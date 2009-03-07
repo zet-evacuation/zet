@@ -1,0 +1,367 @@
+<linked-list>
+  <profile>
+    <name>Zur Evakuierung ben�tigte Zeit</name>
+    <type>GLOBAL</type>
+    <diagrams class="linked-list">
+      <diagram>
+        <title>Tabelle 1: Insgesamt ben�tigte Zeit</title>
+        <type>TABLE</type>
+        <xAxisLabel></xAxisLabel>
+      </diagram>
+      <diagram>
+        <title>Stufendiagramm 1: Minima und Maxima</title>
+        <type>STEP_CHART</type>
+        <xAxisLabel>Personen</xAxisLabel>
+        <yAxisLabel>Zeit</yAxisLabel>
+      </diagram>
+      <diagram>
+        <title>Stufenfl�chendiagramm 1: Quantile</title>
+        <type>STEP_AREA_CHART</type>
+        <xAxisLabel>Personen</xAxisLabel>
+        <yAxisLabel>Zeit</yAxisLabel>
+      </diagram>
+      <diagram>
+        <title>Liniendiagramm 1: Konfidenzintervalle</title>
+        <type>LINE_CHART</type>
+      </diagram>
+      <diagram>
+        <title>Fl�chendiagramm 1: Minima und Maxima</title>
+        <type>AREA_CHART</type>
+        <xAxisLabel>Personen</xAxisLabel>
+        <yAxisLabel>Zeit</yAxisLabel>
+      </diagram>
+      <diagram>
+        <title>S�ulendiagramm 1: Ben�tigte Zeit</title>
+        <type>BAR_CHART</type>
+        <xAxisLabel>Durchlauf</xAxisLabel>
+        <yAxisLabel>Zeit</yAxisLabel>
+      </diagram>
+    </diagrams>
+    <statistics class="linked-list">
+      <statistic>
+        <statistic>
+          <objectParameters/>
+          <runOperation class="statistic.graph.DoubleOperation">COMPARISON</runOperation>
+          <runParameters/>
+          <statistic class="statistic.graph.StaticStatistic">TOTAL_TIME</statistic>
+        </statistic>
+        <attributes>
+          <diagram reference="../../../../diagrams/diagram"/>
+          <name>Insgesamt ben�tigte Zeit</name>
+        </attributes>
+      </statistic>
+      <statistic>
+        <statistic>
+          <objectParameters/>
+          <runOperation class="statistic.graph.DynamicOperation">MAXIMUM</runOperation>
+          <runParameters/>
+          <statistic class="statistic.graph.DynamicStatistic">TIME_NEEDED_FOR_FLOW</statistic>
+        </statistic>
+        <attributes>
+          <diagram reference="../../../../diagrams/diagram[2]"/>
+          <name>Maximum</name>
+        </attributes>
+      </statistic>
+      <statistic>
+        <statistic>
+          <objectParameters/>
+          <runOperation class="statistic.graph.DynamicOperation">MINIMUM</runOperation>
+          <runParameters/>
+          <statistic class="statistic.graph.DynamicStatistic">TIME_NEEDED_FOR_FLOW</statistic>
+        </statistic>
+        <attributes>
+          <diagram reference="../../../../diagrams/diagram[2]"/>
+          <name>Minimum</name>
+        </attributes>
+      </statistic>
+      <statistic>
+        <statistic>
+          <objectParameters/>
+          <runOperation class="statistic.graph.DynamicOperation">QUANTIL</runOperation>
+          <runParameters>
+            <double>0.25</double>
+          </runParameters>
+          <statistic class="statistic.graph.DynamicStatistic">TIME_NEEDED_FOR_FLOW</statistic>
+        </statistic>
+        <attributes>
+          <diagram reference="../../../../diagrams/diagram[3]"/>
+          <name>1. Quartil</name>
+        </attributes>
+      </statistic>
+      <statistic>
+        <statistic>
+          <objectParameters/>
+          <runOperation class="statistic.graph.DynamicOperation">MEDIAN</runOperation>
+          <runParameters/>
+          <statistic class="statistic.graph.DynamicStatistic">TIME_NEEDED_FOR_FLOW</statistic>
+        </statistic>
+        <attributes>
+          <diagram reference="../../../../diagrams/diagram[3]"/>
+          <name>Median</name>
+        </attributes>
+      </statistic>
+      <statistic>
+        <statistic>
+          <objectParameters/>
+          <runOperation class="statistic.graph.DynamicOperation">QUANTIL</runOperation>
+          <runParameters>
+            <double>0.75</double>
+          </runParameters>
+          <statistic class="statistic.graph.DynamicStatistic">TIME_NEEDED_FOR_FLOW</statistic>
+        </statistic>
+        <attributes>
+          <diagram reference="../../../../diagrams/diagram[3]"/>
+          <name>3. Quartil</name>
+        </attributes>
+      </statistic>
+      <statistic>
+        <statistic>
+          <objectParameters/>
+          <runOperation class="statistic.graph.DynamicOperation">MEAN</runOperation>
+          <runParameters/>
+          <statistic class="statistic.graph.DynamicStatistic">TIME_NEEDED_FOR_FLOW</statistic>
+        </statistic>
+        <attributes>
+          <diagram reference="../../../../diagrams/diagram[4]"/>
+          <name>Arithmetrisches Mittel</name>
+        </attributes>
+      </statistic>
+      <statistic>
+        <statistic>
+          <objectParameters/>
+          <runOperation class="statistic.graph.DynamicOperation">CONFIDENCE_INTERVAL_LOWER</runOperation>
+          <runParameters>
+            <double>0.95</double>
+          </runParameters>
+          <statistic class="statistic.graph.DynamicStatistic">TIME_NEEDED_FOR_FLOW</statistic>
+        </statistic>
+        <attributes>
+          <diagram reference="../../../../diagrams/diagram[4]"/>
+          <name>Konfidenzintervall, untere Grenze</name>
+        </attributes>
+      </statistic>
+      <statistic>
+        <statistic>
+          <objectParameters/>
+          <runOperation class="statistic.graph.DynamicOperation">CONFIDENCE_INTERVAL_UPPER</runOperation>
+          <runParameters>
+            <double>0.95</double>
+          </runParameters>
+          <statistic class="statistic.graph.DynamicStatistic">TIME_NEEDED_FOR_FLOW</statistic>
+        </statistic>
+        <attributes>
+          <diagram reference="../../../../diagrams/diagram[4]"/>
+          <name>Konfidenzintervall, obere Grenze</name>
+        </attributes>
+      </statistic>
+      <statistic>
+        <statistic>
+          <objectParameters/>
+          <runOperation class="statistic.graph.DynamicOperation">MAXIMUM</runOperation>
+          <runParameters/>
+          <statistic class="statistic.graph.DynamicStatistic">TIME_NEEDED_FOR_FLOW</statistic>
+        </statistic>
+        <attributes>
+          <diagram reference="../../../../diagrams/diagram[5]"/>
+          <name>Maximum</name>
+        </attributes>
+      </statistic>
+      <statistic>
+        <statistic>
+          <objectParameters/>
+          <runOperation class="statistic.graph.DynamicOperation">MINIMUM</runOperation>
+          <runParameters/>
+          <statistic class="statistic.graph.DynamicStatistic">TIME_NEEDED_FOR_FLOW</statistic>
+        </statistic>
+        <attributes>
+          <diagram reference="../../../../diagrams/diagram[5]"/>
+          <name>Minimum</name>
+        </attributes>
+      </statistic>
+      <statistic>
+        <statistic>
+          <objectParameters/>
+          <runOperation class="statistic.graph.DoubleOperation">COMPARISON</runOperation>
+          <runParameters/>
+          <statistic class="statistic.graph.StaticStatistic">TOTAL_TIME</statistic>
+        </statistic>
+        <attributes>
+          <diagram reference="../../../../diagrams/diagram[6]"/>
+          <name>Insgesamt ben�tigte Zeit</name>
+        </attributes>
+      </statistic>
+      <statistic>
+        <statistic>
+          <objectParameters/>
+          <runOperation class="statistic.graph.DynamicOperation">MEAN</runOperation>
+          <runParameters/>
+          <statistic class="statistic.graph.DynamicStatistic">TIME_NEEDED_FOR_FLOW</statistic>
+        </statistic>
+        <attributes>
+          <diagram reference="../../../../diagrams/diagram[2]"/>
+          <name>Zeit ben�tigt f�r Individuen</name>
+        </attributes>
+      </statistic>
+    </statistics>
+  </profile>
+  <profile>
+    <name>Verteilung �ber Ausg�nge</name>
+    <type>NODE</type>
+    <diagrams class="linked-list">
+      <diagram>
+        <title>Kreisdiagramm 1: Verteilung �ber Ausg�nge</title>
+        <type>PIE_CHART</type>
+      </diagram>
+      <diagram>
+        <title>Kreisdiagramm 3D 1: Verteilung �ber Ausg�nge</title>
+        <type>PIE_CHART_3D</type>
+      </diagram>
+      <diagram>
+        <title>Ringdiagramm 1: Verteilung �ber Ausg�nge</title>
+        <type>RING_CHART</type>
+      </diagram>
+      <diagram>
+        <title>S�ulendiagramm 1: Evakuierte Personen pro Ausgang</title>
+        <type>BAR_CHART</type>
+        <xAxisLabel>Zeit</xAxisLabel>
+        <yAxisLabel>Personen</yAxisLabel>
+      </diagram>
+      <diagram>
+        <title>Liniendiagramm 1: Titel</title>
+        <type>LINE_CHART</type>
+      </diagram>
+    </diagrams>
+    <statistics class="linked-list">
+      <statistic>
+        <statistic>
+          <objectOperation class="statistic.graph.DynamicOperation">COMPARISON</objectOperation>
+          <objectParameters/>
+          <runOperation class="statistic.graph.DynamicOperation">MEAN</runOperation>
+          <runParameters/>
+          <statistic class="statistic.graph.DynamicNodeStatistic">INCOMING_FLOW_AMOUNT</statistic>
+        </statistic>
+        <attributes>
+          <diagram reference="../../../../diagrams/diagram"/>
+          <name>Eingehende Flussmenge</name>
+        </attributes>
+      </statistic>
+      <statistic>
+        <statistic>
+          <objectOperation class="statistic.graph.DynamicOperation">COMPARISON</objectOperation>
+          <objectParameters/>
+          <runOperation class="statistic.graph.DynamicOperation">MEAN</runOperation>
+          <runParameters/>
+          <statistic class="statistic.graph.DynamicNodeStatistic">INCOMING_FLOW_AMOUNT</statistic>
+        </statistic>
+        <attributes>
+          <diagram reference="../../../../diagrams/diagram[2]"/>
+          <name>Eingehende Flussmenge</name>
+        </attributes>
+      </statistic>
+      <statistic>
+        <statistic>
+          <objectOperation class="statistic.graph.DynamicOperation">COMPARISON</objectOperation>
+          <objectParameters/>
+          <runOperation class="statistic.graph.DynamicOperation">MEAN</runOperation>
+          <runParameters/>
+          <statistic class="statistic.graph.DynamicNodeStatistic">INCOMING_FLOW_AMOUNT</statistic>
+        </statistic>
+        <attributes>
+          <diagram reference="../../../../diagrams/diagram[3]"/>
+          <name>Eingehende Flussmenge</name>
+        </attributes>
+      </statistic>
+      <statistic>
+        <statistic>
+          <objectOperation class="statistic.graph.DynamicOperation">COMPARISON</objectOperation>
+          <objectParameters/>
+          <runOperation class="statistic.graph.DynamicOperation">MEAN</runOperation>
+          <runParameters/>
+          <statistic class="statistic.graph.DynamicNodeStatistic">INCOMING_FLOW_AMOUNT</statistic>
+        </statistic>
+        <attributes>
+          <diagram reference="../../../../diagrams/diagram[4]"/>
+          <name>Eingehende Flussmenge</name>
+        </attributes>
+      </statistic>
+      <statistic>
+        <statistic>
+          <objectOperation class="statistic.graph.DoubleOperation">VARIANCE</objectOperation>
+          <objectParameters/>
+          <runOperation class="statistic.graph.DoubleOperation">MAXIMUM</runOperation>
+          <runParameters/>
+          <statistic class="statistic.graph.StaticNodeStatistic">TOTAL_LOAD</statistic>
+        </statistic>
+        <attributes>
+          <diagram reference="../../../../diagrams/diagram[5]"/>
+          <name>Gemittelte Auslastung</name>
+        </attributes>
+      </statistic>
+    </statistics>
+  </profile>
+  <profile>
+    <name>Fluss &amp; Auslastung</name>
+    <type>EDGE</type>
+    <diagrams class="linked-list">
+      <diagram>
+        <title>Liniendiagramm 1: Fluss �ber Zeit</title>
+        <type>LINE_CHART</type>
+        <xAxisLabel>Zeit</xAxisLabel>
+        <yAxisLabel>Fluss</yAxisLabel>
+      </diagram>
+      <diagram>
+        <title>Stufenfl�chendiagramm 1: Auslastung</title>
+        <type>STEP_AREA_CHART</type>
+        <xAxisLabel>Zeit</xAxisLabel>
+        <yAxisLabel>Auslastung</yAxisLabel>
+      </diagram>
+      <diagram>
+        <title>S�ulendiagramm 1: Flussrate</title>
+        <type>BAR_CHART</type>
+        <xAxisLabel>Zeit</xAxisLabel>
+        <yAxisLabel>Fluss</yAxisLabel>
+      </diagram>
+    </diagrams>
+    <statistics class="linked-list">
+      <statistic>
+        <statistic>
+          <objectOperation class="statistic.graph.DynamicOperation">COMPARISON</objectOperation>
+          <objectParameters/>
+          <runOperation class="statistic.graph.DynamicOperation">MEAN</runOperation>
+          <runParameters/>
+          <statistic class="statistic.graph.DynamicEdgeStatistic">LOAD</statistic>
+        </statistic>
+        <attributes>
+          <diagram reference="../../../../diagrams/diagram[2]"/>
+          <name>Auslastung</name>
+        </attributes>
+      </statistic>
+      <statistic>
+        <statistic>
+          <objectOperation class="statistic.graph.DynamicOperation">COMPARISON</objectOperation>
+          <objectParameters/>
+          <runOperation class="statistic.graph.DynamicOperation">MEAN</runOperation>
+          <runParameters/>
+          <statistic class="statistic.graph.DynamicEdgeStatistic">FLOW_AMOUNT</statistic>
+        </statistic>
+        <attributes>
+          <diagram reference="../../../../diagrams/diagram"/>
+          <name>Flussmenge</name>
+        </attributes>
+      </statistic>
+      <statistic>
+        <statistic>
+          <objectOperation class="statistic.graph.DoubleOperation">QUANTIL</objectOperation>
+          <objectParameters>
+            <double>0.25</double>
+          </objectParameters>
+          <statistic class="statistic.graph.StaticEdgeStatistic">TOTAL_LOAD</statistic>
+        </statistic>
+        <attributes>
+          <diagram reference="../../../../diagrams/diagram[3]"/>
+          <name>Gemittelte Auslastung</name>
+        </attributes>
+      </statistic>
+    </statistics>
+  </profile>
+</linked-list>
