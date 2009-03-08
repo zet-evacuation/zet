@@ -1,14 +1,23 @@
+/* zet evacuation tool copyright (c) 2007-09 zet evacuation team
+ *
+ * This program is free software; you can redistribute it and/or
+ * as published by the Free Software Foundation; either version 2
+ * of the License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, write to the Free Software
+ * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
+ */
 package opengl.helper;
 
 
-// <editor-fold defaultstate="collapsed" desc=" UML Marker "> 
-// #[regen=yes,id=DCE.938D4ED3-1949-89C6-4466-C4DDD06A4A86]
-// </editor-fold> 
 public abstract class CullingTester {
 
-    // <editor-fold defaultstate="collapsed" desc=" UML Marker "> 
-    // #[regen=yes,id=DCE.F71D8EA3-936C-23B6-2F9F-EBA44D4E6241]
-    // </editor-fold> 
     public CullingTester () {
     }
 
