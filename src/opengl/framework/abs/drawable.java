@@ -1,16 +1,25 @@
+/* zet evacuation tool copyright (c) 2007-09 zet evacuation team
+ *
+ * This program is free software; you can redistribute it and/or
+ * as published by the Free Software Foundation; either version 2
+ * of the License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, write to the Free Software
+ * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
+ */
 package opengl.framework.abs;
 
 import javax.media.opengl.GLAutoDrawable;
 
 
-// <editor-fold defaultstate="collapsed" desc=" UML Marker "> 
-// #[regen=yes,id=DCE.C645E001-C434-235B-B276-16CB14ACF005]
-// </editor-fold> 
 public interface drawable {
 
-    // <editor-fold defaultstate="collapsed" desc=" UML Marker "> 
-    // #[regen=yes,id=DCE.A23A4D62-F712-39D9-AF68-B5A7659CBE5B]
-    // </editor-fold> 
     public void draw ( GLAutoDrawable drawable );
     
     public void update();
