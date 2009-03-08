@@ -46,7 +46,8 @@ import util.random.distributions.NormalDistribution;
  * @author Jan-Philipp Kappmeier
  */
 public class EditorStart {
-
+	/** The version of zet. */
+	public static String version = "1.0";
 	static String loadedProject = "";
 	static String propertyFilename = "./properties/properties.xml";
 	static String optionFilename = "zetoptions.xml";
