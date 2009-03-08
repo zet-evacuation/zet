@@ -1,4 +1,19 @@
-/**
+/* zet evacuation tool copyright (c) 2007-09 zet evacuation team
+ *
+ * This program is free software; you can redistribute it and/or
+ * as published by the Free Software Foundation; either version 2
+ * of the License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, write to the Free Software
+ * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
+ */
+/*
  * Class CreditsPanel
  * Erstellt 18.05.2008, 20:05:12
  */
@@ -29,6 +44,104 @@ public class CreditsPanel extends JOrthoPanel {
 	private TextureFont font;
 	/** The top position of the text */
 	private double startPos = -10;
+	/** The array containing the text. */
+	private CreditsString[] lines = {
+		new CreditsString( "zet evakuierungs-tool", true ),
+		new CreditsString( "(c) 2007-08 Projektgruppe 517, TU-Dortmund", true ),
+		new CreditsString( "(c) 2008-09 zet development team", true ),
+		new CreditsString( "", false ),
+		new CreditsString( "http://www.zet-evakuierung.de", true ),
+		new CreditsString( "", false ),
+		new CreditsString( "", false ),
+		new CreditsString( "Credits:", true ),
+		new CreditsString( "", true ),
+		new CreditsString( "Martin Groß", true ),
+		new CreditsString( "Moukarram Kabbash", true ),
+		new CreditsString( "Jan-Philipp Kappmeier", true ),
+		new CreditsString( "Sophia Kardung", true ),
+		new CreditsString( "Timon Kelter", true ),
+		new CreditsString( "Joscha Kulbatzki", true ),
+		new CreditsString( "Daniel Plümpe", true ),
+		new CreditsString( "Marcel Preuß", true ),
+		new CreditsString( "Gordon Schlechter", true ),
+		new CreditsString( "Melanie Schmidt", true ),
+		new CreditsString( "Sylvie Temme", true ),
+		new CreditsString( "Matthias Woste", true ),
+		new CreditsString( "", true ),
+		new CreditsString( "", true ),
+		new CreditsString( "This program is free software; you can", false ),
+		new CreditsString( "redistribute it and/or modify it under", false ),
+		new CreditsString( "the terms of the GNU General Public Li-", false ),
+		new CreditsString( "cense as published by the Free Software", false ),
+		new CreditsString( "Foundation; either version 2 of the Li-", false ),
+		new CreditsString( "cense, or (at your opinion) any later", false ),
+		new CreditsString( "version.", false ),
+		new CreditsString( "", false ),
+		new CreditsString( "zet is distributed in the hope that it", false ),
+		new CreditsString( "will be useful but WITHOUT ANY WARRANTY;", false ),
+		new CreditsString( "without even the implied warranty of", false ),
+		new CreditsString( "MERCHANTABILITY or FITNESS FOR A PAR-", false ),
+		new CreditsString( "TICULAR PURPOSE. See the GNU General", false ),
+		new CreditsString( "Public License for more details.", false ),
+		new CreditsString( "", false ),
+		new CreditsString( "You should have received a copy of the", false ),
+		new CreditsString( "GNU General Public Licence along with", false ),
+		new CreditsString( "zet; if not, write to the Free Software", false ),
+		new CreditsString( "Foundation, Inc., 51 Franklin Street,", false ),
+		new CreditsString( "Fifth Floor, Boston, MA 02110-131, USA,", false ),
+		new CreditsString( "or have a look at", false ),
+		new CreditsString( "http://www.gnu.org/licenses/", false ),
+		new CreditsString( "", false ),
+		new CreditsString( "", false ),
+		new CreditsString( "Third-party components used by zet:", false ),
+		new CreditsString( "", false ),
+		new CreditsString( "MersenneTwister Version 13", false ),
+		new CreditsString( "Copyright (c) 2003 by Sean Luke.", false ),
+		new CreditsString( "Portions copyright (c) 1993 by Michael", false ),
+		new CreditsString( "Lecuyer.", false ),
+		new CreditsString( "", false ),
+		new CreditsString( "MersenneTwisterFast Version 13", false ),
+		new CreditsString( "Copyright (c) 2003 by Sean Luke.", false ),
+		new CreditsString( "Portions copyright (c) 1993 by Michael", false ),
+		new CreditsString( "Lecuyer.", false ),
+		new CreditsString( "", false ),
+		new CreditsString( "MTRandom", false ),
+		new CreditsString( "Copyright (c) 2005 by David Beaumont.", false ),
+		new CreditsString( "", false ),
+		new CreditsString( "TableLayout JDK 1.5 2007-04-21", false ),
+		new CreditsString( "Copyright (c) 2001 by Daniel Barbalace.", false ),
+		new CreditsString( "https://tablelayout.dev.java.net/", false ),
+		new CreditsString( "", false ),
+		new CreditsString( "JFreeChart 1.0.3", false ),
+		new CreditsString( "Copyright (c) 2000-2009 by Object Refinery", false ),
+		new CreditsString( "and Contributors.", false ),
+		new CreditsString( "http://www.jfree.org/jfreechart/", false ),
+		new CreditsString( "", false ),
+		new CreditsString( "JCommon 1.0.7", false ),
+		new CreditsString( "Copyright (c) 2007-2009 by Object Refinery", false ),
+		new CreditsString( "and Contributors.", false ),
+		new CreditsString( "http://www.jfree.org/jcommon/", false ),
+		new CreditsString( "", false ),
+		new CreditsString( "SSJ 2.1.2", false ),
+		new CreditsString( "Copyright (c) 2008  Pierre L'Ecuyer", false ),
+		new CreditsString( "and Université de Montréal", false ),
+		new CreditsString( "http://www.iro.umontreal.ca/~simardr/ssj/", false ),
+		new CreditsString( "", false ),
+		new CreditsString( "XStream 1.3", false ),
+		new CreditsString( "Copyright (c) 2003-2006, Joe Walnes", false ),
+		new CreditsString( "Copyright (c) 2006-2007, XStream Committers", false ),
+		new CreditsString( "http://xstream.codehaus.org/", false ),
+		new CreditsString( "", false ),
+		new CreditsString( "JOGL 1.1.1-rc6", false ),
+		new CreditsString( "Copyright (c) 2003-2007 Sun Microsystems", false ),
+		new CreditsString( "https://jogl.dev.java.net/", false ),
+		new CreditsString( "", false ),
+		new CreditsString( "JMF 2.1.1e", false ),
+		new CreditsString( "Copyright (c) 1995-2003 Sun Microsystems", false ),
+		new CreditsString( "http://java.sun.com/javase/technologies/", false ),
+		new CreditsString( "desktop/media/jmf/", false )
+		//new CreditsString( "----------------------------------------", false ),
+	};
 
 	@Override
 	/**
@@ -61,54 +174,6 @@ public class CreditsPanel extends JOrthoPanel {
 
 		gl.glEnable( GL.GL_TEXTURE_2D );
 		this.switchToPrintScreen( gl );
-		CreditsString[] lines = {
-			new CreditsString( "zet evakuierungs-tool", true ),
-			new CreditsString( "", false ),
-			new CreditsString( "http://www.zet-evakuierung.de", true ),
-			new CreditsString( "", false ),
-			new CreditsString( "", false ),
-			new CreditsString( "Projektgruppe 517", true ),
-			new CreditsString( "TU Dortmund", true ),
-			new CreditsString( "", true ),
-			new CreditsString( "", true ),
-			new CreditsString( "Credits:", true ),
-			new CreditsString( "", true ),
-			new CreditsString( "Martin Groß", true ),
-			new CreditsString( "Moukarram Kabbash", true ),
-			new CreditsString( "Jan-Philipp Kappmeier", true ),
-			new CreditsString( "Sophia Kardung", true ),
-			new CreditsString( "Timon Kelter", true ),
-			new CreditsString( "Joscha Kulbatzki", true ),
-			new CreditsString( "Daniel Plümpe", true ),
-			new CreditsString( "Marcel Preuß", true ),
-			new CreditsString( "Gordon Schlechter", true ),
-			new CreditsString( "Melanie Schmidt", true ),
-			new CreditsString( "Sylvie Temme", true ),
-			new CreditsString( "Matthias Woste", true ),
-			new CreditsString( "", true ),
-			new CreditsString( "", true ),
-			new CreditsString( "copyright 2007-08", true ),
-			new CreditsString( "", false ),
-			new CreditsString( "", false ),
-			new CreditsString( "This program is free software; you can", false ),
-			new CreditsString( "redistribute it and/or modify it under", false ),
-			new CreditsString( "the terms of the GNU General Public Li-", false ),
-			new CreditsString( "cense as published by the Free Software", false ),
-			new CreditsString( "Foundation, either version 2 of the Li-", false ),
-			new CreditsString( "cense, or (at your opinion) any later", false ),
-			new CreditsString( "version.", false ),
-			new CreditsString( "", false ),
-			new CreditsString( "zet is distributed AS IS and comes with", false ),
-			new CreditsString( "absolutely NO WARRENTY.", false ),
-			new CreditsString( "", false ),
-			new CreditsString( "You should have received a copy of the", false ),
-			new CreditsString( "GNU General Public Licence along with", false ),
-			new CreditsString( "zet; if not, write to the Free Software", false ),
-			new CreditsString( "Foundation, Inc., 675 Mass Ave, Cam-", false ),
-			new CreditsString( "bridge, MA 02139, USA or have a look at", false ),
-			new CreditsString( "http://www.gnu.org/licenses/", false )
-			//new CreditsString( "----------------------------------------", false )
-		};
 
 		drawLines( lines );
 		this.switchToOrthoScreen( gl );
@@ -122,6 +187,7 @@ public class CreditsPanel extends JOrthoPanel {
 	public void animate() {
 		super.animate();
 		double timePerPixel = 39;	// in milliseconds
+		timePerPixel = 50;
 		startPos += ( this.getDeltaTime() / timePerPixel );
 	}
 
