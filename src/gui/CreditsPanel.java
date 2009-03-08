@@ -17,8 +17,9 @@ import opengl.helper.TextureManager;
  * @author Jan-Philipp Kappmeier
  */
 public class CreditsPanel extends JOrthoPanel {
-
-	/** The instance of the texture manager*/
+	/** The size of the panel, used for text position calculation. */
+	private static int width = 480;
+	/** The instance of the texture manager. */
 	private TextureManager texMan;
 	/** Describes if the textures are loaded or not */
 	private boolean texturesLoaded = false;
@@ -52,38 +53,63 @@ public class CreditsPanel extends JOrthoPanel {
 	@Override
 	/**
 	 * Displays the text on the screen.
-	 *  @param drawable the context which is used for the credits panel
+	 * @param drawable the context which is used for the credits panel
 	 */
 	public void display( GLAutoDrawable drawable ) {
-		super.display( drawable );	// let clear the screen
+		super.display( drawable );	// clear the screen
 		GL gl = drawable.getGL();
 
 		gl.glEnable( GL.GL_TEXTURE_2D );
 		this.switchToPrintScreen( gl );
-		String[] lines = {"zet evakuierungs-tool",
-			"",
-			"Projektgruppe 517",
-			"TU Dortmund",
-			"",
-			"",
-			"Credits:",
-			"",
-			"Martin Groß",
-			"Moukarram Kabbash",
-			"Jan-Philipp Kappmeier",
-			"Sophia Kardung",
-			"Timon Kelter",
-			"Joscha Kulbatzki",
-			"Daniel Plümpe",
-			"Marcel Preuß",
-			"Gordon Schlechter",
-			"Melanie Schmidt",
-			"Sylvie Temme",
-			"Matthias Woste",
-			"",
-			"",
-			"copyright 2007-08"
+		CreditsString[] lines = {
+			new CreditsString( "zet evakuierungs-tool", true ),
+			new CreditsString( "", false ),
+			new CreditsString( "http://www.zet-evakuierung.de", true ),
+			new CreditsString( "", false ),
+			new CreditsString( "", false ),
+			new CreditsString( "Projektgruppe 517", true ),
+			new CreditsString( "TU Dortmund", true ),
+			new CreditsString( "", true ),
+			new CreditsString( "", true ),
+			new CreditsString( "Credits:", true ),
+			new CreditsString( "", true ),
+			new CreditsString( "Martin Groß", true ),
+			new CreditsString( "Moukarram Kabbash", true ),
+			new CreditsString( "Jan-Philipp Kappmeier", true ),
+			new CreditsString( "Sophia Kardung", true ),
+			new CreditsString( "Timon Kelter", true ),
+			new CreditsString( "Joscha Kulbatzki", true ),
+			new CreditsString( "Daniel Plümpe", true ),
+			new CreditsString( "Marcel Preuß", true ),
+			new CreditsString( "Gordon Schlechter", true ),
+			new CreditsString( "Melanie Schmidt", true ),
+			new CreditsString( "Sylvie Temme", true ),
+			new CreditsString( "Matthias Woste", true ),
+			new CreditsString( "", true ),
+			new CreditsString( "", true ),
+			new CreditsString( "copyright 2007-08", true ),
+			new CreditsString( "", false ),
+			new CreditsString( "", false ),
+			new CreditsString( "This program is free software; you can", false ),
+			new CreditsString( "redistribute it and/or modify it under", false ),
+			new CreditsString( "the terms of the GNU General Public Li-", false ),
+			new CreditsString( "cense as published by the Free Software", false ),
+			new CreditsString( "Foundation, either version 2 of the Li-", false ),
+			new CreditsString( "cense, or (at your opinion) any later", false ),
+			new CreditsString( "version.", false ),
+			new CreditsString( "", false ),
+			new CreditsString( "zet is distributed AS IS and comes with", false ),
+			new CreditsString( "absolutely NO WARRENTY.", false ),
+			new CreditsString( "", false ),
+			new CreditsString( "You should have received a copy of the", false ),
+			new CreditsString( "GNU General Public Licence along with", false ),
+			new CreditsString( "zet; if not, write to the Free Software", false ),
+			new CreditsString( "Foundation, Inc., 675 Mass Ave, Cam-", false ),
+			new CreditsString( "bridge, MA 02139, USA or have a look at", false ),
+			new CreditsString( "http://www.gnu.org/licenses/", false )
+			//new CreditsString( "----------------------------------------", false )
 		};
+
 		drawLines( lines );
 		this.switchToOrthoScreen( gl );
 	}
@@ -111,14 +137,52 @@ public class CreditsPanel extends JOrthoPanel {
 	 * completely scrolled over the whole screen, the top position is resetted.
 	 * @param lines an array containing all lines that should be displayed
 	 */
-	private void drawLines( String[] lines ) {
+	private void drawLines( CreditsString[] lines ) {
 		int start = (int) Math.floor( startPos );
 		int end = 0;
 		for( int i = 0; i < lines.length; i++ ) {
-			font.print( 48, start - i * 16, lines[i] );
+			font.print( lines[i].position(), start - i * 16, lines[i].text() );
 			end = start - i * 16 + 12;
 		}
 		if( end > this.getHeight() + 48 )
 			startPos = -10;
+	}
+	
+	/**
+	 * A special inner class that represents a line of text. It saves
+	 * the information if the line is left-aligned or centered. The
+	 * with of the window has to be given from outside.
+	 */
+	private class CreditsString {
+		/** Indicates wheather the text is centered, or not. */
+		private boolean centered;
+		/** The content of the line. */
+		private String string;
+
+		/**
+		 * Creates a new line with alignment information.
+		 * @param string the text of the line
+		 * @param centered indicates wheather the line is centered, or not
+		 */
+		public CreditsString( String string, boolean centered ) {
+			this.string = string;
+			this.centered = centered;
+		}
+
+		/**
+		 * Returns the <code>x</code>-position of the line
+		 * @return the <code>x</code>-position of the line
+		 */
+		public int position() {
+			return centered ? (width - (string.length() * 9))/2 : (width - (40*9))/2;
+		}
+
+		/**
+		 * Returns the content of the line
+		 * @return
+		 */
+		public String text() {
+			return string;
+		}
 	}
 }
