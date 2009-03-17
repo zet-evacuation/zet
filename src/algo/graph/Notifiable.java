@@ -15,7 +15,7 @@
  */
 package algo.graph;
 
-import ds.Percentage;
+import ds.graph.Percentage;
 
 /**
  * Defines an interface for classes that can receive progress information

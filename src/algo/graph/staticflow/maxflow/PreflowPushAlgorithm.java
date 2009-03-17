@@ -25,7 +25,8 @@ import ds.graph.MaxHeap;
 import ds.graph.Node;
 import ds.graph.ResidualNetwork;
 import ds.graph.flow.MaximumFlow;
-import sandbox.Algorithm;
+import algo.graph.Algorithm;
+import algo.graph.DebugFlags;
 
 /**
  *
@@ -92,7 +93,7 @@ public class PreflowPushAlgorithm extends Algorithm<MaximumFlowProblem, MaximumF
         /* Print both numbers if debug is activated. */
         startExcess = totalExcess;
         done = getProblem().getNetwork().numberOfNodes() * getProblem().getNetwork().numberOfNodes() + (startExcess);
-        if (util.DebugFlags.PP) {
+        if (DebugFlags.PP) {
             System.out.println("Total excess " + totalExcess + " Max Label: " + maxLabel + " Sum of Labels: " + sumOfLabels + " " +
                     (sumOfLabels + (startExcess - totalExcess)) + " of " + done + ".");
         }
@@ -137,7 +138,7 @@ public class PreflowPushAlgorithm extends Algorithm<MaximumFlowProblem, MaximumF
             if (util.ProgressBooleanFlags.ALGO_PROGRESS) {
                 totalExcess -= amount;
                 /* The total excess changed, so print it if debug is activated. */
-                if (util.DebugFlags.PP) {
+                if (DebugFlags.PP) {
                     System.out.println("Total excess " + totalExcess + " Max Label: " + maxLabel + " Sum of Labels: " + sumOfLabels + " " +
                             (sumOfLabels + (startExcess - totalExcess)) + " of " + done + ".");
                 }
@@ -180,7 +181,7 @@ public class PreflowPushAlgorithm extends Algorithm<MaximumFlowProblem, MaximumF
         if (util.ProgressBooleanFlags.ALGO_PROGRESS) {
             sumOfLabels += distanceLabels.get(node);
             /* Print new sum of labels if debug is activated. */
-            if (util.DebugFlags.PP && value > maxLabel) {
+            if (DebugFlags.PP && value > maxLabel) {
                 System.out.println("Total excess " + totalExcess + " Max Label: " + value + " Sum of Labels: " + sumOfLabels + " " +
                         (sumOfLabels + (startExcess - totalExcess)) + " of " + done + ".");
             }
