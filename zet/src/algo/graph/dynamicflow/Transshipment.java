@@ -20,7 +20,7 @@ import java.lang.reflect.InvocationTargetException;
 
 import localization.Localization;
 
-import util.DebugFlags;
+import algo.graph.DebugFlags;
 import algo.graph.Notifiable;
 
 import tasks.AlgorithmTask;

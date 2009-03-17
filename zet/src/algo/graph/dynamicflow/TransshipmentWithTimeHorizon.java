@@ -15,7 +15,7 @@
  */
 package algo.graph.dynamicflow;
 
-import util.DebugFlags;
+import algo.graph.DebugFlags;
 import algo.graph.Notifiable;
 import algo.graph.util.PathDecomposition;
 import tasks.AlgorithmTask;

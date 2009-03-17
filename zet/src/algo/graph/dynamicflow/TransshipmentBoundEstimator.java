@@ -21,7 +21,7 @@ import java.util.LinkedList;
 
 import localization.Localization;
 
-import util.DebugFlags;
+import algo.graph.DebugFlags;
 import algo.graph.staticflow.StaticTransshipment;
 import algo.graph.util.PathDecomposition;
 
