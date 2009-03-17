@@ -17,7 +17,7 @@ package ds.graph;
 
 import ds.graph.flow.PathBasedFlowOverTime;
 import ds.graph.flow.EdgeBasedFlowOverTime;
-import util.DebugFlags;
+import algo.graph.DebugFlags;
 import algo.graph.util.PathComposition;
 import converter.ZToGraphMapping;
 import io.visualization.VisualizationResult;

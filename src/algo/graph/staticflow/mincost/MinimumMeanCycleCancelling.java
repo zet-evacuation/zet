@@ -21,7 +21,7 @@ import ds.graph.IdentifiableIntegerMapping;
 import ds.graph.Network;
 import ds.graph.Node;
 import ds.graph.StaticPath;
-import util.DebugFlags;
+import algo.graph.DebugFlags;
 import algo.graph.staticflow.StaticTransshipment;
 import ds.graph.Mappings;
 import ds.graph.ResidualNetwork;

@@ -17,7 +17,7 @@ package util;
 
 import java.util.LinkedList;
 
-import util.DebugFlags;
+import algo.graph.DebugFlags;
 import algo.graph.traverse.DFS;
 import algo.graph.traverse.DFS.State;
 import ds.graph.IdentifiableIntegerMapping;

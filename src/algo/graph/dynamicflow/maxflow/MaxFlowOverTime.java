@@ -36,12 +36,10 @@ import ds.graph.flow.StaticPathFlow;
 import java.util.LinkedList;
 import java.util.List;
 
-import util.DebugFlags;
+import algo.graph.DebugFlags;
 import algo.graph.staticflow.mincost.MinimumMeanCycleCancelling;
-import algo.graph.staticflow.mincost.SuccessiveShortestPath;
 import algo.graph.util.PathDecomposition;
 
-import util.GraphInstanceChecker;
 import localization.Localization;
 
 /**
@@ -312,14 +310,8 @@ public class MaxFlowOverTime {
 			return;
 		}
 		
-                if (DebugFlags.GORDON_RE){
-                    reduction();
-                    CreateZeroSupply ();
-                }
-                else {
-                    createSuperNodes ();
-                    CreateZeroSupply ();
-                }
+                reduction();
+                CreateZeroSupply ();
 
 		if (DebugFlags.GORDON) {
 			System.out.print ("Network: ");
@@ -343,14 +335,9 @@ public class MaxFlowOverTime {
 			System.out.print ("flow 1: ");
 			System.out.println (flow);
 		}
-
-		if (DebugFlags.GORDON_RE){
-                    reconstruction();
-                    hideAddedInFlow(flow);
-                }
-                else {
-                    hideAdded(flow);
-                }
+		
+                reconstruction();
+                hideAddedInFlow(flow);
 
 		if (DebugFlags.GORDON) {
 			System.out.print ("flow 2: ");
