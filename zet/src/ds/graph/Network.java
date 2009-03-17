@@ -22,7 +22,6 @@ package ds.graph;
 import localization.Localization;
 
 import com.thoughtworks.xstream.annotations.XStreamAlias;
-import static util.DebugFlags.MARTIN;
 
 /**
  * The <code>Network</class> provides an implementation of a directed graph
@@ -488,27 +487,18 @@ public class Network implements Graph, Cloneable {
      * @exception IllegalArgumentException if the specified position is not empty.
      */
     public void setEdge(Edge edge) {
-        if (MARTIN) System.out.println("Network.setEdge: " + edge + "(ID: " + edge.id() + ")");
         if (edges.get(edge.id()) == null) { 
-            if (MARTIN) System.out.println("Network.setEdge - case 1");
             edges.add(edge);
             incidentEdges(edge.start()).add(edge);
             incidentEdges(edge.end()).add(edge);
             outgoingEdges(edge.start()).add(edge);
-            DependingListSequence<Edge> test = (DependingListSequence<Edge>) incomingEdges(edge.end());
-            if (MARTIN) System.out.println("Network.setEdge: incomingEdges before: " + test);
-            //incomingEdges(edge.end()).add(edge);
-            test.add(edge);
-            if (MARTIN) System.out.println("Network.setEdge: incomingEdges after: " + test);
-            if (MARTIN) System.out.println("Network.setEdge: incomingEdges is new edge hidden: " + isHidden(edge));
+            incomingEdges(edge.end()).add(edge);
             degree.increase(edge.start(), 1);
             degree.increase(edge.end(), 1);
             outdegree.increase(edge.start(), 1);
             indegree.increase(edge.end(), 1);  
         } else if (edges.get(edge.id()).equals(edge)) {
-            if (MARTIN) System.out.println("Network.setEdge - case 2");
         } else {
-            if (MARTIN) System.out.println("Network.setEdge - case 3");
             throw new IllegalArgumentException("Edge position is already occupied");
         }
     }

@@ -59,7 +59,6 @@ public class ListSequence<E extends Identifiable> extends LinkedList<E> implemen
      */
     @Override
     public boolean add(E element){
-        if (util.DebugFlags.MARTIN) System.out.println("Addding " + element);
         return super.add(element);
     }
     
@@ -187,7 +186,6 @@ public class ListSequence<E extends Identifiable> extends LinkedList<E> implemen
      */
     @Override
     public String toString() {
-        if (util.DebugFlags.MARTIN) return "(LinkedList.toString) " + super.toString();
         Iterator<E> it = this.iterator();
         String result = "[";
         if (it.hasNext()){
