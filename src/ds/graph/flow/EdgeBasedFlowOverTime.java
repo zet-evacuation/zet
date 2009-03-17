@@ -23,7 +23,6 @@ package ds.graph.flow;
 import ds.graph.Edge;
 import ds.graph.IdentifiableCollection;
 import ds.graph.IdentifiableObjectMapping;
-import ds.graph.IntegerIntegerArrayMapping;
 import ds.graph.IntegerIntegerMapping;
 import ds.graph.Network;
 

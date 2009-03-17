@@ -20,7 +20,6 @@
 
 package ds.graph.flow;
 
-import ds.graph.flow.StaticPathFlow;
 import java.util.Iterator;
 import java.util.Vector;
 
