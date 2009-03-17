@@ -27,7 +27,7 @@ import ds.graph.MinHeap;
 import ds.graph.Network;
 import ds.graph.NetworkFlowModel;
 import ds.graph.Node;
-import sandbox.Algorithm;
+import algo.graph.Algorithm;
 
 /**
  *

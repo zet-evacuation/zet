@@ -35,7 +35,7 @@ import ds.graph.flow.PathBasedFlow;
 import ds.graph.flow.StaticPathFlow;
 import java.util.LinkedList;
 import java.util.List;
-import sandbox.Algorithm;
+import algo.graph.Algorithm;
 
 /**
  *

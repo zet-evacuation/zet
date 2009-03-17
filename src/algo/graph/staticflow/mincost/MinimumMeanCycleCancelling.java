@@ -26,7 +26,7 @@ import algo.graph.staticflow.StaticTransshipment;
 import ds.graph.Mappings;
 import ds.graph.ResidualNetwork;
 
-import localization.Localization;
+import algo.graph.Localization;
 import tasks.AlgorithmTask;
 
 /**

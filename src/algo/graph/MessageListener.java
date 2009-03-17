@@ -17,7 +17,7 @@
  * MessageListener.java
  *
  */
-package sandbox;
+package algo.graph;
 
 import java.util.EventListener;
 

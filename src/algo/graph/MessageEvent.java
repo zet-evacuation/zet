@@ -14,19 +14,26 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 /*
- * AlgorithmStoppedEvent.java
+ * MessageEvent.java
  *
  */
 
-package sandbox;
+package algo.graph;
 
 /**
  *
  * @author Martin Groß
  */
-public class AlgorithmStoppedEvent extends AlgorithmEvent {
+public class MessageEvent extends AlgorithmEvent {
+    
+    private String message;
 
-    public AlgorithmStoppedEvent(Algorithm algorithm) {
-        super(algorithm, algorithm.getStartTime(), algorithm.getRuntime());
+    public MessageEvent(Algorithm algorithm, long startTime, long eventTime, String message) {
+        super(algorithm, startTime, eventTime);
+        this.message = message;
+    }
+
+    public String getMessage() {
+        return message;
     }
 }

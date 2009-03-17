@@ -19,6 +19,7 @@
  */
 package sandbox;
 
+import algo.graph.Algorithm;
 import gui.editor.properties.PropertyTreeModel;
 
 import java.io.BufferedWriter;

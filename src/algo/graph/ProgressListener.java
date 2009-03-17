@@ -14,29 +14,17 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 /*
- * AlgorithmProgressEvent.java
+ * ProgressListener.java
  *
  */
-package sandbox;
+package algo.graph;
+
+import java.util.EventListener;
 
 /**
  *
- * @author Martin Groß
  */
-public class AlgorithmProgressEvent extends AlgorithmEvent {
+public interface ProgressListener extends EventListener {
 
-    private double progress;
-
-    public AlgorithmProgressEvent(Algorithm algorithm, long startTime, long eventTime, double progress) {
-        super(algorithm, startTime, eventTime);
-        this.progress = progress;
-    }
-
-    public double getProgress() {
-        return progress;
-    }
-
-    public int getProgressAsInteger() {
-        return (int) Math.round(progress);
-    }
+    void progressChanged(AlgorithmProgressEvent event);
 }

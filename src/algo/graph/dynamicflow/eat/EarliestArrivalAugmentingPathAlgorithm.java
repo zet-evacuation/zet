@@ -30,7 +30,7 @@ import ds.graph.Node;
 import java.util.LinkedList;
 import java.util.Queue;
 import java.util.logging.Logger;
-import sandbox.Algorithm;
+import algo.graph.Algorithm;
 
 /**
  *

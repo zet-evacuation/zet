@@ -14,19 +14,29 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 /*
- * AlgorithmStartedEvent.java
+ * AlgorithmProgressEvent.java
  *
  */
-
-package sandbox;
+package algo.graph;
 
 /**
  *
  * @author Martin Groß
  */
-public class AlgorithmStartedEvent extends AlgorithmEvent {
+public class AlgorithmProgressEvent extends AlgorithmEvent {
 
-    public AlgorithmStartedEvent(Algorithm algorithm) {
-        super(algorithm, algorithm.getStartTime(), algorithm.getStartTime());
+    private double progress;
+
+    public AlgorithmProgressEvent(Algorithm algorithm, long startTime, long eventTime, double progress) {
+        super(algorithm, startTime, eventTime);
+        this.progress = progress;
+    }
+
+    public double getProgress() {
+        return progress;
+    }
+
+    public int getProgressAsInteger() {
+        return (int) Math.round(progress);
     }
 }

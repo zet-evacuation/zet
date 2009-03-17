@@ -18,7 +18,7 @@
  *
  */
 
-package sandbox;
+package algo.graph;
 
 /**
  *

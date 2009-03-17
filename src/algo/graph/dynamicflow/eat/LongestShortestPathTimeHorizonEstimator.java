@@ -20,7 +20,7 @@
 
 package algo.graph.dynamicflow.eat;
 
-import sandbox.*;
+import algo.graph.Algorithm;
 import algo.graph.shortestpath.Dijkstra;
 import ds.graph.Node;
 
