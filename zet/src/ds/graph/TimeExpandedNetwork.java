@@ -22,6 +22,7 @@ package ds.graph;
 
 import java.util.LinkedList;
 
+import java.util.List;
 import localization.Localization;
 
 /**
@@ -148,7 +149,7 @@ public class TimeExpandedNetwork extends Network {
 	private void createTimeExpansion(Network network,
 			IdentifiableIntegerMapping<Edge> capacities,
 			IdentifiableIntegerMapping<Edge> transitTimes, int timeHorizon,
-			LinkedList<Node> sources, LinkedList<Node> sinks,
+			List<Node> sources, List<Node> sinks,
 			boolean allowStorageInNodes) {
     	
     	// get ID+1 of node with highest ID
@@ -376,8 +377,8 @@ public class TimeExpandedNetwork extends Network {
     		IdentifiableIntegerMapping<Edge> capacities,
     		IdentifiableIntegerMapping<Edge> transitTimes,
     		int timeHorizon,
-    		LinkedList<Node> sources,
-    		LinkedList<Node> sinks,
+    		List<Node> sources,
+    		List<Node> sinks,
     		boolean allowStorageInNodes){
     	this(network, capacities, transitTimes, timeHorizon, sources, sinks, Integer.MAX_VALUE, allowStorageInNodes);
     }
@@ -386,8 +387,8 @@ public class TimeExpandedNetwork extends Network {
     		IdentifiableIntegerMapping<Edge> capacities,
     		IdentifiableIntegerMapping<Edge> transitTimes,
     		int timeHorizon,
-    		LinkedList<Node> sources,
-    		LinkedList<Node> sinks,
+    		List<Node> sources,
+    		List<Node> sinks,
     		int supersouceOutgoingCapacitiy, boolean allowStorageInNodes){
     	this(allowStorageInNodes,network,timeHorizon);
     	originalSources = new ListSequence<Node>(sources);

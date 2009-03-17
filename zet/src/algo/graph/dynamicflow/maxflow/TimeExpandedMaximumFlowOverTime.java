@@ -13,11 +13,11 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
+
 /*
  * TimeExpandedMaximumFlowOverTime.java
  *
  */
-
 package algo.graph.dynamicflow.maxflow;
 
 import algo.graph.staticflow.maxflow.DischargingGlobalGapHighestLabelPreflowPushAlgorithm;
@@ -35,107 +35,50 @@ import ds.graph.flow.StaticPathFlow;
 import ds.graph.TimeExpandedNetwork;
 import java.util.LinkedList;
 
-import util.DebugFlags;
+import algo.graph.DebugFlags;
 import algo.graph.staticflow.maxflow.MaximumFlowProblem;
 import algo.graph.util.PathComposition;
 import algo.graph.util.PathDecomposition;
 //import statistic.graph.FlowStatisticsCalculator;
 import ds.graph.flow.MaximumFlow;
-import sandbox.Algorithm;
+import algo.graph.Algorithm;
 import tasks.AlgorithmTask;
 
 /**
  *
+ * @author Martin Groß
  */
-public class TimeExpandedMaximumFlowOverTime implements Runnable {
-    
-    protected Network network;
-    protected IdentifiableIntegerMapping<Edge> capacities;
-    protected IdentifiableIntegerMapping<Edge> transitTimes;
-    protected LinkedList<Node> sources;
-    protected LinkedList<Node> sinks;
-    protected int timeHorizon;
-    
+public class TimeExpandedMaximumFlowOverTime extends Algorithm<MaximumFlowOverTimeProblem, PathBasedFlowOverTime> {
+
+    //protected Network network;
+    //protected IdentifiableIntegerMapping<Edge> capacities;
+    //protected IdentifiableIntegerMapping<Edge> transitTimes;
+    //protected LinkedList<Node> sources;
+    //protected LinkedList<Node> sinks;
+    //protected int timeHorizon;
     protected PathBasedFlowOverTime dynamicFlow;
     protected int value;
 
     public TimeExpandedMaximumFlowOverTime(Network network, IdentifiableIntegerMapping<Edge> capacities, IdentifiableIntegerMapping<Edge> transitTimes, LinkedList<Node> sources, LinkedList<Node> sinks, int timeHorizon) {
-        this.network = network;
+        /*this.network = network;
         this.capacities = capacities;
         this.transitTimes = transitTimes;
         this.sources = sources;
         this.sinks = sinks;
-        this.timeHorizon = timeHorizon;
+        this.timeHorizon = timeHorizon;*/
+        setProblem(new MaximumFlowOverTimeProblem(network, capacities, transitTimes, sources, sinks, timeHorizon));
     }
 
     public PathBasedFlowOverTime getDynamicFlow() {
         return dynamicFlow;
-    }   
-    
+    }
+
     public int getValueOfMaximumFlowOverTime() {
         return value;
     }
-    
-    public void run() {
-        int v = 0;
-        if (sources.size()==0 || sinks.size()==0){
-        	if (DebugFlags.MEL){
-        		System.out.println("No individuals - no flow.");
-        	}
-    		dynamicFlow = new PathBasedFlowOverTime();
-    		return;
-        }
-        for (Node source : sources) {
-            for (Edge edge : network.outgoingEdges(source)) {
-                v += capacities.get(edge) * timeHorizon;
-            }
-        }
-        int w = 0;
-        for (Node sink : sinks) {
-            for (Edge edge : network.incomingEdges(sink)) {
-                //System.out.println("X " + w);
-                w += capacities.get(edge) * timeHorizon;
-            }
-        }      
-        //System.out.println(v + " " + w + " " + Math.min(v, w) + ": " + timeHorizon);
-        TimeExpandedNetwork ten = new TimeExpandedNetwork(network, capacities, transitTimes, timeHorizon, sources, sinks, v, false);	
-        //PreflowPush maxFlow = new PreflowPush(ten, ten.capacities(), ten.sources(), ten.sinks());        
-        //maxFlow.run();
-        MaximumFlowProblem problem = new MaximumFlowProblem(ten, ten.capacities(), ten.sources(), ten.sinks());
-        
-        ////PreflowPushAlgorithm algorithm = new PreflowPushAlgorithm();
-        ////algorithm.setProblem(problem);
-        ////algorithm.run();
-        
-        Algorithm<MaximumFlowProblem, MaximumFlow> algorithm = new DischargingGlobalGapHighestLabelPreflowPushAlgorithm();
-        algorithm.setProblem(problem);
-        algorithm.run();        
-        
-        //value = maxFlow.getValueOfMaximumFlow();
-        value = algorithm.getSolution().getFlowValue();
-        //PathBasedFlow decomposedFlow = PathDecomposition.calculatePathDecomposition(ten, ten.sources(), ten.sinks(), maxFlow.getFlow());
-        PathBasedFlow decomposedFlow = PathDecomposition.calculatePathDecomposition(ten, ten.sources(), ten.sinks(), algorithm.getSolution());
-        dynamicFlow = new PathBasedFlowOverTime();
-        for (StaticPathFlow staticPathFlow : decomposedFlow) {
-            if (staticPathFlow.getAmount() == 0) {
-                continue;
-            }
-            StaticPath staticPath = staticPathFlow.getPath();
-            DynamicPath dynamicPath = ten.translatePath(staticPath);
-            FlowOverTimePath dynamicPathFlow = new FlowOverTimePath(dynamicPath, staticPathFlow.getAmount(), staticPathFlow.getAmount());
-            dynamicFlow.addPathFlow(dynamicPathFlow);
-        }        
-        if (DebugFlags.TEMFOT) {
-            System.out.println("The maximum flow over time has the following value:");
-            System.out.println(value);
-            AlgorithmTask.getInstance().publish(100, "TimeExpandedMaximumFlowOverTime", "The maximal flow value is: " + value);
-            System.out.println("It consists of the following dynamic path flows:");
-            System.out.println(dynamicFlow);
-        }        
-    }
-    
-    public static void main (String args[])  {
-        
+
+    public static void main(String args[]) {
+
         Network network = new Network(9, 10);
         Node source1 = network.getNode(0);
         Node source2 = network.getNode(1);
@@ -202,7 +145,7 @@ public class TimeExpandedMaximumFlowOverTime implements Runnable {
         supplies.set(source3, 0);
         supplies.set(sink1, -1);
         supplies.set(sink2, -1);
-        supplies.set(sink3, -1);        
+        supplies.set(sink3, -1);
         TimeExpandedMaximumFlowOverTime algo = new TimeExpandedMaximumFlowOverTime(network, capacities, transitTimes, sources, sinks, 10);
         algo.run();
         //MinimumMeanCycleCancelling algo2 = new MinimumMeanCycleCancelling(network, capacities, transitTimes, supplies);
@@ -217,9 +160,68 @@ public class TimeExpandedMaximumFlowOverTime implements Runnable {
         nfm.setEdgeCapacities(capacities);
         nfm.setTransitTimes(transitTimes);
         nfm.setCurrentAssignment(supplies);
-        // fs = new FlowStatisticsCalculator(nfm, algo.getDynamicFlow());
-        //System.out.println(fs.getFlowRate(e));
-        //System.out.println(algo.getValueOfMaximumFlowOverTime());
-        //System.out.println(algo.getDynamicFlow());
-    }    
+    // fs = new FlowStatisticsCalculator(nfm, algo.getDynamicFlow());
+    //System.out.println(fs.getFlowRate(e));
+    //System.out.println(algo.getValueOfMaximumFlowOverTime());
+    //System.out.println(algo.getDynamicFlow());
+    }
+
+    @Override
+    protected PathBasedFlowOverTime runAlgorithm(MaximumFlowOverTimeProblem problem) {
+        int v = 0;
+        if (problem.getSources().size() == 0 || problem.getSinks().size() == 0) {
+            if (DebugFlags.MEL) {
+                System.out.println("No individuals - no flow.");
+            }
+            return new PathBasedFlowOverTime();
+        }
+        for (Node source : problem.getSources()) {
+            for (Edge edge : problem.getNetwork().outgoingEdges(source)) {
+                v += problem.getCapacities().get(edge) * problem.getTimeHorizon();
+            }
+        }
+        int w = 0;
+        for (Node sink : problem.getSinks()) {
+            for (Edge edge : problem.getNetwork().incomingEdges(sink)) {
+                //System.out.println("X " + w);
+                w += problem.getCapacities().get(edge) * problem.getTimeHorizon();
+            }
+        }
+        //System.out.println(v + " " + w + " " + Math.min(v, w) + ": " + timeHorizon);
+        TimeExpandedNetwork ten = new TimeExpandedNetwork(problem.getNetwork(), problem.getCapacities(), problem.getTransitTimes(), problem.getTimeHorizon(), problem.getSources(), problem.getSinks(), v, false);
+        //PreflowPush maxFlow = new PreflowPush(ten, ten.capacities(), ten.sources(), ten.sinks());        
+        //maxFlow.run();
+        MaximumFlowProblem maximumFlowProblem = new MaximumFlowProblem(ten, ten.capacities(), ten.sources(), ten.sinks());
+
+        ////PreflowPushAlgorithm algorithm = new PreflowPushAlgorithm();
+        ////algorithm.setProblem(problem);
+        ////algorithm.run();
+
+        Algorithm<MaximumFlowProblem, MaximumFlow> algorithm = new DischargingGlobalGapHighestLabelPreflowPushAlgorithm();
+        algorithm.setProblem(maximumFlowProblem);
+        algorithm.run();
+
+        //value = maxFlow.getValueOfMaximumFlow();
+        value = algorithm.getSolution().getFlowValue();
+        //PathBasedFlow decomposedFlow = PathDecomposition.calculatePathDecomposition(ten, ten.sources(), ten.sinks(), maxFlow.getFlow());
+        PathBasedFlow decomposedFlow = PathDecomposition.calculatePathDecomposition(ten, ten.sources(), ten.sinks(), algorithm.getSolution());
+        dynamicFlow = new PathBasedFlowOverTime();
+        for (StaticPathFlow staticPathFlow : decomposedFlow) {
+            if (staticPathFlow.getAmount() == 0) {
+                continue;
+            }
+            StaticPath staticPath = staticPathFlow.getPath();
+            DynamicPath dynamicPath = ten.translatePath(staticPath);
+            FlowOverTimePath dynamicPathFlow = new FlowOverTimePath(dynamicPath, staticPathFlow.getAmount(), staticPathFlow.getAmount());
+            dynamicFlow.addPathFlow(dynamicPathFlow);
+        }
+        if (DebugFlags.TEMFOT) {
+            System.out.println("The maximum flow over time has the following value:");
+            System.out.println(value);
+            AlgorithmTask.getInstance().publish(100, "TimeExpandedMaximumFlowOverTime", "The maximal flow value is: " + value);
+            System.out.println("It consists of the following dynamic path flows:");
+            System.out.println(dynamicFlow);
+        }
+        return dynamicFlow;
+    }
 }
