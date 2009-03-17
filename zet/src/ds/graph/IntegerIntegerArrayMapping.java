@@ -20,14 +20,8 @@
 
 package ds.graph;
 
-import java.util.Iterator;
-import java.util.NavigableSet;
-import java.util.TreeSet;
-
-import localization.Localization;
 import ds.graph.IntegerIntegerArrayMapping.TimeIntegerPair;
 import java.util.Arrays;
-import statistic.graph.IntegerDoubleMapping;
 
 /**
  * The <code>IntegerIntegerMapping</code> class represents a mapping from 

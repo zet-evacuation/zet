@@ -26,7 +26,6 @@ import java.util.TreeSet;
 
 import localization.Localization;
 import ds.graph.IntegerIntegerMapping.TimeIntegerPair;
-import statistic.graph.IntegerDoubleMapping;
 
 /**
  * The <code>IntegerIntegerMapping</code> class represents a mapping from 
