@@ -19,7 +19,8 @@
  */
 package algo.graph.staticflow.mincost;
 
-import algo.graph.traverse.*;
+import algo.graph.shortestpath.MooreBellmanFord;
+import algo.graph.traverse.BFS;
 import ds.graph.Path;
 import ds.graph.Edge;
 import ds.graph.IdentifiableIntegerMapping;
@@ -30,8 +31,6 @@ import ds.graph.TimeExpandedNetwork;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.logging.Logger;
-
-import algo.graph.shortestpath.MooreBellmanFord;
 
 /**
  *

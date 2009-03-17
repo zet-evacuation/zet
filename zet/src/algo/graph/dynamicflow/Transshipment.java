@@ -18,7 +18,7 @@ package algo.graph.dynamicflow;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 
-import localization.Localization;
+import algo.graph.Localization;
 
 import algo.graph.DebugFlags;
 import algo.graph.Notifiable;

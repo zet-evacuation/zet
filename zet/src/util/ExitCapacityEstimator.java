@@ -28,7 +28,7 @@ import ds.graph.IdentifiableIntegerMapping;
 import ds.graph.NetworkFlowModel;
 import ds.graph.Node;
 import ds.graph.flow.MaximumFlow;
-import sandbox.Algorithm;
+import algo.graph.Algorithm;
 
 /**
  *

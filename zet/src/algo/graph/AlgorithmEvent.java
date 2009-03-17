@@ -14,26 +14,36 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 /*
- * MessageEvent.java
+ * AlgorithmEvent.java
  *
  */
-
-package sandbox;
+package algo.graph;
 
 /**
  *
  * @author Martin Groß
  */
-public class MessageEvent extends AlgorithmEvent {
-    
-    private String message;
+public abstract class AlgorithmEvent {
 
-    public MessageEvent(Algorithm algorithm, long startTime, long eventTime, String message) {
-        super(algorithm, startTime, eventTime);
-        this.message = message;
+    private Algorithm algorithm;
+    private long eventTime;
+    private long startTime;
+
+    protected AlgorithmEvent(Algorithm algorithm, long startTime, long eventTime) {
+        this.algorithm = algorithm;
+        this.startTime = startTime;
+        this.eventTime = eventTime;
     }
 
-    public String getMessage() {
-        return message;
+    public final Algorithm getAlgorithm() {
+        return algorithm;
+    }
+
+    public final long getEventTime() {
+        return eventTime;
+    }
+
+    public final long getStartTime() {
+        return startTime;
     }
 }

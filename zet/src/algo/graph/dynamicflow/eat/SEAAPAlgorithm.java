@@ -25,7 +25,7 @@ import ds.graph.Node;
 import ds.graph.flow.FlowOverTime;
 import java.util.Arrays;
 import java.util.LinkedList;
-import sandbox.Algorithm;
+import algo.graph.Algorithm;
 
 /**
  *

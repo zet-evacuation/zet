@@ -14,36 +14,19 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 /*
- * AlgorithmEvent.java
+ * AlgorithmStoppedEvent.java
  *
  */
-package sandbox;
+
+package algo.graph;
 
 /**
  *
  * @author Martin Groß
  */
-public abstract class AlgorithmEvent {
+public class AlgorithmStoppedEvent extends AlgorithmEvent {
 
-    private Algorithm algorithm;
-    private long eventTime;
-    private long startTime;
-
-    protected AlgorithmEvent(Algorithm algorithm, long startTime, long eventTime) {
-        this.algorithm = algorithm;
-        this.startTime = startTime;
-        this.eventTime = eventTime;
-    }
-
-    public final Algorithm getAlgorithm() {
-        return algorithm;
-    }
-
-    public final long getEventTime() {
-        return eventTime;
-    }
-
-    public final long getStartTime() {
-        return startTime;
+    public AlgorithmStoppedEvent(Algorithm algorithm) {
+        super(algorithm, algorithm.getStartTime(), algorithm.getRuntime());
     }
 }

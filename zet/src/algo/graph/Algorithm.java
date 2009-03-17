@@ -13,11 +13,12 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
+
 /*
  * Algorithm.java
  *
  */
-package sandbox;
+package algo.graph;
 
 import java.util.LinkedHashSet;
 import java.util.Set;
@@ -25,8 +26,9 @@ import tasks.AlgorithmTask;
 import util.NanosecondTimeFormatter;
 
 /**
- *
- * @author
+ * The basic framework class for graph algorithms.
+ * 
+ * @author Martin Groß
  */
 public abstract class Algorithm<Problem, Solution> implements Runnable {
 
@@ -37,15 +39,15 @@ public abstract class Algorithm<Problem, Solution> implements Runnable {
     private void fireEvent(AlgorithmStoppedEvent algorithmStoppedEvent) {
         //throw new UnsupportedOperationException("Not yet implemented");
     }
-    
-    public enum State { 
+
+    public enum State {
+
         WAITING_FOR_PROBLEM,
         READY_TO_SOLVE,
-        SOLVING, 
-        SOLVING_FAILED, 
-        SOLVED; 
+        SOLVING,
+        SOLVING_FAILED,
+        SOLVED;
     }
-
     private Problem problem;
     private Set<MessageListener> messageListeners;
     private double progress;
@@ -120,9 +122,10 @@ public abstract class Algorithm<Problem, Solution> implements Runnable {
             throw new IllegalArgumentException("The progress values must be monotonically increasing.");
         }
         this.progress = progress;
-				if( util.ProgressBooleanFlags.ALGO_PROGRESS )
-					System.out.println( "Progress: " + progress );
-				AlgorithmTask.getInstance().publish( (int)Math.round( progress*100 ) );
+        if (util.ProgressBooleanFlags.ALGO_PROGRESS) {
+            System.out.println("Progress: " + progress);
+        }
+        AlgorithmTask.getInstance().publish((int) Math.round(progress * 100));
         if (progressListeners != null) {
             AlgorithmProgressEvent event = new AlgorithmProgressEvent(this, startTime, System.nanoTime(), progress);
             for (ProgressListener listener : progressListeners) {
@@ -153,8 +156,8 @@ public abstract class Algorithm<Problem, Solution> implements Runnable {
         } else {
             throw new IllegalStateException("The problem has not been solved yet. Please call run() first.");
         }
-    }    
-    
+    }
+
     public final Solution getSolution() {
         if (isProblemSolved()) {
             return solution;
@@ -162,7 +165,7 @@ public abstract class Algorithm<Problem, Solution> implements Runnable {
             throw new IllegalStateException("The problem has not been solved yet. Please call run() first.");
         }
     }
-    
+
     public final long getStartTime() {
         if (isRunning() || isProblemSolved()) {
             return startTime;
@@ -192,8 +195,8 @@ public abstract class Algorithm<Problem, Solution> implements Runnable {
                 startTime = System.nanoTime();
                 state = State.SOLVING;
                 fireEvent(new AlgorithmStartedEvent(this));
-                solution = runAlgorithm(problem);                
-                state = State.SOLVED;                
+                solution = runAlgorithm(problem);
+                state = State.SOLVED;
                 runtime = System.nanoTime() - startTime;
                 //fireEvent(new AlgorithmStoppedEvent(this));
             } catch (RuntimeException ex) {

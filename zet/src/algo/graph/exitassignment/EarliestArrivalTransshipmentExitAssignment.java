@@ -29,7 +29,7 @@ import ds.graph.Node;
 import ds.graph.flow.FlowOverTime;
 import ds.graph.flow.FlowOverTimePath;
 import ds.graph.flow.PathBasedFlowOverTime;
-import sandbox.Algorithm;
+import algo.graph.Algorithm;
 
 /**
  *

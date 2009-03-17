@@ -19,7 +19,7 @@ import java.util.Collections;
 import java.util.Iterator;
 import java.util.LinkedList;
 
-import localization.Localization;
+import algo.graph.Localization;
 
 import algo.graph.DebugFlags;
 import algo.graph.staticflow.StaticTransshipment;

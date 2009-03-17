@@ -19,7 +19,6 @@
  */
 package algo.graph.staticflow.maxflow;
 
-import algo.graph.traverse.BFS;
 import ds.graph.Edge;
 import ds.graph.Node;
 import java.util.LinkedList;
