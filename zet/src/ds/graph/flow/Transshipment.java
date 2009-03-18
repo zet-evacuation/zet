@@ -19,7 +19,7 @@
  */
 package ds.graph.flow;
 
-import algo.graph.staticflow.TransshipmentProblem;
+import ds.graph.problem.TransshipmentProblem;
 import ds.graph.Edge;
 import ds.graph.IdentifiableIntegerMapping;
 import ds.graph.Node;

@@ -25,7 +25,7 @@ import algo.graph.dynamicflow.eat.SEAAPAlgorithm;
 import algo.graph.dynamicflow.eat.TimeHorizonBounds;
 import algo.graph.shortestpath.Dijkstra;
 import algo.graph.staticflow.maxflow.DischargingGlobalGapHighestLabelPreflowPushAlgorithm;
-import algo.graph.staticflow.maxflow.MaximumFlowProblem;
+import ds.graph.problem.MaximumFlowProblem;
 import ds.graph.Edge;
 import ds.graph.Forest;
 import ds.graph.IdentifiableCollection;

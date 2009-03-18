@@ -21,7 +21,7 @@
 package util;
 
 import algo.graph.staticflow.maxflow.DischargingGlobalGapHighestLabelPreflowPushAlgorithm;
-import algo.graph.staticflow.maxflow.MaximumFlowProblem;
+import ds.graph.problem.MaximumFlowProblem;
 import ds.graph.Edge;
 import ds.graph.IdentifiableCollection;
 import ds.graph.IdentifiableIntegerMapping;

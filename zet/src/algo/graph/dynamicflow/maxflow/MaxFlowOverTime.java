@@ -40,7 +40,7 @@ import algo.graph.DebugFlags;
 import algo.graph.staticflow.mincost.MinimumMeanCycleCancelling;
 import algo.graph.util.PathDecomposition;
 
-import algo.graph.Localization;
+import ds.graph.Localization;
 
 /**
  * The class <code>MaxFlowOverTime</code> solves the max flow over time 

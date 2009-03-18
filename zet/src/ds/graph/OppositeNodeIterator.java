@@ -23,8 +23,6 @@ package ds.graph;
 import java.util.HashMap;
 import java.util.Iterator;
 
-import localization.Localization;
-
 /**
  * The iterator belong to the collection class above. Required for iterating
  * over the set of adjacent nodes obtained by the class above.

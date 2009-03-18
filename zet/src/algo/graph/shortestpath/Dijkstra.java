@@ -19,7 +19,7 @@
  */
 package algo.graph.shortestpath;
 
-import algo.graph.Localization;
+import ds.graph.Localization;
 import ds.graph.Edge;
 import ds.graph.Forest;
 import ds.graph.IdentifiableCollection;

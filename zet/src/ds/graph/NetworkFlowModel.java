@@ -22,8 +22,6 @@ package ds.graph;
 
 import java.util.LinkedList;
 
-import localization.Localization;
-
 import com.thoughtworks.xstream.annotations.XStreamAlias;
 import converter.ZToGraphMapping;
 

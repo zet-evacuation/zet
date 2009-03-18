@@ -17,6 +17,7 @@
 /*
  * Algorithm.java
  *
+ * @author Martin Groß
  */
 package algo.graph;
 

@@ -21,8 +21,6 @@ package ds.graph;
 
 import java.lang.reflect.Array;
 
-import localization.Localization;
-
 /**
  * The <code>IdentifiableObjectMapping</code> class represents a mapping from a
  * set of identifiable objects to arbitrary values. An object is considered 

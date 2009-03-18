@@ -20,8 +20,8 @@
 package ds.graph;
 
 import java.util.List;
-import algo.graph.dynamicflow.eat.EarliestArrivalAugmentingPath;
-import algo.graph.dynamicflow.eat.EarliestArrivalAugmentingPath.NodeTimePair;
+import ds.graph.flow.EarliestArrivalAugmentingPath;
+import ds.graph.flow.EarliestArrivalAugmentingPath.NodeTimePair;
 
 /**
  *

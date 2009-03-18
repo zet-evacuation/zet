@@ -20,7 +20,7 @@
  */
 package algo.graph.dynamicflow.maxflow;
 
-import algo.graph.staticflow.maxflow.MaximumFlowProblem;
+import ds.graph.problem.MaximumFlowProblem;
 import ds.graph.Edge;
 import ds.graph.IdentifiableIntegerMapping;
 import ds.graph.Network;

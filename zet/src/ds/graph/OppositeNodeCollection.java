@@ -22,8 +22,6 @@ package ds.graph;
 
 import java.util.Iterator;
 
-import localization.Localization;
-
 /**
  * A utility class for obtaining the set of adjacent nodes from a set of 
  * incident edges in O(1) time.
