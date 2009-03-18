@@ -147,7 +147,6 @@ public class BatchEvacuationCATask implements Runnable {
 		caAlgo.getCellularAutomaton ().startRecording ();
 		caAlgo.run ();
 		caAlgo.getCellularAutomaton ().stopRecording ();
-		//JEditor.sendMessage( Localization.getInstance ().getString ("batch.SimulationCompleted") );
 		// THREAD end
 		long end = System.currentTimeMillis ();
 		System.out.println ("Laufzeit optimierter CA:" + (end - start) + " ms");

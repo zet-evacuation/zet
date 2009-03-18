@@ -62,15 +62,24 @@ import util.random.distributions.NormalDistribution;
  */
 public class EditorStart {
 	/** The version of zet. */
-	public static String version = "1.0";
+	public static String version = "1.0.1";
+	/** The localization class. */
+	private static Localization loc = Localization.getInstance();
+	/** The project file that should be loaded (submitted via commandline). */
 	static String loadedProject = "";
+	/** The property file that is loaded when the program starts. Can be changed via commandline. */
 	static String propertyFilename = "./properties/properties.xml";
-	static String optionFilename = "zetoptions.xml";
+	/** The filename that contains the program options. */
+	static final String optionFilename = "zetoptions.xml";
+	/** The file to which the log is written (if specified via commandline). */
 	static String logFile = "";
+	/** The file to which the error log is written (if specified via commandline). */
 	static String errFile = "";
+	/** The batch project which is loaded if -batch command option is used. */
 	static BatchProject bp = null;
-
+	/** States if visualization is used, or not. Can be changed via commandline. */
 	public static boolean useVisualization = true;
+	/** States if statistic is used, or not. Can be changed via commandline. */
 	public static boolean useStatistic = true;
 	
 	/** Creates a new instance of <code>EditorStart</code> */
@@ -78,60 +87,61 @@ public class EditorStart {
 
 	public static void main( String[] args ) throws JSAPException {
 		JSAP jsap = new JSAP();
+		loc.setPrefix( "help." );
 
-		UnflaggedOption optProjectFile = new UnflaggedOption( "project" )
+	UnflaggedOption optProjectFile = new UnflaggedOption( "project" )
 						.setStringParser( JSAP.STRING_PARSER )
 						.setRequired( false );
-		optProjectFile.setHelp( "A project file that should be loaded automatically. If the path contains spaces, enclose it in quotes." );
+		optProjectFile.setHelp( loc.getString("projectFile") );
 		jsap.registerParameter( optProjectFile );
 
 		FlaggedOption optProperty = new FlaggedOption( "property" ).setStringParser( JSAP.STRING_PARSER )
 						.setRequired( false )
 						.setShortFlag( 'p' )
 						.setLongFlag( "property" );
-		optProperty.setHelp( "A property file that is loaded. If the path contains spaces, enclose it in quotes. The default propertyfile that is loaded is './properties/properties.xml'" );
+		optProperty.setHelp( loc.getString( "propertyFile" ) );
 		jsap.registerParameter( optProperty );
 
 		FlaggedOption optBatchFile = new FlaggedOption( "batch" ).setStringParser( JSAP.STRING_PARSER )
 						.setRequired( false )
 						.setShortFlag( 'b' )
 						.setLongFlag( "batch" );
-		optBatchFile.setHelp( "An xml-file containing some jobs that should be executed." );
+		optBatchFile.setHelp( loc.getString( "batchFile" ) );
 		jsap.registerParameter( optBatchFile );
 
 		FlaggedOption optLogFile = new FlaggedOption( "log" ).setStringParser( JSAP.STRING_PARSER )
 						.setRequired( false )
 						.setShortFlag( 'l' )
 						.setLongFlag( "log" );
-		optBatchFile.setHelp( "A file that will contain the program output." );
+		optLogFile.setHelp( loc.getString( "logFile" ) );
 		jsap.registerParameter( optLogFile );
 		
 		FlaggedOption optErrFile = new FlaggedOption( "err" ).setStringParser( JSAP.STRING_PARSER )
 						.setRequired( false )
 						.setShortFlag( 'e' )
 						.setLongFlag( "error" );
-		optBatchFile.setHelp( "A file that will contain the program error messages. Can be the same as the log-file, but then output are mixed." );
+		optErrFile.setHelp( loc.getString( "errFile" ) );
 		jsap.registerParameter( optErrFile );
 
 		Switch optAutoLog = new Switch( "autolog" ).setLongFlag( "autolog" );
-		optAutoLog.setHelp( "Enables automatic logging. Files containing the current date are automatically created. If set, log and error options are ignored." );
+		optAutoLog.setHelp( loc.getString( "autoLog" ) );
 		jsap.registerParameter( optAutoLog );
 
 		Switch optVerbose = new Switch( "verbose" ).setLongFlag( "verbose" )
 						.setShortFlag( 'v' );
-		optVerbose.setHelp( "Enables commandline output even if file-logging is enabled." );
+		optVerbose.setHelp( loc.getString( "verbose" ) );
 		jsap.registerParameter( optVerbose );
 
 		Switch optNoVisualization = new Switch( "noVis" ).setLongFlag( "noVisualization" );
-		optNoVisualization.setHelp( "Disables storing of visualization results for cellular automatons." );
+		optNoVisualization.setHelp( loc.getString( "noVisualization" ) );
 		jsap.registerParameter( optNoVisualization );
 
 		Switch optNoStatistic = new Switch( "noStat" ).setLongFlag( "noStatistic" );
-		optNoStatistic.setHelp( "Disables storing of statistic for the individuals and cells in the cellular automaton." );
+		optNoStatistic.setHelp( loc.getString( "noStatistic" ) );
 		jsap.registerParameter( optNoStatistic );
 
 		Switch optHelp = new Switch( "help" ).setShortFlag( 'h' ).setLongFlag( "help" );
-		optHelp.setHelp( "Shows this help." );
+		optHelp.setHelp( loc.getString( "help" ) );
 		jsap.registerParameter( optHelp );
 
 		JSAPResult config = jsap.parse( args );
@@ -139,10 +149,10 @@ public class EditorStart {
 			System.err.println();
 			for( java.util.Iterator errs = config.getErrorMessageIterator();
 							errs.hasNext();) {
-				System.err.println( "Error: " + errs.next() );
+				System.err.println( loc.getString( "error" ) + errs.next() );
 			}
 			System.err.println();
-			System.err.println( "Usage: java zet" + jsap.getUsage() );
+			System.err.println( loc.getString( "usage" ) + " java zet" + jsap.getUsage() );
 			System.err.println();
 			System.err.println( jsap.getHelp() );
 			System.err.println();
@@ -151,13 +161,14 @@ public class EditorStart {
 
 		if( config.getBoolean( "help" ) ) {
 			System.out.println();
-			System.out.println( "Usage: java zet" + jsap.getUsage() );
+			System.out.println( loc.getString( "usage" ) + " java zet" + jsap.getUsage() );
 			System.out.println();
 			System.out.println( jsap.getHelp() );
 			if( !config.contains( "project" ) ) {
 				System.exit( 0 );
 			}
 		}
+		loc.setPrefix( "" );
 		
 		if( config.contains( "log" ) )
 			logFile = config.getString( "log" );
@@ -306,16 +317,16 @@ public class EditorStart {
 	 */
 	public static Project newProject() {
 		Project p = new Project();
-		Floor fl = new Floor( Localization.getInstance().getString( "ds.z.DefaultName.Floor" ) + " 1" );
+		Floor fl = new Floor( loc.getString( "ds.z.DefaultName.Floor" ) + " 1" );
 		p.getPlan().addFloor( fl );
-		Assignment assignment = new Assignment( Localization.getInstance().getString( "ds.z.DefaultName.DefaultAssignment" ) );
+		Assignment assignment = new Assignment( loc.getString( "ds.z.DefaultName.DefaultAssignment" ) );
 		p.addAssignment( assignment );
 		NormalDistribution d = new NormalDistribution( 0.5, 1.0, 0.4, 0.7 );
 		NormalDistribution a = new NormalDistribution( 16, 1, 14, 80 );
 		NormalDistribution f = new NormalDistribution( 0.8, 1.0, 0.7, 1.0 );
 		NormalDistribution pa = new NormalDistribution( 0.5, 1.0, 0.0, 1.0 );
 		NormalDistribution de = new NormalDistribution( 0.3, 1.0, 0.0, 1.0 );
-		AssignmentType assignmentType = new AssignmentType( Localization.getInstance().getString( "ds.z.DefaultName.DefaultAssignmentType" ), d, a, f, pa, de, 10 );
+		AssignmentType assignmentType = new AssignmentType( loc.getString( "ds.z.DefaultName.DefaultAssignmentType" ), d, a, f, pa, de, 10 );
 		assignment.addAssignmentType( assignmentType );
 		return p;
 	}
