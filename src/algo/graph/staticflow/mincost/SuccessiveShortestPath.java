@@ -19,6 +19,7 @@
  */
 package algo.graph.staticflow.mincost;
 
+import algo.graph.Algorithm;
 import algo.graph.shortestpath.MooreBellmanFord;
 import algo.graph.traverse.BFS;
 import ds.graph.Path;
@@ -28,6 +29,7 @@ import ds.graph.Network;
 import ds.graph.Node;
 import ds.graph.ResidualNetwork;
 import ds.graph.TimeExpandedNetwork;
+import ds.graph.problem.MinimumCostFlowProblem;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.logging.Logger;
@@ -36,7 +38,7 @@ import java.util.logging.Logger;
  *
  * @author Martin Groß
  */
-public class SuccessiveShortestPath {
+public class SuccessiveShortestPath /*extends Algorithm<MinimumCostFlowProblem, IdentifiableIntegerMapping<Edge>>*/ {
 
     private static final Logger LOGGER = Logger.getLogger("fv.model.algorithm.SuccessiveShortestPath");
     private Network network;
@@ -214,5 +216,10 @@ public class SuccessiveShortestPath {
         for (Path path : algo.getPaths()) {
             //System.out.println(path.toString());
         }
+    }
+
+    //@Override
+    protected IdentifiableIntegerMapping<Edge> runAlgorithm(MinimumCostFlowProblem problem) {
+        throw new UnsupportedOperationException("Not supported yet.");
     }
 }

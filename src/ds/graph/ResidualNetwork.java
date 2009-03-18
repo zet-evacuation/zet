@@ -19,6 +19,8 @@
  */
 package ds.graph;
 
+import ds.graph.flow.Flow;
+
 /**
  * The <code>ResidualNetwork</code> class provides flow algorithms with the 
  * functionality to create and work with residual networks. The residual 
@@ -96,14 +98,17 @@ public class ResidualNetwork extends Network {
      */
     public ResidualNetwork(Network network, IdentifiableIntegerMapping<Edge> capacities, IdentifiableIntegerMapping<Edge> transitTimes) {
         this(network, capacities);
+        residualTransitTimes = expandCostFunction(transitTimes);
+        /*
         residualTransitTimes = new IdentifiableIntegerMapping<Edge>(network.numberOfEdges() * 2);
         for (Edge edge : edges) {
+            System.out.println(edge);
             if (isReverseEdge(edge)) {
                 residualTransitTimes.set(edge, -transitTimes.get(edge));
             } else {
                 residualTransitTimes.set(edge, transitTimes.get(edge));
             }
-        }
+        }*/
     }
 
     /**
@@ -182,6 +187,28 @@ public class ResidualNetwork extends Network {
         return edge.id() >= originalNumberOfEdges;
     }
 
+    /**
+     * This method expand the given cost function over some network to cover 
+     * also the residual network
+     * @param oldCosts The old cost function to be expanded
+     * @param sNetwork The network.
+     * @param resNetwork The residual network
+     * @return an new costs function that is identical with the old function
+     * on the old domain. On all other edges in the residual network it returns
+     * either the ngated cost of the oposite edge if it exists or 0.
+     */
+    public IdentifiableIntegerMapping<Edge> expandCostFunction(IdentifiableIntegerMapping<Edge> costs) {
+        IdentifiableIntegerMapping<Edge> result = new IdentifiableIntegerMapping<Edge>(costs);
+        result.setDomainSize(getEdgeCapacity());
+        for (int id = 0; id < getEdgeCapacity(); id++) {
+            Edge edge = edges.getEvenIfHidden(id);
+            if (isReverseEdge(edge)) {
+                result.set(edge, -costs.get(reverseEdge(edge)));
+            }
+        }
+        return result;
+    }    
+    
     /**
      * Creates a copy of this residual network.
      * @return a copy of this residual network.
