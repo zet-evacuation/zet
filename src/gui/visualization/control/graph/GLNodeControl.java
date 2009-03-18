@@ -62,7 +62,12 @@ public class GLNodeControl extends AbstractControl<GLNode, Node, GraphVisualizat
 
 		for( Edge edge : graphVisResult.getNetwork().outgoingEdges( node ) ) {
 			if( edge.start().id() != 0 && edge.end().id() != 0 ) {
-				add( new GLEdgeControl( graphVisResult, edge, glControl ) );
+				int nodeFloor1 = graphVisResult.getNodeToFloorMapping().get( edge.start() );
+				int nodeFloor2 = graphVisResult.getNodeToFloorMapping().get( edge.end() );
+				if( nodeFloor1 != nodeFloor2 )
+					System.out.println( "Knoten auf verschiedenen floors" );
+				else
+					add( new GLEdgeControl( graphVisResult, edge, glControl ) );
 			}
 		}
 		isEvacuationNode = graphVisResult.isEvacuationNode( node );
@@ -155,11 +160,11 @@ public class GLNodeControl extends AbstractControl<GLNode, Node, GraphVisualizat
 		}
 	}
 
-	public void setGridVisible( boolean val ) {
+	public void setRectangleVisible( boolean val ) {
 		this.gridVisible = val;
 	}
 	
-	public boolean isGridVisible() {
+	public boolean isRectangleVisible() {
 		return gridVisible;
 	}
 }

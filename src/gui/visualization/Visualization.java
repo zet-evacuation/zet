@@ -82,6 +82,8 @@ public class Visualization extends AbstractVisualization implements EventListene
 	// Status-Variablen die angezeigte Elemente steuern
 	private boolean showEye = PropertyContainer.getInstance().getAsBoolean( "options.visualization.elements.eye" );
 	private boolean showFPS = PropertyContainer.getInstance().getAsBoolean( "options.visualization.elements.fps" );
+	private boolean showTimestepGraph = PropertyContainer.getInstance().getAsBoolean( "options.visualization.elements.timestepGraph" );
+	private boolean showTimestepCellularAutomaton = PropertyContainer.getInstance().getAsBoolean( "options.visualization.elements.timestepCA" );
 	/** 
 	 * Creates a new instance of the {@code Visualization} panel with given 
 	 * properties in an {@code GLCapabilities}.
@@ -326,24 +328,32 @@ public class Visualization extends AbstractVisualization implements EventListene
 		if( control.hasCellularAutomaton() ) {
 			if( control.isCaFinshed() ) {
 				minimalFrameCountCellularAutomaton--;
-				font.print( 0, this.getHeight() - (row++)*fontSize, loc.getString( "gui.visualization.fps.simulationFinished" ) );
-				font.print( 0, this.getHeight() - (row++)*fontSize, loc.getString( "gui.visualization.fps.simulationNeeded" ) + " " + secToMin( control.getCaStep()*control.getCaSecondsPerStep() ) );
+				if( showTimestepCellularAutomaton ) {
+					font.print( 0, this.getHeight() - (row++)*fontSize, loc.getString( "gui.visualization.fps.simulationFinished" ) );
+					font.print( 0, this.getHeight() - (row++)*fontSize, loc.getString( "gui.visualization.fps.simulationNeeded" ) + " " + secToMin( control.getCaStep()*control.getCaSecondsPerStep() ) );
+				}
 			} else {
 				minimalFrameCountCellularAutomaton = 2;
-				font.print( 0, this.getHeight() - (row++)*fontSize, loc.getString( "gui.visualization.fps.simulationStep" ) + " " + Double.toString( control.getCaStep() ) );
-				font.print( 0, this.getHeight() - (row++)*fontSize, loc.getString( "gui.visualization.fps.simulationTime" ) + " " + secToMin( control.getCaStep()*control.getCaSecondsPerStep() ) );
+				if( showTimestepCellularAutomaton ) {
+					font.print( 0, this.getHeight() - (row++)*fontSize, loc.getString( "gui.visualization.fps.simulationStep" ) + " " + Double.toString( control.getCaStep() ) );
+					font.print( 0, this.getHeight() - (row++)*fontSize, loc.getString( "gui.visualization.fps.simulationTime" ) + " " + secToMin( control.getCaStep()*control.getCaSecondsPerStep() ) );
+				}
 			}
 			row++;
 		}
 		if( control.hasGraph() ) {
 			if( control.isGraphFinished() ) {
 				minimalFrameCountGraph--;
-				font.print( 0, this.getHeight() - (row++)*fontSize, loc.getString( "gui.visualization.fps.graphFinished" ) );
-				font.print( 0, this.getHeight() - (row++)*fontSize, loc.getString( "gui.visualization.fps.graphNeeded" ) + " " + secToMin( control.getGraphStep()*control.getGraphSecondsPerStep() ) );
+				if( showTimestepGraph ) {
+					font.print( 0, this.getHeight() - (row++)*fontSize, loc.getString( "gui.visualization.fps.graphFinished" ) );
+					font.print( 0, this.getHeight() - (row++)*fontSize, loc.getString( "gui.visualization.fps.graphNeeded" ) + " " + secToMin( control.getGraphStep()*control.getGraphSecondsPerStep() ) );
+				}
 			} else {
 				minimalFrameCountGraph = 2;
-				font.print( 0, this.getHeight() - (row++)*fontSize, loc.getString( "gui.visualization.fps.graphStep" ) + " " + Double.toString( control.getGraphStep() ) );
-				font.print( 0, this.getHeight() - (row++)*fontSize,  loc.getString( "gui.visualization.fps.graphTime" ) + " " + secToMin( control.getGraphStep()*control.getGraphSecondsPerStep() ) );
+				if( showTimestepGraph ) {
+					font.print( 0, this.getHeight() - (row++)*fontSize, loc.getString( "gui.visualization.fps.graphStep" ) + " " + Double.toString( control.getGraphStep() ) );
+					font.print( 0, this.getHeight() - (row++)*fontSize,  loc.getString( "gui.visualization.fps.graphTime" ) + " " + secToMin( control.getGraphStep()*control.getGraphSecondsPerStep() ) );
+				}
 			}
 			row++;
 		}

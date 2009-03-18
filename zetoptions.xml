@@ -32,8 +32,10 @@
       <boolNode name="options.visualization.invertScroll" useAsLocString="true" description="desc" information="options.visualization.invertScroll.info" parameter="editor.options.visualization.invertScroll">false</boolNode>
     </treeNode>
     <treeNode name = "options.visualization.elements" useAsLocString="true">
-      <boolNode name="options.visualization.elements.eye" useAsLocString="true" description="desc" information="options.visualization.elements.eye.info" parameter="options.visualization.elements.eye">true</boolNode>
+      <boolNode name="options.visualization.elements.eye" useAsLocString="true" description="desc" information="options.visualization.elements.eye.info" parameter="options.visualization.elements.eye">false</boolNode>
       <boolNode name="options.visualization.elements.fps" useAsLocString="true" description="desc" information="options.visualization.elements.fps.info" parameter="options.visualization.elements.fps">false</boolNode>
+      <boolNode name="options.visualization.elements.timestepGraph" useAsLocString="true" description="desc" information="options.visualization.elements.timestepGraph.info" parameter="options.visualization.elements.timestepGraph">false</boolNode>
+      <boolNode name="options.visualization.elements.timestepCA" useAsLocString="true" description="desc" information="options.visualization.elements.timestepCA.info" parameter="options.visualization.elements.timestepCA">false</boolNode>
     </treeNode>
     <treeNode name = "options.visualization.view" useAsLocString="true">
       <boolNode name="options.visualization.view.smooth" useAsLocString="true" description="desc" information="options.visualization.view.smooth.info" parameter="options.visualization.view.smooth">true</boolNode>
@@ -42,6 +44,9 @@
     <boolNode name="options.visualization.allowRotateIn2D" useAsLocString="true" description="desc" information="options.visualization.allowRotateIn2D.info" parameter="editor.options.visualization.allowRotateIn2D">true</boolNode>
     <boolNode name="options.visualization.startWith2D" useAsLocString="true" description="desc" information="options.visualization.startWith2D.info" parameter="editor.options.visualization.startWith2D">true</boolNode>
     <boolNode name="options.visualization.startWithIso" useAsLocString="true" description="desc" information="options.visualization.startWithIso.info" parameter="editor.options.visualization.startWithIso">true</boolNode>
+	  <treeNode name="options.visualization.flow" useAsLocString="true">
+		<boolNode name = "options.visualization.flow.equalArrival" useAsLocString="true" description="desc" information="options.visualization.flow.equalArrival" parameter="options.visualization.flow.equalArrival">true</boolNode>
+	  </treeNode>
   </treeNode>
 	<treeNode name="options.statistic" useAsLocString="true">
 		<boolNode name="options.statistic.blackAndWhiteDiagrams" useAsLocString="true" description="desc" information="options.statistic.blackAndWhiteDiagrams.info" parameter="statistic.blackAndWhiteDiagrams">true</boolNode>

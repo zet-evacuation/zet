@@ -206,7 +206,31 @@ public class SimpleMovementRule2 extends AbstractMovementRule{
 		if( targets.size() == 0 )
 			return cell;
 
-		double p[] = new double[targets.size()];
+		// wähle die target-cell mit dem kleinsten potenzial aus
+		//int pot = Integer.MAX_VALUE;
+		Cell target = targets.get( 0 );
+		double minPot = parameters.effectivePotential( cell, target );
+		for( Cell c : targets ) {
+			double pot = parameters.effectivePotential( cell, c );
+			if( pot > minPot ) {
+				target = c;
+				minPot = pot;
+			}
+		}
+		return target;
+//		double p[] = new double[targets.size()];
+//
+//		for( int i = 0; i < targets.size(); i++ )
+//			p[i] = Math.exp( parameters.effectivePotential( cell, targets.get( i ) ) );
+////
+//		double min = p[0];
+//		int minIndex;
+//		for( int i = 1; i < targets.size(); ++i )
+//			if( p[i] < min ) {
+//
+//			}
+//			min = Math.min( min, p[i] );
+//		return targets.get( RandomUtils.getInstance().chooseRandomlyAbsolute( p ) );
 
 //		double max = Integer.MIN_VALUE;
 //		int max_index = 0;
@@ -287,8 +311,8 @@ public class SimpleMovementRule2 extends AbstractMovementRule{
 			}//end else
 		}// end if inSameRoom*/
 
-		int number = RandomUtils.getInstance().chooseRandomlyAbsolute( p );
-		return targets.get( number );
+		//int number = RandomUtils.getInstance().chooseRandomlyAbsolute( p );
+		//return targets.get( number );
 	}
 
 
