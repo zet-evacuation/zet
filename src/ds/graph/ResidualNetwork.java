@@ -32,35 +32,32 @@ public class ResidualNetwork extends Network {
      * The underlying base network.
      */
     private Network network;
-	
-	/** The number of edges that the original Network had (without the residual edges)
-	 */
+    /** 
+     * The number of edges that the original Network had (without the residual edges)
+     */
     private int originalNumberOfEdges;
-	
     /**
      * The flow associated with this residual network.
      */
     private IdentifiableIntegerMapping<Edge> flow;
-    
     /**
      * The residual capacities of this residual network.
      */
     private IdentifiableIntegerMapping<Edge> residualCapacities;
-    
     /**
      * The residual transit times of this residual network.
-     */    
+     */
     private IdentifiableIntegerMapping<Edge> residualTransitTimes;
-    
+
     /**
      * A constructor for clone and overriding classes.
      */
     protected ResidualNetwork(int initialNodeCapacity, int initialEdgeCapacity) {
         super(initialNodeCapacity, initialEdgeCapacity);
-		
-		originalNumberOfEdges = initialEdgeCapacity;
+
+        originalNumberOfEdges = initialEdgeCapacity;
     }
-    
+
     /**
      * Creates a new residual network, based on the specified network, the 
      * zero flow and the specidied capacities.
@@ -69,8 +66,8 @@ public class ResidualNetwork extends Network {
      */
     public ResidualNetwork(Network network, IdentifiableIntegerMapping<Edge> capacities) {
         super(network.numberOfNodes(), network.numberOfEdges() * 2);
-		originalNumberOfEdges = network.numberOfEdges ();
-		
+        originalNumberOfEdges = network.numberOfEdges();
+
         setNodes(network.nodes());
         setEdges(network.edges());
         for (Edge edge : network.edges()) {
@@ -96,7 +93,7 @@ public class ResidualNetwork extends Network {
      * @param network the base network for the residual network.
      * @param capacities the base capacities for the residual network.
      * @param transitTimes the base transit times for the residual network.
-     */    
+     */
     public ResidualNetwork(Network network, IdentifiableIntegerMapping<Edge> capacities, IdentifiableIntegerMapping<Edge> transitTimes) {
         this(network, capacities);
         residualTransitTimes = new IdentifiableIntegerMapping<Edge>(network.numberOfEdges() * 2);
@@ -138,7 +135,7 @@ public class ResidualNetwork extends Network {
      * Returns the capacities of the edges in this residual network (with regard
      * to the flow associated with the network). Runtime O(1).
      * @return the capacities of the edges in this residual network.
-     */    
+     */
     public IdentifiableIntegerMapping<Edge> residualCapacities() {
         return residualCapacities;
     }
@@ -184,7 +181,7 @@ public class ResidualNetwork extends Network {
     public boolean isReverseEdge(Edge edge) {
         return edge.id() >= originalNumberOfEdges;
     }
-    
+
     /**
      * Creates a copy of this residual network.
      * @return a copy of this residual network.
@@ -207,11 +204,11 @@ public class ResidualNetwork extends Network {
         clone.flow = flow.clone();
         clone.residualCapacities = residualCapacities.clone();
         if (residualTransitTimes != null) {
-            clone.residualTransitTimes = residualTransitTimes.clone();    
+            clone.residualTransitTimes = residualTransitTimes.clone();
         }
         return clone;
     }
-    
+
     /**
      * Compares this object with the specified object. If the specified object
      * is equivalent to this one <code>true</code> is returned, <code>false
@@ -230,14 +227,13 @@ public class ResidualNetwork extends Network {
             if (residualTransitTimes == null) {
                 return network.equals(rn.network) && residualCapacities.equals(rn.residualCapacities) && super.equals(o);
             } else {
-                return network.equals(rn.network) && residualCapacities.equals(rn.residualCapacities) 
-                        && residualTransitTimes.equals(rn.residualTransitTimes);
+                return network.equals(rn.network) && residualCapacities.equals(rn.residualCapacities) && residualTransitTimes.equals(rn.residualTransitTimes);
             }
         } else {
             return false;
         }
     }
-    
+
     /**
      * Returns a hash code for this residual network.
      * Runtime O(n + m).
@@ -246,10 +242,10 @@ public class ResidualNetwork extends Network {
      */
     @Override
     public int hashCode() {
-        int hashCode = super.hashCode()+ network.hashCode() + residualCapacities.hashCode();
+        int hashCode = super.hashCode() + network.hashCode() + residualCapacities.hashCode();
         return hashCode;
     }
-    
+
     /**
      * Returns a string representation of this residual network. The 
      * representation consists of the underlying base network, the nodes and

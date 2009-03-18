@@ -190,6 +190,14 @@ public class IdentifiableIntegerMapping<D extends Identifiable> implements Clone
         }
         return minimum;
     }
+
+    public int sum(Iterable<D> identifiableObjects) {
+        int sum = 0;
+        for (D identifiableObject : identifiableObjects) {
+            sum += get(identifiableObject);
+        }
+        return sum;
+    }    
     
     /**
      * Returns the size of this mapping's domain. Associations of objects and 

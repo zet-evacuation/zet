@@ -199,7 +199,7 @@ public abstract class Algorithm<Problem, Solution> implements Runnable {
                 solution = runAlgorithm(problem);
                 state = State.SOLVED;
                 runtime = System.nanoTime() - startTime;
-                //fireEvent(new AlgorithmStoppedEvent(this));
+                fireEvent(new AlgorithmStoppedEvent(this));
             } catch (RuntimeException ex) {
                 state = State.SOLVING_FAILED;
                 throw ex;
