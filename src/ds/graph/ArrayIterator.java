@@ -22,8 +22,6 @@ package ds.graph;
 
 import java.util.Iterator;
 
-import localization.Localization;
-
 /**
  * An iterator to comfortably iterate through the elements of an 
  * <code>ArraySet</code>. The elements in an <code>ArraySet</code>

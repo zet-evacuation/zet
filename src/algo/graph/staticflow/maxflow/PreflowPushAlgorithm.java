@@ -19,6 +19,7 @@
  */
 package algo.graph.staticflow.maxflow;
 
+import ds.graph.problem.MaximumFlowProblem;
 import ds.graph.Edge;
 import ds.graph.IdentifiableIntegerMapping;
 import ds.graph.MaxHeap;

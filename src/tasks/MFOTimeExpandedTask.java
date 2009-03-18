@@ -39,7 +39,7 @@ public class MFOTimeExpandedTask extends GraphAlgorithmTask {
 		TimeExpandedMaximumFlowOverTime maxFlowOverTimeAlgo =
 			new TimeExpandedMaximumFlowOverTime(model.getNetwork(), model.getEdgeCapacities(), model.getTransitTimes(), model.getSources(), model.getSinks(), th);
 		maxFlowOverTimeAlgo.run();
-		df = maxFlowOverTimeAlgo.getDynamicFlow();
+		df = maxFlowOverTimeAlgo.getSolution();
                 
                 //TransshipmentBoundEstimator tbe = new TransshipmentBoundEstimator();
                 //int bound = tbe.calculateBound(model.getNetwork(), model.getTransitTimes(), model.getEdgeCapacities(), model.getCurrentAssignment());

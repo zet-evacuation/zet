@@ -114,14 +114,14 @@ public class VisualTest extends JFrame {
         algo.run();
         //MinimumMeanCycleCancelling algo2 = new MinimumMeanCycleCancelling(network, capacities, transitTimes, supplies);
         //algo2.run();
-        PathComposition fc = new PathComposition(network, transitTimes, algo.getDynamicFlow());
+        PathComposition fc = new PathComposition(network, transitTimes, algo.getSolution());
         fc.run();
         NetworkFlowModel nfm = new NetworkFlowModel();
         nfm.setNetwork(network);
         nfm.setEdgeCapacities(capacities);
         nfm.setTransitTimes(transitTimes);
         nfm.setCurrentAssignment(supplies);
-        GraphData data = new GraphData(network, capacities, supplies, transitTimes, supplies, sinks, algo.getDynamicFlow());
+        GraphData data = new GraphData(network, capacities, supplies, transitTimes, supplies, sinks, algo.getSolution());
         final Statistics<GraphData> stats = new Statistics<GraphData>(data);
         //final FlowStatisticsCalculator fs = new FlowStatisticsCalculator(nfm, algo.getDynamicFlow());
 

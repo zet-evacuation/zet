@@ -19,7 +19,7 @@
  */
 package ds.graph.flow;
 
-import localization.Localization;
+import ds.graph.Localization;
 import ds.graph.DynamicPath;
 import ds.graph.Edge;
 import ds.graph.IdentifiableIntegerMapping;

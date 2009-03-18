@@ -22,8 +22,6 @@ package ds.graph;
 
 import java.util.Iterator;
 
-import localization.Localization;
-
 /**
  * The <code>StaticPath</code> class represents a static path in a {@link Network}.
  * A static path is a sequence of <code>Edge</code> objects, where the 

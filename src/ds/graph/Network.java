@@ -19,8 +19,6 @@
  */
 package ds.graph;
 
-import localization.Localization;
-
 import com.thoughtworks.xstream.annotations.XStreamAlias;
 
 /**

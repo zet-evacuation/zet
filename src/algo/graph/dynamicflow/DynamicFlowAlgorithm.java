@@ -15,7 +15,7 @@
  */
 package algo.graph.dynamicflow;
 
-import algo.graph.Localization;
+import ds.graph.Localization;
 import algo.graph.GraphAlgorithm;
 import algo.graph.util.PathComposition;
 import ds.graph.flow.PathBasedFlowOverTime;

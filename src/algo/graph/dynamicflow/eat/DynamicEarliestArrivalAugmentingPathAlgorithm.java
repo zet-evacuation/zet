@@ -19,6 +19,7 @@
  */
 package algo.graph.dynamicflow.eat;
 
+import ds.graph.flow.EarliestArrivalAugmentingPath;
 import ds.graph.DynamicResidualNetwork;
 import ds.graph.Edge;
 import ds.graph.IdentifiableCollection;

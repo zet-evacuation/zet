@@ -18,7 +18,7 @@
  *
  */
 
-package algo.graph.staticflow.maxflow;
+package ds.graph.problem;
 
 import ds.graph.Edge;
 import ds.graph.IdentifiableIntegerMapping;

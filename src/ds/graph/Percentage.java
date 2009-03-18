@@ -15,8 +15,6 @@
  */
 package ds.graph;
 
-import localization.Localization;
-
 /**
  * Represents a percentage value, i.e. the contained double value
  * must lie in [0,100].

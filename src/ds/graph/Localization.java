@@ -18,7 +18,7 @@
  * Localization.java
  *
  */
-package algo.graph;
+package ds.graph;
 
 /**
  *
