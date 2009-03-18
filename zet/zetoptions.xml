@@ -1,7 +1,7 @@
 <zp name="options.tree.root" useAsLocString="true">
   <treeNode name="options.view.editor" useAsLocString="true">
-    <boolNode name="options.view.editor.hideDefaultFloor" useAsLocString="true" description="desc" information="" parameter="editor.options.view.hideDefaultFloor">true</boolNode>
-    <boolNode name="options.view.editor.rasterizedPaintMode" useAsLocString="true" description="desc" information="" parameter="editor.options.view.rasterizedPaintMode">true</boolNode>
+    <boolNode name="options.view.editor.hideDefaultFloor" useAsLocString="true" description="desc" information="options.view.editor.hideDefaultFloor.info" parameter="editor.options.view.hideDefaultFloor">true</boolNode>
+    <boolNode name="options.view.editor.rasterizedPaintMode" useAsLocString="true" description="desc" information="options.view.editor.rasterizedPaintMode.info" parameter="editor.options.view.rasterizedPaintMode">true</boolNode>
 		<treeNode name="options.view.editor.size" useAsLocString="true">
 			<intNode name="options.view.editor.size.minx" useAsLocString="true" description="desc" information="options.view.editor.size.minx.info" parameter="editor.options.view.size.minx">0</intNode>
 			<intNode name="options.view.editor.size.miny" useAsLocString="true" description="desc" information="options.view.editor.size.miny.info" parameter="editor.options.view.size.miny">0</intNode>
@@ -17,13 +17,13 @@
     <stringNode name="options.filehandling.movieFrameName" useAsLocString="true" description="" information="options.filehandling.movieFrameName.info" parameter="options.filehandling.movieFrameName">videoFrame</stringNode>
   </treeNode>
   <treeNode name="options.quickvisualization" useAsLocString="true">
-    <boolNode name="options.quickvisualization.onthefly.usegraph" useAsLocString="true" description="desc" information="options.visualization.onthefly.usegraph.info" parameter="editor.options.visualization.useGraph">true</boolNode>
-    <boolNode name="options.quickvisualization.onthefly.useca" useAsLocString="true" description="desc" information="options.visualization.onthefly.usegraph.info" parameter="editor.options.visualization.useCa">true</boolNode>
+    <boolNode name="options.quickvisualization.onthefly.usegraph" useAsLocString="true" description="desc" information="options.quickvisualization.onthefly.usegraph.info" parameter="editor.options.visualization.useGraph">true</boolNode>
+    <boolNode name="options.quickvisualization.onthefly.useca" useAsLocString="true" description="desc" information="options.quickvisualization.onthefly.useca.info" parameter="editor.options.visualization.useCa">true</boolNode>
     <treeNode name = "options.quickvisualization.view" useAsLocString="true">
-      <boolNode name="Statisches Potenzial anzeigen" useAsLocString="true" description="desc" information="" parameter="editor.options.cavis.staticPotential">false</boolNode>
-      <boolNode name="Dynamisches Potenzial anzeigen" useAsLocString="true" description="desc" information="" parameter="editor.options.cavis.dynamicPotential">true</boolNode>
-      <boolNode name="Potenzialwerte eintragen" useAsLocString="true" description="desc" information="" parameter="editor.options.cavis.showPotentialValue">true</boolNode>
-      <boolNode name="Personennamen eintragen" useAsLocString="true" description="desc" information="" parameter="editor.options.cavis.showIndividualNames">true</boolNode>  
+      <boolNode name="options.quickvisualization.view.staticPotential" useAsLocString="true" description="desc" information="options.quickvisualization.view.staticPotential.info" parameter="editor.options.cavis.staticPotential">false</boolNode>
+      <boolNode name="options.quickvisualization.view.dynamicPotential" useAsLocString="true" description="desc" information="options.quickvisualization.view.dynamicPotential.info" parameter="editor.options.cavis.dynamicPotential">true</boolNode>
+      <boolNode name="options.quickvisualization.view.potentialValues" useAsLocString="true" description="desc" information="options.quickvisualization.view.potentialValues.info" parameter="editor.options.cavis.showPotentialValue">true</boolNode>
+      <boolNode name="options.quickvisualization.view.personNumbers" useAsLocString="true" description="desc" information="options.quickvisualization.view.personNumbers.info" parameter="editor.options.cavis.showIndividualNames">true</boolNode>  
     </treeNode>
   </treeNode>
   <treeNode name="options.visualization" useAsLocString="true">
@@ -45,7 +45,7 @@
     <boolNode name="options.visualization.startWith2D" useAsLocString="true" description="desc" information="options.visualization.startWith2D.info" parameter="editor.options.visualization.startWith2D">true</boolNode>
     <boolNode name="options.visualization.startWithIso" useAsLocString="true" description="desc" information="options.visualization.startWithIso.info" parameter="editor.options.visualization.startWithIso">true</boolNode>
 	  <treeNode name="options.visualization.flow" useAsLocString="true">
-		<boolNode name = "options.visualization.flow.equalArrival" useAsLocString="true" description="desc" information="options.visualization.flow.equalArrival" parameter="options.visualization.flow.equalArrival">true</boolNode>
+		<boolNode name = "options.visualization.flow.equalArrival" useAsLocString="true" description="desc" information="options.visualization.flow.equalArrival.info" parameter="options.visualization.flow.equalArrival">true</boolNode>
 	  </treeNode>
   </treeNode>
 	<treeNode name="options.statistic" useAsLocString="true">
