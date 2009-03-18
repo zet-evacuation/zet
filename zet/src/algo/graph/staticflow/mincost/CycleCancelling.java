@@ -27,6 +27,7 @@ import ds.graph.IdentifiableIntegerMapping;
 import ds.graph.Network;
 import ds.graph.ResidualNetwork;
 import ds.graph.StaticPath;
+import ds.graph.flow.Flow;
 import ds.graph.problem.MinimumCostFlowProblem;
 
 /**
@@ -45,7 +46,7 @@ public abstract class CycleCancelling extends Algorithm<MinimumCostFlowProblem, 
      * <code>null</code> if there is no feasible flow.
      */
     @Override
-    protected IdentifiableIntegerMapping<Edge> runAlgorithm(MinimumCostFlowProblem problem) {
+    protected Flow runAlgorithm(MinimumCostFlowProblem problem) {
         StaticTransshipment algorithm = new StaticTransshipment(problem.getNetwork(), problem.getCapacities(), problem.getBalances());
         algorithm.run();
         ResidualNetwork residualNetwork = algorithm.getResidualNetwork();
@@ -53,7 +54,7 @@ public abstract class CycleCancelling extends Algorithm<MinimumCostFlowProblem, 
             fireEvent("The instance has no feasible solution.");
             return null;
         } else {
-            IdentifiableIntegerMapping<Edge> residualCosts = m_expandCostFunction(problem.getCosts(), problem.getNetwork(), residualNetwork);
+            IdentifiableIntegerMapping<Edge> residualCosts = residualNetwork.expandCostFunction(problem.getCosts());
             StaticPath cycle = findCycle(residualNetwork, residualCosts);
             while (cycle != null) {
                 int minimumCycleCapacity = residualNetwork.residualCapacities().minimum(cycle);
@@ -62,7 +63,7 @@ public abstract class CycleCancelling extends Algorithm<MinimumCostFlowProblem, 
                 }
                 cycle = findCycle(residualNetwork, residualCosts);
             }
-            return residualNetwork.flow();
+            return new Flow(residualNetwork.flow());
         }
     }
 
@@ -72,40 +73,4 @@ public abstract class CycleCancelling extends Algorithm<MinimumCostFlowProblem, 
      * cycle exists.
      */
     protected abstract StaticPath findCycle(Network network, IdentifiableIntegerMapping<Edge> costs);
-
-    /**
-     * This method expand the given cost function over some network to cover 
-     * also the residual network
-     * @param oldCosts The old cost function to be expanded
-     * @param sNetwork The network.
-     * @param resNetwork The residual network
-     * @return an new costs function that is identical with the old function
-     * on the old domain. On all other edges in the residual network it returns
-     * either the ngated cost of the oposite edge if it exists or 0.
-     */
-    public IdentifiableIntegerMapping<Edge> m_expandCostFunction(IdentifiableIntegerMapping<Edge> oldCosts, Network sNetwork, ResidualNetwork resNetwork) {
-        resNetwork = resNetwork.clone();
-        resNetwork.showAllEdges();
-        IdentifiableIntegerMapping<Edge> newCosts = oldCosts.clone();
-
-        if (newCosts.getDomainSize() < resNetwork.getEdgeCapacity()) {
-            newCosts.setDomainSize(resNetwork.getEdgeCapacity());
-        }
-
-        for (Edge edge : resNetwork.edges()) {
-            if (edge != null) {
-                if (sNetwork.contains(edge)) {
-                    newCosts.set(edge, oldCosts.get(edge));
-                } else {
-                    Edge opEdge = sNetwork.getEdge(edge.end(), edge.start());
-                    if (opEdge != null) {
-                        newCosts.set(edge, -oldCosts.get(opEdge));
-                    } else {
-                        newCosts.set(edge, 0);
-                    }
-                }
-            }
-        }
-        return newCosts;
-    }
 }
