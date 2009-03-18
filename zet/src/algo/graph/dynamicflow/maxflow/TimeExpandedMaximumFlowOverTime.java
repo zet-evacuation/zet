@@ -21,29 +21,26 @@
 package algo.graph.dynamicflow.maxflow;
 
 import algo.graph.Algorithm;
-import algo.graph.DebugFlags;
 import algo.graph.staticflow.maxflow.DischargingGlobalGapHighestLabelPreflowPushAlgorithm;
-import algo.graph.util.PathComposition;
 import algo.graph.util.PathDecomposition;
-import ds.graph.flow.PathBasedFlowOverTime;
 import ds.graph.DynamicPath;
-import ds.graph.flow.FlowOverTimePath;
 import ds.graph.Edge;
 import ds.graph.IdentifiableIntegerMapping;
-import ds.graph.problem.MaximumFlowProblem;
 import ds.graph.Network;
 import ds.graph.Node;
-import ds.graph.flow.PathBasedFlow;
 import ds.graph.StaticPath;
-import ds.graph.flow.StaticPathFlow;
 import ds.graph.TimeExpandedNetwork;
+import ds.graph.flow.FlowOverTimePath;
 import ds.graph.flow.MaximumFlow;
+import ds.graph.flow.PathBasedFlow;
+import ds.graph.flow.PathBasedFlowOverTime;
+import ds.graph.flow.StaticPathFlow;
+import ds.graph.problem.MaximumFlowProblem;
 import java.util.LinkedList;
 
-import tasks.AlgorithmTask;
-
 /**
- *
+ * Calculates a maximum flow over time by reducing it to the maximum flow 
+ * problem using a time expanded network.
  * @author Martin Groß
  */
 public class TimeExpandedMaximumFlowOverTime extends Algorithm<MaximumFlowOverTimeProblem, PathBasedFlowOverTime> {
@@ -54,13 +51,11 @@ public class TimeExpandedMaximumFlowOverTime extends Algorithm<MaximumFlowOverTi
 
     @Override
     protected PathBasedFlowOverTime runAlgorithm(MaximumFlowOverTimeProblem problem) {
-        int v = 0;
         if (problem.getSources().size() == 0 || problem.getSinks().size() == 0) {
-            if (DebugFlags.MEL) {
-                System.out.println("No individuals - no flow.");
-            }
+            System.out.println("TimeExpandedMaximumFlowOverTime: The problem is invalid - this should not happen!");
             return new PathBasedFlowOverTime();
         }
+        int v = 0;        
         for (Node source : problem.getSources()) {
             for (Edge edge : problem.getNetwork().outgoingEdges(source)) {
                 v += problem.getCapacities().get(edge) * problem.getTimeHorizon();
@@ -76,19 +71,13 @@ public class TimeExpandedMaximumFlowOverTime extends Algorithm<MaximumFlowOverTi
         PathBasedFlowOverTime dynamicFlow = new PathBasedFlowOverTime();
         for (StaticPathFlow staticPathFlow : decomposedFlow) {
             if (staticPathFlow.getAmount() == 0) {
+                System.out.println("TimeExpandedMaximumFlowOverTime: There is a flow path with zero units - this should not happen!");
                 continue;
             }
             StaticPath staticPath = staticPathFlow.getPath();
             DynamicPath dynamicPath = ten.translatePath(staticPath);
             FlowOverTimePath dynamicPathFlow = new FlowOverTimePath(dynamicPath, staticPathFlow.getAmount(), staticPathFlow.getAmount());
             dynamicFlow.addPathFlow(dynamicPathFlow);
-        }
-        if (DebugFlags.TEMFOT) {
-            System.out.println("The maximum flow over time has the following value:");
-            System.out.println(algorithm.getSolution().getFlowValue());
-            AlgorithmTask.getInstance().publish(100, "TimeExpandedMaximumFlowOverTime", "The maximal flow value is: " + algorithm.getSolution().getFlowValue());
-            System.out.println("It consists of the following dynamic path flows:");
-            System.out.println(dynamicFlow);
         }
         return dynamicFlow;
     }

@@ -17,7 +17,6 @@
  * ArrayIterator.java
  * 
  */
-
 package ds.graph;
 
 import java.util.Iterator;
@@ -33,13 +32,11 @@ public class ArrayIterator<E> implements Iterator<E> {
      * The stored elements.
      */
     private E[] data;
-    
     /**
      * The current index.
      */
     private int index;
-    
-    
+
     /**
      * Constructs an iterator for a given dataarray. 
      * The ArraySet uses this constructor with its internal array.
@@ -49,15 +46,16 @@ public class ArrayIterator<E> implements Iterator<E> {
         this.data = data;
         this.index = 0;
     }
-    
+
     /**
      * Returns whether there is one more element in the <code>ArraySet</code>.
      * @return <code>true</code> if there is one more element in the
      *         <code>ArraySet</code>, <code>false</code> else.
      */
     public boolean hasNext() {
-        while ( index < data.length && data[index] == null)
+        while (index < data.length && data[index] == null) {
             index++;
+        }
         return index < data.length;
     }
 
@@ -70,7 +68,7 @@ public class ArrayIterator<E> implements Iterator<E> {
     public E next() {
         if (index < data.length) {
             index++;
-            return data[index-1];
+            return data[index - 1];
         } else {
             return null;
         }
@@ -81,8 +79,6 @@ public class ArrayIterator<E> implements Iterator<E> {
      * Method is not yet implemented.
      */
     public void remove() {
-        throw new UnsupportedOperationException(Localization.getInstance (
-		).getString ("ds.graph.NotSupportedException"));
+        throw new UnsupportedOperationException(Localization.getInstance().getString("ds.graph.NotSupportedException"));
     }
-
 }
