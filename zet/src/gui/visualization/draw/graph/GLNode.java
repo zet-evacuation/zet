@@ -94,7 +94,7 @@ public class GLNode extends AbstractDrawable<GLEdge, GLNodeControl, GLEdgeContro
 		nodeBorderColor.performGL( gl );
 		double xOffset = -this.getControl().getXPosition() * VisualizationConstants.SIZE_MULTIPLICATOR;
 		double yOffset = this.getControl().getYPosition() * VisualizationConstants.SIZE_MULTIPLICATOR;
-		if( control.isGridVisible() ) {
+		if( control.isRectangleVisible() ) {
 			gl.glBegin( GL.GL_LINES );
 			gl.glVertex3d( this.getControl().getNwX() * VisualizationConstants.SIZE_MULTIPLICATOR + xOffset, this.getControl().getNwY() * VisualizationConstants.SIZE_MULTIPLICATOR + yOffset, -graphHeight + 1.0 * VisualizationConstants.SIZE_MULTIPLICATOR );
 			gl.glVertex3d( this.getControl().getSeX() * VisualizationConstants.SIZE_MULTIPLICATOR + xOffset, this.getControl().getNwY() * VisualizationConstants.SIZE_MULTIPLICATOR + yOffset, -graphHeight + 1.0 * VisualizationConstants.SIZE_MULTIPLICATOR );

@@ -1542,7 +1542,7 @@ public class JEditor extends JFrame implements Localized, EventListener<Progress
 		public void actionPerformed( ActionEvent e ) {
 			if( e.getActionCommand().equals( "graphgrid" ) ) {
 				btnShowGraphGrid.setSelected( !btnShowGraphGrid.isSelected() );
-				control.showGraphGrid( btnShowGraphGrid.isSelected() );
+				control.showNodeRectangles( btnShowGraphGrid.isSelected() );
 				visualizationView.getGLContainer().repaint();
 			} else if( e.getActionCommand().equals( "walls" ) ) {
 				btnShowWalls.setSelected( !btnShowWalls.isSelected() );
@@ -2112,7 +2112,7 @@ public class JEditor extends JFrame implements Localized, EventListener<Progress
 			return;
 		}
 		if (tabID > CA_FLOOR && result == null) {
-			JEditor.sendError ("Bitte zuerst einen Batch-Auftrag anlegen & ausf�hren!");
+			JEditor.sendError ("Bitte zuerst einen Batch-Auftrag anlegen & ausführen!");
 			tabPane.setSelectedIndex (currentMode);
 			return;
 		}

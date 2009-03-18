@@ -27,7 +27,7 @@ import util.random.RandomUtils;
 /**
  * A simple movement rule that does not care about anything like slack, speed,
  * panic or anything else. Steps are always performed, there is no special
- * behaviour on {@link isDirectExecute()}.
+ * behaviour on {@link #isDirectExecute()}.
  * @author Jan-Philipp Kappmeier
  */
 public class SimpleMovementRule extends AbstractMovementRule {

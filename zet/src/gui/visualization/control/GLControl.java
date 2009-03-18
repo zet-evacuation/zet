@@ -15,6 +15,7 @@
  */
 package gui.visualization.control;
 
+import ds.PropertyContainer;
 import ds.graph.GraphVisualizationResult;
 import ds.ca.CellularAutomaton;
 import ds.ca.PotentialManager;
@@ -52,15 +53,6 @@ import tasks.AlgorithmTask;
 import util.DebugFlags;
 
 public class GLControl implements drawable {
-
-	public void showGraphGrid( boolean selected ) {
-		for( GLGraphFloorControl g : graphControl.childControls ) {
-			for( GLNodeControl node : g ) {
-				node.setGridVisible( selected );
-				g.getView().update();
-			}
-		}
-	}
 
 	/**
 	 * Describes the differend types of information which can be illustrated
@@ -298,11 +290,7 @@ public class GLControl implements drawable {
 			hasGraph = true;
 			nodeCount = graphVisResult.getNetwork().nodes().size();
 			nodesDone = 0;
-			nanoSecondsPerStepGraph = (long) (nanoSecondsPerStepCA * (1 / 0.67));
-			System.err.println( "Vorher berechnete Geschwindigkeit: " + nanoSecondsPerStepGraph );
-			secondsPerStepGraph = secondsPerStepGraph();
-			nanoSecondsPerStepGraph = Math.round( secondsPerStepGraph * 1000000000 );
-			System.err.println( "Nachher berechnete Geschwindigkeit: " + nanoSecondsPerStepGraph );
+
 			stepGraph = 0;
 			graphControl = new GLGraphControl( graphVisResult, this );
 			graphView = graphControl.getView();
@@ -316,6 +304,17 @@ public class GLControl implements drawable {
 					}
 					nodes.add( node );
 				}
+			}
+
+			// Set speed such that it arrives when the last individual is evacuated.
+			if( hasCA && PropertyContainer.getInstance().getAsBoolean( "options.visualization.flow.equalArrival" ) ) {
+				nanoSecondsPerStepGraph = (nanoSecondsPerStepCA * caVisResults.getRecording().length()) / graphStepCount;
+				secondsPerStepGraph = nanoSecondsPerStepGraph / (double)1000000000;
+				System.err.println( "Für gleichzeitige Ankunft berechnete Geschwindigkeit: " + nanoSecondsPerStepGraph );
+			} else {
+				secondsPerStepGraph = secondsPerStepGraph();
+				nanoSecondsPerStepGraph = Math.round( secondsPerStepGraph * 1000000000 );
+				System.err.println( "Berechnete Geschwindigkeit (durchschnitt der ZA-Geschwindigkeiten): " + nanoSecondsPerStepGraph );
 			}
 			estimatedTime = Math.max( estimatedTime, graphStepCount * secondsPerStepGraph );
 		} else {
@@ -521,19 +520,20 @@ public class GLControl implements drawable {
 		GLCellControl.setActivePotential( potential );
 	}
 	
-	public void showPotential( CellInformationDisplay pdm ) {
-		if( !hasCA )
-			return;
-		caControl.setPotentialDisplay( pdm );
-		update();
-	}
-
 	public void showAllFloors() {
 		if( hasCA )
 			caControl.showAllFloors();
 		if( hasGraph )
 			graphControl.showAllFloors();
 		buildingControl.showAllFloors();
+	}
+
+	/**
+	 * Enables and disables drawing of the cellular automaton
+	 * @param val indicates wheather the cellular automaton is shown or not
+	 */
+	public void showCellularAutomaton( boolean val ) {
+		showCA = val;
 	}
 
 	public void showFloor( int id ) {
@@ -553,19 +553,16 @@ public class GLControl implements drawable {
 	}
 
 	/**
-	 * Enables and disables drawing of the cellular automaton
-	 * @param val indicates wheather the cellular automaton is shown or not
+	 * Enables drawing of the rectangles defining the area which a node occupies.
+	 * @param selected decides wheather the node rectangles are visible, or not.
 	 */
-	public void showCellularAutomaton( boolean val ) {
-		showCA = val;
-	}
-	
-	/**
-	 * Enables and disables drawing of the cellular automaton
-	 * @param val indicates wheather the cellular automaton is shown or not
-	 */
-	public void showWalls( boolean val ) {
-		showWalls = val;
+	public void showNodeRectangles( boolean selected ) {
+		for( GLGraphFloorControl g : graphControl.childControls ) {
+			for( GLNodeControl node : g ) {
+				node.setRectangleVisible( selected );
+				g.getView().update();
+			}
+		}
 	}
 	
 	/**
@@ -579,6 +576,22 @@ public class GLControl implements drawable {
 		for( GLIndividualControl control : getIndividualControls() )
 			control.setHeadInformation( idm );
 		update();
+	}
+
+	public void showPotential( CellInformationDisplay pdm ) {
+		if( !hasCA )
+			return;
+		caControl.setPotentialDisplay( pdm );
+		update();
+	}
+
+
+	/**
+	 * Enables and disables drawing of the cellular automaton
+	 * @param val indicates wheather the cellular automaton is shown or not
+	 */
+	public void showWalls( boolean val ) {
+		showWalls = val;
 	}
 
 	/**

@@ -65,7 +65,8 @@ public class GLEdgeControl extends AbstractControl<GLEdge, Edge, GraphVisualizat
 		EdgeBasedFlowOverTime flowOverTime = graphVisResult.getFlowOverTime();
 		int maxT = flowOverTime.get( edge ).getLastTimeWithNonZeroValue(); // maximaler Zeithorizont
 		int transit = transitTimes.get( edge );
-		glControl.setGraphMaxTime( maxT + transit );
+		if( maxT > 0 )
+			glControl.setGraphMaxTime( maxT + transit );
 		if( maxT > 0 ) {
 		flowOnEdge = new ArrayList<Integer>( maxT + transit + transit );
 		for( int i = 0; i < transit; i++ )
