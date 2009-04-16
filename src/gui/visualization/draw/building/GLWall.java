@@ -19,7 +19,6 @@
  */
 package gui.visualization.draw.building;
 
-import ds.z.PlanPoint;
 import java.util.Iterator;
 import java.util.List;
 
@@ -54,6 +53,7 @@ public class GLWall extends AbstractDrawable<GLWall, GLWallControl, GLWallContro
 		super( control );
 		basePoints = control.getBasePoints();
 		wallColor = VisualizationOptionManager.getCellWallColor();
+		//control.controlled.getWallType( displayList );
 	}
 
 	@Override
@@ -499,6 +499,8 @@ public class GLWall extends AbstractDrawable<GLWall, GLWallControl, GLWallContro
 	}
 	
 	private double getHypothenuseFactor( double angle ) {
+		if( Math.cos( angle ) < 0.000001 )
+			return 1;
 		return 1/ Math.cos( angle );
 	}
 }
