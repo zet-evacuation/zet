@@ -45,6 +45,7 @@ public class GLWall extends AbstractDrawable<GLWall, GLWallControl, GLWallContro
 	private List<GLVector> basePoints;
 	private static final double WALL_HEIGHT = VisualizationOptionManager.getWallHeight() * VisualizationConstants.SIZE_MULTIPLICATOR;
 	private GLColor wallColor;
+	private boolean barrier = false;
 
 	/**
 	 * @param control
@@ -53,6 +54,7 @@ public class GLWall extends AbstractDrawable<GLWall, GLWallControl, GLWallContro
 		super( control );
 		basePoints = control.getBasePoints();
 		wallColor = VisualizationOptionManager.getCellWallColor();
+		barrier = control.isBarrier();
 		//control.controlled.getWallType( displayList );
 	}
 
@@ -102,7 +104,7 @@ public class GLWall extends AbstractDrawable<GLWall, GLWallControl, GLWallContro
 			GLVector outerStartHigh = new GLVector( innerStartHigh );
 			GLVector outerEndHigh = new GLVector( innerEndHigh );
 			
-			if( control.getWallType( i ) != Wall.WallType.PASSABLE ) {	// Normal wall, no door
+			if( control.getWallType( i ) != Wall.ElementType.PASSABLE ) {	// Normal wall, no door
 				GLVector normal = control.isRoomLeft() ? new GLVector( Vector3.normal( innerEnd, innerStart, innerStartHigh ) ) : new GLVector( Vector3.normal( innerStart, innerEnd, innerEndHigh ) );
 				normal.normalize();
 				normal.normal( gl );
@@ -119,34 +121,14 @@ public class GLWall extends AbstractDrawable<GLWall, GLWallControl, GLWallContro
 				GLVector outerEndVectorAddition;
 
 				if( control.isRoomLeft() ) {
-//					if( (i > 0 ? control.getWallType( i - 1) : control.getWallType( vectors.size()-1 ) ) == Wall.WallType.PASSABLE ) {
-//						// Der vorherige abschnitt ist passierbar!
-//						GLVector doorStart = getStart( i-1, vectors.size() );
-//						GLVector doorEnd = getEnd( i-1, vectors.size() );
-//						GLVector doorStartHigh = getStartHigh( i-1, vectors.size() );
-//						GLVector doorEndHigh = getEndHigh( i-1, vectors.size() );
-//						// Neue berechnung
-//						innerStart = this.getDoorFrontCoordinate(doorStart, doorEnd, doorStartHigh, doorEndHigh, false, 1 );
-//						innerStartHigh = this.getDoorFrontCoordinate(doorStart, doorEnd, doorStartHigh, doorEndHigh, false, 4 );
-//					} else {
 						innerStartVectorAddition.rotate( -(angleEnd/2)*Frustum.DEG2ANGLE, new Vector3( 0,0,1) );
 						innerStartVectorAddition.scalarMultiplicate( getHypothenuseFactor( angleEnd / 2 ) );
 						innerStart.add( innerStartVectorAddition );
 						innerStartHigh.add( innerStartVectorAddition );
-//					}
-//					if( (i < vectors.size()-1 ? control.getWallType( i + 1) : control.getWallType( 0 )) == Wall.WallType.PASSABLE ) {
-//						GLVector doorStart = getStart( i+1, vectors.size() );
-//						GLVector doorEnd = getEnd( i+1, vectors.size() );
-//						GLVector doorStartHigh = getStartHigh( i+1, vectors.size() );
-//						GLVector doorEndHigh = getEndHigh( i+1, vectors.size() );
-//						innerEnd = this.getDoorFrontCoordinate(doorStart, doorEnd, doorStartHigh, doorEndHigh, true, 1 );
-//						innerEndHigh = this.getDoorFrontCoordinate(doorStart, doorEnd, doorStartHigh, doorEndHigh, true, 4 );
-//					} else {
 						innerEndVectorAddition.rotate( (angleStart/2)*Frustum.DEG2ANGLE, new Vector3( 0,0,1) );
 						innerEndVectorAddition.scalarMultiplicate( getHypothenuseFactor( angleStart / 2 ) );
 						innerEnd.add( innerEndVectorAddition );
 						innerEndHigh.add( innerEndVectorAddition );
-//					}
 					gl.glVertex3d( innerEnd.x, innerEnd.y, innerEnd.z );
 					gl.glVertex3d( innerStart.x, innerStart.y, innerStart.z );
 					gl.glVertex3d( innerStartHigh.x, innerStartHigh.y, innerStartHigh.z );
@@ -156,71 +138,32 @@ public class GLWall extends AbstractDrawable<GLWall, GLWallControl, GLWallContro
 					normal.normal( gl );
 					outerEndVectorAddition = new GLVector( normal );
 					outerStartVectorAddition = new GLVector( normal );
-//					if( (i < vectors.size()-1 ? control.getWallType( i + 1) : control.getWallType( 0 )) == Wall.WallType.PASSABLE ) {
-//						// Der nächste abschnitt ist passierbar!
-//						GLVector doorStart = getStart( i+1, vectors.size() );
-//						GLVector doorEnd = getEnd( i+1, vectors.size() );
-//						GLVector doorStartHigh = getStartHigh( i+1, vectors.size() );
-//						GLVector doorEndHigh = getEndHigh( i+1, vectors.size() );
-//						// Neue berechnung
-//						outerEnd = this.getDoorFrontCoordinate(doorStart, doorEnd, doorStartHigh, doorEndHigh, true, 2 );
-//						outerEndHigh = this.getDoorFrontCoordinate(doorStart, doorEnd, doorStartHigh, doorEndHigh, true, 3 );
-//					} else {
 						outerEndVectorAddition.rotate( (angleStart/2)*Frustum.DEG2ANGLE, new Vector3( 0,0,1) );
 						outerEndVectorAddition.scalarMultiplicate( getHypothenuseFactor( angleStart / 2 ) );
 						outerEnd.add( outerEndVectorAddition );
 						outerEndHigh.add( outerEndVectorAddition );
-//					}
-//					if( (i > 0 ? control.getWallType( i - 1) : control.getWallType( vectors.size()-1 ) ) == Wall.WallType.PASSABLE ) {
-//						// Der vorherige abschnitt ist passierbar!
-//						GLVector doorStart = getStart( i-1, vectors.size() );
-//						GLVector doorEnd = getEnd( i-1, vectors.size() );
-//						GLVector doorStartHigh = getStartHigh( i-1, vectors.size() );
-//						GLVector doorEndHigh = getEndHigh( i-1, vectors.size() );
-//						// Neue berechnung
-//						outerStart = this.getDoorFrontCoordinate(doorStart, doorEnd, doorStartHigh, doorEndHigh, false, 2 );
-//						outerStartHigh = this.getDoorFrontCoordinate(doorStart, doorEnd, doorStartHigh, doorEndHigh, false, 3 );
-//					} else {
 						outerStartVectorAddition.rotate( -(angleEnd/2)*Frustum.DEG2ANGLE, new Vector3( 0,0,1) );
 						outerStartVectorAddition.scalarMultiplicate( getHypothenuseFactor( angleEnd / 2 ) );
 						outerStart.add( outerStartVectorAddition );
 						outerStartHigh.add( outerStartVectorAddition );
-//					}
 					gl.glVertex3d( outerStart.x, outerStart.y, outerStart.z );
 					gl.glVertex3d( outerEnd.x, outerEnd.y, outerEnd.z );
 					gl.glVertex3d( outerEndHigh.x, outerEndHigh.y, outerEndHigh.z );
 					gl.glVertex3d( outerStartHigh.x, outerStartHigh.y, outerStartHigh.z );
 				} else { // Room is right
-//					if( (i > 0 ? control.getWallType( i - 1) : control.getWallType( vectors.size()-1 ) ) == Wall.WallType.PASSABLE ) {
-//						// Der vorherige abschnitt ist passierbar!
-//						GLVector doorStart = getStart( i-1, vectors.size() );
-//						GLVector doorEnd = getEnd( i-1, vectors.size() );
-//						GLVector doorStartHigh = getStartHigh( i-1, vectors.size() );
-//						GLVector doorEndHigh = getEndHigh( i-1, vectors.size() );
-//						// Neue berechnung
-//						innerStart = this.getDoorFrontCoordinate(doorStart, doorEnd, doorStartHigh, doorEndHigh, false, 1 );
-//						innerStartHigh = this.getDoorFrontCoordinate(doorStart, doorEnd, doorStartHigh, doorEndHigh, false, 4 );
-//					} else {
+					if( Math.cos( angleEnd * 0.5 ) > 0.000001 ) { // added
 						innerStartVectorAddition.rotate( (angleEnd/2)*Frustum.DEG2ANGLE, new Vector3( 0,0,1) );
 						innerStartVectorAddition.scalarMultiplicate( getHypothenuseFactor( angleEnd / 2 ) );
+					} // added
 						innerStart.add( innerStartVectorAddition );
 						innerStartHigh.add( innerStartVectorAddition );
-//					}
-//					if( (i < vectors.size()-1 ? control.getWallType( i + 1) : control.getWallType( 0 )) == Wall.WallType.PASSABLE ) {
-//						// Der nächste Abschnitt ist passierbar!
-//						GLVector doorStart = getStart( i+1, vectors.size() );
-//						GLVector doorEnd = getEnd( i+1, vectors.size() );
-//						GLVector doorStartHigh = getStartHigh( i+1, vectors.size() );
-//						GLVector doorEndHigh = getEndHigh( i+1, vectors.size() );
-//						// Neue berechnung
-//						innerEnd = this.getDoorFrontCoordinate(doorStart, doorEnd, doorStartHigh, doorEndHigh, true, 1 );
-//						innerEndHigh = this.getDoorFrontCoordinate(doorStart, doorEnd, doorStartHigh, doorEndHigh, true, 4 );
-//					} else {
+
+					if( Math.cos( angleStart * 0.5 ) > 0.00001 ) {
 						innerEndVectorAddition.rotate( -(angleStart/2)*Frustum.DEG2ANGLE, new Vector3( 0,0,1) );
 						innerEndVectorAddition.scalarMultiplicate( getHypothenuseFactor( angleStart / 2 ) );
-						innerEnd.add( innerEndVectorAddition );
-						innerEndHigh.add( innerEndVectorAddition );
-//					}
+					}
+					innerEnd.add( innerEndVectorAddition );
+					innerEndHigh.add( innerEndVectorAddition );
 					gl.glVertex3d( innerStart.x, innerStart.y, innerStart.z );
 					gl.glVertex3d( innerEnd.x, innerEnd.y, innerEnd.z );
 					gl.glVertex3d( innerEndHigh.x, innerEndHigh.y, innerEndHigh.z );
@@ -230,41 +173,42 @@ public class GLWall extends AbstractDrawable<GLWall, GLWallControl, GLWallContro
 					normal.normal( gl );
 					outerEndVectorAddition = new GLVector( normal );
 					outerStartVectorAddition = new GLVector( normal );
-//					if( (i < vectors.size()-1 ? control.getWallType( i + 1) : control.getWallType( 0 )) == Wall.WallType.PASSABLE ) {
-//						// Der nächste Abschnitt ist passierbar!
-//						GLVector doorStart = getStart( i+1, vectors.size() );
-//						GLVector doorEnd = getEnd( i+1, vectors.size() );
-//						GLVector doorStartHigh = getStartHigh( i+1, vectors.size() );
-//						GLVector doorEndHigh = getEndHigh( i+1, vectors.size() );
-//						// Neue berechnung
-//						outerEnd = this.getDoorFrontCoordinate(doorStart, doorEnd, doorStartHigh, doorEndHigh, true, 2 );
-//						outerEndHigh = this.getDoorFrontCoordinate(doorStart, doorEnd, doorStartHigh, doorEndHigh, true, 3 );
-//					} else {
+					if( Math.cos( angleStart * 0.5 ) > 0.000001 ) { // added
 						outerEndVectorAddition.rotate( -(angleStart/2)*Frustum.DEG2ANGLE, new Vector3( 0,0,1) );
 						outerEndVectorAddition.scalarMultiplicate( getHypothenuseFactor( angleStart / 2 ) );
+					}
 						outerEnd.add( outerEndVectorAddition );
 						outerEndHigh.add( outerEndVectorAddition );
-//					}
-//					if( (i > 0 ? control.getWallType( i - 1) : control.getWallType( vectors.size()-1 ) ) == Wall.WallType.PASSABLE ) {
-//						// Der vorherige Abschnitt ist passierbar!
-//						GLVector doorStart = getStart( i-1, vectors.size() );
-//						GLVector doorEnd = getEnd( i-1, vectors.size() );
-//						GLVector doorStartHigh = getStartHigh( i-1, vectors.size() );
-//						GLVector doorEndHigh = getEndHigh( i-1, vectors.size() );
-//						// Neue berechnung
-//						outerStart = this.getDoorFrontCoordinate(doorStart, doorEnd, doorStartHigh, doorEndHigh, false, 2 );
-//						outerStartHigh = this.getDoorFrontCoordinate(doorStart, doorEnd, doorStartHigh, doorEndHigh, false, 3 );
-//					} else {
+					if( Math.cos( angleEnd * 0.5 ) > 0.000001 ) { // added
 						outerStartVectorAddition.rotate( +(angleEnd/2)*Frustum.DEG2ANGLE, new Vector3( 0,0,1) );
 						outerStartVectorAddition.scalarMultiplicate( getHypothenuseFactor( angleEnd / 2 ) );
+					}
 						outerStart.add( outerStartVectorAddition );
 						outerStartHigh.add( outerStartVectorAddition );
-//					}
 					gl.glVertex3d( outerStart.x, outerStart.y, outerStart.z );
 					gl.glVertex3d( outerEnd.x, outerEnd.y, outerEnd.z );
 					gl.glVertex3d( outerEndHigh.x, outerEndHigh.y, outerEndHigh.z );
 					gl.glVertex3d( outerStartHigh.x, outerStartHigh.y, outerStartHigh.z );
 				} // end if room is left/right
+				// Special-Zeichnen falls angle = pi:
+				// nur eine richtung, normale manchmal nicht korrekt, sondern 180° zu stark!
+				if( angleEnd - pi < 0.000001 && i < ((vectors.size()+1) / 2) ) {
+					Vector3 n = vectors.get( i );
+					gl.glNormal3d( n.x, n.y, n.z );
+					// innerstart, outer start
+					gl.glVertex3d( innerStart.x, innerStart.y, innerStart.z );
+					gl.glVertex3d( innerStartHigh.x, innerStartHigh.y, innerStartHigh.z );
+					gl.glVertex3d( outerStartHigh.x, outerStartHigh.y, outerStartHigh.z );
+					gl.glVertex3d( outerStart.x, outerStart.y, outerStart.z );
+				}
+				if( angleStart - pi < 0.000001 && i < ((vectors.size()+1) / 2) ) {
+					Vector3 n = vectors.get( i );
+					gl.glNormal3d( n.x, n.y, n.z );
+					gl.glVertex3d( innerEnd.x, innerEnd.y, innerEnd.z );
+					gl.glVertex3d( innerEndHigh.x, innerEndHigh.y, innerEndHigh.z );
+					gl.glVertex3d( outerEndHigh.x, outerEndHigh.y, outerEndHigh.z );
+					gl.glVertex3d( outerEnd.x, outerEnd.y, outerEnd.z );
+				}
 				// zeichne oberseite
 				gl.glNormal3d( 0, 0, 1);
 				gl.glVertex3d( innerStartHigh.x, innerStartHigh.y, innerStartHigh.z );
@@ -500,7 +444,7 @@ public class GLWall extends AbstractDrawable<GLWall, GLWallControl, GLWallContro
 	
 	private double getHypothenuseFactor( double angle ) {
 		if( Math.cos( angle ) < 0.000001 )
-			return 1;
+			return 0;
 		return 1/ Math.cos( angle );
 	}
 }
