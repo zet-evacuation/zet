@@ -37,7 +37,7 @@ public class BuildingResults implements VisualizationResult {
 	
 	public static class Wall implements Iterable<Point2D.Double> {
 		/** An enumeration describing the different types of walls that can be visualized. */
-		public static enum WallType {
+		public static enum ElementType {
 			/** The default wall type, nothing special. */
 			SIMPLE,
 			/** A passable wall, normally that is a door. */
@@ -48,16 +48,25 @@ public class BuildingResults implements VisualizationResult {
 
 		private Vector<Point2D.Double> points;
 		private Floor floor;
-		//protected WallType wallType;
-		private Vector<WallType> wallTypes;
+		//protected ElementType wallType;
+		private Vector<ElementType> wallTypes;
 		protected boolean roomIsLeft;
 		protected boolean roomIsRight;
+		protected boolean barrier = false;
 
 		public Wall( Floor floor ) {
 			this.points = new Vector<Point2D.Double>();
-			this.wallTypes = new Vector<WallType>();
-			//this.wallType = WallType.SIMPLE;
+			this.wallTypes = new Vector<ElementType>();
+			//this.wallType = ElementType.SIMPLE;
 			this.floor = floor;
+		}
+
+		public boolean isBarrier() {
+			return barrier;
+		}
+
+		protected void setBarrier( boolean barrier ) {
+			this.barrier = barrier;
 		}
 
 		public boolean isRoomIsLeft() {
@@ -76,7 +85,7 @@ public class BuildingResults implements VisualizationResult {
 			this.roomIsRight = roomIsRight;
 		}
 
-		public void addPoint( double x, double y, WallType type ) {
+		public void addPoint( double x, double y, ElementType type ) {
 			if( points.size() == 0 ) {
 				// nothing
 			} else {
@@ -90,11 +99,11 @@ public class BuildingResults implements VisualizationResult {
 		 * @param zPoint
 		 * @param type
 		 */
-		public void addPoint( PlanPoint zPoint, WallType type ) {
+		public void addPoint( PlanPoint zPoint, ElementType type ) {
 			addPoint( zPoint.x * Z_TO_OPENGL_SCALING, zPoint.y * Z_TO_OPENGL_SCALING, type );
 		}
 
-		public WallType getWallType( int wallSegment ) {
+		public ElementType getWallType( int wallSegment ) {
 			return wallTypes.get( wallSegment );
 		}
 
@@ -145,10 +154,11 @@ public class BuildingResults implements VisualizationResult {
 				for( ds.z.Room room : zFloor.getRooms() ) {
 					addHeterogeneousEdgeList( room.edgeIterator( false ), room, buildingFloor );
 					for( ds.z.Barrier barrier : room.getBarriers() ) {
-						addHomogeneousEdgeList( barrier.edgeIterator( false ), barrier, buildingFloor, Wall.WallType.INACCESSIBLE );
+						Wall w = addHomogeneousEdgeList( barrier.edgeIterator( false ), barrier, buildingFloor, Wall.ElementType.INACCESSIBLE );
+						w.setBarrier( true );
 					}
 					for( ds.z.InaccessibleArea area : room.getInaccessibleAreas() ) {
-						addHomogeneousEdgeList( area.edgeIterator( false ), area, buildingFloor, Wall.WallType.INACCESSIBLE );
+						addHomogeneousEdgeList( area.edgeIterator( false ), area, buildingFloor, Wall.ElementType.INACCESSIBLE );
 					}
 				}
 			}
@@ -174,11 +184,11 @@ public class BuildingResults implements VisualizationResult {
 			ds.z.RoomEdge firstEdge = edgeIt.next();
 			checkOrientation( firstEdge, room, curWall );
 			if( firstEdge.isPassable() ) {
-				curWall.addPoint( firstEdge.getSource(), Wall.WallType.PASSABLE );
-				curWall.addPoint( firstEdge.getTarget(), Wall.WallType.PASSABLE );
+				curWall.addPoint( firstEdge.getSource(), Wall.ElementType.PASSABLE );
+				curWall.addPoint( firstEdge.getTarget(), Wall.ElementType.PASSABLE );
 			} else {
-				curWall.addPoint( firstEdge.getSource(), Wall.WallType.SIMPLE );
-				curWall.addPoint( firstEdge.getTarget(), Wall.WallType.SIMPLE );
+				curWall.addPoint( firstEdge.getSource(), Wall.ElementType.SIMPLE );
+				curWall.addPoint( firstEdge.getTarget(), Wall.ElementType.SIMPLE );
 			}
 		}
 
@@ -186,14 +196,14 @@ public class BuildingResults implements VisualizationResult {
 			ds.z.RoomEdge curEdge = edgeIt.next();
 			checkOrientation( curEdge, room, curWall );
 			if( curEdge.isPassable() )
-				curWall.addPoint( curEdge.getTarget(), Wall.WallType.PASSABLE );
+				curWall.addPoint( curEdge.getTarget(), Wall.ElementType.PASSABLE );
 			else
-				curWall.addPoint( curEdge.getTarget(), Wall.WallType.SIMPLE );
+				curWall.addPoint( curEdge.getTarget(), Wall.ElementType.SIMPLE );
 			}
 			addWall( curWall );
 		}
 
-	protected void addHomogeneousEdgeList( Iterator<? extends ds.z.Edge> edgeIt, ds.z.PlanPolygon room, Floor floor, Wall.WallType type ) {
+	protected Wall addHomogeneousEdgeList( Iterator<? extends ds.z.Edge> edgeIt, ds.z.PlanPolygon room, Floor floor, Wall.ElementType type ) {
 		Wall curWall = new Wall( floor );
 
 		if( edgeIt.hasNext() ) {
@@ -209,6 +219,7 @@ public class BuildingResults implements VisualizationResult {
 			curWall.addPoint( curEdge.getTarget(), type );
 		}
 		addWall( curWall );
+		return curWall;
 	}
 	
 	/**

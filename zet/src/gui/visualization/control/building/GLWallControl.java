@@ -62,6 +62,10 @@ public class GLWallControl extends AbstractControl<GLWall, BuildingResults.Wall,
 	public List<GLVector> getBasePoints() {
 		return Collections.unmodifiableList( basePoints );
 	}
+
+	public boolean isBarrier() {
+		return getControlled().isBarrier();
+	}
 	
 	/**
 	 * Checks if the room is on the left side of the wall.
@@ -80,11 +84,11 @@ public class GLWallControl extends AbstractControl<GLWall, BuildingResults.Wall,
 	}
 	
 	/**
-	 * Returns the {@link Wall.WallType} of the controlled class.
+	 * Returns the {@link Wall.ElementType} of the controlled class.
 	 * @param segmentNumber the segment of the wall which type should be returned
 	 * @return the wall type of the wall segment in the controlled class.
 	 */
-	public Wall.WallType getWallType( int segmentNumber ) {
+	public Wall.ElementType getWallType( int segmentNumber ) {
 		return getControlled().getWallType( segmentNumber );
 	}
 }
