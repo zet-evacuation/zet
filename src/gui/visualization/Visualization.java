@@ -174,6 +174,14 @@ public class Visualization extends AbstractVisualization implements EventListene
 	 * @param drawable the OpenGL context
 	 */
 	public void display( GLAutoDrawable drawable ) {
+		// TODO: richtig machen mit dem update :D
+		// Status-Variablen die angezeigte Elemente steuern
+		showEye = PropertyContainer.getInstance().getAsBoolean( "options.visualization.elements.eye" );
+		showFPS = PropertyContainer.getInstance().getAsBoolean( "options.visualization.elements.fps" );
+		showTimestepGraph = PropertyContainer.getInstance().getAsBoolean( "options.visualization.elements.timestepGraph" );
+		showTimestepCellularAutomaton = PropertyContainer.getInstance().getAsBoolean( "options.visualization.elements.timestepCA" );
+
+
 		this.drawable = drawable;
 		calculateFPS();
 		if( isAnimating() == true && recording == false )
