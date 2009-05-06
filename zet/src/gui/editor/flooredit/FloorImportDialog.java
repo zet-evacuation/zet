@@ -98,7 +98,7 @@ public class FloorImportDialog extends JDialog {
 		final JButton btnLoad = Button.newButton( "Laden", aclButton, "load", "Ein ZET-Projekt zum Importieren öffnen" );
 		final JButton btnImport = Button.newButton( "Importieren", aclButton, "import", "Ausgewählte Stockwerke importieren" );
 		final JButton btnClose = Button.newButton( "Schließen", aclButton, "close", "Dialog schließen" );
-		final JLabel lblInfo = new JLabel( "Import-Funktion ist Beta! Hinzufügen funktioniert nur für einen Floor gleichzeitig. Hinzugefügte Etagen dürfen keine Stockwerkübergänge enthalten!" );
+		final JLabel lblInfo = new JLabel( "<html>Import-Funktion ist Beta! Hinzufügen funktioniert nur für einen Floor gleichzeitig. Hinzugefügte Etagen dürfen keine Stockwerkübergänge enthalten!</html>" );
 
 		// Add Components:
 		add( list, "1,1,1,6" );
