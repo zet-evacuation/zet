@@ -195,6 +195,9 @@ public class EditorStart {
 		if( config.contains( "property" ) )
 			propertyFilename = config.getString( "property" );
 
+		PropertyContainer.getInstance().define( "projectPath", String.class, "./examples/" );
+		PropertyContainer.getInstance().define( "imagePath", String.class, "./examples/" );
+
 		createEditor();
 	}
 
