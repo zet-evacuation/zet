@@ -25,7 +25,7 @@ import javax.swing.JButton;
 
 /**
  * Automatic creation of JButtons.
- * @author Kapman
+ * @author Jan-Philipp Kappmeier
  */
 public class Button {
 
@@ -61,31 +61,31 @@ public class Button {
 		return b;
 	}
 	
-	public static JButton newButton( String s, ActionListener al, String commandString, String toolTip ) {
-		JButton b = processMnemonic( s );
+	public static JButton newButton( String title, ActionListener al, String commandString, String toolTip ) {
+		JButton b = processMnemonic( title );
 		if( toolTip != null )
 			b.setToolTipText( toolTip );
 		return addActionListener( b, al, commandString );
 	}
 
-	public static JButton newButton( String s, ActionListener al, String commandString ) {
-		JButton b = processMnemonic( s );
+	public static JButton newButton( String title, ActionListener al, String commandString ) {
+		JButton b = processMnemonic( title );
 		return addActionListener( b, al, commandString );
 	}
 	
-	public static JButton newButton( String s, ActionListener al ) {
-		JButton b = processMnemonic( s );
+	public static JButton newButton( String title, ActionListener al ) {
+		JButton b = processMnemonic( title );
 		return addActionListener( b, al, null );
 	}
 	
-	public static JButton newButton( String s, String toolTip ) {
-		JButton b = processMnemonic( s );
+	public static JButton newButton( String title, String toolTip ) {
+		JButton b = processMnemonic( title );
 		b.setToolTipText( toolTip );
 		return b;
 	}
 
-	public static JButton newButton( String s ) {
-		return processMnemonic( s );
+	public static JButton newButton( String title ) {
+		return processMnemonic( title );
 	}
 
 	public static JButton newButton( javax.swing.Icon i, ActionListener al, String commandString ) {

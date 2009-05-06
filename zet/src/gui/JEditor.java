@@ -57,6 +57,7 @@ import gui.components.AbstractFloor.RasterPaintStyle;
 import gui.components.NamedIndex;
 import gui.editor.JEditView;
 import gui.editor.assignment.JAssignment;
+import gui.editor.flooredit.FloorImportDialog;
 import gui.editor.planimage.JPlanImageProperties;
 import gui.editor.properties.JOptionsWindow;
 import gui.editor.properties.JPropertySelectorWindow;
@@ -191,6 +192,7 @@ public class JEditor extends JFrame implements Localized, EventListener<Progress
 	private JMenuItem mnuEditFloorUp;
 	private JMenuItem mnuEditFloorDown;
 	private JMenuItem mnuEditFloorDelete;
+	private JMenuItem mnuEditFloorImport;
 	private JMenuItem mnuEditDistribution;
 	private JMenuItem mnuEditProperties;
 	private JMenuItem mnuScreenshot;
@@ -497,6 +499,7 @@ public class JEditor extends JFrame implements Localized, EventListener<Progress
 		mnuEditFloorUp = Menu.addMenuItem( mEdit, loc.getString( "menuFloorUp" ), aclFloor, "up" );
 		mnuEditFloorDown = Menu.addMenuItem( mEdit, loc.getString( "menuFloorDown" ), aclFloor, "down" );
 		mnuEditFloorDelete = Menu.addMenuItem( mEdit, loc.getString( "menuFloorDelete" ), aclFloor, "delete" );
+		mnuEditFloorImport = Menu.addMenuItem( mEdit, loc.getString( "menuFloorImport" ), aclFloor, "import" );
 		Menu.addMenuItem( mEdit, "-" );
 		mnuFileRasterize = Menu.addMenuItem( mEdit, loc.getString( "menuRasterize" ), 'R', aclStart, "rasterize" );
 		Menu.addMenuItem( mEdit, "-" );
@@ -870,6 +873,8 @@ public class JEditor extends JFrame implements Localized, EventListener<Progress
 		Menu.updateMenu( mnuEditFloorNew, loc.getString( "menuFloorNew" ) );
 		Menu.updateMenu( mnuEditFloorUp, loc.getString( "menuFloorUp" ) );
 		Menu.updateMenu( mnuEditFloorDown, loc.getString( "menuFloorDown" ) );
+		Menu.updateMenu( mnuEditFloorDelete, loc.getString( "menuFloorDelete" ) );
+		Menu.updateMenu( mnuEditFloorImport, loc.getString( "menuFloorImport" ) );
 		Menu.updateMenu( mnuEditDistribution, loc.getString( "menuDistributions" ) );
 		Menu.updateMenu( mnuEditProperties, loc.getString( "menuProperties" ) );
 		Menu.updateMenu( mnuScreenshot, loc.getString( "menuScreenshot" ) );
@@ -1086,34 +1091,14 @@ public class JEditor extends JFrame implements Localized, EventListener<Progress
 		private JFileChooser jfcProject;
 		private JFileChooser jfcResults;
 		{
-			jfcProject = new JFileChooser( new File( "./examples/" ) );
-			FileFilter filter = new FileFilter() {
-				@Override
-				public boolean accept( File f ) {
-					return f.isDirectory() || f.getName().toLowerCase().endsWith( ".zet" );
-				}
-
-				@Override
-				public String getDescription() {
-					return "Evakuierungsprojekte";
-				}
-			};
-			jfcProject.setFileFilter( filter );
+			final String path = PropertyContainer.getInstance().getAsString( "projectPath" );
+			// TODO save the chosen path in the propertycontainer
+			jfcProject = new JFileChooser( new File( path ) );
+			jfcProject.setFileFilter( JEditor.getProjectFilter() );
 			jfcProject.setAcceptAllFileFilterUsed( false );
 
 			jfcResults = new JFileChooser( GUIOptionManager.getSavePathResults() );
-			filter = new FileFilter() {
-				@Override
-				public boolean accept( File f ) {
-					return f.isDirectory() || f.getName().toLowerCase().endsWith( ".ers" );
-				}
-
-				@Override
-				public String getDescription() {
-					return "Ergebnisdateien";
-				}
-			};
-			jfcResults.setFileFilter( filter );
+			jfcResults.setFileFilter( JEditor.getResultsFilter() );
 			jfcResults.setAcceptAllFileFilterUsed( false );
 		}
 
@@ -1262,6 +1247,9 @@ public class JEditor extends JFrame implements Localized, EventListener<Progress
 					getProject().getPlan().moveFloorDown (editView.getCurrentFloor ());
 				} else if( e.getActionCommand().equals( "delete"  )) {
 					getProject().getPlan().removeFloor(editView.getCurrentFloor ());
+				} else if( e.getActionCommand().equals( "import"  )) {
+					FloorImportDialog floorImport = new FloorImportDialog( JEditor.this, getProject(), "Importieren", 450, 250 );
+					floorImport.setVisible( true );
 				} else {
 					sendError( loc.getString( "gui.UnknownCommand" ) + " '" + e.getActionCommand() + "'. " + loc.getString( "gui.ContactDeveloper" ) );
 				}
@@ -2241,9 +2229,47 @@ public class JEditor extends JFrame implements Localized, EventListener<Progress
 //		}
 	}
 
-	public Project getProject() {
+	public final Project getProject() {
 		return currentProject;
 	}
+
+	/**
+	 * Returns a {@link FileFilter} that allows loading zet format files with ending ".zet"
+	 * @return a {@link FileFilter} that allows loading zet format files
+	 */
+	public static	FileFilter getProjectFilter() {
+		return new FileFilter() {
+			@Override
+			public boolean accept( File f ) {
+				return f.isDirectory() || f.getName().toLowerCase().endsWith( ".zet" );
+			}
+
+			@Override
+			public String getDescription() {
+				return "Evakuierungsprojekte";
+			}
+		};
+	}
+
+
+	/**
+	 * Returns a {@link FileFilter} that allows loading zet result files with ending ".ers"
+	 * @return a {@link FileFilter} that allows loading zet result files
+	 */
+	public static	FileFilter getResultsFilter() {
+		return new FileFilter() {
+			@Override
+			public boolean accept( File f ) {
+				return f.isDirectory() || f.getName().toLowerCase().endsWith( ".ers" );
+			}
+
+			@Override
+			public String getDescription() {
+				return "Evakuierungsprojekte";
+			}
+		};
+	}
+
 
 	/*****************************************************************************
 	 *                                                                           *

@@ -136,13 +136,16 @@ public class BuildingPlan implements Serializable, ChangeListener, ChangeReporte
 	 * Adds the denoted floor to the building plan, only if it has not
 	 * been present in the list of floors until now.
 	 * @param f the new floor
+	 * @return <code>true</code> if the floor was added, <code>false</code> otherwise
 	 */
-	public void addFloor( Floor f ) {
+	public boolean addFloor( Floor f ) {
 		if( !floors.contains( f ) ) {
 			floors.add( f );
 			f.addChangeListener( this );
 			throwChangeEvent( new ChangeEvent( this ) );
+			return true;
 		}
+		return false;
 	}
 	
 	/**

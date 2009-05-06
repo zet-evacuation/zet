@@ -202,6 +202,10 @@ public class Floor implements Serializable, ChangeListener, ChangeReporter {
 		}
 	}
 
+	/**
+	 * Returns the number of rooms on the floor.
+	 * @return the number of rooms on the floor
+	 */
 	public int roomCount() {
 		return rooms.size();
 	}
@@ -273,7 +277,7 @@ public class Floor implements Serializable, ChangeListener, ChangeReporter {
 	 * uppermost and lowermost y-coordinates of contained rooms.
 	 * @return the height
 	 */
-	public int getHeight() {
+	public final int getHeight() {
 		return height;
 	}
 
@@ -281,7 +285,7 @@ public class Floor implements Serializable, ChangeListener, ChangeReporter {
 	 * Returns the name of the floor.
 	 * @return the name of the floor
 	 */
-	public String getName() {
+	public final String getName() {
 		return name;
 	}
 
@@ -290,7 +294,7 @@ public class Floor implements Serializable, ChangeListener, ChangeReporter {
 	 * leftmost and rightmost x-coordinates of contained rooms.
 	 * @return the width
 	 */
-	public int getWidth() {
+	public final int getWidth() {
 		return width;
 	}
 
@@ -298,7 +302,7 @@ public class Floor implements Serializable, ChangeListener, ChangeReporter {
 	 * The leftmost point coordinate of the <code>Floor</code>.
 	 * @return the leftmost coordinate
 	 */
-	public int getxOffset() {
+	public final int getxOffset() {
 		return this.xOffset;
 	}
 
@@ -306,7 +310,7 @@ public class Floor implements Serializable, ChangeListener, ChangeReporter {
 	 * The uppermost point coordinate of the <code>Floor</code>.
 	 * @return the uppermost coordinate
 	 */
-	public int getyOffset() {
+	public final int getyOffset() {
 		return this.yOffset;
 	}
 
@@ -601,8 +605,18 @@ public class Floor implements Serializable, ChangeListener, ChangeReporter {
 		width = maxX - minX;
 		height = maxY - minY;
 	}
+	
 	/** Method to indicate whether this is a Floor that was loaded from a legacy file. */
 	public boolean boundStructureAvailable () {
 		return minX_DefiningRoom != null;
+	}
+
+	/**
+	 * Returns the name of the floor as string representation.
+	 * @return the name of the floor as string representation
+	 */
+	@Override
+	public String toString() {
+		return this.getName();
 	}
 }
