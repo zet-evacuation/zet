@@ -15,7 +15,6 @@
  */
 /*
  * PolygonPopupListener.java
- *
  * Created on 28. Dezember 2007, 13:11
  */
 

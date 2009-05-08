@@ -62,7 +62,7 @@ import util.random.distributions.NormalDistribution;
  */
 public class EditorStart {
 	/** The version of zet. */
-	public static String version = "1.0.1";
+	public static String version = "1.0.2";
 	/** The localization class. */
 	private static Localization loc = Localization.getInstance();
 	/** The project file that should be loaded (submitted via commandline). */
