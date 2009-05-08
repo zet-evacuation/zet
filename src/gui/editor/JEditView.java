@@ -1199,6 +1199,7 @@ public class JEditView extends AbstractSplitPropertyWindow<JFloorScrollPane<JFlo
 	 * @param currentPolygon The PlanPolygon that is displayed by the JPolygon
 	 * on which the PopupMenu shall be shown. */
 	protected void setPopupPolygon( PlanPolygon currentPolygon ) {
+		System.out.println( "Popup now belongs to " + currentPolygon.toString() );
 		for( PolygonPopupListener p : polygonPopupListeners ) {
 			p.setPolygon( currentPolygon );
 		}
