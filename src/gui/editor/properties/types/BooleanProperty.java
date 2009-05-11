@@ -42,7 +42,7 @@ public class BooleanProperty extends AbstractPropertyValue<Boolean> {
 	}
 
 	public JPanel getPanel() {
-		JPanel panel = new JPanel();
+		final JPanel panel = new JPanel();
 		checkBox.setText( this.getName() );
 		checkBox.setSelected( getValue() );
 		checkBox.addActionListener( new ActionListener() {

@@ -1,0 +1,7 @@
+<zp name="additionalInformation" useAsLocString="false" propertyName="">
+  <treeNode name="directories" useAsLocString="false">
+    <stringNode name="lastProjectDirectory" useAsLocString="false" description="" information="" parameter="information.directory.lastProject">./examples</stringNode>
+    <stringNode name="lastPlanDirectory" useAsLocString="false" description="" information="" parameter="information.directory.lastPlan"></stringNode>
+    <stringNode name="lastResultsDirectory" useAsLocString="false" description="" information="" parameter="information.directory.lastResult">./examples</stringNode>
+  </treeNode>
+</zp>

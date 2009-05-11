@@ -39,7 +39,6 @@ import event.EventServer;
 import event.MessageEvent;
 import event.MessageEvent.MessageType;
 import event.ProgressEvent;
-import gui.VideoOptions;
 import gui.batch.JBatchView;
 import gui.components.ComboBoxRenderer;
 import gui.components.JEventStatusBar;
@@ -61,6 +60,7 @@ import gui.editor.flooredit.FloorImportDialog;
 import gui.editor.planimage.JPlanImageProperties;
 import gui.editor.properties.JOptionsWindow;
 import gui.editor.properties.JPropertySelectorWindow;
+import gui.editor.properties.PropertyTreeNode;
 import gui.statistic.JGraphStatisticPanel;
 import gui.statistic.JStatisticPanel;
 import gui.visualization.AbstractVisualization;
@@ -292,8 +292,6 @@ public class JEditor extends JFrame implements Localized, EventListener<Progress
 	private EditComboBoxModel editSelector;
 	private boolean disableUpdate = false;
 	private int currentMode = EDIT_FLOOR;
-	private String optionsFile;
-	private String propertiesFile;
 	private JAssignment distribution;
 
 	/**
@@ -340,6 +338,12 @@ public class JEditor extends JFrame implements Localized, EventListener<Progress
 			public void windowClosing( WindowEvent e ) {
 				if( graphStatisticPanel != null )
 					graphStatisticPanel.saveSettings();
+				try {
+					EditorStart.ptm.getRoot().reloadFromPropertyContainer();
+					PropertyContainer.saveConfigFile( EditorStart.ptm, new File( EditorStart.informationFilename ) );
+				} catch( IOException ex ) {
+					System.err.println( "Error saving information file." );
+				}
 			}
 
 			public void windowClosed( WindowEvent e ) { }
@@ -1091,9 +1095,7 @@ public class JEditor extends JFrame implements Localized, EventListener<Progress
 		private JFileChooser jfcProject;
 		private JFileChooser jfcResults;
 		{
-			final String path = PropertyContainer.getInstance().getAsString( "projectPath" );
-			// TODO save the chosen path in the propertycontainer
-			jfcProject = new JFileChooser( new File( path ) );
+			jfcProject = new JFileChooser( GUIOptionManager.getSavePath() );
 			jfcProject.setFileFilter( JEditor.getProjectFilter() );
 			jfcProject.setAcceptAllFileFilterUsed( false );
 
@@ -1107,11 +1109,13 @@ public class JEditor extends JFrame implements Localized, EventListener<Progress
 			if( e.getActionCommand().equals( "loadProject"  )) {
 				if( jfcProject.showOpenDialog( JEditor.getInstance() ) == JFileChooser.APPROVE_OPTION ) {
 					loadProjectFile( jfcProject.getSelectedFile() );
+					GUIOptionManager.setSavePath( jfcProject.getCurrentDirectory().getPath() );
 				}
 			} else if( e.getActionCommand().equals( "saveProjectAs" ) ||
 							(e.getActionCommand().equals( "saveProject" ) &&
 							getProject().getProjectFile() == null) ) {
 				if( jfcProject.showSaveDialog( JEditor.getInstance() ) == JFileChooser.APPROVE_OPTION ) {
+					GUIOptionManager.setSavePath( jfcProject.getCurrentDirectory().getPath() );
 					if( jfcProject.getSelectedFile().exists() && createCopy )
 						createBackup( jfcProject.getSelectedFile() );
 					try {
@@ -1125,7 +1129,6 @@ public class JEditor extends JFrame implements Localized, EventListener<Progress
 						showErrorMessage( loc.getString( "gui.editor.JEditor.error.SaveTitle" ), loc.getString( "gui.editor.JEditor.error.Save" ) );
 					}
 					editView.displayProject( getProject() );
-					GUIOptionManager.setSavePath( jfcProject.getCurrentDirectory().getPath() );
 					sendMessage( loc.getString( "gui.editor.JEditor.message.saved" ) );
 				}
 			} else if( e.getActionCommand().equals( "saveProject"  )) {
@@ -1195,6 +1198,7 @@ public class JEditor extends JFrame implements Localized, EventListener<Progress
 				sendMessage( status );
 			} else if( e.getActionCommand().equals( "loadBatchResult"  )) {
 				if( jfcResults.showOpenDialog( JEditor.getInstance() ) == JFileChooser.APPROVE_OPTION ) {
+					GUIOptionManager.setSavePathResults( jfcProject.getCurrentDirectory().getPath() );
 					try {
 						setBatchResult (BatchResult.load( (jfcResults.getSelectedFile()) ));
 						sendMessage( loc.getString( "gui.editor.JEditor.message.loaded" ) );
@@ -1205,6 +1209,7 @@ public class JEditor extends JFrame implements Localized, EventListener<Progress
 				}
 			} else if (e.getActionCommand ().equals ("saveResultAs")) {
 				if (jfcResults.showSaveDialog (JEditor.this) == JFileChooser.APPROVE_OPTION) {
+					GUIOptionManager.setSavePathResults( jfcProject.getCurrentDirectory().getPath() );
 					try {
 						File target = jfcResults.getSelectedFile ();
 						if (!target.getName ().endsWith(".ers")) {
@@ -1318,9 +1323,8 @@ public class JEditor extends JFrame implements Localized, EventListener<Progress
 		public void actionPerformed( ActionEvent e ) {
 			try {
 				if( e.getActionCommand().equals( "load"  )) {
-					JFileChooser d = new JFileChooser();
+					JFileChooser d = new JFileChooser( GUIOptionManager.getBuildingPlanPath() );
 					d.setFileFilter( new FileFilter() {
-
 						@Override
 						public boolean accept( File f ) {
 							return f.isDirectory() || f.getName().toLowerCase().endsWith( ".jpg" ) || f.getName().toLowerCase().endsWith( ".png" ) || f.getName().toLowerCase().endsWith( ".gif" );
@@ -1335,6 +1339,7 @@ public class JEditor extends JFrame implements Localized, EventListener<Progress
 					File file = d.getSelectedFile();
 					BufferedImage image = null;
 					if( file != null ) {
+						GUIOptionManager.setBuildingPlanPath( d.getCurrentDirectory().getPath() );
 						try {
 							image = ImageIO.read( file );
 						} catch( IOException ex ) {
@@ -1424,6 +1429,7 @@ public class JEditor extends JFrame implements Localized, EventListener<Progress
 			} else if( e.getActionCommand().equals( "options"  )) {
 				JOptionsWindow propertySelector = new JOptionsWindow( JEditor.this, loc.getString( "gui.editor.JOptions.Title" ), 700, 500 );
 				propertySelector.setVisible( true );
+				propertySelector.saveConfigFile( new File( EditorStart.optionFilename ) );
 			} else {
 				sendError( loc.getString( "gui.UnknownCommand" ) + " '" + e.getActionCommand() + "'. " + loc.getString( "gui.ContactDeveloper" ) );
 			}
@@ -1991,14 +1997,6 @@ public class JEditor extends JFrame implements Localized, EventListener<Progress
 		return editView;
 	}
 	
-	void setOptionsFile( String optionsFile ) {
-		this.optionsFile = optionsFile;
-	}
-
-	void setPropertiesFile( String propertiesFile ) {
-		this.propertiesFile = propertiesFile;
-	}
-
 	/**
 	 * Sets the Zoom factor on the currently shown shown JFloor.
 	 * @param zoomFactor the zoom factor

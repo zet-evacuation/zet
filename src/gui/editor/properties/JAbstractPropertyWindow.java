@@ -251,9 +251,10 @@ public abstract class JAbstractPropertyWindow extends JDialog {
 	}
 
 	/**
-	 * Loads a file containing the configuration in XML-Format.
+	 * Saves the configuration to a file in XML-Format.
+	 * @param file a file to which the properties are saved
 	 */
-	private void saveConfigFile( File file ) {
+	public void saveConfigFile( File file ) {
 		try {
 			PropertyContainer.saveConfigFile( propertyTreeModel, file );
 		} catch( IOException ex ) {
@@ -264,6 +265,10 @@ public abstract class JAbstractPropertyWindow extends JDialog {
 		}
 	}
 
+	/**
+	 * Saves the configuration to a file in XML-Format. The file will only be a
+	 * working copy for the current run.
+	 */
 	public void saveWorking() {
 		try {
 			PropertyContainer.saveConfigFile( propertyTreeModel, new File( defaultConfigFile ) );

@@ -19,10 +19,8 @@
  */
 package util;
 
-import io.IOTools;
 import java.io.OutputStream;
 import java.io.PrintStream;
-import java.util.Calendar;
 
 /**
  * The class <code>DebugStream</code> mirrors outputs on an {@link OutputStream}
@@ -43,7 +41,6 @@ public class DebugStream extends PrintStream {
 	public DebugStream( OutputStream out, PrintStream oldOutputStream ) {
 		super( out );
 		this.oldOutputStream = oldOutputStream;
-		Calendar cal = Calendar.getInstance();
 	}
 
 	/** {@inheritDoc} */

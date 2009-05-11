@@ -30,7 +30,7 @@ import java.awt.Rectangle;
 import javax.swing.JPanel;
 
 /**
- *
+ * 
  * @author Jan-Philipp Kappmeier
  */
 abstract public class AbstractPolygon extends JPanel {
@@ -52,9 +52,10 @@ abstract public class AbstractPolygon extends JPanel {
 	public PlanPolygon getPlanPolygon () { return myPolygon; }
 	
 	/**
-	 * Returns the real polygon area within the coordinate space  of this
-	 * JCellPolygons bounding box.
-	 * @return  */
+	 * Returns the real polygon area within the coordinate space of the bounding
+	 * box of this {@link JCellPolygon}.
+	 * @return the real polygon area of this polygon
+	 */
 	public Polygon getDrawingPolygon () { return drawingPolygon; }
 	
 	/**
@@ -64,9 +65,11 @@ abstract public class AbstractPolygon extends JPanel {
 	public abstract void displayPolygon( PlanPolygon p );
 	
 	/**
-	 * 
-	 * @param name
-	 * @param g2
+	 * Draws the specified text in the polygon. The position is the middle of the
+	 * bounding box. The text is not displayed if it is to large to fit into the
+	 * bounding box.
+	 * @param name the text displayed.
+	 * @param g2 the graphics context on which the name is drawn
 	 */
 	public void drawName( String name, Graphics2D g2 ) {
 		FontMetrics metrics = g2.getFontMetrics();
@@ -83,10 +86,12 @@ abstract public class AbstractPolygon extends JPanel {
 	}
 	
 	/**
-	 * 
-	 * @param name
-	 * @param g2
-	 * @param color
+	 * Draws the specified text with a specified color in the polygon. The
+	 * position is the middle of the bounding box. The text is not displayed if it
+	 * is to large to fit into the bounding box.
+	 * @param name the text displayed.
+	 * @param g2 the graphics context on which the name is drawn
+	 * @param color the color that should be used for the text
 	 */
 	public void drawName( String name, Graphics2D g2, Color color ) {
 		g2.setPaint( color );
