@@ -46,7 +46,6 @@ import java.awt.Polygon;
 import java.awt.RenderingHints;
 import java.util.Iterator;
 import java.util.LinkedList;
-import java.util.NoSuchElementException;
 
 /**
  * Graphical representation of a {@link ds.z.PlanPolygon}. This class has the
@@ -316,7 +315,6 @@ public class JPolygon extends AbstractPolygon {
 									pLeft.y + EDGE_WIDTH_ADDITION );
 					ed.selectionPolygon.addPoint( pLeft.x - EDGE_WIDTH_ADDITION,
 									pLeft.y + EDGE_WIDTH_ADDITION );
-
 				}
 
 				// Always start at the leftmost or, if that is not applicable, at 
@@ -563,7 +561,12 @@ public class JPolygon extends AbstractPolygon {
 		}
 	}
 
-	/** Determines whether the given MouseEvent will lead to a popup menu when dispatched to this JPolygon. */
+	/**
+	 * Determines whether the given <code>MouseEvent</code> will lead to a popup
+	 * menu when dispatched to this JPolygon.
+	 * @param e the mouse event that occured
+	 * @return <code>true</code> if the popup is displayed, <code>false</code> otherwise
+	 */
 	public boolean isPopupTrigger( MouseEvent e ) {
 		// Do not use e.isPopupTrigger() here - Won't work under linux
 		if( e.getID() == MouseEvent.MOUSE_RELEASED && e.getButton() == MouseEvent.BUTTON3 ) {
@@ -580,14 +583,15 @@ public class JPolygon extends AbstractPolygon {
 			return false;
 	}
 
-	/** This is a helper method, to determine whether the user clicked on a
+	/**
+	 * This is a helper method, to determine whether the user clicked on a
 	 * planPoint (the nodes of an edge) and not only into the middle of an
 	 * edge.
 	 * @param ed The edge on which the user clicked
 	 * @param click The click coordinates <u>in the coordinate space of the JPolygon</u>
-	 * @return The PlanPoint that the user clicked on, if such a point exists.
-	 * Returns null if the user did not click on a point. */
-	public PlanPoint clickHitsPlanPoint( EdgeData ed, Point click ) {
+	 * @return The {@link ds.z.PlanPoint} that the user clicked on, if such a point exists, <code>null</code> if no point was hit.
+	 */
+	private PlanPoint clickHitsPlanPoint( EdgeData ed, Point click ) {
 		if( ed.node1.distance( click ) <= NODE_SELECTION_RADIUS )
 			return ed.myEdge.getSource();
 		else if( ed.node2.distance( click ) <= NODE_SELECTION_RADIUS )

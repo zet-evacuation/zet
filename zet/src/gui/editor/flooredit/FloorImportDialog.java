@@ -24,6 +24,7 @@ import ds.PropertyContainer;
 import ds.z.Floor;
 import gui.JEditor;
 import gui.components.framework.Button;
+import gui.editor.GUIOptionManager;
 import info.clearthought.layout.TableLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -109,9 +110,8 @@ public class FloorImportDialog extends JDialog {
 	}
 	ActionListener aclButton = new ActionListener() {
 		private JFileChooser jfcProject;
-		final String path = PropertyContainer.getInstance().getAsString( "projectPath" );
 		{
-			jfcProject = new JFileChooser( new File( path ) );
+			jfcProject = new JFileChooser( GUIOptionManager.getSavePath() );
 			jfcProject.setFileFilter( JEditor.getProjectFilter() );
 			jfcProject.setAcceptAllFileFilterUsed( false );
 		}

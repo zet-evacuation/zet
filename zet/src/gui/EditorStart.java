@@ -38,6 +38,8 @@ import gui.editor.GUIOptionManager;
 import gui.editor.properties.JOptionsWindow;
 import gui.editor.properties.JPropertySelectorWindow;
 import gui.editor.properties.PropertyLoadException;
+import gui.editor.properties.PropertyTreeModel;
+import gui.editor.properties.PropertyTreeNode;
 import io.IOTools;
 import java.awt.Image;
 import java.io.File;
@@ -47,6 +49,8 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.io.PrintStream;
 import java.util.Calendar;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.imageio.ImageIO;
 import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
@@ -57,7 +61,7 @@ import util.random.distributions.NormalDistribution;
 /**
  * The <code>EditorStart</code> class is the main entry for the graphical user
  * interface of the evacuation tool. It creates an editor window and displays
- * en empty project.
+ * an empty project.
  * @author Jan-Philipp Kappmeier
  */
 public class EditorStart {
@@ -69,8 +73,10 @@ public class EditorStart {
 	static String loadedProject = "";
 	/** The property file that is loaded when the program starts. Can be changed via commandline. */
 	static String propertyFilename = "./properties/properties.xml";
-	/** The filename that contains the program options. */
+	/** The filename for the file that contains the program options. */
 	static final String optionFilename = "zetoptions.xml";
+	/** The filename for the file that contains additional options. */
+	static final String informationFilename = "options.xml";
 	/** The file to which the log is written (if specified via commandline). */
 	static String logFile = "";
 	/** The file to which the error log is written (if specified via commandline). */
@@ -81,6 +87,8 @@ public class EditorStart {
 	public static boolean useVisualization = true;
 	/** States if statistic is used, or not. Can be changed via commandline. */
 	public static boolean useStatistic = true;
+	/** The properties in the information file. */
+	public static PropertyTreeModel ptm;
 	
 	/** Creates a new instance of <code>EditorStart</code> */
 	private EditorStart() { }
@@ -195,16 +203,18 @@ public class EditorStart {
 		if( config.contains( "property" ) )
 			propertyFilename = config.getString( "property" );
 
-		PropertyContainer.getInstance().define( "projectPath", String.class, "./examples/" );
-		PropertyContainer.getInstance().define( "imagePath", String.class, "./examples/" );
+		// Notfallmäßig vordefinieren, falls xml-datei nicht existiert. TODO
+		//PropertyContainer.getInstance().define( "projectPath", String.class, "./examples/" );
+		//PropertyContainer.getInstance().define( "imagePath", String.class, "./examples/" );
 
 		createEditor();
 	}
 
 	/**
 	 * Creates the editor window and displays it on the screen. This method should
-	 * be called by a scheduler, so it could be executed in the event-dispatch
-	 * thread.
+	 * be called by a scheduler, so it can be executed in the event-dispatch
+	 * thread. That allows to have user interaction if the program is working in
+	 * other threads.
 	 * @see SwingUtilities.invokeLater()
 	 * @see Runnable
 	 */
@@ -215,13 +225,24 @@ public class EditorStart {
 				// Load default parameters and options
 				File propertyFile = new File( propertyFilename );
 				File optionFile = new File( optionFilename );
+				File informationFile = new File( informationFilename );
 				checkFile( propertyFile, "Property file" );
 				checkFile( optionFile, "Option file" );
+//				checkFile( informationFile, "Information file" );
 				try {
 					PropertyContainer.getInstance().applyParameters( propertyFile );
 					PropertyContainer.getInstance().applyParameters( optionFile );
 				} catch( PropertyLoadException ex ) {
 					exit( ex.getMessage() );
+				}
+				try {
+					ptm = PropertyContainer.getInstance().applyParameters( informationFile );
+				} catch( PropertyLoadException ex ) {
+					try { // Load from default-file if no user-specific is available
+						ptm = PropertyContainer.getInstance().applyParameters( new File( "./baseoptions.xml" ) );
+					} catch( PropertyLoadException ex1 ) {
+						exit( ex.getMessage() );
+					}
 				}
 				// Change look and feel to native
 				GUIOptionManager.changeLookAndFeel( UIManager.getSystemLookAndFeelClassName() );
@@ -235,8 +256,8 @@ public class EditorStart {
 				} catch( IOException e ) {
 					exit( "Error loding icon." );
 				}
-				edit.setOptionsFile( optionFilename );
-				edit.setPropertiesFile( propertyFilename );
+				//edit.setOptionsFile( optionFilename );
+				//edit.setPropertiesFile( propertyFilename );
 				JPropertySelectorWindow a = new JPropertySelectorWindow( edit, "", 100, 100, propertyFilename );
 				a.saveWorking();
 				a = null;
@@ -260,6 +281,11 @@ public class EditorStart {
 		} );
 	}
 
+	/**
+	 * Loads an xml-file containing several tasks with projects to evacuate
+	 * (simulation and optimization).
+	 * @param string a batch file
+	 */
 	private static void loadBatchProject( String string ) {
 		System.out.println( "Loading file " + string );
 		File batchFile = new File( string );
