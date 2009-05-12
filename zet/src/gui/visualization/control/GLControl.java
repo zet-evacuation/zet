@@ -308,7 +308,7 @@ public class GLControl implements drawable {
 
 			// Set speed such that it arrives when the last individual is evacuated.
 			if( hasCA && PropertyContainer.getInstance().getAsBoolean( "options.visualization.flow.equalArrival" ) ) {
-				nanoSecondsPerStepGraph = (nanoSecondsPerStepCA * caVisResults.getRecording().length()) / graphStepCount;
+				nanoSecondsPerStepGraph = graphStepCount == 0 ? 0 : (nanoSecondsPerStepCA * caVisResults.getRecording().length()) / graphStepCount;
 				secondsPerStepGraph = nanoSecondsPerStepGraph / (double)1000000000;
 				System.err.println( "Für gleichzeitige Ankunft berechnete Geschwindigkeit: " + nanoSecondsPerStepGraph );
 			} else {
@@ -460,10 +460,20 @@ public class GLControl implements drawable {
 		}
 	}
 
+	/**
+	 * Returns the (exact) time needed by one step of the cellular automaton.
+	 * @return the time needed by one step of the cellular automaton
+	 */
 	public double getCaSecondsPerStep() {
 		return secondsPerStepCA;
 	}
 
+	/**
+	 * Returns the (exact) time needed by one step of the graph. Note that ghe
+	 * graph has no implicit time model. The time for one step is calculated
+	 * depending on the cellular automaton and/or the original z-model.
+	 * @return the time needed by one step of the graph
+	 */
 	public double getGraphSecondsPerStep() {
 		return secondsPerStepGraph;
 	}
@@ -536,6 +546,10 @@ public class GLControl implements drawable {
 		showCA = val;
 	}
 
+	/**
+	 * Displays a floor with the specified id in the visualization.
+	 * @param id the floor id
+	 */
 	public void showFloor( int id ) {
 		if( hasCA )
 			caControl.showOnlyFloor( id );
@@ -618,6 +632,10 @@ public class GLControl implements drawable {
 			cell.getView().update();
 	}
 
+	/**
+	 * Returns a {@code Map} that assigns floor names to their ids.
+	 * @return a map that assigns floor names to their ids
+	 */
 	public Map<Integer, String> getFloorNames() {
 		HashMap<Integer, String> floorNames = new HashMap<Integer, String>(  buildingResults.getFloors().size() );
 		for( BuildingResults.Floor floor : buildingResults.getFloors() ) {
