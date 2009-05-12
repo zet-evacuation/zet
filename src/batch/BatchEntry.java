@@ -83,13 +83,7 @@ public class BatchEntry {
 	 * @throws IllegalArgumentException If the project is null or if it doesn't contain at least one assignment.
 	 */
 	public BatchEntry( String name, Project project, int cycles, GraphAlgorithm ga, CellularAutomatonAlgorithm caa ) throws IllegalArgumentException {
-		if( project == null ) {
-			throw new IllegalArgumentException( Localization.getInstance().getString( "batch.ProjectIsNullException" ) );
-		} else if( project.getPlan().isEmpty() ) {
-			throw new IllegalArgumentException( Localization.getInstance().getString( "batch.EmptyProjectException" ) );
-		} else if( !project.getPlan().hasEvacuationAreas() ) {
-			throw new IllegalArgumentException( Localization.getInstance().getString( "batch.NoEvacAreas" ) );
-		}
+		check( project );
 		setOptimizedEvacuationPlanCycles( 0 );
 		this.project = project;
 		this.setAssignment( (project.getCurrentAssignment() != null) ? project.getCurrentAssignment() : project.getAssignments().
@@ -126,14 +120,8 @@ public class BatchEntry {
 	 * @throws IllegalArgumentException If the project is null or if it doesn't contain at least one assignment.
 	 */
 	public BatchEntry( String name, Project project, Assignment assignment, boolean useCA, double caTime, int cycles, GraphAlgorithm ga, CellularAutomatonAlgorithm caa, boolean useGraph, int graphMaxTime, EvacuationOptimizationType eot, int eoRuns, Property property ) throws IllegalArgumentException {
-		if( project == null ) {
-			throw new IllegalArgumentException( Localization.getInstance().getString( "batch.ProjectIsNullException" ) );
-		} else if( project.getPlan().isEmpty() ) {
-			throw new IllegalArgumentException( Localization.getInstance().getString( "batch.EmptyProjectException" ) );
-		} else if( !project.getPlan().hasEvacuationAreas() ) {
-			throw new IllegalArgumentException( Localization.getInstance().getString( "batch.NoEvacAreas" ) );
-		}
 //		setOptimizedEvacuationPlanCycles( 0 );
+		check( project );
 		this.project = project;
 		this.setAssignment( assignment );
 		this.setName( name );
@@ -147,6 +135,21 @@ public class BatchEntry {
 		this.setProperty( property );
 		this.setEvacuationOptimizationType( eot );
 		this.setOptimizedEvacuationPlanCycles( eoRuns );
+	}
+
+	/**
+	 * Checks if the project is valid. If it is not valid, an exception is thrown.
+	 * The project must not be {@code null} and is not allowed to be empty.
+	 * @param p the project
+	 */
+	private void check( Project p ) {
+		if( p == null ) {
+			throw new IllegalArgumentException( Localization.getInstance().getString( "batch.ProjectIsNullException" ) );
+		} else if( p.getPlan().isEmpty() ) {
+			throw new IllegalArgumentException( Localization.getInstance().getString( "batch.EmptyProjectException" ) );
+		}// else if( !p.getPlan().hasEvacuationAreas() ) {
+		//	throw new IllegalArgumentException( Localization.getInstance().getString( "batch.NoEvacAreas" ) );
+		//}
 	}
 
 	/** Executes the chosen graph algorithm on the network flow model that
