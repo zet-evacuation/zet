@@ -176,7 +176,7 @@ public class PlanPoint extends Point implements ChangeReporter {
 	/** This should ONLY be called from Edge.setPoints (). Unfortunately Java
 	 * does not provide a mechanism to ensure this, so just don't use this method.
 	 * 
-	 * @param The next incident (= outgoing) edge of this point. */
+	 * @param nextEdge the next incident (= outgoing) edge of this point. */
 	protected void setNextEdge( Edge nextEdge ) {
 		this.nextEdge = nextEdge;
 	}
@@ -184,7 +184,7 @@ public class PlanPoint extends Point implements ChangeReporter {
 	/** This should ONLY be called from Edge.setPoints (). Unfortunately Java
 	 * does not provide a mechanism to ensure this, so just don't use this method.
 	 * 
-	 * @param The previous incident (= incoming) edge of this point. */
+	 * @param previousEdge the previous incident (= incoming) edge of this point. */
 	protected void setPreviousEdge( Edge previousEdge ) {
 		this.previousEdge = previousEdge;
 	}
@@ -199,9 +199,11 @@ public class PlanPoint extends Point implements ChangeReporter {
 		return previousEdge;
 	}
 
-	/** @param e An edge that must be incident to this point
-	 * @returns The second edge that is incident to this point. 
-	 * @exception IllegalArgumentException Is thrown when <code>e</code> is not
+	/**
+	 * Returns the second edge that is incident to this point
+	 * @param e An edge that must be incident to this point
+	 * @return The second edge that is incident to this point. 
+	 * @throws IllegalArgumentException Is thrown when <code>e</code> is not
 	 * incident to the plan point.
 	 */
 	public Edge getOtherEdge( Edge e ) throws IllegalArgumentException {

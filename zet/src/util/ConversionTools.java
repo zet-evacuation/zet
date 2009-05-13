@@ -50,11 +50,12 @@ public final class ConversionTools {
   }
   
 	/**
-	 * Converts a float value to an int value, using three decimal places. The
-	 * floating point values are rounded fair using {@link roundScale3( double )}.
-	 * This represents the accurancy used by the <code>z</code>-format.
-	 * @param x
-	 * @return
+	 * Converts a floating point  value to an int value, using three decimal
+	 * places. The floating point values are rounded fair using
+	 * {@link #roundScale3( double )}. This represents the accurancy used by the
+	 * {@code z}-format.
+	 * @param x the floating point value
+	 * @return the same value as {@code z}-format precision integer value
 	 */
   public static int floatToInt( double x ) {
     return (int)Math.round( roundScale3( x ) * 1000.0f );

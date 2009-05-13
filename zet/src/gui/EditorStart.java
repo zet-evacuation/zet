@@ -215,7 +215,7 @@ public class EditorStart {
 	 * be called by a scheduler, so it can be executed in the event-dispatch
 	 * thread. That allows to have user interaction if the program is working in
 	 * other threads.
-	 * @see SwingUtilities.invokeLater()
+	 * @see SwingUtilities#invokeLater()
 	 * @see Runnable
 	 */
 	public static void createEditor() {
@@ -342,7 +342,7 @@ public class EditorStart {
 
 	/**
 	 * Creates a new project file with default settings
-	 * @return
+	 * @return the newly created project
 	 */
 	public static Project newProject() {
 		Project p = new Project();

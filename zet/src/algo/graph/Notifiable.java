@@ -25,7 +25,7 @@ public interface Notifiable {
 
 	/**
 	 * Collects a progress information.
-	 * @param progressInformation The new state of the sender.
+	 * @param percentageDone The new state of the sender.
 	 * @param sender The algorithm sending the information.
 	 */
 	public void recieveProgressInformation(Percentage percentageDone, Sender sender);

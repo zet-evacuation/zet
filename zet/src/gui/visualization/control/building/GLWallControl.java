@@ -84,7 +84,8 @@ public class GLWallControl extends AbstractControl<GLWall, BuildingResults.Wall,
 	}
 	
 	/**
-	 * Returns the {@link Wall.ElementType} of the controlled class.
+	 * Returns the {@link io.visualization.BuildingResults.Wall.ElementType} of
+	 * the controlled class.
 	 * @param segmentNumber the segment of the wall which type should be returned
 	 * @return the wall type of the wall segment in the controlled class.
 	 */

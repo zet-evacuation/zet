@@ -44,8 +44,8 @@ public class JCAView extends AbstractSplitPropertyWindow<JFloorScrollPane<JRaste
 	}
 	
 	/**
-	 * 
-	 * @return
+	 * Returns a panel displayed on the right side of the window.
+	 * @return a panel displayed on the right side of the window
 	 */
 	@Override
 	protected JPanel getEastBar() {
@@ -56,8 +56,8 @@ public class JCAView extends AbstractSplitPropertyWindow<JFloorScrollPane<JRaste
 	}
 
 	/**
-	 * 
-	 * @return
+	 * Returns the text for the title bar.
+	 * @return the text for the title bar
 	 */
 	@Override
 	protected String getTitleBarText() {

@@ -37,7 +37,7 @@ public class SuccessiveEarliestArrivalAugmentingPathAlgorithmTH extends
 	 * finds an earliest arrival transshipment for the time horizon, if possible.
 	 * @param network The original network.
 	 * @param transitTimes The transit times of all edges in the network.
-	 * @param capacities The capacities of all edges in the network.
+	 * @param edgeCapacities The capacities of all edges in the network.
 	 * @param supplies The supplies of all nodes in the network.
 	 * @param timeHorizon The time horizon to test.
 	 */

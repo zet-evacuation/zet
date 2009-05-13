@@ -17,7 +17,7 @@
  * Created on 01.12.2007
  *
  */
-package ds.za;
+package ds.ca;
 
 import ds.ca.DynamicPotential;
 import ds.ca.StaticPotential;

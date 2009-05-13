@@ -41,9 +41,9 @@ import static algo.graph.DebugFlags.*;
  */
 public abstract class MinimumMeanCycleDetector {
 
-	/** Detects a minimum mean cost cycle. Running time is O(n*(n+m)).
-	 * 
-	 * @param n The graph in which the cycles shall be found. 
+	/**
+	 * Detects a minimum mean cost cycle. Running time is O(n*(n+m)).
+	 * @param g the graph in which the cycles shall be found.
 	 * @param cost The edge costs for graph <code>n</code>
 	 * @return The mean value value of a minimum mean cost cycle. If no cycle
 	 * is found, 0 is returned.

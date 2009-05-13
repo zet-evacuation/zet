@@ -85,8 +85,10 @@ public class PropertyTreeNode extends DefaultMutableTreeNode implements Property
 	}
 
 	/**
-	 *
-	 * @return
+	 * Returns {@code true} if the strings for the name, information and
+	 * description in the XML-file shall be tags used for localization.
+	 * @return {@code true} if the XML-file contains localization tags, {@code false} otherwise
+	 * @see Localization
 	 */
 	public boolean isUsedAsLocString() {
 		return useAsLocString;
@@ -102,7 +104,8 @@ public class PropertyTreeNode extends DefaultMutableTreeNode implements Property
 	}
 
 	/**
-	 * Returns the name of the property stored in this node.
+	 * Returns the name of the property stored in this node. If it
+	 * {@link #isUsedAsLocString()}, the localized string is returned.
 	 * @return the name of the property stored in this node
 	 */
 	public String getName() {
@@ -129,8 +132,10 @@ public class PropertyTreeNode extends DefaultMutableTreeNode implements Property
 	}
 
 	/**
-	 * 
-	 * @return
+	 * Returns the string stored in the XML-file. This can be either a name or
+	 * a tag used for localization.
+	 * @return the name stored in the XML-file
+	 * @see #isUsedAsLocString()
 	 */
 	public String getNameTag() {
 		return name;

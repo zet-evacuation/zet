@@ -69,7 +69,8 @@ public class CAVisualizationResults implements VisualizationResult {
 	/**
 	 * Creates the visualization results. Takes a ca data structure, a
 	 * visual recording object, a ZToCAMapping and creates all necessary objects.
-	 * @param ca
+	 * @param visRecording 
+	 * @param caMapping
 	 */
 	public CAVisualizationResults(VisualResultsRecording visRecording, ZToCAMapping caMapping) {
 		caCellToZOffsetMapping = new HashMap<ds.ca.Cell, Vector3>();

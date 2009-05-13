@@ -207,7 +207,7 @@ public class PotentialTest {
 			}
 		}
 		
-        /*for(ds.za.Room room : ca.getRooms()){
+        /*for(ds.ca.Room room : ca.getRooms()){
             System.out.println(room.graphicalToString());
             System.out.println();
         }*/

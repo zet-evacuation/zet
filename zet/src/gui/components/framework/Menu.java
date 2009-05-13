@@ -89,7 +89,7 @@ public class Menu {
 	 * Creates a new menu entry to chreate herarchial menus
 	 * @param m the parent JMenu
 	 * @param s the title
-	 * @return
+	 * @return the newly created menu
 	 */
 	public static JMenu addMenu( JMenu m, String s ) {
 		if( s.startsWith( "-" ) ) {

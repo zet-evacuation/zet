@@ -32,7 +32,7 @@ import io.visualization.CAVisualizationResults;
 import java.util.ArrayList;
 
 /**
- * This class controls an {@link Individual} in the {@link CellularAutomaton}
+ * This class controls an {@link Individual} in the {@link ds.ca.CellularAutomaton}
  * and is used by the visualization class {@link GLIndividual} which draws
  * the individual on the screen.
  * @author Jan-Philipp Kappmeier
@@ -229,7 +229,7 @@ public class GLIndividualControl extends AbstractControl<GLIndividual, Individua
 
 	/**
 	 * Returns the number of the controlled individual.
-	 * @return
+	 * @return the number of the controlled individual
 	 */
 	public int getNumber() {
 		return this.getControlled().getNumber();

@@ -114,7 +114,7 @@ public class ZToCAMapping
 	}
 	
 	/**
-	 * Inserts a new tuple (ds.z.Room, ds.za.Room). This means that "zRoom" of 
+	 * Inserts a new tuple (ds.z.Room, ds.ca.Room). This means that "zRoom" of 
 	 * the Z-Datastructure and "zARoom" of the ZA-Datastructure are associated 
 	 * to each other from now on bidirectionally.
 	 * If at least one of the two parameter-values "zRoom" or "zARoom" already

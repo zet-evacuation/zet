@@ -652,8 +652,8 @@ public class Edge implements Serializable, ChangeListener, ChangeReporter {
 	/**
 	 * Calculates the length of the line segment between two specified points with
 	 * the euclidean norm. The length is rounded to millimeter.
-	 * @param newSource one point
-	 * @param newTarget the other point
+	 * @param p1 one point
+	 * @param p2 the other point
 	 * @return the rounded length
 	 * @see ds.z.PlanPoint
 	 */
@@ -680,7 +680,7 @@ public class Edge implements Serializable, ChangeListener, ChangeReporter {
 	
 	/**
 	 * @param p An arbitrary point
-	 * @returns A new PlanPoint, that lies on this Edge and that is close to p.
+	 * @return A new PlanPoint, that lies on this Edge and that is close to p.
 	 */
 	public PlanPoint getPointOnEdge (PlanPoint p) {
 		int width = boundRight () - boundLeft ();

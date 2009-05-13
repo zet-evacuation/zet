@@ -31,8 +31,8 @@ import opengl.framework.abs.AbstractDrawable;
  * in the graph itself). It consists of the nodes belonging to rooms on one
  * floor in a {@link ds.z.Project}.</p>
  * <p>The nodes are stored in a display list to speed up the visualization,
- * the display list is created if {@link performStaticDrawing()} is called.
- * During normal visualization (when {@linkperformDrawing( GLAutoDrawable )} is
+ * the display list is created if {@link #performStaticDrawing()} is called.
+ * During normal visualization (when {@link #performDrawing( GLAutoDrawable )} is
  * called) the display list is executed. The display list is rebuilt when some
  * settings are updated.</p>
  * @see{AbstractDrawable}

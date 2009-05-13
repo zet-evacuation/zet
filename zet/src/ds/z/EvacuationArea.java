@@ -42,7 +42,7 @@ public class EvacuationArea extends SaveArea {
 	 * Creates a new instance of <code>EvacuationArea</code> and sets the
 	 * room containing this area. The attractivity is initialized to 100.
 	 * @param room the room
-	 * @see #setAttractivity()
+	 * @see #setAttractivity( int )
 	 */
 	public EvacuationArea( Room room ) {
 		this( room, 100 );
@@ -52,7 +52,7 @@ public class EvacuationArea extends SaveArea {
 	 * room containing this area.
 	 * @param room the room
 	 * @param attractivity the initial attractivity
-	 * @see #setAttractivity()
+	 * @see #setAttractivity( int )
 	 */
 	public EvacuationArea( Room room, int attractivity ) {
 		super( room );
@@ -60,9 +60,11 @@ public class EvacuationArea extends SaveArea {
 		throwChangeEvent( new EvacuationAreaCreatedEvent( this, 1 ) );
 	}
 	
-	/** This method copies the current polygon without it's edges. Every other setting, as f.e. the floor
-	 * for Rooms or the associated Room for Areas is kept as in the original polygon.
-	 * @return 
+	/**
+	 * This method copies the current polygon without it's edges. Every other
+	 * setting, as f.e. the floor for Rooms or the associated Room for Areas is
+	 * kept as in the original polygon.
+	 * @return a copy of the polygon
 	 */
 	@Override
 	protected PlanPolygon<Edge> createPlainCopy() {

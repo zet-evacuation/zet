@@ -345,7 +345,7 @@ public class JBatchView extends JPanel {
 	}
 
 	/**
-	 * Adds a {@link ds.z.Project} to the batch table.
+	 * Adds a {@link ds.Project} to the batch table.
 	 * @param project the added project
 	 */
 	public void addProject( Project project ) {

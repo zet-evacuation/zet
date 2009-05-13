@@ -84,11 +84,11 @@ public class JEventStatusBar extends JStatusBar implements EventListener<Message
 	
 	/**
 	 * Handles events sent from the {@link event.EventServer}, if the event is of
-	 * one of the types {@link event.MessageEvent.Error},
-	 * {@link event.MessageEvent.Status}, {@link event.MessageEvent.MousePosition} or
-	 * {@link event.MessageEvent.EditMode} the message is displayed on one of the
-	 * four initial elements.
+	 * one of the types {@code Error}, {@code Status}, {@code MousePosition} or
+	 * {@code EditMode} the message is displayed on one of the four initial
+	 * elements.
 	 * @param event
+	 * @see event.MessageEvent.MessageType
 	 */
 	public void handleEvent ( MessageEvent event ) {
 		switch( event.getType () ) {

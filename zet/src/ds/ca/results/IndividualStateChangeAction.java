@@ -51,7 +51,7 @@ public class IndividualStateChangeAction extends Action {
 
 	/**
 	 * {@inheritDoc }
-	 * @see ds.za.results.Action#adoptToCA(ds.za.CellularAutomaton)
+	 * @see ds.ca.results.Action#adoptToCA(ds.ca.CellularAutomaton)
 	 */
 	@Override
 	Action adoptToCA(  CellularAutomaton targetCA ) throws CADoesNotMatchException {
@@ -65,7 +65,7 @@ public class IndividualStateChangeAction extends Action {
 	 * {@inheritDoc }
 	 * @param onCA 
 	 * @throws InconsistentPlaybackStateException 
-	 * @see ds.za.results.Action#execute(ds.za.CellularAutomaton)
+	 * @see ds.ca.results.Action#execute(ds.ca.CellularAutomaton)
 	 */
 	@Override
 	public void execute( CellularAutomaton onCA ) throws InconsistentPlaybackStateException {
@@ -78,7 +78,7 @@ public class IndividualStateChangeAction extends Action {
 
 	/**
 	 * {@inheritDoc }
-	 * @see ds.za.results.Action#toString()
+	 * @see ds.ca.results.Action#toString()
 	 */
 	@Override
 	public String toString() {

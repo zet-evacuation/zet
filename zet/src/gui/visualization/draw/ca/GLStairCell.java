@@ -23,7 +23,7 @@ import gui.visualization.VisualizationOptionManager;
 import gui.visualization.control.ca.GLCellControl;
 
 /**
- * This class represents the graphical representation of a {@link StairCell}.
+ * This class represents the graphical representation of a {@link ds.ca.StairCell}.
  * The only difference between this type and the general cell type is that it
  * can have the color of stair cells.
  * @author Jan-Philipp Kappmeier

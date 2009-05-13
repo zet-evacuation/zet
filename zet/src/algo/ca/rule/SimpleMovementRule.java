@@ -32,9 +32,10 @@ import util.random.RandomUtils;
  */
 public class SimpleMovementRule extends AbstractMovementRule {
 	/**
-	 * 
-	 * @param cell
-	 * @return
+	 * Returns {@code true} if the rule can be executed. That is the case if an
+	 * {@link ds.z.Individual} stands on the specified {@link Cell}.
+	 * @param cell the cell
+	 * @return {@code true} if an individual stands on the cell, {@code false} otherwise
 	 */
 	@Override
 	public boolean executableOn( Cell cell ) {

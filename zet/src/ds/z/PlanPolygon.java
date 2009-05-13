@@ -54,16 +54,16 @@ import util.ConversionTools;
  * closed polygon, inserting edges/points, or mor preciseley, replacing an
  * existing <code>Edge</code> by some edges fitting into the gap, and
  * calculating the cut of two polygons.</p>
- * @param T the type describing the edges (borders) of the polygon
+ * @param <T> the type describing the edges (borders) of the polygon
  * @author Jan-Philipp Kappmeier, Timon Kelter
  */
-@XStreamAlias( "planPolygon" )
-@XMLConverter( PlanPolygonConverter.class )
+@XStreamAlias("planPolygon")
+@XMLConverter(PlanPolygonConverter.class)
 public class PlanPolygon<T extends Edge> implements Serializable, ChangeListener, ChangeReporter, Iterable<T> {
 	/**
 	 * Enumeration used by the relative position test. Specifies if a 
 	 * polygon is left or right from the border.
-	 * @see{relativePolygonPosition( Edge, RelativePosition)}
+	 * @see #relativePolygonPosition(ds.z.Edge, ds.z.PlanPolygon.RelativePosition)
 	 */
 	public enum RelativePosition {
 		/**Checks wheater the room is on the right side of anedge. */
@@ -71,7 +71,6 @@ public class PlanPolygon<T extends Edge> implements Serializable, ChangeListener
 		/** Checks wheather the room is on the left side of an edge. */
 		Left;
 	}
-
 	/** The class-type of the edges. This is set only one single time in the constructor. */
 	private final Class<T> edgeClassType;
 	/** The change listeners that are informed if any change of the polygon occurs. */
@@ -82,7 +81,7 @@ public class PlanPolygon<T extends Edge> implements Serializable, ChangeListener
 	@XStreamAsAttribute()
 	private boolean closed = false;
 	/** The start point of the polygon. At this point new edges or polygons can be added. */
-	@XStreamConverter( CompactEdgeListConverter.class )
+	@XStreamConverter(CompactEdgeListConverter.class)
 	private PlanPoint start = null;
 	/** The end point of the polygon. At this point new edges or polygons can be added. */
 	private PlanPoint end = null;
@@ -129,10 +128,10 @@ public class PlanPolygon<T extends Edge> implements Serializable, ChangeListener
 	 * three transformation matrixes for flip vertically, horizontally and at the main
 	 * diagonal plus identity matrix
 	 */
-	public static final int[][] flipXAxis = { { 1, 0 }, { 0, -1 } };
-	public static final int[][] flipYAxis = { { -1, 0 }, { 0, 1 } };
-	public static final int[][] flipMainDiagonal = { { 0, 1 }, { 1, 0 } };
-	public static final int[][] identity = { { 1, 0 }, { 0, 1 } };
+	public static final int[][] flipXAxis = {{1, 0}, {0, -1}};
+	public static final int[][] flipYAxis = {{-1, 0}, {0, 1}};
+	public static final int[][] flipMainDiagonal = {{0, 1}, {1, 0}};
+	public static final int[][] identity = {{1, 0}, {0, 1}};
 
 	/**
 	 * Creates an new instance of <code>PlanPolygon</code> without any assigned
@@ -153,7 +152,7 @@ public class PlanPolygon<T extends Edge> implements Serializable, ChangeListener
 	 * <p>It is neccessary to submit the class type of the generic parameter in
 	 * order to create new edges.</p>
 	 * @param edgeClassType the type of the generic edges
-	 * @param firstPoint An edge that shall be added to the polygon immediately
+	 * @param firstEdge An edge that shall be added to the polygon immediately
 	 */
 	public PlanPolygon( Class<T> edgeClassType, T firstEdge ) {
 		start = null;
@@ -187,15 +186,12 @@ public class PlanPolygon<T extends Edge> implements Serializable, ChangeListener
 	 */
 	public void add( List<PlanPoint> points ) throws IllegalArgumentException, IllegalStateException,
 					NullPointerException {
-		if( start != null ) {
+		if( start != null )
 			throw new IllegalStateException( Localization.getInstance().getString( "ds.z.PlanPolygon.ContainerNotEmptyException" ) );
-		}
-		if( points == null ) {
+		if( points == null )
 			throw new NullPointerException( Localization.getInstance().getString( "ds.z.PlanPolygon.PointListIsNullException" ) );
-		}
-		if( points.size() <= 2 ) {
+		if( points.size() <= 2 )
 			throw new IllegalArgumentException( Localization.getInstance().getString( "ds.z.PlanPolygon.ListDoesNotContainenoughPointsException" ) );
-		}
 
 		// At least two point is in the list
 		PlanPoint firstPoint = points.get( 0 );
@@ -203,9 +199,8 @@ public class PlanPolygon<T extends Edge> implements Serializable, ChangeListener
 		for( int i = 1; i < points.size(); i++ ) {
 			PlanPoint secondPoint = points.get( i );
 			// Don't create zero-length edges
-			if( secondPoint.equals( firstPoint ) ) {
+			if( secondPoint.equals( firstPoint ) )
 				continue;
-			}
 
 			newEdge( firstPoint, secondPoint );
 			firstPoint = secondPoint;
@@ -213,9 +208,8 @@ public class PlanPolygon<T extends Edge> implements Serializable, ChangeListener
 
 		// Insert closing edge. addEdge() is automatically called by Edge-Constructor
 		// if the polygon is already closed, discard edge
-		if( !closed ) {
+		if( !closed )
 			newEdge( firstPoint, points.get( 0 ) );
-		}
 	}
 
 	/**
@@ -259,9 +253,8 @@ public class PlanPolygon<T extends Edge> implements Serializable, ChangeListener
 			maxX_DefiningEdge = e;
 			maxY_DefiningEdge = e;
 		} else {
-			if( isClosed() ) {
+			if( isClosed() )
 				throw new IllegalStateException( Localization.getInstance().getString( "ds.z.PlanPolygon.AddEdgeToClosedPolygonException" ) );
-			}
 
 			if( fitsTogether( e, this ) ) {
 				// --> "e" is the closing edge
@@ -284,9 +277,8 @@ public class PlanPolygon<T extends Edge> implements Serializable, ChangeListener
 				PlanPoint copyPoint = new PlanPoint( e.getOther( end ) );
 				e.setPoints( end, copyPoint, false );
 				end = copyPoint;
-			} else {
+			} else
 				throw new IllegalArgumentException( Localization.getInstance().getString( "ds.z.PlanPolygon.CoordinateMismatchException" ) );
-			}
 
 			// Scan for new boundaries
 			edgeChangeHandler( e, null );
@@ -305,9 +297,8 @@ public class PlanPolygon<T extends Edge> implements Serializable, ChangeListener
 	 */
 	@Override
 	public void addChangeListener( ChangeListener c ) {
-		if( !changeListeners.contains( c ) ) {
+		if( !changeListeners.contains( c ) )
 			changeListeners.add( c );
-		}
 	}
 
 	/**
@@ -321,9 +312,8 @@ public class PlanPolygon<T extends Edge> implements Serializable, ChangeListener
 	 * point
 	 */
 	public void addPointFirst( PlanPoint p ) throws IllegalArgumentException, IllegalStateException {
-		if( start.equals( p ) ) {
+		if( start.equals( p ) )
 			throw new IllegalArgumentException( Localization.getInstance().getString( "ds.z.PlanPolygon.StartPointException" ) );
-		}
 		// Insert closing edge. addEdge is automatically called by Edge-Constructor
 		newEdge( p, start );
 	}
@@ -338,9 +328,8 @@ public class PlanPolygon<T extends Edge> implements Serializable, ChangeListener
 	 * @throws java.lang.IllegalArgumentException if the new point is the end point
 	 */
 	public void addPointLast( PlanPoint p ) throws IllegalArgumentException, IllegalStateException {
-		if( end.equals( p ) ) {
+		if( end.equals( p ) )
 			throw new IllegalArgumentException( Localization.getInstance().getString( "ds.z.PlanPolygon.EndPointException" ) );
-		}
 		// Insert closing edge. addEdge() is automatically called by Edge-Constructor
 		newEdge( end, p );
 	}
@@ -352,17 +341,15 @@ public class PlanPolygon<T extends Edge> implements Serializable, ChangeListener
 	 */
 	public int area() {
 		List<PlanPoint> points = this.getPolygonPoints();
-		if( points.size() <= 0 ) {
+		if( points.size() <= 0 )
 			return 0;
-		}
 		int area = 0;
-		for( int i = 0; i < points.size() - 1; i++ ) {
+		for( int i = 0; i < points.size() - 1; i++ )
 			area += ((points.get( i ).getYInt() + points.get( i + 1 ).getYInt()) *
 							(points.get( i ).getXInt() - points.get( i + 1 ).getXInt()));
-		}
 		area += ((points.get( points.size() - 1 ).getYInt() + points.get( 0 ).getYInt()) *
 						(points.get( points.size() - 1 ).getXInt() - points.get( 0 ).getXInt()));
-		return (int) (Math.abs( area ) * 0.5f);
+		return (int)(Math.abs( area ) * 0.5f);
 	}
 
 	/**
@@ -372,14 +359,12 @@ public class PlanPolygon<T extends Edge> implements Serializable, ChangeListener
 	 */
 	public double areaMeter() {
 		List<PlanPoint> points = this.getPolygonPoints();
-		if( points.size() <= 0 ) {
+		if( points.size() <= 0 )
 			return 0;
-		}
 		float area = 0;
-		for( int i = 0; i < points.size() - 1; i++ ) {
+		for( int i = 0; i < points.size() - 1; i++ )
 			area += ((points.get( i ).getYMeter() + points.get( i + 1 ).getYMeter()) *
 							(points.get( i ).getXMeter() - points.get( i + 1 ).getXMeter()));
-		}
 		area += ((points.get( points.size() - 1 ).getYMeter() + points.get( 0 ).getYMeter()) *
 						(points.get( points.size() - 1 ).getXMeter() - points.get( 0 ).getXMeter()));
 		return Math.abs( area ) * 0.5f;
@@ -404,7 +389,7 @@ public class PlanPolygon<T extends Edge> implements Serializable, ChangeListener
 	 * @return a rectangle that defines the bounds
 	 */
 	public Rectangle2D bounds2D() {
-		return (Rectangle2D) bounds();
+		return (Rectangle2D)bounds();
 	}
 
 	/**
@@ -423,12 +408,10 @@ public class PlanPolygon<T extends Edge> implements Serializable, ChangeListener
 	 */
 	public void check( boolean rasterized ) throws PolygonNotClosedException,
 					PolygonNotRasterizedException {
-		if( !isClosed() ) {
+		if( !isClosed() )
 			throw new PolygonNotClosedException( this );
-		}
-		if( rasterized ) {
+		if( rasterized )
 			checkRasterized();
-		}
 	}
 
 	/**
@@ -449,33 +432,28 @@ public class PlanPolygon<T extends Edge> implements Serializable, ChangeListener
 		// gehe alle Edges des Polygons durch
 		for( T edge : this ) {
 			// falls die x-Koordinate des Startpunktes der Kante nicht durch 400mm teilbar ist-->nicht gerastert
-			if( !((edge.getSource().getXInt() % (BuildingPlan.rasterSize * 1000)) == 0) ) {
+			if( !((edge.getSource().getXInt() % (BuildingPlan.rasterSize * 1000)) == 0) )
 				throw new PolygonNotRasterizedException( this,
 								Localization.getInstance().getString( "ds.z.PlanPolygon.PointNotOnRasterException" ) );
-			}
 			// falls die y-Koordinate des Startpunktes der Kante nicht durch 400mm teilbar ist-->nicht gerastert
-			if( !((edge.getSource().getYInt() % (BuildingPlan.rasterSize * 1000)) == 0) ) {
+			if( !((edge.getSource().getYInt() % (BuildingPlan.rasterSize * 1000)) == 0) )
 				throw new PolygonNotRasterizedException( this,
 								Localization.getInstance().getString( "ds.z.PlanPolygon.PointNotOnRasterException" ) );
-			}
 			// falls die x-Koordinate des Endpunktes der Kante nicht durch 400mm teilbar ist-->nicht gerastert
-			if( !((edge.getTarget().getXInt() % (BuildingPlan.rasterSize * 1000)) == 0) ) {
+			if( !((edge.getTarget().getXInt() % (BuildingPlan.rasterSize * 1000)) == 0) )
 				throw new PolygonNotRasterizedException( this,
 								Localization.getInstance().getString( "ds.z.PlanPolygon.PointNotOnRasterException" ) );
-			}
 			// falls die y-Koordinate des Endpunktes der Kante nicht durch 400mm teilbar ist-->nicht gerastert
-			if( !((edge.getTarget().getYInt() % (BuildingPlan.rasterSize * 1000)) == 0) ) {
+			if( !((edge.getTarget().getYInt() % (BuildingPlan.rasterSize * 1000)) == 0) )
 				throw new PolygonNotRasterizedException( this,
 								Localization.getInstance().getString( "ds.z.PlanPolygon.PointNotOnRasterException" ) );
-			}
 			// falls die x-Koordinaten der beiden Punkte der Kante nicht gleich sind
 			// UND die y-Koordinaten der beiden Punkte der Kante nicht gleich sind-->nicht gerastert
 			//if( !( edge.getSource().getXInt() == edge.getTarget().getXInt() ) ) {
 			//	if( !( edge.getSource().getYInt() == edge.getTarget().getYInt() ) ) {
-			if( !edge.isHorizontal() && !edge.isVertical() ) {
+			if( !edge.isHorizontal() && !edge.isVertical() )
 				throw new PolygonNotRasterizedException( this,
 								Localization.getInstance().getString( "ds.z.PlanPolygon.PointNotOnRasterException" ) );
-			}
 		//	}
 		//}
 		}
@@ -517,12 +495,10 @@ public class PlanPolygon<T extends Edge> implements Serializable, ChangeListener
 	 */
 	public T combineEdges( T e1, T e2, boolean keepMinSize ) throws IllegalArgumentException,
 					IllegalStateException {
-		if( e1.getAssociatedPolygon() != this || e2.getAssociatedPolygon() != this ) {
+		if( e1.getAssociatedPolygon() != this || e2.getAssociatedPolygon() != this )
 			throw new IllegalArgumentException( Localization.getInstance().getString( "ds.z.PlanPolygon.EdgeNotContained" ) );
-		}
-		if( keepMinSize && (size - 1) < 3 ) {
+		if( keepMinSize && (size - 1) < 3 )
 			throw new IllegalStateException( Localization.getInstance().getString( "ds.z.PlanPolygon.NotEnoughEdgesException" ) );
-		}
 		PlanPoint common = null;
 		try {
 			common = e1.commonPoint( e2 );
@@ -541,8 +517,8 @@ public class PlanPolygon<T extends Edge> implements Serializable, ChangeListener
 			if( e1_other.equals( e2_other ) ) {
 				// We are combining two edges who have the same end points
 
-				T edgeAfterE1 = (T) e1.getOtherNeighbour( e2 );
-				T edgeAfterE2 = (T) e2.getOtherNeighbour( e1 );
+				T edgeAfterE1 = (T)e1.getOtherNeighbour( e2 );
+				T edgeAfterE2 = (T)e2.getOtherNeighbour( e1 );
 				PlanPoint outwardPointE1 = e1.commonPoint( edgeAfterE1 );
 				PlanPoint outwardPointE2 = e2.commonPoint( edgeAfterE2 );
 				PlanPoint deletedPoint = e1.getOther( outwardPointE1 );
@@ -561,12 +537,10 @@ public class PlanPolygon<T extends Edge> implements Serializable, ChangeListener
 					}
 
 					// Restore start & end if they were deleted
-					if( start == deletedPoint ) {
+					if( start == deletedPoint )
 						start = resolvedPoint;
-					}
-					if( end == deletedPoint ) {
+					if( end == deletedPoint )
 						end = resolvedPoint;
-					}
 
 					// Update edge count
 					size -= 2;
@@ -574,20 +548,19 @@ public class PlanPolygon<T extends Edge> implements Serializable, ChangeListener
 					// Call edge delete handlers
 					edgeDeleteHandler( e1 );
 					edgeDeleteHandler( e2 );
-				} else {
+				} else
 					// e1 and e2 have no neighbours
 					// --> Either they are alone in the polygon, but in this case
 					//     we would have thrown an exception above, because size
 					//     would be 2 then or something went terribly wrong with
 					//     our data structures.
-					if( keepMinSize ) {
+					if( keepMinSize )
 						throw new RuntimeException( Localization.getInstance().getString(
 										"ds.z.PlanPolygon.InternalError" ) );
-					} else {
+					else {
 						e1.delete();
 						e2.delete();
 					}
-				}
 
 				result = null;
 			} else {
@@ -601,12 +574,10 @@ public class PlanPolygon<T extends Edge> implements Serializable, ChangeListener
 				// event handlers that are triggered by the setting of the point below 
 				// will try to iterate over the polygon which will fail or lead to
 				// infinite loops when start or end have invalid values.
-				if( common == start ) {
+				if( common == start )
 					start = deleteE1 ? e1_other : e2_other;
-				}
-				if( common == end ) {
+				if( common == end )
 					end = deleteE1 ? e1_other : e2_other;
-				}
 
 				// really delete the one edge
 				if( deleteE1 ) {
@@ -649,7 +620,9 @@ public class PlanPolygon<T extends Edge> implements Serializable, ChangeListener
 	 * @param keepMinSize If this is true, the polygon will throw an exception when
 	 * you try to combine edges in a polygon with 3 edges or less. If it is false
 	 * you can combine the edges independently of the polygon size.
-	 * @see #combineEdges(Edge,Edge)
+	 * @throws IllegalArgumentException If the polygon contains less than
+	 * or equal to 3 edges. Then no edge can be deleted / no edges combined.
+	 * @see #combineEdges(ds.z.Edge, ds.z.Edge, boolean)
 	 */
 	public void combineEdges( PlanPoint p1, PlanPoint p2, PlanPoint p3, boolean keepMinSize )
 					throws IllegalArgumentException {
@@ -664,15 +637,14 @@ public class PlanPolygon<T extends Edge> implements Serializable, ChangeListener
 	 * @param keepMinSize If this is true, the polygon will throw an exception when
 	 * you try to combine edges in a polygon with (3 + points.size() - 2) edges or less. 
 	 * If it is false you can combine the edges independently of the polygon size.
-	 * @see #combineEdges(Edge,Edge)
+	 * @return the new combined edge
+	 * @see #combineEdges(ds.z.Edge, ds.z.Edge, boolean)
 	 */
 	public T combineEdges( List<PlanPoint> points, boolean keepMinSize ) {
-		if( points.size() < 3 ) {
+		if( points.size() < 3 )
 			throw new IllegalArgumentException( Localization.getInstance().getString( "ds.z.PlanPolygon.ListDoesNotContainenoughPointsException" ) );
-		}
-		if( keepMinSize && (size - (points.size() - 2)) < 3 ) {
+		if( keepMinSize && (size - (points.size() - 2)) < 3 )
 			throw new IllegalStateException( Localization.getInstance().getString( "ds.z.PlanPolygon.NotEnoughEdgesException" ) );
-		}
 		T result = null;
 
 		// Switch off events while working on the polygon structure
@@ -688,40 +660,36 @@ public class PlanPolygon<T extends Edge> implements Serializable, ChangeListener
 			while( myPoints.hasNext() && itPoints == null ) {
 				PlanPoint p = myPoints.next();
 
-				if( itPoints == null ) {
+				if( itPoints == null )
 					if( p.equals( points.get( 0 ) ) ) {
 						itPoints = points.listIterator();
 						reversed = false;
-						combinationEdge = (T) p.getNextEdge();
+						combinationEdge = (T)p.getNextEdge();
 					} else if( p.equals( points.get( points.size() - 1 ) ) ) {
 						itPoints = points.listIterator( points.size() - 1 );
 						reversed = true;
-						combinationEdge = (T) p.getNextEdge();
+						combinationEdge = (T)p.getNextEdge();
 					}
-				}
 			}
 
 			// This is NO else case!
-			if( itPoints != null ) {
+			if( itPoints != null )
 				while( reversed ? itPoints.hasPrevious() : itPoints.hasNext() ) {
 					PlanPoint nextPoint = reversed ? itPoints.previous() : itPoints.next();
 
-					if( !combinationEdge.getTarget().equals( nextPoint ) ) {
+					if( !combinationEdge.getTarget().equals( nextPoint ) )
 						throw new IllegalArgumentException( Localization.getInstance().getString( "ds.z.PlanPolygon.NotEqualException" ) + " (" + nextPoint +
 										", " + combinationEdge.getTarget() + ")" );
-					} else {
+					else {
 						// Combine a new edge
 						combinationEdge = combineEdges( combinationEdge,
-										(T) combinationEdge.getTarget().getNextEdge(), keepMinSize );
+										(T)combinationEdge.getTarget().getNextEdge(), keepMinSize );
 
 						if( combinationEdge.getTarget().equals( points.get( 0 ) ) ||
-										combinationEdge.getTarget().equals( points.get( points.size() - 1 ) ) ) // Reached the end of the combination zone
-						{
+										combinationEdge.getTarget().equals( points.get( points.size() - 1 ) ) )
 							break;
-						}
 					}
 				}
-			}
 
 		} finally {
 			enableEventGeneration = eAG_old;
@@ -749,7 +717,7 @@ public class PlanPolygon<T extends Edge> implements Serializable, ChangeListener
 	public boolean relativePolygonPosition( Edge e, RelativePosition where ) {
 		PlanPoint startPoint = e.getSource();
 		PlanPoint endPoint = e.getTarget();
-		PlanPoint middle = new PlanPoint( (endPoint.x + startPoint.x)/2, (endPoint.y + startPoint.y)/2 );
+		PlanPoint middle = new PlanPoint( (endPoint.x + startPoint.x) / 2, (endPoint.y + startPoint.y) / 2 );
 		double newVectorX;
 		double newVectorY;
 		if( e.isHorizontal() ) {
@@ -760,32 +728,32 @@ public class PlanPolygon<T extends Edge> implements Serializable, ChangeListener
 			newVectorY = -0;
 		} else {
 			double slope = (endPoint.y - startPoint.y) / (double)(endPoint.x - startPoint.x);
-			double inverseSlope = -1/slope;
-			double norm = Math.sqrt(1 + inverseSlope * inverseSlope);
+			double inverseSlope = -1 / slope;
+			double norm = Math.sqrt( 1 + inverseSlope * inverseSlope );
 			newVectorX = 1 / norm;
 			newVectorY = inverseSlope / norm;
 		}
-		PlanPoint test1 = new PlanPoint( middle.x + 200*newVectorX, middle.y + 200*newVectorY, false );
-		PlanPoint test2 = new PlanPoint( middle.x - 200*newVectorX, middle.y + 200*(-1)*newVectorY, false );
+		PlanPoint test1 = new PlanPoint( middle.x + 200 * newVectorX, middle.y + 200 * newVectorY, false );
+		PlanPoint test2 = new PlanPoint( middle.x - 200 * newVectorX, middle.y + 200 * (-1) * newVectorY, false );
 		switch( where ) {
 			case Left:
 				if( PlanPoint.orientation( endPoint, startPoint, test1 ) == 1 )
-					return( contains( test1 ) );
+					return (contains( test1 ));
 				if( PlanPoint.orientation( endPoint, startPoint, test2 ) == 1 )
-					return( contains( test2 ) );
+					return (contains( test2 ));
 				break;
 			case Right:
 				if( PlanPoint.orientation( endPoint, startPoint, test1 ) == -1 )
-					return( contains( test1 ) );
+					return (contains( test1 ));
 				if( PlanPoint.orientation( endPoint, startPoint, test2 ) == -1 )
-					return( contains( test2 ) );
+					return (contains( test2 ));
 				break;
 			default:
 				throw new java.lang.UnsupportedOperationException( "This Position is not supported" );
 		}
 		return false;
 	}
-	
+
 	/**
 	 * Checks wether a <code>PlanPoint</code> is inside a <code>PlanPolygon</code>
 	 * or not. A point is considered inside if it is inside or on the bordering
@@ -799,9 +767,9 @@ public class PlanPolygon<T extends Edge> implements Serializable, ChangeListener
 		// it is not defined what happens if the point is _on_ one line
 		boolean inside = false;
 		if( p.getXInt() < xOffset || p.getYInt() < yOffset ||
-						p.getXInt() > xOffset + width || p.getYInt() > yOffset + height ) {
+						p.getXInt() > xOffset + width || p.getYInt() > yOffset + height )
 			return false;
-		} else {
+		else {
 			// Test all edges, if they are inside
 			Iterator<T> iter = edgeIterator( false );
 			// Create the edge whose crossings are counted
@@ -813,16 +781,12 @@ public class PlanPolygon<T extends Edge> implements Serializable, ChangeListener
 			while( iter.hasNext() ) {
 				current = iter.next();
 				// Check if the point is one of the end-points
-				if( current.fits( p ) ) {
+				if( current.fits( p ) )
 					return true;
-				}
 				switch( Edge.intersects( e, current ) ) {
 					case Colinear:
-						if( p.getXInt() < current.getMaxX() & p.getXInt() > current.getMinX() ) // return true as both lines are horizontal and the point is on it
-						{
+						if( p.getXInt() < current.getMaxX() & p.getXInt() > current.getMinX() )
 							return true;
-						// Nothing to do
-						}
 						break;
 					case Intersects:
 						// "Normal" crossing
@@ -831,16 +795,13 @@ public class PlanPolygon<T extends Edge> implements Serializable, ChangeListener
 					case IntersectsBorder:
 						// Check if p is on the line or the ray goes through the end point of another line
 						Edge inverse_e = new Edge( new PlanPoint( p.getXInt(), p.getYInt() ), new PlanPoint( p.getXInt() - 2 * width, p.getYInt() ), new PlanPolygon<T>( edgeClassType ) );
-						if( Edge.intersects( inverse_e, current ) == Edge.LineIntersectionType.IntersectsBorder ) // p is on current
-						{
+						if( Edge.intersects( inverse_e, current ) == Edge.LineIntersectionType.IntersectsBorder )
 							return true;
-						} else {
+						else
 							// the point lies on the ray
 							// only count if the point is _not_ the lower one of the edge
-							if( current.boundLower() != p.getYInt() ) {
+							if( current.boundLower() != p.getYInt() )
 								inside = !inside;
-							}
-						}
 						break;
 					case Connected:
 						// Only count point one time. That is done as follows:
@@ -870,16 +831,16 @@ public class PlanPolygon<T extends Edge> implements Serializable, ChangeListener
 
 		boolean myResult = myContains( poly );
 
-		Rectangle shape_poly = poly.bounds();
-		Rectangle shape_me = bounds();
-
-		boolean result = shape_me.x <= shape_poly.x && shape_me.y <= shape_poly.y &&
-						(shape_poly.x + shape_poly.width) <= (shape_me.x + shape_me.width) &&
-						(shape_poly.y + shape_poly.height) <= (shape_me.y + shape_me.height);
-
-		// check for bounding box inside. TODO complete test
-		java.awt.Polygon awt = getAWTPolygon();
-		boolean result2 = awt.contains( poly.getAWTPolygon().getBounds2D() );
+//		Rectangle shape_poly = poly.bounds();
+//		Rectangle shape_me = bounds();
+//
+//		boolean result = shape_me.x <= shape_poly.x && shape_me.y <= shape_poly.y &&
+//						(shape_poly.x + shape_poly.width) <= (shape_me.x + shape_me.width) &&
+//						(shape_poly.y + shape_poly.height) <= (shape_me.y + shape_me.height);
+//
+//		// check for bounding box inside. TODO complete test
+//		java.awt.Polygon awt = getAWTPolygon();
+//		boolean result2 = awt.contains( poly.getAWTPolygon().getBounds2D() );
 		//if( result2 != myResult ) System.err.println( "Unterschiedliche Ausgabe im isInside-Test" );
 
 		return myResult;
@@ -890,9 +851,8 @@ public class PlanPolygon<T extends Edge> implements Serializable, ChangeListener
 		ListIterator<PlanPoint> pit = poly.pointIterator( false );
 		while( pit.hasNext() ) {
 			PlanPoint p = pit.next();
-			if( !this.contains( p ) ) {
+			if( !this.contains( p ) )
 				return false;
-			}
 		}
 		// Teste auf kantenschnitt
 		Iterator<T> ei2 = poly.edgeIterator( false );
@@ -913,56 +873,39 @@ public class PlanPolygon<T extends Edge> implements Serializable, ChangeListener
 						if( current.getMinX() >= e.getMinX() & current.getMaxX() <= e.getMaxX() & current.getMinY() >= e.getMinY() & current.getMaxY() <= e.getMaxY() ) // no problem
 						; else {
 							// Points may create a problem
-							if( isBetween( current.getSource(), e ) && !problemPoints.contains( current.getSource() ) ) {
+							if( isBetween( current.getSource(), e ) && !problemPoints.contains( current.getSource() ) )
 								problemPoints.add( current.getSource() );
-							//System.out.println( "Point added to problemlist: " + current.getSource().toString() );
-							}
-							if( isBetween( current.getTarget(), e ) && !problemPoints.contains( current.getTarget() ) ) {
+							if( isBetween( current.getTarget(), e ) && !problemPoints.contains( current.getTarget() ) )
 								problemPoints.add( current.getTarget() );
-							//System.out.println( "Point added to problemlist: " + current.getTarget().toString() );
-							}
-							if( isBetween( e.getSource(), current ) && !problemPoints.contains( e.getSource() ) ) {
+							if( isBetween( e.getSource(), current ) && !problemPoints.contains( e.getSource() ) )
 								problemPoints.add( e.getSource() );
-							//System.out.println( "Point added to problemlist: " + e.getSource().toString() );
-							}
-							if( isBetween( e.getTarget(), current ) && !problemPoints.contains( e.getTarget() ) ) {
+							if( isBetween( e.getTarget(), current ) && !problemPoints.contains( e.getTarget() ) )
 								problemPoints.add( e.getTarget() );
-							//System.out.println( "Point added to problemlist: " + e.getTarget().toString() );
-							}
 						}
 						lastType = Edge.LineIntersectionType.Colinear;
 						break;
 					case IntersectsBorder:
 						//System.out.println( "IntersectsBorder: " + e.toString() + " und " + current.toString() );
 						PlanPoint p = getIntersection( e, current );
-						if( !problemPoints.contains( p ) ) {
+						if( !problemPoints.contains( p ) )
 							problemPoints.add( p );
-						//System.out.println( "Point added to problemlist: " + p.toString() );
-						}
 						break;
 					case Connected:
 						//System.out.println( "Connected: " + e.toString() + " und " + current.toString() );
-						if( current.fits( e.getSource() ) && !problemPoints.contains( e.getSource() ) ) {
+						if( current.fits( e.getSource() ) && !problemPoints.contains( e.getSource() ) )
 							problemPoints.add( e.getSource() );
-						//System.out.println( "Point added to problemlist: " + e.getSource().toString() );
-						} else if( current.fits( e.getTarget() ) && !problemPoints.contains( e.getTarget() ) ) {
+						else if( current.fits( e.getTarget() ) && !problemPoints.contains( e.getTarget() ) )
 							problemPoints.add( e.getTarget() );
-						//System.out.println( "Point added to problemlist: " + e.getTarget().toString() );
-						}
 						break;
 					case NotIntersects:
 						//System.out.println( "NotIntersects" );
 						break;
 					case Superposed:
 						//System.out.println( "Superposed: " + e.toString() + " und " + current.toString() );
-						if( !problemPoints.contains( e.getSource() ) ) {
+						if( !problemPoints.contains( e.getSource() ) )
 							problemPoints.add( e.getSource() );
-						//System.out.println( "Point added to problemlist: " + e.getSource().toString() );
-						}
-						if( !problemPoints.contains( e.getTarget() ) ) {
+						if( !problemPoints.contains( e.getTarget() ) )
 							problemPoints.add( e.getTarget() );
-						//System.out.println( "Point added to problemlist: " + e.getTarget().toString() );
-						}
 						break;
 				}
 			}
@@ -971,10 +914,9 @@ public class PlanPolygon<T extends Edge> implements Serializable, ChangeListener
 				PlanPoint middle = new PlanPoint( (problemPoints.get( i ).getXMeter() + problemPoints.get( i + 1 ).getXMeter()) * 0.5,
 								(problemPoints.get( i ).getYMeter() + problemPoints.get( i + 1 ).getYMeter()) * 0.5 );
 				//System.out.println( "Teste Mittelpunkt: " + middle.toString() );
-				if( !this.contains( middle ) ) {
+				if( !this.contains( middle ) )
 					//System.out.println( "Mittelpunkt liegt außerhalb!" );
 					return false;
-				}
 			}
 		//problemPoints.add( null );
 		}
@@ -993,13 +935,13 @@ public class PlanPolygon<T extends Edge> implements Serializable, ChangeListener
 
 		double det = A1 * B2 - A2 * B1;
 		//if( det == 0 ){
-		if( Math.abs( det ) <= 0.00000001 ) {
+		if( Math.abs( det ) <= 0.00000001 )
 			//Lines are parallel
 			throw new java.lang.IllegalArgumentException( Localization.getInstance().getString( "ds.z.PlanPolygon.ParallelLinesException" ) );
-		} else {
+		else {
 			double x = (B2 * C1 - B1 * C2) / det;
 			double y = (A1 * C2 - A2 * C1) / det;
-			return new PlanPoint( (int) Math.rint( ConversionTools.roundScale3( x ) ), (int) Math.rint( ConversionTools.roundScale3( y ) ) );
+			return new PlanPoint( (int)Math.rint( ConversionTools.roundScale3( x ) ), (int)Math.rint( ConversionTools.roundScale3( y ) ) );
 		}
 	// will make problems if lines are horizontal or vertical
 //		double x1 = e1.getSource().getXInt();
@@ -1021,11 +963,10 @@ public class PlanPolygon<T extends Edge> implements Serializable, ChangeListener
 	}
 
 	private boolean isBetween( PlanPoint p, T e ) {
-		if( (p.getXInt() > e.getMinX() && p.getXInt() < e.getMaxX()) | (p.getYInt() > e.getMinY() && p.getYInt() < e.getMaxY()) ) {
+		if( (p.getXInt() > e.getMinX() && p.getXInt() < e.getMaxX()) | (p.getYInt() > e.getMinY() && p.getYInt() < e.getMaxY()) )
 			return true;
-		} else {
+		else
 			return false;
-		}
 	}
 
 	/**
@@ -1045,12 +986,8 @@ public class PlanPolygon<T extends Edge> implements Serializable, ChangeListener
 			// Do not use the polygon iterator here - he will fail because you 
 			// delete his cursor when deleting the current edge
 			List<T> edges = getEdges();
-			for( Edge e : edges ) // Always call the delete() methods of the edges. These may provide
-			// important behaviour as for example the deletion of the mutual
-			// relationship in case of passable room edges
-			{
+			for( Edge e : edges )
 				e.delete();
-			}
 
 			closed = false;
 			changed = true;
@@ -1092,18 +1029,14 @@ public class PlanPolygon<T extends Edge> implements Serializable, ChangeListener
 	 */
 	// what happens if p has no edges?
 	public boolean equals( PlanPolygon p ) {
-		if( p == this ) {
+		if( p == this )
 			return true;
-		}
-		if( p.getNumberOfEdges() == 0 && this.getNumberOfEdges() == 0 ) {
+		if( p.getNumberOfEdges() == 0 && this.getNumberOfEdges() == 0 )
 			return true;
-		}
-		if( p.getNumberOfEdges() != this.getNumberOfEdges() ) {
+		if( p.getNumberOfEdges() != this.getNumberOfEdges() )
 			return false;
-		}
-		if( p.isClosed() && !this.isClosed() ) {
+		if( p.isClosed() && !this.isClosed() )
 			return false;
-		}
 		if( p.isClosed() ) {
 			PlanPoint pStart = null;
 			ListIterator<PlanPoint> piter = p.pointIterator( false );
@@ -1114,18 +1047,16 @@ public class PlanPolygon<T extends Edge> implements Serializable, ChangeListener
 					break; // Stop iterating, we found the start
 				}
 			}
-			if( pStart == null ) {
+			if( pStart == null )
 				return false;
-			}
 
 			PlanPoint curMe = start;
 			PlanPoint curP = pStart;
 			for( int i = 0; i < this.getNumberOfEdges(); i++ ) {
-				T e1 = (T) curMe.getNextEdge();
-				T e2 = (T) curP.getNextEdge();
-				if( !e1.equals( e2 ) ) {
+				T e1 = (T)curMe.getNextEdge();
+				T e2 = (T)curP.getNextEdge();
+				if( !e1.equals( e2 ) )
 					return false;
-				}
 				curMe = e1.getOther( curMe );
 				curP = e2.getOther( curP );
 			}
@@ -1134,22 +1065,19 @@ public class PlanPolygon<T extends Edge> implements Serializable, ChangeListener
 		}
 		ListIterator<T> iter1;
 		ListIterator<T> iter2;
-		T current1 = (T) getFirstEdge();
-		T current2 = (T) p.getFirstEdge();
+		T current1 = (T)getFirstEdge();
+		T current2 = (T)p.getFirstEdge();
 		// TODO the polygons may have an arbitrary shift of their starting
 		// points, but can still be equal
 		if( current1.equals( current2 ) ) {
 			iter1 = edgeIterator( false );
 			iter2 = p.edgeIterator( false );
-			while( iter1.hasNext() ) {
-				if( !iter1.next().equals( iter2.next() ) ) {
+			while( iter1.hasNext() )
+				if( !iter1.next().equals( iter2.next() ) )
 					return false;
-				}
-			}
 			return true;
-		} else {
+		} else
 			return false;
-		}
 	}
 
 	/** @return The number of edges that this polygon contains. */
@@ -1157,7 +1085,10 @@ public class PlanPolygon<T extends Edge> implements Serializable, ChangeListener
 		return size;
 	}
 
-	/** @return The number of points that this polygon contains. */
+	/**
+	 * Returns the number of points that this {@link PlanPolygon} contains.
+	 * @return the number of points that this polygon contains
+	 */
 	public int getNumberOfPoints() {
 		return closed ? size : size + 1;
 	}
@@ -1177,11 +1108,10 @@ public class PlanPolygon<T extends Edge> implements Serializable, ChangeListener
 	 */
 	@Override
 	public boolean equals( Object obj ) {
-		if( obj instanceof PlanPolygon ) {
-			return this.equals( (PlanPolygon) obj );
-		} else {
+		if( obj instanceof PlanPolygon )
+			return this.equals( (PlanPolygon)obj );
+		else
 			return false;
-		}
 	}
 
 	/**
@@ -1192,9 +1122,8 @@ public class PlanPolygon<T extends Edge> implements Serializable, ChangeListener
 	 * @return true if the edge can be added to the polygon
 	 */
 	public boolean fits( T e ) {
-		if( size == 0 ) {
+		if( size == 0 )
 			return true;
-		}
 		return (fits( e.getSource() ) || fits( e.getTarget() )) && !isClosed();
 	}
 
@@ -1232,7 +1161,7 @@ public class PlanPolygon<T extends Edge> implements Serializable, ChangeListener
 	}
 
 	/**
-	 * Checks whether an {@link Edge} fits into a <code>PlanPolygon<&/code>. An
+	 * Checks whether an {@link Edge} fits into a <code>PlanPolygon</code>. An
 	 * edge is said to fit, if the coordinates of the edge are the same as the
 	 * <code>start</code> and <code>end</code> coordinates of the polygon. That
 	 * means an edge fits if it will close the polygon.
@@ -1242,6 +1171,20 @@ public class PlanPolygon<T extends Edge> implements Serializable, ChangeListener
 	 */
 	public static boolean fitsTogether( Edge e, PlanPolygon p ) {
 		return e.fits( p.getEnd() ) && e.fits( p.getStart() ) && !p.isClosed();
+	}
+
+	/**
+	 * Checks wheather two {@link PlanPoint}s fit to a {@code PlanPolygon}. If two
+	 * points, that are not equal, fit an edge with these two end points will
+	 * close the polygon. If the polygon is closed, {@code false} is returned.
+	 * @param p1 one point that is tested
+	 * @param p2 the other point that is tested
+	 * @param polygon the polygon that is tested to fit to the two points
+	 * @return {@code true} if both points fit to a (not closed) polygon
+	 * @see PlanPolygon#fits(PlanPoint)
+	 */
+	public static boolean fitsTogether( PlanPoint p1, PlanPoint p2, PlanPolygon polygon ) {
+		return polygon.fits( p1 ) && polygon.fits( p2 ) && !polygon.isClosed();
 	}
 
 	/**
@@ -1304,15 +1247,12 @@ public class PlanPolygon<T extends Edge> implements Serializable, ChangeListener
 	 * @return the {@link Edge} instance contained in the polygon
 	 */
 	public T getEdge( PlanPoint p1, PlanPoint p2 ) throws IllegalArgumentException {
-		if( p1.equals( p2 ) ) {
+		if( p1.equals( p2 ) )
 			throw new IllegalArgumentException( Localization.getInstance().getString(
 							"ds.z.PlanPolygon.EqualPointsException" ) );
-		}
-		for( T e : this ) {
-			if( e.fits( p1 ) && e.fits( p2 ) ) {
+		for( T e : this )
+			if( e.fits( p1 ) && e.fits( p2 ) )
 				return e;
-			}
-		}
 		throw new IllegalArgumentException( Localization.getInstance().getString(
 						"ds.z.PlanPolygon.EdgeNotFoundException" ) );
 	}
@@ -1327,9 +1267,8 @@ public class PlanPolygon<T extends Edge> implements Serializable, ChangeListener
 	 */
 	public List<T> getEdges() {
 		ArrayList<T> values = new ArrayList<T>( size );
-		for( T e : this ) {
+		for( T e : this )
 			values.add( e );
-		}
 		return values;
 	}
 
@@ -1366,15 +1305,13 @@ public class PlanPolygon<T extends Edge> implements Serializable, ChangeListener
 	 */
 	public PlanPoint getPointAfterTheNext( T e, PlanPoint p )
 					throws IllegalArgumentException, IllegalStateException {
-		if( e.getSource() != p && e.getTarget() != p ) {
+		if( e.getSource() != p && e.getTarget() != p )
 			throw new IllegalArgumentException( Localization.getInstance().getString( "ds.z.PlanPolygon.PointNotContainedInEdgeException" ) );
-		}
-		if( !closed ) {
+		if( !closed )
 			throw new IllegalStateException( Localization.getInstance().getString( "ds.z.PlanPolygon.PolygonNotClosedException" ) );
-		}
-		T e2 = (T) p.getOtherEdge( e ); // First neighbour
+		T e2 = (T)p.getOtherEdge( e ); // First neighbour
 		PlanPoint p2 = e2.getOther( p ); // First next point
-		T e3 = (T) p2.getOtherEdge( e2 ); // Second neighbour
+		T e3 = (T)p2.getOtherEdge( e2 ); // Second neighbour
 		return e3.getOther( p2 ); // Second next point
 	}
 
@@ -1393,9 +1330,8 @@ public class PlanPolygon<T extends Edge> implements Serializable, ChangeListener
 						(isClosed() ? 0 : 1) );
 
 		Iterator<PlanPoint> itP = pointIterator( false );
-		while( itP.hasNext() ) {
+		while( itP.hasNext() )
 			pointList.add( itP.next() );
-		}
 
 		return pointList;
 	}
@@ -1434,22 +1370,34 @@ public class PlanPolygon<T extends Edge> implements Serializable, ChangeListener
 		return this.yOffset;
 	}
 
-	/** Gets the leftmost x coordinate of the polygon */
+	/**
+	 * Returns the leftmost {@code x}-coordinate of the polygon
+	 * @return the leftmost {@code x}-coordinate of the polygon
+	 */
 	public int boundLeft() {
 		return xOffset;
 	}
 
-	/** Gets the rightmost x coordinate of the polygon */
+	/**
+	 * Returns the rightmost {@code x}-coordinate of the polygon.
+	 * @return the rightmost {@code x}-coordinate of the polygon
+	 */
 	public int boundRight() {
 		return xOffset + width;
 	}
 
-	/** Gets the biggest y coordinate of the polygon (this is then the lowest coord on screen) */
+	/**
+	 * Returns the biggest {@code y}-coordinate of the polygon (this is then the lowest coordinate on screen).
+	 * @return the biggest {@code y}-coordinate of the polygon
+	 */
 	public int boundLower() {
 		return yOffset + height;
 	}
 
-	/** Gets the smallest y coordinate of the polygon (this is then the upmost coord on screen) */
+	/**
+	 * Returns the smallest {@code y}-coordinate of the polygon (this is then the upmost coordinate on screen)
+	 * @return the smallest {@code y}-coordinate of the polygon
+	 */
 	public int boundUpper() {
 		return yOffset;
 	}
@@ -1490,12 +1438,22 @@ public class PlanPolygon<T extends Edge> implements Serializable, ChangeListener
 	}
 
 	/**
+	 * Checks wheather an edge between two distinct points will close the polygon.
+	 * @param p1 one point
+	 * @param p2 the other point
+	 * @return {@code true} if the edge will close the polygon, {@code false} otherwise
+	 */
+	public boolean willClose( PlanPoint p1, PlanPoint p2 ) {
+		return fitsTogether( p1, p2, this );
+	}
+
+	/**
 	 * Returns the maximal number of persons for this area.
 	 * @return the maximal number of persons for this area
 	 */
 	public int getMaxEvacuees() {
 		double area = Math.round( areaMeter() * 100 ) / 100.0;	// round correctly...
-		return (int) Math.round( area / (0.4 * 0.4) );
+		return (int)Math.round( area / (0.4 * 0.4) );
 	}
 
 	/**
@@ -1572,17 +1530,24 @@ public class PlanPolygon<T extends Edge> implements Serializable, ChangeListener
 		return edge;
 	}
 
-	/** @return The first edge of the polygon or null if it is empty. */
+	/**
+	 * Returns the first edge of the polygon or null if it is empty.
+	 * @return The first edge of the polygon or null if it is empty
+	 */
 	public T getFirstEdge() {
-		return (start != null) ? (T) start.getNextEdge() : null;
+		return (start != null) ? (T)start.getNextEdge() : null;
 	}
 
-	/** @return The last edge of the polygon or null if it is empty. */
+	/**
+	 * Returns the last edge of the polygon or null if it is empty
+	 * @return the last edge of the polygon or null if it is empty.
+	 */
 	public T getLastEdge() {
-		return (end != null) ? (T) end.getPreviousEdge() : null;
+		return (end != null) ? (T)end.getPreviousEdge() : null;
 	}
 
-	/** This is ONLY to be called by Edge.delete(). Other methods must never use
+	/**
+	 * This is ONLY to be called by Edge.delete(). Other methods must never use
 	 * this method!
 	 * <p>
 	 * Removes an {@link Edge} from the polygon. For open polygons this will only
@@ -1621,15 +1586,12 @@ public class PlanPolygon<T extends Edge> implements Serializable, ChangeListener
 			T first = getFirstEdge();
 			T last = getLastEdge();
 
-			if( length == 0 ) // Connect the remaining neighbours - Only for zero-length edges!
-			{
-				if( prev != null && next != null ) {
+			if( length == 0 )
+				if( prev != null && next != null )
 					// This happens if three points in one row have the same position
-					next.setSource( prev.getTarget(), true );	// hier auf true gesetzt! 
-				} else {
+					next.setSource( prev.getTarget(), true );
+				else
 					closed = false;
-				}
-			}
 
 			// size has not yet been decremented (this happens below), so if we delete
 			// the last edge size is still 1 at this position
@@ -1638,15 +1600,13 @@ public class PlanPolygon<T extends Edge> implements Serializable, ChangeListener
 				end = null;
 				closed = false; // Deletion of zero-length edges keeps polygon closed until it is empty
 			// At this point it is empty, so we set closed to "false" explicitly
-			} else if( first == e ) {
+			} else if( first == e )
 				start = first.getOther( start );
-			} else if( last == e ) {
+			else if( last == e )
 				end = last.getOther( end );
-			} else if( length != 0 ) // Illegal to delete non-zero-edges from the middle
-			{
+			else if( length != 0 )
 				throw new IllegalStateException( Localization.getInstance().getString(
 								"ds.z.PlanPolygon.EdgeIsNotFirstOrLastOneExcpetion" ) );
-			}
 		}
 
 		changed = true;
@@ -1672,12 +1632,11 @@ public class PlanPolygon<T extends Edge> implements Serializable, ChangeListener
 	 * points. The behaviour is the same as in #add( List<PlanPoint> ). Before
 	 * adding the points the polygon is reinitialized and all edges are deleted.
 	 * @param points the list of points defining the shape of the polygon
-	 * @see add( List<PlanPoint> )
+	 * @see #add( List )
 	 */
 	public void replace( List<PlanPoint> points ) {
-		for( T e : this ) {
+		for( T e : this )
 			e.removeChangeListener( this );
-		}
 		// Drop the current edges
 		start = null;
 		end = null;
@@ -1713,30 +1672,24 @@ public class PlanPolygon<T extends Edge> implements Serializable, ChangeListener
 	 * @exception IllegalStateException If the polygon is not closed
 	 */
 	public ArrayList<T> replaceEdge( T e, List<PlanPoint> points ) throws IllegalArgumentException {
-		if( points.size() < 3 ) {
+		if( points.size() < 3 )
 			throw new IllegalArgumentException( Localization.getInstance().getString( "ds.z.PlanPolygon.ListDoesNotContainenoughPointsException" ) );
-		}
-		if( !closed ) {
+		if( !closed )
 			throw new IllegalStateException( Localization.getInstance().getString(
 							"ds.z.PlanPolygon.PolygonNotClosedException" ) );
-		}
-		if( e.getAssociatedPolygon() != this ) {
+		if( e.getAssociatedPolygon() != this )
 			throw new IllegalArgumentException( Localization.getInstance().getString( "ds.z.PlanPolygon.EdgeNotFoundException" ) );
-		}
 		if( !(e.getSource().equals( points.get( 0 ) ) &&
 						e.getTarget().equals( points.get( points.size() - 1 ) ) || e.getSource().equals( points.get( points.size() - 1 ) ) &&
-						e.getTarget().equals( points.get( 0 ) )) ) {
+						e.getTarget().equals( points.get( 0 ) )) )
 			throw new IllegalArgumentException( Localization.getInstance().getString( "ds.z.PlanPolygon.ReplacementEndPointsMismatch" ) );
-		}
 		// Check for invalid points before having to revert the whole
 		// replacement process when recognizing the error later
 		PlanPoint lastPoint = null;
 		for( PlanPoint currentPoint : points ) {
-			if( lastPoint != null ) {
-				if( lastPoint.equals( currentPoint ) ) {
+			if( lastPoint != null )
+				if( lastPoint.equals( currentPoint ) )
 					throw new IllegalArgumentException( Localization.getInstance().getString( "ds.z.PlanPolygon.SubsequentPointsEqualException" ) );
-				}
-			}
 			lastPoint = currentPoint;
 		}
 
@@ -1754,15 +1707,12 @@ public class PlanPolygon<T extends Edge> implements Serializable, ChangeListener
 			PlanPoint current_start = old_start;
 			boolean firstPoint = true;
 			for( PlanPoint current_end : points ) {
-				if( firstPoint ) {
+				if( firstPoint )
 					firstPoint = false;
-				} else // We have to copy the plan points because they will become part of the 
-				// polygon (which changes them) and we don't want to modify the parameter list
-				{
-					result.add( (T) newEdge( new PlanPoint( current_start ),
+				else
+					result.add( (T)newEdge( new PlanPoint( current_start ),
 									new PlanPoint( current_end ), this,
-									(Class<T>) e.getClass() ) );
-				}
+									(Class<T>)e.getClass() ) );
 				current_start = current_end;
 			}
 
@@ -1798,9 +1748,8 @@ public class PlanPolygon<T extends Edge> implements Serializable, ChangeListener
 	@Override
 	public void stateChanged( ChangeEvent e ) {
 		// Listen for EdgeChangeEvents and update the polygon bounds eventually
-		if( (e instanceof EdgeChangeEvent) || (edgeClassType.isInstance( e.getSource() )) ) {
-			edgeChangeHandler( (Edge) e.getSource(), (e instanceof EdgeChangeEvent) ? ((EdgeChangeEvent) e).getTarget() : null );
-		}
+		if( (e instanceof EdgeChangeEvent) || (edgeClassType.isInstance( e.getSource() )) )
+			edgeChangeHandler( (Edge)e.getSource(), (e instanceof EdgeChangeEvent) ? ((EdgeChangeEvent)e).getTarget() : null );
 		throwChangeEvent( e );
 	}
 
@@ -1818,18 +1767,17 @@ public class PlanPolygon<T extends Edge> implements Serializable, ChangeListener
 							new ChangeListener[changeListeners.size()] );
 
 
-			for( ChangeListener c : listenerCopy ) {
+			for( ChangeListener c : listenerCopy )
 				c.stateChanged( e );
-			}
 		}
 	}
 
-	/** This is a convenience method that returns all PlanPoints of all
+	/**
+	 * This is a convenience method that returns all PlanPoints of all
 	 * Edges of this polygon. Note that the intended behaviour is of this method
 	 * is to return all plan points that are connected to this Polygon, so
 	 * {@link ds.z.Room} f.e. overwrites this method to include all Area PlanPoints.
-	 *
-	 * @return 
+	 * @return a list of all points of the polygon
 	 * @see Room#getPlanPoints()
 	 */
 	public List<PlanPoint> getPlanPoints() {
@@ -1841,21 +1789,19 @@ public class PlanPolygon<T extends Edge> implements Serializable, ChangeListener
 		return planPoints;
 	}
 
-	/** This is a convenience method that adds all PlanPoints of all
+	/**
+	 * This is a convenience method that adds all PlanPoints of all
 	 * Edges of this polygon to the given list. Note that the intended behaviour
 	 * of this method is to return all plan points that are connected to this
 	 * PlanPolygon, so {@link ds.z.Room} f.e. overwrites this method to include
 	 * all Area PlanPoints
-	 *
 	 * @param planPoints The list that the points will be added to
-	 *
 	 * @see Room#getPlanPoints(List)
 	 */
 	public void getPlanPoints( List<PlanPoint> planPoints ) {
 		Iterator<PlanPoint> itP = pointIterator( false );
-		while( itP.hasNext() ) {
+		while( itP.hasNext() )
 			planPoints.add( itP.next() );
-		}
 	}
 
 	/**
@@ -1873,13 +1819,11 @@ public class PlanPolygon<T extends Edge> implements Serializable, ChangeListener
 	@Override
 	public String toString() {
 		String ret = "";
-		for( T e : this ) {
-			if( ret.equals( "" ) ) {
+		for( T e : this )
+			if( ret.equals( "" ) )
 				ret = e.toString();
-			} else {
+			else
 				ret += " - " + e.toString();
-			}
-		}
 		return ret;
 	}
 
@@ -1891,47 +1835,42 @@ public class PlanPolygon<T extends Edge> implements Serializable, ChangeListener
 	 */
 	static private int totalLengthOfEdges( List<PlanPoint> points ) {
 		int length = 0;
-		for( int i = 0; i < points.size() - 1; i++ ) {
+		for( int i = 0; i < points.size() - 1; i++ )
 			length += Edge.length( points.get( i ), points.get( i + 1 ) );
-		}
 		return length;
 	}
 
-	/** This method splits up a closed poylgon into two parts. It deletes the two given edges from 
-	 * the polygon and adds two edges to the resulting parts of the original polygon so that at the 
-	 * end all resulting poylgons are closed again.
-	 * 
-	 * This method does not check the size of the resulting polygons, so that you can create polygons 
-	 * that contain only 2 edges when using this method. (One of the resulting polygons)
-	 * 
-	 * The running time is O(n) because every edge that now is part of the newly created poylgon
-	 * must be associated to the new polygon.
-	 * 
+	/**
+	 * <p>This method splits up a closed poylgon into two parts. It deletes the
+	 * two given edges from the polygon and adds two edges to the resulting parts
+	 * of the original polygon so that at the end all resulting poylgons are
+	 * closed again.</p>
+	 * <p>This method does not check the size of the resulting polygons, so that
+	 * you can create polygons that contain only 2 edges when using this method.
+	 * In this case the one of the resulting polygons will be degenerated.</p>
+	 * <p>The running time is O(n) because every edge that now is part of the
+	 * newly created poylgon must be associated to the new polygon.</p>
 	 * @param edge1 The first edge at which the polygon should be split up. 
 	 * (Will be removed fom the polygon)
 	 * @param edge2 The second edge at which the polygon should be split up. 
 	 * (Will be removed fom the polygon)
 	 * @return One of the two resulting slip-up polygons will be made the current (this) polygon and 
 	 * the other one will be returned here.
-	 * 
 	 * @throws IllegalArgumentException If the one of the given edges is not part of the polygon of if
 	 * they are adjacent.
 	 * @throws IllegalStateException If the polygon is not closed
 	 */
 	public PlanPolygon<T> splitClosedPolygon( T edge1, T edge2 ) throws IllegalArgumentException,
 					IllegalArgumentException {
-		if( !closed ) {
+		if( !closed )
 			throw new IllegalStateException( Localization.getInstance().getString(
 							"ds.z.PlanPolygon.PolygonNotClosedException" ) );
-		}
-		if( edge1.getAssociatedPolygon() != this || edge2.getAssociatedPolygon() != this ) {
+		if( edge1.getAssociatedPolygon() != this || edge2.getAssociatedPolygon() != this )
 			throw new IllegalArgumentException( Localization.getInstance().getString(
 							"ds.z.PlanPolygon.EdgeNotContained" ) );
-		}
-		if( edge1.isNeighbour( edge2 ) ) {
+		if( edge1.isNeighbour( edge2 ) )
 			throw new IllegalArgumentException( Localization.getInstance().getString(
 							"ds.z.PlanPolygon.AdjacentEdges" ) );
-		}
 
 		// Save the edges' end points		
 		PlanPoint e1_start = edge1.getSource();
@@ -1956,18 +1895,17 @@ public class PlanPolygon<T extends Edge> implements Serializable, ChangeListener
 		edge2.delete();
 
 		// Close the two resulting polygons
-		if( !e1_start.equals( e2_target ) ) {
+		if( !e1_start.equals( e2_target ) )
 			// Endpoints are not equal --> insert new edge
 			newEdge( e1_start, e2_target, this );
-		} else {
+		else {
 			// Endpoints are equal --> Cannot add new edge, set new endpoint for last edge
 			e1_start.getPreviousEdge().setTarget( e2_target, false );
 			this.closed = true;
 		}
-		if( !e2_start.equals( e1_target ) ) {
+		if( !e2_start.equals( e1_target ) )
 			// Endpoints are not equal --> insert new edge
-			newEdge( e2_start, e1_target, newPolygon );
-		}/* else {
+			newEdge( e2_start, e1_target, newPolygon );/* else {
 		// Endpoints are equal --> The new polygon is already closed because the
 		// points were added using the normal addEdge() method. This method closes
 		// the polygon automatically when the start and end nodes match.
@@ -1976,33 +1914,31 @@ public class PlanPolygon<T extends Edge> implements Serializable, ChangeListener
 		return newPolygon;
 	}
 
-	/** This method splits up an unclosed poylgon into two parts. It deletes the given edge from 
-	 * the polygon and returns the two resulting parts.
-	 * 
-	 * This method does not check the size of the resulting polygons, so that you can create polygons 
-	 * that contain only 1 edge when using this method. (One of the resulting polygons)
-	 * 
-	 * The running time is O(n) because every edge that now is part of the newly created poylgon
-	 * must be associated to the new polygon.
-	 * 
-	 * @param edge1 The edge at which the polygon should be split up. 
+	/**
+	 * <p>This method splits up a closed poylgon into two parts. It deletes the
+	 * two given edges from the polygon and adds two edges to the resulting parts
+	 * of the original polygon so that at the end all resulting poylgons are
+	 * closed again.</p>
+	 * <p>This method does not check the size of the resulting polygons, so that
+	 * you can create polygons that contain only 2 edges when using this method.
+	 * In this case the one of the resulting polygons will be degenerated.</p>
+	 * <p>The running time is O(n) because every edge that now is part of the
+	 * newly created poylgon must be associated to the new polygon.</p>
+	 * @param splitEdge The edge at which the polygon should be split up.
 	 * (Will be removed fom the polygon)
 	 * @return One of the two resulting slip-up polygons will be made the current (this) polygon and 
 	 * the other one will be returned here.
-	 * 
 	 * @throws IllegalArgumentException If the given edge is not part of the polygon
 	 * @throws IllegalStateException If the polygon is closed
 	 */
 	public PlanPolygon<T> splitUnclosedPolygon( T splitEdge ) throws IllegalArgumentException,
 					IllegalArgumentException {
-		if( closed ) {
+		if( closed )
 			throw new IllegalStateException( Localization.getInstance().getString(
 							"ds.z.PlanPolygon.PolygonClosedException" ) );
-		}
-		if( splitEdge.getAssociatedPolygon() != this ) {
+		if( splitEdge.getAssociatedPolygon() != this )
 			throw new IllegalArgumentException( Localization.getInstance().getString(
 							"ds.z.PlanPolygon.EdgeNotContained" ) );
-		}
 
 		// Save the edges' end points		
 		PlanPoint e_start = splitEdge.getSource();
@@ -2024,8 +1960,12 @@ public class PlanPolygon<T extends Edge> implements Serializable, ChangeListener
 		return newPolygon;
 	}
 
-	/** This method copies the current polygon without it's edges. Every other setting, as f.e. the floor
-	 * for Rooms or the associated Room for Areas is kept as in the original polygon. */
+	/**
+	 * This method copies the current polygon without it's edges. Every other
+	 * setting, as f.e. the floor for Rooms or the associated Room for Areas is
+	 * kept as in the original polygon.
+	 * @return the newly created polygon
+	 */
 	protected PlanPolygon<T> createPlainCopy() {
 		return new PlanPolygon<T>( edgeClassType );
 	}
@@ -2033,10 +1973,8 @@ public class PlanPolygon<T extends Edge> implements Serializable, ChangeListener
 	/**
 	 * This helper method updates the values returned by {@link #bounds()} after
 	 * an {@link ds.z.Edge} has been added or modified.
-	 *
 	 * @param pointMoved A point that belongs to the edge and that was moved or null
 	 * if that is not the case.
-	 *
 	 * @see #edgeDeleteHandler
 	 */
 	private void edgeChangeHandler( Edge e, PlanPoint pointMoved ) {
@@ -2073,7 +2011,7 @@ public class PlanPolygon<T extends Edge> implements Serializable, ChangeListener
 			width += Math.abs( e.boundLeft() - xOffset );
 			xOffset = e.boundLeft();
 
-			minX_DefiningEdge = (T) e;
+			minX_DefiningEdge = (T)e;
 		}
 		if( e == minY_DefiningEdge && e.boundUpper() > yOffset ) {
 			// Init with feasible data
@@ -2096,7 +2034,7 @@ public class PlanPolygon<T extends Edge> implements Serializable, ChangeListener
 			height += Math.abs( e.boundUpper() - yOffset );
 			yOffset = e.boundUpper();
 
-			minY_DefiningEdge = (T) e;
+			minY_DefiningEdge = (T)e;
 		}
 
 		// Update of the maximums
@@ -2120,7 +2058,7 @@ public class PlanPolygon<T extends Edge> implements Serializable, ChangeListener
 			// No Math.abs needed - e.boundRight is always bigger than xOffset
 			width = e.boundRight() - xOffset;
 
-			maxX_DefiningEdge = (T) e;
+			maxX_DefiningEdge = (T)e;
 		}
 		if( e == maxY_DefiningEdge && e.boundLower() < (yOffset + height) ) {
 			// Init with feasible data
@@ -2142,16 +2080,14 @@ public class PlanPolygon<T extends Edge> implements Serializable, ChangeListener
 			// No Math.abs needed - e.boundLower is always bigger than yOffset
 			height = e.boundLower() - yOffset;
 
-			maxY_DefiningEdge = (T) e;
+			maxY_DefiningEdge = (T)e;
 		}
 	}
 
 	/**
 	 * This helper method updates the values returned by {@link #bounds()} after
 	 * an {@link ds.z.Edge} has been deleted.
-	 *
 	 * @param e An Edge that was deleted.
-	 *
 	 * @see #edgeChangeHandler
 	 */
 	private void edgeDeleteHandler( Edge e ) {
@@ -2263,30 +2199,26 @@ public class PlanPolygon<T extends Edge> implements Serializable, ChangeListener
 		double x2 = p2.getX();
 		double y2 = p2.getY();
 		double m = ((y2 - y1) / (x2 - x1));
-		if( x1 < x2 ) {
-			if( m >= 0 ) {
-				if( Math.abs( m ) >= 1.0 ) {
+		if( x1 < x2 )
+			if( m >= 0 )
+				if( Math.abs( m ) >= 1.0 )
 					return PlanPolygon.flipMainDiagonal;
-				} else {
+				else
 					return PlanPolygon.identity;
-				}
-			} else if( Math.abs( m ) >= 1.0 ) {
+			else if( Math.abs( m ) >= 1.0 )
 				return matrixMultiplication( PlanPolygon.flipMainDiagonal, PlanPolygon.flipXAxis );
-			} else {
+			else
 				return PlanPolygon.flipXAxis;
-			}
-		} else if( m >= 0 ) {
-			if( Math.abs( m ) >= 1.0 ) {
+		else if( m >= 0 )
+			if( Math.abs( m ) >= 1.0 )
 				return matrixMultiplication( matrixMultiplication( PlanPolygon.flipMainDiagonal,
 								PlanPolygon.flipXAxis ), PlanPolygon.flipYAxis );
-			} else {
+			else
 				return matrixMultiplication( PlanPolygon.flipYAxis, PlanPolygon.flipXAxis );
-			}
-		} else if( Math.abs( m ) >= 1.0 ) {
+		else if( Math.abs( m ) >= 1.0 )
 			return matrixMultiplication( PlanPolygon.flipMainDiagonal, PlanPolygon.flipYAxis );
-		} else {
+		else
 			return PlanPolygon.flipYAxis;
-		}
 	}
 
 	public int[][] calculateRetransformMatrix( PlanPoint p1, PlanPoint p2 ) {
@@ -2295,31 +2227,27 @@ public class PlanPolygon<T extends Edge> implements Serializable, ChangeListener
 		double x2 = p2.getX();
 		double y2 = p2.getY();
 		double m = ((y2 - y1) / (x2 - x1));
-		if( x1 < x2 ) {
-			if( m >= 0 ) {
-				if( Math.abs( m ) >= 1.0 ) {
+		if( x1 < x2 )
+			if( m >= 0 )
+				if( Math.abs( m ) >= 1.0 )
 					return PlanPolygon.flipMainDiagonal;
-				} else {
+				else
 					return PlanPolygon.identity;
-				}
-			} else if( Math.abs( m ) >= 1.0 ) {
+			else if( Math.abs( m ) >= 1.0 )
 				return matrixMultiplication( PlanPolygon.flipXAxis, PlanPolygon.flipMainDiagonal );
-			} else {
+			else
 				return PlanPolygon.flipXAxis;
-			}
-		} else if( m >= 0 ) {
-			if( Math.abs( m ) >= 1.0 ) {
+		else if( m >= 0 )
+			if( Math.abs( m ) >= 1.0 )
 				return matrixMultiplication( matrixMultiplication(
 								PlanPolygon.flipYAxis, PlanPolygon.flipXAxis ),
 								PlanPolygon.flipMainDiagonal );
-			} else {
+			else
 				return matrixMultiplication( PlanPolygon.flipXAxis, PlanPolygon.flipYAxis );
-			}
-		} else if( Math.abs( m ) >= 1.0 ) {
+		else if( Math.abs( m ) >= 1.0 )
 			return matrixMultiplication( PlanPolygon.flipYAxis, PlanPolygon.flipMainDiagonal );
-		} else {
+		else
 			return PlanPolygon.flipYAxis;
-		}
 	}
 
 	/**
@@ -2338,9 +2266,8 @@ public class PlanPolygon<T extends Edge> implements Serializable, ChangeListener
 				int oldLength = e.length();
 				int newLength = 0;
 				newLength = rasterizeEdge( e, false );
-				if( oldLength - 199 > newLength ) {
+				if( oldLength - 199 > newLength )
 					alertDoors.add( e );
-				}
 			}
 		} finally {
 			enableEventGeneration = eAG_old;
@@ -2413,11 +2340,10 @@ public class PlanPolygon<T extends Edge> implements Serializable, ChangeListener
 			//we chose a linked list here because we will typically only add elements
 			//and iterate over all elements at the end, so linked lists are best suited here
 			LinkedList<PlanPoint> newBetweenPlanPoints = new LinkedList<PlanPoint>();
-			if( flip ) {
+			if( flip )
 				newBetweenPlanPoints.add( p2 );
-			} else {
+			else
 				newBetweenPlanPoints.add( p1 );
-			}
 			PlanPoint nextPlanPoint;
 
 			//System.out.println("parameter for-schleife: ("+work1.getXInt()+","+work2.getXInt()+")");
@@ -2448,22 +2374,15 @@ public class PlanPolygon<T extends Edge> implements Serializable, ChangeListener
 									start.getXInt()) * m );
 
 					if( yCordPredecessor - this.transformPlanPoint( newBetweenPlanPoints.get( newBetweenPlanPoints.size() - 1 ),
-									transformMatrix ).getYInt() + (yCord - yCordPredecessor) / 2 < 200 ) //go right down
-					//System.out.println("inserted: ("+xCord+","+
-					//newBetweenPlanPoints.get(newBetweenPlanPoints.size()-1).getYInt()+")");
-					{
+									transformMatrix ).getYInt() + (yCord - yCordPredecessor) / 2 < 200 )
 						newBetweenPlanPoints.add( this.transformPlanPoint( new PlanPoint( xCord,
 										this.transformPlanPoint( newBetweenPlanPoints.get( newBetweenPlanPoints.size() - 1 ),
 										transformMatrix ).getYInt() ), retransformMatrix ) );
-					} else //go down rights
-					//System.out.println("inserted: ("+(xCord-400)+","+
-					//(newBetweenPlanPoints.get(newBetweenPlanPoints.size()-1).getYInt()+400)+")");
-					{
+					else
 						newBetweenPlanPoints.add( this.transformPlanPoint( new PlanPoint( xCord -
 										400,
 										this.transformPlanPoint( newBetweenPlanPoints.get( newBetweenPlanPoints.size() - 1 ),
 										transformMatrix ).getYInt() + 400 ), retransformMatrix ) );
-					}
 				}
 
 				//insert nextPlanPoint
@@ -2477,9 +2396,8 @@ public class PlanPolygon<T extends Edge> implements Serializable, ChangeListener
 			if( flip ) {
 				flip = false;
 				LinkedList<PlanPoint> tmpBetweenPlanPoints = new LinkedList<PlanPoint>();
-				for( int i = newBetweenPlanPoints.size() - 1; i >= 0; i-- ) {
+				for( int i = newBetweenPlanPoints.size() - 1; i >= 0; i-- )
 					tmpBetweenPlanPoints.add( newBetweenPlanPoints.get( i ) );
-				}
 				newBetweenPlanPoints = tmpBetweenPlanPoints;
 			}
 
@@ -2500,7 +2418,7 @@ public class PlanPolygon<T extends Edge> implements Serializable, ChangeListener
 				current = itED.next();
 
 				// Check for unneccessary points
-				if( current != null && last != null && secondLast != null ) {
+				if( current != null && last != null && secondLast != null )
 					if( (current.x == last.x && last.x == secondLast.x) ||
 									(current.y == last.y && last.y == secondLast.y) ) {
 
@@ -2514,7 +2432,6 @@ public class PlanPolygon<T extends Edge> implements Serializable, ChangeListener
 						last = secondLast;
 						secondLast = thirdLast;
 					}
-				}
 
 				// Get one step further
 				thirdLast = secondLast;
@@ -2533,10 +2450,8 @@ public class PlanPolygon<T extends Edge> implements Serializable, ChangeListener
 			if( check ) {
 				//this.cleanUpAfterRasterization();
 			}
-		} else //System.out.println("no diagonal edge: nothing additional inserted.");
-		{
+		} else
 			newLength = newLength + Edge.length( p1, p2 );
-		}
 
 		return newLength;
 	}
@@ -2557,61 +2472,67 @@ public class PlanPolygon<T extends Edge> implements Serializable, ChangeListener
 		throwChangeEvent( new ChangeEvent( this ) );
 	}
 
-	/** Convenience method that always iterates over the whole polygon.
-	 *  <p>{@see PlanPolygon#edgeIterator(PlanPoint,PlanPoint,boolean)}
+	/**
+	 * Convenience method that always iterates over the whole polygon.
 	 * @param fromEnd if the iteration should start at the beginning or at the end
 	 * @return the edge iterator pointing at the start or end point
+	 * @see PlanPolygon#edgeIterator(PlanPoint,PlanPoint,boolean)
 	 */
 	public ListIterator<T> edgeIterator( boolean fromEnd ) {
 		return new EdgeIterator( this.start, this.end, fromEnd );
 	}
 
-	/** @return A new iterator that the caller can use to iterate over the PlanPolygon's
+	/**
+	 * Returns a new iterator that the caller can use to iterate over the PlanPolygon's
 	 * edges. The iterator will be sensitive to changes that are made during it's
 	 * iteration, which means that f.e. edges which are inserted during the iteration
-	 * will be returned by calls to next() in case they were inserted before the 
+	 * will be returned by calls to next() in case they were inserted before the
 	 * iterator's cursor.
-	 * 
 	 * @param start The starting point of the iterator.
 	 * @param end The end point of the iterator.
 	 * @param fromEnd If this flag is "true" the iterator's initial position will be at
 	 * the "end" PlanPoint so that the first call to previous () will return the edge
 	 * before "end".
+	 * @return a new iterator over all edges
 	 */
 	public ListIterator<T> edgeIterator( PlanPoint start, PlanPoint end, boolean fromEnd ) {
 		return new EdgeIterator( start, end, fromEnd );
 	}
 
-	/** @return A new iterator that the caller can use to iterate over the PlanPolygon's
+	/**
+	 * Returns a new iterator that the caller can use to iterate over the PlanPolygon's
 	 * edges. The iterator will be sensitive to changes that are made during it's
 	 * iteration, which means that f.e. edges which are inserted during the iteration
 	 * will be returned by calls to next() in case they were inserted before the 
 	 * iterator's cursor.
+	 * @return a new iterator over all edges
 	 */
 	@Override
 	public ListIterator<T> iterator() {
 		return edgeIterator( false );
 	}
 
-	/** Convenience method that always iterates over the whole polygon.
-	 *  <p>{@see PlanPolygon#pointIterator(PlanPoint,PlanPoint,boolean)}
-	 * @param fromEnd 
-	 * @return
+	/**
+	 * Convenience method that always iterates over the whole polygon.
+	 * @param fromEnd indicates if the iteration starts at the end point
+	 * @return an iterator over all points
+	 * @see PlanPolygon#pointIterator(PlanPoint,PlanPoint,boolean)
 	 */
 	public ListIterator<PlanPoint> pointIterator( boolean fromEnd ) {
 		return new PointIterator( this.start, this.end, fromEnd );
 	}
 
-	/** @return A new iterator that the caller can use to iterate over the PlanPolygon's
+	/**
+	 * Returns a new iterator that the caller can use to iterate over the PlanPolygon's
 	 * PlanPoints. The iterator will be sensitive to changes that are made during it's
 	 * iteration, which means that f.e. PlanPoints of edges which are inserted during the 
 	 * iteration will be returned by calls to next() in case they were inserted before 
 	 * the iterator's cursor.
-	 * 
 	 * @param start The starting point of the iterator.
 	 * @param end The end point of the iterator.
 	 * @param fromEnd If this flag is "true" the iterator's initial position will be at
 	 * the "end" PlanPoint so that the first call to previous () will return "end".
+	 * @return a new iterator over all points between the two specified points
 	 */
 	public ListIterator<PlanPoint> pointIterator( PlanPoint start, PlanPoint end, boolean fromEnd ) {
 		return new PointIterator( start, end, fromEnd );
@@ -2619,7 +2540,6 @@ public class PlanPolygon<T extends Edge> implements Serializable, ChangeListener
 
 	/** An iterator to iterate over a polygon's edges. */
 	private class EdgeIterator implements ListIterator<T> {
-
 		private PlanPoint start;
 		private PlanPoint end;
 		private T cursor;
@@ -2633,7 +2553,7 @@ public class PlanPolygon<T extends Edge> implements Serializable, ChangeListener
 		public EdgeIterator( PlanPoint start, PlanPoint end, boolean startAtEnd ) {
 			this.start = start;
 			this.end = end;
-			this.cursor = (T) (startAtEnd ? ((end != null) ? end.getPreviousEdge() : null) : ((start != null)
+			this.cursor = (T)(startAtEnd ? ((end != null) ? end.getPreviousEdge() : null) : ((start != null)
 							? start.getNextEdge() : null));
 
 			beforeStart = !startAtEnd;
@@ -2648,16 +2568,14 @@ public class PlanPolygon<T extends Edge> implements Serializable, ChangeListener
 		@Override
 		public T next() {
 			if( hasNext() ) {
-				if( beforeStart ) {
+				if( beforeStart )
 					beforeStart = false;
-				} else {
-					cursor = (T) cursor.getTarget().getNextEdge();
-				}
+				else
+					cursor = (T)cursor.getTarget().getNextEdge();
 
 				return cursor;
-			} else {
+			} else
 				return null;
-			}
 		}
 
 		@Override
@@ -2669,16 +2587,14 @@ public class PlanPolygon<T extends Edge> implements Serializable, ChangeListener
 		@Override
 		public T previous() {
 			if( hasPrevious() ) {
-				cursor = (T) cursor.getSource().getPreviousEdge();
+				cursor = (T)cursor.getSource().getPreviousEdge();
 
-				if( cursor == start.getNextEdge() ) {
+				if( cursor == start.getNextEdge() )
 					beforeStart = true;
-				}
 
 				return cursor;
-			} else {
+			} else
 				return null;
-			}
 		}
 
 		@Override
@@ -2714,7 +2630,6 @@ public class PlanPolygon<T extends Edge> implements Serializable, ChangeListener
 
 	/** An iterator to iterate over a PlanPolygon's PlanPoints. */
 	private class PointIterator implements ListIterator<PlanPoint> {
-
 		private PlanPoint start;
 		private PlanPoint end;
 		private PlanPoint cursor;
@@ -2746,19 +2661,17 @@ public class PlanPolygon<T extends Edge> implements Serializable, ChangeListener
 		@Override
 		public PlanPoint next() {
 			if( hasNext() ) {
-				if( beforeStart ) {
+				if( beforeStart )
 					beforeStart = false;
-				} else {
+				else {
 					cursor = cursor.getNextEdge().getTarget();
-					if( cursor == end ) {
+					if( cursor == end )
 						beyondEnd = true;
-					}
 				}
 
 				return cursor;
-			} else {
+			} else
 				return null;
-			}
 		}
 
 		@Override
@@ -2772,19 +2685,17 @@ public class PlanPolygon<T extends Edge> implements Serializable, ChangeListener
 		@Override
 		public PlanPoint previous() {
 			if( hasPrevious() ) {
-				if( beyondEnd ) {
+				if( beyondEnd )
 					beyondEnd = false;
-				} else {
+				else {
 					cursor = cursor.getPreviousEdge().getOther( cursor );
-					if( cursor == start ) {
+					if( cursor == start )
 						beforeStart = true;
-					}
 				}
 
 				return cursor;
-			} else {
+			} else
 				return null;
-			}
 		}
 
 		@Override

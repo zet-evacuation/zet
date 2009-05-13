@@ -29,7 +29,7 @@ import ds.ca.Cell;
 public class InitialDynamicPotentialRule extends AbstractInitialRule {
 
 	/**
-	 * Checks if an {@link Individual} is assigned to the cell.
+	 * Checks if an {@link ds.ca.Individual} is assigned to the cell.
 	 * @param cell the cell
 	 * @return true if an individual is on the cell.
 	 */

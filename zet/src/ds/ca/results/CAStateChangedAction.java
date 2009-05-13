@@ -35,7 +35,7 @@ public class CAStateChangedAction extends Action {
 	}
 
 	/** {@inheritDoc}
-	 * @see ds.za.results.Action#adoptToCA(ds.za.CellularAutomaton)
+	 * @see ds.ca.results.Action#adoptToCA(ds.ca.CellularAutomaton)
 	 */
 	@Override
 	Action adoptToCA(  CellularAutomaton targetCA ) throws CADoesNotMatchException {
@@ -45,7 +45,7 @@ public class CAStateChangedAction extends Action {
 	/** {@inheritDoc}
 	 * @param onCA the cellular on which the rule is executed
 	 * @throws InconsistentPlaybackStateException if an error during replay occured
-	 * @see ds.za.results.Action#execute(ds.za.CellularAutomaton)
+	 * @see ds.ca.results.Action#execute(ds.ca.CellularAutomaton)
 	 */
 	@Override
 	public void execute( CellularAutomaton onCA ) throws InconsistentPlaybackStateException {
@@ -53,7 +53,7 @@ public class CAStateChangedAction extends Action {
 	}
 
 	/** {@inheritDoc}
-	 * @see ds.za.results.Action#toString()
+	 * @see ds.ca.results.Action#toString()
 	 */
 	@Override
 	public String toString() {

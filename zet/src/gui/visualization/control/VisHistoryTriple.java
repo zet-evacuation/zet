@@ -43,24 +43,24 @@ public class VisHistoryTriple<T1 extends Comparable<T1>, T2, T3> implements Comp
 	}
 
 	/**
-	 * Returns the first Value of the Triple
-	 * @return
+	 * Returns the first Value of the triple.
+	 * @return the first Value of the triple
 	 */
 	public T1 getFirstValue() {
 		return this.value1;
 	}
 
 	/**
-	 * Returns the second Value of the Triple
-	 * @return
+	 * Returns the second value of the triple.
+	 * @return the second Value of the Triple
 	 */
 	public T2 getSecondValue() {
 		return this.value2;
 	}
 
 	/**
-	 * Returns the third Value of the Triple
-	 * @return
+	 * Returns the third value of the triple.
+	 * @return the third value of the triple
 	 */
 	public T3 getThirdValue() {
 		return this.value3;
@@ -68,7 +68,7 @@ public class VisHistoryTriple<T1 extends Comparable<T1>, T2, T3> implements Comp
 
 	/**
 	 * Sets the first value to vale of parameter v1
-	 * @param v1
+	 * @param v1 the first parameter
 	 */
 	public void setFirstValue( T1 v1 ) {
 		this.value1 = v1;
@@ -76,7 +76,7 @@ public class VisHistoryTriple<T1 extends Comparable<T1>, T2, T3> implements Comp
 
 	/**
 	 * Sets the second value to vale of parameter v2
-	 * @param v2
+	 * @param v2 the second parameter
 	 */
 	public void setSecondValue( T2 v2 ) {
 		this.value2 = v2;
@@ -84,14 +84,14 @@ public class VisHistoryTriple<T1 extends Comparable<T1>, T2, T3> implements Comp
 
 	/**
 	 * Sets the third value to vale of parameter v3
-	 * @param v3
+	 * @param v3 the third parameter
 	 */
 	public void setThirdValue( T3 v3 ) {
 		this.value3 = v3;
 	}
 
 	/**
-	 * Compares to another VisHistoryTriple
+	 * Compares to another {@code VisHistoryTriple}
 	 * @param v1 the triple
 	 */
 	public int compareTo( VisHistoryTriple<T1, T2, T3> v1 ) {

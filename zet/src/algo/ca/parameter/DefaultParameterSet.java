@@ -63,7 +63,7 @@ public class DefaultParameterSet extends AbstractDefaultParameterSet {
 	 * {@inheritDoc}
 	 * @param i
 	 * @return
-	 * @see algo.ca.parameter.AbstractDefaultParameterSet#changePotentialThreshold(ds.za.Individual)
+	 * @see algo.ca.parameter.AbstractDefaultParameterSet#changePotentialThreshold(ds.ca.Individual)
 	 */
 	@Override
 	public double changePotentialThreshold( Individual i ) {
@@ -112,7 +112,7 @@ public class DefaultParameterSet extends AbstractDefaultParameterSet {
 
 	/*
 	 * {@inheritDoc}
-	 * @see algo.ca.parameter.AbstractDefaultParameterSet#idleThreshold(ds.za.Individual)
+	 * @see algo.ca.parameter.AbstractDefaultParameterSet#idleThreshold(ds.ca.Individual)
 	 */
 	@Override
 	public double idleThreshold( Individual i ) {
@@ -121,7 +121,7 @@ public class DefaultParameterSet extends AbstractDefaultParameterSet {
 
 	/*
 	 * {@inheritDoc}
-	 * @see algo.ca.parameter.AbstractDefaultParameterSet#movementThreshold(ds.za.Individual)
+	 * @see algo.ca.parameter.AbstractDefaultParameterSet#movementThreshold(ds.ca.Individual)
 	 */
 	// wird nur benutzt wenn die Geschwindigkeit der Individuen mit Wahrscheinlichkeiten simuliert wird
 	// das ist in der NonWaitingMovementRule nicht der Fall
@@ -136,7 +136,7 @@ public class DefaultParameterSet extends AbstractDefaultParameterSet {
 
 	/*
 	 * {@inheritDoc}
-	 * @see algo.ca.parameter.AbstractDefaultParameterSet#updateExhaustion(ds.za.Individual)
+	 * @see algo.ca.parameter.AbstractDefaultParameterSet#updateExhaustion(ds.ca.Individual)
 	 */
 	@Override
 	public double updateExhaustion( Individual individual, Cell targetCell ) {
@@ -204,7 +204,7 @@ public class DefaultParameterSet extends AbstractDefaultParameterSet {
 
 	/* alter Code */
 //		    // update panic only if the individual is not standing on a savecell or an exitcell
-//	        if (! ( (individual.getCell() instanceof ds.za.SaveCell) || (individual.getCell() instanceof ds.za.ExitCell) )) {
+//	        if (! ( (individual.getCell() instanceof ds.ca.SaveCell) || (individual.getCell() instanceof ds.ca.ExitCell) )) {
 //	        	
 //	            double panic = individual.getPanic();
 //	            
@@ -237,7 +237,7 @@ public class DefaultParameterSet extends AbstractDefaultParameterSet {
 
 	/*
 	 * {@inheritDoc}
-	 * @see algo.ca.parameter.AbstractDefaultParameterSet#updateSpeed(ds.za.Individual)
+	 * @see algo.ca.parameter.AbstractDefaultParameterSet#updateSpeed(ds.ca.Individual)
 	 */
 	@Override
 	public double updatePreferredSpeed( Individual i ) {
