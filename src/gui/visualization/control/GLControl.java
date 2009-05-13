@@ -213,7 +213,7 @@ public class GLControl implements drawable {
 	 * Initializes a new empty instance of the general control class for the
 	 * visualization of an evacuation simulation. The instance does not contain
 	 * any graph, building or cellular automaton data, its
-	 * {@link #draw( AutoDrawable )} method doeas nothing.
+	 * {@link #draw( GLAutoDrawable )} method doeas nothing.
 	 */
 	public GLControl( ) {
 		showCA = false;
@@ -402,8 +402,8 @@ public class GLControl implements drawable {
 	}
 
 	/**
- * Returns the time of the model in nanoseconds
- * @return
+ * Returns the time of the model in nanoseconds.
+ * @return the time of the model in nanoseconds
  */
 	public long getTime() {
 		return time;

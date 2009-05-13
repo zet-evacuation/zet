@@ -427,7 +427,7 @@ public ArrayList<Double> calculateAverageCoveredDistanceForGroupInTimeSteps(Arra
             }
         }
         int time=to-from;
-        if (!( (ind.getDeathCause() != null)  && ind.getDeathCause().compareTo(ds.za.Individual.DeathCause.EXIT_UNREACHABLE)==0) ) {
+        if (!( (ind.getDeathCause() != null)  && ind.getDeathCause().compareTo(ds.ca.Individual.DeathCause.EXIT_UNREACHABLE)==0) ) {
             if (time>0) {
                 double startCoveredDistance = getCoveredDistance(ind, from);
                 double endCoveredDistance = getCoveredDistance(ind, to);

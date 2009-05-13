@@ -67,8 +67,8 @@ public class AlgorithmTask extends SwingWorker<Integer, ProcessUpdateMessage> {
 	}
 
 	/**
-	 * Returns a new instance of this singleton object
-	 * @return
+	 * Returns a new instance of this singleton object.
+	 * @return a new instance of this singleton object
 	 */
 	public static AlgorithmTask getNewInstance() {
 		if( instance != null )

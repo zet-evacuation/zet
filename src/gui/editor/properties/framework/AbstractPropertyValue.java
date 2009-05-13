@@ -33,7 +33,7 @@ import localization.Localization;
  *	localization, as well. In that case the strings in the XML-file does not
  *	contain the name, information etc. but some tags used by
  *	{@link Localization} to read localized strings. If it is the case can be
- *	checked via {@link #isUseAsLocString()} and is stored as a boolean flag in
+ *	checked via {@link #isUsedAsLocString()} and is stored as a boolean flag in
  *	the XML-file.</p>
  * @param <T> The type of the property information. Specialized behaviour for
  *	the types shall be implemented in derived classes.
@@ -133,7 +133,7 @@ public abstract class AbstractPropertyValue<T> implements PropertyValue<T>, Prop
 	/**
 	 * Reloads the values for the property from the {@link PropertyContainer}.
 	 * This can be useful, if some properties were changed and should be stored.
-	 * @see PropertyContainer.saveConfigFile(PropertyTreeModel, File)
+	 * @see PropertyContainer#saveConfigFile(PropertyTreeModel, File)
 	 */
 	@SuppressWarnings("unchecked")
 	public void reloadFromPropertyContainer() {

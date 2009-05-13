@@ -50,7 +50,7 @@ public class GLVector extends Vector3 implements drawable {
 	}
 	
 	/**
-	 * Sets this vector as normal in OpenGL using the <code>glNormal3d()</code>
+	 * Sets this vector as normal in {@code OpenGL} using the <code>glNormal3d()</code>
 	 * method. The vector is not normalized!
 	 * @param gl the GL context
 	 */

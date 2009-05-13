@@ -25,7 +25,7 @@ import algo.ca.rule.Rule;
 import statistic.ca.CAStatisticWriter;
 
 /**
- * <p> The <code>CAController</code> works as an controlle in the MVC design
+ * <p> The {@code CAController} works as an controlle in the MVC design
  * pattern. It allows to access the cellular automaton and all the
  * datastructures connected with it to do both, run an ca algorithm and get
  * information for the visualization.</p>
@@ -64,32 +64,35 @@ public class CAController {
 	}
 
 	/**
-	 * 
-	 * @return
+	 * Returns the {@link ds.ca.CellularAutomaton} that is controlled.
+	 * @return the cellular automaton
 	 */
 	public CellularAutomaton getCA() {
 		return ca;
 	}
 
 	/**
-	 * 
-	 * @return
+	 * Returns the {@link RuleSet}that is used during execution of the
+	 * {@link ds.ca.CellularAutomaton}
+	 * @return the ruleset
 	 */
 	public RuleSet getRuleSet() {
 		return ruleSet;
 	}
 
 	/**
-	 * 
-	 * @return
+	 * Returns the {@link ParameterSet} that is used during execution of the
+	 * {@link ds.ca.CellularAutomaton}
+	 * @return the parameter set
 	 */
 	public ParameterSet getParameterSet() {
 		return parameterSet;
 	}
 
 	/**
-	 * 
-	 * @return
+	 * Returns the {@link PotentialController} used during execution of the
+	 * {@link ds.ca.CellularAutomaton}
+	 * @return the potential controller
 	 */
 	public PotentialController getPotentialController() {
 		return potentialController;

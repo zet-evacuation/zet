@@ -50,7 +50,7 @@ public class GLEdge extends AbstractDrawable<GLEdge, GLEdgeControl, GLEdgeContro
 	int transitTime;
 	/* not used */
 	double maxCapacity;
-	/* The length of the edge in OpenGL scaling. */
+	/* The length of the edge in {@code OpenGL} scaling. */
 	double length;
 
 	public GLEdge( GLEdgeControl control ) {
@@ -88,7 +88,7 @@ public class GLEdge extends AbstractDrawable<GLEdge, GLEdgeControl, GLEdgeContro
 	// WARNING: Debug-Out is disabled due to the fact that the method getEdge() is not available in GLEdgeControl (MVC design!)
 	/**
 	 * Draws the flow on the edge.
-	 * @gl the OpenGL context
+	 * @gl the {@code OpenGL} context
 	 */
 	private void drawFlow( GL gl ) {
 		control.stepUpdate();
@@ -141,7 +141,7 @@ public class GLEdge extends AbstractDrawable<GLEdge, GLEdgeControl, GLEdgeContro
 	/**
 	 * Draws all edges (without flow). 
 	 * Therefore, the coordinate system is rotated in such a  way that the cylinder is drawn into the direction
-	 * of the difference vector of start and end node. Usually OpenGL draws cylinders into the direction
+	 * of the difference vector of start and end node. Usually {@code OpenGL} draws cylinders into the direction
 	 * (0,0,1), so the difference vector has to be rotated into this vector.
 	 * @param drawable a <code>GLAutoDrawable</code> on which the edges are drawn.
 	 */
@@ -162,8 +162,8 @@ public class GLEdge extends AbstractDrawable<GLEdge, GLEdgeControl, GLEdgeContro
 	}
 
 	/**
-	 * Draws the flow on the edge. The edge is already drawn using the {@link performStaticDrawing} method.
-	 * @param drawable the OpenGL drawable object
+	 * Draws the flow on the edge. The edge is already drawn using the {@link #performStaticDrawing()} method.
+	 * @param drawable the {@code OpenGL} drawable object
 	 */
 	@Override
 	public void performDrawing( GLAutoDrawable drawable ) {
@@ -173,8 +173,8 @@ public class GLEdge extends AbstractDrawable<GLEdge, GLEdgeControl, GLEdgeContro
 	/**
 	 * Draws the static structure of the edge that means the edge, if it is the first one
 	 * of the two edges. The flow is not painted.
-	 * {@see GLEdgeControl.isFirst()}
-	 * @param drawable the OpenGL drawable object
+	 * {@see GLEdgeControl#isFirst()}
+	 * @param drawable the {@code OpenGL} drawable object
 	 */
 	@Override
 	public void performStaticDrawing( GLAutoDrawable drawable ) {

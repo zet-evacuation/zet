@@ -32,7 +32,7 @@ import localization.Localization;
 public class CreditsDialog extends JDialog {
 	/**
 	 * Creates the window and the {@link CreditsPanel}. The window has the
-	 * program title and the version as defined by {@link EditorStart.version} as
+	 * program title and the version as defined by {@link EditorStart#version} as
 	 * title, is modal and centered in the parent window.
 	 * @param parent the parent window
 	 */

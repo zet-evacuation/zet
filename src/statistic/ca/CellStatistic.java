@@ -98,7 +98,7 @@ public class CellStatistic implements CellStatisticMethods {
 	}
 	
 	/* (non-Javadoc)
-	 * @see statistic.ca.CellStatisticMethods#getCellUtilization(ds.za.Cell, int)
+	 * @see statistic.ca.CellStatisticMethods#getCellUtilization(ds.ca.Cell, int)
 	 */
 	public int getCellUtilization(Cell c, int t) throws IllegalArgumentException{
 		if(cellUtilization.containsKey(c)) {
@@ -130,7 +130,7 @@ public class CellStatistic implements CellStatisticMethods {
 	}
 
 	/* (non-Javadoc)
-	 * @see statistic.ca.CellStatisticMethods#getCellWaitingTime(ds.za.Cell, int)
+	 * @see statistic.ca.CellStatisticMethods#getCellWaitingTime(ds.ca.Cell, int)
 	 */
 	public int getCellWaitingTime(Cell c, int t) throws IllegalArgumentException{
 		if(waitingTime.containsKey(c)){
@@ -159,7 +159,7 @@ public class CellStatistic implements CellStatisticMethods {
 	}
 	
 	/* (non-Javadoc)
-	 * @see statistic.ca.CellStatisticMethods#getOverallCellUtilization(ds.za.Cell, int)
+	 * @see statistic.ca.CellStatisticMethods#getOverallCellUtilization(ds.ca.Cell, int)
 	 */
 	public double getOverallCellUtilization(Cell c, int o){
 		if(cellUtilization.containsKey(c)){
@@ -169,7 +169,7 @@ public class CellStatistic implements CellStatisticMethods {
 	}
 	
 	/* (non-Javadoc)
-	 * @see statistic.ca.CellStatisticMethods#getOverallWaitingTime(ds.za.Cell, int)
+	 * @see statistic.ca.CellStatisticMethods#getOverallWaitingTime(ds.ca.Cell, int)
 	 */
 	public double getOverallWaitingTime(Cell c, int o){
 		if(waitingTime.containsKey(c)){
@@ -179,14 +179,14 @@ public class CellStatistic implements CellStatisticMethods {
 	}
 
 	/* (non-Javadoc)
-	 * @see statistic.ca.CellStatisticMethods#calculatedOverallSingleRoomUtilization(ds.za.Room, int)
+	 * @see statistic.ca.CellStatisticMethods#calculatedOverallSingleRoomUtilization(ds.ca.Room, int)
 	 */
 	public double calculatedOverallSingleRoomUtilization(Room r, int o){
 		return calculatedSingleRoomUtilization(r,o);
 	}
 	
 	/* (non-Javadoc)
-	 * @see statistic.ca.CellStatisticMethods#calculatedSingleRoomUtilization(ds.za.Room, int)
+	 * @see statistic.ca.CellStatisticMethods#calculatedSingleRoomUtilization(ds.ca.Room, int)
 	 */
 	public double calculatedSingleRoomUtilization(Room r, int t){
 		double averageRoomUtilization = 0.0;
@@ -209,14 +209,14 @@ public class CellStatistic implements CellStatisticMethods {
 	}
 	
 	/* (non-Javadoc)
-	 * @see statistic.ca.CellStatisticMethods#calculatedOverallSingleRoomWaitingTime(ds.za.Room, int)
+	 * @see statistic.ca.CellStatisticMethods#calculatedOverallSingleRoomWaitingTime(ds.ca.Room, int)
 	 */
 	public double calculatedOverallSingleRoomWaitingTime(Room r, int o){
 		return calculatedSingleRoomWaitingTime(r,o);
 	}
 	
 	/* (non-Javadoc)
-	 * @see statistic.ca.CellStatisticMethods#calculatedSingleRoomWaitingTime(ds.za.Room, int)
+	 * @see statistic.ca.CellStatisticMethods#calculatedSingleRoomWaitingTime(ds.ca.Room, int)
 	 */
 	public double calculatedSingleRoomWaitingTime(Room r, int t){
 		double averageRoomWaitingTime = 0.0;

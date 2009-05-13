@@ -21,7 +21,7 @@
  */
 
 
-package ds.za;
+package ds.ca;
 
 import junit.framework.TestCase;
 
@@ -60,7 +60,7 @@ public class DynamicPotentialTest extends TestCase {
 
     
     /**
-     * Test der Methode deleteCell, in Klasse ds.za.DynamicPotential.
+     * Test der Methode deleteCell, in Klasse ds.ca.DynamicPotential.
      */
     
     @Test
@@ -79,7 +79,7 @@ public class DynamicPotentialTest extends TestCase {
     }
     
     /**
-     * Test der Methode setPotential, in Klasse ds.za.DynamicPotential.
+     * Test der Methode setPotential, in Klasse ds.ca.DynamicPotential.
      */
     
     @Test
@@ -96,7 +96,7 @@ public class DynamicPotentialTest extends TestCase {
     
     
     /**
-     * Test der Methode getPotential, in Klasse ds.za.DynamicPotential.
+     * Test der Methode getPotential, in Klasse ds.ca.DynamicPotential.
      */
     
     @Test
@@ -113,7 +113,7 @@ public class DynamicPotentialTest extends TestCase {
     }
     
     /**
-     * Test der Methode increase, in Klasse ds.za.DynamicPotential.
+     * Test der Methode increase, in Klasse ds.ca.DynamicPotential.
      */
     @Test
     public void testIncrease() {
@@ -147,7 +147,7 @@ public class DynamicPotentialTest extends TestCase {
     }
 
     /**
-     * Test der Methode decrease, in Klasse ds.za.DynamicPotential.
+     * Test der Methode decrease, in Klasse ds.ca.DynamicPotential.
      */
     
     @Test

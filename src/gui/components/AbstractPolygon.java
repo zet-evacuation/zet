@@ -53,7 +53,7 @@ abstract public class AbstractPolygon extends JPanel {
 	
 	/**
 	 * Returns the real polygon area within the coordinate space of the bounding
-	 * box of this {@link JCellPolygon}.
+	 * box of this {@code AbstractPolygon}.
 	 * @return the real polygon area of this polygon
 	 */
 	public Polygon getDrawingPolygon () { return drawingPolygon; }

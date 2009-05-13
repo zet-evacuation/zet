@@ -138,7 +138,7 @@ public final class GLColor implements DrawingHelper {
 	 * from the current mode</p>
 	 * <p>Note that it is not allowed to use glIsEnabled() between glBegin() and
 	 * glEnd(). Use performGL( GL, boolean ) instead.</p>
-	 * @param gl the OpenGL context on which shall be drawn
+	 * @param gl the {@code OpenGL} context on which shall be drawn
 	 */
 	public final void performGL( GL gl ) {
 		if( gl.glIsEnabled(  GL.GL_LIGHTING) ) {
@@ -150,7 +150,7 @@ public final class GLColor implements DrawingHelper {
 
 	/**
 	 * Sets the color in OpenGL, can set color using materials and color.
-	 * @param gl the OpenGL context on which shall be drawn
+	 * @param gl the {@code OpenGL} context on which shall be drawn
 	 * @param lighting sets wheather the lighting or non-lighting version should be used
 	 */
 	public final void performGL( GL gl, boolean lighting ) {

@@ -30,7 +30,7 @@ import opengl.drawingutils.GLColor;
 import opengl.framework.abs.AbstractDrawable;
 
 /**
- * Draws an individual on a OpenGL canvas.
+ * Draws an individual on a {@code OpenGL} canvas.
  * @author Jan-Philipp Kappmeier
  */
 public class GLIndividual extends AbstractDrawable<GLIndividual, GLIndividualControl, GLIndividualControl> {

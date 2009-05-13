@@ -356,7 +356,7 @@ public abstract class AbstractVisualization extends GLCanvas implements GLEventL
 	/**
 	 * Takes a screenshot and saves it to the file indiciated by the filename
 	 * submitted by the other screenshot method.
-	 * @param drawable the OpenGL context
+	 * @param drawable the {@code OpenGL} context
 	 */
 	protected void takeScreenshot( GLAutoDrawable drawable ) {
 		File file = new File( screenshotFilename );
@@ -375,7 +375,7 @@ public abstract class AbstractVisualization extends GLCanvas implements GLEventL
 
 		/**
 	 * Takes a screenshot and saves it to the submitted file
-	 * @param drawable the OpenGL context
+	 * @param drawable the {@code OpenGL} context
 	 * @param filename the filename
 	 */
 	protected void takeScreenshot( GLAutoDrawable drawable, String filename ) {

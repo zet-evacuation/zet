@@ -154,7 +154,7 @@ public class GLCellControl extends AbstractControl<GLCell, Cell, CAVisualization
 	
 	/**
 	 * Returns the absolute position of the cell in the graphics world
-	 * @return
+	 * @return the absolute position. of the cell in the graphics world
 	 */
 	public Tuple getAbsolutePosition() {
 		return new Tuple( this.getXPosition() + this.getGLControlRoom().getXPosition() + this.getGLControlRoom().getGLCAFloorControl().getXPosition(), this.getYPosition() + this.getGLControlRoom().getYPosition() + this.getGLControlRoom().getGLCAFloorControl().getYPosition() );

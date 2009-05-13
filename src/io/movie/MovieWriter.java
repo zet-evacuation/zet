@@ -38,7 +38,7 @@ public abstract class MovieWriter {
 	protected final int FRAMEDIGITS = 5;
 	/** The path to the movie and the frame images. */
 	protected String path;
-	/** The filename used for the movie images. The frame number with {@link FRAMEDIGITS} digits is added. */
+	/** The filename used for the movie images. The frame number with {@link #FRAMEDIGITS} digits is added. */
 	protected String framename;
 	/** The format in which the movie is encoded. */
 	protected MovieFormat movieFormat;
@@ -65,7 +65,7 @@ public abstract class MovieWriter {
 	 */
 	public abstract String getFilename( int number );
 	/**
-	 * Creates the video with the specified filename in the {@link path}. The
+	 * Creates the video with the specified filename with the {@code #path}. The
 	 * filenames should be submitted, but, however, needn't be neccessaryly
 	 * used.
 	 * @param inputFiles the filenames of the video frames
@@ -98,7 +98,7 @@ public abstract class MovieWriter {
 	
 	/**
 	 * Returns the format in which the frame images are saved.
-	 * @return
+	 * @return the format in which the frame images are saved
 	 */
 	public ImageFormat getFrameFormat() {
 		return frameFormat;

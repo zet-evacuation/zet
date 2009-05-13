@@ -114,7 +114,7 @@ public class Room {
 	 * case the DoorCell will be removed from the list of DoorCells.
 	 * @param cell The cell, which should be referenced at position (x,y).
 	 * If position (x,y) shall be empty, set parameter cell = null.
-	 * @throw Throws an <code>IllegalArgumentException</code>, if the x- or the y-value of
+	 * @throws IllegalArgumentException if the x- or the y-value of
 	 * the parameter "cell" is out of bounds.
 	 */
 	public void setCell( Cell cell ) throws IllegalArgumentException {
@@ -141,7 +141,7 @@ public class Room {
 	 * @param y y-coordinate of the cell. 0 <= y <= height-1
 	 * @return The cell referenced at position (x,y). If position (x,y) is empty
 	 * (in other words: does not reference any cell) null is returned.
-	 * @throw Throws an <code>IllegalArgumentException</code>, if the x- or the y-parameter
+	 * @throws IllegalArgumentException if the x- or the y-parameter
 	 * is out of bounds.
 	 */
 	public Cell getCell( int x, int y ) throws IllegalArgumentException {

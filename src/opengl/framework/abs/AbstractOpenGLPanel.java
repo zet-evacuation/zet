@@ -159,7 +159,7 @@ abstract public class AbstractOpenGLPanel extends GLJPanel implements GLEventLis
 	}
 
 	/**
-	 * Initializes this OpenGL component. This method is called directly after
+	 * Initializes this {@code OpenGL} component. This method is called directly after
 	 * the component is created. Do all you init-gfx stuff here.
 	 * @param drawable the GL context that we can use
 	 */

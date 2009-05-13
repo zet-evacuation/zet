@@ -384,11 +384,11 @@ public class JPlanImageProperties extends JComponent {
 	}
 	
 	/**
-	 * Initializes the {@link dialog} so that it can be used to set the zoom
+	 * Initializes the {@link #dialog} so that it can be used to set the zoom
 	 * for the image. After the dialog is created, it is shown (modal).
 	 * It returns an integer value depending on the selected button.
 	 * @param parent
-	 * @return {@link OK} or {@link CANCEL}
+	 * @return {@link #OK} or {@link #CANCEL}
 	 */
 	public int showPlanImageZoomDialog( Frame parent ) {
 		if( image == null )
@@ -401,11 +401,11 @@ public class JPlanImageProperties extends JComponent {
 	}
 	
 	/**
-	 * Initializes the {@link dialog} so that it can be used to set the position
+	 * Initializes the {@link #dialog} so that it can be used to set the position
 	 * of the image. After the dialog is created, it is shown (modal).
 	 * It returns an integer value depending on the selected button.
 	 * @param parent
-	 * @return {@link OK} or {@link CANCEL}
+	 * @return {@link #OK} or {@link #CANCEL}
 	 */
 	public int showPlanMoveDialog( Frame parent ) {
 		this.parent = parent;
@@ -416,11 +416,11 @@ public class JPlanImageProperties extends JComponent {
 	}
 	
 	/**
-	 * Initializes the {@link dialog} so that it can be used to set the alpha
+	 * Initializes the {@link #dialog} so that it can be used to set the alpha
 	 * value for the image. After the dialog is created, it is shown (modal).
 	 * It returns an integer value depending on the selected button.
 	 * @param parent
-	 * @return {@link OK} or {@link CANCEL}
+	 * @return {@link #OK} or {@link #CANCEL}
 	 */
 	public int showPlanAlphaDialog( Frame parent ) {
 		this.parent = parent;

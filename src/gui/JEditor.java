@@ -408,7 +408,7 @@ public class JEditor extends JFrame implements Localized, EventListener<Progress
 	}
 
 	/**
-	 * Sends a ready-message using {@link JEditor.sendMessage( String )}.
+	 * Sends a ready-message using {@link JEditor#sendMessage( String )}.
 	 */
 	public static void sendReady() {
 		sendMessage( loc.getString( "gui.message.ready" ) );
@@ -847,7 +847,7 @@ public class JEditor extends JFrame implements Localized, EventListener<Progress
 
 	/**
 	 * Changes the appearance of the gui to the selected language.
-	 * {@see localization/Localization}
+	 * @see localization.Localization
 	 */
 	public void localize() {
 		editView.localize();

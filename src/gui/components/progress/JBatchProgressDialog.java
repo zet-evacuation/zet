@@ -137,7 +137,7 @@ public class JBatchProgressDialog extends javax.swing.JDialog {
 	
 	/**
 	 * Checks whether the task execution is finished, or not. Note that the method
-	 * may give a wrong result if {@link start()} is not called or another
+	 * may give a wrong result if {@link #start()} is not called or another
 	 * task has started in the meantime!
 	 * @return true if the task is finished.
 	 */

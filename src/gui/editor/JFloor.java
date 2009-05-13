@@ -784,11 +784,16 @@ public class JFloor extends AbstractFloor implements ds.z.event.ChangeListener {
 							try {
 								completeRectangledPolygon( newPolygon, p1, p2 );
 							} catch( IllegalArgumentException ex ) {
-								JEditor.sendError( Localization.getInstance().getString(
-												"gui.error.RectangleCreationZeroArea" ) );
+								JEditor.sendError( Localization.getInstance().getString( "gui.error.RectangleCreationZeroArea" ) );
 								return;
 							}
 						else if( GUIOptionManager.getEditMode().getType() == EditMode.Type.CREATION_POINTWISE )
+							// check if the new point will close the polygon
+							// check the area that the polygon would have
+							if( newPolygon.willClose( p1, p2 ) && newPolygon.area() == 0 ) {
+									JEditor.sendError( Localization.getInstance().getString( "gui.error.RectangleCreationZeroArea" ) );
+									return;
+							}
 							try {
 								if( newPolygon instanceof Room )
 									new RoomEdge( p1, p2, (Room)newPolygon );
@@ -826,14 +831,15 @@ public class JFloor extends AbstractFloor implements ds.z.event.ChangeListener {
 							// Delete empty, aborted polygons
 							newPolygon.delete();
 						else
-							if( newPolygon.getNumberOfEdges() >= ((newPolygon instanceof Barrier) ? 1 : 3) )
+							if( newPolygon.area() == 0 ) {
+								JEditor.sendError( Localization.getInstance().getString( "gui.error.RectangleCreationZeroArea" ) );
+								return;
+							} else if( newPolygon.getNumberOfEdges() >= ((newPolygon instanceof Barrier) ? 1 : 2) ) // The new edge would be the third
 								newPolygon.close();
 							else {
-								JEditor.sendError( Localization.getInstance().getString(
-												"gui.error.CreateAtLeastThreeEdges" ) );
+								JEditor.sendError( Localization.getInstance().getString( "gui.error.CreateAtLeastThreeEdges" ) );
 								return;
 							}
-
 					polygonFinishedHandler();
 				}
 			}
@@ -1103,11 +1109,13 @@ public class JFloor extends AbstractFloor implements ds.z.event.ChangeListener {
 		repaint();
 	}
 
-	/** This method adds Edges to the Polygon p so that is gets into a rectangular 
-	 * shape where p1 is the top left point and p2 the bottom right point of the resulting 
-	 * rectangle. 
+	/**
+	 * This method adds Edges to the {@link PlanPolygon} {@code p} so that it
+	 * becomes a rectangular shape where {@code p1} is the top left point and
+	 * {@code p2} the bottom right point of the resulting rectangle.
 	 * @param p This must be an empty PlanPolygon (with no edges)
-	 * @param p1 / p2 These have to be coordinates in the model space
+	 * @param p1 coordinates of one corner of the rectangle in model space
+	 * @param p2 coordinates of the diagonally inverse corner
 	 */
 	private void completeRectangledPolygon( PlanPolygon p, Point p1, Point p2 ) {
 		if( p1.getX() == p2.getX() || p1.getY() == p2.getY() )

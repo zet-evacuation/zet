@@ -97,7 +97,7 @@ public class Camera {
 	}
 
 	/**
-	 * <p>This method pitches but not around the {@link up}-vector but around a
+	 * <p>This method pitches but not around the {@code up}-vector but around a
 	 * given vector indicating the up direction. </p>
 	 * <p>This can be used to allow using the mouse for viewing and calculate the
 	 * current view (while mouse motion is in progress) on the base of the

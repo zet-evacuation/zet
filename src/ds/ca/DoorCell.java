@@ -137,7 +137,7 @@ public class DoorCell extends Cell implements Cloneable {
 	 * the next doors about the removal.</p>
 	 * <p><b>Warning!</b> Use this method only if you know what you do. It may
 	 * destroy the cosistency of the CA. This method is basically useful if a
-	 * {@link ds.za.CellularAutomaton} should be clonded. In that case the
+	 * {@link ds.ca.CellularAutomaton} should be clonded. In that case the
 	 * next doors have to be set to the new cloned instances and the old
 	 * instances should be deleted without disturbing the original automaton.
 	 * </p>

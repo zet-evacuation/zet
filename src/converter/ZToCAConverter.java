@@ -277,7 +277,7 @@ public class ZToCAConverter {
 	 * @param rasteredRoom the rastered room
 	 * @param onFloor the floor on which the room lies
 	 * @param floorID the id of the floor (that means the level)
-	 * @return the created {@link ds.za.Room}
+	 * @return the created {@link ds.ca.Room}
 	 * @throws converter.ZToCAConverter.ConversionNotSupportedException if an error occurs
 	 */
 	protected static ds.ca.Room convertRoom( ZToCARoomRaster rasteredRoom, Floor onFloor, int floorID ) throws ConversionNotSupportedException {
@@ -326,7 +326,7 @@ public class ZToCAConverter {
 	}
 
 	/**
-	 * <p>Converts a {@link ZToCARasterSquare} to a {@link ds.za.Cell} of the appropriate type
+	 * <p>Converts a {@link ZToCARasterSquare} to a {@link ds.ca.Cell} of the appropriate type
 	 * e.g. DoorCell or ExitCell. The position in the room has to be submitted and the
 	 * converted Room which should contain the created cell.</p>
 	 * <p>During creation of door cells another cell can be created (the partner).

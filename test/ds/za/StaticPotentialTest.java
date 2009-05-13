@@ -21,7 +21,7 @@
  */
 
 
-package ds.za;
+package ds.ca;
 
 import junit.framework.TestCase;
 
@@ -55,7 +55,7 @@ public class StaticPotentialTest extends TestCase {
 
     
     /**
-     * Test der Methode deleteCell, in Klasse ds.za.DynamicPotential.
+     * Test der Methode deleteCell, in Klasse ds.ca.DynamicPotential.
      */
     
     @Test

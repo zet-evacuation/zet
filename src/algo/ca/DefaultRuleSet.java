@@ -31,9 +31,9 @@ import localization.Localization;
  * sets, the <b>primary rules</b> and the <b>loop rules</b>. The primary rules
  * are supposed to be only executed once to initialize the {@link CA} while
  * the loop rules are supposed to be executed in every step.</p>
- * <p>It is only allowed to have one instance of {@AbstractMovementRule} which
- * describes the behaviour of the individuals while they are moving. However,
- * the rule can be added to both the primary set and the loop set.</p>
+ * <p>It is only allowed to have one instance of {@link AbstractMovementRule}
+ * which describes the behaviour of the individuals while they are moving.
+ * However, the rule can be added to both the primary set and the loop set.</p>
  * @author Jan-Philipp Kappmeier
  */
 public class DefaultRuleSet extends RuleSet {

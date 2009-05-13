@@ -29,7 +29,7 @@ import java.util.ArrayList;
  * types: the initialization rules and the loop rules. </p>
  * <p>When a new instance is created, it should load the rules itself,
  * so all child classes need to implement the  method {@code selfInit()}. It
- * is intended to load the rules out of the {@link PropertyContainer}, but this
+ * is intended to load the rules out of the {@link ds.PropertyContainer}, but this
  * can easyly be omitted. Nevertheless <code>selfInit()</code> needs to be
  * overwritten at least with an empty method.</p>
  * <p>As the objects are divided in two parts, a <code>RuleSet</code> provides
@@ -48,7 +48,7 @@ public abstract class RuleSet implements Iterable<Rule> {
 
 	/**
 	 * Creates a new instance of <code>RuleSet</code> and initializes the
-	 * container. The abstract method {@link selfInit()} is called, that should
+	 * container. The abstract method {@link #selfInit()} is called, that should
 	 * load all neccessary rules.
 	 */
 	public RuleSet() {

@@ -40,7 +40,7 @@ public class CreditsPanel extends JOrthoPanel {
 	private boolean texturesLoaded = false;
 	/** The texture containing the font information */
 	private Texture fontTex;
-	/** A texture-font object using to draw text on the OpenGL panel */
+	/** A texture-font object using to draw text on the {@code OpenGL} panel */
 	private TextureFont font;
 	/** The top position of the text */
 	private double startPos = -10;

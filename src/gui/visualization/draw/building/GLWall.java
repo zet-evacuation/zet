@@ -65,7 +65,7 @@ public class GLWall extends AbstractDrawable<GLWall, GLWallControl, GLWallContro
 	/**
 	 * Draws the walls around rooms. The walls have some thickness and also an upper side.
 	 * {@inheritDoc}
-	 * @param drawable the OpenGL graphics context to be drawn on
+	 * @param drawable the {@code OpenGL} graphics context to be drawn on
 	 */
 	@Override
 	public void performStaticDrawing( GLAutoDrawable drawable ) {

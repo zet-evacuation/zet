@@ -42,7 +42,7 @@ import opengl.helper.TextureManager;
 import util.vectormath.Vector3;
 
 /**
- * Implements the OpenGL visualization on a JOGL canvas. The class initializes
+ * Implements the {@code OpenGL} visualization on a JOGL canvas. The class initializes
  * the canvas, sets up light, textures and other stuff and draws the scene.
  * @author Jan-Philipp Kappmeier
  */
@@ -171,7 +171,7 @@ public class Visualization extends AbstractVisualization implements EventListene
 
 	/**
 	 * Draws the scene.
-	 * @param drawable the OpenGL context
+	 * @param drawable the {@code OpenGL} context
 	 */
 	public void display( GLAutoDrawable drawable ) {
 		// TODO: richtig machen mit dem update :D
@@ -265,7 +265,7 @@ public class Visualization extends AbstractVisualization implements EventListene
 	/**
 	 * Sets the correct animation time. Calculated by the difference
 	 * from the current time and last time.
-	 * @see getDeltaTime()
+	 * @see #getDeltaTime()
 	 */
 	final public void animate() {
 		control.addTime( getDeltaTime() );
