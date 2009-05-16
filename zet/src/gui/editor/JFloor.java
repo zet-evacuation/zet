@@ -266,7 +266,7 @@ public class JFloor extends AbstractFloor implements ds.z.event.ChangeListener {
 	public void paintComponent( Graphics g ) {
 		super.paintComponent( g );
 		Graphics2D g2 = (Graphics2D)g;
-		g2.setRenderingHint( RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON );
+		//g2.setRenderingHint( RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON );
 		this.drawRaster( g2 );
 
 		// Draw background image if set
@@ -787,10 +787,10 @@ public class JFloor extends AbstractFloor implements ds.z.event.ChangeListener {
 								JEditor.sendError( Localization.getInstance().getString( "gui.error.RectangleCreationZeroArea" ) );
 								return;
 							}
-						else if( GUIOptionManager.getEditMode().getType() == EditMode.Type.CREATION_POINTWISE )
+						else if( GUIOptionManager.getEditMode().getType() == EditMode.Type.CREATION_POINTWISE ) {
 							// check if the new point will close the polygon
 							// check the area that the polygon would have
-							if( newPolygon.willClose( p1, p2 ) && newPolygon.area() == 0 ) {
+							if( newPolygon.willClose( p1, p2 ) && newPolygon.area() == 0 && !(newPolygon instanceof Barrier) ) {
 									JEditor.sendError( Localization.getInstance().getString( "gui.error.RectangleCreationZeroArea" ) );
 									return;
 							}
@@ -804,11 +804,11 @@ public class JFloor extends AbstractFloor implements ds.z.event.ChangeListener {
 								JEditor.sendError( Localization.getInstance().getString(
 												"gui.error.ChooseDifferentPoint" ) );
 							}
+						}
 						// Set the correct number of persons to assignment areas
 						if( newPolygon instanceof AssignmentArea )
 							((AssignmentArea)newPolygon).setEvacuees( Math.min( newPolygon.getMaxEvacuees(), ((AssignmentArea)newPolygon).getAssignmentType().getDefaultEvacuees() ) );
 					}
-
 					if( newPolygon != null && newPolygon.isClosed() )
 						// Room closed, with next click create new instance
 						polygonFinishedHandler();
@@ -819,7 +819,7 @@ public class JFloor extends AbstractFloor implements ds.z.event.ChangeListener {
 					}
 
 				}
-			else if( e.getButton() == MouseEvent.BUTTON3 ){
+			else if( e.getButton() == MouseEvent.BUTTON3 ) {
 				// This method already contains the EditMode analysis
 				if( GUIOptionManager.getEditMode().getType() == EditMode.Type.CREATION_POINTWISE ) {
 					// Create last Edge and close the polygon
@@ -827,11 +827,12 @@ public class JFloor extends AbstractFloor implements ds.z.event.ChangeListener {
 					// FALSE: Special case: Barriers are left open ( as a polygon )
 					// This is no longer the case, because unclosed polygons won't work eith the rasterization
 					if( newPolygon != null )
-						if( newPolygon.getNumberOfEdges() == 0 )
+						if( newPolygon.getNumberOfEdges() == 0 ) {
 							// Delete empty, aborted polygons
 							newPolygon.delete();
-						else
-							if( newPolygon.area() == 0 ) {
+							JEditor.sendMessage( Localization.getInstance().getString( "gui.message.PolgonCreationAborted" ) );
+						} else {
+							if( newPolygon.area() == 0 && !(newPolygon instanceof Barrier) ) {
 								JEditor.sendError( Localization.getInstance().getString( "gui.error.RectangleCreationZeroArea" ) );
 								return;
 							} else if( newPolygon.getNumberOfEdges() >= ((newPolygon instanceof Barrier) ? 1 : 2) ) // The new edge would be the third
@@ -840,6 +841,8 @@ public class JFloor extends AbstractFloor implements ds.z.event.ChangeListener {
 								JEditor.sendError( Localization.getInstance().getString( "gui.error.CreateAtLeastThreeEdges" ) );
 								return;
 							}
+							JEditor.sendMessage( Localization.getInstance().getString( "gui.message.PolgonSuccessfullyCreated" ) );
+						}
 					polygonFinishedHandler();
 				}
 			}
@@ -1046,7 +1049,6 @@ public class JFloor extends AbstractFloor implements ds.z.event.ChangeListener {
 		newPolygon = null;
 		lastClick = null;
 		lastPlanClick = null;
-		JEditor.sendMessage( Localization.getInstance().getString( "gui.message.PolgonSuccessfullyCreated" ) );
 		if( GUIOptionManager.getEditMode() == EditMode.StairAreaCreationPointwise ||
 						GUIOptionManager.getEditMode() == EditMode.StairAreaCreation ) {
 			GUIOptionManager.setEditMode( EditMode.StairAreaMarkLowerLevel );
@@ -1163,6 +1165,7 @@ public class JFloor extends AbstractFloor implements ds.z.event.ChangeListener {
 						newPolygon = null;
 						lastClick = null;
 						lastPlanClick = null;
+						JEditor.sendMessage( Localization.getInstance().getString( "gui.message.PolgonCreationAborted" ) );
 					}
 					break;
 				case KeyEvent.VK_DELETE:

@@ -34,19 +34,28 @@ import java.util.Vector;
 public class BuildingResults implements VisualizationResult {
 
 	private static final double Z_TO_OPENGL_SCALING = 0.1d;
-	
+
 	public static class Wall implements Iterable<Point2D.Double> {
+
 		/** An enumeration describing the different types of walls that can be visualized. */
 		public static enum ElementType {
+
 			/** The default wall type, nothing special. */
 			SIMPLE,
 			/** A passable wall, normally that is a door. */
 			PASSABLE,
 			/** A wall that belongs to an inaccessible area. */
 			INACCESSIBLE
-		};
+		}
 
-		private Vector<Point2D.Double> points;
+		
+		
+		  ;
+		private  Vector 
+		 <Point2D 
+		  
+		  
+		    .Double> points;
 		private Floor floor;
 		//protected ElementType wallType;
 		private Vector<ElementType> wallTypes;
@@ -87,10 +96,9 @@ public class BuildingResults implements VisualizationResult {
 
 		public void addPoint( double x, double y, ElementType type ) {
 			if( points.size() == 0 ) {
-				// nothing
-			} else {
+			// nothing
+			} else
 				wallTypes.add( type );
-			}
 			points.add( new Point2D.Double( x, y ) );
 		}
 
@@ -114,10 +122,11 @@ public class BuildingResults implements VisualizationResult {
 		@Override
 		public Iterator<Point2D.Double> iterator() {
 			return Collections.unmodifiableList( points ).iterator();
-		}	
+		}
 	}
 
 	public static class Floor {
+
 		/** The id of the floor. Normally this is the floor number in the z-format.*/
 		private int id;
 		/** The name of the floor. */
@@ -147,9 +156,8 @@ public class BuildingResults implements VisualizationResult {
 			Floor buildingFloor = new Floor( buildingPlan.getFloorID( zFloor ), zFloor.getName() );
 
 			if( zFloor.getRooms().size() > 0 ) {
-				if( floors.put( buildingFloor.id(), buildingFloor ) != null ) {
+				if( floors.put( buildingFloor.id(), buildingFloor ) != null )
 					throw new RuntimeException( "Error while building the visualisation data out of the building plan: " + "There were two z-floors with the same id. " );
-				}
 
 				for( ds.z.Room room : zFloor.getRooms() ) {
 					addHeterogeneousEdgeList( room.edgeIterator( false ), room, buildingFloor );
@@ -157,9 +165,8 @@ public class BuildingResults implements VisualizationResult {
 						Wall w = addHomogeneousEdgeList( barrier.edgeIterator( false ), barrier, buildingFloor, Wall.ElementType.INACCESSIBLE );
 						w.setBarrier( true );
 					}
-					for( ds.z.InaccessibleArea area : room.getInaccessibleAreas() ) {
+					for( ds.z.InaccessibleArea area : room.getInaccessibleAreas() )
 						addHomogeneousEdgeList( area.edgeIterator( false ), area, buildingFloor, Wall.ElementType.INACCESSIBLE );
-					}
 				}
 			}
 		}
@@ -199,9 +206,9 @@ public class BuildingResults implements VisualizationResult {
 				curWall.addPoint( curEdge.getTarget(), Wall.ElementType.PASSABLE );
 			else
 				curWall.addPoint( curEdge.getTarget(), Wall.ElementType.SIMPLE );
-			}
-			addWall( curWall );
 		}
+		addWall( curWall );
+	}
 
 	protected Wall addHomogeneousEdgeList( Iterator<? extends ds.z.Edge> edgeIt, ds.z.PlanPolygon room, Floor floor, Wall.ElementType type ) {
 		Wall curWall = new Wall( floor );
@@ -221,7 +228,7 @@ public class BuildingResults implements VisualizationResult {
 		addWall( curWall );
 		return curWall;
 	}
-	
+
 	/**
 	 * Checks wheather an room is on the right or left side of an edge and stores
 	 * the result in an corresponding {@link Wall} object.
@@ -230,12 +237,12 @@ public class BuildingResults implements VisualizationResult {
 	 * @param curWall the wall
 	 */
 	private void checkOrientation( ds.z.Edge edge, ds.z.PlanPolygon room, Wall curWall ) {
-		boolean isLeft = room.relativePolygonPosition(edge,RelativePosition.Left);
-		boolean isRight = room.relativePolygonPosition(edge,RelativePosition.Right);
+		boolean isLeft = room.relativePolygonPosition( edge, RelativePosition.Left );
+		boolean isRight = room.relativePolygonPosition( edge, RelativePosition.Right );
 		if( isLeft != isRight ) {
 			curWall.roomIsLeft = isLeft;
 			curWall.roomIsRight = isRight;
-		} else
-			System.err.println( "Kante konnte nicht genutzt werden!");
+		}// else
+	//	System.err.println( "Kante konnte nicht genutzt werden!");
 	}
 }

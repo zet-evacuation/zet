@@ -49,14 +49,14 @@ abstract public class AbstractPolygon extends JPanel {
 	 * Returns the {@link ds.z.PlanPolygon} represented by this instance.
 	 * @return the polygon
 	 */
-	public PlanPolygon getPlanPolygon () { return myPolygon; }
+	public final PlanPolygon getPlanPolygon () { return myPolygon; }
 	
 	/**
 	 * Returns the real polygon area within the coordinate space of the bounding
 	 * box of this {@code AbstractPolygon}.
 	 * @return the real polygon area of this polygon
 	 */
-	public Polygon getDrawingPolygon () { return drawingPolygon; }
+	public final Polygon getDrawingPolygon () { return drawingPolygon; }
 	
 	/**
 	 * 
@@ -72,6 +72,7 @@ abstract public class AbstractPolygon extends JPanel {
 	 * @param g2 the graphics context on which the name is drawn
 	 */
 	public void drawName( String name, Graphics2D g2 ) {
+		if( 1 == 1 )return;
 		FontMetrics metrics = g2.getFontMetrics();
 		Rectangle nameBounds = metrics.getStringBounds( name, g2 ).getBounds();
 		Rectangle myBounds = getBounds();

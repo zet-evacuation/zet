@@ -339,8 +339,8 @@ public class BuildingPlan implements Serializable, ChangeListener, ChangeReporte
 				// Checking if r is rasterized before rasterizing it makes no sense??
                                 // but it makes sense to ensure that all polygons are closed!!
 				r.check( rasterized );
-				r.rasterize ();
-				r.cleanUpThornsAndNormalEdgesForRooms ();
+				r.rasterize();
+				//r.cleanUpThornsAndNormalEdgesForRooms ();
 				r.cleanUpPassableEdgesForRooms ();
 
 			}
