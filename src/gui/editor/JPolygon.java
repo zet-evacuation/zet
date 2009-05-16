@@ -168,6 +168,7 @@ public class JPolygon extends AbstractPolygon {
 	 * @param p the polygon
 	 */
 	public void displayPolygon( PlanPolygon p ) {
+		System.out.println( "Display Polygon is called" );
 		if( myPolygon != null ) {
 			removeAll();
 			edgeData.clear();
@@ -357,8 +358,7 @@ public class JPolygon extends AbstractPolygon {
 		}
 
 		Graphics2D g2 = (Graphics2D)g;
-		g2.setRenderingHint( RenderingHints.KEY_ANTIALIASING,
-						RenderingHints.VALUE_ANTIALIAS_ON );
+		g2.setRenderingHint( RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON );
 
 		// Option flags for Stairs
 		boolean lowerPart = false;
@@ -367,7 +367,7 @@ public class JPolygon extends AbstractPolygon {
 		// ### Paint the Edges ### 
 		Iterator<EdgeData> itEdgeData = edgeData.iterator();
 		for( Edge myEdge : myPolygon ) {
-			assert (itEdgeData.hasNext());
+			assert ( itEdgeData.hasNext() );
 			EdgeData ed = itEdgeData.next();
 
 			// Set various paint options
@@ -415,10 +415,8 @@ public class JPolygon extends AbstractPolygon {
 			}
 
 			// Drawing coordinates for nodes are node1 / node 2
-			g2.fillRect( ed.node1.x - NODE_PAINT_RADIUS, ed.node1.y - NODE_PAINT_RADIUS,
-							2 * NODE_PAINT_RADIUS, 2 * NODE_PAINT_RADIUS );
-			g2.fillRect( ed.node2.x - NODE_PAINT_RADIUS, ed.node2.y - NODE_PAINT_RADIUS,
-							2 * NODE_PAINT_RADIUS, 2 * NODE_PAINT_RADIUS );
+			g2.fillRect( ed.node1.x - NODE_PAINT_RADIUS, ed.node1.y - NODE_PAINT_RADIUS, 2 * NODE_PAINT_RADIUS, 2 * NODE_PAINT_RADIUS );
+			g2.fillRect( ed.node2.x - NODE_PAINT_RADIUS, ed.node2.y - NODE_PAINT_RADIUS, 2 * NODE_PAINT_RADIUS, 2 * NODE_PAINT_RADIUS );
 
 			// Consider the case, that there is a passable edge whose target
 			// has node1 and node2 in the reversed order (this is absolutely
