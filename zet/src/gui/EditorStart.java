@@ -270,7 +270,7 @@ public class EditorStart {
 					for( BatchProjectEntry bpe : bp ) {
 						edit.addBatchEntry( bpe );
 					}
-				} else if( !loadedProject.equals( "" ) ) {
+				} if( !loadedProject.equals( "" ) ) {
 					File f = new File( loadedProject );
 					checkFile( f, "Project file" );
 					edit.loadProjectFile( f );
