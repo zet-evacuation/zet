@@ -125,7 +125,6 @@ public class RoomRaster<T extends RoomRasterSquare> extends Raster<T, Room> {
 	public LinkedList<T> getAccessibleSquares () {
 		LinkedList<T> result = new LinkedList<T> ();
 		if (rasterSquares.length==0){
-			System.out.println(p);
 			return result;
 		}		for (int j = 0; j < rasterSquares[0].length; j++) {
 			for (int i = 0; i < rasterSquares.length; i++) {
