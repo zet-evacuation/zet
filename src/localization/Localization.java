@@ -69,6 +69,19 @@ public class Localization {
 		}
 	}
 
+	public String getStringWithoutPrefix( String key ) {
+		if( key.equals( "" ) )
+			return "";
+		try {
+			return bundle.getString( key );
+		} catch( MissingResourceException ex ) {
+			if( returnKeyOnly )
+				return key;
+			else
+				return "Unknown Language key: '" + key + "'";
+		}
+	}
+
 	public void setPrefix( String prefix ) {
 		this.prefix = prefix;
 	}
