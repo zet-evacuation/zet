@@ -5,7 +5,7 @@
  * of the License, or (at your option) any later version.
  *
  * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * but WITHOUT ANY WARRANTY; witzethout even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
  *
@@ -60,7 +60,6 @@ import gui.editor.flooredit.FloorImportDialog;
 import gui.editor.planimage.JPlanImageProperties;
 import gui.editor.properties.JOptionsWindow;
 import gui.editor.properties.JPropertySelectorWindow;
-import gui.editor.properties.PropertyTreeNode;
 import gui.statistic.JGraphStatisticPanel;
 import gui.statistic.JStatisticPanel;
 import gui.visualization.AbstractVisualization;
@@ -143,10 +142,15 @@ import util.ConversionTools;
 public class JEditor extends JFrame implements Localized, EventListener<ProgressEvent> {
 	public static final int EDIT_FLOOR = 0;
 	public static final int BATCH = 1;
-	public static final int CA_FLOOR = 2;
-	public static final int VISUALIZATION = 3;
-	public static final int STATISTIC = 4;
-	public static final int GRAPH_STATISTIC = 5;
+	public static final int CA_FLOOR = EditorStart.isDebug() ? 2 : -1;
+	public static final int VISUALIZATION = EditorStart.isDebug() ? 3 : 2;
+	public static final int STATISTIC = EditorStart.isDebug() ? 4 : 3;
+	public static final int GRAPH_STATISTIC = EditorStart.isDebug() ? 5 : 4;
+//	public static final int CA_FLOOR = 2;
+//	public static final int VISUALIZATION = 3;
+//	public static final int STATISTIC = 4;
+//	public static final int GRAPH_STATISTIC = 5;
+//	public static final int CORRECTION = EditorStart.isDebug() ? 0 : 1;
 	
 	/** The localization class. */
 	static final Localization loc = Localization.getInstance();
@@ -183,7 +187,7 @@ public class JEditor extends JFrame implements Localized, EventListener<Progress
 	private JMenuItem mnuFileSaveAs;
 	private JMenuItem mnuFileExportAsDXF;
 	private JMenuItem mnuFileSaveResultAs;
-	private JMenuItem mnuFileRasterize;
+	private JMenuItem mnuFileLoadResult;
 	private JMenuItem mnuFileExit;
 	private JMenu mEdit;
 	private JMenuItem mnuEditUndo;
@@ -193,6 +197,8 @@ public class JEditor extends JFrame implements Localized, EventListener<Progress
 	private JMenuItem mnuEditFloorDown;
 	private JMenuItem mnuEditFloorDelete;
 	private JMenuItem mnuEditFloorImport;
+	private JMenuItem mnuEditRasterize;
+	private JMenuItem mnuEditDistributeEvacuees;
 	private JMenuItem mnuEditDistribution;
 	private JMenuItem mnuEditProperties;
 	private JMenuItem mnuScreenshot;
@@ -250,7 +256,12 @@ public class JEditor extends JFrame implements Localized, EventListener<Progress
 	private JToolBar currentToolbar;
 	// Toolbar items
 	// Edit toolbar
-	private JButton btnExit;
+	private JButton btnExit1;
+	private JButton btnExit2;
+	private JButton btnExit3;
+	private JButton btnExit4;
+	private JButton btnExit5;
+	private JButton btnExit6;
 	private JButton btnOpen;
 	private JButton btnSave;
 	private JButton btnEditSelect;
@@ -293,6 +304,16 @@ public class JEditor extends JFrame implements Localized, EventListener<Progress
 	private boolean disableUpdate = false;
 	private int currentMode = EDIT_FLOOR;
 	private JAssignment distribution;
+	private JButton btnSaveResults1;
+	private JButton btnOpenResults1;
+	private JButton btnSaveResults2;
+	private JButton btnSaveResults3;
+	private JButton btnOpenResults2;
+	private JButton btnOpenResults3;
+	private JLabel labelBatchName1;
+	private JLabel labelBatchRun;
+	private JLabel labelBatchName2;
+
 
 	/**
 	 * Creates a new instance of <code>JEditor</code>.
@@ -305,6 +326,8 @@ public class JEditor extends JFrame implements Localized, EventListener<Progress
 		super();
 
 		loc.setLocale( Locale.getDefault() );
+
+		nfZoom.setMaximumFractionDigits( 2 );
 
 		setDefaultCloseOperation( JFrame.EXIT_ON_CLOSE );
 		setSize( 800, 600 );
@@ -448,13 +471,17 @@ public class JEditor extends JFrame implements Localized, EventListener<Progress
 		graphStatisticPanel = new JGraphStatisticPanel();
 
 		tabPane = new JTabbedPane();
-		tabPane.addTab( "Editor", null, editView, "Editormodus" );
-		tabPane.addTab( "Batch", null, batchView, "Batchmodus" );
-		tabPane.addTab( "CA Vis", null, caView, "ZA Ansicht" );
-		tabPane.addTab( "Visualisierung", null, visualizationView, "Visualisierung" );
-		tabPane.addTab( "ZA Statistik", null, caStatisticView, "Statistische Auswertung für den zellulären Automaten" );
-		tabPane.addTab( "Graph Statistik", null, graphStatisticPanel, "Statistische Auswertung für Graphalgorithmen" );
+
+		loc.setPrefix( "gui.editor.JEditor.tab" );
+		tabPane.addTab( loc.getString( "Edit" ), null, editView, loc.getString( "EditToolTip" ) );
+		tabPane.addTab( loc.getString( "Batch" ), null, batchView, loc.getString( "BatchToolTip" ) );
+		if( EditorStart.isDebug() )
+			tabPane.addTab( loc.getString( "CAView" ), null, caView, loc.getString( "CAViewToolTip" ) );
+		tabPane.addTab( loc.getString( "Visualization" ), null, visualizationView, loc.getString( "VisualizationToolTip" ) );
+		tabPane.addTab( loc.getString( "Statistic" ), null, caStatisticView, loc.getString( "StatisticToolTip" ) );
+		tabPane.addTab( loc.getString( "GraphStatistic" ), null, graphStatisticPanel, loc.getString( "GraphStatisticToolTip" ) );
 		tabPane.addChangeListener( chlTab );
+		loc.setPrefix( "" );
 
 		getContentPane().add( tabPane, BorderLayout.CENTER );
 		editView.setEditMode( EditMode.Selection );
@@ -472,7 +499,8 @@ public class JEditor extends JFrame implements Localized, EventListener<Progress
 		mFile = Menu.addMenu( bar, loc.getString( "menuFile" ) );
 		mEdit = Menu.addMenu( bar, loc.getString( "menuEdit" ) );
 		mView = Menu.addMenu( bar, loc.getString( "menuView" ) );
-		mExecute = Menu.addMenu( bar, loc.getString( "menuExecute" ) );
+		if( EditorStart.isDebug() )
+			mExecute = Menu.addMenu( bar, loc.getString( "menuExecute" ) );
 		mExtras = Menu.addMenu( bar, loc.getString( "menuExtras" ) );
 		mHelp = Menu.addMenu( bar, loc.getString( "menuHelp" ) );
 
@@ -487,7 +515,7 @@ public class JEditor extends JFrame implements Localized, EventListener<Progress
 		Menu.addMenuItem( mFile, "-" );
 		mnuFileSaveResultAs = Menu.addMenuItem (mFile, loc.getString ("menuSaveResultAs"), 'E', aclFile, "saveResultAs");
 		mnuFileSaveResultAs.setEnabled (false);
-		Menu.addMenuItem( mFile, loc.getString( "menuLoadBatchResult" ), 'B', aclFile, "loadBatchResult" );
+		mnuFileLoadResult = Menu.addMenuItem( mFile, loc.getString( "menuLoadBatchResult" ), 'B', aclFile, "loadBatchResult" );
 		Menu.addMenuItem( mFile, "-" );
 		mnuFileExit = Menu.addMenuItem( mFile, loc.getString( "menuExit" ), 'X' );
 		mnuFileExit.addActionListener( new ActionListener() {
@@ -505,9 +533,9 @@ public class JEditor extends JFrame implements Localized, EventListener<Progress
 		mnuEditFloorDelete = Menu.addMenuItem( mEdit, loc.getString( "menuFloorDelete" ), aclFloor, "delete" );
 		mnuEditFloorImport = Menu.addMenuItem( mEdit, loc.getString( "menuFloorImport" ), aclFloor, "import" );
 		Menu.addMenuItem( mEdit, "-" );
-		mnuFileRasterize = Menu.addMenuItem( mEdit, loc.getString( "menuRasterize" ), 'R', aclStart, "rasterize" );
+		mnuEditRasterize = Menu.addMenuItem( mEdit, loc.getString( "menuRasterize" ), 'R', aclStart, "rasterize" );
 		Menu.addMenuItem( mEdit, "-" );
-		Menu.addMenuItem( mEdit, loc.getString( "menuDistributeEvacuees" ), aclStart, "distributeEvacuees" );
+		mnuEditDistributeEvacuees = Menu.addMenuItem( mEdit, loc.getString( "menuDistributeEvacuees" ), aclStart, "distributeEvacuees" );
 		Menu.addMenuItem( mEdit, "-" );
 		mnuEditDistribution = Menu.addMenuItem( mEdit, loc.getString( "menuDistributions" ), 'V', aclDistribution );
 		mnuEditProperties = Menu.addMenuItem( mEdit, loc.getString( "menuProperties" ), 'P', aclProperties, "properties" );
@@ -535,16 +563,17 @@ public class JEditor extends JFrame implements Localized, EventListener<Progress
 		mnuScreenshot = Menu.addMenuItem( mView, loc.getString( "menuScreenshot" ), KeyEvent.VK_F12, aclScreenshot, "screenshot", 0 );
 
 		// Ausfuehren menu
-		mSimulation = Menu.addMenu( mExecute, loc.getString( "menuSimulation" ) );
-		mnuStartSimulation = Menu.addMenuItem( mSimulation, loc.getString( "menuSimulationStart" ), aclExecute, "startSimulation" );
-		mnuStepByStepSimulation = Menu.addMenuItem( mSimulation, loc.getString( "menuSimulationStepByStep" ), KeyEvent.VK_F8, aclExecute, "stepByStepSimulation", 0 );
-		mnuQuickVisualization = Menu.addMenuItem( mSimulation, loc.getString( "menuSimulationQuickVisualization" ), KeyEvent.VK_F5, aclExecute, "visualization", 0 );
-		mOptimization = Menu.addMenu( mExecute, loc.getString( "menuOptimization" ) );
-		mnuQuickestTransshipment = Menu.addMenuItem( mOptimization, loc.getString( "menuOptAlgoQuickestTransshipment" ), aclExecute, "QT" );
-		mnuMaxFlowOverTimeMC = Menu.addMenuItem( mOptimization, loc.getString( "menuOptAlgoMaxFlowOverTimeMinCost" ), aclExecute, "MFOTMC" );
-		mnuMaxFlowOverTimeTEN = Menu.addMenuItem( mOptimization, loc.getString( "menuOptAlgoMaxFlowOverTimeTEN" ), aclExecute, "MFOTTEN" );
-		mnuEarliestArrivalTransshipment = Menu.addMenuItem( mOptimization, loc.getString( "menuOptAlgoEATransshipment" ), aclExecute, "EAT" );
-
+		if( EditorStart.isDebug() ) {
+			mSimulation = Menu.addMenu( mExecute, loc.getString( "menuSimulation" ) );
+			mnuStartSimulation = Menu.addMenuItem( mSimulation, loc.getString( "menuSimulationStart" ), aclExecute, "startSimulation" );
+			mnuStepByStepSimulation = Menu.addMenuItem( mSimulation, loc.getString( "menuSimulationStepByStep" ), KeyEvent.VK_F8, aclExecute, "stepByStepSimulation", 0 );
+			mnuQuickVisualization = Menu.addMenuItem( mSimulation, loc.getString( "menuSimulationQuickVisualization" ), KeyEvent.VK_F5, aclExecute, "visualization", 0 );
+			mOptimization = Menu.addMenu( mExecute, loc.getString( "menuOptimization" ) );
+			mnuQuickestTransshipment = Menu.addMenuItem( mOptimization, loc.getString( "menuOptAlgoQuickestTransshipment" ), aclExecute, "QT" );
+			mnuMaxFlowOverTimeMC = Menu.addMenuItem( mOptimization, loc.getString( "menuOptAlgoMaxFlowOverTimeMinCost" ), aclExecute, "MFOTMC" );
+			mnuMaxFlowOverTimeTEN = Menu.addMenuItem( mOptimization, loc.getString( "menuOptAlgoMaxFlowOverTimeTEN" ), aclExecute, "MFOTTEN" );
+			mnuEarliestArrivalTransshipment = Menu.addMenuItem( mOptimization, loc.getString( "menuOptAlgoEATransshipment" ), aclExecute, "EAT" );
+		}
 		// Extras-Menu
 		mLanguage = Menu.addMenu( mExtras, loc.getString( "menuLanguages" ) );
 		ButtonGroup grpLanguage = new ButtonGroup();
@@ -583,12 +612,12 @@ public class JEditor extends JFrame implements Localized, EventListener<Progress
 		loc.setPrefix( "gui.editor.JEditor." );
 
 		toolBarEdit = new JToolBar();
-		btnExit = Button.newButton( IconSet.Exit, new ActionListener() {
+		btnExit1 = Button.newButton( IconSet.Exit, new ActionListener() {
 			public void actionPerformed( ActionEvent e ) {
 				System.exit( 0 );
 			}
 		}, "", loc.getString( "toolbarTooltipExit" ) );
-		toolBarEdit.add( btnExit );
+		toolBarEdit.add( btnExit1 );
 		toolBarEdit.addSeparator();
 
 		btnOpen = Button.newButton( IconSet.Open, aclFile, "loadProject", loc.getString( "toolbarTooltipOpen" ) );
@@ -688,83 +717,85 @@ public class JEditor extends JFrame implements Localized, EventListener<Progress
 	private void createVisualizationToolBar() {
 		// todo loc
 		loc.setPrefix( "gui.editor.JEditor." );
-		
+
 		toolBarVisualization = new JToolBar ();
-		toolBarVisualization.add( Button.newButton( IconSet.Exit, new ActionListener() {
+		btnExit2 = Button.newButton( IconSet.Exit, new ActionListener() {
 			public void actionPerformed( ActionEvent e ) {
 				System.exit( 0 );
 			}
-		}, "", loc.getString( "toolbarTooltipExit" ) ) );
-		toolBarVisualization.add (new JLabel (" Bezeichner "));
-		entryModelVis = new BatchResultEntryVisComboBoxModel ();
-		JComboBox cbxBatchEntry = new JComboBox (entryModelVis);
-		cbxBatchEntry.setLightWeightPopupEnabled (false);
-		cbxBatchEntry.setMaximumRowCount (10);
-		cbxBatchEntry.setMaximumSize (new Dimension (250, cbxBatchEntry.getPreferredSize ().height));
-		cbxBatchEntry.setPreferredSize (new Dimension (250, cbxBatchEntry.getPreferredSize ().height));
-		cbxBatchEntry.setAlignmentX (0);
-		toolBarVisualization.add (cbxBatchEntry);
-		toolBarVisualization.add (new JLabel (" Durchlauf "));
-		cycleModel = new CycleComboBoxModel ();
-		JComboBox cbxBatchCycle = new JComboBox (cycleModel);
-		cbxBatchCycle.setLightWeightPopupEnabled (false);
-		cbxBatchCycle.setRenderer (new CycleComboBoxRenderer ());
-		cbxBatchCycle.setMaximumRowCount (20);
-		cbxBatchCycle.setMaximumSize (new Dimension (120, cbxBatchCycle.getPreferredSize ().height));
-		cbxBatchCycle.setAlignmentX (0);
-		toolBarVisualization.add (cbxBatchCycle);
+		}, "", loc.getString( "toolbarTooltipExit" ) );
+		toolBarVisualization.add( btnExit2 );
+		toolBarVisualization.addSeparator();
+		labelBatchName1 = new JLabel( loc.getString( "batchName" ) );
+		toolBarVisualization.add( labelBatchName1 );
+		entryModelVis = new BatchResultEntryVisComboBoxModel();
+		JComboBox cbxBatchEntry = new JComboBox( entryModelVis );
+		cbxBatchEntry.setLightWeightPopupEnabled( false );
+		cbxBatchEntry.setMaximumRowCount( 10 );
+		cbxBatchEntry.setMaximumSize( new Dimension( 250, cbxBatchEntry.getPreferredSize().height) );
+		cbxBatchEntry.setPreferredSize( new Dimension( 250, cbxBatchEntry.getPreferredSize().height) );
+		cbxBatchEntry.setAlignmentX( 0 );
+		toolBarVisualization.add( cbxBatchEntry );
+		labelBatchRun = new JLabel( loc.getString( "batchRun" ) );
+		toolBarVisualization.add( labelBatchRun );
+		cycleModel = new CycleComboBoxModel();
+		JComboBox cbxBatchCycle = new JComboBox( cycleModel );
+		cbxBatchCycle.setLightWeightPopupEnabled( false );
+		cbxBatchCycle.setRenderer( new CycleComboBoxRenderer() );
+		cbxBatchCycle.setMaximumRowCount( 20 );
+		cbxBatchCycle.setMaximumSize( new Dimension( 120, cbxBatchCycle.getPreferredSize().height) );
+		cbxBatchCycle.setAlignmentX( 0 );
+		toolBarVisualization.add( cbxBatchCycle );
 		
-		toolBarVisualization.add (new JLabel (" "));
-		toolBarVisualization.addSeparator ();
-		toolBarVisualization.add (new JLabel (" "));
+		toolBarVisualization.add( new JLabel( " " ) );
+		toolBarVisualization.addSeparator();
+		toolBarVisualization.add( new JLabel( " " ) );
 		
-		btn2d3dSwitch = Button.newButton( IconSet.Toggle2D3D, aclVisualizationView, "2d3dSwitch", "3D/2D Sicht wechseln" );
+		btn2d3dSwitch = Button.newButton( IconSet.Toggle2D3D, aclVisualizationView, "2d3dSwitch", loc.getString( "switch2d3d" ) );
 		toolBarVisualization.add( btn2d3dSwitch );
-		btn2dSwitch = Button.newButton( IconSet.ToggleOrthogonalIsometric, aclVisualizationView, "2dSwitch", "Iso an/aus" );
+		btn2dSwitch = Button.newButton( IconSet.ToggleOrthogonalIsometric, aclVisualizationView, "2dSwitch", loc.getString( "switchIso" ) );
 		toolBarVisualization.add( btn2dSwitch );
 		toolBarVisualization.addSeparator();
-		btnVideo = Button.newButton( IconSet.Video, aclScreenshot, "video", "Als Video speichern" );
+		btnVideo = Button.newButton( IconSet.Video, aclScreenshot, "video", loc.getString( "saveVideo" ) );
 		toolBarVisualization.add( btnVideo );
-		btnPlayStart = Button.newButton( IconSet.PlayStart, aclPlay, "start", "Zum Anfang springen" );
+		btnPlayStart = Button.newButton( IconSet.PlayStart, aclPlay, "start", loc.getString( "playBackToStart" ) );
 		toolBarVisualization.add( btnPlayStart );
-		btnPlay = Button.newButton( IconSet.Play, aclPlay, "play", "Wiedergabe starten und pausieren" );
+		btnPlay = Button.newButton( IconSet.Play, aclPlay, "play", loc.getString( "playPause" ) );
 		playIcon = gui.components.framework.Icon.newIcon( IconSet.Play );
 		pauseIcon = gui.components.framework.Icon.newIcon( IconSet.PlayPause );
 		toolBarVisualization.add( btnPlay );
-		btnPlayEnd = Button.newButton( IconSet.PlayEnd, aclPlay, "end", "Zum Ende springen" );
+		btnPlayEnd = Button.newButton( IconSet.PlayEnd, aclPlay, "end", loc.getString( "playToEnd" ) );
 		toolBarVisualization.add( btnPlayEnd );
 		toolBarVisualization.addSeparator();
-		btnShowWalls = Button.newButton( IconSet.ShowWalls, aclViewUpdate, "walls", "Wände ein- und ausblenden" );
+		btnShowWalls = Button.newButton( IconSet.ShowWalls, aclViewUpdate, "walls", loc.getString( "showWalls" ) );
 		btnShowWalls.setSelected( true );
 		toolBarVisualization.add( btnShowWalls );
-		btnShowGraph = Button.newButton( IconSet.ShowGraph, aclViewUpdate, "graph", "Graph ein- und ausblenden" );
+		btnShowGraph = Button.newButton( IconSet.ShowGraph, aclViewUpdate, "graph", loc.getString( "showGraph" ) );
 		btnShowGraph.setSelected( true );
 		toolBarVisualization.add( btnShowGraph );
-		btnShowGraphGrid = Button.newButton( IconSet.ShowGraphGrid, aclViewUpdate, "graphgrid", "Knotenrechtecke" );
+		btnShowGraphGrid = Button.newButton( IconSet.ShowGraphGrid, aclViewUpdate, "graphgrid", loc.getString( "showGridRectangles" ) );
 		btnShowGraphGrid.setSelected( true );
 		toolBarVisualization.add( btnShowGraphGrid );
-		btnShowCellularAutomaton = Button.newButton( IconSet.ShowCellularAutomaton, aclViewUpdate, "ca", "Zellulären Automaten ein- und ausblenden" );
+		btnShowCellularAutomaton = Button.newButton( IconSet.ShowCellularAutomaton, aclViewUpdate, "ca", loc.getString( "showCellularAutomaton" ) );
 		btnShowCellularAutomaton.setSelected( true );
 		toolBarVisualization.add( btnShowCellularAutomaton );
 		toolBarVisualization.addSeparator();
-		btnShowAllFloors = Button.newButton( IconSet.ShowAllFloors, aclViewUpdate, "floors", "Alle Stockwerke zeigen" );
+		btnShowAllFloors = Button.newButton( IconSet.ShowAllFloors, aclViewUpdate, "floors", loc.getString( "showAllFloors" ) );
 		toolBarVisualization.add( btnShowAllFloors );
 		btnShowAllFloors.setSelected( false );
 		toolBarVisualization.addSeparator();
 
-		btnShowPotential = Button.newButton( IconSet.ShowPotential, aclViewUpdate, "potential", "Potenzial ein- und ausblenden" );
+		btnShowPotential = Button.newButton( IconSet.ShowPotential, aclViewUpdate, "potential", loc.getString( "showPotential" ) );
 		toolBarVisualization.add( btnShowPotential );
 		btnShowPotential.setSelected( true );
-		btnShowDynamicPotential = Button.newButton( IconSet.ShowDynamicPotential, aclViewUpdate, "dynamic", "Dynamisches Potenzial ein- und ausblenden"  );
+		btnShowDynamicPotential = Button.newButton( IconSet.ShowDynamicPotential, aclViewUpdate, "dynamic", loc.getString( "showDynamicPotential" ) );
 		toolBarVisualization.add( btnShowDynamicPotential );
-		btnShowUtilization = Button.newButton( IconSet.ShowUsage, aclViewUpdate, "utilization", "Benutzungsstatistik anzeigen" );
+		btnShowUtilization = Button.newButton( IconSet.ShowUsage, aclViewUpdate, "utilization", loc.getString( "showUtilization" ) );
 		toolBarVisualization.add( btnShowUtilization );
-		btnShowWaiting = Button.newButton( IconSet.ShowWaiting, aclViewUpdate, "waiting", "Wartestatistik anzeigen" );
+		btnShowWaiting = Button.newButton( IconSet.ShowWaiting, aclViewUpdate, "waiting", loc.getString( "showWaitingTime" ) );
 		toolBarVisualization.add( btnShowWaiting );
 		toolBarVisualization.addSeparator();
-		
-		
-		
+
 		loc.setPrefix( "" );
 	}
 	
@@ -774,39 +805,45 @@ public class JEditor extends JFrame implements Localized, EventListener<Progress
 	private void createStatisticsToolBar() {
 		loc.setPrefix( "gui.editor.JEditor." );
 		/** ########## CA Statistics Toolbar ############ */
-		toolBarCAStats = new JToolBar ();
-		toolBarCAStats.add (Button.newButton (IconSet.Exit, new ActionListener () {
-			public void actionPerformed (ActionEvent e) {
+		toolBarCAStats = new JToolBar();
+		btnExit3 = Button.newButton( IconSet.Exit, new ActionListener() {
+			public void actionPerformed( ActionEvent e ) {
 				System.exit( 0 );
 			}
-		}, "", loc.getString ("toolbarTooltipExit")));
-		toolBarCAStats.addSeparator ();
+		}, "", loc.getString( "toolbarTooltipExit" ) );
+		toolBarCAStats.add( btnExit3 );
+		toolBarCAStats.addSeparator();
 
-		btnSave = Button.newButton (IconSet.Save, aclFile, "saveResultAs", loc.getString ("toolbarTooltipSave"));
-		toolBarCAStats.add (btnSave);
+		btnOpenResults2 = Button.newButton( IconSet.Open, aclFile, "loadBatchResult", loc.getString( "toolbarTooltipOpen" ) );
+		toolBarCAStats.add( btnOpenResults2 );
+		btnSaveResults2 = Button.newButton( IconSet.Save, aclFile, "saveResultAs", loc.getString( "toolbarTooltipSave" ) );
+		toolBarCAStats.add( btnSaveResults2 );
 		
 		/** ########## Graph Statistics Toolbar ############ */
-		toolBarGraphStats = new JToolBar ();
-		toolBarGraphStats.add (Button.newButton (IconSet.Exit, new ActionListener () {
-
-			public void actionPerformed (ActionEvent e) {
+		toolBarGraphStats = new JToolBar();
+		btnExit4 = Button.newButton( IconSet.Exit, new ActionListener() {
+			public void actionPerformed( ActionEvent e ) {
 				System.exit( 0 );
 			}
-		}, "", loc.getString ("toolbarTooltipExit")));
-		toolBarGraphStats.addSeparator ();
+		}, "", loc.getString( "toolbarTooltipExit" ) );
+		toolBarGraphStats.add( btnExit4 );
+		toolBarGraphStats.addSeparator();
 
-		btnSave = Button.newButton (IconSet.Save, aclFile, "saveResultAs", loc.getString ("toolbarTooltipSave"));
-		toolBarGraphStats.add (btnSave);
-		toolBarGraphStats.addSeparator ();
+		btnOpenResults3 = Button.newButton( IconSet.Open, aclFile, "loadBatchResult", loc.getString( "toolbarTooltipOpen" ) );
+		toolBarGraphStats.add( btnOpenResults3 );
+		btnSaveResults3 = Button.newButton( IconSet.Save, aclFile, "saveResultAs", loc.getString( "toolbarTooltipSave" ) );
+		toolBarGraphStats.add( btnSaveResults3 );
+		toolBarGraphStats.addSeparator();
 
-		toolBarGraphStats.add (new JLabel (" Bezeichner "));
-		entryModelGraph = new BatchResultEntryGRSComboBoxModel ();
+		labelBatchName2 = new JLabel( loc.getString( "batchName" ) );
+		toolBarGraphStats.add( labelBatchName2 );
+		entryModelGraph = new BatchResultEntryGRSComboBoxModel();
 		JComboBox cbxBatchEntry = new JComboBox( entryModelGraph );
-		cbxBatchEntry.setMaximumRowCount (10);
-		cbxBatchEntry.setMaximumSize (new Dimension (250, cbxBatchEntry.getPreferredSize ().height));
-		cbxBatchEntry.setPreferredSize (new Dimension (250, cbxBatchEntry.getPreferredSize ().height));
-		cbxBatchEntry.setAlignmentX (0);
-		toolBarGraphStats.add (cbxBatchEntry);
+		cbxBatchEntry.setMaximumRowCount( 10 );
+		cbxBatchEntry.setMaximumSize( new Dimension (250, cbxBatchEntry.getPreferredSize().height) );
+		cbxBatchEntry.setPreferredSize( new Dimension (250, cbxBatchEntry.getPreferredSize().height) );
+		cbxBatchEntry.setAlignmentX( 0 );
+		toolBarGraphStats.add( cbxBatchEntry );
 		loc.setPrefix( "" );
 	}
 	
@@ -816,17 +853,19 @@ public class JEditor extends JFrame implements Localized, EventListener<Progress
 	private void createBatchToolBar() {
 		loc.setPrefix( "gui.editor.JEditor." );
 		toolBarBatch = new JToolBar();
-		btnExit = Button.newButton( IconSet.Exit, new ActionListener() {
+		btnExit5 = Button.newButton( IconSet.Exit, new ActionListener() {
 
 			public void actionPerformed( ActionEvent e ) {
 				System.exit( 0 );
 			}
 		}, "", loc.getString( "toolbarTooltipExit" ) );
-		toolBarBatch.add( btnExit );
+		toolBarBatch.add( btnExit5 );
 		toolBarBatch.addSeparator();
 
-		btnOpen = Button.newButton( IconSet.Open, aclFile, "loadProject", loc.getString( "toolbarTooltipOpen" ) );
-		toolBarBatch.add( btnOpen );
+		btnOpenResults1 = Button.newButton( IconSet.Open, aclFile, "loadBatchResult", loc.getString( "toolbarTooltipOpen" ) );
+		toolBarBatch.add( btnOpenResults1 );
+		btnSaveResults1 = Button.newButton( IconSet.Save, aclFile, "saveResultAs", loc.getString( "toolbarTooltipSave" ) );
+		toolBarBatch.add( btnSaveResults1 );
 		loc.setPrefix( "" );
 	}
 	
@@ -836,12 +875,13 @@ public class JEditor extends JFrame implements Localized, EventListener<Progress
 	private final void createQuickVisualizationToolBar() {
 		loc.setPrefix( "gui.editor.JEditor." );
 		toolBarCA = new JToolBar ();
-		toolBarCA.add (Button.newButton (IconSet.Exit, new ActionListener () {
+		btnExit6 = Button.newButton( IconSet.Exit, new ActionListener() {
 
-			public void actionPerformed (ActionEvent e) {
+			public void actionPerformed( ActionEvent e ) {
 				System.exit( 0 );
 			}
-		}, "", loc.getString ("toolbarTooltipExit")));
+		}, "", loc.getString( "toolbarTooltipExit" ) );
+		toolBarCA.add( btnExit6 );
 		loc.setPrefix( "" );
 	}
 
@@ -858,7 +898,7 @@ public class JEditor extends JFrame implements Localized, EventListener<Progress
 		Menu.updateMenu( mEdit, loc.getString( "menuEdit" ) );
 		Menu.updateMenu( mView, loc.getString( "menuView" ) );
 		Menu.updateMenu( mExtras, loc.getString( "menuExtras" ) );
-		Menu.updateMenu( mWindow, loc.getString( "menuWindow" ) );
+		//Menu.updateMenu( mWindow, loc.getString( "menuWindow" ) );
 		Menu.updateMenu( mHelp, loc.getString( "menuHelp" ) );
 
 		// Dateimenu
@@ -866,24 +906,28 @@ public class JEditor extends JFrame implements Localized, EventListener<Progress
 		Menu.updateMenu( mnuFileOpen, loc.getString( "menuOpen" ) );
 		Menu.updateMenu( mnuFileSave, loc.getString( "menuSave" ) );
 		Menu.updateMenu( mnuFileSaveAs, loc.getString( "menuSaveAs" ) );
-		Menu.updateMenu( mnuFileSaveAs, loc.getString( "menuDXF" ) );
-		Menu.updateMenu( mnuFileRasterize, loc.getString( "menuRasterize" ) );
+		Menu.updateMenu( mnuFileExportAsDXF, loc.getString( "menuDXF" ) );
+		Menu.updateMenu( mnuFileSaveResultAs, loc.getString( "menuSaveResultAs" ) );
+		Menu.updateMenu( mnuFileLoadResult, loc.getString( "menuLoadBatchResult" ) );
 		//Menu.updateMenu (mnuFileStart, loc.getString ("menuStart"));
 		Menu.updateMenu( mnuFileExit, loc.getString( "menuExit" ) );
 
 		// Bearbeiten menu
-		Menu.updateMenu( mnuEditUndo, loc.getString( "menuUndo" ) );
-		Menu.updateMenu( mnuEditGoTo, loc.getString( "menuGoToRoom" ) );
+		//Menu.updateMenu( mnuEditUndo, loc.getString( "menuUndo" ) );
+		//Menu.updateMenu( mnuEditGoTo, loc.getString( "menuGoToRoom" ) );
 		Menu.updateMenu( mnuEditFloorNew, loc.getString( "menuFloorNew" ) );
 		Menu.updateMenu( mnuEditFloorUp, loc.getString( "menuFloorUp" ) );
 		Menu.updateMenu( mnuEditFloorDown, loc.getString( "menuFloorDown" ) );
 		Menu.updateMenu( mnuEditFloorDelete, loc.getString( "menuFloorDelete" ) );
 		Menu.updateMenu( mnuEditFloorImport, loc.getString( "menuFloorImport" ) );
+		Menu.updateMenu( mnuEditRasterize, loc.getString( "menuRasterize" ) );
+		Menu.updateMenu( mnuEditDistributeEvacuees, loc.getString( "menuDistributeEvacuees" ) );
 		Menu.updateMenu( mnuEditDistribution, loc.getString( "menuDistributions" ) );
 		Menu.updateMenu( mnuEditProperties, loc.getString( "menuProperties" ) );
 		Menu.updateMenu( mnuScreenshot, loc.getString( "menuScreenshot" ) );
 		
 		// Anzeige-menu
+		Menu.updateMenu( mVisibleAreas, loc.getString( "menuVisibleAreas" ) );
 		Menu.updateMenu( mnuShowAllAreas, loc.getString( "menuShowAllAreas" ) );
 		Menu.updateMenu( mnuHideAllAreas, loc.getString( "menuHideAllAreas" ) );
 		Menu.updateMenu( mnuDelayArea, loc.getString( "menuShowDelayAreas" ) );
@@ -899,32 +943,34 @@ public class JEditor extends JFrame implements Localized, EventListener<Progress
 		Menu.updateMenu( mnuPaintRasterized, loc.getString( "menuDrawOnGrid" ) );
 		Menu.updateMenu( mnuHideDefaultFloor, loc.getString( "menuHideDefaultEvacuationFloor" ) );
 
-		// Ausführen menue
-		Menu.updateMenu( mExecute, loc.getString( "menuExecute" ) );
-		Menu.updateMenu( mSimulation, loc.getString( "menuSimulation" ) );
-		Menu.updateMenu( mnuCreateCA, loc.getString( "menuSimulationCreateCA" ) );
-		Menu.updateMenu( mnuApplyAssignment, loc.getString( "menuSimulationApplyConcreteAssignment" ) );
-		Menu.updateMenu( mnuStartSimulation, loc.getString( "menuSimulationStart" ) );
-		//TODO if paused use other
-		if( caAlgo != null ) {
-			if( caAlgo.isPaused() ) {
-				Menu.updateMenu( mnuPauseSimulation, loc.getString( "menuSimulationContinue" ) );
+		// Execute menu (debug only)
+		if( EditorStart.isDebug() ) {
+			Menu.updateMenu( mExecute, loc.getString( "menuExecute" ) );
+			Menu.updateMenu( mSimulation, loc.getString( "menuSimulation" ) );
+			Menu.updateMenu( mnuCreateCA, loc.getString( "menuSimulationCreateCA" ) );
+			Menu.updateMenu( mnuApplyAssignment, loc.getString( "menuSimulationApplyConcreteAssignment" ) );
+			Menu.updateMenu( mnuStartSimulation, loc.getString( "menuSimulationStart" ) );
+			//TODO if paused use other
+			if( caAlgo != null ) {
+				if( caAlgo.isPaused() ) {
+					Menu.updateMenu( mnuPauseSimulation, loc.getString( "menuSimulationContinue" ) );
+				} else {
+					Menu.updateMenu( mnuPauseSimulation, loc.getString( "menuSimulationPause" ) );
+				}
 			} else {
 				Menu.updateMenu( mnuPauseSimulation, loc.getString( "menuSimulationPause" ) );
 			}
-		} else {
-			Menu.updateMenu( mnuPauseSimulation, loc.getString( "menuSimulationPause" ) );
+			Menu.updateMenu( mnuStepByStepSimulation, loc.getString( "menuSimulationStepByStep" ) );
+			Menu.updateMenu( mnuQuickVisualization, loc.getString( "menuSimulationQuickVisualization" ) );
+			Menu.updateMenu( mOptimization, loc.getString( "menuOptimization" ) );
+			Menu.updateMenu( mnuCreateGraph, loc.getString( "menuOptimizationCreateGraph" ) );
+			Menu.updateMenu( mnuQuickestTransshipment, loc.getString( "menuOptAlgoQuickestTransshipment" ) );
+			Menu.updateMenu( mnuMaxFlowOverTimeMC, loc.getString( "menuOptAlgoMaxFlowOverTimeMinCost" ) );
+			Menu.updateMenu( mnuMaxFlowOverTimeTEN, loc.getString( "menuOptAlgoMaxFlowOverTimeTEN" ) );
+			Menu.updateMenu( mnuEarliestArrivalTransshipment, loc.getString( "menuOptAlgoEATransshipment" ) );
 		}
-		Menu.updateMenu( mnuStepByStepSimulation, loc.getString( "menuSimulationStepByStep" ) );
-		Menu.updateMenu( mnuQuickVisualization, loc.getString( "menuSimulationQuickVisualization" ) );
-		Menu.updateMenu( mOptimization, loc.getString( "menuOptimization" ) );
-		Menu.updateMenu( mnuCreateGraph, loc.getString( "menuOptimizationCreateGraph" ) );
-		Menu.updateMenu( mnuQuickestTransshipment, loc.getString( "menuOptAlgoQuickestTransshipment" ) );
-		Menu.updateMenu( mnuMaxFlowOverTimeMC, loc.getString( "menuOptAlgoMaxFlowOverTimeMinCost" ) );
-		Menu.updateMenu( mnuMaxFlowOverTimeTEN, loc.getString( "menuOptAlgoMaxFlowOverTimeTEN" ) );
-		Menu.updateMenu( mnuEarliestArrivalTransshipment, loc.getString( "menuOptAlgoEATransshipment" ) );
-
-		// Extras-Menu
+		
+		// Extras menu
 		Menu.updateMenu( mLanguage, loc.getString( "menuLanguages" ) );
 		Menu.updateMenu( mPlanImage, loc.getString( "menuPlanDisplaying" ) );
 		Menu.updateMenu( mnuPlanImageLoad, loc.getString( "menuLoadPlan" ) );
@@ -934,28 +980,85 @@ public class JEditor extends JFrame implements Localized, EventListener<Progress
 		Menu.updateMenu( mnuPlanImageTransparency, loc.getString( "menuSetPlanTransparency" ) );
 		Menu.updateMenu( mnuOptions, loc.getString( "menuOptions" ) );
 
-		// Fenster-Menu
+		// Window menu
 
-		// Hilfe-menu
+		// Help menu
 		Menu.updateMenu( mnuHelpAbout, loc.getString( "menuAbout" ) );
 
-		cbxEdit.setToolTipText( loc.getString( "toolbarTooltipAreaType" ) );
-		btnExit.setToolTipText( loc.getString( "toolbarTooltipExit" ) );
+		// Tabs in the tabbed view
+		loc.setPrefix( "gui.editor.JEditor.tab" );
+		tabPane.setTitleAt( EDIT_FLOOR, loc.getString( "Edit" ) );
+		tabPane.setToolTipTextAt( EDIT_FLOOR, loc.getString( "EditToolTip" ) );
 
+		tabPane.setTitleAt( BATCH, loc.getString( "Batch" ) );
+		tabPane.setToolTipTextAt( BATCH, loc.getString( "BatchToolTip" ) );
+
+		if( EditorStart.isDebug() ) {
+			tabPane.setTitleAt( CA_FLOOR, loc.getString( "CAView" ) );
+			tabPane.setToolTipTextAt( CA_FLOOR, loc.getString( "CAViewToolTip" ) );
+		}
+		
+		tabPane.setTitleAt( VISUALIZATION, loc.getString( "Visualization" ) );
+		tabPane.setToolTipTextAt( VISUALIZATION, loc.getString( "VisualizationToolTip" ) );
+
+		tabPane.setTitleAt( STATISTIC, loc.getString( "Statistic" ) );
+		tabPane.setToolTipTextAt( STATISTIC, loc.getString( "StatisticToolTip" ) );
+
+		tabPane.setTitleAt( GRAPH_STATISTIC, loc.getString( "GraphStatistic" ) );
+		tabPane.setToolTipTextAt( GRAPH_STATISTIC, loc.getString( "GraphStatisticToolTip" ) );
+		loc.setPrefix( "" );
+		
+
+		// Tool tips for buttons and text views in the menu bar
+		loc.setPrefix( "gui.editor.JEditor." );
+		cbxEdit.setToolTipText( loc.getString( "toolbarTooltipAreaType" ) );
+		btnExit1.setToolTipText( loc.getString( "toolbarTooltipExit" ) );
+		btnExit2.setToolTipText( loc.getString( "toolbarTooltipExit" ) );
+		btnExit3.setToolTipText( loc.getString( "toolbarTooltipExit" ) );
+		btnExit4.setToolTipText( loc.getString( "toolbarTooltipExit" ) );
+		btnExit5.setToolTipText( loc.getString( "toolbarTooltipExit" ) );
+		btnExit6.setToolTipText( loc.getString( "toolbarTooltipExit" ) );
 		btnOpen.setToolTipText( loc.getString( "toolbarTooltipOpen" ) );
 		btnSave.setToolTipText( loc.getString( "toolbarTooltipSave" ) );
+
+		btnOpen.setToolTipText( loc.getString( "toolbarTooltipOpen" ) );
+		btnOpenResults1.setToolTipText( loc.getString( "toolbarTooltipOpen" ) );
+		btnOpenResults2.setToolTipText( loc.getString( "toolbarTooltipOpen" ) );
+		btnOpenResults3.setToolTipText( loc.getString( "toolbarTooltipOpen" ) );
+		btnSave.setToolTipText( loc.getString( "toolbarTooltipSave" ) );
+		btnSaveResults1.setToolTipText( loc.getString( "toolbarTooltipSave" ) );
+		btnSaveResults2.setToolTipText( loc.getString( "toolbarTooltipSave" ) );
+		btnSaveResults3.setToolTipText( loc.getString( "toolbarTooltipSave" ) );
 
 		btnEditSelect.setToolTipText( loc.getString( "toolbarTooltipSelectionMode" ) );
 		btnEditPointwise.setToolTipText( loc.getString( "toolbarTooltipPointSequence" ) );
 		btnEditRectangled.setToolTipText( loc.getString( "toolbarTooltipDragCreate" ) );
-
 		lblAreaType.setText( loc.getString( "labelAreaType" ) );
-
 		btnZoomIn.setToolTipText( loc.getString( "toolbarTooltipZoomIn" ) );
 		btnZoomOut.setToolTipText( loc.getString( "toolbarTooltipZoomOut" ) );
 		txtZoomFactor.setToolTipText( loc.getString( "toolbarTooltipZoomTextBox" ) );
-
 		btnRasterize.setToolTipText( loc.getString( "toolbarTooltipRasterize" ) );
+
+		labelBatchName1.setText( loc.getString( "batchName" ) );
+		labelBatchName2.setText( loc.getString( "batchName" ) );
+		labelBatchRun.setText( loc.getString( "batchRun" ) );
+
+		// Visualization toolbar
+		btn2d3dSwitch.setToolTipText( loc.getString( "switch2d3d" ) );
+		btn2dSwitch.setToolTipText( loc.getString( "switchIso" ) );
+		btnVideo.setToolTipText( loc.getString( "saveVideo" ) );
+		btnPlayStart.setToolTipText( loc.getString( "playBackToStart" ) );
+		btnPlay.setToolTipText( loc.getString( "playPause" ) );
+		btnPlayEnd.setToolTipText( loc.getString( "playToEnd" ) );
+		btnShowWalls.setToolTipText( loc.getString( "showWalls" ) );
+		btnShowGraph.setToolTipText( loc.getString( "showGraph" ) );
+		btnShowGraphGrid.setToolTipText( loc.getString( "showGridRectangles" ) );
+		btnShowCellularAutomaton.setToolTipText( loc.getString( "showCellularAutomaton" ) );
+		btnShowAllFloors.setToolTipText( loc.getString( "showAllFloors" ) );
+		btnShowPotential.setToolTipText( loc.getString( "showPotential" ) );
+		btnShowDynamicPotential.setToolTipText( loc.getString( "showDynamicPotential" ) );
+		btnShowUtilization.setToolTipText( loc.getString( "showUtilization" ) );
+		btnShowWaiting.setToolTipText( loc.getString( "showWaitingTime" ) );
 
 		loc.setPrefix( "" );
 	}
@@ -1642,7 +1745,7 @@ public class JEditor extends JFrame implements Localized, EventListener<Progress
 				if( e.getActionCommand().equals( "zoomIn"  )) {
 					setZoomFactor( Math.min( 0.4, CoordinateTools.getZoomFactor() * 2 ) );
 				} else if( e.getActionCommand().equals( "zoomOut"  )) {
-					setZoomFactor( Math.max( 0.01, CoordinateTools.getZoomFactor() / 2 ) );
+					setZoomFactor( Math.max( 0.00004, CoordinateTools.getZoomFactor() / 2 ) );
 				} else {
 					sendError( loc.getString( "gui.UnknownCommand" ) + " '" + e.getActionCommand() + "'. " + loc.getString( "gui.ContactDeveloper" ) );
 				}
@@ -1655,34 +1758,56 @@ public class JEditor extends JFrame implements Localized, EventListener<Progress
 	};
 	ChangeListener chlTab = new ChangeListener() {
 		public void stateChanged( ChangeEvent e ) {
-			switch( tabPane.getSelectedIndex() ) {
-				case EDIT_FLOOR:	// edit view
-					switchTo( EDIT_FLOOR );
-					editView.updateFloorView();
-					break;
-				case BATCH:	// batch view
-					// Add curent project, if not already done
-					if( firstSwitch ) {
-						batchView.addProject( currentProject );
-						firstSwitch = false;
-					}
-					switchTo( BATCH );
-					break;
-				case CA_FLOOR: // ca fast visualization
-					switchTo( CA_FLOOR );
-					break;
-				case VISUALIZATION:	// visualization view
-					switchTo( VISUALIZATION );
-					break;
-				case STATISTIC: // statistic view
-					switchTo( STATISTIC );
-					break;
-				case GRAPH_STATISTIC: // statistic view
-					switchTo( GRAPH_STATISTIC );
-					break;
-				default:
-					sendError( "Unknown tab index:" + tabPane.getSelectedIndex() + ". " + loc.getString( "gui.ContactDeveloper" ) );	// TODO loc
+			final int i = tabPane.getSelectedIndex();
+			if( i == EDIT_FLOOR ) {
+				switchTo( EDIT_FLOOR );
+				editView.updateFloorView();
+			} else if( i == BATCH ) {
+				// Add curent project, if not already done
+				if( firstSwitch ) {
+					batchView.addProject( currentProject );
+					firstSwitch = false;
+				}
+				switchTo( BATCH );
+			} else if( i == CA_FLOOR ) {
+				switchTo( CA_FLOOR );
+			} else if( i == VISUALIZATION ) {
+				switchTo( VISUALIZATION );
+			} else if( i == STATISTIC ) {
+				switchTo( STATISTIC );
+			} else if( i == GRAPH_STATISTIC ) {
+				switchTo( GRAPH_STATISTIC );
+			} else {
+				sendError( "Unknown tab index:" + tabPane.getSelectedIndex() + ". " + loc.getString( "gui.ContactDeveloper" ) );
 			}
+//			switch( tabPane.getSelectedIndex() ) {
+//				case EDIT_FLOOR:	// edit view
+//					switchTo( EDIT_FLOOR );
+//					editView.updateFloorView();
+//					break;
+//				case BATCH:	// batch view
+//					// Add curent project, if not already done
+//					if( firstSwitch ) {
+//						batchView.addProject( currentProject );
+//						firstSwitch = false;
+//					}
+//					switchTo( BATCH );
+//					break;
+//				case CA_FLOOR: // ca fast visualization
+//					switchTo( CA_FLOOR );
+//					break;
+//				case VISUALIZATION:	// visualization view
+//					switchTo( VISUALIZATION );
+//					break;
+//				case STATISTIC: // statistic view
+//					switchTo( STATISTIC );
+//					break;
+//				case GRAPH_STATISTIC: // statistic view
+//					switchTo( GRAPH_STATISTIC );
+//					break;
+//				default:
+//					sendError( "Unknown tab index:" + tabPane.getSelectedIndex() + ". " + loc.getString( "gui.ContactDeveloper" ) );	// TODO loc
+//			}
 		}
 	};
 	KeyListener kylZoom = new KeyListener() {
@@ -2002,11 +2127,12 @@ public class JEditor extends JFrame implements Localized, EventListener<Progress
 	 * @param zoomFactor the zoom factor
 	 */
 	public void setZoomFactor( double zoomFactor ) {
-		double zoomChange = zoomFactor / CoordinateTools.getZoomFactor ();
-		Rectangle oldView = new Rectangle (editView.getLeftPanel ().getViewport ().getViewRect ());
+		System.out.println(zoomFactor);
+		double zoomChange = zoomFactor / CoordinateTools.getZoomFactor();
+		Rectangle oldView = new Rectangle( editView.getLeftPanel().getViewport().getViewRect() );
 		oldView.x *= zoomChange;
 		oldView.y *= zoomChange;
-		if (zoomChange > 1) {
+		if( zoomChange > 1 ) {
 			// If we are zooming in, then we have to move our window to the "middle"
 			// of what the user previously saw. Right now we are in the upper left edge
 			// of what he previously saw, and now we are doing this "move"
@@ -2093,12 +2219,13 @@ public class JEditor extends JFrame implements Localized, EventListener<Progress
 	 */
 	private void switchTo( int tabID  ) {
 		if (tabID == CA_FLOOR && worker == null) {
-			JEditor.sendError ("Zuerst über Ausführen->Simulation starten!");
+			JEditor.sendError( loc.getStringWithoutPrefix( "gui.error.StartSimulation" ) );
 			tabPane.setSelectedIndex (currentMode);
 			return;
 		}
-		if (tabID > CA_FLOOR && result == null) {
-			JEditor.sendError ("Bitte zuerst einen Batch-Auftrag anlegen & ausführen!");
+		// TODO better implementation of this stuff for debug mode ?
+		if( ((EditorStart.isDebug() && tabID > CA_FLOOR) || (!EditorStart.isDebug() && tabID > BATCH )) && result == null ) {
+			JEditor.sendError(  loc.getStringWithoutPrefix( "gui.error.CreateBatch" ) );
 			tabPane.setSelectedIndex (currentMode);
 			return;
 		}
@@ -2109,30 +2236,45 @@ public class JEditor extends JFrame implements Localized, EventListener<Progress
 			btnPlay.setIcon( playIcon );
 			visualizationView.getGLContainer().stopAnimation();
 		}
-		switch( tabID ) {
-			case EDIT_FLOOR:
-				showToolBar( toolBarEdit );
-				break;
-			case BATCH:
-				showToolBar( toolBarBatch );
-				break;
-			case CA_FLOOR:
-				showToolBar( toolBarCA );
-				break;
-			case VISUALIZATION:
-				showToolBar( toolBarVisualization );
-				visualizationView.requestFocusInWindow();
-				break;
-			case STATISTIC:
-				showToolBar( toolBarCAStats );
-				break;
-			case GRAPH_STATISTIC:
-				showToolBar( toolBarGraphStats );
-				break;
-			default:
-				sendError( "Unbekannte TabID: " + Integer.toString( tabID  ) + ". " + loc.getString( "gui.ContactDeveloper" ) );	// todo loc
-				break;
-		}
+		if( tabID== EDIT_FLOOR ) {
+			showToolBar( toolBarEdit );
+		} else if( tabID == BATCH ) {
+			showToolBar( toolBarBatch );
+		} else if( tabID == CA_FLOOR ) {
+			showToolBar( toolBarCA );
+		} else if( tabID == VISUALIZATION ) {
+			showToolBar( toolBarVisualization );
+			visualizationView.requestFocusInWindow();
+		} else if ( tabID == STATISTIC ) {
+			showToolBar( toolBarCAStats );
+		} else if( tabID == GRAPH_STATISTIC ) {
+			showToolBar( toolBarGraphStats );
+		} else {
+			sendError( "Unbekannte TabID: " + Integer.toString( tabID  ) + ". " + loc.getString( "gui.ContactDeveloper" ) );	// todo loc
+		}//		switch( tabID ) {
+//			case EDIT_FLOOR:
+//				showToolBar( toolBarEdit );
+//				break;
+//			case BATCH:
+//				showToolBar( toolBarBatch );
+//				break;
+//			case CA_FLOOR:
+//				showToolBar( toolBarCA );
+//				break;
+//			case VISUALIZATION:
+//				showToolBar( toolBarVisualization );
+//				visualizationView.requestFocusInWindow();
+//				break;
+//			case STATISTIC:
+//				showToolBar( toolBarCAStats );
+//				break;
+//			case GRAPH_STATISTIC:
+//				showToolBar( toolBarGraphStats );
+//				break;
+//			default:
+//				sendError( "Unbekannte TabID: " + Integer.toString( tabID  ) + ". " + loc.getString( "gui.ContactDeveloper" ) );	// todo loc
+//				break;
+//		}
 		repaint();
 		validate();
 	}
@@ -2170,17 +2312,18 @@ public class JEditor extends JFrame implements Localized, EventListener<Progress
 		NumberFormat nf = NumberFormat.getNumberInstance( loc.getLocale() );
 		String text = txtZoomFactor.getText();
 		char c = text.charAt( text.length() - 1 );
+		boolean percent = false;
 		if( c == '%' ) {
 			StringBuffer sb = new StringBuffer( text ).delete( text.length() - 1, text.length() );
 			text = sb.toString();
+			percent = true;
 		}
 		try {
-			double val = nf.parse( text ).doubleValue() / 2.5d;
-			if( Math.abs( val - Math.floor( val ) ) < 0.001 ) {
-				setZoomFactor( val / 100 );
-			} else {
-				setZoomFactor( val );
-			}
+			double val = nf.parse( text ).doubleValue();
+			if( val < 1 && percent == false )
+				val = val * 100;
+			val = val / 2.5d;
+			setZoomFactor( val / 100 );
 		} catch( ParseException ex2 ) {
 			sendError( loc.getString( "gui.error.NonParsableNumber" ) );
 		} catch( IllegalArgumentException ex ) {

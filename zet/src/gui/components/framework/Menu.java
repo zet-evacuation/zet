@@ -30,6 +30,7 @@ import javax.swing.JMenuItem;
 import javax.swing.JPopupMenu;
 import javax.swing.JRadioButtonMenuItem;
 import javax.swing.KeyStroke;
+import localization.Localization;
 
 /**
  * Creates a complete framework to create menus inclusive shortcuts and
@@ -39,7 +40,7 @@ import javax.swing.KeyStroke;
 public class Menu {
 	private Menu() { }
 	
-	// Menuestuff
+	// Menustuff
 	private static JMenuItem processMnemonic( String s ) {
 		return processMnemonic( new JMenuItem(), s );
 	}
@@ -311,6 +312,10 @@ public class Menu {
 	//}
 
 	public static void updateMenu( JMenuItem menu, String text ) {
+		if( menu == null ) { //throw new IllegalArgumentException( "Menu item '" + text + "' is null." );
+			System.err.println( String.format( Localization.getInstance().getStringWithoutPrefix( "menu.updateMenuNullPointer" ), text ) );
+			return;
+		}
 		menu.setText( extractMnemonic( text ) );
 		menu.setMnemonic( getMnemonic( text ) );
 	}

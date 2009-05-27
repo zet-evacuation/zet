@@ -39,7 +39,6 @@ import gui.editor.properties.JOptionsWindow;
 import gui.editor.properties.JPropertySelectorWindow;
 import gui.editor.properties.PropertyLoadException;
 import gui.editor.properties.PropertyTreeModel;
-import gui.editor.properties.PropertyTreeNode;
 import io.IOTools;
 import java.awt.Image;
 import java.io.File;
@@ -49,8 +48,6 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.io.PrintStream;
 import java.util.Calendar;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.imageio.ImageIO;
 import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
@@ -69,6 +66,8 @@ public class EditorStart {
 	public static String version = "1.0.2";
 	/** The localization class. */
 	private static Localization loc = Localization.getInstance();
+	/** Indicates wheather debug mode is active, or not. */
+	private static boolean debug;
 	/** The project file that should be loaded (submitted via commandline). */
 	static String loadedProject = "";
 	/** The property file that is loaded when the program starts. Can be changed via commandline. */
@@ -140,6 +139,11 @@ public class EditorStart {
 		optVerbose.setHelp( loc.getString( "verbose" ) );
 		jsap.registerParameter( optVerbose );
 
+		Switch optDebug = new Switch( "debug" ).setLongFlag( "debug" )
+						.setShortFlag( 'd' );
+		optDebug.setHelp( loc.getString( "debug" ) );
+		jsap.registerParameter( optDebug );
+
 		Switch optNoVisualization = new Switch( "noVis" ).setLongFlag( "noVisualization" );
 		optNoVisualization.setHelp( loc.getString( "noVisualization" ) );
 		jsap.registerParameter( optNoVisualization );
@@ -185,12 +189,12 @@ public class EditorStart {
 		setUpLog( config.contains( "log" ), config.contains(  "err" ), config.getBoolean( "autolog" ), config.getBoolean( "verbose" ) );
 
 		if( config.getBoolean( "noVis" ) ) {
-			System.err.println( "Visualisierung wird ausgeschaltet." );
+			System.err.println( loc.getString( "log.disableVisualization" ) );
 			useVisualization = false;
 		}
 
 		if( config.getBoolean( "noStat" ) ) {
-			System.err.println( "Statistik wird ausgeschaltet." );
+			System.err.println( loc.getString( "log.disableStatistic" ) );
 			useStatistic = false;
 		}
 
@@ -202,6 +206,8 @@ public class EditorStart {
 
 		if( config.contains( "property" ) )
 			propertyFilename = config.getString( "property" );
+
+		debug = config.getBoolean( "debug" );
 
 		// Notfallmäßig vordefinieren, falls xml-datei nicht existiert. TODO
 		//PropertyContainer.getInstance().define( "projectPath", String.class, "./examples/" );
@@ -400,6 +406,14 @@ public class EditorStart {
 			System.out.println( "Log of " + cal.get( Calendar.YEAR ) + "-" + IOTools.fillLeadingZeros( cal.get( Calendar.MONTH ), 2 ) + "-" + IOTools.fillLeadingZeros( cal.get( Calendar.DAY_OF_MONTH ), 2 ) + " " + IOTools.fillLeadingZeros( cal.get( Calendar.HOUR_OF_DAY ), 2 ) + "-" + IOTools.fillLeadingZeros( cal.get( Calendar.MINUTE ), 2 ) + "-" + IOTools.fillLeadingZeros( cal.get( Calendar.SECOND ), 2 ) );
 		if( log && !logFile.equals( errFile ) )
 			System.err.println( "Error log of " + cal.get( Calendar.YEAR ) + "-" + IOTools.fillLeadingZeros( cal.get( Calendar.MONTH ), 2 ) + "-" + IOTools.fillLeadingZeros( cal.get( Calendar.DAY_OF_MONTH ), 2 ) + " " + IOTools.fillLeadingZeros( cal.get( Calendar.HOUR_OF_DAY ), 2 ) + "-" + IOTools.fillLeadingZeros( cal.get( Calendar.MINUTE ), 2 ) + "-" + IOTools.fillLeadingZeros( cal.get( Calendar.SECOND ), 2 ) );
+	}
+
+	/**
+	 * Indicates wheather the program is in debug mode, or not.
+	 * @return <code>true</code> if debug mode is on, <code>false</code> otherwise.
+	 */
+	public static boolean isDebug() {
+		return debug;
 	}
 }
 

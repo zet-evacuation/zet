@@ -168,7 +168,6 @@ public class JPolygon extends AbstractPolygon {
 	 * @param p the polygon
 	 */
 	public void displayPolygon( PlanPolygon p ) {
-		System.out.println( "Display Polygon is called" );
 		if( myPolygon != null ) {
 			removeAll();
 			edgeData.clear();
