@@ -364,4 +364,15 @@
       </statistic>
     </statistics>
   </profile>
+  <profile>
+    <name>Neues Profil</name>
+    <type>GLOBAL</type>
+    <diagrams class="linked-list">
+      <diagram>
+        <title>Tabelle 1: Titel</title>
+        <type>TABLE</type>
+      </diagram>
+    </diagrams>
+    <statistics class="linked-list"/>
+  </profile>
 </linked-list>

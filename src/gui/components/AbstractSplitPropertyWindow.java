@@ -39,9 +39,9 @@ public abstract class AbstractSplitPropertyWindow<T extends JComponent> extends 
 	//private final Class<T> leftPanelType;
 	private T leftPanel;
 	/** The localization class. */
-	protected static final Localization loc = Localization.getInstance ();
-	protected static final NumberFormat nfFloat = loc.getFloatConverter (); //NumberFormat.getNumberInstance( Localization.getInstance().getLocale() );
-	protected static final NumberFormat nfInteger = loc.getIntegerConverter (); //NumberFormat.getIntegerInstance( Localization.getInstance().getLocale() );
+	protected static final Localization loc = Localization.getInstance();
+	protected static final NumberFormat nfFloat = loc.getFloatConverter(); //NumberFormat.getNumberInstance( Localization.getInstance().getLocale() );
+	protected static final NumberFormat nfInteger = loc.getIntegerConverter(); //NumberFormat.getIntegerInstance( Localization.getInstance().getLocale() );
 
 	public AbstractSplitPropertyWindow( T panel ) {
 		//this.leftPanelType = leftPanelType;

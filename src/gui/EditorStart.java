@@ -87,7 +87,9 @@ public class EditorStart {
 	/** States if statistic is used, or not. Can be changed via commandline. */
 	public static boolean useStatistic = true;
 	/** The properties in the information file. */
-	public static PropertyTreeModel ptm;
+	public static PropertyTreeModel ptmInformation;
+	/** The properties in the information file. */
+	public static PropertyTreeModel ptmOptions;
 	
 	/** Creates a new instance of <code>EditorStart</code> */
 	private EditorStart() { }
@@ -228,30 +230,46 @@ public class EditorStart {
 		SwingUtilities.invokeLater( new Runnable() {
 			@Override
 			public void run() {
-				// Load default parameters and options
+				// First load base parameters
+				File optionFile = new File( "./basezetoptions.xml" );
+				File informationFile = new File( "./baseoptions.xml" );
 				File propertyFile = new File( propertyFilename );
-				File optionFile = new File( optionFilename );
-				File informationFile = new File( informationFilename );
-				checkFile( propertyFile, "Property file" );
+				checkFile( informationFile, "Information file" );
 				checkFile( optionFile, "Option file" );
-//				checkFile( informationFile, "Information file" );
+				checkFile( propertyFile, "Property file" );
+				// Load properties
 				try {
 					PropertyContainer.getInstance().applyParameters( propertyFile );
-					PropertyContainer.getInstance().applyParameters( optionFile );
 				} catch( PropertyLoadException ex ) {
 					exit( ex.getMessage() );
 				}
+				// Load default values
 				try {
-					ptm = PropertyContainer.getInstance().applyParameters( informationFile );
-				} catch( PropertyLoadException ex ) {
-					try { // Load from default-file if no user-specific is available
-						ptm = PropertyContainer.getInstance().applyParameters( new File( "./baseoptions.xml" ) );
-					} catch( PropertyLoadException ex1 ) {
-						exit( ex.getMessage() );
-					}
+					ptmOptions = PropertyContainer.getInstance().applyParameters( optionFile );
+				} catch( PropertyLoadException ex1 ) {
+					exit( ex1.getMessage() );
 				}
+				try { // Load from default-file if no user-specific is available
+					ptmInformation = PropertyContainer.getInstance().applyParameters( informationFile );
+				} catch( PropertyLoadException ex1 ) {
+					exit( ex1.getMessage() );
+				}
+				// Load user defined parameters, do not check if they exist
+				optionFile = new File( optionFilename );
+				informationFile = new File( informationFilename );
+				try {
+					PropertyContainer.getInstance().applyParameters( optionFile );
+				} catch( PropertyLoadException ex ) { }
+				try {
+					PropertyContainer.getInstance().applyParameters( informationFile );
+				} catch( PropertyLoadException ex ) { }
+				// Update the values in the ptms
+				EditorStart.ptmInformation.getRoot().reloadFromPropertyContainer();
+				EditorStart.ptmOptions.getRoot().reloadFromPropertyContainer();
+
 				// Change look and feel to native
 				GUIOptionManager.changeLookAndFeel( UIManager.getSystemLookAndFeelClassName() );
+
 				//Start our editor in the event-dispatch-thread
 				JEditor edit = JEditor.getInstance();
 				File iconFile = new File( "./icon.gif" );
@@ -267,9 +285,9 @@ public class EditorStart {
 				JPropertySelectorWindow a = new JPropertySelectorWindow( edit, "", 100, 100, propertyFilename );
 				a.saveWorking();
 				a = null;
-				JOptionsWindow b = new JOptionsWindow( edit, "", 100, 100, optionFilename );
-				b.saveWorking();
-				b = null;
+				//JOptionsWindow b = new JOptionsWindow( edit, "", 100, 100, optionFilename );
+				//b.saveWorking();
+				//b = null;
 				edit.addMainComponents();
 				System.out.println( "ZET-Fenster geladen." );
 				if( bp != null ) {

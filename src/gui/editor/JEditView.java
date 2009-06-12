@@ -481,7 +481,7 @@ public class JEditView extends AbstractSplitPropertyWindow<JFloorScrollPane<JFlo
 		row++;
 
 		// Delay-Selector
-		lblPreferredExit = new JLabel( loc.getString( "gui.editor.JEditorPanel.labelPreferredExit" ) + ":" );
+		lblPreferredExit = new JLabel( loc.getString( "gui.editor.JEditorPanel.labelPreferredExit" ) );
 		eastPanel.add( lblPreferredExit, "0, " + row++ );
 		cbxPreferredExit = new JComboBox();
 		cbxPreferredExit.addItemListener( new ItemListener() {
@@ -851,10 +851,10 @@ public class JEditView extends AbstractSplitPropertyWindow<JFloorScrollPane<JFlo
 				}
 			}
 		};
-		btnFloorUp = Button.newButton( loc.getString( "gui.editor.JEditorPanel.floorUp" ), aclFloor, "up", loc.getString( "gui.editor.JEditorPanel.floorUp.Tooltip") );
+		btnFloorUp = Button.newButton( loc.getString( "gui.editor.JEditorPanel.floorUp" ), aclFloor, "up", loc.getString( "gui.editor.JEditorPanel.floorUp.ToolTip") );
 		eastPanel.add( btnFloorUp, "0,3,0,3" );
 		
-		btnFloorDown = Button.newButton( loc.getString( "gui.editor.JEditorPanel.floorDown" ), aclFloor, "down", loc.getString( "gui.editor.JEditorPanel.floorDown.Tooltip" ) );
+		btnFloorDown = Button.newButton( loc.getString( "gui.editor.JEditorPanel.floorDown" ), aclFloor, "down", loc.getString( "gui.editor.JEditorPanel.floorDown.ToolTip" ) );
 		
 		eastPanel.add( btnFloorDown, "2,3" );
 		return eastPanel;
@@ -912,16 +912,24 @@ public class JEditView extends AbstractSplitPropertyWindow<JFloorScrollPane<JFlo
 		lblAssignmentEvacueeNumber.setText( loc.getString( "gui.editor.JEditorPanel.labelPersons" ) );
 		btnAssignmentSetDefaultEvacuees.setText( loc.getString( "gui.editor.JEditorPanel.assignmentNameDefault" ) );
 		btnAssignmentSetDefaultEvacuees.setToolTipText( loc.getString( "gui.editor.JEditorPanel.assignmentTooltipDefault" ) );
+		lblPreferredExit.setText( loc.getString( "gui.editor.JEditorPanel.labelPreferredExit" ) );
 		lblDelayType.setText( loc.getString( "gui.editor.JEditorPanel.labelDelayType" ) + ":" );
 		lblDelayFactor.setText( loc.getString( "gui.editor.JEditorPanel.labelFactor" ) );
 		btnDelaySetDefault.setText( loc.getString( "gui.editor.JEditorPanel.delayTypeDefault" ) );
 		btnDelaySetDefault.setToolTipText( loc.getString( "gui.editor.JEditorPanel.delayTypeDefaultToolTip" ) );
+		btnFloorUp.setText( loc.getString( "gui.editor.JEditorPanel.floorUp" ) );
+		btnFloorUp.setToolTipText( loc.getString( "gui.editor.JEditorPanel.floorUp.ToolTip" ) );
+		btnFloorDown.setText( loc.getString( "gui.editor.JEditorPanel.floorDown" ) );
+		btnFloorDown.setToolTipText( loc.getString( "gui.editor.JEditorPanel.floorDown.ToolTip" ) );
 		lblFloorName.setText( loc.getString( "gui.editor.JEditorPanel.labelNameFloor" ) );
 		lblRoomName.setText( loc.getString( "gui.editor.JEditorPanel.labelNameRoom" ) );
 		lblEvacuationAreaName.setText( loc.getString( "gui.editor.JEditorPanel.labelNameEvacuationArea" ) );
+		lblEvacuationAttractivity.setText( loc.getString( "gui.editor.JEditorPanel.labelAttractivity" ) );
 		lblMaxPersonsDesc.setText( loc.getString( "gui.editor.JEditorPanel.labelMaxPersons" ) );
 		lblMaxPersonsWarning.setText( loc.getString( "gui.editor.JEditorPanel.labelArea" ) );
 		lblAreaSizeDesc.setText( loc.getString( "gui.editor.JEditorPanel.labelAreaWarning" ) );
+		lblStairFactorUp.setText( loc.getString( "gui.editor.JEditorPanel.labelStairFactorUp" ) + ":" );
+		lblStairFactorDown.setText( loc.getString( "gui.editor.JEditorPanel.labelStairFactorDown" ) + ":" );
 	}
 
 	/**

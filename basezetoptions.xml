@@ -5,7 +5,7 @@
       <intNode name="options.view.editor.size.miny" useAsLocString="true" description="desc" information="options.view.editor.size.miny.info" parameter="editor.options.view.size.miny">0</intNode>
       <intNode name="options.view.editor.size.maxx" useAsLocString="true" description="desc" information="options.view.editor.size.maxx.info" parameter="editor.options.view.size.maxx">8000</intNode>
       <intNode name="options.view.editor.size.maxy" useAsLocString="true" description="desc" information="options.view.editor.size.maxy.info" parameter="editor.options.view.size.maxy">6000</intNode>
-      <intNode name="options.view.editor.size.border" useAsLocString="true" description="desc" information="options.view.editor.size.border.info" parameter="editor.options.view.size.border">0</intNode>
+      <intNode name="options.view.editor.size.border" useAsLocString="true" description="desc" information="options.view.editor.size.border.info" parameter="editor.options.view.size.border">800</intNode>
     </treeNode>
     <boolNode name="options.view.editor.hideDefaultFloor" useAsLocString="true" description="desc" information="options.view.editor.hideDefaultFloor.info" parameter="editor.options.view.hideDefaultFloor">true</boolNode>
     <boolNode name="options.view.editor.rasterizedPaintMode" useAsLocString="true" description="desc" information="options.view.editor.rasterizedPaintMode.info" parameter="editor.options.view.rasterizedPaintMode">true</boolNode>
@@ -49,7 +49,7 @@
     <boolNode name="options.visualization.startWithIso" useAsLocString="true" description="desc" information="options.visualization.startWithIso.info" parameter="editor.options.visualization.startWithIso">true</boolNode>
   </treeNode>
   <treeNode name="options.statistic" useAsLocString="true">
-    <boolNode name="options.statistic.blackAndWhiteDiagrams" useAsLocString="true" description="desc" information="options.statistic.blackAndWhiteDiagrams.info" parameter="statistic.blackAndWhiteDiagrams">true</boolNode>
+    <boolNode name="options.statistic.blackAndWhiteDiagrams" useAsLocString="true" description="desc" information="options.statistic.blackAndWhiteDiagrams.info" parameter="statistic.blackAndWhiteDiagrams">false</boolNode>
     <boolNode name="options.statistic.showAssignmentNamesInDiagrams" useAsLocString="true" description="desc" information="options.statistic.showAssignmentNamesInDiagrams.info" parameter="statistic.showAssignmentNamesInDiagrams">false</boolNode>
   </treeNode>
 </zp>
