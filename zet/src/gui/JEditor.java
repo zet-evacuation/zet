@@ -100,6 +100,8 @@ import java.text.NumberFormat;
 import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Locale;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.imageio.ImageIO;
 import javax.media.opengl.GLCapabilities;
 import javax.swing.ButtonGroup;
@@ -154,7 +156,11 @@ public class JEditor extends JFrame implements Localized, EventListener<Progress
 	
 	/** The localization class. */
 	static final Localization loc = Localization.getInstance();
-	/** Singleton instance variable. */
+		/** Stores the last mouse position if a mouse position event is sent. */
+	private static Point lastMouse = new Point( 0, 0 );
+	/** The delimter used if numbers are stored in a tuple. */
+	final static String delimiter = Localization.getInstance().getStringWithoutPrefix( "numberSeparator" );
+/** Singleton instance variable. */
 	private static final JEditor instance = new JEditor();
 	private static boolean editing = false;
 	
@@ -257,11 +263,6 @@ public class JEditor extends JFrame implements Localized, EventListener<Progress
 	// Toolbar items
 	// Edit toolbar
 	private JButton btnExit1;
-	private JButton btnExit2;
-	private JButton btnExit3;
-	private JButton btnExit4;
-	private JButton btnExit5;
-	private JButton btnExit6;
 	private JButton btnOpen;
 	private JButton btnSave;
 	private JButton btnEditSelect;
@@ -273,15 +274,25 @@ public class JEditor extends JFrame implements Localized, EventListener<Progress
 	private JButton btnZoomOut;
 	private JTextField txtZoomFactor;
 	private JButton btnRasterize;
+	// Batch toolbar
+	private JButton btnExit5;
+	private JButton btnSaveResults1;
+	private JButton btnOpenResults1;
+	// Quick visualization toolbar
+	private JButton btnExit6;
 	// Visualization toolbar
+	private JButton btnExit2;
+	private JLabel labelBatchName1;
 	private BatchResultEntryVisComboBoxModel entryModelVis;
-	private BatchResultEntryGRSComboBoxModel entryModelGraph;
+	private JLabel labelBatchRun;
 	private CycleComboBoxModel cycleModel;
 	private JButton btn2d3dSwitch;
 	private JButton btn2dSwitch;
 	private JButton btnVideo;
 	private JButton btnPlayStart;
 	private JButton btnPlay;
+	private Icon playIcon;
+	private Icon pauseIcon;
 	private JButton btnPlayEnd;
 	private JButton btnShowWalls;
 	private JButton btnShowGraph;
@@ -292,8 +303,16 @@ public class JEditor extends JFrame implements Localized, EventListener<Progress
 	private JButton btnShowDynamicPotential;
 	private JButton btnShowUtilization;
 	private JButton btnShowWaiting;
-	private Icon playIcon;
-	private Icon pauseIcon;
+	// Statistic Toolbar
+	private JButton btnOpenResults2;
+	private JButton btnExit3;
+	private JButton btnSaveResults2;
+	// Graph statistic Toolbar
+	private JButton btnExit4;
+	private JButton btnOpenResults3;
+	private JButton btnSaveResults3;
+	private JLabel labelBatchName2;
+	private BatchResultEntryGRSComboBoxModel entryModelGraph;
 
 	// Items for the switch-bar
 	private JTabbedPane tabPane;
@@ -304,15 +323,6 @@ public class JEditor extends JFrame implements Localized, EventListener<Progress
 	private boolean disableUpdate = false;
 	private int currentMode = EDIT_FLOOR;
 	private JAssignment distribution;
-	private JButton btnSaveResults1;
-	private JButton btnOpenResults1;
-	private JButton btnSaveResults2;
-	private JButton btnSaveResults3;
-	private JButton btnOpenResults2;
-	private JButton btnOpenResults3;
-	private JLabel labelBatchName1;
-	private JLabel labelBatchRun;
-	private JLabel labelBatchName2;
 
 
 	/**
@@ -362,8 +372,10 @@ public class JEditor extends JFrame implements Localized, EventListener<Progress
 				if( graphStatisticPanel != null )
 					graphStatisticPanel.saveSettings();
 				try {
-					EditorStart.ptm.getRoot().reloadFromPropertyContainer();
-					PropertyContainer.saveConfigFile( EditorStart.ptm, new File( EditorStart.informationFilename ) );
+					EditorStart.ptmInformation.getRoot().reloadFromPropertyContainer();
+					EditorStart.ptmOptions.getRoot().reloadFromPropertyContainer();
+					PropertyContainer.saveConfigFile( EditorStart.ptmInformation, new File( EditorStart.informationFilename ) );
+					PropertyContainer.saveConfigFile( EditorStart.ptmOptions, new File( EditorStart.optionFilename ) );
 				} catch( IOException ex ) {
 					System.err.println( "Error saving information file." );
 				}
@@ -407,10 +419,12 @@ public class JEditor extends JFrame implements Localized, EventListener<Progress
 	 * @param position the mouse position in millimeter.
 	 */
 	public static void sendMouse( Point position ) {
+		lastMouse = position;
 		//String pixelCoords = "(" + Integer.toString (e.getX ()) + "," + Integer.toString (e.getY ()) + ")";
-		String realCoordsMillimeter = "(" + Integer.toString( position.x ) + "," + Integer.toString( position.y ) + ")";
-		String realCoordsMeter = "(" + Double.toString( ConversionTools.toMeter( position.x ) ) + "," + Double.toString( ConversionTools.toMeter( position.y ) ) + ")";
-		String text = /*"Pixel: " + pixelCoords + " - */ "Millimeter: " + realCoordsMillimeter + " - Meter: " + realCoordsMeter;
+		String realCoordsMillimeter = "(" + Integer.toString( position.x ) + delimiter + Integer.toString( position.y ) + ")";
+		String realCoordsMeter = "(" + Localization.getInstance().getFloatConverter().format( ConversionTools.toMeter( position.x ) ) + delimiter + Localization.getInstance().getFloatConverter().format( ConversionTools.toMeter( position.y ) ) + ")";
+		//String text = /*"Pixel: " + pixelCoords + " - */ "Millimeter: " + realCoordsMillimeter + " - Meter: " + realCoordsMeter;
+		String text = String.format( Localization.getInstance().getString( "gui.mousePositionMillimeterMeter" ), realCoordsMillimeter, realCoordsMeter );
 		EventServer.getInstance().dispatchEvent( new MessageEvent<JEditor>( JEditor.getInstance(), MessageType.MousePosition, text ) );
 	}
 	
@@ -1061,6 +1075,10 @@ public class JEditor extends JFrame implements Localized, EventListener<Progress
 		btnShowWaiting.setToolTipText( loc.getString( "showWaitingTime" ) );
 
 		loc.setPrefix( "" );
+
+		sendMouse( lastMouse );
+		sendError( "" );
+		sendMessage( loc.getStringWithoutPrefix( "gui.status.LanguageChangedTo" ) );
 	}
 	/*****************************************************************************
 	 *                                                                           *
@@ -1098,11 +1116,11 @@ public class JEditor extends JFrame implements Localized, EventListener<Progress
 	ActionListener aclDistribution = new ActionListener() {
 		@Override
 		public void actionPerformed( ActionEvent e ) {
-			if (distribution == null) {
-				distribution = new JAssignment( JEditor.this,
-							getProject(), loc.getString( "gui.editor.assignment.JAssignment.Title" ), 850, 400);
-			}
+			//if( distribution == null ) {
+				distribution = new JAssignment( JEditor.this, getProject(), loc.getString( "gui.editor.assignment.JAssignment.Title" ), 850, 400 );
+			//}
 			distribution.setVisible( true );
+			distribution.dispose();
 		}
 	};
 	ActionListener aclExecute = new ActionListener() {
@@ -1527,12 +1545,17 @@ public class JEditor extends JFrame implements Localized, EventListener<Progress
 			if( e.getActionCommand().equals( "properties"  )) {
 				JPropertySelectorWindow propertySelector = new JPropertySelectorWindow( JEditor.this, loc.getString( "gui.editor.JPropertySelector.Title" ), 700, 500 );
 				propertySelector.setVisible( true );
-				System.out.println( "Properties wurden gespeichert." );
+				System.out.println( "Properties saved." ); // TODO loc
 				System.out.println( PropertyContainer.getInstance().getAsInt( "converter.Imbalance" ) );
 			} else if( e.getActionCommand().equals( "options"  )) {
-				JOptionsWindow propertySelector = new JOptionsWindow( JEditor.this, loc.getString( "gui.editor.JOptions.Title" ), 700, 500 );
+				EditorStart.ptmOptions.getRoot().reloadFromPropertyContainer();
+				JOptionsWindow propertySelector = new JOptionsWindow( JEditor.this, loc.getString( "gui.editor.JOptions.Title" ), 700, 500, EditorStart.ptmOptions );
 				propertySelector.setVisible( true );
-				propertySelector.saveConfigFile( new File( EditorStart.optionFilename ) );
+				try {	// Save results in options file
+					PropertyContainer.saveConfigFile( EditorStart.ptmOptions, new File( EditorStart.optionFilename ) );
+				} catch( IOException ex ) {
+					sendError( "Error saving config file!" ); // TODO loc
+				}
 			} else {
 				sendError( loc.getString( "gui.UnknownCommand" ) + " '" + e.getActionCommand() + "'. " + loc.getString( "gui.ContactDeveloper" ) );
 			}
@@ -1893,7 +1916,7 @@ public class JEditor extends JFrame implements Localized, EventListener<Progress
 		try {
 			Project loaded = Project.load( projectFile );
 			currentProject = loaded;
-			distribution = null; // Throw away the old assignment window
+//			distribution = null; // Throw away the old assignment window
 			getProject().setProjectFile( projectFile );
 			editView.displayProject( loaded );
 			// Löschen eingestellter parameter

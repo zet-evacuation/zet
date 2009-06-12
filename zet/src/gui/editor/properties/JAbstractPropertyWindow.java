@@ -63,6 +63,38 @@ public abstract class JAbstractPropertyWindow extends JDialog {
 	protected int space = 16;
 	private String defaultConfigFile = "default.xml";
 
+	/**
+	 * Initializes the property/option window. A given {@link PropertyTreeModel} will be displayed
+	 * in the tree view and on the settings panel.
+	 * @param owner the owner of the window
+	 * @param title the title of the window
+	 * @param width the width of the window
+	 * @param height the height of the window
+	 * @param ptm the property tree model that is displayed
+	 */
+	public JAbstractPropertyWindow( JFrame owner, String title, int width, int height, PropertyTreeModel ptm ) {
+		super( owner, title, true );
+		dialog = this;
+		dialog.setResizable( false );
+		getContentPane().setLayout( new BorderLayout() );
+
+		setSize( width, height );
+		setLocation( owner.getX() + (owner.getWidth() - width) / 2, owner.getY() + (owner.getHeight() - height) / 2 );
+
+		propertyTreeModel = ptm;
+		initModel();
+	}
+
+	/**
+	 * Initializes the property/option window. A {@link PropertyTreeModel} will be
+	 * first created from a given file and then displayed in the tree view and on
+	 * the settings panel.
+	 * @param owner the owner of the window
+	 * @param title the title of the window
+	 * @param width the width of the window
+	 * @param height the height of the window
+	 * @param filename the file that contains valid options in xml-format for the property tree model
+	 */
 	public JAbstractPropertyWindow( JFrame owner, String title, int width, int height, String filename ) {
 		super( owner, title, true );
 		dialog = this;
@@ -71,13 +103,20 @@ public abstract class JAbstractPropertyWindow extends JDialog {
 		getContentPane().setLayout( new BorderLayout() );
 
 		setSize( width, height );
-		setLocation( owner.getX() + (owner.getWidth() - width) / 2,
-						owner.getY() + (owner.getHeight() - height) / 2 );
+		setLocation( owner.getX() + (owner.getWidth() - width) / 2, owner.getY() + (owner.getHeight() - height) / 2 );
 
-		// Initialize model
+		// Load model from file
 		try {
-		propertyTreeModel = PropertyContainer.loadConfigFile( configFile );
+			propertyTreeModel = PropertyContainer.loadConfigFile( configFile );
 		} catch (Exception e) {}
+		initModel();
+	}
+
+	/**
+	 * Displays the contents of a given {@link PropertyTreeModel} in the contents-panel.
+	 */
+	private void initModel() {
+		// Initialize model
 		contents = new JPanel( new BorderLayout() );
 		settings = new JPanel();
 		settingsView = new JScrollPane( settings );
@@ -268,6 +307,7 @@ public abstract class JAbstractPropertyWindow extends JDialog {
 	/**
 	 * Saves the configuration to a file in XML-Format. The file will only be a
 	 * working copy for the current run.
+	 * @see #getDefaultConfigFile()
 	 */
 	public void saveWorking() {
 		try {

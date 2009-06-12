@@ -15,7 +15,7 @@
  */
 /**
  * Class JOptionsWindow
- * Erstellt 22.04.2008, 18:34:20
+ * Created 22.04.2008, 18:34:20
  */
 
 package gui.editor.properties;
@@ -46,12 +46,16 @@ public class JOptionsWindow extends JAbstractPropertyWindow {
 	 */
 	public JOptionsWindow( JFrame owner, String title, int width, int height, String file ) {
 		super( owner, title, width, height, file );
-		setDefaultConfigFile( "optionsWorking.xml" );
+		setDefaultConfigFile( "basezetoptions.xml" );
+	}
+
+	public JOptionsWindow( JFrame owner, String title, int width, int height, PropertyTreeModel ptm ) {
+		super( owner, title, width, height, ptm );
 	}
 
 	public JOptionsWindow( JFrame owner, String title, int width, int height ) {
-		super( owner, title, width, height, "optionsWorking.xml" );
-		setDefaultConfigFile( "optionsWorking.xml" );
+		super( owner, title, width, height, "basezetoptions.xml" );
+		setDefaultConfigFile( "basezetoptions.xml" );
 	}
 	
 	@Override

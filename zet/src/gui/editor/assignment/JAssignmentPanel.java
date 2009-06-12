@@ -116,7 +116,10 @@ public class JAssignmentPanel extends JPanel {
 	private ArrayList<DistributionEntry> params;
 	private AssignmentTableModel tablemodel;
 	private JTable distributionTable;
+	/** A panel containing the plot of the density */
 	private ChartPanel chartPanel;
+	/** The chart of the probability dense function */
+	private JFreeChart chart;
 	private JComboBox distributions;
 
 	public JAssignmentPanel( JDialog parent, Project p ) {
@@ -297,9 +300,9 @@ public class JAssignmentPanel extends JPanel {
 						GridBagConstraints.BOTH, new Insets( 16, 0, 0, 16 ), 0, 0 ) );
 
 		XYSeriesCollection c = new XYSeriesCollection();
-		JFreeChart chart = ChartFactory.createXYLineChart( "Verteilungen", // Title
-						"Werte", // X-Axis label
-						"Wahrscheinlichkeit", // Y-Axis label
+		chart = ChartFactory.createXYLineChart( loc.getStringWithoutPrefix( "gui.editor.assignment.plot.title" ), // title
+						loc.getStringWithoutPrefix( "gui.editor.assignment.plot.values" ), // X-Axis label
+						loc.getStringWithoutPrefix( "gui.editor.assignment.plot.probability" ), // Y-Axis label
 						c, // Dataset
 						PlotOrientation.VERTICAL,
 						false, true, false // Show legend
@@ -470,9 +473,9 @@ public class JAssignmentPanel extends JPanel {
 			}
 			c.addSeries( a );
 		}
-		chart = ChartFactory.createXYLineChart( "Verteilungen", // Title
-						"Werte", // X-Axis label
-						"Wahrscheinlichkeit", // Y-Axis label
+		chart = ChartFactory.createXYLineChart( loc.getStringWithoutPrefix( "gui.editor.assignment.plot.title" ), // Title
+						loc.getStringWithoutPrefix( "gui.editor.assignment.plot.values" ), // X-Axis label
+						loc.getStringWithoutPrefix( "gui.editor.assignment.plot.probability" ), // Y-Axis label
 						c, // Dataset
 						PlotOrientation.VERTICAL,
 						false, true, false // Show legend
@@ -788,15 +791,15 @@ public class JAssignmentPanel extends JPanel {
 				case COL_NAME:
 					return "";
 				case COL_DISTRIBUTION:
-					return "Verteilung";
+					return loc.getStringWithoutPrefix( "gui.editor.assignment.labelProbabilityDistribution" ) ;
 				case COL_PARAM1:
-					return "Minimum";
+					return loc.getStringWithoutPrefix( "gui.editor.assignment.labelMinimum" ) ;
 				case COL_PARAM2:
-					return "Maximum";
+					return loc.getStringWithoutPrefix( "gui.editor.assignment.labelMaximum" ) ;
 				case COL_PARAM3:
-					return "Erw.-Wert/Lambda";
+					return loc.getStringWithoutPrefix( "gui.editor.assignment.labelExpectedValue" ) ;
 				case COL_PARAM4:
-					return "Varianz";
+					return loc.getStringWithoutPrefix( "gui.editor.assignment.labelVariance" ) ;
 				default:
 					return null;
 			}
