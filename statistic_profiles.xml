@@ -36,6 +36,10 @@
         <xAxisLabel>Durchlauf</xAxisLabel>
         <yAxisLabel>Zeit</yAxisLabel>
       </diagram>
+      <diagram>
+        <title>Tabelle 2: Titel</title>
+        <type>TABLE</type>
+      </diagram>
     </diagrams>
     <statistics class="linked-list">
       <statistic>
@@ -363,6 +367,17 @@
         </attributes>
       </statistic>
     </statistics>
+  </profile>
+  <profile>
+    <name>Neues Profil</name>
+    <type>GLOBAL</type>
+    <diagrams class="linked-list">
+      <diagram>
+        <title>Tabelle 1: Titel</title>
+        <type>TABLE</type>
+      </diagram>
+    </diagrams>
+    <statistics class="linked-list"/>
   </profile>
   <profile>
     <name>Neues Profil</name>

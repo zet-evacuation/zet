@@ -153,32 +153,27 @@ public class JEditor extends JFrame implements Localized, EventListener<Progress
 //	public static final int STATISTIC = 4;
 //	public static final int GRAPH_STATISTIC = 5;
 //	public static final int CORRECTION = EditorStart.isDebug() ? 0 : 1;
-	
 	/** The localization class. */
 	static final Localization loc = Localization.getInstance();
-		/** Stores the last mouse position if a mouse position event is sent. */
+	/** Stores the last mouse position if a mouse position event is sent. */
 	private static Point lastMouse = new Point( 0, 0 );
 	/** The delimter used if numbers are stored in a tuple. */
 	final static String delimiter = Localization.getInstance().getStringWithoutPrefix( "numberSeparator" );
-/** Singleton instance variable. */
+	/** Singleton instance variable. */
 	private static final JEditor instance = new JEditor();
 	private static boolean editing = false;
-	
 	private Project currentProject;	// Task and execution stuff
 	private CellularAutomatonInOrderExecution caAlgo = null;
 	private AlgorithmTask worker;
 	private BatchResult result;
-	
 	// Options
 	private boolean createCopy;
 	private boolean firstSwitch = false;
-	
 	private EditMode.Type creationType = EditMode.Type.CREATION_POINTWISE;
 	/** The number format used to display the zoomfactor in the textfield. */
 	private NumberFormat nfZoom = NumberFormat.getPercentInstance();	// Main window components
 	/** The status bar. */
 	private JEventStatusBar statusBar;
-	
 	private JVisualizationView visualizationView;
 	private GLControl control;
 	private JEditView editView;
@@ -251,7 +246,6 @@ public class JEditor extends JFrame implements Localized, EventListener<Progress
 	private JMenu mWindow;
 	private JMenu mHelp;
 	private JMenuItem mnuHelpAbout;
-	
 	/** The tool bars */
 	private JToolBar toolBarEdit;
 	private JToolBar toolBarBatch;
@@ -316,14 +310,12 @@ public class JEditor extends JFrame implements Localized, EventListener<Progress
 
 	// Items for the switch-bar
 	private JTabbedPane tabPane;
-	
 	// Additional GUI stuff
 	/** Model for the edit-mode combo box. */
 	private EditComboBoxModel editSelector;
 	private boolean disableUpdate = false;
 	private int currentMode = EDIT_FLOOR;
 	private JAssignment distribution;
-
 
 	/**
 	 * Creates a new instance of <code>JEditor</code>.
@@ -357,7 +349,7 @@ public class JEditor extends JFrame implements Localized, EventListener<Progress
 		createQuickVisualizationToolBar();
 		createVisualizationToolBar();
 		createStatisticsToolBar();
-		
+
 		add( toolBarEdit, BorderLayout.NORTH );
 		currentToolbar = toolBarEdit;
 
@@ -366,7 +358,8 @@ public class JEditor extends JFrame implements Localized, EventListener<Progress
 		currentProject = EditorStart.newProject();
 
 		this.addWindowListener( new WindowListener() {
-			public void windowOpened( WindowEvent e ) { }
+			public void windowOpened( WindowEvent e ) {
+			}
 
 			public void windowClosing( WindowEvent e ) {
 				if( graphStatisticPanel != null )
@@ -381,11 +374,20 @@ public class JEditor extends JFrame implements Localized, EventListener<Progress
 				}
 			}
 
-			public void windowClosed( WindowEvent e ) { }
-			public void windowIconified( WindowEvent e ) { }
-			public void windowDeiconified( WindowEvent e ) { }
-			public void windowActivated( WindowEvent e ) { }
-			public void windowDeactivated( WindowEvent e ) { }
+			public void windowClosed( WindowEvent e ) {
+			}
+
+			public void windowIconified( WindowEvent e ) {
+			}
+
+			public void windowDeiconified( WindowEvent e ) {
+			}
+
+			public void windowActivated( WindowEvent e ) {
+			}
+
+			public void windowDeactivated( WindowEvent e ) {
+			}
 		} );
 	}
 
@@ -427,7 +429,7 @@ public class JEditor extends JFrame implements Localized, EventListener<Progress
 		String text = String.format( Localization.getInstance().getString( "gui.mousePositionMillimeterMeter" ), realCoordsMillimeter, realCoordsMeter );
 		EventServer.getInstance().dispatchEvent( new MessageEvent<JEditor>( JEditor.getInstance(), MessageType.MousePosition, text ) );
 	}
-	
+
 	/**
 	 * Displays an error message in the left edge of the status bar
 	 * @return true if the editor is in editing mode.
@@ -435,7 +437,7 @@ public class JEditor extends JFrame implements Localized, EventListener<Progress
 	public static boolean isEditing() {
 		return editing;
 	}
-	
+
 	/**
 	 * Enables or disables the flag for the editing mode.
 	 * @param editing the status
@@ -465,7 +467,6 @@ public class JEditor extends JFrame implements Localized, EventListener<Progress
 	 * GUI initialization                                                        *
 	 *                                                                           *
 	 ****************************************************************************/
-
 	public void addMainComponents() {
 		editView = new JEditView( getProject() );
 		batchView = new JBatchView();
@@ -479,7 +480,7 @@ public class JEditor extends JFrame implements Localized, EventListener<Progress
 				btnShowUtilization.setSelected( false );
 				btnShowWaiting.setSelected( false );
 			}
-		});
+		} );
 		caView = new JCAView();
 		caStatisticView = new JStatisticPanel();
 		graphStatisticPanel = new JGraphStatisticPanel();
@@ -527,13 +528,12 @@ public class JEditor extends JFrame implements Localized, EventListener<Progress
 		Menu.addMenuItem( mFile, "-" );
 		mnuFileExportAsDXF = Menu.addMenuItem( mFile, loc.getString( "menuDXF" ), aclFile, "saveAsDXF" );
 		Menu.addMenuItem( mFile, "-" );
-		mnuFileSaveResultAs = Menu.addMenuItem (mFile, loc.getString ("menuSaveResultAs"), 'E', aclFile, "saveResultAs");
-		mnuFileSaveResultAs.setEnabled (false);
+		mnuFileSaveResultAs = Menu.addMenuItem( mFile, loc.getString( "menuSaveResultAs" ), 'E', aclFile, "saveResultAs" );
+		mnuFileSaveResultAs.setEnabled( false );
 		mnuFileLoadResult = Menu.addMenuItem( mFile, loc.getString( "menuLoadBatchResult" ), 'B', aclFile, "loadBatchResult" );
 		Menu.addMenuItem( mFile, "-" );
 		mnuFileExit = Menu.addMenuItem( mFile, loc.getString( "menuExit" ), 'X' );
 		mnuFileExit.addActionListener( new ActionListener() {
-
 			@Override
 			public void actionPerformed( ActionEvent e ) {
 				System.exit( 0 );
@@ -553,7 +553,7 @@ public class JEditor extends JFrame implements Localized, EventListener<Progress
 		Menu.addMenuItem( mEdit, "-" );
 		mnuEditDistribution = Menu.addMenuItem( mEdit, loc.getString( "menuDistributions" ), 'V', aclDistribution );
 		mnuEditProperties = Menu.addMenuItem( mEdit, loc.getString( "menuProperties" ), 'P', aclProperties, "properties" );
-		
+
 		// Anzeige-menue
 		mVisibleAreas = Menu.addMenu( mView, loc.getString( "menuVisibleAreas" ) );
 		mnuShowAllAreas = Menu.addMenuItem( mVisibleAreas, loc.getString( "menuShowAllAreas" ), aclAreaVisibility, "showAll" );
@@ -572,7 +572,7 @@ public class JEditor extends JFrame implements Localized, EventListener<Progress
 		mnuGridPoints = Menu.addRadioButtonMenuItem( mGrid, loc.getString( "menuGridstylePoints" ), true, aclPaint, "gridPoint" );
 		mnuGridNotVisible = Menu.addRadioButtonMenuItem( mGrid, loc.getString( "menuGridstyleNone" ), false, aclPaint, "gridNo" );
 		mnuPaintRasterized = Menu.addCheckMenuItem( mView, loc.getString( "menuDrawOnGrid" ), true, aclPaint, "grid" );
-		mnuHideDefaultFloor = Menu.addCheckMenuItem( mView, loc.getString( "menuHideDefaultEvacuationFloor" ), true, aclPaint, "defaultFloor" );
+		mnuHideDefaultFloor = Menu.addCheckMenuItem( mView, loc.getString( "menuHideDefaultEvacuationFloor" ), PropertyContainer.getInstance().getAsBoolean( "editor.options.view.hideDefaultFloor" ), aclPaint, "defaultFloor" );
 		mView.addSeparator();
 		mnuScreenshot = Menu.addMenuItem( mView, loc.getString( "menuScreenshot" ), KeyEvent.VK_F12, aclScreenshot, "screenshot", 0 );
 
@@ -641,7 +641,6 @@ public class JEditor extends JFrame implements Localized, EventListener<Progress
 		toolBarEdit.addSeparator();
 
 		btnEditSelect = Button.newButton( IconSet.EditSelect, new ActionListener() {
-
 			@Override
 			public void actionPerformed( ActionEvent e ) {
 				btnEditSelect.setSelected( true );
@@ -654,7 +653,6 @@ public class JEditor extends JFrame implements Localized, EventListener<Progress
 		toolBarEdit.add( btnEditSelect );
 		btnEditSelect.setSelected( true );
 		btnEditPointwise = Button.newButton( IconSet.EditDrawPointwise, new ActionListener() {
-
 			@Override
 			public void actionPerformed( ActionEvent e ) {
 				btnEditSelect.setSelected( false );
@@ -662,13 +660,12 @@ public class JEditor extends JFrame implements Localized, EventListener<Progress
 				btnEditRectangled.setSelected( false );
 				creationType = EditMode.Type.CREATION_POINTWISE;
 				editSelector.rebuild();
-				editView.setEditMode( (EditMode) editSelector.getSelectedItem() );
+				editView.setEditMode( (EditMode)editSelector.getSelectedItem() );
 				sendMessage( "Wählen sie die Koordinaten." ); // TODO loc
 			}
 		}, "", loc.getString( "toolbarTooltipPointSequence" ) );
 		toolBarEdit.add( btnEditPointwise );
 		btnEditRectangled = Button.newButton( IconSet.EditDrawRectangled, new ActionListener() {
-
 			@Override
 			public void actionPerformed( ActionEvent e ) {
 				btnEditSelect.setSelected( false );
@@ -710,7 +707,6 @@ public class JEditor extends JFrame implements Localized, EventListener<Progress
 		txtZoomFactor.setMaximumSize( new Dimension( 40, txtZoomFactor.getPreferredSize().height ) );
 		txtZoomFactor.addKeyListener( kylZoom );
 		txtZoomFactor.addFocusListener( new java.awt.event.FocusAdapter() {
-
 			@Override
 			public void focusLost( java.awt.event.FocusEvent evt ) {
 				updateZoomFactor();
@@ -724,7 +720,7 @@ public class JEditor extends JFrame implements Localized, EventListener<Progress
 
 		loc.setPrefix( "" );
 	}
-	
+
 	/**
 	 * Creates the <code>JToolBar</code> for the visualization mode.
 	 */
@@ -732,7 +728,7 @@ public class JEditor extends JFrame implements Localized, EventListener<Progress
 		// todo loc
 		loc.setPrefix( "gui.editor.JEditor." );
 
-		toolBarVisualization = new JToolBar ();
+		toolBarVisualization = new JToolBar();
 		btnExit2 = Button.newButton( IconSet.Exit, new ActionListener() {
 			public void actionPerformed( ActionEvent e ) {
 				System.exit( 0 );
@@ -746,8 +742,8 @@ public class JEditor extends JFrame implements Localized, EventListener<Progress
 		JComboBox cbxBatchEntry = new JComboBox( entryModelVis );
 		cbxBatchEntry.setLightWeightPopupEnabled( false );
 		cbxBatchEntry.setMaximumRowCount( 10 );
-		cbxBatchEntry.setMaximumSize( new Dimension( 250, cbxBatchEntry.getPreferredSize().height) );
-		cbxBatchEntry.setPreferredSize( new Dimension( 250, cbxBatchEntry.getPreferredSize().height) );
+		cbxBatchEntry.setMaximumSize( new Dimension( 250, cbxBatchEntry.getPreferredSize().height ) );
+		cbxBatchEntry.setPreferredSize( new Dimension( 250, cbxBatchEntry.getPreferredSize().height ) );
 		cbxBatchEntry.setAlignmentX( 0 );
 		toolBarVisualization.add( cbxBatchEntry );
 		labelBatchRun = new JLabel( loc.getString( "batchRun" ) );
@@ -757,14 +753,14 @@ public class JEditor extends JFrame implements Localized, EventListener<Progress
 		cbxBatchCycle.setLightWeightPopupEnabled( false );
 		cbxBatchCycle.setRenderer( new CycleComboBoxRenderer() );
 		cbxBatchCycle.setMaximumRowCount( 20 );
-		cbxBatchCycle.setMaximumSize( new Dimension( 120, cbxBatchCycle.getPreferredSize().height) );
+		cbxBatchCycle.setMaximumSize( new Dimension( 120, cbxBatchCycle.getPreferredSize().height ) );
 		cbxBatchCycle.setAlignmentX( 0 );
 		toolBarVisualization.add( cbxBatchCycle );
-		
+
 		toolBarVisualization.add( new JLabel( " " ) );
 		toolBarVisualization.addSeparator();
 		toolBarVisualization.add( new JLabel( " " ) );
-		
+
 		btn2d3dSwitch = Button.newButton( IconSet.Toggle2D3D, aclVisualizationView, "2d3dSwitch", loc.getString( "switch2d3d" ) );
 		toolBarVisualization.add( btn2d3dSwitch );
 		btn2dSwitch = Button.newButton( IconSet.ToggleOrthogonalIsometric, aclVisualizationView, "2dSwitch", loc.getString( "switchIso" ) );
@@ -812,7 +808,7 @@ public class JEditor extends JFrame implements Localized, EventListener<Progress
 
 		loc.setPrefix( "" );
 	}
-	
+
 	/**
 	 * Creates the <code>JToolBar</code> for the statistic mode.
 	 */
@@ -832,7 +828,7 @@ public class JEditor extends JFrame implements Localized, EventListener<Progress
 		toolBarCAStats.add( btnOpenResults2 );
 		btnSaveResults2 = Button.newButton( IconSet.Save, aclFile, "saveResultAs", loc.getString( "toolbarTooltipSave" ) );
 		toolBarCAStats.add( btnSaveResults2 );
-		
+
 		/** ########## Graph Statistics Toolbar ############ */
 		toolBarGraphStats = new JToolBar();
 		btnExit4 = Button.newButton( IconSet.Exit, new ActionListener() {
@@ -854,13 +850,13 @@ public class JEditor extends JFrame implements Localized, EventListener<Progress
 		entryModelGraph = new BatchResultEntryGRSComboBoxModel();
 		JComboBox cbxBatchEntry = new JComboBox( entryModelGraph );
 		cbxBatchEntry.setMaximumRowCount( 10 );
-		cbxBatchEntry.setMaximumSize( new Dimension (250, cbxBatchEntry.getPreferredSize().height) );
-		cbxBatchEntry.setPreferredSize( new Dimension (250, cbxBatchEntry.getPreferredSize().height) );
+		cbxBatchEntry.setMaximumSize( new Dimension( 250, cbxBatchEntry.getPreferredSize().height ) );
+		cbxBatchEntry.setPreferredSize( new Dimension( 250, cbxBatchEntry.getPreferredSize().height ) );
 		cbxBatchEntry.setAlignmentX( 0 );
 		toolBarGraphStats.add( cbxBatchEntry );
 		loc.setPrefix( "" );
 	}
-	
+
 	/**
 	 * Creates the <code>JToolBar</code> for the batch panel.
 	 */
@@ -868,7 +864,6 @@ public class JEditor extends JFrame implements Localized, EventListener<Progress
 		loc.setPrefix( "gui.editor.JEditor." );
 		toolBarBatch = new JToolBar();
 		btnExit5 = Button.newButton( IconSet.Exit, new ActionListener() {
-
 			public void actionPerformed( ActionEvent e ) {
 				System.exit( 0 );
 			}
@@ -882,15 +877,14 @@ public class JEditor extends JFrame implements Localized, EventListener<Progress
 		toolBarBatch.add( btnSaveResults1 );
 		loc.setPrefix( "" );
 	}
-	
+
 	/**
 	 * Creates the <code>JToolBar</code> for the quick visualization.
 	 */
 	private final void createQuickVisualizationToolBar() {
 		loc.setPrefix( "gui.editor.JEditor." );
-		toolBarCA = new JToolBar ();
+		toolBarCA = new JToolBar();
 		btnExit6 = Button.newButton( IconSet.Exit, new ActionListener() {
-
 			public void actionPerformed( ActionEvent e ) {
 				System.exit( 0 );
 			}
@@ -939,7 +933,7 @@ public class JEditor extends JFrame implements Localized, EventListener<Progress
 		Menu.updateMenu( mnuEditDistribution, loc.getString( "menuDistributions" ) );
 		Menu.updateMenu( mnuEditProperties, loc.getString( "menuProperties" ) );
 		Menu.updateMenu( mnuScreenshot, loc.getString( "menuScreenshot" ) );
-		
+
 		// Anzeige-menu
 		Menu.updateMenu( mVisibleAreas, loc.getString( "menuVisibleAreas" ) );
 		Menu.updateMenu( mnuShowAllAreas, loc.getString( "menuShowAllAreas" ) );
@@ -965,15 +959,13 @@ public class JEditor extends JFrame implements Localized, EventListener<Progress
 			Menu.updateMenu( mnuApplyAssignment, loc.getString( "menuSimulationApplyConcreteAssignment" ) );
 			Menu.updateMenu( mnuStartSimulation, loc.getString( "menuSimulationStart" ) );
 			//TODO if paused use other
-			if( caAlgo != null ) {
-				if( caAlgo.isPaused() ) {
+			if( caAlgo != null )
+				if( caAlgo.isPaused() )
 					Menu.updateMenu( mnuPauseSimulation, loc.getString( "menuSimulationContinue" ) );
-				} else {
+				else
 					Menu.updateMenu( mnuPauseSimulation, loc.getString( "menuSimulationPause" ) );
-				}
-			} else {
+			else
 				Menu.updateMenu( mnuPauseSimulation, loc.getString( "menuSimulationPause" ) );
-			}
 			Menu.updateMenu( mnuStepByStepSimulation, loc.getString( "menuSimulationStepByStep" ) );
 			Menu.updateMenu( mnuQuickVisualization, loc.getString( "menuSimulationQuickVisualization" ) );
 			Menu.updateMenu( mOptimization, loc.getString( "menuOptimization" ) );
@@ -983,7 +975,7 @@ public class JEditor extends JFrame implements Localized, EventListener<Progress
 			Menu.updateMenu( mnuMaxFlowOverTimeTEN, loc.getString( "menuOptAlgoMaxFlowOverTimeTEN" ) );
 			Menu.updateMenu( mnuEarliestArrivalTransshipment, loc.getString( "menuOptAlgoEATransshipment" ) );
 		}
-		
+
 		// Extras menu
 		Menu.updateMenu( mLanguage, loc.getString( "menuLanguages" ) );
 		Menu.updateMenu( mPlanImage, loc.getString( "menuPlanDisplaying" ) );
@@ -1011,7 +1003,7 @@ public class JEditor extends JFrame implements Localized, EventListener<Progress
 			tabPane.setTitleAt( CA_FLOOR, loc.getString( "CAView" ) );
 			tabPane.setToolTipTextAt( CA_FLOOR, loc.getString( "CAViewToolTip" ) );
 		}
-		
+
 		tabPane.setTitleAt( VISUALIZATION, loc.getString( "Visualization" ) );
 		tabPane.setToolTipTextAt( VISUALIZATION, loc.getString( "VisualizationToolTip" ) );
 
@@ -1021,7 +1013,7 @@ public class JEditor extends JFrame implements Localized, EventListener<Progress
 		tabPane.setTitleAt( GRAPH_STATISTIC, loc.getString( "GraphStatistic" ) );
 		tabPane.setToolTipTextAt( GRAPH_STATISTIC, loc.getString( "GraphStatisticToolTip" ) );
 		loc.setPrefix( "" );
-		
+
 
 		// Tool tips for buttons and text views in the menu bar
 		loc.setPrefix( "gui.editor.JEditor." );
@@ -1095,14 +1087,14 @@ public class JEditor extends JFrame implements Localized, EventListener<Progress
 	ActionListener aclAreaVisibility = new ActionListener() {
 		@Override
 		public void actionPerformed( ActionEvent e ) {
-			if( e.getActionCommand().equals( "showAll" )) {
+			if( e.getActionCommand().equals( "showAll" ) ) {
 				mnuDelayArea.setSelected( true );
 				mnuStairArea.setSelected( true );
 				mnuEvacuationArea.setSelected( true );
 				mnuInaccessibleArea.setSelected( true );
 				mnuSaveArea.setSelected( true );
 				mnuAssignmentArea.setSelected( true );
-			} else if( e.getActionCommand().equals( "hideAll" )) {
+			} else if( e.getActionCommand().equals( "hideAll" ) ) {
 				mnuDelayArea.setSelected( false );
 				mnuStairArea.setSelected( false );
 				mnuEvacuationArea.setSelected( false );
@@ -1117,7 +1109,7 @@ public class JEditor extends JFrame implements Localized, EventListener<Progress
 		@Override
 		public void actionPerformed( ActionEvent e ) {
 			//if( distribution == null ) {
-				distribution = new JAssignment( JEditor.this, getProject(), loc.getString( "gui.editor.assignment.JAssignment.Title" ), 850, 400 );
+			distribution = new JAssignment( JEditor.this, getProject(), loc.getString( "gui.editor.assignment.JAssignment.Title" ), 850, 400 );
 			//}
 			distribution.setVisible( true );
 			distribution.dispose();
@@ -1126,95 +1118,94 @@ public class JEditor extends JFrame implements Localized, EventListener<Progress
 	ActionListener aclExecute = new ActionListener() {
 		@Override
 		public void actionPerformed( ActionEvent e ) {
-			if( e.getActionCommand().equals( "startSimulation" )) {
-				simulateCA ();
-			} else if( e.getActionCommand().equals( "stepByStepSimulation"  )) {
+			if( e.getActionCommand().equals( "startSimulation" ) )
+				simulateCA();
+			else if( e.getActionCommand().equals( "stepByStepSimulation" ) ) {
 				stepByStepSimulation();
-				if( tabPane.getSelectedIndex() != CA_FLOOR ) {
+				if( tabPane.getSelectedIndex() != CA_FLOOR )
 					tabPane.setSelectedIndex( CA_FLOOR );
-				}
-			} else if( e.getActionCommand().equals( "visualization"  )) {
+			} else if( e.getActionCommand().equals( "visualization" ) ) {
 				quickVisualization();
-				if( tabPane.getSelectedIndex() != CA_FLOOR ) {
+				if( tabPane.getSelectedIndex() != CA_FLOOR )
 					tabPane.setSelectedIndex( CA_FLOOR );
-				}
-			} else if( e.getActionCommand().equals( "QT"  )) {
+			} else if( e.getActionCommand().equals( "QT" ) )
 				//createGraph();	// nf wird gesetzt
 				quickestTransshipment();
-			} else if( e.getActionCommand().equals( "MFOTMC"  )) {
+			else if( e.getActionCommand().equals( "MFOTMC" ) )
 				maxFlowOverTimeMinCost();
-			} else if( e.getActionCommand().equals( "MFOTTEN"  )) {
+			else if( e.getActionCommand().equals( "MFOTTEN" ) )
 				maxFlowOverTimeTimeExpanded();
-			} else if( e.getActionCommand().equals( "EAT"  )) {
+			else if( e.getActionCommand().equals( "EAT" ) )
 				earliestArrivalTransshipment();
-			} else {
+			else
 				sendError( loc.getString( "gui.UnknownCommand" ) + " '" + e.getActionCommand() + "'. " + loc.getString( "gui.ContactDeveloper" ) );
+		}
+
+		private void earliestArrivalTransshipment() {
+			try {
+				Batch res = new Batch();
+				res.addEntry( "EA Transshipment with SSSP", currentProject, 1, GraphAlgorithm.EarliestArrivalTransshipmentSuccessiveShortestPaths, CellularAutomatonAlgorithm.Swap );
+				res.getEntries().get( 0 ).setUseCa( false );
+				setBatchResult( res.execute( false ) );
+				tabPane.setSelectedIndex( VISUALIZATION );
+			} catch( Exception ex ) {
+				JEditor.sendError( ex.getLocalizedMessage() );
 			}
 		}
 
-		private void earliestArrivalTransshipment () {
+		private void maxFlowOverTimeMinCost() {
 			try {
-				Batch res = new Batch ();
-				res.addEntry ("EA Transshipment with SSSP", currentProject, 1, GraphAlgorithm.EarliestArrivalTransshipmentSuccessiveShortestPaths, CellularAutomatonAlgorithm.Swap);
-				res.getEntries ().get (0).setUseCa (false);
-				setBatchResult (res.execute (false));
-				tabPane.setSelectedIndex (VISUALIZATION);
-			} catch (Exception ex) {
-				JEditor.sendError (ex.getLocalizedMessage ());
+				Batch res = new Batch();
+				res.addEntry( "MaxFlow", currentProject, 1, GraphAlgorithm.MaxFlowOverTimeMinCost, CellularAutomatonAlgorithm.Swap );
+				res.getEntries().get( 0 ).setUseCa( false );
+				setBatchResult( res.execute( false ) );
+				tabPane.setSelectedIndex( VISUALIZATION );
+			} catch( Exception ex ) {
+				JEditor.sendError( ex.getLocalizedMessage() );
 			}
 		}
 
-		private void maxFlowOverTimeMinCost () {
+		private void maxFlowOverTimeTimeExpanded() {
 			try {
-				Batch res = new Batch ();
-				res.addEntry ("MaxFlow", currentProject, 1, GraphAlgorithm.MaxFlowOverTimeMinCost, CellularAutomatonAlgorithm.Swap);
-				res.getEntries ().get (0).setUseCa (false);
-				setBatchResult (res.execute (false));
-				tabPane.setSelectedIndex (VISUALIZATION);
-			} catch (Exception ex) {
-				JEditor.sendError (ex.getLocalizedMessage ());
+				Batch res = new Batch();
+				res.addEntry( "MaxFlow", currentProject, 1, GraphAlgorithm.MaxFlowOverTimeTimeExpanded, CellularAutomatonAlgorithm.Swap );
+				res.getEntries().get( 0 ).setUseCa( false );
+				setBatchResult( res.execute( false ) );
+				tabPane.setSelectedIndex( VISUALIZATION );
+			} catch( Exception ex ) {
+				JEditor.sendError( ex.getLocalizedMessage() );
 			}
 		}
 
-		private void maxFlowOverTimeTimeExpanded () {
+		private void quickestTransshipment() {
 			try {
-				Batch res = new Batch ();
-				res.addEntry ("MaxFlow", currentProject, 1, GraphAlgorithm.MaxFlowOverTimeTimeExpanded, CellularAutomatonAlgorithm.Swap);
-				res.getEntries ().get (0).setUseCa (false);
-				setBatchResult (res.execute (false));
-				tabPane.setSelectedIndex (VISUALIZATION);
-			} catch (Exception ex) {
-				JEditor.sendError (ex.getLocalizedMessage ());
+				Batch res = new Batch();
+				res.addEntry( "Quickest Transshipment", currentProject, 1, GraphAlgorithm.QuickestTransshipment, CellularAutomatonAlgorithm.Swap );
+				res.getEntries().get( 0 ).setUseCa( false );
+				setBatchResult( res.execute( false ) );
+				tabPane.setSelectedIndex( VISUALIZATION );
+			} catch( Exception ex ) {
+				JEditor.sendError( ex.getLocalizedMessage() );
 			}
 		}
 
-		private void quickestTransshipment () {
+		private void simulateCA() {
 			try {
-				Batch res = new Batch ();
-				res.addEntry ("Quickest Transshipment", currentProject, 1, GraphAlgorithm.QuickestTransshipment, CellularAutomatonAlgorithm.Swap);
-				res.getEntries ().get (0).setUseCa (false);
-				setBatchResult (res.execute (false));
-				tabPane.setSelectedIndex (VISUALIZATION);
-			} catch (Exception ex) {
-				JEditor.sendError (ex.getLocalizedMessage ());
-			}
-		}
-
-		private void simulateCA () {
-			try {
-				Batch res = new Batch ();
-				res.addEntry ("CA", currentProject, 1, GraphAlgorithm.EarliestArrivalTransshipmentSuccessiveShortestPaths, CellularAutomatonAlgorithm.Swap);
-				res.getEntries().get (0).setUseGraph (false);
-				setBatchResult (res.execute (false));
-				tabPane.setSelectedIndex (VISUALIZATION);
-			} catch (Exception ex) {
-				JEditor.sendError (ex.getLocalizedMessage ());
+				Batch res = new Batch();
+				res.addEntry( "CA", currentProject, 1, GraphAlgorithm.EarliestArrivalTransshipmentSuccessiveShortestPaths, CellularAutomatonAlgorithm.Swap );
+				res.getEntries().get( 0 ).setUseGraph( false );
+				setBatchResult( res.execute( false ) );
+				tabPane.setSelectedIndex( VISUALIZATION );
+			} catch( Exception ex ) {
+				JEditor.sendError( ex.getLocalizedMessage() );
 			}
 		}
 	};
 	ActionListener aclFile = new ActionListener() {
 		private JFileChooser jfcProject;
 		private JFileChooser jfcResults;
+
+
 		{
 			jfcProject = new JFileChooser( GUIOptionManager.getSavePath() );
 			jfcProject.setFileFilter( JEditor.getProjectFilter() );
@@ -1227,7 +1218,7 @@ public class JEditor extends JFrame implements Localized, EventListener<Progress
 
 		@Override
 		public void actionPerformed( ActionEvent e ) {
-			if( e.getActionCommand().equals( "loadProject"  )) {
+			if( e.getActionCommand().equals( "loadProject" ) ) {
 				if( jfcProject.showOpenDialog( JEditor.getInstance() ) == JFileChooser.APPROVE_OPTION ) {
 					loadProjectFile( jfcProject.getSelectedFile() );
 					GUIOptionManager.setSavePath( jfcProject.getCurrentDirectory().getPath() );
@@ -1241,7 +1232,7 @@ public class JEditor extends JFrame implements Localized, EventListener<Progress
 						createBackup( jfcProject.getSelectedFile() );
 					try {
 						File target = jfcProject.getSelectedFile();
-						if( !target.getName().endsWith( ".zet"  ) )
+						if( !target.getName().endsWith( ".zet" ) )
 							target = new File( target.getAbsolutePath() + ".zet" );
 						getProject().save( target );
 					} catch( java.lang.StackOverflowError soe ) {
@@ -1252,10 +1243,9 @@ public class JEditor extends JFrame implements Localized, EventListener<Progress
 					editView.displayProject( getProject() );
 					sendMessage( loc.getString( "gui.editor.JEditor.message.saved" ) );
 				}
-			} else if( e.getActionCommand().equals( "saveProject"  )) {
-				if( createCopy == true ) {
+			} else if( e.getActionCommand().equals( "saveProject" ) ) {
+				if( createCopy == true )
 					createBackup();
-				}
 				try {
 					getProject().save();
 				} catch( java.lang.StackOverflowError soe ) {
@@ -1266,14 +1256,14 @@ public class JEditor extends JFrame implements Localized, EventListener<Progress
 					return;
 				}
 				sendMessage( loc.getString( "gui.editor.JEditor.message.saved" ) );
-			} else if( e.getActionCommand().equals( "newProject"  )) {
+			} else if( e.getActionCommand().equals( "newProject" ) ) {
 				String status = "";
 				switch( JOptionPane.showOptionDialog( JEditor.getInstance(),
 								loc.getString( "gui.editor.JEditor.SaveQuestion" ),
 								loc.getString( "gui.editor.JEditor.NewProject" ),
 								JOptionPane.YES_NO_CANCEL_OPTION,
 								JOptionPane.QUESTION_MESSAGE,
-								null, null, null)) {
+								null, null, null ) ) {
 					case 2:
 					case -1:
 						return;	// exit, do nothing
@@ -1281,9 +1271,8 @@ public class JEditor extends JFrame implements Localized, EventListener<Progress
 						// save
 						if( getProject().getProjectFile() == null ) {
 							if( jfcProject.showSaveDialog( JEditor.getInstance() ) == JFileChooser.APPROVE_OPTION ) {
-								if( createCopy ) {
+								if( createCopy )
 									createBackup();
-								}
 								try {
 									getProject().save( jfcProject.getSelectedFile() );
 								} catch( java.lang.StackOverflowError soe ) {
@@ -1295,13 +1284,12 @@ public class JEditor extends JFrame implements Localized, EventListener<Progress
 								}
 							}
 						} else {
-							if( createCopy ) {
+							if( createCopy )
 								createBackup();
-							}
 							try {
 								getProject().save();
 							} catch( java.lang.StackOverflowError soe ) {
-									showErrorMessage( loc.getString( "gui.editor.JEditor.error.stackOverflowTitle" ), loc.getString( "gui.editor.JEditor.error.stackOverflow" ) );
+								showErrorMessage( loc.getString( "gui.editor.JEditor.error.stackOverflowTitle" ), loc.getString( "gui.editor.JEditor.error.stackOverflow" ) );
 							} catch( Exception ex ) {
 								showErrorMessage( loc.getString( "gui.editor.JEditor.error.SaveTitle" ), loc.getString( "gui.editor.JEditor.error.Save" ) );
 								ex.printStackTrace();
@@ -1315,77 +1303,74 @@ public class JEditor extends JFrame implements Localized, EventListener<Progress
 				}
 				currentProject = EditorStart.newProject();
 				distribution = null; // Throw away the old assignment window
-				editView.displayProject( currentProject  );
+				editView.displayProject( currentProject );
 				sendMessage( status );
-			} else if( e.getActionCommand().equals( "loadBatchResult"  )) {
+			} else if( e.getActionCommand().equals( "loadBatchResult" ) ) {
 				if( jfcResults.showOpenDialog( JEditor.getInstance() ) == JFileChooser.APPROVE_OPTION ) {
 					GUIOptionManager.setSavePathResults( jfcProject.getCurrentDirectory().getPath() );
 					try {
-						setBatchResult (BatchResult.load( (jfcResults.getSelectedFile()) ));
+						setBatchResult( BatchResult.load( (jfcResults.getSelectedFile()) ) );
 						sendMessage( loc.getString( "gui.editor.JEditor.message.loaded" ) );
 					} catch( Exception ex ) {
 						showErrorMessage( loc.getString( "gui.editor.JEditor.error.SaveTitle" ), loc.getString( "gui.editor.JEditor.error.Save" ) );
 						ex.printStackTrace();
 					}
 				}
-			} else if (e.getActionCommand ().equals ("saveResultAs")) {
-				if (jfcResults.showSaveDialog (JEditor.this) == JFileChooser.APPROVE_OPTION) {
+			} else if( e.getActionCommand().equals( "saveResultAs" ) ) {
+				if( jfcResults.showSaveDialog( JEditor.this ) == JFileChooser.APPROVE_OPTION ) {
 					GUIOptionManager.setSavePathResults( jfcProject.getCurrentDirectory().getPath() );
 					try {
-						File target = jfcResults.getSelectedFile ();
-						if (!target.getName ().endsWith(".ers")) {
-							target = new File (target.getAbsolutePath () + ".ers");
-						}
-						result.save (target);
-					} catch (java.lang.StackOverflowError soe) {
+						File target = jfcResults.getSelectedFile();
+						if( !target.getName().endsWith( ".ers" ) )
+							target = new File( target.getAbsolutePath() + ".ers" );
+						result.save( target );
+					} catch( java.lang.StackOverflowError soe ) {
 						showErrorMessage( loc.getString( "gui.editor.JEditor.error.stackOverflowTitle" ), loc.getString( "gui.editor.JEditor.error.stackOverflow" ) );
-					} catch (Exception ex) {
+					} catch( Exception ex ) {
 						showErrorMessage( loc.getString( "gui.editor.JEditor.error.SaveTitle" ), loc.getString( "gui.editor.JEditor.error.Save" ) );
 						ex.printStackTrace();
 					}
-					sendMessage ( loc.getString( "gui.editor.JEditor.message.saved" ) );
+					sendMessage( loc.getString( "gui.editor.JEditor.message.saved" ) );
 				}
 			} else if( e.getActionCommand().equals( "saveAsDXF" ) ) {
 				String filename = getProject().getProjectFile().getPath().substring( 0, getProject().getProjectFile().getPath().length() - 3 ) + "dxf";
 				try {
 					DXFWriter.exportIntoDXF( filename, currentProject.getPlan() );
-				} catch( IOException ex) {
+				} catch( IOException ex ) {
 					showErrorMessage( loc.getString( "gui.editor.JEditor.error.SaveTitle" ), loc.getString( "gui.editor.JEditor.error.Save" ) );
 					ex.printStackTrace();
 					return;
 				}
 				sendMessage( loc.getString( "gui.editor.JEditor.message.dxfComplete" ) );
-			} else {
+			} else
 				sendError( loc.getString( "gui.UnknownCommand" ) + " '" + e.getActionCommand() + "'. " + loc.getString( "gui.ContactDeveloper" ) );
-			}
 		}
 	};
 	ActionListener aclFloor = new ActionListener() {
 		@Override
 		public void actionPerformed( ActionEvent e ) {
 			try {
-				if( e.getActionCommand().equals( "new"  )) {
+				if( e.getActionCommand().equals( "new" ) ) {
 					getProject().getPlan().addFloor( new Floor( loc.getString( "ds.z.DefaultName.Floor" ) + " " + getProject().getPlan().floorCount() ) );
 					sendMessage( "Neue Etage angelegt." ); // TODO loc
-				} else if( e.getActionCommand().equals( "up"  )) {
-					getProject().getPlan().moveFloorUp (editView.getCurrentFloor ());
-				} else if( e.getActionCommand().equals( "down"  )) {
-					getProject().getPlan().moveFloorDown (editView.getCurrentFloor ());
-				} else if( e.getActionCommand().equals( "delete"  )) {
-					getProject().getPlan().removeFloor(editView.getCurrentFloor ());
-				} else if( e.getActionCommand().equals( "import"  )) {
+				} else if( e.getActionCommand().equals( "up" ) )
+					getProject().getPlan().moveFloorUp( editView.getCurrentFloor() );
+				else if( e.getActionCommand().equals( "down" ) )
+					getProject().getPlan().moveFloorDown( editView.getCurrentFloor() );
+				else if( e.getActionCommand().equals( "delete" ) )
+					getProject().getPlan().removeFloor( editView.getCurrentFloor() );
+				else if( e.getActionCommand().equals( "import" ) ) {
 					FloorImportDialog floorImport = new FloorImportDialog( JEditor.this, getProject(), "Importieren", 450, 250 );
 					floorImport.setVisible( true );
-				} else {
+				} else
 					sendError( loc.getString( "gui.UnknownCommand" ) + " '" + e.getActionCommand() + "'. " + loc.getString( "gui.ContactDeveloper" ) );
-				}
-			} catch (IllegalArgumentException ex) {
-				sendError (ex.getLocalizedMessage ());
+			} catch( IllegalArgumentException ex ) {
+				sendError( ex.getLocalizedMessage() );
 			} catch( Exception ex ) {
 				JOptionPane.showMessageDialog( JEditor.getInstance(),
 								ex.getLocalizedMessage(), loc.getString( "gui.Error" ),
 								JOptionPane.ERROR_MESSAGE );
-				ex.printStackTrace ();
+				ex.printStackTrace();
 			}
 		}
 	};
@@ -1393,13 +1378,12 @@ public class JEditor extends JFrame implements Localized, EventListener<Progress
 		@Override
 		public void actionPerformed( ActionEvent e ) {
 			try {
-				if( e.getActionCommand().equals( "german"  )) {
+				if( e.getActionCommand().equals( "german" ) )
 					loc.setLocale( Locale.GERMAN );
-				} else if( e.getActionCommand().equals( "english"  )) {
+				else if( e.getActionCommand().equals( "english" ) )
 					loc.setLocale( Locale.ENGLISH );
-				} else {
+				else
 					sendError( loc.getString( "gui.UnknownCommand" ) + " '" + e.getActionCommand() + "'. " + loc.getString( "gui.ContactDeveloper" ) );
-				}
 				localize();
 			} catch( Exception ex ) {
 				JOptionPane.showMessageDialog( JEditor.getInstance(),
@@ -1412,26 +1396,25 @@ public class JEditor extends JFrame implements Localized, EventListener<Progress
 		@Override
 		public void actionPerformed( ActionEvent e ) {
 			try {
-				if( e.getActionCommand().equals( "grid"  )) {
+				if( e.getActionCommand().equals( "grid" ) )
 					editView.getFloor().setRasterizedPaintMode( mnuPaintRasterized.isSelected() );
-				} else if( e.getActionCommand().equals( "defaultFloor"  )) {
+				else if( e.getActionCommand().equals( "defaultFloor" ) ) {
 					PropertyContainer.getInstance().set( "editor.options.view.hideDefaultFloor", mnuHideDefaultFloor.isSelected() );
 					editView.displayProject();
-				} else if( e.getActionCommand().equals( "gridLine"  )) {
+				} else if( e.getActionCommand().equals( "gridLine" ) ) {
 					mnuGridPoints.setSelected( false );
 					mnuGridNotVisible.setSelected( false );
 					editView.getFloor().setRasterPaintStyle( RasterPaintStyle.Lines );
-				} else if( e.getActionCommand().equals( "gridPoint"  )) {
+				} else if( e.getActionCommand().equals( "gridPoint" ) ) {
 					mnuGridLines.setSelected( false );
 					mnuGridNotVisible.setSelected( false );
 					editView.getFloor().setRasterPaintStyle( RasterPaintStyle.Points );
-				} else if( e.getActionCommand().equals( "gridNo"  )) {
+				} else if( e.getActionCommand().equals( "gridNo" ) ) {
 					mnuGridLines.setSelected( false );
 					mnuGridPoints.setSelected( false );
 					editView.getFloor().setRasterPaintStyle( RasterPaintStyle.Nothing );
-				} else {
+				} else
 					sendError( loc.getString( "gui.UnknownCommand" ) + " '" + e.getActionCommand() + "'. " + loc.getString( "gui.ContactDeveloper" ) );
-				}
 			} catch( Exception ex ) {
 				JOptionPane.showMessageDialog( JEditor.getInstance(),
 								ex.getLocalizedMessage(), loc.getString( "gui.Error" ),
@@ -1443,7 +1426,7 @@ public class JEditor extends JFrame implements Localized, EventListener<Progress
 		@Override
 		public void actionPerformed( ActionEvent e ) {
 			try {
-				if( e.getActionCommand().equals( "load"  )) {
+				if( e.getActionCommand().equals( "load" ) ) {
 					JFileChooser d = new JFileChooser( GUIOptionManager.getBuildingPlanPath() );
 					d.setFileFilter( new FileFilter() {
 						@Override
@@ -1470,7 +1453,7 @@ public class JEditor extends JFrame implements Localized, EventListener<Progress
 						// Show Zoom/Size Dialogue
 						JPlanImageProperties ip = new JPlanImageProperties( image );
 						if( ip.showPlanImageZoomDialog( JEditor.getInstance() ) == JPlanImageProperties.OK ) {
-							CoordinateTools.setPictureZoomFactor( (double) ip.getMillimeterCount() / (double) ip.getPixelCount() );
+							CoordinateTools.setPictureZoomFactor( (double)ip.getMillimeterCount() / (double)ip.getPixelCount() );
 							editView.getFloor().getPlanImage().setImage( image );
 							mnuPlanImageHide.setEnabled( true );
 							mnuPlanImageResize.setEnabled( true );
@@ -1479,21 +1462,21 @@ public class JEditor extends JFrame implements Localized, EventListener<Progress
 							sendMessage( "Plan für Hintergrunddarstellung geladen." );
 						}
 					}
-				} else if( e.getActionCommand().equals( "hide"  )) {
-					editView.getFloor().getPlanImage().setImage( (BufferedImage) null );
+				} else if( e.getActionCommand().equals( "hide" ) ) {
+					editView.getFloor().getPlanImage().setImage( (BufferedImage)null );
 					mnuPlanImageHide.setEnabled( false );
 					mnuPlanImageResize.setEnabled( false );
 					mnuPlanImageLocate.setEnabled( false );
 					mnuPlanImageTransparency.setEnabled( false );
-				} else if( e.getActionCommand().equals( "resize"  )) {
+				} else if( e.getActionCommand().equals( "resize" ) ) {
 					BufferedImage image = editView.getFloor().getPlanImage().getImage();
 					// Show Zoom/Size Dialogue
 					JPlanImageProperties ip = new JPlanImageProperties( image );
 					if( ip.showPlanImageZoomDialog( JEditor.getInstance() ) == JPlanImageProperties.OK ) {
-						CoordinateTools.setPictureZoomFactor( (double) ip.getMillimeterCount() / (double) ip.getPixelCount() );
+						CoordinateTools.setPictureZoomFactor( (double)ip.getMillimeterCount() / (double)ip.getPixelCount() );
 						editView.getFloor().getPlanImage().resize();
 					}
-				} else if( e.getActionCommand().equals( "move"  )) {
+				} else if( e.getActionCommand().equals( "move" ) ) {
 					JPlanImageProperties ip = new JPlanImageProperties();
 					ip.setXOffset( editView.getFloor().getPlanImage().getImageX() );
 					ip.setYOffset( editView.getFloor().getPlanImage().getImageY() );
@@ -1501,15 +1484,13 @@ public class JEditor extends JFrame implements Localized, EventListener<Progress
 						editView.getFloor().getPlanImage().setImageX( ip.getXOffset() );
 						editView.getFloor().getPlanImage().setImageY( ip.getYOffset() );
 					}
-				} else if( e.getActionCommand().equals( "transparency"  )) {
+				} else if( e.getActionCommand().equals( "transparency" ) ) {
 					JPlanImageProperties ip = new JPlanImageProperties();
 					ip.setAlpha( editView.getFloor().getPlanImage().getAlpha() );
-					if( ip.showPlanAlphaDialog( JEditor.getInstance() ) == JPlanImageProperties.OK ) {
+					if( ip.showPlanAlphaDialog( JEditor.getInstance() ) == JPlanImageProperties.OK )
 						editView.getFloor().getPlanImage().setAlpha( ip.getAlpha() );
-					}
-				} else {
+				} else
 					sendError( loc.getString( "gui.UnknownCommand" ) + " '" + e.getActionCommand() + "'. " + loc.getString( "gui.ContactDeveloper" ) );
-				}
 
 			} catch( Exception ex ) {
 				JOptionPane.showMessageDialog( JEditor.getInstance(),
@@ -1520,9 +1501,9 @@ public class JEditor extends JFrame implements Localized, EventListener<Progress
 	};
 	ActionListener aclPlay = new ActionListener() {
 		public void actionPerformed( ActionEvent e ) {
-			if( e.getActionCommand().equals( "start" ) ) {
+			if( e.getActionCommand().equals( "start" ) )
 				JEditor.sendError( "Not supported yet" );
-			} else if( e.getActionCommand().equals( "play" ) ) {
+			else if( e.getActionCommand().equals( "play" ) )
 				if( visualizationView.getGLContainer().isAnimating() ) {
 					btnPlay.setIcon( playIcon );
 					btnPlay.setSelected( false );
@@ -1532,22 +1513,21 @@ public class JEditor extends JFrame implements Localized, EventListener<Progress
 					btnPlay.setSelected( true );
 					visualizationView.getGLContainer().startAnimation();
 				}
-			} else if( e.getActionCommand().equals( "end" ) ) {
+			else if( e.getActionCommand().equals( "end" ) )
 				JEditor.sendError( "Not supported yet" );
-			} else {
+			else
 				JEditor.sendError( loc.getString( "gui.UnknownCommand" ) + " '" + e.getActionCommand() + "'. " + loc.getString( "gui.ContactDeveloper" ) );
-			}
 		}
 	};
 	ActionListener aclProperties = new ActionListener() {
 		@Override
 		public void actionPerformed( ActionEvent e ) {
-			if( e.getActionCommand().equals( "properties"  )) {
+			if( e.getActionCommand().equals( "properties" ) ) {
 				JPropertySelectorWindow propertySelector = new JPropertySelectorWindow( JEditor.this, loc.getString( "gui.editor.JPropertySelector.Title" ), 700, 500 );
 				propertySelector.setVisible( true );
 				System.out.println( "Properties saved." ); // TODO loc
 				System.out.println( PropertyContainer.getInstance().getAsInt( "converter.Imbalance" ) );
-			} else if( e.getActionCommand().equals( "options"  )) {
+			} else if( e.getActionCommand().equals( "options" ) ) {
 				EditorStart.ptmOptions.getRoot().reloadFromPropertyContainer();
 				JOptionsWindow propertySelector = new JOptionsWindow( JEditor.this, loc.getString( "gui.editor.JOptions.Title" ), 700, 500, EditorStart.ptmOptions );
 				propertySelector.setVisible( true );
@@ -1556,9 +1536,8 @@ public class JEditor extends JFrame implements Localized, EventListener<Progress
 				} catch( IOException ex ) {
 					sendError( "Error saving config file!" ); // TODO loc
 				}
-			} else {
+			} else
 				sendError( loc.getString( "gui.UnknownCommand" ) + " '" + e.getActionCommand() + "'. " + loc.getString( "gui.ContactDeveloper" ) );
-			}
 		}
 	};
 	ActionListener aclScreenshot = new ActionListener() {
@@ -1566,7 +1545,7 @@ public class JEditor extends JFrame implements Localized, EventListener<Progress
 		public void actionPerformed( ActionEvent e ) {
 			if( e.getActionCommand().equals( "screenshot" ) ) {
 				String path = PropertyContainer.getInstance().getAsString( "options.filehandling.screenshotPath" );
-				if( !(path.endsWith( "/" ) || path.endsWith( "\\" ) ) )
+				if( !(path.endsWith( "/" ) || path.endsWith( "\\" )) )
 					path = path + "/";
 				String projectName;
 				try {
@@ -1583,7 +1562,7 @@ public class JEditor extends JFrame implements Localized, EventListener<Progress
 				vo.setResolution( visualizationView.getGLContainer().getSize() );
 				vo.setBitrate( 1000 );
 				vo.setFramerate( 24 );
-				vo.setVisible(  true );
+				vo.setVisible( true );
 				vo.dispose();
 				if( vo.getRetVal() == VideoOptions.OK ) {
 					String movieFrameName = PropertyContainer.getInstance().getAsString( "options.filehandling.movieFrameName" );
@@ -1594,7 +1573,7 @@ public class JEditor extends JFrame implements Localized, EventListener<Progress
 					else
 						movieCreator.setFramename( movieFrameName );
 					String path = PropertyContainer.getInstance().getAsString( "options.filehandling.moviePath" );
-					if( !(path.endsWith( "/" ) || path.endsWith( "\\" ) ) )
+					if( !(path.endsWith( "/" ) || path.endsWith( "\\" )) )
 						path = path + "/";
 					String movieFileName = IOTools.getNextFreeNumberedFilename( path, projectName, 3 );
 					movieCreator.setFilename( movieFileName );
@@ -1613,16 +1592,15 @@ public class JEditor extends JFrame implements Localized, EventListener<Progress
 					movieCreator.setFrameFormat( vo.getFrameFormat() );
 					visualizationView.getGLContainer().startAnimation();
 				}
-			} else {
+			} else
 				sendError( loc.getString( "gui.UnknownCommand" ) + " '" + e.getActionCommand() + "'. " + loc.getString( "gui.ContactDeveloper" ) );
-			}
 		}
 	};
 	ActionListener aclStart = new ActionListener() {
 		@Override
 		public void actionPerformed( ActionEvent e ) {
 			try {
-				if( e.getActionCommand().equals( "rasterize"  )) {
+				if( e.getActionCommand().equals( "rasterize" ) )
 					try {
 						RasterizeTask rasterize = new RasterizeTask( getProject() );
 						JProgressBarDialog pbd = new JRasterizeProgressBarDialog( JEditor.getInstance(), "Rastern", true, rasterize );
@@ -1630,27 +1608,25 @@ public class JEditor extends JFrame implements Localized, EventListener<Progress
 						pbd.setVisible( true );
 						sendMessage( loc.getString( "gui.message.RasterizationComplete" ) );
 					} catch( Exception ex ) {
-						sendError( ex.getLocalizedMessage () );
+						sendError( ex.getLocalizedMessage() );
 					}
-				} else if (e.getActionCommand().equals( "distributeEvacuees" )) {
+				else if( e.getActionCommand().equals( "distributeEvacuees" ) )
 					try {
-						String res = JOptionPane.showInputDialog (JEditor.this, 
-								"Anzahl zu evakuierender Personen (maximal " +
-								Integer.toString (getProject ().getPlan ().maximalEvacuees ())
-								+ ")", "Personen verteilen", JOptionPane.QUESTION_MESSAGE);
+						String res = JOptionPane.showInputDialog( JEditor.this,
+										"Anzahl zu evakuierender Personen (maximal " +
+										Integer.toString( getProject().getPlan().maximalEvacuees() ) + ")", "Personen verteilen", JOptionPane.QUESTION_MESSAGE );
 
-						if (res != null) {
-							getProject ().getPlan ().distributeEvacuees (Integer.parseInt (res));
+						if( res != null ) {
+							getProject().getPlan().distributeEvacuees( Integer.parseInt( res ) );
 							sendMessage( loc.getString( "gui.message.RasterizationComplete" ) );
 						}
-					} catch (NumberFormatException ex) {
-						sendError ( loc.getString ( "gui.error.NonParsableNumber" ));
+					} catch( NumberFormatException ex ) {
+						sendError( loc.getString( "gui.error.NonParsableNumber" ) );
 					} catch( TooManyPeopleException ex ) {
-						sendError( ex.getLocalizedMessage () );
+						sendError( ex.getLocalizedMessage() );
 					}
-				} else {
+				else
 					sendError( loc.getString( "gui.UnknownCommand" ) + " '" + e.getActionCommand() + "'. " + loc.getString( "gui.ContactDeveloper" ) );
-				}
 			} catch( Exception ex ) {
 				JOptionPane.showMessageDialog( JEditor.getInstance(),
 								ex.getLocalizedMessage(), loc.getString( "gui.Error" ),
@@ -1679,11 +1655,10 @@ public class JEditor extends JFrame implements Localized, EventListener<Progress
 			} else if( e.getActionCommand().equals( "floors" ) ) {
 				visualizationView.enableFloorSelector( btnShowAllFloors.isSelected() );
 				btnShowAllFloors.setSelected( !btnShowAllFloors.isSelected() );
-				if( btnShowAllFloors.isSelected() ) {
+				if( btnShowAllFloors.isSelected() )
 					control.showAllFloors();
-				} else {
+				else
 					control.showFloor( visualizationView.getSelectedFloorID() );
-				}
 				visualizationView.getGLContainer().repaint();
 			} else if( e.getActionCommand().equals( "potential" ) ) {
 				if( btnShowPotential.isSelected() ) {
@@ -1722,7 +1697,7 @@ public class JEditor extends JFrame implements Localized, EventListener<Progress
 					btnShowPotential.setSelected( false );
 					btnShowWaiting.setSelected( false );
 					visualizationView.unselectPotentialSelector();
-					control.showPotential( CellInformationDisplay.UTILIZATION  );
+					control.showPotential( CellInformationDisplay.UTILIZATION );
 				}
 				visualizationView.getGLContainer().repaint();
 			} else if( e.getActionCommand().equals( "waiting" ) ) {
@@ -1735,12 +1710,11 @@ public class JEditor extends JFrame implements Localized, EventListener<Progress
 					btnShowDynamicPotential.setSelected( false );
 					btnShowPotential.setSelected( false );
 					visualizationView.unselectPotentialSelector();
-					control.showPotential( CellInformationDisplay.WAITING  );
+					control.showPotential( CellInformationDisplay.WAITING );
 				}
 				visualizationView.getGLContainer().repaint();
-			} else {
+			} else
 				JEditor.sendError( loc.getString( "gui.UnknownCommand" ) + " '" + e.getActionCommand() + "'. " + loc.getString( "gui.ContactDeveloper" ) );
-			}
 		}
 	};
 	ActionListener aclVisualizationView = new ActionListener() {
@@ -1751,11 +1725,10 @@ public class JEditor extends JFrame implements Localized, EventListener<Progress
 				visualizationView.getGLContainer().toggleView();
 				visualizationView.getGLContainer().repaint();
 			} else if( e.getActionCommand().equals( "2dSwitch" ) ) {
-				if( visualizationView.getGLContainer().getPvm() == AbstractVisualization.ParallelViewMode.Orthogonal ) {
+				if( visualizationView.getGLContainer().getPvm() == AbstractVisualization.ParallelViewMode.Orthogonal )
 					visualizationView.getGLContainer().setPvm( AbstractVisualization.ParallelViewMode.Isometric );
-				} else {
+				else
 					visualizationView.getGLContainer().setPvm( AbstractVisualization.ParallelViewMode.Orthogonal );
-				}
 				visualizationView.getGLContainer().repaint();
 			}
 
@@ -1765,13 +1738,12 @@ public class JEditor extends JFrame implements Localized, EventListener<Progress
 		@Override
 		public void actionPerformed( ActionEvent e ) {
 			try {
-				if( e.getActionCommand().equals( "zoomIn"  )) {
+				if( e.getActionCommand().equals( "zoomIn" ) )
 					setZoomFactor( Math.min( 0.4, CoordinateTools.getZoomFactor() * 2 ) );
-				} else if( e.getActionCommand().equals( "zoomOut"  )) {
+				else if( e.getActionCommand().equals( "zoomOut" ) )
 					setZoomFactor( Math.max( 0.00004, CoordinateTools.getZoomFactor() / 2 ) );
-				} else {
+				else
 					sendError( loc.getString( "gui.UnknownCommand" ) + " '" + e.getActionCommand() + "'. " + loc.getString( "gui.ContactDeveloper" ) );
-				}
 			} catch( Exception ex ) {
 				JOptionPane.showMessageDialog( JEditor.getInstance(),
 								ex.getLocalizedMessage(), loc.getString( "gui.Error" ),
@@ -1792,17 +1764,16 @@ public class JEditor extends JFrame implements Localized, EventListener<Progress
 					firstSwitch = false;
 				}
 				switchTo( BATCH );
-			} else if( i == CA_FLOOR ) {
+			} else if( i == CA_FLOOR )
 				switchTo( CA_FLOOR );
-			} else if( i == VISUALIZATION ) {
+			else if( i == VISUALIZATION )
 				switchTo( VISUALIZATION );
-			} else if( i == STATISTIC ) {
+			else if( i == STATISTIC )
 				switchTo( STATISTIC );
-			} else if( i == GRAPH_STATISTIC ) {
+			else if( i == GRAPH_STATISTIC )
 				switchTo( GRAPH_STATISTIC );
-			} else {
+			else
 				sendError( "Unknown tab index:" + tabPane.getSelectedIndex() + ". " + loc.getString( "gui.ContactDeveloper" ) );
-			}
 //			switch( tabPane.getSelectedIndex() ) {
 //				case EDIT_FLOOR:	// edit view
 //					switchTo( EDIT_FLOOR );
@@ -1834,9 +1805,11 @@ public class JEditor extends JFrame implements Localized, EventListener<Progress
 		}
 	};
 	KeyListener kylZoom = new KeyListener() {
-		public void keyTyped( KeyEvent e ) { }
+		public void keyTyped( KeyEvent e ) {
+		}
 
-		public void keyPressed( KeyEvent e ) { }
+		public void keyPressed( KeyEvent e ) {
+		}
 
 		public void keyReleased( KeyEvent e ) {
 			if( e.getKeyCode() != KeyEvent.VK_ENTER )
@@ -1844,16 +1817,16 @@ public class JEditor extends JFrame implements Localized, EventListener<Progress
 			updateZoomFactor();
 		}
 	};
-	PopupMenuListener pmlEditMode = new PopupMenuListener () {
+	PopupMenuListener pmlEditMode = new PopupMenuListener() {
 		private EditMode lastEditMode = null;
-		
-		public void popupMenuWillBecomeVisible (PopupMenuEvent e) {
+
+		public void popupMenuWillBecomeVisible( PopupMenuEvent e ) {
 		}
 
-		public void popupMenuWillBecomeInvisible (PopupMenuEvent e) {
-			EditMode currentEditMode = (EditMode) editSelector.getSelectedItem ();
-			
-			
+		public void popupMenuWillBecomeInvisible( PopupMenuEvent e ) {
+			EditMode currentEditMode = (EditMode)editSelector.getSelectedItem();
+
+
 			// Einblenden der gewählten Area, falls ausgeblendet
 			switch( currentEditMode ) {
 				case AssignmentAreaCreation:
@@ -1884,17 +1857,17 @@ public class JEditor extends JFrame implements Localized, EventListener<Progress
 					break;
 			}
 			updateAreaVisiblity();
-			if( editView != null && lastEditMode == currentEditMode) {
+			if( editView != null && lastEditMode == currentEditMode ) {
 				editView.setEditMode( currentEditMode );
 				btnEditSelect.setSelected( false );
 				btnEditPointwise.setSelected( creationType == EditMode.Type.CREATION_POINTWISE );
 				btnEditRectangled.setSelected( creationType == EditMode.Type.CREATION_RECTANGLED );
-				
+
 			}
 			lastEditMode = currentEditMode;
 		}
 
-		public void popupMenuCanceled (PopupMenuEvent e) {
+		public void popupMenuCanceled( PopupMenuEvent e ) {
 		}
 	};
 
@@ -1903,16 +1876,14 @@ public class JEditor extends JFrame implements Localized, EventListener<Progress
 	 * Algorithm starter methods                                                 *
 	 *                                                                           *
 	 ****************************************************************************/
-	
 	/**
 	 * Loads the specified {@link File} into the editor and switches to the
 	 * edit tab.
 	 * @param projectFile the project file
 	 */
 	public void loadProjectFile( File projectFile ) {
-		if( tabPane.getSelectedIndex() > 1 ) {
+		if( tabPane.getSelectedIndex() > 1 )
 			tabPane.setSelectedIndex( 0 );
-		}
 		try {
 			Project loaded = Project.load( projectFile );
 			currentProject = loaded;
@@ -1928,14 +1899,14 @@ public class JEditor extends JFrame implements Localized, EventListener<Progress
 		} catch( Exception ex ) {
 			JOptionPane.showMessageDialog( null,
 							loc.getString( "gui.editor.JEditor.error.loadError" ),
-							loc.getString( "gui.editor.JEditor.error.loadErrorTitle" ), 
+							loc.getString( "gui.editor.JEditor.error.loadErrorTitle" ),
 							JOptionPane.ERROR_MESSAGE );
 			ex.printStackTrace();
 			editView.displayProject( EditorStart.newProject() );
 			sendMessage( loc.getString( "gui.editor.JEditor.message.loadError" ) );
 		}
 	}
-	
+
 	/**
 	 * Adds a {@link BatchProjectEntry} that can be loaded from a batch task file
 	 * into the batch view.
@@ -1945,12 +1916,12 @@ public class JEditor extends JFrame implements Localized, EventListener<Progress
 		batchView.add( batchProjectEntry );
 	}
 
-	private void buildVisualizationDataStructure (BatchResultEntry e, int nrOfCycle) {
-		CAVisualizationResults caRes = e.getCaVis () != null ? e.getCaVis ()[nrOfCycle] : null;
+	private void buildVisualizationDataStructure( BatchResultEntry e, int nrOfCycle ) {
+		CAVisualizationResults caRes = e.getCaVis() != null ? e.getCaVis()[nrOfCycle] : null;
 		CAStatistic caStatistic = e.getCaStatistics() != null ? e.getCaStatistics()[nrOfCycle] : null;
-		
-		GraphVisualizationResult graphRes = e.getGraphVis ();
-		
+
+		GraphVisualizationResult graphRes = e.getGraphVis();
+
 		VisualizationDataStructureTask visualizationDataStructure = new VisualizationDataStructureTask( caRes, graphRes, e.getBuildingResults(), caStatistic );
 		JProgressBarDialog pbd = new JProgressBarDialog( JEditor.getInstance(), "Visualisierungs Datenstruktur aufbauen", true, visualizationDataStructure );
 		pbd.executeTask();
@@ -1959,17 +1930,17 @@ public class JEditor extends JFrame implements Localized, EventListener<Progress
 		control = visualizationDataStructure.getControl();
 
 		visualizationView.getGLContainer().setControl( control );
-		
+
 		btnShowCellularAutomaton.setEnabled( control.hasCellularAutomaton() );
 		btnShowGraph.setEnabled( control.hasGraph() );
-		
+
 		control.showCellularAutomaton( btnShowCellularAutomaton.isSelected() );
 		control.showGraph( btnShowGraph.isSelected() );
 		control.showFloor( visualizationView.getSelectedFloorID() );
 		visualizationView.updateFloorSelector();
 		visualizationView.updatePotentialSelector();
 	}
-	
+
 	private boolean continueTask() {
 		if( JOptionPane.showOptionDialog( this,
 						"Es läuft ein Task. Soll der aktuelle Lauf abgebrochen werden und ein neuer gestartet werden?", //TODO loc
@@ -1982,28 +1953,25 @@ public class JEditor extends JFrame implements Localized, EventListener<Progress
 			worker.cancel( true );
 			caAlgo = null;
 			return false;
-		} else {
+		} else
 			return true;
-		}
 	}
 
 	private void quickVisualization() {
-		if (worker != null  && !worker.isDone () && continueTask ()) {
+		if( worker != null && !worker.isDone() && continueTask() )
 			return;
-		}
-		
+
 		try {
-			CellularAutomaton ca = ZToCAConverter.getInstance().convert( currentProject.getPlan()  );
-			for (AssignmentType at : currentProject.getCurrentAssignment().getAssignmentTypes()){
-				ca.setAssignmentType (at.getName(), at.getUid());
-			}
+			CellularAutomaton ca = ZToCAConverter.getInstance().convert( currentProject.getPlan() );
+			for( AssignmentType at : currentProject.getCurrentAssignment().getAssignmentTypes() )
+				ca.setAssignmentType( at.getName(), at.getUid() );
 			ZToCAConverter.applyConcreteAssignment(
-				currentProject.getCurrentAssignment().createConcreteAssignment( 400 ));
-			caAlgo = new CellularAutomatonInOrderExecution (ca);
-			caAlgo.setMaxTimeInSeconds (PropertyContainer.getInstance().getAsDouble( "algo.ca.maxTime" ));
+							currentProject.getCurrentAssignment().createConcreteAssignment( 400 ) );
+			caAlgo = new CellularAutomatonInOrderExecution( ca );
+			caAlgo.setMaxTimeInSeconds( PropertyContainer.getInstance().getAsDouble( "algo.ca.maxTime" ) );
 
 			caAlgo = new CARealTime( ca );
-			CARealTime caRealTime = (CARealTime) caAlgo;
+			CARealTime caRealTime = (CARealTime)caAlgo;
 			caRealTime.setStepTime( 550 );
 
 			worker = AlgorithmTask.getNewInstance();
@@ -2013,8 +1981,8 @@ public class JEditor extends JFrame implements Localized, EventListener<Progress
 			} catch( Exception ex ) {
 				printException( ex );
 			}
-		} catch (ZToCAConverter.ConversionNotSupportedException ex) {
-			JEditor.sendError (ex.getLocalizedMessage ());
+		} catch( ZToCAConverter.ConversionNotSupportedException ex ) {
+			JEditor.sendError( ex.getLocalizedMessage() );
 		}
 	}
 
@@ -2023,7 +1991,7 @@ public class JEditor extends JFrame implements Localized, EventListener<Progress
 	}
 
 	public static void createBackup( File file ) {
-		if( file != null && !file.getPath().equals( ""  )) {
+		if( file != null && !file.getPath().equals( "" ) ) {
 			String source = file.getPath();
 			String dest = source.substring( 0, source.length() - 3 ) + "bak";
 			try {
@@ -2035,13 +2003,11 @@ public class JEditor extends JFrame implements Localized, EventListener<Progress
 	}
 
 	public static void copyFile( File src, File dest, int bufSize, boolean force ) throws IOException {
-		if( dest.exists() ) {
-			if( force ) {
+		if( dest.exists() )
+			if( force )
 				dest.delete();
-			} else {
+			else
 				throw new IOException( "Cannot overwrite existing file: " + dest.getName() );
-			}
-		}
 		byte[] buffer = new byte[bufSize];
 		int read = 0;
 		InputStream in = null;
@@ -2051,27 +2017,24 @@ public class JEditor extends JFrame implements Localized, EventListener<Progress
 			out = new FileOutputStream( dest );
 			while( true ) {
 				read = in.read( buffer );
-				if( read == -1 ) {
+				if( read == -1 )
 					//-1 bedeutet EOF
 					break;
-				}
 				out.write( buffer, 0, read );
 			}
 		} finally {
 			// Sicherstellen, dass die Streams auch
 			// bei einem throw geschlossen werden.
 			// Falls in null ist, ist out auch null!
-			if( in != null ) {
+			if( in != null )
 				//Falls tatsächlich in.close() und out.close()
 				//Exceptions werfen, die jenige von 'out' geworfen wird.
 				try {
 					in.close();
 				} finally {
-					if( out != null ) {
+					if( out != null )
 						out.close();
-					}
 				}
-			}
 		}
 	}
 
@@ -2079,34 +2042,32 @@ public class JEditor extends JFrame implements Localized, EventListener<Progress
 	 * 
 	 * @param r
 	 */
-	public void setBatchResult (BatchResult r) {
-		if (result != null && JOptionPane.showConfirmDialog( this, "Alte Ergebnisse werden " +
-				"hiermit überschrieben. Wollen Sie fortfahren?", "Überschreiben",
-				JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE ) != JOptionPane.YES_OPTION ) {
+	public void setBatchResult( BatchResult r ) {
+		if( result != null && JOptionPane.showConfirmDialog( this, "Alte Ergebnisse werden " +
+						"hiermit überschrieben. Wollen Sie fortfahren?", "Überschreiben",
+						JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE ) != JOptionPane.YES_OPTION )
 			return;
-		}
-		
+
 		this.result = r;
-		
-		caStatisticView.setResult(result);
-		entryModelGraph.rebuild (result);
-		entryModelVis.rebuild (result);
-		
-		mnuFileSaveResultAs.setEnabled (result != null);
+
+		caStatisticView.setResult( result );
+		entryModelGraph.rebuild( result );
+		entryModelVis.rebuild( result );
+
+		mnuFileSaveResultAs.setEnabled( result != null );
 	}
+
 	private void stepByStepSimulation() {
-		if (worker != null  && !worker.isDone () && continueTask ()) {
+		if( worker != null && !worker.isDone() && continueTask() )
 			return;
-		}
-		
+
 		try {
-			CellularAutomaton ca = ZToCAConverter.getInstance().convert( currentProject.getPlan()  );
-			for (AssignmentType at : currentProject.getCurrentAssignment().getAssignmentTypes()){
-				ca.setAssignmentType (at.getName(), at.getUid());
-			}
+			CellularAutomaton ca = ZToCAConverter.getInstance().convert( currentProject.getPlan() );
+			for( AssignmentType at : currentProject.getCurrentAssignment().getAssignmentTypes() )
+				ca.setAssignmentType( at.getName(), at.getUid() );
 			ZToCAConverter.applyConcreteAssignment( currentProject.getCurrentAssignment().createConcreteAssignment( 400 ) );
-			caAlgo = new CellularAutomatonInOrderExecution (ca);
-			caAlgo.setMaxTimeInSeconds (PropertyContainer.getInstance().getAsDouble( "algo.ca.maxTime" ));
+			caAlgo = new CellularAutomatonInOrderExecution( ca );
+			caAlgo.setMaxTimeInSeconds( PropertyContainer.getInstance().getAsDouble( "algo.ca.maxTime" ) );
 
 			caAlgo = new CARealTime( ca );
 			caAlgo.setStepByStep( true );
@@ -2118,14 +2079,13 @@ public class JEditor extends JFrame implements Localized, EventListener<Progress
 			} catch( Exception ex ) {
 				printException( ex );
 			}
-		} catch (ZToCAConverter.ConversionNotSupportedException ex) {
-			JEditor.sendError (ex.getLocalizedMessage ());
+		} catch( ZToCAConverter.ConversionNotSupportedException ex ) {
+			JEditor.sendError( ex.getLocalizedMessage() );
 		}
 	}
-
 	PropertyChangeListener pclStepByStep = new PropertyChangeListener() {
 		public void propertyChange( PropertyChangeEvent evt ) {
-			if( evt.getPropertyName().equals( "progress"  )) {
+			if( evt.getPropertyName().equals( "progress" ) ) {
 				//int progress = (Integer)evt.getNewValue();
 			}
 		}
@@ -2136,7 +2096,23 @@ public class JEditor extends JFrame implements Localized, EventListener<Progress
 	 * Some helper and tool methods                                              *
 	 *                                                                           *
 	 ****************************************************************************/
-	 
+
+	/**
+	 * Enables and disables the menu item that moves a floor up.
+	 * @param enabled the enabled status
+	 */
+	public void enableMenuFloorUp( boolean enabled ) {
+		mnuEditFloorUp.setEnabled( enabled );
+	}
+
+	/**
+	 * Enables and disables the menu item that moves a floor down.
+	 * @param enabled the enabled status
+	 */
+	public void enableMenuFloorDown( boolean enabled ) {
+		mnuEditFloorDown.setEnabled( enabled );
+	}
+
 	/**
 	 * Returns the edit view component.
 	 * @return the edit view component.
@@ -2144,13 +2120,13 @@ public class JEditor extends JFrame implements Localized, EventListener<Progress
 	public JEditView getEditView() {
 		return editView;
 	}
-	
+
 	/**
 	 * Sets the Zoom factor on the currently shown shown JFloor.
 	 * @param zoomFactor the zoom factor
 	 */
 	public void setZoomFactor( double zoomFactor ) {
-		System.out.println(zoomFactor);
+		System.out.println( zoomFactor );
 		double zoomChange = zoomFactor / CoordinateTools.getZoomFactor();
 		Rectangle oldView = new Rectangle( editView.getLeftPanel().getViewport().getViewRect() );
 		oldView.x *= zoomChange;
@@ -2161,26 +2137,26 @@ public class JEditor extends JFrame implements Localized, EventListener<Progress
 			// of what he previously saw, and now we are doing this "move"
 			int widthIncrement = (int)(oldView.width * zoomChange) - oldView.width;
 			int heightIncrement = (int)(oldView.height * zoomChange) - oldView.height;
-			
+
 			oldView.x += widthIncrement / 2;
 			oldView.y += heightIncrement / 2;
 		}
-				
+
 		CoordinateTools.setZoomFactor( zoomFactor );
 		editView.getLeftPanel().setZoomFactor( zoomFactor );
 		editView.getFloor().getPlanImage().update();
 		editView.updateFloorView();
-		if (worker != null) {
+		if( worker != null ) {
 			caView.getLeftPanel().setZoomFactor( zoomFactor );
 			caView.updateFloorView();
 		}
-		
+
 		// Pretend a smaller Zoom factor, so that the user is actually only zomming 
 		// in the range [0,0.25]. This is still close enough for the user.
 		txtZoomFactor.setText( nfZoom.format( zoomFactor * 2.5d ) );
-		
+
 		//Redisplay the same portion of the Floor as before (move scrollbars)
-		editView.getLeftPanel().getViewport ().setViewPosition (oldView.getLocation ());
+		editView.getLeftPanel().getViewport().setViewPosition( oldView.getLocation() );
 	}
 
 	public static void printException( Exception ex ) {
@@ -2220,11 +2196,11 @@ public class JEditor extends JFrame implements Localized, EventListener<Progress
 				mnuAssignmentArea.setSelected( true );
 				break;
 			default:
-				showErrorMessage( "Error", "Dieser Area-Typ wird nicht unterstützt.");
+				showErrorMessage( "Error", "Dieser Area-Typ wird nicht unterstützt." );
 		}
 		updateAreaVisiblity();
 	}
-	
+
 	/**
 	 * Shows a <code>JToolBar</code> and hides all others.
 	 * @param toolBar the tool bar that is shown
@@ -2234,47 +2210,46 @@ public class JEditor extends JFrame implements Localized, EventListener<Progress
 		getContentPane().add( newToolbar, BorderLayout.NORTH );
 		currentToolbar = newToolbar;
 	}
-	
+
 	/**
 	 * Sets the visible tab. Enables and disables all necessary menu and
 	 * toolbar elements.
 	 * @param tabID the tab id as specified in {@link JEditor}.
 	 */
-	private void switchTo( int tabID  ) {
-		if (tabID == CA_FLOOR && worker == null) {
+	private void switchTo( int tabID ) {
+		if( tabID == CA_FLOOR && worker == null ) {
 			JEditor.sendError( loc.getStringWithoutPrefix( "gui.error.StartSimulation" ) );
-			tabPane.setSelectedIndex (currentMode);
+			tabPane.setSelectedIndex( currentMode );
 			return;
 		}
 		// TODO better implementation of this stuff for debug mode ?
-		if( ((EditorStart.isDebug() && tabID > CA_FLOOR) || (!EditorStart.isDebug() && tabID > BATCH )) && result == null ) {
-			JEditor.sendError(  loc.getStringWithoutPrefix( "gui.error.CreateBatch" ) );
-			tabPane.setSelectedIndex (currentMode);
+		if( ((EditorStart.isDebug() && tabID > CA_FLOOR) || (!EditorStart.isDebug() && tabID > BATCH)) && result == null ) {
+			JEditor.sendError( loc.getStringWithoutPrefix( "gui.error.CreateBatch" ) );
+			tabPane.setSelectedIndex( currentMode );
 			return;
 		}
-		
+
 		currentMode = tabID;
 		// code using the switch-bar is disabled!
 		if( visualizationView.getGLContainer().isAnimating() ) {
 			btnPlay.setIcon( playIcon );
 			visualizationView.getGLContainer().stopAnimation();
 		}
-		if( tabID== EDIT_FLOOR ) {
+		if( tabID == EDIT_FLOOR )
 			showToolBar( toolBarEdit );
-		} else if( tabID == BATCH ) {
+		else if( tabID == BATCH )
 			showToolBar( toolBarBatch );
-		} else if( tabID == CA_FLOOR ) {
+		else if( tabID == CA_FLOOR )
 			showToolBar( toolBarCA );
-		} else if( tabID == VISUALIZATION ) {
+		else if( tabID == VISUALIZATION ) {
 			showToolBar( toolBarVisualization );
 			visualizationView.requestFocusInWindow();
-		} else if ( tabID == STATISTIC ) {
+		} else if( tabID == STATISTIC )
 			showToolBar( toolBarCAStats );
-		} else if( tabID == GRAPH_STATISTIC ) {
+		else if( tabID == GRAPH_STATISTIC )
 			showToolBar( toolBarGraphStats );
-		} else {
-			sendError( "Unbekannte TabID: " + Integer.toString( tabID  ) + ". " + loc.getString( "gui.ContactDeveloper" ) );	// todo loc
-		}//		switch( tabID ) {
+		else
+			sendError( "Unbekannte TabID: " + Integer.toString( tabID ) + ". " + loc.getString( "gui.ContactDeveloper" ) );//		switch( tabID ) {
 //			case EDIT_FLOOR:
 //				showToolBar( toolBarEdit );
 //				break;
@@ -2325,7 +2300,7 @@ public class JEditor extends JFrame implements Localized, EventListener<Progress
 		mnuHideAllAreas.setEnabled( mode.size() != 0 );
 		editView.changeAreaView( mode );
 	}
-	
+
 	/**
 	 * Reads the current value of the Zoomfactor textfield and sets the
 	 * zoomfactor. If the last character is '%' it is removed. It is possible to
@@ -2401,7 +2376,7 @@ public class JEditor extends JFrame implements Localized, EventListener<Progress
 	 * Returns a {@link FileFilter} that allows loading zet format files with ending ".zet"
 	 * @return a {@link FileFilter} that allows loading zet format files
 	 */
-	public static	FileFilter getProjectFilter() {
+	public static FileFilter getProjectFilter() {
 		return new FileFilter() {
 			@Override
 			public boolean accept( File f ) {
@@ -2415,12 +2390,11 @@ public class JEditor extends JFrame implements Localized, EventListener<Progress
 		};
 	}
 
-
 	/**
 	 * Returns a {@link FileFilter} that allows loading zet result files with ending ".ers"
 	 * @return a {@link FileFilter} that allows loading zet result files
 	 */
-	public static	FileFilter getResultsFilter() {
+	public static FileFilter getResultsFilter() {
 		return new FileFilter() {
 			@Override
 			public boolean accept( File f ) {
@@ -2434,7 +2408,6 @@ public class JEditor extends JFrame implements Localized, EventListener<Progress
 		};
 	}
 
-
 	/*****************************************************************************
 	 *                                                                           *
 	 * Models and renderer for control elements.                                 *
@@ -2442,7 +2415,6 @@ public class JEditor extends JFrame implements Localized, EventListener<Progress
 	 ****************************************************************************/
 	/** This class serves as a model for the JComboBox that contains the EditModes. */
 	private class EditComboBoxModel extends DefaultComboBoxModel {
-
 		/**
 		 * Creates a new combo box model containing edit types that are of a
 		 * specified type.
@@ -2456,19 +2428,17 @@ public class JEditor extends JFrame implements Localized, EventListener<Progress
 			// In case that the creationType really changed we must restore the partner edit mode.
 			// If we change to the same creation type as before, we must restore the old selection itself.
 			boolean restore_partner = getSelectedItem() != null &&
-							creationType != ((EditMode) getSelectedItem()).getType();
-			EditMode next_selection = restore_partner ? ((EditMode) getSelectedItem()).getPartnerMode() : (EditMode) getSelectedItem();
+							creationType != ((EditMode)getSelectedItem()).getType();
+			EditMode next_selection = restore_partner ? ((EditMode)getSelectedItem()).getPartnerMode() : (EditMode)getSelectedItem();
 
 			// Build new edit mode list
 			this.removeAllElements();
-			for( EditMode e : EditMode.getCreationModes( creationType )) {
+			for( EditMode e : EditMode.getCreationModes( creationType ) )
 				addElement( e );
-			}
 
 			// Restore the selection with the associated partner editmode if neccessary
-			if( next_selection != null ) {
+			if( next_selection != null )
 				setSelectedItem( next_selection );
-			}
 		}
 
 		// This was moved to a change listener too, to be able to capture selections that
@@ -2479,8 +2449,8 @@ public class JEditor extends JFrame implements Localized, EventListener<Progress
 		public void setSelectedItem( Object object ) {
 			super.setSelectedItem( object );
 			if( editView != null ) {
-				editView.setEditMode( (EditMode) object );
-				
+				editView.setEditMode( (EditMode)object );
+
 				btnEditSelect.setSelected( false );
 				btnEditPointwise.setSelected( creationType == EditMode.Type.CREATION_POINTWISE );
 				btnEditRectangled.setSelected( creationType == EditMode.Type.CREATION_RECTANGLED );
@@ -2490,63 +2460,58 @@ public class JEditor extends JFrame implements Localized, EventListener<Progress
 
 	/** This class can display EditMode Objects in a JComboBox. */
 	private class EditComboBoxRenderer extends ComboBoxRenderer {
-
 		@Override
 		public Component getListCellRendererComponent( JList list, Object value, int index, boolean isSelected, boolean cellHasFocus ) {
-			JLabel me = (JLabel) super.getListCellRendererComponent( list, value, index, isSelected, cellHasFocus );
+			JLabel me = (JLabel)super.getListCellRendererComponent( list, value, index, isSelected, cellHasFocus );
 			setHorizontalAlignment( LEFT );
 
 			if( value != null ) {
-				EditMode e = (EditMode) value;
+				EditMode e = (EditMode)value;
 				if( e.getEditorColor() != null &&
-								!e.getEditorColor().equals( Color.BLACK  )) {
+								!e.getEditorColor().equals( Color.BLACK ) )
 					setBackground( e.getEditorColor() );
-				}
 				setText( e.toString() );
 			}
 			return this;
 		}
 	}
-	
+
 	/** This class serves as a model for the JComboBox that contains the 
 	 * BatchResultEntries for the Visualization Tab. */
 	private class BatchResultEntryVisComboBoxModel extends DefaultComboBoxModel {
 		BatchResult result;
-		
-		public void rebuild (BatchResult result) {
-			this.result = result;
-			
-			removeAllElements ();
-			int index = 0;
-			for (String e : result.getEntryNames ()) {
-				super.addElement (new NamedIndex (e, index++));
-			}
-		}
-		
-		@Override
-		public void setSelectedItem (Object object) {
-			super.setSelectedItem (object);
 
-			BatchResultEntry entry = (BatchResultEntry)getSelectedItem ();
-			if (visualizationView != null && visualizationView.getGLContainer().isAnimating()) {
-				btnPlay.setIcon( playIcon );
-				visualizationView.getGLContainer ().stopAnimation();
-			}
-			if(cycleModel != null) {
-				cycleModel.rebuild (entry);
-			}
+		public void rebuild( BatchResult result ) {
+			this.result = result;
+
+			removeAllElements();
+			int index = 0;
+			for( String e : result.getEntryNames() )
+				super.addElement( new NamedIndex( e, index++ ) );
 		}
-		
+
 		@Override
-		public Object getSelectedItem () {
+		public void setSelectedItem( Object object ) {
+			super.setSelectedItem( object );
+
+			BatchResultEntry entry = (BatchResultEntry)getSelectedItem();
+			if( visualizationView != null && visualizationView.getGLContainer().isAnimating() ) {
+				btnPlay.setIcon( playIcon );
+				visualizationView.getGLContainer().stopAnimation();
+			}
+			if( cycleModel != null )
+				cycleModel.rebuild( entry );
+		}
+
+		@Override
+		public Object getSelectedItem() {
 			try {
-				if (result != null && super.getSelectedItem () != null) {
-					return result.getResult (((NamedIndex)super.getSelectedItem ()).getIndex ());
-				} else {
+				if( result != null && super.getSelectedItem() != null )
+					return result.getResult( ((NamedIndex)super.getSelectedItem()).getIndex() );
+				else
 					return null;
-				}
-			} catch (IOException ex) {
-				JEditor.sendError ("Error while loading temp file: " + ex.getLocalizedMessage ());
+			} catch( IOException ex ) {
+				JEditor.sendError( "Error while loading temp file: " + ex.getLocalizedMessage() );
 				return null;
 			}
 		}
@@ -2556,35 +2521,33 @@ public class JEditor extends JFrame implements Localized, EventListener<Progress
 	 * BatchResultEntries for the Graph Stats Tab. */
 	private class BatchResultEntryGRSComboBoxModel extends DefaultComboBoxModel {
 		BatchResult result;
-		
-		public void rebuild (BatchResult result) {
-			this.result = result;
-			
-			removeAllElements ();
-			int index = 0;
-			for (String e : result.getEntryNames ()) {
-				super.addElement (new NamedIndex (e, index++));
-			}
-		}
-		
-		@Override
-		public void setSelectedItem (Object object) {
-			super.setSelectedItem (object);
 
-			BatchResultEntry entry = (BatchResultEntry)getSelectedItem ();
-			Controller.getInstance ().setFlow (entry.getGraph (), entry.getFlow ());
+		public void rebuild( BatchResult result ) {
+			this.result = result;
+
+			removeAllElements();
+			int index = 0;
+			for( String e : result.getEntryNames() )
+				super.addElement( new NamedIndex( e, index++ ) );
 		}
-		
+
 		@Override
-		public Object getSelectedItem () {
+		public void setSelectedItem( Object object ) {
+			super.setSelectedItem( object );
+
+			BatchResultEntry entry = (BatchResultEntry)getSelectedItem();
+			Controller.getInstance().setFlow( entry.getGraph(), entry.getFlow() );
+		}
+
+		@Override
+		public Object getSelectedItem() {
 			try {
-				if (result != null && super.getSelectedItem () != null) {
-					return result.getResult (((NamedIndex)super.getSelectedItem ()).getIndex ());
-				} else {
+				if( result != null && super.getSelectedItem() != null )
+					return result.getResult( ((NamedIndex)super.getSelectedItem()).getIndex() );
+				else
 					return null;
-				}
-			} catch (IOException ex) {
-				JEditor.sendError ("Error while loading temp file: " + ex.getLocalizedMessage ());
+			} catch( IOException ex ) {
+				JEditor.sendError( "Error while loading temp file: " + ex.getLocalizedMessage() );
 				return null;
 			}
 		}
@@ -2592,61 +2555,56 @@ public class JEditor extends JFrame implements Localized, EventListener<Progress
 
 	/** This class serves as a model for the JComboBox that contains the Cycles. */
 	private class CycleComboBoxModel extends DefaultComboBoxModel {
-		
-		public void rebuild (BatchResultEntry e) {
-			int oldSize = getSize ();
-			
-			removeAllElements ();
-			if (e != null) {
-				if (e.getCaVis () != null) {
-					for (int i = 0; i < e.getCaVis ().length; i++) {
-						addElement (new Integer (i));
-					}
-				} // else { the box stays empty }
-				fireIntervalAdded (this, 0, getSize ());
-			} else {
-				fireIntervalRemoved (this, 0, oldSize);
-			}
+		public void rebuild( BatchResultEntry e ) {
+			int oldSize = getSize();
+
+			removeAllElements();
+			if( e != null ) {
+				if( e.getCaVis() != null )
+					for( int i = 0; i < e.getCaVis().length; i++ )
+						addElement( new Integer( i ) ); // else { the box stays empty }
+				fireIntervalAdded( this, 0, getSize() );
+			} else
+				fireIntervalRemoved( this, 0, oldSize );
 		}
 
 		@Override
-		public void setSelectedItem (Object object) {
-			super.setSelectedItem (object);
+		public void setSelectedItem( Object object ) {
+			super.setSelectedItem( object );
 
 			if( visualizationView.getGLContainer().isAnimating() ) {
 				btnPlay.setIcon( playIcon );
-				visualizationView.getGLContainer().stopAnimation ();
+				visualizationView.getGLContainer().stopAnimation();
 			}
-			buildVisualizationDataStructure((BatchResultEntry)entryModelVis.getSelectedItem(), 
-				((Integer)object).intValue());
+			buildVisualizationDataStructure( (BatchResultEntry)entryModelVis.getSelectedItem(),
+							((Integer)object).intValue() );
 		}
 	}
 
 	/** This class can display EditMode Objects in a JComboBox. */
 	private class CycleComboBoxRenderer extends ComboBoxRenderer {
-
 		@Override
-		public Component getListCellRendererComponent (JList list, Object value, int index, boolean isSelected,
-				boolean cellHasFocus) {
-			JLabel me = (JLabel)super.getListCellRendererComponent (list, value, index, isSelected, cellHasFocus);
-			setHorizontalAlignment (RIGHT);
+		public Component getListCellRendererComponent( JList list, Object value, int index, boolean isSelected,
+						boolean cellHasFocus ) {
+			JLabel me = (JLabel)super.getListCellRendererComponent( list, value, index, isSelected, cellHasFocus );
+			setHorizontalAlignment( RIGHT );
 
-			if (value != null) {
-				BatchResultEntry currentEntry = (BatchResultEntry)entryModelVis.getSelectedItem ();
+			if( value != null ) {
+				BatchResultEntry currentEntry = (BatchResultEntry)entryModelVis.getSelectedItem();
 				Integer number = (Integer)value;
-				
-				try{
-					setText (Integer.toString (number + 1));
+
+				try {
+					setText( Integer.toString( number + 1 ) );
 				} catch( java.lang.ClassCastException e ) {
-					setText((String)value);
+					setText( (String)value );
 				}
 
 				// Paint Medians with inverted colors
-				if (currentEntry != null && (number == currentEntry.getMedianIndex ())) {
-					Color foreground = getForeground ();
-					Color background = getBackground ();
-					setBackground (foreground);
-					setForeground (background);
+				if( currentEntry != null && (number == currentEntry.getMedianIndex()) ) {
+					Color foreground = getForeground();
+					Color background = getBackground();
+					setBackground( foreground );
+					setForeground( background );
 				}
 			}
 

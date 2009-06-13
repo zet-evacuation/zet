@@ -49,8 +49,8 @@ import tasks.AlgorithmTask;
  * floor is used to automatically create rooms containing an {@link EvacuationArea}
  * to rescue people. </p>
  */
-@XStreamAlias( "buildingPlan" )
-@XMLConverter( BuildingPlanConverter.class )
+@XStreamAlias("buildingPlan")
+@XMLConverter(BuildingPlanConverter.class)
 public class BuildingPlan implements Serializable, ChangeListener, ChangeReporter {
 	/** The change listeners of the plan. */
 	@XStreamOmitField()
@@ -90,9 +90,9 @@ public class BuildingPlan implements Serializable, ChangeListener, ChangeReporte
 	 * @return the index
 	 */
 	public int getFloorID( Floor floor ) {
-		return( floors.indexOf( floor ) );
+		return (floors.indexOf( floor ));
 	}
-	
+
 	/**
 	 * {@inheritDoc}
 	 * @param e the change event
@@ -127,7 +127,7 @@ public class BuildingPlan implements Serializable, ChangeListener, ChangeReporte
 		// The change may have broken the rasterization. We are pessimistic here and
 		// reset the "rasterized" flag in any case.
 		rasterized = false;
-		
+
 		// Simply forward the event
 		throwChangeEvent( e );
 	}
@@ -147,7 +147,7 @@ public class BuildingPlan implements Serializable, ChangeListener, ChangeReporte
 		}
 		return false;
 	}
-	
+
 	/**
 	 * Moves the given floor one position further towards the beginning of the floor list. Only changes
 	 * the order of the floors.
@@ -155,21 +155,20 @@ public class BuildingPlan implements Serializable, ChangeListener, ChangeReporte
 	 * @throws IllegalArgumentException If the given floor is not in the list or if you try to move the 
 	 * default evacuation floor
 	 */
-	public void moveFloorUp ( Floor f ) throws IllegalArgumentException {
+	public void moveFloorUp( Floor f ) throws IllegalArgumentException {
 		if( floors.contains( f ) ) {
 			int pos = floors.indexOf( f );
-			
-			if (pos <= 1) {
-				throw new IllegalArgumentException ("You may not move the default evac floor!");
-			} else {
-				floors.set (pos, floors.get (pos - 1));
-				floors.set (pos - 1, f);
+			if( pos == 0 )
+				throw new IllegalArgumentException( "You may not move the default evacuation floor!" );
+			else if( pos < floors.size() - 1 ) {
+				floors.set( pos, floors.get( pos + 1 ) );
+				floors.set( pos + 1, f );
 				throwChangeEvent( new ChangeEvent( this ) );
 			}
-		} else {
-			throw new IllegalArgumentException ("The given floor is not on the list!");
-		}
+		} else
+			throw new IllegalArgumentException( "The given floor is not on the list!" );
 	}
+
 	/**
 	 * Moves the given floor one position further towards the end of the floor list. Only changes
 	 * the order of the floors.
@@ -177,19 +176,19 @@ public class BuildingPlan implements Serializable, ChangeListener, ChangeReporte
 	 * @throws IllegalArgumentException If the given floor is not in the list or if you try to move the 
 	 * default evacuation floor
 	 */
-	public void moveFloorDown ( Floor f ) throws IllegalArgumentException {
+	public void moveFloorDown( Floor f ) throws IllegalArgumentException {
 		if( floors.contains( f ) ) {
 			int pos = floors.indexOf( f );
-			if (pos == 0) {
-				throw new IllegalArgumentException ("You may not move the default evac floor!");
-			} else if (pos < floors.size () - 1) {
-				floors.set (pos, floors.get (pos + 1));
-				floors.set (pos + 1, f);
+
+			if( pos <= 1 )
+				throw new IllegalArgumentException( "You may not move the default evac floor!" );
+			else {
+				floors.set( pos, floors.get( pos - 1 ) );
+				floors.set( pos - 1, f );
 				throwChangeEvent( new ChangeEvent( this ) );
 			}
-		} else {
-			throw new IllegalArgumentException ("The given floor is not on the list!");
-		}
+		} else
+			throw new IllegalArgumentException( "The given floor is not on the list!" );
 	}
 
 	/** @return The default floor that exists in each BuildingPlan as 
@@ -215,43 +214,50 @@ public class BuildingPlan implements Serializable, ChangeListener, ChangeReporte
 	}
 
 	/** @return If the plan has any rooms at all, e.g. if it is empty or not. */
-	public boolean isEmpty () {
-		for (Floor f : getFloors ()) {
-			if (f.getRooms ().size () > 0) {
+	public boolean isEmpty() {
+		for( Floor f : getFloors() )
+			if( f.getRooms().size() > 0 )
 				return false;
-			}
-		}
 		return true;
 	}
+
 	/** @return If the plan has any evacuation areas at all. */
-	public boolean hasEvacuationAreas () {
+	public boolean hasEvacuationAreas() {
 		boolean hasEvac = false;
-		for (Floor f : getFloors ()) {
-			for (Room r : f.getRooms ()) {
-				if (r.getEvacuationAreas ().size () > 0) {
+		for( Floor f : getFloors() ) {
+			for( Room r : f.getRooms() )
+				if( r.getEvacuationAreas().size() > 0 ) {
 					hasEvac = true;
 					break;
 				}
-			}
-			
-			if (hasEvac) {
+
+			if( hasEvac )
 				break;
-			}
 		}
 		return hasEvac;
 	}
-	
+
 	/**
-	 * Removes a specified {@link ds.z.Floor} from the floorlist. The {@link DefaultEvacuationFloor} cannot be
-	 * removed.
+	 * Removes a specified {@link ds.z.Floor} from the floorlist. The
+	 * {@link DefaultEvacuationFloor} cannot be removed. If the floor is the first
+	 * (and only one), the floor is deleted and a new empty floor is added again
+	 * as the first one.
 	 * @param f the floor to be removed
 	 * @throws java.lang.IllegalArgumentException if the default floor should be removed.
 	 */
 	public void removeFloor( Floor f ) throws java.lang.IllegalArgumentException {
 		if( f.equals( floors.get( 0 ) ) )
 			throw new java.lang.IllegalArgumentException( Localization.getInstance().getString( "ds.z.BuildingPlan.DeleteDefaultEvacuationFloorException" ) );
-		if( floors.remove( f ) ) {
-			f.delete ();
+		else if( floors.size() == 2 ) {
+			// Delete the floor and add a new and empty one
+			if( floors.remove( f) ) {
+				f.delete();
+				f.removeChangeListener( this );
+				throwChangeEvent( new ChangeEvent( this ) );
+				addFloor( new Floor( Localization.getInstance().getString( "ds.z.DefaultName.Floor" ) + " " + 1 ) );
+			}
+		} else if( floors.remove( f ) ) {
+			f.delete();
 			f.removeChangeListener( this );
 			throwChangeEvent( new ChangeEvent( this ) );
 		}
@@ -278,7 +284,7 @@ public class BuildingPlan implements Serializable, ChangeListener, ChangeReporte
 			BuildingPlan p = (BuildingPlan)o;
 
 			//This is not an implementation error - Lists also have a proper equals method
-			return ( floors == null ) ? p.floors == null : floors.equals( p.floors );
+			return (floors == null) ? p.floors == null : floors.equals( p.floors );
 		} else
 			return false;
 	}
@@ -305,51 +311,47 @@ public class BuildingPlan implements Serializable, ChangeListener, ChangeReporte
 			return floors.size() - 1;
 	}
 
-	
 	/**
 	 * Returns the number of all evacuation areas in the building.
 	 * @return the evacuation area count
 	 */
 	public int getEvacuationAreasCount() {
 		int count = 0;
-		for( Floor floor : floors ) {
+		for( Floor floor : floors )
 			for( Room room : floor.getRooms() )
 				for( EvacuationArea evac : room.getEvacuationAreas() )
 					count++;
-		}
 		return count;
 	}
-	
+
 	/**
 	 * Rasterizes each Room / Area on every Floor. 
 	 * Sets the rasterized flag to "true" upon completion.
 	 */
-	public void rasterize () {
+	public void rasterize() {
 		try {
 			check();
 		} catch( ds.z.exception.RoomIntersectException e ) {
 			RoomPair rooms = e.getIntersectingRooms();
 			System.out.println( "Es schneiden sich die Räume: " + rooms.room1.getName() + " - " + rooms.room2.getName() );
 		}
-		for (Floor f : floors) {
-			for (Room r : f.getRooms ()) {
-				AlgorithmTask.getInstance ().setProgress (100 / (Math.max (f.roomCount (), 1)), 
-						Localization.getInstance ().getString ("ds.z.floor")+":" + f.getName (), r.getName ());
+		for( Floor f : floors )
+			for( Room r : f.getRooms() ) {
+				AlgorithmTask.getInstance().setProgress( 100 / (Math.max( f.roomCount(), 1 )),
+								Localization.getInstance().getString( "ds.z.floor" ) + ":" + f.getName(), r.getName() );
 
 				// Checking if r is rasterized before rasterizing it makes no sense??
-                                // but it makes sense to ensure that all polygons are closed!!
+				// but it makes sense to ensure that all polygons are closed!!
 				r.check( rasterized );
 				r.rasterize();
 				//r.cleanUpThornsAndNormalEdgesForRooms ();
-				r.cleanUpPassableEdgesForRooms ();
+				r.cleanUpPassableEdgesForRooms();
 
 			}
-		}
-		AlgorithmTask.getInstance ().setProgress (100, Localization.getInstance (
-		).getString ("ds.z.RasterizeFinished"), "");
-        rasterized = true;
+		AlgorithmTask.getInstance().setProgress( 100, Localization.getInstance().getString( "ds.z.RasterizeFinished" ), "" );
+		rasterized = true;
 	}
-	
+
 	/** A convenience method that automatically distributes the given number of evcauees
 	 * among all assignment areas that were created in the building. Each area gets a 
 	 * share of the total number of evacuees which is proportional to it's share of the
@@ -360,63 +362,56 @@ public class BuildingPlan implements Serializable, ChangeListener, ChangeReporte
 	 * @throws TooManyPeopleException If you specify a number of evacuees that
 	 * exceeds the total space in all assignment areas.
 	 */
-	public void distributeEvacuees (int nrOfEvacuees) throws TooManyPeopleException {
+	public void distributeEvacuees( int nrOfEvacuees ) throws TooManyPeopleException {
 		// Get the total assignment area size
 		int max_persons = 0;
 		int nr_of_assignment_areas = 0;
-		for (Floor f : floors) {
-			for (Room r : f.getRooms ()) {
-				for (AssignmentArea a : r.getAssignmentAreas ()) {
-					max_persons += a.getMaxEvacuees ();
+		for( Floor f : floors )
+			for( Room r : f.getRooms() )
+				for( AssignmentArea a : r.getAssignmentAreas() ) {
+					max_persons += a.getMaxEvacuees();
 					nr_of_assignment_areas++;
 				}
-			}
-		}
-		
-		if (max_persons < nrOfEvacuees) {
-			throw new TooManyPeopleException (null, Localization.getInstance (
-					).getString ("ds.TooManyEvacuees"));
-		}
-		
+
+		if( max_persons < nrOfEvacuees )
+			throw new TooManyPeopleException( null, Localization.getInstance().getString( "ds.TooManyEvacuees" ) );
+
 		// Try to distribute the persons and gather all ass. areas
 		int already_distributed = 0;
 		int index = 0;
 		AssignmentArea[] aareas = new AssignmentArea[nr_of_assignment_areas];
-		for (Floor f : floors) {
-			for (Room r : f.getRooms ()) {
-				for (AssignmentArea a : r.getAssignmentAreas ()) {
-					int evacs_for_a = (int)(((double)a.getMaxEvacuees () / (double)max_persons) * nrOfEvacuees);
-					a.setEvacuees (evacs_for_a);
+		for( Floor f : floors )
+			for( Room r : f.getRooms() )
+				for( AssignmentArea a : r.getAssignmentAreas() ) {
+					int evacs_for_a = (int)(((double)a.getMaxEvacuees() / (double)max_persons) * nrOfEvacuees);
+					a.setEvacuees( evacs_for_a );
 					already_distributed += evacs_for_a;
-					
+
 					aareas[index++] = a;
 				}
-			}
-		}
-		
+
 		// Distribute the rest of the eacs (we round down, so possibly there are some
 		// of them left) randomly among all ass. areas
-		while (already_distributed < nrOfEvacuees) {
+		while( already_distributed < nrOfEvacuees ) {
 			// We don't use the Random Utils here, because this is not a simulation feature
 			// but an editor feature and thus it mustn't forcedly be reproducable
-			Random rand = new Random ();
-			index = rand.nextInt (aareas.length - 1);
-			aareas[index].setEvacuees (aareas[index].getEvacuees () + 1);
+			Random rand = new Random();
+			index = rand.nextInt( aareas.length - 1 );
+			aareas[index].setEvacuees( aareas[index].getEvacuees() + 1 );
 			already_distributed++;
 		}
 	}
-	
-	/** @return The maximum number of evacuees that can be placed in all the assignment 
-	 * areas in the building */
-	public int maximalEvacuees () {
+
+	/**
+	 * Returns the maximum number of evacuees that can be placed in all the assignment
+	 * areas in the building
+	 * @return the maximal number of evacuees in the building */
+	public int maximalEvacuees() {
 		int maxPersons = 0;
-		for (Floor f : floors) {
-			for (Room r : f.getRooms ()) {
-				for (AssignmentArea a : r.getAssignmentAreas ()) {
-					maxPersons += a.getMaxEvacuees ();
-				}
-			}
-		}
+		for( Floor f : floors )
+			for( Room r : f.getRooms() )
+				for( AssignmentArea a : r.getAssignmentAreas() )
+					maxPersons += a.getMaxEvacuees();
 		return maxPersons;
 	}
 }
