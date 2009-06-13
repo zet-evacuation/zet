@@ -108,10 +108,10 @@ public class FFmpegWrapper extends MovieWriter {
 				width += 1;
 			if( height % 2 == 1 )
 				height += 1;
-			String command3 = "./ffmpeg/ffmpeg.exe -f image2 -i ./movies/videoFrame%05d.jpg -b 1000kb -s 640x460 -r 24 -vcodec mpeg4 -vtag dx50 ./movies/" + filename + ".avi";
+			String command3 = "./tools/ffmpeg/ffmpeg.exe -f image2 -i ./movies/videoFrame%05d.jpg -b 1000kb -s 640x460 -r 24 -vcodec mpeg4 -vtag dx50 ./movies/" + filename + ".avi";
 			String command2 = "";
 			// Basic command 
-			command2 += "./ffmpeg/ffmpeg.exe -f image2";
+			command2 += "./tools/ffmpeg/ffmpeg.exe -f image2";
 			// Input Parameters: framerate
 			command2 += " -r " + framerate;
 			// Input files
