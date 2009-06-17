@@ -17,7 +17,6 @@
  * Class EvacuationOptimizationType
  * Erstellt 23.11.2008, 21:39:42
  */
-
 package gui.batch;
 
 /**
@@ -26,24 +25,25 @@ package gui.batch;
  * @author Jan-Philipp Kappmeier
  */
 public enum EvacuationOptimizationType {
-	/** Indicates that no evacuation optimization is performed. */
+	/** Indicates that no evacuation optimization shoule be performed. */
 	None( "Keine" ),
 	/** Personal optimization for each individual is performed (using earliest arrival transshipments). */
 	PersonalEvacuationPlan( "Persönliche Fluchtpläne" ),
-	/** Exit distribution using earliest arrival transshipments is calculated. */
+	/** Exit distribution using earliest arrival transshipments. */
 	EarliestArrivalTransshipment( "Earliest Arrival Transhhipment" ),
-	/** Exit distribution using minimum cost flow algorithm is calculated. */
-        EAT_REDUCED( "Reduzierter EAT" ),
-        EAT_SPG( "SPG-EAT" ),
+	/** Using earliest arrival flows on reduced graph. */
+	ReducedGraphEAT( "Reduzierter EAT" ),
+	/** Use earliest arrival flows on shortest paths graph. */
+	ShortestPathGraphEAT( "SPG-EAT" ),
+	/** Exit distribution using minimum cost flow algorithm. */
 	MinCost( "Min Cost" ),
-	/** Exit distribution using shortest paths is calculated. */
+	/** Exit distribution using shortest paths. */
 	ShortestPaths( "Kürzeste Wege" ),
-        /** Estimated Exit capacity by Max-Flow */
-        BestResponse( "Best Response Dynamics" );
-
+	/** Estimated exit capacity by best response dynamics game theoretic approach. */
+	BestResponse( "Best Response Dynamics" );
 	/** The name (used for displaying in selection boxes). */
 	private String name;
-	
+
 	/**
 	 * Creates an enumeration instance and sets the name
 	 * @param name the name

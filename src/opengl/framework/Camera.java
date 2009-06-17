@@ -23,13 +23,16 @@ package opengl.framework;
 import util.vectormath.Vector3;
 
 /**
- *
+ * A camera used for movement in a 3-dimensional world.
  * @author Jan-Philipp Kappmeier
  */
 public class Camera {
-	Vector3 view = new Vector3( 0, 0, 1 );			// direction of view (z-axis)
-	Vector3 up = new Vector3( 0, 1, 0 );				// direction of up   (y-axis)
-	Vector3 pos = new Vector3( 0, 0, 0 );			// position
+	/** Direction of view (z-axis) */
+	Vector3 view = new Vector3( 0, 0, 1 );			
+	/** Direction of up (y-axis) */
+	Vector3 up = new Vector3( 0, 1, 0 );
+		/** Position */
+	Vector3 pos = new Vector3( 0, 0, 0 );
 	double speed = 20;
 	double speedStep = 1;
 	double minSpeed = 0;
@@ -201,5 +204,13 @@ public class Camera {
 			speedStep = maxSpeed;
 		else
 			this.speedStep = speedStep;
+	}
+
+	/**
+	 * Returns a string representation of the camera that contains the position
+	 * and the vectors for view direction and upwards direction.
+	 */
+	public String toString() {
+		return pos.toString() + "\n" + view.toString() + "\n" + up.toString();
 	}
 }

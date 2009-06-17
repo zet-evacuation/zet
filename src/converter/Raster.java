@@ -36,8 +36,8 @@ import util.ConversionTools;
  * of the type {@link RasterSquare} or any subtypes. A <code>RasterSquare</codes> does all
  * checks itself and calculates all necessary values. Thus, new features can be provided
  * by a subclass.</p>
- * @param T the type of the {@link RasterSquare} objects that is used for rasterization
- * @param P the type of {@link PlanPolygon} that is rasterized
+ * @param <T> the type of the {@link RasterSquare} objects that is used for rasterization
+ * @param <P> the type of {@link PlanPolygon} that is rasterized
  * @author Jan-Philipp Kappmeier
  */
 public class Raster<T extends RasterSquare, P extends PlanPolygon> {

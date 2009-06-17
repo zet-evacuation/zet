@@ -86,8 +86,7 @@ public class BatchEntry {
 		check( project );
 		setOptimizedEvacuationPlanCycles( 0 );
 		this.project = project;
-		this.setAssignment( (project.getCurrentAssignment() != null) ? project.getCurrentAssignment() : project.getAssignments().
-						get( 0 ) );
+		this.setAssignment( (project.getCurrentAssignment() != null) ? project.getCurrentAssignment() : project.getAssignments().get( 0 ) );
 		this.setName( name );
 		this.setUseCa( PropertyContainer.getInstance().getAsBoolean( "editor.options.visualization.useCa" ) );
 		this.setUseGraph( PropertyContainer.getInstance().getAsBoolean( "editor.options.visualization.useGraph" ) );
@@ -96,7 +95,8 @@ public class BatchEntry {
 		this.setGraphMaxTime( PropertyContainer.getInstance().getAsInt( "algo.graph.MaxFlowOverTime.timeHorizon" ) );
 		this.setGraphAlgo( ga );
 		this.setCellularAutomatonAlgo( caa );
-		this.setProperty( PropertyFilesSelectionModel.getInstance().getProperty( "PaperProperties.xml" ) );
+		// Initialize the properties with the default property file: TODO: editable by options
+		this.setProperty( PropertyFilesSelectionModel.getInstance().getProperty( "properties.xml" ) );
 		this.setEvacuationOptimizationType( EvacuationOptimizationType.None );
 	}
 
@@ -269,11 +269,11 @@ public class BatchEntry {
 							mat = new EarliestArrivalAssignmentTask( project, assignment, opt_res, concreteAssignments, i );
 							bpd.addTask( Localization.getInstance().getString( "batch.evacuationPlan.EarliestArrival" ), mat );
 							break;
-						case EAT_REDUCED:
+						case ReducedGraphEAT:
 							mat = new ReducedEarliestArrivalAssignmentTask( project, assignment, opt_res, concreteAssignments, i );
 							bpd.addTask( Localization.getInstance().getString( "batch.evacuationPlan.ReducedEAT" ), mat );
 							break;
-						case EAT_SPG:
+						case ShortestPathGraphEAT:
 							mat = new ShortestPathGraphEarliestArrivalAssignmentTask( project, assignment, opt_res, concreteAssignments, i );
 							bpd.addTask( Localization.getInstance().getString( "batch.evacuationPlan.SPG_EAT" ), mat );
 							break;
@@ -295,8 +295,8 @@ public class BatchEntry {
 							break;
 						case MinCost:
 						case EarliestArrivalTransshipment:
-						case EAT_REDUCED:
-						case EAT_SPG:
+						case ReducedGraphEAT:
+						case ShortestPathGraphEAT:
 						case ShortestPaths:
 							BatchCA2Task bct2 = new BatchCA2Task( project, assignment, opt_res, mat, concreteAssignments,
 											i, cellularAutomatonAlgo, findMedian );

@@ -275,7 +275,7 @@ public class JEditView extends AbstractSplitPropertyWindow<JFloorScrollPane<JFlo
 	 * @return the panel containing the different components
 	 */
 	@Override
-	protected JPanel getEastBar() {
+	protected JPanel createEastBar() {
 		double size[][] = // Columns
 						{{10, TableLayout.FILL, 10},
 			//Rows
@@ -1007,12 +1007,37 @@ public class JEditView extends AbstractSplitPropertyWindow<JFloorScrollPane<JFlo
 				changeFloor( p.getPlan().getFloors().get( 0 ) );
 	}
 
+	/**
+	 * Returns the gui component of the floor.
+	 * @return the gui component of the floor
+	 */
 	public JFloor getFloor() {
 		return getLeftPanel().getMainComponent();
 	}
 
+	/**
+	 * Returns the z format floor that is currently visible.
+	 * @return the z format floor that is currently visible
+	 */
 	public Floor getCurrentFloor() {
 		return currentFloor;
+	}
+
+	/**
+	 * Sets the selected floor to a specified id
+	 * @param id the floor id
+	 */
+	public void setFloor( int id ) {
+		cbxFloors.setSelectedIndex( id );
+	}
+
+	/**
+	 * Returns the the z format floor that is currently visible. If the evacuation floor
+	 * is hidden, the first floor is returned with index 0.
+	 * @return the z format floor that is currently visible
+	 */
+	public int getFloorID() {
+		return cbxFloors.getSelectedIndex();
 	}
 
 	/**

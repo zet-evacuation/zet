@@ -44,9 +44,14 @@
     <treeNode name="options.visualization.flow" useAsLocString="true">
       <boolNode name="options.visualization.flow.equalArrival" useAsLocString="true" description="desc" information="options.visualization.flow.equalArrival.info" parameter="options.visualization.flow.equalArrival">true</boolNode>
     </treeNode>
+    <treeNode name="options.visualization.appearance" useAsLocString="true">
+      <doubleNode name="options.visualization.appearance.graphHeight" useAsLocString="true" description="desc" information="options.visualization.appearance.graphHeight.info" parameter="options.visualization.appearance.graphHeight">150.0</doubleNode>
+      <doubleNode name="options.visualization.appearance.floorDistance" useAsLocString="true" description="desc" information="options.visualization.appearance.floorDistance.info" parameter="options.visualization.appearance.floorDistance">250</doubleNode>
+      <doubleNode name="options.visualization.appearance.individualHeight" useAsLocString="true" description="desc" information="options.visualization.appearance.individualHeight.info" parameter="options.visualization.appearance.individualHeight">100</doubleNode>
+      <doubleNode name="options.visualization.appearance.IndividualRadius" useAsLocString="true" description="desc" information="options.visualization.appearance.individualRadius.info" parameter="options.visualization.appearance.individualRadius">15</doubleNode>
+      <doubleNode name="options.visualization.appearance.wallHeight" useAsLocString="true" description="desc" information="options.visualization.appearance.wallHeight.info" parameter="options.visualization.appearance.wallHeight">30</doubleNode>
+    </treeNode>
     <boolNode name="options.visualization.allowRotateIn2D" useAsLocString="true" description="desc" information="options.visualization.allowRotateIn2D.info" parameter="editor.options.visualization.allowRotateIn2D">true</boolNode>
-    <boolNode name="options.visualization.startWith2D" useAsLocString="true" description="desc" information="options.visualization.startWith2D.info" parameter="editor.options.visualization.startWith2D">true</boolNode>
-    <boolNode name="options.visualization.startWithIso" useAsLocString="true" description="desc" information="options.visualization.startWithIso.info" parameter="editor.options.visualization.startWithIso">true</boolNode>
   </treeNode>
   <treeNode name="options.statistic" useAsLocString="true">
     <boolNode name="options.statistic.blackAndWhiteDiagrams" useAsLocString="true" description="desc" information="options.statistic.blackAndWhiteDiagrams.info" parameter="statistic.blackAndWhiteDiagrams">false</boolNode>

@@ -15,7 +15,7 @@
  */
 /**
  * Class VisualizationOptionManager
- * Erstellt 08.05.2008, 02:27:00
+ * Created 08.05.2008, 02:27:00
  */
 package gui.visualization;
 
@@ -37,32 +37,28 @@ public class VisualizationOptionManager {
 	}
 
 	public static double getGraphHeight() {
-		return 120.0;
-	}
-
-	public static double getFloorHeight() {
-		return 200;
+		return PropertyContainer.getInstance().getAsDouble( "options.visualization.appearance.graphHeight" );
 	}
 
 	public static double getFloorDistance() {
-		return 50;
+		return PropertyContainer.getInstance().getAsDouble( "options.visualization.appearance.floorDistance" );
 	}
 
 	public static double getIndividualHeight() {
-		return 100.0;
+		return PropertyContainer.getInstance().getAsDouble( "options.visualization.appearance.individualHeight" );
 	}
 
 	public static double getIndividualRadius() {
-		return 15.0;
+		return PropertyContainer.getInstance().getAsDouble( "options.visualization.appearance.individualRadius" );
+	}
+
+	public static double getWallHeight() {
+		return PropertyContainer.getInstance().getAsDouble( "options.visualization.appearance.wallHeight" );
 	}
 
 	public static GLColor getIndividualColor() {
 		return new GLColor( 0, 108, 255 );
 	//return new GLColor( Color.yellow );
-	}
-
-	public static int getWallHeight() {
-		return 30;	// kniehoch 40 cm
 	}
 
 	public static boolean animateMovements() {

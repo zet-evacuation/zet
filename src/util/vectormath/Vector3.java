@@ -20,6 +20,9 @@
 package util.vectormath;
 
 import ds.z.PlanPoint;
+import java.text.NumberFormat;
+import java.text.ParseException;
+import localization.Localization;
 
 /**
  * Implements a three dimensional vector.
@@ -248,16 +251,44 @@ public class Vector3 {
 	}
 
 	/**
-	 * Calculates the euclidian length of a vector. 
+	 * Calculates the euclidian length of the vector.
 	 * @return the length of the vector
 	 */
 	public double length() {
 		return Math.sqrt( x * x + y * y + z * z );
 	}
+
+	final static NumberFormat nfFloat = Localization.getInstance().getFloatConverter();
 	
 	@Override
 	public String toString(){
-	    return "(" + x + ", " + y + ", " +  z + ")";
+		return "(" + nfFloat.format( x ) + "; " + nfFloat.format( y ) + "; " +  nfFloat.format( z ) + ")";
+	}
+
+	/**
+	 * Reads a vector from a given string. The string must have the same format
+	 * as it is printed using the toString() method. Note that this depends from
+	 * the {@link Locale} scheme that is selected. The string may be enclosed by
+	 * brackets and/or spaces, also the numbers itself may be surrounded by
+	 * spaces.
+	 * @param value the vector as string
+	 * @throws ParseException if an error occurs during parsing
+	 */
+	public void parse( String value ) throws ParseException {
+		final int len = value.length();
+		value = value.trim();
+		if( value.startsWith( "(" ) )
+			value = value.substring( 1 );
+		if( value.endsWith( ")" ) )
+			value = value.substring( 0, value.length()-1 );
+		String a[] = value.split( ";" );
+		try {
+			x = nfFloat.parse( a[0].trim() ).doubleValue();
+			y = nfFloat.parse( a[1].trim() ).doubleValue();
+			z = nfFloat.parse( a[2].trim() ).doubleValue();
+		} catch( IndexOutOfBoundsException ex ) {
+			throw new ParseException( "String does not contain three coordinates.", len );
+		}
 	}
 	
 	public static Vector3 normal( Vector3 x, Vector3 y, Vector3 z ) {
@@ -267,11 +298,16 @@ public class Vector3 {
 		return t1.crossProduct( t2 );
 	}
 
+	/**
+	 * Calculates the orientation between two vectors.
+	 * @param v1
+	 * @param v2
+	 * @return
+	 */
 	public static int orientation( Vector3 v1, Vector3 v2 ) {
-			PlanPoint p = new PlanPoint( v1.x, v1.y );
-			PlanPoint q = new PlanPoint( 0, 0 );
-			PlanPoint r = new PlanPoint( v2.x, v2.y);
-			return PlanPoint.orientation(p,r,q);
+		PlanPoint p = new PlanPoint( v1.x, v1.y );
+		PlanPoint q = new PlanPoint( 0, 0 );
+		PlanPoint r = new PlanPoint( v2.x, v2.y);
+		return PlanPoint.orientation(p,r,q);
 	}
-
 }

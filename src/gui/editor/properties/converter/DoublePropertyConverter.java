@@ -27,7 +27,7 @@ import gui.editor.properties.types.DoubleProperty;
 
 /**
  *
- * @author Kapman
+ * @author Jan-Philipp Kappmeier
  */
 public class DoublePropertyConverter extends AbstractPropertyConverter<DoubleProperty, Double>{
 

@@ -48,7 +48,7 @@ public class JCAView extends AbstractSplitPropertyWindow<JFloorScrollPane<JRaste
 	 * @return a panel displayed on the right side of the window
 	 */
 	@Override
-	protected JPanel getEastBar() {
+	protected JPanel createEastBar() {
 		JPanel panel = new JPanel();
 		JButton button = new JButton( "Klick mich" );
 		panel.add( button );

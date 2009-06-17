@@ -32,17 +32,15 @@ public class GLCell extends AbstractDrawable<GLCell, GLCellControl, GLCellContro
 	private static GLVector ur;	// upper right
 	private static GLVector ll;	// lower left
 	private static GLVector lr;	// lower right
-	
 	protected GLColor color;
 	private GLColor defaultColor;
-	
 	protected static GLColor wallColor = VisualizationOptionManager.getCellWallColor();
 
-	public GLCell(GLCellControl control ) {
-		super(control);
+	public GLCell( GLCellControl control ) {
+		super( control );
 		this.position.x = control.getXPosition() * VisualizationConstants.SIZE_MULTIPLICATOR;
 		this.position.y = control.getYPosition() * VisualizationConstants.SIZE_MULTIPLICATOR;
-		if( ul == null ) {
+		if( ul == null )
 			if( VisualizationOptionManager.showSpaceBetweenCells() ) {
 				ul = new GLVector( 1 * VisualizationConstants.SIZE_MULTIPLICATOR, -1 * VisualizationConstants.SIZE_MULTIPLICATOR, 0 );
 				ur = new GLVector( 39 * VisualizationConstants.SIZE_MULTIPLICATOR, -1 * VisualizationConstants.SIZE_MULTIPLICATOR, 0 );
@@ -54,17 +52,16 @@ public class GLCell extends AbstractDrawable<GLCell, GLCellControl, GLCellContro
 				ll = new GLVector( 0 * VisualizationConstants.SIZE_MULTIPLICATOR, -40 * VisualizationConstants.SIZE_MULTIPLICATOR, 0 );
 				lr = new GLVector( 40 * VisualizationConstants.SIZE_MULTIPLICATOR, -40 * VisualizationConstants.SIZE_MULTIPLICATOR, 0 );
 			}
-		}
 		// Do not set color it should already be set by super call
 		this.defaultColor = VisualizationOptionManager.getCellFloorColor();
 	}
-	
+
 	public GLCell( GLCellControl control, GLColor color ) {
-		super(control );
+		super( control );
 		//super(control, new CullingShapeSphere() );
 		this.position.x = control.getXPosition() * VisualizationConstants.SIZE_MULTIPLICATOR;
 		this.position.y = control.getYPosition() * VisualizationConstants.SIZE_MULTIPLICATOR;
-		if( ul == null ) {
+		if( ul == null )
 			if( VisualizationOptionManager.showSpaceBetweenCells() ) {
 				ul = new GLVector( 1 * VisualizationConstants.SIZE_MULTIPLICATOR, -1 * VisualizationConstants.SIZE_MULTIPLICATOR, 0 );
 				ur = new GLVector( 39 * VisualizationConstants.SIZE_MULTIPLICATOR, -1 * VisualizationConstants.SIZE_MULTIPLICATOR, 0 );
@@ -76,35 +73,34 @@ public class GLCell extends AbstractDrawable<GLCell, GLCellControl, GLCellContro
 				ll = new GLVector( 0 * VisualizationConstants.SIZE_MULTIPLICATOR, -40 * VisualizationConstants.SIZE_MULTIPLICATOR, 0 );
 				lr = new GLVector( 40 * VisualizationConstants.SIZE_MULTIPLICATOR, -40 * VisualizationConstants.SIZE_MULTIPLICATOR, 0 );
 			}
-		}
 		this.color = color;
 		this.defaultColor = color;
 	}
 
 	@Override
-	public void performDrawing(GLAutoDrawable drawable) {
+	public void performDrawing( GLAutoDrawable drawable ) {
 		GL gl = drawable.getGL();
 		if( VisualizationOptionManager.smoothCellVisualization() ) {
-			boolean lighting = gl.glIsEnabled(  GL.GL_LIGHTING );
-			gl.glBegin(GL.GL_QUADS);
-				gl.glNormal3d( 0, 0, 1 );
-				getControl().bla( Direction.UPPER_LEFT ).performGL( gl, lighting );
-				ul.draw( drawable );
-				getControl().bla( Direction.UPPER_RIGHT ).performGL( gl, lighting );
-				ur.draw( drawable );
-				getControl().bla( Direction.LOWER_LEFT ).performGL( gl, lighting );
-				lr.draw( drawable );
-				getControl().bla( Direction.LOWER_RIGHT ).performGL( gl, lighting );
-				ll.draw( drawable );
+			boolean lighting = gl.glIsEnabled( GL.GL_LIGHTING );
+			gl.glBegin( GL.GL_QUADS );
+			gl.glNormal3d( 0, 0, 1 );
+			getControl().mixColorWithNeighbours( Direction.UPPER_LEFT ).performGL( gl, lighting );
+			ul.draw( drawable );
+			getControl().mixColorWithNeighbours( Direction.UPPER_RIGHT ).performGL( gl, lighting );
+			ur.draw( drawable );
+			getControl().mixColorWithNeighbours( Direction.LOWER_LEFT ).performGL( gl, lighting );
+			lr.draw( drawable );
+			getControl().mixColorWithNeighbours( Direction.LOWER_RIGHT ).performGL( gl, lighting );
+			ll.draw( drawable );
 			gl.glEnd();
 		} else {
 			color.performGL( gl );
-			gl.glBegin(GL.GL_QUADS);
-				gl.glNormal3d( 0, 0, 1 );
-				ul.draw( drawable );
-				ur.draw( drawable );
-				lr.draw( drawable );
-				ll.draw( drawable );
+			gl.glBegin( GL.GL_QUADS );
+			gl.glNormal3d( 0, 0, 1 );
+			ul.draw( drawable );
+			ur.draw( drawable );
+			lr.draw( drawable );
+			ll.draw( drawable );
 			gl.glEnd();
 		}
 	}
@@ -119,30 +115,29 @@ public class GLCell extends AbstractDrawable<GLCell, GLCellControl, GLCellContro
 		else
 			this.color = potentialToColor( control.getCellInformation( control.getDisplayMode() ), control.getMaxCellInformation( control.getDisplayMode() ), VisualizationOptionManager.getCellInformationLowColor( control.getDisplayMode() ), VisualizationOptionManager.getCellInformationHighColor( control.getDisplayMode() ) );
 	}
-  
+
 	protected final GLColor potentialToColor( long potential, long maxPotential, GLColor lowColor, GLColor highColor ) {
 		if( control.isPotentialValid() ) {
-			double blending = potential / (double) maxPotential;
+			double blending = potential / (double)maxPotential;
 			return lowColor.blend( highColor, blending );
-		} else {
+		} else
 			return VisualizationOptionManager.getInvalidPotentialColor();
-		}
 	}
 
-	public final GLColor getDefaultColor(){
+	public final GLColor getDefaultColor() {
 		return defaultColor;
 	}
-	
+
 	@Override
 	public void update() {
-	    updateFloorColor();
+		updateFloorColor();
 	}
 
 	@Override
 	public String toString() {
 		return "GLCell";
 	}
-	
+
 	public GLColor getColor() {
 		return color;
 	}
