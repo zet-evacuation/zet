@@ -222,7 +222,13 @@ public class GLCellControl extends AbstractControl<GLCell, Cell, CAVisualization
 		displayMode = potentialDisplay;
 	}
 	
-	public GLColor bla( Direction direction ) {
+	/**
+	 * Creates a mixed colour for the cell. The direction indicates for which edge
+	 * of the cell the colour is calculated.
+	 * @param direction the edge of the cell
+	 * @return the mixed color for that edge
+	 */
+	public GLColor mixColorWithNeighbours( Direction direction ) {
 		Cell cell = getControlled();
 		
 		Cell[] c = new Cell[3];

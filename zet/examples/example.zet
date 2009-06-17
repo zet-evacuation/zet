@@ -1,0 +1,453 @@
+<project id="1">
+  <plan id="2">
+    <evacuationFloor id="4" name="EvacuationFloor" xOffset="0" yOffset="0" width="0" height="0" normalMode="true" rasterSize="400" defaultRoomSize="4000" roomCount="0">
+      <rooms id="5"/>
+    </evacuationFloor>
+    <floor id="6" name="Floor 1" xOffset="800" yOffset="800" width="12000" height="7600">
+      <rooms id="7">
+        <room id="8" closed="true" xOffset="800" yOffset="800" width="6000" height="4000" changed="true" name="Room 0">
+          <edgeClassType>ds.z.RoomEdge</edgeClassType>
+          <start id="9" x="6800" y="4800">
+            <edges>
+              <planPoint reference="9"/>
+              <roomEdge id="10">
+                <associatedPolygon class="room" reference="8"/>
+              </roomEdge>
+              <planPoint id="11" x="6800" y="800"/>
+              <roomEdge id="12">
+                <associatedPolygon class="room" reference="8"/>
+              </roomEdge>
+              <planPoint id="13" x="800" y="800"/>
+              <roomEdge id="14">
+                <associatedPolygon class="room" reference="8"/>
+              </roomEdge>
+              <planPoint id="15" x="800" y="4800"/>
+              <roomEdge id="16">
+                <associatedPolygon class="room" reference="8"/>
+              </roomEdge>
+              <planPoint id="17" x="1600" y="4800"/>
+              <roomEdge id="18">
+                <associatedPolygon class="room" reference="8"/>
+                <linkTarget id="19">
+                  <associatedPolygon class="room" id="20" closed="true" xOffset="800" yOffset="4800" width="12000" height="3600" changed="true" name="Room 2">
+                    <edgeClassType>ds.z.RoomEdge</edgeClassType>
+                    <start id="21" x="12800" y="6400">
+                      <edges>
+                        <planPoint reference="21"/>
+                        <roomEdge id="22">
+                          <associatedPolygon class="room" reference="20"/>
+                        </roomEdge>
+                        <planPoint id="23" x="12800" y="4800"/>
+                        <roomEdge id="24">
+                          <associatedPolygon class="room" reference="20"/>
+                        </roomEdge>
+                        <planPoint id="25" x="8800" y="4800"/>
+                        <roomEdge id="26">
+                          <associatedPolygon class="room" reference="20"/>
+                          <linkTarget id="27">
+                            <associatedPolygon class="room" id="28" closed="true" xOffset="6800" yOffset="800" width="6000" height="4000" changed="true" name="Room 1">
+                              <edgeClassType>ds.z.RoomEdge</edgeClassType>
+                              <start id="29" x="12800" y="4800">
+                                <edges>
+                                  <planPoint reference="29"/>
+                                  <roomEdge id="30">
+                                    <associatedPolygon class="room" reference="28"/>
+                                  </roomEdge>
+                                  <planPoint id="31" x="12800" y="800"/>
+                                  <roomEdge id="32">
+                                    <associatedPolygon class="room" reference="28"/>
+                                  </roomEdge>
+                                  <planPoint id="33" x="6800" y="800"/>
+                                  <roomEdge id="34">
+                                    <associatedPolygon class="room" reference="28"/>
+                                  </roomEdge>
+                                  <planPoint id="35" x="6800" y="4800"/>
+                                  <roomEdge id="36">
+                                    <associatedPolygon class="room" reference="28"/>
+                                  </roomEdge>
+                                  <planPoint id="37" x="7600" y="4800"/>
+                                  <roomEdge reference="27"/>
+                                  <planPoint id="38" x="8800" y="4800"/>
+                                  <roomEdge id="39">
+                                    <associatedPolygon class="room" reference="28"/>
+                                  </roomEdge>
+                                </edges>
+                              </start>
+                              <end reference="29"/>
+                              <size>6</size>
+                              <minX__DefiningEdge class="roomEdge" reference="32"/>
+                              <minY__DefiningEdge id="40">
+                                <associatedPolygon class="assignmentArea" id="41" closed="true" xOffset="8400" yOffset="800" width="4400" height="4000" changed="true" evacuees="10">
+                                  <edgeClassType>ds.z.Edge</edgeClassType>
+                                  <start id="42" x="8400" y="800">
+                                    <edges>
+                                      <planPoint reference="42"/>
+                                      <ds.z.Edge reference="40"/>
+                                      <planPoint id="43" x="8400" y="4800"/>
+                                      <ds.z.Edge id="44">
+                                        <associatedPolygon class="assignmentArea" reference="41"/>
+                                      </ds.z.Edge>
+                                      <planPoint id="45" x="12800" y="4800"/>
+                                      <ds.z.Edge id="46">
+                                        <associatedPolygon class="assignmentArea" reference="41"/>
+                                      </ds.z.Edge>
+                                      <planPoint id="47" x="12800" y="800"/>
+                                      <ds.z.Edge id="48">
+                                        <associatedPolygon class="assignmentArea" reference="41"/>
+                                      </ds.z.Edge>
+                                    </edges>
+                                  </start>
+                                  <end reference="42"/>
+                                  <size>4</size>
+                                  <minX__DefiningEdge reference="44"/>
+                                  <minY__DefiningEdge reference="40"/>
+                                  <maxX__DefiningEdge reference="44"/>
+                                  <maxY__DefiningEdge reference="44"/>
+                                  <xOffsetAll>0</xOffsetAll>
+                                  <yOffsetAll>0</yOffsetAll>
+                                  <heightAll>0</heightAll>
+                                  <widthAll>0</widthAll>
+                                  <associatedRoom reference="28"/>
+                                  <assignmentType id="49" name="Default type">
+                                    <diameter class="normalDistribution" id="50" min="0.4" max="0.7" variance="1.0" expectedValue="0.5"/>
+                                    <age class="normalDistribution" id="51" min="14.0" max="80.0" variance="10.0" expectedValue="32.0"/>
+                                    <familiarity class="uniformDistribution" id="52" min="0.0" max="1.0"/>
+                                    <panic class="normalDistribution" id="53" min="0.0" max="1.0" variance="1.0" expectedValue="0.5"/>
+                                    <decisiveness class="normalDistribution" id="54" min="0.0" max="1.0" variance="1.0" expectedValue="0.3"/>
+                                    <standardEvacuees>10</standardEvacuees>
+                                    <assignmentAreas id="55">
+                                      <assignmentArea reference="41"/>
+                                      <assignmentArea id="56" closed="true" xOffset="7200" yOffset="2400" width="400" height="800" changed="true" evacuees="1">
+                                        <edgeClassType>ds.z.Edge</edgeClassType>
+                                        <start id="57" x="7200" y="2400">
+                                          <edges>
+                                            <planPoint reference="57"/>
+                                            <ds.z.Edge id="58">
+                                              <associatedPolygon class="assignmentArea" reference="56"/>
+                                            </ds.z.Edge>
+                                            <planPoint id="59" x="7200" y="3200"/>
+                                            <ds.z.Edge id="60">
+                                              <associatedPolygon class="assignmentArea" reference="56"/>
+                                            </ds.z.Edge>
+                                            <planPoint id="61" x="7600" y="3200"/>
+                                            <ds.z.Edge id="62">
+                                              <associatedPolygon class="assignmentArea" reference="56"/>
+                                            </ds.z.Edge>
+                                            <planPoint id="63" x="7600" y="2400"/>
+                                            <ds.z.Edge id="64">
+                                              <associatedPolygon class="assignmentArea" reference="56"/>
+                                            </ds.z.Edge>
+                                          </edges>
+                                        </start>
+                                        <end reference="57"/>
+                                        <size>4</size>
+                                        <minX__DefiningEdge reference="64"/>
+                                        <minY__DefiningEdge reference="64"/>
+                                        <maxX__DefiningEdge reference="64"/>
+                                        <maxY__DefiningEdge reference="62"/>
+                                        <xOffsetAll>0</xOffsetAll>
+                                        <yOffsetAll>0</yOffsetAll>
+                                        <heightAll>0</heightAll>
+                                        <widthAll>0</widthAll>
+                                        <associatedRoom reference="28"/>
+                                        <assignmentType reference="49"/>
+                                      </assignmentArea>
+                                      <assignmentArea id="65" closed="true" xOffset="1600" yOffset="1600" width="2800" height="2400" changed="true" evacuees="10">
+                                        <edgeClassType>ds.z.Edge</edgeClassType>
+                                        <start id="66" x="1600" y="1600">
+                                          <edges>
+                                            <planPoint reference="66"/>
+                                            <ds.z.Edge id="67">
+                                              <associatedPolygon class="assignmentArea" reference="65"/>
+                                            </ds.z.Edge>
+                                            <planPoint id="68" x="1600" y="2400"/>
+                                            <ds.z.Edge id="69">
+                                              <associatedPolygon class="assignmentArea" reference="65"/>
+                                            </ds.z.Edge>
+                                            <planPoint id="70" x="2000" y="2400"/>
+                                            <ds.z.Edge id="71">
+                                              <associatedPolygon class="assignmentArea" reference="65"/>
+                                            </ds.z.Edge>
+                                            <planPoint id="72" x="2000" y="3200"/>
+                                            <ds.z.Edge id="73">
+                                              <associatedPolygon class="assignmentArea" reference="65"/>
+                                            </ds.z.Edge>
+                                            <planPoint id="74" x="1600" y="3200"/>
+                                            <ds.z.Edge id="75">
+                                              <associatedPolygon class="assignmentArea" reference="65"/>
+                                            </ds.z.Edge>
+                                            <planPoint id="76" x="1600" y="4000"/>
+                                            <ds.z.Edge id="77">
+                                              <associatedPolygon class="assignmentArea" reference="65"/>
+                                            </ds.z.Edge>
+                                            <planPoint id="78" x="4400" y="4000"/>
+                                            <ds.z.Edge id="79">
+                                              <associatedPolygon class="assignmentArea" reference="65"/>
+                                            </ds.z.Edge>
+                                            <planPoint id="80" x="4400" y="1600"/>
+                                            <ds.z.Edge id="81">
+                                              <associatedPolygon class="assignmentArea" reference="65"/>
+                                            </ds.z.Edge>
+                                          </edges>
+                                        </start>
+                                        <end reference="66"/>
+                                        <size>8</size>
+                                        <minX__DefiningEdge reference="81"/>
+                                        <minY__DefiningEdge reference="81"/>
+                                        <maxX__DefiningEdge reference="81"/>
+                                        <maxY__DefiningEdge reference="79"/>
+                                        <xOffsetAll>0</xOffsetAll>
+                                        <yOffsetAll>0</yOffsetAll>
+                                        <heightAll>0</heightAll>
+                                        <widthAll>0</widthAll>
+                                        <associatedRoom reference="8"/>
+                                        <assignmentType reference="49"/>
+                                      </assignmentArea>
+                                    </assignmentAreas>
+                                    <uid id="82">303ce1e8-ae44-42cc-89aa-65862a4b9b05</uid>
+                                  </assignmentType>
+                                </associatedPolygon>
+                              </minY__DefiningEdge>
+                              <maxX__DefiningEdge reference="44"/>
+                              <maxY__DefiningEdge reference="44"/>
+                              <xOffsetAll>0</xOffsetAll>
+                              <yOffsetAll>0</yOffsetAll>
+                              <heightAll>0</heightAll>
+                              <widthAll>0</widthAll>
+                              <associatedFloor reference="6"/>
+                              <assignmentAreas id="83">
+                                <assignmentArea reference="41"/>
+                                <assignmentArea reference="56"/>
+                              </assignmentAreas>
+                              <barriers id="84"/>
+                              <delayAreas id="85"/>
+                              <evacuationAreas id="86"/>
+                              <inaccessibleAreas id="87"/>
+                              <saveAreas id="88"/>
+                              <stairAreas id="89"/>
+                            </associatedPolygon>
+                            <linkTarget reference="26"/>
+                          </linkTarget>
+                        </roomEdge>
+                        <planPoint id="90" x="7600" y="4800"/>
+                        <roomEdge id="91">
+                          <associatedPolygon class="room" reference="20"/>
+                        </roomEdge>
+                        <planPoint id="92" x="2800" y="4800"/>
+                        <roomEdge reference="19"/>
+                        <planPoint id="93" x="1600" y="4800"/>
+                        <roomEdge id="94">
+                          <associatedPolygon class="room" reference="20"/>
+                        </roomEdge>
+                        <planPoint id="95" x="800" y="4800"/>
+                        <roomEdge id="96">
+                          <associatedPolygon class="room" reference="20"/>
+                        </roomEdge>
+                        <planPoint id="97" x="800" y="6400"/>
+                        <roomEdge id="98">
+                          <associatedPolygon class="room" reference="20"/>
+                        </roomEdge>
+                        <planPoint id="99" x="7600" y="6400"/>
+                        <roomEdge id="100">
+                          <associatedPolygon class="room" reference="20"/>
+                          <linkTarget id="101">
+                            <associatedPolygon class="room" id="102" closed="true" xOffset="800" yOffset="6400" width="6800" height="2000" changed="true" name="Room 3">
+                              <edgeClassType>ds.z.RoomEdge</edgeClassType>
+                              <start id="103" x="800" y="6400">
+                                <edges>
+                                  <planPoint reference="103"/>
+                                  <roomEdge id="104">
+                                    <associatedPolygon class="room" reference="102"/>
+                                  </roomEdge>
+                                  <planPoint id="105" x="800" y="8400"/>
+                                  <roomEdge id="106">
+                                    <associatedPolygon class="room" reference="102"/>
+                                  </roomEdge>
+                                  <planPoint id="107" x="7600" y="8400"/>
+                                  <roomEdge reference="101"/>
+                                  <planPoint id="108" x="7600" y="6400"/>
+                                  <roomEdge id="109">
+                                    <associatedPolygon class="room" reference="102"/>
+                                  </roomEdge>
+                                </edges>
+                              </start>
+                              <end reference="103"/>
+                              <size>4</size>
+                              <minX__DefiningEdge class="roomEdge" reference="109"/>
+                              <minY__DefiningEdge class="roomEdge" reference="101"/>
+                              <maxX__DefiningEdge class="roomEdge" reference="101"/>
+                              <maxY__DefiningEdge class="roomEdge" reference="101"/>
+                              <xOffsetAll>0</xOffsetAll>
+                              <yOffsetAll>0</yOffsetAll>
+                              <heightAll>0</heightAll>
+                              <widthAll>0</widthAll>
+                              <associatedFloor reference="6"/>
+                              <assignmentAreas id="110"/>
+                              <barriers id="111"/>
+                              <delayAreas id="112"/>
+                              <evacuationAreas id="113">
+                                <evacuationArea id="114" closed="true" xOffset="800" yOffset="6400" width="3200" height="2000" changed="true" name="Exit 1">
+                                  <edgeClassType>ds.z.Edge</edgeClassType>
+                                  <start id="115" x="800" y="6400">
+                                    <edges>
+                                      <planPoint reference="115"/>
+                                      <ds.z.Edge id="116">
+                                        <associatedPolygon class="evacuationArea" reference="114"/>
+                                      </ds.z.Edge>
+                                      <planPoint id="117" x="800" y="8400"/>
+                                      <ds.z.Edge id="118">
+                                        <associatedPolygon class="evacuationArea" reference="114"/>
+                                      </ds.z.Edge>
+                                      <planPoint id="119" x="4000" y="8400"/>
+                                      <ds.z.Edge id="120">
+                                        <associatedPolygon class="evacuationArea" reference="114"/>
+                                      </ds.z.Edge>
+                                      <planPoint id="121" x="4000" y="6400"/>
+                                      <ds.z.Edge id="122">
+                                        <associatedPolygon class="evacuationArea" reference="114"/>
+                                      </ds.z.Edge>
+                                    </edges>
+                                  </start>
+                                  <end reference="115"/>
+                                  <size>4</size>
+                                  <minX__DefiningEdge reference="122"/>
+                                  <minY__DefiningEdge reference="122"/>
+                                  <maxX__DefiningEdge reference="122"/>
+                                  <maxY__DefiningEdge reference="120"/>
+                                  <xOffsetAll>0</xOffsetAll>
+                                  <yOffsetAll>0</yOffsetAll>
+                                  <heightAll>0</heightAll>
+                                  <widthAll>0</widthAll>
+                                  <associatedRoom reference="102"/>
+                                  <attractivity>100</attractivity>
+                                </evacuationArea>
+                              </evacuationAreas>
+                              <inaccessibleAreas id="123"/>
+                              <saveAreas id="124">
+                                <saveArea id="125" closed="true" xOffset="4000" yOffset="6400" width="3600" height="2000" changed="true">
+                                  <edgeClassType>ds.z.Edge</edgeClassType>
+                                  <start id="126" x="4000" y="6400">
+                                    <edges>
+                                      <planPoint reference="126"/>
+                                      <ds.z.Edge id="127">
+                                        <associatedPolygon class="saveArea" reference="125"/>
+                                      </ds.z.Edge>
+                                      <planPoint id="128" x="4000" y="8400"/>
+                                      <ds.z.Edge id="129">
+                                        <associatedPolygon class="saveArea" reference="125"/>
+                                      </ds.z.Edge>
+                                      <planPoint id="130" x="7600" y="8400"/>
+                                      <ds.z.Edge id="131">
+                                        <associatedPolygon class="saveArea" reference="125"/>
+                                      </ds.z.Edge>
+                                      <planPoint id="132" x="7600" y="6400"/>
+                                      <ds.z.Edge id="133">
+                                        <associatedPolygon class="saveArea" reference="125"/>
+                                      </ds.z.Edge>
+                                    </edges>
+                                  </start>
+                                  <end reference="126"/>
+                                  <size>4</size>
+                                  <minX__DefiningEdge reference="133"/>
+                                  <minY__DefiningEdge reference="133"/>
+                                  <maxX__DefiningEdge reference="133"/>
+                                  <maxY__DefiningEdge reference="131"/>
+                                  <xOffsetAll>0</xOffsetAll>
+                                  <yOffsetAll>0</yOffsetAll>
+                                  <heightAll>0</heightAll>
+                                  <widthAll>0</widthAll>
+                                  <associatedRoom reference="102"/>
+                                </saveArea>
+                                <evacuationArea reference="114"/>
+                              </saveAreas>
+                              <stairAreas id="134"/>
+                            </associatedPolygon>
+                            <linkTarget reference="100"/>
+                          </linkTarget>
+                        </roomEdge>
+                        <planPoint id="135" x="7600" y="8400"/>
+                        <roomEdge id="136">
+                          <associatedPolygon class="room" reference="20"/>
+                        </roomEdge>
+                      </edges>
+                    </start>
+                    <end reference="21"/>
+                    <size>10</size>
+                    <minX__DefiningEdge class="roomEdge" reference="98"/>
+                    <minY__DefiningEdge class="roomEdge" reference="26"/>
+                    <maxX__DefiningEdge class="roomEdge" reference="136"/>
+                    <maxY__DefiningEdge class="roomEdge" reference="136"/>
+                    <xOffsetAll>0</xOffsetAll>
+                    <yOffsetAll>0</yOffsetAll>
+                    <heightAll>0</heightAll>
+                    <widthAll>0</widthAll>
+                    <associatedFloor reference="6"/>
+                    <assignmentAreas id="137"/>
+                    <barriers id="138"/>
+                    <delayAreas id="139"/>
+                    <evacuationAreas id="140"/>
+                    <inaccessibleAreas id="141"/>
+                    <saveAreas id="142"/>
+                    <stairAreas id="143"/>
+                  </associatedPolygon>
+                  <linkTarget reference="18"/>
+                </linkTarget>
+              </roomEdge>
+              <planPoint id="144" x="2800" y="4800"/>
+              <roomEdge id="145">
+                <associatedPolygon class="room" reference="8"/>
+              </roomEdge>
+            </edges>
+          </start>
+          <end reference="9"/>
+          <size>6</size>
+          <minX__DefiningEdge class="roomEdge" reference="16"/>
+          <minY__DefiningEdge class="roomEdge" reference="12"/>
+          <maxX__DefiningEdge class="roomEdge" reference="145"/>
+          <maxY__DefiningEdge class="roomEdge" reference="18"/>
+          <xOffsetAll>0</xOffsetAll>
+          <yOffsetAll>0</yOffsetAll>
+          <heightAll>0</heightAll>
+          <widthAll>0</widthAll>
+          <associatedFloor reference="6"/>
+          <assignmentAreas id="146">
+            <assignmentArea reference="65"/>
+          </assignmentAreas>
+          <barriers id="147"/>
+          <delayAreas id="148"/>
+          <evacuationAreas id="149"/>
+          <inaccessibleAreas id="150"/>
+          <saveAreas id="151"/>
+          <stairAreas id="152"/>
+        </room>
+        <room reference="28"/>
+        <room reference="20"/>
+        <room reference="102"/>
+      </rooms>
+      <minX__DefiningRoom reference="20"/>
+      <minY__DefiningRoom reference="28"/>
+      <maxX__DefiningRoom reference="20"/>
+      <maxY__DefiningRoom reference="20"/>
+    </floor>
+    <rasterized>false</rasterized>
+  </plan>
+  <currentAssignment id="153" name="Default assignment">
+    <assignmentTypes id="154">
+      <assignmentType reference="49"/>
+      <assignmentType id="155" name="Guests">
+        <diameter class="normalDistribution" id="156" min="0.4" max="0.7" variance="1.0" expectedValue="0.5"/>
+        <age class="normalDistribution" id="157" min="14.0" max="18.0" variance="1.0" expectedValue="16.0"/>
+        <familiarity class="normalDistribution" id="158" min="0.7" max="1.0" variance="1.0" expectedValue="0.8"/>
+        <panic class="normalDistribution" id="159" min="0.0" max="1.0" variance="1.0" expectedValue="0.5"/>
+        <decisiveness class="normalDistribution" id="160" min="0.0" max="1.0" variance="1.0" expectedValue="0.3"/>
+        <standardEvacuees>3</standardEvacuees>
+        <assignmentAreas id="161"/>
+        <uid id="162">d902ae90-9a9b-4fc7-9064-4517f36b0bcb</uid>
+      </assignmentType>
+    </assignmentTypes>
+  </currentAssignment>
+  <assignments id="163">
+    <assignment reference="153"/>
+  </assignments>
+  <evacuationPlans id="164"/>
+</project>

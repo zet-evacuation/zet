@@ -100,8 +100,6 @@ import java.text.NumberFormat;
 import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Locale;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.imageio.ImageIO;
 import javax.media.opengl.GLCapabilities;
 import javax.swing.ButtonGroup;
@@ -243,6 +241,7 @@ public class JEditor extends JFrame implements Localized, EventListener<Progress
 	private JMenuItem mnuPlanImageLocate;
 	private JMenuItem mnuPlanImageTransparency;
 	private JMenuItem mnuOptions;
+	private JMenuItem mnuSettings;
 	private JMenu mWindow;
 	private JMenu mHelp;
 	private JMenuItem mnuHelpAbout;
@@ -280,7 +279,9 @@ public class JEditor extends JFrame implements Localized, EventListener<Progress
 	private BatchResultEntryVisComboBoxModel entryModelVis;
 	private JLabel labelBatchRun;
 	private CycleComboBoxModel cycleModel;
+	/** Allows switching between 3d (perspective) view and 2d (orthogonal/isometric) view. */
 	private JButton btn2d3dSwitch;
+	/** Allows switching orthogonal and isometric 2-dimensional view. */
 	private JButton btn2dSwitch;
 	private JButton btnVideo;
 	private JButton btnPlayStart;
@@ -471,6 +472,14 @@ public class JEditor extends JFrame implements Localized, EventListener<Progress
 		editView = new JEditView( getProject() );
 		batchView = new JBatchView();
 		visualizationView = new JVisualizationView( new GLCapabilities() );
+		visualizationView.setFloorSelectorEnabled( !PropertyContainer.getInstance().getAsBoolean( "settings.gui.visualization.floors" ) );
+		if( PropertyContainer.getInstance().getAsBoolean( "settings.gui.visualization.isometric" ) ) {
+			visualizationView.getGLContainer().setPvm( AbstractVisualization.ParallelViewMode.Isometric );
+		} else {
+			visualizationView.getGLContainer().setPvm( AbstractVisualization.ParallelViewMode.Orthogonal );
+		}
+		visualizationView.getGLContainer().setView( !PropertyContainer.getInstance().getAsBoolean( "settings.gui.visualization.2d" ) );
+					
 		visualizationView.addPotentialItemListener( new ItemListener() {
 			public void itemStateChanged( ItemEvent e ) {
 				if( e.getItem() == null || e.getStateChange() == ItemEvent.DESELECTED )
@@ -505,7 +514,7 @@ public class JEditor extends JFrame implements Localized, EventListener<Progress
 	}
 
 	/**
-	 * Creates the Menu
+	 * Creates the menu.
 	 */
 	private void createMenuBar() {
 		loc.setPrefix( "gui.editor.JEditor." );
@@ -610,6 +619,7 @@ public class JEditor extends JFrame implements Localized, EventListener<Progress
 		mnuPlanImageTransparency.setEnabled( false );
 		Menu.addMenuItem( mExtras, "-" );
 		mnuOptions = Menu.addMenuItem( mExtras, loc.getString( "menuOptions" ), 'T', aclProperties, "options" );
+		mnuSettings = Menu.addMenuItem( mExtras, loc.getString( "menuSettings" ), aclProperties, "settings" );
 
 		// Hilfe-menu
 		mnuHelpAbout = Menu.addMenuItem( mHelp, loc.getString( "menuAbout" ), 'I', aclAbout );
@@ -762,8 +772,11 @@ public class JEditor extends JFrame implements Localized, EventListener<Progress
 		toolBarVisualization.add( new JLabel( " " ) );
 
 		btn2d3dSwitch = Button.newButton( IconSet.Toggle2D3D, aclVisualizationView, "2d3dSwitch", loc.getString( "switch2d3d" ) );
+		btn2d3dSwitch.setSelected( !PropertyContainer.getInstance().getAsBoolean( "settings.gui.visualization.2d" ) );
 		toolBarVisualization.add( btn2d3dSwitch );
 		btn2dSwitch = Button.newButton( IconSet.ToggleOrthogonalIsometric, aclVisualizationView, "2dSwitch", loc.getString( "switchIso" ) );
+		btn2dSwitch.setSelected( PropertyContainer.getInstance().getAsBoolean( "settings.gui.visualization.isometric" ) );
+		btn2dSwitch.setEnabled( PropertyContainer.getInstance().getAsBoolean( "settings.gui.visualization.2d" ) );
 		toolBarVisualization.add( btn2dSwitch );
 		toolBarVisualization.addSeparator();
 		btnVideo = Button.newButton( IconSet.Video, aclScreenshot, "video", loc.getString( "saveVideo" ) );
@@ -778,31 +791,34 @@ public class JEditor extends JFrame implements Localized, EventListener<Progress
 		toolBarVisualization.add( btnPlayEnd );
 		toolBarVisualization.addSeparator();
 		btnShowWalls = Button.newButton( IconSet.ShowWalls, aclViewUpdate, "walls", loc.getString( "showWalls" ) );
-		btnShowWalls.setSelected( true );
+		btnShowWalls.setSelected( PropertyContainer.getInstance().getAsBoolean( "settings.gui.visualization.walls" ) );
 		toolBarVisualization.add( btnShowWalls );
 		btnShowGraph = Button.newButton( IconSet.ShowGraph, aclViewUpdate, "graph", loc.getString( "showGraph" ) );
-		btnShowGraph.setSelected( true );
+		btnShowGraph.setSelected( PropertyContainer.getInstance().getAsBoolean( "settings.gui.visualization.graph" ) );
 		toolBarVisualization.add( btnShowGraph );
 		btnShowGraphGrid = Button.newButton( IconSet.ShowGraphGrid, aclViewUpdate, "graphgrid", loc.getString( "showGridRectangles" ) );
-		btnShowGraphGrid.setSelected( true );
+		btnShowGraphGrid.setSelected( PropertyContainer.getInstance().getAsBoolean( "settings.gui.visualization.nodeArea" ) );
 		toolBarVisualization.add( btnShowGraphGrid );
 		btnShowCellularAutomaton = Button.newButton( IconSet.ShowCellularAutomaton, aclViewUpdate, "ca", loc.getString( "showCellularAutomaton" ) );
-		btnShowCellularAutomaton.setSelected( true );
+		btnShowCellularAutomaton.setSelected( PropertyContainer.getInstance().getAsBoolean( "settings.gui.visualization.cellularAutomaton" ) );
 		toolBarVisualization.add( btnShowCellularAutomaton );
 		toolBarVisualization.addSeparator();
 		btnShowAllFloors = Button.newButton( IconSet.ShowAllFloors, aclViewUpdate, "floors", loc.getString( "showAllFloors" ) );
 		toolBarVisualization.add( btnShowAllFloors );
-		btnShowAllFloors.setSelected( false );
+		btnShowAllFloors.setSelected( PropertyContainer.getInstance().getAsBoolean( "settings.gui.visualization.floors" ) );
 		toolBarVisualization.addSeparator();
 
 		btnShowPotential = Button.newButton( IconSet.ShowPotential, aclViewUpdate, "potential", loc.getString( "showPotential" ) );
+		btnShowPotential.setSelected( PropertyContainer.getInstance().getAsInt( "settings.gui.visualization.floorInformation" ) == 1 );
 		toolBarVisualization.add( btnShowPotential );
-		btnShowPotential.setSelected( true );
 		btnShowDynamicPotential = Button.newButton( IconSet.ShowDynamicPotential, aclViewUpdate, "dynamic", loc.getString( "showDynamicPotential" ) );
+		btnShowDynamicPotential.setSelected( PropertyContainer.getInstance().getAsInt( "settings.gui.visualization.floorInformation" ) == 2 );
 		toolBarVisualization.add( btnShowDynamicPotential );
 		btnShowUtilization = Button.newButton( IconSet.ShowUsage, aclViewUpdate, "utilization", loc.getString( "showUtilization" ) );
+		btnShowUtilization.setSelected( PropertyContainer.getInstance().getAsInt( "settings.gui.visualization.floorInformation" ) == 3 );
 		toolBarVisualization.add( btnShowUtilization );
 		btnShowWaiting = Button.newButton( IconSet.ShowWaiting, aclViewUpdate, "waiting", loc.getString( "showWaitingTime" ) );
+		btnShowWaiting.setSelected( PropertyContainer.getInstance().getAsInt( "settings.gui.visualization.floorInformation" ) == 4 );
 		toolBarVisualization.add( btnShowWaiting );
 		toolBarVisualization.addSeparator();
 
@@ -899,6 +915,7 @@ public class JEditor extends JFrame implements Localized, EventListener<Progress
 	 */
 	public void localize() {
 		editView.localize();
+		visualizationView.localize();
 
 		loc.setPrefix( "gui.editor.JEditor." );
 
@@ -985,6 +1002,7 @@ public class JEditor extends JFrame implements Localized, EventListener<Progress
 		Menu.updateMenu( mnuPlanImageLocate, loc.getString( "menuMovePlan" ) );
 		Menu.updateMenu( mnuPlanImageTransparency, loc.getString( "menuSetPlanTransparency" ) );
 		Menu.updateMenu( mnuOptions, loc.getString( "menuOptions" ) );
+		Menu.updateMenu( mnuSettings, loc.getString( "menuSettings" ) );
 
 		// Window menu
 
@@ -1205,7 +1223,6 @@ public class JEditor extends JFrame implements Localized, EventListener<Progress
 		private JFileChooser jfcProject;
 		private JFileChooser jfcResults;
 
-
 		{
 			jfcProject = new JFileChooser( GUIOptionManager.getSavePath() );
 			jfcProject.setFileFilter( JEditor.getProjectFilter() );
@@ -1223,9 +1240,7 @@ public class JEditor extends JFrame implements Localized, EventListener<Progress
 					loadProjectFile( jfcProject.getSelectedFile() );
 					GUIOptionManager.setSavePath( jfcProject.getCurrentDirectory().getPath() );
 				}
-			} else if( e.getActionCommand().equals( "saveProjectAs" ) ||
-							(e.getActionCommand().equals( "saveProject" ) &&
-							getProject().getProjectFile() == null) ) {
+			} else if( e.getActionCommand().equals( "saveProjectAs" ) || (e.getActionCommand().equals( "saveProject" ) && getProject().getProjectFile() == null) ) {
 				if( jfcProject.showSaveDialog( JEditor.getInstance() ) == JFileChooser.APPROVE_OPTION ) {
 					GUIOptionManager.setSavePath( jfcProject.getCurrentDirectory().getPath() );
 					if( jfcProject.getSelectedFile().exists() && createCopy )
@@ -1526,7 +1541,6 @@ public class JEditor extends JFrame implements Localized, EventListener<Progress
 				JPropertySelectorWindow propertySelector = new JPropertySelectorWindow( JEditor.this, loc.getString( "gui.editor.JPropertySelector.Title" ), 700, 500 );
 				propertySelector.setVisible( true );
 				System.out.println( "Properties saved." ); // TODO loc
-				System.out.println( PropertyContainer.getInstance().getAsInt( "converter.Imbalance" ) );
 			} else if( e.getActionCommand().equals( "options" ) ) {
 				EditorStart.ptmOptions.getRoot().reloadFromPropertyContainer();
 				JOptionsWindow propertySelector = new JOptionsWindow( JEditor.this, loc.getString( "gui.editor.JOptions.Title" ), 700, 500, EditorStart.ptmOptions );
@@ -1536,7 +1550,16 @@ public class JEditor extends JFrame implements Localized, EventListener<Progress
 				} catch( IOException ex ) {
 					sendError( "Error saving config file!" ); // TODO loc
 				}
-			} else
+			} else if( e.getActionCommand().equals( "settings" ) ) {
+				EditorStart.ptmInformation.getRoot().reloadFromPropertyContainer();
+				JOptionsWindow propertySelector = new JOptionsWindow( JEditor.this, loc.getString( "gui.editor.settings.Title" ), 700, 500, EditorStart.ptmInformation );
+				propertySelector.setVisible( true );
+				try {	// Save results in settings file
+					PropertyContainer.saveConfigFile( EditorStart.ptmInformation, new File( EditorStart.informationFilename ) );
+				} catch( IOException ex ) {
+					sendError( "Error saving settings file!" ); // TODO loc
+				}
+			}else
 				sendError( loc.getString( "gui.UnknownCommand" ) + " '" + e.getActionCommand() + "'. " + loc.getString( "gui.ContactDeveloper" ) );
 		}
 	};
@@ -1638,23 +1661,28 @@ public class JEditor extends JFrame implements Localized, EventListener<Progress
 		public void actionPerformed( ActionEvent e ) {
 			if( e.getActionCommand().equals( "graphgrid" ) ) {
 				btnShowGraphGrid.setSelected( !btnShowGraphGrid.isSelected() );
+				PropertyContainer.getInstance().set( "settings.gui.visualization.nodeArea", btnShowGraphGrid.isSelected() );
 				control.showNodeRectangles( btnShowGraphGrid.isSelected() );
 				visualizationView.getGLContainer().repaint();
 			} else if( e.getActionCommand().equals( "walls" ) ) {
 				btnShowWalls.setSelected( !btnShowWalls.isSelected() );
+				PropertyContainer.getInstance().set( "settings.gui.visualization.walls", btnShowWalls.isSelected() );
 				control.showWalls( btnShowWalls.isSelected() );
 				visualizationView.getGLContainer().repaint();
 			} else if( e.getActionCommand().equals( "graph" ) ) {
 				btnShowGraph.setSelected( !btnShowGraph.isSelected() );
+				PropertyContainer.getInstance().set( "settings.gui.visualization.graph", btnShowGraph.isSelected() );
 				control.showGraph( btnShowGraph.isSelected() );
 				visualizationView.getGLContainer().repaint();
 			} else if( e.getActionCommand().equals( "ca" ) ) {
 				btnShowCellularAutomaton.setSelected( !btnShowCellularAutomaton.isSelected() );
+				PropertyContainer.getInstance().set( "settings.gui.visualization.cellularAutomaton", btnShowCellularAutomaton.isSelected() );
 				control.showCellularAutomaton( btnShowCellularAutomaton.isSelected() );
 				visualizationView.getGLContainer().repaint();
 			} else if( e.getActionCommand().equals( "floors" ) ) {
-				visualizationView.enableFloorSelector( btnShowAllFloors.isSelected() );
 				btnShowAllFloors.setSelected( !btnShowAllFloors.isSelected() );
+				PropertyContainer.getInstance().set( "settings.gui.visualization.floors", btnShowAllFloors.isSelected() );
+				visualizationView.setFloorSelectorEnabled( !btnShowAllFloors.isSelected() );
 				if( btnShowAllFloors.isSelected() )
 					control.showAllFloors();
 				else
@@ -1664,11 +1692,13 @@ public class JEditor extends JFrame implements Localized, EventListener<Progress
 				if( btnShowPotential.isSelected() ) {
 					btnShowPotential.setSelected( false );
 					control.showPotential( CellInformationDisplay.NO_POTENTIAL );
+					PropertyContainer.getInstance().set( "settings.gui.visualization.floorInformation", 0 );
 				} else {
 					btnShowPotential.setSelected( true );
 					btnShowDynamicPotential.setSelected( false );
 					btnShowUtilization.setSelected( false );
 					btnShowWaiting.setSelected( false );
+					PropertyContainer.getInstance().set( "settings.gui.visualization.floorInformation", 1 );
 					visualizationView.unselectPotentialSelector();
 					control.activateMergedPotential();
 					control.showPotential( CellInformationDisplay.STATIC_POTENTIAL );
@@ -1678,11 +1708,13 @@ public class JEditor extends JFrame implements Localized, EventListener<Progress
 				if( btnShowDynamicPotential.isSelected() ) {
 					btnShowDynamicPotential.setSelected( false );
 					control.showPotential( CellInformationDisplay.NO_POTENTIAL );
+					PropertyContainer.getInstance().set( "settings.gui.visualization.floorInformation", 0 );
 				} else {
 					btnShowDynamicPotential.setSelected( true );
 					btnShowPotential.setSelected( false );
 					btnShowUtilization.setSelected( false );
 					btnShowWaiting.setSelected( false );
+					PropertyContainer.getInstance().set( "settings.gui.visualization.floorInformation", 2 );
 					visualizationView.unselectPotentialSelector();
 					control.showPotential( CellInformationDisplay.DYNAMIC_POTENTIAL );
 				}
@@ -1690,12 +1722,14 @@ public class JEditor extends JFrame implements Localized, EventListener<Progress
 			} else if( e.getActionCommand().equals( "utilization" ) ) {
 				if( btnShowUtilization.isSelected() ) {
 					btnShowUtilization.setSelected( false );
+					PropertyContainer.getInstance().set( "settings.gui.visualization.floorInformation", 0 );
 					control.showPotential( CellInformationDisplay.NO_POTENTIAL );
 				} else {
 					btnShowUtilization.setSelected( true );
 					btnShowDynamicPotential.setSelected( false );
 					btnShowPotential.setSelected( false );
 					btnShowWaiting.setSelected( false );
+					PropertyContainer.getInstance().set( "settings.gui.visualization.floorInformation", 3 );
 					visualizationView.unselectPotentialSelector();
 					control.showPotential( CellInformationDisplay.UTILIZATION );
 				}
@@ -1703,12 +1737,14 @@ public class JEditor extends JFrame implements Localized, EventListener<Progress
 			} else if( e.getActionCommand().equals( "waiting" ) ) {
 				if( btnShowWaiting.isSelected() ) {
 					btnShowWaiting.setSelected( false );
+					PropertyContainer.getInstance().set( "settings.gui.visualization.floorInformation", 0 );
 					control.showPotential( CellInformationDisplay.NO_POTENTIAL );
 				} else {
 					btnShowWaiting.setSelected( true );
 					btnShowUtilization.setSelected( false );
 					btnShowDynamicPotential.setSelected( false );
 					btnShowPotential.setSelected( false );
+					PropertyContainer.getInstance().set( "settings.gui.visualization.floorInformation", 4 );
 					visualizationView.unselectPotentialSelector();
 					control.showPotential( CellInformationDisplay.WAITING );
 				}
@@ -1721,10 +1757,14 @@ public class JEditor extends JFrame implements Localized, EventListener<Progress
 		@Override
 		public void actionPerformed( ActionEvent e ) {
 			if( e.getActionCommand().equals( "2d3dSwitch" ) ) {
+				btn2d3dSwitch.setSelected( !btn2d3dSwitch.isSelected() );
 				btn2dSwitch.setEnabled( !btn2dSwitch.isEnabled() );
+				PropertyContainer.getInstance().set( "settings.gui.visualization.2d", !btn2d3dSwitch.isSelected() );
 				visualizationView.getGLContainer().toggleView();
 				visualizationView.getGLContainer().repaint();
 			} else if( e.getActionCommand().equals( "2dSwitch" ) ) {
+				btn2dSwitch.setSelected( !btn2dSwitch.isSelected() );
+				PropertyContainer.getInstance().set( "settings.gui.visualization.isometric", btn2dSwitch.isSelected() );
 				if( visualizationView.getGLContainer().getPvm() == AbstractVisualization.ParallelViewMode.Orthogonal )
 					visualizationView.getGLContainer().setPvm( AbstractVisualization.ParallelViewMode.Isometric );
 				else
@@ -1893,6 +1933,8 @@ public class JEditor extends JFrame implements Localized, EventListener<Progress
 			// Löschen eingestellter parameter
 			ZToCAConverter.getInstance().clear();
 			firstSwitch = true;
+			if( !PropertyContainer.getInstance().getAsBoolean( "editor.options.view.hideDefaultFloor" ) )
+				editView.setFloor( 1 );
 			// Updaten der gui
 			this.getEditView().update();
 			sendMessage( loc.getString( "gui.editor.JEditor.message.loaded" ) );
@@ -1923,20 +1965,22 @@ public class JEditor extends JFrame implements Localized, EventListener<Progress
 		GraphVisualizationResult graphRes = e.getGraphVis();
 
 		VisualizationDataStructureTask visualizationDataStructure = new VisualizationDataStructureTask( caRes, graphRes, e.getBuildingResults(), caStatistic );
-		JProgressBarDialog pbd = new JProgressBarDialog( JEditor.getInstance(), "Visualisierungs Datenstruktur aufbauen", true, visualizationDataStructure );
+		JProgressBarDialog pbd = new JProgressBarDialog( JEditor.getInstance(), loc.getStringWithoutPrefix( "batch.tasks.buildVisualizationDatastructure" ), true, visualizationDataStructure );
 		pbd.executeTask();
 		pbd.setVisible( true );
-		sendMessage( "Visualisierungsdatenstruktur aufgebaut" );
+		sendMessage( loc.getStringWithoutPrefix( "batch.tasks.progress.visualizationDatastructureComplete" ) );
 		control = visualizationDataStructure.getControl();
 
 		visualizationView.getGLContainer().setControl( control );
 
 		btnShowCellularAutomaton.setEnabled( control.hasCellularAutomaton() );
 		btnShowGraph.setEnabled( control.hasGraph() );
+		btnShowGraphGrid.setEnabled( control.hasGraph() );
 
-		control.showCellularAutomaton( btnShowCellularAutomaton.isSelected() );
-		control.showGraph( btnShowGraph.isSelected() );
-		control.showFloor( visualizationView.getSelectedFloorID() );
+		//control.showCellularWa( btnShowCellularAutomaton.isSelected() );
+		//control.showCellularAutomaton( btnShowCellularAutomaton.isSelected() );
+		//control.showGraph( btnShowGraph.isSelected() );
+//		control.showFloor( visualizationView.getSelectedFloorID() );
 		visualizationView.updateFloorSelector();
 		visualizationView.updatePotentialSelector();
 	}
@@ -2122,11 +2166,18 @@ public class JEditor extends JFrame implements Localized, EventListener<Progress
 	}
 
 	/**
+	 * Returns the visualization view component.
+	 * @return the visualization view component.
+	 */
+	public JVisualizationView getVisualizationView() {
+		return visualizationView;
+	}
+
+	/**
 	 * Sets the Zoom factor on the currently shown shown JFloor.
 	 * @param zoomFactor the zoom factor
 	 */
 	public void setZoomFactor( double zoomFactor ) {
-		System.out.println( zoomFactor );
 		double zoomChange = zoomFactor / CoordinateTools.getZoomFactor();
 		Rectangle oldView = new Rectangle( editView.getLeftPanel().getViewport().getViewRect() );
 		oldView.x *= zoomChange;

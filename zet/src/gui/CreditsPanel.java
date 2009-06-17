@@ -39,11 +39,13 @@ public class CreditsPanel extends JOrthoPanel {
 	/** Describes if the textures are loaded or not */
 	private boolean texturesLoaded = false;
 	/** The texture containing the font information */
-	private Texture fontTex;
+	private Texture texFont;
+	/** The texture containing the logo */
+	private Texture texLogo;
 	/** A texture-font object using to draw text on the {@code OpenGL} panel */
 	private TextureFont font;
 	/** The top position of the text */
-	private double startPos = -10;
+	private double startPos = -128; // 256 height of picture, 84 black pixels
 	/** The array containing the text. */
 	private CreditsString[] lines = {
 		new CreditsString( "zet evakuierungs-tool", true ),
@@ -155,11 +157,12 @@ public class CreditsPanel extends JOrthoPanel {
 			texMan = TextureManager.getInstance();
 			loadTextures();
 			texturesLoaded = true;
-			fontTex = texMan.get( "font1" );
-			font = new TextureFont( drawable.getGL(), fontTex );
+			texFont = texMan.get( "font1" );
+			texLogo = texMan.get( "logo1" );
+			font = new TextureFont( drawable.getGL(), texFont );
 			font.buildFont( 16, 14, 16, 12, 9 );
 			//font.buildFont( 16, 8, 16, 24, 19 );
-			fontTex.bind();
+			texFont.bind();
 		}
 	}
 
@@ -170,12 +173,27 @@ public class CreditsPanel extends JOrthoPanel {
 	 */
 	public void display( GLAutoDrawable drawable ) {
 		super.display( drawable );	// clear the screen
-		GL gl = drawable.getGL();
+		//GL gl = drawable.getGL();
 
 		gl.glEnable( GL.GL_TEXTURE_2D );
 		this.switchToPrintScreen( gl );
 
+		texLogo.bind();
+		// Draw a logo
+		gl.glBegin( GL.GL_QUADS );
+			gl.glTexCoord2f( 0.0f, 1.0f );
+			gl.glVertex3d( (width-256)/2, startPos, 0 );
+			gl.glTexCoord2f( 0.0f, 0.0f );
+			gl.glVertex3d( (width-256)/2, startPos + 128, 0 );
+			gl.glTexCoord2f( 1.0f, 0.0f );
+			gl.glVertex3d( (width-256)/2+256, startPos + 128, 0 );
+			gl.glTexCoord2f( 1.0f, 1.0f );
+			gl.glVertex3d( (width-256)/2+250, startPos, 0 );
+		gl.glEnd();
+
+		texFont.bind();
 		drawLines( lines );
+
 		this.switchToOrthoScreen( gl );
 	}
 
@@ -196,6 +214,7 @@ public class CreditsPanel extends JOrthoPanel {
 	 */
 	private void loadTextures() {
 		texMan.load( "font1", "./textures/font1.bmp" );
+		texMan.load( "logo1", "./textures/logo1.png" );
 	}
 
 	/**
@@ -211,7 +230,7 @@ public class CreditsPanel extends JOrthoPanel {
 			end = start - i * 16 + 12;
 		}
 		if( end > this.getHeight() + 48 )
-			startPos = -10;
+			startPos = -128;
 	}
 	
 	/**

@@ -60,7 +60,7 @@ public class GLNodeControl extends AbstractControl<GLNode, Node, GraphVisualizat
 		yPosition = (nwY + 0.5 * (seY - nwY)) * Z_TO_OPENGL_SCALING;
 		capacity = graphVisResult.getNodeCapacities().get( node );
 
-		for( Edge edge : graphVisResult.getNetwork().outgoingEdges( node ) ) {
+		for( Edge edge : graphVisResult.getNetwork().outgoingEdges( node ) )
 			if( edge.start().id() != 0 && edge.end().id() != 0 ) {
 				int nodeFloor1 = graphVisResult.getNodeToFloorMapping().get( edge.start() );
 				int nodeFloor2 = graphVisResult.getNodeToFloorMapping().get( edge.end() );
@@ -69,13 +69,12 @@ public class GLNodeControl extends AbstractControl<GLNode, Node, GraphVisualizat
 				else
 					add( new GLEdgeControl( graphVisResult, edge, glControl ) );
 			}
-		}
 		isEvacuationNode = graphVisResult.isEvacuationNode( node );
 		isSourceNode = graphVisResult.isSourceNode( node );
 		isDeletedSourceNode = graphVisResult.isDeletedSourceNode( node );
 
 		floor = graphVisResult.getNodeToFloorMapping().get( node );
-		zPosition += (floor - 1) * (VisualizationOptionManager.getFloorDistance() + VisualizationOptionManager.getFloorHeight());
+		zPosition += (floor - 1) * VisualizationOptionManager.getFloorDistance();
 
 		setView( new GLNode( this ) );
 		flowCalculator = new FlowCalculator();
@@ -153,17 +152,20 @@ public class GLNodeControl extends AbstractControl<GLNode, Node, GraphVisualizat
 	}
 
 	public final boolean isCurrentlyOccupied() {
-		if( startTime < time && startTime + duration > time ) {
+		if( startTime < time && startTime + duration > time )
 			return true;
-		} else {
+		else
 			return false;
-		}
 	}
 
 	public void setRectangleVisible( boolean val ) {
 		this.gridVisible = val;
 	}
-	
+
+	/**
+	 * Returns <code>true</code> if the rectangled area belonging to the node is visible.
+	 * @return <code>true</code> if the rectangled node area is visible, <code>false</code> otherwise
+	 */
 	public boolean isRectangleVisible() {
 		return gridVisible;
 	}

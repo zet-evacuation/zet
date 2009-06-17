@@ -47,6 +47,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Vector;
 import javax.media.opengl.GLAutoDrawable;
+import localization.Localization;
 import opengl.framework.abs.drawable;
 import statistic.ca.CAStatistic;
 import tasks.AlgorithmTask;
@@ -89,7 +90,8 @@ public class GLControl implements drawable {
 		/** Shows the chosen exit at the head*/
 		CHOSEN_EXIT
 	}
-	
+	/** The localization class. */
+	private Localization loc = Localization.getInstance();
 	/** Indicates wheather the graph is currently visible, or not. */
 	private boolean showGraph;
 	/** Indicates wheather the cellular automaton is currently visible, or not. */
@@ -150,6 +152,161 @@ public class GLControl implements drawable {
 	private int recordingDone;
 	
 	/**
+	 * Initializes a new empty instance of the general control class for the
+	 * visualization of an evacuation simulation. The instance does not contain
+	 * any graph, building or cellular automaton data, its
+	 * {@link #draw( GLAutoDrawable )} method doeas nothing.
+	 */
+	public GLControl( ) {
+		showCA = false;
+		hasCA = false;
+		showGraph = false;
+		hasGraph = false;
+		showWalls = false;
+	}
+
+	/**
+	 * Initializes a new instance of the general control class for the
+	 * visualization of an evacuation simulation.
+	 * @param caVisResults the visual results for cellular automatons
+	 * @param graphVisResult the visual results for graph
+	 * @param buildingResults the visual information about the building
+	 * @param caStatistic the calculated statistic for cellular automaton
+	 */
+	public GLControl( CAVisualizationResults caVisResults, GraphVisualizationResult graphVisResult, BuildingResults buildingResults, CAStatistic caStatistic ) {
+		this.caStatistic = caStatistic;
+		this.buildingResults = buildingResults;
+		GLCellControl.invalidateMergedPotential();
+		if( caVisResults != null ) {
+			caFinished = false;
+			Runtime runtime = Runtime.getRuntime();
+			long memStart = (runtime.totalMemory() - runtime.freeMemory());
+			hasCA = true;
+			ca = new CellularAutomaton( caVisResults.getRecording().getInitialConfig() );
+			cellCount = ca.getCellCount();
+			cellsDone = 0;
+			recordingCount = caVisResults.getRecording().length();
+			recordingDone = 0;
+			AlgorithmTask.getInstance().setProgress( 0, loc.getStringWithoutPrefix( "batch.tasks.progress.createCellularAutomatonVisualizationDatastructure" ), "" );
+			caControl = new GLCAControl( caVisResults, ca, this );
+			long memEnd = (runtime.totalMemory() - runtime.freeMemory());
+			if( DebugFlags.VIS_CA )
+				System.out.println( "Speicher für ZA: " + (memEnd - memStart) + " Bytes" );
+			individuals = caControl.getIndividuals();
+			visRecording = caVisResults.getRecording();
+			caView = caControl.getView();
+			secondsPerStepCA = ca.getSecondsPerStep();
+			estimatedTime = Math.max( estimatedTime, caVisResults.getRecording().length() * secondsPerStepCA );
+			nanoSecondsPerStepCA = Math.round( secondsPerStepCA * 1000000000 );
+			stepCA = 0;
+			caVisResults.getRecording().rewind();
+			for( Action action : caVisResults.getRecording().nextActions() ) {
+				try {
+					action.execute( ca );
+					if( action instanceof MoveAction ) {
+						System.out.println( action );
+					}
+				} catch( InconsistentPlaybackStateException e ) {
+					e.printStackTrace();
+				}
+			}
+			// füge alle zellen in die update-liste hinzu
+			cells = new ArrayList<GLCellControl>();
+			for( GLCAFloorControl floor : caControl.getAllFloors() ) {
+				for( GLRoomControl room : floor ) {
+					for( GLCellControl cell : room ) {
+						cells.add( cell );	// TODO use addAll
+					}
+				}
+				floor.getView().setIndividuals( caControl.getIndividualControls() );
+			}
+		} else {
+			hasCA = false;
+		}
+		if( graphVisResult != null ) {
+			graphFinished = false;
+			AlgorithmTask.getInstance().setProgress( 0, loc.getStringWithoutPrefix( "batch.tasks.progress.createGraphVisualizationDataStructure" ), "" );
+			hasGraph = true;
+			nodeCount = graphVisResult.getNetwork().nodes().size();
+			nodesDone = 0;
+
+			stepGraph = 0;
+			graphControl = new GLGraphControl( graphVisResult, this );
+			graphView = graphControl.getView();
+			nodes = new ArrayList<GLNodeControl>();
+			edges = new ArrayList<GLEdgeControl>();
+
+			for( GLGraphFloorControl g : graphControl.childControls ) {
+				for( GLNodeControl node : g ) {
+					for( GLEdgeControl edge : node ) {
+						edges.add( edge );	// TODO use addAll
+					}
+					nodes.add( node );
+				}
+			}
+
+			// Set speed such that it arrives when the last individual is evacuated.
+			if( hasCA && PropertyContainer.getInstance().getAsBoolean( "options.visualization.flow.equalArrival" ) ) {
+				nanoSecondsPerStepGraph = graphStepCount == 0 ? 0 : (nanoSecondsPerStepCA * caVisResults.getRecording().length()) / graphStepCount;
+				secondsPerStepGraph = nanoSecondsPerStepGraph / (double)1000000000;
+				System.err.println( "Für gleichzeitige Ankunft berechnete Geschwindigkeit: " + nanoSecondsPerStepGraph );
+			} else {
+				secondsPerStepGraph = secondsPerStepGraph();
+				nanoSecondsPerStepGraph = Math.round( secondsPerStepGraph * 1000000000 );
+				System.err.println( "Berechnete Geschwindigkeit (durchschnitt der ZA-Geschwindigkeiten): " + nanoSecondsPerStepGraph );
+			}
+			estimatedTime = Math.max( estimatedTime, graphStepCount * secondsPerStepGraph );
+		} else {
+			hasGraph = false;
+		}
+		time = 0;
+		finished = caFinished && graphFinished;
+
+		AlgorithmTask.getInstance().setProgress( 1, loc.getStringWithoutPrefix( "batch.tasks.progress.createBuildingVisualizationDataStructure" ), "" );
+		wallCount = buildingResults.getWalls().size();
+		wallsDone = 0;
+		buildingControl = new GLBuildingControl( buildingResults, this );
+		buildingView = buildingControl.getView();
+
+		AlgorithmTask.getInstance().setProgress( 100, loc.getStringWithoutPrefix( "batch.tasks.progress.visualizationDatastructureComplete" ), "" );
+		initSettings();
+	}
+
+	/**
+	 * Initializes the visualization settings with the values stored in the
+	 * {@link PropertyContainer}.
+	 */
+	private void initSettings() {
+		showWalls( PropertyContainer.getInstance().getAsBoolean( "settings.gui.visualization.walls" ) );
+		showGraph( PropertyContainer.getInstance().getAsBoolean( "settings.gui.visualization.graph" ) );
+		showNodeRectangles( PropertyContainer.getInstance().getAsBoolean( "settings.gui.visualization.nodeArea" ) );
+		showCellularAutomaton( PropertyContainer.getInstance().getAsBoolean( "settings.gui.visualization.cellularAutomaton" ) );
+		if( PropertyContainer.getInstance().getAsBoolean( "settings.gui.visualization.floors" ) ) {
+			showAllFloors();
+		} else
+			showFirstFloor();
+
+		switch( PropertyContainer.getInstance().getAsInt( "settings.gui.visualization.floorInformation" ) ) {
+			case 1:
+				showPotential( CellInformationDisplay.STATIC_POTENTIAL );
+				break;
+			case 2:
+				showPotential( CellInformationDisplay.DYNAMIC_POTENTIAL );
+				break;
+			case 3:
+				showPotential( CellInformationDisplay.UTILIZATION );
+				break;
+			case 4:
+				showPotential( CellInformationDisplay.WAITING );
+				break;
+			case 0:
+			default:
+				showPotential( CellInformationDisplay.NO_POTENTIAL );
+				break;
+		}
+	}
+
+	/**
 	 * <p>This method increases the number of cells that are created and
 	 * calculates a new progress. The progress will at most reach 99% so that
 	 * after all objects are created a final "Done" message can be submitted.</p>
@@ -207,129 +364,6 @@ public class GLControl implements drawable {
 		wallsDone++;
 		int progress = Math.max( 0, Math.min( (int) Math.round( ((double) wallsDone / wallCount) * 100 ), 99 ) );
 		AlgorithmTask.getInstance().setProgress( progress, "Erzeuge Gebäude...", "Wand " + wallsDone + " von " + wallCount + " erzeugt." );
-	}
-
-	/**
-	 * Initializes a new empty instance of the general control class for the
-	 * visualization of an evacuation simulation. The instance does not contain
-	 * any graph, building or cellular automaton data, its
-	 * {@link #draw( GLAutoDrawable )} method doeas nothing.
-	 */
-	public GLControl( ) {
-		showCA = false;
-		hasCA = false;
-		showGraph = false;
-		hasGraph = false;
-		showWalls = false;
-	}
-
-	/**
-	 * Initializes a new instance of the general control class for the
-	 * visualization of an evacuation simulation.
-	 * @param caVisResults the visual results for cellular automatons
-	 * @param graphVisResult the visual results for graph
-	 * @param buildingResults the visual information about the building
-	 * @param caStatistic the calculated statistic for cellular automaton
-	 */
-	public GLControl( CAVisualizationResults caVisResults, GraphVisualizationResult graphVisResult, BuildingResults buildingResults, CAStatistic caStatistic ) {
-		this.caStatistic = caStatistic;
-		this.buildingResults = buildingResults;
-		GLCellControl.invalidateMergedPotential();
-		if( caVisResults != null ) {
-			caFinished = false;
-			Runtime runtime = Runtime.getRuntime();
-			long memStart = (runtime.totalMemory() - runtime.freeMemory());
-			hasCA = true;
-			ca = new CellularAutomaton( caVisResults.getRecording().getInitialConfig() );
-			cellCount = ca.getCellCount();
-			cellsDone = 0;
-			recordingCount = caVisResults.getRecording().length();
-			recordingDone = 0;
-			if( DebugFlags.VIS_CA )
-				System.out.println( "Starte das Aufbauen der ZA Struktur..." );
-			caControl = new GLCAControl( caVisResults, ca, this );
-			if( DebugFlags.VIS_CA )
-				System.out.println( "ZA Struktur erstellt.");
-			long memEnd = (runtime.totalMemory() - runtime.freeMemory());
-			if( DebugFlags.VIS_CA )
-				System.out.println( "Speicher für ZA: " + (memEnd - memStart) + " Bytes" );
-			individuals = caControl.getIndividuals();
-			visRecording = caVisResults.getRecording();
-			caView = caControl.getView();
-			secondsPerStepCA = ca.getSecondsPerStep();
-			estimatedTime = Math.max( estimatedTime, caVisResults.getRecording().length() * secondsPerStepCA );
-			nanoSecondsPerStepCA = Math.round( secondsPerStepCA * 1000000000 );
-			stepCA = 0;
-			caVisResults.getRecording().rewind();
-			for( Action action : caVisResults.getRecording().nextActions() ) {
-				try {
-					action.execute( ca );
-					if( action instanceof MoveAction ) {
-						System.out.println( action );
-					}
-				} catch( InconsistentPlaybackStateException e ) {
-					e.printStackTrace();
-				}
-			}
-			// füge alle zellen in die update-liste hinzu
-			cells = new ArrayList<GLCellControl>();
-			for( GLCAFloorControl floor : caControl.getAllFloors() ) {
-				for( GLRoomControl room : floor ) {
-					for( GLCellControl cell : room ) {
-						cells.add( cell );	// TODO use addAll
-					}
-				}
-				floor.getView().setIndividuals( caControl.getIndividualControls() );
-			}
-		} else {
-			hasCA = false;
-		}
-		if( graphVisResult != null ) {
-			graphFinished = false;
-			AlgorithmTask.getInstance().setProgress( 0, "Erzeuge Graph...", "" );
-			hasGraph = true;
-			nodeCount = graphVisResult.getNetwork().nodes().size();
-			nodesDone = 0;
-
-			stepGraph = 0;
-			graphControl = new GLGraphControl( graphVisResult, this );
-			graphView = graphControl.getView();
-			nodes = new ArrayList<GLNodeControl>();
-			edges = new ArrayList<GLEdgeControl>();
-
-			for( GLGraphFloorControl g : graphControl.childControls ) {
-				for( GLNodeControl node : g ) {
-					for( GLEdgeControl edge : node ) {
-						edges.add( edge );	// TODO use addAll
-					}
-					nodes.add( node );
-				}
-			}
-
-			// Set speed such that it arrives when the last individual is evacuated.
-			if( hasCA && PropertyContainer.getInstance().getAsBoolean( "options.visualization.flow.equalArrival" ) ) {
-				nanoSecondsPerStepGraph = graphStepCount == 0 ? 0 : (nanoSecondsPerStepCA * caVisResults.getRecording().length()) / graphStepCount;
-				secondsPerStepGraph = nanoSecondsPerStepGraph / (double)1000000000;
-				System.err.println( "Für gleichzeitige Ankunft berechnete Geschwindigkeit: " + nanoSecondsPerStepGraph );
-			} else {
-				secondsPerStepGraph = secondsPerStepGraph();
-				nanoSecondsPerStepGraph = Math.round( secondsPerStepGraph * 1000000000 );
-				System.err.println( "Berechnete Geschwindigkeit (durchschnitt der ZA-Geschwindigkeiten): " + nanoSecondsPerStepGraph );
-			}
-			estimatedTime = Math.max( estimatedTime, graphStepCount * secondsPerStepGraph );
-		} else {
-			hasGraph = false;
-		}
-		time = 0;
-		finished = caFinished && graphFinished;
-
-		AlgorithmTask.getInstance().setProgress( 1, "Erzeuge Gebäude...", "" );
-		wallCount = buildingResults.getWalls().size();
-		wallsDone = 0;
-		buildingControl = new GLBuildingControl( buildingResults, this );
-		buildingView = buildingControl.getView();
-
-		AlgorithmTask.getInstance().setProgress( 100, "Visualisierungsdatenstruktur aufgebaut", "" );
 	}
 
 	/**
@@ -447,7 +481,7 @@ public class GLControl implements drawable {
 		if( hasGraph && !graphFinished ) {
 			long elapsedSteps = (timeSinceLastStepGraph / nanoSecondsPerStepGraph);
 			stepGraph += elapsedSteps;
-			timeSinceLastStepGraph = timeSinceLastStepGraph% nanoSecondsPerStepGraph;
+			timeSinceLastStepGraph = timeSinceLastStepGraph % nanoSecondsPerStepGraph;
 			realStepGraph = ( (double) time / (double) nanoSecondsPerStepGraph );
 			for( GLNodeControl node : nodes )
 				node.stepUpdate( (int) stepGraph );
@@ -530,12 +564,22 @@ public class GLControl implements drawable {
 		GLCellControl.setActivePotential( potential );
 	}
 	
+	/**
+	 * Activates the visualization of all floors, if a cellular automaton is present.
+	 */
 	public void showAllFloors() {
 		if( hasCA )
 			caControl.showAllFloors();
 		if( hasGraph )
 			graphControl.showAllFloors();
 		buildingControl.showAllFloors();
+	}
+
+	/**
+	* Shows the first floor, ignoring the default evacuation floor.
+	*/
+	public void showFirstFloor() {
+		showFloor( 0 );
 	}
 
 	/**
@@ -571,6 +615,8 @@ public class GLControl implements drawable {
 	 * @param selected decides wheather the node rectangles are visible, or not.
 	 */
 	public void showNodeRectangles( boolean selected ) {
+		if( !hasGraph() )
+			return;
 		for( GLGraphFloorControl g : graphControl.childControls ) {
 			for( GLNodeControl node : g ) {
 				node.setRectangleVisible( selected );
@@ -592,6 +638,10 @@ public class GLControl implements drawable {
 		update();
 	}
 
+	/**
+	 * Sets a type of potential that is visualized if a cellular automaton is present.
+	 * @param pdm the type of potential
+	 */
 	public void showPotential( CellInformationDisplay pdm ) {
 		if( !hasCA )
 			return;

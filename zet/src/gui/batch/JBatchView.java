@@ -79,268 +79,252 @@ public class JBatchView extends JPanel {
 	private static final int COL_EVACUATION_PLAN_TYPE = COL_GRAPH_MAX_TIME + 1;
 	private static final int COL_EVACUATION_PLAN_CYCLES = COL_EVACUATION_PLAN_TYPE + 1;
 	private static final int COL_PROPERTIES = COL_EVACUATION_PLAN_CYCLES + 1;
-	
 	private static final int STARTING_CYCLES = PropertyContainer.getInstance().getAsInt( "properties.simulation.runCount" );
-	
 	private Batch batch;
 	private int cycles = STARTING_CYCLES;
-	
 	private JTable tblEntries;
 	private BatchTableModel tablemodel;
 	private JTextField txtCycles;
 	private JTextField txtSeed;
 	private JPopupMenu popup;
 	private JCheckBox chkTempFiles;
-	
-	public JBatchView () {
-		super (new BorderLayout ());
 
-		batch = new Batch ();
+	public JBatchView() {
+		super( new BorderLayout() );
 
-		add (createMainPanel (), BorderLayout.CENTER);
-		add (createSouthPanel (), BorderLayout.SOUTH);
+		batch = new Batch();
+
+		add( createMainPanel(), BorderLayout.CENTER );
+		add( createSouthPanel(), BorderLayout.SOUTH );
 	}
 
-	private JPanel createSouthPanel () {
-		txtCycles = new JTextField (Integer.toString (STARTING_CYCLES), 3);
-		txtSeed = new JTextField (Long.toString (RandomUtils.getInstance ().getSeed ()), 20);
-		chkTempFiles = new JCheckBox (Localization.getInstance ().getString ("gui.editor.JBatchView.tempfiles"), false);
-		JButton btnRun = new JButton (Localization.getInstance ().getString ("gui.editor.JBatchView.start"));
+	private JPanel createSouthPanel() {
+		txtCycles = new JTextField( Integer.toString( STARTING_CYCLES ), 3 );
+		txtSeed = new JTextField( Long.toString( RandomUtils.getInstance().getSeed() ), 20 );
+		chkTempFiles = new JCheckBox( Localization.getInstance().getString( "gui.editor.JBatchView.tempfiles" ), false );
+		JButton btnRun = new JButton( Localization.getInstance().getString( "gui.editor.JBatchView.start" ) );
 
 		int x = 0;
-		
-		JPanel south = new JPanel (new GridBagLayout ());
-		south.add (new JLabel (Localization.getInstance ().getString ("gui.editor.JBatchView.cycles") + " "), new GridBagConstraints (
-				x++, 0, 1, 1, 0.0, 1.0, GridBagConstraints.WEST, GridBagConstraints.NONE,
-				new Insets (5, 5, 5, 5), 0, 0));
-		south.add (txtCycles, new GridBagConstraints (
-				x++, 0, 1, 1, 0.0, 1.0, GridBagConstraints.WEST, GridBagConstraints.NONE,
-				new Insets (5, 5, 5, 5), 0, 0));
-		south.add (new JLabel (Localization.getInstance ().getString ("gui.editor.JBatchView.seed") + " "), new GridBagConstraints (
-				x++, 0, 1, 1, 1.0, 1.0, GridBagConstraints.EAST, GridBagConstraints.NONE,
-				new Insets (5, 5, 5, 5), 0, 0));
-		south.add (txtSeed, new GridBagConstraints (
-				x++, 0, 1, 1, 1.0, 1.0, GridBagConstraints.WEST, GridBagConstraints.NONE,
-				new Insets (5, 5, 5, 5), 0, 0));
-		south.add (chkTempFiles, new GridBagConstraints (
-				x++, 0, 1, 1, 1.0, 1.0, GridBagConstraints.CENTER, GridBagConstraints.NONE,
-				new Insets (5, 5, 5, 5), 0, 0));
-		south.add (btnRun, new GridBagConstraints (
-				x++, 0, 1, 1, 0.0, 1.0, GridBagConstraints.EAST, GridBagConstraints.NONE,
-				new Insets (5, 5, 5, 5), 0, 0));
 
-		txtCycles.addKeyListener (new KeyAdapter () {
+		JPanel south = new JPanel( new GridBagLayout() );
+		south.add( new JLabel( Localization.getInstance().getString( "gui.editor.JBatchView.cycles" ) + " " ), new GridBagConstraints(
+						x++, 0, 1, 1, 0.0, 1.0, GridBagConstraints.WEST, GridBagConstraints.NONE,
+						new Insets( 5, 5, 5, 5 ), 0, 0 ) );
+		south.add( txtCycles, new GridBagConstraints(
+						x++, 0, 1, 1, 0.0, 1.0, GridBagConstraints.WEST, GridBagConstraints.NONE,
+						new Insets( 5, 5, 5, 5 ), 0, 0 ) );
+		south.add( new JLabel( Localization.getInstance().getString( "gui.editor.JBatchView.seed" ) + " " ), new GridBagConstraints(
+						x++, 0, 1, 1, 1.0, 1.0, GridBagConstraints.EAST, GridBagConstraints.NONE,
+						new Insets( 5, 5, 5, 5 ), 0, 0 ) );
+		south.add( txtSeed, new GridBagConstraints(
+						x++, 0, 1, 1, 1.0, 1.0, GridBagConstraints.WEST, GridBagConstraints.NONE,
+						new Insets( 5, 5, 5, 5 ), 0, 0 ) );
+		south.add( chkTempFiles, new GridBagConstraints(
+						x++, 0, 1, 1, 1.0, 1.0, GridBagConstraints.CENTER, GridBagConstraints.NONE,
+						new Insets( 5, 5, 5, 5 ), 0, 0 ) );
+		south.add( btnRun, new GridBagConstraints(
+						x++, 0, 1, 1, 0.0, 1.0, GridBagConstraints.EAST, GridBagConstraints.NONE,
+						new Insets( 5, 5, 5, 5 ), 0, 0 ) );
 
+		txtCycles.addKeyListener( new KeyAdapter() {
 			@Override
-			public void keyReleased (KeyEvent e) {
+			public void keyReleased( KeyEvent e ) {
 				String errorMessage = null;
 				try {
-					cycles = Integer.parseInt (txtCycles.getText ());
-				} catch (NumberFormatException ex) {
-					errorMessage = Localization.getInstance ().getString (
-							"gui.error.NonParsableNumber");
-				} catch (RuntimeException ex) {
-					errorMessage = ex.getLocalizedMessage ();
+					cycles = Integer.parseInt( txtCycles.getText() );
+				} catch( NumberFormatException ex ) {
+					errorMessage = Localization.getInstance().getString(
+									"gui.error.NonParsableNumber" );
+				} catch( RuntimeException ex ) {
+					errorMessage = ex.getLocalizedMessage();
 				}
 
-				if (errorMessage != null) {
-					JEditor.sendError (errorMessage);
-					if (!txtCycles.getText ().equals ("")) {
-						txtCycles.setText (Integer.toString (cycles));
-					}
+				if( errorMessage != null ) {
+					JEditor.sendError( errorMessage );
+					if( !txtCycles.getText().equals( "" ) )
+						txtCycles.setText( Integer.toString( cycles ) );
 				} else {
-					JEditor.sendError (""); // Clear error messages
-					batch.setCyclesForAllEntries (cycles);
-					tablemodel.fireTableDataChanged ();
+					JEditor.sendError( "" ); // Clear error messages
+					batch.setCyclesForAllEntries( cycles );
+					tablemodel.fireTableDataChanged();
 				}
 			}
-		});
-		txtSeed.addKeyListener (new KeyAdapter () {
-
+		} );
+		txtSeed.addKeyListener( new KeyAdapter() {
 			@Override
-			public void keyReleased (KeyEvent e) {
+			public void keyReleased( KeyEvent e ) {
 				String errorMessage = null;
 				try {
-					RandomUtils.getInstance ().setSeed (Long.parseLong (txtSeed.getText ()));
-				} catch (NumberFormatException ex) {
-					errorMessage = Localization.getInstance ().getString (
-							"gui.error.NonParsableNumber");
-				} catch (RuntimeException ex) {
-					errorMessage = ex.getLocalizedMessage ();
+					RandomUtils.getInstance().setSeed( Long.parseLong( txtSeed.getText() ) );
+				} catch( NumberFormatException ex ) {
+					errorMessage = Localization.getInstance().getString(
+									"gui.error.NonParsableNumber" );
+				} catch( RuntimeException ex ) {
+					errorMessage = ex.getLocalizedMessage();
 				}
 
-				if (errorMessage != null) {
-					JEditor.sendError (errorMessage);
-					if (!txtSeed.getText ().equals ("") &&
-							!txtSeed.getText ().equals ("-")) {
-						txtSeed.setText (Integer.toString (cycles));
-					}
-				} else {
-					JEditor.sendError (""); // Clear error messages
-				}
+				if( errorMessage != null ) {
+					JEditor.sendError( errorMessage );
+					if( !txtSeed.getText().equals( "" ) &&
+									!txtSeed.getText().equals( "-" ) )
+						txtSeed.setText( Integer.toString( cycles ) );
+				} else
+					JEditor.sendError( "" );
 			}
-		});
+		} );
 
-		btnRun.addActionListener (new ActionListener () {
-
-			public void actionPerformed (ActionEvent e) {
+		btnRun.addActionListener( new ActionListener() {
+			public void actionPerformed( ActionEvent e ) {
 				try {
-					if (batch.getEntries ().isEmpty ()) {
-						JEditor.sendError (Localization.getInstance ().getString ("gui.editor.JBatchView.emptyBatch"));
+					if( batch.getEntries().isEmpty() ) {
+						JEditor.sendError( Localization.getInstance().getString( "gui.editor.JBatchView.emptyBatch" ) );
 						return;
 					}
-					
+
 					// Set seed (even if the user didn't edit it)
 					try {
-						RandomUtils.getInstance ().setSeed (Long.parseLong (txtSeed.getText ()));
-					} catch (NumberFormatException ex) {
-						JEditor.sendError (Localization.getInstance ().getString (
-								"gui.error.NonParsableNumber"));
+						RandomUtils.getInstance().setSeed( Long.parseLong( txtSeed.getText() ) );
+					} catch( NumberFormatException ex ) {
+						JEditor.sendError( Localization.getInstance().getString(
+										"gui.error.NonParsableNumber" ) );
 						return;
 					}
-					
-					JEditor.getInstance ().setBatchResult (batch.execute (chkTempFiles.isSelected ()));
-				} catch (Exception ex) {
-					JEditor.sendError (ex.getLocalizedMessage ());
+
+					JEditor.getInstance().setBatchResult( batch.execute( chkTempFiles.isSelected() ) );
+				} catch( Exception ex ) {
+					JEditor.sendError( ex.getLocalizedMessage() );
 					ex.printStackTrace();
 				}
 			}
-		});
+		} );
 
 		return south;
 	}
 
-	private JPanel createMainPanel () {
-		JPanel main = new JPanel (new GridBagLayout ());
-		JPanel tableButtons = new JPanel (new FlowLayout ());
+	private JPanel createMainPanel() {
+		JPanel main = new JPanel( new GridBagLayout() );
+		JPanel tableButtons = new JPanel( new FlowLayout() );
 
 		// Create the main table
-		tablemodel = new BatchTableModel ();
-		tblEntries = new JTable (tablemodel);
-		JComboBox cbxGraphAlgos = new JComboBox ();
+		tablemodel = new BatchTableModel();
+		tblEntries = new JTable( tablemodel );
+		JComboBox cbxGraphAlgos = new JComboBox();
 		for( GraphAlgorithm g : GraphAlgorithm.values() )
 			cbxGraphAlgos.addItem( g );
 
 		JComboBox cbxCAAlgos = new JComboBox();
 		for( CellularAutomatonAlgorithm caa : CellularAutomatonAlgorithm.values() )
 			cbxCAAlgos.addItem( caa );
-		
+
 		JComboBox cbxEvacuationOptimizationType = new JComboBox();
 		for( EvacuationOptimizationType eot : EvacuationOptimizationType.values() )
 			cbxEvacuationOptimizationType.addItem( eot );
-		
-		tblEntries.setFillsViewportHeight (true);
+
+		tblEntries.setFillsViewportHeight( true );
 		// Set table column editors
-		SelectingCellEditor selectingEditor = new SelectingCellEditor ();
-		tblEntries.getColumnModel ().getColumn (COL_NAME).setCellEditor (selectingEditor);
-		tblEntries.getColumnModel ().getColumn (COL_ASSIGNMENT).setCellEditor (new AssignmentCellEditor ());
-		tblEntries.getColumnModel().getColumn( COL_CA_ALGO ).setCellEditor(  new DefaultCellEditor( cbxCAAlgos ) );
-		tblEntries.getColumnModel ().getColumn (COL_CYCLES).setCellEditor (selectingEditor);
-		tblEntries.getColumnModel ().getColumn (COL_CA_MAX_TIME).setCellEditor (selectingEditor);
-		tblEntries.getColumnModel ().getColumn (COL_GRAPH_MAX_TIME).setCellEditor (selectingEditor);
-		tblEntries.getColumnModel ().getColumn (COL_GRAPH_ALGO).setCellEditor (new DefaultCellEditor (cbxGraphAlgos));
-		tblEntries.getColumnModel().getColumn(COL_PROPERTIES).setCellEditor( new DefaultCellEditor( new JPropertyComboBox() ));
-		tblEntries.getColumnModel ().getColumn (COL_EVACUATION_PLAN_CYCLES).setCellEditor (selectingEditor);
+		SelectingCellEditor selectingEditor = new SelectingCellEditor();
+		tblEntries.getColumnModel().getColumn( COL_NAME ).setCellEditor( selectingEditor );
+		tblEntries.getColumnModel().getColumn( COL_ASSIGNMENT ).setCellEditor( new AssignmentCellEditor() );
+		tblEntries.getColumnModel().getColumn( COL_CA_ALGO ).setCellEditor( new DefaultCellEditor( cbxCAAlgos ) );
+		tblEntries.getColumnModel().getColumn( COL_CYCLES ).setCellEditor( selectingEditor );
+		tblEntries.getColumnModel().getColumn( COL_CA_MAX_TIME ).setCellEditor( selectingEditor );
+		tblEntries.getColumnModel().getColumn( COL_GRAPH_MAX_TIME ).setCellEditor( selectingEditor );
+		tblEntries.getColumnModel().getColumn( COL_GRAPH_ALGO ).setCellEditor( new DefaultCellEditor( cbxGraphAlgos ) );
+		tblEntries.getColumnModel().getColumn( COL_PROPERTIES ).setCellEditor( new DefaultCellEditor( new JPropertyComboBox() ) );
+		tblEntries.getColumnModel().getColumn( COL_EVACUATION_PLAN_CYCLES ).setCellEditor( selectingEditor );
 		tblEntries.getColumnModel().getColumn( COL_EVACUATION_PLAN_TYPE ).setCellEditor( new DefaultCellEditor( cbxEvacuationOptimizationType ) );
 		// Set table column renderers
-		InactiveRenderer inactiveRenderer = new InactiveRenderer ();
-		tblEntries.getColumnModel ().getColumn (COL_ASSIGNMENT).setCellRenderer (new AssignmentRenderer ());
-		tblEntries.getColumnModel().getColumn( COL_CA_ALGO ).setCellRenderer(inactiveRenderer);
-		tblEntries.getColumnModel ().getColumn (COL_CYCLES).setCellRenderer (inactiveRenderer);
-		tblEntries.getColumnModel ().getColumn (COL_CA_MAX_TIME).setCellRenderer (inactiveRenderer);
-		tblEntries.getColumnModel ().getColumn (COL_GRAPH_MAX_TIME).setCellRenderer (inactiveRenderer);
-		tblEntries.getColumnModel ().getColumn (COL_GRAPH_ALGO).setCellRenderer (inactiveRenderer);
-		tblEntries.getColumnModel ().getColumn (COL_EVACUATION_PLAN_CYCLES).setCellRenderer (inactiveRenderer);
+		InactiveRenderer inactiveRenderer = new InactiveRenderer();
+		tblEntries.getColumnModel().getColumn( COL_ASSIGNMENT ).setCellRenderer( new AssignmentRenderer() );
+		tblEntries.getColumnModel().getColumn( COL_CA_ALGO ).setCellRenderer( inactiveRenderer );
+		tblEntries.getColumnModel().getColumn( COL_CYCLES ).setCellRenderer( inactiveRenderer );
+		tblEntries.getColumnModel().getColumn( COL_CA_MAX_TIME ).setCellRenderer( inactiveRenderer );
+		tblEntries.getColumnModel().getColumn( COL_GRAPH_MAX_TIME ).setCellRenderer( inactiveRenderer );
+		tblEntries.getColumnModel().getColumn( COL_GRAPH_ALGO ).setCellRenderer( inactiveRenderer );
+		tblEntries.getColumnModel().getColumn( COL_EVACUATION_PLAN_CYCLES ).setCellRenderer( inactiveRenderer );
 		tblEntries.getColumnModel().getColumn( COL_EVACUATION_PLAN_TYPE ).setCellRenderer( inactiveRenderer );
 		// Set table column widths
-		tblEntries.getColumnModel ().getColumn (COL_NAME).setPreferredWidth (100);
-		tblEntries.getColumnModel ().getColumn (COL_ASSIGNMENT).setPreferredWidth (100);
+		tblEntries.getColumnModel().getColumn( COL_NAME ).setPreferredWidth( 100 );
+		tblEntries.getColumnModel().getColumn( COL_ASSIGNMENT ).setPreferredWidth( 100 );
 		tblEntries.getColumnModel().getColumn( COL_CA_ALGO ).setPreferredWidth( 120 );
-		tblEntries.getColumnModel ().getColumn (COL_SIMULATE).setPreferredWidth (50);
-		tblEntries.getColumnModel ().getColumn (COL_CYCLES).setPreferredWidth (50);
-		tblEntries.getColumnModel ().getColumn (COL_CA_MAX_TIME).setPreferredWidth (80);
-		tblEntries.getColumnModel ().getColumn (COL_OPTIMIZE).setPreferredWidth (50);
-		tblEntries.getColumnModel ().getColumn (COL_GRAPH_ALGO).setPreferredWidth (210);
-		tblEntries.getColumnModel ().getColumn (COL_GRAPH_MAX_TIME).setPreferredWidth (80);
-		tblEntries.getColumnModel().getColumn( COL_EVACUATION_PLAN_CYCLES  ).setPreferredWidth( 50 );
-		tblEntries.getColumnModel().getColumn( COL_EVACUATION_PLAN_TYPE  ).setPreferredWidth( 80 );
+		tblEntries.getColumnModel().getColumn( COL_SIMULATE ).setPreferredWidth( 50 );
+		tblEntries.getColumnModel().getColumn( COL_CYCLES ).setPreferredWidth( 50 );
+		tblEntries.getColumnModel().getColumn( COL_CA_MAX_TIME ).setPreferredWidth( 80 );
+		tblEntries.getColumnModel().getColumn( COL_OPTIMIZE ).setPreferredWidth( 50 );
+		tblEntries.getColumnModel().getColumn( COL_GRAPH_ALGO ).setPreferredWidth( 210 );
+		tblEntries.getColumnModel().getColumn( COL_GRAPH_MAX_TIME ).setPreferredWidth( 80 );
+		tblEntries.getColumnModel().getColumn( COL_EVACUATION_PLAN_CYCLES ).setPreferredWidth( 50 );
+		tblEntries.getColumnModel().getColumn( COL_EVACUATION_PLAN_TYPE ).setPreferredWidth( 80 );
 
-		
+
 		int y = 0;
-		main.add (new JLabel (Localization.getInstance ().getString ("gui.editor.JBatchView.batchCaption") + " "), new GridBagConstraints (
-				0, y++, 1, 1, 1.0, 0.0, GridBagConstraints.WEST, GridBagConstraints.NONE,
-				new Insets (5, 5, 0, 5), 0, 0));
-		main.add (new JScrollPane (tblEntries), new GridBagConstraints (
-				0, y++, 1, 1, 1.0, 1.0, GridBagConstraints.CENTER, GridBagConstraints.BOTH,
-				new Insets (5, 5, 0, 5), 0, 0));
-		main.add (tableButtons, new GridBagConstraints (
-				0, y++, 1, 1, 1.0, 0.0, GridBagConstraints.NORTH, GridBagConstraints.BOTH,
-				new Insets (5, 5, 20, 5), 0, 0));
+		main.add( new JLabel( Localization.getInstance().getString( "gui.editor.JBatchView.batchCaption" ) + " " ), new GridBagConstraints(
+						0, y++, 1, 1, 1.0, 0.0, GridBagConstraints.WEST, GridBagConstraints.NONE,
+						new Insets( 5, 5, 0, 5 ), 0, 0 ) );
+		main.add( new JScrollPane( tblEntries ), new GridBagConstraints(
+						0, y++, 1, 1, 1.0, 1.0, GridBagConstraints.CENTER, GridBagConstraints.BOTH,
+						new Insets( 5, 5, 0, 5 ), 0, 0 ) );
+		main.add( tableButtons, new GridBagConstraints(
+						0, y++, 1, 1, 1.0, 0.0, GridBagConstraints.NORTH, GridBagConstraints.BOTH,
+						new Insets( 5, 5, 20, 5 ), 0, 0 ) );
 
-		JButton btnNewEntry = new JButton (Localization.getInstance ().getString ("gui.editor.JBatchView.newEntry"));
-		btnNewEntry.addActionListener (new ActionListener () {
-
-			public void actionPerformed (ActionEvent e) {
+		JButton btnNewEntry = new JButton( Localization.getInstance().getString( "gui.editor.JBatchView.newEntry" ) );
+		btnNewEntry.addActionListener( new ActionListener() {
+			public void actionPerformed( ActionEvent e ) {
 				addProject( JEditor.getInstance().getProject() );
 			}
-		});
-		tableButtons.add (btnNewEntry);
-		JButton btnDeleteEntry = new JButton (Localization.getInstance ().getString ("gui.editor.JBatchView.deleteEntry"));
-		btnDeleteEntry.addActionListener (new ActionListener () {
-
-			public void actionPerformed (ActionEvent e) {
-				if (tblEntries.getSelectedRow () >= 0) {
-					if (tblEntries.isEditing ()) {
-						tblEntries.getCellEditor ().cancelCellEditing ();
-					}
-					batch.removeEntry (batch.getEntries ().get (tblEntries.getSelectedRow ()));
-					tablemodel.fireTableDataChanged ();
-				} else {
-					JEditor.sendMessage (Localization.getInstance ().getString ("gui.editor.JBatchView.selectLineFirst"));
-				}
+		} );
+		tableButtons.add( btnNewEntry );
+		JButton btnDeleteEntry = new JButton( Localization.getInstance().getString( "gui.editor.JBatchView.deleteEntry" ) );
+		btnDeleteEntry.addActionListener( new ActionListener() {
+			public void actionPerformed( ActionEvent e ) {
+				if( tblEntries.getSelectedRow() >= 0 ) {
+					if( tblEntries.isEditing() )
+						tblEntries.getCellEditor().cancelCellEditing();
+					batch.removeEntry( batch.getEntries().get( tblEntries.getSelectedRow() ) );
+					tablemodel.fireTableDataChanged();
+				} else
+					JEditor.sendMessage( Localization.getInstance().getString( "gui.editor.JBatchView.selectLineFirst" ) );
 			}
-		});
-		tableButtons.add (btnDeleteEntry);
-		JButton btnClearEntries = new JButton (Localization.getInstance ().getString ("gui.editor.JBatchView.clearEntries"));
-		btnClearEntries.addActionListener (new ActionListener () {
-
-			public void actionPerformed (ActionEvent e) {
-				if (tblEntries.isEditing ()) {
-					tblEntries.getCellEditor ().cancelCellEditing ();
-				}
-				batch.clearEntries ();
-				tablemodel.fireTableDataChanged ();
+		} );
+		tableButtons.add( btnDeleteEntry );
+		JButton btnClearEntries = new JButton( Localization.getInstance().getString( "gui.editor.JBatchView.clearEntries" ) );
+		btnClearEntries.addActionListener( new ActionListener() {
+			public void actionPerformed( ActionEvent e ) {
+				if( tblEntries.isEditing() )
+					tblEntries.getCellEditor().cancelCellEditing();
+				batch.clearEntries();
+				tablemodel.fireTableDataChanged();
 			}
-		});
-		tableButtons.add (btnClearEntries);
+		} );
+		tableButtons.add( btnClearEntries );
 
 		// Install popup menu for the table
 		popup = new JPopupMenu();
-		JMenuItem menuItem = new JMenuItem(Localization.getInstance ().getString ("gui.editor.JBatchView.confidenceIntervalCaption"));
-		menuItem.addActionListener (new ActionListener () {
-			public void actionPerformed (ActionEvent e) {
-				JOptionPane.showInputDialog (tblEntries, Localization.getInstance ().getString ("gui.editor.JBatchView.confidenceIntervalText") + " ");
-				// TODO: # Cycles berechnen ...
+		JMenuItem menuItem = new JMenuItem( Localization.getInstance().getString( "gui.editor.JBatchView.confidenceIntervalCaption" ) );
+		menuItem.addActionListener( new ActionListener() {
+			public void actionPerformed( ActionEvent e ) {
+				JOptionPane.showInputDialog( tblEntries, Localization.getInstance().getString( "gui.editor.JBatchView.confidenceIntervalText" ) + " " );
+			// TODO: # Cycles berechnen ...
 			}
-		});
-		popup.add(menuItem);
-		tblEntries.addMouseListener (new MouseAdapter () {
+		} );
+		popup.add( menuItem );
+		tblEntries.addMouseListener( new MouseAdapter() {
 			@Override
-			public void mousePressed(MouseEvent e) {
-				maybeShowPopup(e);
+			public void mousePressed( MouseEvent e ) {
+				maybeShowPopup( e );
 			}
 
 			@Override
-			public void mouseReleased(MouseEvent e) {
-				maybeShowPopup(e);
+			public void mouseReleased( MouseEvent e ) {
+				maybeShowPopup( e );
 			}
 
-			private void maybeShowPopup(MouseEvent e) {
-				if (e.isPopupTrigger()) {
-					popup.show (e.getComponent(), e.getX(), e.getY());
-				}
+			private void maybeShowPopup( MouseEvent e ) {
+				if( e.isPopupTrigger() )
+					popup.show( e.getComponent(), e.getX(), e.getY() );
 			}
-		});
+		} );
 		return main;
 	}
 
@@ -373,12 +357,11 @@ public class JBatchView extends JPanel {
 			Project project = Project.load( projectFile );
 			Assignment assignment = null; // = new Assignment( "bla" );
 			// suche assignment
-			for( Assignment a : project.getAssignments() ) {
+			for( Assignment a : project.getAssignments() )
 				if( a.getName().equals( batchProjectEntry.getAssignment() ) ) {
 					assignment = a;
 					break;
 				}
-			}
 			if( assignment == null )
 				throw new IllegalStateException( "Assignment " + batchProjectEntry.getAssignment() + " not found!" );
 			Property property = PropertyFilesSelectionModel.getInstance().getPropertyByName( batchProjectEntry.getProperty() );
@@ -397,224 +380,277 @@ public class JBatchView extends JPanel {
 							batchProjectEntry.getGraphTimeHorizon(),
 							batchProjectEntry.getEvacuationOptimizationType(),
 							batchProjectEntry.getEvacuationOptimizationRuns(),
-							property
-							);
+							property );
 		} catch( Exception ex ) {
 			JEditor.sendError( ex.getLocalizedMessage() );
 		}
 	}
 
-	
 	private class BatchTableModel extends AbstractTableModel {
-
 		@Override
-		public Class getColumnClass (int column) {
-			switch (column) {
-				case COL_NAME: return String.class;
-				case COL_ASSIGNMENT: return Assignment.class;
-				case COL_CA_ALGO: return CellularAutomatonAlgorithm.class;
-				case COL_SIMULATE: return Boolean.class;
-				case COL_CYCLES: return Integer.class;
-				case COL_CA_MAX_TIME: return Double.class;
-				case COL_GRAPH_MAX_TIME: return Integer.class;
-				case COL_OPTIMIZE: return Boolean.class;
-				case COL_GRAPH_ALGO: return GraphAlgorithm.class;
-				case COL_EVACUATION_PLAN_CYCLES: return Integer.class;
-				case COL_EVACUATION_PLAN_TYPE: return EvacuationOptimizationType.class;
-				case COL_PROPERTIES: return PropertyFilesSelectionModel.Property.class;
-				default: return null;
+		public Class getColumnClass( int column ) {
+			switch( column ) {
+				case COL_NAME:
+					return String.class;
+				case COL_ASSIGNMENT:
+					return Assignment.class;
+				case COL_CA_ALGO:
+					return CellularAutomatonAlgorithm.class;
+				case COL_SIMULATE:
+					return Boolean.class;
+				case COL_CYCLES:
+					return Integer.class;
+				case COL_CA_MAX_TIME:
+					return Double.class;
+				case COL_GRAPH_MAX_TIME:
+					return Integer.class;
+				case COL_OPTIMIZE:
+					return Boolean.class;
+				case COL_GRAPH_ALGO:
+					return GraphAlgorithm.class;
+				case COL_EVACUATION_PLAN_CYCLES:
+					return Integer.class;
+				case COL_EVACUATION_PLAN_TYPE:
+					return EvacuationOptimizationType.class;
+				case COL_PROPERTIES:
+					return PropertyFilesSelectionModel.Property.class;
+				default:
+					return null;
 			}
 		}
 
 		@Override
-		public String getColumnName (int column) {
-			switch (column) {
-				case COL_NAME: return Localization.getInstance ().getString ("gui.editor.JBatchView.table.column.name");
-				case COL_ASSIGNMENT: return Localization.getInstance ().getString ("gui.editor.JBatchView.table.column.assignment");
-				case COL_CA_ALGO: return Localization.getInstance ().getString ("gui.editor.JBatchView.table.column.caAlgo");
-				case COL_SIMULATE: return Localization.getInstance ().getString ("gui.editor.JBatchView.table.column.simulate");
-				case COL_CYCLES: return Localization.getInstance ().getString ("gui.editor.JBatchView.table.column.cycles");
-				case COL_CA_MAX_TIME: return Localization.getInstance ().getString ("gui.editor.JBatchView.table.column.caMaxTime");
-				case COL_GRAPH_MAX_TIME: return Localization.getInstance ().getString ("gui.editor.JBatchView.table.column.graphMaxTime");
-				case COL_OPTIMIZE: return Localization.getInstance ().getString ("gui.editor.JBatchView.table.column.optimize");
-				case COL_GRAPH_ALGO: return Localization.getInstance ().getString ("gui.editor.JBatchView.table.column.algo");
-				case COL_EVACUATION_PLAN_CYCLES: return Localization.getInstance ().getString ("gui.editor.JBatchView.table.column.evacCycles");
-				case COL_EVACUATION_PLAN_TYPE: return Localization.getInstance ().getString ("gui.editor.JBatchView.table.column.evacType");
-				case COL_PROPERTIES: return Localization.getInstance ().getString ("gui.editor.JBatchView.table.column.properties");
-				default: return null;
+		public String getColumnName( int column ) {
+			switch( column ) {
+				case COL_NAME:
+					return Localization.getInstance().getString( "gui.editor.JBatchView.table.column.name" );
+				case COL_ASSIGNMENT:
+					return Localization.getInstance().getString( "gui.editor.JBatchView.table.column.assignment" );
+				case COL_CA_ALGO:
+					return Localization.getInstance().getString( "gui.editor.JBatchView.table.column.caAlgo" );
+				case COL_SIMULATE:
+					return Localization.getInstance().getString( "gui.editor.JBatchView.table.column.simulate" );
+				case COL_CYCLES:
+					return Localization.getInstance().getString( "gui.editor.JBatchView.table.column.cycles" );
+				case COL_CA_MAX_TIME:
+					return Localization.getInstance().getString( "gui.editor.JBatchView.table.column.caMaxTime" );
+				case COL_GRAPH_MAX_TIME:
+					return Localization.getInstance().getString( "gui.editor.JBatchView.table.column.graphMaxTime" );
+				case COL_OPTIMIZE:
+					return Localization.getInstance().getString( "gui.editor.JBatchView.table.column.optimize" );
+				case COL_GRAPH_ALGO:
+					return Localization.getInstance().getString( "gui.editor.JBatchView.table.column.algo" );
+				case COL_EVACUATION_PLAN_CYCLES:
+					return Localization.getInstance().getString( "gui.editor.JBatchView.table.column.evacCycles" );
+				case COL_EVACUATION_PLAN_TYPE:
+					return Localization.getInstance().getString( "gui.editor.JBatchView.table.column.evacType" );
+				case COL_PROPERTIES:
+					return Localization.getInstance().getString( "gui.editor.JBatchView.table.column.properties" );
+				default:
+					return null;
 			}
 		}
 
-		public int getRowCount () {
-			return batch.getEntries ().size ();
+		public int getRowCount() {
+			return batch.getEntries().size();
 		}
 
-		public int getColumnCount () {
+		public int getColumnCount() {
 			return COL_PROPERTIES + 1;
 		}
 
-		public Object getValueAt (int row, int column) {
-			switch (column) {
-				case COL_NAME: return batch.getEntries ().get (row).getName ();
-				case COL_ASSIGNMENT: return batch.getEntries ().get (row).getAssignment ();
-				case COL_CA_ALGO: return batch.getEntries().get( row ).getCellularAutomatonAlgo();
-				case COL_SIMULATE:	return batch.getEntries ().get (row).getUseCa ();
-				case COL_CYCLES:	return batch.getEntries ().get (row).getCycles ();
-				case COL_CA_MAX_TIME:	return batch.getEntries ().get (row).getCaMaxTime ();
-				case COL_GRAPH_MAX_TIME:	return batch.getEntries ().get (row).getGraphMaxTime ();
-				case COL_OPTIMIZE:	return batch.getEntries ().get (row).getUseGraph ();
-				case COL_GRAPH_ALGO:	return batch.getEntries ().get (row).getGraphAlgo ();
-				case COL_EVACUATION_PLAN_CYCLES: return batch.getEntries().get(row).getOptimizedEvacuationPlanCycles ();
-				case COL_EVACUATION_PLAN_TYPE: return batch.getEntries().get(row).getEvacuationOptimizationType();
-				case COL_PROPERTIES: return batch.getEntries().get(row).getProperty();
-				default: return null;
+		public Object getValueAt( int row, int column ) {
+			switch( column ) {
+				case COL_NAME:
+					return batch.getEntries().get( row ).getName();
+				case COL_ASSIGNMENT:
+					return batch.getEntries().get( row ).getAssignment();
+				case COL_CA_ALGO:
+					return batch.getEntries().get( row ).getCellularAutomatonAlgo();
+				case COL_SIMULATE:
+					return batch.getEntries().get( row ).getUseCa();
+				case COL_CYCLES:
+					return batch.getEntries().get( row ).getCycles();
+				case COL_CA_MAX_TIME:
+					return batch.getEntries().get( row ).getCaMaxTime();
+				case COL_GRAPH_MAX_TIME:
+					return batch.getEntries().get( row ).getGraphMaxTime();
+				case COL_OPTIMIZE:
+					return batch.getEntries().get( row ).getUseGraph();
+				case COL_GRAPH_ALGO:
+					return batch.getEntries().get( row ).getGraphAlgo();
+				case COL_EVACUATION_PLAN_CYCLES:
+					return batch.getEntries().get( row ).getOptimizedEvacuationPlanCycles();
+				case COL_EVACUATION_PLAN_TYPE:
+					return batch.getEntries().get( row ).getEvacuationOptimizationType();
+				case COL_PROPERTIES:
+					return batch.getEntries().get( row ).getProperty();
+				default:
+					return null;
 			}
 		}
 
 		@Override
-		public boolean isCellEditable (int row, int column) {
-			switch (column) {
-				case COL_CA_ALGO: return batch.getEntries().get( row ).getUseCa();
-				case COL_CYCLES: return batch.getEntries ().get (row).getUseCa ();
-				case COL_GRAPH_ALGO: return batch.getEntries ().get (row).getUseGraph ();
-				case COL_CA_MAX_TIME: return batch.getEntries ().get (row).getUseCa ();
-				case COL_GRAPH_MAX_TIME: return batch.getEntries ().get (row).getUseGraph ();
-				case COL_EVACUATION_PLAN_TYPE: return batch.getEntries ().get (row).getUseGraph ();
-				case COL_EVACUATION_PLAN_CYCLES: return !batch.getEntries ().get (row).getEvacuationOptimizationType (
-						).equals(EvacuationOptimizationType.None) && batch.getEntries ().get (row).getUseGraph ();
-				default: return true;
+		public boolean isCellEditable( int row, int column ) {
+			switch( column ) {
+				case COL_CA_ALGO:
+					return batch.getEntries().get( row ).getUseCa();
+				case COL_CYCLES:
+					return batch.getEntries().get( row ).getUseCa();
+				case COL_GRAPH_ALGO:
+					return batch.getEntries().get( row ).getUseGraph();
+				case COL_CA_MAX_TIME:
+					return batch.getEntries().get( row ).getUseCa();
+				case COL_GRAPH_MAX_TIME:
+					return batch.getEntries().get( row ).getUseGraph();
+				case COL_EVACUATION_PLAN_TYPE:
+					return batch.getEntries().get( row ).getUseGraph();
+				case COL_EVACUATION_PLAN_CYCLES:
+					return !batch.getEntries().get( row ).getEvacuationOptimizationType().equals( EvacuationOptimizationType.None ) && batch.getEntries().get( row ).getUseGraph();
+				default:
+					return true;
 			}
 		}
 
 		@Override
-		public void setValueAt (Object aValue, int row, int column) {
-			switch (column) {
-				case COL_NAME: batch.getEntries ().get (row).setName ((String)aValue); break;
-				case COL_ASSIGNMENT: batch.getEntries ().get (row).setAssignment ((Assignment)aValue); break;
-				case COL_CA_ALGO: batch.getEntries ().get (row).setCellularAutomatonAlgo ((CellularAutomatonAlgorithm)aValue); break;
-				case COL_SIMULATE: batch.getEntries ().get (row).setUseCa (((Boolean)aValue).booleanValue ()); break;
+		public void setValueAt( Object aValue, int row, int column ) {
+			switch( column ) {
+				case COL_NAME:
+					batch.getEntries().get( row ).setName( (String)aValue );
+					break;
+				case COL_ASSIGNMENT:
+					batch.getEntries().get( row ).setAssignment( (Assignment)aValue );
+					break;
+				case COL_CA_ALGO:
+					batch.getEntries().get( row ).setCellularAutomatonAlgo( (CellularAutomatonAlgorithm)aValue );
+					break;
+				case COL_SIMULATE:
+					batch.getEntries().get( row ).setUseCa( ((Boolean)aValue).booleanValue() );
+					break;
 				case COL_CYCLES:
 					try {
-						batch.getEntries ().get (row).setCycles (Integer.parseInt (aValue.toString ()));
-					} catch (NumberFormatException ex) {
-						JEditor.sendError (Localization.getInstance ().getString (
-							"gui.error.NonParsableNumber"));
-					} catch (RuntimeException ex) {
-						JEditor.sendError (ex.getLocalizedMessage ());
+						batch.getEntries().get( row ).setCycles( Integer.parseInt( aValue.toString() ) );
+					} catch( NumberFormatException ex ) {
+						JEditor.sendError( Localization.getInstance().getString(
+										"gui.error.NonParsableNumber" ) );
+					} catch( RuntimeException ex ) {
+						JEditor.sendError( ex.getLocalizedMessage() );
 					}
 					break;
-				case COL_CA_MAX_TIME: 
+				case COL_CA_MAX_TIME:
 					try {
-						batch.getEntries ().get (row).setCaMaxTime (Double.parseDouble (aValue.toString ()));
-					} catch (NumberFormatException ex) {
-						JEditor.sendError (Localization.getInstance ().getString (
-							"gui.error.NonParsableFloatString"));
-					} catch (RuntimeException ex) {
-						JEditor.sendError (ex.getLocalizedMessage ());
+						batch.getEntries().get( row ).setCaMaxTime( Double.parseDouble( aValue.toString() ) );
+					} catch( NumberFormatException ex ) {
+						JEditor.sendError( Localization.getInstance().getString(
+										"gui.error.NonParsableFloatString" ) );
+					} catch( RuntimeException ex ) {
+						JEditor.sendError( ex.getLocalizedMessage() );
 					}
 					break;
-				case COL_OPTIMIZE: batch.getEntries ().get (row).setUseGraph (((Boolean)aValue).booleanValue ()); break;
-				case COL_GRAPH_ALGO: batch.getEntries ().get (row).setGraphAlgo ((GraphAlgorithm)aValue); break;
+				case COL_OPTIMIZE:
+					batch.getEntries().get( row ).setUseGraph( ((Boolean)aValue).booleanValue() );
+					break;
+				case COL_GRAPH_ALGO:
+					batch.getEntries().get( row ).setGraphAlgo( (GraphAlgorithm)aValue );
+					break;
 				case COL_EVACUATION_PLAN_CYCLES:
 					try {
-						batch.getEntries ().get (row).setOptimizedEvacuationPlanCycles (Integer.parseInt (aValue.toString ()));
-					} catch (NumberFormatException ex) {
-						JEditor.sendError (Localization.getInstance ().getString (
-							"gui.error.NonParsableNumber"));
-					} catch (RuntimeException ex) {
-						JEditor.sendError (ex.getLocalizedMessage ());
+						batch.getEntries().get( row ).setOptimizedEvacuationPlanCycles( Integer.parseInt( aValue.toString() ) );
+					} catch( NumberFormatException ex ) {
+						JEditor.sendError( Localization.getInstance().getString(
+										"gui.error.NonParsableNumber" ) );
+					} catch( RuntimeException ex ) {
+						JEditor.sendError( ex.getLocalizedMessage() );
 					}
 					break;
 				case COL_EVACUATION_PLAN_TYPE:
 					batch.getEntries().get( row ).setEvacuationOptimizationType( (EvacuationOptimizationType)aValue );
-					if (aValue != EvacuationOptimizationType.None) {
-						if (batch.getEntries().get( row ).getOptimizedEvacuationPlanCycles () <= 0) {
-							batch.getEntries().get( row ).setOptimizedEvacuationPlanCycles (1);
-						}
-					} else {
-						batch.getEntries().get( row ).setOptimizedEvacuationPlanCycles (0);
-					}
+					if( aValue != EvacuationOptimizationType.None ) {
+						if( batch.getEntries().get( row ).getOptimizedEvacuationPlanCycles() <= 0 )
+							batch.getEntries().get( row ).setOptimizedEvacuationPlanCycles( 1 );
+					} else
+						batch.getEntries().get( row ).setOptimizedEvacuationPlanCycles( 0 );
 					break;
-				case COL_PROPERTIES: batch.getEntries().get( row ).setProperty( (PropertyFilesSelectionModel.Property)aValue ); break;
-				case COL_GRAPH_MAX_TIME: 
+				case COL_PROPERTIES:
+					batch.getEntries().get( row ).setProperty( (PropertyFilesSelectionModel.Property)aValue );
+					break;
+				case COL_GRAPH_MAX_TIME:
 					try {
-						batch.getEntries ().get (row).setGraphMaxTime (Integer.parseInt (aValue.toString ()));
-					} catch (NumberFormatException ex) {
-						JEditor.sendError (Localization.getInstance ().getString (
-							"gui.error.NonParsableNumber"));
-					} catch (RuntimeException ex) {
-						JEditor.sendError (ex.getLocalizedMessage ());
+						batch.getEntries().get( row ).setGraphMaxTime( Integer.parseInt( aValue.toString() ) );
+					} catch( NumberFormatException ex ) {
+						JEditor.sendError( Localization.getInstance().getString(
+										"gui.error.NonParsableNumber" ) );
+					} catch( RuntimeException ex ) {
+						JEditor.sendError( ex.getLocalizedMessage() );
 					}
 					break;
-				default: ;
+				default:
+					;
 			}
-			tblEntries.repaint (); // Necessary for (de)activating columns
+			tblEntries.repaint(); // Necessary for (de)activating columns
 		}
 	}
 
 	/** A Table Cell editor that immediately selects the whole Text when it is activated. */
 	private class SelectingCellEditor extends DefaultCellEditor {
+		public SelectingCellEditor() {
+			super( new JTextField() );
 
-		public SelectingCellEditor () {
-			super (new JTextField ());
+			setClickCountToStart( 1 );
 
-			setClickCountToStart (1);
-
-			getComponent ().addFocusListener (new FocusAdapter () {
-
+			getComponent().addFocusListener( new FocusAdapter() {
 				@Override
-				public void focusGained (FocusEvent e) {
-					((JTextField)e.getComponent ()).selectAll ();
+				public void focusGained( FocusEvent e ) {
+					((JTextField)e.getComponent()).selectAll();
 				}
-			});
+			} );
 		}
 	}
 
 	/** A Table Cell editor that displays assignments. */
 	private class AssignmentCellEditor extends DefaultCellEditor {
 		private DefaultComboBoxModel model;
-		
-		public AssignmentCellEditor () {
-			super (new JComboBox ());
-			
-			model = new DefaultComboBoxModel ();
-			((JComboBox)getComponent ()).setModel (model);
-			((JComboBox)getComponent ()).setRenderer (new BasicComboBoxRenderer () {
+
+		public AssignmentCellEditor() {
+			super( new JComboBox() );
+
+			model = new DefaultComboBoxModel();
+			((JComboBox)getComponent()).setModel( model );
+			((JComboBox)getComponent()).setRenderer( new BasicComboBoxRenderer() {
 				@Override
-				public Component getListCellRendererComponent(JList list,
-                                              Object value,
-                                              int index,
-                                              boolean isSelected,
-                                              boolean cellHasFocus) {
-					Component res = super.getListCellRendererComponent (list, value, index, isSelected, cellHasFocus);
-					
-					((JLabel)res).setText (((Assignment)value).getName ());
-					
+				public Component getListCellRendererComponent( JList list,
+								Object value,
+								int index,
+								boolean isSelected,
+								boolean cellHasFocus ) {
+					Component res = super.getListCellRendererComponent( list, value, index, isSelected, cellHasFocus );
+
+					((JLabel)res).setText( ((Assignment)value).getName() );
+
 					return res;
 				}
-			});
-			
+			} );
+
 		}
-		
+
 		@Override
-		public Component getTableCellEditorComponent(JTable table,
-                                             Object value,
-                                             boolean isSelected,
-                                             int row,
-                                             int column) {
-			Component res = super.getTableCellEditorComponent (table, value, isSelected, row, column);
-			
+		public Component getTableCellEditorComponent( JTable table,
+						Object value,
+						boolean isSelected,
+						int row,
+						int column ) {
+			Component res = super.getTableCellEditorComponent( table, value, isSelected, row, column );
+
 			// Build the list from scratch each time the editor is shown
-			Project p = batch.getEntries ().get (row).getProject ();
-			model.removeAllElements ();
-			for (Assignment a : p.getAssignments ()) {
-				model.addElement (a);
-			}
-			
+			Project p = batch.getEntries().get( row ).getProject();
+			model.removeAllElements();
+			for( Assignment a : p.getAssignments() )
+				model.addElement( a );
+
 			return res;
 		}
 	}
-	
+
 	/** Renders uneditable cells specially marked. */
 	public class InactiveRenderer extends DefaultTableCellRenderer {
 		private final Color inactiveColor = Color.GRAY;
@@ -622,46 +658,45 @@ public class JBatchView extends JPanel {
 		private Color activeColorUnselected = null;
 
 		@Override
-		public Component getTableCellRendererComponent (
-				JTable table, Object value,
-				boolean isSelected, boolean hasFocus,
-				int row, int column) {
+		public Component getTableCellRendererComponent(
+						JTable table, Object value,
+						boolean isSelected, boolean hasFocus,
+						int row, int column ) {
 
-			if (activeColorSelected == null) {
-				Component normal = super.getTableCellRendererComponent (table, value, 
-					false, false, row, column);
-				activeColorUnselected = normal.getForeground ();
-				normal = super.getTableCellRendererComponent (table, value, 
-					true, true, row, column);
-				activeColorSelected = normal.getForeground ();
+			if( activeColorSelected == null ) {
+				Component normal = super.getTableCellRendererComponent( table, value,
+								false, false, row, column );
+				activeColorUnselected = normal.getForeground();
+				normal = super.getTableCellRendererComponent( table, value,
+								true, true, row, column );
+				activeColorSelected = normal.getForeground();
 			}
-			
-			Component normal = super.getTableCellRendererComponent (table, value, 
-					isSelected, hasFocus, row, column);
-			
-			if (!tablemodel.isCellEditable (row, column)) {
-			    normal.setForeground (inactiveColor);	
-			} else {
-				normal.setForeground (isSelected ? activeColorSelected : activeColorUnselected);	
-			}
-			
+
+			Component normal = super.getTableCellRendererComponent( table, value,
+							isSelected, hasFocus, row, column );
+
+			if( !tablemodel.isCellEditable( row, column ) )
+				normal.setForeground( inactiveColor );
+			else
+				normal.setForeground( isSelected ? activeColorSelected : activeColorUnselected );
+
 			return this;
 		}
 	}
-	
+
 	/** Renders assignments. */
 	public class AssignmentRenderer extends DefaultTableCellRenderer {
 		@Override
-		public Component getTableCellRendererComponent (
-				JTable table, Object value,
-				boolean isSelected, boolean hasFocus,
-				int row, int column) {
+		public Component getTableCellRendererComponent(
+						JTable table, Object value,
+						boolean isSelected, boolean hasFocus,
+						int row, int column ) {
 
-			Component normal = super.getTableCellRendererComponent (table, value, 
-					isSelected, hasFocus, row, column);
-			
-			setText (((Assignment)value).getName ());
-			
+			Component normal = super.getTableCellRendererComponent( table, value,
+							isSelected, hasFocus, row, column );
+
+			setText( ((Assignment)value).getName() );
+
 			return this;
 		}
 	}

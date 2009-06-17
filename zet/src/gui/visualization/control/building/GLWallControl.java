@@ -34,7 +34,7 @@ import java.util.List;
 import opengl.drawingutils.GLVector;
 
 /**
- * @author Daniel Pluempe
+ * @author Daniel Plümpe
  */
 public class GLWallControl extends AbstractControl<GLWall, BuildingResults.Wall, BuildingResults, GLWall, GLWallControl> {
 
@@ -49,7 +49,7 @@ public class GLWallControl extends AbstractControl<GLWall, BuildingResults.Wall,
 		super( controlled, visResult, mainControl );
 		basePoints = new LinkedList<GLVector>();
 		final int floor = getControlled().getFloor().id();
-		final double height = (floor - 1) * (VisualizationOptionManager.getFloorDistance() + VisualizationOptionManager.getFloorHeight());
+		final double height = (floor - 1) * VisualizationOptionManager.getFloorDistance();
 
 		for( Point2D.Double point : getControlled() ) {
 			basePoints.add( new GLVector( point.x, (-1) * point.y, height ) );

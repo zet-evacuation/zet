@@ -14,8 +14,8 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 /**
- * Class J3dVisualizationPanel
- * Erstellt 25.04.2008, 01:01:24
+ * Class GLCAFloor
+ * Created 25.04.2008, 01:01:24
  */
 package gui.visualization.draw.ca;
 
@@ -35,8 +35,6 @@ import javax.media.opengl.GLAutoDrawable;
 
 //public class GLCAFloor extends AbstractDrawable<CullingShapeCube, GLRoom, GLCAFloorControl, GLRoomControl> {
 public class GLCAFloor extends AbstractDrawable<GLRoom, GLCAFloorControl, GLRoomControl> {
-	private static double FLOOR_HEIGHT = VisualizationOptionManager.getFloorHeight() * VisualizationConstants.SIZE_MULTIPLICATOR;
-	private static double FLOOR_DISTANCE = VisualizationOptionManager.getFloorDistance() * VisualizationConstants.SIZE_MULTIPLICATOR;
 	private List<GLIndividualControl> individuals;
 	private int floorID;
     
@@ -45,7 +43,7 @@ public class GLCAFloor extends AbstractDrawable<GLRoom, GLCAFloorControl, GLRoom
 //		super(control, new CullingShapeCube() );
 	    this.position.x = control.getXPosition();
 	    this.position.y = control.getYPosition();
-	    this.position.z = (control.getFloorNumber() - 1) * (FLOOR_HEIGHT + FLOOR_DISTANCE);
+	    this.position.z = (control.getFloorNumber() - 1) * VisualizationOptionManager.getFloorDistance() * VisualizationConstants.SIZE_MULTIPLICATOR;
 			floorID = control.getFloorNumber();
 	}
 	
@@ -69,7 +67,6 @@ public class GLCAFloor extends AbstractDrawable<GLRoom, GLCAFloorControl, GLRoom
 			if( ic.onFloor() == floorID )
 				ic.getView().performDrawing( drawable );
 		}
-		//GLIndividualControl ic = individuals.get(0);
-		
+		//GLIndividualControl ic = individuals.get(0);		
 	}
 }

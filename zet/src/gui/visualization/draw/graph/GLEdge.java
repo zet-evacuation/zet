@@ -36,9 +36,9 @@ public class GLEdge extends AbstractDrawable<GLEdge, GLEdgeControl, GLEdgeContro
 	static GLColor flowColor;
 	static GLColor flowUnitColor;
 	/* The thickness of the edges and pieces of flow according to their capacities. */
-	static double thickness = 2 /* 5 */ * VisualizationConstants.SIZE_MULTIPLICATOR;
-	static double flowThickness = 3 /* 7 */* VisualizationConstants.SIZE_MULTIPLICATOR;
-	static double minFlowThickness = 3; /* 10 */
+	static double thickness = 5 /* 5 */ * VisualizationConstants.SIZE_MULTIPLICATOR; // original 2
+	static double flowThickness = 7 /* 7 */* VisualizationConstants.SIZE_MULTIPLICATOR; // original 3
+	static double minFlowThickness = 10; /* 10 */ // original 3
 	static double maxFlowThickness = 10;
 	static double flowThicknessOfOneCapacityStep;
 	int maxFlowRate = control.getMaxFlowRate();

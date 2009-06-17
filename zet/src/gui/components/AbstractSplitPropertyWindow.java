@@ -53,7 +53,7 @@ public abstract class AbstractSplitPropertyWindow<T extends JComponent> extends 
 		setLayout( new BorderLayout() );
 		// Initialize the window as a whole by putting everything together
 		JSplitPane splitPane = new JSplitPane( JSplitPane.HORIZONTAL_SPLIT,
-						false, getLeftPanel(), getEastBar() );
+						false, getLeftPanel(), createEastBar() );
 		splitPane.setResizeWeight( 1.0d );
 		splitPane.setPreferredSize( new Dimension( 800, 600 ) );
 		splitPane.setDividerLocation( 680 );
@@ -61,7 +61,7 @@ public abstract class AbstractSplitPropertyWindow<T extends JComponent> extends 
 		add( splitPane, BorderLayout.CENTER );
 	}
 	
-	abstract protected JPanel getEastBar();
+	abstract protected JPanel createEastBar();
 	
 	public T getLeftPanel() {
 		return leftPanel;

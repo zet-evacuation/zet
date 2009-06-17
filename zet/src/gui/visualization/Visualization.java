@@ -17,7 +17,6 @@
  * Class Visualization
  * Erstellt 20.05.2008, 23:50:54
  */
-
 package gui.visualization;
 
 import com.sun.opengl.util.texture.Texture;
@@ -25,11 +24,15 @@ import ds.PropertyContainer;
 import event.EventListener;
 import event.EventServer;
 import event.OptionsChangedEvent;
+import gui.JEditor;
 import gui.visualization.control.GLControl;
 import gui.visualization.util.VisualizationConstants;
 import io.movie.MovieManager;
 import java.awt.Color;
 import java.awt.Dimension;
+import java.awt.event.KeyEvent;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseWheelEvent;
 import javax.media.opengl.GL;
 import javax.media.opengl.GLAutoDrawable;
 import javax.media.opengl.GLCapabilities;
@@ -84,31 +87,31 @@ public class Visualization extends AbstractVisualization implements EventListene
 	private boolean showFPS = PropertyContainer.getInstance().getAsBoolean( "options.visualization.elements.fps" );
 	private boolean showTimestepGraph = PropertyContainer.getInstance().getAsBoolean( "options.visualization.elements.timestepGraph" );
 	private boolean showTimestepCellularAutomaton = PropertyContainer.getInstance().getAsBoolean( "options.visualization.elements.timestepCA" );
-	/** 
+
+	/**
 	 * Creates a new instance of the {@code Visualization} panel with given 
 	 * properties in an {@code GLCapabilities}.
 	 * @param capabilities the open gl properties of the panel
 	 */
 	public Visualization( GLCapabilities capabilities ) {
 		super( capabilities );
-		getCamera().setPos( new Vector3( 0, 0, 100 ) );
-		getCamera().setUp( new Vector3( 0, 0, 1 ) );
-		getCamera().setView( new Vector3( 1, -1, 0 ) );
+		camera.setPos( new Vector3( 0, 0, 100 ) );
+		camera.setUp( new Vector3( 0, 0, 1 ) );
+		camera.setView( new Vector3( 1, -1, 0 ) );
+		//JEditor.getInstance().getVisualizationView().setCamera( camera );
 		noRotate = !PropertyContainer.getInstance().getAsBoolean( "editor.options.visualization.allowRotateIn2D" );
 		movieManager = new MovieManager();
-		
 
 		// this will create errors!
-		if( PropertyContainer.getInstance().getAsBoolean( "editor.options.visualization.startWith2D" ) )
-			//toggleView();
+		if( PropertyContainer.getInstance().getAsBoolean( "settings.gui.visualization.2d" ) )
 			set2DView();
 		else
 			set3DView();
-		if( PropertyContainer.getInstance().getAsBoolean( "editor.options.visualization.startWithIso" ) )
+		if( PropertyContainer.getInstance().getAsBoolean( "settings.gui.visualization.isometric" ) )
 			this.setPvm( ParallelViewMode.Isometric );
 		else
 			this.setPvm( ParallelViewMode.Orthogonal );
-		
+
 		EventServer.getInstance().registerListener( this, OptionsChangedEvent.class );
 	}
 
@@ -122,47 +125,47 @@ public class Visualization extends AbstractVisualization implements EventListene
 		gl.glHint( GL.GL_PERSPECTIVE_CORRECTION_HINT, GL.GL_NICEST );		// Perspective calculations with high precision
 
 		// Enable VSync
-		gl.setSwapInterval(1);
+		gl.setSwapInterval( 1 );
 
-		gl.glEnable( GL.GL_LIGHTING);
-		gl.glEnable( GL.GL_LIGHT0);
-	//float[] a = { 0, 0, -100 };
-	//gl.glLightfv(GL.GL_LIGHT0, GL.GL_POSITION, a, 0 );
+		gl.glEnable( GL.GL_LIGHTING );
+		gl.glEnable( GL.GL_LIGHT0 );
+		//float[] a = { 0, 0, -100 };
+		//gl.glLightfv(GL.GL_LIGHT0, GL.GL_POSITION, a, 0 );
 		float[] mat_specular = {1.0f, 1.0f, 1.0f, 1.0f};
-    float[] mat_shininess = {100.0f};
-    //float[] mat_ambient = {0.4f, 0.4f, 0.4f, 1.0f};
-    //float[] mat_diffuse = {0.4f, 0.8f, 0.4f, 1.0f};
-    float[] mat_ambient = {1f, 0f, 0f, 1.0f};
-    float[] mat_diffuse = {0f, 0f, 0f, 1.0f};
- 
-    //float[] light_position = {10.0f, 10.0f, 0.0f, 1.0f};
-    float[] light_position = {10.0f, 10.0f, 0.0f, 0.0f};
-    //float[] light_ambient = {0.8f, 0.8f, 0.8f, 1.0f};
+		float[] mat_shininess = {100.0f};
+		//float[] mat_ambient = {0.4f, 0.4f, 0.4f, 1.0f};
+		//float[] mat_diffuse = {0.4f, 0.8f, 0.4f, 1.0f};
+		float[] mat_ambient = {1f, 0f, 0f, 1.0f};
+		float[] mat_diffuse = {0f, 0f, 0f, 1.0f};
+
+		//float[] light_position = {10.0f, 10.0f, 0.0f, 1.0f};
+		float[] light_position = {10.0f, 10.0f, 0.0f, 0.0f};
+		//float[] light_ambient = {0.8f, 0.8f, 0.8f, 1.0f};
 		//float[] light_ambient = {1f, 1f, 1f, 1.0f};
 		float[] light_ambient = {0.8f, 0.8f, 0.8f, 1.0f};
-    float[] light_diffuse = {0.4f, 0.4f, 0.4f, 1.0f};
-    //float[] light_diffuse = {0.8f, 0.8f, 0.8f, 1.0f};
- 
-    gl.glMaterialfv(GL.GL_FRONT, GL.GL_SPECULAR, mat_specular, 0);
-    gl.glMaterialfv(GL.GL_FRONT, GL.GL_SHININESS, mat_shininess, 0);
-    gl.glMaterialfv(GL.GL_FRONT, GL.GL_AMBIENT, mat_ambient, 0);
-    gl.glMaterialfv(GL.GL_FRONT, GL.GL_DIFFUSE, mat_diffuse, 0);
- 
-    gl.glLightfv(GL.GL_LIGHT0, GL.GL_AMBIENT, light_ambient, 0);
-    gl.glLightfv(GL.GL_LIGHT0, GL.GL_DIFFUSE, light_diffuse, 0);
-    gl.glLightfv(GL.GL_LIGHT0, GL.GL_POSITION, light_position, 0);
-	
-	
+		float[] light_diffuse = {0.4f, 0.4f, 0.4f, 1.0f};
+		//float[] light_diffuse = {0.8f, 0.8f, 0.8f, 1.0f};
+
+		gl.glMaterialfv( GL.GL_FRONT, GL.GL_SPECULAR, mat_specular, 0 );
+		gl.glMaterialfv( GL.GL_FRONT, GL.GL_SHININESS, mat_shininess, 0 );
+		gl.glMaterialfv( GL.GL_FRONT, GL.GL_AMBIENT, mat_ambient, 0 );
+		gl.glMaterialfv( GL.GL_FRONT, GL.GL_DIFFUSE, mat_diffuse, 0 );
+
+		gl.glLightfv( GL.GL_LIGHT0, GL.GL_AMBIENT, light_ambient, 0 );
+		gl.glLightfv( GL.GL_LIGHT0, GL.GL_DIFFUSE, light_diffuse, 0 );
+		gl.glLightfv( GL.GL_LIGHT0, GL.GL_POSITION, light_position, 0 );
+
+
 		// load textures
 		texMan = TextureManager.getInstance();
-		texMan.load( "font2", "./textures/font2.bmp");
+		texMan.load( "font2", "./textures/font2.bmp" );
 		// load texture font
 		fontTex = texMan.get( "font2" );
 		font = new TextureFont( gl, fontTex );
 		font.buildFont( 16, 8, 16, 12, 9 );
 		//font.buildFont( 16, 8, 16, 24, 19 );
 		fontTex.bind();
-		
+
 		gl.glEnable( GL.GL_NORMALIZE );
 
 		if( control == null )
@@ -186,12 +189,11 @@ public class Visualization extends AbstractVisualization implements EventListene
 		calculateFPS();
 		if( isAnimating() == true && recording == false )
 			animate();
-		if( recording ) {
+		if( recording )
 			if( drawable.getWidth() != movieWidth || drawable.getHeight() != movieHeight ) {
 				setSize( movieWidth, movieHeight );
 				return;
 			}
-		}
 
 		if( updateProjection )
 			updateProjection();
@@ -209,25 +211,25 @@ public class Visualization extends AbstractVisualization implements EventListene
 		light_position[3] = 1.0f;
 
 		//gl.glLightfv(GL.GL_LIGHT0, GL.GL_POSITION, light_position, 0);
-		if( is3D ) {
+		if( is3D )
 			look();
-		} else {
+		else {
 			if( pvm != ParallelViewMode.Orthogonal ) {	// Isometric view
 				if( pvm == ParallelViewMode.Isometric )
-					gl.glRotatef(35.264f, 1.0f, 0.0f, 0.0f);
+					gl.glRotatef( 35.264f, 1.0f, 0.0f, 0.0f );
 				else
-					gl.glRotatef(30f, 1.0f, 0.0f, 0.0f);
-				gl.glRotatef(-45.0f, 0.0f, 1.0f, 0.0f);
-				gl.glRotated( -90, 1, 0., 0.);
-			} else {	// Orthogonal view
+					gl.glRotatef( 30f, 1.0f, 0.0f, 0.0f );
+				gl.glRotatef( -45.0f, 0.0f, 1.0f, 0.0f );
+				gl.glRotated( -90, 1, 0., 0. );
+			} else	// Orthogonal view
 				gl.glLoadIdentity();
-			}
 			if( showEye )
 				drawEye();
 		}
+
 		control.draw( drawable );
 		drawFPS();
-		
+
 		switch( gl.glGetError() ) {
 			case GL.GL_NO_ERROR:
 				break;
@@ -251,8 +253,8 @@ public class Visualization extends AbstractVisualization implements EventListene
 				break;
 		}
 		gl.glFlush();
-		
-		
+
+
 		if( takeScreenshot )
 			takeScreenshot( drawable );
 		if( recording && frameUsed ) {
@@ -262,6 +264,7 @@ public class Visualization extends AbstractVisualization implements EventListene
 			movieStep();
 		}
 	}
+
 	/**
 	 * Sets the correct animation time. Calculated by the difference
 	 * from the current time and last time.
@@ -278,18 +281,18 @@ public class Visualization extends AbstractVisualization implements EventListene
 	final public void animate( long timestep ) {
 		control.addTime( timestep );
 	}
-	
+
 	/**
 	 * Sets the new time basing on the movie frame time
 	 */
 	final public void movieStep() {
-		animate( Math.round( (1000./movieFrameRate) * 1000 * 1000 ) );
+		animate( Math.round( (1000. / movieFrameRate) * 1000 * 1000 ) );
 	}
-	
+
 	/**
 	 * Draws the eye and the lines representing the 3d-sight-field in the 2d-view.
 	 */
-	final private void drawEye( ) {
+	final private void drawEye() {
 		// Calculate the vector of the eye rotation with respect to to the current
 		// view vector.
 		Vector3 cameraView = new Vector3( getCamera().getView() );
@@ -299,23 +302,23 @@ public class Visualization extends AbstractVisualization implements EventListene
 		int orientation = Vector3.orientation( rotation2D, getCamera().getView() );
 		if( orientation == -1 )
 			eyeRotation = -eyeRotation;
-		eyeRotation = eyeRotation*Frustum.DEG2ANGLE;
+		eyeRotation = eyeRotation * Frustum.DEG2ANGLE;
 
-			gl.glTranslated( getCamera().getPos().x, getCamera().getPos().y, getCamera().getPos().z );
+		gl.glTranslated( getCamera().getPos().x, getCamera().getPos().y, getCamera().getPos().z );
 		GLColor red = new GLColor( Color.red );
 		red.performGL( gl );
 		GLUquadric quadObj = glu.gluNewQuadric();
 		glu.gluSphere( quadObj, 10 * VisualizationConstants.SIZE_MULTIPLICATOR, 10, 3 );
 		gl.glPushMatrix();
-		gl.glRotated( eyeRotation + 25, 0, 0, 1);
+		gl.glRotated( eyeRotation + 25, 0, 0, 1 );
 		gl.glBegin( GL.GL_LINES );
-			gl.glVertex3d( 0.0, 0.0, 0.0 );
-			gl.glVertex3d( 300, 0.0, 0.0 );
+		gl.glVertex3d( 0.0, 0.0, 0.0 );
+		gl.glVertex3d( 300, 0.0, 0.0 );
 		gl.glEnd();
 		gl.glRotated( -45, 0, 0, 1 );
 		gl.glBegin( GL.GL_LINES );
-			gl.glVertex3d( 0.0, 0.0, 0.0 );
-			gl.glVertex3d( 300, 0.0, 0.0 );
+		gl.glVertex3d( 0.0, 0.0, 0.0 );
+		gl.glVertex3d( 300, 0.0, 0.0 );
 		gl.glEnd();
 		gl.glPopMatrix();
 		gl.glRotated( getRotateAngle(), 0, 0, 1 );
@@ -327,24 +330,28 @@ public class Visualization extends AbstractVisualization implements EventListene
 	 * the current time of the cellular automaton and graph, if used.
 	 */
 	final private void drawFPS() {
-		this.setProjectionPrint();
+			if( gl.glGetError() == gl.GL_INVALID_VALUE )
+			System.err.println( "ERROR vor look" );
+	this.setProjectionPrint();
+		if( gl.glGetError() == gl.GL_INVALID_VALUE )
+			System.err.println( "ERROR nach look" );
 		white.performGL( gl );
 		gl.glEnable( gl.GL_TEXTURE_2D );
 		if( showFPS )
-			font.print( 0, 0, Integer.toString( this.fps )+ " FPS" );
+			font.print( 0, 0, Integer.toString( this.fps ) + " FPS" );
 		int row = 1;
 		if( control.hasCellularAutomaton() ) {
 			if( control.isCaFinshed() ) {
 				minimalFrameCountCellularAutomaton--;
 				if( showTimestepCellularAutomaton ) {
-					font.print( 0, this.getHeight() - (row++)*fontSize, loc.getString( "gui.visualization.fps.simulationFinished" ) );
-					font.print( 0, this.getHeight() - (row++)*fontSize, loc.getString( "gui.visualization.fps.simulationNeeded" ) + " " + secToMin( control.getCaStep()*control.getCaSecondsPerStep() ) );
+					font.print( 0, this.getHeight() - (row++) * fontSize, loc.getString( "gui.visualization.fps.simulationFinished" ) );
+					font.print( 0, this.getHeight() - (row++) * fontSize, loc.getString( "gui.visualization.fps.simulationNeeded" ) + " " + secToMin( control.getCaStep() * control.getCaSecondsPerStep() ) );
 				}
 			} else {
 				minimalFrameCountCellularAutomaton = 2;
 				if( showTimestepCellularAutomaton ) {
-					font.print( 0, this.getHeight() - (row++)*fontSize, loc.getString( "gui.visualization.fps.simulationStep" ) + " " + Double.toString( control.getCaStep() ) );
-					font.print( 0, this.getHeight() - (row++)*fontSize, loc.getString( "gui.visualization.fps.simulationTime" ) + " " + secToMin( control.getCaStep()*control.getCaSecondsPerStep() ) );
+					font.print( 0, this.getHeight() - (row++) * fontSize, loc.getString( "gui.visualization.fps.simulationStep" ) + " " + Double.toString( control.getCaStep() ) );
+					font.print( 0, this.getHeight() - (row++) * fontSize, loc.getString( "gui.visualization.fps.simulationTime" ) + " " + secToMin( control.getCaStep() * control.getCaSecondsPerStep() ) );
 				}
 			}
 			row++;
@@ -353,14 +360,14 @@ public class Visualization extends AbstractVisualization implements EventListene
 			if( control.isGraphFinished() ) {
 				minimalFrameCountGraph--;
 				if( showTimestepGraph ) {
-					font.print( 0, this.getHeight() - (row++)*fontSize, loc.getString( "gui.visualization.fps.graphFinished" ) );
-					font.print( 0, this.getHeight() - (row++)*fontSize, loc.getString( "gui.visualization.fps.graphNeeded" ) + " " + secToMin( control.getGraphStep()*control.getGraphSecondsPerStep() ) );
+					font.print( 0, this.getHeight() - (row++) * fontSize, loc.getString( "gui.visualization.fps.graphFinished" ) );
+					font.print( 0, this.getHeight() - (row++) * fontSize, loc.getString( "gui.visualization.fps.graphNeeded" ) + " " + secToMin( control.getGraphStep() * control.getGraphSecondsPerStep() ) );
 				}
 			} else {
 				minimalFrameCountGraph = 2;
 				if( showTimestepGraph ) {
-					font.print( 0, this.getHeight() - (row++)*fontSize, loc.getString( "gui.visualization.fps.graphStep" ) + " " + Double.toString( control.getGraphStep() ) );
-					font.print( 0, this.getHeight() - (row++)*fontSize,  loc.getString( "gui.visualization.fps.graphTime" ) + " " + secToMin( control.getGraphStep()*control.getGraphSecondsPerStep() ) );
+					font.print( 0, this.getHeight() - (row++) * fontSize, loc.getString( "gui.visualization.fps.graphStep" ) + " " + Double.toString( control.getGraphStep() ) );
+					font.print( 0, this.getHeight() - (row++) * fontSize, loc.getString( "gui.visualization.fps.graphTime" ) + " " + secToMin( control.getGraphStep() * control.getGraphSecondsPerStep() ) );
 				}
 			}
 			row++;
@@ -380,7 +387,7 @@ public class Visualization extends AbstractVisualization implements EventListene
 		gl.glDisable( gl.GL_TEXTURE_2D );
 		this.resetProjection();
 	}
-	
+
 	/**
 	 * Helper method that converts an double seconds value in an string
 	 * representing minutes and seconds.
@@ -389,9 +396,9 @@ public class Visualization extends AbstractVisualization implements EventListene
 	 */
 	final private String secToMin( double sec ) {
 		int min = (int)Math.floor( sec / 60 );
-		int secs = (int)Math.floor(sec-(60*min));
+		int secs = (int)Math.floor( sec - (60 * min) );
 		String ssecs = secs < 10 ? "0" + Integer.toString( secs ) : Integer.toString( secs );
-		return ssecs.length() >= 2 ? Integer.toString( min ) + ":" + ssecs.substring( 0,2 ) + " Min" : Integer.toString( min ) + ":" + ssecs + " Min";
+		return ssecs.length() >= 2 ? Integer.toString( min ) + ":" + ssecs.substring( 0, 2 ) + " Min" : Integer.toString( min ) + ":" + ssecs + " Min";
 	}
 
 	/**
@@ -401,7 +408,7 @@ public class Visualization extends AbstractVisualization implements EventListene
 	public final void setControl( GLControl control ) {
 		this.control = control;
 	}
-	
+
 	/**
 	 * Returns the current control object.
 	 * @return the control object
@@ -461,11 +468,10 @@ public class Visualization extends AbstractVisualization implements EventListene
 			oldY = this.getSize().height;
 			movieWidth = resolution.width;
 			movieHeight = resolution.height;
-		} else {
-			setSize( oldX, oldY );			
-		}
+		} else
+			setSize( oldX, oldY );
 	}
-	
+
 	/**
 	 * Starts animation, stores animation state.
 	 */
@@ -474,7 +480,7 @@ public class Visualization extends AbstractVisualization implements EventListene
 		super.startAnimation();
 		this.frameUsed = true;
 	}
-				
+
 	public void initGFX( GLAutoDrawable drawable ) {
 		throw new UnsupportedOperationException( "Not supported by JOGL yet." );
 	}
@@ -487,7 +493,7 @@ public class Visualization extends AbstractVisualization implements EventListene
 	public void handleEvent( OptionsChangedEvent event ) {
 		update();
 	}
-	
+
 	public void update() {
 		// TODO update weiterleiten an den MovieManager
 		//moviePath = PropertyContainer.getInstance().getAsString( "options.filehandling.moviePath" );
@@ -495,5 +501,41 @@ public class Visualization extends AbstractVisualization implements EventListene
 		showEye = PropertyContainer.getInstance().getAsBoolean( "options.visualization.elements.eye" );
 		showFPS = PropertyContainer.getInstance().getAsBoolean( "options.visualization.elements.fps" );
 		repaint();
+	}
+
+	@Override
+	@SuppressWarnings("fallthrough")
+	public void keyPressed( KeyEvent e ) {
+		switch( e.getKeyCode() ) {
+			case KeyEvent.VK_C:
+				System.out.println( loc.getStringWithoutPrefix( "gui.visualizationView.cameraInformation" ) );
+				System.out.println( camera );
+				break;
+			case KeyEvent.VK_LEFT:
+			case KeyEvent.VK_RIGHT:
+			case KeyEvent.VK_UP:
+			case KeyEvent.VK_DOWN:
+				JEditor.getInstance().getVisualizationView().updateCameraInformation();
+			default:
+				super.keyPressed( e );
+		}
+	}
+
+	@Override
+	public void mousePressed( MouseEvent e ) {
+		super.mousePressed( e );
+		JEditor.getInstance().getVisualizationView().updateCameraInformation();
+	}
+
+	@Override
+	public void mouseDragged( MouseEvent e ) {
+		super.mouseDragged( e );
+		JEditor.getInstance().getVisualizationView().updateCameraInformation();
+	}
+
+	@Override
+	public void mouseWheelMoved( MouseWheelEvent e ) {
+		super.mouseWheelMoved( e );
+		JEditor.getInstance().getVisualizationView().updateCameraInformation();
 	}
 }
