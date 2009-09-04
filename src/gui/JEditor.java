@@ -616,8 +616,9 @@ public class JEditor extends JFrame implements Localized, EventListener<Progress
 		mnuPlanImageTransparency.setEnabled( false );
 		Menu.addMenuItem( mExtras, "-" );
 		mnuOptions = Menu.addMenuItem( mExtras, loc.getString( "menuOptions" ), 'T', aclProperties, "options" );
-		mnuSettings = Menu.addMenuItem( mExtras, loc.getString( "menuSettings" ), aclProperties, "settings" );
-
+		if( EditorStart.isDebug() ) {
+			mnuSettings = Menu.addMenuItem( mExtras, loc.getString( "menuSettings" ), aclProperties, "settings" );
+		}
 		// Hilfe-menu
 		mnuHelpAbout = Menu.addMenuItem( mHelp, loc.getString( "menuAbout" ), 'I', aclAbout );
 
@@ -1000,7 +1001,9 @@ public class JEditor extends JFrame implements Localized, EventListener<Progress
 		Menu.updateMenu( mnuPlanImageLocate, loc.getString( "menuMovePlan" ) );
 		Menu.updateMenu( mnuPlanImageTransparency, loc.getString( "menuSetPlanTransparency" ) );
 		Menu.updateMenu( mnuOptions, loc.getString( "menuOptions" ) );
-		Menu.updateMenu( mnuSettings, loc.getString( "menuSettings" ) );
+		if( EditorStart.isDebug() ) {
+			Menu.updateMenu( mnuSettings, loc.getString( "menuSettings" ) );
+		}
 
 		// Window menu
 
