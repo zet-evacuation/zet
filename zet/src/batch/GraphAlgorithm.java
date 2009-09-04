@@ -33,62 +33,60 @@ import tasks.SuccessiveEarliestArrivalAugmentingPathAlgorithmTask3;
  * @author Timon
  */
 public enum GraphAlgorithm {
-  EarliestArrivalTransshipmentSuccessiveShortestPaths (Localization.getInstance().getString("gui.EATransshipmentSSSP")) {
-		public GraphAlgorithmTask createTask (NetworkFlowModel model, int timeHorizon) {
-			return new EATransshipmentSSSPTask (model);
-		}
-	}, 
-	EarliestArrivalTransshipmentMinCost (Localization.getInstance().getString("gui.EATransshipmentMinCost")) {
-		public GraphAlgorithmTask createTask (NetworkFlowModel model, int timeHorizon) {
-			return new EATransshipmentMinCostTask (model);
-		}
-	}, 
-	SuccessiveEarliestArrivalAugmentingPathBinarySearch (Localization.getInstance().getString("gui.SuccEAAugPathBS")) {
-		public GraphAlgorithmTask createTask (NetworkFlowModel model, int timeHorizon) {
-			return new SuccessiveEarliestArrivalAugmentingPathAlgorithmTask (model);
-		}
-	}, 
-	SuccessiveEarliestArrivalAugmentingPath (Localization.getInstance().getString("gui.SuccEAAugPath")) {
-		public GraphAlgorithmTask createTask (NetworkFlowModel model, int timeHorizon) {
-			return new SuccessiveEarliestArrivalAugmentingPathAlgorithm2Task (model);
-		}
-	}, 
-	MaxFlowOverTimeMinCost (Localization.getInstance().getString("gui.MaxFlowMinCost")) {
-		public GraphAlgorithmTask createTask (NetworkFlowModel model, int timeHorizon) {
-			return new MFOTMinCostTask (model, timeHorizon);
-		}
-	}, 
-	MaxFlowOverTimeTimeExpanded (Localization.getInstance().getString("gui.MaxFlowTimeExtended")) {
-		public GraphAlgorithmTask createTask (NetworkFlowModel model, int timeHorizon) {
-			return new MFOTimeExpandedTask (model, timeHorizon);
-		}
-	}, 
-	QuickestTransshipment (Localization.getInstance().getString("gui.QuickestTransshipment")) {
-		public GraphAlgorithmTask createTask (NetworkFlowModel model, int timeHorizon) {
-			return new QuickestTransshipmentTask (model);
+	EarliestArrivalTransshipmentSuccessiveShortestPaths( Localization.getInstance().getString( "gui.EATransshipmentSSSP" ) ) {
+		public GraphAlgorithmTask createTask( NetworkFlowModel model, int timeHorizon ) {
+			return new EATransshipmentSSSPTask( model );
 		}
 	},
-	SuccessiveEarliestArrivalAugmentingPathOptimized (Localization.getInstance().getString("gui.SEAAP")) {
-		public GraphAlgorithmTask createTask (NetworkFlowModel model, int timeHorizon) {
-			return new SuccessiveEarliestArrivalAugmentingPathAlgorithmTask3 (model);
+	EarliestArrivalTransshipmentMinCost( Localization.getInstance().getString( "gui.EATransshipmentMinCost" ) ) {
+		public GraphAlgorithmTask createTask( NetworkFlowModel model, int timeHorizon ) {
+			return new EATransshipmentMinCostTask( model );
 		}
-	},        
-        ;
-	
+	},
+	SuccessiveEarliestArrivalAugmentingPathBinarySearch( Localization.getInstance().getString( "gui.SuccEAAugPathBS" ) ) {
+		public GraphAlgorithmTask createTask( NetworkFlowModel model, int timeHorizon ) {
+			return new SuccessiveEarliestArrivalAugmentingPathAlgorithmTask( model );
+		}
+	},
+	SuccessiveEarliestArrivalAugmentingPath( Localization.getInstance().getString( "gui.SuccEAAugPath" ) ) {
+		public GraphAlgorithmTask createTask( NetworkFlowModel model, int timeHorizon ) {
+			return new SuccessiveEarliestArrivalAugmentingPathAlgorithm2Task( model );
+		}
+	},
+	MaxFlowOverTimeMinCost( Localization.getInstance().getString( "gui.MaxFlowMinCost" ) ) {
+		public GraphAlgorithmTask createTask( NetworkFlowModel model, int timeHorizon ) {
+			return new MFOTMinCostTask( model, timeHorizon );
+		}
+	},
+	MaxFlowOverTimeTimeExpanded( Localization.getInstance().getString( "gui.MaxFlowTimeExtended" ) ) {
+		public GraphAlgorithmTask createTask( NetworkFlowModel model, int timeHorizon ) {
+			return new MFOTimeExpandedTask( model, timeHorizon );
+		}
+	},
+	QuickestTransshipment( Localization.getInstance().getString( "gui.QuickestTransshipment" ) ) {
+		public GraphAlgorithmTask createTask( NetworkFlowModel model, int timeHorizon ) {
+			return new QuickestTransshipmentTask( model );
+		}
+	},
+	SuccessiveEarliestArrivalAugmentingPathOptimized( Localization.getInstance().getString( "gui.SEAAP" ) ) {
+		public GraphAlgorithmTask createTask( NetworkFlowModel model, int timeHorizon ) {
+			return new SuccessiveEarliestArrivalAugmentingPathAlgorithmTask3( model );
+		}
+	},;
 	private String name;
-	
-	GraphAlgorithm (String name) {
+
+	GraphAlgorithm( String name ) {
 		this.name = name;
 	}
-	
-	public String getName () {
+
+	public String getName() {
 		return name;
 	}
-	
+
 	@Override
-	public String toString () {
+	public String toString() {
 		return name;
 	}
-	
-	public abstract GraphAlgorithmTask createTask (NetworkFlowModel model, int timeHorizon);
+
+	public abstract GraphAlgorithmTask createTask( NetworkFlowModel model, int timeHorizon );
 }

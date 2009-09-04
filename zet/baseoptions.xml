@@ -3,6 +3,7 @@
     <stringNode name="lastProjectDirectory" useAsLocString="false" description="" information="" parameter="information.directory.lastProject">./examples</stringNode>
     <stringNode name="lastPlanDirectory" useAsLocString="false" description="" information="" parameter="information.directory.lastPlan"></stringNode>
     <stringNode name="lastResultsDirectory" useAsLocString="false" description="" information="" parameter="information.directory.lastResult">./examples</stringNode>
+    <stringNode name="lastImportDirectory" useAsLocString="false" description="" information="" parameter="information.directory.importProject">./examples</stringNode>
   </treeNode>
   <treeNode name="gui" useAsLocString="false">
     <treeNode name="visualization" useAsLocString="false">

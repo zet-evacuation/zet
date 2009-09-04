@@ -146,6 +146,13 @@ public class PlanPolygon<T extends Edge> implements Serializable, ChangeListener
 		this.edgeClassType = edgeClassType;
 	}
 
+	void resetListener() {
+		changeListeners = new ArrayList<ChangeListener>();
+		for( T e : this ) {
+			e.resetListener();
+		}
+	}
+
 	/**
 	 * Creates an new instance of <code>PlanPolygon</code> without any assigned
 	 * edges or points. All parameters are initialized with <code>null</code>.
@@ -190,7 +197,7 @@ public class PlanPolygon<T extends Edge> implements Serializable, ChangeListener
 			throw new IllegalStateException( Localization.getInstance().getString( "ds.z.PlanPolygon.ContainerNotEmptyException" ) );
 		if( points == null )
 			throw new NullPointerException( Localization.getInstance().getString( "ds.z.PlanPolygon.PointListIsNullException" ) );
-		if( points.size() <= 2 )
+		if( points.size() <= 1 )
 			throw new IllegalArgumentException( Localization.getInstance().getString( "ds.z.PlanPolygon.ListDoesNotContainenoughPointsException" ) );
 
 		// At least two point is in the list
@@ -1783,8 +1790,7 @@ public class PlanPolygon<T extends Edge> implements Serializable, ChangeListener
 	public List<PlanPoint> getPlanPoints() {
 		// The edges use common PlanPoint instances, so we don't
 		// have to add (edges.size () * 2) points.
-		ArrayList planPoints = new ArrayList<PlanPoint>( size +
-						(isClosed() ? 0 : 1) );
+		ArrayList planPoints = new ArrayList<PlanPoint>( size + (isClosed() ? 0 : 1) );
 		getPlanPoints( planPoints );
 		return planPoints;
 	}

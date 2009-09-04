@@ -55,7 +55,7 @@ public class JAssignment extends JDialog {
 		JButton btnClose = new JButton (Localization.getInstance().getString( "gui.Quit" ));
 		btnClose.addActionListener (new ActionListener () {
 			public void actionPerformed (ActionEvent e) {
-				JAssignment.this.setVisible (false);
+				JAssignment.this.setVisible( false );
 			}
 		});
 		pnlButton.add (btnClose, BorderLayout.EAST);

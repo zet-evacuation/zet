@@ -30,6 +30,7 @@ import java.awt.Point;
 import java.awt.geom.Point2D;
 import java.util.ArrayList;
 
+import java.util.List;
 import localization.Localization;
 import util.ConversionTools;
 
@@ -120,6 +121,10 @@ public class PlanPoint extends Point implements ChangeReporter {
 		}
 	}
 
+	void resetListener() {
+		changeListeners = new ArrayList<ChangeListener>();
+	}
+
 	/** {@inheritDoc}
 	 * @param e the event
 	 */
@@ -128,8 +133,7 @@ public class PlanPoint extends Point implements ChangeReporter {
 		// Workaround: Notify only the listeners who are registered at the time when this method starts
 		// This point may be thrown away when the resulting edge must be rastered, and then the list
 		// "changeListeners" will be altered during "c.stateChanged (e)", which produces exceptions.
-		ChangeListener[] listenerCopy = changeListeners.toArray(
-						new ChangeListener[changeListeners.size()] );
+		ChangeListener[] listenerCopy = changeListeners.toArray( new ChangeListener[changeListeners.size()] );
 
 
 		for( ChangeListener c : listenerCopy ) {
@@ -232,7 +236,6 @@ public class PlanPoint extends Point implements ChangeReporter {
 	 * @return integer transformed <code>x</code>-coordinate
 	 */
 	public double getXMeter() {
-		//return Math.round( (float)getX() * 1000.0f );
 		return ConversionTools.roundScale3( getX() / 1000.0 );
 	}
 
@@ -310,8 +313,8 @@ public class PlanPoint extends Point implements ChangeReporter {
 	}
 
 	@Override
-	public void setLocation( int i, int i0 ) {
-		setLocation( (double) i, (double) i0 );
+	public void setLocation( int x, int y ) {
+		setLocation( (double) x, (double) y );
 	}
 
 	@Override
@@ -323,12 +326,23 @@ public class PlanPoint extends Point implements ChangeReporter {
 	}
 
 	/**
+	 * Creates a copy of a list of <code>PlanPoint</code> objects. The copies are
+	 * new instances.
+	 * @param original the original list of points
+	 * @return the new list containing the copies
+	 */
+	public static List<PlanPoint> pointCopy( List<PlanPoint> original ) {
+		final List<PlanPoint> points = new ArrayList<PlanPoint>();
+		for( PlanPoint p : original )
+			points.add( new PlanPoint( p ) );
+		return points;
+	}
+
+	/**
 	 * Returns a string representation of the <code>PlanPoint</code> that
 	 * textually represents the point.
-	 * <p>A point is represented as a tupel of its coordinates like this:
-	 * </p>
-	 * <blockquote>
-	 * <pre>
+	 * <p>A point is represented as a tupel of its coordinates like this:</p>
+	 * <blockquote><pre>
 	 * (x,y)
 	 * </pre></blockquote>
 	 * @return a string representation of the point

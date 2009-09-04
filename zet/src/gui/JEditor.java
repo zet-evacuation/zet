@@ -146,11 +146,6 @@ public class JEditor extends JFrame implements Localized, EventListener<Progress
 	public static final int VISUALIZATION = EditorStart.isDebug() ? 3 : 2;
 	public static final int STATISTIC = EditorStart.isDebug() ? 4 : 3;
 	public static final int GRAPH_STATISTIC = EditorStart.isDebug() ? 5 : 4;
-//	public static final int CA_FLOOR = 2;
-//	public static final int VISUALIZATION = 3;
-//	public static final int STATISTIC = 4;
-//	public static final int GRAPH_STATISTIC = 5;
-//	public static final int CORRECTION = EditorStart.isDebug() ? 0 : 1;
 	/** The localization class. */
 	static final Localization loc = Localization.getInstance();
 	/** Stores the last mouse position if a mouse position event is sent. */
@@ -196,6 +191,7 @@ public class JEditor extends JFrame implements Localized, EventListener<Progress
 	private JMenuItem mnuEditFloorDown;
 	private JMenuItem mnuEditFloorDelete;
 	private JMenuItem mnuEditFloorImport;
+	private JMenuItem mnuEditFloorCopy;
 	private JMenuItem mnuEditRasterize;
 	private JMenuItem mnuEditDistributeEvacuees;
 	private JMenuItem mnuEditDistribution;
@@ -554,6 +550,7 @@ public class JEditor extends JFrame implements Localized, EventListener<Progress
 		mnuEditFloorUp = Menu.addMenuItem( mEdit, loc.getString( "menuFloorUp" ), aclFloor, "up" );
 		mnuEditFloorDown = Menu.addMenuItem( mEdit, loc.getString( "menuFloorDown" ), aclFloor, "down" );
 		mnuEditFloorDelete = Menu.addMenuItem( mEdit, loc.getString( "menuFloorDelete" ), aclFloor, "delete" );
+		mnuEditFloorCopy = Menu.addMenuItem( mEdit, loc.getString( "menuFloorCopy" ), aclFloor, "copy" );
 		mnuEditFloorImport = Menu.addMenuItem( mEdit, loc.getString( "menuFloorImport" ), aclFloor, "import" );
 		Menu.addMenuItem( mEdit, "-" );
 		mnuEditRasterize = Menu.addMenuItem( mEdit, loc.getString( "menuRasterize" ), 'R', aclStart, "rasterize" );
@@ -944,6 +941,7 @@ public class JEditor extends JFrame implements Localized, EventListener<Progress
 		Menu.updateMenu( mnuEditFloorUp, loc.getString( "menuFloorUp" ) );
 		Menu.updateMenu( mnuEditFloorDown, loc.getString( "menuFloorDown" ) );
 		Menu.updateMenu( mnuEditFloorDelete, loc.getString( "menuFloorDelete" ) );
+		Menu.updateMenu( mnuEditFloorCopy, loc.getString( "menuFloorCopy" ) );
 		Menu.updateMenu( mnuEditFloorImport, loc.getString( "menuFloorImport" ) );
 		Menu.updateMenu( mnuEditRasterize, loc.getString( "menuRasterize" ) );
 		Menu.updateMenu( mnuEditDistributeEvacuees, loc.getString( "menuDistributeEvacuees" ) );
@@ -1377,6 +1375,12 @@ public class JEditor extends JFrame implements Localized, EventListener<Progress
 				else if( e.getActionCommand().equals( "import" ) ) {
 					FloorImportDialog floorImport = new FloorImportDialog( JEditor.this, getProject(), "Importieren", 450, 250 );
 					floorImport.setVisible( true );
+				} else if( e.getActionCommand().equals( "copy" ) ) {
+					final Floor fc = editView.getCurrentFloor().clone();
+					final int max = getProject().getPlan().floorCount() + 1;
+					int number = 0;
+					while( !getProject().getPlan().addFloor( fc ) && number <= max )
+						fc.setName( editView.getCurrentFloor().getName() + "_" + number++ );
 				} else
 					sendError( loc.getString( "gui.UnknownCommand" ) + " '" + e.getActionCommand() + "'. " + loc.getString( "gui.ContactDeveloper" ) );
 			} catch( IllegalArgumentException ex ) {

@@ -45,9 +45,8 @@ import localization.Localization;
  * end points of two adjacent edges. It is escecially harmful when dealing with RoomEdges
  */
 //@XStreamAlias ( "edge" ) - Avoid duplicate edge tags (ds.graph.Edge also exists)
-@XMLConverter ( EdgeConverter.class )
+@XMLConverter(EdgeConverter.class)
 public class Edge implements Serializable, ChangeListener, ChangeReporter {
-	
 	/**
 	 * The <code>LineIntersectionType</code> enumeration defines the type of
 	 * intersection of two line segments.
@@ -67,17 +66,17 @@ public class Edge implements Serializable, ChangeListener, ChangeReporter {
 		NotIntersects;
 	}
 	/** The listeners which should be informed if anything changes */
-	@XStreamOmitField ()
+	@XStreamOmitField()
 	private transient ArrayList<ChangeListener> changeListeners = new ArrayList<ChangeListener>();
 	/** The associated polygon of this edge */
 	private PlanPolygon associatedPolygon;
 	/** The start point of this edge */
-	@XStreamOmitField () // - is set in Compact converter
+	@XStreamOmitField() // - is set in Compact converter
 	private PlanPoint target;
 	/** The end point of this edge */
-	@XStreamOmitField () // - is set in Compact converter
+	@XStreamOmitField() // - is set in Compact converter
 	private PlanPoint source;
-	
+
 	/**
 	 * Creates a new instance of <code>Edge</code> with two different ending points 
 	 * and no associated polygon. The edge will try to add itself to the ending
@@ -86,7 +85,7 @@ public class Edge implements Serializable, ChangeListener, ChangeReporter {
 	 * @param newSource one ending point
 	 * @param newTarget the other ending point
 	 */
-	Edge ( PlanPoint newSource, PlanPoint newTarget ) {
+	Edge( PlanPoint newSource, PlanPoint newTarget ) {
 		// We do explicitly NOT use setPoints here, because setPoints registers the Edge
 		// at the PlanPoints. This must not happen here, but when the edge is added to the 
 		// polygon, because it will possibly be turned around to fit into the polygon 
@@ -94,7 +93,7 @@ public class Edge implements Serializable, ChangeListener, ChangeReporter {
 		source = newSource;
 		target = newTarget;
 	}
-	
+
 	/**
 	 * Creates a new instance of <code>Edge</code> with two different ending points.
 	 * The edge will try to add itself to the ending points' list of incident edges.
@@ -103,123 +102,123 @@ public class Edge implements Serializable, ChangeListener, ChangeReporter {
 	 * @param newTarget the other ending point
 	 * @param p the polygon to which this edge is associated
 	 */
-	public Edge ( PlanPoint newSource, PlanPoint newTarget, PlanPolygon p ) {
-		this (newSource, newTarget);
-		setAssociatedPolygon (p);
+	public Edge( PlanPoint newSource, PlanPoint newTarget, PlanPolygon p ) {
+		this( newSource, newTarget );
+		setAssociatedPolygon( p );
 	}
-	
+
+	void resetListener() {
+		changeListeners = new ArrayList<ChangeListener>();
+		source.resetListener();
+		target.resetListener();
+	}
+
 	/** {@inheritDoc}
 	 * @param e the event
 	 */
 	@Override
-	public void throwChangeEvent ( ChangeEvent e ) {
+	public void throwChangeEvent( ChangeEvent e ) {
 		// Workaround: Notify only the listeners who are registered at the time when this method starts
 		// This edge may be thrown away when it must be rastered, and then the list
 		// "changeListeners" will be altered during "c.stateChanged (e)", which produces exceptions.
-		ChangeListener[] listenerCopy = changeListeners.toArray (
-			new ChangeListener[changeListeners.size ()]);
-		
-		for( ChangeListener c : listenerCopy ) {
-			c.stateChanged ( e );
-		}
+		ChangeListener[] listenerCopy = changeListeners.toArray( new ChangeListener[changeListeners.size()] );
+
+		for( ChangeListener c : listenerCopy )
+			c.stateChanged( e );
 	}
-	
+
 	/** {@inheritDoc}
 	 * @param c the listener
 	 */
 	@Override
-	public void addChangeListener ( ChangeListener c ) {
-		if( !changeListeners.contains ( c ) ) {
-			changeListeners.add ( c );
-		}
+	public void addChangeListener( ChangeListener c ) {
+		if( !changeListeners.contains( c ) )
+			changeListeners.add( c );
 	}
-	
+
 	/** {@inheritDoc}
 	 * @param c the listener
 	 */
 	@Override
-	public void removeChangeListener ( ChangeListener c ) {
-		changeListeners.remove ( c );
+	public void removeChangeListener( ChangeListener c ) {
+		changeListeners.remove( c );
 	}
-	
+
 	/** {@inheritDoc}
 	 * @param e the event
 	 */
 	@Override
-	public void stateChanged ( ChangeEvent e ) {
+	public void stateChanged( ChangeEvent e ) {
 		// Create an EdgeChangedEvent from the ChangeEvent that comes from the PlanPoints
-		if( e.getSource () instanceof PlanPoint ) {
-			throwChangeEvent ( new EdgeChangeEvent ( this, (PlanPoint) e.getSource () ) );
-		} else {
-			throwChangeEvent ( e );
-		}
+		if( e.getSource() instanceof PlanPoint )
+			throwChangeEvent( new EdgeChangeEvent( this, (PlanPoint)e.getSource() ) );
+		else
+			throwChangeEvent( e );
 	}
-	
+
 	/** @param e An arbitrary edge
 	 * @return Whether the given edge e is a neighbour of this edge in this edge's polygon. The method
 	 * checks for instance identity, so e must be the real neighbour object of this edge, not only a
 	 * copy of the neightbour object, to let this method produce the output "true". */
-	public boolean isNeighbour (Edge e) {
-		return (source.getPreviousEdge () == e) || (target.getNextEdge () == e);
+	public boolean isNeighbour( Edge e ) {
+		return (source.getPreviousEdge() == e) || (target.getNextEdge() == e);
 	}
-	
+
 	/** @param e A neighbour of this edge in this edge's polygon (may not be a copy of a neighbour)
 	 * @return The other neighbour (not e) of this edge or null if e is the only neighbour
 	 * @exception IllegalArgumentException If e is no neighbour of this edge.
 	 */
-	public Edge getOtherNeighbour (Edge e) throws IllegalArgumentException {
-		if (source.getPreviousEdge () == e) {
-			return target.getNextEdge ();
-		} else if (target.getNextEdge () == e) {
-			return source.getPreviousEdge ();
-		} else {
-			throw new IllegalArgumentException (Localization.getInstance (
-			).getString ("ds.z.EdgeException"));
-		}
+	public Edge getOtherNeighbour( Edge e ) throws IllegalArgumentException {
+		if( source.getPreviousEdge() == e )
+			return target.getNextEdge();
+		else if( target.getNextEdge() == e )
+			return source.getPreviousEdge();
+		else
+			throw new IllegalArgumentException( Localization.getInstance().getString( "ds.z.EdgeException" ) );
 	}
-	
+
 	/**
 	 * Returns the leftmost coordinate value of this edge.
 	 * @return the right bound
 	 */
-	public int boundLeft () {
-		return (int) Math.min ( source.getX (), target.getX () );
+	public int boundLeft() {
+		return (int)Math.min( source.getX(), target.getX() );
 	}
-	
+
 	/**
 	 * Returns the lowermost coordinate value of this edge.
 	 * @return the lower bound
 	 */
-	public int boundLower () {
-		return (int) Math.max ( source.getY (), target.getY () );
+	public int boundLower() {
+		return (int)Math.max( source.getY(), target.getY() );
 	}
-	
+
 	/**
 	 * Returns the rightmost coordinate value of this edge.
 	 * @return the right bound
 	 */
-	public int boundRight () {
-		return (int) Math.max ( source.getX (), target.getX () );
+	public int boundRight() {
+		return (int)Math.max( source.getX(), target.getX() );
 	}
-	
+
 	/**
 	 * Returns the uppermost coordinate value of this edge.
 	 * @return the upper bound
 	 */
-	public int boundUpper () {
-		return (int) Math.min ( source.getY (), target.getY () );
+	public int boundUpper() {
+		return (int)Math.min( source.getY(), target.getY() );
 	}
-	
+
 	/**
 	 * Determines the common point of the <code>Edge</code> with another specified edge.
 	 * @param e the edge
 	 * @throws java.lang.IllegalArgumentException if the edges have no point in common
 	 * @return the common point
 	 */
-	public PlanPoint commonPoint ( Edge e ) throws IllegalArgumentException {
-		return commonPoint ( this, e );
+	public PlanPoint commonPoint( Edge e ) throws IllegalArgumentException {
+		return commonPoint( this, e );
 	}
-	
+
 	/**
 	 * Determines the common point of two specified edges that fit together.
 	 * @param e1 one edge
@@ -228,21 +227,19 @@ public class Edge implements Serializable, ChangeListener, ChangeReporter {
 	 * @throws java.lang.IllegalArgumentException if the edges have no point in common
 	 * @see #fits(Edge)
 	 */
-	public static PlanPoint commonPoint ( Edge e1, Edge e2 ) throws IllegalArgumentException {
-		if( e1.getSource ().equals ( e2.getSource () ) ) {
-			return e1.getSource ();
-		} else if( e1.getSource ().equals ( e2.getTarget () ) ) {
-			return e1.getSource ();
-		} else if( e1.getTarget ().equals ( e2.getSource () ) ) {
-			return e1.getTarget ();
-		} else if( e1.getTarget ().equals ( e2.getTarget () ) ) {
-			return e1.getTarget ();
-		} else {
-			throw new java.lang.IllegalArgumentException (Localization.getInstance (
-			).getString ("ds.z.NoCommonPointException"));
-		}
+	public static PlanPoint commonPoint( Edge e1, Edge e2 ) throws IllegalArgumentException {
+		if( e1.getSource().equals( e2.getSource() ) )
+			return e1.getSource();
+		else if( e1.getSource().equals( e2.getTarget() ) )
+			return e1.getSource();
+		else if( e1.getTarget().equals( e2.getSource() ) )
+			return e1.getTarget();
+		else if( e1.getTarget().equals( e2.getTarget() ) )
+			return e1.getTarget();
+		else
+			throw new java.lang.IllegalArgumentException( Localization.getInstance().getString( "ds.z.NoCommonPointException" ) );
 	}
-	
+
 	/**
 	 * Deletes this <code>Edge</code>. That means, the edge removes itself out of
 	 * the list of edges in the associated polygon. After that all used references are
@@ -251,18 +248,18 @@ public class Edge implements Serializable, ChangeListener, ChangeReporter {
 	 * @throws java.lang.IllegalStateException if the edge is not the first or last 
 	 * edge in the polygon. first and last edges also occur in closed polygons.
 	 */
-	public void delete () throws IllegalArgumentException, IllegalStateException {
-		associatedPolygon.removeEdge ( this );
+	public void delete() throws IllegalArgumentException, IllegalStateException {
+		associatedPolygon.removeEdge( this );
 		associatedPolygon = null;
 
-		target.setPreviousEdge (null);
-		source.setNextEdge (null);
-		target.removeChangeListener (this);
-		source.removeChangeListener (this);
+		target.setPreviousEdge( null );
+		source.setNextEdge( null );
+		target.removeChangeListener( this );
+		source.removeChangeListener( this );
 		target = null;
 		source = null;
 	}
-	
+
 	/**
 	 * Tests if this edge is equal to any object. If the object is not an instance
 	 * of edge, the two objects are considered as unequal. Two edges are equal if
@@ -271,19 +268,18 @@ public class Edge implements Serializable, ChangeListener, ChangeReporter {
 	 * @return true if the points of e and this instance are the same
 	 */
 	@Override
-	public boolean equals ( Object obj ) {
+	public boolean equals( Object obj ) {
 		if( obj instanceof Edge ) {
 			Edge e = (Edge)obj;
-			boolean val1 = e.getSource ().equals ( this.getSource () ) && 
-					e.getTarget ().equals ( this.getTarget () );
-			boolean val2 = e.getSource ().equals ( this.getTarget () ) && 
-					e.getTarget ().equals ( this.getSource () );
+			final boolean val1 = e.getSource().equals( this.getSource() ) &&
+							e.getTarget().equals( this.getTarget() );
+			final boolean val2 = e.getSource().equals( this.getTarget() ) &&
+							e.getTarget().equals( this.getSource() );
 			return val1 | val2;
-		} else {
+		} else
 			return false;
-		}
 	}
-	
+
 	/**
 	 * Checks if a specified {@link PlanPoint} fits to the <code>Edge</code>. That
 	 * means that the point has the same coordinates than one of the end points
@@ -291,10 +287,10 @@ public class Edge implements Serializable, ChangeListener, ChangeReporter {
 	 * @param p the point
 	 * @return true if the point is one of the end points
 	 */
-	public boolean fits ( PlanPoint p ) {
-		return fits ( p, this );
+	public boolean fits( PlanPoint p ) {
+		return fits( p, this );
 	}
-	
+
 	/**
 	 * Checks if a specified {@link PlanPoint} fits a specified <code>Edge</code>.
 	 * That means that the point has the same coordinates than one of the end points
@@ -303,20 +299,20 @@ public class Edge implements Serializable, ChangeListener, ChangeReporter {
 	 * @param e the edge
 	 * @return true if the point is one of the end points of the edge
 	 */
-	public static boolean fits ( PlanPoint p, Edge e ) {
-		return p.equals ( e.getSource () ) | p.equals ( e.getTarget () );
+	public static boolean fits( PlanPoint p, Edge e ) {
+		return p.equals( e.getSource() ) | p.equals( e.getTarget() );
 	}
-	
+
 	/**
 	 * Checks if a specified <code>Edge</code> fits to the edge. That means that
 	 * the edges have ending points with the same coordinates.
 	 * @param e the edge
 	 * @return true if the edges have an ending point in common
 	 */
-	public boolean fits ( Edge e ) {
-		return fits ( e.getSource () ) | fits ( e.getTarget () );
+	public boolean fits( Edge e ) {
+		return fits( e.getSource() ) | fits( e.getTarget() );
 	}
-	
+
 	/**
 	 * Checks whether an {@link Edge} fits into another <code>Edge<&/code>. An
 	 * edge is said to fit, if the coordinates of the edges are the same. That
@@ -328,17 +324,17 @@ public class Edge implements Serializable, ChangeListener, ChangeReporter {
 	public static boolean fitsTogether( Edge e1, Edge e2 ) {
 		return e1.fits( e2.getSource() ) && e1.fits( e2.getTarget() );
 	}
-	
+
 	/**
 	 * Returns the {@link PlanPolygon} that is associated to the<code>Edge</code>.
 	 * A polygon is associated if it contains the edge.
 	 * <p>Every edge must have exactly one associated polygon.</p>
 	 * @return the associated polygon.
 	 */
-	public PlanPolygon getAssociatedPolygon () {
+	public PlanPolygon getAssociatedPolygon() {
 		return associatedPolygon;
 	}
-	
+
 	/**
 	 * Returns the end point of the <code>Edge</code> that is not the specified
 	 * point.
@@ -346,63 +342,59 @@ public class Edge implements Serializable, ChangeListener, ChangeReporter {
 	 * @return the other end point
 	 * @throws java.lang.IllegalArgumentException
 	 */
-	public PlanPoint getOther ( PlanPoint p ) throws IllegalArgumentException {
-		if( p == source || p.equals (source) ) {
-			return getTarget ();
-		}
-		if( p == target || p.equals (target) ) {
-			return getSource ();
-		}
-		throw new IllegalArgumentException (Localization.getInstance (
-		).getString ("ds.z.NoCoindidesException"));
+	public PlanPoint getOther( PlanPoint p ) throws IllegalArgumentException {
+		if( p == source || p.equals( source ) )
+			return getTarget();
+		if( p == target || p.equals( target ) )
+			return getSource();
+		throw new IllegalArgumentException( Localization.getInstance().getString( "ds.z.NoCoindidesException" ) );
 	}
-	
+
 	/**
 	 * If target or source of the Edge equal the given point, then target or source are returned,
 	 * otherwise null is returned.
 	 */
-	public PlanPoint getPoint (PlanPoint p) {
-		return (target == p || (target != null && target.equals (p))) ? target :
-			(source == p || (source != null && source.equals (p))) ? source : null;
+	public PlanPoint getPoint( PlanPoint p ) {
+		return (target == p || (target != null && target.equals( p ))) ? target : (source == p || (source != null && source.equals( p ))) ? source : null;
 	}
-	
+
 	/**
 	 * Returns one of the bounding points of this edge.
 	 * @return one bounding point as {@link PlanPoint}
 	 */
-	public PlanPoint getSource () {
+	public PlanPoint getSource() {
 		return source;
 	}
-	
+
 	/**
 	 * Returns one of the bounding points of this edge.
 	 * @return one bounding point as {@link PlanPoint}
 	 */
-	public PlanPoint getTarget () {
+	public PlanPoint getTarget() {
 		return target;
 	}
-	
+
 	public int getMinX() {
 		int mine1 = Math.min( getSource().getXInt(), getTarget().getXInt() );
 		return mine1;
-		
+
 	}
-	
+
 	public int getMinY() {
 		int mine1 = Math.min( getSource().getYInt(), getTarget().getYInt() );
 		return mine1;
 	}
-	
+
 	public int getMaxX() {
 		int maxe1 = Math.max( getSource().getXInt(), getTarget().getXInt() );
 		return maxe1;
 	}
-	
+
 	public int getMaxY() {
 		int maxe1 = Math.max( getSource().getYInt(), getTarget().getYInt() );
 		return maxe1;
 	}
-	
+
 	/**
 	 * Tests whether two edges intersect each other, or not. The returned value is an
 	 * {@link ds.z.Edge.LineIntersectionType} object, which indicates what type the
@@ -412,13 +404,12 @@ public class Edge implements Serializable, ChangeListener, ChangeReporter {
 	 * @return the intersection type
 	 * @see ds.z.Edge.LineIntersectionType
 	 */
-	public static LineIntersectionType intersects ( Edge e1, Edge e2 ) {
-		if( e1.fits ( e2 ) ) {
+	public static LineIntersectionType intersects( Edge e1, Edge e2 ) {
+		if( e1.fits( e2 ) )
 			if( fitsTogether( e1, e2 ) )
 				return LineIntersectionType.Superposed;
 			else
 				return LineIntersectionType.Connected;
-		}
 		// TODO use getMinX(), getMinY()... functions
 		int mine1 = Math.min( e1.getSource().getXInt(), e1.getTarget().getXInt() );
 		int maxe1 = Math.max( e1.getSource().getXInt(), e1.getTarget().getXInt() );
@@ -433,55 +424,49 @@ public class Edge implements Serializable, ChangeListener, ChangeReporter {
 		if( mine1 > maxe2 | mine2 > maxe1 )
 			return LineIntersectionType.NotIntersects;
 		//if(  )
-		
-		int t1 = PlanPoint.orientation ( e1.getSource (), e1.getTarget (), e2.getSource () );
-		int t2 = PlanPoint.orientation ( e1.getSource (), e1.getTarget (), e2.getTarget () );
-		if( t1 == 0 & t2 == 0 ) {
+
+		int t1 = PlanPoint.orientation( e1.getSource(), e1.getTarget(), e2.getSource() );
+		int t2 = PlanPoint.orientation( e1.getSource(), e1.getTarget(), e2.getTarget() );
+		if( t1 == 0 & t2 == 0 )
 			return LineIntersectionType.Colinear;
-		}
 		int ret1 = t1 * t2;
-		t1 = PlanPoint.orientation ( e2.getSource (), e2.getTarget (), e1.getSource () );
-		t2 = PlanPoint.orientation ( e2.getSource (), e2.getTarget (), e1.getTarget () );
-		if( t1 == 0 & t2 == 0 ) {
+		t1 = PlanPoint.orientation( e2.getSource(), e2.getTarget(), e1.getSource() );
+		t2 = PlanPoint.orientation( e2.getSource(), e2.getTarget(), e1.getTarget() );
+		if( t1 == 0 & t2 == 0 )
 			return LineIntersectionType.Colinear;
-		}
 		int ret2 = t1 * t2;
-		if( ret1 < 0 & ret2 < 0 ) {
+		if( ret1 < 0 & ret2 < 0 )
 			return LineIntersectionType.Intersects;
-		} else if( ret1 * ret2 == 0 ) {
-			return LineIntersectionType.IntersectsBorder;
-		} // Cannot be colinear here!
-		else {
+		else if( ret1 * ret2 == 0 )
+			return LineIntersectionType.IntersectsBorder; // Cannot be colinear here!
+		else
 			return LineIntersectionType.NotIntersects;
-		}
 	}
-	
+
 	/**
 	 * Checks whether the edge is horizontally aligned. The edge is considered
 	 * horizontal if the <code>y</code>-coordinates of the two end points are equal.
 	 * @return true if the edge is horizontal
 	 */
-	public boolean isHorizontal () {
-		if( source.y == target.y ) {
+	public boolean isHorizontal() {
+		if( source.y == target.y )
 			return true;
-		} else {
+		else
 			return false;
-		}
 	}
-	
+
 	/**
 	 * Checks whether the edge is vertically aligned. The edge is considered
 	 * vertical if the <code>x</code>-coordinates of the two end points are equal.
 	 * @return true if the edge is vertical
 	 */
-	public boolean isVertical () {
-		if( source.x == target.x ) {
+	public boolean isVertical() {
+		if( source.x == target.x )
 			return true;
-		} else {
+		else
 			return false;
-		}
 	}
-	
+
 	/** Sets a new associated polygon. This should only be invoked when the edge
 	 * is created. An edge should typically keep its polygon during its entire
 	 * lifetime.
@@ -492,26 +477,21 @@ public class Edge implements Serializable, ChangeListener, ChangeReporter {
 	 * @throws IllegalStateException if the edge is part of a polygon with more than one
 	 * @param polygon the new polygon
 	 */
-	protected void setAssociatedPolygon ( PlanPolygon polygon ) 
-			throws NullPointerException, IllegalArgumentException, IllegalStateException {
-		if( polygon == null ) {
-			throw new NullPointerException( Localization.getInstance (
-			).getString ("ds.z.PolygonIsNullException") );
-		}
-		if( polygon.fits ( this ) ) {
-			if( associatedPolygon != null ) {
-				associatedPolygon.removeEdge ( this );
-			}
-			polygon.addEdge ( this );
+	protected void setAssociatedPolygon( PlanPolygon polygon )
+					throws NullPointerException, IllegalArgumentException, IllegalStateException {
+		if( polygon == null )
+			throw new NullPointerException( Localization.getInstance().getString( "ds.z.PolygonIsNullException" ) );
+		if( polygon.fits( this ) ) {
+			if( associatedPolygon != null )
+				associatedPolygon.removeEdge( this );
+			polygon.addEdge( this );
 			associatedPolygon = polygon;
 			//ChangeEvents are thrown by polygons
-			throwChangeEvent ( new ChangeEvent (this) );
-		} else {
-			throw new IllegalArgumentException ( Localization.getInstance (
-			).getString ("ds.z.CanNotConnectException") );
-		}
+			throwChangeEvent( new ChangeEvent( this ) );
+		} else
+			throw new IllegalArgumentException( Localization.getInstance().getString( "ds.z.CanNotConnectException" ) );
 	}
-		
+
 	/**
 	 * Sets one specified end point of the edge to a new one.
 	 *
@@ -526,17 +506,17 @@ public class Edge implements Serializable, ChangeListener, ChangeReporter {
 	 * edges and overwrite is 'false'
 	 * @throws IllegalArgumentException If p is not on the edge
 	 */
-	protected void setPoint ( PlanPoint p, PlanPoint newPoint, boolean overwrite ) 
-			throws PointsAlreadyConnectedException {
-		if( source.equals ( p ) )
-			setSource ( newPoint, overwrite );
-		else if( target.equals ( p ) )
-			setTarget ( newPoint, overwrite );
+	protected void setPoint( PlanPoint p, PlanPoint newPoint, boolean overwrite )
+					throws PointsAlreadyConnectedException {
+		if( source.equals( p ) )
+			setSource( newPoint, overwrite );
+		else if( target.equals( p ) )
+			setTarget( newPoint, overwrite );
 		else
-			throw new IllegalArgumentException ( Localization.getInstance ().getString (
-				"ds.z.PlanPolygon.PointNotContainedInEdgeException"));
+			throw new IllegalArgumentException( Localization.getInstance().getString(
+							"ds.z.PlanPolygon.PointNotContainedInEdgeException" ) );
 	}
-	
+
 	/**
 	 * Sets the first point to a new position, it has to be different from the second point.
 	 * @param newSource the new point
@@ -546,28 +526,26 @@ public class Edge implements Serializable, ChangeListener, ChangeReporter {
 	 * @throws PointsAlreadyConnectedException if the points are already connected to other 
 	 * edges and overwrite is 'false'
 	 */
-	protected void setSource ( PlanPoint newSource, boolean overwrite  ) 
-			throws PointsAlreadyConnectedException {
+	protected void setSource( PlanPoint newSource, boolean overwrite )
+					throws PointsAlreadyConnectedException {
 		/* Do not switch this test back on - it preempts exchanging the two end points
-		 if( newSource == target || newSource.equals ( target  ) ) {
-			throw new IllegalArgumentException ( "Points have the same coordinates" );
+		if( newSource == target || newSource.equals ( target  ) ) {
+		throw new IllegalArgumentException ( "Points have the same coordinates" );
 		}*/
-		if (!overwrite && newSource != source && newSource.getNextEdge () != null) {
-			throw new PointsAlreadyConnectedException ( newSource,
-					Localization.getInstance (
-					).getString ("ds.z.SourceAlreadyConnectedException") );
-		}
-		
+		if( !overwrite && newSource != source && newSource.getNextEdge() != null )
+			throw new PointsAlreadyConnectedException( newSource,
+							Localization.getInstance().getString( "ds.z.SourceAlreadyConnectedException" ) );
+
 		if( source != null ) {
-			source.removeChangeListener ( this );
-			source.setNextEdge (null);
+			source.removeChangeListener( this );
+			source.setNextEdge( null );
 		}
 		source = newSource;
-		newSource.addChangeListener ( this );
-		newSource.setNextEdge (this);
-		throwChangeEvent ( new ChangeEvent ( this ) );
+		newSource.addChangeListener( this );
+		newSource.setNextEdge( this );
+		throwChangeEvent( new ChangeEvent( this ) );
 	}
-	
+
 	/**
 	 * Sets the second point to a new position, it has to be different from the first point.
 	 *
@@ -580,28 +558,25 @@ public class Edge implements Serializable, ChangeListener, ChangeReporter {
 	 * @throws PointsAlreadyConnectedException if the points are already connected to other 
 	 * edges and overwrite is 'false'
 	 */
-	protected void setTarget ( PlanPoint newTarget, boolean overwrite  ) 
-			throws PointsAlreadyConnectedException {
+	protected void setTarget( PlanPoint newTarget, boolean overwrite ) throws PointsAlreadyConnectedException {
 		/* Do not switch this test back on - it preempts exchanging the two end points
-		 if( source == newTarget || newTarget.equals ( source  ) ) {
-			throw new IllegalArgumentException ( "Points have the same coordinates" );
+		if( source == newTarget || newTarget.equals ( source  ) ) {
+		throw new IllegalArgumentException ( "Points have the same coordinates" );
 		}*/
-		if (!overwrite && newTarget != target && newTarget.getPreviousEdge () != null) {
-			throw new PointsAlreadyConnectedException ( newTarget, 
-					Localization.getInstance (
-					).getString ("ds.z.TargetAlreadyConnectedException") );
-		}
-		
+		if( !overwrite && newTarget != target && newTarget.getPreviousEdge() != null )
+			throw new PointsAlreadyConnectedException( newTarget,
+							Localization.getInstance().getString( "ds.z.TargetAlreadyConnectedException" ) );
+
 		if( target != null ) {
-			target.removeChangeListener ( this );
-			target.setPreviousEdge (null);
+			target.removeChangeListener( this );
+			target.setPreviousEdge( null );
 		}
 		target = newTarget;
-		newTarget.addChangeListener ( this );
-		newTarget.setPreviousEdge (this);
-		throwChangeEvent ( new ChangeEvent ( this ) );
+		newTarget.addChangeListener( this );
+		newTarget.setPreviousEdge( this );
+		throwChangeEvent( new ChangeEvent( this ) );
 	}
-	
+
 	/**
 	 * Sets both points at the same time. They have to be different.
 	 *
@@ -615,12 +590,12 @@ public class Edge implements Serializable, ChangeListener, ChangeReporter {
 	 * @throws PointsAlreadyConnectedException if the points are already connected to other 
 	 * edges and overwrite is 'false'
 	 */
-	protected void setPoints ( PlanPoint newSource, PlanPoint newTarget, boolean overwrite) 
-			throws IllegalArgumentException, PointsAlreadyConnectedException {
-		setSource (newSource, overwrite);
-		setTarget (newTarget, overwrite);
+	protected void setPoints( PlanPoint newSource, PlanPoint newTarget, boolean overwrite )
+					throws IllegalArgumentException, PointsAlreadyConnectedException {
+		setSource( newSource, overwrite );
+		setTarget( newTarget, overwrite );
 	}
-	
+
 	/**
 	 * Returns a string representation of the <code>Edge</code> that
 	 * textually represents the edge.
@@ -637,18 +612,18 @@ public class Edge implements Serializable, ChangeListener, ChangeReporter {
 	 * @return a string representation of the edge
 	 */
 	@Override
-	public String toString () {
-		return "[" + source.toString () + "," + target.toString () + "]";
+	public String toString() {
+		return "[" + source.toString() + "," + target.toString() + "]";
 	}
-	
+
 	/**
 	 * Returns the length of the edge (in millimeters).
 	 * @return The length of the edge (in millimeters).
 	 */
-	public int length () {
-		return length ( getSource (), getTarget () );
+	public int length() {
+		return length( getSource(), getTarget() );
 	}
-	
+
 	/**
 	 * Calculates the length of the line segment between two specified points with
 	 * the euclidean norm. The length is rounded to millimeter.
@@ -657,62 +632,62 @@ public class Edge implements Serializable, ChangeListener, ChangeReporter {
 	 * @return the rounded length
 	 * @see ds.z.PlanPoint
 	 */
-	static public int length ( PlanPoint p1, PlanPoint p2 ) {
-		return p1.equals (p2) ? 0 : (int)Math.round (PlanPoint.distance (p1.x, p1.y, p2.x, p2.y));
+	static public int length( PlanPoint p1, PlanPoint p2 ) {
+		return p1.equals( p2 ) ? 0 : (int)Math.round( PlanPoint.distance( p1.x, p1.y, p2.x, p2.y ) );
 	}
-	
+
 	/** This is a convenience method that returns both PlanPoints of this Edge.
 	 */
-	public List<PlanPoint> getPlanPoints () {
-		ArrayList<PlanPoint> planPoints = new ArrayList<PlanPoint> (2);
-		getPlanPoints (planPoints);
+	public List<PlanPoint> getPlanPoints() {
+		ArrayList<PlanPoint> planPoints = new ArrayList<PlanPoint>( 2 );
+		getPlanPoints( planPoints );
 		return planPoints;
 	}
+
 	/** This is a convenience method that adds both PlanPoints of this Edge to
 	 * the given list.
 	 *
 	 * @param planPoints The method will add all PlanPoints to the parameter list.
 	 */
-	public void getPlanPoints (List<PlanPoint> planPoints) {
-		planPoints.add (source);
-		planPoints.add (target);
+	public void getPlanPoints( List<PlanPoint> planPoints ) {
+		planPoints.add( source );
+		planPoints.add( target );
 	}
-	
+
 	/**
 	 * @param p An arbitrary point
 	 * @return A new PlanPoint, that lies on this Edge and that is close to p.
 	 */
-	public PlanPoint getPointOnEdge (PlanPoint p) {
-		int width = boundRight () - boundLeft ();
-		int height = boundLower () - boundUpper ();
-		
+	public PlanPoint getPointOnEdge( PlanPoint p ) {
+		int width = boundRight() - boundLeft();
+		int height = boundLower() - boundUpper();
+
 		PlanPoint pLeft = (source.x <= target.x) ? source : target;
 		PlanPoint pRight = (source.x <= target.x) ? target : source;
 		PlanPoint pTop = (source.y <= target.y) ? source : target;
 		PlanPoint pBottom = (source.y <= target.y) ? target : source;
-		
-		if (width > height) {
+
+		if( width > height ) {
 			// ~ Horizontal edge --> We correct the y coordinate of the point
 			double ascension = (double)(pRight.y - pLeft.y) /
-				(double)(pRight.x - pLeft.x);
+							(double)(pRight.x - pLeft.x);
 			int offset = pLeft.y;
-			
-			return new PlanPoint (p.x, (int)(ascension * (p.x - pLeft.x)) + offset);
+
+			return new PlanPoint( p.x, (int)(ascension * (p.x - pLeft.x)) + offset );
 		} else {
 			// ~ Vertical edge --> We correct the x coordinate of the point
 			double ascension = (double)(pTop.x - pBottom.x) /
-				(double)(pTop.y - pBottom.y);
+							(double)(pTop.y - pBottom.y);
 			int offset = pBottom.x;
-			
-			return new PlanPoint ((int)(ascension * (p.y - pBottom.y)) + offset, p.y);
+
+			return new PlanPoint( (int)(ascension * (p.y - pBottom.y)) + offset, p.y );
 		}
 	}
-	
+
 	/** Splits the edge in two parts. Each of the edges will have identic fields and the
 	 * Point p will be the end of the first and the start of teh second edge, e.g. split them.
 	 * @param p The splitting point (Is not modified in here)
 	 */
-	public void splitEdge (PlanPoint p) {
-		
+	public void splitEdge( PlanPoint p ) {
 	}
 }

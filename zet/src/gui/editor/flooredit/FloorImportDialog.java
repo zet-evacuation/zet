@@ -20,7 +20,6 @@
 package gui.editor.flooredit;
 
 import ds.Project;
-import ds.PropertyContainer;
 import ds.z.Floor;
 import gui.JEditor;
 import gui.components.framework.Button;
@@ -28,8 +27,14 @@ import gui.editor.GUIOptionManager;
 import info.clearthought.layout.TableLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.io.File;
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.util.Vector;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.JButton;
 import javax.swing.JDialog;
 import javax.swing.JFileChooser;
@@ -37,6 +42,7 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JList;
 import javax.swing.JOptionPane;
+import javax.swing.text.Document;
 import localization.Localization;
 
 /**
@@ -57,6 +63,7 @@ public class FloorImportDialog extends JDialog {
 	/**
 	 * Creates aclButton new instance of <code>FloorImportDialog</code>.
 	 * @param owner the parent window
+	 * @param project the project to which the floor is added
 	 * @param title the title of the floor import dialog
 	 * @param width the width of the dialog window
 	 * @param height the height of the dialog window
@@ -111,7 +118,7 @@ public class FloorImportDialog extends JDialog {
 	ActionListener aclButton = new ActionListener() {
 		private JFileChooser jfcProject;
 		{
-			jfcProject = new JFileChooser( GUIOptionManager.getSavePath() );
+			jfcProject = new JFileChooser( GUIOptionManager.getImportPath() );
 			jfcProject.setFileFilter( JEditor.getProjectFilter() );
 			jfcProject.setAcceptAllFileFilterUsed( false );
 		}
@@ -119,7 +126,7 @@ public class FloorImportDialog extends JDialog {
 		public void actionPerformed( ActionEvent e ) {
 			if( e.getActionCommand().equals( "load" ) ) {
 				if( jfcProject.showOpenDialog( JEditor.getInstance() ) == JFileChooser.APPROVE_OPTION )
-					//loadProjectFile( jfcProject.getSelectedFile() );
+					GUIOptionManager.setImportPath( jfcProject.getCurrentDirectory().getPath() );
 					try {
 						Project loaded = Project.load( jfcProject.getSelectedFile() );
 						floors.clear();
@@ -134,15 +141,13 @@ public class FloorImportDialog extends JDialog {
 						ex.printStackTrace();
 						JEditor.sendMessage( loc.getString( "gui.editor.JEditor.message.loadError" ) );
 					}
-			// TODO save the chosen path in the propertycontainer
 			} else if( e.getActionCommand().equals( "import" ) ) {
-				Floor f = (Floor)list.getSelectedValue();
-				int max = project.getPlan().floorCount()+1;
-				String original = f.getName();
-				int number = 0;
-				while( !project.getPlan().addFloor( f ) && number <= max ) {
-					f.setName( original + "_" + number++ );
-				}
+					final Floor f = (Floor)list.getSelectedValue();
+					final Floor fc = f.clone();
+					final int max = project.getPlan().floorCount() + 1;
+					int number = 0;
+					while( !project.getPlan().addFloor( fc ) && number <= max )
+						fc.setName( f.getName() + "_" + number++ );
 			} else if( e.getActionCommand().equals( "close" ) ) {
 				dispose();
 			}
