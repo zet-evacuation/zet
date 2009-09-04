@@ -46,7 +46,7 @@ import localization.Localization;
  */
 @XStreamAlias( "room" )
 @XMLConverter( RoomConverter.class )
-public class Room extends BaseRoom<RoomEdge> {
+public class Room extends BaseRoom<RoomEdge> implements Cloneable {
 //public class Room<T extends RoomEdge> extends PlanPolygon<T> {
 	@XStreamAsAttribute()
 	/** The name of the <code>Room</code>. */
@@ -797,10 +797,12 @@ public class Room extends BaseRoom<RoomEdge> {
 		}
 	}
 
-	/** This is a convenience method that returns all PlanPoints of all 
+	/**
+	 * This is a convenience method that returns all PlanPoints of all
 	 * Edges of this polygon and all PlanPoints of all Areas that are 
 	 * registered at this Room.
 	 */
+	@Override
 	public List<PlanPoint> getPlanPoints() {
 		// Use linked list instaed of computing the right size for an ArrayList
 		LinkedList<PlanPoint> planPoints = new LinkedList<PlanPoint>();
@@ -808,7 +810,25 @@ public class Room extends BaseRoom<RoomEdge> {
 		return planPoints;
 	}
 
-	/** This is a convenience method that adds all PlanPoints of all 
+	public List<PlanPoint> getBorderPlanPoints() {
+		// Use linked list instaed of computing the right size for an ArrayList
+		LinkedList<PlanPoint> planPoints = new LinkedList<PlanPoint>();
+		getBorderPlanPoints( planPoints );
+		return planPoints;
+	}
+
+	/**
+	 * This is a convenience method that adds all PlanPoints of all
+	 * Edges of this polygon to the given list. The Room implementation
+	 * also adds all PlanPoints of all Areas that are registered at this Room.
+	 */
+	public void getBorderPlanPoints( List<PlanPoint> planPoints ) {
+		super.getPlanPoints( planPoints );
+	}
+
+
+	/**
+	 * This is a convenience method that adds all PlanPoints of all
 	 * Edges of this polygon to the given list. The Room implementation 
 	 * also adds all PlanPoints of all Areas that are registered at this Room.
 	 */
@@ -982,16 +1002,16 @@ public class Room extends BaseRoom<RoomEdge> {
 		}
 
 
-		for( StairArea da : stairAreas ) {
+		for( StairArea sa : stairAreas ) {
 			//get copies of the area`s points
-			temp_points = da.getPlanPoints();
+			temp_points = sa.getPlanPoints();
 			for( int i = 0; i < temp_points.size(); i++ ) {
 				temp_points.set( i, (PlanPoint) (temp_points.get( i ).clone()) );
 			}
-			da.cleanUpForAreas();
-			if( da.getNumberOfEdges() < 4 ) {
+			sa.cleanUpForAreas();
+			if( sa.getNumberOfEdges() < 4 ) {
 				//staticClass.add(temp_type,temp_points,getFloor());
-				da.delete();
+				sa.delete();
 			}
 		}
 

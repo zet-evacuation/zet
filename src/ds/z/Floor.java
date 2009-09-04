@@ -30,12 +30,14 @@ import ds.z.exception.AreaNotInsideException;
 import ds.z.exception.PolygonNotClosedException;
 import ds.z.exception.RoomIntersectException;
 import ds.z.exception.TeleportEdgeInvalidTargetException;
+import gui.JEditor;
 import io.z.FloorConverter;
 import io.z.XMLConverter;
 import java.awt.Rectangle;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
 
 import localization.Localization;
@@ -51,7 +53,7 @@ import localization.Localization;
  */
 @XStreamAlias( "floor" )
 @XMLConverter( FloorConverter.class )
-public class Floor implements Serializable, ChangeListener, ChangeReporter {
+public class Floor implements Serializable, ChangeListener, ChangeReporter, Cloneable {
 	/** A list of all listeners of the floor. */
 	@XStreamOmitField()
 	private transient ArrayList<ChangeListener> changeListeners = new ArrayList<ChangeListener>();
@@ -606,9 +608,93 @@ public class Floor implements Serializable, ChangeListener, ChangeReporter {
 		height = maxY - minY;
 	}
 	
-	/** Method to indicate whether this is a Floor that was loaded from a legacy file. */
+	/**
+	 * Indicates whether this is a <code>Floor</code> that was loaded from a legacy file.
+	 * @return <code>true</code> if the squared boundings are known, <code>false</code> otherwise
+	 */
 	public boolean boundStructureAvailable () {
 		return minX_DefiningRoom != null;
+	}
+
+	/**
+	 * Returns a copy of the <code>Floor</code>, but deletes all {@link AssignmentArea} objects
+	 * as they would most likely refer to assignments that do not exist.
+	 */
+	@Override
+	public Floor clone() {
+		Floor deepCopy = new Floor( this.name );
+		try {
+			HashMap<Room,Room> m = new HashMap<Room,Room>();
+
+			for( Room r : getRooms() ) {
+				Room newRoom = new Room( deepCopy, r.getName() );
+				newRoom.add( PlanPoint.pointCopy( r.getBorderPlanPoints() ) );
+
+				// Reconnect the rooms
+				m.put( r, newRoom );
+				for( RoomEdge e : r ) {
+					if( e.isPassable() ) {
+						Room connectedRoom = e.getLinkTarget().getRoom();
+						if( m.containsKey( connectedRoom ) ) {
+							Room connectToRoom = m.get( connectedRoom );
+							newRoom.connectTo( connectToRoom, e );
+						}
+					}
+				}
+
+				// Recreate the areas: Inaccessible, Save, Evacuation, Delay, Stair
+				// _NOT_ AssignmentArea
+				for( Barrier t : r.getBarriers() ) {
+					Barrier b = new Barrier( newRoom );
+					b.add( PlanPoint.pointCopy( t.getPlanPoints() ) );
+				}
+				for( DelayArea t : r.getDelayAreas() ) {
+					DelayArea d = new DelayArea( newRoom, t.getDelayType(), t.getSpeedFactor() );
+					d.add( PlanPoint.pointCopy ( t.getPlanPoints() ) );
+				}
+				for( InaccessibleArea t : r.getInaccessibleAreas() ) {
+					InaccessibleArea i = new InaccessibleArea( newRoom );
+					i.add( PlanPoint.pointCopy ( t.getPlanPoints() ) );
+				}
+				for( SaveArea t : r.getSaveAreas() ) { // Evacuation areas are contained!
+					if( !(t instanceof EvacuationArea) ) {
+						SaveArea s = new SaveArea( newRoom );
+						s.add( PlanPoint.pointCopy( t.getPlanPoints() ) );
+					}
+				}
+				for( EvacuationArea t : r.getEvacuationAreas() ) {
+					EvacuationArea e = new EvacuationArea( newRoom, t.getAttractivity(), t.getName() );
+					e.add( PlanPoint.pointCopy( t.getPlanPoints() ) );
+				}
+				for( StairArea t : r.getStairAreas() ) {
+					StairArea s = new StairArea( newRoom );
+					List<PlanPoint> points = PlanPoint.pointCopy( t.getPlanPoints() );
+					s.add( points );
+
+					PlanPoint lowerStart = null;
+					PlanPoint lowerEnd = null;
+					PlanPoint upperStart = null;
+					PlanPoint upperEnd = null;
+					for( PlanPoint p : s.getPlanPoints() ) {
+						if( p.x == t.getLowerLevelStart().x && p.y == t.getLowerLevelStart().y )
+							lowerStart = p;
+						if( p.x == t.getLowerLevelEnd().x && p.y == t.getLowerLevelEnd().y )
+							lowerEnd = p;
+						if( p.x == t.getUpperLevelStart().x && p.y == t.getUpperLevelStart().y )
+							upperStart = p;
+						if( p.x == t.getUpperLevelEnd().x && p.y == t.getUpperLevelEnd().y )
+							upperEnd = p;
+					}
+					s.setLowerLevel( lowerStart, lowerEnd );
+					s.setUpperLevel( upperStart, upperEnd );
+					s.setSpeedFactorDown( t.getSpeedFactorDown() );
+					s.setSpeedFactorUp( t.getSpeedFactorUp() );
+				}
+			}
+		} catch ( Exception ex ) {
+			JEditor.sendError( ex.getMessage() );
+		}
+		return deepCopy;
 	}
 
 	/**

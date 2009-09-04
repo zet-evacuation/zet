@@ -227,16 +227,14 @@ public class StairArea extends Area<Edge> {
 				PlanPoint i = itP.next ();
 				// First check for invalid points then accept eventually
 				if (i == upperLevel[0] || i == upperLevel[1]) {
-					throw new IllegalArgumentException (Localization.getInstance ().getString (
-						"ds.z.StairArea.LevelProgressionsOverlap"));
+					throw new IllegalArgumentException (Localization.getInstance ().getString ( "ds.z.StairArea.LevelProgressionsOverlap"));
 				} else if (i == lowerLevelEnd) {
 					foundEnd = true;
 					break;
 				}
-			}
+ 			}
 			if (!foundEnd) {
-				throw new IllegalArgumentException (Localization.getInstance ().getString (
-					"ds.z.StairArea.InvalidEdgeProgression"));
+				throw new IllegalArgumentException (Localization.getInstance ().getString ( "ds.z.StairArea.InvalidEdgeProgression"));
 			}
 		}
 		

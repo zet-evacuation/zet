@@ -20,12 +20,8 @@
 package ds.z;
 
 import com.thoughtworks.xstream.annotations.XStreamAlias;
-import com.thoughtworks.xstream.annotations.XStreamAsAttribute;
 import com.thoughtworks.xstream.annotations.XStreamOmitField;
 import ds.z.event.ChangeEvent;
-import java.util.Iterator;
-import java.util.LinkedList;
-import java.util.List;
 import localization.Localization;
 
 /**

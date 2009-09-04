@@ -21,11 +21,9 @@ import algo.ca.parameter.ParameterSet;
 import ds.ca.Cell;
 
 /**
- * @author Daniel Pluempe
- *
+ * @author Daniel Plümpe
  */
 public abstract class AbstractRule implements Rule {
-
 	private CAController caController;
 	protected ParameterSet parameters;
 
@@ -33,18 +31,15 @@ public abstract class AbstractRule implements Rule {
 		return caController;
 	}
 
-	//@Override
-	//abstract public boolean executableOn( Cell cell );
 	@Override
 	public boolean executableOn( Cell cell ) {
-		return ( cell.getIndividual() != null );
+		return (cell.getIndividual() != null);
 	}
 
 	@Override
 	final public void execute( Cell cell ) {
-		if( !executableOn( cell ) ) {
+		if( !executableOn( cell ) )
 			return;
-		}
 
 		onExecute( cell );
 	}
@@ -52,13 +47,11 @@ public abstract class AbstractRule implements Rule {
 	abstract protected void onExecute( Cell cell );
 
 	public void setCAController( CAController caController ) {
-		if( this.caController != null ) {
+		if( this.caController != null )
 			throw new RuntimeException( Localization.getInstance().getString( "algo.ca.rule.RuleAlreadyHaveCAControllerException" ) );
-		}
 
-		if( caController == null ) {
+		if( caController == null )
 			throw new RuntimeException( Localization.getInstance().getString( "algo.ca.rule.CAControllerIsNullException" ) );
-		}
 
 		this.caController = caController;
 		this.parameters = caController.getParameterSet();

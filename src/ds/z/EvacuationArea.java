@@ -47,6 +47,7 @@ public class EvacuationArea extends SaveArea {
 	public EvacuationArea( Room room ) {
 		this( room, 100 );
 	}
+
 	/**
 	 * Creates a new instance of <code>EvacuationArea</code> and sets the
 	 * room containing this area.
@@ -60,6 +61,21 @@ public class EvacuationArea extends SaveArea {
 		throwChangeEvent( new EvacuationAreaCreatedEvent( this, 1 ) );
 	}
 	
+	/**
+	 * Creates a new instance of <code>EvacuationArea</code> and sets the
+	 * room containing this area.
+	 * @param room the room
+	 * @param attractivity the initial attractivity
+	 * @param name the name of the evacuation area
+	 * @see #setAttractivity( int )
+	 */
+	public EvacuationArea( Room room, int attractivity, String name ) {
+		super( room );
+		setAttractivity( attractivity );
+		setName( name );
+		throwChangeEvent( new EvacuationAreaCreatedEvent( this, 1 ) );
+	}
+
 	/**
 	 * This method copies the current polygon without it's edges. Every other
 	 * setting, as f.e. the floor for Rooms or the associated Room for Areas is

@@ -169,8 +169,7 @@ public abstract class GUIOptionManager {
 		editMode = em;
 
 		// Announce new EditMode
-		EventServer.getInstance().dispatchEvent( new MessageEvent( em,
-						MessageEvent.MessageType.EditMode, em.getName() ) );
+		EventServer.getInstance().dispatchEvent( new MessageEvent( em, MessageEvent.MessageType.EditMode, em.getName() ) );
 	}
 
 	public static String getSavePath() {
@@ -179,6 +178,14 @@ public abstract class GUIOptionManager {
 
 	public static void setSavePath( String path ) {
 		PropertyContainer.getInstance().set( "information.directory.lastProject", path );
+	}
+
+	public static String getImportPath() {
+		return PropertyContainer.getInstance().getAsString( "information.directory.importProject" );
+	}
+
+	public static void setImportPath( String importPath ) {
+		PropertyContainer.getInstance().set( "information.directory.importProject", importPath );
 	}
 
 	public static String getSavePathResults() {
