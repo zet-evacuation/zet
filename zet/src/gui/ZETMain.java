@@ -29,17 +29,16 @@ import com.martiansoftware.jsap.Switch;
 import com.martiansoftware.jsap.UnflaggedOption;
 import com.thoughtworks.xstream.XStream;
 import com.thoughtworks.xstream.annotations.Annotations;
-import ds.Project;
+import control.ProjectControl;
 import ds.PropertyContainer;
-import ds.z.Assignment;
-import ds.z.AssignmentType;
-import ds.z.Floor;
+import event.EventServer;
+import event.MessageEvent;
+import event.MessageEvent.MessageType;
 import gui.editor.GUIOptionManager;
-import gui.editor.properties.JOptionsWindow;
 import gui.editor.properties.JPropertySelectorWindow;
 import gui.editor.properties.PropertyLoadException;
 import gui.editor.properties.PropertyTreeModel;
-import io.IOTools;
+import util.IOTools;
 import java.awt.Image;
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -53,17 +52,16 @@ import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
 import localization.Localization;
 import util.DebugStream;
-import util.random.distributions.NormalDistribution;
 
 /**
- * The <code>EditorStart</code> class is the main entry for the graphical user
+ * The <code>ZETMain</code> class is the main entry for the graphical user
  * interface of the evacuation tool. It creates an editor window and displays
  * an empty project.
  * @author Jan-Philipp Kappmeier
  */
-public class EditorStart {
+public class ZETMain {
 	/** The version of zet. */
-	public static String version = "1.0.2";
+	public static String version = "1.0.3";
 	/** The localization class. */
 	private static Localization loc = Localization.getInstance();
 	/** Indicates wheather debug mode is active, or not. */
@@ -91,8 +89,8 @@ public class EditorStart {
 	/** The properties in the information file. */
 	public static PropertyTreeModel ptmOptions;
 	
-	/** Creates a new instance of <code>EditorStart</code> */
-	private EditorStart() { }
+	/** Creates a new instance of <code>ZETMain</code> */
+	private ZETMain() { }
 
 	public static void main( String[] args ) throws JSAPException {
 		JSAP jsap = new JSAP();
@@ -264,14 +262,17 @@ public class EditorStart {
 					PropertyContainer.getInstance().applyParameters( informationFile );
 				} catch( PropertyLoadException ex ) { }
 				// Update the values in the ptms
-				EditorStart.ptmInformation.getRoot().reloadFromPropertyContainer();
-				EditorStart.ptmOptions.getRoot().reloadFromPropertyContainer();
+				ZETMain.ptmInformation.getRoot().reloadFromPropertyContainer();
+				ZETMain.ptmOptions.getRoot().reloadFromPropertyContainer();
 
 				// Change look and feel to native
 				GUIOptionManager.changeLookAndFeel( UIManager.getSystemLookAndFeelClassName() );
 
-				//Start our editor in the event-dispatch-thread
+				// Start our editor in the event-dispatch-thread
 				JEditor edit = JEditor.getInstance();
+				// The control object for projects
+				ProjectControl projectControl = null;
+
 				File iconFile = new File( "./icon.gif" );
 				checkFile( iconFile );
 				try {
@@ -280,14 +281,11 @@ public class EditorStart {
 				} catch( IOException e ) {
 					exit( "Error loding icon." );
 				}
-				//edit.setOptionsFile( optionFilename );
-				//edit.setPropertiesFile( propertyFilename );
+
 				JPropertySelectorWindow a = new JPropertySelectorWindow( edit, "", 100, 100, propertyFilename );
 				a.saveWorking();
 				a = null;
-				//JOptionsWindow b = new JOptionsWindow( edit, "", 100, 100, optionFilename );
-				//b.saveWorking();
-				//b = null;
+
 				edit.addMainComponents();
 				System.out.println( "ZET-Fenster geladen." );
 				if( bp != null ) {
@@ -297,9 +295,13 @@ public class EditorStart {
 				} if( !loadedProject.equals( "" ) ) {
 					File f = new File( loadedProject );
 					checkFile( f, "Project file" );
-					edit.loadProjectFile( f );
+					projectControl = new ProjectControl( f );
 					System.out.println( "Projekt " + f.getAbsolutePath() + " geladen." );
+				} else {
+					projectControl = new ProjectControl();
 				}
+				edit.setProjectControl( projectControl );
+
 				edit.setVisible( true );
 			}
 		} );
@@ -365,26 +367,6 @@ public class EditorStart {
 	}
 
 	/**
-	 * Creates a new project file with default settings
-	 * @return the newly created project
-	 */
-	public static Project newProject() {
-		Project p = new Project();
-		Floor fl = new Floor( loc.getString( "ds.z.DefaultName.Floor" ) + " 1" );
-		p.getPlan().addFloor( fl );
-		Assignment assignment = new Assignment( loc.getString( "ds.z.DefaultName.DefaultAssignment" ) );
-		p.addAssignment( assignment );
-		NormalDistribution d = new NormalDistribution( 0.5, 1.0, 0.4, 0.7 );
-		NormalDistribution a = new NormalDistribution( 16, 1, 14, 80 );
-		NormalDistribution f = new NormalDistribution( 0.8, 1.0, 0.7, 1.0 );
-		NormalDistribution pa = new NormalDistribution( 0.5, 1.0, 0.0, 1.0 );
-		NormalDistribution de = new NormalDistribution( 0.3, 1.0, 0.0, 1.0 );
-		AssignmentType assignmentType = new AssignmentType( loc.getString( "ds.z.DefaultName.DefaultAssignmentType" ), d, a, f, pa, de, 10 );
-		assignment.addAssignmentType( assignmentType );
-		return p;
-	}
-
-	/**
 	 * Sets up the standard output and the error output to some logging files.
 	 * @param log indicates wheather standard out is redirected to a file
 	 * @param err indicates wheather error out is redirected to a file
@@ -424,6 +406,22 @@ public class EditorStart {
 			System.out.println( "Log of " + cal.get( Calendar.YEAR ) + "-" + IOTools.fillLeadingZeros( cal.get( Calendar.MONTH ), 2 ) + "-" + IOTools.fillLeadingZeros( cal.get( Calendar.DAY_OF_MONTH ), 2 ) + " " + IOTools.fillLeadingZeros( cal.get( Calendar.HOUR_OF_DAY ), 2 ) + "-" + IOTools.fillLeadingZeros( cal.get( Calendar.MINUTE ), 2 ) + "-" + IOTools.fillLeadingZeros( cal.get( Calendar.SECOND ), 2 ) );
 		if( log && !logFile.equals( errFile ) )
 			System.err.println( "Error log of " + cal.get( Calendar.YEAR ) + "-" + IOTools.fillLeadingZeros( cal.get( Calendar.MONTH ), 2 ) + "-" + IOTools.fillLeadingZeros( cal.get( Calendar.DAY_OF_MONTH ), 2 ) + " " + IOTools.fillLeadingZeros( cal.get( Calendar.HOUR_OF_DAY ), 2 ) + "-" + IOTools.fillLeadingZeros( cal.get( Calendar.MINUTE ), 2 ) + "-" + IOTools.fillLeadingZeros( cal.get( Calendar.SECOND ), 2 ) );
+	}
+
+	/**
+	 * Displays an error message in the left edge of the status bar
+	 * @param msg the message
+	 */
+	public static void sendError( String msg ) {
+		EventServer.getInstance().dispatchEvent( new MessageEvent<JEditor>( JEditor.getInstance(), MessageType.Error, msg ) );
+	}
+
+	/**
+	 * Displays an error message in the middle of the status bar
+	 * @param msg the message
+	 */
+	public static void sendMessage( String msg ) {
+		EventServer.getInstance().dispatchEvent( new MessageEvent<JEditor>( JEditor.getInstance(), MessageType.Status, msg ) );
 	}
 
 	/**

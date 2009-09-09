@@ -32,12 +32,12 @@ import localization.Localization;
 public class CreditsDialog extends JDialog {
 	/**
 	 * Creates the window and the {@link CreditsPanel}. The window has the
-	 * program title and the version as defined by {@link EditorStart#version} as
+	 * program title and the version as defined by {@link ZETMain#version} as
 	 * title, is modal and centered in the parent window.
 	 * @param parent the parent window
 	 */
 	public CreditsDialog( Frame parent ) {
-		super(parent, Localization.getInstance().getString( "AppTitle" ) + " v" + EditorStart.version, true);
+		super(parent, Localization.getInstance().getString( "AppTitle" ) + " v" + ZETMain.version, true);
 		setSize( 480, 360 );
 		setLocation ( parent.getX () + ((parent.getWidth() - getWidth()) / 2), parent.getY () + ((parent.getHeight() - getHeight()) / 2));
 		CreditsPanel credits = new CreditsPanel();

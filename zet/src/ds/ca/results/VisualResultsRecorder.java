@@ -30,7 +30,7 @@ import ds.ca.PotentialManager;
 import ds.ca.InitialConfiguration;
 import ds.ca.Room;
 import ds.ca.StaticPotential;
-import gui.EditorStart;
+import gui.ZETMain;
 
 /**
  * This class helps you to store all the parts of a simulation that are
@@ -155,7 +155,7 @@ public class VisualResultsRecorder {
 	 * the action should refer to the original configuration.
 	 */
 	public void recordAction( Action action ) throws Action.CADoesNotMatchException {
-		if( !EditorStart.useVisualization )
+		if( !ZETMain.useVisualization )
 			return;
 		if( doRecord ) {
 			Action adoptedAction = action.adoptToCA( this.clonedCA );

@@ -32,6 +32,7 @@ import ds.z.RoomEdge;
 import ds.z.SaveArea;
 import ds.z.StairArea;
 import gui.JEditor;
+import gui.ZETMain;
 import gui.editor.planimage.PlanImage;
 import java.awt.AWTEvent;
 import java.awt.BasicStroke;
@@ -43,7 +44,6 @@ import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Point;
 import java.awt.Rectangle;
-import java.awt.RenderingHints;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.InputEvent;
@@ -59,6 +59,7 @@ import java.util.List;
 import java.util.ListIterator;
 import javax.swing.JComponent;
 import javax.swing.SwingUtilities;
+import javax.swing.event.EventListenerList;
 import localization.Localization;
 
 /**
@@ -208,7 +209,7 @@ public class JFloor extends AbstractFloor implements ds.z.event.ChangeListener {
 			planImage.setOffsetY( -floorMin_y );
 
 			if( showDifferentFloor )
-				JEditor.sendMessage( Localization.getInstance().getString( "gui.message.FloorSuccessfullyLoaded" ) );
+				ZETMain.sendMessage( Localization.getInstance().getString( "gui.message.FloorSuccessfullyLoaded" ) );
 		}
 
 		revalidate();
@@ -519,7 +520,7 @@ public class JFloor extends AbstractFloor implements ds.z.event.ChangeListener {
 	protected void processMouseEvent( MouseEvent e ) {
 		if( e.getID() == MouseEvent.MOUSE_PRESSED ) {
 			// Clear status bar
-			JEditor.sendError( "" );
+			ZETMain.sendError( "" );
 			JEditor.sendReady();
 
 			if( e.getButton() == MouseEvent.BUTTON1 )
@@ -644,22 +645,22 @@ public class JFloor extends AbstractFloor implements ds.z.event.ChangeListener {
 								else if( ne.getTarget() == a.getLowerLevelStart() )
 									a.setLowerLevel( ne.getSource(), a.getLowerLevelEnd() );
 								else
-									JEditor.sendError( Localization.getInstance().getString(
+									ZETMain.sendError( Localization.getInstance().getString(
 													"gui.error.ConnectedEdgeTrailsOnly" ) );
 							if( !e.isControlDown() ) {
 								// Workaround to keep the previous edit mode setting
 								GUIOptionManager.setEditMode( GUIOptionManager.getPreviousEditMode() );
 
 								GUIOptionManager.setEditMode( EditMode.StairAreaMarkUpperLevel );
-								JEditor.sendMessage( Localization.getInstance().getString( "gui.message.SelectUpperStairLevel" ) );
+								ZETMain.sendMessage( Localization.getInstance().getString( "gui.message.SelectUpperStairLevel" ) );
 							} else
 								// Refresh our select lower level message
-								JEditor.sendMessage( Localization.getInstance().getString( "gui.message.SelectLowerStairLevel" ) );
+								ZETMain.sendMessage( Localization.getInstance().getString( "gui.message.SelectLowerStairLevel" ) );
 						} catch( IllegalArgumentException ex ) {
-							JEditor.sendError( ex.getLocalizedMessage() );
+							ZETMain.sendError( ex.getLocalizedMessage() );
 						}
 					} else
-						JEditor.sendError( Localization.getInstance().getString(
+						ZETMain.sendError( Localization.getInstance().getString(
 										"gui.error.ClickOnStairEdge" ) );
 				} else if( GUIOptionManager.getEditMode() == EditMode.StairAreaMarkUpperLevel ) {
 					// The stair must be selected when we enter this code
@@ -682,20 +683,20 @@ public class JFloor extends AbstractFloor implements ds.z.event.ChangeListener {
 								else if( ne.getTarget() == a.getUpperLevelStart() )
 									a.setUpperLevel( ne.getSource(), a.getUpperLevelEnd() );
 								else
-									JEditor.sendError( Localization.getInstance().getString(
+									ZETMain.sendError( Localization.getInstance().getString(
 													"gui.error.ConnectedEdgeTrailsOnly" ) );
 							if( !e.isControlDown() ) {
 								GUIOptionManager.setEditMode( GUIOptionManager.getPreviousEditMode() );
-								JEditor.sendMessage( Localization.getInstance().getString(
+								ZETMain.sendMessage( Localization.getInstance().getString(
 												"gui.message.StairSuccessfullyCreated" ) );
 							} else
 								// Refresh our select upper level message
-								JEditor.sendMessage( Localization.getInstance().getString( "gui.message.SelectUpperStairLevel" ) );
+								ZETMain.sendMessage( Localization.getInstance().getString( "gui.message.SelectUpperStairLevel" ) );
 						} catch( IllegalArgumentException ex ) {
-							JEditor.sendError( ex.getLocalizedMessage() );
+							ZETMain.sendError( ex.getLocalizedMessage() );
 						}
 					} else
-						JEditor.sendError( Localization.getInstance().getString(
+						ZETMain.sendError( Localization.getInstance().getString(
 										"gui.error.ClickOnStairEdge" ) );
 				} else {
 					// Click in non-selection mode: Start creating a polygon or 
@@ -712,14 +713,14 @@ public class JFloor extends AbstractFloor implements ds.z.event.ChangeListener {
 						//parent = findParent (findComponentAt (e.getPoint ()));
 						parent = findParent( findRoomAt( e.getPoint() ) );
 						if( parent == null ) {
-							JEditor.sendError( Localization.getInstance().getString( "gui.error.SelectARoom" ) );
+							ZETMain.sendError( Localization.getInstance().getString( "gui.error.SelectARoom" ) );
 							return;
 						}
 
 						// Check whether we clicked into the same room as before
 						if( lastClick != null )
 							if( !parent.equals( ((Area)newPolygon).getAssociatedRoom() ) ) {
-								JEditor.sendError( Localization.getInstance().getString(
+								ZETMain.sendError( Localization.getInstance().getString(
 												"gui.error.SelectCoordinatesInSameRoom" ) );
 								return;
 							}
@@ -739,12 +740,12 @@ public class JFloor extends AbstractFloor implements ds.z.event.ChangeListener {
 									if( cur.getAssignmentTypes().size() > 0 )
 										newPolygon = new AssignmentArea( parent, cur.getAssignmentTypes().get( 0 ) );
 									else {
-										JEditor.sendError( Localization.getInstance().getString(
+										ZETMain.sendError( Localization.getInstance().getString(
 														"gui.error.CreateAnAssignmentFirst" ) );
 										return;
 									}
 								else {
-									JEditor.sendError( Localization.getInstance().getString(
+									ZETMain.sendError( Localization.getInstance().getString(
 													"gui.error.SetCurrentAssignmentFirst" ) );
 									return;
 								}
@@ -784,14 +785,14 @@ public class JFloor extends AbstractFloor implements ds.z.event.ChangeListener {
 							try {
 								completeRectangledPolygon( newPolygon, p1, p2 );
 							} catch( IllegalArgumentException ex ) {
-								JEditor.sendError( Localization.getInstance().getString( "gui.error.RectangleCreationZeroArea" ) );
+								ZETMain.sendError( Localization.getInstance().getString( "gui.error.RectangleCreationZeroArea" ) );
 								return;
 							}
 						else if( GUIOptionManager.getEditMode().getType() == EditMode.Type.CREATION_POINTWISE ) {
 							// check if the new point will close the polygon
 							// check the area that the polygon would have
 							if( newPolygon.willClose( p1, p2 ) && newPolygon.area() == 0 && !(newPolygon instanceof Barrier) ) {
-									JEditor.sendError( Localization.getInstance().getString( "gui.error.RectangleCreationZeroArea" ) );
+									ZETMain.sendError( Localization.getInstance().getString( "gui.error.RectangleCreationZeroArea" ) );
 									return;
 							}
 							try {
@@ -801,7 +802,7 @@ public class JFloor extends AbstractFloor implements ds.z.event.ChangeListener {
 									new Edge( p1, p2, newPolygon );
 							} catch( IllegalArgumentException ex ) {
 								// Tried to select equal points
-								JEditor.sendError( Localization.getInstance().getString(
+								ZETMain.sendError( Localization.getInstance().getString(
 												"gui.error.ChooseDifferentPoint" ) );
 							}
 						}
@@ -830,18 +831,18 @@ public class JFloor extends AbstractFloor implements ds.z.event.ChangeListener {
 						if( newPolygon.getNumberOfEdges() == 0 ) {
 							// Delete empty, aborted polygons
 							newPolygon.delete();
-							JEditor.sendMessage( Localization.getInstance().getString( "gui.message.PolgonCreationAborted" ) );
+							ZETMain.sendMessage( Localization.getInstance().getString( "gui.message.PolgonCreationAborted" ) );
 						} else {
 							if( newPolygon.area() == 0 && !(newPolygon instanceof Barrier) ) {
-								JEditor.sendError( Localization.getInstance().getString( "gui.error.RectangleCreationZeroArea" ) );
+								ZETMain.sendError( Localization.getInstance().getString( "gui.error.RectangleCreationZeroArea" ) );
 								return;
 							} else if( newPolygon.getNumberOfEdges() >= ((newPolygon instanceof Barrier) ? 1 : 2) ) // The new edge would be the third
 								newPolygon.close();
 							else {
-								JEditor.sendError( Localization.getInstance().getString( "gui.error.CreateAtLeastThreeEdges" ) );
+								ZETMain.sendError( Localization.getInstance().getString( "gui.error.CreateAtLeastThreeEdges" ) );
 								return;
 							}
-							JEditor.sendMessage( Localization.getInstance().getString( "gui.message.PolgonSuccessfullyCreated" ) );
+							ZETMain.sendMessage( Localization.getInstance().getString( "gui.message.PolgonSuccessfullyCreated" ) );
 						}
 					polygonFinishedHandler();
 				}
@@ -924,7 +925,7 @@ public class JFloor extends AbstractFloor implements ds.z.event.ChangeListener {
 									a.delete();
 							}
 					} catch( Exception ex ) {
-						JEditor.sendError( Localization.getInstance().getString(
+						ZETMain.sendError( Localization.getInstance().getString(
 										"gui.message.ExceptionDuringDrag" ) );
 						ex.printStackTrace();
 					}
@@ -1052,7 +1053,7 @@ public class JFloor extends AbstractFloor implements ds.z.event.ChangeListener {
 		if( GUIOptionManager.getEditMode() == EditMode.StairAreaCreationPointwise ||
 						GUIOptionManager.getEditMode() == EditMode.StairAreaCreation ) {
 			GUIOptionManager.setEditMode( EditMode.StairAreaMarkLowerLevel );
-			JEditor.sendMessage( Localization.getInstance().getString( "gui.message.SelectLowerStairLevel" ) );
+			ZETMain.sendMessage( Localization.getInstance().getString( "gui.message.SelectLowerStairLevel" ) );
 		}
 	}
 
@@ -1165,7 +1166,7 @@ public class JFloor extends AbstractFloor implements ds.z.event.ChangeListener {
 						newPolygon = null;
 						lastClick = null;
 						lastPlanClick = null;
-						JEditor.sendMessage( Localization.getInstance().getString( "gui.message.PolgonCreationAborted" ) );
+						ZETMain.sendMessage( Localization.getInstance().getString( "gui.message.PolgonCreationAborted" ) );
 					}
 					break;
 				case KeyEvent.VK_DELETE:

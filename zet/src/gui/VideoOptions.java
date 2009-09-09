@@ -467,7 +467,7 @@ public class VideoOptions extends javax.swing.JDialog {
 				retVal = CANCEL;
 				setVisible( false );
 			} else {
-				JEditor.sendError( loc.getString( "gui.UnknownCommand" ) + " '" + e.getActionCommand() + "'. " + loc.getString( "gui.ContactDeveloper" ) );
+				ZETMain.sendError( loc.getString( "gui.UnknownCommand" ) + " '" + e.getActionCommand() + "'. " + loc.getString( "gui.ContactDeveloper" ) );
 			}
 		}
 	};
@@ -489,7 +489,7 @@ public class VideoOptions extends javax.swing.JDialog {
 				for( ImageFormat f : mw.getSupportedImageFormats() )
 					cbxFrameFormat.addItem( f );
 			} else {
-				JEditor.sendError( loc.getString( "gui.UnknownCommand" ) + " '" + e.getActionCommand() + "'. " + loc.getString( "gui.ContactDeveloper" ) );
+				ZETMain.sendError( loc.getString( "gui.UnknownCommand" ) + " '" + e.getActionCommand() + "'. " + loc.getString( "gui.ContactDeveloper" ) );
 			}
 		}
 	};

@@ -69,4 +69,8 @@ public final class Helper {
 			ret /= 1024;
 		return n.format( ret ) + " " + fileSizes[Math.min( i, fileSizes.length-1 )];
 	}
+
+	public final static boolean isBetween( char value, char lower, char upper ) {
+		return value >= lower &&  value <= upper;
+	}
 }

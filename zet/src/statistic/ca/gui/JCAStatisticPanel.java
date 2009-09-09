@@ -62,10 +62,9 @@ import statistic.ca.exception.GroupOfIndsNoPotentialException;
 import statistic.ca.exception.OneIndNoPotentialException;
 import ds.graph.GraphVisualizationResult;
 import ds.ca.CellularAutomaton;
-import ds.ca.ExitCell;
 import ds.ca.Individual;
 import ds.ca.Individual.DeathCause;
-import gui.JEditor;
+import gui.ZETMain;
 import gui.components.NamedIndex;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
@@ -245,7 +244,7 @@ public class JCAStatisticPanel extends JPanel {
 				setCellularAutomaton( selectedBatchResultEntry.getCa()[0] );
 				currentAverageStepsPerSeconds = selectedBatchResultEntry.getAverageCAStepsPerSecond();
 			} else
-				JEditor.sendMessage( "This entry bears no cellular automaton results!" );
+				ZETMain.sendMessage( "This entry bears no cellular automaton results!" );
 		}
 
 		@Override
@@ -256,7 +255,7 @@ public class JCAStatisticPanel extends JPanel {
 				else
 					return null;
 			} catch( IOException ex ) {
-				JEditor.sendError( "Error while loading temp file: " + ex.getLocalizedMessage() );
+				ZETMain.sendError( "Error while loading temp file: " + ex.getLocalizedMessage() );
 				return null;
 			}
 		}
@@ -265,7 +264,7 @@ public class JCAStatisticPanel extends JPanel {
 	private class AddToDiagramPerformed implements ActionListener {
 		public void actionPerformed( ActionEvent e ) {
 			if( assignmentIndexToShow.isEmpty() ) {
-				JEditor.sendError( "Bitte wählen Sie zuerst eine Belegung aus!" );
+				ZETMain.sendError( "Bitte wählen Sie zuerst eine Belegung aus!" );
 				return;
 			}
 
