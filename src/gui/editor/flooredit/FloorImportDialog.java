@@ -22,19 +22,13 @@ package gui.editor.flooredit;
 import ds.Project;
 import ds.z.Floor;
 import gui.JEditor;
+import gui.ZETMain;
 import gui.components.framework.Button;
 import gui.editor.GUIOptionManager;
 import info.clearthought.layout.TableLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
 import java.util.Vector;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.swing.JButton;
 import javax.swing.JDialog;
 import javax.swing.JFileChooser;
@@ -42,7 +36,6 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JList;
 import javax.swing.JOptionPane;
-import javax.swing.text.Document;
 import localization.Localization;
 
 /**
@@ -139,7 +132,7 @@ public class FloorImportDialog extends JDialog {
 										loc.getString( "gui.editor.JEditor.error.loadErrorTitle" ),
 										JOptionPane.ERROR_MESSAGE );
 						ex.printStackTrace();
-						JEditor.sendMessage( loc.getString( "gui.editor.JEditor.message.loadError" ) );
+						ZETMain.sendMessage( loc.getString( "gui.editor.JEditor.message.loadError" ) );
 					}
 			} else if( e.getActionCommand().equals( "import" ) ) {
 					final Floor f = (Floor)list.getSelectedValue();

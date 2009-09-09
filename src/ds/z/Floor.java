@@ -30,7 +30,7 @@ import ds.z.exception.AreaNotInsideException;
 import ds.z.exception.PolygonNotClosedException;
 import ds.z.exception.RoomIntersectException;
 import ds.z.exception.TeleportEdgeInvalidTargetException;
-import gui.JEditor;
+import gui.ZETMain;
 import io.z.FloorConverter;
 import io.z.XMLConverter;
 import java.awt.Rectangle;
@@ -692,7 +692,7 @@ public class Floor implements Serializable, ChangeListener, ChangeReporter, Clon
 				}
 			}
 		} catch ( Exception ex ) {
-			JEditor.sendError( ex.getMessage() );
+			ZETMain.sendError( ex.getMessage() );
 		}
 		return deepCopy;
 	}

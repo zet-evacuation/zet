@@ -26,7 +26,7 @@ import java.util.HashMap;
 import java.util.ArrayList;
 import ds.ca.Cell;
 import ds.ca.Room;
-import gui.EditorStart;
+import gui.ZETMain;
 
 /**
  *
@@ -68,7 +68,7 @@ public class StoredCAStatisticResultsForCells {
 	 * @param t timestep
 	 */
 	public void addCellToUtilizationStatistic(Cell c, int t){
-		if( !EditorStart.useStatistic ) 
+		if( !ZETMain.useStatistic )
 			return;
 		
 		if(cellUtilization.containsKey(c)){
@@ -87,7 +87,7 @@ public class StoredCAStatisticResultsForCells {
 	 * @param t timestep
 	 */
 	public void addCellToWaitingStatistic(Cell c, int t){
-		if( !EditorStart.useStatistic ) 
+		if( !ZETMain.useStatistic )
 			return;
 		if(waitingTime.containsKey(c)){
 			waitingTime.get(c).add(t);

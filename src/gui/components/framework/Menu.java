@@ -173,7 +173,7 @@ public class Menu {
 	}
 	
 	
-		/**
+	/**
 	 * Insert a JMenuItem to a given JMenu.
 	 * @param m the JMenu
 	 * @param s the menu title
@@ -184,6 +184,20 @@ public class Menu {
 	 */
 	public static JMenuItem addMenuItem( JMenu m, String s, char keyChar, ActionListener al, String commandString ) {
 		return addMenuItem( m, s, keyChar, al, commandString, InputEvent.CTRL_DOWN_MASK);
+	}
+
+	/**
+	 * Insert a JMenuItem to a given JMenu.
+	 * @param m the JMenu
+	 * @param s the menu title
+	 * @param keyChar the shortcut character
+	 * @param mask the shortcut mask, such as 'CTRL' or 'SHIFT+CTRL'
+	 * @param al an ActionListener
+	 * @param commandString an action command
+	 * @return   a JMenuItem
+	 */
+	public static JMenuItem addMenuItem( JMenu m, String s, char keyChar, int mask, ActionListener al, String commandString ) {
+		return addMenuItem( m, s, keyChar, al, commandString, mask );
 	}
 
 	public static JMenuItem addMenuItem( JMenu m, String s, char c, ActionListener al ) {

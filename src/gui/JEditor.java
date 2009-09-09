@@ -14,7 +14,7 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 /*
- * JEditor.java
+ * java
  * Created on 4. Dezember 2007, 17:08
  */
 package gui;
@@ -26,14 +26,15 @@ import batch.BatchResultEntry;
 import batch.CellularAutomatonAlgorithm;
 import batch.GraphAlgorithm;
 import batch.load.BatchProjectEntry;
+import control.ProjectControl;
 import converter.ZToCAConverter;
 import ds.Project;
 import ds.PropertyContainer;
+import ds.ca.CellularAutomaton;
 import ds.graph.GraphVisualizationResult;
 import ds.z.AssignmentType;
 import ds.z.Floor;
 import ds.z.exception.TooManyPeopleException;
-import ds.ca.CellularAutomaton;
 import event.EventListener;
 import event.EventServer;
 import event.MessageEvent;
@@ -42,18 +43,18 @@ import event.ProgressEvent;
 import gui.batch.JBatchView;
 import gui.components.ComboBoxRenderer;
 import gui.components.JEventStatusBar;
-import gui.components.progress.JProgressBarDialog;
-import gui.components.progress.JRasterizeProgressBarDialog;
 import gui.components.framework.Button;
 import gui.components.framework.IconSet;
 import gui.components.framework.Menu;
-import gui.editor.AreaVisibility;
 import gui.editor.CoordinateTools;
 import gui.editor.EditMode;
 import gui.editor.GUIOptionManager;
 import gui.ca.JCAView;
 import gui.components.AbstractFloor.RasterPaintStyle;
 import gui.components.NamedIndex;
+import gui.components.progress.JProgressBarDialog;
+import gui.components.progress.JRasterizeProgressBarDialog;
+import gui.editor.AreaVisibility;
 import gui.editor.JEditView;
 import gui.editor.assignment.JAssignment;
 import gui.editor.flooredit.FloorImportDialog;
@@ -67,7 +68,7 @@ import gui.visualization.JVisualizationView;
 import gui.visualization.control.GLControl;
 import gui.visualization.control.GLControl.CellInformationDisplay;
 import io.DXFWriter;
-import io.IOTools;
+import util.IOTools;
 import io.movie.MovieManager;
 import io.visualization.CAVisualizationResults;
 import java.awt.BorderLayout;
@@ -79,6 +80,7 @@ import java.awt.Rectangle;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.InputEvent;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 import java.awt.event.KeyEvent;
@@ -108,6 +110,7 @@ import javax.swing.Icon;
 import javax.swing.JButton;
 import javax.swing.JCheckBoxMenuItem;
 import javax.swing.JComboBox;
+import javax.swing.JComponent;
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -120,6 +123,7 @@ import javax.swing.JRadioButtonMenuItem;
 import javax.swing.JTabbedPane;
 import javax.swing.JTextField;
 import javax.swing.JToolBar;
+import javax.swing.KeyStroke;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 import javax.swing.event.PopupMenuEvent;
@@ -142,10 +146,10 @@ import util.ConversionTools;
 public class JEditor extends JFrame implements Localized, EventListener<ProgressEvent> {
 	public static final int EDIT_FLOOR = 0;
 	public static final int BATCH = 1;
-	public static final int CA_FLOOR = EditorStart.isDebug() ? 2 : -1;
-	public static final int VISUALIZATION = EditorStart.isDebug() ? 3 : 2;
-	public static final int STATISTIC = EditorStart.isDebug() ? 4 : 3;
-	public static final int GRAPH_STATISTIC = EditorStart.isDebug() ? 5 : 4;
+	public static final int CA_FLOOR = ZETMain.isDebug() ? 2 : -1;
+	public static final int VISUALIZATION = ZETMain.isDebug() ? 3 : 2;
+	public static final int STATISTIC = ZETMain.isDebug() ? 4 : 3;
+	public static final int GRAPH_STATISTIC = ZETMain.isDebug() ? 5 : 4;
 	/** The localization class. */
 	static final Localization loc = Localization.getInstance();
 	/** Stores the last mouse position if a mouse position event is sent. */
@@ -154,6 +158,11 @@ public class JEditor extends JFrame implements Localized, EventListener<Progress
 	final static String delimiter = Localization.getInstance().getStringWithoutPrefix( "numberSeparator" );
 	/** Singleton instance variable. */
 	private static final JEditor instance = new JEditor();
+
+	/** Control class for projects and editing */
+	private ProjectControl projectControl;
+
+
 	private static boolean editing = false;
 	private Project currentProject;	// Task and execution stuff
 	private CellularAutomatonInOrderExecution caAlgo = null;
@@ -352,8 +361,6 @@ public class JEditor extends JFrame implements Localized, EventListener<Progress
 
 		EventServer.getInstance().registerListener( this, ProgressEvent.class );
 
-		currentProject = EditorStart.newProject();
-
 		this.addWindowListener( new WindowListener() {
 			public void windowOpened( WindowEvent e ) {
 			}
@@ -362,10 +369,10 @@ public class JEditor extends JFrame implements Localized, EventListener<Progress
 				if( graphStatisticPanel != null )
 					graphStatisticPanel.saveSettings();
 				try {
-					EditorStart.ptmInformation.getRoot().reloadFromPropertyContainer();
-					EditorStart.ptmOptions.getRoot().reloadFromPropertyContainer();
-					PropertyContainer.saveConfigFile( EditorStart.ptmInformation, new File( EditorStart.informationFilename ) );
-					PropertyContainer.saveConfigFile( EditorStart.ptmOptions, new File( EditorStart.optionFilename ) );
+					ZETMain.ptmInformation.getRoot().reloadFromPropertyContainer();
+					ZETMain.ptmOptions.getRoot().reloadFromPropertyContainer();
+					PropertyContainer.saveConfigFile( ZETMain.ptmInformation, new File( ZETMain.informationFilename ) );
+					PropertyContainer.saveConfigFile( ZETMain.ptmOptions, new File( ZETMain.optionFilename ) );
 				} catch( IOException ex ) {
 					System.err.println( "Error saving information file." );
 				}
@@ -388,6 +395,47 @@ public class JEditor extends JFrame implements Localized, EventListener<Progress
 		} );
 	}
 
+	/**
+	 * Sets a new project controller. For reasons of consistency the project
+	 * currently controlled by the control class is loaded. It should not happen,
+	 * that this project is <code>null</code>
+	 * @param projectControl the projects control class
+	 */
+	public void setProjectControl( ProjectControl projectControl ) {
+		this.projectControl = projectControl;
+		loadProject();
+	}
+
+	/**
+	 * Returns the control class controlling the currently visible project.
+	 * @return the control class controlling the currently visible project
+	 */
+	public ProjectControl getProjectControl() {
+		return projectControl;
+	}
+
+	/**
+	 * Loads the project currently controlled by the project controller. Resets
+	 * the view to edit window and resets the zoom factor to 10%
+	 */
+	private void loadProject() {
+		currentProject = projectControl.getProject();
+
+		if( tabPane.getSelectedIndex() > 1 )
+			tabPane.setSelectedIndex( 0 );
+		editView.displayProject( currentProject );
+		// Löschen eingestellter parameter
+		ZToCAConverter.getInstance().clear();
+		firstSwitch = true;
+		if( !PropertyContainer.getInstance().getAsBoolean( "editor.options.view.hideDefaultFloor" ) )
+			editView.setFloor( 1 );
+		// Updaten der gui
+		this.getEditView().update();
+
+		editView.setEditMode( EditMode.Selection );
+		setZoomFactor( 0.04d );
+	}
+
 	public static JEditor getInstance() {
 		return instance;
 	}
@@ -395,22 +443,6 @@ public class JEditor extends JFrame implements Localized, EventListener<Progress
 	private void initializeOptions() {
 		PropertyContainer pc = PropertyContainer.getInstance();
 		createCopy = pc.getAsBoolean( "options.filehandling.createBackup" );
-	}
-
-	/**
-	 * Displays an error message in the left edge of the status bar
-	 * @param msg the message
-	 */
-	public static void sendError( String msg ) {
-		EventServer.getInstance().dispatchEvent( new MessageEvent<JEditor>( JEditor.getInstance(), MessageType.Error, msg ) );
-	}
-
-	/**
-	 * Displays an error message in the middle of the status bar
-	 * @param msg the message
-	 */
-	public static void sendMessage( String msg ) {
-		EventServer.getInstance().dispatchEvent( new MessageEvent<JEditor>( JEditor.getInstance(), MessageType.Status, msg ) );
 	}
 
 	/**
@@ -424,7 +456,7 @@ public class JEditor extends JFrame implements Localized, EventListener<Progress
 		String realCoordsMeter = "(" + Localization.getInstance().getFloatConverter().format( ConversionTools.toMeter( position.x ) ) + delimiter + Localization.getInstance().getFloatConverter().format( ConversionTools.toMeter( position.y ) ) + ")";
 		//String text = /*"Pixel: " + pixelCoords + " - */ "Millimeter: " + realCoordsMillimeter + " - Meter: " + realCoordsMeter;
 		String text = String.format( Localization.getInstance().getString( "gui.mousePositionMillimeterMeter" ), realCoordsMillimeter, realCoordsMeter );
-		EventServer.getInstance().dispatchEvent( new MessageEvent<JEditor>( JEditor.getInstance(), MessageType.MousePosition, text ) );
+		EventServer.getInstance().dispatchEvent( new MessageEvent<JEditor>( getInstance(), MessageType.MousePosition, text ) );
 	}
 
 	/**
@@ -444,10 +476,10 @@ public class JEditor extends JFrame implements Localized, EventListener<Progress
 	}
 
 	/**
-	 * Sends a ready-message using {@link JEditor#sendMessage( String )}.
+	 * Sends a ready-message using {@link JEditor#ZETMain.sendMessage( String )}.
 	 */
 	public static void sendReady() {
-		sendMessage( loc.getString( "gui.message.ready" ) );
+		ZETMain.sendMessage( loc.getString( "gui.message.ready" ) );
 	}
 
 	/**
@@ -456,7 +488,7 @@ public class JEditor extends JFrame implements Localized, EventListener<Progress
 	 * @param message the message
 	 */
 	public static void showErrorMessage( String title, String message ) {
-		JOptionPane.showMessageDialog( JEditor.getInstance(), message, title, JOptionPane.ERROR_MESSAGE );
+		JOptionPane.showMessageDialog( getInstance(), message, title, JOptionPane.ERROR_MESSAGE );
 	}
 
 	/*****************************************************************************
@@ -465,7 +497,7 @@ public class JEditor extends JFrame implements Localized, EventListener<Progress
 	 *                                                                           *
 	 ****************************************************************************/
 	public void addMainComponents() {
-		editView = new JEditView( getProject() );
+		editView = new JEditView( );
 		batchView = new JBatchView();
 		visualizationView = new JVisualizationView( new GLCapabilities() );
 		visualizationView.setFloorSelectorEnabled( !PropertyContainer.getInstance().getAsBoolean( "settings.gui.visualization.floors" ) );
@@ -495,7 +527,7 @@ public class JEditor extends JFrame implements Localized, EventListener<Progress
 		loc.setPrefix( "gui.editor.JEditor.tab" );
 		tabPane.addTab( loc.getString( "Edit" ), null, editView, loc.getString( "EditToolTip" ) );
 		tabPane.addTab( loc.getString( "Batch" ), null, batchView, loc.getString( "BatchToolTip" ) );
-		if( EditorStart.isDebug() )
+		if( ZETMain.isDebug() )
 			tabPane.addTab( loc.getString( "CAView" ), null, caView, loc.getString( "CAViewToolTip" ) );
 		tabPane.addTab( loc.getString( "Visualization" ), null, visualizationView, loc.getString( "VisualizationToolTip" ) );
 		tabPane.addTab( loc.getString( "Statistic" ), null, caStatisticView, loc.getString( "StatisticToolTip" ) );
@@ -504,9 +536,27 @@ public class JEditor extends JFrame implements Localized, EventListener<Progress
 		loc.setPrefix( "" );
 
 		getContentPane().add( tabPane, BorderLayout.CENTER );
-		editView.setEditMode( EditMode.Selection );
-		setZoomFactor( 0.04d );
-		sendMessage( loc.getString( "gui.status.EditorInitialized" ) );
+
+		// Register Shortcuts (no-menu-shortcuts)
+		KeyStroke up = KeyStroke.getKeyStroke( KeyEvent.VK_R, InputEvent.CTRL_DOWN_MASK);
+		ActionListener acl = new ActionListener() {
+			public void actionPerformed( ActionEvent e ) {
+				switch( editView.getEastPanelType() ) {
+					case JEditView.FLOOR_PANEL:
+						editView.setFloorNameFocus();
+						break;
+					case JEditView.ROOM_PANEL:
+						editView.setRoomNameFocus();
+						break;
+					default:
+						System.out.println( "Nothing" );
+				}
+			}
+		};
+
+		tabPane.registerKeyboardAction( acl, "test", up, JComponent.WHEN_ANCESTOR_OF_FOCUSED_COMPONENT);
+
+		ZETMain.sendMessage( loc.getString( "gui.status.EditorInitialized" ) );
 	}
 
 	/**
@@ -519,7 +569,7 @@ public class JEditor extends JFrame implements Localized, EventListener<Progress
 		mFile = Menu.addMenu( bar, loc.getString( "menuFile" ) );
 		mEdit = Menu.addMenu( bar, loc.getString( "menuEdit" ) );
 		mView = Menu.addMenu( bar, loc.getString( "menuView" ) );
-		if( EditorStart.isDebug() )
+		if( ZETMain.isDebug() )
 			mExecute = Menu.addMenu( bar, loc.getString( "menuExecute" ) );
 		mExtras = Menu.addMenu( bar, loc.getString( "menuExtras" ) );
 		mHelp = Menu.addMenu( bar, loc.getString( "menuHelp" ) );
@@ -553,7 +603,7 @@ public class JEditor extends JFrame implements Localized, EventListener<Progress
 		mnuEditFloorCopy = Menu.addMenuItem( mEdit, loc.getString( "menuFloorCopy" ), aclFloor, "copy" );
 		mnuEditFloorImport = Menu.addMenuItem( mEdit, loc.getString( "menuFloorImport" ), aclFloor, "import" );
 		Menu.addMenuItem( mEdit, "-" );
-		mnuEditRasterize = Menu.addMenuItem( mEdit, loc.getString( "menuRasterize" ), 'R', aclStart, "rasterize" );
+		mnuEditRasterize = Menu.addMenuItem( mEdit, loc.getString( "menuRasterize" ), 'R', InputEvent.CTRL_DOWN_MASK + InputEvent.SHIFT_DOWN_MASK, aclStart, "rasterize" );
 		Menu.addMenuItem( mEdit, "-" );
 		mnuEditDistributeEvacuees = Menu.addMenuItem( mEdit, loc.getString( "menuDistributeEvacuees" ), aclStart, "distributeEvacuees" );
 		Menu.addMenuItem( mEdit, "-" );
@@ -583,7 +633,7 @@ public class JEditor extends JFrame implements Localized, EventListener<Progress
 		mnuScreenshot = Menu.addMenuItem( mView, loc.getString( "menuScreenshot" ), KeyEvent.VK_F12, aclScreenshot, "screenshot", 0 );
 
 		// Ausfuehren menu
-		if( EditorStart.isDebug() ) {
+		if( ZETMain.isDebug() ) {
 			mSimulation = Menu.addMenu( mExecute, loc.getString( "menuSimulation" ) );
 			mnuStartSimulation = Menu.addMenuItem( mSimulation, loc.getString( "menuSimulationStart" ), aclExecute, "startSimulation" );
 			mnuStepByStepSimulation = Menu.addMenuItem( mSimulation, loc.getString( "menuSimulationStepByStep" ), KeyEvent.VK_F8, aclExecute, "stepByStepSimulation", 0 );
@@ -616,7 +666,7 @@ public class JEditor extends JFrame implements Localized, EventListener<Progress
 		mnuPlanImageTransparency.setEnabled( false );
 		Menu.addMenuItem( mExtras, "-" );
 		mnuOptions = Menu.addMenuItem( mExtras, loc.getString( "menuOptions" ), 'T', aclProperties, "options" );
-		if( EditorStart.isDebug() ) {
+		if( ZETMain.isDebug() ) {
 			mnuSettings = Menu.addMenuItem( mExtras, loc.getString( "menuSettings" ), aclProperties, "settings" );
 		}
 		// Hilfe-menu
@@ -669,7 +719,7 @@ public class JEditor extends JFrame implements Localized, EventListener<Progress
 				creationType = EditMode.Type.CREATION_POINTWISE;
 				editSelector.rebuild();
 				editView.setEditMode( (EditMode)editSelector.getSelectedItem() );
-				sendMessage( "Wählen sie die Koordinaten." ); // TODO loc
+				ZETMain.sendMessage( "Wählen sie die Koordinaten." ); // TODO loc
 			}
 		}, "", loc.getString( "toolbarTooltipPointSequence" ) );
 		toolBarEdit.add( btnEditPointwise );
@@ -681,7 +731,7 @@ public class JEditor extends JFrame implements Localized, EventListener<Progress
 				btnEditRectangled.setSelected( true );
 				creationType = EditMode.Type.CREATION_RECTANGLED;
 				editSelector.rebuild();
-				sendMessage( "Wählen sie die Koordinaten." ); // TODO loc
+				ZETMain.sendMessage( "Wählen sie die Koordinaten." ); // TODO loc
 			}
 		}, "", loc.getString( "toolbarTooltipDragCreate" ) );
 		toolBarEdit.add( btnEditRectangled );
@@ -968,7 +1018,7 @@ public class JEditor extends JFrame implements Localized, EventListener<Progress
 		Menu.updateMenu( mnuHideDefaultFloor, loc.getString( "menuHideDefaultEvacuationFloor" ) );
 
 		// Execute menu (debug only)
-		if( EditorStart.isDebug() ) {
+		if( ZETMain.isDebug() ) {
 			Menu.updateMenu( mExecute, loc.getString( "menuExecute" ) );
 			Menu.updateMenu( mSimulation, loc.getString( "menuSimulation" ) );
 			Menu.updateMenu( mnuCreateCA, loc.getString( "menuSimulationCreateCA" ) );
@@ -1001,7 +1051,7 @@ public class JEditor extends JFrame implements Localized, EventListener<Progress
 		Menu.updateMenu( mnuPlanImageLocate, loc.getString( "menuMovePlan" ) );
 		Menu.updateMenu( mnuPlanImageTransparency, loc.getString( "menuSetPlanTransparency" ) );
 		Menu.updateMenu( mnuOptions, loc.getString( "menuOptions" ) );
-		if( EditorStart.isDebug() ) {
+		if( ZETMain.isDebug() ) {
 			Menu.updateMenu( mnuSettings, loc.getString( "menuSettings" ) );
 		}
 
@@ -1018,7 +1068,7 @@ public class JEditor extends JFrame implements Localized, EventListener<Progress
 		tabPane.setTitleAt( BATCH, loc.getString( "Batch" ) );
 		tabPane.setToolTipTextAt( BATCH, loc.getString( "BatchToolTip" ) );
 
-		if( EditorStart.isDebug() ) {
+		if( ZETMain.isDebug() ) {
 			tabPane.setTitleAt( CA_FLOOR, loc.getString( "CAView" ) );
 			tabPane.setToolTipTextAt( CA_FLOOR, loc.getString( "CAViewToolTip" ) );
 		}
@@ -1088,8 +1138,8 @@ public class JEditor extends JFrame implements Localized, EventListener<Progress
 		loc.setPrefix( "" );
 
 		sendMouse( lastMouse );
-		sendError( "" );
-		sendMessage( loc.getStringWithoutPrefix( "gui.status.LanguageChangedTo" ) );
+		ZETMain.sendError( "" );
+		ZETMain.sendMessage( loc.getStringWithoutPrefix( "gui.status.LanguageChangedTo" ) );
 	}
 	/*****************************************************************************
 	 *                                                                           *
@@ -1099,7 +1149,7 @@ public class JEditor extends JFrame implements Localized, EventListener<Progress
 	ActionListener aclAbout = new ActionListener() {
 		@Override
 		public void actionPerformed( ActionEvent e ) {
-			CreditsDialog credits = new CreditsDialog( JEditor.this );
+			CreditsDialog credits = new CreditsDialog( instance );
 			credits.setVisible( true );
 		}
 	};
@@ -1128,7 +1178,7 @@ public class JEditor extends JFrame implements Localized, EventListener<Progress
 		@Override
 		public void actionPerformed( ActionEvent e ) {
 			//if( distribution == null ) {
-			distribution = new JAssignment( JEditor.this, getProject(), loc.getString( "gui.editor.assignment.JAssignment.Title" ), 850, 400 );
+			distribution = new JAssignment( instance, getProject(), loc.getString( "gui.editor.assignment.JAssignment.Title" ), 850, 400 );
 			//}
 			distribution.setVisible( true );
 			distribution.dispose();
@@ -1157,7 +1207,7 @@ public class JEditor extends JFrame implements Localized, EventListener<Progress
 			else if( e.getActionCommand().equals( "EAT" ) )
 				earliestArrivalTransshipment();
 			else
-				sendError( loc.getString( "gui.UnknownCommand" ) + " '" + e.getActionCommand() + "'. " + loc.getString( "gui.ContactDeveloper" ) );
+				ZETMain.sendError( loc.getString( "gui.UnknownCommand" ) + " '" + e.getActionCommand() + "'. " + loc.getString( "gui.ContactDeveloper" ) );
 		}
 
 		private void earliestArrivalTransshipment() {
@@ -1168,7 +1218,7 @@ public class JEditor extends JFrame implements Localized, EventListener<Progress
 				setBatchResult( res.execute( false ) );
 				tabPane.setSelectedIndex( VISUALIZATION );
 			} catch( Exception ex ) {
-				JEditor.sendError( ex.getLocalizedMessage() );
+				ZETMain.sendError( ex.getLocalizedMessage() );
 			}
 		}
 
@@ -1180,7 +1230,7 @@ public class JEditor extends JFrame implements Localized, EventListener<Progress
 				setBatchResult( res.execute( false ) );
 				tabPane.setSelectedIndex( VISUALIZATION );
 			} catch( Exception ex ) {
-				JEditor.sendError( ex.getLocalizedMessage() );
+				ZETMain.sendError( ex.getLocalizedMessage() );
 			}
 		}
 
@@ -1192,7 +1242,7 @@ public class JEditor extends JFrame implements Localized, EventListener<Progress
 				setBatchResult( res.execute( false ) );
 				tabPane.setSelectedIndex( VISUALIZATION );
 			} catch( Exception ex ) {
-				JEditor.sendError( ex.getLocalizedMessage() );
+				ZETMain.sendError( ex.getLocalizedMessage() );
 			}
 		}
 
@@ -1204,7 +1254,7 @@ public class JEditor extends JFrame implements Localized, EventListener<Progress
 				setBatchResult( res.execute( false ) );
 				tabPane.setSelectedIndex( VISUALIZATION );
 			} catch( Exception ex ) {
-				JEditor.sendError( ex.getLocalizedMessage() );
+				ZETMain.sendError( ex.getLocalizedMessage() );
 			}
 		}
 
@@ -1216,7 +1266,7 @@ public class JEditor extends JFrame implements Localized, EventListener<Progress
 				setBatchResult( res.execute( false ) );
 				tabPane.setSelectedIndex( VISUALIZATION );
 			} catch( Exception ex ) {
-				JEditor.sendError( ex.getLocalizedMessage() );
+				ZETMain.sendError( ex.getLocalizedMessage() );
 			}
 		}
 	};
@@ -1226,23 +1276,24 @@ public class JEditor extends JFrame implements Localized, EventListener<Progress
 
 		{
 			jfcProject = new JFileChooser( GUIOptionManager.getSavePath() );
-			jfcProject.setFileFilter( JEditor.getProjectFilter() );
+			jfcProject.setFileFilter( getProjectFilter() );
 			jfcProject.setAcceptAllFileFilterUsed( false );
 
 			jfcResults = new JFileChooser( GUIOptionManager.getSavePathResults() );
-			jfcResults.setFileFilter( JEditor.getResultsFilter() );
+			jfcResults.setFileFilter( getResultsFilter() );
 			jfcResults.setAcceptAllFileFilterUsed( false );
 		}
 
 		@Override
 		public void actionPerformed( ActionEvent e ) {
 			if( e.getActionCommand().equals( "loadProject" ) ) {
-				if( jfcProject.showOpenDialog( JEditor.getInstance() ) == JFileChooser.APPROVE_OPTION ) {
-					loadProjectFile( jfcProject.getSelectedFile() );
+				if( jfcProject.showOpenDialog( getInstance() ) == JFileChooser.APPROVE_OPTION ) {
+					projectControl.loadProject( jfcProject.getSelectedFile() );
+					loadProject();	// Load the currently loaded project by the control file
 					GUIOptionManager.setSavePath( jfcProject.getCurrentDirectory().getPath() );
 				}
 			} else if( e.getActionCommand().equals( "saveProjectAs" ) || (e.getActionCommand().equals( "saveProject" ) && getProject().getProjectFile() == null) ) {
-				if( jfcProject.showSaveDialog( JEditor.getInstance() ) == JFileChooser.APPROVE_OPTION ) {
+				if( jfcProject.showSaveDialog( getInstance() ) == JFileChooser.APPROVE_OPTION ) {
 					GUIOptionManager.setSavePath( jfcProject.getCurrentDirectory().getPath() );
 					if( jfcProject.getSelectedFile().exists() && createCopy )
 						createBackup( jfcProject.getSelectedFile() );
@@ -1252,12 +1303,12 @@ public class JEditor extends JFrame implements Localized, EventListener<Progress
 							target = new File( target.getAbsolutePath() + ".zet" );
 						getProject().save( target );
 					} catch( java.lang.StackOverflowError soe ) {
-						showErrorMessage( loc.getString( "gui.editor.JEditor.error.stackOverflowTitle" ), loc.getString( "gui.editor.JEditor.error.stackOverflow" ) );
+						showErrorMessage( loc.getString( "gui.editor.error.stackOverflowTitle" ), loc.getString( "gui.editor.error.stackOverflow" ) );
 					} catch( Exception ex ) {
-						showErrorMessage( loc.getString( "gui.editor.JEditor.error.SaveTitle" ), loc.getString( "gui.editor.JEditor.error.Save" ) );
+						showErrorMessage( loc.getString( "gui.editor.error.SaveTitle" ), loc.getString( "gui.editor.error.Save" ) );
 					}
 					editView.displayProject( getProject() );
-					sendMessage( loc.getString( "gui.editor.JEditor.message.saved" ) );
+					ZETMain.sendMessage( loc.getString( "gui.editor.message.saved" ) );
 				}
 			} else if( e.getActionCommand().equals( "saveProject" ) ) {
 				if( createCopy == true )
@@ -1265,18 +1316,18 @@ public class JEditor extends JFrame implements Localized, EventListener<Progress
 				try {
 					getProject().save();
 				} catch( java.lang.StackOverflowError soe ) {
-					showErrorMessage( loc.getString( "gui.editor.JEditor.error.stackOverflowTitle" ), loc.getString( "gui.editor.JEditor.error.stackOverflow" ) );
+					showErrorMessage( loc.getString( "gui.editor.error.stackOverflowTitle" ), loc.getString( "gui.editor.error.stackOverflow" ) );
 				} catch( Exception ex ) {
-					showErrorMessage( loc.getString( "gui.editor.JEditor.error.SaveTitle" ), loc.getString( "gui.editor.JEditor.error.Save" ) );
+					showErrorMessage( loc.getString( "gui.editor.error.SaveTitle" ), loc.getString( "gui.editor.error.Save" ) );
 					ex.printStackTrace();
 					return;
 				}
-				sendMessage( loc.getString( "gui.editor.JEditor.message.saved" ) );
+				ZETMain.sendMessage( loc.getString( "gui.editor.message.saved" ) );
 			} else if( e.getActionCommand().equals( "newProject" ) ) {
 				String status = "";
-				switch( JOptionPane.showOptionDialog( JEditor.getInstance(),
-								loc.getString( "gui.editor.JEditor.SaveQuestion" ),
-								loc.getString( "gui.editor.JEditor.NewProject" ),
+				switch( JOptionPane.showOptionDialog( getInstance(),
+								loc.getString( "gui.editor.SaveQuestion" ),
+								loc.getString( "gui.editor.NewProject" ),
 								JOptionPane.YES_NO_CANCEL_OPTION,
 								JOptionPane.QUESTION_MESSAGE,
 								null, null, null ) ) {
@@ -1286,15 +1337,15 @@ public class JEditor extends JFrame implements Localized, EventListener<Progress
 					case 0:
 						// save
 						if( getProject().getProjectFile() == null ) {
-							if( jfcProject.showSaveDialog( JEditor.getInstance() ) == JFileChooser.APPROVE_OPTION ) {
+							if( jfcProject.showSaveDialog( getInstance() ) == JFileChooser.APPROVE_OPTION ) {
 								if( createCopy )
 									createBackup();
 								try {
 									getProject().save( jfcProject.getSelectedFile() );
 								} catch( java.lang.StackOverflowError soe ) {
-									showErrorMessage( loc.getString( "gui.editor.JEditor.error.stackOverflowTitle" ), loc.getString( "gui.editor.JEditor.error.stackOverflow" ) );
+									showErrorMessage( loc.getString( "gui.editor.error.stackOverflowTitle" ), loc.getString( "gui.editor.error.stackOverflow" ) );
 								} catch( Exception ex ) {
-									showErrorMessage( loc.getString( "gui.editor.JEditor.error.SaveTitle" ), loc.getString( "gui.editor.JEditor.error.Save" ) );
+									showErrorMessage( loc.getString( "gui.editor.error.SaveTitle" ), loc.getString( "gui.editor.error.Save" ) );
 									ex.printStackTrace();
 									return;
 								}
@@ -1305,35 +1356,37 @@ public class JEditor extends JFrame implements Localized, EventListener<Progress
 							try {
 								getProject().save();
 							} catch( java.lang.StackOverflowError soe ) {
-								showErrorMessage( loc.getString( "gui.editor.JEditor.error.stackOverflowTitle" ), loc.getString( "gui.editor.JEditor.error.stackOverflow" ) );
+								showErrorMessage( loc.getString( "gui.editor.error.stackOverflowTitle" ), loc.getString( "gui.editor.error.stackOverflow" ) );
 							} catch( Exception ex ) {
-								showErrorMessage( loc.getString( "gui.editor.JEditor.error.SaveTitle" ), loc.getString( "gui.editor.JEditor.error.Save" ) );
+								showErrorMessage( loc.getString( "gui.editor.error.SaveTitle" ), loc.getString( "gui.editor.error.Save" ) );
 								ex.printStackTrace();
 								return;
 							}
 						}
-						status = loc.getString( "gui.editor.JEditor.status.newProject" );
+						status = loc.getString( "gui.editor.status.newProject" );
 						break;
 					case 1:
-						status = loc.getString( "gui.editor.JEditor.status.newProjectDiscard" );
+						status = loc.getString( "gui.editor.status.newProjectDiscard" );
 				}
-				currentProject = EditorStart.newProject();
+				//currentProject = ZETMain.newProject();
+				projectControl.newProject();
+				currentProject = projectControl.getProject();
 				distribution = null; // Throw away the old assignment window
 				editView.displayProject( currentProject );
-				sendMessage( status );
+				ZETMain.sendMessage( status );
 			} else if( e.getActionCommand().equals( "loadBatchResult" ) ) {
-				if( jfcResults.showOpenDialog( JEditor.getInstance() ) == JFileChooser.APPROVE_OPTION ) {
+				if( jfcResults.showOpenDialog( getInstance() ) == JFileChooser.APPROVE_OPTION ) {
 					GUIOptionManager.setSavePathResults( jfcProject.getCurrentDirectory().getPath() );
 					try {
 						setBatchResult( BatchResult.load( (jfcResults.getSelectedFile()) ) );
-						sendMessage( loc.getString( "gui.editor.JEditor.message.loaded" ) );
+						ZETMain.sendMessage( loc.getString( "gui.editor.message.loaded" ) );
 					} catch( Exception ex ) {
-						showErrorMessage( loc.getString( "gui.editor.JEditor.error.SaveTitle" ), loc.getString( "gui.editor.JEditor.error.Save" ) );
+						showErrorMessage( loc.getString( "gui.editor.error.SaveTitle" ), loc.getString( "gui.editor.error.Save" ) );
 						ex.printStackTrace();
 					}
 				}
 			} else if( e.getActionCommand().equals( "saveResultAs" ) ) {
-				if( jfcResults.showSaveDialog( JEditor.this ) == JFileChooser.APPROVE_OPTION ) {
+				if( jfcResults.showSaveDialog( instance ) == JFileChooser.APPROVE_OPTION ) {
 					GUIOptionManager.setSavePathResults( jfcProject.getCurrentDirectory().getPath() );
 					try {
 						File target = jfcResults.getSelectedFile();
@@ -1341,25 +1394,25 @@ public class JEditor extends JFrame implements Localized, EventListener<Progress
 							target = new File( target.getAbsolutePath() + ".ers" );
 						result.save( target );
 					} catch( java.lang.StackOverflowError soe ) {
-						showErrorMessage( loc.getString( "gui.editor.JEditor.error.stackOverflowTitle" ), loc.getString( "gui.editor.JEditor.error.stackOverflow" ) );
+						showErrorMessage( loc.getString( "gui.editor.error.stackOverflowTitle" ), loc.getString( "gui.editor.error.stackOverflow" ) );
 					} catch( Exception ex ) {
-						showErrorMessage( loc.getString( "gui.editor.JEditor.error.SaveTitle" ), loc.getString( "gui.editor.JEditor.error.Save" ) );
+						showErrorMessage( loc.getString( "gui.editor.error.SaveTitle" ), loc.getString( "gui.editor.error.Save" ) );
 						ex.printStackTrace();
 					}
-					sendMessage( loc.getString( "gui.editor.JEditor.message.saved" ) );
+					ZETMain.sendMessage( loc.getString( "gui.editor.message.saved" ) );
 				}
 			} else if( e.getActionCommand().equals( "saveAsDXF" ) ) {
 				String filename = getProject().getProjectFile().getPath().substring( 0, getProject().getProjectFile().getPath().length() - 3 ) + "dxf";
 				try {
 					DXFWriter.exportIntoDXF( filename, currentProject.getPlan() );
 				} catch( IOException ex ) {
-					showErrorMessage( loc.getString( "gui.editor.JEditor.error.SaveTitle" ), loc.getString( "gui.editor.JEditor.error.Save" ) );
+					showErrorMessage( loc.getString( "gui.editor.error.SaveTitle" ), loc.getString( "gui.editor.error.Save" ) );
 					ex.printStackTrace();
 					return;
 				}
-				sendMessage( loc.getString( "gui.editor.JEditor.message.dxfComplete" ) );
+				ZETMain.sendMessage( loc.getString( "gui.editor.message.dxfComplete" ) );
 			} else
-				sendError( loc.getString( "gui.UnknownCommand" ) + " '" + e.getActionCommand() + "'. " + loc.getString( "gui.ContactDeveloper" ) );
+				ZETMain.sendError( loc.getString( "gui.UnknownCommand" ) + " '" + e.getActionCommand() + "'. " + loc.getString( "gui.ContactDeveloper" ) );
 		}
 	};
 	ActionListener aclFloor = new ActionListener() {
@@ -1368,28 +1421,30 @@ public class JEditor extends JFrame implements Localized, EventListener<Progress
 			try {
 				if( e.getActionCommand().equals( "new" ) ) {
 					getProject().getPlan().addFloor( new Floor( loc.getString( "ds.z.DefaultName.Floor" ) + " " + getProject().getPlan().floorCount() ) );
-					sendMessage( "Neue Etage angelegt." ); // TODO loc
-				} else if( e.getActionCommand().equals( "up" ) )
-					getProject().getPlan().moveFloorUp( editView.getCurrentFloor() );
-				else if( e.getActionCommand().equals( "down" ) )
-					getProject().getPlan().moveFloorDown( editView.getCurrentFloor() );
-				else if( e.getActionCommand().equals( "delete" ) )
+					ZETMain.sendMessage( "Neue Etage angelegt." ); // TODO loc
+				} else if( e.getActionCommand().equals( "up" ) ) {
+					final int oldIndex = editView.getFloorID();
+					projectControl.moveFloorUp( editView.getFloorID() + (ZETProperties.isDefaultFloorHidden() ? 1 : 0) );
+					editView.setFloor( oldIndex + 1 );
+				} else if( e.getActionCommand().equals( "down" ) ) {
+					final int oldIndex = editView.getFloorID();
+					projectControl.moveFloorDown( editView.getFloorID() + (ZETProperties.isDefaultFloorHidden() ? 1 : 0) );
+					editView.setFloor( oldIndex - 1 );
+				} else if( e.getActionCommand().equals( "delete" ) )
 					getProject().getPlan().removeFloor( editView.getCurrentFloor() );
 				else if( e.getActionCommand().equals( "import" ) ) {
-					FloorImportDialog floorImport = new FloorImportDialog( JEditor.this, getProject(), "Importieren", 450, 250 );
+					FloorImportDialog floorImport = new FloorImportDialog( instance, getProject(), "Importieren", 450, 250 );
 					floorImport.setVisible( true );
 				} else if( e.getActionCommand().equals( "copy" ) ) {
-					final Floor fc = editView.getCurrentFloor().clone();
-					final int max = getProject().getPlan().floorCount() + 1;
-					int number = 0;
-					while( !getProject().getPlan().addFloor( fc ) && number <= max )
-						fc.setName( editView.getCurrentFloor().getName() + "_" + number++ );
+					final int oldIndex = editView.getFloorID();
+					projectControl.copyFloor( editView.getCurrentFloor() );
+					editView.setFloor( oldIndex );
 				} else
-					sendError( loc.getString( "gui.UnknownCommand" ) + " '" + e.getActionCommand() + "'. " + loc.getString( "gui.ContactDeveloper" ) );
+					ZETMain.sendError( loc.getString( "gui.UnknownCommand" ) + " '" + e.getActionCommand() + "'. " + loc.getString( "gui.ContactDeveloper" ) );
 			} catch( IllegalArgumentException ex ) {
-				sendError( ex.getLocalizedMessage() );
+				ZETMain.sendError( ex.getLocalizedMessage() );
 			} catch( Exception ex ) {
-				JOptionPane.showMessageDialog( JEditor.getInstance(),
+				JOptionPane.showMessageDialog( getInstance(),
 								ex.getLocalizedMessage(), loc.getString( "gui.Error" ),
 								JOptionPane.ERROR_MESSAGE );
 				ex.printStackTrace();
@@ -1405,10 +1460,10 @@ public class JEditor extends JFrame implements Localized, EventListener<Progress
 				else if( e.getActionCommand().equals( "english" ) )
 					loc.setLocale( Locale.ENGLISH );
 				else
-					sendError( loc.getString( "gui.UnknownCommand" ) + " '" + e.getActionCommand() + "'. " + loc.getString( "gui.ContactDeveloper" ) );
+					ZETMain.sendError( loc.getString( "gui.UnknownCommand" ) + " '" + e.getActionCommand() + "'. " + loc.getString( "gui.ContactDeveloper" ) );
 				localize();
 			} catch( Exception ex ) {
-				JOptionPane.showMessageDialog( JEditor.getInstance(),
+				JOptionPane.showMessageDialog( getInstance(),
 								ex.getLocalizedMessage(), loc.getString( "gui.Error" ),
 								JOptionPane.ERROR_MESSAGE );
 			}
@@ -1421,6 +1476,7 @@ public class JEditor extends JFrame implements Localized, EventListener<Progress
 				if( e.getActionCommand().equals( "grid" ) )
 					editView.getFloor().setRasterizedPaintMode( mnuPaintRasterized.isSelected() );
 				else if( e.getActionCommand().equals( "defaultFloor" ) ) {
+					ZETProperties.isDefaultFloorHidden();
 					PropertyContainer.getInstance().set( "editor.options.view.hideDefaultFloor", mnuHideDefaultFloor.isSelected() );
 					editView.displayProject();
 				} else if( e.getActionCommand().equals( "gridLine" ) ) {
@@ -1436,9 +1492,9 @@ public class JEditor extends JFrame implements Localized, EventListener<Progress
 					mnuGridPoints.setSelected( false );
 					editView.getFloor().setRasterPaintStyle( RasterPaintStyle.Nothing );
 				} else
-					sendError( loc.getString( "gui.UnknownCommand" ) + " '" + e.getActionCommand() + "'. " + loc.getString( "gui.ContactDeveloper" ) );
+					ZETMain.sendError( loc.getString( "gui.UnknownCommand" ) + " '" + e.getActionCommand() + "'. " + loc.getString( "gui.ContactDeveloper" ) );
 			} catch( Exception ex ) {
-				JOptionPane.showMessageDialog( JEditor.getInstance(),
+				JOptionPane.showMessageDialog( getInstance(),
 								ex.getLocalizedMessage(), loc.getString( "gui.Error" ),
 								JOptionPane.ERROR_MESSAGE );
 			}
@@ -1474,14 +1530,14 @@ public class JEditor extends JFrame implements Localized, EventListener<Progress
 
 						// Show Zoom/Size Dialogue
 						JPlanImageProperties ip = new JPlanImageProperties( image );
-						if( ip.showPlanImageZoomDialog( JEditor.getInstance() ) == JPlanImageProperties.OK ) {
+						if( ip.showPlanImageZoomDialog( getInstance() ) == JPlanImageProperties.OK ) {
 							CoordinateTools.setPictureZoomFactor( (double)ip.getMillimeterCount() / (double)ip.getPixelCount() );
 							editView.getFloor().getPlanImage().setImage( image );
 							mnuPlanImageHide.setEnabled( true );
 							mnuPlanImageResize.setEnabled( true );
 							mnuPlanImageLocate.setEnabled( true );
 							mnuPlanImageTransparency.setEnabled( true );
-							sendMessage( "Plan für Hintergrunddarstellung geladen." );
+							ZETMain.sendMessage( "Plan für Hintergrunddarstellung geladen." );
 						}
 					}
 				} else if( e.getActionCommand().equals( "hide" ) ) {
@@ -1494,7 +1550,7 @@ public class JEditor extends JFrame implements Localized, EventListener<Progress
 					BufferedImage image = editView.getFloor().getPlanImage().getImage();
 					// Show Zoom/Size Dialogue
 					JPlanImageProperties ip = new JPlanImageProperties( image );
-					if( ip.showPlanImageZoomDialog( JEditor.getInstance() ) == JPlanImageProperties.OK ) {
+					if( ip.showPlanImageZoomDialog( getInstance() ) == JPlanImageProperties.OK ) {
 						CoordinateTools.setPictureZoomFactor( (double)ip.getMillimeterCount() / (double)ip.getPixelCount() );
 						editView.getFloor().getPlanImage().resize();
 					}
@@ -1502,20 +1558,20 @@ public class JEditor extends JFrame implements Localized, EventListener<Progress
 					JPlanImageProperties ip = new JPlanImageProperties();
 					ip.setXOffset( editView.getFloor().getPlanImage().getImageX() );
 					ip.setYOffset( editView.getFloor().getPlanImage().getImageY() );
-					if( ip.showPlanMoveDialog( JEditor.getInstance() ) == JPlanImageProperties.OK ) {
+					if( ip.showPlanMoveDialog( getInstance() ) == JPlanImageProperties.OK ) {
 						editView.getFloor().getPlanImage().setImageX( ip.getXOffset() );
 						editView.getFloor().getPlanImage().setImageY( ip.getYOffset() );
 					}
 				} else if( e.getActionCommand().equals( "transparency" ) ) {
 					JPlanImageProperties ip = new JPlanImageProperties();
 					ip.setAlpha( editView.getFloor().getPlanImage().getAlpha() );
-					if( ip.showPlanAlphaDialog( JEditor.getInstance() ) == JPlanImageProperties.OK )
+					if( ip.showPlanAlphaDialog( getInstance() ) == JPlanImageProperties.OK )
 						editView.getFloor().getPlanImage().setAlpha( ip.getAlpha() );
 				} else
-					sendError( loc.getString( "gui.UnknownCommand" ) + " '" + e.getActionCommand() + "'. " + loc.getString( "gui.ContactDeveloper" ) );
+					ZETMain.sendError( loc.getString( "gui.UnknownCommand" ) + " '" + e.getActionCommand() + "'. " + loc.getString( "gui.ContactDeveloper" ) );
 
 			} catch( Exception ex ) {
-				JOptionPane.showMessageDialog( JEditor.getInstance(),
+				JOptionPane.showMessageDialog( getInstance(),
 								ex.getLocalizedMessage(), loc.getString( "gui.Error" ),
 								JOptionPane.ERROR_MESSAGE );
 			}
@@ -1524,7 +1580,7 @@ public class JEditor extends JFrame implements Localized, EventListener<Progress
 	ActionListener aclPlay = new ActionListener() {
 		public void actionPerformed( ActionEvent e ) {
 			if( e.getActionCommand().equals( "start" ) )
-				JEditor.sendError( "Not supported yet" );
+				ZETMain.sendError( "Not supported yet" );
 			else if( e.getActionCommand().equals( "play" ) )
 				if( visualizationView.getGLContainer().isAnimating() ) {
 					btnPlay.setIcon( playIcon );
@@ -1536,38 +1592,38 @@ public class JEditor extends JFrame implements Localized, EventListener<Progress
 					visualizationView.getGLContainer().startAnimation();
 				}
 			else if( e.getActionCommand().equals( "end" ) )
-				JEditor.sendError( "Not supported yet" );
+				ZETMain.sendError( "Not supported yet" );
 			else
-				JEditor.sendError( loc.getString( "gui.UnknownCommand" ) + " '" + e.getActionCommand() + "'. " + loc.getString( "gui.ContactDeveloper" ) );
+				ZETMain.sendError( loc.getString( "gui.UnknownCommand" ) + " '" + e.getActionCommand() + "'. " + loc.getString( "gui.ContactDeveloper" ) );
 		}
 	};
 	ActionListener aclProperties = new ActionListener() {
 		@Override
 		public void actionPerformed( ActionEvent e ) {
 			if( e.getActionCommand().equals( "properties" ) ) {
-				JPropertySelectorWindow propertySelector = new JPropertySelectorWindow( JEditor.this, loc.getString( "gui.editor.JPropertySelector.Title" ), 700, 500 );
+				JPropertySelectorWindow propertySelector = new JPropertySelectorWindow( instance, loc.getString( "gui.editor.JPropertySelector.Title" ), 700, 500 );
 				propertySelector.setVisible( true );
 				System.out.println( "Properties saved." ); // TODO loc
 			} else if( e.getActionCommand().equals( "options" ) ) {
-				EditorStart.ptmOptions.getRoot().reloadFromPropertyContainer();
-				JOptionsWindow propertySelector = new JOptionsWindow( JEditor.this, loc.getString( "gui.editor.JOptions.Title" ), 700, 500, EditorStart.ptmOptions );
+				ZETMain.ptmOptions.getRoot().reloadFromPropertyContainer();
+				JOptionsWindow propertySelector = new JOptionsWindow( instance, loc.getString( "gui.editor.JOptions.Title" ), 700, 500, ZETMain.ptmOptions );
 				propertySelector.setVisible( true );
 				try {	// Save results in options file
-					PropertyContainer.saveConfigFile( EditorStart.ptmOptions, new File( EditorStart.optionFilename ) );
+					PropertyContainer.saveConfigFile( ZETMain.ptmOptions, new File( ZETMain.optionFilename ) );
 				} catch( IOException ex ) {
-					sendError( "Error saving config file!" ); // TODO loc
+					ZETMain.sendError( "Error saving config file!" ); // TODO loc
 				}
 			} else if( e.getActionCommand().equals( "settings" ) ) {
-				EditorStart.ptmInformation.getRoot().reloadFromPropertyContainer();
-				JOptionsWindow propertySelector = new JOptionsWindow( JEditor.this, loc.getString( "gui.editor.settings.Title" ), 700, 500, EditorStart.ptmInformation );
+				ZETMain.ptmInformation.getRoot().reloadFromPropertyContainer();
+				JOptionsWindow propertySelector = new JOptionsWindow( instance, loc.getString( "gui.editor.settings.Title" ), 700, 500, ZETMain.ptmInformation );
 				propertySelector.setVisible( true );
 				try {	// Save results in settings file
-					PropertyContainer.saveConfigFile( EditorStart.ptmInformation, new File( EditorStart.informationFilename ) );
+					PropertyContainer.saveConfigFile( ZETMain.ptmInformation, new File( ZETMain.informationFilename ) );
 				} catch( IOException ex ) {
-					sendError( "Error saving settings file!" ); // TODO loc
+					ZETMain.sendError( "Error saving settings file!" ); // TODO loc
 				}
 			}else
-				sendError( loc.getString( "gui.UnknownCommand" ) + " '" + e.getActionCommand() + "'. " + loc.getString( "gui.ContactDeveloper" ) );
+				ZETMain.sendError( loc.getString( "gui.UnknownCommand" ) + " '" + e.getActionCommand() + "'. " + loc.getString( "gui.ContactDeveloper" ) );
 		}
 	};
 	ActionListener aclScreenshot = new ActionListener() {
@@ -1596,6 +1652,7 @@ public class JEditor extends JFrame implements Localized, EventListener<Progress
 				vo.dispose();
 				if( vo.getRetVal() == VideoOptions.OK ) {
 					String movieFrameName = PropertyContainer.getInstance().getAsString( "options.filehandling.movieFrameName" );
+					// TODO BUG: wenn ein projekt noch nicht gespeichert worden ist, liefert das hier iene null pointer exception. (tritt auf, wenn ein video gedreht werden soll)
 					String projectName = getProject().getProjectFile().getName().substring( 0, getProject().getProjectFile().getName().length() - 4 );
 					MovieManager movieCreator = visualizationView.getGLContainer().getMovieCreator();
 					if( movieFrameName.equals( "" ) )
@@ -1623,7 +1680,7 @@ public class JEditor extends JFrame implements Localized, EventListener<Progress
 					visualizationView.getGLContainer().startAnimation();
 				}
 			} else
-				sendError( loc.getString( "gui.UnknownCommand" ) + " '" + e.getActionCommand() + "'. " + loc.getString( "gui.ContactDeveloper" ) );
+				ZETMain.sendError( loc.getString( "gui.UnknownCommand" ) + " '" + e.getActionCommand() + "'. " + loc.getString( "gui.ContactDeveloper" ) );
 		}
 	};
 	ActionListener aclStart = new ActionListener() {
@@ -1633,32 +1690,32 @@ public class JEditor extends JFrame implements Localized, EventListener<Progress
 				if( e.getActionCommand().equals( "rasterize" ) )
 					try {
 						RasterizeTask rasterize = new RasterizeTask( getProject() );
-						JProgressBarDialog pbd = new JRasterizeProgressBarDialog( JEditor.getInstance(), "Rastern", true, rasterize );
+						JProgressBarDialog pbd = new JRasterizeProgressBarDialog( getInstance(), "Rastern", true, rasterize );
 						pbd.executeTask();
 						pbd.setVisible( true );
-						sendMessage( loc.getString( "gui.message.RasterizationComplete" ) );
+						ZETMain.sendMessage( loc.getString( "gui.message.RasterizationComplete" ) );
 					} catch( Exception ex ) {
-						sendError( ex.getLocalizedMessage() );
+						ZETMain.sendError( ex.getLocalizedMessage() );
 					}
 				else if( e.getActionCommand().equals( "distributeEvacuees" ) )
 					try {
-						String res = JOptionPane.showInputDialog( JEditor.this,
+						String res = JOptionPane.showInputDialog( instance,
 										"Anzahl zu evakuierender Personen (maximal " +
 										Integer.toString( getProject().getPlan().maximalEvacuees() ) + ")", "Personen verteilen", JOptionPane.QUESTION_MESSAGE );
 
 						if( res != null ) {
 							getProject().getPlan().distributeEvacuees( Integer.parseInt( res ) );
-							sendMessage( loc.getString( "gui.message.RasterizationComplete" ) );
+							ZETMain.sendMessage( loc.getString( "gui.message.RasterizationComplete" ) );
 						}
 					} catch( NumberFormatException ex ) {
-						sendError( loc.getString( "gui.error.NonParsableNumber" ) );
+						ZETMain.sendError( loc.getString( "gui.error.NonParsableNumber" ) );
 					} catch( TooManyPeopleException ex ) {
-						sendError( ex.getLocalizedMessage() );
+						ZETMain.sendError( ex.getLocalizedMessage() );
 					}
 				else
-					sendError( loc.getString( "gui.UnknownCommand" ) + " '" + e.getActionCommand() + "'. " + loc.getString( "gui.ContactDeveloper" ) );
+					ZETMain.sendError( loc.getString( "gui.UnknownCommand" ) + " '" + e.getActionCommand() + "'. " + loc.getString( "gui.ContactDeveloper" ) );
 			} catch( Exception ex ) {
-				JOptionPane.showMessageDialog( JEditor.getInstance(),
+				JOptionPane.showMessageDialog( getInstance(),
 								ex.getLocalizedMessage(), loc.getString( "gui.Error" ),
 								JOptionPane.ERROR_MESSAGE );
 			}
@@ -1757,7 +1814,7 @@ public class JEditor extends JFrame implements Localized, EventListener<Progress
 				}
 				visualizationView.getGLContainer().repaint();
 			} else
-				JEditor.sendError( loc.getString( "gui.UnknownCommand" ) + " '" + e.getActionCommand() + "'. " + loc.getString( "gui.ContactDeveloper" ) );
+				ZETMain.sendError( loc.getString( "gui.UnknownCommand" ) + " '" + e.getActionCommand() + "'. " + loc.getString( "gui.ContactDeveloper" ) );
 		}
 	};
 	ActionListener aclVisualizationView = new ActionListener() {
@@ -1790,9 +1847,9 @@ public class JEditor extends JFrame implements Localized, EventListener<Progress
 				else if( e.getActionCommand().equals( "zoomOut" ) )
 					setZoomFactor( Math.max( 0.00004, CoordinateTools.getZoomFactor() / 2 ) );
 				else
-					sendError( loc.getString( "gui.UnknownCommand" ) + " '" + e.getActionCommand() + "'. " + loc.getString( "gui.ContactDeveloper" ) );
+					ZETMain.sendError( loc.getString( "gui.UnknownCommand" ) + " '" + e.getActionCommand() + "'. " + loc.getString( "gui.ContactDeveloper" ) );
 			} catch( Exception ex ) {
-				JOptionPane.showMessageDialog( JEditor.getInstance(),
+				JOptionPane.showMessageDialog( getInstance(),
 								ex.getLocalizedMessage(), loc.getString( "gui.Error" ),
 								JOptionPane.ERROR_MESSAGE );
 			}
@@ -1820,7 +1877,7 @@ public class JEditor extends JFrame implements Localized, EventListener<Progress
 			else if( i == GRAPH_STATISTIC )
 				switchTo( GRAPH_STATISTIC );
 			else
-				sendError( "Unknown tab index:" + tabPane.getSelectedIndex() + ". " + loc.getString( "gui.ContactDeveloper" ) );
+				ZETMain.sendError( "Unknown tab index:" + tabPane.getSelectedIndex() + ". " + loc.getString( "gui.ContactDeveloper" ) );
 //			switch( tabPane.getSelectedIndex() ) {
 //				case EDIT_FLOOR:	// edit view
 //					switchTo( EDIT_FLOOR );
@@ -1847,7 +1904,7 @@ public class JEditor extends JFrame implements Localized, EventListener<Progress
 //					switchTo( GRAPH_STATISTIC );
 //					break;
 //				default:
-//					sendError( "Unknown tab index:" + tabPane.getSelectedIndex() + ". " + loc.getString( "gui.ContactDeveloper" ) );	// TODO loc
+//					ZETMain.sendError( "Unknown tab index:" + tabPane.getSelectedIndex() + ". " + loc.getString( "gui.ContactDeveloper" ) );	// TODO loc
 //			}
 		}
 	};
@@ -1923,38 +1980,6 @@ public class JEditor extends JFrame implements Localized, EventListener<Progress
 	 * Algorithm starter methods                                                 *
 	 *                                                                           *
 	 ****************************************************************************/
-	/**
-	 * Loads the specified {@link File} into the editor and switches to the
-	 * edit tab.
-	 * @param projectFile the project file
-	 */
-	public void loadProjectFile( File projectFile ) {
-		if( tabPane.getSelectedIndex() > 1 )
-			tabPane.setSelectedIndex( 0 );
-		try {
-			Project loaded = Project.load( projectFile );
-			currentProject = loaded;
-//			distribution = null; // Throw away the old assignment window
-			getProject().setProjectFile( projectFile );
-			editView.displayProject( loaded );
-			// Löschen eingestellter parameter
-			ZToCAConverter.getInstance().clear();
-			firstSwitch = true;
-			if( !PropertyContainer.getInstance().getAsBoolean( "editor.options.view.hideDefaultFloor" ) )
-				editView.setFloor( 1 );
-			// Updaten der gui
-			this.getEditView().update();
-			sendMessage( loc.getString( "gui.editor.JEditor.message.loaded" ) );
-		} catch( Exception ex ) {
-			JOptionPane.showMessageDialog( null,
-							loc.getString( "gui.editor.JEditor.error.loadError" ),
-							loc.getString( "gui.editor.JEditor.error.loadErrorTitle" ),
-							JOptionPane.ERROR_MESSAGE );
-			ex.printStackTrace();
-			editView.displayProject( EditorStart.newProject() );
-			sendMessage( loc.getString( "gui.editor.JEditor.message.loadError" ) );
-		}
-	}
 
 	/**
 	 * Adds a {@link BatchProjectEntry} that can be loaded from a batch task file
@@ -1972,10 +1997,10 @@ public class JEditor extends JFrame implements Localized, EventListener<Progress
 		GraphVisualizationResult graphRes = e.getGraphVis();
 
 		VisualizationDataStructureTask visualizationDataStructure = new VisualizationDataStructureTask( caRes, graphRes, e.getBuildingResults(), caStatistic );
-		JProgressBarDialog pbd = new JProgressBarDialog( JEditor.getInstance(), loc.getStringWithoutPrefix( "batch.tasks.buildVisualizationDatastructure" ), true, visualizationDataStructure );
+		JProgressBarDialog pbd = new JProgressBarDialog( getInstance(), loc.getStringWithoutPrefix( "batch.tasks.buildVisualizationDatastructure" ), true, visualizationDataStructure );
 		pbd.executeTask();
 		pbd.setVisible( true );
-		sendMessage( loc.getStringWithoutPrefix( "batch.tasks.progress.visualizationDatastructureComplete" ) );
+		ZETMain.sendMessage( loc.getStringWithoutPrefix( "batch.tasks.progress.visualizationDatastructureComplete" ) );
 		control = visualizationDataStructure.getControl();
 
 		visualizationView.getGLContainer().setControl( control );
@@ -2033,7 +2058,7 @@ public class JEditor extends JFrame implements Localized, EventListener<Progress
 				printException( ex );
 			}
 		} catch( ZToCAConverter.ConversionNotSupportedException ex ) {
-			JEditor.sendError( ex.getLocalizedMessage() );
+			ZETMain.sendError( ex.getLocalizedMessage() );
 		}
 	}
 
@@ -2048,7 +2073,7 @@ public class JEditor extends JFrame implements Localized, EventListener<Progress
 			try {
 				copyFile( file, new File( dest ), 100, true );
 			} catch( Exception e ) {
-				sendError( "Fehler beim anlegen der Sicherungskopie" );
+				ZETMain.sendError( "Fehler beim anlegen der Sicherungskopie" );
 			}
 		}
 	}
@@ -2131,7 +2156,7 @@ public class JEditor extends JFrame implements Localized, EventListener<Progress
 				printException( ex );
 			}
 		} catch( ZToCAConverter.ConversionNotSupportedException ex ) {
-			JEditor.sendError( ex.getLocalizedMessage() );
+			ZETMain.sendError( ex.getLocalizedMessage() );
 		}
 	}
 	PropertyChangeListener pclStepByStep = new PropertyChangeListener() {
@@ -2276,13 +2301,13 @@ public class JEditor extends JFrame implements Localized, EventListener<Progress
 	 */
 	private void switchTo( int tabID ) {
 		if( tabID == CA_FLOOR && worker == null ) {
-			JEditor.sendError( loc.getStringWithoutPrefix( "gui.error.StartSimulation" ) );
+			ZETMain.sendError( loc.getStringWithoutPrefix( "gui.error.StartSimulation" ) );
 			tabPane.setSelectedIndex( currentMode );
 			return;
 		}
 		// TODO better implementation of this stuff for debug mode ?
-		if( ((EditorStart.isDebug() && tabID > CA_FLOOR) || (!EditorStart.isDebug() && tabID > BATCH)) && result == null ) {
-			JEditor.sendError( loc.getStringWithoutPrefix( "gui.error.CreateBatch" ) );
+		if( ((ZETMain.isDebug() && tabID > CA_FLOOR) || (!ZETMain.isDebug() && tabID > BATCH)) && result == null ) {
+			ZETMain.sendError( loc.getStringWithoutPrefix( "gui.error.CreateBatch" ) );
 			tabPane.setSelectedIndex( currentMode );
 			return;
 		}
@@ -2307,7 +2332,7 @@ public class JEditor extends JFrame implements Localized, EventListener<Progress
 		else if( tabID == GRAPH_STATISTIC )
 			showToolBar( toolBarGraphStats );
 		else
-			sendError( "Unbekannte TabID: " + Integer.toString( tabID ) + ". " + loc.getString( "gui.ContactDeveloper" ) );//		switch( tabID ) {
+			ZETMain.sendError( "Unbekannte TabID: " + Integer.toString( tabID ) + ". " + loc.getString( "gui.ContactDeveloper" ) );//		switch( tabID ) {
 //			case EDIT_FLOOR:
 //				showToolBar( toolBarEdit );
 //				break;
@@ -2328,7 +2353,7 @@ public class JEditor extends JFrame implements Localized, EventListener<Progress
 //				showToolBar( toolBarGraphStats );
 //				break;
 //			default:
-//				sendError( "Unbekannte TabID: " + Integer.toString( tabID  ) + ". " + loc.getString( "gui.ContactDeveloper" ) );	// todo loc
+//				ZETMain.sendError( "Unbekannte TabID: " + Integer.toString( tabID  ) + ". " + loc.getString( "gui.ContactDeveloper" ) );	// todo loc
 //				break;
 //		}
 		repaint();
@@ -2381,9 +2406,9 @@ public class JEditor extends JFrame implements Localized, EventListener<Progress
 			val = val / 2.5d;
 			setZoomFactor( val / 100 );
 		} catch( ParseException ex2 ) {
-			sendError( loc.getString( "gui.error.NonParsableNumber" ) );
+			ZETMain.sendError( loc.getString( "gui.error.NonParsableNumber" ) );
 		} catch( IllegalArgumentException ex ) {
-			sendError( loc.getString( ex.getLocalizedMessage() ) );
+			ZETMain.sendError( loc.getString( ex.getLocalizedMessage() ) );
 		}
 	}
 
@@ -2421,7 +2446,7 @@ public class JEditor extends JFrame implements Localized, EventListener<Progress
 //		} else {
 //			if( event.getProcessMessage().progress >= 0 )
 //				progressBar.setValue( event.getProcessMessage().progress );
-		sendMessage( event.getProcessMessage().taskName );
+		ZETMain.sendMessage( event.getProcessMessage().taskName );
 //			lblTaskInfo.setText( event.getProcessMessage().taskProgressInformation );
 //		}
 	}
@@ -2569,7 +2594,7 @@ public class JEditor extends JFrame implements Localized, EventListener<Progress
 				else
 					return null;
 			} catch( IOException ex ) {
-				JEditor.sendError( "Error while loading temp file: " + ex.getLocalizedMessage() );
+				ZETMain.sendError( "Error while loading temp file: " + ex.getLocalizedMessage() );
 				return null;
 			}
 		}
@@ -2605,7 +2630,7 @@ public class JEditor extends JFrame implements Localized, EventListener<Progress
 				else
 					return null;
 			} catch( IOException ex ) {
-				JEditor.sendError( "Error while loading temp file: " + ex.getLocalizedMessage() );
+				ZETMain.sendError( "Error while loading temp file: " + ex.getLocalizedMessage() );
 				return null;
 			}
 		}

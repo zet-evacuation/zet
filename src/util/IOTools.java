@@ -18,7 +18,7 @@
  * Erstellt 20.09.2008, 17:51:39
  */
 
-package io;
+package util;
 
 import java.io.File;
 import java.text.ParseException;

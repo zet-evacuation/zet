@@ -27,7 +27,7 @@ import java.util.ArrayList;
 import ds.ca.Individual;
 import ds.ca.ExitCell;
 import ds.ca.StaticPotential;
-import gui.EditorStart;
+import gui.ZETMain;
 
 /**
  *
@@ -86,7 +86,7 @@ public class StoredCAStatisticResultsForIndividuals {
     
     
     public void addChangedPotentialToStatistic(Individual ind, int t){
-			if( !EditorStart.useStatistic ) 
+			if( !ZETMain.useStatistic )
 				return;
 			
         if(!(changePotentialTimes.containsKey(ind))){
@@ -99,7 +99,7 @@ public class StoredCAStatisticResultsForIndividuals {
     
     
     public void addCoveredDistanceToStatistic(Individual ind, int t, double distance){
-			if( !EditorStart.useStatistic ) 
+			if( !ZETMain.useStatistic )
 				return;
 			
         double lastCoveredDistance=0;
@@ -116,7 +116,7 @@ public class StoredCAStatisticResultsForIndividuals {
         
     
     public void addWaitedTimeToStatistic(Individual ind, int t) {
-			if( !EditorStart.useStatistic ) 
+			if( !ZETMain.useStatistic )
 				return;
 			
         int lastWaitedTime=0;
@@ -134,7 +134,7 @@ public class StoredCAStatisticResultsForIndividuals {
  
     
     public void addMinDistancesToStatistic(Individual ind, double distNearest, double distPlanned) {
-			if( !EditorStart.useStatistic )
+			if( !ZETMain.useStatistic )
 				return;
 			
         if(!(minDistanceToNearestExit.containsKey(ind))){
@@ -151,7 +151,7 @@ public class StoredCAStatisticResultsForIndividuals {
     
     
     public void addExhaustionToStatistic(Individual ind, int t, double actualExhaustion){
-			if( !EditorStart.useStatistic ) 
+			if( !ZETMain.useStatistic )
 				return;
 			
         if(!(exhaustionTimes.containsKey(ind))){
@@ -164,7 +164,7 @@ public class StoredCAStatisticResultsForIndividuals {
     }
     
     public void addPanicToStatistic(Individual ind, int t, double actualPanic){
-			if( !EditorStart.useStatistic ) 
+			if( !ZETMain.useStatistic )
 				return;
 			
         if(!(panicTimes.containsKey(ind))){
@@ -177,7 +177,7 @@ public class StoredCAStatisticResultsForIndividuals {
     
     
     public void addCurrentSpeedToStatistic(Individual ind, int t, double speed){
-			if( !EditorStart.useStatistic ) 
+			if( !ZETMain.useStatistic )
 				return;
 			
         if(!(currentSpeedTimes.containsKey(ind))){

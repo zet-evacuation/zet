@@ -112,6 +112,9 @@ public class Visualization extends AbstractVisualization implements EventListene
 		else
 			this.setPvm( ParallelViewMode.Orthogonal );
 
+
+
+
 		EventServer.getInstance().registerListener( this, OptionsChangedEvent.class );
 	}
 
@@ -123,6 +126,11 @@ public class Visualization extends AbstractVisualization implements EventListene
 		gl.glEnable( GL.GL_DEPTH_TEST );																// Enable depth-buffer. (z-buffer)
 		gl.glShadeModel( GL.GL_SMOOTH );																// Activate smooth-shading (Gauraud)
 		gl.glHint( GL.GL_PERSPECTIVE_CORRECTION_HINT, GL.GL_NICEST );		// Perspective calculations with high precision
+    gl.glHint( GL.GL_GENERATE_MIPMAP_HINT, GL.GL_NICEST );					//
+//    gl.glHint( GL.GL_FOG_HINT, GL.GL_NICEST );										//
+    gl.glHint( GL.GL_LINE_SMOOTH_HINT, GL.GL_NICEST );							//
+    gl.glHint( GL.GL_POINT_SMOOTH_HINT, GL.GL_NICEST );							//
+    gl.glHint( GL.GL_POLYGON_SMOOTH_HINT, GL.GL_NICEST );						//
 
 		// Enable VSync
 		gl.setSwapInterval( 1 );
@@ -167,6 +175,15 @@ public class Visualization extends AbstractVisualization implements EventListene
 		fontTex.bind();
 
 		gl.glEnable( GL.GL_NORMALIZE );
+
+//		if ( glewIsSupported( "GL_EXT_texture_filter_anisotropic" ) ) {
+//	    float maxAni;
+//			glGetFloatv( GL_MAX_TEXTURE_MAX_ANISOTROPY_EXT, &maxAni );
+//			glBindTexture( GL_TEXTURE_2D, theTex );
+//			glTexParameterf( GL_TEXTURE_2D, GL_TEXTURE_MAX_ANISOTROPY_EXT, maxAni );
+//		}
+}
+
 
 		if( control == null )
 			control = new GLControl();

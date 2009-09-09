@@ -23,6 +23,7 @@ import ds.Project;
 import ds.PropertyContainer;
 import ds.z.Assignment;
 import gui.JEditor;
+import gui.ZETMain;
 import gui.editor.properties.JPropertyComboBox;
 import gui.editor.properties.PropertyFilesSelectionModel;
 import gui.editor.properties.PropertyFilesSelectionModel.Property;
@@ -140,11 +141,11 @@ public class JBatchView extends JPanel {
 				}
 
 				if( errorMessage != null ) {
-					JEditor.sendError( errorMessage );
+					ZETMain.sendError( errorMessage );
 					if( !txtCycles.getText().equals( "" ) )
 						txtCycles.setText( Integer.toString( cycles ) );
 				} else {
-					JEditor.sendError( "" ); // Clear error messages
+					ZETMain.sendError( "" ); // Clear error messages
 					batch.setCyclesForAllEntries( cycles );
 					tablemodel.fireTableDataChanged();
 				}
@@ -164,12 +165,12 @@ public class JBatchView extends JPanel {
 				}
 
 				if( errorMessage != null ) {
-					JEditor.sendError( errorMessage );
+					ZETMain.sendError( errorMessage );
 					if( !txtSeed.getText().equals( "" ) &&
 									!txtSeed.getText().equals( "-" ) )
 						txtSeed.setText( Integer.toString( cycles ) );
 				} else
-					JEditor.sendError( "" );
+					ZETMain.sendError( "" );
 			}
 		} );
 
@@ -177,7 +178,7 @@ public class JBatchView extends JPanel {
 			public void actionPerformed( ActionEvent e ) {
 				try {
 					if( batch.getEntries().isEmpty() ) {
-						JEditor.sendError( Localization.getInstance().getString( "gui.editor.JBatchView.emptyBatch" ) );
+						ZETMain.sendError( Localization.getInstance().getString( "gui.editor.JBatchView.emptyBatch" ) );
 						return;
 					}
 
@@ -185,14 +186,14 @@ public class JBatchView extends JPanel {
 					try {
 						RandomUtils.getInstance().setSeed( Long.parseLong( txtSeed.getText() ) );
 					} catch( NumberFormatException ex ) {
-						JEditor.sendError( Localization.getInstance().getString(
+						ZETMain.sendError( Localization.getInstance().getString(
 										"gui.error.NonParsableNumber" ) );
 						return;
 					}
 
 					JEditor.getInstance().setBatchResult( batch.execute( chkTempFiles.isSelected() ) );
 				} catch( Exception ex ) {
-					JEditor.sendError( ex.getLocalizedMessage() );
+					ZETMain.sendError( ex.getLocalizedMessage() );
 					ex.printStackTrace();
 				}
 			}
@@ -284,7 +285,7 @@ public class JBatchView extends JPanel {
 					batch.removeEntry( batch.getEntries().get( tblEntries.getSelectedRow() ) );
 					tablemodel.fireTableDataChanged();
 				} else
-					JEditor.sendMessage( Localization.getInstance().getString( "gui.editor.JBatchView.selectLineFirst" ) );
+					ZETMain.sendMessage( Localization.getInstance().getString( "gui.editor.JBatchView.selectLineFirst" ) );
 			}
 		} );
 		tableButtons.add( btnDeleteEntry );
@@ -339,7 +340,7 @@ public class JBatchView extends JPanel {
 			batch.addEntry( "Neuer Eintrag", project, cycles, GraphAlgorithm.SuccessiveEarliestArrivalAugmentingPathOptimized, CellularAutomatonAlgorithm.Swap );
 			tablemodel.fireTableDataChanged();
 		} catch( Exception ex ) {
-			JEditor.sendError( ex.getLocalizedMessage() );
+			ZETMain.sendError( ex.getLocalizedMessage() );
 		}
 	}
 
@@ -382,7 +383,7 @@ public class JBatchView extends JPanel {
 							batchProjectEntry.getEvacuationOptimizationRuns(),
 							property );
 		} catch( Exception ex ) {
-			JEditor.sendError( ex.getLocalizedMessage() );
+			ZETMain.sendError( ex.getLocalizedMessage() );
 		}
 	}
 
@@ -531,20 +532,20 @@ public class JBatchView extends JPanel {
 					try {
 						batch.getEntries().get( row ).setCycles( Integer.parseInt( aValue.toString() ) );
 					} catch( NumberFormatException ex ) {
-						JEditor.sendError( Localization.getInstance().getString(
+						ZETMain.sendError( Localization.getInstance().getString(
 										"gui.error.NonParsableNumber" ) );
 					} catch( RuntimeException ex ) {
-						JEditor.sendError( ex.getLocalizedMessage() );
+						ZETMain.sendError( ex.getLocalizedMessage() );
 					}
 					break;
 				case COL_CA_MAX_TIME:
 					try {
 						batch.getEntries().get( row ).setCaMaxTime( Double.parseDouble( aValue.toString() ) );
 					} catch( NumberFormatException ex ) {
-						JEditor.sendError( Localization.getInstance().getString(
+						ZETMain.sendError( Localization.getInstance().getString(
 										"gui.error.NonParsableFloatString" ) );
 					} catch( RuntimeException ex ) {
-						JEditor.sendError( ex.getLocalizedMessage() );
+						ZETMain.sendError( ex.getLocalizedMessage() );
 					}
 					break;
 				case COL_OPTIMIZE:
@@ -557,10 +558,10 @@ public class JBatchView extends JPanel {
 					try {
 						batch.getEntries().get( row ).setOptimizedEvacuationPlanCycles( Integer.parseInt( aValue.toString() ) );
 					} catch( NumberFormatException ex ) {
-						JEditor.sendError( Localization.getInstance().getString(
+						ZETMain.sendError( Localization.getInstance().getString(
 										"gui.error.NonParsableNumber" ) );
 					} catch( RuntimeException ex ) {
-						JEditor.sendError( ex.getLocalizedMessage() );
+						ZETMain.sendError( ex.getLocalizedMessage() );
 					}
 					break;
 				case COL_EVACUATION_PLAN_TYPE:
@@ -578,10 +579,10 @@ public class JBatchView extends JPanel {
 					try {
 						batch.getEntries().get( row ).setGraphMaxTime( Integer.parseInt( aValue.toString() ) );
 					} catch( NumberFormatException ex ) {
-						JEditor.sendError( Localization.getInstance().getString(
+						ZETMain.sendError( Localization.getInstance().getString(
 										"gui.error.NonParsableNumber" ) );
 					} catch( RuntimeException ex ) {
-						JEditor.sendError( ex.getLocalizedMessage() );
+						ZETMain.sendError( ex.getLocalizedMessage() );
 					}
 					break;
 				default:

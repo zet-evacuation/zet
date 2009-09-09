@@ -20,7 +20,7 @@
 
 package io.movie;
 
-import io.IOTools;
+import util.IOTools;
 import java.util.Vector;
 import javax.swing.JPanel;
 

@@ -25,7 +25,6 @@ import com.thoughtworks.xstream.annotations.XStreamOmitField;
 import ds.z.event.ChangeEvent;
 import ds.z.event.ChangeListener;
 import ds.z.event.ChangeReporter;
-import ds.z.event.EvacuationAreaCreatedEvent;
 import ds.z.exception.AreaNotInsideException;
 import ds.z.exception.PolygonNotClosedException;
 import ds.z.exception.RoomIntersectException;
@@ -151,48 +150,48 @@ public class BuildingPlan implements Serializable, ChangeListener, ChangeReporte
 	/**
 	 * Moves the given floor one position further towards the beginning of the floor list. Only changes
 	 * the order of the floors.
-	 * @param f the floor to move
+	 * @param level the index of the floor to move
 	 * @throws IllegalArgumentException If the given floor is not in the list or if you try to move the 
 	 * default evacuation floor
 	 */
-	public void moveFloorUp( Floor f ) throws IllegalArgumentException {
-		if( floors.contains( f ) ) {
-			int pos = floors.indexOf( f );
-			if( pos == 0 )
-				throw new IllegalArgumentException( "You may not move the default evacuation floor!" );
-			else if( pos < floors.size() - 1 ) {
-				floors.set( pos, floors.get( pos + 1 ) );
-				floors.set( pos + 1, f );
-				throwChangeEvent( new ChangeEvent( this ) );
-			}
+	public void moveFloorUp( int level ) {
+		if( level == 0 )
+			throw new IllegalArgumentException( "You may not move the default evacuation floor." );
+		else if( level < 0 )
+			throw new IllegalArgumentException( "There is no floor with negative id." );
+		else if( level < floors.size() - 1 ) {
+			final Floor f = floors.get( level );
+			floors.set( level, floors.get( level + 1 ) );
+			floors.set( level + 1, f );
+			throwChangeEvent( new ChangeEvent( this ) );
 		} else
-			throw new IllegalArgumentException( "The given floor is not on the list!" );
+			throw new IllegalArgumentException( "The given floor is not on the list." );
 	}
 
 	/**
 	 * Moves the given floor one position further towards the end of the floor list. Only changes
 	 * the order of the floors.
-	 * @param f the floor to move
-	 * @throws IllegalArgumentException If the given floor is not in the list or if you try to move the 
+	 * @param level the index of the floor to move
+	 * @throws IllegalArgumentException If the given floor is not in the list or if you try to move the
 	 * default evacuation floor
 	 */
-	public void moveFloorDown( Floor f ) throws IllegalArgumentException {
-		if( floors.contains( f ) ) {
-			int pos = floors.indexOf( f );
-
-			if( pos <= 1 )
-				throw new IllegalArgumentException( "You may not move the default evac floor!" );
-			else {
-				floors.set( pos, floors.get( pos - 1 ) );
-				floors.set( pos - 1, f );
-				throwChangeEvent( new ChangeEvent( this ) );
-			}
+	public void moveFloorDown( int level ) {
+		if( level < 0 )
+			throw new IllegalArgumentException( "There is no floor with negative id." );
+		else if( level <= 1 )
+			throw new IllegalArgumentException( "You may not move the default evacuation floor." );
+		else if( level <= floors.size() - 1 ) {
+			final Floor f = floors.get( level );
+			floors.set( level, floors.get( level - 1 ) );
+			floors.set( level - 1, f );
+			throwChangeEvent( new ChangeEvent( this ) );
 		} else
-			throw new IllegalArgumentException( "The given floor is not on the list!" );
+			throw new IllegalArgumentException( "The given floor is not on the list." );
 	}
 
-	/** @return The default floor that exists in each BuildingPlan as 
-	 * the first registered floor. */
+	/**
+	 * Returns the default floor that exists in each {@link BuildingPlan} as  the first registered floor.
+	 * @return the default floor that exists in each {@link BuildingPlan} as the first registered floor */
 	public DefaultEvacuationFloor getDefaultFloor() {
 		return (DefaultEvacuationFloor)floors.get( 0 );
 	}

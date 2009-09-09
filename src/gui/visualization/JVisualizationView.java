@@ -20,7 +20,7 @@
 package gui.visualization;
 
 import ds.PropertyContainer;
-import gui.EditorStart;
+import gui.ZETMain;
 import gui.JEditor;
 import gui.components.ComboBoxRenderer;
 import gui.components.FloorComboBoxModel;
@@ -271,7 +271,7 @@ public class JVisualizationView extends AbstractVisualizationView<Visualization>
 					camera.getUp().parse( txtCameraUp.getText() );
 					visualization.repaint();
 				} catch( ParseException ex ) {
-					JEditor.sendError( loc.getStringWithoutPrefix( "gui.error.CameraParseError" ) );
+					ZETMain.sendError( loc.getStringWithoutPrefix( "gui.error.CameraParseError" ) );
 				}
 			}
 		});
