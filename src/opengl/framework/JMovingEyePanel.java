@@ -42,7 +42,7 @@ public class JMovingEyePanel extends JOpenGLCanvas {
 	private int initMouseY;
 	private boolean mouseMove;
 	private Vector3 initView;
-	private Vector3 initUp;
+	private Vector3 initUp = up;
 	double speed = 0.05;
 	double speedStep = 0.01;
 	double minSpeed = 0;
@@ -164,7 +164,7 @@ public class JMovingEyePanel extends JOpenGLCanvas {
 		repaint();
 	}
 
-	private void pitch( double angle ) {
+	protected void pitch( double angle ) {
 	  Vector3 xa;
 
 		xa = view.crossProduct( initUp ); // view * up;
@@ -172,11 +172,11 @@ public class JMovingEyePanel extends JOpenGLCanvas {
 		up = Vector3.rotateVector( angle, xa, initUp );
 	}
 
-	private void yaw( double angle ) {
+	protected void yaw( double angle ) {
 		view = Vector3.rotateVector( angle, up, view );
 	}
 	
-	private void roll( double angle ) {
+	protected void roll( double angle ) {
 		up = Vector3.rotateVector( angle, view, up );
 	}
 
