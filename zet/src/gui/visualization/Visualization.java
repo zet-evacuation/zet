@@ -19,7 +19,6 @@
  */
 package gui.visualization;
 
-import com.sun.opengl.util.texture.Texture;
 import ds.PropertyContainer;
 import event.EventListener;
 import event.EventServer;
@@ -40,6 +39,7 @@ import javax.media.opengl.glu.GLUquadric;
 import localization.Localization;
 import opengl.drawingutils.GLColor;
 import opengl.helper.Frustum;
+import opengl.helper.Texture;
 import opengl.helper.TextureFont;
 import opengl.helper.TextureManager;
 import util.vectormath.Vector3;
@@ -166,9 +166,11 @@ public class Visualization extends AbstractVisualization implements EventListene
 
 		// load textures
 		texMan = TextureManager.getInstance();
-		texMan.load( "font2", "./textures/font2.bmp" );
+		texMan.setGL( gl );
+		texMan.setGLU( glu );
+		//texMan.load( "font2", "./textures/font2.bmp" );
+		fontTex = texMan.newTexture( "font2", "./textures/font2.bmp" );
 		// load texture font
-		fontTex = texMan.get( "font2" );
 		font = new TextureFont( gl, fontTex );
 		font.buildFont( 16, 8, 16, 12, 9 );
 		//font.buildFont( 16, 8, 16, 24, 19 );
@@ -182,7 +184,7 @@ public class Visualization extends AbstractVisualization implements EventListene
 //			glBindTexture( GL_TEXTURE_2D, theTex );
 //			glTexParameterf( GL_TEXTURE_2D, GL_TEXTURE_MAX_ANISOTROPY_EXT, maxAni );
 //		}
-}
+
 
 
 		if( control == null )

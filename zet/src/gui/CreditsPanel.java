@@ -19,19 +19,21 @@
  */
 package gui;
 
-import com.sun.opengl.util.texture.Texture;
 import javax.media.opengl.GL;
 import javax.media.opengl.GLAutoDrawable;
-import opengl.framework.JOrthoPanel;
+import javax.media.opengl.glu.GLU;
+import opengl.framework.JMovingEyePanel;
+import opengl.helper.Texture;
 import opengl.helper.TextureFont;
 import opengl.helper.TextureManager;
+import util.vectormath.Vector3;
 
 /**
  * An OpenGL-panel displaying some textual copyright information about the zet
  * evacuation tool. The information scrolls from bottom to top, and starts again.
  * @author Jan-Philipp Kappmeier
  */
-public class CreditsPanel extends JOrthoPanel {
+public class CreditsPanel extends JMovingEyePanel {
 	/** The size of the panel, used for text position calculation. */
 	private static int width = 480;
 	/** The instance of the texture manager. */
@@ -45,7 +47,8 @@ public class CreditsPanel extends JOrthoPanel {
 	/** A texture-font object using to draw text on the {@code OpenGL} panel */
 	private TextureFont font;
 	/** The top position of the text */
-	private double startPos = -128; // 256 height of picture, 84 black pixels
+	//private double startPos = -128; // 256 height of picture, 84 black pixels
+	private float startPos = -5; // 256 height of picture, 84 black pixels
 	/** The array containing the text. */
 	private CreditsString[] lines = {
 		new CreditsString( "zet evakuierungs-tool", true ),
@@ -155,15 +158,21 @@ public class CreditsPanel extends JOrthoPanel {
 		super.initGFX( drawable );
 		if( !texturesLoaded ) {
 			texMan = TextureManager.getInstance();
+			texMan.setGL( drawable.getGL() );
+			GLU glu = new GLU();
+			texMan.setGLU( glu );
 			loadTextures();
 			texturesLoaded = true;
-			texFont = texMan.get( "font1" );
-			texLogo = texMan.get( "logo1" );
+			//texFont = texMan.get( "font1" );
+			//texLogo = texMan.get( "logo1" );
 			font = new TextureFont( drawable.getGL(), texFont );
-			font.buildFont( 16, 14, 16, 12, 9 );
+			font.buildFont3( 16, 14, 16, 0.7f, (0.7f*3)/4 );
 			//font.buildFont( 16, 8, 16, 24, 19 );
 			texFont.bind();
 		}
+		this.pitch( 20 );
+		Vector3 pos = getPos();
+		pos.y += 7;
 	}
 
 	@Override
@@ -175,26 +184,56 @@ public class CreditsPanel extends JOrthoPanel {
 		super.display( drawable );	// clear the screen
 		//GL gl = drawable.getGL();
 
-		gl.glEnable( GL.GL_TEXTURE_2D );
-		this.switchToPrintScreen( gl );
+		//super.updateViewport( drawable, WIDTH, WIDTH, width, width )
 
+		//gl.glEnable( GL.GL_TEXTURE_2D );
+
+//gl.glTranslatef(0, 0,-6);
+//gl.glTranslatef(-1.5f,0,0);
+		gl.glLoadIdentity();
+		this.look();
+//l.glTranslatef(-1.5f, 0,-6);
+//gl.glBegin( GL.GL_TRIANGLES );
+//  gl.glColor3f(1, 0, 0); gl.glVertex3f(-1,-1, -3);
+//  gl.glColor3f(0, 0, 1); gl.glVertex3f( 1,-1, -3);
+//  gl.glColor3f(0, 1, 0); gl.glVertex3f( 0, 1, -3);
+//gl.glEnd();
+		gl.glEnable( GL.GL_TEXTURE_2D );
 		texLogo.bind();
-		// Draw a logo
 		gl.glBegin( GL.GL_QUADS );
 			gl.glTexCoord2f( 0.0f, 1.0f );
-			gl.glVertex3d( (width-256)/2, startPos, 0 );
+			gl.glVertex3d( -10, -4, startPos );					// Unten links
 			gl.glTexCoord2f( 0.0f, 0.0f );
-			gl.glVertex3d( (width-256)/2, startPos + 128, 0 );
+			gl.glVertex3d( -10, -4, startPos -10 );					// Oben links
 			gl.glTexCoord2f( 1.0f, 0.0f );
-			gl.glVertex3d( (width-256)/2+256, startPos + 128, 0 );
+			gl.glVertex3d( 10, -4, startPos- 10 );						// Oben rechts
 			gl.glTexCoord2f( 1.0f, 1.0f );
-			gl.glVertex3d( (width-256)/2+250, startPos, 0 );
+			gl.glVertex3d( 10, -4, startPos );						// Unten rechts
 		gl.glEnd();
 
-		texFont.bind();
-		drawLines( lines );
 
-		this.switchToOrthoScreen( gl );
+//		this.switchToPrintScreen( gl );
+//
+//		texLogo.bind();
+//		// Draw a logo
+//		gl.glBegin( GL.GL_QUADS );
+//			gl.glTexCoord2f( 0.0f, 1.0f );
+//			gl.glVertex3d( (width-256)/2, startPos, startPos );
+//			gl.glTexCoord2f( 0.0f, 0.0f );
+//			gl.glVertex3d( (width-256)/2, startPos + 128, startPos + 128 );
+//			gl.glTexCoord2f( 1.0f, 0.0f );
+//			gl.glVertex3d( (width-256)/2+256, startPos + 128, startPos + 128 );
+//			gl.glTexCoord2f( 1.0f, 1.0f );
+//			gl.glVertex3d( (width-256)/2+250, startPos, startPos );
+//		gl.glEnd();
+//
+//		gl.glFlush();
+		texFont.bind();
+		String text = "Text";
+		//font.print( -1.7f, -1, -3, text );
+		drawLines( lines, startPos + 1  );
+//
+//		this.switchToOrthoScreen( gl );
 	}
 
 	@Override
@@ -203,9 +242,11 @@ public class CreditsPanel extends JOrthoPanel {
 	 * lags can occur on slower hardware.
 	 */
 	public void animate() {
-		super.animate();
 		double timePerPixel = 39;	// in milliseconds
-		timePerPixel = 50;
+		timePerPixel = 1000;
+		startPos -= ( this.getDeltaTime() / timePerPixel );
+		if( true ) return;
+		super.animate();
 		startPos += ( this.getDeltaTime() / timePerPixel );
 	}
 
@@ -213,8 +254,8 @@ public class CreditsPanel extends JOrthoPanel {
 	 * Loads the texture file from harddisk.
 	 */
 	private void loadTextures() {
-		texMan.load( "font1", "./textures/font1.bmp" );
-		texMan.load( "logo1", "./textures/logo1.png" );
+		texLogo = texMan.newTexture( "logo1", "./textures/logo1.png" );
+		texFont = texMan.newTexture( "font1", "./textures/font1.bmp" );
 	}
 
 	/**
@@ -222,12 +263,14 @@ public class CreditsPanel extends JOrthoPanel {
 	 * completely scrolled over the whole screen, the top position is resetted.
 	 * @param lines an array containing all lines that should be displayed
 	 */
-	private void drawLines( CreditsString[] lines ) {
-		int start = (int) Math.floor( startPos );
+	private void drawLines( CreditsString[] lines, float start ) {
+		//font.print( -1.7f, -1, -3, text );
+		//int start = (int) Math.floor( startPos );
 		int end = 0;
 		for( int i = 0; i < lines.length; i++ ) {
-			font.print( lines[i].position(), start - i * 16, lines[i].text() );
-			end = start - i * 16 + 12;
+			//font.print( lines[i].position(), start - i * 16, lines[i].text() );
+			font.print( -lines[i].position(), -4f, start + i * 1.1f, lines[i].text() );
+			//end = start - i * 16 + 12;
 		}
 		if( end > this.getHeight() + 48 )
 			startPos = -128;
@@ -258,8 +301,9 @@ public class CreditsPanel extends JOrthoPanel {
 		 * Returns the <code>x</code>-position of the line
 		 * @return the <code>x</code>-position of the line
 		 */
-		public int position() {
-			return centered ? (width - (string.length() * 9))/2 : (width - (40*9))/2;
+		public float position() {
+			//return centered ? (width - (string.length() * 9))/2 : (width - (40*9))/2;
+			return (float)(centered ? ((((0.7f*3)/4) * (string.length())) * 0.5) : 10.3);
 		}
 
 		/**
