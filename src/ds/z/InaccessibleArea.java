@@ -21,7 +21,6 @@
 package ds.z;
 
 import com.thoughtworks.xstream.annotations.XStreamAlias;
-import ds.z.Barrier;
 import java.util.ArrayList;
 
 /**
