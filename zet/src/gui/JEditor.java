@@ -1303,12 +1303,12 @@ public class JEditor extends JFrame implements Localized, EventListener<Progress
 							target = new File( target.getAbsolutePath() + ".zet" );
 						getProject().save( target );
 					} catch( java.lang.StackOverflowError soe ) {
-						showErrorMessage( loc.getString( "gui.editor.error.stackOverflowTitle" ), loc.getString( "gui.editor.error.stackOverflow" ) );
+						showErrorMessage( loc.getString( "gui.editor.JEditor.error.stackOverflowTitle" ), loc.getString( "gui.editor.JEditor.error.stackOverflow" ) );
 					} catch( Exception ex ) {
-						showErrorMessage( loc.getString( "gui.editor.error.SaveTitle" ), loc.getString( "gui.editor.error.Save" ) );
+						showErrorMessage( loc.getString( "gui.editor.JEditor.error.SaveTitle" ), loc.getString( "gui.editor.JEditor.error.Save" ) );
 					}
 					editView.displayProject( getProject() );
-					ZETMain.sendMessage( loc.getString( "gui.editor.message.saved" ) );
+					ZETMain.sendMessage( loc.getString( "gui.editor.JEditor.message.saved" ) );
 				}
 			} else if( e.getActionCommand().equals( "saveProject" ) ) {
 				if( createCopy == true )
@@ -1316,18 +1316,18 @@ public class JEditor extends JFrame implements Localized, EventListener<Progress
 				try {
 					getProject().save();
 				} catch( java.lang.StackOverflowError soe ) {
-					showErrorMessage( loc.getString( "gui.editor.error.stackOverflowTitle" ), loc.getString( "gui.editor.error.stackOverflow" ) );
+					showErrorMessage( loc.getString( "gui.editor.JEditor.error.stackOverflowTitle" ), loc.getString( "gui.editor.JEditor.error.stackOverflow" ) );
 				} catch( Exception ex ) {
-					showErrorMessage( loc.getString( "gui.editor.error.SaveTitle" ), loc.getString( "gui.editor.error.Save" ) );
+					showErrorMessage( loc.getString( "gui.editor.JEditor.error.SaveTitle" ), loc.getString( "gui.editor.JEditor.error.Save" ) );
 					ex.printStackTrace();
 					return;
 				}
-				ZETMain.sendMessage( loc.getString( "gui.editor.message.saved" ) );
+				ZETMain.sendMessage( loc.getString( "gui.editor.JEditor.message.saved" ) );
 			} else if( e.getActionCommand().equals( "newProject" ) ) {
 				String status = "";
 				switch( JOptionPane.showOptionDialog( getInstance(),
-								loc.getString( "gui.editor.SaveQuestion" ),
-								loc.getString( "gui.editor.NewProject" ),
+								loc.getString( "gui.editor.JEditor.SaveQuestion" ),
+								loc.getString( "gui.editor.JEditor.NewProject" ),
 								JOptionPane.YES_NO_CANCEL_OPTION,
 								JOptionPane.QUESTION_MESSAGE,
 								null, null, null ) ) {
@@ -1343,9 +1343,9 @@ public class JEditor extends JFrame implements Localized, EventListener<Progress
 								try {
 									getProject().save( jfcProject.getSelectedFile() );
 								} catch( java.lang.StackOverflowError soe ) {
-									showErrorMessage( loc.getString( "gui.editor.error.stackOverflowTitle" ), loc.getString( "gui.editor.error.stackOverflow" ) );
+									showErrorMessage( loc.getString( "gui.editor.JEditor.error.stackOverflowTitle" ), loc.getString( "gui.editor.error.JEditor.stackOverflow" ) );
 								} catch( Exception ex ) {
-									showErrorMessage( loc.getString( "gui.editor.error.SaveTitle" ), loc.getString( "gui.editor.error.Save" ) );
+									showErrorMessage( loc.getString( "gui.editor.JEditor.error.SaveTitle" ), loc.getString( "gui.editor.JEditor.error.Save" ) );
 									ex.printStackTrace();
 									return;
 								}
@@ -1356,17 +1356,17 @@ public class JEditor extends JFrame implements Localized, EventListener<Progress
 							try {
 								getProject().save();
 							} catch( java.lang.StackOverflowError soe ) {
-								showErrorMessage( loc.getString( "gui.editor.error.stackOverflowTitle" ), loc.getString( "gui.editor.error.stackOverflow" ) );
+								showErrorMessage( loc.getString( "gui.editor.JEditor.error.stackOverflowTitle" ), loc.getString( "gui.editor.JEditor.error.stackOverflow" ) );
 							} catch( Exception ex ) {
-								showErrorMessage( loc.getString( "gui.editor.error.SaveTitle" ), loc.getString( "gui.editor.error.Save" ) );
+								showErrorMessage( loc.getString( "gui.editor.JEditor.error.SaveTitle" ), loc.getString( "gui.editor.JEditor.error.Save" ) );
 								ex.printStackTrace();
 								return;
 							}
 						}
-						status = loc.getString( "gui.editor.status.newProject" );
+						status = loc.getString( "gui.editor.JEditor.status.newProject" );
 						break;
 					case 1:
-						status = loc.getString( "gui.editor.status.newProjectDiscard" );
+						status = loc.getString( "gui.editor.JEditor.status.newProjectDiscard" );
 				}
 				//currentProject = ZETMain.newProject();
 				projectControl.newProject();
@@ -1379,9 +1379,9 @@ public class JEditor extends JFrame implements Localized, EventListener<Progress
 					GUIOptionManager.setSavePathResults( jfcProject.getCurrentDirectory().getPath() );
 					try {
 						setBatchResult( BatchResult.load( (jfcResults.getSelectedFile()) ) );
-						ZETMain.sendMessage( loc.getString( "gui.editor.message.loaded" ) );
+						ZETMain.sendMessage( loc.getString( "gui.editor.JEditor.message.loaded" ) );
 					} catch( Exception ex ) {
-						showErrorMessage( loc.getString( "gui.editor.error.SaveTitle" ), loc.getString( "gui.editor.error.Save" ) );
+						showErrorMessage( loc.getString( "gui.editor.JEditor.error.SaveTitle" ), loc.getString( "gui.editor.JEditor.error.Save" ) );
 						ex.printStackTrace();
 					}
 				}
@@ -1394,23 +1394,23 @@ public class JEditor extends JFrame implements Localized, EventListener<Progress
 							target = new File( target.getAbsolutePath() + ".ers" );
 						result.save( target );
 					} catch( java.lang.StackOverflowError soe ) {
-						showErrorMessage( loc.getString( "gui.editor.error.stackOverflowTitle" ), loc.getString( "gui.editor.error.stackOverflow" ) );
+						showErrorMessage( loc.getString( "gui.editor.JEditor.error.stackOverflowTitle" ), loc.getString( "gui.editor.JEditor.error.stackOverflow" ) );
 					} catch( Exception ex ) {
-						showErrorMessage( loc.getString( "gui.editor.error.SaveTitle" ), loc.getString( "gui.editor.error.Save" ) );
+						showErrorMessage( loc.getString( "gui.editor.JEditor.error.SaveTitle" ), loc.getString( "gui.editor.JEditor.error.Save" ) );
 						ex.printStackTrace();
 					}
-					ZETMain.sendMessage( loc.getString( "gui.editor.message.saved" ) );
+					ZETMain.sendMessage( loc.getString( "gui.editor.JEditor.message.saved" ) );
 				}
 			} else if( e.getActionCommand().equals( "saveAsDXF" ) ) {
 				String filename = getProject().getProjectFile().getPath().substring( 0, getProject().getProjectFile().getPath().length() - 3 ) + "dxf";
 				try {
 					DXFWriter.exportIntoDXF( filename, currentProject.getPlan() );
 				} catch( IOException ex ) {
-					showErrorMessage( loc.getString( "gui.editor.error.SaveTitle" ), loc.getString( "gui.editor.error.Save" ) );
+					showErrorMessage( loc.getString( "gui.editor.JEditor.error.SaveTitle" ), loc.getString( "gui.editor.JEditor.error.Save" ) );
 					ex.printStackTrace();
 					return;
 				}
-				ZETMain.sendMessage( loc.getString( "gui.editor.message.dxfComplete" ) );
+				ZETMain.sendMessage( loc.getString( "gui.editor.JEditor.message.dxfComplete" ) );
 			} else
 				ZETMain.sendError( loc.getString( "gui.UnknownCommand" ) + " '" + e.getActionCommand() + "'. " + loc.getString( "gui.ContactDeveloper" ) );
 		}
