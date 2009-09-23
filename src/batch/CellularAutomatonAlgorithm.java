@@ -19,6 +19,8 @@
  */
 package batch;
 
+import algo.ca.CellularAutomatonBackToFrontExecution;
+import algo.ca.CellularAutomatonFrontToBackExecution;
 import algo.ca.CellularAutomatonInOrderExecution;
 import algo.ca.CellularAutomatonRandomOrderExecution;
 import algo.ca.EvacuationCellularAutomatonAlgorithm;
@@ -32,6 +34,18 @@ import localization.Localization;
  * @author Jan-Philipp Kappmeier
  */
 public enum CellularAutomatonAlgorithm {
+	/** A simulation algorithm where all individuals move in the order of decreasing distances. */
+	BackToFront( Localization.getInstance().getString( "batch.caOrder.backToFront" ) ) {
+		public EvacuationCellularAutomatonAlgorithm createTask( CellularAutomaton ca ) {
+			return new CellularAutomatonBackToFrontExecution( ca );
+		}
+	},
+	/** A simulation algorithm where all individuals move in the order of increasing distances. */
+	FrontToBack( Localization.getInstance().getString( "batch.caOrder.frontToBack" ) ) {
+		public EvacuationCellularAutomatonAlgorithm createTask( CellularAutomaton ca ) {
+			return new CellularAutomatonFrontToBackExecution( ca );
+		}
+	},
 	/** A simulation algorithm where all individuals are simulated in a random order in each step. */
 	RandomOrder( Localization.getInstance().getString( "batch.caOrder.random" ) ) {
 		public EvacuationCellularAutomatonAlgorithm createTask( CellularAutomaton ca ) {

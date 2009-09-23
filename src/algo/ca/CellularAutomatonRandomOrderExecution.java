@@ -32,6 +32,11 @@ import util.random.RandomUtils;
  * @author Jan-Philipp Kappmeier
  */
 public class CellularAutomatonRandomOrderExecution extends CellularAutomatonInOrderExecution {
+
+	/**
+	 *
+	 * @param ca the cellular automaton that is executed
+	 */
 	public CellularAutomatonRandomOrderExecution( CellularAutomaton ca ) {
 		super( ca );
 	}

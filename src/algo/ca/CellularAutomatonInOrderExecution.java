@@ -44,7 +44,7 @@ public class CellularAutomatonInOrderExecution extends EvacuationCellularAutomat
 
 	/**
 	 * 
-	 * @param ca
+	 * @param ca the cellular automaton that is executed
 	 */
 	public CellularAutomatonInOrderExecution( CellularAutomaton ca ) {
 		super( ca );
