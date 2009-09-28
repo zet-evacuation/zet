@@ -21,7 +21,7 @@
 package batch.tasks;
 
 import algo.ca.EvacuationCellularAutomatonAlgorithm;
-import algo.graph.exitassignment.MinimumCostTransshipmentExitAssignment;
+import algo.graph.exitassignment.ExitAssignment;
 import batch.BatchResultEntry;
 import batch.CellularAutomatonAlgorithm;
 import converter.ZToCAConverter;

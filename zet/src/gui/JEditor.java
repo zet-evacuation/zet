@@ -133,10 +133,10 @@ import localization.Localization;
 import localization.Localized;
 import statistic.ca.CAStatistic;
 import statistic.graph.Controller;
-import tasks.AlgorithmTask;
-import tasks.CARealTime;
-import tasks.RasterizeTask;
-import tasks.VisualizationDataStructureTask;
+import batch.tasks.AlgorithmTask;
+import batch.tasks.CARealTime;
+import batch.tasks.RasterizeTask;
+import batch.tasks.VisualizationDataStructureTask;
 import util.ConversionTools;
 
 /**

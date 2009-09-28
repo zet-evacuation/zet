@@ -22,7 +22,7 @@ package batch.tasks;
 
 import batch.BatchResultEntry;
 import java.util.TreeMap;
-import tasks.AlgorithmTask;
+import batch.tasks.AlgorithmTask;
 
 /**
  *

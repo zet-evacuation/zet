@@ -24,8 +24,8 @@ import gui.JEditor;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import javax.swing.SwingWorker.StateValue;
-import tasks.AlgorithmTask;
-import tasks.RasterizeTask;
+import batch.tasks.AlgorithmTask;
+import batch.tasks.RasterizeTask;
 
 /**
  *

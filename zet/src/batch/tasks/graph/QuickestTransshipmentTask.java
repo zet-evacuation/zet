@@ -18,8 +18,9 @@
  * Created on 23.01.2008, 23:27:12
  */
 
-package tasks;
+package batch.tasks.graph;
 
+import batch.tasks.*;
 import algo.graph.dynamicflow.QuickestTransshipment;
 import ds.graph.NetworkFlowModel;
 

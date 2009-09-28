@@ -18,7 +18,7 @@
  * Erstellt 27.06.2008, 00:45:14
  */
 
-package tasks;
+package batch.tasks;
 
 import ds.graph.GraphVisualizationResult;
 import gui.visualization.control.GLControl;

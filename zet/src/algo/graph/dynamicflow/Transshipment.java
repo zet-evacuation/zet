@@ -23,7 +23,7 @@ import ds.graph.Localization;
 import algo.graph.DebugFlags;
 import algo.graph.Notifiable;
 
-import tasks.AlgorithmTask;
+import batch.tasks.AlgorithmTask;
 import util.GraphInstanceChecker;
 import ds.graph.flow.PathBasedFlowOverTime;
 import ds.graph.Edge;

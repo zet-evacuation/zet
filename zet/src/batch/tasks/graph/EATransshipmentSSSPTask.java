@@ -13,32 +13,33 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
-package tasks;
+/*
+ * EATransshipmentTask.java
+ * 
+ */
 
-import ds.graph.flow.PathBasedFlowOverTime;
+package batch.tasks.graph;
+
+import batch.tasks.*;
+import algo.graph.dynamicflow.eat.EATransshipmentSSSP;
 import ds.graph.NetworkFlowModel;
 
-/** The superclass of all tasks who execute graph algorithms. This class is
- * useful to access the graph algorithms in a generic way.
+/**
  *
- * @author Timon
  */
-public abstract class GraphAlgorithmTask implements Runnable {
-	protected NetworkFlowModel model;
-	protected PathBasedFlowOverTime df;
+public class EATransshipmentSSSPTask extends GraphAlgorithmTask {
 	
-	public GraphAlgorithmTask( NetworkFlowModel model ) {
-		if( model == null )
-			throw new IllegalArgumentException( "Model is null." );
-		this.model = model;
+	public EATransshipmentSSSPTask( NetworkFlowModel model ) {
+		super (model);
 	}
 	
-	public abstract void run();
-	
-	public PathBasedFlowOverTime getDynamicFlow() {
-		return df;
-	}
-	public NetworkFlowModel getNetwork () {
-		return model;
+	@Override
+	public void run() {		
+			EATransshipmentSSSP algo = new EATransshipmentSSSP( model.getNetwork(), model.getTransitTimes(), model.getEdgeCapacities(), model.getCurrentAssignment() );
+			algo.run();
+			if (!algo.hasRun() || !algo.isPathBasedFlowAvailable()){
+				throw new AssertionError("Either algorithm has not run or path based flow is not available.");
+			}
+			df = algo.getResultFlowPathBased();
 	}
 }

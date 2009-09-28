@@ -22,7 +22,7 @@ package batch.tasks;
 
 import gui.components.progress.ProgressTaskEntry;
 import java.util.ArrayList;
-import tasks.AlgorithmTask;
+import batch.tasks.AlgorithmTask;
 import util.Helper;
 
 /**

@@ -13,27 +13,32 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
-/*
- * ProcessUpdateMessage.java
- * Created on 27.01.2008, 02:36:44
- */
+package batch.tasks;
 
-package tasks;
+import ds.graph.flow.PathBasedFlowOverTime;
+import ds.graph.NetworkFlowModel;
 
-/**
- * 
- * @author Jan-Philipp Kappmeier
+/** The superclass of all tasks who execute graph algorithms. This class is
+ * useful to access the graph algorithms in a generic way.
+ *
+ * @author Timon
  */
-public class ProcessUpdateMessage {
-		public int progress = 0;
-		public String taskName = "";
-		public String taskProgressInformation = "";
-		public String taskDetailedProgressInformation = "";
-		
-		public ProcessUpdateMessage( int progress, String taskName, String taskProgressInformation, String taskDetailedProgressInformation ) {
-			this.progress = progress;
-			this.taskName = taskName;
-			this.taskProgressInformation = taskProgressInformation;
-			this.taskDetailedProgressInformation = taskDetailedProgressInformation;
-		}
+public abstract class GraphAlgorithmTask implements Runnable {
+	protected NetworkFlowModel model;
+	protected PathBasedFlowOverTime df;
+	
+	public GraphAlgorithmTask( NetworkFlowModel model ) {
+		if( model == null )
+			throw new IllegalArgumentException( "Model is null." );
+		this.model = model;
+	}
+	
+	public abstract void run();
+	
+	public PathBasedFlowOverTime getDynamicFlow() {
+		return df;
+	}
+	public NetworkFlowModel getNetwork () {
+		return model;
+	}
 }

@@ -18,8 +18,9 @@
  * 
  */
 
-package tasks;
+package batch.tasks.graph;
 
+import batch.tasks.*;
 import ds.graph.NetworkFlowModel;
 import algo.graph.dynamicflow.eat.EarliestArrivalFlowProblem;
 import algo.graph.dynamicflow.eat.LongestShortestPathTimeHorizonEstimator;

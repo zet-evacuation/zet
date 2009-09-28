@@ -19,7 +19,6 @@
  */
 package batch.tasks;
 
-import tasks.GraphAlgorithmTask;
 import batch.BatchResultEntry;
 import batch.GraphAlgorithm;
 import converter.ZToGraphConverter;

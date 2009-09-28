@@ -20,7 +20,7 @@
 
 package event;
 
-import tasks.ProcessUpdateMessage;
+import batch.tasks.ProcessUpdateMessage;
 
 /**
  * This is a simple messaging event to submit status messages or error messages.
