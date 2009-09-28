@@ -13,8 +13,9 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
-package batch.tasks;
+package batch.tasks.assignment;
 
+import batch.tasks.*;
 import algo.ca.EvacuationCellularAutomatonAlgorithm;
 import batch.BatchResultEntry;
 import converter.ZToCAConverter;

@@ -18,27 +18,32 @@
  * 
  */
 
-package tasks;
+package batch.tasks.graph;
 
-import algo.graph.dynamicflow.maxflow.MaxFlowOverTime;
-import ds.PropertyContainer;
+import batch.tasks.*;
 import ds.graph.NetworkFlowModel;
+import algo.graph.dynamicflow.maxflow.TimeExpandedMaximumFlowOverTime;
 
 /**
  *
  */
-public class MFOTMinCostTask extends GraphAlgorithmTask {
+public class MFOTimeExpandedTask extends GraphAlgorithmTask {
 	private int th;
-	public MFOTMinCostTask( NetworkFlowModel model, int timeHorizon ) {
+	public MFOTimeExpandedTask( NetworkFlowModel model, int timeHorizon ) {
 		super (model);
 		this.th = timeHorizon;
 	}
 	
 	@Override
 	public void run() {
-		MaxFlowOverTime maxFlowOverTimeAlgo =
-			new MaxFlowOverTime(model.getNetwork(), model.getEdgeCapacities(), model.getSinks(), model.getSources(), th, model.getTransitTimes());
+            
+		TimeExpandedMaximumFlowOverTime maxFlowOverTimeAlgo =
+			new TimeExpandedMaximumFlowOverTime(model.getNetwork(), model.getEdgeCapacities(), model.getTransitTimes(), model.getSources(), model.getSinks(), th);
 		maxFlowOverTimeAlgo.run();
-		df = maxFlowOverTimeAlgo.getDynamicFlow();
+		df = maxFlowOverTimeAlgo.getSolution();
+                
+                //TransshipmentBoundEstimator tbe = new TransshipmentBoundEstimator();
+                //int bound = tbe.calculateBound(model.getNetwork(), model.getTransitTimes(), model.getEdgeCapacities(), model.getCurrentAssignment());
+                //System.out.println(bound);
 	}
 }

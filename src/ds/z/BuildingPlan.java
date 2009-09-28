@@ -38,7 +38,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Random;
 import localization.Localization;
-import tasks.AlgorithmTask;
+import batch.tasks.AlgorithmTask;
 
 /**
  * The <code>BuildingPlan</code> represents a complete building plan, consisting of

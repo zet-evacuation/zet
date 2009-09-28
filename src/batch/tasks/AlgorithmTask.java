@@ -17,7 +17,7 @@
  * GraphCreate.java
  * Created on 23.01.2008, 23:13:35
  */
-package tasks;
+package batch.tasks;
 
 import event.EventServer;
 import event.ProgressEvent;
@@ -40,7 +40,6 @@ import javax.swing.SwingWorker;
  */
 public class AlgorithmTask extends SwingWorker<Integer, ProcessUpdateMessage> {
 	private static AlgorithmTask instance;
-	AlgorithmTestClass test;
 	private boolean useUpdates;
 	private Runnable algorithmTask;
 	private String taskName;

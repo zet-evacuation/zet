@@ -13,32 +13,19 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
-/*
- * EATransshipmentTask.java
- * 
- */
-
-package tasks;
-
-import algo.graph.dynamicflow.eat.EATransshipmentSSSP;
-import ds.graph.NetworkFlowModel;
+package algo.graph;
 
 /**
- *
+ * This class contains boolean flags to switch progress information
+ * on or of.
  */
-public class EATransshipmentSSSPTask extends GraphAlgorithmTask {
+public class ProgressBooleanFlags {
+
+	/* Progress information for graph algorithms. */
+	public final static boolean ALGO_PROGRESS = false;
+	/* Progress information for graph creation. */
+	public final static boolean GRAPH_CREATION_PROGRESS = false;
+	/* Progress information for simulation of ca. */
+	public final static boolean CA_PROGRESS = false;
 	
-	public EATransshipmentSSSPTask( NetworkFlowModel model ) {
-		super (model);
-	}
-	
-	@Override
-	public void run() {		
-			EATransshipmentSSSP algo = new EATransshipmentSSSP( model.getNetwork(), model.getTransitTimes(), model.getEdgeCapacities(), model.getCurrentAssignment() );
-			algo.run();
-			if (!algo.hasRun() || !algo.isPathBasedFlowAvailable()){
-				throw new AssertionError("Either algorithm has not run or path based flow is not available.");
-			}
-			df = algo.getResultFlowPathBased();
-	}
 }

@@ -191,6 +191,7 @@ public class ZToNonGridGraphConverter {
         if (ProgressBooleanFlags.GRAPH_CREATION_PROGRESS){
         	System.out.println("Progress: The network, capacities and transit times were created.");
         }
+        System.out.println(model.getNetwork().numberOfNodes() + " Edges: " + model.getNetwork().numberOfEdges());
         if (DebugFlags.CONVERTING){
         	System.out.println("Network:");
         	System.out.println(model.getNetwork());
@@ -804,10 +805,9 @@ public class ZToNonGridGraphConverter {
     protected static void calculateTransitTimes(ZToGraphRasterContainer raster, NetworkFlowModel model, Hashtable<Edge,ArrayList<ZToGraphRasterSquare>> doorEdgeToSquare) {
         long startTT = System.currentTimeMillis();
         System.out.println("BEGINNE TRANSIT-TIMES");
-        IdentifiableIntegerMapping<Edge> transitTimes = new IdentifiableIntegerMapping<Edge>(1);
         
+        IdentifiableIntegerMapping<Edge> transitTimes = new IdentifiableIntegerMapping<Edge>(1);        
         List<ZToGraphRoomRaster> roomRasterList = raster.getAllRasteredRooms();
-
         Graph graph = model.getGraph();
         
         //IdentifiableCollection<Node> nodes = graph.nodes();                    

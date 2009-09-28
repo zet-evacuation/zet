@@ -23,14 +23,14 @@ import batch.tasks.BatchCATask;
 import batch.tasks.BatchEvacuationCATask;
 import batch.tasks.BatchGraphTask;
 import batch.tasks.BatchLoadProperties;
-import batch.tasks.BestResponseAssignmentTask;
+import batch.tasks.assignment.BestResponseAssignmentTask;
 import batch.tasks.ComputeAvgStepPerSecondTask;
-import batch.tasks.EarliestArrivalAssignmentTask;
+import batch.tasks.assignment.EarliestArrivalAssignmentTask;
 import batch.tasks.MedianTask;
-import batch.tasks.MinCostAssignmentTask;
-import batch.tasks.ReducedEarliestArrivalAssignmentTask;
-import batch.tasks.ShortestPathAssignmentTask;
-import batch.tasks.ShortestPathGraphEarliestArrivalAssignmentTask;
+import batch.tasks.assignment.MinCostAssignmentTask;
+import batch.tasks.assignment.ReducedEarliestArrivalAssignmentTask;
+import batch.tasks.assignment.ShortestPathAssignmentTask;
+import batch.tasks.assignment.ShortestPathGraphEarliestArrivalAssignmentTask;
 import converter.ZToCAConverter.ConversionNotSupportedException;
 import ds.Project;
 import ds.PropertyContainer;
@@ -46,7 +46,7 @@ import io.visualization.CAVisualizationResults;
 import localization.Localization;
 import statistic.ca.CAStatistic;
 import statistic.ca.MultipleCycleCAStatistic;
-import tasks.RasterizeTask;
+import batch.tasks.RasterizeTask;
 
 /**
  * A wrapper class that represents a single entry in the batch list.

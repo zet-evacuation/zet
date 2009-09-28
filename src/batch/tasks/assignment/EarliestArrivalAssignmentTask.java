@@ -18,8 +18,9 @@
  * Erstellt 24.11.2008, 00:16:08
  */
 
-package batch.tasks;
+package batch.tasks.assignment;
 
+import batch.tasks.*;
 import algo.graph.exitassignment.EarliestArrivalTransshipmentExitAssignment;
 import batch.BatchResultEntry;
 import converter.ZToGraphConverter;

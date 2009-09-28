@@ -50,7 +50,7 @@ import javax.media.opengl.GLAutoDrawable;
 import localization.Localization;
 import opengl.framework.abs.drawable;
 import statistic.ca.CAStatistic;
-import tasks.AlgorithmTask;
+import batch.tasks.AlgorithmTask;
 import util.DebugFlags;
 
 public class GLControl implements drawable {

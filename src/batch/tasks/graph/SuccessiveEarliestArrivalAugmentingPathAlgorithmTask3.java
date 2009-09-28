@@ -17,8 +17,9 @@
  * EATransshipmentTask.java
  * 
  */
-package tasks;
+package batch.tasks.graph;
 
+import batch.tasks.*;
 import algo.graph.dynamicflow.eat.EarliestArrivalFlowProblem;
 import algo.graph.dynamicflow.eat.LongestShortestPathTimeHorizonEstimator;
 import algo.graph.dynamicflow.eat.SEAAPAlgorithm;

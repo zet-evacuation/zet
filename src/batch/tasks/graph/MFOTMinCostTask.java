@@ -14,37 +14,32 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 /*
- * RasterizeTask.java
- * Created on 24.01.2008, 21:02:06
+ * MaxFlowTask.java
+ * 
  */
 
-package tasks;
+package batch.tasks.graph;
 
-import ds.Project;
-import gui.ZETMain;
+import batch.tasks.*;
+import algo.graph.dynamicflow.maxflow.MaxFlowOverTime;
+import ds.PropertyContainer;
+import ds.graph.NetworkFlowModel;
 
 /**
- * Performs the rasterization of a {@link ds.z.BuildingPlan}.
- * @author Jan-Philipp Kappmeier
+ *
  */
-public class RasterizeTask implements Runnable {
-	/** The project that should be rastered. */
-	private Project project;
-	
-	/** Creates a new instance of the rasterization task. */
-	public RasterizeTask( Project p ) {
-		if( p == null ) {
-			throw new java.lang.IllegalArgumentException ("Project is null.");
-		}
-		project = p;
+public class MFOTMinCostTask extends GraphAlgorithmTask {
+	private int th;
+	public MFOTMinCostTask( NetworkFlowModel model, int timeHorizon ) {
+		super (model);
+		this.th = timeHorizon;
 	}
 	
-	/** Performs rasterization. */
+	@Override
 	public void run() {
-		try {
-			project.getPlan().rasterize();
-		} catch( Exception ex ) {
-			ZETMain.sendError( ex.getLocalizedMessage () );
-		}
-	}	
+		MaxFlowOverTime maxFlowOverTimeAlgo =
+			new MaxFlowOverTime(model.getNetwork(), model.getEdgeCapacities(), model.getSinks(), model.getSources(), th, model.getTransitTimes());
+		maxFlowOverTimeAlgo.run();
+		df = maxFlowOverTimeAlgo.getDynamicFlow();
+	}
 }

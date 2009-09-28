@@ -24,7 +24,6 @@ import io.visualization.CAVisualizationResults;
 import java.util.TreeMap;
 
 import statistic.ca.CAStatistic;
-import tasks.GraphAlgorithmTask;
 import algo.ca.EvacuationSwapCellularAutomatonInOrder;
 import batch.BatchResultEntry;
 import batch.CellularAutomatonAlgorithm;

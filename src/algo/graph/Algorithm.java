@@ -23,7 +23,7 @@ package algo.graph;
 
 import java.util.LinkedHashSet;
 import java.util.Set;
-import tasks.AlgorithmTask;
+import batch.tasks.AlgorithmTask;
 import util.NanosecondTimeFormatter;
 
 /**
@@ -91,6 +91,16 @@ public abstract class Algorithm<Problem, Solution> implements Runnable {
     protected final void fireEvent(String formatStr, Object... params) {
         fireEvent(String.format(formatStr, params));
     }
+    
+    @Deprecated
+    protected final void fireTaskDescriptionEvent(String taskName) {
+        AlgorithmTask.getInstance().publish(taskName);        
+    }
+    
+    @Deprecated
+    protected final void fireTaskInformationEvent(String taskInformation) {
+        
+    }
 
     public final void addProgressListener(ProgressListener listener) {
         if (isProblemSolved()) {
@@ -110,9 +120,6 @@ public abstract class Algorithm<Problem, Solution> implements Runnable {
     }
 
     protected final void fireProgressEvent(double progress) {
-        //if (!util.ProgressBooleanFlags.ALGO_PROGRESS) {
-        //    return;
-        //}
         if (!isRunning()) {
             throw new IllegalStateException("Progress Events can only be dispatched while the algorithm is running.");
         } else if (progress < 0) {
@@ -135,6 +142,29 @@ public abstract class Algorithm<Problem, Solution> implements Runnable {
         }
     }
 
+    protected final void fireProgressEvent(double progress, String information, String detailedInformation) {
+        if (!isRunning()) {
+            throw new IllegalStateException("Progress Events can only be dispatched while the algorithm is running.");
+        } else if (progress < 0) {
+            throw new IllegalArgumentException("The progress value must not be < 0.");
+        } else if (progress > 100) {
+            throw new IllegalArgumentException("The progress values must not not be > 100.");
+        } else if (progress < this.progress) {
+            throw new IllegalArgumentException("The progress values must be monotonically increasing.");
+        }
+        this.progress = progress;
+        if (util.ProgressBooleanFlags.ALGO_PROGRESS) {
+            System.out.println("Progress: " + progress);
+        }
+        AlgorithmTask.getInstance().publish((int) Math.round(progress * 100), information, detailedInformation);
+        if (progressListeners != null) {
+            AlgorithmProgressEvent event = new AlgorithmProgressEvent(this, startTime, System.nanoTime(), progress);
+            for (ProgressListener listener : progressListeners) {
+                listener.progressChanged(event);
+            }
+        }
+    }    
+    
     public final Problem getProblem() {
         return problem;
     }

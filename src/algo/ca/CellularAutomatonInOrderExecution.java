@@ -30,7 +30,7 @@ import ds.ca.Individual;
 import java.util.Iterator;
 
 import localization.Localization;
-import tasks.AlgorithmTask;
+import batch.tasks.AlgorithmTask;
 import statistic.ca.CAStatisticWriter;
 import util.ProgressBooleanFlags;
 

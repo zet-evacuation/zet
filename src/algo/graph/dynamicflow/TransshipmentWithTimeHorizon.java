@@ -18,7 +18,7 @@ package algo.graph.dynamicflow;
 import algo.graph.DebugFlags;
 import algo.graph.Notifiable;
 import algo.graph.util.PathDecomposition;
-import tasks.AlgorithmTask;
+import batch.tasks.AlgorithmTask;
 import ds.graph.flow.PathBasedFlowOverTime;
 import ds.graph.DynamicPath;
 import ds.graph.flow.FlowOverTimePath;

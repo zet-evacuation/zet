@@ -27,7 +27,7 @@ import java.beans.PropertyChangeListener;
 import java.util.ArrayList;
 import javax.swing.JLabel;
 import javax.swing.JProgressBar;
-import tasks.AlgorithmTask;
+import batch.tasks.AlgorithmTask;
 import util.Helper;
 
 /**

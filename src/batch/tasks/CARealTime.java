@@ -18,7 +18,7 @@
  * Created on 28.01.2008, 03:16:13
  */
 
-package tasks;
+package batch.tasks;
 
 import algo.ca.CellularAutomatonInOrderExecution;
 import ds.ca.CellularAutomaton;

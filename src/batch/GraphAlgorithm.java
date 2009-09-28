@@ -17,15 +17,15 @@ package batch;
 
 import localization.Localization;
 import ds.graph.NetworkFlowModel;
-import tasks.EATransshipmentMinCostTask;
-import tasks.EATransshipmentSSSPTask;
-import tasks.GraphAlgorithmTask;
-import tasks.MFOTMinCostTask;
-import tasks.MFOTimeExpandedTask;
-import tasks.QuickestTransshipmentTask;
-import tasks.SuccessiveEarliestArrivalAugmentingPathAlgorithm2Task;
-import tasks.SuccessiveEarliestArrivalAugmentingPathAlgorithmTask;
-import tasks.SuccessiveEarliestArrivalAugmentingPathAlgorithmTask3;
+import batch.tasks.graph.EATransshipmentMinCostTask;
+import batch.tasks.graph.EATransshipmentSSSPTask;
+import batch.tasks.GraphAlgorithmTask;
+import batch.tasks.graph.MFOTMinCostTask;
+import batch.tasks.graph.MFOTimeExpandedTask;
+import batch.tasks.graph.QuickestTransshipmentTask;
+import batch.tasks.graph.SuccessiveEarliestArrivalAugmentingPathAlgorithm2Task;
+import batch.tasks.graph.SuccessiveEarliestArrivalAugmentingPathAlgorithmTask;
+import batch.tasks.graph.SuccessiveEarliestArrivalAugmentingPathAlgorithmTask3;
 
 /** Enumerates the types of graph algorithms and assigns each of them a way
  * to get the associated GraphAlgorithmTask and a name;
