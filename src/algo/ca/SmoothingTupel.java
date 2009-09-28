@@ -23,30 +23,15 @@ import ds.ca.Cell;
  *
  */
 public class SmoothingTupel {
-
-	/**
-	 * Reference to the cell
-	 */
+	/** Reference to the cell. */
 	Cell cell;
-	
-	/**
-	 * potential value
-	 */
+	/** potential value. */
 	double value;
-	
-	/**
-	 * real distance
-	 */
+	/** Real distance. */
 	double distanceValue;
-	
-	/**
-	 * number of the cells that could affect this cell
-	 */	
+	/** Number of the cells that could affect this cell. */
 	int numberOfParents;
-	
-	/**
-	 * sum of the potentials of the parent cells
-	 */
+	/** Sum of the potentials of the parent cells. */
 	double sumOfValuesOfParents;
 	
 	/**

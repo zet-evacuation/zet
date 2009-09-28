@@ -32,6 +32,7 @@ import java.awt.Dimension;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseWheelEvent;
+import java.util.ArrayList;
 import javax.media.opengl.GL;
 import javax.media.opengl.GLAutoDrawable;
 import javax.media.opengl.GLCapabilities;
@@ -41,6 +42,7 @@ import opengl.drawingutils.GLColor;
 import opengl.helper.Frustum;
 import opengl.helper.Texture;
 import opengl.helper.TextureFont;
+import opengl.helper.TextureFontStrings;
 import opengl.helper.TextureManager;
 import util.vectormath.Vector3;
 
@@ -112,9 +114,6 @@ public class Visualization extends AbstractVisualization implements EventListene
 		else
 			this.setPvm( ParallelViewMode.Orthogonal );
 
-
-
-
 		EventServer.getInstance().registerListener( this, OptionsChangedEvent.class );
 	}
 
@@ -168,12 +167,13 @@ public class Visualization extends AbstractVisualization implements EventListene
 		texMan = TextureManager.getInstance();
 		texMan.setGL( gl );
 		texMan.setGLU( glu );
-		//texMan.load( "font2", "./textures/font2.bmp" );
-		fontTex = texMan.newTexture( "font2", "./textures/font2.bmp" );
+//		fontTex = texMan.newTexture( "font2", "./textures/font2.bmp" );
+		fontTex = texMan.newTexture( "font2", "./textures/fontl.bmp" );
 		// load texture font
 		font = new TextureFont( gl, fontTex );
-		font.buildFont( 16, 8, 16, 12, 9 );
-		//font.buildFont( 16, 8, 16, 24, 19 );
+//		font.buildFont( 8, 16, 32, 16, 16 );	// font1.bmp ???
+		font.buildFont( 8, 16, 32, 16, 16 );		// fontl.bmp
+//		font.buildFont( 16, 8, 16, 12, 10 );	// font2.bmp
 		fontTex.bind();
 
 		gl.glEnable( GL.GL_NORMALIZE );
@@ -185,11 +185,22 @@ public class Visualization extends AbstractVisualization implements EventListene
 //			glTexParameterf( GL_TEXTURE_2D, GL_TEXTURE_MAX_ANISOTROPY_EXT, maxAni );
 //		}
 
-
-
 		if( control == null )
 			control = new GLControl();
+	// init intro text
+//		texts.add( new TextureFontStrings( true ) );
+// 		texts.get( 0 ).setXoffset( 10 );
+//		texts.get( 0 ).setWidth( drawable.getWidth() );
+//		// TODO resize: send new value to texts and recalc centered!
+//		texts.get( 0 ).add( "text1", false );
+//		texts.get( 0 ).add( "text2", false );
+//		texts.get( 0 ).add( "text3", false );
+//		texts.get( 0 ).add( "text4", false );
 	}
+
+int showIntro = 0;
+double introSec = 3.5;
+ArrayList<TextureFontStrings> texts = new ArrayList<TextureFontStrings>();
 
 	/**
 	 * Draws the scene.
@@ -208,46 +219,25 @@ public class Visualization extends AbstractVisualization implements EventListene
 		calculateFPS();
 		if( isAnimating() == true && recording == false )
 			animate();
-		if( recording )
-			if( drawable.getWidth() != movieWidth || drawable.getHeight() != movieHeight ) {
-				setSize( movieWidth, movieHeight );
-				return;
-			}
+
+		if( recording && (drawable.getWidth() != movieWidth || drawable.getHeight() != movieHeight) ) {
+			setSize( movieWidth, movieHeight );
+			return;
+		}
 
 		if( updateProjection )
 			updateProjection();
-		gl.glClear( clearBits );
 
-		gl.glMatrixMode( GL.GL_MODELVIEW );
-		gl.glLoadIdentity();
-		float[] light_position = new float[4];
-		light_position[0] = (float)getCamera().getView().x;
-		light_position[1] = (float)getCamera().getView().y;
-		light_position[2] = (float)getCamera().getView().z;
-		//light_position[0] = 0;
-		//light_position[1] = 1;
-		//light_position[2] = 0;
-		light_position[3] = 1.0f;
-
-		//gl.glLightfv(GL.GL_LIGHT0, GL.GL_POSITION, light_position, 0);
-		if( is3D )
-			look();
-		else {
-			if( pvm != ParallelViewMode.Orthogonal ) {	// Isometric view
-				if( pvm == ParallelViewMode.Isometric )
-					gl.glRotatef( 35.264f, 1.0f, 0.0f, 0.0f );
+		if( !recording )
+			drawScene();
+		else
+			if( showIntro < texts.size() ) {
+				if( getTimeSinceStart() <= (long)(((showIntro+1) * 1000000000L) * introSec) )
+					drawIntroText( showIntro );
 				else
-					gl.glRotatef( 30f, 1.0f, 0.0f, 0.0f );
-				gl.glRotatef( -45.0f, 0.0f, 1.0f, 0.0f );
-				gl.glRotated( -90, 1, 0., 0. );
-			} else	// Orthogonal view
-				gl.glLoadIdentity();
-			if( showEye )
-				drawEye();
-		}
-
-		control.draw( drawable );
-		drawFPS();
+					showIntro++;
+			} else
+				drawScene();
 
 		switch( gl.glGetError() ) {
 			case GL.GL_NO_ERROR:
@@ -344,16 +334,83 @@ public class Visualization extends AbstractVisualization implements EventListene
 		gl.glTranslated( -getCamera().getPos().x, -getCamera().getPos().y, -getCamera().getPos().z );
 	}
 
+
+	/**
+	 * Prints some text on the screen. The text is shown before the visualization
+	 * starts if a movie is recorded.
+	 */
+	final private void drawIntroText( int index ) {
+		this.setProjectionPrint();
+		white.performGL( gl );
+		gl.glEnable( gl.GL_TEXTURE_2D );
+		int row = 1;
+		TextureFontStrings tfs = texts.get( index );
+		for( int i=0; i < tfs.size(); ++i ) {
+			font.print( 100, this.getHeight() - (7+i) * fontSize, tfs.text( index ) );
+		}
+		gl.glDisable( gl.GL_TEXTURE_2D );
+		this.resetProjection();
+	}
+
+	/**
+	 * Prints some text on the screen. The text is shown after the visualization
+	 * has finished if a movie is recorded.
+	 */
+	final private void drawOutroText() {
+		this.setProjectionPrint();
+		white.performGL( gl );
+		gl.glEnable( gl.GL_TEXTURE_2D );
+		int row = 1;
+		font.print( 100, this.getHeight() - (7) * fontSize, loc.getString( "testtext" ) );
+		gl.glDisable( gl.GL_TEXTURE_2D );
+		this.resetProjection();
+	}
+
+	/**
+	 * Draws the main scene, that is the walls, the cellular automaton, the individuals and the graph.
+	 * Includes text visible in the scene but not the copyright notice, etc.
+	 */
+	final private void drawScene() {
+		gl.glClear( clearBits );
+
+		gl.glMatrixMode( GL.GL_MODELVIEW );
+		gl.glLoadIdentity();
+		float[] light_position = new float[4];
+		light_position[0] = (float)getCamera().getView().x;
+		light_position[1] = (float)getCamera().getView().y;
+		light_position[2] = (float)getCamera().getView().z;
+		//light_position[0] = 0;
+		//light_position[1] = 1;
+		//light_position[2] = 0;
+		light_position[3] = 1.0f;
+
+		//gl.glLightfv(GL.GL_LIGHT0, GL.GL_POSITION, light_position, 0);
+		if( is3D )
+			look();
+		else {
+			if( pvm != ParallelViewMode.Orthogonal ) {	// Isometric view
+				if( pvm == ParallelViewMode.Isometric )
+					gl.glRotatef( 35.264f, 1.0f, 0.0f, 0.0f );
+				else
+					gl.glRotatef( 30f, 1.0f, 0.0f, 0.0f );
+				gl.glRotatef( -45.0f, 0.0f, 1.0f, 0.0f );
+				gl.glRotated( -90, 1, 0., 0. );
+			} else	// Orthogonal view
+				gl.glLoadIdentity();
+			if( showEye )
+				drawEye();
+		}
+
+		control.draw( drawable );
+		drawFPS();
+	}
+
 	/**
 	 * Draws the current framerate on the lower left edge of the screen and
 	 * the current time of the cellular automaton and graph, if used.
 	 */
 	final private void drawFPS() {
-			if( gl.glGetError() == gl.GL_INVALID_VALUE )
-			System.err.println( "ERROR vor look" );
-	this.setProjectionPrint();
-		if( gl.glGetError() == gl.GL_INVALID_VALUE )
-			System.err.println( "ERROR nach look" );
+		this.setProjectionPrint();
 		white.performGL( gl );
 		gl.glEnable( gl.GL_TEXTURE_2D );
 		if( showFPS )

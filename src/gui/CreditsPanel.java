@@ -23,6 +23,7 @@ import javax.media.opengl.GL;
 import javax.media.opengl.GLAutoDrawable;
 import javax.media.opengl.glu.GLU;
 import opengl.framework.JMovingEyePanel;
+import opengl.helper.TextureFontStrings;
 import opengl.helper.Texture;
 import opengl.helper.TextureFont;
 import opengl.helper.TextureManager;
@@ -34,7 +35,7 @@ import util.vectormath.Vector3;
  * @author Jan-Philipp Kappmeier
  */
 public class CreditsPanel extends JMovingEyePanel {
-	/** The size of the panel, used for text position calculation. */
+	/** The size of the panel, used for text getX calculation. */
 	private static int width = 480;
 	/** The instance of the texture manager. */
 	private TextureManager texMan;
@@ -46,107 +47,17 @@ public class CreditsPanel extends JMovingEyePanel {
 	private Texture texLogo;
 	/** A texture-font object using to draw text on the {@code OpenGL} panel */
 	private TextureFont font;
-	/** The top position of the text */
+	/** The top getX of the text */
 	//private double startPos = -128; // 256 height of picture, 84 black pixels
 	private float startPos = -5; // 256 height of picture, 84 black pixels
 	/** The array containing the text. */
-	private CreditsString[] lines = {
-		new CreditsString( "zet evakuierungs-tool", true ),
-		new CreditsString( "(c) 2007-08 Projektgruppe 517, TU-Dortmund", true ),
-		new CreditsString( "(c) 2008-09 zet development team", true ),
-		new CreditsString( "", false ),
-		new CreditsString( "http://www.zet-evakuierung.de", true ),
-		new CreditsString( "", false ),
-		new CreditsString( "", false ),
-		new CreditsString( "Credits:", true ),
-		new CreditsString( "", true ),
-		new CreditsString( "Martin Groß", true ),
-		new CreditsString( "Moukarram Kabbash", true ),
-		new CreditsString( "Jan-Philipp Kappmeier", true ),
-		new CreditsString( "Sophia Kardung", true ),
-		new CreditsString( "Timon Kelter", true ),
-		new CreditsString( "Joscha Kulbatzki", true ),
-		new CreditsString( "Daniel Plümpe", true ),
-		new CreditsString( "Marcel Preuß", true ),
-		new CreditsString( "Gordon Schlechter", true ),
-		new CreditsString( "Melanie Schmidt", true ),
-		new CreditsString( "Sylvie Temme", true ),
-		new CreditsString( "Matthias Woste", true ),
-		new CreditsString( "", true ),
-		new CreditsString( "", true ),
-		new CreditsString( "This program is free software; you can", false ),
-		new CreditsString( "redistribute it and/or modify it under", false ),
-		new CreditsString( "the terms of the GNU General Public Li-", false ),
-		new CreditsString( "cense as published by the Free Software", false ),
-		new CreditsString( "Foundation; either version 2 of the Li-", false ),
-		new CreditsString( "cense, or (at your opinion) any later", false ),
-		new CreditsString( "version.", false ),
-		new CreditsString( "", false ),
-		new CreditsString( "zet is distributed in the hope that it", false ),
-		new CreditsString( "will be useful but WITHOUT ANY WARRANTY;", false ),
-		new CreditsString( "without even the implied warranty of", false ),
-		new CreditsString( "MERCHANTABILITY or FITNESS FOR A PAR-", false ),
-		new CreditsString( "TICULAR PURPOSE. See the GNU General", false ),
-		new CreditsString( "Public License for more details.", false ),
-		new CreditsString( "", false ),
-		new CreditsString( "You should have received a copy of the", false ),
-		new CreditsString( "GNU General Public Licence along with", false ),
-		new CreditsString( "zet; if not, write to the Free Software", false ),
-		new CreditsString( "Foundation, Inc., 51 Franklin Street,", false ),
-		new CreditsString( "Fifth Floor, Boston, MA 02110-131, USA,", false ),
-		new CreditsString( "or have a look at", false ),
-		new CreditsString( "http://www.gnu.org/licenses/", false ),
-		new CreditsString( "", false ),
-		new CreditsString( "", false ),
-		new CreditsString( "Third-party components used by zet:", false ),
-		new CreditsString( "", false ),
-		new CreditsString( "MersenneTwister Version 13", false ),
-		new CreditsString( "Copyright (c) 2003 by Sean Luke.", false ),
-		new CreditsString( "Portions copyright (c) 1993 by Michael", false ),
-		new CreditsString( "Lecuyer.", false ),
-		new CreditsString( "", false ),
-		new CreditsString( "MersenneTwisterFast Version 13", false ),
-		new CreditsString( "Copyright (c) 2003 by Sean Luke.", false ),
-		new CreditsString( "Portions copyright (c) 1993 by Michael", false ),
-		new CreditsString( "Lecuyer.", false ),
-		new CreditsString( "", false ),
-		new CreditsString( "MTRandom", false ),
-		new CreditsString( "Copyright (c) 2005 by David Beaumont.", false ),
-		new CreditsString( "", false ),
-		new CreditsString( "TableLayout JDK 1.5 2007-04-21", false ),
-		new CreditsString( "Copyright (c) 2001 by Daniel Barbalace.", false ),
-		new CreditsString( "https://tablelayout.dev.java.net/", false ),
-		new CreditsString( "", false ),
-		new CreditsString( "JFreeChart 1.0.3", false ),
-		new CreditsString( "Copyright (c) 2000-2009 by Object", false ),
-		new CreditsString( "Refinery and Contributors.", false ),
-		new CreditsString( "http://www.jfree.org/jfreechart/", false ),
-		new CreditsString( "", false ),
-		new CreditsString( "JCommon 1.0.7", false ),
-		new CreditsString( "Copyright (c) 2007-2009 by Object", false ),
-		new CreditsString( "Refinery and Contributors.", false ),
-		new CreditsString( "http://www.jfree.org/jcommon/", false ),
-		new CreditsString( "", false ),
-		new CreditsString( "SSJ 2.1.2", false ),
-		new CreditsString( "Copyright (c) 2008  Pierre L'Ecuyer", false ),
-		new CreditsString( "and Université de Montréal", false ),
-		new CreditsString( "http://www.iro.umontreal.ca/~simardr/ssj/", false ),
-		new CreditsString( "", false ),
-		new CreditsString( "XStream 1.3", false ),
-		new CreditsString( "Copyright (c) 2003-2006, Joe Walnes", false ),
-		new CreditsString( "Copyright (c) 2006-2007, XStream Committers", false ),
-		new CreditsString( "http://xstream.codehaus.org/", false ),
-		new CreditsString( "", false ),
-		new CreditsString( "JOGL 1.1.1-rc6", false ),
-		new CreditsString( "Copyright (c) 2003-2007 Sun Microsystems", false ),
-		new CreditsString( "https://jogl.dev.java.net/", false ),
-		new CreditsString( "", false ),
-		new CreditsString( "JMF 2.1.1e", false ),
-		new CreditsString( "Copyright (c) 1995-2003 Sun Microsystems", false ),
-		new CreditsString( "http://java.sun.com/javase/technologies/", false ),
-		new CreditsString( "desktop/media/jmf/", false )
-		//new CreditsString( "----------------------------------------", false ),
-	};
+	private TextureFontStrings lines = new TextureFontStrings( false );
+
+	public CreditsPanel() {
+		super();
+
+		initLines();
+	}
 
 	@Override
 	/**
@@ -260,58 +171,120 @@ public class CreditsPanel extends JMovingEyePanel {
 
 	/**
 	 * Draws some lines on the screen using the texture font. If the text was
-	 * completely scrolled over the whole screen, the top position is resetted.
+	 * completely scrolled over the whole screen, the top getX is resetted.
 	 * @param lines an array containing all lines that should be displayed
 	 */
-	private void drawLines( CreditsString[] lines, float start ) {
+	private void drawLines( TextureFontStrings lines, float start ) {
 		//font.print( -1.7f, -1, -3, text );
 		//int start = (int) Math.floor( startPos );
 		int end = 0;
-		for( int i = 0; i < lines.length; i++ ) {
-			//font.print( lines[i].position(), start - i * 16, lines[i].text() );
-			font.print( -lines[i].position(), -4f, start + i * 1.1f, lines[i].text() );
+		for( int i = 0; i < lines.size(); i++ ) {
+			//font.print( lines[i].getX(), start - i * 16, lines[i].text() );
+			font.print( -lines.getX( i ), -4f, start + i * 1.1f, lines.text(i) );
 			//end = start - i * 16 + 12;
 		}
 		if( end > this.getHeight() + 48 )
 			startPos = -128;
 	}
-	
+
 	/**
-	 * A special inner class that represents a line of text. It saves
-	 * the information if the line is left-aligned or centered. The
-	 * with of the window has to be given from outside.
+	 * Adds all lines of the credits text to the font line object.
 	 */
-	private class CreditsString {
-		/** Indicates wheather the text is centered, or not. */
-		private boolean centered;
-		/** The content of the line. */
-		private String string;
-
-		/**
-		 * Creates a new line with alignment information.
-		 * @param string the text of the line
-		 * @param centered indicates wheather the line is centered, or not
-		 */
-		public CreditsString( String string, boolean centered ) {
-			this.string = string;
-			this.centered = centered;
-		}
-
-		/**
-		 * Returns the <code>x</code>-position of the line
-		 * @return the <code>x</code>-position of the line
-		 */
-		public float position() {
-			//return centered ? (width - (string.length() * 9))/2 : (width - (40*9))/2;
-			return (float)(centered ? ((((0.7f*3)/4) * (string.length())) * 0.5) : 10.3);
-		}
-
-		/**
-		 * Returns the content of the line
-		 * @return
-		 */
-		public String text() {
-			return string;
-		}
+	private void initLines() {
+		lines.setXoffset( 10.3 );
+		lines.add( "zet evakuierungs-tool", true );
+		lines.add( "(c) 2007-08 Projektgruppe 517, TU-Dortmund", true );
+		lines.add( "(c) 2008-09 zet development team", true );
+		lines.add( "", false );
+		lines.add( "http://www.zet-evakuierung.de", true );
+		lines.add( "", false );
+		lines.add( "", false );
+		lines.add( "Credits:", true );
+		lines.add( "", true );
+		lines.add( "Martin Groß", true );
+		lines.add( "Moukarram Kabbash", true );
+		lines.add( "Jan-Philipp Kappmeier", true );
+		lines.add( "Sophia Kardung", true );
+		lines.add( "Timon Kelter", true );
+		lines.add( "Joscha Kulbatzki", true );
+		lines.add( "Daniel Plümpe", true );
+		lines.add( "Marcel Preuß", true );
+		lines.add( "Gordon Schlechter", true );
+		lines.add( "Melanie Schmidt", true );
+		lines.add( "Sylvie Temme", true );
+		lines.add( "Matthias Woste", true );
+		lines.add( "", true );
+		lines.add( "", true );
+		lines.add( "This program is free software; you can", false );
+		lines.add( "redistribute it and/or modify it under", false );
+		lines.add( "the terms of the GNU General Public Li-", false );
+		lines.add( "cense as published by the Free Software", false );
+		lines.add( "Foundation; either version 2 of the Li-", false );
+		lines.add( "cense, or (at your opinion) any later", false );
+		lines.add( "version.", false );
+		lines.add( "", false );
+		lines.add( "zet is distributed in the hope that it", false );
+		lines.add( "will be useful but WITHOUT ANY WARRANTY;", false );
+		lines.add( "without even the implied warranty of", false );
+		lines.add( "MERCHANTABILITY or FITNESS FOR A PAR-", false );
+		lines.add( "TICULAR PURPOSE. See the GNU General", false );
+		lines.add( "Public License for more details.", false );
+		lines.add( "", false );
+		lines.add( "You should have received a copy of the", false );
+		lines.add( "GNU General Public Licence along with", false );
+		lines.add( "zet; if not, write to the Free Software", false );
+		lines.add( "Foundation, Inc., 51 Franklin Street,", false );
+		lines.add( "Fifth Floor, Boston, MA 02110-131, USA,", false );
+		lines.add( "or have a look at", false );
+		lines.add( "http://www.gnu.org/licenses/", false );
+		lines.add( "", false );
+		lines.add( "", false );
+		lines.add( "Third-party components used by zet:", false );
+		lines.add( "", false );
+		lines.add( "MersenneTwister Version 13", false );
+		lines.add( "Copyright (c) 2003 by Sean Luke.", false );
+		lines.add( "Portions copyright (c) 1993 by Michael", false );
+		lines.add( "Lecuyer.", false );
+		lines.add( "", false );
+		lines.add( "MersenneTwisterFast Version 13", false );
+		lines.add( "Copyright (c) 2003 by Sean Luke.", false );
+		lines.add( "Portions copyright (c) 1993 by Michael", false );
+		lines.add( "Lecuyer.", false );
+		lines.add( "", false );
+		lines.add( "MTRandom", false );
+		lines.add( "Copyright (c) 2005 by David Beaumont.", false );
+		lines.add( "", false );
+		lines.add( "TableLayout JDK 1.5 2007-04-21", false );
+		lines.add( "Copyright (c) 2001 by Daniel Barbalace.", false );
+		lines.add( "https://tablelayout.dev.java.net/", false );
+		lines.add( "", false );
+		lines.add( "JFreeChart 1.0.3", false );
+		lines.add( "Copyright (c) 2000-2009 by Object", false );
+		lines.add( "Refinery and Contributors.", false );
+		lines.add( "http://www.jfree.org/jfreechart/", false );
+		lines.add( "", false );
+		lines.add( "JCommon 1.0.7", false );
+		lines.add( "Copyright (c) 2007-2009 by Object", false );
+		lines.add( "Refinery and Contributors.", false );
+		lines.add( "http://www.jfree.org/jcommon/", false );
+		lines.add( "", false );
+		lines.add( "SSJ 2.1.2", false );
+		lines.add( "Copyright (c) 2008  Pierre L'Ecuyer", false );
+		lines.add( "and Université de Montréal", false );
+		lines.add( "http://www.iro.umontreal.ca/~simardr/ssj/", false );
+		lines.add( "", false );
+		lines.add( "XStream 1.3", false );
+		lines.add( "Copyright (c) 2003-2006, Joe Walnes", false );
+		lines.add( "Copyright (c) 2006-2007, XStream Committers", false );
+		lines.add( "http://xstream.codehaus.org/", false );
+		lines.add( "", false );
+		lines.add( "JOGL 1.1.1-rc6", false );
+		lines.add( "Copyright (c) 2003-2007 Sun Microsystems", false );
+		lines.add( "https://jogl.dev.java.net/", false );
+		lines.add( "", false );
+		lines.add( "JMF 2.1.1e", false );
+		lines.add( "Copyright (c) 1995-2003 Sun Microsystems", false );
+		lines.add( "http://java.sun.com/javase/technologies/", false );
+		lines.add( "desktop/media/jmf/", false );
 	}
 }

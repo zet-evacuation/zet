@@ -66,8 +66,8 @@ public class TextureFont {
 		fontTexture.bind();				// select the font texture
 
 		for( int i=0; i < count; i++ ) {
-			cx = (i%size)/(double)cpl;			 // x position of current character (left)
-			cy = (i/size)/(double)cpr;					// y position of current character (top)	
+			cx = (i%cpl)/(double)cpl;			 // x position of current character (left)
+			cy = (i/cpl)/(double)cpr;					// y position of current character (top)
 
 			gl.glNewList( base + i, gl.GL_COMPILE );				// create a listelement
 				// somehow, the upper and lower ends of the bitmap are the opposite as on
@@ -99,8 +99,8 @@ public void buildFont3( int cpl, int cpr, int size, float targetsize, float skip
 		fontTexture.bind();				// select the font texture
 
 		for( int i=0; i < count; i++ ) {
-			cx = (i%size)/(double)cpl;			 // x position of current character (left)
-			cy = (i/size)/(double)cpr;					// y position of current character (top)
+			cx = (i%cpl)/(double)cpl;			 // x position of current character (left)
+			cy = (i/cpl)/(double)cpr;					// y position of current character (top)
 
 			gl.glNewList( base + i, gl.GL_COMPILE );				// create a listelement
 				// somehow, the upper and lower ends of the bitmap are the opposite as on
