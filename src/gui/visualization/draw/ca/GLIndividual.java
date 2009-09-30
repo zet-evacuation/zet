@@ -74,12 +74,12 @@ public class GLIndividual extends AbstractDrawable<GLIndividual, GLIndividualCon
 		Tuple pos = control.getCurrentPosition();
 		gl.glTranslated( pos.x * VisualizationConstants.SIZE_MULTIPLICATOR, pos.y * VisualizationConstants.SIZE_MULTIPLICATOR, 1 * VisualizationConstants.SIZE_MULTIPLICATOR );
 		bodyColor.performGL( gl );
-		glu.gluCylinder( quadObj, individualRadius, 0.0, individualHeight, 12, 1 );	// Normal
-		//glu.gluCylinder( quadObj, individualRadius, 0.0, individualHeight, 48, 24 );	// High quality
+		//glu.gluCylinder( quadObj, individualRadius, 0.0, individualHeight, 12, 1 );	// Normal
+		glu.gluCylinder( quadObj, individualRadius, 0.0, individualHeight, 48, 24 );	// High quality
 		headColor.performGL( gl );
 		gl.glTranslated( 0, 0, individualHeight - individualRadius * 0.7 );
-		glu.gluSphere( quadObj, individualRadius * 0.7, 8, 8 ); // Normal
-		//glu.gluSphere( quadObj, individualRadius * 0.7, 48, 48 ); // High quality
+		//glu.gluSphere( quadObj, individualRadius * 0.7, 8, 8 ); // Normal
+		glu.gluSphere( quadObj, individualRadius * 0.7, 48, 48 ); // High quality
 		gl.glPopMatrix();
 	}
 }

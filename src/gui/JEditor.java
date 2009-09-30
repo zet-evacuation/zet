@@ -434,6 +434,14 @@ public class JEditor extends JFrame implements Localized, EventListener<Progress
 
 		editView.setEditMode( EditMode.Selection );
 		setZoomFactor( 0.04d );
+
+		// Set up the last camera position
+		visualizationView.getGLContainer().getCamera().setPos( projectControl.getProject().getVisualProperties().getCameraPosition().pos );
+		visualizationView.getGLContainer().getCamera().setView( projectControl.getProject().getVisualProperties().getCameraPosition().view );
+		visualizationView.getGLContainer().getCamera().setUp( projectControl.getProject().getVisualProperties().getCameraPosition().up );
+		visualizationView.getGLContainer().setTexts( projectControl.getProject().getVisualProperties().getTextureFontStrings() );
+		visualizationView.getGLContainer().setView( projectControl.getProject().getVisualProperties().getCurrentWidth(), projectControl.getProject().getVisualProperties().getCurrentHeight() );
+		visualizationView.updateCameraInformation();
 	}
 
 	public static JEditor getInstance() {
@@ -1653,6 +1661,7 @@ public class JEditor extends JFrame implements Localized, EventListener<Progress
 				vo.dispose();
 				if( vo.getRetVal() == VideoOptions.OK ) {
 					visualizationView.getGLContainer().setTexts( vo.getTextureFontStrings() );
+					projectControl.getProject().getVisualProperties().setTextureFontStrings( vo.getTextureFontStrings() );
 					String movieFrameName = PropertyContainer.getInstance().getAsString( "options.filehandling.movieFrameName" );
 					// TODO BUG: wenn ein projekt noch nicht gespeichert worden ist, liefert das hier iene null pointer exception. (tritt auf, wenn ein video gedreht werden soll)
 					String projectName = getProject().getProjectFile().getName().substring( 0, getProject().getProjectFile().getName().length() - 4 );

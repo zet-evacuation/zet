@@ -59,224 +59,216 @@ import localization.Localization;
  * The central Projekt class for the Z format. All information about
  * the evacuation scenario is linked together in this class.
  */
-@XStreamAlias ("project")
-@XMLConverter (ProjectConverter.class)
+@XStreamAlias("project")
+@XMLConverter(ProjectConverter.class)
 public class Project implements Serializable, ChangeListener, ChangeReporter {
-
 	private static XStream xml_convert;
 
-	public static XStream getXStream () {
+	public static XStream getXStream() {
 		return xml_convert;
 	}
 
+
 	static {
-		xml_convert = new XStream ();
-		xml_convert.setMode (XStream.ID_REFERENCES);
+		xml_convert = new XStream();
+		xml_convert.setMode( XStream.ID_REFERENCES );
 
 		//Configure aliases for external classes (Java API)
-		xml_convert.useAttributeFor (java.awt.Point.class, "x");
-		xml_convert.useAttributeFor (java.awt.Point.class, "y");
+		xml_convert.useAttributeFor( java.awt.Point.class, "x" );
+		xml_convert.useAttributeFor( java.awt.Point.class, "y" );
 
 		//Configure aliases for all ds.* classes
 		//For this purpose the current location of the bytecode is searched for
 		//all class names. These are loaded and their annotaions are examined.
 
 		// Load "ds" because the JARClassLoader won't load "" (the FileClassLoader does)
-		URL pack = Project.class.getClassLoader ().getResource ("ds");
-		String url = pack.toExternalForm ();
+		URL pack = Project.class.getClassLoader().getResource( "ds" );
+		String url = pack.toExternalForm();
 		// The artificially delete the "ds" again
-		url = url.substring (0, url.lastIndexOf ('/') + 1);
+		url = url.substring( 0, url.lastIndexOf( '/' ) + 1 );
 
 		// Scan JARs iteratively
-		if (url.startsWith ("jar:")) {
+		if( url.startsWith( "jar:" ) )
 			try {
-				String jar_filename = url.substring (url.indexOf (':') + 1,
-						url.lastIndexOf ('!'));
-				JarFile jar = new JarFile (new File (new URI (jar_filename)));
+				String jar_filename = url.substring( url.indexOf( ':' ) + 1,
+								url.lastIndexOf( '!' ) );
+				JarFile jar = new JarFile( new File( new URI( jar_filename ) ) );
 
-				Enumeration enu = jar.entries ();
-				while (enu.hasMoreElements ()) {
-					String entry = ((ZipEntry)enu.nextElement ()).getName ();
-					if (entry.endsWith (".class")) {
+				Enumeration enu = jar.entries();
+				while( enu.hasMoreElements() ) {
+					String entry = ((ZipEntry)enu.nextElement()).getName();
+					if( entry.endsWith( ".class" ) )
 						try {
-							String classname = entry.replace ('/', '.').substring (
-									0, entry.lastIndexOf ('.'));
-							Class fromFile = Project.class.getClassLoader ().loadClass (classname);
-							processClassObject (fromFile);
-						} catch (Exception ex) {
-							System.out.println (" Problem while scanning classes: Class file" + entry +
-									"\n" + ex.getLocalizedMessage ());
+							String classname = entry.replace( '/', '.' ).substring(
+											0, entry.lastIndexOf( '.' ) );
+							Class fromFile = Project.class.getClassLoader().loadClass( classname );
+							processClassObject( fromFile );
+						} catch( Exception ex ) {
+							System.out.println( " Problem while scanning classes: Class file" + entry +
+											"\n" + ex.getLocalizedMessage() );
 						}
-					}
 				}
-			} catch (Exception ex) {
-				throw new RuntimeException (Localization.getInstance (
-				).getString ("ds.InitProjectException" +ex.getLocalizedMessage ()));
+			} catch( Exception ex ) {
+				throw new RuntimeException( Localization.getInstance().getString( "ds.InitProjectException" + ex.getLocalizedMessage() ) );
 			}
-		} else if (url.startsWith ("file:")) {
+		else if( url.startsWith( "file:" ) )
 			try {
-				File dir = new File (new URI (url));
-				assert (dir.isDirectory ());
-				scanPackage (dir, "");
-			} catch (URISyntaxException ex) {
-				throw new RuntimeException (Localization.getInstance (
-				).getString ("ds.InitProjectException"));
+				File dir = new File( new URI( url ) );
+				assert (dir.isDirectory());
+				scanPackage( dir, "" );
+			} catch( URISyntaxException ex ) {
+				throw new RuntimeException( Localization.getInstance().getString( "ds.InitProjectException" ) );
 			}
-		} else {
-			throw new IllegalStateException (Localization.getInstance (
-			).getString ("ds.DeterminingJarException"));
-		}
+		else
+			throw new IllegalStateException( Localization.getInstance().getString( "ds.DeterminingJarException" ) );
 	}
 
 	/** Crawls the given directory for class files and processes them. */
-	private static void scanPackage (File dir, String pack) {
-		for (File f : dir.listFiles ()) {
-			if (f.isDirectory ()) {
-				scanPackage (f, pack + f.getName () + ".");
-			} else if (f.getName ().endsWith (".class")) {
+	private static void scanPackage( File dir, String pack ) {
+		for( File f : dir.listFiles() )
+			if( f.isDirectory() )
+				scanPackage( f, pack + f.getName() + "." );
+			else if( f.getName().endsWith( ".class" ) )
 				try {
-					String classname = f.getName ().substring (0, f.getName ().lastIndexOf ('.'));
-					Class fromFile = Project.class.getClassLoader ().loadClass (pack + classname);
-					processClassObject (fromFile);
-				} catch (Exception ex) {
-					System.out.println ("Problem while scanning classes: Class file" + f.getName () +
-							"\n" + ex.getLocalizedMessage ());
+					String classname = f.getName().substring( 0, f.getName().lastIndexOf( '.' ) );
+					Class fromFile = Project.class.getClassLoader().loadClass( pack + classname );
+					processClassObject( fromFile );
+				} catch( Exception ex ) {
+					System.out.println( "Problem while scanning classes: Class file" + f.getName() +
+									"\n" + ex.getLocalizedMessage() );
 				}
-			}
-		}
 	}
 
 	/** Used to initalize the XStream related stuff concerning the given type. */
-	private static void processClassObject (Class type) throws Exception {
+	private static void processClassObject( Class type ) throws Exception {
 		// Inhibit alias processing on the converter classes themselves
 		// as this will lead to unwanted behaviour in XStream
-		if (!com.thoughtworks.xstream.converters.Converter.class.isAssignableFrom (type)) {
-			Annotations.configureAliases (xml_convert, type);
+		if( !com.thoughtworks.xstream.converters.Converter.class.isAssignableFrom( type ) ) {
+			Annotations.configureAliases( xml_convert, type );
 
-			if (type.isAnnotationPresent (XMLConverter.class)) {
-				xml_convert.registerConverter ((Converter)((XMLConverter)type.getAnnotation (
-						XMLConverter.class)).value ().getConstructor (
-						Mapper.class, ReflectionProvider.class).newInstance (
-						xml_convert.getMapper (), xml_convert.getReflectionProvider ()));
-			}
+			if( type.isAnnotationPresent( XMLConverter.class ) )
+				xml_convert.registerConverter( (Converter)((XMLConverter)type.getAnnotation(
+								XMLConverter.class )).value().getConstructor(
+								Mapper.class, ReflectionProvider.class ).newInstance(
+								xml_convert.getMapper(), xml_convert.getReflectionProvider() ) );
 		}
 	}
-	@XStreamOmitField ()
+	@XStreamOmitField()
 	private transient ArrayList<ChangeListener> changeListeners;
-	@XStreamOmitField ()
+	@XStreamOmitField()
 	private transient File projectFile;
+	/** The building plan belonging to the project. */
 	private BuildingPlan plan;
+	/** The currently active evacuation plan for the building. */
 	private EvacuationPlan currentEvacuationPlan;
+	/** The currently active assignment. */
 	private Assignment currentAssignment;
+	/** The list of possible assignments for the project. */
 	private ArrayList<Assignment> assignments;
+	/** The list of possible evacuation plans for the project. */
 	private ArrayList<EvacuationPlan> evacuationPlans;
+	/** Additionally stored visualization parameters for the project. */
+	private VisualProperties vp;
 
-	public Project () {
-		changeListeners = new ArrayList<ChangeListener> ();
+	public Project() {
+		changeListeners = new ArrayList<ChangeListener>();
 
-		plan = new BuildingPlan ();
-		plan.addChangeListener (this);
-		assignments = new ArrayList<Assignment> (10);
-		evacuationPlans = new ArrayList<EvacuationPlan> (10);
+		plan = new BuildingPlan();
+		plan.addChangeListener( this );
+		assignments = new ArrayList<Assignment>( 10 );
+		evacuationPlans = new ArrayList<EvacuationPlan>( 10 );
+		vp = new VisualProperties();
 	}
 
 	/** {@inheritDoc}
 	 * @param e 
 	 */
-	public void throwChangeEvent (ChangeEvent e) {
+	public void throwChangeEvent( ChangeEvent e ) {
 		// Workaround: Notify only the listeners who are registered at the time when this method starts
 		// Some problems occur with the GUI: if a new assignment is created,
 		// the listeners of this project are changed in order to get new assignment lists etc.
 		// this invalidates the lists.
-		ChangeListener[] listenerCopy = changeListeners.toArray ( new ChangeListener[changeListeners.size ()] );
+		ChangeListener[] listenerCopy = changeListeners.toArray( new ChangeListener[changeListeners.size()] );
 
-		for (ChangeListener c : listenerCopy) {
-			c.stateChanged (e);
-		}
+		for( ChangeListener c : listenerCopy )
+			c.stateChanged( e );
 	}
 
 	/** {@inheritDoc} */
-	public void addChangeListener (ChangeListener c) {
-		if (!changeListeners.contains (c)) {
-			changeListeners.add (c);
-		}
+	public void addChangeListener( ChangeListener c ) {
+		if( !changeListeners.contains( c ) )
+			changeListeners.add( c );
 	}
 
 	/** {@inheritDoc} */
-	public void removeChangeListener (ChangeListener c) {
-		changeListeners.remove (c);
+	public void removeChangeListener( ChangeListener c ) {
+		changeListeners.remove( c );
 	}
 
 	/** See {@link ds.z.event.ChangeListener#stateChanged (ChangeEvent)} for details.
 	 * @param e 
 	 */
-	public void stateChanged (ChangeEvent e) {
-		if( e instanceof EvacuationAreaCreatedEvent ) {
+	public void stateChanged( ChangeEvent e ) {
+		if( e instanceof EvacuationAreaCreatedEvent )
 			for( Assignment a : this.getAssignments() )
 				for( AssignmentType t : a.getAssignmentTypes() )
 					for( AssignmentArea aa : t.getAssignmentAreas() )
-						if( aa.getExitArea() != null && aa.getExitArea().equals( e.getSource() ) ) {
-							aa.setExitArea( null );			
-						}
-		}
+						if( aa.getExitArea() != null && aa.getExitArea().equals( e.getSource() ) )
+							aa.setExitArea( null );
 		// Simply forward the events
-		throwChangeEvent (e);
+		throwChangeEvent( e );
 	}
-	
+
 	/**
 	 * Adds a new EvacuationPlan to the Project. If the Project hasn't had a
 	 * "CurrentEvacuationPlan" previously, then the new EvacuationPlan is made
 	 *  the current one.
-	 *
 	 * @param val the evacuation plan
 	 * @exception IllegalArgumentException - Is thrown when the EvacuationPlan "val" is already
-	 * registered at the Project. */
-	public void addEvacuationPlan (EvacuationPlan val) throws IllegalArgumentException {
-		if (evacuationPlans.contains (val)) {
-			throw new IllegalArgumentException (Localization.getInstance (
-			).getString ("ds.PlanAlreadyExistsException"));
-		} else {
-			if (currentEvacuationPlan == null) {
+	 * registered at the Project.
+	 */
+	public void addEvacuationPlan( EvacuationPlan val ) throws IllegalArgumentException {
+		if( evacuationPlans.contains( val ) )
+			throw new IllegalArgumentException( Localization.getInstance().getString( "ds.PlanAlreadyExistsException" ) );
+		else {
+			if( currentEvacuationPlan == null )
 				currentEvacuationPlan = val;
-			}
 
-			evacuationPlans.add (val);
-			throwChangeEvent (new ChangeEvent (this));
+			evacuationPlans.add( val );
+			throwChangeEvent( new ChangeEvent( this ) );
 		}
 	}
 
-	/** Deletes an EvacuationPlan from the Project. If you deleted the "current"
+	/**
+	 * Deletes an EvacuationPlan from the Project. If you deleted the "current"
 	 * EvacuationPlan, the first EvacuationPlan in the List of the remaining ones will
 	 * be selected to become "current", if the List is empty, the "currentEvacuationPlan"
 	 * will be set to null.
-	 *
 	 * @param val 
 	 * @exception IllegalArgumentException - Is thrown when the EvacuationPlan "val" is not
-	 * registered at the Project. */
-	public void deleteEvacuationPlan (EvacuationPlan val) throws IllegalArgumentException {
-		if (!evacuationPlans.remove (val)) {
-			throw new IllegalArgumentException (Localization.getInstance (
-			).getString ("ds.PlanNotRegisteredException"));
-		} else {
-			val.delete ();
+	 * registered at the Project.
+	 */
+	public void deleteEvacuationPlan( EvacuationPlan val ) throws IllegalArgumentException {
+		if( !evacuationPlans.remove( val ) )
+			throw new IllegalArgumentException( Localization.getInstance().getString( "ds.PlanNotRegisteredException" ) );
+		else {
+			val.delete();
 
-			if (val == currentEvacuationPlan) {
-				if (evacuationPlans.size () > 0) {
-					currentEvacuationPlan = evacuationPlans.get (0);
-				} else {
+			if( val == currentEvacuationPlan )
+				if( evacuationPlans.size() > 0 )
+					currentEvacuationPlan = evacuationPlans.get( 0 );
+				else
 					currentEvacuationPlan = null;
-				}
-			}
 
-			throwChangeEvent (new ChangeEvent (this));
+			throwChangeEvent( new ChangeEvent( this ) );
 		}
 	}
 
-	public List<EvacuationPlan> getEvacuationPlans () {
-		return Collections.unmodifiableList (evacuationPlans);
+	public List<EvacuationPlan> getEvacuationPlans() {
+		return Collections.unmodifiableList( evacuationPlans );
 	}
 
-	public EvacuationPlan getCurrentEvacuationPlan () {
+	public EvacuationPlan getCurrentEvacuationPlan() {
 		return currentEvacuationPlan;
 	}
 
@@ -285,14 +277,12 @@ public class Project implements Serializable, ChangeListener, ChangeReporter {
 	 * @exception IllegalArgumentException Is thrown when val is not in the
 	 * List of EvacuationPlans that is maintained by the Project.
 	 */
-	public void setCurrentEvacuationPlan (EvacuationPlan val) throws IllegalArgumentException {
-		if (evacuationPlans.contains (val)) {
+	public void setCurrentEvacuationPlan( EvacuationPlan val ) throws IllegalArgumentException {
+		if( evacuationPlans.contains( val ) ) {
 			this.currentEvacuationPlan = val;
-			throwChangeEvent (new ChangeEvent (this));
-		} else {
-			throw new IllegalArgumentException (Localization.getInstance (
-			).getString ("ds.PlanNotInProjectException"));
-		}
+			throwChangeEvent( new ChangeEvent( this ) );
+		} else
+			throw new IllegalArgumentException( Localization.getInstance().getString( "ds.PlanNotInProjectException" ) );
 	}
 
 	/** Adds a new Assignment to the Project. If the Project hasn't had a "CurrentAssignment"
@@ -302,59 +292,53 @@ public class Project implements Serializable, ChangeListener, ChangeReporter {
 	 * @exception IllegalArgumentException - Is thrown if the Assignment "val" is already
 	 * registered at the Project.
 	 */
-	public void addAssignment (Assignment val) throws IllegalArgumentException {
-		if (assignments.contains (val)) {
-			throw new IllegalArgumentException (Localization.getInstance (
-			).getString ("ds.AssignmentAlreadyRegisteredException"));
-		} else {
-			if (currentAssignment == null) {
+	public void addAssignment( Assignment val ) throws IllegalArgumentException {
+		if( assignments.contains( val ) )
+			throw new IllegalArgumentException( Localization.getInstance().getString( "ds.AssignmentAlreadyRegisteredException" ) );
+		else {
+			if( currentAssignment == null )
 				currentAssignment = val;
-			}
 
-			assignments.add (val);
-			val.addChangeListener (this);
-			throwChangeEvent (new ChangeEvent (this));
+			assignments.add( val );
+			val.addChangeListener( this );
+			throwChangeEvent( new ChangeEvent( this ) );
 		}
 	}
 
-	/** Deletes an Assignment from the Project. If you deleted the "current"
+	/**
+	 * Deletes an Assignment from the Project. If you deleted the "current"
 	 * Assignment, the first Assignment in the List of the remaining ones will
 	 * be selected to become "current", if the List is empty, the "currentAssignment"
 	 * will be set to null.
-	 *
 	 * @param val 
 	 * @exception IllegalArgumentException - Is thrown when the Assignment "val" is not
-	 * registered at the Project. */
-	public void deleteAssignment (Assignment val) throws IllegalArgumentException {
-		if (!assignments.remove (val)) {
-			throw new IllegalArgumentException (Localization.getInstance (
-			).getString ("ds.AssignmentNotRegisteredException"));
-		} else {
-			val.removeChangeListener (this);
-			val.delete ();
+	 * registered at the Project.
+	 */
+	public void deleteAssignment( Assignment val ) throws IllegalArgumentException {
+		if( !assignments.remove( val ) )
+			throw new IllegalArgumentException( Localization.getInstance().getString( "ds.AssignmentNotRegisteredException" ) );
+		else {
+			val.removeChangeListener( this );
+			val.delete();
 
-			if (val == currentAssignment) {
-				if (assignments.size () > 0) {
-					currentAssignment = assignments.get (0);
-				} else {
+			if( val == currentAssignment )
+				if( assignments.size() > 0 )
+					currentAssignment = assignments.get( 0 );
+				else
 					currentAssignment = null;
-				}
-			}
 
-			throwChangeEvent (new ChangeEvent (this));
+			throwChangeEvent( new ChangeEvent( this ) );
 		}
 	}
 
-	public List<Assignment> getAssignments () {
-		return Collections.unmodifiableList (assignments);
+	public List<Assignment> getAssignments() {
+		return Collections.unmodifiableList( assignments );
 	}
 
-	public Assignment getCurrentAssignment () {
-		if (currentAssignment == null) {
-			if (assignments.size () > 0) {
-				currentAssignment = assignments.get (0);
-			}
-		}
+	public Assignment getCurrentAssignment() {
+		if( currentAssignment == null )
+			if( assignments.size() > 0 )
+				currentAssignment = assignments.get( 0 );
 		return currentAssignment;
 	}
 
@@ -364,32 +348,46 @@ public class Project implements Serializable, ChangeListener, ChangeReporter {
 	 * @exception IllegalArgumentException - Is thrown when val is not in the
 	 * List of Assignments that is maintained by the Project.
 	 */
-	public void setCurrentAssignment (Assignment val) throws IllegalArgumentException {
-		if (assignments.contains (val)) {
-			this.currentAssignment.setInactive ();
+	public void setCurrentAssignment( Assignment val ) throws IllegalArgumentException {
+		if( assignments.contains( val ) ) {
+			this.currentAssignment.setInactive();
 			this.currentAssignment = val;
-			this.currentAssignment.setActive ();
-			throwChangeEvent (new ChangeEvent (this));
-		} else {
-			throw new IllegalArgumentException (Localization.getInstance (
-			).getString ("ds.AssignmentNotInProjectException"));
-		}
+			this.currentAssignment.setActive();
+			throwChangeEvent( new ChangeEvent( this ) );
+		} else
+			throw new IllegalArgumentException( Localization.getInstance().getString( "ds.AssignmentNotInProjectException" ) );
 	}
-			
+
+	/**
+	 * Returns the stored visual properties of the project.
+	 * @return the stored visual properties of the project
+	 */
+	public VisualProperties getVisualProperties() {
+		return vp;
+	}
+
+	/**
+	 * Sets new visual properties for the project.
+	 * @param visualProperties the new visual properties
+	 */
+	public void setVisualProperties( VisualProperties visualProperties ) {
+		vp = visualProperties;
+	}
+
 	/** @exception IOException - Is thrown when the I/O-Operation fails. */
-	public void save () throws IOException {
-		save (projectFile);
+	public void save() throws IOException {
+		save( projectFile );
 	}
 
 	/** @param file The location where the Project shall be stored.
 	 * @exception IOException - Is thrown when the I/O-Operation fails. */
-	public void save (File file) throws IOException {
-		PrintWriter output = new PrintWriter (file);
+	public void save( File file ) throws IOException {
+		PrintWriter output = new PrintWriter( file );
 
 		// Set project file before saving, to get it into the saved file
 		projectFile = file;
 
-		xml_convert.toXML (this, output);
+		xml_convert.toXML( this, output );
 	}
 
 	/**
@@ -397,67 +395,66 @@ public class Project implements Serializable, ChangeListener, ChangeReporter {
 	 * @exception IOException - Is thrown when the I/O-Operation fails.
 	 * @return The Project that was stored in the denoted file.
 	 */
-	public static Project load (File projectFile) throws IOException {
-		FileReader input = new FileReader (projectFile);
-		Project p = (Project)xml_convert.fromXML (input);
+	public static Project load( File projectFile ) throws IOException {
+		FileReader input = new FileReader( projectFile );
+		Project p = (Project)xml_convert.fromXML( input );
 		return p;
 	}
 
-	public File getProjectFile () {
+	public File getProjectFile() {
 		return projectFile;
 	}
 
-	public void setProjectFile (File val) {
+	public void setProjectFile( File val ) {
 		this.projectFile = val;
 	}
 
-	public BuildingPlan getPlan () {
+	public BuildingPlan getPlan() {
 		return plan;
 	}
 
 	@Override
-	public boolean equals (Object o) {
-		if (o instanceof Project) {
+	public boolean equals( Object o ) {
+		if( o instanceof Project ) {
 			Project p = (Project)o;
 
 			//This is redundant and only for speeding up the method
-			if (assignments.size () != p.assignments.size () ||
-					evacuationPlans.size () != p.evacuationPlans.size ()) {
+			if( assignments.size() != p.assignments.size() ||
+							evacuationPlans.size() != p.evacuationPlans.size() )
 				return false;
-			}
 
 			//Here comes the real comparison - Iteratively compare all subobjects
 			//The order in the lists subobjects_me/p MUST be the same
-			LinkedList subobjects_me = new LinkedList ();
-			subobjects_me.add (currentAssignment);
-			subobjects_me.add (currentEvacuationPlan);
-			subobjects_me.add (plan);
-			subobjects_me.add (projectFile);
-			subobjects_me.add (assignments);
-			subobjects_me.add (evacuationPlans);
+			LinkedList subobjects_me = new LinkedList();
+			subobjects_me.add( currentAssignment );
+			subobjects_me.add( currentEvacuationPlan );
+			subobjects_me.add( plan );
+			subobjects_me.add( projectFile );
+			subobjects_me.add( assignments );
+			subobjects_me.add( evacuationPlans );
+			subobjects_me.add( vp );
 
-			LinkedList subobjects_p = new LinkedList ();
-			subobjects_p.add (p.currentAssignment);
-			subobjects_p.add (p.currentEvacuationPlan);
-			subobjects_p.add (p.plan);
-			subobjects_p.add (p.projectFile);
-			subobjects_p.add (p.assignments);
-			subobjects_p.add (p.evacuationPlans);
+			LinkedList subobjects_p = new LinkedList();
+			subobjects_p.add( p.currentAssignment );
+			subobjects_p.add( p.currentEvacuationPlan );
+			subobjects_p.add( p.plan );
+			subobjects_p.add( p.projectFile );
+			subobjects_p.add( p.assignments );
+			subobjects_p.add( p.evacuationPlans );
+			subobjects_p.add( p.vp );
 
-			while (subobjects_me.size () > 0 && subobjects_p.size () > 0) {
-				Object subobj_me = subobjects_me.poll ();
-				Object subobj_p = subobjects_p.poll ();
+			while( subobjects_me.size() > 0 && subobjects_p.size() > 0 ) {
+				Object subobj_me = subobjects_me.poll();
+				Object subobj_p = subobjects_p.poll();
 
 				//This is not an implementation error - Lists also have a proper equals method
-				boolean subobj_equal = (subobj_me == null) ? subobj_p == null : subobj_me.equals (subobj_p);
-				if (!subobj_equal) {
+				boolean subobj_equal = (subobj_me == null) ? subobj_p == null : subobj_me.equals( subobj_p );
+				if( !subobj_equal )
 					return false;
-				}
 			}
 			//Return whether no elements are left on one side (that would imply inequality)
-			return (subobjects_me.size () == 0 && subobjects_p.size () == 0);
-		} else {
+			return (subobjects_me.size() == 0 && subobjects_p.size() == 0);
+		} else
 			return false;
-		}
 	}
 }
