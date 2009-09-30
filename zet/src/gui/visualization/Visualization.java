@@ -56,8 +56,13 @@ public class Visualization extends AbstractVisualization implements EventListene
 	private Localization loc = Localization.getInstance();
 	private static final int fontSize = 16;
 	private TextureManager texMan;
+	/** The {@link TextureFont} used to display informations in the screen. */
 	private TextureFont font;
+	/** The {@link TextureFont} used to display bold text in the intro. */
+	private TextureFont fontBold;
+	/** The texture containing the font. */
 	private Texture fontTex;
+	private Texture fontTexBold;
 	/** The control object of the graphics data structure (in MVC pattern). */
 	private GLControl control = null;
 	private GLAutoDrawable drawable;
@@ -89,6 +94,9 @@ public class Visualization extends AbstractVisualization implements EventListene
 	private boolean showFPS = PropertyContainer.getInstance().getAsBoolean( "options.visualization.elements.fps" );
 	private boolean showTimestepGraph = PropertyContainer.getInstance().getAsBoolean( "options.visualization.elements.timestepGraph" );
 	private boolean showTimestepCellularAutomaton = PropertyContainer.getInstance().getAsBoolean( "options.visualization.elements.timestepCA" );
+	int showIntro = 0;
+	double introSec = 8.0;
+	ArrayList<TextureFontStrings> texts = new ArrayList<TextureFontStrings>();
 
 	/**
 	 * Creates a new instance of the {@code Visualization} panel with given 
@@ -125,11 +133,11 @@ public class Visualization extends AbstractVisualization implements EventListene
 		gl.glEnable( GL.GL_DEPTH_TEST );																// Enable depth-buffer. (z-buffer)
 		gl.glShadeModel( GL.GL_SMOOTH );																// Activate smooth-shading (Gauraud)
 		gl.glHint( GL.GL_PERSPECTIVE_CORRECTION_HINT, GL.GL_NICEST );		// Perspective calculations with high precision
-    gl.glHint( GL.GL_GENERATE_MIPMAP_HINT, GL.GL_NICEST );					//
+		gl.glHint( GL.GL_GENERATE_MIPMAP_HINT, GL.GL_NICEST );					//
 //    gl.glHint( GL.GL_FOG_HINT, GL.GL_NICEST );										//
-    gl.glHint( GL.GL_LINE_SMOOTH_HINT, GL.GL_NICEST );							//
-    gl.glHint( GL.GL_POINT_SMOOTH_HINT, GL.GL_NICEST );							//
-    gl.glHint( GL.GL_POLYGON_SMOOTH_HINT, GL.GL_NICEST );						//
+		gl.glHint( GL.GL_LINE_SMOOTH_HINT, GL.GL_NICEST );							//
+		gl.glHint( GL.GL_POINT_SMOOTH_HINT, GL.GL_NICEST );							//
+		gl.glHint( GL.GL_POLYGON_SMOOTH_HINT, GL.GL_NICEST );						//
 
 		// Enable VSync
 		gl.setSwapInterval( 1 );
@@ -169,11 +177,15 @@ public class Visualization extends AbstractVisualization implements EventListene
 		texMan.setGLU( glu );
 //		fontTex = texMan.newTexture( "font2", "./textures/font2.bmp" );
 		fontTex = texMan.newTexture( "font2", "./textures/fontl.bmp" );
+		fontTexBold = texMan.newTexture( "font2", "./textures/fontl.bmp" );
 		// load texture font
+		fontBold = new TextureFont( gl, fontTexBold );
+		fontBold.buildFont( 8, 16, 32, 32, 19 );
+
 		font = new TextureFont( gl, fontTex );
+		font.buildFont( 8, 16, 32, 16, 9.5 );		// fontl.bmp
 //		font.buildFont( 8, 16, 32, 16, 16 );	// font1.bmp ???
-		font.buildFont( 8, 16, 32, 16, 16 );		// fontl.bmp
-//		font.buildFont( 16, 8, 16, 12, 10 );	// font2.bmp
+//		font.buildFont( 16, 8, 16, 12, 10 );	// font2.bmp (the old one. used in credits)
 		fontTex.bind();
 
 		gl.glEnable( GL.GL_NORMALIZE );
@@ -187,20 +199,23 @@ public class Visualization extends AbstractVisualization implements EventListene
 
 		if( control == null )
 			control = new GLControl();
-	// init intro text
-//		texts.add( new TextureFontStrings( true ) );
-// 		texts.get( 0 ).setXoffset( 10 );
-//		texts.get( 0 ).setWidth( drawable.getWidth() );
-//		// TODO resize: send new value to texts and recalc centered!
-//		texts.get( 0 ).add( "text1", false );
-//		texts.get( 0 ).add( "text2", false );
-//		texts.get( 0 ).add( "text3", false );
-//		texts.get( 0 ).add( "text4", false );
 	}
 
-int showIntro = 0;
-double introSec = 3.5;
-ArrayList<TextureFontStrings> texts = new ArrayList<TextureFontStrings>();
+	/**
+	 * Returns the set of texts that is shown as the intro.
+	 * @return the set of texts that is shown as the intro
+	 */
+	public ArrayList<TextureFontStrings> getTexts() {
+		return texts;
+	}
+
+	/**
+	 * Sets a new set of texts that are shown as the intro.
+	 * @param texts the <code>ArrayList</code> containing the texts.
+	 */
+	public void setTexts( ArrayList<TextureFontStrings> texts ) {
+		this.texts = texts;
+	}
 
 	/**
 	 * Draws the scene.
@@ -213,7 +228,6 @@ ArrayList<TextureFontStrings> texts = new ArrayList<TextureFontStrings>();
 		showFPS = PropertyContainer.getInstance().getAsBoolean( "options.visualization.elements.fps" );
 		showTimestepGraph = PropertyContainer.getInstance().getAsBoolean( "options.visualization.elements.timestepGraph" );
 		showTimestepCellularAutomaton = PropertyContainer.getInstance().getAsBoolean( "options.visualization.elements.timestepCA" );
-
 
 		this.drawable = drawable;
 		calculateFPS();
@@ -230,14 +244,13 @@ ArrayList<TextureFontStrings> texts = new ArrayList<TextureFontStrings>();
 
 		if( !recording )
 			drawScene();
+		else if( showIntro < texts.size() )
+			if( getTimeSinceStart() <= (long)(((showIntro + 1) * 1000000000L) * introSec) )
+				drawIntroText( showIntro );
+			else
+				showIntro++;
 		else
-			if( showIntro < texts.size() ) {
-				if( getTimeSinceStart() <= (long)(((showIntro+1) * 1000000000L) * introSec) )
-					drawIntroText( showIntro );
-				else
-					showIntro++;
-			} else
-				drawScene();
+			drawScene();
 
 		switch( gl.glGetError() ) {
 			case GL.GL_NO_ERROR:
@@ -334,26 +347,31 @@ ArrayList<TextureFontStrings> texts = new ArrayList<TextureFontStrings>();
 		gl.glTranslated( -getCamera().getPos().x, -getCamera().getPos().y, -getCamera().getPos().z );
 	}
 
-
 	/**
-	 * Prints some text on the screen. The text is shown before the visualization
+	 * Prints some getText on the screen. The getText is shown before the visualization
 	 * starts if a movie is recorded.
 	 */
 	final private void drawIntroText( int index ) {
+		gl.glClear( clearBits );
 		this.setProjectionPrint();
 		white.performGL( gl );
 		gl.glEnable( gl.GL_TEXTURE_2D );
-		int row = 1;
 		TextureFontStrings tfs = texts.get( index );
-		for( int i=0; i < tfs.size(); ++i ) {
-			font.print( 100, this.getHeight() - (7+i) * fontSize, tfs.text( index ) );
-		}
+		for( int i = 0; i < tfs.size(); ++i )
+//			font.print( 100, this.getHeight() - (7+i) * fontSize, tfs.getText( index ) );
+			if( tfs.getBold( i ) ) {
+				fontBold.print( 100, this.getHeight() - (int)tfs.getY( i ), tfs.getText( i ) );
+				System.out.println( "Bold: " + tfs.getText( i ) );
+			} else {
+				font.print( 100, this.getHeight() - (int)tfs.getY( i ), tfs.getText( i ) );
+				System.out.println( "Normal: " + tfs.getText( i ) );
+			}
 		gl.glDisable( gl.GL_TEXTURE_2D );
 		this.resetProjection();
 	}
 
 	/**
-	 * Prints some text on the screen. The text is shown after the visualization
+	 * Prints some getText on the screen. The getText is shown after the visualization
 	 * has finished if a movie is recorded.
 	 */
 	final private void drawOutroText() {
@@ -368,9 +386,10 @@ ArrayList<TextureFontStrings> texts = new ArrayList<TextureFontStrings>();
 
 	/**
 	 * Draws the main scene, that is the walls, the cellular automaton, the individuals and the graph.
-	 * Includes text visible in the scene but not the copyright notice, etc.
+	 * Includes getText visible in the scene but not the copyright notice, etc.
 	 */
 	final private void drawScene() {
+		//if( true ) return;
 		gl.glClear( clearBits );
 
 		gl.glMatrixMode( GL.GL_MODELVIEW );
@@ -402,6 +421,7 @@ ArrayList<TextureFontStrings> texts = new ArrayList<TextureFontStrings>();
 		}
 
 		control.draw( drawable );
+		gl.glClear( GL.GL_DEPTH_BUFFER_BIT );
 		drawFPS();
 	}
 

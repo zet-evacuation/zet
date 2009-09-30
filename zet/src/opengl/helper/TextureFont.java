@@ -20,7 +20,10 @@
 
 package opengl.helper;
 
+import java.lang.reflect.Array;
+import java.nio.ByteBuffer;
 import java.nio.CharBuffer;
+import java.util.ArrayList;
 import javax.media.opengl.GL;
 
 /**
@@ -54,8 +57,8 @@ public class TextureFont {
 	 * @param skipspace the space which the next letter should start more right
 	 */
 	// TODO unsigned values! exception if negative
-	public void buildFont( int cpl, int cpr, int size, int targetsize, int skipspace ) {
-		m_width = skipspace;
+	public void buildFont( int cpl, int cpr, int size, int targetsize, double skipspace ) {
+		m_width = (int)skipspace;
 		m_size = targetsize;
 		double	cx;								// character x coordinates
 		double	cy;								// character y coordinates
@@ -159,16 +162,19 @@ public void buildFont3( int cpl, int cpr, int size, float targetsize, float skip
 		gl.glPushAttrib( gl.GL_LIST_BIT );				// push display list bits
 		gl.glTranslated( x, y, 0 );							// textposition (0,0 - Bottom Left)
 
-		// todo test if > 256 works...
-		CharBuffer buf = CharBuffer.wrap( string.toCharArray() );
+		// TODO test if > 256 works...
+		byte[] array = (byte[])Array.newInstance( byte.class, string.length() ) ;
+		string.getBytes();
+		for( int i = 0; i < string.length(); ++i )
+			array[i] = (byte)string.charAt( i );
+		ByteBuffer bbuf = ByteBuffer.wrap( string.getBytes() );
 
 		// now reset the list-base index, subtract 32 because the space (first
 		// non-hidden character) has index 33, after that use the glCallLists
 		// method to display the lists corresponding to the indices in the buffer
 		gl.glListBase( base - 32 );
 			
-		// need to multiplicate by 2! why???
-		gl.glCallLists( string.length()*2, gl.GL_UNSIGNED_BYTE, buf );			// print text to screen
+		gl.glCallLists( string.length(), gl.GL_UNSIGNED_BYTE, bbuf );			// print text to screen
 		gl.glPopAttrib();
 		gl.glPopMatrix();
 	}

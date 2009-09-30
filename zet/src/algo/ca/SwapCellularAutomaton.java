@@ -105,7 +105,8 @@ public class SwapCellularAutomaton extends CellularAutomatonRandomOrderExecution
 			if( target.getIndividual() == null ) {
 				// Klappt alles
 				movement.move( i, target );
-				individualSwapped.add( i );
+				//individualSwapped.add( i );
+				unfinished2.add( i );
 			} else {
 				if( target.equals( i.getCell() ) ) {
 					unfinished2.add( i );
@@ -163,13 +164,12 @@ public class SwapCellularAutomaton extends CellularAutomatonRandomOrderExecution
 			}
 		}
 
-		// führe alle übrigen individuals aus
+		// Führe alle übrigen Individuals aus (Individuen, die nicht geswappt haben
 		for( Individual i : unfinished2 ) {
 			Iterator<Rule> loop = rs.loopIterator();
 			boolean movementFound = false;
 			while( loop.hasNext() ) {
 				Rule r = loop.next();
-				//r.execute( i.getCell() );
 				if( r instanceof AbstractMovementRule ) {
 					r.execute( i.getCell() );
 					movementFound = true;

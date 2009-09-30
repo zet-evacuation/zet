@@ -370,7 +370,7 @@ public class CellularAutomaton implements Iterable<Individual> {
 			throw new IllegalArgumentException( "Specified individual is not in list individuals." );
 	}
 
-		/**
+	/**
 	 * Move the individual standing on the "from"-Cell to the "to"-Cell.
 	 * @param from The cell on which the individual, which shall be moved, stays.
 	 * @param to The destination-cell for the moving individual.

@@ -22,6 +22,9 @@ package gui.visualization;
 import com.sun.opengl.util.Animator;
 import com.sun.opengl.util.Screenshot;
 import ds.PropertyContainer;
+import event.EventServer;
+import event.MessageEvent;
+import event.MessageEvent.MessageType;
 import gui.JEditor;
 import java.awt.Color;
 import java.awt.Dimension;
@@ -163,6 +166,8 @@ public abstract class AbstractVisualization extends GLCanvas implements GLEventL
 			set3DProjection();
 		else
 			set2DProjection();
+
+		EventServer.getInstance().dispatchEvent( new MessageEvent<JEditor>( JEditor.getInstance(), MessageType.MousePosition, "View: " + width + " x " + height ) );
 	}
 
 	final protected void updateProjection() {

@@ -35,7 +35,7 @@ import util.vectormath.Vector3;
  * @author Jan-Philipp Kappmeier
  */
 public class CreditsPanel extends JMovingEyePanel {
-	/** The size of the panel, used for text getX calculation. */
+	/** The size of the panel, used for getText getX calculation. */
 	private static int width = 480;
 	/** The instance of the texture manager. */
 	private TextureManager texMan;
@@ -45,12 +45,12 @@ public class CreditsPanel extends JMovingEyePanel {
 	private Texture texFont;
 	/** The texture containing the logo */
 	private Texture texLogo;
-	/** A texture-font object using to draw text on the {@code OpenGL} panel */
+	/** A texture-font object using to draw getText on the {@code OpenGL} panel */
 	private TextureFont font;
-	/** The top getX of the text */
+	/** The top getX of the getText */
 	//private double startPos = -128; // 256 height of picture, 84 black pixels
 	private float startPos = -5; // 256 height of picture, 84 black pixels
-	/** The array containing the text. */
+	/** The array containing the getText. */
 	private TextureFontStrings lines = new TextureFontStrings( false );
 
 	public CreditsPanel() {
@@ -88,7 +88,7 @@ public class CreditsPanel extends JMovingEyePanel {
 
 	@Override
 	/**
-	 * Displays the text on the screen.
+	 * Displays the getText on the screen.
 	 * @param drawable the context which is used for the credits panel
 	 */
 	public void display( GLAutoDrawable drawable ) {
@@ -141,7 +141,7 @@ public class CreditsPanel extends JMovingEyePanel {
 //		gl.glFlush();
 		texFont.bind();
 		String text = "Text";
-		//font.print( -1.7f, -1, -3, text );
+		//font.print( -1.7f, -1, -3, getText );
 		drawLines( lines, startPos + 1  );
 //
 //		this.switchToOrthoScreen( gl );
@@ -149,7 +149,7 @@ public class CreditsPanel extends JMovingEyePanel {
 
 	@Override
 	/**
-	 * Moves the text a bit upwards. The scrolling is not time independent, that means
+	 * Moves the getText a bit upwards. The scrolling is not time independent, that means
 	 * lags can occur on slower hardware.
 	 */
 	public void animate() {
@@ -170,17 +170,17 @@ public class CreditsPanel extends JMovingEyePanel {
 	}
 
 	/**
-	 * Draws some lines on the screen using the texture font. If the text was
+	 * Draws some lines on the screen using the texture font. If the getText was
 	 * completely scrolled over the whole screen, the top getX is resetted.
 	 * @param lines an array containing all lines that should be displayed
 	 */
 	private void drawLines( TextureFontStrings lines, float start ) {
-		//font.print( -1.7f, -1, -3, text );
+		//font.print( -1.7f, -1, -3, getText );
 		//int start = (int) Math.floor( startPos );
 		int end = 0;
 		for( int i = 0; i < lines.size(); i++ ) {
-			//font.print( lines[i].getX(), start - i * 16, lines[i].text() );
-			font.print( -lines.getX( i ), -4f, start + i * 1.1f, lines.text(i) );
+			//font.print( lines[i].getX(), start - i * 16, lines[i].getText() );
+			font.print( -lines.getX( i ), -4f, start + i * 1.1f, lines.getText(i) );
 			//end = start - i * 16 + 12;
 		}
 		if( end > this.getHeight() + 48 )
@@ -188,7 +188,7 @@ public class CreditsPanel extends JMovingEyePanel {
 	}
 
 	/**
-	 * Adds all lines of the credits text to the font line object.
+	 * Adds all lines of the credits getText to the font line object.
 	 */
 	private void initLines() {
 		lines.setXoffset( 10.3 );

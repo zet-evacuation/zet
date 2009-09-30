@@ -40,7 +40,7 @@ public class EvacuateIndividualsRule extends AbstractEvacuationRule {
 		//return (i != null) && (cell instanceof ds.ca.ExitCell) && ( i.getStepEndTime() <= caController().getCA().getTimeStep() );
 		boolean testval = false;
 		if( (i != null) && (cell instanceof ds.ca.ExitCell)) {
-			if( i.getStepEndTime() >= caController().getCA().getTimeStep()+1)
+			if( i.getStepEndTime() >= caController().getCA().getTimeStep()+1 )
 				testval = false;
 			else
 				testval = true;
