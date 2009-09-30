@@ -14,7 +14,7 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 /*
- * java
+ * JEditor.java
  * Created on 4. Dezember 2007, 17:08
  */
 package gui;
@@ -1648,9 +1648,11 @@ public class JEditor extends JFrame implements Localized, EventListener<Progress
 				vo.setResolution( visualizationView.getGLContainer().getSize() );
 				vo.setBitrate( 1000 );
 				vo.setFramerate( 24 );
+				vo.setTextureFontStrings( visualizationView.getGLContainer().getTexts() );
 				vo.setVisible( true );
 				vo.dispose();
 				if( vo.getRetVal() == VideoOptions.OK ) {
+					visualizationView.getGLContainer().setTexts( vo.getTextureFontStrings() );
 					String movieFrameName = PropertyContainer.getInstance().getAsString( "options.filehandling.movieFrameName" );
 					// TODO BUG: wenn ein projekt noch nicht gespeichert worden ist, liefert das hier iene null pointer exception. (tritt auf, wenn ein video gedreht werden soll)
 					String projectName = getProject().getProjectFile().getName().substring( 0, getProject().getProjectFile().getName().length() - 4 );

@@ -17,10 +17,10 @@
  * VideoOptions.java
  * Created on 8. November 2008, 20:45
  */
-
 package gui;
 
 import gui.components.framework.Button;
+import gui.editor.GUIOptionManager;
 import info.clearthought.layout.TableLayout;
 import io.movie.MovieWriter;
 import io.visualization.ImageFormat;
@@ -33,18 +33,27 @@ import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
+import java.util.ArrayList;
 import java.util.EnumSet;
+import javax.swing.DefaultListModel;
 import javax.swing.GroupLayout;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
+import javax.swing.JList;
 import javax.swing.JPanel;
 import javax.swing.JRadioButton;
 import javax.swing.JTabbedPane;
+import javax.swing.JTable;
 import javax.swing.JTextField;
 import javax.swing.LayoutStyle;
+import javax.swing.UIManager;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
+import javax.swing.table.AbstractTableModel;
 import localization.Localization;
+import opengl.helper.TextureFontStrings;
 import util.Helper;
 
 /**
@@ -54,6 +63,10 @@ import util.Helper;
  * @author  Jan-Philipp Kappmeier
  */
 public class VideoOptions extends javax.swing.JDialog {
+	private static final int COL_TEXT = 0;
+	private static final int COL_Y = COL_TEXT + 1;
+	private static final int COL_BOLD = COL_Y + 1;
+	private static final int COL_LAST = COL_BOLD;
 	/** The index of the tab with the advanced options for the writer. */
 	private final int ADVANCED_TAB_INDEX = 3;
 	/** The space between components and the border of the frames and the compontents. */
@@ -67,17 +80,19 @@ public class VideoOptions extends javax.swing.JDialog {
 	/** The localization class. */
 	static final Localization loc = Localization.getInstance();
 	/** The default cancel button. */
-  private JButton btnCancel;
+	private JButton btnCancel;
 	/** The default ok button. */
-  private JButton btnOK;
+	private JButton btnOK;
 	/** The tabbed pane. */
 	private JTabbedPane tabbedPane;
 	/**  The tab with basic format selections. */
-  private JPanel tabMovieRecord;
+	private JPanel tabMovieRecord;
 	/**  The tab with advanced options, such as bitrate or resolution. */
 	private JPanel tabMovieOptions;
 	/**  The tab allowing to set up filenames. */
-  private JPanel tabMoviePath;
+	private JPanel tabMoviePath;
+	/**  The tab for specification of introduction getText of the movie. */
+	private JPanel tabIntroText;
 	/** A radio button representing that only frames are recorded and no video is created. */
 	private JRadioButton optFrames;
 	/** A radio button representing that a movie is created. */
@@ -104,45 +119,55 @@ public class VideoOptions extends javax.swing.JDialog {
 	private MovieWriters mw = MovieWriters.FFmpeg;
 	/** The estimated time of the video that is to be encoded. Used to calculate size. */
 	private double estimatedTime = 0;
+	private JList lstTextSets;
+	private JButton btnAddTextSet;
+	private IntroTextTableModel tablemodel;
+	private JTable textTable;
+	private JButton btnAddText;
+	private ArrayList<TextureFontStrings> tfs = new ArrayList<TextureFontStrings>();
+	private TextureFontStrings tfsCurrent;
+	final DefaultListModel listModel = new DefaultListModel();
 
 	/**
 	 * Creates the form <code>VideoOptions</code> and sets the position to
 	 * centered.
 	 * @param owner the parent window that owns this window as child
 	 */
-	public VideoOptions(java.awt.Frame owner ) {
+	public VideoOptions( java.awt.Frame owner ) {
 		super( owner, true );
 		setDefaultCloseOperation( javax.swing.WindowConstants.DISPOSE_ON_CLOSE );
-    setTitle( loc.getString( "gui.visualization.createMovieDialog.title" ) );
-    setResizable( false );
+		setTitle( loc.getString( "gui.visualization.createMovieDialog.title" ) );
+		setResizable( false );
 		initComponents();
 		if( owner != null )
-			setLocation( owner.getX () + ( owner.getWidth() - getWidth() ) / 2, owner.getY () + ( owner.getHeight() - getWidth() ) / 2 );
+			setLocation( owner.getX() + (owner.getWidth() - getWidth()) / 2, owner.getY() + (owner.getHeight() - getWidth()) / 2 );
 	}
 
 	/**
 	 * This method is called from within the constructor to initialize the 
 	 * components of the form.
 	 */
-  private void initComponents() {
-    tabbedPane = new JTabbedPane();
-    tabMovieRecord = getMovieRecordTab();
+	private void initComponents() {
+		tabbedPane = new JTabbedPane();
+		tabMovieRecord = getMovieRecordTab();
 		tabMovieOptions = getMovieOptionsTab();
-    tabMoviePath = getMoviePathTab();
+		tabMoviePath = getMoviePathTab();
+		tabIntroText = getIntroTextTab();
 
 		loc.setPrefix( "gui.visualization.createMovieDialog." );
-    tabbedPane.addTab( loc.getString( "tabVideoRecord" ), null, tabMovieRecord, loc.getString( "tabVideoRecordTooltip") );
-    tabbedPane.addTab( loc.getString( "tabVideoOptions" ), null, tabMovieOptions, loc.getString( "tabVideoOptionsTooltip") );
-    tabbedPane.addTab( loc.getString( "tabVideoPath" ), null, tabMoviePath, loc.getString( "tabVideoPathTooltip") );
-		tabbedPane.addTab( loc.getString( "tabExtended" ), null, mw.getWriter().getAdvancedConfigurationPanel(), loc.getString( "tabExtendedTooltip") );
+		tabbedPane.addTab( loc.getString( "tabVideoRecord" ), null, tabMovieRecord, loc.getString( "tabVideoRecordTooltip" ) );
+		tabbedPane.addTab( loc.getString( "tabVideoOptions" ), null, tabMovieOptions, loc.getString( "tabVideoOptionsTooltip" ) );
+		tabbedPane.addTab( loc.getString( "tabVideoPath" ), null, tabMoviePath, loc.getString( "tabVideoPathTooltip" ) );
+		tabbedPane.addTab( loc.getString( "tabExtended" ), null, mw.getWriter().getAdvancedConfigurationPanel(), loc.getString( "tabExtendedTooltip" ) );
+		tabbedPane.addTab( loc.getString( "tabIntro" ), null, tabIntroText, loc.getString( "tabIntroTooltip" ) );
 		loc.setPrefix( "" );
-		
+
 		btnCancel = Button.newButton( loc.getString( "gui.OK" ), aclFinish, "ok", loc.getString( "gui.OK.tooltip" ) );
-    btnOK = Button.newButton( loc.getString( "gui.Cancel" ), aclFinish, "cancel", loc.getString( "gui.Cancel.tooltip" ) );
+		btnOK = Button.newButton( loc.getString( "gui.Cancel" ), aclFinish, "cancel", loc.getString( "gui.Cancel.tooltip" ) );
 
 		GroupLayout layout = new GroupLayout( getContentPane() );
 		getContentPane().setLayout( layout );
-		
+
 		int windowWidth = 413;
 		int windowHeight = 230;
 		layout.setHorizontalGroup( layout.createParallelGroup( GroupLayout.Alignment.LEADING ).addGroup( layout.createSequentialGroup().addContainerGap().addGroup( layout.createParallelGroup( GroupLayout.Alignment.LEADING ).addComponent( tabbedPane, GroupLayout.DEFAULT_SIZE, windowWidth, Short.MAX_VALUE ).addGroup( GroupLayout.Alignment.TRAILING, layout.createSequentialGroup().addComponent( btnOK ).addPreferredGap( LayoutStyle.ComponentPlacement.RELATED ).addComponent( btnCancel ) ) ).addContainerGap() ) );
@@ -161,35 +186,35 @@ public class VideoOptions extends javax.swing.JDialog {
 	 */
 	private JPanel getMovieRecordTab() {
 		double size[][] = // Columns
-		{
-			{ space, 2*space, TableLayout.PREFERRED, space, TableLayout.FILL, space },
+						{
+			{space, 2 * space, TableLayout.PREFERRED, space, TableLayout.FILL, space},
 			//Rows
-			{ space,
-				TableLayout.PREFERRED,	// Wrapper/Writer
+			{space,
+				TableLayout.PREFERRED, // Wrapper/Writer
 				space,
-				TableLayout.PREFERRED,	// Option Images
-				space/2,
-				TableLayout.PREFERRED,	// Image Format
+				TableLayout.PREFERRED, // Option Images
+				space / 2,
+				TableLayout.PREFERRED, // Image Format
 				space,
-				TableLayout.PREFERRED,	// Option Video
-				space/2,
-				TableLayout.PREFERRED,	// Video Format
+				TableLayout.PREFERRED, // Option Video
+				space / 2,
+				TableLayout.PREFERRED, // Video Format
 				space,
-				TableLayout.PREFERRED,	// Checkbox Delete Images
+				TableLayout.PREFERRED, // Checkbox Delete Images
 				space
 			}
 		};
-		
+
 		JPanel panel = new JPanel( new TableLayout( size ) );
 		loc.setPrefix( "gui.visualization.createMovieDialog." );
-		
+
 		optFrames = new JRadioButton( loc.getString( "frameOption" ) );
 		optFrames.addActionListener( aclRadio );
 		optFrames.setActionCommand( "frame" );
 		optMovie = new JRadioButton( loc.getString( "movieOption" ) );
 		optMovie.addActionListener( aclRadio );
 		optMovie.setActionCommand( "movie" );
-		
+
 		cbxFrameFormat = new JComboBox();
 		cbxMovieFormat = new JComboBox();
 		cbxMovieWriters = new JComboBox();
@@ -207,10 +232,10 @@ public class VideoOptions extends javax.swing.JDialog {
 					tabbedPane.insertTab( loc.getString( "gui.visualization.createMovieDialog.tabExtended" ), null, mw.getWriter().getAdvancedConfigurationPanel(), loc.getString( "gui.visualization.createMovieDialog.tabVideoOptionsTooltip" ), ADVANCED_TAB_INDEX );
 				}
 			}
-		});
+		} );
 		for( MovieWriters w : EnumSet.allOf( MovieWriters.class ) )
 			cbxMovieWriters.addItem( w );
-		
+
 		chkDeleteFrames = new JCheckBox( loc.getString( "deleteFrames" ) );
 
 		panel.add( cbxMovieWriters, "1,1,4,1" );
@@ -235,23 +260,23 @@ public class VideoOptions extends javax.swing.JDialog {
 	 */
 	private JPanel getMovieOptionsTab() {
 		double size[][] = // Columns
-		{
-			{ space, TableLayout.PREFERRED, 80, TableLayout.PREFERRED, 80, TableLayout.FILL, space },
+						{
+			{space, TableLayout.PREFERRED, 80, TableLayout.PREFERRED, 80, TableLayout.FILL, space},
 			//Rows
-			{ space,
-				TableLayout.PREFERRED,	// Resolution
+			{space,
+				TableLayout.PREFERRED, // Resolution
 				space,
-				TableLayout.PREFERRED,	// Bitrate
+				TableLayout.PREFERRED, // Bitrate
 				space,
-				TableLayout.PREFERRED,	// Framerate
+				TableLayout.PREFERRED, // Framerate
 				space,
 				TableLayout.FILL
 			}
 		};
-		
+
 		JPanel panel = new JPanel( new TableLayout( size ) );
 		loc.setPrefix( "gui.visualization.createMovieDialog." );
-		
+
 		// Create resolution panel
 		txtWidth = new JTextField();
 		txtHeight = new JTextField();
@@ -261,7 +286,7 @@ public class VideoOptions extends javax.swing.JDialog {
 		panel.add( txtHeight, "4,1" );
 
 		txtBitrate = new JTextField();
-		panel.add( new JLabel( loc.getString( "bitrate" ) + ": " ), "1,3");
+		panel.add( new JLabel( loc.getString( "bitrate" ) + ": " ), "1,3" );
 		panel.add( txtBitrate, "2,3" );
 		panel.add( new JLabel( " kb" ), "3,3" );
 		lblEstimatedFilesize = new JLabel();
@@ -277,19 +302,20 @@ public class VideoOptions extends javax.swing.JDialog {
 			public void actionPerformed( ActionEvent e ) {
 				lblEstimatedFilesize.setText( " (" + Helper.bitToMaxFilesizeUnit( estimatedTime * 1000 * getBitrate() ) + ")" );
 			}
-		});
+		} );
 		txtBitrate.addFocusListener( new FocusListener() {
-			public void focusGained( FocusEvent e ) { }
+			public void focusGained( FocusEvent e ) {
+			}
 
 			public void focusLost( FocusEvent e ) {
 				lblEstimatedFilesize.setText( " (" + Helper.bitToMaxFilesizeUnit( estimatedTime * 1000 * getBitrate() ) + ")" );
 			}
-		});
-		
+		} );
+
 		loc.setPrefix( "" );
 		return panel;
 	}
-	
+
 	/**
 	 * Returns a panel inserted as a tab in the tab control containing some
 	 * components to specify the movie path and the names for the images and
@@ -298,7 +324,55 @@ public class VideoOptions extends javax.swing.JDialog {
 	 */
 	private JPanel getMoviePathTab() {
 		JPanel panel = new JPanel();
+		// TODO
 		panel.add( new JLabel( "Die Pfade stellen sie bitte im Menü 'Extras | Optionen' ein." ) );
+		return panel;
+	}
+
+	/**
+	 * Returns a panel inserted as a tab in the tab control containing some
+	 * components to specify getText displayed as copyright information before
+	 * the video starts.
+	 * @return the panel
+	 */
+	private JPanel getIntroTextTab() {
+		double size[][] = {
+			// Columns
+			// Auswahl der Seite -- Tabelle --> default x-pos, button
+			{space, 80, space, TableLayout.PREFERRED, TableLayout.FILL, TableLayout.PREFERRED, space},
+			//Rows
+			// Tabelle -- Buttonreihe
+			{space,
+				TableLayout.FILL, // Tabelle
+				space,
+				TableLayout.PREFERRED, // Button
+				space,}
+		};
+
+		JPanel panel = new JPanel( new TableLayout( size ) );
+		loc.setPrefix( "gui.visualization.createMovieDialog." );
+
+		lstTextSets = new JList( listModel );
+		lstTextSets.addListSelectionListener( new ListSelectionListener() {
+			public void valueChanged( ListSelectionEvent e ) {
+				tfsCurrent = tfs.get( e.getFirstIndex() );
+				textTable.repaint();
+			}
+		} );
+		panel.add( lstTextSets, "1,1,1,1" );
+
+		btnAddTextSet = Button.newButton( loc.getString( "addTextSet" ), aclIntroText, "addTextSet", loc.getString( "addTextSet.tooltip" ) );
+		panel.add( btnAddTextSet, "1,3,1,3" );
+
+		tablemodel = new IntroTextTableModel();
+		textTable = new JTable( tablemodel );
+		panel.add( textTable, "3,1,5,1" );
+
+		btnAddText = Button.newButton( loc.getString( "addText" ), aclIntroText, "addText", loc.getString( "addText.tooltip" ) );
+		panel.add( btnAddText, "5,3,5,3" );
+		btnAddText.setEnabled( tfs.size() != 0 );
+
+		loc.setPrefix( "" );
 		return panel;
 	}
 
@@ -310,13 +384,12 @@ public class VideoOptions extends javax.swing.JDialog {
 	public int getRetVal() {
 		return retVal;
 	}
-	
-/*****************************************************************************
- *                                                                           *
- * Getter and Setter for the general movie recording parameter               *
- *                                                                           *
- ****************************************************************************/
 
+	/*****************************************************************************
+	 *                                                                           *
+	 * Getter and Setter for the general movie recording parameter               *
+	 *                                                                           *
+	 ****************************************************************************/
 	/**
 	 * Indicates wheather frames should be saved.
 	 * @return true, if frames should be created instead of a video
@@ -324,7 +397,7 @@ public class VideoOptions extends javax.swing.JDialog {
 	public boolean isFrameMode() {
 		return optFrames.isSelected();
 	}
-	
+
 	/**
 	 * Indicates wheather a movie should be saved.
 	 * @return true, if a movie should be created instead of frames
@@ -332,7 +405,7 @@ public class VideoOptions extends javax.swing.JDialog {
 	public boolean isMovieMode() {
 		return optMovie.isSelected();
 	}
-	
+
 	/**
 	 * Indicates wheather frames should be deleted after a video is created.
 	 * @return true if the frames should be deleted
@@ -340,13 +413,13 @@ public class VideoOptions extends javax.swing.JDialog {
 	public boolean isDeleteFrames() {
 		return chkDeleteFrames.isSelected();
 	}
-	
+
 	/**
 	 * Returns the selected movie format as {@link MovieFormat} enumeration.
 	 * @return the movie format
 	 */
 	public MovieFormat getMovieFormat() {
-		return (MovieFormat) cbxMovieFormat.getSelectedItem();
+		return (MovieFormat)cbxMovieFormat.getSelectedItem();
 	}
 
 	/**
@@ -354,21 +427,20 @@ public class VideoOptions extends javax.swing.JDialog {
 	 * @return the image format
 	 */
 	public ImageFormat getFrameFormat() {
-		return (ImageFormat) cbxFrameFormat.getSelectedItem();
+		return (ImageFormat)cbxFrameFormat.getSelectedItem();
 	}
 
-/*****************************************************************************
- *                                                                           *
- * Getter and Setter for Option Panel Values                                 *
- *                                                                           *
- ****************************************************************************/
-
+	/*****************************************************************************
+	 *                                                                           *
+	 * Getter and Setter for Option Panel Values                                 *
+	 *                                                                           *
+	 ****************************************************************************/
 	/**
 	 * Returns the bitrate from the video options in kilobits.
 	 * @return the bitrate from the video options
 	 */
 	public int getBitrate() {
-		return( Integer.parseInt( "0" + txtBitrate.getText() ) );
+		return (Integer.parseInt( "0" + txtBitrate.getText() ));
 	}
 
 	/**
@@ -376,7 +448,7 @@ public class VideoOptions extends javax.swing.JDialog {
 	 * @param bitrate the bitrate
 	 */
 	public void setBitrate( int bitrate ) {
-		txtBitrate.setText( Integer.toString( bitrate) );
+		txtBitrate.setText( Integer.toString( bitrate ) );
 		lblEstimatedFilesize.setText( " (" + Helper.bitToMaxFilesizeUnit( estimatedTime * 1000 * getBitrate() ) + ")" );
 	}
 
@@ -385,9 +457,9 @@ public class VideoOptions extends javax.swing.JDialog {
 	 * @return the framerate from the video options
 	 */
 	public int getFramerate() {
-		return( Integer.parseInt( "0" + txtFramerate.getText() ) );
+		return (Integer.parseInt( "0" + txtFramerate.getText() ));
 	}
-	
+
 	/**
 	 * Sets the framerate displayed in the video options in frames per second
 	 * @param framerate the framerate
@@ -395,7 +467,7 @@ public class VideoOptions extends javax.swing.JDialog {
 	public void setFramerate( int framerate ) {
 		txtFramerate.setText( Integer.toString( framerate ) );
 	}
-	
+
 	/**
 	 * Returns the resolution from the video options in pixels.
 	 * @return the resolution from the video options
@@ -403,7 +475,7 @@ public class VideoOptions extends javax.swing.JDialog {
 	public Dimension getResolution() {
 		return new Dimension( Integer.parseInt( "0" + txtWidth.getText() ), Integer.parseInt( "0" + txtHeight.getText() ) );
 	}
-	
+
 	/**
 	 * Sets the resolution displayed in the video options in pixels.
 	 * @param resolution the resolution
@@ -411,7 +483,7 @@ public class VideoOptions extends javax.swing.JDialog {
 	public void setResolution( Dimension resolution ) {
 		setResolution( resolution.width, resolution.height );
 	}
-	
+
 	/**
 	 * Sets the resolution displayed in the video options in pixels.
 	 * @param width the video width
@@ -422,18 +494,26 @@ public class VideoOptions extends javax.swing.JDialog {
 		txtHeight.setText( Integer.toString( height ) );
 	}
 
-/*****************************************************************************
- *                                                                           *
- * Other stuff, not necessary used as movie parameter.                       *
- *                                                                           *
- ****************************************************************************/
-/**
- * Returns the estimated video time that was used for the calculation of the
- * filesize.
- * @return the estimated video time.
- */
- public double getEstimatedTime() {
+	/*****************************************************************************
+	 *                                                                           *
+	 * Other stuff, not necessary used as movie parameter.                       *
+	 *                                                                           *
+	 ****************************************************************************/
+	/**
+	 * Returns the estimated video time that was used for the calculation of the
+	 * filesize.
+	 * @return the estimated video time.
+	 */
+	public double getEstimatedTime() {
 		return estimatedTime;
+	}
+
+	/**
+	 * Sets the estimated video time used to calculate the filesize.
+	 * @param estimatedTime the estimated time in seconds
+	 */
+	public void setEstimatedTime( double estimatedTime ) {
+		this.estimatedTime = estimatedTime;
 	}
 
 	/**
@@ -445,36 +525,45 @@ public class VideoOptions extends javax.swing.JDialog {
 	}
 
 	/**
-	* Sets the estimated video time used to calculate the filesize.
-	* @param estimatedTime the estimated time in seconds
-	*/
-	public void setEstimatedTime( double estimatedTime ) {
-		this.estimatedTime = estimatedTime;
+	 * Returns the set of texts for the intro.
+	 * @return the set of texts for the intro
+	 */
+	public ArrayList<TextureFontStrings> getTextureFontStrings() {
+		return tfs;
 	}
 
-/*****************************************************************************
- *                                                                           *
- * Action listener                                                           *
- *                                                                           *
- ****************************************************************************/
-	/** The listener for the OK and Cancel buttons. */	
+	/**
+	 * Sets a set of texts for the intro.
+	 * @param tfs the set of texts
+	 */
+	public void setTextureFontStrings( ArrayList<TextureFontStrings> tfs ) {
+		this.tfs = tfs;
+		btnAddText.setEnabled( tfs.size() != 0 );
+		for( int i = 1; i <= tfs.size(); i++ )
+			listModel.addElement( "Introseite " + i );
+	}
+	/*****************************************************************************
+	 *                                                                           *
+	 * Action listener                                                           *
+	 *                                                                           *
+	 ****************************************************************************/
+	/** The listener for the OK and Cancel buttons. */
 	ActionListener aclFinish = new ActionListener() {
 		public void actionPerformed( ActionEvent e ) {
-			if( e.getActionCommand().equals( "ok" )) {
+			if( e.getActionCommand().equals( "ok" ) ) {
 				retVal = OK;
 				setVisible( false );
 			} else if( e.getActionCommand().equals( "cancel" ) ) {
 				retVal = CANCEL;
 				setVisible( false );
-			} else {
+			} else
 				ZETMain.sendError( loc.getString( "gui.UnknownCommand" ) + " '" + e.getActionCommand() + "'. " + loc.getString( "gui.ContactDeveloper" ) );
-			}
 		}
 	};
 	/** A listener that enables or disables the elements depending of the radio button status. */
 	ActionListener aclRadio = new ActionListener() {
 		public void actionPerformed( ActionEvent e ) {
-			if( e.getActionCommand().equals( "frame" )) {
+			if( e.getActionCommand().equals( "frame" ) ) {
 				optMovie.setSelected( false );
 				cbxMovieFormat.setEnabled( false );
 				chkDeleteFrames.setEnabled( false );
@@ -488,33 +577,134 @@ public class VideoOptions extends javax.swing.JDialog {
 				cbxFrameFormat.removeAllItems();
 				for( ImageFormat f : mw.getSupportedImageFormats() )
 					cbxFrameFormat.addItem( f );
-			} else {
+			} else
 				ZETMain.sendError( loc.getString( "gui.UnknownCommand" ) + " '" + e.getActionCommand() + "'. " + loc.getString( "gui.ContactDeveloper" ) );
+		}
+	};
+	/** A listener that handels adding of texts in intro getText tab. */
+	ActionListener aclIntroText = new ActionListener() {
+		public void actionPerformed( ActionEvent e ) {
+			if( e.getActionCommand().equals( "addText" ) ) {
+				tfsCurrent.add( "New line", false, 0 );
+				textTable.repaint();
+			} else if( e.getActionCommand().equals( "addTextSet" ) ) {
+				tfsCurrent = new TextureFontStrings( true );
+				tfs.add( tfsCurrent );
+				btnAddText.setEnabled( true );
+				listModel.addElement( "Introseite " + (lstTextSets.getComponentCount() + 1) );
 			}
 		}
 	};
-	
+
 	/**
-	* @param args the command line arguments
-	*/
-	public static void main(String args[]) {
-		java.awt.EventQueue.invokeLater(new Runnable() {
+	 * @param args the command line arguments
+	 */
+	public static void main( String args[] ) {
+		java.awt.EventQueue.invokeLater( new Runnable() {
 			public void run() {
-					VideoOptions dialog = new VideoOptions(new javax.swing.JFrame() );
-					dialog.addWindowListener(new java.awt.event.WindowAdapter() {
-						@Override
-						public void windowClosing(java.awt.event.WindowEvent e) {
-							System.exit(0);
-						}
-					});
-					dialog.setVisible(true);
-					if( dialog.getRetVal() == OK )
-						System.out.println( "OK" );
-					else
-						System.out.println( "CANCEL" );
-					dialog.dispose();
+				// Change look and feel to native
+				GUIOptionManager.changeLookAndFeel( UIManager.getSystemLookAndFeelClassName() );
+				VideoOptions dialog = new VideoOptions( new javax.swing.JFrame() );
+				dialog.tfsCurrent = new TextureFontStrings( true );
+				dialog.tfsCurrent.add( "test", false, 100 );
+				dialog.tfsCurrent.add( "test1", false, 200 );
+				dialog.tfsCurrent.add( "test2", false, 300 );
+				dialog.tfsCurrent.add( "test3", false, 400 );
+				dialog.tfs.add( dialog.tfsCurrent );
+				dialog.setTextureFontStrings( dialog.tfs );
+				dialog.setLocation( 100, 100 );
+				dialog.addWindowListener( new java.awt.event.WindowAdapter() {
+					@Override
+					public void windowClosing( java.awt.event.WindowEvent e ) {
+						System.exit( 0 );
+					}
+				} );
+				dialog.setVisible( true );
+				if( dialog.getRetVal() == OK )
+					System.out.println( "OK" );
+				else
+					System.out.println( "CANCEL" );
+				dialog.dispose();
 			}
-		});
+		} );
 	}
-	
+
+	private class IntroTextTableModel extends AbstractTableModel {
+		@Override
+		public Class getColumnClass( int column ) {
+			switch( column ) {
+				case COL_TEXT:
+					return String.class;
+				case COL_Y:
+					return Double.class;
+				case COL_BOLD:
+					return Boolean.class;
+				default:
+					return null;
+			}
+		}
+
+		@Override
+		public String getColumnName( int column ) {
+			switch( column ) {
+				case COL_TEXT:
+					return Localization.getInstance().getStringWithoutPrefix( "gui.visualization.createMovieDialog.textTable.text" );
+				case COL_Y:
+					return Localization.getInstance().getStringWithoutPrefix( "gui.visualization.createMovieDialog.textTable.y" );
+				case COL_BOLD:
+					return Localization.getInstance().getStringWithoutPrefix( "gui.visualization.createMovieDialog.textTable.bold" );
+				default:
+					return null;
+			}
+		}
+
+		public int getRowCount() {
+			return tfsCurrent == null ? 0 : tfsCurrent.size();
+		}
+
+		public int getColumnCount() {
+			return COL_LAST + 1;
+		}
+
+		public Object getValueAt( int row, int column ) {
+			switch( column ) {
+				case COL_TEXT:
+					return tfsCurrent.getText( row );
+				case COL_Y:
+					return tfsCurrent.getY( row );
+				case COL_BOLD:
+					return tfsCurrent.getBold( row );
+				default:
+					return null;
+			}
+		}
+
+		@Override
+		public boolean isCellEditable( int row, int column ) {
+			switch( column ) {
+				case COL_TEXT:
+				case COL_Y:
+				case COL_BOLD:
+					return true;
+				default:
+					return true;
+			}
+		}
+
+		@Override
+		public void setValueAt( Object aValue, int row, int column ) {
+			switch( column ) {
+				case COL_TEXT:
+					tfsCurrent.setText( row, (String)aValue );
+					break;
+				case COL_Y:
+					tfsCurrent.setY( row, Double.parseDouble( aValue.toString() ) );
+					break;
+				case COL_BOLD:
+					tfsCurrent.setBold( row, (Boolean)aValue );
+				default:
+					;
+			}
+		}
+	}
 }
