@@ -15,8 +15,6 @@
  */
 package io.z;
 
-import com.thoughtworks.xstream.converters.Converter;
-import com.thoughtworks.xstream.converters.MarshallingContext;
 import com.thoughtworks.xstream.converters.UnmarshallingContext;
 import com.thoughtworks.xstream.converters.reflection.ReflectionConverter;
 import com.thoughtworks.xstream.converters.reflection.ReflectionProvider;
@@ -24,12 +22,13 @@ import com.thoughtworks.xstream.io.HierarchicalStreamReader;
 import com.thoughtworks.xstream.mapper.Mapper;
 
 import ds.Project;
+import ds.VisualProperties;
 import ds.z.event.ChangeListener;
 
-import java.lang.reflect.Field;
 import java.util.ArrayList;
 
-/** A converter that behaves just like a normal converter would do, he only adds
+/**
+ * A converter that behaves just like a normal converter would do, he only adds
  * the functionality of recreating the changeListeners.
  *
  * @author Timon Kelter
@@ -61,6 +60,12 @@ public class ProjectConverter extends ReflectionConverter {
 		// Recreate changeListener list
 		result.getPlan ().addChangeListener (result);
 		
+		// Check if project is old version and does not contain visual properties
+		if( result.getVisualProperties() == null ) {
+			System.err.println( "VisualProperties recreated for project." );
+			result.setVisualProperties( new VisualProperties() );
+		}
+
 		return result;
 	}
 }

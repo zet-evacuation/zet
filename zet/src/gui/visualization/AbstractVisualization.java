@@ -546,4 +546,18 @@ public abstract class AbstractVisualization extends GLCanvas implements GLEventL
 		moveUp( camera.getPos().z, scrollInvert * e.getWheelRotation() );
 		repaint();
 	}
+
+	public void setView( double width, double height ) {
+		currentWidth = width;
+		currentHeight = height;
+	}
+
+	public double getViewWidth() {
+		return currentWidth;
+	}
+
+	public double getViewHeight() {
+		return currentHeight;
+	}
+
 }

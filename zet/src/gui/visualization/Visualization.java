@@ -94,8 +94,11 @@ public class Visualization extends AbstractVisualization implements EventListene
 	private boolean showFPS = PropertyContainer.getInstance().getAsBoolean( "options.visualization.elements.fps" );
 	private boolean showTimestepGraph = PropertyContainer.getInstance().getAsBoolean( "options.visualization.elements.timestepGraph" );
 	private boolean showTimestepCellularAutomaton = PropertyContainer.getInstance().getAsBoolean( "options.visualization.elements.timestepCA" );
+	/** The intro page that is shown. */
 	int showIntro = 0;
-	double introSec = 8.0;
+	/** The number of seconds that each intro page is visible. */
+	double introSec = 6.3;
+	/** The intro pages that are shown. */
 	ArrayList<TextureFontStrings> texts = new ArrayList<TextureFontStrings>();
 
 	/**
@@ -105,9 +108,9 @@ public class Visualization extends AbstractVisualization implements EventListene
 	 */
 	public Visualization( GLCapabilities capabilities ) {
 		super( capabilities );
-		camera.setPos( new Vector3( 0, 0, 100 ) );
-		camera.setUp( new Vector3( 0, 0, 1 ) );
-		camera.setView( new Vector3( 1, -1, 0 ) );
+//		camera.setPos( new Vector3( 0, 0, 100 ) );
+//		camera.setUp( new Vector3( 0, 0, 1 ) );
+//		camera.setView( new Vector3( 1, -1, 0 ) );
 		//JEditor.getInstance().getVisualizationView().setCamera( camera );
 		noRotate = !PropertyContainer.getInstance().getAsBoolean( "editor.options.visualization.allowRotateIn2D" );
 		movieManager = new MovieManager();
@@ -217,6 +220,8 @@ public class Visualization extends AbstractVisualization implements EventListene
 		this.texts = texts;
 	}
 
+	int introCount;
+
 	/**
 	 * Draws the scene.
 	 * @param drawable the {@code OpenGL} context
@@ -242,14 +247,27 @@ public class Visualization extends AbstractVisualization implements EventListene
 		if( updateProjection )
 			updateProjection();
 
+		boolean introRunning = false;
+
 		if( !recording )
 			drawScene();
-		else if( showIntro < texts.size() )
-			if( getTimeSinceStart() <= (long)(((showIntro + 1) * 1000000000L) * introSec) )
+		else if( showIntro < texts.size() && texts.get( showIntro ).size() > 0 ) {
+//			if( getTimeSinceStart() <= (long)(((showIntro + 1) * 1000000000L) * introSec) ) {
+			// usable if no video is recorded
+			//if( introCount < introSec * movieFrameRate ) {
 				drawIntroText( showIntro );
-			else
+				introRunning = true;
+			//} else {
+			if( introCount++ == introSec * movieFrameRate ) {
 				showIntro++;
-		else
+				introCount = 0;
+			}
+				// Hier wurde angezeigt, aber die zeit ist abgelaufen.
+				//if( showIntro >= texts.size() )
+				//	control.addTime( -control.getTime() );
+//				introRunning = false;
+			//}
+		} else
 			drawScene();
 
 		switch( gl.glGetError() ) {
@@ -283,7 +301,8 @@ public class Visualization extends AbstractVisualization implements EventListene
 			String newFilename = movieManager.nextFilename();
 			takeScreenshot( drawable, newFilename );
 			movieManager.addImage( newFilename );
-			movieStep();
+			if( !introRunning )
+				movieStep();
 		}
 	}
 
@@ -361,10 +380,8 @@ public class Visualization extends AbstractVisualization implements EventListene
 //			font.print( 100, this.getHeight() - (7+i) * fontSize, tfs.getText( index ) );
 			if( tfs.getBold( i ) ) {
 				fontBold.print( 100, this.getHeight() - (int)tfs.getY( i ), tfs.getText( i ) );
-				System.out.println( "Bold: " + tfs.getText( i ) );
 			} else {
 				font.print( 100, this.getHeight() - (int)tfs.getY( i ), tfs.getText( i ) );
-				System.out.println( "Normal: " + tfs.getText( i ) );
 			}
 		gl.glDisable( gl.GL_TEXTURE_2D );
 		this.resetProjection();
@@ -560,10 +577,12 @@ public class Visualization extends AbstractVisualization implements EventListene
 	public void setRecording( boolean recording, Dimension resolution ) {
 		this.recording = recording;
 		if( recording ) {
+			showIntro = 0;
 			oldX = this.getSize().width;
 			oldY = this.getSize().height;
 			movieWidth = resolution.width;
 			movieHeight = resolution.height;
+			introCount = 0;
 		} else
 			setSize( oldX, oldY );
 	}
@@ -612,6 +631,11 @@ public class Visualization extends AbstractVisualization implements EventListene
 			case KeyEvent.VK_UP:
 			case KeyEvent.VK_DOWN:
 				JEditor.getInstance().getVisualizationView().updateCameraInformation();
+				JEditor.getInstance().getProject().getVisualProperties().getCameraPosition().pos = camera.getPos();
+				JEditor.getInstance().getProject().getVisualProperties().getCameraPosition().view = camera.getView();
+				JEditor.getInstance().getProject().getVisualProperties().getCameraPosition().up = camera.getUp();
+				JEditor.getInstance().getProject().getVisualProperties().setCurrentWidth( getViewWidth() );
+				JEditor.getInstance().getProject().getVisualProperties().setCurrentHeight( getViewHeight() );
 			default:
 				super.keyPressed( e );
 		}
@@ -621,17 +645,33 @@ public class Visualization extends AbstractVisualization implements EventListene
 	public void mousePressed( MouseEvent e ) {
 		super.mousePressed( e );
 		JEditor.getInstance().getVisualizationView().updateCameraInformation();
+		JEditor.getInstance().getProject().getVisualProperties().getCameraPosition().pos = camera.getPos();
+		JEditor.getInstance().getProject().getVisualProperties().getCameraPosition().view = camera.getView();
+		JEditor.getInstance().getProject().getVisualProperties().getCameraPosition().up = camera.getUp();
+				JEditor.getInstance().getProject().getVisualProperties().setCurrentWidth( getViewWidth() );
+				JEditor.getInstance().getProject().getVisualProperties().setCurrentHeight( getViewHeight() );
 	}
 
 	@Override
 	public void mouseDragged( MouseEvent e ) {
 		super.mouseDragged( e );
 		JEditor.getInstance().getVisualizationView().updateCameraInformation();
+		JEditor.getInstance().getProject().getVisualProperties().getCameraPosition().pos = camera.getPos();
+		JEditor.getInstance().getProject().getVisualProperties().getCameraPosition().view = camera.getView();
+		JEditor.getInstance().getProject().getVisualProperties().getCameraPosition().up = camera.getUp();
+				JEditor.getInstance().getProject().getVisualProperties().setCurrentWidth( getViewWidth() );
+				JEditor.getInstance().getProject().getVisualProperties().setCurrentHeight( getViewHeight() );
 	}
 
 	@Override
 	public void mouseWheelMoved( MouseWheelEvent e ) {
 		super.mouseWheelMoved( e );
 		JEditor.getInstance().getVisualizationView().updateCameraInformation();
+		JEditor.getInstance().getProject().getVisualProperties().getCameraPosition().pos = camera.getPos();
+		JEditor.getInstance().getProject().getVisualProperties().getCameraPosition().view = camera.getView();
+		JEditor.getInstance().getProject().getVisualProperties().getCameraPosition().up = camera.getUp();
+				JEditor.getInstance().getProject().getVisualProperties().setCurrentWidth( getViewWidth() );
+				JEditor.getInstance().getProject().getVisualProperties().setCurrentHeight( getViewHeight() );
+
 	}
 }
