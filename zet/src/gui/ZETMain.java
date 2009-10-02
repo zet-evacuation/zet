@@ -89,7 +89,9 @@ public class ZETMain {
 	/** The properties in the information file. */
 	public static PropertyTreeModel ptmOptions;
 	
-	/** Creates a new instance of <code>ZETMain</code> */
+	/**
+	 * Creates a new instance of <code>ZETMain</code>
+	 */
 	private ZETMain() { }
 
 	public static void main( String[] args ) throws JSAPException {

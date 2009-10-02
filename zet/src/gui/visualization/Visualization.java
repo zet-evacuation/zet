@@ -22,6 +22,8 @@ package gui.visualization;
 import ds.PropertyContainer;
 import event.EventListener;
 import event.EventServer;
+import event.MessageEvent;
+import event.MessageEvent.MessageType;
 import event.OptionsChangedEvent;
 import gui.JEditor;
 import gui.visualization.control.GLControl;
@@ -62,7 +64,11 @@ public class Visualization extends AbstractVisualization implements EventListene
 	private TextureFont fontBold;
 	/** The texture containing the font. */
 	private Texture fontTex;
-	private Texture fontTexBold;
+//	private Texture fontTexBold;
+	/** The texture containing the logo. */
+	private Texture logoTex;
+	/** The texture for the logo mask (used for blending). */
+	private Texture maskTex;
 	/** The control object of the graphics data structure (in MVC pattern). */
 	private GLControl control = null;
 	private GLAutoDrawable drawable;
@@ -97,7 +103,7 @@ public class Visualization extends AbstractVisualization implements EventListene
 	/** The intro page that is shown. */
 	int showIntro = 0;
 	/** The number of seconds that each intro page is visible. */
-	double introSec = 6.3;
+	double introSec = 8.3;
 	/** The intro pages that are shown. */
 	ArrayList<TextureFontStrings> texts = new ArrayList<TextureFontStrings>();
 
@@ -179,14 +185,16 @@ public class Visualization extends AbstractVisualization implements EventListene
 		texMan.setGL( gl );
 		texMan.setGLU( glu );
 //		fontTex = texMan.newTexture( "font2", "./textures/font2.bmp" );
-		fontTex = texMan.newTexture( "font2", "./textures/fontl.bmp" );
-		fontTexBold = texMan.newTexture( "font2", "./textures/fontl.bmp" );
+		maskTex = texMan.newTexture( "logo", "./textures/logomask.png" );
+		logoTex = texMan.newTexture( "logo", "./textures/logo2.png" );
+		fontTex = texMan.newTexture( "font2", "./textures/fontl.png" );
+		//fontTexBold = texMan.newTexture( "font2", "./textures/fontl.bmp" );
 		// load texture font
-		fontBold = new TextureFont( gl, fontTexBold );
-		fontBold.buildFont( 8, 16, 32, 32, 19 );
+		fontBold = new TextureFont( gl, fontTex );
+		fontBold.buildFont( 8, 32, 32, 32, 19 );
 
 		font = new TextureFont( gl, fontTex );
-		font.buildFont( 8, 16, 32, 16, 9.5 );		// fontl.bmp
+		font.buildFont( 8, 32, 32, 16, 9.5 );		// fontl.bmp
 //		font.buildFont( 8, 16, 32, 16, 16 );	// font1.bmp ???
 //		font.buildFont( 16, 8, 16, 12, 10 );	// font2.bmp (the old one. used in credits)
 		fontTex.bind();
@@ -220,10 +228,11 @@ public class Visualization extends AbstractVisualization implements EventListene
 		this.texts = texts;
 	}
 
-	int introCount;
+	int introCount = 0;
+int screenshotCounter = 0;
 
 	/**
-	 * Draws the scene.
+	 * Draws the scene, including text and takes screenshots, if necessary.
 	 * @param drawable the {@code OpenGL} context
 	 */
 	public void display( GLAutoDrawable drawable ) {
@@ -248,27 +257,20 @@ public class Visualization extends AbstractVisualization implements EventListene
 			updateProjection();
 
 		boolean introRunning = false;
-
 		if( !recording )
 			drawScene();
 		else if( showIntro < texts.size() && texts.get( showIntro ).size() > 0 ) {
-//			if( getTimeSinceStart() <= (long)(((showIntro + 1) * 1000000000L) * introSec) ) {
-			// usable if no video is recorded
-			//if( introCount < introSec * movieFrameRate ) {
-				drawIntroText( showIntro );
-				introRunning = true;
-			//} else {
-			if( introCount++ == introSec * movieFrameRate ) {
+			drawIntroText( showIntro );
+			introRunning = true;
+			if( (++introCount) >= (introSec * movieFrameRate) ) {
 				showIntro++;
 				introCount = 0;
 			}
-				// Hier wurde angezeigt, aber die zeit ist abgelaufen.
-				//if( showIntro >= texts.size() )
-				//	control.addTime( -control.getTime() );
-//				introRunning = false;
-			//}
 		} else
 			drawScene();
+
+		// Show logo
+		drawLogo();
 
 		switch( gl.glGetError() ) {
 			case GL.GL_NO_ERROR:
@@ -300,6 +302,7 @@ public class Visualization extends AbstractVisualization implements EventListene
 		if( recording && frameUsed ) {
 			String newFilename = movieManager.nextFilename();
 			takeScreenshot( drawable, newFilename );
+			EventServer.getInstance().dispatchEvent( new MessageEvent<JEditor>( JEditor.getInstance(), MessageType.MousePosition, "Video frame "  + (++screenshotCounter) + " - " + (screenshotCounter * (1.0/movieFrameRate )) + " sec" ) );
 			movieManager.addImage( newFilename );
 			if( !introRunning )
 				movieStep();
@@ -375,6 +378,7 @@ public class Visualization extends AbstractVisualization implements EventListene
 		this.setProjectionPrint();
 		white.performGL( gl );
 		gl.glEnable( gl.GL_TEXTURE_2D );
+		fontTex.bind();
 		TextureFontStrings tfs = texts.get( index );
 		for( int i = 0; i < tfs.size(); ++i )
 //			font.print( 100, this.getHeight() - (7+i) * fontSize, tfs.getText( index ) );
@@ -384,6 +388,46 @@ public class Visualization extends AbstractVisualization implements EventListene
 				font.print( 100, this.getHeight() - (int)tfs.getY( i ), tfs.getText( i ) );
 			}
 		gl.glDisable( gl.GL_TEXTURE_2D );
+		this.resetProjection();
+	}
+
+	/**
+	 * Draws the ZET logo on the lower right edge.
+	 */
+	final private void drawLogo() {
+		int logoHeight = 128;
+		this.setProjectionPrint();
+		gl.glEnable( GL.GL_BLEND );
+		gl.glBlendFunc( GL.GL_DST_COLOR, GL.GL_ZERO );
+		gl.glEnable( GL.GL_TEXTURE_2D );
+		// Draw the mask
+		maskTex.bind();
+		gl.glBegin( GL.GL_QUADS );
+			gl.glTexCoord2f( 0.0f, 1.0f );
+			gl.glVertex3d( drawable.getWidth()-2*logoHeight, 0, -1 );
+			gl.glTexCoord2f( 0.0f, 0.0f );
+			gl.glVertex3d( drawable.getWidth()-2*logoHeight, logoHeight, -1 );
+			gl.glTexCoord2f( 1.0f, 0.0f );
+			gl.glVertex3d( drawable.getWidth(), logoHeight, -1 );
+			gl.glTexCoord2f( 1.0f, 1.0f );
+			gl.glVertex3d( drawable.getWidth(), 0, -1 );
+		gl.glEnd();
+
+		// Draw the logo
+    gl.glBlendFunc( GL.GL_SRC_COLOR, GL.GL_ONE );// Copy Image 2 Color To The Screen
+		logoTex.bind();
+		gl.glBegin( GL.GL_QUADS );
+			gl.glTexCoord2f( 0.0f, 1.0f );
+			gl.glVertex3d( drawable.getWidth()-2*logoHeight, 0, -1 );
+			gl.glTexCoord2f( 0.0f, 0.0f );
+			gl.glVertex3d( drawable.getWidth()-2*logoHeight, logoHeight, -1 );
+			gl.glTexCoord2f( 1.0f, 0.0f );
+			gl.glVertex3d( drawable.getWidth(), logoHeight, -1 );
+			gl.glTexCoord2f( 1.0f, 1.0f );
+			gl.glVertex3d( drawable.getWidth(), 0, -1 );
+		gl.glEnd();
+		gl.glDisable( GL.GL_TEXTURE_2D );
+		gl.glDisable( GL.GL_BLEND );
 		this.resetProjection();
 	}
 
@@ -449,7 +493,10 @@ public class Visualization extends AbstractVisualization implements EventListene
 	final private void drawFPS() {
 		this.setProjectionPrint();
 		white.performGL( gl );
+		gl.glEnable( GL.GL_BLEND );
+    gl.glBlendFunc( GL.GL_ONE, GL.GL_ONE );// Copy Image 2 Color To The Screen
 		gl.glEnable( gl.GL_TEXTURE_2D );
+		fontTex.bind();
 		if( showFPS )
 			font.print( 0, 0, Integer.toString( this.fps ) + " FPS" );
 		int row = 1;
@@ -463,7 +510,7 @@ public class Visualization extends AbstractVisualization implements EventListene
 			} else {
 				minimalFrameCountCellularAutomaton = 2;
 				if( showTimestepCellularAutomaton ) {
-					font.print( 0, this.getHeight() - (row++) * fontSize, loc.getString( "gui.visualization.fps.simulationStep" ) + " " + Double.toString( control.getCaStep() ) );
+					font.print( 0, this.getHeight() - (row++) * fontSize, loc.getString( "gui.visualization.fps.simulationStep" ) + " " + loc.getFloatConverter().format( control.getCaStep() ) );
 					font.print( 0, this.getHeight() - (row++) * fontSize, loc.getString( "gui.visualization.fps.simulationTime" ) + " " + secToMin( control.getCaStep() * control.getCaSecondsPerStep() ) );
 				}
 			}
@@ -479,7 +526,7 @@ public class Visualization extends AbstractVisualization implements EventListene
 			} else {
 				minimalFrameCountGraph = 2;
 				if( showTimestepGraph ) {
-					font.print( 0, this.getHeight() - (row++) * fontSize, loc.getString( "gui.visualization.fps.graphStep" ) + " " + Double.toString( control.getGraphStep() ) );
+					font.print( 0, this.getHeight() - (row++) * fontSize, loc.getString( "gui.visualization.fps.graphStep" ) + " " + loc.getFloatConverter().format( control.getGraphStep() ) );
 					font.print( 0, this.getHeight() - (row++) * fontSize, loc.getString( "gui.visualization.fps.graphTime" ) + " " + secToMin( control.getGraphStep() * control.getGraphSecondsPerStep() ) );
 				}
 			}
@@ -497,7 +544,8 @@ public class Visualization extends AbstractVisualization implements EventListene
 			}
 		}
 		//font.print( 0, this.getHeight() - (row++)*fontSize, "Zeit: " + secToMin( getTimeSinceStart()/1000000000 ) );
-		gl.glDisable( gl.GL_TEXTURE_2D );
+		gl.glDisable( GL.GL_TEXTURE_2D );
+		gl.glDisable( GL.GL_BLEND );
 		this.resetProjection();
 	}
 
