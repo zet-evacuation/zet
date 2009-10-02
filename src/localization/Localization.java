@@ -112,16 +112,18 @@ public class Localization {
 	}
 	
 	/**
-	 * 
-	 * @return
+	 * Returns a formatter that formats floating point numbers with respect to the
+	 * current locale.
+	 * @return a formatter that formats floating point numbers
 	 */
 	public final NumberFormat getFloatConverter() {
 		return nfFloat;
 	}
 	
 	/**
-	 * 
-	 * @return
+	 * Returns a formatter that formats integral numbers with respect to the
+	 * current locale.
+	 * @return a formatter that formats integral numbers
 	 */
 	public final NumberFormat getIntegerConverter() {
 		return nfInteger;
