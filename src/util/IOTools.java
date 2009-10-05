@@ -59,12 +59,12 @@ public class IOTools {
 	public static String getNextFreeNumberedFilename( String path, String filePrefix, int digits ) throws java.lang.IllegalArgumentException, java.lang.IllegalStateException {
 		if( digits <= 0 )
 			throw new IllegalArgumentException( "Digits must not be negative." );
-		int prefixLen = filePrefix.length();
+		final int prefixLen = filePrefix.length();
 		File[] files = new File( path ).listFiles();
 		int lastIndex = 1;
 		if (files != null) { // worked to get the list
 			for( int i = 0; i < files.length; i++ ) {
-				if( !files[i].isDirectory() && files[i].getName().length() >= prefixLen ) {
+				if( !files[i].isDirectory() && files[i].getName().length() >= prefixLen+digits ) {
 					String foundPrefix = files[i].getName().substring( 0, prefixLen );
 					if( foundPrefix.equals( filePrefix ) ) {
 						String foundNumber = files[i].getName().substring( prefixLen, prefixLen + digits );
@@ -72,7 +72,9 @@ public class IOTools {
 						try {
 							number = Localization.getInstance().getIntegerConverter().parse( foundNumber ).intValue();
 						} catch( ParseException ex ) {
-							throw new java.lang.IllegalStateException( "File numbering wrong." );
+							//throw new java.lang.IllegalStateException( "File numbering wrong." );
+							System.out.println( "Skipped file with same prefix: " + files[i].getName() );
+							number = -1;
 						}
 						if( number >= lastIndex )
 							lastIndex = number + 1;
