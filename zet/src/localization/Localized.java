@@ -26,5 +26,8 @@ package localization;
  * @author Jan-Philipp Kappmeier
  */
 public interface Localized {
+	/**
+	 * This method localizes the object that implements {@code Localized}. 
+	 */
 	public void localize();
 }

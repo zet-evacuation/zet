@@ -6,7 +6,7 @@
  *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
  * GNU General Public License for more details.
  *
  * You should have received a copy of the GNU General Public License
@@ -15,7 +15,7 @@
  */
 /**
  * Class Visualization
- * Erstellt 20.05.2008, 23:50:54
+ * Created 20.05.2008, 23:50:54
  */
 package gui.visualization;
 
@@ -26,6 +26,8 @@ import event.MessageEvent;
 import event.MessageEvent.MessageType;
 import event.OptionsChangedEvent;
 import gui.JEditor;
+import gui.ZETProperties;
+import gui.editor.properties.JOptionsWindow;
 import gui.visualization.control.GLControl;
 import gui.visualization.util.VisualizationConstants;
 import io.movie.MovieManager;
@@ -64,14 +66,15 @@ public class Visualization extends AbstractVisualization implements EventListene
 	private TextureFont fontBold;
 	/** The texture containing the font. */
 	private Texture fontTex;
-//	private Texture fontTexBold;
 	/** The texture containing the logo. */
 	private Texture logoTex;
 	/** The texture for the logo mask (used for blending). */
 	private Texture maskTex;
 	/** The control object of the graphics data structure (in MVC pattern). */
 	private GLControl control = null;
+	/** The {@code OpenGL} context. */
 	private GLAutoDrawable drawable;
+	/** Indicates if mouse movement in 2d-view rotates or moves the building. */
 	private boolean noRotate = false;
 	private static GLColor white = new GLColor( Color.white );
 	/** Decides wheather a movie is captured or not */
@@ -86,26 +89,27 @@ public class Visualization extends AbstractVisualization implements EventListene
 	private boolean frameUsed;
 	/** The MovieManager object*/
 	private MovieManager movieManager;
-	/** The old resolution width used vor movie recording */
+	/** The old resolution width used for movie recording */
 	int oldX;
-	/** The old resolution height used vor movie recording */
+	/** The old resolution height used for movie recording */
 	int oldY;
 	/** The width used for movie recording. */
 	int movieWidth;
 	/** The height used for movie recording. */
 	int movieHeight;
 
-	// Status-Variablen die angezeigte Elemente steuern
-	private boolean showEye = PropertyContainer.getInstance().getAsBoolean( "options.visualization.elements.eye" );
-	private boolean showFPS = PropertyContainer.getInstance().getAsBoolean( "options.visualization.elements.fps" );
-	private boolean showTimestepGraph = PropertyContainer.getInstance().getAsBoolean( "options.visualization.elements.timestepGraph" );
-	private boolean showTimestepCellularAutomaton = PropertyContainer.getInstance().getAsBoolean( "options.visualization.elements.timestepCA" );
-	/** The intro page that is shown. */
+	/** The intro page that is currently shown. Starts from 0 up to the maximal number. */
 	int showIntro = 0;
 	/** The number of seconds that each intro page is visible. */
 	double introSec = 8.3;
 	/** The intro pages that are shown. */
 	ArrayList<TextureFontStrings> texts = new ArrayList<TextureFontStrings>();
+
+	// Status-Variablen die angezeigte Elemente steuern
+	private boolean showEye = ZETProperties.isShowEye();
+	private boolean showFPS = ZETProperties.isShowFPS();
+	private boolean showTimestepGraph = ZETProperties.isShowTimestepGraph();
+	private boolean showTimestepCellularAutomaton = ZETProperties.isShowTimestepCellularAutomaton();
 
 	/**
 	 * Creates a new instance of the {@code Visualization} panel with given 
@@ -238,10 +242,10 @@ int screenshotCounter = 0;
 	public void display( GLAutoDrawable drawable ) {
 		// TODO: richtig machen mit dem update :D
 		// Status-Variablen die angezeigte Elemente steuern
-		showEye = PropertyContainer.getInstance().getAsBoolean( "options.visualization.elements.eye" );
-		showFPS = PropertyContainer.getInstance().getAsBoolean( "options.visualization.elements.fps" );
-		showTimestepGraph = PropertyContainer.getInstance().getAsBoolean( "options.visualization.elements.timestepGraph" );
-		showTimestepCellularAutomaton = PropertyContainer.getInstance().getAsBoolean( "options.visualization.elements.timestepCA" );
+//		showEye = PropertyContainer.getInstance().getAsBoolean( "options.visualization.elements.eye" );
+//		showFPS = PropertyContainer.getInstance().getAsBoolean( "options.visualization.elements.fps" );
+//		showTimestepGraph = PropertyContainer.getInstance().getAsBoolean( "options.visualization.elements.timestepGraph" );
+//		showTimestepCellularAutomaton = PropertyContainer.getInstance().getAsBoolean( "options.visualization.elements.timestepCA" );
 
 		this.drawable = drawable;
 		calculateFPS();
@@ -636,7 +640,7 @@ int screenshotCounter = 0;
 	}
 
 	/**
-	 * Starts animation, stores animation state.
+	 * Starts animation and stores animation state.
 	 */
 	@Override
 	public void startAnimation() {
@@ -654,15 +658,18 @@ int screenshotCounter = 0;
 	 * @param event the event
 	 */
 	public void handleEvent( OptionsChangedEvent event ) {
-		update();
+		showEye = ZETProperties.isShowEye();
+		showFPS = ZETProperties.isShowFPS();
+		showTimestepGraph = ZETProperties.isShowTimestepGraph();
+		showTimestepCellularAutomaton = ZETProperties.isShowTimestepCellularAutomaton();
+		repaint();
+		//update();
 	}
 
 	public void update() {
 		// TODO update weiterleiten an den MovieManager
 		//moviePath = PropertyContainer.getInstance().getAsString( "options.filehandling.moviePath" );
 		//movieFrameName = PropertyContainer.getInstance().getAsString( "options.filehandling.movieFrameName" );
-		showEye = PropertyContainer.getInstance().getAsBoolean( "options.visualization.elements.eye" );
-		showFPS = PropertyContainer.getInstance().getAsBoolean( "options.visualization.elements.fps" );
 		repaint();
 	}
 

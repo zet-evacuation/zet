@@ -82,13 +82,12 @@ public class ProjectControl {
 //			distribution = null; // Throw away the old assignment window
 			project.setProjectFile( projectFile );
 //			editView.displayProject( loaded );
-			// Löschen eingestellter parameter
+			// delete parameters that are set
 			ZToCAConverter.getInstance().clear();
 			//firstSwitch = true;
 			//if( !PropertyContainer.getInstance().getAsBoolean( "editor.options.view.hideDefaultFloor" ) )
 			//	editView.setFloor( 1 );
-			// Updaten der gui
-			//this.getEditView().update();
+			// Update the graphical user interface
 			ZETMain.sendMessage( loc.getString( "gui.editor.JEditor.message.loaded" ) );	// TODO output changed, use listener
 		} catch( Exception ex ) {
 			//JOptionPane.showMessageDialog( null,
@@ -108,7 +107,7 @@ public class ProjectControl {
 	}
 
 	/**
-	 * Creates a new project file with default settings
+	 * Creates a new project with default settings and returns it.
 	 * @return the newly created project
 	 */
 	public static Project newProject() {

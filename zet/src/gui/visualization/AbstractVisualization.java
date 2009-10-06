@@ -343,7 +343,7 @@ public abstract class AbstractVisualization extends GLCanvas implements GLEventL
 
 	/**
 	 * Returns the time since start of animation in nano seconds. In case the
-	 * animation has not startet yet, 0 is returned.
+	 * animation has not been started yet, 0 is returned.
 	 * @return the time since start of animation in nano seconds
 	 */
 	final public long getTimeSinceStart() {
@@ -369,7 +369,7 @@ public abstract class AbstractVisualization extends GLCanvas implements GLEventL
 	}
 
 	/**
-	 * Takes a screenshot and saves it to the file indiciated by the filename
+	 * Takes a screenshot and saves it to the file indicated by the filename
 	 * submitted by the other screenshot method.
 	 * @param drawable the {@code OpenGL} context
 	 */
