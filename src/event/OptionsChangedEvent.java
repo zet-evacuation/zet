@@ -21,7 +21,7 @@
 package event;
 
 /**
- * An event that is thrown if the program optons are changed, so that the
+ * An event that is thrown if the program options are changed, so that the
  * values can be reloaded. Especially used for the visualization.
  * @param <S> 
  * @author Jan-Philipp Kappmeier

@@ -1346,10 +1346,14 @@ public class JEditor extends JFrame implements Localized, EventListener<Progress
 						// save
 						if( getProject().getProjectFile() == null ) {
 							if( jfcProject.showSaveDialog( getInstance() ) == JFileChooser.APPROVE_OPTION ) {
-								if( createCopy )
-									createBackup();
+								GUIOptionManager.setSavePath( jfcProject.getCurrentDirectory().getPath() );
+								if( jfcProject.getSelectedFile().exists() && createCopy )
+									createBackup( jfcProject.getSelectedFile() );
 								try {
-									getProject().save( jfcProject.getSelectedFile() );
+									File target = jfcProject.getSelectedFile();
+									if( !target.getName().endsWith( ".zet" ) )
+										target = new File( target.getAbsolutePath() + ".zet" );
+									getProject().save( target );
 								} catch( java.lang.StackOverflowError soe ) {
 									showErrorMessage( loc.getString( "gui.editor.JEditor.error.stackOverflowTitle" ), loc.getString( "gui.editor.error.JEditor.stackOverflow" ) );
 								} catch( Exception ex ) {
@@ -1376,9 +1380,8 @@ public class JEditor extends JFrame implements Localized, EventListener<Progress
 					case 1:
 						status = loc.getString( "gui.editor.JEditor.status.newProjectDiscard" );
 				}
-				//currentProject = ZETMain.newProject();
-				projectControl.newProject();
-				currentProject = projectControl.getProject();
+				currentProject = ProjectControl.newProject();
+				projectControl.setProject( currentProject );
 				distribution = null; // Throw away the old assignment window
 				editView.displayProject( currentProject );
 				ZETMain.sendMessage( status );

@@ -98,7 +98,7 @@ public class ZETMain {
 		JSAP jsap = new JSAP();
 		loc.setPrefix( "help." );
 
-	UnflaggedOption optProjectFile = new UnflaggedOption( "project" )
+		UnflaggedOption optProjectFile = new UnflaggedOption( "project" )
 						.setStringParser( JSAP.STRING_PARSER )
 						.setRequired( false );
 		optProjectFile.setHelp( loc.getString("projectFile") );
