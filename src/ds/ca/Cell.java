@@ -181,6 +181,10 @@ public abstract class Cell implements Comparable<Cell> {
 		return getNeighbours( false, false );
 	}
 
+	/**
+	 * Returns a list of all free neighbour cells.
+	 * @return a list of all free neighbour cells
+	 */
 	public ArrayList<Cell> getFreeNeighbours() {
 		return getNeighbours( true, true );
 	}
@@ -373,6 +377,7 @@ public abstract class Cell implements Comparable<Cell> {
 		return "(" + x + "," + y + ")";
 	}
 
+	@SuppressWarnings("fallthrough")
 	protected ArrayList<Cell> getNeighbours( boolean passableOnly, boolean freeOnly ) {
 		ArrayList<Cell> neighbours = new ArrayList<Cell>();
 		Room cellRoom = this.getRoom();
@@ -380,7 +385,7 @@ public abstract class Cell implements Comparable<Cell> {
 			int cellx = this.getX() + direction.xOffset();
 			int celly = this.getY() + direction.yOffset();
 			if( cellRoom.existsCellAt( cellx, celly ) && (!passableOnly || !bounds.contains( direction )) && (!freeOnly || cellRoom.getCell( cellx, celly ).individual == null) ) {
-
+				// old behavoiur: just add the cell
 				neighbours.add( cellRoom.getCell( cellx, celly ) );
 			}
 		}
