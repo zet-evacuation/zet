@@ -54,16 +54,21 @@ import static util.Direction.*;
 
 /**
  * This singleton class converts a rasterized z-Project to a cellular automaton.
- * @author Daniel Pluempe
+ * @author Daniel Pluempe, Jan-Philipp Kappmeier
  *
  */
 public class ZToCAConverter {
-
+	/** The private instance of this singleton. */
 	private static ZToCAConverter instance = null;
+	/** The latest created mapping of the z-format to the cellular automaton. */
 	private static ZToCAMapping lastMapping = null;
+	/** The latest created container of rastered elements. */
 	private static ZToCARasterContainer lastContainer = null;
+	/** A list of all exit cells in the cellular automaton. */
 	private static ArrayList<ExitCell> exitCells = null;
+	/** The latest created cellular automaton. */
 	private static CellularAutomaton lastCA = null;
+	/** A map that maps rastered rooms to rooms in the cellular automaton. */
 	private static HashMap<ZToCARoomRaster, ds.ca.Room> roomRasterRoomMapping = null;
 
 	public static class ConversionNotSupportedException extends Exception {
@@ -495,39 +500,6 @@ public class ZToCAConverter {
 	}
 
 	/**
-	 * Calculate the cell on which persons, which are specified in an concrete assignment, will stand 
-	 * in the cellular automaton. This is done by first get the rastered square version of the room 
-	 * specified in the person object. Afterwards the cell, in which the person has to be located, 
-	 * is calculated in the following way: (coordinate-200)/400.
-	 * @param concreteAssignment the concrete assignment containing the individuals
-	 * @throws java.lang.IllegalArgumentException if the calculated cell is not in the room of the cellular automaton
-	 * @return ArrayList containing generated Individuals
-	 */
-//	public static Individual[] storeConcreteAssignment( ConcreteAssignment concreteAssignment ) throws IllegalArgumentException {
-//		if( 1 == 1 )
-//			throw new IllegalArgumentException( "Should never be called!" );
-//		ZToCARoomRaster room;
-//		Individual[] individuals = new Individual[concreteAssignment.getPersons().size()];
-//		Cell c;
-//		int x, y;
-//		int individualCounter = 1;
-//		for( Person p : concreteAssignment.getPersons() ) {
-//			room = lastContainer.getRasteredRoom( p.getRoom() );
-//			x = Math.round( (p.getPosition().getXInt() - 200 - p.getRoom().getxOffset()) / 400 );
-//			y = Math.round( (p.getPosition().getYInt() - 200 - p.getRoom().getyOffset()) / 400 );
-//			if( !room.isValid( x, y ) ) {
-//				throw new IllegalArgumentException( "Individual is placed outside the room." );
-//			}
-//			c = lastMapping.get( room.getSquare( x, y ) );
-//			Individual i = generateIndividual( p );
-//			i.setNumber( individualCounter++ );
-//			i.setCell( c );
-//			individuals[individualCounter - 2] = i;
-//		}
-//		return individuals;
-//	}
-
-	/**
 	 * Copies the bonds from a square to the corrisponding cell. That means, if a
 	 * direction of the square is unpassable the direction is set unpassable in the
 	 * cell, too and vice versa.
@@ -563,8 +535,12 @@ public class ZToCAConverter {
 	}
 
 	/**
-	 * 
-	 * @param room
+	 * <p>Sets the bounds for the cells in a specified room. That means, that bounds
+	 * are set, if a cell in a direction is not reachable.</p>
+	 * <p>A cell is not reachable diagonally if only one of the horizontal or
+	 * vertical neighbor cells is not reachable. For example, the upper left cell
+	 * is not reachable if the upper or the left cell is not reachable.</p>
+	 * @param room the room for that the borders are set up
 	 */
 	protected static void connectBounds( ds.ca.Room room ) {
 		for( int x = 0; x < room.getWidth(); x++ ) {
@@ -603,11 +579,14 @@ public class ZToCAConverter {
 			}
 		}
 
+		// Disable diagonally reachable cells if one edge is blocked. Behaviour changed:
+		// it is not neccessary to have two sides blocked, but only one.
 		for( int x = 0; x < room.getWidth(); x++ ) {
 			for( int y = 0; y < room.getHeight(); y++ ) {
 				if( room.existsCellAt( x, y ) ) {
 					Cell aCell = room.getCell( x, y );
-					if( isDirectionBlocked( aCell, UP ) && isDirectionBlocked( aCell, LEFT ) ) {
+					if( isDirectionBlocked( aCell, UP ) || isDirectionBlocked( aCell, LEFT ) ) {
+//					if( isDirectionBlocked( aCell, UP ) && isDirectionBlocked( aCell, LEFT ) ) {
 						aCell.setUnPassable( UPPER_LEFT );
 
 						if( room.existsCellAt( x - 1, y - 1 ) ) {
@@ -615,7 +594,8 @@ public class ZToCAConverter {
 						}
 					}
 
-					if( isDirectionBlocked( aCell, UP ) && isDirectionBlocked( aCell, RIGHT ) ) {
+					if( isDirectionBlocked( aCell, UP ) || isDirectionBlocked( aCell, RIGHT ) ) {
+//					if( isDirectionBlocked( aCell, UP ) && isDirectionBlocked( aCell, RIGHT ) ) {
 						aCell.setUnPassable( Direction.UPPER_RIGHT );
 
 						if( room.existsCellAt( x + 1, y - 1 ) ) {
@@ -623,7 +603,8 @@ public class ZToCAConverter {
 						}
 					}
 
-					if( isDirectionBlocked( aCell, DOWN ) && isDirectionBlocked( aCell, LEFT ) ) {
+					if( isDirectionBlocked( aCell, DOWN ) || isDirectionBlocked( aCell, LEFT ) ) {
+//					if( isDirectionBlocked( aCell, DOWN ) && isDirectionBlocked( aCell, LEFT ) ) {
 						aCell.setUnPassable( Direction.LOWER_LEFT );
 
 						if( room.existsCellAt( x - 1, y + 1 ) ) {
@@ -631,7 +612,8 @@ public class ZToCAConverter {
 						}
 					}
 
-					if( isDirectionBlocked( aCell, DOWN ) && isDirectionBlocked( aCell, RIGHT ) ) {
+					if( isDirectionBlocked( aCell, DOWN ) || isDirectionBlocked( aCell, RIGHT ) ) {
+//					if( isDirectionBlocked( aCell, DOWN ) && isDirectionBlocked( aCell, RIGHT ) ) {
 						aCell.setUnPassable( Direction.LOWER_RIGHT );
 
 						if( room.existsCellAt( x + 1, y + 1 ) ) {
