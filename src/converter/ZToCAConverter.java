@@ -534,6 +534,8 @@ public class ZToCAConverter {
 		}
 	}
 
+	static final boolean walkDiagonalStrict = true;
+
 	/**
 	 * <p>Sets the bounds for the cells in a specified room. That means, that bounds
 	 * are set, if a cell in a direction is not reachable.</p>
@@ -585,8 +587,8 @@ public class ZToCAConverter {
 			for( int y = 0; y < room.getHeight(); y++ ) {
 				if( room.existsCellAt( x, y ) ) {
 					Cell aCell = room.getCell( x, y );
-					if( isDirectionBlocked( aCell, UP ) || isDirectionBlocked( aCell, LEFT ) ) {
-//					if( isDirectionBlocked( aCell, UP ) && isDirectionBlocked( aCell, LEFT ) ) {
+					if( ( walkDiagonalStrict && (isDirectionBlocked( aCell, UP ) || isDirectionBlocked( aCell, LEFT ) ) ) || ( !walkDiagonalStrict && ( isDirectionBlocked( aCell, UP ) && isDirectionBlocked( aCell, LEFT ) ) ) ) {
+//					if(  ) {
 						aCell.setUnPassable( UPPER_LEFT );
 
 						if( room.existsCellAt( x - 1, y - 1 ) ) {
@@ -594,7 +596,8 @@ public class ZToCAConverter {
 						}
 					}
 
-					if( isDirectionBlocked( aCell, UP ) || isDirectionBlocked( aCell, RIGHT ) ) {
+//					if( isDirectionBlocked( aCell, UP ) || isDirectionBlocked( aCell, RIGHT ) ) {
+					if( ( walkDiagonalStrict && ( isDirectionBlocked( aCell, UP ) || isDirectionBlocked( aCell, RIGHT ) ) ) || ( !walkDiagonalStrict && ( isDirectionBlocked( aCell, UP ) && isDirectionBlocked( aCell, RIGHT ) ) ) ) {
 //					if( isDirectionBlocked( aCell, UP ) && isDirectionBlocked( aCell, RIGHT ) ) {
 						aCell.setUnPassable( Direction.UPPER_RIGHT );
 
@@ -603,7 +606,8 @@ public class ZToCAConverter {
 						}
 					}
 
-					if( isDirectionBlocked( aCell, DOWN ) || isDirectionBlocked( aCell, LEFT ) ) {
+//					if( isDirectionBlocked( aCell, DOWN ) || isDirectionBlocked( aCell, LEFT ) ) {
+					if( ( walkDiagonalStrict && ( isDirectionBlocked( aCell, DOWN ) || isDirectionBlocked( aCell, LEFT ) ) ) || ( !walkDiagonalStrict && ( isDirectionBlocked( aCell, DOWN ) && isDirectionBlocked( aCell, LEFT ) ) ) ) {
 //					if( isDirectionBlocked( aCell, DOWN ) && isDirectionBlocked( aCell, LEFT ) ) {
 						aCell.setUnPassable( Direction.LOWER_LEFT );
 
@@ -612,7 +616,8 @@ public class ZToCAConverter {
 						}
 					}
 
-					if( isDirectionBlocked( aCell, DOWN ) || isDirectionBlocked( aCell, RIGHT ) ) {
+//					if( isDirectionBlocked( aCell, DOWN ) || isDirectionBlocked( aCell, RIGHT ) ) {
+					if( ( walkDiagonalStrict && ( isDirectionBlocked( aCell, DOWN ) || isDirectionBlocked( aCell, RIGHT ) ) ) || ( !walkDiagonalStrict && ( isDirectionBlocked( aCell, DOWN ) && isDirectionBlocked( aCell, RIGHT ) ) ) ) {
 //					if( isDirectionBlocked( aCell, DOWN ) && isDirectionBlocked( aCell, RIGHT ) ) {
 						aCell.setUnPassable( Direction.LOWER_RIGHT );
 
