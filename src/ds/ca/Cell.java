@@ -385,8 +385,29 @@ public abstract class Cell implements Comparable<Cell> {
 			int cellx = this.getX() + direction.xOffset();
 			int celly = this.getY() + direction.yOffset();
 			if( cellRoom.existsCellAt( cellx, celly ) && (!passableOnly || !bounds.contains( direction )) && (!freeOnly || cellRoom.getCell( cellx, celly ).individual == null) ) {
-				// old behavoiur: just add the cell
-				neighbours.add( cellRoom.getCell( cellx, celly ) );
+				// Test again for the diagonal directions. if next tu the position an individual stands. than this direction is removed!
+				boolean add = true;
+				switch( direction ) {
+					case LOWER_LEFT:
+					case LOWER_RIGHT:
+					case UPPER_LEFT:
+					case UPPER_RIGHT:
+						boolean f1 = false;
+						boolean f2 = false;
+						if( cellRoom.getCell( this.getX() + direction.xOffset(), this.getY() ).individual != null )
+							//add = false;
+							f1 = true;
+						else if( cellRoom.getCell( this.getX() + direction.xOffset(), this.getY() ).individual != null )
+							//add = false;
+							f2 = true;
+						if( f1 && f2 )
+							add = false;
+				}
+				add=true;
+				if( add )
+					neighbours.add( cellRoom.getCell( cellx, celly ) );
+				else
+					System.err.println( "Neuer Fall ist eingetreten!" );
 			}
 		}
 

@@ -55,7 +55,8 @@ public class NonWaitingMovementRule extends AbstractMovementRule {
 					doMove( actor, cell );
 				} else {
 					if( this.isDirectExecute() ) {
-						Cell targetCell = this.selectTargetCell( cell, selectPossibleTargets( cell, true ) );
+						//Cell targetCell = this.selectTargetCell( cell, selectPossibleTargets( cell, true ) );
+						Cell targetCell = getTargetCell( cell );
 						setPerformMove( true );
 						move( actor, targetCell );
 					} else {
@@ -74,6 +75,29 @@ public class NonWaitingMovementRule extends AbstractMovementRule {
 			doMove( actor, cell );
 		}
 		VisualResultsRecorder.getInstance().recordAction( new IndividualStateChangeAction( actor ) );
+	}
+
+	private Cell getTargetCell( Cell cell ) {
+		Cell targetCell = this.selectTargetCell( cell, selectPossibleTargets( cell, true ) );
+		int xd = targetCell.getX() - cell.getX();
+		int yd = targetCell.getY() - cell.getY();
+
+		boolean diagonal = ((xd == -1) || (xd == 1)) && ((yd == -1) || (yd == 1));
+		if( diagonal ) {
+			boolean indVary = cell.getRoom().getCell( cell.getX(), cell.getY()+yd ).getIndividual() == null;
+			boolean indVarx = cell.getRoom().getCell( cell.getX()+xd, cell.getY() ).getIndividual() == null;
+
+			if( indVary && indVarx )
+				return targetCell;
+			else if( !indVary && !indVarx )
+				return cell;
+			else if( indVary && !indVarx) {
+				final Cell possibleCell = cell.getRoom().getCell( cell.getX(), cell.getY()+yd );
+				return possibleCell;
+			} else
+				return cell.getRoom().getCell( cell.getX()+xd, cell.getY() );
+		} else
+			return targetCell;
 	}
 
 	private void doMove( Individual i, Cell targetCell ) {
