@@ -35,7 +35,7 @@ public class TestExhaustionRule extends NonWaitingMovementRule {
         double newExhaustion = i.getExhaustion();
         
         if(oldExhaustion != newExhaustion){
-            System.out.println("Ersch�pfung von Individuum " 
+            System.out.println("Erschöpfung von Individuum "
                     + i.getNumber()
                     + " aktualisiert von "
                     + oldExhaustion
@@ -52,7 +52,7 @@ public class TestExhaustionRule extends NonWaitingMovementRule {
         super.updateSpeed(i);
         double newSpeed= i.getCurrentSpeed();
         
-        if(oldSpeed != newSpeed){
+        if(oldSpeed != newSpeed) {
             System.out.println("Geschwindigkeit von Individuum " 
                     + i.getNumber()
                     + " aktualisiert von "
