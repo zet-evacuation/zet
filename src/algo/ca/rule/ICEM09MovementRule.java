@@ -31,13 +31,13 @@ import util.DebugFlags;
  *
  * @author Sylvie
  */
-public class PaperMovementRule extends AbstractMovementRule{
+public class ICEM09MovementRule extends AbstractMovementRule{
 
 
 	static double timeCounter = 0;
 	static double distCounter = 0;
 
-	public PaperMovementRule() {
+	public ICEM09MovementRule() {
 	}
 
 	/**

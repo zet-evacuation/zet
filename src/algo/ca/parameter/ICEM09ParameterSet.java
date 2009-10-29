@@ -32,7 +32,7 @@ import localization.Localization;
  * @author Sylvie Temme
  *
  */
-public class PaperParameterSet extends AbstractDefaultParameterSet{
+public class ICEM09ParameterSet extends AbstractDefaultParameterSet{
 	/* im AbstractDefaultParameterSet: 
         final protected double DYNAMIC_POTENTIAL_WEIGHT;
 	final protected double STATIC_POTENTIAL_WEIGHT;
@@ -54,7 +54,7 @@ public class PaperParameterSet extends AbstractDefaultParameterSet{
 	/**
 	 * Initializes the default parameter set and loads some constants from the property container.
 	 */
-	public PaperParameterSet() {
+	public ICEM09ParameterSet() {
              /* im AbstractDefaultParameterSet: 		
              DYNAMIC_POTENTIAL_WEIGHT = PropertyContainer.getInstance().getAsDouble( "algo.ca.DYNAMIC_POTENTIAL_WEIGHT" );
              STATIC_POTENTIAL_WEIGHT = PropertyContainer.getInstance().getAsDouble( "algo.ca.STATIC_POTENTIAL_WEIGHT" );

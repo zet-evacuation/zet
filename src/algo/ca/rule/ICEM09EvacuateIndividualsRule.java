@@ -18,9 +18,9 @@ package algo.ca.rule;
 import ds.ca.Individual;
 
 // dieselbe wie die normale EvacuateIndividualsRule!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-public class PaperEvacuateIndividualsRule extends AbstractEvacuationRule {
+public class ICEM09EvacuateIndividualsRule extends AbstractEvacuationRule {
 
-	public PaperEvacuateIndividualsRule() {
+	public ICEM09EvacuateIndividualsRule() {
 	}
 
 	@Override

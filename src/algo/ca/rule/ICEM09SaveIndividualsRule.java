@@ -21,9 +21,9 @@ import ds.ca.Cell;
 - Panik wird nicht auf 0 gesetzt
 - kein neues Potential, wenn man eine SaveArea betritt!!!!!
 */
-public class PaperSaveIndividualsRule extends AbstractSaveRule {
+public class ICEM09SaveIndividualsRule extends AbstractSaveRule {
 	// muss VOR der EvacuateIndividualsRule aufgerufen werden!
-	public PaperSaveIndividualsRule() {
+	public ICEM09SaveIndividualsRule() {
 	}
 
 	@Override
