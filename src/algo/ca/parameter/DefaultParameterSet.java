@@ -13,9 +13,10 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
+
 /*
+ * DefaultParameterSet.java
  * Created on 23.01.2008
- *
  */
 package algo.ca.parameter;
 
@@ -31,7 +32,6 @@ import util.random.distributions.NormalDistribution;
 
 /**
  * @author Daniel Pluempe, Jan-Philipp Kappmeier
- *
  */
 public class DefaultParameterSet extends AbstractDefaultParameterSet {
 	final protected double PANIC_TO_PROB_OF_POTENTIAL_CHANGE_RATIO;
@@ -321,7 +321,11 @@ public class DefaultParameterSet extends AbstractDefaultParameterSet {
 	 * @param pAge
 	 * @return the maximal speed as percentage of the overall maximal speed for the simulation run
 	 */
+	static double cumulativeSpeed = 0;
+	static int counter = 0;
+
 	public double getSpeedFromAge( double pAge ) {
+		// additional: calculate the average speed.
 		double ageArray[] = { 0.6, 1.15, 1.42, 1.61, 1.55, 1.51, 1.5, 1.48, 1.47, 1.4, 1.33, 1.29, 1.2, 1.08, 0.85, 0.7 };
 		int i2 = (int) Math.floor( pAge / 5 );
 		int i1 = i2 - 1;
@@ -342,6 +346,13 @@ public class DefaultParameterSet extends AbstractDefaultParameterSet {
 			maxSpeed = 1;
 		//System.err.println( "Maximale geschw: " + maxSpeed );
 		}
+
+		counter++;
+		cumulativeSpeed += (maxSpeed * ABSOLUTE_MAX_SPEED);
+
+		System.out.println( "First one has speed " + (maxSpeed * ABSOLUTE_MAX_SPEED) );
+		System.out.println( "Average speed for " + counter + " persons: " + (cumulativeSpeed / counter) + " m/s. (Should be 1.3x)" );
+
 		return maxSpeed;
 	}
 
