@@ -13,6 +13,7 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
+
 /**
  * Class JPropertyComboBox
  * Erstellt 03.07.2008, 23:59:56
@@ -24,7 +25,8 @@ import java.io.File;
 import javax.swing.JComboBox;
 
 /**
- *
+ * A specialized {@link JComboBox} that contains an entry for each property type
+ * that is known.
  * @author Jan-Philipp Kappmeier
  */
 public class JPropertyComboBox extends JComboBox {
