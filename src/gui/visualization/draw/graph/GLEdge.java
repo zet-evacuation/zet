@@ -6,7 +6,7 @@
  *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
  * GNU General Public License for more details.
  *
  * You should have received a copy of the GNU General Public License
@@ -15,6 +15,7 @@
  */
 package gui.visualization.draw.graph;
 
+import gui.visualization.QualityPreset;
 import gui.visualization.VisualizationOptionManager;
 import gui.visualization.control.graph.GLEdgeControl;
 import gui.visualization.util.VisualizationConstants;
@@ -30,7 +31,6 @@ import util.vectormath.Vector3;
 public class GLEdge extends AbstractDrawable<GLEdge, GLEdgeControl, GLEdgeControl> {
 	/** The length of single flow units. If set to 1 no single units are displayed. */
 	static double factor = 0.7;
-	static int numOfCylinderFacetts = 5;
 	static int edgeDisplayMode = GLU.GLU_FILL;
 	static GLColor edgeColor;
 	static GLColor flowColor;
@@ -52,6 +52,7 @@ public class GLEdge extends AbstractDrawable<GLEdge, GLEdgeControl, GLEdgeContro
 	double maxCapacity;
 	/* The length of the edge in {@code OpenGL} scaling. */
 	double length;
+	private static QualityPreset qualityPreset = VisualizationOptionManager.getQualityPreset();
 
 	public GLEdge( GLEdgeControl control ) {
 		super( control );
@@ -72,15 +73,15 @@ public class GLEdge extends AbstractDrawable<GLEdge, GLEdgeControl, GLEdgeContro
 		diskAtEnd = diskAtEnd && (factor < 1);
 		if( diskAtEnd ) {
 			flowUnitColor.performGL( gl );
-			glu.gluDisk( quadObj, thickness, calculatedFlowThickness, numOfCylinderFacetts, 1 );
+			glu.gluDisk( quadObj, thickness, calculatedFlowThickness, qualityPreset.edgeSlices, 1 );
 		}
 		flowColor.performGL( gl );
-		glu.gluCylinder( quadObj, calculatedFlowThickness, calculatedFlowThickness, length, numOfCylinderFacetts, 1 );
+		glu.gluCylinder( quadObj, calculatedFlowThickness, calculatedFlowThickness, length, qualityPreset.edgeSlices, 1 );
 		if( diskAtStart ) {
 			gl.glPushMatrix();
 			gl.glTranslated( 0.0, 0.0, length );
 			flowUnitColor.performGL( gl );
-			glu.gluDisk( quadObj, thickness, calculatedFlowThickness, numOfCylinderFacetts, 1 );
+			glu.gluDisk( quadObj, thickness, calculatedFlowThickness, qualityPreset.edgeSlices, 1 );
 			gl.glPopMatrix();
 		}
 	}
@@ -156,7 +157,7 @@ public class GLEdge extends AbstractDrawable<GLEdge, GLEdgeControl, GLEdgeContro
 		Vector3 axis = control.getRotationAxis( a, b );
 		gl.glRotated( control.getAngleBetween( a, b ), axis.x, axis.y, axis.z );
 
-		glu.gluCylinder( quadObj, thickness, thickness, length, 12, 1 );
+		glu.gluCylinder( quadObj, thickness, thickness, length, qualityPreset.edgeSlices, 1 );
 		//gl.glDisable( GL.GL_BLEND );
 		gl.glPopMatrix();
 	}

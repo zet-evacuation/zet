@@ -6,7 +6,7 @@
  *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
  * GNU General Public License for more details.
  *
  * You should have received a copy of the GNU General Public License
@@ -15,6 +15,7 @@
  */
 package gui.visualization.draw.graph;
 
+import gui.visualization.QualityPreset;
 import gui.visualization.VisualizationOptionManager;
 import gui.visualization.control.graph.GLEdgeControl;
 import gui.visualization.control.graph.GLNodeControl;
@@ -38,6 +39,7 @@ public class GLNode extends AbstractDrawable<GLEdge, GLNodeControl, GLEdgeContro
 	GLColor deletedSourceColor = VisualizationOptionManager.getDeletedSourceNodeColor();
 	GLColor nodeBorderColor = VisualizationOptionManager.getNodeBorderColor();
 	static double nodeRadius = 13; // 13 // war 10 original
+	private static QualityPreset qualityPreset = VisualizationOptionManager.getQualityPreset();
 
 	public GLNode( GLNodeControl control ) {
 		super( control );
@@ -62,6 +64,11 @@ public class GLNode extends AbstractDrawable<GLEdge, GLNodeControl, GLEdgeContro
 		}
 	}
 
+	/**
+	 * Draws a node as a solid sphere. The number of slices and stacks is defined
+	 * by the given quality preset.
+	 * @param drawable the context on which the node is drawn
+	 */
 	public void performFlowDrawing( GLAutoDrawable drawable ) {
 		super.performDrawing( drawable );
 		GL gl = drawable.getGL();
@@ -72,9 +79,8 @@ public class GLNode extends AbstractDrawable<GLEdge, GLNodeControl, GLEdgeContro
 
 		//gl.glEnable( gl.GL_BLEND );
 		//gl.glBlendFunc( gl.GL_SRC_ALPHA, gl.GL_ONE );
-
-		glu.gluSphere( quadObj, radius * 0.8, 12, 12 );
-	//gl.glDisable( GL.GL_BLEND );
+		glu.gluSphere( quadObj, radius * 0.8, qualityPreset.nodeSlices, qualityPreset.nodeStacks );
+		//gl.glDisable( GL.GL_BLEND );
 	}
 
 	@Override
@@ -126,7 +132,7 @@ public class GLNode extends AbstractDrawable<GLEdge, GLNodeControl, GLEdgeContro
 			}
 		}
 
-		glu.gluSphere( quadObj, radius, 12, 12 );
+		glu.gluSphere( quadObj, radius, qualityPreset.nodeSlices, qualityPreset.nodeStacks );
 		staticDrawAllChildren( drawable );
 		endDraw( drawable );
 	}

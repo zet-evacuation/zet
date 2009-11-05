@@ -6,19 +6,22 @@
  *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
  * GNU General Public License for more details.
  *
  * You should have received a copy of the GNU General Public License
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
+
 /**
  * Class GLIndividual2
  * Erstellt 10.06.2008, 22:23:01
  */
+
 package gui.visualization.draw.ca;
 
+import gui.visualization.QualityPreset;
 import gui.visualization.VisualizationOptionManager;
 import gui.visualization.control.ca.GLIndividualControl;
 import gui.visualization.util.Tuple;
@@ -40,6 +43,7 @@ public class GLIndividual extends AbstractDrawable<GLIndividual, GLIndividualCon
 	private static double individualRadius = VisualizationOptionManager.getIndividualRadius() * VisualizationConstants.SIZE_MULTIPLICATOR;
 	private static GLColor individualColor = VisualizationOptionManager.getIndividualColor();
 	private static GLColor deadColor = new GLColor( 130, 55, 101 );
+	private static QualityPreset qualityPreset = VisualizationOptionManager.getQualityPreset();
 
 	public GLIndividual( GLIndividualControl control ) {
 //		super( control, new CullingShapeSphere() );
@@ -75,11 +79,14 @@ public class GLIndividual extends AbstractDrawable<GLIndividual, GLIndividualCon
 		gl.glTranslated( pos.x * VisualizationConstants.SIZE_MULTIPLICATOR, pos.y * VisualizationConstants.SIZE_MULTIPLICATOR, 1 * VisualizationConstants.SIZE_MULTIPLICATOR );
 		bodyColor.performGL( gl );
 		//glu.gluCylinder( quadObj, individualRadius, 0.0, individualHeight, 12, 1 );	// Normal
-		glu.gluCylinder( quadObj, individualRadius, 0.0, individualHeight, 48, 24 );	// High quality
+		//glu.gluCylinder( quadObj, individualRadius, 0.0, individualHeight, 48, 24 );	// High quality
+
+		glu.gluCylinder( quadObj, individualRadius, 0.0, individualHeight, qualityPreset.individualBodySlices, qualityPreset.individualBodyStacks );
 		headColor.performGL( gl );
 		gl.glTranslated( 0, 0, individualHeight - individualRadius * 0.7 );
 		//glu.gluSphere( quadObj, individualRadius * 0.7, 8, 8 ); // Normal
-		glu.gluSphere( quadObj, individualRadius * 0.7, 48, 48 ); // High quality
+    //glu.gluSphere( quadObj, individualRadius * 0.7, 48, 48 ); // High quality
+		glu.gluSphere( quadObj, individualRadius * 0.7, qualityPreset.individualHeadSlices, qualityPreset.individualHeadStacks );
 		gl.glPopMatrix();
 	}
 }
