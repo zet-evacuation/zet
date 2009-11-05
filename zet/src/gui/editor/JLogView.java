@@ -15,44 +15,45 @@
  */
 
 /*
- * MessageEvent.java
- * Created on 19.12.2007, 02:09:37
+ * JLogView.java
+ * Created 29.10.2009, 15:57:37
  */
-package event;
+
+package gui.editor;
+
+import gui.components.JLogField;
+import info.clearthought.layout.TableLayout;
+import javax.swing.JPanel;
 
 /**
- * This is a simple messaging event to submit status messages or error messages.
- * @param <S> 
+ * The class <code>JLogView</code> ...
  * @author Jan-Philipp Kappmeier
  */
-public class MessageEvent<S> implements Event {
-	public enum MessageType {
-		Status,
-		Error,
-		MousePosition,
-		EditMode,
-		Log,
-		LogError;
-	}
-	protected S source;
-	private String msg;
-	private MessageType type;
+public class JLogView extends JPanel {
 
-	public MessageEvent( S source, MessageType type, String msg ) {
-		this.source = source;
-		this.msg = msg;
-		this.type = type;
-	}
+	/**
+	 * Creates a new instance of <code>JLogView</code>.
+	 */
+	public JLogView() {
+		double size[][] = // Columns
+		{
+			{ TableLayout.FILL },
+			//Rows
+			{ TableLayout.FILL }
+		};
 
-	public String getMessage() {
-		return msg;
+		setLayout( new TableLayout( size ) );
+
+		JLogField logField = new JLogField();
+		add( logField, "0,0" );
 	}
 
-	public S getSource() {
-		return source;
-	}
-
-	public MessageType getType() {
-		return type;
+	/**
+	 * Returns the name of the class.
+	 * @return the name of the class
+	 */
+	@Override
+	public String toString() {
+		return "JLogView";
 	}
 }

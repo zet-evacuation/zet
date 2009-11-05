@@ -13,6 +13,7 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
+
 /*
  * JEditor.java
  * Created on 4. Dezember 2007, 17:08
@@ -137,6 +138,7 @@ import batch.tasks.AlgorithmTask;
 import batch.tasks.CARealTime;
 import batch.tasks.RasterizeTask;
 import batch.tasks.VisualizationDataStructureTask;
+import gui.editor.JLogView;
 import util.ConversionTools;
 
 /**
@@ -150,6 +152,7 @@ public class JEditor extends JFrame implements Localized, EventListener<Progress
 	public static final int VISUALIZATION = ZETMain.isDebug() ? 3 : 2;
 	public static final int STATISTIC = ZETMain.isDebug() ? 4 : 3;
 	public static final int GRAPH_STATISTIC = ZETMain.isDebug() ? 5 : 4;
+	public static final int LOG = ZETMain.isDebug() ? 6 : 5;
 	/** The localization class. */
 	static final Localization loc = Localization.getInstance();
 	/** Stores the last mouse position if a mouse position event is sent. */
@@ -178,11 +181,18 @@ public class JEditor extends JFrame implements Localized, EventListener<Progress
 	private JEventStatusBar statusBar;
 	private JVisualizationView visualizationView;
 	private GLControl control;
+	/** The editor tab. */
 	private JEditView editView;
+	/** The batch view tab. */
 	private JBatchView batchView;
+	/** The tab for quick CA visualization. */
 	private JCAView caView;
+	/** The tab containing the CA statistic. */
 	private JStatisticPanel caStatisticView;
-	private JGraphStatisticPanel graphStatisticPanel;	// Menu items
+	/** The tab containing the graph statistic. */
+	private JGraphStatisticPanel graphStatisticView;	// Menu items
+	/** The tab containing the log window. */
+	private JLogView logView;
 	private JMenu mFile;
 	private JMenuItem mnuFileNew;
 	private JMenuItem mnuFileOpen;
@@ -257,6 +267,8 @@ public class JEditor extends JFrame implements Localized, EventListener<Progress
 	private JToolBar toolBarVisualization;
 	private JToolBar toolBarCAStats;
 	private JToolBar toolBarGraphStats;
+	/** The tool bar that is visible if the log view is active. */
+	private JToolBar toolBarLog;
 	private JToolBar currentToolbar;
 	// Toolbar items
 	// Edit toolbar
@@ -306,6 +318,7 @@ public class JEditor extends JFrame implements Localized, EventListener<Progress
 	// Statistic Toolbar
 	private JButton btnOpenResults2;
 	private JButton btnExit3;
+	private JButton btnExit7;
 	private JButton btnSaveResults2;
 	// Graph statistic Toolbar
 	private JButton btnExit4;
@@ -314,7 +327,7 @@ public class JEditor extends JFrame implements Localized, EventListener<Progress
 	private JLabel labelBatchName2;
 	private BatchResultEntryGRSComboBoxModel entryModelGraph;
 
-	// Items for the switch-bar
+	/** A tabbed pane that allows switching of the different views. */
 	private JTabbedPane tabPane;
 	// Additional GUI stuff
 	/** Model for the edit-mode combo box. */
@@ -355,6 +368,7 @@ public class JEditor extends JFrame implements Localized, EventListener<Progress
 		createQuickVisualizationToolBar();
 		createVisualizationToolBar();
 		createStatisticsToolBar();
+		createLogToolBar();
 
 		add( toolBarEdit, BorderLayout.NORTH );
 		currentToolbar = toolBarEdit;
@@ -366,8 +380,8 @@ public class JEditor extends JFrame implements Localized, EventListener<Progress
 			}
 
 			public void windowClosing( WindowEvent e ) {
-				if( graphStatisticPanel != null )
-					graphStatisticPanel.saveSettings();
+				if( graphStatisticView != null )
+					graphStatisticView.saveSettings();
 				try {
 					ZETMain.ptmInformation.getRoot().reloadFromPropertyContainer();
 					ZETMain.ptmOptions.getRoot().reloadFromPropertyContainer();
@@ -528,7 +542,8 @@ public class JEditor extends JFrame implements Localized, EventListener<Progress
 		} );
 		caView = new JCAView();
 		caStatisticView = new JStatisticPanel();
-		graphStatisticPanel = new JGraphStatisticPanel();
+		graphStatisticView = new JGraphStatisticPanel();
+		logView = new JLogView();
 
 		tabPane = new JTabbedPane();
 
@@ -539,7 +554,8 @@ public class JEditor extends JFrame implements Localized, EventListener<Progress
 			tabPane.addTab( loc.getString( "CAView" ), null, caView, loc.getString( "CAViewToolTip" ) );
 		tabPane.addTab( loc.getString( "Visualization" ), null, visualizationView, loc.getString( "VisualizationToolTip" ) );
 		tabPane.addTab( loc.getString( "Statistic" ), null, caStatisticView, loc.getString( "StatisticToolTip" ) );
-		tabPane.addTab( loc.getString( "GraphStatistic" ), null, graphStatisticPanel, loc.getString( "GraphStatisticToolTip" ) );
+		tabPane.addTab( loc.getString( "GraphStatistic" ), null, graphStatisticView, loc.getString( "GraphStatisticToolTip" ) );
+		tabPane.addTab( loc.getString( "LogWindow" ), null, logView, loc.getString( "LogWindowToolTip" ) );
 		tabPane.addChangeListener( chlTab );
 		loc.setPrefix( "" );
 
@@ -882,7 +898,7 @@ public class JEditor extends JFrame implements Localized, EventListener<Progress
 	}
 
 	/**
-	 * Creates the <code>JToolBar</code> for the statistic mode.
+	 * Creates the <code>JToolBar</code> for the statistic view.
 	 */
 	private void createStatisticsToolBar() {
 		loc.setPrefix( "gui.editor.JEditor." );
@@ -926,6 +942,23 @@ public class JEditor extends JFrame implements Localized, EventListener<Progress
 		cbxBatchEntry.setPreferredSize( new Dimension( 250, cbxBatchEntry.getPreferredSize().height ) );
 		cbxBatchEntry.setAlignmentX( 0 );
 		toolBarGraphStats.add( cbxBatchEntry );
+		loc.setPrefix( "" );
+	}
+
+	/**
+	 * Creates the <code>JToolBar</code> for the log view.
+	 */
+	private void createLogToolBar()	 {
+		loc.setPrefix( "gui.editor.JEditor." );
+		/** ########## Log View Statistics Toolbar ############ */
+		toolBarLog = new JToolBar();
+		btnExit7 = Button.newButton( IconSet.Exit, new ActionListener() {
+			public void actionPerformed( ActionEvent e ) {
+				System.exit( 0 );
+			}
+		}, "", loc.getString( "toolbarTooltipExit" ) );
+		toolBarLog.add( btnExit7 );
+		
 		loc.setPrefix( "" );
 	}
 
@@ -1089,6 +1122,9 @@ public class JEditor extends JFrame implements Localized, EventListener<Progress
 
 		tabPane.setTitleAt( GRAPH_STATISTIC, loc.getString( "GraphStatistic" ) );
 		tabPane.setToolTipTextAt( GRAPH_STATISTIC, loc.getString( "GraphStatisticToolTip" ) );
+
+		tabPane.setTitleAt( LOG, loc.getString( "LogWindow" ) );
+		tabPane.setToolTipTextAt( LOG, loc.getString( "LogWindowToolTip" ) );
 		loc.setPrefix( "" );
 
 
@@ -1101,6 +1137,7 @@ public class JEditor extends JFrame implements Localized, EventListener<Progress
 		btnExit4.setToolTipText( loc.getString( "toolbarTooltipExit" ) );
 		btnExit5.setToolTipText( loc.getString( "toolbarTooltipExit" ) );
 		btnExit6.setToolTipText( loc.getString( "toolbarTooltipExit" ) );
+		btnExit7.setToolTipText( loc.getString( "toolbarTooltipExit" ) );
 		btnOpen.setToolTipText( loc.getString( "toolbarTooltipOpen" ) );
 		btnSave.setToolTipText( loc.getString( "toolbarTooltipSave" ) );
 
@@ -1890,36 +1927,10 @@ public class JEditor extends JFrame implements Localized, EventListener<Progress
 				switchTo( STATISTIC );
 			else if( i == GRAPH_STATISTIC )
 				switchTo( GRAPH_STATISTIC );
+			else if( i == LOG )
+				switchTo( LOG );
 			else
 				ZETMain.sendError( "Unknown tab index:" + tabPane.getSelectedIndex() + ". " + loc.getString( "gui.ContactDeveloper" ) );
-//			switch( tabPane.getSelectedIndex() ) {
-//				case EDIT_FLOOR:	// edit view
-//					switchTo( EDIT_FLOOR );
-//					editView.updateFloorView();
-//					break;
-//				case BATCH:	// batch view
-//					// Add curent project, if not already done
-//					if( firstSwitch ) {
-//						batchView.addProject( currentProject );
-//						firstSwitch = false;
-//					}
-//					switchTo( BATCH );
-//					break;
-//				case CA_FLOOR: // ca fast visualization
-//					switchTo( CA_FLOOR );
-//					break;
-//				case VISUALIZATION:	// visualization view
-//					switchTo( VISUALIZATION );
-//					break;
-//				case STATISTIC: // statistic view
-//					switchTo( STATISTIC );
-//					break;
-//				case GRAPH_STATISTIC: // statistic view
-//					switchTo( GRAPH_STATISTIC );
-//					break;
-//				default:
-//					ZETMain.sendError( "Unknown tab index:" + tabPane.getSelectedIndex() + ". " + loc.getString( "gui.ContactDeveloper" ) );	// TODO loc
-//			}
 		}
 	};
 	KeyListener kylZoom = new KeyListener() {
@@ -2320,7 +2331,7 @@ public class JEditor extends JFrame implements Localized, EventListener<Progress
 			return;
 		}
 		// TODO better implementation of this stuff for debug mode ?
-		if( ((ZETMain.isDebug() && tabID > CA_FLOOR) || (!ZETMain.isDebug() && tabID > BATCH)) && result == null ) {
+		if( ((ZETMain.isDebug() && tabID > CA_FLOOR) || (!ZETMain.isDebug() && tabID > BATCH)) && result == null && tabID != LOG ) {
 			ZETMain.sendError( loc.getStringWithoutPrefix( "gui.error.CreateBatch" ) );
 			tabPane.setSelectedIndex( currentMode );
 			return;
@@ -2345,31 +2356,10 @@ public class JEditor extends JFrame implements Localized, EventListener<Progress
 			showToolBar( toolBarCAStats );
 		else if( tabID == GRAPH_STATISTIC )
 			showToolBar( toolBarGraphStats );
+		else if( tabID == LOG )
+			showToolBar( toolBarLog );
 		else
-			ZETMain.sendError( "Unbekannte TabID: " + Integer.toString( tabID ) + ". " + loc.getString( "gui.ContactDeveloper" ) );//		switch( tabID ) {
-//			case EDIT_FLOOR:
-//				showToolBar( toolBarEdit );
-//				break;
-//			case BATCH:
-//				showToolBar( toolBarBatch );
-//				break;
-//			case CA_FLOOR:
-//				showToolBar( toolBarCA );
-//				break;
-//			case VISUALIZATION:
-//				showToolBar( toolBarVisualization );
-//				visualizationView.requestFocusInWindow();
-//				break;
-//			case STATISTIC:
-//				showToolBar( toolBarCAStats );
-//				break;
-//			case GRAPH_STATISTIC:
-//				showToolBar( toolBarGraphStats );
-//				break;
-//			default:
-//				ZETMain.sendError( "Unbekannte TabID: " + Integer.toString( tabID  ) + ". " + loc.getString( "gui.ContactDeveloper" ) );	// todo loc
-//				break;
-//		}
+			ZETMain.sendError( "Unbekannte TabID: " + Integer.toString( tabID ) + ". " + loc.getString( "gui.ContactDeveloper" ) );
 		repaint();
 		validate();
 	}
