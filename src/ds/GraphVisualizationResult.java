@@ -13,8 +13,10 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
-package ds.graph;
+package ds;
 
+import ds.graph.*;
+import ds.NetworkFlowModel;
 import ds.graph.flow.PathBasedFlowOverTime;
 import ds.graph.flow.EdgeBasedFlowOverTime;
 import algo.graph.DebugFlags;

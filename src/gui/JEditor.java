@@ -31,7 +31,7 @@ import converter.ZToCAConverter;
 import ds.Project;
 import ds.PropertyContainer;
 import ds.ca.CellularAutomaton;
-import ds.graph.GraphVisualizationResult;
+import ds.GraphVisualizationResult;
 import ds.z.AssignmentType;
 import ds.z.Floor;
 import ds.z.exception.TooManyPeopleException;

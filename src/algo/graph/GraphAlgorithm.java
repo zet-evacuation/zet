@@ -56,7 +56,8 @@ public abstract class GraphAlgorithm implements Sender{
 	 * @return whether the algorithm has already run.
 	 */
 	public final boolean hasRun(){
-		return hasRun;
+            return hasRun;
+		//return hasRun;
 	}
 	
 }

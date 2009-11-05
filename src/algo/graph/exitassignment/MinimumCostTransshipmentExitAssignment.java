@@ -28,7 +28,7 @@ import ds.graph.Edge;
 import ds.graph.IdentifiableCollection;
 import ds.graph.IdentifiableIntegerMapping;
 import ds.graph.Network;
-import ds.graph.NetworkFlowModel;
+import ds.NetworkFlowModel;
 import ds.graph.Node;
 import ds.graph.flow.MaximumFlow;
 import ds.graph.flow.PathBasedFlow;

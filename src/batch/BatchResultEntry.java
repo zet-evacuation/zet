@@ -17,8 +17,8 @@ package batch;
 
 import com.thoughtworks.xstream.XStream;
 import ds.graph.flow.PathBasedFlowOverTime;
-import ds.graph.GraphVisualizationResult;
-import ds.graph.NetworkFlowModel;
+import ds.GraphVisualizationResult;
+import ds.NetworkFlowModel;
 import ds.ca.CellularAutomaton;
 import io.visualization.BuildingResults;
 import io.visualization.CAVisualizationResults;

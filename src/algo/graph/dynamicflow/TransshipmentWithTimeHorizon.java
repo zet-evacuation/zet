@@ -30,7 +30,7 @@ import ds.graph.flow.PathBasedFlow;
 import ds.graph.StaticPath;
 import ds.graph.flow.StaticPathFlow;
 import ds.graph.TimeExpandedNetwork;
-import util.ProgressBooleanFlags;
+import algo.graph.ProgressBooleanFlags;
 
 /** 
  * The class <code>TransshipmentWithTimeHorizon</code> provides a method to calculate 

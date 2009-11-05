@@ -16,7 +16,7 @@
 package batch.tasks;
 
 import ds.graph.flow.PathBasedFlowOverTime;
-import ds.graph.NetworkFlowModel;
+import ds.NetworkFlowModel;
 
 /** The superclass of all tasks who execute graph algorithms. This class is
  * useful to access the graph algorithms in a generic way.

@@ -24,13 +24,13 @@ import algo.graph.DebugFlags;
 import algo.graph.Notifiable;
 
 import batch.tasks.AlgorithmTask;
-import util.GraphInstanceChecker;
+import algo.graph.util.GraphInstanceChecker;
 import ds.graph.flow.PathBasedFlowOverTime;
 import ds.graph.Edge;
 import ds.graph.IdentifiableIntegerMapping;
 import ds.graph.Network;
 import ds.graph.Node;
-import util.ProgressBooleanFlags;
+import algo.graph.ProgressBooleanFlags;
 
 /**
  * The class <code>Transshipment</code> implements a binary search to compute the minimal
@@ -95,7 +95,7 @@ public abstract class Transshipment<TT extends TransshipmentWithTimeHorizon> ext
 			throw new AssertionError("Instantiation Exception: "+i.getMessage());
 		}
 		transshipmentAlgorithm.run();
-		if (!transshipmentAlgorithm.hasRun()){
+		if (!transshipmentAlgorithm.isProblemSolved()){
 			throw new AssertionError (Localization.getInstance (
 					).getString ("algo.graph.dynamicflow.RunNotCalledException"));
 		}

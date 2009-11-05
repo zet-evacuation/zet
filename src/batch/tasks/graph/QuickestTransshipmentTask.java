@@ -22,7 +22,7 @@ package batch.tasks.graph;
 
 import batch.tasks.*;
 import algo.graph.dynamicflow.QuickestTransshipment;
-import ds.graph.NetworkFlowModel;
+import ds.NetworkFlowModel;
 
 /**
  *

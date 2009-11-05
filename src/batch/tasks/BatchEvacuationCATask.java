@@ -34,7 +34,7 @@ import ds.Project;
 import ds.PropertyContainer;
 import ds.ca.CellularAutomaton;
 import ds.ca.results.VisualResultsRecorder;
-import ds.graph.NetworkFlowModel;
+import ds.NetworkFlowModel;
 import ds.z.Assignment;
 import ds.z.AssignmentType;
 import ds.z.ConcreteAssignment;

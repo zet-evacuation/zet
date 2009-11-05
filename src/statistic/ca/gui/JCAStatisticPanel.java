@@ -60,7 +60,7 @@ import ds.PropertyContainer;
 import statistic.ca.MultipleCycleCAStatistic;
 import statistic.ca.exception.GroupOfIndsNoPotentialException;
 import statistic.ca.exception.OneIndNoPotentialException;
-import ds.graph.GraphVisualizationResult;
+import ds.GraphVisualizationResult;
 import ds.ca.CellularAutomaton;
 import ds.ca.Individual;
 import ds.ca.Individual.DeathCause;

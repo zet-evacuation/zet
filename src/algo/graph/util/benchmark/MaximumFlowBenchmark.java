@@ -18,7 +18,7 @@
  *
  */
 
-package algo.graph.benchmark;
+package algo.graph.util.benchmark;
 
 /**
  *

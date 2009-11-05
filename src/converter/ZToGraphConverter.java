@@ -15,7 +15,7 @@
  */
 package converter;
 
-import ds.graph.NetworkFlowModel;
+import ds.NetworkFlowModel;
 import ds.z.BuildingPlan;
 import ds.z.ConcreteAssignment;
 

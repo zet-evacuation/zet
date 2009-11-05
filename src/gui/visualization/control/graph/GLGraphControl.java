@@ -19,7 +19,7 @@
  */
 package gui.visualization.control.graph;
 
-import ds.graph.GraphVisualizationResult;
+import ds.GraphVisualizationResult;
 import ds.graph.Network;
 import gui.visualization.control.AbstractControl;
 import gui.visualization.control.GLControl;

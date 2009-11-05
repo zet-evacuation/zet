@@ -31,14 +31,14 @@ import java.util.ArrayList;
 import localization.Localization;
 
 import util.Direction;
-import util.GraphInstanceChecker;
+import algo.graph.util.GraphInstanceChecker;
 import util.Level;
 import util.DebugFlags;
 import ds.PropertyContainer;
 import ds.graph.DynamicNetwork;
 import ds.graph.IdentifiableIntegerMapping;
 import ds.graph.Network;
-import ds.graph.NetworkFlowModel;
+import ds.NetworkFlowModel;
 import ds.graph.Node;
 import ds.graph.Edge;
 import ds.graph.Graph;

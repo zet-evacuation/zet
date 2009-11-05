@@ -23,8 +23,8 @@ import batch.BatchResultEntry;
 import batch.GraphAlgorithm;
 import converter.ZToGraphConverter;
 import ds.Project;
-import ds.graph.GraphVisualizationResult;
-import ds.graph.NetworkFlowModel;
+import ds.GraphVisualizationResult;
+import ds.NetworkFlowModel;
 import ds.z.Assignment;
 import ds.z.ConcreteAssignment;
 

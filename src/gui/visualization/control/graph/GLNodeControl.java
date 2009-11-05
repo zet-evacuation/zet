@@ -15,7 +15,7 @@
  */
 package gui.visualization.control.graph;
 
-import ds.graph.GraphVisualizationResult;
+import ds.GraphVisualizationResult;
 import ds.graph.Node;
 import ds.graph.Edge;
 import gui.visualization.VisualizationOptionManager;
