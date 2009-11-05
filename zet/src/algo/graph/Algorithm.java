@@ -24,7 +24,7 @@ package algo.graph;
 import java.util.LinkedHashSet;
 import java.util.Set;
 import batch.tasks.AlgorithmTask;
-import util.NanosecondTimeFormatter;
+import algo.graph.util.NanosecondTimeFormatter;
 
 /**
  * The basic framework class for graph algorithms.
@@ -130,7 +130,7 @@ public abstract class Algorithm<Problem, Solution> implements Runnable {
             throw new IllegalArgumentException("The progress values must be monotonically increasing.");
         }
         this.progress = progress;
-        if (util.ProgressBooleanFlags.ALGO_PROGRESS) {
+        if (ProgressBooleanFlags.ALGO_PROGRESS) {
             System.out.println("Progress: " + progress);
         }
         AlgorithmTask.getInstance().publish((int) Math.round(progress * 100));
@@ -153,7 +153,7 @@ public abstract class Algorithm<Problem, Solution> implements Runnable {
             throw new IllegalArgumentException("The progress values must be monotonically increasing.");
         }
         this.progress = progress;
-        if (util.ProgressBooleanFlags.ALGO_PROGRESS) {
+        if (ProgressBooleanFlags.ALGO_PROGRESS) {
             System.out.println("Progress: " + progress);
         }
         AlgorithmTask.getInstance().publish((int) Math.round(progress * 100), information, detailedInformation);

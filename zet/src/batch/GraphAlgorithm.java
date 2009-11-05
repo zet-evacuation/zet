@@ -16,7 +16,7 @@
 package batch;
 
 import localization.Localization;
-import ds.graph.NetworkFlowModel;
+import ds.NetworkFlowModel;
 import batch.tasks.graph.EATransshipmentMinCostTask;
 import batch.tasks.graph.EATransshipmentSSSPTask;
 import batch.tasks.GraphAlgorithmTask;

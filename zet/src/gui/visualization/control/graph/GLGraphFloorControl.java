@@ -20,7 +20,7 @@
 
 package gui.visualization.control.graph;
 
-import ds.graph.GraphVisualizationResult;
+import ds.GraphVisualizationResult;
 import ds.graph.Node;
 import gui.visualization.control.AbstractControl;
 import gui.visualization.control.GLControl;

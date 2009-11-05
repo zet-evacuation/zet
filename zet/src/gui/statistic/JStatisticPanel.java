@@ -29,7 +29,7 @@ import javax.swing.JPanel;
 import batch.BatchResult;
 import statistic.ca.MultipleCycleCAStatistic;
 import statistic.ca.gui.JCAStatisticPanel;
-import ds.graph.GraphVisualizationResult;
+import ds.GraphVisualizationResult;
 import ds.ca.CellularAutomaton;
 
 /**

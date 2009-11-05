@@ -23,7 +23,7 @@ package exitdistributions;
 import converter.ZToCAConverter;
 import converter.ZToGraphRasterContainer;
 import ds.ca.CellularAutomaton;
-import ds.graph.NetworkFlowModel;
+import ds.NetworkFlowModel;
 import ds.z.BuildingPlan;
 import ds.z.ConcreteAssignment;
 import evacuationplan.BidirectionalNodeCellMapping;

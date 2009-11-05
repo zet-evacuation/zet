@@ -29,7 +29,7 @@ import util.DebugFlags;
 
 import ds.Project;
 import ds.PropertyContainer;
-import ds.graph.NetworkFlowModel;
+import ds.NetworkFlowModel;
 import ds.z.BuildingPlan;
 import ds.z.DelayArea;
 import ds.z.EvacuationArea;

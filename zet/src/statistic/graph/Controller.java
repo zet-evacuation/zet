@@ -22,7 +22,7 @@ package statistic.graph;
 import ds.graph.flow.PathBasedFlowOverTime;
 import ds.graph.flow.FlowOverTimePath;
 import ds.graph.Edge;
-import ds.graph.NetworkFlowModel;
+import ds.NetworkFlowModel;
 import ds.graph.Node;
 import java.awt.Component;
 import java.awt.Container;

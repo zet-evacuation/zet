@@ -18,8 +18,9 @@
  *
  */
 
-package ds.graph;
+package ds;
 
+import ds.graph.*;
 import java.util.LinkedList;
 
 import com.thoughtworks.xstream.annotations.XStreamAlias;

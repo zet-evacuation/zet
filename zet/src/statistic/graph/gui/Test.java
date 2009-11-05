@@ -30,7 +30,7 @@ import ds.graph.flow.PathBasedFlowOverTime;
 import ds.graph.Edge;
 import ds.graph.IdentifiableIntegerMapping;
 import ds.graph.Network;
-import ds.graph.NetworkFlowModel;
+import ds.NetworkFlowModel;
 import ds.graph.Node;
 import java.awt.BorderLayout;
 import java.awt.Dimension;

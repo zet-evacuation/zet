@@ -18,7 +18,7 @@
  * NanosecondTimeFormatter.java
  *
  */
-package util;
+package algo.graph.util;
 
 /**
  * An utility class to convert and format a time specified in nanoseconds into 

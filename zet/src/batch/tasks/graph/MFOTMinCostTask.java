@@ -23,7 +23,7 @@ package batch.tasks.graph;
 import batch.tasks.*;
 import algo.graph.dynamicflow.maxflow.MaxFlowOverTime;
 import ds.PropertyContainer;
-import ds.graph.NetworkFlowModel;
+import ds.NetworkFlowModel;
 
 /**
  *

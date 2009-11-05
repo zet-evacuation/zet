@@ -32,7 +32,7 @@ import ds.graph.Network;
 import ds.graph.Node;
 import ds.graph.flow.PathBasedFlow;
 import ds.graph.flow.StaticPathFlow;
-import util.ProgressBooleanFlags;
+import algo.graph.ProgressBooleanFlags;
 
 /** 
  * Calculates an upper bound for the time horizon needed

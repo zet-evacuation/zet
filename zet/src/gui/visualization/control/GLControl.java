@@ -16,7 +16,7 @@
 package gui.visualization.control;
 
 import ds.PropertyContainer;
-import ds.graph.GraphVisualizationResult;
+import ds.GraphVisualizationResult;
 import ds.ca.CellularAutomaton;
 import ds.ca.PotentialManager;
 import ds.ca.StaticPotential;

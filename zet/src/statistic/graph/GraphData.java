@@ -26,7 +26,7 @@ import ds.graph.flow.FlowOverTimePath;
 import ds.graph.Edge;
 import ds.graph.IdentifiableIntegerMapping;
 import ds.graph.Network;
-import ds.graph.NetworkFlowModel;
+import ds.NetworkFlowModel;
 import ds.graph.Node;
 import java.util.HashMap;
 import java.util.Map;

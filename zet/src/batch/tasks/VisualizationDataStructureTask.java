@@ -20,7 +20,7 @@
 
 package batch.tasks;
 
-import ds.graph.GraphVisualizationResult;
+import ds.GraphVisualizationResult;
 import gui.visualization.control.GLControl;
 import io.visualization.BuildingResults;
 import io.visualization.CAVisualizationResults;
