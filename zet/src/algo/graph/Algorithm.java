@@ -23,7 +23,7 @@ package algo.graph;
 
 import java.util.LinkedHashSet;
 import java.util.Set;
-import batch.tasks.AlgorithmTask;
+//import batch.tasks.AlgorithmTask;
 import algo.graph.util.NanosecondTimeFormatter;
 
 /**
@@ -94,7 +94,7 @@ public abstract class Algorithm<Problem, Solution> implements Runnable {
     
     @Deprecated
     protected final void fireTaskDescriptionEvent(String taskName) {
-        AlgorithmTask.getInstance().publish(taskName);        
+        //AlgorithmTask.getInstance().publish(taskName);
     }
     
     @Deprecated
@@ -133,7 +133,7 @@ public abstract class Algorithm<Problem, Solution> implements Runnable {
         if (ProgressBooleanFlags.ALGO_PROGRESS) {
             System.out.println("Progress: " + progress);
         }
-        AlgorithmTask.getInstance().publish((int) Math.round(progress * 100));
+        //AlgorithmTask.getInstance().publish((int) Math.round(progress * 100));
         if (progressListeners != null) {
             AlgorithmProgressEvent event = new AlgorithmProgressEvent(this, startTime, System.nanoTime(), progress);
             for (ProgressListener listener : progressListeners) {
@@ -156,7 +156,7 @@ public abstract class Algorithm<Problem, Solution> implements Runnable {
         if (ProgressBooleanFlags.ALGO_PROGRESS) {
             System.out.println("Progress: " + progress);
         }
-        AlgorithmTask.getInstance().publish((int) Math.round(progress * 100), information, detailedInformation);
+        //AlgorithmTask.getInstance().publish((int) Math.round(progress * 100), information, detailedInformation);
         if (progressListeners != null) {
             AlgorithmProgressEvent event = new AlgorithmProgressEvent(this, startTime, System.nanoTime(), progress);
             for (ProgressListener listener : progressListeners) {

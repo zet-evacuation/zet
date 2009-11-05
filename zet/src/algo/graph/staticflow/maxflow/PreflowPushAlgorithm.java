@@ -28,6 +28,7 @@ import ds.graph.ResidualNetwork;
 import ds.graph.flow.MaximumFlow;
 import algo.graph.Algorithm;
 import algo.graph.DebugFlags;
+import algo.graph.ProgressBooleanFlags;
 
 /**
  *
@@ -74,7 +75,7 @@ public class PreflowPushAlgorithm extends Algorithm<MaximumFlowProblem, MaximumF
     }
 
     protected void initializeProgress() {
-        if (!util.ProgressBooleanFlags.ALGO_PROGRESS) {
+        if (!ProgressBooleanFlags.ALGO_PROGRESS) {
             return;
         }
         /* Initialize the overall excess and the sum of all labels. */
@@ -98,7 +99,7 @@ public class PreflowPushAlgorithm extends Algorithm<MaximumFlowProblem, MaximumF
             System.out.println("Total excess " + totalExcess + " Max Label: " + maxLabel + " Sum of Labels: " + sumOfLabels + " " +
                     (sumOfLabels + (startExcess - totalExcess)) + " of " + done + ".");
         }
-        if( util.ProgressBooleanFlags.ALGO_PROGRESS ) {
+        if (ProgressBooleanFlags.ALGO_PROGRESS ) {
             if (progressOutputCounter == increasesBeforeOutput) {
                 System.out.println("Progress: " + (sumOfLabels + (startExcess - totalExcess)) + " of " + done);
                 System.out.flush();
@@ -136,7 +137,7 @@ public class PreflowPushAlgorithm extends Algorithm<MaximumFlowProblem, MaximumF
         residualNetwork.augmentFlow(edge, amount);
         excess.decrease(edge.start(), amount);
         if (getProblem().getSinks().contains(edge.end()) || getProblem().getSources().contains(edge.end())) {
-            if (util.ProgressBooleanFlags.ALGO_PROGRESS) {
+            if (ProgressBooleanFlags.ALGO_PROGRESS) {
                 totalExcess -= amount;
                 /* The total excess changed, so print it if debug is activated. */
                 if (DebugFlags.PP) {
@@ -175,11 +176,11 @@ public class PreflowPushAlgorithm extends Algorithm<MaximumFlowProblem, MaximumF
     }
 
     protected void updateDistanceLabel(Node node, int value) {
-        if (util.ProgressBooleanFlags.ALGO_PROGRESS) {
+        if (ProgressBooleanFlags.ALGO_PROGRESS) {
             sumOfLabels -= distanceLabels.get(node);
         }
         distanceLabels.set(node, value);
-        if (util.ProgressBooleanFlags.ALGO_PROGRESS) {
+        if (ProgressBooleanFlags.ALGO_PROGRESS) {
             sumOfLabels += distanceLabels.get(node);
             /* Print new sum of labels if debug is activated. */
             if (DebugFlags.PP && value > maxLabel) {

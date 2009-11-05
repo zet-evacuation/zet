@@ -38,7 +38,7 @@ public class QuickestTransshipmentTask extends GraphAlgorithmTask {
 	public void run() {
 		QuickestTransshipment algo = new QuickestTransshipment( model.getNetwork(), model.getTransitTimes(), model.getEdgeCapacities(), model.getCurrentAssignment() );
 		algo.run();
-		if (!algo.hasRun() || !algo.isPathBasedFlowAvailable()){
+		if (!algo.isProblemSolved() || !algo.isPathBasedFlowAvailable()){
 			throw new AssertionError("Either algorithm has not run or path based flow is not available.");
 		}
 		df = algo.getResultFlowPathBased();

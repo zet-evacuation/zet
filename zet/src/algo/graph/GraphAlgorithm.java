@@ -21,7 +21,7 @@ package algo.graph;
  * for each run of the algorithm. The input is given to 
  * the algorithm in the constructor. The output shall be
  * calculated if the method <code>run()</code> is called.
- * The method <code>hasRun()</code> returns whether
+ * The method <code>isProblemSolved()</code> returns whether
  * the algorithm has already run. Only one run should be made!
  * After the run the results can be obtained by algorithm
  * specific methods.
@@ -55,9 +55,9 @@ public abstract class GraphAlgorithm implements Sender{
 	 * Returns whether the algorithm has already run. Don't run it twice.
 	 * @return whether the algorithm has already run.
 	 */
-	public final boolean hasRun(){
+	public final boolean isProblemSolved(){
             return hasRun;
-		//return hasRun;
+		//return isProblemSolved;
 	}
 	
 }
