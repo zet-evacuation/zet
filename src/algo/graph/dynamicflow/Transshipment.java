@@ -23,7 +23,7 @@ import ds.graph.Localization;
 import algo.graph.DebugFlags;
 import algo.graph.Notifiable;
 
-import batch.tasks.AlgorithmTask;
+//import batch.tasks.AlgorithmTask;
 import algo.graph.util.GraphInstanceChecker;
 import ds.graph.flow.PathBasedFlowOverTime;
 import ds.graph.Edge;
@@ -105,7 +105,16 @@ public abstract class Transshipment<TT extends TransshipmentWithTimeHorizon> ext
 		}
 		return transshipmentAlgorithm.getResultFlowPathBased();
 	}
-	
+
+        @Override
+        protected PathBasedFlowOverTime runAlgorithm(DynamicFlowProblem problem) {
+            //network = problem.getNetwork();
+            //edgeCapacities = problem.getCapacities();
+            //transitTimes = problem.getTransitTimes();
+            runAlgorithm();
+            return resultFlowPathBased;
+        }
+
 	/**
 	 * This method performs binary search to find a minimal time horizon.
 	 * For each time step, the time-expanded network is created and the algorithm
@@ -118,13 +127,13 @@ public abstract class Transshipment<TT extends TransshipmentWithTimeHorizon> ext
 	 * @param transshipmentAlgorithm The algorithm used for each time step.
 	 * @return
 	 */
-	@Override
 	public void runAlgorithm() {
 		if (ProgressBooleanFlags.ALGO_PROGRESS){
 			System.out.println("Progress: Transshipment algorithm was started.");
 			System.out.flush();
 		}
-		AlgorithmTask.getInstance().publish( "Transshipment algorithm started.", "" );
+                fireEvent("Transshipment algorithm started.");
+		//AlgorithmTask.getInstance().publish( "Transshipment algorithm started.", "" );
 		
 		if (DebugFlags.MEL){
 			System.out.println("Eingabe: ");
@@ -161,7 +170,8 @@ public abstract class Transshipment<TT extends TransshipmentWithTimeHorizon> ext
 		if (ProgressBooleanFlags.ALGO_PROGRESS){
 			System.out.println("Progress: Now testing time horizon 1.");
 		}
-		AlgorithmTask.getInstance().publish( "Uppder bound for the time horizon was calculated.", "Now testing time horizon 1." );
+		//AlgorithmTask.getInstance().publish( "Uppder bound for the time horizon was calculated.", "Now testing time horizon 1." );
+                fireEvent("Upper bound for the time horizon was calculated. Now testing time horizon 1.");
 		/* Use the specific transshipment algorithm to check whether testTimeHorizon is sufficient. */
 		PathBasedFlowOverTime dynamicTransshipment = useTransshipmentAlgorithm(network, transitTimes, edgeCapacities, nodeCapacities, supplies, 1, standardTHTAlgorithm);
 		
@@ -186,7 +196,8 @@ public abstract class Transshipment<TT extends TransshipmentWithTimeHorizon> ext
 				if (ProgressBooleanFlags.ALGO_PROGRESS){
 					System.out.println("Progress: Now testing time horizon "+testTimeHorizon+".");
 				}
-				AlgorithmTask.getInstance().publish( "Now testing time horizon " + testTimeHorizon + ".", "" );
+				//AlgorithmTask.getInstance().publish( "Now testing time horizon " + testTimeHorizon + ".", "" );
+                                fireEvent("Now testing time horizon " + testTimeHorizon + ".");
                                 System.out.println(System.currentTimeMillis() + " ms");
 				dynamicTransshipment = useTransshipmentAlgorithm(network, transitTimes, edgeCapacities, nodeCapacities, supplies, testTimeHorizon, standardTHTAlgorithm);
 				if (dynamicTransshipment == null)
@@ -210,7 +221,8 @@ public abstract class Transshipment<TT extends TransshipmentWithTimeHorizon> ext
 			if (ProgressBooleanFlags.ALGO_PROGRESS){
 				System.out.println("Progress: Now testing time horizon "+testTimeHorizon+".");
 			}
-			AlgorithmTask.getInstance().publish( "Now testing time horizon " + testTimeHorizon + ".", "" );
+			//AlgorithmTask.getInstance().publish( "Now testing time horizon " + testTimeHorizon + ".", "" );
+                        fireEvent("Now testing time horizon " + testTimeHorizon + ".");
 			
 			/* Use the specific transshipment algorithm to check whether testTimeHorizon is sufficient. */
 			dynamicTransshipment = useTransshipmentAlgorithm(network, transitTimes, edgeCapacities, nodeCapacities, supplies, testTimeHorizon, standardTHTAlgorithm);
@@ -231,7 +243,8 @@ public abstract class Transshipment<TT extends TransshipmentWithTimeHorizon> ext
 			if (ProgressBooleanFlags.ALGO_PROGRESS){
 				System.out.println("Progress: Transshipment algorithm has finished. Time horizon: "+right);
 			}
-			AlgorithmTask.getInstance().publish("Solution found.", "The optimal time horizon is: " + right +" (estimated upper bound: "+(upperBound-1)+")");
+			//AlgorithmTask.getInstance().publish("Solution found.", "The optimal time horizon is: " + right +" (estimated upper bound: "+(upperBound-1)+")");
+                        fireEvent("Solution found. The optimal time horizon is: " + right +" (estimated upper bound: "+(upperBound-1)+")");
 			if (DebugFlags.TRANSSHIPMENT_SHORT) {
 				System.out.println("The optimal time horizon is: " + right +" (estimated upper bound: "+(upperBound-1)+")");
 			}
@@ -243,7 +256,8 @@ public abstract class Transshipment<TT extends TransshipmentWithTimeHorizon> ext
 				System.out.println(transshipmentWithoutTimeHorizon);
 			}
 		} else {
-			AlgorithmTask.getInstance().publish("No solution found.","");
+			//AlgorithmTask.getInstance().publish("No solution found.","");
+                        fireEvent("No solution found.");
 			if (DebugFlags.TRANSSHIPMENT_SHORT){
 				System.out.println("No solution found.");
 			}
@@ -264,7 +278,8 @@ public abstract class Transshipment<TT extends TransshipmentWithTimeHorizon> ext
 				if (ProgressBooleanFlags.ALGO_PROGRESS){
 					System.out.println("Progress: Additional transshipment algorithm has finished and the new solution was set.");
 				}
-				AlgorithmTask.getInstance().publish( 100, "Run with additional transshipment algorithm has finished.", "The new solution was set." );
+				//AlgorithmTask.getInstance().publish( 100, "Run with additional transshipment algorithm has finished.", "The new solution was set." );
+                                fireProgressEvent( 100, "Run with additional transshipment algorithm has finished.", "The new solution was set." );
 			}
 		}
 		

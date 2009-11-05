@@ -17,18 +17,14 @@
  * ChainDecomposition2.java
  *
  */
-package algo.graph.dynamicflow;
+package ds.graph.flow;
 
 import ds.graph.DynamicResidualNetwork;
 import ds.graph.Edge;
 import ds.graph.IdentifiableIntegerMapping;
 import ds.graph.IdentifiableObjectMapping;
 import ds.graph.Node;
-import ds.graph.flow.FlowOverTimeEdge;
-import ds.graph.flow.FlowOverTimeEdgeSequence;
 //import ds.graph.flow.FlowOverTimeEdgeSequence;
-import ds.graph.flow.FlowOverTimePath;
-import ds.graph.flow.PathBasedFlowOverTime;
 import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.Queue;

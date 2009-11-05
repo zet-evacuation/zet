@@ -15,8 +15,10 @@
  */
 package algo.graph.dynamicflow;
 
+import algo.graph.Algorithm;
 import ds.graph.Localization;
 import algo.graph.GraphAlgorithm;
+import algo.graph.Sender;
 import algo.graph.util.PathComposition;
 import ds.graph.flow.PathBasedFlowOverTime;
 import ds.graph.Edge;
@@ -30,7 +32,7 @@ import ds.graph.Network;
  * and therefore this class implements the <code>GraphAlgorithm</code>
  * interface. 
  */
-public abstract class DynamicFlowAlgorithm extends GraphAlgorithm {
+public abstract class DynamicFlowAlgorithm /*extends GraphAlgorithm*/ extends Algorithm<DynamicFlowProblem, PathBasedFlowOverTime> implements Sender {
 
 	/** Flow based result flow. */
 	protected PathBasedFlowOverTime resultFlowPathBased = null;

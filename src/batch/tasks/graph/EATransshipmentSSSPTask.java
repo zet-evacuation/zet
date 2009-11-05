@@ -37,7 +37,7 @@ public class EATransshipmentSSSPTask extends GraphAlgorithmTask {
 	public void run() {		
 			EATransshipmentSSSP algo = new EATransshipmentSSSP( model.getNetwork(), model.getTransitTimes(), model.getEdgeCapacities(), model.getCurrentAssignment() );
 			algo.run();
-			if (!algo.hasRun() || !algo.isPathBasedFlowAvailable()){
+			if (!algo.isProblemSolved() || !algo.isPathBasedFlowAvailable()){
 				throw new AssertionError("Either algorithm has not run or path based flow is not available.");
 			}
 			df = algo.getResultFlowPathBased();
