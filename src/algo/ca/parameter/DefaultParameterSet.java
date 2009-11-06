@@ -18,6 +18,7 @@
  * DefaultParameterSet.java
  * Created on 23.01.2008
  */
+
 package algo.ca.parameter;
 
 import ds.PropertyContainer;
@@ -121,7 +122,7 @@ public class DefaultParameterSet extends AbstractDefaultParameterSet {
 
 	/*
 	 * {@inheritDoc}
-	 * @see algo.ca.parameter.AbstractDefaultParameterSet#movementThreshold(ds.ca.Individual)
+	 * @see algo.ca.parameter.AbstractDefaultParameterSet#movementThreshold( ds.ca.Individual )
 	 */
 	// wird nur benutzt wenn die Geschwindigkeit der Individuen mit Wahrscheinlichkeiten simuliert wird
 	// das ist in der NonWaitingMovementRule nicht der Fall
