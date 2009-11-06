@@ -211,6 +211,6 @@ public class VisualizationOptionManager {
 	}
 
 	public static QualityPreset getQualityPreset() {
-		return QualityPreset.VeryHighQuality;
+		return PropertyContainer.getInstance().getAs( "options.visualization.qualitySetting", QualityPreset.class);
 	}
 }
