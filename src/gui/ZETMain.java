@@ -54,6 +54,7 @@ import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
 import localization.Localization;
 import util.DebugStream;
+import util.DebugStreamVerbose;
 
 /**
  * The <code>ZETMain</code> class is the main entry for the graphical user
@@ -77,9 +78,9 @@ public class ZETMain {
 	/** The filename for the file that contains additional options. */
 	static final String informationFilename = "options.xml";
 	/** The file to which the log is written (if specified via commandline). */
-	static String logFile = "";
+	static String logFile = "output.log";
 	/** The file to which the error log is written (if specified via commandline). */
-	static String errFile = "";
+	static String errFile = "error.log";
 	/** The batch project which is loaded if -batch command option is used. */
 	static BatchProject bp = null;
 	/** States if visualization is used, or not. Can be changed via commandline. */
@@ -212,10 +213,6 @@ public class ZETMain {
 			propertyFilename = config.getString( "property" );
 
 		debug = config.getBoolean( "debug" );
-
-		// Notfallmäßig vordefinieren, falls xml-datei nicht existiert. TODO
-		//PropertyContainer.getInstance().define( "projectPath", String.class, "./examples/" );
-		//PropertyContainer.getInstance().define( "imagePath", String.class, "./examples/" );
 
 		createEditor();
 	}
@@ -393,18 +390,18 @@ public class ZETMain {
 		}
 		if( log )
 			try {
-				logStream = verbose ? new DebugStream( new FileOutputStream( logFile ), System.out ) : new PrintStream( new FileOutputStream( logFile ) );
+				logStream = verbose ? new DebugStreamVerbose( new FileOutputStream( logFile ), System.out ) : new DebugStream( new FileOutputStream( logFile ) );
 			} catch( FileNotFoundException ex ) {
-				System.err.println( "Error creating out." );
+				System.err.println( "Error creating debug out." );
 			}
 		if( err )
 			if( log && logFile.equals( errFile ) )
 				errStream = logStream;
 			else
 				try {
-					errStream = verbose ? new DebugStream( new FileOutputStream( errFile ), System.err, MessageType.LogError ): new PrintStream( new FileOutputStream( errFile ) );
+					errStream = verbose ? new DebugStreamVerbose( new FileOutputStream( errFile ), System.err, MessageType.LogError ): new DebugStream( new FileOutputStream( errFile ), MessageType.LogError );
 				} catch( FileNotFoundException ex ) {
-					System.err.println( "Error creating error out." );
+					System.err.println( "Error creating debug error out." );
 				}
 		System.setOut( logStream );
 		System.setErr( errStream );
