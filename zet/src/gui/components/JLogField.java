@@ -27,6 +27,7 @@ import info.clearthought.layout.TableLayout;
 import java.util.ArrayList;
 import javax.swing.JEditorPane;
 import javax.swing.JPanel;
+import javax.swing.JScrollPane;
 
 /**
  * The class <code>JLogField</code> is a text area that displays log and error
@@ -52,7 +53,10 @@ public class JLogField extends JPanel implements EventListener<MessageEvent> {
 		setLayout( new TableLayout( size ) );
 
 		log = new JEditorPane( "text/html", "" );
-		add( log, "0,0" );
+
+    JScrollPane scrollPane = new JScrollPane( log );
+
+		add( scrollPane, "0,0" );
 
 		EventServer.getInstance().registerListener( this, MessageEvent.class );
 	}

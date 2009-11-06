@@ -210,6 +210,10 @@ public class VisualizationOptionManager {
 		return new GLColor( Color.black );
 	}
 
+	/**
+	 * Returns the currenly active quality preset.
+	 * @return the currenly active quality preset
+	 */
 	public static QualityPreset getQualityPreset() {
 		return PropertyContainer.getInstance().getAs( "options.visualization.qualitySetting", QualityPreset.class);
 	}
