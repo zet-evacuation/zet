@@ -6,13 +6,14 @@
  *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
  * GNU General Public License for more details.
  *
  * You should have received a copy of the GNU General Public License
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
+
 /**
  * Class StringListProperty
  * Erstellt 14.04.2008, 20:42:35
@@ -30,7 +31,6 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
 import javax.swing.DefaultListModel;
-import javax.swing.JButton;
 import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JList;
@@ -59,7 +59,6 @@ public class StringListProperty extends AbstractPropertyValue<ArrayList<String>>
 
 	@Override
 	public JPanel getPanel() {
-		//throw new UnsupportedOperationException( "Not supported yet." );
 		JPanel panel = new JPanel();
 
 		int space = 16;

@@ -6,13 +6,14 @@
  *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
  * GNU General Public License for more details.
  *
  * You should have received a copy of the GNU General Public License
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
+
 /*
  * PropertyContainer.java
  *
@@ -28,8 +29,10 @@ import gui.editor.properties.PropertyTreeNode;
 import gui.editor.properties.framework.AbstractPropertyValue;
 import gui.editor.properties.types.IntegerProperty;
 import gui.editor.properties.types.DoubleProperty;
+import gui.editor.properties.types.QualitySettingProperty;
 import gui.editor.properties.types.StringProperty;
 import gui.editor.properties.types.StringListProperty;
+import gui.visualization.QualityPreset;
 import java.awt.Color;
 import java.awt.Font;
 import java.io.File;
@@ -235,5 +238,11 @@ public class PropertyContainer {
 					pc.define( property.getPropertyName(), ArrayList.class, (ArrayList)property.getValue() );
 				else
 					pc.set( property.getPropertyName(), (ArrayList)property.getValue() );
+			else if( property instanceof QualitySettingProperty ) {
+				if( !pc.isDefined( property.getPropertyName() ) )
+					pc.define( property.getPropertyName(), QualityPreset.class, (QualityPreset)property.getValue() );
+				else
+					pc.set( property.getPropertyName(), (QualityPreset)property.getValue() );
+			}
 	}
 }

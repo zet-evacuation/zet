@@ -6,13 +6,14 @@
  *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
  * GNU General Public License for more details.
  *
  * You should have received a copy of the GNU General Public License
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
+
 /**
  * Class StringPropertyConverter
  * Erstellt 14.04.2008, 14:02:24
@@ -26,7 +27,7 @@ import gui.editor.properties.framework.AbstractPropertyConverter;
 import gui.editor.properties.types.StringProperty;
 
 /**
- *
+ * A property that allows to store one {@code String}.
  * @author Jan-Philipp Kappmeier
  */
 public class StringPropertyConverter extends AbstractPropertyConverter<StringProperty, String> {

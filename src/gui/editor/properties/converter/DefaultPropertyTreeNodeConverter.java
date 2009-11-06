@@ -6,7 +6,7 @@
  *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
  * GNU General Public License for more details.
  *
  * You should have received a copy of the GNU General Public License
@@ -33,6 +33,7 @@ import gui.editor.properties.types.IntegerRangeProperty;
 import gui.editor.properties.types.StringProperty;
 import gui.editor.properties.types.StringListProperty;
 import gui.editor.properties.PropertyTreeNode;
+import gui.editor.properties.types.QualitySettingProperty;
 import javax.swing.tree.DefaultMutableTreeNode;
 
 /**
@@ -78,7 +79,9 @@ public class DefaultPropertyTreeNodeConverter implements Converter {
 			else if( property instanceof StringProperty )
 				context.convertAnother( property, new StringPropertyConverter() );
 			else if( property instanceof StringListProperty )
-				context.convertAnother( property, new StringListPropertyConverter() );				
+				context.convertAnother( property, new StringListPropertyConverter() );
+			else if( property instanceof QualitySettingProperty )
+				context.convertAnother( property, new QualitySettingPropertyConverter() );
 		}
     writer.endNode();
   }
@@ -117,6 +120,9 @@ public class DefaultPropertyTreeNodeConverter implements Converter {
 			} else if( nodeName.equals( "stringListNode" ) ) {
 				StringListProperty stringP = (StringListProperty)context.convertAnother( node, StringListProperty.class, new StringListPropertyConverter() );
 				node.addProperty( stringP );
+			} else if( nodeName.equals( "comboBoxNodeQuality" ) ) {
+				QualitySettingProperty qualityP = (QualitySettingProperty)context.convertAnother( node, QualitySettingProperty.class, new QualitySettingPropertyConverter() );
+				node.addProperty( qualityP );
 			}
       reader.moveUp();
     }

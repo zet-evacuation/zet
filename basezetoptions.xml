@@ -51,6 +51,7 @@
       <doubleNode name="options.visualization.appearance.IndividualRadius" useAsLocString="true" description="desc" information="options.visualization.appearance.individualRadius.info" parameter="options.visualization.appearance.individualRadius">15</doubleNode>
       <doubleNode name="options.visualization.appearance.wallHeight" useAsLocString="true" description="desc" information="options.visualization.appearance.wallHeight.info" parameter="options.visualization.appearance.wallHeight">30</doubleNode>
     </treeNode>
+    <comboBoxNodeQuality name="options.visualization.qualitySetting" useAsLocString="true" description="desc" information="options.visualization.qualitySetting.info" parameter="options.visualization.qualitySetting">MediumQuality</comboBoxNodeQuality>
     <boolNode name="options.visualization.allowRotateIn2D" useAsLocString="true" description="desc" information="options.visualization.allowRotateIn2D.info" parameter="editor.options.visualization.allowRotateIn2D">true</boolNode>
   </treeNode>
   <treeNode name="options.statistic" useAsLocString="true">
