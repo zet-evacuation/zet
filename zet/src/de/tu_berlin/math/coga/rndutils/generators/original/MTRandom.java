@@ -26,7 +26,7 @@
  */
 
 //package net.goui.util;
-package util.random;
+package de.tu_berlin.math.coga.rndutils.generators.original;
 
 import java.util.Random;
 

@@ -6,7 +6,7 @@
  *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
  * GNU General Public License for more details.
  *
  * You should have received a copy of the GNU General Public License
@@ -16,18 +16,14 @@
 package algo.ca.rule;
 
 import java.util.ArrayList;
-import java.util.Comparator;
-
-import util.Direction;
-import util.Level;
 import ds.ca.Cell;
 import ds.ca.Individual;
 import ds.ca.StairCell;
-import java.util.Collections;
-import util.random.RandomUtils;
 import ds.ca.results.VisualResultsRecorder;
 import ds.ca.results.IndividualStateChangeAction;
 import util.DebugFlags;
+import util.Direction;
+import util.Level;
 
 /**
  *

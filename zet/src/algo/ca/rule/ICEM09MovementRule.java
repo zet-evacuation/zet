@@ -22,9 +22,9 @@ import util.Level;
 import ds.ca.Cell;
 import ds.ca.Individual;
 import ds.ca.StairCell;
-import util.random.RandomUtils;
 import ds.ca.results.VisualResultsRecorder;
 import ds.ca.results.IndividualStateChangeAction;
+import de.tu_berlin.math.coga.rndutils.RandomUtils;
 import util.DebugFlags;
 
 /**

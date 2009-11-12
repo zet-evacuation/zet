@@ -6,7 +6,7 @@
  *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
  * GNU General Public License for more details.
  *
  * You should have received a copy of the GNU General Public License
@@ -18,16 +18,16 @@ package algo.ca.rule;
 import java.util.ArrayList;
 import java.util.Comparator;
 
-import util.Direction;
-import util.Level;
 import ds.ca.Cell;
 import ds.ca.Individual;
 import ds.ca.StairCell;
-import java.util.Collections;
-import util.random.RandomUtils;
 import ds.ca.results.VisualResultsRecorder;
 import ds.ca.results.IndividualStateChangeAction;
+import java.util.Collections;
+import de.tu_berlin.math.coga.rndutils.RandomUtils;
 import util.DebugFlags;
+import util.Direction;
+import util.Level;
 
 /**
  * 
@@ -84,8 +84,8 @@ public class NonWaitingMovementRule extends AbstractMovementRule {
 
 		boolean diagonal = ((xd == -1) || (xd == 1)) && ((yd == -1) || (yd == 1));
 		if( diagonal ) {
-			boolean indVary = cell.getRoom().getCell( cell.getX(), cell.getY()+yd ).getIndividual() == null;
-			boolean indVarx = cell.getRoom().getCell( cell.getX()+xd, cell.getY() ).getIndividual() == null;
+			boolean indVary = cell.getRoom().existsCellAt( cell.getX(), cell.getY()+yd ) && cell.getRoom().getCell( cell.getX(), cell.getY()+yd ).getIndividual() == null;
+			boolean indVarx = cell.getRoom().existsCellAt( cell.getX()+xd, cell.getY() ) && cell.getRoom().getCell( cell.getX()+xd, cell.getY() ).getIndividual() == null;
 
 			if( indVary && indVarx )
 				return targetCell;
@@ -262,7 +262,7 @@ public class NonWaitingMovementRule extends AbstractMovementRule {
 					if( nextProbable[1] != -1 ) {
 						// if exactly two nextProbableCells found
 						// choose one of them randomly:
-						if( util.random.RandomUtils.getInstance().binaryDecision( 0.5 ) ) {
+						if( RandomUtils.getInstance().binaryDecision( 0.5 ) ) {
 							max_index2 = nextProbable[0];
 						} else {
 							max_index2 = nextProbable[1];

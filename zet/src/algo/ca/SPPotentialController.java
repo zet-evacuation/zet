@@ -6,7 +6,7 @@
  *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
  * GNU General Public License for more details.
  *
  * You should have received a copy of the GNU General Public License
@@ -15,16 +15,9 @@
  */
 package algo.ca;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.HashMap;
-
-import localization.Localization;
-
 import algo.ca.util.PotentialUtils;
-
-
-import util.random.RandomUtils;
+import de.tu_berlin.math.coga.rndutils.RandomUtils;
+import de.tu_berlin.math.coga.rndutils.generators.GeneralRandom;
 import ds.ca.Cell;
 import ds.ca.CellularAutomaton;
 import ds.ca.DynamicPotential;
@@ -34,7 +27,10 @@ import ds.ca.Room;
 import ds.ca.StaticPotential;
 import ds.ca.DoorCell;
 import ds.ca.TargetCell;
-import util.random.GeneralRandom;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.HashMap;
+import localization.Localization;
 
 /**
  * This class provides general functionality for manipulation of PotentialMaps.

@@ -6,7 +6,7 @@
  *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
  * GNU General Public License for more details.
  *
  * You should have received a copy of the GNU General Public License
@@ -15,14 +15,8 @@
  */
 package evacuationplan;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-
-import util.DebugFlags;
-
-import util.random.GeneralRandom;
-
+import de.tu_berlin.math.coga.rndutils.RandomUtils;
+import de.tu_berlin.math.coga.rndutils.generators.GeneralRandom;
 import ds.graph.flow.PathBasedFlowOverTime;
 import ds.graph.flow.FlowOverTimePath;
 import ds.graph.IdentifiableObjectMapping;
@@ -33,6 +27,10 @@ import ds.ca.ExitCell;
 import ds.ca.Individual;
 import ds.ca.PotentialManager;
 import ds.ca.StaticPotential;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import util.DebugFlags;
 
 /**
  * This class controls the behavior of a cellular automaton so that the individuals
@@ -170,7 +168,7 @@ public class CAPathPassabilityChecker {
 			for (int c=0; c < dynamicPathFlow.getAmount(); c++){
 				// choose one of the possible individuals randomly, 
 				// associate it to the path and delete it from the list of individuals remaining in this node
-				GeneralRandom randGen = util.random.RandomUtils.getInstance().getRandomGenerator();
+				GeneralRandom randGen = RandomUtils.getInstance().getRandomGenerator();
 				int randomNumber = randGen.nextInt(possibleIndividuals.size());
 				chosenIndividual = possibleIndividuals.remove(randomNumber);
 				// calculate successor mapping from path

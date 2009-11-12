@@ -6,7 +6,7 @@
  *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
  * GNU General Public License for more details.
  *
  * You should have received a copy of the GNU General Public License
@@ -29,6 +29,7 @@ import ds.ca.StaticPotential;
 import java.util.Collection;
 import java.util.List;
 import localization.Localization;
+import de.tu_berlin.math.coga.rndutils.RandomUtils;
 import util.random.distributions.NormalDistribution;
 
 /**
@@ -183,11 +184,11 @@ public class DefaultParameterSet extends AbstractDefaultParameterSet {
 
 		int failures = 0;
 
-		int chosenNeighbour = util.random.RandomUtils.getInstance().chooseRandomlyAbsolute( potentials );
+		int chosenNeighbour = RandomUtils.getInstance().chooseRandomlyAbsolute( potentials );
 		while( possibleNeighbours.get( chosenNeighbour ).getIndividual() != null && failures <= possibleNeighbours.size() ) {
 			failures++;
 			potentials[chosenNeighbour] = 0;
-			chosenNeighbour = util.random.RandomUtils.getInstance().chooseRandomlyAbsolute( potentials );
+			chosenNeighbour = RandomUtils.getInstance().chooseRandomlyAbsolute( potentials );
 		}
 
 		double newPanic = individual.getPanic();

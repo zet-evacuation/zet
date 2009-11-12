@@ -394,14 +394,20 @@ public abstract class Cell implements Comparable<Cell> {
 					case UPPER_RIGHT:
 						boolean f1 = false;
 						boolean f2 = false;
-						if( cellRoom.getCell( this.getX() + direction.xOffset(), this.getY() ).individual != null )
+//try{
+						if( cellRoom.existsCellAt( this.getX() + direction.xOffset(), this.getY() ) && cellRoom.getCell( this.getX() + direction.xOffset(), this.getY() ).individual != null )
 							//add = false;
 							f1 = true;
-						else if( cellRoom.getCell( this.getX() + direction.xOffset(), this.getY() ).individual != null )
+						else if( cellRoom.existsCellAt( this.getX() + direction.xOffset(), this.getY() ) && cellRoom.getCell( this.getX() + direction.xOffset(), this.getY() ).individual != null )
 							//add = false;
 							f2 = true;
 						if( f1 && f2 )
 							add = false;
+//} catch (java.lang.NullPointerException ex) {
+//	int i = 1;
+//i++
+//					;
+//}
 				}
 				add=true;
 				if( add )
