@@ -6,7 +6,7 @@
  *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
  * GNU General Public License for more details.
  *
  * You should have received a copy of the GNU General Public License
@@ -22,7 +22,7 @@ import ds.ca.ExitCell;
 import ds.ca.Individual;
 import ds.ca.SaveCell;
 import ds.ca.StaticPotential;
-import util.random.RandomUtils;
+import de.tu_berlin.math.coga.rndutils.RandomUtils;
 
 /**
  * This rule changes the Individuals StaticPotential. It chooses the admissible 

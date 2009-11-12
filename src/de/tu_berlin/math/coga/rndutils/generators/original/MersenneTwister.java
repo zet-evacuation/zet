@@ -1,7 +1,12 @@
 //package ec.util;
-package util.random;
+package de.tu_berlin.math.coga.rndutils.generators.original;
 
-import java.io.*;
+import java.io.DataInputStream;
+import java.io.DataOutputStream;
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+import java.io.Serializable;
 
 /** 
  * <h3>MersenneTwister and MersenneTwisterFast</h3>

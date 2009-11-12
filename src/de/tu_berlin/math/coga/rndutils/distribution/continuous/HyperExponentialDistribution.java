@@ -1,27 +1,12 @@
-/* zet evacuation tool copyright (c) 2007-09 zet evacuation team
- *
- * This program is free software; you can redistribute it and/or
- * as published by the Free Software Foundation; either version 2
- * of the License, or (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with this program; if not, write to the Free Software
- * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
- */
 /**
  * Class HyperExponentialDistribution
  * Erstellt 18.09.2008, 16:06:48
  */
 
-package util.random.distributions;
+package de.tu_berlin.math.coga.rndutils.distribution.continuous;
 
-import com.thoughtworks.xstream.annotations.XStreamAsAttribute;
 import de.tu_berlin.math.coga.rndutils.RandomUtils;
+import de.tu_berlin.math.coga.rndutils.distribution.ContinousDistribution;
 
 /**
  * Represents a hyper-exponential distribution based on two exponential
@@ -29,8 +14,7 @@ import de.tu_berlin.math.coga.rndutils.RandomUtils;
  * and the second one of <code>1-p</code>.
  * @author Jan-Philipp Kappmeier
  */
-public class HyperExponentialDistribution extends Distribution {
-	@XStreamAsAttribute()
+public class HyperExponentialDistribution extends ContinousDistribution {
 	private double p;
 	private ExponentialDistribution e1;
 	private ExponentialDistribution e2;
@@ -131,7 +115,7 @@ public class HyperExponentialDistribution extends Distribution {
 	 * @throws IllegalArgumentException if max is smaller than the new value for min or vice versa
 	 */
 	@Override
-	public void setParameter ( double min, double max ) throws IllegalArgumentException {
+	public void setParameter ( Double min, Double max ) throws IllegalArgumentException {
 		if( e1 == null ) {
 			e1 = new ExponentialDistribution();
 			e2 = new ExponentialDistribution();
@@ -148,7 +132,7 @@ public class HyperExponentialDistribution extends Distribution {
 	 * @return a hyper-exponentially distributed random value less than the maximal value.
 	 */
 	@Override
-	public double getNextRandom() {
+	public Double getNextRandom() {
 		while( true ) {
 			double rnd = RandomUtils.getInstance().getRandomGenerator().nextDouble();
 			if( p == 1 || p > rnd )

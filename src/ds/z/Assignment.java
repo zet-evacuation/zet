@@ -6,7 +6,7 @@
  *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
  * GNU General Public License for more details.
  *
  * You should have received a copy of the GNU General Public License
@@ -24,6 +24,7 @@ import com.thoughtworks.xstream.annotations.XStreamAsAttribute;
 import com.thoughtworks.xstream.annotations.XStreamOmitField;
 import converter.Raster;
 import converter.RasterSquare;
+import de.tu_berlin.math.coga.rndutils.RandomUtils;
 import ds.z.event.ChangeEvent;
 import ds.z.event.ChangeListener;
 import ds.z.event.ChangeReporter;
@@ -37,7 +38,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.ArrayList;
 import localization.Localization;
-import util.random.RandomUtils;
 
 /**
  * The <code>Assignment</code> class holds all information about one assignment
