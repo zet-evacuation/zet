@@ -6,7 +6,7 @@
  *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
  * GNU General Public License for more details.
  *
  * You should have received a copy of the GNU General Public License
@@ -60,12 +60,14 @@ public class GLNodeControl extends AbstractControl<GLNode, Node, GraphVisualizat
 		yPosition = (nwY + 0.5 * (seY - nwY)) * Z_TO_OPENGL_SCALING;
 		capacity = graphVisResult.getNodeCapacities().get( node );
 
+		final boolean showEdgesBetweenFloors = true;
+
 		for( Edge edge : graphVisResult.getNetwork().outgoingEdges( node ) )
 			if( edge.start().id() != 0 && edge.end().id() != 0 ) {
 				int nodeFloor1 = graphVisResult.getNodeToFloorMapping().get( edge.start() );
 				int nodeFloor2 = graphVisResult.getNodeToFloorMapping().get( edge.end() );
-				if( nodeFloor1 != nodeFloor2 )
-					System.out.println( "Knoten auf verschiedenen floors" );
+				if( nodeFloor1 != nodeFloor2 && !showEdgesBetweenFloors )
+					System.out.println( "Knoten auf verschiedenen Etagen." );
 				else
 					add( new GLEdgeControl( graphVisResult, edge, glControl ) );
 			}

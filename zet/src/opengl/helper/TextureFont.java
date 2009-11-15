@@ -162,12 +162,11 @@ public void buildFont3( int cpl, int cpr, int size, float targetsize, float skip
 		gl.glPushAttrib( gl.GL_LIST_BIT );				// push display list bits
 		gl.glTranslated( x, y, 0 );							// textposition (0,0 - Bottom Left)
 
-		// TODO test if > 256 works...
 		byte[] array = (byte[])Array.newInstance( byte.class, string.length() ) ;
-		string.getBytes();
 		for( int i = 0; i < string.length(); ++i )
 			array[i] = (byte)string.charAt( i );
-		ByteBuffer bbuf = ByteBuffer.wrap( string.getBytes() );
+		//ByteBuffer bbuf = ByteBuffer.wrap( string.getBytes() );
+		ByteBuffer bbuf = ByteBuffer.wrap( array );
 
 		// now reset the list-base index, subtract 32 because the space (first
 		// non-hidden character) has index 33, after that use the glCallLists

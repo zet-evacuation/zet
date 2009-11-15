@@ -206,6 +206,7 @@ public class VisualizationOptionManager {
 	public static boolean smoothCellVisualization() {
 		return PropertyContainer.getInstance().getAsBoolean( "options.visualization.view.smooth" );
 	}
+
 	public static GLColor getCellSeperationColor() {
 		return new GLColor( Color.black );
 	}
