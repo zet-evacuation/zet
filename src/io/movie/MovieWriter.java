@@ -6,13 +6,14 @@
  *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
  * GNU General Public License for more details.
  *
  * You should have received a copy of the GNU General Public License
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
+
 /**
  * Class MovieWriter
  * Erstellt 09.11.2008, 22:43:29
@@ -52,6 +53,8 @@ public abstract class MovieWriter {
 	protected int height;
 	/** The with of the movie. */
 	protected int width;
+	/** The command used to encode the video. */
+	protected String command;
 
 	/**
 	 * <p>Returns a filename for the frame with the specified number. The wrapper
@@ -95,7 +98,15 @@ public abstract class MovieWriter {
 	public void setBitrate( int bitrate ) {
 		this.bitrate = bitrate;
 	}
-	
+
+	/**
+	 * Returns the command used to encode the video.
+	 * @return the command used to encode the video
+	 */
+	public String getCommand() {
+		return command;
+	}
+
 	/**
 	 * Returns the format in which the frame images are saved.
 	 * @return the format in which the frame images are saved

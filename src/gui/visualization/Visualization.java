@@ -13,12 +13,10 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
-
 /**
  * Class Visualization
  * Created 20.05.2008, 23:50:54
  */
-
 package gui.visualization;
 
 import ds.PropertyContainer;
@@ -29,7 +27,6 @@ import event.MessageEvent.MessageType;
 import event.OptionsChangedEvent;
 import gui.JEditor;
 import gui.ZETProperties;
-import gui.editor.properties.JOptionsWindow;
 import gui.visualization.control.GLControl;
 import gui.visualization.util.VisualizationConstants;
 import io.movie.MovieManager;
@@ -38,7 +35,12 @@ import java.awt.Dimension;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseWheelEvent;
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.ArrayList;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.media.opengl.GL;
 import javax.media.opengl.GLAutoDrawable;
 import javax.media.opengl.GLCapabilities;
@@ -99,14 +101,12 @@ public class Visualization extends AbstractVisualization implements EventListene
 	int movieWidth;
 	/** The height used for movie recording. */
 	int movieHeight;
-
 	/** The intro page that is currently shown. Starts from 0 up to the maximal number. */
 	int showIntro = 0;
 	/** The number of seconds that each intro page is visible. */
 	double introSec = 8.3;
 	/** The intro pages that are shown. */
 	ArrayList<TextureFontStrings> texts = new ArrayList<TextureFontStrings>();
-
 	// Status-Variablen die angezeigte Elemente steuern
 	private boolean showEye = ZETProperties.isShowEye();
 	private boolean showFPS = ZETProperties.isShowFPS();
@@ -233,9 +233,8 @@ public class Visualization extends AbstractVisualization implements EventListene
 	public void setTexts( ArrayList<TextureFontStrings> texts ) {
 		this.texts = texts;
 	}
-
 	int introCount = 0;
-int screenshotCounter = 0;
+	int screenshotCounter = 0;
 
 	/**
 	 * Draws the scene, including text and takes screenshots, if necessary.
@@ -308,7 +307,7 @@ int screenshotCounter = 0;
 		if( recording && frameUsed ) {
 			String newFilename = movieManager.nextFilename();
 			takeScreenshot( drawable, newFilename );
-			EventServer.getInstance().dispatchEvent( new MessageEvent<JEditor>( JEditor.getInstance(), MessageType.MousePosition, "Video frame "  + (++screenshotCounter) + " - " + (screenshotCounter * (1.0/movieFrameRate )) + " sec" ) );
+			EventServer.getInstance().dispatchEvent( new MessageEvent<JEditor>( JEditor.getInstance(), MessageType.MousePosition, "Video frame " + (++screenshotCounter) + " - " + (screenshotCounter * (1.0 / movieFrameRate)) + " sec" ) );
 			movieManager.addImage( newFilename );
 			if( !introRunning )
 				movieStep();
@@ -388,11 +387,10 @@ int screenshotCounter = 0;
 		TextureFontStrings tfs = texts.get( index );
 		for( int i = 0; i < tfs.size(); ++i )
 //			font.print( 100, this.getHeight() - (7+i) * fontSize, tfs.getText( index ) );
-			if( tfs.getBold( i ) ) {
+			if( tfs.getBold( i ) )
 				fontBold.print( 100, this.getHeight() - (int)tfs.getY( i ), tfs.getText( i ) );
-			} else {
+			else
 				font.print( 100, this.getHeight() - (int)tfs.getY( i ), tfs.getText( i ) );
-			}
 		gl.glDisable( gl.GL_TEXTURE_2D );
 		this.resetProjection();
 	}
@@ -409,28 +407,28 @@ int screenshotCounter = 0;
 		// Draw the mask
 		maskTex.bind();
 		gl.glBegin( GL.GL_QUADS );
-			gl.glTexCoord2f( 0.0f, 1.0f );
-			gl.glVertex3d( drawable.getWidth()-2*logoHeight, 0, -1 );
-			gl.glTexCoord2f( 0.0f, 0.0f );
-			gl.glVertex3d( drawable.getWidth()-2*logoHeight, logoHeight, -1 );
-			gl.glTexCoord2f( 1.0f, 0.0f );
-			gl.glVertex3d( drawable.getWidth(), logoHeight, -1 );
-			gl.glTexCoord2f( 1.0f, 1.0f );
-			gl.glVertex3d( drawable.getWidth(), 0, -1 );
+		gl.glTexCoord2f( 0.0f, 1.0f );
+		gl.glVertex3d( drawable.getWidth() - 2 * logoHeight, 0, -1 );
+		gl.glTexCoord2f( 0.0f, 0.0f );
+		gl.glVertex3d( drawable.getWidth() - 2 * logoHeight, logoHeight, -1 );
+		gl.glTexCoord2f( 1.0f, 0.0f );
+		gl.glVertex3d( drawable.getWidth(), logoHeight, -1 );
+		gl.glTexCoord2f( 1.0f, 1.0f );
+		gl.glVertex3d( drawable.getWidth(), 0, -1 );
 		gl.glEnd();
 
 		// Draw the logo
-    gl.glBlendFunc( GL.GL_SRC_COLOR, GL.GL_ONE );// Copy Image 2 Color To The Screen
+		gl.glBlendFunc( GL.GL_SRC_COLOR, GL.GL_ONE );// Copy Image 2 Color To The Screen
 		logoTex.bind();
 		gl.glBegin( GL.GL_QUADS );
-			gl.glTexCoord2f( 0.0f, 1.0f );
-			gl.glVertex3d( drawable.getWidth()-2*logoHeight, 0, -1 );
-			gl.glTexCoord2f( 0.0f, 0.0f );
-			gl.glVertex3d( drawable.getWidth()-2*logoHeight, logoHeight, -1 );
-			gl.glTexCoord2f( 1.0f, 0.0f );
-			gl.glVertex3d( drawable.getWidth(), logoHeight, -1 );
-			gl.glTexCoord2f( 1.0f, 1.0f );
-			gl.glVertex3d( drawable.getWidth(), 0, -1 );
+		gl.glTexCoord2f( 0.0f, 1.0f );
+		gl.glVertex3d( drawable.getWidth() - 2 * logoHeight, 0, -1 );
+		gl.glTexCoord2f( 0.0f, 0.0f );
+		gl.glVertex3d( drawable.getWidth() - 2 * logoHeight, logoHeight, -1 );
+		gl.glTexCoord2f( 1.0f, 0.0f );
+		gl.glVertex3d( drawable.getWidth(), logoHeight, -1 );
+		gl.glTexCoord2f( 1.0f, 1.0f );
+		gl.glVertex3d( drawable.getWidth(), 0, -1 );
 		gl.glEnd();
 		gl.glDisable( GL.GL_TEXTURE_2D );
 		gl.glDisable( GL.GL_BLEND );
@@ -500,7 +498,7 @@ int screenshotCounter = 0;
 		this.setProjectionPrint();
 		white.performGL( gl );
 		gl.glEnable( GL.GL_BLEND );
-    gl.glBlendFunc( GL.GL_ONE, GL.GL_ONE );// Copy Image 2 Color To The Screen
+		gl.glBlendFunc( GL.GL_ONE, GL.GL_ONE );// Copy Image 2 Color To The Screen
 		gl.glEnable( gl.GL_TEXTURE_2D );
 		fontTex.bind();
 		if( showFPS )
@@ -547,6 +545,7 @@ int screenshotCounter = 0;
 				movieManager.performFinishingActions();
 				setRecording( false, getSize() );
 				stopAnimation();
+				createInformationFile();
 			}
 		}
 		//font.print( 0, this.getHeight() - (row++)*fontSize, "Zeit: " + secToMin( getTimeSinceStart()/1000000000 ) );
@@ -705,8 +704,8 @@ int screenshotCounter = 0;
 		JEditor.getInstance().getProject().getVisualProperties().getCameraPosition().pos = camera.getPos();
 		JEditor.getInstance().getProject().getVisualProperties().getCameraPosition().view = camera.getView();
 		JEditor.getInstance().getProject().getVisualProperties().getCameraPosition().up = camera.getUp();
-				JEditor.getInstance().getProject().getVisualProperties().setCurrentWidth( getViewWidth() );
-				JEditor.getInstance().getProject().getVisualProperties().setCurrentHeight( getViewHeight() );
+		JEditor.getInstance().getProject().getVisualProperties().setCurrentWidth( getViewWidth() );
+		JEditor.getInstance().getProject().getVisualProperties().setCurrentHeight( getViewHeight() );
 	}
 
 	@Override
@@ -716,8 +715,8 @@ int screenshotCounter = 0;
 		JEditor.getInstance().getProject().getVisualProperties().getCameraPosition().pos = camera.getPos();
 		JEditor.getInstance().getProject().getVisualProperties().getCameraPosition().view = camera.getView();
 		JEditor.getInstance().getProject().getVisualProperties().getCameraPosition().up = camera.getUp();
-				JEditor.getInstance().getProject().getVisualProperties().setCurrentWidth( getViewWidth() );
-				JEditor.getInstance().getProject().getVisualProperties().setCurrentHeight( getViewHeight() );
+		JEditor.getInstance().getProject().getVisualProperties().setCurrentWidth( getViewWidth() );
+		JEditor.getInstance().getProject().getVisualProperties().setCurrentHeight( getViewHeight() );
 	}
 
 	@Override
@@ -727,8 +726,37 @@ int screenshotCounter = 0;
 		JEditor.getInstance().getProject().getVisualProperties().getCameraPosition().pos = camera.getPos();
 		JEditor.getInstance().getProject().getVisualProperties().getCameraPosition().view = camera.getView();
 		JEditor.getInstance().getProject().getVisualProperties().getCameraPosition().up = camera.getUp();
-				JEditor.getInstance().getProject().getVisualProperties().setCurrentWidth( getViewWidth() );
-				JEditor.getInstance().getProject().getVisualProperties().setCurrentHeight( getViewHeight() );
+		JEditor.getInstance().getProject().getVisualProperties().setCurrentWidth( getViewWidth() );
+		JEditor.getInstance().getProject().getVisualProperties().setCurrentHeight( getViewHeight() );
 
+	}
+
+	/**
+	 * Writes some information to a file. Camera position, commands used to execute
+	 */
+	private void createInformationFile() {
+		FileWriter writer = null;
+		String fileName = movieManager.getFullFilePath();
+		fileName.substring( 0, fileName.length() - 5 );
+		fileName += ".txt";
+		try {
+			System.out.println( "Schreibe Video-Informationen in die Datei '" + fileName + "'" );
+			writer = new FileWriter( new File( fileName ) );
+			writer.write( "[Commands]\n" );
+			writer.write( movieManager.getCommands() + "\n" );
+			writer.write( "[Camera]\n" );
+			writer.write( camera.getPos().toString() + "\n" );
+			writer.write( camera.getView().toString() + "\n" );
+			writer.write( camera.getUp().toString() + "\n" );
+			writer.close();
+		} catch( IOException ex ) {
+			System.err.println( "Fehler beim Erstellen der Datei '" + fileName + "'" );
+		} finally {
+			try {
+				writer.close();
+			} catch( IOException ex ) {
+				System.err.println( "Fehler beim Schließen der Datei '" + fileName + "'" );
+			}
+		}
 	}
 }
