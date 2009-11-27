@@ -180,7 +180,7 @@ public abstract class AbstractVisualization extends GLCanvas implements GLEventL
 	final private void set3DProjection() {
 		gl.glMatrixMode( GL.GL_PROJECTION );
 		gl.glLoadIdentity();
-		glu.gluPerspective( 45.0, aspect, 1, 1000 );
+		glu.gluPerspective( 45.0, aspect, 1, 2000 );
 		gl.glMatrixMode( GL.GL_MODELVIEW );
 		updateProjection = false;
 	}
