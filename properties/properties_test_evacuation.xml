@@ -1,0 +1,58 @@
+<zp name="propertyselector.tree.root" useAsLocString="true" propertyName="Probeevakuierung">
+  <treeNode name="propertyselector.tree.convert" useAsLocString="true">
+    <treeNode name="propertyselector.tree.convert.graph" useAsLocString="true">
+      <boolNode name="properties.convert.graph.accurateDelayAreas" useAsLocString="true" description="desc" information="properties.convert.graph.accurateDelayAreas.info" parameter="converter.AccurateDelayAreaCreation">true</boolNode>
+      <boolNode name="properties.convert.graph.accurateAssignmentAreas" useAsLocString="true" description="desc" information="properties.convert.graph.accurateAssignmentAreas.info" parameter="converter.accurateAssignmentAreaCreation">true</boolNode>
+      <intNode name="properties.convert.graph.balance" useAsLocString="true" description="desc" information="properties.convert.graph.balance.info" parameter="converter.Imbalance">1</intNode>
+      <intRangeNode name="properties.convert.graph.precision" useAsLocString="true" description="" information="properties.convert.graph.precision.info" parameter="converter.GraphPrecision" minValue="1" maxValue="400" minorTick="9" majorTick="100">1</intRangeNode>
+    </treeNode>
+    <treeNode name="propertyselector.tree.convert.ca" useAsLocString="true"/>
+  </treeNode>
+  <treeNode name="propertyselector.tree.optimization" useAsLocString="true">
+    <treeNode name="propertyselector.tree.optimization.quickestTransshipment" useAsLocString="true"/>
+    <treeNode name="propertyselector.tree.optimization.maxFlowOverTime" useAsLocString="true">
+      <intNode name="properties.optimization.maxFlowOverTime.timeHorizon" useAsLocString="true" description="desc" information="properties.optimization.maxFlowOverTime.timeHorizon.info" parameter="algo.graph.MaxFlowOverTime.timeHorizon">15</intNode>
+    </treeNode>
+    <treeNode name="propertyselector.tree.optimization.eaTransshipment" useAsLocString="true"/>
+  </treeNode>
+  <treeNode name="propertyselector.tree.simulation" useAsLocString="true">
+    <intNode name="properties.simulation.runCount" useAsLocString="true" description="desc" information="properties.simulation.runCount.info" parameter="properties.simulation.runCount">1</intNode>
+    <treeNode name="propertyselector.tree.simulation.ca" useAsLocString="true">
+      <treeNode name="DefaultRuleSet" useAsLocString="false">
+        <stringListNode name="properties.simulation.ca.defaultRuleSet.init" useAsLocString="true" description="" information="properties.simulation.ca.defaultRuleSet.primary.info" parameter="algo.ca.defaultRuleSet.init">
+          <string>InitializeReactionTimeRule</string>
+          <string>ConvertIndividualParameters</string>
+          <string>ApplyExitMappingRule</string>
+          <string>SaveIndividualsRule</string>
+          <string>EvacuateIndividualsRule</string>
+          <string>InitialDynamicPotentialRule</string>
+        </stringListNode>
+        <stringListNode name="properties.simulation.ca.defaultRuleSet.loop" useAsLocString="true" description="" information="properties.simulation.ca.defaultRuleSet.loop.info" parameter="algo.ca.defaultRuleSet.loop">
+          <string>ReactionRuleAllPersonsInRoom</string>
+          <string>WaitingMovementRule</string>
+          <string>SaveIndividualsRule</string>
+          <string>EvacuateIndividualsRule</string>
+        </stringListNode>
+      </treeNode>
+      <doubleNode name="properties.simulation.ca.stoptime" useAsLocString="true" description="desc" information="properties.simulation.ca.stoptime.info" parameter="algo.ca.maxTime">600.0</doubleNode>
+      <treeNode name="propertyselector.tree.simulation.ca.parameters" useAsLocString="true">
+        <doubleNode name="properties.simulation.ca.defaultParameterSet.dynPotWeight" useAsLocString="true" description="" information="properties.simulation.ca.defaultParameterSet.dynPotWeight.info" parameter="algo.ca.DYNAMIC_POTENTIAL_WEIGHT">0.2</doubleNode>
+        <doubleNode name="properties.simulation.ca.defaultParameterSet.statPotWeight" useAsLocString="true" description="" information="properties.simulation.ca.defaultParameterSet.statPotWeight.info" parameter="algo.ca.STATIC_POTENTIAL_WEIGHT">0.8</doubleNode>
+        <doubleNode name="properties.simulation.ca.defaultParameterSet.probDynPotInc" useAsLocString="true" description="" information="properties.simulation.ca.defaultParameterSet.probDynPotInc.info" parameter="algo.ca.PROB_DYNAMIC_POTENTIAL_INCREASE">0.15</doubleNode>
+        <doubleNode name="properties.simulation.ca.defaultParameterSet.probDynPotDec" useAsLocString="true" description="" information="properties.simulation.ca.defaultParameterSet.probDynPotDec.info" parameter="algo.ca.PROB_DYNAMIC_POTENTIAL_DECREASE">0.3</doubleNode>
+        <doubleNode name="properties.simulation.ca.defaultParameterSet.probFamilAttrExit" useAsLocString="true" description="" information="properties.simulation.ca.defaultParameterSet.probFamilAttrExit.info" parameter="algo.ca.PROB_FAMILIARITY_OR_ATTRACTIVITY_OF_EXIT">0.5</doubleNode>
+        <doubleNode name="properties.simulation.ca.defaultParameterSet.absMaxSpeed" useAsLocString="true" description="" information="properties.simulation.ca.defaultParameterSet.absMaxSpeed.info" parameter="algo.ca.ABSOLUTE_MAX_SPEED">1.8</doubleNode>
+        <doubleNode name="properties.simulation.ca.defaultParameterSet.panicToProbOfPotChangeRatio" useAsLocString="true" description="" information="properties.simulation.ca.defaultParameterSet.panicToProbOfPotChangeRatio.info" parameter="algo.ca.PANIC_TO_PROB_OF_POTENTIAL_CHANGE_RATIO">0.1</doubleNode>
+        <doubleNode name="properties.simulation.ca.defaultParameterSet.slacknessToIdleRatio" useAsLocString="true" description="" information="properties.simulation.ca.defaultParameterSet.slacknessToIdleRatio.info" parameter="algo.ca.SLACKNESS_TO_IDLE_RATIO">0.1</doubleNode>
+        <doubleNode name="properties.simulation.ca.defaultParameterSet.panicDecreaseIfHappy" useAsLocString="true" description="" information="properties.simulation.ca.defaultParameterSet.panicDecreaseIfHappy.info" parameter="algo.ca.PANIC_DECREASE">0.05</doubleNode>
+        <doubleNode name="properties.simulation.ca.defaultParameterSet.panicIncreaseIfUnhappy" useAsLocString="true" description="" information="properties.simulation.ca.defaultParameterSet.panicIncreaseIfUnhappy.info" parameter="algo.ca.PANIC_INCREASE">0.01</doubleNode>
+        <doubleNode name="properties.simulation.ca.defaultParameterSet.panicWeightOnSpeed" useAsLocString="true" description="" information="properties.simulation.ca.defaultParameterSet.panicWeightOnSpeed.info" parameter="algo.ca.PANIC_WEIGHT_ON_SPEED">0.3</doubleNode>
+        <doubleNode name="properties.simulation.ca.defaultParameterSet.panicWeightOnPotentials" useAsLocString="true" description="" information="properties.simulation.ca.defaultParameterSet.panicWeightOnPotentials.info" parameter="algo.ca.PANIC_WEIGHT_ON_POTENTIALS">0.3</doubleNode>
+        <doubleNode name="properties.simulation.ca.defaultParameterSet.exhaustionWeightOnSpeed" useAsLocString="true" description="" information="properties.simulation.ca.defaultParameterSet.exhaustionWeightOnSpeed.info" parameter="algo.ca.EXHAUSTION_WEIGHT_ON_SPEED">0.2</doubleNode>
+        <doubleNode name="properties.simulation.ca.defaultParameterSet.panicThreshold" useAsLocString="true" description="" information="properties.simulation.ca.defaultParameterSet.panicThreshold.info" parameter="algo.ca.PANIC_THRESHOLD">3.0</doubleNode>
+      </treeNode>
+      <stringNode name="properties.simulation.ca.rules.ruleName" useAsLocString="true" description="desc" information="properties.simulation.ca.rules.ruleName.info" parameter="algo.ca.ruleSet">DefaultRuleSet</stringNode>
+      <stringNode name="properties.simulation.ca.rules.parameterName" useAsLocString="true" description="desc" information="properties.simulation.ca.rules.parameterName.info" parameter="algo.ca.parameterSet">TestEvacuationParameterSet</stringNode>
+    </treeNode>
+  </treeNode>
+</zp>
