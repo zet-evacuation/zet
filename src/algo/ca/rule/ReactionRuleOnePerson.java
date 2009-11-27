@@ -6,18 +6,18 @@
  *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
  * GNU General Public License for more details.
  *
  * You should have received a copy of the GNU General Public License
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
+
 /**
  * Class ReactionRuleOnePerson
  * Erstellt 13.10.2008, 23:39:45
  */
-
 package algo.ca.rule;
 
 import ds.ca.Individual;
@@ -32,8 +32,9 @@ public class ReactionRuleOnePerson extends AbstractReactionRule {
 	/**
 	 * Creates the instance.
 	 */
-	public ReactionRuleOnePerson() { }
-	
+	public ReactionRuleOnePerson() {
+	}
+
 	/**
 	 * Executes the rule. The individual is alarmed if the time is over
 	 * otherwise the remaining time is reduced by one.
@@ -44,6 +45,7 @@ public class ReactionRuleOnePerson extends AbstractReactionRule {
 		Individual i = cell.getIndividual();
 		if( i.getReactionTime() == 0 )
 			i.setAlarmed( true );
-                else i.setReactionTime( i.getReactionTime() - 1 );
+		else
+			i.setReactionTime( i.getReactionTime() - 1 );
 	}
 }

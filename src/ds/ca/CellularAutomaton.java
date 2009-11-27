@@ -220,6 +220,10 @@ public class CellularAutomaton implements Iterable<Individual> {
 			VisualResultsRecorder.getInstance().getInitialConfiguration().setAbsoluteMaxSpeed( absoluteMaxSpeed );
 	}
 
+	/**
+	 * Returns the seconds one step needs.
+	 * @return the seconds one step needs
+	 */
 	public double getSecondsPerStep() {
 		return secondsPerStep;
 	}
@@ -255,7 +259,7 @@ public class CellularAutomaton implements Iterable<Individual> {
 
 	/**
 	 * Gets the actual timeStep of the CellularAutomaton.
-	 * @return The timeStep
+	 * @return the timeStep
 	 */
 	public int getTimeStep() {
 		return timeStep;
@@ -342,7 +346,12 @@ public class CellularAutomaton implements Iterable<Individual> {
 				typeIndividualMap.get( i.getUid() ).add( i );
 			}
 		}
+		try {
 		c.getRoom().addIndividual( c, i );
+		} catch( Exception ex ) {
+			int k = 1;
+			k++;
+		}
 		
 		// assign shortest path potential to individual, so it is not null.
 		int currentMin = -1;

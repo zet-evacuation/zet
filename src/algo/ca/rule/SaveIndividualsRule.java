@@ -6,7 +6,7 @@
  *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
  * GNU General Public License for more details.
  *
  * You should have received a copy of the GNU General Public License
@@ -15,7 +15,9 @@
  */
 package algo.ca.rule;
 
-import ds.ca.Cell;
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
 
 public class SaveIndividualsRule extends AbstractSaveRule {
 	// muss VOR der EvacuateIndividualsRule aufgerufen werden!
@@ -26,6 +28,23 @@ public class SaveIndividualsRule extends AbstractSaveRule {
 	protected void onExecute( ds.ca.Cell cell ) {
 		ds.ca.Individual savedIndividual = cell.getIndividual();
 		if( !(savedIndividual.isSafe()) ) {
+		try {
+			//System.out.println( savedIndividual.getStaticPotential().getName() );
+			// Write to file
+			File f = null;
+			if( savedIndividual.getStaticPotential().getName().equals( "Nordausgang" ) )
+				f = new File( "./results_nord.txt" );
+			else
+				f = new File( "./results_süd.txt" );
+			FileWriter w = new FileWriter( f, true );
+			Double d = savedIndividual.getStepEndTime() * caController().getCA().getSecondsPerStep();
+			Double d2 = caController().getCA().getTimeStep() * caController().getCA().getSecondsPerStep();
+			w.append( Double.toString(  d  ) + '\n' );
+			w.close();
+		} catch( IOException ex ) {
+
+		}
+
 			//caController().getCA().decreaseNrOfLivingAndNotSafeIndividuals();
 			//savedIndividual.setSafe();
 			caController().getCA().setIndividualSave( savedIndividual );

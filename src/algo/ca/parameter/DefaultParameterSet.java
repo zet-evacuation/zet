@@ -313,8 +313,13 @@ public class DefaultParameterSet extends AbstractDefaultParameterSet {
 	}
 
 	@Override
-	public double getReactiontimeFromAge( double age ) {
+	public double getReactionTimeFromAge( double age ) {
 		return age / 10;
+	}
+
+	@Override
+	public double getReactionTime( ) {
+		return 1;
 	}
 
 	/**
@@ -349,11 +354,16 @@ public class DefaultParameterSet extends AbstractDefaultParameterSet {
 		//System.err.println( "Maximale geschw: " + maxSpeed );
 		}
 
+		// Correction of 0.2
+//		maxSpeed = Math.max( 0.6, maxSpeed-0.4 );
+
 		counter++;
 		cumulativeSpeed += (maxSpeed * ABSOLUTE_MAX_SPEED);
 
 		System.out.println( "First one has speed " + (maxSpeed * ABSOLUTE_MAX_SPEED) );
 		System.out.println( "Average speed for " + counter + " persons: " + (cumulativeSpeed / counter) + " m/s. (Should be 1.3x)" );
+
+
 
 		return maxSpeed;
 	}

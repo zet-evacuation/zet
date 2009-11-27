@@ -6,7 +6,7 @@
  *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
  * GNU General Public License for more details.
  *
  * You should have received a copy of the GNU General Public License
@@ -17,11 +17,6 @@ package ds.ca;
 
 import java.util.ArrayList;
 
-import ds.ca.results.MoveAction;
-import ds.ca.results.VisualResultsRecorder;
-import util.DebugFlags;
-import ds.ca.results.SwapAction;
-
 /**
  * This class represents a room, which is a collection of Cells.
  * Individuals can stay in a room:
@@ -31,38 +26,24 @@ import ds.ca.results.SwapAction;
  */
 public class Room {
 
-	/**
-	 * The id of the room (to calculate the hashCode).
-	 */
+	/** The id of the room (to calculate the hashCode). */
 	private int id;
 	/**
 	 * Counts the number of existing Rooms. 
 	 * Every new Room gets automatically a unique ID.
 	 */
 	private static int idCount = 0;
-	/**
-	 * Manages the DoorCells existing in this room
-	 */
+	/** Manages the DoorCells existing in this room. */
 	private ArrayList<DoorCell> doors;
-	/**
-	 * Manages the individuals existing in this room
-	 */
+	/** Manages the individuals existing in this room. */
 	private ArrayList<Individual> individuals;
-	/**
-	 * Manages the Cells into which the room is divided
-	 */
+	/** Manages the Cells into which the room is divided. */
 	private Cell[][] cells;
-	/**
-	 * Number of Cells on the x-axis
-	 */
+	/** Number of Cells on the x-axis. */
 	private int width;
-	/**
-	 * Description of Floor containing this room
-	 */
+	/** Description of Floor containing this room. */
 	private String floor;
-	/**
-	 * Number of Cells on the y-axis
-	 */
+	/** Number of Cells on the y-axis. */
 	private int height;
 	
 	private int floorID;
@@ -93,7 +74,15 @@ public class Room {
 		this.id = id;
 		this.isAlarmed = false;
 	}
-	
+
+	/**
+	 * Returns the number of cells contained in this room. The parameter
+	 * {@code allCells} indicates wheather the number of all cells is returned or
+	 * the number of all cells that are not {@code null}. These cells can occur if
+	 * there are "holes" in the room.
+	 * @param allCells indicates wheather all cells are counted, or not
+	 * @return the number of cells
+	 */
 	public int getCellCount( boolean allCells ) {
 		int count = 0;
 		if( allCells )

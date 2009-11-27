@@ -63,7 +63,7 @@ public class RimeaParameterSet extends DefaultParameterSet {
 	}
 	
 	@Override
-	public double getReactiontimeFromAge( double age ) {
+	public double getReactionTimeFromAge( double age ) {
 		UniformDistribution uniform = new UniformDistribution( 10, 101 );
 		return uniform.getNextRandom();
 	}

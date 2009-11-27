@@ -337,7 +337,7 @@ public class JBatchView extends JPanel {
 		try {
 			if( tblEntries.isEditing() )
 				tblEntries.getCellEditor().cancelCellEditing();
-			batch.addEntry( "Neuer Eintrag", project, cycles, GraphAlgorithm.SuccessiveEarliestArrivalAugmentingPathOptimized, CellularAutomatonAlgorithm.Swap );
+			batch.addEntry( "Neuer Eintrag", project, cycles, GraphAlgorithm.SuccessiveEarliestArrivalAugmentingPathOptimized, CellularAutomatonAlgorithm.RandomOrder );
 			tablemodel.fireTableDataChanged();
 		} catch( Exception ex ) {
 			ZETMain.sendError( ex.getLocalizedMessage() );

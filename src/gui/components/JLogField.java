@@ -70,6 +70,7 @@ public class JLogField extends JPanel implements EventListener<MessageEvent> {
 	 * @param event the event that occured.
 	 */
 	public void handleEvent( MessageEvent event ) {
+		try{
 		String s = "";
 		switch( event.getType() ) {
 			case Log:
@@ -81,7 +82,11 @@ public class JLogField extends JPanel implements EventListener<MessageEvent> {
 		}
 		strings.add( s );
 		text += s;
-		log.setText( "<html>" + text + "</html>" );
+//  		log.setText( "<html>" + text + "</html>" );
+		}catch( Exception ex ) {
+			int i = 1;
+			i++;
+		}
 	}
 
 	/**

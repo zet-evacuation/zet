@@ -35,7 +35,7 @@ public class RimeaParameterSetNoReactionTime extends RimeaParameterSet {
 	 * @return
 	 */
 	@Override
-	public double getReactiontimeFromAge( double age ) {
+	public double getReactionTimeFromAge( double age ) {
 		return 0.0;
 	}
 	
