@@ -55,5 +55,7 @@ public interface ParameterSet {
 	public double getSpeedFromAge( double pAge );
 	public double getSlacknessFromDecisiveness( double pDecisiveness );
 	public double getExhaustionFromAge( double pAge);
-	public double getReactiontimeFromAge( double pAge);
+	public double getReactionTimeFromAge( double pAge);
+
+	public double getReactionTime();
 }

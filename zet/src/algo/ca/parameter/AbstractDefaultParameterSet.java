@@ -106,6 +106,10 @@ public abstract class AbstractDefaultParameterSet implements ParameterSet {
 	@Override
 	public abstract double updatePreferredSpeed( Individual individual );
 
+//	public double getReactionTime() {
+//		return 45;
+//	}
+
 	/**
 	 * Creates a {@link ParameterSet} of a specified subclass.
 	 * @param parameterSetName the subclass

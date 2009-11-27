@@ -45,6 +45,7 @@ import ds.z.PlanPoint;
 import evacuationplan.BidirectionalNodeCellMapping;
 
 import exitdistributions.ZToExitMapping;
+import gui.JEditor;
 import java.util.ArrayDeque;
 
 import java.util.HashMap;
@@ -436,7 +437,9 @@ public class ZToCAConverter {
 	 * @return Returns an individual of type Individual
 	 */
 	private static Individual generateIndividual( Person p ) {
-		ParameterSet ps = AbstractDefaultParameterSet.createParameterSet( PropertyContainer.getInstance().getAsString( "algo.ca.parameterSet" ) );
+		String parameterName = PropertyContainer.getInstance().getAsString( "algo.ca.parameterSet" );
+		AbstractDefaultParameterSet.createParameterSet( "DefaultParameterSet" );
+		ParameterSet ps = AbstractDefaultParameterSet.createParameterSet( parameterName );
 
 		double pDecisiveness = p.getDecisiveness();
 		double pFamiliarity = p.getFamiliarity();
@@ -450,7 +453,7 @@ public class ZToCAConverter {
 		double exhaustionFactor = ps.getExhaustionFromAge( pAge );
 		double maxSpeed = ps.getSpeedFromAge( pAge );
 
-		int reactiontime = (int) ps.getReactiontimeFromAge( pAge );
+		int reactiontime = (int) ps.getReactionTimeFromAge( pAge );
 		return new Individual( (int) pAge, familiarity, panicFactor, slackness, exhaustionFactor, maxSpeed, reactiontime, p.getUid() );
 	}
 
@@ -463,7 +466,7 @@ public class ZToCAConverter {
 	 * @param concreteAssignment the concrete assignment containing the individuals
 	 * @throws java.lang.IllegalArgumentException if the calculated cell is not in the room of the cellular automaton
 	 */
-	public static void applyConcreteAssignment( ConcreteAssignment concreteAssignment ) throws IllegalArgumentException {
+	public static void applyConcreteAssignment( ConcreteAssignment concreteAssignment ) throws IllegalArgumentException, ConversionNotSupportedException {
 		ZToCARoomRaster room;
 		// Create ZToExitMapping
 		HashMap<Individual, TargetCell> individualExitMapping = new HashMap<Individual, TargetCell>();
@@ -478,22 +481,30 @@ public class ZToCAConverter {
 				throw new IllegalArgumentException(Localization.getInstance().getString ( "converter.IndividualOutsideException" ));
 			}
 			c = lastMapping.get( room.getSquare( x, y ) );
-			Individual i = generateIndividual( p );
-			i.setNumber( individualCounter++ );
-			
-			List<ExitCell> exits = lastCA.getExits();
-			for( ExitCell e : exits ) {
-				// Calculate absolute position
-				// TODO 400 hardcoded hier!
-				int cellCenterX = (e.getX() + e.getRoom().getXOffset())*400 + 200;
-				int cellCenterY = (e.getY() + e.getRoom().getYOffset())*400 + 200;
-				if( p.getSaveArea() != null && p.getSaveArea().contains(  new PlanPoint( cellCenterX, cellCenterY ) ) ) {
-					individualExitMapping.put( i, e );
-					break;
+			if( c == null ) {
+				//JEditor.showErrorMessage( "Fehler", "Individuen konnten nicht erzeugt werden in Raum '" + room.getRoom().getName() + "'. Eventuell keine freien Plätze durch unbetretbare Bereiche?" );
+				//throw new ConversionNotSupportedException();
+				// Individual mapped to inaccessible area
+				// skip
+
+			} else {
+				Individual i = generateIndividual( p );
+				i.setNumber( individualCounter++ );
+
+				List<ExitCell> exits = lastCA.getExits();
+				for( ExitCell e : exits ) {
+					// Calculate absolute position
+					// TODO 400 hardcoded hier!
+					int cellCenterX = (e.getX() + e.getRoom().getXOffset())*400 + 200;
+					int cellCenterY = (e.getY() + e.getRoom().getYOffset())*400 + 200;
+					if( p.getSaveArea() != null && p.getSaveArea().contains(  new PlanPoint( cellCenterX, cellCenterY ) ) ) {
+						individualExitMapping.put( i, e );
+						break;
+					}
 				}
+
+				lastCA.addIndividual( c, i );
 			}
-			
-			lastCA.addIndividual( c, i );
 		}
 		ZToExitMapping mapping = new ZToExitMapping( individualExitMapping );
 		lastCA.setIndividualToExitMapping( mapping );

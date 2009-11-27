@@ -90,7 +90,25 @@ public class SimpleParameterSet extends AbstractDefaultParameterSet {
 	public double getExhaustionFromAge( double pAge){
 		return 0.1;
 	}
-	public double getReactiontimeFromAge( double pAge){
+
+  /**
+	 * Returns a reactin time of 5.
+	 * @return 5
+	 */
+	public double getReactionTimeFromAge( double pAge){
 		return 5;
 	}
+
+	@Override
+	public double getReactionTime() {
+		throw new UnsupportedOperationException( "Not supported yet." );
+	}
+
+	/**
+	 * Returns a reactin time of 5.
+	 * @return 5
+	 */
+	//public double getReactionTime() {
+	//	return 5;
+	//}
 }

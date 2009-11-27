@@ -81,6 +81,7 @@ public class JBatchProgressDialog extends javax.swing.JDialog {
 		worker.setTask( mte );
 		worker.addPropertyChangeListener( pcl );
 		try {
+			//mte.run();
 			worker.executeAlgorithm( true );
 		} catch( Exception ex ) {
 			System.out.println( "Fehler trat auf" );

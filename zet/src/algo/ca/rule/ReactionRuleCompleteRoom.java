@@ -6,7 +6,7 @@
  *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
  * GNU General Public License for more details.
  *
  * You should have received a copy of the GNU General Public License
@@ -42,12 +42,11 @@ public class ReactionRuleCompleteRoom extends AbstractReactionRule {
 		Individual i = cell.getIndividual();
 		if( i.getCell().getRoom().getAlarmstatus() )
 			i.setAlarmed( true );
-		else {
+		else
 			if( i.getReactionTime() == 0 ) {
 				i.setAlarmed( true );
 				cell.getRoom().setAlarmstatus( true );
 			} else
 				i.setReactionTime( i.getReactionTime() - 1 );
-		}
 	}
 }

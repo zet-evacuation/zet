@@ -6,7 +6,7 @@
  *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
  * GNU General Public License for more details.
  *
  * You should have received a copy of the GNU General Public License
@@ -31,8 +31,9 @@ import java.util.List;
  * @author Timon
  */
 public class Batch {
-	private ArrayList<BatchEntry> entries = new ArrayList<BatchEntry> ();
-		
+
+	private ArrayList<BatchEntry> entries = new ArrayList<BatchEntry>();
+
 	/** Executes the whole batch.
 	 * 
 	 * @param storeEntriesInFiles Whether this batch should save it's result 
@@ -40,23 +41,21 @@ public class Batch {
 	 * @return The result of the batch computations.
 	 * @throws Exception Thrown by the CA or Graph construction algos
 	 */
-	public BatchResult execute (boolean storeEntriesInFiles) throws Exception {
-		BatchResult res = new BatchResult (storeEntriesInFiles);
-		
-		for (BatchEntry e : entries) {
+	public BatchResult execute( boolean storeEntriesInFiles ) throws Exception {
+		BatchResult res = new BatchResult( storeEntriesInFiles );
+
+		for( BatchEntry e : entries ) {
 			BatchResultEntry[] enres = e.execute();
-			if (enres[0] != null) {
-				res.addResult (enres[0]);
-			}
-			if (enres[1] != null) {
-				res.addResult (enres[1]);
-			}
+			if( enres[0] != null )
+				res.addResult( enres[0] );
+			if( enres[1] != null )
+				res.addResult( enres[1] );
 		}
-		System.gc ();
-		
+		System.gc();
+
 		return res;
 	}
-	
+
 	/**
 	 * Creates a new BatchEntry with the specified name which contains the given 
 	 * project.
@@ -67,10 +66,10 @@ public class Batch {
 	 * @param caa the cellular automaton algorithm used for simulation
 	 * @throws java.lang.IllegalArgumentException if an error occured
 	 */
-	public void addEntry (String name, Project project, int cycles, GraphAlgorithm ga, CellularAutomatonAlgorithm caa) throws IllegalArgumentException{
-		entries.add (new BatchEntry (name, project, cycles, ga, caa));
+	public void addEntry( String name, Project project, int cycles, GraphAlgorithm ga, CellularAutomatonAlgorithm caa ) throws IllegalArgumentException {
+		entries.add( new BatchEntry( name, project, cycles, ga, caa ) );
 	}
-	
+
 	/**
 	 * Creates a new BatchEntry with the specified name which contains the given 
 	 * project.
@@ -89,27 +88,28 @@ public class Batch {
 	 * @param property the properties loaded befor the batch is executed
 	 * @throws java.lang.IllegalArgumentException if an error occured
 	 */
-	public void addEntry(String name, Project project, Assignment assignment, boolean useCA, double caTime, int cycles, GraphAlgorithm ga, CellularAutomatonAlgorithm caa, boolean useGraph, int graphMaxTime, EvacuationOptimizationType eot, int eoRuns, Property property ) throws IllegalArgumentException {
+	public void addEntry( String name, Project project, Assignment assignment, boolean useCA, double caTime, int cycles, GraphAlgorithm ga, CellularAutomatonAlgorithm caa, boolean useGraph, int graphMaxTime, EvacuationOptimizationType eot, int eoRuns, Property property ) throws IllegalArgumentException {
 		entries.add( new BatchEntry( name, project, assignment, useCA, caTime, cycles, ga, caa, useGraph, graphMaxTime, eot, eoRuns, property ) );
 	}
-	public void removeEntry (BatchEntry e) {
-		entries.remove (e);
-	}
-	public List<BatchEntry> getEntries () {
-		return Collections.unmodifiableList (entries);
-	}
-	public void clearEntries () {
-		entries.clear ();
+
+	public void removeEntry( BatchEntry e ) {
+		entries.remove( e );
 	}
 
-	
+	public List<BatchEntry> getEntries() {
+		return Collections.unmodifiableList( entries );
+	}
+
+	public void clearEntries() {
+		entries.clear();
+	}
+
 	/** Sets the "cycle" parameter on all entries to the same, given number.
 	 * 
 	 * @param cycles The new number of cycles
 	 */
-	public void setCyclesForAllEntries (int cycles) {
-		for (BatchEntry e : entries) {
-			e.setCycles (cycles);
-		}
+	public void setCyclesForAllEntries( int cycles ) {
+		for( BatchEntry e : entries )
+			e.setCycles( cycles );
 	}
 }

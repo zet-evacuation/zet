@@ -67,9 +67,9 @@ public class BatchCATask implements Runnable {
 	 * @param assignment the selected assignment
 	 * @param concreteAssignments the array with calculated concrete assignments
 	 */
-	public BatchCATask (CellularAutomatonAlgorithm cellularAutomatonAlgo, BatchResultEntry res,
-			int runNumber, TreeMap<Integer, Integer> median, Project project, Assignment assignment,
-			ConcreteAssignment[] concreteAssignments) {
+	public BatchCATask( CellularAutomatonAlgorithm cellularAutomatonAlgo, BatchResultEntry res,
+					int runNumber, TreeMap<Integer, Integer> median, Project project, Assignment assignment,
+					ConcreteAssignment[] concreteAssignments ) {
 		this.cellularAutomatonAlgo = cellularAutomatonAlgo;
 		this.res = res;
 		this.runNumber = runNumber;
@@ -85,49 +85,53 @@ public class BatchCATask implements Runnable {
 	 * executed. After execution the results are stored in an
 	 * {@link BatchResultEntry}.
 	 */
-	public void run () {
+	public void run() {
 		EvacuationCellularAutomatonAlgorithm caAlgo;
 		CellularAutomaton ca;
 		try {
-			ca = ZToCAConverter.getInstance ().convert (project.getPlan ());
-		} catch (ConversionNotSupportedException e) {
-			e.printStackTrace ();
+			ca = ZToCAConverter.getInstance().convert( project.getPlan() );
+		} catch( ConversionNotSupportedException e ) {
+			e.printStackTrace();
 			return;
 		}
-		res.setCellularAutomaton (runNumber, ca);
-		for (AssignmentType at : assignment.getAssignmentTypes ()) {
-			ca.setAssignmentType (at.getName (), at.getUid ());
-		}
+		res.setCellularAutomaton( runNumber, ca );
+		for( AssignmentType at : assignment.getAssignmentTypes() )
+			ca.setAssignmentType( at.getName(), at.getUid() );
 		ConcreteAssignment concreteAssignment;
-		concreteAssignment = assignment.createConcreteAssignment (400);
+		concreteAssignment = assignment.createConcreteAssignment( 400 );
 		concreteAssignments[runNumber] = concreteAssignment;
-		ZToCAConverter.applyConcreteAssignment (concreteAssignment);
+		try {
+			ZToCAConverter.applyConcreteAssignment( concreteAssignment );
+		} catch( ConversionNotSupportedException e ) {
+			// The exception occurs if an individual can not be set.
+			return;
+		}
 
-		caAlgo = cellularAutomatonAlgo.createTask (ca);
-		double caMaxTime = PropertyContainer.getInstance ().getAsDouble ("algo.ca.maxTime");
-		caAlgo.setMaxTimeInSeconds (caMaxTime);
+		caAlgo = cellularAutomatonAlgo.createTask( ca );
+		double caMaxTime = PropertyContainer.getInstance().getAsDouble( "algo.ca.maxTime" );
+		caAlgo.setMaxTimeInSeconds( caMaxTime );
 
 		long start;
 		long end;
 
 		//Run the CA
-		start = System.currentTimeMillis ();
-		caAlgo.getCellularAutomaton ().startRecording ();
-		caAlgo.run ();	// hier wird initialisiert
-		caAlgo.getCellularAutomaton ().stopRecording ();
-		end = System.currentTimeMillis ();
-		System.out.println ("Laufzeit CA:" + (end - start) + " ms");
+		start = System.currentTimeMillis();
+		caAlgo.getCellularAutomaton().startRecording();
+		caAlgo.run();	// hier wird initialisiert
+		caAlgo.getCellularAutomaton().stopRecording();
+		end = System.currentTimeMillis();
+		System.out.println( "Laufzeit CA:" + (end - start) + " ms" );
 
 		// Get the results
-		res.setCellularAutomatonStatistic (runNumber, new CAStatistic (caAlgo.getCaController ().getCaStatisticWriter ().
-				getStoredCAStatisticResults ()));
-		res.setCellularAutomatonVisualization (runNumber, new CAVisualizationResults (
-				VisualResultsRecorder.getInstance ().getRecording (),
-				ZToCAConverter.getInstance ().getLatestMapping ()));
+		res.setCellularAutomatonStatistic( runNumber, new CAStatistic( caAlgo.getCaController().getCaStatisticWriter().
+						getStoredCAStatisticResults() ) );
+		res.setCellularAutomatonVisualization( runNumber, new CAVisualizationResults(
+						VisualResultsRecorder.getInstance().getRecording(),
+						ZToCAConverter.getInstance().getLatestMapping() ) );
 
 		// Gather median information
-		median.put (new Integer (caAlgo.getCellularAutomaton ().getTimeStep ()), runNumber);
-		
+		median.put( new Integer( caAlgo.getCellularAutomaton().getTimeStep() ), runNumber );
+
 		// Forget the used batch result entry. This is necessary in case that the batch entries
 		// are stored on disk. Then this reference will inhibit the deletion of the batch result entry
 		res = null;

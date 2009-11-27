@@ -95,8 +95,10 @@ public class BatchEntry {
 		this.setGraphMaxTime( PropertyContainer.getInstance().getAsInt( "algo.graph.MaxFlowOverTime.timeHorizon" ) );
 		this.setGraphAlgo( ga );
 		this.setCellularAutomatonAlgo( caa );
-		// Initialize the properties with the default property file: TODO: editable by options
-		this.setProperty( PropertyFilesSelectionModel.getInstance().getProperty( "properties.xml" ) );
+		this.useGraph = false;
+		this.useCa = true;
+		// Initialize the properties with the default property file: TODO: editable by options //
+		this.setProperty( PropertyFilesSelectionModel.getInstance().getProperty( "properties_test_evacuation.xml" ) ); // was: properties.xml
 		this.setEvacuationOptimizationType( EvacuationOptimizationType.None );
 	}
 

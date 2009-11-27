@@ -45,9 +45,10 @@ import localization.Localization;
  * lists of all assignments.
  * @author Sylvie Temme
  */
-@XStreamAlias( "assignment" )
-@XMLConverter( AssignmentConverter.class )
+@XStreamAlias("assignment")
+@XMLConverter(AssignmentConverter.class)
 public class Assignment implements Serializable, ChangeReporter, ChangeListener {
+
 	@XStreamOmitField()
 	private transient ArrayList<ChangeListener> changeListeners = new ArrayList<ChangeListener>();
 	/** The name of the assignment. */
@@ -111,10 +112,8 @@ public class Assignment implements Serializable, ChangeReporter, ChangeListener 
 	 * @throws IllegalArgumentException If the given name is nul or "".
 	 */
 	public void setName( String val ) throws IllegalArgumentException {
-		if (val == null || val.equals ("")) {
-			throw new IllegalArgumentException (Localization.getInstance (
-			).getString ("ds.z.Assignment.NoNameException"));
-		}
+		if( val == null || val.equals( "" ) )
+			throw new IllegalArgumentException( Localization.getInstance().getString( "ds.z.Assignment.NoNameException" ) );
 		name = val;
 		throwChangeEvent( new ChangeEvent( this ) );
 	}
@@ -134,7 +133,7 @@ public class Assignment implements Serializable, ChangeReporter, ChangeListener 
 	 */
 	public void addAssignmentType( AssignmentType val ) throws IllegalArgumentException {
 		if( assignmentTypes.contains( val ) )
-			throw new IllegalArgumentException( Localization.getInstance().getString("ds.z.Assignment.DoubleAssignmentTypeException") );
+			throw new IllegalArgumentException( Localization.getInstance().getString( "ds.z.Assignment.DoubleAssignmentTypeException" ) );
 		else {
 			assignmentTypes.add( val );
 			val.addChangeListener( this );
@@ -149,7 +148,7 @@ public class Assignment implements Serializable, ChangeReporter, ChangeListener 
 	 */
 	public void deleteAssignmentType( AssignmentType val ) throws IllegalArgumentException {
 		if( !assignmentTypes.contains( val ) )
-			throw new IllegalArgumentException( Localization.getInstance().getString("ds.z.Assignment.AssignmentTypeNotNotFoundException") );
+			throw new IllegalArgumentException( Localization.getInstance().getString( "ds.z.Assignment.AssignmentTypeNotNotFoundException" ) );
 		else {
 			assignmentTypes.remove( val );
 			val.removeChangeListener( this );
@@ -159,7 +158,7 @@ public class Assignment implements Serializable, ChangeReporter, ChangeListener 
 			// The areas deregister themselves out of the getAssignmentAreas() list, so
 			// this list has to be copied before deleting
 			AssignmentArea[] areaCopy = val.getAssignmentAreas().toArray(
-					new AssignmentArea[val.getAssignmentAreas().size()] );
+							new AssignmentArea[val.getAssignmentAreas().size()] );
 			for( AssignmentArea a : areaCopy )
 				a.delete();
 		}
@@ -174,8 +173,8 @@ public class Assignment implements Serializable, ChangeReporter, ChangeListener 
 		for( AssignmentType t : assignmentTypes )
 			// Don't use for loop here - will throw a concurrent modification exception - TIMON
 			//for( AssignmentArea a : t.getAssignmentAreas() )
-			while (!t.getAssignmentAreas ().isEmpty ())
-				t.getAssignmentAreas ().get (0).delete();
+			while(!t.getAssignmentAreas().isEmpty())
+				t.getAssignmentAreas().get( 0 ).delete();
 		assignmentTypes.clear();
 		assignmentTypes = null;
 	}
@@ -183,9 +182,9 @@ public class Assignment implements Serializable, ChangeReporter, ChangeListener 
 	@Override
 	public boolean equals( Object o ) {
 		if( o instanceof Assignment ) {
-			Assignment p = (Assignment)o;
+			Assignment p = (Assignment) o;
 			return assignmentTypes.equals( p.getAssignmentTypes() ) &&
-			( ( name == null ) ? p.getName() == null : name.equals( p.getName() ) );
+							((name == null) ? p.getName() == null : name.equals( p.getName() ));
 		} else
 			return false;
 	}
@@ -231,6 +230,9 @@ public class Assignment implements Serializable, ChangeReporter, ChangeListener 
 		ArrayList<RasterSquare> rasterSquaresInArea; // ArrayList containing all available RasterSquares in an Area
 		HashSet<Floor> floors;
 
+//				c = lastMapping.get( room.getSquare( x, y ) );
+
+
 		// iterate over all assignment types
 		for( AssignmentType assignmentType : getAssignmentTypes() )
 			// Gehe alle Assignment-Areas durch
@@ -244,22 +246,21 @@ public class Assignment implements Serializable, ChangeReporter, ChangeListener 
 				Raster<RasterSquare, PlanPolygon> rasterer = new Raster( RasterSquare.class, PlanPolygon.class, assignmentArea, raster );  //new Rasterization();
 				rasterer.rasterize();
 				int squareCount = rasterer.insideSquares().size();
-				rasterSquaresInArea = new ArrayList<RasterSquare>(squareCount);
+				rasterSquaresInArea = new ArrayList<RasterSquare>( squareCount );
+
 				//List<RasterSquare> unmodifiableInsideSquares = rasterer.insideSquares();
 				//copy all RasterSquares. necessary because rasterer.insideSquares() returns an unmodifialbe list :(
-				for(RasterSquare s : rasterer.insideSquares()){
+				for( RasterSquare s : rasterer.insideSquares() )
 					//public RasterSquare(PlanPolygon p, int column, int row, int raster)
-					rasterSquaresInArea.add(new RasterSquare(assignmentArea, s.getColumn(), s.getRow(), s.getRaster()));
-				}
+					rasterSquaresInArea.add( new RasterSquare( assignmentArea, s.getColumn(), s.getRow(), s.getRaster() ) );
 
 				if( squareCount < numberOfPersons )
-					throw new TooManyPeopleException( assignmentArea,  Localization.getInstance().getString("ds.z.Assignment.NotEnoughSpaceException") );
+					throw new TooManyPeopleException( assignmentArea, Localization.getInstance().getString( "ds.z.Assignment.NotEnoughSpaceException" ) );
 
-				while( numberOfPersons > 0 ) {
+				while(numberOfPersons > 0) {
 					// this case could occur, if all available cells are already used by an overlaying area
-					if(rasterSquaresInArea.size() == 0){
-						throw new TooManyPeopleException( assignmentArea,  Localization.getInstance().getString("ds.z.Assignment.NotEnoughSpaceException") );
-					}
+					if( rasterSquaresInArea.size() == 0 )
+						throw new TooManyPeopleException( assignmentArea, Localization.getInstance().getString( "ds.z.Assignment.NotEnoughSpaceException" ) );
 					int squareNumber = random.getRandomGenerator().nextInt( rasterSquaresInArea.size() );
 					RasterSquare square = rasterSquaresInArea.get( squareNumber );
 
@@ -268,30 +269,29 @@ public class Assignment implements Serializable, ChangeReporter, ChangeListener 
 					location = new PlanPoint( xPos, yPos );
 
 					Person person;
-					if(square.getIntersectType() == RasterSquare.FieldIntersectType.Inside){
+					if( square.getIntersectType() == RasterSquare.FieldIntersectType.Inside ) {
 						person = new Person( new PlanPoint( xPos, yPos ), assignmentArea.getAssociatedRoom() );
 						//case: raster square with this location was never used before
-						if(!usedPositions.containsKey( location )){
+						if( !usedPositions.containsKey( location ) ) {
 							floors = new HashSet<Floor>();
-							floors.add(assignmentArea.getAssociatedRoom().getAssociatedFloor());
-							usedPositions.put( new PlanPoint( xPos, yPos ) , floors);
-							rasterSquaresInArea.remove(squareNumber);
-						} else {
+							floors.add( assignmentArea.getAssociatedRoom().getAssociatedFloor() );
+							usedPositions.put( new PlanPoint( xPos, yPos ), floors );
+							rasterSquaresInArea.remove( squareNumber );
+						} else
 							//case: raster square with this location was used before but on another floor
-							if(!usedPositions.get(location).contains(assignmentArea.getAssociatedRoom().getAssociatedFloor())){
-								floors = usedPositions.get(location);
-								floors.add(assignmentArea.getAssociatedRoom().getAssociatedFloor());
-								rasterSquaresInArea.remove(squareNumber);
+							if( !usedPositions.get( location ).contains( assignmentArea.getAssociatedRoom().getAssociatedFloor() ) ) {
+								floors = usedPositions.get( location );
+								floors.add( assignmentArea.getAssociatedRoom().getAssociatedFloor() );
+								rasterSquaresInArea.remove( squareNumber );
 							} else {
-								rasterSquaresInArea.remove(squareNumber);
+								rasterSquaresInArea.remove( squareNumber );
 								continue;
 							}
-						}
 					} else {
-						rasterSquaresInArea.remove(squareNumber);
+						rasterSquaresInArea.remove( squareNumber );
 						continue;
 					}
-					
+
 					// set properties for the persons
 					person.setAge( assignmentType.getAge().getNextRandom() );
 					person.setDecisiveness( assignmentType.getDecisiveness().getNextRandom() );
