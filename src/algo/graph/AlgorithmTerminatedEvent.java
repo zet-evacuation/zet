@@ -14,19 +14,24 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 /*
- * AlgorithmStoppedEvent.java
+ * AlgorithmTerminatedEvent.java
  *
  */
-
 package algo.graph;
 
 /**
- *
+ * A special algorithm event that occurs when the algorithm terminates (either
+ * by completing successfully or by an uncaught runtime exception).
  * @author Martin Groß
  */
-public class AlgorithmStoppedEvent extends AlgorithmEvent {
+public class AlgorithmTerminatedEvent extends AlgorithmEvent {
 
-    public AlgorithmStoppedEvent(Algorithm algorithm) {
-        super(algorithm, algorithm.getStartTime(), algorithm.getRuntime());
+    /**
+     * Creates an <code>AlgorithmTerminatedEvent</code> for the specified
+     * algorithm.
+     * @param algorithm the algorithm that has terminated.
+     */
+    public AlgorithmTerminatedEvent(Algorithm algorithm) {
+        super(algorithm, algorithm.getStartTime() + algorithm.getRuntime());
     }
 }

@@ -79,6 +79,7 @@ public class JProgressBarDialog extends javax.swing.JDialog {
 		// Execute task
 		AlgorithmTask worker = AlgorithmTask.getNewInstance();
 		worker.setTask( task );
+                System.out.println(task.getClass());
 		worker.addPropertyChangeListener( pcl );
 		try {
 			worker.executeAlgorithm( true );

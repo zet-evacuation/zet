@@ -62,7 +62,9 @@ public class MultiTaskExecutor implements Runnable {
 	 * @see ProgressTaskEntry
 	 */
 	public void run() {
+            System.out.println("Running");
 		for( ProgressTaskEntry task : tasks ) {
+                    System.out.println(task);
 			AlgorithmTask.getInstance().publish( task.title );
 			task.task.run();
 		}

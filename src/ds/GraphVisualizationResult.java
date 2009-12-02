@@ -19,7 +19,7 @@ import ds.graph.*;
 import ds.NetworkFlowModel;
 import ds.graph.flow.PathBasedFlowOverTime;
 import ds.graph.flow.EdgeBasedFlowOverTime;
-import algo.graph.DebugFlags;
+import algo.graph.Flags;
 import algo.graph.util.PathComposition;
 import converter.ZToGraphMapping;
 import io.visualization.VisualizationResult;
@@ -106,7 +106,7 @@ public class GraphVisualizationResult implements VisualizationResult {
         pathComposition.run();
         this.flowOverTime = pathComposition.getEdgeFlows();
         maxFlowRate = pathComposition.getMaxFlowRate();
-        if (DebugFlags.FLOWWRONG) {
+        if (Flags.FLOWWRONG) {
             System.out.println("Eingabe in die PathComposition:");
             System.out.println("Netzwerk:\n" + network + "\n" + "Fahrzeiten:\n" + transitTimes + "\n" + "Fluss:\n" + dynamicFlow);
             System.out.println("Ausgabe der PathComposition:");

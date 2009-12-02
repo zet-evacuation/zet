@@ -37,7 +37,7 @@ import ds.graph.flow.StaticPathFlow;
 import java.util.LinkedList;
 import java.util.List;
 
-import algo.graph.DebugFlags;
+import algo.graph.Flags;
 import algo.graph.staticflow.mincost.MinimumMeanCycleCancelling;
 import algo.graph.util.PathDecomposition;
 
@@ -314,7 +314,7 @@ public class MaxFlowOverTime {
         reduction();
         CreateZeroSupply();
 
-        if (DebugFlags.GORDON) {
+        if (Flags.GORDON) {
             System.out.print("Network: ");
             System.out.println(network);
             System.out.print("transit times");
@@ -338,7 +338,7 @@ public class MaxFlowOverTime {
         //algo.run();
         //flow = algo.getFlow();
 
-        if (DebugFlags.GORDON) {
+        if (Flags.GORDON) {
             System.out.print("flow 1: ");
             System.out.println(flow);
         }
@@ -346,14 +346,14 @@ public class MaxFlowOverTime {
         reconstruction();
         hideAddedInFlow(flow);
 
-        if (DebugFlags.GORDON) {
+        if (Flags.GORDON) {
             System.out.print("flow 2: ");
             System.out.println(flow);
         }
 
         PathBasedFlow minCostFlow = PathDecomposition.calculatePathDecomposition(network, sources, sinks, flow);
 
-        if (DebugFlags.GORDON) {
+        if (Flags.GORDON) {
             System.out.print("min cost flow: ");
             System.out.println(flow);
         }
