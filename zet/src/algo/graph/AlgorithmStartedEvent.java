@@ -13,16 +13,17 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
+
 /*
  * AlgorithmStartedEvent.java
  *
  */
-
 package algo.graph;
 
 /**
  * A special algorithm event that occurs when the execution of an algorithm
  * begins.
+ *
  * @author Martin Groß
  */
 public class AlgorithmStartedEvent extends AlgorithmEvent {

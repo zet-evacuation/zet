@@ -13,6 +13,7 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
+
 /*
  * AlgorithmProgressEvent.java
  *
@@ -21,6 +22,7 @@ package algo.graph;
 
 /**
  * An algorithm event that is fired by the algorithm when progress occurs.
+ *
  * @author Martin Groß
  */
 public class AlgorithmProgressEvent extends AlgorithmEvent {

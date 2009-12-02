@@ -22,10 +22,21 @@ package algo.graph;
 
 import algo.graph.util.MillisecondTimeFormatter;
 import java.util.LinkedHashSet;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.Set;
 
 /**
- * The basic framework class for algorithms.
+ * The basic framework class for algorithms. It allows to define input and
+ * output of an algorithm by using generics and provides the framework to run
+ * an algorithm in its own thread by implementing <code>Runnable</code>.
+ * Furthermore, it keeps track of the current state of the algorithm and
+ * provides an generic exception handling that can be extended by overwriting
+ * <code>handleException</code>. It also keeps track of the algorithms runtime
+ * and offers simple logging features that should be preferred to System.out
+ * logging. Finally it offers the possibility to dispatch information about the
+ * algorithm's state and progress to listeners, that can register and unregister
+ * themselves for the algorithms events.
  * 
  * @author Martin Groß
  */
@@ -183,7 +194,16 @@ public abstract class Algorithm<Problem, Solution> implements Runnable {
      * @param problem the instance of the problem that is to be solved.
      */
     public final void setProblem(Problem problem) {
-        this.problem = problem;
+        if (state == State.SOLVING) {
+            throw new IllegalStateException("The algorithm is currently running! Changing the underlying instance could lead to undefined behaviour!");
+        }
+        if (this.problem != problem) {
+            this.problem = problem;
+            runtime = 0;
+            solution = null;
+            startTime = 0;
+            state = State.WAITING;
+        }
     }
 
     /**
@@ -262,19 +282,41 @@ public abstract class Algorithm<Problem, Solution> implements Runnable {
     }
 
     /**
-     * Returns whether events are treated aslog messages or not.
-     * @return <code>true</code>, if events are treated as log messages,
+     * Sets whether messages logged via the log() methods are written to
+     * System.out or not.
+     * @param value whether messages logged via the log() methods are written to
+     * System.out or not.
+     */
+    public final void setLogging(boolean logging) {
+        this.logging = logging;
+    }
+
+    /**
+     * Returns whether events are also treated as log messages or not.
+     * @return <code>true</code>, if events are also treated as log messages,
      * <code>false</code> if otherwise.
      */
     public final boolean isLoggingEvents() {
         return loggingEvents;
     }
 
-    public void setLoggingToConsole(boolean value) {
-        if (loggingEvents != value) {
-            loggingEvents = value;
+    /**
+     * Sets whether events are also treated as log messages.
+     * @param loggingEvents whether events are also treated as log messages.
+     */
+    public final void setLoggingEvents(boolean loggingEvents) {
+        if (this.loggingEvents != loggingEvents) {
+            this.loggingEvents = loggingEvents;
             if (loggingEvents) {
-                
+                addAlgorithmListener(new EventLogger());
+            } else {
+                List<AlgorithmListener> logger = new LinkedList<AlgorithmListener>();
+                for (AlgorithmListener listener : algorithmListeners) {
+                    if (listener instanceof Algorithm.EventLogger) {
+                        logger.add(listener);
+                    }
+                }
+                algorithmListeners.removeAll(logger);
             }
         }
     }
@@ -310,7 +352,12 @@ public abstract class Algorithm<Problem, Solution> implements Runnable {
         return state == State.SOLVING;
     }
 
-    protected void log(String message) {
+    /**
+     * Writes the specified message to System.out, if logging is enabled. Does
+     * nothing otherwise.
+     * @param message the message that it to be logged.
+     */
+    protected final void log(String message) {
         if (logging) {
             System.out.println(message);
         }
@@ -322,7 +369,7 @@ public abstract class Algorithm<Problem, Solution> implements Runnable {
      * @param message the format string of the message.
      * @param params the parameters for formatting the message.
      */
-    protected void log(String message, Object... params) {
+    protected final void log(String message, Object... params) {
         log(String.format(message, params));
     }
 
@@ -371,4 +418,31 @@ public abstract class Algorithm<Problem, Solution> implements Runnable {
      * @return a solution to the specified problem.
      */
     protected abstract Solution runAlgorithm(Problem problem);
+
+    /**
+     * A private listener class for recieving events and logging them.
+     */
+    private class EventLogger implements AlgorithmListener {
+
+        /**
+         * This method is called when an event occurred in an algorithm that is
+         * being listened to.
+         * @param event the event which occurred.
+         */
+        public void eventOccurred(AlgorithmEvent event) {
+            String message = "";
+            if (event instanceof AlgorithmStartedEvent) {
+                message = String.format("%1$s: %2$s gestartet...", event.getFormattedEventTime(), Algorithm.this.getClass().getSimpleName());
+            } else if (event instanceof AlgorithmDetailedProgressEvent) {
+                message = String.format("%1$s: %2$s running... %3$s%", event.getFormattedEventTime(), Algorithm.this.getClass().getSimpleName(), ((AlgorithmProgressEvent) event).getProgressAsInteger());
+            } else if (event instanceof AlgorithmProgressEvent) {
+                message = String.format("%1$s: %2$s running... %3$s%", event.getFormattedEventTime(), Algorithm.this.getClass().getSimpleName(), ((AlgorithmProgressEvent) event).getProgressAsInteger());
+            } else if (event instanceof AlgorithmTerminatedEvent) {
+                message = String.format("%1$s: %2$s beendet nach %3$s.", event.getFormattedEventTime(), Algorithm.this.getClass().getSimpleName(), getRuntimeAsString());
+            }
+            if (!message.equals("")) {
+                log(message);
+            }
+        }
+    }
 }

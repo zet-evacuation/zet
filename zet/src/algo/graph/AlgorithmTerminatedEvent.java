@@ -13,6 +13,7 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
+
 /*
  * AlgorithmTerminatedEvent.java
  *
@@ -22,6 +23,7 @@ package algo.graph;
 /**
  * A special algorithm event that occurs when the algorithm terminates (either
  * by completing successfully or by an uncaught runtime exception).
+ * 
  * @author Martin Groß
  */
 public class AlgorithmTerminatedEvent extends AlgorithmEvent {
