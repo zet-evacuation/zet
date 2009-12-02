@@ -15,8 +15,7 @@
  */
 package algo.graph.dynamicflow;
 
-import algo.graph.DebugFlags;
-import algo.graph.Notifiable;
+import algo.graph.Flags;
 import algo.graph.util.PathDecomposition;
 //import batch.tasks.AlgorithmTask;
 import ds.graph.flow.PathBasedFlowOverTime;
@@ -30,7 +29,7 @@ import ds.graph.flow.PathBasedFlow;
 import ds.graph.StaticPath;
 import ds.graph.flow.StaticPathFlow;
 import ds.graph.TimeExpandedNetwork;
-import algo.graph.ProgressBooleanFlags;
+import algo.graph.Flags;
 
 /** 
  * The class <code>TransshipmentWithTimeHorizon</code> provides a method to calculate 
@@ -45,8 +44,6 @@ public abstract class TransshipmentWithTimeHorizon extends DynamicFlowAlgorithm{
 	protected IdentifiableIntegerMapping<Node> supplies;
 	/** The name of the concrete transshipment algorithm. */
 	protected String nameOfTransshipmentWithTimeHorizon;
-	/** The receiver of progress information. */
-	protected Notifiable receiver;
 	/** Node capacities */
 	protected IdentifiableIntegerMapping<Node> nodeCapacities;
 	
@@ -94,7 +91,7 @@ public abstract class TransshipmentWithTimeHorizon extends DynamicFlowAlgorithm{
 	 */
 	public void runAlgorithm(){
 		/* Short debug output telling that a time expanded network is created. */
-		if (DebugFlags.TRANSSHIPMENT_SHORT) {
+		if (Flags.TRANSSHIPMENT_SHORT) {
 			System.out.println("The "+nameOfTransshipmentWithTimeHorizon+" algorithm creates a time expanded network.");
 //			 AlgorithmTask.getInstance().publish( "Time-Expanded Network-Creation", "The "+nameOfTransshipmentWithTimeHorizon+" algorithm creates a time expanded network.");
                          fireEvent("Time-Expanded Network-Creation. The "+nameOfTransshipmentWithTimeHorizon+" algorithm creates a time expanded network.");
@@ -105,28 +102,28 @@ public abstract class TransshipmentWithTimeHorizon extends DynamicFlowAlgorithm{
 				edgeCapacities, transitTimes, timeHorizon, supplies, false);
 		
 		/* Progress output. */
-		if (ProgressBooleanFlags.ALGO_PROGRESS){
+		if (Flags.ALGO_PROGRESS){
 			System.out.print("Progress: The time expanded network was created, ");
 		}
 
 		/* Short debug output including the size of the created expanded network. */
-		if (DebugFlags.TRANSSHIPMENT_SHORT && !DebugFlags.TRANSSHIPMENT_LONG){
+		if (Flags.TRANSSHIPMENT_SHORT && !Flags.TRANSSHIPMENT_LONG){
 			System.out.println("The time expanded network was created.");
 			System.out.println("It has "+tnetwork.nodes().size()+" nodes and "+tnetwork.edges().size()+" edges.");
 			 //AlgorithmTask.getInstance().publish( "Time-Expanded Network created.", "It has "+tnetwork.nodes().size()+" nodes and "+tnetwork.edges().size()+" edges.");
                          fireEvent("Time-Expanded Network created. It has "+tnetwork.nodes().size()+" nodes and "+tnetwork.edges().size()+" edges.");
 		}
 		/* Long debug output including the complete expanded network.*/
-		if (DebugFlags.TRANSSHIPMENT_LONG){
+		if (Flags.TRANSSHIPMENT_LONG){
 			System.out.println(tnetwork);
 		}
 		
 		/* Progress output. */
-		if (ProgressBooleanFlags.ALGO_PROGRESS){
+		if (Flags.ALGO_PROGRESS){
 			System.out.println("the "+nameOfTransshipmentWithTimeHorizon+" algorithm is called.. ");
 		}
 		/* Short debug output telling that the algorithm for the transshipment with time horizon is called. */
-		if (DebugFlags.TRANSSHIPMENT_SHORT && !DebugFlags.TRANSSHIPMENT_LONG){
+		if (Flags.TRANSSHIPMENT_SHORT && !Flags.TRANSSHIPMENT_LONG){
 			System.out.println("The "+nameOfTransshipmentWithTimeHorizon+" algorithm is called.");
 			//AlgorithmTask.getInstance().publish( nameOfTransshipmentWithTimeHorizon+" algorithm", "The "+nameOfTransshipmentWithTimeHorizon+" algorithm is called.");
                         fireEvent(nameOfTransshipmentWithTimeHorizon+" algorithm. The "+nameOfTransshipmentWithTimeHorizon+" algorithm is called.");
@@ -136,7 +133,7 @@ public abstract class TransshipmentWithTimeHorizon extends DynamicFlowAlgorithm{
 		IdentifiableIntegerMapping<Edge> flow = transshipmentWithTimeHorizon(tnetwork);
 		
 		/* Progress output. */
-		if (ProgressBooleanFlags.ALGO_PROGRESS){
+		if (Flags.ALGO_PROGRESS){
 			System.out.print("Progress: .. call of the "+nameOfTransshipmentWithTimeHorizon+" algorithm finished. Time horizon is ");
 			if (flow == null)
 				System.out.print("not ");
@@ -144,7 +141,7 @@ public abstract class TransshipmentWithTimeHorizon extends DynamicFlowAlgorithm{
 		}
 		
 		/* Short debug output telling whether the current time horizon was sufficient. */		
-		if (DebugFlags.TRANSSHIPMENT_SHORT){
+		if (Flags.TRANSSHIPMENT_SHORT){
 			System.out.print("A time horizon of "+timeHorizon+" is ");
 			if (flow == null)
 				System.out.print("not ");
@@ -159,14 +156,14 @@ public abstract class TransshipmentWithTimeHorizon extends DynamicFlowAlgorithm{
 		}
 		
 		/* Long debug output including the flow function of the found flow. */
-		if (DebugFlags.TRANSSHIPMENT_LONG){
+		if (Flags.TRANSSHIPMENT_LONG){
 			System.out.println();
 			System.out.println("Static transshipment as flow function:");
 			System.out.println(flow);
 		}
 
 		/* Short Debug telling that a path decomposition is calculated.*/		
-		if (DebugFlags.TRANSSHIPMENT_SHORT){
+		if (Flags.TRANSSHIPMENT_SHORT){
 			System.out.println();
 			System.out.println("Calculating path decomposition from sources "+tnetwork.sources()+" to sinks "+ tnetwork.sinks()+".");
 		}
@@ -176,7 +173,7 @@ public abstract class TransshipmentWithTimeHorizon extends DynamicFlowAlgorithm{
 				tnetwork, tnetwork.sources(), tnetwork.sinks(), flow);
 
 		/* Long debug output containing the path flows.*/
-		if (DebugFlags.TRANSSHIPMENT_LONG){
+		if (Flags.TRANSSHIPMENT_LONG){
 			System.out.println();
 			System.out.println("Static transshipment path based:");
 			System.out.println(decomposedFlow);
@@ -197,7 +194,7 @@ public abstract class TransshipmentWithTimeHorizon extends DynamicFlowAlgorithm{
 			dynamicTransshipment.addPathFlow(dynamicPathFlow);
 		}
 		
-		if (DebugFlags.TRANSSHIPMENT_LONG){
+		if (Flags.TRANSSHIPMENT_LONG){
 			System.out.println("Dynamic transshipment:");
 			System.out.println(dynamicTransshipment);
 		}
@@ -205,13 +202,5 @@ public abstract class TransshipmentWithTimeHorizon extends DynamicFlowAlgorithm{
 		resultFlowPathBased = dynamicTransshipment;
 	}
 	
-	@Override
-	/**
-	 * Sets the object that will be informed by this algorithm. Only one receiver per time.
- 	 * @param receiver Object that wants to receive progress information from this algorithm. 
-	 */
-	public void setReciever(Notifiable receiver){
-		this.receiver = receiver;
-	}
 	
 }

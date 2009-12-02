@@ -21,7 +21,7 @@ import java.util.LinkedList;
 
 import ds.graph.Localization;
 
-import algo.graph.DebugFlags;
+import algo.graph.Flags;
 import algo.graph.staticflow.StaticTransshipment;
 import algo.graph.util.PathDecomposition;
 
@@ -32,7 +32,7 @@ import ds.graph.Network;
 import ds.graph.Node;
 import ds.graph.flow.PathBasedFlow;
 import ds.graph.flow.StaticPathFlow;
-import algo.graph.ProgressBooleanFlags;
+import algo.graph.Flags;
 
 /** 
  * Calculates an upper bound for the time horizon needed
@@ -86,7 +86,7 @@ public class TransshipmentBoundEstimator {
 			IdentifiableIntegerMapping<Edge> edgeCapacities,
 			IdentifiableIntegerMapping<Node> supplies) {
 				
-		if (ProgressBooleanFlags.ALGO_PROGRESS){
+		if (Flags.ALGO_PROGRESS){
 			System.out.println("Bound calculation by static max flow started.");
 		}
 		LinkedList<Node> sources = new LinkedList<Node>();
@@ -123,10 +123,10 @@ public class TransshipmentBoundEstimator {
 		do {
 			flowLeavingSource = new IdentifiableIntegerMapping<Node>(supplies.getDomainSize());
 			int maxSupplyInThisRun=0;
-			if (DebugFlags.BOUND_ESTIMATOR_STATIC_FLOW){
+			if (Flags.BOUND_ESTIMATOR_STATIC_FLOW){
 				System.out.println("New run");
 			}
-			if (ProgressBooleanFlags.ALGO_PROGRESS){
+			if (Flags.ALGO_PROGRESS){
 				System.out.println("New run of the max flow algorithm starts.");
 			}
 			StaticTransshipment staticTransshipment = new StaticTransshipment(network, edgeCapacities, restSupplies);
@@ -147,10 +147,10 @@ public class TransshipmentBoundEstimator {
 			for (StaticPathFlow staticPathFlow : staticFlowAsPaths){
 				int length = 0;
 				//test += staticPathFlow.getAmount();
-				if (DebugFlags.BOUND_ESTIMATOR_STATIC_FLOW){
+				if (Flags.BOUND_ESTIMATOR_STATIC_FLOW){
 					System.out.println("Source: "+staticPathFlow.firstEdge().start()+" Amount: "+staticPathFlow.getAmount());
 				}
-				if (ProgressBooleanFlags.ALGO_PROGRESS){
+				if (Flags.ALGO_PROGRESS){
 					System.out.println("Removed "+staticPathFlow.getAmount()+" supply from "+staticPathFlow.firstEdge().start()+". ");
 				}
 			//	System.out.println(staticPathFlow);
@@ -164,7 +164,7 @@ public class TransshipmentBoundEstimator {
 					sources.remove(staticPathFlow.firstEdge().start());
 				}
 				restSupplies.increase(sink, staticPathFlow.getAmount());
-				if (DebugFlags.BOUND_ESTIMATOR_STATIC_FLOW){
+				if (Flags.BOUND_ESTIMATOR_STATIC_FLOW){
 					System.out.println("Sink: "+restSupplies.get(sink));
 				}
 				for (Edge edge : staticPathFlow){
@@ -174,20 +174,20 @@ public class TransshipmentBoundEstimator {
 					maxLength = length;
 				}
 			}
-			if (DebugFlags.BOUND_ESTIMATOR_STATIC_FLOW){
+			if (Flags.BOUND_ESTIMATOR_STATIC_FLOW){
 				System.out.println("max supply in this run "+maxSupplyInThisRun);
 				System.out.println("max length "+maxLength);
 			}
 			sumOfMaxSupplies += maxSupplyInThisRun;
 			//System.out.println(restSupplies);
-			if (DebugFlags.BOUND_ESTIMATOR_STATIC_FLOW){
+			if (Flags.BOUND_ESTIMATOR_STATIC_FLOW){
 				System.out.println(sources);
 			}
-			if (ProgressBooleanFlags.ALGO_PROGRESS){
+			if (Flags.ALGO_PROGRESS){
 				System.out.println("Max flow run finished. Remaining supplies: "+(-restSupplies.get(sink)));
 			}
 		} while (restSupplies.get(sink) < 0);
-		if (DebugFlags.BOUND_ESTIMATOR_STATIC_FLOW){
+		if (Flags.BOUND_ESTIMATOR_STATIC_FLOW){
 			System.out.println("sum of max "+sumOfMaxSupplies);
 		}
 		
@@ -325,10 +325,10 @@ public class TransshipmentBoundEstimator {
 					maxLength = length;
 			}
 			
-			if (DebugFlags.BOUND_ESTIMATOR_LONG) {
+			if (Flags.BOUND_ESTIMATOR_LONG) {
 				System.out.println("Path decomposition: " + pathFlows);
 			}
-			if (DebugFlags.BOUND_ESTIMATOR){
+			if (Flags.BOUND_ESTIMATOR){
 				System.out.println();
 				System.out.println("Max Length: " + maxLength + " Max Supply: "
 						+ maxSupply + " Sum:" + (maxLength + maxSupply)
@@ -381,7 +381,7 @@ public class TransshipmentBoundEstimator {
 			else
 				multipliedCapacities.set(edge, edgeCapacities.get(edge)*sources.size());
 		}
-		if (DebugFlags.BOUND_ESTIMATOR_LONG){
+		if (Flags.BOUND_ESTIMATOR_LONG){
 			System.out.println();
 			System.out.println();
 			System.out.println("network: "+network);
@@ -390,16 +390,16 @@ public class TransshipmentBoundEstimator {
 			System.out.println("supplies: "+supplies);
 			System.out.println("oneSupplies "+oneSupplies);
 		}
-		if (ProgressBooleanFlags.ALGO_PROGRESS){
+		if (Flags.ALGO_PROGRESS){
 			System.out.println("Progress: Static transshipment algorithm is called for calculation of upper bound for time horizon..");
 		}
 		StaticTransshipment staticTransshipment = new StaticTransshipment(network, multipliedCapacities, oneSupplies);
 		staticTransshipment.run();
 		IdentifiableIntegerMapping<Edge> staticFlow = staticTransshipment.getFlow();
-		if (ProgressBooleanFlags.ALGO_PROGRESS){
+		if (Flags.ALGO_PROGRESS){
 			System.out.println("Progress: .. call of static transshipment algorithm finished.");
 		}
-		if (DebugFlags.BOUND_ESTIMATOR_LONG) 
+		if (Flags.BOUND_ESTIMATOR_LONG)
 			System.out.println("Calculated static flow for upper bound: "+staticFlow);
 		PathBasedFlow pathFlows = PathDecomposition.calculatePathDecomposition(network, supplies, sources, sinks, staticFlow);
 		
@@ -413,10 +413,10 @@ public class TransshipmentBoundEstimator {
 				maxLength = length;
 		}
 		
-		if (DebugFlags.BOUND_ESTIMATOR_LONG) {
+		if (Flags.BOUND_ESTIMATOR_LONG) {
 			System.out.println("Path decomposition: " + pathFlows);
 		}
-		if (DebugFlags.BOUND_ESTIMATOR){
+		if (Flags.BOUND_ESTIMATOR){
 			System.out.println();
 			System.out.println("Max Length: " + maxLength + " Max Supply: "
 					+ maxSupply + " Sum:" + (maxLength + maxSupply)
@@ -432,7 +432,7 @@ public class TransshipmentBoundEstimator {
 			IdentifiableIntegerMapping<Edge> transitTimes,
 			IdentifiableIntegerMapping<Edge> edgeCapacities,
 			IdentifiableIntegerMapping<Node> supplies){
-		if (DebugFlags.BOUND_ESTIMATOR){
+		if (Flags.BOUND_ESTIMATOR){
 			System.out.println("");
 		}
 		int c = Integer.MAX_VALUE;//calculateBoundByStaticTransshipment(network, transitTimes, edgeCapacities, supplies);

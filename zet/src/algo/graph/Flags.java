@@ -15,16 +15,21 @@
  */
 
 /*
- * DebugFlags.java
+ * Flags.java
  *
  */
 package algo.graph;
+
+import java.util.logging.Logger;
 
 /**
  *
  * @author
  */
-public class DebugFlags {
+public class Flags {
+
+    Logger log;
+    public final static boolean ALGO_PROGRESS = true;
 
     public final static boolean MARTIN = false;
     public final static boolean MEL = false;

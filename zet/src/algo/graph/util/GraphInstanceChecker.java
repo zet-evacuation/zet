@@ -17,7 +17,7 @@ package algo.graph.util;
 
 import java.util.LinkedList;
 
-import algo.graph.DebugFlags;
+import algo.graph.Flags;
 import algo.graph.traverse.DFS;
 import algo.graph.traverse.DFS.State;
 import ds.graph.IdentifiableIntegerMapping;
@@ -134,7 +134,7 @@ public class GraphInstanceChecker {
 			}
 		}
 		
-		if (DebugFlags.MEL){
+		if (Flags.MEL){
 			System.out.println("Sources: "+sources);
 			System.out.println("Sinks: "+sinks);
 		}

@@ -79,6 +79,7 @@ public class JBatchProgressDialog extends javax.swing.JDialog {
 		AlgorithmTask worker = AlgorithmTask.getNewInstance();
 		mte = new MultiTaskExecutor( tasks );
 		worker.setTask( mte );
+
 		worker.addPropertyChangeListener( pcl );
 		try {
 			//mte.run();

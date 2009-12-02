@@ -20,8 +20,7 @@ import java.lang.reflect.InvocationTargetException;
 
 import ds.graph.Localization;
 
-import algo.graph.DebugFlags;
-import algo.graph.Notifiable;
+import algo.graph.Flags;
 
 //import batch.tasks.AlgorithmTask;
 import algo.graph.util.GraphInstanceChecker;
@@ -30,7 +29,7 @@ import ds.graph.Edge;
 import ds.graph.IdentifiableIntegerMapping;
 import ds.graph.Network;
 import ds.graph.Node;
-import algo.graph.ProgressBooleanFlags;
+import algo.graph.Flags;
 
 /**
  * The class <code>Transshipment</code> implements a binary search to compute the minimal
@@ -41,8 +40,6 @@ import algo.graph.ProgressBooleanFlags;
  */
 public abstract class Transshipment<TT extends TransshipmentWithTimeHorizon> extends DynamicFlowAlgorithm{
 	
-	/** The receiver of progress information. */
-	Notifiable receiver;
 	/** The supplies used by the algorithm. */ 
 	IdentifiableIntegerMapping<Node> supplies;
 	/** Class type of the specific transshipment algorithm. */
@@ -128,14 +125,14 @@ public abstract class Transshipment<TT extends TransshipmentWithTimeHorizon> ext
 	 * @return
 	 */
 	public void runAlgorithm() {
-		if (ProgressBooleanFlags.ALGO_PROGRESS){
+		if (Flags.ALGO_PROGRESS){
 			System.out.println("Progress: Transshipment algorithm was started.");
 			System.out.flush();
 		}
                 fireEvent("Transshipment algorithm started.");
 		//AlgorithmTask.getInstance().publish( "Transshipment algorithm started.", "" );
 		
-		if (DebugFlags.MEL){
+		if (Flags.MEL){
 			System.out.println("Eingabe: ");
 			System.out.println("Network: "+network);
 			System.out.println("Edge capacities:" +edgeCapacities);
@@ -143,7 +140,7 @@ public abstract class Transshipment<TT extends TransshipmentWithTimeHorizon> ext
 		}
 		
 		if (GraphInstanceChecker.emptySupplies(network, supplies)){
-			if (DebugFlags.MEL)
+			if (Flags.MEL)
 				System.out.println("No individuals - no flow.");
 			resultFlowPathBased = new PathBasedFlowOverTime();
 			return;
@@ -154,10 +151,10 @@ public abstract class Transshipment<TT extends TransshipmentWithTimeHorizon> ext
 		upperBound = TransshipmentBoundEstimator.calculateBound(network, transitTimes, edgeCapacities, supplies);
 		
 		/* Short debug output telling the computed upper bound. */
-		if (ProgressBooleanFlags.ALGO_PROGRESS){
+		if (Flags.ALGO_PROGRESS){
 			System.out.println("Progress: The upper bound for the time horizon was calculated.");
 		}
-		if (DebugFlags.TRANSSHIPMENT_SHORT){
+		if (Flags.TRANSSHIPMENT_SHORT){
 			System.out.println("Upper bound for time horizon: " + (upperBound-1) );
 		}
 		
@@ -167,7 +164,7 @@ public abstract class Transshipment<TT extends TransshipmentWithTimeHorizon> ext
 		
 		/* Do geometric search: */
 		
-		if (ProgressBooleanFlags.ALGO_PROGRESS){
+		if (Flags.ALGO_PROGRESS){
 			System.out.println("Progress: Now testing time horizon 1.");
 		}
 		//AlgorithmTask.getInstance().publish( "Uppder bound for the time horizon was calculated.", "Now testing time horizon 1." );
@@ -193,7 +190,7 @@ public abstract class Transshipment<TT extends TransshipmentWithTimeHorizon> ext
 				feasibleT = upperBound;
 				found = true;
 			} else {
-				if (ProgressBooleanFlags.ALGO_PROGRESS){
+				if (Flags.ALGO_PROGRESS){
 					System.out.println("Progress: Now testing time horizon "+testTimeHorizon+".");
 				}
 				//AlgorithmTask.getInstance().publish( "Now testing time horizon " + testTimeHorizon + ".", "" );
@@ -218,7 +215,7 @@ public abstract class Transshipment<TT extends TransshipmentWithTimeHorizon> ext
 			/* Compute the middle of the search intervall. */
 			int testTimeHorizon = (left + right) / 2;
 			
-			if (ProgressBooleanFlags.ALGO_PROGRESS){
+			if (Flags.ALGO_PROGRESS){
 				System.out.println("Progress: Now testing time horizon "+testTimeHorizon+".");
 			}
 			//AlgorithmTask.getInstance().publish( "Now testing time horizon " + testTimeHorizon + ".", "" );
@@ -240,28 +237,28 @@ public abstract class Transshipment<TT extends TransshipmentWithTimeHorizon> ext
 
 		/* If a transshipment was found print the result. */
 		if (left == right - 1 && transshipmentWithoutTimeHorizon != null) {
-			if (ProgressBooleanFlags.ALGO_PROGRESS){
+			if (Flags.ALGO_PROGRESS){
 				System.out.println("Progress: Transshipment algorithm has finished. Time horizon: "+right);
 			}
 			//AlgorithmTask.getInstance().publish("Solution found.", "The optimal time horizon is: " + right +" (estimated upper bound: "+(upperBound-1)+")");
                         fireEvent("Solution found. The optimal time horizon is: " + right +" (estimated upper bound: "+(upperBound-1)+")");
-			if (DebugFlags.TRANSSHIPMENT_SHORT) {
+			if (Flags.TRANSSHIPMENT_SHORT) {
 				System.out.println("The optimal time horizon is: " + right +" (estimated upper bound: "+(upperBound-1)+")");
 			}
-			if (DebugFlags.TRANSSHIPMENT_LONG){
+			if (Flags.TRANSSHIPMENT_LONG){
 				System.out.println("A transshipment with time horizon ("+(upperBound-1)+")"+ + right + ": ");
 				System.out.println(transshipmentWithoutTimeHorizon);
 			}
-			if (DebugFlags.TRANSSHIPMENT_RESULT_FLOW  ){
+			if (Flags.TRANSSHIPMENT_RESULT_FLOW  ){
 				System.out.println(transshipmentWithoutTimeHorizon);
 			}
 		} else {
 			//AlgorithmTask.getInstance().publish("No solution found.","");
                         fireEvent("No solution found.");
-			if (DebugFlags.TRANSSHIPMENT_SHORT){
+			if (Flags.TRANSSHIPMENT_SHORT){
 				System.out.println("No solution found.");
 			}
-			if (ProgressBooleanFlags.ALGO_PROGRESS){
+			if (Flags.ALGO_PROGRESS){
 				System.out.println("Progress: Transshipment algorithm has finished. No solution.");
 			}
 			throw new AssertionError("No solution found. Upper bound wrong?");
@@ -272,10 +269,10 @@ public abstract class Transshipment<TT extends TransshipmentWithTimeHorizon> ext
 		if (left == right-1 && transshipmentWithoutTimeHorizon != null){
 			if (additionalTHTAlgorithm != null && additionalTHTAlgorithm != standardTHTAlgorithm){
 				transshipmentWithoutTimeHorizon = useTransshipmentAlgorithm(network, transitTimes, edgeCapacities, nodeCapacities, supplies, right, additionalTHTAlgorithm);
-				if (DebugFlags.TRANSSHIPMENT_SHORT){
+				if (Flags.TRANSSHIPMENT_SHORT){
 					System.out.println("Additional run with additional transshipment algorithm has finished.");
 				}
-				if (ProgressBooleanFlags.ALGO_PROGRESS){
+				if (Flags.ALGO_PROGRESS){
 					System.out.println("Progress: Additional transshipment algorithm has finished and the new solution was set.");
 				}
 				//AlgorithmTask.getInstance().publish( 100, "Run with additional transshipment algorithm has finished.", "The new solution was set." );
@@ -286,15 +283,5 @@ public abstract class Transshipment<TT extends TransshipmentWithTimeHorizon> ext
 		/* May be null if upperBound was not sufficient. This should not happen! 
 		 * Else the optimal transshipment is saved. */ 
 		resultFlowPathBased = transshipmentWithoutTimeHorizon;
-	}
-	
-	@Override
-	/**
-	 * Sets the object that will be informed by this algorithm. Only one receiver per time.
- 	 * @param receiver Object that wants to receive progress information from this algorithm. 
-	 */
-	public void setReciever(Notifiable receiver){
-		this.receiver = receiver;
-	}
-	
+	}	
 }

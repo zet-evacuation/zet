@@ -17,227 +17,358 @@
 /*
  * Algorithm.java
  *
- * @author Martin Groß
  */
 package algo.graph;
 
+import algo.graph.util.MillisecondTimeFormatter;
 import java.util.LinkedHashSet;
 import java.util.Set;
-//import batch.tasks.AlgorithmTask;
-import algo.graph.util.NanosecondTimeFormatter;
 
 /**
- * The basic framework class for graph algorithms.
+ * The basic framework class for algorithms.
  * 
  * @author Martin Groß
  */
 public abstract class Algorithm<Problem, Solution> implements Runnable {
 
-    private void fireEvent(AlgorithmStartedEvent algorithmStartedEvent) {
-        //throw new UnsupportedOperationException("Not yet implemented");
-    }
-
-    private void fireEvent(AlgorithmStoppedEvent algorithmStoppedEvent) {
-        //throw new UnsupportedOperationException("Not yet implemented");
-    }
-
+    /**
+     * An enumeration type that specifies the current state of the algorithm.
+     */
     public enum State {
 
-        WAITING_FOR_PROBLEM,
-        READY_TO_SOLVE,
+        WAITING,
         SOLVING,
         SOLVING_FAILED,
         SOLVED;
     }
+    /**
+     * The set of listeners that recieves events from this algorithm.
+     */
+    private Set<AlgorithmListener> algorithmListeners;
+    /**
+     * Whether messages are logged by the log-methods.
+     */
+    private boolean logging;
+    /**
+     * Whether events are also logged to the console.
+     */
+    private boolean loggingEvents;
+    /**
+     * The instance of the problem.
+     */
     private Problem problem;
-    private Set<MessageListener> messageListeners;
+    /**
+     * The current progress of the algorithm. The progress begins with 0.0 and
+     * ends with 1.0.
+     */
     private double progress;
-    private Set<ProgressListener> progressListeners;
-    private boolean running;
+    /**
+     * The runtime of the algorithm in milliseconds.
+     */
     private long runtime;
+    /**
+     * The solution to the problem instance, once available.
+     */
     private Solution solution;
+    /**
+     * The point of time at which the execution of the algorithm started.
+     */
     private long startTime;
+    /**
+     * The state of execution of the algorithm.
+     */
     private State state;
 
-    public final void addMessageListener(MessageListener listener) {
+    /**
+     * Adds the specified listener to the set of listeners recieving events from
+     * this algorithm. If the specified listener is already part of this list,
+     * nothing happens.
+     * @param listener the listener to be added to the notification list.
+     * @throws IllegalArgumentException if the algorithm has already terminated.
+     */
+    public final void addAlgorithmListener(AlgorithmListener listener) {
         if (isProblemSolved()) {
-            throw new IllegalStateException("The problem has already been solved. There are no messages that could be listened to anymore.");
+            throw new IllegalStateException("The problem has already been solved. There will be no more events that could be listened to anymore.");
         } else {
-            if (messageListeners == null) {
-                messageListeners = new LinkedHashSet<MessageListener>();
+            if (algorithmListeners == null) {
+                algorithmListeners = new LinkedHashSet<AlgorithmListener>();
             }
-            messageListeners.add(listener);
+            algorithmListeners.add(listener);
         }
     }
 
-    public final void removeMessageListener(MessageListener listener) {
-        if (messageListeners != null) {
-            messageListeners.remove(listener);
+    /**
+     * Removes the specified listener from the set of listeners recieving events
+     * from this algorithm.
+     * @param listener the listener to be removed from the notification list.
+     */
+    public final void removeAlgorithmListener(AlgorithmListener listener) {
+        if (algorithmListeners != null) {
+            algorithmListeners.remove(listener);
         }
     }
 
+    /**
+     * Dispatches the specified event to all registered listeners.
+     * @param event the event to be dispatched to the listeners.
+     */
+    protected final void fireEvent(AlgorithmEvent event) {
+        if (algorithmListeners != null) {
+            for (AlgorithmListener listener : algorithmListeners) {
+                listener.eventOccurred(event);
+            }
+        }
+    }
+
+    /**
+     * Dispatches an algorithm progress event with the specified message and
+     * current progress value to all listeners.
+     * @param message the message to be dispatched.
+     */
     protected final void fireEvent(String message) {
-        if (!isRunning()) {
-            throw new IllegalStateException("Message Events can only be dispatched while the algorithm is running.");
-        }
-        if (messageListeners != null) {
-            MessageEvent event = new MessageEvent(this, startTime, System.nanoTime(), message);
-            for (MessageListener listener : messageListeners) {
-                listener.messageChanged(event);
-            }
-        }
+        fireEvent(new AlgorithmDetailedProgressEvent(this, progress, message));
     }
 
+    /**
+     * Dispatches an algorithm progress event with the specified message and
+     * current progress value to all listeners. The method is a shortcut for
+     * fireEvent(String.format(formatStr, params)).
+     * @param formatStr the format string part of the message to be dispatched.
+     * @param params the parameters used by the format string.
+     */
     protected final void fireEvent(String formatStr, Object... params) {
         fireEvent(String.format(formatStr, params));
     }
-    
-    @Deprecated
-    protected final void fireTaskDescriptionEvent(String taskName) {
-        //AlgorithmTask.getInstance().publish(taskName);
-    }
-    
-    @Deprecated
-    protected final void fireTaskInformationEvent(String taskInformation) {
-        
-    }
 
-    public final void addProgressListener(ProgressListener listener) {
-        if (isProblemSolved()) {
-            throw new IllegalStateException("The problem has already been solved. There is no progress that could be listened to anymore.");
-        } else {
-            if (progressListeners == null) {
-                progressListeners = new LinkedHashSet<ProgressListener>();
-            }
-            progressListeners.add(listener);
-        }
-    }
-
-    public final void removeProgressListener(ProgressListener listener) {
-        if (progressListeners != null) {
-            progressListeners.remove(listener);
-        }
-    }
-
+    /**
+     * Updates the progress value to broadcasts the new value to all listeners.
+     * @param progress the new progress value.
+     * @throws IllegalArgumentException if the progress value is less than the
+     * previous one.
+     */
     protected final void fireProgressEvent(double progress) {
-        if (!isRunning()) {
-            throw new IllegalStateException("Progress Events can only be dispatched while the algorithm is running.");
-        } else if (progress < 0) {
-            throw new IllegalArgumentException("The progress value must not be < 0.");
-        } else if (progress > 100) {
-            throw new IllegalArgumentException("The progress values must not not be > 100.");
-        } else if (progress < this.progress) {
+        if (progress < this.progress) {
             throw new IllegalArgumentException("The progress values must be monotonically increasing.");
         }
         this.progress = progress;
-        if (ProgressBooleanFlags.ALGO_PROGRESS) {
-            System.out.println("Progress: " + progress);
-        }
-        //AlgorithmTask.getInstance().publish((int) Math.round(progress * 100));
-        if (progressListeners != null) {
-            AlgorithmProgressEvent event = new AlgorithmProgressEvent(this, startTime, System.nanoTime(), progress);
-            for (ProgressListener listener : progressListeners) {
-                listener.progressChanged(event);
-            }
-        }
+        fireEvent(new AlgorithmProgressEvent(this, progress));
     }
 
+    /**
+     * 
+     * @param progress
+     * @param information
+     * @param detailedInformation
+     * @throws IllegalArgumentException if the progress value is less than the
+     * previous one.
+     */
     protected final void fireProgressEvent(double progress, String information, String detailedInformation) {
-        if (!isRunning()) {
-            throw new IllegalStateException("Progress Events can only be dispatched while the algorithm is running.");
-        } else if (progress < 0) {
-            throw new IllegalArgumentException("The progress value must not be < 0.");
-        } else if (progress > 100) {
-            throw new IllegalArgumentException("The progress values must not not be > 100.");
-        } else if (progress < this.progress) {
+        if (progress < this.progress) {
             throw new IllegalArgumentException("The progress values must be monotonically increasing.");
         }
         this.progress = progress;
-        if (ProgressBooleanFlags.ALGO_PROGRESS) {
-            System.out.println("Progress: " + progress);
-        }
-        //AlgorithmTask.getInstance().publish((int) Math.round(progress * 100), information, detailedInformation);
-        if (progressListeners != null) {
-            AlgorithmProgressEvent event = new AlgorithmProgressEvent(this, startTime, System.nanoTime(), progress);
-            for (ProgressListener listener : progressListeners) {
-                listener.progressChanged(event);
-            }
-        }
-    }    
-    
+        fireEvent(new AlgorithmProgressEvent(this, progress));
+    }
+
+    /**
+     * Returns the instance of the problem that is to be solved.
+     * @return the instance of the problem that is to be solved.
+     */
     public final Problem getProblem() {
         return problem;
     }
 
+    /**
+     * Specifies the instance of the problem this algorithm is going to solve.
+     * @param problem the instance of the problem that is to be solved.
+     */
     public final void setProblem(Problem problem) {
         this.problem = problem;
     }
 
+    /**
+     * Returns the time between the start of the algorithm and its termination
+     * in milliseconds.
+     * @return the runtime of the algorithm in milliseconds.
+     * @throws IllegalStateException if the algorithm has not terminated yet.
+     */
     public final long getRuntime() {
-        if (isProblemSolved()) {
+        if (state == State.SOLVED || state == State.SOLVING_FAILED) {
             return runtime;
         } else {
-            throw new IllegalStateException("The problem has not been solved yet. Please call run() first.");
+            throw new IllegalStateException("The algorithm has not terminated yet. Please call run() first and wait for its termination.");
         }
     }
 
+    /**
+     * Returns the runtime of the algorithm as a string formatted with regard to
+     * human readability. The formatting is done according to
+     * <code>MillisecondTimeFormatter</code>.
+     * @return the runtime of the algorithm formatted as a string.
+     * @throws IllegalStateException if the algorithm has not terminated yet.
+     */
     public final String getRuntimeAsString() {
-        if (isProblemSolved()) {
-            return NanosecondTimeFormatter.formatTime(runtime);
+        if (state == State.SOLVED || state == State.SOLVING_FAILED) {
+            return MillisecondTimeFormatter.formatTime(runtime);
         } else {
-            throw new IllegalStateException("The problem has not been solved yet. Please call run() first.");
+            throw new IllegalStateException("The algorithm has not terminated yet. Please call run() first and wait for its termination.");
         }
     }
 
+    /**
+     * Returns the solution computed by the algorithm.
+     * @return the solution to the algorithm.
+     * @throws IllegalStateException if the problem has not been solved yet.
+     */
     public final Solution getSolution() {
         if (isProblemSolved()) {
             return solution;
         } else {
-            throw new IllegalStateException("The problem has not been solved yet. Please call run() first.");
+            throw new IllegalStateException("The problem has not been solved yet. Please call run() first and wait for its termination.");
         }
     }
 
+    /**
+     * Returns the start time of the algorithm. The start time is measured in
+     * the number of milliseconds elapsed since midnight, January 1, 1970 UTC.
+     * @return the start time of the algorithm.
+     * @throws IllegalStateException if the execution of the algorithm has not
+     * yet begun.
+     */
     public final long getStartTime() {
-        if (isRunning() || isProblemSolved()) {
+        if (state != State.WAITING) {
             return startTime;
         } else {
-            throw new IllegalStateException("The problem has neither been solved nor is it currently been solved. Please call run() first.");
+            throw new IllegalStateException("The execution of the algorithm has not started yet. Please call run() first.");
         }
     }
 
-    public final boolean isProblemInitialized() {
-        return problem != null;
+    /**
+     * Returns the current state of the algorithm.
+     * @return the current state of the algorithm.
+     */
+    public final State getState() {
+        return state;
     }
 
-    public final boolean isProblemSolved() {
-        return solution != null;
+    /**
+     * Returns whether log messages of this algorithm are written to System.out 
+     * or not.
+     * @return <code>true</code>, if log messages are written to System.out, 
+     * <code>false</code> if otherwise.
+     */
+    public final boolean isLogging() {
+        return logging;
     }
 
-    public final boolean isRunning() {
-        return running;
+    /**
+     * Returns whether events are treated aslog messages or not.
+     * @return <code>true</code>, if events are treated as log messages,
+     * <code>false</code> if otherwise.
+     */
+    public final boolean isLoggingEvents() {
+        return loggingEvents;
     }
 
-    public final void run() {
-        if (!isProblemInitialized()) {
-            throw new IllegalStateException("No problem has been specified yet. Please call setProblem() first.");
-        } else {
-            try {
-                running = true;
-                startTime = System.nanoTime();
-                state = State.SOLVING;
-                fireEvent(new AlgorithmStartedEvent(this));
-                solution = runAlgorithm(problem);
-                state = State.SOLVED;
-                runtime = System.nanoTime() - startTime;
-                fireEvent(new AlgorithmStoppedEvent(this));
-            } catch (RuntimeException ex) {
-                state = State.SOLVING_FAILED;
-                throw ex;
-            } finally {
-                running = false;
+    public void setLoggingToConsole(boolean value) {
+        if (loggingEvents != value) {
+            loggingEvents = value;
+            if (loggingEvents) {
+                
             }
         }
     }
 
+    /**
+     * Returns whether a problem instance has been specified for the algorithm.
+     * This is the prerequisite for beginning the execution of the algorithm.
+     * @return <code>true</code> if a problem instance has been specified,
+     * <code>false</code> otherwise.
+     */
+    public final boolean isProblemInitialized() {
+        return problem != null;
+    }
+
+    /**
+     * Returns whether this algorithm has successfully run and solved the
+     * instance of the problem given to it. If this is <code>true</code>, then
+     * the solution to the instance of the problem can be obtained by <code>
+     * getSolution</code>.
+     * @return <code>true</code> if the algorithm's instance of the problem has
+     * been solved successfully and <code>false</code> otherwise.
+     */
+    public final boolean isProblemSolved() {
+        return state == State.SOLVED;
+    }
+
+    /**
+     * Returns whether the algorithm is currently begin executed.
+     * @return <code>true</code> if this algorithm is currently running and
+     * <code>false</code> otherwise.
+     */
+    public final boolean isRunning() {
+        return state == State.SOLVING;
+    }
+
+    protected void log(String message) {
+        if (logging) {
+            System.out.println(message);
+        }
+    }
+
+    /**
+     * Formats the specified message and params using String.format() and logs
+     * it.
+     * @param message the format string of the message.
+     * @param params the parameters for formatting the message.
+     */
+    protected void log(String message, Object... params) {
+        log(String.format(message, params));
+    }
+
+    /**
+     * The framework method for executing the algorithm. It is responsible for
+     * recording the runtime of the actual algorithm in addition to handling
+     * exceptions and recording the solution to the problem instance.
+     * @throws IllegalStateException if the instance of the problem has not been
+     * specified yet.
+     */
+    public final void run() {
+        if (!isProblemInitialized()) {
+            throw new IllegalStateException("The instance of the problem has been specified yet. Please call setProblem() first.");
+        } else {
+            try {
+                startTime = System.currentTimeMillis();
+                state = State.SOLVING;
+                fireEvent(new AlgorithmStartedEvent(this));
+                solution = runAlgorithm(problem);
+                state = State.SOLVED;
+            } catch (RuntimeException ex) {
+                state = State.SOLVING_FAILED;
+                handleException(ex);
+            } finally {
+                runtime = System.currentTimeMillis() - startTime;
+                fireEvent(new AlgorithmTerminatedEvent(this));
+            }
+        }
+    }
+
+    /**
+     * The default exception handling method. It records that the algorithm 
+     * failed to solve the instance and rethrows the runtime exception that 
+     * caused the premature termination of the algorithm. Subclasses can
+     * override this method to change this behaviour.
+     * @param the exception that caused the termination of the algorithm.
+     */
+    protected void handleException(RuntimeException exception) {
+        throw exception;
+    }
+
+    /**
+     * The abstract method that needs to be implemented by sub-classes in order
+     * to implement the actual algorithm.
+     * @param problem an instance of the problem.
+     * @return a solution to the specified problem.
+     */
     protected abstract Solution runAlgorithm(Problem problem);
 }
