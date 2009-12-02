@@ -28,7 +28,7 @@ import ds.graph.IdentifiableIntegerMapping;
 import ds.NetworkFlowModel;
 import ds.graph.Node;
 import ds.graph.flow.MaximumFlow;
-import algo.graph.Algorithm;
+import de.tu_berlin.math.coga.common.algorithm.Algorithm;
 
 /**
  *

@@ -19,7 +19,7 @@
  */
 package sandbox;
 
-import algo.graph.Algorithm;
+import de.tu_berlin.math.coga.common.algorithm.Algorithm;
 import gui.editor.properties.PropertyTreeModel;
 
 import java.io.BufferedWriter;

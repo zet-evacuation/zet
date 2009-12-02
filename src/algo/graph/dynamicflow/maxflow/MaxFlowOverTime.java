@@ -23,7 +23,7 @@
  */
 package algo.graph.dynamicflow.maxflow;
 
-import algo.graph.Algorithm;
+import de.tu_berlin.math.coga.common.algorithm.Algorithm;
 import ds.graph.flow.PathBasedFlowOverTime;
 import ds.graph.DynamicPath;
 import ds.graph.flow.FlowOverTimePath;

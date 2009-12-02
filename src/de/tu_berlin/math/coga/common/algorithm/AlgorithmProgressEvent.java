@@ -18,7 +18,7 @@
  * AlgorithmProgressEvent.java
  *
  */
-package algo.graph;
+package de.tu_berlin.math.coga.common.algorithm;
 
 /**
  * An algorithm event that is fired by the algorithm when progress occurs.

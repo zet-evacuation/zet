@@ -29,7 +29,7 @@ import ds.graph.Node;
 import ds.graph.flow.FlowOverTime;
 import ds.graph.flow.FlowOverTimePath;
 import ds.graph.flow.PathBasedFlowOverTime;
-import algo.graph.Algorithm;
+import de.tu_berlin.math.coga.common.algorithm.Algorithm;
 
 /**
  *

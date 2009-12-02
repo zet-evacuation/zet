@@ -19,7 +19,7 @@
  *
  */
 
-package algo.graph;
+package de.tu_berlin.math.coga.common.algorithm;
 
 /**
  * An algorithm event that is fired by the algorithm when progress occurs. It
@@ -32,23 +32,17 @@ public class AlgorithmDetailedProgressEvent extends AlgorithmProgressEvent {
     /**
      * A short description of the task currently performed by the algorithm.
      */
-    private String taskName;
-
-    private String progressInformation;
-
-    private String detailedProgressInformation;
-
-    public AlgorithmDetailedProgressEvent(Algorithm algorithm, double progress) {
-        super(algorithm, progress);
-    }
-
-    public AlgorithmDetailedProgressEvent(Algorithm algorithm, long eventTime, double progress) {
-        super(algorithm, eventTime, progress);
-    }
+    private String message;
 
     public AlgorithmDetailedProgressEvent(Algorithm algorithm, double progress, String message) {
         super(algorithm, progress);
+        this.message = message;
     }
+
+    public AlgorithmDetailedProgressEvent(Algorithm algorithm, long eventTime, double progress, String message) {
+        super(algorithm, eventTime, progress);
+    }
+
 
     /**
      * Returns a short description of the task currently performed by the
@@ -56,8 +50,8 @@ public class AlgorithmDetailedProgressEvent extends AlgorithmProgressEvent {
      * @return a short description of the task currently performed by the
      * algorithm.
      */
-    public String getTaskName() {
-        return taskName;
+    public String getMessage() {
+        return message;
     }
 
 }

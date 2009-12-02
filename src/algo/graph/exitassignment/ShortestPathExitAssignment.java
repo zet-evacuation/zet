@@ -27,7 +27,7 @@ import ds.graph.MinHeap;
 import ds.graph.Network;
 import ds.NetworkFlowModel;
 import ds.graph.Node;
-import algo.graph.Algorithm;
+import de.tu_berlin.math.coga.common.algorithm.Algorithm;
 
 /**
  *

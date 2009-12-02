@@ -276,7 +276,7 @@ public abstract class Transshipment<TT extends TransshipmentWithTimeHorizon> ext
 					System.out.println("Progress: Additional transshipment algorithm has finished and the new solution was set.");
 				}
 				//AlgorithmTask.getInstance().publish( 100, "Run with additional transshipment algorithm has finished.", "The new solution was set." );
-                                fireProgressEvent( 100, "Run with additional transshipment algorithm has finished.", "The new solution was set." );
+                                fireProgressEvent( 100, "Run with additional transshipment algorithm has finished. The new solution was set." );
 			}
 		}
 		
