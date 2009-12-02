@@ -26,7 +26,7 @@ import ds.graph.Node;
 import ds.graph.flow.FlowOverTime;
 import java.util.Arrays;
 import java.util.LinkedList;
-import algo.graph.Algorithm;
+import de.tu_berlin.math.coga.common.algorithm.Algorithm;
 
 /**
  *

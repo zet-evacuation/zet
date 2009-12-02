@@ -15,24 +15,25 @@
  */
 
 /*
- * AlgorithmStartedEvent.java
+ * AlgorithmTerminatedEvent.java
  *
  */
-package algo.graph;
+package de.tu_berlin.math.coga.common.algorithm;
 
 /**
- * A special algorithm event that occurs when the execution of an algorithm
- * begins.
- *
+ * A special algorithm event that occurs when the algorithm terminates (either
+ * by completing successfully or by an uncaught runtime exception).
+ * 
  * @author Martin Groß
  */
-public class AlgorithmStartedEvent extends AlgorithmEvent {
+public class AlgorithmTerminatedEvent extends AlgorithmEvent {
 
     /**
-     * Creates a <code>AlgorithmStartedEvent</code> for the specified algorithm.
-     * @param algorithm the algorithm whose execution started.
+     * Creates an <code>AlgorithmTerminatedEvent</code> for the specified
+     * algorithm.
+     * @param algorithm the algorithm that has terminated.
      */
-    public AlgorithmStartedEvent(Algorithm algorithm) {
-        super(algorithm, algorithm.getStartTime());
+    public AlgorithmTerminatedEvent(Algorithm algorithm) {
+        super(algorithm, algorithm.getStartTime() + algorithm.getRuntime());
     }
 }

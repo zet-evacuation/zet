@@ -26,7 +26,7 @@ import ds.graph.Node;
 import ds.graph.flow.FlowOverTime;
 import java.util.Arrays;
 import java.util.LinkedList;
-import algo.graph.Algorithm;
+import de.tu_berlin.math.coga.common.algorithm.Algorithm;
 
 /**
  *
@@ -76,7 +76,7 @@ public class SEAAPAlgorithm extends Algorithm<EarliestArrivalFlowProblem, FlowOv
             System.out.println(path);
             flowUnitsSent += path.getCapacity();
 
-            fireProgressEvent(flowUnitsSent * 1.0 / problem.getTotalSupplies(), String.format("%1$s von %2$s Personen evakuiert.", flowUnitsSent, problem.getTotalSupplies()), "");
+            fireProgressEvent(flowUnitsSent * 1.0 / problem.getTotalSupplies(), String.format("%1$s von %2$s Personen evakuiert.", flowUnitsSent, problem.getTotalSupplies()));
             paths.add(path);
             drn.augmentPath(path);
             calculateEarliestArrivalAugmentingPath();

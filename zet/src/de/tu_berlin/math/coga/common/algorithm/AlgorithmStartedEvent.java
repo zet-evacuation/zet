@@ -15,23 +15,24 @@
  */
 
 /*
- * AlgorithmListener.java
+ * AlgorithmStartedEvent.java
  *
  */
-package algo.graph;
-
-import java.util.EventListener;
+package de.tu_berlin.math.coga.common.algorithm;
 
 /**
- * The interface for classes that want to recieve events from algorithms.
+ * A special algorithm event that occurs when the execution of an algorithm
+ * begins.
+ *
  * @author Martin Groß
  */
-public interface AlgorithmListener extends EventListener {
+public class AlgorithmStartedEvent extends AlgorithmEvent {
 
     /**
-     * This method is called when an event occurred in an algorithm that is
-     * being listened to.
-     * @param event the event which occurred.
+     * Creates a <code>AlgorithmStartedEvent</code> for the specified algorithm.
+     * @param algorithm the algorithm whose execution started.
      */
-    void eventOccurred(AlgorithmEvent event);
+    public AlgorithmStartedEvent(Algorithm algorithm) {
+        super(algorithm, algorithm.getStartTime());
+    }
 }

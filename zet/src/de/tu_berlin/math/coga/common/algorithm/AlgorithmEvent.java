@@ -18,7 +18,7 @@
  * AlgorithmEvent.java
  *
  */
-package algo.graph;
+package de.tu_berlin.math.coga.common.algorithm;
 
 import java.text.DateFormat;
 import java.util.Date;

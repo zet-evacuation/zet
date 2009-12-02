@@ -15,25 +15,23 @@
  */
 
 /*
- * AlgorithmTerminatedEvent.java
+ * AlgorithmListener.java
  *
  */
-package algo.graph;
+package de.tu_berlin.math.coga.common.algorithm;
+
+import java.util.EventListener;
 
 /**
- * A special algorithm event that occurs when the algorithm terminates (either
- * by completing successfully or by an uncaught runtime exception).
- * 
+ * The interface for classes that want to recieve events from algorithms.
  * @author Martin Groß
  */
-public class AlgorithmTerminatedEvent extends AlgorithmEvent {
+public interface AlgorithmListener extends EventListener {
 
     /**
-     * Creates an <code>AlgorithmTerminatedEvent</code> for the specified
-     * algorithm.
-     * @param algorithm the algorithm that has terminated.
+     * This method is called when an event occurred in an algorithm that is
+     * being listened to.
+     * @param event the event which occurred.
      */
-    public AlgorithmTerminatedEvent(Algorithm algorithm) {
-        super(algorithm, algorithm.getStartTime() + algorithm.getRuntime());
-    }
+    void eventOccurred(AlgorithmEvent event);
 }

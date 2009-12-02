@@ -19,7 +19,7 @@
  */
 package algo.graph.staticflow.mincost;
 
-import algo.graph.Algorithm;
+import de.tu_berlin.math.coga.common.algorithm.Algorithm;
 import algo.graph.shortestpath.MooreBellmanFord;
 import algo.graph.traverse.BFS;
 import ds.graph.Path;

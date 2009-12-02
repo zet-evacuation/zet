@@ -18,7 +18,7 @@
  * Algorithm.java
  *
  */
-package algo.graph;
+package de.tu_berlin.math.coga.common.algorithm;
 
 import algo.graph.util.MillisecondTimeFormatter;
 import java.util.LinkedHashSet;
@@ -166,19 +166,20 @@ public abstract class Algorithm<Problem, Solution> implements Runnable {
     }
 
     /**
-     * 
-     * @param progress
-     * @param information
-     * @param detailedInformation
+     * Updates the progress value to broadcasts the new value together with a
+     * message to all listeners.
+     * @param progress the current progress value.
+     * @param message a message describing the current task and progress of the
+     * algorithm.
      * @throws IllegalArgumentException if the progress value is less than the
      * previous one.
      */
-    protected final void fireProgressEvent(double progress, String information, String detailedInformation) {
+    protected final void fireProgressEvent(double progress, String message) {
         if (progress < this.progress) {
             throw new IllegalArgumentException("The progress values must be monotonically increasing.");
         }
         this.progress = progress;
-        fireEvent(new AlgorithmProgressEvent(this, progress));
+        fireEvent(new AlgorithmDetailedProgressEvent(this, progress, message));
     }
 
     /**

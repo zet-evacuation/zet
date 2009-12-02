@@ -19,9 +19,9 @@
  */
 package batch.tasks;
 
-import algo.graph.AlgorithmEvent;
-import algo.graph.AlgorithmProgressEvent;
-import algo.graph.AlgorithmListener;
+import de.tu_berlin.math.coga.common.algorithm.AlgorithmEvent;
+import de.tu_berlin.math.coga.common.algorithm.AlgorithmProgressEvent;
+import de.tu_berlin.math.coga.common.algorithm.AlgorithmListener;
 import event.EventServer;
 import event.ProgressEvent;
 import java.util.List;
