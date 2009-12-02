@@ -13,16 +13,21 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
+
 /*
  * AlgorithmEvent.java
  *
  */
 package algo.graph;
 
+import java.text.DateFormat;
+import java.util.Date;
+
 /**
  * The abstract base class for algorithm events. It records the algorithm the
  * event occurred in and the time at which the event occured. The time should be
  * given in milliseconds elapsed since midnight, January 1, 1970 UTC.
+ *
  * @author Martin Groß
  */
 public abstract class AlgorithmEvent {
@@ -64,5 +69,14 @@ public abstract class AlgorithmEvent {
      */
     public final long getEventTime() {
         return eventTime;
+    }
+
+    /**
+     * Returns the event time formatted as a string by using the class
+     * java.util.DateFormat.
+     * @return the event time formatted as a string.
+     */
+    public final String getFormattedEventTime() {
+        return DateFormat.getDateInstance().format(new Date(eventTime));
     }
 }
