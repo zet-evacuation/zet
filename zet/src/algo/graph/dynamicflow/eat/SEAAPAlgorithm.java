@@ -54,7 +54,7 @@ public class SEAAPAlgorithm extends Algorithm<EarliestArrivalFlowProblem, FlowOv
     
     @Override
     protected FlowOverTime runAlgorithm(EarliestArrivalFlowProblem problem) {
-        System.out.println("X");
+        //System.out.println("X");
         if (problem.getTotalSupplies() == 0) {
             drn = new DynamicResidualNetwork(problem.getNetwork(), problem.getEdgeCapacities(), problem.getNodeCapacities(), problem.getTransitTimes(), problem.getSources(), problem.getSupplies(), problem.getTimeHorizon());
             paths = new LinkedList<EarliestArrivalAugmentingPath>(); 
@@ -68,12 +68,13 @@ public class SEAAPAlgorithm extends Algorithm<EarliestArrivalFlowProblem, FlowOv
         //System.out.println(drn);
         //System.out.println(drn.capacities());
         //System.out.println(drn.transitTimes());
-        System.out.println("A");
+        //System.out.println("A");
         calculateEarliestArrivalAugmentingPath();
-        System.out.println("B");
+        //System.out.println("B");
         paths = new LinkedList<EarliestArrivalAugmentingPath>();
+        System.out.println("Arrivals:");
         while (!path.isEmpty() && path.getCapacity() > 0) {
-            System.out.println(path);
+            System.out.println(path.getArrivalTime());
             flowUnitsSent += path.getCapacity();
 
             fireProgressEvent(flowUnitsSent * 1.0 / problem.getTotalSupplies(), String.format("%1$s von %2$s Personen evakuiert.", flowUnitsSent, problem.getTotalSupplies()));
