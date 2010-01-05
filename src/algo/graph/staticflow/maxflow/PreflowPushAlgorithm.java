@@ -26,9 +26,9 @@ import ds.graph.MaxHeap;
 import ds.graph.Node;
 import ds.graph.ResidualNetwork;
 import ds.graph.flow.MaximumFlow;
-import algo.graph.Algorithm;
-import algo.graph.DebugFlags;
-import algo.graph.ProgressBooleanFlags;
+import de.tu_berlin.math.coga.common.algorithm.Algorithm;
+import algo.graph.Flags;
+import algo.graph.Flags;
 
 /**
  *
@@ -75,7 +75,7 @@ public class PreflowPushAlgorithm extends Algorithm<MaximumFlowProblem, MaximumF
     }
 
     protected void initializeProgress() {
-        if (!ProgressBooleanFlags.ALGO_PROGRESS) {
+        if (!isLogging()) {
             return;
         }
         /* Initialize the overall excess and the sum of all labels. */
@@ -95,11 +95,11 @@ public class PreflowPushAlgorithm extends Algorithm<MaximumFlowProblem, MaximumF
         /* Print both numbers if debug is activated. */
         startExcess = totalExcess;
         done = getProblem().getNetwork().numberOfNodes() * getProblem().getNetwork().numberOfNodes() + (startExcess);
-        if (DebugFlags.PP) {
+        if (Flags.PP) {
             System.out.println("Total excess " + totalExcess + " Max Label: " + maxLabel + " Sum of Labels: " + sumOfLabels + " " +
                     (sumOfLabels + (startExcess - totalExcess)) + " of " + done + ".");
         }
-        if (ProgressBooleanFlags.ALGO_PROGRESS ) {
+        if (isLogging()) {
             if (progressOutputCounter == increasesBeforeOutput) {
                 System.out.println("Progress: " + (sumOfLabels + (startExcess - totalExcess)) + " of " + done);
                 System.out.flush();
@@ -137,10 +137,10 @@ public class PreflowPushAlgorithm extends Algorithm<MaximumFlowProblem, MaximumF
         residualNetwork.augmentFlow(edge, amount);
         excess.decrease(edge.start(), amount);
         if (getProblem().getSinks().contains(edge.end()) || getProblem().getSources().contains(edge.end())) {
-            if (ProgressBooleanFlags.ALGO_PROGRESS) {
+            if (isLogging()) {
                 totalExcess -= amount;
                 /* The total excess changed, so print it if debug is activated. */
-                if (DebugFlags.PP) {
+                if (Flags.PP) {
                     System.out.println("Total excess " + totalExcess + " Max Label: " + maxLabel + " Sum of Labels: " + sumOfLabels + " " +
                             (sumOfLabels + (startExcess - totalExcess)) + " of " + done + ".");
                 }
@@ -176,14 +176,14 @@ public class PreflowPushAlgorithm extends Algorithm<MaximumFlowProblem, MaximumF
     }
 
     protected void updateDistanceLabel(Node node, int value) {
-        if (ProgressBooleanFlags.ALGO_PROGRESS) {
+        if (isLogging()) {
             sumOfLabels -= distanceLabels.get(node);
         }
         distanceLabels.set(node, value);
-        if (ProgressBooleanFlags.ALGO_PROGRESS) {
+        if (isLogging()) {
             sumOfLabels += distanceLabels.get(node);
             /* Print new sum of labels if debug is activated. */
-            if (DebugFlags.PP && value > maxLabel) {
+            if (Flags.PP && value > maxLabel) {
                 System.out.println("Total excess " + totalExcess + " Max Label: " + value + " Sum of Labels: " + sumOfLabels + " " +
                         (sumOfLabels + (startExcess - totalExcess)) + " of " + done + ".");
             }
