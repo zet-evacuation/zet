@@ -20,7 +20,7 @@
  */
 package algo.graph.dynamicflow.maxflow;
 
-import algo.graph.Algorithm;
+import de.tu_berlin.math.coga.common.algorithm.Algorithm;
 import algo.graph.staticflow.maxflow.DischargingGlobalGapHighestLabelPreflowPushAlgorithm;
 import algo.graph.util.PathDecomposition;
 import ds.graph.DynamicPath;

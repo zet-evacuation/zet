@@ -32,7 +32,7 @@ import ds.graph.Node;
 import ds.graph.Path;
 import ds.graph.StaticPath;
 import java.text.NumberFormat;
-import static algo.graph.DebugFlags.*;
+import static algo.graph.Flags.*;
 
 /** This class provides a method fpr detecting minimum mean cycles in arbitrary
  * weighted graphs.
