@@ -227,19 +227,11 @@ public class AlgorithmTask extends SwingWorker<Integer, ProcessUpdateMessage> im
         execute();
     }
 
-    /**
-     *
-     * @param useUpdates
-     */
     public void useUpdates(boolean useUpdates) {
         this.useUpdates = useUpdates;
         oldUpdateStatus = useUpdates;
     }
 
-    /**
-     *
-     * @return
-     */
     public boolean useUpdates() {
         return useUpdates;
     }

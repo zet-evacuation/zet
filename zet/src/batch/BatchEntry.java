@@ -37,9 +37,7 @@ import ds.PropertyContainer;
 import ds.z.Assignment;
 import ds.z.ConcreteAssignment;
 import ds.ca.CellularAutomaton;
-import gui.JEditor;
 import gui.batch.EvacuationOptimizationType;
-import gui.components.progress.JBatchProgressDialog;
 import gui.editor.properties.PropertyFilesSelectionModel;
 import io.visualization.BuildingResults;
 import io.visualization.CAVisualizationResults;
@@ -47,6 +45,7 @@ import localization.Localization;
 import statistic.ca.CAStatistic;
 import statistic.ca.MultipleCycleCAStatistic;
 import batch.tasks.RasterizeTask;
+import gui.batch.JBatchProgressDialog;
 
 /**
  * A wrapper class that represents a single entry in the batch list.
@@ -171,7 +170,7 @@ public class BatchEntry {
             //System.setOut(null);
 		Runtime runtime = Runtime.getRuntime();
 		long memStart = (runtime.totalMemory() - runtime.freeMemory());
-		JBatchProgressDialog bpd = new JBatchProgressDialog( JEditor.getInstance(), Localization.getInstance().getString( "batch.ProgressTitle" ), true );
+		JBatchProgressDialog bpd = new JBatchProgressDialog();
 
 		boolean useCaRes = (useCa && cycles > 0) || (useGraph && optimizedEvacuationPlanCycles <= 0);
 		boolean useOptRes = useGraph && optimizedEvacuationPlanCycles > 0;

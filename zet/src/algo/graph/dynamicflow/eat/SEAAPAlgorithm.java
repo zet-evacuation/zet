@@ -54,7 +54,7 @@ public class SEAAPAlgorithm extends Algorithm<EarliestArrivalFlowProblem, FlowOv
     
     @Override
     protected FlowOverTime runAlgorithm(EarliestArrivalFlowProblem problem) {
-        //System.out.println("X");
+        System.out.println("SSSP Beginns");
         if (problem.getTotalSupplies() == 0) {
             drn = new DynamicResidualNetwork(problem.getNetwork(), problem.getEdgeCapacities(), problem.getNodeCapacities(), problem.getTransitTimes(), problem.getSources(), problem.getSupplies(), problem.getTimeHorizon());
             paths = new LinkedList<EarliestArrivalAugmentingPath>(); 

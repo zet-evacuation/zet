@@ -23,6 +23,7 @@ import batch.tasks.*;
 import algo.graph.dynamicflow.eat.EarliestArrivalFlowProblem;
 import algo.graph.dynamicflow.eat.LongestShortestPathTimeHorizonEstimator;
 import algo.graph.dynamicflow.eat.SEAAPAlgorithm;
+import de.tu_berlin.math.coga.common.algorithm.AlgorithmListener;
 import ds.NetworkFlowModel;
 
 /**
@@ -30,9 +31,17 @@ import ds.NetworkFlowModel;
  */
 public class SuccessiveEarliestArrivalAugmentingPathAlgorithmTask3 extends GraphAlgorithmTask {
 
+    private AlgorithmListener listener;
+
     public SuccessiveEarliestArrivalAugmentingPathAlgorithmTask3(NetworkFlowModel model) {
         super(model);
     }
+
+    public void setListener(AlgorithmListener listener) {
+        this.listener = listener;
+    }
+
+
 
     @Override
     public void run() {
@@ -44,9 +53,12 @@ public class SuccessiveEarliestArrivalAugmentingPathAlgorithmTask3 extends Graph
         System.out.println(estimator.getSolution());
         problem = new EarliestArrivalFlowProblem(model.getEdgeCapacities(), model.getNetwork(), model.getNodeCapacities(), model.getSupersink(), model.getSources(), estimator.getSolution().getUpperBound(), model.getTransitTimes(), model.getCurrentAssignment());
         problem = new EarliestArrivalFlowProblem(model.getEdgeCapacities(), model.getNetwork(), model.getNodeCapacities(), model.getSupersink(), model.getSources(), estimator.getSolution().getUpperBound(), model.getTransitTimes(), model.getCurrentAssignment());
+        System.out.println("Creating Algorithm Instance");
         SEAAPAlgorithm algo = new SEAAPAlgorithm();
         algo.addAlgorithmListener(AlgorithmTask.getInstance());
+        if (listener != null) algo.addAlgorithmListener(listener);
         algo.setProblem(problem);
+        System.out.println("Calling Algorithm Instance");
         algo.run();
         df = algo.getSolution().getPathBased();
         String result = String.format("Sent %1$s of %2$s flow units in %3$s time units successfully.", algo.getSolution().getFlowAmount(), problem.getTotalSupplies(), algo.getSolution().getTimeHorizon());

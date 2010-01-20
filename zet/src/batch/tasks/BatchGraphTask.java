@@ -21,7 +21,9 @@ package batch.tasks;
 
 import batch.BatchResultEntry;
 import batch.GraphAlgorithm;
+import batch.tasks.graph.SuccessiveEarliestArrivalAugmentingPathAlgorithmTask3;
 import converter.ZToGraphConverter;
+import de.tu_berlin.math.coga.common.algorithm.AlgorithmListener;
 import ds.Project;
 import ds.GraphVisualizationResult;
 import ds.NetworkFlowModel;
@@ -69,6 +71,8 @@ public class BatchGraphTask implements Runnable {
 		this.concreteAssignments = concreteAssignments;
 	}
 
+        public AlgorithmListener listener;
+
 	/**
 	 * Runs a graph algorithm. At first the {@link ds.graph.NetworkFlowModel}
 	 * is created. After that the algorithm stored in the submitted
@@ -91,6 +95,9 @@ public class BatchGraphTask implements Runnable {
 		ZToGraphConverter.convertConcreteAssignment( concreteAssignment, nfo );
 		GraphAlgorithmTask gt = null;
 		gt = graphAlgo.createTask( nfo, maxTime );
+                if (gt instanceof SuccessiveEarliestArrivalAugmentingPathAlgorithmTask3 && listener != null) {
+                    ((SuccessiveEarliestArrivalAugmentingPathAlgorithmTask3) gt).setListener(listener);
+                }
 		gt.run();
 
 		res.setFlow( gt.getDynamicFlow() );
