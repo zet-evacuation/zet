@@ -19,32 +19,46 @@
  */
 package batch.tasks.graph;
 
-import batch.tasks.*;
+import de.tu_berlin.math.coga.common.algorithm.Transformation;
 import algo.graph.dynamicflow.eat.EarliestArrivalFlowProblem;
 import algo.graph.dynamicflow.eat.LongestShortestPathTimeHorizonEstimator;
 import algo.graph.dynamicflow.eat.SEAAPAlgorithm;
-import de.tu_berlin.math.coga.common.algorithm.AlgorithmListener;
+import batch.tasks.AlgorithmTask;
 import ds.NetworkFlowModel;
+import ds.graph.flow.FlowOverTime;
+import ds.graph.flow.PathBasedFlowOverTime;
 
-/**
- *
- */
-public class SuccessiveEarliestArrivalAugmentingPathAlgorithmTask3 extends GraphAlgorithmTask {
+public class SuccessiveEarliestArrivalAugmentingPathAlgorithmTask3 extends Transformation<NetworkFlowModel, EarliestArrivalFlowProblem, FlowOverTime, PathBasedFlowOverTime> {
 
-    private AlgorithmListener listener;
-
-    public SuccessiveEarliestArrivalAugmentingPathAlgorithmTask3(NetworkFlowModel model) {
-        super(model);
+    public SuccessiveEarliestArrivalAugmentingPathAlgorithmTask3() {
+        setAlgorithm(new SEAAPAlgorithm());
     }
-
-    public void setListener(AlgorithmListener listener) {
-        this.listener = listener;
-    }
-
-
 
     @Override
-    public void run() {
+    protected EarliestArrivalFlowProblem transformProblem(NetworkFlowModel originalProblem) {
+        System.out.println("EAT Task Begins");
+        EarliestArrivalFlowProblem problem = new EarliestArrivalFlowProblem(originalProblem.getEdgeCapacities(), originalProblem.getNetwork(), originalProblem.getNodeCapacities(), originalProblem.getSupersink(), originalProblem.getSources(), 0, originalProblem.getTransitTimes(), originalProblem.getCurrentAssignment());
+        LongestShortestPathTimeHorizonEstimator estimator = new LongestShortestPathTimeHorizonEstimator();
+        estimator.setProblem(problem);
+        estimator.run();
+        System.out.println(estimator.getSolution());
+        problem = new EarliestArrivalFlowProblem(originalProblem.getEdgeCapacities(), originalProblem.getNetwork(), originalProblem.getNodeCapacities(), originalProblem.getSupersink(), originalProblem.getSources(), estimator.getSolution().getUpperBound(), originalProblem.getTransitTimes(), originalProblem.getCurrentAssignment());
+        return problem;
+    }
+
+    @Override
+    protected PathBasedFlowOverTime transformSolution(FlowOverTime transformedSolution) {
+        PathBasedFlowOverTime df = transformedSolution.getPathBased();
+        String result = String.format("Sent %1$s of %2$s flow units in %3$s time units successfully.", transformedSolution.getFlowAmount(), getAlgorithm().getProblem().getTotalSupplies(), transformedSolution.getTimeHorizon());
+        System.out.println(result);
+        AlgorithmTask.getInstance().publish(100, result, "");
+        System.out.println(String.format("Sending the flow units required %1$s ms.", getAlgorithm().getRuntime() / 1000000));
+        return df;
+    }
+
+    //@Override
+    //protected PathBasedFlowOverTime runAlgorithm(NetworkFlowModel model) {
+        /*
         System.out.println("EAT Task Begins");
         EarliestArrivalFlowProblem problem = new EarliestArrivalFlowProblem(model.getEdgeCapacities(), model.getNetwork(), model.getNodeCapacities(), model.getSupersink(), model.getSources(), 0, model.getTransitTimes(), model.getCurrentAssignment());
         LongestShortestPathTimeHorizonEstimator estimator = new LongestShortestPathTimeHorizonEstimator();
@@ -52,18 +66,15 @@ public class SuccessiveEarliestArrivalAugmentingPathAlgorithmTask3 extends Graph
         estimator.run();
         System.out.println(estimator.getSolution());
         problem = new EarliestArrivalFlowProblem(model.getEdgeCapacities(), model.getNetwork(), model.getNodeCapacities(), model.getSupersink(), model.getSources(), estimator.getSolution().getUpperBound(), model.getTransitTimes(), model.getCurrentAssignment());
-        problem = new EarliestArrivalFlowProblem(model.getEdgeCapacities(), model.getNetwork(), model.getNodeCapacities(), model.getSupersink(), model.getSources(), estimator.getSolution().getUpperBound(), model.getTransitTimes(), model.getCurrentAssignment());
-        System.out.println("Creating Algorithm Instance");
-        SEAAPAlgorithm algo = new SEAAPAlgorithm();
-        algo.addAlgorithmListener(AlgorithmTask.getInstance());
-        if (listener != null) algo.addAlgorithmListener(listener);
-        algo.setProblem(problem);
-        System.out.println("Calling Algorithm Instance");
-        algo.run();
-        df = algo.getSolution().getPathBased();
-        String result = String.format("Sent %1$s of %2$s flow units in %3$s time units successfully.", algo.getSolution().getFlowAmount(), problem.getTotalSupplies(), algo.getSolution().getTimeHorizon());
-        System.out.println(result);
-        AlgorithmTask.getInstance().publish(100, result, "");
-        System.out.println(String.format("Sending the flow units required %1$s ms.", algo.getRuntime() / 1000000));
-    }
+        //problem = new EarliestArrivalFlowProblem(model.getEdgeCapacities(), model.getNetwork(), model.getNodeCapacities(), model.getSupersink(), model.getSources(), estimator.getSolution().getUpperBound(), model.getTransitTimes(), model.getCurrentAssignment());
+        */
+        // System.out.println("Creating Algorithm Instance");
+        //SEAAPAlgorithm algo = new SEAAPAlgorithm();
+        //algo.addAlgorithmListener(AlgorithmTask.getInstance());
+        //if (listener != null) algo.addAlgorithmListener(listener);
+        //algo.setProblem(problem);
+        //System.out.println("Calling Algorithm Instance");
+        //algo.run();
+
+    //}
 }

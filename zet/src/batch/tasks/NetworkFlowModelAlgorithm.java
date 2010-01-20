@@ -13,32 +13,16 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
-package batch.tasks;
+package ds;
 
+import de.tu_berlin.math.coga.common.algorithm.Algorithm;
 import ds.graph.flow.PathBasedFlowOverTime;
-import ds.NetworkFlowModel;
 
 /** The superclass of all tasks who execute graph algorithms. This class is
  * useful to access the graph algorithms in a generic way.
  *
- * @author Timon
+ * @author Martin Groß
  */
-public abstract class GraphAlgorithmTask implements Runnable {
-	protected NetworkFlowModel model;
-	protected PathBasedFlowOverTime df;
-	
-	public GraphAlgorithmTask( NetworkFlowModel model ) {
-		if( model == null )
-			throw new IllegalArgumentException( "Model is null." );
-		this.model = model;
-	}
-	
-	public abstract void run();
-	
-	public PathBasedFlowOverTime getDynamicFlow() {
-		return df;
-	}
-	public NetworkFlowModel getNetwork () {
-		return model;
-	}
+public abstract class NetworkFlowModelAlgorithm extends Algorithm<NetworkFlowModel, PathBasedFlowOverTime> {
+
 }

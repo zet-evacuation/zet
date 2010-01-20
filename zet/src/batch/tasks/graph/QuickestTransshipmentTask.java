@@ -20,27 +20,28 @@
 
 package batch.tasks.graph;
 
+import ds.NetworkFlowModelAlgorithm;
+import de.tu_berlin.math.coga.common.algorithm.Transformation;
 import batch.tasks.*;
 import algo.graph.dynamicflow.QuickestTransshipment;
 import ds.NetworkFlowModel;
+import ds.graph.flow.PathBasedFlowOverTime;
 
 /**
  *
  * @author Jan-Philipp Kappmeier
  */
-public class QuickestTransshipmentTask extends GraphAlgorithmTask {
+public class QuickestTransshipmentTask extends NetworkFlowModelAlgorithm {
 					
-	public QuickestTransshipmentTask( NetworkFlowModel model ) {
-		super (model);
-	}
-	
+
 	@Override
-	public void run() {
+	protected PathBasedFlowOverTime runAlgorithm(NetworkFlowModel model) {
 		QuickestTransshipment algo = new QuickestTransshipment( model.getNetwork(), model.getTransitTimes(), model.getEdgeCapacities(), model.getCurrentAssignment() );
 		algo.run();
 		if (!algo.isProblemSolved() || !algo.isPathBasedFlowAvailable()){
 			throw new AssertionError("Either algorithm has not run or path based flow is not available.");
 		}
-		df = algo.getResultFlowPathBased();
+		          return  algo.getResultFlowPathBased();
+
 	}
 }
