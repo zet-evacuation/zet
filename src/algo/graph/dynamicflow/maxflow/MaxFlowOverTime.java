@@ -50,7 +50,7 @@ import ds.graph.problem.MinimumCostFlowProblem;
  * 
  * @author Gordon Schlechter
  */
-public class MaxFlowOverTime {
+public class MaxFlowOverTime extends Algorithm<MaximumFlowOverTimeProblem, PathBasedFlowOverTime> {
 
     private Network network;
     private IdentifiableIntegerMapping<Edge> edgeCapacities;
@@ -67,14 +67,7 @@ public class MaxFlowOverTime {
     protected PathBasedFlowOverTime maxFlowOT;
 
     /** Creates a new instance of MaxFlowOverTime */
-    public MaxFlowOverTime(Network network, IdentifiableIntegerMapping<Edge> edgeCapacities, List<Node> sinks,
-            List<Node> sources, int timeHorizon, IdentifiableIntegerMapping<Edge> transitTimes) {
-        this.network = network;
-        this.sources = sources;
-        this.sinks = sinks;
-        this.edgeCapacities = edgeCapacities;
-        this.timeHorizon = timeHorizon;
-        this.transitTimes = transitTimes;
+    public MaxFlowOverTime() {
 
         newNodes = new LinkedList<Node>();
         newEdges = new LinkedList<Edge>();
@@ -299,74 +292,8 @@ public class MaxFlowOverTime {
         return maxFlowOT;
     }
 
-    public void run() {
-
-        if ((sources == null) || (sinks == null)) {
-            throw new IllegalArgumentException(Localization.getInstance().getString(
-                    "algo.graph.MaxFlowOverTime.SpecifySourceSinkFirst"));
-        }
-
-        if ((sources.size() == 0) || (sinks.size() == 0)) {
-            maxFlowOT = new PathBasedFlowOverTime();
-            return;
-        }
-
-        reduction();
-        CreateZeroSupply();
-
-        if (Flags.GORDON) {
-            System.out.print("Network: ");
-            System.out.println(network);
-            System.out.print("transit times");
-            System.out.println(transitTimes);
-            System.out.print("edge capicties: ");
-            System.out.println(edgeCapacities);
-            System.out.print("supplies: ");
-            System.out.println(zeroSupplies);
-        }
-
-
-        IdentifiableIntegerMapping<Edge> flow = null;
-
-        MinimumCostFlowProblem problem = new MinimumCostFlowProblem(network, edgeCapacities, transitTimes, zeroSupplies);
-        Algorithm<MinimumCostFlowProblem, IdentifiableIntegerMapping<Edge>> algorithm = new MinimumMeanCycleCancelling();
-        algorithm.setProblem(problem);
-        algorithm.run();
-        flow = algorithm.getSolution();
-
-        //SuccessiveShortestPath algo = new SuccessiveShortestPath(network, zeroSupplies, edgeCapacities, transitTimes);
-        //algo.run();
-        //flow = algo.getFlow();
-
-        if (Flags.GORDON) {
-            System.out.print("flow 1: ");
-            System.out.println(flow);
-        }
-
-        reconstruction();
-        hideAddedInFlow(flow);
-
-        if (Flags.GORDON) {
-            System.out.print("flow 2: ");
-            System.out.println(flow);
-        }
-
-        PathBasedFlow minCostFlow = PathDecomposition.calculatePathDecomposition(network, sources, sinks, flow);
-
-        if (Flags.GORDON) {
-            System.out.print("min cost flow: ");
-            System.out.println(flow);
-        }
-
-        maxFlowOT = translateIntoMaxFlow(minCostFlow);
-
-        System.out.print("Max flow over time:");
-        System.out.println(maxFlowOT);
-
-    }
-
     public static void main(String args[]) {
-
+/*
         Network network = new Network(9, 10);
         Node source1 = network.getNode(0);
         Node source2 = network.getNode(1);
@@ -429,6 +356,74 @@ public class MaxFlowOverTime {
         sinks.add(sink3);
 
         MaxFlowOverTime algo = new MaxFlowOverTime(network, capacities, sinks, sources, 25, transitTimes);
-        algo.run();
+        algo.run();*/
+    }
+
+    @Override
+    protected PathBasedFlowOverTime runAlgorithm(MaximumFlowOverTimeProblem problem) {
+
+
+        if ((sources == null) || (sinks == null)) {
+            throw new IllegalArgumentException(Localization.getInstance().getString(
+                    "algo.graph.MaxFlowOverTime.SpecifySourceSinkFirst"));
+        }
+
+        if ((sources.size() == 0) || (sinks.size() == 0)) {
+            maxFlowOT = new PathBasedFlowOverTime();
+             return maxFlowOT;
+        }
+
+        reduction();
+        CreateZeroSupply();
+
+        if (Flags.GORDON) {
+            System.out.print("Network: ");
+            System.out.println(network);
+            System.out.print("transit times");
+            System.out.println(transitTimes);
+            System.out.print("edge capicties: ");
+            System.out.println(edgeCapacities);
+            System.out.print("supplies: ");
+            System.out.println(zeroSupplies);
+        }
+
+
+        IdentifiableIntegerMapping<Edge> flow = null;
+
+        MinimumCostFlowProblem p = new MinimumCostFlowProblem(network, edgeCapacities, transitTimes, zeroSupplies);
+        Algorithm<MinimumCostFlowProblem, IdentifiableIntegerMapping<Edge>> algorithm = new MinimumMeanCycleCancelling();
+        algorithm.setProblem(p);
+        algorithm.run();
+        flow = algorithm.getSolution();
+
+        //SuccessiveShortestPath algo = new SuccessiveShortestPath(network, zeroSupplies, edgeCapacities, transitTimes);
+        //algo.run();
+        //flow = algo.getFlow();
+
+        if (Flags.GORDON) {
+            System.out.print("flow 1: ");
+            System.out.println(flow);
+        }
+
+        reconstruction();
+        hideAddedInFlow(flow);
+
+        if (Flags.GORDON) {
+            System.out.print("flow 2: ");
+            System.out.println(flow);
+        }
+
+        PathBasedFlow minCostFlow = PathDecomposition.calculatePathDecomposition(network, sources, sinks, flow);
+
+        if (Flags.GORDON) {
+            System.out.print("min cost flow: ");
+            System.out.println(flow);
+        }
+
+        maxFlowOT = translateIntoMaxFlow(minCostFlow);
+
+        System.out.print("Max flow over time:");
+        System.out.println(maxFlowOT);
+        return maxFlowOT;
     }
 }

@@ -19,15 +19,12 @@
  */
 package batch.tasks.graph;
 
+import algo.graph.dynamicflow.maxflow.MaximumFlowOverTimeProblem;
 import ds.NetworkFlowModelAlgorithm;
-import batch.tasks.*;
 import ds.NetworkFlowModel;
 import algo.graph.dynamicflow.maxflow.TimeExpandedMaximumFlowOverTime;
 import ds.graph.flow.PathBasedFlowOverTime;
 
-/**
- *
- */
 public class MFOTimeExpandedTask extends NetworkFlowModelAlgorithm {
 
     private int th;
@@ -38,15 +35,9 @@ public class MFOTimeExpandedTask extends NetworkFlowModelAlgorithm {
 
     @Override
     protected PathBasedFlowOverTime runAlgorithm(NetworkFlowModel model) {
-
-        TimeExpandedMaximumFlowOverTime maxFlowOverTimeAlgo =
-                new TimeExpandedMaximumFlowOverTime(model.getNetwork(), model.getEdgeCapacities(), model.getTransitTimes(), model.getSources(), model.getSinks(), th);
+        TimeExpandedMaximumFlowOverTime maxFlowOverTimeAlgo = new TimeExpandedMaximumFlowOverTime();
+        maxFlowOverTimeAlgo.setProblem(new MaximumFlowOverTimeProblem(model.getNetwork(), model.getEdgeCapacities(), model.getTransitTimes(), model.getSources(), model.getSinks(), th));
         maxFlowOverTimeAlgo.run();
         return maxFlowOverTimeAlgo.getSolution();
-
-        //TransshipmentBoundEstimator tbe = new TransshipmentBoundEstimator();
-        //int bound = tbe.calculateBound(model.getNetwork(), model.getTransitTimes(), model.getEdgeCapacities(), model.getCurrentAssignment());
-        //System.out.println(bound);
-
     }
 }

@@ -17,25 +17,27 @@
  * MaxFlowTask.java
  * 
  */
-
 package batch.tasks.graph;
 
 import algo.graph.dynamicflow.maxflow.MaxFlowOverTime;
+import algo.graph.dynamicflow.maxflow.MaximumFlowOverTimeProblem;
 import ds.NetworkFlowModelAlgorithm;
 import ds.NetworkFlowModel;
 import ds.graph.flow.PathBasedFlowOverTime;
 
 public class MFOTMinCostTask extends NetworkFlowModelAlgorithm {
-	private int th;
-	public MFOTMinCostTask(int timeHorizon ) {
-		this.th = timeHorizon;
-	}
-	
-	@Override
-	protected PathBasedFlowOverTime runAlgorithm(NetworkFlowModel model) {
-		MaxFlowOverTime maxFlowOverTimeAlgo =
-			new MaxFlowOverTime(model.getNetwork(), model.getEdgeCapacities(), model.getSinks(), model.getSources(), th, model.getTransitTimes());
-		maxFlowOverTimeAlgo.run();
-		          return  maxFlowOverTimeAlgo.getDynamicFlow();
-	}
+
+    private int th;
+
+    public MFOTMinCostTask(int timeHorizon) {
+        this.th = timeHorizon;
+    }
+
+    @Override
+    protected PathBasedFlowOverTime runAlgorithm(NetworkFlowModel model) {
+        MaxFlowOverTime maxFlowOverTimeAlgo = new MaxFlowOverTime();
+        maxFlowOverTimeAlgo.setProblem(new MaximumFlowOverTimeProblem(model.getNetwork(), model.getEdgeCapacities(), model.getTransitTimes(), model.getSinks(), model.getSources(), th));
+        maxFlowOverTimeAlgo.run();
+        return maxFlowOverTimeAlgo.getSolution();
+    }
 }

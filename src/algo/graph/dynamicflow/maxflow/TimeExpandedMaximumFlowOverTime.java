@@ -45,10 +45,6 @@ import java.util.LinkedList;
  */
 public class TimeExpandedMaximumFlowOverTime extends Algorithm<MaximumFlowOverTimeProblem, PathBasedFlowOverTime> {
 
-    public TimeExpandedMaximumFlowOverTime(Network network, IdentifiableIntegerMapping<Edge> capacities, IdentifiableIntegerMapping<Edge> transitTimes, LinkedList<Node> sources, LinkedList<Node> sinks, int timeHorizon) {
-        setProblem(new MaximumFlowOverTimeProblem(network, capacities, transitTimes, sources, sinks, timeHorizon));
-    }
-
     @Override
     protected PathBasedFlowOverTime runAlgorithm(MaximumFlowOverTimeProblem problem) {
         if (problem.getSources().size() == 0 || problem.getSinks().size() == 0) {
