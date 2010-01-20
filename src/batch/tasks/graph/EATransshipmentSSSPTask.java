@@ -17,29 +17,24 @@
  * EATransshipmentTask.java
  * 
  */
-
 package batch.tasks.graph;
 
+import ds.NetworkFlowModelAlgorithm;
 import batch.tasks.*;
 import algo.graph.dynamicflow.eat.EATransshipmentSSSP;
+import de.tu_berlin.math.coga.common.algorithm.Algorithm;
 import ds.NetworkFlowModel;
+import ds.graph.flow.PathBasedFlowOverTime;
 
-/**
- *
- */
-public class EATransshipmentSSSPTask extends GraphAlgorithmTask {
-	
-	public EATransshipmentSSSPTask( NetworkFlowModel model ) {
-		super (model);
-	}
-	
-	@Override
-	public void run() {		
-			EATransshipmentSSSP algo = new EATransshipmentSSSP( model.getNetwork(), model.getTransitTimes(), model.getEdgeCapacities(), model.getCurrentAssignment() );
-			algo.run();
-			if (!algo.isProblemSolved() || !algo.isPathBasedFlowAvailable()){
-				throw new AssertionError("Either algorithm has not run or path based flow is not available.");
-			}
-			df = algo.getResultFlowPathBased();
-	}
+public class EATransshipmentSSSPTask extends NetworkFlowModelAlgorithm {
+
+    @Override
+    protected PathBasedFlowOverTime runAlgorithm(NetworkFlowModel model) {
+        EATransshipmentSSSP algo = new EATransshipmentSSSP(model.getNetwork(), model.getTransitTimes(), model.getEdgeCapacities(), model.getCurrentAssignment());
+        algo.run();
+        if (!algo.isProblemSolved() || !algo.isPathBasedFlowAvailable()) {
+            throw new AssertionError("Either algorithm has not run or path based flow is not available.");
+        }
+        return algo.getResultFlowPathBased();
+    }
 }

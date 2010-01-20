@@ -17,29 +17,26 @@
  * EATransshipmentTask.java
  * 
  */
-
 package batch.tasks.graph;
 
-import batch.tasks.*;
 import algo.graph.dynamicflow.eat.EATransshipmentMinCost;
+import ds.NetworkFlowModelAlgorithm;
+import de.tu_berlin.math.coga.common.algorithm.Algorithm;
 import ds.NetworkFlowModel;
+import ds.graph.flow.PathBasedFlowOverTime;
 
-/**
- *
- */
-public class EATransshipmentMinCostTask extends GraphAlgorithmTask {
-	
-	public EATransshipmentMinCostTask( NetworkFlowModel model ) {
-		super (model);
-	}
-	
-	@Override
-	public void run() {		
-			EATransshipmentMinCost algo = new EATransshipmentMinCost( model.getNetwork(), model.getTransitTimes(), model.getEdgeCapacities(), model.getCurrentAssignment() );
-			algo.run();
-			if (!algo.isProblemSolved() || !algo.isPathBasedFlowAvailable()){
-				throw new AssertionError("Either algorithm has not run or path based flow is not available.");
-			}
-			df = algo.getResultFlowPathBased();
-	}
+public class EATransshipmentMinCostTask extends NetworkFlowModelAlgorithm {
+
+    public EATransshipmentMinCostTask() {
+    }
+
+    @Override
+    protected PathBasedFlowOverTime runAlgorithm(NetworkFlowModel model) {
+        EATransshipmentMinCost algo = new EATransshipmentMinCost(model.getNetwork(), model.getTransitTimes(), model.getEdgeCapacities(), model.getCurrentAssignment());
+        algo.run();
+        if (!algo.isProblemSolved() || !algo.isPathBasedFlowAvailable()) {
+            throw new AssertionError("Either algorithm has not run or path based flow is not available.");
+        }
+        return algo.getResultFlowPathBased();
+    }
 }

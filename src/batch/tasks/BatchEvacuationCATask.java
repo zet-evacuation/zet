@@ -30,11 +30,13 @@ import batch.CellularAutomatonAlgorithm;
 import batch.GraphAlgorithm;
 import converter.ZToGraphConverter;
 import converter.ZToCAConverter.ConversionNotSupportedException;
+import de.tu_berlin.math.coga.common.algorithm.Algorithm;
 import ds.Project;
 import ds.PropertyContainer;
 import ds.ca.CellularAutomaton;
 import ds.ca.results.VisualResultsRecorder;
 import ds.NetworkFlowModel;
+import ds.graph.flow.PathBasedFlowOverTime;
 import ds.z.Assignment;
 import ds.z.AssignmentType;
 import ds.z.ConcreteAssignment;
@@ -114,14 +116,15 @@ public class BatchEvacuationCATask implements Runnable {
 		}
 
 		ZToGraphConverter.convertConcreteAssignment( concreteAssignment, nfo );
-		GraphAlgorithmTask gt = null;
+		Algorithm<NetworkFlowModel, PathBasedFlowOverTime> gt = null;
 		gt = graphAlgo.createTask (nfo, maxTime);
+                gt.setProblem(nfo);
 		gt.run ();
 
 		
 		CellularAutomaton ca;
 		try {
-			ca = FlowBasedCAFactory.getFlowBasedCAFactoryInstance ().convertAndApplyConcreteAssignment (project.getPlan (), gt.getDynamicFlow (), concreteAssignment, nfo.getZToGraphMapping ().
+			ca = FlowBasedCAFactory.getFlowBasedCAFactoryInstance ().convertAndApplyConcreteAssignment (project.getPlan (), gt.getSolution (), concreteAssignment, nfo.getZToGraphMapping ().
 					getRaster ());
 		} catch (ConversionNotSupportedException ex) {
 			ex.printStackTrace ();

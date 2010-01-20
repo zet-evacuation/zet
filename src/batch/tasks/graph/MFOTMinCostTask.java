@@ -20,26 +20,22 @@
 
 package batch.tasks.graph;
 
-import batch.tasks.*;
 import algo.graph.dynamicflow.maxflow.MaxFlowOverTime;
-import ds.PropertyContainer;
+import ds.NetworkFlowModelAlgorithm;
 import ds.NetworkFlowModel;
+import ds.graph.flow.PathBasedFlowOverTime;
 
-/**
- *
- */
-public class MFOTMinCostTask extends GraphAlgorithmTask {
+public class MFOTMinCostTask extends NetworkFlowModelAlgorithm {
 	private int th;
-	public MFOTMinCostTask( NetworkFlowModel model, int timeHorizon ) {
-		super (model);
+	public MFOTMinCostTask(int timeHorizon ) {
 		this.th = timeHorizon;
 	}
 	
 	@Override
-	public void run() {
+	protected PathBasedFlowOverTime runAlgorithm(NetworkFlowModel model) {
 		MaxFlowOverTime maxFlowOverTimeAlgo =
 			new MaxFlowOverTime(model.getNetwork(), model.getEdgeCapacities(), model.getSinks(), model.getSources(), th, model.getTransitTimes());
 		maxFlowOverTimeAlgo.run();
-		df = maxFlowOverTimeAlgo.getDynamicFlow();
+		          return  maxFlowOverTimeAlgo.getDynamicFlow();
 	}
 }
