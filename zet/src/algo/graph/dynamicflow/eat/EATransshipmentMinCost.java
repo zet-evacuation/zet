@@ -29,10 +29,9 @@ import ds.graph.Node;
  * For the variant without a time horizon, binary search
  * is used. 
  */
-public class EATransshipmentMinCost extends Transshipment<EATransshipmentWithTHMinCost>{
-	
-	public EATransshipmentMinCost(Network network, IdentifiableIntegerMapping<Edge> transitTimes, IdentifiableIntegerMapping<Edge> capacities, IdentifiableIntegerMapping<Node> supplies){
-		super(network, transitTimes, capacities, null, supplies, DynamicTransshipment.class, EATransshipmentWithTHMinCost.class);
-	}	
-		
+public class EATransshipmentMinCost extends Transshipment<EATransshipmentWithTHMinCost> {
+
+    public EATransshipmentMinCost(Network network, IdentifiableIntegerMapping<Edge> transitTimes, IdentifiableIntegerMapping<Edge> capacities, IdentifiableIntegerMapping<Node> supplies) {
+        super(network, transitTimes, capacities, null, supplies, DynamicTransshipment.class, EATransshipmentWithTHMinCost.class);
+    }
 }

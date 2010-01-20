@@ -21,7 +21,6 @@ package batch.tasks.graph;
 
 import algo.graph.dynamicflow.eat.EATransshipmentMinCost;
 import ds.NetworkFlowModelAlgorithm;
-import de.tu_berlin.math.coga.common.algorithm.Algorithm;
 import ds.NetworkFlowModel;
 import ds.graph.flow.PathBasedFlowOverTime;
 

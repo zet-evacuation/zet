@@ -110,19 +110,19 @@ public class VisualTest extends JFrame {
         supplies.set(sink1, -1);
         supplies.set(sink2, -1);
         supplies.set(sink3, -1);
-        TimeExpandedMaximumFlowOverTime algo = new TimeExpandedMaximumFlowOverTime(network, capacities, transitTimes, sources, sinks, 10);
-        algo.run();
+       //TimeExpandedMaximumFlowOverTime algo = new TimeExpandedMaximumFlowOverTime(network, capacities, transitTimes, sources, sinks, 10);
+        //algo.run();
         //MinimumMeanCycleCancelling algo2 = new MinimumMeanCycleCancelling(network, capacities, transitTimes, supplies);
         //algo2.run();
-        PathComposition fc = new PathComposition(network, transitTimes, algo.getSolution());
-        fc.run();
+        //PathComposition fc = new PathComposition(network, transitTimes, algo.getSolution());
+        //fc.run();
         NetworkFlowModel nfm = new NetworkFlowModel();
         nfm.setNetwork(network);
         nfm.setEdgeCapacities(capacities);
         nfm.setTransitTimes(transitTimes);
         nfm.setCurrentAssignment(supplies);
-        GraphData data = new GraphData(network, capacities, supplies, transitTimes, supplies, sinks, algo.getSolution());
-        final Statistics<GraphData> stats = new Statistics<GraphData>(data);
+        //GraphData data = new GraphData(network, capacities, supplies, transitTimes, supplies, sinks, algo.getSolution());
+        //final Statistics<GraphData> stats = new Statistics<GraphData>(data);
         //final FlowStatisticsCalculator fs = new FlowStatisticsCalculator(nfm, algo.getDynamicFlow());
 
         VisualTest test = new VisualTest();
@@ -132,8 +132,8 @@ public class VisualTest extends JFrame {
         final Edge edge = i;
         final Node node = sink1;
         charts.clear();
-        charts.add("Flussrate", stats.get(FLOW_RATE, edge));
-        charts.add("Flussmenge", stats.get(FLOW_AMOUNT, edge));
+        //charts.add("Flussrate", stats.get(FLOW_RATE, edge));
+        //charts.add("Flussmenge", stats.get(FLOW_AMOUNT, edge));
         box.addItem("Kante: Flussrate & -menge");
         box.addItem("Kante: Flussrate & Auslastung");
         box.addItem("Senke: Eingehende Flussrate & -menge");
@@ -142,6 +142,7 @@ public class VisualTest extends JFrame {
 
             public void actionPerformed(ActionEvent event) {
                 charts.clear();
+                /*
                 switch (box.getSelectedIndex()) {
                     case 0:
                         charts.add("Flussrate", stats.get(FLOW_RATE, edge));
@@ -160,7 +161,7 @@ public class VisualTest extends JFrame {
                         charts.add("Ausgehende Flussrate", stats.get(OUTGOING_FLOW_RATE, node));
                         charts.add("Ausgegangene Flussmenge", stats.get(OUTGOING_FLOW_AMOUNT, node));
                         break;
-                }
+                }*/
             }
         });
         test.add(box, BorderLayout.NORTH);
