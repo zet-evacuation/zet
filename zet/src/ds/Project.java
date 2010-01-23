@@ -27,14 +27,8 @@ import com.thoughtworks.xstream.converters.Converter;
 import com.thoughtworks.xstream.converters.reflection.ReflectionProvider;
 import com.thoughtworks.xstream.mapper.Mapper;
 import ds.z.Assignment;
-import ds.z.AssignmentArea;
-import ds.z.AssignmentType;
 import ds.z.BuildingPlan;
 import ds.z.EvacuationPlan;
-import ds.z.event.ChangeEvent;
-import ds.z.event.ChangeListener;
-import ds.z.event.ChangeReporter;
-import ds.z.event.EvacuationAreaCreatedEvent;
 import io.z.ProjectConverter;
 import io.z.XMLConverter;
 import java.io.File;
@@ -61,13 +55,13 @@ import localization.Localization;
  */
 @XStreamAlias("project")
 @XMLConverter(ProjectConverter.class)
-public class Project implements Serializable, ChangeListener, ChangeReporter {
+//public class Project implements Serializable, ChangeListener, ChangeReporter {
+public class Project implements Serializable {
 	private static XStream xml_convert;
 
 	public static XStream getXStream() {
 		return xml_convert;
 	}
-
 
 	static {
 		xml_convert = new XStream();
@@ -153,8 +147,8 @@ public class Project implements Serializable, ChangeListener, ChangeReporter {
 								xml_convert.getMapper(), xml_convert.getReflectionProvider() ) );
 		}
 	}
-	@XStreamOmitField()
-	private transient ArrayList<ChangeListener> changeListeners;
+//	@XStreamOmitField()
+//	private transient ArrayList<ChangeListener> changeListeners;
 	@XStreamOmitField()
 	private transient File projectFile;
 	/** The building plan belonging to the project. */
@@ -171,10 +165,10 @@ public class Project implements Serializable, ChangeListener, ChangeReporter {
 	private VisualProperties vp;
 
 	public Project() {
-		changeListeners = new ArrayList<ChangeListener>();
+//		changeListeners = new ArrayList<ChangeListener>();
 
 		plan = new BuildingPlan();
-		plan.addChangeListener( this );
+//		plan.addChangeListener( this );
 		assignments = new ArrayList<Assignment>( 10 );
 		evacuationPlans = new ArrayList<EvacuationPlan>( 10 );
 		vp = new VisualProperties();
@@ -183,41 +177,45 @@ public class Project implements Serializable, ChangeListener, ChangeReporter {
 	/** {@inheritDoc}
 	 * @param e 
 	 */
-	public void throwChangeEvent( ChangeEvent e ) {
-		// Workaround: Notify only the listeners who are registered at the time when this method starts
-		// Some problems occur with the GUI: if a new assignment is created,
-		// the listeners of this project are changed in order to get new assignment lists etc.
-		// this invalidates the lists.
-		ChangeListener[] listenerCopy = changeListeners.toArray( new ChangeListener[changeListeners.size()] );
-
-		for( ChangeListener c : listenerCopy )
-			c.stateChanged( e );
-	}
-
-	/** {@inheritDoc} */
-	public void addChangeListener( ChangeListener c ) {
-		if( !changeListeners.contains( c ) )
-			changeListeners.add( c );
-	}
+//	public void throwChangeEvent( ChangeEvent e ) {
+//		// Workaround: Notify only the listeners who are registered at the time when this method starts
+//		// Some problems occur with the GUI: if a new assignment is created,
+//		// the listeners of this project are changed in order to get new assignment lists etc.
+//		// this invalidates the lists.
+//		ChangeListener[] listenerCopy = changeListeners.toArray( new ChangeListener[changeListeners.size()] );
+//
+//		for( ChangeListener c : listenerCopy )
+//			c.stateChanged( e );
+//	}
 
 	/** {@inheritDoc} */
-	public void removeChangeListener( ChangeListener c ) {
-		changeListeners.remove( c );
-	}
+//	public void addChangeListener( ChangeListener c ) {
+//		if( !changeListeners.contains( c ) )
+//			changeListeners.add( c );
+//	}
+
+	/** {@inheritDoc} */
+//	public void removeChangeListener( ChangeListener c ) {
+//		changeListeners.remove( c );
+//	}
 
 	/** See {@link ds.z.event.ChangeListener#stateChanged (ChangeEvent)} for details.
 	 * @param e 
 	 */
-	public void stateChanged( ChangeEvent e ) {
-		if( e instanceof EvacuationAreaCreatedEvent )
-			for( Assignment a : this.getAssignments() )
-				for( AssignmentType t : a.getAssignmentTypes() )
-					for( AssignmentArea aa : t.getAssignmentAreas() )
-						if( aa.getExitArea() != null && aa.getExitArea().equals( e.getSource() ) )
-							aa.setExitArea( null );
-		// Simply forward the events
-		throwChangeEvent( e );
-	}
+	
+// TODO-Event: wenn eine EvacuationArea gelöscht wird, sollen alle assignment areas,
+//             die diese als standard-ausgang haben, diesen auf null gesetzt bekommen.
+
+	//	public void stateChanged( ChangeEvent e ) {
+//		if( e instanceof EvacuationAreaCreatedEvent )
+//			for( Assignment a : this.getAssignments() )
+//				for( AssignmentType t : a.getAssignmentTypes() )
+//					for( AssignmentArea aa : t.getAssignmentAreas() )
+//						if( aa.getExitArea() != null && aa.getExitArea().equals( e.getSource() ) )
+//							aa.setExitArea( null );
+//		// Simply forward the events
+//		throwChangeEvent( e );
+//	}
 
 	/**
 	 * Adds a new EvacuationPlan to the Project. If the Project hasn't had a
@@ -235,7 +233,7 @@ public class Project implements Serializable, ChangeListener, ChangeReporter {
 				currentEvacuationPlan = val;
 
 			evacuationPlans.add( val );
-			throwChangeEvent( new ChangeEvent( this ) );
+//			throwChangeEvent( new ChangeEvent( this ) );
 		}
 	}
 
@@ -260,7 +258,7 @@ public class Project implements Serializable, ChangeListener, ChangeReporter {
 				else
 					currentEvacuationPlan = null;
 
-			throwChangeEvent( new ChangeEvent( this ) );
+//			throwChangeEvent( new ChangeEvent( this ) );
 		}
 	}
 
@@ -280,7 +278,7 @@ public class Project implements Serializable, ChangeListener, ChangeReporter {
 	public void setCurrentEvacuationPlan( EvacuationPlan val ) throws IllegalArgumentException {
 		if( evacuationPlans.contains( val ) ) {
 			this.currentEvacuationPlan = val;
-			throwChangeEvent( new ChangeEvent( this ) );
+//			throwChangeEvent( new ChangeEvent( this ) );
 		} else
 			throw new IllegalArgumentException( Localization.getInstance().getString( "ds.PlanNotInProjectException" ) );
 	}
@@ -300,8 +298,8 @@ public class Project implements Serializable, ChangeListener, ChangeReporter {
 				currentAssignment = val;
 
 			assignments.add( val );
-			val.addChangeListener( this );
-			throwChangeEvent( new ChangeEvent( this ) );
+//			val.addChangeListener( this );
+//			throwChangeEvent( new ChangeEvent( this ) );
 		}
 	}
 
@@ -318,7 +316,7 @@ public class Project implements Serializable, ChangeListener, ChangeReporter {
 		if( !assignments.remove( val ) )
 			throw new IllegalArgumentException( Localization.getInstance().getString( "ds.AssignmentNotRegisteredException" ) );
 		else {
-			val.removeChangeListener( this );
+//			val.removeChangeListener( this );
 			val.delete();
 
 			if( val == currentAssignment )
@@ -327,7 +325,7 @@ public class Project implements Serializable, ChangeListener, ChangeReporter {
 				else
 					currentAssignment = null;
 
-			throwChangeEvent( new ChangeEvent( this ) );
+//			throwChangeEvent( new ChangeEvent( this ) );
 		}
 	}
 
@@ -353,7 +351,7 @@ public class Project implements Serializable, ChangeListener, ChangeReporter {
 			this.currentAssignment.setInactive();
 			this.currentAssignment = val;
 			this.currentAssignment.setActive();
-			throwChangeEvent( new ChangeEvent( this ) );
+//			throwChangeEvent( new ChangeEvent( this ) );
 		} else
 			throw new IllegalArgumentException( Localization.getInstance().getString( "ds.AssignmentNotInProjectException" ) );
 	}
@@ -409,7 +407,7 @@ public class Project implements Serializable, ChangeListener, ChangeReporter {
 		this.projectFile = val;
 	}
 
-	public BuildingPlan getPlan() {
+	public BuildingPlan getBuildingPlan() {
 		return plan;
 	}
 

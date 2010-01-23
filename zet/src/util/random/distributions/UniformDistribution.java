@@ -13,6 +13,7 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
+
 /*
  * UniformDistribution.java
  * Created on 26. November 2007, 21:32
@@ -22,6 +23,7 @@ package util.random.distributions;
 
 import com.thoughtworks.xstream.annotations.XStreamAlias;
 import de.tu_berlin.math.coga.rndutils.RandomUtils;
+//import ds.z.event.ChangeEvent;
 
 /**
  * Represents a uniformly distributed random variable. All values are uniformly distributed within the
@@ -30,14 +32,16 @@ import de.tu_berlin.math.coga.rndutils.RandomUtils;
  * @author Jan-Philipp Kappmeier
  */
 @XStreamAlias("uniformDistribution") // Saved to XML only as Parameter of Z.AssignmentType
+//@XStreamAlias ("distribution")
+//@XMLConverter(UniformDistributionConverter.class)
 public class UniformDistribution extends Distribution {
   
-  /**
+	/**
    * Creates a new instance of <code>UniformDistribution</code> with values in the interval 0 and 1.
    */
   public UniformDistribution() {
     super( 0, 1 );
-  }
+	}
   
   /**
    * Creates a new instance of <code>UniformDistribution</code> within a given interval.
@@ -48,7 +52,12 @@ public class UniformDistribution extends Distribution {
   public UniformDistribution( double min, double max ) throws IllegalArgumentException {
     super( min, max );
   }
-  
+
+	public void setParameter( Double min, Double max ) throws IllegalArgumentException {
+		super.setParameter( min, max );
+//		throwChangeEvent( new ChangeEvent (this) );
+	}
+
 	/**
 	 * {@inheritDoc}
 	 */
@@ -59,7 +68,6 @@ public class UniformDistribution extends Distribution {
 		else
 			return 1/(getMax() - getMin());
 	}
-	
   /**
    * Gets the next random number according to this distribution. The generated
    * value is uniformly distributed in the interval defined by the values {@link #getMin()} and {@link #getMax()}.
@@ -69,10 +77,4 @@ public class UniformDistribution extends Distribution {
 		double randomNumber = RandomUtils.getInstance().getRandomGenerator().nextDouble();
 		return getMin() + (getMax() - getMin()) * randomNumber;
   }
-
-	@Override
-	public Object clone() throws CloneNotSupportedException {
-		UniformDistribution d = (UniformDistribution)super.clone();
-		return d;
-	}
 }

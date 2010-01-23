@@ -28,9 +28,10 @@ import ds.z.EvacuationArea;
 import ds.z.Floor;
 import ds.z.InaccessibleArea;
 import ds.z.Room;
-import ds.z.RoomEdge;
 import ds.z.SaveArea;
 import ds.z.StairArea;
+import ds.z.ZControl;
+import ds.z.exception.AssignmentException;
 import gui.JEditor;
 import gui.ZETMain;
 import gui.editor.planimage.PlanImage;
@@ -59,7 +60,6 @@ import java.util.List;
 import java.util.ListIterator;
 import javax.swing.JComponent;
 import javax.swing.SwingUtilities;
-import javax.swing.event.EventListenerList;
 import localization.Localization;
 
 /**
@@ -67,14 +67,12 @@ import localization.Localization;
  * for editing the displayed floor.
  * @author Timon Kelter, Jan-Philipp Kappmeier
  */
-public class JFloor extends AbstractFloor implements ds.z.event.ChangeListener {
-
+public class JFloor extends AbstractFloor {
 	// Main objects
 	/** The displayed floor. */
 	private Floor myFloor;
 	/** The currently selected polygons. */
 	private LinkedList<JPolygon> selectedPolygons = new LinkedList<JPolygon>();
-
 	// User interaction
 	/** This field stored where the new PlanPoint would be inserted in rasterized
 	 * paint mode if the user clicked into the {@link JFloor}. */
@@ -126,6 +124,15 @@ public class JFloor extends AbstractFloor implements ds.z.event.ChangeListener {
 	/** The stroke used for painting the selection recatngle. */
 	private final static BasicStroke selection_stroke = new BasicStroke( 1.0f,
 					BasicStroke.CAP_BUTT, BasicStroke.JOIN_MITER, 3.0f, new float[]{4.0f, 2.0f}, 0.0f );
+	private ZControl zcontrol;
+
+	public ZControl getZcontrol() {
+		return zcontrol;
+	}
+
+	public void setZcontrol( ZControl zcontrol ) {
+		this.zcontrol = zcontrol;
+	}
 
 	/**
 	 * Creates a new instance of <code>JFloor</code>.
@@ -141,7 +148,8 @@ public class JFloor extends AbstractFloor implements ds.z.event.ChangeListener {
 		enableEvents( AWTEvent.MOUSE_WHEEL_EVENT_MASK );
 	}
 
-	/** Only call this after the component has been added to a container. Otherwise
+	/**
+	 * Only call this after the component has been added to a container. Otherwise
 	 * operations like setBounds, which are called herein, will fail.
 	 * @param f the floor
 	 */
@@ -150,8 +158,8 @@ public class JFloor extends AbstractFloor implements ds.z.event.ChangeListener {
 		LinkedList<PlanPolygon> old_selection = new LinkedList<PlanPolygon>();
 
 		if( myFloor != null ) {
-			if( showDifferentFloor )
-				myFloor.removeChangeListener( this );
+//			if( showDifferentFloor )
+//				myFloor.removeChangeListener( this );
 
 			// Clear & Save old selection
 			for( JPolygon p : selectedPolygons )
@@ -168,8 +176,8 @@ public class JFloor extends AbstractFloor implements ds.z.event.ChangeListener {
 		myFloor = f;
 
 		if( f != null ) {
-			if( showDifferentFloor )
-				myFloor.addChangeListener( this );
+//			if( showDifferentFloor )
+//				myFloor.addChangeListener( this );
 			updateOffsets( f );
 
 			// TODO: Provide better implementation - Do not recreate everything each time			
@@ -245,17 +253,18 @@ public class JFloor extends AbstractFloor implements ds.z.event.ChangeListener {
 		dragStarts = null;
 		draggedPlanPoints = null;
 		if( newPolygon != null ) {
-			newPolygon.delete();
+			JEditor.getInstance().getEditView().getProjectControl().delete( newPolygon );
+//			newPolygon.delete();
 			newPolygon = null;
 		}
 	}
 
-	@Override
-	public void stateChanged( ds.z.event.ChangeEvent event ) {
-		if( !JEditor.getInstance().isUpdateDisabled() )
-			displayFloor( myFloor );
-	}
-
+	// TODO-Event
+//	@Override
+//	public void stateChanged( ds.z.event.ChangeEvent event ) {
+//		if( !JEditor.getInstance().isUpdateDisabled() )
+//			displayFloor( myFloor );
+//	}
 	/**
 	 * <p>Paints the panel in the graphics object. It is possible to pass any
 	 * graphics object, but it is particularly used for painting this panel. This
@@ -280,25 +289,24 @@ public class JFloor extends AbstractFloor implements ds.z.event.ChangeListener {
 				g2.drawRect( newRasterizedPoint.x - JPolygon.NODE_PAINT_RADIUS,
 								newRasterizedPoint.y - JPolygon.NODE_PAINT_RADIUS,
 								2 * JPolygon.NODE_PAINT_RADIUS, 2 * JPolygon.NODE_PAINT_RADIUS );
-		} else
-			// a) Paint drag Targets when dragging real objects
-			if( dragTargets != null ) {
-				g2.setPaint( GUIOptionManager.getDragNodeColor() );
-				for( Point p : dragTargets )
-					g2.drawRect( p.x - JPolygon.NODE_PAINT_RADIUS,
-									p.y - JPolygon.NODE_PAINT_RADIUS,
-									2 * JPolygon.NODE_PAINT_RADIUS, 2 * JPolygon.NODE_PAINT_RADIUS );
+		} else // a) Paint drag Targets when dragging real objects
+		if( dragTargets != null ) {
+			g2.setPaint( GUIOptionManager.getDragNodeColor() );
+			for( Point p : dragTargets )
+				g2.drawRect( p.x - JPolygon.NODE_PAINT_RADIUS,
+								p.y - JPolygon.NODE_PAINT_RADIUS,
+								2 * JPolygon.NODE_PAINT_RADIUS, 2 * JPolygon.NODE_PAINT_RADIUS );
 			// b) Paint selection rectangle when dragging in selection mode
 			} else {
-				g2.setPaint( GUIOptionManager.getDragNodeColor() );
-				g2.setStroke( selection_stroke );
-				// No negative width/height allowed here, so work around it with Math
-				g2.drawRect( Math.min( dragStart.x, mousePos.x ),
-								Math.min( dragStart.y, mousePos.y ),
-								Math.abs( mousePos.x - dragStart.x ),
-								Math.abs( mousePos.y - dragStart.y ) );
-				g2.setStroke( stroke_standard );
-			}
+			g2.setPaint( GUIOptionManager.getDragNodeColor() );
+			g2.setStroke( selection_stroke );
+			// No negative width/height allowed here, so work around it with Math
+			g2.drawRect( Math.min( dragStart.x, mousePos.x ),
+							Math.min( dragStart.y, mousePos.y ),
+							Math.abs( mousePos.x - dragStart.x ),
+							Math.abs( mousePos.y - dragStart.y ) );
+			g2.setStroke( stroke_standard );
+		}
 
 		// If in PolygonCreationMode, draw help-line
 		if( GUIOptionManager.getEditMode().getType() == EditMode.Type.CREATION_POINTWISE ||
@@ -483,7 +491,7 @@ public class JFloor extends AbstractFloor implements ds.z.event.ChangeListener {
 	/** This is an internal helper method. Never call it. 
 	 * Call findAllComponentsAt (Container c, Point p) instead. */
 	private static void findAllPolygonsAtImpl( Container c, Point p,
-					List<JPolygon> polygonList ) {
+																						 List<JPolygon> polygonList ) {
 		for( Component comp : c.getComponents() ) {
 			Point relative_point = SwingUtilities.convertPoint( c, p, comp );
 			if( comp instanceof JPolygon ) {
@@ -493,9 +501,8 @@ public class JFloor extends AbstractFloor implements ds.z.event.ChangeListener {
 				if( poly.getPlanPolygon() instanceof Barrier ) {
 					if( poly.getBounds().contains( p ) )
 						polygonList.add( poly );
-				} else
-					if( poly.getDrawingPolygon().contains( relative_point ) )
-						polygonList.add( poly );
+				} else if( poly.getDrawingPolygon().contains( relative_point ) )
+					polygonList.add( poly );
 
 				// Recursively search the JPolygon. We can restrict ourselves to 
 				// searching recursively in all JPolygons, because Polygons can
@@ -638,15 +645,14 @@ public class JFloor extends AbstractFloor implements ds.z.event.ChangeListener {
 							if( a.getLowerLevelStart() == null )
 								// Initial edge
 								a.setLowerLevel( ne.getSource(), ne.getTarget() );
+							else // Further edges
+							if( ne.getSource() == a.getLowerLevelEnd() )
+								a.setLowerLevel( a.getLowerLevelStart(), ne.getTarget() );
+							else if( ne.getTarget() == a.getLowerLevelStart() )
+								a.setLowerLevel( ne.getSource(), a.getLowerLevelEnd() );
 							else
-								// Further edges
-								if( ne.getSource() == a.getLowerLevelEnd() )
-									a.setLowerLevel( a.getLowerLevelStart(), ne.getTarget() );
-								else if( ne.getTarget() == a.getLowerLevelStart() )
-									a.setLowerLevel( ne.getSource(), a.getLowerLevelEnd() );
-								else
-									ZETMain.sendError( Localization.getInstance().getString(
-													"gui.error.ConnectedEdgeTrailsOnly" ) );
+								ZETMain.sendError( Localization.getInstance().getString(
+												"gui.error.ConnectedEdgeTrailsOnly" ) );
 							if( !e.isControlDown() ) {
 								// Workaround to keep the previous edit mode setting
 								GUIOptionManager.setEditMode( GUIOptionManager.getPreviousEditMode() );
@@ -676,19 +682,16 @@ public class JFloor extends AbstractFloor implements ds.z.event.ChangeListener {
 							if( a.getUpperLevelStart() == null )
 								// Initial edge
 								a.setUpperLevel( ne.getSource(), ne.getTarget() );
+							else // Further edges
+							if( ne.getSource() == a.getUpperLevelEnd() )
+								a.setUpperLevel( a.getUpperLevelStart(), ne.getTarget() );
+							else if( ne.getTarget() == a.getUpperLevelStart() )
+								a.setUpperLevel( ne.getSource(), a.getUpperLevelEnd() );
 							else
-								// Further edges
-								if( ne.getSource() == a.getUpperLevelEnd() )
-									a.setUpperLevel( a.getUpperLevelStart(), ne.getTarget() );
-								else if( ne.getTarget() == a.getUpperLevelStart() )
-									a.setUpperLevel( ne.getSource(), a.getUpperLevelEnd() );
-								else
-									ZETMain.sendError( Localization.getInstance().getString(
-													"gui.error.ConnectedEdgeTrailsOnly" ) );
+								ZETMain.sendError( Localization.getInstance().getString( "gui.error.ConnectedEdgeTrailsOnly" ) );
 							if( !e.isControlDown() ) {
 								GUIOptionManager.setEditMode( GUIOptionManager.getPreviousEditMode() );
-								ZETMain.sendMessage( Localization.getInstance().getString(
-												"gui.message.StairSuccessfullyCreated" ) );
+								ZETMain.sendMessage( Localization.getInstance().getString( "gui.message.StairSuccessfullyCreated" ) );
 							} else
 								// Refresh our select upper level message
 								ZETMain.sendMessage( Localization.getInstance().getString( "gui.message.SelectUpperStairLevel" ) );
@@ -696,8 +699,7 @@ public class JFloor extends AbstractFloor implements ds.z.event.ChangeListener {
 							ZETMain.sendError( ex.getLocalizedMessage() );
 						}
 					} else
-						ZETMain.sendError( Localization.getInstance().getString(
-										"gui.error.ClickOnStairEdge" ) );
+						ZETMain.sendError( Localization.getInstance().getString( "gui.error.ClickOnStairEdge" ) );
 				} else {
 					// Click in non-selection mode: Start creating a polygon or 
 					// continue creating one if newPolygon is already != null
@@ -719,108 +721,93 @@ public class JFloor extends AbstractFloor implements ds.z.event.ChangeListener {
 
 						// Check whether we clicked into the same room as before
 						if( lastClick != null )
-							if( !parent.equals( ((Area)newPolygon).getAssociatedRoom() ) ) {
-								ZETMain.sendError( Localization.getInstance().getString(
-												"gui.error.SelectCoordinatesInSameRoom" ) );
+							if( !parent.equals( ((Area)zcontrol.latestPolygon()).getAssociatedRoom() ) ) {
+								ZETMain.sendError( Localization.getInstance().getString( "gui.error.SelectCoordinatesInSameRoom" ) );
 								return;
 							}
 					}
-
-					if( lastClick == null )
-						// First create a new room / area - this is the same for RECTANGLED and POINTWISE
+					boolean newPolygonClosed = false;
+					if( lastClick == null ) {
+						// First create a new room / area
 						switch( GUIOptionManager.getEditMode() ) {
 							case RoomCreationPointwise:
 							case RoomCreation:
-								newPolygon = new Room( myFloor );
+								zcontrol.createNew( Room.class, myFloor );
 								break;
 							case AssignmentAreaCreationPointwise:
 							case AssignmentAreaCreation:
-								Assignment cur = JEditor.getInstance().getEditView().getProject().getCurrentAssignment();
-								if( cur != null )
-									if( cur.getAssignmentTypes().size() > 0 )
-										newPolygon = new AssignmentArea( parent, cur.getAssignmentTypes().get( 0 ) );
-									else {
-										ZETMain.sendError( Localization.getInstance().getString(
-														"gui.error.CreateAnAssignmentFirst" ) );
-										return;
-									}
-								else {
-									ZETMain.sendError( Localization.getInstance().getString(
-													"gui.error.SetCurrentAssignmentFirst" ) );
-									return;
+								try {
+									zcontrol.createNew( AssignmentArea.class, parent );
+								} catch( AssignmentException ex ) {
+									if( ex.getState() == AssignmentException.State.NoAssignmentCreated )
+										ZETMain.sendError( Localization.getInstance().getString( "gui.error.CreateAnAssignmentFirst" ) );
+									else if( ex.getState() == AssignmentException.State.NoAssignmentSelected )
+										ZETMain.sendError( Localization.getInstance().getString( "gui.error.SetCurrentAssignmentFirst" ) );
+									else
+										ZETMain.sendError( "Unknown Error during AssingmentArea creation." );
 								}
 								break;
 							case BarrierCreationPointwise:
-								newPolygon = new Barrier( parent );
+								zcontrol.createNew( Barrier.class, parent );
 								break;
 							case DelayAreaCreationPointwise:
 							case DelayAreaCreation:
-								newPolygon = new DelayArea( parent, DelayArea.DelayType.OBSTACLE, 0.7d );
+								zcontrol.createNew( DelayArea.class, parent );
 								break;
 							case StairAreaCreationPointwise:
 							case StairAreaCreation:
-								newPolygon = new StairArea( parent );
+								zcontrol.createNew( StairArea.class, parent );
 								break;
 							case EvacuationAreaCreationPointwise:
 							case EvacuationAreaCreation:
-								newPolygon = new EvacuationArea( parent );
-								int count = JEditor.getInstance().getProject().getPlan().getEvacuationAreasCount();
-								String name = Localization.getInstance().getString( "ds.z.DefaultName.EvacuationArea" ) + " " + count;
-								((EvacuationArea)newPolygon).setName( name );
+								zcontrol.createNew( EvacuationArea.class, parent );
 								break;
 							case InaccessibleAreaCreationPointwise:
 							case InaccessibleAreaCreation:
-								newPolygon = new InaccessibleArea( parent );
+								zcontrol.createNew( InaccessibleArea.class, parent );
 								break;
 							case SaveAreaCreationPointwise:
 							case SaveAreaCreation:
-								newPolygon = new SaveArea( parent );
+								zcontrol.createNew( SaveArea.class, parent );
 								break;
 							default:
+								ZETMain.sendError( "Unknown Edit mode selected." );
 								break;
 						}
-					else {
-						// The commands for the different types of areas/rooms differ only in the creation phase
-						if( GUIOptionManager.getEditMode().getType() == EditMode.Type.CREATION_RECTANGLED )
+						if( GUIOptionManager.getEditMode().getType() == EditMode.Type.CREATION_POINTWISE )
+							zcontrol.addPoint( p2 );
+					} else {
+						if( GUIOptionManager.getEditMode().getType() == EditMode.Type.CREATION_RECTANGLED ) {
+							if( p1.getX() == p2.getX() || p1.getY() == p2.getY() )
+								throw new IllegalArgumentException( Localization.getInstance().getString( "gui.error.RectangleCreationZeroArea" ) );
+							LinkedList<PlanPoint> points = new LinkedList<PlanPoint>();
+							points.add( new PlanPoint( p1.x, p1.y ) );
+							points.add( new PlanPoint( p1.x, p2.y ) );
+							points.add( new PlanPoint( p2.x, p2.y ) );
+							points.add( new PlanPoint( p2.x, p1.y ) );
+							points.add( new PlanPoint( p1.x, p1.y ) );
+							newPolygonClosed = zcontrol.addPoints( points );
+						} else if( GUIOptionManager.getEditMode().getType() == EditMode.Type.CREATION_POINTWISE )
 							try {
-								completeRectangledPolygon( newPolygon, p1, p2 );
-							} catch( IllegalArgumentException ex ) {
-								ZETMain.sendError( Localization.getInstance().getString( "gui.error.RectangleCreationZeroArea" ) );
-								return;
-							}
-						else if( GUIOptionManager.getEditMode().getType() == EditMode.Type.CREATION_POINTWISE ) {
-							// check if the new point will close the polygon
-							// check the area that the polygon would have
-							if( newPolygon.willClose( p1, p2 ) && newPolygon.area() == 0 && !(newPolygon instanceof Barrier) ) {
+								// check if the new point will close the polygon or the area will be zero
+								if( zcontrol.latestPolygon().willClose( p1, p2 ) && zcontrol.latestPolygon().area() == 0 && !(zcontrol.latestPolygon() instanceof Barrier) ) {
 									ZETMain.sendError( Localization.getInstance().getString( "gui.error.RectangleCreationZeroArea" ) );
 									return;
+								}
+								newPolygonClosed = zcontrol.addPoint( p2 );
+							} catch( RuntimeException ex ) {
+								throw ex;
 							}
-							try {
-								if( newPolygon instanceof Room )
-									new RoomEdge( p1, p2, (Room)newPolygon );
-								else
-									new Edge( p1, p2, newPolygon );
-							} catch( IllegalArgumentException ex ) {
-								// Tried to select equal points
-								ZETMain.sendError( Localization.getInstance().getString(
-												"gui.error.ChooseDifferentPoint" ) );
-							}
-						}
-						// Set the correct number of persons to assignment areas
-						if( newPolygon instanceof AssignmentArea )
-							((AssignmentArea)newPolygon).setEvacuees( Math.min( newPolygon.getMaxEvacuees(), ((AssignmentArea)newPolygon).getAssignmentType().getDefaultEvacuees() ) );
 					}
-					if( newPolygon != null && newPolygon.isClosed() )
-						// Room closed, with next click create new instance
+					if( newPolygonClosed )
 						polygonFinishedHandler();
 					else {
 						// Polygon not closed - prepare next point
 						lastClick = e.getPoint();
 						lastPlanClick = p2;
 					}
-
 				}
-			else if( e.getButton() == MouseEvent.BUTTON3 ) {
+			else if( e.getButton() == MouseEvent.BUTTON3 )
 				// This method already contains the EditMode analysis
 				if( GUIOptionManager.getEditMode().getType() == EditMode.Type.CREATION_POINTWISE ) {
 					// Create last Edge and close the polygon
@@ -830,7 +817,9 @@ public class JFloor extends AbstractFloor implements ds.z.event.ChangeListener {
 					if( newPolygon != null )
 						if( newPolygon.getNumberOfEdges() == 0 ) {
 							// Delete empty, aborted polygons
-							newPolygon.delete();
+							Assignment cur = JEditor.getInstance().getEditView().getProjectControl().getProject().getCurrentAssignment();
+							JEditor.getInstance().getEditView().getProjectControl().delete( newPolygon );
+//							newPolygon.delete();
 							ZETMain.sendMessage( Localization.getInstance().getString( "gui.message.PolgonCreationAborted" ) );
 						} else {
 							if( newPolygon.area() == 0 && !(newPolygon instanceof Barrier) ) {
@@ -846,7 +835,6 @@ public class JFloor extends AbstractFloor implements ds.z.event.ChangeListener {
 						}
 					polygonFinishedHandler();
 				}
-			}
 		} else if( e.getID() == MouseEvent.MOUSE_RELEASED )
 			// Complete the drag if you've begun one
 			if( dragStart != null ) {
@@ -945,7 +933,7 @@ public class JFloor extends AbstractFloor implements ds.z.event.ChangeListener {
 						repaint();
 					}
 
-				// b) Dragged a selection rectangle
+					// b) Dragged a selection rectangle
 				} else if( !dragStart.equals( e.getPoint() ) ) {
 					// No negative width/height allowed here, so work around it with Math
 					Rectangle selectionArea = new Rectangle(
@@ -1044,8 +1032,9 @@ public class JFloor extends AbstractFloor implements ds.z.event.ChangeListener {
 
 	/** Only internal: To be called after a polygon was created to clean up our data structures. */
 	private void polygonFinishedHandler() {
+		displayFloor( myFloor );
 		// Select the newly created polygon
-		setSelectedPolygon( newPolygon );
+		setSelectedPolygon( zcontrol.latestPolygon() );
 
 		newPolygon = null;
 		lastClick = null;
@@ -1113,26 +1102,6 @@ public class JFloor extends AbstractFloor implements ds.z.event.ChangeListener {
 	}
 
 	/**
-	 * This method adds Edges to the {@link PlanPolygon} {@code p} so that it
-	 * becomes a rectangular shape where {@code p1} is the top left point and
-	 * {@code p2} the bottom right point of the resulting rectangle.
-	 * @param p This must be an empty PlanPolygon (with no edges)
-	 * @param p1 coordinates of one corner of the rectangle in model space
-	 * @param p2 coordinates of the diagonally inverse corner
-	 */
-	private void completeRectangledPolygon( PlanPolygon p, Point p1, Point p2 ) {
-		if( p1.getX() == p2.getX() || p1.getY() == p2.getY() )
-			throw new IllegalArgumentException( Localization.getInstance().getString(
-							"gui.error.RectangleCreationZeroArea" ) );
-		LinkedList<PlanPoint> points = new LinkedList<PlanPoint>();
-		points.add( new PlanPoint( p1.x, p1.y ) );
-		points.add( new PlanPoint( p1.x, p2.y ) );
-		points.add( new PlanPoint( p2.x, p2.y ) );
-		points.add( new PlanPoint( p2.x, p1.y ) );
-		p.add( points );
-	}
-
-	/**
 	 * Returns the Room that is connected to the {@link JPolygon} which must be a
 	 * parent of the given Component <code>clickedOn</code>. Returns <code>null</code>
 	 * if such a Room does not exist
@@ -1162,7 +1131,8 @@ public class JFloor extends AbstractFloor implements ds.z.event.ChangeListener {
 			switch( e.getKeyCode() ) {
 				case KeyEvent.VK_ESCAPE:
 					if( newPolygon != null ) {
-						newPolygon.delete();
+						JEditor.getInstance().getEditView().getProjectControl().delete( newPolygon );
+//						newPolygon.delete();
 						newPolygon = null;
 						lastClick = null;
 						lastPlanClick = null;
@@ -1175,7 +1145,8 @@ public class JFloor extends AbstractFloor implements ds.z.event.ChangeListener {
 						for( JPolygon sel : selectedPolygons )
 							toDelete.add( sel.getPlanPolygon() );
 						for( PlanPolygon p : toDelete )
-							p.delete();
+							JEditor.getInstance().getEditView().getProjectControl().delete( p );
+//							p.delete();
 					}
 					break;
 				default:
@@ -1239,7 +1210,6 @@ public class JFloor extends AbstractFloor implements ds.z.event.ChangeListener {
 	public ActionListener[] getActionListeners() {
 		return listenerList.getListeners( ActionListener.class );
 	}
-
 	// Flag to ensure that infinite loops do not occur with ActionEvents.
 	private boolean firingActionEvent = false;
 

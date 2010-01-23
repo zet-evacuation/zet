@@ -49,7 +49,7 @@ public class ExponentialDistribution extends Distribution {
    * @throws IllegalArgumentException if min is smaller than max
    */
   public ExponentialDistribution( double lambda ) throws IllegalArgumentException {
-		super( 0, 5 );
+		super( (double)0, (double)5 );
     setLambda( lambda );
   }
 

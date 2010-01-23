@@ -6,13 +6,14 @@
  *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
  * GNU General Public License for more details.
  *
  * You should have received a copy of the GNU General Public License
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
+
 /**
  * Class FloorComboBoxModel
  * Erstellt 29.04.2008, 21:29:56
@@ -23,7 +24,6 @@ package gui.components;
 import ds.Project;
 import ds.PropertyContainer;
 import ds.z.Floor;
-import ds.z.event.ChangeListener;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
@@ -39,35 +39,36 @@ import javax.swing.DefaultComboBoxModel;
  * 
  * @author Jan-Philipp Kappmeier
  */
-public class FloorComboBoxModel extends DefaultComboBoxModel implements ChangeListener {
+public class FloorComboBoxModel extends DefaultComboBoxModel {
 	private List<Floor> entries = new LinkedList<Floor>();
 	RoomComboBoxModel roomSelector = null;
 	private HashMap<Integer, Integer> idToIndex;
 
-	@Override
-	public void stateChanged( ds.z.event.ChangeEvent e ) {
-		if( e.getSource() instanceof Floor ) {
-			// Floorname possibly changed
-			int index = entries.indexOf( (Floor) e.getSource() );
-			this.fireContentsChanged( this, index, index );
-		}
-	}
+	// TODO-Event
+//	@Override
+//	public void stateChanged( ds.z.event.ChangeEvent e ) {
+//		if( e.getSource() instanceof Floor ) {
+//			// Floorname possibly changed
+//			int index = entries.indexOf( (Floor) e.getSource() );
+//			this.fireContentsChanged( this, index, index );
+//		}
+//	}
 
 	public void displayFloors( Project p ) {
 		clear();
 
 		if( p != null ) {
-			for( Floor f : p.getPlan().getFloors() ) {
+			for( Floor f : p.getBuildingPlan().getFloors() ) {
 				if( PropertyContainer.getInstance().getAsBoolean( "editor.options.view.hideDefaultFloor" ) ) {
-					if( !f.equals( p.getPlan().getDefaultFloor() ) ) {
+					if( !f.equals( p.getBuildingPlan().getDefaultFloor() ) ) {
 						addElement( f );
 						entries.add( f );
-						f.addChangeListener( this );
+//						f.addChangeListener( this );
 					}
 				} else {
 					addElement( f );
-					entries.add( f );
-					f.addChangeListener( this );
+					entries.add( f );//
+//					f.addChangeListener( this );
 				}
 			}
 		}	
@@ -91,11 +92,11 @@ public class FloorComboBoxModel extends DefaultComboBoxModel implements ChangeLi
 	}
 
 	public void clear() {
-		if( getSelectedItem() != null  && getSelectedItem () instanceof Floor) 
-			((Floor) getSelectedItem()).removeChangeListener( roomSelector );
+//		if( getSelectedItem() != null  && getSelectedItem () instanceof Floor)
+//			((Floor) getSelectedItem()).removeChangeListener( roomSelector );
 
-		for( Floor f : entries )
-			f.removeChangeListener( this );
+//		for( Floor f : entries )
+//			f.removeChangeListener( this );
 		entries.clear();
 
 		removeAllElements();

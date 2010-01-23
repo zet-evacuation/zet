@@ -171,7 +171,7 @@ public class CommandLineInterpretor {
 
         start = System.currentTimeMillis();
         try {
-            project.getPlan().rasterize();
+            project.getBuildingPlan().rasterize();
         } catch (Exception e) {
             if (log != null) log.write(", exception");
             return;
@@ -184,7 +184,7 @@ public class CommandLineInterpretor {
         start = System.currentTimeMillis();
         NetworkFlowModel model = new NetworkFlowModel();
         try {
-            ZToGraphConverter.convertBuildingPlan(project.getPlan(), model);
+            ZToGraphConverter.convertBuildingPlan(project.getBuildingPlan(), model);
         } catch (Exception e) {
             if (log != null) log.write(", exception");
             return; 

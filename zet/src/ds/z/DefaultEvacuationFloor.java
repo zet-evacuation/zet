@@ -137,17 +137,17 @@ public class DefaultEvacuationFloor extends Floor {
 			points.add( lr );
 		}
 		points.add( ll );
-		newRoom.add( points );
+		newRoom.defineByPoints( points );
 		Edge door = newRoom.getEdge( p1, p2 );
 
-		// add evacuation area
+		// defineByPoints evacuation area
 		EvacuationArea evac = new EvacuationArea( newRoom );
 		points = new ArrayList<PlanPoint>( 4 );
 		points.add( ul );
 		points.add( ur );
 		points.add( lr );
 		points.add( ll );
-		evac.add( points );
+		evac.defineByPoints( points );
 		evac.setName( getNewEvacuationAreaName() );
 
 		// door wird zur teleport edge

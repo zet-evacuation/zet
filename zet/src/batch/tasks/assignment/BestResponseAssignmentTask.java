@@ -75,7 +75,7 @@ public class BestResponseAssignmentTask extends AssignmentTask {
             
     CellularAutomaton ca2;
 		try {
-			ca2 = ExitCapacityBasedCAFactory.getInstance().convertAndApplyConcreteAssignment(project.getPlan(),res.getNetworkFlowModel(),concreteAssignments[runNumber],res.getNetworkFlowModel().getZToGraphMapping().getRaster());			
+			ca2 = ExitCapacityBasedCAFactory.getInstance().convertAndApplyConcreteAssignment(project.getBuildingPlan(),res.getNetworkFlowModel(),concreteAssignments[runNumber],res.getNetworkFlowModel().getZToGraphMapping().getRaster());
 			res.setCellularAutomaton(runNumber, ca2 );
 		} catch( ConversionNotSupportedException ex ) {
 			System.err.println( "ConversionNotSupportedException ist aufgetreten. Dies sollte eigentlich nicht passieren..." );

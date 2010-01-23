@@ -6,13 +6,14 @@
  *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
  * GNU General Public License for more details.
  *
  * You should have received a copy of the GNU General Public License
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
+
 /**
  * Class AssignmentTypeComboBoxModel
  * Erstellt 29.04.2008, 21:30:15
@@ -23,7 +24,7 @@ import ds.Project;
 import ds.z.Assignment;
 import ds.z.AssignmentArea;
 import ds.z.AssignmentType;
-import ds.z.event.ChangeListener;
+import ds.z.ZControl;
 import gui.editor.JFloor;
 import gui.editor.JPolygon;
 import javax.swing.DefaultComboBoxModel;
@@ -32,43 +33,44 @@ import javax.swing.DefaultComboBoxModel;
  * This class serves as a model for the JComboBox that contains the current assignment types.
  * @author Jan-Philipp Kappmeier
  */
-public class AssignmentTypeComboBoxModel extends DefaultComboBoxModel implements ChangeListener {
+public class AssignmentTypeComboBoxModel extends DefaultComboBoxModel {
 	Assignment oldAssignment = null;
-	Project myProject;
+	ZControl zcontrol;
 	boolean itemChange = false;
 	JFloor floorPanel;
 
-	public AssignmentTypeComboBoxModel( Project project ) {
+	public AssignmentTypeComboBoxModel( ZControl zcontrol ) {
 		super();
-		myProject = project;
+		this.zcontrol = zcontrol;
 	}
 
-	@Override
-	public void stateChanged( ds.z.event.ChangeEvent e ) {
-		if( (e.getSource() instanceof Project ||
-						e.getSource() instanceof Assignment ||
-						e.getSource() instanceof AssignmentType) && !itemChange ) {
-			displayAssignmentTypesForCurrentProject();
-		}
-	}
+	// TODO-Event
+//	@Override
+//	public void stateChanged( ds.z.event.ChangeEvent e ) {
+//		if( (e.getSource() instanceof Project ||
+//						e.getSource() instanceof Assignment ||
+//						e.getSource() instanceof AssignmentType) && !itemChange ) {
+//			displayAssignmentTypesForCurrentProject();
+//		}
+//	}
 
 	public void displayAssignmentTypesForCurrentProject() {
-		//if( myProject != null && myProject.getCurrentAssignment().equals( oldAssignment )  )
+		//if( zcontrol != null && zcontrol.getCurrentAssignment().equals( oldAssignment )  )
 		//	return;
 
 		clear();
 
-		if( myProject != null && myProject.getCurrentAssignment() != null ) {
-			for( AssignmentType a : myProject.getCurrentAssignment().getAssignmentTypes() ) {
+		if( zcontrol != null && zcontrol.getProject().getCurrentAssignment() != null ) {
+			for( AssignmentType a : zcontrol.getProject().getCurrentAssignment().getAssignmentTypes() ) {
 				addElement( a );			// This will only enter me into the list, if i'm not already entered
 			}
-			myProject.addChangeListener( this );
+//			zcontrol.addChangeListener( this );
 		}
 	}
 
 	public void clear() {
-		if( myProject != null ) {
-			myProject.removeChangeListener( this );
+		if( zcontrol != null ) {
+//			zcontrol.removeChangeListener( this );
 		}
 		removeAllElements();
 	}
@@ -90,11 +92,11 @@ public class AssignmentTypeComboBoxModel extends DefaultComboBoxModel implements
 		}
 	}
 
-	public void setProject( Project p ) {
-		if( myProject != null ) {
-			myProject.removeChangeListener( this );
-		}
-		myProject = p;
+	public void setControl( ZControl zcontrol ) {
+//		if( zcontrol != null ) {
+//			zcontrol.removeChangeListener( this );
+//		}
+		this.zcontrol = zcontrol;
 	}
 
 	public void setFloorPanel( JFloor floorPanel ) {

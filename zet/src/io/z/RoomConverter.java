@@ -24,8 +24,6 @@ import ds.z.Area;
 import ds.z.Room;
 import ds.z.StairArea;
 import java.util.ArrayList;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 /**
  * A converter that behaves just like a normal converter would do, he only adds
@@ -71,24 +69,24 @@ public class RoomConverter extends PlanPolygonConverter {
 		Room result = (Room)super.unmarshal( reader, context );
 
 		for( Area t : result.getAssignmentAreas() ) {
-			t.addChangeListener( result );
+//			t.addChangeListener( result );
 		}
 		for( Area t : result.getBarriers() ) {
-			t.addChangeListener( result );
+//			t.addChangeListener( result );
 		}
 		for( Area t : result.getDelayAreas() ) {
-			t.addChangeListener( result );
+//			t.addChangeListener( result );
 		}
 		for( Area t : result.getInaccessibleAreas() ) {
-			t.addChangeListener( result );
+//			t.addChangeListener( result );
 		}
 		for( Area t : result.getSaveAreas() ) { // Evacuation areas are contained!
-			t.addChangeListener( result );
+//			t.addChangeListener( result );
 		}
 		
 		try {
 			for( Area t : result.getStairAreas() ) {
-				t.addChangeListener( result );
+//				t.addChangeListener( result );
 			}
 		} catch( Exception ex ) {
 			try {
@@ -97,7 +95,7 @@ public class RoomConverter extends PlanPolygonConverter {
 				field.setAccessible( true );
 				field.set( result, new ArrayList<StairArea>() );
 				for( Area t : result.getStairAreas() ) {
-					t.addChangeListener( result );
+//					t.addChangeListener( result );
 				}
 			} catch( NoSuchFieldException ex1 ) {
 				System.err.println( "NoSuchFieldException in RoomConverter");

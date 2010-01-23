@@ -18,8 +18,11 @@ package algo.ca.rule;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
+import util.IOTools;
 
 public class SaveIndividualsRule extends AbstractSaveRule {
+	static String nord = IOTools.getNextFreeNumberedFilename( "./", "results_nord", 3 );
+	static String süd = IOTools.getNextFreeNumberedFilename( "./", "results_süd", 3 );
 	// muss VOR der EvacuateIndividualsRule aufgerufen werden!
 	public SaveIndividualsRule() {
 	}
@@ -33,9 +36,9 @@ public class SaveIndividualsRule extends AbstractSaveRule {
 			// Write to file
 			File f = null;
 			if( savedIndividual.getStaticPotential().getName().equals( "Nordausgang" ) )
-				f = new File( "./results_nord.txt" );
+				f = new File( "./" + nord + ".txt" );
 			else
-				f = new File( "./results_süd.txt" );
+				f = new File( "./" + süd + ".txt" );
 			FileWriter w = new FileWriter( f, true );
 			Double d = savedIndividual.getStepEndTime() * caController().getCA().getSecondsPerStep();
 			Double d2 = caController().getCA().getTimeStep() * caController().getCA().getSecondsPerStep();

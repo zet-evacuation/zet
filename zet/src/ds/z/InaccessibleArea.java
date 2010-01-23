@@ -6,13 +6,14 @@
  *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
  * GNU General Public License for more details.
  *
  * You should have received a copy of the GNU General Public License
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
+
 /*
  * InaccessibleArea.java
  * Created on 26. November 2007, 21:32
@@ -103,7 +104,7 @@ public class InaccessibleArea extends Area<Edge> {
                     // deletes the thorn
                     temp1=e1.getSource().getPreviousEdge();
                     temp2=e2.getTarget().getNextEdge();
-                    combineEdges((Edge)e1,(Edge)e2,false);
+                    combineEdges(e1,e2,false);
                     // if the barrier is inside the room and outside the inaccessible area:
                     // all is good!
                     if (!this.contains(b) && getAssociatedRoom().contains(b)) {
@@ -179,7 +180,7 @@ public class InaccessibleArea extends Area<Edge> {
                         b.replace(barrierPoints);
                     }
                         
-                    e1=(Edge)combineEdges(e1,e2,false);
+                    e1=combineEdges( e1, e2, false );
                     e2=e1.getTarget().getNextEdge();
                     p2=e1.getTarget();
                     p3=e2.getTarget();

@@ -466,7 +466,7 @@ public class JAssignmentPanel extends JPanel {
 		for( int i = 0; i < sel.length; i++ ) {
 			XYSeries a = new XYSeries( "Stat" + i );
 			Distribution distribution = params.get( sel[i] ).getDistribution();
-			double distance = (distribution.getMax() - distribution.getMin()) / (nodes - 1);
+			double distance = (distribution.getMax() - distribution.getMin() ) / (nodes - 1);
 			for( int j = 0; j < nodes; j++ ) {
 				double pos = distribution.getMin() + j * distance;
 				a.add( pos, distribution.getDensityAt( pos ) );

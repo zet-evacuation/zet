@@ -6,7 +6,7 @@
  *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
  * GNU General Public License for more details.
  *
  * You should have received a copy of the GNU General Public License
@@ -25,6 +25,7 @@ import batch.tasks.BatchGraphTask;
 import batch.tasks.BatchLoadProperties;
 import batch.tasks.assignment.BestResponseAssignmentTask;
 import batch.tasks.ComputeAvgStepPerSecondTask;
+import batch.tasks.CreateCellularAutomatonTask;
 import batch.tasks.assignment.EarliestArrivalAssignmentTask;
 import batch.tasks.MedianTask;
 import batch.tasks.assignment.MinCostAssignmentTask;
@@ -53,7 +54,7 @@ import gui.batch.JBatchProgressDialog;
  * to run the algorithms on them, the chosen graph algorithm and the name
  * of the entry.
  * 
- * @author Timon
+ * @author Timon, Jan-Philipp Kappmeier
  */
 public class BatchEntry {
 
@@ -138,20 +139,20 @@ public class BatchEntry {
         this.setOptimizedEvacuationPlanCycles(eoRuns);
     }
 
-    /**
-     * Checks if the project is valid. If it is not valid, an exception is thrown.
-     * The project must not be {@code null} and is not allowed to be empty.
-     * @param p the project
-     */
-    private void check(Project p) {
-        if (p == null) {
-            throw new IllegalArgumentException(Localization.getInstance().getString("batch.ProjectIsNullException"));
-        } else if (p.getPlan().isEmpty()) {
-            throw new IllegalArgumentException(Localization.getInstance().getString("batch.EmptyProjectException"));
-        }// else if( !p.getPlan().hasEvacuationAreas() ) {
-        //	throw new IllegalArgumentException( Localization.getInstance().getString( "batch.NoEvacAreas" ) );
-        //}
-    }
+	/**
+	 * Checks if the project is valid. If it is not valid, an exception is thrown.
+	 * The project must not be {@code null} and is not allowed to be empty.
+	 * @param p the project
+	 */
+	private void check( Project p ) {
+		if( p == null ) {
+			throw new IllegalArgumentException( Localization.getInstance().getString( "batch.ProjectIsNullException" ) );
+		} else if( p.getBuildingPlan().isEmpty() ) {
+			throw new IllegalArgumentException( Localization.getInstance().getString( "batch.EmptyProjectException" ) );
+		}// else if( !p.getBuildingPlan().hasEvacuationAreas() ) {
+		//	throw new IllegalArgumentException( Localization.getInstance().getString( "batch.NoEvacAreas" ) );
+		//}
+	}
 
     /** Executes the chosen graph algorithm on the network flow model that
      * is stored in this batch entry and executes a given number of runs of
@@ -172,12 +173,13 @@ public class BatchEntry {
         long memStart = (runtime.totalMemory() - runtime.freeMemory());
         JBatchProgressDialog bpd = new JBatchProgressDialog();
 
-        boolean useCaRes = (useCa && cycles > 0) || (useGraph && optimizedEvacuationPlanCycles <= 0);
-        boolean useOptRes = useGraph && optimizedEvacuationPlanCycles > 0;
-
-        BatchResultEntry ca_res = new BatchResultEntry(name, new BuildingResults(project.getPlan()));
-        BatchResultEntry opt_res = new BatchResultEntry(name + (useCaRes ? " " + Localization.getInstance().getString("gui.editor.JEditor.optimizedEvacuation")
-                : ""), new BuildingResults(project.getPlan()));
+		boolean useCaRes = (useCa && cycles > 0) || (useGraph && optimizedEvacuationPlanCycles <= 0);
+		boolean useOptRes = useGraph && optimizedEvacuationPlanCycles > 0;
+		
+		BatchResultEntry ca_res = new BatchResultEntry( name, new BuildingResults( project.getBuildingPlan() ) );
+		BatchResultEntry opt_res = new BatchResultEntry( name + (useCaRes ? 
+			" " + Localization.getInstance().getString( "gui.editor.JEditor.optimizedEvacuation" )
+			: ""), new BuildingResults( project.getBuildingPlan() ) );
 
         // Try to load the file
         BatchLoadProperties blp;
@@ -214,21 +216,18 @@ public class BatchEntry {
             opt_res.caVis = null;
         }
 
-        // Rastern
-        RasterizeTask rt = new RasterizeTask(project);
-        bpd.addTask(Localization.getInstance().getString("batch.Rasterize"), rt);
+		// CA-Part
+		if( useCa ) {
+			TreeMap<Integer, Integer> findMedian = new TreeMap<Integer, Integer>();
+			for( int i = 0; i < cycles; i++ ) {
+				CreateCellularAutomatonTask ccat = new CreateCellularAutomatonTask( ca_res, i, project );
+				bpd.addTask( "Konvertiere zellulären Automat " + (i+1), ccat );
+				BatchCATask bct = new BatchCATask( cellularAutomatonAlgo, ca_res, i, findMedian, project, assignment, concreteAssignments );
+				bpd.addTask( String.format( Localization.getInstance().getString( "batch.CaCount" ), i + 1, getCycles() ), bct );
+			}
+			MedianTask mt = new MedianTask( ca_res, findMedian );
+			bpd.addTask( Localization.getInstance().getString( "batch.ComputeMedian" ), mt );
 
-        // CA-Part
-        if (useCa) {
-            TreeMap<Integer, Integer> findMedian = new TreeMap<Integer, Integer>();
-            for (int i = 0; i < cycles; i++) {
-                BatchCATask bct = new BatchCATask(cellularAutomatonAlgo, ca_res, i, findMedian, project, assignment,
-                        concreteAssignments);
-                bpd.addTask(String.format(Localization.getInstance().getString("batch.CaCount"),
-                        i + 1, getCycles()), bct);
-            }
-            MedianTask mt = new MedianTask(ca_res, findMedian);
-            bpd.addTask(Localization.getInstance().getString("batch.ComputeMedian"), mt);
 
             ComputeAvgStepPerSecondTask ct = new ComputeAvgStepPerSecondTask(ca_res);
             bpd.addTask(Localization.getInstance().getString("batch.ComputeCAStepAvg"), ct);

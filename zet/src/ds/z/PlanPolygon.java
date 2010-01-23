@@ -6,15 +6,16 @@
  *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
  * GNU General Public License for more details.
  *
  * You should have received a copy of the GNU General Public License
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
+
 /*
- * NewPolygon.java
+ * PlanPolygon.java
  * Created on 18.12.2007, 11:37:43
  */
 package ds.z;
@@ -23,10 +24,6 @@ import com.thoughtworks.xstream.annotations.XStreamAlias;
 import com.thoughtworks.xstream.annotations.XStreamAsAttribute;
 import com.thoughtworks.xstream.annotations.XStreamConverter;
 import com.thoughtworks.xstream.annotations.XStreamOmitField;
-import ds.z.event.ChangeEvent;
-import ds.z.event.ChangeListener;
-import ds.z.event.ChangeReporter;
-import ds.z.event.EdgeChangeEvent;
 import ds.z.exception.PolygonNotClosedException;
 import ds.z.exception.PolygonNotRasterizedException;
 import io.z.CompactEdgeListConverter;
@@ -59,7 +56,7 @@ import util.ConversionTools;
  */
 @XStreamAlias("planPolygon")
 @XMLConverter(PlanPolygonConverter.class)
-public class PlanPolygon<T extends Edge> implements Serializable, ChangeListener, ChangeReporter, Iterable<T> {
+public class PlanPolygon<T extends Edge> implements Serializable, Iterable<T> {
 	/**
 	 * Enumeration used by the relative position test. Specifies if a 
 	 * polygon is left or right from the border.
@@ -74,8 +71,8 @@ public class PlanPolygon<T extends Edge> implements Serializable, ChangeListener
 	/** The class-type of the edges. This is set only one single time in the constructor. */
 	private final Class<T> edgeClassType;
 	/** The change listeners that are informed if any change of the polygon occurs. */
-	@XStreamOmitField()
-	private transient ArrayList<ChangeListener> changeListeners = new ArrayList<ChangeListener>();
+//	@XStreamOmitField()
+//	private transient ArrayList<ChangeListener> changeListeners = new ArrayList<ChangeListener>();
 	/** Determines, if the polygon is closed. That means that the <CODE>end</CODE>
 	 * and <CODE>start</CODE> edges have a common point. */
 	@XStreamAsAttribute()
@@ -146,13 +143,13 @@ public class PlanPolygon<T extends Edge> implements Serializable, ChangeListener
 		this.edgeClassType = edgeClassType;
 	}
 
-	void resetListener() {
-		changeListeners = new ArrayList<ChangeListener>();
-		for( T e : this ) {
-			e.resetListener();
-		}
-	}
-
+//	void resetListener() {
+//		changeListeners = new ArrayList<ChangeListener>();
+//		for( T e : this ) {
+//			e.resetListener();
+//		}
+//	}
+//
 	/**
 	 * Creates an new instance of <code>PlanPolygon</code> without any assigned
 	 * edges or points. All parameters are initialized with <code>null</code>.
@@ -191,8 +188,7 @@ public class PlanPolygon<T extends Edge> implements Serializable, ChangeListener
 	 * @throws java.lang.NullPointerException if the specified <code>List</code>
 	 * of points is null
 	 */
-	public void add( List<PlanPoint> points ) throws IllegalArgumentException, IllegalStateException,
-					NullPointerException {
+	public void defineByPoints( List<PlanPoint> points ) throws IllegalArgumentException, IllegalStateException, NullPointerException {
 		if( start != null )
 			throw new IllegalStateException( Localization.getInstance().getString( "ds.z.PlanPolygon.ContainerNotEmptyException" ) );
 		if( points == null )
@@ -219,9 +215,44 @@ public class PlanPolygon<T extends Edge> implements Serializable, ChangeListener
 			newEdge( firstPoint, points.get( 0 ) );
 	}
 
+	public void add( List<PlanPoint> points, boolean close ) {
+		if( start == null ) {
+			if( points.size() == 1 ) {
+				start = points.get(0);
+				end = points.get(0);
+			} else {
+				PlanPoint firstPoint = points.get( 0 );
+				for( int i = 1; i < points.size(); i++ ) {
+					PlanPoint secondPoint = points.get( i );
+					// Don't create zero-length edges
+					if( secondPoint.equals( firstPoint ) )
+						continue;
+
+					newEdge( firstPoint, secondPoint );
+					firstPoint = secondPoint;
+				}
+			}
+		} else {
+			PlanPoint firstPoint = end;
+			for( int i = 1; i < points.size(); ++i ) {
+				PlanPoint secondPoint = points.get( i );
+				// Don't create zero-length edges
+				if( secondPoint.equals( firstPoint ) )
+					continue;
+
+				newEdge( firstPoint, secondPoint );
+				firstPoint = secondPoint;
+			}
+
+		}
+		if( !closed && close && !end.equals( points.get(0) ) )
+			newEdge( end, points.get( 0 ) );
+		
+	}
+
 	/**
 	 * Inserts a new edge at one end of the polygon, if it is open. It is not
-	 * possible to add further edges to closed polygons, such polygons have to be
+	 * possible to defineByPoints further edges to closed polygons, such polygons have to be
 	 * opened before adding new edges. This method is only called, if a new
 	 * instance of edge is created that schould be part of this instance of the
 	 * polygon. It is called from the constructor of {@link Edge} and methods of
@@ -231,7 +262,7 @@ public class PlanPolygon<T extends Edge> implements Serializable, ChangeListener
 	 * its width and height.</p>
 	 * @param e the edge to be added
 	 * @throws java.lang.IllegalStateException if the polygon is closed. It is not
-	 * possible to add further edges to a closed polygon.
+	 * possible to defineByPoints further edges to a closed polygon.
 	 * @throws java.lang.IllegalArgumentException if the polygon already contains
 	 * the edge or if the edge is not connected to the polygon
 	 */
@@ -294,27 +325,27 @@ public class PlanPolygon<T extends Edge> implements Serializable, ChangeListener
 		changed = true;
 		size++;
 
-		e.addChangeListener( this );
-		throwChangeEvent( new ChangeEvent( this ) );
+//		e.addChangeListener( this );
+//		throwChangeEvent( new ChangeEvent( this ) );
 	}
 
-	/**
-	 * {@inheritDoc}
-	 * @param c the new listener
-	 */
-	@Override
-	public void addChangeListener( ChangeListener c ) {
-		if( !changeListeners.contains( c ) )
-			changeListeners.add( c );
-	}
-
+//	/**
+//	 * {@inheritDoc}
+//	 * @param c the new listener
+//	 */
+//	@Override
+//	public void addChangeListener( ChangeListener c ) {
+//		if( !changeListeners.contains( c ) )
+//			changeListeners.defineByPoints( c );
+//	}
+//
 	/**
 	 * Adds a new {@link PlanPoint} to the <code>PlanPolygon</code>. The point is
 	 * added at the beginning of the polygon. That means, an edge from
 	 * the new point to <code>start</code> is added to the polygon.
 	 * @param p the point that is added
 	 * @throws java.lang.IllegalStateException if the polygon is closed. It is not
-	 * possible to add further points to a closed polygon
+	 * possible to defineByPoints further points to a closed polygon
 	 * @throws java.lang.IllegalArgumentException if the new point is the start
 	 * point
 	 */
@@ -331,7 +362,7 @@ public class PlanPolygon<T extends Edge> implements Serializable, ChangeListener
 	 * to the new point is added to the polygon.
 	 * @param p the point that is added
 	 * @throws java.lang.IllegalStateException if the polygon is closed. 
-	 * It is not possible to add further points to a closed polygon
+	 * It is not possible to defineByPoints further points to a closed polygon
 	 * @throws java.lang.IllegalArgumentException if the new point is the end point
 	 */
 	public void addPointLast( PlanPoint p ) throws IllegalArgumentException, IllegalStateException {
@@ -589,10 +620,10 @@ public class PlanPolygon<T extends Edge> implements Serializable, ChangeListener
 				// really delete the one edge
 				if( deleteE1 ) {
 					e2.setPoint( common, e1_other, true );
-					e1.removeChangeListener( this );
+//					e1.removeChangeListener( this );
 				} else {
 					e1.setPoint( common, e2_other, true );
-					e2.removeChangeListener( this );
+	//				e2.removeChangeListener( this );
 				}
 
 				size--;
@@ -611,7 +642,7 @@ public class PlanPolygon<T extends Edge> implements Serializable, ChangeListener
 			enableEventGeneration = eAG_old;
 		}
 
-		throwChangeEvent( new ChangeEvent( this ) );
+//		throwChangeEvent( new ChangeEvent( this ) );
 		return result;
 	}
 
@@ -702,7 +733,7 @@ public class PlanPolygon<T extends Edge> implements Serializable, ChangeListener
 			enableEventGeneration = eAG_old;
 		}
 
-		throwChangeEvent( new ChangeEvent( this ) );
+//		throwChangeEvent( new ChangeEvent( this ) );
 		return result;
 	}
 
@@ -925,7 +956,7 @@ public class PlanPolygon<T extends Edge> implements Serializable, ChangeListener
 					//System.out.println( "Mittelpunkt liegt außerhalb!" );
 					return false;
 			}
-		//problemPoints.add( null );
+		//problemPoints.defineByPoints( null );
 		}
 		//System.out.println( "The Area is inside!" );
 		return true;
@@ -985,7 +1016,7 @@ public class PlanPolygon<T extends Edge> implements Serializable, ChangeListener
 	 * @throws java.lang.IllegalArgumentException
 	 * @throws java.lang.IllegalStateException
 	 */
-	public void delete() throws IllegalArgumentException, IllegalStateException {
+	void delete() throws IllegalArgumentException, IllegalStateException {
 		boolean eAG_old = enableEventGeneration;
 		try {
 			enableEventGeneration = false;
@@ -1009,7 +1040,7 @@ public class PlanPolygon<T extends Edge> implements Serializable, ChangeListener
 			enableEventGeneration = eAG_old;
 		}
 
-		throwChangeEvent( new ChangeEvent( this ) );
+//		throwChangeEvent( new ChangeEvent( this ) );
 	}
 
 	/**
@@ -1619,39 +1650,39 @@ public class PlanPolygon<T extends Edge> implements Serializable, ChangeListener
 		changed = true;
 		size--;
 
-		e.removeChangeListener( this );
+//		e.removeChangeListener( this );
 		edgeDeleteHandler( e );
 
-		throwChangeEvent( new ChangeEvent( this ) );
+//		throwChangeEvent( new ChangeEvent( this ) );
 	}
 
 	/**
 	 * {@inheritDoc}
 	 * @param c the listener that is to be removed
 	 */
-	@Override
-	public void removeChangeListener( ChangeListener c ) {
-		changeListeners.remove( c );
-	}
+//	@Override
+//	public void removeChangeListener( ChangeListener c ) {
+//		changeListeners.remove( c );
+//	}
 
 	/**
 	 * Replaces all edges of the polygon with new ones defined throug a list of
-	 * points. The behaviour is the same as in #add( List<PlanPoint> ). Before
+	 * points. The behaviour is the same as in #defineByPoints( List<PlanPoint> ). Before
 	 * adding the points the polygon is reinitialized and all edges are deleted.
 	 * @param points the list of points defining the shape of the polygon
-	 * @see #add( List )
+	 * @see #defineByPoints( List )
 	 */
 	public void replace( List<PlanPoint> points ) {
-		for( T e : this )
-			e.removeChangeListener( this );
+//		for( T e : this )
+//			e.removeChangeListener( this );
 		// Drop the current edges
 		start = null;
 		end = null;
 		size = 0;
 		closed = false;
 
-		// ChangeEvent is thrown within the add-Method (indirectly)
-		add( points );
+		// ChangeEvent is thrown within the defineByPoints-Method (indirectly)
+		defineByPoints( points );
 	}
 
 	/**
@@ -1723,12 +1754,12 @@ public class PlanPolygon<T extends Edge> implements Serializable, ChangeListener
 				current_start = current_end;
 			}
 
-		// Edge count is automatically adjusted by add/removeEdge methods
+		// Edge count is automatically adjusted by defineByPoints/removeEdge methods
 		} finally {
 			enableEventGeneration = eAG_old;
 		}
 
-		throwChangeEvent( new ChangeEvent( this ) );
+//		throwChangeEvent( new ChangeEvent( this ) );
 		return result;
 	}
 
@@ -1751,33 +1782,33 @@ public class PlanPolygon<T extends Edge> implements Serializable, ChangeListener
 	/**
 	 * {@inheritDoc}
 	 * @param e the event
-	 */
-	@Override
-	public void stateChanged( ChangeEvent e ) {
-		// Listen for EdgeChangeEvents and update the polygon bounds eventually
-		if( (e instanceof EdgeChangeEvent) || (edgeClassType.isInstance( e.getSource() )) )
-			edgeChangeHandler( (Edge)e.getSource(), (e instanceof EdgeChangeEvent) ? ((EdgeChangeEvent)e).getTarget() : null );
-		throwChangeEvent( e );
-	}
+//	 */
+//	@Override
+//	public void stateChanged( ChangeEvent e ) {
+//		// Listen for EdgeChangeEvents and update the polygon bounds eventually
+//		if( (e instanceof EdgeChangeEvent) || (edgeClassType.isInstance( e.getSource() )) )
+//			edgeChangeHandler( (Edge)e.getSource(), (e instanceof EdgeChangeEvent) ? ((EdgeChangeEvent)e).getTarget() : null );
+//		throwChangeEvent( e );
+//	}
 
 	/**
 	 * {@inheritDoc}
 	 * @param e the thrown event
-	 */
-	@Override
-	public void throwChangeEvent( ChangeEvent e ) {
-		if( enableEventGeneration ) {
-			// Workaround: Notify only the listeners who are registered at the time when this method starts
-			// This point may be thrown away when the resulting edge must be rastered, and then the list
-			// "changeListeners" will be altered during "c.stateChanged (e)", which produces exceptions.
-			ChangeListener[] listenerCopy = changeListeners.toArray(
-							new ChangeListener[changeListeners.size()] );
-
-
-			for( ChangeListener c : listenerCopy )
-				c.stateChanged( e );
-		}
-	}
+//	 */
+//	@Override
+//	public void throwChangeEvent( ChangeEvent e ) {
+//		if( enableEventGeneration ) {
+//			// Workaround: Notify only the listeners who are registered at the time when this method starts
+//			// This point may be thrown away when the resulting edge must be rastered, and then the list
+//			// "changeListeners" will be altered during "c.stateChanged (e)", which produces exceptions.
+//			ChangeListener[] listenerCopy = changeListeners.toArray(
+//							new ChangeListener[changeListeners.size()] );
+//
+//
+//			for( ChangeListener c : listenerCopy )
+//				c.stateChanged( e );
+//		}
+//	}
 
 	/**
 	 * This is a convenience method that returns all PlanPoints of all
@@ -1789,7 +1820,7 @@ public class PlanPolygon<T extends Edge> implements Serializable, ChangeListener
 	 */
 	public List<PlanPoint> getPlanPoints() {
 		// The edges use common PlanPoint instances, so we don't
-		// have to add (edges.size () * 2) points.
+		// have to defineByPoints (edges.size () * 2) points.
 		ArrayList planPoints = new ArrayList<PlanPoint>( size + (isClosed() ? 0 : 1) );
 		getPlanPoints( planPoints );
 		return planPoints;
@@ -1905,7 +1936,7 @@ public class PlanPolygon<T extends Edge> implements Serializable, ChangeListener
 			// Endpoints are not equal --> insert new edge
 			newEdge( e1_start, e2_target, this );
 		else {
-			// Endpoints are equal --> Cannot add new edge, set new endpoint for last edge
+			// Endpoints are equal --> Cannot defineByPoints new edge, set new endpoint for last edge
 			e1_start.getPreviousEdge().setTarget( e2_target, false );
 			this.closed = true;
 		}
@@ -2278,7 +2309,7 @@ public class PlanPolygon<T extends Edge> implements Serializable, ChangeListener
 		} finally {
 			enableEventGeneration = eAG_old;
 		}
-		throwChangeEvent( new ChangeEvent( this ) );
+//		throwChangeEvent( new ChangeEvent( this ) );
 	}
 
 	/**
@@ -2343,7 +2374,7 @@ public class PlanPolygon<T extends Edge> implements Serializable, ChangeListener
 			//work1.getYInt()+") - ("+work2.getXInt()+","+work2.getYInt()+")");
 
 			//contains the new created PlanPoints representing the rasterized edge
-			//we chose a linked list here because we will typically only add elements
+			//we chose a linked list here because we will typically only defineByPoints elements
 			//and iterate over all elements at the end, so linked lists are best suited here
 			LinkedList<PlanPoint> newBetweenPlanPoints = new LinkedList<PlanPoint>();
 			if( flip )
@@ -2397,7 +2428,7 @@ public class PlanPolygon<T extends Edge> implements Serializable, ChangeListener
 				newBetweenPlanPoints.add( this.transformPlanPoint( nextPlanPoint, retransformMatrix ) );
 			}
 			//not necessary, is inserted by for-loop
-			//newBetweenPlanPoints.add(p2);
+			//newBetweenPlanPoints.defineByPoints(p2);
 			//check, whether a roll over is necessary
 			if( flip ) {
 				flip = false;
@@ -2475,7 +2506,7 @@ public class PlanPolygon<T extends Edge> implements Serializable, ChangeListener
 		} finally {
 			enableEventGeneration = eAG_old;
 		}
-		throwChangeEvent( new ChangeEvent( this ) );
+//		throwChangeEvent( new ChangeEvent( this ) );
 	}
 
 	/**

@@ -22,7 +22,6 @@ package ds.z;
 
 import com.thoughtworks.xstream.annotations.XStreamAlias;
 import com.thoughtworks.xstream.annotations.XStreamAsAttribute;
-import ds.z.event.ChangeEvent;
 import ds.z.exception.PolygonNotClosedException;
 import ds.z.exception.TooManyPeopleException;
 import localization.Localization;
@@ -146,7 +145,7 @@ public class AssignmentArea extends Area<Edge> {
 			throw new IllegalArgumentException ( Localization.getInstance().getString("ds.z.AssignmentArea.NegativePersonValueException") );
 		} else {
 			evacuees=val;
-			throwChangeEvent (new ChangeEvent (this));
+//			throwChangeEvent (new ChangeEvent (this));
 		}
 	}
 	
@@ -175,7 +174,7 @@ public class AssignmentArea extends Area<Edge> {
 		}
 		assignmentType = val;
 		assignmentType.addAssignmentArea (this);
-		//throwChangeEvent (new ChangeEvent (this)); - is thrown by add/delete methods
+		//throwChangeEvent (new ChangeEvent (this)); - is thrown by defineByPoints/delete methods
 	}
 
 	/**
@@ -187,7 +186,8 @@ public class AssignmentArea extends Area<Edge> {
 	 * (assignmentType is set to null.)
 	 */
 	@Override
-	public void delete () throws IllegalArgumentException{
+	public void delete () throws IllegalArgumentException {
+// TODO: warum das hier und wen nötig, text schreiben!
 		try {
 			assignmentType.deleteAssignmentArea( this );
 		} finally {

@@ -106,7 +106,7 @@ public class BatchEvacuationCATask implements Runnable {
 		//NetworkFlowModel nfo = res.getNetworkFlowModel ();
 		NetworkFlowModel nfo = new NetworkFlowModel();
 		res.setNetworkFlowModel( nfo );
-		ZToGraphConverter.convertBuildingPlan( project.getPlan(), nfo );
+		ZToGraphConverter.convertBuildingPlan( project.getBuildingPlan(), nfo );
 
 		ConcreteAssignment concreteAssignment;
 		if (concreteAssignments == null) {
@@ -124,7 +124,8 @@ public class BatchEvacuationCATask implements Runnable {
 		
 		CellularAutomaton ca;
 		try {
-			ca = FlowBasedCAFactory.getFlowBasedCAFactoryInstance ().convertAndApplyConcreteAssignment (project.getPlan (), gt.getSolution (), concreteAssignment, nfo.getZToGraphMapping ().
+//			ca = FlowBasedCAFactory.getFlowBasedCAFactoryInstance ().convertAndApplyConcreteAssignment (project.getBuildingPlan (), gt.getDynamicFlow (), concreteAssignment, nfo.getZToGraphMapping ().
+			ca = FlowBasedCAFactory.getFlowBasedCAFactoryInstance ().convertAndApplyConcreteAssignment (project.getBuildingPlan (), gt.getSolution (), concreteAssignment, nfo.getZToGraphMapping ().
 					getRaster ());
 		} catch (ConversionNotSupportedException ex) {
 			ex.printStackTrace ();

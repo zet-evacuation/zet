@@ -22,7 +22,6 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
-import com.thoughtworks.xstream.converters.Converter;
 
 /** This annotation is used to denote the XStream converter that is associated 
  * to a certain class. We do not use the XStream annotation "XStreamConverter",

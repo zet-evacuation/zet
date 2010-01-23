@@ -38,6 +38,7 @@ import algo.ca.PotentialController;
 import algo.ca.SPPotentialController;
 import algo.ca.parameter.AbstractDefaultParameterSet;
 import algo.ca.parameter.ParameterSet;
+import batch.tasks.AlgorithmTask;
 import ds.PropertyContainer;
 import ds.ca.SaveCell;
 import ds.ca.TargetCell;
@@ -45,7 +46,6 @@ import ds.z.PlanPoint;
 import evacuationplan.BidirectionalNodeCellMapping;
 
 import exitdistributions.ZToExitMapping;
-import gui.JEditor;
 import java.util.ArrayDeque;
 
 import java.util.HashMap;
@@ -128,17 +128,23 @@ public class ZToCAConverter {
 	 * @throws converter.ZToCAConverter.ConversionNotSupportedException 
 	 */
 	public CellularAutomaton convert( BuildingPlan buildingPlan ) throws ConversionNotSupportedException {
+		AlgorithmTask.getInstance().publish( "Starte Konvertierung", "" );
 		CellularAutomaton convertedCA = new CellularAutomaton();
 		lastMapping = new ZToCAMapping();
+		AlgorithmTask.getInstance().publish( "Rastere den Gebäudeplan", "" );
 		lastContainer = RasterContainerCreator.getInstance().ZToCARasterContainer( buildingPlan );
 		exitCells = new ArrayList<ExitCell>();
 		roomRasterRoomMapping = new HashMap<ZToCARoomRaster, ds.ca.Room>();
 
 
+		AlgorithmTask.getInstance().publish( "Erzeuge Räume", "" );
+
 		for( Floor floor : lastContainer.getFloors() ) {
 			createAllRooms( floor, lastContainer.getAllRasteredRooms( floor ), buildingPlan.getFloorID( floor ) );
 		}
-		
+
+		AlgorithmTask.getInstance().publish( "Konvertiere Räume", "" );
+
 		for( Floor floor : lastContainer.getFloors() ) {
 			Collection<ZToCARoomRaster> rooms = lastContainer.getAllRasteredRooms( floor );
 			if( rooms != null ) {
@@ -155,6 +161,8 @@ public class ZToCAConverter {
 		//	convertedCA.addExit( e );
 		//}
 		
+		AlgorithmTask.getInstance().publish( "Berechne statische Potenziale", "" );
+
 		calculateAndAddStaticPotentials(convertedCA);
 		
 		lastCA = convertedCA;
@@ -167,7 +175,7 @@ public class ZToCAConverter {
 	 * @param convertedCA The cellular automaton that needs potentials.
 	 */
 	protected void calculateAndAddStaticPotentials(CellularAutomaton convertedCA ){
-		//calculate and add staticPotentials to CA
+		//calculate and defineByPoints staticPotentials to CA
 		PotentialController pc = new SPPotentialController( convertedCA );
 		for( ArrayList<ExitCell> cells : convertedCA.clusterExitCells() ) {
 			StaticPotential sp = pc.calculateStaticPotential( cells );

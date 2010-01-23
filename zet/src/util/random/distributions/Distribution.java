@@ -23,9 +23,6 @@ package util.random.distributions;
 import com.thoughtworks.xstream.annotations.XStreamAlias;
 import com.thoughtworks.xstream.annotations.XStreamAsAttribute;
 import com.thoughtworks.xstream.annotations.XStreamOmitField;
-import ds.z.event.ChangeEvent;
-import ds.z.event.ChangeListener;
-import ds.z.event.ChangeReporter;
 import io.z.DistributionConverter;
 import io.z.XMLConverter;
 import java.io.Serializable;
@@ -39,18 +36,18 @@ import java.util.ArrayList;
  */
 @XStreamAlias ("distribution")
 @XMLConverter (DistributionConverter.class)
-public abstract class Distribution implements Serializable, ChangeReporter, Cloneable {
+public abstract class Distribution implements Serializable, Cloneable {
 	/** The listeners of this distibution. */
-	@XStreamOmitField ()
-	private transient ArrayList<ChangeListener> changeListeners = new ArrayList<ChangeListener> ();
-	
+//	@XStreamOmitField ()
+//	private transient ArrayList<ChangeListener> changeListeners = new ArrayList<ChangeListener> ();
+
 	/** The minimal value that this distribution can take. */
 	@XStreamAsAttribute ()
 	private double min;
 	/** The maximal value that this distribution can take. */
 	@XStreamAsAttribute ()
 	private double max;
-	
+
 	/**
 	 * Creates a new instance of <code>Distribution</code>
 	 * @param min the minimal value that can be taken by the random variable
@@ -60,35 +57,35 @@ public abstract class Distribution implements Serializable, ChangeReporter, Clon
 	public Distribution ( double min, double max ) throws IllegalArgumentException {
 		setParameter ( min, max );
 	}
-	
-	/**
-	 * {@inheritDoc}
-	 * @param e the submitted event
-	 */
-	public void throwChangeEvent (ChangeEvent e) {
-		for (ChangeListener c : changeListeners) {
-			c.stateChanged (e);
-		}
-	}
-	
-	/**
-	 * {@inheritDoc}
-	 * @param c the listener to register
-	 */
-	public void addChangeListener (ChangeListener c) {
-		if (!changeListeners.contains (c)) {
-			changeListeners.add (c);
-		}
-	}
-	
-	/**
-	 * {@inheritDoc}
-	 * @param c the litener to remove
-	 */
-	public void removeChangeListener (ChangeListener c) {
-		changeListeners.remove (c);
-	}
-	
+
+//	/**
+//	 * {@inheritDoc}
+//	 * @param e the submitted event
+//	 */
+//	public void throwChangeEvent (ChangeEvent e) {
+//		for (ChangeListener c : changeListeners) {
+//			c.stateChanged (e);
+//		}
+//	}
+
+//	/**
+//	 * {@inheritDoc}
+//	 * @param c the listener to register
+//	 */
+//	public void addChangeListener (ChangeListener c) {
+//		if (!changeListeners.contains (c)) {
+//			changeListeners.add (c);
+//		}
+//	}
+
+//	/**
+//	 * {@inheritDoc}
+//	 * @param c the litener to remove
+//	 */
+//	public void removeChangeListener (ChangeListener c) {
+//		changeListeners.remove (c);
+//	}
+
 	/**
 	 * Returns the value of the density function for this probability distribution
 	 * at a given point.
@@ -96,7 +93,7 @@ public abstract class Distribution implements Serializable, ChangeReporter, Clon
 	 * @return the value of the density function
 	 */
 	abstract public double getDensityAt( double x );
-	
+
 	/**
 	 * Returns the currently set maximal value that the random variable can take.
 	 * @return the maximal value
@@ -104,7 +101,7 @@ public abstract class Distribution implements Serializable, ChangeReporter, Clon
 	public double getMax () {
 		return max;
 	}
-	
+
 	/**
 	 * Returns the currently set minimal value that the random variable can take.
 	 * @return the minimal value
@@ -112,7 +109,7 @@ public abstract class Distribution implements Serializable, ChangeReporter, Clon
 	public double getMin () {
 		return min;
 	}
-	
+
 	/**
 	 * Sets a new maximal value for the random variable.
 	 * @param val the maximal value that can be taken by the random variable
@@ -121,7 +118,7 @@ public abstract class Distribution implements Serializable, ChangeReporter, Clon
 	public void setMax ( double val ) throws IllegalArgumentException {
 		setParameter ( min, val );
 	}
-	
+
 	/**
 	 * Sets a new minimal value for the random variable.
 	 * @param val the minimal value that can be taken by the random variable
@@ -130,7 +127,7 @@ public abstract class Distribution implements Serializable, ChangeReporter, Clon
 	public void setMin ( double val ) throws IllegalArgumentException {
 		setParameter ( val, max );
 	}
-	
+
 	/**
 	 * Sets both bounding parameters for the distribution at the same time.
 	 * @param min the minimal value that can be taken by the random variable
@@ -143,9 +140,9 @@ public abstract class Distribution implements Serializable, ChangeReporter, Clon
 		}
 		this.min = min;
 		this.max = max;
-		throwChangeEvent (new ChangeEvent (this));
+//		throwChangeEvent (new ChangeEvent (this));
 	}
-	
+
 	/**
 	 * Gets the next random number according to this distribution. The generated value
 	 * has to be between the values returned by {@link #getMin()} and {@link #getMax()}.

@@ -98,7 +98,7 @@ public class RasterSquare {
     squareList.add( new PlanPoint( x, y + raster ) );
 
     square = new PlanPolygon<Edge>( Edge.class );
-    square.add( squareList );    
+    square.defineByPoints( squareList );
 
     stairPotential = -1;
     

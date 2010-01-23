@@ -6,13 +6,14 @@
  *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
  * GNU General Public License for more details.
  *
  * You should have received a copy of the GNU General Public License
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
+
 /*
  * Room.java
  * Created on 26. November 2007, 21:32
@@ -21,7 +22,6 @@ package ds.z;
 
 import com.thoughtworks.xstream.annotations.XStreamAlias;
 import com.thoughtworks.xstream.annotations.XStreamAsAttribute;
-import ds.z.event.ChangeEvent;
 import ds.z.exception.AreaNotInsideException;
 import ds.z.exception.PolygonNotClosedException;
 import ds.z.exception.RoomEdgeInvalidTargetException;
@@ -212,7 +212,7 @@ public class Room extends BaseRoom<RoomEdge> implements Cloneable {
 	 */
 	public void setName( String val ) {
 		name = val;
-		throwChangeEvent( new ChangeEvent( this ) );
+//		throwChangeEvent( new ChangeEvent( this ) );
 	}
 
 	/**
@@ -222,35 +222,35 @@ public class Room extends BaseRoom<RoomEdge> implements Cloneable {
 	 */
 	void addArea( Area area ) throws IllegalArgumentException {
 		if( area instanceof AssignmentArea ) {
-			if( assignmentAreas.contains( area ) ) {
+			if( assignmentAreas.contains( (AssignmentArea)area ) ) {
 				throw new IllegalArgumentException( Localization.getInstance().getString( "ds.z.Room.AlreadyContainsAreaException" ) );
 			} else {
 				assignmentAreas.add( (AssignmentArea) area );
 			}
 		}
 		if( area instanceof DelayArea ) {
-			if( delayAreas.contains( area ) ) {
+			if( delayAreas.contains( (DelayArea)area ) ) {
 				throw new IllegalArgumentException( Localization.getInstance().getString( "ds.z.Room.AlreadyContainsAreaException" ) );
 			} else {
 				delayAreas.add( (DelayArea) area );
 			}
 		}
 		if( area instanceof Barrier ) {
-			if( barriers.contains( area ) ) {
+			if( barriers.contains( (Barrier)area ) ) {
 				throw new IllegalArgumentException( Localization.getInstance().getString( "ds.z.Room.AlreadyContainsAreaException" ) );
 			} else {
 				barriers.add( (Barrier) area );
 			}
 		// Check also for evacuation barriers
 		} else if( area instanceof InaccessibleArea ) {
-			if( inaccessibleAreas.contains( area ) ) {
+			if( inaccessibleAreas.contains( (InaccessibleArea)area ) ) {
 				throw new IllegalArgumentException( Localization.getInstance().getString( "ds.z.Room.AlreadyContainsAreaException" ) );
 			}
 			// is _not_ contained because if it would be in inaccessibleAreas and the exception is already thrown
 			inaccessibleAreas.add( (InaccessibleArea) area );
 		}
 		if( area instanceof SaveArea ) {
-			if( saveAreas.contains( area ) ) {
+			if( saveAreas.contains( (SaveArea)area ) ) {
 				throw new IllegalArgumentException( Localization.getInstance().getString( "ds.z.Room.AlreadyContainsAreaException" ) );
 			} else {
 				saveAreas.add( (SaveArea) area );
@@ -262,15 +262,15 @@ public class Room extends BaseRoom<RoomEdge> implements Cloneable {
 			}
 		}
 		if( area instanceof StairArea ) {
-			if( stairAreas.contains( area ) ) {
+			if( stairAreas.contains( (StairArea)area ) ) {
 				throw new IllegalArgumentException( Localization.getInstance().getString( "ds.z.Room.AlreadyContainsAreaException" ) );
 			} else {
 				stairAreas.add( (StairArea) area );
 			}
 		}
 
-		area.addChangeListener( this );
-		throwChangeEvent( new ChangeEvent( this ) );
+//		area.addChangeListener( this );
+//		throwChangeEvent( new ChangeEvent( this ) );
 	}
 
 	/**
@@ -373,6 +373,8 @@ public class Room extends BaseRoom<RoomEdge> implements Cloneable {
 	 *  also be replaced by the same list of points, and then these two new polygon parts
 	 *  will be linked together so that the whole replacement part is passable after this
 	 *  method finishes.
+	 *
+	 * @param p
 	 */
 	@Override
 	public ArrayList<RoomEdge> replaceEdge( RoomEdge e, List<PlanPoint> p ) {
@@ -665,8 +667,8 @@ public class Room extends BaseRoom<RoomEdge> implements Cloneable {
 			throw new IllegalArgumentException( Localization.getInstance().getString( "ds.z.Room.NoAreaException" ) );
 		}
 
-		area.removeChangeListener( this );
-		throwChangeEvent( new ChangeEvent( this ) );
+//		area.removeChangeListener( this );
+//		throwChangeEvent( new ChangeEvent( this ) );
 	}
 
 	/**
@@ -675,6 +677,8 @@ public class Room extends BaseRoom<RoomEdge> implements Cloneable {
 	@Override
 	public void delete() throws IllegalArgumentException, IllegalStateException {
 		try {
+// TODO wenn ein raum gelöscht wird, werden nicht alle areas gelöscht???
+			
 			//ChangeEvent is thrown by Floor
 			associatedFloor.deleteRoom( this );
 			associatedFloor = null;
@@ -821,6 +825,8 @@ public class Room extends BaseRoom<RoomEdge> implements Cloneable {
 	 * This is a convenience method that adds all PlanPoints of all
 	 * Edges of this polygon to the given list. The Room implementation
 	 * also adds all PlanPoints of all Areas that are registered at this Room.
+	 *
+	 * @param planPoints 
 	 */
 	public void getBorderPlanPoints( List<PlanPoint> planPoints ) {
 		super.getPlanPoints( planPoints );
@@ -832,6 +838,7 @@ public class Room extends BaseRoom<RoomEdge> implements Cloneable {
 	 * Edges of this polygon to the given list. The Room implementation 
 	 * also adds all PlanPoints of all Areas that are registered at this Room.
 	 */
+	@Override
 	public void getPlanPoints( List<PlanPoint> planPoints ) {
 		super.getPlanPoints( planPoints );
 
@@ -884,7 +891,7 @@ public class Room extends BaseRoom<RoomEdge> implements Cloneable {
 		// cleanUp for Rooms (first traversion)
 		PlanPoint p1, p2, p3;
 		RoomEdge e1, e2, temp1, temp2;
-		e1 = (RoomEdge) getFirstEdge();
+		e1 = getFirstEdge();
 		e2 = (RoomEdge) (e1.getTarget().getNextEdge());
 		p1 = e1.getSource();
 		p2 = e1.getTarget();
@@ -942,7 +949,7 @@ public class Room extends BaseRoom<RoomEdge> implements Cloneable {
 			boolean combineable = (((p1.getXInt() == p2.getXInt()) && (p2.getXInt() == p3.getXInt())) || ((p1.getYInt() == p2.getYInt()) && (p2.getYInt() == p3.getYInt())));
 			boolean bothNotPassable = (!(e1.isPassable()) && !(e2.isPassable()));
 			if( combineable && bothNotPassable ) {
-				e1 = (RoomEdge) combineEdges( e1, e2, false );
+				e1 = combineEdges( e1, e2, false );
 				e2 = (RoomEdge) e1.getTarget().getNextEdge();
 				p2 = e1.getTarget();
 				p3 = e2.getTarget();
@@ -981,7 +988,7 @@ public class Room extends BaseRoom<RoomEdge> implements Cloneable {
 
 			sa.cleanUpForAreas();
 			if( sa.getNumberOfEdges() < 4 ) {
-				//staticClass.add(temp_type,temp_points,getFloor());
+				//staticClass.defineByPoints(temp_type,temp_points,getFloor());
 				sa.delete();
 			}
 		}
@@ -996,7 +1003,7 @@ public class Room extends BaseRoom<RoomEdge> implements Cloneable {
 			}
 			da.cleanUpForAreas();
 			if( da.getNumberOfEdges() < 4 ) {
-				//staticClass.add(temp_type,temp_points,getFloor());
+				//staticClass.defineByPoints(temp_type,temp_points,getFloor());
 				da.delete();
 			}
 		}
@@ -1010,7 +1017,7 @@ public class Room extends BaseRoom<RoomEdge> implements Cloneable {
 			}
 			sa.cleanUpForAreas();
 			if( sa.getNumberOfEdges() < 4 ) {
-				//staticClass.add(temp_type,temp_points,getFloor());
+				//staticClass.defineByPoints(temp_type,temp_points,getFloor());
 				sa.delete();
 			}
 		}
@@ -1025,7 +1032,7 @@ public class Room extends BaseRoom<RoomEdge> implements Cloneable {
 			}
 			aa.cleanUpForAreas();
 			if( aa.getNumberOfEdges() < 4 ) {
-				//staticClass.add(temp_type,temp_points,getFloor(),aa.getAssignmentType(),aa.getEvacuees());
+				//staticClass.defineByPoints(temp_type,temp_points,getFloor(),aa.getAssignmentType(),aa.getEvacuees());
 				aa.delete();
 			}
 		}
@@ -1044,7 +1051,7 @@ public class Room extends BaseRoom<RoomEdge> implements Cloneable {
 			if( ia.getNumberOfEdges() < 4 ) {
 				ia.delete();
 				if( !(convertedToBarrier) ) {
-					//staticClass.add(temp_type,temp_points,getFloor());
+					//staticClass.defineByPoints(temp_type,temp_points,getFloor());
 				}
 			}
 		}
@@ -1060,7 +1067,7 @@ public class Room extends BaseRoom<RoomEdge> implements Cloneable {
 		// cleanUp for Rooms (second traversion)
 		PlanPoint p1, p2, p3;
 		RoomEdge e1, e2;
-		e1 = (RoomEdge) getFirstEdge();
+		e1 = getFirstEdge();
 		e2 = (RoomEdge) (e1.getTarget().getNextEdge());
 		p1 = e1.getSource();
 		p2 = e1.getTarget();
@@ -1087,7 +1094,7 @@ public class Room extends BaseRoom<RoomEdge> implements Cloneable {
 			boolean combineable = (((p1.getXInt() == p2.getXInt()) && (p2.getXInt() == p3.getXInt())) || ((p1.getYInt() == p2.getYInt()) && (p2.getYInt() == p3.getYInt())));
 
 			if( combineable && bothPassable && linkTargetsAreCombineable ) {
-				e1 = (RoomEdge) combineEdges( e1, e2, false );
+				e1 = combineEdges( e1, e2, false );
 				e2 = (RoomEdge) e1.getTarget().getNextEdge();
 				p2 = e1.getTarget();
 				p3 = e2.getTarget();

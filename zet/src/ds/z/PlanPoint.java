@@ -21,9 +21,6 @@ package ds.z;
 
 import com.thoughtworks.xstream.annotations.XStreamAlias;
 import com.thoughtworks.xstream.annotations.XStreamOmitField;
-import ds.z.event.ChangeEvent;
-import ds.z.event.ChangeListener;
-import ds.z.event.ChangeReporter;
 import io.z.PlanPointConverter;
 import io.z.XMLConverter;
 import java.awt.Point;
@@ -46,10 +43,10 @@ import util.ConversionTools;
  */
 @XStreamAlias( "planPoint" )
 @XMLConverter( PlanPointConverter.class )
-public class PlanPoint extends Point implements ChangeReporter {
+public class PlanPoint extends Point {
 
-	@XStreamOmitField()
-	private transient ArrayList<ChangeListener> changeListeners = new ArrayList<ChangeListener>();
+//	@XStreamOmitField()
+//	private transient ArrayList<ChangeListener> changeListeners = new ArrayList<ChangeListener>();
 	/** The next incident edge. */
 	@XStreamOmitField() // - is set in Compact converter
 	private Edge nextEdge;
@@ -120,44 +117,44 @@ public class PlanPoint extends Point implements ChangeReporter {
 			setLocation( x, y );
 		}
 	}
-
-	void resetListener() {
-		changeListeners = new ArrayList<ChangeListener>();
-	}
-
-	/** {@inheritDoc}
-	 * @param e the event
-	 */
-	@Override
-	public void throwChangeEvent( ChangeEvent e ) {
-		// Workaround: Notify only the listeners who are registered at the time when this method starts
-		// This point may be thrown away when the resulting edge must be rastered, and then the list
-		// "changeListeners" will be altered during "c.stateChanged (e)", which produces exceptions.
-		ChangeListener[] listenerCopy = changeListeners.toArray( new ChangeListener[changeListeners.size()] );
-
-
-		for( ChangeListener c : listenerCopy ) {
-			c.stateChanged( e );
-		}
-	}
-
-	/** {@inheritDoc}
-	 * @param c the listener
-	 */
-	@Override
-	public void addChangeListener( ChangeListener c ) {
-		if( !changeListeners.contains( c ) ) {
-			changeListeners.add( c );
-		}
-	}
-
-	/** {@inheritDoc}
-	 * @param c the listener
-	 */
-	@Override
-	public void removeChangeListener( ChangeListener c ) {
-		changeListeners.remove( c );
-	}
+//
+//	void resetListener() {
+//		changeListeners = new ArrayList<ChangeListener>();
+//	}
+//
+//	/** {@inheritDoc}
+//	 * @param e the event
+//	 */
+//	@Override
+//	public void throwChangeEvent( ChangeEvent e ) {
+//		// Workaround: Notify only the listeners who are registered at the time when this method starts
+//		// This point may be thrown away when the resulting edge must be rastered, and then the list
+//		// "changeListeners" will be altered during "c.stateChanged (e)", which produces exceptions.
+//		ChangeListener[] listenerCopy = changeListeners.toArray( new ChangeListener[changeListeners.size()] );
+//
+//
+//		for( ChangeListener c : listenerCopy ) {
+//			c.stateChanged( e );
+//		}
+//	}
+//
+//	/** {@inheritDoc}
+//	 * @param c the listener
+//	 */
+//	@Override
+//	public void addChangeListener( ChangeListener c ) {
+//		if( !changeListeners.contains( c ) ) {
+//			changeListeners.add( c );
+//		}
+//	}
+//
+//	/** {@inheritDoc}
+//	 * @param c the listener
+//	 */
+//	@Override
+//	public void removeChangeListener( ChangeListener c ) {
+//		changeListeners.remove( c );
+//	}
 
 	/**
 	 * Checks if an object is equal to this instance of <code>PlanPoint</code>. A point
@@ -281,7 +278,7 @@ public class PlanPoint extends Point implements ChangeReporter {
 			// Values are already rounded in superimplementation of setLocation
 			// -> No need to round them here
 			super.setLocation( x, y );
-			throwChangeEvent( new ChangeEvent( this ) );
+//			throwChangeEvent( new ChangeEvent( this ) );
 		}
 	}
 
@@ -322,7 +319,7 @@ public class PlanPoint extends Point implements ChangeReporter {
 	 */
 	public void translate( int x, int y ) {
 		super.translate( x, y );
-		throwChangeEvent( new ChangeEvent( this ) );
+//		throwChangeEvent( new ChangeEvent( this ) );
 	}
 
 	/**

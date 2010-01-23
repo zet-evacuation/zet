@@ -23,7 +23,6 @@ import com.thoughtworks.xstream.mapper.Mapper;
 import ds.z.Edge;
 
 import ds.z.PlanPolygon;
-import ds.z.event.ChangeListener;
 
 import java.util.ArrayList;
 
@@ -50,8 +49,7 @@ public class PlanPolygonConverter extends ReflectionConverter {
 		Object created = instantiateNewInstance (reader, context);
 
 		// Early recreation of changeListener List neccessary
-		reflectionProvider.writeField (created, "changeListeners",
-				new ArrayList<ChangeListener> (), myClass);
+//		reflectionProvider.writeField (created, "changeListeners", new ArrayList<ChangeListener> (), myClass);
 
 		try {
 			created = doUnmarshal (created, reader, context);
@@ -62,7 +60,7 @@ public class PlanPolygonConverter extends ReflectionConverter {
 
 		// Recreate changeListener list
 		for (Edge t : result.getEdges ()) {
-			t.addChangeListener (result);
+	//		t.addChangeListener (result);
 		}
 
 		// Recreate transient flag

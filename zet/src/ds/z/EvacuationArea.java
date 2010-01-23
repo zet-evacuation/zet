@@ -6,13 +6,14 @@
  *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
  * GNU General Public License for more details.
  *
  * You should have received a copy of the GNU General Public License
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
+
 /*
  * EvacuationArea.java
  * Created on 26. November 2007, 21:32
@@ -21,7 +22,6 @@ package ds.z;
 
 import com.thoughtworks.xstream.annotations.XStreamAlias;
 import com.thoughtworks.xstream.annotations.XStreamAsAttribute;
-import ds.z.event.EvacuationAreaCreatedEvent;
 import localization.Localization;
 
 /**
@@ -58,7 +58,7 @@ public class EvacuationArea extends SaveArea {
 	public EvacuationArea( Room room, int attractivity ) {
 		super( room );
 		setAttractivity( attractivity );
-		throwChangeEvent( new EvacuationAreaCreatedEvent( this, 1 ) );
+//		throwChangeEvent( new EvacuationAreaCreatedEvent( this, 1 ) );
 	}
 	
 	/**
@@ -73,7 +73,7 @@ public class EvacuationArea extends SaveArea {
 		super( room );
 		setAttractivity( attractivity );
 		setName( name );
-		throwChangeEvent( new EvacuationAreaCreatedEvent( this, 1 ) );
+//		throwChangeEvent( new EvacuationAreaCreatedEvent( this, 1 ) );
 	}
 
 	/**
@@ -130,9 +130,9 @@ public class EvacuationArea extends SaveArea {
 	 * that use this <code>EvacuationArea</code> as exit are set to <code>null</code>
 	 * using the event system.
 	 */
-	@Override
-	public void delete() {
-		throwChangeEvent( new EvacuationAreaCreatedEvent( this, 2 ) );
-		super.delete();
-	}
+//	@Override
+//	public void delete() {
+//		throwChangeEvent( new EvacuationAreaCreatedEvent( this, 2 ) );
+//		super.delete();
+//	}
 }

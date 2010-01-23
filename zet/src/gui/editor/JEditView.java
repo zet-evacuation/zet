@@ -13,6 +13,7 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
+
 /**
  * Class JEditView
  * Erstellt 29.04.2008, 21:06:42
@@ -20,12 +21,10 @@
 package gui.editor;
 
 import gui.components.AbstractSplitPropertyWindow;
-import ds.Project;
 import ds.PropertyContainer;
 import ds.z.Assignment;
 import ds.z.AssignmentArea;
 import ds.z.AssignmentType;
-import ds.z.BuildingPlan;
 import ds.z.DelayArea;
 import ds.z.Edge;
 import ds.z.EvacuationArea;
@@ -36,8 +35,7 @@ import ds.z.Room;
 import ds.z.RoomEdge;
 import ds.z.StairArea;
 import ds.z.TeleportEdge;
-import ds.z.event.ChangeEvent;
-import ds.z.event.EvacuationAreaCreatedEvent;
+import ds.z.ZControl;
 import gui.JEditor;
 import gui.ZETMain;
 import gui.ZETProperties;
@@ -85,7 +83,7 @@ import javax.swing.SwingUtilities;
  *
  * @author Jan-Philipp Kappmeier
  */
-public class JEditView extends AbstractSplitPropertyWindow<JFloorScrollPane<JFloor>> implements ds.z.event.ChangeListener {
+public class JEditView extends AbstractSplitPropertyWindow<JFloorScrollPane<JFloor>> {
 	/** Message code indicating that the delay area panel should be displayed. @see setEastPanelType() */
 	public static final int DELAY_AREA_PANEL = 0;
 	/** Message code indicating that the assignment area panel should be displayed. @see setEastPanelType() */
@@ -102,8 +100,10 @@ public class JEditView extends AbstractSplitPropertyWindow<JFloorScrollPane<JFlo
 	public static final int STAIR_AREA_PANEL = 6;
 	/** The currently active panel type */
 	private static int eastPanelType;
+	/** The control object for the loaded project. */
+  private ZControl projectControl;
 	/** The model that is loded in the editor. */
-	private Project myProject;
+	//private Project myProject;
 	/** The currently visible {@link ds.z.Floor} */
 	private Floor currentFloor;
 	/** Model for a floor-selector combo box. */
@@ -174,7 +174,7 @@ public class JEditView extends AbstractSplitPropertyWindow<JFloorScrollPane<JFlo
 	 * Initializes the editing view of ZET.
 	 * @param project the project which is displayed in the editor
 	 */
-	public JEditView( Project project ) {
+	public JEditView( ZControl projectControl ) {
 		super( new JFloorScrollPane<JFloor>( new JFloor() ) );
 		// this.myProject = project; is now called later - TIMON
 		final JFloor centerPanel = this.getLeftPanel().getMainComponent();
@@ -200,10 +200,11 @@ public class JEditView extends AbstractSplitPropertyWindow<JFloorScrollPane<JFlo
 				}
 			}
 		} );
-		displayProject( project );
+		displayProject( projectControl );
 		this.getLeftPanel().getHorizontalScrollBar().addAdjustmentListener( adlPlanImage );
 		this.getLeftPanel().getVerticalScrollBar().addAdjustmentListener( adlPlanImage );
 	}
+	
 	public JEditView( ) {
 		super( new JFloorScrollPane<JFloor>( new JFloor() ) );
 		final JFloor centerPanel = this.getLeftPanel().getMainComponent();
@@ -272,7 +273,7 @@ public class JEditView extends AbstractSplitPropertyWindow<JFloorScrollPane<JFlo
 				eastSubBarCardLayout.show( eastSubBar, "assignmentArea" );
 				double area = Math.round( selectedPolygon.areaMeter() * 100 ) / 100.0;
 				lblAreaSize.setText( nfFloat.format( area ) + " m²" );
-				if( myProject.getPlan().getRasterized() ) {
+				if( projectControl.getProject().getBuildingPlan().getRasterized() ) {
 					lblMaxPersons.setText( nfInteger.format( ((AssignmentArea)selectedPolygon).getMaxEvacuees() ) );
 					lblMaxPersonsWarning.setText( "" );
 				} else {
@@ -335,7 +336,7 @@ public class JEditView extends AbstractSplitPropertyWindow<JFloorScrollPane<JFlo
 		cbxFloors.addActionListener( new ActionListener() {
 			public void actionPerformed( ActionEvent e ) {
 				if( cbxFloors.getSelectedItem() != null )
-					((Floor)cbxFloors.getSelectedItem()).removeChangeListener( roomSelector );
+;//					((Floor)cbxFloors.getSelectedItem()).removeChangeListener( roomSelector );
 				else
 					return;
 
@@ -348,7 +349,7 @@ public class JEditView extends AbstractSplitPropertyWindow<JFloorScrollPane<JFlo
 				Floor dspFloor = (Floor)cbxFloors.getSelectedItem();
 				currentFloor = dspFloor;
 				updateFloorView();
-				dspFloor.addChangeListener( roomSelector );
+//				dspFloor.addChangeListener( roomSelector );
 				getLeftPanel().getTopRuler().setWidth( dspFloor.getWidth() );
 				getLeftPanel().getLeftRuler().setHeight( dspFloor.getHeight() );
 				getLeftPanel().getTopRuler().offset = util.ConversionTools.roundScale3( dspFloor.getxOffset() / 1000.0 - 0.8 );
@@ -374,7 +375,7 @@ public class JEditView extends AbstractSplitPropertyWindow<JFloorScrollPane<JFlo
 		} );
 
 		final JComboBox cbxRooms = new JComboBox();
-		roomSelector = new RoomComboBoxModel( myProject, floorSelector );
+		roomSelector = new RoomComboBoxModel( projectControl, floorSelector );
 		floorSelector.setRoomSelector( roomSelector );
 		cbxRooms.setModel( roomSelector );
 		cbxRooms.addActionListener( new ActionListener() {
@@ -463,7 +464,7 @@ public class JEditView extends AbstractSplitPropertyWindow<JFloorScrollPane<JFlo
 		// AssignmentType-Selector
 		lblAssignmentType = new JLabel( loc.getString( "gui.editor.JEditorPanel.labelAssignmentType" ) );
 		eastPanel.add( lblAssignmentType, "0, " + row++ );
-		assignmentTypeSelector = new AssignmentTypeComboBoxModel( myProject );
+		assignmentTypeSelector = new AssignmentTypeComboBoxModel( projectControl );
 		assignmentTypeSelector.setFloorPanel( this.getLeftPanel().getMainComponent() );
 		JComboBox cbxAssignmentType = new JComboBox( assignmentTypeSelector );
 		cbxAssignmentType.setRenderer( new ComboBoxRenderer() {
@@ -983,8 +984,8 @@ public class JEditView extends AbstractSplitPropertyWindow<JFloorScrollPane<JFlo
 	 * @return the text
 	 */
 	protected String getTitleBarText() {
-		if( myProject.getProjectFile() != null )
-			return myProject.getProjectFile().getName() + " [" + currentFloor.getName() + "]" + " - " +
+		if( projectControl.getProject().getProjectFile() != null )
+			return projectControl.getProject().getProjectFile().getName() + " [" + currentFloor.getName() + "]" + " - " +
 							loc.getString( "AppTitle" );
 		else
 			return loc.getString( "NewFile" ) + " [" + currentFloor.getName() + "]" + " - " + loc.getString( "AppTitle" );
@@ -1000,14 +1001,14 @@ public class JEditView extends AbstractSplitPropertyWindow<JFloorScrollPane<JFlo
 	}
 
 	public void displayProject() {
-		displayProject( myProject );
+		displayProject( projectControl );
 	}
 
-	public void displayProject( Project p ) {
-		boolean show_different_project = (myProject != p);
-		if( myProject != null ) {
-			if( show_different_project )
-				myProject.removeChangeListener( this );
+	public void displayProject( ZControl projectControl ) {
+		//boolean show_different_project = (this.projectControl.getZControl() != projectControl.getZControl());
+		if( projectControl != null ) {
+//			if( show_different_project )
+//				myProject.removeChangeListener( this );
 
 			// Clearing is done in the set-methods called later
 			floorSelector.clear();
@@ -1015,31 +1016,33 @@ public class JEditView extends AbstractSplitPropertyWindow<JFloorScrollPane<JFlo
 			assignmentTypeSelector.clear();
 
 
+			getLeftPanel().getMainComponent().setZcontrol( projectControl );
 			getLeftPanel().getMainComponent().displayFloor( null );
 		}
 
-		myProject = p;
+//		myProject = p;
+		this.projectControl = projectControl;
 
-		if( p != null ) {
-			if( show_different_project )
-				p.addChangeListener( this );
+		if( projectControl != null ) {
+//			if( show_different_project )
+//				p.addChangeListener( this );
 
-			recreatePolygonPopupMenu( p.getCurrentAssignment() );
+			recreatePolygonPopupMenu( projectControl.getProject().getCurrentAssignment() );
 			recreateEdgePopupMenu();
 			recreatePointPopupMenu();
 		}
 
 		//This is independent of the rest of the displaying work
-		floorSelector.displayFloors( p );
-		assignmentTypeSelector.setProject( p );
+		floorSelector.displayFloors( projectControl.getProject() );
+		assignmentTypeSelector.setControl( projectControl );
 		assignmentTypeSelector.displayAssignmentTypesForCurrentProject();
 		// If more than one floor, display the second.
 		// what happens if a project has no floor?
 		if( PropertyContainer.getInstance().getAsBoolean( "editor.options.view.hideDefaultFloor" ) )
-			if( p.getPlan().getFloors().size() >= 2 )
-				changeFloor( p.getPlan().getFloors().get( 1 ) );
+			if( projectControl.getProject().getBuildingPlan().getFloors().size() >= 2 )
+				changeFloor( projectControl.getProject().getBuildingPlan().getFloors().get( 1 ) );
 			else
-				changeFloor( p.getPlan().getFloors().get( 0 ) );
+				changeFloor( projectControl.getProject().getBuildingPlan().getFloors().get( 0 ) );
 	}
 
 	/**
@@ -1075,13 +1078,19 @@ public class JEditView extends AbstractSplitPropertyWindow<JFloorScrollPane<JFlo
 		return cbxFloors.getSelectedIndex();
 	}
 
+	public ZControl getProjectControl() {
+		return projectControl;
+	}
+
 	/**
 	 * Returns the currently displayed project.
 	 * @return the currently displayed project
 	 */
-	public Project getProject() {
-		return myProject;
-	}
+//	public Project getZControl() {
+//		return projectControl.getZControl();
+//	}
+
+
 
 	/**
 	 * Updates the gui if a new project has been loaded. Loads new combo boxes,
@@ -1089,7 +1098,7 @@ public class JEditView extends AbstractSplitPropertyWindow<JFloorScrollPane<JFlo
 	 */
 	public void update() {
 		cbxPreferredExit.removeAllItems();
-		for( Floor f : getProject().getPlan().getFloors() )
+		for( Floor f : projectControl.getProject().getBuildingPlan().getFloors() )
 			for( Room r : f.getRooms() )
 				for( EvacuationArea e : r.getEvacuationAreas() )
 					cbxPreferredExit.addItem( e );
@@ -1284,17 +1293,20 @@ public class JEditView extends AbstractSplitPropertyWindow<JFloorScrollPane<JFlo
 			p.setPolygon( currentPolygon );
 	}
 
-	public void stateChanged( ChangeEvent e ) {
+// TODO-Event werfe wirklich events
+	public void stateChanged( /*ChangeEvent e*/ ) {
 		// Show possibly new floor list (floors added/removed or names changed)
-		if( (e.getSource() instanceof BuildingPlan) || (e.getSource() instanceof Floor && e.getField() != null ? e.getField().equals( "name" ) : false) )
-			floorSelector.displayFloors( myProject );
-		if( e instanceof EvacuationAreaCreatedEvent ) {
-			EvacuationAreaCreatedEvent eac = (EvacuationAreaCreatedEvent)e;
-			if( eac.getMessage().equals( "created" ) )
-				cbxPreferredExit.addItem( eac.getSource() );
-			else
-				cbxPreferredExit.removeItem( eac.getSource() );
-		}
+//		if( (e.getSource() instanceof BuildingPlan) || (e.getSource() instanceof Floor && e.getField() != null ? e.getField().equals( "name" ) : false) )
+//			floorSelector.displayFloors( myProject );
+		// TODO-Event: hier wird das evacuation-created-event abgefangen!
+		// irgendwie anders regeln
+//		if( e instanceof EvacuationAreaCreatedEvent ) {
+//			EvacuationAreaCreatedEvent eac = (EvacuationAreaCreatedEvent)e;
+//			if( eac.getMessage().equals( "created" ) )
+//				cbxPreferredExit.addItem( eac.getSource() );
+//			else
+//				cbxPreferredExit.removeItem( eac.getSource() );
+//		}
 		JRuler topRuler = getLeftPanel().getTopRuler();
 		JRuler leftRuler = getLeftPanel().getLeftRuler();
 		Floor floor = getCurrentFloor();

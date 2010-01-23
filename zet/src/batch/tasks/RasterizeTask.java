@@ -42,7 +42,7 @@ public class RasterizeTask implements Runnable {
 	/** Performs rasterization. */
 	public void run() {
 		try {
-			project.getPlan().rasterize();
+			project.getBuildingPlan().rasterize();
 		} catch( Exception ex ) {
 			ZETMain.sendError( ex.getLocalizedMessage () );
 		}
