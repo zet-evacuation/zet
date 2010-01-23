@@ -25,7 +25,6 @@ import com.thoughtworks.xstream.mapper.Mapper;
 
 import ds.z.Edge;
 import ds.z.PlanPoint;
-import ds.z.event.ChangeListener;
 
 import java.util.ArrayList;
 
@@ -85,8 +84,7 @@ public class CompactEdgeListConverter extends ReflectionConverter {
 		PlanPoint created = (PlanPoint) instantiateNewInstance (reader, context);
 
 		// Early recreation of changeListener List neccessary
-		reflectionProvider.writeField (created, "changeListeners",
-				new ArrayList<ChangeListener> (), PlanPoint.class);
+//		reflectionProvider.writeField (created, "changeListeners", new ArrayList<ChangeListener> (), PlanPoint.class);
 
 		created.x = Integer.parseInt (reader.getAttribute ("x"));
 		created.y = Integer.parseInt (reader.getAttribute ("y"));
@@ -153,8 +151,8 @@ public class CompactEdgeListConverter extends ReflectionConverter {
 		Edge start = created.getNextEdge ();
 		currentEdge = start;
 		do {
-			currentEdge.getSource ().addChangeListener (currentEdge);
-			currentEdge.getTarget ().addChangeListener (currentEdge);
+//			currentEdge.getSource ().addChangeListener (currentEdge);
+//			currentEdge.getTarget ().addChangeListener (currentEdge);
 
 			currentEdge = currentEdge.getTarget ().getNextEdge ();
 		} while (currentEdge != null && currentEdge != start);

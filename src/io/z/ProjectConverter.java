@@ -23,9 +23,7 @@ import com.thoughtworks.xstream.mapper.Mapper;
 
 import ds.Project;
 import ds.VisualProperties;
-import ds.z.event.ChangeListener;
 
-import java.util.ArrayList;
 
 /**
  * A converter that behaves just like a normal converter would do, he only adds
@@ -51,14 +49,13 @@ public class ProjectConverter extends ReflectionConverter {
 		Object created = instantiateNewInstance(reader, context);
 		
 		// Early recreation of changeListener List neccessary
-		reflectionProvider.writeField (created, "changeListeners", 
-			new ArrayList<ChangeListener> (), myClass);
+//		reflectionProvider.writeField (created, "changeListeners", new ArrayList<ChangeListener> (), myClass);
 		
         created = doUnmarshal(created, reader, context);
 		Project result = (Project)serializationMethodInvoker.callReadResolve(created);
 		
 		// Recreate changeListener list
-		result.getPlan ().addChangeListener (result);
+//		result.getBuildingPlan().addChangeListener( result );
 		
 		// Check if project is old version and does not contain visual properties
 		if( result.getVisualProperties() == null ) {

@@ -23,9 +23,6 @@ package ds.z;
 import com.thoughtworks.xstream.annotations.XStreamAlias;
 import com.thoughtworks.xstream.annotations.XStreamAsAttribute;
 import com.thoughtworks.xstream.annotations.XStreamOmitField;
-import ds.z.event.ChangeEvent;
-import ds.z.event.ChangeListener;
-import ds.z.event.ChangeReporter;
 import io.z.AssignmentTypeConverter;
 import io.z.XMLConverter;
 import java.io.Serializable;
@@ -43,9 +40,9 @@ import util.random.distributions.Distribution;
  */
 @XStreamAlias ("assignmentType")
 @XMLConverter(AssignmentTypeConverter.class)
-public class AssignmentType implements Serializable, ChangeListener, ChangeReporter {
-	@XStreamOmitField ()
-	private transient ArrayList<ChangeListener> changeListeners = new ArrayList<ChangeListener> ();
+public class AssignmentType implements Serializable {
+//	@XStreamOmitField ()
+//	private transient ArrayList<ChangeListener> changeListeners = new ArrayList<ChangeListener> ();
 	
 	
 	/**
@@ -129,26 +126,26 @@ public class AssignmentType implements Serializable, ChangeListener, ChangeRepor
 	}
 	
 	/** See {@link ds.z.event.ChangeReporter#throwChangeEvent (ChangeEvent)} for details. */
-	public void throwChangeEvent (ChangeEvent e) {
-		for (ChangeListener c : changeListeners) {
-			c.stateChanged (e);
-		}
-	}
-	/** {@inheritDoc} */
-	public void addChangeListener (ChangeListener c) {
-		if (!changeListeners.contains (c)) {
-			changeListeners.add (c);
-		}
-	}
-	/** {@inheritDoc} */
-	public void removeChangeListener (ChangeListener c) {
-		changeListeners.remove (c);
-	}
-	/** See {@link ds.z.event.ChangeListener#stateChanged (ChangeEvent)} for details. */
-	public void stateChanged (ChangeEvent e) {
-		// Simply forward the event
-		throwChangeEvent (e);
-	}
+//	public void throwChangeEvent (ChangeEvent e) {
+//		for (ChangeListener c : changeListeners) {
+//			c.stateChanged (e);
+//		}
+//	}
+//	/** {@inheritDoc} */
+//	public void addChangeListener (ChangeListener c) {
+//		if (!changeListeners.contains (c)) {
+//			changeListeners.add (c);
+//		}
+//	}
+//	/** {@inheritDoc} */
+//	public void removeChangeListener (ChangeListener c) {
+//		changeListeners.remove (c);
+//	}
+//	/** See {@link ds.z.event.ChangeListener#stateChanged (ChangeEvent)} for details. */
+//	public void stateChanged (ChangeEvent e) {
+//		// Simply forward the event
+//		throwChangeEvent (e);
+//	}
 	
 	/**
 	 * Returns the currently set value for the standardnumber of evacuees.
@@ -170,7 +167,7 @@ public class AssignmentType implements Serializable, ChangeListener, ChangeRepor
 			throw new IllegalArgumentException ( Localization.getInstance().getString("ds.z.AssignmentArea.NegativePersonValueException") );
 		} else {
 			standardEvacuees=val;
-			throwChangeEvent (new ChangeEvent (this));
+//			throwChangeEvent (new ChangeEvent (this));
 		}
 	}
 	
@@ -188,11 +185,11 @@ public class AssignmentType implements Serializable, ChangeListener, ChangeRepor
 	 */
 	public void setDiameter (Distribution val) {
 		if (diameter != null) {
-			diameter.removeChangeListener (this);
+//			diameter.removeChangeListener (this);
 		}
 		diameter=val;
-		val.addChangeListener (this);
-		throwChangeEvent (new ChangeEvent (this));
+//		val.addChangeListener (this);
+//		throwChangeEvent (new ChangeEvent (this));
 	}
 	
 	/**
@@ -209,11 +206,11 @@ public class AssignmentType implements Serializable, ChangeListener, ChangeRepor
 	 */
 	public void setAge (Distribution val) {
 		if (age != null) {
-			age.removeChangeListener (this);
+//			age.removeChangeListener (this);
 		}
 		age=val;
-		val.addChangeListener (this);
-		throwChangeEvent (new ChangeEvent (this));
+//		val.addChangeListener (this);
+//		throwChangeEvent (new ChangeEvent (this));
 	}
 	
 	/**
@@ -230,11 +227,11 @@ public class AssignmentType implements Serializable, ChangeListener, ChangeRepor
 	 */
 	public void setFamiliarity (Distribution val) {
 		if (familiarity != null) {
-			familiarity.removeChangeListener (this);
+	//		familiarity.removeChangeListener (this);
 		}
 		familiarity=val;
-		val.addChangeListener (this);
-		throwChangeEvent (new ChangeEvent (this));
+		//val.addChangeListener (this);
+		//throwChangeEvent (new ChangeEvent (this));
 	}
 	
 	/**
@@ -251,11 +248,11 @@ public class AssignmentType implements Serializable, ChangeListener, ChangeRepor
 	 */
 	public void setPanic (Distribution val) {
 		if (panic != null) {
-			panic.removeChangeListener (this);
+//			panic.removeChangeListener (this);
 		}
 		panic=val;
-		val.addChangeListener (this);
-		throwChangeEvent (new ChangeEvent (this));
+	//	val.addChangeListener (this);
+		//throwChangeEvent (new ChangeEvent (this));
 	}
 	
 	/**
@@ -272,11 +269,11 @@ public class AssignmentType implements Serializable, ChangeListener, ChangeRepor
 	 */
 	public void setDecisiveness (Distribution val) {
 		if (decisiveness != null) {
-			decisiveness.removeChangeListener (this);
+//			decisiveness.removeChangeListener (this);
 		}
 		decisiveness=val;
-		val.addChangeListener (this);
-		throwChangeEvent (new ChangeEvent (this));
+	//	val.addChangeListener (this);
+		//throwChangeEvent (new ChangeEvent (this));
 	}
 	
 	/**
@@ -297,8 +294,8 @@ public class AssignmentType implements Serializable, ChangeListener, ChangeRepor
 			throw new IllegalArgumentException (Localization.getInstance().getString("ds.z.AssignmentType.DoubleAssignmentAreaException"));
 		} else {
 			assignmentAreas.add (val);
-			val.addChangeListener (this);
-			throwChangeEvent (new ChangeEvent (this));
+//			val.addChangeListener (this);
+//			throwChangeEvent (new ChangeEvent (this));
 		}
 	}
 	
@@ -312,8 +309,8 @@ public class AssignmentType implements Serializable, ChangeListener, ChangeRepor
 			throw new IllegalArgumentException (Localization.getInstance().getString("ds.z.AssignmentType.AssignmentAreaNotFound"));
 		} else {
 			assignmentAreas.remove (val);
-			val.removeChangeListener (this);
-			throwChangeEvent (new ChangeEvent (this));
+//			val.removeChangeListener (this);
+//			throwChangeEvent (new ChangeEvent (this));
 		}
 	}
 	
@@ -372,7 +369,7 @@ public class AssignmentType implements Serializable, ChangeListener, ChangeRepor
 			).getString ("ds.z.Assignment.NoNameException"));
 		}
 		this.name = val;
-		throwChangeEvent (new ChangeEvent (this));
+//		throwChangeEvent (new ChangeEvent (this));
 	}
 	
 }

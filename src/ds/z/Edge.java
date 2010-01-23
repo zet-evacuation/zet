@@ -13,6 +13,7 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
+
 /*
  * Edge.java
  * Created on 26. November 2007, 21:32
@@ -20,10 +21,6 @@
 package ds.z;
 
 import com.thoughtworks.xstream.annotations.XStreamOmitField;
-import ds.z.event.ChangeEvent;
-import ds.z.event.ChangeListener;
-import ds.z.event.ChangeReporter;
-import ds.z.event.EdgeChangeEvent;
 import ds.z.exception.PointsAlreadyConnectedException;
 import io.z.EdgeConverter;
 import io.z.XMLConverter;
@@ -46,7 +43,7 @@ import localization.Localization;
  */
 //@XStreamAlias ( "edge" ) - Avoid duplicate edge tags (ds.graph.Edge also exists)
 @XMLConverter(EdgeConverter.class)
-public class Edge implements Serializable, ChangeListener, ChangeReporter {
+public class Edge implements Serializable {
 	/**
 	 * The <code>LineIntersectionType</code> enumeration defines the type of
 	 * intersection of two line segments.
@@ -66,8 +63,8 @@ public class Edge implements Serializable, ChangeListener, ChangeReporter {
 		NotIntersects;
 	}
 	/** The listeners which should be informed if anything changes */
-	@XStreamOmitField()
-	private transient ArrayList<ChangeListener> changeListeners = new ArrayList<ChangeListener>();
+//	@XStreamOmitField()
+//	private transient ArrayList<ChangeListener> changeListeners = new ArrayList<ChangeListener>();
 	/** The associated polygon of this edge */
 	private PlanPolygon associatedPolygon;
 	/** The start point of this edge */
@@ -79,7 +76,7 @@ public class Edge implements Serializable, ChangeListener, ChangeReporter {
 
 	/**
 	 * Creates a new instance of <code>Edge</code> with two different ending points 
-	 * and no associated polygon. The edge will try to add itself to the ending
+	 * and no associated polygon. The edge will try to defineByPoints itself to the ending
 	 * points' list of incident edges.
 	 *
 	 * @param newSource one ending point
@@ -96,7 +93,7 @@ public class Edge implements Serializable, ChangeListener, ChangeReporter {
 
 	/**
 	 * Creates a new instance of <code>Edge</code> with two different ending points.
-	 * The edge will try to add itself to the ending points' list of incident edges.
+	 * The edge will try to defineByPoints itself to the ending points' list of incident edges.
 	 *
 	 * @param newSource one ending point
 	 * @param newTarget the other ending point
@@ -107,54 +104,54 @@ public class Edge implements Serializable, ChangeListener, ChangeReporter {
 		setAssociatedPolygon( p );
 	}
 
-	void resetListener() {
-		changeListeners = new ArrayList<ChangeListener>();
-		source.resetListener();
-		target.resetListener();
-	}
-
-	/** {@inheritDoc}
-	 * @param e the event
-	 */
-	@Override
-	public void throwChangeEvent( ChangeEvent e ) {
-		// Workaround: Notify only the listeners who are registered at the time when this method starts
-		// This edge may be thrown away when it must be rastered, and then the list
-		// "changeListeners" will be altered during "c.stateChanged (e)", which produces exceptions.
-		ChangeListener[] listenerCopy = changeListeners.toArray( new ChangeListener[changeListeners.size()] );
-
-		for( ChangeListener c : listenerCopy )
-			c.stateChanged( e );
-	}
-
-	/** {@inheritDoc}
-	 * @param c the listener
-	 */
-	@Override
-	public void addChangeListener( ChangeListener c ) {
-		if( !changeListeners.contains( c ) )
-			changeListeners.add( c );
-	}
-
-	/** {@inheritDoc}
-	 * @param c the listener
-	 */
-	@Override
-	public void removeChangeListener( ChangeListener c ) {
-		changeListeners.remove( c );
-	}
-
-	/** {@inheritDoc}
-	 * @param e the event
-	 */
-	@Override
-	public void stateChanged( ChangeEvent e ) {
-		// Create an EdgeChangedEvent from the ChangeEvent that comes from the PlanPoints
-		if( e.getSource() instanceof PlanPoint )
-			throwChangeEvent( new EdgeChangeEvent( this, (PlanPoint)e.getSource() ) );
-		else
-			throwChangeEvent( e );
-	}
+//	void resetListener() {
+//		changeListeners = new ArrayList<ChangeListener>();
+//		source.resetListener();
+//		target.resetListener();
+//	}
+//
+//	/** {@inheritDoc}
+//	 * @param e the event
+//	 */
+//	@Override
+//	public void throwChangeEvent( ChangeEvent e ) {
+//		// Workaround: Notify only the listeners who are registered at the time when this method starts
+//		// This edge may be thrown away when it must be rastered, and then the list
+//		// "changeListeners" will be altered during "c.stateChanged (e)", which produces exceptions.
+//		ChangeListener[] listenerCopy = changeListeners.toArray( new ChangeListener[changeListeners.size()] );
+//
+//		for( ChangeListener c : listenerCopy )
+//			c.stateChanged( e );
+//	}
+//
+//	/** {@inheritDoc}
+//	 * @param c the listener
+//	 */
+//	@Override
+//	public void addChangeListener( ChangeListener c ) {
+//		if( !changeListeners.contains( c ) )
+//			changeListeners.defineByPoints( c );
+//	}
+//
+//	/** {@inheritDoc}
+//	 * @param c the listener
+//	 */
+//	@Override
+//	public void removeChangeListener( ChangeListener c ) {
+//		changeListeners.remove( c );
+//	}
+//
+//	/** {@inheritDoc}
+//	 * @param e the event
+//	 */
+//	@Override
+//	public void stateChanged( ChangeEvent e ) {
+//		// Create an EdgeChangedEvent from the ChangeEvent that comes from the PlanPoints
+//		if( e.getSource() instanceof PlanPoint )
+//			throwChangeEvent( new EdgeChangeEvent( this, (PlanPoint)e.getSource() ) );
+//		else
+//			throwChangeEvent( e );
+//	}
 
 	/** @param e An arbitrary edge
 	 * @return Whether the given edge e is a neighbour of this edge in this edge's polygon. The method
@@ -254,8 +251,8 @@ public class Edge implements Serializable, ChangeListener, ChangeReporter {
 
 		target.setPreviousEdge( null );
 		source.setNextEdge( null );
-		target.removeChangeListener( this );
-		source.removeChangeListener( this );
+//		target.removeChangeListener( this );
+//		source.removeChangeListener( this );
 		target = null;
 		source = null;
 	}
@@ -487,7 +484,7 @@ public class Edge implements Serializable, ChangeListener, ChangeReporter {
 			polygon.addEdge( this );
 			associatedPolygon = polygon;
 			//ChangeEvents are thrown by polygons
-			throwChangeEvent( new ChangeEvent( this ) );
+//			throwChangeEvent( new ChangeEvent( this ) );
 		} else
 			throw new IllegalArgumentException( Localization.getInstance().getString( "ds.z.CanNotConnectException" ) );
 	}
@@ -537,13 +534,13 @@ public class Edge implements Serializable, ChangeListener, ChangeReporter {
 							Localization.getInstance().getString( "ds.z.SourceAlreadyConnectedException" ) );
 
 		if( source != null ) {
-			source.removeChangeListener( this );
+//			source.removeChangeListener( this );
 			source.setNextEdge( null );
 		}
 		source = newSource;
-		newSource.addChangeListener( this );
+//		newSource.addChangeListener( this );
 		newSource.setNextEdge( this );
-		throwChangeEvent( new ChangeEvent( this ) );
+//		throwChangeEvent( new ChangeEvent( this ) );
 	}
 
 	/**
@@ -568,13 +565,13 @@ public class Edge implements Serializable, ChangeListener, ChangeReporter {
 							Localization.getInstance().getString( "ds.z.TargetAlreadyConnectedException" ) );
 
 		if( target != null ) {
-			target.removeChangeListener( this );
+//			target.removeChangeListener( this );
 			target.setPreviousEdge( null );
 		}
 		target = newTarget;
-		newTarget.addChangeListener( this );
+//		newTarget.addChangeListener( this );
 		newTarget.setPreviousEdge( this );
-		throwChangeEvent( new ChangeEvent( this ) );
+//		throwChangeEvent( new ChangeEvent( this ) );
 	}
 
 	/**
@@ -647,7 +644,7 @@ public class Edge implements Serializable, ChangeListener, ChangeReporter {
 	/** This is a convenience method that adds both PlanPoints of this Edge to
 	 * the given list.
 	 *
-	 * @param planPoints The method will add all PlanPoints to the parameter list.
+	 * @param planPoints The method will defineByPoints all PlanPoints to the parameter list.
 	 */
 	public void getPlanPoints( List<PlanPoint> planPoints ) {
 		planPoints.add( source );

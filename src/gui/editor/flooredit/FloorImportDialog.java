@@ -123,7 +123,7 @@ public class FloorImportDialog extends JDialog {
 					try {
 						Project loaded = Project.load( jfcProject.getSelectedFile() );
 						floors.clear();
-						for( Floor floor : loaded.getPlan().getFloors() )
+						for( Floor floor : loaded.getBuildingPlan().getFloors() )
 							floors.add( floor );
 						list.setListData( floors );
 					} catch( Exception ex ) {
@@ -137,9 +137,9 @@ public class FloorImportDialog extends JDialog {
 			} else if( e.getActionCommand().equals( "import" ) ) {
 					final Floor f = (Floor)list.getSelectedValue();
 					final Floor fc = f.clone();
-					final int max = project.getPlan().floorCount() + 1;
+					final int max = project.getBuildingPlan().floorCount() + 1;
 					int number = 0;
-					while( !project.getPlan().addFloor( fc ) && number <= max )
+					while( !project.getBuildingPlan().addFloor( fc ) && number <= max )
 						fc.setName( f.getName() + "_" + number++ );
 			} else if( e.getActionCommand().equals( "close" ) ) {
 				dispose();

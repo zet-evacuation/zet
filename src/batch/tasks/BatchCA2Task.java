@@ -91,7 +91,7 @@ public class BatchCA2Task implements Runnable {
 	public void run() {
 		CellularAutomaton ca2;
 		try {
-			ca2 = ExitDistributionBasedCAFactory.getInstance().convertAndApplyConcreteAssignment( project.getPlan(), exitAssignmentTask.getExitAssignment(), concreteAssignments[runNumber], res.getNetworkFlowModel().getZToGraphMapping().getRaster() );
+			ca2 = ExitDistributionBasedCAFactory.getInstance().convertAndApplyConcreteAssignment( project.getBuildingPlan(), exitAssignmentTask.getExitAssignment(), concreteAssignments[runNumber], res.getNetworkFlowModel().getZToGraphMapping().getRaster() );
 			res.setCellularAutomaton(runNumber, ca2 );
 		} catch( ConversionNotSupportedException ex ) {
 			System.err.println( "ConversionNotSupportedException ist aufgetreten. Dies sollte eigentlich nicht passieren..." );

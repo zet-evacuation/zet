@@ -6,13 +6,14 @@
  *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
  * GNU General Public License for more details.
  *
  * You should have received a copy of the GNU General Public License
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
+
 /*
  * BuildingPlan.java
  * Created on 26. November 2007, 21:32
@@ -21,10 +22,6 @@ package ds.z;
 
 import com.thoughtworks.xstream.annotations.XStreamAlias;
 import com.thoughtworks.xstream.annotations.XStreamImplicit;
-import com.thoughtworks.xstream.annotations.XStreamOmitField;
-import ds.z.event.ChangeEvent;
-import ds.z.event.ChangeListener;
-import ds.z.event.ChangeReporter;
 import ds.z.exception.AreaNotInsideException;
 import ds.z.exception.PolygonNotClosedException;
 import ds.z.exception.RoomIntersectException;
@@ -35,6 +32,7 @@ import io.z.XMLConverter;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Random;
 import localization.Localization;
@@ -50,10 +48,10 @@ import batch.tasks.AlgorithmTask;
  */
 @XStreamAlias("buildingPlan")
 @XMLConverter(BuildingPlanConverter.class)
-public class BuildingPlan implements Serializable, ChangeListener, ChangeReporter {
+public class BuildingPlan implements Serializable, Iterable<Floor> {
 	/** The change listeners of the plan. */
-	@XStreamOmitField()
-	private transient ArrayList<ChangeListener> changeListeners = new ArrayList<ChangeListener>();
+//	@XStreamOmitField()
+//	private transient ArrayList<ChangeListener> changeListeners = new ArrayList<ChangeListener>();
 	/** A list of all floors of the plan. */
 	@XStreamImplicit()
 	private ArrayList<Floor> floors;
@@ -61,12 +59,13 @@ public class BuildingPlan implements Serializable, ChangeListener, ChangeReporte
 	private boolean rasterized;
 	/** Static variable that stores the default-value for the rastersize in meter. */
 	public static double rasterSize = 0.4;
-	/**
-	 * three transformation matrixes for flip vertically, horizontally and at the main diagonal plus identity matrix
-	 */
+  /** Transformation matrix that flips vertically (mirrors at the {@code x}-axis. */
 	public static final int[][] flipXAxis = {{1, 0}, {0, -1}};
+  /** Transformation matrix that flips horizontally (mirrors at the {@code y}-axis. */
 	public static final int[][] flipYAxis = {{-1, 0}, {0, 1}};
+  /** Transformation matrix that mirrors at the main diagonal. */
 	public static final int[][] flipMainDiagonal = {{0, 1}, {1, 0}};
+  /** Transformation matrix that does nothing. */
 	public static final int[][] identity = {{1, 0}, {0, 1}};
 
 	/**
@@ -84,53 +83,52 @@ public class BuildingPlan implements Serializable, ChangeListener, ChangeReporte
 
 	/**
 	 * Returns the id of the selected floor.
-	 * @param floor
-	 * @throws 
-	 * @return the index
+	 * @param floor the selected flor whose index should be computed
+	 * @return the id of the selected floor
 	 */
 	public int getFloorID( Floor floor ) {
 		return (floors.indexOf( floor ));
 	}
 
-	/**
-	 * {@inheritDoc}
-	 * @param e the change event
-	 */
-	public void throwChangeEvent( ChangeEvent e ) {
-		for( ChangeListener c : changeListeners )
-			c.stateChanged( e );
-	}
-
-	/**
-	 * {@inheritDoc}
-	 * @param c the change listener
-	 */
-	public void addChangeListener( ChangeListener c ) {
-		if( !changeListeners.contains( c ) )
-			changeListeners.add( c );
-	}
-
-	/**
-	 * {@inheritDoc}
-	 * @param c the change listener
-	 */
-	public void removeChangeListener( ChangeListener c ) {
-		changeListeners.remove( c );
-	}
-
-	/**
-	 * {@inheritDoc}
-	 * @param e the change event
-	 */
-	public void stateChanged( ChangeEvent e ) {
-		// The change may have broken the rasterization. We are pessimistic here and
-		// reset the "rasterized" flag in any case.
-		rasterized = false;
-
-		// Simply forward the event
-		throwChangeEvent( e );
-	}
-
+//	/**
+//	 * {@inheritDoc}
+//	 * @param e the change event
+//	 */
+//	public void throwChangeEvent( ChangeEvent e ) {
+//		for( ChangeListener c : changeListeners )
+//			c.stateChanged( e );
+//	}
+//
+//	/**
+//	 * {@inheritDoc}
+//	 * @param c the change listener
+//	 */
+//	public void addChangeListener( ChangeListener c ) {
+//		if( !changeListeners.contains( c ) )
+//			changeListeners.defineByPoints( c );
+//	}
+//
+//	/**
+//	 * {@inheritDoc}
+//	 * @param c the change listener
+//	 */
+//	public void removeChangeListener( ChangeListener c ) {
+//		changeListeners.remove( c );
+//	}
+//
+//	/**
+//	 * {@inheritDoc}
+//	 * @param e the change event
+//	 */
+//	public void stateChanged( ChangeEvent e ) {
+//		// The change may have broken the rasterization. We are pessimistic here and
+//		// reset the "rasterized" flag in any case.
+//		rasterized = false;
+//
+//		// Simply forward the event
+//		throwChangeEvent( e );
+//	}
+//
 	/**
 	 * Adds the denoted floor to the building plan, only if it has not
 	 * been present in the list of floors until now.
@@ -140,8 +138,8 @@ public class BuildingPlan implements Serializable, ChangeListener, ChangeReporte
 	public boolean addFloor( Floor f ) {
 		if( !floors.contains( f ) ) {
 			floors.add( f );
-			f.addChangeListener( this );
-			throwChangeEvent( new ChangeEvent( this ) );
+//			f.addChangeListener( this );
+//			throwChangeEvent( new ChangeEvent( this ) );
 			return true;
 		}
 		return false;
@@ -163,7 +161,7 @@ public class BuildingPlan implements Serializable, ChangeListener, ChangeReporte
 			final Floor f = floors.get( level );
 			floors.set( level, floors.get( level + 1 ) );
 			floors.set( level + 1, f );
-			throwChangeEvent( new ChangeEvent( this ) );
+//			throwChangeEvent( new ChangeEvent( this ) );
 		} else
 			throw new IllegalArgumentException( "The given floor is not on the list." );
 	}
@@ -184,7 +182,7 @@ public class BuildingPlan implements Serializable, ChangeListener, ChangeReporte
 			final Floor f = floors.get( level );
 			floors.set( level, floors.get( level - 1 ) );
 			floors.set( level - 1, f );
-			throwChangeEvent( new ChangeEvent( this ) );
+//			throwChangeEvent( new ChangeEvent( this ) );
 		} else
 			throw new IllegalArgumentException( "The given floor is not on the list." );
 	}
@@ -248,17 +246,17 @@ public class BuildingPlan implements Serializable, ChangeListener, ChangeReporte
 		if( f.equals( floors.get( 0 ) ) )
 			throw new java.lang.IllegalArgumentException( Localization.getInstance().getString( "ds.z.BuildingPlan.DeleteDefaultEvacuationFloorException" ) );
 		else if( floors.size() == 2 ) {
-			// Delete the floor and add a new and empty one
+			// Delete the floor and defineByPoints a new and empty one
 			if( floors.remove( f) ) {
 				f.delete();
-				f.removeChangeListener( this );
-				throwChangeEvent( new ChangeEvent( this ) );
+//				f.removeChangeListener( this );
+//				throwChangeEvent( new ChangeEvent( this ) );
 				addFloor( new Floor( Localization.getInstance().getString( "ds.z.DefaultName.Floor" ) + " " + 1 ) );
 			}
 		} else if( floors.remove( f ) ) {
 			f.delete();
-			f.removeChangeListener( this );
-			throwChangeEvent( new ChangeEvent( this ) );
+//			f.removeChangeListener( this );
+//			throwChangeEvent( new ChangeEvent( this ) );
 		}
 	}
 
@@ -413,4 +411,13 @@ public class BuildingPlan implements Serializable, ChangeListener, ChangeReporte
 					maxPersons += a.getMaxEvacuees();
 		return maxPersons;
 	}
+
+	/**
+	 * Returns an iterator over the floors of this building plan.
+	 * @return an iterator over the floors of this building plan.
+	 */
+	public Iterator<Floor> iterator() {
+		return getFloors().iterator();
+	}
+
 }

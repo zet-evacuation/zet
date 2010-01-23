@@ -6,7 +6,7 @@
  *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
  * GNU General Public License for more details.
  *
  * You should have received a copy of the GNU General Public License
@@ -21,11 +21,6 @@ package ds.z;
 
 import com.thoughtworks.xstream.annotations.XStreamAlias;
 import com.thoughtworks.xstream.annotations.XStreamAsAttribute;
-import com.thoughtworks.xstream.annotations.XStreamOmitField;
-import ds.z.event.ChangeEvent;
-import ds.z.event.ChangeListener;
-import ds.z.event.ChangeReporter;
-import ds.z.event.EdgeChangeEvent;
 import ds.z.exception.AreaNotInsideException;
 import ds.z.exception.PolygonNotClosedException;
 import ds.z.exception.RoomIntersectException;
@@ -38,8 +33,10 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 
+import javax.swing.event.ChangeEvent;
 import localization.Localization;
 
 /**
@@ -53,10 +50,10 @@ import localization.Localization;
  */
 @XStreamAlias( "floor" )
 @XMLConverter( FloorConverter.class )
-public class Floor implements Serializable, ChangeListener, ChangeReporter, Cloneable {
+public class Floor implements Serializable, Cloneable, Iterable<Room> {
 	/** A list of all listeners of the floor. */
-	@XStreamOmitField()
-	private transient ArrayList<ChangeListener> changeListeners = new ArrayList<ChangeListener>();
+//	@XStreamOmitField()
+//	private transient ArrayList<ChangeListener> changeListeners = new ArrayList<ChangeListener>();
 	@XStreamAsAttribute()
 	private String name;
 	/** A list of all rooms contained in the floor. */
@@ -96,8 +93,8 @@ public class Floor implements Serializable, ChangeListener, ChangeReporter, Clon
 	 * ensure that it is switched back to the state that it had before by using
 	 * try & finally constructions.
 	 */
-	@XStreamOmitField ()
-	private transient boolean enableEventGeneration = true;
+//	@XStreamOmitField ()
+//	private transient boolean enableEventGeneration = true;
 	
 	/**
 	 * Creates a new empty instance of <code>Floor</code> with the name "NewFloor".
@@ -118,32 +115,32 @@ public class Floor implements Serializable, ChangeListener, ChangeReporter, Clon
 	/** {@inheritDoc}
 	 * @param e the event
 	 */
-	@Override
-	public void throwChangeEvent( ChangeEvent e ) {
-		if (enableEventGeneration) {
-			// Workaround: Notify only the listeners who are registered at the time when this method starts
-			// This point may be thrown away when the resulting edge must be rastered, and then the list
-			// "changeListeners" will be altered during "c.stateChanged (e)", which produces exceptions.
-			ChangeListener[] listenerCopy = changeListeners.toArray (
-					new ChangeListener[changeListeners.size ()]);
-
-			for (ChangeListener c : listenerCopy) {
-				c.stateChanged (e);
-			}
-		}
-	}
+//	@Override
+//	public void throwChangeEvent( ChangeEvent e ) {
+//		if (enableEventGeneration) {
+//			// Workaround: Notify only the listeners who are registered at the time when this method starts
+//			// This point may be thrown away when the resulting edge must be rastered, and then the list
+//			// "changeListeners" will be altered during "c.stateChanged (e)", which produces exceptions.
+//			ChangeListener[] listenerCopy = changeListeners.toArray (
+//					new ChangeListener[changeListeners.size ()]);
+//
+//			for (ChangeListener c : listenerCopy) {
+//				c.stateChanged (e);
+//			}
+//		}
+//	}
 
 	/** To be called before the floor is finally deleted. */
 	void delete () {
-		boolean eAG_old = enableEventGeneration;
+//		boolean eAG_old = enableEventGeneration;
 		try {
-			enableEventGeneration = false;
+//			enableEventGeneration = false;
 			
 			while (!rooms.isEmpty ()) {
 				rooms.get (0).delete ();
 			}
 		} finally {
-			enableEventGeneration = eAG_old;
+//			enableEventGeneration = eAG_old;
 		}
 		// Event is thrown by BuildingPlan
 	}
@@ -151,35 +148,35 @@ public class Floor implements Serializable, ChangeListener, ChangeReporter, Clon
 	/** {@inheritDoc}
 	 * @param c the listener
 	 */
-	@Override
-	public void addChangeListener( ChangeListener c ) {
-		if( !changeListeners.contains( c ) ) {
-			changeListeners.add( c );
-		}
-	}
-
-	/** {@inheritDoc}
-	 * @param c the listener
-	 */
-	@Override
-	public void removeChangeListener( ChangeListener c ) {
-		changeListeners.remove( c );
-	}
-
-	/** {@inheritDoc}
-	 * @param e the event
-	 */
-	@Override
-	public void stateChanged( ChangeEvent e ) {
-		if (e instanceof EdgeChangeEvent && ((EdgeChangeEvent)e).getEdge () instanceof RoomEdge) {
-			roomChangeHandler ( ((RoomEdge) ((EdgeChangeEvent)e).getEdge ()).getRoom () );
-		} else if (e.getSource () instanceof Room) {
-			roomChangeHandler ((Room)e.getSource ());
-		}
-
-		// Simply forward the event
-		throwChangeEvent( e );
-	}
+//	@Override
+//	public void addChangeListener( ChangeListener c ) {
+//		if( !changeListeners.contains( c ) ) {
+//			changeListeners.defineByPoints( c );
+//		}
+//	}
+//
+//	/** {@inheritDoc}
+//	 * @param c the listener
+//	 */
+//	@Override
+//	public void removeChangeListener( ChangeListener c ) {
+//		changeListeners.remove( c );
+//	}
+//
+//	/** {@inheritDoc}
+//	 * @param e the event
+//	 */
+//	@Override
+//	public void stateChanged( ChangeEvent e ) {
+//		if (e instanceof EdgeChangeEvent && ((EdgeChangeEvent)e).getEdge () instanceof RoomEdge) {
+//			roomChangeHandler ( ((RoomEdge) ((EdgeChangeEvent)e).getEdge ()).getRoom () );
+//		} else if (e.getSource () instanceof Room) {
+//			roomChangeHandler ((Room)e.getSource ());
+//		}
+//
+//		// Simply forward the event
+//		throwChangeEvent( e );
+//	}
 
 	/**
 	 * Adds a room to the floor and sets this floor as the associated floor of the room to be added.
@@ -193,10 +190,9 @@ public class Floor implements Serializable, ChangeListener, ChangeReporter, Clon
 				).getString ("ds.z.RoomAlreadyExistsException"));
 			}
 			rooms.add( room );
-			room.addChangeListener( this );
-			roomChangeHandler (room);
-			throwChangeEvent( new ChangeEvent( this, Localization.getInstance (
-			).getString ("ds.z.RoomAdded") ) );
+//			room.addChangeListener( this );
+//			roomChangeHandler (room);
+//			throwChangeEvent( new ChangeEvent( this, Localization.getInstance (			).getString ("ds.z.RoomAdded") ) );
 		// The room calls this method, so there is no need to set it's field here
 		// room.setAssociatedFloor (this);
 		} catch( IllegalArgumentException ex ) {
@@ -223,9 +219,9 @@ public class Floor implements Serializable, ChangeListener, ChangeReporter, Clon
 			).getString ("ds.z.NoRoomException"));
 		} else {
 			rooms.remove( room );
-			room.removeChangeListener( this );
+//			room.removeChangeListener( this );
 			roomDeleteHandler (room);
-			throwChangeEvent( new ChangeEvent( this ) );
+//			throwChangeEvent( new ChangeEvent( this ) );
 		}
 	}
 
@@ -330,7 +326,7 @@ public class Floor implements Serializable, ChangeListener, ChangeReporter, Clon
 	 */
 	public void setName( String val ) {
 		name = val;
-		throwChangeEvent( new ChangeEvent( this, null, "name" ) );
+//		throwChangeEvent( new ChangeEvent( this, null, "name" ) );
 	}
 
 	/**
@@ -628,7 +624,7 @@ public class Floor implements Serializable, ChangeListener, ChangeReporter, Clon
 
 			for( Room r : getRooms() ) {
 				Room newRoom = new Room( deepCopy, r.getName() );
-				newRoom.add( PlanPoint.pointCopy( r.getBorderPlanPoints() ) );
+				newRoom.defineByPoints( PlanPoint.pointCopy( r.getBorderPlanPoints() ) );
 
 				// Reconnect the rooms
 				m.put( r, newRoom );
@@ -646,30 +642,30 @@ public class Floor implements Serializable, ChangeListener, ChangeReporter, Clon
 				// _NOT_ AssignmentArea
 				for( Barrier t : r.getBarriers() ) {
 					Barrier b = new Barrier( newRoom );
-					b.add( PlanPoint.pointCopy( t.getPlanPoints() ) );
+					b.defineByPoints( PlanPoint.pointCopy( t.getPlanPoints() ) );
 				}
 				for( DelayArea t : r.getDelayAreas() ) {
 					DelayArea d = new DelayArea( newRoom, t.getDelayType(), t.getSpeedFactor() );
-					d.add( PlanPoint.pointCopy ( t.getPlanPoints() ) );
+					d.defineByPoints( PlanPoint.pointCopy ( t.getPlanPoints() ) );
 				}
 				for( InaccessibleArea t : r.getInaccessibleAreas() ) {
 					InaccessibleArea i = new InaccessibleArea( newRoom );
-					i.add( PlanPoint.pointCopy ( t.getPlanPoints() ) );
+					i.defineByPoints( PlanPoint.pointCopy ( t.getPlanPoints() ) );
 				}
 				for( SaveArea t : r.getSaveAreas() ) { // Evacuation areas are contained!
 					if( !(t instanceof EvacuationArea) ) {
 						SaveArea s = new SaveArea( newRoom );
-						s.add( PlanPoint.pointCopy( t.getPlanPoints() ) );
+						s.defineByPoints( PlanPoint.pointCopy( t.getPlanPoints() ) );
 					}
 				}
 				for( EvacuationArea t : r.getEvacuationAreas() ) {
 					EvacuationArea e = new EvacuationArea( newRoom, t.getAttractivity(), t.getName() );
-					e.add( PlanPoint.pointCopy( t.getPlanPoints() ) );
+					e.defineByPoints( PlanPoint.pointCopy( t.getPlanPoints() ) );
 				}
 				for( StairArea t : r.getStairAreas() ) {
 					StairArea s = new StairArea( newRoom );
 					List<PlanPoint> points = PlanPoint.pointCopy( t.getPlanPoints() );
-					s.add( points );
+					s.defineByPoints( points );
 
 					PlanPoint lowerStart = null;
 					PlanPoint lowerEnd = null;
@@ -695,6 +691,14 @@ public class Floor implements Serializable, ChangeListener, ChangeReporter, Clon
 			ZETMain.sendError( ex.getMessage() );
 		}
 		return deepCopy;
+	}
+
+	/**
+	 * Returns an iterator over all rooms contained in this floor.
+	 * @return an iterator over all rooms contained in this floor
+	 */
+	public Iterator<Room> iterator() {
+		return this.getRooms().iterator();
 	}
 
 	/**

@@ -272,7 +272,7 @@ public class JBatchView extends JPanel {
 		JButton btnNewEntry = new JButton( Localization.getInstance().getString( "gui.editor.JBatchView.newEntry" ) );
 		btnNewEntry.addActionListener( new ActionListener() {
 			public void actionPerformed( ActionEvent e ) {
-				addProject( JEditor.getInstance().getProject() );
+				addProject( JEditor.getInstance().getZControl().getProject() );
 			}
 		} );
 		tableButtons.add( btnNewEntry );

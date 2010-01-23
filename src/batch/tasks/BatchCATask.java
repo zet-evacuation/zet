@@ -6,13 +6,14 @@
  *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
  * GNU General Public License for more details.
  *
  * You should have received a copy of the GNU General Public License
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
+
 /**
  * Class BatchCATask
  * Erstellt 20.07.2008, 23:54:19
@@ -87,14 +88,14 @@ public class BatchCATask implements Runnable {
 	 */
 	public void run() {
 		EvacuationCellularAutomatonAlgorithm caAlgo;
-		CellularAutomaton ca;
-		try {
-			ca = ZToCAConverter.getInstance().convert( project.getPlan() );
-		} catch( ConversionNotSupportedException e ) {
-			e.printStackTrace();
-			return;
-		}
-		res.setCellularAutomaton( runNumber, ca );
+		CellularAutomaton ca = res.getCellularAutomaton( runNumber );
+//		try {
+//			ca = ZToCAConverter.getInstance().convert( project.getPlan() );
+//		} catch( ConversionNotSupportedException e ) {
+//			e.printStackTrace();
+//			return;
+//		}
+//		res.setCellularAutomaton( runNumber, ca );
 		for( AssignmentType at : assignment.getAssignmentTypes() )
 			ca.setAssignmentType( at.getName(), at.getUid() );
 		ConcreteAssignment concreteAssignment;

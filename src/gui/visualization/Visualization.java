@@ -13,6 +13,7 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
+
 /**
  * Class Visualization
  * Created 20.05.2008, 23:50:54
@@ -687,11 +688,11 @@ public class Visualization extends AbstractVisualization implements EventListene
 			case KeyEvent.VK_UP:
 			case KeyEvent.VK_DOWN:
 				JEditor.getInstance().getVisualizationView().updateCameraInformation();
-				JEditor.getInstance().getProject().getVisualProperties().getCameraPosition().pos = camera.getPos();
-				JEditor.getInstance().getProject().getVisualProperties().getCameraPosition().view = camera.getView();
-				JEditor.getInstance().getProject().getVisualProperties().getCameraPosition().up = camera.getUp();
-				JEditor.getInstance().getProject().getVisualProperties().setCurrentWidth( getViewWidth() );
-				JEditor.getInstance().getProject().getVisualProperties().setCurrentHeight( getViewHeight() );
+				JEditor.getInstance().getZControl().getProject().getVisualProperties().getCameraPosition().pos = camera.getPos();
+				JEditor.getInstance().getZControl().getProject().getVisualProperties().getCameraPosition().view = camera.getView();
+				JEditor.getInstance().getZControl().getProject().getVisualProperties().getCameraPosition().up = camera.getUp();
+				JEditor.getInstance().getZControl().getProject().getVisualProperties().setCurrentWidth( getViewWidth() );
+				JEditor.getInstance().getZControl().getProject().getVisualProperties().setCurrentHeight( getViewHeight() );
 			default:
 				super.keyPressed( e );
 		}
@@ -701,33 +702,33 @@ public class Visualization extends AbstractVisualization implements EventListene
 	public void mousePressed( MouseEvent e ) {
 		super.mousePressed( e );
 		JEditor.getInstance().getVisualizationView().updateCameraInformation();
-		JEditor.getInstance().getProject().getVisualProperties().getCameraPosition().pos = camera.getPos();
-		JEditor.getInstance().getProject().getVisualProperties().getCameraPosition().view = camera.getView();
-		JEditor.getInstance().getProject().getVisualProperties().getCameraPosition().up = camera.getUp();
-		JEditor.getInstance().getProject().getVisualProperties().setCurrentWidth( getViewWidth() );
-		JEditor.getInstance().getProject().getVisualProperties().setCurrentHeight( getViewHeight() );
+		JEditor.getInstance().getZControl().getProject().getVisualProperties().getCameraPosition().pos = camera.getPos();
+		JEditor.getInstance().getZControl().getProject().getVisualProperties().getCameraPosition().view = camera.getView();
+		JEditor.getInstance().getZControl().getProject().getVisualProperties().getCameraPosition().up = camera.getUp();
+		JEditor.getInstance().getZControl().getProject().getVisualProperties().setCurrentWidth( getViewWidth() );
+		JEditor.getInstance().getZControl().getProject().getVisualProperties().setCurrentHeight( getViewHeight() );
 	}
 
 	@Override
 	public void mouseDragged( MouseEvent e ) {
 		super.mouseDragged( e );
 		JEditor.getInstance().getVisualizationView().updateCameraInformation();
-		JEditor.getInstance().getProject().getVisualProperties().getCameraPosition().pos = camera.getPos();
-		JEditor.getInstance().getProject().getVisualProperties().getCameraPosition().view = camera.getView();
-		JEditor.getInstance().getProject().getVisualProperties().getCameraPosition().up = camera.getUp();
-		JEditor.getInstance().getProject().getVisualProperties().setCurrentWidth( getViewWidth() );
-		JEditor.getInstance().getProject().getVisualProperties().setCurrentHeight( getViewHeight() );
+		JEditor.getInstance().getZControl().getProject().getVisualProperties().getCameraPosition().pos = camera.getPos();
+		JEditor.getInstance().getZControl().getProject().getVisualProperties().getCameraPosition().view = camera.getView();
+		JEditor.getInstance().getZControl().getProject().getVisualProperties().getCameraPosition().up = camera.getUp();
+		JEditor.getInstance().getZControl().getProject().getVisualProperties().setCurrentWidth( getViewWidth() );
+		JEditor.getInstance().getZControl().getProject().getVisualProperties().setCurrentHeight( getViewHeight() );
 	}
 
 	@Override
 	public void mouseWheelMoved( MouseWheelEvent e ) {
 		super.mouseWheelMoved( e );
 		JEditor.getInstance().getVisualizationView().updateCameraInformation();
-		JEditor.getInstance().getProject().getVisualProperties().getCameraPosition().pos = camera.getPos();
-		JEditor.getInstance().getProject().getVisualProperties().getCameraPosition().view = camera.getView();
-		JEditor.getInstance().getProject().getVisualProperties().getCameraPosition().up = camera.getUp();
-		JEditor.getInstance().getProject().getVisualProperties().setCurrentWidth( getViewWidth() );
-		JEditor.getInstance().getProject().getVisualProperties().setCurrentHeight( getViewHeight() );
+		JEditor.getInstance().getZControl().getProject().getVisualProperties().getCameraPosition().pos = camera.getPos();
+		JEditor.getInstance().getZControl().getProject().getVisualProperties().getCameraPosition().view = camera.getView();
+		JEditor.getInstance().getZControl().getProject().getVisualProperties().getCameraPosition().up = camera.getUp();
+		JEditor.getInstance().getZControl().getProject().getVisualProperties().setCurrentWidth( getViewWidth() );
+		JEditor.getInstance().getZControl().getProject().getVisualProperties().setCurrentHeight( getViewHeight() );
 
 	}
 

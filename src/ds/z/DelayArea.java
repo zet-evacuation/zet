@@ -6,13 +6,14 @@
  *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
  * GNU General Public License for more details.
  *
  * You should have received a copy of the GNU General Public License
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
+
 /*
  * DelayArea.java
  * Created on 26. November 2007, 21:32
@@ -22,7 +23,6 @@ package ds.z;
 
 import com.thoughtworks.xstream.annotations.XStreamAlias;
 import com.thoughtworks.xstream.annotations.XStreamAsAttribute;
-import ds.z.event.ChangeEvent;
 import localization.Localization;
 
 /**
@@ -94,12 +94,12 @@ public class DelayArea extends Area<Edge> {
 	}
 	
 	/**
-	 * Sets a new value for the speedFactor in the area. The speedfactor is
-         * the percentage of the original speed that can be achieved on this area.
-         * A speedfactor of 1 would be normal speed and speedfactor of 0 would mean
-         * total halt.
-         * <p>The speedfactor has to be greater than 0 and less or equal than 1.</p>
-#	 * @throws java.lang.IllegalArgumentException the speedFactor must be greater than 0.
+	 * <p>Sets a new value for the speedFactor in the area. The speedfactor is
+   * the percentage of the original speed that can be achieved on this area.
+   * A speedfactor of 1 would be normal speed and speedfactor of 0 would mean
+   * total halt.</p>
+   * <p>The speedfactor has to be greater than 0 and less or equal than 1.</p>
+	 * @throws java.lang.IllegalArgumentException the speedFactor must be greater than 0.
 	 * @param val ist the speedFactor of the delayArea.
 	 */
 	public void setSpeedFactor (double val) throws IllegalArgumentException {
@@ -109,7 +109,7 @@ public class DelayArea extends Area<Edge> {
                   throw new IllegalArgumentException( Localization.getInstance().getString("ds.z.DelayArea.SpeedFactorToHighException") );
                 else {
 			this.speedFactor = val;
-			throwChangeEvent (new ChangeEvent (this));
+//			throwChangeEvent (new ChangeEvent (this));
 		}
 	}
 
@@ -119,7 +119,7 @@ public class DelayArea extends Area<Edge> {
 
 	public void setDelayType (DelayType delayType) {
 		this.delayType = delayType;
-		throwChangeEvent (new ChangeEvent (this));
+//		throwChangeEvent (new ChangeEvent (this));
 	}
 	
 	public boolean equals (Object o) {

@@ -13,6 +13,7 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
+
 /*
  * Assignment.java
  * Created on 26. November 2007, 21:32
@@ -21,13 +22,9 @@ package ds.z;
 
 import com.thoughtworks.xstream.annotations.XStreamAlias;
 import com.thoughtworks.xstream.annotations.XStreamAsAttribute;
-import com.thoughtworks.xstream.annotations.XStreamOmitField;
 import converter.Raster;
 import converter.RasterSquare;
 import de.tu_berlin.math.coga.rndutils.RandomUtils;
-import ds.z.event.ChangeEvent;
-import ds.z.event.ChangeListener;
-import ds.z.event.ChangeReporter;
 import ds.z.exception.TooManyPeopleException;
 import io.z.AssignmentConverter;
 import io.z.XMLConverter;
@@ -47,10 +44,11 @@ import localization.Localization;
  */
 @XStreamAlias("assignment")
 @XMLConverter(AssignmentConverter.class)
-public class Assignment implements Serializable, ChangeReporter, ChangeListener {
+//public class Assignment implements Serializable, ChangeReporter, ChangeListener {
+public class Assignment implements Serializable {
 
-	@XStreamOmitField()
-	private transient ArrayList<ChangeListener> changeListeners = new ArrayList<ChangeListener>();
+//	@XStreamOmitField()
+//	private transient ArrayList<ChangeListener> changeListeners = new ArrayList<ChangeListener>();
 	/** The name of the assignment. */
 	@XStreamAsAttribute()
 	private String name;
@@ -73,30 +71,30 @@ public class Assignment implements Serializable, ChangeReporter, ChangeListener 
 	}
 
 	/** See {@link ds.z.event.ChangeReporter#throwChangeEvent (ChangeEvent)} for details. */
-	public void throwChangeEvent( ChangeEvent e ) {
-		for( ChangeListener c : changeListeners )
-			c.stateChanged( e );
-	}
+//	public void throwChangeEvent( ChangeEvent e ) {
+//		for( ChangeListener c : changeListeners )
+//			c.stateChanged( e );
+//	}
 
 	/** {@inheritDoc} */
-	public void addChangeListener( ChangeListener c ) {
-		if( !changeListeners.contains( c ) )
-			changeListeners.add( c );
-	}
-
+//	public void addChangeListener( ChangeListener c ) {
+//		if( !changeListeners.contains( c ) )
+//			changeListeners.add( c );
+//	}
+//
 	/** {@inheritDoc} */
-	public void removeChangeListener( ChangeListener c ) {
-		changeListeners.remove( c );
-	}
+//	public void removeChangeListener( ChangeListener c ) {
+//		changeListeners.remove( c );
+//	}
 
 	/**
 	 * {@inheritDoc}
 	 * @param e the event
 	 */
-	public void stateChanged( ChangeEvent e ) {
-		// Simply forward the event
-		throwChangeEvent( e );
-	}
+//	public void stateChanged( ChangeEvent e ) {
+//		// Simply forward the event
+//		throwChangeEvent( e );
+//	}
 
 	/**
 	 * Returns the name of the assignment.
@@ -115,7 +113,7 @@ public class Assignment implements Serializable, ChangeReporter, ChangeListener 
 		if( val == null || val.equals( "" ) )
 			throw new IllegalArgumentException( Localization.getInstance().getString( "ds.z.Assignment.NoNameException" ) );
 		name = val;
-		throwChangeEvent( new ChangeEvent( this ) );
+//		throwChangeEvent( new ChangeEvent( this ) );
 	}
 
 	/**
@@ -136,8 +134,8 @@ public class Assignment implements Serializable, ChangeReporter, ChangeListener 
 			throw new IllegalArgumentException( Localization.getInstance().getString( "ds.z.Assignment.DoubleAssignmentTypeException" ) );
 		else {
 			assignmentTypes.add( val );
-			val.addChangeListener( this );
-			throwChangeEvent( new ChangeEvent( this ) );
+//			val.addChangeListener( this );
+//			throwChangeEvent( new ChangeEvent( this ) );
 		}
 	}
 
@@ -151,8 +149,8 @@ public class Assignment implements Serializable, ChangeReporter, ChangeListener 
 			throw new IllegalArgumentException( Localization.getInstance().getString( "ds.z.Assignment.AssignmentTypeNotNotFoundException" ) );
 		else {
 			assignmentTypes.remove( val );
-			val.removeChangeListener( this );
-			throwChangeEvent( new ChangeEvent( this ) );
+//			val.removeChangeListener( this );
+//			throwChangeEvent( new ChangeEvent( this ) );
 
 			// Delete corresponding assignment areas
 			// The areas deregister themselves out of the getAssignmentAreas() list, so

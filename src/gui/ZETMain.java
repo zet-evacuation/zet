@@ -15,7 +15,7 @@
  */
 
 /*
- * EditorTest.java
+ * ZETMain.java
  * Created on 4. Dezember 40007, 17:08
  */
 
@@ -55,6 +55,7 @@ import javax.swing.UIManager;
 import localization.Localization;
 import util.DebugStream;
 import util.DebugStreamVerbose;
+import util.random.distributions.UniformDistribution;
 
 /**
  * The <code>ZETMain</code> class is the main entry for the graphical user
@@ -98,6 +99,9 @@ public class ZETMain {
 	private ZETMain() { }
 
 	public static void main( String[] args ) throws JSAPException {
+
+UniformDistribution dist = new UniformDistribution();
+
 		JSAP jsap = new JSAP();
 		loc.setPrefix( "help." );
 

@@ -21,7 +21,6 @@ package ds.z;
 
 import com.thoughtworks.xstream.annotations.XStreamAlias;
 import com.thoughtworks.xstream.annotations.XStreamOmitField;
-import ds.z.event.ChangeEvent;
 import localization.Localization;
 
 /**
@@ -88,46 +87,46 @@ public class RoomEdge extends Edge {
 	 * and additionally applies the changes that were made to this edge to the linkTarget edge
 	 * (if it is != null).
 	 */
-	@Override
-	public void stateChanged (ChangeEvent e) {
-		// In case a passable edge is moved we have to move the attached edge in the other room too
-		if (ensureMatchWithLinkTarget && isPassable ()) {
-			if (e.getSource () instanceof PlanPoint) {
-				// First p = myPoint ; Second p = linkTarget point --> Equal?
-				boolean p1p1 = linkTarget.getSource ().equals (getSource ());
-				boolean p2p2 = linkTarget.getTarget ().equals (getTarget ());
-				boolean p2p1 = linkTarget.getSource ().equals (getTarget ());
-				boolean p1p2 = linkTarget.getTarget ().equals (getSource ());
-				//assert (p1p1 ^ p1p2 ^ p2p1 ^ p2p2);
-
-				// The following cases may be true here:
-				// 1) Both edges were of the form p1,p2 before
-				// 2) One edge was of the form p1,p2 and the other was p2,p1
-				//    (this makes no difference since we are using undirected edges)
-
-				if (p1p1) {
-					// Case 1) (where "this" edge has already changed)
-					// Point 2 has changed
-					linkTarget.getTarget ().setLocation (getTarget ());
-				} else if (p2p2) {
-					// Case 1) (where "this" edge has already changed)
-					// Point 1 has changed
-					linkTarget.getSource ().setLocation (getSource ());
-				} else if (p1p2) {
-					// Case 2) (where "this" edge has already changed)
-					// Point 2 at "this" has changed --> Point 1 at "linkTarget""
-					linkTarget.getSource ().setLocation (getTarget ());
-				} else if (p2p1) {
-					// Case 2) (where "this" edge has already changed)
-					// Point 1 at "this" has changed --> Point 2 at "linkTarget""
-					linkTarget.getTarget ().setLocation (getSource ());
-				}
-			}
-			super.stateChanged (e);
-		} else {
-			super.stateChanged (e);
-		}
-	}
+//	@Override
+//	public void stateChanged (ChangeEvent e) {
+//		// In case a passable edge is moved we have to move the attached edge in the other room too
+//		if (ensureMatchWithLinkTarget && isPassable ()) {
+//			if (e.getSource () instanceof PlanPoint) {
+//				// First p = myPoint ; Second p = linkTarget point --> Equal?
+//				boolean p1p1 = linkTarget.getSource ().equals (getSource ());
+//				boolean p2p2 = linkTarget.getTarget ().equals (getTarget ());
+//				boolean p2p1 = linkTarget.getSource ().equals (getTarget ());
+//				boolean p1p2 = linkTarget.getTarget ().equals (getSource ());
+//				//assert (p1p1 ^ p1p2 ^ p2p1 ^ p2p2);
+//
+//				// The following cases may be true here:
+//				// 1) Both edges were of the form p1,p2 before
+//				// 2) One edge was of the form p1,p2 and the other was p2,p1
+//				//    (this makes no difference since we are using undirected edges)
+//
+//				if (p1p1) {
+//					// Case 1) (where "this" edge has already changed)
+//					// Point 2 has changed
+//					linkTarget.getTarget ().setLocation (getTarget ());
+//				} else if (p2p2) {
+//					// Case 1) (where "this" edge has already changed)
+//					// Point 1 has changed
+//					linkTarget.getSource ().setLocation (getSource ());
+//				} else if (p1p2) {
+//					// Case 2) (where "this" edge has already changed)
+//					// Point 2 at "this" has changed --> Point 1 at "linkTarget""
+//					linkTarget.getSource ().setLocation (getTarget ());
+//				} else if (p2p1) {
+//					// Case 2) (where "this" edge has already changed)
+//					// Point 1 at "this" has changed --> Point 2 at "linkTarget""
+//					linkTarget.getTarget ().setLocation (getSource ());
+//				}
+//			}
+//			super.stateChanged (e);
+//		} else {
+//			super.stateChanged (e);
+//		}
+//	}
 
 	/**
 	 * Determines whether the represented edge is considered as passable. That happens 
@@ -201,7 +200,7 @@ public class RoomEdge extends Edge {
 		}
 		this.linkTarget = target;
 
-		throwChangeEvent (new ChangeEvent (this));
+//		throwChangeEvent (new ChangeEvent (this));
 	}
 
 	/**

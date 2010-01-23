@@ -74,18 +74,17 @@ public class BatchGraphTask implements Runnable {
     }
     public AlgorithmListener listener;
 
-    /**
-     * Runs a graph algorithm. At first the {@link ds.graph.NetworkFlowModel}
-     * is created. After that the algorithm stored in the submitted
-     * {@link GraphAlgorithm} is executed. After execution the results are stored in an
-     * {@link BatchResultEntry}.
-     */
-    public void run() {
-        //Build Graph
-        NetworkFlowModel nfo = new NetworkFlowModel();
-        res.setNetworkFlowModel(nfo);
-        ZToGraphConverter.convertBuildingPlan(project.getPlan(), nfo);
-
+	/**
+	 * Runs a graph algorithm. At first the {@link ds.graph.NetworkFlowModel}
+	 * is created. After that the algorithm stored in the submitted
+	 * {@link GraphAlgorithm} is executed. After execution the results are stored in an
+	 * {@link BatchResultEntry}.
+	 */
+	public void run() {
+		//Build Graph
+		NetworkFlowModel nfo = new NetworkFlowModel();
+		res.setNetworkFlowModel( nfo );
+		ZToGraphConverter.convertBuildingPlan( project.getBuildingPlan(), nfo );
         //Run graph algo on the last CA instance if possible
         ConcreteAssignment concreteAssignment;
         if (runNumber < 0) {

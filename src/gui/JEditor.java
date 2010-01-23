@@ -6,7 +6,7 @@
  *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; witzethout even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
  * GNU General Public License for more details.
  *
  * You should have received a copy of the GNU General Public License
@@ -138,6 +138,10 @@ import batch.tasks.AlgorithmTask;
 import batch.tasks.CARealTime;
 import batch.tasks.RasterizeTask;
 import batch.tasks.VisualizationDataStructureTask;
+import ds.z.AssignmentArea;
+import ds.z.EvacuationArea;
+import ds.z.Room;
+import ds.z.ZControl;
 import gui.editor.JLogView;
 import util.ConversionTools;
 
@@ -165,9 +169,8 @@ public class JEditor extends JFrame implements Localized, EventListener<Progress
 	/** Control class for projects and editing */
 	private ProjectControl projectControl;
 
-
 	private static boolean editing = false;
-	private Project currentProject;	// Task and execution stuff
+	private ZControl zcontrol;	// Task and execution stuff
 	private CellularAutomatonInOrderExecution caAlgo = null;
 	private AlgorithmTask worker;
 	private BatchResult result;
@@ -257,6 +260,8 @@ public class JEditor extends JFrame implements Localized, EventListener<Progress
 	private JMenuItem mnuPlanImageTransparency;
 	private JMenuItem mnuOptions;
 	private JMenuItem mnuSettings;
+	private JMenu mnuDebug;
+	private JMenuItem mnuOutputInformation;
 	private JMenu mWindow;
 	private JMenu mHelp;
 	private JMenuItem mnuHelpAbout;
@@ -433,11 +438,11 @@ public class JEditor extends JFrame implements Localized, EventListener<Progress
 	 * the view to edit window and resets the zoom factor to 10%
 	 */
 	private void loadProject() {
-		currentProject = projectControl.getProject();
+		zcontrol = projectControl.getZControl();
 
 		if( tabPane.getSelectedIndex() > 1 )
 			tabPane.setSelectedIndex( 0 );
-		editView.displayProject( currentProject );
+		editView.displayProject( zcontrol );
 		// Löschen eingestellter parameter
 		ZToCAConverter.getInstance().clear();
 		firstSwitch = true;
@@ -450,11 +455,11 @@ public class JEditor extends JFrame implements Localized, EventListener<Progress
 		setZoomFactor( 0.04d );
 
 		// Set up the last camera position
-		visualizationView.getGLContainer().getCamera().setPos( projectControl.getProject().getVisualProperties().getCameraPosition().pos );
-		visualizationView.getGLContainer().getCamera().setView( projectControl.getProject().getVisualProperties().getCameraPosition().view );
-		visualizationView.getGLContainer().getCamera().setUp( projectControl.getProject().getVisualProperties().getCameraPosition().up );
-		visualizationView.getGLContainer().setTexts( projectControl.getProject().getVisualProperties().getTextureFontStrings() );
-		visualizationView.getGLContainer().setView( projectControl.getProject().getVisualProperties().getCurrentWidth(), projectControl.getProject().getVisualProperties().getCurrentHeight() );
+		visualizationView.getGLContainer().getCamera().setPos( projectControl.getZControl().getProject().getVisualProperties().getCameraPosition().pos );
+		visualizationView.getGLContainer().getCamera().setView( projectControl.getZControl().getProject().getVisualProperties().getCameraPosition().view );
+		visualizationView.getGLContainer().getCamera().setUp( projectControl.getZControl().getProject().getVisualProperties().getCameraPosition().up );
+		visualizationView.getGLContainer().setTexts( projectControl.getZControl().getProject().getVisualProperties().getTextureFontStrings() );
+		visualizationView.getGLContainer().setView( projectControl.getZControl().getProject().getVisualProperties().getCurrentWidth(), projectControl.getZControl().getProject().getVisualProperties().getCurrentHeight() );
 		visualizationView.updateCameraInformation();
 	}
 
@@ -692,6 +697,8 @@ public class JEditor extends JFrame implements Localized, EventListener<Progress
 		mnuOptions = Menu.addMenuItem( mExtras, loc.getString( "menuOptions" ), 'T', aclProperties, "options" );
 		if( ZETMain.isDebug() ) {
 			mnuSettings = Menu.addMenuItem( mExtras, loc.getString( "menuSettings" ), aclProperties, "settings" );
+			mnuDebug = Menu.addMenu( mExtras, "Debug" );
+			mnuOutputInformation = Menu.addMenuItem( mnuDebug, "Ausgabe", aclDebug, "outputInformation" );
 		}
 		// Hilfe-menu
 		mnuHelpAbout = Menu.addMenuItem( mHelp, loc.getString( "menuAbout" ), 'I', aclAbout );
@@ -1223,10 +1230,53 @@ public class JEditor extends JFrame implements Localized, EventListener<Progress
 		@Override
 		public void actionPerformed( ActionEvent e ) {
 			//if( distribution == null ) {
-			distribution = new JAssignment( instance, getProject(), loc.getString( "gui.editor.assignment.JAssignment.Title" ), 850, 400 );
+			distribution = new JAssignment( instance, getZControl().getProject(), loc.getString( "gui.editor.assignment.JAssignment.Title" ), 850, 400 );
 			//}
 			distribution.setVisible( true );
 			distribution.dispose();
+		}
+	};
+	ActionListener aclDebug = new ActionListener() {
+    @Override
+		public void actionPerformed( ActionEvent e ) {
+			if( e.getActionCommand().equals( "outputInformation" ) ) {
+				// Pro Stockwerk:
+				System.out.println( "Personenverteilung im Gebäude: ");
+				int overall = 0;
+				for( Floor f : getZControl().getProject().getBuildingPlan() ) {
+          int counter = 0;
+					for( Room r : f ) {
+						for( AssignmentArea a : r.getAssignmentAreas() ) {
+							counter += a.getEvacuees();
+						}
+					}
+					System.out.println( f.getName() + ": " + counter + " Personen" );
+					overall += counter;
+				}
+				System.out.println( "Insgesamt: " + overall );
+			}
+
+			// Pro Ausgang:
+			System.out.println( "Personenverteilung pro Ausgang: " );
+			for( Floor f : getZControl().getProject().getBuildingPlan() )
+				for( Room r : f )
+					for( EvacuationArea ea : r.getEvacuationAreas() ) {
+						int overall = 0;
+						System.out.println( "" );
+						System.out.println( ea.getName() );
+						// Suche nach evakuierten pro etage für dieses teil
+						for( Floor f2 : getZControl().getProject().getBuildingPlan() ) {
+							int counter = 0;
+							for( Room r2 : f2 )
+								for( AssignmentArea a : r2.getAssignmentAreas() ) {
+                  if( a.getExitArea().equals( ea ) )
+										counter += a.getEvacuees();
+								}
+								System.out.println( f2.getName() + ": " + counter + " Personen" );
+								overall += counter;
+						}
+						System.out.println( ea.getName() + " insgesamt: " + overall );
+					}
 		}
 	};
 	ActionListener aclExecute = new ActionListener() {
@@ -1258,7 +1308,7 @@ public class JEditor extends JFrame implements Localized, EventListener<Progress
 		private void earliestArrivalTransshipment() {
 			try {
 				Batch res = new Batch();
-				res.addEntry( "EA Transshipment with SSSP", currentProject, 1, GraphAlgorithm.EarliestArrivalTransshipmentSuccessiveShortestPaths, CellularAutomatonAlgorithm.Swap );
+				res.addEntry( "EA Transshipment with SSSP", zcontrol.getProject(), 1, GraphAlgorithm.EarliestArrivalTransshipmentSuccessiveShortestPaths, CellularAutomatonAlgorithm.Swap );
 				res.getEntries().get( 0 ).setUseCa( false );
 				setBatchResult( res.execute( false ) );
 				tabPane.setSelectedIndex( VISUALIZATION );
@@ -1270,7 +1320,7 @@ public class JEditor extends JFrame implements Localized, EventListener<Progress
 		private void maxFlowOverTimeMinCost() {
 			try {
 				Batch res = new Batch();
-				res.addEntry( "MaxFlow", currentProject, 1, GraphAlgorithm.MaxFlowOverTimeMinCost, CellularAutomatonAlgorithm.Swap );
+				res.addEntry( "MaxFlow", zcontrol.getProject(), 1, GraphAlgorithm.MaxFlowOverTimeMinCost, CellularAutomatonAlgorithm.Swap );
 				res.getEntries().get( 0 ).setUseCa( false );
 				setBatchResult( res.execute( false ) );
 				tabPane.setSelectedIndex( VISUALIZATION );
@@ -1282,7 +1332,7 @@ public class JEditor extends JFrame implements Localized, EventListener<Progress
 		private void maxFlowOverTimeTimeExpanded() {
 			try {
 				Batch res = new Batch();
-				res.addEntry( "MaxFlow", currentProject, 1, GraphAlgorithm.MaxFlowOverTimeTimeExpanded, CellularAutomatonAlgorithm.Swap );
+				res.addEntry( "MaxFlow", zcontrol.getProject(), 1, GraphAlgorithm.MaxFlowOverTimeTimeExpanded, CellularAutomatonAlgorithm.Swap );
 				res.getEntries().get( 0 ).setUseCa( false );
 				setBatchResult( res.execute( false ) );
 				tabPane.setSelectedIndex( VISUALIZATION );
@@ -1294,7 +1344,7 @@ public class JEditor extends JFrame implements Localized, EventListener<Progress
 		private void quickestTransshipment() {
 			try {
 				Batch res = new Batch();
-				res.addEntry( "Quickest Transshipment", currentProject, 1, GraphAlgorithm.QuickestTransshipment, CellularAutomatonAlgorithm.Swap );
+				res.addEntry( "Quickest Transshipment", zcontrol.getProject(), 1, GraphAlgorithm.QuickestTransshipment, CellularAutomatonAlgorithm.Swap );
 				res.getEntries().get( 0 ).setUseCa( false );
 				setBatchResult( res.execute( false ) );
 				tabPane.setSelectedIndex( VISUALIZATION );
@@ -1306,7 +1356,7 @@ public class JEditor extends JFrame implements Localized, EventListener<Progress
 		private void simulateCA() {
 			try {
 				Batch res = new Batch();
-				res.addEntry( "CA", currentProject, 1, GraphAlgorithm.EarliestArrivalTransshipmentSuccessiveShortestPaths, CellularAutomatonAlgorithm.Swap );
+				res.addEntry( "CA", zcontrol.getProject(), 1, GraphAlgorithm.EarliestArrivalTransshipmentSuccessiveShortestPaths, CellularAutomatonAlgorithm.Swap );
 				res.getEntries().get( 0 ).setUseGraph( false );
 				setBatchResult( res.execute( false ) );
 				tabPane.setSelectedIndex( VISUALIZATION );
@@ -1337,7 +1387,7 @@ public class JEditor extends JFrame implements Localized, EventListener<Progress
 					loadProject();	// Load the currently loaded project by the control file
 					GUIOptionManager.setSavePath( jfcProject.getCurrentDirectory().getPath() );
 				}
-			} else if( e.getActionCommand().equals( "saveProjectAs" ) || (e.getActionCommand().equals( "saveProject" ) && getProject().getProjectFile() == null) ) {
+			} else if( e.getActionCommand().equals( "saveProjectAs" ) || (e.getActionCommand().equals( "saveProject" ) && getZControl().getProject().getProjectFile() == null) ) {
 				if( jfcProject.showSaveDialog( getInstance() ) == JFileChooser.APPROVE_OPTION ) {
 					GUIOptionManager.setSavePath( jfcProject.getCurrentDirectory().getPath() );
 					if( jfcProject.getSelectedFile().exists() && createCopy )
@@ -1346,20 +1396,20 @@ public class JEditor extends JFrame implements Localized, EventListener<Progress
 						File target = jfcProject.getSelectedFile();
 						if( !target.getName().endsWith( ".zet" ) )
 							target = new File( target.getAbsolutePath() + ".zet" );
-						getProject().save( target );
+						getZControl().getProject().save( target );
 					} catch( java.lang.StackOverflowError soe ) {
 						showErrorMessage( loc.getString( "gui.editor.JEditor.error.stackOverflowTitle" ), loc.getString( "gui.editor.JEditor.error.stackOverflow" ) );
 					} catch( Exception ex ) {
 						showErrorMessage( loc.getString( "gui.editor.JEditor.error.SaveTitle" ), loc.getString( "gui.editor.JEditor.error.Save" ) );
 					}
-					editView.displayProject( getProject() );
+					editView.displayProject( zcontrol );
 					ZETMain.sendMessage( loc.getString( "gui.editor.JEditor.message.saved" ) );
 				}
 			} else if( e.getActionCommand().equals( "saveProject" ) ) {
 				if( createCopy == true )
 					createBackup();
 				try {
-					getProject().save();
+					getZControl().getProject().save();
 				} catch( java.lang.StackOverflowError soe ) {
 					showErrorMessage( loc.getString( "gui.editor.JEditor.error.stackOverflowTitle" ), loc.getString( "gui.editor.JEditor.error.stackOverflow" ) );
 				} catch( Exception ex ) {
@@ -1381,7 +1431,7 @@ public class JEditor extends JFrame implements Localized, EventListener<Progress
 						return;	// exit, do nothing
 					case 0:
 						// save
-						if( getProject().getProjectFile() == null ) {
+						if( getZControl().getProject().getProjectFile() == null ) {
 							if( jfcProject.showSaveDialog( getInstance() ) == JFileChooser.APPROVE_OPTION ) {
 								GUIOptionManager.setSavePath( jfcProject.getCurrentDirectory().getPath() );
 								if( jfcProject.getSelectedFile().exists() && createCopy )
@@ -1390,7 +1440,7 @@ public class JEditor extends JFrame implements Localized, EventListener<Progress
 									File target = jfcProject.getSelectedFile();
 									if( !target.getName().endsWith( ".zet" ) )
 										target = new File( target.getAbsolutePath() + ".zet" );
-									getProject().save( target );
+									getZControl().getProject().save( target );
 								} catch( java.lang.StackOverflowError soe ) {
 									showErrorMessage( loc.getString( "gui.editor.JEditor.error.stackOverflowTitle" ), loc.getString( "gui.editor.error.JEditor.stackOverflow" ) );
 								} catch( Exception ex ) {
@@ -1403,7 +1453,7 @@ public class JEditor extends JFrame implements Localized, EventListener<Progress
 							if( createCopy )
 								createBackup();
 							try {
-								getProject().save();
+								getZControl().getProject().save();
 							} catch( java.lang.StackOverflowError soe ) {
 								showErrorMessage( loc.getString( "gui.editor.JEditor.error.stackOverflowTitle" ), loc.getString( "gui.editor.JEditor.error.stackOverflow" ) );
 							} catch( Exception ex ) {
@@ -1417,10 +1467,13 @@ public class JEditor extends JFrame implements Localized, EventListener<Progress
 					case 1:
 						status = loc.getString( "gui.editor.JEditor.status.newProjectDiscard" );
 				}
-				currentProject = ProjectControl.newProject();
-				projectControl.setProject( currentProject );
+				// TODO: better (next 3 lines)
+				Project p = ProjectControl.newProject();
+				projectControl.setProject( p );
+				zcontrol = projectControl.getZControl();
+
 				distribution = null; // Throw away the old assignment window
-				editView.displayProject( currentProject );
+				editView.displayProject( zcontrol );
 				ZETMain.sendMessage( status );
 			} else if( e.getActionCommand().equals( "loadBatchResult" ) ) {
 				if( jfcResults.showOpenDialog( getInstance() ) == JFileChooser.APPROVE_OPTION ) {
@@ -1450,9 +1503,9 @@ public class JEditor extends JFrame implements Localized, EventListener<Progress
 					ZETMain.sendMessage( loc.getString( "gui.editor.JEditor.message.saved" ) );
 				}
 			} else if( e.getActionCommand().equals( "saveAsDXF" ) ) {
-				String filename = getProject().getProjectFile().getPath().substring( 0, getProject().getProjectFile().getPath().length() - 3 ) + "dxf";
+				String filename = getZControl().getProject().getProjectFile().getPath().substring( 0, getZControl().getProject().getProjectFile().getPath().length() - 3 ) + "dxf";
 				try {
-					DXFWriter.exportIntoDXF( filename, currentProject.getPlan() );
+					DXFWriter.exportIntoDXF( filename, zcontrol.getProject().getBuildingPlan() );
 				} catch( IOException ex ) {
 					showErrorMessage( loc.getString( "gui.editor.JEditor.error.SaveTitle" ), loc.getString( "gui.editor.JEditor.error.Save" ) );
 					ex.printStackTrace();
@@ -1468,7 +1521,7 @@ public class JEditor extends JFrame implements Localized, EventListener<Progress
 		public void actionPerformed( ActionEvent e ) {
 			try {
 				if( e.getActionCommand().equals( "new" ) ) {
-					getProject().getPlan().addFloor( new Floor( loc.getString( "ds.z.DefaultName.Floor" ) + " " + getProject().getPlan().floorCount() ) );
+					getZControl().getProject().getBuildingPlan().addFloor( new Floor( loc.getString( "ds.z.DefaultName.Floor" ) + " " + getZControl().getProject().getBuildingPlan().floorCount() ) );
 					ZETMain.sendMessage( "Neue Etage angelegt." ); // TODO loc
 				} else if( e.getActionCommand().equals( "up" ) ) {
 					final int oldIndex = editView.getFloorID();
@@ -1479,9 +1532,9 @@ public class JEditor extends JFrame implements Localized, EventListener<Progress
 					projectControl.moveFloorDown( editView.getFloorID() + (ZETProperties.isDefaultFloorHidden() ? 1 : 0) );
 					editView.setFloor( oldIndex - 1 );
 				} else if( e.getActionCommand().equals( "delete" ) )
-					getProject().getPlan().removeFloor( editView.getCurrentFloor() );
+					getZControl().getProject().getBuildingPlan().removeFloor( editView.getCurrentFloor() );
 				else if( e.getActionCommand().equals( "import" ) ) {
-					FloorImportDialog floorImport = new FloorImportDialog( instance, getProject(), "Importieren", 450, 250 );
+					FloorImportDialog floorImport = new FloorImportDialog( instance, getZControl().getProject(), "Importieren", 450, 250 );
 					floorImport.setVisible( true );
 				} else if( e.getActionCommand().equals( "copy" ) ) {
 					final int oldIndex = editView.getFloorID();
@@ -1683,7 +1736,7 @@ public class JEditor extends JFrame implements Localized, EventListener<Progress
 					path = path + "/";
 				String projectName;
 				try {
-					projectName = getProject().getProjectFile().getName().substring( 0, getProject().getProjectFile().getName().length() - 4 );
+					projectName = getZControl().getProject().getProjectFile().getName().substring( 0, getZControl().getProject().getProjectFile().getName().length() - 4 );
 				} catch( NullPointerException ex ) {
 					projectName = "untitled";
 				}
@@ -1701,10 +1754,10 @@ public class JEditor extends JFrame implements Localized, EventListener<Progress
 				vo.dispose();
 				if( vo.getRetVal() == VideoOptions.OK ) {
 					visualizationView.getGLContainer().setTexts( vo.getTextureFontStrings() );
-					projectControl.getProject().getVisualProperties().setTextureFontStrings( vo.getTextureFontStrings() );
+					projectControl.getZControl().getProject().getVisualProperties().setTextureFontStrings( vo.getTextureFontStrings() );
 					String movieFrameName = PropertyContainer.getInstance().getAsString( "options.filehandling.movieFrameName" );
 					// TODO BUG: wenn ein projekt noch nicht gespeichert worden ist, liefert das hier iene null pointer exception. (tritt auf, wenn ein video gedreht werden soll)
-					String projectName = getProject().getProjectFile().getName().substring( 0, getProject().getProjectFile().getName().length() - 4 );
+					String projectName = getZControl().getProject().getProjectFile().getName().substring( 0, getZControl().getProject().getProjectFile().getName().length() - 4 );
 					MovieManager movieCreator = visualizationView.getGLContainer().getMovieCreator();
 					if( movieFrameName.equals( "" ) )
 						movieCreator.setFramename( projectName );
@@ -1740,7 +1793,7 @@ public class JEditor extends JFrame implements Localized, EventListener<Progress
 			try {
 				if( e.getActionCommand().equals( "rasterize" ) )
 					try {
-						RasterizeTask rasterize = new RasterizeTask( getProject() );
+						RasterizeTask rasterize = new RasterizeTask( getZControl().getProject() );
 						JProgressBarDialog pbd = new JRasterizeProgressBarDialog( getInstance(), "Rastern", true, rasterize );
 						pbd.executeTask();
 						pbd.setVisible( true );
@@ -1752,10 +1805,10 @@ public class JEditor extends JFrame implements Localized, EventListener<Progress
 					try {
 						String res = JOptionPane.showInputDialog( instance,
 										"Anzahl zu evakuierender Personen (maximal " +
-										Integer.toString( getProject().getPlan().maximalEvacuees() ) + ")", "Personen verteilen", JOptionPane.QUESTION_MESSAGE );
+										Integer.toString( getZControl().getProject().getBuildingPlan().maximalEvacuees() ) + ")", "Personen verteilen", JOptionPane.QUESTION_MESSAGE );
 
 						if( res != null ) {
-							getProject().getPlan().distributeEvacuees( Integer.parseInt( res ) );
+							getZControl().getProject().getBuildingPlan().distributeEvacuees( Integer.parseInt( res ) );
 							ZETMain.sendMessage( loc.getString( "gui.message.RasterizationComplete" ) );
 						}
 					} catch( NumberFormatException ex ) {
@@ -1915,7 +1968,7 @@ public class JEditor extends JFrame implements Localized, EventListener<Progress
 			} else if( i == BATCH ) {
 				// Add curent project, if not already done
 				if( firstSwitch ) {
-					batchView.addProject( currentProject );
+					batchView.addProject( zcontrol.getProject() );
 					firstSwitch = false;
 				}
 				switchTo( BATCH );
@@ -2063,11 +2116,11 @@ public class JEditor extends JFrame implements Localized, EventListener<Progress
 			return;
 
 		try {
-			CellularAutomaton ca = ZToCAConverter.getInstance().convert( currentProject.getPlan() );
-			for( AssignmentType at : currentProject.getCurrentAssignment().getAssignmentTypes() )
+			CellularAutomaton ca = ZToCAConverter.getInstance().convert( zcontrol.getProject().getBuildingPlan() );
+			for( AssignmentType at : zcontrol.getProject().getCurrentAssignment().getAssignmentTypes() )
 				ca.setAssignmentType( at.getName(), at.getUid() );
 			ZToCAConverter.applyConcreteAssignment(
-							currentProject.getCurrentAssignment().createConcreteAssignment( 400 ) );
+							zcontrol.getProject().getCurrentAssignment().createConcreteAssignment( 400 ) );
 			caAlgo = new CellularAutomatonInOrderExecution( ca );
 			caAlgo.setMaxTimeInSeconds( PropertyContainer.getInstance().getAsDouble( "algo.ca.maxTime" ) );
 
@@ -2088,7 +2141,7 @@ public class JEditor extends JFrame implements Localized, EventListener<Progress
 	}
 
 	public void createBackup() {
-		createBackup( getProject().getProjectFile() );
+		createBackup( getZControl().getProject().getProjectFile() );
 	}
 
 	public static void createBackup( File file ) {
@@ -2163,10 +2216,10 @@ public class JEditor extends JFrame implements Localized, EventListener<Progress
 			return;
 
 		try {
-			CellularAutomaton ca = ZToCAConverter.getInstance().convert( currentProject.getPlan() );
-			for( AssignmentType at : currentProject.getCurrentAssignment().getAssignmentTypes() )
+			CellularAutomaton ca = ZToCAConverter.getInstance().convert( zcontrol.getProject().getBuildingPlan() );
+			for( AssignmentType at : zcontrol.getProject().getCurrentAssignment().getAssignmentTypes() )
 				ca.setAssignmentType( at.getName(), at.getUid() );
-			ZToCAConverter.applyConcreteAssignment( currentProject.getCurrentAssignment().createConcreteAssignment( 400 ) );
+			ZToCAConverter.applyConcreteAssignment( zcontrol.getProject().getCurrentAssignment().createConcreteAssignment( 400 ) );
 			caAlgo = new CellularAutomatonInOrderExecution( ca );
 			caAlgo.setMaxTimeInSeconds( PropertyContainer.getInstance().getAsDouble( "algo.ca.maxTime" ) );
 
@@ -2439,7 +2492,7 @@ public class JEditor extends JFrame implements Localized, EventListener<Progress
 //				progressBar.setValue( event.getProcessMessage().progress );
 //			lblTaskMain.setText( event.getProcessMessage().taskName );
 //			lblTaskInfo.setText( event.getProcessMessage().taskProgressInformation );
-//			//JEditorPanel.instance.getRasterizedFloor().displayFloor( myProject.getPlan().getFloors().get(1), ZToCAConverter.getInstance().getLatestMapping(), ZToCAConverter.getInstance().getLatestContainer() );
+//			//JEditorPanel.instance.getRasterizedFloor().displayFloor( myProject.getBuildingPlan().getFloors().get(1), ZToCAConverter.getInstance().getLatestMapping(), ZToCAConverter.getInstance().getLatestContainer() );
 		//updateFloorView();
 		//caView.updateFloorView();
 		if( currentMode == CA_FLOOR ) {
@@ -2455,8 +2508,8 @@ public class JEditor extends JFrame implements Localized, EventListener<Progress
 //		}
 	}
 
-	public final Project getProject() {
-		return currentProject;
+	public final ZControl getZControl() {
+		return zcontrol;
 	}
 
 	/**

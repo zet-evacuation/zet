@@ -6,13 +6,14 @@
  *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
  * GNU General Public License for more details.
  *
  * You should have received a copy of the GNU General Public License
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
+
 /**
  * Class RoomComboBoxModel
  * Erstellt 29.04.2008, 21:30:27
@@ -20,9 +21,9 @@
 
 package gui.components;
 
-import ds.Project;
 import ds.z.Floor;
 import ds.z.Room;
+import ds.z.ZControl;
 import java.util.LinkedList;
 import java.util.List;
 import javax.swing.DefaultComboBoxModel;
@@ -34,29 +35,30 @@ import javax.swing.DefaultComboBoxModel;
 	/**
 	 * This class serves as a model for the JComboBox that contains the current rooms.
 	 */
-	public class RoomComboBoxModel extends DefaultComboBoxModel implements ds.z.event.ChangeListener {
+	public class RoomComboBoxModel extends DefaultComboBoxModel {
 		private List<Room> entries = new LinkedList<Room>();
 		private boolean initializing;
 		private FloorComboBoxModel floorSelector;
 		private boolean disableUpdate = false;
 		
-		public RoomComboBoxModel( Project project, FloorComboBoxModel floorSelector ) {
+		public RoomComboBoxModel( ZControl zcontrol, FloorComboBoxModel floorSelector ) {
 			super();
 			this.floorSelector = floorSelector;
 		}
 
-		@Override
-		public void stateChanged( ds.z.event.ChangeEvent e ) {
-			if( ( (Floor)floorSelector.getSelectedItem() ).getRooms().size() == entries.size() )
-				// Roomname changed
-				if( e.getSource() instanceof Room ) {
-					int index = entries.indexOf( (Room)e.getSource() );
-					this.fireContentsChanged( this, index, index );
-				}
-			else
-				// Number of rooms changed
-				displayRoomsForCurrentFloor();
-		}
+		// TODO-Event
+//		@Override
+//		public void stateChanged( ds.z.event.ChangeEvent e ) {
+//			if( ( (Floor)floorSelector.getSelectedItem() ).getRooms().size() == entries.size() )
+//				// Roomname changed
+//				if( e.getSource() instanceof Room ) {
+//					int index = entries.indexOf( (Room)e.getSource() );
+//					this.fireContentsChanged( this, index, index );
+//				}
+//			else
+//				// Number of rooms changed
+//				displayRoomsForCurrentFloor();
+//		}
 
 		public void displayRoomsForCurrentFloor() {
 			if( disableUpdate )

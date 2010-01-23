@@ -10,6 +10,7 @@ import ds.Project;
 import ds.z.Assignment;
 import ds.z.AssignmentType;
 import ds.z.Floor;
+import ds.z.ZControl;
 import gui.ZETMain;
 import java.io.File;
 import localization.Localization;
@@ -29,14 +30,16 @@ public class ProjectControl {
 	/** The localization class. */
 	static final Localization loc = Localization.getInstance();
 	/** The project that is controlled by this class. */
-	private Project project;
+	private ZControl zcontrol;
 
 	/**
 	 * Creates a new instance of <code>ProjectControl</code>. The {@link Project}
 	 * is set to a new project.
 	 */
 	public ProjectControl() {
-		project = newProject();
+		Project p = newProject();
+		zcontrol = new ZControl( p );
+//		zcontrol = newProject();
 	}
 
 	/**
@@ -44,7 +47,7 @@ public class ProjectControl {
 	 * given project.
 	 * @param p the project that should be controlled
 	 */
-	public ProjectControl( Project p ) {
+	public ProjectControl( ZControl zcontrol ) {
 
 	}
 
@@ -63,7 +66,9 @@ public class ProjectControl {
 	 */
 	public ProjectControl( File file ) {
 		if( !loadProject( file ) ) {
-			project = newProject();
+			Project p = newProject();
+			zcontrol = new ZControl( p );
+			//zcontrol = newProject();
 		}
 	}
 
@@ -78,9 +83,10 @@ public class ProjectControl {
 	 */
 	public boolean loadProject( File projectFile ) {
 		try {
-			project = Project.load( projectFile );
+			Project p = Project.load( projectFile );
 //			distribution = null; // Throw away the old assignment window
-			project.setProjectFile( projectFile );
+			p.setProjectFile( projectFile );
+			zcontrol = new ZControl( p );
 //			editView.displayProject( loaded );
 			// delete parameters that are set
 			ZToCAConverter.getInstance().clear();
@@ -99,7 +105,7 @@ public class ProjectControl {
 			ex.printStackTrace();
 			//editView.displayProject( EditorStart.newProject() );
 			//projectControl.newProject();
-			//editView.displayProject( projectControl.getProject() );
+			//editView.displayProject( projectControl.getZControl() );
 			ZETMain.sendMessage( loc.getString( "gui.editor.JEditor.message.loadError" ) );
 			return false;
 		}
@@ -113,7 +119,7 @@ public class ProjectControl {
 	public static Project newProject() {
 		Project p = new Project();
 		Floor fl = new Floor( loc.getString( "ds.z.DefaultName.Floor" ) + " 1" );
-		p.getPlan().addFloor( fl );
+		p.getBuildingPlan().addFloor( fl );
 		Assignment assignment = new Assignment( loc.getString( "ds.z.DefaultName.DefaultAssignment" ) );
 		p.addAssignment( assignment );
 		NormalDistribution d = new NormalDistribution( 0.5, 1.0, 0.4, 0.7 );
@@ -146,23 +152,23 @@ public class ProjectControl {
 		}
 		do {
 			fc.setName( newName + IOTools.fillLeadingZeros( number++, 2 ) );
-		} while( !getProject().getPlan().addFloor( fc ) && number <= 99 );
+		} while( !getZControl().getProject().getBuildingPlan().addFloor( fc ) && number <= 99 );
 	}
 
 	public void moveFloorUp( int id ) {
-		project.getPlan().moveFloorUp( id );
+		zcontrol.getProject().getBuildingPlan().moveFloorUp( id );
 	}
 
 	public void moveFloorDown( int id ) {
-		project.getPlan().moveFloorDown( id );
+		zcontrol.getProject().getBuildingPlan().moveFloorDown( id );
 	}
 
 	/**
 	 * Returns the currently controlled project
 	 * @return the currently controlled project.
 	 */
-	public Project getProject() {
-		return project;
+	public ZControl getZControl() {
+		return zcontrol;
 	}
 
 	/**
@@ -173,7 +179,7 @@ public class ProjectControl {
 	public void setProject( Project project ) throws NullPointerException {
 		if( project == null )
 			throw new NullPointerException( "Project is null.");
-		this.project = project;
+		this.zcontrol = new ZControl( project );
 	}
 
 	/**
