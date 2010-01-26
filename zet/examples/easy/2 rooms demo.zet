@@ -1,10 +1,10 @@
 <project id="1">
   <plan id="2">
-    <evacuationFloor id="4" name="Evakuierungsetage" offsetChanged="false" xOffset="0" yOffset="0" width="0" height="0" normalMode="true" rasterSize="400" defaultRoomSize="4000" roomCount="0">
+    <evacuationFloor id="4" name="Evakuierungsetage" xOffset="0" yOffset="0" width="0" height="0" normalMode="true" rasterSize="400" defaultRoomSize="4000" roomCount="0">
       <rooms id="5"/>
       <edges id="6"/>
     </evacuationFloor>
-    <floor id="7" name="Etage 1" offsetChanged="true" xOffset="0" yOffset="0" width="10000" height="4000">
+    <floor id="7" name="Etage 1" xOffset="0" yOffset="0" width="10000" height="4000">
       <rooms id="8">
         <room id="9" closed="true" xOffset="0" yOffset="0" width="4000" height="4000" changed="true" name="Raum 1">
           <edgeClassType>ds.z.RoomEdge</edgeClassType>
@@ -308,8 +308,12 @@
         <room reference="23"/>
       </rooms>
       <edges id="108"/>
+      <minX__DefiningRoom reference="9"/>
+      <minY__DefiningRoom reference="32"/>
+      <maxX__DefiningRoom reference="32"/>
+      <maxY__DefiningRoom reference="32"/>
     </floor>
-    <rasterized>false</rasterized>
+    <rasterized>true</rasterized>
   </plan>
   <currentAssignment id="109" name="Mischbelegung">
     <assignmentTypes id="110">
@@ -460,4 +464,40 @@
     </assignment>
   </assignments>
   <evacuationPlans id="165"/>
+  <vp id="166">
+    <tfs id="167">
+      <opengl.helper.TextureFontStrings id="168">
+        <centered id="169"/>
+        <strings id="170"/>
+        <width>0.0</width>
+        <ortho>true</ortho>
+        <x id="171"/>
+        <y id="172"/>
+        <bold id="173"/>
+        <xoffset>0.0</xoffset>
+      </opengl.helper.TextureFontStrings>
+    </tfs>
+    <cameraPositions id="174">
+      <ds.CameraPosition id="175">
+        <view id="176">
+          <x>0.7071067811865476</x>
+          <y>-0.7071067811865476</y>
+          <z>0.0</z>
+        </view>
+        <up id="177">
+          <x>0.0</x>
+          <y>0.0</y>
+          <z>1.0</z>
+        </up>
+        <pos id="178">
+          <x>50.0</x>
+          <y>-18.0</y>
+          <z>8.0</z>
+        </pos>
+        <text>CameraPosition</text>
+      </ds.CameraPosition>
+    </cameraPositions>
+    <currentWidth>80.0</currentWidth>
+    <currentHeight>80.0</currentHeight>
+  </vp>
 </project>

@@ -715,7 +715,7 @@
       <maxX__DefiningRoom reference="188"/>
       <maxY__DefiningRoom reference="47"/>
     </floor>
-    <rasterized>false</rasterized>
+    <rasterized>true</rasterized>
   </plan>
   <currentAssignment id="264" name="Neue">
     <assignmentTypes id="265">
@@ -997,4 +997,40 @@
     <assignment reference="264"/>
   </assignments>
   <evacuationPlans id="346"/>
+  <vp id="347">
+    <tfs id="348">
+      <opengl.helper.TextureFontStrings id="349">
+        <centered id="350"/>
+        <strings id="351"/>
+        <width>0.0</width>
+        <ortho>true</ortho>
+        <x id="352"/>
+        <y id="353"/>
+        <bold id="354"/>
+        <xoffset>0.0</xoffset>
+      </opengl.helper.TextureFontStrings>
+    </tfs>
+    <cameraPositions id="355">
+      <ds.CameraPosition id="356">
+        <view id="357">
+          <x>0.7071067811865476</x>
+          <y>-0.7071067811865476</y>
+          <z>0.0</z>
+        </view>
+        <up id="358">
+          <x>0.0</x>
+          <y>0.0</y>
+          <z>1.0</z>
+        </up>
+        <pos id="359">
+          <x>50.0</x>
+          <y>-20.0</y>
+          <z>15.0</z>
+        </pos>
+        <text>CameraPosition</text>
+      </ds.CameraPosition>
+    </cameraPositions>
+    <currentWidth>150.0</currentWidth>
+    <currentHeight>150.0</currentHeight>
+  </vp>
 </project>

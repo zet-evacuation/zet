@@ -6,13 +6,14 @@
  *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
  * GNU General Public License for more details.
  *
  * You should have received a copy of the GNU General Public License
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
+
 /*
  * UniformDistributionConverter.java
  * Created 16.12.2009, 12:21:47
@@ -20,28 +21,24 @@
 
 package io.z;
 
+import com.thoughtworks.xstream.converters.Converter;
 import com.thoughtworks.xstream.converters.MarshallingContext;
 import com.thoughtworks.xstream.converters.UnmarshallingContext;
-import com.thoughtworks.xstream.converters.reflection.ReflectionConverter;
-import com.thoughtworks.xstream.converters.reflection.ReflectionProvider;
 import com.thoughtworks.xstream.io.HierarchicalStreamReader;
 import com.thoughtworks.xstream.io.HierarchicalStreamWriter;
-import com.thoughtworks.xstream.mapper.Mapper;
+import de.tu_berlin.math.coga.rndutils.distribution.continuous.UniformDistribution;
 
-import util.random.distributions.UniformDistribution;
 
-/** A converter that behaves just like a normal converter would do, he only adds
+/**
+ * A converter that behaves just like a normal converter would do, he only adds
  * the functionality of recreating the changeListeners.
  *
- * @author Timon Kelter
+ * @author Jan-Philipp Kappmeier
  */
-public class UniformDistributionConverter extends ReflectionConverter {
+public class UniformDistributionConverter implements Converter {
 	private Class myClass = UniformDistribution.class;
 
-	public UniformDistributionConverter (Mapper mapper, ReflectionProvider reflectionProvider) {
-		super (mapper, reflectionProvider);
-	}
-
+	@Override
 	public boolean canConvert (Class type) {
 		return myClass.isAssignableFrom (type);
 	}
@@ -53,52 +50,16 @@ public class UniformDistributionConverter extends ReflectionConverter {
    * @param context
    */
   public void marshal( Object source, HierarchicalStreamWriter writer, MarshallingContext context ) {
-    //PropertyTreeNode node = (PropertyTreeNode) source;
 		UniformDistribution dist = (UniformDistribution) source;
-//    writer.startNode( "treeNode" );
     writer.addAttribute( "min", new Double(dist.getMin()).toString() );
     writer.addAttribute( "max", new Double(dist.getMax()).toString() );
-//    for( int i=0; i < node.getChildCount(); i++ ) {
-//      DefaultMutableTreeNode child = (DefaultMutableTreeNode) node.getChildAt( i );
-//      context.convertAnother( child );
-//    }
-//		for( AbstractPropertyValue property : node.getProperties()	) {
-//			if( property instanceof BooleanProperty )
-//				context.convertAnother( property, new BooleanPropertyConverter() );
-//			else if( property instanceof IntegerRangeProperty )
-//				context.convertAnother( property, new IntegerRangePropertyConverter() );
-//			else if( property instanceof IntegerProperty )
-//				context.convertAnother( property, new IntegerPropertyConverter() );
-//			else if( property instanceof DoubleProperty )
-//				context.convertAnother( property, new DoublePropertyConverter() );
-//			else if( property instanceof StringProperty )
-//				context.convertAnother( property, new StringPropertyConverter() );
-//			else if( property instanceof StringListProperty )
-//				context.convertAnother( property, new StringListPropertyConverter() );
-//			else if( property instanceof QualitySettingProperty )
-//				context.convertAnother( property, new QualitySettingPropertyConverter() );
-//		}
-//    writer.endNode();
   }
 
 	public Object unmarshal (final HierarchicalStreamReader reader, final UnmarshallingContext context) {
-		//Object created = instantiateNewInstance(reader, context);
-
 		UniformDistribution dist = new UniformDistribution();
-
-		double min = Double.parseDouble( reader.getAttribute( "min" ) );
-		double max = Double.parseDouble( reader.getAttribute( "max" ) );
-
+		final double min = Double.parseDouble( reader.getAttribute( "min" ) );
+		final double max = Double.parseDouble( reader.getAttribute( "max" ) );
 		dist.setParameter( min, max );
-		//reflectionProvider.writeField( created, "min", min, myClass );
-		// Early recreation of changeListener List neccessary
-//		reflectionProvider.writeField (dist, "changeListeners", new ArrayList<ChangeListener> (), myClass);
-
-//        created = doUnmarshal(created, reader, context);
-//		Distribution result = (Distribution)serializationMethodInvoker.callReadResolve(created);
-
 		return dist;
-		
-		//min="0.0" max="1.0"
 	}
 }

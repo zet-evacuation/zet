@@ -126,6 +126,7 @@ public final class ProjectionHelper {
     gl.glRotated( -twist, 0.0, 0.0, 1.0 );
     gl.glRotated( -incidence, 1.0, 0.0, 0.0 );
     gl.glRotated( -azimuth, 0.0, 0.0, 1.0 );
+		System.out.println( "Set to distance " + distance );
   }
 
 		

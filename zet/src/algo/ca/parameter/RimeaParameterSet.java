@@ -20,10 +20,10 @@
 
 package algo.ca.parameter;
 
+import de.tu_berlin.math.coga.rndutils.distribution.continuous.UniformDistribution;
 import ds.ca.Cell;
 import ds.ca.Individual;
 import java.util.Collection;
-import util.random.distributions.UniformDistribution;
 
 /**
  * A {@link ParameterSet} that sets the parameter of the simulation to values

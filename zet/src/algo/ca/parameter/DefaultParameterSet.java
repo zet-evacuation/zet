@@ -30,7 +30,7 @@ import java.util.Collection;
 import java.util.List;
 import localization.Localization;
 import de.tu_berlin.math.coga.rndutils.RandomUtils;
-import util.random.distributions.NormalDistribution;
+import de.tu_berlin.math.coga.rndutils.distribution.continuous.NormalDistribution;
 
 /**
  * @author Daniel Pluempe, Jan-Philipp Kappmeier

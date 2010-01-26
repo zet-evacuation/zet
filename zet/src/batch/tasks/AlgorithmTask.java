@@ -6,7 +6,7 @@
  *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
  * GNU General Public License for more details.
  *
  * You should have received a copy of the GNU General Public License
@@ -53,7 +53,7 @@ public class AlgorithmTask extends SwingWorker<Integer, ProcessUpdateMessage> im
 
     public void eventOccurred(AlgorithmEvent event) {
         if (event instanceof AlgorithmProgressEvent) {
-            System.out.println("Here");
+            System.out.print("Here;");
             publish(new ProcessUpdateMessage(((AlgorithmProgressEvent) event).getProgressAsInteger(), "taskName", "taskProgressInformation", "taskDetailedProgressInformation"));
         }
     }

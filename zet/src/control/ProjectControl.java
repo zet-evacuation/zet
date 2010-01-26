@@ -6,6 +6,7 @@
 package control;
 
 import converter.ZToCAConverter;
+import de.tu_berlin.math.coga.rndutils.distribution.continuous.NormalDistribution;
 import ds.Project;
 import ds.z.Assignment;
 import ds.z.AssignmentType;
@@ -16,7 +17,6 @@ import java.io.File;
 import localization.Localization;
 import util.Helper;
 import util.IOTools;
-import util.random.distributions.NormalDistribution;
 
 /**
  * The class <code>ProjectControl</code> represents a control class to implement

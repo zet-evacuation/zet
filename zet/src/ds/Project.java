@@ -26,10 +26,14 @@ import com.thoughtworks.xstream.annotations.XStreamOmitField;
 import com.thoughtworks.xstream.converters.Converter;
 import com.thoughtworks.xstream.converters.reflection.ReflectionProvider;
 import com.thoughtworks.xstream.mapper.Mapper;
+import de.tu_berlin.math.coga.rndutils.distribution.continuous.NormalDistribution;
+import de.tu_berlin.math.coga.rndutils.distribution.continuous.UniformDistribution;
 import ds.z.Assignment;
 import ds.z.BuildingPlan;
 import ds.z.EvacuationPlan;
+import io.z.NormalDistributionConverter;
 import io.z.ProjectConverter;
+import io.z.UniformDistributionConverter;
 import io.z.XMLConverter;
 import java.io.File;
 import java.io.FileReader;
@@ -70,6 +74,18 @@ public class Project implements Serializable {
 		//Configure aliases for external classes (Java API)
 		xml_convert.useAttributeFor( java.awt.Point.class, "x" );
 		xml_convert.useAttributeFor( java.awt.Point.class, "y" );
+
+		xml_convert.alias( "uniformDistribution", UniformDistribution.class );
+                xml_convert.registerConverter(new UniformDistributionConverter() );
+//		xml_convert.useAttributeFor(Distribution.class, "min" );
+//		xml_convert.useAttributeFor(Distribution.class, "max" );
+////		xml_convert.useAttributeFor(NormalDistribution.class, "min" );
+////		xml_convert.useAttributeFor(NormalDistribution.class, "max" );
+//		xml_convert.useAttributeFor(NormalDistribution.class, "variance" );
+//		xml_convert.useAttributeFor(NormalDistribution.class, "expectedValue" );
+
+				xml_convert.alias( "normalDistribution", NormalDistribution.class );
+                xml_convert.registerConverter(new NormalDistributionConverter() );
 
 		//Configure aliases for all ds.* classes
 		//For this purpose the current location of the bytecode is searched for
