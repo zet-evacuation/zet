@@ -37,7 +37,7 @@ import java.util.Iterator;
 import java.util.List;
 
 import javax.swing.event.ChangeEvent;
-import localization.Localization;
+import de.tu_berlin.math.coga.common.localization.Localization;
 
 /**
  * A <code>Floor</code> is a plane that can contain {@link Room}-objects. It is

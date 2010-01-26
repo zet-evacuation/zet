@@ -27,7 +27,7 @@ import ds.graph.NodeRectangle;
 
 import java.awt.Shape;
 
-import localization.Localization;
+import de.tu_berlin.math.coga.common.localization.Localization;
 
 import util.Level;
 

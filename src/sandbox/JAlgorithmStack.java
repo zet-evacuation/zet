@@ -26,7 +26,7 @@ import javax.swing.JProgressBar;
 import javax.swing.JTable;
 import javax.swing.table.AbstractTableModel;
 import javax.swing.table.TableCellRenderer;
-import localization.Localization;
+import de.tu_berlin.math.coga.common.localization.Localization;
 
 /**
  *

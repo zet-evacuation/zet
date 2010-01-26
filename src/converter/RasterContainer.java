@@ -27,7 +27,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Set;
 
-import localization.Localization;
+import de.tu_berlin.math.coga.common.localization.Localization;
 
 import ds.z.Floor;
 import ds.z.Room;

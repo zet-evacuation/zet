@@ -47,7 +47,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Vector;
 import javax.media.opengl.GLAutoDrawable;
-import localization.Localization;
+import de.tu_berlin.math.coga.common.localization.Localization;
 import opengl.framework.abs.drawable;
 import statistic.ca.CAStatistic;
 import batch.tasks.AlgorithmTask;

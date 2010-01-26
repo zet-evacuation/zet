@@ -28,7 +28,7 @@ import ds.ca.Individual;
 import ds.ca.StaticPotential;
 import java.util.Collection;
 import java.util.List;
-import localization.Localization;
+import de.tu_berlin.math.coga.common.localization.Localization;
 import de.tu_berlin.math.coga.rndutils.RandomUtils;
 import de.tu_berlin.math.coga.rndutils.distribution.continuous.NormalDistribution;
 

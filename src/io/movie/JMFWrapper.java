@@ -25,7 +25,7 @@ import java.util.Vector;
 import javax.media.MediaLocator;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
-import localization.Localization;
+import de.tu_berlin.math.coga.common.localization.Localization;
 
 /**
  * <p>The JMFWriter can write files with arbitrary names.</p>

@@ -18,7 +18,6 @@
  * NormalDistributionConverter.java
  * Created 26.01.2010, 18:17:32
  */
-
 package io.z;
 
 import com.thoughtworks.xstream.converters.Converter;
@@ -28,45 +27,57 @@ import com.thoughtworks.xstream.io.HierarchicalStreamReader;
 import com.thoughtworks.xstream.io.HierarchicalStreamWriter;
 import de.tu_berlin.math.coga.rndutils.distribution.continuous.NormalDistribution;
 
-
 /**
- * A converter that allows to load and store normal distribution objects. It
- * loads the parameters of the distribution as xml-attributes.
- *
+ * A converter that allows to load and store {@link NormalDistribtion}
+ * objects. It loads the parameters of the distribution as xml-attributes.
  * @author Jan-Philipp Kappmeier
  */
 public class NormalDistributionConverter implements Converter {
-	private Class myClass = NormalDistribution.class;
-
+	/**
+	 * <p>Checks wheather an object can be converted by this class, that is if it
+	 * is of the type {@link NormalDistribution.}</p>
+	 * {@inheritDoc}
+	 * @param type the type of the object that is checked
+	 * @return true if this converter can convert an object of the given type
+	 */
 	@Override
-	public boolean canConvert (Class type) {
-		return myClass.isAssignableFrom (type);
+	public boolean canConvert( Class type ) {
+		return NormalDistribution.class.isAssignableFrom( type );
 	}
 
-  /**
-   * Writes a node to the XML-file, beginning with writing the start node.
-   * @param source
-   * @param writer
-   * @param context
-   */
+	/**
+	 * <p>Writes the attributes of the {@link NormalDistribution} to the
+	 * xml tag. Written attributes are min, max, variance and expectedValue.</p>
+	 * {@inheritDoc}
+	 * @param source the source which is saved
+	 * @param writer the file writer
+	 * @param context the current marshalling context.
+	 */
 	@Override
-  public void marshal( Object source, HierarchicalStreamWriter writer, MarshallingContext context ) {
-		NormalDistribution dist = (NormalDistribution) source;
-    writer.addAttribute( "min", new Double(dist.getMin()).toString() );
-    writer.addAttribute( "max", new Double(dist.getMax()).toString() );
-		writer.addAttribute( "variance", new Double( dist.getVariance()).toString() );
-		writer.addAttribute( "expectedValue", new Double( dist.getExpectedValue()).toString() );
-  }
+	public void marshal( Object source, HierarchicalStreamWriter writer, MarshallingContext context ) {
+		final NormalDistribution dist = (NormalDistribution)source;
+		writer.addAttribute( "min", new Double( dist.getMin() ).toString() );
+		writer.addAttribute( "max", new Double( dist.getMax() ).toString() );
+		writer.addAttribute( "variance", new Double( dist.getVariance() ).toString() );
+		writer.addAttribute( "expectedValue", new Double( dist.getExpectedValue() ).toString() );
+	}
 
+	/**
+	 * <p>Reads the attributes of an {@link NormalDistribution} and
+	 * creates the object instance. Readed attributes are min, max, lambda1,
+	 * lambda2 and p.</p>
+	 * {inheritDoc}
+	 * @param reader the reader for the xml input stream
+	 * @param context the current marshalling context
+	 * @return the new instance of {@link NormalDistribution}
+	 */
 	@Override
-	public Object unmarshal (final HierarchicalStreamReader reader, final UnmarshallingContext context) {
+	public Object unmarshal( final HierarchicalStreamReader reader, final UnmarshallingContext context ) {
 		NormalDistribution dist = new NormalDistribution();
-
 		final double min = Double.parseDouble( reader.getAttribute( "min" ) );
 		final double max = Double.parseDouble( reader.getAttribute( "max" ) );
 		final double variance = Double.parseDouble( reader.getAttribute( "variance" ) );
 		final double expectedValue = Double.parseDouble( reader.getAttribute( "expectedValue" ) );
-
 		dist.setParameter( expectedValue, variance, min, max );
 		return dist;
 	}

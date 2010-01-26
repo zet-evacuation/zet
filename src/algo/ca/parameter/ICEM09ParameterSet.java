@@ -20,7 +20,7 @@ import ds.ca.Cell;
 import ds.ca.Individual;
 import ds.ca.StaticPotential;
 import java.util.Collection;
-import localization.Localization;
+import de.tu_berlin.math.coga.common.localization.Localization;
 
 /**
  * @author Sylvie Temme

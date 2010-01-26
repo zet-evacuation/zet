@@ -44,7 +44,7 @@ import javax.media.opengl.GL;
 import javax.media.opengl.GLAutoDrawable;
 import javax.media.opengl.GLCapabilities;
 import javax.media.opengl.glu.GLUquadric;
-import localization.Localization;
+import de.tu_berlin.math.coga.common.localization.Localization;
 import opengl.drawingutils.GLColor;
 import opengl.helper.Frustum;
 import opengl.helper.Texture;

@@ -44,7 +44,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import localization.Localization;
+import de.tu_berlin.math.coga.common.localization.Localization;
 
 /**
  * Stores properties of arbitrary type accessible via a string.

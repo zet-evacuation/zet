@@ -21,7 +21,7 @@ import com.thoughtworks.xstream.annotations.XStreamAsAttribute;
 import ds.z.exception.PolygonNotClosedException;
 import ds.z.exception.PolygonNotRasterizedException;
 import java.util.ListIterator;
-import localization.Localization;
+import de.tu_berlin.math.coga.common.localization.Localization;
 
 /**
  * Represents a Stair (whether in a room or between floors). The "upper" and

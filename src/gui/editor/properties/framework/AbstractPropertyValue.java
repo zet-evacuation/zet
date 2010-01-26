@@ -21,7 +21,7 @@ package gui.editor.properties.framework;
 
 import ds.PropertyContainer;
 import javax.swing.JPanel;
-import localization.Localization;
+import de.tu_berlin.math.coga.common.localization.Localization;
 
 /**
  * <p>A class representing a property value. Properties are stored in an XML-file

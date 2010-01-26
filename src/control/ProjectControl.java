@@ -14,7 +14,7 @@ import ds.z.Floor;
 import ds.z.ZControl;
 import gui.ZETMain;
 import java.io.File;
-import localization.Localization;
+import de.tu_berlin.math.coga.common.localization.Localization;
 import util.Helper;
 import util.IOTools;
 

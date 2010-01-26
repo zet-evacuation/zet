@@ -6,12 +6,13 @@
 package de.tu_berlin.math.coga.rndutils;
 
 /**
- * The class <code>Util</code> ...
+ * The class <code>Util</code> provides some utility methods used by the random
+ * classes.
  * @author Jan-Philipp Kappmeier
  */
 public class Util {
 
-	/** Aviods instancint the utility class. */
+	/** Aviods instantiation of the utility class. */
 	public Util() { }
 
 	/**
@@ -19,8 +20,9 @@ public class Util {
 	 * @param n parameter n
 	 * @param k parameter k
 	 * @return the binomak coefficient
+	 * @throws IllegalArgumentException if n is negative
 	 */
-	public static long bink( int n, int k ) {
+	public static long bink( int n, int k ) throws IllegalArgumentException {
 		if( k < 0 || k > Math.abs( n ) )
 			return 0;
 		if( k == 1 )

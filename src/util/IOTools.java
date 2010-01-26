@@ -23,7 +23,7 @@ package util;
 
 import java.io.File;
 import java.text.ParseException;
-import localization.Localization;
+import de.tu_berlin.math.coga.common.localization.Localization;
 
 /**
  * A set of helper methods for input and output operations.

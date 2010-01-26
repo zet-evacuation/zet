@@ -28,7 +28,7 @@ import java.util.Collection;
 import java.util.Hashtable;
 import java.util.ArrayList;
 
-import localization.Localization;
+import de.tu_berlin.math.coga.common.localization.Localization;
 
 import util.Direction;
 import algo.graph.util.GraphInstanceChecker;

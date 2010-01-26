@@ -15,7 +15,7 @@
  */
 package algo.ca.rule;
 
-import localization.Localization;
+import de.tu_berlin.math.coga.common.localization.Localization;
 import ds.ca.CAController;
 import algo.ca.parameter.ParameterSet;
 import ds.ca.Cell;

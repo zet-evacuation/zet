@@ -29,7 +29,7 @@ import ds.ca.CellularAutomaton;
 import ds.ca.Individual;
 import java.util.Iterator;
 
-import localization.Localization;
+import de.tu_berlin.math.coga.common.localization.Localization;
 import batch.tasks.AlgorithmTask;
 import statistic.ca.CAStatisticWriter;
 import util.ProgressBooleanFlags;

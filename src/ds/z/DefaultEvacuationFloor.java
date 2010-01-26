@@ -22,7 +22,7 @@ package ds.z;
 import com.thoughtworks.xstream.annotations.XStreamAlias;
 import com.thoughtworks.xstream.annotations.XStreamAsAttribute;
 import java.util.ArrayList;
-import localization.Localization;
+import de.tu_berlin.math.coga.common.localization.Localization;
 
 /**
  * A <code>DefaultEvacuationFloor</code> basically behaves as a normal {@link ds.z.Floor}.

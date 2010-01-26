@@ -60,7 +60,7 @@ import java.util.List;
 import java.util.ListIterator;
 import javax.swing.JComponent;
 import javax.swing.SwingUtilities;
-import localization.Localization;
+import de.tu_berlin.math.coga.common.localization.Localization;
 
 /**
  * Graphical representation of a Floor from the BuildingPlan. Also offers features

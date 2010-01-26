@@ -52,7 +52,7 @@ import java.util.Calendar;
 import javax.imageio.ImageIO;
 import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
-import localization.Localization;
+import de.tu_berlin.math.coga.common.localization.Localization;
 import util.DebugStream;
 import util.DebugStreamVerbose;
 

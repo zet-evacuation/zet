@@ -15,7 +15,7 @@
  */
 package batch;
 
-import localization.Localization;
+import de.tu_berlin.math.coga.common.localization.Localization;
 import ds.NetworkFlowModel;
 import batch.tasks.graph.EATransshipmentMinCostTask;
 import batch.tasks.graph.EATransshipmentSSSPTask;

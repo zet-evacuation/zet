@@ -52,7 +52,7 @@ import javax.swing.UIManager;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 import javax.swing.table.AbstractTableModel;
-import localization.Localization;
+import de.tu_berlin.math.coga.common.localization.Localization;
 import opengl.helper.TextureFontStrings;
 import util.Helper;
 

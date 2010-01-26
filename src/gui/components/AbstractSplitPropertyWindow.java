@@ -26,8 +26,8 @@ import java.text.NumberFormat;
 import javax.swing.JComponent;
 import javax.swing.JPanel;
 import javax.swing.JSplitPane;
-import localization.Localization;
-import localization.Localized;
+import de.tu_berlin.math.coga.common.localization.Localization;
+import de.tu_berlin.math.coga.common.localization.Localized;
 
 /**
  *

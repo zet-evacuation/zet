@@ -27,7 +27,7 @@ import io.z.XMLConverter;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
-import localization.Localization;
+import de.tu_berlin.math.coga.common.localization.Localization;
 
 /**
  * Implements a simple edge that can be used to create boundings of polygons.

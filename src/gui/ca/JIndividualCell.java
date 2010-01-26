@@ -28,7 +28,7 @@ import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.text.NumberFormat;
-import localization.Localization;
+import de.tu_berlin.math.coga.common.localization.Localization;
 
 /**
  * The swing component <code>JIndividualCell</code> represents an individual of

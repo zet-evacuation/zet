@@ -24,7 +24,7 @@ import com.thoughtworks.xstream.annotations.XStreamAlias;
 import com.thoughtworks.xstream.annotations.XStreamAsAttribute;
 import ds.z.exception.PolygonNotClosedException;
 import ds.z.exception.TooManyPeopleException;
-import localization.Localization;
+import de.tu_berlin.math.coga.common.localization.Localization;
 
 
 /**
