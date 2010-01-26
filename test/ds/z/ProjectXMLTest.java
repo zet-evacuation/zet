@@ -38,7 +38,7 @@ public class ProjectXMLTest extends TestCase {
 	public void testCreation() throws Exception {
 		Project p = new Project();
 		Floor fl = new Floor( "Floor 1" );
-		p.getPlan().addFloor( fl );
+		p.getBuildingPlan().addFloor( fl );
 		Room room1 = new Room( fl, "Room 1" );
 		Room room2 = new Room( fl, "Room 2" );
 		Room door = new Room( fl, "Door" );
@@ -51,7 +51,7 @@ public class ProjectXMLTest extends TestCase {
 		pointList.add( new PlanPoint( 100, 70 ) );
 		pointList.add( new PlanPoint( 100, 40 ) );
 		pointList.add( new PlanPoint( 100, 10 ) );
-		room1.add( pointList );
+		room1.defineByPoints( pointList );
 
 		// Erzeuge Room2
 		pointList = new ArrayList<PlanPoint>();
@@ -63,12 +63,12 @@ public class ProjectXMLTest extends TestCase {
 		pointList.add( new PlanPoint( 200, 10 ) );
 		try {
 			// Check wheter room1 sends exception if we try adding points a second time
-			room1.add( pointList );
+			room1.defineByPoints( pointList );
 			fail( "Adding points to not empty room should be forbidden!" );
 		} catch( IllegalStateException expected ) {
 
 		}
-		room2.add( pointList );
+		room2.defineByPoints( pointList );
 
 		// Erzeuge Door
 		pointList = new ArrayList<PlanPoint>();
@@ -76,7 +76,7 @@ public class ProjectXMLTest extends TestCase {
 		pointList.add( new PlanPoint( 100, 70 ) );
 		pointList.add( new PlanPoint( 110, 70 ) );
 		pointList.add( new PlanPoint( 110, 40 ) );
-		door.add( pointList );
+		door.defineByPoints( pointList );
 
 		// Verbinden der Räume
 		RoomEdge r1Edge = room1.getEdge( new PlanPoint( 100, 40 ), new PlanPoint( 100, 70 ) );
@@ -98,7 +98,7 @@ public class ProjectXMLTest extends TestCase {
 		pointList.add( new PlanPoint( 10, 100 ) );
 		pointList.add( new PlanPoint( 50, 100 ) );
 		pointList.add( new PlanPoint( 50, 10 ) );
-		a.add( pointList );
+		a.defineByPoints( pointList );
 
 		p.save( new File( ".\\examples\\test_simple.xml" ) );
 
@@ -109,7 +109,7 @@ public class ProjectXMLTest extends TestCase {
 		// Create a sample building
 		Project p = new Project();
 		Floor f1 = new Floor( "Erdgeschoss" );
-		p.getPlan().addFloor( f1 );
+		p.getBuildingPlan().addFloor( f1 );
 		Room f1_r1 = new Room( f1, "Diele" );
 		RoomEdge f1_e1 = new RoomEdge( new PlanPoint( 400, 400 ), new PlanPoint( 400, 2400 ), f1_r1 );
 		RoomEdge f1_e2 = new RoomEdge( new PlanPoint( 400, 2400 ), new PlanPoint( 2400, 2400 ), f1_r1 );
@@ -125,7 +125,7 @@ public class ProjectXMLTest extends TestCase {
 		f1_r2.connectTo( f1_r1, f1_e8 );
 
 		Floor f2 = new Floor( "1. Stock" );
-		p.getPlan().addFloor( f2 );
+		p.getBuildingPlan().addFloor( f2 );
 		Room f2_r1 = new Room( f2, "Wohnraum" );
 		RoomEdge f2_e1 = new RoomEdge( new PlanPoint( 800, 800 ), new PlanPoint( 800, 2000 ), f2_r1 );
 		RoomEdge f2_e2 = new RoomEdge( new PlanPoint( 800, 2000 ), new PlanPoint( 2000, 2000 ), f2_r1 );
@@ -151,7 +151,7 @@ public class ProjectXMLTest extends TestCase {
 		pointList.add( new PlanPoint( 1000, 1000 ) );
 		pointList.add( new PlanPoint( 1000, 500 ) );
 		pointList.add( new PlanPoint( 500, 500 ) );
-		dieleAssignment.add( pointList );
+		dieleAssignment.defineByPoints( pointList );
 
 		//p.save (new File ("C:\\default_editor_demo.xml"));	
 		p.save( new File( ".\\examples\\default_editor_demo.xml" ) );

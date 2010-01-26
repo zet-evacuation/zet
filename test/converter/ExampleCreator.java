@@ -62,7 +62,7 @@ public class ExampleCreator extends TestCase {
 		points.add( new PlanPoint( 8.6, 3.0 ) );
 		points.add( new PlanPoint( 8.6, 8.2 ) );
 		points.add( new PlanPoint( 3.0, 8.2 ) );
-		pg_room.add( points );
+		pg_room.defineByPoints( points );
 
 		points = new ArrayList<PlanPoint>();
 		points.add( new PlanPoint( 3.4, 3.4 ) );
@@ -70,7 +70,7 @@ public class ExampleCreator extends TestCase {
 		points.add( new PlanPoint( 3.8, 5.4 ) );
 		points.add( new PlanPoint( 3.4, 5.4 ) );
 		iA = new InaccessibleArea( pg_room );
-		iA.add( points );
+		iA.defineByPoints( points );
 
 		points = new ArrayList<PlanPoint>();
 		points.add( new PlanPoint( 3.8, 3.4 ) );
@@ -82,7 +82,7 @@ public class ExampleCreator extends TestCase {
 		points.add( new PlanPoint( 4.2, 3.8 ) );
 		points.add( new PlanPoint( 3.8, 3.8 ) );
 		iA = new InaccessibleArea( pg_room );
-		iA.add( points );
+		iA.defineByPoints( points );
 
 		points = new ArrayList<PlanPoint>();
 		points.add( new PlanPoint( 5.0, 3.4 ) );
@@ -98,7 +98,7 @@ public class ExampleCreator extends TestCase {
 		points.add( new PlanPoint( 6.6, 5.4 ) );
 		points.add( new PlanPoint( 5.0, 5.4 ) );
 		iA = new InaccessibleArea( pg_room );
-		iA.add( points );
+		iA.defineByPoints( points );
 
 		points = new ArrayList<PlanPoint>();
 		points.add( new PlanPoint( 3.4, 5.8 ) );
@@ -114,7 +114,7 @@ public class ExampleCreator extends TestCase {
 		points.add( new PlanPoint( 4.2, 7.0 ) );
 		points.add( new PlanPoint( 3.4, 7.0 ) );
 		iA = new InaccessibleArea( pg_room );
-		iA.add( points );
+		iA.defineByPoints( points );
 
 		points = new ArrayList<PlanPoint>();
 		points.add( new PlanPoint( 5.0, 6.6 ) );
@@ -122,7 +122,7 @@ public class ExampleCreator extends TestCase {
 		points.add( new PlanPoint( 5.4, 7.0 ) );
 		points.add( new PlanPoint( 5.0, 7.0 ) );
 		iA = new InaccessibleArea( pg_room );
-		iA.add( points );
+		iA.defineByPoints( points );
 
 		points = new ArrayList<PlanPoint>();
 		points.add( new PlanPoint( 5.4, 6.2 ) );
@@ -130,7 +130,7 @@ public class ExampleCreator extends TestCase {
 		points.add( new PlanPoint( 5.8, 6.6 ) );
 		points.add( new PlanPoint( 5.4, 6.6 ) );
 		iA = new InaccessibleArea( pg_room );
-		iA.add( points );
+		iA.defineByPoints( points );
 
 		points = new ArrayList<PlanPoint>();
 		points.add( new PlanPoint( 5.8, 5.8 ) );
@@ -138,7 +138,7 @@ public class ExampleCreator extends TestCase {
 		points.add( new PlanPoint( 6.2, 7.8 ) );
 		points.add( new PlanPoint( 5.8, 7.8 ) );
 		iA = new InaccessibleArea( pg_room );
-		iA.add( points );
+		iA.defineByPoints( points );
 
 		points = new ArrayList<PlanPoint>();
 		points.add( new PlanPoint( 6.6, 5.8 ) );
@@ -150,7 +150,7 @@ public class ExampleCreator extends TestCase {
 		points.add( new PlanPoint( 7.4, 6.2 ) );
 		points.add( new PlanPoint( 6.6, 6.2 ) );
 		iA = new InaccessibleArea( pg_room );
-		iA.add( points );
+		iA.defineByPoints( points );
 
 		points = new ArrayList<PlanPoint>();
 		points.add( new PlanPoint( 6.6, 6.6 ) );
@@ -158,7 +158,7 @@ public class ExampleCreator extends TestCase {
 		points.add( new PlanPoint( 8.2, 7.0 ) );
 		points.add( new PlanPoint( 6.6, 7.0 ) );
 		iA = new InaccessibleArea( pg_room );
-		iA.add( points );
+		iA.defineByPoints( points );
 
 		points = new ArrayList<PlanPoint>();
 		points.add( new PlanPoint( 7.0, 7.0 ) );
@@ -166,7 +166,7 @@ public class ExampleCreator extends TestCase {
 		points.add( new PlanPoint( 7.4, 7.4 ) );
 		points.add( new PlanPoint( 7.0, 7.4 ) );
 		iA = new InaccessibleArea( pg_room );
-		iA.add( points );
+		iA.defineByPoints( points );
 
 		points = new ArrayList<PlanPoint>();
 		points.add( new PlanPoint( 6.6, 7.4 ) );
@@ -174,12 +174,12 @@ public class ExampleCreator extends TestCase {
 		points.add( new PlanPoint( 7.0, 7.8 ) );
 		points.add( new PlanPoint( 6.6, 7.8 ) );
 		iA = new InaccessibleArea( pg_room );
-		iA.add( points );
+		iA.defineByPoints( points );
 
 		// Store to harddisk    
 		Project p = new Project();
 
-		p.getPlan().addFloor( floor );
+		p.getBuildingPlan().addFloor( floor );
 
 		//p.save (new File ("D:\\Semester9\\PG\\pg517.xml"));
 		p.save( new File( ".\\examples\\pg517.xml" ) );
@@ -202,7 +202,7 @@ public class ExampleCreator extends TestCase {
 		points.add( new PlanPoint( 2.0, 2.4 ) );
 		points.add( new PlanPoint( 1.2, 2.4 ) );
 		points.add( new PlanPoint( 0.4, 2.4 ) );
-		room.add( points );
+		room.defineByPoints( points );
 
 		Room room2 = new Room( floor, "Anderer Raum" );
 		points = new ArrayList<PlanPoint>();
@@ -212,7 +212,7 @@ public class ExampleCreator extends TestCase {
 		points.add( new PlanPoint( 1.2, 3.2 ) );
 		points.add( new PlanPoint( 2.0, 3.2 ) );
 		points.add( new PlanPoint( 2.4, 3.2 ) );
-		room2.add( points );
+		room2.defineByPoints( points );
 		room2.connectTo( room, new PlanPoint( 2.0, 2.4, true ), new PlanPoint( 1.2, 2.4, true ) );
 
 		Room room3 = new Room( floor, "Nochn Raum" );
@@ -221,7 +221,7 @@ public class ExampleCreator extends TestCase {
 		points.add( new PlanPoint( 4.0, 0.4 ) );
 		points.add( new PlanPoint( 4.0, 1.2 ) );
 		points.add( new PlanPoint( 2.4, 1.2 ) );
-		room3.add( points );
+		room3.defineByPoints( points );
 		room3.connectTo( room, new PlanPoint( 2.4, 0.4, true ), new PlanPoint( 2.4, 1.2, true ) );
 
 		// To exception is allowed here!
@@ -234,7 +234,7 @@ public class ExampleCreator extends TestCase {
 		points.add( new PlanPoint( 1.6, 0.8 ) );
 		points.add( new PlanPoint( 1.2, 0.8 ) );
 		InaccessibleArea iA = new InaccessibleArea( room );
-		iA.add( points );
+		iA.defineByPoints( points );
 
 		points = new ArrayList<PlanPoint>();
 		points.add( new PlanPoint( 1.2, 1.2 ) );
@@ -244,7 +244,7 @@ public class ExampleCreator extends TestCase {
 		points.add( new PlanPoint( 2.0, 2.0 ) );
 		points.add( new PlanPoint( 1.2, 2.0 ) );
 		iA = new InaccessibleArea( room );
-		iA.add( points );
+		iA.defineByPoints( points );
 
 		points = new ArrayList<PlanPoint>();
 		points.add( new PlanPoint( 0.4, 1.6 ) );
@@ -252,7 +252,7 @@ public class ExampleCreator extends TestCase {
 		points.add( new PlanPoint( 0.8, 2.0 ) );
 		points.add( new PlanPoint( 0.8, 2.4 ) );
 		Barrier ba = new Barrier( room );
-		ba.add( points );
+		ba.defineByPoints( points );
 
 		// DelayArea
 		points = new ArrayList<PlanPoint>();
@@ -261,7 +261,7 @@ public class ExampleCreator extends TestCase {
 		points.add( new PlanPoint( 2.0, 1.2 ) );
 		points.add( new PlanPoint( 0.8, 1.2 ) );
 		DelayArea dA = new DelayArea( room, DelayArea.DelayType.OTHER, 1.0 / 3.0 );
-		dA.add( points );
+		dA.defineByPoints( points );
 
 		points = new ArrayList<PlanPoint>();
 		points.add( new PlanPoint( 1.6, 0.8 ) );
@@ -269,12 +269,12 @@ public class ExampleCreator extends TestCase {
 		points.add( new PlanPoint( 2.4, 2.0 ) );
 		points.add( new PlanPoint( 1.6, 2.0 ) );
 		dA = new DelayArea( room, DelayArea.DelayType.OTHER, 0.5 );
-		dA.add( points );
+		dA.defineByPoints( points );
 
 		// Store to harddisk    
 		Project p = new Project();
 
-		p.getPlan().addFloor( floor );
+		p.getBuildingPlan().addFloor( floor );
 
 		//p.save (new File ("D:\\Semester9\\PG\\pg517.xml"));
 		p.save( new File( ".\\examples\\testraum.xml" ) );
@@ -297,7 +297,7 @@ public class ExampleCreator extends TestCase {
 		points.add( new PlanPoint( 4.0, 0.4 ) );
 		points.add( new PlanPoint( 4.0, 4.0 ) );
 		points.add( new PlanPoint( 0.4, 4.0 ) );
-		room.add( points );
+		room.defineByPoints( points );
 
 		points = new ArrayList<PlanPoint>();
 		iA = new InaccessibleArea( room );
@@ -305,7 +305,7 @@ public class ExampleCreator extends TestCase {
 		points.add( new PlanPoint( 3.6, 3.6 ) );
 		points.add( new PlanPoint( 3.6, 4.0 ) );
 		points.add( new PlanPoint( 0.8, 4.0 ) );
-		iA.add( points );
+		iA.defineByPoints( points );
 
 		points = new ArrayList<PlanPoint>();
 		dA = new DelayArea( room, DelayType.OBSTACLE );
@@ -313,7 +313,7 @@ public class ExampleCreator extends TestCase {
 		points.add( new PlanPoint( 1.6, 2.4 ) );
 		points.add( new PlanPoint( 1.6, 3.2 ) );
 		points.add( new PlanPoint( 0.8, 3.2 ) );
-		dA.add( points );
+		dA.defineByPoints( points );
 
 		points = new ArrayList<PlanPoint>();
 		eA = new EvacuationArea( room );
@@ -321,11 +321,11 @@ public class ExampleCreator extends TestCase {
 		points.add( new PlanPoint( 4.0, 2.4 ) );
 		points.add( new PlanPoint( 4.0, 3.2 ) );
 		points.add( new PlanPoint( 3.4, 3.2 ) );
-		eA.add( points );
+		eA.defineByPoints( points );
 
 		Project p = new Project();
 
-		p.getPlan().addFloor( floor );
+		p.getBuildingPlan().addFloor( floor );
 
 		//p.save (new File ("D:\\Semester9\\PG\\pg517.xml"));
 		p.save( new File( ".\\examples\\delayExitRoom.xml" ) );
@@ -335,7 +335,7 @@ public class ExampleCreator extends TestCase {
 	public void testDefaultRoom() throws Exception {
 		Project p = new Project();
 		Floor f1 = new Floor( "Erdgeschoss" );
-		p.getPlan().addFloor( f1 );
+		p.getBuildingPlan().addFloor( f1 );
 		Room f1_r1 = new Room( f1, "Diele" );
 		RoomEdge f1_e1 = new RoomEdge( new PlanPoint( 400, 400 ), new PlanPoint( 400, 2400 ), f1_r1 );
 		RoomEdge f1_e2 = new RoomEdge( new PlanPoint( 400, 2400 ), new PlanPoint( 2400, 2400 ), f1_r1 );
@@ -351,7 +351,7 @@ public class ExampleCreator extends TestCase {
 		f1_r2.connectTo( f1_r1, f1_e8 );
 
 		Floor f2 = new Floor( "1. Stock" );
-		p.getPlan().addFloor( f2 );
+		p.getBuildingPlan().addFloor( f2 );
 		Room f2_r1 = new Room( f2, "Wohnraum" );
 		RoomEdge f2_e1 = new RoomEdge( new PlanPoint( 800, 800 ), new PlanPoint( 800, 2000 ), f2_r1 );
 		RoomEdge f2_e2 = new RoomEdge( new PlanPoint( 800, 2000 ), new PlanPoint( 2000, 2000 ), f2_r1 );
@@ -392,7 +392,7 @@ public class ExampleCreator extends TestCase {
 		pointList.add( new PlanPoint( 1000, 1000 ) );
 		pointList.add( new PlanPoint( 1000, 500 ) );
 		pointList.add( new PlanPoint( 500, 500 ) );
-		dieleAssignment.add( pointList );
+		dieleAssignment.defineByPoints( pointList );
 		p.save( new File( ".\\examples\\default_editor_demo.xml" ) );
 
 	}

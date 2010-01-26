@@ -58,7 +58,7 @@ public class PotentialTest {
     public void testStaticPotential() throws Exception{
     	Project project = new Project();
 		Floor floor = new Floor();
-		project.getPlan().addFloor(floor);
+		project.getBuildingPlan().addFloor(floor);
 
 		ArrayList<PlanPoint> points = new ArrayList<PlanPoint>();
 
@@ -70,7 +70,7 @@ public class PotentialTest {
 		points.add( new PlanPoint(2.0, 2.4) );
 		points.add( new PlanPoint(2.0, 1.2) );
 		points.add( new PlanPoint(0.4, 1.2) );
-		aussen.add( points );
+		aussen.defineByPoints( points );
 		
 		EvacuationArea evacuationArea = new EvacuationArea(aussen);
 		points = new ArrayList<PlanPoint>();
@@ -78,7 +78,7 @@ public class PotentialTest {
 		points.add( new PlanPoint(1.2, 4.0) );
 		points.add( new PlanPoint(1.2, 1.2) );
 		points.add( new PlanPoint(0.4, 1.2) );
-		evacuationArea.add( points );
+		evacuationArea.defineByPoints( points );
 		
 		Room aussenTuer = new Room(floor, "Aussentuer");
 		points = new ArrayList<PlanPoint>();
@@ -86,7 +86,7 @@ public class PotentialTest {
 		points.add( new PlanPoint(2.4, 2.4) );
 		points.add( new PlanPoint(2.4, 3.2) );
 		points.add( new PlanPoint(2.0, 3.2) );
-		aussenTuer.add( points );
+		aussenTuer.defineByPoints( points );
 		
 		Room flur = new Room(floor, "Flur");
 		points = new ArrayList<PlanPoint>();
@@ -100,7 +100,7 @@ public class PotentialTest {
 		points.add( new PlanPoint(4.8, 3.2) );
 		points.add( new PlanPoint(4.0, 3.2) );
 		points.add( new PlanPoint(2.4, 3.2) );
-		flur.add( points );
+		flur.defineByPoints( points );
 		
 		EvacuationArea evacuationArea2 = new EvacuationArea(flur);
 		points = new ArrayList<PlanPoint>();
@@ -108,7 +108,7 @@ public class PotentialTest {
 		points.add( new PlanPoint(7.2, 3.2) );
 		points.add( new PlanPoint(8.0, 3.2) );
 		points.add( new PlanPoint(8.0, 2.4) );
-		evacuationArea2.add( points );
+		evacuationArea2.defineByPoints( points );
 		
 		Room pg1 = new Room(floor,"PG1");
 		points = new ArrayList<PlanPoint>();
@@ -118,7 +118,7 @@ public class PotentialTest {
 		points.add( new PlanPoint(5.2, 3.2) );
 		points.add( new PlanPoint(5.2, 5.6) );
 		points.add( new PlanPoint(3.2, 5.6) );
-		pg1.add( points );
+		pg1.defineByPoints( points );
 
 		Room pg2 = new Room(floor,"PG2");
 		points = new ArrayList<PlanPoint>();
@@ -128,7 +128,7 @@ public class PotentialTest {
 		points.add( new PlanPoint(8.0, 3.2) );
 		points.add( new PlanPoint(6.8, 5.6) );
 		points.add( new PlanPoint(5.2, 5.6) );
-		pg2.add( points );
+		pg2.defineByPoints( points );
 
 		Room foyer = new Room(floor,"Foyer");
 		points = new ArrayList<PlanPoint>();
@@ -144,7 +144,7 @@ public class PotentialTest {
 		points.add( new PlanPoint(8.4, 1.2) );
 		points.add( new PlanPoint(8.4, 0.4) );
 		points.add( new PlanPoint(2.8, 0.4) );
-		foyer.add( points );
+		foyer.defineByPoints( points );
 		
 		InaccessibleArea inacessibleArea = new InaccessibleArea(foyer);
 		points = new ArrayList<PlanPoint>();
@@ -152,7 +152,7 @@ public class PotentialTest {
 		points.add( new PlanPoint(7.2, 3.2) );
 		points.add( new PlanPoint(8.0, 3.2) );
 		points.add( new PlanPoint(8.0, 2.4) );
-		inacessibleArea.add( points );
+		inacessibleArea.defineByPoints( points );
 
 		Room m = new Room(floor,"Toilette M");
 		points = new ArrayList<PlanPoint>();
@@ -161,7 +161,7 @@ public class PotentialTest {
 		points.add( new PlanPoint(6.8, 1.2) );
 		points.add( new PlanPoint(6.8, 2.4) );
 		points.add( new PlanPoint(5.2, 2.4) );
-		m.add( points );
+		m.defineByPoints( points );
 		
 		Room w = new Room(floor,"Toilette W");
 		points = new ArrayList<PlanPoint>();
@@ -171,7 +171,7 @@ public class PotentialTest {
 		points.add( new PlanPoint(8.4, 1.2) );
 		points.add( new PlanPoint(8.4, 2.4) );
 		points.add( new PlanPoint(6.8, 2.4) );
-		w.add( points );
+		w.defineByPoints( points );
 
 		aussen.connectTo(aussenTuer, new PlanPoint(2.0, 2.4), new PlanPoint(2.0, 3.2));
 		aussenTuer.connectTo(flur, new PlanPoint(2.4, 2.4), new PlanPoint(2.4, 3.2));
@@ -181,7 +181,7 @@ public class PotentialTest {
 		foyer.connectTo(m, new PlanPoint(6.0, 1.2), new PlanPoint(6.8, 1.2));
 		foyer.connectTo(w, new PlanPoint(7.2, 1.2), new PlanPoint(8.0, 1.2));
 		
-		CellularAutomaton ca = ZToCAConverter.getInstance().convert(project.getPlan());
+		CellularAutomaton ca = ZToCAConverter.getInstance().convert(project.getBuildingPlan());
 
 		PotentialController pm = new SPPotentialController(ca);
 		

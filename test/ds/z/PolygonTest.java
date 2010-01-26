@@ -383,7 +383,7 @@ public class PolygonTest extends TestCase {
 		pointList.add (p4);
 
 		PlanPolygon p = new PlanPolygon<Edge> (Edge.class);
-		p.add (pointList);
+		p.defineByPoints (pointList);
 		assertEquals (true, p.isClosed ());
 
 		p.delete (); // danach ist alles null, kann man nicht testen ;)
@@ -483,7 +483,7 @@ public class PolygonTest extends TestCase {
 		PlanPoint p6 = new PlanPoint (00, 00);
 
 		PlanPolygon<Edge> p = new PlanPolygon<Edge> (Edge.class);
-		p.add (points);
+		p.defineByPoints (points);
 
 		Edge e = p.getEdge (p2, p3);
 		assertEquals (p5, p.getPointAfterTheNext (e, e.getPoint (p3)));

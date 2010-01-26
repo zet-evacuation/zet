@@ -217,6 +217,13 @@ abstract public class AbstractOpenGLCanvas extends GLCanvas implements GLEventLi
 		useMouseWheelListener();
 	}
 
+	public void removeListener() {
+		removeKeyListener( this );
+		removeMouseListener( this );
+		removeMouseMotionListener( this );
+		removeMouseWheelListener( this );
+	}
+
 	public void useKeyListener() {
 		addKeyListener( this );
 	}

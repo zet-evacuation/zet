@@ -79,7 +79,7 @@ public class ZFormatTest extends TestCase {
     pointList.add( new PlanPoint( 100, 70 ) );
     pointList.add( new PlanPoint( 100, 40 ) );
     pointList.add( new PlanPoint( 100, 10 ) );
-    room1.add( pointList );
+    room1.defineByPoints( pointList );
     
     // Erzeuge Room2
     pointList = new ArrayList<PlanPoint>();
@@ -91,12 +91,12 @@ public class ZFormatTest extends TestCase {
     pointList.add( new PlanPoint( 200, 10 ) );
     try {
       // Check wheter room1 sends exception if we try adding points a second time
-      room1.add( pointList );
+      room1.defineByPoints( pointList );
       fail( "Adding points to not empty room should be forbidden!" );
     } catch( IllegalStateException expected ) {
       
     }
-    room2.add( pointList );
+    room2.defineByPoints( pointList );
     
     // Erzeuge Door
     pointList = new ArrayList<PlanPoint>();
@@ -104,7 +104,7 @@ public class ZFormatTest extends TestCase {
     pointList.add( new PlanPoint( 100, 70 ) );
     pointList.add( new PlanPoint( 110, 70 ) );
     pointList.add( new PlanPoint( 110, 40 ) );
-    door.add( pointList );
+    door.defineByPoints( pointList );
     
     // Verbinden der R�ume
     RoomEdge r1Edge = room1.getEdge( new PlanPoint( 100, 40 ), new PlanPoint( 100, 70 ) );
@@ -152,7 +152,7 @@ public class ZFormatTest extends TestCase {
     pointList.add( new PlanPoint( 8.66, -0.00, true ) );
     
     Room entry = new Room( ground, "Eingang" );
-    entry.add( pointList );
+    entry.defineByPoints( pointList );
     
     pointList = new ArrayList<PlanPoint>();
     double roomXStart = 9.18;
@@ -164,7 +164,7 @@ public class ZFormatTest extends TestCase {
     pointList.add( new PlanPoint( roomXStart + 03.57, roomYStart + 0.00, true ) );
     pointList.add( new PlanPoint( roomXStart + 02.38, roomYStart + 0.00, true ) );
     Room class1 = new Room( ground, "Klasse 1");
-    class1.add( pointList );
+    class1.defineByPoints( pointList );
 
     pointList = new ArrayList<PlanPoint>();
     roomXStart += 11.15 + 0.52;
@@ -175,7 +175,7 @@ public class ZFormatTest extends TestCase {
     pointList.add( new PlanPoint( roomXStart + 03.57, roomYStart + 0.00, true ) );
     pointList.add( new PlanPoint( roomXStart + 02.38, roomYStart + 0.00, true ) );
     Room class2 = new Room( ground, "Klasse 2");
-    class2.add( pointList );
+    class2.defineByPoints( pointList );
 
     pointList = new ArrayList<PlanPoint>();
     roomXStart += 11.15 + 0.52;
@@ -186,7 +186,7 @@ public class ZFormatTest extends TestCase {
     pointList.add( new PlanPoint( roomXStart + 03.57, roomYStart + 0.00, true ) );
     pointList.add( new PlanPoint( roomXStart + 02.38, roomYStart + 0.00, true ) );
     Room class3 = new Room( ground, "Klasse 3");
-    class3.add( pointList );
+    class3.defineByPoints( pointList );
     
     // Flur
     pointList = new ArrayList<PlanPoint>();
@@ -203,7 +203,7 @@ public class ZFormatTest extends TestCase {
     pointList.add( new PlanPoint( roomXStart + 35.53, roomYStart - 2.38, true ) );
     pointList.add( new PlanPoint( roomXStart + 35.53, roomYStart - 0.00, true ) );
     Room corridor = new Room( ground, "Flur" );
-    corridor.add( pointList );
+    corridor.defineByPoints( pointList );
     
     // T�ren
     roomXStart += 2.90;
@@ -214,7 +214,7 @@ public class ZFormatTest extends TestCase {
     pointList.add( new PlanPoint( roomXStart + 1.19, roomYStart - 0.52, true ) );
     pointList.add( new PlanPoint( roomXStart + 1.19, roomYStart - 0.00, true ) );
     Room door1 = new Room( ground, "Tuer 1" );
-    door1.add( pointList );
+    door1.defineByPoints( pointList );
 
     roomXStart += 10.48 + 1.19;
     pointList = new ArrayList<PlanPoint>();
@@ -223,7 +223,7 @@ public class ZFormatTest extends TestCase {
     pointList.add( new PlanPoint( roomXStart + 1.19, roomYStart - 0.52, true ) );
     pointList.add( new PlanPoint( roomXStart + 1.19, roomYStart - 0.00, true ) );
     Room door2 = new Room( ground, "Tuer 2" );
-    door2.add( pointList );
+    door2.defineByPoints( pointList );
 
     roomXStart += 10.48 + 1.19;
     pointList = new ArrayList<PlanPoint>();
@@ -232,7 +232,7 @@ public class ZFormatTest extends TestCase {
     pointList.add( new PlanPoint( roomXStart + 1.19, roomYStart - 0.52, true ) );
     pointList.add( new PlanPoint( roomXStart + 1.19, roomYStart - 0.00, true ) );
     Room door3 = new Room( ground, "Tuer 3" );
-    door3.add( pointList );
+    door3.defineByPoints( pointList );
 
     // Verbinde rooms und doors im erdgeschoss
     class1.connectTo( door1, new PlanPoint( 11.56, -2.90, true ), new PlanPoint( 12.75, -2.90, true ) );
@@ -279,7 +279,7 @@ public class ZFormatTest extends TestCase {
     pointList.add( new PlanPoint( roomXStart + 0.00, roomYStart - 7.54, true ) );
     pointList.add( new PlanPoint( roomXStart + 10.11, roomYStart - 7.54, true ) );
     pointList.add( new PlanPoint( roomXStart + 10.11, roomYStart - 0.00, true ) );
-    class1Assignment.add( pointList );
+    class1Assignment.defineByPoints( pointList );
 
     pointList = new ArrayList<PlanPoint>();
     roomXStart = 21.37;
@@ -287,7 +287,7 @@ public class ZFormatTest extends TestCase {
     pointList.add( new PlanPoint( roomXStart + 0.00, roomYStart - 7.54, true ) );
     pointList.add( new PlanPoint( roomXStart + 10.11, roomYStart - 7.54, true ) );
     pointList.add( new PlanPoint( roomXStart + 10.11, roomYStart - 0.00, true ) );
-    class2Assignment.add( pointList );
+    class2Assignment.defineByPoints( pointList );
 
     pointList = new ArrayList<PlanPoint>();
     roomXStart = 33.04;
@@ -295,7 +295,7 @@ public class ZFormatTest extends TestCase {
     pointList.add( new PlanPoint( roomXStart + 0.00, roomYStart - 7.54, true ) );
     pointList.add( new PlanPoint( roomXStart + 10.11, roomYStart - 7.54, true ) );
     pointList.add( new PlanPoint( roomXStart + 10.11, roomYStart - 0.00, true ) );
-    class3Assignment.add( pointList );
+    class3Assignment.defineByPoints( pointList );
 
     pointList = new ArrayList<PlanPoint>();
     roomXStart = 19.56;
@@ -304,7 +304,7 @@ public class ZFormatTest extends TestCase {
     pointList.add( new PlanPoint( roomXStart + 0.00, roomYStart - 0.25, true ) );
     pointList.add( new PlanPoint( roomXStart + 0.25, roomYStart - 0.25, true ) );
     pointList.add( new PlanPoint( roomXStart + 0.25, roomYStart - 0.00, true ) );
-    class1Teacher.add( pointList );
+    class1Teacher.defineByPoints( pointList );
 
     pointList = new ArrayList<PlanPoint>();
     roomXStart = 31.23;
@@ -312,7 +312,7 @@ public class ZFormatTest extends TestCase {
     pointList.add( new PlanPoint( roomXStart + 0.00, roomYStart - 0.25, true ) );
     pointList.add( new PlanPoint( roomXStart + 0.25, roomYStart - 0.25, true ) );
     pointList.add( new PlanPoint( roomXStart + 0.25, roomYStart - 0.00, true ) );
-    class2Teacher.add( pointList );
+    class2Teacher.defineByPoints( pointList );
 
     pointList = new ArrayList<PlanPoint>();
     roomXStart = 42.9;
@@ -320,7 +320,7 @@ public class ZFormatTest extends TestCase {
     pointList.add( new PlanPoint( roomXStart + 0.00, roomYStart - 0.25, true ) );
     pointList.add( new PlanPoint( roomXStart + 0.25, roomYStart - 0.25, true ) );
     pointList.add( new PlanPoint( roomXStart + 0.25, roomYStart - 0.00, true ) );
-    class3Teacher.add( pointList );
+    class3Teacher.defineByPoints( pointList );
     
     assertTrue( class1.contains( class1Assignment ) );
     assertTrue( class2.contains( class2Assignment ) );
@@ -341,8 +341,8 @@ public class ZFormatTest extends TestCase {
     pointList.add( new PlanPoint( 2.38, -6.32, true ) );
     pointList.add( new PlanPoint( 2.90, -6.32, true ) );
     // Treppe zum 2. Stock
-//    pointList.add( new PlanPoint( 2.90, -11.48, true ) );
-//    pointList.add( new PlanPoint( 5.28, -11.48, true ) );
+//    pointList.defineByPoints( new PlanPoint( 2.90, -11.48, true ) );
+//    pointList.defineByPoints( new PlanPoint( 5.28, -11.48, true ) );
     // Raum weiter
     pointList.add( new PlanPoint( 5.28, -6.32, true ) );
     pointList.add( new PlanPoint( 6.28, -6.32, true ) );
@@ -358,7 +358,7 @@ public class ZFormatTest extends TestCase {
     pointList.add( new PlanPoint( 8.66, -0.00, true ) );
 
     Room upperRoom = new Room( first, "Eingangsbereich oben" );
-    upperRoom.add( pointList );
+    upperRoom.defineByPoints( pointList );
     
     // Verbinde Oben und Unten
     // Does not work yet
@@ -379,7 +379,7 @@ public class ZFormatTest extends TestCase {
     pointList.add( new PlanPoint( -2.00, +3.16, true ) );
     pointList.add( new PlanPoint( -2.00, +0.00, true ) );
     Room outside = new Room( ground, "Au�enbereich" );
-    outside.add( pointList );
+    outside.defineByPoints( pointList );
     
     // Verbinde doors
     outside.connectTo( entry, new PlanPoint( +0.00, -0.52, true ), new PlanPoint( +0.00, -2.90, true ) );
@@ -392,7 +392,7 @@ public class ZFormatTest extends TestCase {
     pointList.add( new PlanPoint( +0.00, -6.32, true ) );
     pointList.add( new PlanPoint( -6.32, -6.32, true ) );
     pointList.add( new PlanPoint( -6.32, +0.00, true ) );
-    safe.add( pointList );
+    safe.defineByPoints( pointList );
     
     // Evacuation Areas
     EvacuationArea eva1 = new EvacuationArea( outside );
@@ -401,7 +401,7 @@ public class ZFormatTest extends TestCase {
     pointList.add( new PlanPoint( -9.48, -6.32, true ) );
     pointList.add( new PlanPoint( -9.48, +0.00, true ) );
     pointList.add( new PlanPoint( -6.32, +0.00, true ) );
-    eva1.add( pointList );
+    eva1.defineByPoints( pointList );
 
     EvacuationArea eva2 = new EvacuationArea( outside );
     pointList = new ArrayList<PlanPoint>();
@@ -409,7 +409,7 @@ public class ZFormatTest extends TestCase {
     pointList.add( new PlanPoint( -6.32, +3.16, true ) );
     pointList.add( new PlanPoint( -2.00, +3.16, true ) );
     pointList.add( new PlanPoint( -2.00, +0.00, true ) );
-    eva2.add( pointList );
+    eva2.defineByPoints( pointList );
 
     assertTrue( outside.contains( safe ) );
     assertTrue( outside.contains( eva1 ) );
@@ -418,16 +418,16 @@ public class ZFormatTest extends TestCase {
     // Treppe
 //    DelayArea stairsO = new DelayArea( outside, ds.z.DelayArea.DelayType.STAIR );
 //    pointList = new ArrayList<PlanPoint>();
-//    pointList.add( new PlanPoint( +0.00, +0.00, true ) );
-//    pointList.add( new PlanPoint( -0.00, -6.32, true ) );
-//    pointList.add( new PlanPoint( -2.00, -6.32, true ) );
-//    pointList.add( new PlanPoint( -2.00, +0.00, true ) );
-//    stairsO.add( pointList );
+//    pointList.defineByPoints( new PlanPoint( +0.00, +0.00, true ) );
+//    pointList.defineByPoints( new PlanPoint( -0.00, -6.32, true ) );
+//    pointList.defineByPoints( new PlanPoint( -2.00, -6.32, true ) );
+//    pointList.defineByPoints( new PlanPoint( -2.00, +0.00, true ) );
+//    stairsO.defineByPoints( pointList );
     
     //Project p = new Project ();
     
-    p.getPlan ().addFloor( ground );
-    p.getPlan().addFloor( first );
+    p.getBuildingPlan ().addFloor( ground );
+    p.getBuildingPlan().addFloor( first );
 
     //ConcreteAssignment c = schoolDemo.createConcreteAssignment( 100 );
 		p.save( new File( ".\\examples\\stgh.xml"));
@@ -435,7 +435,7 @@ public class ZFormatTest extends TestCase {
   
   public void testConvertToCA() throws Exception{
 	  testCreateExample();
-	  BuildingPlan bp = p.getPlan();
+	  BuildingPlan bp = p.getBuildingPlan();
 	  RoomRaster<RoomRasterSquare> rasterer;
 	  List<Floor> floors = bp.getFloors();
 	  CellularAutomaton ca = new CellularAutomaton();

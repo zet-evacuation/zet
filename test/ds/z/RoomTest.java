@@ -48,7 +48,7 @@ public class RoomTest extends TestCase {
 		pointList.add(p4);
 		pointList.add(p5);
 		
-		r.add(pointList);
+		r.defineByPoints(pointList);
 		
 		r.rasterizeEdge (r.getEdge (new PlanPoint(400,2000),new PlanPoint(2000,400)));
 	}
@@ -72,7 +72,7 @@ public class RoomTest extends TestCase {
 		pointList1.add(p15);
 		pointList1.add(p16);
 		
-		r1.add(pointList1);
+		r1.defineByPoints(pointList1);
 		r1.rasterize();
 		
 		//Room1
@@ -89,7 +89,7 @@ public class RoomTest extends TestCase {
 		pointList2.add(p24);
 		pointList2.add(p25);
 		
-		r2.add(pointList2);
+		r2.defineByPoints(pointList2);
 		r2.rasterize();
 		
 		//Room1
@@ -106,7 +106,7 @@ public class RoomTest extends TestCase {
 		pointList3.add(p34);
 		pointList3.add(p35);
 		
-		r3.add(pointList3);
+		r3.defineByPoints(pointList3);
 		r3.rasterize();
 		
 		//Room4
@@ -123,7 +123,7 @@ public class RoomTest extends TestCase {
 		pointList4.add(p44);
 		pointList4.add(p45);
 		
-		r4.add(pointList4);
+		r4.defineByPoints(pointList4);
 		r4.rasterize();
 		
 		
@@ -146,7 +146,7 @@ public class RoomTest extends TestCase {
 		insertList.add(p4);
 		insertList.add(p3);
 		
-		r.add(pointList);
+		r.defineByPoints(pointList);
 		
 		r.replaceEdge(p2,p3, insertList);		
 		for(Edge e : r.getEdges()){
