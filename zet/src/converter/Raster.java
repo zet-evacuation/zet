@@ -23,7 +23,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-import localization.Localization;
+import de.tu_berlin.math.coga.common.localization.Localization;
 import ds.z.PlanPolygon;
 import util.ConversionTools;
 

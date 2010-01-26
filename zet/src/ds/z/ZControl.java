@@ -7,7 +7,7 @@ package ds.z;
 import ds.Project;
 import ds.z.exception.AssignmentException;
 import java.util.List;
-import localization.Localization;
+import de.tu_berlin.math.coga.common.localization.Localization;
 
 /**
  * The class <code>ZControl</code> represents a front end class to the Z-model.

@@ -28,7 +28,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
-import localization.Localization;
+import de.tu_berlin.math.coga.common.localization.Localization;
 import util.ProgressBooleanFlags;
 
 /**

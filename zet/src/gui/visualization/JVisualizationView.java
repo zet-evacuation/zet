@@ -50,7 +50,7 @@ import javax.swing.JSlider;
 import javax.swing.JTextField;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
-import localization.Localization;
+import de.tu_berlin.math.coga.common.localization.Localization;
 import opengl.framework.Camera;
 
 /**

@@ -19,7 +19,7 @@
  * Created on 09.01.2008, 23:29:26
  */
 
-package localization;
+package de.tu_berlin.math.coga.common.localization;
 
 import java.text.NumberFormat;
 import java.util.Locale;

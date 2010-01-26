@@ -42,7 +42,7 @@ import gui.batch.EvacuationOptimizationType;
 import gui.editor.properties.PropertyFilesSelectionModel;
 import io.visualization.BuildingResults;
 import io.visualization.CAVisualizationResults;
-import localization.Localization;
+import de.tu_berlin.math.coga.common.localization.Localization;
 import statistic.ca.CAStatistic;
 import statistic.ca.MultipleCycleCAStatistic;
 import batch.tasks.RasterizeTask;

@@ -21,7 +21,7 @@ package ds.z;
 
 import java.util.UUID;
 
-import localization.Localization;
+import de.tu_berlin.math.coga.common.localization.Localization;
 
 /**
  * Represents a person that should be evacuated. The person has a specified position

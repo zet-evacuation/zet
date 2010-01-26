@@ -43,7 +43,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Vector;
 import javax.swing.tree.DefaultMutableTreeNode;
-import localization.Localization;
+import de.tu_berlin.math.coga.common.localization.Localization;
 
 /**
  *

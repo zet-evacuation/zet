@@ -28,7 +28,7 @@ import java.awt.geom.Point2D;
 import java.util.ArrayList;
 
 import java.util.List;
-import localization.Localization;
+import de.tu_berlin.math.coga.common.localization.Localization;
 import util.ConversionTools;
 
 /**

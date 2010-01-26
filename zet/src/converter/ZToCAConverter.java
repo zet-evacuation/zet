@@ -50,7 +50,7 @@ import java.util.ArrayDeque;
 
 import java.util.HashMap;
 import java.util.List;
-import localization.Localization;
+import de.tu_berlin.math.coga.common.localization.Localization;
 import static util.Direction.*;
 
 /**

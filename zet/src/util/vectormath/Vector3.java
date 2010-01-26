@@ -22,7 +22,7 @@ package util.vectormath;
 import ds.z.PlanPoint;
 import java.text.NumberFormat;
 import java.text.ParseException;
-import localization.Localization;
+import de.tu_berlin.math.coga.common.localization.Localization;
 
 /**
  * Implements a three dimensional vector.

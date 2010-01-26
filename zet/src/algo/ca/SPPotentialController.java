@@ -30,7 +30,7 @@ import ds.ca.TargetCell;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
-import localization.Localization;
+import de.tu_berlin.math.coga.common.localization.Localization;
 
 /**
  * This class provides general functionality for manipulation of PotentialMaps.

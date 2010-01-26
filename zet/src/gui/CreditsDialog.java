@@ -22,7 +22,7 @@ package gui;
 
 import java.awt.Frame;
 import javax.swing.JDialog;
-import localization.Localization;
+import de.tu_berlin.math.coga.common.localization.Localization;
 
 /**
  * A window that contains a {@link CreditsPanel} to represent the

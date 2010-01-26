@@ -24,7 +24,7 @@ import algo.ca.rule.AbstractMovementRule;
 import algo.ca.rule.Rule;
 import ds.PropertyContainer;
 import java.util.ArrayList;
-import localization.Localization;
+import de.tu_berlin.math.coga.common.localization.Localization;
 
 /**
  * <p>The <code>DefaultRuleSet</code> is a {@link RuleSet} consisting of two

@@ -17,7 +17,7 @@ package gui.editor;
 
 import java.awt.Color;
 import java.util.LinkedList;
-import localization.Localization;
+import de.tu_berlin.math.coga.common.localization.Localization;
 
 /**
  * An enumeration of all possible edit modes of the editor.

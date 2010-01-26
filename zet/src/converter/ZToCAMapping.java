@@ -20,7 +20,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 
-import localization.Localization;
+import de.tu_berlin.math.coga.common.localization.Localization;
 
 import ds.ca.Cell;
 import ds.ca.CellularAutomaton;

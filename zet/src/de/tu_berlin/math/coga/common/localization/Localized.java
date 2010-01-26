@@ -18,7 +18,7 @@
  * Erstellt 30.04.2008, 09:03:00
  */
 
-package localization;
+package de.tu_berlin.math.coga.common.localization;
 
 /**
  * Classes that support localization can implement this interface. The

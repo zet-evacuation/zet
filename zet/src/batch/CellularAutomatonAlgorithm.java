@@ -26,7 +26,7 @@ import algo.ca.CellularAutomatonRandomOrderExecution;
 import algo.ca.EvacuationCellularAutomatonAlgorithm;
 import algo.ca.SwapCellularAutomaton;
 import ds.ca.CellularAutomaton;
-import localization.Localization;
+import de.tu_berlin.math.coga.common.localization.Localization;
 
 /**
  * Some cellular automaton simulation algorithms. Creates the algorithm objects
