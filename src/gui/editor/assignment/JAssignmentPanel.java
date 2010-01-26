@@ -19,6 +19,12 @@
  */
 package gui.editor.assignment;
 
+import de.tu_berlin.math.coga.rndutils.distribution.Distribution;
+import de.tu_berlin.math.coga.rndutils.distribution.continuous.ErlangDistribution;
+import de.tu_berlin.math.coga.rndutils.distribution.continuous.ExponentialDistribution;
+import de.tu_berlin.math.coga.rndutils.distribution.continuous.HyperExponentialDistribution;
+import de.tu_berlin.math.coga.rndutils.distribution.continuous.NormalDistribution;
+import de.tu_berlin.math.coga.rndutils.distribution.continuous.UniformDistribution;
 import ds.Project;
 import ds.z.Assignment;
 import ds.z.AssignmentType;
@@ -69,12 +75,6 @@ import org.jfree.chart.JFreeChart;
 import org.jfree.chart.plot.PlotOrientation;
 import org.jfree.data.xy.XYSeries;
 import org.jfree.data.xy.XYSeriesCollection;
-import util.random.distributions.Distribution;
-import util.random.distributions.ErlangDistribution;
-import util.random.distributions.NormalDistribution;
-import util.random.distributions.UniformDistribution;
-import util.random.distributions.ExponentialDistribution;
-import util.random.distributions.HyperExponentialDistribution;
 
 /**
  * A panel containing all assignments and assignment type of a
@@ -466,9 +466,9 @@ public class JAssignmentPanel extends JPanel {
 		for( int i = 0; i < sel.length; i++ ) {
 			XYSeries a = new XYSeries( "Stat" + i );
 			Distribution distribution = params.get( sel[i] ).getDistribution();
-			double distance = (distribution.getMax() - distribution.getMin() ) / (nodes - 1);
+			double distance = (distribution.getMax().doubleValue() - distribution.getMin().doubleValue() ) / (nodes - 1);
 			for( int j = 0; j < nodes; j++ ) {
-				double pos = distribution.getMin() + j * distance;
+				double pos = distribution.getMin().doubleValue() + j * distance;
 				a.add( pos, distribution.getDensityAt( pos ) );
 			}
 			c.addSeries( a );

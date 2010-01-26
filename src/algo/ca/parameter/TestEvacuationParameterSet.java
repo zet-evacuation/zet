@@ -21,7 +21,6 @@
 package algo.ca.parameter;
 
 import de.tu_berlin.math.coga.rndutils.distribution.continuous.NormalDistribution;
-import util.random.distributions.ExponentialDistribution;
 
 
 /**
@@ -60,6 +59,8 @@ public class TestEvacuationParameterSet extends DefaultParameterSet {
 //		double randReactionTime = exp.getNextRandom();
 		System.out.println( "Reactiontime: " + randReactionTime );
 
+		randReactionTime = 0;
+
 		return randReactionTime;
 	}
 
@@ -88,6 +89,7 @@ public class TestEvacuationParameterSet extends DefaultParameterSet {
 			double slope = (ageArray[i2] - ageArray[i1]) / 5;
 			maxSpeedExpected = ageArray[i1] + diff * slope;
 		}
+//		NormalDistribution normal = new NormalDistribution( maxSpeedExpected*0.9, 4, ageArray[0], ABSOLUTE_MAX_SPEED );
 		NormalDistribution normal = new NormalDistribution( maxSpeedExpected*0.9, 0.26, ageArray[0], ABSOLUTE_MAX_SPEED );
 		double randSpeed = normal.getNextRandom();
 		double maxSpeed = randSpeed / ABSOLUTE_MAX_SPEED;
@@ -102,13 +104,20 @@ public class TestEvacuationParameterSet extends DefaultParameterSet {
 		counter++;
 		cumulativeSpeed += (maxSpeed * ABSOLUTE_MAX_SPEED);
 
+//		maxSpeed = 1.23 / ABSOLUTE_MAX_SPEED;
+
 		System.out.println( "First one has age " + pAge + " and speed " + (maxSpeed * ABSOLUTE_MAX_SPEED) );
 		System.out.println( "Average speed for " + counter + " persons: " + (cumulativeSpeed / counter) + " m/s. (Should be 1.3x)" );
 
-
+    maxSpeed = 1.23 / ABSOLUTE_MAX_SPEED;
 
 		return maxSpeed;
 	}
 	
+	@Override
+	protected double exhaustionWeightOnSpeed() {
+//		return super.exhaustionWeightOnSpeed();
+		return 0;
+	}
 
 }

@@ -36,8 +36,8 @@ public class GLEdge extends AbstractDrawable<GLEdge, GLEdgeControl, GLEdgeContro
 	static GLColor flowColor;
 	static GLColor flowUnitColor;
 	/* The thickness of the edges and pieces of flow according to their capacities. */
-	static double thickness = 5 /* 5 */ * VisualizationConstants.SIZE_MULTIPLICATOR; // original 2
-	static double flowThickness = 7 /* 7 */* VisualizationConstants.SIZE_MULTIPLICATOR; // original 3
+	static double thickness = 5 * 1.5 /* 5 */ * VisualizationConstants.SIZE_MULTIPLICATOR; //
+	static double flowThickness = 7 * 1.5 /* 7 */* VisualizationConstants.SIZE_MULTIPLICATOR; //
 	static double minFlowThickness = 10; /* 10 */ // original 3
 	static double maxFlowThickness = 10;
 	static double flowThicknessOfOneCapacityStep;
@@ -194,11 +194,11 @@ public class GLEdge extends AbstractDrawable<GLEdge, GLEdgeControl, GLEdgeContro
 		capacity = control.getCapacity();
 		maxCapacity = control.getMaxCapacity();
 		edgeColor = VisualizationOptionManager.getEdgeColor();
-		flowColor = VisualizationOptionManager.getFlowNodeColor();
+		flowColor = VisualizationOptionManager.getFlowUnitColor();
 		flowUnitColor = VisualizationOptionManager.getFlowUnitEndColor();
 		maxFlowRate = control.getMaxFlowRate();
-		minFlowThickness = 3 * VisualizationConstants.SIZE_MULTIPLICATOR;
-		maxFlowThickness = 10 * VisualizationConstants.SIZE_MULTIPLICATOR;
+		minFlowThickness = 3 * VisualizationConstants.SIZE_MULTIPLICATOR * 1.7;
+		maxFlowThickness = 10 * VisualizationConstants.SIZE_MULTIPLICATOR * 1.7;
 		flowThicknessOfOneCapacityStep = (maxFlowThickness - minFlowThickness) / maxFlowRate;
 	}
 }

@@ -22,7 +22,7 @@ package ds.z;
 
 import com.thoughtworks.xstream.annotations.XStreamAlias;
 import com.thoughtworks.xstream.annotations.XStreamAsAttribute;
-import com.thoughtworks.xstream.annotations.XStreamOmitField;
+import de.tu_berlin.math.coga.rndutils.distribution.Distribution;
 import io.z.AssignmentTypeConverter;
 import io.z.XMLConverter;
 import java.io.Serializable;
@@ -31,7 +31,6 @@ import java.util.Collections;
 import java.util.List;
 import java.util.UUID;
 import localization.Localization;
-import util.random.distributions.Distribution;
 
 /**
  * This class pools several assignmentAreas.

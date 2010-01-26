@@ -98,13 +98,15 @@ public class VisualizationOptionManager {
 
 	public static GLColor getNodeColor() {
 //		return new GLColor( 240, 240, 110 );
-		return new GLColor( 250, 250, 100 );
+//		return new GLColor( 250, 250, 100 ); // current
 	//return new GLColor( Color.gray, 1.0 );
-	//return new GLColor( Color.yellow, 0.3 );
+	return new GLColor( 221, 125, 42 );
 	}
 
 	public static GLColor getEdgeColor() {
-		return new GLColor( 240, 240, 190, 140 );
+//		return new GLColor( 240, 240, 190, 140 );
+//		return new GLColor( 75, 77, 73, 255);
+		return new GLColor( Color.gray );
 	//return new GLColor( Color.yellow, 0.3 );                
 	}
 
@@ -113,8 +115,18 @@ public class VisualizationOptionManager {
 	//return new GLColor( Color.red );
 	}
 
+	public static GLColor getFlowUnitColor() {
+		//GLColor flowColor = getFlowNodeColor();
+		GLColor flowColor = new GLColor( 45, 113, 255  );
+		return flowColor;
+	}
+
+	/**
+	 * Returns the color used for the front- and backside of the flow unit.
+	 * @return the color used for the front- and backside of the flow unit
+	 */
 	public static GLColor getFlowUnitEndColor() {
-		GLColor flowColor = getFlowNodeColor();
+		GLColor flowColor = getFlowUnitColor();
 		float r, g, b, a;
 		r = (float) flowColor.getRed() * (float) 0.8;
 		g = (float) flowColor.getGreen() * (float) 0.8;

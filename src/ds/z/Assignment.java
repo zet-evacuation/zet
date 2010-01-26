@@ -291,11 +291,11 @@ public class Assignment implements Serializable {
 					}
 
 					// set properties for the persons
-					person.setAge( assignmentType.getAge().getNextRandom() );
-					person.setDecisiveness( assignmentType.getDecisiveness().getNextRandom() );
-					person.setDiameter( assignmentType.getDiameter().getNextRandom() );
-					person.setFamiliarity( assignmentType.getFamiliarity().getNextRandom() );
-					person.setPanic( assignmentType.getPanic().getNextRandom() );
+					person.setAge( assignmentType.getAge().getNextRandom().doubleValue() );
+					person.setDecisiveness( assignmentType.getDecisiveness().getNextRandom().doubleValue() );
+					person.setDiameter( assignmentType.getDiameter().getNextRandom().doubleValue() );
+					person.setFamiliarity( assignmentType.getFamiliarity().getNextRandom().doubleValue() );
+					person.setPanic( assignmentType.getPanic().getNextRandom().doubleValue() );
 					person.setUid( assignmentType.getUid() );
 					person.setSaveArea( assignmentArea.getExitArea() );
 					ca.addPerson( person );
