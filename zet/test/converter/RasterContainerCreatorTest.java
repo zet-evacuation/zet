@@ -52,7 +52,7 @@ public class RasterContainerCreatorTest {
      */
     @Test
     public void testZToCARasterContainer() throws Exception{
-        BuildingPlan plan = Project.load(new File("testraum2.xml")).getPlan();
+        BuildingPlan plan = Project.load(new File("testraum2.xml")).getBuildingPlan();
         //BuildingPlan plan = RasterContainerCreator.makeBuildingPlanExampleWithDifferentAreas();
         //ZToCARasterContainer rc = RasterContainerCreator.getInstance().ZToCARasterContainer(plan);
         CellularAutomaton ca = null;
@@ -69,7 +69,7 @@ public class RasterContainerCreatorTest {
         
 //        Project project = new Project();
 //        for(Floor floor : plan.getFloors()){
-//            project.getPlan().addFloor(floor);
+//            project.getBuildingPlan().addFloor(floor);
 //        }
 //        project.save(new File(".\\examples\\presentation.xml"));
     }

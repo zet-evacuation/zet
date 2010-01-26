@@ -61,7 +61,7 @@ public class RasterizationTest extends TestCase {
     points.add( new PlanPoint( 20, 0 ) );
     points.add( new PlanPoint( 40, 40 ) );
     
-    dreieck.add( points );
+    dreieck.defineByPoints( points );
     
     Raster<RasterSquare, PlanPolygon> rasterer = new Raster<RasterSquare, PlanPolygon>(RasterSquare.class, PlanPolygon.class, dreieck, 1000 );
     rasterer.rasterize( );
@@ -80,7 +80,7 @@ public class RasterizationTest extends TestCase {
     points.add( new PlanPoint( 2.4, 0.4 ) );
     points.add( new PlanPoint( 2.4, 2.4 ) );
     points.add( new PlanPoint( 0.4, 2.4 ) );
-    room.add( points );
+    room.defineByPoints( points );
     
     // To exception is allowed here!
     room.checkRasterized();
@@ -92,7 +92,7 @@ public class RasterizationTest extends TestCase {
     points.add( new PlanPoint( 1.6, 0.8 ) );
     points.add( new PlanPoint( 1.2, 0.8 ) );
     InaccessibleArea iA = new InaccessibleArea( room );
-    iA.add( points );
+    iA.defineByPoints( points );
     
     points = new ArrayList<PlanPoint>();
     points.add( new PlanPoint( 1.2, 1.2 ) );
@@ -102,7 +102,7 @@ public class RasterizationTest extends TestCase {
     points.add( new PlanPoint( 2.0, 2.0 ) );
     points.add( new PlanPoint( 1.2, 2.0 ) );
     iA = new InaccessibleArea( room );
-    iA.add( points );
+    iA.defineByPoints( points );
     
     // DelayArea
     points = new ArrayList<PlanPoint>();
@@ -111,7 +111,7 @@ public class RasterizationTest extends TestCase {
     points.add( new PlanPoint( 2.0, 1.2 ) );
     points.add( new PlanPoint( 0.8, 1.2 ) );
     DelayArea dA = new DelayArea( room, DelayArea.DelayType.OTHER, 1.0/3.0 );
-    dA.add( points );
+    dA.defineByPoints( points );
 
     points = new ArrayList<PlanPoint>();
     points.add( new PlanPoint( 1.6, 0.8 ) );
@@ -119,7 +119,7 @@ public class RasterizationTest extends TestCase {
     points.add( new PlanPoint( 2.4, 2.0 ) );
     points.add( new PlanPoint( 1.6, 2.0 ) );
     dA = new DelayArea( room, DelayArea.DelayType.OTHER, 0.5 );
-    dA.add( points );
+    dA.defineByPoints( points );
 
     Room pg_room = new Room( floor, "PG-Raum");
     points = new ArrayList<PlanPoint>();
@@ -127,7 +127,7 @@ public class RasterizationTest extends TestCase {
     points.add( new PlanPoint(8.6,3.0) );
     points.add( new PlanPoint(8.6,8.2) );
     points.add( new PlanPoint(3.0,8.2) );
-    pg_room.add( points );
+    pg_room.defineByPoints( points );
     
     points = new ArrayList<PlanPoint>();
     points.add( new PlanPoint(3.4,3.4) );
@@ -135,7 +135,7 @@ public class RasterizationTest extends TestCase {
     points.add( new PlanPoint(3.8,5.4) );
     points.add( new PlanPoint(3.4,5.4) );
     iA = new InaccessibleArea( pg_room );
-    iA.add(points);
+    iA.defineByPoints(points);
     
     points = new ArrayList<PlanPoint>();
     points.add( new PlanPoint(3.8,3.4));
@@ -147,7 +147,7 @@ public class RasterizationTest extends TestCase {
     points.add( new PlanPoint(4.2,3.8));
     points.add( new PlanPoint(3.8,3.8));
     iA = new InaccessibleArea( pg_room );
-    iA.add(points);
+    iA.defineByPoints(points);
     
     points = new ArrayList<PlanPoint>();
     points.add( new PlanPoint(5.0,3.4));
@@ -163,7 +163,7 @@ public class RasterizationTest extends TestCase {
     points.add( new PlanPoint(6.6,5.4));
     points.add( new PlanPoint(5.0,5.4));
     iA = new InaccessibleArea( pg_room );
-    iA.add(points);
+    iA.defineByPoints(points);
     
     points = new ArrayList<PlanPoint>();
     points.add( new PlanPoint(3.4,5.8) );
@@ -179,7 +179,7 @@ public class RasterizationTest extends TestCase {
     points.add( new PlanPoint(4.2,7.0) );
     points.add( new PlanPoint(3.4,7.0) );
     iA = new InaccessibleArea( pg_room );
-    iA.add(points);
+    iA.defineByPoints(points);
     
     points = new ArrayList<PlanPoint>();
     points.add( new PlanPoint(5.0,6.6) );
@@ -187,7 +187,7 @@ public class RasterizationTest extends TestCase {
     points.add( new PlanPoint(5.4,7.0) );
     points.add( new PlanPoint(5.0,7.0) );
     iA = new InaccessibleArea( pg_room );
-    iA.add(points);
+    iA.defineByPoints(points);
     
     points = new ArrayList<PlanPoint>();
     points.add( new PlanPoint(5.4,6.2) );
@@ -195,7 +195,7 @@ public class RasterizationTest extends TestCase {
     points.add( new PlanPoint(5.8,6.6) );
     points.add( new PlanPoint(5.4,6.6) );
     iA = new InaccessibleArea( pg_room );
-    iA.add(points);
+    iA.defineByPoints(points);
     
     points = new ArrayList<PlanPoint>();
     points.add( new PlanPoint(5.8,5.8) );
@@ -203,7 +203,7 @@ public class RasterizationTest extends TestCase {
     points.add( new PlanPoint(6.2,7.8) );
     points.add( new PlanPoint(5.8,7.8) );
     iA = new InaccessibleArea( pg_room );
-    iA.add(points);
+    iA.defineByPoints(points);
     
     points = new ArrayList<PlanPoint>();
     points.add( new PlanPoint(6.6,5.8));
@@ -215,7 +215,7 @@ public class RasterizationTest extends TestCase {
     points.add( new PlanPoint(7.4,6.2));
     points.add( new PlanPoint(6.6,6.2));
     iA = new InaccessibleArea( pg_room );
-    iA.add(points);
+    iA.defineByPoints(points);
     
     points = new ArrayList<PlanPoint>();
     points.add( new PlanPoint(6.6,6.6) );
@@ -223,7 +223,7 @@ public class RasterizationTest extends TestCase {
     points.add( new PlanPoint(8.2,7.0) );
     points.add( new PlanPoint(6.6,7.0) );
     iA = new InaccessibleArea( pg_room );
-    iA.add(points);   
+    iA.defineByPoints(points);
     
     points = new ArrayList<PlanPoint>();
     points.add( new PlanPoint(7.0,7.0) );
@@ -231,7 +231,7 @@ public class RasterizationTest extends TestCase {
     points.add( new PlanPoint(7.4,7.4) );
     points.add( new PlanPoint(7.0,7.4) );
     iA = new InaccessibleArea( pg_room );
-    iA.add(points);        
+    iA.defineByPoints(points);
     
     points = new ArrayList<PlanPoint>();
     points.add( new PlanPoint(6.6,7.4));
@@ -239,7 +239,7 @@ public class RasterizationTest extends TestCase {
     points.add( new PlanPoint(7.0,7.8));
     points.add( new PlanPoint(6.6,7.8));
     iA = new InaccessibleArea( pg_room );
-    iA.add(points);
+    iA.defineByPoints(points);
 
     // Rasterrung
     RoomRaster<RoomRasterSquare> rasterer = new RoomRaster<RoomRasterSquare>(RoomRasterSquare.class, room, 400 );
@@ -257,7 +257,7 @@ public class RasterizationTest extends TestCase {
     // Store to harddisk    
     Project p = new Project ();
     
-    p.getPlan ().addFloor( floor );
+    p.getBuildingPlan ().addFloor( floor );
     
     //p.save (new File ("D:\\Semester9\\PG\\pg517.xml"));
     //p.save( new File( "C:\\pg517.xml"));

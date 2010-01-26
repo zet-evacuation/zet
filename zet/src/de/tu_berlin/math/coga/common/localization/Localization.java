@@ -66,7 +66,7 @@ public class Localization {
 	 * @throws MissingResourceException if no resource bundle for the default system locale is found
 	 */
 	private Localization() throws MissingResourceException {
-		bundle = ResourceBundle.getBundle( "localization.zevacuate", Locale.getDefault() );
+		bundle = ResourceBundle.getBundle( "de.tu_berlin.math.coga.common.localization.zevacuate", Locale.getDefault() );
 	}
 	
 	/**
@@ -124,10 +124,10 @@ public class Localization {
 	 * @throws java.util.MissingResourceException if the locale cannot be found
 	 */
 	public void setLocale( Locale locale ) throws MissingResourceException {
-		bundle = ResourceBundle.getBundle( "localization.zevacuate", locale );
+		bundle = ResourceBundle.getBundle( "de.tu_berlin.math.coga.common.localization.zevacuate", locale );
 		currentLocale = locale;
 		nfFloat = NumberFormat.getNumberInstance( instance.getLocale() );
-		nfInteger = NumberFormat.getIntegerInstance(instance.getLocale() );		
+		nfInteger = NumberFormat.getIntegerInstance( instance.getLocale() );
 	}
 	
 	/**

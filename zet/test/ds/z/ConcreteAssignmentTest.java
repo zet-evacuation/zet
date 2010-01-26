@@ -40,7 +40,7 @@ public class ConcreteAssignmentTest extends TestCase {
 	public void testOneCA() throws Exception{
 		Project p = new Project();
 		Floor floor = new Floor();
-		p.getPlan().addFloor(floor);
+		p.getBuildingPlan().addFloor(floor);
 
 		ArrayList<PlanPoint> points = new ArrayList<PlanPoint>();
 
@@ -50,7 +50,7 @@ public class ConcreteAssignmentTest extends TestCase {
 		points.add( new PlanPoint(8.6,3.0) );
 		points.add( new PlanPoint(8.6,8.2) );
 		points.add( new PlanPoint(3.0,8.2) );
-		pg_room.add( points );
+		pg_room.defineByPoints( points );
 
 		// Erzeuge assignments
 		Assignment uni = new Assignment( "Uni" );
@@ -71,15 +71,15 @@ public class ConcreteAssignmentTest extends TestCase {
 		pointList.add( new PlanPoint( 7.0, 4.0 ) );
 		pointList.add( new PlanPoint( 7.0, 7.0 ) );
 		pointList.add( new PlanPoint( 4.0, 7.0 ) );
-		tischAssignment.add( pointList );
+		tischAssignment.defineByPoints( pointList );
 
 //		points = new ArrayList<PlanPoint>();
-//		points.add( new PlanPoint(6.6,7.4));
-//		points.add( new PlanPoint(7.0,7.4));
-//		points.add( new PlanPoint(7.0,7.8));
-//		points.add( new PlanPoint(6.6,7.8));
+//		points.defineByPoints( new PlanPoint(6.6,7.4));
+//		points.defineByPoints( new PlanPoint(7.0,7.4));
+//		points.defineByPoints( new PlanPoint(7.0,7.8));
+//		points.defineByPoints( new PlanPoint(6.6,7.8));
 //		iA = new InaccessibleArea( pg_room );
-//		iA.add(points);
+//		iA.defineByPoints(points);
 		
 		// den raum vorher zu rastern....
 		pg_room.rasterize();

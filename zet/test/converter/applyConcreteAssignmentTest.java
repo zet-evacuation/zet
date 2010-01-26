@@ -62,7 +62,7 @@ public class applyConcreteAssignmentTest {
     public void testApplyConcreteAssignment() throws Exception{
     	Project p = new Project();
 		Floor floor = new Floor();
-		p.getPlan().addFloor(floor);
+		p.getBuildingPlan().addFloor(floor);
 
 		ArrayList<PlanPoint> points = new ArrayList<PlanPoint>();
 
@@ -72,7 +72,7 @@ public class applyConcreteAssignmentTest {
 		points.add( new PlanPoint(8.6,3.0) );
 		points.add( new PlanPoint(8.6,8.2) );
 		points.add( new PlanPoint(3.0,8.2) );
-		pg_room.add( points );
+		pg_room.defineByPoints( points );
 
 		// Erzeuge assignments
 		Assignment uni = new Assignment( "Uni" );
@@ -93,15 +93,15 @@ public class applyConcreteAssignmentTest {
 		pointList.add( new PlanPoint( 8.0, 4.0 ) );
 		pointList.add( new PlanPoint( 8.0, 8.0 ) );
 		pointList.add( new PlanPoint( 4.0, 8.0 ) );
-		tischAssignment.add( pointList );
+		tischAssignment.defineByPoints( pointList );
 
 //		points = new ArrayList<PlanPoint>();
-//		points.add( new PlanPoint(6.6,7.4));
-//		points.add( new PlanPoint(7.0,7.4));
-//		points.add( new PlanPoint(7.0,7.8));
-//		points.add( new PlanPoint(6.6,7.8));
+//		points.defineByPoints( new PlanPoint(6.6,7.4));
+//		points.defineByPoints( new PlanPoint(7.0,7.4));
+//		points.defineByPoints( new PlanPoint(7.0,7.8));
+//		points.defineByPoints( new PlanPoint(6.6,7.8));
 //		iA = new InaccessibleArea( pg_room );
-//		iA.add(points);
+//		iA.defineByPoints(points);
 		
 		// den raum vorher zu rastern....
 		pg_room.rasterize();
@@ -111,7 +111,7 @@ public class applyConcreteAssignmentTest {
         //ZToCARasterContainer rc = RasterContainerCreator.getInstance().ZToCARasterContainer(plan);
         CellularAutomaton ca = null;
         try{
-            ca = ZToCAConverter.getInstance().convert(p.getPlan());
+            ca = ZToCAConverter.getInstance().convert(p.getBuildingPlan());
         } catch(ConversionNotSupportedException e){
             throw new Exception("The building plan contains features that cannot be converted to a CA. " + e.getMessage());
         }
@@ -125,7 +125,7 @@ public class applyConcreteAssignmentTest {
         
 //        Project project = new Project();
 //        for(Floor floor : plan.getFloors()){
-//            project.getPlan().addFloor(floor);
+//            project.getBuildingPlan().addFloor(floor);
 //        }
 //        project.save(new File(".\\examples\\presentation.xml"));
     }

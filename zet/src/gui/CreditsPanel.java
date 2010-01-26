@@ -6,13 +6,14 @@
  *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
  * GNU General Public License for more details.
  *
  * You should have received a copy of the GNU General Public License
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
+
 /*
  * Class CreditsPanel
  * Erstellt 18.05.2008, 20:05:12
@@ -35,8 +36,6 @@ import util.vectormath.Vector3;
  * @author Jan-Philipp Kappmeier
  */
 public class CreditsPanel extends JMovingEyePanel {
-	/** The size of the panel, used for getText getX calculation. */
-	private static int width = 480;
 	/** The instance of the texture manager. */
 	private TextureManager texMan;
 	/** Describes if the textures are loaded or not */
@@ -48,14 +47,18 @@ public class CreditsPanel extends JMovingEyePanel {
 	/** A texture-font object using to draw getText on the {@code OpenGL} panel */
 	private TextureFont font;
 	/** The top getX of the getText */
-	//private double startPos = -128; // 256 height of picture, 84 black pixels
-	private float startPos = -5; // 256 height of picture, 84 black pixels
+	private float startPos = -5;
 	/** The array containing the getText. */
 	private TextureFontStrings lines = new TextureFontStrings( false );
 
+	/**
+	 * Create a new instance of the {@code CreditsPanel}. Initializes the
+	 * default {@code OpenGL} canvas and removes all listeners as the credits are
+	 * view-only.
+	 */
 	public CreditsPanel() {
 		super();
-
+		removeListener();
 		initLines();
 	}
 
@@ -74,42 +77,29 @@ public class CreditsPanel extends JMovingEyePanel {
 			texMan.setGLU( glu );
 			loadTextures();
 			texturesLoaded = true;
-			//texFont = texMan.get( "font1" );
-			//texLogo = texMan.get( "logo1" );
 			font = new TextureFont( drawable.getGL(), texFont );
 			font.buildFont3( 16, 14, 16, 0.7f, (0.7f*3)/4 );
-			//font.buildFont( 16, 8, 16, 24, 19 );
 			texFont.bind();
 		}
+		drawable.getGL().glEnable( GL.GL_TEXTURE_2D );
 		this.pitch( 20 );
 		Vector3 pos = getPos();
 		pos.y += 7;
 	}
 
-	@Override
 	/**
 	 * Displays the getText on the screen.
 	 * @param drawable the context which is used for the credits panel
 	 */
+	@Override
 	public void display( GLAutoDrawable drawable ) {
 		super.display( drawable );	// clear the screen
-		//GL gl = drawable.getGL();
 
-		//super.updateViewport( drawable, WIDTH, WIDTH, width, width )
-
-		//gl.glEnable( GL.GL_TEXTURE_2D );
-
-//gl.glTranslatef(0, 0,-6);
-//gl.glTranslatef(-1.5f,0,0);
+		// reset view
 		gl.glLoadIdentity();
 		this.look();
-//l.glTranslatef(-1.5f, 0,-6);
-//gl.glBegin( GL.GL_TRIANGLES );
-//  gl.glColor3f(1, 0, 0); gl.glVertex3f(-1,-1, -3);
-//  gl.glColor3f(0, 0, 1); gl.glVertex3f( 1,-1, -3);
-//  gl.glColor3f(0, 1, 0); gl.glVertex3f( 0, 1, -3);
-//gl.glEnd();
-		gl.glEnable( GL.GL_TEXTURE_2D );
+
+		// enable texture mode and draw logo
 		texLogo.bind();
 		gl.glBegin( GL.GL_QUADS );
 			gl.glTexCoord2f( 0.0f, 1.0f );
@@ -123,28 +113,10 @@ public class CreditsPanel extends JMovingEyePanel {
 		gl.glEnd();
 
 
-//		this.switchToPrintScreen( gl );
-//
-//		texLogo.bind();
-//		// Draw a logo
-//		gl.glBegin( GL.GL_QUADS );
-//			gl.glTexCoord2f( 0.0f, 1.0f );
-//			gl.glVertex3d( (width-256)/2, startPos, startPos );
-//			gl.glTexCoord2f( 0.0f, 0.0f );
-//			gl.glVertex3d( (width-256)/2, startPos + 128, startPos + 128 );
-//			gl.glTexCoord2f( 1.0f, 0.0f );
-//			gl.glVertex3d( (width-256)/2+256, startPos + 128, startPos + 128 );
-//			gl.glTexCoord2f( 1.0f, 1.0f );
-//			gl.glVertex3d( (width-256)/2+250, startPos, startPos );
-//		gl.glEnd();
-//
-//		gl.glFlush();
+		// load font texture and draw text
 		texFont.bind();
 		String text = "Text";
-		//font.print( -1.7f, -1, -3, getText );
 		drawLines( lines, startPos + 1  );
-//
-//		this.switchToOrthoScreen( gl );
 	}
 
 	@Override
@@ -162,7 +134,7 @@ public class CreditsPanel extends JMovingEyePanel {
 	}
 
 	/**
-	 * Loads the texture file from harddisk.
+	 * Loads the texture files from harddisk.
 	 */
 	private void loadTextures() {
 		texLogo = texMan.newTexture( "logo1", "./textures/logo1.png" );
@@ -175,14 +147,9 @@ public class CreditsPanel extends JMovingEyePanel {
 	 * @param lines an array containing all lines that should be displayed
 	 */
 	private void drawLines( TextureFontStrings lines, float start ) {
-		//font.print( -1.7f, -1, -3, getText );
-		//int start = (int) Math.floor( startPos );
 		int end = 0;
-		for( int i = 0; i < lines.size(); i++ ) {
-			//font.print( lines[i].getX(), start - i * 16, lines[i].getText() );
+		for( int i = 0; i < lines.size(); i++ )
 			font.print( -lines.getX( i ), -4f, start + i * 1.1f, lines.getText(i) );
-			//end = start - i * 16 + 12;
-		}
 		if( end > this.getHeight() + 48 )
 			startPos = -128;
 	}
