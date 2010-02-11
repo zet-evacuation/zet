@@ -69,7 +69,7 @@ public class Localization {
 	 * @throws MissingResourceException if no resource bundle for the default system locale is found
 	 */
 	private Localization() throws MissingResourceException {
-		bundle = ResourceBundle.getBundle( "localization.zevacuate", Locale.getDefault() );
+		bundle = ResourceBundle.getBundle( "de.tu_berlin.math.coga.common.localization.zevacuate", Locale.getDefault() );
 	}
 
 	/**

@@ -189,23 +189,20 @@ public class Visualization extends AbstractVisualization implements EventListene
 		texMan = TextureManager.getInstance();
 		texMan.setGL( gl );
 		texMan.setGLU( glu );
-//		fontTex = texMan.newTexture( "font2", "./textures/font2.bmp" );
 		maskTex = texMan.newTexture( "logo", "./textures/logomask.png" );
 		logoTex = texMan.newTexture( "logo", "./textures/logo2.png" );
 		fontTex = texMan.newTexture( "font2", "./textures/fontl.png" );
-		//fontTexBold = texMan.newTexture( "font2", "./textures/fontl.bmp" );
 		// load texture font
 		fontBold = new TextureFont( gl, fontTex );
 		fontBold.buildFont( 8, 32, 32, 32, 19 );
 
 		font = new TextureFont( gl, fontTex );
 		font.buildFont( 8, 32, 32, 16, 9.5 );		// fontl.bmp
-//		font.buildFont( 8, 16, 32, 16, 16 );	// font1.bmp ???
-//		font.buildFont( 16, 8, 16, 12, 10 );	// font2.bmp (the old one. used in credits)
 		fontTex.bind();
 
 		gl.glEnable( GL.GL_NORMALIZE );
 
+		// activate anisotropic filtering. had no effect on my computer
 //		if ( glewIsSupported( "GL_EXT_texture_filter_anisotropic" ) ) {
 //	    float maxAni;
 //			glGetFloatv( GL_MAX_TEXTURE_MAX_ANISOTROPY_EXT, &maxAni );
@@ -242,32 +239,10 @@ public class Visualization extends AbstractVisualization implements EventListene
 	public void display( GLAutoDrawable drawable ) {
 		// TODO: richtig machen mit dem update :D
 		// Status-Variablen die angezeigte Elemente steuern
-//		showEye = PropertyContainer.getInstance().getAsBoolean( "options.visualization.elements.eye" );
-//		showFPS = PropertyContainer.getInstance().getAsBoolean( "options.visualization.elements.fps" );
-//		showTimestepGraph = PropertyContainer.getInstance().getAsBoolean( "options.visualization.elements.timestepGraph" );
-//		showTimestepCellularAutomaton = PropertyContainer.getInstance().getAsBoolean( "options.visualization.elements.timestepCA" );
-
-
-		gl.glBegin( GL.GL_LINES );
-      gl.glVertex3d( 0, 0, 0 );
-      gl.glVertex3d( 0, 0, 1 );
-      gl.glVertex3d( 2.3, 3.1,1 );
-      gl.glVertex3d( 1.3, 3.1,1 );
-      gl.glVertex3d( 2.3, 3.1,1 );
-      gl.glVertex3d( 1.3, 3.1,1 );
-		gl.glEnd( );
-
-		gl.glEnable(  GL.GL_BLEND );
-		gl.glBegin( GL.GL_POINTS );
-		  gl.glColor3d( 1, 2, 3 );
-      gl.glVertex3d( 0, 0, 0 );
-      gl.glVertex3d( 0, 0, 1 );
-      gl.glVertex3d( 2.3, 3.1,1 );
-      gl.glVertex3d( 1.3, 3.1,1 );
-      gl.glVertex3d( 2.3, 3.1,1 );
-      gl.glVertex3d( 1.3, 3.1,1 );
-		gl.glEnd( );
-
+		showEye = PropertyContainer.getInstance().getAsBoolean( "options.visualization.elements.eye" );
+		showFPS = PropertyContainer.getInstance().getAsBoolean( "options.visualization.elements.fps" );
+		showTimestepGraph = PropertyContainer.getInstance().getAsBoolean( "options.visualization.elements.timestepGraph" );
+		showTimestepCellularAutomaton = PropertyContainer.getInstance().getAsBoolean( "options.visualization.elements.timestepCA" );
 
 		this.drawable = drawable;
 		calculateFPS();
@@ -321,7 +296,6 @@ public class Visualization extends AbstractVisualization implements EventListene
 				break;
 		}
 		gl.glFlush();
-
 
 		if( takeScreenshot )
 			takeScreenshot( drawable );
@@ -475,9 +449,7 @@ public class Visualization extends AbstractVisualization implements EventListene
 	 * Includes getText visible in the scene but not the copyright notice, etc.
 	 */
 	final private void drawScene() {
-		//if( true ) return;
 		gl.glClear( clearBits );
-		gl.glClearColor(1.0f,1.0f,1.0f,0.0f);
 
 		gl.glMatrixMode( GL.GL_MODELVIEW );
 		gl.glLoadIdentity();

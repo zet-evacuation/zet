@@ -24,6 +24,8 @@ package util;
 import java.io.File;
 import java.text.ParseException;
 import de.tu_berlin.math.coga.common.localization.Localization;
+import java.util.LinkedList;
+import java.util.List;
 
 /**
  * A set of helper methods for input and output operations.
@@ -105,6 +107,46 @@ public class IOTools {
 		while( ret.length() < digits )
 			ret = "0" + ret;
 		return ret;
+	}
+
+	/**
+	 * Splits a string up at spaces but ignores spaces that are in parts between
+	 * quotes. This is the normal behaviour of command line interfaces.
+	 * @param command the string to be splitted up
+	 * @return a {@link List} containing all parts of the command
+	 */
+	public static List<String> parseCommandString( String command ) {
+		LinkedList<String> ret = new LinkedList<String>();
+		int i = -1;
+		String s = "";
+		boolean quotes = false;
+		while( ++i < command.length() ) {
+			if( command.charAt( i ) == '"' ) {
+				s = addElement( ret, s );
+				quotes = !quotes;
+			} else if( command.charAt( i ) == ' ' && !quotes)
+				s = addElement( ret, s );
+			else s += command.charAt( i );
+		}
+		addElement( ret, s );
+		return ret;
+	}
+
+	/**
+	 * Adds a {@code String} to a list of strings if it is not the empty string.
+	 * @param list the list of strings
+	 * @param s the {@code String} that is added
+	 * @return the empty string
+	 */
+	private final static String addElement( List<String> list, String s ) {
+		if( !s.equals( "" ) )
+			list.add( s );
+		return "";
+	}
+
+	public static void main( String[] args ) {
+		String test = "-y -t hallo -k    \" d\"da\"das ist ein pfad\"ttt -i";
+		System.out.println( parseCommandString( test ) );
 	}
 }
 

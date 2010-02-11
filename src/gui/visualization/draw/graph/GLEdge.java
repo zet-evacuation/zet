@@ -36,8 +36,8 @@ public class GLEdge extends AbstractDrawable<GLEdge, GLEdgeControl, GLEdgeContro
 	static GLColor flowColor;
 	static GLColor flowUnitColor;
 	/* The thickness of the edges and pieces of flow according to their capacities. */
-	static double thickness = 5 * 1.5 /* 5 */ * VisualizationConstants.SIZE_MULTIPLICATOR; //
-	static double flowThickness = 7 * 1.5 /* 7 */* VisualizationConstants.SIZE_MULTIPLICATOR; //
+	static double thickness = 5 /* *1.5*/ /* 5 */ * VisualizationConstants.SIZE_MULTIPLICATOR; // factor of 1.5 used for test evacuation report
+	static double flowThickness = 7 /* * 1.5 */ /* 7 */* VisualizationConstants.SIZE_MULTIPLICATOR; //// factor of 1.5 used for test evacuation report
 	static double minFlowThickness = 10; /* 10 */ // original 3
 	static double maxFlowThickness = 10;
 	static double flowThicknessOfOneCapacityStep;

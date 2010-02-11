@@ -56,6 +56,8 @@ public abstract class MovieWriter {
 	/** The command used to encode the video. */
 	protected String command;
 
+
+
 	/**
 	 * <p>Returns a filename for the frame with the specified number. The wrapper
 	 * can create files in the temp directory, but is not supposed to do so as
