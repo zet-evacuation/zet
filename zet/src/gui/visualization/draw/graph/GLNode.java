@@ -38,7 +38,7 @@ public class GLNode extends AbstractDrawable<GLEdge, GLNodeControl, GLEdgeContro
 	GLColor sourceColor = VisualizationOptionManager.getSourceNodeColor();
 	GLColor deletedSourceColor = VisualizationOptionManager.getDeletedSourceNodeColor();
 	GLColor nodeBorderColor = VisualizationOptionManager.getNodeBorderColor();
-	static double nodeRadius = 13 * 2.2; // 13 
+	static double nodeRadius = 13 /* 2.2*/; // 13 // factor of 2.2 used for test evacuation report
 	private static QualityPreset qualityPreset = VisualizationOptionManager.getQualityPreset();
 
 	public GLNode( GLNodeControl control ) {

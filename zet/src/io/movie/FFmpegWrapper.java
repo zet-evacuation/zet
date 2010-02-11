@@ -54,7 +54,7 @@ public class FFmpegWrapper extends MovieWriter {
 	private double duration = 1;
 	/** A string used to describe the codec used by ffmpeg. Needs to start with a space. */
 	private String codecParameterString = "";
-	
+
 	/**
 	 * {@inheritDoc}
 	 * <p>Encodes the movie, one or two times, depending if 2-pass encoding
@@ -62,6 +62,7 @@ public class FFmpegWrapper extends MovieWriter {
 	 */
 	public void create( Vector<String> inputFiles, String filename ) {
 		command = ""; // clear all commandlines to store the new ones.
+
 		duration = inputFiles.size() / (double)framerate;
 		// create player string
 		switch( movieFormat ) {
@@ -118,31 +119,38 @@ public class FFmpegWrapper extends MovieWriter {
 	 * @throws java.lang.IllegalArgumentException if pass is not 0, 1 or 2
 	 */
 	private int record( int pass, String filename ) throws IllegalArgumentException {
+
 		try {
 			// framesize must be a multiple of 2 (at least for mpeg4)
-			if( width % 2 == 1 )
-				width += 1;
-			if( height % 2 == 1 )
-				height += 1;
+			width += width % 2;
+			height += height % 2;
+//			if( width % 2 == 1 )
+//				width += 1;
+//			if( height % 2 == 1 )
+//				height += 1;
 			String thisCommand = "";
-			// Basic command 
-			thisCommand += "./tools/ffmpeg/ffmpeg.exe -f image2";
+			// Basic command
+			String programPath = "./tools/ffmpeg/ffmpeg";
+			thisCommand += programPath + " -f image2";
+
 			// Input Parameters: framerate
 			thisCommand += " -r " + framerate;
+
 			// Input files
-			thisCommand += " -i \"./" + path + framename+"%0" + FRAMEDIGITS + "d." + frameFormat.getEnding() + '"';
+			thisCommand += " -i \"./" + path + framename+"%0" + FRAMEDIGITS + "d." + frameFormat.getEnding() + "\"";
 
 			// maybe mp3 file
 			if( !mp3File.trim().equals( "" ) ) {
 				System.out.println( "Codiere mit Audio." );
 				File mp3 = new File( mp3File );
 				if( mp3.exists() )
-					thisCommand += " -i " + '"' + mp3File + '"' + " -acodec libmp3lame";
+					thisCommand += " -i \"" + mp3File + "\" -acodec libmp3lame";
 				else
 					System.err.println( "Datei '" + mp3.getAbsolutePath() + "' nicht gefunden. Encodiere ohne Audio." );
 			}
 			// Quality parameter
 			thisCommand += " -b " + bitrate + "kb -s " + width + "x" + height;
+			
 			// Video codec
 			thisCommand += codecParameterString;
 			// duration (needed to stop, if mp3-file is larger)
@@ -153,11 +161,11 @@ public class FFmpegWrapper extends MovieWriter {
 					// do nothing
 					break;
 				case 1:
-					thisCommand += " -pass 1 -passlogfile \"./" + path + filename + '"';
+					thisCommand += " -pass 1 -passlogfile \"./" + path + filename + "\"";
 					break;
 				case 2:
 					// use auto-overwrite (-y) because the file was already written in pass 1
-					thisCommand += " -y -pass 2 -passlogfile \"./" + path + filename + '"';
+					thisCommand += " -y -pass 2 -passlogfile \"./" + path + filename + "\"";
 					break;
 				default:
 					throw new IllegalArgumentException( "Pass must be 0, 1 or 2" );
@@ -166,16 +174,17 @@ public class FFmpegWrapper extends MovieWriter {
 				thisCommand += " " + advancedParameter;
 			}
 			// Output file
-			thisCommand += " \"./" + path + filename + "." + movieFormat.getEnding() + '"';
+			thisCommand += " \"./" + path + filename + "." + movieFormat.getEnding() + "\"";
+
 			// Store commandline to the global commands.
-			if( command.equals( "" ))
+			if( command.equals( "" ) )
 				command += thisCommand;
 			else
 				command += '\n' + thisCommand;
 			System.out.println( "Encode video with command line: ");
-			System.out.println( thisCommand );
-			//ProcessBuilder processBuilder = new ProcessBuilder( "ffmpeg.bat -f image2" );
-			Process process = Runtime.getRuntime().exec( thisCommand );
+
+			//System.out.println( thisCommand );
+			Process process = new ProcessBuilder( IOTools.parseCommandString( thisCommand ) ).start();
 			InputHandler errorHandler = new InputHandler( process.getErrorStream(), "Error Stream" );
 			errorHandler.setVerbose( true );
 			errorHandler.start();
@@ -183,6 +192,8 @@ public class FFmpegWrapper extends MovieWriter {
 			inputHandler.setVerbose( true );
 			inputHandler.start();
 			process.waitFor();
+			inputHandler.close();
+			errorHandler.close();
 			return process.exitValue();
 		} catch( InterruptedException ex ) {
 			System.err.println( "Encoding-Prozess wurde unterbrochen!!!" );
