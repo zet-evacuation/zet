@@ -6,16 +6,18 @@
  *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
  * GNU General Public License for more details.
  *
  * You should have received a copy of the GNU General Public License
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
+
 /*
  * Raster.java
  */
+
 package converter;
 
 import java.lang.reflect.Array;
@@ -248,7 +250,7 @@ public class Raster<T extends RasterSquare, P extends PlanPolygon> {
 	 * Sets the raster size used for rasterization. The size is given in millimeters,
 	 * which is the base unit.
 	 * @param raster the size
-	 * @see util.ConversionTools
+	 * @see util.CellularAutomatonConversionTools
 	 */
 	public void setRaster( int raster ) {
 		this.raster = raster;
@@ -258,7 +260,7 @@ public class Raster<T extends RasterSquare, P extends PlanPolygon> {
 	 * Sets the raster size used for rasterization. The size is given in meter. The
 	 * size is converted to the base unit millimeter.
 	 * @param raster the size
-	 * @see util.ConversionTools
+	 * @see util.CellularAutomatonConversionTools
 	 */
 	public void setRaster( double raster ) {
 		this.raster = ConversionTools.floatToInt( raster );

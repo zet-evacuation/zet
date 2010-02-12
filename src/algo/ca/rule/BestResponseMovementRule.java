@@ -126,9 +126,9 @@ public class BestResponseMovementRule extends AbstractMovementRule{
 			int y = targetCell.getY() - i.getCell().getY();
 			Direction direction = Direction.getDirection( x, y );
 			Level lvl = stairCell.getLevel( direction );
-			if( lvl == Level.HIGHER ) {
+			if( lvl == Level.Higher ) {
 				stairSpeedFactor = stairCell.getSpeedFactorUp();
-			} else if( lvl == Level.LOWER ) {
+			} else if( lvl == Level.Lower ) {
 				stairSpeedFactor = stairCell.getSpeedFactorDown();			
 			}
 		}

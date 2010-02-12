@@ -6,7 +6,7 @@
  *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
  * GNU General Public License for more details.
  *
  * You should have received messageType copy of the GNU General Public License
@@ -18,7 +18,6 @@
  * DebugStream.java
  * Created 06.11.2009, 14:18:50
  */
-
 package util;
 
 import event.MessageEvent.MessageType;
@@ -32,6 +31,7 @@ import java.io.PrintStream;
  * @author Jan-Philipp Kappmeier
  */
 public class DebugStreamVerbose extends DebugStream {
+
 	/** The output stream that is used as messageType mirror. */
 	PrintStream oldOutputStream = null;
 

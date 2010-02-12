@@ -146,14 +146,14 @@ public class JRasterFloor extends AbstractFloor /*implements ds.z.event.ChangeLi
 						} else
 							poly = new JCellPolygon( this, Color.lightGray, Color.black );
 					}
-					if( !cell.isPassable( Direction.LEFT) )
-						poly.addWall( Direction.LEFT );
-					if( !cell.isPassable( Direction.RIGHT) )
-						poly.addWall( Direction.RIGHT );
-					if( !cell.isPassable( Direction.UP) )
-						poly.addWall( Direction.UP );
-					if( !cell.isPassable( Direction.DOWN ) )
-						poly.addWall( Direction.DOWN );
+					if( !cell.isPassable( Direction.Left) )
+						poly.addWall( Direction.Left );
+					if( !cell.isPassable( Direction.Right) )
+						poly.addWall( Direction.Right );
+					if( !cell.isPassable( Direction.Top) )
+						poly.addWall( Direction.Top );
+					if( !cell.isPassable( Direction.Down ) )
+						poly.addWall( Direction.Down );
 					//nicht zeichnen
 					add( poly );
 					poly.displayPolygon( square.getSquare() );

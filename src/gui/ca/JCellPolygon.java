@@ -115,13 +115,13 @@ public class JCellPolygon extends AbstractPolygon {
 		Rectangle bounds = drawingPolygon.getBounds();
 		BasicStroke thick = new BasicStroke ( 5 );
 		g2.setStroke( thick );
-		if( borders.contains( Direction.UP ) )
+		if( borders.contains( Direction.Top ) )
 			g2.drawLine( bounds.x, bounds.y, bounds.x + bounds.width, bounds.y );
-		if( borders.contains( Direction.DOWN ) )
+		if( borders.contains( Direction.Down ) )
 			g2.drawLine( bounds.x, bounds.y + bounds.height, bounds.x + bounds.width, bounds.y + bounds.height );
-		if( borders.contains( Direction.LEFT ) )
+		if( borders.contains( Direction.Left ) )
 			g2.drawLine( bounds.x, bounds.y, bounds.x, bounds.y + bounds.height );
-		if( borders.contains( Direction.RIGHT ) )
+		if( borders.contains( Direction.Right ) )
 			g2.drawLine( bounds.x + bounds.width, bounds.y, bounds.x + bounds.width, bounds.y + bounds.height );
 
 	//g2.fillPolygon( drawingPolygon );

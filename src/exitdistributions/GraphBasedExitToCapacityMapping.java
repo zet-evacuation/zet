@@ -26,7 +26,7 @@ import evacuationplan.BidirectionalNodeCellMapping;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
-import util.ExitCapacityEstimator;
+import algo.graph.exitassignment.ExitCapacityEstimator;
 
 /**
 

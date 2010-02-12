@@ -44,7 +44,7 @@ public class IOTools {
 	 * @throws java.lang.IllegalArgumentException if digits is less or equal to zero
 	 * @throws java.lang.IllegalStateException if there are too many files beginning with prefix for the specified number of digits or if an error converting the digits occured.
 	 */
-	public static String getNextFreeNumberedFilepath( String path, String filePrefix, int digits ) throws java.lang.IllegalArgumentException, java.lang.IllegalStateException {
+	public final static String getNextFreeNumberedFilepath( String path, String filePrefix, int digits ) throws java.lang.IllegalArgumentException, java.lang.IllegalStateException {
 		return path + getNextFreeNumberedFilename( path, filePrefix, digits );
 	}
 	
@@ -59,7 +59,7 @@ public class IOTools {
 	 * @throws java.lang.IllegalArgumentException if digits is less or equal to zero
 	 * @throws java.lang.IllegalStateException if there are too many files beginning with prefix for the specified number of digits or if an error converting the digits occured.
 	 */
-	public static String getNextFreeNumberedFilename( String path, String filePrefix, int digits ) throws java.lang.IllegalArgumentException, java.lang.IllegalStateException {
+	public final static String getNextFreeNumberedFilename( String path, String filePrefix, int digits ) throws java.lang.IllegalArgumentException, java.lang.IllegalStateException {
 		if( digits <= 0 )
 			throw new IllegalArgumentException( "Digits must not be negative." );
 		final int prefixLen = filePrefix.length();
@@ -75,7 +75,6 @@ public class IOTools {
 						try {
 							number = Localization.getInstance().getIntegerConverter().parse( foundNumber ).intValue();
 						} catch( ParseException ex ) {
-							//throw new java.lang.IllegalStateException( "File numbering wrong." );
 							System.out.println( "Skipped file with same prefix: " + files[i].getName() );
 							number = -1;
 						}
@@ -100,7 +99,7 @@ public class IOTools {
 	 * @return the number with leading zeros
 	 * @throws java.lang.IllegalArgumentException if the number has to many digits
 	 */
-	public static String fillLeadingZeros( int number, int digits ) throws IllegalArgumentException {
+	public final static String fillLeadingZeros( int number, int digits ) throws IllegalArgumentException {
 		String ret = Integer.toString( number );
 		if( ret.length() > digits )
 			throw new java.lang.IllegalArgumentException( "Number " + number + " is too long. Only " + digits + " digits are allowed." );
@@ -115,7 +114,7 @@ public class IOTools {
 	 * @param command the string to be splitted up
 	 * @return a {@link List} containing all parts of the command
 	 */
-	public static List<String> parseCommandString( String command ) {
+	public final static List<String> parseCommandString( String command ) {
 		LinkedList<String> ret = new LinkedList<String>();
 		int i = -1;
 		String s = "";
@@ -142,11 +141,6 @@ public class IOTools {
 		if( !s.equals( "" ) )
 			list.add( s );
 		return "";
-	}
-
-	public static void main( String[] args ) {
-		String test = "-y -t hallo -k    \" d\"da\"das ist ein pfad\"ttt -i";
-		System.out.println( parseCommandString( test ) );
 	}
 }
 

@@ -45,6 +45,7 @@ import javax.media.opengl.GLAutoDrawable;
 import javax.media.opengl.GLCapabilities;
 import javax.media.opengl.glu.GLUquadric;
 import de.tu_berlin.math.coga.common.localization.Localization;
+import java.io.PrintStream;
 import opengl.drawingutils.GLColor;
 import opengl.helper.Frustum;
 import opengl.helper.Texture;
@@ -142,16 +143,16 @@ public class Visualization extends AbstractVisualization implements EventListene
 	public void init( GLAutoDrawable drawable ) {
 		gl = drawable.getGL();
 
-		gl.glClearDepth( 1.0f );																				// Initialize depth-buffer precision
-		gl.glDepthFunc( GL.GL_LEQUAL );																	// Quality of depht-testing
-		gl.glEnable( GL.GL_DEPTH_TEST );																// Enable depth-buffer. (z-buffer)
-		gl.glShadeModel( GL.GL_SMOOTH );																// Activate smooth-shading (Gauraud)
-		gl.glHint( GL.GL_PERSPECTIVE_CORRECTION_HINT, GL.GL_NICEST );		// Perspective calculations with high precision
-		gl.glHint( GL.GL_GENERATE_MIPMAP_HINT, GL.GL_NICEST );					//
-//    gl.glHint( GL.GL_FOG_HINT, GL.GL_NICEST );										//
-		gl.glHint( GL.GL_LINE_SMOOTH_HINT, GL.GL_NICEST );							//
-		gl.glHint( GL.GL_POINT_SMOOTH_HINT, GL.GL_NICEST );							//
-		gl.glHint( GL.GL_POLYGON_SMOOTH_HINT, GL.GL_NICEST );						//
+		gl.glClearDepth( 1.0f );																						// Initialize depth-buffer precision
+		gl.glDepthFunc( GL.GL_LEQUAL );																		// Quality of depht-testing
+		gl.glEnable( GL.GL_DEPTH_TEST );																	// Enable depth-buffer. (z-buffer)
+		gl.glShadeModel( GL.GL_SMOOTH );																 // Activate smooth-shading (Gauraud)
+		gl.glHint( GL.GL_PERSPECTIVE_CORRECTION_HINT, GL.GL_NICEST );	 // Perspective calculations with high precision
+		gl.glHint( GL.GL_GENERATE_MIPMAP_HINT, GL.GL_NICEST );				 //
+//    gl.glHint( GL.GL_FOG_HINT, GL.GL_NICEST );											 //
+		gl.glHint( GL.GL_LINE_SMOOTH_HINT, GL.GL_NICEST );              //
+		gl.glHint( GL.GL_POINT_SMOOTH_HINT, GL.GL_NICEST );            //
+		gl.glHint( GL.GL_POLYGON_SMOOTH_HINT, GL.GL_NICEST );         //
 
 		// Enable VSync
 		gl.setSwapInterval( 1 );
@@ -273,28 +274,7 @@ public class Visualization extends AbstractVisualization implements EventListene
 		// Show logo
 		drawLogo();
 
-		switch( gl.glGetError() ) {
-			case GL.GL_NO_ERROR:
-				break;
-			case GL.GL_INVALID_ENUM:
-				System.err.println( "INVALID ENUM" );
-				break;
-			case GL.GL_INVALID_VALUE:
-				System.err.println( "INVALID VALUE" );
-				break;
-			case GL.GL_INVALID_OPERATION:
-				System.err.println( "INVALID OPERATION" );
-				break;
-			case GL.GL_STACK_OVERFLOW:
-				System.err.println( "STACK OVERFLOW" );
-				break;
-			case GL.GL_STACK_UNDERFLOW:
-				System.err.println( "STACK UNDERFLOW" );
-				break;
-			case GL.GL_OUT_OF_MEMORY:
-				System.err.println( "OUT OF MEMORY" );
-				break;
-		}
+		printErrors();
 		gl.glFlush();
 
 		if( takeScreenshot )
@@ -616,8 +596,7 @@ public class Visualization extends AbstractVisualization implements EventListene
 	 * <p>If called with <code>recording</code> set to true the current resolution
 	 * is stored and rewritten if called with false. Thus automatic resetting of
 	 * the resolution only works if the method is called with true and false
-	 * in this order.
-	 * </p>
+	 * in this order.</p>
 	 * @param recording the status of the movie capture mode
 	 * @param resolution the resolution used for video recording
 	 */
@@ -630,6 +609,7 @@ public class Visualization extends AbstractVisualization implements EventListene
 			movieWidth = resolution.width;
 			movieHeight = resolution.height;
 			introCount = 0;
+			screenshotCounter = 0;
 		} else
 			setSize( oldX, oldY );
 	}
@@ -750,6 +730,44 @@ public class Visualization extends AbstractVisualization implements EventListene
 				writer.close();
 			} catch( IOException ex ) {
 				System.err.println( "Fehler beim Schließen der Datei '" + fileName + "'" );
+			}
+		}
+	}
+
+	/**
+	 * Prints out all error messages that are in the error queue to
+	 * {@code System.err}.
+	 */
+	private void printErrors() {
+		printErrors( System.err );
+	}
+
+	/**
+	 * Gives out all error messages to a submitted {@link PrintStream}.
+	 * @param stream
+	 */
+	private void printErrors( PrintStream stream ) {
+		int ret;
+		while( (ret = gl.glGetError()) != GL.GL_NO_ERROR ) {
+			switch( ret ) {
+				case GL.GL_INVALID_ENUM:
+					stream.println( "INVALID ENUM" );
+					break;
+				case GL.GL_INVALID_VALUE:
+					stream.println( "INVALID VALUE" );
+					break;
+				case GL.GL_INVALID_OPERATION:
+					stream.println( "INVALID OPERATION" );
+					break;
+				case GL.GL_STACK_OVERFLOW:
+					stream.println( "STACK OVERFLOW" );
+					break;
+				case GL.GL_STACK_UNDERFLOW:
+					stream.println( "STACK UNDERFLOW" );
+					break;
+				case GL.GL_OUT_OF_MEMORY:
+					stream.println( "OUT OF MEMORY" );
+					break;
 			}
 		}
 	}

@@ -89,7 +89,7 @@ public class RoomRasterSquare extends RasterSquare {
 		passable = EnumSet.allOf( Direction.class );
 		levels = new EnumMap<Direction, Level>( Direction.class );
 		for( Direction direction : Direction.values() ) {
-			levels.put( direction, Level.EQUAL );
+			levels.put( direction, Level.Equal );
 		}
 		if( properties != null ) {
 			System.out.println( "wie kann das sein properties!=null RoomRasterSquare" );
@@ -235,32 +235,32 @@ public class RoomRasterSquare extends RasterSquare {
 	}
 
 	/**
-	 * Returns the speed factor that is multiplied with the velocity if the square is left going down.
-	 * @return the speed factor that is multiplied with the velocity if the square is left going down.
+	 * Returns the speed factor that is multiplied with the velocity if the square is Left going down.
+	 * @return the speed factor that is multiplied with the velocity if the square is Left going down.
 	 */
 	public double getDownSpeedFactor() {
 		return downSpeedFactor;
 	}
 
 	/**
-	 * Returns the speed factor that is multiplied with the velocity if the square is left going up.
-	 * @return the speed factor that is multiplied with the velocity if the square is left going up.
+	 * Returns the speed factor that is multiplied with the velocity if the square is Left going up.
+	 * @return the speed factor that is multiplied with the velocity if the square is Left going up.
 	 */
 	public double getUpSpeedFactor() {
 		return upSpeedFactor;
 	}
 
 	/**
-	 * Sets the speed factor that is multiplied with the velocity if the square is left going up.
-	 * @param downSpeedFactor the speed factor that is multiplied with the velocity if the square is left going up.
+	 * Sets the speed factor that is multiplied with the velocity if the square is Left going up.
+	 * @param downSpeedFactor the speed factor that is multiplied with the velocity if the square is Left going up.
 	 */
 	public void setDownSpeedFactor( double downSpeedFactor ) {
 		this.downSpeedFactor = downSpeedFactor;
 	}
 
 	/**
-	 * Sets the speed factor that is multiplied with the velocity if the square is left going up.
-	 * @param downSpeedFactor the speed factor that is multiplied with the velocity if the square is left going up.
+	 * Sets the speed factor that is multiplied with the velocity if the square is Left going up.
+	 * @param downSpeedFactor the speed factor that is multiplied with the velocity if the square is Left going up.
 	 */
 	public void setUpSpeedFactor( double upSpeedFactor ) {
 		this.upSpeedFactor = upSpeedFactor;
@@ -279,7 +279,7 @@ public class RoomRasterSquare extends RasterSquare {
 	/**
 	 * Returns whether the square in direction <code>direction</code> lies
 	 * higher, equal or lower than this square.
-	 * If the level has never been set explicitly, EQUAL is returned.
+	 * If the level has never been set explicitly, Equal is returned.
 	 * @param direction The square in this direction is considered.
 	 * @return whether the square in direction <code>direction</code> lies
 	 * higher, equal or lower than this square.
@@ -288,7 +288,7 @@ public class RoomRasterSquare extends RasterSquare {
 		if( levels.containsKey( direction ) ) {
 			return levels.get( direction );
 		} else {
-			return Level.EQUAL;
+			return Level.Equal;
 		}
 	}
 
