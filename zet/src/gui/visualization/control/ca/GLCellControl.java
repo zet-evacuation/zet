@@ -240,25 +240,25 @@ public class GLCellControl extends AbstractControl<GLCell, Cell, CAVisualization
 		
 		
 		switch( direction ) {
-			case UPPER_LEFT:
-				c[0] = cell.getNeighbour( Direction.UP );
-				c[1] = cell.getNeighbour( Direction.UPPER_LEFT );
-				c[2] = cell.getNeighbour( Direction.LEFT );
+			case TopLeft:
+				c[0] = cell.getNeighbour( Direction.Top );
+				c[1] = cell.getNeighbour( Direction.TopLeft );
+				c[2] = cell.getNeighbour( Direction.Left );
 				break;
-			case UPPER_RIGHT:
-				c[0] = cell.getNeighbour( Direction.UP );
-				c[1] = cell.getNeighbour( Direction.UPPER_RIGHT );
-				c[2] = cell.getNeighbour( Direction.RIGHT );
+			case TopRight:
+				c[0] = cell.getNeighbour( Direction.Top );
+				c[1] = cell.getNeighbour( Direction.TopRight );
+				c[2] = cell.getNeighbour( Direction.Right );
 				break;
-			case LOWER_RIGHT:
-				c[0] = cell.getNeighbour( Direction.DOWN );
-				c[1] = cell.getNeighbour( Direction.LOWER_LEFT );
-				c[2] = cell.getNeighbour( Direction.LEFT );
+			case DownRight:
+				c[0] = cell.getNeighbour( Direction.Down );
+				c[1] = cell.getNeighbour( Direction.DownLeft );
+				c[2] = cell.getNeighbour( Direction.Left );
 				break;
-			case LOWER_LEFT:
-				c[0] = cell.getNeighbour( Direction.DOWN );
-				c[1] = cell.getNeighbour( Direction.LOWER_RIGHT );
-				c[2] = cell.getNeighbour( Direction.RIGHT );
+			case DownLeft:
+				c[0] = cell.getNeighbour( Direction.Down );
+				c[1] = cell.getNeighbour( Direction.DownRight );
+				c[2] = cell.getNeighbour( Direction.Right );
 				break;
 			default:
 				return new GLColor( 1, 1, 1 );

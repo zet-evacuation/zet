@@ -383,11 +383,11 @@ public class ZToCAConverter {
 				ds.ca.DoorCell partnerDoor = (ds.ca.DoorCell) lastMapping.get( partner );
 				if( partnerDoor == null ) {
 					ZToCARoomRaster partnerRoom = getInstance().getLatestContainer().getRasteredRoom( (ds.z.Room) (partner.getPolygon()) );
-					int newX = util.ConversionTools.polyCoordToRasterCoord(
+					int newX = converter.RasterTools.polyCoordToRasterCoord(
 									partner.getX(),
 									partnerRoom.getXOffset(),
 									partnerRoom );
-					int newY = util.ConversionTools.polyCoordToRasterCoord(
+					int newY = converter.RasterTools.polyCoordToRasterCoord(
 									partner.getY(),
 									partnerRoom.getYOffset(),
 									partnerRoom );
@@ -466,7 +466,7 @@ public class ZToCAConverter {
 	}
 
 	/**
-	 * Puts persons which are specified in an concrete assignment into the right
+	 * Puts persons which are specified in an concrete assignment into the Right
 	 * cells of the cellular automaton. This is done by first get the rastered
 	 * square version of the room specified in the person object. Afterwards the
 	 * cell, in which the person has to be located, is calculated in the following
@@ -559,8 +559,8 @@ public class ZToCAConverter {
 	 * <p>Sets the bounds for the cells in a specified room. That means, that bounds
 	 * are set, if a cell in a direction is not reachable.</p>
 	 * <p>A cell is not reachable diagonally if only one of the horizontal or
-	 * vertical neighbor cells is not reachable. For example, the upper left cell
-	 * is not reachable if the upper or the left cell is not reachable.</p>
+	 * vertical neighbor cells is not reachable. For example, the upper Left cell
+	 * is not reachable if the upper or the Left cell is not reachable.</p>
 	 * @param room the room for that the borders are set up
 	 */
 	protected static void connectBounds( ds.ca.Room room ) {
@@ -569,31 +569,31 @@ public class ZToCAConverter {
 				if( room.existsCellAt( x, y ) ) {
 					ds.ca.Cell aCell = room.getCell( x, y );
 
-					if( !aCell.isPassable( LEFT ) ) {
-						if( room.existsCellAt( x, y + 1 ) && !room.getCell( x, y + 1 ).isPassable( LEFT ) ) {
-							aCell.setUnPassable( LOWER_LEFT );
-							room.getCell( x, y + 1 ).setUnPassable( UPPER_LEFT );
+					if( !aCell.isPassable( Left ) ) {
+						if( room.existsCellAt( x, y + 1 ) && !room.getCell( x, y + 1 ).isPassable( Left ) ) {
+							aCell.setUnPassable( DownLeft );
+							room.getCell( x, y + 1 ).setUnPassable( TopLeft );
 						}
 					}
 
-					if( !aCell.isPassable( RIGHT ) ) {
-						if( room.existsCellAt( x, y + 1 ) && !room.getCell( x, y + 1 ).isPassable( RIGHT ) ) {
-							aCell.setUnPassable( LOWER_RIGHT );
-							room.getCell( x, y + 1 ).setUnPassable( UPPER_RIGHT );
+					if( !aCell.isPassable( Right ) ) {
+						if( room.existsCellAt( x, y + 1 ) && !room.getCell( x, y + 1 ).isPassable( Right ) ) {
+							aCell.setUnPassable( DownRight );
+							room.getCell( x, y + 1 ).setUnPassable( TopRight );
 						}
 					}
 
-					if( !aCell.isPassable( UP ) ) {
-						if( room.existsCellAt( x + 1, y ) && !room.getCell( x + 1, y ).isPassable( UP ) ) {
-							aCell.setUnPassable( UPPER_RIGHT );
-							room.getCell( x + 1, y ).setUnPassable( UPPER_LEFT );
+					if( !aCell.isPassable( Top ) ) {
+						if( room.existsCellAt( x + 1, y ) && !room.getCell( x + 1, y ).isPassable( Top ) ) {
+							aCell.setUnPassable( TopRight );
+							room.getCell( x + 1, y ).setUnPassable( TopLeft );
 						}
 					}
 
-					if( !aCell.isPassable( DOWN ) ) {
-						if( room.existsCellAt( x + 1, y ) && !room.getCell( x + 1, y ).isPassable( DOWN ) ) {
-							aCell.setUnPassable( LOWER_RIGHT );
-							room.getCell( x + 1, y ).setUnPassable( LOWER_LEFT );
+					if( !aCell.isPassable( Down ) ) {
+						if( room.existsCellAt( x + 1, y ) && !room.getCell( x + 1, y ).isPassable( Down ) ) {
+							aCell.setUnPassable( DownRight );
+							room.getCell( x + 1, y ).setUnPassable( DownLeft );
 						}
 					}
 				}
@@ -606,42 +606,42 @@ public class ZToCAConverter {
 			for( int y = 0; y < room.getHeight(); y++ ) {
 				if( room.existsCellAt( x, y ) ) {
 					Cell aCell = room.getCell( x, y );
-					if( ( walkDiagonalStrict && (isDirectionBlocked( aCell, UP ) || isDirectionBlocked( aCell, LEFT ) ) ) || ( !walkDiagonalStrict && ( isDirectionBlocked( aCell, UP ) && isDirectionBlocked( aCell, LEFT ) ) ) ) {
+					if( ( walkDiagonalStrict && (isDirectionBlocked( aCell, Top ) || isDirectionBlocked( aCell, Left ) ) ) || ( !walkDiagonalStrict && ( isDirectionBlocked( aCell, Top ) && isDirectionBlocked( aCell, Left ) ) ) ) {
 //					if(  ) {
-						aCell.setUnPassable( UPPER_LEFT );
+						aCell.setUnPassable( TopLeft );
 
 						if( room.existsCellAt( x - 1, y - 1 ) ) {
-							room.getCell( x - 1, y - 1 ).setUnPassable( LOWER_RIGHT );
+							room.getCell( x - 1, y - 1 ).setUnPassable( DownRight );
 						}
 					}
 
-//					if( isDirectionBlocked( aCell, UP ) || isDirectionBlocked( aCell, RIGHT ) ) {
-					if( ( walkDiagonalStrict && ( isDirectionBlocked( aCell, UP ) || isDirectionBlocked( aCell, RIGHT ) ) ) || ( !walkDiagonalStrict && ( isDirectionBlocked( aCell, UP ) && isDirectionBlocked( aCell, RIGHT ) ) ) ) {
-//					if( isDirectionBlocked( aCell, UP ) && isDirectionBlocked( aCell, RIGHT ) ) {
-						aCell.setUnPassable( Direction.UPPER_RIGHT );
+//					if( isDirectionBlocked( aCell, Top ) || isDirectionBlocked( aCell, Right ) ) {
+					if( ( walkDiagonalStrict && ( isDirectionBlocked( aCell, Top ) || isDirectionBlocked( aCell, Right ) ) ) || ( !walkDiagonalStrict && ( isDirectionBlocked( aCell, Top ) && isDirectionBlocked( aCell, Right ) ) ) ) {
+//					if( isDirectionBlocked( aCell, Top ) && isDirectionBlocked( aCell, Right ) ) {
+						aCell.setUnPassable( Direction.TopRight );
 
 						if( room.existsCellAt( x + 1, y - 1 ) ) {
-							room.getCell( x + 1, y - 1 ).setUnPassable( LOWER_LEFT );
+							room.getCell( x + 1, y - 1 ).setUnPassable( DownLeft );
 						}
 					}
 
-//					if( isDirectionBlocked( aCell, DOWN ) || isDirectionBlocked( aCell, LEFT ) ) {
-					if( ( walkDiagonalStrict && ( isDirectionBlocked( aCell, DOWN ) || isDirectionBlocked( aCell, LEFT ) ) ) || ( !walkDiagonalStrict && ( isDirectionBlocked( aCell, DOWN ) && isDirectionBlocked( aCell, LEFT ) ) ) ) {
-//					if( isDirectionBlocked( aCell, DOWN ) && isDirectionBlocked( aCell, LEFT ) ) {
-						aCell.setUnPassable( Direction.LOWER_LEFT );
+//					if( isDirectionBlocked( aCell, Down ) || isDirectionBlocked( aCell, Left ) ) {
+					if( ( walkDiagonalStrict && ( isDirectionBlocked( aCell, Down ) || isDirectionBlocked( aCell, Left ) ) ) || ( !walkDiagonalStrict && ( isDirectionBlocked( aCell, Down ) && isDirectionBlocked( aCell, Left ) ) ) ) {
+//					if( isDirectionBlocked( aCell, Down ) && isDirectionBlocked( aCell, Left ) ) {
+						aCell.setUnPassable( Direction.DownLeft );
 
 						if( room.existsCellAt( x - 1, y + 1 ) ) {
-							room.getCell( x - 1, y + 1 ).setUnPassable( UPPER_RIGHT );
+							room.getCell( x - 1, y + 1 ).setUnPassable( TopRight );
 						}
 					}
 
-//					if( isDirectionBlocked( aCell, DOWN ) || isDirectionBlocked( aCell, RIGHT ) ) {
-					if( ( walkDiagonalStrict && ( isDirectionBlocked( aCell, DOWN ) || isDirectionBlocked( aCell, RIGHT ) ) ) || ( !walkDiagonalStrict && ( isDirectionBlocked( aCell, DOWN ) && isDirectionBlocked( aCell, RIGHT ) ) ) ) {
-//					if( isDirectionBlocked( aCell, DOWN ) && isDirectionBlocked( aCell, RIGHT ) ) {
-						aCell.setUnPassable( Direction.LOWER_RIGHT );
+//					if( isDirectionBlocked( aCell, Down ) || isDirectionBlocked( aCell, Right ) ) {
+					if( ( walkDiagonalStrict && ( isDirectionBlocked( aCell, Down ) || isDirectionBlocked( aCell, Right ) ) ) || ( !walkDiagonalStrict && ( isDirectionBlocked( aCell, Down ) && isDirectionBlocked( aCell, Right ) ) ) ) {
+//					if( isDirectionBlocked( aCell, Down ) && isDirectionBlocked( aCell, Right ) ) {
+						aCell.setUnPassable( Direction.DownRight );
 
 						if( room.existsCellAt( x + 1, y + 1 ) ) {
-							room.getCell( x + 1, y + 1 ).setUnPassable( UPPER_LEFT );
+							room.getCell( x + 1, y + 1 ).setUnPassable( TopLeft );
 						}
 					}
 				}

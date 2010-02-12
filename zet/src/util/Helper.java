@@ -6,7 +6,7 @@
  *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
  * GNU General Public License for more details.
  *
  * You should have received a copy of the GNU General Public License
@@ -17,7 +17,6 @@
  * Class Helper
  * Erstellt 08.07.2008, 19:04:34
  */
-
 package util;
 
 import java.text.NumberFormat;
@@ -28,6 +27,9 @@ import java.text.NumberFormat;
  */
 public final class Helper {
 
+	/** An array containing text for several file size measures. */
+	static final String[] fileSizes = {"Bytes", "KiB", "MiB", "GiB"};
+
 	/**
 	 * Pauses the program for fileSizes specified time
 	 * @param wait the pause time in milliseconds
@@ -35,9 +37,10 @@ public final class Helper {
 	public static final void pause( long wait ) {
 		try {
 			Thread.sleep( wait );
-		} catch( InterruptedException ignore ) { }
+		} catch( InterruptedException ignore ) {
+		}
 	}
-	
+
 	/**
 	 * Calculates the faculty of fileSizes given number.
 	 * @param n the parameter
@@ -47,30 +50,258 @@ public final class Helper {
 	public static final long faculty( int n ) {
 		if( n < 0 )
 			throw new java.lang.IllegalArgumentException( "Negative parameter value for faculty!" );
-		if( n == 0 )
+		if( n < 2 )
 			return 1;
 		else
-			return( n * faculty(n-1));
+			return (n * faculty( n - 1 ));
 	}
-	
+
 	/**
 	 * Formats a given number of bits to the largest possible unit. Supported
 	 * units are "Bytes", "Kilobytes", "Megabytes" and "Gigabytes".
 	 * @param bits the bits
 	 * @return the string in the calculated unit with one decimal place and the shortcut for the unit
 	 */
-	static final String[] fileSizes = {"Bytes", "KB", "MB", "GB"};
 	public static final String bitToMaxFilesizeUnit( double bits ) {
-		NumberFormat n = NumberFormat.getInstance();
+		final NumberFormat n = NumberFormat.getInstance();
 		n.setMaximumFractionDigits( 1 );
-		double ret = bits/8;	// rets is in bytes
+		double ret = bits / 8;	// rets is in bytes
 		int i = 0;
-		while( ret > 1024 && i++ < fileSizes.length-1 )
+		while(ret > 1024 && i++ < fileSizes.length - 1)
 			ret /= 1024;
-		return n.format( ret ) + " " + fileSizes[Math.min( i, fileSizes.length-1 )];
+		return n.format( ret ) + " " + fileSizes[Math.min( i, fileSizes.length - 1 )];
 	}
 
+	/**
+	 * Checks weather a value is between two other values, or not. {@code true} is
+	 * returned if the value is directly on the lower or upper bound.
+	 * @param value the value
+	 * @param lower the lower bound
+	 * @param upper the upper bound
+	 * @return {@code false} if the value is outside of the bounds, {@code true} if it is inside
+	 */
 	public final static boolean isBetween( char value, char lower, char upper ) {
-		return value >= lower &&  value <= upper;
+		return value >= lower && value <= upper;
+	}
+	private static long currentN;
+
+//	public long factorial( int n ) {
+//		if( n < 0 )
+//			throw new java.lang.IllegalArgumentException( ": n >= 0 required, but was " + n );
+//		if( n < 2 )
+//			return 1;
+//		long p = 1;
+//
+//		long r = 1;
+//		currentN = 1;
+//
+//		int h = 0, shift = 0, high = 1;
+//		int log2n = (int)Math.floor( Math.log( 2 ) ); // Xmath.FloorLog2( n );
+//
+//		while(h != n) {
+//			shift += h;
+//			h = n >> log2n--;
+//			int len = high;
+//			high = (h - 1) | 1;
+//			len = (high - len) / 2;
+//
+//			if( len > 0 ) {
+//				p *= Product( len );
+//				r *= p;
+//			}
+//		}
+//		return r << shift;
+//	}
+	private static long product( int n ) {
+		int m = n / 2;
+		if( m == 0 )
+			return (currentN += 2);
+		if( n == 2 )
+			return ((currentN += 2) * (currentN += 2));
+		return product( n - m ) * product( m );
+	}
+
+//	public static int bitLen( int n ) {
+//		if( n > 0 )
+//			if( bitTest2( n, 15 ) )
+//				if( bitTest2( n, 23 ) )
+//					if( bitTest2( n, 27 ) )
+//						if( bitTest2( n, 29 ) )
+//							if( bitTest2( n, 30 ) )
+//								return 30;
+//							else
+//								return 29;
+//						else
+//							if( bitTest2( n, 28 ) )
+//								return 28;
+//							else
+//								return 27;
+//					else
+//						if( bitTest2( n, 25 ) )
+//							if( bitTest2( n, 26 ) )
+//								return 26;
+//							else
+//								return 25;
+//						else
+//							if( bitTest2( n, 24 ) )
+//								return 24;
+//							else
+//								return 23;
+//				else
+//					if( bitTest2( n, 19 ) )
+//						if( bitTest2( n, 21 ) )
+//							if( bitTest2( n, 22 ) )
+//								return 22;
+//							else
+//								return 21;
+//						else
+//							if( bitTest2( n, 20 ) )
+//								return 20;
+//							else
+//								return 19;
+//					else
+//						if( bitTest( n, 17 ) )
+//							if( bitTest( n, 18 ) )
+//								return 18;
+//							else
+//								return 17;
+//						else
+//							if( bitTest( n, 16 ) )
+//								return 16;
+//							else
+//								return 15;
+//			else
+//				if( bitTest2( n, 7 ) )
+//					if( bitTest2( n, 11 ) )
+//						if( bitTest2( n, 13 ) )
+//							if( bitTest2( n, 14 ) )
+//								return 14;
+//							else
+//								return 13;
+//						else
+//							if( bitTest2( n, 12 ) )
+//								return 12;
+//							else
+//								return 11;
+//					else
+//						if( bitTest2( n, 9 ) )
+//							if( bitTest2( n, 10 ) )
+//								return 10;
+//							else
+//								return 9;
+//						else
+//							if( bitTest2( n, 8 ) )
+//								return 8;
+//							else
+//								return 7;
+//				else
+//					if( bitTest2( n, 3 ) )
+//						if( bitTest2( n, 5 ) )
+//							if( bitTest2( n, 6 ) )
+//								return 6;
+//							else
+//								return 5;
+//						else
+//							if( bitTest2( n, 4 ) )
+//								return 4;
+//							else
+//								return 3;
+//					else
+//						if( bitTest2( n, 1 ) )
+//							if( bitTest2( n, 2 ) )
+//								return 2;
+//							else
+//								return 1;
+//						else
+//							return 0;
+//		else
+//			return 31;
+//	}
+
+
+		public static int bitLen( int n ) {
+		return n > 0 ?
+			n >= 1 << 15 ?
+				n >= 1 << 23 ?
+					n >= 1 << 27 ?
+						n >= 1 << 29 ?
+							n >= 1 << 30 ? 30 : 29
+						: n >= 1 << 28 ? 28 : 27
+					: n >= 1 << 25 ?
+							n >= 1 << 26 ? 26 : 25
+						: n >= 1 << 24 ? 24 : 23
+				: n >= 1 << 19 ?
+						n >= 1 << 21 ?
+							n >= 1 << 22 ? 22 : 21
+						: n >= 1 << 20 ? 20 : 19
+					: n >= 1 << 17 ?
+							n >= 1 << 18 ? 18 : 17
+						: n >= 1 << 16 ? 16 : 15
+			: n >= 1 << 7 ?
+					n >= 1 << 11 ?
+						n >= 1 << 13 ?
+							n >= 1 << 14 ? 14 : 13
+						: n >= 1 << 12 ? 12 : 11
+					: n >= 1 << 9 ?
+							n >= 1 << 10 ? 10 : 9
+						: n >= 1 << 8 ? 8 : 7
+				: n >= 1 << 3 ?
+						n >= 1 << 5 ?
+							n >= 1 << 6 ? 6 : 5
+						: n >= 1 << 4 ? 4 : 3
+					: n >= 1 << 1 ?
+							n >= 1 << 2 ? 2 : 1
+						: 0
+		: 31;
+	}
+
+		public static int bitLenFor( int n ) {
+			if( n < 0 )
+				return 31;
+			if( (n & 1 << 30) != 0 )
+				return 30;
+			int l = 31;
+			int r = 0;
+			int mid;
+			while( true ) {
+				if( l - r <= 1 )
+					return n >= 1 << l ? l : r;
+				if( n >= 1 << (mid = (l+r)/2) )
+					r = mid;
+				else
+					l = mid - 1;
+			}
+		}
+
+	public static boolean bitTest2( int n, int i ) {
+		return (n >= (1 << i));
+	}
+
+	public static boolean bitTest( int n, int i ) {
+		return ((n & (1 << i)) != 0);
+	}
+
+	public static int maxNumber( int bits ) {
+		int sum = 0;
+		for( int i = 0; i <= bits; ++i )
+			sum += 1 << i;
+		return sum;
+	}
+
+	public static void main( String[] args ) {
+
+		for( int i = 0; i <= 31; i++ )
+			System.out.println( bitLen( maxNumber( i ) ) + " soll sein: " + i + " --- " + bitLenFor( maxNumber( i ) ) );
+
+		System.out.println();
+		for( int i = 0; i <= 31; i++ )
+			System.out.println( bitLen( 1 << i ) + " soll sein: " + i + " --- " + bitLenFor( ( 1 << i ) ) );
+
+		System.out.println();
+		for( int i = 1; i <= 32; i++ )
+			System.out.println( bitLen( (1 << i) - 1 ) + " soll sein: " + (i - 1) + " --- " + bitLenFor( ( 1 << i ) - i ) );
 	}
 }
+
+
+

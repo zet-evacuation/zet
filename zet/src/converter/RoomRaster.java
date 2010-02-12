@@ -147,27 +147,27 @@ public class RoomRaster<T extends RoomRasterSquare> extends Raster<T, Room> {
 			for (Edge barrierEdge : barrier.getEdges ()) {
 
 				// Für über der Kante liegende Rastersquares den Übergang nach unten sperren.
-				List<T> squares = util.ConversionTools.getSquaresAboveEdge (barrierEdge, this);
+				List<T> squares = converter.RasterTools.getSquaresAboveEdge (barrierEdge, this);
 				for (T square : squares) {
-					square.blockDirection (Direction.DOWN);
+					square.blockDirection (Direction.Down);
 				}
 
 				// Für unter der Kante liegende Rastersquares den Übergang nach oben sperren.
-				squares = util.ConversionTools.getSquaresBelowEdge (barrierEdge, this);
+				squares = converter.RasterTools.getSquaresBelowEdge (barrierEdge, this);
 				for (T square : squares) {
-					square.blockDirection (Direction.UP);
+					square.blockDirection (Direction.Top);
 				}
 
 				// Für links von der Kante liegende Rastersquares den Übergang nach rechts sperren.
-				squares = util.ConversionTools.getSquaresLeftOfEdge (barrierEdge, this);
+				squares = converter.RasterTools.getSquaresLeftOfEdge (barrierEdge, this);
 				for (T square : squares) {
-					square.blockDirection (Direction.RIGHT);
+					square.blockDirection (Direction.Right);
 				}
 
 				// Für rechts von der Kante liegende Rastersquares den Übergang nach links sperren.
-				squares = util.ConversionTools.getSquaresRightOfEdge (barrierEdge, this);
+				squares = converter.RasterTools.getSquaresRightOfEdge (barrierEdge, this);
 				for (T square : squares) {
-					square.blockDirection (Direction.LEFT);
+					square.blockDirection (Direction.Left);
 				}
 			}
 		}
@@ -205,7 +205,7 @@ public class RoomRaster<T extends RoomRasterSquare> extends Raster<T, Room> {
 		while (itEd.hasNext()){
 			Edge e = itEd.next();
 			
-			List<T> squaresAlongE = util.ConversionTools.getSquaresAlongEdge(e, this);
+			List<T> squaresAlongE = converter.RasterTools.getSquaresAlongEdge(e, this);
 			for (T square : squaresAlongE){				
 				if (stair.contains(square.getSquare())){
 					result.add(square);
@@ -226,12 +226,12 @@ public class RoomRaster<T extends RoomRasterSquare> extends Raster<T, Room> {
 
 				if (isValid (column - 1, row - 1)) {
 					temp = getSquare (column - 1, row - 1);
-					if (temp.isStair () && !akt.isBlocked (Direction.UPPER_LEFT)) {//Richtung UPPER_LEFT
+					if (temp.isStair () && !akt.isBlocked (Direction.TopLeft)) {//Richtung TopLeft
 						if (akt.getStairPotential () < temp.getStairPotential ()) {
-							akt.setLevel (Direction.UPPER_LEFT, Level.HIGHER);
+							akt.setLevel (Direction.TopLeft, Level.Higher);
 						} else {
 							if (akt.getStairPotential () > temp.getStairPotential ()) {
-								akt.setLevel (Direction.UPPER_LEFT, Level.LOWER);
+								akt.setLevel (Direction.TopLeft, Level.Lower);
 							}
 						}
 					}
@@ -239,12 +239,12 @@ public class RoomRaster<T extends RoomRasterSquare> extends Raster<T, Room> {
 
 				if (isValid (column, row - 1)) {
 					temp = getSquare (column, row - 1);
-					if (temp.isStair () && !akt.isBlocked (Direction.UP)) {//Richtung UP
+					if (temp.isStair () && !akt.isBlocked (Direction.Top)) {//Richtung Top
 						if (akt.getStairPotential () < temp.getStairPotential ()) {
-							akt.setLevel (Direction.UP, Level.HIGHER);
+							akt.setLevel (Direction.Top, Level.Higher);
 						} else {
 							if (akt.getStairPotential () > temp.getStairPotential ()) {
-								akt.setLevel (Direction.UP, Level.LOWER);
+								akt.setLevel (Direction.Top, Level.Lower);
 							}
 						}
 					}
@@ -252,12 +252,12 @@ public class RoomRaster<T extends RoomRasterSquare> extends Raster<T, Room> {
 
 				if (isValid (column + 1, row - 1)) {
 					temp = getSquare (column + 1, row - 1);
-					if (temp.isStair () && !akt.isBlocked (Direction.UPPER_RIGHT)) {//Richtung UPPER_RIGHT
+					if (temp.isStair () && !akt.isBlocked (Direction.TopRight)) {//Richtung TopRight
 						if (akt.getStairPotential () < temp.getStairPotential ()) {
-							akt.setLevel (Direction.UPPER_RIGHT, Level.HIGHER);
+							akt.setLevel (Direction.TopRight, Level.Higher);
 						} else {
 							if (akt.getStairPotential () > temp.getStairPotential ()) {
-								akt.setLevel (Direction.UPPER_RIGHT, Level.LOWER);
+								akt.setLevel (Direction.TopRight, Level.Lower);
 							}
 						}
 					}
@@ -265,12 +265,12 @@ public class RoomRaster<T extends RoomRasterSquare> extends Raster<T, Room> {
 
 				if (isValid (column - 1, row)) {
 					temp = getSquare (column - 1, row);
-					if (temp.isStair () && !akt.isBlocked (Direction.LEFT)) {//Richtung LEFT
+					if (temp.isStair () && !akt.isBlocked (Direction.Left)) {//Richtung Left
 						if (akt.getStairPotential () < temp.getStairPotential ()) {
-							akt.setLevel (Direction.LEFT, Level.HIGHER);
+							akt.setLevel (Direction.Left, Level.Higher);
 						} else {
 							if (akt.getStairPotential () > temp.getStairPotential ()) {
-								akt.setLevel (Direction.LEFT, Level.LOWER);
+								akt.setLevel (Direction.Left, Level.Lower);
 							}
 						}
 					}
@@ -278,12 +278,12 @@ public class RoomRaster<T extends RoomRasterSquare> extends Raster<T, Room> {
 
 				if (isValid (column + 1, row)) {
 					temp = getSquare (column + 1, row);
-					if (temp.isStair () && !akt.isBlocked (Direction.RIGHT)) {//Richtung RIGHT
+					if (temp.isStair () && !akt.isBlocked (Direction.Right)) {//Richtung Right
 						if (akt.getStairPotential () < temp.getStairPotential ()) {
-							akt.setLevel (Direction.RIGHT, Level.HIGHER);
+							akt.setLevel (Direction.Right, Level.Higher);
 						} else {
 							if (akt.getStairPotential () > temp.getStairPotential ()) {
-								akt.setLevel (Direction.RIGHT, Level.LOWER);
+								akt.setLevel (Direction.Right, Level.Lower);
 							}
 						}
 					}
@@ -291,12 +291,12 @@ public class RoomRaster<T extends RoomRasterSquare> extends Raster<T, Room> {
 
 				if (isValid (column - 1, row + 1)) {
 					temp = getSquare (column - 1, row + 1);
-					if (temp.isStair () && !akt.isBlocked (Direction.LOWER_LEFT)) {//Richtung LOWER_LEFT
+					if (temp.isStair () && !akt.isBlocked (Direction.DownLeft)) {//Richtung DownLeft
 						if (akt.getStairPotential () < temp.getStairPotential ()) {
-							akt.setLevel (Direction.LOWER_LEFT, Level.HIGHER);
+							akt.setLevel (Direction.DownLeft, Level.Higher);
 						} else {
 							if (akt.getStairPotential () > temp.getStairPotential ()) {
-								akt.setLevel (Direction.LOWER_LEFT, Level.LOWER);
+								akt.setLevel (Direction.DownLeft, Level.Lower);
 							}
 						}
 					}
@@ -304,12 +304,12 @@ public class RoomRaster<T extends RoomRasterSquare> extends Raster<T, Room> {
 
 				if (isValid (column, row + 1)) {
 					temp = getSquare (column, row + 1);
-					if (temp.isStair () && !akt.isBlocked (Direction.DOWN)) {//Richtung DOWN
+					if (temp.isStair () && !akt.isBlocked (Direction.Down)) {//Richtung Down
 						if (akt.getStairPotential () < temp.getStairPotential ()) {
-							akt.setLevel (Direction.DOWN, Level.HIGHER);
+							akt.setLevel (Direction.Down, Level.Higher);
 						} else {
 							if (akt.getStairPotential () > temp.getStairPotential ()) {
-								akt.setLevel (Direction.DOWN, Level.LOWER);
+								akt.setLevel (Direction.Down, Level.Lower);
 							}
 						}
 					}
@@ -317,12 +317,12 @@ public class RoomRaster<T extends RoomRasterSquare> extends Raster<T, Room> {
 
 				if (isValid (column + 1, row - 1)) {
 					temp = getSquare (column + 1, row - 1);
-					if (temp.isStair () && !akt.isBlocked (Direction.LOWER_RIGHT)) {//Richtung LOWER_RIGHT
+					if (temp.isStair () && !akt.isBlocked (Direction.DownRight)) {//Richtung DownRight
 						if (akt.getStairPotential () < temp.getStairPotential ()) {
-							akt.setLevel (Direction.LOWER_RIGHT, Level.HIGHER);
+							akt.setLevel (Direction.DownRight, Level.Higher);
 						} else {
 							if (akt.getStairPotential () > temp.getStairPotential ()) {
-								akt.setLevel (Direction.LOWER_RIGHT, Level.LOWER);
+								akt.setLevel (Direction.DownRight, Level.Lower);
 							}
 						}
 					}

@@ -300,7 +300,7 @@ public abstract class Cell implements Comparable<Cell> {
 	/**
 	 * Returns the level difference between this cell and the cell 
 	 * at the relative position <code>relPosition</code>.
-	 * If the level has never been set explicitly, EQUAL is returned.
+	 * If the level has never been set explicitly, Equal is returned.
 	 * @param direction The square in this direction is considered.
 	 * @return the level of the square in direction <code>direction</code> (higher, equal or lower).
 	 */
@@ -308,7 +308,7 @@ public abstract class Cell implements Comparable<Cell> {
 		if( levels.containsKey( direction ) ) {
 			return levels.get( direction );
 		} else {
-			return Level.EQUAL;
+			return Level.Equal;
 		}
 	}
 
@@ -388,10 +388,10 @@ public abstract class Cell implements Comparable<Cell> {
 				// Test again for the diagonal directions. if next tu the position an individual stands. than this direction is removed!
 				boolean add = true;
 				switch( direction ) {
-					case LOWER_LEFT:
-					case LOWER_RIGHT:
-					case UPPER_LEFT:
-					case UPPER_RIGHT:
+					case DownLeft:
+					case DownRight:
+					case TopLeft:
+					case TopRight:
 						boolean f1 = false;
 						boolean f2 = false;
 //try{

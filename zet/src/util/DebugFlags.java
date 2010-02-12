@@ -25,7 +25,7 @@ public class DebugFlags {
 	public final static boolean NODECREATION = false;
 	public final static boolean NODECREATIONSMALL = false;
 	public final static boolean GRAPH_DOORS = false;
-	public final static boolean CONVERTING = false;
+	//public final static boolean CONVERTING = false;
 	// Switch output for earliest arrival transshipment on or off.
 	//public final static boolean TEST = MEL && false;
 	// Switch short output for earliest arrival transshipment on or off.

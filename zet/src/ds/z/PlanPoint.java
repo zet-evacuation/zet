@@ -6,7 +6,7 @@
  *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
  * GNU General Public License for more details.
  *
  * You should have received a copy of the GNU General Public License
@@ -29,6 +29,7 @@ import java.util.ArrayList;
 
 import java.util.List;
 import de.tu_berlin.math.coga.common.localization.Localization;
+import converter.RasterTools;
 import util.ConversionTools;
 
 /**
@@ -93,7 +94,7 @@ public class PlanPoint extends Point {
 	 * @param x the {@code x}-coordinate of the point
 	 * @param y the {@code y}-coordinate of the point
 	 * @see #setLocationMeter( double, double )
-	 * @see util.ConversionTools#floatToInt( double )
+	 * @see util.RasterTools#floatToInt( double )
 	 */
 	public PlanPoint( double x, double y ) {
 		super();

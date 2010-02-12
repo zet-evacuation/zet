@@ -28,10 +28,10 @@ import util.Direction;
 
 public class GLCell extends AbstractDrawable<GLCell, GLCellControl, GLCellControl> {
 	// Vorlaeufige Konstanten bis Verwaltungsklasse fertig
-	private static GLVector ul = null;	// upper left
-	private static GLVector ur;	// upper right
-	private static GLVector ll;	// lower left
-	private static GLVector lr;	// lower right
+	private static GLVector ul = null;	// upper Left
+	private static GLVector ur;	// upper Right
+	private static GLVector ll;	// lower Left
+	private static GLVector lr;	// lower Right
 	protected GLColor color;
 	private GLColor defaultColor;
 	protected static GLColor wallColor = VisualizationOptionManager.getCellWallColor();
@@ -84,13 +84,13 @@ public class GLCell extends AbstractDrawable<GLCell, GLCellControl, GLCellContro
 			boolean lighting = gl.glIsEnabled( GL.GL_LIGHTING );
 			gl.glBegin( GL.GL_QUADS );
 			gl.glNormal3d( 0, 0, 1 );
-			getControl().mixColorWithNeighbours( Direction.UPPER_LEFT ).performGL( gl, lighting );
+			getControl().mixColorWithNeighbours( Direction.TopLeft ).performGL( gl, lighting );
 			ul.draw( drawable );
-			getControl().mixColorWithNeighbours( Direction.UPPER_RIGHT ).performGL( gl, lighting );
+			getControl().mixColorWithNeighbours( Direction.TopRight ).performGL( gl, lighting );
 			ur.draw( drawable );
-			getControl().mixColorWithNeighbours( Direction.LOWER_LEFT ).performGL( gl, lighting );
+			getControl().mixColorWithNeighbours( Direction.DownLeft ).performGL( gl, lighting );
 			lr.draw( drawable );
-			getControl().mixColorWithNeighbours( Direction.LOWER_RIGHT ).performGL( gl, lighting );
+			getControl().mixColorWithNeighbours( Direction.DownRight ).performGL( gl, lighting );
 			ll.draw( drawable );
 			gl.glEnd();
 		} else {
