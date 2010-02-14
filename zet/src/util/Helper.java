@@ -83,44 +83,53 @@ public final class Helper {
 	public final static boolean isBetween( char value, char lower, char upper ) {
 		return value >= lower && value <= upper;
 	}
-	private static long currentN;
 
-//	public long factorial( int n ) {
-//		if( n < 0 )
-//			throw new java.lang.IllegalArgumentException( ": n >= 0 required, but was " + n );
-//		if( n < 2 )
-//			return 1;
-//		long p = 1;
-//
-//		long r = 1;
-//		currentN = 1;
-//
-//		int h = 0, shift = 0, high = 1;
-//		int log2n = (int)Math.floor( Math.log( 2 ) ); // Xmath.FloorLog2( n );
-//
-//		while(h != n) {
-//			shift += h;
-//			h = n >> log2n--;
-//			int len = high;
-//			high = (h - 1) | 1;
-//			len = (high - len) / 2;
-//
-//			if( len > 0 ) {
-//				p *= Product( len );
-//				r *= p;
-//			}
-//		}
-//		return r << shift;
-//	}
+	private static long N;
+
+	/**
+	 * Computes the factorial of a number.
+	 * @param n
+	 * @return
+	 */
+	public static long factorial( int n ) {
+		if( n < 0 )
+			throw new IllegalArgumentException( "n must not be at least zero." );
+		if( n < 2 )
+			return 1;
+
+		long p = 1;
+		long r = 1;
+		N = 1;
+
+		int log2n = 31 - Integer.numberOfLeadingZeros( n );
+		int h = 0, shift = 0, high = 1;
+
+		while( h != n ) {
+			shift += h;
+			h = n >>> log2n--;
+			int len = high;
+			high = (h & 1) == 1 ? h : h - 1;
+			len = (high - len) / 2;
+
+			if( len > 0 )
+				r = r * (p *= product( len ));
+		}
+		return r << shift;
+	}
+
+	/**
+	 * Private helping method used to compute the factorial.
+	 * @param n
+	 * @return
+	 */
 	private static long product( int n ) {
 		int m = n / 2;
 		if( m == 0 )
-			return (currentN += 2);
+			return N += 2;
 		if( n == 2 )
-			return ((currentN += 2) * (currentN += 2));
+			return (N += 2) * (N += 2);
 		return product( n - m ) * product( m );
 	}
-
 //	public static int bitLen( int n ) {
 //		if( n > 0 )
 //			if( bitTest2( n, 15 ) )
@@ -255,28 +264,37 @@ public final class Helper {
 		: 31;
 	}
 
-		public static int bitLenFor( int n ) {
-			if( n < 0 )
-				return 31;
-			if( (n & 1 << 30) != 0 )
-				return 30;
-			int l = 31;
-			int r = 0;
-			int mid;
-			while( true ) {
-				if( l - r <= 1 )
-					return n >= 1 << l ? l : r;
-				if( n >= 1 << (mid = (l+r)/2) )
-					r = mid;
-				else
-					l = mid - 1;
-			}
+	public static int bitLenFor( int n ) {
+		if( n < 0 )
+			return 31;
+		if( (n & 1 << 30) != 0 )
+			return 30;
+		int l = 31;
+		int r = 0;
+		int mid;
+		while( true ) {
+			if( l - r <= 1 )
+				return n >= 1 << l ? l : r;
+			if( n >= 1 << (mid = (l + r) / 2) )
+				r = mid;
+			else
+				l = mid - 1;
 		}
-
-	public static boolean bitTest2( int n, int i ) {
-		return (n >= (1 << i));
 	}
 
+	public static int bitLenTrivial( int n ) {
+		for( int i = 31; i >= 0; --i )
+			if( (n & 1 << i) != 0 )
+				return i;
+		return 0;
+	}
+
+	/**
+	 * Checks weather the {@code i}-th bit of a given number is set to 1.
+	 * @param n the number which is tested
+	 * @param i the bit position
+	 * @return {@code true} if the {@code i}-th bit of {@code n} is 1, {@code false} otherwise
+	 */
 	public static boolean bitTest( int n, int i ) {
 		return ((n & (1 << i)) != 0);
 	}
@@ -288,18 +306,63 @@ public final class Helper {
 		return sum;
 	}
 
+	/**
+	 * Computes the rounded down logarithm to the basis 2 of an integral number.
+	 * @param n the integral number
+	 * @return the logarithm to the basis 2 rounded down
+	 */
+	public static int log2Floor( int n ) {
+		if( n <= 0 )
+			throw new IllegalArgumentException( "n > 0 required" );
+		return bitLen( n ) - 1;
+	}
+
 	public static void main( String[] args ) {
 
-		for( int i = 0; i <= 31; i++ )
-			System.out.println( bitLen( maxNumber( i ) ) + " soll sein: " + i + " --- " + bitLenFor( maxNumber( i ) ) );
+		System.out.println( factorial( 5 ) );
 
-		System.out.println();
-		for( int i = 0; i <= 31; i++ )
-			System.out.println( bitLen( 1 << i ) + " soll sein: " + i + " --- " + bitLenFor( ( 1 << i ) ) );
 
-		System.out.println();
-		for( int i = 1; i <= 32; i++ )
-			System.out.println( bitLen( (1 << i) - 1 ) + " soll sein: " + (i - 1) + " --- " + bitLenFor( ( 1 << i ) - i ) );
+//		long count = 1 << 36;
+//
+//		long start, end;
+//		// Test für die Optimierte variante:
+//		count = 0;
+//		do {//
+//			++count;
+//			start = System.nanoTime();
+//			for( int j = 1; j < count; j++ )
+//				for( int i = 0; i < (1 << 25); ++i ) {
+//					bitLenTrivial( i );
+//				}
+//			end = System.nanoTime();
+//			System.out.println( count + " Läufe: " + (end-start) + " Nanosekunden" );
+//		} while( (end - start) < (1000000000L * 50) );
+		//long end = System.currentTimeMillis();
+
+//		long run1 = end - start;
+//		System.out.println( "Run1: " + run1 );
+
+//		start = System.currentTimeMillis();
+//		// Test für die Optimierte variante:
+//		for( int j = 1; j < count; j++ )
+//			for( int i = 0; i < (1 << 31); ++i ) {
+//				bitLenFor( i );
+//			}
+//		end = System.currentTimeMillis();
+//
+//		long run2 = end - start;
+//		System.out.println( "Run2: " + run2 );
+
+//		for( int i = 0; i <= 31; i++ )
+//			System.out.println( bitLen( maxNumber( i ) ) + " soll sein: " + i + " --- " + bitLenFor( maxNumber( i ) ) );
+//
+//		System.out.println();
+//		for( int i = 0; i <= 31; i++ )
+//			System.out.println( bitLen( 1 << i ) + " soll sein: " + i + " --- " + bitLenFor( ( 1 << i ) ) );
+//
+//		System.out.println();
+//		for( int i = 1; i <= 32; i++ )
+//			System.out.println( bitLen( (1 << i) - 1 ) + " soll sein: " + (i - 1) + " --- " + bitLenFor( ( 1 << i ) - i ) );
 	}
 }
 
