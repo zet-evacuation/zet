@@ -261,14 +261,21 @@ public final class Helper {
 					: n >= 1 << 1 ?
 							n >= 1 << 2 ? 2 : 1
 						: 0
-		: 31;
+		: (n & (1 << 31)) == 0 ? -1 : 31;
 	}
 
+		/**
+		 * This method will fail for the second representation of zero.
+		 * @param n
+		 * @return
+		 */
 	public static int bitLenFor( int n ) {
 		if( n < 0 )
 			return 31;
 		if( (n & 1 << 30) != 0 )
 			return 30;
+		if( n == 0 )
+			return -1;
 		int l = 31;
 		int r = 0;
 		int mid;
@@ -286,7 +293,11 @@ public final class Helper {
 		for( int i = 31; i >= 0; --i )
 			if( (n & 1 << i) != 0 )
 				return i;
-		return 0;
+		return n == 0 ? -1 : 0;
+	}
+
+	public static int bitLenIntern( int n ) {
+		return 31 - Integer.numberOfLeadingZeros( n );
 	}
 
 	/**
@@ -317,10 +328,25 @@ public final class Helper {
 		return bitLen( n ) - 1;
 	}
 
+	public static int bitLenT( int n ) {
+		return Integer.highestOneBit( n );
+	}
+
+	private static void bitLenTest( int n, int r ) {
+		System.out.println( n + " soll sein: " + r + " - for: " + bitLenFor( n ) + " - trivial:" + bitLenTrivial( n ) + " - intern: " + bitLenIntern( n ) + " - opt:" + bitLen( n ) + " - binary: " + Integer.toBinaryString( n ) );
+	}
+
 	public static void main( String[] args ) {
 
-		System.out.println( factorial( 5 ) );
-
+		// Fakultätstest
+		int i = 0;
+		long last;
+		long res = -1;
+		do {
+			last = res;
+			res = factorial( i++ );
+			System.out.println( "i = " + i + ": " + res );
+		} while( last < res+1 );
 
 //		long count = 1 << 36;
 //
@@ -332,37 +358,23 @@ public final class Helper {
 //			start = System.nanoTime();
 //			for( int j = 1; j < count; j++ )
 //				for( int i = 0; i < (1 << 25); ++i ) {
-//					bitLenTrivial( i );
+//					bitLenFor( i );
 //				}
 //			end = System.nanoTime();
 //			System.out.println( count + " Läufe: " + (end-start) + " Nanosekunden" );
-//		} while( (end - start) < (1000000000L * 50) );
-		//long end = System.currentTimeMillis();
+//		} while( count <= 30 );
 
-//		long run1 = end - start;
-//		System.out.println( "Run1: " + run1 );
-
-//		start = System.currentTimeMillis();
-//		// Test für die Optimierte variante:
-//		for( int j = 1; j < count; j++ )
-//			for( int i = 0; i < (1 << 31); ++i ) {
-//				bitLenFor( i );
-//			}
-//		end = System.currentTimeMillis();
-//
-//		long run2 = end - start;
-//		System.out.println( "Run2: " + run2 );
-
+		// Tests
 //		for( int i = 0; i <= 31; i++ )
-//			System.out.println( bitLen( maxNumber( i ) ) + " soll sein: " + i + " --- " + bitLenFor( maxNumber( i ) ) );
+//			bitLenTest( maxNumber( i ), i );
 //
 //		System.out.println();
 //		for( int i = 0; i <= 31; i++ )
-//			System.out.println( bitLen( 1 << i ) + " soll sein: " + i + " --- " + bitLenFor( ( 1 << i ) ) );
+//			bitLenTest( 1 << i , i );
 //
 //		System.out.println();
 //		for( int i = 1; i <= 32; i++ )
-//			System.out.println( bitLen( (1 << i) - 1 ) + " soll sein: " + (i - 1) + " --- " + bitLenFor( ( 1 << i ) - i ) );
+//			bitLenTest( (1 << i ) - 1, i-1 );
 	}
 }
 
