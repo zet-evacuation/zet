@@ -75,6 +75,12 @@ public class PrimeSieve {
 
 	}
 
+	public void compute2 () {
+		boolean[] working = new boolean[n];
+
+
+	}
+
 	public static void main(String[] args) {
 		PrimeSieve p = new PrimeSieve(113);
 		p.compute();
