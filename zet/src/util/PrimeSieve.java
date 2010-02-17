@@ -35,7 +35,7 @@ public class PrimeSieve {
 		if( n < 17 )
 			return 6;
 
-		return (int) Math.floor( n / (Math.log10( n ) - 1.5) );
+		return (int) Math.floor( n /(Math.log10( n )) - 1.5);
 	}
 
 	public void compute() {
@@ -75,20 +75,59 @@ public class PrimeSieve {
 
 	}
 
-	public void compute2 () {
-		boolean[] working = new boolean[n];
+	public void computeADWopt () {
+		boolean[] working = new boolean[n+1];
+		int i = 0;
+		int k = 0;
+try {
+		for(  i = 2; i <= Math.floor( Math.sqrt(n) ); ++i ){
+			for( k = n/i; k >= i; --k ) {
+				working[i*k] = true;
+			}
+		}
+} catch (Exception e ) {
+	int t = 3;
+}
 
+		int count = 0;
+		for( i = 2; i < n; ++i ) {
+			if( !working[i] )
+				primes[count++] = i;
+		}
+		primeCount = count;
 
-	}
+}
 
 	public static void main(String[] args) {
-		PrimeSieve p = new PrimeSieve(113);
-		p.compute();
+		int n = 1;
+		for( int i = 1; i <= 20; ++i ) {
+			n *= 5;
+			System.out.println( "n = " + n );
+  		System.out.println( "optimiertes PrimeSieve" );
+			System.gc();
+			PrimeSieve p = new PrimeSieve( n );
+			long start = System.nanoTime();
+			p.compute();
+			long end = System.nanoTime();
+			System.out.println( end - start );
+	//		for( int i = 0; i < p.primeCount; ++i ) {
+	//			System.out.println( p.primes[i] );
+	//		}
 
-		for( int i = 0; i < p.primeCount; ++i ) {
-			System.out.println( p.primes[i] );
+
+			System.out.println( "OptAlgo3" );
+			p = new PrimeSieve( n );
+			System.gc();
+			start = System.nanoTime();
+			p.computeADWopt();
+			end = System.nanoTime();
+			System.out.println( end - start );
 		}
-		System.out.println( p.primes );
+
+//		for( int i = 0; i < p.primeCount; ++i ) {
+//			System.out.println( p.primes[i] );
+//		}
+
 
 	}
 
