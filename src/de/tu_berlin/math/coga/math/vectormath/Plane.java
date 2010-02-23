@@ -18,7 +18,7 @@
  * Erstellt 03.05.2008, 16:38:42
  */
 
-package util.vectormath;
+package de.tu_berlin.math.coga.math.vectormath;
 
 /**
  * Reprensentates a plane in three dimensional space.

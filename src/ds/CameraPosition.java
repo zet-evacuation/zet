@@ -5,7 +5,7 @@
 
 package ds;
 
-import util.vectormath.Vector3;
+import de.tu_berlin.math.coga.math.vectormath.Vector3;
 
 /**
  * The class <code>CameraPosition</code> stores a camera position. The position

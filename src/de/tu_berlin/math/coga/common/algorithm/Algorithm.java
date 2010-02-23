@@ -20,7 +20,7 @@
  */
 package de.tu_berlin.math.coga.common.algorithm;
 
-import algo.graph.util.MillisecondTimeFormatter;
+import de.tu_berlin.math.coga.common.util.Formatter;
 import java.util.LinkedHashSet;
 import java.util.LinkedList;
 import java.util.List;
@@ -230,7 +230,7 @@ public abstract class Algorithm<Problem, Solution> implements Runnable {
      */
     public final String getRuntimeAsString() {
         if (state == State.SOLVED || state == State.SOLVING_FAILED) {
-            return MillisecondTimeFormatter.formatTime(runtime);
+            return Formatter.formatTimeMilliseconds(runtime);
         } else {
             throw new IllegalStateException("The algorithm has not terminated yet. Please call run() first and wait for its termination.");
         }

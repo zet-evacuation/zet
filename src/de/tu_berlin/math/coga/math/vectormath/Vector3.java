@@ -17,7 +17,7 @@
  * Vector.java
  * Created on 30.01.2008, 00:54:29
  */
-package util.vectormath;
+package de.tu_berlin.math.coga.math.vectormath;
 
 import ds.z.PlanPoint;
 import java.text.NumberFormat;
