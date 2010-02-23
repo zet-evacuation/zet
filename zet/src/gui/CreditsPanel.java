@@ -1,4 +1,4 @@
-/* zet evacuation tool copyright (c) 2007-09 zet evacuation team
+/* zet evacuation tool copyright (c) 2007-10 zet evacuation team
  *
  * This program is free software; you can redistribute it and/or
  * as published by the Free Software Foundation; either version 2
@@ -28,7 +28,7 @@ import opengl.helper.TextureFontStrings;
 import opengl.helper.Texture;
 import opengl.helper.TextureFont;
 import opengl.helper.TextureManager;
-import util.vectormath.Vector3;
+import de.tu_berlin.math.coga.math.vectormath.Vector3;
 
 /**
  * An OpenGL-panel displaying some textual copyright information about the zet

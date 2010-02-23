@@ -5,8 +5,8 @@
 
 package de.tu_berlin.math.coga.rndutils.distribution.discrete;
 
+import de.tu_berlin.math.coga.math.Combinatorics;
 import de.tu_berlin.math.coga.rndutils.RandomUtils;
-import de.tu_berlin.math.coga.rndutils.Util;
 import de.tu_berlin.math.coga.rndutils.distribution.DiscreteDistribution;
 
 /**
@@ -68,7 +68,7 @@ public class BinomialDistribution extends DiscreteDistribution {
 	public double getProbability( int k ) {
 		double a = Math.pow( p, k );
 		double b = Math.pow( q, n-k );
-		long c = Util.bink( n, k );
+		long c = Combinatorics.bink( n, k );
 		return a * b * c;
 	}
 

@@ -1,4 +1,4 @@
-/* zet evacuation tool copyright (c) 2007-09 zet evacuation team
+/* zet evacuation tool copyright (c) 2007-10 zet evacuation team
  *
  * This program is free software; you can redistribute it and/or
  * as published by the Free Software Foundation; either version 2
@@ -25,7 +25,7 @@ import javax.media.opengl.GLAutoDrawable;
 import javax.media.opengl.glu.GLU;
 import opengl.drawingutils.GLColor;
 import opengl.framework.abs.AbstractDrawable;
-import util.vectormath.Vector3;
+import de.tu_berlin.math.coga.math.vectormath.Vector3;
 
 //public class GLEdge extends AbstractDrawable<CullingShapeCube, GLEdge, GLEdgeControl, GLEdgeControl> {
 public class GLEdge extends AbstractDrawable<GLEdge, GLEdgeControl, GLEdgeControl> {

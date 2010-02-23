@@ -1,4 +1,4 @@
-/* zet evacuation tool copyright (c) 2007-09 zet evacuation team
+/* zet evacuation tool copyright (c) 2007-10 zet evacuation team
  *
  * This program is free software; you can redistribute it and/or
  * as published by the Free Software Foundation; either version 2
@@ -375,8 +375,8 @@ public class ZETMain {
 	 * @param verbose indicates wheather the default output is also used, or not
 	 */
 	public static void setUpLog( boolean log, boolean err, boolean auto, boolean verbose ) {
-		log=true;
-		err=true;
+		log = true;
+		err = true;
 		PrintStream errStream = System.err;
 		PrintStream logStream = System.out;
 		Calendar cal = Calendar.getInstance();

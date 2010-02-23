@@ -1,4 +1,4 @@
-/* zet evacuation tool copyright (c) 2007-09 zet evacuation team
+/* zet evacuation tool copyright (c) 2007-10 zet evacuation team
  *
  * This program is free software; you can redistribute it and/or
  * as published by the Free Software Foundation; either version 2
@@ -20,6 +20,9 @@
  */
 package gui.visualization;
 
+import de.tu_berlin.math.coga.common.localization.Localization;
+import de.tu_berlin.math.coga.common.util.Formatter;
+import de.tu_berlin.math.coga.math.vectormath.Vector3;
 import ds.PropertyContainer;
 import event.EventListener;
 import event.EventServer;
@@ -44,7 +47,6 @@ import javax.media.opengl.GL;
 import javax.media.opengl.GLAutoDrawable;
 import javax.media.opengl.GLCapabilities;
 import javax.media.opengl.glu.GLUquadric;
-import de.tu_berlin.math.coga.common.localization.Localization;
 import java.io.PrintStream;
 import opengl.drawingutils.GLColor;
 import opengl.helper.Frustum;
@@ -52,7 +54,6 @@ import opengl.helper.Texture;
 import opengl.helper.TextureFont;
 import opengl.helper.TextureFontStrings;
 import opengl.helper.TextureManager;
-import util.vectormath.Vector3;
 
 /**
  * Implements the {@code OpenGL} visualization on a JOGL canvas. The class initializes
@@ -483,13 +484,13 @@ public class Visualization extends AbstractVisualization implements EventListene
 				minimalFrameCountCellularAutomaton--;
 				if( showTimestepCellularAutomaton ) {
 					font.print( 0, this.getHeight() - (row++) * fontSize, loc.getString( "gui.visualization.fps.simulationFinished" ) );
-					font.print( 0, this.getHeight() - (row++) * fontSize, loc.getString( "gui.visualization.fps.simulationNeeded" ) + " " + secToMin( control.getCaStep() * control.getCaSecondsPerStep() ) );
+					font.print( 0, this.getHeight() - (row++) * fontSize, loc.getString( "gui.visualization.fps.simulationNeeded" ) + " " + Formatter.secToMin( control.getCaStep() * control.getCaSecondsPerStep() ) );
 				}
 			} else {
 				minimalFrameCountCellularAutomaton = 2;
 				if( showTimestepCellularAutomaton ) {
 					font.print( 0, this.getHeight() - (row++) * fontSize, loc.getString( "gui.visualization.fps.simulationStep" ) + " " + loc.getFloatConverter().format( control.getCaStep() ) );
-					font.print( 0, this.getHeight() - (row++) * fontSize, loc.getString( "gui.visualization.fps.simulationTime" ) + " " + secToMin( control.getCaStep() * control.getCaSecondsPerStep() ) );
+					font.print( 0, this.getHeight() - (row++) * fontSize, loc.getString( "gui.visualization.fps.simulationTime" ) + " " + Formatter.secToMin( control.getCaStep() * control.getCaSecondsPerStep() ) );
 				}
 			}
 			row++;
@@ -499,13 +500,13 @@ public class Visualization extends AbstractVisualization implements EventListene
 				minimalFrameCountGraph--;
 				if( showTimestepGraph ) {
 					font.print( 0, this.getHeight() - (row++) * fontSize, loc.getString( "gui.visualization.fps.graphFinished" ) );
-					font.print( 0, this.getHeight() - (row++) * fontSize, loc.getString( "gui.visualization.fps.graphNeeded" ) + " " + secToMin( control.getGraphStep() * control.getGraphSecondsPerStep() ) );
+					font.print( 0, this.getHeight() - (row++) * fontSize, loc.getString( "gui.visualization.fps.graphNeeded" ) + " " + Formatter.secToMin( control.getGraphStep() * control.getGraphSecondsPerStep() ) );
 				}
 			} else {
 				minimalFrameCountGraph = 2;
 				if( showTimestepGraph ) {
 					font.print( 0, this.getHeight() - (row++) * fontSize, loc.getString( "gui.visualization.fps.graphStep" ) + " " + loc.getFloatConverter().format( control.getGraphStep() ) );
-					font.print( 0, this.getHeight() - (row++) * fontSize, loc.getString( "gui.visualization.fps.graphTime" ) + " " + secToMin( control.getGraphStep() * control.getGraphSecondsPerStep() ) );
+					font.print( 0, this.getHeight() - (row++) * fontSize, loc.getString( "gui.visualization.fps.graphTime" ) + " " + Formatter.secToMin( control.getGraphStep() * control.getGraphSecondsPerStep() ) );
 				}
 			}
 			row++;
@@ -526,19 +527,6 @@ public class Visualization extends AbstractVisualization implements EventListene
 		gl.glDisable( GL.GL_TEXTURE_2D );
 		gl.glDisable( GL.GL_BLEND );
 		this.resetProjection();
-	}
-
-	/**
-	 * Helper method that converts an double seconds value in an string
-	 * representing minutes and seconds.
-	 * @param sec
-	 * @return a string representing the time in minutes
-	 */
-	final private String secToMin( double sec ) {
-		int min = (int)Math.floor( sec / 60 );
-		int secs = (int)Math.floor( sec - (60 * min) );
-		String ssecs = secs < 10 ? "0" + Integer.toString( secs ) : Integer.toString( secs );
-		return ssecs.length() >= 2 ? Integer.toString( min ) + ":" + ssecs.substring( 0, 2 ) + " Min" : Integer.toString( min ) + ":" + ssecs + " Min";
 	}
 
 	/**

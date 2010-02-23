@@ -1,4 +1,4 @@
-/* zet evacuation tool copyright (c) 2007-09 zet evacuation team
+/* zet evacuation tool copyright (c) 2007-10 zet evacuation team
  *
  * This program is free software; you can redistribute it and/or
  * as published by the Free Software Foundation; either version 2
@@ -6,13 +6,14 @@
  *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
  * GNU General Public License for more details.
  *
  * You should have received a copy of the GNU General Public License
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
+
 /*
  * VideoOptions.java
  * Created on 8. November 2008, 20:45
@@ -54,6 +55,7 @@ import javax.swing.event.ListSelectionListener;
 import javax.swing.table.AbstractTableModel;
 import de.tu_berlin.math.coga.common.localization.Localization;
 import opengl.helper.TextureFontStrings;
+import de.tu_berlin.math.coga.common.util.Formatter;
 import util.Helper;
 
 /**
@@ -300,7 +302,7 @@ public class VideoOptions extends javax.swing.JDialog {
 
 		txtBitrate.addActionListener( new ActionListener() {
 			public void actionPerformed( ActionEvent e ) {
-				lblEstimatedFilesize.setText( " (" + Helper.bitToMaxFilesizeUnit( estimatedTime * 1000 * getBitrate() ) + ")" );
+				lblEstimatedFilesize.setText( " (" + Formatter.bitToMaxFilesizeUnit( estimatedTime * 1000 * getBitrate() ) + ")" );
 			}
 		} );
 		txtBitrate.addFocusListener( new FocusListener() {
@@ -308,7 +310,7 @@ public class VideoOptions extends javax.swing.JDialog {
 			}
 
 			public void focusLost( FocusEvent e ) {
-				lblEstimatedFilesize.setText( " (" + Helper.bitToMaxFilesizeUnit( estimatedTime * 1000 * getBitrate() ) + ")" );
+				lblEstimatedFilesize.setText( " (" + Formatter.bitToMaxFilesizeUnit( estimatedTime * 1000 * getBitrate() ) + ")" );
 			}
 		} );
 
@@ -449,7 +451,7 @@ public class VideoOptions extends javax.swing.JDialog {
 	 */
 	public void setBitrate( int bitrate ) {
 		txtBitrate.setText( Integer.toString( bitrate ) );
-		lblEstimatedFilesize.setText( " (" + Helper.bitToMaxFilesizeUnit( estimatedTime * 1000 * getBitrate() ) + ")" );
+		lblEstimatedFilesize.setText( " (" + Formatter.bitToMaxFilesizeUnit( estimatedTime * 1000 * getBitrate() ) + ")" );
 	}
 
 	/**
