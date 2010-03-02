@@ -163,7 +163,7 @@ public class GLEdge extends AbstractDrawable<GLEdge, GLEdgeControl, GLEdgeContro
 	}
 
 	/**
-	 * Draws the flow on the edge. The edge is already drawn using the {@link #performStaticDrawing()} method.
+	 * Draws the flow on the edge. The edge is already drawn using the {@link #performStaticDrawing(javax.media.opengl.GLAutoDrawable)} method.
 	 * @param drawable the {@code OpenGL} drawable object
 	 */
 	@Override
@@ -171,13 +171,13 @@ public class GLEdge extends AbstractDrawable<GLEdge, GLEdgeControl, GLEdgeContro
 		drawFlow( drawable.getGL() );
 	}
 
+	@Override
 	/**
 	 * Draws the static structure of the edge that means the edge, if it is the first one
 	 * of the two edges. The flow is not painted.
-	 * {@see GLEdgeControl#isFirst()}
+	 * {@see GLEdgeControl#isFirstEdge()}
 	 * @param drawable the {@code OpenGL} drawable object
 	 */
-	@Override
 	public void performStaticDrawing( GLAutoDrawable drawable ) {
 		beginDraw( drawable );
 		edgeColor.performGL( drawable.getGL() );

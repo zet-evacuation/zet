@@ -172,7 +172,7 @@ public class JEditView extends AbstractSplitPropertyWindow<JFloorScrollPane<JFlo
 
 	/**
 	 * Initializes the editing view of ZET.
-	 * @param project the project which is displayed in the editor
+	 * @param projectControl the project which is displayed in the editor
 	 */
 	public JEditView( ZControl projectControl ) {
 		super( new JFloorScrollPane<JFloor>( new JFloor() ) );
@@ -1147,24 +1147,24 @@ public class JEditView extends AbstractSplitPropertyWindow<JFloorScrollPane<JFlo
 	 *                                                                           *
 	 ****************************************************************************/
 	/**
-	 * Returns the up-to-date popup menu that is shown on all JEdges.
-	 * @return 
+	 * Returns the up-to-date popup menu that is shown on all edges.
+	 * @return the up-to-date popup menu that is shown on all edges
 	 */
 	public JPopupMenu getEdgePopup() {
 		return pupEdge;
 	}
 
 	/**
-	 * Returns the up-to-date popup menu that is shown on all JEdges' end points.
-	 * @return 
+	 * Returns the up-to-date popup menu that is shown on all edges end points.
+	 * @return the up-to-date popup menu that is shown on all edges and end points
 	 */
 	public JPopupMenu getPointPopup() {
 		return pupPoint;
 	}
 
 	/**
-	 * Returns the up-to-date popup menu that is shown on all JPolygons.
-	 * @return 
+	 * Returns the up-to-date popup menu that is shown on all {@link JPolygon}s.
+	 * @return the up-to-date popup menu that is shown on all polygons
 	 */
 	public JPopupMenu getPolygonPopup() {
 		return pupPolygon;

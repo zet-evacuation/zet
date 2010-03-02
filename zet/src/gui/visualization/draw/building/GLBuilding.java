@@ -33,7 +33,6 @@ public class GLBuilding extends AbstractDrawable<GLWall, GLBuildingControl, GLWa
 
 	/**
 	 * @param control
-	 * @param cullingShape
 	 */
 	public GLBuilding( GLBuildingControl control ) {
 		super( control );

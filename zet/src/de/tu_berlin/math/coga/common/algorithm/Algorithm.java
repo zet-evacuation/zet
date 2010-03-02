@@ -285,7 +285,7 @@ public abstract class Algorithm<Problem, Solution> implements Runnable {
     /**
      * Sets whether messages logged via the log() methods are written to
      * System.out or not.
-     * @param value whether messages logged via the log() methods are written to
+     * @param logging whether messages logged via the log() methods are written to
      * System.out or not.
      */
     public final void setLogging(boolean logging) {
@@ -406,7 +406,7 @@ public abstract class Algorithm<Problem, Solution> implements Runnable {
      * failed to solve the instance and rethrows the runtime exception that 
      * caused the premature termination of the algorithm. Subclasses can
      * override this method to change this behaviour.
-     * @param the exception that caused the termination of the algorithm.
+     * @param exception the exception that caused the termination of the algorithm.
      */
     protected void handleException(RuntimeException exception) {
         throw exception;

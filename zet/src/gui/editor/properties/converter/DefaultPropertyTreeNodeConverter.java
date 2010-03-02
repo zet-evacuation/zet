@@ -90,7 +90,7 @@ public class DefaultPropertyTreeNodeConverter implements Converter {
    * Reads a treeNode element from a XML-file.
    * @param reader
    * @param context
-   * @return
+   * @return the converted property tree node
    */
   public Object unmarshal( HierarchicalStreamReader reader, UnmarshallingContext context ) {
     String name = reader.getAttribute( "name" );

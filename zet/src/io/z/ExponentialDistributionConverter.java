@@ -25,17 +25,18 @@ import com.thoughtworks.xstream.converters.MarshallingContext;
 import com.thoughtworks.xstream.converters.UnmarshallingContext;
 import com.thoughtworks.xstream.io.HierarchicalStreamReader;
 import com.thoughtworks.xstream.io.HierarchicalStreamWriter;
+import de.tu_berlin.math.coga.rndutils.distribution.continuous.ErlangDistribution;
 import de.tu_berlin.math.coga.rndutils.distribution.continuous.ExponentialDistribution;
 
 /**
- * A converter that allows to load and store {@link ExponentialDistribtion}
+ * A converter that allows to load and store {@link ExponentialDistribution}
  * objects. It loads the parameters of the distribution as xml-attributes.
  * @author Jan-Philipp Kappmeier
  */
 public class ExponentialDistributionConverter implements Converter {
 	/**
 	 * <p>Checks wheather an object can be converted by this class, that is if it
-	 * is of the type {@link ExponentialDistribution.}</p>
+	 * is of the type {@link ExponentialDistribution}</p>
 	 * {@inheritDoc}
 	 * @param type the type of the object that is checked
 	 * @return true if this converter can convert an object of the given type
@@ -46,7 +47,7 @@ public class ExponentialDistributionConverter implements Converter {
 	}
 
 	/**
-	 * <p>Writes the attributes of the {@link HyperExponentialDistribution} to the
+	 * <p>Writes the attributes of the {@link ExponentialDistribution} to the
 	 * xml tag. Written attributes are min, max and lambda.</p>
 	 * {@inheritDoc}
 	 * @param source the source which is saved

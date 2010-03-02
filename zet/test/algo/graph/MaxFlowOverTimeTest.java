@@ -27,7 +27,6 @@ import ds.graph.Node;
 import java.util.LinkedList;
 import java.util.List;
 import org.junit.Test;
-import static org.junit.Assert.*;
 
 /**
  *

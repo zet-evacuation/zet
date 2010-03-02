@@ -31,7 +31,7 @@ public class ChangePotentialInsufficientAdvancementRule extends AbstractPotentia
 	/**
 	 * 
 	 * @param cell
-	 * @return
+	 * @return true, if the cange potential rule can be used
 	 */
 	@Override
 	public boolean executableOn( Cell cell ) {

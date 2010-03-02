@@ -29,13 +29,13 @@ import opengl.framework.abs.AbstractDrawable;
 /**
  * <p>This class draws a floor in the graph (which does not explecitly exist
  * in the graph itself). It consists of the nodes belonging to rooms on one
- * floor in a {@link ds.z.Project}.</p>
+ * floor in a {@link ds.Project}.</p>
  * <p>The nodes are stored in a display list to speed up the visualization,
- * the display list is created if {@link #performStaticDrawing()} is called.
- * During normal visualization (when {@link #performDrawing( GLAutoDrawable )} is
+ * the display list is created if {@link #performStaticDrawing(javax.media.opengl.GLAutoDrawable)} is called.
+ * During normal visualization (when {@link #performStaticDrawing(javax.media.opengl.GLAutoDrawable)} is
  * called) the display list is executed. The display list is rebuilt when some
  * settings are updated.</p>
- * @see{AbstractDrawable}
+ * @see AbstractDrawable
  * @author Jan-Philipp Kappmeier
  */
 //public class GLGraphFloor extends AbstractDrawable<CullingShapeCube, GLNode, GLGraphFloorControl, GLNodeControl> {

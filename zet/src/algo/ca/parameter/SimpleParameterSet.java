@@ -40,7 +40,7 @@ public class SimpleParameterSet extends AbstractDefaultParameterSet {
 	 * 
 	 * @param referenceCell
 	 * @param targetCell
-	 * @return
+	 * @return the potential difference between the two cells
 	 */
 	@Override
 	public double effectivePotential( Cell referenceCell, Cell targetCell ) {

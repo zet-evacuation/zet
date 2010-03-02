@@ -239,7 +239,7 @@ public class ZToCAConverter {
 	/**
 	 * When a {@link ZToCARasterContainer} is converted, a mapping between
 	 * the squares in the raster and the cells of the cellular automaton
-	 * is stored. Each time you call {@link convertRoom}, the stored mapping
+	 * is stored. Each time you call {@link #convertRoom( ZToCARoomRaster, Floor, int)}, the stored mapping
 	 * is overwritten. This method retrieves the mapping from the last 
 	 * convert-operation. 
 	 * @return The mapping that was created during the last conversion.

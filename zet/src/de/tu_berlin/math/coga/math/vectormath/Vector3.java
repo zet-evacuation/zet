@@ -105,7 +105,7 @@ public class Vector3 {
 	/**
 	 * Cross product.
 	 * @param v
-	 * @return 
+	 * @return the cross product of this vector and the vector {@code v}
 	 */
 	public Vector3 crossProduct( Vector3 v ) {
 		Vector3 result = new Vector3();
@@ -158,9 +158,9 @@ public class Vector3 {
 	}
 	
 	/**
-	 * Calculates this vector - v and puts the result in a new vector object.
-	 * @param v
-	 * @return
+	 * Computes the difference this vector - v and returns the result in a new {@code vector3} object.
+	 * @param v the vector which is subtracted
+	 * @return the result of the subtraction
 	 */
 	public Vector3 subtraction( Vector3 v ) {
 		double newx = x - v.x;
@@ -168,44 +168,46 @@ public class Vector3 {
 		double newz = z - v.z;
 		return new Vector3( newx, newy, newz );
 	}
-	
-	public void rotate( double angle, Vector3 axis ) {
-		Vector3 nVec = new Vector3();
 
-		double x = axis.x;
-		double y = axis.y;
-		double z = axis.z;
+	/**
+	 * Rotates this vector (as point) around a given axis by a given angle.
+	 * @param angle the angle by which the point is rotated
+	 * @param axis the axis
+	 */
+	public void rotate( final double angle, final Vector3 axis ) {
+		// a temporary vector
+		Vector3 tempVec = new Vector3();
 
-		// Sinus und Cosinus des Winkels
-		double cosTheta = Math.cos( angle * Math.PI / 180.0 );
-		double sinTheta = Math.sin( angle * Math.PI / 180.0 );
+		// sine and cosine of the angle
+		final double cosTheta = Math.cos( angle * Math.PI / 180.0 );
+		final double sinTheta = Math.sin( angle * Math.PI / 180.0 );
 
-		// Neue x-Position
-		nVec.x = ( cosTheta + ( 1 - cosTheta ) * x * x ) * this.x;
-		nVec.x += ( ( 1 - cosTheta ) * x * y - z * sinTheta ) * this.y;
-		nVec.x += ( ( 1 - cosTheta ) * x * z + y * sinTheta ) * this.z;
+		// new x-position
+		tempVec.x = ( cosTheta + ( 1 - cosTheta ) * axis.x * axis.x ) * this.x;
+		tempVec.x += ( ( 1 - cosTheta ) * axis.x * axis.y - axis.z * sinTheta ) * this.y;
+		tempVec.x += ( ( 1 - cosTheta ) * axis.x * axis.z + axis.y * sinTheta ) * this.z;
 
-		// Neue y-Position
-		nVec.y = ( ( 1 - cosTheta ) * x * y + z * sinTheta ) * this.x;
-		nVec.y += ( cosTheta + ( 1 - cosTheta ) * y * y ) * this.y;
-		nVec.y += ( ( 1 - cosTheta ) * y * z - x * sinTheta ) * this.z;
+		// new y-position
+		tempVec.y = ( ( 1 - cosTheta ) * axis.x * axis.y + axis.z * sinTheta ) * this.x;
+		tempVec.y += ( cosTheta + ( 1 - cosTheta ) * axis.y * axis.y ) * this.y;
+		tempVec.y += ( ( 1 - cosTheta ) * axis.y * axis.z - axis.x * sinTheta ) * this.z;
 
-		// Neue z-Position
-		nVec.z = ( ( 1 - cosTheta ) * x * z - y * sinTheta ) * this.x;
-		nVec.z += ( ( 1 - cosTheta ) * y * z + x * sinTheta ) * this.y;
-		nVec.z += ( cosTheta + ( 1 - cosTheta ) * z * z ) * this.z;
+		// new z-position
+		tempVec.z = ( ( 1 - cosTheta ) * axis.x * axis.z - axis.y * sinTheta ) * this.x;
+		tempVec.z += ( ( 1 - cosTheta ) * axis.y * axis.z + axis.x * sinTheta ) * this.y;
+		tempVec.z += ( cosTheta + ( 1 - cosTheta ) * axis.z * axis.z ) * this.z;
 
-		this.x = nVec.x;
-		this.y = nVec.y;
-		this.z = nVec.z;
+		this.x = tempVec.x;
+		this.y = tempVec.y;
+		this.z = tempVec.z;
 	}
 
 	/**
 	 * Rotates a vector around an axis.
-	 * @param angle Winkel um den rotiert werden soll
-	 * @param axis Achse um die rotiert werden soll
-	 * @param oVec Punkt der rotiert werden soll
-	 * @return
+	 * @param angle the angle by which the point is rotated
+	 * @param axis the axis around that the point is rotated
+	 * @param oVec the point that is rotated
+	 * @return the rotated vector (point)
 	 */
 	public static Vector3 rotateVector( double angle, Vector3 axis, Vector3 oVec ) {
 		Vector3 nVec = new Vector3();
@@ -267,8 +269,8 @@ public class Vector3 {
 
 	/**
 	 * Reads a vector from a given string. The string must have the same format
-	 * as it is printed using the toString() method. Note that this depends from
-	 * the {@link Locale} scheme that is selected. The string may be enclosed by
+	 * as it is printed using the {@link #toString()} method. Note that this depends from
+	 * the {@link java.util.Locale} scheme that is selected. The string may be enclosed by
 	 * brackets and/or spaces, also the numbers itself may be surrounded by
 	 * spaces.
 	 * @param value the vector as string
@@ -300,9 +302,9 @@ public class Vector3 {
 
 	/**
 	 * Calculates the orientation between two vectors.
-	 * @param v1
-	 * @param v2
-	 * @return
+	 * @param v1 the first vector
+	 * @param v2 the second vector
+	 * @return a value indiciating the orientation between the two vectors
 	 */
 	public static int orientation( Vector3 v1, Vector3 v2 ) {
 		PlanPoint p = new PlanPoint( v1.x, v1.y );

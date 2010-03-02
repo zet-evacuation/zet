@@ -47,8 +47,8 @@ public class InitialConfiguration{
      * Constructs a new initial configuration of a cellular automaton.
      * @param rooms The automaton's rooms, including cells and the
      * initial placing of individuals
-     * @param globalPotential The automaton's global potentials
-     * @param dynamicPotential The initial dynamic potential of the automaton
+     * @param potentialManager the potential manager
+     * @param absoluteMaxSpeed the maximal speed that any individual can have at maximum
      */
     public InitialConfiguration (Collection<Room> rooms, PotentialManager potentialManager, double absoluteMaxSpeed) {
         this.rooms = rooms;

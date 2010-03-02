@@ -26,7 +26,7 @@ import ds.ca.Individual;
 /**
  * Converts some values of the individuals just before the execution of the
  * ca starts. It is supposed to execute this rule first and after all values
- * of the {@link CellularAutomaton} are initialized correctly.
+ * of the {@link ds.ca.CellularAutomaton} are initialized correctly.
  * @author Jan-Philipp Kappmeier
  */
 public class ConvertIndividualParameters extends AbstractRule {

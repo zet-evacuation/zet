@@ -81,13 +81,12 @@ public abstract class TransshipmentWithTimeHorizon extends DynamicFlowAlgorithm{
         }
 
 	/**
-	 * This static method computes a transshipment using the method <code>runTransshipment</code>
+	 * This static method computes a transshipment using the method {@link #transshipmentWithTimeHorizon}
 	 * that has to be implemented by subclasses.
-	 * The algorithm creates a time expanded network, calls <code>runTransshipment</code> to compute
+	 * The algorithm creates a time expanded network, calls {@link #transshipmentWithTimeHorizon} to compute
 	 * a static flow and creates a dynamic flow from the result. 
-	 * If <code>runTransshipment</code> returns <code>null</code>
-	 * this method also returns <code>null</code>.
-	 * @return A dynamic transshipment (with certain properties) if it exists, <code>null</code> otherwise.
+	 * If {@code runTransshipment} returns {@code null}
+	 * this method also returns {@code null}.
 	 */
 	public void runAlgorithm(){
 		/* Short debug output telling that a time expanded network is created. */

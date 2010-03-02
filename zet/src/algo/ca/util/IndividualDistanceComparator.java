@@ -30,9 +30,9 @@ public class IndividualDistanceComparator<E extends Individual> implements Compa
 	 * Individual 1 has a distance of 20 and individual 2 has a distance of 100.
 	 * Then individual 1 is nearer to the exit than individual 2. The returned
 	 * value is (20 - 100) and thus negative.</p>
-	 * @param i1
-	 * @param i2
-	 * @return
+	 * @param i1 the first individual
+	 * @param i2 the second individual
+	 * @return the difference in distance between the two individauls
 	 */
 	public int compare( Individual i1, Individual i2 ) {
 		return i1.getStaticPotential().getTruePotential( i1.getCell() ) - i2.getStaticPotential().getTruePotential( i2.getCell() );

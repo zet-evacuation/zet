@@ -42,7 +42,7 @@ public abstract class AbstractVisualizationView<T extends GLCanvas> extends Abst
 	
 	/**
 	 * 
-	 * @return
+	 * @return the text for the title bar
 	 */
 	@Override
 	protected String getTitleBarText() {
@@ -51,7 +51,7 @@ public abstract class AbstractVisualizationView<T extends GLCanvas> extends Abst
 	
 	/**
 	 * 
-	 * @return
+	 * @return the {@code GLContainer}
 	 */
 	public final T getGLContainer() {
 		return canvas;

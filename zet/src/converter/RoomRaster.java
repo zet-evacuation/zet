@@ -96,7 +96,7 @@ public class RoomRaster<T extends RoomRasterSquare> extends Raster<T, Room> {
 
 	/**
 	 * Returns the {@link Floor} this room belongs to.
-	 * @returnthe {@link Floor} this room belongs to.
+	 * @return the {@link Floor} this room belongs to.
 	 */
 	public Floor getFloor () {
 		return floor;

@@ -75,7 +75,7 @@ public class BatchGraphTask implements Runnable {
     public AlgorithmListener listener;
 
 	/**
-	 * Runs a graph algorithm. At first the {@link ds.graph.NetworkFlowModel}
+	 * Runs a graph algorithm. At first the {@link ds.NetworkFlowModel}
 	 * is created. After that the algorithm stored in the submitted
 	 * {@link GraphAlgorithm} is executed. After execution the results are stored in an
 	 * {@link BatchResultEntry}.

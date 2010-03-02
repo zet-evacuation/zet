@@ -64,7 +64,7 @@ public class MultiTaskExecutor implements Runnable {
 
     /**
      * Starts executing the submitted tasks. Before a task is started, its name
-     * is send using the {@link task.AlgorithmTask} interface.
+     * is send using the {@link batch.tasks.AlgorithmTask} interface.
      * @see ProgressTaskEntry
      */
     public void run() {

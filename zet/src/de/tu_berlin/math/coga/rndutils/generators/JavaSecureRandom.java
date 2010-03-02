@@ -5,7 +5,6 @@
 
 package de.tu_berlin.math.coga.rndutils.generators;
 
-import de.tu_berlin.math.coga.rndutils.generators.GeneralRandom;
 import java.security.SecureRandom;
 
 /**
@@ -14,14 +13,17 @@ import java.security.SecureRandom;
  */
 public class JavaSecureRandom extends SecureRandom implements GeneralRandom {
 	/**
-	 * @inheritDoc
+	 * A wrapper class for the {@link SecureRandom} generator.
+	 * @see SecureRandom
 	 */
 	public JavaSecureRandom() {
 		super();
   }
 
 	/**
-	 * @inheritDoc
+	 * A wrapper class for the {@link SecureRandom} generator.
+	 * @param seed an array of seeds
+	 * @see SecureRandom
 	 */
 	public JavaSecureRandom( byte seed[]) {
 		super( seed );

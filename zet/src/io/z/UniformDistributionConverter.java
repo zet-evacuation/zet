@@ -28,7 +28,7 @@ import com.thoughtworks.xstream.io.HierarchicalStreamWriter;
 import de.tu_berlin.math.coga.rndutils.distribution.continuous.UniformDistribution;
 
 /**
- * A converter that allows to load and store {@link UniformDistribtion}
+ * A converter that allows to load and store {@link UniformDistribution}
  * objects. It loads the parameters of the distribution as xml-attributes.
  * @author Jan-Philipp Kappmeier
  */
@@ -36,7 +36,7 @@ public class UniformDistributionConverter implements Converter {
 
 	/**
 	 * <p>Checks wheather an object can be converted by this class, that is if it
-	 * is of the type {@link UniformDistribution.}</p>
+	 * is of the type {@link UniformDistribution}</p>
 	 * {@inheritDoc}
 	 * @param type the type of the object that is checked
 	 * @return true if this converter can convert an object of the given type

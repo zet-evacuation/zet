@@ -131,7 +131,7 @@ public class JPolygon extends AbstractPolygon {
 	 * findComponentAt it not just checks whether the point is inside the
 	 * bounding box of the Component, but also whether the point is inside
 	 * the shape of the <code>Component</code>
-	 * (only works for {@link JEdge} / {@link JPolygon}). 
+	 * (only works for edges / {@link JPolygon}).
 	 * @param p 
 	 * @return The topmost plan component that was clicked on, e.g. a PlanPoint,
 	 * a Edge/RoomEdge or a PlanPolygon. If no such component can be found null is returned.

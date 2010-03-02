@@ -220,7 +220,7 @@ public abstract class JAbstractPropertyWindow extends JDialog {
 
 	/**
 	 * Creates a panel that is placed at the right bottom of the window.
-	 * @return
+	 * @return a panel that is placed at the right bottom of the window
 	 */
 	protected abstract JPanel createButtonPanel();
 	ActionListener aclButton = new ActionListener() {

@@ -32,7 +32,7 @@ public class RimeaParameterSetNoReactionTime extends RimeaParameterSet {
 	/**
 	 * 
 	 * @param age
-	 * @return
+	 * @return 0.0
 	 */
 	@Override
 	public double getReactionTimeFromAge( double age ) {
@@ -42,7 +42,7 @@ public class RimeaParameterSetNoReactionTime extends RimeaParameterSet {
 	/**
 	 * 
 	 * @param individual
-	 * @return
+	 * @return 0.0
 	 */
 	@Override
 	public double idleThreshold(Individual individual){

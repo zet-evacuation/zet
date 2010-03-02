@@ -130,7 +130,7 @@ public class BatchProjectEntry {
 	
 	/**
 	 * Returns the number of runs for the evacuation optimization. Only used
-	 * if evacuation optimization type is not set to {@link EvacuationOptimizationType.None}
+	 * if evacuation optimization type is not set to {@link EvacuationOptimizationType#None}
 	 * @return the number of runs for the evacuation optimization
 	 */
 	public int getEvacuationOptimizationRuns() {
@@ -139,7 +139,7 @@ public class BatchProjectEntry {
 
 	/**
 	 * Sets the number of runs for the evacuation optimization. Only used
-	 * if evacuation optimization type is not set to {@link EvacuationOptimizationType.None}
+	 * if evacuation optimization type is not set to {@link EvacuationOptimizationType#None}
 	 * @param evacuationOptimizationRuns the number of runs for the evacuation optimization
 	 */
 	public void setEvacuationOptimizationRuns( int evacuationOptimizationRuns ) {
@@ -148,7 +148,7 @@ public class BatchProjectEntry {
 
 	/**
 	 * Returns the evacuation optimization type. It is never returned null, in that
-	 * case {@link EvacuationOptimizationType.None} is returned.
+	 * case {@link EvacuationOptimizationType#None} is returned.
 	 * @return the evacuation optimization type.
 	 */
 	public EvacuationOptimizationType getEvacuationOptimizationType() {
@@ -157,7 +157,7 @@ public class BatchProjectEntry {
 
 	/**
 	 * Sets the evacuation optimization type. If null is submitted, the type is set to
-	 * {@link EvacuationOptimizationType.None}.
+	 * {@link EvacuationOptimizationType#None}.
 	 * @param evacuationOptimizationType the evacuation optimization type
 	 */
 	public void setEvacuationOptimizationType( EvacuationOptimizationType evacuationOptimizationType ) {

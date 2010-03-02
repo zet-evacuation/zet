@@ -115,14 +115,8 @@ public abstract class Transshipment<TT extends TransshipmentWithTimeHorizon> ext
 	/**
 	 * This method performs binary search to find a minimal time horizon.
 	 * For each time step, the time-expanded network is created and the algorithm
-	 * defined by the object <code>transshipmentAlgorithm</code> is used to check
+	 * defined by the object @code{transshipmentAlgorithm} is used to check
 	 * whether the time horizon is sufficient.
-	 * @param network The network.
-	 * @param transitTimes The transit times for all edges in the network.
-	 * @param edgeCapacities The capacities of all edges in the network.
-	 * @param supplies Supplies and demands of all nodes in the network.
-	 * @param transshipmentAlgorithm The algorithm used for each time step.
-	 * @return
 	 */
 	public void runAlgorithm() {
 		if (Flags.ALGO_PROGRESS){

@@ -28,14 +28,14 @@ import com.thoughtworks.xstream.io.HierarchicalStreamWriter;
 import de.tu_berlin.math.coga.rndutils.distribution.continuous.ErlangDistribution;
 
 /**
- * A converter that allows to load and store {@link ErlangDistribtion}
+ * A converter that allows to load and store {@link ErlangDistribution}
  * objects. It loads the parameters of the distribution as xml-attributes.
  * @author Jan-Philipp Kappmeier
  */
 public class ErlangDistributionConverter implements Converter {
 	/**
 	 * <p>Checks wheather an object can be converted by this class, that is if it
-	 * is of the type {@link HyperExponentialDistribution.}</p>
+	 * is of the type {@link ErlangDistribution}</p>
 	 * {@inheritDoc}
 	 * @param type the type of the object that is checked
 	 * @return true if this converter can convert an object of the given type

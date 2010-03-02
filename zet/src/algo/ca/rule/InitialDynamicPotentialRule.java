@@ -43,7 +43,7 @@ public class InitialDynamicPotentialRule extends AbstractInitialRule {
 
 	/**
 	 * Assigns the dynamic potential to the cell's individual. It is found in the
-	 * {@link PotentialController}.
+	 * {@link algo.ca.PotentialController}.
 	 * @param cell
 	 */
 	@Override

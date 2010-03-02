@@ -63,7 +63,7 @@ public enum EvacuationOptimizationType {
 	/**
 	 * The string representation. The same as the name.
 	 * @return the string representation.
-	 * @see{#.getName()}
+	 * @see #getName()
 	 */
 	@Override
 	public String toString() {

@@ -38,7 +38,7 @@ public class PropertyTreeConverter implements Converter {
   /**
    * 
    * @param type
-   * @return
+   * @return {@code true} if the class can be converted, {@code false} otherwise
    */
   public boolean canConvert( Class type ) {
     return type.equals( PropertyTreeModel.class );
@@ -67,7 +67,7 @@ public class PropertyTreeConverter implements Converter {
    * 
    * @param reader
    * @param context
-   * @return
+   * @return the converted property tree node
    */
   public Object unmarshal( HierarchicalStreamReader reader, UnmarshallingContext context ) {
     PropertyTreeNode root = new PropertyTreeNode( "" );

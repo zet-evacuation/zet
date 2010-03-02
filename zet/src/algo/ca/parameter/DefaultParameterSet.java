@@ -64,7 +64,7 @@ public class DefaultParameterSet extends AbstractDefaultParameterSet {
 	/**
 	 * {@inheritDoc}
 	 * @param i
-	 * @return
+	 * @return the individual threshold for the individual {@code i}
 	 * @see algo.ca.parameter.AbstractDefaultParameterSet#changePotentialThreshold(ds.ca.Individual)
 	 */
 	@Override

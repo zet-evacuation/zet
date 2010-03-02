@@ -22,7 +22,7 @@ package util;
 /**
  * This enumerates directions on an integral 2 dimensional room such as a
  * raster. Each direction has offsets for the {@code x} and {@code y}-direction
- * in \{-1,0,1\}. The {@copde x}-coordinate increases in the <b>Right</b>
+ * in \{-1,0,1\}. The {@code x}-coordinate increases in the <b>Right</b>
  * direction while the {@code y}-coordinate increases in the <b>downwards</b>
  * direction. Hence, if only positive coordinates are allowed, the point (0,0)
  * lies in the up-most, Left-most corner.

@@ -29,7 +29,7 @@ import de.tu_berlin.math.coga.common.localization.Localization;
 /**
  * <p>The <code>DefaultRuleSet</code> is a {@link RuleSet} consisting of two
  * sets, the <b>primary rules</b> and the <b>loop rules</b>. The primary rules
- * are supposed to be only executed once to initialize the {@link CA} while
+ * are supposed to be only executed once to initialize the {@link ds.ca.CellularAutomaton} while
  * the loop rules are supposed to be executed in every step.</p>
  * <p>It is only allowed to have one instance of {@link AbstractMovementRule}
  * which describes the behaviour of the individuals while they are moving.

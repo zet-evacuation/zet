@@ -29,7 +29,7 @@ import java.util.Vector;
 /**
  * A <code>MovieManager</code> controls {@link MovieWriter} objects,
  * which basically only create movie files out of a list of files. The
- * controller allows the {@link Visualization} easyly to access different
+ * controller allows the {@link gui.visualization.Visualization} easyly to access different
  * writer to support a wide variation of both, image and movie formats.
  * @author Jan-Philipp Kappmeier
  */
@@ -66,7 +66,7 @@ public class MovieManager {
 	/**
 	 * Creates a new instance of <code>MovieManager</code> with default settings.
 	 * The default writer for the movies is the {@link FFmpegWrapper} and the
-	 * format is {@link MovieFormat.DIVX}.
+	 * format is {@link MovieFormat#DIVX}.
 	 */
 	public MovieManager() {
 		inputFiles = new Vector<String>();
@@ -88,7 +88,7 @@ public class MovieManager {
 	 * Creates a new filename. The new filename is created by the movie writer
 	 * following their special treatment of the filenames. The filename is
 	 * <b>not</b> added to the vector of files.
-	 * @return
+	 * @return the new filename
 	 */
 	public String nextFilename() {
 		String newFilename;
@@ -125,10 +125,9 @@ public class MovieManager {
 
 	/**
 	 * Call this method after all video frames have been created. The method
-	 * will create a video if {@link isCreateVideo()} returns <code>true</code>
+	 * will create a video if {@link #isCreateVideo()} returns <code>true</code>
 	 * and will delete. At last the current list of frames is cleared, if
-	 * {@link isDeleteFrames()} returns <code>true</code>.
-	 * the frames if the parameter {@link deleteFrames} is set to true.
+	 * {@link #isDeleteFrames()} returns <code>true</code>.
 	 */
 	public void performFinishingActions() {
 		if( createVideo ) {
@@ -150,7 +149,7 @@ public class MovieManager {
 
 	/**
 	 * Returns the video create status, i.e. if a video is created when
-	 * {@link performFinishingActions()} is called.
+	 * {@link #performFinishingActions()} is called.
 	 * @return <code>true</code>, if a video is created
 	 */
 	public boolean isCreateVideo() {
@@ -159,7 +158,7 @@ public class MovieManager {
 
 	/**
 	 * Sets the video create status, i.e. if a video is created when
-	 * {@link performFinishingActions()} is called.
+	 * {@link #performFinishingActions()} is called.
 	 * @param createVideo true if a video should be created
 	 */
 	public void setCreateMovie( boolean createVideo ) {
@@ -168,7 +167,7 @@ public class MovieManager {
 
 	/**
 	 * Returns the frame files delete status, i.e. if the frames are deleted when
-	 * {@link performFinishingActions()} is called.
+	 * {@link #performFinishingActions()} is called.
 	 * @return true, if the videos are deleted
 	 */
 	public boolean isDeleteFrames() {
@@ -177,7 +176,7 @@ public class MovieManager {
 
 	/**
 	 * Sets the frame files delete status, i.e. if the frames are deleted when
-	 * {@link performFinishingActions()} is called.
+	 * {@link #performFinishingActions()} is called.
 	 * @param deleteFrames true if the files should be deleted
 	 */
 	public void setDeleteFrames( boolean deleteFrames ) {
