@@ -65,7 +65,7 @@ abstract public class AbstractOpenGLCanvas extends GLCanvas implements GLEventLi
 	}
 	
 	/**
-	 * 
+	 * Starts animation and resets counter.
 	 */
 	public void startAnimation() {
 		animationStartTime = System.currentTimeMillis();
@@ -75,15 +75,15 @@ abstract public class AbstractOpenGLCanvas extends GLCanvas implements GLEventLi
 	}
 	
 	/**
-	 * 
+	 * Stops animation.
 	 */
 	public void stopAnimation() {
 		animator.stop();
 	}
 	
 	/**
-	 * 
-	 * @return
+	 * Decides, wheather animation is turned on or of.
+	 * @return {@code true} if animation is on, {@code false otherwise}
 	 */
 	public boolean isAnimating() {
 		return animator.isAnimating();
@@ -104,34 +104,34 @@ abstract public class AbstractOpenGLCanvas extends GLCanvas implements GLEventLi
 	}
 	
 	/**
-	 * 
-	 * @return
+	 * Returns the maximal allowed framerate per second.
+	 * @return the maximal allowed framerate per second
 	 */
 	public int getMaxFPS() {
 		return maxFPS;
 	}
 
 	/**
-	 * 
-	 * @return
+	 * Returns the time passed since the last frame was drawn.
+	 * @return the time passed since the last frame was drawn
 	 */
 	public long getDeltaTime() {
 		return deltaTime;
 	}
 
 	/**
-	 * 
-	 * @return
+	 * Returns the elapsed time since the animation was started.
+	 * @return the elapsed time since the animation was started
 	 */
 	public long getTimeSinceStart() {
 		return lastTime - animationStartTime;
 	}
 
 	/**
-	 * 
-	 * @return
+	 * Returns the current framerate per second.
+	 * @return the current framerate per second
 	 */
-	public int getFps() {
+	public int getFPS() {
 		return fps;
 	}
 	

@@ -39,7 +39,7 @@ import de.tu_berlin.math.coga.common.localization.Localization;
  * <p> Warning! Once changed the behaviour, it cannot be changed back to default behaviour.
  * The created rooms in default mode have a defined size, which can be changed to allow
  * wider teleport edges. </p>
- * @see Floor#check()
+ * @see Floor#check(boolean)
  * @see ds.z.Floor
  * @author Jan-Philipp Kappmeier
  */

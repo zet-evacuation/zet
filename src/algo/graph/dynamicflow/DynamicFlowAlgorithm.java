@@ -48,7 +48,7 @@ public abstract class DynamicFlowAlgorithm /*extends GraphAlgorithm*/ extends Al
 	 * Can only be called for subclasses.
 	 * @param network The network the dynamic flow algorithm shall work on.
 	 * @param transitTimes The transit times the dynamic flow algorithm shall use.
-	 * @param edgeCapacities The edge capacities the dynamic flow algorithm shall use.
+	 * @param capacities The edge capacities the dynamic flow algorithm shall use.
 	 */
 	public DynamicFlowAlgorithm(Network network, IdentifiableIntegerMapping<Edge> transitTimes, IdentifiableIntegerMapping<Edge> capacities){
 		this.network = network;

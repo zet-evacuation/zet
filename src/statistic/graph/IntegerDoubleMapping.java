@@ -42,7 +42,7 @@ import statistic.graph.IntegerDoubleMapping.TimeValuePair;
  * based on a red-black tree. This allows the addition, removal and search for
  * steps in O(log (number of steps)) time.
  * For mappings of integers to arbitrary values see
- * {@link IntegerObjectMapping}.
+ * {@link ds.graph.IntegerObjectMapping}.
  * 
  * @author Martin Groß
  */
@@ -240,7 +240,7 @@ public class IntegerDoubleMapping implements Cloneable, Iterable<TimeValuePair> 
      * <code>IntegerDoubleMapping</code> objects are treated as mathematical
      * functions Z -> Z for this purpose.
      * Runtime(number of steps in <code>mapping</code>).
-     * @param mapping the mapping to be added to this mapping.
+     * @param map the mapping to be added to this mapping.
      * @exception NullPointerException if mapping is null.
      */
     public IntegerDoubleMapping add(IntegerDoubleMapping map) {

@@ -176,7 +176,7 @@ public class ZToGridGraphConverterAlt1 {
 		// connect the nodes of different rooms with edges
 		Hashtable<Edge, ArrayList<ZToGraphRasterSquare>> doorEdgeToSquare = connectRooms( raster, model );
 		// calculate the transit times for all edges
-		calculateTransitTimes( raster, model, doorEdgeToSquare );
+		computeTransitTimes( raster, model, doorEdgeToSquare );
 		// dublicate the edges and their transit times (except those concerning the super sink)
 		dublicateEdges( model );
 		// adjust transit times according to stair speed factors
@@ -631,10 +631,10 @@ public class ZToGridGraphConverterAlt1 {
 	 * the HashMap graphs. Afterwards the calculated transit times are set into the network flow model.
 	 * The transit times are weighted by the rooms speed factors and rounded to the multiple of the graph precision value.
 	 * @param raster Supplies a list of all rastered rooms
-	 * @param graphs Is a HashMap, that maps the separate room raster to the corresponding dynamic networks.
 	 * @param model A reference to the network flow model to set it's transit times.
+	 * @param doorEdgeToSquare Is a HashMap, that maps the separate room raster to the corresponding dynamic networks.
 	 */
-	protected static void calculateTransitTimes( ZToGraphRasterContainer raster, NetworkFlowModel model, Hashtable<Edge, ArrayList<ZToGraphRasterSquare>> doorEdgeToSquare ) {
+	protected static void computeTransitTimes( ZToGraphRasterContainer raster, NetworkFlowModel model, Hashtable<Edge, ArrayList<ZToGraphRasterSquare>> doorEdgeToSquare ) {
 		long startTT = System.currentTimeMillis();
 		System.out.println( "BEGINNE TRANSIT-TIMES" );
 		IdentifiableIntegerMapping<Edge> transitTimes = new IdentifiableIntegerMapping<Edge>( 1 );

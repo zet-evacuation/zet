@@ -313,8 +313,8 @@ public abstract class AbstractVisualization extends GLCanvas implements GLEventL
 	}
 
 	/**
-	 * 
-	 * @return
+	 * Decides, wheather animation is turned on or of.
+	 * @return {@code true} if animation is on, {@code false otherwise}
 	 */
 	final public boolean isAnimating() {
 		return animator.isAnimating();
@@ -322,8 +322,8 @@ public abstract class AbstractVisualization extends GLCanvas implements GLEventL
 
 	// Setter & Getter
 	/**
-	 * 
-	 * @return
+	 * Returns the time passed since the last frame was drawn.
+	 * @return the time passed since the last frame was drawn
 	 */
 	final public long getDeltaTime() {
 		return deltaTime;

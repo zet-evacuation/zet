@@ -33,7 +33,7 @@ import de.tu_berlin.math.coga.rndutils.RandomUtils;
 public class SimpleMovementRule extends AbstractMovementRule {
 	/**
 	 * Returns {@code true} if the rule can be executed. That is the case if an
-	 * {@link ds.z.Individual} stands on the specified {@link Cell}.
+	 * {@link ds.ca.Individual} stands on the specified {@link Cell}.
 	 * @param cell the cell
 	 * @return {@code true} if an individual stands on the cell, {@code false} otherwise
 	 */

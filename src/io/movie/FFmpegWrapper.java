@@ -40,7 +40,7 @@ import javax.swing.filechooser.FileFilter;
 
 /**
  * A {@link MovieWriter} that works as a wrapper for the open source movie 
- * encoder ffmpeg. See {@link http://ffmpeg.mplayerhq.hu/} for more information.
+ * encoder ffmpeg. See <a href=http://ffmpeg.mplayerhq.hu/>http://ffmpeg.mplayerhq.hu/</a> for more information.
  * @author Jan-Philipp Kappmeier
  */
 public class FFmpegWrapper extends MovieWriter {

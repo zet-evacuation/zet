@@ -27,7 +27,7 @@ public class Texture {
 /**
 	 * Creates a new instance of <code>Texture</code>.
  * @param gl the graphics context in which this texture is used
- * @param target the OpenGL target, for example ({@link javax.media.opengl.GL.GL_TEXTURE_2D})
+ * @param target the OpenGL target, for example ({@link javax.media.opengl.GL#GL_TEXTURE_2D})
  * @param textureID the internal id of the texture (OpenGL texture name)
 	 */
 	public Texture( GL gl, int target, int textureID ) {
@@ -49,8 +49,8 @@ public class Texture {
 	}
 
 	/**
-	 * Returns the OpoenGL target of the texture.
-	 * @return
+	 * Returns the {@code OpenGL} target of the texture.
+	 * @return the target of the texture
 	 */
 	public final int getTarget() {
 		return target;
@@ -63,6 +63,11 @@ public class Texture {
 	 */
 	public final int getID() {
 		return textureID;
+	}
+
+	// TODO Dispose
+	public final void dispose() {
+		
 	}
 
 	/**

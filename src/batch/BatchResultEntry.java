@@ -130,7 +130,7 @@ public class BatchResultEntry {
 	}
 		
 	/**
-	 * Returns the {@link ds.graph.NetworkFlowModel}
+	 * Returns the {@link ds.NetworkFlowModel}
 	 * @return the network flow model
 	 */
 	public NetworkFlowModel getNetworkFlowModel() {
@@ -138,7 +138,7 @@ public class BatchResultEntry {
 	}
 
 	/**
-	 * Sets the {@link ds.graph.NetworkFlowModel}
+	 * Sets the {@link ds.NetworkFlowModel}
 	 * @param networkFlowModel the network flow model
 	 */
 	public void setNetworkFlowModel( NetworkFlowModel networkFlowModel ) {

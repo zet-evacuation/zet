@@ -32,7 +32,7 @@ public class Math {
 	/**
 	 * Computes the rounded up logarithm to the basis 2 of an integral number.
 	 * @param n the integral number
-	 * @return the logarithm to the basis 2 rounded down
+	 * @return the logarithm to the basis 2 rounded up
 	 */
 	public static int log2Ceil( int n ) {
 		if( n <= 0 )

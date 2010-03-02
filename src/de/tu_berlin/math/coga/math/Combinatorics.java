@@ -29,7 +29,7 @@ package de.tu_berlin.math.coga.math;
 public class Combinatorics {
 
 	/**
-	 * Aviods instancint the utility class with combinatorial methods.
+	 * Aviods instanciation of the utility class with combinatorial methods.
 	 */
 	private Combinatorics() {
 	}
@@ -41,7 +41,7 @@ public class Combinatorics {
 	 * @return the binomial coefficient
 	 */
 	public static long bink( int n, int k ) {
-		if( k < 0 || k > Math.abs( n ) )
+		if( k < 0 || k > java.lang.Math.abs( n ) )
 			return 0;
 		if( k == 1 )
 			return 1;
@@ -75,7 +75,7 @@ public class Combinatorics {
 		long r = 1;
 		N = 1;
 
-		int log2n = 31 - Integer.numberOfLeadingZeros( n );
+		int log2n = Math.log2Floor( n );
 		int h = 0, shift = 0, high = 1;
 
 		while( h != n ) {
@@ -86,7 +86,7 @@ public class Combinatorics {
 			len = (high - len) / 2;
 
 			if( len > 0 )
-				r = r * (p *= product( len ));
+				r = r * (p *= factorialProduct( len ));
 		}
 		return r << shift;
 	}
@@ -96,12 +96,12 @@ public class Combinatorics {
 	 * @param n
 	 * @return
 	 */
-	private static long product( int n ) {
+	private static long factorialProduct( int n ) {
 		int m = n / 2;
 		if( m == 0 )
 			return N += 2;
 		if( n == 2 )
 			return (N += 2) * (N += 2);
-		return product( n - m ) * product( m );
+		return factorialProduct( n - m ) * factorialProduct( m );
 	}
 }

@@ -20,7 +20,7 @@ import ds.ca.Individual;
 /**
  * A rule that alarms an individual if its reaction time is over. After that 
  * the room of the individual is alarmed, too. This alarms all individuals in
- * the room not later than the next step of the {@link CellularAutomaton}.
+ * the room not later than the next step of the {@link ds.ca.CellularAutomaton}.
  * @author Jan-Philipp Kappmeier
  */
 public class ReactionRuleCompleteRoom extends AbstractReactionRule {

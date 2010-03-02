@@ -35,7 +35,7 @@ public class ChangePotentialBestResponseOptimizedRule extends AbstractPotentialC
 	/**
 	 * 
 	 * @param cell
-	 * @return
+	 * @return true if the potential change rule can be used
 	 */
 	@Override
 	public boolean executableOn(Cell cell) {

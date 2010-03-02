@@ -19,8 +19,6 @@
  */
 package algo.ca;
 
-import static org.junit.Assert.*;
-
 import java.util.ArrayList;
 
 import org.junit.Before;
@@ -35,11 +33,10 @@ import ds.z.Floor;
 import ds.z.PlanPoint;
 import ds.ca.CellularAutomaton;
 import ds.z.Room;
-import algo.ca.PotentialController;
 import ds.ca.StaticPotential;
 
 /**
- * @author Daniel Pluempe
+ * @author Daniel Plümpe
  *
  */
 public class PotentialTest {

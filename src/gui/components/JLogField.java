@@ -63,8 +63,8 @@ public class JLogField extends JPanel implements EventListener<MessageEvent> {
 
 	/**
 	 * <p>Handles incoming events. An event comes, if some debugger/logger sends
-	 * messages of type {@link MessageType}. Only messages of the types
-	 * {@link MessageType.Log} and {@link MessageType.LogError} are handled.</p>
+	 * messages of type {@link event.MessageEvent.MessageType}. Only messages of the types
+	 * {@link event.MessageEvent.MessageType#Log} and {@link event.MessageEvent.MessageType#LogError} are handled.</p>
 	 * <p>{@code Log} events are displayed in normal font style while
 	 * {@code LogError} events are displayed red.</p>
 	 * @param event the event that occured.

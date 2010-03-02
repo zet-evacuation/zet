@@ -82,11 +82,11 @@ import org.jfree.data.xy.XYSeriesCollection;
  * box that contains some types (that can describe different types of people).
  * All of the parameters of the different assignment types can be set
  * as probability distributions. Currently
- * {@link util.random.distributions.NormalDistribution},
- * {@link util.random.distributions.UniformDistribution},
- * {@link util.random.distributions.ExponentialDistribution},
- * {@link util.random.distributions.ErlangDistribution} and
- * {@link util.random.distributions.HyperExponentialDistribution} are supported.
+ * {@link de.tu_berlin.math.coga.rndutils.distribution.continuous.NormalDistribution},
+ * {@link de.tu_berlin.math.coga.rndutils.distribution.continuous.UniformDistribution},
+ * {@link de.tu_berlin.math.coga.rndutils.distribution.continuous.ExponentialDistribution},
+ * {@link ErlangDistribution} and
+ * {@link HyperExponentialDistribution} are supported.
  * @author Jan-Philipp Kappmeier
  */
 public class JAssignmentPanel extends JPanel {

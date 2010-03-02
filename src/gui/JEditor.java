@@ -503,7 +503,7 @@ public class JEditor extends JFrame implements Localized, EventListener<Progress
 	}
 
 	/**
-	 * Sends a ready-message using {@link JEditor#ZETMain.sendMessage( String )}.
+	 * Sends a ready-message using {@link ZETMain#sendMessage(java.lang.String) }.
 	 */
 	public static void sendReady() {
 		ZETMain.sendMessage( loc.getString( "gui.message.ready" ) );
@@ -1007,7 +1007,7 @@ public class JEditor extends JFrame implements Localized, EventListener<Progress
 
 	/**
 	 * Changes the appearance of the gui to the selected language.
-	 * @see localization.Localization
+	 * @see de.tu_berlin.math.coga.common.localization.Localization
 	 */
 	public void localize() {
 		editView.localize();

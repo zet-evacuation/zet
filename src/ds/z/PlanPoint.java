@@ -94,7 +94,7 @@ public class PlanPoint extends Point {
 	 * @param x the {@code x}-coordinate of the point
 	 * @param y the {@code y}-coordinate of the point
 	 * @see #setLocationMeter( double, double )
-	 * @see util.RasterTools#floatToInt( double )
+	 * @see util.ConversionTools#floatToInt(double)
 	 */
 	public PlanPoint( double x, double y ) {
 		super();

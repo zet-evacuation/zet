@@ -231,7 +231,7 @@ public class CellularAutomaton implements Iterable<Individual> {
 	/**
 	 * Returns the number of steps performed by the cellular automaton within one
 	 * second. The time dependds of the absolute max speed and is set if
-	 * {@link setAbsoluteMaxspeed( double )} is called.
+	 * {@link #setAbsoluteMaxSpeed(double)} is called.
 	 * @return the number of steps performed by the cellular automaton within one second.
 	 */
 	public double getStepsPerSecond() {
@@ -509,7 +509,7 @@ public class CellularAutomaton implements Iterable<Individual> {
 	/**
 	 * Returns the number of individuals that were in the cellular automaton when
 	 * the simulation starts.
-	 * @return
+	 * @return the number of individuals
 	 */
 	public int getInitialIndividualCount() {
 		return initialIndividualCount;

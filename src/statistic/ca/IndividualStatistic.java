@@ -1508,7 +1508,7 @@ public double calculateMaxSpeedForGroupInOneTimestep(ArrayList<Individual> indgr
     
     /**
      * 
-     * @param indgroupa list of individuals
+     * @param indgroup list of individuals
      * @param from a TimeStep
      * @param to a TimeStep
      * @return the maximum of the individuals` average-exhaustions from the TimeStep "from" to the TimeStep "to"

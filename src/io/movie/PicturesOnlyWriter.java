@@ -32,7 +32,7 @@ public class PicturesOnlyWriter extends MovieWriter {
 
 	/**
 	 * <p>Creates a new filename, but ignores the actual frame number. The next free
-	 * file with the suffix {@link getFramename()} and {@link FRAMEDIGITS} digits
+	 * file with the suffix {@link #getFramename()} and {@link #FRAMEDIGITS} digits
 	 * is returned.</p>
 	 * @param frameNumber the (ignored) frame number
 	 * @return the next filename

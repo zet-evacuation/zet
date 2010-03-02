@@ -1184,8 +1184,8 @@ public class JFloor extends AbstractFloor {
 	 * when a selection has been made. If the combo box is editable, then
 	 * an <code>ActionEvent</code> will be fired when editing has stopped.
 	 *
-	 * @param l  the <code>ActionListener</code> that is to be notified
-	 * @see #setSelectedItem
+	 * @param l the <code>ActionListener</code> that is to be notified
+	 * @see javax.swing.JComboBox#setSelectedItem(java.lang.Object)
 	 */
 	public void addActionListener( ActionListener l ) {
 		listenerList.add( ActionListener.class, l );
@@ -1216,8 +1216,6 @@ public class JFloor extends AbstractFloor {
 	/**
 	 * Notifies all listeners that have registered interest for
 	 * notification on this event type.
-	 *  
-	 * @see EventListenerList
 	 */
 	protected void fireActionEvent() {
 		if( !firingActionEvent ) {
@@ -1251,12 +1249,11 @@ public class JFloor extends AbstractFloor {
 	/** 
 	 * Returns the action command that is included in the event sent to
 	 * action listeners.
-	 *
-	 * @return  the string containing the "command" that is sent
-	 *          to action listeners.
+	 * @return  the string containing the "command" that is sent to action listeners
 	 */
 	public String getActionCommand() {
 		return actionCommand;
 	}
+	
 	protected String actionCommand = "roomSelected";
 }

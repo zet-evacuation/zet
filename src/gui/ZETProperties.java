@@ -105,7 +105,7 @@ public final class ZETProperties {
 	
 	/**
 	 * Hides and shows the timestep of the cellular automaton during visualization.
-	 * @param showTimestepGraph decides if the timestep should be visible
+	 * @param showTimestepCellularAutomaton decides if the timestep should be visible
 	 */
 	public final static void setShowTimestepCellularAutomaton( boolean showTimestepCellularAutomaton ) {
 		PropertyContainer.getInstance().set( "options.visualization.elements.eye", showTimestepCellularAutomaton );

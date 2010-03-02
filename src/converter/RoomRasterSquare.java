@@ -260,7 +260,7 @@ public class RoomRasterSquare extends RasterSquare {
 
 	/**
 	 * Sets the speed factor that is multiplied with the velocity if the square is Left going up.
-	 * @param downSpeedFactor the speed factor that is multiplied with the velocity if the square is Left going up.
+	 * @param upSpeedFactor the speed factor that is multiplied with the velocity if the square is Left going up.
 	 */
 	public void setUpSpeedFactor( double upSpeedFactor ) {
 		this.upSpeedFactor = upSpeedFactor;

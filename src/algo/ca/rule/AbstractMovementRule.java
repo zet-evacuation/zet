@@ -66,17 +66,19 @@ public abstract class AbstractMovementRule extends AbstractRule {
 	
 	/**
 	 * Returns the possible targets already sorted by priority.
-	 * @return
+	 * @return a list of possible targets.
 	 */
 	public ArrayList<Cell> getPossibleTargets() {
 		return possibleTargets;
 	}
 	
 	/**
-	 * 
-	 * @param cell 
-	 * @param targets
-	 * @return
+	 * In this simple implementation always the first possible cell is returned.
+	 * As this method should be overridden, a warning is printed to the err log
+	 * if it is used.
+	 * @param cell not used in the simple imlementation
+	 * @param targets possible targets (only the first one is used)
+	 * @return the first cell of the possible targets
 	 */
 	public Cell selectTargetCell( Cell cell, ArrayList<Cell> targets ) {
 		System.err.println( "WARNUNG nicht überschriebene target cell selection wird ausgeführt" );

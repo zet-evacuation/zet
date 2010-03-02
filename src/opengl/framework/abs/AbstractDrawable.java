@@ -23,13 +23,12 @@ import opengl.drawingutils.GLVector;
 
 /**
  * 
- * @author Jan-Philipp Kapmeier, Daniel Plümpe
  *
- * @param <T> The type of the object used for culling with this object
  * @param <U> The type of the children view object
  * @param <V> The type of the associated control object
  * @param <W> The type of the associated children control object
- */
+ * @author Jan-Philipp Kapmeier, Daniel Plümpe
+  */
 public abstract class AbstractDrawable<U extends AbstractDrawable<?, ?, ?>, V extends AbstractControl<?, ?, ?, U, W>, W extends AbstractControl<U, ?, ?, ?, ?>> implements drawable {
 //public abstract class AbstractDrawable<T extends CullingShape, U extends AbstractDrawable<?,?,?,?>, V extends AbstractControl<?, ?, ?, U, W>, W extends AbstractControl<U,?,?,?,?>> implements drawable {
 

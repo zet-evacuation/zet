@@ -1,10 +1,5 @@
 /**
  * PrimeSieve.java
- * input:
- * output:
- *
- * method:
- *
  * Created: Feb 15, 2010,2:29:27 PM
  */
 package de.tu_berlin.math.coga.math;
@@ -34,7 +29,7 @@ public class PrimeSieve {
 		if( n < 17 )
 			return 6;
 
-		return (int)Math.floor( n / (Math.log10( n )) - 1.5 );
+		return (int)java.lang.Math.floor( n / (java.lang.Math.log10( n )) - 1.5 );
 	}
 
 	public int getPrimeCount() {
@@ -47,7 +42,7 @@ public class PrimeSieve {
 
 	public void compute() {
 		n = (n%2 == 0) ? n-1: n;
-		int root = (int)Math.sqrt( n );
+		int root = (int)java.lang.Math.sqrt( n );
 		boolean[] working = new boolean[n / 2];
 
 		primes[0] = 2;
@@ -84,7 +79,7 @@ public class PrimeSieve {
 		int i = 0;
 		int k = 0;
 		try {
-			for( i = 2; i <= Math.floor( Math.sqrt( n ) ); ++i )
+			for( i = 2; i <= java.lang.Math.floor( java.lang.Math.sqrt( n ) ); ++i )
 				for( k = n / i; k >= i; --k )
 					working[i * k] = true;
 		} catch( Exception e ) {

@@ -510,7 +510,7 @@ public class Individual implements Identifiable {
 
 	/**
 	 * The hashcode of individuals is their id numer.
-	 * @return
+	 * @return the hashcode of the individual
 	 */
 	@Override
 	public int hashCode() {

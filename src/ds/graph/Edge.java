@@ -55,7 +55,7 @@ public class Edge implements Identifiable {
     /**
      * Constructs a new <code>Edge</code> object with a given given start-
      * and endnode and given ID. Runtime O(1).
-     * @param edgeID the ID of the new edge.
+     * @param id the ID of the new edge.
      * @param start the startnode of the new  edge.
      * @param end the endnode of the new  edge.
      * @exception NullPointerException if <code>start</code> or 

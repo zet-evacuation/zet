@@ -250,7 +250,7 @@ public class Raster<T extends RasterSquare, P extends PlanPolygon> {
 	 * Sets the raster size used for rasterization. The size is given in millimeters,
 	 * which is the base unit.
 	 * @param raster the size
-	 * @see util.CellularAutomatonConversionTools
+	 * @see util.ConversionTools
 	 */
 	public void setRaster( int raster ) {
 		this.raster = raster;
@@ -260,7 +260,7 @@ public class Raster<T extends RasterSquare, P extends PlanPolygon> {
 	 * Sets the raster size used for rasterization. The size is given in meter. The
 	 * size is converted to the base unit millimeter.
 	 * @param raster the size
-	 * @see util.CellularAutomatonConversionTools
+	 * @see util.ConversionTools
 	 */
 	public void setRaster( double raster ) {
 		this.raster = ConversionTools.floatToInt( raster );

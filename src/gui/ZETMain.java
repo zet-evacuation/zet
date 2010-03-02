@@ -222,7 +222,7 @@ public class ZETMain {
 	 * be called by a scheduler, so it can be executed in the event-dispatch
 	 * thread. That allows to have user interaction if the program is working in
 	 * other threads.
-	 * @see SwingUtilities#invokeLater()
+	 * @see SwingUtilities#invokeLater(java.lang.Runnable)
 	 * @see Runnable
 	 */
 	public static void createEditor() {

@@ -112,10 +112,6 @@ public class GraphInstanceChecker {
     * delete the source if there is only one sink. If there are more sinks,
     * it cannot be decided where to subtract the corresponding need.
     * In this case an exception is thrown.
-    * @param network the underlying graph.
-    * @param supplies given supplies.
-    * @return corrected supplies that do not contain sources that are not
-    * connected to any sink.
     */
     public void supplyChecker(){
 		
@@ -197,7 +193,7 @@ public class GraphInstanceChecker {
      * and is not zero, false is returned.
      * @param network the network to be checked.
      * @param supplies the supply mapping to be checked.
-     * @return
+     * @return {@code true} if no demands and supplies are given, {@code false} otherwise
      */
     public static boolean emptySupplies(Network network, IdentifiableIntegerMapping<Node> supplies){
     	int sup = 0, dem = 0;

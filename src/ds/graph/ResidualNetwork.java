@@ -190,9 +190,7 @@ public class ResidualNetwork extends Network {
     /**
      * This method expand the given cost function over some network to cover 
      * also the residual network
-     * @param oldCosts The old cost function to be expanded
-     * @param sNetwork The network.
-     * @param resNetwork The residual network
+     * @param costs The old cost function to be expanded
      * @return an new costs function that is identical with the old function
      * on the old domain. On all other edges in the residual network it returns
      * either the ngated cost of the oposite edge if it exists or 0.

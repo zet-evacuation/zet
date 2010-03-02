@@ -45,7 +45,7 @@ public class ProjectControl {
 	/**
 	 * Creates a new instance of <code>ProjectControl</code> which controls a
 	 * given project.
-	 * @param p the project that should be controlled
+	 * @param zcontrol the project that should be controlled
 	 */
 	public ProjectControl( ZControl zcontrol ) {
 

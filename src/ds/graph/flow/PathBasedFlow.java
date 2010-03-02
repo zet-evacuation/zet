@@ -43,7 +43,7 @@ public class PathBasedFlow implements Iterable<StaticPathFlow>{
     
     /**
      * Adds a path flow to this dynamic flow.
-     * @param pathFlow the path flow to be add.
+     * @param staticPathFlow the path flow to be add.
      */
     public void addPathFlow(StaticPathFlow staticPathFlow){
         if (staticPathFlow != null)

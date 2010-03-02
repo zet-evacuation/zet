@@ -13,6 +13,7 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
+
 /*
  * OpenGLComponent.java
  * Created on 28.01.2008, 23:19:42
@@ -63,16 +64,26 @@ abstract public class AbstractOpenGLPanel extends GLJPanel implements GLEventLis
 		animator = new FPSAnimator( this, maxFPS );
 	}
 	
+	/**
+	 * Starts animation and resets counter.
+	 */
 	public void startAnimation() {
 		animationStartTime = System.currentTimeMillis();
 		animator.start();
 		animator.setRunAsFastAsPossible( true );
 	}
 	
+	/**
+	 * Stops animation.
+	 */
 	public void stopAnimation() {
 		animator.stop();
 	}
 	
+	/**
+	 * Decides, wheather animation is turned on or of.
+	 * @return {@code true} if animation is on, {@code false otherwise}
+	 */
 	public boolean isAnimating() {
 		return animator.isAnimating();
 	}
@@ -93,31 +104,32 @@ abstract public class AbstractOpenGLPanel extends GLJPanel implements GLEventLis
 	}
 	
 	/**
-	 * 
-	 * @return
+	 * Returns the maximal allowed framerate per second.
+	 * @return the maximal allowed framerate per second
 	 */
 	public int getMaxFPS() {
 		return maxFPS;
 	}
 
 	/**
-	 * 
-	 * @return
+	 * Returns the time passed since the last frame was drawn.
+	 * @return the time passed since the last frame was drawn
 	 */
 	public long getDeltaTime() {
 		return deltaTime;
 	}
 	
 	/**
-	 * 
-	 * @return
-	 */public long getTimeSinceStart() {
+	 * Returns the elapsed time since the animation was started.
+	 * @return the elapsed time since the animation was started
+	 */
+	public long getTimeSinceStart() {
 		return lastTime - animationStartTime;
 	}
 
 	/**
-	 * 
-	 * @return
+	 * Returns the current framerate per second.
+	 * @return the current framerate per second
 	 */
 	public int getFps() {
 		return fps;

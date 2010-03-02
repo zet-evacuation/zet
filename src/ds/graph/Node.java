@@ -42,7 +42,7 @@ public class Node implements Identifiable {
      
     /**
      * Constructs a new <code>Node</code> object with a given ID. Runtime O(1).
-     * @param nodeID the ID of the new node.
+     * @param id the ID of the new node.
      */
     public Node(int id) {
         this.nodeID = id;

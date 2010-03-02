@@ -36,8 +36,8 @@ public class IntegerPropertyConverter extends AbstractPropertyConverter<IntegerP
 	}
 
 	/**
-	 * 
-	 * @return
+	 * Returns the name of the node
+	 * @return the name of the node
 	 */
 	public String getNodeName() {
 		return "intNode";

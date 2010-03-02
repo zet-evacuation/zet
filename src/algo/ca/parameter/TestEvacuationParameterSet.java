@@ -44,7 +44,7 @@ public class TestEvacuationParameterSet extends DefaultParameterSet {
 
 	/**
 	 * Returns a random reaction time.
-	 * @return
+	 * @return a random reaction time
 	 */
 	@Override
 	public double getReactionTime() {
@@ -52,14 +52,14 @@ public class TestEvacuationParameterSet extends DefaultParameterSet {
 		
 		NormalDistribution normal = new NormalDistribution( 60, 900, 0, 180 );
 		double randReactionTime = normal.getNextRandom();
-		System.out.println( "Reactiontime: " + randReactionTime );
+//		System.out.println( "Reactiontime: " + randReactionTime );
 
 //		ExponentialDistribution exp = new ExponentialDistribution( 0.016666666667 );
 //		exp.setParameter( 0, 180 );
 //		double randReactionTime = exp.getNextRandom();
-		System.out.println( "Reactiontime: " + randReactionTime );
+//		System.out.println( "Reactiontime: " + randReactionTime );
 
-		randReactionTime = 0;
+		//randReactionTime = 0;
 
 		return randReactionTime;
 	}

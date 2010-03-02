@@ -22,7 +22,7 @@ package de.tu_berlin.math.coga.common.localization;
 
 /**
  * Classes that support localization can implement this interface. The
- * {@link localize()} method is called if the language is changed.
+ * {@link #localize()} method is called if the language is changed.
  * @author Jan-Philipp Kappmeier
  */
 public interface Localized {

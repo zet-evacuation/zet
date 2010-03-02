@@ -70,7 +70,7 @@ public class JArrayPanel extends JPanel {
 	 * constants defined by {@link TableLayout}. All rows are initialized
 	 * with the preferred constant.
 	 * @param index the index of the row
-	 * @param width the width of the row
+	 * @param height the width of the row
 	 */
 	public void setRowHeight( int index, double height ) {
 		sizeR[index] = height;

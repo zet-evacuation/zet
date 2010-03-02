@@ -28,7 +28,7 @@ import com.thoughtworks.xstream.io.HierarchicalStreamWriter;
 import de.tu_berlin.math.coga.rndutils.distribution.continuous.HyperExponentialDistribution;
 
 /**
- * A converter that allows to load and store {@link HyperExponentialDistribtion}
+ * A converter that allows to load and store {@link HyperExponentialDistribution}
  * objects. It loads the parameters of the distribution as xml-attributes.
  * @author Jan-Philipp Kappmeier
  */
@@ -36,7 +36,7 @@ public class HyperExponentialDistributionConverter implements Converter {
 
 	/**
 	 * <p>Checks wheather an object can be converted by this class, that is if it
-	 * is of the type {@link HyperExponentialDistribution.}</p>
+	 * is of the type {@link de.tu_berlin.math.coga.rndutils.distribution.continuous.HyperExponentialDistribution}</p>
 	 * {@inheritDoc}
 	 * @param type the type of the object that is checked
 	 * @return true if this converter can convert an object of the given type
