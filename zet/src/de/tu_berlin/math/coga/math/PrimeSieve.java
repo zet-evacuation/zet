@@ -40,6 +40,10 @@ public class PrimeSieve {
 		return primes[n-1];
 	}
 
+	public int[] getPrimes() {
+		return primes;
+	}
+
 	public void compute() {
 		n = (n%2 == 0) ? n-1: n;
 		int root = (int)java.lang.Math.sqrt( n );

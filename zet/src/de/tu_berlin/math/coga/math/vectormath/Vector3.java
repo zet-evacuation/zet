@@ -147,7 +147,7 @@ public class Vector3 implements Cloneable {
 	 * <p>Computes the cross product of this vector and another vector.</p>
 	 * <p>The product of two vectors {@code a = (a_x, a_y, a_z)} and
 	 * {@code b = (b_x, b_y, b_z)} is defined as
-	 * {@code a \cros b = (a_yb_z - a_zb_y, a_zb_x - a_xb_z, a_xb_y - a_yb_x)}.
+	 * {@code a \cross b = (a_yb_z - a_zb_y, a_zb_x - a_xb_z, a_xb_y - a_yb_x)}.
 	 * </p>
 	 * @param v the vector
 	 * @return the cross product of this vector and the vector {@code v}
