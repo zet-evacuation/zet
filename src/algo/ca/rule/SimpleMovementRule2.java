@@ -22,8 +22,8 @@ import ds.ca.StairCell;
 import ds.ca.results.VisualResultsRecorder;
 import ds.ca.results.IndividualStateChangeAction;
 import util.DebugFlags;
-import util.Direction;
-import util.Level;
+import de.tu_berlin.math.coga.common.util.Direction;
+import de.tu_berlin.math.coga.common.util.Level;
 
 /**
  *

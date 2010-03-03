@@ -22,8 +22,8 @@ package converter;
 import java.util.ArrayList;
 import java.util.Collection;
 
-import util.Direction;
-import util.Level;
+import de.tu_berlin.math.coga.common.util.Direction;
+import de.tu_berlin.math.coga.common.util.Level;
 
 import ds.z.BuildingPlan;
 import ds.z.ConcreteAssignment;
@@ -51,7 +51,7 @@ import java.util.ArrayDeque;
 import java.util.HashMap;
 import java.util.List;
 import de.tu_berlin.math.coga.common.localization.Localization;
-import static util.Direction.*;
+import static de.tu_berlin.math.coga.common.util.Direction.*;
 
 /**
  * This singleton class converts a rasterized z-Project to a cellular automaton.

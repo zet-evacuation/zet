@@ -30,7 +30,7 @@ import java.util.ArrayList;
 import java.util.List;
 import de.tu_berlin.math.coga.common.localization.Localization;
 import converter.RasterTools;
-import util.ConversionTools;
+import zet.util.ConversionTools;
 
 /**
  * <code>PlanPoint</code> represents a point with integer coordinates. It represents a position

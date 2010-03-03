@@ -29,8 +29,8 @@ import java.util.EnumMap;
 import java.util.EnumSet;
 import java.util.Locale;
 import java.util.Set;
-import util.Direction;
-import util.Level;
+import de.tu_berlin.math.coga.common.util.Direction;
+import de.tu_berlin.math.coga.common.util.Level;
 
 /**
  * The <code>RoomRasterSquare</code> is a special type of {@link RasterSquare} containing

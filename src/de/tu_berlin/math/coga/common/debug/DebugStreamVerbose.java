@@ -18,7 +18,7 @@
  * DebugStream.java
  * Created 06.11.2009, 14:18:50
  */
-package util;
+package de.tu_berlin.math.coga.common.debug;
 
 import event.MessageEvent.MessageType;
 import java.io.OutputStream;

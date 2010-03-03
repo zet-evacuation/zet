@@ -69,7 +69,7 @@ import gui.visualization.JVisualizationView;
 import gui.visualization.control.GLControl;
 import gui.visualization.control.GLControl.CellInformationDisplay;
 import io.DXFWriter;
-import util.IOTools;
+import de.tu_berlin.math.coga.common.util.IOTools;
 import io.movie.MovieManager;
 import io.visualization.CAVisualizationResults;
 import java.awt.BorderLayout;
@@ -143,7 +143,7 @@ import ds.z.EvacuationArea;
 import ds.z.Room;
 import ds.z.ZControl;
 import gui.editor.JLogView;
-import util.ConversionTools;
+import zet.util.ConversionTools;
 
 /**
  * Displays a window with the editor.

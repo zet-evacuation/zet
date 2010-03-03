@@ -22,8 +22,8 @@ import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
-import util.Direction;
-import util.Level;
+import de.tu_berlin.math.coga.common.util.Direction;
+import de.tu_berlin.math.coga.common.util.Level;
 import converter.RoomRasterSquare.Property;
 import ds.z.Barrier;
 import ds.z.Edge;

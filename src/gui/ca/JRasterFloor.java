@@ -46,7 +46,7 @@ import java.util.ArrayList;
 import java.util.LinkedList;
 
 import statistic.ca.CAStatistic;
-import util.Direction;
+import de.tu_berlin.math.coga.common.util.Direction;
 
 /**
  * Represents a rastered floor, all rooms have to be squares of the raster size

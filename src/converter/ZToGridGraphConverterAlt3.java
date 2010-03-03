@@ -44,10 +44,10 @@ import java.util.HashSet;
 import java.util.Hashtable;
 import java.util.LinkedList;
 import java.util.List;
-import util.Direction;
-import util.Level;
-import static util.Direction.*;
-import static util.Level.*;
+import de.tu_berlin.math.coga.common.util.Direction;
+import de.tu_berlin.math.coga.common.util.Level;
+import static de.tu_berlin.math.coga.common.util.Direction.*;
+import static de.tu_berlin.math.coga.common.util.Level.*;
 
 /**
  *

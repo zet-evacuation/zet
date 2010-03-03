@@ -29,7 +29,7 @@ import java.awt.Shape;
 
 import de.tu_berlin.math.coga.common.localization.Localization;
 
-import util.Level;
+import de.tu_berlin.math.coga.common.util.Level;
 
 /**
  * The <code>ZToGraphMapping</code> class stores a mapping between an

@@ -17,7 +17,7 @@
 /*
  * Direction.java
  */
-package util;
+package de.tu_berlin.math.coga.common.util;
 
 /**
  * This enumerates directions on an integral 2 dimensional room such as a

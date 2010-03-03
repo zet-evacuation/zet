@@ -24,7 +24,7 @@ import javax.media.opengl.GLAutoDrawable;
 import opengl.drawingutils.GLColor;
 import opengl.drawingutils.GLVector;
 import opengl.framework.abs.AbstractDrawable;
-import util.Direction;
+import de.tu_berlin.math.coga.common.util.Direction;
 
 public class GLCell extends AbstractDrawable<GLCell, GLCellControl, GLCellControl> {
 	// Vorlaeufige Konstanten bis Verwaltungsklasse fertig

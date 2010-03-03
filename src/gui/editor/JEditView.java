@@ -352,8 +352,8 @@ public class JEditView extends AbstractSplitPropertyWindow<JFloorScrollPane<JFlo
 //				dspFloor.addChangeListener( roomSelector );
 				getLeftPanel().getTopRuler().setWidth( dspFloor.getWidth() );
 				getLeftPanel().getLeftRuler().setHeight( dspFloor.getHeight() );
-				getLeftPanel().getTopRuler().offset = util.ConversionTools.roundScale3( dspFloor.getxOffset() / 1000.0 - 0.8 );
-				getLeftPanel().getLeftRuler().offset = util.ConversionTools.roundScale3( dspFloor.getyOffset() / 1000.0 - 0.8 );
+				getLeftPanel().getTopRuler().offset = zet.util.ConversionTools.roundScale3( dspFloor.getxOffset() / 1000.0 - 0.8 );
+				getLeftPanel().getLeftRuler().offset = zet.util.ConversionTools.roundScale3( dspFloor.getyOffset() / 1000.0 - 0.8 );
 
 				// FloorName
 				txtFloorName.setText( dspFloor.getName() );
@@ -1312,8 +1312,8 @@ public class JEditView extends AbstractSplitPropertyWindow<JFloorScrollPane<JFlo
 		Floor floor = getCurrentFloor();
 		topRuler.setWidth( floor.getWidth() );
 		leftRuler.setHeight( floor.getHeight() );
-		topRuler.offset = util.ConversionTools.roundScale3( floor.getxOffset() / 1000.0 - 0.8 );
-		leftRuler.offset = util.ConversionTools.roundScale3( floor.getyOffset() / 1000.0 - 0.8 );
+		topRuler.offset = zet.util.ConversionTools.roundScale3( floor.getxOffset() / 1000.0 - 0.8 );
+		leftRuler.offset = zet.util.ConversionTools.roundScale3( floor.getyOffset() / 1000.0 - 0.8 );
 		topRuler.repaint();
 		leftRuler.repaint();
 	}

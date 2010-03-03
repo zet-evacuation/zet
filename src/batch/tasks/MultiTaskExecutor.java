@@ -23,7 +23,7 @@ import de.tu_berlin.math.coga.common.algorithm.Algorithm;
 import de.tu_berlin.math.coga.common.algorithm.AlgorithmListener;
 import gui.components.progress.ProgressTaskEntry;
 import java.util.ArrayList;
-import util.Helper;
+import de.tu_berlin.math.coga.common.util.Helper;
 
 /**
  * A <code>Runnable</code> class that allows to execute several tasks

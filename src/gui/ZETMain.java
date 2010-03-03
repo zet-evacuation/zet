@@ -40,7 +40,7 @@ import gui.editor.GUIOptionManager;
 import gui.editor.properties.JPropertySelectorWindow;
 import gui.editor.properties.PropertyLoadException;
 import gui.editor.properties.PropertyTreeModel;
-import util.IOTools;
+import de.tu_berlin.math.coga.common.util.IOTools;
 import java.awt.Image;
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -53,8 +53,8 @@ import javax.imageio.ImageIO;
 import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
 import de.tu_berlin.math.coga.common.localization.Localization;
-import util.DebugStream;
-import util.DebugStreamVerbose;
+import de.tu_berlin.math.coga.common.debug.DebugStream;
+import de.tu_berlin.math.coga.common.debug.DebugStreamVerbose;
 
 /**
  * The <code>ZETMain</code> class is the main entry for the graphical user

@@ -22,7 +22,7 @@
 package io.movie;
 
 import info.clearthought.layout.TableLayout;
-import util.IOTools;
+import de.tu_berlin.math.coga.common.util.IOTools;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.FocusEvent;

@@ -77,7 +77,7 @@ public class BuildingPlan implements Serializable, Iterable<Floor> {
 		rasterized = false;
 		// Add a new default-floor and sets its raster to 400 millimeter
 		DefaultEvacuationFloor def = new DefaultEvacuationFloor();
-		def.setRasterSize( util.ConversionTools.floatToInt( rasterSize ) );
+		def.setRasterSize( zet.util.ConversionTools.floatToInt( rasterSize ) );
 		addFloor( def );
 	}
 

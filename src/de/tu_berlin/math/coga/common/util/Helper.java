@@ -18,7 +18,7 @@
  * Class Helper
  * Erstellt 08.07.2008, 19:04:34
  */
-package util;
+package de.tu_berlin.math.coga.common.util;
 
 /**
  * Some helper methods that are needed every now and then.

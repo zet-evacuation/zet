@@ -28,7 +28,7 @@ import de.tu_berlin.math.coga.common.localization.Localization;
  * Implements a three dimensional vector.
  * @author Jan-Philipp Kappmeier
  */
-public class Vector3 {
+public class Vector3 implements Cloneable {
 	public double x = 0;
 	public double y = 0;
 	public double z = 0;
@@ -55,6 +55,11 @@ public class Vector3 {
 		this.x = x;
 		this.y = y;
 		this.z = z;
+	}
+
+	@Override
+	public Vector3 clone() {
+		return new Vector3( x, y, z );
 	}
 
 	/**
@@ -103,8 +108,8 @@ public class Vector3 {
 //	}
 
 	/**
-	 * Cross product.
-	 * @param v
+	 * Computes the cross product of this vector and another vector.
+	 * @param v the vector
 	 * @return the cross product of this vector and the vector {@code v}
 	 */
 	public Vector3 crossProduct( Vector3 v ) {
@@ -116,11 +121,11 @@ public class Vector3 {
 	}
 	
 	/**
-	 * Calculates the dot product or scalar product of this vector and another vector..
+	 * Computes the dot product or scalar product of this vector and another vector..
 	 * @param v the other vector
 	 * @return the dot product
 	 */
-	public double dotProduct( Vector3 v ) {
+	public final double dotProduct( Vector3 v ) {
 		return x * v.x + y * v.y + z * v.z;
 	}
 	

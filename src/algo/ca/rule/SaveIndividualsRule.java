@@ -18,7 +18,7 @@ package algo.ca.rule;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
-import util.IOTools;
+import de.tu_berlin.math.coga.common.util.IOTools;
 
 public class SaveIndividualsRule extends AbstractSaveRule {
 	static String nord = IOTools.getNextFreeNumberedFilename( "./", "results_nord", 3 );

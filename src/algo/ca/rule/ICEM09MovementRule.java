@@ -17,8 +17,8 @@ package algo.ca.rule;
 
 import java.util.ArrayList;
 
-import util.Direction;
-import util.Level;
+import de.tu_berlin.math.coga.common.util.Direction;
+import de.tu_berlin.math.coga.common.util.Level;
 import ds.ca.Cell;
 import ds.ca.Individual;
 import ds.ca.StairCell;

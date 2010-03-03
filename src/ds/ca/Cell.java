@@ -19,8 +19,8 @@ import java.util.ArrayList;
 import java.util.EnumMap;
 import java.util.EnumSet;
 
-import util.Direction;
-import util.Level;
+import de.tu_berlin.math.coga.common.util.Direction;
+import de.tu_berlin.math.coga.common.util.Level;
 
 /**
  * The Cellular Automaton devides a room into quadratic cells.

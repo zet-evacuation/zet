@@ -19,7 +19,7 @@
  * Created 06.03.2009, 19:48:32
  */
 
-package util;
+package de.tu_berlin.math.coga.common.debug;
 
 import event.EventServer;
 import event.MessageEvent;

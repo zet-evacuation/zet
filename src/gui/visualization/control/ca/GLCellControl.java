@@ -38,7 +38,7 @@ import gui.visualization.draw.ca.GLSaveCell;
 import gui.visualization.draw.ca.GLStairCell;
 import gui.visualization.util.Tuple;
 import opengl.drawingutils.GLColor;
-import util.Direction;
+import de.tu_berlin.math.coga.common.util.Direction;
 
 public class GLCellControl extends AbstractControl<GLCell, Cell, CAVisualizationResults, GLCell, GLCellControl> implements StepUpdateListener {
 	private int floorID;
