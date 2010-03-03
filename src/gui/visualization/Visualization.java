@@ -81,7 +81,6 @@ public class Visualization extends AbstractVisualization implements EventListene
 	private GLAutoDrawable drawable;
 	/** Indicates if mouse movement in 2d-view rotates or moves the building. */
 	private boolean noRotate = false;
-	private static GLColor white = new GLColor( Color.white );
 	/** Decides wheather a movie is captured or not */
 	private boolean recording = false;
 	/** If a movie is captured describes the framerate of the movie */
@@ -331,7 +330,7 @@ public class Visualization extends AbstractVisualization implements EventListene
 
 		gl.glTranslated( getCamera().getPos().x, getCamera().getPos().y, getCamera().getPos().z );
 		GLColor red = new GLColor( Color.red );
-		red.performGL( gl );
+		red.draw( gl );
 		GLUquadric quadObj = glu.gluNewQuadric();
 		glu.gluSphere( quadObj, 10 * VisualizationConstants.SIZE_MULTIPLICATOR, 10, 3 );
 		gl.glPushMatrix();
@@ -357,7 +356,7 @@ public class Visualization extends AbstractVisualization implements EventListene
 	final private void drawIntroText( int index ) {
 		gl.glClear( clearBits );
 		this.setProjectionPrint();
-		white.performGL( gl );
+		GLColor.white.draw( gl );
 		gl.glEnable( gl.GL_TEXTURE_2D );
 		fontTex.bind();
 		TextureFontStrings tfs = texts.get( index );
@@ -417,7 +416,7 @@ public class Visualization extends AbstractVisualization implements EventListene
 	 */
 	final private void drawOutroText() {
 		this.setProjectionPrint();
-		white.performGL( gl );
+		GLColor.white.draw( gl );
 		gl.glEnable( gl.GL_TEXTURE_2D );
 		int row = 1;
 		font.print( 100, this.getHeight() - (7) * fontSize, loc.getString( "testtext" ) );
@@ -460,7 +459,7 @@ public class Visualization extends AbstractVisualization implements EventListene
 				drawEye();
 		}
 
-		control.draw( drawable );
+		control.draw( gl );
 		gl.glClear( GL.GL_DEPTH_BUFFER_BIT );
 		drawFPS();
 	}
@@ -471,7 +470,7 @@ public class Visualization extends AbstractVisualization implements EventListene
 	 */
 	final private void drawFPS() {
 		this.setProjectionPrint();
-		white.performGL( gl );
+		GLColor.white.draw( gl );
 		gl.glEnable( GL.GL_BLEND );
 		gl.glBlendFunc( GL.GL_ONE, GL.GL_ONE );// Copy Image 2 Color To The Screen
 		gl.glEnable( gl.GL_TEXTURE_2D );

@@ -46,14 +46,14 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Vector;
-import javax.media.opengl.GLAutoDrawable;
 import de.tu_berlin.math.coga.common.localization.Localization;
-import opengl.framework.abs.drawable;
+import opengl.framework.abs.Drawable;
 import statistic.ca.CAStatistic;
 import batch.tasks.AlgorithmTask;
+import javax.media.opengl.GL;
 import util.DebugFlags;
 
-public class GLControl implements drawable {
+public class GLControl implements Drawable {
 
 	/**
 	 * Describes the differend types of information which can be illustrated
@@ -661,20 +661,20 @@ public class GLControl implements drawable {
 	/**
 	 * This method draws the scene. That means it calls the {@link GLCA } and
 	 * {@link GLGraph} objects and calls their drawing routines.
-	 * @param drawable
+	 * @param Drawable
 	 */
-	public final void draw( GLAutoDrawable drawable ) {
+	public final void draw( GL gl ) {
 		if( showCA && hasCA )
-			caView.draw( drawable );
+			caView.draw( gl );
 		if( showGraph && hasGraph )
-			graphView.draw( drawable );
+			graphView.draw( gl );
 		if( showWalls )
-			buildingView.draw( drawable );
+			buildingView.draw( gl );
 	}
 
 	/** 
 	 * {@inheritDoc}
-	 * @see opengl.framework.abs.drawable#update()
+	 * @see opengl.framework.abs.Drawable#update()
 	 */
 	@Override
 	public void update() {

@@ -13,28 +13,27 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
+
 /*
+ * GLWall.java
  * Created on 18.06.2008
- *
  */
+
 package gui.visualization.draw.building;
 
-import java.util.Iterator;
-import java.util.List;
-
-import javax.media.opengl.GL;
-import javax.media.opengl.GLAutoDrawable;
-
+import de.tu_berlin.math.coga.math.vectormath.Vector3;
 import gui.visualization.VisualizationOptionManager;
 import gui.visualization.control.building.GLWallControl;
 import gui.visualization.util.VisualizationConstants;
 import io.visualization.BuildingResults.Wall;
+import java.util.Iterator;
+import java.util.List;
 import java.util.Vector;
+import javax.media.opengl.GL;
 import opengl.drawingutils.GLColor;
 import opengl.drawingutils.GLVector;
 import opengl.framework.abs.AbstractDrawable;
 import opengl.helper.Frustum;
-import de.tu_berlin.math.coga.math.vectormath.Vector3;
 
 /**
  * @author Daniel Pluempe, Jan-Philipp Kappmeier
@@ -59,7 +58,7 @@ public class GLWall extends AbstractDrawable<GLWall, GLWallControl, GLWallContro
 	}
 
 	@Override
-	public void performDrawing( GLAutoDrawable drawable ) {
+	public void performDrawing( GL gl ) {
 	}
 
 	/**
@@ -68,11 +67,10 @@ public class GLWall extends AbstractDrawable<GLWall, GLWallControl, GLWallContro
 	 * @param drawable the {@code OpenGL} graphics context to be drawn on
 	 */
 	@Override
-	public void performStaticDrawing( GLAutoDrawable drawable ) {
+	public void performStaticDrawing( GL gl ) {
 		final double pi = Math.PI;
-		GL gl = drawable.getGL();
 
-		wallColor.performGL( gl );
+		wallColor.draw( gl );
 
 		gl.glBegin( GL.GL_QUADS );
 		Iterator<GLVector> wallStart = basePoints.iterator();

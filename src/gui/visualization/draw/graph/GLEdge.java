@@ -21,7 +21,6 @@ import gui.visualization.control.graph.GLEdgeControl;
 import gui.visualization.util.VisualizationConstants;
 import java.util.ArrayList;
 import javax.media.opengl.GL;
-import javax.media.opengl.GLAutoDrawable;
 import javax.media.opengl.glu.GLU;
 import opengl.drawingutils.GLColor;
 import opengl.framework.abs.AbstractDrawable;
@@ -72,15 +71,15 @@ public class GLEdge extends AbstractDrawable<GLEdge, GLEdgeControl, GLEdgeContro
 		diskAtStart = diskAtStart && (factor < 1);
 		diskAtEnd = diskAtEnd && (factor < 1);
 		if( diskAtEnd ) {
-			flowUnitColor.performGL( gl );
+			flowUnitColor.draw( gl );
 			glu.gluDisk( quadObj, thickness, calculatedFlowThickness, qualityPreset.edgeSlices, 1 );
 		}
-		flowColor.performGL( gl );
+		flowColor.draw( gl );
 		glu.gluCylinder( quadObj, calculatedFlowThickness, calculatedFlowThickness, length, qualityPreset.edgeSlices, 1 );
 		if( diskAtStart ) {
 			gl.glPushMatrix();
 			gl.glTranslated( 0.0, 0.0, length );
-			flowUnitColor.performGL( gl );
+			flowUnitColor.draw( gl );
 			glu.gluDisk( quadObj, thickness, calculatedFlowThickness, qualityPreset.edgeSlices, 1 );
 			gl.glPopMatrix();
 		}
@@ -94,7 +93,7 @@ public class GLEdge extends AbstractDrawable<GLEdge, GLEdgeControl, GLEdgeContro
 	private void drawFlow( GL gl ) {
 		control.stepUpdate();
 
-		flowColor.performGL( gl );
+		flowColor.draw( gl );
 		flowOnEdge = control.getFlowOnEdge();
 
 		int offset = transitTime;
@@ -146,8 +145,7 @@ public class GLEdge extends AbstractDrawable<GLEdge, GLEdgeControl, GLEdgeContro
 	 * (0,0,1), so the difference vector has to be rotated into this vector.
 	 * @param drawable a <code>GLAutoDrawable</code> on which the edges are drawn.
 	 */
-	private void drawStaticStructure( GLAutoDrawable drawable ) {
-		GL gl = drawable.getGL();
+	private void drawStaticStructure( GL gl ) {
 		gl.glPushMatrix();
 		//gl.glEnable( gl.GL_BLEND );
 		//gl.glBlendFunc( gl.GL_SRC_ALPHA, gl.GL_ONE );
@@ -167,24 +165,24 @@ public class GLEdge extends AbstractDrawable<GLEdge, GLEdgeControl, GLEdgeContro
 	 * @param drawable the {@code OpenGL} drawable object
 	 */
 	@Override
-	public void performDrawing( GLAutoDrawable drawable ) {
-		drawFlow( drawable.getGL() );
+	public void performDrawing( GL gl ) {
+		drawFlow( gl );
 	}
 
-	@Override
 	/**
 	 * Draws the static structure of the edge that means the edge, if it is the first one
 	 * of the two edges. The flow is not painted.
 	 * {@see GLEdgeControl#isFirstEdge()}
 	 * @param drawable the {@code OpenGL} drawable object
 	 */
-	public void performStaticDrawing( GLAutoDrawable drawable ) {
-		beginDraw( drawable );
-		edgeColor.performGL( drawable.getGL() );
+	@Override
+	public void performStaticDrawing( GL gl ) {
+		beginDraw( gl );
+		edgeColor.draw( gl );
 		if( control.isFirstEdge() ) {
-			drawStaticStructure( drawable );
+			drawStaticStructure( gl );
 		}
-		endDraw( drawable );
+		endDraw( gl );
 	}
 	
 	@Override

@@ -15,7 +15,7 @@
  */
 
 /**
- * Class GLIndividual2
+ * Class GLIndividual
  * Erstellt 10.06.2008, 22:23:01
  */
 
@@ -28,7 +28,6 @@ import gui.visualization.util.Tuple;
 import gui.visualization.util.VisualizationConstants;
 import java.awt.Color;
 import javax.media.opengl.GL;
-import javax.media.opengl.GLAutoDrawable;
 import opengl.drawingutils.GLColor;
 import opengl.framework.abs.AbstractDrawable;
 
@@ -58,7 +57,7 @@ public class GLIndividual extends AbstractDrawable<GLIndividual, GLIndividualCon
 	static GLColor green = new GLColor( Color.green );
 
 	@Override
-	public void performDrawing( GLAutoDrawable drawable ) {
+	public void performDrawing( GL gl ) {
 		control.stepUpdate();
 		if( control.isInvisible() )
 			return;
@@ -73,16 +72,15 @@ public class GLIndividual extends AbstractDrawable<GLIndividual, GLIndividualCon
 			headColor = green.blend( red, control.getHeadInformation() );
 			bodyColor = individualColor;
 		}
-		GL gl = drawable.getGL();
 		gl.glPushMatrix();
 		Tuple pos = control.getCurrentPosition();
 		gl.glTranslated( pos.x * VisualizationConstants.SIZE_MULTIPLICATOR, pos.y * VisualizationConstants.SIZE_MULTIPLICATOR, 1 * VisualizationConstants.SIZE_MULTIPLICATOR );
-		bodyColor.performGL( gl );
+		bodyColor.draw( gl );
 		//glu.gluCylinder( quadObj, individualRadius, 0.0, individualHeight, 12, 1 );	// Normal
 		//glu.gluCylinder( quadObj, individualRadius, 0.0, individualHeight, 48, 24 );	// High quality
 
 		glu.gluCylinder( quadObj, individualRadius, 0.0, individualHeight, qualityPreset.individualBodySlices, qualityPreset.individualBodyStacks );
-		headColor.performGL( gl );
+		headColor.draw( gl );
 		gl.glTranslated( 0, 0, individualHeight - individualRadius * 0.7 );
 		//glu.gluSphere( quadObj, individualRadius * 0.7, 8, 8 ); // Normal
     //glu.gluSphere( quadObj, individualRadius * 0.7, 48, 48 ); // High quality
