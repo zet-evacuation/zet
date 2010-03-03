@@ -21,6 +21,7 @@
 
 package gui.editor;
 
+import de.tu_berlin.math.coga.common.debug.Log;
 import gui.components.JLogField;
 import info.clearthought.layout.TableLayout;
 import javax.swing.JPanel;
@@ -34,7 +35,7 @@ public class JLogView extends JPanel {
 	/**
 	 * Creates a new instance of <code>JLogView</code>.
 	 */
-	public JLogView() {
+	public JLogView( Log log ) {
 		double size[][] = // Columns
 		{
 			{ TableLayout.FILL },
@@ -44,7 +45,7 @@ public class JLogView extends JPanel {
 
 		setLayout( new TableLayout( size ) );
 
-		JLogField logField = new JLogField();
+		JLogField logField = new JLogField( log );
 		add( logField, "0,0" );
 	}
 

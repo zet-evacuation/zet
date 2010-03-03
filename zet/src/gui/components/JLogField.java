@@ -18,31 +18,31 @@
  * JLogField.java
  * Created 29.10.2009, 15:56:54
  */
+
 package gui.components;
 
+import de.tu_berlin.math.coga.common.debug.Log;
 import event.EventListener;
 import event.EventServer;
 import event.MessageEvent;
 import info.clearthought.layout.TableLayout;
-import java.util.ArrayList;
 import javax.swing.JEditorPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 
 /**
- * The class <code>JLogField</code> is a text area that displays log and error
+ * The class <code>JLogField</code> is a text area that displays logPane and error
  * messages. The error messages are displayed in red.
  * @author Jan-Philipp Kappmeier
  */
 public class JLogField extends JPanel implements EventListener<MessageEvent> {
-	JEditorPane log;
-	ArrayList<String> strings = new ArrayList<String>();
-	String text = "";
+	JEditorPane logPane;
+	Log log;
 
 	/**
 	 * Creates a new instance of <code>JLogField</code>.
 	 */
-	public JLogField() {
+	public JLogField( Log log ) {
 		double size[][] = // Columns
 						{
 			{TableLayout.FILL},
@@ -52,9 +52,10 @@ public class JLogField extends JPanel implements EventListener<MessageEvent> {
 
 		setLayout( new TableLayout( size ) );
 
-		log = new JEditorPane( "text/html", "" );
+		logPane = new JEditorPane( "text/html", "" );
+		//logPane = new JEditorPane();
 
-    JScrollPane scrollPane = new JScrollPane( log );
+    JScrollPane scrollPane = new JScrollPane( logPane );
 
 		add( scrollPane, "0,0" );
 
@@ -70,19 +71,11 @@ public class JLogField extends JPanel implements EventListener<MessageEvent> {
 	 * @param event the event that occured.
 	 */
 	public void handleEvent( MessageEvent event ) {
-		try{
-		String s = "";
-		switch( event.getType() ) {
-			case Log:
-				s = event.getMessage() + "<br>";
-				break;
-			case LogError:
-				s = "<font color=\"red\">" + event.getMessage() + "</font><br>";
-				break;
-		}
-		strings.add( s );
-		text += s;
-//  		log.setText( "<html>" + text + "</html>" );
+		final String pre = "<html><font face=\"sans-serif\" size=\"-1\">";
+		final String post = "</font></html>";
+ 		try {
+  		logPane.setText( pre + log.getText() + post );
+		//logPane.setText( text );
 		}catch( Exception ex ) {
 			int i = 1;
 			i++;

@@ -30,11 +30,6 @@ public abstract class ContinousDistribution extends Distribution<Double> {
 		return "ContinousDistribution";
 	}
 
-	@Override
-	public double getDensityAt( double x ) {
-		throw new UnsupportedOperationException( "Not supported yet." );
-	}
-
 	/**
 	 * {@inheritDoc}
 	 * @throws IllegalArgumentException if min is greater than max

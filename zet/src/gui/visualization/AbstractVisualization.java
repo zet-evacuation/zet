@@ -272,7 +272,7 @@ public abstract class AbstractVisualization extends GLCanvas implements GLEventL
 	}
 
 	final public void moveUp( double init, double value ) {
-		camera.getPos().z = init + 1 * (value);								// add( camera.getView().scalaryMultiplication( e.getWheelRotation() * camera.getSpeed() ) );
+		camera.getPos().z = init + 1 * (value);								// addTo( camera.getView().scalarMultiplicate( e.getWheelRotation() * camera.getSpeed() ) );
 		if( camera.getPos().z <= 0.001 )												// let epsilon space to zero
 			camera.getPos().z = 0.001;
 		currentWidth = initWidth * camera.getPos().z / init;
@@ -539,7 +539,7 @@ public abstract class AbstractVisualization extends GLCanvas implements GLEventL
 	@Override
 	public void mouseWheelMoved( MouseWheelEvent e ) {
 		if( is3D )
-			camera.getPos().add( camera.getView().scalaryMultiplication( scrollInvert * e.getWheelRotation() * camera.getSpeed() ) );
+			camera.getPos().addTo( camera.getView().scalarMultiplicate( scrollInvert * e.getWheelRotation() * camera.getSpeed() ) );
 		else
 			initWidth = currentWidth;
 		initHeight = currentHeight;

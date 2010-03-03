@@ -130,27 +130,27 @@ public class Camera {
 	}
 
 	public void stepRight() {
-		pos.add( view.crossProduct( up ).scalaryMultiplication( -speed ) );
+		pos.addTo( view.crossProduct( up ).scalarMultiplicate( -speed ) );
 	}
 	
 	public void stepLeft() {
-		pos.add( view.crossProduct( up ).scalaryMultiplication( speed ) );
+		pos.addTo( view.crossProduct( up ).scalarMultiplicate( speed ) );
 	}
 	
 	public void stepForward() {
-		pos.add( view.scalaryMultiplication( speed ) );
+		pos.addTo( view.scalarMultiplicate( speed ) );
 	}
 	
 	public void stepBackward() {
-		pos.add( view.scalaryMultiplication( -speed ) );
+		pos.addTo( view.scalarMultiplicate( -speed ) );
 	}
 	
 	public void stepUp() {
-		pos.add( up.scalaryMultiplication( speed ) );
+		pos.addTo( up.scalarMultiplicate( speed ) );
 	}
 
 	public void stepDown() {
-		pos.add( up.scalaryMultiplication( -speed ) );
+		pos.addTo( up.scalarMultiplicate( -speed ) );
 	}
 	
 	public void strafeLeft() {

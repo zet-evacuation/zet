@@ -160,7 +160,7 @@ public class JMovingEyePanel extends JOpenGLCanvas {
 
 	@Override
 	public void mouseWheelMoved( MouseWheelEvent e ) {
-		pos.add( view.scalaryMultiplication( e.getWheelRotation() * speed ) );
+		pos.addTo( view.scalarMultiplicate( e.getWheelRotation() * speed ) );
 		repaint();
 	}
 
@@ -181,27 +181,27 @@ public class JMovingEyePanel extends JOpenGLCanvas {
 	}
 
 	public void stepRight() {
-		pos.add( view.crossProduct( up ).scalaryMultiplication( -speed ) );
+		pos.addTo( view.crossProduct( up ).scalarMultiplicate( -speed ) );
 	}
 	
 	public void stepLeft() {
-		pos.add( view.crossProduct( up ).scalaryMultiplication( speed ) );
+		pos.addTo( view.crossProduct( up ).scalarMultiplicate( speed ) );
 	}
 	
 	public void stepFor() {
-		pos.add( view.scalaryMultiplication( -speed ) );
+		pos.addTo( view.scalarMultiplicate( -speed ) );
 	}
 	
 	public void stepBack() {
-		pos.add( view.scalaryMultiplication( speed ) );
+		pos.addTo( view.scalarMultiplicate( speed ) );
 	}
 	
 	public void stepUp() {
-		pos.add( up.scalaryMultiplication( speed ) );
+		pos.addTo( up.scalarMultiplicate( speed ) );
 	}
 
 	public void stepDown() {
-		pos.add( up.scalaryMultiplication( -speed ) );
+		pos.addTo( up.scalarMultiplicate( -speed ) );
 	}
 	
 	public void accelerate() {

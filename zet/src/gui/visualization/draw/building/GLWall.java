@@ -85,7 +85,7 @@ public class GLWall extends AbstractDrawable<GLWall, GLWallControl, GLWallContro
 		while( wallEnd.hasNext() && wallStart.hasNext() ) {
 			GLVector start = wallStart.next();
 			GLVector end = wallEnd.next();
-			Vector3 newVector = start.subtraction( end );
+			Vector3 newVector = start.sub( end );
 			newVector.normalize();
 			vectors.add(newVector);
 		}
@@ -122,13 +122,13 @@ public class GLWall extends AbstractDrawable<GLWall, GLWallControl, GLWallContro
 
 				if( control.isRoomLeft() ) {
 						innerStartVectorAddition.rotate( -(angleEnd/2)*Frustum.DEG2ANGLE, new Vector3( 0,0,1) );
-						innerStartVectorAddition.scalarMultiplicate( getHypothenuseFactor( angleEnd / 2 ) );
-						innerStart.add( innerStartVectorAddition );
-						innerStartHigh.add( innerStartVectorAddition );
+						innerStartVectorAddition.scalarMultiplicateTo( getHypothenuseFactor( angleEnd / 2 ) );
+						innerStart.addTo( innerStartVectorAddition );
+						innerStartHigh.addTo( innerStartVectorAddition );
 						innerEndVectorAddition.rotate( (angleStart/2)*Frustum.DEG2ANGLE, new Vector3( 0,0,1) );
-						innerEndVectorAddition.scalarMultiplicate( getHypothenuseFactor( angleStart / 2 ) );
-						innerEnd.add( innerEndVectorAddition );
-						innerEndHigh.add( innerEndVectorAddition );
+						innerEndVectorAddition.scalarMultiplicateTo( getHypothenuseFactor( angleStart / 2 ) );
+						innerEnd.addTo( innerEndVectorAddition );
+						innerEndHigh.addTo( innerEndVectorAddition );
 					gl.glVertex3d( innerEnd.x, innerEnd.y, innerEnd.z );
 					gl.glVertex3d( innerStart.x, innerStart.y, innerStart.z );
 					gl.glVertex3d( innerStartHigh.x, innerStartHigh.y, innerStartHigh.z );
@@ -139,13 +139,13 @@ public class GLWall extends AbstractDrawable<GLWall, GLWallControl, GLWallContro
 					outerEndVectorAddition = new GLVector( normal );
 					outerStartVectorAddition = new GLVector( normal );
 						outerEndVectorAddition.rotate( (angleStart/2)*Frustum.DEG2ANGLE, new Vector3( 0,0,1) );
-						outerEndVectorAddition.scalarMultiplicate( getHypothenuseFactor( angleStart / 2 ) );
-						outerEnd.add( outerEndVectorAddition );
-						outerEndHigh.add( outerEndVectorAddition );
+						outerEndVectorAddition.scalarMultiplicateTo( getHypothenuseFactor( angleStart / 2 ) );
+						outerEnd.addTo( outerEndVectorAddition );
+						outerEndHigh.addTo( outerEndVectorAddition );
 						outerStartVectorAddition.rotate( -(angleEnd/2)*Frustum.DEG2ANGLE, new Vector3( 0,0,1) );
-						outerStartVectorAddition.scalarMultiplicate( getHypothenuseFactor( angleEnd / 2 ) );
-						outerStart.add( outerStartVectorAddition );
-						outerStartHigh.add( outerStartVectorAddition );
+						outerStartVectorAddition.scalarMultiplicateTo( getHypothenuseFactor( angleEnd / 2 ) );
+						outerStart.addTo( outerStartVectorAddition );
+						outerStartHigh.addTo( outerStartVectorAddition );
 					gl.glVertex3d( outerStart.x, outerStart.y, outerStart.z );
 					gl.glVertex3d( outerEnd.x, outerEnd.y, outerEnd.z );
 					gl.glVertex3d( outerEndHigh.x, outerEndHigh.y, outerEndHigh.z );
@@ -153,17 +153,17 @@ public class GLWall extends AbstractDrawable<GLWall, GLWallControl, GLWallContro
 				} else { // Room is right
 					if( Math.cos( angleEnd * 0.5 ) > 0.000001 ) { // added
 						innerStartVectorAddition.rotate( (angleEnd/2)*Frustum.DEG2ANGLE, new Vector3( 0,0,1) );
-						innerStartVectorAddition.scalarMultiplicate( getHypothenuseFactor( angleEnd / 2 ) );
+						innerStartVectorAddition.scalarMultiplicateTo( getHypothenuseFactor( angleEnd / 2 ) );
 					} // added
-						innerStart.add( innerStartVectorAddition );
-						innerStartHigh.add( innerStartVectorAddition );
+						innerStart.addTo( innerStartVectorAddition );
+						innerStartHigh.addTo( innerStartVectorAddition );
 
 					if( Math.cos( angleStart * 0.5 ) > 0.00001 ) {
 						innerEndVectorAddition.rotate( -(angleStart/2)*Frustum.DEG2ANGLE, new Vector3( 0,0,1) );
-						innerEndVectorAddition.scalarMultiplicate( getHypothenuseFactor( angleStart / 2 ) );
+						innerEndVectorAddition.scalarMultiplicateTo( getHypothenuseFactor( angleStart / 2 ) );
 					}
-					innerEnd.add( innerEndVectorAddition );
-					innerEndHigh.add( innerEndVectorAddition );
+					innerEnd.addTo( innerEndVectorAddition );
+					innerEndHigh.addTo( innerEndVectorAddition );
 					gl.glVertex3d( innerStart.x, innerStart.y, innerStart.z );
 					gl.glVertex3d( innerEnd.x, innerEnd.y, innerEnd.z );
 					gl.glVertex3d( innerEndHigh.x, innerEndHigh.y, innerEndHigh.z );
@@ -175,16 +175,16 @@ public class GLWall extends AbstractDrawable<GLWall, GLWallControl, GLWallContro
 					outerStartVectorAddition = new GLVector( normal );
 					if( Math.cos( angleStart * 0.5 ) > 0.000001 ) { // added
 						outerEndVectorAddition.rotate( -(angleStart/2)*Frustum.DEG2ANGLE, new Vector3( 0,0,1) );
-						outerEndVectorAddition.scalarMultiplicate( getHypothenuseFactor( angleStart / 2 ) );
+						outerEndVectorAddition.scalarMultiplicateTo( getHypothenuseFactor( angleStart / 2 ) );
 					}
-						outerEnd.add( outerEndVectorAddition );
-						outerEndHigh.add( outerEndVectorAddition );
+						outerEnd.addTo( outerEndVectorAddition );
+						outerEndHigh.addTo( outerEndVectorAddition );
 					if( Math.cos( angleEnd * 0.5 ) > 0.000001 ) { // added
 						outerStartVectorAddition.rotate( +(angleEnd/2)*Frustum.DEG2ANGLE, new Vector3( 0,0,1) );
-						outerStartVectorAddition.scalarMultiplicate( getHypothenuseFactor( angleEnd / 2 ) );
+						outerStartVectorAddition.scalarMultiplicateTo( getHypothenuseFactor( angleEnd / 2 ) );
 					}
-						outerStart.add( outerStartVectorAddition );
-						outerStartHigh.add( outerStartVectorAddition );
+						outerStart.addTo( outerStartVectorAddition );
+						outerStartHigh.addTo( outerStartVectorAddition );
 					gl.glVertex3d( outerStart.x, outerStart.y, outerStart.z );
 					gl.glVertex3d( outerEnd.x, outerEnd.y, outerEnd.z );
 					gl.glVertex3d( outerEndHigh.x, outerEndHigh.y, outerEndHigh.z );
@@ -217,7 +217,7 @@ public class GLWall extends AbstractDrawable<GLWall, GLWallControl, GLWallContro
 				gl.glVertex3d( outerStartHigh.x, outerStartHigh.y, outerStartHigh.z );
 			} else { // is passable
 				// Zeichne für türen die innen liegenden Türseiten (also im Durchgang innen)
-				GLVector doorVector = new GLVector( innerEnd.subtraction(innerStart) );
+				GLVector doorVector = new GLVector( innerEnd.sub(innerStart) );
 				doorVector.normalize();
 				doorVector.normal( gl );
 				GLVector dl = getDoorFrontCoordinate( innerStart, innerEnd, innerStartHigh, innerEndHigh, true, 1 );	// In normalenrichtung
@@ -234,16 +234,16 @@ public class GLWall extends AbstractDrawable<GLWall, GLWallControl, GLWallContro
 			normal.normal( gl );
 			// Nutze dl und tl
 			// addiere normale zum startpunkt hinzu
-			GLVector dl2 = new GLVector( innerStart.addition( normal ) );
-			GLVector tl2 = new GLVector( innerStartHigh.addition( normal ) );
+			GLVector dl2 = new GLVector( innerStart.add( normal ) );
+			GLVector tl2 = new GLVector( innerStartHigh.add( normal ) );
 			gl.glVertex3d( dl.x, dl.y, dl.z );
 			gl.glVertex3d( dl2.x, dl2.y, dl2.z );
 			gl.glVertex3d( tl2.x, tl2.y, tl2.z );
 			gl.glVertex3d( tl.x, tl.y, tl.z );
 			normal.invert();
 			normal.normal( gl );
-			GLVector dr2 = new GLVector( innerStart.addition( normal ) );
-			GLVector tr2 = new GLVector( innerStartHigh.addition( normal ) );
+			GLVector dr2 = new GLVector( innerStart.add( normal ) );
+			GLVector tr2 = new GLVector( innerStartHigh.add( normal ) );
 			gl.glVertex3d( dr2.x, dr2.y, dr2.z );
 			gl.glVertex3d( dr.x, dr.y, dr.z );
 			gl.glVertex3d( tr.x, tr.y, tr.z );
@@ -270,16 +270,16 @@ public class GLWall extends AbstractDrawable<GLWall, GLWallControl, GLWallContro
 			normal.normal( gl );
 			// Nutze dl und tl
 			// addiere normale zum startpunkt hinzu
-			dl2 = new GLVector( innerEnd.addition( normal ) );
-			tl2 = new GLVector( innerEndHigh.addition( normal ) );
+			dl2 = new GLVector( innerEnd.add( normal ) );
+			tl2 = new GLVector( innerEndHigh.add( normal ) );
 			gl.glVertex3d( dl.x, dl.y, dl.z );
 			gl.glVertex3d( dl2.x, dl2.y, dl2.z );
 			gl.glVertex3d( tl2.x, tl2.y, tl2.z );
 			gl.glVertex3d( tl.x, tl.y, tl.z );
 			normal.invert();
 			normal.normal( gl );
-			dr2 = new GLVector( innerEnd.addition( normal ) );
-			tr2 = new GLVector( innerEndHigh.addition( normal ) );
+			dr2 = new GLVector( innerEnd.add( normal ) );
+			tr2 = new GLVector( innerEndHigh.add( normal ) );
 			gl.glVertex3d( dr2.x, dr2.y, dr2.z );
 			gl.glVertex3d( dr.x, dr.y, dr.z );
 			gl.glVertex3d( tr.x, tr.y, tr.z );
@@ -328,55 +328,55 @@ public class GLWall extends AbstractDrawable<GLWall, GLWallControl, GLWallContro
 	}
 	private GLVector getStart( int segment, int segmentCount ) {
 		GLVector start = new GLVector( basePoints.get( mod( segment, segmentCount ) ) );
-		start.scalarMultiplicate( VisualizationConstants.SIZE_MULTIPLICATOR );
+		start.scalarMultiplicateTo( VisualizationConstants.SIZE_MULTIPLICATOR );
 		return start;
 	}
 	private GLVector getEnd( int segment, int segmentCount ) {
 			GLVector end = new GLVector( basePoints.get( mod( segment+1, segmentCount ) ) ); //segment < segmentCount ? new GLVector( basePoints.get( segment + 1) ) : new GLVector( basePoints.get( 0 ) );
-			end.scalarMultiplicate( VisualizationConstants.SIZE_MULTIPLICATOR );
+			end.scalarMultiplicateTo( VisualizationConstants.SIZE_MULTIPLICATOR );
 			return end;
 	}
 	private GLVector getStartHigh( int segment, int segmentCount ) {
 			GLVector startHigh = new GLVector( basePoints.get( mod( segment, segmentCount ) ) );
-			startHigh.scalarMultiplicate( VisualizationConstants.SIZE_MULTIPLICATOR );
+			startHigh.scalarMultiplicateTo( VisualizationConstants.SIZE_MULTIPLICATOR );
 			startHigh.z += WALL_HEIGHT;
 			return startHigh;
 	}
 	// Cannot use this if the start vector is scalar multiplicated already!
 	private GLVector getStartHigh( GLVector start ) {
 			GLVector startHigh = new GLVector( start );
-			startHigh.scalarMultiplicate( VisualizationConstants.SIZE_MULTIPLICATOR );
+			startHigh.scalarMultiplicateTo( VisualizationConstants.SIZE_MULTIPLICATOR );
 			startHigh.z += WALL_HEIGHT;
 			return startHigh;
 	}
 	private GLVector getEndHigh( int segment, int segmentCount ) {
 			GLVector endHigh = new GLVector( basePoints.get( mod( segment+1, segmentCount ) ) );
-			endHigh.scalarMultiplicate( VisualizationConstants.SIZE_MULTIPLICATOR );
+			endHigh.scalarMultiplicateTo( VisualizationConstants.SIZE_MULTIPLICATOR );
 			endHigh.z += WALL_HEIGHT;
 			return endHigh;
 	}
 	// Cannot use this if the end vector is scalar multiplicated already!
 	private GLVector getEndHigh( GLVector end ) {
 			GLVector endHigh = new GLVector( end );
-			endHigh.scalarMultiplicate( VisualizationConstants.SIZE_MULTIPLICATOR );
+			endHigh.scalarMultiplicateTo( VisualizationConstants.SIZE_MULTIPLICATOR );
 			endHigh.z += WALL_HEIGHT;
 			return endHigh;
 	}
 	private GLVector getDoorFrontCoordinate( GLVector startVec, GLVector endVec, GLVector startVecHigh, GLVector endVecHigh, boolean start, int vecNumber ) {		GLVector ret = new GLVector();
-		GLVector doorVector = new GLVector( endVec.subtraction( startVec) );
+		GLVector doorVector = new GLVector( endVec.sub( startVec) );
 		doorVector.normalize();
 		//doorVector.normal( gl );
 		GLVector normal = control.isRoomLeft() ? new GLVector( Vector3.normal( endVec, startVec, startVecHigh ) ) : new GLVector( Vector3.normal( startVec, endVec, endVecHigh ) );
 		normal.normalize();
-				//GLVector dl = new GLVector( innerStart.addition( doorVector ) );
-				//dl.add( normal );
-				//GLVector tl = new GLVector( innerStartHigh.addition( doorVector ) );
-				//tl.add( normal );
+				//GLVector dl = new GLVector( innerStart.add( doorVector ) );
+				//dl.addTo( normal );
+				//GLVector tl = new GLVector( innerStartHigh.add( doorVector ) );
+				//tl.addTo( normal );
 				//normal.invert();
-				//GLVector dr = new GLVector( innerStart.addition( doorVector ) );
-				//dr.add( normal );
-				//GLVector tr = new GLVector( innerStartHigh.addition( doorVector ) );
-				//tr.add( normal );
+				//GLVector dr = new GLVector( innerStart.add( doorVector ) );
+				//dr.addTo( normal );
+				//GLVector tr = new GLVector( innerStartHigh.add( doorVector ) );
+				//tr.addTo( normal );
 				//gl.glVertex3d( dl.x, dl.y, dl.z );
 				//gl.glVertex3d( dr.x, dr.y, dr.z );
 				//gl.glVertex3d( tr.x, tr.y, tr.z );
@@ -384,22 +384,22 @@ public class GLWall extends AbstractDrawable<GLWall, GLWallControl, GLWallContro
 		if( start ) {
 			switch( vecNumber ) {
 				case 1:
-					ret = new GLVector( startVec.addition( doorVector ) );
-					ret.add( normal );
+					ret = new GLVector( startVec.add( doorVector ) );
+					ret.addTo( normal );
 					break;
 				case 2:
 					normal.invert();
-					ret = new GLVector( startVec.addition( doorVector ) );
-					ret.add( normal );
+					ret = new GLVector( startVec.add( doorVector ) );
+					ret.addTo( normal );
 					break;
 				case 3:
 					normal.invert();
-					ret = new GLVector( startVecHigh.addition( doorVector ) );
-					ret.add( normal );
+					ret = new GLVector( startVecHigh.add( doorVector ) );
+					ret.addTo( normal );
 					break;
 				case 4:
-					ret = new GLVector( startVecHigh.addition( doorVector ) );
-					ret.add( normal );
+					ret = new GLVector( startVecHigh.add( doorVector ) );
+					ret.addTo( normal );
 					break;
 				default:
 					throw new IllegalArgumentException( "Vector number must be withing the range from 1 to 4.");
@@ -407,33 +407,33 @@ public class GLWall extends AbstractDrawable<GLWall, GLWallControl, GLWallContro
 		} else { // end 
 				doorVector.invert();
 //				doorVector.normal( gl );
-//				dl = new GLVector( innerEnd.addition( doorVector ) );
-//				dl.add( normal );
-//				tl = new GLVector( innerEndHigh.addition( doorVector ) );
-//				tl.add( normal );
+//				dl = new GLVector( innerEnd.add( doorVector ) );
+//				dl.addTo( normal );
+//				tl = new GLVector( innerEndHigh.add( doorVector ) );
+//				tl.addTo( normal );
 //				normal.invert();
-//				dr = new GLVector( innerEnd.addition( doorVector ) );
-//				dr.add( normal );
-//				tr = new GLVector( innerEndHigh.addition( doorVector ) );
-//				tr.add( normal );
+//				dr = new GLVector( innerEnd.add( doorVector ) );
+//				dr.addTo( normal );
+//				tr = new GLVector( innerEndHigh.add( doorVector ) );
+//				tr.addTo( normal );
 			switch( vecNumber ) {
 				case 1:
-					ret = new GLVector( endVec.addition( doorVector ) );
-					ret.add( normal );
+					ret = new GLVector( endVec.add( doorVector ) );
+					ret.addTo( normal );
 					break;
 				case 2:
 					normal.invert();
-					ret = new GLVector( endVec.addition( doorVector ) );
-					ret.add( normal );
+					ret = new GLVector( endVec.add( doorVector ) );
+					ret.addTo( normal );
 					break;
 				case 3:
 					normal.invert();
-					ret = new GLVector( endVecHigh.addition( doorVector ) );
-					ret.add( normal );
+					ret = new GLVector( endVecHigh.add( doorVector ) );
+					ret.addTo( normal );
 					break;
 				case 4:
-					ret = new GLVector( endVecHigh.addition( doorVector ) );
-					ret.add( normal );
+					ret = new GLVector( endVecHigh.add( doorVector ) );
+					ret.addTo( normal );
 					break;
 				default:
 					throw new IllegalArgumentException( "Vector number must be withing the range from 1 to 4.");
