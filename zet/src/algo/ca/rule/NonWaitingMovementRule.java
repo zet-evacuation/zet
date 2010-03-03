@@ -26,8 +26,8 @@ import ds.ca.results.IndividualStateChangeAction;
 import java.util.Collections;
 import de.tu_berlin.math.coga.rndutils.RandomUtils;
 import util.DebugFlags;
-import util.Direction;
-import util.Level;
+import de.tu_berlin.math.coga.common.util.Direction;
+import de.tu_berlin.math.coga.common.util.Level;
 
 /**
  * 

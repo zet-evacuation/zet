@@ -17,7 +17,7 @@
 /**
  * Level.java
  */
-package util;
+package de.tu_berlin.math.coga.common.util;
 
 /**
  * Represents relative position in one dimension, the naming is about levels (of

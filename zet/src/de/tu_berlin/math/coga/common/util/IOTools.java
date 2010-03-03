@@ -19,7 +19,7 @@
  * Erstellt 20.09.2008, 17:51:39
  */
 
-package util;
+package de.tu_berlin.math.coga.common.util;
 
 import java.io.File;
 import java.text.ParseException;

@@ -24,7 +24,7 @@ import algo.ca.CellularAutomatonInOrderExecution;
 import ds.ca.CellularAutomaton;
 import ds.ca.CellularAutomaton.State;
 import ds.ca.Individual;
-import util.Helper;
+import de.tu_berlin.math.coga.common.util.Helper;
 
 /**
  *

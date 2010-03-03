@@ -56,7 +56,7 @@ import javax.swing.table.AbstractTableModel;
 import de.tu_berlin.math.coga.common.localization.Localization;
 import opengl.helper.TextureFontStrings;
 import de.tu_berlin.math.coga.common.util.Formatter;
-import util.Helper;
+import de.tu_berlin.math.coga.common.util.Helper;
 
 /**
  * A window allowing to set the options used to create a video. The

@@ -27,7 +27,7 @@ import java.util.List;
 
 import de.tu_berlin.math.coga.common.localization.Localization;
 import ds.z.PlanPolygon;
-import util.ConversionTools;
+import zet.util.ConversionTools;
 
 /**
  * The <code>Raster</code> class provides basic rasterization of polygonal objects. These
@@ -113,7 +113,7 @@ public class Raster<T extends RasterSquare, P extends PlanPolygon> {
 	 * @author Jan-Philipp Kappmeier
 	 */
 	public Raster( Class<T> squareClassType, Class<P> polygonClassType, PlanPolygon p, double raster ) throws java.lang.IllegalArgumentException {
-		if( util.ConversionTools.floatToInt( raster ) < 1 ) {
+		if( zet.util.ConversionTools.floatToInt( raster ) < 1 ) {
 			throw new java.lang.IllegalArgumentException (Localization.getInstance (
 			).getString ("converter.NegativeRasterException"));
 		}
@@ -144,7 +144,7 @@ public class Raster<T extends RasterSquare, P extends PlanPolygon> {
 	 * @return the grid size of the raster
 	 */
 	public double getRasterMeter() {
-		return util.ConversionTools.roundScale3( raster );
+		return zet.util.ConversionTools.roundScale3( raster );
 	}
 
 	/**

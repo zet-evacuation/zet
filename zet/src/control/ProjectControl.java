@@ -15,8 +15,8 @@ import ds.z.ZControl;
 import gui.ZETMain;
 import java.io.File;
 import de.tu_berlin.math.coga.common.localization.Localization;
-import util.Helper;
-import util.IOTools;
+import de.tu_berlin.math.coga.common.util.Helper;
+import de.tu_berlin.math.coga.common.util.IOTools;
 
 /**
  * The class <code>ProjectControl</code> represents a control class to implement

@@ -18,7 +18,7 @@
  * ConversionTools.java
  * Created on 3. Dezember 2007, 23:34
  */
-package util;
+package zet.util;
 
 /**
  * A class that provides methods to convert length into the internal z-format

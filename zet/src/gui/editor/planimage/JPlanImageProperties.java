@@ -39,7 +39,7 @@ import javax.swing.JRadioButton;
 import javax.swing.JTextField;
 import de.tu_berlin.math.coga.common.localization.Localization;
 import converter.RasterTools;
-import util.ConversionTools;
+import zet.util.ConversionTools;
 
 /**
  *

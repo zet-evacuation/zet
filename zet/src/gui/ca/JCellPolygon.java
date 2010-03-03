@@ -29,7 +29,7 @@ import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Rectangle;
 import java.util.EnumSet;
-import util.Direction;
+import de.tu_berlin.math.coga.common.util.Direction;
 
 /**
  *

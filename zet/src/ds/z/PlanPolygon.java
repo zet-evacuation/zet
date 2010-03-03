@@ -39,7 +39,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.ListIterator;
 import de.tu_berlin.math.coga.common.localization.Localization;
-import util.ConversionTools;
+import zet.util.ConversionTools;
 
 /**
  * The generic <code>PlanPolygon</code> class implements a polygonal area

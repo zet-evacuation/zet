@@ -20,7 +20,7 @@
 
 package io.movie;
 
-import util.IOTools;
+import de.tu_berlin.math.coga.common.util.IOTools;
 import java.util.Vector;
 import javax.swing.JPanel;
 
