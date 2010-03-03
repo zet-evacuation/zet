@@ -23,7 +23,7 @@ package opengl.helper;
 /**
  * This enumeration describes the possible types of relation between a
  * {@link Frustum} and an object.
- * @author Kapman
+ * @author Jan-Philipp Kappmeier
  */
 public enum CullingLocation {
     outside,

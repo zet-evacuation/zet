@@ -23,6 +23,8 @@ package opengl.drawingutils;
 
 import java.awt.Color;
 import javax.media.opengl.GL;
+import javax.media.opengl.GLAutoDrawable;
+import opengl.framework.abs.Drawable;
 
 /**
  * The class {@code GLColor} encapsulates a <i>color</i> defined by RGB values.
@@ -33,7 +35,7 @@ import javax.media.opengl.GL;
  * operations.
  * @author Jan-Philipp Kappmeier
  */
-public final class GLColor implements DrawingHelper {
+public final class GLColor implements Drawable {
 	/** The red part of the color. */
 	private double R = 0.0;
 	/** The green part of the color. */
@@ -244,8 +246,8 @@ public final class GLColor implements DrawingHelper {
 	 * instead.</p>
 	 * @param gl the {@code OpenGL} context on which shall be drawn
 	 */
-	public final void performGL( GL gl ) {
-		if( gl.glIsEnabled(  GL.GL_LIGHTING) ) {
+	public void draw( GL gl ) {
+	if( gl.glIsEnabled(  GL.GL_LIGHTING) ) {
 			gl.glMaterialfv(GL.GL_FRONT, GL.GL_DIFFUSE, mat, 0);
 			gl.glMaterialfv(GL.GL_FRONT, GL.GL_AMBIENT, mat, 0);
 		} else
@@ -258,7 +260,7 @@ public final class GLColor implements DrawingHelper {
 	 * @param gl the {@code OpenGL} context on which shall be drawn
 	 * @param lighting sets wheather the lighting or non-lighting version should be used
 	 */
-	public final void performGL( GL gl, boolean lighting ) {
+	public final void draw( GL gl, boolean lighting ) {
 		if( lighting ) {
 			gl.glMaterialfv( GL.GL_FRONT, GL.GL_DIFFUSE, mat, 0 );
 			gl.glMaterialfv( GL.GL_FRONT, GL.GL_AMBIENT, mat, 0 );
@@ -323,5 +325,9 @@ public final class GLColor implements DrawingHelper {
 	 */
 	public GLColor blendInv( double percentage ) {
 		return blend( white, percentage );
+	}
+
+	public void update() {
+		
 	}
 }

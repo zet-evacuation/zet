@@ -21,9 +21,6 @@ public abstract class CullingTester {
     public CullingTester () {
     }
 
-    // <editor-fold defaultstate="collapsed" desc=" UML Marker "> 
-    // #[regen=yes,id=DCE.324E6C56-5B99-FF33-7DE6-3C3325962114]
-    // </editor-fold> 
     public abstract CullingLocation testCullingLocation (CullingShape object);
 
 }

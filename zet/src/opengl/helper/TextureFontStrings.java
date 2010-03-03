@@ -13,10 +13,12 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
+
 /*
  * TextureFontStrings.java
  * Created 28.09.2009, 21:04:24
  */
+
 package opengl.helper;
 
 import java.util.ArrayList;
@@ -42,7 +44,7 @@ public class TextureFontStrings {
 	private ArrayList<Double> y;
 	/** Decides wheather a line is bold, or not. */
 	private ArrayList<Boolean> bold;
-	/** Decides the default <code>x</code>-position of a line. */
+	/** Defines the default <code>x</code>-position of a line. */
 	private double xoffset = 0;
 
 	/**
@@ -51,11 +53,11 @@ public class TextureFontStrings {
 	 */
 	public TextureFontStrings( boolean ortho ) {
 		this.ortho = ortho;
-		this.strings = new ArrayList<String>();
-		this.centered = new ArrayList<Boolean>();
-		this.x = new ArrayList<Double>();
-		this.y = new ArrayList<Double>();
-		this.bold = new ArrayList<Boolean>();
+		strings = new ArrayList<String>();
+		centered = new ArrayList<Boolean>();
+		x = new ArrayList<Double>();
+		y = new ArrayList<Double>();
+		bold = new ArrayList<Boolean>();
 	}
 
 	/**

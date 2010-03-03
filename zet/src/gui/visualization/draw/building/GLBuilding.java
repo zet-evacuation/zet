@@ -40,23 +40,22 @@ public class GLBuilding extends AbstractDrawable<GLWall, GLBuildingControl, GLWa
 	}
 
 	@Override
-	public void performDrawing( GLAutoDrawable drawable ) {
-		super.performDrawing( drawable );
+	public void performDrawing( GL gl ) {
+		super.performDrawing( gl );
 		if( repaint ) {
-			performStaticDrawing( drawable );
+			performStaticDrawing( gl );
 		}
-		drawable.getGL().glCallList( displayList );
+		gl.glCallList( displayList );
 	}
 
 	@Override
-	public void performStaticDrawing( GLAutoDrawable drawable ) {
+	public void performStaticDrawing( GL gl ) {
 		// Erzeuge eine display-Liste falls nicht schon längst gemacht
-		GL gl = drawable.getGL();
 		if( displayList <= 0 )
 			gl.glDeleteLists( displayList, 1 );
 		displayList = gl.glGenLists( 1 );
 		gl.glNewList( displayList, GL.GL_COMPILE );
-		staticDrawAllChildren( drawable );
+		staticDrawAllChildren( gl );
 		gl.glEndList();
 		repaint = false;
 	}

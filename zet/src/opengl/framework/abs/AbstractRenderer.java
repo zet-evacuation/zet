@@ -26,10 +26,8 @@ import javax.media.opengl.GLAutoDrawable;
  *
  * @author Jan-Philipp Kappmeier
  */
-abstract public class AbstractRenderer implements OpenGLRenderer {
+abstract public class AbstractRenderer implements OpenGLRenderer, Animatable {
 	public final void updateViewport( GLAutoDrawable drawable, int x, int y, int width, int height ) { }
 
 	public final void initGFX( GLAutoDrawable drawable ) { }
-	
-	public void animate( double deltaTime ) { }
 }

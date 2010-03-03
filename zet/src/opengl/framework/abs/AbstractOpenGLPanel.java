@@ -15,7 +15,7 @@
  */
 
 /*
- * OpenGLComponent.java
+ * JOpenGLCanvas.java
  * Created on 28.01.2008, 23:19:42
  */
 
@@ -41,7 +41,7 @@ import javax.media.opengl.GLJPanel;
  * By default depth buffer is used.
  * @author Jan-Philipp Kappmeier
  */
-abstract public class AbstractOpenGLPanel extends GLJPanel implements GLEventListener, OpenGLRenderer, KeyListener, MouseListener, MouseMotionListener, MouseWheelListener {
+abstract public class AbstractOpenGLPanel extends GLJPanel implements GLEventListener, OpenGLRenderer, Animatable, KeyListener, MouseListener, MouseMotionListener, MouseWheelListener {
 	private int clear = GL.GL_COLOR_BUFFER_BIT | GL.GL_DEPTH_BUFFER_BIT;
 	private Animator animator;
 	private int maxFPS = 200;
@@ -135,7 +135,6 @@ abstract public class AbstractOpenGLPanel extends GLJPanel implements GLEventLis
 		return fps;
 	}
 
-	
 	/**
 	 * 
 	 */
@@ -171,8 +170,8 @@ abstract public class AbstractOpenGLPanel extends GLJPanel implements GLEventLis
 	}
 
 	/**
-	 * Initializes this {@code OpenGL} component. This method is called directly after
-	 * the component is created. Do all you init-gfx stuff here.
+	 * Initializes this {@code OpenGL} component. This method is called directly
+	 * after the component is created. Do all you init-graphics stuff here.
 	 * @param drawable the GL context that we can use
 	 */
 	final public void init( GLAutoDrawable drawable ) {

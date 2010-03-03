@@ -18,7 +18,7 @@ package gui.visualization.control;
 import io.visualization.VisualizationResult;
 import java.util.ArrayList;
 import java.util.Iterator;
-import opengl.framework.abs.drawable;
+import opengl.framework.abs.Drawable;
 
 /**
  * 
@@ -30,7 +30,7 @@ import opengl.framework.abs.drawable;
  * @param <W> The type of the child graphic objects
  * @param <X> The type of the child control objects
  */
-public abstract class AbstractControl<T extends drawable, U, V extends VisualizationResult, W extends drawable, X extends AbstractControl<W, ?, ?, ?, ?>> implements control, Iterable<X> {
+public abstract class AbstractControl<T extends Drawable, U, V extends VisualizationResult, W extends Drawable, X extends AbstractControl<W, ?, ?, ?, ?>> implements control, Iterable<X> {
 
 	private V visResult;
 	private T drawable;

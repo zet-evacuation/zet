@@ -13,10 +13,12 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
+
 /*
  * TextureManager.java
  * Created on 31.01.2008, 21:29:51
  */
+
 package opengl.helper;
 
 import java.awt.Color;
@@ -38,8 +40,8 @@ import javax.media.opengl.GL;
 import javax.media.opengl.glu.GLU;
 
 /**
- * A class used for loading textures from the hard disk and activating them
- * in OpenGL.
+ * A class used to load textures from the hard disk and to activate them
+ * in {@code OpenGL}.
  * @author Jan-Philipp Kappmeier
  */
 public class TextureManager {
@@ -65,8 +67,6 @@ public class TextureManager {
 	public void setGLU( GLU glu ) {
 		this.glu = glu;
 	}
-
-	
 
 	private int createTextureID() {
 		int tmp[] = new int[1];
@@ -128,21 +128,21 @@ public class TextureManager {
 		ByteBuffer imageBuffer = null;
 		int texWidth = 2;
 		int texHeight = 2;
-		for(; texWidth < bufferedImage.getWidth(); texWidth *= 2);
-		for(; texHeight < bufferedImage.getHeight(); texHeight *= 2);
+		for( ; texWidth < bufferedImage.getWidth(); texWidth *= 2 );
+		for( ; texHeight < bufferedImage.getHeight(); texHeight *= 2 );
 
-		ColorModel glAlphaColorModel = new ComponentColorModel(java.awt.color.ColorSpace.getInstance(1000), new int[] {8, 8, 8, 8}, true, false, 3, 0);
+		ColorModel glAlphaColorModel = new ComponentColorModel( java.awt.color.ColorSpace.getInstance( 1000 ), new int[]{8, 8, 8, 8}, true, false, 3, 0 );
 		int ai[] = new int[4];
 		ai[0] = 8;
 		ai[1] = 8;
 		ai[2] = 8;
-		ColorModel glColorModel = new ComponentColorModel(java.awt.color.ColorSpace.getInstance(1000), ai, false, false, 1, 0);
+		ColorModel glColorModel = new ComponentColorModel( java.awt.color.ColorSpace.getInstance( 1000 ), ai, false, false, 1, 0 );
 
 		//texture.setTextureHeight( texHeight );
 		//texture.setTextureWidth( texWidth );
 
 		BufferedImage texImage;
-		if(bufferedImage.getColorModel().hasAlpha()) {
+		if( bufferedImage.getColorModel().hasAlpha() ) {
 			WritableRaster raster = Raster.createInterleavedRaster( 0, texWidth, texHeight, 4, null );
 			texImage = new BufferedImage( glAlphaColorModel, raster, false, new Hashtable() );
 		} else {
@@ -153,7 +153,7 @@ public class TextureManager {
 		g.setColor( new Color( 0.0F, 0.0F, 0.0F, 0.0F ) );
 		g.fillRect( 0, 0, texWidth, texHeight );
 		g.drawImage( bufferedImage, 0, 0, null );
-		byte data[] = ((DataBufferByte)texImage.getRaster().getDataBuffer()).getData();
+		byte data[] = ((DataBufferByte) texImage.getRaster().getDataBuffer()).getData();
 		imageBuffer = ByteBuffer.allocateDirect( data.length );
 		imageBuffer.order( java.nio.ByteOrder.nativeOrder() );
 		imageBuffer.put( data, 0, data.length );

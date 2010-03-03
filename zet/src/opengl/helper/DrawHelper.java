@@ -13,6 +13,7 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
+
 /**
  * Class DrawHelper
  * Erstellt 18.05.2008, 19:33:34
@@ -28,8 +29,20 @@ import javax.media.opengl.GL;
  * @author Jan-Philipp Kappmeier
  */
 public final class DrawHelper {
+	
+	/**
+	 * Avoids instanciation of utility class.
+	 */
 	private DrawHelper() { }
 
+	/**
+	 * Draws the axes of a coordinate system.
+	 * @param gl the OpenGL graphics context
+	 * @param length the length of the axes
+	 * @param x the color of the first or {@code x}-axis
+	 * @param y the color of the second or {@code y}-axis
+	 * @param z the color of the third or {@code z}-axis
+	 */
 	public static void drawAxes( GL gl, double length, Color x, Color y, Color z ) {
     gl.glBegin( GL.GL_LINES );
     gl.glColor4d( x.getRed() / 255., x.getGreen() / 255., x.getBlue() / 255., x.getAlpha() / 255. );

@@ -40,7 +40,7 @@ import javax.media.opengl.GLEventListener;
  *
  * @author Jan-Philipp Kappmeier
  */
-abstract public class AbstractOpenGLCanvas extends GLCanvas implements GLEventListener, OpenGLRenderer, KeyListener, MouseListener, MouseMotionListener, MouseWheelListener  {
+abstract public class AbstractOpenGLCanvas extends GLCanvas implements GLEventListener, OpenGLRenderer, Animatable, KeyListener, MouseListener, MouseMotionListener, MouseWheelListener {
 	private int clear = GL.GL_COLOR_BUFFER_BIT | GL.GL_DEPTH_BUFFER_BIT;
 	private Animator animator;
 	private int maxFPS = 200;

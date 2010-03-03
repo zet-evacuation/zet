@@ -13,6 +13,7 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
+
 /*
  * OpenGLComponent.java
  * Created on 29.01.2008, 17:59:42
@@ -29,9 +30,10 @@ import javax.media.opengl.GLAutoDrawable;
 public interface OpenGLRenderer {
 	
 	//public void renderScene( GLAutoDrawable drawable );
-	public void updateViewport( GLAutoDrawable drawable, int x, int y, int width, int height );
-	public void initGFX( GLAutoDrawable drawable );
-	public void animate( );
-}
+public void display( GLAutoDrawable drawable );	// inherited from GLEventListener
 
-// TODO interface animatable
+public void updateViewport( GLAutoDrawable drawable, int x, int y, int width, int height );
+
+	public void initGFX( GLAutoDrawable drawable );
+	//public void animate( );
+}

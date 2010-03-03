@@ -21,7 +21,6 @@ import gui.visualization.control.graph.GLEdgeControl;
 import gui.visualization.control.graph.GLNodeControl;
 import gui.visualization.util.VisualizationConstants;
 import javax.media.opengl.GL;
-import javax.media.opengl.GLAutoDrawable;
 import javax.media.opengl.glu.GLU;
 import opengl.drawingutils.GLColor;
 import opengl.framework.abs.AbstractDrawable;
@@ -57,10 +56,10 @@ public class GLNode extends AbstractDrawable<GLEdge, GLNodeControl, GLEdgeContro
 	}
 
 	@Override
-	public void performDrawing( GLAutoDrawable drawable ) {
-		super.performDrawing( drawable );
+	public void performDrawing( GL gl ) {
+		super.performDrawing( gl );
 		if( getControl().isCurrentlyOccupied() ) {
-			performFlowDrawing( drawable );
+			performFlowDrawing( gl );
 		}
 	}
 
@@ -69,10 +68,8 @@ public class GLNode extends AbstractDrawable<GLEdge, GLNodeControl, GLEdgeContro
 	 * by the given quality preset.
 	 * @param drawable the context on which the node is drawn
 	 */
-	public void performFlowDrawing( GLAutoDrawable drawable ) {
-		super.performDrawing( drawable );
-		GL gl = drawable.getGL();
-
+	public void performFlowDrawing( GL gl ) {
+		super.performDrawing( gl );
 		glu.gluQuadricDrawStyle( quadObj, flowDisplayMode );
 
 		gl.glColor4d( 1.0, 0.0, 0.0, 1.0 );
@@ -87,9 +84,8 @@ public class GLNode extends AbstractDrawable<GLEdge, GLNodeControl, GLEdgeContro
 	public void update() { }
 	
 	@Override
-	public void performStaticDrawing( GLAutoDrawable drawable ) {
-		beginDraw( drawable );
-		GL gl = drawable.getGL();
+	public void performStaticDrawing( GL gl ) {
+		beginDraw( gl );
 
 //		if( getControl().isCurrentlyOccupied() ) {
 //			performFlowDrawing( drawable );
@@ -97,7 +93,7 @@ public class GLNode extends AbstractDrawable<GLEdge, GLNodeControl, GLEdgeContro
 		glu.gluQuadricDrawStyle( quadObj, nodeDisplayMode );
 
 		//gl.glColor4d( 1.0, 1.0, 0.0, 0.3 );
-		nodeBorderColor.performGL( gl );
+		nodeBorderColor.draw( gl );
 		double xOffset = -this.getControl().getXPosition() * VisualizationConstants.SIZE_MULTIPLICATOR;
 		double yOffset = this.getControl().getYPosition() * VisualizationConstants.SIZE_MULTIPLICATOR;
 		if( control.isRectangleVisible() ) {
@@ -119,21 +115,21 @@ public class GLNode extends AbstractDrawable<GLEdge, GLNodeControl, GLEdgeContro
 		//gl.glBlendFunc( gl.GL_SRC_ALPHA, gl.GL_ONE );
 
 		if( control.isEvacuationNode() ) {
-			evacuationColor.performGL( gl );
+			evacuationColor.draw( gl );
 		} else {
 			if( control.isSourceNode() ) {
-				sourceColor.performGL( gl );
+				sourceColor.draw( gl );
 			} else {
 				if( control.isDeletedSourceNode() ) {
-					deletedSourceColor.performGL( gl );
+					deletedSourceColor.draw( gl );
 				} else {
-					nodeColor.performGL( gl );
+					nodeColor.draw( gl );
 				}
 			}
 		}
 
 		glu.gluSphere( quadObj, radius, qualityPreset.nodeSlices, qualityPreset.nodeStacks );
-		staticDrawAllChildren( drawable );
-		endDraw( drawable );
+		staticDrawAllChildren( gl );
+		endDraw( gl );
 	}
 }

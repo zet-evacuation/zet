@@ -13,33 +13,41 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
+
 /*
  * OpenGLHelper.java
  * Created on 29.01.2008, 23:29:46
  */
+
 package opengl.helper;
 
 import javax.media.opengl.GL;
 
 /**
- *
+ * A utility class that allows to set up several projections in the
+ * {@code OpenGL} world. Whenever a method
+ * (except {@link #resetProjection(javax.media.opengl.GL)}) is called, the
+ * current projection and modelview matrices are pushed to the stack.
  * @author Jan-Philipp Kappmeier
  */
 public final class ProjectionHelper {
 
+	/**
+	 * Avoids instanciation of the utility class.
+	 */
   private ProjectionHelper() { }
 
   /**
-   * 
-   * @param gl
-   * @param viewportWidth
-   * @param viewportHeight
-   * @param x
-   * @param y
-   * @param z
+   * Sets up an orthogonal projection.
+   * @param gl the OpenGL graphics context
+   * @param viewportWidth the width of the viewport
+   * @param viewportHeight the height of the viewport
+   * @param x the center point {@code x}-position in world coorinates
+   * @param y the center point {@code y}-position in world coorinates
+   * @param z the center point {@code z}-position in world coorinates
    * @param favouredWidth
    * @param favouredHeight
-   * @param depth
+   * @param depth the depth that can be used to draw
    */
   public static void setViewOrthogonal( GL gl, int viewportWidth, double viewportHeight, double x, double y, double z, double favouredWidth, double favouredHeight, double depth ) {
     // Avoid division by zero
@@ -72,25 +80,25 @@ public final class ProjectionHelper {
   }
 
   /**
-   * 
-   * @param gl
-   * @param viewportWidth
-   * @param viewportHeight
-   * @param x
-   * @param y
-   * @param z
+   * Sets up an orthognal projection. In opposite to {@link #setViewOrthogonal()},
+	 * the visible range is stretched if the screen is wider than the viewport. In
+	 * that case the upper and lower part are cut of.
+   * @param gl the OpenGL graphics context
+   * @param viewportWidth the width of the vewport
+   * @param viewportHeight the height of the viewport
+   * @param x the center point {@code x}-position in world coorinates
+   * @param y the center point {@code y}-position in world coorinates
+   * @param z the center point {@code z}-position in world coorinates
    * @param favouredWidth
    * @param favouredHeight
-   * @param depth
+   * @param depth the depth that can be used to draw
    */
   public static void setViewStretchedOrthogonal( GL gl, int viewportWidth, double viewportHeight, double x, double y, double z, double favouredWidth, double favouredHeight, double depth ) {
     // Avoid division by zero
-    if( viewportHeight <= 0 ) {
+		if( viewportHeight <= 0 )
       viewportHeight = 1;
-    }
-    if( viewportWidth <= 0 ) {
+    if( viewportWidth <= 0 )
       viewportWidth = 1;
-    }
 
     // Set up projection matrices for 2d-like orthogonal projection
     gl.glMatrixMode( GL.GL_PROJECTION );										// Set projection-matrix-mode
@@ -114,8 +122,8 @@ public final class ProjectionHelper {
   }
 
   /**
-   * 
-   * @param gl
+   * Sets up a polar view projection.
+   * @param gl the OpenGL graphics context
    * @param distance
    * @param azimuth
    * @param incidence
@@ -129,12 +137,12 @@ public final class ProjectionHelper {
 		System.out.println( "Set to distance " + distance );
   }
 
-		
 	/**
-	 * 
-	 * @param gl
-	 * @param width
-	 * @param height
+	 * Sets up a projection to print text on the screen. It uses an orthogonal
+	 * projection and allows to address each pixel in the submittet range.
+	 * @param gl the OpenGL render context
+	 * @param width the width of the screen
+	 * @param height the height of the screen
 	 */
 	public static void setPrintScreenProjection( GL gl, int width, int height ) {
     gl.glMatrixMode( gl.GL_PROJECTION );
@@ -145,7 +153,12 @@ public final class ProjectionHelper {
     gl.glPushMatrix();
     gl.glLoadIdentity();
 	}
-	
+
+	/**
+	 * Resets a projection to the old status by deleting projection matrices from
+	 * the stack.
+	 * @param gl the OpenGL render context
+	 */
 	public static void resetProjection( GL gl ) {
     // restore matrices
     gl.glMatrixMode( gl.GL_PROJECTION );

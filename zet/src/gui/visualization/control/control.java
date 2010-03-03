@@ -15,9 +15,9 @@
  */
 package gui.visualization.control;
 
-import opengl.framework.abs.drawable; 
+import opengl.framework.abs.Drawable;
 
 public interface control {
-	public drawable getView ();
+	public Drawable getView ();
 }
 

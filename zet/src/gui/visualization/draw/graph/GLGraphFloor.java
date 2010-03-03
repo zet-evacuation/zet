@@ -23,7 +23,6 @@ import gui.visualization.control.graph.GLGraphFloorControl;
 import gui.visualization.control.graph.GLNodeControl;
 import gui.visualization.util.VisualizationConstants;
 import javax.media.opengl.GL;
-import javax.media.opengl.GLAutoDrawable;
 import opengl.framework.abs.AbstractDrawable;
 
 /**
@@ -54,22 +53,21 @@ public class GLGraphFloor extends AbstractDrawable<GLNode, GLGraphFloorControl, 
 	}
 	
 	@Override
-	public void performDrawing( GLAutoDrawable drawable ) {
-		super.performDrawing( drawable );
+	public void performDrawing( GL gl ) {
+		super.performDrawing( gl );
 		if( repaint )
-			performStaticDrawing( drawable );
-		drawable.getGL().glCallList( displayList );
+			performStaticDrawing( gl );
+		gl.glCallList( displayList );
 	}
 	
 	@Override
-	public void performStaticDrawing( GLAutoDrawable drawable ) {
+	public void performStaticDrawing( GL gl ) {
 		// Erzeuge eine display-Liste falls nicht schon längst gemacht
-		GL gl = drawable.getGL();
 		if( displayList <= 0 )
 			gl.glDeleteLists( displayList, 1 );
 		displayList = gl.glGenLists( 1 );
 		gl.glNewList( displayList, GL.GL_COMPILE );
-		staticDrawAllChildren( drawable );
+		staticDrawAllChildren( gl );
 		gl.glEndList();
 		repaint = false;
 	}

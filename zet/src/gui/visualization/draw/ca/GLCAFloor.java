@@ -24,10 +24,9 @@ import gui.visualization.VisualizationOptionManager;
 import gui.visualization.control.ca.GLCAFloorControl;
 import gui.visualization.control.ca.GLIndividualControl;
 import gui.visualization.control.ca.GLRoomControl;
-
 import gui.visualization.util.VisualizationConstants;
 import java.util.List;
-import javax.media.opengl.GLAutoDrawable;
+import javax.media.opengl.GL;
 
 /**
  *  @author Jan-Philipp Kappmeier
@@ -60,12 +59,12 @@ public class GLCAFloor extends AbstractDrawable<GLRoom, GLCAFloorControl, GLRoom
 	}
 	
 	@Override
-	public void performDrawing( GLAutoDrawable drawable ) {
-		super.performDrawing( drawable );
+	public void performDrawing( GL gl ) {
+		super.performDrawing( gl );
 		for( GLIndividualControl ic : control.getIndividualControls() ) {
 			//individual.performDrawing( drawable );
 			if( ic.onFloor() == floorID )
-				ic.getView().performDrawing( drawable );
+				ic.getView().performDrawing( gl );
 		}
 		//GLIndividualControl ic = individuals.get(0);		
 	}

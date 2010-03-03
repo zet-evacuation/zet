@@ -16,6 +16,7 @@
 package opengl.framework.abs;
 
 import gui.visualization.control.AbstractControl;
+import javax.media.opengl.GL;
 import javax.media.opengl.GLAutoDrawable;
 import javax.media.opengl.glu.GLU;
 import javax.media.opengl.glu.GLUquadric;
@@ -29,8 +30,8 @@ import opengl.drawingutils.GLVector;
  * @param <W> The type of the associated children control object
  * @author Jan-Philipp Kapmeier, Daniel Plümpe
   */
-public abstract class AbstractDrawable<U extends AbstractDrawable<?, ?, ?>, V extends AbstractControl<?, ?, ?, U, W>, W extends AbstractControl<U, ?, ?, ?, ?>> implements drawable {
-//public abstract class AbstractDrawable<T extends CullingShape, U extends AbstractDrawable<?,?,?,?>, V extends AbstractControl<?, ?, ?, U, W>, W extends AbstractControl<U,?,?,?,?>> implements drawable {
+public abstract class AbstractDrawable<U extends AbstractDrawable<?, ?, ?>, V extends AbstractControl<?, ?, ?, U, W>, W extends AbstractControl<U, ?, ?, ?, ?>> implements Drawable {
+//public abstract class AbstractDrawable<T extends CullingShape, U extends AbstractDrawable<?,?,?,?>, V extends AbstractControl<?, ?, ?, U, W>, W extends AbstractControl<U,?,?,?,?>> implements Drawable {
 
 	//private CullingTester tester;
 	protected static GLU glu = new GLU();
@@ -66,57 +67,57 @@ public abstract class AbstractDrawable<U extends AbstractDrawable<?, ?, ?>, V ex
 //	}
 	/**
 	 * Calls {@link #draw( GLAutoDrawable) } for all contained objects.
-	 * @param drawable
+	 * @param Drawable
 	 */
-	public void drawAllChildren( GLAutoDrawable drawable ) {
+	public void drawAllChildren( GL gl ) {
 		for( W child : control ) {
-			child.getView().draw( drawable );
+			child.getView().draw( gl );
 		}
 	}
 
-	public void staticDrawAllChildren( GLAutoDrawable drawable ) {
+	public void staticDrawAllChildren( GL gl ) {
 		for( W child : control ) {
-			child.getView().performStaticDrawing( drawable );
+			child.getView().performStaticDrawing( gl );
 		}
 	}
 
 	@Override
-	final public void draw( GLAutoDrawable drawable ) {
+	final public void draw( GL gl ) {
 		if( !callChildren ) {
-			performDrawing( drawable );
+			performDrawing( gl );
 			return;
 		}
-		beginDraw( drawable );
-		performDrawing( drawable );
-		endDraw( drawable );
+		beginDraw( gl );
+		performDrawing( gl );
+		endDraw( gl );
 	}
 
 	/**
 	 * This method is called prior to performing the actual 
 	 * drawing. In its default behavior, it translates the
 	 * <code>AbstractDrawable</code> to the origin.
-	 * @param drawable
+	 * @param Drawable
 	 */
-	public void beginDraw( GLAutoDrawable drawable ) {
-		drawable.getGL().glPushMatrix();
-		position.translate( drawable );
+	public void beginDraw( GL gl ) {
+		gl.glPushMatrix();
+		position.translate( gl );
 	}
 
 	/**
 	 * This method is called after the drawing has been performed.
 	 * In its default behavior, it tranlates the <code>AbstractDrawable</code>
 	 * back to where it has been.
-	 * @param drawable
+	 * @param gl the {@code OpenGL} context on which it is drawn
 	 */
-	public void endDraw( GLAutoDrawable drawable ) {
-		drawable.getGL().glPopMatrix();
+	public void endDraw( GL gl ) {
+		gl.glPopMatrix();
 	}
 
-	public void performDrawing( GLAutoDrawable drawable ) {
-		drawAllChildren( drawable );
+	public void performDrawing( GL gl ) {
+		drawAllChildren( gl );
 	}
 
-	public void performStaticDrawing( GLAutoDrawable drawable ) {
+	public void performStaticDrawing( GL gl ) {
 	}
 
 	public abstract void update();

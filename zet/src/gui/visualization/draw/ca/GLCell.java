@@ -78,29 +78,28 @@ public class GLCell extends AbstractDrawable<GLCell, GLCellControl, GLCellContro
 	}
 
 	@Override
-	public void performDrawing( GLAutoDrawable drawable ) {
-		GL gl = drawable.getGL();
+	public void performDrawing( GL gl ) {
 		if( VisualizationOptionManager.smoothCellVisualization() ) {
 			boolean lighting = gl.glIsEnabled( GL.GL_LIGHTING );
 			gl.glBegin( GL.GL_QUADS );
 			gl.glNormal3d( 0, 0, 1 );
-			getControl().mixColorWithNeighbours( Direction.TopLeft ).performGL( gl, lighting );
-			ul.draw( drawable );
-			getControl().mixColorWithNeighbours( Direction.TopRight ).performGL( gl, lighting );
-			ur.draw( drawable );
-			getControl().mixColorWithNeighbours( Direction.DownLeft ).performGL( gl, lighting );
-			lr.draw( drawable );
-			getControl().mixColorWithNeighbours( Direction.DownRight ).performGL( gl, lighting );
-			ll.draw( drawable );
+			getControl().mixColorWithNeighbours( Direction.TopLeft ).draw( gl, lighting );
+			ul.draw( gl );
+			getControl().mixColorWithNeighbours( Direction.TopRight ).draw( gl, lighting );
+			ur.draw( gl );
+			getControl().mixColorWithNeighbours( Direction.DownLeft ).draw( gl, lighting );
+			lr.draw( gl );
+			getControl().mixColorWithNeighbours( Direction.DownRight ).draw( gl, lighting );
+			ll.draw( gl );
 			gl.glEnd();
 		} else {
-			color.performGL( gl );
+			color.draw( gl );
 			gl.glBegin( GL.GL_QUADS );
 			gl.glNormal3d( 0, 0, 1 );
-			ul.draw( drawable );
-			ur.draw( drawable );
-			lr.draw( drawable );
-			ll.draw( drawable );
+			ul.draw( gl );
+			ur.draw( gl );
+			lr.draw( gl );
+			ll.draw( gl );
 			gl.glEnd();
 		}
 	}
