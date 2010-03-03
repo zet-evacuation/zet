@@ -548,7 +548,7 @@ public class JEditor extends JFrame implements Localized, EventListener<Progress
 		caView = new JCAView();
 		caStatisticView = new JStatisticPanel();
 		graphStatisticView = new JGraphStatisticPanel();
-		logView = new JLogView();
+		logView = new JLogView( ZETMain.log );
 
 		tabPane = new JTabbedPane();
 

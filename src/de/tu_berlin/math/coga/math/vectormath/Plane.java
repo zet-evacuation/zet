@@ -82,8 +82,8 @@ public class Plane {
   public void setPlane( Vector3 v1, Vector3 v2, Vector3 v3 ) {
 		Vector3 aux1 = v1.clone();
 		Vector3 aux2 = v3.clone();
-		aux1.sub( v2 );
-		aux2.sub( v2 );
+		aux1.subTo( v2 );
+		aux2.subTo( v2 );
 		normal = aux2.crossProduct( aux1 );
 		normal.normalize();
 		point = v2.clone();

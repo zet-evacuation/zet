@@ -13,10 +13,12 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
+
 /*
  * Vector.java
  * Created on 30.01.2008, 00:54:29
  */
+
 package de.tu_berlin.math.coga.math.vectormath;
 
 import ds.z.PlanPoint;
@@ -29,41 +31,75 @@ import de.tu_berlin.math.coga.common.localization.Localization;
  * @author Jan-Philipp Kappmeier
  */
 public class Vector3 implements Cloneable {
+	/** The first or {@code x}-coordinate of the vector. */
 	public double x = 0;
+	/** The second or {@code y}-coordinate of the vector. */
 	public double y = 0;
+	/** The third or {@code z}-coordinate of the vector. */
 	public double z = 0;
 
+	/**
+	 * Initializes a zero vector in the origin.
+	 */
 	public Vector3() {
 		x = 0;
 		y = 0;
 		z = 0;
 	}
-	
+
+	/**
+	 * Creates a vector that is a copy of another one.
+	 * @param v the original vector
+	 */
 	public Vector3( Vector3 v ) {
 		x = v.x;
 		y = v.y;
 		z = v.z;
 	}
 
+	/**
+	 * Initializes a 2-dimensional vector, that means the third coordinate remains
+	 * zero.
+	 * @param x the first or {@code x}-coordinate
+	 * @param y the second or {@code y}-coordinate
+	 */
 	public Vector3( double x, double y ) {
 		this.x = x;
 		this.y = y;
 		z = 0;
 	}
 
+	/**
+	 * Initializes the vector by three real coordinates.
+	 * @param x the first or {@code x}-coordinate
+	 * @param y the second or {@code y}-coordinate
+	 * @param z the third or {@code z}-coordinate
+	 */
 	public Vector3( double x, double y, double z ) {
 		this.x = x;
 		this.y = y;
 		this.z = z;
 	}
 
+	/**
+	 * Creates a copy of this vector.
+	 */
 	@Override
 	public Vector3 clone() {
 		return new Vector3( x, y, z );
 	}
 
 	/**
-	 * Inverts the direction of the vector.
+	 * Returns the dimension of the vector.
+	 * @return the dimension of the vector
+	 */
+	public int getDimension() {
+		return 3;
+	}
+
+	/**
+	 * Inverts the direction of the vector. Equals the multiplication with the
+	 * scalar value -1.
 	 */
 	public void invert() {
 		x = -x;
@@ -73,9 +109,9 @@ public class Vector3 implements Cloneable {
 	
 	/**
 	 * Sets all three coordinates at once
-	 * @param x the x-coordinate
-	 * @param y the y-coordinate
-	 * @param z the z-coordinate
+	 * @param x the first or {@code x}-coordinate
+	 * @param y the second or {@code y}-coordinate
+	 * @param z the thirc or {@code z}-coordinate
 	 */
 	public void set( double x, double y, double z ) {
 		this.x = x;
@@ -108,7 +144,11 @@ public class Vector3 implements Cloneable {
 //	}
 
 	/**
-	 * Computes the cross product of this vector and another vector.
+	 * <p>Computes the cross product of this vector and another vector.</p>
+	 * <p>The product of two vectors {@code a = (a_x, a_y, a_z)} and
+	 * {@code b = (b_x, b_y, b_z)} is defined as
+	 * {@code a \cros b = (a_yb_z - a_zb_y, a_zb_x - a_xb_z, a_xb_y - a_yb_x)}.
+	 * </p>
 	 * @param v the vector
 	 * @return the cross product of this vector and the vector {@code v}
 	 */
@@ -121,7 +161,17 @@ public class Vector3 implements Cloneable {
 	}
 	
 	/**
-	 * Computes the dot product or scalar product of this vector and another vector..
+	 * <p>Computes the dot, inner or scalar product of this vector and another
+	 * vector.</p>
+	 * <p>
+	 * The scalar product of two vectors {@code a = (a_x, a_y, a_z)} and
+	 * {@code b = (b_x, b_y, b_z)} is defined as
+	 * {@code a * b = (a_xb_y + a_yb_y + a_zb_z)}. Note that the result is a
+	 * scalary value.
+	 * </p>
+	 * <p>The multiplication with a scalary value, which returns a vector again,
+	 * is defined in {@link #scalarMultiplicateTo(double)} and
+	 * {@link #scalarMultiplicate(double) </p>.}
 	 * @param v the other vector
 	 * @return the dot product
 	 */
@@ -129,79 +179,81 @@ public class Vector3 implements Cloneable {
 		return x * v.x + y * v.y + z * v.z;
 	}
 	
-	public Vector3 scalaryMultiplication( double scalar ) {
-		Vector3 result = new Vector3();
-		result.x = x * scalar;
-		result.y = y * scalar;
-		result.z = z * scalar;
-		return result;
+	/**
+	 * @see #dotProduct(de.tu_berlin.math.coga.math.vectormath.Vector3)
+	 * @param v the other vector
+	 * @return the scalar product
+	 */
+	public final double scalarProduct( Vector3 v ) {
+		return dotProduct( v );
 	}
 
-	public void scalarMultiplicate( double scalar ) {
+	/**
+	 * Returns a copy of this vector whose coordinates are multiplicated by a
+	 * scalar value.
+	 * @param scalar the scalar value
+	 * @return the vector multiplicated with a scalar
+	 */
+	public final Vector3 scalarMultiplicate( double scalar ) {
+		return new Vector3( x * scalar, y * scalar, z * scalar );
+	}
+
+	/**
+	 * Multiplicates this vector with a scalar value.
+	 * @param scalar the scalar value
+	 */
+	public void scalarMultiplicateTo( double scalar ) {
 		x *= scalar;
 		y *= scalar;
 		z *= scalar;
 	}
 
-	public void add( Vector3 v ) {
+	/**
+	 * Returns a copy of this vector to which another vector is added.
+	 * @param v the vector
+	 * @return the sum of this vector and the other vector
+	 */
+	public final Vector3 add( Vector3 v ) {
+		return new Vector3( x + v.x, y + v.y, z + v.z );
+	}
+
+	/**
+	 * Adds a {@code Vector3} to this vector.
+	 * @param v the added vector
+	 */
+	public final void addTo( Vector3 v ) {
 		x += v.x;
 		y += v.y;
 		z += v.z;
 	}
 
-	public Vector3 addition( Vector3 v ) {
-		double newx = x + v.x;
-		double newy = y + v.y;
-		double newz = z + v.z;
-		return new Vector3( newx, newy, newz );
+	/**
+	 * Computes the difference this vector - v and returns the result in a new
+	 * {@code vector3} object.
+	 * @param v the vector which is subtracted
+	 * @return the result of the sub
+	 */
+	public final Vector3 sub( Vector3 v ) {
+		return new Vector3( x - v.x, y - v.y, z - v.z );
 	}
 
-	public void sub( Vector3 v ) {
+	/**
+	 * Subtracts a {@code Vector3} from this vector.
+	 * @param v the subtracted vector
+	 */
+	public void subTo( Vector3 v ) {
 		x -= v.x;
 		y -= v.y;
 		z -= v.z;
 	}
 	
 	/**
-	 * Computes the difference this vector - v and returns the result in a new {@code vector3} object.
-	 * @param v the vector which is subtracted
-	 * @return the result of the subtraction
-	 */
-	public Vector3 subtraction( Vector3 v ) {
-		double newx = x - v.x;
-		double newy = y - v.y;
-		double newz = z - v.z;
-		return new Vector3( newx, newy, newz );
-	}
-
-	/**
 	 * Rotates this vector (as point) around a given axis by a given angle.
 	 * @param angle the angle by which the point is rotated
 	 * @param axis the axis
 	 */
 	public void rotate( final double angle, final Vector3 axis ) {
-		// a temporary vector
-		Vector3 tempVec = new Vector3();
-
-		// sine and cosine of the angle
-		final double cosTheta = Math.cos( angle * Math.PI / 180.0 );
-		final double sinTheta = Math.sin( angle * Math.PI / 180.0 );
-
-		// new x-position
-		tempVec.x = ( cosTheta + ( 1 - cosTheta ) * axis.x * axis.x ) * this.x;
-		tempVec.x += ( ( 1 - cosTheta ) * axis.x * axis.y - axis.z * sinTheta ) * this.y;
-		tempVec.x += ( ( 1 - cosTheta ) * axis.x * axis.z + axis.y * sinTheta ) * this.z;
-
-		// new y-position
-		tempVec.y = ( ( 1 - cosTheta ) * axis.x * axis.y + axis.z * sinTheta ) * this.x;
-		tempVec.y += ( cosTheta + ( 1 - cosTheta ) * axis.y * axis.y ) * this.y;
-		tempVec.y += ( ( 1 - cosTheta ) * axis.y * axis.z - axis.x * sinTheta ) * this.z;
-
-		// new z-position
-		tempVec.z = ( ( 1 - cosTheta ) * axis.x * axis.z - axis.y * sinTheta ) * this.x;
-		tempVec.z += ( ( 1 - cosTheta ) * axis.y * axis.z + axis.x * sinTheta ) * this.y;
-		tempVec.z += ( cosTheta + ( 1 - cosTheta ) * axis.z * axis.z ) * this.z;
-
+		final Vector3 tempVec = rotateVector( angle, axis, this );
 		this.x = tempVec.x;
 		this.y = tempVec.y;
 		this.z = tempVec.z;
@@ -214,42 +266,37 @@ public class Vector3 implements Cloneable {
 	 * @param oVec the point that is rotated
 	 * @return the rotated vector (point)
 	 */
-	public static Vector3 rotateVector( double angle, Vector3 axis, Vector3 oVec ) {
-		Vector3 nVec = new Vector3();
+	public static Vector3 rotateVector( double angle, Vector3 axis, Vector3 oVec ) {		
+		Vector3 tempVec = new Vector3(); // a temporary vector
 
-		double x = axis.x;
-		double y = axis.y;
-		double z = axis.z;
+		// sine and cosine of the angle
+		final double cosTheta = Math.cos( angle * Math.PI / 180.0 );
+		final double sinTheta = Math.sin( angle * Math.PI / 180.0 );
 
-		// Sinus und Cosinus des Winkels
-		double cosTheta = Math.cos( angle * Math.PI / 180.0 );
-		double sinTheta = Math.sin( angle * Math.PI / 180.0 );
+		// new x-position
+		tempVec.x = ( cosTheta + ( 1 - cosTheta ) * axis.x * axis.x ) * oVec.x;
+		tempVec.x += ( ( 1 - cosTheta ) * axis.x * axis.y - axis.z * sinTheta ) * oVec.y;
+		tempVec.x += ( ( 1 - cosTheta ) * axis.x * axis.z + axis.y * sinTheta ) * oVec.z;
 
-		// Neue x-Position
-		nVec.x = ( cosTheta + ( 1 - cosTheta ) * x * x ) * oVec.x;
-		nVec.x += ( ( 1 - cosTheta ) * x * y - z * sinTheta ) * oVec.y;
-		nVec.x += ( ( 1 - cosTheta ) * x * z + y * sinTheta ) * oVec.z;
+		// new y-position
+		tempVec.y = ( ( 1 - cosTheta ) * axis.x * axis.y + axis.z * sinTheta ) * oVec.x;
+		tempVec.y += ( cosTheta + ( 1 - cosTheta ) * axis.y * axis.y ) * oVec.y;
+		tempVec.y += ( ( 1 - cosTheta ) * axis.y * axis.z - axis.x * sinTheta ) * oVec.z;
 
-		// Neue y-Position
-		nVec.y = ( ( 1 - cosTheta ) * x * y + z * sinTheta ) * oVec.x;
-		nVec.y += ( cosTheta + ( 1 - cosTheta ) * y * y ) * oVec.y;
-		nVec.y += ( ( 1 - cosTheta ) * y * z - x * sinTheta ) * oVec.z;
+		// new z-position
+		tempVec.z = ( ( 1 - cosTheta ) * axis.x * axis.z - axis.y * sinTheta ) * oVec.x;
+		tempVec.z += ( ( 1 - cosTheta ) * axis.y * axis.z + axis.x * sinTheta ) * oVec.y;
+		tempVec.z += ( cosTheta + ( 1 - cosTheta ) * axis.z * axis.z ) * oVec.z;
 
-		// Neue z-Position
-		nVec.z = ( ( 1 - cosTheta ) * x * z - y * sinTheta ) * oVec.x;
-		nVec.z += ( ( 1 - cosTheta ) * y * z + x * sinTheta ) * oVec.y;
-		nVec.z += ( cosTheta + ( 1 - cosTheta ) * z * z ) * oVec.z;
-
-		return nVec;
+		return tempVec;
 	}
 	
 	
 	/**
-	 * Normalizes the vector.
+	 * Normalizes the vector. The length of a normalized vector is 1.
 	 */
 	public void normalize() {
-		double len;
-		len = length();
+		final double len = length();
 		if( len != 0 ) {// only dvide if len is not equal to zero
 			x /= len;
 			y /= len;
@@ -258,30 +305,57 @@ public class Vector3 implements Cloneable {
 	}
 
 	/**
-	 * Calculates the euclidian length of the vector.
+	 * Computes the euclidian length of the vector.
 	 * @return the length of the vector
 	 */
 	public double length() {
 		return Math.sqrt( x * x + y * y + z * z );
 	}
 
-	final static NumberFormat nfFloat = Localization.getInstance().getFloatConverter();
-	
+	/**
+	 * Returns a {@link String}-representation of the vector that is of the type
+	 * (x; y; z). The numbers in the representation are formatted in the current
+	 * locale.
+	 * @return a string representation of the vector
+	 */
 	@Override
 	public String toString(){
-		return "(" + nfFloat.format( x ) + "; " + nfFloat.format( y ) + "; " +  nfFloat.format( z ) + ")";
+		return toString( Localization.getInstance().getFloatConverter() );
+	}
+
+	/**
+	 * Returns a {@link String}-representation of the vector that is of the type
+	 * (x; y; z). The numbers in the representation are formatted in the submitted
+	 * number format.
+	 * @param nf the number format used to format the numbers
+	 * @return a string representation of the vector
+	 */
+	public String toString( NumberFormat nf ) {
+		return "(" + nf.format( x ) + "; " + nf.format( y ) + "; " +  nf.format( z ) + ")";
 	}
 
 	/**
 	 * Reads a vector from a given string. The string must have the same format
-	 * as it is printed using the {@link #toString()} method. Note that this depends from
-	 * the {@link java.util.Locale} scheme that is selected. The string may be enclosed by
-	 * brackets and/or spaces, also the numbers itself may be surrounded by
-	 * spaces.
+	 * as it is printed using the {@link #toString()} method. Note that this
+	 * depends from the {@link java.util.Locale} scheme that is selected. The
+	 * string may be enclosed by brackets and/or spaces, also the numbers itself
+	 * may be surrounded by spaces.
 	 * @param value the vector as string
 	 * @throws ParseException if an error occurs during parsing
 	 */
 	public void parse( String value ) throws ParseException {
+		parse( value, Localization.getInstance().getFloatConverter() );
+	}
+
+	/**
+	 * Reads a vector from a given string. The string must have the same format as
+	 * it is printed using the {@link #toString()} method. The format of the
+	 * numbers has to fit to the given number format.
+	 * @param value the vector as string
+	 * @param nf the number format used for the numbers in the string
+	 * @throws ParseException if an error occurs during parsing
+	 */
+	public void parse( String value, NumberFormat nf ) throws ParseException {
 		final int len = value.length();
 		value = value.trim();
 		if( value.startsWith( "(" ) )
@@ -290,23 +364,29 @@ public class Vector3 implements Cloneable {
 			value = value.substring( 0, value.length()-1 );
 		String a[] = value.split( ";" );
 		try {
-			x = nfFloat.parse( a[0].trim() ).doubleValue();
-			y = nfFloat.parse( a[1].trim() ).doubleValue();
-			z = nfFloat.parse( a[2].trim() ).doubleValue();
+			x = nf.parse( a[0].trim() ).doubleValue();
+			y = nf.parse( a[1].trim() ).doubleValue();
+			z = nf.parse( a[2].trim() ).doubleValue();
 		} catch( IndexOutOfBoundsException ex ) {
 			throw new ParseException( "String does not contain three coordinates.", len );
 		}
 	}
-	
-	public static Vector3 normal( Vector3 x, Vector3 y, Vector3 z ) {
-		//N = (V1 - V2)x(V2 - V3)
-		Vector3 t1 = x.subtraction( y );
-		Vector3 t2 = y.subtraction( z );
-		return t1.crossProduct( t2 );
+
+	/**
+	 * Computes a normal to a plane defined by three vectors or points. It is
+	 * computed using the formular {@code n = (x - y) \cross (y - z)}, where
+	 * \cross denotes the {@link #crossProduct(de.tu_berlin.math.coga.math.vectormath.Vector3)}.
+	 * @param x the first vector
+	 * @param y the second vector
+	 * @param z the third vector
+	 * @return the normal to the three vectors.
+	 */
+	public final static Vector3 normal( Vector3 x, Vector3 y, Vector3 z ) {
+		return x.sub( y ).crossProduct( y.sub( z ) );
 	}
 
 	/**
-	 * Calculates the orientation between two vectors.
+	 * Computes the orientation between two vectors.
 	 * @param v1 the first vector
 	 * @param v2 the second vector
 	 * @return a value indiciating the orientation between the two vectors
@@ -316,5 +396,6 @@ public class Vector3 implements Cloneable {
 		PlanPoint q = new PlanPoint( 0, 0 );
 		PlanPoint r = new PlanPoint( v2.x, v2.y);
 		return PlanPoint.orientation(p,r,q);
+		// TODO plan point hier entfernen
 	}
 }

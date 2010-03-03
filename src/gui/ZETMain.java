@@ -55,6 +55,7 @@ import javax.swing.UIManager;
 import de.tu_berlin.math.coga.common.localization.Localization;
 import de.tu_berlin.math.coga.common.debug.DebugStream;
 import de.tu_berlin.math.coga.common.debug.DebugStreamVerbose;
+import de.tu_berlin.math.coga.common.debug.Log;
 
 /**
  * The <code>ZETMain</code> class is the main entry for the graphical user
@@ -91,6 +92,8 @@ public class ZETMain {
 	public static PropertyTreeModel ptmInformation;
 	/** The properties in the information file. */
 	public static PropertyTreeModel ptmOptions;
+	/** The log of the application. */
+	public static Log log = new Log();
 	
 	/**
 	 * Creates a new instance of <code>ZETMain</code>

@@ -192,45 +192,45 @@ public class Frustum {
 
 	  // calculate positions of far plane edges
 		Vector3 farCenter = new Vector3( pos );
-		farCenter.add(up);
-		farCenter.scalarMultiplicate( farDist );
+		farCenter.addTo(up);
+		farCenter.scalarMultiplicateTo( farDist );
 		farTopLeft = new Vector3( farCenter );
 		//Vector3 t = new Vector3(up);	// with temp vector and without doing-all-in-one
-		//t.scalarMultiplicate( farHeight*0.5 );
-		farTopLeft.add( new Vector3(up).scalaryMultiplication( farHeight*0.5 ) );
-		farTopLeft.sub( new Vector3(right).scalaryMultiplication( farWidth*0.5 ) );
+		//t.scalarMultiplicateTo( farHeight*0.5 );
+		farTopLeft.addTo( new Vector3(up).scalarMultiplicate( farHeight*0.5 ) );
+		farTopLeft.subTo( new Vector3(right).scalarMultiplicate( farWidth*0.5 ) );
 		farTopRight = new Vector3( farCenter );
-		farTopRight.add( new Vector3(up).scalaryMultiplication( farHeight*0.5 ) );
-		farTopRight.add( new Vector3(right).scalaryMultiplication( farWidth*0.5 ) );
+		farTopRight.addTo( new Vector3(up).scalarMultiplicate( farHeight*0.5 ) );
+		farTopRight.addTo( new Vector3(right).scalarMultiplicate( farWidth*0.5 ) );
 		//farTopRight= farCenter + (camera->getUp()  * frustum.farHeight*0.5) + (camera->getRight()  * frustum.farWidth*0.5);
 		farBottomLeft = new Vector3( farCenter );
-		farBottomLeft.sub( new Vector3(up).scalaryMultiplication( farHeight*0.5 ) );
-		farBottomLeft.sub( new Vector3(right).scalaryMultiplication( farWidth*0.5 ) );
+		farBottomLeft.subTo( new Vector3(up).scalarMultiplicate( farHeight*0.5 ) );
+		farBottomLeft.subTo( new Vector3(right).scalarMultiplicate( farWidth*0.5 ) );
 		//farBottomLeft= farCenter - (camera->getUp()  * frustum.farHeight*0.5) - (camera->getRight()  * frustum.farWidth*0.5);
 		farBottomRight = new Vector3( farCenter );
-		farBottomRight.sub( new Vector3(up).scalaryMultiplication( farHeight*0.5 ) );
-		farBottomRight.add( new Vector3(right).scalaryMultiplication( farWidth*0.5 ) );
+		farBottomRight.subTo( new Vector3(up).scalarMultiplicate( farHeight*0.5 ) );
+		farBottomRight.addTo( new Vector3(right).scalarMultiplicate( farWidth*0.5 ) );
 		//farBottomRight = farCenter - (camera->getUp()  * frustum.farHeight*0.5) + (camera->getRight()  * frustum.farWidth*0.5);
 
 	  // calculate positions of near plane edges
 		Vector3 nearCenter = new Vector3( pos );
-		nearCenter.add(up);
-		nearCenter.scalarMultiplicate( nearDist );
+		nearCenter.addTo(up);
+		nearCenter.scalarMultiplicateTo( nearDist );
 		nearTopLeft = new Vector3( nearCenter );
-		nearTopLeft.add( new Vector3(up).scalaryMultiplication( nearHeight*0.5 ) );
-		nearTopLeft.sub( new Vector3(right).scalaryMultiplication( nearWidth*0.5 ) );
+		nearTopLeft.addTo( new Vector3(up).scalarMultiplicate( nearHeight*0.5 ) );
+		nearTopLeft.subTo( new Vector3(right).scalarMultiplicate( nearWidth*0.5 ) );
 		//nearTopLeft= nearCenter + (camera->getUp()  * frustum.nearHeight*0.5) - (camera->getRight()  * frustum.nearWidth*0.5);
 		nearTopRight = new Vector3( nearCenter );
-		nearTopRight.add( new Vector3(up).scalaryMultiplication( nearHeight*0.5 ) );
-		nearTopRight.add( new Vector3(right).scalaryMultiplication( nearHeight*0.5 ) );
+		nearTopRight.addTo( new Vector3(up).scalarMultiplicate( nearHeight*0.5 ) );
+		nearTopRight.addTo( new Vector3(right).scalarMultiplicate( nearHeight*0.5 ) );
 		//nearTopRight= nearCenter + (camera->getUp()  * frustum.nearHeight*0.5) + (camera->getRight()  * frustum.nearWidth*0.5);
 		nearBottomLeft = new Vector3( nearCenter );
-		nearBottomLeft.sub( new Vector3(up).scalaryMultiplication( nearHeight*0.5 ) );
-		nearBottomLeft.sub( new Vector3(right).scalaryMultiplication( nearHeight*0.5 ) );
+		nearBottomLeft.subTo( new Vector3(up).scalarMultiplicate( nearHeight*0.5 ) );
+		nearBottomLeft.subTo( new Vector3(right).scalarMultiplicate( nearHeight*0.5 ) );
 	  //nearBottomLeft= nearCenter - (camera->getUp()  * frustum.nearHeight*0.5) - (camera->getRight()  * frustum.nearWidth*0.5);
 		nearBottomRight = new Vector3( nearCenter );
-		nearBottomRight.sub( new Vector3(up).scalaryMultiplication( nearHeight*0.5 ) );
-		nearBottomRight.add( new Vector3(right).scalaryMultiplication( nearHeight*0.5 ) );
+		nearBottomRight.subTo( new Vector3(up).scalarMultiplicate( nearHeight*0.5 ) );
+		nearBottomRight.addTo( new Vector3(right).scalarMultiplicate( nearHeight*0.5 ) );
 		//nearBottomRight = nearCenter - (camera->getUp()  * frustum.nearHeight*0.5) + (camera->getRight()  * frustum.nearWidth*0.5);
 
 		// now compute the six planes bounding the frustum. the points are given in counter clockwise
