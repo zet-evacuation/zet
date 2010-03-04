@@ -15,9 +15,7 @@
  */
 package opengl.framework.abs;
 
-import gui.visualization.control.AbstractControl;
 import javax.media.opengl.GL;
-import javax.media.opengl.GLAutoDrawable;
 import javax.media.opengl.glu.GLU;
 import javax.media.opengl.glu.GLUquadric;
 import opengl.drawingutils.GLVector;
@@ -30,7 +28,7 @@ import opengl.drawingutils.GLVector;
  * @param <W> The type of the associated children control object
  * @author Jan-Philipp Kapmeier, Daniel Plümpe
   */
-public abstract class AbstractDrawable<U extends AbstractDrawable<?, ?, ?>, V extends AbstractControl<?, ?, ?, U, W>, W extends AbstractControl<U, ?, ?, ?, ?>> implements Drawable {
+public abstract class AbstractDrawable<U extends AbstractDrawable<?, ?, ?>, V extends AbstractControl<?, ?, ?, U, W, ?>, W extends AbstractControl<U, ?, ?, ?, ?, ?>> implements Drawable {
 //public abstract class AbstractDrawable<T extends CullingShape, U extends AbstractDrawable<?,?,?,?>, V extends AbstractControl<?, ?, ?, U, W>, W extends AbstractControl<U,?,?,?,?>> implements Drawable {
 
 	//private CullingTester tester;

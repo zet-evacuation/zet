@@ -22,6 +22,7 @@ package gui.visualization;
 
 import de.tu_berlin.math.coga.common.localization.Localization;
 import de.tu_berlin.math.coga.common.util.Formatter;
+import de.tu_berlin.math.coga.math.vectormath.Vector2;
 import de.tu_berlin.math.coga.math.vectormath.Vector3;
 import ds.PropertyContainer;
 import event.EventListener;

@@ -13,10 +13,10 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
+
 /*
  * GeometricFunctionsTest.java
- *
- * Created on 7. Dezember 2007, 19:17
+ * Created on 07.12.2007, 19:17
  */
 
 package ds.z;

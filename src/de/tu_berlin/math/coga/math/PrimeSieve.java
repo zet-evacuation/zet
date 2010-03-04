@@ -98,39 +98,103 @@ public class PrimeSieve {
 
 	}
 
-	public static void main( String[] args ) {
-			int n = 16;
-			PrimeSieve p = new PrimeSieve( n );
-			p.compute();
-		for( int i = 0; i < p.getPrimeCount(); ++i ) {
-			System.out.println( p.getPrime( i+1 ) );
+	public void computeOpt() {
+		if( n == 2 ) {
+			primes[0] = 2;
+			primeCount = 1;
+			return;
 		}
 
+		boolean[] working = new boolean[n/3];
 
-//		int n = 1;
-//		for( int i = 1; i <= 40; ++i ) {
-//			n *= 2;
-//			System.out.println( "n = " + n );
-//			System.out.println( "optimiertes PrimeSieve" );
-//			System.gc();
-//			PrimeSieve p = new PrimeSieve( n );
-//			long start = System.nanoTime();
-//			p.compute();
-//			long end = System.nanoTime();
-//			System.out.println( end - start );
-//			//		for( int i = 0; i < p.primeCount; ++i ) {
-//			//			System.out.println( p.primes[i] );
-//			//		}
-//
-//
-//			System.out.println( "OptAlgo3" );
-//			p = new PrimeSieve( n );
-//			System.gc();
-//			start = System.nanoTime();
-//			p.computeADWopt();
-//			end = System.nanoTime();
-//			System.out.println( end - start );
-//		}
+		int d1 = 8;
+		int d2 = 8;
+		int p1 = 3;
+		int p2 = 7;
+		int s1 = 7;
+		int s2 = 3;
+		int thisN = 0;
+		int len = working.length;
+		boolean toggle = false;
+
+		while(s1 < len) {// -- scan sieve
+			if( !working[thisN++] ) { // -- if a prime is found
+				// -- cancel its multiples
+				int inc = p1 + p2;
+
+				for( int k = s1; k < len; k += inc )
+					working[k] = true;
+
+				for( int k = s1 + s2; k < len; k += inc )
+					working[k] = true;
+			}
+
+			if( toggle = !toggle ) { // Never mind, it's ok.
+				s1 += d2;
+				d1 += 16;
+				p1 += 2;
+				p2 += 2;
+				s2 = p2;
+			} else {
+				s1 += d1;
+				d2 += 8;
+				p1 += 2;
+				p2 += 6;
+				s2 = p1;
+			}
+		}
+
+		toggle = false;
+		int p = 5, i = 0, j = 2;
+
+		primes[0] = 2;
+		primes[1] = 3;
+
+		while(p <= n) {
+			if( !working[i++] )
+				primes[j++] = p;
+			// -- never mind, it's ok.
+			p += (toggle = !toggle) ? 2 : 4;
+		}
+		primeCount = j;
+	}
+
+	public static void main( String[] args ) {
+		PrimeSieve p;
+		int n = 1;
+		for( int i = 1; i <= 40; ++i ) {
+			n *= 2;
+			System.out.print( "n = ;" + n );
+			System.out.print( ";optimiertes PrimeSieve" );
+			System.gc();
+			p = new PrimeSieve( n );
+			long start = System.nanoTime();
+			p.compute();
+			long end = System.nanoTime();
+			System.out.print( ";" + (end - start) );
+			//		for( int i = 0; i < p.primeCount; ++i ) {
+			//			System.out.println( p.primes[i] );
+			//		}
+
+
+			System.out.print( ";OptAlgo3" );
+			p = new PrimeSieve( n );
+			System.gc();
+			start = System.nanoTime();
+			p.computeADWopt();
+			end = System.nanoTime();
+			System.out.print( ";" + (end - start) );
+
+			System.out.print( ";Luschny" );
+			p = new PrimeSieve( n );
+			System.gc();
+			start = System.nanoTime();
+			p.computeOpt();
+			end = System.nanoTime();
+			System.out.print( ";" + (end - start) );
+			System.out.println();
+
+		}
 
 //		for( int i = 0; i < p.primeCount; ++i ) {
 //			System.out.println( p.primes[i] );

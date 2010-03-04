@@ -16,13 +16,13 @@
 
 /**
  * Class GLGraphControl
- * Erstellt 02.05.2008, 18:44:28
+ * Created 02.05.2008, 18:44:28
  */
 package gui.visualization.control.graph;
 
 import ds.GraphVisualizationResult;
 import ds.graph.Network;
-import gui.visualization.control.AbstractControl;
+import opengl.framework.abs.AbstractControl;
 import gui.visualization.control.GLControl;
 import gui.visualization.draw.graph.GLGraph;
 import gui.visualization.draw.graph.GLGraphFloor;
@@ -32,7 +32,7 @@ import java.util.Iterator;
 /**
  *  @author Jan-Philipp Kappmeier
  */
-public class GLGraphControl extends AbstractControl<GLGraph, Network, GraphVisualizationResult, GLGraphFloor, GLGraphFloorControl> {
+public class GLGraphControl extends AbstractControl<GLGraph, Network, GraphVisualizationResult, GLGraphFloor, GLGraphFloorControl, GLControl> {
 
 	private HashMap<Integer, GLGraphFloorControl> allFloorsByID;
 

@@ -68,7 +68,7 @@ public class PlanPolygon<T extends Edge> implements Serializable, Iterable<T> {
 		/** Checks wheather the room is on the left side of an edge. */
 		Left;
 	}
-	/** The class-type of the edges. This is set only one single time in the constructor. */
+	/** The class-type of the edges. This is setLocation only one single time in the constructor. */
 	private final Class<T> edgeClassType;
 	/** The change listeners that are informed if any change of the polygon occurs. */
 //	@XStreamOmitField()
@@ -115,7 +115,7 @@ public class PlanPolygon<T extends Edge> implements Serializable, Iterable<T> {
 	 * the listeners. In case of complex manipulations (f.e. when
 	 * combining two edges) you may want to suppress single events that arise
 	 * during the course of the manipulation and only send out a single event
-	 * at the end. Then you can set this variable to "false", but you should always
+	 * at the end. Then you can setLocation this variable to "false", but you should always
 	 * ensure that it is switched back to the state that it had before by using
 	 * try & finally constructions like those in comineEdges or replaceEdge.
 	 */
@@ -167,7 +167,7 @@ public class PlanPolygon<T extends Edge> implements Serializable, Iterable<T> {
 	}
 
 	/**
-	 * Fills an empty instance of <code>PlanPolygon</code> with a set of
+	 * Fills an empty instance of <code>PlanPolygon</code> with a setLocation of
 	 * {@link PlanPoint}. The border of the polygon is defined by the order of
 	 * points, following the points and the neccessary edges are created. The last
 	 * edge between the <code>n</code>-th and <code>1</code>st point closes the
@@ -281,8 +281,8 @@ public class PlanPolygon<T extends Edge> implements Serializable, Iterable<T> {
 			e.setPoints( start, end, false );
 
 			// Initialize bounds
-			width = Math.abs( start.x - end.x );
-			height = Math.abs( start.y - end.y );
+			width = Math.abs( (int)start.x - (int)end.x );
+			height = Math.abs( (int)start.y - (int)end.y );
 			xOffset = e.boundLeft();
 			yOffset = e.boundUpper();
 			// This first edge defines all bounds
@@ -739,7 +739,7 @@ public class PlanPolygon<T extends Edge> implements Serializable, Iterable<T> {
 
 	/**
 	 * <p>Checks the relative position of the <code>PlanPolygon</code> with respect
-	 * to an edge. The mode of the test can be set using a {@link RelativePosition} enumeration
+	 * to an edge. The mode of the test can be setLocation using a {@link RelativePosition} enumeration
 	 * which enables testing if the polygon is on the left or the right side of the polygon.</p>
 	 * <p>Note that only edges of the border of the polygon should be used. However, no
 	 * test is made and no exception is throws. But using different edges is quite senseless as the result
@@ -1009,7 +1009,7 @@ public class PlanPolygon<T extends Edge> implements Serializable, Iterable<T> {
 
 	/**
 	 * Deletes this <code>PlanPolygon</code>. That means, all edges are removed
-	 * from the list of <code>Edge</code>. After that all used references are set
+	 * from the list of <code>Edge</code>. After that all used references are setLocation
 	 * to <code>null</code>.
 	 * <p>The runtime of this operation is O(n), where <code>n</code> is the
 	 * number of edges.</p>
@@ -1637,7 +1637,7 @@ public class PlanPolygon<T extends Edge> implements Serializable, Iterable<T> {
 				start = null;
 				end = null;
 				closed = false; // Deletion of zero-length edges keeps polygon closed until it is empty
-			// At this point it is empty, so we set closed to "false" explicitly
+			// At this point it is empty, so we setLocation closed to "false" explicitly
 			} else if( first == e )
 				start = first.getOther( start );
 			else if( last == e )
@@ -1936,7 +1936,7 @@ public class PlanPolygon<T extends Edge> implements Serializable, Iterable<T> {
 			// Endpoints are not equal --> insert new edge
 			newEdge( e1_start, e2_target, this );
 		else {
-			// Endpoints are equal --> Cannot defineByPoints new edge, set new endpoint for last edge
+			// Endpoints are equal --> Cannot defineByPoints new edge, setLocation new endpoint for last edge
 			e1_start.getPreviousEdge().setTarget( e2_target, false );
 			this.closed = true;
 		}
@@ -2388,7 +2388,7 @@ public class PlanPolygon<T extends Edge> implements Serializable, Iterable<T> {
 			for( xCord = work1.getXInt() + 400; xCord <= work2.getXInt() + 100; xCord += 400 ) {
 				//crossingpoint with the next x-coordinate
 				yCord = Math.round( start.getYInt() + (xCord - start.getXInt()) * m );
-				//creates the next PlanPoint which has to be set due to rasterization.
+				//creates the next PlanPoint which has to be setLocation due to rasterization.
 				nextPlanPoint = new PlanPoint( xCord, Math.round( (new Float( yCord ).floatValue() /
 								400.0f) ) * 400 );
 

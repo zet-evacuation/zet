@@ -22,7 +22,7 @@ import ds.graph.flow.EdgeBasedFlowOverTime;
 import algo.graph.Flags;
 import algo.graph.util.PathComposition;
 import converter.ZToGraphMapping;
-import io.visualization.VisualizationResult;
+import opengl.framework.abs.VisualizationResult;
 import java.util.ArrayList;
 
 /**

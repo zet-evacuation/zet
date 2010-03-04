@@ -30,7 +30,7 @@ import ds.ca.results.DieAction;
 import ds.ca.results.MoveAction;
 import ds.ca.results.SwapAction;
 import ds.ca.results.VisualResultsRecording;
-import gui.visualization.control.AbstractControl;
+import opengl.framework.abs.AbstractControl;
 import gui.visualization.control.GLControl;
 import static gui.visualization.control.GLControl.CellInformationDisplay;
 import gui.visualization.draw.ca.GLCA;
@@ -45,7 +45,7 @@ import util.DebugFlags;
 /**
  *  @author Jan-Philipp Kappmeier
  */
-public class GLCAControl extends AbstractControl<GLCA, CellularAutomaton, CAVisualizationResults, GLCAFloor, GLCAFloorControl> {
+public class GLCAControl extends AbstractControl<GLCA, CellularAutomaton, CAVisualizationResults, GLCAFloor, GLCAFloorControl, GLControl> {
 
 	private HashMap<Integer, GLCAFloorControl> allFloorsByID;
 	ArrayList<GLIndividual> glIndividuals;
@@ -128,7 +128,7 @@ public class GLCAControl extends AbstractControl<GLCA, CellularAutomaton, CAVisu
 			individuals.add( null );
 		}
 		for( Individual individual : ca.getIndividuals() ) {
-			GLIndividualControl control = new GLIndividualControl( getVisResult(), individual, mainControl );
+			GLIndividualControl control = new GLIndividualControl( getVisResult(), individual, (GLControl)mainControl ); // TODO anders machen hier irgendwie...
 			individuals.set( individual.getNumber() - 1, control );
 		}
 
@@ -160,7 +160,7 @@ public class GLCAControl extends AbstractControl<GLCA, CellularAutomaton, CAVisu
 				GLCellControl cell = getCellControl( death.placeOfDeath() );
 				individuals.get(  death.getIndividualNumber() - 1 ).addHistoryTriple( cell, cell, 0, 0 );
 			}
-			mainControl.recordingProgress();
+			((GLControl)mainControl).recordingProgress();
 		}
 		recording.rewind();
 		for( int k = 0; k < ca.getIndividuals().size(); k++ ) {

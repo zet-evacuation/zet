@@ -29,12 +29,11 @@ import java.util.ArrayList;
 
 import java.util.List;
 import de.tu_berlin.math.coga.common.localization.Localization;
-import converter.RasterTools;
 import zet.util.ConversionTools;
 
 /**
  * <code>PlanPoint</code> represents a point with integer coordinates. It represents a position
- * in a {@link BuildingPlan} to a accuracy to millimeters. It is possible to get and set coordinates
+ * in a {@link BuildingPlan} to a accuracy to millimeters. It is possible to get and setLocation coordinates
  * as float values, rounded to three decimals, representing the current value in meters.
  *
  * PlanPoints are used to represent polygon nodes and to implement the polygon edge
@@ -49,10 +48,10 @@ public class PlanPoint extends Point {
 //	@XStreamOmitField()
 //	private transient ArrayList<ChangeListener> changeListeners = new ArrayList<ChangeListener>();
 	/** The next incident edge. */
-	@XStreamOmitField() // - is set in Compact converter
+	@XStreamOmitField() // - is setLocation in Compact converter
 	private Edge nextEdge;
 	/** The previous incident edge. */
-	@XStreamOmitField() // - is set in Compact converter
+	@XStreamOmitField() // - is setLocation in Compact converter
 	private Edge previousEdge;
 
 	/**
@@ -229,7 +228,7 @@ public class PlanPoint extends Point {
 
 	/**
 	 * Returns the value of this point als float value. Due to the limitations of
-	 * integer it is possible to set coordinates between about -2147483 and
+	 * integer it is possible to setLocation coordinates between about -2147483 and
 	 * 2147483 meters.
 	 * @return integer transformed <code>x</code>-coordinate
 	 */
@@ -238,12 +237,12 @@ public class PlanPoint extends Point {
 	}
 
 	public int getXInt() {
-		return x;
+		return (int)x;
 	}
 
 	/**
 	 * Returns the value of this point als float value. Due to the limitations of
-	 * integer it is possible to set coordinates between about -2147483 and
+	 * integer it is possible to setLocation coordinates between about -2147483 and
 	 * 2147483 meters.
 	 * @return integer transformed <code>y</code>-coordinate
 	 */
@@ -252,8 +251,9 @@ public class PlanPoint extends Point {
 	}
 
 	public int getYInt() {
-		return y;
+		return (int)y;
 	}
+
 	// q is the point in common with both edges
 	public static int orientation( PlanPoint p, PlanPoint q, PlanPoint r ) {
 		double u1 = p.getX() - q.getX();

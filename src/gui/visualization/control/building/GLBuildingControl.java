@@ -24,7 +24,7 @@ import java.util.HashMap;
 
 import io.visualization.BuildingResults;
 import io.visualization.BuildingResults.Wall;
-import gui.visualization.control.AbstractControl;
+import opengl.framework.abs.AbstractControl;
 import gui.visualization.control.GLControl;
 import gui.visualization.draw.building.GLBuilding;
 import gui.visualization.draw.building.GLWall;
@@ -33,7 +33,7 @@ import gui.visualization.draw.building.GLWall;
  * A control class that allows hiding and showing of walls on different floors.
  * @author Daniel Pluempe
  */
-public class GLBuildingControl extends AbstractControl<GLBuilding, BuildingResults, BuildingResults, GLWall, GLWallControl> {
+public class GLBuildingControl extends AbstractControl<GLBuilding, BuildingResults, BuildingResults, GLWall, GLWallControl, GLControl> {
 
 	private HashMap<Integer, ArrayList<GLWallControl>> allFloorsByID;
 
