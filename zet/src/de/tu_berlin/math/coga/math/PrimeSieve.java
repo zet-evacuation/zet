@@ -45,40 +45,68 @@ public class PrimeSieve {
 	}
 
 	public void compute() {
-		n = (n%2 == 0) ? n-1: n;
-		int root = (int)java.lang.Math.sqrt( n );
-		boolean[] working = new boolean[n / 2];
+		if( (n & 1) == 0 )
+			n--;
+		boolean[] working = new boolean[n >> 1];
 
 		primes[0] = 2;
-		int index = 0;
+		int index = -1;
 		int start = 3;
 		int skip = 3;
 		int pindex = 1;
 
-		//for( int i = 0; i < root; i++ ) {
 		while( start < n / 2 ) {
-			if( !working[index] ) {
+			if( !working[++index] ) {
 				primes[pindex++] = (index << 1) + 3;
 				// erase
 				for( int j = start; j < n / 2; j += skip )
 					working[j] = true;
 			}
-
 			start += (++skip) << 1;
 			skip++;
-			index++;
 		}
 
 		// give out the rest
-		while( index < n / 2 & (pindex) < bound ) {
+		while( ++index < n / 2 && (pindex) < bound )
 			if( !working[index] )
 				primes[pindex++] = (index << 1) + 3;
-			index++;
-		}
 		primeCount = pindex;
 	}
 
-	public void computeADWopt() {
+	public void computeLowMem() {
+		if( (n & 1) == 0 )
+			n -= 1;
+//		n = (n%2 == 0) ? n-1: n;
+		int[] working = new int[(n >>6)+1];
+
+		primes[0] = 2;
+		int index = -1;
+		int start = 3;
+		int skip = 3;
+		int pindex = 1;
+
+		while( start < n / 2 ) {
+//			if( !working[++index] ) {
+			if( (working[++index >> 5] & (1 << index % 32)) == 0 ) {
+				primes[pindex++] = (index << 1) + 3;
+				// erase
+				for( int j = start; j < n / 2; j += skip )
+					//working[j] = true;
+					working[j >> 5] |= (1 << j % 32 );
+			}
+			start += (++skip) << 1;
+			skip++;
+		}
+
+		// give out the rest
+		while( ++index < n / 2 && (pindex) < bound )
+//			if( !working[index] )
+			if( (working[index >> 5] & (1 << index % 32)) == 0 )
+				primes[pindex++] = (index << 1) + 3;
+		primeCount = pindex;
+	}
+
+	public void computeADW3() {
 		boolean[] working = new boolean[n + 1];
 		int i = 0;
 		int k = 0;
@@ -98,7 +126,28 @@ public class PrimeSieve {
 
 	}
 
-	public void computeOpt() {
+	public void computeADW3Half() {
+		boolean[] working = new boolean[n/2 + 1];
+		int i = 0;
+		int k = 0;
+		try {
+			for( i = 3; i <= java.lang.Math.floor( java.lang.Math.sqrt( n ) ); i+=2 )
+				for( k = n / i; k >= i; k-=2 )
+					working[(i * k) >> 1] = true;
+		} catch( Exception e ) {
+
+		}
+
+		int count = 0;
+		primes[count++] = 2;
+		for( i = 1; i < n/2; ++i )
+			if( !working[i] )
+				primes[count++] = (i<<1) + 1;
+		primeCount = count;
+
+	}
+
+	public void computeLuschny() {
 		if( n == 2 ) {
 			primes[0] = 2;
 			primeCount = 1;
@@ -161,39 +210,52 @@ public class PrimeSieve {
 
 	public static void main( String[] args ) {
 		PrimeSieve p;
-		int n = 1;
-		for( int i = 1; i <= 40; ++i ) {
-			n *= 2;
+		int n = 2;
+		for( int i = 1; i <= 60; ++i ) {
+			n = (int)(n*1.5);
 			System.out.print( "n = ;" + n );
-			System.out.print( ";optimiertes PrimeSieve" );
+			long start, end;
+//			System.out.print( ";optimiertes PrimeSieve" );
+//			System.gc();
+//			p = new PrimeSieve( n );
+//			start = System.nanoTime();
+//			p.compute();
+//			end = System.nanoTime();
+//			System.out.print( ";" + (end - start) );
+//
+			System.out.print( ";optimiertes PrimeSieve LowMem" );
 			System.gc();
 			p = new PrimeSieve( n );
-			long start = System.nanoTime();
-			p.compute();
-			long end = System.nanoTime();
-			System.out.print( ";" + (end - start) );
-			//		for( int i = 0; i < p.primeCount; ++i ) {
-			//			System.out.println( p.primes[i] );
-			//		}
-
-
-			System.out.print( ";OptAlgo3" );
-			p = new PrimeSieve( n );
-			System.gc();
 			start = System.nanoTime();
-			p.computeADWopt();
+			p.computeLowMem();
 			end = System.nanoTime();
 			System.out.print( ";" + (end - start) );
+//
+//			System.out.print( ";OptAlgo3" );
+//			p = new PrimeSieve( n );
+//			System.gc();
+//			start = System.nanoTime();
+//			p.computeADW3();
+//			end = System.nanoTime();
+//			System.out.print( ";" + (end - start) );
+//
+//			System.out.print( ";OptAlgo3Half" );
+//			p = new PrimeSieve( n );
+//			System.gc();
+//			start = System.nanoTime();
+//			p.computeADW3Half();
+//			end = System.nanoTime();
+//			System.out.print( ";" + (end - start) );
 
-			System.out.print( ";Luschny" );
-			p = new PrimeSieve( n );
-			System.gc();
-			start = System.nanoTime();
-			p.computeOpt();
-			end = System.nanoTime();
-			System.out.print( ";" + (end - start) );
+//			System.out.print( ";Luschny" );
+//			p = new PrimeSieve( n );
+//			System.gc();
+//			start = System.nanoTime();
+//			p.computeLuschny();
+//			end = System.nanoTime();
+//			System.out.print( ";" + (end - start) );
+
 			System.out.println();
-
 		}
 
 //		for( int i = 0; i < p.primeCount; ++i ) {

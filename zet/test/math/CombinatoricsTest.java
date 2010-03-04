@@ -126,7 +126,7 @@ public class CombinatoricsTest extends TestCase {
 			for( int k = 0; k <= n; ++k ) {
 				bcounter = 0;
 				fcounter = 0;
-				for( int i = 1; i < 10000; i++ ) {
+				for( int i = 1; i < 20000; i++ ) {
 					start = System.nanoTime();
 					//long nb = naiveBinomial( n, k );
 					end = System.nanoTime();

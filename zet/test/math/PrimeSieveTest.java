@@ -56,7 +56,7 @@ public class PrimeSieveTest extends TestCase {
 	pl109,pl109,pl109,pl113,pl113,pl113,pl113,pl113,pl113,pl113,pl113,pl113,pl113,pl113,pl113,pl113,pl113
 	};
 
-	  public void testMyPrimeSieve() throws Exception {
+	  public void testPrimeSieve() throws Exception {
 			System.out.println( "Testing prime sieve for n = 16..." );
 			int n = 16;
 			PrimeSieve p = new PrimeSieve( n );
@@ -72,14 +72,35 @@ public class PrimeSieveTest extends TestCase {
 				check( p, parray[i-2] );
 			}
 			System.out.println();
+			System.out.println();
 		}
 
-	  public void testADWOpt3() throws Exception {
+	  public void testPrimeSieveLowMem() throws Exception {
+			System.out.println( "Testing Low Mem Algorithmus" );
+			System.out.println( "Testing prime sieve for n = 16..." );
+			int n = 16;
+			PrimeSieve p = new PrimeSieve( n );
+			p.computeLowMem();
+			giveOutPrimes( p );
+			check( p, pl13 );
+
+			System.out.println( "Test correct number of primes..." );
+			for( int i = 2; i <= 126; ++i ) {
+				System.out.print( i + " " );
+				p = new PrimeSieve( i );
+				p.compute();
+				check( p, parray[i-2] );
+			}
+			System.out.println();
+			System.out.println();
+		}
+
+	  public void testADW3() throws Exception {
 			System.out.println( "Testing Algorithmus der Woche Optimiert3" );
 			System.out.println( "Testing prime sieve for n = 16..." );
 			int n = 16;
 			PrimeSieve p = new PrimeSieve( n );
-			p.computeADWopt();
+			p.computeADW3();
 			giveOutPrimes( p );
 			check( p, pl13 );
 
@@ -87,17 +108,39 @@ public class PrimeSieveTest extends TestCase {
 			for( int i = 2; i <= 126; ++i ) {
 				System.out.print( i + " " );
 				p = new PrimeSieve( i );
-				p.computeADWopt();
+				p.computeADW3();
 				check( p, parray[i-2] );
 			}
 			System.out.println();
+			System.out.println();
 		}
-	  public void testOptPrimeSieve() throws Exception {
+
+	  public void testADW3Half() throws Exception {
+			System.out.println( "Testing Algorithmus der Woche Optimiert3-half" );
+			System.out.println( "Testing prime sieve for n = 16..." );
+			int n = 16;
+			PrimeSieve p = new PrimeSieve( n );
+			p.computeADW3Half();
+			giveOutPrimes( p );
+			check( p, pl13 );
+
+			System.out.println( "Test correct number of primes..." );
+			for( int i = 2; i <= 126; ++i ) {
+				System.out.print( i + " " );
+				p = new PrimeSieve( i );
+				p.computeADW3();
+				check( p, parray[i-2] );
+			}
+			System.out.println();
+			System.out.println();
+		}
+
+		public void testOptPrimeSieve() throws Exception {
 			System.out.println( "Testing Luschnys PrimeSieve" );
 			System.out.println( "Testing prime sieve for n = 16..." );
 			int n = 16;
 			PrimeSieve p = new PrimeSieve( n );
-			p.computeOpt();
+			p.computeLuschny();
 			giveOutPrimes( p );
 			check( p, pl13 );
 
@@ -105,9 +148,10 @@ public class PrimeSieveTest extends TestCase {
 			for( int i = 2; i <= 126; ++i ) {
 				System.out.print( i + " " );
 				p = new PrimeSieve( i );
-				p.computeOpt();
+				p.computeLuschny();
 				check( p, parray[i-2] );
 			}
+			System.out.println();
 			System.out.println();
 		}
 

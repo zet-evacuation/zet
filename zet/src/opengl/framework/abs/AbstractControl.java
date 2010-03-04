@@ -20,7 +20,7 @@ import java.util.Iterator;
 
 /**
  * 
- * @author Daniel Pluempe
+ * @author Daniel Plümpe
  *
  * @param <T> The type of the graphic object that is controlled by this class
  * @param <U> The type of the object in the data structure (the model) that is controlled by this class
