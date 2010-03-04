@@ -17,7 +17,7 @@ package gui.visualization.control.ca;
 
 import ds.ca.Cell;
 import ds.ca.Room;
-import gui.visualization.control.AbstractControl;
+import opengl.framework.abs.AbstractControl;
 import gui.visualization.control.GLControl;
 import gui.visualization.control.GLControl.CellInformationDisplay;
 import gui.visualization.draw.ca.GLCell;
@@ -25,7 +25,7 @@ import gui.visualization.draw.ca.GLRoom;
 import io.visualization.CAVisualizationResults;
 import java.util.HashMap;
 
-public class GLRoomControl extends AbstractControl<GLRoom, Room, CAVisualizationResults, GLCell, GLCellControl> {
+public class GLRoomControl extends AbstractControl<GLRoom, Room, CAVisualizationResults, GLCell, GLCellControl, GLControl> {
 
 	private HashMap<ds.ca.Cell, GLCellControl> cellControls;
 

@@ -20,6 +20,7 @@
 
 package io.visualization;
 
+import opengl.framework.abs.VisualizationResult;
 import ds.ca.CellularAutomaton;
 import ds.ca.results.VisualResultsRecording;
 

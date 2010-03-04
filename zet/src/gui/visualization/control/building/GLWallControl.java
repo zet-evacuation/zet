@@ -20,7 +20,7 @@
 package gui.visualization.control.building;
 
 import gui.visualization.VisualizationOptionManager;
-import gui.visualization.control.AbstractControl;
+import opengl.framework.abs.AbstractControl;
 import gui.visualization.control.GLControl;
 import gui.visualization.draw.building.GLWall;
 import io.visualization.BuildingResults;
@@ -36,7 +36,7 @@ import opengl.drawingutils.GLVector;
 /**
  * @author Daniel Plümpe
  */
-public class GLWallControl extends AbstractControl<GLWall, BuildingResults.Wall, BuildingResults, GLWall, GLWallControl> {
+public class GLWallControl extends AbstractControl<GLWall, BuildingResults.Wall, BuildingResults, GLWall, GLWallControl, GLControl> {
 
 	private LinkedList<GLVector> basePoints;
 

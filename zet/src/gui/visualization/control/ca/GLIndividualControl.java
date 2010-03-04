@@ -21,7 +21,7 @@
 package gui.visualization.control.ca;
 
 import ds.ca.Individual;
-import gui.visualization.control.AbstractControl;
+import opengl.framework.abs.AbstractControl;
 import gui.visualization.control.GLControl;
 import gui.visualization.control.GLControl.IndividualInformationDisplay;
 import gui.visualization.control.StepUpdateListener;
@@ -37,7 +37,7 @@ import java.util.ArrayList;
  * the individual on the screen.
  * @author Jan-Philipp Kappmeier
  */
-public class GLIndividualControl extends AbstractControl<GLIndividual, Individual, CAVisualizationResults, GLIndividual, GLIndividualControl> implements StepUpdateListener {
+public class GLIndividualControl extends AbstractControl<GLIndividual, Individual, CAVisualizationResults, GLIndividual, GLIndividualControl, GLControl> implements StepUpdateListener {
 	/** The history data structure that stores information about the positions of the individual at given times */
 	private ArrayList<VisHistoryTriple<Double, GLCellControl, GLCellControl>> path;
 	/** The last time at that the individual moves. */

@@ -402,8 +402,8 @@ public class Room extends BaseRoom<RoomEdge> implements Cloneable {
 				if( e instanceof TeleportEdge ) {
 					// Move the parameter points so that they are on the link-target edge. This is only neccessary 
 					// for TeleportEdges because normal passable edges always are equal to their link target.
-					int xOffset = partnerSource.x - eSource.x;
-					int yOffset = partnerSource.y - eSource.y;
+					int xOffset = (int)(partnerSource.x - eSource.x);
+					int yOffset = (int)(partnerSource.y - eSource.y);
 					List<PlanPoint> new_p = new LinkedList<PlanPoint>();
 					for( PlanPoint point : p ) {
 						new_p.add( new PlanPoint( point.x + xOffset, point.y + yOffset ) );
@@ -531,7 +531,7 @@ public class Room extends BaseRoom<RoomEdge> implements Cloneable {
 					if( oldTarget instanceof TeleportEdge ) {
 						// TODO: Apply an offset to the target point - Teleport Edge
 					} else {
-						// Directly set the new location
+						// Directly setLocation the new location
 						oldTargetEndpoint.setLocation( newTargetEndpoint );
 					}
 
@@ -558,7 +558,7 @@ public class Room extends BaseRoom<RoomEdge> implements Cloneable {
 	 * Connects this room with another room at a specified {@link RoomEdge}. 
 	 * This edge must be contained in both rooms. That means, the
 	 * underlying polygons must intersect themselves at this edge.
-	 * <p>The <code>RoomEdge</code> is associated to both rooms and is set as passable.
+	 * <p>The <code>RoomEdge</code> is associated to both rooms and is setLocation as passable.
 	 * This creates a "door" between the two rooms.</p>
 	 * @param r the other room
 	 * @param e the edge
@@ -578,7 +578,7 @@ public class Room extends BaseRoom<RoomEdge> implements Cloneable {
 	 * Connects this room with another room at an {@link RoomEdge}. The edge is specified by its
 	 * two end points. This edge must be contained in both rooms. That means, the
 	 * underlying polygons must intersect themselves at this edge.
-	 * <p>The <code>RoomEdge</code> is associated to both rooms and is set as passable.
+	 * <p>The <code>RoomEdge</code> is associated to both rooms and is setLocation as passable.
 	 * This creates a "door" between the two rooms.</p>
 	 * @param r the other room
 	 * @param p1 one end point of the connecting edge

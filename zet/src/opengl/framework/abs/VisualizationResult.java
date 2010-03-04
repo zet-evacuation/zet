@@ -18,7 +18,7 @@
  * and open the template in the editor.
  */
 
-package io.visualization;
+package opengl.framework.abs;
 
 /**
  *

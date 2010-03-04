@@ -26,7 +26,7 @@ import ds.graph.IdentifiableObjectMapping;
 import ds.graph.Network;
 import ds.graph.Node;
 import ds.graph.NodeRectangle;
-import io.visualization.VisualizationResult;
+import opengl.framework.abs.VisualizationResult;
 import java.util.ArrayList;
 
 /**

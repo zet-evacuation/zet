@@ -15,6 +15,7 @@
  */
 package io.visualization;
 
+import opengl.framework.abs.VisualizationResult;
 import java.awt.geom.Point2D;
 import java.util.Collection;
 import java.util.Collections;

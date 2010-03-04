@@ -13,12 +13,10 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
-package gui.visualization.control;
+package opengl.framework.abs;
 
-import io.visualization.VisualizationResult;
 import java.util.ArrayList;
 import java.util.Iterator;
-import opengl.framework.abs.Drawable;
 
 /**
  * 
@@ -30,7 +28,7 @@ import opengl.framework.abs.Drawable;
  * @param <W> The type of the child graphic objects
  * @param <X> The type of the child control objects
  */
-public abstract class AbstractControl<T extends Drawable, U, V extends VisualizationResult, W extends Drawable, X extends AbstractControl<W, ?, ?, ?, ?>> implements control, Iterable<X> {
+public abstract class AbstractControl<T extends Drawable, U, V extends VisualizationResult, W extends Drawable, X extends AbstractControl<W, ?, ?, ?, ?, ?>, Y extends Controlable> implements control, Iterable<X> {
 
 	private V visResult;
 	private T drawable;
@@ -38,9 +36,9 @@ public abstract class AbstractControl<T extends Drawable, U, V extends Visualiza
 	
 	protected ArrayList<X> childControls;
 	
-	protected GLControl mainControl;
+	protected Y mainControl;
 
-	public AbstractControl( U controlled, V visResult, GLControl mainControl ) {
+	public AbstractControl( U controlled, V visResult, Y mainControl ) {
 		this.controlled = controlled;
 		this.visResult = visResult;
 		this.childControls = new ArrayList<X>();
@@ -55,13 +53,18 @@ public abstract class AbstractControl<T extends Drawable, U, V extends Visualiza
 		return drawable;
 	}
 
+	public ArrayList<X> getChildControls() {
+		return childControls;
+	}
+
 	/**
 	 * Returns the controlled model object
 	 * @return the model object
 	 */
-	protected U getControlled() {
+	public U getControlled() {
 		return controlled;
 	}
+	// TODO evtl. protected... mal sehen
 	
 	protected void add(X childControl) {
 		childControls.add(childControl);
@@ -71,7 +74,7 @@ public abstract class AbstractControl<T extends Drawable, U, V extends Visualiza
 		childControls.clear();
 	}
 
-	public final GLControl getMainControl() {
+	public final Y getMainControl() {
 		return mainControl; 
 	}
 

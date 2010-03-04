@@ -269,7 +269,7 @@ public class JFloor extends AbstractFloor {
 	 * <p>Paints the panel in the graphics object. It is possible to pass any
 	 * graphics object, but it is particularly used for painting this panel. This
 	 * can be used to save as bitmap or jpeg.</p>
-	 * <p>It draws points and a raster and a background image, if set.</p>
+	 * <p>It draws points and a raster and a background image, if setLocation.</p>
 	 * @param g The graphics object
 	 */
 	@Override
@@ -279,7 +279,7 @@ public class JFloor extends AbstractFloor {
 		//g2.setRenderingHint( RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON );
 		this.drawRaster( g2 );
 
-		// Draw background image if set
+		// Draw background image if setLocation
 		planImage.paintComponent( g2 );
 
 		// Draw drag point and helping point in rasterizedPaintMode
@@ -885,7 +885,7 @@ public class JFloor extends AbstractFloor {
 							}
 						}
 
-						// Add the last considered polygon to the area set (if it is an area)
+						// Add the last considered polygon to the area setLocation (if it is an area)
 						if( lastPolygon != null && lastPolygon instanceof Area )
 							affected_areas.add( (Area)lastPolygon );
 

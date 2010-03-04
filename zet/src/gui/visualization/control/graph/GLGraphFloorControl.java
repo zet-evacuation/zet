@@ -23,7 +23,7 @@ package gui.visualization.control.graph;
 
 import ds.GraphVisualizationResult;
 import ds.graph.Node;
-import gui.visualization.control.AbstractControl;
+import opengl.framework.abs.AbstractControl;
 import gui.visualization.control.GLControl;
 import gui.visualization.draw.graph.GLGraphFloor;
 import gui.visualization.draw.graph.GLNode;
@@ -35,7 +35,7 @@ import java.util.Iterator;
  * the floor are created and submitted to the view object.
  * @author Jan-Philipp Kappmeier
  */
-public class GLGraphFloorControl extends AbstractControl<GLGraphFloor, Integer, GraphVisualizationResult, GLNode, GLNodeControl>{
+public class GLGraphFloorControl extends AbstractControl<GLGraphFloor, Integer, GraphVisualizationResult, GLNode, GLNodeControl, GLControl>{
 
 	/**
 	 * Creates a new instance of <code>GLGraphFloorControl</code>. Therefore for

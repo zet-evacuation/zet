@@ -68,10 +68,10 @@ public class Edge implements Serializable {
 	/** The associated polygon of this edge */
 	private PlanPolygon associatedPolygon;
 	/** The start point of this edge */
-	@XStreamOmitField() // - is set in Compact converter
+	@XStreamOmitField() // - is setLocation in Compact converter
 	private PlanPoint target;
 	/** The end point of this edge */
-	@XStreamOmitField() // - is set in Compact converter
+	@XStreamOmitField() // - is setLocation in Compact converter
 	private PlanPoint source;
 
 	/**
@@ -240,7 +240,7 @@ public class Edge implements Serializable {
 	/**
 	 * Deletes this <code>Edge</code>. That means, the edge removes itself out of
 	 * the list of edges in the associated polygon. After that all used references are
-	 * set to <code>null</code>.
+	 * setLocation to <code>null</code>.
 	 * @throws java.lang.IllegalArgumentException sent from super-class, not supposed to occur
 	 * @throws java.lang.IllegalStateException if the edge is not the first or last 
 	 * edge in the polygon. first and last edges also occur in closed polygons.

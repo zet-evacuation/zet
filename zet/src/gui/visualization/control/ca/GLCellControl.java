@@ -26,7 +26,7 @@ import ds.ca.SaveCell;
 import ds.ca.StairCell;
 import ds.ca.StaticPotential;
 import io.visualization.CAVisualizationResults;
-import gui.visualization.control.AbstractControl;
+import opengl.framework.abs.AbstractControl;
 import gui.visualization.control.GLControl.CellInformationDisplay;
 import gui.visualization.control.GLControl;
 import gui.visualization.control.StepUpdateListener;
@@ -40,7 +40,7 @@ import gui.visualization.util.Tuple;
 import opengl.drawingutils.GLColor;
 import de.tu_berlin.math.coga.common.util.Direction;
 
-public class GLCellControl extends AbstractControl<GLCell, Cell, CAVisualizationResults, GLCell, GLCellControl> implements StepUpdateListener {
+public class GLCellControl extends AbstractControl<GLCell, Cell, CAVisualizationResults, GLCell, GLCellControl, GLControl> implements StepUpdateListener {
 	private int floorID;
 	
 	private GLRoomControl glRoomControlObject;  // the corresponding GLRoomControl of this object

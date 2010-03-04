@@ -51,9 +51,10 @@ import opengl.framework.abs.Drawable;
 import statistic.ca.CAStatistic;
 import batch.tasks.AlgorithmTask;
 import javax.media.opengl.GL;
+import opengl.framework.abs.Controlable;
 import util.DebugFlags;
 
-public class GLControl implements Drawable {
+public class GLControl implements Drawable, Controlable {
 
 	/**
 	 * Describes the differend types of information which can be illustrated
@@ -236,7 +237,7 @@ public class GLControl implements Drawable {
 			nodes = new ArrayList<GLNodeControl>();
 			edges = new ArrayList<GLEdgeControl>();
 
-			for( GLGraphFloorControl g : graphControl.childControls ) {
+			for( GLGraphFloorControl g : graphControl.getChildControls() ) {
 				for( GLNodeControl node : g ) {
 					for( GLEdgeControl edge : node ) {
 						edges.add( edge );	// TODO use addAll
@@ -617,7 +618,7 @@ public class GLControl implements Drawable {
 	public void showNodeRectangles( boolean selected ) {
 		if( !hasGraph() )
 			return;
-		for( GLGraphFloorControl g : graphControl.childControls ) {
+		for( GLGraphFloorControl g : graphControl.getChildControls() ) {
 			for( GLNodeControl node : g ) {
 				node.setRectangleVisible( selected );
 				g.getView().update();

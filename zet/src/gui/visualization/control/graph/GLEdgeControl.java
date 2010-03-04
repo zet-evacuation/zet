@@ -22,7 +22,7 @@ import ds.graph.IdentifiableIntegerMapping;
 import ds.graph.Node;
 import ds.graph.NodeRectangle;
 import gui.visualization.VisualizationOptionManager;
-import gui.visualization.control.AbstractControl;
+import opengl.framework.abs.AbstractControl;
 import gui.visualization.control.GLControl;
 import gui.visualization.draw.graph.GLEdge;
 import opengl.helper.Frustum;
@@ -35,7 +35,7 @@ import de.tu_berlin.math.coga.math.vectormath.Vector3;
  * by {@code GLEdge}. That means it sets the correct positions depending on the time of the visualization.
  * @author Jan-Philipp Kappmeier
  */
-public class GLEdgeControl extends AbstractControl<GLEdge, Edge, GraphVisualizationResult, GLEdge, GLEdgeControl> {
+public class GLEdgeControl extends AbstractControl<GLEdge, Edge, GraphVisualizationResult, GLEdge, GLEdgeControl, GLControl> {
 	private static final double Z_TO_OPENGL_SCALING = 0.1d;
 	private double time;
 	/** Decides wheather this edge is the one from the node with lower id to the one wiith higher id of the two edges between two nodes. */

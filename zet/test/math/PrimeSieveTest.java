@@ -84,10 +84,28 @@ public class PrimeSieveTest extends TestCase {
 			check( p, pl13 );
 
 			System.out.println( "Test correct number of primes..." );
-			for( int i = 5; i <= 126; ++i ) {
+			for( int i = 2; i <= 126; ++i ) {
 				System.out.print( i + " " );
 				p = new PrimeSieve( i );
 				p.computeADWopt();
+				check( p, parray[i-2] );
+			}
+			System.out.println();
+		}
+	  public void testOptPrimeSieve() throws Exception {
+			System.out.println( "Testing Luschnys PrimeSieve" );
+			System.out.println( "Testing prime sieve for n = 16..." );
+			int n = 16;
+			PrimeSieve p = new PrimeSieve( n );
+			p.computeOpt();
+			giveOutPrimes( p );
+			check( p, pl13 );
+
+			System.out.println( "Test correct number of primes..." );
+			for( int i = 2; i <= 126; ++i ) {
+				System.out.print( i + " " );
+				p = new PrimeSieve( i );
+				p.computeOpt();
 				check( p, parray[i-2] );
 			}
 			System.out.println();

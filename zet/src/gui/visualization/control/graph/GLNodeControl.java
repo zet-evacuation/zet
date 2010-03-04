@@ -20,14 +20,14 @@ import ds.graph.Node;
 import ds.graph.Edge;
 import gui.visualization.VisualizationOptionManager;
 import gui.visualization.draw.graph.GLNode;
-import gui.visualization.control.AbstractControl;
+import opengl.framework.abs.AbstractControl;
 import gui.visualization.control.GLControl;
 import gui.visualization.control.FlowHistroryTriple;
 import gui.visualization.draw.graph.GLEdge;
 import gui.visualization.util.FlowCalculator;
 import java.util.ArrayList;
 
-public class GLNodeControl extends AbstractControl<GLNode, Node, GraphVisualizationResult, GLEdge, GLEdgeControl> {
+public class GLNodeControl extends AbstractControl<GLNode, Node, GraphVisualizationResult, GLEdge, GLEdgeControl, GLControl> {
 	private double xPosition;
 	private double yPosition;
 	private double zPosition = VisualizationOptionManager.getGraphHeight();
