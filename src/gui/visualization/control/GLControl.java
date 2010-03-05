@@ -379,7 +379,7 @@ public class GLControl implements Drawable, Controlable {
 		double maxSpeed = ca.getAbsoluteMaxSpeed();
 		double average = 0;
 		for( GLIndividual ind : this.getIndividuals() ) {
-			average += ind.getControl().getControlled().getMaxSpeed() * maxSpeed;
+			average += ind.getControl().getMaxSpeed() * maxSpeed;// .getControlled().getMaxSpeed() * maxSpeed;
 		}
 		average /= getIndividuals().size();
 		double secondsPerStep = 0.4 / average;

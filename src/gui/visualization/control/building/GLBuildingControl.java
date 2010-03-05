@@ -13,27 +13,28 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
+
 /*
+ * GLBuildingControl.java
  * Created on 19.06.2008
- *
  */
 package gui.visualization.control.building;
 
+import gui.visualization.control.AbstractZETVisualizationControl;
 import java.util.ArrayList;
 import java.util.HashMap;
 
 import io.visualization.BuildingResults;
 import io.visualization.BuildingResults.Wall;
-import opengl.framework.abs.AbstractControl;
 import gui.visualization.control.GLControl;
 import gui.visualization.draw.building.GLBuilding;
-import gui.visualization.draw.building.GLWall;
 
 /**
  * A control class that allows hiding and showing of walls on different floors.
- * @author Daniel Pluempe
+ * @author Jan-Philipp Kappmeier, Daniel Plümpe
  */
-public class GLBuildingControl extends AbstractControl<GLBuilding, BuildingResults, BuildingResults, GLWall, GLWallControl, GLControl> {
+//public class GLBuildingControl extends AbstractControl<GLBuilding, BuildingResults, BuildingResults, GLWall, GLWallControl, GLControl> {
+public class GLBuildingControl extends AbstractZETVisualizationControl<GLWallControl, GLBuilding> {
 
 	private HashMap<Integer, ArrayList<GLWallControl>> allFloorsByID;
 
@@ -45,17 +46,18 @@ public class GLBuildingControl extends AbstractControl<GLBuilding, BuildingResul
 	 * @param mainControl
 	 */
 	public GLBuildingControl( BuildingResults visResult, GLControl mainControl ) {
-		super( visResult, visResult, mainControl );
+		super( mainControl );
 		allFloorsByID = new HashMap<Integer, ArrayList<GLWallControl>>();
 		for( Wall wall : visResult.getWalls() ) {
-			//if( wall.getWallType() == Wall.WallType.SIMPLE ) {
-				if( !allFloorsByID.containsKey( wall.getFloor().id() ) ) {
+				if( !allFloorsByID.containsKey( wall.getFloor().id() ) )
 					allFloorsByID.put( wall.getFloor().id(), new ArrayList<GLWallControl>() );
-				}
-				allFloorsByID.get( wall.getFloor().id() ).add( new GLWallControl( wall, visResult, mainControl ) );
-			//}
+				final GLWallControl child = new GLWallControl( wall, mainControl );
+				add( child );
+				allFloorsByID.get( wall.getFloor().id() ).add( child );
 		}
-		this.setView( new GLBuilding( this ) );
+		setView( new GLBuilding( this ) );
+		for( GLWallControl wall : this )
+			view.addChild( wall.getView() );
 	}
 
 	/**

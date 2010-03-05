@@ -13,9 +13,10 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
+
 /*
+ * GLBuilding.java
  * Created on 19.06.2008
- *
  */
 package gui.visualization.draw.building;
 
@@ -29,7 +30,8 @@ import opengl.framework.abs.AbstractDrawable;
  * @author Daniel Pluempe, Jan-Philipp Kappmeier
  *
  */
-public class GLBuilding extends AbstractDrawable<GLWall, GLBuildingControl, GLWallControl> {
+//public class GLBuilding extends AbstractDrawable<GLWall, GLBuildingControl, GLWallControl> {
+public class GLBuilding extends AbstractDrawable<GLWall, GLBuildingControl> {
 
 	/**
 	 * @param control

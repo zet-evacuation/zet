@@ -39,7 +39,8 @@ import opengl.helper.Frustum;
  * @author Daniel Pluempe, Jan-Philipp Kappmeier
  *
  */
-public class GLWall extends AbstractDrawable<GLWall, GLWallControl, GLWallControl> {
+//public class GLWall extends AbstractDrawable<GLWall, GLWallControl, GLWallControl> {
+public class GLWall extends AbstractDrawable<GLWall, GLWallControl> {
 
 	private List<GLVector> basePoints;
 	private static final double WALL_HEIGHT = VisualizationOptionManager.getWallHeight() * VisualizationConstants.SIZE_MULTIPLICATOR;

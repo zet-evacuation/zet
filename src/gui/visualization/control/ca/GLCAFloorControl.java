@@ -16,19 +16,17 @@
 package gui.visualization.control.ca;
 
 import ds.ca.Room;
-import opengl.framework.abs.AbstractControl;
+import gui.visualization.control.AbstractZETVisualizationControl;
 import gui.visualization.control.GLControl;
 import gui.visualization.control.GLControl.CellInformationDisplay;
-import gui.visualization.draw.ca.GLCAFloor; 
-import gui.visualization.draw.ca.GLIndividual;
-import gui.visualization.draw.ca.GLRoom;
+import gui.visualization.draw.ca.GLCAFloor;
 import io.visualization.CAVisualizationResults;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 
-public class GLCAFloorControl extends AbstractControl<GLCAFloor, Integer, CAVisualizationResults, GLRoom, GLRoomControl, GLControl> {
-	
+//public class GLCAFloorControl extends AbstractControl<GLCAFloor, Integer, CAVisualizationResults, GLRoom, GLRoomControl, GLControl> {
+public class GLCAFloorControl extends AbstractZETVisualizationControl<GLRoomControl, GLCAFloor> {
 	private HashMap<ds.ca.Room, GLRoomControl> roomControls;
     
   private double xPosition = 0.0d;
@@ -37,7 +35,7 @@ public class GLCAFloorControl extends AbstractControl<GLCAFloor, Integer, CAVisu
 	private int floorNumber = 0;
 	
 	public GLCAFloorControl( CAVisualizationResults caVisResults, Collection<Room> roomsOnTheFloor, int floorID, GLControl glControl ) {
-		super( floorID, caVisResults, glControl );
+		super( glControl );
 		
 		xPosition = caVisResults.get(floorID).x;
 		yPosition = caVisResults.get(floorID).y;
@@ -46,12 +44,14 @@ public class GLCAFloorControl extends AbstractControl<GLCAFloor, Integer, CAVisu
 		this.floorNumber = floorID;
 
 		for( Room room : roomsOnTheFloor ) {
-		    GLRoomControl roomControl = new GLRoomControl( caVisResults, room, this, glControl );
+		  GLRoomControl roomControl = new GLRoomControl( caVisResults, room, this, glControl );
 			roomControls.put(room, roomControl);
-		    add( roomControl );
+		  add( roomControl );
 		}
 				
 		setView( new GLCAFloor( this ) );
+		for( GLRoomControl room : this )
+			view.addChild( room.getView() );
 	}
 		
 	/**

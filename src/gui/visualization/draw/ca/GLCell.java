@@ -20,13 +20,13 @@ import gui.visualization.control.GLControl.CellInformationDisplay;
 import gui.visualization.VisualizationOptionManager;
 import gui.visualization.util.VisualizationConstants;
 import javax.media.opengl.GL;
-import javax.media.opengl.GLAutoDrawable;
 import opengl.drawingutils.GLColor;
 import opengl.drawingutils.GLVector;
 import opengl.framework.abs.AbstractDrawable;
 import de.tu_berlin.math.coga.common.util.Direction;
 
-public class GLCell extends AbstractDrawable<GLCell, GLCellControl, GLCellControl> {
+//public class GLCell extends AbstractDrawable<GLCell, GLCellControl, GLCellControl> {
+public class GLCell extends AbstractDrawable<GLCell, GLCellControl> {
 	// Vorlaeufige Konstanten bis Verwaltungsklasse fertig
 	private static GLVector ul = null;	// upper Left
 	private static GLVector ur;	// upper Right

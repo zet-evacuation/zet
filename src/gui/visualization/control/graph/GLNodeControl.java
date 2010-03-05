@@ -19,15 +19,15 @@ import ds.GraphVisualizationResult;
 import ds.graph.Node;
 import ds.graph.Edge;
 import gui.visualization.VisualizationOptionManager;
+import gui.visualization.control.AbstractZETVisualizationControl;
 import gui.visualization.draw.graph.GLNode;
-import opengl.framework.abs.AbstractControl;
 import gui.visualization.control.GLControl;
 import gui.visualization.control.FlowHistroryTriple;
-import gui.visualization.draw.graph.GLEdge;
 import gui.visualization.util.FlowCalculator;
 import java.util.ArrayList;
 
-public class GLNodeControl extends AbstractControl<GLNode, Node, GraphVisualizationResult, GLEdge, GLEdgeControl, GLControl> {
+//public class GLNodeControl extends AbstractControl<GLNode, Node, GraphVisualizationResult, GLEdge, GLEdgeControl, GLControl> {
+public class GLNodeControl extends AbstractZETVisualizationControl<GLEdgeControl, GLNode> {
 	private double xPosition;
 	private double yPosition;
 	private double zPosition = VisualizationOptionManager.getGraphHeight();
@@ -49,7 +49,7 @@ public class GLNodeControl extends AbstractControl<GLNode, Node, GraphVisualizat
 	private boolean gridVisible = true;
 
 	public GLNodeControl( GraphVisualizationResult graphVisResult, Node node, GLControl glControl ) {
-		super( node, graphVisResult, glControl );
+		super( glControl );
 
 		nwX = graphVisResult.getNodeRectangles().get( node ).get_nw_point().getX();
 		nwY = graphVisResult.getNodeRectangles().get( node ).get_nw_point().getY();
@@ -79,6 +79,9 @@ public class GLNodeControl extends AbstractControl<GLNode, Node, GraphVisualizat
 		zPosition += (floor - 1) * VisualizationOptionManager.getFloorDistance();
 
 		setView( new GLNode( this ) );
+		for( GLEdgeControl edge : this )
+			view.addChild( edge.getView() );
+
 		flowCalculator = new FlowCalculator();
 		glControl.nodeProgress();
 	}
@@ -135,9 +138,9 @@ public class GLNodeControl extends AbstractControl<GLNode, Node, GraphVisualizat
 		return flowCalculator;
 	}
 
-	public Node getNode() {
-		return getControlled();
-	}
+//	public Node getNode() {
+//		return getControlled();
+//	}
 
 	public void stepUpdate( int step ) {
 		time = mainControl.getGraphStep();

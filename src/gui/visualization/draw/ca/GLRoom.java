@@ -16,14 +16,14 @@
 package gui.visualization.draw.ca;
 
 import gui.visualization.VisualizationOptionManager;
-import gui.visualization.control.ca.GLCellControl;
 import gui.visualization.control.ca.GLRoomControl;
 import gui.visualization.util.VisualizationConstants;
 import javax.media.opengl.GL;
 import opengl.drawingutils.GLVector;
 import opengl.framework.abs.AbstractDrawable;
 
-public class GLRoom extends AbstractDrawable<GLCell, GLRoomControl, GLCellControl> {
+//public class GLRoom extends AbstractDrawable<GLCell, GLRoomControl, GLCellControl> {
+public class GLRoom extends AbstractDrawable<GLCell, GLRoomControl> {
 
 	private GLVector ul;	// upper left
 	private GLVector ur;	// upper right

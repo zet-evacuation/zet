@@ -23,7 +23,6 @@ import opengl.framework.abs.AbstractDrawable;
 import gui.visualization.VisualizationOptionManager;
 import gui.visualization.control.ca.GLCAFloorControl;
 import gui.visualization.control.ca.GLIndividualControl;
-import gui.visualization.control.ca.GLRoomControl;
 import gui.visualization.util.VisualizationConstants;
 import java.util.List;
 import javax.media.opengl.GL;
@@ -33,7 +32,7 @@ import javax.media.opengl.GL;
  */
 
 //public class GLCAFloor extends AbstractDrawable<CullingShapeCube, GLRoom, GLCAFloorControl, GLRoomControl> {
-public class GLCAFloor extends AbstractDrawable<GLRoom, GLCAFloorControl, GLRoomControl> {
+public class GLCAFloor extends AbstractDrawable<GLRoom, GLCAFloorControl> {
 	private List<GLIndividualControl> individuals;
 	private int floorID;
     
