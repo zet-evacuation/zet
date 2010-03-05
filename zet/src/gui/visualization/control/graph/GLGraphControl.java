@@ -21,23 +21,22 @@
 package gui.visualization.control.graph;
 
 import ds.GraphVisualizationResult;
-import ds.graph.Network;
-import opengl.framework.abs.AbstractControl;
+import gui.visualization.control.AbstractZETVisualizationControl;
 import gui.visualization.control.GLControl;
 import gui.visualization.draw.graph.GLGraph;
-import gui.visualization.draw.graph.GLGraphFloor;
 import java.util.HashMap;
 import java.util.Iterator;
 
 /**
  *  @author Jan-Philipp Kappmeier
  */
-public class GLGraphControl extends AbstractControl<GLGraph, Network, GraphVisualizationResult, GLGraphFloor, GLGraphFloorControl, GLControl> {
+//public class GLGraphControl extends AbstractControl<GLGraph, Network, GraphVisualizationResult, GLGraphFloor, GLGraphFloorControl, GLControl> {
+public class GLGraphControl extends AbstractZETVisualizationControl<GLGraphFloorControl, GLGraph> {
 
 	private HashMap<Integer, GLGraphFloorControl> allFloorsByID;
 
 	public GLGraphControl( GraphVisualizationResult graphVisResult, GLControl glControl) {
-		super( graphVisResult.getNetwork(), graphVisResult, glControl );
+		super( glControl );
 		allFloorsByID = new HashMap<Integer, GLGraphFloorControl>();
 		int floorCount = graphVisResult.getFloorToNodeMapping().size();
 		for( int i = 0; i < floorCount; i++ ) {
@@ -48,6 +47,8 @@ public class GLGraphControl extends AbstractControl<GLGraph, Network, GraphVisua
 			}
 		}
 		this.setView( new GLGraph( this ) );
+		for( GLGraphFloorControl floor : this )
+			view.addChild( floor.getView() );
 	}
 
 	@Override

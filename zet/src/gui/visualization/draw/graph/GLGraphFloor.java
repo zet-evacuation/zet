@@ -13,14 +13,15 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
+
 /**
  * Class GLGraphFloor
  * Erstellt 08.05.2008, 01:30:50
  */
+
 package gui.visualization.draw.graph;
 
 import gui.visualization.control.graph.GLGraphFloorControl;
-import gui.visualization.control.graph.GLNodeControl;
 import gui.visualization.util.VisualizationConstants;
 import javax.media.opengl.GL;
 import opengl.framework.abs.AbstractDrawable;
@@ -38,7 +39,8 @@ import opengl.framework.abs.AbstractDrawable;
  * @author Jan-Philipp Kappmeier
  */
 //public class GLGraphFloor extends AbstractDrawable<CullingShapeCube, GLNode, GLGraphFloorControl, GLNodeControl> {
-public class GLGraphFloor extends AbstractDrawable<GLNode, GLGraphFloorControl, GLNodeControl> {
+//public class GLGraphFloor extends AbstractDrawable<GLNode, GLGraphFloorControl, GLNodeControl> {
+public class GLGraphFloor extends AbstractDrawable<GLNode, GLGraphFloorControl> {
 
 	public GLGraphFloor( GLGraphFloorControl control ) {
 		super( control );

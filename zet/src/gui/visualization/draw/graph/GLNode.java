@@ -17,7 +17,6 @@ package gui.visualization.draw.graph;
 
 import gui.visualization.QualityPreset;
 import gui.visualization.VisualizationOptionManager;
-import gui.visualization.control.graph.GLEdgeControl;
 import gui.visualization.control.graph.GLNodeControl;
 import gui.visualization.util.VisualizationConstants;
 import javax.media.opengl.GL;
@@ -25,8 +24,8 @@ import javax.media.opengl.glu.GLU;
 import opengl.drawingutils.GLColor;
 import opengl.framework.abs.AbstractDrawable;
 
-public class GLNode extends AbstractDrawable<GLEdge, GLNodeControl, GLEdgeControl> {
-//public class GLNode extends AbstractDrawable<CullingShapeSphere, GLEdge, GLNodeControl, GLEdgeControl> {
+public class GLNode extends AbstractDrawable<GLEdge, GLNodeControl> {
+	//public class GLNode extends AbstractDrawable<CullingShapeSphere, GLEdge, GLNodeControl, GLEdgeControl> {
 	//private GLNodeControl control;
 	private double graphHeight = VisualizationOptionManager.getGraphHeight() * VisualizationConstants.SIZE_MULTIPLICATOR;
 	private double radius;

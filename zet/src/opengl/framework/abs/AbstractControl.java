@@ -20,78 +20,64 @@ import java.util.Iterator;
 
 /**
  * 
- * @author Daniel Plümpe
+ * @author Daniel Plümpe, Jan-Philipp Kappmeier
  *
- * @param <T> The type of the graphic object that is controlled by this class
- * @param <U> The type of the object in the data structure (the model) that is controlled by this class
+ * @param <T> The type of the graphic object that is view by this class
+ * @param <U> The type of the object in the data structure (the model) that is view by this class
  * @param <V> The type of the visualization results that will displayed by the graphic objects associated with this class  
  * @param <W> The type of the child graphic objects
  * @param <X> The type of the child control objects
  */
-public abstract class AbstractControl<T extends Drawable, U, V extends VisualizationResult, W extends Drawable, X extends AbstractControl<W, ?, ?, ?, ?, ?>, Y extends Controlable> implements control, Iterable<X> {
+//public abstract class AbstractControl<T extends Drawable, U, V extends VisualizationResult, W extends Drawable, X extends AbstractControl<W, ?, ?, ?, ?, ?>, Y extends Controlable> implements control, Iterable<X> {
+public abstract class AbstractControl<T extends AbstractControl<?, ?>, U extends AbstractDrawable<?, ?>> implements control, Iterable<T> {
 
-	private V visResult;
-	private T drawable;
-	private U controlled;
+	protected U view;
 	
-	protected ArrayList<X> childControls;
+	protected ArrayList<T> childControls;
 	
-	protected Y mainControl;
-
-	public AbstractControl( U controlled, V visResult, Y mainControl ) {
-		this.controlled = controlled;
-		this.visResult = visResult;
-		this.childControls = new ArrayList<X>();
-		this.mainControl = mainControl;
-	}
-
-	protected void setView( T view ) {
-		this.drawable = view;
-	}
-
-	public T getView() {
-		return drawable;
-	}
-
-	public ArrayList<X> getChildControls() {
-		return childControls;
-	}
 
 	/**
-	 * Returns the controlled model object
-	 * @return the model object
+	 * No view is set. During construction process, a view must be set! Call
+	 * {@link #setView(U)}.
 	 */
-	public U getControlled() {
-		return controlled;
+	protected AbstractControl() {
+		this.childControls = new ArrayList<T>();
 	}
-	// TODO evtl. protected... mal sehen
+
+	public AbstractControl( U controlled ) {
+		this.view = controlled;
+		this.childControls = new ArrayList<T>();
+	}
+
+	protected void setView( U view ) {
+		this.view = view;
+	}
+
+	public U getView() {
+		return view;
+	}
+
+	public ArrayList<T> getChildControls() {
+		return childControls;
+	}
 	
-	protected void add(X childControl) {
-		childControls.add(childControl);
+	protected void add(T childControl) {
+		childControls.add( childControl );
 	}
 	
 	protected void clear() {
 		childControls.clear();
 	}
 
-	public final Y getMainControl() {
-		return mainControl; 
-	}
-
-	public Iterator<X> iterator() {
+	public Iterator<T> iterator() {
 		return childControls.iterator();
 	}
 	
-    public Iterator<X> fullIterator(){
+    public Iterator<T> fullIterator(){
         return iterator();
     }
 
-    public V getVisResult(){
-        return visResult;
-    }
-    
     public int size(){
         return childControls.size();
     }
 }
-

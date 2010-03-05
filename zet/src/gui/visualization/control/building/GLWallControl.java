@@ -20,7 +20,7 @@
 package gui.visualization.control.building;
 
 import gui.visualization.VisualizationOptionManager;
-import opengl.framework.abs.AbstractControl;
+import gui.visualization.control.AbstractZETVisualizationControl;
 import gui.visualization.control.GLControl;
 import gui.visualization.draw.building.GLWall;
 import io.visualization.BuildingResults;
@@ -34,24 +34,27 @@ import java.util.List;
 import opengl.drawingutils.GLVector;
 
 /**
- * @author Daniel Plümpe
+ * @author Daniel Plümpe, Jan-Philipp Kappmeier
  */
-public class GLWallControl extends AbstractControl<GLWall, BuildingResults.Wall, BuildingResults, GLWall, GLWallControl, GLControl> {
+//public class GLWallControl extends AbstractControl<GLWall, BuildingResults.Wall, BuildingResults, GLWall, GLWallControl, GLControl> {
+public class GLWallControl extends AbstractZETVisualizationControl<GLWallControl, GLWall> {
 
 	private LinkedList<GLVector> basePoints;
+	Wall controlled;
 
 	/**
 	 * @param controlled
 	 * @param visResult
 	 * @param mainControl
 	 */
-	public GLWallControl( Wall controlled, BuildingResults visResult, GLControl mainControl ) {
-		super( controlled, visResult, mainControl );
+	public GLWallControl( Wall controlled, GLControl mainControl ) {
+		super( mainControl );
+		this.controlled = controlled;
 		basePoints = new LinkedList<GLVector>();
-		final int floor = getControlled().getFloor().id();
+		final int floor = controlled.getFloor().id();
 		final double height = (floor - 1) * VisualizationOptionManager.getFloorDistance();
 
-		for( Point2D.Double point : getControlled() ) {
+		for( Point2D.Double point : controlled ) {
 			basePoints.add( new GLVector( point.x, (-1) * point.y, height ) );
 		}
 
@@ -64,7 +67,7 @@ public class GLWallControl extends AbstractControl<GLWall, BuildingResults.Wall,
 	}
 
 	public boolean isBarrier() {
-		return getControlled().isBarrier();
+		return controlled.isBarrier();
 	}
 	
 	/**
@@ -72,7 +75,7 @@ public class GLWallControl extends AbstractControl<GLWall, BuildingResults.Wall,
 	 * @return true if the room is on the left side, false otherwise.
 	 */
 	public boolean isRoomLeft() {
-		return getControlled().isRoomIsLeft();
+		return controlled.isRoomIsLeft();
 	}
 
 	/**
@@ -80,7 +83,7 @@ public class GLWallControl extends AbstractControl<GLWall, BuildingResults.Wall,
 	 * @return true if the room is on the right side, false otherwise
 	 */
 	public boolean isRoomRight() {
-		return getControlled().isRoomIsRight();
+		return controlled.isRoomIsRight();
 	}
 	
 	/**
@@ -90,6 +93,6 @@ public class GLWallControl extends AbstractControl<GLWall, BuildingResults.Wall,
 	 * @return the wall type of the wall segment in the controlled class.
 	 */
 	public Wall.ElementType getWallType( int segmentNumber ) {
-		return getControlled().getWallType( segmentNumber );
+		return controlled.getWallType( segmentNumber );
 	}
 }

@@ -22,20 +22,21 @@ import ds.graph.IdentifiableIntegerMapping;
 import ds.graph.Node;
 import ds.graph.NodeRectangle;
 import gui.visualization.VisualizationOptionManager;
-import opengl.framework.abs.AbstractControl;
 import gui.visualization.control.GLControl;
 import gui.visualization.draw.graph.GLEdge;
 import opengl.helper.Frustum;
 import java.util.ArrayList;
 
 import de.tu_berlin.math.coga.math.vectormath.Vector3;
+import gui.visualization.control.AbstractZETVisualizationControl;
 
 /**
  * The control class for edges in an MVC-design. This class controls the visualization of such an edge represented
  * by {@code GLEdge}. That means it sets the correct positions depending on the time of the visualization.
  * @author Jan-Philipp Kappmeier
  */
-public class GLEdgeControl extends AbstractControl<GLEdge, Edge, GraphVisualizationResult, GLEdge, GLEdgeControl, GLControl> {
+//public class GLEdgeControl extends AbstractControl<GLEdge, Edge, GraphVisualizationResult, GLEdge, GLEdgeControl, GLControl> {
+public class GLEdgeControl extends AbstractZETVisualizationControl<GLEdgeControl, GLEdge> {
 	private static final double Z_TO_OPENGL_SCALING = 0.1d;
 	private double time;
 	/** Decides wheather this edge is the one from the node with lower id to the one wiith higher id of the two edges between two nodes. */
@@ -43,6 +44,8 @@ public class GLEdgeControl extends AbstractControl<GLEdge, Edge, GraphVisualizat
 	private ArrayList<Integer> flowOnEdge;
 	private int maxFlowRate;
 	private double deltaStep;
+	private Edge controlled;
+	private GraphVisualizationResult graphVisResult;
 
 	/**
 	 * Creates a new <code>GLEdgeControl</code> object for the edge <code>edge</code> using data from 
@@ -52,8 +55,10 @@ public class GLEdgeControl extends AbstractControl<GLEdge, Edge, GraphVisualizat
 	 * @param glControl the main control class.
 	 */
 	public GLEdgeControl( GraphVisualizationResult graphVisResult, Edge edge, GLControl glControl ) {
-		super( edge, graphVisResult, glControl );
+		super( glControl );
 		maxFlowRate = graphVisResult.getMaxFlowRate();
+		this.graphVisResult = graphVisResult;
+		controlled = edge;
 		setView( new GLEdge( this ) );
 
 		if( edge.start().id() < edge.end().id() )	// checks weather this edge is the first one of the two representing one undirected edge
@@ -92,7 +97,7 @@ public class GLEdgeControl extends AbstractControl<GLEdge, Edge, GraphVisualizat
 	 * @return the transit time of this edge.
 	 */
 	public int getTransitTime() {
-		return this.getVisResult().getTransitTimes().get( getControlled() );
+		return graphVisResult.getTransitTimes().get( controlled );
 	}
 
 	/**
@@ -109,8 +114,8 @@ public class GLEdgeControl extends AbstractControl<GLEdge, Edge, GraphVisualizat
 	 * @return the model-length of the edge, NOT taking the z-coordinate into account.
 	 */
 	public double getLength() {
-		Node start = super.getControlled().start();
-		Node end = getControlled().end();
+		Node start = controlled.start();
+		Node end = controlled.end();
 		Vector3 startPos = getMiddlePoint( start );
 		Vector3 endPos = getMiddlePoint( end );
 		double dx = Math.abs( startPos.x - endPos.x ) * Z_TO_OPENGL_SCALING;
@@ -124,8 +129,8 @@ public class GLEdgeControl extends AbstractControl<GLEdge, Edge, GraphVisualizat
 	 * @return the model length of the edge, taking the z-coordinate into account.
 	 */
 	public double get3DLength() {
-		Node start = super.getControlled().start();
-		Node end = getControlled().end();
+		Node start = controlled.start();
+		Node end = controlled.end();
 		Vector3 startPos = getMiddlePoint( start );
 		Vector3 endPos = getMiddlePoint( end );
 		double dz = Math.abs( startPos.z - endPos.z ) * Z_TO_OPENGL_SCALING;
@@ -142,8 +147,8 @@ public class GLEdgeControl extends AbstractControl<GLEdge, Edge, GraphVisualizat
 	 * in each component.
 	 */
 	public Vector3 getDifferenceVectorInOpenGlScaling() {
-		Node start = super.getControlled().start();
-		Node end = getControlled().end();
+		Node start = controlled.start();
+		Node end = controlled.end();
 		Vector3 startPos = getMiddlePoint( start );
 		Vector3 endPos = getMiddlePoint( end );
 		double dx = (startPos.x - endPos.x) * Z_TO_OPENGL_SCALING;
@@ -182,7 +187,7 @@ public class GLEdgeControl extends AbstractControl<GLEdge, Edge, GraphVisualizat
 	 * @return the capacity of this edge.
 	 */
 	public int getCapacity() {
-		return getVisResult().getEdgeCapacities().get( getControlled() );
+		return graphVisResult.getEdgeCapacities().get( controlled );
 	}
 
 	/**
@@ -198,8 +203,8 @@ public class GLEdgeControl extends AbstractControl<GLEdge, Edge, GraphVisualizat
 	}
 
 	public Vector3 getStartPosition() {
-		Node start = super.getControlled().start();
-		Node end = getControlled().end();
+		Node start = controlled.start();
+		Node end = controlled.end();
 		Vector3 startPos = getMiddlePoint( start );
 		Vector3 endPos = getMiddlePoint( end );
 		//compare the y-coordinates
@@ -212,8 +217,8 @@ public class GLEdgeControl extends AbstractControl<GLEdge, Edge, GraphVisualizat
 	}
 
 	public Vector3 getEndPosition() {
-		Node start = super.getControlled().start();
-		Node end = getControlled().end();
+		Node start = controlled.start();
+		Node end = controlled.end();
 		Vector3 startPos = getMiddlePoint( start );
 		Vector3 endPos = getMiddlePoint( end );
 
@@ -233,7 +238,7 @@ public class GLEdgeControl extends AbstractControl<GLEdge, Edge, GraphVisualizat
 	 * @return the middle point of the corresponding rectangle
 	 */
 	private Vector3 getMiddlePoint( Node node ) {
-		NodeRectangle rect = super.getVisResult().getNodeRectangles().get( node );
+		NodeRectangle rect = graphVisResult.getNodeRectangles().get( node );
 		double dx = rect.get_nw_point().getX() +
 						(rect.get_ne_point().getX() -
 						rect.get_nw_point().getX()) / 2;
@@ -241,7 +246,7 @@ public class GLEdgeControl extends AbstractControl<GLEdge, Edge, GraphVisualizat
 		double dy = rect.get_nw_point().getY() +
 						(rect.get_sw_point().getY() -
 						rect.get_nw_point().getY()) / 2;
-		int floor = super.getVisResult().getNodeToFloorMapping().get( node );
+		int floor = graphVisResult.getNodeToFloorMapping().get( node );
 		double z = VisualizationOptionManager.getGraphHeight();
 		z += (floor - 1) * VisualizationOptionManager.getFloorDistance();
 		z *= 10;

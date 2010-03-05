@@ -17,18 +17,16 @@
  * Class GLIndividualControl
  * Erstellt 10.06.2008, 22:22:41
  */
-
 package gui.visualization.control.ca;
 
 import ds.ca.Individual;
-import opengl.framework.abs.AbstractControl;
+import gui.visualization.control.AbstractZETVisualizationControl;
 import gui.visualization.control.GLControl;
 import gui.visualization.control.GLControl.IndividualInformationDisplay;
 import gui.visualization.control.StepUpdateListener;
 import gui.visualization.control.VisHistoryTriple;
 import gui.visualization.draw.ca.GLIndividual;
 import gui.visualization.util.Tuple;
-import io.visualization.CAVisualizationResults;
 import java.util.ArrayList;
 
 /**
@@ -37,7 +35,9 @@ import java.util.ArrayList;
  * the individual on the screen.
  * @author Jan-Philipp Kappmeier
  */
-public class GLIndividualControl extends AbstractControl<GLIndividual, Individual, CAVisualizationResults, GLIndividual, GLIndividualControl, GLControl> implements StepUpdateListener {
+//public class GLIndividualControl extends AbstractControl<GLIndividual, Individual, CAVisualizationResults, GLIndividual, GLIndividualControl, GLControl> implements StepUpdateListener {
+public class GLIndividualControl extends AbstractZETVisualizationControl<GLIndividualControl, GLIndividual> implements StepUpdateListener {
+
 	/** The history data structure that stores information about the positions of the individual at given times */
 	private ArrayList<VisHistoryTriple<Double, GLCellControl, GLCellControl>> path;
 	/** The last time at that the individual moves. */
@@ -60,19 +60,21 @@ public class GLIndividualControl extends AbstractControl<GLIndividual, Individua
 	private double headInformationValue;
 	/** The type of the information displayed on the head */
 	private IndividualInformationDisplay headInformationType = IndividualInformationDisplay.PANIC;
-	
+	private Individual controlled;
+
 	/**
 	 * Creates a new individual control class for an {@link Individual}.
 	 * @param caVisResults the visualization results for a simulation
 	 * @param individual the controlled individual
 	 * @param glControl the general control class
 	 */
-	public GLIndividualControl( CAVisualizationResults caVisResults, Individual individual, GLControl glControl ){ 
-		super( individual, caVisResults, glControl );
+	public GLIndividualControl( Individual individual, GLControl glControl ) {
+		super( glControl );
+		this.setView( new GLIndividual( this ) );
+		this.controlled = individual;
 		path = new ArrayList<VisHistoryTriple<Double, GLCellControl, GLCellControl>>();
-		this.setView(new GLIndividual( this ) );
 		moveVector = new Tuple( 0, 0 );
-		sourcePos = new Tuple( 0, 0);
+		sourcePos = new Tuple( 0, 0 );
 	}
 
 	/**
@@ -80,9 +82,9 @@ public class GLIndividualControl extends AbstractControl<GLIndividual, Individua
 	 * @return  the number of the floor on which the individual stands
 	 */
 	public int onFloor() {
-		return getControlled().getCell().getRoom().getFloorID();
+		return controlled.getCell().getRoom().getFloorID();
 	}
-	
+
 	/**
 	 * Retrieves the current positioning information from the history position
 	 * data structure. This method must be called if a new step of the cellular
@@ -97,7 +99,7 @@ public class GLIndividualControl extends AbstractControl<GLIndividual, Individua
 		double stepStart = -1;
 		GLCellControl source = null;
 		GLCellControl destination = null;
-		while( index < path.size() && this.path.get(index).getFirstValue() <= time ) {
+		while(index < path.size() && this.path.get( index ).getFirstValue() <= time) {
 			stepStart = this.path.get( index ).getFirstValue();
 			source = this.path.get( index ).getSecondValue();
 			destination = this.path.get( index ).getThirdValue();
@@ -110,11 +112,11 @@ public class GLIndividualControl extends AbstractControl<GLIndividual, Individua
 		if( stepStart == -1 )
 			return;
 		startTimeOfMove = stepStart;
-			calcPos( time, stepStart, stepEnd, source, destination );
+		calcPos( time, stepStart, stepEnd, source, destination );
 		invisible = source.getFloorID() != destination.getFloorID();
 		calcHeadInformation();
 	}
-	
+
 	/**
 	 * Returns the current position of the individual in absolute coordinates.
 	 * @return the current position of the individual in absolute coordinates.
@@ -124,7 +126,7 @@ public class GLIndividualControl extends AbstractControl<GLIndividual, Individua
 		double completedPartOfMove = (time - startTimeOfMove) / timeForMove;
 		completedPartOfMove = Math.min( completedPartOfMove, 1.0 );
 		completedPartOfMove = Math.max( completedPartOfMove, 0.0 );
-		Tuple currentPosition = new Tuple(0,0);
+		Tuple currentPosition = new Tuple( 0, 0 );
 		if( timeForMove <= 0.001 ) {
 			currentPosition.x = sourcePos.x + cellSize + moveVector.x;
 			currentPosition.y = sourcePos.y - cellSize + moveVector.y;
@@ -134,7 +136,7 @@ public class GLIndividualControl extends AbstractControl<GLIndividual, Individua
 		}
 		return currentPosition;
 	}
-	
+
 	/**
 	 * Returns the value used for information displayed on the head
 	 * @return the value used for information displayed on the head
@@ -142,7 +144,7 @@ public class GLIndividualControl extends AbstractControl<GLIndividual, Individua
 	public double getHeadInformation() {
 		return headInformationValue;
 	}
-	
+
 	/**
 	 * Sets the information type displayed on the individuals head
 	 * @param idm the information type
@@ -150,52 +152,60 @@ public class GLIndividualControl extends AbstractControl<GLIndividual, Individua
 	public void setHeadInformation( GLControl.IndividualInformationDisplay idm ) {
 		this.headInformationType = idm;
 	}
-	
+
 	/**
 	 * Calculates the current value for the head information display depending on 
 	 * the {@link headInformationType}.
 	 */
-	private void calcHeadInformation( ) {
+	private void calcHeadInformation() {
 		switch( headInformationType ) {
 			default:
 			case NOTHING:
 				headInformationValue = 0;
 				break;
 			case PANIC:
-				headInformationValue = getControlled().getPanic();
+				headInformationValue = controlled.getPanic();
 				break;
 			case SPEED:
 				headInformationValue = 0;
 				break;
 			case EXHAUSTION:
-				headInformationValue = getControlled().getExhaustion();
+				headInformationValue = controlled.getExhaustion();
 				break;
 			case ALARMED:
-				headInformationValue = getControlled().isAlarmed() ? 0 : 1;
+				headInformationValue = controlled.isAlarmed() ? 0 : 1;
 				break;
 			case CHOSEN_EXIT:
-				final int potentials = getMainControl().getPotentialManager().getStaticPotentials().size();
-				headInformationValue = (getControlled().getStaticPotential().getID() % potentials) / (double)potentials;
+				final int potentials = mainControl.getPotentialManager().getStaticPotentials().size();
+				headInformationValue = (controlled.getStaticPotential().getID() % potentials) / (double) potentials;
 				break;
 		}
 	}
-	
+
 	/**
 	 * Checks wheather the individual is evacuated
 	 * @return true if the individual is evacuated
 	 */
 	public boolean isEvacuated() {
-		return getControlled().isEvacuated() && time > lastEnd;
+		return controlled.isEvacuated() && time > lastEnd;
 	}
-	
+
 	/**
 	 * Checks wheather the individual is dead
 	 * @return true if the individual is dead
 	 */
 	public boolean isDead() {
-		return getControlled().isDead();
+		return controlled.isDead();
 	}
-	
+
+	/**
+	 * Returns the maximal speed of the controlled individual.
+	 * @return the maximal speed of the controlled individual
+	 */
+	public double getMaxSpeed() {
+		return controlled.getMaxSpeed();
+	}
+
 	/**
 	 * Calculates the current position of an Individual standing on this cell or leaving this cell,
 	 * based on the current time t of the cellular automaton, which is defined in the parameter of this method.
@@ -213,7 +223,7 @@ public class GLIndividualControl extends AbstractControl<GLIndividual, Individua
 		moveVector = new Tuple( destinationPos.x - sourcePos.x, destinationPos.y - sourcePos.y );
 		timeForMove = end - start;
 	}
-	
+
 	/**
 	 * Adds a new position triple to the history data structure used
 	 * to calculate the position of the individual at a given time.
@@ -223,7 +233,7 @@ public class GLIndividualControl extends AbstractControl<GLIndividual, Individua
 	 * @param arrival the time when the individual arrives at the destination
 	 */
 	public void addHistoryTriple( GLCellControl from, GLCellControl to, double start, double arrival ) {
-		path.add( new VisHistoryTriple<Double, GLCellControl, GLCellControl>( start, from, to) );
+		path.add( new VisHistoryTriple<Double, GLCellControl, GLCellControl>( start, from, to ) );
 		lastEnd = arrival;
 	}
 
@@ -232,7 +242,7 @@ public class GLIndividualControl extends AbstractControl<GLIndividual, Individua
 	 * @return the number of the controlled individual
 	 */
 	public int getNumber() {
-		return this.getControlled().getNumber();
+		return this.controlled.getNumber();
 	}
 
 	/**

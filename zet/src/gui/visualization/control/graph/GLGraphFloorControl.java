@@ -23,10 +23,9 @@ package gui.visualization.control.graph;
 
 import ds.GraphVisualizationResult;
 import ds.graph.Node;
-import opengl.framework.abs.AbstractControl;
+import gui.visualization.control.AbstractZETVisualizationControl;
 import gui.visualization.control.GLControl;
 import gui.visualization.draw.graph.GLGraphFloor;
-import gui.visualization.draw.graph.GLNode;
 import java.util.Iterator;
 
 /**
@@ -35,7 +34,8 @@ import java.util.Iterator;
  * the floor are created and submitted to the view object.
  * @author Jan-Philipp Kappmeier
  */
-public class GLGraphFloorControl extends AbstractControl<GLGraphFloor, Integer, GraphVisualizationResult, GLNode, GLNodeControl, GLControl>{
+//public class GLGraphFloorControl extends AbstractControl<GLGraphFloor, Integer, GraphVisualizationResult, GLNode, GLNodeControl, GLControl>{
+public class GLGraphFloorControl extends AbstractZETVisualizationControl<GLNodeControl, GLGraphFloor> {
 
 	/**
 	 * Creates a new instance of <code>GLGraphFloorControl</code>. Therefore for
@@ -47,7 +47,7 @@ public class GLGraphFloorControl extends AbstractControl<GLGraphFloor, Integer, 
 	 * @param glControl the general control object for visualization
 	 */
 	public GLGraphFloorControl( GraphVisualizationResult graphVisResult, Iterable<Node> nodesOnTheFloor, Integer floor, GLControl glControl ) {
-		super( floor, graphVisResult, glControl );
+		super( glControl );
 		Iterator<Node> it = nodesOnTheFloor.iterator();
 		Node supersink = graphVisResult.getSupersink();
 		while( it.hasNext() ) {
@@ -56,6 +56,8 @@ public class GLGraphFloorControl extends AbstractControl<GLGraphFloor, Integer, 
 				add( new GLNodeControl( graphVisResult, n, glControl ) );
 		}
 		setView( new GLGraphFloor( this ) );
+		for( GLNodeControl node : this )
+			view.addChild( node.getView() );
 	}
 
 	/**

@@ -27,7 +27,8 @@ import opengl.framework.abs.AbstractDrawable;
 import de.tu_berlin.math.coga.math.vectormath.Vector3;
 
 //public class GLEdge extends AbstractDrawable<CullingShapeCube, GLEdge, GLEdgeControl, GLEdgeControl> {
-public class GLEdge extends AbstractDrawable<GLEdge, GLEdgeControl, GLEdgeControl> {
+public class GLEdge extends AbstractDrawable<GLEdge, GLEdgeControl> {
+	
 	/** The length of single flow units. If set to 1 no single units are displayed. */
 	static double factor = 0.7;
 	static int edgeDisplayMode = GLU.GLU_FILL;

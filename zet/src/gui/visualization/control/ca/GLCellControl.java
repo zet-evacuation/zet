@@ -26,7 +26,6 @@ import ds.ca.SaveCell;
 import ds.ca.StairCell;
 import ds.ca.StaticPotential;
 import io.visualization.CAVisualizationResults;
-import opengl.framework.abs.AbstractControl;
 import gui.visualization.control.GLControl.CellInformationDisplay;
 import gui.visualization.control.GLControl;
 import gui.visualization.control.StepUpdateListener;
@@ -39,50 +38,51 @@ import gui.visualization.draw.ca.GLStairCell;
 import gui.visualization.util.Tuple;
 import opengl.drawingutils.GLColor;
 import de.tu_berlin.math.coga.common.util.Direction;
+import gui.visualization.control.AbstractZETVisualizationControl;
 
-public class GLCellControl extends AbstractControl<GLCell, Cell, CAVisualizationResults, GLCell, GLCellControl, GLControl> implements StepUpdateListener {
+//public class GLCellControl extends AbstractControl<GLCell, Cell, CAVisualizationResults, GLCell, GLCellControl, GLControl> implements StepUpdateListener {
+public class GLCellControl extends AbstractZETVisualizationControl<GLCellControl, GLCell> implements StepUpdateListener {
+
 	private int floorID;
-	
 	private GLRoomControl glRoomControlObject;  // the corresponding GLRoomControl of this object
 	private static PotentialManager pm = null;
-					
 	private double xPosition;
 	private double yPosition;
-	
 	private static StaticPotential mergedPotential = null;
 	private static StaticPotential activePotential = null;
-	
 	private static long MAX_DYNAMIC_POTENTIAL = -1;
-	
 	private CellInformationDisplay displayMode = CellInformationDisplay.STATIC_POTENTIAL;
-	
+	private Cell controlled;
+
 	public static void invalidateMergedPotential() {
 		mergedPotential = null;
 	}
-	
-	public GLCellControl( CAVisualizationResults caVisResults, Cell cell, GLRoomControl glRoomControl, GLControl glControl ){ 
-		super( cell, caVisResults, glControl );
-		xPosition = caVisResults.get(cell).x;
-		yPosition = caVisResults.get(cell).y;
+
+	public GLCellControl( CAVisualizationResults caVisResults, Cell cell, GLRoomControl glRoomControl, GLControl glControl ) {
+		super( glControl );
+		this.controlled = cell;
+		xPosition = caVisResults.get( cell ).x;
+		yPosition = caVisResults.get( cell ).y;
 		this.glRoomControlObject = glRoomControl;
 		if( mergedPotential == null ) {
-			pm = getVisResult().getRecording().getInitialConfig().getPotentialManager();
+			pm = caVisResults.getRecording().getInitialConfig().getPotentialManager();
+			//pm = getVisResult().getRecording().getInitialConfig().getPotentialManager();
 			mergedPotential = PotentialUtils.mergePotentials( pm.getStaticPotentials() );
 			activePotential = mergedPotential;
 		}
 		MAX_DYNAMIC_POTENTIAL = caVisResults.getRecording().getMaxDynamicPotential();
-		
-		floorID = getControlled().getRoom().getFloorID();
+
+		floorID = controlled.getRoom().getFloorID();
 
 		GLCell gLCell = null;
-		if( cell instanceof DoorCell || cell instanceof RoomCell ) {
+		if( cell instanceof DoorCell || cell instanceof RoomCell )
 			if( cell.getSpeedFactor() == RoomCell.STANDARD_ROOMCELL_SPEEDFACTOR )
 				gLCell = new GLCell( this );
 			else
 				gLCell = new GLDelayCell( this );
-		} else if( cell instanceof ExitCell )
+		else if( cell instanceof ExitCell )
 			gLCell = new GLEvacuationCell( this );
-		else if( cell instanceof SaveCell)
+		else if( cell instanceof SaveCell )
 			gLCell = new GLSaveCell( this );
 		else if( cell instanceof StairCell )
 			gLCell = new GLStairCell( this );
@@ -93,51 +93,51 @@ public class GLCellControl extends AbstractControl<GLCell, Cell, CAVisualization
 	}
 
 	public GLIndividual getDrawIndividual() {
-		return mainControl.getIndividualControl( getControlled().getIndividual().getNumber() );
+		return mainControl.getIndividualControl( controlled.getIndividual().getNumber() );
 	}
-	
+
 	public int getFloorID() {
 		return floorID;
 	}
-	
-	public double getXPosition(){
-	    return xPosition;
+
+	public double getXPosition() {
+		return xPosition;
 	}
-	
-	public double getYPosition(){
-	    return -yPosition;
+
+	public double getYPosition() {
+		return -yPosition;
 	}
-	
+
 	/**
 	 * Returns the x-coordinate of the cell relative to the room.
 	 * @return the x-coordinate.
 	 */
-    public int getX() {
-    	return getControlled().getX();
-    }
-    
+	public int getX() {
+		return controlled.getX();
+	}
+
 	/**
 	 * Returns the y-coordiante of the cell relative to the room.
 	 * @return the y-coordinate
 	 */
-    public int getY() {
-    	return getControlled().getY();
-    }
-    
-		// Ich denke daß man das nicht benötigt ;) Aber mal sehen...
-    public Room getRoom() { // Room eigentlich DS-interne Klasse?!? Wie sonst Zellen zu Rooms zuordnen?
-    	return getControlled().getRoom();
-    }
-    
-		// das bräuchte man eigentlich auch nicht, oder?
-    public String getFloor() {
-    	return getControlled().getRoom().getFloor();
-    }
-    
-    public double getSpeedFactor() {
-    	return getControlled().getSpeedFactor();
-    }
-	
+	public int getY() {
+		return controlled.getY();
+	}
+
+	// Ich denke daß man das nicht benötigt ;) Aber mal sehen...
+	public Room getRoom() { // Room eigentlich DS-interne Klasse?!? Wie sonst Zellen zu Rooms zuordnen?
+		return controlled.getRoom();
+	}
+
+	// das bräuchte man eigentlich auch nicht, oder?
+	public String getFloor() {
+		return controlled.getRoom().getFloor();
+	}
+
+	public double getSpeedFactor() {
+		return controlled.getSpeedFactor();
+	}
+
 	/**
 	 * Returns the corresponding GLControlRoom-Object which created this GLCellControl Object.
 	 * @return the corresponding GLControlRoom-Object which created this GLCellControl Object.
@@ -145,13 +145,13 @@ public class GLCellControl extends AbstractControl<GLCell, Cell, CAVisualization
 	public GLRoomControl getGLControlRoom() {
 		return this.glRoomControlObject;
 	}
-	
-	public void stepUpdate( ) {
+
+	public void stepUpdate() {
 		// Update the floor colors if in an mode that can change every step
 		if( displayMode == CellInformationDisplay.DYNAMIC_POTENTIAL || displayMode == CellInformationDisplay.UTILIZATION || displayMode == CellInformationDisplay.WAITING )
 			getView().update();
 	}
-	
+
 	/**
 	 * Returns the absolute position of the cell in the graphics world
 	 * @return the absolute position. of the cell in the graphics world
@@ -159,7 +159,7 @@ public class GLCellControl extends AbstractControl<GLCell, Cell, CAVisualization
 	public Tuple getAbsolutePosition() {
 		return new Tuple( this.getXPosition() + this.getGLControlRoom().getXPosition() + this.getGLControlRoom().getGLCAFloorControl().getXPosition(), this.getYPosition() + this.getGLControlRoom().getYPosition() + this.getGLControlRoom().getGLCAFloorControl().getYPosition() );
 	}
-	
+
 	public static void setActivePotential( StaticPotential activePotential ) {
 		GLCellControl.activePotential = activePotential;
 	}
@@ -167,7 +167,7 @@ public class GLCellControl extends AbstractControl<GLCell, Cell, CAVisualization
 	public static StaticPotential getMergedPotential() {
 		return mergedPotential;
 	}
-	
+
 	/**
 	 * Returns some values that can be used to display the status of the controlled
 	 * cell, such as potentials or utilization.
@@ -177,18 +177,18 @@ public class GLCellControl extends AbstractControl<GLCell, Cell, CAVisualization
 	public long getCellInformation( CellInformationDisplay cid ) {
 		switch( cid ) {
 			case DYNAMIC_POTENTIAL:
-				return pm.getDynamicPotential().getPotential( getControlled() );
+				return pm.getDynamicPotential().getPotential( controlled );
 			case STATIC_POTENTIAL:
-				return activePotential.getPotential(getControlled());
+				return activePotential.getPotential( controlled );
 			case UTILIZATION:
-				return mainControl.getCAStatistic().getCellStatistic().getCellUtilization( getControlled(), (int)mainControl.getCaStep() );
+				return mainControl.getCAStatistic().getCellStatistic().getCellUtilization( controlled, (int) mainControl.getCaStep() );
 			case WAITING:
-				return mainControl.getCAStatistic().getCellStatistic().getCellWaitingTime( getControlled(), (int)mainControl.getCaStep() );
+				return mainControl.getCAStatistic().getCellStatistic().getCellWaitingTime( controlled, (int) mainControl.getCaStep() );
 			default:
 				return 0;
-		}		
+		}
 	}
-	
+
 	/**
 	 * Returns the maximal values that are reached at the current time for some
 	 * status properties of the controlled cell, such as potentials or utilization.
@@ -207,21 +207,21 @@ public class GLCellControl extends AbstractControl<GLCell, Cell, CAVisualization
 				return mainControl.getCAStatistic().getCellStatistic().getMaxWaiting();
 			default:
 				return 0;
-		}		
+		}
 	}
-	
+
 	public CellInformationDisplay getDisplayMode() {
 		return displayMode;
 	}
 
 	public boolean isPotentialValid() {
-		return activePotential.hasValidPotential( getControlled() );
+		return activePotential.hasValidPotential( controlled );
 	}
 
 	void setPotentialDisplay( CellInformationDisplay potentialDisplay ) {
 		displayMode = potentialDisplay;
 	}
-	
+
 	/**
 	 * Creates a mixed colour for the cell. The direction indicates for which edge
 	 * of the cell the colour is calculated.
@@ -229,41 +229,41 @@ public class GLCellControl extends AbstractControl<GLCell, Cell, CAVisualization
 	 * @return the mixed color for that edge
 	 */
 	public GLColor mixColorWithNeighbours( Direction direction ) {
-		Cell cell = getControlled();
-		
+		//Cell cell = getControlled();
+
 		Cell[] c = new Cell[3];
 		GLCellControl cc;
 		double r = getView().getColor().getRed();
 		double g = getView().getColor().getGreen();
 		double b = getView().getColor().getBlue();
 		int count = 1;
-		
-		
+
+
 		switch( direction ) {
 			case TopLeft:
-				c[0] = cell.getNeighbour( Direction.Top );
-				c[1] = cell.getNeighbour( Direction.TopLeft );
-				c[2] = cell.getNeighbour( Direction.Left );
+				c[0] = controlled.getNeighbour( Direction.Top );
+				c[1] = controlled.getNeighbour( Direction.TopLeft );
+				c[2] = controlled.getNeighbour( Direction.Left );
 				break;
 			case TopRight:
-				c[0] = cell.getNeighbour( Direction.Top );
-				c[1] = cell.getNeighbour( Direction.TopRight );
-				c[2] = cell.getNeighbour( Direction.Right );
+				c[0] = controlled.getNeighbour( Direction.Top );
+				c[1] = controlled.getNeighbour( Direction.TopRight );
+				c[2] = controlled.getNeighbour( Direction.Right );
 				break;
 			case DownRight:
-				c[0] = cell.getNeighbour( Direction.Down );
-				c[1] = cell.getNeighbour( Direction.DownLeft );
-				c[2] = cell.getNeighbour( Direction.Left );
+				c[0] = controlled.getNeighbour( Direction.Down );
+				c[1] = controlled.getNeighbour( Direction.DownLeft );
+				c[2] = controlled.getNeighbour( Direction.Left );
 				break;
 			case DownLeft:
-				c[0] = cell.getNeighbour( Direction.Down );
-				c[1] = cell.getNeighbour( Direction.DownRight );
-				c[2] = cell.getNeighbour( Direction.Right );
+				c[0] = controlled.getNeighbour( Direction.Down );
+				c[1] = controlled.getNeighbour( Direction.DownRight );
+				c[2] = controlled.getNeighbour( Direction.Right );
 				break;
 			default:
 				return new GLColor( 1, 1, 1 );
 		}
-		for( int i = 0; i < 3; i++) {
+		for( int i = 0; i < 3; i++ )
 			if( c[i] != null ) {
 				count++;
 				cc = getGLControlRoom().getCellControl( c[i] );
@@ -271,7 +271,6 @@ public class GLCellControl extends AbstractControl<GLCell, Cell, CAVisualization
 				g += cc.getView().getColor().getGreen();
 				b += cc.getView().getColor().getBlue();
 			}
-		}
 		r = r / count;
 		g = g / count;
 		b = b / count;

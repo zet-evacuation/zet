@@ -13,10 +13,12 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
+
 /**
  * Class GLCAControl
  * Erstellt 02.05.2008, 18:44:21
  */
+
 package gui.visualization.control.ca;
 
 import java.util.Collection;
@@ -30,11 +32,10 @@ import ds.ca.results.DieAction;
 import ds.ca.results.MoveAction;
 import ds.ca.results.SwapAction;
 import ds.ca.results.VisualResultsRecording;
-import opengl.framework.abs.AbstractControl;
+import gui.visualization.control.AbstractZETVisualizationControl;
 import gui.visualization.control.GLControl;
-import static gui.visualization.control.GLControl.CellInformationDisplay;
 import gui.visualization.draw.ca.GLCA;
-import gui.visualization.draw.ca.GLCAFloor;
+import static gui.visualization.control.GLControl.CellInformationDisplay;
 import gui.visualization.draw.ca.GLIndividual;
 import io.visualization.CAVisualizationResults;
 import java.util.ArrayList;
@@ -45,22 +46,28 @@ import util.DebugFlags;
 /**
  *  @author Jan-Philipp Kappmeier
  */
-public class GLCAControl extends AbstractControl<GLCA, CellularAutomaton, CAVisualizationResults, GLCAFloor, GLCAFloorControl, GLControl> {
+//public class GLCAControl extends AbstractControl<GLCA, CellularAutomaton, CAVisualizationResults, GLCAFloor, GLCAFloorControl, GLControl> {
+public class GLCAControl extends AbstractZETVisualizationControl<GLCAFloorControl, GLCA> {
 
 	private HashMap<Integer, GLCAFloorControl> allFloorsByID;
 	ArrayList<GLIndividual> glIndividuals;
 	ArrayList<GLIndividualControl> individuals;
+	CAVisualizationResults visResults;
 
 	public GLCAControl( CAVisualizationResults caVisResults, CellularAutomaton ca, GLControl glControl ) {
-		super( ca, caVisResults, glControl );
+		super( glControl );
 		allFloorsByID = new HashMap<Integer, GLCAFloorControl>();
 		glIndividuals = new ArrayList<GLIndividual>();
+		this.visResults = caVisResults;
 
 		for( int floorID : ca.getFloors().keySet() ) {
 			add( new GLCAFloorControl( caVisResults, ca.getRoomsOnFloor( floorID ), floorID, glControl ) );
 		}
 
 		this.setView( new GLCA( this ) );
+		for( GLCAFloorControl floor : this )
+			view.addChild( floor.getView() );
+
 		showAllFloors();
 
 		if( DebugFlags.VIS_CA )
@@ -90,6 +97,7 @@ public class GLCAControl extends AbstractControl<GLCA, CellularAutomaton, CAVisu
 
 	@Override
 	public void add( GLCAFloorControl childControl ) {
+		super.add( childControl );
 		allFloorsByID.put( childControl.getFloorNumber(), childControl );
 	}
 
@@ -121,14 +129,14 @@ public class GLCAControl extends AbstractControl<GLCA, CellularAutomaton, CAVisu
 	}
 
 	private void convertIndividualMovements() {
-		VisualResultsRecording recording = this.getVisResult().getRecording();
+		VisualResultsRecording recording = visResults.getRecording();
 		CellularAutomaton ca = new CellularAutomaton( recording.getInitialConfig() );
 		individuals = new ArrayList<GLIndividualControl>( ca.getIndividuals().size() );
 		for( int k = 0; k < ca.getIndividuals().size(); k++ ) {
 			individuals.add( null );
 		}
 		for( Individual individual : ca.getIndividuals() ) {
-			GLIndividualControl control = new GLIndividualControl( getVisResult(), individual, (GLControl)mainControl ); // TODO anders machen hier irgendwie...
+			GLIndividualControl control = new GLIndividualControl( individual, mainControl );
 			individuals.set( individual.getNumber() - 1, control );
 		}
 

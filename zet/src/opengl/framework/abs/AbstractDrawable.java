@@ -15,6 +15,7 @@
  */
 package opengl.framework.abs;
 
+import java.util.ArrayList;
 import javax.media.opengl.GL;
 import javax.media.opengl.glu.GLU;
 import javax.media.opengl.glu.GLUquadric;
@@ -28,7 +29,7 @@ import opengl.drawingutils.GLVector;
  * @param <W> The type of the associated children control object
  * @author Jan-Philipp Kapmeier, Daniel Plümpe
   */
-public abstract class AbstractDrawable<U extends AbstractDrawable<?, ?, ?>, V extends AbstractControl<?, ?, ?, U, W, ?>, W extends AbstractControl<U, ?, ?, ?, ?, ?>> implements Drawable {
+public abstract class AbstractDrawable<U extends AbstractDrawable<?, ?>, V extends AbstractControl<?, ?>> implements Drawable {
 //public abstract class AbstractDrawable<T extends CullingShape, U extends AbstractDrawable<?,?,?,?>, V extends AbstractControl<?, ?, ?, U, W>, W extends AbstractControl<U,?,?,?,?>> implements Drawable {
 
 	//private CullingTester tester;
@@ -41,11 +42,18 @@ public abstract class AbstractDrawable<U extends AbstractDrawable<?, ?, ?>, V ex
 	protected boolean repaint = true;
 	protected boolean callChildren = true;
 	protected GLVector position = new GLVector();
+	protected ArrayList<U> children;
+
 
 	public AbstractDrawable( V control ) {
 //	public AbstractDrawable(V control, T cullingShape ) {
+		children = new ArrayList<U>();
 		this.control = control;
 		update();
+	}
+
+	public void addChild( U child ) {
+		children.add( child );
 	}
 
 	public V getControl() {
@@ -68,14 +76,14 @@ public abstract class AbstractDrawable<U extends AbstractDrawable<?, ?, ?>, V ex
 	 * @param Drawable
 	 */
 	public void drawAllChildren( GL gl ) {
-		for( W child : control ) {
-			child.getView().draw( gl );
+		for( U child : children ) {
+			child.draw( gl );
 		}
 	}
 
 	public void staticDrawAllChildren( GL gl ) {
-		for( W child : control ) {
-			child.getView().performStaticDrawing( gl );
+		for( U child : children ) {
+			child.performStaticDrawing( gl );
 		}
 	}
 

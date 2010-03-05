@@ -35,8 +35,9 @@ import opengl.framework.abs.AbstractDrawable;
  * Draws an individual on a {@code OpenGL} canvas.
  * @author Jan-Philipp Kappmeier
  */
-public class GLIndividual extends AbstractDrawable<GLIndividual, GLIndividualControl, GLIndividualControl> {
 //public class GLIndividual extends AbstractDrawable<CullingShapeSphere, GLIndividual, GLIndividualControl, GLIndividualControl> {
+//public class GLIndividual extends AbstractDrawable<GLIndividual, GLIndividualControl, GLIndividualControl> {
+public class GLIndividual extends AbstractDrawable<GLIndividual, GLIndividualControl> {
 
 	private static double individualHeight = VisualizationOptionManager.getIndividualHeight() * VisualizationConstants.SIZE_MULTIPLICATOR;
 	private static double individualRadius = VisualizationOptionManager.getIndividualRadius() * VisualizationConstants.SIZE_MULTIPLICATOR;
