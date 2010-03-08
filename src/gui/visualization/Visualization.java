@@ -22,7 +22,6 @@ package gui.visualization;
 
 import de.tu_berlin.math.coga.common.localization.Localization;
 import de.tu_berlin.math.coga.common.util.Formatter;
-import de.tu_berlin.math.coga.math.vectormath.Vector2;
 import de.tu_berlin.math.coga.math.vectormath.Vector3;
 import ds.PropertyContainer;
 import event.EventListener;
@@ -51,6 +50,7 @@ import javax.media.opengl.glu.GLUquadric;
 import java.io.PrintStream;
 import opengl.drawingutils.GLColor;
 import opengl.helper.Frustum;
+import opengl.helper.ProjectionHelper;
 import opengl.helper.Texture;
 import opengl.helper.TextureFont;
 import opengl.helper.TextureFontStrings;
@@ -134,87 +134,13 @@ public class Visualization extends AbstractVisualization implements EventListene
 		else
 			set3DView();
 		if( PropertyContainer.getInstance().getAsBoolean( "settings.gui.visualization.isometric" ) )
-			this.setPvm( ParallelViewMode.Isometric );
+			this.setParallelViewMode( ParallelViewMode.Isometric );
 		else
-			this.setPvm( ParallelViewMode.Orthogonal );
+			this.setParallelViewMode( ParallelViewMode.Orthogonal );
 
 		EventServer.getInstance().registerListener( this, OptionsChangedEvent.class );
 	}
 
-	public void init( GLAutoDrawable drawable ) {
-		gl = drawable.getGL();
-
-		gl.glClearDepth( 1.0f );																						// Initialize depth-buffer precision
-		gl.glDepthFunc( GL.GL_LEQUAL );																		// Quality of depht-testing
-		gl.glEnable( GL.GL_DEPTH_TEST );																	// Enable depth-buffer. (z-buffer)
-		gl.glShadeModel( GL.GL_SMOOTH );																 // Activate smooth-shading (Gauraud)
-		gl.glHint( GL.GL_PERSPECTIVE_CORRECTION_HINT, GL.GL_NICEST );	 // Perspective calculations with high precision
-		gl.glHint( GL.GL_GENERATE_MIPMAP_HINT, GL.GL_NICEST );				 //
-//    gl.glHint( GL.GL_FOG_HINT, GL.GL_NICEST );											 //
-		gl.glHint( GL.GL_LINE_SMOOTH_HINT, GL.GL_NICEST );              //
-		gl.glHint( GL.GL_POINT_SMOOTH_HINT, GL.GL_NICEST );            //
-		gl.glHint( GL.GL_POLYGON_SMOOTH_HINT, GL.GL_NICEST );         //
-
-		// Enable VSync
-		gl.setSwapInterval( 1 );
-
-		gl.glEnable( GL.GL_LIGHTING );
-		gl.glEnable( GL.GL_LIGHT0 );
-		//float[] a = { 0, 0, -100 };
-		//gl.glLightfv(GL.GL_LIGHT0, GL.GL_POSITION, a, 0 );
-		float[] mat_specular = {1.0f, 1.0f, 1.0f, 1.0f};
-		float[] mat_shininess = {100.0f};
-		//float[] mat_ambient = {0.4f, 0.4f, 0.4f, 1.0f};
-		//float[] mat_diffuse = {0.4f, 0.8f, 0.4f, 1.0f};
-		float[] mat_ambient = {1f, 0f, 0f, 1.0f};
-		float[] mat_diffuse = {0f, 0f, 0f, 1.0f};
-
-		//float[] light_position = {10.0f, 10.0f, 0.0f, 1.0f};
-		float[] light_position = {10.0f, 10.0f, 0.0f, 0.0f};
-		//float[] light_ambient = {0.8f, 0.8f, 0.8f, 1.0f};
-		//float[] light_ambient = {1f, 1f, 1f, 1.0f};
-		float[] light_ambient = {0.8f, 0.8f, 0.8f, 1.0f};
-		float[] light_diffuse = {0.4f, 0.4f, 0.4f, 1.0f};
-		//float[] light_diffuse = {0.8f, 0.8f, 0.8f, 1.0f};
-
-		gl.glMaterialfv( GL.GL_FRONT, GL.GL_SPECULAR, mat_specular, 0 );
-		gl.glMaterialfv( GL.GL_FRONT, GL.GL_SHININESS, mat_shininess, 0 );
-		gl.glMaterialfv( GL.GL_FRONT, GL.GL_AMBIENT, mat_ambient, 0 );
-		gl.glMaterialfv( GL.GL_FRONT, GL.GL_DIFFUSE, mat_diffuse, 0 );
-
-		gl.glLightfv( GL.GL_LIGHT0, GL.GL_AMBIENT, light_ambient, 0 );
-		gl.glLightfv( GL.GL_LIGHT0, GL.GL_DIFFUSE, light_diffuse, 0 );
-		gl.glLightfv( GL.GL_LIGHT0, GL.GL_POSITION, light_position, 0 );
-
-
-		// load textures
-		texMan = TextureManager.getInstance();
-		texMan.setGL( gl );
-		texMan.setGLU( glu );
-		maskTex = texMan.newTexture( "logo", "./textures/logomask.png" );
-		logoTex = texMan.newTexture( "logo", "./textures/logo2.png" );
-		fontTex = texMan.newTexture( "font2", "./textures/fontl.png" );
-		// load texture font
-		fontBold = new TextureFont( gl, fontTex );
-		fontBold.buildFont( 8, 32, 32, 32, 19 );
-
-		font = new TextureFont( gl, fontTex );
-		font.buildFont( 8, 32, 32, 16, 9.5 );		// fontl.bmp
-		fontTex.bind();
-
-		gl.glEnable( GL.GL_NORMALIZE );
-
-		// activate anisotropic filtering. had no effect on my computer
-//		if ( glewIsSupported( "GL_EXT_texture_filter_anisotropic" ) ) {
-//	    float maxAni;
-//			glGetFloatv( GL_MAX_TEXTURE_MAX_ANISOTROPY_EXT, &maxAni );
-//			glBindTexture( GL_TEXTURE_2D, theTex );
-//			glTexParameterf( GL_TEXTURE_2D, GL_TEXTURE_MAX_ANISOTROPY_EXT, maxAni );
-//		}
-
-		if( control == null )
-			control = new GLControl();
-	}
 
 	/**
 	 * Returns the set of texts that is shown as the intro.
@@ -238,6 +164,7 @@ public class Visualization extends AbstractVisualization implements EventListene
 	 * Draws the scene, including text and takes screenshots, if necessary.
 	 * @param drawable the {@code OpenGL} context
 	 */
+	@Override
 	public void display( GLAutoDrawable drawable ) {
 		// TODO: richtig machen mit dem update :D
 		// Status-Variablen die angezeigte Elemente steuern
@@ -247,7 +174,7 @@ public class Visualization extends AbstractVisualization implements EventListene
 		showTimestepCellularAutomaton = PropertyContainer.getInstance().getAsBoolean( "options.visualization.elements.timestepCA" );
 
 		this.drawable = drawable;
-		calculateFPS();
+		computeFPS();
 		if( isAnimating() == true && recording == false )
 			animate();
 
@@ -295,6 +222,7 @@ public class Visualization extends AbstractVisualization implements EventListene
 	 * from the current time and last time.
 	 * @see #getDeltaTime()
 	 */
+	@Override
 	final public void animate() {
 		control.addTime( getDeltaTime() );
 	}
@@ -303,6 +231,7 @@ public class Visualization extends AbstractVisualization implements EventListene
 	 * Sets the new animation time a specified time to the future
 	 * @param timestep the specified time
 	 */
+	@Override
 	final public void animate( long timestep ) {
 		control.addTime( timestep );
 	}
@@ -320,16 +249,16 @@ public class Visualization extends AbstractVisualization implements EventListene
 	final private void drawEye() {
 		// Calculate the vector of the eye rotation with respect to to the current
 		// view vector.
-		Vector3 cameraView = new Vector3( getCamera().getView() );
+		Vector3 cameraView = new Vector3( camera.getView() );
 		cameraView.z = 0;
 		cameraView.normalize();
 		double eyeRotation = Math.acos( rotation2D.dotProduct( cameraView ) );
-		int orientation = Vector3.orientation( rotation2D, getCamera().getView() );
+		int orientation = Vector3.orientation( rotation2D, camera.getView() );
 		if( orientation == -1 )
 			eyeRotation = -eyeRotation;
 		eyeRotation = eyeRotation * Frustum.DEG2ANGLE;
 
-		gl.glTranslated( getCamera().getPos().x, getCamera().getPos().y, getCamera().getPos().z );
+		gl.glTranslated( camera.getPos().x, camera.getPos().y, camera.getPos().z );
 		GLColor red = new GLColor( Color.red );
 		red.draw( gl );
 		GLUquadric quadObj = glu.gluNewQuadric();
@@ -347,7 +276,7 @@ public class Visualization extends AbstractVisualization implements EventListene
 		gl.glEnd();
 		gl.glPopMatrix();
 		gl.glRotated( getRotateAngle(), 0, 0, 1 );
-		gl.glTranslated( -getCamera().getPos().x, -getCamera().getPos().y, -getCamera().getPos().z );
+		gl.glTranslated( -camera.getPos().x, -camera.getPos().y, -camera.getPos().z );
 	}
 
 	/**
@@ -356,7 +285,7 @@ public class Visualization extends AbstractVisualization implements EventListene
 	 */
 	final private void drawIntroText( int index ) {
 		gl.glClear( clearBits );
-		this.setProjectionPrint();
+		ProjectionHelper.setPrintScreenProjection( gl, viewportWidth, viewportHeight );
 		GLColor.white.draw( gl );
 		gl.glEnable( gl.GL_TEXTURE_2D );
 		fontTex.bind();
@@ -368,7 +297,7 @@ public class Visualization extends AbstractVisualization implements EventListene
 			else
 				font.print( 100, this.getHeight() - (int)tfs.getY( i ), tfs.getText( i ) );
 		gl.glDisable( gl.GL_TEXTURE_2D );
-		this.resetProjection();
+		ProjectionHelper.resetProjection( gl );
 	}
 
 	/**
@@ -376,7 +305,7 @@ public class Visualization extends AbstractVisualization implements EventListene
 	 */
 	final private void drawLogo() {
 		int logoHeight = 128;
-		this.setProjectionPrint();
+		ProjectionHelper.setPrintScreenProjection( gl, viewportWidth, viewportHeight );
 		gl.glEnable( GL.GL_BLEND );
 		gl.glBlendFunc( GL.GL_DST_COLOR, GL.GL_ZERO );
 		gl.glEnable( GL.GL_TEXTURE_2D );
@@ -408,7 +337,7 @@ public class Visualization extends AbstractVisualization implements EventListene
 		gl.glEnd();
 		gl.glDisable( GL.GL_TEXTURE_2D );
 		gl.glDisable( GL.GL_BLEND );
-		this.resetProjection();
+		ProjectionHelper.resetProjection( gl );
 	}
 
 	/**
@@ -416,13 +345,13 @@ public class Visualization extends AbstractVisualization implements EventListene
 	 * has finished if a movie is recorded.
 	 */
 	final private void drawOutroText() {
-		this.setProjectionPrint();
+		ProjectionHelper.setPrintScreenProjection( gl, viewportWidth, viewportHeight );
 		GLColor.white.draw( gl );
 		gl.glEnable( gl.GL_TEXTURE_2D );
 		int row = 1;
 		font.print( 100, this.getHeight() - (7) * fontSize, loc.getString( "testtext" ) );
 		gl.glDisable( gl.GL_TEXTURE_2D );
-		this.resetProjection();
+		ProjectionHelper.resetProjection( gl );
 	}
 
 	/**
@@ -435,9 +364,9 @@ public class Visualization extends AbstractVisualization implements EventListene
 		gl.glMatrixMode( GL.GL_MODELVIEW );
 		gl.glLoadIdentity();
 		float[] light_position = new float[4];
-		light_position[0] = (float)getCamera().getView().x;
-		light_position[1] = (float)getCamera().getView().y;
-		light_position[2] = (float)getCamera().getView().z;
+		light_position[0] = (float)camera.getView().x;
+		light_position[1] = (float)camera.getView().y;
+		light_position[2] = (float)camera.getView().z;
 		//light_position[0] = 0;
 		//light_position[1] = 1;
 		//light_position[2] = 0;
@@ -470,7 +399,7 @@ public class Visualization extends AbstractVisualization implements EventListene
 	 * the current time of the cellular automaton and graph, if used.
 	 */
 	final private void drawFPS() {
-		this.setProjectionPrint();
+		ProjectionHelper.setPrintScreenProjection( gl, viewportWidth, viewportHeight );
 		GLColor.white.draw( gl );
 		gl.glEnable( GL.GL_BLEND );
 		gl.glBlendFunc( GL.GL_ONE, GL.GL_ONE );// Copy Image 2 Color To The Screen
@@ -478,6 +407,8 @@ public class Visualization extends AbstractVisualization implements EventListene
 		fontTex.bind();
 		if( showFPS )
 			font.print( 0, 0, Integer.toString( this.fps ) + " FPS" );
+
+		// TODO gehört hier nicht rein!
 		int row = 1;
 		if( control.hasCellularAutomaton() ) {
 			if( control.isCaFinshed() ) {
@@ -526,7 +457,7 @@ public class Visualization extends AbstractVisualization implements EventListene
 		//font.print( 0, this.getHeight() - (row++)*fontSize, "Zeit: " + secToMin( getTimeSinceStart()/1000000000 ) );
 		gl.glDisable( GL.GL_TEXTURE_2D );
 		gl.glDisable( GL.GL_BLEND );
-		this.resetProjection();
+		ProjectionHelper.resetProjection( gl );
 	}
 
 	/**
@@ -611,8 +542,80 @@ public class Visualization extends AbstractVisualization implements EventListene
 		this.frameUsed = true;
 	}
 
+	@Override
 	public void initGFX( GLAutoDrawable drawable ) {
-		throw new UnsupportedOperationException( "Not supported by JOGL yet." );
+		gl = drawable.getGL();
+
+		gl.glClearDepth( 1.0f );																						// Initialize depth-buffer precision
+		gl.glDepthFunc( GL.GL_LEQUAL );																		// Quality of depht-testing
+		gl.glEnable( GL.GL_DEPTH_TEST );																	// Enable depth-buffer. (z-buffer)
+		gl.glShadeModel( GL.GL_SMOOTH );																 // Activate smooth-shading (Gauraud)
+		gl.glHint( GL.GL_PERSPECTIVE_CORRECTION_HINT, GL.GL_NICEST );	 // Perspective calculations with high precision
+		gl.glHint( GL.GL_GENERATE_MIPMAP_HINT, GL.GL_NICEST );				 //
+//    gl.glHint( GL.GL_FOG_HINT, GL.GL_NICEST );											 //
+		gl.glHint( GL.GL_LINE_SMOOTH_HINT, GL.GL_NICEST );              //
+		gl.glHint( GL.GL_POINT_SMOOTH_HINT, GL.GL_NICEST );            //
+		gl.glHint( GL.GL_POLYGON_SMOOTH_HINT, GL.GL_NICEST );         //
+
+		// Enable VSync
+		gl.setSwapInterval( 1 );
+
+		gl.glEnable( GL.GL_LIGHTING );
+		gl.glEnable( GL.GL_LIGHT0 );
+		//float[] a = { 0, 0, -100 };
+		//gl.glLightfv(GL.GL_LIGHT0, GL.GL_POSITION, a, 0 );
+		float[] mat_specular = {1.0f, 1.0f, 1.0f, 1.0f};
+		float[] mat_shininess = {100.0f};
+		//float[] mat_ambient = {0.4f, 0.4f, 0.4f, 1.0f};
+		//float[] mat_diffuse = {0.4f, 0.8f, 0.4f, 1.0f};
+		float[] mat_ambient = {1f, 0f, 0f, 1.0f};
+		float[] mat_diffuse = {0f, 0f, 0f, 1.0f};
+
+		//float[] light_position = {10.0f, 10.0f, 0.0f, 1.0f};
+		float[] light_position = {10.0f, 10.0f, 0.0f, 0.0f};
+		//float[] light_ambient = {0.8f, 0.8f, 0.8f, 1.0f};
+		//float[] light_ambient = {1f, 1f, 1f, 1.0f};
+		float[] light_ambient = {0.8f, 0.8f, 0.8f, 1.0f};
+		float[] light_diffuse = {0.4f, 0.4f, 0.4f, 1.0f};
+		//float[] light_diffuse = {0.8f, 0.8f, 0.8f, 1.0f};
+
+		gl.glMaterialfv( GL.GL_FRONT, GL.GL_SPECULAR, mat_specular, 0 );
+		gl.glMaterialfv( GL.GL_FRONT, GL.GL_SHININESS, mat_shininess, 0 );
+		gl.glMaterialfv( GL.GL_FRONT, GL.GL_AMBIENT, mat_ambient, 0 );
+		gl.glMaterialfv( GL.GL_FRONT, GL.GL_DIFFUSE, mat_diffuse, 0 );
+
+		gl.glLightfv( GL.GL_LIGHT0, GL.GL_AMBIENT, light_ambient, 0 );
+		gl.glLightfv( GL.GL_LIGHT0, GL.GL_DIFFUSE, light_diffuse, 0 );
+		gl.glLightfv( GL.GL_LIGHT0, GL.GL_POSITION, light_position, 0 );
+
+
+		// load textures
+		texMan = TextureManager.getInstance();
+		texMan.setGL( gl );
+		texMan.setGLU( glu );
+		maskTex = texMan.newTexture( "logo", "./textures/logomask.png" );
+		logoTex = texMan.newTexture( "logo", "./textures/logo2.png" );
+		fontTex = texMan.newTexture( "font2", "./textures/fontl.png" );
+		// load texture font
+		fontBold = new TextureFont( gl, fontTex );
+		fontBold.buildFont( 8, 32, 32, 32, 19 );
+
+		font = new TextureFont( gl, fontTex );
+		font.buildFont( 8, 32, 32, 16, 9.5 );		// fontl.bmp
+		fontTex.bind();
+
+		gl.glEnable( GL.GL_NORMALIZE );
+
+		// activate anisotropic filtering. had no effect on my computer
+//		if ( glewIsSupported( "GL_EXT_texture_filter_anisotropic" ) ) {
+//	    float maxAni;
+//			glGetFloatv( GL_MAX_TEXTURE_MAX_ANISOTROPY_EXT, &maxAni );
+//			glBindTexture( GL_TEXTURE_2D, theTex );
+//			glTexParameterf( GL_TEXTURE_2D, GL_TEXTURE_MAX_ANISOTROPY_EXT, maxAni );
+//		}
+
+		if( control == null )
+			control = new GLControl();
 	}
 
 	/**

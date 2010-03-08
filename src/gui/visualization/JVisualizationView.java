@@ -21,7 +21,6 @@ package gui.visualization;
 
 import ds.PropertyContainer;
 import gui.ZETMain;
-import gui.JEditor;
 import gui.components.ComboBoxRenderer;
 import gui.components.FloorComboBoxModel;
 import gui.components.JArrayPanel;
@@ -37,8 +36,6 @@ import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 import java.text.ParseException;
 import java.util.Hashtable;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.media.opengl.GLCapabilities;
 import javax.swing.JButton;
 import javax.swing.JComboBox;

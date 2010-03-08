@@ -11,5 +11,6 @@ package opengl.framework.abs;
  */
 public interface Animatable {
 	void animate();
+	void animate( long delta );
 	// TODO: more methods to the interface
 }

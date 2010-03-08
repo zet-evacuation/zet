@@ -27,7 +27,7 @@ import javax.media.opengl.GLCapabilities;
 import opengl.framework.abs.AbstractOpenGLPanel;
 
 /**
- *
+ * TODO: OpenGL Demo-Classes. Move out of package.
  * @author Jan-Philipp Kappmeier
  */
 public class JOpenGLPanel extends AbstractOpenGLPanel {
@@ -68,9 +68,11 @@ public class JOpenGLPanel extends AbstractOpenGLPanel {
 		//gl.glShadeModel( GL.GL_SMOOTH );
 	}
 
-	public void animate( double deltaTime ) {
+	@Override
+	public void animate() {
 	}
 
-	public void animate() {
+	@Override
+	public void animate( long delta ) {
 	}
 }

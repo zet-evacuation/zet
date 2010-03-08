@@ -29,32 +29,25 @@ import gui.JEditor;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.event.KeyEvent;
-import java.awt.event.KeyListener;
 import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
-import java.awt.event.MouseMotionListener;
 import java.awt.event.MouseWheelEvent;
-import java.awt.event.MouseWheelListener;
 import java.io.File;
 import java.io.IOException;
 import javax.media.opengl.GL;
 import javax.media.opengl.GLAutoDrawable;
-import javax.media.opengl.GLCanvas;
 import javax.media.opengl.GLCapabilities;
-import javax.media.opengl.GLEventListener;
 import javax.media.opengl.GLException;
 import javax.media.opengl.glu.GLU;
 import opengl.framework.Camera;
-import opengl.framework.abs.OpenGLRenderer;
 import opengl.helper.Frustum;
 import opengl.helper.ProjectionHelper;
 import de.tu_berlin.math.coga.math.vectormath.Vector3;
+import opengl.framework.abs.AbstractOpenGLCanvas;
 
-/**
- *
- * @author Jan-Philipp Kappmeier
- */
-public abstract class AbstractVisualization extends GLCanvas implements GLEventListener, OpenGLRenderer, KeyListener, MouseListener, MouseMotionListener, MouseWheelListener {
+public abstract class AbstractVisualization extends AbstractOpenGLCanvas {
+
+	// TODO: OpenGL evtl. Parallel-view-mode verschieben?
+
 	public enum ParallelViewMode {
 		/** Orthognal view from direcly above the scene. */
 		Orthogonal,
@@ -63,11 +56,33 @@ public abstract class AbstractVisualization extends GLCanvas implements GLEventL
 		/** Isometric view, the scene is rotated xx degree. */
 		Isometric2;
 	}
-	// General vars
-	protected GL gl;
-	private Animator animator;
-	protected int clearBits = GL.GL_COLOR_BUFFER_BIT | GL.GL_DEPTH_BUFFER_BIT;
-	protected GLU glu;
+
+//	// Projection stuff
+	/** Stores the information, which of the parallel view modes is active. */
+	protected ParallelViewMode pvm = ParallelViewMode.Isometric;
+	/** Keeps the information, if 3-dimensional view is active, or not. */
+	protected boolean is3D = false;
+
+//	// 2D-Projection vars
+	/** The camera. */
+	Camera camera = new Camera();
+	/** The height of the viewport. */
+	int viewportWidth = 0;
+	/** The width of the viewport. */
+	int viewportHeight = 0;
+	/** Keeps the current projection state. If it is changed, the projection matrices has to be recomputed. */
+	protected boolean updateProjection = false;
+//	private double canvasWidth = 100;
+//	private double canvasHeight = 100;
+
+	private double depth = 2000;
+	private double currentWidth = 1000;
+	private double currentHeight = 1000;
+
+	//	private double zoomFactor = 0.1;
+	private double initZ;
+//	// 3D-Projection vars
+	double aspect = 1;
 
 	// FPS vars
 	private long lastFrameTime = 0;
@@ -77,26 +92,8 @@ public abstract class AbstractVisualization extends GLCanvas implements GLEventL
 	private long deltaTime;
 	private long lastTime = 0;
 
-	// Projection stuff
-	protected ParallelViewMode pvm = ParallelViewMode.Isometric;
-	protected boolean is3D = false;
-
-	// 2D-Projection vars
-	Camera camera = new Camera();
-	int viewportWidth = 0;
-	int viewportHeight = 0;
-	protected boolean updateProjection = false;
-	private double canvasWidth = 100;
-	private double canvasHeight = 100;
-	private double depth = 2000;
-	private double currentWidth = 1000;
-	private double currentHeight = 1000;
-	private double zoomFactor = 0.1;
-	private double initZ;
-	// 3D-Projection vars
-	double aspect = 1;
-
-	// Mouse interaction vars
+//
+//	// Mouse interaction vars
 	private final int mouseInvert = PropertyContainer.getInstance().getAsBoolean( "editor.options.visualization.invertMouse" ) ? -1 : 1;
 	private final int scrollInvert = PropertyContainer.getInstance().getAsBoolean( "editor.options.visualization.invertScroll" ) ? 1 : -1;
 	private double initWidth;
@@ -109,22 +106,25 @@ public abstract class AbstractVisualization extends GLCanvas implements GLEventL
 	/** The difference angle between the view angle and the angle of the scene rotation. */
 	protected Vector3 rotation2D = new Vector3( 1, 0, 0 );
 	private Vector3 initRotation2D;
+
 	private static final Vector3 absoluteUp = new Vector3( 0, 0, 1 );
-	/** Indicates wheather a screenshot should be taken after a redrow of the scene */
+
+	//	/** Indicates wheather a screenshot should be taken after a redrow of the scene */
 	protected boolean takeScreenshot = false;
-	/** The filename of the screenshot. */
+//	/** The filename of the screenshot. */
 	protected String screenshotFilename = "./screenshots/screenshot.png";
 
 	/**
-	 * 
-	 * @param caps 
+	 * Initializes the visualization class. Sets up background, event-listener and
+	 * animation.
+	 * @param caps the capabilities for {@code OpenGL}-rendering
 	 */
 	public AbstractVisualization( GLCapabilities caps ) {
 		super( caps );
 		glu = new GLU();
 		setBackground( Color.black );
+		// TODO: eventl-listener for OpenGL.
 		addGLEventListener( this );
-		//animator = new FPSAnimator( this, maxFPS );
 		animator = new Animator( this );
 		addKeyListener( this );
 		addMouseListener( this );
@@ -134,26 +134,14 @@ public abstract class AbstractVisualization extends GLCanvas implements GLEventL
 		camera.setSpeed( camera.getSpeed() * 0.1 );
 	}
 
-	/**
-	 * This method is called everytime the GL context is resized. Calculates the
-	 * current viewport and aspect ratio of the visible area.
-	 * @param drawable the GL context that we can use
-	 * @param x the x coordinate
-	 * @param y the y coordinate
-	 * @param width the width of the context
-	 * @param height the height of the context
-	 */
-	final public void reshape( GLAutoDrawable drawable, int x, int y, int width, int height ) {
-		updateViewport( drawable, x, y, width, height );
-	}
+	/*****************************************************************************
+	 *                                                                           *
+	 * Projection-Stuff                                                          *
+	 *                                                                           *
+	 *****************************************************************************/
 
-	final public void displayChanged( GLAutoDrawable drawable, boolean modeChanged, boolean deviceChanged ) {
-	}
-
-	// Setting up of the projections and other stuff
 	@Override
 	final public void updateViewport( GLAutoDrawable drawable, int x, int y, int width, int height ) {
-		//super.updateViewport( drawable, x, y, width, height );	// calculate viewport
 		//gl = drawable.getGL();
 		gl.glViewport( 0, 0, width, height );
 
@@ -167,9 +155,14 @@ public abstract class AbstractVisualization extends GLCanvas implements GLEventL
 		else
 			set2DProjection();
 
+		// TODO: event-server usage in Open-GL-Kram
 		EventServer.getInstance().dispatchEvent( new MessageEvent<JEditor>( JEditor.getInstance(), MessageType.MousePosition, "View: " + width + " x " + height ) );
 	}
 
+	/**
+	 * Sets up the projection, depending from the current mode: 2-dimensional or
+	 * 3-dimensional.
+	 */
 	final protected void updateProjection() {
 		if( is3D )
 			set3DProjection();
@@ -177,6 +170,9 @@ public abstract class AbstractVisualization extends GLCanvas implements GLEventL
 			set2DProjection();
 	}
 
+	/**
+	 * Sets up the projection matrix for 3-dimensional view.
+	 */
 	final private void set3DProjection() {
 		gl.glMatrixMode( GL.GL_PROJECTION );
 		gl.glLoadIdentity();
@@ -185,27 +181,14 @@ public abstract class AbstractVisualization extends GLCanvas implements GLEventL
 		updateProjection = false;
 	}
 
+	/**
+	 * Sets up the projection matrix for 2-dimensonal (orthogonal or parallel) view.
+	 */
 	final private void set2DProjection() {
 		ProjectionHelper.setViewOrthogonal( gl, viewportWidth, viewportHeight, camera.getPos().x, camera.getPos().y, camera.getPos().z, currentWidth, currentHeight, depth );
 		// We need to reset the model/view matrix (and swith to the mode!)
 		gl.glMatrixMode( GL.GL_MODELVIEW );			// Set model/view matrix-mode
 		updateProjection = false;
-	}
-
-	final public void setProjectionPrint() {
-		ProjectionHelper.setPrintScreenProjection( gl, viewportWidth, viewportHeight );
-	}
-
-	final public void resetProjection() {
-		ProjectionHelper.resetProjection( gl );
-	}
-
-	final public ParallelViewMode getPvm() {
-		return pvm;
-	}
-
-	final public void setPvm( ParallelViewMode pvm ) {
-		this.pvm = pvm;
 	}
 
 	/**
@@ -225,24 +208,11 @@ public abstract class AbstractVisualization extends GLCanvas implements GLEventL
 	}
 
 	/**
-	 * Returns <code>true</code> if the 3-dimensonal perspective view is enabled.
-	 * @return <code>true</code> if 3-dimensonal perspective view is enabled, <code>false</code> otherwise.
+	 * Sets a 3d-view or a 2-dimensional view.
+	 * @param view3d set to {@code true} if 3-dimensional view should be enabled, {@code false} for 2-dimensional view
 	 */
-	final public boolean is3D() {
-		return is3D;
-	}
-
-	/**
-	 * Returns <code>true</code> if a 2-dimensonal view is enabled, which can be
-	 * either orthogonal or isometric.
-	 * @return <code>true</code> if a 2-dimensonal view is enabled, <code>false</code> otherwise.
-	 */
-	final public boolean is2D() {
-		return !is3D;
-	}
-
-	final public void setView( boolean view ) {
-		is3D = view;
+	final public void setView( boolean view3d ) {
+		is3D = view3d;
 		updateProjection = true;
 	}
 
@@ -251,24 +221,36 @@ public abstract class AbstractVisualization extends GLCanvas implements GLEventL
 		updateProjection = true;
 	}
 
-	// look-method
+	/**
+	 * Returns <code>true</code> if the 3-dimensonal perspective view is enabled.
+	 * @return <code>true</code> if 3-dimensonal perspective view is enabled, <code>false</code> otherwise.
+	 */
+	final public boolean is3D() {
+		return is3D;
+	}
+
+	/**
+	 * Returns the view mode for parallel/orthogonal projection.
+	 * @return the view mode for parallel/orthogonal projection
+	 */
+	final public ParallelViewMode getParallelViewMode() {
+		return pvm;
+	}
+
+	/**
+	 * Sets the view mode for parallel/orthogonal projection.
+	 * @param pvm the projection mode
+	 */
+	final public void setParallelViewMode( ParallelViewMode pvm ) {
+		this.pvm = pvm;
+	}
+
+	/**
+	 * // TODO OpenGL: move to AbstractOpenGLCanvas/Panel
+	 * Sets the eye position and direction of view.
+	 */
 	final public void look() {
-		// set eye position and direction of view
 		glu.gluLookAt( camera.getPos().x, camera.getPos().y, camera.getPos().z, camera.getPos().x + camera.getView().x, camera.getPos().y + camera.getView().y, camera.getPos().z + camera.getView().z, camera.getUp().x, camera.getUp().y, camera.getUp().z );
-	}
-
-	public void zoomIn() {
-		currentWidth *= 1 - zoomFactor;
-		currentHeight *= 1 - zoomFactor;
-		updateProjection = true;
-		repaint();
-	}
-
-	public void zoomOut() {
-		currentWidth /= 1 - zoomFactor;
-		currentHeight /= 1 - zoomFactor;
-		updateProjection = true;
-		repaint();
 	}
 
 	final public void moveUp( double init, double value ) {
@@ -281,53 +263,15 @@ public abstract class AbstractVisualization extends GLCanvas implements GLEventL
 		repaint();
 	}
 
-	// Helper Methods
-	final public void calculateFPS() {
-		// calculate real FPS and delay time for animation
-		long currentTime = System.nanoTime(); // currentTimeMillis();
-		deltaTime = currentTime - lastTime;
-		lastTime = currentTime;
-		if( currentTime - lastFrameTime >= 1000000000 ) {
-			lastFrameTime = currentTime;
-			fps = frameCount;
-			frameCount = 0;
-		} else
-			frameCount++;
-	}
-
-	/**
-	 * Starts animation with the maximal speed (frames per second).
-	 */
-	public void startAnimation() {
-		animationStartTime = System.nanoTime();
-		animator.start();
-		animator.setRunAsFastAsPossible( true );
-		lastTime = System.nanoTime();
-	}
-
-	/**
-	 * Stops animation if started.
-	 */
-	final public void stopAnimation() {
-		animator.stop();
-	}
-
-	/**
-	 * Decides, wheather animation is turned on or of.
-	 * @return {@code true} if animation is on, {@code false otherwise}
-	 */
-	final public boolean isAnimating() {
-		return animator.isAnimating();
-	}
-
-	// Setter & Getter
-	/**
-	 * Returns the time passed since the last frame was drawn.
-	 * @return the time passed since the last frame was drawn
-	 */
-	final public long getDeltaTime() {
-		return deltaTime;
-	}
+	// Getter & Setter
+//	// Setter & Getter
+//	/**
+//	 * Returns the time passed since the last frame was drawn.
+//	 * @return the time passed since the last frame was drawn
+//	 */
+//	final public long getDeltaTime() {
+//		return deltaTime;
+//	}
 
 	/**
 	 * Returns the angle between the current rotate vector and the vector in
@@ -342,13 +286,46 @@ public abstract class AbstractVisualization extends GLCanvas implements GLEventL
 	}
 
 	/**
-	 * Returns the time since start of animation in nano seconds. In case the
-	 * animation has not been started yet, 0 is returned.
-	 * @return the time since start of animation in nano seconds
+	 * Returns the current height of the visible rendered area. It can be larger
+	 * than the size of the window.
+	 * @return the current height of the visible rendered area
 	 */
-	final public long getTimeSinceStart() {
-		return animator.isAnimating() ? lastTime - animationStartTime : 0;
+	public double getViewHeight() {
+		return currentHeight;
 	}
+
+	/**
+	 * Returns the current width of the visible rendered area. It can be larger
+	 * than the size of the window.
+	 * @return the current width of the visible rendered area
+	 */
+	public double getViewWidth() {
+		return currentWidth;
+	}
+
+	/**
+	 * Directly sets the current size of view (which is the visible area that is
+	 * rendered). Note that this method does not ensure that the size of the
+	 * viewport fits to the window or panel.
+	 * @param width the new width
+	 * @param height the new height
+	 */
+	public void setView( double width, double height ) {
+		currentWidth = width;
+		currentHeight = height;
+	}
+
+
+	// TODO OpenGL: check wheather rotation2D could be a vector2
+
+	//	/**
+//	 * Returns the time since start of animation in nano seconds. In case the
+//	 * animation has not been started yet, 0 is returned.
+//	 * @return the time since start of animation in nano seconds
+//	 */
+//	final public long getTimeSinceStart() {
+//		return animator.isAnimating() ? lastTime - animationStartTime : 0;
+//	}
 
 	/**
 	 * Returns the camera object of the scene.
@@ -358,6 +335,7 @@ public abstract class AbstractVisualization extends GLCanvas implements GLEventL
 		return camera;
 	}
 
+	// Take a screenshot
 	/**
 	 * Call this method to make a screenshot after the next redraw.
 	 * @param filename the filename of the screenshot file
@@ -368,16 +346,16 @@ public abstract class AbstractVisualization extends GLCanvas implements GLEventL
 		repaint();
 	}
 
+	// TODO: OpenGL JEditor-Exception-Printing entfernen
 	/**
 	 * Takes a screenshot and saves it to the file indicated by the filename
 	 * submitted by the other screenshot method.
 	 * @param drawable the {@code OpenGL} context
 	 */
 	protected void takeScreenshot( GLAutoDrawable drawable ) {
-		File file = new File( screenshotFilename );
 		//System.out.println( "Save screenshot to " + file.getAbsolutePath() );
 		try {
-			Screenshot.writeToFile( file, drawable.getWidth(), drawable.getHeight(), false );
+			Screenshot.writeToFile( new File( screenshotFilename ), drawable.getWidth(), drawable.getHeight(), false );
 		} catch( IOException ex ) {
 			JEditor.printException( ex );
 		} catch( GLException ex ) {
@@ -399,9 +377,6 @@ public abstract class AbstractVisualization extends GLCanvas implements GLEventL
 	}
 
 	// Listener
-	public void keyTyped( KeyEvent e ) {
-	}
-
 	@Override
 	public void keyPressed( KeyEvent e ) {
 		switch( e.getKeyCode() ) {
@@ -469,13 +444,6 @@ public abstract class AbstractVisualization extends GLCanvas implements GLEventL
 	//camera.setUp( oldUp );
 	}
 
-	public void keyReleased( KeyEvent e ) {
-	}
-
-	public void mouseClicked( MouseEvent e ) {
-		requestFocusInWindow();
-	}
-
 	@Override
 	public void mousePressed( MouseEvent e ) {
 		if( mouseMove != MouseEvent.NOBUTTON )
@@ -494,12 +462,6 @@ public abstract class AbstractVisualization extends GLCanvas implements GLEventL
 	@Override
 	public void mouseReleased( MouseEvent e ) {
 		mouseMove = MouseEvent.NOBUTTON;
-	}
-
-	public void mouseEntered( MouseEvent e ) {
-	}
-
-	public void mouseExited( MouseEvent e ) {
 	}
 
 	@Override
@@ -533,9 +495,6 @@ public abstract class AbstractVisualization extends GLCanvas implements GLEventL
 		}
 	}
 
-	public void mouseMoved( MouseEvent e ) {
-	}
-
 	@Override
 	public void mouseWheelMoved( MouseWheelEvent e ) {
 		if( is3D )
@@ -547,17 +506,18 @@ public abstract class AbstractVisualization extends GLCanvas implements GLEventL
 		repaint();
 	}
 
-	public void setView( double width, double height ) {
-		currentWidth = width;
-		currentHeight = height;
-	}
-
-	public double getViewWidth() {
-		return currentWidth;
-	}
-
-	public double getViewHeight() {
-		return currentHeight;
-	}
-
 }
+
+//	public void zoomIn() {
+//		currentWidth *= 1 - zoomFactor;
+//		currentHeight *= 1 - zoomFactor;
+//		updateProjection = true;
+//		repaint();
+//	}
+//
+//	public void zoomOut() {
+//		currentWidth /= 1 - zoomFactor;
+//		currentHeight /= 1 - zoomFactor;
+//		updateProjection = true;
+//		repaint();
+//	}

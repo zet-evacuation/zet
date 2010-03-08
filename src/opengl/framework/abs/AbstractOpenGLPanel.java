@@ -36,14 +36,15 @@ import javax.media.opengl.GLAutoDrawable;
 import javax.media.opengl.GLCapabilities;
 import javax.media.opengl.GLEventListener;
 import javax.media.opengl.GLJPanel;
+import javax.media.opengl.glu.GLU;
 
 /**
  * By default depth buffer is used.
  * @author Jan-Philipp Kappmeier
  */
 abstract public class AbstractOpenGLPanel extends GLJPanel implements GLEventListener, OpenGLRenderer, Animatable, KeyListener, MouseListener, MouseMotionListener, MouseWheelListener {
-	private int clear = GL.GL_COLOR_BUFFER_BIT | GL.GL_DEPTH_BUFFER_BIT;
-	private Animator animator;
+	protected int clearBits = GL.GL_COLOR_BUFFER_BIT | GL.GL_DEPTH_BUFFER_BIT;
+	protected Animator animator;
 	private int maxFPS = 200;
 	private long lastFrameTime = 0;
 	private long animationStartTime = 0;
@@ -52,6 +53,7 @@ abstract public class AbstractOpenGLPanel extends GLJPanel implements GLEventLis
 	private long deltaTime;
 	private long lastTime=0;
 	protected GL gl;
+	protected GLU glu;
 	
 	/**
 	 * 
@@ -135,6 +137,19 @@ abstract public class AbstractOpenGLPanel extends GLJPanel implements GLEventLis
 		return fps;
 	}
 
+	final public void computeFPS() {
+		// calculate real FPS and delay time for animation
+		long currentTime = System.nanoTime(); // currentTimeMillis();
+		deltaTime = currentTime - lastTime;
+		lastTime = currentTime;
+		if( currentTime - lastFrameTime >= 1000000000 ) {
+			lastFrameTime = currentTime;
+			fps = frameCount;
+			frameCount = 0;
+		} else
+			frameCount++;
+	}
+
 	/**
 	 * 
 	 */
@@ -152,20 +167,11 @@ abstract public class AbstractOpenGLPanel extends GLJPanel implements GLEventLis
 	 */
 	public void display( GLAutoDrawable drawable ) {
 		// calculate real FPS and delay time for animation
-		this.gl = drawable.getGL();
-		long currentTime = System.currentTimeMillis();
-		deltaTime = currentTime - lastTime;
-		lastTime = currentTime;
-		if( currentTime-lastFrameTime >= 1000 ) {
-				lastFrameTime = currentTime;
-				fps = frameCount;
-				frameCount = 0;
-		} else {
-				frameCount++;
-		}
+		gl = drawable.getGL();
+		computeFPS();
 		if( animator.isAnimating() == true )
 			animate();
-		gl.glClear( clear );
+		gl.glClear( clearBits );
 		//this.renderScene( drawable );
 	}
 
@@ -202,11 +208,12 @@ abstract public class AbstractOpenGLPanel extends GLJPanel implements GLEventLis
 	final public void displayChanged( GLAutoDrawable drawable, boolean modeChanged, boolean deviceChanged ) { }
 		
 	public int getClearBits() {
-		return clear;
+		return clearBits;
 	}
-	
+
+	// TODO is this method necessary?
 	public void setClearBits( int clear ) {
-		this.clear = clear;
+		this.clearBits = clear;
 	}
 
 	public void useListener() {
