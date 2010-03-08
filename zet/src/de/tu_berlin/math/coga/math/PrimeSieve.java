@@ -222,24 +222,24 @@ public class PrimeSieve {
 //			p.compute();
 //			end = System.nanoTime();
 //			System.out.print( ";" + (end - start) );
-//
-			System.out.print( ";optimiertes PrimeSieve LowMem" );
-			System.gc();
-			p = new PrimeSieve( n );
-			start = System.nanoTime();
-			p.computeLowMem();
-			end = System.nanoTime();
-			System.out.print( ";" + (end - start) );
-//
-//			System.out.print( ";OptAlgo3" );
-//			p = new PrimeSieve( n );
+////
+//			System.out.print( ";optimiertes PrimeSieve LowMem" );
 //			System.gc();
+//			p = new PrimeSieve( n );
 //			start = System.nanoTime();
-//			p.computeADW3();
+//			p.computeLowMem();
 //			end = System.nanoTime();
 //			System.out.print( ";" + (end - start) );
 //
-//			System.out.print( ";OptAlgo3Half" );
+			System.out.print( ";OptAlgo3" );
+			p = new PrimeSieve( n );
+			System.gc();
+			start = System.nanoTime();
+			p.computeADW3();
+			end = System.nanoTime();
+			System.out.print( ";" + (end - start) );
+
+			//			System.out.print( ";OptAlgo3Half" );
 //			p = new PrimeSieve( n );
 //			System.gc();
 //			start = System.nanoTime();

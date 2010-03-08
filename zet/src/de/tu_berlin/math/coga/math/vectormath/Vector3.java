@@ -21,7 +21,6 @@
 
 package de.tu_berlin.math.coga.math.vectormath;
 
-import ds.z.PlanPoint;
 import java.text.NumberFormat;
 import java.text.ParseException;
 import de.tu_berlin.math.coga.common.localization.Localization;

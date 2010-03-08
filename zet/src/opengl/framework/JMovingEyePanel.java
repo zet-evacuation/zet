@@ -72,7 +72,7 @@ public class JMovingEyePanel extends JOpenGLCanvas {
 	@Override
 	public void updateViewport( GLAutoDrawable drawable, int x, int y, int width, int height ) {
 		super.updateViewport( drawable, x, y, width, height );	// calculate viewport
-		GL gl = drawable.getGL();
+		gl = drawable.getGL();
 		GLU glu = new GLU();
 
 		if( height <= 0 ) // avoid a divide by zero error!

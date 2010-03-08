@@ -529,9 +529,9 @@ public class JEditor extends JFrame implements Localized, EventListener<Progress
 		visualizationView = new JVisualizationView( new GLCapabilities() );
 		visualizationView.setFloorSelectorEnabled( !PropertyContainer.getInstance().getAsBoolean( "settings.gui.visualization.floors" ) );
 		if( PropertyContainer.getInstance().getAsBoolean( "settings.gui.visualization.isometric" ) ) {
-			visualizationView.getGLContainer().setPvm( AbstractVisualization.ParallelViewMode.Isometric );
+			visualizationView.getGLContainer().setParallelViewMode( AbstractVisualization.ParallelViewMode.Isometric );
 		} else {
-			visualizationView.getGLContainer().setPvm( AbstractVisualization.ParallelViewMode.Orthogonal );
+			visualizationView.getGLContainer().setParallelViewMode( AbstractVisualization.ParallelViewMode.Orthogonal );
 		}
 		visualizationView.getGLContainer().setView( !PropertyContainer.getInstance().getAsBoolean( "settings.gui.visualization.2d" ) );
 					
@@ -1933,10 +1933,10 @@ public class JEditor extends JFrame implements Localized, EventListener<Progress
 			} else if( e.getActionCommand().equals( "2dSwitch" ) ) {
 				btn2dSwitch.setSelected( !btn2dSwitch.isSelected() );
 				PropertyContainer.getInstance().set( "settings.gui.visualization.isometric", btn2dSwitch.isSelected() );
-				if( visualizationView.getGLContainer().getPvm() == AbstractVisualization.ParallelViewMode.Orthogonal )
-					visualizationView.getGLContainer().setPvm( AbstractVisualization.ParallelViewMode.Isometric );
+				if( visualizationView.getGLContainer().getParallelViewMode() == AbstractVisualization.ParallelViewMode.Orthogonal )
+					visualizationView.getGLContainer().setParallelViewMode( AbstractVisualization.ParallelViewMode.Isometric );
 				else
-					visualizationView.getGLContainer().setPvm( AbstractVisualization.ParallelViewMode.Orthogonal );
+					visualizationView.getGLContainer().setParallelViewMode( AbstractVisualization.ParallelViewMode.Orthogonal );
 				visualizationView.getGLContainer().repaint();
 			}
 

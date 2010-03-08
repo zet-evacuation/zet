@@ -156,9 +156,8 @@ public class PrimeSieveTest extends TestCase {
 		}
 
 		private void giveOutPrimes( PrimeSieve p ) {
-			for( int i = 0; i < p.getPrimeCount(); ++i ) {
-				System.out.print( p.getPrime( i+1 ) + " " );
-			}
+			for( int i = 0; i < p.getPrimeCount(); ++i )
+				System.out.print( p.getPrime( i+1 ) + ' ' );
 			System.out.println();
 		}
 

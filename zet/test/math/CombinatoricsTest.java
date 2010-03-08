@@ -42,7 +42,7 @@ public class CombinatoricsTest extends TestCase {
 		int rootN = (int) Math.floor( Math.sqrt( n ) );
 
 		PrimeSieve primeSieve = new PrimeSieve( n );
-		primeSieve.compute();
+		primeSieve.computeLuschny();
 		int[] primes = primeSieve.getPrimes(); //new PrimeSieve(n).GetPrimeCollection(2, n).ToArray();
 
 		for( int i = 0; i < primeSieve.getPrimeCount(); ++i ) {

@@ -27,7 +27,7 @@ import javax.media.opengl.GLCapabilities;
 import opengl.framework.abs.AbstractOpenGLCanvas;
 
 /**
- *
+ * TODO: Demo-Classes, move out of package.
  * @author Jan-Philipp Kappmeier
  */
 public class JOpenGLCanvas extends AbstractOpenGLCanvas {
@@ -85,5 +85,9 @@ public class JOpenGLCanvas extends AbstractOpenGLCanvas {
 	 */
 	@Override
 	public void animate() {
+	}
+
+	@Override
+	public void animate( long delta ) {
 	}
 }
