@@ -24,7 +24,6 @@ package gui.visualization.control.graph;
 import ds.GraphVisualizationResult;
 import ds.graph.Node;
 import gui.visualization.control.AbstractZETVisualizationControl;
-import gui.visualization.control.GLControl;
 import gui.visualization.draw.graph.GLGraphFloor;
 import java.util.Iterator;
 
@@ -35,7 +34,7 @@ import java.util.Iterator;
  * @author Jan-Philipp Kappmeier
  */
 //public class GLGraphFloorControl extends AbstractControl<GLGraphFloor, Integer, GraphVisualizationResult, GLNode, GLNodeControl, GLControl>{
-public class GLGraphFloorControl extends AbstractZETVisualizationControl<GLNodeControl, GLGraphFloor> {
+public class GLGraphFloorControl extends AbstractZETVisualizationControl<GLNodeControl, GLGraphFloor, GLGraphControl> {
 
 	/**
 	 * Creates a new instance of <code>GLGraphFloorControl</code>. Therefore for
@@ -46,7 +45,7 @@ public class GLGraphFloorControl extends AbstractZETVisualizationControl<GLNodeC
 	 * @param floor the number of the floor
 	 * @param glControl the general control object for visualization
 	 */
-	public GLGraphFloorControl( GraphVisualizationResult graphVisResult, Iterable<Node> nodesOnTheFloor, Integer floor, GLControl glControl ) {
+	public GLGraphFloorControl( GraphVisualizationResult graphVisResult, Iterable<Node> nodesOnTheFloor, Integer floor, GLGraphControl glControl ) {
 		super( glControl );
 		Iterator<Node> it = nodesOnTheFloor.iterator();
 		Node supersink = graphVisResult.getSupersink();

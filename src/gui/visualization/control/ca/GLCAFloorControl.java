@@ -26,7 +26,7 @@ import java.util.HashMap;
 import java.util.List;
 
 //public class GLCAFloorControl extends AbstractControl<GLCAFloor, Integer, CAVisualizationResults, GLRoom, GLRoomControl, GLControl> {
-public class GLCAFloorControl extends AbstractZETVisualizationControl<GLRoomControl, GLCAFloor> {
+public class GLCAFloorControl extends AbstractZETVisualizationControl<GLRoomControl, GLCAFloor, GLCAControl> {
 	private HashMap<ds.ca.Room, GLRoomControl> roomControls;
     
   private double xPosition = 0.0d;
@@ -34,7 +34,7 @@ public class GLCAFloorControl extends AbstractZETVisualizationControl<GLRoomCont
 	
 	private int floorNumber = 0;
 	
-	public GLCAFloorControl( CAVisualizationResults caVisResults, Collection<Room> roomsOnTheFloor, int floorID, GLControl glControl ) {
+	public GLCAFloorControl( CAVisualizationResults caVisResults, Collection<Room> roomsOnTheFloor, int floorID, GLCAControl glControl ) {
 		super( glControl );
 		
 		xPosition = caVisResults.get(floorID).x;

@@ -37,7 +37,7 @@ import opengl.drawingutils.GLVector;
  * @author Daniel Plümpe, Jan-Philipp Kappmeier
  */
 //public class GLWallControl extends AbstractControl<GLWall, BuildingResults.Wall, BuildingResults, GLWall, GLWallControl, GLControl> {
-public class GLWallControl extends AbstractZETVisualizationControl<GLWallControl, GLWall> {
+public class GLWallControl extends AbstractZETVisualizationControl<GLWallControl, GLWall, GLBuildingControl> {
 
 	private LinkedList<GLVector> basePoints;
 	Wall controlled;
@@ -47,7 +47,7 @@ public class GLWallControl extends AbstractZETVisualizationControl<GLWallControl
 	 * @param visResult
 	 * @param mainControl
 	 */
-	public GLWallControl( Wall controlled, GLControl mainControl ) {
+	public GLWallControl( Wall controlled, GLBuildingControl mainControl ) {
 		super( mainControl );
 		this.controlled = controlled;
 		basePoints = new LinkedList<GLVector>();

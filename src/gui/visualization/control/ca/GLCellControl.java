@@ -41,7 +41,7 @@ import de.tu_berlin.math.coga.common.util.Direction;
 import gui.visualization.control.AbstractZETVisualizationControl;
 
 //public class GLCellControl extends AbstractControl<GLCell, Cell, CAVisualizationResults, GLCell, GLCellControl, GLControl> implements StepUpdateListener {
-public class GLCellControl extends AbstractZETVisualizationControl<GLCellControl, GLCell> implements StepUpdateListener {
+public class GLCellControl extends AbstractZETVisualizationControl<GLCellControl, GLCell, GLCAControl> implements StepUpdateListener {
 
 	private int floorID;
 	private GLRoomControl glRoomControlObject;  // the corresponding GLRoomControl of this object
@@ -58,7 +58,7 @@ public class GLCellControl extends AbstractZETVisualizationControl<GLCellControl
 		mergedPotential = null;
 	}
 
-	public GLCellControl( CAVisualizationResults caVisResults, Cell cell, GLRoomControl glRoomControl, GLControl glControl ) {
+	public GLCellControl( CAVisualizationResults caVisResults, Cell cell, GLRoomControl glRoomControl, GLCAControl glControl ) {
 		super( glControl );
 		this.controlled = cell;
 		xPosition = caVisResults.get( cell ).x;
@@ -93,7 +93,7 @@ public class GLCellControl extends AbstractZETVisualizationControl<GLCellControl
 	}
 
 	public GLIndividual getDrawIndividual() {
-		return mainControl.getIndividualControl( controlled.getIndividual().getNumber() );
+		return mainControl.getControlledGLIndividual( controlled.getIndividual().getNumber() );
 	}
 
 	public int getFloorID() {
@@ -181,9 +181,13 @@ public class GLCellControl extends AbstractZETVisualizationControl<GLCellControl
 			case STATIC_POTENTIAL:
 				return activePotential.getPotential( controlled );
 			case UTILIZATION:
-				return mainControl.getCAStatistic().getCellStatistic().getCellUtilization( controlled, (int) mainControl.getCaStep() );
+				return 0;
+				// TODO statistic visualization
+				//return mainControl.getCAStatistic().getCellStatistic().getCellUtilization( controlled, (int) mainControl.getCaStep() );
 			case WAITING:
-				return mainControl.getCAStatistic().getCellStatistic().getCellWaitingTime( controlled, (int) mainControl.getCaStep() );
+				return 0;
+				// TODO statistic visualization
+				//return mainControl.getCAStatistic().getCellStatistic().getCellWaitingTime( controlled, (int) mainControl.getCaStep() );
 			default:
 				return 0;
 		}
@@ -202,9 +206,13 @@ public class GLCellControl extends AbstractZETVisualizationControl<GLCellControl
 			case STATIC_POTENTIAL:
 				return activePotential.getMaxPotential();
 			case UTILIZATION:
-				return mainControl.getCAStatistic().getCellStatistic().getMaxUtilization();
+				return 0;
+				// TODO opengL statistic visualization
+				//return mainControl.getCAStatistic().getCellStatistic().getMaxUtilization();
 			case WAITING:
-				return mainControl.getCAStatistic().getCellStatistic().getMaxWaiting();
+				return 0;
+				// TODO opengL statistic visualization
+				//return mainControl.getCAStatistic().getCellStatistic().getMaxWaiting();
 			default:
 				return 0;
 		}

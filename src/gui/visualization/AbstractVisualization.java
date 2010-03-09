@@ -81,19 +81,10 @@ public abstract class AbstractVisualization extends AbstractOpenGLCanvas {
 
 	//	private double zoomFactor = 0.1;
 	private double initZ;
-//	// 3D-Projection vars
+	// 3D-Projection vars
 	double aspect = 1;
 
-	// FPS vars
-	private long lastFrameTime = 0;
-	private long animationStartTime = 0;
-	protected int fps = 0;
-	private int frameCount = 0;
-	private long deltaTime;
-	private long lastTime = 0;
-
-//
-//	// Mouse interaction vars
+	// Mouse interaction vars
 	private final int mouseInvert = PropertyContainer.getInstance().getAsBoolean( "editor.options.visualization.invertMouse" ) ? -1 : 1;
 	private final int scrollInvert = PropertyContainer.getInstance().getAsBoolean( "editor.options.visualization.invertScroll" ) ? 1 : -1;
 	private double initWidth;
