@@ -1,19 +1,20 @@
 /**
- * Class MTRandom
- * Erstellt 04.05.2008, 23:51:13
+ * MTRandom.java
+ * Created 04.05.2008, 23:51:13
  */
-
 package de.tu_berlin.math.coga.rndutils.generators;
 
 /**
- * A wrapper class for the general use of random generators using {@link de.tu_berlin.math.coga.rndutils.generators.original.MTRandom}.
+ * A wrapper class for the general use of random generators using
+ * {@link de.tu_berlin.math.coga.rndutils.generators.original.MTRandom}.
  * @author Jan-Philipp Kappmeier
  */
 public class MTRandom extends de.tu_berlin.math.coga.rndutils.generators.original.MTRandom implements GeneralRandom {
+
 	/**
 	 * Initializes the random generator.
 	 * @see de.tu_berlin.math.coga.rndutils.generators.original.MTRandom
-	 */	
+	 */
 	public MTRandom() {
 		super();
 	}
@@ -48,6 +49,21 @@ public class MTRandom extends de.tu_berlin.math.coga.rndutils.generators.origina
 	 */
 	public MTRandom( int[] buf ) {
 		super( buf );
+	}
+
+	@Override
+	public byte nextByte() {
+		return (byte) (next( 8 ));
+	}
+
+	@Override
+	public char nextChar() {
+		return (char) (next( 16 ));
+	}
+
+	@Override
+	public short nextShort() {
+		return (short) (next( 16 ));
 	}
 
 	public String getName() {
