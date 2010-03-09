@@ -1,10 +1,10 @@
 <project id="1">
   <plan id="2">
-    <evacuationFloor id="4" name="Evakuierungsetage" offsetChanged="false" xOffset="0" yOffset="0" width="0" height="0" normalMode="true" rasterSize="400" defaultRoomSize="4000" roomCount="0">
+    <evacuationFloor id="4" name="Evakuierungsetage" xOffset="0" yOffset="0" width="0" height="0" normalMode="true" rasterSize="400" defaultRoomSize="4000" roomCount="0">
       <rooms id="5"/>
       <edges id="6"/>
     </evacuationFloor>
-    <floor id="7" name="Etage 1" offsetChanged="true" xOffset="0" yOffset="0" width="400" height="400">
+    <floor id="7" name="Etage 1" xOffset="0" yOffset="0" width="400" height="400">
       <rooms id="8">
         <room id="9" closed="true" xOffset="0" yOffset="0" width="400" height="400" changed="true" name="Room 0">
           <edgeClassType>ds.z.RoomEdge</edgeClassType>
@@ -49,6 +49,8 @@
         </room>
       </rooms>
       <edges id="25"/>
+      <maxX__DefiningRoom reference="9"/>
+      <maxY__DefiningRoom reference="9"/>
     </floor>
     <rasterized>false</rasterized>
   </plan>
@@ -69,4 +71,40 @@
     <assignment reference="26"/>
   </assignments>
   <evacuationPlans id="36"/>
+  <vp id="37">
+    <tfs id="38">
+      <opengl.helper.TextureFontStrings id="39">
+        <centered id="40"/>
+        <strings id="41"/>
+        <width>0.0</width>
+        <ortho>true</ortho>
+        <x id="42"/>
+        <y id="43"/>
+        <bold id="44"/>
+        <xoffset>0.0</xoffset>
+      </opengl.helper.TextureFontStrings>
+    </tfs>
+    <cameraPositions id="45">
+      <ds.CameraPosition id="46">
+        <view id="47">
+          <x>0.23248254684589853</x>
+          <y>-0.2598454688025492</y>
+          <z>-0.937247138035016</z>
+        </view>
+        <up id="48">
+          <x>0.6249354986635194</x>
+          <y>-0.6984896708363026</y>
+          <z>0.34866574572959136</z>
+        </up>
+        <pos id="49">
+          <x>-1.0702021628191691</x>
+          <y>1.1535994746448197</y>
+          <z>15.673228421271226</z>
+        </pos>
+        <text>CameraPosition</text>
+      </ds.CameraPosition>
+    </cameraPositions>
+    <currentWidth>142.7195560222861</currentWidth>
+    <currentHeight>130.5889044830461</currentHeight>
+  </vp>
 </project>

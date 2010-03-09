@@ -14,5 +14,13 @@ package opengl.framework.abs;
  * @author Jan-Philipp Kappmeier
  */
 public interface Controlable {
+	
+	void addTime( long timeNanoSeconds );
+
+	/**
+	 * Checks wheather all parts of the simulation are finished, or not.
+	 *  @return true if the simulation is finished, false otherwise
+	 */
+	public boolean isFinished();
 
 }

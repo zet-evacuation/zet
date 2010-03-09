@@ -16,7 +16,9 @@
 package opengl.framework.abs;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Iterator;
+import java.util.List;
 
 /**
  * 
@@ -32,9 +34,7 @@ import java.util.Iterator;
 public abstract class AbstractControl<T extends AbstractControl<?, ?>, U extends AbstractDrawable<?, ?>> implements control, Iterable<T> {
 
 	protected U view;
-	
 	protected ArrayList<T> childControls;
-	
 
 	/**
 	 * No view is set. During construction process, a view must be set! Call
@@ -57,14 +57,14 @@ public abstract class AbstractControl<T extends AbstractControl<?, ?>, U extends
 		return view;
 	}
 
-	public ArrayList<T> getChildControls() {
-		return childControls;
+	public List<T> getChildControls() {
+		return Collections.unmodifiableList( childControls );//childControls;
 	}
-	
-	protected void add(T childControl) {
+
+	protected void add( T childControl ) {
 		childControls.add( childControl );
 	}
-	
+
 	protected void clear() {
 		childControls.clear();
 	}
@@ -72,12 +72,12 @@ public abstract class AbstractControl<T extends AbstractControl<?, ?>, U extends
 	public Iterator<T> iterator() {
 		return childControls.iterator();
 	}
-	
-    public Iterator<T> fullIterator(){
-        return iterator();
-    }
 
-    public int size(){
-        return childControls.size();
-    }
+	public Iterator<T> fullIterator() {
+		return iterator();
+	}
+
+	public int size() {
+		return childControls.size();
+	}
 }
