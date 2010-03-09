@@ -32,9 +32,10 @@ public class RandomUtils {
 	private RandomUtils() {
 		SecureRandom secRandom = new SecureRandom();
 		secRandom.setSeed( SecureRandom.getSeed( 16 ) );
-		seeds.set( 0, secRandom.nextLong() );
+		seeds.add( secRandom.nextLong() );
+//		seeds.set( 0, secRandom.nextLong() );
 		seeds.set( 0, -7566781686001723112l );
-		randomGenerator.set( 0, new MersenneTwister( seeds.get( 0 ) ) );
+		randomGenerator.add( new MersenneTwister( seeds.get( 0 ) ) );
 	}
 
 	/**
@@ -105,8 +106,8 @@ public class RandomUtils {
 		seeds = new ArrayList<Long>( threadCount );
 		randomGenerator = new ArrayList<GeneralRandom>( threadCount );
 		for( int i = 0; i < threadCount; ++i ) {
-			seeds.set( i, System.nanoTime() );
-			randomGenerator.set( i, new MersenneTwister( seeds.get( i ) ) );
+			seeds.add( System.nanoTime() );
+			randomGenerator.add( new MersenneTwister( seeds.get( i ) ) );
 		}
 	}
 
@@ -124,8 +125,8 @@ public class RandomUtils {
 		this.seeds = new ArrayList<Long>( seeds.length );
 		randomGenerator = new ArrayList<GeneralRandom>( seeds.length );
 		for( int i = 0; i < seeds.length; ++i ) {
-			this.seeds.set( i, seeds[i] );
-			randomGenerator.set( i, new MersenneTwister( seeds[i] ) );
+			this.seeds.add( seeds[i] );
+			randomGenerator.add( new MersenneTwister( seeds[i] ) );
 		}
 	}
 

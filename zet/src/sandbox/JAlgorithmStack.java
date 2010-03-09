@@ -69,7 +69,7 @@ public class JAlgorithmStack extends JTable {
                     return String.format("%1$d.%2$03d ms", time / 1000000, (time / 1000) % 1000);
                 default:
                     long ms = (time / 1000000) % 1000;
-                    long s = time / 1000000000;
+                    long s = time * Conversion.nanoSecondsToSec;
                     long min = s / 60;
                     long h = min / 60;
                     if ( s < 60) {

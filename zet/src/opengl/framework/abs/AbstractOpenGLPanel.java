@@ -23,6 +23,7 @@ package opengl.framework.abs;
 
 import com.sun.opengl.util.Animator;
 import com.sun.opengl.util.FPSAnimator;
+import de.tu_berlin.math.coga.math.Conversion;
 import java.awt.Color;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
@@ -142,7 +143,7 @@ abstract public class AbstractOpenGLPanel extends GLJPanel implements GLEventLis
 		long currentTime = System.nanoTime(); // currentTimeMillis();
 		deltaTime = currentTime - lastTime;
 		lastTime = currentTime;
-		if( currentTime - lastFrameTime >= 1000000000 ) {
+		if( currentTime - lastFrameTime >= Conversion.secToNanoSeconds ) {
 			lastFrameTime = currentTime;
 			fps = frameCount;
 			frameCount = 0;

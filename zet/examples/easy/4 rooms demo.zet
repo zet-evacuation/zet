@@ -1013,24 +1013,24 @@
     <cameraPositions id="355">
       <ds.CameraPosition id="356">
         <view id="357">
-          <x>0.7071067811865476</x>
-          <y>-0.7071067811865476</y>
-          <z>0.0</z>
+          <x>0.5796067403795957</x>
+          <y>-0.3313664403345455</y>
+          <z>-0.7444812346369464</z>
         </view>
         <up id="358">
-          <x>0.0</x>
-          <y>0.0</y>
-          <z>1.0</z>
+          <x>0.6463126131922744</x>
+          <y>-0.3695027939747219</y>
+          <z>0.6676433863024841</z>
         </up>
         <pos id="359">
-          <x>50.0</x>
-          <y>-20.0</y>
-          <z>15.0</z>
+          <x>-26.753216561599487</x>
+          <y>32.26109199005954</y>
+          <z>102.40346242042725</z>
         </pos>
         <text>CameraPosition</text>
       </ds.CameraPosition>
     </cameraPositions>
-    <currentWidth>150.0</currentWidth>
-    <currentHeight>150.0</currentHeight>
+    <currentWidth>512.5913423745359</currentWidth>
+    <currentHeight>188.4436620662652</currentHeight>
   </vp>
 </project>
