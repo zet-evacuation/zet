@@ -54,9 +54,9 @@ import opengl.framework.Camera;
  *
  * @author Jan-Philipp Kappmeier
  */
-public class JVisualizationView extends AbstractVisualizationView<Visualization> {
+public class JVisualizationView extends AbstractVisualizationView<ZETVisualization> {
 	/** The visualization panel. */
-	private Visualization visualization;
+	private ZETVisualization visualization;
 	/** A combo box that allows selecting the visible floor (if not all are visible) */
 	private JComboBox floorSelector;
 	/** The model for the floor selection combo box */
@@ -97,7 +97,7 @@ public class JVisualizationView extends AbstractVisualizationView<Visualization>
 	private final int HEAD_INFORMATION_CHOSEN_EXIT = 5;
 	JArrayPanel cameraPanel;
 	public JVisualizationView( GLCapabilities caps ) {
-		super( new VisualizationPanel<Visualization>( new Visualization( caps ) ) );
+		super( new VisualizationPanel<ZETVisualization>( new ZETVisualization( caps ) ) );
 		visualization = getGLContainer();
 		setCamera( visualization.getCamera() );
 

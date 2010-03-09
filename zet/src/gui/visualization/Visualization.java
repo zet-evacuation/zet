@@ -15,23 +15,18 @@
  */
 
 /**
- * Class Visualization
+ * Visualization.java
  * Created 20.05.2008, 23:50:54
  */
 package gui.visualization;
 
 import de.tu_berlin.math.coga.common.localization.Localization;
-import de.tu_berlin.math.coga.common.util.Formatter;
 import de.tu_berlin.math.coga.math.vectormath.Vector3;
 import ds.PropertyContainer;
-import event.EventListener;
 import event.EventServer;
 import event.MessageEvent;
 import event.MessageEvent.MessageType;
-import event.OptionsChangedEvent;
 import gui.JEditor;
-import gui.ZETProperties;
-import gui.visualization.control.GLControl;
 import gui.visualization.util.VisualizationConstants;
 import io.movie.MovieManager;
 import java.awt.Color;
@@ -49,6 +44,7 @@ import javax.media.opengl.GLCapabilities;
 import javax.media.opengl.glu.GLUquadric;
 import java.io.PrintStream;
 import opengl.drawingutils.GLColor;
+import opengl.framework.abs.DrawableControlable;
 import opengl.helper.Frustum;
 import opengl.helper.ProjectionHelper;
 import opengl.helper.Texture;
@@ -61,23 +57,23 @@ import opengl.helper.TextureManager;
  * the canvas, sets up light, textures and other stuff and draws the scene.
  * @author Jan-Philipp Kappmeier
  */
-public class Visualization extends AbstractVisualization implements EventListener<OptionsChangedEvent> {
+public class Visualization<U extends DrawableControlable> extends AbstractVisualization {
 	/** The localization class. */
-	private Localization loc = Localization.getInstance();
-	private static final int fontSize = 16;
+	protected Localization loc = Localization.getInstance();
+	protected static final int fontSize = 16;
 	private TextureManager texMan;
 	/** The {@link TextureFont} used to display informations in the screen. */
-	private TextureFont font;
+	protected TextureFont font;
 	/** The {@link TextureFont} used to display bold text in the intro. */
 	private TextureFont fontBold;
 	/** The texture containing the font. */
-	private Texture fontTex;
+	protected Texture fontTex;
 	/** The texture containing the logo. */
 	private Texture logoTex;
 	/** The texture for the logo mask (used for blending). */
 	private Texture maskTex;
 	/** The control object of the graphics data structure (in MVC pattern). */
-	private GLControl control = null;
+	protected U control = null;
 	/** The {@code OpenGL} context. */
 	private GLAutoDrawable drawable;
 	/** Indicates if mouse movement in 2d-view rotates or moves the building. */
@@ -86,10 +82,6 @@ public class Visualization extends AbstractVisualization implements EventListene
 	private boolean recording = false;
 	/** If a movie is captured describes the framerate of the movie */
 	private int movieFrameRate = 24;
-	/** The minimal number of frames that needs to be captured in movie rendering mode for the cellular automaton */
-	private int minimalFrameCountCellularAutomaton;
-	/** The minimal number of frames that needs to be captured in movie rendering mode for the graph */
-	private int minimalFrameCountGraph;
 	/** Set to true during drawing if the frame contains some valid information. False at the end of playback. Only valid if in {@code movieRecording} mode.*/
 	private boolean frameUsed;
 	/** The MovieManager object*/
@@ -109,10 +101,8 @@ public class Visualization extends AbstractVisualization implements EventListene
 	/** The intro pages that are shown. */
 	ArrayList<TextureFontStrings> texts = new ArrayList<TextureFontStrings>();
 	// Status-Variablen die angezeigte Elemente steuern
-	private boolean showEye = ZETProperties.isShowEye();
-	private boolean showFPS = ZETProperties.isShowFPS();
-	private boolean showTimestepGraph = ZETProperties.isShowTimestepGraph();
-	private boolean showTimestepCellularAutomaton = ZETProperties.isShowTimestepCellularAutomaton();
+	protected boolean showEye = true;
+	protected boolean showFPS = true;
 
 	/**
 	 * Creates a new instance of the {@code Visualization} panel with given 
@@ -124,7 +114,6 @@ public class Visualization extends AbstractVisualization implements EventListene
 //		camera.setPos( new Vector3( 0, 0, 100 ) );
 //		camera.setUp( new Vector3( 0, 0, 1 ) );
 //		camera.setView( new Vector3( 1, -1, 0 ) );
-		//JEditor.getInstance().getVisualizationView().setCamera( camera );
 		noRotate = !PropertyContainer.getInstance().getAsBoolean( "editor.options.visualization.allowRotateIn2D" );
 		movieManager = new MovieManager();
 
@@ -138,9 +127,7 @@ public class Visualization extends AbstractVisualization implements EventListene
 		else
 			this.setParallelViewMode( ParallelViewMode.Orthogonal );
 
-		EventServer.getInstance().registerListener( this, OptionsChangedEvent.class );
 	}
-
 
 	/**
 	 * Returns the set of texts that is shown as the intro.
@@ -168,13 +155,8 @@ public class Visualization extends AbstractVisualization implements EventListene
 	public void display( GLAutoDrawable drawable ) {
 		// TODO: richtig machen mit dem update :D
 		// Status-Variablen die angezeigte Elemente steuern
-		showEye = PropertyContainer.getInstance().getAsBoolean( "options.visualization.elements.eye" );
-		showFPS = PropertyContainer.getInstance().getAsBoolean( "options.visualization.elements.fps" );
-		showTimestepGraph = PropertyContainer.getInstance().getAsBoolean( "options.visualization.elements.timestepGraph" );
-		showTimestepCellularAutomaton = PropertyContainer.getInstance().getAsBoolean( "options.visualization.elements.timestepCA" );
 
 		this.drawable = drawable;
-		computeFPS();
 		if( isAnimating() == true && recording == false )
 			animate();
 
@@ -224,6 +206,7 @@ public class Visualization extends AbstractVisualization implements EventListene
 	 */
 	@Override
 	final public void animate() {
+		computeFPS();
 		control.addTime( getDeltaTime() );
 	}
 
@@ -394,11 +377,13 @@ public class Visualization extends AbstractVisualization implements EventListene
 		drawFPS();
 	}
 
+	private int minimalFrameCount = 0;
+
 	/**
 	 * Draws the current framerate on the lower left edge of the screen and
 	 * the current time of the cellular automaton and graph, if used.
 	 */
-	final private void drawFPS() {
+	protected void drawFPS() {
 		ProjectionHelper.setPrintScreenProjection( gl, viewportWidth, viewportHeight );
 		GLColor.white.draw( gl );
 		gl.glEnable( GL.GL_BLEND );
@@ -406,45 +391,17 @@ public class Visualization extends AbstractVisualization implements EventListene
 		gl.glEnable( gl.GL_TEXTURE_2D );
 		fontTex.bind();
 		if( showFPS )
-			font.print( 0, 0, Integer.toString( this.fps ) + " FPS" );
+			font.print( 0, 0, Integer.toString( getFPS() ) + " FPS" );
 
-		// TODO gehört hier nicht rein!
-		int row = 1;
-		if( control.hasCellularAutomaton() ) {
-			if( control.isCaFinshed() ) {
-				minimalFrameCountCellularAutomaton--;
-				if( showTimestepCellularAutomaton ) {
-					font.print( 0, this.getHeight() - (row++) * fontSize, loc.getString( "gui.visualization.fps.simulationFinished" ) );
-					font.print( 0, this.getHeight() - (row++) * fontSize, loc.getString( "gui.visualization.fps.simulationNeeded" ) + " " + Formatter.secToMin( control.getCaStep() * control.getCaSecondsPerStep() ) );
-				}
-			} else {
-				minimalFrameCountCellularAutomaton = 2;
-				if( showTimestepCellularAutomaton ) {
-					font.print( 0, this.getHeight() - (row++) * fontSize, loc.getString( "gui.visualization.fps.simulationStep" ) + " " + loc.getFloatConverter().format( control.getCaStep() ) );
-					font.print( 0, this.getHeight() - (row++) * fontSize, loc.getString( "gui.visualization.fps.simulationTime" ) + " " + Formatter.secToMin( control.getCaStep() * control.getCaSecondsPerStep() ) );
-				}
-			}
-			row++;
-		}
-		if( control.hasGraph() ) {
-			if( control.isGraphFinished() ) {
-				minimalFrameCountGraph--;
-				if( showTimestepGraph ) {
-					font.print( 0, this.getHeight() - (row++) * fontSize, loc.getString( "gui.visualization.fps.graphFinished" ) );
-					font.print( 0, this.getHeight() - (row++) * fontSize, loc.getString( "gui.visualization.fps.graphNeeded" ) + " " + Formatter.secToMin( control.getGraphStep() * control.getGraphSecondsPerStep() ) );
-				}
-			} else {
-				minimalFrameCountGraph = 2;
-				if( showTimestepGraph ) {
-					font.print( 0, this.getHeight() - (row++) * fontSize, loc.getString( "gui.visualization.fps.graphStep" ) + " " + loc.getFloatConverter().format( control.getGraphStep() ) );
-					font.print( 0, this.getHeight() - (row++) * fontSize, loc.getString( "gui.visualization.fps.graphTime" ) + " " + Formatter.secToMin( control.getGraphStep() * control.getGraphSecondsPerStep() ) );
-				}
-			}
-			row++;
-		}
+		if( control.isFinished() )
+			minimalFrameCount--;
+		else
+			minimalFrameCount = 2;
+
 		if( recording ) {
-			boolean frameUsedOld = frameUsed;
-			frameUsed = Math.max( minimalFrameCountCellularAutomaton, minimalFrameCountGraph ) >= 1;
+			final boolean frameUsedOld = frameUsed;
+			//frameUsed = Math.max( minimalFrameCountCellularAutomaton, minimalFrameCountGraph ) >= 1;
+			frameUsed = minimalFrameCount >= 1;
 			if( frameUsedOld != frameUsed ) {
 				// The movie is finished completely
 				this.repaint();
@@ -454,7 +411,7 @@ public class Visualization extends AbstractVisualization implements EventListene
 				createInformationFile();
 			}
 		}
-		//font.print( 0, this.getHeight() - (row++)*fontSize, "Zeit: " + secToMin( getTimeSinceStart()/1000000000 ) );
+		//font.print( 0, this.getHeight() - (row++)*fontSize, "Zeit: " + secToMin( getTimeSinceStart()/Conversion.secToNanoSeconds ) );
 		gl.glDisable( GL.GL_TEXTURE_2D );
 		gl.glDisable( GL.GL_BLEND );
 		ProjectionHelper.resetProjection( gl );
@@ -464,7 +421,7 @@ public class Visualization extends AbstractVisualization implements EventListene
 	 * Sets the current control object.
 	 * @param control the control object
 	 */
-	public final void setControl( GLControl control ) {
+	public final void setControl( U control ) {
 		this.control = control;
 	}
 
@@ -472,7 +429,7 @@ public class Visualization extends AbstractVisualization implements EventListene
 	 * Returns the current control object.
 	 * @return the control object
 	 */
-	public final GLControl getControl() {
+	public final U getControl() {
 		return control;
 	}
 
@@ -614,22 +571,8 @@ public class Visualization extends AbstractVisualization implements EventListene
 //			glTexParameterf( GL_TEXTURE_2D, GL_TEXTURE_MAX_ANISOTROPY_EXT, maxAni );
 //		}
 
-		if( control == null )
-			control = new GLControl();
-	}
-
-	/**
-	 * Called if an {@link OptionsChangedEvent} is send to the visualization class.
-	 * Updates the variables indicating the visible elements in the visualization.
-	 * @param event the event
-	 */
-	public void handleEvent( OptionsChangedEvent event ) {
-		showEye = ZETProperties.isShowEye();
-		showFPS = ZETProperties.isShowFPS();
-		showTimestepGraph = ZETProperties.isShowTimestepGraph();
-		showTimestepCellularAutomaton = ZETProperties.isShowTimestepCellularAutomaton();
-		repaint();
-		//update();
+//		if( control == null )
+//			control = new GLControl();
 	}
 
 	public void update() {

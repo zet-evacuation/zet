@@ -27,7 +27,7 @@ import gui.visualization.util.FlowCalculator;
 import java.util.ArrayList;
 
 //public class GLNodeControl extends AbstractControl<GLNode, Node, GraphVisualizationResult, GLEdge, GLEdgeControl, GLControl> {
-public class GLNodeControl extends AbstractZETVisualizationControl<GLEdgeControl, GLNode> {
+public class GLNodeControl extends AbstractZETVisualizationControl<GLEdgeControl, GLNode, GLGraphControl> {
 	private double xPosition;
 	private double yPosition;
 	private double zPosition = VisualizationOptionManager.getGraphHeight();
@@ -48,7 +48,7 @@ public class GLNodeControl extends AbstractZETVisualizationControl<GLEdgeControl
 	private int floor;
 	private boolean gridVisible = true;
 
-	public GLNodeControl( GraphVisualizationResult graphVisResult, Node node, GLControl glControl ) {
+	public GLNodeControl( GraphVisualizationResult graphVisResult, Node node, GLGraphControl glControl ) {
 		super( glControl );
 
 		nwX = graphVisResult.getNodeRectangles().get( node ).get_nw_point().getX();

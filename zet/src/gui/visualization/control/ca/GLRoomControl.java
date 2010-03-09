@@ -18,14 +18,13 @@ package gui.visualization.control.ca;
 import ds.ca.Cell;
 import ds.ca.Room;
 import gui.visualization.control.AbstractZETVisualizationControl;
-import gui.visualization.control.GLControl;
 import gui.visualization.control.GLControl.CellInformationDisplay;
 import gui.visualization.draw.ca.GLRoom;
 import io.visualization.CAVisualizationResults;
 import java.util.HashMap;
 
 //public class GLRoomControl extends AbstractControl<GLRoom, Room, CAVisualizationResults, GLCell, GLCellControl, GLControl> {
-public class GLRoomControl extends AbstractZETVisualizationControl<GLCellControl, GLRoom> {
+public class GLRoomControl extends AbstractZETVisualizationControl<GLCellControl, GLRoom, GLCAControl> {
 
 	private HashMap<ds.ca.Cell, GLCellControl> cellControls;
 	private GLCAFloorControl glCAFloorControlObject;  // the corresponding GLCAFloorControl of this object
@@ -33,7 +32,7 @@ public class GLRoomControl extends AbstractZETVisualizationControl<GLCellControl
 	private double yPosition;
 	Room controlled;
 
-	public GLRoomControl( CAVisualizationResults caVisResults, Room room, GLCAFloorControl glCAFloorControl, GLControl glControl ) {
+	public GLRoomControl( CAVisualizationResults caVisResults, Room room, GLCAFloorControl glCAFloorControl, GLCAControl glControl ) {
 		super( glControl );
 		controlled = room;
 		xPosition = caVisResults.get( room ).x;

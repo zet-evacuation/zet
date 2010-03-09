@@ -22,7 +22,6 @@ import ds.graph.IdentifiableIntegerMapping;
 import ds.graph.Node;
 import ds.graph.NodeRectangle;
 import gui.visualization.VisualizationOptionManager;
-import gui.visualization.control.GLControl;
 import gui.visualization.draw.graph.GLEdge;
 import opengl.helper.Frustum;
 import java.util.ArrayList;
@@ -36,7 +35,7 @@ import gui.visualization.control.AbstractZETVisualizationControl;
  * @author Jan-Philipp Kappmeier
  */
 //public class GLEdgeControl extends AbstractControl<GLEdge, Edge, GraphVisualizationResult, GLEdge, GLEdgeControl, GLControl> {
-public class GLEdgeControl extends AbstractZETVisualizationControl<GLEdgeControl, GLEdge> {
+public class GLEdgeControl extends AbstractZETVisualizationControl<GLEdgeControl, GLEdge, GLGraphControl> {
 	private static final double Z_TO_OPENGL_SCALING = 0.1d;
 	private double time;
 	/** Decides wheather this edge is the one from the node with lower id to the one wiith higher id of the two edges between two nodes. */
@@ -54,7 +53,7 @@ public class GLEdgeControl extends AbstractZETVisualizationControl<GLEdgeControl
 	 * @param edge the edge for this control object.
 	 * @param glControl the main control class.
 	 */
-	public GLEdgeControl( GraphVisualizationResult graphVisResult, Edge edge, GLControl glControl ) {
+	public GLEdgeControl( GraphVisualizationResult graphVisResult, Edge edge, GLGraphControl glControl ) {
 		super( glControl );
 		maxFlowRate = graphVisResult.getMaxFlowRate();
 		this.graphVisResult = graphVisResult;

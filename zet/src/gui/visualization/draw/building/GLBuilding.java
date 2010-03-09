@@ -21,9 +21,7 @@
 package gui.visualization.draw.building;
 
 import gui.visualization.control.building.GLBuildingControl;
-import gui.visualization.control.building.GLWallControl;
 import javax.media.opengl.GL;
-import javax.media.opengl.GLAutoDrawable;
 import opengl.framework.abs.AbstractDrawable;
 
 /**

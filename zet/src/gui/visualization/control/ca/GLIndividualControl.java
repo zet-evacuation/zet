@@ -13,10 +13,12 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
+
 /**
  * Class GLIndividualControl
  * Erstellt 10.06.2008, 22:22:41
  */
+
 package gui.visualization.control.ca;
 
 import ds.ca.Individual;
@@ -36,7 +38,7 @@ import java.util.ArrayList;
  * @author Jan-Philipp Kappmeier
  */
 //public class GLIndividualControl extends AbstractControl<GLIndividual, Individual, CAVisualizationResults, GLIndividual, GLIndividualControl, GLControl> implements StepUpdateListener {
-public class GLIndividualControl extends AbstractZETVisualizationControl<GLIndividualControl, GLIndividual> implements StepUpdateListener {
+public class GLIndividualControl extends AbstractZETVisualizationControl<GLIndividualControl, GLIndividual, GLCAControl> implements StepUpdateListener {
 
 	/** The history data structure that stores information about the positions of the individual at given times */
 	private ArrayList<VisHistoryTriple<Double, GLCellControl, GLCellControl>> path;
@@ -68,7 +70,7 @@ public class GLIndividualControl extends AbstractZETVisualizationControl<GLIndiv
 	 * @param individual the controlled individual
 	 * @param glControl the general control class
 	 */
-	public GLIndividualControl( Individual individual, GLControl glControl ) {
+	public GLIndividualControl( Individual individual, GLCAControl glControl ) {
 		super( glControl );
 		this.setView( new GLIndividual( this ) );
 		this.controlled = individual;
@@ -176,8 +178,10 @@ public class GLIndividualControl extends AbstractZETVisualizationControl<GLIndiv
 				headInformationValue = controlled.isAlarmed() ? 0 : 1;
 				break;
 			case CHOSEN_EXIT:
-				final int potentials = mainControl.getPotentialManager().getStaticPotentials().size();
-				headInformationValue = (controlled.getStaticPotential().getID() % potentials) / (double) potentials;
+				headInformationValue = 0;
+				// TODO visualization statistic
+				//final int potentials = mainControl.getPotentialManager().getStaticPotentials().size();
+				//headInformationValue = (controlled.getStaticPotential().getID() % potentials) / (double) potentials;
 				break;
 		}
 	}
