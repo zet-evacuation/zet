@@ -69,7 +69,7 @@ public class GLEdgeControl extends AbstractZETVisualizationControl<GLEdgeControl
 		int maxT = flowOverTime.get( edge ).getLastTimeWithNonZeroValue(); // maximaler Zeithorizont
 		int transit = transitTimes.get( edge );
 		if( maxT > 0 )
-			glControl.setGraphMaxTime( maxT + transit );
+			glControl.setMaxTime( maxT + transit );
 		if( maxT > 0 ) {
 			flowOnEdge = new ArrayList<Integer>( maxT + transit + transit );
 			for( int i = 0; i < transit; i++ )
@@ -274,7 +274,7 @@ public class GLEdgeControl extends AbstractZETVisualizationControl<GLEdgeControl
 	 * of the graph step in the main control class.
 	 */
 	public void stepUpdate() {
-		time = mainControl.getGraphStep();
+		time = mainControl.getStep();
 		deltaStep = time - Math.floor( time );
 	}
 }

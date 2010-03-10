@@ -93,7 +93,7 @@ public class GLIndividualControl extends AbstractZETVisualizationControl<GLIndiv
 	 * automaton is reached.
 	 */
 	public void stepUpdate() {
-		time = mainControl.getCaStep();
+		time = mainControl.getStep();
 		getView().update();
 		if( path.size() <= 0 )
 			return;

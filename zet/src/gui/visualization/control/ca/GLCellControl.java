@@ -183,11 +183,11 @@ public class GLCellControl extends AbstractZETVisualizationControl<GLCellControl
 			case UTILIZATION:
 				return 0;
 				// TODO statistic visualization
-				//return mainControl.getCAStatistic().getCellStatistic().getCellUtilization( controlled, (int) mainControl.getCaStep() );
+				//return mainControl.getCAStatistic().getCellStatistic().getCellUtilization( controlled, (int) mainControl.getStep() );
 			case WAITING:
 				return 0;
 				// TODO statistic visualization
-				//return mainControl.getCAStatistic().getCellStatistic().getCellWaitingTime( controlled, (int) mainControl.getCaStep() );
+				//return mainControl.getCAStatistic().getCellStatistic().getCellWaitingTime( controlled, (int) mainControl.getStep() );
 			default:
 				return 0;
 		}

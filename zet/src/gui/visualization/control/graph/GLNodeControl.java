@@ -143,7 +143,7 @@ public class GLNodeControl extends AbstractZETVisualizationControl<GLEdgeControl
 //	}
 
 	public void stepUpdate( int step ) {
-		time = mainControl.getGraphStep();
+		time = mainControl.getStep();
 		graphHistory = flowCalculator.getCalculatedFlow();
 
 		if( graphHistory.size() <= 0 )
