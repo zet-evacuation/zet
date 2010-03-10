@@ -207,8 +207,10 @@ public class GLControl implements DrawableControlable {
 		if( hasCellularAutomaton && PropertyContainer.getInstance().getAsBoolean( "options.visualization.flow.equalArrival" ) )
 			graphControl.setNanoSecondsPerStep( graphControl.getStepCount() == 0 ? 0 : (caControl.getNanoSecondsPerStep() * caControl.getStepCount()) / graphControl.getStepCount() );
 		else {
-			if( ca == null )
+			if( ca == null ) {
 				graphControl.setSecondsPerStep( 1 );
+				return;
+			}
 			double maxSpeed = ca.getAbsoluteMaxSpeed();
 			double average = 0;
 			for( GLIndividual ind : this.getIndividuals() )
@@ -289,6 +291,20 @@ public class GLControl implements DrawableControlable {
 			caControl.addTime( timeNanoSeconds );
 		if( hasGraph && !graphControl.isFinished() )
 			graphControl.addTime( timeNanoSeconds );
+	}
+
+	public void setTime( long timeNanoSeconds ) {
+		if( hasCellularAutomaton )
+			caControl.setTime( timeNanoSeconds );
+		if( hasGraph )
+			graphControl.setTime( timeNanoSeconds );
+	}
+
+	public void resetTime() {
+		if( hasCellularAutomaton )
+			caControl.resetTime();
+		if( hasGraph )
+			graphControl.resetTime();
 	}
 
 	/**

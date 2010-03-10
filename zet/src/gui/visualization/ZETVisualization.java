@@ -14,6 +14,7 @@ import ds.PropertyContainer;
 import event.EventListener;
 import event.EventServer;
 import event.OptionsChangedEvent;
+import event.VisualizationEvent;
 import gui.ZETProperties;
 import gui.visualization.control.GLControl;
 import javax.media.opengl.GL;
@@ -67,6 +68,8 @@ public class ZETVisualization extends Visualization<GLControl> implements EventL
 		gl.glEnable( gl.GL_TEXTURE_2D );
 		fontTex.bind();
 
+		boolean finished = true;
+
 		// TODO gehört hier nicht rein!
 		int row = 1;
 		if( control.hasCellularAutomaton() ) {
@@ -78,6 +81,7 @@ public class ZETVisualization extends Visualization<GLControl> implements EventL
 					font.print( 0, this.getHeight() - (row++) * fontSize, loc.getString( "gui.visualization.fps.simulationNeeded" ) + " " + Formatter.secToMin( control.getCaStep() * control.getCaSecondsPerStep() ) );
 				}
 			} else {
+				finished = false;
 				minimalFrameCountCellularAutomaton = 2;
 				if( showTimestepCellularAutomaton ) {
 					font.print( 0, this.getHeight() - (row++) * fontSize, loc.getString( "gui.visualization.fps.simulationStep" ) + " " + loc.getFloatConverter().format( control.getCaStep() ) );
@@ -94,6 +98,7 @@ public class ZETVisualization extends Visualization<GLControl> implements EventL
 					font.print( 0, this.getHeight() - (row++) * fontSize, loc.getString( "gui.visualization.fps.graphNeeded" ) + " " + Formatter.secToMin( control.getGraphStep() * control.getGraphSecondsPerStep() ) );
 				}
 			} else {
+				finished = false;
 				minimalFrameCountGraph = 2;
 				if( showTimestepGraph ) {
 					font.print( 0, this.getHeight() - (row++) * fontSize, loc.getString( "gui.visualization.fps.graphStep" ) + " " + loc.getFloatConverter().format( control.getGraphStep() ) );
@@ -102,6 +107,9 @@ public class ZETVisualization extends Visualization<GLControl> implements EventL
 			}
 			row++;
 		}
+
+		if( finished && isAnimating() )
+			EventServer.getInstance().dispatchEvent( new VisualizationEvent( this ) );
 
 		//font.print( 0, this.getHeight() - (row++)*fontSize, "Zeit: " + secToMin( getTimeSinceStart()/Conversion.secToNanoSeconds ) );
 		gl.glDisable( GL.GL_TEXTURE_2D );

@@ -63,7 +63,6 @@ public class GLCAControl extends AbstractZETVisualizationControl<GLCAFloorContro
 	private double secondsPerStep;
 	private long nanoSecondsPerStep;
 	private long step;
-	private long timeSinceLastStep = 0;
 	private long time;
 	/** The status of the simulation, true if all is finished */
 	private boolean finished = false;
@@ -213,6 +212,7 @@ public class GLCAControl extends AbstractZETVisualizationControl<GLCAFloorContro
 				individuals.get( swap.getIndividualNumber1() - 1 ).addHistoryTriple( cell2, cell1, startTime2, arrivalTime2 );
 			}
 			Vector<DieAction> deaths = recording.filterActions( DieAction.class );
+			// Individuen, die schon von anfang an tot sind:
 			for( DieAction death : deaths ) {
 				GLCellControl cell = getCellControl( death.placeOfDeath() );
 				individuals.get( death.getIndividualNumber() - 1 ).addHistoryTriple( cell, cell, 0, 0 );
@@ -258,34 +258,68 @@ public class GLCAControl extends AbstractZETVisualizationControl<GLCAFloorContro
 		AlgorithmTask.getInstance().setProgress( progress, "Erzeuge Individuen-Bewegungen...", "Recording-Schritt " + recordingDone + " von " + recordingCount + " abgearbeitet." );
 	}
 
+	double speedFactor = 1;
+
 	@Override
 	public void addTime( long timeNanoSeconds ) {
-		timeSinceLastStep += timeNanoSeconds;
+		time += timeNanoSeconds * speedFactor;
+		realStep = ((double) time / (double) nanoSecondsPerStep);
+		final long stepOld = step;
+		step = (long) realStep;
+		long elapsedSteps = stepOld - step;
+//		for( int i = 1; i <= elapsedSteps; i++ ) {
+//			ca.nextTimeStep();
+//			if( visRecording.hasNext() )
+//				try {
+//					Vector<Action> actions = visRecording.nextActions();
+//					for( Action action : actions )
+//						action.execute( ca );
+//				} catch( InconsistentPlaybackStateException ex ) {
+//					ex.printStackTrace();
+//				}
+//		}
 
-		if( timeSinceLastStep >= nanoSecondsPerStep ) {
-			long elapsedSteps = (timeSinceLastStep / nanoSecondsPerStep);
-			step += elapsedSteps;
-			for( int i = 1; i <= elapsedSteps; i++ ) {
-				ca.nextTimeStep();
-				if( visRecording.hasNext() )
-					try {
-						Vector<Action> actions = visRecording.nextActions();
-						for( Action action : actions )
-							action.execute( ca );
-					} catch( InconsistentPlaybackStateException ex ) {
-						ex.printStackTrace();
-					}
-			}
-			timeSinceLastStep = timeSinceLastStep % nanoSecondsPerStep; //elapsedTime -  step*nanoSecondsPerStep;
+		if( elapsedSteps > 0 )
 			for( GLCAFloorControl floor : this )
 				for( GLRoomControl room : floor )
 					for( GLCellControl cell : room )
 						cell.stepUpdate();
-			}
-		realStep = step + (double) timeSinceLastStep / nanoSecondsPerStep;
-		if( ca.getState() == CellularAutomaton.State.finish )
-			finished = true;
 
+//		if( ca.getState() == CellularAutomaton.State.finish )
+
+//			finished = true;
+			finished = step > recordingCount;
+	}
+
+	@Override
+	public void setTime( long timeNanoSeconds ) {
+		time = timeNanoSeconds;
+		realStep = ((double) time / (double) nanoSecondsPerStep);
+		step = (long) realStep;
+//		for( int i = 1; i <= elapsedSteps; i++ ) {
+//			ca.nextTimeStep();
+//			if( visRecording.hasNext() )
+//				try {
+//					Vector<Action> actions = visRecording.nextActions();
+//					for( Action action : actions )
+//						action.execute( ca );
+//				} catch( InconsistentPlaybackStateException ex ) {
+//					ex.printStackTrace();
+//				}
+//		}
+
+//		if( elapsedSteps > 0 )
+		for( GLCAFloorControl floor : this )
+			for( GLRoomControl room : floor )
+				for( GLCellControl cell : room )
+					cell.stepUpdate();
+
+		finished = step > recordingCount;
+	}
+
+	@Override
+	public void resetTime() {
+		setTime( 0 );
 	}
 
 	@Override
@@ -312,8 +346,9 @@ public class GLCAControl extends AbstractZETVisualizationControl<GLCAFloorContro
 	 * @param speedFactor the speed factor
 	 */
 	public void setSpeedFactor( double speedFactor ) {
-		secondsPerStep = ca.getSecondsPerStep();
-		nanoSecondsPerStep = (long) (Math.round( secondsPerStep * Conversion.secToNanoSeconds ) / speedFactor);
+		//secondsPerStep = ca.getSecondsPerStep();
+		//nanoSecondsPerStep = (long) (Math.round( secondsPerStep * Conversion.secToNanoSeconds ) / speedFactor);
+		this.speedFactor = speedFactor;
 	}
 
 	public long getNanoSecondsPerStep() {

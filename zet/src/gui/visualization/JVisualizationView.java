@@ -13,12 +13,15 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
+
 /**
  * Class JVisualizationView
  * Created 10.06.2008, 11:07:01
  */
+
 package gui.visualization;
 
+import de.tu_berlin.math.coga.common.localization.Localization;
 import ds.PropertyContainer;
 import gui.ZETMain;
 import gui.components.ComboBoxRenderer;
@@ -47,7 +50,6 @@ import javax.swing.JSlider;
 import javax.swing.JTextField;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
-import de.tu_berlin.math.coga.common.localization.Localization;
 import opengl.framework.Camera;
 
 /**

@@ -84,6 +84,7 @@ abstract public class AbstractOpenGLCanvas extends GLCanvas implements GLEventLi
 	 */
 	public void stopAnimation() {
 		animator.stop();
+		fps = 0;
 	}
 
 	/**

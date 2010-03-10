@@ -142,6 +142,7 @@ import ds.z.AssignmentArea;
 import ds.z.EvacuationArea;
 import ds.z.Room;
 import ds.z.ZControl;
+import event.VisualizationEvent;
 import gui.editor.JLogView;
 import zet.util.ConversionTools;
 
@@ -308,6 +309,7 @@ public class JEditor extends JFrame implements Localized, EventListener<Progress
 	private JButton btnVideo;
 	private JButton btnPlayStart;
 	private JButton btnPlay;
+	private JButton btnStop;
 	private Icon playIcon;
 	private Icon pauseIcon;
 	private JButton btnPlayEnd;
@@ -340,6 +342,9 @@ public class JEditor extends JFrame implements Localized, EventListener<Progress
 	private boolean disableUpdate = false;
 	private int currentMode = EDIT_FLOOR;
 	private JAssignment distribution;
+
+	/** Decides wheather the visualization should be restarted if 'play' is pressed. */
+	private boolean restartVisualization = false;
 
 	/**
 	 * Creates a new instance of <code>JEditor</code>.
@@ -866,6 +871,8 @@ public class JEditor extends JFrame implements Localized, EventListener<Progress
 		playIcon = gui.components.framework.Icon.newIcon( IconSet.Play );
 		pauseIcon = gui.components.framework.Icon.newIcon( IconSet.PlayPause );
 		toolBarVisualization.add( btnPlay );
+		btnStop = Button.newButton( IconSet.PlayStop, aclPlay, "stop", loc.getString( "playStop" ) );
+		toolBarVisualization.add( btnStop );
 		btnPlayEnd = Button.newButton( IconSet.PlayEnd, aclPlay, "end", loc.getString( "playToEnd" ) );
 		toolBarVisualization.add( btnPlayEnd );
 		toolBarVisualization.addSeparator();
@@ -1680,9 +1687,14 @@ public class JEditor extends JFrame implements Localized, EventListener<Progress
 	};
 	ActionListener aclPlay = new ActionListener() {
 		public void actionPerformed( ActionEvent e ) {
-			if( e.getActionCommand().equals( "start" ) )
-				ZETMain.sendError( "Not supported yet" );
-			else if( e.getActionCommand().equals( "play" ) )
+			if( e.getActionCommand().equals( "start" ) ) {
+				control.resetTime();
+				visualizationView.getGLContainer().repaint();
+			} else if( e.getActionCommand().equals( "play" ) ) {
+				if( restartVisualization ) {
+					control.resetTime();
+					restartVisualization = false;
+				}
 				if( visualizationView.getGLContainer().isAnimating() ) {
 					btnPlay.setIcon( playIcon );
 					btnPlay.setSelected( false );
@@ -1692,9 +1704,16 @@ public class JEditor extends JFrame implements Localized, EventListener<Progress
 					btnPlay.setSelected( true );
 					visualizationView.getGLContainer().startAnimation();
 				}
-			else if( e.getActionCommand().equals( "end" ) )
-				ZETMain.sendError( "Not supported yet" );
-			else
+			} else if( e.getActionCommand().equals( "stop" ) ) {
+				btnPlay.setIcon( playIcon );
+				btnPlay.setSelected( false );
+				control.resetTime();
+				if( visualizationView.getGLContainer().isAnimating() )
+					visualizationView.getGLContainer().stopAnimation();
+				visualizationView.getGLContainer().repaint();
+			} else if( e.getActionCommand().equals( "end" ) ) {
+				ZETMain.sendError( "Not completeley supported yet" );
+			} else
 				ZETMain.sendError( loc.getString( "gui.UnknownCommand" ) + " '" + e.getActionCommand() + "'. " + loc.getString( "gui.ContactDeveloper" ) );
 		}
 	};
@@ -2487,6 +2506,13 @@ public class JEditor extends JFrame implements Localized, EventListener<Progress
 	 * @param event 
 	 */
 	public void handleEvent( ProgressEvent event ) {
+		if( event instanceof VisualizationEvent ) {
+			this.restartVisualization = true;
+			btnPlay.setIcon( playIcon );
+			visualizationView.getGLContainer().stopAnimation();
+			btnPlay.setSelected( false );
+			return;
+		}
 //		if( stepByStep ) {
 //			if( event.getProcessMessage().progress >= 0 )
 //				progressBar.setValue( event.getProcessMessage().progress );

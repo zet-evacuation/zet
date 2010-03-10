@@ -13,6 +13,7 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
+
 /*
  * IconSet.java
  * Created on 19.12.2007, 00:29:35
@@ -34,6 +35,7 @@ public enum IconSet {
 	PlayEnd( "end.png" ),
 	PlayPause( "pause.png" ),
 	PlayStart( "start.png" ),
+	PlayStop( "stop.png" ),
 	Rasterize( "rasterize.png" ),
 	Run( "run_algorithms.png" ),
 	Save( "save.png" ),
