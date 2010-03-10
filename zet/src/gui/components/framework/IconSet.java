@@ -35,6 +35,7 @@ public enum IconSet {
 	PlayEnd( "end.png" ),
 	PlayPause( "pause.png" ),
 	PlayStart( "start.png" ),
+	PlayLoop( "loop.png" ),
 	PlayStop( "stop.png" ),
 	Rasterize( "rasterize.png" ),
 	Run( "run_algorithms.png" ),
