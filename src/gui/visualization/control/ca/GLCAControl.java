@@ -24,11 +24,6 @@ package gui.visualization.control.ca;
 import batch.tasks.AlgorithmTask;
 import de.tu_berlin.math.coga.common.localization.Localization;
 import de.tu_berlin.math.coga.math.Conversion;
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.Vector;
-
 import ds.ca.CellularAutomaton;
 import ds.ca.Individual;
 import ds.ca.results.Action;
@@ -43,15 +38,17 @@ import static gui.visualization.control.GLControl.CellInformationDisplay;
 import gui.visualization.draw.ca.GLIndividual;
 import io.visualization.CAVisualizationResults;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Collections;
+import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
+import java.util.Vector;
 import opengl.framework.abs.Controlable;
-import util.DebugFlags;
 
 /**
  *  @author Jan-Philipp Kappmeier
  */
-//public class GLCAControl extends AbstractControl<GLCA, CellularAutomaton, CAVisualizationResults, GLCAFloor, GLCAFloorControl, GLControl> {
 public class GLCAControl extends AbstractZETVisualizationControl<GLCAFloorControl, GLCA, GLCAControl> implements Controlable {
 
 	// general control stuff
@@ -61,25 +58,18 @@ public class GLCAControl extends AbstractZETVisualizationControl<GLCAFloorContro
 	CAVisualizationResults visResults;
 	private VisualResultsRecording visRecording;
 	private CellularAutomaton ca;
-
 	// timing stuff
-	private double realStepCA;
-	private double secondsPerStepCA;
-	private long nanoSecondsPerStepCA;
-	private long stepCA;
-	private long timeSinceLastStepCA = 0;
+	private double realStep;
+	private double secondsPerStep;
+	private long nanoSecondsPerStep;
+	private long step;
+	private long timeSinceLastStep = 0;
 	private long time;
 	/** The status of the simulation, true if all is finished */
 	private boolean finished = false;
-
-
 	// ca visualization stuff
 	private int cellCount;
 	private int cellsDone;
-
-	// Individual stuff
-	//private List<GLIndividual> individuals;
-
 	private int recordingCount;
 	private int recordingDone;
 
@@ -96,13 +86,12 @@ public class GLCAControl extends AbstractZETVisualizationControl<GLCAFloorContro
 		recordingCount = caVisResults.getRecording().length();
 		recordingDone = 0;
 
-			allFloorsByID = new HashMap<Integer, GLCAFloorControl>();
+		allFloorsByID = new HashMap<Integer, GLCAFloorControl>();
 		glIndividuals = new ArrayList<GLIndividual>();
 		this.visResults = caVisResults;
 
-		for( int floorID : ca.getFloors().keySet() ) {
+		for( int floorID : ca.getFloors().keySet() )
 			add( new GLCAFloorControl( caVisResults, ca.getRoomsOnFloor( floorID ), floorID, mainControl ) );
-		}
 
 		this.setView( new GLCA( this ) );
 		for( GLCAFloorControl floor : this )
@@ -110,46 +99,30 @@ public class GLCAControl extends AbstractZETVisualizationControl<GLCAFloorContro
 
 		showAllFloors();
 
-		if( DebugFlags.VIS_CA )
-			System.out.println( "Beginne Indivduen-Bewegungen zu konvertieren ..." );
 		convertIndividualMovements();
-		if( DebugFlags.VIS_CA )
-			System.out.println( "Individuen-Bewegungen konvertiert." );
 
 		visRecording = caVisResults.getRecording();
 
 		// Set up timing:
-			secondsPerStepCA = ca.getSecondsPerStep();
-			nanoSecondsPerStepCA = Math.round( secondsPerStepCA * Conversion.secToNanoSeconds );
-			stepCA = 0;
-			caVisResults.getRecording().rewind();
-			for( Action action : caVisResults.getRecording().nextActions() ) {
-				try {
-					action.execute( ca );
-					if( action instanceof MoveAction ) {
-						System.out.println( action );
-					}
-				} catch( InconsistentPlaybackStateException e ) {
-					e.printStackTrace();
-				}
+		secondsPerStep = ca.getSecondsPerStep();
+		nanoSecondsPerStep = Math.round( secondsPerStep * Conversion.secToNanoSeconds );
+		step = 0;
+		caVisResults.getRecording().rewind();
+		for( Action action : caVisResults.getRecording().nextActions() )
+			try {
+				action.execute( ca );
+				if( action instanceof MoveAction )
+					System.out.println( action );
+			} catch( InconsistentPlaybackStateException e ) {
+				e.printStackTrace();
 			}
 
-			// füge alle zellen in die update-liste hinzu
-			//cells = new ArrayList<GLCellControl>();
-			for( GLCAFloorControl floor : this ) {
-				//for( GLRoomControl room : floor ) {
-					//for( GLCellControl cell : room ) {
-						//cells.add( cell );	// TODO use addAll
-					//}
-				//}
-				floor.getView().setIndividuals( getIndividualControls() );
-			}
-
-
+		for( GLCAFloorControl floor : this )
+			floor.getView().setIndividuals( getIndividualControls() );
 	}
 
-	public double getSecondsPerStepCA() {
-		return secondsPerStepCA;
+	public double getSecondsPerStep() {
+		return secondsPerStep;
 	}
 
 	public List<GLIndividual> getIndividuals() {
@@ -162,7 +135,7 @@ public class GLCAControl extends AbstractZETVisualizationControl<GLCAFloorContro
 
 	public void showOnlyFloor( Integer floorID ) {
 		childControls.clear();
-		if( floorID == 0 && allFloorsByID.get( floorID) == null )
+		if( floorID == 0 && allFloorsByID.get( floorID ) == null )
 			childControls.add( allFloorsByID.get( 1 ) );
 		else
 			childControls.add( allFloorsByID.get( floorID ) );
@@ -191,9 +164,8 @@ public class GLCAControl extends AbstractZETVisualizationControl<GLCAFloorContro
 	}
 
 	public void setPotentialDisplay( CellInformationDisplay potentialDisplay ) {
-		for( GLCAFloorControl floorControl : allFloorsByID.values() ) {
+		for( GLCAFloorControl floorControl : allFloorsByID.values() )
 			floorControl.setPotentialDisplay( potentialDisplay );
-		}
 	}
 
 	GLCAFloorControl getFloorControl( Integer floorID ) {
@@ -210,17 +182,16 @@ public class GLCAControl extends AbstractZETVisualizationControl<GLCAFloorContro
 		VisualResultsRecording recording = visResults.getRecording();
 		CellularAutomaton ca = new CellularAutomaton( recording.getInitialConfig() );
 		individuals = new ArrayList<GLIndividualControl>( ca.getIndividuals().size() );
-		for( int k = 0; k < ca.getIndividuals().size(); k++ ) {
+		for( int k = 0; k < ca.getIndividuals().size(); k++ )
 			individuals.add( null );
-		}
 		for( Individual individual : ca.getIndividuals() ) {
 			GLIndividualControl control = new GLIndividualControl( individual, mainControl );
 			individuals.set( individual.getNumber() - 1, control );
 		}
 
 		recording.rewind();
-		
-		while( recording.hasNext() ) {
+
+		while(recording.hasNext()) {
 			recording.nextActions();
 			Vector<MoveAction> movements = recording.filterActions( MoveAction.class );
 			for( MoveAction movement : movements ) {
@@ -231,7 +202,7 @@ public class GLCAControl extends AbstractZETVisualizationControl<GLCAFloorContro
 				individuals.get( movement.getIndividualNumber() - 1 ).addHistoryTriple( fromCell, endCell, startTime, arrivalTime );
 			}
 			Vector<SwapAction> swaps = recording.filterActions( SwapAction.class );
-			for( SwapAction swap: swaps ) {
+			for( SwapAction swap : swaps ) {
 				GLCellControl cell1 = getCellControl( swap.cell1() );
 				GLCellControl cell2 = getCellControl( swap.cell2() );
 				double arrivalTime1 = swap.arrivalTime1();
@@ -242,22 +213,20 @@ public class GLCAControl extends AbstractZETVisualizationControl<GLCAFloorContro
 				individuals.get( swap.getIndividualNumber1() - 1 ).addHistoryTriple( cell2, cell1, startTime2, arrivalTime2 );
 			}
 			Vector<DieAction> deaths = recording.filterActions( DieAction.class );
-			for( DieAction death: deaths) {
+			for( DieAction death : deaths ) {
 				GLCellControl cell = getCellControl( death.placeOfDeath() );
-				individuals.get(  death.getIndividualNumber() - 1 ).addHistoryTriple( cell, cell, 0, 0 );
+				individuals.get( death.getIndividualNumber() - 1 ).addHistoryTriple( cell, cell, 0, 0 );
 			}
 			mainControl.recordingProgress();
 		}
 		recording.rewind();
-		for( int k = 0; k < ca.getIndividuals().size(); k++ ) {
+		for( int k = 0; k < ca.getIndividuals().size(); k++ )
 			glIndividuals.add( individuals.get( k ).getView() );
-		}
 	}
 
 	public final List<GLIndividualControl> getIndividualControls() {
 		return Collections.unmodifiableList( individuals );
 	}
-
 
 	/**
 	 * <p>This method increases the number of cells that are created and
@@ -291,43 +260,31 @@ public class GLCAControl extends AbstractZETVisualizationControl<GLCAFloorContro
 
 	@Override
 	public void addTime( long timeNanoSeconds ) {
-		timeSinceLastStepCA += timeNanoSeconds;
-//		time += timeNanoSeconds;
+		timeSinceLastStep += timeNanoSeconds;
 
-		if( timeSinceLastStepCA >= nanoSecondsPerStepCA ) {
-				long elapsedSteps = (timeSinceLastStepCA / nanoSecondsPerStepCA);
-				stepCA += elapsedSteps;
-				for( int i = 1; i <= elapsedSteps; i++ ) {
-					ca.nextTimeStep();
-					if( visRecording.hasNext() ) {
-						try {
-							Vector<Action> actions = visRecording.nextActions();
-							for( Action action : actions )
-								action.execute( ca );
-						} catch( InconsistentPlaybackStateException ex ) {
-							ex.printStackTrace();
-						}
+		if( timeSinceLastStep >= nanoSecondsPerStep ) {
+			long elapsedSteps = (timeSinceLastStep / nanoSecondsPerStep);
+			step += elapsedSteps;
+			for( int i = 1; i <= elapsedSteps; i++ ) {
+				ca.nextTimeStep();
+				if( visRecording.hasNext() )
+					try {
+						Vector<Action> actions = visRecording.nextActions();
+						for( Action action : actions )
+							action.execute( ca );
+					} catch( InconsistentPlaybackStateException ex ) {
+						ex.printStackTrace();
 					}
-				}
-				timeSinceLastStepCA = timeSinceLastStepCA % nanoSecondsPerStepCA; //elapsedTime -  step*nanoSecondsPerStep;
-			for( GLCAFloorControl floor : this ) {
-				for( GLRoomControl room : floor ) {
-					for( GLCellControl cell : room ) {
-						//cells.add( cell );	// TODO use addAll
+			}
+			timeSinceLastStep = timeSinceLastStep % nanoSecondsPerStep; //elapsedTime -  step*nanoSecondsPerStep;
+			for( GLCAFloorControl floor : this )
+				for( GLRoomControl room : floor )
+					for( GLCellControl cell : room )
 						cell.stepUpdate();
-					}
-				}
-				//floor.getView().setIndividuals( getIndividualControls() );
 			}
-
-				//				for( GLCellControl cell : cells ) {
-//					cell.stepUpdate();
-//				}
-			}
-			realStepCA = stepCA + (double)timeSinceLastStepCA/nanoSecondsPerStepCA;
-			if( ca.getState() == CellularAutomaton.State.finish ) {
-				finished = true;
-			}
+		realStep = step + (double) timeSinceLastStep / nanoSecondsPerStep;
+		if( ca.getState() == CellularAutomaton.State.finish )
+			finished = true;
 
 	}
 
@@ -345,10 +302,9 @@ public class GLCAControl extends AbstractZETVisualizationControl<GLCAFloorContro
 	 * stopped if the cellular automaton is finished.
 	 * @return the current step of the cellular automaton
 	 */
-	public double getCaStep() {
-		return realStepCA;
+	public double getStep() {
+		return realStep;
 	}
-
 
 	/**
 	 * Sets a factor that is multiplicated with the visualization speed. Use
@@ -356,8 +312,15 @@ public class GLCAControl extends AbstractZETVisualizationControl<GLCAFloorContro
 	 * @param speedFactor the speed factor
 	 */
 	public void setSpeedFactor( double speedFactor ) {
-		secondsPerStepCA = ca.getSecondsPerStep();
-		nanoSecondsPerStepCA = (long)(Math.round( secondsPerStepCA * Conversion.secToNanoSeconds ) / speedFactor);
+		secondsPerStep = ca.getSecondsPerStep();
+		nanoSecondsPerStep = (long) (Math.round( secondsPerStep * Conversion.secToNanoSeconds ) / speedFactor);
 	}
 
+	public long getNanoSecondsPerStep() {
+		return nanoSecondsPerStep;
+	}
+
+	public long getStepCount() {
+		return recordingCount;
+	}
 }

@@ -29,9 +29,7 @@ import gui.visualization.control.ca.GLRoomControl;
 import gui.visualization.control.graph.GLGraphControl;
 import gui.visualization.control.graph.GLGraphFloorControl;
 import gui.visualization.control.graph.GLNodeControl;
-import gui.visualization.draw.ca.GLCA;
 import gui.visualization.draw.ca.GLIndividual;
-import gui.visualization.draw.graph.GLGraph;
 import io.visualization.BuildingResults;
 import io.visualization.CAVisualizationResults;
 import java.util.Collections;
@@ -141,52 +139,24 @@ public class GLControl implements DrawableControlable {
 		this.buildingResults = buildingResults;
 		GLCellControl.invalidateMergedPotential();
 		if( caVisResults != null ) {
-			//caFinished = false;
-			//Runtime runtime = Runtime.getRuntime();
-			//long memStart = (runtime.totalMemory() - runtime.freeMemory());
 			hasCellularAutomaton = true;
 			ca = new CellularAutomaton( caVisResults.getRecording().getInitialConfig() );
 			caControl = new GLCAControl( caVisResults, ca );
-
-			//long memEnd = (runtime.totalMemory() - runtime.freeMemory());
-
-			//if( DebugFlags.VIS_CA )
-			//	System.out.println( "Speicher für ZA: " + (memEnd - memStart) + " Bytes" );
-
-			//individuals = caControl.getIndividuals();
-
-			estimatedTime = Math.max( estimatedTime, caVisResults.getRecording().length() * caControl.getSecondsPerStepCA() );
-
+			estimatedTime = Math.max( estimatedTime, caVisResults.getRecording().length() * caControl.getSecondsPerStep() );
 		} else
 			hasCellularAutomaton = false;
 		if( graphVisResult != null ) {
-//			graphFinished = false;
 			hasGraph = true;
-
-//			stepGraph = 0;
 			graphControl = new GLGraphControl( graphVisResult );
 
-//			nodes = new ArrayList<GLNodeControl>();
-//			edges = new ArrayList<GLEdgeControl>();
-//
-//			for( GLGraphFloorControl g : graphControl.getChildControls() ) {
-//				for( GLNodeControl node : g ) {
-//					for( GLEdgeControl edge : node ) {
-//						edges.add( edge );	// TODO use addAll
-//					}
-//					nodes.add( node );
-//				}
-//			}
-
+			this.secondsPerStepGraph();
+			
 			// TODO OpenGL equal-flow-arrival, see
-			estimatedTime = Math.max( estimatedTime, graphControl.getGraphStepCount() * graphControl.getSecondsPerStepGraph() );
+			estimatedTime = Math.max( estimatedTime, graphControl.getStepCount() * graphControl.getSecondsPerStep() );
 		} else
 			hasGraph = false;
 		time = 0;
-		//finished = (!hasGraph || graphControl.isFinished()) && (!hasCA || caControl.isFinished());
-
 		buildingControl = new GLBuildingControl( buildingResults );
-
 		AlgorithmTask.getInstance().setProgress( 100, loc.getStringWithoutPrefix( "batch.tasks.progress.visualizationDatastructureComplete" ), "" );
 		initSettings();
 	}
@@ -232,16 +202,21 @@ public class GLControl implements DrawableControlable {
 	 * speed.
 	 * @return the seconds needed for one graph step
 	 */
-	private double secondsPerStepGraph() {
-		if( ca == null )
-			return 1;
-		double maxSpeed = ca.getAbsoluteMaxSpeed();
-		double average = 0;
-		for( GLIndividual ind : this.getIndividuals() )
-			average += ind.getControl().getMaxSpeed() * maxSpeed;
-		average /= getIndividuals().size();
-		double secondsPerStep = 0.4 / average;
-		return secondsPerStep;
+	private void secondsPerStepGraph() {
+		// Set speed such that it arrives when the last individual is evacuated.
+		if( hasCellularAutomaton && PropertyContainer.getInstance().getAsBoolean( "options.visualization.flow.equalArrival" ) )
+			graphControl.setNanoSecondsPerStep( graphControl.getStepCount() == 0 ? 0 : (caControl.getNanoSecondsPerStep() * caControl.getStepCount()) / graphControl.getStepCount() );
+		else {
+			if( ca == null )
+				graphControl.setSecondsPerStep( 1 );
+			double maxSpeed = ca.getAbsoluteMaxSpeed();
+			double average = 0;
+			for( GLIndividual ind : this.getIndividuals() )
+				average += ind.getControl().getMaxSpeed() * maxSpeed;
+			average /= getIndividuals().size();
+			double secondsPerStep = 0.4 / average;
+			graphControl.setSecondsPerStep( secondsPerStep );
+		}
 	}
 
 	/**
@@ -283,7 +258,7 @@ public class GLControl implements DrawableControlable {
 	 * @return the current step of the graph
 	 */
 	public final double getGraphStep() {
-		return graphControl.getGraphStep();
+		return graphControl.getStep();
 	}
 
 	/**
@@ -292,7 +267,7 @@ public class GLControl implements DrawableControlable {
 	 * @return the current step of the cellular automaton
 	 */
 	public final double getCaStep() {
-		return caControl.getCaStep();
+		return caControl.getStep();
 	}
 
 	/**
@@ -321,7 +296,7 @@ public class GLControl implements DrawableControlable {
 	 * @return the time needed by one step of the cellular automaton
 	 */
 	public double getCaSecondsPerStep() {
-		return caControl.getSecondsPerStepCA();
+		return caControl.getSecondsPerStep();
 	}
 
 	/**
@@ -331,7 +306,7 @@ public class GLControl implements DrawableControlable {
 	 * @return the time needed by one step of the graph
 	 */
 	public double getGraphSecondsPerStep() {
-		return graphControl.getSecondsPerStepGraph();
+		return graphControl.getSecondsPerStep();
 	}
 
 	/**
@@ -532,4 +507,5 @@ public class GLControl implements DrawableControlable {
 	public CAStatistic getCAStatistic() {
 		return hasCellularAutomaton ? caStatistic : null;
 	}
+
 }

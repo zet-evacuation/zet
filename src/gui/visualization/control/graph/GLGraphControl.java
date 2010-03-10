@@ -34,7 +34,6 @@ import opengl.framework.abs.Controlable;
 /**
  *  @author Jan-Philipp Kappmeier
  */
-//public class GLGraphControl extends AbstractControl<GLGraph, Network, GraphVisualizationResult, GLGraphFloor, GLGraphFloorControl, GLControl> {
 public class GLGraphControl extends AbstractZETVisualizationControl<GLGraphFloorControl, GLGraph, GLGraphControl> implements Controlable {
 
 	private int nodeCount;
@@ -43,13 +42,13 @@ public class GLGraphControl extends AbstractZETVisualizationControl<GLGraphFloor
 
 	// Timing variables
 	private long time;
-	private double realStepGraph;
+	private double realStep;
 	private long timeSinceLastStep = 0;
-	private long nanoSecondsPerStep;
-	private double secondsPerStepGraph;
-	private long stepGraph;
+	private long nanoSecondsPerStep = Conversion.secToNanoSeconds;
+	private double secondsPerStep = 1;
+	private long step;
 	/** The maximal time step used for the graph */
-	private int graphStepCount = 0;
+	private int stepCount = 0;
 	/** The status of the simulation, true if all is finished */
 	private boolean finished = false;
 
@@ -72,19 +71,6 @@ public class GLGraphControl extends AbstractZETVisualizationControl<GLGraphFloor
 		this.setView( new GLGraph( this ) );
 		for( GLGraphFloorControl floor : this )
 			view.addChild( floor.getView() );
-		
-
-			// Set speed such that it arrives when the last individual is evacuated.
-//			if( hasCA && PropertyContainer.getInstance().getAsBoolean( "options.visualization.flow.equalArrival" ) ) {
-//				nanoSecondsPerStepGraph = graphStepCount == 0 ? 0 : (nanoSecondsPerStepCA * caVisResults.getRecording().length()) / graphStepCount;
-//				secondsPerStepGraph = nanoSecondsPerStepGraph * Conversion.nanoSecondsToSec;
-//				System.err.println( "Für gleichzeitige Ankunft berechnete Geschwindigkeit: " + nanoSecondsPerStepGraph );
-//			} else {
-				//secondsPerStepGraph = secondsPerStepGraph();
-		this.setSecondsPerStepGraph( 0.75 );
-				System.err.println( "Berechnete Geschwindigkeit (durchschnitt der ZA-Geschwindigkeiten): " + nanoSecondsPerStep );
-//			}
-
 	}
 
 	@Override
@@ -131,31 +117,31 @@ public class GLGraphControl extends AbstractZETVisualizationControl<GLGraphFloor
 	 * Returns the current step of the graph. The step counter is stopped if the graph is finished.
 	 * @return the current step of the graph
 	 */
-	public double getGraphStep() {
-		return realStepGraph;
+	public double getStep() {
+		return realStep;
 	}
 
 	public void addTime( long timeNanoSeconds ) {
 		time += timeNanoSeconds;
 		timeSinceLastStep += timeNanoSeconds;
 		long elapsedSteps = (timeSinceLastStep / nanoSecondsPerStep);
-		stepGraph += elapsedSteps;
+		step += elapsedSteps;
 		timeSinceLastStep = timeSinceLastStep % nanoSecondsPerStep;
-		realStepGraph = ((double) time / (double) nanoSecondsPerStep);
+		realStep = ((double) time / (double) nanoSecondsPerStep);
 			for( GLGraphFloorControl g : this ) {
 				for( GLNodeControl node : g ) {
 					for( GLEdgeControl edge : node ) {
 						//edges.add( edge );	// TODO use addAll
 						edge.stepUpdate();
 					}
-					node.stepUpdate( (int) stepGraph );
+					node.stepUpdate( (int) step );
 				}
 			}
 //		for( GLNodeControl node : nodes )
 //			node.stepUpdate( (int) stepGraph );
 //		for( GLEdgeControl edge : edges )
 //			edge.stepUpdate();
-		if( stepGraph > graphStepCount ) {
+		if( step > stepCount ) {
 			finished = true;
 		}
 	}
@@ -164,8 +150,8 @@ public class GLGraphControl extends AbstractZETVisualizationControl<GLGraphFloor
 	 * Sets the maximal time used by the graph
 	 * @param maxT
 	 */
-	public void setGraphMaxTime( int maxT ) {
-		this.graphStepCount = Math.max( graphStepCount, maxT );
+	public void setMaxTime( int maxT ) {
+		this.stepCount = Math.max( stepCount, maxT );
 	}
 
 	/**
@@ -178,27 +164,40 @@ public class GLGraphControl extends AbstractZETVisualizationControl<GLGraphFloor
 	}
 
 	/**
-	 * ... also sets visualization speed to real-time speed.
-	 * @param secondsPerStepGraph
+	 * Sets the time needed for one step of the graph in nano seconds. A graph
+	 * step equals a time unit of the network flow.
+	 * @param nanoSecondsPerStep the nano seconds needed for one graph step
+	 * @see #setSecondsPerStep(double) 
 	 */
-	public void setSecondsPerStepGraph( double secondsPerStepGraph ) {
-		this.secondsPerStepGraph = secondsPerStepGraph;
+	public void setNanoSecondsPerStep( long nanoSecondsPerStep ) {
+		this.nanoSecondsPerStep = nanoSecondsPerStep;
+		secondsPerStep = nanoSecondsPerStep * Conversion.nanoSecondsToSec;
+
+		System.out.println( "Berechnete Graph-Geschwindigkeit: " + nanoSecondsPerStep );
+	}
+
+	/**
+	 * Sets the time needed for one step of the graph in seconds. A graph step
+	 * equals a time unit of the network flow.
+	 * @param secondsPerStepGraph the seconds needed for one graph step
+	 * @see #setNanoSecondsPerStep(long)
+	 */
+	public void setSecondsPerStep( double secondsPerStepGraph ) {
+		this.secondsPerStep = secondsPerStepGraph;
 		nanoSecondsPerStep = Math.round( secondsPerStepGraph * Conversion.secToNanoSeconds );
+
+		System.out.println( "Berechnete Graph-Geschwindigkeit: " + nanoSecondsPerStep );
 	}
 
 	public void setSpeedFactor( double speedFactor ) {
-		nanoSecondsPerStep = (long)(Math.round( secondsPerStepGraph * Conversion.secToNanoSeconds ) / speedFactor);
+		nanoSecondsPerStep = (long)(Math.round( secondsPerStep * Conversion.secToNanoSeconds ) / speedFactor);
 	}
 
-	public double getSecondsPerStepGraph() {
-		return secondsPerStepGraph;
+	public double getSecondsPerStep() {
+		return secondsPerStep;
 	}
 
-	public int getGraphStepCount() {
-		return graphStepCount;
+	public int getStepCount() {
+		return stepCount;
 	}
-
-
-
-
 }
