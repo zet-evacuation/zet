@@ -18,7 +18,6 @@
  * GLBuildingControl.java
  * Created on 19.06.2008
  */
-
 package gui.visualization.control.building;
 
 import batch.tasks.AlgorithmTask;
@@ -127,5 +126,21 @@ public class GLBuildingControl extends AbstractZETVisualizationControl<GLWallCon
 	 */
 	public final boolean isFinished() {
 		return true;
+	}
+
+	/**
+	 * Does nothing, as the building is static at the moment.
+	 * @param timeNanoSeconds the time that has passed.
+	 */
+	@Override
+	public void setTime( long time ) {
+	}
+
+	/**
+	 * Does nothing, as the building is static at the moment.
+	 * @param timeNanoSeconds the time that has passed.
+	 */
+	@Override
+	public void resetTime() {
 	}
 }

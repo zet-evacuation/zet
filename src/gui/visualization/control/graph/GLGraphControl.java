@@ -39,11 +39,10 @@ public class GLGraphControl extends AbstractZETVisualizationControl<GLGraphFloor
 	private int nodeCount;
 	private int nodesDone;
 	private HashMap<Integer, GLGraphFloorControl> allFloorsByID;
-
 	// Timing variables
 	private long time;
 	private double realStep;
-	private long timeSinceLastStep = 0;
+//	private long timeSinceLastStep = 0;
 	private long nanoSecondsPerStep = Conversion.secToNanoSeconds;
 	private double secondsPerStep = 1;
 	private long step;
@@ -51,6 +50,7 @@ public class GLGraphControl extends AbstractZETVisualizationControl<GLGraphFloor
 	private int stepCount = 0;
 	/** The status of the simulation, true if all is finished */
 	private boolean finished = false;
+	double speedFactor = 1;
 
 	public GLGraphControl( GraphVisualizationResult graphVisResult ) {
 		super();
@@ -121,29 +121,38 @@ public class GLGraphControl extends AbstractZETVisualizationControl<GLGraphFloor
 		return realStep;
 	}
 
+	@Override
 	public void addTime( long timeNanoSeconds ) {
-		time += timeNanoSeconds;
-		timeSinceLastStep += timeNanoSeconds;
-		long elapsedSteps = (timeSinceLastStep / nanoSecondsPerStep);
-		step += elapsedSteps;
-		timeSinceLastStep = timeSinceLastStep % nanoSecondsPerStep;
+		time += timeNanoSeconds * speedFactor;
 		realStep = ((double) time / (double) nanoSecondsPerStep);
-			for( GLGraphFloorControl g : this ) {
-				for( GLNodeControl node : g ) {
-					for( GLEdgeControl edge : node ) {
-						//edges.add( edge );	// TODO use addAll
-						edge.stepUpdate();
-					}
-					node.stepUpdate( (int) step );
-				}
+		step = (long) realStep;
+
+		for( GLGraphFloorControl g : this )
+			for( GLNodeControl node : g ) {
+				for( GLEdgeControl edge : node )
+					edge.stepUpdate();
+				node.stepUpdate( (int) step );
 			}
-//		for( GLNodeControl node : nodes )
-//			node.stepUpdate( (int) stepGraph );
-//		for( GLEdgeControl edge : edges )
-//			edge.stepUpdate();
-		if( step > stepCount ) {
+		if( step > stepCount )
 			finished = true;
-		}
+	}
+
+	public void setTime( long time ) {
+		this.time = time;
+		realStep = time == 0 ? 0 : ((double) time / (double) nanoSecondsPerStep);
+		step = (long) realStep;
+
+		for( GLGraphFloorControl g : this )
+			for( GLNodeControl node : g ) {
+				for( GLEdgeControl edge : node )
+					edge.stepUpdate();
+				node.stepUpdate( (int) step );
+			}
+		finished = step > stepCount;
+	}
+
+	public void resetTime() {
+		setTime( 0 );
 	}
 
 	/**
@@ -190,7 +199,7 @@ public class GLGraphControl extends AbstractZETVisualizationControl<GLGraphFloor
 	}
 
 	public void setSpeedFactor( double speedFactor ) {
-		nanoSecondsPerStep = (long)(Math.round( secondsPerStep * Conversion.secToNanoSeconds ) / speedFactor);
+		this.speedFactor = speedFactor;
 	}
 
 	public double getSecondsPerStep() {

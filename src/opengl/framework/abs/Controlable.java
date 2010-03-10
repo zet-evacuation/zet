@@ -17,6 +17,10 @@ public interface Controlable {
 	
 	void addTime( long timeNanoSeconds );
 
+	void setTime( long time );
+
+	void resetTime();
+
 	/**
 	 * Checks wheather all parts of the simulation are finished, or not.
 	 *  @return true if the simulation is finished, false otherwise

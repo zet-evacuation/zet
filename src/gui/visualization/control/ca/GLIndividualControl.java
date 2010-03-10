@@ -51,7 +51,7 @@ public class GLIndividualControl extends AbstractZETVisualizationControl<GLIndiv
 	/** The time the individual needs to perform the current step */
 	double timeForMove;
 	/** The current time */
-	private double time;
+	private double step;
 	/** The position where the individual has started the current step */
 	private Tuple sourcePos;
 	/** The direction the individual walks */
@@ -93,7 +93,9 @@ public class GLIndividualControl extends AbstractZETVisualizationControl<GLIndiv
 	 * automaton is reached.
 	 */
 	public void stepUpdate() {
-		time = mainControl.getStep();
+		if( mainControl.getStep() < step )
+			index = 0;
+		step = mainControl.getStep();
 		getView().update();
 		if( path.size() <= 0 )
 			return;
@@ -101,7 +103,7 @@ public class GLIndividualControl extends AbstractZETVisualizationControl<GLIndiv
 		double stepStart = -1;
 		GLCellControl source = null;
 		GLCellControl destination = null;
-		while(index < path.size() && this.path.get( index ).getFirstValue() <= time) {
+		while(index < path.size() && this.path.get( index ).getFirstValue() <= step) {
 			stepStart = this.path.get( index ).getFirstValue();
 			source = this.path.get( index ).getSecondValue();
 			destination = this.path.get( index ).getThirdValue();
@@ -114,7 +116,7 @@ public class GLIndividualControl extends AbstractZETVisualizationControl<GLIndiv
 		if( stepStart == -1 )
 			return;
 		startTimeOfMove = stepStart;
-		calcPos( time, stepStart, stepEnd, source, destination );
+		calcPos( step, stepStart, stepEnd, source, destination );
 		invisible = source.getFloorID() != destination.getFloorID();
 		calcHeadInformation();
 	}
@@ -125,7 +127,7 @@ public class GLIndividualControl extends AbstractZETVisualizationControl<GLIndiv
 	 */
 	public Tuple getCurrentPosition() {
 		double cellSize = 20;
-		double completedPartOfMove = (time - startTimeOfMove) / timeForMove;
+		double completedPartOfMove = (step - startTimeOfMove) / timeForMove;
 		completedPartOfMove = Math.min( completedPartOfMove, 1.0 );
 		completedPartOfMove = Math.max( completedPartOfMove, 0.0 );
 		Tuple currentPosition = new Tuple( 0, 0 );
@@ -191,7 +193,7 @@ public class GLIndividualControl extends AbstractZETVisualizationControl<GLIndiv
 	 * @return true if the individual is evacuated
 	 */
 	public boolean isEvacuated() {
-		return controlled.isEvacuated() && time > lastEnd;
+		return /*controlled.isEvacuated() &&*/ step > lastEnd;
 	}
 
 	/**
