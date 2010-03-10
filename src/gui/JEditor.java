@@ -309,6 +309,7 @@ public class JEditor extends JFrame implements Localized, EventListener<Progress
 	private JButton btnVideo;
 	private JButton btnPlayStart;
 	private JButton btnPlay;
+	private JButton btnPlayLoop;
 	private JButton btnStop;
 	private Icon playIcon;
 	private Icon pauseIcon;
@@ -345,6 +346,8 @@ public class JEditor extends JFrame implements Localized, EventListener<Progress
 
 	/** Decides wheather the visualization should be restarted if 'play' is pressed. */
 	private boolean restartVisualization = false;
+	/** Decides wheather visualization runs in loop-mode, that means it automatically starts again. */
+	private boolean loop = false;
 
 	/**
 	 * Creates a new instance of <code>JEditor</code>.
@@ -871,6 +874,9 @@ public class JEditor extends JFrame implements Localized, EventListener<Progress
 		playIcon = gui.components.framework.Icon.newIcon( IconSet.Play );
 		pauseIcon = gui.components.framework.Icon.newIcon( IconSet.PlayPause );
 		toolBarVisualization.add( btnPlay );
+		btnPlayLoop = Button.newButton( IconSet.PlayLoop, aclPlay, "loop", loc.getString( "playLoop" ) );
+		btnPlayLoop.setSelected( false );
+		toolBarVisualization.add( btnPlayLoop );
 		btnStop = Button.newButton( IconSet.PlayStop, aclPlay, "stop", loc.getString( "playStop" ) );
 		toolBarVisualization.add( btnStop );
 		btnPlayEnd = Button.newButton( IconSet.PlayEnd, aclPlay, "end", loc.getString( "playToEnd" ) );
@@ -1704,6 +1710,9 @@ public class JEditor extends JFrame implements Localized, EventListener<Progress
 					btnPlay.setSelected( true );
 					visualizationView.getGLContainer().startAnimation();
 				}
+			} else if( e.getActionCommand().equals( "loop" ) ) {
+				loop = !loop;
+				btnPlayLoop.setSelected( loop );
 			} else if( e.getActionCommand().equals( "stop" ) ) {
 				btnPlay.setIcon( playIcon );
 				btnPlay.setSelected( false );
@@ -2201,7 +2210,7 @@ public class JEditor extends JFrame implements Localized, EventListener<Progress
 			// Falls in null ist, ist out auch null!
 			if( in != null )
 				//Falls tatsächlich in.close() und out.close()
-				//Exceptions werfen, die jenige von 'out' geworfen wird.
+				//Exceptions werfen, diejenige von 'out' geworfen wird.
 				try {
 					in.close();
 				} finally {
@@ -2507,10 +2516,15 @@ public class JEditor extends JFrame implements Localized, EventListener<Progress
 	 */
 	public void handleEvent( ProgressEvent event ) {
 		if( event instanceof VisualizationEvent ) {
-			this.restartVisualization = true;
-			btnPlay.setIcon( playIcon );
-			visualizationView.getGLContainer().stopAnimation();
-			btnPlay.setSelected( false );
+			if( loop )
+				control.resetTime();
+			else {
+				this.restartVisualization = true;
+				btnPlay.setIcon( playIcon );
+				visualizationView.getGLContainer().stopAnimation();
+				btnPlay.setSelected( false );
+				ZETMain.sendMessage( "Replaying visualization finished." );
+			}
 			return;
 		}
 //		if( stepByStep ) {
