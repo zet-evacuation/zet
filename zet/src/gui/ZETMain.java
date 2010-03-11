@@ -32,6 +32,9 @@ import com.martiansoftware.jsap.UnflaggedOption;
 import com.thoughtworks.xstream.XStream;
 import com.thoughtworks.xstream.annotations.Annotations;
 import control.ProjectControl;
+import de.tu_berlin.math.coga.common.debug.DebugStream;
+import de.tu_berlin.math.coga.common.debug.DebugStreamVerbose;
+import de.tu_berlin.math.coga.common.debug.Log;
 import de.tu_berlin.math.coga.common.localization.Localization;
 import ds.PropertyContainer;
 import event.EventServer;
@@ -53,9 +56,6 @@ import java.util.Calendar;
 import javax.imageio.ImageIO;
 import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
-import de.tu_berlin.math.coga.common.debug.DebugStream;
-import de.tu_berlin.math.coga.common.debug.DebugStreamVerbose;
-import de.tu_berlin.math.coga.common.debug.Log;
 
 /**
  * The <code>ZETMain</code> class is the main entry for the graphical user

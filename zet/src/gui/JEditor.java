@@ -21,6 +21,7 @@
 package gui;
 
 import algo.ca.CellularAutomatonInOrderExecution;
+import algo.graph.dynamicflow.eat.EarliestArrivalFlowProblem;
 import batch.Batch;
 import batch.BatchResult;
 import batch.BatchResultEntry;
@@ -94,6 +95,7 @@ import java.beans.PropertyChangeListener;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -103,6 +105,8 @@ import java.text.NumberFormat;
 import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Locale;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.imageio.ImageIO;
 import javax.media.opengl.GLCapabilities;
 import javax.swing.ButtonGroup;
@@ -135,15 +139,21 @@ import de.tu_berlin.math.coga.common.localization.Localized;
 import statistic.ca.CAStatistic;
 import statistic.graph.Controller;
 import batch.tasks.AlgorithmTask;
+import batch.tasks.BatchGraphCreateOnlyTask;
 import batch.tasks.CARealTime;
 import batch.tasks.RasterizeTask;
 import batch.tasks.VisualizationDataStructureTask;
+import ds.NetworkFlowModel;
+import ds.z.Assignment;
 import ds.z.AssignmentArea;
+import ds.z.ConcreteAssignment;
 import ds.z.EvacuationArea;
 import ds.z.Room;
 import ds.z.ZControl;
 import event.VisualizationEvent;
 import gui.editor.JLogView;
+import io.visualization.BuildingResults;
+import zet.FileFlow;
 import zet.util.ConversionTools;
 
 /**
@@ -263,6 +273,7 @@ public class JEditor extends JFrame implements Localized, EventListener<Progress
 	private JMenuItem mnuSettings;
 	private JMenu mnuDebug;
 	private JMenuItem mnuOutputInformation;
+	private JMenuItem mnuOutputGraphAsText;
 	private JMenu mWindow;
 	private JMenu mHelp;
 	private JMenuItem mnuHelpAbout;
@@ -707,6 +718,7 @@ public class JEditor extends JFrame implements Localized, EventListener<Progress
 			mnuSettings = Menu.addMenuItem( mExtras, loc.getString( "menuSettings" ), aclProperties, "settings" );
 			mnuDebug = Menu.addMenu( mExtras, "Debug" );
 			mnuOutputInformation = Menu.addMenuItem( mnuDebug, "Ausgabe", aclDebug, "outputInformation" );
+			mnuOutputGraphAsText = Menu.addMenuItem( mnuDebug, "Zugehöriger Graph als Datei ausgeben", aclDebug, "outputGraph" );
 		}
 		// Hilfe-menu
 		mnuHelpAbout = Menu.addMenuItem( mHelp, loc.getString( "menuAbout" ), 'I', aclAbout );
@@ -1250,46 +1262,63 @@ public class JEditor extends JFrame implements Localized, EventListener<Progress
 		}
 	};
 	ActionListener aclDebug = new ActionListener() {
-    @Override
+ 	@Override
 		public void actionPerformed( ActionEvent e ) {
 			if( e.getActionCommand().equals( "outputInformation" ) ) {
 				// Pro Stockwerk:
-				System.out.println( "Personenverteilung im Gebäude: ");
+				System.out.println( "Personenverteilung im Gebäude: " );
 				int overall = 0;
 				for( Floor f : getZControl().getProject().getBuildingPlan() ) {
-          int counter = 0;
-					for( Room r : f ) {
-						for( AssignmentArea a : r.getAssignmentAreas() ) {
+					int counter = 0;
+					for( Room r : f )
+						for( AssignmentArea a : r.getAssignmentAreas() )
 							counter += a.getEvacuees();
-						}
-					}
 					System.out.println( f.getName() + ": " + counter + " Personen" );
 					overall += counter;
 				}
 				System.out.println( "Insgesamt: " + overall );
-			}
 
-			// Pro Ausgang:
-			System.out.println( "Personenverteilung pro Ausgang: " );
-			for( Floor f : getZControl().getProject().getBuildingPlan() )
-				for( Room r : f )
-					for( EvacuationArea ea : r.getEvacuationAreas() ) {
-						int overall = 0;
-						System.out.println( "" );
-						System.out.println( ea.getName() );
-						// Suche nach evakuierten pro etage für dieses teil
-						for( Floor f2 : getZControl().getProject().getBuildingPlan() ) {
-							int counter = 0;
-							for( Room r2 : f2 )
-								for( AssignmentArea a : r2.getAssignmentAreas() ) {
-                  if( a.getExitArea().equals( ea ) )
-										counter += a.getEvacuees();
-								}
+				// Pro Ausgang:
+				System.out.println( "Personenverteilung pro Ausgang: " );
+				for( Floor f : getZControl().getProject().getBuildingPlan() )
+					for( Room r : f )
+						for( EvacuationArea ea : r.getEvacuationAreas() ) {
+							overall = 0;
+							System.out.println( "" );
+							System.out.println( ea.getName() );
+							// Suche nach evakuierten pro etage für dieses teil
+							for( Floor f2 : getZControl().getProject().getBuildingPlan() ) {
+								int counter = 0;
+								for( Room r2 : f2 )
+									for( AssignmentArea a : r2.getAssignmentAreas() )
+										if( a.getExitArea().equals( ea ) )
+											counter += a.getEvacuees();
 								System.out.println( f2.getName() + ": " + counter + " Personen" );
 								overall += counter;
+							}
+							System.out.println( ea.getName() + " insgesamt: " + overall );
 						}
-						System.out.println( ea.getName() + " insgesamt: " + overall );
-					}
+			} else if( e.getActionCommand().equals( "outputGraph" ) ) {
+				BatchResultEntry ca_res = new BatchResultEntry( getZControl().getProject().getProjectFile().getName(), new BuildingResults( getZControl().getProject().getBuildingPlan() ) );
+				ConcreteAssignment[] concreteAssignments = new ConcreteAssignment[1];
+				Assignment assignment = getZControl().getProject().getCurrentAssignment();
+				concreteAssignments[0] = assignment.createConcreteAssignment( 400 );
+				BatchGraphCreateOnlyTask bgt = new BatchGraphCreateOnlyTask( ca_res, 0, 600, getZControl().getProject(), assignment, concreteAssignments );
+				bgt.run();
+				NetworkFlowModel originalProblem = ca_res.getNetworkFlowModel();
+				EarliestArrivalFlowProblem problem = new EarliestArrivalFlowProblem( originalProblem.getEdgeCapacities(), originalProblem.getNetwork(), originalProblem.getNodeCapacities(), originalProblem.getSupersink(), originalProblem.getSources(), 0, originalProblem.getTransitTimes(), originalProblem.getCurrentAssignment() );
+				try {
+					//FileFlow ff = new FileFlow();
+					//ff.computeFlow( problem );
+					FileFlow.writeFile( getZControl().getProject().getProjectFile().getName(), problem, getZControl().getProject().getProjectFile().getName() + ".dat" );
+				} catch( FileNotFoundException ex ) {
+					ZETMain.sendError( "FileNotFoundException" );
+					ex.printStackTrace();
+				} catch( IOException ex ) {
+					ZETMain.sendError( "IOException" );
+					ex.printStackTrace();
+				}
+			}
 		}
 	};
 	ActionListener aclExecute = new ActionListener() {
