@@ -1,44 +1,50 @@
 /**
- * EarliestArrivalFlowInstanceTest.java
- * Created: 10.03.2010, 16:59:07
+ * FileFlow.java
+ * input:
+ * output:
+ *
+ * method:
+ *
+ * Created: Mar 11, 2010,10:59:01 AM
  */
-package algo.graph;
+package zet;
 
 import algo.graph.dynamicflow.eat.EarliestArrivalFlowProblem;
 import algo.graph.dynamicflow.eat.SEAAPAlgorithm;
 import batch.tasks.AlgorithmTask;
+import de.tu_berlin.math.coga.common.algorithm.Algorithm;
 import de.tu_berlin.math.coga.common.algorithm.AlgorithmEvent;
-import de.tu_berlin.math.coga.common.algorithm.AlgorithmProgressEvent;
 import de.tu_berlin.math.coga.common.algorithm.AlgorithmListener;
+import de.tu_berlin.math.coga.common.algorithm.AlgorithmStartedEvent;
+import de.tu_berlin.math.coga.common.algorithm.AlgorithmTerminatedEvent;
+import de.tu_berlin.math.coga.common.algorithm.AlgorithmProgressEvent;
 import de.tu_berlin.math.coga.common.util.Formatter;
 import ds.graph.Edge;
+import ds.graph.IdentifiableCollection;
 import ds.graph.IdentifiableIntegerMapping;
 import ds.graph.Network;
 import ds.graph.Node;
 import ds.graph.flow.PathBasedFlowOverTime;
 import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
-import org.junit.Test;
-import junit.framework.TestCase;
+import java.util.List;
+
 
 /**
  *
  * @author Jan-Philipp Kappmeier
  */
-public class EarliestArrivalFlowInstanceTest extends TestCase implements AlgorithmListener {
+public class FileFlow implements AlgorithmListener {
 
-	@Test
-	public void testInstance() throws FileNotFoundException, IOException {
-		//File batchFile = new File( "./testinstanz/siouxfalls_500_10s.dat" );
-		File batchFile = new File( "./testinstanz/padang_10p_10s_flow01.dat" );
-
-
-		BufferedReader read = new BufferedReader( new FileReader( batchFile ) );
+	public static EarliestArrivalFlowProblem read( String filename ) throws FileNotFoundException, IOException {
+		BufferedReader read = new BufferedReader( new FileReader( new File( filename ) ) );
 		String s;
 
 		int nodeCount = 0;
@@ -75,7 +81,6 @@ public class EarliestArrivalFlowInstanceTest extends TestCase implements Algorit
 			if( s.charAt( 0 ) == 'S' ) {
 				final String[] split = s.split( " " );
 				final long nodeID = Long.parseLong( split[1] );
-				System.out.println( " Key: " + nodeID + " value: " + currentNodeID );
 				nodeMap.put( nodeID, currentNodeID++ );
 				final int nodeSupply = Integer.parseInt( split[2] );
 				source_id.add( nodeID );
@@ -85,7 +90,6 @@ public class EarliestArrivalFlowInstanceTest extends TestCase implements Algorit
 			if( s.charAt( 0 ) == 'T' ) {
 				final String[] split = s.split( " " );
 				final long nodeID = Long.parseLong( split[1] );
-				System.out.println( " Key: " + nodeID + " value: " + currentNodeID );
 				nodeMap.put( nodeID, currentNodeID++ );
 				final int nodeSupply = Integer.parseInt( split[2] );
 				sink_id.add( nodeID );
@@ -113,7 +117,6 @@ public class EarliestArrivalFlowInstanceTest extends TestCase implements Algorit
 
 		System.out.println( "Knotenzahl: " + nodeCount );
 		System.out.println( "Hasheinträge: " + nodeMap.size() );
-		assertEquals( nodeCount, nodeMap.size() );
 		System.out.println( "Kantenzahl: " + edge_start.size() );
 		System.out.println( "Zeithorizont (geschätzt): " + estimatedTimeHorizon );
 		System.out.println( "Quellen: " + source_id.toString() );
@@ -160,30 +163,102 @@ public class EarliestArrivalFlowInstanceTest extends TestCase implements Algorit
 		for( int i = 0; i < source_id.size(); ++i )
 			sources.add( network.getNode( nodeMap.get( source_id.get( i ) ) ) );
 
-		EarliestArrivalFlowProblem eat = new EarliestArrivalFlowProblem( edgeCapacities, network, nodeCapacities, sink, sources, estimatedTimeHorizon, transitTimes, currentAssignment );
+		return new EarliestArrivalFlowProblem( edgeCapacities, network, nodeCapacities, sink, sources, estimatedTimeHorizon, transitTimes, currentAssignment );
+	}
+
+	public Algorithm computeFlow( EarliestArrivalFlowProblem eat ) throws FileNotFoundException, IOException {
 
 		//SuccessiveEarliestArrivalAugmentingPathAlgorithm algo = new SuccessiveEarliestArrivalAugmentingPathAlgorithm();
 		SEAAPAlgorithm algo = new SEAAPAlgorithm();
 		algo.setProblem( eat );
 		algo.addAlgorithmListener( this );
 		algo.run();
-		System.err.println( Formatter.formatTimeMilliseconds( algo.getRuntime() ) );
+		//System.out.println( Formatter.formatTimeMilliseconds( algo.getRuntime() ) );
 		long start = System.nanoTime();
 		PathBasedFlowOverTime df = algo.getSolution().getPathBased();
 		String result = String.format( "Sent %1$s of %2$s flow units in %3$s time units successfully.", algo.getSolution().getFlowAmount(), eat.getTotalSupplies(), algo.getSolution().getTimeHorizon() );
 		System.out.println( result );
 		AlgorithmTask.getInstance().publish( 100, result, "" );
 		long end = System.nanoTime();
-		System.out.println( String.format( "Sending the flow units required %1$s ms.", algo.getRuntime() / 1000000 ) );
+		//System.out.println( String.format( "Sending the flow units required %1$s ms.", algo.getRuntime() / 1000000 ) );
 //		System.out.println( df.toString() );
 		System.err.println( Formatter.formatTimeNanoseconds( end - start ) );
-
+		return algo;
 	}
 
 	public void eventOccurred( AlgorithmEvent event ) {
 		if( event instanceof AlgorithmProgressEvent )
-			System.out.println( ((AlgorithmProgressEvent) event).getProgress() );
+			System.out.println( ((AlgorithmProgressEvent)event).getProgress() );
+		else if( event instanceof AlgorithmStartedEvent )
+			System.out.println( "Algorithmus startet." );
+		else if( event instanceof AlgorithmTerminatedEvent )
+			System.out.println( "Laufzeit Flussalgorithmus: " + Formatter.formatTimeMilliseconds( event.getAlgorithm().getRuntime() ) );
 		else
 			System.out.println( event.toString() );
+	}
+
+	public static void main( String[] arguments ) throws FileNotFoundException, IOException {
+		// MÖgliche Dateien:
+		// problem.dat
+		// siouxfalls_5_10s.dat
+		// siouxfalls_50_10s.dat
+		// siouxfalls_500_10s.dat
+		// padang_10p_10s_flow01.dat
+		// swiss_500_10s.dat
+
+		System.out.println( "Version 1.0" );
+		System.out.println( "Reads a file with an earliest arrival flow problem and solves the problem." );
+		System.out.println( "Param #1: filename/path");
+		System.out.println();
+
+		try {
+			FileFlow ff = new FileFlow();
+			EarliestArrivalFlowProblem eat = read( arguments[0] );
+			ff.computeFlow( eat );
+			ff.writeFile( "problem.dat", eat, "./testinstanz/output.dat" );
+		} catch( FileNotFoundException e ) {
+			System.out.println( "Datei nicht gefunden." );
+			printFiles();
+		} catch( ArrayIndexOutOfBoundsException e ) {
+			System.out.println( "Kein Dateiname angegeben." );
+			printFiles();
+		}
+	}
+
+	public static void printFiles() {
+			System.out.println( "Mögliche Dateien:" );
+			System.out.println( "problem.dat" );
+			System.out.println( "siouxfalls_5_10s.dat" );
+			System.out.println( "siouxfalls_5_10s.dat" );
+			System.out.println( "siouxfalls_50_10s.dat" );
+			System.out.println( "padang_10p_10s_flow01.dat" );
+			System.out.println( "swiss_500_10s.dat" );
+	}
+
+	public static void writeFile( String original, EarliestArrivalFlowProblem eafp, String filename ) throws FileNotFoundException, IOException {
+		//writeFile( filename, eafp.getNetwork().numberOfNodes(), eafp.getTimeHorizon(), eafp.getSources(), eafp.getSink(), eafp.getNetwork().edges(), eafp.getEdgeCapacities(), eafp.getTransitTimes(), eafp.getSupplies() );
+		writeFile( original, filename, eafp.getNetwork().numberOfNodes(), -1, eafp.getSources(), eafp.getSink(), eafp.getNetwork().edges(), eafp.getEdgeCapacities(), eafp.getTransitTimes(), eafp.getSupplies() );
+	}
+
+	public static void writeFile( String original, String filename, int nodeCount, int timeHorizon, List<Node> sources, Node sink, IdentifiableCollection<Edge> edges, IdentifiableIntegerMapping<Edge> edgeCapacities, IdentifiableIntegerMapping<Edge> transitTimes, IdentifiableIntegerMapping<Node> currentAssignment ) throws FileNotFoundException, IOException {
+		BufferedWriter writer = new BufferedWriter( new FileWriter( new File( filename ) ) );
+		String s;
+
+		writer.write( "% Written by ZET FlowWriter\n" );
+		writer.write( "% original file: " + original + '\n' );
+		writer.write( "N " + nodeCount + '\n' );
+		writer.write( "TIME " + timeHorizon + '\n' );
+
+		for( Node source : sources ) {
+			writer.write( "S " + source.id() + ' ' + currentAssignment.get( source ) + '\n' );
+		}
+
+		writer.write( "T " + sink.id() + ' ' + (-currentAssignment.get( sink )) + '\n' );
+
+		for( Edge edge : edges ) {
+			writer.write( "E " + edge.start().id() + ' ' + edge.end().id() + ' ' + edgeCapacities.get( edge ) + ' ' + transitTimes.get( edge ) + '\n' );
+		}
+
+		writer.close();
 	}
 }
