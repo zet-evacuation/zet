@@ -15,6 +15,7 @@
  */
 package opengl.helper;
 
+import de.tu_berlin.math.coga.math.Conversion;
 import de.tu_berlin.math.coga.math.vectormath.Plane;
 import de.tu_berlin.math.coga.math.vectormath.Vector3;
 
@@ -22,9 +23,6 @@ import de.tu_berlin.math.coga.math.vectormath.Vector3;
  *  @author Jan-Philipp Kappmeier
  */
 public class Frustum {
-
-    public static final double ANGLE2DEG = Math.PI / 180.0;
-    public static final double DEG2ANGLE = 180.0 / Math.PI;
 
     private double fov = 45.0;
 
@@ -153,8 +151,8 @@ public class Frustum {
 	}
 
     private void recalc () {
-		nearHeight = 2 * Math.tan( fov * ANGLE2DEG * 0.5 ) * nearDist;
-		farHeight  = 2 * Math.tan( fov * ANGLE2DEG * 0.5 ) * farDist;
+		nearHeight = 2 * Math.tan( fov * Conversion.ANGLE2DEG * 0.5 ) * nearDist;
+		farHeight  = 2 * Math.tan( fov * Conversion.ANGLE2DEG * 0.5 ) * farDist;
 		nearWidth  = nearHeight * aspect;
 		farWidth   = farHeight  * aspect;
 	}
@@ -256,7 +254,7 @@ public class Frustum {
 		if( dist < nearDist || dist > farDist )
 			return 0;
 
-		double val = 2 * Math.tan( fov * ANGLE2DEG * 0.5 ) * dist;
+		double val = 2 * Math.tan( fov * Conversion.ANGLE2DEG * 0.5 ) * dist;
 		return val;
 	}
 

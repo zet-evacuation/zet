@@ -211,11 +211,15 @@ public class FileFlow implements AlgorithmListener {
 		System.out.println( "Param #1: filename/path");
 		System.out.println();
 
+		String filename0 = "./testinstanz/problem.dat";
+		String filename1 = "./testinstanz/siouxfalls_500_10s.dat";
+
 		try {
 			FileFlow ff = new FileFlow();
 			EarliestArrivalFlowProblem eat = read( arguments[0] );
+			//EarliestArrivalFlowProblem eat = read( filename1 );
 			ff.computeFlow( eat );
-			ff.writeFile( "problem.dat", eat, "./testinstanz/output.dat" );
+			//FileFlow.writeFile( "problem.dat", eat, "./testinstanz/output.dat" );
 		} catch( FileNotFoundException e ) {
 			System.out.println( "Datei nicht gefunden." );
 			printFiles();

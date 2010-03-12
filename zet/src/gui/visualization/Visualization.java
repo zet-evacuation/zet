@@ -21,6 +21,7 @@
 package gui.visualization;
 
 import de.tu_berlin.math.coga.common.localization.Localization;
+import de.tu_berlin.math.coga.math.Conversion;
 import de.tu_berlin.math.coga.math.vectormath.Vector3;
 import ds.PropertyContainer;
 import event.EventServer;
@@ -45,7 +46,6 @@ import javax.media.opengl.glu.GLUquadric;
 import java.io.PrintStream;
 import opengl.drawingutils.GLColor;
 import opengl.framework.abs.DrawableControlable;
-import opengl.helper.Frustum;
 import opengl.helper.ProjectionHelper;
 import opengl.helper.Texture;
 import opengl.helper.TextureFont;
@@ -239,7 +239,7 @@ public class Visualization<U extends DrawableControlable> extends AbstractVisual
 		int orientation = Vector3.orientation( rotation2D, camera.getView() );
 		if( orientation == -1 )
 			eyeRotation = -eyeRotation;
-		eyeRotation = eyeRotation * Frustum.DEG2ANGLE;
+		eyeRotation = eyeRotation * Conversion.DEG2ANGLE;
 
 		gl.glTranslated( camera.getPos().x, camera.getPos().y, camera.getPos().z );
 		GLColor red = new GLColor( Color.red );

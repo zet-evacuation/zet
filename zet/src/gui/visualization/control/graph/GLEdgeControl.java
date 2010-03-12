@@ -15,6 +15,7 @@
  */
 package gui.visualization.control.graph;
 
+import de.tu_berlin.math.coga.math.Conversion;
 import ds.graph.Edge;
 import ds.graph.flow.EdgeBasedFlowOverTime;
 import ds.GraphVisualizationResult;
@@ -23,7 +24,6 @@ import ds.graph.Node;
 import ds.graph.NodeRectangle;
 import gui.visualization.VisualizationOptionManager;
 import gui.visualization.draw.graph.GLEdge;
-import opengl.helper.Frustum;
 import java.util.ArrayList;
 
 import de.tu_berlin.math.coga.math.vectormath.Vector3;
@@ -167,7 +167,7 @@ public class GLEdgeControl extends AbstractZETVisualizationControl<GLEdgeControl
 	 */
 	public double getAngleBetween( Vector3 a, Vector3 b ) {
 		double cosine = (a.dotProduct( b ) / a.length()) / b.length();
-		double angle = Math.acos( cosine ) / Frustum.ANGLE2DEG;
+		double angle = Math.acos( cosine ) / Conversion.ANGLE2DEG;
 		return 180 - angle;
 	}
 
