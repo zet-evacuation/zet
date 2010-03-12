@@ -21,6 +21,7 @@ package gui.visualization;
 
 import com.sun.opengl.util.Animator;
 import com.sun.opengl.util.Screenshot;
+import de.tu_berlin.math.coga.math.Conversion;
 import ds.PropertyContainer;
 import event.EventServer;
 import event.MessageEvent;
@@ -270,7 +271,7 @@ public abstract class AbstractVisualization extends AbstractOpenGLCanvas {
 	 * @return the angle of the rotate vector
 	 */
 	final public double getRotateAngle() {
-		double rotateAngle = Math.atan( -rotation2D.y / rotation2D.x ) / Frustum.ANGLE2DEG;
+		double rotateAngle = Math.atan( -rotation2D.y / rotation2D.x ) * Conversion.DEG2ANGLE;
 		if( rotation2D.x < 0 )
 			rotateAngle += 180;
 		return rotateAngle;
@@ -423,7 +424,7 @@ public abstract class AbstractVisualization extends AbstractOpenGLCanvas {
 		//Vector3 oldUp = new Vector3(camera.getUp().x, camera.getUp().y, camera.getUp().z);
 
 		// Calculate angle
-		double rotateAngle = Math.atan( -rotation2D.y / rotation2D.x ) / Frustum.ANGLE2DEG;
+		double rotateAngle = Math.atan( -rotation2D.y / rotation2D.x ) * Conversion.DEG2ANGLE;
 		if( rotation2D.x < 0 )
 			rotateAngle += 180;
 		rotateAngle = -rotateAngle;

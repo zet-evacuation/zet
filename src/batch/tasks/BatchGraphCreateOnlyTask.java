@@ -1,10 +1,5 @@
 /**
  * BatchGraphCreateOnlyTask.java
- * input:
- * output:
- *
- * method:
- *
  * Created: Mar 11, 2010,5:50:17 PM
  */
 package batch.tasks;
@@ -27,8 +22,6 @@ public class BatchGraphCreateOnlyTask {
 	private BatchResultEntry res;
 	/** The number of the run, used for accessing the result in {@link res} */
 	private int runNumber;
-	/** The maximal time for the graph algorithm, if used. */
-	private int maxTime;
 	/** The {@link ds.z.Project} */
 	private Project project;
 	/** The used assignment for the ca run. */
@@ -46,10 +39,9 @@ public class BatchGraphCreateOnlyTask {
 	 * @param assignment the selected assignment
 	 * @param concreteAssignments the concrete assignments that were already calculated for the cellular automaton. can be null.
 	 */
-	public BatchGraphCreateOnlyTask( BatchResultEntry res, int runNumber, int maxTime, Project project, Assignment assignment, ConcreteAssignment[] concreteAssignments ) {
+	public BatchGraphCreateOnlyTask( BatchResultEntry res, int runNumber, Project project, Assignment assignment, ConcreteAssignment[] concreteAssignments ) {
 		this.res = res;
 		this.runNumber = runNumber;
-		this.maxTime = maxTime;
 		this.project = project;
 		this.assignment = assignment;
 		this.concreteAssignments = concreteAssignments;

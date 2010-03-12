@@ -1303,13 +1303,10 @@ public class JEditor extends JFrame implements Localized, EventListener<Progress
 				ConcreteAssignment[] concreteAssignments = new ConcreteAssignment[1];
 				Assignment assignment = getZControl().getProject().getCurrentAssignment();
 				concreteAssignments[0] = assignment.createConcreteAssignment( 400 );
-				BatchGraphCreateOnlyTask bgt = new BatchGraphCreateOnlyTask( ca_res, 0, 600, getZControl().getProject(), assignment, concreteAssignments );
-				bgt.run();
+				new BatchGraphCreateOnlyTask( ca_res, 0, getZControl().getProject(), assignment, concreteAssignments ).run();
 				NetworkFlowModel originalProblem = ca_res.getNetworkFlowModel();
 				EarliestArrivalFlowProblem problem = new EarliestArrivalFlowProblem( originalProblem.getEdgeCapacities(), originalProblem.getNetwork(), originalProblem.getNodeCapacities(), originalProblem.getSupersink(), originalProblem.getSources(), 0, originalProblem.getTransitTimes(), originalProblem.getCurrentAssignment() );
 				try {
-					//FileFlow ff = new FileFlow();
-					//ff.computeFlow( problem );
 					FileFlow.writeFile( getZControl().getProject().getProjectFile().getName(), problem, getZControl().getProject().getProjectFile().getName() + ".dat" );
 				} catch( FileNotFoundException ex ) {
 					ZETMain.sendError( "FileNotFoundException" );

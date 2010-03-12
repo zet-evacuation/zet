@@ -415,6 +415,10 @@ public class Project implements Serializable {
 		return p;
 	}
 
+	/**
+	 * Returns the project file, if a file is loaded. New projects don't have a file.
+	 * @return the project file
+	 */
 	public File getProjectFile() {
 		return projectFile;
 	}

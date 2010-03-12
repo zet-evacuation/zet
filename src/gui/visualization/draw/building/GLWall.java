@@ -21,6 +21,7 @@
 
 package gui.visualization.draw.building;
 
+import de.tu_berlin.math.coga.math.Conversion;
 import de.tu_berlin.math.coga.math.vectormath.Vector3;
 import gui.visualization.VisualizationOptionManager;
 import gui.visualization.control.building.GLWallControl;
@@ -120,11 +121,11 @@ public class GLWall extends AbstractDrawable<GLWall, GLWallControl> {
 				GLVector outerEndVectorAddition;
 
 				if( control.isRoomLeft() ) {
-						innerStartVectorAddition.rotate( -(angleEnd/2)*Frustum.DEG2ANGLE, new Vector3( 0,0,1) );
+						innerStartVectorAddition.rotate( -(angleEnd/2)*Conversion.DEG2ANGLE, new Vector3( 0,0,1) );
 						innerStartVectorAddition.scalarMultiplicateTo( getHypothenuseFactor( angleEnd / 2 ) );
 						innerStart.addTo( innerStartVectorAddition );
 						innerStartHigh.addTo( innerStartVectorAddition );
-						innerEndVectorAddition.rotate( (angleStart/2)*Frustum.DEG2ANGLE, new Vector3( 0,0,1) );
+						innerEndVectorAddition.rotate( (angleStart/2)*Conversion.DEG2ANGLE, new Vector3( 0,0,1) );
 						innerEndVectorAddition.scalarMultiplicateTo( getHypothenuseFactor( angleStart / 2 ) );
 						innerEnd.addTo( innerEndVectorAddition );
 						innerEndHigh.addTo( innerEndVectorAddition );
@@ -137,11 +138,11 @@ public class GLWall extends AbstractDrawable<GLWall, GLWallControl> {
 					normal.normal( gl );
 					outerEndVectorAddition = new GLVector( normal );
 					outerStartVectorAddition = new GLVector( normal );
-						outerEndVectorAddition.rotate( (angleStart/2)*Frustum.DEG2ANGLE, new Vector3( 0,0,1) );
+						outerEndVectorAddition.rotate( (angleStart/2)*Conversion.DEG2ANGLE, new Vector3( 0,0,1) );
 						outerEndVectorAddition.scalarMultiplicateTo( getHypothenuseFactor( angleStart / 2 ) );
 						outerEnd.addTo( outerEndVectorAddition );
 						outerEndHigh.addTo( outerEndVectorAddition );
-						outerStartVectorAddition.rotate( -(angleEnd/2)*Frustum.DEG2ANGLE, new Vector3( 0,0,1) );
+						outerStartVectorAddition.rotate( -(angleEnd/2)*Conversion.DEG2ANGLE, new Vector3( 0,0,1) );
 						outerStartVectorAddition.scalarMultiplicateTo( getHypothenuseFactor( angleEnd / 2 ) );
 						outerStart.addTo( outerStartVectorAddition );
 						outerStartHigh.addTo( outerStartVectorAddition );
@@ -151,14 +152,14 @@ public class GLWall extends AbstractDrawable<GLWall, GLWallControl> {
 					gl.glVertex3d( outerStartHigh.x, outerStartHigh.y, outerStartHigh.z );
 				} else { // Room is right
 					if( Math.cos( angleEnd * 0.5 ) > 0.000001 ) { // added
-						innerStartVectorAddition.rotate( (angleEnd/2)*Frustum.DEG2ANGLE, new Vector3( 0,0,1) );
+						innerStartVectorAddition.rotate( (angleEnd/2)*Conversion.DEG2ANGLE, new Vector3( 0,0,1) );
 						innerStartVectorAddition.scalarMultiplicateTo( getHypothenuseFactor( angleEnd / 2 ) );
 					} // added
 						innerStart.addTo( innerStartVectorAddition );
 						innerStartHigh.addTo( innerStartVectorAddition );
 
 					if( Math.cos( angleStart * 0.5 ) > 0.00001 ) {
-						innerEndVectorAddition.rotate( -(angleStart/2)*Frustum.DEG2ANGLE, new Vector3( 0,0,1) );
+						innerEndVectorAddition.rotate( -(angleStart/2)*Conversion.DEG2ANGLE, new Vector3( 0,0,1) );
 						innerEndVectorAddition.scalarMultiplicateTo( getHypothenuseFactor( angleStart / 2 ) );
 					}
 					innerEnd.addTo( innerEndVectorAddition );
@@ -173,13 +174,13 @@ public class GLWall extends AbstractDrawable<GLWall, GLWallControl> {
 					outerEndVectorAddition = new GLVector( normal );
 					outerStartVectorAddition = new GLVector( normal );
 					if( Math.cos( angleStart * 0.5 ) > 0.000001 ) { // added
-						outerEndVectorAddition.rotate( -(angleStart/2)*Frustum.DEG2ANGLE, new Vector3( 0,0,1) );
+						outerEndVectorAddition.rotate( -(angleStart/2)*Conversion.DEG2ANGLE, new Vector3( 0,0,1) );
 						outerEndVectorAddition.scalarMultiplicateTo( getHypothenuseFactor( angleStart / 2 ) );
 					}
 						outerEnd.addTo( outerEndVectorAddition );
 						outerEndHigh.addTo( outerEndVectorAddition );
 					if( Math.cos( angleEnd * 0.5 ) > 0.000001 ) { // added
-						outerStartVectorAddition.rotate( +(angleEnd/2)*Frustum.DEG2ANGLE, new Vector3( 0,0,1) );
+						outerStartVectorAddition.rotate( +(angleEnd/2)*Conversion.DEG2ANGLE, new Vector3( 0,0,1) );
 						outerStartVectorAddition.scalarMultiplicateTo( getHypothenuseFactor( angleEnd / 2 ) );
 					}
 						outerStart.addTo( outerStartVectorAddition );
