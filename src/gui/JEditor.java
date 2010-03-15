@@ -18,6 +18,7 @@
  * JEditor.java
  * Created on 4. Dezember 2007, 17:08
  */
+
 package gui;
 
 import algo.ca.CellularAutomatonInOrderExecution;
@@ -1307,7 +1308,7 @@ public class JEditor extends JFrame implements Localized, EventListener<Progress
 				NetworkFlowModel originalProblem = ca_res.getNetworkFlowModel();
 				EarliestArrivalFlowProblem problem = new EarliestArrivalFlowProblem( originalProblem.getEdgeCapacities(), originalProblem.getNetwork(), originalProblem.getNodeCapacities(), originalProblem.getSupersink(), originalProblem.getSources(), 0, originalProblem.getTransitTimes(), originalProblem.getCurrentAssignment() );
 				try {
-					FileFlow.writeFile( getZControl().getProject().getProjectFile().getName(), problem, getZControl().getProject().getProjectFile().getName() + ".dat" );
+					FileFlow.writeFile( getZControl().getProject().getProjectFile().getName(), problem, getZControl().getProject().getProjectFile().getName() + ".dat", originalProblem.getZToGraphMapping() );
 				} catch( FileNotFoundException ex ) {
 					ZETMain.sendError( "FileNotFoundException" );
 					ex.printStackTrace();

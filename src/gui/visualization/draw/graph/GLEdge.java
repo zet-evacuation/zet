@@ -18,13 +18,13 @@ package gui.visualization.draw.graph;
 import gui.visualization.QualityPreset;
 import gui.visualization.VisualizationOptionManager;
 import gui.visualization.control.graph.GLEdgeControl;
-import gui.visualization.util.VisualizationConstants;
 import java.util.ArrayList;
 import javax.media.opengl.GL;
 import javax.media.opengl.glu.GLU;
 import opengl.drawingutils.GLColor;
 import opengl.framework.abs.AbstractDrawable;
 import de.tu_berlin.math.coga.math.vectormath.Vector3;
+import gui.visualization.control.graph.GLGraphControl;
 
 //public class GLEdge extends AbstractDrawable<CullingShapeCube, GLEdge, GLEdgeControl, GLEdgeControl> {
 public class GLEdge extends AbstractDrawable<GLEdge, GLEdgeControl> {
@@ -36,8 +36,8 @@ public class GLEdge extends AbstractDrawable<GLEdge, GLEdgeControl> {
 	static GLColor flowColor;
 	static GLColor flowUnitColor;
 	/* The thickness of the edges and pieces of flow according to their capacities. */
-	static double thickness = 5 /* *1.5*/ /* 5 */ * VisualizationConstants.SIZE_MULTIPLICATOR; // factor of 1.5 used for test evacuation report
-	static double flowThickness = 7 /* * 1.5 */ /* 7 */* VisualizationConstants.SIZE_MULTIPLICATOR; //// factor of 1.5 used for test evacuation report
+	static double thickness = 5 /* *1.5*/ /* 5 */ * GLGraphControl.sizeMultiplicator; // factor of 1.5 used for test evacuation report
+	static double flowThickness = 7 /* * 1.5 */ /* 7 */* GLGraphControl.sizeMultiplicator; //// factor of 1.5 used for test evacuation report
 	static double minFlowThickness = 10; /* 10 */ // original 3
 	static double maxFlowThickness = 10;
 	static double flowThicknessOfOneCapacityStep;
@@ -52,7 +52,9 @@ public class GLEdge extends AbstractDrawable<GLEdge, GLEdgeControl> {
 	double maxCapacity;
 	/* The length of the edge in {@code OpenGL} scaling. */
 	double length;
-	private static QualityPreset qualityPreset = VisualizationOptionManager.getQualityPreset();
+	// TODO read quality from VisualOptionManager
+	//private static QualityPreset qualityPreset = VisualizationOptionManager.getQualityPreset();
+	private static QualityPreset qualityPreset = QualityPreset.MediumQuality;
 
 	public GLEdge( GLEdgeControl control ) {
 		super( control );
@@ -189,15 +191,15 @@ public class GLEdge extends AbstractDrawable<GLEdge, GLEdgeControl> {
 	@Override
 	public void update() {
 		transitTime = control.getTransitTime();
-		length = control.get3DLength() * VisualizationConstants.SIZE_MULTIPLICATOR;
+		length = control.get3DLength() * GLGraphControl.sizeMultiplicator;
 		capacity = control.getCapacity();
 		maxCapacity = control.getMaxCapacity();
 		edgeColor = VisualizationOptionManager.getEdgeColor();
 		flowColor = VisualizationOptionManager.getFlowUnitColor();
 		flowUnitColor = VisualizationOptionManager.getFlowUnitEndColor();
 		maxFlowRate = control.getMaxFlowRate();
-		minFlowThickness = 3 * VisualizationConstants.SIZE_MULTIPLICATOR * 1.7;
-		maxFlowThickness = 10 * VisualizationConstants.SIZE_MULTIPLICATOR * 1.7;
+		minFlowThickness = 3 * GLGraphControl.sizeMultiplicator * 1.7;
+		maxFlowThickness = 10 * GLGraphControl.sizeMultiplicator * 1.7;
 		flowThicknessOfOneCapacityStep = (maxFlowThickness - minFlowThickness) / maxFlowRate;
 	}
 }

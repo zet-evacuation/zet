@@ -21,7 +21,7 @@ import ds.ca.CellularAutomaton;
 import ds.ca.PotentialManager;
 import ds.ca.StaticPotential;
 import gui.visualization.control.building.GLBuildingControl;
-import gui.visualization.control.ca.GLCAControl;
+import gui.visualization.control.ca.GLCellularAutomatonControl;
 import gui.visualization.control.ca.GLCAFloorControl;
 import gui.visualization.control.ca.GLCellControl;
 import gui.visualization.control.ca.GLIndividualControl;
@@ -103,7 +103,7 @@ public class GLControl implements DrawableControlable {
 	private BuildingResults buildingResults;
 	/** Represents the statistic  */
 	private CAStatistic caStatistic;
-	private GLCAControl caControl;
+	private GLCellularAutomatonControl caControl;
 	private GLGraphControl graphControl;
 	private GLBuildingControl buildingControl;
 	/** The estimated time used for the whole visualization in seconds. */
@@ -141,7 +141,7 @@ public class GLControl implements DrawableControlable {
 		if( caVisResults != null ) {
 			hasCellularAutomaton = true;
 			ca = new CellularAutomaton( caVisResults.getRecording().getInitialConfig() );
-			caControl = new GLCAControl( caVisResults, ca );
+			caControl = new GLCellularAutomatonControl( caVisResults, ca );
 			estimatedTime = Math.max( estimatedTime, caVisResults.getRecording().length() * caControl.getSecondsPerStep() );
 		} else
 			hasCellularAutomaton = false;
@@ -472,7 +472,7 @@ public class GLControl implements DrawableControlable {
 		if( showCA && hasCellularAutomaton )
 			caControl.getView().draw( gl );
 		if( showGraph && hasGraph )
-			graphControl.getView().draw( gl );
+			graphControl.draw( gl );
 		if( showWalls )
 			buildingControl.getView().draw( gl );
 	}

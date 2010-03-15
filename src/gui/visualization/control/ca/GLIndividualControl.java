@@ -38,7 +38,7 @@ import java.util.ArrayList;
  * @author Jan-Philipp Kappmeier
  */
 //public class GLIndividualControl extends AbstractControl<GLIndividual, Individual, CAVisualizationResults, GLIndividual, GLIndividualControl, GLControl> implements StepUpdateListener {
-public class GLIndividualControl extends AbstractZETVisualizationControl<GLIndividualControl, GLIndividual, GLCAControl> implements StepUpdateListener {
+public class GLIndividualControl extends AbstractZETVisualizationControl<GLIndividualControl, GLIndividual, GLCellularAutomatonControl> implements StepUpdateListener {
 
 	/** The history data structure that stores information about the positions of the individual at given times */
 	private ArrayList<VisHistoryTriple<Double, GLCellControl, GLCellControl>> path;
@@ -70,7 +70,7 @@ public class GLIndividualControl extends AbstractZETVisualizationControl<GLIndiv
 	 * @param individual the controlled individual
 	 * @param glControl the general control class
 	 */
-	public GLIndividualControl( Individual individual, GLCAControl glControl ) {
+	public GLIndividualControl( Individual individual, GLCellularAutomatonControl glControl ) {
 		super( glControl );
 		this.setView( new GLIndividual( this ) );
 		this.controlled = individual;

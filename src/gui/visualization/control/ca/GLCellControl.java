@@ -41,7 +41,7 @@ import de.tu_berlin.math.coga.common.util.Direction;
 import gui.visualization.control.AbstractZETVisualizationControl;
 
 //public class GLCellControl extends AbstractControl<GLCell, Cell, CAVisualizationResults, GLCell, GLCellControl, GLControl> implements StepUpdateListener {
-public class GLCellControl extends AbstractZETVisualizationControl<GLCellControl, GLCell, GLCAControl> implements StepUpdateListener {
+public class GLCellControl extends AbstractZETVisualizationControl<GLCellControl, GLCell, GLCellularAutomatonControl> implements StepUpdateListener {
 
 	private int floorID;
 	private GLRoomControl glRoomControlObject;  // the corresponding GLRoomControl of this object
@@ -58,7 +58,7 @@ public class GLCellControl extends AbstractZETVisualizationControl<GLCellControl
 		mergedPotential = null;
 	}
 
-	public GLCellControl( CAVisualizationResults caVisResults, Cell cell, GLRoomControl glRoomControl, GLCAControl glControl ) {
+	public GLCellControl( CAVisualizationResults caVisResults, Cell cell, GLRoomControl glRoomControl, GLCellularAutomatonControl glControl ) {
 		super( glControl );
 		this.controlled = cell;
 		xPosition = caVisResults.get( cell ).x;

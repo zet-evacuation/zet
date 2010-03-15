@@ -1,10 +1,5 @@
 /**
  * FileFlow.java
- * input:
- * output:
- *
- * method:
- *
  * Created: Mar 11, 2010,10:59:01 AM
  */
 package zet;
@@ -12,6 +7,7 @@ package zet;
 import algo.graph.dynamicflow.eat.EarliestArrivalFlowProblem;
 import algo.graph.dynamicflow.eat.SEAAPAlgorithm;
 import batch.tasks.AlgorithmTask;
+import converter.ZToGraphMapping;
 import de.tu_berlin.math.coga.common.algorithm.Algorithm;
 import de.tu_berlin.math.coga.common.algorithm.AlgorithmEvent;
 import de.tu_berlin.math.coga.common.algorithm.AlgorithmListener;
@@ -22,8 +18,10 @@ import de.tu_berlin.math.coga.common.util.Formatter;
 import ds.graph.Edge;
 import ds.graph.IdentifiableCollection;
 import ds.graph.IdentifiableIntegerMapping;
+import ds.graph.IdentifiableObjectMapping;
 import ds.graph.Network;
 import ds.graph.Node;
+import ds.graph.NodeRectangle;
 import ds.graph.flow.PathBasedFlowOverTime;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
@@ -44,11 +42,155 @@ import java.util.List;
 public class FileFlow implements AlgorithmListener {
 
 	public static EarliestArrivalFlowProblem read( String filename ) throws FileNotFoundException, IOException {
+		return read( filename, null, null );
+	}
+
+	public static EarliestArrivalFlowProblem read( String filename, IdentifiableIntegerMapping<Node> x, IdentifiableIntegerMapping<Node> y ) throws FileNotFoundException, IOException {
 		BufferedReader read = new BufferedReader( new FileReader( new File( filename ) ) );
 		String s;
 
 		int nodeCount = 0;
-		int estimatedTimeHorizon = 0;
+		int edgeCount = -1;
+		int estimatedTimeHorizon = -1;
+
+//		ArrayList<Long> source_id = new ArrayList<Long>();
+//		ArrayList<Integer> source_sup = new ArrayList<Integer>();
+
+
+		ArrayList<Long> node_id = new ArrayList<Long>();
+		ArrayList<Integer> node_sup = new ArrayList<Integer>();
+
+		ArrayList<Integer> node_x = new ArrayList<Integer>();
+		ArrayList<Integer> node_y = new ArrayList<Integer>();
+
+		ArrayList<Long> edge_start = new ArrayList<Long>();
+		ArrayList<Long> edge_end = new ArrayList<Long>();
+		ArrayList<Integer> edge_cap = new ArrayList<Integer>();
+		ArrayList<Integer> edge_len = new ArrayList<Integer>();
+
+		HashMap<Long, Integer> nodeMap = new HashMap<Long, Integer>();
+
+		int currentNodeID = 0;
+
+		while((s = read.readLine()) != null) {
+			if( s.length() == 0 )
+				continue;
+			if( s.charAt( 0 ) == 'S' )
+				continue;
+			if( s.charAt( 0 ) == '%' )	// comment
+				continue;
+			if( s.charAt( 0 ) == 'N' ) {
+				nodeCount = Integer.parseInt( s.substring( 2 ) );
+				continue;
+			}
+			if( s.charAt( 0 ) == 'M' ) {
+				edgeCount = Integer.parseInt( s.substring( 2 ) );
+				continue;
+			}
+			if( s.startsWith( "TIME" ) ) {
+				estimatedTimeHorizon = Integer.parseInt( s.substring( 5 ) );
+				continue;
+			}
+			if( s.charAt( 0 ) == 'T' )
+				continue;
+			if( s.startsWith( "HOLDOVER" ) )
+				continue;
+			if( s.charAt( 0 ) == 'V' ) {
+				final String[] split = s.split( " " );
+				final long nodeID = Long.parseLong( split[1] );
+				nodeMap.put( nodeID, currentNodeID++ );
+				final int nodeSupply = Integer.parseInt( split[2] );
+				if( x != null && y != null ) {
+					final int readX = (int)Double.parseDouble( split[3] );
+					final int readY = (int)Double.parseDouble( split[4] );
+					node_x.add( readX );
+					node_y.add( readY );
+				}
+				node_id.add( nodeID );
+				node_sup.add( nodeSupply );
+				continue;
+			}
+			if( s.charAt( 0 ) == 'E' ) {
+				final String[] split = s.split( " " );
+				final long start = Long.parseLong( split[1] );
+				final long end = Long.parseLong( split[2] );
+				if( !nodeMap.containsKey( start ) )
+					nodeMap.put( start, currentNodeID++ );
+				if( !nodeMap.containsKey( end ) )
+					nodeMap.put( end, currentNodeID++ );
+				edge_start.add( start );
+				edge_end.add( end );
+				edge_cap.add( Integer.parseInt( split[3] ) );
+				edge_len.add( Integer.parseInt( split[4] ) );
+				continue;
+			}
+			throw new IllegalStateException( "Unbekannte Zeile" );
+		}
+
+		x.setDomainSize( nodeCount );
+		y.setDomainSize( nodeCount );
+		
+		//int edgeCount = edge_start.size();
+		if( edgeCount < 0 )
+			edgeCount = edge_start.size();
+
+		System.out.println( "Knotenzahl: " + nodeCount );
+		System.out.println( "Hasheinträge: " + nodeMap.size() );
+		System.out.println( "Kantenzahl: " + edge_start.size() );
+		System.out.println( "Zeithorizont (geschätzt): " + estimatedTimeHorizon );
+		System.out.println( "Knoten: " + node_id.toString() );
+		System.out.println( "mit Angeboten " + node_sup.toString() );
+		System.out.println( "Kanten von " + edge_start.toString() );
+		System.out.println( "nach " + edge_end.toString() );
+		System.out.println( "Mit Kapazitäten " + edge_cap.toString() );
+		System.out.println( "Mit Länge " + edge_len.toString() );
+		System.out.println( "Nächste Knotennummer: " + currentNodeID );
+
+		System.out.println();
+		System.out.println( "Erzeuge Netzwerk..." );
+
+
+		Network network = new Network( nodeCount, edgeCount );
+		for( int i = 0; i < edgeCount; ++i )
+			network.createAndSetEdge( network.getNode( nodeMap.get( edge_start.get( i ) ) ), network.getNode( nodeMap.get( edge_end.get( i ) ) ) );
+		Long t;
+		IdentifiableIntegerMapping<Edge> edgeCapacities = new IdentifiableIntegerMapping<Edge>( network.edges() );
+		IdentifiableIntegerMapping<Node> nodeCapacities = new IdentifiableIntegerMapping<Node>( network.nodes() );
+		IdentifiableIntegerMapping<Edge> transitTimes = new IdentifiableIntegerMapping<Edge>( network.edges() );
+		IdentifiableIntegerMapping<Node> currentAssignment = new IdentifiableIntegerMapping<Node>( network.nodes() );
+
+		for( int i = 0; i < edgeCount; ++i ) {
+			edgeCapacities.set( network.getEdge( network.getNode( nodeMap.get( edge_start.get( i ) ) ), network.getNode( nodeMap.get( edge_end.get( i ) ) ) ), edge_cap.get( i ) );
+			transitTimes.set( network.getEdge( network.getNode( nodeMap.get( edge_start.get( i ) ) ), network.getNode( nodeMap.get( edge_end.get( i ) ) ) ), edge_len.get( i ) );
+		}
+
+		for( int i = 0; i < nodeCount; ++i )
+			nodeCapacities.set( network.getNode( i ), 1000 );
+
+		Node sink = null;
+		ArrayList<Node> sources = new ArrayList<Node>();
+		for( int i = 0; i < node_id.size(); ++i ) {
+			currentAssignment.set( network.getNode( nodeMap.get( node_id.get( i ) ) ), node_sup.get( i ) );
+			if( node_sup.get( i ) < 0 )
+				sink = network.getNode( nodeMap.get( node_id.get( i ) ) );
+			if( node_sup.get( i ) > 0 )
+				sources.add( network.getNode( nodeMap.get( node_id.get( i ) ) ) );
+			x.set( network.getNode( nodeMap.get( node_id.get( i ) ) ), node_x.get( i ) );
+			y.set( network.getNode( nodeMap.get( node_id.get( i ) ) ), node_y.get( i ) );
+		}
+
+		System.out.println( network.toString() );
+
+		return new EarliestArrivalFlowProblem( edgeCapacities, network, nodeCapacities, sink, sources, estimatedTimeHorizon, transitTimes, currentAssignment );
+	}
+
+	public static EarliestArrivalFlowProblem readOld( String filename ) throws FileNotFoundException, IOException {
+		BufferedReader read = new BufferedReader( new FileReader( new File( filename ) ) );
+		String s;
+
+		int nodeCount = 0;
+		int edgeCount = -1;
+		int estimatedTimeHorizon = -1;
 
 		ArrayList<Long> source_id = new ArrayList<Long>();
 		ArrayList<Integer> source_sup = new ArrayList<Integer>();
@@ -70,6 +212,10 @@ public class FileFlow implements AlgorithmListener {
 				continue;
 			if( s.charAt( 0 ) == 'N' ) {
 				nodeCount = Integer.parseInt( s.substring( 2 ) );
+				continue;
+			}
+			if( s.charAt( 0 ) == 'M' ) {
+				edgeCount = Integer.parseInt( s.substring( 2 ) );
 				continue;
 			}
 			if( s.startsWith( "TIME" ) ) {
@@ -113,7 +259,9 @@ public class FileFlow implements AlgorithmListener {
 			throw new IllegalStateException( "Unbekannte Zeile" );
 		}
 
-		int edgeCount = edge_start.size();
+		//int edgeCount = edge_start.size();
+		if( edgeCount < 0 )
+			edgeCount = edge_start.size();
 
 		System.out.println( "Knotenzahl: " + nodeCount );
 		System.out.println( "Hasheinträge: " + nodeMap.size() );
@@ -213,11 +361,12 @@ public class FileFlow implements AlgorithmListener {
 
 		String filename0 = "./testinstanz/problem.dat";
 		String filename1 = "./testinstanz/siouxfalls_500_10s.dat";
+		String filename2 = "./testinstanz/4 rooms demo.dat";
 
 		try {
 			FileFlow ff = new FileFlow();
-			EarliestArrivalFlowProblem eat = read( arguments[0] );
-			//EarliestArrivalFlowProblem eat = read( filename1 );
+//			EarliestArrivalFlowProblem eat = read( arguments[0] );
+			EarliestArrivalFlowProblem eat = read( filename1 );
 			ff.computeFlow( eat );
 			//FileFlow.writeFile( "problem.dat", eat, "./testinstanz/output.dat" );
 		} catch( FileNotFoundException e ) {
@@ -241,10 +390,47 @@ public class FileFlow implements AlgorithmListener {
 
 	public static void writeFile( String original, EarliestArrivalFlowProblem eafp, String filename ) throws FileNotFoundException, IOException {
 		//writeFile( filename, eafp.getNetwork().numberOfNodes(), eafp.getTimeHorizon(), eafp.getSources(), eafp.getSink(), eafp.getNetwork().edges(), eafp.getEdgeCapacities(), eafp.getTransitTimes(), eafp.getSupplies() );
-		writeFile( original, filename, eafp.getNetwork().numberOfNodes(), -1, eafp.getSources(), eafp.getSink(), eafp.getNetwork().edges(), eafp.getEdgeCapacities(), eafp.getTransitTimes(), eafp.getSupplies() );
+		writeFile( original, filename, -1, eafp.getNetwork().nodes(), eafp.getSources(), eafp.getSink(), eafp.getNetwork().edges(), eafp.getEdgeCapacities(), eafp.getTransitTimes(), eafp.getSupplies(), null );
 	}
 
-	public static void writeFile( String original, String filename, int nodeCount, int timeHorizon, List<Node> sources, Node sink, IdentifiableCollection<Edge> edges, IdentifiableIntegerMapping<Edge> edgeCapacities, IdentifiableIntegerMapping<Edge> transitTimes, IdentifiableIntegerMapping<Node> currentAssignment ) throws FileNotFoundException, IOException {
+	public static void writeFile( String original, EarliestArrivalFlowProblem eafp, String filename, ZToGraphMapping mapping ) throws FileNotFoundException, IOException {
+		//writeFile( filename, eafp.getNetwork().numberOfNodes(), eafp.getTimeHorizon(), eafp.getSources(), eafp.getSink(), eafp.getNetwork().edges(), eafp.getEdgeCapacities(), eafp.getTransitTimes(), eafp.getSupplies() );
+		writeFile( original, filename, -1, eafp.getNetwork().nodes(), eafp.getSources(), eafp.getSink(), eafp.getNetwork().edges(), eafp.getEdgeCapacities(), eafp.getTransitTimes(), eafp.getSupplies(), mapping.getNodeRectangles() );
+	}
+
+	public static void writeFile( String original, String filename, int timeHorizon, IdentifiableCollection<Node> nodes, List<Node> sources, Node sink, IdentifiableCollection<Edge> edges, IdentifiableIntegerMapping<Edge> edgeCapacities, IdentifiableIntegerMapping<Edge> transitTimes, IdentifiableIntegerMapping<Node> currentAssignment, IdentifiableObjectMapping<Node,NodeRectangle> nodePositions ) throws FileNotFoundException, IOException {
+		BufferedWriter writer = new BufferedWriter( new FileWriter( new File( filename ) ) );
+		String s;
+
+		writer.write( "% Written by ZET FlowWriter\n" );
+		writer.write( "% original file: " + original + '\n' );
+		writer.write( "N " + nodes.size() + '\n' );
+		writer.write( "M " + edges.size() + '\n' );
+		writer.write( "TIME " + timeHorizon + '\n' );
+
+		for( Node node : nodes ) {
+			if( nodePositions == null )
+				writer.write( "V " + node.id() + ' ' + currentAssignment.get( node ) + '\n' );
+			else {
+		int nwX = nodePositions.get( node ).get_nw_point().getX();
+		int nwY = nodePositions.get( node ).get_nw_point().getY();
+		int seX = nodePositions.get( node ).get_se_point().getX();
+		int seY = nodePositions.get( node ).get_se_point().getY();
+
+		int xPosition = (int)(nwX + 0.5 * (seX - nwX));
+		int yPosition = (int)(nwY + 0.5 * (seY - nwY));
+				writer.write( "V " + node.id() + ' ' + currentAssignment.get( node ) + ' ' + xPosition + ' ' + yPosition + '\n' );
+			}
+		}
+
+		for( Edge edge : edges ) {
+			writer.write( "E " + edge.start().id() + ' ' + edge.end().id() + ' ' + edgeCapacities.get( edge ) + ' ' + transitTimes.get( edge ) + '\n' );
+		}
+
+		writer.close();
+	}
+
+	public static void writeFileOld( String original, String filename, int nodeCount, int timeHorizon, List<Node> sources, Node sink, IdentifiableCollection<Edge> edges, IdentifiableIntegerMapping<Edge> edgeCapacities, IdentifiableIntegerMapping<Edge> transitTimes, IdentifiableIntegerMapping<Node> currentAssignment ) throws FileNotFoundException, IOException {
 		BufferedWriter writer = new BufferedWriter( new FileWriter( new File( filename ) ) );
 		String s;
 
@@ -265,4 +451,6 @@ public class FileFlow implements AlgorithmListener {
 
 		writer.close();
 	}
+
+
 }

@@ -13,12 +13,16 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
+
+/**
+ * GLNode.java
+ */
 package gui.visualization.draw.graph;
 
 import gui.visualization.QualityPreset;
 import gui.visualization.VisualizationOptionManager;
+import gui.visualization.control.graph.GLGraphControl;
 import gui.visualization.control.graph.GLNodeControl;
-import gui.visualization.util.VisualizationConstants;
 import javax.media.opengl.GL;
 import javax.media.opengl.glu.GLU;
 import opengl.drawingutils.GLColor;
@@ -27,7 +31,9 @@ import opengl.framework.abs.AbstractDrawable;
 public class GLNode extends AbstractDrawable<GLEdge, GLNodeControl> {
 	//public class GLNode extends AbstractDrawable<CullingShapeSphere, GLEdge, GLNodeControl, GLEdgeControl> {
 	//private GLNodeControl control;
-	private double graphHeight = VisualizationOptionManager.getGraphHeight() * VisualizationConstants.SIZE_MULTIPLICATOR;
+	// TODO read value from VisualizationOptionManager
+	//private double graphHeight = VisualizationOptionManager.getGraphHeight() * GLGraphControl.sizeMultiplicator;
+	private double graphHeight = 70 * GLGraphControl.sizeMultiplicator;
 	private double radius;
 	int nodeDisplayMode = GLU.GLU_FILL;//GLU.GLU_SILHOUETTE;
 	int flowDisplayMode = GLU.GLU_FILL;
@@ -37,16 +43,18 @@ public class GLNode extends AbstractDrawable<GLEdge, GLNodeControl> {
 	GLColor deletedSourceColor = VisualizationOptionManager.getDeletedSourceNodeColor();
 	GLColor nodeBorderColor = VisualizationOptionManager.getNodeBorderColor();
 	static double nodeRadius = 13 /* 2.2*/; // 13 // factor of 2.2 used for test evacuation report
-	private static QualityPreset qualityPreset = VisualizationOptionManager.getQualityPreset();
+	// TODO read quality preset from VisualizatonOptionManager
+	//private static QualityPreset qualityPreset = VisualizationOptionManager.getQualityPreset();
+	private static QualityPreset qualityPreset = QualityPreset.MediumQuality;
 
 	public GLNode( GLNodeControl control ) {
 		super( control );
 //			super( control, new CullingShapeSphere() );
 		this.control = control;
-		this.position.x = control.getXPosition() * VisualizationConstants.SIZE_MULTIPLICATOR;
-		this.position.y = control.getYPosition() * VisualizationConstants.SIZE_MULTIPLICATOR;
-		this.position.z = control.getZPosition() * VisualizationConstants.SIZE_MULTIPLICATOR;
-		this.radius = nodeRadius * VisualizationConstants.SIZE_MULTIPLICATOR;
+		this.position.x = control.getXPosition() * GLGraphControl.sizeMultiplicator;
+		this.position.y = control.getYPosition() * GLGraphControl.sizeMultiplicator;
+		this.position.z = control.getZPosition() * GLGraphControl.sizeMultiplicator;
+		this.radius = nodeRadius * GLGraphControl.sizeMultiplicator;
 		glu = new GLU();
 		quadObj = glu.gluNewQuadric();
 		glu.gluQuadricDrawStyle( quadObj, nodeDisplayMode );
@@ -71,6 +79,8 @@ public class GLNode extends AbstractDrawable<GLEdge, GLNodeControl> {
 		super.performDrawing( gl );
 		glu.gluQuadricDrawStyle( quadObj, flowDisplayMode );
 
+		System.out.print( "Node " + this.toString() + " is drawn." );
+
 		gl.glColor4d( 1.0, 0.0, 0.0, 1.0 );
 
 		//gl.glEnable( gl.GL_BLEND );
@@ -93,21 +103,21 @@ public class GLNode extends AbstractDrawable<GLEdge, GLNodeControl> {
 
 		//gl.glColor4d( 1.0, 1.0, 0.0, 0.3 );
 		nodeBorderColor.draw( gl );
-		double xOffset = -this.getControl().getXPosition() * VisualizationConstants.SIZE_MULTIPLICATOR;
-		double yOffset = this.getControl().getYPosition() * VisualizationConstants.SIZE_MULTIPLICATOR;
+		double xOffset = -this.getControl().getXPosition() * GLGraphControl.sizeMultiplicator;
+		double yOffset = this.getControl().getYPosition() * GLGraphControl.sizeMultiplicator;
 		if( control.isRectangleVisible() ) {
 			gl.glBegin( GL.GL_LINES );
-			gl.glVertex3d( this.getControl().getNwX() * VisualizationConstants.SIZE_MULTIPLICATOR + xOffset, this.getControl().getNwY() * VisualizationConstants.SIZE_MULTIPLICATOR + yOffset, -graphHeight + 1.0 * VisualizationConstants.SIZE_MULTIPLICATOR );
-			gl.glVertex3d( this.getControl().getSeX() * VisualizationConstants.SIZE_MULTIPLICATOR + xOffset, this.getControl().getNwY() * VisualizationConstants.SIZE_MULTIPLICATOR + yOffset, -graphHeight + 1.0 * VisualizationConstants.SIZE_MULTIPLICATOR );
+			gl.glVertex3d( this.getControl().getNwX() * GLGraphControl.sizeMultiplicator + xOffset, this.getControl().getNwY() * GLGraphControl.sizeMultiplicator + yOffset, -graphHeight + 1.0 * GLGraphControl.sizeMultiplicator );
+			gl.glVertex3d( this.getControl().getSeX() * GLGraphControl.sizeMultiplicator + xOffset, this.getControl().getNwY() * GLGraphControl.sizeMultiplicator + yOffset, -graphHeight + 1.0 * GLGraphControl.sizeMultiplicator );
 
-			gl.glVertex3d( this.getControl().getSeX() * VisualizationConstants.SIZE_MULTIPLICATOR + xOffset, this.getControl().getNwY() * VisualizationConstants.SIZE_MULTIPLICATOR + yOffset, -graphHeight + 1.0 * VisualizationConstants.SIZE_MULTIPLICATOR );
-			gl.glVertex3d( this.getControl().getSeX() * VisualizationConstants.SIZE_MULTIPLICATOR + xOffset, this.getControl().getSeY() * VisualizationConstants.SIZE_MULTIPLICATOR + yOffset, -graphHeight + 1.0 * VisualizationConstants.SIZE_MULTIPLICATOR );
+			gl.glVertex3d( this.getControl().getSeX() * GLGraphControl.sizeMultiplicator + xOffset, this.getControl().getNwY() * GLGraphControl.sizeMultiplicator + yOffset, -graphHeight + 1.0 * GLGraphControl.sizeMultiplicator );
+			gl.glVertex3d( this.getControl().getSeX() * GLGraphControl.sizeMultiplicator + xOffset, this.getControl().getSeY() * GLGraphControl.sizeMultiplicator + yOffset, -graphHeight + 1.0 * GLGraphControl.sizeMultiplicator );
 
-			gl.glVertex3d( this.getControl().getSeX() * VisualizationConstants.SIZE_MULTIPLICATOR + xOffset, this.getControl().getSeY() * VisualizationConstants.SIZE_MULTIPLICATOR + yOffset, -graphHeight + 1.0 * VisualizationConstants.SIZE_MULTIPLICATOR );
-			gl.glVertex3d( this.getControl().getNwX() * VisualizationConstants.SIZE_MULTIPLICATOR + xOffset, this.getControl().getSeY() * VisualizationConstants.SIZE_MULTIPLICATOR + yOffset, -graphHeight + 1.0 * VisualizationConstants.SIZE_MULTIPLICATOR );
+			gl.glVertex3d( this.getControl().getSeX() * GLGraphControl.sizeMultiplicator + xOffset, this.getControl().getSeY() * GLGraphControl.sizeMultiplicator + yOffset, -graphHeight + 1.0 * GLGraphControl.sizeMultiplicator );
+			gl.glVertex3d( this.getControl().getNwX() * GLGraphControl.sizeMultiplicator + xOffset, this.getControl().getSeY() * GLGraphControl.sizeMultiplicator + yOffset, -graphHeight + 1.0 * GLGraphControl.sizeMultiplicator );
 
-			gl.glVertex3d( this.getControl().getNwX() * VisualizationConstants.SIZE_MULTIPLICATOR + xOffset, this.getControl().getSeY() * VisualizationConstants.SIZE_MULTIPLICATOR + yOffset, -graphHeight + 1.0 * VisualizationConstants.SIZE_MULTIPLICATOR );
-			gl.glVertex3d( this.getControl().getNwX() * VisualizationConstants.SIZE_MULTIPLICATOR + xOffset, this.getControl().getNwY() * VisualizationConstants.SIZE_MULTIPLICATOR + yOffset, -graphHeight + 1.0 * VisualizationConstants.SIZE_MULTIPLICATOR );
+			gl.glVertex3d( this.getControl().getNwX() * GLGraphControl.sizeMultiplicator + xOffset, this.getControl().getSeY() * GLGraphControl.sizeMultiplicator + yOffset, -graphHeight + 1.0 * GLGraphControl.sizeMultiplicator );
+			gl.glVertex3d( this.getControl().getNwX() * GLGraphControl.sizeMultiplicator + xOffset, this.getControl().getNwY() * GLGraphControl.sizeMultiplicator + yOffset, -graphHeight + 1.0 * GLGraphControl.sizeMultiplicator );
 			gl.glEnd();
 		}
 		//gl.glEnable( gl.GL_BLEND );

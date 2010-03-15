@@ -21,8 +21,8 @@
 
 package gui.visualization.draw.graph;
 
+import gui.visualization.control.graph.GLGraphControl;
 import gui.visualization.control.graph.GLGraphFloorControl;
-import gui.visualization.util.VisualizationConstants;
 import javax.media.opengl.GL;
 import opengl.framework.abs.AbstractDrawable;
 
@@ -45,8 +45,8 @@ public class GLGraphFloor extends AbstractDrawable<GLNode, GLGraphFloorControl> 
 	public GLGraphFloor( GLGraphFloorControl control ) {
 		super( control );
 //		super( control, new CullingShapeCube() );
-		this.position.x = control.getXPosition() * VisualizationConstants.SIZE_MULTIPLICATOR;
-		this.position.y = control.getYPosition() * VisualizationConstants.SIZE_MULTIPLICATOR;
+		this.position.x = control.getXPosition() * GLGraphControl.sizeMultiplicator;
+		this.position.y = control.getYPosition() * GLGraphControl.sizeMultiplicator;
 	}
 
 	@Override

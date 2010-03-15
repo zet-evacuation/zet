@@ -37,6 +37,8 @@ import opengl.framework.abs.Controlable;
 //public class GLBuildingControl extends AbstractControl<GLBuilding, BuildingResults, BuildingResults, GLWall, GLWallControl, GLControl> {
 public class GLBuildingControl extends AbstractZETVisualizationControl<GLWallControl, GLBuilding, GLBuildingControl> implements Controlable {
 
+	public static double sizeMultiplicator = 0.1;
+
 	private int wallCount;
 	private int wallsDone;
 	private HashMap<Integer, ArrayList<GLWallControl>> allFloorsByID;

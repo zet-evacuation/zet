@@ -32,7 +32,8 @@ public class MessageEvent<S> implements Event {
 		MousePosition,
 		EditMode,
 		Log,
-		LogError;
+		LogError,
+		VideoFrame;
 	}
 	protected S source;
 	private String msg;

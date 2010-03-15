@@ -22,8 +22,8 @@ package gui.visualization.draw.ca;
 import opengl.framework.abs.AbstractDrawable;
 import gui.visualization.VisualizationOptionManager;
 import gui.visualization.control.ca.GLCAFloorControl;
+import gui.visualization.control.ca.GLCellularAutomatonControl;
 import gui.visualization.control.ca.GLIndividualControl;
-import gui.visualization.util.VisualizationConstants;
 import java.util.List;
 import javax.media.opengl.GL;
 
@@ -41,7 +41,7 @@ public class GLCAFloor extends AbstractDrawable<GLRoom, GLCAFloorControl> {
 //		super(control, new CullingShapeCube() );
 	    this.position.x = control.getXPosition();
 	    this.position.y = control.getYPosition();
-	    this.position.z = (control.getFloorNumber() - 1) * VisualizationOptionManager.getFloorDistance() * VisualizationConstants.SIZE_MULTIPLICATOR;
+	    this.position.z = (control.getFloorNumber() - 1) * VisualizationOptionManager.getFloorDistance() * GLCellularAutomatonControl.sizeMultiplicator;
 			floorID = control.getFloorNumber();
 	}
 	

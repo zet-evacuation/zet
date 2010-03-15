@@ -15,13 +15,18 @@
  */
 package ds;
 
-import ds.graph.*;
-import ds.NetworkFlowModel;
 import ds.graph.flow.PathBasedFlowOverTime;
 import ds.graph.flow.EdgeBasedFlowOverTime;
 import algo.graph.Flags;
+import algo.graph.dynamicflow.eat.EarliestArrivalFlowProblem;
 import algo.graph.util.PathComposition;
 import converter.ZToGraphMapping;
+import ds.graph.Edge;
+import ds.graph.IdentifiableIntegerMapping;
+import ds.graph.IdentifiableObjectMapping;
+import ds.graph.Network;
+import ds.graph.Node;
+import ds.graph.NodeRectangle;
 import opengl.framework.abs.VisualizationResult;
 import java.util.ArrayList;
 
@@ -159,6 +164,76 @@ public class GraphVisualizationResult implements VisualizationResult {
         this.flowOverTime = flowOverTime;
         this.dynamicFlow = null;
     }
+
+		public GraphVisualizationResult( EarliestArrivalFlowProblem eatf, IdentifiableIntegerMapping<Node> xPos, IdentifiableIntegerMapping<Node> yPos, PathBasedFlowOverTime dynamicFlow ) {
+			this.network = eatf.getNetwork();
+			
+			int nodeCount = eatf.getNetwork().numberOfNodes();
+			this.nodeRectangle = new IdentifiableObjectMapping<Node, NodeRectangle>( nodeCount, NodeRectangle.class );
+			for( Node node : eatf.getNetwork().nodes() ) {
+				int x = xPos.get( node );
+				int y = yPos.get( node );
+				NodeRectangle nr = new NodeRectangle( x, y, x, y );
+				nodeRectangle.set( node, nr );
+			}
+
+			supersink = eatf.getSink();
+
+			nodeToFloorMapping = new IdentifiableIntegerMapping<Node>( nodeCount );
+			isSourceNode = new IdentifiableObjectMapping<Node, Boolean>( nodeCount, Boolean.class );
+			isEvacuationNode = new IdentifiableObjectMapping<Node, Boolean>( nodeCount, Boolean.class );
+			isDeletedSourceNode = new IdentifiableObjectMapping<Node, Boolean>( nodeCount, Boolean.class );
+			 for( Node node : eatf.getNetwork().nodes() ) {
+				nodeToFloorMapping.set( node, 1 );
+				isDeletedSourceNode.set( node, false );
+				if( eatf.getSources().contains( node ) )
+					isSourceNode.set( node, true );
+				else
+					isSourceNode.set( node, false );
+				isEvacuationNode.set( node, false );
+			}
+
+			for( Edge edge : eatf.getNetwork().edges() ) {
+				if( edge.end().equals( supersink ) )
+					isEvacuationNode.set( edge.start(), true );
+			}
+
+      this.nodeCapacities = eatf.getNodeCapacities();
+      this.edgeCapacities = eatf.getEdgeCapacities();
+      this.transitTimes = eatf.getTransitTimes();
+      this.supplies = eatf.getSupplies();
+
+        this.floorToNodeMapping = new ArrayList<ArrayList<Node>>();
+        for (Node node : network.nodes()) {
+            int floor = this.nodeToFloorMapping.get(node);
+
+            if (floor != -1) {
+                while (this.floorToNodeMapping.size() < floor) {
+                    this.floorToNodeMapping.add(new ArrayList<Node>());
+                }
+                if (this.floorToNodeMapping.size() <= floor) {
+                    this.floorToNodeMapping.add(floor, new ArrayList<Node>());
+                }
+                this.floorToNodeMapping.get(floor).add(node);
+            }
+        }
+
+				System.out.println( "Start converting path based to edge based flow ..." );
+        this.dynamicFlow = dynamicFlow;
+        PathComposition pathComposition = new PathComposition(network, transitTimes, dynamicFlow);
+        pathComposition.run();
+				System.out.println( "finished." );
+
+				this.flowOverTime = pathComposition.getEdgeFlows();
+        maxFlowRate = pathComposition.getMaxFlowRate();
+        if (Flags.FLOWWRONG) {
+            System.out.println("Eingabe in die PathComposition:");
+            System.out.println("Netzwerk:\n" + network + "\n" + "Fahrzeiten:\n" + transitTimes + "\n" + "Fluss:\n" + dynamicFlow);
+            System.out.println("Ausgabe der PathComposition:");
+            System.out.println(flowOverTime);
+        }
+
+		}
 
     /**
      * Constructor creating an object where no nodes and edges exists.
