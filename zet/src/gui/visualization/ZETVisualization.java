@@ -15,8 +15,12 @@ import event.EventListener;
 import event.EventServer;
 import event.OptionsChangedEvent;
 import event.VisualizationEvent;
+import gui.JEditor;
 import gui.ZETProperties;
 import gui.visualization.control.GLControl;
+import java.awt.event.KeyEvent;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseWheelEvent;
 import javax.media.opengl.GL;
 import javax.media.opengl.GLAutoDrawable;
 import javax.media.opengl.GLCapabilities;
@@ -43,6 +47,21 @@ public class ZETVisualization extends Visualization<GLControl> implements EventL
 		showEye = ZETProperties.isShowEye();
 		showFPS = ZETProperties.isShowFPS();
 		EventServer.getInstance().registerListener( this, OptionsChangedEvent.class );
+
+		noRotate = !PropertyContainer.getInstance().getAsBoolean( "editor.options.visualization.allowRotateIn2D" );
+		mouseInvert = PropertyContainer.getInstance().getAsBoolean( "editor.options.visualization.invertMouse" ) ? -1 : 1;
+		scrollInvert = PropertyContainer.getInstance().getAsBoolean( "editor.options.visualization.invertScroll" ) ? 1 : -1;
+
+		// this will create errors!
+		if( PropertyContainer.getInstance().getAsBoolean( "settings.gui.visualization.2d" ) )
+			set2DView();
+		else
+			set3DView();
+		if( PropertyContainer.getInstance().getAsBoolean( "settings.gui.visualization.isometric" ) )
+			this.setParallelViewMode( ParallelViewMode.Isometric );
+		else
+			this.setParallelViewMode( ParallelViewMode.Orthogonal );
+
 	}
 
 	@Override
@@ -115,6 +134,63 @@ public class ZETVisualization extends Visualization<GLControl> implements EventL
 		gl.glDisable( GL.GL_TEXTURE_2D );
 		gl.glDisable( GL.GL_BLEND );
 		ProjectionHelper.resetProjection( gl );
+	}
+
+	@Override
+	@SuppressWarnings("fallthrough")
+	public void keyPressed( KeyEvent e ) {
+		switch( e.getKeyCode() ) {
+			case KeyEvent.VK_C:
+				System.out.println( loc.getStringWithoutPrefix( "gui.visualizationView.cameraInformation" ) );
+				System.out.println( camera );
+				break;
+			case KeyEvent.VK_LEFT:
+			case KeyEvent.VK_RIGHT:
+			case KeyEvent.VK_UP:
+			case KeyEvent.VK_DOWN:
+				JEditor.getInstance().getVisualizationView().updateCameraInformation();
+				JEditor.getInstance().getZControl().getProject().getVisualProperties().getCameraPosition().pos = camera.getPos();
+				JEditor.getInstance().getZControl().getProject().getVisualProperties().getCameraPosition().view = camera.getView();
+				JEditor.getInstance().getZControl().getProject().getVisualProperties().getCameraPosition().up = camera.getUp();
+				JEditor.getInstance().getZControl().getProject().getVisualProperties().setCurrentWidth( getViewWidth() );
+				JEditor.getInstance().getZControl().getProject().getVisualProperties().setCurrentHeight( getViewHeight() );
+			default:
+				super.keyPressed( e );
+		}
+	}
+
+	@Override
+	public void mousePressed( MouseEvent e ) {
+		super.mousePressed( e );
+		JEditor.getInstance().getVisualizationView().updateCameraInformation();
+		JEditor.getInstance().getZControl().getProject().getVisualProperties().getCameraPosition().pos = camera.getPos();
+		JEditor.getInstance().getZControl().getProject().getVisualProperties().getCameraPosition().view = camera.getView();
+		JEditor.getInstance().getZControl().getProject().getVisualProperties().getCameraPosition().up = camera.getUp();
+		JEditor.getInstance().getZControl().getProject().getVisualProperties().setCurrentWidth( getViewWidth() );
+		JEditor.getInstance().getZControl().getProject().getVisualProperties().setCurrentHeight( getViewHeight() );
+	}
+
+	@Override
+	public void mouseDragged( MouseEvent e ) {
+		super.mouseDragged( e );
+		JEditor.getInstance().getVisualizationView().updateCameraInformation();
+		JEditor.getInstance().getZControl().getProject().getVisualProperties().getCameraPosition().pos = camera.getPos();
+		JEditor.getInstance().getZControl().getProject().getVisualProperties().getCameraPosition().view = camera.getView();
+		JEditor.getInstance().getZControl().getProject().getVisualProperties().getCameraPosition().up = camera.getUp();
+		JEditor.getInstance().getZControl().getProject().getVisualProperties().setCurrentWidth( getViewWidth() );
+		JEditor.getInstance().getZControl().getProject().getVisualProperties().setCurrentHeight( getViewHeight() );
+	}
+
+	@Override
+	public void mouseWheelMoved( MouseWheelEvent e ) {
+		super.mouseWheelMoved( e );
+		JEditor.getInstance().getVisualizationView().updateCameraInformation();
+		JEditor.getInstance().getZControl().getProject().getVisualProperties().getCameraPosition().pos = camera.getPos();
+		JEditor.getInstance().getZControl().getProject().getVisualProperties().getCameraPosition().view = camera.getView();
+		JEditor.getInstance().getZControl().getProject().getVisualProperties().getCameraPosition().up = camera.getUp();
+		JEditor.getInstance().getZControl().getProject().getVisualProperties().setCurrentWidth( getViewWidth() );
+		JEditor.getInstance().getZControl().getProject().getVisualProperties().setCurrentHeight( getViewHeight() );
+
 	}
 
 	/**

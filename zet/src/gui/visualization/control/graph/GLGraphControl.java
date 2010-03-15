@@ -29,12 +29,14 @@ import gui.visualization.control.AbstractZETVisualizationControl;
 import gui.visualization.draw.graph.GLGraph;
 import java.util.HashMap;
 import java.util.Iterator;
-import opengl.framework.abs.Controlable;
+import javax.media.opengl.GL;
+import opengl.framework.abs.DrawableControlable;
 
 /**
  *  @author Jan-Philipp Kappmeier
  */
-public class GLGraphControl extends AbstractZETVisualizationControl<GLGraphFloorControl, GLGraph, GLGraphControl> implements Controlable {
+public class GLGraphControl extends AbstractZETVisualizationControl<GLGraphFloorControl, GLGraph, GLGraphControl> implements DrawableControlable {
+	public static double sizeMultiplicator = 0.1;
 
 	private int nodeCount;
 	private int nodesDone;
@@ -208,5 +210,13 @@ public class GLGraphControl extends AbstractZETVisualizationControl<GLGraphFloor
 
 	public int getStepCount() {
 		return stepCount;
+	}
+
+	public void draw( GL gl ) {
+		getView().draw( gl );
+	}
+
+	public void update() {
+		throw new UnsupportedOperationException( "Not supported yet." );
 	}
 }

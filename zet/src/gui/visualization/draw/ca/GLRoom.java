@@ -16,6 +16,7 @@
 package gui.visualization.draw.ca;
 
 import gui.visualization.VisualizationOptionManager;
+import gui.visualization.control.ca.GLCellularAutomatonControl;
 import gui.visualization.control.ca.GLRoomControl;
 import gui.visualization.util.VisualizationConstants;
 import javax.media.opengl.GL;
@@ -34,13 +35,13 @@ public class GLRoom extends AbstractDrawable<GLCell, GLRoomControl> {
 	public GLRoom( GLRoomControl control ) {
 		super( control );
 //			super(control, new CullingShapeCube() );
-		this.position.x = control.getXPosition() * VisualizationConstants.SIZE_MULTIPLICATOR;
-		this.position.y = control.getYPosition() * VisualizationConstants.SIZE_MULTIPLICATOR;
+		this.position.x = control.getXPosition() * GLCellularAutomatonControl.sizeMultiplicator;
+		this.position.y = control.getYPosition() * GLCellularAutomatonControl.sizeMultiplicator;
 		if( VisualizationOptionManager.showSpaceBetweenCells() ) {
-			ul = new GLVector( 0 * VisualizationConstants.SIZE_MULTIPLICATOR, 0 * VisualizationConstants.SIZE_MULTIPLICATOR, -1 * VisualizationConstants.SIZE_MULTIPLICATOR );
-			ur = new GLVector( control.getWidth() * 40 * VisualizationConstants.SIZE_MULTIPLICATOR, 0 * VisualizationConstants.SIZE_MULTIPLICATOR, -1 * VisualizationConstants.SIZE_MULTIPLICATOR );
-			ll = new GLVector( 0 * VisualizationConstants.SIZE_MULTIPLICATOR, control.getHeight() * -40 * VisualizationConstants.SIZE_MULTIPLICATOR, -1 * VisualizationConstants.SIZE_MULTIPLICATOR );
-			lr = new GLVector( control.getWidth() * 40 * VisualizationConstants.SIZE_MULTIPLICATOR, control.getHeight() * -40 * VisualizationConstants.SIZE_MULTIPLICATOR, -1 * VisualizationConstants.SIZE_MULTIPLICATOR );
+			ul = new GLVector( 0 * GLCellularAutomatonControl.sizeMultiplicator, 0 * GLCellularAutomatonControl.sizeMultiplicator, -1 * GLCellularAutomatonControl.sizeMultiplicator );
+			ur = new GLVector( control.getWidth() * 40 * GLCellularAutomatonControl.sizeMultiplicator, 0 * GLCellularAutomatonControl.sizeMultiplicator, -1 * GLCellularAutomatonControl.sizeMultiplicator );
+			ll = new GLVector( 0 * GLCellularAutomatonControl.sizeMultiplicator, control.getHeight() * -40 * GLCellularAutomatonControl.sizeMultiplicator, -1 * GLCellularAutomatonControl.sizeMultiplicator );
+			lr = new GLVector( control.getWidth() * 40 * GLCellularAutomatonControl.sizeMultiplicator, control.getHeight() * -40 * GLCellularAutomatonControl.sizeMultiplicator, -1 * GLCellularAutomatonControl.sizeMultiplicator );
 		}
 	}
 

@@ -21,7 +21,6 @@ import ds.graph.Edge;
 import gui.visualization.VisualizationOptionManager;
 import gui.visualization.control.AbstractZETVisualizationControl;
 import gui.visualization.draw.graph.GLNode;
-import gui.visualization.control.GLControl;
 import gui.visualization.control.FlowHistroryTriple;
 import gui.visualization.util.FlowCalculator;
 import java.util.ArrayList;
@@ -30,7 +29,8 @@ import java.util.ArrayList;
 public class GLNodeControl extends AbstractZETVisualizationControl<GLEdgeControl, GLNode, GLGraphControl> {
 	private double xPosition;
 	private double yPosition;
-	private double zPosition = VisualizationOptionManager.getGraphHeight();
+	// TODO read data from file in ZET
+	private double zPosition = 70;
 	private int capacity;
 	private FlowCalculator flowCalculator;
 	private static final double Z_TO_OPENGL_SCALING = 0.1d;
@@ -76,7 +76,9 @@ public class GLNodeControl extends AbstractZETVisualizationControl<GLEdgeControl
 		isDeletedSourceNode = graphVisResult.isDeletedSourceNode( node );
 
 		floor = graphVisResult.getNodeToFloorMapping().get( node );
-		zPosition += (floor - 1) * VisualizationOptionManager.getFloorDistance();
+		// TODO get the information in ZET from Visualization option manager
+		//zPosition += (floor - 1) * VisualizationOptionManager.getFloorDistance();
+		zPosition += (floor - 1) * 70;
 
 		setView( new GLNode( this ) );
 		for( GLEdgeControl edge : this )

@@ -23,27 +23,21 @@ package gui.visualization;
 import de.tu_berlin.math.coga.common.localization.Localization;
 import de.tu_berlin.math.coga.math.Conversion;
 import de.tu_berlin.math.coga.math.vectormath.Vector3;
-import ds.PropertyContainer;
 import event.EventServer;
 import event.MessageEvent;
 import event.MessageEvent.MessageType;
-import gui.JEditor;
-import gui.visualization.util.VisualizationConstants;
 import io.movie.MovieManager;
 import java.awt.Color;
 import java.awt.Dimension;
-import java.awt.event.KeyEvent;
-import java.awt.event.MouseEvent;
-import java.awt.event.MouseWheelEvent;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.io.PrintStream;
 import java.util.ArrayList;
 import javax.media.opengl.GL;
 import javax.media.opengl.GLAutoDrawable;
 import javax.media.opengl.GLCapabilities;
 import javax.media.opengl.glu.GLUquadric;
-import java.io.PrintStream;
 import opengl.drawingutils.GLColor;
 import opengl.framework.abs.DrawableControlable;
 import opengl.helper.ProjectionHelper;
@@ -58,6 +52,9 @@ import opengl.helper.TextureManager;
  * @author Jan-Philipp Kappmeier
  */
 public class Visualization<U extends DrawableControlable> extends AbstractVisualization {
+	//public final static double SIZE_MULTIPLICATOR = 0.1;
+	
+	protected double sizeMultiplikator = 0.1;
 	/** The localization class. */
 	protected Localization loc = Localization.getInstance();
 	protected static final int fontSize = 16;
@@ -77,7 +74,7 @@ public class Visualization<U extends DrawableControlable> extends AbstractVisual
 	/** The {@code OpenGL} context. */
 	private GLAutoDrawable drawable;
 	/** Indicates if mouse movement in 2d-view rotates or moves the building. */
-	private boolean noRotate = false;
+	protected boolean noRotate = false;
 	/** Decides wheather a movie is captured or not */
 	private boolean recording = false;
 	/** If a movie is captured describes the framerate of the movie */
@@ -111,22 +108,9 @@ public class Visualization<U extends DrawableControlable> extends AbstractVisual
 	 */
 	public Visualization( GLCapabilities capabilities ) {
 		super( capabilities );
-//		camera.setPos( new Vector3( 0, 0, 100 ) );
-//		camera.setUp( new Vector3( 0, 0, 1 ) );
-//		camera.setView( new Vector3( 1, -1, 0 ) );
-		noRotate = !PropertyContainer.getInstance().getAsBoolean( "editor.options.visualization.allowRotateIn2D" );
 		movieManager = new MovieManager();
-
-		// this will create errors!
-		if( PropertyContainer.getInstance().getAsBoolean( "settings.gui.visualization.2d" ) )
-			set2DView();
-		else
-			set3DView();
-		if( PropertyContainer.getInstance().getAsBoolean( "settings.gui.visualization.isometric" ) )
-			this.setParallelViewMode( ParallelViewMode.Isometric );
-		else
-			this.setParallelViewMode( ParallelViewMode.Orthogonal );
-
+		set2DView();
+		this.setParallelViewMode( ParallelViewMode.Isometric );
 	}
 
 	/**
@@ -192,7 +176,7 @@ public class Visualization<U extends DrawableControlable> extends AbstractVisual
 		if( recording && frameUsed ) {
 			String newFilename = movieManager.nextFilename();
 			takeScreenshot( drawable, newFilename );
-			EventServer.getInstance().dispatchEvent( new MessageEvent<JEditor>( JEditor.getInstance(), MessageType.MousePosition, "Video frame " + (++screenshotCounter) + " - " + (screenshotCounter * (1.0 / movieFrameRate)) + " sec" ) );
+			EventServer.getInstance().dispatchEvent( new MessageEvent<Visualization>( this, MessageType.VideoFrame, "Video frame " + (++screenshotCounter) + " - " + (screenshotCounter * (1.0 / movieFrameRate)) + " sec" ) );
 			movieManager.addImage( newFilename );
 			if( !introRunning )
 				movieStep();
@@ -230,7 +214,7 @@ public class Visualization<U extends DrawableControlable> extends AbstractVisual
 	 * Draws the eye and the lines representing the 3d-sight-field in the 2d-view.
 	 */
 	final private void drawEye() {
-		// Calculate the vector of the eye rotation with respect to to the current
+		// Compute the vector of the eye rotation with respect to to the current
 		// view vector.
 		Vector3 cameraView = new Vector3( camera.getView() );
 		cameraView.z = 0;
@@ -245,7 +229,7 @@ public class Visualization<U extends DrawableControlable> extends AbstractVisual
 		GLColor red = new GLColor( Color.red );
 		red.draw( gl );
 		GLUquadric quadObj = glu.gluNewQuadric();
-		glu.gluSphere( quadObj, 10 * VisualizationConstants.SIZE_MULTIPLICATOR, 10, 3 );
+		glu.gluSphere( quadObj, 10 * sizeMultiplikator, 10, 3 );
 		gl.glPushMatrix();
 		gl.glRotated( eyeRotation + 25, 0, 0, 1 );
 		gl.glBegin( GL.GL_LINES );
@@ -371,6 +355,8 @@ public class Visualization<U extends DrawableControlable> extends AbstractVisual
 			if( showEye )
 				drawEye();
 		}
+
+		if( control != null )
 
 		control.draw( gl );
 		gl.glClear( GL.GL_DEPTH_BUFFER_BIT );
@@ -580,63 +566,6 @@ public class Visualization<U extends DrawableControlable> extends AbstractVisual
 		//moviePath = PropertyContainer.getInstance().getAsString( "options.filehandling.moviePath" );
 		//movieFrameName = PropertyContainer.getInstance().getAsString( "options.filehandling.movieFrameName" );
 		repaint();
-	}
-
-	@Override
-	@SuppressWarnings("fallthrough")
-	public void keyPressed( KeyEvent e ) {
-		switch( e.getKeyCode() ) {
-			case KeyEvent.VK_C:
-				System.out.println( loc.getStringWithoutPrefix( "gui.visualizationView.cameraInformation" ) );
-				System.out.println( camera );
-				break;
-			case KeyEvent.VK_LEFT:
-			case KeyEvent.VK_RIGHT:
-			case KeyEvent.VK_UP:
-			case KeyEvent.VK_DOWN:
-				JEditor.getInstance().getVisualizationView().updateCameraInformation();
-				JEditor.getInstance().getZControl().getProject().getVisualProperties().getCameraPosition().pos = camera.getPos();
-				JEditor.getInstance().getZControl().getProject().getVisualProperties().getCameraPosition().view = camera.getView();
-				JEditor.getInstance().getZControl().getProject().getVisualProperties().getCameraPosition().up = camera.getUp();
-				JEditor.getInstance().getZControl().getProject().getVisualProperties().setCurrentWidth( getViewWidth() );
-				JEditor.getInstance().getZControl().getProject().getVisualProperties().setCurrentHeight( getViewHeight() );
-			default:
-				super.keyPressed( e );
-		}
-	}
-
-	@Override
-	public void mousePressed( MouseEvent e ) {
-		super.mousePressed( e );
-		JEditor.getInstance().getVisualizationView().updateCameraInformation();
-		JEditor.getInstance().getZControl().getProject().getVisualProperties().getCameraPosition().pos = camera.getPos();
-		JEditor.getInstance().getZControl().getProject().getVisualProperties().getCameraPosition().view = camera.getView();
-		JEditor.getInstance().getZControl().getProject().getVisualProperties().getCameraPosition().up = camera.getUp();
-		JEditor.getInstance().getZControl().getProject().getVisualProperties().setCurrentWidth( getViewWidth() );
-		JEditor.getInstance().getZControl().getProject().getVisualProperties().setCurrentHeight( getViewHeight() );
-	}
-
-	@Override
-	public void mouseDragged( MouseEvent e ) {
-		super.mouseDragged( e );
-		JEditor.getInstance().getVisualizationView().updateCameraInformation();
-		JEditor.getInstance().getZControl().getProject().getVisualProperties().getCameraPosition().pos = camera.getPos();
-		JEditor.getInstance().getZControl().getProject().getVisualProperties().getCameraPosition().view = camera.getView();
-		JEditor.getInstance().getZControl().getProject().getVisualProperties().getCameraPosition().up = camera.getUp();
-		JEditor.getInstance().getZControl().getProject().getVisualProperties().setCurrentWidth( getViewWidth() );
-		JEditor.getInstance().getZControl().getProject().getVisualProperties().setCurrentHeight( getViewHeight() );
-	}
-
-	@Override
-	public void mouseWheelMoved( MouseWheelEvent e ) {
-		super.mouseWheelMoved( e );
-		JEditor.getInstance().getVisualizationView().updateCameraInformation();
-		JEditor.getInstance().getZControl().getProject().getVisualProperties().getCameraPosition().pos = camera.getPos();
-		JEditor.getInstance().getZControl().getProject().getVisualProperties().getCameraPosition().view = camera.getView();
-		JEditor.getInstance().getZControl().getProject().getVisualProperties().getCameraPosition().up = camera.getUp();
-		JEditor.getInstance().getZControl().getProject().getVisualProperties().setCurrentWidth( getViewWidth() );
-		JEditor.getInstance().getZControl().getProject().getVisualProperties().setCurrentHeight( getViewHeight() );
-
 	}
 
 	/**

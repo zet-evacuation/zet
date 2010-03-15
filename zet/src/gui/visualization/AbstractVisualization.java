@@ -22,7 +22,6 @@ package gui.visualization;
 import com.sun.opengl.util.Animator;
 import com.sun.opengl.util.Screenshot;
 import de.tu_berlin.math.coga.math.Conversion;
-import ds.PropertyContainer;
 import event.EventServer;
 import event.MessageEvent;
 import event.MessageEvent.MessageType;
@@ -86,8 +85,8 @@ public abstract class AbstractVisualization extends AbstractOpenGLCanvas {
 	double aspect = 1;
 
 	// Mouse interaction vars
-	private final int mouseInvert = PropertyContainer.getInstance().getAsBoolean( "editor.options.visualization.invertMouse" ) ? -1 : 1;
-	private final int scrollInvert = PropertyContainer.getInstance().getAsBoolean( "editor.options.visualization.invertScroll" ) ? 1 : -1;
+	protected int mouseInvert = 1;
+	protected int scrollInvert = 1;
 	private double initWidth;
 	private double initHeight;
 	private int initMouseX;
@@ -148,7 +147,7 @@ public abstract class AbstractVisualization extends AbstractOpenGLCanvas {
 			set2DProjection();
 
 		// TODO: event-server usage in Open-GL-Kram
-		EventServer.getInstance().dispatchEvent( new MessageEvent<JEditor>( JEditor.getInstance(), MessageType.MousePosition, "View: " + width + " x " + height ) );
+		EventServer.getInstance().dispatchEvent( new MessageEvent<AbstractVisualization>( this, MessageType.MousePosition, "View: " + width + " x " + height ) );
 	}
 
 	/**

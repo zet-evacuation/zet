@@ -24,7 +24,7 @@ import io.visualization.CAVisualizationResults;
 import java.util.HashMap;
 
 //public class GLRoomControl extends AbstractControl<GLRoom, Room, CAVisualizationResults, GLCell, GLCellControl, GLControl> {
-public class GLRoomControl extends AbstractZETVisualizationControl<GLCellControl, GLRoom, GLCAControl> {
+public class GLRoomControl extends AbstractZETVisualizationControl<GLCellControl, GLRoom, GLCellularAutomatonControl> {
 
 	private HashMap<ds.ca.Cell, GLCellControl> cellControls;
 	private GLCAFloorControl glCAFloorControlObject;  // the corresponding GLCAFloorControl of this object
@@ -32,7 +32,7 @@ public class GLRoomControl extends AbstractZETVisualizationControl<GLCellControl
 	private double yPosition;
 	Room controlled;
 
-	public GLRoomControl( CAVisualizationResults caVisResults, Room room, GLCAFloorControl glCAFloorControl, GLCAControl glControl ) {
+	public GLRoomControl( CAVisualizationResults caVisResults, Room room, GLCAFloorControl glCAFloorControl, GLCellularAutomatonControl glControl ) {
 		super( glControl );
 		controlled = room;
 		xPosition = caVisResults.get( room ).x;

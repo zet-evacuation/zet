@@ -13,17 +13,22 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
+
+/**
+ * GLCell.java
+ */
+
 package gui.visualization.draw.ca;
 
 import gui.visualization.control.ca.GLCellControl;
 import gui.visualization.control.GLControl.CellInformationDisplay;
 import gui.visualization.VisualizationOptionManager;
-import gui.visualization.util.VisualizationConstants;
 import javax.media.opengl.GL;
 import opengl.drawingutils.GLColor;
 import opengl.drawingutils.GLVector;
 import opengl.framework.abs.AbstractDrawable;
 import de.tu_berlin.math.coga.common.util.Direction;
+import gui.visualization.control.ca.GLCellularAutomatonControl;
 
 //public class GLCell extends AbstractDrawable<GLCell, GLCellControl, GLCellControl> {
 public class GLCell extends AbstractDrawable<GLCell, GLCellControl> {
@@ -38,19 +43,19 @@ public class GLCell extends AbstractDrawable<GLCell, GLCellControl> {
 
 	public GLCell( GLCellControl control ) {
 		super( control );
-		this.position.x = control.getXPosition() * VisualizationConstants.SIZE_MULTIPLICATOR;
-		this.position.y = control.getYPosition() * VisualizationConstants.SIZE_MULTIPLICATOR;
+		this.position.x = control.getXPosition() * GLCellularAutomatonControl.sizeMultiplicator;
+		this.position.y = control.getYPosition() * GLCellularAutomatonControl.sizeMultiplicator;
 		if( ul == null )
 			if( VisualizationOptionManager.showSpaceBetweenCells() ) {
-				ul = new GLVector( 1 * VisualizationConstants.SIZE_MULTIPLICATOR, -1 * VisualizationConstants.SIZE_MULTIPLICATOR, 0 );
-				ur = new GLVector( 39 * VisualizationConstants.SIZE_MULTIPLICATOR, -1 * VisualizationConstants.SIZE_MULTIPLICATOR, 0 );
-				ll = new GLVector( 1 * VisualizationConstants.SIZE_MULTIPLICATOR, -39 * VisualizationConstants.SIZE_MULTIPLICATOR, 0 );
-				lr = new GLVector( 39 * VisualizationConstants.SIZE_MULTIPLICATOR, -39 * VisualizationConstants.SIZE_MULTIPLICATOR, 0 );
+				ul = new GLVector( 1 * GLCellularAutomatonControl.sizeMultiplicator, -1 * GLCellularAutomatonControl.sizeMultiplicator, 0 );
+				ur = new GLVector( 39 * GLCellularAutomatonControl.sizeMultiplicator, -1 * GLCellularAutomatonControl.sizeMultiplicator, 0 );
+				ll = new GLVector( 1 * GLCellularAutomatonControl.sizeMultiplicator, -39 * GLCellularAutomatonControl.sizeMultiplicator, 0 );
+				lr = new GLVector( 39 * GLCellularAutomatonControl.sizeMultiplicator, -39 * GLCellularAutomatonControl.sizeMultiplicator, 0 );
 			} else {
-				ul = new GLVector( 0 * VisualizationConstants.SIZE_MULTIPLICATOR, 0 * VisualizationConstants.SIZE_MULTIPLICATOR, 0 );
-				ur = new GLVector( 40 * VisualizationConstants.SIZE_MULTIPLICATOR, 0 * VisualizationConstants.SIZE_MULTIPLICATOR, 0 );
-				ll = new GLVector( 0 * VisualizationConstants.SIZE_MULTIPLICATOR, -40 * VisualizationConstants.SIZE_MULTIPLICATOR, 0 );
-				lr = new GLVector( 40 * VisualizationConstants.SIZE_MULTIPLICATOR, -40 * VisualizationConstants.SIZE_MULTIPLICATOR, 0 );
+				ul = new GLVector( 0 * GLCellularAutomatonControl.sizeMultiplicator, 0 * GLCellularAutomatonControl.sizeMultiplicator, 0 );
+				ur = new GLVector( 40 * GLCellularAutomatonControl.sizeMultiplicator, 0 * GLCellularAutomatonControl.sizeMultiplicator, 0 );
+				ll = new GLVector( 0 * GLCellularAutomatonControl.sizeMultiplicator, -40 * GLCellularAutomatonControl.sizeMultiplicator, 0 );
+				lr = new GLVector( 40 * GLCellularAutomatonControl.sizeMultiplicator, -40 * GLCellularAutomatonControl.sizeMultiplicator, 0 );
 			}
 		// Do not set color it should already be set by super call
 		this.defaultColor = VisualizationOptionManager.getCellFloorColor();
@@ -59,19 +64,19 @@ public class GLCell extends AbstractDrawable<GLCell, GLCellControl> {
 	public GLCell( GLCellControl control, GLColor color ) {
 		super( control );
 		//super(control, new CullingShapeSphere() );
-		this.position.x = control.getXPosition() * VisualizationConstants.SIZE_MULTIPLICATOR;
-		this.position.y = control.getYPosition() * VisualizationConstants.SIZE_MULTIPLICATOR;
+		this.position.x = control.getXPosition() * GLCellularAutomatonControl.sizeMultiplicator;
+		this.position.y = control.getYPosition() * GLCellularAutomatonControl.sizeMultiplicator;
 		if( ul == null )
 			if( VisualizationOptionManager.showSpaceBetweenCells() ) {
-				ul = new GLVector( 1 * VisualizationConstants.SIZE_MULTIPLICATOR, -1 * VisualizationConstants.SIZE_MULTIPLICATOR, 0 );
-				ur = new GLVector( 39 * VisualizationConstants.SIZE_MULTIPLICATOR, -1 * VisualizationConstants.SIZE_MULTIPLICATOR, 0 );
-				ll = new GLVector( 1 * VisualizationConstants.SIZE_MULTIPLICATOR, -39 * VisualizationConstants.SIZE_MULTIPLICATOR, 0 );
-				lr = new GLVector( 39 * VisualizationConstants.SIZE_MULTIPLICATOR, -39 * VisualizationConstants.SIZE_MULTIPLICATOR, 0 );
+				ul = new GLVector( 1 * GLCellularAutomatonControl.sizeMultiplicator, -1 * GLCellularAutomatonControl.sizeMultiplicator, 0 );
+				ur = new GLVector( 39 * GLCellularAutomatonControl.sizeMultiplicator, -1 * GLCellularAutomatonControl.sizeMultiplicator, 0 );
+				ll = new GLVector( 1 * GLCellularAutomatonControl.sizeMultiplicator, -39 * GLCellularAutomatonControl.sizeMultiplicator, 0 );
+				lr = new GLVector( 39 * GLCellularAutomatonControl.sizeMultiplicator, -39 * GLCellularAutomatonControl.sizeMultiplicator, 0 );
 			} else {
-				ul = new GLVector( 0 * VisualizationConstants.SIZE_MULTIPLICATOR, 0 * VisualizationConstants.SIZE_MULTIPLICATOR, 0 );
-				ur = new GLVector( 40 * VisualizationConstants.SIZE_MULTIPLICATOR, 0 * VisualizationConstants.SIZE_MULTIPLICATOR, 0 );
-				ll = new GLVector( 0 * VisualizationConstants.SIZE_MULTIPLICATOR, -40 * VisualizationConstants.SIZE_MULTIPLICATOR, 0 );
-				lr = new GLVector( 40 * VisualizationConstants.SIZE_MULTIPLICATOR, -40 * VisualizationConstants.SIZE_MULTIPLICATOR, 0 );
+				ul = new GLVector( 0 * GLCellularAutomatonControl.sizeMultiplicator, 0 * GLCellularAutomatonControl.sizeMultiplicator, 0 );
+				ur = new GLVector( 40 * GLCellularAutomatonControl.sizeMultiplicator, 0 * GLCellularAutomatonControl.sizeMultiplicator, 0 );
+				ll = new GLVector( 0 * GLCellularAutomatonControl.sizeMultiplicator, -40 * GLCellularAutomatonControl.sizeMultiplicator, 0 );
+				lr = new GLVector( 40 * GLCellularAutomatonControl.sizeMultiplicator, -40 * GLCellularAutomatonControl.sizeMultiplicator, 0 );
 			}
 		this.color = color;
 		this.defaultColor = color;

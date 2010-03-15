@@ -15,7 +15,7 @@
  */
 
 /**
- * Class GLCAControl
+ * Class GLCellularAutomatonControl
  * Erstellt 02.05.2008, 18:44:21
  */
 
@@ -49,14 +49,14 @@ import opengl.framework.abs.Controlable;
 /**
  *  @author Jan-Philipp Kappmeier
  */
-public class GLCAControl extends AbstractZETVisualizationControl<GLCAFloorControl, GLCA, GLCAControl> implements Controlable {
+public class GLCellularAutomatonControl extends AbstractZETVisualizationControl<GLCAFloorControl, GLCA, GLCellularAutomatonControl> implements Controlable {
+	public static double sizeMultiplicator = 0.1;
 
 	// general control stuff
 	private HashMap<Integer, GLCAFloorControl> allFloorsByID;
 	ArrayList<GLIndividual> glIndividuals;
 	ArrayList<GLIndividualControl> individuals;
 	CAVisualizationResults visResults;
-	private VisualResultsRecording visRecording;
 	private CellularAutomaton ca;
 	// timing stuff
 	private double realStep;
@@ -72,7 +72,7 @@ public class GLCAControl extends AbstractZETVisualizationControl<GLCAFloorContro
 	private int recordingCount;
 	private int recordingDone;
 
-	public GLCAControl( CAVisualizationResults caVisResults, CellularAutomaton ca ) {
+	public GLCellularAutomatonControl( CAVisualizationResults caVisResults, CellularAutomaton ca ) {
 		super();
 		mainControl = this;
 
@@ -99,8 +99,6 @@ public class GLCAControl extends AbstractZETVisualizationControl<GLCAFloorContro
 		showAllFloors();
 
 		convertIndividualMovements();
-
-		visRecording = caVisResults.getRecording();
 
 		// Set up timing:
 		secondsPerStep = ca.getSecondsPerStep();

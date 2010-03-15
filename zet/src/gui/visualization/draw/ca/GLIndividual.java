@@ -23,6 +23,7 @@ package gui.visualization.draw.ca;
 
 import gui.visualization.QualityPreset;
 import gui.visualization.VisualizationOptionManager;
+import gui.visualization.control.ca.GLCellularAutomatonControl;
 import gui.visualization.control.ca.GLIndividualControl;
 import gui.visualization.util.Tuple;
 import gui.visualization.util.VisualizationConstants;
@@ -39,8 +40,8 @@ import opengl.framework.abs.AbstractDrawable;
 //public class GLIndividual extends AbstractDrawable<GLIndividual, GLIndividualControl, GLIndividualControl> {
 public class GLIndividual extends AbstractDrawable<GLIndividual, GLIndividualControl> {
 
-	private static double individualHeight = VisualizationOptionManager.getIndividualHeight() * VisualizationConstants.SIZE_MULTIPLICATOR;
-	private static double individualRadius = VisualizationOptionManager.getIndividualRadius() * VisualizationConstants.SIZE_MULTIPLICATOR;
+	private static double individualHeight = VisualizationOptionManager.getIndividualHeight() * GLCellularAutomatonControl.sizeMultiplicator;
+	private static double individualRadius = VisualizationOptionManager.getIndividualRadius() * GLCellularAutomatonControl.sizeMultiplicator;
 	private static GLColor individualColor = VisualizationOptionManager.getIndividualColor();
 	private static GLColor deadColor = new GLColor( 130, 55, 101 );
 	private static QualityPreset qualityPreset = VisualizationOptionManager.getQualityPreset();
@@ -75,7 +76,7 @@ public class GLIndividual extends AbstractDrawable<GLIndividual, GLIndividualCon
 		}
 		gl.glPushMatrix();
 		Tuple pos = control.getCurrentPosition();
-		gl.glTranslated( pos.x * VisualizationConstants.SIZE_MULTIPLICATOR, pos.y * VisualizationConstants.SIZE_MULTIPLICATOR, 1 * VisualizationConstants.SIZE_MULTIPLICATOR );
+		gl.glTranslated( pos.x * GLCellularAutomatonControl.sizeMultiplicator, pos.y * GLCellularAutomatonControl.sizeMultiplicator, 1 * GLCellularAutomatonControl.sizeMultiplicator );
 		bodyColor.draw( gl );
 		//glu.gluCylinder( quadObj, individualRadius, 0.0, individualHeight, 12, 1 );	// Normal
 		//glu.gluCylinder( quadObj, individualRadius, 0.0, individualHeight, 48, 24 );	// High quality

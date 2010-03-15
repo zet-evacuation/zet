@@ -24,8 +24,8 @@ package gui.visualization.draw.building;
 import de.tu_berlin.math.coga.math.Conversion;
 import de.tu_berlin.math.coga.math.vectormath.Vector3;
 import gui.visualization.VisualizationOptionManager;
+import gui.visualization.control.building.GLBuildingControl;
 import gui.visualization.control.building.GLWallControl;
-import gui.visualization.util.VisualizationConstants;
 import io.visualization.BuildingResults.Wall;
 import java.util.Iterator;
 import java.util.List;
@@ -34,7 +34,6 @@ import javax.media.opengl.GL;
 import opengl.drawingutils.GLColor;
 import opengl.drawingutils.GLVector;
 import opengl.framework.abs.AbstractDrawable;
-import opengl.helper.Frustum;
 
 /**
  * @author Daniel Pluempe, Jan-Philipp Kappmeier
@@ -44,7 +43,7 @@ import opengl.helper.Frustum;
 public class GLWall extends AbstractDrawable<GLWall, GLWallControl> {
 
 	private List<GLVector> basePoints;
-	private static final double WALL_HEIGHT = VisualizationOptionManager.getWallHeight() * VisualizationConstants.SIZE_MULTIPLICATOR;
+	private static final double WALL_HEIGHT = VisualizationOptionManager.getWallHeight() * GLBuildingControl.sizeMultiplicator;
 	private GLColor wallColor;
 	private boolean barrier = false;
 
@@ -328,37 +327,37 @@ public class GLWall extends AbstractDrawable<GLWall, GLWallControl> {
 	}
 	private GLVector getStart( int segment, int segmentCount ) {
 		GLVector start = new GLVector( basePoints.get( mod( segment, segmentCount ) ) );
-		start.scalarMultiplicateTo( VisualizationConstants.SIZE_MULTIPLICATOR );
+		start.scalarMultiplicateTo( GLBuildingControl.sizeMultiplicator );
 		return start;
 	}
 	private GLVector getEnd( int segment, int segmentCount ) {
 			GLVector end = new GLVector( basePoints.get( mod( segment+1, segmentCount ) ) ); //segment < segmentCount ? new GLVector( basePoints.get( segment + 1) ) : new GLVector( basePoints.get( 0 ) );
-			end.scalarMultiplicateTo( VisualizationConstants.SIZE_MULTIPLICATOR );
+			end.scalarMultiplicateTo( GLBuildingControl.sizeMultiplicator );
 			return end;
 	}
 	private GLVector getStartHigh( int segment, int segmentCount ) {
 			GLVector startHigh = new GLVector( basePoints.get( mod( segment, segmentCount ) ) );
-			startHigh.scalarMultiplicateTo( VisualizationConstants.SIZE_MULTIPLICATOR );
+			startHigh.scalarMultiplicateTo( GLBuildingControl.sizeMultiplicator );
 			startHigh.z += WALL_HEIGHT;
 			return startHigh;
 	}
 	// Cannot use this if the start vector is scalar multiplicated already!
 	private GLVector getStartHigh( GLVector start ) {
 			GLVector startHigh = new GLVector( start );
-			startHigh.scalarMultiplicateTo( VisualizationConstants.SIZE_MULTIPLICATOR );
+			startHigh.scalarMultiplicateTo( GLBuildingControl.sizeMultiplicator );
 			startHigh.z += WALL_HEIGHT;
 			return startHigh;
 	}
 	private GLVector getEndHigh( int segment, int segmentCount ) {
 			GLVector endHigh = new GLVector( basePoints.get( mod( segment+1, segmentCount ) ) );
-			endHigh.scalarMultiplicateTo( VisualizationConstants.SIZE_MULTIPLICATOR );
+			endHigh.scalarMultiplicateTo( GLBuildingControl.sizeMultiplicator );
 			endHigh.z += WALL_HEIGHT;
 			return endHigh;
 	}
 	// Cannot use this if the end vector is scalar multiplicated already!
 	private GLVector getEndHigh( GLVector end ) {
 			GLVector endHigh = new GLVector( end );
-			endHigh.scalarMultiplicateTo( VisualizationConstants.SIZE_MULTIPLICATOR );
+			endHigh.scalarMultiplicateTo( GLBuildingControl.sizeMultiplicator );
 			endHigh.z += WALL_HEIGHT;
 			return endHigh;
 	}

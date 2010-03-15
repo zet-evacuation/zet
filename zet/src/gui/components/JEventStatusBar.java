@@ -104,6 +104,7 @@ public class JEventStatusBar extends JStatusBar implements EventListener<Message
 				setStatusText ( 1, event.getMessage () );
 				break;
 			case MousePosition:
+			case VideoFrame:
 				setStatusText ( 2, event.getMessage () );
 				break;
 			//case EditMode:

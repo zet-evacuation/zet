@@ -246,9 +246,11 @@ public class GLEdgeControl extends AbstractZETVisualizationControl<GLEdgeControl
 						(rect.get_sw_point().getY() -
 						rect.get_nw_point().getY()) / 2;
 		int floor = graphVisResult.getNodeToFloorMapping().get( node );
-		double z = VisualizationOptionManager.getGraphHeight();
-		z += (floor - 1) * VisualizationOptionManager.getFloorDistance();
-		z *= 10;
+		// TODO read the value from VisualizationOptionManager
+		//double z = VisualizationOptionManager.getGraphHeight();
+		double z = 70;
+		z += (floor - 1) * 70;
+		z *= 10;	// whereever this 10 comes from...
 		return new Vector3( dx, -dy, z );
 	}
 
