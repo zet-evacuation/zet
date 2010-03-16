@@ -13,6 +13,11 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
+
+/**
+ * GLEdge.java
+ */
+
 package gui.visualization.draw.graph;
 
 import gui.visualization.QualityPreset;
@@ -29,7 +34,7 @@ import gui.visualization.control.graph.GLGraphControl;
 //public class GLEdge extends AbstractDrawable<CullingShapeCube, GLEdge, GLEdgeControl, GLEdgeControl> {
 public class GLEdge extends AbstractDrawable<GLEdge, GLEdgeControl> {
 	
-	/** The length of single flow units. If set to 1 no single units are displayed. */
+	/** The edgeLength of single flow units. If set to 1 no single units are displayed. */
 	static double factor = 0.7;
 	static int edgeDisplayMode = GLU.GLU_FILL;
 	static GLColor edgeColor;
@@ -50,8 +55,8 @@ public class GLEdge extends AbstractDrawable<GLEdge, GLEdgeControl> {
 	int transitTime;
 	/* not used */
 	double maxCapacity;
-	/* The length of the edge in {@code OpenGL} scaling. */
-	double length;
+	/* The edgeLength of the edge in {@code OpenGL} scaling. */
+	double edgeLength;
 	// TODO read quality from VisualOptionManager
 	//private static QualityPreset qualityPreset = VisualizationOptionManager.getQualityPreset();
 	private static QualityPreset qualityPreset = QualityPreset.MediumQuality;
@@ -66,7 +71,7 @@ public class GLEdge extends AbstractDrawable<GLEdge, GLEdgeControl> {
 	/**
 	 * Draws a piece of flow. The start and end of the piece can be drawn or not.
 	 * If they are drawn their color is flowUnitColor.
-	 * @param length length of the flow piece to draw.
+	 * @param edgeLength edgeLength of the flow piece to draw.
 	 * @param diskAtStart tells whether there shall be a disk at the start of the piece.
 	 * @param diskAtEnd tells whether there shall be a disk at the end of the piece.
 	 */
@@ -88,7 +93,6 @@ public class GLEdge extends AbstractDrawable<GLEdge, GLEdgeControl> {
 		}
 	}
 
-	// WARNING: Debug-Out is disabled due to the fact that the method getEdge() is not available in GLEdgeControl (MVC design!)
 	/**
 	 * Draws the flow on the edge.
 	 * @gl the {@code OpenGL} context
@@ -110,8 +114,8 @@ public class GLEdge extends AbstractDrawable<GLEdge, GLEdgeControl> {
 		Vector3 axis = control.getRotationAxis( a, b );
 		gl.glRotated( control.getAngleBetween( a, b ), axis.x, axis.y, axis.z );
 
-		double unit = length / transitTime;
-		double delta = control.getDeltaStep() * unit;
+		double flowUnitLength = edgeLength / transitTime;
+		double delta = control.getDeltaStep() * flowUnitLength;
 		if( pointer < flowOnEdge.size() ) {
 			if( flowOnEdge.get( pointer ) != 0 ) {
 				//if( DebugFlags.FLOWWRONG_LONG ) {
@@ -126,16 +130,16 @@ public class GLEdge extends AbstractDrawable<GLEdge, GLEdgeControl> {
 					//if( DebugFlags.FLOWWRONG_LONG ) {
 						//System.out.println( "(" + control.getEdge().start() + " " + control.getEdge().end() + ") " );
 					//}
-					drawPieceOfFlow( gl, unit * factor, flowThickness + flowOnEdge.get( pointer ) * flowThicknessOfOneCapacityStep, true, true );
+					drawPieceOfFlow( gl, flowUnitLength * factor, flowThickness + flowOnEdge.get( pointer ) * flowThicknessOfOneCapacityStep, true, true );
 				}
-				gl.glTranslated( 0.0, 0.0, unit );
+				gl.glTranslated( 0.0, 0.0, flowUnitLength );
 				pointer--;
 			}
 			if( flowOnEdge.get( pointer ) != 0 ) {
 				//if( DebugFlags.FLOWWRONG_LONG ) {
 					//System.out.println( "(" + control.getEdge().start() + " " + control.getEdge().end() + ") " );
 				//}
-				drawPieceOfFlow( gl, (unit - delta) * factor, flowThickness + flowOnEdge.get( pointer ) * flowThicknessOfOneCapacityStep, false, true );
+				drawPieceOfFlow( gl, (flowUnitLength - delta) * factor, flowThickness + flowOnEdge.get( pointer ) * flowThicknessOfOneCapacityStep, false, true );
 			}
 		}
 		gl.glPopMatrix();
@@ -158,7 +162,7 @@ public class GLEdge extends AbstractDrawable<GLEdge, GLEdgeControl> {
 		Vector3 axis = control.getRotationAxis( a, b );
 		gl.glRotated( control.getAngleBetween( a, b ), axis.x, axis.y, axis.z );
 
-		glu.gluCylinder( quadObj, thickness, thickness, length, qualityPreset.edgeSlices, 1 );
+		glu.gluCylinder( quadObj, thickness, thickness, edgeLength, qualityPreset.edgeSlices, 1 );
 		//gl.glDisable( GL.GL_BLEND );
 		gl.glPopMatrix();
 	}
@@ -191,7 +195,7 @@ public class GLEdge extends AbstractDrawable<GLEdge, GLEdgeControl> {
 	@Override
 	public void update() {
 		transitTime = control.getTransitTime();
-		length = control.get3DLength() * GLGraphControl.sizeMultiplicator;
+		edgeLength = control.get3DLength() * GLGraphControl.sizeMultiplicator;
 		capacity = control.getCapacity();
 		maxCapacity = control.getMaxCapacity();
 		edgeColor = VisualizationOptionManager.getEdgeColor();

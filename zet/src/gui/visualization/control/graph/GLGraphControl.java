@@ -53,6 +53,7 @@ public class GLGraphControl extends AbstractZETVisualizationControl<GLGraphFloor
 	/** The status of the simulation, true if all is finished */
 	private boolean finished = false;
 	double speedFactor = 1;
+	private int superSinkID = 0;
 
 	public GLGraphControl( GraphVisualizationResult graphVisResult ) {
 		super();
@@ -61,7 +62,7 @@ public class GLGraphControl extends AbstractZETVisualizationControl<GLGraphFloor
 		AlgorithmTask.getInstance().setProgress( 0, Localization.getInstance().getStringWithoutPrefix( "batch.tasks.progress.createGraphVisualizationDataStructure" ), "" );
 		nodeCount = graphVisResult.getNetwork().nodes().size();
 		nodesDone = 0;
-
+		superSinkID = graphVisResult.getSupersink().id();
 		allFloorsByID = new HashMap<Integer, GLGraphFloorControl>();
 		int floorCount = graphVisResult.getFloorToNodeMapping().size();
 		for( int i = 0; i < floorCount; i++ )
@@ -142,7 +143,7 @@ public class GLGraphControl extends AbstractZETVisualizationControl<GLGraphFloor
 	public void setTime( long time ) {
 		this.time = time;
 		realStep = time == 0 ? 0 : ((double) time / (double) nanoSecondsPerStep);
-		step = (long) realStep;
+		step = (long)realStep;
 
 		for( GLGraphFloorControl g : this )
 			for( GLNodeControl node : g ) {
@@ -208,6 +209,10 @@ public class GLGraphControl extends AbstractZETVisualizationControl<GLGraphFloor
 		return secondsPerStep;
 	}
 
+	public long getNanoSecondsPerStep() {
+		return this.nanoSecondsPerStep;
+	}
+
 	public int getStepCount() {
 		return stepCount;
 	}
@@ -218,5 +223,9 @@ public class GLGraphControl extends AbstractZETVisualizationControl<GLGraphFloor
 
 	public void update() {
 		throw new UnsupportedOperationException( "Not supported yet." );
+	}
+
+	int superSinkID() {
+		return superSinkID;
 	}
 }

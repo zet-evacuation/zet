@@ -45,6 +45,8 @@ public class FileFlow implements AlgorithmListener {
 		return read( filename, null, null );
 	}
 
+	static int factor = 2;
+
 	public static EarliestArrivalFlowProblem read( String filename, IdentifiableIntegerMapping<Node> x, IdentifiableIntegerMapping<Node> y ) throws FileNotFoundException, IOException {
 		BufferedReader read = new BufferedReader( new FileReader( new File( filename ) ) );
 		String s;
@@ -71,10 +73,18 @@ public class FileFlow implements AlgorithmListener {
 		HashMap<Long, Integer> nodeMap = new HashMap<Long, Integer>();
 
 		int currentNodeID = 0;
+		int xmax = Integer.MIN_VALUE;
+		int xmin = Integer.MAX_VALUE;
+		int ymax = Integer.MIN_VALUE;
+		int ymin = Integer.MAX_VALUE;
 
 		while((s = read.readLine()) != null) {
 			if( s.length() == 0 )
 				continue;
+			if( s.startsWith( "SCALE" ) ) {
+				factor = Integer.parseInt( s.substring( 6 ) );
+				continue;
+			}
 			if( s.charAt( 0 ) == 'S' )
 				continue;
 			if( s.charAt( 0 ) == '%' )	// comment
@@ -101,8 +111,16 @@ public class FileFlow implements AlgorithmListener {
 				nodeMap.put( nodeID, currentNodeID++ );
 				final int nodeSupply = Integer.parseInt( split[2] );
 				if( x != null && y != null ) {
-					final int readX = (int)Double.parseDouble( split[3] );
-					final int readY = (int)Double.parseDouble( split[4] );
+					final int readX = (int)( factor * Double.parseDouble( split[3] ) );
+					if( readX > xmax )
+						xmax = readX;
+					if( readX < xmin )
+						xmin = readX;
+					final int readY = (int)( factor * Double.parseDouble( split[4] ) );
+					if( readY > ymax )
+						ymax = readY;
+					if( readY < ymin )
+						ymin = readY;
 					node_x.add( readX );
 					node_y.add( readY );
 				}
@@ -126,6 +144,41 @@ public class FileFlow implements AlgorithmListener {
 			}
 			throw new IllegalStateException( "Unbekannte Zeile" );
 		}
+
+		System.out.println( "Min x: " + xmin + " - max x: " + xmax );
+		System.out.println( "Min y: " + ymin + " - max y: " + ymax );
+
+		int xDiff = xmax - xmin;
+		int yDiff = ymax - ymin;
+
+		int xadd = xDiff/2;
+		int yadd = xDiff/2;
+
+		int xoffset = 0;
+		int yoffset = 0;
+
+		if( xmax < 0 )
+			xoffset = xmax + xadd;
+		else if( xmin > 0 )
+			xoffset = -xmin - xadd;
+		else if( xmin < 0 )
+			xoffset = -xmin - xadd;
+		else
+			xoffset = -xmax + xadd;
+
+		if( ymax < 0 )
+			yoffset = ymax + yadd;
+		else if( ymin > 0 )
+			yoffset = -ymin - yadd;
+		else if( ymin < 0 )
+			yoffset = -ymin - yadd;
+		else
+			yoffset = -ymax + yadd;
+
+		System.out.println( "x-offset: " + xoffset );
+		System.out.println( "y-offset:  " + yoffset );
+
+		//System.exit( 0 );
 
 		x.setDomainSize( nodeCount );
 		y.setDomainSize( nodeCount );
@@ -175,8 +228,8 @@ public class FileFlow implements AlgorithmListener {
 				sink = network.getNode( nodeMap.get( node_id.get( i ) ) );
 			if( node_sup.get( i ) > 0 )
 				sources.add( network.getNode( nodeMap.get( node_id.get( i ) ) ) );
-			x.set( network.getNode( nodeMap.get( node_id.get( i ) ) ), node_x.get( i ) );
-			y.set( network.getNode( nodeMap.get( node_id.get( i ) ) ), node_y.get( i ) );
+			x.set( network.getNode( nodeMap.get( node_id.get( i ) ) ), node_x.get( i ) + xoffset );
+			y.set( network.getNode( nodeMap.get( node_id.get( i ) ) ), node_y.get( i ) + yoffset );
 		}
 
 		System.out.println( network.toString() );

@@ -27,7 +27,6 @@ import javax.media.opengl.GLCapabilities;
 import opengl.drawingutils.GLColor;
 import opengl.helper.ProjectionHelper;
 
-
 /**
  *
  * @author Jan-Philipp Kappmeier
@@ -61,7 +60,6 @@ public class ZETVisualization extends Visualization<GLControl> implements EventL
 			this.setParallelViewMode( ParallelViewMode.Isometric );
 		else
 			this.setParallelViewMode( ParallelViewMode.Orthogonal );
-
 	}
 
 	@Override

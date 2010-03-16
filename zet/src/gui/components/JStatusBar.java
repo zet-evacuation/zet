@@ -18,6 +18,7 @@ package gui.components;
 
 import info.clearthought.layout.TableLayout;
 import java.util.ArrayList;
+import javax.swing.JComponent;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.border.EtchedBorder;
@@ -30,13 +31,13 @@ import javax.swing.border.EtchedBorder;
  * be added and deleted separately and the status bar can be edited, but to
  * the changes are not displayed until {@code reset()} is called.</p>
  * <p>The appearance of the status bar can not be changed, the elements look
- * just like bordered labels, however, it is possible to assign a percential
+ * just like bordered components, however, it is possible to assign a percential
  * size to each element. If no size is set, the space is divided equally to
  * the elements.</p>
  * @author Jan-Philipp Kappmeier
  */
 public class JStatusBar extends JPanel {
-	protected ArrayList<JLabel> labels = new ArrayList<JLabel>(3);
+	protected ArrayList<JComponent> components = new ArrayList<JComponent>(3);
   
 	/**
 	 * Creates a new instance of the <code>JStatusBar</code> containing one
@@ -72,7 +73,11 @@ public class JStatusBar extends JPanel {
 	public void addElement( String text ) {
 		JLabel label = new JLabel( text );
 		label.setBorder( new EtchedBorder() );
-		labels.add( label );
+		components.add( label );
+	}
+
+	public void addElement( JComponent component ) {
+		components.add( component );
 	}
 
 	/**
@@ -80,7 +85,7 @@ public class JStatusBar extends JPanel {
 	 * like this will use no space.
 	 */
 	public void clear() {
-		labels.clear();
+		components.clear();
 	}
 	
 	/**
@@ -88,35 +93,36 @@ public class JStatusBar extends JPanel {
 	 * called if elements where added or deleted.
 	 */
 	protected void rebuild() {
-		if( labels.size() == 0 ) {
+		if( components.size() == 0 ) {
 			setLayout( new TableLayout() );
 			return;
 		}
 		
 		// set array		
 		double size2[][] = new double[2][];
-		size2[0] = new double[labels.size() ];
+		size2[0] = new double[components.size() ];
 		size2[1] = new double[ 1 ];
 		size2[1][0] = TableLayout.PREFERRED;
-		for( int i=0; i < labels.size(); i++ ) {
+		for( int i=0; i < components.size(); i++ ) {
 			size2[0][i] = TableLayout.FILL;
 		}
 		setLayout( new TableLayout( size2 ) );
 		
-		// for all labels, add them
-		for( int i=0; i < labels.size(); i++ ) {
-			this.add( labels.get( i ), i + ", 0" );
+		// for all components, add them
+		for( int i=0; i < components.size(); i++ ) {
+			this.add( components.get( i ), i + ", 0" );
 		}
 	}
 	
   /**
 	 * Sets a new text on a specified status bar element. The text is also set as
-	 * tooltip, so that the text can be read if the space is to small.
+	 * tooltip, so that the text can be read if the space is to small. Converts
+	 * the component to {@link JLabel} without testing.
 	 * @param index the index of the element, begins with 0
 	 * @param text the new text
 	 */
   public void setStatusText( int index, String text ) {
-    labels.get( index ).setText( text );
-	labels.get( index ).setToolTipText (text);
+    ((JLabel)components.get( index )).setText( text );
+		components.get( index ).setToolTipText (text);
   }
 }

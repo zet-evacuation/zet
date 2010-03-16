@@ -71,6 +71,8 @@ import gui.visualization.JVisualizationView;
 import gui.visualization.control.GLControl;
 import gui.visualization.control.GLControl.CellInformationDisplay;
 import io.DXFWriter;
+import de.tu_berlin.math.coga.common.localization.Localization;
+import de.tu_berlin.math.coga.common.localization.Localized;
 import de.tu_berlin.math.coga.common.util.IOTools;
 import io.movie.MovieManager;
 import io.visualization.CAVisualizationResults;
@@ -106,8 +108,6 @@ import java.text.NumberFormat;
 import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Locale;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.imageio.ImageIO;
 import javax.media.opengl.GLCapabilities;
 import javax.swing.ButtonGroup;
@@ -135,8 +135,6 @@ import javax.swing.event.ChangeListener;
 import javax.swing.event.PopupMenuEvent;
 import javax.swing.event.PopupMenuListener;
 import javax.swing.filechooser.FileFilter;
-import de.tu_berlin.math.coga.common.localization.Localization;
-import de.tu_berlin.math.coga.common.localization.Localized;
 import statistic.ca.CAStatistic;
 import statistic.graph.Controller;
 import batch.tasks.AlgorithmTask;
@@ -1308,7 +1306,7 @@ public class JEditor extends JFrame implements Localized, EventListener<Progress
 				NetworkFlowModel originalProblem = ca_res.getNetworkFlowModel();
 				EarliestArrivalFlowProblem problem = new EarliestArrivalFlowProblem( originalProblem.getEdgeCapacities(), originalProblem.getNetwork(), originalProblem.getNodeCapacities(), originalProblem.getSupersink(), originalProblem.getSources(), 0, originalProblem.getTransitTimes(), originalProblem.getCurrentAssignment() );
 				try {
-					FileFlow.writeFile( getZControl().getProject().getProjectFile().getName(), problem, getZControl().getProject().getProjectFile().getName() + ".dat", originalProblem.getZToGraphMapping() );
+					FileFlow.writeFile( getZControl().getProject().getName(), problem, getZControl().getProject().getProjectFile().getName().substring( 0, getZControl().getProject().getProjectFile().getName().length()-4 ) + ".dat", originalProblem.getZToGraphMapping() );
 				} catch( FileNotFoundException ex ) {
 					ZETMain.sendError( "FileNotFoundException" );
 					ex.printStackTrace();
