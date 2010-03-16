@@ -13,6 +13,7 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
+
 /*
  * JEventStatusBar.java
  * Created on 19.12.2007, 02:16:58
@@ -51,19 +52,19 @@ public class JEventStatusBar extends JStatusBar implements EventListener<Message
 		addElement();
 		rebuild();
 		
-		labelBackground = labels.get (0).getBackground ();
+		labelBackground = components.get (0).getBackground ();
 		
 		blinkTimer = new Timer ( 200, new ActionListener () {
 			public void actionPerformed (ActionEvent e) {
 				if (blinkCount == 0) {
-					labels.get (0).setOpaque (true);
+					components.get (0).setOpaque (true);
 				}
 				
 				if (blinkCount < 6) {
-					if (labels.get (0).getBackground () == labelBackground) {
-						labels.get (0).setBackground (blinkColor);
+					if (components.get (0).getBackground () == labelBackground) {
+						components.get (0).setBackground (blinkColor);
 					} else {
-						labels.get (0).setBackground (labelBackground);
+						components.get (0).setBackground (labelBackground);
 					}
 					blinkCount++;
 				} else {
@@ -76,10 +77,10 @@ public class JEventStatusBar extends JStatusBar implements EventListener<Message
 	}
 
 	private void stopBlinking () {
-		labels.get (0).setBackground (labelBackground);
+		components.get (0).setBackground (labelBackground);
 		blinkTimer.stop ();
 		blinkCount = 0;
-		labels.get (0).setOpaque (false);
+		components.get (0).setOpaque (false);
 	}
 	
 	/**

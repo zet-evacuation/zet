@@ -13,10 +13,12 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
+
 /*
  * Project.java
  * Created on 26. November 2007, 21:32
  */
+
 package ds;
 
 import com.thoughtworks.xstream.XStream;
@@ -475,4 +477,15 @@ public class Project implements Serializable {
 		} else
 			return false;
 	}
+
+	private String name = "New Project";
+
+	public void setName( String name ) {
+		this.name = name;
+	}
+
+	public String getName() {
+		return this.getProjectFile().getName().substring( 0, getProjectFile().getName().length()-4 );
+	}
+
 }

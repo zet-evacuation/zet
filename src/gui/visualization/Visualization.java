@@ -181,6 +181,7 @@ public class Visualization<U extends DrawableControlable> extends AbstractVisual
 			if( !introRunning )
 				movieStep();
 		}
+		EventServer.getInstance().dispatchEvent( new MessageEvent<Visualization>( this, MessageType.Status, "Frame rendered" ) );
 	}
 
 	/**

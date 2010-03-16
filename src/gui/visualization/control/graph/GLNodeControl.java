@@ -18,7 +18,6 @@ package gui.visualization.control.graph;
 import ds.GraphVisualizationResult;
 import ds.graph.Node;
 import ds.graph.Edge;
-import gui.visualization.VisualizationOptionManager;
 import gui.visualization.control.AbstractZETVisualizationControl;
 import gui.visualization.draw.graph.GLNode;
 import gui.visualization.control.FlowHistroryTriple;
@@ -43,7 +42,6 @@ public class GLNodeControl extends AbstractZETVisualizationControl<GLEdgeControl
 	private ArrayList<FlowHistroryTriple> graphHistory;
 	private boolean isEvacuationNode,  isSourceNode,  isDeletedSourceNode;
 	private int duration;
-	private double flow;
 	private int startTime;
 	private int floor;
 	private boolean gridVisible = true;
@@ -56,6 +54,8 @@ public class GLNodeControl extends AbstractZETVisualizationControl<GLEdgeControl
 		seX = graphVisResult.getNodeRectangles().get( node ).get_se_point().getX();
 		seY = graphVisResult.getNodeRectangles().get( node ).get_se_point().getY();
 
+		graphVisResult.getSupersink().id();
+
 		xPosition = (nwX + 0.5 * (seX - nwX)) * Z_TO_OPENGL_SCALING;
 		yPosition = (nwY + 0.5 * (seY - nwY)) * Z_TO_OPENGL_SCALING;
 		capacity = graphVisResult.getNodeCapacities().get( node );
@@ -63,7 +63,7 @@ public class GLNodeControl extends AbstractZETVisualizationControl<GLEdgeControl
 		final boolean showEdgesBetweenFloors = true;
 
 		for( Edge edge : graphVisResult.getNetwork().outgoingEdges( node ) )
-			if( edge.start().id() != 0 && edge.end().id() != 0 ) {
+			if( edge.start().id() != glControl.superSinkID() && edge.end().id() != glControl.superSinkID() ) {
 				int nodeFloor1 = graphVisResult.getNodeToFloorMapping().get( edge.start() );
 				int nodeFloor2 = graphVisResult.getNodeToFloorMapping().get( edge.end() );
 				if( nodeFloor1 != nodeFloor2 && !showEdgesBetweenFloors )
@@ -140,10 +140,6 @@ public class GLNodeControl extends AbstractZETVisualizationControl<GLEdgeControl
 		return flowCalculator;
 	}
 
-//	public Node getNode() {
-//		return getControlled();
-//	}
-
 	public void stepUpdate( int step ) {
 		time = mainControl.getStep();
 		graphHistory = flowCalculator.getCalculatedFlow();
@@ -153,7 +149,7 @@ public class GLNodeControl extends AbstractZETVisualizationControl<GLEdgeControl
 		if( index < graphHistory.size() && this.graphHistory.get( index ).getFirstValue() <= step ) {
 			this.startTime = this.graphHistory.get( index ).getTime();
 			this.duration = this.graphHistory.get( index ).getDuration();
-			this.flow = this.graphHistory.get( index ).getFlow();
+			//this.flow = this.graphHistory.get( index ).getFlow();
 			index++;
 		}
 	}
