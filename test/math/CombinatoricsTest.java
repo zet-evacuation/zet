@@ -39,40 +39,36 @@ public class CombinatoricsTest extends TestCase {
 
 		int fi = 0, nk = n - k;
 
-		int rootN = (int) Math.floor( Math.sqrt( n ) );
+		//int rootN = (int) Math.floor( Math.sqrt( n ) );
+		int rootN = de.tu_berlin.math.coga.math.Math.sqrt( n );
 
 		PrimeSieve primeSieve = new PrimeSieve( n );
 		primeSieve.computeLuschny();
-		int[] primes = primeSieve.getPrimes(); //new PrimeSieve(n).GetPrimeCollection(2, n).ToArray();
+		int[] primes = primeSieve.getPrimes();
 
 		for( int i = 0; i < primeSieve.getPrimeCount(); ++i ) {
-			int prime = primes[i];
-//  foreach (int prime in primes) // Equivalent to a nextPrime() function.
-
-			// {
-			if( prime > nk ) {
-				primes[fi++] = prime;
+			if( primes[i] > nk ) {
+				primes[fi++] = primes[i];
 				continue;
 			}
 
-			if( prime > n / 2 )
+			if( primes[i] > n / 2 )
 				continue;
 
-			if( prime > rootN ) {
-				if( n % prime < k % prime )
-					primes[fi++] = prime;
+			if( primes[i] > rootN ) {
+				if( n % primes[i] < k % primes[i] )
+					primes[fi++] = primes[i];
 				continue;
 			}
 
 			int r = 0, N = n, K = k, p = 1;
 
 			while(N > 0) {
-				r = ((N % prime) < (K % prime + r)) ? 1 : 0;
+				r = ((N % primes[i]) < (K % primes[i] + r)) ? 1 : 0;
 				if( r == 1 )
-					p *= prime;
-
-				N /= prime;
-				K /= prime;
+					p *= primes[i];
+				N /= primes[i];
+				K /= primes[i];
 			}
 			primes[fi++] = p;
 		}
@@ -126,7 +122,7 @@ public class CombinatoricsTest extends TestCase {
 			for( int k = 0; k <= n; ++k ) {
 				bcounter = 0;
 				fcounter = 0;
-				for( int i = 1; i < 20000; i++ ) {
+				for( int i = 1; i < 10000; i++ ) {
 					start = System.nanoTime();
 					//long nb = naiveBinomial( n, k );
 					end = System.nanoTime();
