@@ -4,7 +4,9 @@
  */
 package de.tu_berlin.math.coga.common.util;
 
+import de.tu_berlin.math.coga.common.localization.Localization;
 import java.text.NumberFormat;
+import java.util.Locale;
 
 /**
  * The class <code>Formatter</code> is a utility class that provides methods
@@ -59,7 +61,53 @@ public class Formatter {
 	 * @return the converted and formatted string
 	 */
 	public final static String formatTimeMilliseconds( long timeInMilliseconds ) {
-		long time = timeInMilliseconds * 1000 * 1000;
+		return formatTimeNanoseconds( timeInMilliseconds * 1000 * 1000 );
+	}
+
+	/**
+	 * Converts a time specified in nanoseconds into a time unit appropriate for
+	 * the length of the specified time and formats it as a human readable
+	 * string. For example, 1445997106 ns would be converted and formatted to
+	 * "1.445 s".
+	 * @param timeInNanoseconds the time in nanoseconds.
+	 * @return the converted and formatted string.
+	 */
+	public final static String formatTimeNanoseconds( long timeInNanoseconds ) {
+		NumberFormat nf = Localization.getInstance().getFloatConverter();
+		nf.setMaximumFractionDigits( 3 );
+		nf.setMinimumFractionDigits( 0 );
+		double time = timeInNanoseconds;
+		int counter = 0;
+		//int last = 0;
+		while( time >= 1000 && counter < 3 ) {
+			//last = (int)(time % 1000);
+			time /= 1000;
+			counter++;
+		}
+		switch( counter ) {
+			case 0:
+				return nf.format( time ) + " ns"; //String.format( "%1$s ns", time );
+			case 1:
+				return nf.format( time ) + " µs"; //String.format( "%1$s ns", time );
+			case 2:
+				return nf.format( time ) + " ms"; //String.format( "%1$s ns", time );
+			case 3:
+				if( time <= 60 )
+					return nf.format( time ) + " s";
+					//return String.format( "%1$s.%2$03d s", time, last );
+				else if( time > 60 ) {
+					//last = (int)(time % 60);
+					time /= 60;
+					return nf.format( time ) + " min"; //String.format( "%1$s.%2$02d min", time, last );
+				} else
+					throw new AssertionError( "This should not happen." );
+			default:
+				throw new AssertionError( "This should not happen." );
+		}
+	}
+
+	public final static String formatTimeNanosecondsWithoutLocale( long timeInNanoseconds ) {
+		long time = timeInNanoseconds;
 		int counter = 0;
 		int last = 0;
 		while( time >= 1000 && counter < 3 ) {
@@ -89,40 +137,15 @@ public class Formatter {
 	}
 
 	/**
-	 * Converts a time specified in nanoseconds into a time unit appropriate for
-	 * the length of the specified time and formats it as a human readable
-	 * string. For example, 1445997106 ns would be converted and formatted to
-	 * "1.445 s".
-	 * @param timeInNanoseconds the time in nanoseconds.
-	 * @return the converted and formatted string.
+	 * Formats a double value (between 0 and 1) into a percent value, always
+	 * showing 2 fraction digits.
+	 * @param value the decimal value
+	 * @return a string containing the decimal value
 	 */
-	public final static String formatTimeNanoseconds( long timeInNanoseconds ) {
-		long time = timeInNanoseconds;
-		int counter = 0;
-		int last = 0;
-		while( time >= 1000 && counter < 3 ) {
-			last = (int)(time % 1000);
-			time /= 1000;
-			counter++;
-		}
-		switch( counter ) {
-			case 0:
-				return String.format( "%1$s ns", time );
-			case 1:
-				return String.format( "%1$s.%2$03d µs", time, last );
-			case 2:
-				return String.format( "%1$s.%2$03d ms", time, last );
-			case 3:
-				if( time <= 60 )
-					return String.format( "%1$s.%2$03d s", time, last );
-				else if( time > 60 ) {
-					last = (int)(time % 60);
-					time /= 60;
-					return String.format( "%1$s.%2$02d min", time, last );
-				} else
-					throw new AssertionError( "This should not happen." );
-			default:
-				throw new AssertionError( "This should not happen." );
-		}
+	public final static String formatPercent( double value ) {
+		NumberFormat nfPercent = Localization.getInstance().getPercentConverter();
+		nfPercent.setMaximumFractionDigits( 2 );
+		nfPercent.setMinimumFractionDigits( 2 );
+		return nfPercent.format( value );
 	}
 }

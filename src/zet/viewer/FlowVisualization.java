@@ -55,7 +55,7 @@ import javax.swing.UIManager;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 import javax.swing.filechooser.FileFilter;
-import zet.FileFlow;
+import zet.DatFileReaderWriter;
 
 /**
  *
@@ -82,6 +82,7 @@ public class FlowVisualization extends JFrame implements PropertyChangeListener,
 	EarliestArrivalTask sw;
 	EarliestArrivalFlowProblem eafp = null;
 	GraphVisualizationResult graphVisResult = null;
+	boolean pause = false;
 
 	public FlowVisualization() {
 		super();
@@ -122,8 +123,13 @@ public class FlowVisualization extends JFrame implements PropertyChangeListener,
 		initializeComponents();
 	}
 
+	/**
+	 * Initializes the components of the visualization window. That are menus,
+	 * toolbar and status bar.
+	 */
 	private void initializeComponents() {
-		loc.setPrefix( "gui.editor.JEditor." );
+		loc.setLocale( Locale.GERMAN );
+		loc.setPrefix( "viewer." );
 		sb = new JEventStatusBar();
 		add( sb, BorderLayout.SOUTH );
 
@@ -175,6 +181,11 @@ public class FlowVisualization extends JFrame implements PropertyChangeListener,
 		} );
 	}
 
+	/**
+	 * Starts the application, creates the main window and shows it within a new
+	 * thread.
+	 * @param arguments command line arguments, are ignored currently
+	 */
 	public static void main( String[] arguments ) {
 		SwingUtilities.invokeLater( new Runnable() {
 
@@ -190,6 +201,10 @@ public class FlowVisualization extends JFrame implements PropertyChangeListener,
 		} );
 	}
 
+	/**
+	 *
+	 * @param event
+	 */
 	public void eventOccurred( AlgorithmEvent event ) {
 		if( event instanceof AlgorithmProgressEvent );//System.out.println( ((AlgorithmProgressEvent) event).getProgress() );
 		else if( event instanceof AlgorithmStartedEvent )
@@ -200,6 +215,7 @@ public class FlowVisualization extends JFrame implements PropertyChangeListener,
 			System.out.println( event.toString() );
 	}
 
+	/** Action listener for the file menu. */
 	ActionListener aclFile = new ActionListener() {
 
 		public void actionPerformed( ActionEvent event ) {
@@ -225,7 +241,7 @@ public class FlowVisualization extends JFrame implements PropertyChangeListener,
 
 						xPos = new IdentifiableIntegerMapping<Node>( 0 );
 						yPos = new IdentifiableIntegerMapping<Node>( 0 );
-						eafp = FileFlow.read( path, xPos, yPos );
+						eafp = DatFileReaderWriter.read( path, xPos, yPos );
 
 					} catch( FileNotFoundException ex ) {
 						Logger.getLogger( FlowVisualization.class.getName() ).log( Level.SEVERE, null, ex );
@@ -282,7 +298,7 @@ public class FlowVisualization extends JFrame implements PropertyChangeListener,
 			}
 		}
 	};
-	boolean pause = false;
+	/** Action listener for the flow menu. */
 	ActionListener aclFlow = new ActionListener() {
 
 		public void actionPerformed( ActionEvent event ) {
@@ -301,17 +317,15 @@ public class FlowVisualization extends JFrame implements PropertyChangeListener,
 				}
 			} );
 			if( event.getActionCommand().equals( "execute" ) ) {
-				int timeHorizon = eafp.getTimeHorizon();
-				if( timeHorizon <= 0 ) {
+				if( eafp.getTimeHorizon() <= 0 ) {
 					sb.setStatusText( 0, "Schätze Zeithorizont" );
 					LongestShortestPathTimeHorizonEstimator estimator = new LongestShortestPathTimeHorizonEstimator();
 					estimator.setProblem( eafp );
 					estimator.run();
-					timeHorizon = estimator.getSolution().getUpperBound();
+					eafp.setTimeHorizon( estimator.getSolution().getUpperBound() );
 					System.out.println( "Geschätzter Zeithorizont: " + estimator.getSolution().getUpperBound() );
 				}
 
-				eafp = new EarliestArrivalFlowProblem( eafp.getEdgeCapacities(), eafp.getNetwork(), eafp.getNodeCapacities(), eafp.getSink(), eafp.getSources(), timeHorizon, eafp.getTransitTimes(), eafp.getSupplies() );
 				// Fluss bestimmen
 				sw = new EarliestArrivalTask( eafp );
 				sw.addPropertyChangeListener( theInstance );
@@ -329,7 +343,8 @@ public class FlowVisualization extends JFrame implements PropertyChangeListener,
 			}
 		}
 	};
-  ChangeListener chl = new ChangeListener() {
+  /** Change listener for the slider. Sets the visualization time. */
+	ChangeListener chl = new ChangeListener() {
 
 		public void stateChanged( ChangeEvent event ) {
 			int time = slider.getValue();
@@ -338,6 +353,10 @@ public class FlowVisualization extends JFrame implements PropertyChangeListener,
 		}
 	};
 
+	/**
+	 * Loads a visualization from the data structure. The structure has either to
+	 * be set up by a flow computation or loaded from a file.
+	 */
 	private void loadGraphVisResults() {
 		sb.setStatusText( 0, "Baue Visualisierung" );
 		slider.setMaximum( graphVisResult.getNeededTimeHorizon() * sliderAccuracy );
