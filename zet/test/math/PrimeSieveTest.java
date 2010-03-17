@@ -135,12 +135,52 @@ public class PrimeSieveTest extends TestCase {
 			System.out.println();
 		}
 
+	  public void testADW3Third() throws Exception {
+			System.out.println( "Testing Algorithmus der Woche Optimiert3-third" );
+			System.out.println( "Testing prime sieve for n = 16..." );
+			int n = 16;
+			PrimeSieve p = new PrimeSieve( n );
+			p.computeADW3Third();
+			giveOutPrimes( p );
+			check( p, pl13 );
+
+			System.out.println( "Test correct number of primes..." );
+			for( int i = 2; i <= 126; ++i ) {
+				System.out.print( i + " " );
+				p = new PrimeSieve( i );
+				p.computeADW3Third();
+				check( p, parray[i-2] );
+			}
+			System.out.println();
+			System.out.println();
+		}
+
 		public void testOptPrimeSieve() throws Exception {
 			System.out.println( "Testing Luschnys PrimeSieve" );
 			System.out.println( "Testing prime sieve for n = 16..." );
 			int n = 16;
 			PrimeSieve p = new PrimeSieve( n );
 			p.computeLuschny();
+			giveOutPrimes( p );
+			check( p, pl13 );
+
+			System.out.println( "Test correct number of primes..." );
+			for( int i = 2; i <= 126; ++i ) {
+				System.out.print( i + " " );
+				p = new PrimeSieve( i );
+				p.computeLuschny();
+				check( p, parray[i-2] );
+			}
+			System.out.println();
+			System.out.println();
+		}
+
+		public void testAtkin() throws Exception {
+			System.out.println( "Testing Atkin sieve" );
+			System.out.println( "Testing prime sieve for n = 16..." );
+			int n = 16;
+			PrimeSieve p = new PrimeSieve( n );
+			p.computeAtkin();
 			giveOutPrimes( p );
 			check( p, pl13 );
 

@@ -86,7 +86,6 @@ public class PrimeSieve {
 		int pindex = 1;
 
 		while( start < n / 2 ) {
-//			if( !working[++index] ) {
 			if( (working[++index >> 5] & (1 << index % 32)) == 0 ) {
 				primes[pindex++] = (index << 1) + 3;
 				// erase
@@ -100,7 +99,6 @@ public class PrimeSieve {
 
 		// give out the rest
 		while( ++index < n / 2 && (pindex) < bound )
-//			if( !working[index] )
 			if( (working[index >> 5] & (1 << index % 32)) == 0 )
 				primes[pindex++] = (index << 1) + 3;
 		primeCount = pindex;
@@ -144,7 +142,52 @@ public class PrimeSieve {
 			if( !working[i] )
 				primes[count++] = (i<<1) + 1;
 		primeCount = count;
+	}
 
+	static private int[][] offsetCorrection = {{-1, -3, -1},{-2, 0, 0}};
+	static private int[] swap = {0,0,4,0,2};
+
+	public void computeADW3Third() {
+		boolean[] working = new boolean[n/3 + 1];
+		int i = 0;
+		int k = 0;
+		int c = 4;
+
+		try {
+			for( i = 5; i <= java.lang.Math.floor( java.lang.Math.sqrt( n ) ); i += c ) {
+				//c = c == 2 ? 4 : 2;
+				c = swap[c];
+				int first = n/i;
+				first += offsetCorrection[first%2][first%3];
+
+				int c2 = first%3 == 1 ? 4 : 2;
+
+				for( k = first; k >= i; k -= c2 ) {
+					//c2 = c2 == 2 ? 4 : 2;
+					c2 = swap[c2];
+					working[((i*k)-5) / 3 + (((i*k)-5)%3 == 0 ? 0 : 1)] = true;
+					// experiments show that the following (which does the same) is slower:
+					//working[(int)java.lang.Math.ceil( ((i*k)-5) / 3.0 )] = true;
+				}
+			}
+		} catch( Exception e ) {
+
+		}
+
+		int count = 0;
+		primes[count++] = 2;
+		if( n <= 2 ) {
+			primeCount = 1;
+			return;
+		}
+		primes[count++] = 3;
+		int start = 5;
+		i = -1;
+		while( (start += ((i++ % 2 + 1) << 1)) <= n ) {
+			if( !working[i] )
+				primes[count++] = start;
+		}
+		primeCount = count;
 	}
 
 	public void computeLuschny() {
@@ -208,6 +251,62 @@ public class PrimeSieve {
 		primeCount = j;
 	}
 
+	public void computeAtkin() {
+		boolean working[] = new boolean[n+1];
+		int root = (int)java.lang.Math.sqrt( n );
+
+		//"bilde das kartesische Produkt aus x und y"
+		//dabei sind x und y alle Zahlen von 1 bis Wurzel aus Limit
+		for( int x = 1; x <= root; ++x )
+			for( int y = 1; y <= root; ++y ) {
+
+				//Wenn die Zahl an Lösungen für diese Gleichung ungerade ist
+				//und n Modulo 12 ist 1 oder 5, dann muss die Zahl prim sein
+				{final int test = 4 * x * x + y * y;
+				if( test <= n && (test % 12 == 1 || test % 12 == 5) )
+					working[test] = !working[test];
+				/*hier wird das Ergebnis invertiert und damit
+				sichergestellt, dass nur die Zahlen prim sind,
+				für die eine ungerade Zahl an Lösungen für die
+				obere Gleichung existiert */
+				}
+				//Wenn die Zahl an Lösungen für diese Gleichung ungerade ist
+				//und n Modulo 12 ist 1 oder 5, dann muss die Zahl prim sein
+				{
+					final int test = 3 * x * x + y * y;
+				if( test <= n && test % 12 == 7 )
+					working[test] = !working[test];
+				}
+				/*hier wird das Ergebnis invertiert und damit
+				sichergestellt, dass nur die Zahlen prim sind,
+				für die eine ungerade Zahl an Lösungen für die
+				obere Gleichung existiert */
+
+				//das gleiche Prinzip wie oben
+				{
+					final int test = 3 * x * x - y * y;
+				if( x > y && test <= n && test % 12 == 11 )
+					working[test] = !working[test];
+				}
+			}
+
+//nun sollen alle Quadrate und alle Vielfachen der Quadrate
+//der gefundenen Primzahlen gestrichen werden
+		for( int l = 5; l <= root; l++ )
+			if( working[l] )
+				for( int k = 1; k * l * l <= n; k++ )
+					working[k * l * l] = false;
+
+
+		primes[0] = 2;
+		primes[1] = 3;
+		int counter = 2;
+		for( int k = 5; k <= n; k++ )
+			if( working[k] )
+				primes[counter++] = k;
+		primeCount = counter;
+	}
+
 	public static void main( String[] args ) {
 		PrimeSieve p;
 		int n = 2;
@@ -222,7 +321,7 @@ public class PrimeSieve {
 //			p.compute();
 //			end = System.nanoTime();
 //			System.out.print( ";" + (end - start) );
-////
+
 //			System.out.print( ";optimiertes PrimeSieve LowMem" );
 //			System.gc();
 //			p = new PrimeSieve( n );
@@ -230,14 +329,14 @@ public class PrimeSieve {
 //			p.computeLowMem();
 //			end = System.nanoTime();
 //			System.out.print( ";" + (end - start) );
-//
-			System.out.print( ";OptAlgo3" );
-			p = new PrimeSieve( n );
-			System.gc();
-			start = System.nanoTime();
-			p.computeADW3();
-			end = System.nanoTime();
-			System.out.print( ";" + (end - start) );
+
+//			System.out.print( ";OptAlgo3" );
+//			p = new PrimeSieve( n );
+//			System.gc();
+//			start = System.nanoTime();
+//			p.computeADW3();
+//			end = System.nanoTime();
+//			System.out.print( ";" + (end - start) );
 
 			//			System.out.print( ";OptAlgo3Half" );
 //			p = new PrimeSieve( n );
@@ -254,6 +353,22 @@ public class PrimeSieve {
 //			p.computeLuschny();
 //			end = System.nanoTime();
 //			System.out.print( ";" + (end - start) );
+
+//			System.out.print( ";Atkin" );
+//			p = new PrimeSieve( n );
+//			System.gc();
+//			start = System.nanoTime();
+//			p.computeAtkin();
+//			end = System.nanoTime();
+//			System.out.print( ";" + (end - start) );
+
+			System.out.print( ";OptAlgo3Third" );
+			p = new PrimeSieve( n );
+			System.gc();
+			start = System.nanoTime();
+			p.computeADW3Third();
+			end = System.nanoTime();
+			System.out.print( ";" + (end - start) );
 
 			System.out.println();
 		}
