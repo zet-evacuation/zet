@@ -13,10 +13,12 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
+
 /*
  * SEAAPAlgorithm.java
  *
  */
+
 package algo.graph.dynamicflow.eat;
 
 import ds.graph.flow.EarliestArrivalAugmentingPath;
@@ -54,7 +56,7 @@ public class SEAAPAlgorithm extends Algorithm<EarliestArrivalFlowProblem, FlowOv
     
     @Override
     protected FlowOverTime runAlgorithm(EarliestArrivalFlowProblem problem) {
-        System.out.println("SSSP Beginns");
+        //System.out.println("SSSP Beginns");
         if (problem.getTotalSupplies() == 0) {
             drn = new DynamicResidualNetwork(problem.getNetwork(), problem.getEdgeCapacities(), problem.getNodeCapacities(), problem.getTransitTimes(), problem.getSources(), problem.getSupplies(), problem.getTimeHorizon());
             paths = new LinkedList<EarliestArrivalAugmentingPath>(); 
@@ -72,19 +74,13 @@ public class SEAAPAlgorithm extends Algorithm<EarliestArrivalFlowProblem, FlowOv
         calculateEarliestArrivalAugmentingPath();
         //System.out.println("B");
         paths = new LinkedList<EarliestArrivalAugmentingPath>();
-        //System.out.println("Arrivals:");
-				long totalCost = 0;
         while (!path.isEmpty() && path.getCapacity() > 0) {
-            //System.out.println(path.getArrivalTime());
-						totalCost += (path.getArrivalTime()) * path.getCapacity();
             flowUnitsSent += path.getCapacity();
-
             fireProgressEvent(flowUnitsSent * 1.0 / problem.getTotalSupplies(), String.format("%1$s von %2$s Personen evakuiert.", flowUnitsSent, problem.getTotalSupplies()));
             paths.add(path);
             drn.augmentPath(path);
             calculateEarliestArrivalAugmentingPath();
         }
-				System.out.println( "TotalCost:   " + totalCost );
         if (autoConvert) {
 					FlowOverTime flow		= new FlowOverTime(drn, paths);
 				  return flow;

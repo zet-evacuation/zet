@@ -54,7 +54,16 @@ public class EarliestArrivalFlowProblem {
             totalSupplies += supplies.get(source);
         }
     }
-    
+
+		/**
+		 * Sets a new time horizon for the instance. Use this if a time horizon
+		 * has changed, for example if an estimator has been used.
+		 * @param timeHorizon the new time horizon
+		 */
+		public void setTimeHorizon( int timeHorizon ) {
+			this.timeHorizon = timeHorizon;
+		}
+
     public IdentifiableIntegerMapping<Edge> getEdgeCapacities() {
         return edgeCapacities;
     }

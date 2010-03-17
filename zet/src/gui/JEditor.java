@@ -152,7 +152,7 @@ import ds.z.ZControl;
 import event.VisualizationEvent;
 import gui.editor.JLogView;
 import io.visualization.BuildingResults;
-import zet.FileFlow;
+import zet.DatFileReaderWriter;
 import zet.util.ConversionTools;
 
 /**
@@ -1306,7 +1306,7 @@ public class JEditor extends JFrame implements Localized, EventListener<Progress
 				NetworkFlowModel originalProblem = ca_res.getNetworkFlowModel();
 				EarliestArrivalFlowProblem problem = new EarliestArrivalFlowProblem( originalProblem.getEdgeCapacities(), originalProblem.getNetwork(), originalProblem.getNodeCapacities(), originalProblem.getSupersink(), originalProblem.getSources(), 0, originalProblem.getTransitTimes(), originalProblem.getCurrentAssignment() );
 				try {
-					FileFlow.writeFile( getZControl().getProject().getName(), problem, getZControl().getProject().getProjectFile().getName().substring( 0, getZControl().getProject().getProjectFile().getName().length()-4 ) + ".dat", originalProblem.getZToGraphMapping() );
+					DatFileReaderWriter.writeFile( getZControl().getProject().getName(), problem, getZControl().getProject().getProjectFile().getName().substring( 0, getZControl().getProject().getProjectFile().getName().length()-4 ) + ".dat", originalProblem.getZToGraphMapping() );
 				} catch( FileNotFoundException ex ) {
 					ZETMain.sendError( "FileNotFoundException" );
 					ex.printStackTrace();

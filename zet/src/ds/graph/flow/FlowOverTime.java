@@ -35,17 +35,20 @@ public class FlowOverTime {
     private PathBasedFlowOverTime pathBased;
     private int flowAmount;
     private int timeHorizon;
+		private int totalCost;
 
     public FlowOverTime(DynamicResidualNetwork network, Queue<EarliestArrivalAugmentingPath> eaaPaths) {
         edgeBased = new EdgeBasedFlowOverTime(network.flow());
         pathBased = new PathBasedFlowOverTime();
         LinkedList<FlowOverTimeEdgeSequence> paths = new LinkedList<FlowOverTimeEdgeSequence>();
         int index = 0;
+				totalCost = 0;
         for (EarliestArrivalAugmentingPath eaaPath : eaaPaths) {
             if (DEBUG) System.out.println( (index++) + ":\n " + eaaPath + "\n " + eaaPath.getFlowOverTimeEdgeSequence(network).toText(network.transitTimes()));
             paths.add(eaaPath.getFlowOverTimeEdgeSequence(network));
             flowAmount += eaaPath.getCapacity();
             timeHorizon = Math.max(timeHorizon, eaaPath.getArrivalTime() + 1);
+						totalCost += eaaPath.getCapacity() * eaaPath.getArrivalTime();
         }
         ChainDecomposition2 pd = new ChainDecomposition2();
         pd.pathBased = pathBased;
@@ -67,4 +70,12 @@ public class FlowOverTime {
     public int getTimeHorizon() {
         return timeHorizon;
     }
+
+		/**
+		 * Returns the total costs for the flow.
+		 * @return
+		 */
+		public int getTotalCost() {
+			return totalCost;
+		}
 }

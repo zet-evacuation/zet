@@ -1,10 +1,11 @@
 /**
- * FileFlow.java
+ * DatFileReaderWriter.java
  * Created: Mar 11, 2010,10:59:01 AM
  */
 package zet;
 
 import algo.graph.dynamicflow.eat.EarliestArrivalFlowProblem;
+import algo.graph.dynamicflow.eat.LongestShortestPathTimeHorizonEstimator;
 import algo.graph.dynamicflow.eat.SEAAPAlgorithm;
 import batch.tasks.AlgorithmTask;
 import converter.ZToGraphMapping;
@@ -39,13 +40,14 @@ import java.util.List;
  *
  * @author Jan-Philipp Kappmeier
  */
-public class FileFlow implements AlgorithmListener {
+public class DatFileReaderWriter implements AlgorithmListener {
 
 	public static EarliestArrivalFlowProblem read( String filename ) throws FileNotFoundException, IOException {
 		return read( filename, null, null );
 	}
 
 	static int factor = 2;
+	static boolean verbose = false;
 
 	public static EarliestArrivalFlowProblem read( String filename, IdentifiableIntegerMapping<Node> x, IdentifiableIntegerMapping<Node> y ) throws FileNotFoundException, IOException {
 		BufferedReader read = new BufferedReader( new FileReader( new File( filename ) ) );
@@ -110,6 +112,8 @@ public class FileFlow implements AlgorithmListener {
 				final long nodeID = Long.parseLong( split[1] );
 				nodeMap.put( nodeID, currentNodeID++ );
 				final int nodeSupply = Integer.parseInt( split[2] );
+				node_id.add( nodeID );
+				node_sup.add( nodeSupply );
 				if( x != null && y != null ) {
 					final int readX = (int)( factor * Double.parseDouble( split[3] ) );
 					if( readX > xmax )
@@ -124,8 +128,6 @@ public class FileFlow implements AlgorithmListener {
 					node_x.add( readX );
 					node_y.add( readY );
 				}
-				node_id.add( nodeID );
-				node_sup.add( nodeSupply );
 				continue;
 			}
 			if( s.charAt( 0 ) == 'E' ) {
@@ -144,9 +146,6 @@ public class FileFlow implements AlgorithmListener {
 			}
 			throw new IllegalStateException( "Unbekannte Zeile" );
 		}
-
-		System.out.println( "Min x: " + xmin + " - max x: " + xmax );
-		System.out.println( "Min y: " + ymin + " - max y: " + ymax );
 
 		int xDiff = xmax - xmin;
 		int yDiff = ymax - ymin;
@@ -175,32 +174,41 @@ public class FileFlow implements AlgorithmListener {
 		else
 			yoffset = -ymax + yadd;
 
-		System.out.println( "x-offset: " + xoffset );
-		System.out.println( "y-offset:  " + yoffset );
+		if( x == null || y == null ) {
+			System.out.println( "Ignoring coordinates.");
+		} else {
+			System.out.println( "x: " + xmin + " - " + xmax + "; offset " + xoffset );
+			System.out.println( "y: " + ymin + " - " + ymax + "; offset " + yoffset );
+		}
 
 		//System.exit( 0 );
 
-		x.setDomainSize( nodeCount );
-		y.setDomainSize( nodeCount );
+		if( x != null && y != null) {
+			x.setDomainSize( nodeCount );
+			y.setDomainSize( nodeCount );
+		}
 		
 		//int edgeCount = edge_start.size();
 		if( edgeCount < 0 )
 			edgeCount = edge_start.size();
 
-		System.out.println( "Knotenzahl: " + nodeCount );
-		System.out.println( "Hasheinträge: " + nodeMap.size() );
-		System.out.println( "Kantenzahl: " + edge_start.size() );
-		System.out.println( "Zeithorizont (geschätzt): " + estimatedTimeHorizon );
-		System.out.println( "Knoten: " + node_id.toString() );
-		System.out.println( "mit Angeboten " + node_sup.toString() );
-		System.out.println( "Kanten von " + edge_start.toString() );
-		System.out.println( "nach " + edge_end.toString() );
-		System.out.println( "Mit Kapazitäten " + edge_cap.toString() );
-		System.out.println( "Mit Länge " + edge_len.toString() );
-		System.out.println( "Nächste Knotennummer: " + currentNodeID );
+		System.out.println( "Node count: " + nodeCount );
+		if( verbose )
+			System.out.println( "Hasheinträge: " + nodeMap.size() );
+		System.out.println( "Edge count: " + edge_start.size() );
+		System.out.println( "Time horizon (read form file): " + estimatedTimeHorizon );
+		if( verbose ) {
+			System.out.println( "Knoten: " + node_id.toString() );
+			System.out.println( "mit Angeboten " + node_sup.toString() );
+			System.out.println( "Kanten von " + edge_start.toString() );
+			System.out.println( "nach " + edge_end.toString() );
+			System.out.println( "Mit Kapazitäten " + edge_cap.toString() );
+			System.out.println( "Mit Länge " + edge_len.toString() );
+			System.out.println( "Nächste Knotennummer: " + currentNodeID );
+		}
 
 		System.out.println();
-		System.out.println( "Erzeuge Netzwerk..." );
+		System.out.print( "Create network..." );
 
 
 		Network network = new Network( nodeCount, edgeCount );
@@ -228,11 +236,15 @@ public class FileFlow implements AlgorithmListener {
 				sink = network.getNode( nodeMap.get( node_id.get( i ) ) );
 			if( node_sup.get( i ) > 0 )
 				sources.add( network.getNode( nodeMap.get( node_id.get( i ) ) ) );
-			x.set( network.getNode( nodeMap.get( node_id.get( i ) ) ), node_x.get( i ) + xoffset );
-			y.set( network.getNode( nodeMap.get( node_id.get( i ) ) ), node_y.get( i ) + yoffset );
+			if( x!= null )
+				x.set( network.getNode( nodeMap.get( node_id.get( i ) ) ), node_x.get( i ) + xoffset );
+			if( y != null)
+				y.set( network.getNode( nodeMap.get( node_id.get( i ) ) ), node_y.get( i ) + yoffset );
 		}
+		System.out.println( " done." );
 
-		System.out.println( network.toString() );
+		if( verbose )
+			System.out.println( network.toString() );
 
 		return new EarliestArrivalFlowProblem( edgeCapacities, network, nodeCapacities, sink, sources, estimatedTimeHorizon, transitTimes, currentAssignment );
 	}
@@ -261,6 +273,10 @@ public class FileFlow implements AlgorithmListener {
 		int currentNodeID = 0;
 
 		while((s = read.readLine()) != null) {
+			if( s.length() == 0 )
+				continue;
+			if( s.charAt( 0) == 'V' )
+				continue;
 			if( s.charAt( 0 ) == '%' )	// comment
 				continue;
 			if( s.charAt( 0 ) == 'N' ) {
@@ -309,7 +325,7 @@ public class FileFlow implements AlgorithmListener {
 				edge_len.add( Integer.parseInt( split[4] ) );
 				continue;
 			}
-			throw new IllegalStateException( "Unbekannte Zeile" );
+			throw new IllegalStateException( "Unbekannte Zeile: '" + s + "'" );
 		}
 
 		//int edgeCount = edge_start.size();
@@ -367,29 +383,36 @@ public class FileFlow implements AlgorithmListener {
 		return new EarliestArrivalFlowProblem( edgeCapacities, network, nodeCapacities, sink, sources, estimatedTimeHorizon, transitTimes, currentAssignment );
 	}
 
-	public Algorithm computeFlow( EarliestArrivalFlowProblem eat ) throws FileNotFoundException, IOException {
+	public Algorithm computeFlow( EarliestArrivalFlowProblem eafp ) throws FileNotFoundException, IOException {
 
-		//SuccessiveEarliestArrivalAugmentingPathAlgorithm algo = new SuccessiveEarliestArrivalAugmentingPathAlgorithm();
+		if( eafp.getTimeHorizon() <= 0 ) {
+			System.out.println( "Schätze Zeithorizont" );
+			LongestShortestPathTimeHorizonEstimator estimator = new LongestShortestPathTimeHorizonEstimator();
+			estimator.setProblem( eafp );
+			estimator.run();
+			eafp.setTimeHorizon( estimator.getSolution().getUpperBound() );
+			System.out.println( "Geschätzter Zeithorizont: " + estimator.getSolution().getUpperBound() );
+		}
+
 		SEAAPAlgorithm algo = new SEAAPAlgorithm();
-		algo.setProblem( eat );
+		algo.setProblem( eafp );
 		algo.addAlgorithmListener( this );
 		algo.run();
 		//System.out.println( Formatter.formatTimeMilliseconds( algo.getRuntime() ) );
 		long start = System.nanoTime();
 		PathBasedFlowOverTime df = algo.getSolution().getPathBased();
-		String result = String.format( "Sent %1$s of %2$s flow units in %3$s time units successfully.", algo.getSolution().getFlowAmount(), eat.getTotalSupplies(), algo.getSolution().getTimeHorizon() );
+		String result = String.format( "Sent %1$s of %2$s flow units in %3$s time units successfully.", algo.getSolution().getFlowAmount(), eafp.getTotalSupplies(), algo.getSolution().getTimeHorizon() );
 		System.out.println( result );
 		AlgorithmTask.getInstance().publish( 100, result, "" );
 		long end = System.nanoTime();
-		//System.out.println( String.format( "Sending the flow units required %1$s ms.", algo.getRuntime() / 1000000 ) );
-//		System.out.println( df.toString() );
 		System.err.println( Formatter.formatTimeNanoseconds( end - start ) );
 		return algo;
 	}
 
 	public void eventOccurred( AlgorithmEvent event ) {
 		if( event instanceof AlgorithmProgressEvent )
-			System.out.println( ((AlgorithmProgressEvent)event).getProgress() );
+			//System.out.println( ((AlgorithmProgressEvent)event).getProgress() );
+			System.out.println( Formatter.formatPercent( ((AlgorithmProgressEvent)event).getProgress() ));
 		else if( event instanceof AlgorithmStartedEvent )
 			System.out.println( "Algorithmus startet." );
 		else if( event instanceof AlgorithmTerminatedEvent )
@@ -417,11 +440,11 @@ public class FileFlow implements AlgorithmListener {
 		String filename2 = "./testinstanz/4 rooms demo.dat";
 
 		try {
-			FileFlow ff = new FileFlow();
+			DatFileReaderWriter ff = new DatFileReaderWriter();
 //			EarliestArrivalFlowProblem eat = read( arguments[0] );
-			EarliestArrivalFlowProblem eat = read( filename1 );
+			EarliestArrivalFlowProblem eat = read( filename2 );
 			ff.computeFlow( eat );
-			//FileFlow.writeFile( "problem.dat", eat, "./testinstanz/output.dat" );
+			//DatFileReaderWriter.writeFile( "problem.dat", eat, "./testinstanz/output.dat" );
 		} catch( FileNotFoundException e ) {
 			System.out.println( "Datei nicht gefunden." );
 			printFiles();

@@ -61,7 +61,7 @@ public class GraphVisualizationResult implements VisualizationResult {
 	/**
 	 * The result flow.
 	 */
-	private PathBasedFlowOverTime dynamicFlow;
+	private PathBasedFlowOverTime dynamicFlow = null;
 	/**
 	 * A mapping saving a rectangle in the real world for each node.
 	 */
@@ -119,6 +119,7 @@ public class GraphVisualizationResult implements VisualizationResult {
 			System.out.println( "Ausgabe der PathComposition:" );
 			System.out.println( flowOverTime );
 		}
+		this.dynamicFlow = null;
 	}
 
 	private GraphVisualizationResult( NetworkFlowModel networkFlowModel ) {
@@ -214,7 +215,7 @@ public class GraphVisualizationResult implements VisualizationResult {
 		}
 
 		maxFlowRate = 0;
-		dynamicFlow = new PathBasedFlowOverTime();
+		//dynamicFlow = new PathBasedFlowOverTime();
 		flowOverTime = new EdgeBasedFlowOverTime( network );
 	}
 
@@ -222,7 +223,6 @@ public class GraphVisualizationResult implements VisualizationResult {
 		this( eatf, xPos, yPos );
 
 		System.out.println( "Start converting path based to edge based flow ..." );
-		this.dynamicFlow = dynamicFlow;
 		PathComposition pathComposition = new PathComposition( network, transitTimes, dynamicFlow );
 		pathComposition.run();
 		System.out.println( "finished." );
@@ -235,6 +235,7 @@ public class GraphVisualizationResult implements VisualizationResult {
 			System.out.println( "Ausgabe der PathComposition:" );
 			System.out.println( flowOverTime );
 		}
+		this.dynamicFlow = dynamicFlow;
 	}
 
 	/**
@@ -243,7 +244,7 @@ public class GraphVisualizationResult implements VisualizationResult {
 	 */
 	public GraphVisualizationResult() {
 		this.network = new Network( 0, 0 );
-		this.dynamicFlow = new PathBasedFlowOverTime();
+		//this.dynamicFlow = new PathBasedFlowOverTime();
 		this.nodeRectangle = new IdentifiableObjectMapping<Node, NodeRectangle>( 0, NodeRectangle.class );
 		this.nodeToFloorMapping = new IdentifiableIntegerMapping<Node>( 0 );
 		this.nodeCapacities = new IdentifiableIntegerMapping<Node>( 0 );

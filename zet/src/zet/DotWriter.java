@@ -113,14 +113,14 @@ public class DotWriter {
 
 		//int i = 1;
 		try {
-			FileFlow ff = new FileFlow();
+			DatFileReaderWriter ff = new DatFileReaderWriter();
 			for( int i = 0; i < filenames.length; ++i ) {
-				EarliestArrivalFlowProblem eat = FileFlow.read( filenames[i] );
+				EarliestArrivalFlowProblem eat = DatFileReaderWriter.read( filenames[i] );
 				//DotWriter.writeDot( "audimax.dot", filenames[i].substring( 0, filenames[i].length()-3) + "dot", eat.getNetwork() );
 				DotWriter.writeFileWithoutSuperSink( "audimax.dot", eat, filenames[i].substring( 0, filenames[i].length()-4) + "_wos_.dot" );
 			}//EarliestArrivalFlowProblem eat = read( filename1 );
 			//ff.computeFlow( eat );
-			//FileFlow.writeFile( "problem.dat", eat, "./testinstanz/output.dat" );
+			//DatFileReaderWriter.writeFile( "problem.dat", eat, "./testinstanz/output.dat" );
 		} catch( FileNotFoundException e ) {
 			System.out.println( "Datei nicht gefunden." );
 			printFiles();

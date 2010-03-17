@@ -24,7 +24,7 @@ public class EarliestArrivalTask extends SwingWorker<PathBasedFlowOverTime, Proc
 	SEAAPAlgorithm algo = new SEAAPAlgorithm();
 	PathBasedFlowOverTime df;
 
-	EarliestArrivalTask( EarliestArrivalFlowProblem eafp ) {
+	public EarliestArrivalTask( EarliestArrivalFlowProblem eafp ) {
 		this.eafp = eafp;
 	}
 

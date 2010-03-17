@@ -15,7 +15,7 @@
  */
 
 /*
- * localization.java
+ * Localization.java
  * Created on 09.01.2008, 23:29:26
  */
 
@@ -46,6 +46,8 @@ public class Localization {
 	private static NumberFormat nfFloat;
 	/** A number formatter for integral numbers. */
 	private static NumberFormat nfInteger;
+	/** A number formatter for percent values. */
+	private static NumberFormat nfPercent;
 					
 	/**
 	 * Returns the instance of the singleton class. The default locale of the system is loaded at the beginning.
@@ -56,7 +58,8 @@ public class Localization {
 			instance = new Localization();
 			instance.currentLocale = Locale.getDefault();
 			nfFloat = NumberFormat.getNumberInstance( instance.getLocale() );
-			nfInteger = NumberFormat.getIntegerInstance(instance.getLocale() );
+			nfInteger = NumberFormat.getIntegerInstance( instance.getLocale() );
+			nfPercent = NumberFormat.getPercentInstance( instance.getLocale() );
 		}
 		return instance;
 	}
@@ -128,6 +131,7 @@ public class Localization {
 		currentLocale = locale;
 		nfFloat = NumberFormat.getNumberInstance( instance.getLocale() );
 		nfInteger = NumberFormat.getIntegerInstance( instance.getLocale() );
+		nfPercent = NumberFormat.getPercentInstance( instance.getLocale() );
 	}
 	
 	/**
@@ -153,5 +157,9 @@ public class Localization {
 	 */
 	public final NumberFormat getIntegerConverter() {
 		return nfInteger;
+	}
+
+	public final NumberFormat getPercentConverter() {
+		return nfPercent;
 	}
 }
