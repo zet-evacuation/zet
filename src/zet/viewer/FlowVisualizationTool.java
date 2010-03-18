@@ -1,5 +1,5 @@
 /**
- * FlowVisualization.java
+ * FlowVisualizationTool.java
  * Created: 15.03.2010, 12:29:16
  */
 package zet.viewer;
@@ -56,12 +56,14 @@ import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 import javax.swing.filechooser.FileFilter;
 import zet.DatFileReaderWriter;
+import zet.xml.FlowVisualization;
+import zet.xml.XMLReader;
 
 /**
  *
  * @author Jan-Philipp Kappmeier
  */
-public class FlowVisualization extends JFrame implements PropertyChangeListener, EventListener<MessageEvent> {
+public class FlowVisualizationTool extends JFrame implements PropertyChangeListener, EventListener<MessageEvent> {
 
 	Localization loc = Localization.getInstance();
 	private int sliderAccuracy = 100;
@@ -76,7 +78,7 @@ public class FlowVisualization extends JFrame implements PropertyChangeListener,
 	final Visualization<GLGraphControl> vis = new Visualization<GLGraphControl>( new GLCapabilities() );
 	JEventStatusBar sb = new JEventStatusBar();
 	JSlider slider = new JSlider(0,0);
-	FlowVisualization theInstance;
+	FlowVisualizationTool theInstance;
 	IdentifiableIntegerMapping<Node> xPos;
 	IdentifiableIntegerMapping<Node> yPos;
 	EarliestArrivalTask sw;
@@ -84,7 +86,7 @@ public class FlowVisualization extends JFrame implements PropertyChangeListener,
 	GraphVisualizationResult graphVisResult = null;
 	boolean pause = false;
 
-	public FlowVisualization() {
+	public FlowVisualizationTool() {
 		super();
 		theInstance = this;
 		loc.setLocale( Locale.getDefault() );
@@ -101,7 +103,7 @@ public class FlowVisualization extends JFrame implements PropertyChangeListener,
 		vis.set3DView();
 		vis.getCamera().getView().invert();
 		vis.getCamera().getPos().z = 140;
-		GraphVisualizationResult graphVisResult = new GraphVisualizationResult();
+		graphVisResult = new GraphVisualizationResult();
 		GLGraphControl control = new GLGraphControl( graphVisResult );
 		vis.setControl( control );
 
@@ -195,7 +197,7 @@ public class FlowVisualization extends JFrame implements PropertyChangeListener,
 				GUIOptionManager.changeLookAndFeel( UIManager.getSystemLookAndFeelClassName() );
 
 				// Start the viewer in the event-dispatch-thread
-				FlowVisualization fv = new FlowVisualization();
+				FlowVisualizationTool fv = new FlowVisualizationTool();
 				fv.setVisible( true );
 			}
 		} );
@@ -222,6 +224,22 @@ public class FlowVisualization extends JFrame implements PropertyChangeListener,
 			JFileChooser jfc = new JFileChooser();
 			jfc.setCurrentDirectory( new File( "./" ) );
 			if( event.getActionCommand().equals( "open" ) ) {
+				XMLReader reader;
+				FlowVisualization fv = null;
+				try {
+					reader = new XMLReader( "./testinstanz/test.xml" );
+					fv = (FlowVisualization)reader.read();
+				} catch( IOException ex ) {
+					System.err.println( "Fehler beim laden!" );
+					ex.printStackTrace();
+				}
+
+				GLGraphControl control2 = new GLGraphControl( fv );
+				vis.setControl( control2 );
+				vis.repaint();
+				
+				if( true )
+					return;
 				jfc.setFileFilter( new FileFilter() {
 
 					@Override
@@ -244,11 +262,11 @@ public class FlowVisualization extends JFrame implements PropertyChangeListener,
 						eafp = DatFileReaderWriter.read( path, xPos, yPos );
 
 					} catch( FileNotFoundException ex ) {
-						Logger.getLogger( FlowVisualization.class.getName() ).log( Level.SEVERE, null, ex );
+						Logger.getLogger( FlowVisualizationTool.class.getName() ).log( Level.SEVERE, null, ex );
 						eafp = null;
 						return;
 					} catch( IOException ex ) {
-						Logger.getLogger( FlowVisualization.class.getName() ).log( Level.SEVERE, null, ex );
+						Logger.getLogger( FlowVisualizationTool.class.getName() ).log( Level.SEVERE, null, ex );
 						eafp = null;
 						return;
 					} catch( Exception e ) {

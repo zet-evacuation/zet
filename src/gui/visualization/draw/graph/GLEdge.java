@@ -162,6 +162,9 @@ public class GLEdge extends AbstractDrawable<GLEdge, GLEdgeControl> {
 		Vector3 axis = control.getRotationAxis( a, b );
 		gl.glRotated( control.getAngleBetween( a, b ), axis.x, axis.y, axis.z );
 
+		System.out.println( "static structure is drawn" );
+		System.out.println( edgeLength );
+
 		glu.gluCylinder( quadObj, thickness, thickness, edgeLength, qualityPreset.edgeSlices, 1 );
 		//gl.glDisable( GL.GL_BLEND );
 		gl.glPopMatrix();

@@ -25,18 +25,22 @@ import batch.tasks.AlgorithmTask;
 import de.tu_berlin.math.coga.common.localization.Localization;
 import de.tu_berlin.math.coga.math.Conversion;
 import ds.GraphVisualizationResult;
+import ds.graph.Node;
 import gui.visualization.control.AbstractZETVisualizationControl;
 import gui.visualization.draw.graph.GLGraph;
+import gui.visualization.draw.graph.GLGraphFloor;
 import java.util.HashMap;
 import java.util.Iterator;
 import javax.media.opengl.GL;
 import opengl.framework.abs.DrawableControlable;
+import zet.xml.FlowVisualization;
 
 /**
  *  @author Jan-Philipp Kappmeier
  */
 public class GLGraphControl extends AbstractZETVisualizationControl<GLGraphFloorControl, GLGraph, GLGraphControl> implements DrawableControlable {
-	public static double sizeMultiplicator = 0.1;
+	//public static double sizeMultiplicator = 0.1; // for ZET
+	public static double sizeMultiplicator = 1;
 
 	private int nodeCount;
 	private int nodesDone;
@@ -54,6 +58,7 @@ public class GLGraphControl extends AbstractZETVisualizationControl<GLGraphFloor
 	private boolean finished = false;
 	double speedFactor = 1;
 	private int superSinkID = 0;
+	private boolean supportsFloors = false;
 
 	public GLGraphControl( GraphVisualizationResult graphVisResult ) {
 		super();
@@ -64,6 +69,7 @@ public class GLGraphControl extends AbstractZETVisualizationControl<GLGraphFloor
 		nodesDone = 0;
 		superSinkID = graphVisResult.getSupersink().id();
 		allFloorsByID = new HashMap<Integer, GLGraphFloorControl>();
+		supportsFloors = true;
 		int floorCount = graphVisResult.getFloorToNodeMapping().size();
 		for( int i = 0; i < floorCount; i++ )
 			if( graphVisResult.getFloorToNodeMapping().get( i ).size() > 0 ) {
@@ -71,6 +77,37 @@ public class GLGraphControl extends AbstractZETVisualizationControl<GLGraphFloor
 				add( floorControl );
 				allFloorsByID.put( i, floorControl );
 			}
+		this.setView( new GLGraph( this ) );
+		for( GLGraphFloorControl floor : this )
+			view.addChild( floor.getView() );
+	}
+
+	public GLGraphControl( FlowVisualization fv ) {
+		mainControl = this;
+
+		AlgorithmTask.getInstance().setProgress( 0, Localization.getInstance().getStringWithoutPrefix( "batch.tasks.progress.createGraphVisualizationDataStructure" ), "" );
+		nodeCount = fv.getGv().getNetwork().nodes().size();
+		nodesDone = 0;
+		//superSinkID = graphVisResult.getSupersink().id();
+		superSinkID = fv.getGv().getSinks().get( 0 ).id(); // graphVisResult.getSupersink().id();
+
+		Iterator<Node> it = fv.getGv().getNetwork().nodes().iterator();
+		Node supersink = fv.getGv().getSinks().get( 0 );  // graphVisResult.getSupersink();
+
+		GLGraphFloorControl floorControl = new GLGraphFloorControl( fv, fv.getGv().getNetwork().nodes(), mainControl );
+		add( floorControl );
+
+		allFloorsByID = new HashMap<Integer, GLGraphFloorControl>();
+		allFloorsByID.put( 0, floorControl );
+
+		//allFloorsByID = new HashMap<Integer, GLGraphFloorControl>();
+		//int floorCount = graphVisResult.getFloorToNodeMapping().size();
+		//for( int i = 0; i < floorCount; i++ )
+			//if( graphVisResult.getFloorToNodeMapping().get( i ).size() > 0 ) {
+			//	GLGraphFloorControl floorControl = new GLGraphFloorControl( graphVisResult, graphVisResult.getFloorToNodeMapping().get( i ), i, mainControl );
+			//	add( floorControl );
+			//	allFloorsByID.put( i, floorControl );
+			//}
 		this.setView( new GLGraph( this ) );
 		for( GLGraphFloorControl floor : this )
 			view.addChild( floor.getView() );

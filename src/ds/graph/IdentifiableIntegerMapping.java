@@ -152,6 +152,36 @@ public class IdentifiableIntegerMapping<D extends Identifiable> implements Clone
         mapping[identifiableObject.id()] += amount;
     }
 
+
+	/**
+	 * Associates <code>identifiableObject</code> with <code>value</code> in
+	 * this mapping. Any previously made association for
+	 * <code>identifiableObject</code> is lost in the process. Calling
+	 * <code>add</code> with an <code>identifiableObject</code> whose ID is
+	 * greater equal than the current size of the domain will automatically
+	 * increase the size of the domain to accommodate
+	 * <code>identifiableObject</code>'s ID, at least the capacity is doubled.
+	 * Runtime O(1) (O(min{ID, 2*oldDomainSize}) if the domain is expanded).
+	 * @param identifiableObject the object for which an association is to be
+	 * made.
+	 * @param value the integer to be associated with
+	 * <code>identifiableObject</code>.
+	 * @exception ArrayIndexOutOfBoundsException if
+	 * <code>identifiableObject</code>'s ID is less then 0.
+	 * @exception NullPointerException if <code>identifiableObject</code> is
+	 * null.
+	 * @see #getDomainSize
+	 * @see #setDomainSize
+	 * @see Identifiable
+	 */
+	public void add( D identifiableObject, int value ) {
+		if( identifiableObject == null )
+			throw new RuntimeException( "IdentifiableObject contains null, value contains " + value + "." );
+		if( identifiableObject.id() >= getDomainSize() )
+			setDomainSize( Math.min( identifiableObject.id() + 1, getDomainSize() * 2 ) );
+		mapping[identifiableObject.id()] = value;
+	}
+
     /**
      * A convenience method equaling to <code>set(identifiableObject, 
      * get(identifiableObject) - amount)</code>, with the exception that the
@@ -308,8 +338,8 @@ public class IdentifiableIntegerMapping<D extends Identifiable> implements Clone
             if (counter == 10) {
                 counter = 0;
                 builder.append("\n");
-            }            
-            if (mapping[i] != 0) {
+            }
+//            if (mapping[i] != 0) {
                 builder.append(i);
                 builder.append(" = ");
                 if (mapping[i] == Integer.MAX_VALUE) {
@@ -319,9 +349,10 @@ public class IdentifiableIntegerMapping<D extends Identifiable> implements Clone
                 }
                 builder.append(", ");
                 counter++;
-            }            
+//            }
         }
-        builder.delete(builder.length() - 2, builder.length());
+        if( builder.length() > 2 )
+					builder.delete(builder.length() - 2, builder.length());
         builder.append(']');
         return builder.toString();
     }
