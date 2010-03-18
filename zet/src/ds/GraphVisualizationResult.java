@@ -222,10 +222,10 @@ public class GraphVisualizationResult implements VisualizationResult {
 	public GraphVisualizationResult( EarliestArrivalFlowProblem eatf, IdentifiableIntegerMapping<Node> xPos, IdentifiableIntegerMapping<Node> yPos, PathBasedFlowOverTime dynamicFlow ) {
 		this( eatf, xPos, yPos );
 
-		System.out.println( "Start converting path based to edge based flow ..." );
+		System.out.print( "Start converting path based to edge based flow..." );
 		PathComposition pathComposition = new PathComposition( network, transitTimes, dynamicFlow );
 		pathComposition.run();
-		System.out.println( "finished." );
+		System.out.println( " done." );
 
 		this.flowOverTime = pathComposition.getEdgeFlows();
 		maxFlowRate = pathComposition.getMaxFlowRate();

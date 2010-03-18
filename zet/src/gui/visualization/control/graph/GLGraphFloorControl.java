@@ -22,10 +22,12 @@
 package gui.visualization.control.graph;
 
 import ds.GraphVisualizationResult;
+import ds.graph.IdentifiableCollection;
 import ds.graph.Node;
 import gui.visualization.control.AbstractZETVisualizationControl;
 import gui.visualization.draw.graph.GLGraphFloor;
 import java.util.Iterator;
+import zet.xml.FlowVisualization;
 
 /**
  * The <code>GLGraphFloorControl</code> class represents an floor of the
@@ -53,6 +55,20 @@ public class GLGraphFloorControl extends AbstractZETVisualizationControl<GLNodeC
 			Node n = it.next();
 			if( !n.equals(supersink) )
 				add( new GLNodeControl( graphVisResult, n, glControl ) );
+		}
+		setView( new GLGraphFloor( this ) );
+		for( GLNodeControl node : this )
+			view.addChild( node.getView() );
+	}
+
+	GLGraphFloorControl( FlowVisualization fv, IdentifiableCollection<Node> nodes, GLGraphControl mainControl ) {
+		super( mainControl );
+		Iterator<Node> it = nodes.iterator();
+		Node supersink = fv.getGv().getSinks().get( 0 );
+		while( it.hasNext() ) {
+			Node n = it.next();
+			//if( !n.equals(supersink) )
+				add( new GLNodeControl( fv, n, mainControl ) );
 		}
 		setView( new GLGraphFloor( this ) );
 		for( GLNodeControl node : this )

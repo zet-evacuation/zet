@@ -20,6 +20,7 @@
  */
 package de.tu_berlin.math.coga.common.algorithm;
 
+import algo.graph.dynamicflow.eat.SEAAPAlgorithm;
 import de.tu_berlin.math.coga.common.util.Formatter;
 import java.util.LinkedHashSet;
 import java.util.LinkedList;
@@ -396,7 +397,24 @@ public abstract class Algorithm<Problem, Solution> implements Runnable {
                 handleException(ex);
             } finally {
                 runtime = System.currentTimeMillis() - startTime;
-                fireEvent(new AlgorithmTerminatedEvent(this));
+								if( this instanceof SEAAPAlgorithm ) {
+									System.out.println( "Algorithm terminated." );
+									System.out.println( "Status: " + getState().toString() );
+									System.out.println( "Runtime" + runtime );
+									System.out.println( this.toString() );
+									System.out.println( "Rutnime: " + getRuntime() );
+								}
+								AlgorithmTerminatedEvent ev = null;
+								try {
+									ev = new AlgorithmTerminatedEvent( this );
+								} catch ( IllegalStateException ex2 ) {
+									System.out.println( "Exception during instanciating AlgorithmTerminatedEvent" );
+									System.out.println( this.toString() );
+									System.out.println( "Algorithm terminated." );
+									System.out.println( "Rutnime: " + getRuntime() );
+									System.out.println( "Status: " + getState().toString() );
+								}
+                fireEvent( ev );
             }
         }
     }
@@ -409,6 +427,8 @@ public abstract class Algorithm<Problem, Solution> implements Runnable {
      * @param exception the exception that caused the termination of the algorithm.
      */
     protected void handleException(RuntimeException exception) {
+			System.out.println( "Exception handler" );
+			exception.printStackTrace();
         throw exception;
     }
 

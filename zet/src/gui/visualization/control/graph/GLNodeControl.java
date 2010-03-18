@@ -23,6 +23,7 @@ import gui.visualization.draw.graph.GLNode;
 import gui.visualization.control.FlowHistroryTriple;
 import gui.visualization.util.FlowCalculator;
 import java.util.ArrayList;
+import zet.xml.FlowVisualization;
 
 //public class GLNodeControl extends AbstractControl<GLNode, Node, GraphVisualizationResult, GLEdge, GLEdgeControl, GLControl> {
 public class GLNodeControl extends AbstractZETVisualizationControl<GLEdgeControl, GLNode, GLGraphControl> {
@@ -32,6 +33,7 @@ public class GLNodeControl extends AbstractZETVisualizationControl<GLEdgeControl
 	private double zPosition = 70;
 	private int capacity;
 	private FlowCalculator flowCalculator;
+	// TODO transfer the scaling parameter somewhere else (probably into the graphVisResults)
 	private static final double Z_TO_OPENGL_SCALING = 0.1d;
 	double nwX;
 	double nwY;
@@ -40,7 +42,7 @@ public class GLNodeControl extends AbstractZETVisualizationControl<GLEdgeControl
 	private double time;
 	private int index;
 	private ArrayList<FlowHistroryTriple> graphHistory;
-	private boolean isEvacuationNode,  isSourceNode,  isDeletedSourceNode;
+	private boolean isEvacuationNode,  isSourceNode,  isDeletedSourceNode = false;
 	private int duration;
 	private int startTime;
 	private int floor;
@@ -53,8 +55,6 @@ public class GLNodeControl extends AbstractZETVisualizationControl<GLEdgeControl
 		nwY = graphVisResult.getNodeRectangles().get( node ).get_nw_point().getY();
 		seX = graphVisResult.getNodeRectangles().get( node ).get_se_point().getX();
 		seY = graphVisResult.getNodeRectangles().get( node ).get_se_point().getY();
-
-		graphVisResult.getSupersink().id();
 
 		xPosition = (nwX + 0.5 * (seX - nwX)) * Z_TO_OPENGL_SCALING;
 		yPosition = (nwY + 0.5 * (seY - nwY)) * Z_TO_OPENGL_SCALING;
@@ -81,11 +81,62 @@ public class GLNodeControl extends AbstractZETVisualizationControl<GLEdgeControl
 		zPosition += (floor - 1) * 70;
 
 		setView( new GLNode( this ) );
-		for( GLEdgeControl edge : this )
+		for( GLEdgeControl edge : this ) {
 			view.addChild( edge.getView() );
+			edge.getView().update();
+		}
 
 		flowCalculator = new FlowCalculator();
 		glControl.nodeProgress();
+	}
+
+	GLNodeControl( FlowVisualization fv, Node node, GLGraphControl mainControl ) {
+		super( mainControl );
+
+		nwX = fv.getGv().getNodePositionMapping().get( node ).x * fv.getGv().getScale();
+		nwY = fv.getGv().getNodePositionMapping().get( node ).y * fv.getGv().getScale();
+		seX = fv.getGv().getNodePositionMapping().get( node ).x * fv.getGv().getScale();
+		seY = fv.getGv().getNodePositionMapping().get( node ).y * fv.getGv().getScale();
+
+		xPosition = (nwX + 0.5 * (seX - nwX));
+		yPosition = (nwY + 0.5 * (seY - nwY));
+
+		xPosition = fv.getGv().getNodePositionMapping().get( node ).x * fv.getGv().getScale();
+		yPosition = fv.getGv().getNodePositionMapping().get( node ).y * fv.getGv().getScale();
+		capacity = fv.getGv().getNodeCapacities().get( node );
+
+
+		System.out.println( "Position: (" + xPosition + "," + yPosition + ")");
+
+		//final boolean showEdgesBetweenFloors = true;
+
+		for( Edge edge : fv.getGv().getNetwork().outgoingEdges( node ) )
+	//		if( edge.start().id() != mainControl.superSinkID() && edge.end().id() != mainControl.superSinkID() ) {
+				// edit ignore floors
+//				int nodeFloor1 = graphVisResult.getNodeToFloorMapping().get( edge.start() );
+//				int nodeFloor2 = graphVisResult.getNodeToFloorMapping().get( edge.end() );
+//				if( nodeFloor1 != nodeFloor2 && !showEdgesBetweenFloors )
+//					System.out.println( "Knoten auf verschiedenen Etagen." );
+//				else
+					add( new GLEdgeControl( fv, edge, mainControl ) );
+		//	}
+		isEvacuationNode = fv.getGv().isEvacuationNode( node );
+		isSourceNode = fv.getGv().isSourceNode( node );
+		//isDeletedSourceNode = graphVisResult.isDeletedSourceNode( node );
+
+		floor = 0; // ignore floors at the moment
+
+		//zPosition += (floor - 1) * VisualizationOptionManager.getFloorDistance();
+		zPosition = fv.getGv().getNodePositionMapping().get( node ).z * fv.getGv().getScale();
+
+		setView( new GLNode( this ) );
+		for( GLEdgeControl edge : this ) {
+			view.addChild( edge.getView() );
+			edge.getView().update();
+		}
+
+		flowCalculator = new FlowCalculator();
+		mainControl.nodeProgress();
 	}
 
 	public boolean isEvacuationNode() {

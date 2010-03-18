@@ -44,7 +44,7 @@ public class flow implements AlgorithmListener {
 	int percentInterval = 100;
 
 	public static void main ( String[] args ) throws JSAPException, IOException {
-		System.out.println( "flow 0.1" );
+		System.out.println( "flow 0.1.4" );
 
 		JSAP jsap = new JSAP();
 
@@ -151,7 +151,12 @@ public class flow implements AlgorithmListener {
 		SEAAPAlgorithm algo = new SEAAPAlgorithm();
 		algo.setProblem( eafp );
 		algo.addAlgorithmListener( this );
-		algo.run();
+		try {
+			algo.run();
+		} catch( IllegalStateException e ) {
+			System.err.println( "The illegal state exception occured." );
+		}
+
 		df = algo.getSolution().getPathBased();
 		neededTimeHorizon = algo.getSolution().getTimeHorizon()-1;
 		System.out.println( "Total cost: " + algo.getSolution().getTotalCost() );
@@ -170,9 +175,26 @@ public class flow implements AlgorithmListener {
 			System.out.println( "Algorithm starts." );
 		else if( event instanceof AlgorithmTerminatedEvent ) {
 			System.out.println( "" );
-			System.out.println( "Runtime flow computation: " + Formatter.formatTimeMilliseconds( event.getAlgorithm().getRuntime() ) );
+			try {
+				System.out.println( "Runtime flow computation: " + Formatter.formatTimeMilliseconds( event.getAlgorithm().getRuntime() ) );
+			} catch( IllegalStateException ex ) {
+				System.out.println( "The illegal state exception occured once again." );
+			}
 		} else
 			System.out.println( event.toString() );
 	}
 
 }
+
+
+//
+//java.lang.NullPointerException
+//        at ds.graph.flow.ChainDecomposition2.split(ChainDecomposition2.java:140)
+//        at ds.graph.flow.ChainDecomposition2.uncrossPaths(ChainDecomposition2.java:204)
+//        at ds.graph.flow.ChainDecomposition2.uncrossPaths(ChainDecomposition2.java:124)
+//        at ds.graph.flow.FlowOverTime.<init>(FlowOverTime.java:55)
+//        at algo.graph.dynamicflow.eat.SEAAPAlgorithm.runAlgorithm(SEAAPAlgorithm.java:85)
+//        at algo.graph.dynamicflow.eat.SEAAPAlgorithm.runAlgorithm(SEAAPAlgorithm.java:37)
+//        at de.tu_berlin.math.coga.common.algorithm.Algorithm.run(Algorithm.java:393)
+//        at zet.flow.compute(flow.java:155)
+//        at zet.flow.main(flow.java:106)
