@@ -37,6 +37,10 @@ public class GraphView {
 	/** A scale value that should be used for displaying the graph. */
 	private double scale = 1;
 
+	int xOffset;
+	int yOffset;
+	int zOffset;
+
 	public GraphView( Network network, IdentifiableObjectMapping<Node, Vector3> nodePositionMapping, IdentifiableIntegerMapping<Edge> edgeCapacities, IdentifiableIntegerMapping<Node> nodeCapacities, IdentifiableIntegerMapping<Edge> transitTimes, IdentifiableIntegerMapping<Node> supplies, ArrayList<Node> sources, ArrayList<Node> sinks ) {
 		this.network = network;
 		this.nodePositionMapping = nodePositionMapping;
@@ -63,6 +67,17 @@ public class GraphView {
 
 	public void setNodePositionMapping( IdentifiableObjectMapping<Node, Vector3> nodePositionMapping ) {
 		this.nodePositionMapping = nodePositionMapping;
+
+		// calculate the offset that is needed to move the graph
+		// to the center of an cartesian coordinate system
+		double xmax = Integer.MIN_VALUE;
+		double xmin = Integer.MAX_VALUE;
+		double ymax = Integer.MIN_VALUE;
+		double ymin = Integer.MAX_VALUE;
+		double zmax = Integer.MIN_VALUE;
+		double zmin = Integer.MAX_VALUE;
+
+		
 	}
 
 	public IdentifiableIntegerMapping<Edge> getEdgeCapacities() {

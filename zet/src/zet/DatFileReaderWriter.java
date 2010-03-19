@@ -225,9 +225,6 @@ public class DatFileReaderWriter implements AlgorithmListener {
 			transitTimes.set( network.getEdge( network.getNode( nodeMap.get( edge_start.get( i ) ) ), network.getNode( nodeMap.get( edge_end.get( i ) ) ) ), edge_len.get( i ) );
 		}
 
-		for( int i = 0; i < nodeCount; ++i )
-			nodeCapacities.set( network.getNode( i ), 1000 );
-
 		Node sink = null;
 		ArrayList<Node> sources = new ArrayList<Node>();
 		for( int i = 0; i < node_id.size(); ++i ) {
@@ -241,6 +238,18 @@ public class DatFileReaderWriter implements AlgorithmListener {
 			if( y != null)
 				y.set( network.getNode( nodeMap.get( node_id.get( i ) ) ), node_y.get( i ) + yoffset );
 		}
+
+		for( int i = 0; i < nodeCount; ++i )
+			if( sources.contains( network.getNode( i ) ) )
+				nodeCapacities.set( network.getNode( i ), currentAssignment.get( network.getNode( i ) ) );
+			else
+				nodeCapacities.set( network.getNode( i ), 0 );
+//		for( int i = 0; i < nodeCount; ++i )
+//			if( sources.contains( network.getNode( i ) ) )
+//				nodeCapacities.set( network.getNode( i ), 1000 );
+
+
+
 		System.out.println( " done." );
 
 		if( verbose )
@@ -505,6 +514,30 @@ public class DatFileReaderWriter implements AlgorithmListener {
 
 		writer.close();
 	}
+
+	public static void writeFile( String original, String filename, int timeHorizon, IdentifiableCollection<Node> nodes, List<Node> sources, Node sink, IdentifiableCollection<Edge> edges, IdentifiableIntegerMapping<Edge> edgeCapacities, IdentifiableIntegerMapping<Edge> transitTimes, IdentifiableIntegerMapping<Node> currentAssignment, IdentifiableIntegerMapping<Node> x, IdentifiableIntegerMapping<Node> y ) throws FileNotFoundException, IOException {
+		BufferedWriter writer = new BufferedWriter( new FileWriter( new File( filename ) ) );
+		String s;
+
+		writer.write( "% Written by ZET FlowWriter\n" );
+		writer.write( "% original file: " + original + '\n' );
+		writer.write( "N " + nodes.size() + '\n' );
+		writer.write( "M " + edges.size() + '\n' );
+		writer.write( "TIME " + timeHorizon + '\n' );
+
+		for( Node node : nodes ) {
+			int xPosition = x.get( node );
+			int yPosition = y.get( node );
+				writer.write( "V " + node.id() + ' ' + currentAssignment.get( node ) + ' ' + xPosition + ' ' + yPosition + '\n' );
+		}
+
+		for( Edge edge : edges ) {
+			writer.write( "E " + edge.start().id() + ' ' + edge.end().id() + ' ' + edgeCapacities.get( edge ) + ' ' + transitTimes.get( edge ) + '\n' );
+		}
+
+		writer.close();
+	}
+
 
 	public static void writeFileOld( String original, String filename, int nodeCount, int timeHorizon, List<Node> sources, Node sink, IdentifiableCollection<Edge> edges, IdentifiableIntegerMapping<Edge> edgeCapacities, IdentifiableIntegerMapping<Edge> transitTimes, IdentifiableIntegerMapping<Node> currentAssignment ) throws FileNotFoundException, IOException {
 		BufferedWriter writer = new BufferedWriter( new FileWriter( new File( filename ) ) );

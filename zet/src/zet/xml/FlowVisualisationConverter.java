@@ -17,13 +17,11 @@ import com.thoughtworks.xstream.io.HierarchicalStreamWriter;
 //import fv.model.DelayedPath;
 //import fv.model.Edge;
 //import fv.model.PathFlow;
-import java.awt.Color;
-import java.util.ArrayList;
-import java.util.HashMap;
+import ds.graph.Edge;
+import ds.graph.IdentifiableObjectMapping;
+import ds.graph.IntegerIntegerMapping;
 import java.util.Iterator;
-import java.util.LinkedHashMap;
-import java.util.LinkedList;
-import java.util.Set;
+import ds.graph.flow.EdgeBasedFlowOverTime;
 
 /**
  *
@@ -113,6 +111,60 @@ public class FlowVisualisationConverter implements Converter {
 		System.out.println( "converted network: " );
 		System.out.println( graphView.getNetwork().toString() );
 
+		IdentifiableObjectMapping<Edge,IntegerIntegerMapping> map = null;
+
+		// read the flow if exists
+		if( reader.hasMoreChildren() ) {
+			// must be flow
+			reader.moveDown();
+			if( !reader.getNodeName().equals( "flows" ) )
+				throw new ConversionException( "Second part has to be the flow." );
+
+			map = new IdentifiableObjectMapping<Edge, IntegerIntegerMapping>( gvc.edges.size(), IntegerIntegerMapping.class );
+			for( Edge edge : graphView.getNetwork().edges() )
+				map.set( edge, new IntegerIntegerMapping() );
+
+			while( reader.hasMoreChildren() ) {
+				reader.moveDown();
+				if( reader.getNodeName().equals( "flow" ) ) {
+					String path = reader.getAttribute( "path" );
+					String sp[] = path.split( "," );
+
+					int current = 0; // the current time
+					// parsing the path
+
+					for( int i = 0; i < sp.length; ++i ) {
+						int amount = 1;
+						int rate = 1;
+
+						final Iterator iter = reader.getAttributeNames();
+						while(iter.hasNext()) {
+							Object name = iter.next();
+							if( name.equals( "rate" ) )
+								rate = (int)Double.parseDouble( reader.getAttribute( "rate" ) );
+							else if( name.equals( "amount" ) )
+								amount = (int)Double.parseDouble( reader.getAttribute( "amount" ) );
+						}
+
+
+						if( sp[i].contains( "." ) ) {
+							current += (int)Double.parseDouble( sp[i] );
+						} else {
+							Edge edge = gvc.edges.get( sp[i] );
+							// Zeitpunkt ist current:
+							IntegerIntegerMapping iim = map.get( edge );
+							iim.set( current, rate );
+							current += gvc.transitTimes.get( edge );
+						}
+					}
+
+				}
+				reader.moveUp();
+			}
+			reader.moveUp();
+		}
+
+
 //		if( reader.hasMoreChildren() ) {
 //			reader.moveDown();
 		// ignore children
@@ -192,6 +244,8 @@ public class FlowVisualisationConverter implements Converter {
 //            flowViews.add(new FlowView(graphView,this.flows.get(key),flowAttributes.get(key)));
 //        }
 		FlowVisualization fv = new FlowVisualization( graphView );//),flowViews);
+		EdgeBasedFlowOverTime flow = new EdgeBasedFlowOverTime( map );
+		fv.setFlow( flow );
 		return fv;
 	}
 }
