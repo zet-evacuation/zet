@@ -93,7 +93,9 @@ public class GLEdgeControl extends AbstractZETVisualizationControl<GLEdgeControl
 
 		// calculate flow on the edge
 		IdentifiableIntegerMapping<Edge> transitTimes = graphVisResult.getTransitTimes();
+
 		EdgeBasedFlowOverTime flowOverTime = graphVisResult.getFlowOverTime();
+
 		int maxT = flowOverTime.get( edge ).getLastTimeWithNonZeroValue(); // maximaler Zeithorizont
 		int transit = transitTimes.get( edge );
 		if( maxT > 0 )
@@ -135,7 +137,24 @@ public class GLEdgeControl extends AbstractZETVisualizationControl<GLEdgeControl
 		init( new Vector3( xs, -ys, zs ), new Vector3( xe, -ye, ze) );
 
 		// compute flow visualization data structure
-		flowOnEdge = new ArrayList<Integer>();
+		IdentifiableIntegerMapping<Edge> transitTimes = fv.getGv().getTransitTimes();
+
+		EdgeBasedFlowOverTime flowOverTime = fv.getFlow();
+
+		int maxT = flowOverTime.get( edge ).getLastTimeWithNonZeroValue(); // maximaler Zeithorizont
+		int transit = transitTimes.get( edge );
+		if( maxT > 0 )
+			mainControl.setMaxTime( maxT + transit );
+		if( maxT > 0 ) {
+			flowOnEdge = new ArrayList<Integer>( maxT + transit + transit );
+			for( int i = 0; i < transit; i++ )
+				flowOnEdge.add( new Integer( 0 ) );
+			for( int i = 0; i <= maxT; i++ )
+				flowOnEdge.add( new Integer( flowOverTime.get( edge ).get( i ) ) );
+			for( int i = 0; i < transit; i++ )
+				flowOnEdge.add( new Integer( 0 ) );
+		} else
+			flowOnEdge = new ArrayList<Integer>();
 	}
 
 	double scaling = 1;

@@ -46,6 +46,10 @@ public class GraphViewConverter implements Converter {
 	public GraphViewConverter() {
 	}
 
+	public LinkedHashMap<String, Edge> getEdges() {
+		return edges;
+	}
+
 	public boolean canConvert( Class type ) {
 		return type.equals( GraphView.class );
 	}

@@ -105,10 +105,6 @@ public class GLNodeControl extends AbstractZETVisualizationControl<GLEdgeControl
 		yPosition = fv.getGv().getNodePositionMapping().get( node ).y * fv.getGv().getScale();
 		capacity = fv.getGv().getNodeCapacities().get( node );
 
-
-		System.out.println();
-		System.out.println( "Position: (" + xPosition + "," + yPosition + ")");
-
 		//final boolean showEdgesBetweenFloors = true;
 
 		for( Edge edge : fv.getGv().getNetwork().outgoingEdges( node ) )

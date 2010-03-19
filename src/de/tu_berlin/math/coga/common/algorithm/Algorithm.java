@@ -398,11 +398,12 @@ public abstract class Algorithm<Problem, Solution> implements Runnable {
             } finally {
                 runtime = System.currentTimeMillis() - startTime;
 								if( this instanceof SEAAPAlgorithm ) {
-									System.out.println( "Algorithm terminated." );
-									System.out.println( "Status: " + getState().toString() );
-									System.out.println( "Runtime" + runtime );
-									System.out.println( this.toString() );
-									System.out.println( "Rutnime: " + getRuntime() );
+									System.out.print( "SEAAPA Algorithm terminated" );
+									System.out.println( " with status: " + getState().toString() );
+									if( getState() != State.SOLVED )
+									System.out.println( "Runtime: " + runtime );
+									//System.out.println( this.toString() );
+									//System.out.println( "Rutnime: " + getRuntime() );
 								}
 								AlgorithmTerminatedEvent ev = null;
 								try {
@@ -411,8 +412,8 @@ public abstract class Algorithm<Problem, Solution> implements Runnable {
 									System.out.println( "Exception during instanciating AlgorithmTerminatedEvent" );
 									System.out.println( this.toString() );
 									System.out.println( "Algorithm terminated." );
-									System.out.println( "Rutnime: " + getRuntime() );
 									System.out.println( "Status: " + getState().toString() );
+									System.out.println( "Runtime: " + getRuntime() );
 								}
                 fireEvent( ev );
             }

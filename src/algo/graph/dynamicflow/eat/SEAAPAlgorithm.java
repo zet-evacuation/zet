@@ -23,12 +23,19 @@ package algo.graph.dynamicflow.eat;
 
 import ds.graph.flow.EarliestArrivalAugmentingPath;
 import algo.graph.shortestpath.Dijkstra;
+import com.thoughtworks.xstream.XStream;
 import ds.graph.DynamicResidualNetwork;
 import ds.graph.Node;
 import ds.graph.flow.FlowOverTime;
+import java.io.FileNotFoundException;
 import java.util.Arrays;
 import java.util.LinkedList;
 import de.tu_berlin.math.coga.common.algorithm.Algorithm;
+import de.tu_berlin.math.coga.common.algorithm.AlgorithmStatusEvent;
+import java.io.File;
+import java.io.PrintWriter;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
@@ -82,6 +89,18 @@ public class SEAAPAlgorithm extends Algorithm<EarliestArrivalFlowProblem, FlowOv
             calculateEarliestArrivalAugmentingPath();
         }
         if (autoConvert) {
+					// save to x-stream
+//					PrintWriter output;
+//			try {
+//				output = new PrintWriter( new File( "debug_dynamic_residual_network.txt" ) );
+//				XStream xml_convert = new XStream();
+//				xml_convert.toXML( drn, output );
+//				output = new PrintWriter( new File( "debug_paths.txt"));
+//				xml_convert.toXML( paths, output );
+//			} catch( FileNotFoundException ex ) {
+//				System.err.println( "XSTREAM-out did not work." );
+//			}
+					fireEvent( new AlgorithmStatusEvent( this, "INIT_PATH_DECOMPOSITION" ) );
 					FlowOverTime flow		= new FlowOverTime(drn, paths);
 				  return flow;
         } else {

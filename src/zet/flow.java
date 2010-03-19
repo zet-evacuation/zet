@@ -17,6 +17,7 @@ import de.tu_berlin.math.coga.common.algorithm.AlgorithmEvent;
 import de.tu_berlin.math.coga.common.algorithm.AlgorithmListener;
 import de.tu_berlin.math.coga.common.algorithm.AlgorithmProgressEvent;
 import de.tu_berlin.math.coga.common.algorithm.AlgorithmStartedEvent;
+import de.tu_berlin.math.coga.common.algorithm.AlgorithmStatusEvent;
 import de.tu_berlin.math.coga.common.algorithm.AlgorithmTerminatedEvent;
 import de.tu_berlin.math.coga.common.util.Formatter;
 import ds.GraphVisualizationResult;
@@ -44,7 +45,7 @@ public class flow implements AlgorithmListener {
 	int percentInterval = 100;
 
 	public static void main ( String[] args ) throws JSAPException, IOException {
-		System.out.println( "flow 0.1.4" );
+		System.out.println( "flow 0.1.7" );
 
 		JSAP jsap = new JSAP();
 
@@ -164,6 +165,8 @@ public class flow implements AlgorithmListener {
 
 	int index = 1;
 
+	long start = 0;
+	long pathDecompositionStart = 0;
 	public void eventOccurred( AlgorithmEvent event ) {
 		if( event instanceof AlgorithmProgressEvent ) {
 			if( index++ == percentInterval ) {
@@ -171,14 +174,25 @@ public class flow implements AlgorithmListener {
 				index = 1;
 			} else
 				System.out.print( '.' );
+			if( (int)(((AlgorithmProgressEvent)event).getProgress() * 100) == 100 )
+				System.out.println( "\n100%" );
 		} else if( event instanceof AlgorithmStartedEvent )
-			System.out.println( "Algorithm starts." );
+			//System.out.println( "Algorithm starts." );
+			start = event.getEventTime();
 		else if( event instanceof AlgorithmTerminatedEvent ) {
 			System.out.println( "" );
+			final long end = event.getEventTime();
+			System.out.println( "PathDecomposition runtime: " + Formatter.formatTimeMilliseconds( end - pathDecompositionStart ) );
 			try {
-				System.out.println( "Runtime flow computation: " + Formatter.formatTimeMilliseconds( event.getAlgorithm().getRuntime() ) );
+				System.out.println( "Overall runtime flow computation: " + Formatter.formatTimeMilliseconds( event.getAlgorithm().getRuntime() ) );
 			} catch( IllegalStateException ex ) {
 				System.out.println( "The illegal state exception occured once again." );
+			}
+			System.out.println( "Fraction of path decomposition: " + ( Formatter.formatPercent( (end-pathDecompositionStart)/(double)event.getAlgorithm().getRuntime() )) );
+		} else if( event instanceof AlgorithmStatusEvent ) {
+			if( ((AlgorithmStatusEvent)event).getMessage().equals( "INIT_PATH_DECOMPOSITION" ) ) {
+				pathDecompositionStart = event.getEventTime();
+				System.out.println( "\nSEAAP runtime: " + Formatter.formatTimeMilliseconds( pathDecompositionStart - start ) );
 			}
 		} else
 			System.out.println( event.toString() );

@@ -4,6 +4,11 @@
  */
 package zet.xml;
 
+import ds.graph.Edge;
+import ds.graph.IdentifiableObjectMapping;
+import ds.graph.IntegerIntegerMapping;
+import ds.graph.flow.EdgeBasedFlowOverTime;
+
 
 /**
  *
@@ -11,6 +16,7 @@ package zet.xml;
  */
 public class FlowVisualization {
 	GraphView gv;
+	private EdgeBasedFlowOverTime flow;
 
 	public FlowVisualization( GraphView gv ) {
 		this.gv = gv;
@@ -24,5 +30,12 @@ public class FlowVisualization {
 		this.gv = gv;
 	}
 
-	
+	public EdgeBasedFlowOverTime getFlow() {
+		return flow;
+	}
+
+	void setFlow( EdgeBasedFlowOverTime flow ) {
+		this.flow = flow;
+	}
+
 }
