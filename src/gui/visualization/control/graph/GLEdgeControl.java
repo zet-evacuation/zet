@@ -1,4 +1,4 @@
-/* zet evacuation tool copyright (c) 2007-10 zet evacuation team
+ /* zet evacuation tool copyright (c) 2007-10 zet evacuation team
  *
  * This program is free software; you can redistribute it and/or
  * as published by the Free Software Foundation; either version 2
@@ -21,10 +21,12 @@ import ds.graph.flow.EdgeBasedFlowOverTime;
 import ds.GraphVisualizationResult;
 import ds.graph.IdentifiableIntegerMapping;
 import ds.graph.Node;
+import ds.graph.NodeRectangle;
+import gui.visualization.VisualizationOptionManager;
 import gui.visualization.draw.graph.GLEdge;
 import java.util.ArrayList;
+
 import de.tu_berlin.math.coga.math.vectormath.Vector3;
-import ds.graph.NodeRectangle;
 import gui.visualization.control.AbstractZETVisualizationControl;
 import zet.xml.FlowVisualization;
 
@@ -43,59 +45,51 @@ public class GLEdgeControl extends AbstractZETVisualizationControl<GLEdgeControl
 	private int maxFlowRate;
 	private double deltaStep;
 	private Edge controlled;
-	private int transitTime;
-	private int capacity;
-	private double length;
-	private double length3D;
+	//private GraphVisualizationResult graphVisResult;
+	private double length = 0;
+	private double length3d = 0;
 	private Vector3 differenceVectorInOpenGLScaling;
 	private Vector3 startPoint;
 	private Vector3 endPoint;
+	private int transitTime;
+	private int capacity;
 
 	/**
-	 * Creates a new <code>GLEdgeControl</code> object for the edge <code>edge</code> using data from 
-	 * the <code>graphVisResult</code> object. 
+	 * Creates a new <code>GLEdgeControl</code> object for the edge <code>edge</code> using data from
+	 * the <code>graphVisResult</code> object.
 	 * @param graphVisResult contains all information necessary to visualize a result of a flow algorithm.
 	 * @param edge the edge for this control object.
 	 * @param glControl the main control class.
 	 */
 	public GLEdgeControl( GraphVisualizationResult graphVisResult, Edge edge, GLGraphControl glControl ) {
 		super( glControl );
-		maxFlowRate = graphVisResult.getMaxFlowRate();
-		//this.graphVisResult = graphVisResult;
 		controlled = edge;
 		setView( new GLEdge( this ) );
 
 		if( edge.start().id() < edge.end().id() )	// checks weather this edge is the first one of the two representing one undirected edge
 			isFirst = true;
 
+		// general edge attributes
+		maxFlowRate = graphVisResult.getMaxFlowRate();
 		transitTime = graphVisResult.getTransitTimes().get( edge );
 		capacity = graphVisResult.getEdgeCapacities().get( edge );
 
-		// compute length, positions and other static stuff.
-		Node start = controlled.start();
-		Node end = controlled.end();
-		Vector3 startPos = getMiddlePoint( graphVisResult, start );
-		Vector3 endPos = getMiddlePoint( graphVisResult, end );
-		double dx = Math.abs( startPos.x - endPos.x ) * Z_TO_OPENGL_SCALING;
-		double dy = Math.abs( startPos.y - endPos.y ) * Z_TO_OPENGL_SCALING;
-		length = Math.sqrt( dx * dx + dy * dy );
-
-		double dz = Math.abs( startPos.z - endPos.z ) * Z_TO_OPENGL_SCALING;
-		length3D = Math.sqrt( dz * dz + length * length );	// length is projection to the xy plane
-
-		differenceVectorInOpenGLScaling = new Vector3( dx, dy, dz );
-
-		//compare the y-coordinates
-		if( startPos.y <= endPos.y )
-			startPoint = startPos;
-		else
-			startPoint = endPos;
-
-		//compare the y-coordinates
-		if( startPos.y <= endPos.y )
-			endPoint = endPos;
-		else
-			endPoint = startPos;
+		scaling = Z_TO_OPENGL_SCALING;
+		// calculate position of start node ...
+		NodeRectangle rect = graphVisResult.getNodeRectangles().get( edge.start() );
+		final double xs = rect.get_nw_point().getX() + (rect.get_ne_point().getX() - rect.get_nw_point().getX()) * 0.5;
+		final double ys = rect.get_nw_point().getY() + (rect.get_sw_point().getY() - rect.get_nw_point().getY()) * 0.5;
+		int floor = graphVisResult.getNodeToFloorMapping().get( edge.start() );
+		// TODO read the value from VisualizationOptionManager (is 70 maybe)
+		final double zs = floor * 70 * 10; // whereever this 10 comes from... probably scaling factor?
+		// ... and of end node ...
+		rect = graphVisResult.getNodeRectangles().get( edge.end() );
+		final double xe = rect.get_nw_point().getX() + (rect.get_ne_point().getX() - rect.get_nw_point().getX()) * 0.5;
+		final double ye = rect.get_nw_point().getY() + (rect.get_sw_point().getY() - rect.get_nw_point().getY()) * 0.5;
+		floor = graphVisResult.getNodeToFloorMapping().get( edge.end() );
+		final double ze = floor * 70 * 10; // whereever this 10 comes from...
+		// ... and call init method
+		init( new Vector3( xs, -ys, zs ), new Vector3( xe, -ye, ze ) );
 
 		// calculate flow on the edge
 		IdentifiableIntegerMapping<Edge> transitTimes = graphVisResult.getTransitTimes();
@@ -118,73 +112,54 @@ public class GLEdgeControl extends AbstractZETVisualizationControl<GLEdgeControl
 
 	GLEdgeControl( FlowVisualization fv, Edge edge, GLGraphControl mainControl ) {
 		super( mainControl );
-		maxFlowRate = 0; //fv .getMaxFlowRate();
 		controlled = edge;
 		setView( new GLEdge( this ) );
 
 		if( edge.start().id() < edge.end().id() )	// checks weather this edge is the first one of the two representing one undirected edge
 			isFirst = true;
 
-		transitTime = fv.getGv().getTransitTimes().get( edge ); //graphVisResult.getTransitTimes().get( edge );
+		// store general edge attributes
+		maxFlowRate = 0;
+		transitTime = fv.getGv().getTransitTimes().get( edge );
 		capacity = fv.getGv().getEdgeCapacities().get( edge );
 
+		// compute the positions for the start ...
+		final double xs = fv.getGv().getNodePositionMapping().get( edge.start() ).x * fv.getGv().getScale();
+		final double ys = fv.getGv().getNodePositionMapping().get( edge.start() ).y * fv.getGv().getScale();
+		final double zs = fv.getGv().getNodePositionMapping().get( edge.start() ).z * fv.getGv().getScale();
+		// ... and for the end node ...
+		final double xe = fv.getGv().getNodePositionMapping().get( edge.end() ).x * fv.getGv().getScale();
+		final double ye = fv.getGv().getNodePositionMapping().get( edge.end() ).y * fv.getGv().getScale();
+		final double ze = fv.getGv().getNodePositionMapping().get( edge.end() ).z * fv.getGv().getScale();
+		// ... and call init method
+		init( new Vector3( xs, -ys, zs ), new Vector3( xe, -ye, ze) );
 
-		// compute length, positions and other static stuff.
-		Node start = edge.start();
-		Node end = edge.end();
-		double xPosition = fv.getGv().getNodePositionMapping().get( start ).x * fv.getGv().getScale();
-		double yPosition = fv.getGv().getNodePositionMapping().get( start ).y * fv.getGv().getScale();
+		// compute flow visualization data structure
+		flowOnEdge = new ArrayList<Integer>();
+	}
 
-	// TODO height information in the new format
+	double scaling = 1;
 
-		Vector3 startPos = new Vector3( xPosition, yPosition, 0 );
-
-		xPosition = fv.getGv().getNodePositionMapping().get( end ).x * fv.getGv().getScale();
-		yPosition = fv.getGv().getNodePositionMapping().get( end ).y * fv.getGv().getScale();
-
-		Vector3 endPos = new Vector3( xPosition, yPosition, 0 );
-		double dx = Math.abs( startPos.x - endPos.x );
-		double dy = Math.abs( startPos.y - endPos.y );
-		length = Math.sqrt( dx * dx + dy * dy );
-
-		double dz = Math.abs( startPos.z - endPos.z );
-		length3D = Math.sqrt( dz * dz + length * length );	// length is projection to the xy plane
-
+	private void init( Vector3 startPos, Vector3 endPos ) {
+		// calculate differences between the points
+		final double dx = (startPos.x - endPos.x) * scaling;
+		final double dy = (startPos.y - endPos.y) * scaling;
+		final double dz = (startPos.z - endPos.z) * scaling;
 		differenceVectorInOpenGLScaling = new Vector3( dx, dy, dz );
 
-		//compare the y-coordinates
-		if( startPos.y <= endPos.y )
+		// calculate length and 3d length
+		length = Math.sqrt( dx * dx + dy * dy );
+		length3d = Math.sqrt( dz * dz + length * length );
+
+		// compare the y-coordinates and set the point with lower coordinate
+		// as start point
+		if( startPos.y <= endPos.y ) {
 			startPoint = startPos;
-		else
-			startPoint = endPos;
-
-		//compare the y-coordinates
-		if( startPos.y <= endPos.y )
 			endPoint = endPos;
-		else
+		} else {
+			startPoint = endPos;
 			endPoint = startPos;
-
-		System.out.println( "Startpunkt: " + startPoint.toString() );
-		System.out.println( "Endpunkt: " + endPoint.toString() );
-
-		// ignore flow at the moment
-		// calculate flow on the edge
-//		IdentifiableIntegerMapping<Edge> transitTimes = graphVisResult.getTransitTimes();
-//		EdgeBasedFlowOverTime flowOverTime = graphVisResult.getFlowOverTime();
-//		int maxT = flowOverTime.get( edge ).getLastTimeWithNonZeroValue(); // maximaler Zeithorizont
-//		int transit = transitTimes.get( edge );
-//		if( maxT > 0 )
-//			glControl.setMaxTime( maxT + transit );
-//		if( maxT > 0 ) {
-//			flowOnEdge = new ArrayList<Integer>( maxT + transit + transit );
-//			for( int i = 0; i < transit; i++ )
-//				flowOnEdge.add( new Integer( 0 ) );
-//			for( int i = 0; i <= maxT; i++ )
-//				flowOnEdge.add( new Integer( flowOverTime.get( edge ).get( i ) ) );
-//			for( int i = 0; i < transit; i++ )
-//				flowOnEdge.add( new Integer( 0 ) );
-//		} else
-			flowOnEdge = new ArrayList<Integer>();
+		}
 	}
 
 	/**
@@ -205,7 +180,7 @@ public class GLEdgeControl extends AbstractZETVisualizationControl<GLEdgeControl
 	}
 
 	/**
-	 * Returns an array list containing the amount of flow going into 
+	 * Returns an array list containing the amount of flow going into
 	 * the edge for each time step within 0 and time horizon + transit time of the edge.
 	 * @return an array list giving the amount of flow going into the edge for each point in time.
 	 */
@@ -226,7 +201,7 @@ public class GLEdgeControl extends AbstractZETVisualizationControl<GLEdgeControl
 	 * @return the model length of the edge, taking the z-coordinate into account.
 	 */
 	public double get3DLength() {
-		return length3D;
+		return length3d;
 	}
 
 	/**
@@ -243,8 +218,8 @@ public class GLEdgeControl extends AbstractZETVisualizationControl<GLEdgeControl
 	/**
 	 * Calculates the angle between to vectors a and b, going from a to b.
 	 * Lies always between 0 and 180 !
-	 * Uses the dot product to calculate the cosine, 
-	 * the angle is then calculated with the arcus cosine. 
+	 * Uses the dot product to calculate the cosine,
+	 * the angle is then calculated with the arcus cosine.
 	 * @param a a vector.
 	 * @param b another vector.
 	 * @return the angle between the two vectors.
@@ -299,22 +274,8 @@ public class GLEdgeControl extends AbstractZETVisualizationControl<GLEdgeControl
 	 * @param node a node
 	 * @return the middle point of the corresponding rectangle
 	 */
-	private Vector3 getMiddlePoint( GraphVisualizationResult graphVisResult, Node node ) {
-		// copied here from glnode constructor. probably better possibilities...
-
-		NodeRectangle rect = graphVisResult.getNodeRectangles().get( node );
-		double dx = rect.get_nw_point().getX() + (rect.get_ne_point().getX() - rect.get_nw_point().getX()) / 2;
-
-		double dy = rect.get_nw_point().getY() + (rect.get_sw_point().getY() - rect.get_nw_point().getY()) / 2;
-		int floor =  graphVisResult.getNodeToFloorMapping().get( node );
-
-		// TODO read the value from VisualizationOptionManager
-		//double z = VisualizationOptionManager.getGraphHeight();
-		double z = 70;
-		z += (floor - 1) * 70;
-		z += (0) * 70;
-		z *= 10;	// whereever this 10 comes from...
-		return new Vector3( dx, -dy, z );
+	private Vector3 getMiddlePoint( Node node ) {
+		return null;
 	}
 
 	/**
@@ -335,7 +296,7 @@ public class GLEdgeControl extends AbstractZETVisualizationControl<GLEdgeControl
 	}
 
 	/**
-	 * Calculates the current time and delta information used for fluid visualization depending 
+	 * Calculates the current time and delta information used for fluid visualization depending
 	 * of the graph step in the main control class.
 	 */
 	public void stepUpdate() {

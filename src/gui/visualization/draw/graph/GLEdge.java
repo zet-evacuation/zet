@@ -162,9 +162,6 @@ public class GLEdge extends AbstractDrawable<GLEdge, GLEdgeControl> {
 		Vector3 axis = control.getRotationAxis( a, b );
 		gl.glRotated( control.getAngleBetween( a, b ), axis.x, axis.y, axis.z );
 
-		System.out.println( "static structure is drawn" );
-		System.out.println( edgeLength );
-
 		glu.gluCylinder( quadObj, thickness, thickness, edgeLength, qualityPreset.edgeSlices, 1 );
 		//gl.glDisable( GL.GL_BLEND );
 		gl.glPopMatrix();
@@ -172,7 +169,7 @@ public class GLEdge extends AbstractDrawable<GLEdge, GLEdgeControl> {
 
 	/**
 	 * Draws the flow on the edge. The edge is already drawn using the {@link #performStaticDrawing(javax.media.opengl.GLAutoDrawable)} method.
-	 * @param drawable the {@code OpenGL} drawable object
+	 * @param gl the {@code OpenGL} drawable object
 	 */
 	@Override
 	public void performDrawing( GL gl ) {
@@ -183,15 +180,14 @@ public class GLEdge extends AbstractDrawable<GLEdge, GLEdgeControl> {
 	 * Draws the static structure of the edge that means the edge, if it is the first one
 	 * of the two edges. The flow is not painted.
 	 * {@see GLEdgeControl#isFirstEdge()}
-	 * @param drawable the {@code OpenGL} drawable object
+	 * @param gl the {@code OpenGL} drawable object
 	 */
 	@Override
 	public void performStaticDrawing( GL gl ) {
 		beginDraw( gl );
 		edgeColor.draw( gl );
-		if( control.isFirstEdge() ) {
+		if( control.isFirstEdge() )
 			drawStaticStructure( gl );
-		}
 		endDraw( gl );
 	}
 	

@@ -73,7 +73,7 @@ public class GLNode extends AbstractDrawable<GLEdge, GLNodeControl> {
 	/**
 	 * Draws a node as a solid sphere. The number of slices and stacks is defined
 	 * by the given quality preset.
-	 * @param drawable the context on which the node is drawn
+	 * @param gl the context on which the node is drawn
 	 */
 	public void performFlowDrawing( GL gl ) {
 		super.performDrawing( gl );

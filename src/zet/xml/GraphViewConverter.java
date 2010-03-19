@@ -326,7 +326,7 @@ public class GraphViewConverter implements Converter {
 		}
 		node = new Node( nid );
 		nodes.put( id, node );
-		int balanceVal = Integer.parseInt( balance );
+		int balanceVal = (int)Double.parseDouble( balance );
 		supplies.add( node, balanceVal );
 		nodeCapacities.add( node, (int)Double.parseDouble( capacity ) );
 

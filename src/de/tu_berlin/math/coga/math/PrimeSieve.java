@@ -77,7 +77,7 @@ public class PrimeSieve {
 		if( (n & 1) == 0 )
 			n -= 1;
 //		n = (n%2 == 0) ? n-1: n;
-		int[] working = new int[(n >>6)+1];
+		int[] working = new int[(n >> 6)+1];
 
 		primes[0] = 2;
 		int index = -1;
@@ -104,6 +104,43 @@ public class PrimeSieve {
 		primeCount = pindex;
 	}
 
+	public void computeThird() {
+		if( (n & 1) == 0 )
+			n--;
+		boolean[] working = new boolean[n];
+
+		boolean last = false;
+
+		primes[0] = 2;
+		int index = -1;
+		int start = 3;
+		int skip = 3;
+		int pindex = 1;
+
+		while( start < n / 2 ) {
+			if( !working[++index] ) {
+				primes[pindex++] = skip;//(index << 1) + 3;
+				// erase
+				//System.out.println( "Index: " + index + " start: " + start + " skip: " + skip );
+// original:
+//				for( int j = start; j < n / 2; j += skip )
+//					working[j] = true;
+//				System.err.println( "start: " + start + " index+skip: " + (index+skip) );
+				for( int j = start; j < n / 2; j += skip )
+					working[j] = true;
+			}
+			start += (++skip) << 1;
+
+			skip++;
+			System.err.println( "Index: " + ((index<<1)+3) + " skip " + skip );
+		}
+
+		// give out the rest
+		while( ++index < n / 2 && (pindex) < bound )
+			if( !working[index] )
+				primes[pindex++] = (index << 1) + 3;
+		primeCount = pindex;
+	}
 	public void computeADW3() {
 		boolean[] working = new boolean[n + 1];
 		int i = 0;
@@ -185,6 +222,52 @@ public class PrimeSieve {
 		i = -1;
 		while( (start += ((i++ % 2 + 1) << 1)) <= n ) {
 			if( !working[i] )
+				primes[count++] = start;
+		}
+		primeCount = count;
+	}
+
+	public void computeADW3ThirdLowMem() {
+		int[] working = new int[((n/3)>>5) + 1];
+		int i = 0;
+		int k = 0;
+		int c = 4;
+
+		try {
+			for( i = 5; i <= java.lang.Math.floor( java.lang.Math.sqrt( n ) ); i += c ) {
+				//c = c == 2 ? 4 : 2;
+				c = swap[c];
+				int first = n/i;
+				first += offsetCorrection[first%2][first%3];
+
+				int c2 = first%3 == 1 ? 4 : 2;
+
+				for( k = first; k >= i; k -= c2 ) {
+					//c2 = c2 == 2 ? 4 : 2;
+					c2 = swap[c2];
+//					final int pos = ((i*k)-5) / 3 + (((i*k)-5)%3 == 0 ? 0 : 1);
+					//working[pos>>5] |= (1 << pos % 32);
+					working[((i*k)-5) / 3 + (((i*k)-5)%3 == 0 ? 0 : 1)>>5] |= (1 << ((i*k)-5) / 3 + (((i*k)-5)%3 == 0 ? 0 : 1) % 32);
+					// experiments show that the following (which does the same) is slower:
+					//working[(int)java.lang.Math.ceil( ((i*k)-5) / 3.0 )] = true;
+				}
+			}
+		} catch( Exception e ) {
+
+		}
+
+		int count = 0;
+		primes[count++] = 2;
+		if( n <= 2 ) {
+			primeCount = 1;
+			return;
+		}
+		primes[count++] = 3;
+		int start = 5;
+		i = -1;
+		while( (start += ((i++ % 2 + 1) << 1)) <= n ) {
+			if( (working[i >> 5] & (1 << i % 32)) == 0 )
+			//if( !working[i] )
 				primes[count++] = start;
 		}
 		primeCount = count;
@@ -362,11 +445,19 @@ public class PrimeSieve {
 //			end = System.nanoTime();
 //			System.out.print( ";" + (end - start) );
 
-			System.out.print( ";OptAlgo3Third" );
+//			System.out.print( ";OptAlgo3Third" );
+//			p = new PrimeSieve( n );
+//			System.gc();
+//			start = System.nanoTime();
+//			p.computeADW3Third();
+//			end = System.nanoTime();
+//			System.out.print( ";" + (end - start) );
+
+			System.out.print( ";OptAlgo3ThirdLowMem" );
 			p = new PrimeSieve( n );
 			System.gc();
 			start = System.nanoTime();
-			p.computeADW3Third();
+			p.computeADW3ThirdLowMem();
 			end = System.nanoTime();
 			System.out.print( ";" + (end - start) );
 

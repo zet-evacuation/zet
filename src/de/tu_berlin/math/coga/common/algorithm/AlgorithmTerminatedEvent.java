@@ -27,13 +27,29 @@ package de.tu_berlin.math.coga.common.algorithm;
  * @author Martin Groß
  */
 public class AlgorithmTerminatedEvent extends AlgorithmEvent {
+	long runtime = -1;
 
-    /**
-     * Creates an <code>AlgorithmTerminatedEvent</code> for the specified
-     * algorithm.
-     * @param algorithm the algorithm that has terminated.
-     */
-    public AlgorithmTerminatedEvent(Algorithm algorithm) {
-        super(algorithm, algorithm.getStartTime() + algorithm.getRuntime());
-    }
+	/**
+	 * Creates an <code>AlgorithmTerminatedEvent</code> for the specified
+	 * algorithm.
+	 * @param algorithm the algorithm that has terminated.
+	 */
+	public AlgorithmTerminatedEvent( Algorithm algorithm ) {
+		super( algorithm, algorithm.getStartTime() + algorithm.getRuntime() );
+	}
+
+	/**
+	 * Creates an <code>AlgorithmTerminatedEvent</code> for the specified
+	 * algorithm and saves the runtime of the algorithm.
+	 * @param algorithm the algorithm that has terminated.
+	 * @param runtime
+	 */
+	public AlgorithmTerminatedEvent( Algorithm algorithm, long runtime ) {
+		this( algorithm );
+		this.runtime = runtime;
+	}
+
+	public long getRuntime() {
+		return runtime;
+	}
 }
