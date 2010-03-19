@@ -102,7 +102,7 @@ public abstract class AbstractDrawable<U extends AbstractDrawable<?, ?>, V exten
 	 * This method is called prior to performing the actual 
 	 * drawing. In its default behavior, it translates the
 	 * <code>AbstractDrawable</code> to the origin.
-	 * @param Drawable
+	 * @param gl
 	 */
 	public void beginDraw( GL gl ) {
 		gl.glPushMatrix();
