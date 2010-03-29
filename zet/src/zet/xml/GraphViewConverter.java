@@ -4,7 +4,6 @@
  */
 package zet.xml;
 
-import com.thoughtworks.xstream.converters.ConversionException;
 import com.thoughtworks.xstream.converters.Converter;
 import com.thoughtworks.xstream.converters.MarshallingContext;
 import com.thoughtworks.xstream.converters.UnmarshallingContext;
@@ -42,13 +41,6 @@ public class GraphViewConverter implements Converter {
 	IdentifiableIntegerMapping<Node> supplies;
 	ArrayList<Node> sources;
 	ArrayList<Node> sinks;
-	double minx = Double.MAX_VALUE;
-	double maxx = Double.MIN_VALUE;
-	double miny = Double.MAX_VALUE;
-	double maxy = Double.MIN_VALUE;
-	double minz = Double.MAX_VALUE;
-	double maxz = Double.MIN_VALUE;
-
 
 	public GraphViewConverter() {
 	}
@@ -115,7 +107,7 @@ public class GraphViewConverter implements Converter {
 		// reader starts in <graphLayout>, so set down to get the graph
 		reader.moveDown();
 		if( !reader.getNodeName().equals( "graph" ) )
-			throw new ConversionException( "Graph layout must start with a graph." );
+			throw new InvalidFileFormatException( "Graph layout must start with a graph." );
 
 		int nodeCount = -1;
 		int edgeCount = -1;
@@ -160,10 +152,10 @@ public class GraphViewConverter implements Converter {
 		graph.setNodeCapacity( nodeCount );
 		graph.setEdgeCapacity( edgeCount );
 		if( nodeCount < n.size() )
-			throw new ConversionException( "Number of nodes to large: " + n.size() );
+			throw new InvalidFileFormatException( "Number of nodes to large: " + n.size() );
 		graph.setNodes( n );
 		if( nodeCount < n.size() )
-			throw new ConversionException( "Number of edges to large: " + e.size() );
+			throw new InvalidFileFormatException( "Number of edges to large: " + e.size() );
 		graph.setEdges( e );
 
 		nodePositionMapping = new IdentifiableObjectMapping<Node, Vector3>( nodeCount, Vector3.class );
@@ -178,7 +170,7 @@ public class GraphViewConverter implements Converter {
 			//while(reader.hasMoreChildren()) {
 			reader.moveDown();
 			if( reader.getNodeName().equals( "graph" ) )
-				throw new ConversionException( "More than one graph is not allowed." );
+				throw new InvalidFileFormatException( "More than one graph is not allowed." );
 			else if( reader.getNodeName().equals( "layouts" ) )
 				// read the layouts
 				readLayouts();
@@ -456,17 +448,7 @@ public class GraphViewConverter implements Converter {
 				z = Double.parseDouble( reader.getAttribute( "z" ) );
 		}
 		if( node == null )
-			throw new ConversionException( "Node id needed for node layout." );
-
-		minx = Math.min( minx, x );
-		maxx = Math.max( maxx, x );
-
-		miny = Math.min( miny, y );
-		maxy = Math.max( maxy, y );
-
-		minz = Math.min( minz, z );
-		maxz = Math.max( maxz, z );
-
+			throw new InvalidFileFormatException( "Node id needed for node layout." );
 		nodePositionMapping.get( node ).set( x, y, z );
 //		a.setType( basedOn );
 	}

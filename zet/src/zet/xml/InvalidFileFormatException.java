@@ -5,15 +5,13 @@
 
 package zet.xml;
 
+import com.thoughtworks.xstream.converters.ConversionException;
+
 /**
  *
- * @author Martin Gro�
+ * @author Martin Groß
  */
-public class InvalidFileFormatException extends Exception {
-    
-    public InvalidFileFormatException() {
-        super();
-    }
+public class InvalidFileFormatException extends ConversionException {
 
     public InvalidFileFormatException(String message) {
         super(message);
