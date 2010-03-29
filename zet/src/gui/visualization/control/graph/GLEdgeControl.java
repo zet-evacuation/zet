@@ -22,7 +22,6 @@ import ds.GraphVisualizationResult;
 import ds.graph.IdentifiableIntegerMapping;
 import ds.graph.Node;
 import ds.graph.NodeRectangle;
-import gui.visualization.VisualizationOptionManager;
 import gui.visualization.draw.graph.GLEdge;
 import java.util.ArrayList;
 
@@ -117,11 +116,13 @@ public class GLEdgeControl extends AbstractZETVisualizationControl<GLEdgeControl
 		controlled = edge;
 		setView( new GLEdge( this ) );
 
-		if( edge.start().id() < edge.end().id() )	// checks weather this edge is the first one of the two representing one undirected edge
-			isFirst = true;
+		isFirst = !fv.isEdgesDoubled() || edge.start().id() < edge.end().id() ? true : false;
+		//if(  )	// checks weather this edge is the first one of the two representing one undirected edge
+		//	isFirst = true;
 
 		// store general edge attributes
-		maxFlowRate = 0;
+		maxFlowRate = fv.getMaxFlowRate();
+		mainControl.setMaxTime( fv.getTimeHorizon() );
 		transitTime = fv.getGv().getTransitTimes().get( edge );
 		capacity = fv.getGv().getEdgeCapacities().get( edge );
 
@@ -143,8 +144,8 @@ public class GLEdgeControl extends AbstractZETVisualizationControl<GLEdgeControl
 
 		int maxT = flowOverTime.get( edge ).getLastTimeWithNonZeroValue(); // maximaler Zeithorizont
 		int transit = transitTimes.get( edge );
-		if( maxT > 0 )
-			mainControl.setMaxTime( maxT + transit );
+//		if( maxT > 0 )
+//			mainControl.setMaxTime( maxT + transit );
 		if( maxT > 0 ) {
 			flowOnEdge = new ArrayList<Integer>( maxT + transit + transit );
 			for( int i = 0; i < transit; i++ )

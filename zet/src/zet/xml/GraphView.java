@@ -36,14 +36,26 @@ public class GraphView {
 	ArrayList<Node> sinks;
 	/** A scale value that should be used for displaying the graph. */
 	private double scale = 1;
+	/** The offset that has to be added to a point to center the graph.  */
+	private Vector3 effectiveOffset = new Vector3();
+
+	boolean containsSuperSink = false;
 
 	int xOffset;
 	int yOffset;
 	int zOffset;
 
+	double minX = Double.MAX_VALUE;
+	double maxX = Double.MIN_VALUE;
+	double minY = Double.MAX_VALUE;
+	double maxY = Double.MIN_VALUE;
+	double minZ = Double.MAX_VALUE;
+	double maxZ = Double.MIN_VALUE;
+
+
 	public GraphView( Network network, IdentifiableObjectMapping<Node, Vector3> nodePositionMapping, IdentifiableIntegerMapping<Edge> edgeCapacities, IdentifiableIntegerMapping<Node> nodeCapacities, IdentifiableIntegerMapping<Edge> transitTimes, IdentifiableIntegerMapping<Node> supplies, ArrayList<Node> sources, ArrayList<Node> sinks ) {
 		this.network = network;
-		this.nodePositionMapping = nodePositionMapping;
+		setNodePositionMapping( nodePositionMapping );
 		this.edgeCapacities = edgeCapacities;
 		this.nodeCapacities = nodeCapacities;
 		this.transitTimes = transitTimes;
@@ -68,16 +80,53 @@ public class GraphView {
 	public void setNodePositionMapping( IdentifiableObjectMapping<Node, Vector3> nodePositionMapping ) {
 		this.nodePositionMapping = nodePositionMapping;
 
-		// calculate the offset that is needed to move the graph
-		// to the center of an cartesian coordinate system
-		double xmax = Integer.MIN_VALUE;
-		double xmin = Integer.MAX_VALUE;
-		double ymax = Integer.MIN_VALUE;
-		double ymin = Integer.MAX_VALUE;
-		double zmax = Integer.MIN_VALUE;
-		double zmin = Integer.MAX_VALUE;
+		// compute min and max values
+		for( Node node : network.nodes() ) {
+			minX = Math.min( nodePositionMapping.get( node ).x, minX );
+			maxX = Math.max( nodePositionMapping.get( node ).x, maxX );
 
+			minY = Math.min( nodePositionMapping.get( node ).y, minY );
+			maxY = Math.max( nodePositionMapping.get( node ).y, maxY );
+
+			minZ = Math.min( nodePositionMapping.get( node ).z, minZ );
+			maxZ = Math.max( nodePositionMapping.get( node ).z, maxZ );
+		}
+
+		// compute effective offset for centration
+
+
+		final double xadd = (maxX - minX)/2;
+		final double yadd = (maxY - minY)/2;
+		final double zadd = (maxZ - minZ)/2;
+
+		if( maxX < 0 )
+			effectiveOffset.x = maxX + xadd;
+		else if( minX > 0 )
+			effectiveOffset.x = -minX - xadd;
+		else if( minX < 0 )
+			effectiveOffset.x = -minX - xadd;
+		else
+			effectiveOffset.x = -maxX + xadd;
+
+		if( maxY < 0 )
+			effectiveOffset.y = maxY + yadd;
+		else if( minY > 0 )
+			effectiveOffset.y = -minY - yadd;
+		else if( minY < 0 )
+			effectiveOffset.y = -minY - yadd;
+		else
+			effectiveOffset.y = -maxY + yadd;
+
+		if( maxZ < 0 )
+			effectiveOffset.z = maxZ + zadd;
+		else if( minZ > 0 )
+			effectiveOffset.z = -minZ - zadd;
+		else if( minZ < 0 )
+			effectiveOffset.z = -minZ - zadd;
+		else
+			effectiveOffset.z = -maxZ + zadd;
 		
+		System.out.println( "Offset: " + effectiveOffset.toString() );
 	}
 
 	public IdentifiableIntegerMapping<Edge> getEdgeCapacities() {
@@ -133,7 +182,10 @@ public class GraphView {
 	}
 
 	public boolean isEvacuationNode( Node node ) {
-		return network.adjacentNodes( node ).contains( getSupersink() );
+		if( containsSuperSink )
+			return network.adjacentNodes( node ).contains( getSupersink() );
+		else
+			return sinks.contains( node );
 	}
 
 	public boolean isSourceNode( Node node ) {
@@ -146,5 +198,70 @@ public class GraphView {
 
 	void setScale( double scale ) {
 		this.scale = scale;
-	}	
+	}
+
+	/**
+	 * Returns the largest {@code x}-position of a node.
+	 * @return the largest {@code x}-position of a node
+	 */
+	public double getMaxX() {
+		return maxX;
+	}
+
+	/**
+	 * Returns the largest {@code y}-position of a node.
+	 * @return the largest {@code y}-position of a node
+	 */
+	public double getMaxY() {
+		return maxY;
+	}
+
+	/**
+	 * Returns the largest {@code z}-position of a node.
+	 * @return the largest {@code z}-position of a node
+	 */
+	public double getMaxZ() {
+		return maxZ;
+	}
+
+	/**
+	 * Returns the smallest {@code x}-position of a node.
+	 * @return the smallest {@code x}-position of a node
+	 */
+	public double getMinX() {
+		return minX;
+	}
+
+	/**
+	 * Returns the smallest {@code y}-position of a node.
+	 * @return the smallest {@code y}-position of a node
+	 */
+	public double getMinY() {
+		return minY;
+	}
+
+	/**
+	 * Returns the smallest {@code z}-position of a node.
+	 * @return the smallest {@code z}-position of a node
+	 */
+	public double getMinZ() {
+		return minZ;
+	}
+
+	/**
+	 * Returns the offset that has to be added to all coordinates to center the
+	 * graph around the origin.
+	 * @return a vector containing the offsets for all three coordinate directions
+	 */
+	public Vector3 getEffectiveOffset() {
+		return effectiveOffset;
+	}
+
+	public boolean isContainsSuperSink() {
+		return containsSuperSink;
+	}
+
+	public void setContainsSuperSink( boolean containsSuperSink ) {
+		this.containsSuperSink = containsSuperSink;
+	}
 }

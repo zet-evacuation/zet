@@ -4,28 +4,23 @@
  */
 package zet.xml;
 
+import algo.graph.util.PathComposition;
 import com.thoughtworks.xstream.converters.ConversionException;
 import com.thoughtworks.xstream.converters.Converter;
 import com.thoughtworks.xstream.converters.MarshallingContext;
 import com.thoughtworks.xstream.converters.UnmarshallingContext;
 import com.thoughtworks.xstream.io.HierarchicalStreamReader;
 import com.thoughtworks.xstream.io.HierarchicalStreamWriter;
-//import fv.gui.view.FlowVisualisation;
-//import fv.gui.view.GraphView;
-//import fv.gui.view.FlowAttributes;
-//import fv.gui.view.FlowView;
-//import fv.model.DelayedPath;
-//import fv.model.Edge;
-//import fv.model.PathFlow;
 import ds.graph.Edge;
-import ds.graph.IdentifiableObjectMapping;
-import ds.graph.IntegerIntegerMapping;
+import ds.graph.flow.FlowOverTimeEdge;
+import ds.graph.flow.FlowOverTimeEdgeSequence;
+import ds.graph.flow.FlowOverTimePath;
+import ds.graph.flow.PathBasedFlowOverTime;
 import java.util.Iterator;
-import ds.graph.flow.EdgeBasedFlowOverTime;
 
 /**
  *
- * @author Martin Groß
+ * @author Martin Groß, Jan-Philipp Kappmeier
  */
 public class FlowVisualisationConverter implements Converter {
 
@@ -87,22 +82,41 @@ public class FlowVisualisationConverter implements Converter {
 	}
 
 	public Object unmarshal( HierarchicalStreamReader reader, UnmarshallingContext context ) {
-		if( !reader.hasMoreChildren() ) {
+		if( !reader.hasMoreChildren() )
 			throw new ConversionException( "Flow visualization root has no children." );
-		}
 
 		// move to the first child, must be 'graphLayout'. then convert the layout.
 		reader.moveDown();
-		if( !reader.getNodeName().equals( "graphLayout" ) ) {
+		if( !reader.getNodeName().equals( "graphLayout" ) )
 			throw new ConversionException( "First node has to be graphlayout" );
-		}
 
-		String scale = reader.getAttribute( "scale" );
 		double scaleVal = 1;
-		if( scale != null ) {
-			scaleVal = Double.parseDouble( scale );
+		boolean doubleEdges = false;
+		boolean containsSuperSink = false;
+		Iterator iter = reader.getAttributeNames();
+		while(iter.hasNext()) {
+			Object name = iter.next();
+			if( name.equals( "scale" ) )
+				scaleVal = Double.parseDouble( reader.getAttribute( "scale" ) );
+			else if( name.equals( "doubleEdges" ) ) {
+				final String res = reader.getAttribute( "doubleEdges" );
+				if( res.equals( "1" ) )
+					doubleEdges = true;
+				else if( res.equals( "0" ) )
+					doubleEdges = false;
+				else
+					throw new ConversionException( "doubleEdges has to be either 0 or 1" );
+			} else if( name.equals( "containsSuperSink" ) ) {
+				final String res = reader.getAttribute( "containsSuperSink" );
+				if( res.equals( "1" ) )
+					containsSuperSink = true;
+				else if( res.equals( "0" ) )
+					containsSuperSink = false;
+				else
+					throw new ConversionException( "containsSuperSink has to be either 0 or 1" );
+			}
 		}
-
+		
 		GraphViewConverter gvc = new GraphViewConverter();
 		GraphView graphView = (GraphView) gvc.unmarshal( reader, context );
 		reader.moveUp();	// close graphLayout reading
@@ -111,7 +125,9 @@ public class FlowVisualisationConverter implements Converter {
 		System.out.println( "converted network: " );
 		System.out.println( graphView.getNetwork().toString() );
 
-		IdentifiableObjectMapping<Edge,IntegerIntegerMapping> map = null;
+
+		PathBasedFlowOverTime dynamicFlow = new PathBasedFlowOverTime();
+		int maxFlowRate = 0;
 
 		// read the flow if exists
 		if( reader.hasMoreChildren() ) {
@@ -120,58 +136,57 @@ public class FlowVisualisationConverter implements Converter {
 			if( !reader.getNodeName().equals( "flows" ) )
 				throw new ConversionException( "Second part has to be the flow." );
 
-			map = new IdentifiableObjectMapping<Edge, IntegerIntegerMapping>( gvc.edges.size(), IntegerIntegerMapping.class );
-			for( Edge edge : graphView.getNetwork().edges() )
-				map.set( edge, new IntegerIntegerMapping() );
-
-			while( reader.hasMoreChildren() ) {
+			while(reader.hasMoreChildren()) {
 				reader.moveDown();
 				if( reader.getNodeName().equals( "flow" ) ) {
-					String path = reader.getAttribute( "path" );
-					String sp[] = path.split( "," );
 
-					int current = 0; // the current time
-					// parsing the path
+					String path = "";
+					String sp[] = null;
+					int amount = 1;
+					int rate = 1;
 
-					for( int i = 0; i < sp.length; ++i ) {
-						int amount = 1;
-						int rate = 1;
-
-						final Iterator iter = reader.getAttributeNames();
-						while(iter.hasNext()) {
-							Object name = iter.next();
-							if( name.equals( "rate" ) )
-								rate = (int)Double.parseDouble( reader.getAttribute( "rate" ) );
-							else if( name.equals( "amount" ) )
-								amount = (int)Double.parseDouble( reader.getAttribute( "amount" ) );
-						}
-
-
-						if( sp[i].contains( "." ) ) {
-							current += (int)Double.parseDouble( sp[i] );
-						} else {
-							Edge edge = gvc.edges.get( sp[i] );
-							// Zeitpunkt ist current:
-							IntegerIntegerMapping iim = map.get( edge );
-							iim.set( current, rate );
-							current += gvc.transitTimes.get( edge );
+					iter = reader.getAttributeNames();
+					while(iter.hasNext()) {
+						Object name = iter.next();
+						if( name.equals( "rate" ) )
+							rate = (int) Double.parseDouble( reader.getAttribute( "rate" ) );
+						else if( name.equals( "amount" ) )
+							amount = (int) Double.parseDouble( reader.getAttribute( "amount" ) );
+						else if( name.equals( "path" ) ) {
+							path = reader.getAttribute( "path" );
+							sp = path.split( "," );
 						}
 					}
 
+					maxFlowRate = Math.max( maxFlowRate, rate );
+
+					if( sp == null )
+						throw new ConversionException( "No path defined." );
+
+					// parsing the path
+					FlowOverTimeEdgeSequence es = new FlowOverTimeEdgeSequence();
+					for( int i = 0; i < sp.length; ++i ) {
+						// Baue den Pfad zusammen
+						final int delay = sp[i].contains( "." ) ? (int) Double.parseDouble( sp[i++] ) : 0;
+						es.addLast( new FlowOverTimeEdge( gvc.edges.get( sp[i] ), delay ) );
+					}
+					// füge den Pfad hinzu
+					final FlowOverTimePath p = new FlowOverTimePath( es );
+					p.setRate( rate );
+					p.setAmount( amount );
+					dynamicFlow.addPathFlow( p );
 				}
+
 				reader.moveUp();
 			}
 			reader.moveUp();
 		}
 
 
-//		if( reader.hasMoreChildren() ) {
-//			reader.moveDown();
-		// ignore children
-			while(reader.hasMoreChildren()) {
-				reader.moveDown();
-				reader.moveUp();
-			}
+		while(reader.hasMoreChildren()) {
+			reader.moveDown();
+			reader.moveUp();
+		}
 //                PathFlow flow = new PathFlow();
 //                flow.setUnitSize(1.0);
 //                //flow.setRate(1.0);
@@ -243,17 +258,22 @@ public class FlowVisualisationConverter implements Converter {
 //        for (String key : this.flows.keySet()) {
 //            flowViews.add(new FlowView(graphView,this.flows.get(key),flowAttributes.get(key)));
 //        }
-		FlowVisualization fv = new FlowVisualization( graphView );//),flowViews);
-		EdgeBasedFlowOverTime flow = new EdgeBasedFlowOverTime( map );
-		fv.setFlow( flow );
+		FlowVisualization fv = new FlowVisualization( graphView );
+
+		fv.setEdgesDoubled( doubleEdges );
+		fv.getGv().setContainsSuperSink( containsSuperSink );
+
+		PathComposition pathComposition = new PathComposition( fv.getGv().network, fv.getGv().transitTimes, dynamicFlow );
+		pathComposition.run();
+
+		fv.setFlow( pathComposition.getEdgeFlows() );
+
+		int maxTimeHorizon = 0;
+		for( Edge edge : gvc.edges.values() )
+			maxTimeHorizon = Math.max( maxTimeHorizon, pathComposition.getEdgeFlows().get( edge ).getLastTimeWithNonZeroValue() + gvc.transitTimes.get( edge ) );
+
+		fv.setTimeHorizon( maxTimeHorizon );
+		fv.setMaxFlowRate( maxFlowRate );
 		return fv;
 	}
 }
-//    static HashMap<String,Class> requiredTypes = new HashMap<String,Class>();
-//    static {
-//        requiredTypes.put("color",Color.class);
-//        requiredTypes.put("sizePerUnit",Double.class);
-//        requiredTypes.put("visibleAfter",Boolean.class);
-//        requiredTypes.put("visibleBefore",Boolean.class);
-//    }
-

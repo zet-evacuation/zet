@@ -24,7 +24,7 @@ import java.util.LinkedHashMap;
 
 /**
  *
- * @author Martin Groß
+ * @author Martin Groß, Jan-Philipp Kappmeier
  */
 public class GraphViewConverter implements Converter {
 
@@ -42,6 +42,13 @@ public class GraphViewConverter implements Converter {
 	IdentifiableIntegerMapping<Node> supplies;
 	ArrayList<Node> sources;
 	ArrayList<Node> sinks;
+	double minx = Double.MAX_VALUE;
+	double maxx = Double.MIN_VALUE;
+	double miny = Double.MAX_VALUE;
+	double maxy = Double.MIN_VALUE;
+	double minz = Double.MAX_VALUE;
+	double maxz = Double.MIN_VALUE;
+
 
 	public GraphViewConverter() {
 	}
@@ -258,6 +265,8 @@ public class GraphViewConverter implements Converter {
 //		System.out.println( "Sources: " + sources.toString() );
 //		System.out.println( "Sinks: " + sinks.toString() );
 
+
+
 		return graphView;
 	}
 
@@ -448,6 +457,15 @@ public class GraphViewConverter implements Converter {
 		}
 		if( node == null )
 			throw new ConversionException( "Node id needed for node layout." );
+
+		minx = Math.min( minx, x );
+		maxx = Math.max( maxx, x );
+
+		miny = Math.min( miny, y );
+		maxy = Math.max( maxy, y );
+
+		minz = Math.min( minz, z );
+		maxz = Math.max( maxz, z );
 
 		nodePositionMapping.get( node ).set( x, y, z );
 //		a.setType( basedOn );

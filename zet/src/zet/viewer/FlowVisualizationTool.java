@@ -235,8 +235,13 @@ public class FlowVisualizationTool extends JFrame implements PropertyChangeListe
 				}
 
 				GLGraphControl control2 = new GLGraphControl( fv );
+				slider.setMaximum( fv.getTimeHorizon() * sliderAccuracy );
 				vis.setControl( control2 );
+				vis.update();
 				vis.repaint();
+				if( !vis.isAnimating() )
+					vis.startAnimation();
+
 				
 				if( true )
 					return;
