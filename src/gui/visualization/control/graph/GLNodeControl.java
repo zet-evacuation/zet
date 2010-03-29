@@ -101,14 +101,16 @@ public class GLNodeControl extends AbstractZETVisualizationControl<GLEdgeControl
 		xPosition = (nwX + 0.5 * (seX - nwX));
 		yPosition = (nwY + 0.5 * (seY - nwY));
 
-		xPosition = fv.getGv().getNodePositionMapping().get( node ).x * fv.getGv().getScale();
-		yPosition = fv.getGv().getNodePositionMapping().get( node ).y * fv.getGv().getScale();
+		xPosition = (fv.getGv().getNodePositionMapping().get( node ).x + fv.getGv().getEffectiveOffset().x) * fv.getGv().getScale();
+		yPosition = (fv.getGv().getNodePositionMapping().get( node ).y + fv.getGv().getEffectiveOffset().y) * fv.getGv().getScale();
 		capacity = fv.getGv().getNodeCapacities().get( node );
 
 		//final boolean showEdgesBetweenFloors = true;
 
 		for( Edge edge : fv.getGv().getNetwork().outgoingEdges( node ) )
-	//		if( edge.start().id() != mainControl.superSinkID() && edge.end().id() != mainControl.superSinkID() ) {
+			if( !fv.getGv().isContainsSuperSink() )
+				add( new GLEdgeControl( fv, edge, mainControl ) );
+			else if( edge.start().id() != mainControl.superSinkID() && edge.end().id() != mainControl.superSinkID() ) {
 				// edit ignore floors
 //				int nodeFloor1 = graphVisResult.getNodeToFloorMapping().get( edge.start() );
 //				int nodeFloor2 = graphVisResult.getNodeToFloorMapping().get( edge.end() );
@@ -116,7 +118,7 @@ public class GLNodeControl extends AbstractZETVisualizationControl<GLEdgeControl
 //					System.out.println( "Knoten auf verschiedenen Etagen." );
 //				else
 					add( new GLEdgeControl( fv, edge, mainControl ) );
-		//	}
+			}
 		isEvacuationNode = fv.getGv().isEvacuationNode( node );
 		isSourceNode = fv.getGv().isSourceNode( node );
 		//isDeletedSourceNode = graphVisResult.isDeletedSourceNode( node );

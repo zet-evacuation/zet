@@ -4,11 +4,7 @@
  */
 package zet.xml;
 
-import ds.graph.Edge;
-import ds.graph.IdentifiableObjectMapping;
-import ds.graph.IntegerIntegerMapping;
 import ds.graph.flow.EdgeBasedFlowOverTime;
-
 
 /**
  *
@@ -17,6 +13,9 @@ import ds.graph.flow.EdgeBasedFlowOverTime;
 public class FlowVisualization {
 	GraphView gv;
 	private EdgeBasedFlowOverTime flow;
+	int timeHorizon;
+	int maxFlowRate;
+	boolean edgesDoubled = false;
 
 	public FlowVisualization( GraphView gv ) {
 		this.gv = gv;
@@ -38,4 +37,27 @@ public class FlowVisualization {
 		this.flow = flow;
 	}
 
+	public int getTimeHorizon() {
+		return timeHorizon;
+	}
+
+	public void setTimeHorizon( int timeHorizon ) {
+		this.timeHorizon = timeHorizon;
+	}
+
+	public int getMaxFlowRate() {
+		return maxFlowRate;
+	}
+
+	public void setMaxFlowRate( int maxFlowRate ) {
+		this.maxFlowRate = maxFlowRate;
+	}
+
+	public boolean isEdgesDoubled() {
+		return edgesDoubled;
+	}
+
+	public void setEdgesDoubled( boolean edgesDoubled ) {
+		this.edgesDoubled = edgesDoubled;
+	}
 }
