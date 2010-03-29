@@ -5,7 +5,6 @@
 package zet.xml;
 
 import algo.graph.util.PathComposition;
-import com.thoughtworks.xstream.converters.ConversionException;
 import com.thoughtworks.xstream.converters.Converter;
 import com.thoughtworks.xstream.converters.MarshallingContext;
 import com.thoughtworks.xstream.converters.UnmarshallingContext;
@@ -83,12 +82,12 @@ public class FlowVisualisationConverter implements Converter {
 
 	public Object unmarshal( HierarchicalStreamReader reader, UnmarshallingContext context ) {
 		if( !reader.hasMoreChildren() )
-			throw new ConversionException( "Flow visualization root has no children." );
+			throw new InvalidFileFormatException( "Flow visualization root has no children." );
 
 		// move to the first child, must be 'graphLayout'. then convert the layout.
 		reader.moveDown();
 		if( !reader.getNodeName().equals( "graphLayout" ) )
-			throw new ConversionException( "First node has to be graphlayout" );
+			throw new InvalidFileFormatException( "First node has to be graphlayout" );
 
 		double scaleVal = 1;
 		boolean doubleEdges = false;
@@ -105,7 +104,7 @@ public class FlowVisualisationConverter implements Converter {
 				else if( res.equals( "0" ) )
 					doubleEdges = false;
 				else
-					throw new ConversionException( "doubleEdges has to be either 0 or 1" );
+					throw new InvalidFileFormatException( "doubleEdges has to be either 0 or 1" );
 			} else if( name.equals( "containsSuperSink" ) ) {
 				final String res = reader.getAttribute( "containsSuperSink" );
 				if( res.equals( "1" ) )
@@ -113,7 +112,7 @@ public class FlowVisualisationConverter implements Converter {
 				else if( res.equals( "0" ) )
 					containsSuperSink = false;
 				else
-					throw new ConversionException( "containsSuperSink has to be either 0 or 1" );
+					throw new InvalidFileFormatException( "containsSuperSink has to be either 0 or 1" );
 			}
 		}
 		
@@ -134,7 +133,7 @@ public class FlowVisualisationConverter implements Converter {
 			// must be flow
 			reader.moveDown();
 			if( !reader.getNodeName().equals( "flows" ) )
-				throw new ConversionException( "Second part has to be the flow." );
+				throw new InvalidFileFormatException( "Second part has to be the flow." );
 
 			while(reader.hasMoreChildren()) {
 				reader.moveDown();
@@ -161,7 +160,7 @@ public class FlowVisualisationConverter implements Converter {
 					maxFlowRate = Math.max( maxFlowRate, rate );
 
 					if( sp == null )
-						throw new ConversionException( "No path defined." );
+						throw new InvalidFileFormatException( "No path defined." );
 
 					// parsing the path
 					FlowOverTimeEdgeSequence es = new FlowOverTimeEdgeSequence();

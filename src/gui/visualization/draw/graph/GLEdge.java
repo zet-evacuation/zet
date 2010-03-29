@@ -116,33 +116,75 @@ public class GLEdge extends AbstractDrawable<GLEdge, GLEdgeControl> {
 
 		double flowUnitLength = edgeLength / transitTime;
 		double delta = control.getDeltaStep() * flowUnitLength;
+		factor = 0.75;
 		if( pointer < flowOnEdge.size() ) {
+			double visibleLen = (flowUnitLength * factor);
+			double invisible = flowUnitLength - visibleLen;
+			double invisiblePart = invisible * 0.5;
+
+			double start = delta - invisiblePart;
 			if( flowOnEdge.get( pointer ) != 0 ) {
-				//if( DebugFlags.FLOWWRONG_LONG ) {
-					//System.out.println( "(" + control.getEdge().start() + " " + control.getEdge().end() + ") " );
-				//}
-				drawPieceOfFlow( gl, delta * factor, flowThickness + flowOnEdge.get( pointer ) * flowThicknessOfOneCapacityStep, true, false );
+				draw( gl, delta, flowUnitLength, factor,flowOnEdge.get( pointer ) );
+//				if( start >= 0 && start < visibleLen) {
+//					drawPieceOfFlow( gl, delta - invisiblePart, flowThickness + flowOnEdge.get( pointer ) * flowThicknessOfOneCapacityStep, true, false );
+//				}
+//				else if ( start >= 0 && start >= visibleLen ) {
+//					gl.glTranslated( 0, 0, start - visibleLen );
+//					drawPieceOfFlow( gl, visibleLen, flowThickness + flowOnEdge.get( pointer ) * flowThicknessOfOneCapacityStep, true, false );
+//				} else {
+//					gl.glTranslated( 0, 0, delta );
+//				}
 			}
+
 			if (pointer > 0) pointer--;
-			gl.glTranslated( 0.0, 0.0, delta );
+//				draw( gl, delta, flowUnitLength, factor );
+//			if( start >= 0 && start < visibleLen ) {
+//				gl.glTranslated( 0, 0, delta + invisiblePart );
+//			} else if( start >= 0 && start >= visibleLen ) {
+//				gl.glTranslated( 0, 0, flowUnitLength );
+//			} else {
+////				System.out.println( "noch ein fall" );
+////				System.out.println( "Start: " + start );
+//				gl.glTranslated( 0, 0, invisiblePart );
+//			}
+
+			gl.glTranslated( 0, 0, flowUnitLength );
 			for( int i = 1; i < transitTime; i++ ) {
-				if( flowOnEdge.get( pointer ) != 0 ) {
-					//if( DebugFlags.FLOWWRONG_LONG ) {
-						//System.out.println( "(" + control.getEdge().start() + " " + control.getEdge().end() + ") " );
-					//}
-					drawPieceOfFlow( gl, flowUnitLength * factor, flowThickness + flowOnEdge.get( pointer ) * flowThicknessOfOneCapacityStep, true, true );
-				}
+				if( flowOnEdge.get( pointer ) != 0 )
+					draw( gl, delta, flowUnitLength, factor, flowOnEdge.get( pointer ) );
+//				if( flowOnEdge.get( pointer ) != 0 ) {
+//					drawPieceOfFlow( gl, visibleLen, flowThickness + flowOnEdge.get( pointer ) * flowThicknessOfOneCapacityStep, true, true );
+//				}
 				gl.glTranslated( 0.0, 0.0, flowUnitLength );
 				pointer--;
 			}
+
 			if( flowOnEdge.get( pointer ) != 0 ) {
-				//if( DebugFlags.FLOWWRONG_LONG ) {
-					//System.out.println( "(" + control.getEdge().start() + " " + control.getEdge().end() + ") " );
-				//}
-				drawPieceOfFlow( gl, (flowUnitLength - delta) * factor, flowThickness + flowOnEdge.get( pointer ) * flowThicknessOfOneCapacityStep, false, true );
+				draw( gl, delta, flowUnitLength, factor, flowOnEdge.get( pointer ) );
+//				//if( DebugFlags.FLOWWRONG_LONG ) {
+//					//System.out.println( "(" + control.getEdge().start() + " " + control.getEdge().end() + ") " );
+//				//}
+//				if( delta < invisiblePart )
+//					drawPieceOfFlow( gl, visibleLen, flowThickness + flowOnEdge.get( pointer ) * flowThicknessOfOneCapacityStep, false, true );
+//				else
+//					drawPieceOfFlow( gl, visibleLen+invisiblePart-delta, flowThickness + flowOnEdge.get( pointer ) * flowThicknessOfOneCapacityStep, false, true );
 			}
 		}
 		gl.glPopMatrix();
+	}
+
+	public void draw( GL gl, double delta, double flowUnitLength, double factor, double val ) {
+			double visibleLen = (flowUnitLength * factor);
+			double invisible = flowUnitLength - visibleLen;
+			double invisiblePart = invisible * 0.5;
+
+			double start = delta - invisiblePart;
+			gl.glPushMatrix();
+			gl.glTranslated( 0, 0, start );
+			gl.glTranslated( 0, 0, -visibleLen );
+			//drawPieceOfFlow( gl, visibleLen, flowThickness + flowOnEdge.get( pointer ) * flowThicknessOfOneCapacityStep, true, false )
+			drawPieceOfFlow( gl, visibleLen, flowThickness + val * flowThicknessOfOneCapacityStep, true, false );
+			gl.glPopMatrix();
 	}
 
 	/**
