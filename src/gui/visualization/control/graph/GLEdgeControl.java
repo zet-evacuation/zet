@@ -117,14 +117,13 @@ public class GLEdgeControl extends AbstractZETVisualizationControl<GLEdgeControl
 		setView( new GLEdge( this ) );
 
 		isFirst = !fv.isEdgesDoubled() || edge.start().id() < edge.end().id() ? true : false;
-		//if(  )	// checks weather this edge is the first one of the two representing one undirected edge
-		//	isFirst = true;
 
 		// store general edge attributes
 		maxFlowRate = fv.getMaxFlowRate();
-		mainControl.setMaxTime( fv.getTimeHorizon() );
+		mainControl.setMaxTime( fv.getTimeHorizon() + 1 );
 		transitTime = fv.getGv().getTransitTimes().get( edge );
 		capacity = fv.getGv().getEdgeCapacities().get( edge );
+
 
 		// compute the positions for the start ...
 		final double xs = fv.getGv().getNodePositionMapping().get( edge.start() ).x * fv.getGv().getScale();
@@ -135,7 +134,7 @@ public class GLEdgeControl extends AbstractZETVisualizationControl<GLEdgeControl
 		final double ye = fv.getGv().getNodePositionMapping().get( edge.end() ).y * fv.getGv().getScale();
 		final double ze = fv.getGv().getNodePositionMapping().get( edge.end() ).z * fv.getGv().getScale();
 		// ... and call init method
-		init( new Vector3( xs, -ys, zs ), new Vector3( xe, -ye, ze) );
+		init( new Vector3( xs, -ys, zs ), new Vector3( xe, -ye, ze ) );
 
 		// compute flow visualization data structure
 		IdentifiableIntegerMapping<Edge> transitTimes = fv.getGv().getTransitTimes();
@@ -274,10 +273,6 @@ public class GLEdgeControl extends AbstractZETVisualizationControl<GLEdgeControl
 	 */
 	public int getMaxFlowRate() {
 		return maxFlowRate;
-	}
-
-	public int getMaxCapacity() {
-		return 0;
 	}
 
 	public Vector3 getStartPosition() {

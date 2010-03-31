@@ -33,7 +33,7 @@ import gui.visualization.control.graph.GLGraphControl;
 
 //public class GLEdge extends AbstractDrawable<CullingShapeCube, GLEdge, GLEdgeControl, GLEdgeControl> {
 public class GLEdge extends AbstractDrawable<GLEdge, GLEdgeControl> {
-	
+
 	/** The edgeLength of single flow units. If set to 1 no single units are displayed. */
 	static double factor = 0.7;
 	static int edgeDisplayMode = GLU.GLU_FILL;
@@ -42,8 +42,9 @@ public class GLEdge extends AbstractDrawable<GLEdge, GLEdgeControl> {
 	static GLColor flowUnitColor;
 	/* The thickness of the edges and pieces of flow according to their capacities. */
 	static double thickness = 5 /* *1.5*/ /* 5 */ * GLGraphControl.sizeMultiplicator; // factor of 1.5 used for test evacuation report
-	static double flowThickness = 7 /* * 1.5 */ /* 7 */* GLGraphControl.sizeMultiplicator; //// factor of 1.5 used for test evacuation report
+	static double flowThickness = 7 /* * 1.5 */ /* 7 */ * GLGraphControl.sizeMultiplicator; //// factor of 1.5 used for test evacuation report
 	static double minFlowThickness = 10; /* 10 */ // original 3
+
 	static double maxFlowThickness = 10;
 	static double flowThicknessOfOneCapacityStep;
 	int maxFlowRate = control.getMaxFlowRate();
@@ -54,7 +55,7 @@ public class GLEdge extends AbstractDrawable<GLEdge, GLEdgeControl> {
 	/** The transit time of the edge */
 	int transitTime;
 	/* not used */
-	double maxCapacity;
+	//double maxCapacity;
 	/* The edgeLength of the edge in {@code OpenGL} scaling. */
 	double edgeLength;
 	// TODO read quality from VisualOptionManager
@@ -94,7 +95,15 @@ public class GLEdge extends AbstractDrawable<GLEdge, GLEdgeControl> {
 	}
 
 	/**
-	 * Draws the flow on the edge.
+	 * <p>Draws the flow on the edge. An edge is divided into parts with equal length,
+	 * the number of parts equals the (integral) length of the edge. The flow
+	 * is diplayed in different widths, if the flow rate is larger. Flow parts
+	 * move along the edge with equal speed.</p>
+	 * <p>Note that flow particles only use the same speed, if the length of the
+	 * edges is correct also in the graphical representation. The speed of flow
+	 * is computed based on the network flow model length of the edge, so the
+	 * positions of the start- and end node for the edge should fit to the model
+	 * to get a smooth and homogeneous flow.</p>
 	 * @gl the {@code OpenGL} context
 	 */
 	private void drawFlow( GL gl ) {
@@ -103,88 +112,80 @@ public class GLEdge extends AbstractDrawable<GLEdge, GLEdgeControl> {
 		flowColor.draw( gl );
 		flowOnEdge = control.getFlowOnEdge();
 
-		int offset = transitTime;
-		int step = (int) Math.floor( control.getTime() );
-
-		int pointer = offset + step;
+		// compute the correct position in the flow-value-array for each time step.
+		// the position consists of an offset by transitTime and the current time
+		// of the flow
+		int pointer = transitTime + (int) Math.floor( control.getTime() );
 
 		gl.glPushMatrix();
-		Vector3 b = new Vector3( 0, 0, 1 );
-		Vector3 a = control.getDifferenceVectorInOpenGlScaling();
-		Vector3 axis = control.getRotationAxis( a, b );
+
+		// Rotate the coordinates in a way, that the edge lies on the z-axis with
+		// the start point in the origin. This is needed as flow particles are
+		// drawn as GLU cylinder and these are automatically drawn along the z-axis.
+		final Vector3 b = new Vector3( 0, 0, 1 );
+		final Vector3 a = control.getDifferenceVectorInOpenGlScaling();
+		final Vector3 axis = control.getRotationAxis( a, b );
 		gl.glRotated( control.getAngleBetween( a, b ), axis.x, axis.y, axis.z );
 
+		// the length of a flow unit (without spacing factor)
 		double flowUnitLength = edgeLength / transitTime;
+		// the start position of the first edge. delta is the fraction of the current step that is already over
 		double delta = control.getDeltaStep() * flowUnitLength;
-		factor = 0.75;
 		if( pointer < flowOnEdge.size() ) {
-			double visibleLen = (flowUnitLength * factor);
-			double invisible = flowUnitLength - visibleLen;
-			double invisiblePart = invisible * 0.5;
+			// the real visible length of an edge (spaces are taken into account)
+			final double visibleLen = (flowUnitLength * factor);
+			// the correct start position of the first part of flow (including spaces)
+			final double start = delta - (flowUnitLength - visibleLen) * 0.5;
 
-			double start = delta - invisiblePart;
+			// the position where the visible part of the flow unit begins...
+			// should not be drawn if it lies before the edge (< 0)
+			final double translateDiff = start - visibleLen;
+			// draw the first flow element, if flow is running into the edge at the moment
 			if( flowOnEdge.get( pointer ) != 0 ) {
-				draw( gl, delta, flowUnitLength, factor,flowOnEdge.get( pointer ) );
-//				if( start >= 0 && start < visibleLen) {
-//					drawPieceOfFlow( gl, delta - invisiblePart, flowThickness + flowOnEdge.get( pointer ) * flowThicknessOfOneCapacityStep, true, false );
-//				}
-//				else if ( start >= 0 && start >= visibleLen ) {
-//					gl.glTranslated( 0, 0, start - visibleLen );
-//					drawPieceOfFlow( gl, visibleLen, flowThickness + flowOnEdge.get( pointer ) * flowThicknessOfOneCapacityStep, true, false );
-//				} else {
-//					gl.glTranslated( 0, 0, delta );
-//				}
-			}
+				// if positive, translate to the appropriate position
+				if( translateDiff > 0 )
+					gl.glTranslated( 0, 0, translateDiff );
+				// draw only a delta-part if translate was negative (flow would start before the edge start),
+				// otherwise draw the complete length (visibleLen)
+				drawPieceOfFlow( gl, translateDiff < 0 ? visibleLen + translateDiff : visibleLen, flowThickness + flowOnEdge.get( pointer ) * flowThicknessOfOneCapacityStep, true, false );
+				// move further on the z-axis (depending if a translation already has been done)
+				gl.glTranslated( 0, 0, translateDiff > 0 ? flowUnitLength-translateDiff : flowUnitLength );
+			} else
+				// move further on the z-axis
+				gl.glTranslated( 0, 0, flowUnitLength );
 
-			if (pointer > 0) pointer--;
-//				draw( gl, delta, flowUnitLength, factor );
-//			if( start >= 0 && start < visibleLen ) {
-//				gl.glTranslated( 0, 0, delta + invisiblePart );
-//			} else if( start >= 0 && start >= visibleLen ) {
-//				gl.glTranslated( 0, 0, flowUnitLength );
-//			} else {
-////				System.out.println( "noch ein fall" );
-////				System.out.println( "Start: " + start );
-//				gl.glTranslated( 0, 0, invisiblePart );
-//			}
+			// if there is more flow on the edge go one step further
+			if( pointer > 0 )
+				pointer--;
 
-			gl.glTranslated( 0, 0, flowUnitLength );
+			// draw all other elements (except for the last one), if flow is on the edge in that moment
 			for( int i = 1; i < transitTime; i++ ) {
-				if( flowOnEdge.get( pointer ) != 0 )
-					draw( gl, delta, flowUnitLength, factor, flowOnEdge.get( pointer ) );
-//				if( flowOnEdge.get( pointer ) != 0 ) {
-//					drawPieceOfFlow( gl, visibleLen, flowThickness + flowOnEdge.get( pointer ) * flowThicknessOfOneCapacityStep, true, true );
-//				}
-				gl.glTranslated( 0.0, 0.0, flowUnitLength );
+				if( flowOnEdge.get( pointer ) != 0 ) {
+					// translate to the correct starting position. can be negative here,
+					// thats no problem as we are in the middle of the edge!
+					gl.glTranslated( 0, 0, translateDiff );
+					// draw a complete flow element with lengh visibleLen
+					drawPieceOfFlow( gl, visibleLen, flowThickness + flowOnEdge.get( pointer ) * flowThicknessOfOneCapacityStep, true, true );
+					gl.glTranslated( 0.0, 0.0, flowUnitLength-translateDiff );
+				} else
+					gl.glTranslated( 0, 0, flowUnitLength );
+				// move on the pointer
 				pointer--;
 			}
 
-			if( flowOnEdge.get( pointer ) != 0 ) {
-				draw( gl, delta, flowUnitLength, factor, flowOnEdge.get( pointer ) );
-//				//if( DebugFlags.FLOWWRONG_LONG ) {
-//					//System.out.println( "(" + control.getEdge().start() + " " + control.getEdge().end() + ") " );
-//				//}
-//				if( delta < invisiblePart )
-//					drawPieceOfFlow( gl, visibleLen, flowThickness + flowOnEdge.get( pointer ) * flowThicknessOfOneCapacityStep, false, true );
-//				else
-//					drawPieceOfFlow( gl, visibleLen+invisiblePart-delta, flowThickness + flowOnEdge.get( pointer ) * flowThicknessOfOneCapacityStep, false, true );
-			}
+			// draw the last part of flow, if it exists
+			if( flowOnEdge.get( pointer ) != 0 )
+				// do not draw anything if translation is positive (would lie behind the edge)
+				if( translateDiff < 0 ) {
+					// translate to the correct starting position. can be negative here,
+					// thats no problem as we are at the end of the edge!
+					gl.glTranslated( 0, 0, translateDiff );
+					// if start is negative, enough space for the complete visibleLen is left
+					// on the edge, if it is positive, it should be reduced
+					drawPieceOfFlow( gl, start < 0 ? visibleLen : visibleLen - start, flowThickness + flowOnEdge.get( pointer ) * flowThicknessOfOneCapacityStep, false, true );
+				}
 		}
 		gl.glPopMatrix();
-	}
-
-	public void draw( GL gl, double delta, double flowUnitLength, double factor, double val ) {
-			double visibleLen = (flowUnitLength * factor);
-			double invisible = flowUnitLength - visibleLen;
-			double invisiblePart = invisible * 0.5;
-
-			double start = delta - invisiblePart;
-			gl.glPushMatrix();
-			gl.glTranslated( 0, 0, start );
-			gl.glTranslated( 0, 0, -visibleLen );
-			//drawPieceOfFlow( gl, visibleLen, flowThickness + flowOnEdge.get( pointer ) * flowThicknessOfOneCapacityStep, true, false )
-			drawPieceOfFlow( gl, visibleLen, flowThickness + val * flowThicknessOfOneCapacityStep, true, false );
-			gl.glPopMatrix();
 	}
 
 	/**
@@ -232,13 +233,13 @@ public class GLEdge extends AbstractDrawable<GLEdge, GLEdgeControl> {
 			drawStaticStructure( gl );
 		endDraw( gl );
 	}
-	
+
 	@Override
 	public void update() {
 		transitTime = control.getTransitTime();
 		edgeLength = control.get3DLength() * GLGraphControl.sizeMultiplicator;
 		capacity = control.getCapacity();
-		maxCapacity = control.getMaxCapacity();
+		//maxCapacity = control.getMaxCapacity();
 		edgeColor = VisualizationOptionManager.getEdgeColor();
 		flowColor = VisualizationOptionManager.getFlowUnitColor();
 		flowUnitColor = VisualizationOptionManager.getFlowUnitEndColor();
