@@ -224,32 +224,11 @@ public class FlowVisualizationTool extends JFrame implements PropertyChangeListe
 			JFileChooser jfc = new JFileChooser();
 			jfc.setCurrentDirectory( new File( "./" ) );
 			if( event.getActionCommand().equals( "open" ) ) {
-				XMLReader reader;
-				FlowVisualization fv = null;
-				try {
-					reader = new XMLReader( "./testinstanz/test.xml" );
-					fv = (FlowVisualization)reader.read();
-				} catch( IOException ex ) {
-					System.err.println( "Fehler beim laden!" );
-					ex.printStackTrace();
-				}
-
-				GLGraphControl control2 = new GLGraphControl( fv );
-				slider.setMaximum( (fv.getTimeHorizon()+1) * sliderAccuracy );
-				vis.setControl( control2 );
-				vis.update();
-				vis.repaint();
-				if( !vis.isAnimating() )
-					vis.startAnimation();
-
-				
-				if( true )
-					return;
 				jfc.setFileFilter( new FileFilter() {
 
 					@Override
 					public boolean accept( File f ) {
-						return f.isDirectory() || f.getName().toLowerCase().endsWith( ".dat" );
+						return f.isDirectory() || f.getName().toLowerCase().endsWith( ".dat" ) || f.getName().toLowerCase().endsWith( ".xml" );
 					}
 
 					@Override
@@ -258,29 +237,44 @@ public class FlowVisualizationTool extends JFrame implements PropertyChangeListe
 					}
 				} );
 				if( jfc.showOpenDialog( theInstance ) == JFileChooser.APPROVE_OPTION ) {
-					try {
-						String path = jfc.getSelectedFile().getPath();
-						sb.setStatusText( 0, "Lade Datei '" + path + "' " );
+					String path = jfc.getSelectedFile().getPath();
+					sb.setStatusText( 0, "Lade Datei '" + path + "' " );
+					GLGraphControl control = null;
+					if( path.endsWith( ".xml" ) ) {
+						XMLReader reader;
+						FlowVisualization fv = null;
+						try {
+							reader = new XMLReader( "./testinstanz/test.xml" );
+							fv = (FlowVisualization)reader.read();
+						} catch( IOException ex ) {
+							System.err.println( "Fehler beim laden!" );
+							ex.printStackTrace();
+						}
+						sb.setStatusText( 0, "Baue Visualisierung" );
+						control = new GLGraphControl( fv );
+						slider.setMaximum( (fv.getTimeHorizon()+1) * sliderAccuracy );
+					} else {
+						try {
+							xPos = new IdentifiableIntegerMapping<Node>( 0 );
+							yPos = new IdentifiableIntegerMapping<Node>( 0 );
+							eafp = DatFileReaderWriter.read( path, xPos, yPos );
 
-						xPos = new IdentifiableIntegerMapping<Node>( 0 );
-						yPos = new IdentifiableIntegerMapping<Node>( 0 );
-						eafp = DatFileReaderWriter.read( path, xPos, yPos );
-
-					} catch( FileNotFoundException ex ) {
-						Logger.getLogger( FlowVisualizationTool.class.getName() ).log( Level.SEVERE, null, ex );
-						eafp = null;
-						return;
-					} catch( IOException ex ) {
-						Logger.getLogger( FlowVisualizationTool.class.getName() ).log( Level.SEVERE, null, ex );
-						eafp = null;
-						return;
-					} catch( Exception e ) {
-						eafp = null;
-						return;
+						} catch( FileNotFoundException ex ) {
+							Logger.getLogger( FlowVisualizationTool.class.getName() ).log( Level.SEVERE, null, ex );
+							eafp = null;
+							return;
+						} catch( IOException ex ) {
+							Logger.getLogger( FlowVisualizationTool.class.getName() ).log( Level.SEVERE, null, ex );
+							eafp = null;
+							return;
+						} catch( Exception e ) {
+							eafp = null;
+							return;
+						}
+						GraphVisualizationResult graphVisResult = new GraphVisualizationResult( eafp, xPos, yPos );
+						sb.setStatusText( 0, "Baue Visualisierung" );
+						control = new GLGraphControl( graphVisResult );
 					}
-					GraphVisualizationResult graphVisResult = new GraphVisualizationResult( eafp, xPos, yPos );
-					sb.setStatusText( 0, "Baue Visualisierung" );
-					GLGraphControl control = new GLGraphControl( graphVisResult );
 					if( vis.isAnimating() )
 						vis.stopAnimation();
 					vis.setControl( control );
