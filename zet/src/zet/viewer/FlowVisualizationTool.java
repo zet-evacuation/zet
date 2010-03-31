@@ -235,7 +235,7 @@ public class FlowVisualizationTool extends JFrame implements PropertyChangeListe
 				}
 
 				GLGraphControl control2 = new GLGraphControl( fv );
-				slider.setMaximum( fv.getTimeHorizon() * sliderAccuracy );
+				slider.setMaximum( (fv.getTimeHorizon()+1) * sliderAccuracy );
 				vis.setControl( control2 );
 				vis.update();
 				vis.repaint();
@@ -382,7 +382,7 @@ public class FlowVisualizationTool extends JFrame implements PropertyChangeListe
 	 */
 	private void loadGraphVisResults() {
 		sb.setStatusText( 0, "Baue Visualisierung" );
-		slider.setMaximum( graphVisResult.getNeededTimeHorizon() * sliderAccuracy );
+		slider.setMaximum( (graphVisResult.getNeededTimeHorizon()+1) * sliderAccuracy );
 		GLGraphControl control = new GLGraphControl( graphVisResult );
 		vis.setControl( control );
 		vis.update();
