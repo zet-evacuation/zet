@@ -350,6 +350,9 @@ public class FlowVisualizationTool extends JFrame implements PropertyChangeListe
 				sb.setStatusText( 0, "Berechne earliest arrival flow..." );
 				sw.execute();
 			} else if( event.getActionCommand().equals( "pause" ) ) {
+				vis.startAnimation();
+				if( true )
+					return;
 				if( pause )
 					vis.startAnimation();
 				else

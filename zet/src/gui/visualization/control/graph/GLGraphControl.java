@@ -40,7 +40,7 @@ import zet.xml.FlowVisualization;
  */
 public class GLGraphControl extends AbstractZETVisualizationControl<GLGraphFloorControl, GLGraph, GLGraphControl> implements DrawableControlable {
 	//public static double sizeMultiplicator = 0.1; // for ZET
-	public static double sizeMultiplicator = 1;
+	public static double sizeMultiplicator = 0.1;
 
 	private int nodeCount;
 	private int nodesDone;
