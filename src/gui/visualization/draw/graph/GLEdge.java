@@ -147,7 +147,8 @@ public class GLEdge extends AbstractDrawable<GLEdge, GLEdgeControl> {
 					gl.glTranslated( 0, 0, translateDiff );
 				// draw only a delta-part if translate was negative (flow would start before the edge start),
 				// otherwise draw the complete length (visibleLen)
-				drawPieceOfFlow( gl, translateDiff < 0 ? visibleLen + translateDiff : visibleLen, flowThickness + flowOnEdge.get( pointer ) * flowThicknessOfOneCapacityStep, true, false );
+				if( start > 0 )
+					drawPieceOfFlow( gl, translateDiff < 0 ? visibleLen + translateDiff : visibleLen, flowThickness + flowOnEdge.get( pointer ) * flowThicknessOfOneCapacityStep, true, false );
 				// move further on the z-axis (depending if a translation already has been done)
 				gl.glTranslated( 0, 0, translateDiff > 0 ? flowUnitLength-translateDiff : flowUnitLength );
 			} else
