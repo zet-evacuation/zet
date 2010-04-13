@@ -53,7 +53,6 @@ public class JLogField extends JPanel implements EventListener<MessageEvent> {
 		setLayout( new TableLayout( size ) );
 
 		logPane = new JEditorPane( "text/html", "" );
-		//logPane = new JEditorPane();
 
     JScrollPane scrollPane = new JScrollPane( logPane );
 

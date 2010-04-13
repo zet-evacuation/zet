@@ -76,7 +76,7 @@ public class GLEdge extends AbstractDrawable<GLEdge, GLEdgeControl> {
 	 * @param diskAtStart tells whether there shall be a disk at the start of the piece.
 	 * @param diskAtEnd tells whether there shall be a disk at the end of the piece.
 	 */
-	private void drawPieceOfFlow( GL gl, double length, double calculatedFlowThickness, boolean diskAtStart, boolean diskAtEnd ) {
+	private void drawPieceOfFlowComplete( GL gl, double length, double calculatedFlowThickness, boolean diskAtStart, boolean diskAtEnd ) {
 		diskAtStart = diskAtStart && (factor < 1);
 		diskAtEnd = diskAtEnd && (factor < 1);
 		if( diskAtEnd ) {
@@ -92,6 +92,11 @@ public class GLEdge extends AbstractDrawable<GLEdge, GLEdgeControl> {
 			glu.gluDisk( quadObj, thickness, calculatedFlowThickness, qualityPreset.edgeSlices, 1 );
 			gl.glPopMatrix();
 		}
+	}
+
+	private void drawPieceOfFlowIndividual( GL gl, double radius ) {
+		flowColor.draw( gl );
+		glu.gluSphere( quadObj, radius, qualityPreset.nodeSlices, qualityPreset.nodeStacks );
 	}
 
 	/**
@@ -148,7 +153,7 @@ public class GLEdge extends AbstractDrawable<GLEdge, GLEdgeControl> {
 				// draw only a delta-part if translate was negative (flow would start before the edge start),
 				// otherwise draw the complete length (visibleLen)
 				if( start > 0 )
-					drawPieceOfFlow( gl, translateDiff < 0 ? visibleLen + translateDiff : visibleLen, flowThickness + flowOnEdge.get( pointer ) * flowThicknessOfOneCapacityStep, true, false );
+					drawPieceOfFlowComplete( gl, translateDiff < 0 ? visibleLen + translateDiff : visibleLen, flowThickness + flowOnEdge.get( pointer ) * flowThicknessOfOneCapacityStep, true, false );
 				// move further on the z-axis (depending if a translation already has been done)
 				gl.glTranslated( 0, 0, translateDiff > 0 ? flowUnitLength-translateDiff : flowUnitLength );
 			} else
@@ -166,7 +171,7 @@ public class GLEdge extends AbstractDrawable<GLEdge, GLEdgeControl> {
 					// thats no problem as we are in the middle of the edge!
 					gl.glTranslated( 0, 0, translateDiff );
 					// draw a complete flow element with lengh visibleLen
-					drawPieceOfFlow( gl, visibleLen, flowThickness + flowOnEdge.get( pointer ) * flowThicknessOfOneCapacityStep, true, true );
+					drawPieceOfFlowComplete( gl, visibleLen, flowThickness + flowOnEdge.get( pointer ) * flowThicknessOfOneCapacityStep, true, true );
 					gl.glTranslated( 0.0, 0.0, flowUnitLength-translateDiff );
 				} else
 					gl.glTranslated( 0, 0, flowUnitLength );
@@ -183,11 +188,79 @@ public class GLEdge extends AbstractDrawable<GLEdge, GLEdgeControl> {
 					gl.glTranslated( 0, 0, translateDiff );
 					// if start is negative, enough space for the complete visibleLen is left
 					// on the edge, if it is positive, it should be reduced
-					drawPieceOfFlow( gl, start < 0 ? visibleLen : visibleLen - start, flowThickness + flowOnEdge.get( pointer ) * flowThicknessOfOneCapacityStep, false, true );
+					drawPieceOfFlowComplete( gl, start < 0 ? visibleLen : visibleLen - start, flowThickness + flowOnEdge.get( pointer ) * flowThicknessOfOneCapacityStep, false, true );
 				}
 		}
 		gl.glPopMatrix();
 	}
+
+	private void drawFlow2( GL gl ) {
+		control.stepUpdate();
+
+		flowColor.draw( gl );
+		flowOnEdge = control.getFlowOnEdge();
+
+		// compute the correct position in the flow-value-array for each time step.
+		// the position consists of an offset by transitTime and the current time
+		// of the flow
+		int pointer = transitTime + (int) Math.floor( control.getTime() );
+
+		gl.glPushMatrix();
+
+		// Rotate the coordinates in a way, that the edge lies on the z-axis with
+		// the start point in the origin. This is needed as flow particles are
+		// drawn as GLU cylinder and these are automatically drawn along the z-axis.
+		final Vector3 b = new Vector3( 0, 0, 1 );
+		final Vector3 a = control.getDifferenceVectorInOpenGlScaling();
+		final Vector3 axis = control.getRotationAxis( a, b );
+		gl.glRotated( control.getAngleBetween( a, b ), axis.x, axis.y, axis.z );
+
+		// the length of a flow unit (without spacing factor)
+		double flowUnitLength = edgeLength / transitTime;
+		// the start position of the first edge. delta is the fraction of the current step that is already over
+		double delta = control.getDeltaStep() * flowUnitLength;
+		if( pointer < flowOnEdge.size() ) {
+			// draw the first flow element, if flow is running into the edge at the moment
+			//gl.glTranslated( 0, 0, flowUnitLength );
+			gl.glTranslated( 0, 0, delta );
+			if( flowOnEdge.get( pointer ) != 0 ) {
+
+				drawPieceOfFlowIndividual( gl, flowThickness + flowOnEdge.get( pointer ) * flowThicknessOfOneCapacityStep );
+			} else
+				// move further on the z-axis
+				;//
+			gl.glTranslated( 0, 0, flowUnitLength );
+
+			// if there is more flow on the edge go one step further
+			if( pointer > 0 )
+				pointer--;
+
+			// draw all other elements (except for the last one), if flow is on the edge in that moment
+			for( int i = 1; i < transitTime; i++ ) {
+				if( flowOnEdge.get( pointer ) != 0 ) {
+					// translate to the correct starting position. can be negative here,
+					// thats no problem as we are in the middle of the edge!
+					//gl.glTranslated( 0, 0, delta );
+					// draw a complete flow element with lengh visibleLen
+					drawPieceOfFlowIndividual( gl, flowThickness + flowOnEdge.get( pointer ) * flowThicknessOfOneCapacityStep );
+					//gl.glTranslated( 0.0, 0.0, -delta  );
+					gl.glTranslated( 0, 0, flowUnitLength );
+				} else
+					gl.glTranslated( 0, 0, flowUnitLength );
+				// move on the pointer
+				pointer--;
+			}
+
+			// draw the last part of flow, if it exists
+	//		if( flowOnEdge.get( pointer ) != 0 )
+				// do not draw anything if translation is positive (would lie behind the edge)
+	//				gl.glTranslated( 0, 0, delta );
+					// if start is negative, enough space for the complete visibleLen is left
+					// on the edge, if it is positive, it should be reduced
+	//				drawPieceOfFlowIndividual( gl, flowThickness + flowOnEdge.get( pointer ) * flowThicknessOfOneCapacityStep );
+				}
+		gl.glPopMatrix();
+		}
 
 	/**
 	 * Draws all edges (without flow). 
@@ -217,7 +290,7 @@ public class GLEdge extends AbstractDrawable<GLEdge, GLEdgeControl> {
 	 */
 	@Override
 	public void performDrawing( GL gl ) {
-		drawFlow( gl );
+		drawFlow2( gl );
 	}
 
 	/**
