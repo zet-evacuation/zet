@@ -67,27 +67,24 @@ public class MultiTaskExecutor implements Runnable {
      * is send using the {@link batch.tasks.AlgorithmTask} interface.
      * @see ProgressTaskEntry
      */
-    public void run() {
-        System.out.println("Running");
-        for (ProgressTaskEntry task : tasks) {
-            System.out.println(task);
-            AlgorithmTask.getInstance().publish(task.title);
-            if (task.task instanceof BatchGraphTask && algorithmListener != null) {
-                ((BatchGraphTask) task.task).listener = algorithmListener;
-            }
-            task.task.run();
-        }
-        done = true;
-        AlgorithmTask.getInstance().publish("Fertig");
-        while (!(AlgorithmTask.getInstance().getProgress() == 0)) {
-            Helper.pause(500);
-        }
-        for (int i = 1; i <= 100; i++) {
-            if (closed) {
-                return;
-            }
-            AlgorithmTask.getInstance().publish(i);
-            Helper.pause(500);
-        }
-    }
+	public void run() {
+		System.out.println( "Multi Task-Executor starts." );
+		for( ProgressTaskEntry task : tasks ) {
+			System.out.println( "Execute task: " + task.title );
+			AlgorithmTask.getInstance().publish( task.title );
+			if( task.task instanceof BatchGraphTask && algorithmListener != null )
+				((BatchGraphTask) task.task).listener = algorithmListener;
+			task.task.run();
+		}
+		done = true;
+		AlgorithmTask.getInstance().publish( "Fertig" );
+		while(!(AlgorithmTask.getInstance().getProgress() == 0))
+			Helper.pause( 500 );
+		for( int i = 1; i <= 100; i++ ) {
+			if( closed )
+				return;
+			AlgorithmTask.getInstance().publish( i );
+			Helper.pause( 500 );
+		}
+	}
 }

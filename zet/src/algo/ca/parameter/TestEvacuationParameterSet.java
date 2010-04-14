@@ -106,8 +106,8 @@ public class TestEvacuationParameterSet extends DefaultParameterSet {
 
 //		maxSpeed = 1.23 / ABSOLUTE_MAX_SPEED;
 
-		System.out.println( "First one has age " + pAge + " and speed " + (maxSpeed * ABSOLUTE_MAX_SPEED) );
-		System.out.println( "Average speed for " + counter + " persons: " + (cumulativeSpeed / counter) + " m/s. (Should be 1.3x)" );
+		//System.out.println( "First one has age " + pAge + " and speed " + (maxSpeed * ABSOLUTE_MAX_SPEED) );
+		//System.out.println( "Average speed for " + counter + " persons: " + (cumulativeSpeed / counter) + " m/s. (Should be 1.3x)" );
 
     maxSpeed = 1.23 / ABSOLUTE_MAX_SPEED;
 

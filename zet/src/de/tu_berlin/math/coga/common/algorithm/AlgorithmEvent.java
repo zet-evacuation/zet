@@ -79,4 +79,8 @@ public abstract class AlgorithmEvent {
     public final String getFormattedEventTime() {
         return DateFormat.getDateInstance().format(new Date(eventTime));
     }
+	@Override
+		public String toString() {
+			return "a";
+		}
 }

@@ -43,7 +43,6 @@ public class AlgorithmDetailedProgressEvent extends AlgorithmProgressEvent {
         super(algorithm, eventTime, progress);
     }
 
-
     /**
      * Returns a short description of the task currently performed by the
      * algorithm.
@@ -53,5 +52,4 @@ public class AlgorithmDetailedProgressEvent extends AlgorithmProgressEvent {
     public String getMessage() {
         return message;
     }
-
 }

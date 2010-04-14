@@ -46,7 +46,7 @@ import java.util.LinkedList;
 import java.util.List;
 import de.tu_berlin.math.coga.common.util.Direction;
 import de.tu_berlin.math.coga.common.util.Level;
-
+import de.tu_berlin.math.coga.common.util.Formatter;
 
 /**
  *
@@ -182,7 +182,7 @@ public class ZToNonGridGraphConverter {
 		multiplyWithUpAndDownSpeedFactors( model );
 		if( progress )
 			System.out.println( ": The network, capacities and transit times were created." );
-		System.out.println( model.getNetwork().numberOfNodes() + " Edges: " + model.getNetwork().numberOfEdges() );
+		System.out.println( "Created graph with " + model.getNetwork().numberOfNodes() + " nodes and " + model.getNetwork().numberOfEdges() + " edges" );
 		if( debug ) {
 			System.out.println( "Network:" );
 			System.out.println( model.getNetwork() );
@@ -286,7 +286,7 @@ public class ZToNonGridGraphConverter {
 	 */
 	protected static void createNodes( ZToGraphRasterContainer rasterContainer,
 					NetworkFlowModel model, BuildingPlan plan ) {
-		System.out.println( "create Nodes" );
+		System.out.print( "Create Nodes... " );
 		List<ZToGraphRoomRaster> rasteredRooms = rasterContainer.getAllRasteredRooms();
 
 		// New graph
@@ -313,9 +313,9 @@ public class ZToNonGridGraphConverter {
 		boolean accurateAssignmentAreaCration = propertyContainer.getAsBoolean( "converter.accurateAssignmentAreaCreation" );
 		if( debug ) {
 			if( accurateDelayAreaCreation )
-				System.out.println( "Delay areas are taken into account." );
+				System.out.println( "\nDelay areas are taken into account." );
 			else
-				System.out.println( "Delay areas are not taken into account." );
+				System.out.println( "\nDelay areas are not taken into account." );
 			System.out.println();
 		}
 
@@ -361,7 +361,7 @@ public class ZToNonGridGraphConverter {
 						model.getZToGraphMapping().setIsSourceNode( node, square.isSource() );
 						model.getZToGraphMapping().setIsDeletedSourceNode( node, false );
 						if( plan.getFloorID( room.getFloor() ) == -1 )
-							System.out.println( "Fehler: Floor beim Konvertieren nicht gefunden." );
+							System.out.println( "\nFehler: Floor beim Konvertieren nicht gefunden." );
 
 						boolean nodeIsSource = false;
 
@@ -532,12 +532,12 @@ public class ZToNonGridGraphConverter {
 		// Set graph to model
 		model.setNetwork( graph );
 		model.setSources( sources );
-		System.out.println( "create Nodes FERTIG" );
+		System.out.println( " fertig" );
 	}
 
 	protected static void calculateEdgesAndCapacities( ZToGraphRasterContainer raster,
 					NetworkFlowModel model ) {
-		System.out.println( "calculate Edges & Capacities" );
+		System.out.print( "Set up edges and compute capacities... " );
 		ZToGraphMapping mapping = model.getZToGraphMapping();
 
 		List<ZToGraphRoomRaster> rasteredRooms = raster.getAllRasteredRooms();
@@ -628,7 +628,7 @@ public class ZToNonGridGraphConverter {
 		}//end for each room
 		model.setNodeCapacities( nodesCap );
 		model.setEdgeCapacities( edgesCap );
-		System.out.println( "calculate Edges & Capacities FERTIG" );
+		System.out.println( "fertig" );
 	}//end of function
 
 	private static PlanPoint calculateCentre( Node node, List<ZToGraphRasterSquare> squareList ) {
@@ -761,7 +761,7 @@ public class ZToNonGridGraphConverter {
 	 */
 	protected static void computeTransitTimes( ZToGraphRasterContainer raster, NetworkFlowModel model, Hashtable<Edge, ArrayList<ZToGraphRasterSquare>> doorEdgeToSquare ) {
 		long startTT = System.currentTimeMillis();
-		System.out.println( "BEGINNE TRANSIT-TIMES" );
+		//System.out.print( "Compute transit times... " );
 
 		IdentifiableIntegerMapping<Edge> transitTimes = new IdentifiableIntegerMapping<Edge>( 1 );
 		List<ZToGraphRoomRaster> roomRasterList = raster.getAllRasteredRooms();
@@ -771,7 +771,7 @@ public class ZToNonGridGraphConverter {
 
 		// calculate INTRA-Room-Edge-Transit-Times
 		long intraStart = System.currentTimeMillis();
-		System.out.println( "calculate INTRA-Room-Edge-Transit-Times" );
+		System.out.print( "Compute intra room edge transit times... " );
 
 		// do for all rooms of the roomRasterList
 		for( ZToGraphRoomRaster room : roomRasterList ) {
@@ -940,11 +940,11 @@ public class ZToNonGridGraphConverter {
 				} // END of for(start)
 		} // END of for(roomRaster)
 		// END calculate INTRA-Room-Edge-Transit-Times
-		System.out.println( "calculate INTRA-Room-Edge-Transit-Times FERTIG " + (System.currentTimeMillis() - intraStart) );
+		System.out.println( "fertig in " + Formatter.formatTimeMilliseconds(System.currentTimeMillis() - intraStart) );
 
 		// calculate INTER-Room-Edge-Transit-Times
 		long interStart = System.currentTimeMillis();
-		System.out.println( "calculate INTER-Room-Edge-Transit-Times" );
+		System.out.print( "Compute inter room transit times... " );
 		for( ZToGraphRoomRaster startRoom : roomRasterList )
 			for( ZToGraphRoomRaster endRoom : roomRasterList ) {
 
@@ -1013,16 +1013,16 @@ public class ZToNonGridGraphConverter {
 					}
 			}
 		// END calculate INTER-Room-Edge-Transit-Times
-		System.out.println( "calculate INTER-Room-Edge-Transit-Times FERTIG " + (System.currentTimeMillis() - interStart) );
+		System.out.println( "fertig in " + Formatter.formatTimeMilliseconds( (System.currentTimeMillis() - interStart)) );
 
 		// set the calculated transitTime-IIMapping as the transitTimes of the NFM
 		model.setTransitTimes( transitTimes );
-		System.out.println( "TRANSIT-TIMES-FERTIG " + (System.currentTimeMillis() - startTT) );
+		//System.out.println( "TRANSIT-TIMES-FERTIG " + (System.currentTimeMillis() - startTT) );
 
 	}
 
 	protected static Hashtable<Edge, ArrayList<ZToGraphRasterSquare>> connectRooms( ZToGraphRasterContainer raster, NetworkFlowModel model ) {
-		System.out.println( "connect Rooms" );
+		System.out.print( "Connect rooms... " );
 		ZToGraphMapping mapping = model.getZToGraphMapping();
 
 		Hashtable<Edge, ArrayList<ZToGraphRasterSquare>> table =
@@ -1101,7 +1101,7 @@ public class ZToNonGridGraphConverter {
 					}// end if safe
 				}//end outer loop
 		}
-		System.out.println( "connect Rooms FERTIG" );
+		System.out.println( "fertig" );
 		return table;
 	}//end of function
 }

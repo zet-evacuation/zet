@@ -167,8 +167,6 @@ public class BatchEntry {
      * @throws ConversionNotSupportedException is possibly thrown by the underlying CA
      */
     public BatchResultEntry[] execute() throws ConversionNotSupportedException {
-        System.out.println("BatchEntry");
-        //System.setOut(null);
         Runtime runtime = Runtime.getRuntime();
         long memStart = (runtime.totalMemory() - runtime.freeMemory());
         JBatchProgressDialog bpd = new JBatchProgressDialog();

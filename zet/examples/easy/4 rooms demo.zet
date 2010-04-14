@@ -333,6 +333,7 @@
                                                         </assignmentAreas>
                                                         <uid id="131">bec1311f-bbc1-4706-9656-146499e929aa</uid>
                                                       </assignmentType>
+                                                      <exit reference="122"/>
                                                     </assignmentArea>
                                                     <assignmentArea id="132" closed="true" xOffset="7200" yOffset="6000" width="1600" height="2800" changed="true" evacuees="28">
                                                       <edgeClassType>ds.z.Edge</edgeClassType>
@@ -409,11 +410,13 @@
                                                             <widthAll>0</widthAll>
                                                             <associatedRoom reference="9"/>
                                                             <assignmentType reference="141"/>
+                                                            <exit reference="122"/>
                                                           </assignmentArea>
                                                           <assignmentArea reference="132"/>
                                                         </assignmentAreas>
                                                         <uid id="157">04ef706f-038c-4fa9-8f52-dc62faa42baa</uid>
                                                       </assignmentType>
+                                                      <exit reference="122"/>
                                                     </assignmentArea>
                                                   </assignmentAreas>
                                                   <barriers id="158"/>
@@ -567,6 +570,7 @@
                                                         </assignmentAreas>
                                                         <uid id="217">18eadf3b-3df4-45a3-a028-5c078610e105</uid>
                                                       </assignmentType>
+                                                      <exit reference="122"/>
                                                     </assignmentArea>
                                                   </assignmentAreas>
                                                   <barriers id="218"/>
@@ -1013,9 +1017,9 @@
     <cameraPositions id="355">
       <ds.CameraPosition id="356">
         <view id="357">
-          <x>0.5796067403795957</x>
-          <y>-0.3313664403345455</y>
-          <z>-0.7444812346369464</z>
+          <x>0.5796067403795958</x>
+          <y>-0.33136644033454554</y>
+          <z>-0.7444812346369465</z>
         </view>
         <up id="358">
           <x>0.6463126131922744</x>
