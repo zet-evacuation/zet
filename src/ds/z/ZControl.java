@@ -4,10 +4,16 @@
  */
 package ds.z;
 
+import converter.ZToCAConverter;
 import ds.Project;
 import ds.z.exception.AssignmentException;
 import java.util.List;
 import de.tu_berlin.math.coga.common.localization.Localization;
+import de.tu_berlin.math.coga.common.util.Helper;
+import de.tu_berlin.math.coga.common.util.IOTools;
+import de.tu_berlin.math.coga.rndutils.distribution.continuous.NormalDistribution;
+import gui.ZETMain;
+import java.io.File;
 
 /**
  * The class <code>ZControl</code> represents a front end class to the Z-model.
@@ -19,15 +25,109 @@ import de.tu_berlin.math.coga.common.localization.Localization;
  * @author Jan-Philipp Kappmeier
  */
 public class ZControl {
+	/** The localization class. */
+	static final Localization loc = Localization.getInstance();
+	/** The project that is root of the controlled model. */
 	private Project p;
+
+	public ZControl() {
+		newProject();
+	}
+
+	/**
+	 * Creates a new instance of <code>ProjectControl</code> which controls a
+	 * given project.
+	 * @param filename the path to a file that should be loaded as project.
+	 */
+	public ZControl( String filename ) {
+		this( new File( filename ) );
+	}
+
+	/**
+	 * Creates a new instance of <code>ProjectControl</code> which controls a
+	 * given project.
+	 * @param file the file that should be loaded as project.
+	 */
+	public ZControl( File file ) {
+		if( !loadProject( file ) ) {
+			p = newProject();
+			//zcontrol = new ZControl( p );
+			//zcontrol = newProject();
+		}
+	}
 
 	/**
 	 * Creates a new instance of <code>ZControl</code>.
-	 *
 	 * @param p 
 	 */
-	public ZControl( Project p ) {
+	ZControl( Project p ) {
 		this.p = p;
+	}
+
+	public Project getProject() {
+		return p;
+	}
+
+	public void loadProject( String projectFile ) {
+		loadProject( new File( projectFile ) );
+	}
+
+	/**
+	 * Loads the specified {@link File}.
+	 * @param projectFile the project file
+	 * @return returns true, if the project loaded correctly
+	 */
+	public boolean loadProject( File projectFile ) {
+		try {
+			p = Project.load( projectFile );
+//			distribution = null; // Throw away the old assignment window
+			p.setProjectFile( projectFile );
+			//zcontrol = new ZControl( p );
+//			editView.displayProject( loaded );
+			// delete parameters that are set
+			ZToCAConverter.getInstance().clear();
+			//firstSwitch = true;
+			//if( !PropertyContainer.getInstance().getAsBoolean( "editor.options.view.hideDefaultFloor" ) )
+			//	editView.setFloor( 1 );
+			// Update the graphical user interface
+			ZETMain.sendMessage( loc.getString( "gui.editor.JEditor.message.loaded" ) );	// TODO output changed, use listener
+		} catch( Exception ex ) {
+			//JOptionPane.showMessageDialog( null,
+			//				loc.getString( "gui.editor.JEditor.error.loadError" ),
+			//				loc.getString( "gui.editor.JEditor.error.loadErrorTitle" ),
+			//				JOptionPane.ERROR_MESSAGE );
+			System.err.println( loc.getString( "gui.editor.JEditor.error.loadErrorTitle" ) + ":" );
+			System.err.println( " - " + loc.getString( "gui.editor.JEditor.error.loadError" ) );
+			ex.printStackTrace();
+			//editView.displayProject( EditorStart.newProject() );
+			//projectControl.newProject();
+			//editView.displayProject( projectControl.getZControl() );
+			ZETMain.sendMessage( loc.getString( "gui.editor.JEditor.message.loadError" ) );
+			return false;
+		}
+		return true;
+	}
+
+	/**
+	 * Creates a new project with default settings and returns it. The old model
+	 * controlled by this class is replaced by the new empty model for the new
+	 * project.
+	 * @return the newly created project
+	 */
+	public Project newProject() {
+		p = new Project();
+		Floor fl = new Floor( loc.getString( "ds.z.DefaultName.Floor" ) + " 1" );
+		p.getBuildingPlan().addFloor( fl );
+		Assignment assignment = new Assignment( loc.getString( "ds.z.DefaultName.DefaultAssignment" ) );
+		p.addAssignment( assignment );
+		NormalDistribution d = new NormalDistribution( 0.5, 1.0, 0.4, 0.7 );
+		NormalDistribution a = new NormalDistribution( 16, 1, 14, 80 );
+		NormalDistribution f = new NormalDistribution( 0.8, 1.0, 0.7, 1.0 );
+		NormalDistribution pa = new NormalDistribution( 0.5, 1.0, 0.0, 1.0 );
+		NormalDistribution de = new NormalDistribution( 0.3, 1.0, 0.0, 1.0 );
+		AssignmentType assignmentType = new AssignmentType( loc.getString( "ds.z.DefaultName.DefaultAssignmentType" ), d, a, f, pa, de, 10 );
+		assignment.addAssignmentType( assignmentType );
+		return p;
 	}
 
 	public void delete( PlanPolygon p ) {
@@ -54,10 +154,6 @@ public class ZControl {
 			area.delete();
 		} else
 			area.delete();
-	}
-
-	public Project getProject() {
-		return p;
 	}
 
 	PlanPolygon newPolygon = null;
@@ -147,6 +243,37 @@ public class ZControl {
 			return true;
 		}
 		return false;
+	}
+
+	/**
+	 * Clones the floor and adds it to the project. The name of the floor is
+	 * extanded by '_##' where ## represents a number. If the name of the floor
+	 * was ending with a two-digit number, this number is increased by one. It is
+	 * not possible to have more than 100 floors with the same name
+	 * (only automatically crated).
+	 * @param f the floor that is copied
+	 */
+	public void copyFloor( Floor f ) {
+		final Floor fc = f.clone();
+		int number = 0;
+		String newName = f.getName() + "_";
+
+		// Check if floorname ends with '##'
+		if( Helper.isBetween( f.getName().charAt( f.getName().length() - 2 ), '0', '9' ) && Helper.isBetween( f.getName().charAt( f.getName().length() - 1 ), '0', '9' )  ) {
+			number = Integer.parseInt( f.getName().substring( f.getName().length()-2, f.getName().length()-0 ) ) + 1;
+			newName = f.getName().substring( 0, f.getName().length()-2 );
+		}
+		do {
+			fc.setName( newName + IOTools.fillLeadingZeros( number++, 2 ) );
+		} while( !p.getBuildingPlan().addFloor( fc ) && number <= 99 );
+	}
+
+	public void moveFloorUp( int id ) {
+		p.getBuildingPlan().moveFloorUp( id );
+	}
+
+	public void moveFloorDown( int id ) {
+		p.getBuildingPlan().moveFloorDown( id );
 	}
 
 	/**

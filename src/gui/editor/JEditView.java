@@ -884,11 +884,11 @@ public class JEditView extends AbstractSplitPropertyWindow<JFloorScrollPane<JFlo
 			public void actionPerformed( ActionEvent e ) {
 				if( e.getActionCommand().equals( "down" ) ) {
 					final int oldIndex = cbxFloors.getSelectedIndex();
-					JEditor.getInstance().getProjectControl().moveFloorDown( getFloorID() + (ZETProperties.isDefaultFloorHidden() ? 1 : 0) );
+					JEditor.getInstance().getZControl().moveFloorDown( getFloorID() + (ZETProperties.isDefaultFloorHidden() ? 1 : 0) );
 					cbxFloors.setSelectedIndex( oldIndex - 1 );
 				} else if( e.getActionCommand().equals( "up" ) ) {
 					final int oldIndex = cbxFloors.getSelectedIndex();
-					JEditor.getInstance().getProjectControl().moveFloorUp( getFloorID() + (ZETProperties.isDefaultFloorHidden() ? 1 : 0) );
+					JEditor.getInstance().getZControl().moveFloorUp( getFloorID() + (ZETProperties.isDefaultFloorHidden() ? 1 : 0) );
 					cbxFloors.setSelectedIndex( oldIndex + 1 );
 				} else
 					ZETMain.sendError( loc.getString( "gui.UnknownCommand" ) + " '" + e.getActionCommand() + "'. " +

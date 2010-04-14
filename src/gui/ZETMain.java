@@ -31,7 +31,6 @@ import com.martiansoftware.jsap.Switch;
 import com.martiansoftware.jsap.UnflaggedOption;
 import com.thoughtworks.xstream.XStream;
 import com.thoughtworks.xstream.annotations.Annotations;
-import control.ProjectControl;
 import de.tu_berlin.math.coga.common.debug.DebugStream;
 import de.tu_berlin.math.coga.common.debug.DebugStreamVerbose;
 import de.tu_berlin.math.coga.common.debug.Log;
@@ -45,6 +44,7 @@ import gui.editor.properties.JPropertySelectorWindow;
 import gui.editor.properties.PropertyLoadException;
 import gui.editor.properties.PropertyTreeModel;
 import de.tu_berlin.math.coga.common.util.IOTools;
+import ds.z.ZControl;
 import java.awt.Image;
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -275,7 +275,7 @@ public class ZETMain {
 				// Start our editor in the event-dispatch-thread
 				JEditor edit = JEditor.getInstance();
 				// The control object for projects
-				ProjectControl projectControl = null;
+				ZControl zcontrol = null;
 
 				File iconFile = new File( "./icon.gif" );
 				checkFile( iconFile );
@@ -299,12 +299,12 @@ public class ZETMain {
 				} if( !loadedProject.equals( "" ) ) {
 					File f = new File( loadedProject );
 					checkFile( f, "Project file" );
-					projectControl = new ProjectControl( f );
+					zcontrol = new ZControl( f );
 					System.out.println( "Projekt " + f.getAbsolutePath() + " geladen." );
 				} else {
-					projectControl = new ProjectControl();
+					zcontrol = new ZControl();
 				}
-				edit.setProjectControl( projectControl );
+				edit.setZControl( zcontrol );
 
 				edit.setVisible( true );
 			}
@@ -438,91 +438,3 @@ public class ZETMain {
 		return debug;
 	}
 }
-
-/*		
-		/* File format conversion code for changing XStream versions
-		 * 
-		 List<File> exampleFiles = getExamples("C:\\Users\\Timon\\Documents\\Studium\\Projektgruppe\\examples");
-		for (File f : exampleFiles) {
-			try {
-				/*ObjectOutputStream oos = new ObjectOutputStream (new FileOutputStream (
-						f.getAbsolutePath ().replaceAll("xml", "sss")));
-				
-				try {
-					Project p = Project.load (f);
-					oos.writeObject (p);
-					oos.flush ();
-				} catch (Exception ex) {
-					System.out.println ("Didn't work with " + f.getName ());
-					continue;
-				}
-				oos.close ();
-						
-				ObjectInputStream oos = new ObjectInputStream (new FileInputStream (f));
-				Project p = null;
-				try {
-					p = (Project)oos.readObject ();
-					oos.close ();
-					p.save (new File (f.getAbsolutePath ().replaceAll("sss", "xml")));
-				} catch (Exception ex) {
-					System.out.println ("Didn't work with " + f.getName ());
-					(new File (f.getAbsolutePath ().replaceAll("sss", "xml"))).delete ();
-					continue;
-				}
-				
-			} catch (IOException ex) {
-				ex.printStackTrace ();
-			}
-		}
-//	/** Helper method for changing XStream versions.
-//	private static List<File> getExamples (String string) {
-//		File f = new File (string);
-//		
-//		List<File> res = new LinkedList<File>();
-//		if (f.isDirectory ()) {
-//			for (File s : f.listFiles ()) {
-//				if (s.getName ().endsWith(".xml")) {
-//					s.delete ();
-//				}
-//				if (s.isDirectory () || s.getName ().endsWith(".sss")) {
-//					res.addAll (getExamples (s.getAbsolutePath ()));
-//				}
-//			}
-//		} else {
-//			res.add (f);
-//		}
-//		return res;
-//	}
-
-*/
-//	private static void test() {
-//		BatchProject bp = new BatchProject();
-//		BatchProjectEntry bpe = new BatchProjectEntry();
-//		bpe.setAssignment( "Standardbelegung" );
-//		bpe.setCellularAutomanMaximalTime( 600.0 );
-//		bpe.setCellularAutomatonAlgorithm( CellularAutomatonAlgorithm.Swap  );
-//		bpe.setCellularAutomatonRuns( 1 );
-//		bpe.setEvacuationOptimizationRuns( 1 );
-//		bpe.setEvacuationOptimizationType( EvacuationOptimizationType.MinCost );
-//		bpe.setGraphAlgorithm( GraphAlgorithm.SuccessiveEarliestArrivalAugmentingPathOptimized  );
-//		bpe.setName( "Neuer Eintrag" );
-//		bpe.setProjectFile( "./examples/ca-demo3.zet" );
-//		bpe.setProperty( "PaperProperties" );
-//		bp.add( bpe );
-//		XStream xstream = new XStream();
-//		Annotations.configureAliases( xstream, BatchProject.class );
-//		Annotations.configureAliases( xstream, BatchProjectEntry.class );
-//		//PropertyTreeNode root = propertyTreeModel.getRoot();
-//		//List<AbstractPropertyValue> props = root.getProperties();
-//		//if( props.size() > 0 ) {
-//		//	StringProperty name = (StringProperty)props.get( 0 );
-//		//	propertyTreeModel.setPropertyName(name.getValue() );
-//		//}
-//		File file = new File( "./batch.xml" );
-//		try {
-//			xstream.toXML( bp, new FileWriter( file ) );
-//		} catch( IOException ex ) {
-//			ex.printStackTrace();
-//			exit( "Error loading Batch" );
-//		}
-//	}
