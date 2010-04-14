@@ -121,7 +121,7 @@ public class BatchCATask implements Runnable {
 		caAlgo.run();	// hier wird initialisiert
 		caAlgo.getCellularAutomaton().stopRecording();
 		end = System.currentTimeMillis();
-		System.out.println( "Laufzeit CA:" + (end - start) + " ms" );
+		//System.out.println( "Laufzeit CA:" + (end - start) + " ms" );
 
 		// Get the results
 		res.setCellularAutomatonStatistic( runNumber, new CAStatistic( caAlgo.getCaController().getCaStatisticWriter().

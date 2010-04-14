@@ -57,6 +57,7 @@ public class JLogField extends JPanel implements EventListener<MessageEvent> {
     JScrollPane scrollPane = new JScrollPane( logPane );
 
 		add( scrollPane, "0,0" );
+		this.log = log;
 
 		EventServer.getInstance().registerListener( this, MessageEvent.class );
 	}

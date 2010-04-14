@@ -24,6 +24,7 @@ import batch.tasks.MultiTaskExecutor;
 import de.tu_berlin.math.coga.common.algorithm.AlgorithmEvent;
 import de.tu_berlin.math.coga.common.algorithm.AlgorithmListener;
 import de.tu_berlin.math.coga.common.algorithm.AlgorithmProgressEvent;
+import de.tu_berlin.math.coga.common.debug.DebugEnum;
 import ds.graph.Localization;
 import info.clearthought.layout.TableLayout;
 import gui.JEditor;
@@ -142,7 +143,7 @@ public class JBatchProgressDialog extends JDialog implements AlgorithmListener, 
     }
 
     public void propertyChange(PropertyChangeEvent evt) {
-        System.out.println("Progress: " + evt.getPropertyName() + ": " + evt.getOldValue() + " -> " + evt.getNewValue());
+        DebugEnum.println("Progress: " + evt.getPropertyName() + ": " + evt.getOldValue() + " -> " + evt.getNewValue(), DebugEnum.DebugLevel.DebugOut );
         if (evt.getPropertyName().equals("progress")) {
             int progress = (Integer) evt.getNewValue();
             progressBar.setValue(progress);
@@ -151,14 +152,13 @@ public class JBatchProgressDialog extends JDialog implements AlgorithmListener, 
             lblBatchStatus.setText(AlgorithmTask.getInstance().getName());
         }
         if (mte != null && mte.isDone()) {
-            mte.setClosed(true);
-            setVisible(false);
-            System.err.println("WIRD GESCHLOSSEN");
+            mte.setClosed( true );
+            setVisible( false );
+            //System.err.println("WIRD GESCHLOSSEN");
         }
     }
 
     public void eventOccurred(AlgorithmEvent event) {
-        System.out.println(event.getClass());
         if (event instanceof AlgorithmProgressEvent) {
             progressBar.setValue(((AlgorithmProgressEvent) event).getProgressAsInteger());
         }

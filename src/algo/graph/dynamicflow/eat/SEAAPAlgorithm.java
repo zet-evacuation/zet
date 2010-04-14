@@ -23,19 +23,13 @@ package algo.graph.dynamicflow.eat;
 
 import ds.graph.flow.EarliestArrivalAugmentingPath;
 import algo.graph.shortestpath.Dijkstra;
-import com.thoughtworks.xstream.XStream;
 import ds.graph.DynamicResidualNetwork;
 import ds.graph.Node;
 import ds.graph.flow.FlowOverTime;
-import java.io.FileNotFoundException;
 import java.util.Arrays;
 import java.util.LinkedList;
 import de.tu_berlin.math.coga.common.algorithm.Algorithm;
 import de.tu_berlin.math.coga.common.algorithm.AlgorithmStatusEvent;
-import java.io.File;
-import java.io.PrintWriter;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 /**
  *
@@ -63,7 +57,6 @@ public class SEAAPAlgorithm extends Algorithm<EarliestArrivalFlowProblem, FlowOv
     
     @Override
     protected FlowOverTime runAlgorithm(EarliestArrivalFlowProblem problem) {
-        //System.out.println("SSSP Beginns");
         if (problem.getTotalSupplies() == 0) {
             drn = new DynamicResidualNetwork(problem.getNetwork(), problem.getEdgeCapacities(), problem.getNodeCapacities(), problem.getTransitTimes(), problem.getSources(), problem.getSupplies(), problem.getTimeHorizon());
             paths = new LinkedList<EarliestArrivalAugmentingPath>(); 
@@ -74,12 +67,7 @@ public class SEAAPAlgorithm extends Algorithm<EarliestArrivalFlowProblem, FlowOv
         drn = new DynamicResidualNetwork(problem.getNetwork(), problem.getEdgeCapacities(), problem.getNodeCapacities(), problem.getTransitTimes(), problem.getSources(), problem.getSupplies(), problem.getTimeHorizon());
         pathProblem = new EarliestArrivalAugmentingPathProblem(drn, drn.getSuperSource(), problem.getSink(), getNextDistance(0) + 1);        
         pathAlgorithm.setProblem(pathProblem);
-        //System.out.println(drn);
-        //System.out.println(drn.capacities());
-        //System.out.println(drn.transitTimes());
-        //System.out.println("A");
         calculateEarliestArrivalAugmentingPath();
-        //System.out.println("B");
         paths = new LinkedList<EarliestArrivalAugmentingPath>();
         while (!path.isEmpty() && path.getCapacity() > 0) {
             flowUnitsSent += path.getCapacity();
@@ -120,7 +108,6 @@ public class SEAAPAlgorithm extends Algorithm<EarliestArrivalFlowProblem, FlowOv
         while (!pathFound) {
             pathAlgorithm.run();
             path = pathAlgorithm.getSolution();
-            //System.out.println("Path: " + path);
             if (path.isEmpty() || path.getCapacity() == 0) {
                 pathProblem.setTimeHorizon(getNextDistance(arrivalTime) + 1);
             } else {

@@ -20,6 +20,7 @@
 package batch.tasks.graph;
 
 import de.tu_berlin.math.coga.common.algorithm.Transformation;
+import de.tu_berlin.math.coga.common.util.Formatter;
 import algo.graph.dynamicflow.eat.EarliestArrivalFlowProblem;
 import algo.graph.dynamicflow.eat.LongestShortestPathTimeHorizonEstimator;
 import algo.graph.dynamicflow.eat.SEAAPAlgorithm;
@@ -36,12 +37,12 @@ public class SuccessiveEarliestArrivalAugmentingPathAlgorithmTask3 extends Trans
 
     @Override
     protected EarliestArrivalFlowProblem transformProblem(NetworkFlowModel originalProblem) {
-        System.out.println("EAT Task Begins");
+        System.out.println("Earliest arrival transshipment calculation starts");
         EarliestArrivalFlowProblem problem = new EarliestArrivalFlowProblem(originalProblem.getEdgeCapacities(), originalProblem.getNetwork(), originalProblem.getNodeCapacities(), originalProblem.getSupersink(), originalProblem.getSources(), 0, originalProblem.getTransitTimes(), originalProblem.getCurrentAssignment());
         LongestShortestPathTimeHorizonEstimator estimator = new LongestShortestPathTimeHorizonEstimator();
         estimator.setProblem(problem);
         estimator.run();
-        System.out.println(estimator.getSolution());
+        System.out.println("Geschätzte Lösung:" + estimator.getSolution());
         problem = new EarliestArrivalFlowProblem(originalProblem.getEdgeCapacities(), originalProblem.getNetwork(), originalProblem.getNodeCapacities(), originalProblem.getSupersink(), originalProblem.getSources(), estimator.getSolution().getUpperBound(), originalProblem.getTransitTimes(), originalProblem.getCurrentAssignment());
         return problem;
     }
@@ -52,7 +53,7 @@ public class SuccessiveEarliestArrivalAugmentingPathAlgorithmTask3 extends Trans
         String result = String.format("Sent %1$s of %2$s flow units in %3$s time units successfully.", transformedSolution.getFlowAmount(), getAlgorithm().getProblem().getTotalSupplies(), transformedSolution.getTimeHorizon());
         System.out.println(result);
         AlgorithmTask.getInstance().publish(100, result, "");
-        System.out.println(String.format("Sending the flow units required %1$s ms.", getAlgorithm().getRuntime() / 1000000));
+        System.out.println( "Sending the flow units required " + Formatter.formatTimeMilliseconds( getAlgorithm().getRuntime() ) );
         return df;
     }
 
