@@ -29,9 +29,7 @@ import batch.BatchResultEntry;
 import batch.CellularAutomatonAlgorithm;
 import batch.GraphAlgorithm;
 import batch.load.BatchProjectEntry;
-import control.ProjectControl;
 import converter.ZToCAConverter;
-import ds.Project;
 import ds.PropertyContainer;
 import ds.ca.CellularAutomaton;
 import ds.GraphVisualizationResult;
@@ -177,10 +175,9 @@ public class JEditor extends JFrame implements Localized, EventListener<Progress
 	private static final JEditor instance = new JEditor();
 
 	/** Control class for projects and editing */
-	private ProjectControl projectControl;
+	private ZControl zcontrol;
 
 	private static boolean editing = false;
-	private ZControl zcontrol;	// Task and execution stuff
 	private CellularAutomatonInOrderExecution caAlgo = null;
 	private AlgorithmTask worker;
 	private BatchResult result;
@@ -433,30 +430,11 @@ public class JEditor extends JFrame implements Localized, EventListener<Progress
 	}
 
 	/**
-	 * Sets a new project controller. For reasons of consistency the project
-	 * currently controlled by the control class is loaded. It should not happen,
-	 * that this project is <code>null</code>
-	 * @param projectControl the projects control class
-	 */
-	public void setProjectControl( ProjectControl projectControl ) {
-		this.projectControl = projectControl;
-		loadProject();
-	}
-
-	/**
-	 * Returns the control class controlling the currently visible project.
-	 * @return the control class controlling the currently visible project
-	 */
-	public ProjectControl getProjectControl() {
-		return projectControl;
-	}
-
-	/**
 	 * Loads the project currently controlled by the project controller. Resets
 	 * the view to edit window and resets the zoom factor to 10%
 	 */
 	private void loadProject() {
-		zcontrol = projectControl.getZControl();
+		//zcontrol = projectControl.getZControl();
 
 		if( tabPane.getSelectedIndex() > 1 )
 			tabPane.setSelectedIndex( 0 );
@@ -473,11 +451,11 @@ public class JEditor extends JFrame implements Localized, EventListener<Progress
 		setZoomFactor( 0.04d );
 
 		// Set up the last camera position
-		visualizationView.getGLContainer().getCamera().setPos( projectControl.getZControl().getProject().getVisualProperties().getCameraPosition().pos );
-		visualizationView.getGLContainer().getCamera().setView( projectControl.getZControl().getProject().getVisualProperties().getCameraPosition().view );
-		visualizationView.getGLContainer().getCamera().setUp( projectControl.getZControl().getProject().getVisualProperties().getCameraPosition().up );
-		visualizationView.getGLContainer().setTexts( projectControl.getZControl().getProject().getVisualProperties().getTextureFontStrings() );
-		visualizationView.getGLContainer().setView( projectControl.getZControl().getProject().getVisualProperties().getCurrentWidth(), projectControl.getZControl().getProject().getVisualProperties().getCurrentHeight() );
+		visualizationView.getGLContainer().getCamera().setPos( zcontrol.getProject().getVisualProperties().getCameraPosition().pos );
+		visualizationView.getGLContainer().getCamera().setView( zcontrol.getProject().getVisualProperties().getCameraPosition().view );
+		visualizationView.getGLContainer().getCamera().setUp( zcontrol.getProject().getVisualProperties().getCameraPosition().up );
+		visualizationView.getGLContainer().setTexts( zcontrol.getProject().getVisualProperties().getTextureFontStrings() );
+		visualizationView.getGLContainer().setView( zcontrol.getProject().getVisualProperties().getCurrentWidth(), zcontrol.getProject().getVisualProperties().getCurrentHeight() );
 		visualizationView.updateCameraInformation();
 	}
 
@@ -1254,7 +1232,7 @@ public class JEditor extends JFrame implements Localized, EventListener<Progress
 		@Override
 		public void actionPerformed( ActionEvent e ) {
 			//if( distribution == null ) {
-			distribution = new JAssignment( instance, getZControl().getProject(), loc.getString( "gui.editor.assignment.JAssignment.Title" ), 850, 400 );
+			distribution = new JAssignment( instance, zcontrol.getProject(), loc.getString( "gui.editor.assignment.JAssignment.Title" ), 850, 400 );
 			//}
 			distribution.setVisible( true );
 			distribution.dispose();
@@ -1267,7 +1245,7 @@ public class JEditor extends JFrame implements Localized, EventListener<Progress
 				// Pro Stockwerk:
 				System.out.println( "Personenverteilung im Gebäude: " );
 				int overall = 0;
-				for( Floor f : getZControl().getProject().getBuildingPlan() ) {
+				for( Floor f : zcontrol.getProject().getBuildingPlan() ) {
 					int counter = 0;
 					for( Room r : f )
 						for( AssignmentArea a : r.getAssignmentAreas() )
@@ -1279,14 +1257,14 @@ public class JEditor extends JFrame implements Localized, EventListener<Progress
 
 				// Pro Ausgang:
 				System.out.println( "Personenverteilung pro Ausgang: " );
-				for( Floor f : getZControl().getProject().getBuildingPlan() )
+				for( Floor f : zcontrol.getProject().getBuildingPlan() )
 					for( Room r : f )
 						for( EvacuationArea ea : r.getEvacuationAreas() ) {
 							overall = 0;
 							System.out.println( "" );
 							System.out.println( ea.getName() );
 							// Suche nach evakuierten pro etage für dieses teil
-							for( Floor f2 : getZControl().getProject().getBuildingPlan() ) {
+							for( Floor f2 : zcontrol.getProject().getBuildingPlan() ) {
 								int counter = 0;
 								for( Room r2 : f2 )
 									for( AssignmentArea a : r2.getAssignmentAreas() )
@@ -1298,15 +1276,15 @@ public class JEditor extends JFrame implements Localized, EventListener<Progress
 							System.out.println( ea.getName() + " insgesamt: " + overall );
 						}
 			} else if( e.getActionCommand().equals( "outputGraph" ) ) {
-				BatchResultEntry ca_res = new BatchResultEntry( getZControl().getProject().getProjectFile().getName(), new BuildingResults( getZControl().getProject().getBuildingPlan() ) );
+				BatchResultEntry ca_res = new BatchResultEntry( zcontrol.getProject().getProjectFile().getName(), new BuildingResults( getZControl().getProject().getBuildingPlan() ) );
 				ConcreteAssignment[] concreteAssignments = new ConcreteAssignment[1];
-				Assignment assignment = getZControl().getProject().getCurrentAssignment();
+				Assignment assignment = zcontrol.getProject().getCurrentAssignment();
 				concreteAssignments[0] = assignment.createConcreteAssignment( 400 );
-				new BatchGraphCreateOnlyTask( ca_res, 0, getZControl().getProject(), assignment, concreteAssignments ).run();
+				new BatchGraphCreateOnlyTask( ca_res, 0, zcontrol.getProject(), assignment, concreteAssignments ).run();
 				NetworkFlowModel originalProblem = ca_res.getNetworkFlowModel();
 				EarliestArrivalFlowProblem problem = new EarliestArrivalFlowProblem( originalProblem.getEdgeCapacities(), originalProblem.getNetwork(), originalProblem.getNodeCapacities(), originalProblem.getSupersink(), originalProblem.getSources(), 0, originalProblem.getTransitTimes(), originalProblem.getCurrentAssignment() );
 				try {
-					DatFileReaderWriter.writeFile( getZControl().getProject().getName(), problem, getZControl().getProject().getProjectFile().getName().substring( 0, getZControl().getProject().getProjectFile().getName().length()-4 ) + ".dat", originalProblem.getZToGraphMapping() );
+					DatFileReaderWriter.writeFile( zcontrol.getProject().getName(), problem, getZControl().getProject().getProjectFile().getName().substring( 0, getZControl().getProject().getProjectFile().getName().length()-4 ) + ".dat", originalProblem.getZToGraphMapping() );
 				} catch( FileNotFoundException ex ) {
 					ZETMain.sendError( "FileNotFoundException" );
 					ex.printStackTrace();
@@ -1421,7 +1399,7 @@ public class JEditor extends JFrame implements Localized, EventListener<Progress
 		public void actionPerformed( ActionEvent e ) {
 			if( e.getActionCommand().equals( "loadProject" ) ) {
 				if( jfcProject.showOpenDialog( getInstance() ) == JFileChooser.APPROVE_OPTION ) {
-					projectControl.loadProject( jfcProject.getSelectedFile() );
+					zcontrol.loadProject( jfcProject.getSelectedFile() );
 					loadProject();	// Load the currently loaded project by the control file
 					GUIOptionManager.setSavePath( jfcProject.getCurrentDirectory().getPath() );
 				}
@@ -1506,9 +1484,7 @@ public class JEditor extends JFrame implements Localized, EventListener<Progress
 						status = loc.getString( "gui.editor.JEditor.status.newProjectDiscard" );
 				}
 				// TODO: better (next 3 lines)
-				Project p = ProjectControl.newProject();
-				projectControl.setProject( p );
-				zcontrol = projectControl.getZControl();
+				zcontrol.newProject();
 
 				distribution = null; // Throw away the old assignment window
 				editView.displayProject( zcontrol );
@@ -1559,24 +1535,24 @@ public class JEditor extends JFrame implements Localized, EventListener<Progress
 		public void actionPerformed( ActionEvent e ) {
 			try {
 				if( e.getActionCommand().equals( "new" ) ) {
-					getZControl().getProject().getBuildingPlan().addFloor( new Floor( loc.getString( "ds.z.DefaultName.Floor" ) + " " + getZControl().getProject().getBuildingPlan().floorCount() ) );
+					zcontrol.getProject().getBuildingPlan().addFloor( new Floor( loc.getString( "ds.z.DefaultName.Floor" ) + " " + getZControl().getProject().getBuildingPlan().floorCount() ) );
 					ZETMain.sendMessage( "Neue Etage angelegt." ); // TODO loc
 				} else if( e.getActionCommand().equals( "up" ) ) {
 					final int oldIndex = editView.getFloorID();
-					projectControl.moveFloorUp( editView.getFloorID() + (ZETProperties.isDefaultFloorHidden() ? 1 : 0) );
+					zcontrol.moveFloorUp( editView.getFloorID() + (ZETProperties.isDefaultFloorHidden() ? 1 : 0) );
 					editView.setFloor( oldIndex + 1 );
 				} else if( e.getActionCommand().equals( "down" ) ) {
 					final int oldIndex = editView.getFloorID();
-					projectControl.moveFloorDown( editView.getFloorID() + (ZETProperties.isDefaultFloorHidden() ? 1 : 0) );
+					zcontrol.moveFloorDown( editView.getFloorID() + (ZETProperties.isDefaultFloorHidden() ? 1 : 0) );
 					editView.setFloor( oldIndex - 1 );
 				} else if( e.getActionCommand().equals( "delete" ) )
-					getZControl().getProject().getBuildingPlan().removeFloor( editView.getCurrentFloor() );
+					zcontrol.getProject().getBuildingPlan().removeFloor( editView.getCurrentFloor() );
 				else if( e.getActionCommand().equals( "import" ) ) {
-					FloorImportDialog floorImport = new FloorImportDialog( instance, getZControl().getProject(), "Importieren", 450, 250 );
+					FloorImportDialog floorImport = new FloorImportDialog( instance, zcontrol.getProject(), "Importieren", 450, 250 );
 					floorImport.setVisible( true );
 				} else if( e.getActionCommand().equals( "copy" ) ) {
 					final int oldIndex = editView.getFloorID();
-					projectControl.copyFloor( editView.getCurrentFloor() );
+					zcontrol.copyFloor( editView.getCurrentFloor() );
 					editView.setFloor( oldIndex );
 				} else
 					ZETMain.sendError( loc.getString( "gui.UnknownCommand" ) + " '" + e.getActionCommand() + "'. " + loc.getString( "gui.ContactDeveloper" ) );
@@ -1807,10 +1783,10 @@ public class JEditor extends JFrame implements Localized, EventListener<Progress
 				vo.dispose();
 				if( vo.getRetVal() == VideoOptions.OK ) {
 					visualizationView.getGLContainer().setTexts( vo.getTextureFontStrings() );
-					projectControl.getZControl().getProject().getVisualProperties().setTextureFontStrings( vo.getTextureFontStrings() );
+					zcontrol.getProject().getVisualProperties().setTextureFontStrings( vo.getTextureFontStrings() );
 					String movieFrameName = PropertyContainer.getInstance().getAsString( "options.filehandling.movieFrameName" );
 					// TODO BUG: wenn ein projekt noch nicht gespeichert worden ist, liefert das hier iene null pointer exception. (tritt auf, wenn ein video gedreht werden soll)
-					String projectName = getZControl().getProject().getProjectFile().getName().substring( 0, getZControl().getProject().getProjectFile().getName().length() - 4 );
+					String projectName = zcontrol.getProject().getProjectFile().getName().substring( 0, getZControl().getProject().getProjectFile().getName().length() - 4 );
 					MovieManager movieCreator = visualizationView.getGLContainer().getMovieCreator();
 					if( movieFrameName.equals( "" ) )
 						movieCreator.setFramename( projectName );
@@ -2194,7 +2170,7 @@ public class JEditor extends JFrame implements Localized, EventListener<Progress
 	}
 
 	public void createBackup() {
-		createBackup( getZControl().getProject().getProjectFile() );
+		createBackup( zcontrol.getProject().getProjectFile() );
 	}
 
 	public static void createBackup( File file ) {
@@ -2573,6 +2549,21 @@ public class JEditor extends JFrame implements Localized, EventListener<Progress
 //		}
 	}
 
+	/**
+	 * Sets a new project controller. For reasons of consistency the project
+	 * currently controlled by the control class is loaded. It should not happen,
+	 * that this project is <code>null</code>
+	 * @param zcontrol the zet model control class
+	 */
+	public void setZControl( ZControl zcontrol ) {
+		this.zcontrol = zcontrol;
+		loadProject();
+	}
+
+	/**
+	 * Returns the control class controlling the currently visible project.
+	 * @return the control class controlling the currently visible project
+	 */
 	public final ZControl getZControl() {
 		return zcontrol;
 	}
