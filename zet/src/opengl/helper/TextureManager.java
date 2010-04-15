@@ -100,16 +100,17 @@ public class TextureManager {
 			srcPixelFormat = GL.GL_RGB;
 		ByteBuffer textureBuffer = convertImageData( bufferedImage, tex );
 		//if(target == GL.GL_TEXTURE_2D ) {
-			gl.glTexParameteri( GL.GL_TEXTURE_2D, GL.GL_TEXTURE_MAG_FILTER, GL.GL_LINEAR_MIPMAP_LINEAR );
-//		Values for GL_TEXTURE_MAG_FILTER
+		gl.glTexParameteri( GL.GL_TEXTURE_2D, GL.GL_TEXTURE_MIN_FILTER, GL.GL_LINEAR_MIPMAP_LINEAR );
+//		Values for GL_TEXTURE_MIN_FILTER
 //    GL.GL_NEAREST;	// next value in manhatten metric
 //    GL.GL_LINEAR; // meadian of the four nearest texture element
 //    GL.GL_NEAREST_MIPMAP_NEAREST;	// selects mip map that fits best and criteria from GL_NEAREST
 //    GL.GL_LINEAR_MIPMAP_NEAREST;	// selects mip map that fits best and criteria from GL_LINEAR
 //    GL.GL_NEAREST_MIPMAP_LINEAR;	// selects the two mip maps that fit best and uses criteria fom GL_NEAREST
 //    GL.GL_LINEAR_MIPMAP_LINEAR; 	// selects the two mip maps that fit best and uses critera fom GL_LINEAR. the final value is the median
-			gl.glTexParameteri( GL.GL_TEXTURE_2D, GL.GL_TEXTURE_MIN_FILTER, GL.GL_LINEAR  );
-//		Values for GL_TEXTURE_MIN_FILTER
+
+		gl.glTexParameteri( GL.GL_TEXTURE_2D, GL.GL_TEXTURE_MAG_FILTER, GL.GL_LINEAR  );
+//		Values for GL_TEXTURE_MAG_FILTER
 //    GL.GL_NEAREST;	// next value in manhatten metric
 //    GL.GL_LINEAR; // meadian of the four nearest texture element
 		//}
@@ -128,8 +129,13 @@ public class TextureManager {
 		ByteBuffer imageBuffer = null;
 		int texWidth = 2;
 		int texHeight = 2;
-		for( ; texWidth < bufferedImage.getWidth(); texWidth *= 2 );
-		for( ; texHeight < bufferedImage.getHeight(); texHeight *= 2 );
+		// TODO more efficient...
+		while( texWidth < bufferedImage.getWidth() )
+			texWidth *= 2;
+		while( texHeight < bufferedImage.getHeight() )
+			texHeight *= 2;
+//		for( ; texWidth < bufferedImage.getWidth(); texWidth *= 2 );
+//		for( ; texHeight < bufferedImage.getHeight(); texHeight *= 2 );
 
 		ColorModel glAlphaColorModel = new ComponentColorModel( java.awt.color.ColorSpace.getInstance( 1000 ), new int[]{8, 8, 8, 8}, true, false, 3, 0 );
 		int ai[] = new int[4];
