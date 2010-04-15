@@ -540,6 +540,7 @@ public class Visualization<U extends DrawableControlable> extends AbstractVisual
 		maskTex = texMan.newTexture( "logo", "./textures/logomask.png" );
 		logoTex = texMan.newTexture( "logo", "./textures/logo2.png" );
 		fontTex = texMan.newTexture( "font2", "./textures/fontl.png" );
+
 		// load texture font
 		fontBold = new TextureFont( gl, fontTex );
 		fontBold.buildFont( 8, 32, 32, 32, 19 );
@@ -598,41 +599,5 @@ public class Visualization<U extends DrawableControlable> extends AbstractVisual
 		}
 	}
 
-	/**
-	 * Prints out all error messages that are in the error queue to
-	 * {@code System.err}.
-	 */
-	private void printErrors() {
-		printErrors( System.err );
-	}
 
-	/**
-	 * Gives out all error messages to a submitted {@link PrintStream}.
-	 * @param stream
-	 */
-	private void printErrors( PrintStream stream ) {
-		int ret;
-		while( (ret = gl.glGetError()) != GL.GL_NO_ERROR ) {
-			switch( ret ) {
-				case GL.GL_INVALID_ENUM:
-					stream.println( "INVALID ENUM" );
-					break;
-				case GL.GL_INVALID_VALUE:
-					stream.println( "INVALID VALUE" );
-					break;
-				case GL.GL_INVALID_OPERATION:
-					stream.println( "INVALID OPERATION" );
-					break;
-				case GL.GL_STACK_OVERFLOW:
-					stream.println( "STACK OVERFLOW" );
-					break;
-				case GL.GL_STACK_UNDERFLOW:
-					stream.println( "STACK UNDERFLOW" );
-					break;
-				case GL.GL_OUT_OF_MEMORY:
-					stream.println( "OUT OF MEMORY" );
-					break;
-			}
-		}
-	}
 }

@@ -32,12 +32,14 @@ import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
 import java.awt.event.MouseWheelEvent;
 import java.awt.event.MouseWheelListener;
+import java.io.PrintStream;
 import javax.media.opengl.GL;
 import javax.media.opengl.GLAutoDrawable;
 import javax.media.opengl.GLCanvas;
 import javax.media.opengl.GLCapabilities;
 import javax.media.opengl.GLEventListener;
 import javax.media.opengl.glu.GLU;
+import opengl.helper.Util;
 
 /**
  *
@@ -285,5 +287,20 @@ abstract public class AbstractOpenGLCanvas extends GLCanvas implements GLEventLi
 	}
 
 	public void mouseWheelMoved( MouseWheelEvent e ) {
+	}
+	/**
+	 * Prints out all error messages that are in the error queue to
+	 * {@code System.err}.
+	 */
+	protected void printErrors() {
+		printErrors( System.err );
+	}
+
+	/**
+	 * Gives out all error messages to a submitted {@link PrintStream}.
+	 * @param stream
+	 */
+	protected void printErrors( PrintStream stream ) {
+		Util.printErrors( gl, stream );
 	}
 }
