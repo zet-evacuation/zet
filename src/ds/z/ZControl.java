@@ -12,8 +12,12 @@ import de.tu_berlin.math.coga.common.localization.Localization;
 import de.tu_berlin.math.coga.common.util.Helper;
 import de.tu_berlin.math.coga.common.util.IOTools;
 import de.tu_berlin.math.coga.rndutils.distribution.continuous.NormalDistribution;
+import event.EventServer;
+import event.ZModelChangedEvent;
 import gui.ZETMain;
 import java.io.File;
+import java.util.HashSet;
+import java.util.Iterator;
 
 /**
  * The class <code>ZControl</code> represents a front end class to the Z-model.
@@ -51,8 +55,6 @@ public class ZControl {
 	public ZControl( File file ) {
 		if( !loadProject( file ) ) {
 			p = newProject();
-			//zcontrol = new ZControl( p );
-			//zcontrol = newProject();
 		}
 	}
 
@@ -80,28 +82,15 @@ public class ZControl {
 	public boolean loadProject( File projectFile ) {
 		try {
 			p = Project.load( projectFile );
-//			distribution = null; // Throw away the old assignment window
 			p.setProjectFile( projectFile );
-			//zcontrol = new ZControl( p );
-//			editView.displayProject( loaded );
 			// delete parameters that are set
 			ZToCAConverter.getInstance().clear();
-			//firstSwitch = true;
-			//if( !PropertyContainer.getInstance().getAsBoolean( "editor.options.view.hideDefaultFloor" ) )
-			//	editView.setFloor( 1 );
 			// Update the graphical user interface
 			ZETMain.sendMessage( loc.getString( "gui.editor.JEditor.message.loaded" ) );	// TODO output changed, use listener
 		} catch( Exception ex ) {
-			//JOptionPane.showMessageDialog( null,
-			//				loc.getString( "gui.editor.JEditor.error.loadError" ),
-			//				loc.getString( "gui.editor.JEditor.error.loadErrorTitle" ),
-			//				JOptionPane.ERROR_MESSAGE );
 			System.err.println( loc.getString( "gui.editor.JEditor.error.loadErrorTitle" ) + ":" );
 			System.err.println( " - " + loc.getString( "gui.editor.JEditor.error.loadError" ) );
 			ex.printStackTrace();
-			//editView.displayProject( EditorStart.newProject() );
-			//projectControl.newProject();
-			//editView.displayProject( projectControl.getZControl() );
 			ZETMain.sendMessage( loc.getString( "gui.editor.JEditor.message.loadError" ) );
 			return false;
 		}
@@ -210,21 +199,18 @@ public class ZControl {
 			return addPoint( points.get(0) );
 
 		for( int i = 0; i < points.size()-1; ++i ) {
-			addPoint( points.get( i ) );
+			addPoint( points.get( i ), false );
 		}
-		return addPoint( points.get( points.size()-1 ) );
-
-//		newPolygon.add( points, true );
-//		if( newPolygon.isClosed() ) {
-//			if( newPolygon instanceof AssignmentArea )
-//				((AssignmentArea)newPolygon).setEvacuees( Math.min( newPolygon.getMaxEvacuees(), ((AssignmentArea)newPolygon).getAssignmentType().getDefaultEvacuees() ) );
-//		}
-//		return newPolygon.isClosed();
+		return addPoint( points.get( points.size()-1 ), true );
 	}
 
 	private static PlanPoint temp = null;
 
 	public boolean addPoint( PlanPoint point ) {
+		return addPoint( point, true );
+	}
+
+	private boolean addPoint( PlanPoint point, boolean sendEvent ) {
 		if( newPolygon.isClosed() )
 			throw new IllegalStateException( "Polygon is closed." );
 
@@ -240,9 +226,95 @@ public class ZControl {
 				((AssignmentArea)newPolygon).setEvacuees( Math.min( newPolygon.getMaxEvacuees(), ((AssignmentArea)newPolygon).getAssignmentType().getDefaultEvacuees() ) );
 			newPolygon = null;
 			temp = null;
+			if( sendEvent )
+				EventServer.getInstance().dispatchEvent( new ZModelChangedEvent() {} );
 			return true;
 		}
+		if( sendEvent )
+			EventServer.getInstance().dispatchEvent( new ZModelChangedEvent() {} );
 		return false;
+	}
+
+	public void closePolygon() {
+		if( newPolygon.isClosed() )
+			throw new IllegalStateException( "Polygon closed." );
+
+		if( newPolygon.getNumberOfEdges() == 0 )
+			throw new IllegalStateException( "No edges" );
+		else {
+			if( newPolygon.area() == 0 && !(newPolygon instanceof Barrier) )
+				throw new IllegalStateException( "Area zero" );
+			else if( newPolygon.getNumberOfEdges() >= ((newPolygon instanceof Barrier) ? 1 : 2) ) { // The new edge would be the third
+				newPolygon.close();
+				newPolygon = null;
+				temp = null;
+			} else
+				throw new IllegalStateException( "Three edges" );
+		}
+		EventServer.getInstance().dispatchEvent( new ZModelChangedEvent() {} );
+	}
+
+	public void movePolygon( PlanPolygon polygon, int x, int y ) {
+		
+		//return true;
+	}
+
+	public void movePoints( List<PlanPoint> points, int x, int y ) {
+		Iterator<PlanPoint> itPP = points.iterator();
+
+						HashSet<Area> affected_areas = new HashSet<Area>();
+						PlanPolygon lastPolygon = null;
+		PlanPoint planPoint;
+		while( itPP.hasNext() && itPP.hasNext() ) {
+			// The drag targets are already rasterized, if neccessary
+			planPoint = itPP.next();
+			//newLocation = itDT.next();
+			//if( !trueDrag && !newLocation.equals( planPoint.getLocation() ) )
+				// Check for !trueDrag to update "trueDrag" only once
+			//	trueDrag = true;
+
+			// TODO use translate
+			planPoint.setLocation( planPoint.x + x, planPoint.y + y );
+
+			// Keep track of the areas that we move
+			PlanPolygon currentPolygon =
+							planPoint.getNextEdge() != null ? planPoint.getNextEdge().getAssociatedPolygon() : planPoint.getPreviousEdge() != null ? planPoint.getPreviousEdge().getAssociatedPolygon() : null;
+			currentPolygon.edgeChangeHandler( planPoint.getNextEdge(), planPoint );
+
+			// At the moment disabled area handling...
+			// TODO reenable. not so important right now
+			// Add the last polygon (whose modification should be complete
+			// by now to avoid duplicate entries in the area hashset)
+//			if( currentPolygon != lastPolygon ) {
+//				if( lastPolygon != null && lastPolygon instanceof Area )
+//					affected_areas.add( (Area)lastPolygon );
+//				lastPolygon = currentPolygon;
+//			}
+						// If the user dragged areas into a different room, then we
+						// must assign the affected areas to their new rooms
+//						for( Area a : affected_areas )
+//							// If the area has left its room:
+//							if( !a.getAssociatedRoom().contains( a ) ) {
+//								// 1) Search for the new room
+//								Room newRoom = null;
+//
+//								for( Component c : getComponents() )
+//									if( ((JPolygon)c).getPlanPolygon().contains( a ) ) {
+//										newRoom = (Room)((JPolygon)c).getPlanPolygon();
+//										break;
+//									}
+//
+//								if( newRoom != null ) {
+//									// Assign new room if we found one
+//									a.setAssociatedRoom( newRoom );
+//									selectPolygon( a );
+//								} else
+//									// Delete the area if it was dragged out of
+//									// its old room and not into any new one
+//									a.delete();
+//							}
+			EventServer.getInstance().dispatchEvent( new ZModelChangedEvent() {} );
+		}
 	}
 
 	/**
