@@ -281,8 +281,8 @@ public class PlanPolygon<T extends Edge> implements Serializable, Iterable<T> {
 			e.setPoints( start, end, false );
 
 			// Initialize bounds
-			width = Math.abs( (int)start.x - (int)end.x );
-			height = Math.abs( (int)start.y - (int)end.y );
+			width = Math.abs( start.x - end.x );
+			height = Math.abs( start.y - end.y );
 			xOffset = e.boundLeft();
 			yOffset = e.boundUpper();
 			// This first edge defines all bounds
@@ -867,7 +867,7 @@ public class PlanPolygon<T extends Edge> implements Serializable, Iterable<T> {
 	 */
 	public boolean contains( PlanPolygon poly ) {
 
-		boolean myResult = myContains( poly );
+		boolean result = containsI( poly );
 
 //		Rectangle shape_poly = poly.bounds();
 //		Rectangle shape_me = bounds();
@@ -881,10 +881,10 @@ public class PlanPolygon<T extends Edge> implements Serializable, Iterable<T> {
 //		boolean result2 = awt.contains( poly.getAWTPolygon().getBounds2D() );
 		//if( result2 != myResult ) System.err.println( "Unterschiedliche Ausgabe im isInside-Test" );
 
-		return myResult;
+		return result;
 	}
 
-	public boolean myContains( PlanPolygon poly ) {
+	private boolean containsI( PlanPolygon poly ) {
 		// Check for points
 		ListIterator<PlanPoint> pit = poly.pointIterator( false );
 		while( pit.hasNext() ) {
@@ -1103,7 +1103,7 @@ public class PlanPolygon<T extends Edge> implements Serializable, Iterable<T> {
 		}
 		ListIterator<T> iter1;
 		ListIterator<T> iter2;
-		T current1 = (T)getFirstEdge();
+		T current1 = getFirstEdge();
 		T current2 = (T)p.getFirstEdge();
 		// TODO the polygons may have an arbitrary shift of their starting
 		// points, but can still be equal
@@ -1738,7 +1738,6 @@ public class PlanPolygon<T extends Edge> implements Serializable, Iterable<T> {
 			enableEventGeneration = false;
 
 			PlanPoint old_start = e.getSource();
-			PlanPoint old_end = e.getTarget();
 
 			e.delete();
 
@@ -2014,7 +2013,7 @@ public class PlanPolygon<T extends Edge> implements Serializable, Iterable<T> {
 	 * if that is not the case.
 	 * @see #edgeDeleteHandler
 	 */
-	private void edgeChangeHandler( Edge e, PlanPoint pointMoved ) {
+	void edgeChangeHandler( Edge e, PlanPoint pointMoved ) {
 		// Update of offsets, width and height
 
 		// All updates follow a certain schema:

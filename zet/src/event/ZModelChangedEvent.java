@@ -14,7 +14,7 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 /*
- * ZProjectChangedEvent.java
+ * ZModelChangedEvent.java
  *
  */
 
@@ -23,6 +23,6 @@ package event;
 /**
  *
  */
-public interface ZProjectChangedEvent extends Event {
+public interface ZModelChangedEvent extends Event {
 
 }

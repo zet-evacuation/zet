@@ -53,7 +53,6 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseWheelEvent;
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.HashSet;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
@@ -61,13 +60,16 @@ import java.util.ListIterator;
 import javax.swing.JComponent;
 import javax.swing.SwingUtilities;
 import de.tu_berlin.math.coga.common.localization.Localization;
+import event.EventListener;
+import event.EventServer;
+import event.ZModelChangedEvent;
 
 /**
  * Graphical representation of a Floor from the BuildingPlan. Also offers features
  * for editing the displayed floor.
  * @author Timon Kelter, Jan-Philipp Kappmeier
  */
-public class JFloor extends AbstractFloor {
+public class JFloor extends AbstractFloor implements EventListener<ZModelChangedEvent> {
 	// Main objects
 	/** The displayed floor. */
 	private Floor myFloor;
@@ -134,6 +136,11 @@ public class JFloor extends AbstractFloor {
 		this.zcontrol = zcontrol;
 	}
 
+	public void handleEvent( ZModelChangedEvent e ) {
+		if( !JEditor.getInstance().isUpdateDisabled() )
+			displayFloor( myFloor );
+	}
+
 	/**
 	 * Creates a new instance of <code>JFloor</code>.
 	 */
@@ -146,6 +153,7 @@ public class JFloor extends AbstractFloor {
 		enableEvents( AWTEvent.MOUSE_EVENT_MASK );
 		enableEvents( AWTEvent.KEY_EVENT_MASK );
 		enableEvents( AWTEvent.MOUSE_WHEEL_EVENT_MASK );
+		EventServer.getInstance().registerListener( this, ZModelChangedEvent.class );
 	}
 
 	/**
@@ -778,8 +786,10 @@ public class JFloor extends AbstractFloor {
 							zcontrol.addPoint( p2 );
 					} else {
 						if( GUIOptionManager.getEditMode().getType() == EditMode.Type.CREATION_RECTANGLED ) {
-							if( p1.getX() == p2.getX() || p1.getY() == p2.getY() )
-								throw new IllegalArgumentException( Localization.getInstance().getString( "gui.error.RectangleCreationZeroArea" ) );
+							if( p1.getX() == p2.getX() || p1.getY() == p2.getY() ) {
+								ZETMain.sendError( Localization.getInstance().getString( "gui.error.RectangleCreationZeroArea" ) );
+								return;
+							}
 							LinkedList<PlanPoint> points = new LinkedList<PlanPoint>();
 							points.add( new PlanPoint( p1.x, p1.y ) );
 							points.add( new PlanPoint( p1.x, p2.y ) );
@@ -811,28 +821,18 @@ public class JFloor extends AbstractFloor {
 				// This method already contains the EditMode analysis
 				if( GUIOptionManager.getEditMode().getType() == EditMode.Type.CREATION_POINTWISE ) {
 					// Create last Edge and close the polygon
-
-					// FALSE: Special case: Barriers are left open ( as a polygon )
-					// This is no longer the case, because unclosed polygons won't work eith the rasterization
-					if( newPolygon != null )
-						if( newPolygon.getNumberOfEdges() == 0 ) {
-							// Delete empty, aborted polygons
-							Assignment cur = JEditor.getInstance().getEditView().getProjectControl().getProject().getCurrentAssignment();
-							JEditor.getInstance().getEditView().getProjectControl().delete( newPolygon );
-//							newPolygon.delete();
-							ZETMain.sendMessage( Localization.getInstance().getString( "gui.message.PolgonCreationAborted" ) );
-						} else {
-							if( newPolygon.area() == 0 && !(newPolygon instanceof Barrier) ) {
-								ZETMain.sendError( Localization.getInstance().getString( "gui.error.RectangleCreationZeroArea" ) );
-								return;
-							} else if( newPolygon.getNumberOfEdges() >= ((newPolygon instanceof Barrier) ? 1 : 2) ) // The new edge would be the third
-								newPolygon.close();
-							else {
-								ZETMain.sendError( Localization.getInstance().getString( "gui.error.CreateAtLeastThreeEdges" ) );
-								return;
-							}
-							ZETMain.sendMessage( Localization.getInstance().getString( "gui.message.PolgonSuccessfullyCreated" ) );
+					try {
+						zcontrol.closePolygon();
+					} catch( IllegalStateException ex ) {
+						if( ex.getMessage().equals( "No edges" ) ) {
+							ZETMain.sendError( Localization.getInstance().getString( "gui.error.CreateAtLeastThreeEdges" ) );
+						} else if( ex.getMessage().equals( "Area zero" ) ) {
+							ZETMain.sendError( Localization.getInstance().getString( "gui.error.RectangleCreationZeroArea" ) );
+						} else if( ex.getMessage().equals( "Three edges" ) ) {
+							ZETMain.sendError( Localization.getInstance().getString( "gui.error.CreateAtLeastThreeEdges" ) );
 						}
+						return;
+					}
 					polygonFinishedHandler();
 				}
 		} else if( e.getID() == MouseEvent.MOUSE_RELEASED )
@@ -851,70 +851,14 @@ public class JFloor extends AbstractFloor {
 						for( Point p : dragTargets )
 							p.setLocation( CoordinateTools.translateToModel( p ) );
 
-						Iterator<PlanPoint> itPP = draggedPlanPoints.iterator();
-						Iterator<Point> itDT = dragTargets.iterator();
-						Point newLocation;
-						PlanPoint planPoint;
-
-						// The algorithm for detecting the affected areas will only
-						// produce a list that is free of duplicate entries if all
-						// plan points that belong to a single polygon follow each
-						// other in the list of the dragged points
-						HashSet<Area> affected_areas = new HashSet<Area>();
-						PlanPolygon lastPolygon = null;
-						while( itPP.hasNext() && itDT.hasNext() ) {
-							// The drag targets are already rasterized, if neccessary
-							planPoint = itPP.next();
-							newLocation = itDT.next();
-							if( !trueDrag && !newLocation.equals( planPoint.getLocation() ) )
-								// Check for !trueDrag to update "trueDrag" only once
-								trueDrag = true;
-
-							planPoint.setLocation( newLocation );
-
-							// Keep track of the areas that we move
-							PlanPolygon currentPolygon =
-											planPoint.getNextEdge() != null ? planPoint.getNextEdge().getAssociatedPolygon() : planPoint.getPreviousEdge() != null ? planPoint.getPreviousEdge().getAssociatedPolygon() : null;
-
-							// Add the last polygon (whose modification should be complete
-							// by now to avoid duplicate entries in the area hashset)
-							if( currentPolygon != lastPolygon ) {
-								if( lastPolygon != null && lastPolygon instanceof Area )
-									affected_areas.add( (Area)lastPolygon );
-								lastPolygon = currentPolygon;
-							}
-						}
-
-						// Add the last considered polygon to the area setLocation (if it is an area)
-						if( lastPolygon != null && lastPolygon instanceof Area )
-							affected_areas.add( (Area)lastPolygon );
-
-						// If the user dragged areas into a different room, then we
-						// must assign the affected areas to their new rooms
-						for( Area a : affected_areas )
-							// If the area has left its room:
-							if( !a.getAssociatedRoom().contains( a ) ) {
-								// 1) Search for the new room
-								Room newRoom = null;
-
-								for( Component c : getComponents() )
-									if( ((JPolygon)c).getPlanPolygon().contains( a ) ) {
-										newRoom = (Room)((JPolygon)c).getPlanPolygon();
-										break;
-									}
-
-								if( newRoom != null ) {
-									// Assign new room if we found one
-									a.setAssociatedRoom( newRoom );
-									selectPolygon( a );
-								} else
-									// Delete the area if it was dragged out of 
-									// its old room and not into any new one
-									a.delete();
-							}
+						// compute the difference
+						final int xOld = draggedPlanPoints.get( 0 ).x;
+						final int yOld = draggedPlanPoints.get( 0 ).y;
+						final int xNew = dragTargets.get( 0 ).x;
+						final int yNew = dragTargets.get( 0 ).y;
+						zcontrol.movePoints( draggedPlanPoints, xNew - xOld, yNew - yOld );
 					} catch( Exception ex ) {
-						ZETMain.sendError( Localization.getInstance().getString(
-										"gui.message.ExceptionDuringDrag" ) );
+						ZETMain.sendError( Localization.getInstance().getString( "gui.message.ExceptionDuringDrag" ) );
 						ex.printStackTrace();
 					}
 
@@ -1032,7 +976,7 @@ public class JFloor extends AbstractFloor {
 
 	/** Only internal: To be called after a polygon was created to clean up our data structures. */
 	private void polygonFinishedHandler() {
-		displayFloor( myFloor );
+		//displayFloor( myFloor );
 		// Select the newly created polygon
 		setSelectedPolygon( zcontrol.latestPolygon() );
 
