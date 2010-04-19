@@ -360,10 +360,8 @@ public class DefaultParameterSet extends AbstractDefaultParameterSet {
 		counter++;
 		cumulativeSpeed += (maxSpeed * ABSOLUTE_MAX_SPEED);
 
-		System.out.println( "First one has speed " + (maxSpeed * ABSOLUTE_MAX_SPEED) );
-		System.out.println( "Average speed for " + counter + " persons: " + (cumulativeSpeed / counter) + " m/s. (Should be 1.3x)" );
-
-
+		//System.out.println( "First one has speed " + (maxSpeed * ABSOLUTE_MAX_SPEED) );
+		//System.out.println( "Average speed for " + counter + " persons: " + (cumulativeSpeed / counter) + " m/s. (Should be 1.3x)" );
 
 		return maxSpeed;
 	}

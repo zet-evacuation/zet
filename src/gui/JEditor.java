@@ -2100,6 +2100,7 @@ public class JEditor extends JFrame implements Localized, EventListener<Progress
 	private void buildVisualizationDataStructure( BatchResultEntry e, int nrOfCycle ) {
 		CAVisualizationResults caRes = e.getCaVis() != null ? e.getCaVis()[nrOfCycle] : null;
 		CAStatistic caStatistic = e.getCaStatistics() != null ? e.getCaStatistics()[nrOfCycle] : null;
+caRes.statistic = caStatistic;
 
 		GraphVisualizationResult graphRes = e.getGraphVis();
 

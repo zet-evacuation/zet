@@ -315,8 +315,8 @@ public class GLWall extends AbstractDrawable<GLWall, GLWallControl> {
 		//PlanPoint q = new PlanPoint( 0, 0 );
 		//PlanPoint r = new PlanPoint( v2.x, v2.y);
 		//int orientierung = PlanPoint.orientation(p,r,q);
-		int orientierung = Vector3.orientation( v1, v2 );
-		if( orientierung == 1 && control.isRoomRight() || orientierung == -1 && control.isRoomLeft() )
+		int orientation = Vector3.orientation( v1, v2 );
+		if( orientation == -1 && control.isRoomRight() || orientation == 1 && control.isRoomLeft() )
 			angle = -angle;
 		return angle;
 	}
