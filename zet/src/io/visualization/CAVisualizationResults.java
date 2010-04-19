@@ -24,9 +24,8 @@ import opengl.framework.abs.VisualizationResult;
 import ds.ca.CellularAutomaton;
 import ds.ca.results.VisualResultsRecording;
 
-import java.awt.Point;
-import java.awt.geom.Point2D;
 import java.util.HashMap;
+import statistic.ca.CAStatistic;
 
 import de.tu_berlin.math.coga.math.vectormath.Vector3;
 
@@ -65,6 +64,9 @@ public class CAVisualizationResults implements VisualizationResult {
      * origin of the z-project. 
      */
     private HashMap<Integer, Vector3> caFloorToZOffsetMapping;
+
+		//TODO correct
+		public CAStatistic statistic;
     
     	
 	/**

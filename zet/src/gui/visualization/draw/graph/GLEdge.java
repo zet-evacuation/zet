@@ -290,7 +290,7 @@ public class GLEdge extends AbstractDrawable<GLEdge, GLEdgeControl> {
 	 */
 	@Override
 	public void performDrawing( GL gl ) {
-		drawFlow2( gl );
+		drawFlow( gl );
 	}
 
 	/**

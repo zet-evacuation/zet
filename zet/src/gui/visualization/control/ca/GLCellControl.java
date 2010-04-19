@@ -27,7 +27,6 @@ import ds.ca.StairCell;
 import ds.ca.StaticPotential;
 import io.visualization.CAVisualizationResults;
 import gui.visualization.control.GLControl.CellInformationDisplay;
-import gui.visualization.control.GLControl;
 import gui.visualization.control.StepUpdateListener;
 import gui.visualization.draw.ca.GLCell;
 import gui.visualization.draw.ca.GLDelayCell;
@@ -39,6 +38,7 @@ import gui.visualization.util.Tuple;
 import opengl.drawingutils.GLColor;
 import de.tu_berlin.math.coga.common.util.Direction;
 import gui.visualization.control.AbstractZETVisualizationControl;
+import statistic.ca.CAStatistic;
 
 //public class GLCellControl extends AbstractControl<GLCell, Cell, CAVisualizationResults, GLCell, GLCellControl, GLControl> implements StepUpdateListener {
 public class GLCellControl extends AbstractZETVisualizationControl<GLCellControl, GLCell, GLCellularAutomatonControl> implements StepUpdateListener {
@@ -58,8 +58,11 @@ public class GLCellControl extends AbstractZETVisualizationControl<GLCellControl
 		mergedPotential = null;
 	}
 
+	CAStatistic statistic;
+
 	public GLCellControl( CAVisualizationResults caVisResults, Cell cell, GLRoomControl glRoomControl, GLCellularAutomatonControl glControl ) {
 		super( glControl );
+		this.statistic = caVisResults.statistic;
 		this.controlled = cell;
 		xPosition = caVisResults.get( cell ).x;
 		yPosition = caVisResults.get( cell ).y;
@@ -181,13 +184,15 @@ public class GLCellControl extends AbstractZETVisualizationControl<GLCellControl
 			case STATIC_POTENTIAL:
 				return activePotential.getPotential( controlled );
 			case UTILIZATION:
-				return 0;
+				//return 0;
 				// TODO statistic visualization
 				//return mainControl.getCAStatistic().getCellStatistic().getCellUtilization( controlled, (int) mainControl.getStep() );
+				return statistic.getCellStatistic().getCellUtilization( controlled, (int) mainControl.getStep() );
 			case WAITING:
-				return 0;
+				//return 0;
 				// TODO statistic visualization
 				//return mainControl.getCAStatistic().getCellStatistic().getCellWaitingTime( controlled, (int) mainControl.getStep() );
+				return statistic.getCellStatistic().getCellWaitingTime( controlled, (int) mainControl.getStep() );
 			default:
 				return 0;
 		}

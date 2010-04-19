@@ -15,9 +15,6 @@
  */
 package algo.ca.rule;
 
-import java.io.File;
-import java.io.FileWriter;
-import java.io.IOException;
 import de.tu_berlin.math.coga.common.util.IOTools;
 
 public class SaveIndividualsRule extends AbstractSaveRule {
@@ -31,22 +28,22 @@ public class SaveIndividualsRule extends AbstractSaveRule {
 	protected void onExecute( ds.ca.Cell cell ) {
 		ds.ca.Individual savedIndividual = cell.getIndividual();
 		if( !(savedIndividual.isSafe()) ) {
-		try {
-			//System.out.println( savedIndividual.getStaticPotential().getName() );
-			// Write to file
-			File f = null;
-			if( savedIndividual.getStaticPotential().getName().equals( "Nordausgang" ) )
-				f = new File( "./" + nord + ".txt" );
-			else
-				f = new File( "./" + süd + ".txt" );
-			FileWriter w = new FileWriter( f, true );
-			Double d = savedIndividual.getStepEndTime() * caController().getCA().getSecondsPerStep();
-			Double d2 = caController().getCA().getTimeStep() * caController().getCA().getSecondsPerStep();
-			w.append( Double.toString(  d  ) + '\n' );
-			w.close();
-		} catch( IOException ex ) {
-
-		}
+//		try {
+//			//System.out.println( savedIndividual.getStaticPotential().getName() );
+//			// Write to file
+//			File f = null;
+////			if( savedIndividual.getStaticPotential().getName().equals( "Nordausgang" ) )
+////				f = new File( "./" + nord + ".txt" );
+////			else
+////				f = new File( "./" + süd + ".txt" );
+////			FileWriter w = new FileWriter( f, true );
+////			Double d = savedIndividual.getStepEndTime() * caController().getCA().getSecondsPerStep();
+////			Double d2 = caController().getCA().getTimeStep() * caController().getCA().getSecondsPerStep();
+////			w.append( Double.toString(  d  ) + '\n' );
+////			w.close();
+//		} catch( IOException ex ) {
+//
+//		}
 
 			//caController().getCA().decreaseNrOfLivingAndNotSafeIndividuals();
 			//savedIndividual.setSafe();

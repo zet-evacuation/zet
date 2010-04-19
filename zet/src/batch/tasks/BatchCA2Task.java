@@ -120,11 +120,15 @@ public class BatchCA2Task implements Runnable {
 		//System.out.println ("Laufzeit CA:" + (end - start) + " ms");
 
 		// Get the results
-		res.setCellularAutomatonStatistic (runNumber, new CAStatistic (caAlgo.getCaController ().getCaStatisticWriter ().
-				getStoredCAStatisticResults ()));
-		res.setCellularAutomatonVisualization (runNumber, new CAVisualizationResults (
+		CAStatistic statistic = new CAStatistic (caAlgo.getCaController ().getCaStatisticWriter ().
+				getStoredCAStatisticResults ());
+		res.setCellularAutomatonStatistic (runNumber, statistic);
+		CAVisualizationResults visres = new CAVisualizationResults (
 				VisualResultsRecorder.getInstance ().getRecording (),
-				ZToCAConverter.getInstance ().getLatestMapping ()));
+				ZToCAConverter.getInstance ().getLatestMapping ());
+   	visres.statistic = statistic;
+
+		res.setCellularAutomatonVisualization (runNumber, visres );
 
 		// Gather median information
 		median.put (new Integer (caAlgo.getCellularAutomaton ().getTimeStep ()), runNumber);

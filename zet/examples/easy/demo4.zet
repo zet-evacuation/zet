@@ -489,4 +489,40 @@
     <assignment reference="160"/>
   </assignments>
   <evacuationPlans id="163"/>
+  <vp id="164">
+    <tfs id="165">
+      <opengl.helper.TextureFontStrings id="166">
+        <centered id="167"/>
+        <strings id="168"/>
+        <width>0.0</width>
+        <ortho>true</ortho>
+        <x id="169"/>
+        <y id="170"/>
+        <bold id="171"/>
+        <xoffset>0.0</xoffset>
+      </opengl.helper.TextureFontStrings>
+    </tfs>
+    <cameraPositions id="172">
+      <ds.CameraPosition id="173">
+        <view id="174">
+          <x>0.002072917174501506</x>
+          <y>0.6495145469767485</y>
+          <z>-0.7603463396899972</z>
+        </view>
+        <up id="175">
+          <x>0.002426623031892117</x>
+          <y>0.7603424674320366</y>
+          <z>0.6495178548123396</z>
+        </up>
+        <pos id="176">
+          <x>42.8343549319154</x>
+          <y>-69.56024474828489</y>
+          <z>57.001000000000005</z>
+        </pos>
+        <text>CameraPosition</text>
+      </ds.CameraPosition>
+    </cameraPositions>
+    <currentWidth>570.0100000000001</currentWidth>
+    <currentHeight>570.0100000000001</currentHeight>
+  </vp>
 </project>

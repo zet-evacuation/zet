@@ -128,7 +128,16 @@ public class BatchCATask implements Runnable {
 						getStoredCAStatisticResults() ) );
 		res.setCellularAutomatonVisualization( runNumber, new CAVisualizationResults(
 						VisualResultsRecorder.getInstance().getRecording(),
-						ZToCAConverter.getInstance().getLatestMapping() ) );
+					ZToCAConverter.getInstance().getLatestMapping() ) );
+
+//// Get the results
+//		CAStatistic statistic = new CAStatistic (caAlgo.getCaController ().getCaStatisticWriter ().
+//				getStoredCAStatisticResults ());
+//		res.setCellularAutomatonStatistic (runNumber, statistic);
+//		CAVisualizationResults visres = new CAVisualizationResults (
+//				VisualResultsRecorder.getInstance ().getRecording (),
+//				ZToCAConverter.getInstance ().getLatestMapping ());
+//   	visres.statistic = statistic;
 
 		// Gather median information
 		median.put( new Integer( caAlgo.getCellularAutomaton().getTimeStep() ), runNumber );
