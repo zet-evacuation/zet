@@ -16,6 +16,9 @@ import opengl.framework.abs.Controlable;
 
 /**
  *
+ * @param <U>
+ * @param <V> 
+ * @param <W>
  * @author Jan-Philipp Kappmeier
  */
 public abstract class AbstractZETVisualizationControl<U extends AbstractControl<?, ?>, V extends AbstractDrawable<?, ?>, W extends Controlable> extends AbstractControl<U,V> {

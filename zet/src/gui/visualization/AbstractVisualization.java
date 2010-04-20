@@ -83,6 +83,9 @@ public abstract class AbstractVisualization extends AbstractOpenGLCanvas {
 	private double initZ;
 	// 3D-Projection vars
 	double aspect = 1;
+	private double fov = 45;
+	private double zNear = 1;
+	private double zFar = 2000;
 
 	// Mouse interaction vars
 	protected int mouseInvert = 1;
@@ -131,6 +134,14 @@ public abstract class AbstractVisualization extends AbstractOpenGLCanvas {
 	 *                                                                           *
 	 *****************************************************************************/
 
+	/**
+	 *
+	 * @param drawable
+	 * @param x
+	 * @param y
+	 * @param width
+	 * @param height
+	 */
 	@Override
 	final public void updateViewport( GLAutoDrawable drawable, int x, int y, int width, int height ) {
 		//gl = drawable.getGL();
@@ -161,13 +172,14 @@ public abstract class AbstractVisualization extends AbstractOpenGLCanvas {
 			set2DProjection();
 	}
 
+
 	/**
 	 * Sets up the projection matrix for 3-dimensional view.
 	 */
 	final private void set3DProjection() {
 		gl.glMatrixMode( GL.GL_PROJECTION );
 		gl.glLoadIdentity();
-		glu.gluPerspective( 45.0, aspect, 1, 2000 );
+		glu.gluPerspective( fov, aspect, zNear, zFar );
 		gl.glMatrixMode( GL.GL_MODELVIEW );
 		updateProjection = false;
 	}
@@ -495,6 +507,33 @@ public abstract class AbstractVisualization extends AbstractOpenGLCanvas {
 		initHeight = currentHeight;
 		moveUp( camera.getPos().z, scrollInvert * e.getWheelRotation() );
 		repaint();
+	}
+
+	public double getFov() {
+		return fov;
+	}
+
+	public void setFov( double fov ) {
+		this.fov = fov;
+		updateProjection = true;
+	}
+
+	public double getzFar() {
+		return zFar;
+	}
+
+	public void setzFar( double zFar ) {
+		this.zFar = zFar;
+		updateProjection = true;
+	}
+
+	public double getzNear() {
+		return zNear;
+	}
+
+	public void setzNear( double zNear ) {
+		this.zNear = zNear;
+		updateProjection = true;
 	}
 
 }

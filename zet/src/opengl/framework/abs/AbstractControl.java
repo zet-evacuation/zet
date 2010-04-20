@@ -26,11 +26,7 @@ import java.util.List;
  *
  * @param <T> The type of the graphic object that is view by this class
  * @param <U> The type of the object in the data structure (the model) that is view by this class
- * @param <V> The type of the visualization results that will displayed by the graphic objects associated with this class  
- * @param <W> The type of the child graphic objects
- * @param <X> The type of the child control objects
  */
-//public abstract class AbstractControl<T extends Drawable, U, V extends VisualizationResult, W extends Drawable, X extends AbstractControl<W, ?, ?, ?, ?, ?>, Y extends Controlable> implements control, Iterable<X> {
 public abstract class AbstractControl<T extends AbstractControl<?, ?>, U extends AbstractDrawable<?, ?>> implements control, Iterable<T> {
 
 	protected U view;

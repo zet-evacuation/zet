@@ -37,6 +37,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import de.tu_berlin.math.coga.common.localization.Localization;
+import opengl.helper.Frustum;
 import statistic.ca.CAStatistic;
 import batch.tasks.AlgorithmTask;
 import javax.media.opengl.GL;
@@ -49,6 +50,20 @@ import opengl.framework.abs.DrawableControlable;
  * @author Jan-Philipp Kappmeier
  */
 public class GLControl implements DrawableControlable {
+
+	Frustum frustum;
+
+	public void setFrustum( Frustum frustum ) {
+		this.frustum = frustum;
+		if( caControl != null )
+			caControl.setFrustum( frustum );
+		if( graphControl != null )
+			graphControl.setFrustum( frustum );
+	}
+
+	public Frustum getFrustum() {
+		return frustum;
+	}
 
 	/**
 	 * Describes the differend types of information which can be illustrated

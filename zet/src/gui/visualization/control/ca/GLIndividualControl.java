@@ -66,14 +66,14 @@ public class GLIndividualControl extends AbstractZETVisualizationControl<GLIndiv
 
 	/**
 	 * Creates a new individual control class for an {@link Individual}.
-	 * @param caVisResults the visualization results for a simulation
 	 * @param individual the controlled individual
-	 * @param glControl the general control class
+	 * @param glCellularAutomatonControl the general control class
 	 */
-	public GLIndividualControl( Individual individual, GLCellularAutomatonControl glControl ) {
-		super( glControl );
+	public GLIndividualControl( Individual individual, GLCellularAutomatonControl glCellularAutomatonControl ) {
+		super( glCellularAutomatonControl );
 		this.setView( new GLIndividual( this ) );
-		this.controlled = individual;
+		view.setFrustum( mainControl.getFrustum() );
+		controlled = individual;
 		path = new ArrayList<VisHistoryTriple<Double, GLCellControl, GLCellControl>>();
 		moveVector = new Tuple( 0, 0 );
 		sourcePos = new Tuple( 0, 0 );
@@ -103,15 +103,16 @@ public class GLIndividualControl extends AbstractZETVisualizationControl<GLIndiv
 		double stepStart = -1;
 		GLCellControl source = null;
 		GLCellControl destination = null;
-		while(index < path.size() && this.path.get( index ).getFirstValue() <= step) {
+		while( index < path.size() && this.path.get( index ).getFirstValue() <= step ) {
 			stepStart = this.path.get( index ).getFirstValue();
 			source = this.path.get( index ).getSecondValue();
 			destination = this.path.get( index ).getThirdValue();
 			index++;
-			if( index < path.size() )
-				stepEnd = path.get( index ).getFirstValue();
-			else
-				stepEnd = lastEnd;
+			stepEnd = index < path.size() ? path.get( index ).getFirstValue() : lastEnd;
+//			if( index < path.size() )
+//				stepEnd = path.get( index ).getFirstValue();
+//			else
+//				stepEnd = lastEnd;
 		}
 		if( stepStart == -1 )
 			return;

@@ -44,12 +44,14 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Vector;
-import opengl.framework.abs.Controlable;
+import javax.media.opengl.GL;
+import opengl.framework.abs.DrawableControlable;
+import opengl.helper.Frustum;
 
 /**
  *  @author Jan-Philipp Kappmeier
  */
-public class GLCellularAutomatonControl extends AbstractZETVisualizationControl<GLCAFloorControl, GLCA, GLCellularAutomatonControl> implements Controlable {
+public class GLCellularAutomatonControl extends AbstractZETVisualizationControl<GLCAFloorControl, GLCA, GLCellularAutomatonControl> implements DrawableControlable {
 	public static double sizeMultiplicator = 0.1;
 
 	// general control stuff
@@ -355,5 +357,25 @@ public class GLCellularAutomatonControl extends AbstractZETVisualizationControl<
 
 	public long getStepCount() {
 		return recordingCount;
+	}
+
+	Frustum frustum;
+
+	public void setFrustum( Frustum frustum ) {
+		this.frustum = frustum;
+		for( GLIndividual individual : glIndividuals )
+			individual.setFrustum( frustum );
+	}
+
+	public Frustum getFrustum() {
+		return frustum;
+	}
+
+	public void draw( GL gl ) {
+		throw new UnsupportedOperationException( "Not supported yet." );
+	}
+
+	public void update() {
+		throw new UnsupportedOperationException( "Not supported yet." );
 	}
 }

@@ -23,6 +23,11 @@ import de.tu_berlin.math.coga.math.vectormath.Vector3;
  *  @author Jan-Philipp Kappmeier
  */
 public class Frustum {
+public enum CullingLocation {
+  outside,
+  intersect,
+  inside
+};
 
     private double fov = 45.0;
 
@@ -91,6 +96,7 @@ public class Frustum {
 		this.aspect = aspect;
 		this.nearDist = nearDist;
 		this.farDist = farDist;
+		//System.out.println( "FRUSTUM parameters set" );
 		recalc();
 	}
 
@@ -271,5 +277,23 @@ public class Frustum {
 			return 0;
 		double val = getFrustumHeight( dist ) * aspect;
 		return val;
+	}
+
+	/**
+	 * Checks if a single point is inside the frustum or outside. Therefor the
+	 * signed distance is used. The point is tested with each plane and if the
+	 * distance is greater than zero it lies on the right side. If the point lies
+	 * on the right side of every plane it's inside the frustum. If it is on the
+	 * wrong side of only one plane, that means, the distance is zero or negative,
+	 * the point is not in the frustum and the calculation can be stopped.
+	 * @param p
+	 * @return
+	 */
+	public CullingLocation isPointInFrustum( Vector3 p ) {
+		for(int i=0; i < 6; i++) {
+			if (planes[i].distance(p) < 0)
+				return CullingLocation.outside;
+		}
+		return CullingLocation.inside;
 	}
 }

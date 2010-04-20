@@ -33,6 +33,7 @@ import java.util.HashMap;
 import java.util.Iterator;
 import javax.media.opengl.GL;
 import opengl.framework.abs.DrawableControlable;
+import opengl.helper.Frustum;
 import zet.xml.FlowVisualization;
 
 /**
@@ -264,5 +265,15 @@ public class GLGraphControl extends AbstractZETVisualizationControl<GLGraphFloor
 
 	int superSinkID() {
 		return superSinkID;
+	}
+
+	public void setFrustum( Frustum frustum ) {
+		this.frustum = frustum;
+	}
+
+	Frustum frustum;
+
+	public Frustum getFrustum() {
+		return frustum;
 	}
 }

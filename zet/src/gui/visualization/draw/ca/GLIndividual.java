@@ -21,23 +21,22 @@
 
 package gui.visualization.draw.ca;
 
+import de.tu_berlin.math.coga.math.vectormath.Vector3;
 import gui.visualization.QualityPreset;
 import gui.visualization.VisualizationOptionManager;
 import gui.visualization.control.ca.GLCellularAutomatonControl;
 import gui.visualization.control.ca.GLIndividualControl;
 import gui.visualization.util.Tuple;
-import gui.visualization.util.VisualizationConstants;
 import java.awt.Color;
 import javax.media.opengl.GL;
 import opengl.drawingutils.GLColor;
 import opengl.framework.abs.AbstractDrawable;
+import opengl.helper.Frustum;
 
 /**
  * Draws an individual on a {@code OpenGL} canvas.
  * @author Jan-Philipp Kappmeier
  */
-//public class GLIndividual extends AbstractDrawable<CullingShapeSphere, GLIndividual, GLIndividualControl, GLIndividualControl> {
-//public class GLIndividual extends AbstractDrawable<GLIndividual, GLIndividualControl, GLIndividualControl> {
 public class GLIndividual extends AbstractDrawable<GLIndividual, GLIndividualControl> {
 
 	private static double individualHeight = VisualizationOptionManager.getIndividualHeight() * GLCellularAutomatonControl.sizeMultiplicator;
@@ -46,8 +45,13 @@ public class GLIndividual extends AbstractDrawable<GLIndividual, GLIndividualCon
 	private static GLColor deadColor = new GLColor( 130, 55, 101 );
 	private static QualityPreset qualityPreset = VisualizationOptionManager.getQualityPreset();
 
+	Frustum frustum;
+
+	public void setFrustum( Frustum frustum ) {
+		this.frustum = frustum;
+	}
+
 	public GLIndividual( GLIndividualControl control ) {
-//		super( control, new CullingShapeSphere() );
 		super( control );
 	}
 
@@ -78,14 +82,23 @@ public class GLIndividual extends AbstractDrawable<GLIndividual, GLIndividualCon
 		Tuple pos = control.getCurrentPosition();
 		gl.glTranslated( pos.x * GLCellularAutomatonControl.sizeMultiplicator, pos.y * GLCellularAutomatonControl.sizeMultiplicator, 1 * GLCellularAutomatonControl.sizeMultiplicator );
 		bodyColor.draw( gl );
-		//glu.gluCylinder( quadObj, individualRadius, 0.0, individualHeight, 12, 1 );	// Normal
-		//glu.gluCylinder( quadObj, individualRadius, 0.0, individualHeight, 48, 24 );	// High quality
 
 		glu.gluCylinder( quadObj, individualRadius, 0.0, individualHeight, qualityPreset.individualBodySlices, qualityPreset.individualBodyStacks );
 		headColor.draw( gl );
 		gl.glTranslated( 0, 0, individualHeight - individualRadius * 0.7 );
-		//glu.gluSphere( quadObj, individualRadius * 0.7, 8, 8 ); // Normal
-    //glu.gluSphere( quadObj, individualRadius * 0.7, 48, 48 ); // High quality
+
+		// here the head is drawn...
+		// perform frustum test if the center point is within the frustum
+
+//		Vector3 check = new Vector3( pos.x * GLCellularAutomatonControl.sizeMultiplicator, pos.y * GLCellularAutomatonControl.sizeMultiplicator, 1 * GLCellularAutomatonControl.sizeMultiplicator );
+//		if( ( frustum != null ) && frustum.isPointInFrustum( check ) == Frustum.CullingLocation.inside )
+//			System.out.println( "Inside: " + control.getNumber() );
+//		else if( frustum == null ) {
+//			System.out.println( "frustum null" );
+//		} else {
+//			;//System.out.println( "Sonstiges: " + control.getNumber() );
+//		}
+
 		glu.gluSphere( quadObj, individualRadius * 0.7, qualityPreset.individualHeadSlices, qualityPreset.individualHeadStacks );
 		gl.glPopMatrix();
 	}
