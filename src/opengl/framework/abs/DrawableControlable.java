@@ -9,11 +9,14 @@
  */
 package opengl.framework.abs;
 
+import opengl.helper.Frustum;
+
 
 /**
  *
  * @author Jan-Philipp Kappmeier
  */
 public interface DrawableControlable extends Drawable, Controlable {
-
+	void setFrustum( Frustum frustum );
+	Frustum getFrustum();
 }

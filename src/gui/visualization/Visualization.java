@@ -29,10 +29,12 @@ import event.MessageEvent.MessageType;
 import io.movie.MovieManager;
 import java.awt.Color;
 import java.awt.Dimension;
+import java.awt.event.KeyEvent;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseWheelEvent;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.io.PrintStream;
 import java.util.ArrayList;
 import javax.media.opengl.GL;
 import javax.media.opengl.GLAutoDrawable;
@@ -40,6 +42,7 @@ import javax.media.opengl.GLCapabilities;
 import javax.media.opengl.glu.GLUquadric;
 import opengl.drawingutils.GLColor;
 import opengl.framework.abs.DrawableControlable;
+import opengl.helper.Frustum;
 import opengl.helper.ProjectionHelper;
 import opengl.helper.Texture;
 import opengl.helper.TextureFont;
@@ -101,6 +104,12 @@ public class Visualization<U extends DrawableControlable> extends AbstractVisual
 	protected boolean showEye = true;
 	protected boolean showFPS = true;
 
+	private Frustum frustum;
+
+	public Frustum getFrustum() {
+		return frustum;
+	}
+
 	/**
 	 * Creates a new instance of the {@code Visualization} panel with given 
 	 * properties in an {@code GLCapabilities}.
@@ -110,6 +119,7 @@ public class Visualization<U extends DrawableControlable> extends AbstractVisual
 		super( capabilities );
 		movieManager = new MovieManager();
 		set2DView();
+		frustum = new Frustum();
 		this.setParallelViewMode( ParallelViewMode.Isometric );
 	}
 
@@ -149,8 +159,10 @@ public class Visualization<U extends DrawableControlable> extends AbstractVisual
 			return;
 		}
 
-		if( updateProjection )
+		if( updateProjection ) {
+			frustum.setAll( getFov(), aspect, getzNear(), getzFar() );
 			updateProjection();
+		}
 
 		boolean introRunning = false;
 		if( !recording )
@@ -410,6 +422,7 @@ public class Visualization<U extends DrawableControlable> extends AbstractVisual
 	 */
 	public final void setControl( U control ) {
 		this.control = control;
+		control.setFrustum( frustum );
 	}
 
 	/**
@@ -597,6 +610,24 @@ public class Visualization<U extends DrawableControlable> extends AbstractVisual
 				System.err.println( "Fehler beim Schließen der Datei '" + fileName + "'" );
 			}
 		}
+	}
+
+	@Override
+	public void keyPressed( KeyEvent e ) {
+		super.keyPressed( e );
+		frustum.update( camera.getPos(), camera.getView(), camera.getUp() );
+	}
+
+	@Override
+	public void mouseDragged( MouseEvent e ) {
+		super.mouseDragged( e );
+		frustum.update( camera.getPos(), camera.getView(), camera.getUp() );
+	}
+
+	@Override
+	public void mouseWheelMoved( MouseWheelEvent e ) {
+		super.mouseWheelMoved( e );
+		frustum.update( camera.getPos(), camera.getView(), camera.getUp() );
 	}
 
 
