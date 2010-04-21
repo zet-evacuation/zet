@@ -74,9 +74,10 @@ public class JLogField extends JPanel implements EventListener<MessageEvent> {
 		final String pre = "<html><font face=\"sans-serif\" size=\"-1\">";
 		final String post = "</font></html>";
  		try {
-  		logPane.setText( pre + log.getText() + post );
+			if( logPane != null && log != null )
+	  		logPane.setText( pre + log.getText() + post );
 		//logPane.setText( text );
-		}catch( Exception ex ) {
+		} catch( Exception ex ) {
 			int i = 1;
 			i++;
 		}

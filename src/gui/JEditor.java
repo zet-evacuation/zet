@@ -149,6 +149,7 @@ import ds.z.Room;
 import ds.z.ZControl;
 import event.VisualizationEvent;
 import gui.editor.JLogView;
+import gui.visualization.Visualization.RecordingMode;
 import io.visualization.BuildingResults;
 import zet.DatFileReaderWriter;
 import zet.util.ConversionTools;
@@ -1706,9 +1707,13 @@ public class JEditor extends JFrame implements Localized, EventListener<Progress
 					btnPlay.setIcon( playIcon );
 					btnPlay.setSelected( false );
 					visualizationView.getGLContainer().stopAnimation();
+					if( visualizationView.getGLContainer().getRecording() == RecordingMode.Recording )
+						visualizationView.getGLContainer().setRecording( RecordingMode.SkipFrame );
 				} else {
 					btnPlay.setIcon( pauseIcon );
 					btnPlay.setSelected( true );
+					if( visualizationView.getGLContainer().getRecording() == RecordingMode.SkipFrame )
+						visualizationView.getGLContainer().setRecording( RecordingMode.Recording );
 					visualizationView.getGLContainer().startAnimation();
 				}
 			} else if( e.getActionCommand().equals( "loop" ) ) {
@@ -1718,8 +1723,13 @@ public class JEditor extends JFrame implements Localized, EventListener<Progress
 				btnPlay.setIcon( playIcon );
 				btnPlay.setSelected( false );
 				control.resetTime();
+				// create a movie, if movie-creation was active.
+				if( visualizationView.getGLContainer().getRecording() != RecordingMode.NotRecording )
+					visualizationView.getGLContainer().createMovie();
+				// stop animation if still animation
 				if( visualizationView.getGLContainer().isAnimating() )
 					visualizationView.getGLContainer().stopAnimation();
+				// repaint once
 				visualizationView.getGLContainer().repaint();
 			} else if( e.getActionCommand().equals( "end" ) ) {
 				ZETMain.sendError( "Not completeley supported yet" );
@@ -1772,6 +1782,8 @@ public class JEditor extends JFrame implements Localized, EventListener<Progress
 				String newFilename = IOTools.getNextFreeNumberedFilepath( path, projectName, 3 ) + ".png";
 				visualizationView.getGLContainer().takeScreenshot( newFilename );
 			} else if( e.getActionCommand().equals( "video" ) ) {
+				if( visualizationView.getGLContainer().isAnimating() )
+					visualizationView.getGLContainer().stopAnimation();
 				VideoOptions vo = new VideoOptions( instance );
 				// Setze die erwartete Laufzeit
 				vo.setEstimatedTime( visualizationView.getGLContainer().getControl().getEstimatedTime() );
@@ -1800,7 +1812,7 @@ public class JEditor extends JFrame implements Localized, EventListener<Progress
 					movieCreator.setPath( PropertyContainer.getInstance().getAsString( "options.filehandling.moviePath" ) );
 					movieCreator.setFramename( PropertyContainer.getInstance().getAsString( "options.filehandling.movieFrameName" ) );
 					movieCreator.setMovieWriter( vo.getMovieWriter() );
-					visualizationView.getGLContainer().setRecording( true, vo.getResolution() );
+					visualizationView.getGLContainer().setRecording( RecordingMode.Recording, vo.getResolution() );
 					movieCreator.setWidth( vo.getResolution().width );
 					movieCreator.setHeight( vo.getResolution().height );
 					movieCreator.setCreateMovie( vo.isMovieMode() );
@@ -1810,7 +1822,10 @@ public class JEditor extends JFrame implements Localized, EventListener<Progress
 					movieCreator.setBitrate( vo.getBitrate() );
 					visualizationView.getGLContainer().setMovieFramerate( vo.getFramerate() );
 					movieCreator.setFrameFormat( vo.getFrameFormat() );
-					visualizationView.getGLContainer().startAnimation();
+					btnPlay.setIcon( pauseIcon );
+					btnPlay.setSelected( true );
+					if( !visualizationView.getGLContainer().isAnimating() )
+						visualizationView.getGLContainer().startAnimation();
 				}
 			} else
 				ZETMain.sendError( loc.getString( "gui.UnknownCommand" ) + " '" + e.getActionCommand() + "'. " + loc.getString( "gui.ContactDeveloper" ) );

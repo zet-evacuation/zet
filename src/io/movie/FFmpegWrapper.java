@@ -23,6 +23,7 @@ package io.movie;
 
 import info.clearthought.layout.TableLayout;
 import de.tu_berlin.math.coga.common.util.IOTools;
+import de.tu_berlin.math.coga.common.util.Helper;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.FocusEvent;
@@ -185,15 +186,10 @@ public class FFmpegWrapper extends MovieWriter {
 
 			//System.out.println( thisCommand );
 			Process process = new ProcessBuilder( IOTools.parseCommandString( thisCommand ) ).start();
-			InputHandler errorHandler = new InputHandler( process.getErrorStream(), "Error Stream" );
+			FFmpegInputHandler errorHandler = new FFmpegInputHandler( process.getErrorStream(), "Error Stream" );
 			errorHandler.setVerbose( true );
 			errorHandler.start();
-			InputHandler inputHandler = new InputHandler( process.getInputStream(), "Output Stream" );
-			inputHandler.setVerbose( true );
-			inputHandler.start();
 			process.waitFor();
-			inputHandler.close();
-			errorHandler.close();
 			return process.exitValue();
 		} catch( InterruptedException ex ) {
 			System.err.println( "Encoding-Prozess wurde unterbrochen!!!" );
