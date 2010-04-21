@@ -75,6 +75,8 @@ abstract public class AbstractOpenGLCanvas extends GLCanvas implements GLEventLi
 	 * Starts animation and resets the counter.
 	 */
 	public void startAnimation() {
+		//System.out.print( "Try to start animation. Previous state was" );
+		//System.out.println( animator.isAnimating() ? " animating." : " not animating." );
 		animationStartTime = System.nanoTime();
 		animator.start();
 		//animator.setRunAsFastAsPossible( true );
@@ -85,6 +87,8 @@ abstract public class AbstractOpenGLCanvas extends GLCanvas implements GLEventLi
 	 * Stops the animation.
 	 */
 	public void stopAnimation() {
+		//System.out.print( "Try to stop animation. Previous state was" );
+		//System.out.println( animator.isAnimating() ? " animating." : " not animating." );
 		animator.stop();
 		fps = 0;
 	}

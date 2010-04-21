@@ -56,6 +56,11 @@ import opengl.helper.TextureManager;
  */
 public class Visualization<U extends DrawableControlable> extends AbstractVisualization {
 	//public final static double SIZE_MULTIPLICATOR = 0.1;
+	public enum RecordingMode {
+		Recording,
+		NotRecording,
+		SkipFrame,
+	}
 	
 	protected double sizeMultiplikator = 0.1;
 	/** The localization class. */
@@ -79,7 +84,7 @@ public class Visualization<U extends DrawableControlable> extends AbstractVisual
 	/** Indicates if mouse movement in 2d-view rotates or moves the building. */
 	protected boolean noRotate = false;
 	/** Decides wheather a movie is captured or not */
-	private boolean recording = false;
+	private RecordingMode recording = RecordingMode.NotRecording;
 	/** If a movie is captured describes the framerate of the movie */
 	private int movieFrameRate = 24;
 	/** Set to true during drawing if the frame contains some valid information. False at the end of playback. Only valid if in {@code movieRecording} mode.*/
@@ -151,10 +156,10 @@ public class Visualization<U extends DrawableControlable> extends AbstractVisual
 		// Status-Variablen die angezeigte Elemente steuern
 
 		this.drawable = drawable;
-		if( isAnimating() == true && recording == false )
+		if( isAnimating() == true && recording == RecordingMode.NotRecording )
 			animate();
 
-		if( recording && (drawable.getWidth() != movieWidth || drawable.getHeight() != movieHeight) ) {
+		if( recording == RecordingMode.Recording && (drawable.getWidth() != movieWidth || drawable.getHeight() != movieHeight) ) {
 			setSize( movieWidth, movieHeight );
 			return;
 		}
@@ -165,7 +170,7 @@ public class Visualization<U extends DrawableControlable> extends AbstractVisual
 		}
 
 		boolean introRunning = false;
-		if( !recording )
+		if( recording != RecordingMode.Recording  )
 			drawScene();
 		else if( showIntro < texts.size() && texts.get( showIntro ).size() > 0 ) {
 			drawIntroText( showIntro );
@@ -185,7 +190,7 @@ public class Visualization<U extends DrawableControlable> extends AbstractVisual
 
 		if( takeScreenshot )
 			takeScreenshot( drawable );
-		if( recording && frameUsed ) {
+		if( recording == RecordingMode.Recording && frameUsed ) {
 			String newFilename = movieManager.nextFilename();
 			takeScreenshot( drawable, newFilename );
 			EventServer.getInstance().dispatchEvent( new MessageEvent<Visualization>( this, MessageType.VideoFrame, "Video frame " + (++screenshotCounter) + " - " + (screenshotCounter * (1.0 / movieFrameRate)) + " sec" ) );
@@ -397,23 +402,37 @@ public class Visualization<U extends DrawableControlable> extends AbstractVisual
 		else
 			minimalFrameCount = 2;
 
-		if( recording ) {
+		if( recording == RecordingMode.Recording ) {
 			final boolean frameUsedOld = frameUsed;
 			//frameUsed = Math.max( minimalFrameCountCellularAutomaton, minimalFrameCountGraph ) >= 1;
 			frameUsed = minimalFrameCount >= 1;
+			// somehow stop recording if paused
 			if( frameUsedOld != frameUsed ) {
-				// The movie is finished completely
-				this.repaint();
-				movieManager.performFinishingActions();
-				setRecording( false, getSize() );
-				stopAnimation();
-				createInformationFile();
+				createMovie();
 			}
 		}
 		//font.print( 0, this.getHeight() - (row++)*fontSize, "Zeit: " + secToMin( getTimeSinceStart()/Conversion.secToNanoSeconds ) );
 		gl.glDisable( GL.GL_TEXTURE_2D );
 		gl.glDisable( GL.GL_BLEND );
 		ProjectionHelper.resetProjection( gl );
+	}
+
+
+	/**
+	 * Converts rendered frames to a movie or stops creating a movie. It is called
+	 * if the visualization is finished (CA and graph finished). Call it, if you
+	 * stop movie recording in between.
+	 */
+	public void createMovie() {
+		if( recording == RecordingMode.NotRecording )
+			throw new IllegalStateException( "Not in recording mode." );
+		// The movie is finished completely
+		this.repaint();
+		movieManager.performFinishingActions();
+		setRecording( RecordingMode.NotRecording, getSize() );
+		if( isAnimating() )
+			stopAnimation();
+		createInformationFile();
 	}
 
 	/**
@@ -461,7 +480,7 @@ public class Visualization<U extends DrawableControlable> extends AbstractVisual
 	 * Checks if the panel is in movie capture mode
 	 * @return true if panel is in movie capture mode, false otherwise
 	 */
-	public boolean isRecording() {
+	public RecordingMode getRecording() {
 		return recording;
 	}
 
@@ -476,9 +495,10 @@ public class Visualization<U extends DrawableControlable> extends AbstractVisual
 	 * @param recording the status of the movie capture mode
 	 * @param resolution the resolution used for video recording
 	 */
-	public void setRecording( boolean recording, Dimension resolution ) {
+	public void setRecording( RecordingMode recording, Dimension resolution ) {
+		
 		this.recording = recording;
-		if( recording ) {
+		if( recording == RecordingMode.Recording ) {
 			showIntro = 0;
 			oldX = this.getSize().width;
 			oldY = this.getSize().height;
@@ -486,8 +506,17 @@ public class Visualization<U extends DrawableControlable> extends AbstractVisual
 			movieHeight = resolution.height;
 			introCount = 0;
 			screenshotCounter = 0;
-		} else
+		} else if( recording == RecordingMode.NotRecording )
 			setSize( oldX, oldY );
+	}
+
+	/**
+	 * Only use this method to pause recording (set recording to SkipFrame), no
+	 * intro times are reset and the movie width is not changed.
+	 * @param recording
+	 */
+	public void setRecording( RecordingMode recording ) {
+		this.recording = recording;
 	}
 
 	/**

@@ -21,19 +21,19 @@
 package io.movie;
 
 import java.io.BufferedReader;
-import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 /**
- *
+ * A general thread as input handler. A given input stream is used and listened
+ * on. If input arrives on the stream, it is given out to the console.
  * @author Jan-Philipp Kappmeier
  */
-class InputHandler extends Thread {
+public class InputHandler extends Thread {
 	boolean verbose = true;
 	InputStream input_;
+	/** Indicates that the stream should be closed. */
+	boolean close;
 
 	InputHandler( InputStream input, String name ) {
 		super( name );
@@ -47,25 +47,39 @@ class InputHandler extends Thread {
 			BufferedReader br = new BufferedReader(isr);
 			String line=null;
 			while ( verbose && (line = br.readLine()) != null )
-					System.out.println( getName() + ">" + line);
+					giveOut( getName(), line );
+			//if( close )
+				input_.close(); //br.close();
 		} catch( Throwable t ) {
 			t.printStackTrace();
 		}
 	}
 
+	/**
+	 * Gives out the given line with information that it occured on the specified
+	 * stream.
+	 * @param stream the stream where the output occured
+	 * @param line the line that was read
+	 */
+	public void giveOut( String stream, String line ) {
+		System.out.println( getName() + "> " + line);
+	}
+
+	/**
+	 * Decides wheather verbose mode is active, or not. If it is active each
+	 * line read from the input is given out to the {@code System.out} stream.
+	 * @return {@code true} if verbose output to default out is active, {@code false} otherwise
+	 */
 	public boolean isVerbose() {
 		return verbose;
 	}
 
+	/**
+	 * Determines if verbose mode is active, or not. If it is activated each line
+	 * read from the input is given out to the {@code System.out} stream.
+	 * @param verbose determines if verbose mode should be activated, or not
+	 */
 	public void setVerbose( boolean verbose ) {
 		this.verbose = verbose;
-	}
-
-	public void close() {
-		try {
-			input_.close();
-		} catch( IOException ex ) {
-			Logger.getLogger( InputHandler.class.getName() ).log( Level.SEVERE, null, ex );
-		}
 	}
 }
