@@ -21,7 +21,7 @@ public abstract class CullingTester {
     public CullingTester () {
     }
 
-    public abstract CullingLocation testCullingLocation (CullingShape object);
+    //public abstract CullingLocation testCullingLocation (CullingShape object);
 
 }
 

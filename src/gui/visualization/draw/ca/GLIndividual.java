@@ -90,16 +90,16 @@ public class GLIndividual extends AbstractDrawable<GLIndividual, GLIndividualCon
 		// here the head is drawn...
 		// perform frustum test if the center point is within the frustum
 
-//		Vector3 check = new Vector3( pos.x * GLCellularAutomatonControl.sizeMultiplicator, pos.y * GLCellularAutomatonControl.sizeMultiplicator, 1 * GLCellularAutomatonControl.sizeMultiplicator );
-//		if( ( frustum != null ) && frustum.isPointInFrustum( check ) == Frustum.CullingLocation.inside )
-//			System.out.println( "Inside: " + control.getNumber() );
+		Vector3 check = new Vector3( pos.x * GLCellularAutomatonControl.sizeMultiplicator, pos.y * GLCellularAutomatonControl.sizeMultiplicator, 1 * GLCellularAutomatonControl.sizeMultiplicator );
+		if( frustum.isPointInFrustum( check ) == Frustum.CullingLocation.inside )
+			glu.gluSphere( quadObj, individualRadius * 0.7, qualityPreset.individualHeadSlices, qualityPreset.individualHeadStacks );
+			//System.out.println( "Inside: " + control.getNumber() );
 //		else if( frustum == null ) {
-//			System.out.println( "frustum null" );
+//			//System.out.println( "frustum null" );
 //		} else {
 //			;//System.out.println( "Sonstiges: " + control.getNumber() );
 //		}
 
-		glu.gluSphere( quadObj, individualRadius * 0.7, qualityPreset.individualHeadSlices, qualityPreset.individualHeadStacks );
 		gl.glPopMatrix();
 	}
 }

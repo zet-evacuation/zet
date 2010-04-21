@@ -21,9 +21,9 @@ public abstract class OrthoTester extends CullingTester {
     public OrthoTester () {
     }
 
-    public CullingLocation testCullingLocation (CullingShape object) {
-        return null;
-    }
+//    public CullingLocation testCullingLocation (CullingShape object) {
+//        return null;
+//    }
 
 }
 

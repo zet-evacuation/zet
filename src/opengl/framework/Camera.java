@@ -62,7 +62,9 @@ public class Camera {
 	 * Initializes a camera at a specific position. The up vector is in direction
 	 * of the {@code y}-axis and forward vector is along the {@code z}-axis. The
 	 * current position vector is changed to the new coordinates.
-	 * @param pos the position of the camera
+	 * @param x the {@code x}-coordinate of the camera position
+	 * @param y the {@code y}-coordinate of the camera position
+	 * @param z the {@code z}-coordinate of the camera position
 	 */
 	public Camera( double x, double y, double z ) {
 		setPos( x, y, z );
