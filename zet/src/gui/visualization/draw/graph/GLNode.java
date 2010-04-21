@@ -55,8 +55,9 @@ public class GLNode extends AbstractDrawable<GLEdge, GLNodeControl> {
 		this.position.y = control.getYPosition() * GLGraphControl.sizeMultiplicator;
 		this.position.z = control.getZPosition() * GLGraphControl.sizeMultiplicator;
 		this.radius = nodeRadius * GLGraphControl.sizeMultiplicator;
-		glu = new GLU();
-		quadObj = glu.gluNewQuadric();
+		// not neccesary here!
+		//glu = new GLU();
+		//quadObj = glu.gluNewQuadric();
 		glu.gluQuadricDrawStyle( quadObj, nodeDisplayMode );
 		glu.gluQuadricOrientation( quadObj, GLU.GLU_OUTSIDE );
 

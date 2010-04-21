@@ -109,7 +109,7 @@ public class Visualization<U extends DrawableControlable> extends AbstractVisual
 	protected boolean showEye = true;
 	protected boolean showFPS = true;
 
-	private Frustum frustum;
+	protected Frustum frustum;
 
 	public Frustum getFrustum() {
 		return frustum;

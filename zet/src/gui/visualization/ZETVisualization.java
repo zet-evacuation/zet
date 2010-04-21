@@ -1,15 +1,11 @@
 /**
  * ZETVisualization.java
- * input:
- * output:
- *
- * method:
- *
- * Created: Mar 9, 2010,5:28:30 PM
+ * Created: 09.03.2010, 17:28:30
  */
 package gui.visualization;
 
 import de.tu_berlin.math.coga.common.util.Formatter;
+import de.tu_berlin.math.coga.math.vectormath.Vector3;
 import ds.PropertyContainer;
 import event.EventListener;
 import event.EventServer;
@@ -24,7 +20,10 @@ import java.awt.event.MouseWheelEvent;
 import javax.media.opengl.GL;
 import javax.media.opengl.GLAutoDrawable;
 import javax.media.opengl.GLCapabilities;
+import javax.media.opengl.glu.GLU;
+import javax.media.opengl.glu.GLUquadric;
 import opengl.drawingutils.GLColor;
+import opengl.helper.Frustum.CullingLocation;
 import opengl.helper.ProjectionHelper;
 
 /**
@@ -62,12 +61,58 @@ public class ZETVisualization extends Visualization<GLControl> implements EventL
 			this.setParallelViewMode( ParallelViewMode.Orthogonal );
 	}
 
-	@Override
+		static Vector3 camPos = new Vector3(0,0,10);
+		static Vector3 camView = new Vector3(0,0,-1);
+		static Vector3 camUp = new Vector3(0,1,0);
+static boolean done = false;
+		static Vector3 pointPos = new Vector3( 0,0,0);
+		static GLUquadric quadObj = null;
+
+		@Override
 	public void display( GLAutoDrawable drawable ) {
 		showEye = PropertyContainer.getInstance().getAsBoolean( "options.visualization.elements.eye" );
 		showFPS = PropertyContainer.getInstance().getAsBoolean( "options.visualization.elements.fps" );
 		showTimestepGraph = PropertyContainer.getInstance().getAsBoolean( "options.visualization.elements.timestepGraph" );
 		showTimestepCellularAutomaton = PropertyContainer.getInstance().getAsBoolean( "options.visualization.elements.timestepCA" );
+
+
+		// begin test
+//		if( !done ) {
+//			camera.setPos( camPos );
+//			camera.setView( camView );
+//			camera.setUp( camUp );
+//		}
+//		frustum.setAll( getFov(), aspect, getzNear(), getzFar() );
+//		frustum.update( camera.getPos(), camera.getView(), camera.getUp() );
+//
+//		if( quadObj == null )
+//			quadObj = glu.gluNewQuadric();
+//		glu.gluQuadricDrawStyle( quadObj, GLU.GLU_FILL );
+//		glu.gluQuadricOrientation( quadObj, GLU.GLU_OUTSIDE );
+//		gl.glClear( clearBits );
+//
+//		gl.glMatrixMode( GL.GL_MODELVIEW );
+//		gl.glLoadIdentity();
+//		float[] light_position = new float[4];
+//		light_position[0] = (float)camera.getView().x;
+//		light_position[1] = (float)camera.getView().y;
+//		light_position[2] = (float)camera.getView().z;
+//		//light_position[0] = 0;
+//		//light_position[1] = 1;
+//		//light_position[2] = 0;
+//		light_position[3] = 1.0f;
+//
+//		if( frustum.isPointInFrustum( pointPos ) == CullingLocation.inside ) {
+//			System.out.println( "Point is in frustum" );
+//		} else
+//			System.out.println( "Point is not in frustum" );
+//
+//		look();
+//		glu.gluSphere( quadObj, 5, 32, 16);
+////		gl.glClear( GL.GL_DEPTH_BUFFER_BIT );
+////		drawFPS();
+
+
 		super.display( drawable );
 	}
 

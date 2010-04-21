@@ -30,7 +30,7 @@ public abstract class FrustumTester extends CullingTester {
 		this.frustum = val;
 	}
 
-	public CullingLocation testCullingLocation( CullingShape object ) {
-		return null;
-	}
+//	public CullingLocation testCullingLocation( CullingShape object ) {
+//		return null;
+//	}
 }
