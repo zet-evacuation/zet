@@ -524,6 +524,7 @@ public class JEditor extends JFrame implements Localized, EventListener<Progress
 		editView = new JEditView( );
 		batchView = new JBatchView();
 		visualizationView = new JVisualizationView( new GLCapabilities() );
+		visualizationView.getGLContainer().setControl( new GLControl() );
 		visualizationView.setFloorSelectorEnabled( !PropertyContainer.getInstance().getAsBoolean( "settings.gui.visualization.floors" ) );
 		if( PropertyContainer.getInstance().getAsBoolean( "settings.gui.visualization.isometric" ) ) {
 			visualizationView.getGLContainer().setParallelViewMode( AbstractVisualization.ParallelViewMode.Isometric );
@@ -673,10 +674,19 @@ public class JEditor extends JFrame implements Localized, EventListener<Progress
 		// Extras-Menu
 		mLanguage = Menu.addMenu( mExtras, loc.getString( "menuLanguages" ) );
 		ButtonGroup grpLanguage = new ButtonGroup();
-		JRadioButtonMenuItem mnuGerman = Menu.addRadioButtonMenuItem( mLanguage, "_Deutsch", true, aclLanguage, "german" );
+
+		JRadioButtonMenuItem mnuGerman;
+		JRadioButtonMenuItem mnuEnglish;
+		if( loc.getLocale().equals( Locale.GERMAN ) ) {
+			mnuGerman = Menu.addRadioButtonMenuItem( mLanguage, "_Deutsch", true, aclLanguage, "german" );
+			mnuEnglish = Menu.addRadioButtonMenuItem( mLanguage, "_english", false, aclLanguage, "english" );
+		} else {
+			mnuGerman = Menu.addRadioButtonMenuItem( mLanguage, "_Deutsch", false, aclLanguage, "german" );
+			mnuEnglish = Menu.addRadioButtonMenuItem( mLanguage, "_english", true, aclLanguage, "english" );
+		}
 		grpLanguage.add( mnuGerman );
-		JRadioButtonMenuItem mnuEnglish = Menu.addRadioButtonMenuItem( mLanguage, "_english", false, aclLanguage, "english" );
 		grpLanguage.add( mnuEnglish );
+
 		mnuLanguages[0] = mnuGerman;
 		mnuLanguages[1] = mnuEnglish;
 		Menu.addMenuItem( mExtras, "-" );
@@ -1072,21 +1082,21 @@ public class JEditor extends JFrame implements Localized, EventListener<Progress
 		if( ZETMain.isDebug() ) {
 			Menu.updateMenu( mExecute, loc.getString( "menuExecute" ) );
 			Menu.updateMenu( mSimulation, loc.getString( "menuSimulation" ) );
-			Menu.updateMenu( mnuCreateCA, loc.getString( "menuSimulationCreateCA" ) );
-			Menu.updateMenu( mnuApplyAssignment, loc.getString( "menuSimulationApplyConcreteAssignment" ) );
+/**/			Menu.updateMenu( mnuCreateCA, loc.getString( "menuSimulationCreateCA" ) );
+/**/			Menu.updateMenu( mnuApplyAssignment, loc.getString( "menuSimulationApplyConcreteAssignment" ) );
 			Menu.updateMenu( mnuStartSimulation, loc.getString( "menuSimulationStart" ) );
 			//TODO if paused use other
 			if( caAlgo != null )
 				if( caAlgo.isPaused() )
-					Menu.updateMenu( mnuPauseSimulation, loc.getString( "menuSimulationContinue" ) );
+/**/					Menu.updateMenu( mnuPauseSimulation, loc.getString( "menuSimulationContinue" ) );
 				else
-					Menu.updateMenu( mnuPauseSimulation, loc.getString( "menuSimulationPause" ) );
+/**/					Menu.updateMenu( mnuPauseSimulation, loc.getString( "menuSimulationPause" ) );
 			else
-				Menu.updateMenu( mnuPauseSimulation, loc.getString( "menuSimulationPause" ) );
+/**/				Menu.updateMenu( mnuPauseSimulation, loc.getString( "menuSimulationPause" ) );
 			Menu.updateMenu( mnuStepByStepSimulation, loc.getString( "menuSimulationStepByStep" ) );
 			Menu.updateMenu( mnuQuickVisualization, loc.getString( "menuSimulationQuickVisualization" ) );
 			Menu.updateMenu( mOptimization, loc.getString( "menuOptimization" ) );
-			Menu.updateMenu( mnuCreateGraph, loc.getString( "menuOptimizationCreateGraph" ) );
+/**/			Menu.updateMenu( mnuCreateGraph, loc.getString( "menuOptimizationCreateGraph" ) );
 			Menu.updateMenu( mnuQuickestTransshipment, loc.getString( "menuOptAlgoQuickestTransshipment" ) );
 			Menu.updateMenu( mnuMaxFlowOverTimeMC, loc.getString( "menuOptAlgoMaxFlowOverTimeMinCost" ) );
 			Menu.updateMenu( mnuMaxFlowOverTimeTEN, loc.getString( "menuOptAlgoMaxFlowOverTimeTEN" ) );
@@ -1579,9 +1589,9 @@ public class JEditor extends JFrame implements Localized, EventListener<Progress
 					ZETMain.sendError( loc.getString( "gui.UnknownCommand" ) + " '" + e.getActionCommand() + "'. " + loc.getString( "gui.ContactDeveloper" ) );
 				localize();
 			} catch( Exception ex ) {
+				ex.printStackTrace();
 				JOptionPane.showMessageDialog( getInstance(),
-								ex.getLocalizedMessage(), loc.getString( "gui.Error" ),
-								JOptionPane.ERROR_MESSAGE );
+								ex.getLocalizedMessage(), loc.getString( "gui.Error" ), JOptionPane.ERROR_MESSAGE );
 			}
 		}
 	};

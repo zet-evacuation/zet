@@ -126,10 +126,18 @@ public class Individual implements Identifiable {
 		return cellCountToChange;
 	}
 
+	/**
+	 * Used for some potential change rule...
+	 * @return
+	 */
 	public int getMemoryIndex() {
 		return memoryIndex;
 	}
 
+	/**
+	 * Used for some potential change rule...
+	 * @return
+	 */
 	public void setMemoryIndex( int index ) {
 		memoryIndex = index;
 	}

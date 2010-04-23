@@ -91,12 +91,15 @@ public class JVisualizationView extends AbstractVisualizationView<ZETVisualizati
 	private JButton setCameraPosition;
 	/** The camera. */
 	private Camera camera;
+	// TODO better, directly take the enum
 	private final int HEAD_INFORMATION_NOTHING = 0;
 	private final int HEAD_INFORMATION_PANIC = 1;
 	private final int HEAD_INFORMATION_SPEED = 2;
 	private final int HEAD_INFORMATION_EXHAUSTION = 3;
 	private final int HEAD_INFORMATION_ALARMED = 4;
 	private final int HEAD_INFORMATION_CHOSEN_EXIT = 5;
+	private final int HEAD_INFORMATION_REACTION = 6;
+	
 	JArrayPanel cameraPanel;
 	public JVisualizationView( GLCapabilities caps ) {
 		super( new VisualizationPanel<ZETVisualization>( new ZETVisualization( caps ) ) );
@@ -214,6 +217,7 @@ public class JVisualizationView extends AbstractVisualizationView<ZETVisualizati
 		headColorSelector.addItem( loc.getString( "gui.visualizationView.headsExhaustion" ) );
 		headColorSelector.addItem( loc.getString( "gui.visualizationView.headsAlarmed" ) );
 		headColorSelector.addItem( loc.getString( "gui.visualizationView.headsChosenExit" ) );
+		headColorSelector.addItem( loc.getString( "gui.visualizationView.headsReactionTime" ) );
 		headColorSelector.setSelectedIndex( 1 );
 		headColorSelector.addActionListener( new ActionListener() {
 			public void actionPerformed( ActionEvent e ) {
@@ -237,6 +241,8 @@ public class JVisualizationView extends AbstractVisualizationView<ZETVisualizati
 					case HEAD_INFORMATION_CHOSEN_EXIT:
 						visualization.getControl().showIndividualInformation( GLControl.IndividualInformationDisplay.CHOSEN_EXIT );
 						break;
+					case HEAD_INFORMATION_REACTION:
+						visualization.getControl().showIndividualInformation( GLControl.IndividualInformationDisplay.REACTION_TIME );
 				}
 				getLeftPanel().getGLContainer().repaint();
 			}
