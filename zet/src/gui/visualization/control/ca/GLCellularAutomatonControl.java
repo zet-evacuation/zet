@@ -73,6 +73,8 @@ public class GLCellularAutomatonControl extends AbstractZETVisualizationControl<
 	private int cellsDone;
 	private int recordingCount;
 	private int recordingDone;
+	private int maxReactionTime;
+
 
 	public GLCellularAutomatonControl( CAVisualizationResults caVisResults, CellularAutomaton ca ) {
 		super();
@@ -315,6 +317,10 @@ public class GLCellularAutomatonControl extends AbstractZETVisualizationControl<
 					cell.stepUpdate();
 
 		finished = step > recordingCount;
+	}
+
+	public double getTimeInSeconds() {
+		return time * Conversion.nanoSecondsToSec;
 	}
 
 	@Override

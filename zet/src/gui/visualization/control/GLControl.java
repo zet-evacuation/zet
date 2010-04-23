@@ -100,7 +100,9 @@ public class GLControl implements DrawableControlable {
 		/** Shows the alarm-status at the head */
 		ALARMED,
 		/** Shows the chosen exit at the head*/
-		CHOSEN_EXIT
+		CHOSEN_EXIT,
+		/** The rest of the reaction time */
+		REACTION_TIME
 	}
 	/** The localization class. */
 	private Localization loc = Localization.getInstance();

@@ -114,12 +114,12 @@ public class GLIndividualControl extends AbstractZETVisualizationControl<GLIndiv
 //			else
 //				stepEnd = lastEnd;
 		}
+		calcHeadInformation();
 		if( stepStart == -1 )
 			return;
 		startTimeOfMove = stepStart;
 		calcPos( step, stepStart, stepEnd, source, destination );
 		invisible = source.getFloorID() != destination.getFloorID();
-		calcHeadInformation();
 	}
 
 	/**
@@ -185,6 +185,9 @@ public class GLIndividualControl extends AbstractZETVisualizationControl<GLIndiv
 				// TODO visualization statistic
 				//final int potentials = mainControl.getPotentialManager().getStaticPotentials().size();
 				//headInformationValue = (controlled.getStaticPotential().getID() % potentials) / (double) potentials;
+				break;
+			case REACTION_TIME:
+				headInformationValue = 1-(mainControl.getTimeInSeconds()/controlled.getReactionTime());
 				break;
 		}
 	}
