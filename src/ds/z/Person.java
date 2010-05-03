@@ -45,6 +45,8 @@ public class Person {
 	private double panic;
 	/** The distribution of the persons' parameter "decisiveness". */
 	private double decisiveness;
+	/** The reaction time in seconds. */
+	private double reaction;
 	/** The preferred exit area of the person. */
 	private ds.z.SaveArea saveArea;
 
@@ -121,14 +123,21 @@ public class Person {
 	}
 
 	/**
+	 * Returns the reaction time of the person.
+	 * @return the reaction time of the person
+	 */
+	public double getReaction() {
+		return reaction;
+	}
+
+	/**
 	 * Sets the diameter of the person.
 	 * @param diameter the diameter
 	 * @throws java.lang.IllegalArgumentException if the diameter is less or equal to zero
 	 */
 	public void setDiameter( double diameter ) throws java.lang.IllegalArgumentException {
-		if( diameter <= 0 ) {
+		if( diameter <= 0 )
 			throw new java.lang.IllegalArgumentException( Localization.getInstance().getString( "ds.z.DiameterException" ) );
-		}
 		this.diameter = diameter;
 	}
 
@@ -138,9 +147,8 @@ public class Person {
 	 * @throws java.lang.IllegalArgumentException if the age is negative
 	 */
 	public void setAge( double age ) throws java.lang.IllegalArgumentException {
-		if( age < 0 ) {
+		if( age < 0 )
 			throw new java.lang.IllegalArgumentException( Localization.getInstance().getString( "ds.z.AgeException" ) );
-		}
 		this.age = age;
 	}
 
@@ -150,9 +158,8 @@ public class Person {
 	 * @throws java.lang.IllegalArgumentException If the familiarity is less or equal to zero
 	 */
 	public void setFamiliarity( double familiarity ) throws java.lang.IllegalArgumentException {
-		if( familiarity <= 0 ) {
+		if( familiarity <= 0 )
 			throw new java.lang.IllegalArgumentException( Localization.getInstance().getString( "ds.z.FamilarityException" ) );
-		}
 		this.familiarity = familiarity;
 	}
 
@@ -162,9 +169,8 @@ public class Person {
 	 * @throws java.lang.IllegalArgumentException if the panic is less than zero
 	 */
 	public void setPanic( double panic ) throws java.lang.IllegalArgumentException {
-		if( panic < 0 ) {
+		if( panic < 0 )
 			throw new java.lang.IllegalArgumentException( Localization.getInstance().getString( "ds.z.PanicException" ) );
-		}
 		this.panic = panic;
 	}
 
@@ -177,6 +183,17 @@ public class Person {
 		if( decisiveness <= 0 )
 			throw new java.lang.IllegalArgumentException( Localization.getInstance().getString( "ds.z.DecisivenessException" ) );
 		this.decisiveness = decisiveness;
+	}
+
+	/**
+	 * Sets the reaction time of the person.
+	 * @param reaction the reaction time in seconds
+	 * @throws java.lang.IllegalArgumentException if the reaction time is less than zero
+	 */
+	public void setReaction( double reaction ) throws java.lang.IllegalArgumentException {
+		if( reaction < 0 )
+			throw new java.lang.IllegalArgumentException( Localization.getInstance().getString( "ds.z.ReactionException" ) );
+		this.reaction = reaction;
 	}
 
 	public UUID getUid() {

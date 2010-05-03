@@ -461,7 +461,9 @@ public class ZToCAConverter {
 		double exhaustionFactor = ps.getExhaustionFromAge( pAge );
 		double maxSpeed = ps.getSpeedFromAge( pAge );
 
-		int reactiontime = (int) ps.getReactionTimeFromAge( pAge );
+		// Reaction time is now (since 1.1) computed directly from the correct
+		// individual assignment parameter.
+		double reactiontime = p.getReaction();
 		return new Individual( (int) pAge, familiarity, panicFactor, slackness, exhaustionFactor, maxSpeed, reactiontime, p.getUid() );
 	}
 

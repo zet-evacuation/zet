@@ -31,6 +31,12 @@ public abstract class AbstractRule implements Rule {
 		return caController;
 	}
 
+	/**
+	 * Returns if the rule is executable on the cell. The default behaviour is,
+	 * that a rule is executable if an {@link Individual} is standing on it.
+	 * @param cell the cell that is checked
+	 * @return {@code true} if an individual is standing on the cell, {@code false} otherwise
+	 */
 	@Override
 	public boolean executableOn( Cell cell ) {
 		return (cell.getIndividual() != null);

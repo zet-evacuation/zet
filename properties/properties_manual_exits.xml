@@ -21,7 +21,7 @@
       <treeNode name="DefaultRuleSet" useAsLocString="false">
         <stringListNode name="properties.simulation.ca.defaultRuleSet.init" useAsLocString="true" description="" information="properties.simulation.ca.defaultRuleSet.primary.info" parameter="algo.ca.defaultRuleSet.init">
 		  <string>ConvertIndividualParameters</string>
-          <string>ApplyExitMappingRule</string>
+          <string>InitialPotentialExitMappingRule</string>
           <string>SaveIndividualsRule</string>
           <string>EvacuateIndividualsRule</string>
           <string>InitialDynamicPotentialRule</string>

@@ -15,7 +15,7 @@
  */
 
 /**
- * Class ApplyExitMappingRule
+ * Class InitialPotentialExitMappingRule
  * Erstellt 03.12.2008, 23:02:42
  */
 
@@ -32,7 +32,7 @@ import java.util.HashMap;
  * allowed to have individuals with no mapped exit.
  * @author Jan-Philipp Kappmeier
  */
-public class ApplyExitMappingRule extends AbstractInitialRule {
+public class InitialPotentialExitMappingRule extends AbstractInitialRule {
 	boolean initialized = false;
 	HashMap<TargetCell, StaticPotential> potentialMapping;
 	
@@ -69,20 +69,23 @@ public class ApplyExitMappingRule extends AbstractInitialRule {
 	protected void onExecute( Cell cell ) {
 		if( !initialized )
 			init();
-		
+
 		//for( Individual individual : getIndividuals() ) {
 		Individual individual = cell.getIndividual();
-			TargetCell target = caController().getCA().getIndividualToExitMapping().getExit( individual );
-			if( target == null ) {
-				if( !individual.isDead() )
-					System.out.println( "Individual " + individual.getNumber() + " has no manual exit assigned." );
-			} else {
-				StaticPotential potential = potentialMapping.get( target );
-				if( potential == null )
-					throw new IllegalArgumentException( "The target cell (room id, x, y) " + target.getRoom().getID() + ", " + target.getX() + ", " + target.getY() + " does not correspond to a static potential." );
-				individual.setStaticPotential( potential );
-			}
+		TargetCell target = caController().getCA().getIndividualToExitMapping().getExit( individual );
+		if( target == null )
+			// TODO set output for some debug level
+			//if( !individual.isDead() )
+			//	System.out.println( "Individual " + individual.getNumber() + " has no manual exit assigned." );
+			InitialPotentialShortestPathRule.assignShortestPathPotential( cell, this.caController() );
+		else {
+			StaticPotential potential = potentialMapping.get( target );
+			if( potential == null )
+				throw new IllegalArgumentException( "The target cell (room id, x, y) " + target.getRoom().getID() + ", " + target.getX() + ", " + target.getY() + " does not correspond to a static potential." );
+			individual.setStaticPotential( potential );
+		}
 		//}
+		// TODO statistic for this rule
 	}
 
 }

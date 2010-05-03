@@ -15,6 +15,8 @@
  */
 package converter;
 
+import de.tu_berlin.math.coga.rndutils.distribution.continuous.NormalDistribution;
+import de.tu_berlin.math.coga.rndutils.distribution.continuous.UniformDistribution;
 import ds.Project;
 import ds.z.Assignment;
 import ds.z.AssignmentArea;
@@ -32,7 +34,6 @@ import ds.z.RoomEdge;
 import java.io.File;
 import java.util.ArrayList;
 import junit.framework.TestCase;
-import util.random.distributions.NormalDistribution;
 
 
 public class ExampleCreator extends TestCase {
@@ -374,16 +375,17 @@ public class ExampleCreator extends TestCase {
 		NormalDistribution familiarity = new NormalDistribution( 0.8, 1.0, 0.7, 1.0 );
 		NormalDistribution panic = new NormalDistribution( 0.5, 1.0, 0.0, 1.0 );
 		NormalDistribution decisiveness = new NormalDistribution( 0.3, 1.0, 0.0, 1.0 );
-		AssignmentType children = new AssignmentType( "Children", diameter, age, familiarity, panic, decisiveness, 1 );
+		UniformDistribution reaction = new UniformDistribution( 10, 50 );
+		AssignmentType children = new AssignmentType( "Children", diameter, age, familiarity, panic, decisiveness, reaction, 1 );
 		schoolDemo.addAssignmentType( children );
 
-		AssignmentType parents = new AssignmentType( "Parents", diameter, age, familiarity, panic, decisiveness, 1 );
+		AssignmentType parents = new AssignmentType( "Parents", diameter, age, familiarity, panic, decisiveness, reaction, 1 );
 		schoolDemo.addAssignmentType( parents );
 
-		AssignmentType rest = new AssignmentType( "Rest", diameter, age, familiarity, panic, decisiveness, 2 );
+		AssignmentType rest = new AssignmentType( "Rest", diameter, age, familiarity, panic, decisiveness, reaction, 2 );
 		schoolDemo.addAssignmentType( rest );
 
-		AssignmentType rest2 = new AssignmentType( "Rest2", diameter, age, familiarity, panic, decisiveness, 3 );
+		AssignmentType rest2 = new AssignmentType( "Rest2", diameter, age, familiarity, panic, decisiveness, reaction, 3 );
 		schoolDemo2.addAssignmentType( rest2 );
 
 		AssignmentArea dieleAssignment = new AssignmentArea( f1_r1, children );

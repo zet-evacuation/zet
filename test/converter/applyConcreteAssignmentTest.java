@@ -19,23 +19,21 @@
  */
 package converter;
 
-import static org.junit.Assert.*;
 
-import java.io.File;
 import java.util.ArrayList;
 
 import org.junit.Before;
 import org.junit.Test;
 
-import util.random.distributions.NormalDistribution;
 
 import converter.ZToCAConverter.ConversionNotSupportedException;
+import de.tu_berlin.math.coga.rndutils.distribution.continuous.NormalDistribution;
+import de.tu_berlin.math.coga.rndutils.distribution.continuous.UniformDistribution;
 
 import ds.Project;
 import ds.z.Assignment;
 import ds.z.AssignmentArea;
 import ds.z.AssignmentType;
-import ds.z.BuildingPlan;
 import ds.z.ConcreteAssignment;
 import ds.z.Floor;
 import ds.z.PlanPoint;
@@ -84,7 +82,8 @@ public class applyConcreteAssignmentTest {
 		NormalDistribution familiarity = new NormalDistribution( 0.8, 1.0, 0.7, 1.0 );
 		NormalDistribution panic = new NormalDistribution( 0.5, 1.0, 0.0, 1.0 );
 		NormalDistribution decisiveness = new NormalDistribution( 0.3, 1.0, 0.0, 1.0 );
-		AssignmentType students = new AssignmentType( "Students", diameter, age, familiarity, panic, decisiveness, 15 );
+		UniformDistribution reaction = new UniformDistribution( 10, 30 );
+		AssignmentType students = new AssignmentType( "Students", diameter, age, familiarity, panic, decisiveness, reaction, 15 );
 		uni.addAssignmentType( students );
 
 		AssignmentArea tischAssignment = new AssignmentArea( pg_room, students );
@@ -116,7 +115,7 @@ public class applyConcreteAssignmentTest {
             throw new Exception("The building plan contains features that cannot be converted to a CA. " + e.getMessage());
         }
         
-        ZToCAConverter.getInstance().applyConcreteAssignment(newCA);
+        ZToCAConverter.applyConcreteAssignment( newCA );
         
         for(ds.ca.Room room : ca.getRooms()){
             System.out.println(room.graphicalToString());

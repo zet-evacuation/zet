@@ -2358,7 +2358,7 @@ caRes.statistic = caStatistic;
 			oldView.y += heightIncrement / 2;
 		}
 
-		CoordinateTools.setZoomFactor( zoomFactor );
+		//CoordinateTools.setZoomFactor( zoomFactor );
 		editView.getLeftPanel().setZoomFactor( zoomFactor );
 		editView.getFloor().getPlanImage().update();
 		editView.updateFloorView();

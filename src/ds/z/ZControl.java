@@ -11,7 +11,9 @@ import java.util.List;
 import de.tu_berlin.math.coga.common.localization.Localization;
 import de.tu_berlin.math.coga.common.util.Helper;
 import de.tu_berlin.math.coga.common.util.IOTools;
+import de.tu_berlin.math.coga.rndutils.distribution.Distribution;
 import de.tu_berlin.math.coga.rndutils.distribution.continuous.NormalDistribution;
+import de.tu_berlin.math.coga.rndutils.distribution.continuous.UniformDistribution;
 import event.EventServer;
 import event.ZModelChangedEvent;
 import gui.ZETMain;
@@ -98,9 +100,11 @@ public class ZControl {
 	}
 
 	/**
-	 * Creates a new project with default settings and returns it. The old model
-	 * controlled by this class is replaced by the new empty model for the new
-	 * project.
+	 * <p>Creates a new project with default settings and returns it. The old
+	 * model controlled by this class is replaced by the new empty model for the
+	 * new project.</p>
+	 * <p>The model parameters follow the guides from RiMEA (www.rimea.de) if they
+	 * are specified.</p>
 	 * @return the newly created project
 	 */
 	public Project newProject() {
@@ -109,14 +113,40 @@ public class ZControl {
 		p.getBuildingPlan().addFloor( fl );
 		Assignment assignment = new Assignment( loc.getString( "ds.z.DefaultName.DefaultAssignment" ) );
 		p.addAssignment( assignment );
-		NormalDistribution d = new NormalDistribution( 0.5, 1.0, 0.4, 0.7 );
-		NormalDistribution a = new NormalDistribution( 16, 1, 14, 80 );
-		NormalDistribution f = new NormalDistribution( 0.8, 1.0, 0.7, 1.0 );
-		NormalDistribution pa = new NormalDistribution( 0.5, 1.0, 0.0, 1.0 );
-		NormalDistribution de = new NormalDistribution( 0.3, 1.0, 0.0, 1.0 );
-		AssignmentType assignmentType = new AssignmentType( loc.getString( "ds.z.DefaultName.DefaultAssignmentType" ), d, a, f, pa, de, 10 );
+		Distribution diameter = getDefaultAssignmentTypeDistribution( "diameter" );
+		Distribution age = getDefaultAssignmentTypeDistribution( "age" );
+		Distribution familiarity = getDefaultAssignmentTypeDistribution( "familiarity" );
+		Distribution panic = getDefaultAssignmentTypeDistribution( "panic" );
+		Distribution decisiveness = getDefaultAssignmentTypeDistribution( "decisiveness" );
+		Distribution reaction = getDefaultAssignmentTypeDistribution( "reaction" );
+		AssignmentType assignmentType = new AssignmentType( loc.getString( "ds.z.DefaultName.DefaultAssignmentType" ), diameter, age, familiarity, panic, decisiveness, reaction, 10 );
 		assignment.addAssignmentType( assignmentType );
 		return p;
+	}
+
+	/**
+	 * Returns default values for a {@link util.Distribution} distribution
+	 * for a specified parameter. Reaction time and age follow the guidelines of
+	 * RiMEA (www.rimea.de).
+	 * @param type the parameter
+	 * @return the distribution for the parameter
+	 * @throws IllegalArgumentException if type is an unknown string
+	 */
+	public static Distribution getDefaultAssignmentTypeDistribution( String type ) throws IllegalArgumentException {
+		if( type.equals( "diameter" ) ) {
+			return new NormalDistribution( 0.5, 1.0, 0.4, 0.7 );
+		} else if( type.equals( "age" ) ) {
+			return new NormalDistribution( 50, 20, 10, 85 );
+		} else if( type.equals( "familiarity" ) ) {
+			return new NormalDistribution( 0.8, 1.0, 0.7, 1.0 );
+		} else if( type.equals( "panic" ) ) {
+			return new NormalDistribution( 0.5, 1.0, 0.0, 1.0 );
+		} else if( type.equals( "decisiveness" ) ) {
+			return new NormalDistribution( 0.3, 1.0, 0.0, 1.0 );
+		} else if( type.equals( "reaction" ) ) {
+			return new UniformDistribution( 0, 60 );
+		}
+		throw new IllegalArgumentException( "Unknown parameter type." );
 	}
 
 	public void delete( PlanPolygon p ) {

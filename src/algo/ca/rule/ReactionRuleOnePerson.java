@@ -30,20 +30,20 @@ import ds.ca.Individual;
 public class ReactionRuleOnePerson extends AbstractReactionRule {
 
 	/**
-	 * Creates the instance.
+	 * Creates the instance of this rule.
 	 */
-	public ReactionRuleOnePerson() {
-	}
+	public ReactionRuleOnePerson() { }
 
 	/**
 	 * Executes the rule. The individual is alarmed if the time is over
-	 * otherwise the remaining time is reduced by one.
-	 * @param cell
+	 * otherwise the remaining time is reduced by one. No other individuals are
+	 * infected from the alerting of the individual.
+	 * @param cell the cell on which the rule is executed
 	 */
 	@Override
 	protected void onExecute( ds.ca.Cell cell ) {
 		Individual i = cell.getIndividual();
-		if( i.getReactionTime() == 0 )
+		if( i.getReactionTime()-1 <= 0 )
 			i.setAlarmed( true );
 		else
 			i.setReactionTime( i.getReactionTime() - 1 );

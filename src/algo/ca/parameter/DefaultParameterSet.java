@@ -31,19 +31,20 @@ import java.util.List;
 import de.tu_berlin.math.coga.common.localization.Localization;
 import de.tu_berlin.math.coga.rndutils.RandomUtils;
 import de.tu_berlin.math.coga.rndutils.distribution.continuous.NormalDistribution;
+import de.tu_berlin.math.coga.rndutils.distribution.continuous.UniformDistribution;
 
 /**
  * @author Daniel Pluempe, Jan-Philipp Kappmeier
  */
 public class DefaultParameterSet extends AbstractDefaultParameterSet {
-	final protected double PANIC_TO_PROB_OF_POTENTIAL_CHANGE_RATIO;
-	final protected double SLACKNESS_TO_IDLE_RATIO;
-	final protected double PANIC_DECREASE;
-	final protected double PANIC_INCREASE;
-	final protected double PANIC_WEIGHT_ON_SPEED;
-	final protected double PANIC_WEIGHT_ON_POTENTIALS;
-	final protected double EXHAUSTION_WEIGHT_ON_SPEED;
-	final protected double PANIC_THRESHOLD;
+	final protected double PANIC_TO_PROB_OF_POTENTIAL_CHANGE_RATIO = 1;
+	final protected double SLACKNESS_TO_IDLE_RATIO = 1;
+	final protected double PANIC_DECREASE = 0;
+	final protected double PANIC_INCREASE = 0;
+	final protected double PANIC_WEIGHT_ON_SPEED = 0;
+	final protected double PANIC_WEIGHT_ON_POTENTIALS = 0;
+	final protected double EXHAUSTION_WEIGHT_ON_SPEED = 0;
+	final protected double PANIC_THRESHOLD = 0;
 	final protected double MINIMUM_PANIC = 0.0d;
 	final protected double MAXIMUM_PANIC = 1.0d;
 
@@ -51,14 +52,18 @@ public class DefaultParameterSet extends AbstractDefaultParameterSet {
 	 * Creates a new instance with some static values stored in the {@code PropertyContainer}.
 	 */
 	public DefaultParameterSet() {
-		PANIC_TO_PROB_OF_POTENTIAL_CHANGE_RATIO = PropertyContainer.getInstance().getAsDouble( "algo.ca.PANIC_TO_PROB_OF_POTENTIAL_CHANGE_RATIO" );
-		SLACKNESS_TO_IDLE_RATIO = PropertyContainer.getInstance().getAsDouble( "algo.ca.SLACKNESS_TO_IDLE_RATIO" );
-		PANIC_DECREASE = PropertyContainer.getInstance().getAsDouble( "algo.ca.PANIC_DECREASE" );
-		PANIC_INCREASE = PropertyContainer.getInstance().getAsDouble( "algo.ca.PANIC_INCREASE" );
-		PANIC_WEIGHT_ON_SPEED = PropertyContainer.getInstance().getAsDouble( "algo.ca.PANIC_WEIGHT_ON_SPEED" );
-		PANIC_WEIGHT_ON_POTENTIALS = PropertyContainer.getInstance().getAsDouble( "algo.ca.PANIC_WEIGHT_ON_POTENTIALS" );
-		EXHAUSTION_WEIGHT_ON_SPEED = PropertyContainer.getInstance().getAsDouble( "algo.ca.EXHAUSTION_WEIGHT_ON_SPEED" );
-		PANIC_THRESHOLD = PropertyContainer.getInstance().getAsDouble( "algo.ca.PANIC_THRESHOLD" );
+//try{
+//	PANIC_TO_PROB_OF_POTENTIAL_CHANGE_RATIO = PropertyContainer.getInstance().getAsDouble( "algo.ca.PANIC_TO_PROB_OF_POTENTIAL_CHANGE_RATIO" );
+//		SLACKNESS_TO_IDLE_RATIO = PropertyContainer.getInstance().getAsDouble( "algo.ca.SLACKNESS_TO_IDLE_RATIO" );
+//		PANIC_DECREASE = PropertyContainer.getInstance().getAsDouble( "algo.ca.PANIC_DECREASE" );
+//		PANIC_INCREASE = PropertyContainer.getInstance().getAsDouble( "algo.ca.PANIC_INCREASE" );
+//		PANIC_WEIGHT_ON_SPEED = PropertyContainer.getInstance().getAsDouble( "algo.ca.PANIC_WEIGHT_ON_SPEED" );
+//		PANIC_WEIGHT_ON_POTENTIALS = PropertyContainer.getInstance().getAsDouble( "algo.ca.PANIC_WEIGHT_ON_POTENTIALS" );
+//		EXHAUSTION_WEIGHT_ON_SPEED = PropertyContainer.getInstance().getAsDouble( "algo.ca.EXHAUSTION_WEIGHT_ON_SPEED" );
+//		PANIC_THRESHOLD = PropertyContainer.getInstance().getAsDouble( "algo.ca.PANIC_THRESHOLD" );
+//} catch( Exception e ) {
+//
+//}
 	}
 
 	/**
@@ -331,23 +336,68 @@ public class DefaultParameterSet extends AbstractDefaultParameterSet {
 	static double cumulativeSpeed = 0;
 	static int counter = 0;
 
-	public double getSpeedFromAge( double pAge ) {
+		public double wa = 0;
+		public double ma = 0;
+		public int w = 0;
+		public int m = 0;
+
+		public double getSpeedFromAge( double pAge ) {
 		// additional: calculate the average speed.
-		double ageArray[] = { 0.6, 1.15, 1.42, 1.61, 1.55, 1.51, 1.5, 1.48, 1.47, 1.4, 1.33, 1.29, 1.2, 1.08, 0.85, 0.7 };
+		double ageArray[] = {
+			0.58, // 5  years
+			1.15, // 10
+			1.42, // 15
+			1.61, // 20
+			1.55, // 25
+			1.54, // 30
+			1.5,  // 35
+			1.48, // 40
+			1.47, // 45
+			1.41, // 50
+			1.33, // 55
+			1.29, // 60
+			1.2,  // 65
+			1.08, // 70
+			0.85, // 75
+			0.68, // 80
+			0.5   // 85 // guessed, value not based on weidmann
+		};
 		int i2 = (int) Math.floor( pAge / 5 );
 		int i1 = i2 - 1;
 		double maxSpeedExpected = 0;
 		if( pAge <= 5 ) {
 			maxSpeedExpected = ageArray[0];
-		} else if( pAge >= 80 ) {
+		} else if( pAge >= 85 ) {
 			maxSpeedExpected = ageArray[15];
 		} else {
-			double diff = pAge - i2 * 5;
-			double slope = (ageArray[i2] - ageArray[i1]) / 5;
-			maxSpeedExpected = ageArray[i1] + diff * slope;
+//			double diff = pAge - i2 * 5;
+			double slope = (ageArray[i2] - ageArray[i1]);
+			//maxSpeedExpected = ageArray[i1] + diff * slope;
+			UniformDistribution uniform = new UniformDistribution( Math.min( ageArray[i1], ageArray[i2]), Math.max( ageArray[i1], ageArray[i2] ) );
+			maxSpeedExpected = uniform.getNextRandom();
+
+			maxSpeedExpected = slope * (pAge - Math.floor(pAge))  + ageArray[i1];
+
 		}
-		NormalDistribution normal = new NormalDistribution( maxSpeedExpected, 0.1, ageArray[0], ABSOLUTE_MAX_SPEED );
-		double randSpeed = normal.getNextRandom();
+		// Old: normal distributed speed...
+		//NormalDistribution normal = new NormalDistribution( maxSpeedExpected, 0.1, ageArray[0], ABSOLUTE_MAX_SPEED );
+		//double randSpeed = normal.getNextRandom();
+
+		// Change speeds for male and female individuals:
+		// + 5% for male, -5% for female
+		if( RandomUtils.getInstance().binaryDecision( 0.5 ) ) {
+			System.out.print( "m " );
+			//maxSpeedExpected *= 1.05;
+			w++;
+			wa+=maxSpeedExpected;
+		} else {
+			System.out.print( "w " );
+			maxSpeedExpected *= 0.90;
+			m++;
+			ma+=maxSpeedExpected;
+		}
+
+		double randSpeed = maxSpeedExpected;
 		double maxSpeed = randSpeed / ABSOLUTE_MAX_SPEED;
 		if( maxSpeed > 1 ) {
 			maxSpeed = 1;
@@ -363,7 +413,7 @@ public class DefaultParameterSet extends AbstractDefaultParameterSet {
 		//System.out.println( "First one has speed " + (maxSpeed * ABSOLUTE_MAX_SPEED) );
 		//System.out.println( "Average speed for " + counter + " persons: " + (cumulativeSpeed / counter) + " m/s. (Should be 1.3x)" );
 
-		return maxSpeed;
+		return maxSpeedExpected;
 	}
 
 	public double getSlacknessFromDecisiveness( double pDecisiveness ) {

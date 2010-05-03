@@ -22,13 +22,14 @@ import com.thoughtworks.xstream.io.HierarchicalStreamReader;
 import com.thoughtworks.xstream.mapper.Mapper;
 
 import ds.z.AssignmentType;
+import ds.z.ZControl;
 //import ds.z.event.ChangeListener;
 
 
 /** A converter that behaves just like a normal converter would do, he only adds
  * the functionality of recreating the changeListeners.
  *
- * @author Timon Kelter
+ * @author Timon Kelter, Jan-Philipp Kappmeier
  */
 public class AssignmentTypeConverter extends ReflectionConverter {
 	private Class myClass = AssignmentType.class;
@@ -53,7 +54,12 @@ public class AssignmentTypeConverter extends ReflectionConverter {
 		
         created = doUnmarshal(created, reader, context);
 		AssignmentType result = (AssignmentType)serializationMethodInvoker.callReadResolve(created);
-		
+
+		// Ols projects may not contain a parameter for reaction time. Set it to
+		// the default value if it is not present.
+		if( result.getReaction() == null )
+			result.setReaction( ZControl.getDefaultAssignmentTypeDistribution( "reaction" ) );
+
 		// Recreate changeListener list
 //		for (AssignmentArea t : result.getAssignmentAreas ()) {
 //			t.addChangeListener (result);
