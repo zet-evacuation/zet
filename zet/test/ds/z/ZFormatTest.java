@@ -15,7 +15,6 @@
  */
 /*
  * ZFormatTest.java
- *
  * Created on 5. Dezember 2007, 14:16
  */
 
@@ -23,6 +22,8 @@ package ds.z;
 
 import converter.RoomRaster;
 import converter.RoomRasterSquare;
+import de.tu_berlin.math.coga.rndutils.distribution.continuous.NormalDistribution;
+import de.tu_berlin.math.coga.rndutils.distribution.continuous.UniformDistribution;
 import ds.Project;
 import ds.ca.CellularAutomaton;
 import ds.ca.RoomCell;
@@ -30,7 +31,6 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 import junit.framework.TestCase;
-import util.random.distributions.NormalDistribution;
 
 /**
  * Tests the distribution classes.
@@ -253,7 +253,8 @@ public class ZFormatTest extends TestCase {
     NormalDistribution familiarity = new NormalDistribution( 0.8, 1.0, 0.7, 1.0 );
     NormalDistribution panic = new NormalDistribution( 0.5, 1.0, 0.0, 1.0 );
     NormalDistribution decisiveness = new NormalDistribution( 0.3, 1.0, 0.0, 1.0 );
-    AssignmentType children = new AssignmentType( "Children", diameter, age, familiarity, panic, decisiveness, 26 );
+		UniformDistribution reaction = new UniformDistribution( 10, 50 );
+    AssignmentType children = new AssignmentType( "Children", diameter, age, familiarity, panic, decisiveness, reaction, 26 );
     schoolDemo.addAssignmentType( children );
     
     // Sch�ler
@@ -262,7 +263,8 @@ public class ZFormatTest extends TestCase {
     familiarity = new NormalDistribution( 0.9, 1.0, 0.7, 1.0 );
     panic = new NormalDistribution( 0.25, 1.0, 0.0, 0.6 );
     decisiveness = new NormalDistribution( 0.7, 1.0, 0.5, 1.0 );
-    AssignmentType teacher = new AssignmentType( "Teachers", diameter, age, familiarity, panic, decisiveness, 1 );
+		reaction = new UniformDistribution( 10, 50 );
+    AssignmentType teacher = new AssignmentType( "Teachers", diameter, age, familiarity, panic, decisiveness, reaction, 1 );
     schoolDemo.addAssignmentType( teacher );
     
     AssignmentArea class1Assignment = new AssignmentArea( class1, children );

@@ -15,16 +15,8 @@
  */
 package ds.z;
 
-import junit.framework.*;
-import static org.junit.Assert.*;
-
 import java.util.ArrayList;
-
-import org.junit.Test;
-
-import util.random.distributions.NormalDistribution;
-
-import ds.z.*;
+import junit.framework.TestCase;
 
 
 public class RoomTest extends TestCase {

@@ -50,7 +50,7 @@ public class Individual implements Identifiable {
 	private double maxSpeed;
 	private double absoluteMaxSpeed;
 	private boolean alarmed;
-	private int reactionTime;
+	private double reactionTime;
 	private Cell cell;
 	private StaticPotential staticPotential;
 	private DynamicPotential dynamicPotential;
@@ -79,7 +79,7 @@ public class Individual implements Identifiable {
 	}
 
 	public Individual( int age, double familiarity, double panicFactor, double slackness, double exhaustionFactor,
-					double maxSpeed, int reactiontime, UUID uid ) {
+					double maxSpeed, double reactiontime, UUID uid ) {
 		this.age = age;
 		this.familiarity = familiarity;
 		this.panicFactor = panicFactor;
@@ -223,9 +223,9 @@ public class Individual implements Identifiable {
 
 	/**
 	 * Get the left reaction time of the Individual
-	 * @return The left reaction time 
+	 * @return the left reaction time
 	 */
-	public int getReactionTime() {
+	public double getReactionTime() {
 		return reactionTime;
 	}
 
@@ -234,7 +234,7 @@ public class Individual implements Identifiable {
 	 * @param reactionTime the reaction time.
 	 * @throws IllegalArgumentException if <code>reactionTime</code> is negative.
 	 */
-	public void setReactionTime( int reactionTime ) throws IllegalArgumentException {
+	public void setReactionTime( double reactionTime ) throws IllegalArgumentException {
 		if( reactionTime < 0 ) {
 			throw new IllegalArgumentException( "Reaction time must not be negative." );
 		}

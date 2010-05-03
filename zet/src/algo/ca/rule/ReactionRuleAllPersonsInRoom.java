@@ -33,6 +33,7 @@ public class ReactionRuleAllPersonsInRoom extends AbstractReactionRule {
 	 * Executes the rule. If the room is alarmed, the individual is alarmed, too.
 	 * If the room is not alarmed, the individual is alarmed if the time is over
 	 * otherwise the remaining time is reduced by one.
+	 * TODO test
 	 * @param cell
 	 */
 	@Override
@@ -40,7 +41,7 @@ public class ReactionRuleAllPersonsInRoom extends AbstractReactionRule {
 		Individual i = cell.getIndividual();
 		// Check all individuals
 		if( i.isAlarmed() == false ) {
-			if( i.getReactionTime() > 0 )
+			if( i.getReactionTime() > 1 )
 //				i.setAlarmed( true );
 //			else
 				i.setReactionTime( i.getReactionTime() - 1 );

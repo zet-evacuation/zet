@@ -15,13 +15,13 @@
  */
 package ds.z;
 
+import de.tu_berlin.math.coga.rndutils.distribution.continuous.NormalDistribution;
+import de.tu_berlin.math.coga.rndutils.distribution.continuous.UniformDistribution;
 import java.util.ArrayList;
 import java.util.HashSet;
 
-import util.random.distributions.NormalDistribution;
 import ds.Project;
 import junit.framework.*;
-import java.io.File;
 
 public class ConcreteAssignmentTest extends TestCase {
 
@@ -62,7 +62,8 @@ public class ConcreteAssignmentTest extends TestCase {
 		NormalDistribution familiarity = new NormalDistribution( 0.8, 1.0, 0.7, 1.0 );
 		NormalDistribution panic = new NormalDistribution( 0.5, 1.0, 0.0, 1.0 );
 		NormalDistribution decisiveness = new NormalDistribution( 0.3, 1.0, 0.0, 1.0 );
-		AssignmentType students = new AssignmentType( "Students", diameter, age, familiarity, panic, decisiveness, 15 );
+		UniformDistribution reaction = new UniformDistribution( 10, 50 );
+		AssignmentType students = new AssignmentType( "Students", diameter, age, familiarity, panic, decisiveness, reaction, 15 );
 		uni.addAssignmentType( students );
 
 		AssignmentArea tischAssignment = new AssignmentArea( pg_room, students );

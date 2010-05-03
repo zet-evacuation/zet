@@ -21,9 +21,9 @@
 
 package ds.z;
 
+import de.tu_berlin.math.coga.rndutils.distribution.continuous.NormalDistribution;
+import de.tu_berlin.math.coga.rndutils.distribution.continuous.UniformDistribution;
 import junit.framework.TestCase;
-import util.random.distributions.NormalDistribution;
-import util.random.distributions.UniformDistribution;
 
 /**
  * Tests the distribution classes.

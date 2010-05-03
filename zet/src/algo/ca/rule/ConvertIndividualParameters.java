@@ -13,6 +13,7 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
+
 /**
  * Class ConvertIndividualParameters
  * Erstellt 13.10.2008, 23:17:03
@@ -25,8 +26,9 @@ import ds.ca.Individual;
 
 /**
  * Converts some values of the individuals just before the execution of the
- * ca starts. It is supposed to execute this rule first and after all values
- * of the {@link ds.ca.CellularAutomaton} are initialized correctly.
+ * cellular automaton starts. It is supposed to execute this rule first and
+ * after all values of the {@link ds.ca.CellularAutomaton} are initialized
+ * correctly.
  * @author Jan-Philipp Kappmeier
  */
 public class ConvertIndividualParameters extends AbstractRule {

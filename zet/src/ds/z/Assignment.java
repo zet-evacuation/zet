@@ -296,6 +296,7 @@ public class Assignment implements Serializable {
 					person.setDiameter( assignmentType.getDiameter().getNextRandom().doubleValue() );
 					person.setFamiliarity( assignmentType.getFamiliarity().getNextRandom().doubleValue() );
 					person.setPanic( assignmentType.getPanic().getNextRandom().doubleValue() );
+					person.setReaction( assignmentType.getReaction().getNextRandom().doubleValue() );
 					person.setUid( assignmentType.getUid() );
 					person.setSaveArea( assignmentArea.getExitArea() );
 					ca.addPerson( person );

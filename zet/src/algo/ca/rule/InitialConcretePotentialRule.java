@@ -22,12 +22,11 @@ import ds.ca.StaticPotential;
 import ds.ca.Individual;
 
 /**
- * This rule chooses an Individual's (the one standing on the current cell) initial
- * StaticPotential according to the attractivity value of those Exit-Cells, whose
- * distances to the Individual are acceptable according to the Individual's 
- * familarity value.
- * If the Individual standing on "cell" is caged (it cannot leave the building, 
- * because there is now passable way to an ExitCell), this Individual has to die
+ * This rule chooses an {@link Individual}'s initial {@link StaticPotential}
+ * according to the attractivity value of those {@link ExitCells}, whose
+ * distances to the individual are acceptable according to its familarity value.
+ * If the Individual standing on a cell is caged (it cannot leave the building,
+ * because there is now passable way to an exit), this individual has to die
  * because it cannot be evacuated.
  * @author marcel
  *
@@ -43,13 +42,7 @@ public class InitialConcretePotentialRule extends AbstractInitialRule {
 	 */
 	@Override
 	public boolean executableOn( Cell cell ) {
-		if( cell.getIndividual() == null ) {
-			return false;
-		} else if( cell.getIndividual().getStaticPotential() != null ) {
-			return false;
-		} else {
-			return true;
-		}
+		return cell.getIndividual() == null || cell.getIndividual().getStaticPotential() != null ? false : true;
 	}
 
 	/**

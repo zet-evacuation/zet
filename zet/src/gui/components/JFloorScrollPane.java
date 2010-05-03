@@ -47,9 +47,9 @@ public class JFloorScrollPane<T extends AbstractFloor> extends JScrollPane imple
 	/** A button used to change the units of the rulers. */
 	private JButton unitButton;
 
-	public JFloorScrollPane( T panel ) {
-		super( panel );
-		this.floorPanel = panel;
+	public JFloorScrollPane( T floorPanel ) {
+		super( floorPanel );
+		this.floorPanel = floorPanel;
 		topRuler = new JZoomableRuler( JRuler.RulerOrientation.Horizontal, JRuler.RulerDisplayUnits.Meter );
 		topRuler.setBigScaleStep( 2 );
 		topRuler.setSmallScaleStep( 1 );

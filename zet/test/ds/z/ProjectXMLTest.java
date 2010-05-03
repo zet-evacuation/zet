@@ -20,11 +20,12 @@ package ds.z;
  *
  * @author Timon Kelter
  */
+import de.tu_berlin.math.coga.rndutils.distribution.continuous.NormalDistribution;
+import de.tu_berlin.math.coga.rndutils.distribution.continuous.UniformDistribution;
 import ds.Project;
 import java.io.File;
 import java.util.ArrayList;
 import junit.framework.TestCase;
-import util.random.distributions.NormalDistribution;
 
 public class ProjectXMLTest extends TestCase {
 	@Override
@@ -142,7 +143,8 @@ public class ProjectXMLTest extends TestCase {
 		NormalDistribution familiarity = new NormalDistribution( 0.8, 1.0, 0.7, 1.0 );
 		NormalDistribution panic = new NormalDistribution( 0.5, 1.0, 0.0, 1.0 );
 		NormalDistribution decisiveness = new NormalDistribution( 0.3, 1.0, 0.0, 1.0 );
-		AssignmentType children = new AssignmentType( "Children", diameter, age, familiarity, panic, decisiveness, 26 );
+		UniformDistribution reaction = new UniformDistribution( 10, 50 );
+		AssignmentType children = new AssignmentType( "Children", diameter, age, familiarity, panic, decisiveness, reaction, 26 );
 		schoolDemo.addAssignmentType( children );
 
 		AssignmentArea dieleAssignment = new AssignmentArea( f1_r1, children );

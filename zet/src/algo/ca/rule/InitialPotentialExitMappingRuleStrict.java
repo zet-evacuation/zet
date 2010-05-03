@@ -13,8 +13,9 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
+
 /**
- * Class ApplyExitMappingRule
+ * Class InitialPotentialExitMappingRuleStrict
  * Erstellt 03.12.2008, 23:02:42
  */
 package algo.ca.rule;
@@ -30,7 +31,7 @@ import java.util.HashMap;
  * allowed that one individual in the mapping has no exit assigned.
  * @author Jan-Philipp Kappmeier
  */
-public class ApplyExitMappingRuleStrict extends AbstractInitialRule {
+public class InitialPotentialExitMappingRuleStrict extends AbstractInitialRule {
 
 	boolean initialized = false;
 	HashMap<TargetCell, StaticPotential> potentialMapping;

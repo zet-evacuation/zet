@@ -43,7 +43,7 @@ public class ReactionRuleCompleteRoom extends AbstractReactionRule {
 		if( i.getCell().getRoom().getAlarmstatus() )
 			i.setAlarmed( true );
 		else
-			if( i.getReactionTime() == 0 ) {
+			if( i.getReactionTime()-1 <= 0 ) {
 				i.setAlarmed( true );
 				cell.getRoom().setAlarmstatus( true );
 			} else

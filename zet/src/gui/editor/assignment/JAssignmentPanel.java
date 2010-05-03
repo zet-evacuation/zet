@@ -13,10 +13,12 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
+
 /*
  * DistributionTab.java
  * Created on 16. Dezember 2007, 22:48
  */
+
 package gui.editor.assignment;
 
 import de.tu_berlin.math.coga.rndutils.distribution.Distribution;
@@ -69,6 +71,7 @@ import javax.swing.event.TableModelListener;
 import javax.swing.table.AbstractTableModel;
 import javax.swing.table.DefaultTableCellRenderer;
 import de.tu_berlin.math.coga.common.localization.Localization;
+import ds.z.ZControl;
 import org.jfree.chart.ChartFactory;
 import org.jfree.chart.ChartPanel;
 import org.jfree.chart.JFreeChart;
@@ -125,7 +128,7 @@ public class JAssignmentPanel extends JPanel {
 	public JAssignmentPanel( JDialog parent, Project p ) {
 		super();
 		myProject = p;
-		params = new ArrayList<DistributionEntry>();
+		params = new ArrayList<DistributionEntry>( 5 );
 		addComponents();
 	}
 
@@ -321,10 +324,11 @@ public class JAssignmentPanel extends JPanel {
 	private void initDistributions() {
 		loc.setPrefix( "ds.z.AssignmentType." );
 		params.add( new DistributionEntry( loc.getString( "diameter" ), new NormalDistribution() ) );
-		params.add( new DistributionEntry( loc.getString( "age" ), new UniformDistribution() ) );
+		params.add( new DistributionEntry( loc.getString( "age" ), new NormalDistribution() ) );
 		params.add( new DistributionEntry( loc.getString( "familiarity" ), new NormalDistribution() ) );
 		params.add( new DistributionEntry( loc.getString( "panic" ), new NormalDistribution() ) );
 		params.add( new DistributionEntry( loc.getString( "decisiveness" ), new NormalDistribution() ) );
+		params.add( new DistributionEntry( loc.getString( "reaction" ), new UniformDistribution() ) );
 		loc.setPrefix( "" );
 	}
 	/*****************************************************************************
@@ -352,11 +356,12 @@ public class JAssignmentPanel extends JPanel {
 			if( currentAssignment != null ) {
 				try {
 					AssignmentType at = new AssignmentType( addText2.getText(),
-									getDefaultAssignmentTypeNormal( "diameter" ),
-									getDefaultAssignmentTypeNormal( "age" ),
-									getDefaultAssignmentTypeNormal( "familiarity" ),
-									getDefaultAssignmentTypeNormal( "panic" ),
-									getDefaultAssignmentTypeNormal( "decisiveness" ) );
+									ZControl.getDefaultAssignmentTypeDistribution( "diameter" ),
+									ZControl.getDefaultAssignmentTypeDistribution( "age" ),
+									ZControl.getDefaultAssignmentTypeDistribution( "familiarity" ),
+									ZControl.getDefaultAssignmentTypeDistribution( "panic" ),
+									ZControl.getDefaultAssignmentTypeDistribution( "decisiveness" ),
+									ZControl.getDefaultAssignmentTypeDistribution( "reaction" ) );
 					at.setDefaultEvacuees( Integer.parseInt( txtDefaultEvacuees.getText() ) );
 					currentAssignment.addAssignmentType( at );
 					addText2.setText( "" );
@@ -461,7 +466,7 @@ public class JAssignmentPanel extends JPanel {
 	public void drawCharts() {
 		int[] sel = distributionTable.getSelectedRows();
 		XYSeriesCollection c = new XYSeriesCollection();
-		JFreeChart chart = null;
+		JFreeChart newChart = null;
 		int nodes = 100;
 		for( int i = 0; i < sel.length; i++ ) {
 			XYSeries a = new XYSeries( "Stat" + i );
@@ -473,7 +478,7 @@ public class JAssignmentPanel extends JPanel {
 			}
 			c.addSeries( a );
 		}
-		chart = ChartFactory.createXYLineChart( loc.getStringWithoutPrefix( "gui.editor.assignment.plot.title" ), // Title
+		newChart = ChartFactory.createXYLineChart( loc.getStringWithoutPrefix( "gui.editor.assignment.plot.title" ), // Title
 						loc.getStringWithoutPrefix( "gui.editor.assignment.plot.values" ), // X-Axis label
 						loc.getStringWithoutPrefix( "gui.editor.assignment.plot.probability" ), // Y-Axis label
 						c, // Dataset
@@ -481,7 +486,7 @@ public class JAssignmentPanel extends JPanel {
 						false, true, false // Show legend
 						);
 
-		chartPanel.setChart( chart );
+		chartPanel.setChart( newChart );
 	}
 
 	/**
@@ -517,35 +522,14 @@ public class JAssignmentPanel extends JPanel {
 			case 4:
 				currentAssignmentType.setDecisiveness( params.get( 4 ).getDistribution() );
 				break;
+			case 5:
+				currentAssignmentType.setReaction( params.get( 5 ).getDistribution() );
+				break;
 			default:
 				break;
 		}
 	}
 
-	/**
-	 * Returns default values for a {@link util.NormalDistribution} distribution
-	 * for a specified parameter.
-	 * @param type the parameter
-	 * @return the normal distribution
-	 */
-	private NormalDistribution getDefaultAssignmentTypeNormal( String type ) {
-		if( type.equals( "diameter" ) ) {
-			return new NormalDistribution( 0.5, 1.0, 0.4, 0.7 );
-		}
-		if( type.equals( "age" ) ) {
-			return new NormalDistribution( 16, 1, 14, 18 );
-		}
-		if( type.equals( "familiarity" ) ) {
-			return new NormalDistribution( 0.8, 1.0, 0.7, 1.0 );
-		}
-		if( type.equals( "panic" ) ) {
-			return new NormalDistribution( 0.5, 1.0, 0.0, 1.0 );
-		}
-		if( type.equals( "decisiveness" ) ) {
-			return new NormalDistribution( 0.3, 1.0, 0.0, 1.0 );
-		}
-		return null;
-	}
 
 	/*****************************************************************************
 	 *                                                                           *
@@ -1021,6 +1005,7 @@ public class JAssignmentPanel extends JPanel {
 			params.get( 2 ).setDistribution( currentAssignmentType.getFamiliarity() );
 			params.get( 3 ).setDistribution( currentAssignmentType.getPanic() );
 			params.get( 4 ).setDistribution( currentAssignmentType.getDecisiveness() );
+			params.get( 5 ).setDistribution( currentAssignmentType.getReaction() );
 			distributionTable.repaint();
 		}
 	}
