@@ -327,21 +327,20 @@ public class DefaultParameterSet extends AbstractDefaultParameterSet {
 		return 1;
 	}
 
+	public double cumulativeSpeed = 0;
+
+		public double cumulativeFemale = 0;
+		public double cumulativeMale = 0;
+		public int counterFemale = 0;
+		public int counterMale = 0;
+
 	/**
 	 * Calculates the maximal speed for a person dependingon the speed-values
 	 * from the rimea test suite.
 	 * @param pAge
 	 * @return the maximal speed as percentage of the overall maximal speed for the simulation run
 	 */
-	static double cumulativeSpeed = 0;
-	static int counter = 0;
-
-		public double wa = 0;
-		public double ma = 0;
-		public int w = 0;
-		public int m = 0;
-
-		public double getSpeedFromAge( double pAge ) {
+	public double getSpeedFromAge( double pAge ) {
 		// additional: calculate the average speed.
 		double ageArray[] = {
 			0.58, // 5  years
@@ -362,42 +361,34 @@ public class DefaultParameterSet extends AbstractDefaultParameterSet {
 			0.68, // 80
 			0.5   // 85 // guessed, value not based on weidmann
 		};
-		int i2 = (int) Math.floor( pAge / 5 );
-		int i1 = i2 - 1;
+		final int right = (int) Math.floor( pAge / 5 );
+		final int left = right - 1;
 		double maxSpeedExpected = 0;
 		if( pAge <= 5 ) {
 			maxSpeedExpected = ageArray[0];
 		} else if( pAge >= 85 ) {
-			maxSpeedExpected = ageArray[15];
+			maxSpeedExpected = ageArray[16];
 		} else {
-//			double diff = pAge - i2 * 5;
-			double slope = (ageArray[i2] - ageArray[i1]);
-			//maxSpeedExpected = ageArray[i1] + diff * slope;
-			UniformDistribution uniform = new UniformDistribution( Math.min( ageArray[i1], ageArray[i2]), Math.max( ageArray[i1], ageArray[i2] ) );
-			maxSpeedExpected = uniform.getNextRandom();
-
-			maxSpeedExpected = slope * (pAge - Math.floor(pAge))  + ageArray[i1];
-
+			final double slope = (ageArray[right] - ageArray[left]);
+			maxSpeedExpected = slope * (pAge - Math.floor(pAge))  + ageArray[left];
 		}
-		// Old: normal distributed speed...
-		//NormalDistribution normal = new NormalDistribution( maxSpeedExpected, 0.1, ageArray[0], ABSOLUTE_MAX_SPEED );
-		//double randSpeed = normal.getNextRandom();
+
+		final NormalDistribution normal = new NormalDistribution( maxSpeedExpected, 0.26, ageArray[16], ABSOLUTE_MAX_SPEED );
+		double randSpeed = normal.getNextRandom();
 
 		// Change speeds for male and female individuals:
 		// + 5% for male, -5% for female
 		if( RandomUtils.getInstance().binaryDecision( 0.5 ) ) {
-			System.out.print( "m " );
-			//maxSpeedExpected *= 1.05;
-			w++;
-			wa+=maxSpeedExpected;
+			randSpeed *= 1.05;
+			counterFemale++;
+			cumulativeFemale += randSpeed;
 		} else {
-			System.out.print( "w " );
-			maxSpeedExpected *= 0.90;
-			m++;
-			ma+=maxSpeedExpected;
+			randSpeed *= 0.95;
+			counterMale++;
+			cumulativeMale += randSpeed;
 		}
 
-		double randSpeed = maxSpeedExpected;
+		//double randSpeed = maxSpeedExpected;
 		double maxSpeed = randSpeed / ABSOLUTE_MAX_SPEED;
 		if( maxSpeed > 1 ) {
 			maxSpeed = 1;
@@ -406,14 +397,12 @@ public class DefaultParameterSet extends AbstractDefaultParameterSet {
 
 		// Correction of 0.2
 //		maxSpeed = Math.max( 0.6, maxSpeed-0.4 );
-
-		counter++;
-		cumulativeSpeed += (maxSpeed * ABSOLUTE_MAX_SPEED);
+//		cumulativeSpeed += (maxSpeed * ABSOLUTE_MAX_SPEED);
 
 		//System.out.println( "First one has speed " + (maxSpeed * ABSOLUTE_MAX_SPEED) );
-		//System.out.println( "Average speed for " + counter + " persons: " + (cumulativeSpeed / counter) + " m/s. (Should be 1.3x)" );
+		//System.out.println( "Average speed for " + counter + " persons: " + (cumulativeSpeed / counter) + " counterMale/s. (Should be 1.3x)" );
 
-		return maxSpeedExpected;
+		return randSpeed;
 	}
 
 	public double getSlacknessFromDecisiveness( double pDecisiveness ) {
