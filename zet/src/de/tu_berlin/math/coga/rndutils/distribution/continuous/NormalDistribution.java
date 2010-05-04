@@ -143,7 +143,7 @@ public class NormalDistribution extends ContinousDistribution {
     do {
 			double randomNumber = RandomUtils.getInstance().getRandomGenerator().nextGaussian();
 			RandomUtils.getInstance().getRandomGenerator().nextGaussian();
-			val = getExpectedValue() + randomNumber * Math.sqrt( getVariance() );
+			val = getExpectedValue() + randomNumber * getVariance();
 		} while( val < getMin() | val > getMax() );
     return val;
   }

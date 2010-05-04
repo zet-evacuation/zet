@@ -36,7 +36,7 @@ public abstract class AbstractDefaultParameterSet implements ParameterSet {
 	final protected double PROB_DYNAMIC_POTENTIAL_INCREASE = 0;
 	final protected double PROB_DYNAMIC_POTENTIAL_DECREASE = 0;
 	final protected double PROB_FAMILIARITY_OR_ATTRACTIVITY_OF_EXIT = 0;
-	final protected double ABSOLUTE_MAX_SPEED = 0;
+	final protected double ABSOLUTE_MAX_SPEED = 2;
 
 	/**
 	 * Initializes the default parameter set and loads some constants from the property container.

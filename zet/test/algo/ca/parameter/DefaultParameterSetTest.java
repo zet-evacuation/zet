@@ -23,7 +23,6 @@ public class DefaultParameterSetTest extends TestCase {
 	}
 
 	public void testAgeSpeed() {
-		//UniformDistribution age = new UniformDistribution( 0, 90 );
 		NormalDistribution age = new NormalDistribution( 50, 20, 10, 85);
 		DefaultParameterSet dps = new DefaultParameterSet();
 
@@ -35,8 +34,9 @@ public class DefaultParameterSetTest extends TestCase {
 			double speed = dps.getSpeedFromAge( ret );
 			System.out.println( "Speed: " + speed );
 		}
-		System.out.println( dps.wa/dps.w );
-		System.out.println( dps.ma/dps.m );
+		System.out.println( dps.cumulativeFemale/dps.counterFemale );
+		System.out.println( dps.cumulativeMale/dps.counterMale );
+		System.out.println( (dps.cumulativeFemale+dps.cumulativeMale)/(dps.counterFemale+dps.counterMale) );
 
 	}
 }
