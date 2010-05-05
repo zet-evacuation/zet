@@ -37,14 +37,14 @@ import de.tu_berlin.math.coga.rndutils.distribution.continuous.UniformDistributi
  * @author Daniel Pluempe, Jan-Philipp Kappmeier
  */
 public class DefaultParameterSet extends AbstractDefaultParameterSet {
-	final protected double PANIC_TO_PROB_OF_POTENTIAL_CHANGE_RATIO = 1;
-	final protected double SLACKNESS_TO_IDLE_RATIO = 1;
-	final protected double PANIC_DECREASE = 0;
-	final protected double PANIC_INCREASE = 0;
-	final protected double PANIC_WEIGHT_ON_SPEED = 0;
-	final protected double PANIC_WEIGHT_ON_POTENTIALS = 0;
-	final protected double EXHAUSTION_WEIGHT_ON_SPEED = 0;
-	final protected double PANIC_THRESHOLD = 0;
+	final protected double PANIC_TO_PROB_OF_POTENTIAL_CHANGE_RATIO;
+	final protected double SLACKNESS_TO_IDLE_RATIO;
+	final protected double PANIC_DECREASE;
+	final protected double PANIC_INCREASE;
+	final protected double PANIC_WEIGHT_ON_SPEED;
+	final protected double PANIC_WEIGHT_ON_POTENTIALS;
+	final protected double EXHAUSTION_WEIGHT_ON_SPEED;
+	final protected double PANIC_THRESHOLD;
 	final protected double MINIMUM_PANIC = 0.0d;
 	final protected double MAXIMUM_PANIC = 1.0d;
 
@@ -53,14 +53,14 @@ public class DefaultParameterSet extends AbstractDefaultParameterSet {
 	 */
 	public DefaultParameterSet() {
 //try{
-//	PANIC_TO_PROB_OF_POTENTIAL_CHANGE_RATIO = PropertyContainer.getInstance().getAsDouble( "algo.ca.PANIC_TO_PROB_OF_POTENTIAL_CHANGE_RATIO" );
-//		SLACKNESS_TO_IDLE_RATIO = PropertyContainer.getInstance().getAsDouble( "algo.ca.SLACKNESS_TO_IDLE_RATIO" );
-//		PANIC_DECREASE = PropertyContainer.getInstance().getAsDouble( "algo.ca.PANIC_DECREASE" );
-//		PANIC_INCREASE = PropertyContainer.getInstance().getAsDouble( "algo.ca.PANIC_INCREASE" );
-//		PANIC_WEIGHT_ON_SPEED = PropertyContainer.getInstance().getAsDouble( "algo.ca.PANIC_WEIGHT_ON_SPEED" );
-//		PANIC_WEIGHT_ON_POTENTIALS = PropertyContainer.getInstance().getAsDouble( "algo.ca.PANIC_WEIGHT_ON_POTENTIALS" );
-//		EXHAUSTION_WEIGHT_ON_SPEED = PropertyContainer.getInstance().getAsDouble( "algo.ca.EXHAUSTION_WEIGHT_ON_SPEED" );
-//		PANIC_THRESHOLD = PropertyContainer.getInstance().getAsDouble( "algo.ca.PANIC_THRESHOLD" );
+		PANIC_TO_PROB_OF_POTENTIAL_CHANGE_RATIO = PropertyContainer.getInstance().getAsDouble( "algo.ca.PANIC_TO_PROB_OF_POTENTIAL_CHANGE_RATIO" );
+		SLACKNESS_TO_IDLE_RATIO = PropertyContainer.getInstance().getAsDouble( "algo.ca.SLACKNESS_TO_IDLE_RATIO" );
+		PANIC_DECREASE = PropertyContainer.getInstance().getAsDouble( "algo.ca.PANIC_DECREASE" );
+		PANIC_INCREASE = PropertyContainer.getInstance().getAsDouble( "algo.ca.PANIC_INCREASE" );
+		PANIC_WEIGHT_ON_SPEED = PropertyContainer.getInstance().getAsDouble( "algo.ca.PANIC_WEIGHT_ON_SPEED" );
+		PANIC_WEIGHT_ON_POTENTIALS = PropertyContainer.getInstance().getAsDouble( "algo.ca.PANIC_WEIGHT_ON_POTENTIALS" );
+		EXHAUSTION_WEIGHT_ON_SPEED = PropertyContainer.getInstance().getAsDouble( "algo.ca.EXHAUSTION_WEIGHT_ON_SPEED" );
+		PANIC_THRESHOLD = PropertyContainer.getInstance().getAsDouble( "algo.ca.PANIC_THRESHOLD" );
 //} catch( Exception e ) {
 //
 //}

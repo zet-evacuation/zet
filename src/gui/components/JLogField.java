@@ -77,6 +77,8 @@ public class JLogField extends JPanel implements EventListener<MessageEvent> {
 			if( logPane != null && log != null )
 	  		logPane.setText( pre + log.getText() + post );
 		//logPane.setText( text );
+		} catch( NullPointerException ne ) {
+			// nothing
 		} catch( Exception ex ) {
 			int i = 1;
 			i++;

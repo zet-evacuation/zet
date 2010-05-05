@@ -31,23 +31,23 @@ import java.lang.reflect.InvocationTargetException;
  *
  */
 public abstract class AbstractDefaultParameterSet implements ParameterSet {
-	final protected double DYNAMIC_POTENTIAL_WEIGHT = 0;
-	final protected double STATIC_POTENTIAL_WEIGHT = 0;
-	final protected double PROB_DYNAMIC_POTENTIAL_INCREASE = 0;
-	final protected double PROB_DYNAMIC_POTENTIAL_DECREASE = 0;
-	final protected double PROB_FAMILIARITY_OR_ATTRACTIVITY_OF_EXIT = 0;
-	final protected double ABSOLUTE_MAX_SPEED = 2;
+	final protected double DYNAMIC_POTENTIAL_WEIGHT;
+	final protected double STATIC_POTENTIAL_WEIGHT;
+	final protected double PROB_DYNAMIC_POTENTIAL_INCREASE;
+	final protected double PROB_DYNAMIC_POTENTIAL_DECREASE;
+	final protected double PROB_FAMILIARITY_OR_ATTRACTIVITY_OF_EXIT;
+	final protected double ABSOLUTE_MAX_SPEED;
 
 	/**
 	 * Initializes the default parameter set and loads some constants from the property container.
 	 */
 	public AbstractDefaultParameterSet() {
-//		DYNAMIC_POTENTIAL_WEIGHT = PropertyContainer.getInstance().getAsDouble( "algo.ca.DYNAMIC_POTENTIAL_WEIGHT" );
-//		STATIC_POTENTIAL_WEIGHT = PropertyContainer.getInstance().getAsDouble( "algo.ca.STATIC_POTENTIAL_WEIGHT" );
-//		PROB_DYNAMIC_POTENTIAL_INCREASE = PropertyContainer.getInstance().getAsDouble( "algo.ca.PROB_DYNAMIC_POTENTIAL_INCREASE" );
-//		PROB_DYNAMIC_POTENTIAL_DECREASE = PropertyContainer.getInstance().getAsDouble( "algo.ca.PROB_DYNAMIC_POTENTIAL_DECREASE" );
-//		PROB_FAMILIARITY_OR_ATTRACTIVITY_OF_EXIT = PropertyContainer.getInstance().getAsDouble( "algo.ca.PROB_FAMILIARITY_OR_ATTRACTIVITY_OF_EXIT" );
-//		ABSOLUTE_MAX_SPEED = PropertyContainer.getInstance().getAsDouble( "algo.ca.ABSOLUTE_MAX_SPEED" );
+		DYNAMIC_POTENTIAL_WEIGHT = PropertyContainer.getInstance().getAsDouble( "algo.ca.DYNAMIC_POTENTIAL_WEIGHT" );
+		STATIC_POTENTIAL_WEIGHT = PropertyContainer.getInstance().getAsDouble( "algo.ca.STATIC_POTENTIAL_WEIGHT" );
+		PROB_DYNAMIC_POTENTIAL_INCREASE = PropertyContainer.getInstance().getAsDouble( "algo.ca.PROB_DYNAMIC_POTENTIAL_INCREASE" );
+		PROB_DYNAMIC_POTENTIAL_DECREASE = PropertyContainer.getInstance().getAsDouble( "algo.ca.PROB_DYNAMIC_POTENTIAL_DECREASE" );
+		PROB_FAMILIARITY_OR_ATTRACTIVITY_OF_EXIT = PropertyContainer.getInstance().getAsDouble( "algo.ca.PROB_FAMILIARITY_OR_ATTRACTIVITY_OF_EXIT" );
+		ABSOLUTE_MAX_SPEED = PropertyContainer.getInstance().getAsDouble( "algo.ca.ABSOLUTE_MAX_SPEED" );
 	}
 
 	/**
