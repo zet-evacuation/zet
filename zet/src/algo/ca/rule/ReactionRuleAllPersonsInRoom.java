@@ -20,35 +20,44 @@
  */
 package algo.ca.rule;
 
+import ds.ca.Cell;
 import ds.ca.Individual;
 
-
 /**
- *
+ * A rule that activates all individuals in a room if the reaction time of all
+ * of them is over. Before that, people stay unalarmed.
  * @author Jan-Philipp Kappmeier
  */
 public class ReactionRuleAllPersonsInRoom extends AbstractReactionRule {
 
+	@Override
+	public boolean executableOn( Cell cell ) {
+		return cell.getIndividual() == null ? false : cell.getIndividual().getReactionTime() > 1;
+	}
+
+
 	/**
-	 * Executes the rule. If the room is alarmed, the individual is alarmed, too.
-	 * If the room is not alarmed, the individual is alarmed if the time is over
-	 * otherwise the remaining time is reduced by one.
-	 * TODO test
-	 * @param cell
+	 * Executes the rule. The alarm time for the individual on the cell is reduced
+	 * by one, if it will remai positive afterwards. If the reaction time would be
+	 * negative after the reduction (i.e. the reaction time is between 0 and 1),
+	 * it is checked if all individuals in the room are in the same state. If that
+	 * is true for all individuals in the same room, they are all alarmed at the
+	 * same time.
+	 * @param cell the cell, whose individuals reaction time is reduced
 	 */
 	@Override
 	protected void onExecute( ds.ca.Cell cell ) {
+		// Reduce reaction time by one
 		Individual i = cell.getIndividual();
-		// Check all individuals
-		if( i.isAlarmed() == false ) {
-			if( i.getReactionTime() > 1 )
-//				i.setAlarmed( true );
-//			else
-				i.setReactionTime( i.getReactionTime() - 1 );
+		i.setReactionTime( i.getReactionTime() - 1 );
+
+		// If reaction time is small enough (less than 1 step), check if all individuals
+		// in the same room are in the same status. If that is the case, alarm all
+		if( i.getReactionTime() < 1 ) {
+			System.out.println( "The Test is performed for individual " + i.getNumber() );
 			boolean allIndividualsAlarmed = true;
 			for( Individual j : i.getCell().getRoom().getIndividuals() )
-				if( j.getReactionTime() > 0 )
-					allIndividualsAlarmed = false;
+				allIndividualsAlarmed &= (j.getReactionTime() < 1);
 			if( allIndividualsAlarmed )
 				for( Individual j : i.getCell().getRoom().getIndividuals() )
 					j.setAlarmed( true );

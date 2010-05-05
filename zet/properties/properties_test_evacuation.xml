@@ -20,12 +20,12 @@
     <treeNode name="propertyselector.tree.simulation.ca" useAsLocString="true">
       <treeNode name="DefaultRuleSet" useAsLocString="false">
         <stringListNode name="properties.simulation.ca.defaultRuleSet.init" useAsLocString="true" description="" information="properties.simulation.ca.defaultRuleSet.primary.info" parameter="algo.ca.defaultRuleSet.init">
-          <string>InitializeReactionTimeRule</string>
           <string>ConvertIndividualParameters</string>
-          <string>ApplyExitMappingRule</string>
+          <string>InitialPotentialExitMappingRule</string>
           <string>SaveIndividualsRule</string>
           <string>EvacuateIndividualsRule</string>
           <string>InitialDynamicPotentialRule</string>
+          
         </stringListNode>
         <stringListNode name="properties.simulation.ca.defaultRuleSet.loop" useAsLocString="true" description="" information="properties.simulation.ca.defaultRuleSet.loop.info" parameter="algo.ca.defaultRuleSet.loop">
           <string>ReactionRuleAllPersonsInRoom</string>

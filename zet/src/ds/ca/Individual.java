@@ -230,14 +230,14 @@ public class Individual implements Identifiable {
 	}
 
 	/**
-	 * Sets a new reaction time
+	 * Sets a new reaction time. If the time is smaller or equal to zero, the
+	 * individual is alarmed.
 	 * @param reactionTime the reaction time.
 	 * @throws IllegalArgumentException if <code>reactionTime</code> is negative.
 	 */
 	public void setReactionTime( double reactionTime ) throws IllegalArgumentException {
-		if( reactionTime < 0 ) {
-			throw new IllegalArgumentException( "Reaction time must not be negative." );
-		}
+		if( reactionTime < 0 )
+			setAlarmed( true );
 		this.reactionTime = reactionTime;
 	}
 

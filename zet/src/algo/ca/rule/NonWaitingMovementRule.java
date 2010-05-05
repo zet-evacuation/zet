@@ -378,7 +378,6 @@ public class NonWaitingMovementRule extends AbstractMovementRule {
 		final double sqrt2 = Math.sqrt( 2 ) * 0.4;
 		if( !targetCell.getRoom().equals( i.getCell().getRoom() ) ) {
 			if( i.getCell().getX() + i.getCell().getRoom().getXOffset() == targetCell.getX() + targetCell.getRoom().getXOffset() && i.getCell().getY() + i.getCell().getRoom().getYOffset() == targetCell.getY() + targetCell.getRoom().getYOffset() ) {
-				System.err.println( "SelfCell reached or Stockwerkwechsel!" );
 				dist = 0.4;
 			} else if( i.getCell().getX() + i.getCell().getRoom().getXOffset() == targetCell.getX() + targetCell.getRoom().getXOffset() | i.getCell().getY() + i.getCell().getRoom().getYOffset() == targetCell.getY() + targetCell.getRoom().getYOffset() ) {
 				dist = 0.4;

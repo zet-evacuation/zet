@@ -37,7 +37,7 @@ public class ConvertIndividualParameters extends AbstractRule {
 	 * Updates the reaction time which is should calculated in seconds which needs
 	 * the correct stepcount per second.
 	 * {@inheritDoc}
-	 * @param cell
+	 * @param cell the cell for that this rule is executed
 	 */
 	@Override
 	protected void onExecute( Cell cell ) {
@@ -45,8 +45,8 @@ public class ConvertIndividualParameters extends AbstractRule {
 		// multiplied with the stepsPerSeconds value of the CA. During individual
 		// creation this value is not available, thus we need to do it here.
 		Individual i = cell.getIndividual();
-		double sps = caController().getCA().getStepsPerSecond();
-		i.setReactionTime( (int)(i.getReactionTime() * sps ) );
+		final double sps = caController().getCA().getStepsPerSecond();
+		i.setReactionTime( i.getReactionTime() * sps );
 	}
 
 }
