@@ -17,8 +17,9 @@
  * IdentifiableIntegerMapping.java
  *
  */
-
 package ds.graph;
+
+import java.util.Arrays;
 
 /**
  * The <code>IdentifiableIntegerMapping</code> class represents a mapping from a
@@ -36,7 +37,7 @@ package ds.graph;
  * {@link Identifiable}.
  */
 public class IdentifiableIntegerMapping<D extends Identifiable> implements Cloneable {
-    
+
     /**
      * The array storing all associations. Must not be <code>null</code>.
      */
@@ -45,18 +46,20 @@ public class IdentifiableIntegerMapping<D extends Identifiable> implements Clone
     public IdentifiableIntegerMapping(Iterable<D> domain) {
         int maxId = -1;
         for (D x : domain) {
-            if (maxId < x.id()) maxId = x.id();
+            if (maxId < x.id()) {
+                maxId = x.id();
+            }
         }
-        mapping = new int[maxId+1];
+        mapping = new int[maxId + 1];
     }
 
     public IdentifiableIntegerMapping(IdentifiableIntegerMapping<D> iim) {
         mapping = new int[iim.mapping.length];
-        for (int i=0; i<mapping.length; i++) {
+        for (int i = 0; i < mapping.length; i++) {
             mapping[i] = iim.mapping[i];
-        }        
+        }
     }
-    
+
     /**
      * Constructs a new <code>IdentifiableIntegerMapping</code> object with a
      * specified initial mapping. The
@@ -68,7 +71,7 @@ public class IdentifiableIntegerMapping<D extends Identifiable> implements Clone
     protected IdentifiableIntegerMapping(int[] mapping) {
         this.mapping = mapping;
     }
-    
+
     /**
      * Constructs a new <code>IdentifiableObjectMapping</code> object with a
      * domain of the specified size. The default association for an object is 
@@ -122,8 +125,9 @@ public class IdentifiableIntegerMapping<D extends Identifiable> implements Clone
      * @see Identifiable
      */
     public void set(D identifiableObject, int value) {
-    	if (identifiableObject == null)
-    		throw new RuntimeException("IdentifiableObject contains null, value contains "+value+".");
+        if (identifiableObject == null) {
+            throw new RuntimeException("IdentifiableObject contains null, value contains " + value + ".");
+        }
         if (identifiableObject.id() >= getDomainSize()) {
             setDomainSize(identifiableObject.id() + 1);
         }
@@ -152,35 +156,36 @@ public class IdentifiableIntegerMapping<D extends Identifiable> implements Clone
         mapping[identifiableObject.id()] += amount;
     }
 
-
-	/**
-	 * Associates <code>identifiableObject</code> with <code>value</code> in
-	 * this mapping. Any previously made association for
-	 * <code>identifiableObject</code> is lost in the process. Calling
-	 * <code>add</code> with an <code>identifiableObject</code> whose ID is
-	 * greater equal than the current size of the domain will automatically
-	 * increase the size of the domain to accommodate
-	 * <code>identifiableObject</code>'s ID, at least the capacity is doubled.
-	 * Runtime O(1) (O(min{ID, 2*oldDomainSize}) if the domain is expanded).
-	 * @param identifiableObject the object for which an association is to be
-	 * made.
-	 * @param value the integer to be associated with
-	 * <code>identifiableObject</code>.
-	 * @exception ArrayIndexOutOfBoundsException if
-	 * <code>identifiableObject</code>'s ID is less then 0.
-	 * @exception NullPointerException if <code>identifiableObject</code> is
-	 * null.
-	 * @see #getDomainSize
-	 * @see #setDomainSize
-	 * @see Identifiable
-	 */
-	public void add( D identifiableObject, int value ) {
-		if( identifiableObject == null )
-			throw new RuntimeException( "IdentifiableObject contains null, value contains " + value + "." );
-		if( identifiableObject.id() >= getDomainSize() )
-			setDomainSize( Math.min( identifiableObject.id() + 1, getDomainSize() * 2 ) );
-		mapping[identifiableObject.id()] = value;
-	}
+    /**
+     * Associates <code>identifiableObject</code> with <code>value</code> in
+     * this mapping. Any previously made association for
+     * <code>identifiableObject</code> is lost in the process. Calling
+     * <code>add</code> with an <code>identifiableObject</code> whose ID is
+     * greater equal than the current size of the domain will automatically
+     * increase the size of the domain to accommodate
+     * <code>identifiableObject</code>'s ID, at least the capacity is doubled.
+     * Runtime O(1) (O(min{ID, 2*oldDomainSize}) if the domain is expanded).
+     * @param identifiableObject the object for which an association is to be
+     * made.
+     * @param value the integer to be associated with
+     * <code>identifiableObject</code>.
+     * @exception ArrayIndexOutOfBoundsException if
+     * <code>identifiableObject</code>'s ID is less then 0.
+     * @exception NullPointerException if <code>identifiableObject</code> is
+     * null.
+     * @see #getDomainSize
+     * @see #setDomainSize
+     * @see Identifiable
+     */
+    public void add(D identifiableObject, int value) {
+        if (identifiableObject == null) {
+            throw new RuntimeException("IdentifiableObject contains null, value contains " + value + ".");
+        }
+        if (identifiableObject.id() >= getDomainSize()) {
+            setDomainSize(Math.min(identifiableObject.id() + 1, getDomainSize() * 2));
+        }
+        mapping[identifiableObject.id()] = value;
+    }
 
     /**
      * A convenience method equaling to <code>set(identifiableObject, 
@@ -203,7 +208,7 @@ public class IdentifiableIntegerMapping<D extends Identifiable> implements Clone
     public void decrease(D identifiableObject, int amount) {
         mapping[identifiableObject.id()] -= amount;
     }
-    
+
     /**
      * Returns the minimum over all values assigned to the specified set of
      * objects.
@@ -227,8 +232,12 @@ public class IdentifiableIntegerMapping<D extends Identifiable> implements Clone
             sum += get(identifiableObject);
         }
         return sum;
-    }    
-    
+    }
+
+    public void initializeWith(int value) {
+        Arrays.fill(mapping, value);
+    }
+
     /**
      * Returns the size of this mapping's domain. Associations of objects and 
      * integers can only be made for objects with an ID between <code>0</code> 
@@ -265,10 +274,9 @@ public class IdentifiableIntegerMapping<D extends Identifiable> implements Clone
      * null.
      */
     public boolean isDefinedFor(D identifiableObject) {
-        return 0 <= identifiableObject.id()
-                && identifiableObject.id() < getDomainSize();
+        return 0 <= identifiableObject.id() && identifiableObject.id() < getDomainSize();
     }
-    
+
     /**
      * Creates a copy of this mapping. Runtime O(number of values).
      * @return a copy of this mapping.
@@ -279,7 +287,7 @@ public class IdentifiableIntegerMapping<D extends Identifiable> implements Clone
         System.arraycopy(mapping, 0, newMapping, 0, mapping.length);
         return new IdentifiableIntegerMapping<D>(newMapping);
     }
-    
+
     /**
      * Compares this mapping to the specified object. The result is true if and
      * only if the argument is not null and is an 
@@ -340,19 +348,20 @@ public class IdentifiableIntegerMapping<D extends Identifiable> implements Clone
                 builder.append("\n");
             }
 //            if (mapping[i] != 0) {
-                builder.append(i);
-                builder.append(" = ");
-                if (mapping[i] == Integer.MAX_VALUE) {
-                    builder.append("MAX");
-                } else {
-                    builder.append(mapping[i]);
-                }
-                builder.append(", ");
-                counter++;
+            builder.append(i);
+            builder.append(" = ");
+            if (mapping[i] == Integer.MAX_VALUE) {
+                builder.append("MAX");
+            } else {
+                builder.append(mapping[i]);
+            }
+            builder.append(", ");
+            counter++;
 //            }
         }
-        if( builder.length() > 2 )
-					builder.delete(builder.length() - 2, builder.length());
+        if (builder.length() > 2) {
+            builder.delete(builder.length() - 2, builder.length());
+        }
         builder.append(']');
         return builder.toString();
     }
