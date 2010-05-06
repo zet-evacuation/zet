@@ -54,6 +54,10 @@ import java.util.jar.JarFile;
 import java.util.zip.ZipEntry;
 
 import de.tu_berlin.math.coga.common.localization.Localization;
+import java.io.BufferedInputStream;
+import java.io.FileInputStream;
+import java.io.InputStream;
+import java.util.zip.GZIPInputStream;
 
 /**
  * The central Projekt class for the Z format. All information about
@@ -412,7 +416,13 @@ public class Project implements Serializable {
 	 * @return The Project that was stored in the denoted file.
 	 */
 	public static Project load( File projectFile ) throws IOException {
-		FileReader input = new FileReader( projectFile );
+		//FileReader
+            	InputStream input;
+                if (projectFile.getAbsolutePath().endsWith(".gz")) {
+                    input = new GZIPInputStream (new BufferedInputStream (new FileInputStream (projectFile)));
+                } else {
+                    input = new BufferedInputStream (new FileInputStream (projectFile));
+                }
 		Project p = (Project)xml_convert.fromXML( input );
 		return p;
 	}

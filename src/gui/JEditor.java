@@ -2602,7 +2602,7 @@ caRes.statistic = caStatistic;
 		return new FileFilter() {
 			@Override
 			public boolean accept( File f ) {
-				return f.isDirectory() || f.getName().toLowerCase().endsWith( ".zet" );
+				return f.isDirectory() || f.getName().toLowerCase().endsWith( ".zet" ) || f.getName().toLowerCase().endsWith( ".gz" );
 			}
 
 			@Override
