@@ -1421,7 +1421,7 @@ public class JEditor extends JFrame implements Localized, EventListener<Progress
 						createBackup( jfcProject.getSelectedFile() );
 					try {
 						File target = jfcProject.getSelectedFile();
-						if( !target.getName().endsWith( ".zet" ) )
+						if( !target.getName().endsWith( ".zet" ) && !target.getName().endsWith( ".gzet" ))
 							target = new File( target.getAbsolutePath() + ".zet" );
 						getZControl().getProject().save( target );
 					} catch( java.lang.StackOverflowError soe ) {
@@ -1465,7 +1465,7 @@ public class JEditor extends JFrame implements Localized, EventListener<Progress
 									createBackup( jfcProject.getSelectedFile() );
 								try {
 									File target = jfcProject.getSelectedFile();
-									if( !target.getName().endsWith( ".zet" ) )
+									if( !target.getName().endsWith( ".zet" ) && !target.getName().endsWith( ".gzet" ))
 										target = new File( target.getAbsolutePath() + ".zet" );
 									getZControl().getProject().save( target );
 								} catch( java.lang.StackOverflowError soe ) {
@@ -2602,7 +2602,7 @@ caRes.statistic = caStatistic;
 		return new FileFilter() {
 			@Override
 			public boolean accept( File f ) {
-				return f.isDirectory() || f.getName().toLowerCase().endsWith( ".zet" ) || f.getName().toLowerCase().endsWith( ".gz" );
+				return f.isDirectory() || f.getName().toLowerCase().endsWith( ".zet" ) || f.getName().toLowerCase().endsWith( ".gzet" );
 			}
 
 			@Override

@@ -55,9 +55,13 @@ import java.util.zip.ZipEntry;
 
 import de.tu_berlin.math.coga.common.localization.Localization;
 import java.io.BufferedInputStream;
+import java.io.BufferedOutputStream;
 import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.io.InputStream;
+import java.io.OutputStream;
 import java.util.zip.GZIPInputStream;
+import java.util.zip.GZIPOutputStream;
 
 /**
  * The central Projekt class for the Z format. All information about
@@ -402,12 +406,17 @@ public class Project implements Serializable {
 	/** @param file The location where the Project shall be stored.
 	 * @exception IOException - Is thrown when the I/O-Operation fails. */
 	public void save( File file ) throws IOException {
-		PrintWriter output = new PrintWriter( file );
+		OutputStream output = new BufferedOutputStream (new FileOutputStream (file));
 
+                if (file.getAbsolutePath().endsWith(".gzet")) {
+                     output = new GZIPOutputStream (output);
+                }
 		// Set project file before saving, to get it into the saved file
 		projectFile = file;
 
 		xml_convert.toXML( this, output );
+                output.flush();
+                output.close();
 	}
 
 	/**
@@ -418,12 +427,13 @@ public class Project implements Serializable {
 	public static Project load( File projectFile ) throws IOException {
 		//FileReader
             	InputStream input;
-                if (projectFile.getAbsolutePath().endsWith(".gz")) {
+                if (projectFile.getAbsolutePath().endsWith(".gzet")) {
                     input = new GZIPInputStream (new BufferedInputStream (new FileInputStream (projectFile)));
                 } else {
                     input = new BufferedInputStream (new FileInputStream (projectFile));
                 }
 		Project p = (Project)xml_convert.fromXML( input );
+                input.close();
 		return p;
 	}
 
