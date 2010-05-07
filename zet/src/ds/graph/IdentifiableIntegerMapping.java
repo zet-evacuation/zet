@@ -57,7 +57,7 @@ public class IdentifiableIntegerMapping<D extends Identifiable> implements Clone
     }
 
     public IdentifiableIntegerMapping(IdentifiableIntegerMapping<D> iim) {
-        mapping = new int[iim.mapping.length];
+        mapping = new int[iim.getDomainSize()];
         for (int i = 0; i < mapping.length; i++) {
             mapping[i] = iim.mapping[i];
         }

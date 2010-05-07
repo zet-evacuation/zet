@@ -22,9 +22,12 @@ package algo.graph.dynamicflow;
 import de.tu_berlin.math.coga.common.algorithm.Algorithm;
 import ds.graph.DynamicResidualNetwork;
 import ds.graph.Edge;
+import ds.graph.IdentifiableConstantMapping;
 import ds.graph.IdentifiableIntegerMapping;
 import ds.graph.IdentifiableObjectMapping;
+import ds.graph.Network;
 import ds.graph.Node;
+import ds.graph.ResidualNetwork;
 import ds.graph.flow.FlowOverTimeCycle;
 import ds.graph.flow.FlowOverTimeEdge;
 import ds.graph.flow.FlowOverTimeEdgeSequence;
@@ -56,35 +59,32 @@ public class NewChainDecomposition extends Algorithm<ChainDecompositionProblem, 
 
     @Override
     protected PathBasedFlowOverTime runAlgorithm(ChainDecompositionProblem problem) {
+        network = problem.getNetwork();
         transitTimes = problem.getNetwork().transitTimes();
 
         arrivalTime = new IdentifiableIntegerMapping<Node>(network.nodes());
+        // List all usages of edges and waiting at nodes for uncrossing purposes
+        pathsUsingEdge = new IdentifiableObjectMapping<Edge, Queue[]>(network.edges(), Queue[].class);
+        pathsUsingNode = new IdentifiableObjectMapping<Node, Queue[]>(network.nodes(), Queue[].class);
 
-        // Remove all cycles from the edge sequences
+
+        // Remove all cycles from the edge sequences and store them for uncrossing
         cycles = new LinkedList<FlowOverTimeEdgeSequence>();
         for (FlowOverTimeEdgeSequence edgeSequence : problem.getEdgeSequences()) {
-            FlowOverTimeEdgeSequence cycle = extractCycle(edgeSequence);
+            FlowOverTimeCycle cycle = extractCycle(edgeSequence);
             while (cycle != null) {
                 cycles.add(cycle);
-                cycle = extractCycle(edgeSequence);
+                addCycleToUsageLists(cycle);
+                cycle = extractCycle(edgeSequence);                
             }
         }
+
+        // We have removed the cycles for the edge sequences now; what remains are residual paths
         residualPaths = new LinkedList(problem.getEdgeSequences());
-
-        // List all usages of edges and waiting at nodes for uncrossing purposes
-        edgeSequencesUsingEdge = new IdentifiableObjectMapping<Edge, Queue[]>(network.edges(), Queue[].class);
-        edgeSequencesWaitingAtNode = new IdentifiableObjectMapping<Node, Queue[]>(network.nodes(), Queue[].class);
-        for (FlowOverTimeEdgeSequence path : paths) {
-            //addToUsageLists(path);
-        }
-        for (FlowOverTimeEdgeSequence cycle : cycles) {
-            //addToUsageLists(cycle);
-        }
-
         while (!residualPaths.isEmpty()) {
             FlowOverTimeEdgeSequence residualPath = residualPaths.poll();
 
-            // Look for reverse edges
+            // Look for the first reverse edge / node with negative waiting time
             FlowOverTimeEdge reverseEdge = null;
             boolean waiting = false;
             for (FlowOverTimeEdge edge : residualPath) {
@@ -98,8 +98,7 @@ public class NewChainDecomposition extends Algorithm<ChainDecompositionProblem, 
                 }
             }
 
-            // If the edge sequence does not contain reverse arcs or nodes with negative waiting times,
-            // we are done with this residual path
+            // If we do not find any, then residual path is a normal path
             if (reverseEdge == null) {
                 // Convert the edge sequence into a path
                 FlowOverTimePath path = new FlowOverTimePath(residualPath);
@@ -133,20 +132,47 @@ public class NewChainDecomposition extends Algorithm<ChainDecompositionProblem, 
     }
 
     public static void main(String[] args) {
-        FlowOverTimeEdgeSequence sequence = new FlowOverTimeEdgeSequence();
-        Node[] nodes = new Node[10];
-        for (int i = 0; i < 10; i++) nodes[i] = new Node(i);
+        
 
-        sequence.add(new FlowOverTimeEdge(new Edge(0, nodes[0], nodes[1]), 0));
-        sequence.add(new FlowOverTimeEdge(new Edge(1, nodes[1], nodes[2]), 1));
-        sequence.add(new FlowOverTimeEdge(new Edge(2, nodes[2], nodes[3]), 0));
-        sequence.add(new FlowOverTimeEdge(new Edge(3, nodes[3], nodes[1]), 0));
-        sequence.add(new FlowOverTimeEdge(new Edge(4, nodes[1], nodes[4]), 1));
-        sequence.add(new FlowOverTimeEdge(new Edge(5, nodes[4], nodes[5]), 0));
-        sequence.add(new FlowOverTimeEdge(new Edge(6, nodes[5], nodes[1]), 0));
-        sequence.add(new FlowOverTimeEdge(new Edge(7, nodes[1], nodes[6]), 0));
+        Network network = new Network(10, 90);
+        for (Node start : network.nodes()) {            
+            for (Node end : network.nodes()) {
+                if (start == end) continue;
+                network.createAndSetEdge(start, end);
+            }
+        }
+        DynamicResidualNetwork rn = new DynamicResidualNetwork(
+                network,
+                IdentifiableConstantMapping.UNIT_EDGE_MAPPING,
+                IdentifiableConstantMapping.UNIT_NODE_MAPPING,
+                IdentifiableConstantMapping.UNIT_EDGE_MAPPING,
+                new LinkedList<Node>(),
+                IdentifiableConstantMapping.UNIT_NODE_MAPPING,
+                20);
+
+
+
+
+        FlowOverTimeEdgeSequence sequence = new FlowOverTimeEdgeSequence();
+        sequence.add(new FlowOverTimeEdge(rn.getEdge(rn.getNode(0), rn.getNode(1)), 0));
+        sequence.add(new FlowOverTimeEdge(rn.getEdge(rn.getNode(1), rn.getNode(2)), 1));
+        sequence.add(new FlowOverTimeEdge(rn.getEdge(rn.getNode(2), rn.getNode(3)), 0));
+        sequence.add(new FlowOverTimeEdge(rn.getEdge(rn.getNode(3), rn.getNode(1)), 0));
+        sequence.add(new FlowOverTimeEdge(rn.getEdge(rn.getNode(1), rn.getNode(4)), 1));
+        sequence.add(new FlowOverTimeEdge(rn.getEdge(rn.getNode(4), rn.getNode(5)), 0));
+        sequence.add(new FlowOverTimeEdge(rn.getEdge(rn.getNode(5), rn.getNode(1)), 0));
+        sequence.add(new FlowOverTimeEdge(rn.getEdge(rn.getNode(1), rn.getNode(6)), 0));
+        
+        LinkedList<FlowOverTimeEdgeSequence> edgeSequences = new LinkedList<FlowOverTimeEdgeSequence>();
+        edgeSequences.add(sequence);
+        ChainDecompositionProblem problem = new ChainDecompositionProblem(edgeSequences, rn);
+
+
 
         NewChainDecomposition test = new NewChainDecomposition();
+        test.setProblem(problem);
+        test.run();
+        System.out.println(test.getSolution());
         System.out.println(test.extractCycle(sequence));
         System.out.println(test.extractCycle(sequence));
         System.out.println(sequence);
@@ -197,6 +223,7 @@ public class NewChainDecomposition extends Algorithm<ChainDecompositionProblem, 
     }
 
     protected void addCycleToUsageLists(FlowOverTimeCycle cycle) {
+        System.out.println(cycle);
         int time = cycle.getOffset();
         for (FlowOverTimeEdge edge : cycle) {
             Edge e = edge.getEdge();
