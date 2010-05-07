@@ -43,6 +43,9 @@ public class IdentifiableIntegerMapping<D extends Identifiable> implements Clone
      */
     protected int[] mapping;
 
+    protected IdentifiableIntegerMapping() {
+    }
+
     public IdentifiableIntegerMapping(Iterable<D> domain) {
         int maxId = -1;
         for (D x : domain) {
