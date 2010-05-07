@@ -26,7 +26,8 @@ package ds.graph;
  */
 public class IdentifiableConstantMapping<D extends Identifiable> extends IdentifiableIntegerMapping<D> {
 
-    public static IdentifiableConstantMapping<Edge> UNIT_MAPPING = new IdentifiableConstantMapping<Edge>(1);
+    public static IdentifiableConstantMapping<Edge> UNIT_EDGE_MAPPING = new IdentifiableConstantMapping<Edge>(1);
+    public static IdentifiableConstantMapping<Node> UNIT_NODE_MAPPING = new IdentifiableConstantMapping<Node>(1);
 
     protected int constant;
 

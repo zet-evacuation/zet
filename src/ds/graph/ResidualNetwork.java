@@ -196,12 +196,13 @@ public class ResidualNetwork extends Network {
      * either the ngated cost of the oposite edge if it exists or 0.
      */
     public IdentifiableIntegerMapping<Edge> expandCostFunction(IdentifiableIntegerMapping<Edge> costs) {
-        IdentifiableIntegerMapping<Edge> result = new IdentifiableIntegerMapping<Edge>(costs);
-        result.setDomainSize(getEdgeCapacity());
+        IdentifiableIntegerMapping<Edge> result = new IdentifiableIntegerMapping<Edge>(getEdgeCapacity());
         for (int id = 0; id < getEdgeCapacity(); id++) {
             Edge edge = edges.getEvenIfHidden(id);
             if (isReverseEdge(edge)) {
                 result.set(edge, -costs.get(reverseEdge(edge)));
+            } else {
+                result.set(edge, costs.get(edge));
             }
         }
         return result;
