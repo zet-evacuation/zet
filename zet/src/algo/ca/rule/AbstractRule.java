@@ -25,7 +25,7 @@ import ds.ca.Cell;
  */
 public abstract class AbstractRule implements Rule {
 	private CAController caController;
-	protected ParameterSet parameters;
+	protected ParameterSet parameterSet;
 
 	protected CAController caController() {
 		return caController;
@@ -60,6 +60,6 @@ public abstract class AbstractRule implements Rule {
 			throw new RuntimeException( Localization.getInstance().getString( "algo.ca.rule.CAControllerIsNullException" ) );
 
 		this.caController = caController;
-		this.parameters = caController.getParameterSet();
+		this.parameterSet = caController.getParameterSet();
 	}
 }

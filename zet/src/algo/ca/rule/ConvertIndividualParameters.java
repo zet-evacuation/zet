@@ -47,6 +47,11 @@ public class ConvertIndividualParameters extends AbstractRule {
 		Individual i = cell.getIndividual();
 		final double sps = caController().getCA().getStepsPerSecond();
 		i.setReactionTime( i.getReactionTime() * sps );
+
+		// Convert the speed. It is given in meter per second but has to be
+		// converted to cells per step
+		final double speed = Math.min( 1, i.getMaxSpeed()/caController().getParameterSet().getAbsoluteMaxSpeed() );
+		i.setMaxSpeed( speed );
 	}
 
 }

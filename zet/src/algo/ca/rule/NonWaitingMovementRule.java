@@ -50,6 +50,7 @@ public class NonWaitingMovementRule extends AbstractMovementRule {
 		if( actor.isAlarmed() == true ) {
 			if( canMove( actor ) ) {
 				if( slack( actor ) ) {
+					System.out.println( "SLACK" );
 					this.updateExhaustion( actor, cell );
 					this.setPerformMove( true );
 					doMove( actor, cell );
@@ -136,14 +137,14 @@ public class NonWaitingMovementRule extends AbstractMovementRule {
 
 	protected void updatePanic( Individual i, Cell targetCell ) {
 		double oldPanic = i.getPanic();
-		this.parameters.updatePanic( i, targetCell, this.neighboursByPriority( i.getCell() ) );
+		this.parameterSet.updatePanic( i, targetCell, this.neighboursByPriority( i.getCell() ) );
 		if( oldPanic != i.getPanic() ) {
 			caController().getCaStatisticWriter().getStoredCAStatisticResults().getStoredCAStatisticResultsForIndividuals().addPanicToStatistic( i, caController().getCA().getTimeStep(), i.getPanic() );
 		}
 	}
 
 	protected void updateSpeed( Individual i ) {
-		this.parameters.updatePreferredSpeed( i );
+		this.parameterSet.updatePreferredSpeed( i );
 
 	}
 
@@ -167,8 +168,8 @@ public class NonWaitingMovementRule extends AbstractMovementRule {
 
 			@Override
 			public int compare( Cell cell1, Cell cell2 ) {
-				final double potential1 = parameters.effectivePotential( referenceCell, cell1 );
-				final double potential2 = parameters.effectivePotential( referenceCell, cell2 );
+				final double potential1 = parameterSet.effectivePotential( referenceCell, cell1 );
+				final double potential2 = parameterSet.effectivePotential( referenceCell, cell2 );
 				if( potential1 < potential2 ) {
 					return -1;
 				} else if( potential1 == potential2 ) {
@@ -204,7 +205,7 @@ public class NonWaitingMovementRule extends AbstractMovementRule {
 		int max_index = 0;
 
 		for( int i = 0; i < targets.size(); i++ ) {
-			p[i] = Math.exp( parameters.effectivePotential( cell, targets.get( i ) ) );
+			p[i] = Math.exp( parameterSet.effectivePotential( cell, targets.get( i ) ) );
 			if( p[i] > max ) {
 				max = p[i];
 				max_index = i;
@@ -291,7 +292,7 @@ public class NonWaitingMovementRule extends AbstractMovementRule {
 	protected void updateExhaustion( Individual i, Cell targetCell ) {
 		//throw new java.lang.IllegalStateException( "update exhaustion aufgerufen" );
 		double oldExhaustion = i.getExhaustion();
-		this.parameters.updateExhaustion( i, targetCell );
+		this.parameterSet.updateExhaustion( i, targetCell );
 		if( oldExhaustion != i.getExhaustion() ) {
 			caController().getCaStatisticWriter().getStoredCAStatisticResults().getStoredCAStatisticResultsForIndividuals().addExhaustionToStatistic( i, caController().getCA().getTimeStep(), i.getExhaustion() );
 		}
@@ -299,7 +300,7 @@ public class NonWaitingMovementRule extends AbstractMovementRule {
 
 	/**
 	 * Decides randomly if an individual moves. (falsch)
-	 * @param i An individual with a given parameters
+	 * @param i An individual with a given parameterSet
 	 * @return <code>true</code> if the individual moves or
 	 * <code>false</code> otherwise. 
 	 */
@@ -319,7 +320,7 @@ public class NonWaitingMovementRule extends AbstractMovementRule {
 	 */
 	protected boolean slack( Individual i ) {
 		double randomNumber = RandomUtils.getInstance().getRandomGenerator().nextDouble();
-		return (this.parameters.idleThreshold( i ) > randomNumber);
+		return (this.parameterSet.idleThreshold( i ) > randomNumber);
 	}
 
 	/**

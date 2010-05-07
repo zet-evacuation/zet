@@ -34,14 +34,6 @@ public class RimeaParameterSet extends DefaultParameterSet {
 	
 	public RimeaParameterSet() {
 		super();
-		//PANIC_TO_PROB_OF_POTENTIAL_CHANGE_RATIO = PropertyContainer.getInstance().getAsDouble( "algo.ca.PANIC_TO_PROB_OF_POTENTIAL_CHANGE_RATIO" );
-		//SLACKNESS_TO_IDLE_RATIO = PropertyContainer.getInstance().getAsDouble( "algo.ca.SLACKNESS_TO_IDLE_RATIO" );
-		//PANIC_DECREASE_FACTOR_IF_HAPPY = PropertyContainer.getInstance().getAsDouble( "algo.ca.PANIC_DECREASE_FACTOR_IF_HAPPY" );
-		//PANIC_INCREASE_FACTOR_IF_UNHAPPY = PropertyContainer.getInstance().getAsDouble( "algo.ca.PANIC_INCREASE_FACTOR_IF_UNHAPPY" );
-		//PANIC_WEIGHT_ON_SPEED = PropertyContainer.getInstance().getAsDouble( "algo.ca.PANIC_WEIGHT_ON_SPEED" );
-		//PANIC_WEIGHT_ON_POTENTIALS = PropertyContainer.getInstance().getAsDouble( "algo.ca.PANIC_WEIGHT_ON_POTENTIALS" );
-		//EXHAUSTION_WEIGHT_ON_SPEED = PropertyContainer.getInstance().getAsDouble( "algo.ca.EXHAUSTION_WEIGHT_ON_SPEED" );
-		//PANIC_THRESHOLD = PropertyContainer.getInstance().getAsDouble( "algo.ca.PANIC_THRESHOLD" );
 	}
 
 	/**
@@ -91,6 +83,17 @@ public class RimeaParameterSet extends DefaultParameterSet {
 	public double getReactionTimeFromAge( double age ) {
 		throw new IllegalStateException( "ReactionTimeFromAge not allowed in Rimea Parameter set." );
 	}
+
+
+	/**
+	 * Disable idling in RiMEA test suite.
+	 * @param individual
+	 * @return
+	 */
+//	@Override
+//	public double idleThreshold(Individual individual) {
+//		return 0;
+//	}
 
 	/**
 	 * Compute the speed according to the recommendation of the rimea guidelines.
