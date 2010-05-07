@@ -26,7 +26,7 @@ import ds.ca.Cell;
 
 /**
  *
- * @author Daniel Pluempe
+ * @author Daniel Plümpe
  */
 public class WaitingMovementRule extends NonWaitingMovementRule {
 

@@ -136,4 +136,14 @@ public abstract class AbstractDefaultParameterSet implements ParameterSet {
 		}
 		return parameterSet;
 	}
+
+	/**
+	 * Returns the absolute
+	 * @return
+	 */
+	@Override
+	public double getAbsoluteMaxSpeed() {
+		return ABSOLUTE_MAX_SPEED;
+	}
+
 }

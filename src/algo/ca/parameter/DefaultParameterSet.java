@@ -31,10 +31,9 @@ import java.util.List;
 import de.tu_berlin.math.coga.common.localization.Localization;
 import de.tu_berlin.math.coga.rndutils.RandomUtils;
 import de.tu_berlin.math.coga.rndutils.distribution.continuous.NormalDistribution;
-import de.tu_berlin.math.coga.rndutils.distribution.continuous.UniformDistribution;
 
 /**
- * @author Daniel Pluempe, Jan-Philipp Kappmeier
+ * @author Daniel Plümpe, Jan-Philipp Kappmeier
  */
 public class DefaultParameterSet extends AbstractDefaultParameterSet {
 	final protected double PANIC_TO_PROB_OF_POTENTIAL_CHANGE_RATIO;
@@ -52,7 +51,6 @@ public class DefaultParameterSet extends AbstractDefaultParameterSet {
 	 * Creates a new instance with some static values stored in the {@code PropertyContainer}.
 	 */
 	public DefaultParameterSet() {
-//try{
 		PANIC_TO_PROB_OF_POTENTIAL_CHANGE_RATIO = PropertyContainer.getInstance().getAsDouble( "algo.ca.PANIC_TO_PROB_OF_POTENTIAL_CHANGE_RATIO" );
 		SLACKNESS_TO_IDLE_RATIO = PropertyContainer.getInstance().getAsDouble( "algo.ca.SLACKNESS_TO_IDLE_RATIO" );
 		PANIC_DECREASE = PropertyContainer.getInstance().getAsDouble( "algo.ca.PANIC_DECREASE" );
@@ -61,9 +59,6 @@ public class DefaultParameterSet extends AbstractDefaultParameterSet {
 		PANIC_WEIGHT_ON_POTENTIALS = PropertyContainer.getInstance().getAsDouble( "algo.ca.PANIC_WEIGHT_ON_POTENTIALS" );
 		EXHAUSTION_WEIGHT_ON_SPEED = PropertyContainer.getInstance().getAsDouble( "algo.ca.EXHAUSTION_WEIGHT_ON_SPEED" );
 		PANIC_THRESHOLD = PropertyContainer.getInstance().getAsDouble( "algo.ca.PANIC_THRESHOLD" );
-//} catch( Exception e ) {
-//
-//}
 	}
 
 	/**
@@ -80,7 +75,7 @@ public class DefaultParameterSet extends AbstractDefaultParameterSet {
 	}
 
 	/**
-	 * Given a cell <code>referenceCell</code> that is occupied by an 
+	 * <p>Given a cell <code>referenceCell</code> that is occupied by an
 	 * individual I, this method calculates the potential of a cell with respect 
 	 * to I's panic and both the static and the dynamic potential. One can
 	 * think of the resulting potential as an "average" of the static and the
@@ -88,13 +83,10 @@ public class DefaultParameterSet extends AbstractDefaultParameterSet {
 	 * dynamic potential on the average is determined by two constants 
 	 * and I's panic. The higher the panic, the more important the 
 	 * dynamic potential will become while the influence of the static 
-	 * potential lessens. 
-	 * 
+	 * potential lessens.</p>
 	 * @param referenceCell A cell with an individual
 	 * @param targetCell A neighbour of <code>cell</code>
-	 * @return The potential between <code>referenceCell</code> and 
-	 * <code>targetCell</code> with respect to the static and the 
-	 * dynamic potential.  
+	 * @return The potential between <code>referenceCell</code> and  <code>targetCell</code> with respect to the static and the  dynamic potential.
 	 */
 	@Override
 	public double effectivePotential( Cell referenceCell, Cell targetCell ) {
@@ -260,11 +252,6 @@ public class DefaultParameterSet extends AbstractDefaultParameterSet {
 		return i.getCurrentSpeed();
 	}
 
-	@Override
-	public double getAbsoluteMaxSpeed() {
-		return ABSOLUTE_MAX_SPEED;
-	}
-
 	protected double slacknessToIdleRatio() {
 		return SLACKNESS_TO_IDLE_RATIO;
 	}
@@ -288,7 +275,7 @@ public class DefaultParameterSet extends AbstractDefaultParameterSet {
 	protected double exhaustionWeightOnSpeed() {
 		return EXHAUSTION_WEIGHT_ON_SPEED;
 	}
-
+	
 	public double getExhaustionFromAge( double age ) {
 		//minum Exhaustion: individual is fully exhausted
 		//after about 450 meter        
@@ -373,35 +360,32 @@ public class DefaultParameterSet extends AbstractDefaultParameterSet {
 			maxSpeedExpected = slope * (pAge - Math.floor(pAge))  + ageArray[left];
 		}
 
-		final NormalDistribution normal = new NormalDistribution( maxSpeedExpected, 0.26, ageArray[16], ABSOLUTE_MAX_SPEED );
-		double randSpeed = normal.getNextRandom();
+		boolean male = RandomUtils.getInstance().binaryDecision( 0.5 );
 
 		// Change speeds for male and female individuals:
 		// + 5% for male, -5% for female
-		if( RandomUtils.getInstance().binaryDecision( 0.5 ) ) {
-			randSpeed *= 1.05;
+		maxSpeedExpected *= male ? 1.05 : 0.95;
+
+		// Generate the random speed with a deviation around the expected speed for the person
+		if( maxSpeedExpected < ageArray[16] )
+			maxSpeedExpected = ageArray[16];
+		else if( maxSpeedExpected > ABSOLUTE_MAX_SPEED )
+			maxSpeedExpected = ABSOLUTE_MAX_SPEED;
+		final NormalDistribution normal = new NormalDistribution( maxSpeedExpected, 0.26, ageArray[16], ABSOLUTE_MAX_SPEED );
+		double randSpeed = normal.getNextRandom();
+
+		if( !male ) {
 			counterFemale++;
 			cumulativeFemale += randSpeed;
 		} else {
-			randSpeed *= 0.95;
 			counterMale++;
 			cumulativeMale += randSpeed;
 		}
 
-		//double randSpeed = maxSpeedExpected;
-		double maxSpeed = randSpeed / ABSOLUTE_MAX_SPEED;
-		if( maxSpeed > 1 ) {
-			maxSpeed = 1;
-		//System.err.println( "Maximale geschw: " + maxSpeed );
-		}
+//		System.out.println( "Berechnete Speed: " + randSpeed );
 
-		// Correction of 0.2
-//		maxSpeed = Math.max( 0.6, maxSpeed-0.4 );
-//		cumulativeSpeed += (maxSpeed * ABSOLUTE_MAX_SPEED);
-
-		//System.out.println( "First one has speed " + (maxSpeed * ABSOLUTE_MAX_SPEED) );
-		//System.out.println( "Average speed for " + counter + " persons: " + (cumulativeSpeed / counter) + " counterMale/s. (Should be 1.3x)" );
-
+//		if(true )
+//			return 1.33;
 		return randSpeed;
 	}
 

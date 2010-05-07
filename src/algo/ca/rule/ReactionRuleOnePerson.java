@@ -43,12 +43,9 @@ public class ReactionRuleOnePerson extends AbstractReactionRule {
 	@Override
 	protected void onExecute( ds.ca.Cell cell ) {
 		Individual i = cell.getIndividual();
-		if( i.getReactionTime()-1 <= 0 ) {
+		if( i.getReactionTime()-1 <= 0 )
 			i.setAlarmed( true );
-			System.out.println( "Individual " + i.getNumber() + " is being alarmed." );
-		} else {
+		else
 			i.setReactionTime( i.getReactionTime() - 1 );
-			//System.out.println( "Individual " + i.getNumber() + " has " + i.getReactionTime() + " left." );
-		}
 	}
 }

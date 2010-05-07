@@ -54,7 +54,6 @@ public class ReactionRuleAllPersonsInRoom extends AbstractReactionRule {
 		// If reaction time is small enough (less than 1 step), check if all individuals
 		// in the same room are in the same status. If that is the case, alarm all
 		if( i.getReactionTime() < 1 ) {
-			System.out.println( "The Test is performed for individual " + i.getNumber() );
 			boolean allIndividualsAlarmed = true;
 			for( Individual j : i.getCell().getRoom().getIndividuals() )
 				allIndividualsAlarmed &= (j.getReactionTime() < 1);

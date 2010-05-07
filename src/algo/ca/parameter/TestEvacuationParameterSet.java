@@ -55,15 +55,6 @@ public class TestEvacuationParameterSet extends DefaultParameterSet {
 		double randReactionTime = normal.getNextRandom();
 		if( true )
 			throw new IllegalStateException( "Diese Methode sollte nicht aufgerufen werden. Bitte setzen sie die Reaktionszeit im Editor." );
-//		System.out.println( "Reactiontime: " + randReactionTime );
-
-//		ExponentialDistribution exp = new ExponentialDistribution( 0.016666666667 );
-//		exp.setParameter( 0, 180 );
-//		double randReactionTime = exp.getNextRandom();
-//		System.out.println( "Reactiontime: " + randReactionTime );
-
-		//randReactionTime = 0;
-
 		return randReactionTime;
 	}
 
@@ -73,9 +64,6 @@ public class TestEvacuationParameterSet extends DefaultParameterSet {
 	 * @param pAge
 	 * @return the maximal speed as percentage of the overall maximal speed for the simulation run
 	 */
-//	static double cumulativeSpeed = 0;
-//	static int counter = 0;
-
 	@Override
 	public double getSpeedFromAge( double pAge ) {
 		// additional: calculate the average speed.

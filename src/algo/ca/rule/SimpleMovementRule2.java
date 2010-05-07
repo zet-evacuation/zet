@@ -192,9 +192,9 @@ public class SimpleMovementRule2 extends AbstractMovementRule {
 		// wähle die target-cell mit dem kleinsten potenzial aus
 		//int pot = Integer.MAX_VALUE;
 		Cell target = targets.get( 0 );
-		double minPot = parameters.effectivePotential( cell, target );
+		double minPot = parameterSet.effectivePotential( cell, target );
 		for( Cell c : targets ) {
-			double pot = parameters.effectivePotential( cell, c );
+			double pot = parameterSet.effectivePotential( cell, c );
 			if( pot > minPot ) {
 				target = c;
 				minPot = pot;
@@ -205,7 +205,7 @@ public class SimpleMovementRule2 extends AbstractMovementRule {
 
 	/**
 	 * Decides randomly if an individual moves. (falsch)
-	 * @param i An individual with a given parameters
+	 * @param i An individual with a given parameterSet
 	 * @return <code>true</code> if the individual moves or
 	 * <code>false</code> otherwise. 
 	 */
