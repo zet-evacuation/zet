@@ -210,7 +210,7 @@ public class ICEM09MovementRule extends AbstractMovementRule{
 //		int max_index = 0;
 //
 		for( int i = 0; i < targets.size(); i++ ) {
-			p[i] = Math.exp( parameters.effectivePotential( cell, targets.get( i ) ) );
+			p[i] = Math.exp( parameterSet.effectivePotential( cell, targets.get( i ) ) );
 //			if( p[i] > max ) {
 //				max = p[i];
 //				max_index = i;
