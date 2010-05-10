@@ -13,10 +13,12 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
+
 /*
  * SimpleMovementRule.java
  * Created on 26.01.2008, 17:27:04
  */
+
 package algo.ca.rule;
 
 import ds.ca.Cell;
@@ -71,7 +73,7 @@ public class SimpleMovementRule extends AbstractMovementRule {
 
 		double p[] = new double[targets.size()];
 		for( int i = 0; i < targets.size(); i++ )
-			p[i] = Math.exp( parameters.effectivePotential( cell, targets.get( i ) ) );
+			p[i] = Math.exp( parameterSet.effectivePotential( cell, targets.get( i ) ) );
 
 		return targets.get( RandomUtils.getInstance().chooseRandomlyAbsolute( p ) );
 	}
