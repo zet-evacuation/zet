@@ -27,6 +27,7 @@ import ds.graph.Node;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Queue;
+import java.util.HashSet;
 
 /**
  *
@@ -108,4 +109,35 @@ public class BFS {
             }
         }
     }
+    
+    public HashSet<Node> getReachableNodes(Node start) {
+        
+        Queue<Node> queue = new LinkedList<Node>();
+        queue.offer(start);
+        
+        HashSet<Node> reachableNodes = new HashSet<Node>();
+        reachableNodes.add(start);
+        visited.set(start,true);
+       
+        while (!queue.isEmpty()) {
+      
+            Node v = queue.poll();
+            
+            for(Edge edge : graph.outgoingEdges(v)) {
+                
+                Node w = edge.opposite(v);
+                if(!visited.get(w)) {
+                    
+                    queue.offer(w);
+                    visited.set(w,true);
+                    reachableNodes.add(w);
+                }
+               
+            }
+           
+        }
+        return reachableNodes;
+    }
+    
+    
 }

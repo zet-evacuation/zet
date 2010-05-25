@@ -28,7 +28,6 @@ import ds.graph.ResidualNetwork;
 import ds.graph.flow.MaximumFlow;
 import de.tu_berlin.math.coga.common.algorithm.Algorithm;
 import algo.graph.Flags;
-import algo.graph.Flags;
 
 /**
  *
