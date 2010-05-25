@@ -48,6 +48,28 @@ public final class Helper {
 	public final static boolean isBetween( char value, char lower, char upper ) {
 		return value >= lower && value <= upper;
 	}
+
+	/**
+	 * Gives out a string representation of an array.
+	 */
+	public final static String arrayToString( Object[] array ) {
+		StringBuilder sb = new StringBuilder( "[" );
+		for( int i = 0; i < array.length-1; ++i )
+			sb.append( array[i].toString() + ", " );
+		sb.append( array[array.length-1] + "]" );
+		return sb.toString();
+	}
+
+	/**
+	 * Gives out a string representation of an array.
+	 */
+	public final static String arrayToString( double[] array ) {
+		StringBuilder sb = new StringBuilder( "[" );
+		for( int i = 0; i < array.length-1; ++i )
+			sb.append( array[i] + ", " );
+		sb.append( array[array.length-1] + "]" );
+		return sb.toString();
+	}
 }
 
 

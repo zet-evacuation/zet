@@ -30,9 +30,8 @@ import opengl.framework.abs.AbstractDrawable;
 import de.tu_berlin.math.coga.common.util.Direction;
 import gui.visualization.control.ca.GLCellularAutomatonControl;
 
-//public class GLCell extends AbstractDrawable<GLCell, GLCellControl, GLCellControl> {
 public class GLCell extends AbstractDrawable<GLCell, GLCellControl> {
-	// Vorlaeufige Konstanten bis Verwaltungsklasse fertig
+	// Vorlaeufige Konstanten bis Verwaltungsklasse fertig // TODO
 	private static GLVector ul = null;	// upper Left
 	private static GLVector ur;	// upper Right
 	private static GLVector ll;	// lower Left
@@ -63,7 +62,6 @@ public class GLCell extends AbstractDrawable<GLCell, GLCellControl> {
 
 	public GLCell( GLCellControl control, GLColor color ) {
 		super( control );
-		//super(control, new CullingShapeSphere() );
 		this.position.x = control.getXPosition() * GLCellularAutomatonControl.sizeMultiplicator;
 		this.position.y = control.getYPosition() * GLCellularAutomatonControl.sizeMultiplicator;
 		if( ul == null )

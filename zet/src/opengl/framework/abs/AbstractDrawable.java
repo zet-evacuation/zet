@@ -15,6 +15,8 @@
  */
 package opengl.framework.abs;
 
+import gui.visualization.draw.ca.GLCA;
+import gui.visualization.draw.ca.GLCAFloor;
 import java.util.ArrayList;
 import javax.media.opengl.GL;
 import javax.media.opengl.glu.GLU;
@@ -52,6 +54,10 @@ public abstract class AbstractDrawable<U extends AbstractDrawable<?, ?>, V exten
 		update();
 	}
 
+	public void clear() {
+		children.clear();
+	}
+
 	public void addChild( U child ) {
 		children.add( child );
 	}
@@ -77,6 +83,9 @@ public abstract class AbstractDrawable<U extends AbstractDrawable<?, ?>, V exten
 	 */
 	public void drawAllChildren( GL gl ) {
 		for( U child : children ) {
+			if( this instanceof GLCA ) {
+				System.out.println( "GLCA " + ((GLCAFloor)child).getControl().getFloorNumber() );
+			}
 			child.draw( gl );
 		}
 	}

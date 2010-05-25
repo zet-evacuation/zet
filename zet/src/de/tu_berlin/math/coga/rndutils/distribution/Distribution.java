@@ -30,12 +30,30 @@ public abstract class Distribution<T extends Number> implements Cloneable {
 	
 	/**
 	 * Returns the value of the density function for this probability distribution
-	 * at a given point.
+	 * at a given point. Values that are below min and higher than max are
+	 * returned as zero.
 	 * @param x the point
 	 * @return the value of the density function
 	 */
 	abstract public double getDensityAt( double x );
-	
+
+	/**
+	 * Returns the value of the density function for this probability distribution
+	 * at a given point. It can be decided, if the true distribution should be
+	 * used or the one which has borders min and max. By default, a value of
+	 * {@code true} gives an exception.
+	 * @param x the point
+	 * @param ignoreBounds decides wheather a true distribution should be returned
+	 * @return the (maybe true) density at a given point
+	 * @throws UnsupportedOperationException if {@code false} is passed.
+	 */
+	public double getDensityAt( double x, boolean ignoreBounds ) throws UnsupportedOperationException {
+		if( !ignoreBounds )
+			return getDensityAt( x );
+		throw new UnsupportedOperationException( "Not supported." );
+	}
+
+
 	/**
 	 * Returns the currently set maximal value that the random variable can take.
 	 * @return the maximal value

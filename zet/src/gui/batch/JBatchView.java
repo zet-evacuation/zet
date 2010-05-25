@@ -1,4 +1,4 @@
-/* zet evacuation tool copyright (c) 2007-10 zet evacuation team
+/* zet evacuation tool copyright (ageCollector) 2007-10 zet evacuation team
  *
  * This program is free software; you can redistribute it and/or
  * as published by the Free Software Foundation; either version 2
@@ -62,6 +62,8 @@ import javax.swing.table.AbstractTableModel;
 import javax.swing.table.DefaultTableCellRenderer;
 import de.tu_berlin.math.coga.common.localization.Localization;
 import de.tu_berlin.math.coga.rndutils.RandomUtils;
+import statistics.GUIStatistic;
+import statistics.Statistic;
 
 /**
  *
@@ -186,12 +188,21 @@ public class JBatchView extends JPanel {
 					try {
 						RandomUtils.getInstance().setSeed( Long.parseLong( txtSeed.getText() ) );
 					} catch( NumberFormatException ex ) {
-						ZETMain.sendError( Localization.getInstance().getString(
-										"gui.error.NonParsableNumber" ) );
+						ZETMain.sendError( Localization.getInstance().getString( "gui.error.NonParsableNumber" ) );
 						return;
 					}
 
+					Statistic.instance.getAgeCollector().storeCompleteData( true );
+
 					JEditor.getInstance().setBatchResult( batch.execute( chkTempFiles.isSelected() ) );
+					// Try the new statistic thing here
+					Statistic.instance.getAgeCollector().storeCompleteData( true );
+					GUIStatistic gs = new GUIStatistic( Statistic.instance );
+					for( int i = 1; i < 10000; ++i ) {
+						RandomUtils.getInstance().getRandomGenerator().nextGaussian();
+					}
+					gs.getAgeHistogram();
+					
 				} catch( Exception ex ) {
 					ZETMain.sendError( ex.getLocalizedMessage() );
 					ex.printStackTrace();

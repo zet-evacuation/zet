@@ -14,8 +14,140 @@ import java.util.Locale;
  * @author Jan-Philipp Kappmeier, Martin Groß
  */
 public class Formatter {
-	/** An array containing text for several file size measures. */
-	static final String[] fileSizes = {"Bytes", "KiB", "MiB", "GiB", "TiB"};
+	public enum BinaryUnits {
+		Bit( "Bits", "Bits" ),
+		Byte( "Bytes", "Bytes" ),
+		KiB( "KiB", "Kibibyte" ),
+		MiB( "MiB", "Mebibyte" ),
+		GiB( "GiB", "Gibibyte" ),
+		TiB( "TiB", "Tebibyte" ),
+		PiB( "PiB", "Pebibyte" ),
+		EiB( "EiB", "Exbibyte" ),
+		ZiB( "ZiB", "Zebibyte" ),
+		YiB( "YiB", "Yobibyte" );
+
+		String rep;
+		String longRep;
+
+		private BinaryUnits( String rep, String longRep ) {
+			this.rep = rep;
+			this.longRep = longRep;
+		}
+
+		public boolean isOK( double value ) {
+			switch( this ) {
+				case Bit:
+					return value <= 8 ? true : false;
+				case Byte:
+				case KiB:
+				case MiB:
+				case GiB:
+				case TiB:
+				case PiB:
+				case EiB:
+				case ZiB:
+					return value >= 1 && value <= 1024 ? true : false;
+				default:
+					return value >= 1 ? true : false;
+			}
+		}
+
+		public BinaryUnits getNextBetter( double value ) {
+			switch( this ) {
+				case Bit:
+					return value <= 8 ? Bit : Byte;
+				case Byte:
+					if( value <= 1 )
+						return Bit;
+					else if( value >= 1024 )
+						return KiB;
+					return Byte;
+				case KiB:
+					if( value <= 1 )
+						return Byte;
+					else if( value >= 1024 )
+						return MiB;
+					return KiB;
+				case MiB:
+					if( value <= 1 )
+						return KiB;
+					else if( value >= 1024 )
+						return GiB;
+					return MiB;
+				case GiB:
+					if( value <= 1 )
+						return MiB;
+					else if( value >= 1024 )
+						return TiB;
+					return GiB;
+				case TiB:
+					if( value <= 1 )
+						return GiB;
+					else if( value >= 1024 )
+						return PiB;
+					return TiB;
+				case PiB:
+					if( value <= 1 )
+						return TiB;
+					else if( value >= 1024 )
+						return EiB;
+					return PiB;
+				case EiB:
+					if( value <= 1 )
+						return PiB;
+					else if( value >= 1024 )
+						return ZiB;
+					return EiB;
+				case ZiB:
+					if( value <= 1 )
+						return EiB;
+					else if( value >= 1024 )
+						return YiB;
+					return ZiB;
+				default:
+					if( value <= 1 )
+						return GiB;
+					return TiB;
+			}
+		}
+
+		public double getNextBetterValue( double value ) {
+			switch( this ) {
+				case Bit:
+					return value <= 8 ? value : value / 8;
+				case Byte:
+					if( value <= 1 )
+						return value * 8;
+					else if( value >= 1024 )
+						return value / 1024;
+					return value;
+				case KiB:
+				case MiB:
+				case GiB:
+				case TiB:
+				case PiB:
+				case EiB:
+				case ZiB:
+					if( value <= 1 )
+						return value * 1024;
+					else if( value >= 1024 )
+						return value / 1024;
+					return value;
+				default:
+					if( value <= 1 )
+						return value * 1024;
+					return value;
+			}
+		}
+
+		public String getName() {
+			return rep;
+		}
+
+		public String getLongName() {
+			return longRep;
+		}
+	}
 
 	/**
 	 * No instantiating of <code>ConversationTools</code> possible.
@@ -24,20 +156,33 @@ public class Formatter {
 	}
 
 	/**
-	 * Formats a given number of bits to the largest possible unit. Supported
-	 * units are "Bytes", "Kilobytes", "Megabytes" and "Gigabytes".
-	 * @param bits the bits
+	 * Formats a given number of some unit to the most fitting unit.
+	 * @param value the value of the number to be formatted
+	 * @param unit the unit of the number
 	 * @return the string in the calculated unit with one decimal place and the shortcut for the unit
 	 */
-	public final static String bitToMaxFilesizeUnit( double bits ) {
-		final NumberFormat n = NumberFormat.getInstance();
-		n.setMaximumFractionDigits( 1 );
-		double ret = bits / 8;	// rets is in bytes
-		int i = 0;
-		while( ret > 1024 && i++ < fileSizes.length - 1 )
-			ret /= 1024;
-		return n.format( ret ) + " " + fileSizes[Math.min( i, fileSizes.length - 1 )];
+	public final static String fileSizeUnit( double value, BinaryUnits unit ) {
+		return fileSizeUnit( value, unit, 1 );
 	}
+
+	/**
+	 * Formats a given number of some unit to the most fitting unit.
+	 * @param value the value of the number to be formatted
+	 * @param unit the unit of the number
+	 * @param digits the number of digits after the comma in the representation
+	 * @return the string in the calculated unit with one decimal place and the shortcut for the unit
+	 */
+	public final static String fileSizeUnit( double value, BinaryUnits unit, int digits ) {
+		while( !unit.isOK( value ) ) {
+			final double newValue = unit.getNextBetterValue( value );
+			unit = unit.getNextBetter( value );
+			value = newValue;
+		}
+		final NumberFormat n = NumberFormat.getInstance();
+		n.setMaximumFractionDigits( digits );
+		return n.format( value ) + " " + unit.getName();
+	}
+
 
 	/**
 	 * Helper method that converts an double seconds value in an string

@@ -64,6 +64,7 @@ import gui.editor.properties.JOptionsWindow;
 import gui.editor.properties.JPropertySelectorWindow;
 import gui.statistic.JGraphStatisticPanel;
 import gui.statistic.JStatisticPanel;
+import gui.statistic.JStatisticsPanel;
 import gui.visualization.AbstractVisualization;
 import gui.visualization.JVisualizationView;
 import gui.visualization.control.GLControl;
@@ -148,7 +149,8 @@ import ds.z.EvacuationArea;
 import ds.z.Room;
 import ds.z.ZControl;
 import event.VisualizationEvent;
-import gui.editor.JLogView;
+import gui.components.JLogPane;
+import gui.statistic.JStatisticsPanel;
 import gui.visualization.Visualization.RecordingMode;
 import io.visualization.BuildingResults;
 import zet.DatFileReaderWriter;
@@ -166,6 +168,7 @@ public class JEditor extends JFrame implements Localized, EventListener<Progress
 	public static final int STATISTIC = ZETMain.isDebug() ? 4 : 3;
 	public static final int GRAPH_STATISTIC = ZETMain.isDebug() ? 5 : 4;
 	public static final int LOG = ZETMain.isDebug() ? 6 : 5;
+	public static final int STATISTICS = LOG + 1;
 	/** The localization class. */
 	static final Localization loc = Localization.getInstance();
 	/** Stores the last mouse position if a mouse position event is sent. */
@@ -203,7 +206,9 @@ public class JEditor extends JFrame implements Localized, EventListener<Progress
 	/** The tab containing the graph statistic. */
 	private JGraphStatisticPanel graphStatisticView;	// Menu items
 	/** The tab containing the log window. */
-	private JLogView logView;
+	private JLogPane logView;
+	/** The general statistic tab. */
+	public JStatisticsPanel statisticView;
 	private JMenu mFile;
 	private JMenuItem mnuFileNew;
 	private JMenuItem mnuFileOpen;
@@ -546,7 +551,8 @@ public class JEditor extends JFrame implements Localized, EventListener<Progress
 		caView = new JCAView();
 		caStatisticView = new JStatisticPanel();
 		graphStatisticView = new JGraphStatisticPanel();
-		logView = new JLogView( ZETMain.log );
+		logView = new JLogPane( ZETMain.log );
+		statisticView = new JStatisticsPanel();
 
 		tabPane = new JTabbedPane();
 
@@ -559,6 +565,8 @@ public class JEditor extends JFrame implements Localized, EventListener<Progress
 		tabPane.addTab( loc.getString( "Statistic" ), null, caStatisticView, loc.getString( "StatisticToolTip" ) );
 		tabPane.addTab( loc.getString( "GraphStatistic" ), null, graphStatisticView, loc.getString( "GraphStatisticToolTip" ) );
 		tabPane.addTab( loc.getString( "LogWindow" ), null, logView, loc.getString( "LogWindowToolTip" ) );
+		if( ZETMain.isDebug() )
+			tabPane.addTab( loc.getString( "Statistics" ), null, statisticView, loc.getString( "StatisticsToolTip" ) );
 		tabPane.addChangeListener( chlTab );
 		loc.setPrefix( "" );
 
@@ -582,6 +590,14 @@ public class JEditor extends JFrame implements Localized, EventListener<Progress
 		};
 
 		tabPane.registerKeyboardAction( acl, "test", up, JComponent.WHEN_ANCESTOR_OF_FOCUSED_COMPONENT);
+
+		tabPane.addChangeListener( new ChangeListener() {
+			public void stateChanged( ChangeEvent e ) {
+				if( tabPane.getSelectedIndex() == LOG ) {
+					logView.update();
+				}
+			}
+		} );
 
 		ZETMain.sendMessage( loc.getString( "gui.status.EditorInitialized" ) );
 	}
@@ -1145,6 +1161,11 @@ public class JEditor extends JFrame implements Localized, EventListener<Progress
 
 		tabPane.setTitleAt( LOG, loc.getString( "LogWindow" ) );
 		tabPane.setToolTipTextAt( LOG, loc.getString( "LogWindowToolTip" ) );
+
+		if( ZETMain.isDebug() ) {
+			tabPane.setTitleAt( STATISTICS, loc.getString( "Statistics" ) );
+			tabPane.setToolTipTextAt( STATISTICS, loc.getString( "StatisticsToolTip" ) );
+		}
 		loc.setPrefix( "" );
 
 
@@ -2036,6 +2057,8 @@ public class JEditor extends JFrame implements Localized, EventListener<Progress
 				switchTo( GRAPH_STATISTIC );
 			else if( i == LOG )
 				switchTo( LOG );
+			else if( i == STATISTICS )
+				switchTo( STATISTICS );
 			else
 				ZETMain.sendError( "Unknown tab index:" + tabPane.getSelectedIndex() + ". " + loc.getString( "gui.ContactDeveloper" ) );
 		}
@@ -2439,7 +2462,7 @@ caRes.statistic = caStatistic;
 			return;
 		}
 		// TODO better implementation of this stuff for debug mode ?
-		if( ((ZETMain.isDebug() && tabID > CA_FLOOR) || (!ZETMain.isDebug() && tabID > BATCH)) && result == null && tabID != LOG ) {
+		if( ((ZETMain.isDebug() && tabID > CA_FLOOR) || (!ZETMain.isDebug() && tabID > BATCH)) && result == null && tabID != LOG && tabID != STATISTICS ) {
 			ZETMain.sendError( loc.getStringWithoutPrefix( "gui.error.CreateBatch" ) );
 			tabPane.setSelectedIndex( currentMode );
 			return;
@@ -2465,6 +2488,8 @@ caRes.statistic = caStatistic;
 		else if( tabID == GRAPH_STATISTIC )
 			showToolBar( toolBarGraphStats );
 		else if( tabID == LOG )
+			showToolBar( toolBarLog );
+		else if( tabID == STATISTICS )
 			showToolBar( toolBarLog );
 		else
 			ZETMain.sendError( "Unbekannte TabID: " + Integer.toString( tabID ) + ". " + loc.getString( "gui.ContactDeveloper" ) );

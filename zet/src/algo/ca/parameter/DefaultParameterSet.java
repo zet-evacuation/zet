@@ -321,6 +321,8 @@ public class DefaultParameterSet extends AbstractDefaultParameterSet {
 		public int counterFemale = 0;
 		public int counterMale = 0;
 
+		protected final static double sigmaSquared = 0.26*0.26;
+
 	/**
 	 * Calculates the maximal speed for a person dependingon the speed-values
 	 * from the rimea test suite.
@@ -357,7 +359,7 @@ public class DefaultParameterSet extends AbstractDefaultParameterSet {
 			maxSpeedExpected = ageArray[16];
 		} else {
 			final double slope = (ageArray[right] - ageArray[left]);
-			maxSpeedExpected = slope * (pAge - Math.floor(pAge))  + ageArray[left];
+			maxSpeedExpected = slope * (pAge - ((int)pAge/5)*5)/5  + ageArray[left];
 		}
 
 		boolean male = RandomUtils.getInstance().binaryDecision( 0.5 );
@@ -371,7 +373,7 @@ public class DefaultParameterSet extends AbstractDefaultParameterSet {
 			maxSpeedExpected = ageArray[16];
 		else if( maxSpeedExpected > ABSOLUTE_MAX_SPEED )
 			maxSpeedExpected = ABSOLUTE_MAX_SPEED;
-		final NormalDistribution normal = new NormalDistribution( maxSpeedExpected, 0.26, ageArray[16], ABSOLUTE_MAX_SPEED );
+		final NormalDistribution normal = new NormalDistribution( maxSpeedExpected, sigmaSquared, ageArray[16], ABSOLUTE_MAX_SPEED );
 		double randSpeed = normal.getNextRandom();
 
 		if( !male ) {

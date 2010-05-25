@@ -53,7 +53,7 @@ public class GLGraphFloorControl extends AbstractZETVisualizationControl<GLNodeC
 		Node supersink = graphVisResult.getSupersink();
 		while( it.hasNext() ) {
 			Node n = it.next();
-			if( !n.equals(supersink) )
+			if( !n.equals(supersink) && floor != 0 )
 				add( new GLNodeControl( graphVisResult, n, glControl ) );
 		}
 		setView( new GLGraphFloor( this ) );

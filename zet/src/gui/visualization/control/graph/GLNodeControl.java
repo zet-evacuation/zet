@@ -60,7 +60,7 @@ public class GLNodeControl extends AbstractZETVisualizationControl<GLEdgeControl
 		yPosition = (nwY + 0.5 * (seY - nwY)) * Z_TO_OPENGL_SCALING;
 		capacity = graphVisResult.getNodeCapacities().get( node );
 
-		final boolean showEdgesBetweenFloors = true;
+		final boolean showEdgesBetweenFloors = false;
 
 		for( Edge edge : graphVisResult.getNetwork().outgoingEdges( node ) )
 			if( edge.start().id() != glControl.superSinkID() && edge.end().id() != glControl.superSinkID() ) {

@@ -34,6 +34,7 @@ import ds.z.PlanPolygon;
 import ds.z.Room;
 import ds.z.RoomEdge;
 import ds.z.StairArea;
+import ds.z.StairPreset;
 import ds.z.TeleportEdge;
 import ds.z.ZControl;
 import gui.JEditor;
@@ -61,6 +62,7 @@ import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
+import java.text.NumberFormat;
 import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.EnumSet;
@@ -102,8 +104,6 @@ public class JEditView extends AbstractSplitPropertyWindow<JFloorScrollPane<JFlo
 	private static int eastPanelType;
 	/** The control object for the loaded project. */
   private ZControl projectControl;
-	/** The model that is loded in the editor. */
-	//private Project myProject;
 	/** The currently visible {@link ds.z.Floor} */
 	private Floor currentFloor;
 	/** Model for a floor-selector combo box. */
@@ -159,6 +159,12 @@ public class JEditView extends AbstractSplitPropertyWindow<JFloorScrollPane<JFlo
 	private JLabel lblDelayFactor;
 	private JLabel lblStairFactorUp;
 	private JLabel lblStairFactorDown;
+	/** A label for the stair speed preset. */
+	private JLabel lblStairPreset;
+	/** A selection box for the stair speed presets. */
+	private JComboBox cbxStairPresets;
+	/** A label describing the current preset. */
+	private JLabel lblStairPresetDescription;
 	private JLabel lblDelayType;
 	private JLabel lblEvacuationAttractivity;
 	private JTextField txtEvacuationAttractivity;
@@ -676,6 +682,7 @@ public class JEditView extends AbstractSplitPropertyWindow<JFloorScrollPane<JFlo
 			//Rows
 			{TableLayout.PREFERRED, TableLayout.PREFERRED, 20,
 				TableLayout.PREFERRED, TableLayout.PREFERRED, 20,
+				TableLayout.PREFERRED, TableLayout.PREFERRED, TableLayout.PREFERRED, 20,
 				TableLayout.FILL
 			}
 		};
@@ -751,6 +758,26 @@ public class JEditView extends AbstractSplitPropertyWindow<JFloorScrollPane<JFlo
 			}
 		} );
 		eastPanel.add( txtStairFactorDown, "0, " + row++ );
+		row++;
+
+		// Add combo box with presets
+		lblStairPreset = new JLabel( loc.getString( "gui.editor.JEditorPanel.labelStairPreset" ) + ":" );
+		cbxStairPresets = new JComboBox();
+		cbxStairPresets.addItem( StairPreset.Indoor );
+		cbxStairPresets.addItem( StairPreset.Outdoor );
+		eastPanel.add( lblStairPreset, "0, " + row++ );
+		eastPanel.add( cbxStairPresets, "0, " + row++ );
+		cbxStairPresets.addActionListener( new ActionListener() {
+
+			public void actionPerformed( ActionEvent arg0 ) {
+				StairPreset sp = (StairPreset)cbxStairPresets.getSelectedItem();
+				NumberFormat nf = loc.getFloatConverter();
+				txtStairFactorUp.setText( nf.format( sp.getSpeedFactorUp() ) );
+				txtStairFactorDown.setText( nf.format( sp.getSpeedFactorDown() ) );
+			}
+		});
+		lblStairPresetDescription = new JLabel( loc.getString( ((StairPreset)cbxStairPresets.getSelectedItem()).getText() ) ) ;
+		eastPanel.add( lblStairPresetDescription, "0, " + row++ );
 		row++;
 
 		return eastPanel;
@@ -976,6 +1003,8 @@ public class JEditView extends AbstractSplitPropertyWindow<JFloorScrollPane<JFlo
 		lblAreaSizeDesc.setText( loc.getString( "gui.editor.JEditorPanel.labelAreaWarning" ) );
 		lblStairFactorUp.setText( loc.getString( "gui.editor.JEditorPanel.labelStairFactorUp" ) + ":" );
 		lblStairFactorDown.setText( loc.getString( "gui.editor.JEditorPanel.labelStairFactorDown" ) + ":" );
+		lblStairPreset.setText( loc.getString( "gui.editor.JEditorPanel.labelStairPreset" ) + ":" );
+		lblStairPresetDescription.setText(loc.getString( ((StairPreset)cbxStairPresets.getSelectedItem() ).getText() ) );
 	}
 
 	/**

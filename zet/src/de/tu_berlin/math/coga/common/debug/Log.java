@@ -20,7 +20,7 @@ public class Log implements EventListener<MessageEvent> {
 	/** A list of all logged massages. */
 	ArrayList<String> strings = new ArrayList<String>();
 	/** The complete log as string. */
-	String text = "";
+	StringBuilder text = new StringBuilder();
 	// todo: store texts only in array
 
 	/**
@@ -34,7 +34,7 @@ public class Log implements EventListener<MessageEvent> {
 	 * Clears all logged data.
 	 */
 	public void clear() {
-		text = "";
+		text = new StringBuilder();
 		strings.clear();
 	}
 
@@ -43,7 +43,7 @@ public class Log implements EventListener<MessageEvent> {
 	 * @return the current log text
 	 */
 	public String getText() {
-		return text;
+		return text.toString();
 	}
 
 	/**
@@ -68,6 +68,6 @@ public class Log implements EventListener<MessageEvent> {
 				break;
 		}
 		strings.add( s );
-		text += s;
+		text.append( s );
 	}
 }

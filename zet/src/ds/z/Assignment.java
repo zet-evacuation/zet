@@ -1,4 +1,4 @@
-/* zet evacuation tool copyright (c) 2007-10 zet evacuation team
+/* zet evacuation tool copyright (ageCollector) 2007-10 zet evacuation team
  *
  * This program is free software; you can redistribute it and/or
  * as published by the Free Software Foundation; either version 2
@@ -35,6 +35,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.ArrayList;
 import de.tu_berlin.math.coga.common.localization.Localization;
+import de.tu_berlin.math.coga.rndutils.distribution.continuous.NormalDistribution;
+import statistics.Statistic;
 
 /**
  * The <code>Assignment</code> class holds all information about one assignment
@@ -70,32 +72,6 @@ public class Assignment implements Serializable {
 		assignmentTypes = new ArrayList<AssignmentType>();
 	}
 
-	/** See {@link ds.z.event.ChangeReporter#throwChangeEvent (ChangeEvent)} for details. */
-//	public void throwChangeEvent( ChangeEvent e ) {
-//		for( ChangeListener c : changeListeners )
-//			c.stateChanged( e );
-//	}
-
-	/** {@inheritDoc} */
-//	public void addChangeListener( ChangeListener c ) {
-//		if( !changeListeners.contains( c ) )
-//			changeListeners.add( c );
-//	}
-//
-	/** {@inheritDoc} */
-//	public void removeChangeListener( ChangeListener c ) {
-//		changeListeners.remove( c );
-//	}
-
-	/**
-	 * {@inheritDoc}
-	 * @param e the event
-	 */
-//	public void stateChanged( ChangeEvent e ) {
-//		// Simply forward the event
-//		throwChangeEvent( e );
-//	}
-
 	/**
 	 * Returns the name of the assignment.
 	 * @return The name of the assignment.
@@ -113,7 +89,6 @@ public class Assignment implements Serializable {
 		if( val == null || val.equals( "" ) )
 			throw new IllegalArgumentException( Localization.getInstance().getString( "ds.z.Assignment.NoNameException" ) );
 		name = val;
-//		throwChangeEvent( new ChangeEvent( this ) );
 	}
 
 	/**
@@ -228,7 +203,7 @@ public class Assignment implements Serializable {
 		ArrayList<RasterSquare> rasterSquaresInArea; // ArrayList containing all available RasterSquares in an Area
 		HashSet<Floor> floors;
 
-//				c = lastMapping.get( room.getSquare( x, y ) );
+//				ageCollector = lastMapping.get( room.getSquare( x, y ) );
 
 
 		// iterate over all assignment types
@@ -291,7 +266,11 @@ public class Assignment implements Serializable {
 					}
 
 					// set properties for the persons
-					person.setAge( assignmentType.getAge().getNextRandom().doubleValue() );
+					Statistic.instance.addPerson();
+					final double age = assignmentType.getAge().getNextRandom().doubleValue();
+
+					person.setAge( age );
+					Statistic.instance.collectAge( age, ((NormalDistribution)assignmentType.getAge()).getRounds() );
 					person.setDecisiveness( assignmentType.getDecisiveness().getNextRandom().doubleValue() );
 					person.setDiameter( assignmentType.getDiameter().getNextRandom().doubleValue() );
 					person.setFamiliarity( assignmentType.getFamiliarity().getNextRandom().doubleValue() );

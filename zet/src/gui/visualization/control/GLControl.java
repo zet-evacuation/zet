@@ -468,6 +468,7 @@ public class GLControl implements DrawableControlable {
 		if( !hasCellularAutomaton )
 			return;
 		caControl.setPotentialDisplay( pdm );
+		System.out.println( "Show potential " + pdm );
 		update();
 	}
 
@@ -503,9 +504,7 @@ public class GLControl implements DrawableControlable {
 		for( GLCAFloorControl floor : caControl.getChildControls() )
 			for( GLRoomControl room : floor )
 				for( GLCellControl cell : room )
-					//cells.add( cell );	// TODO use addAll
 					cell.getView().update();
-
 		//		for( GLCellControl cell : cells )
 //			cell.getView().update();
 	}

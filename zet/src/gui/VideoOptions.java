@@ -302,7 +302,7 @@ public class VideoOptions extends javax.swing.JDialog {
 
 		txtBitrate.addActionListener( new ActionListener() {
 			public void actionPerformed( ActionEvent e ) {
-				lblEstimatedFilesize.setText( " (" + Formatter.bitToMaxFilesizeUnit( estimatedTime * 1000 * getBitrate() ) + ")" );
+				lblEstimatedFilesize.setText( " (" + Formatter.fileSizeUnit( estimatedTime * 1000 * getBitrate(), Formatter.BinaryUnits.Bit ) + ")" );
 			}
 		} );
 		txtBitrate.addFocusListener( new FocusListener() {
@@ -310,7 +310,7 @@ public class VideoOptions extends javax.swing.JDialog {
 			}
 
 			public void focusLost( FocusEvent e ) {
-				lblEstimatedFilesize.setText( " (" + Formatter.bitToMaxFilesizeUnit( estimatedTime * 1000 * getBitrate() ) + ")" );
+				lblEstimatedFilesize.setText( " (" + Formatter.fileSizeUnit( estimatedTime * 1000 * getBitrate(), Formatter.BinaryUnits.Bit ) + ")" );
 			}
 		} );
 
@@ -451,7 +451,7 @@ public class VideoOptions extends javax.swing.JDialog {
 	 */
 	public void setBitrate( int bitrate ) {
 		txtBitrate.setText( Integer.toString( bitrate ) );
-		lblEstimatedFilesize.setText( " (" + Formatter.bitToMaxFilesizeUnit( estimatedTime * 1000 * getBitrate() ) + ")" );
+		lblEstimatedFilesize.setText( " (" + Formatter.fileSizeUnit( estimatedTime * 1000 * getBitrate(), Formatter.BinaryUnits.Bit ) + ")" );
 	}
 
 	/**

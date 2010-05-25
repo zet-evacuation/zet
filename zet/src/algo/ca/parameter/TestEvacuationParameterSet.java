@@ -95,11 +95,12 @@ public class TestEvacuationParameterSet extends DefaultParameterSet {
 			maxSpeedExpected = ageArray[16];
 		} else {
 			final double slope = (ageArray[right] - ageArray[left]);
-			maxSpeedExpected = slope * (pAge - Math.floor(pAge))  + ageArray[left];
+			maxSpeedExpected = slope * (pAge - ((int)pAge/5)*5)/5  + ageArray[left];
 		}
 
-		final NormalDistribution normal = new NormalDistribution( maxSpeedExpected, 0.26, ageArray[16], ABSOLUTE_MAX_SPEED );
+		final NormalDistribution normal = new NormalDistribution( maxSpeedExpected, sigmaSquared, ageArray[16], ABSOLUTE_MAX_SPEED );
 		double randSpeed = normal.getNextRandom();
+		//randSpeed = maxSpeedExpected;
 
 		// Change speeds for male and female individuals:
 		// + 5% for male, -5% for female
