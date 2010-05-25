@@ -15,34 +15,30 @@
  */
 
 /*
- * JLogField.java
- * Created 29.10.2009, 15:56:54
+ * JLogPane.java
+ * Created 29.10.2009, 15:57:37
  */
 
 package gui.components;
 
 import de.tu_berlin.math.coga.common.debug.Log;
-import event.EventListener;
-import event.EventServer;
-import event.MessageEvent;
 import info.clearthought.layout.TableLayout;
 import javax.swing.JEditorPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 
 /**
- * The class <code>JLogField</code> is a text area that displays logPane and error
- * messages. The error messages are displayed in red.
+ * The class <code>JLogPane</code> ...
  * @author Jan-Philipp Kappmeier
  */
-public class JLogField extends JPanel implements EventListener<MessageEvent> {
+public class JLogPane extends JPanel {
 	JEditorPane logPane;
 	Log log;
 
 	/**
-	 * Creates a new instance of <code>JLogField</code>.
+	 * Creates a new instance of <code>JLogPane</code>.
 	 */
-	public JLogField( Log log ) {
+	public JLogPane( Log log ) {
 		double size[][] = // Columns
 						{
 			{TableLayout.FILL},
@@ -59,38 +55,19 @@ public class JLogField extends JPanel implements EventListener<MessageEvent> {
 		add( scrollPane, "0,0" );
 		this.log = log;
 
-		EventServer.getInstance().registerListener( this, MessageEvent.class );
 	}
-
-	/**
-	 * <p>Handles incoming events. An event comes, if some debugger/logger sends
-	 * messages of type {@link event.MessageEvent.MessageType}. Only messages of the types
-	 * {@link event.MessageEvent.MessageType#Log} and {@link event.MessageEvent.MessageType#LogError} are handled.</p>
-	 * <p>{@code Log} events are displayed in normal font style while
-	 * {@code LogError} events are displayed red.</p>
-	 * @param event the event that occured.
-	 */
-	public void handleEvent( MessageEvent event ) {
+	
+	public void update() {
 		final String pre = "<html><font face=\"sans-serif\" size=\"-1\">";
 		final String post = "</font></html>";
- 		try {
-			if( logPane != null && log != null )
-	  		logPane.setText( pre + log.getText() + post );
-		//logPane.setText( text );
-		} catch( NullPointerException ne ) {
-			// nothing
-		} catch( Exception ex ) {
-			int i = 1;
-			i++;
-		}
+		logPane.setText( pre + log.getText() + post );
 	}
-
 	/**
 	 * Returns the name of the class.
 	 * @return the name of the class
 	 */
 	@Override
 	public String toString() {
-		return "JLogWindow";
+		return "JLogView";
 	}
 }

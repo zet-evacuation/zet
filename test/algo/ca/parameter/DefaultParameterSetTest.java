@@ -11,6 +11,8 @@ import gui.editor.properties.PropertyLoadException;
 import junit.framework.TestCase;
 import ds.PropertyContainer;
 import java.io.File;
+import umontreal.iro.lecuyer.charts.XYLineChart;
+import umontreal.iro.lecuyer.stat.TallyStore;
 
 /**
  * The class <code>DefaultParameterSetTest</code> tests the speed distribution.
@@ -62,18 +64,57 @@ public class DefaultParameterSetTest extends TestCase {
 		RandomUtils.getInstance().setSeed( System.nanoTime() );
 
 
-
-		for( double factor = 0.62; factor <= 0.66; factor = factor + 0.001 ) {
-			System.out.println( "Teste mit factor = " + factor );
-			stairSpeed( factor, dps );
-			System.out.println();
+		double skip = 0.01;
+		double min = 0.3;
+		double max = 0.6;
+		final int len = (int)Math.floor( (max-min)/skip );
+		yLinear = new double[2][len];
+		ySquared = new double[2][len];
+		yMax = new double[2][len];
+		//x = new double[(int)Math.floor( (max-min)/skip )];
+		
+		for( int i = 0; i < len; ++i ) {
+			yLinear[0][i] = i * skip + min;
+			ySquared[0][i] = i * skip + min;
+			yMax[0][i] = i * skip + min;
+			//x[i] = i * skip + min;
+			stairSpeed(i, i * skip + min, dps );
 		}
+
+		// Show Diagrams
+		XYLineChart distribution = new XYLineChart( "Title", "X", "Y", yLinear, ySquared, yMax );
+		distribution.view( 640, 480 );
+
+
+
+
+		//		double[][] distributionData = new double[2][100];
+//		if( ageDist instanceof NormalDistribution ) {
+//			NormalDistribution normalDist = (NormalDistribution)ageDist;
+//			final double minX = 0.001;
+//			final double maxX = 0.999;
+//			for( int i = 1; i <= distributionData[0].length; ++i ) {
+//				final double y = i * (maxX - minX) / (distributionData[0].length);
+//				final double x = normalDist.getInverseCumulatedDensityFunction( y );//
+//				distributionData[0][i-1] = x;
+//				distributionData[1][i-1] = y;
+//			}
+//		}
+
+
+//		for( double factor = min; factor <= max; factor = factor + skip ) {
+//			System.out.println( "Teste mit factor = " + factor );
+//			stairSpeed( factor, dps );
+//			System.out.println();
+//		}
 
 		System.out.println();
 
 		System.out.println( "Min linear factor: " + minLinearFactor );
 		System.out.println( "Min squared factor: " + minSquaredFactor );
 		System.out.println( "Min max factor: " + minMaxFactor );
+
+
 
 	}
 
@@ -84,8 +125,17 @@ public class DefaultParameterSetTest extends TestCase {
 	double minLinearFactor;
 	double minMaxFactor;
 
-	public void stairSpeed( double factor, DefaultParameterSet dps ) {
-		for( int i = 1; i <= 10000000; ++i ) {
+	TallyStore linearTally = new TallyStore();
+	TallyStore squaredTally = new TallyStore();
+	TallyStore maxTally = new TallyStore();
+
+	double[][] yLinear;
+	double[][] ySquared;
+	double[][] yMax;
+	double[] x;
+
+	public void stairSpeed( int index, double factor, DefaultParameterSet dps ) {
+		for( int i = 1; i <= 10000; ++i ) {
 			double age = ageDistribution.getNextRandom();
 			double speed = dps.getSpeedFromAge( age );
 			//System.out.print( "age: " + age + " " );
@@ -119,9 +169,9 @@ public class DefaultParameterSetTest extends TestCase {
 //		double mid = Math.abs( midAv - 0.58);
 //		double high = Math.abs( highAv - 0.42);
 		// Test für Treppe runter
-		double low = Math.abs( lowAv - 0.81 );
-		double mid = Math.abs( midAv - 0.78);
-		double high = Math.abs( highAv - 0.59);
+//		double low = Math.abs( lowAv - 0.81 );
+//		double mid = Math.abs( midAv - 0.78);
+//		double high = Math.abs( highAv - 0.59);
 
 
 
@@ -131,16 +181,23 @@ public class DefaultParameterSetTest extends TestCase {
 //		double mid = Math.abs( midAv - 0.65);
 //		double high = Math.abs( highAv - 0.55);
 		// Test für treppe hoch
-//		double low = Math.abs( lowAv - 0.55 );
-//		double mid = Math.abs( midAv - 0.5);
-//		double high = Math.abs( highAv - 0.42);
+		double lowAge = Math.abs( lowAv - 0.55 );
+		double midAge = Math.abs( midAv - 0.5 );
+		double highAge = Math.abs( highAv - 0.42 );
 
-		double linearSum = low + high + mid;
-		double squareSum = low*low + mid*mid + high*high;
-		double max = Math.max( low, Math.max( mid, high ) );
+
+
+		double linearSum = lowAge + highAge + midAge;
+		double squareSum = lowAge*lowAge + midAge*midAge + highAge*highAge;
+		double max = Math.max( lowAge, Math.max( midAge, highAge ) );
 		System.out.println( "Abweichung (linear): " + linearSum );
 		System.out.println( "Abweichung (squared): " + squareSum );
 		System.out.println( "Maximale Abweichung:" + max );
+
+		yLinear[1][index] = linearSum;//new double[(int)Math.floor( (max-min)/skip )];
+		ySquared[1][index] = squareSum; //new double[(int)Math.floor( (max-min)/skip )];
+		yMax[1][index] = max; // = new double[(int)Math.floor( (max-min)/skip )];
+
 		if( linearSum < minLinear ) {
 			minLinear = linearSum;
 			minLinearFactor = factor;

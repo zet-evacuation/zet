@@ -10,7 +10,7 @@ import junit.framework.TestCase;
 
 /**
  * The class <code>GeometricDistributionTest</code> ...
- * @author Kap
+ * @author Jan-Philipp Kappmeier
  */
 public class GeometricDistributionTest extends TestCase {
 

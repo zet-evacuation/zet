@@ -43,6 +43,7 @@ import gui.editor.properties.PropertyFilesSelectionModel;
 import io.visualization.BuildingResults;
 import io.visualization.CAVisualizationResults;
 import de.tu_berlin.math.coga.common.localization.Localization;
+import de.tu_berlin.math.coga.common.util.Formatter;
 import statistic.ca.CAStatistic;
 import statistic.ca.MultipleCycleCAStatistic;
 import batch.tasks.RasterizeTask;
@@ -333,7 +334,7 @@ public class BatchEntry {
             result[1] = opt_res;
         }
         long memEnd = (runtime.totalMemory() - runtime.freeMemory());
-        System.out.println("Speicher für Lauf: " + (memEnd - memStart) + " Bytes");
+				System.out.println("Speicher für Lauf: " + (Formatter.fileSizeUnit( memEnd - memStart, Formatter.BinaryUnits.Byte )) );
         return result;
     }
 

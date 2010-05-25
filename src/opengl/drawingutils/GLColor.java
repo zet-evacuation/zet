@@ -330,4 +330,11 @@ public final class GLColor implements Drawable {
 	public void update() {
 		
 	}
+
+	@Override
+	public String toString() {
+		return "("+ Math.round(R*255) + "," + Math.round(G*255) + "," + Math.round(B*255) + ")";
+	}
+
+
 }

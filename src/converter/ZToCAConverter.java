@@ -1,4 +1,4 @@
-/* zet evacuation tool copyright (c) 2007-10 zet evacuation team
+/* zet evacuation tool copyright (ageCollector) 2007-10 zet evacuation team
  *
  * This program is free software; you can redistribute it and/or
  * as published by the Free Software Foundation; either version 2
@@ -51,6 +51,8 @@ import java.util.ArrayDeque;
 import java.util.HashMap;
 import java.util.List;
 import de.tu_berlin.math.coga.common.localization.Localization;
+import de.tu_berlin.math.coga.rndutils.distribution.continuous.NormalDistribution;
+import statistics.Statistic;
 import static de.tu_berlin.math.coga.common.util.Direction.*;
 
 /**
@@ -460,6 +462,9 @@ public class ZToCAConverter {
 		double slackness = ps.getSlacknessFromDecisiveness( pDecisiveness );
 		double exhaustionFactor = ps.getExhaustionFromAge( pAge );
 		double maxSpeed = ps.getSpeedFromAge( pAge );
+
+		// Collect statistic
+		Statistic.instance.collectAgeSpeed( pAge, maxSpeed );
 
 		// Reaction time is now (since 1.1) computed directly from the correct
 		// individual assignment parameter.

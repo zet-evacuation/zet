@@ -135,11 +135,16 @@ public class GLCellularAutomatonControl extends AbstractZETVisualizationControl<
 	}
 
 	public void showOnlyFloor( Integer floorID ) {
+		System.out.println( "Show only floor " + floorID );
 		childControls.clear();
 		if( floorID == 0 && allFloorsByID.get( floorID ) == null )
 			childControls.add( allFloorsByID.get( 1 ) );
 		else
 			childControls.add( allFloorsByID.get( floorID ) );
+		view.clear();
+		for( GLCAFloorControl floor : this )
+			view.addChild( floor.getView() );
+
 	}
 
 	public void showAllFloors() {
@@ -150,6 +155,7 @@ public class GLCellularAutomatonControl extends AbstractZETVisualizationControl<
 	@Override
 	public void add( GLCAFloorControl childControl ) {
 		super.add( childControl );
+		System.out.println( "FLoor hinzugefügt" );
 		allFloorsByID.put( childControl.getFloorNumber(), childControl );
 	}
 

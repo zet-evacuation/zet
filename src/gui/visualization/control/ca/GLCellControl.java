@@ -242,8 +242,6 @@ public class GLCellControl extends AbstractZETVisualizationControl<GLCellControl
 	 * @return the mixed color for that edge
 	 */
 	public GLColor mixColorWithNeighbours( Direction direction ) {
-		//Cell cell = getControlled();
-
 		Cell[] c = new Cell[3];
 		GLCellControl cc;
 		double r = getView().getColor().getRed();

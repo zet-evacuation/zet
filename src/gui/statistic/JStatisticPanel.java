@@ -40,7 +40,7 @@ public class JStatisticPanel extends JPanel {
 	
 	private JCAStatisticPanel jcasp;
 	
-	public JStatisticPanel(){
+	public JStatisticPanel() {
 		super();
 		jcasp = new JCAStatisticPanel();
 		setLayout(new BorderLayout());

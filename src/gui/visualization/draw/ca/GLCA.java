@@ -20,11 +20,8 @@ import gui.visualization.control.ca.GLCellularAutomatonControl;
 import javax.media.opengl.GL;
 import opengl.framework.abs.AbstractDrawable;
 
-//public class GLCA extends AbstractDrawable<CullingShapeCube, GLCAFloor, GLCellularAutomatonControl, GLCAFloorControl> {
-//public class GLCA extends AbstractDrawable<GLCAFloor, GLCellularAutomatonControl, GLCAFloorControl> {
 public class GLCA extends AbstractDrawable<GLCAFloor, GLCellularAutomatonControl> {
 	public GLCA( GLCellularAutomatonControl control ) {
-//		super(control, new CullingShapeCube() );
 		super( control );
 	}
 

@@ -84,6 +84,7 @@ public class GLCAFloorControl extends AbstractZETVisualizationControl<GLRoomCont
 	}
 	
 	void setPotentialDisplay( CellInformationDisplay potentialDisplay ) {
+		System.out.println( "PotentialDisplay: " + potentialDisplay );
 		for( GLRoomControl roomControl : roomControls.values() ) {
 			roomControl.setPotentialDisplay(potentialDisplay);
 		}
