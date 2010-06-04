@@ -15,7 +15,6 @@
  */
 package batch.tasks.assignment;
 
-import batch.tasks.*;
 import algo.ca.EvacuationCellularAutomatonAlgorithm;
 import batch.BatchResultEntry;
 import converter.ZToCAConverter;
@@ -31,7 +30,13 @@ import io.visualization.CAVisualizationResults;
 import java.util.TreeMap;
 import statistic.ca.CAStatistic;
 import batch.CellularAutomatonAlgorithm;
+import batch.tasks.AssignmentTask;
+import ds.ca.Cell;
+import ds.ca.Individual;
+import ds.ca.Room;
+import ds.ca.StaticPotential;
 import exitdistributions.ExitCapacityBasedCAFactory;
+import java.util.ArrayList;
 
 /**
  *  
@@ -92,12 +97,22 @@ public class BestResponseAssignmentTask extends AssignmentTask {
 		double caMaxTime = PropertyContainer.getInstance ().getAsDouble ("algo.ca.maxTime");
 		caAlgo.setMaxTimeInSeconds (caMaxTime);
 
+		// Hier könnte man das assignment überprüfen...
+
+
+
 		long start;
 		long end;
 
 		//Run the CA
 		start = System.currentTimeMillis ();
 		caAlgo.getCellularAutomaton ().startRecording ();
+
+		caAlgo.initialize();
+
+		computeAssignmentBasedOnBestResponseDynamics( caAlgo );
+
+
 		caAlgo.run ();	// hier wird initialisiert
 		caAlgo.getCellularAutomaton ().stopRecording ();
 		end = System.currentTimeMillis ();
@@ -116,6 +131,93 @@ public class BestResponseAssignmentTask extends AssignmentTask {
 		// Forget the used batch result entry. This is necessary in case that the batch entries
 		// are stored on disk. Then this reference will inhibit the deletion of the batch result entry
 		res = null;
+	}
+
+	private void computeAssignmentBasedOnBestResponseDynamics( EvacuationCellularAutomatonAlgorithm caAlgo ) {
+		caAlgo.getCaController().getPotentialController();
+
+		//for( int c = 0; c < TIME_STEP_LIMIT_FOR_NASH_EQUILIBRIUM; ++c ) {
+		int c = 0;
+		while( true ) {
+			c++;
+			int swapped = 0;
+			for( Individual i : caAlgo.getIndividuals() ) {
+				Cell cell = i.getCell();
+
+				ArrayList<StaticPotential> exits = new ArrayList<StaticPotential>();
+				exits.addAll( caAlgo.getCaController().getCA().getPotentialManager().getStaticPotentials() );
+				StaticPotential newPot = cell.getIndividual().getStaticPotential();
+				double response = Double.MAX_VALUE;
+				for( StaticPotential pot : exits )
+					if( getResponse( caAlgo, cell, pot ) < response ) {
+						response = getResponse( caAlgo, cell, pot );
+						newPot = pot;
+					}
+
+				StaticPotential oldPot = cell.getIndividual().getStaticPotential();
+				if( !oldPot.equals( newPot ) )
+					swapped++;
+				cell.getIndividual().setStaticPotential( newPot );
+			}
+			System.out.println( "Swapped in iteration " + c + ": " + swapped );
+			if( swapped == 0 )
+				break;
+		}
+		System.out.println( "Best Response Rounds: " + c );
+
+
+
+	}
+
+
+	private double getResponse( EvacuationCellularAutomatonAlgorithm caAlgo, Cell cell, StaticPotential pot ) {
+
+		// Constants
+		Individual ind = cell.getIndividual();
+		double speed = ind.getCurrentSpeed();
+
+		// Exit dependant values
+		double distance = Double.MAX_VALUE;
+		if( pot.getDistance( cell ) >= 0 )
+			distance = pot.getDistance( cell );
+		double movingTime = distance / speed;
+
+		double exitCapacity = caAlgo.getCaController().getCA().getExitToCapacityMapping().get( pot ).doubleValue();
+		//System.out.println("Exit: " + pot.getID() + " : " + exitCapacity);
+
+		// calculate number of individuals that are heading to the same exit and closer to it
+		ArrayList<Individual> otherInds = new ArrayList<Individual>();
+		//cell.getRoom().getIndividuals();
+		ArrayList<Room> rooms = new ArrayList<Room>();
+		rooms.addAll( caAlgo.getCaController().getCA().getRooms() );
+		for( Room room : rooms )
+			for( Individual i : room.getIndividuals() )
+				otherInds.add( i );
+
+		int queueLength = 0;
+		if( otherInds != null )
+			for( Individual otherInd : otherInds )
+				if( !otherInd.equals( ind ) )
+					if( otherInd.getStaticPotential() == pot )
+						if( otherInd.getStaticPotential().getDistance( otherInd.getCell() ) >= 0 )
+							if( otherInd.getStaticPotential().getDistance( otherInd.getCell() ) < distance )
+								queueLength++;
+		//System.out.println("Potential = " + pot.getID());
+		//System.out.println("Queue / Kapa = " + queueLength + " / " + exitCapacity + " = " + (queueLength / exitCapacity));
+		//System.out.println("Dist / Speed = " + distance + " / " + speed + " = " + (distance / speed));
+
+		// calculateEstimatedEvacuationTime
+		return responseFunction1( queueLength, exitCapacity, movingTime );
+
+	}
+
+	private static final double QUEUEING_TIME_WEIGHT_FACTOR = 0.5;
+	private static final double MOVING_TIME_WEIGHT_FACTOR = 0.5;
+	private static final int TIME_STEP_LIMIT_FOR_NASH_EQUILIBRIUM = 125;
+
+
+	private double responseFunction1( int queueLength, double exitCapacity, double movingTime ) {
+		return (QUEUEING_TIME_WEIGHT_FACTOR * (queueLength / exitCapacity)) + (MOVING_TIME_WEIGHT_FACTOR * movingTime);
 	}
 }
 
