@@ -5,6 +5,9 @@
     <stringNode name="lastResultsDirectory" useAsLocString="false" description="" information="" parameter="information.directory.lastResult">./examples</stringNode>
     <stringNode name="lastImportDirectory" useAsLocString="false" description="" information="" parameter="information.directory.importProject">./examples</stringNode>
   </treeNode>
+  <treeNode name="files" useAsLocString="false">
+    <stringNode name="lastFile1" useAsLocString="false" description="" information="" parameter="information.file.lastFile1"></stringNode>
+  </treeNode>
   <treeNode name="gui" useAsLocString="false">
     <treeNode name="visualization" useAsLocString="false">
       <boolNode name="guiSettings.visualization.2d" useAsLocString="false" description="" information="" parameter="settings.gui.visualization.2d">true</boolNode>

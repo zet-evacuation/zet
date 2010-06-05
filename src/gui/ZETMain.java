@@ -94,6 +94,8 @@ public class ZETMain {
 	public static PropertyTreeModel ptmOptions;
 	/** The log of the application. */
 	public static Log log = new Log();
+	/** States if the last loaded file should be loaded at startup. */
+	private static boolean loadLast = false;
 	
 	/**
 	 * Creates a new instance of <code>ZETMain</code>
@@ -123,6 +125,10 @@ public class ZETMain {
 						.setLongFlag( "batch" );
 		optBatchFile.setHelp( loc.getString( "batchFile" ) );
 		jsap.registerParameter( optBatchFile );
+
+		Switch optLoadLast = new Switch( "loadlast" ).setLongFlag( "loadlast" );
+		optLoadLast.setHelp( loc.getString( "loadLast" ) );// TODO add text for load last
+		jsap.registerParameter( optLoadLast );
 
 		FlaggedOption optLogFile = new FlaggedOption( "log" ).setStringParser( JSAP.STRING_PARSER )
 						.setRequired( false )
@@ -211,6 +217,8 @@ public class ZETMain {
 
 		if( config.contains( "project" ) )
 			loadedProject = config.getString( "project" );
+		
+		loadLast = config.contains( "loadlast" );
 
 		if( config.contains( "property" ) )
 			propertyFilename = config.getString( "property" );
@@ -296,11 +304,19 @@ public class ZETMain {
 					for( BatchProjectEntry bpe : bp ) {
 						edit.addBatchEntry( bpe );
 					}
-				} if( !loadedProject.equals( "" ) ) {
+				}
+
+				// load last used file, if necessary
+				if( loadLast ) {
+					loadedProject = PropertyContainer.getInstance().getAsString( "information.file.lastFile1" );
+				}
+
+				if( !loadedProject.equals( "" ) ) {
 					File f = new File( loadedProject );
 					checkFile( f, "Project file" );
 					zcontrol = new ZControl( f );
 					System.out.println( "Projekt " + f.getAbsolutePath() + " geladen." );
+					GUIOptionManager.setLastFile( 1, f.getAbsolutePath() );
 				} else {
 					zcontrol = new ZControl();
 				}

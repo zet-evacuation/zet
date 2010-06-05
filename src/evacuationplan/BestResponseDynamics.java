@@ -1,50 +1,71 @@
-/* zet evacuation tool copyright (c) 2007-10 zet evacuation team
+/*
  *
- * This program is free software; you can redistribute it and/or
- * as published by the Free Software Foundation; either version 2
- * of the License, or (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with this program; if not, write to the Free Software
- * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
+ * BestResponseDynamics.java
+ * Created 04.06.2010, 23:58:56
  */
-package algo.ca.rule;
 
-import java.util.ArrayList;
+package evacuationplan;
+
 import ds.ca.Cell;
+import ds.ca.CellularAutomaton;
 import ds.ca.Individual;
-import ds.ca.StaticPotential;
 import ds.ca.Room;
-import evacuationplan.BestResponseDynamics;
+import ds.ca.StaticPotential;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
- *
+ * The class <code>BestResponseDynamics</code> ...
  * @author Joscha Kulbatzki, Jan-Philipp Kappmeier
  */
-public class ChangePotentialBestResponseOptimizedRule extends AbstractPotentialChangeRule {
+public class BestResponseDynamics {
 
 	private static final double QUEUEING_TIME_WEIGHT_FACTOR = 0.5;
 	private static final double MOVING_TIME_WEIGHT_FACTOR = 0.5;
-	private static final int TIME_STEP_LIMIT_FOR_NASH_EQUILIBRIUM = 25;
+
 
 	/**
-	 * 
-	 * @param cell
-	 * @return true if the potential change rule can be used
+	 * Creates a new instance of <code>BestResponseDynamics</code>.
 	 */
-	@Override
-	public boolean executableOn( Cell cell ) {
-		int timeStep = this.caController().getCA().getTimeStep();
-		return ((timeStep < TIME_STEP_LIMIT_FOR_NASH_EQUILIBRIUM) & (cell.getIndividual() != null)) ? true : false;
+	public BestResponseDynamics() {
 
 	}
 
-	private double getResponse( Cell cell, StaticPotential pot ) {
+	public void computeAssignmentBasedOnBestResponseDynamics( CellularAutomaton ca, List<Individual> individuals ) {
+		int c = 0;
+		while( true ) {
+			c++;
+			int swapped = 0;
+			for( Individual i : individuals ) {
+				swapped += computePotential( i.getCell(), ca );
+			}
+			System.out.println( "Swapped in iteration " + c + ": " + swapped );
+			if( swapped == 0 )
+				break;
+		}
+		System.out.println( "Best Response Rounds: " + c );
+	}
+
+	public int computePotential( Cell cell, CellularAutomaton ca ) {
+		ArrayList<StaticPotential> exits = new ArrayList<StaticPotential>();
+		exits.addAll( ca.getPotentialManager().getStaticPotentials() );
+		StaticPotential newPot = cell.getIndividual().getStaticPotential();
+		double response = Double.MAX_VALUE;
+		for( StaticPotential pot : exits )
+			if( getResponse( ca, cell, pot ) < response ) {
+				response = getResponse( ca, cell, pot );
+				newPot = pot;
+			}
+
+		StaticPotential oldPot = cell.getIndividual().getStaticPotential();
+		cell.getIndividual().setStaticPotential( newPot );
+		if( !oldPot.equals( newPot ) )
+			return 1;
+		else
+			return 0;
+	}
+
+	private double getResponse( CellularAutomaton ca, Cell cell, StaticPotential pot ) {
 
 		// Constants
 		Individual ind = cell.getIndividual();
@@ -56,14 +77,14 @@ public class ChangePotentialBestResponseOptimizedRule extends AbstractPotentialC
 			distance = pot.getDistance( cell );
 		double movingTime = distance / speed;
 
-		double exitCapacity = this.caController().getCA().getExitToCapacityMapping().get( pot ).doubleValue();
+		double exitCapacity = ca.getExitToCapacityMapping().get( pot ).doubleValue();
 		//System.out.println("Exit: " + pot.getID() + " : " + exitCapacity);
 
 		// calculate number of individuals that are heading to the same exit and closer to it
 		ArrayList<Individual> otherInds = new ArrayList<Individual>();
 		//cell.getRoom().getIndividuals();
 		ArrayList<Room> rooms = new ArrayList<Room>();
-		rooms.addAll( this.caController().getCA().getRooms() );
+		rooms.addAll( ca.getRooms() );
 		for( Room room : rooms )
 			for( Individual i : room.getIndividuals() )
 				otherInds.add( i );
@@ -90,13 +111,11 @@ public class ChangePotentialBestResponseOptimizedRule extends AbstractPotentialC
 	}
 
 	/**
-	 * 
-	 * @param cell
+	 * Returns the name of the class.
+	 * @return the name of the class
 	 */
 	@Override
-	protected void onExecute( Cell cell ) {
-		// perform initial best response dynamics exit selection
-		BestResponseDynamics brd = new BestResponseDynamics();
-		brd.computePotential( cell, this.caController().getCA() );
+	public String toString() {
+		return "BestResponseDynamics";
 	}
 }

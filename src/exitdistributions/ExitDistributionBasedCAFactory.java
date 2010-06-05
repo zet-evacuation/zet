@@ -15,9 +15,6 @@
  */
 package exitdistributions;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Iterator;
 
 import algo.graph.exitassignment.ExitAssignment;
 import converter.ZToCAConverter;
@@ -25,21 +22,14 @@ import converter.ZToGraphRasterContainer;
 import ds.z.BuildingPlan;
 import ds.z.ConcreteAssignment;
 import ds.ca.CellularAutomaton;
-import ds.ca.Individual;
-import ds.ca.StaticPotential;
-import ds.ca.TargetCell;
 import evacuationplan.BidirectionalNodeCellMapping;
 import evacuationplan.BidirectionalNodeCellMapping.CAPartOfMapping;
 
 public class ExitDistributionBasedCAFactory extends ZToCAConverter {
 	
-	/**
-	 * The (only) instance of this ExitDistributionBasedCAFactory. It is created at first need.
-	 */
+	/** The instance of this singleton ExitDistributionBasedCAFactory. It is created at first need. */
 	private static ExitDistributionBasedCAFactory instance=null;
-	/**
-	 * A mapping of individuals to exits that is created according to an {@link algo.graph.exitassignment.ExitAssignment}.
-	 */
+	/** A mapping of individuals to exits that is created according to an {@link algo.graph.exitassignment.ExitAssignment}. */
 	private static GraphBasedIndividualToExitMapping graphBasedIndividualToExitMaping = null;
 	
 	/**

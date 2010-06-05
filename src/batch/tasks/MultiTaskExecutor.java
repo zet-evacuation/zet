@@ -19,7 +19,6 @@
  */
 package batch.tasks;
 
-import de.tu_berlin.math.coga.common.algorithm.Algorithm;
 import de.tu_berlin.math.coga.common.algorithm.AlgorithmListener;
 import gui.components.progress.ProgressTaskEntry;
 import java.util.ArrayList;
