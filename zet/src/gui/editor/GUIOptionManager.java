@@ -203,4 +203,12 @@ public abstract class GUIOptionManager {
 	public static void setBuildingPlanPath( String planPath ) {
 		PropertyContainer.getInstance().set( "information.directory.lastPlan", planPath );
 	}
+
+	public static void setLastFile( int i, String filename ) {
+		PropertyContainer.getInstance().set( "information.file.lastFile" + Integer.toString( i ), filename );
+	}
+
+	public static String getLastFile( int i ) {
+		return PropertyContainer.getInstance().getAsString( "information.file.lastFile" + Integer.toString( i ) );
+	}
 }

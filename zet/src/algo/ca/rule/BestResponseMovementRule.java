@@ -31,12 +31,10 @@ import util.DebugFlags;
  *
  * @author Sylvie
  */
-public class BestResponseMovementRule extends AbstractMovementRule{
-
-
+public class BestResponseMovementRule extends AbstractMovementRule {
 	static double timeCounter = 0;
 	static double distCounter = 0;
-        private static final int TIME_STEP_LIMIT_FOR_NASH_EQUILIBRIUM = 25;
+	private static final int TIME_STEP_LIMIT_FOR_NASH_EQUILIBRIUM = 25;
 
 	public BestResponseMovementRule() {
 	}
@@ -52,48 +50,43 @@ public class BestResponseMovementRule extends AbstractMovementRule{
 	public boolean executableOn( ds.ca.Cell cell ) {
 		// Regel nicht anwendbar, wenn auf der Zelle kein Individuum steht.
 		//return (cell.getIndividual() != null && this.caController().getCA().getTimeStep() >= TIME_STEP_LIMIT_FOR_NASH_EQUILIBRIUM);
-                return cell.getIndividual() != null;
-	}        
-        
+		return cell.getIndividual() != null;
+	}
+
 	@Override
 	protected void onExecute( ds.ca.Cell cell ) {
-		if( DebugFlags.EVAPLANCHECKER ) {
+		if( DebugFlags.EVAPLANCHECKER )
 			System.out.print( "Move individual " + cell.getIndividual().id() + " " );
-		}
 		Individual actor = cell.getIndividual();
-		
-			if( canMove( actor ) ) {
-                            if( this.isDirectExecute() ) {
-                                Cell targetCell = this.selectTargetCell( cell, selectPossibleTargets( cell, true ) );
-                                setPerformMove( true );
-                                move( actor, targetCell );
-                            } else {
-                                this.setPossibleTargets( selectPossibleTargets( cell, false ) );
-                                setPerformMove( true );
-                            }
-                        } else {
-                            // Individual can't move, it is already moving
-                            setPerformMove( false );
-                        }
-                VisualResultsRecorder.getInstance().recordAction( new IndividualStateChangeAction( actor ) );
-        }
-        
-        
-    public void move( Individual i, Cell targetCell ) {
-		if( i.isSafe() && !((targetCell instanceof ds.ca.SaveCell) || (targetCell instanceof ds.ca.ExitCell)) ) {
+
+		if( canMove( actor ) )
+			if( this.isDirectExecute() ) {
+				Cell targetCell = this.selectTargetCell( cell, selectPossibleTargets( cell, true ) );
+				setPerformMove( true );
+				move( actor, targetCell );
+			} else {
+				this.setPossibleTargets( selectPossibleTargets( cell, false ) );
+				setPerformMove( true );
+			}
+		else
+			// Individual can't move, it is already moving
+			setPerformMove( false );
+		VisualResultsRecorder.getInstance().recordAction( new IndividualStateChangeAction( actor ) );
+	}
+
+	public void move( Individual i, Cell targetCell ) {
+		if( i.isSafe() && !((targetCell instanceof ds.ca.SaveCell) || (targetCell instanceof ds.ca.ExitCell)) )
 			// Rauslaufen aus sicheren Bereichen ist nicht erlaubt
 			targetCell = i.getCell();
+		if( i.getCell().equals( targetCell ) ) {
+			caController().getCaStatisticWriter().getStoredCAStatisticResults().getStoredCAStatisticResultsForIndividuals().addWaitedTimeToStatistic( i, caController().getCA().getTimeStep() );
+			caController().getCaStatisticWriter().getStoredCAStatisticResults().getStoredCAStatisticResultsForCells().addCellToWaitingStatistic( targetCell, this.caController().getCA().getTimeStep() );
 		}
-                if( i.getCell().equals( targetCell ) ) {
-                    caController().getCaStatisticWriter().getStoredCAStatisticResults().getStoredCAStatisticResultsForIndividuals().addWaitedTimeToStatistic( i, caController().getCA().getTimeStep() );
-                    caController().getCaStatisticWriter().getStoredCAStatisticResults().getStoredCAStatisticResultsForCells().addCellToWaitingStatistic( targetCell, this.caController().getCA().getTimeStep() );
-                }
 		//set statistic for targetCell and timestep
 		caController().getCaStatisticWriter().getStoredCAStatisticResults().getStoredCAStatisticResultsForCells().addCellToUtilizationStatistic( targetCell, this.caController().getCA().getTimeStep() );
 		this.doMove( i, targetCell );
 		setPerformMove( false );
 	}
-        
 
 	private void doMove( Individual i, Cell targetCell ) {
 		if( i.getCell().equals( targetCell ) ) {
@@ -110,8 +103,6 @@ public class BestResponseMovementRule extends AbstractMovementRule{
 		doMoveWithDecision( i, targetCell, true );
 		setPerformMove( false );
 	}
-        
-        
 
 	private void doMoveWithDecision( Individual i, Cell targetCell, boolean performMove ) {
 		this.caController().getPotentialController().increaseDynamicPotential( targetCell );
@@ -121,40 +112,36 @@ public class BestResponseMovementRule extends AbstractMovementRule{
 		double stairSpeedFactor = 1;
 		if( targetCell instanceof StairCell ) {
 
-			StairCell stairCell = (StairCell) targetCell;
+			StairCell stairCell = (StairCell)targetCell;
 			int x = targetCell.getX() - i.getCell().getX();
 			int y = targetCell.getY() - i.getCell().getY();
 			Direction direction = Direction.getDirection( x, y );
 			Level lvl = stairCell.getLevel( direction );
-			if( lvl == Level.Higher ) {
+			if( lvl == Level.Higher )
 				stairSpeedFactor = stairCell.getSpeedFactorUp();
-			} else if( lvl == Level.Lower ) {
-				stairSpeedFactor = stairCell.getSpeedFactorDown();			
-			}
+			else if( lvl == Level.Lower )
+				stairSpeedFactor = stairCell.getSpeedFactorDown();
 		}
 
 		// TODO check if this big stuff is really necessery! maybe easier!
 		// calculate distance
 		double dist;
 		final double sqrt2 = Math.sqrt( 2 ) * 0.4;
-		if( !targetCell.getRoom().equals( i.getCell().getRoom() ) ) {
+		if( !targetCell.getRoom().equals( i.getCell().getRoom() ) )
 			if( i.getCell().getX() + i.getCell().getRoom().getXOffset() == targetCell.getX() + targetCell.getRoom().getXOffset() && i.getCell().getY() + i.getCell().getRoom().getYOffset() == targetCell.getY() + targetCell.getRoom().getYOffset() ) {
 				System.err.println( "SelfCell reached or Stockwerkwechsel!" );
 				dist = 0.4;
-			} else if( i.getCell().getX() + i.getCell().getRoom().getXOffset() == targetCell.getX() + targetCell.getRoom().getXOffset() | i.getCell().getY() + i.getCell().getRoom().getYOffset() == targetCell.getY() + targetCell.getRoom().getYOffset() ) {
+			} else if( i.getCell().getX() + i.getCell().getRoom().getXOffset() == targetCell.getX() + targetCell.getRoom().getXOffset() | i.getCell().getY() + i.getCell().getRoom().getYOffset() == targetCell.getY() + targetCell.getRoom().getYOffset() )
 				dist = 0.4;
-			} else {
+			else
 				dist = sqrt2;
-			}
-		} else {
-			if( i.getCell().getX() == targetCell.getX() && i.getCell().getY() == targetCell.getY() ) {
+		else
+			if( i.getCell().getX() == targetCell.getX() && i.getCell().getY() == targetCell.getY() )
 				dist = 0;
-			} else if( i.getCell().getX() == targetCell.getX() | i.getCell().getY() == targetCell.getY() ) {
+			else if( i.getCell().getX() == targetCell.getX() | i.getCell().getY() == targetCell.getY() )
 				dist = 0.4;
-			} else {
+			else
 				dist = sqrt2;
-			}
-		}
 
 
 		// Perform Movement if the individual changes the room!
@@ -176,22 +163,14 @@ public class BestResponseMovementRule extends AbstractMovementRule{
 				//i.getCell().getRoom().moveIndividual( i.getCell(), targetCell );
 				caController().getCA().moveIndividual( i.getCell(), targetCell );
 				caController().getCaStatisticWriter().getStoredCAStatisticResults().getStoredCAStatisticResultsForIndividuals().addCurrentSpeedToStatistic( i, this.caController().getCA().getTimeStep(), speed * this.caController().getCA().getSecondsPerStep() );
-				caController().getCaStatisticWriter().getStoredCAStatisticResults().getStoredCAStatisticResultsForIndividuals().addCoveredDistanceToStatistic( i, (int) Math.ceil( i.getStepEndTime() ), dist );
-			} else {
-				if( util.DebugFlags.CA_SWAP_USED_OUTPUT ) 
+				caController().getCaStatisticWriter().getStoredCAStatisticResults().getStoredCAStatisticResultsForIndividuals().addCoveredDistanceToStatistic( i, (int)Math.ceil( i.getStepEndTime() ), dist );
+			} else
+				if( util.DebugFlags.CA_SWAP_USED_OUTPUT )
 					System.err.println( "Quetschregel oder Individuum läuft doch nicht!!" );
-			}
-		} else {
+		} else
 			throw new IllegalStateException( "Individuum has no speed." );
-		}
 	}
 
-	
-	
-
-
-
-	
 	/**
 	 * Given a starting cell, this method picks one 
 	 * of its reachable neighbours at random. The i-th neighbour is 
@@ -211,87 +190,80 @@ public class BestResponseMovementRule extends AbstractMovementRule{
 //		double max = Integer.MIN_VALUE;
 //		int max_index = 0;
 //
-		for( int i = 0; i < targets.size(); i++ ) {
+		for( int i = 0; i < targets.size(); i++ )
 			p[i] = Math.exp( parameterSet.effectivePotential( cell, targets.get( i ) ) );
-//			if( p[i] > max ) {
-//				max = p[i];
-//				max_index = i;
-//			}
-		}
-/*
+		/*
 		// raising probablities only makes sense if the cell and all its neighbours are in the same room               
 		boolean inSameRoom = true;
 		for( int i = 0; i < targets.size(); i++ ) {
-			if( !(cell.getRoom().equals( targets.get( i ).getRoom() )) ) {
-				inSameRoom = false;
-				break;
-			}
+		if( !(cell.getRoom().equals( targets.get( i ).getRoom() )) ) {
+		inSameRoom = false;
+		break;
+		}
 		}
 		if( inSameRoom ) {
-			int startX = cell.getX();
-			int startY = cell.getY();
+		int startX = cell.getX();
+		int startY = cell.getY();
 
-			Cell mostProbableTarget = targets.get( max_index );
-			int targetX = mostProbableTarget.getX();
-			int targetY = mostProbableTarget.getY();
+		Cell mostProbableTarget = targets.get( max_index );
+		int targetX = mostProbableTarget.getX();
+		int targetY = mostProbableTarget.getY();
 
-			boolean wayIsntDiagonal = (!(cell.equals( mostProbableTarget ))) && (startX == targetX) || (startY == targetY);
+		boolean wayIsntDiagonal = (!(cell.equals( mostProbableTarget ))) && (startX == targetX) || (startY == targetY);
 
-			if( wayIsntDiagonal ) {
-				// raise the probability of the most probable cell:
-				double c = 10.5;
-				p[max_index] = max * c;
-			} else {
-				// find next probable cell (could be two next probable cells!):
-				double max2 = 0;
-				int max_index2 = 0;
-				int nextProbable[] = { -1, -1 };
-				for( int i = 0; i < targets.size(); i++ ) {
-					int X = targets.get( i ).getX();
-					int Y = targets.get( i ).getY();
-					if( ((startX == X) && (targetY == Y)) || ((targetX == X) && (startY == Y)) ) {
-						// if the cell is a (not-diagonal-)neighbour of the actual cell AND of the most probable cell
-						if( p[i] > max2 ) {
-							// if NEW max2 found
-							max2 = p[i];
-							nextProbable[0] = i;
-							nextProbable[1] = -1;
-						} else {
-							if( p[i] == max2 ) {
-								// if SECOND max2 found
-								nextProbable[1] = i;
-							}
-						}
-					}
-				}//end for
-				if( nextProbable[0] != -1 ) {
-					// if at least one nextProbableCell found
-					if( nextProbable[1] != -1 ) {
-						// if exactly two nextProbableCells found
-						// choose one of them randomly:
-						if( util.random.RandomUtils.getInstance().binaryDecision( 0.5 ) ) {
-							max_index2 = nextProbable[0];
-						} else {
-							max_index2 = nextProbable[1];
-						}
-					} else {
-						// if exactly one nextProbableCell found
-						max_index2 = nextProbable[0];
-					}
+		if( wayIsntDiagonal ) {
+		// raise the probability of the most probable cell:
+		double c = 10.5;
+		p[max_index] = max * c;
+		} else {
+		// find next probable cell (could be two next probable cells!):
+		double max2 = 0;
+		int max_index2 = 0;
+		int nextProbable[] = { -1, -1 };
+		for( int i = 0; i < targets.size(); i++ ) {
+		int X = targets.get( i ).getX();
+		int Y = targets.get( i ).getY();
+		if( ((startX == X) && (targetY == Y)) || ((targetX == X) && (startY == Y)) ) {
+		// if the cell is a (not-diagonal-)neighbour of the actual cell AND of the most probable cell
+		if( p[i] > max2 ) {
+		// if NEW max2 found
+		max2 = p[i];
+		nextProbable[0] = i;
+		nextProbable[1] = -1;
+		} else {
+		if( p[i] == max2 ) {
+		// if SECOND max2 found
+		nextProbable[1] = i;
+		}
+		}
+		}
+		}//end for
+		if( nextProbable[0] != -1 ) {
+		// if at least one nextProbableCell found
+		if( nextProbable[1] != -1 ) {
+		// if exactly two nextProbableCells found
+		// choose one of them randomly:
+		if( util.random.RandomUtils.getInstance().binaryDecision( 0.5 ) ) {
+		max_index2 = nextProbable[0];
+		} else {
+		max_index2 = nextProbable[1];
+		}
+		} else {
+		// if exactly one nextProbableCell found
+		max_index2 = nextProbable[0];
+		}
 
-					// raise the probability of the (chosen) nextProbableCell
-					double c2 = 10.5;
-					p[max_index2] = max2 * c2;
-				}
+		// raise the probability of the (chosen) nextProbableCell
+		double c2 = 10.5;
+		p[max_index2] = max2 * c2;
+		}
 
-			}//end else
+		}//end else
 		}// end if inSameRoom*/
 
 		int number = RandomUtils.getInstance().chooseRandomlyAbsolute( p );
 		return targets.get( number );
 	}
-
-
 
 	/**
 	 * Decides randomly if an individual moves. (falsch)
@@ -301,27 +273,19 @@ public class BestResponseMovementRule extends AbstractMovementRule{
 	 */
 	//gibt true wieder, wenn geschwindigkeit von zelle und individuel (wkeit darueber) bewegung bedeuten
 	protected boolean canMove( Individual i ) {
-		if( this.caController().getCA().getTimeStep() >= i.getStepEndTime() ) {
+		if( this.caController().getCA().getTimeStep() >= i.getStepEndTime() )
 			return true;
-		}
 		return false;
 	}
 
-
-
-
-
 	@Override
 	public void swap( Cell cell1, Cell cell2 ) {
-		if( cell1.getIndividual() == null ) {
+		if( cell1.getIndividual() == null )
 			throw new IllegalArgumentException( "No Individual standing on cell #1!" );
-		}
-		if( cell2.getIndividual() == null ) {
+		if( cell2.getIndividual() == null )
 			throw new IllegalArgumentException( "No Individual standing on cell #2!" );
-		}
-		if( cell1.equals( cell2 ) ) {
+		if( cell1.equals( cell2 ) )
 			throw new IllegalArgumentException( "The cells are equal. Can't swap on equal cells." );
-		}
 		doMoveWithDecision( cell1.getIndividual(), cell2, false );
 		doMoveWithDecision( cell2.getIndividual(), cell1, false );
 		//cell1.getRoom().swapIndividuals( cell1, cell2 );
@@ -336,9 +300,9 @@ public class BestResponseMovementRule extends AbstractMovementRule{
 	 */
 	private void setStepEndTime( Individual i, double d ) {
 		i.setStepEndTime( d );
-		caController().getCA().setNeededTime( (int) Math.ceil( d ) );
+		caController().getCA().setNeededTime( (int)Math.ceil( d ) );
 	}
-        
+
 	/**
 	 * Selects the possible targets including the current cell.
 	 * @param fromCell the current sell
@@ -351,7 +315,4 @@ public class BestResponseMovementRule extends AbstractMovementRule{
 		targets.add( fromCell );
 		return targets;
 	}
-        
- 
-        
 }

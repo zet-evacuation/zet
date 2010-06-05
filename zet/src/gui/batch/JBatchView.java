@@ -201,7 +201,9 @@ public class JBatchView extends JPanel {
 					for( int i = 1; i < 10000; ++i ) {
 						RandomUtils.getInstance().getRandomGenerator().nextGaussian();
 					}
-					gs.getAgeHistogram();
+					// TODO new statistic tests
+					if( !true )
+						gs.getAgeHistogram();
 					
 				} catch( Exception ex ) {
 					ZETMain.sendError( ex.getLocalizedMessage() );

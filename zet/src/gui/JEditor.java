@@ -1434,10 +1434,12 @@ public class JEditor extends JFrame implements Localized, EventListener<Progress
 					zcontrol.loadProject( jfcProject.getSelectedFile() );
 					loadProject();	// Load the currently loaded project by the control file
 					GUIOptionManager.setSavePath( jfcProject.getCurrentDirectory().getPath() );
+					GUIOptionManager.setLastFile( 1, jfcProject.getSelectedFile().getAbsolutePath() );
 				}
 			} else if( e.getActionCommand().equals( "saveProjectAs" ) || (e.getActionCommand().equals( "saveProject" ) && getZControl().getProject().getProjectFile() == null) ) {
 				if( jfcProject.showSaveDialog( getInstance() ) == JFileChooser.APPROVE_OPTION ) {
 					GUIOptionManager.setSavePath( jfcProject.getCurrentDirectory().getPath() );
+					GUIOptionManager.setLastFile( 1, jfcProject.getSelectedFile().getAbsolutePath() );
 					if( jfcProject.getSelectedFile().exists() && createCopy )
 						createBackup( jfcProject.getSelectedFile() );
 					try {

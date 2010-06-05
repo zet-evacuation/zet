@@ -33,7 +33,7 @@ import java.io.PrintStream;
  * and command line output at the same time using the default
  * <code>System.out</code></p>
  * <p>All texts are also sent to an {@link EventServer} and thus can be
- * received by some other logging components such as {@link gui.components.JLogField}.</p>
+ * received by some other logging components such as {@link gui.components.JLogPane}.</p>
  * @author Jan-Philipp Kappmeier
  */
 public class DebugStream extends PrintStream {
