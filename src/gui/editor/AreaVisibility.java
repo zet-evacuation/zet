@@ -13,9 +13,9 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
+
 /*
  * AreaVisibility.java
- *
  * Created on 11. Dezember 2007, 21:56
  */
 
@@ -26,8 +26,14 @@ package gui.editor;
  * on the screen. The user may want some kinds of areas to be hidden if he is
  * not interested in them for some reason.
  *
- * @author Timon Kelter
+ * @author Timon Kelter, Jan-Philipp Kappmeier
  */
 public enum AreaVisibility { 
-	DELAY, STAIR, INACCESSIBLE, SAVE, EVACUATION, ASSIGNMENT
+	Delay,
+	Stair,
+	Inaccessible,
+	Save,
+	Evacuation,
+	Assignment,
+	Teleport;
 }

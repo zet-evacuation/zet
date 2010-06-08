@@ -196,6 +196,7 @@ public class DoorCell extends Cell implements Cloneable {
 		return clone( false );
 	}
 
+	@Override
 	public DoorCell clone( boolean cloneIndividual ) {
 		DoorCell aClone = new DoorCell( this.getX(), this.getY() );
 		basicClone( aClone, cloneIndividual );
@@ -225,15 +226,15 @@ public class DoorCell extends Cell implements Cloneable {
 	/**
 	 * This is a helper method for internal synchronisation. Call this to add
 	 * a nextDoor without being called back.
-	 * @param door A door you want to add to the nextDoors list. 
+	 * @param door a door you want to add to the nextDoors list.
 	 */
 	private void internalAddNextDoor( DoorCell door ) {
 		if( door == null ) {
-			throw new IllegalArgumentException( "Parameter Door must not be ''null''" );
+			throw new IllegalArgumentException( "Parameter Door must not be \"null\"" );
 		}
 		if( nextDoors.contains( door ) ) {
 			if( !door.containsNextDoor( this ) ) {
-				throw new IllegalArgumentException( "''Door'' has already been added!" );
+				throw new IllegalArgumentException( "\"Door\" has already been added!" );
 			}
 		} else {
 			nextDoors.add( door );
@@ -243,12 +244,22 @@ public class DoorCell extends Cell implements Cloneable {
 	/**
 	 * This is a helper method for internal synchronisation. Call this to remove
 	 * a nextDoor without being called back.
-	 * @param door A door you want to remove from the nextDoors list. 
+	 * @param door a door you want to remove from the nextDoors list.
 	 */
 	private void internalRemoveNextDoor( DoorCell door ) {
 		if( this.nextDoors.remove( door ) == false ) {
 			throw new IllegalArgumentException( "The door you tried to remove is not connected to this cell." );
 		}
+	}
+
+	/**
+	 * Adds a target cell only, but does not add this cell as a target of the
+	 * target. Thus this does not implement a real door, but a one-way only door.
+	 * @param door the target cell
+	 */
+	protected void addTarget( DoorCell door ) {
+		if( !nextDoors.contains( door ) )
+			nextDoors.add( door );
 	}
 }
 

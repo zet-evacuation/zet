@@ -188,7 +188,7 @@ public class JEditor extends JFrame implements Localized, EventListener<Progress
 	// Options
 	private boolean createCopy;
 	private boolean firstSwitch = false;
-	private EditMode.Type creationType = EditMode.Type.CREATION_POINTWISE;
+	private EditMode.Type creationType = EditMode.Type.CreationPointwise;
 	/** The number format used to display the zoomfactor in the textfield. */
 	private NumberFormat nfZoom = NumberFormat.getPercentInstance();	// Main window components
 	/** The status bar. */
@@ -771,7 +771,7 @@ public class JEditor extends JFrame implements Localized, EventListener<Progress
 				btnEditSelect.setSelected( false );
 				btnEditPointwise.setSelected( true );
 				btnEditRectangled.setSelected( false );
-				creationType = EditMode.Type.CREATION_POINTWISE;
+				creationType = EditMode.Type.CreationPointwise;
 				editSelector.rebuild();
 				editView.setEditMode( (EditMode)editSelector.getSelectedItem() );
 				ZETMain.sendMessage( "Wählen sie die Koordinaten." ); // TODO loc
@@ -784,7 +784,7 @@ public class JEditor extends JFrame implements Localized, EventListener<Progress
 				btnEditSelect.setSelected( false );
 				btnEditPointwise.setSelected( false );
 				btnEditRectangled.setSelected( true );
-				creationType = EditMode.Type.CREATION_RECTANGLED;
+				creationType = EditMode.Type.CreationRectangled;
 				editSelector.rebuild();
 				ZETMain.sendMessage( "Wählen sie die Koordinaten." ); // TODO loc
 			}
@@ -2092,27 +2092,27 @@ public class JEditor extends JFrame implements Localized, EventListener<Progress
 			switch( currentEditMode ) {
 				case AssignmentAreaCreation:
 				case AssignmentAreaCreationPointwise:
-					showArea( AreaVisibility.ASSIGNMENT );
+					showArea( AreaVisibility.Assignment );
 					break;
 				case DelayAreaCreation:
 				case DelayAreaCreationPointwise:
-					showArea( AreaVisibility.DELAY );
+					showArea( AreaVisibility.Delay );
 					break;
 				case StairAreaCreation:
 				case StairAreaCreationPointwise:
-					showArea( AreaVisibility.STAIR );
+					showArea( AreaVisibility.Stair );
 					break;
 				case EvacuationAreaCreation:
 				case EvacuationAreaCreationPointwise:
-					showArea( AreaVisibility.EVACUATION );
+					showArea( AreaVisibility.Evacuation );
 					break;
 				case InaccessibleAreaCreation:
 				case InaccessibleAreaCreationPointwise:
-					showArea( AreaVisibility.INACCESSIBLE );
+					showArea( AreaVisibility.Inaccessible );
 					break;
 				case SaveAreaCreation:
 				case SaveAreaCreationPointwise:
-					showArea( AreaVisibility.SAVE );
+					showArea( AreaVisibility.Save );
 					break;
 				default:
 					break;
@@ -2121,8 +2121,8 @@ public class JEditor extends JFrame implements Localized, EventListener<Progress
 			if( editView != null && lastEditMode == currentEditMode ) {
 				editView.setEditMode( currentEditMode );
 				btnEditSelect.setSelected( false );
-				btnEditPointwise.setSelected( creationType == EditMode.Type.CREATION_POINTWISE );
-				btnEditRectangled.setSelected( creationType == EditMode.Type.CREATION_RECTANGLED );
+				btnEditPointwise.setSelected( creationType == EditMode.Type.CreationPointwise );
+				btnEditRectangled.setSelected( creationType == EditMode.Type.CreationRectangled );
 
 			}
 			lastEditMode = currentEditMode;
@@ -2418,22 +2418,22 @@ caRes.statistic = caStatistic;
 	 */
 	public void showArea( AreaVisibility areaType ) {
 		switch( areaType ) {
-			case DELAY:
+			case Delay:
 				mnuDelayArea.setSelected( true );
 				break;
-			case STAIR:
+			case Stair:
 				mnuStairArea.setSelected( true );
 				break;
-			case EVACUATION:
+			case Evacuation:
 				mnuEvacuationArea.setSelected( true );
 				break;
-			case INACCESSIBLE:
+			case Inaccessible:
 				mnuInaccessibleArea.setSelected( true );
 				break;
-			case SAVE:
+			case Save:
 				mnuSaveArea.setSelected( true );
 				break;
-			case ASSIGNMENT:
+			case Assignment:
 				mnuAssignmentArea.setSelected( true );
 				break;
 			default:
@@ -2507,17 +2507,17 @@ caRes.statistic = caStatistic;
 	private void updateAreaVisiblity() {
 		ArrayList<AreaVisibility> mode = new ArrayList<AreaVisibility>();
 		if( mnuDelayArea.isSelected() )
-			mode.add( AreaVisibility.DELAY );
+			mode.add( AreaVisibility.Delay );
 		if( mnuStairArea.isSelected() )
-			mode.add( AreaVisibility.STAIR );
+			mode.add( AreaVisibility.Stair );
 		if( mnuEvacuationArea.isSelected() )
-			mode.add( AreaVisibility.EVACUATION );
+			mode.add( AreaVisibility.Evacuation );
 		if( mnuInaccessibleArea.isSelected() )
-			mode.add( AreaVisibility.INACCESSIBLE );
+			mode.add( AreaVisibility.Inaccessible );
 		if( mnuSaveArea.isSelected() )
-			mode.add( AreaVisibility.SAVE );
+			mode.add( AreaVisibility.Save );
 		if( mnuAssignmentArea.isSelected() )
-			mode.add( AreaVisibility.ASSIGNMENT );
+			mode.add( AreaVisibility.Assignment );
 		mnuShowAllAreas.setEnabled( mode.size() != 6 );
 		mnuHideAllAreas.setEnabled( mode.size() != 0 );
 		editView.changeAreaView( mode );
@@ -2701,8 +2701,8 @@ caRes.statistic = caStatistic;
 				editView.setEditMode( (EditMode)object );
 
 				btnEditSelect.setSelected( false );
-				btnEditPointwise.setSelected( creationType == EditMode.Type.CREATION_POINTWISE );
-				btnEditRectangled.setSelected( creationType == EditMode.Type.CREATION_RECTANGLED );
+				btnEditPointwise.setSelected( creationType == EditMode.Type.CreationPointwise );
+				btnEditRectangled.setSelected( creationType == EditMode.Type.CreationRectangled );
 			}
 		}
 	}

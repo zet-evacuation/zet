@@ -17,7 +17,6 @@ package gui.editor;
 
 import gui.components.AbstractFloor;
 import ds.z.Area;
-import ds.z.Assignment;
 import ds.z.AssignmentArea;
 import ds.z.Barrier;
 import ds.z.DelayArea;
@@ -60,6 +59,7 @@ import java.util.ListIterator;
 import javax.swing.JComponent;
 import javax.swing.SwingUtilities;
 import de.tu_berlin.math.coga.common.localization.Localization;
+import ds.z.TeleportArea;
 import event.EventListener;
 import event.EventServer;
 import event.ZModelChangedEvent;
@@ -317,8 +317,8 @@ public class JFloor extends AbstractFloor implements EventListener<ZModelChanged
 		}
 
 		// If in PolygonCreationMode, draw help-line
-		if( GUIOptionManager.getEditMode().getType() == EditMode.Type.CREATION_POINTWISE ||
-						GUIOptionManager.getEditMode().getType() == EditMode.Type.CREATION_RECTANGLED )
+		if( GUIOptionManager.getEditMode().getType() == EditMode.Type.CreationPointwise ||
+						GUIOptionManager.getEditMode().getType() == EditMode.Type.CreationRectangled )
 			if( lastClick != null & mousePos != null ) {
 				Point p1;
 				Point p2;
@@ -335,9 +335,9 @@ public class JFloor extends AbstractFloor implements EventListener<ZModelChanged
 				g2.setPaint( lastColor );
 
 				// Now draw the single line or the rectangle (depending on the edit mode)
-				if( GUIOptionManager.getEditMode().getType() == EditMode.Type.CREATION_POINTWISE )
+				if( GUIOptionManager.getEditMode().getType() == EditMode.Type.CreationPointwise )
 					g2.drawLine( p1.x, p1.y, p2.x, p2.y );
-				else if( GUIOptionManager.getEditMode().getType() == EditMode.Type.CREATION_RECTANGLED )
+				else if( GUIOptionManager.getEditMode().getType() == EditMode.Type.CreationRectangled )
 					g2.drawRect( Math.min( p1.x, p2.x ), Math.min( p1.y, p2.y ),
 									Math.abs( p1.x - p2.x ), Math.abs( p1.y - p2.y ) );
 			}
@@ -778,14 +778,18 @@ public class JFloor extends AbstractFloor implements EventListener<ZModelChanged
 							case SaveAreaCreation:
 								zcontrol.createNew( SaveArea.class, parent );
 								break;
+							case TeleportAreaCreationPointwise:
+							case TeleportAreaCreation:
+								zcontrol.createNew( TeleportArea.class, parent );
+								break;
 							default:
 								ZETMain.sendError( "Unknown Edit mode selected." );
 								break;
 						}
-						if( GUIOptionManager.getEditMode().getType() == EditMode.Type.CREATION_POINTWISE )
+						if( GUIOptionManager.getEditMode().getType() == EditMode.Type.CreationPointwise )
 							zcontrol.addPoint( p2 );
 					} else {
-						if( GUIOptionManager.getEditMode().getType() == EditMode.Type.CREATION_RECTANGLED ) {
+						if( GUIOptionManager.getEditMode().getType() == EditMode.Type.CreationRectangled ) {
 							if( p1.getX() == p2.getX() || p1.getY() == p2.getY() ) {
 								ZETMain.sendError( Localization.getInstance().getString( "gui.error.RectangleCreationZeroArea" ) );
 								return;
@@ -797,7 +801,7 @@ public class JFloor extends AbstractFloor implements EventListener<ZModelChanged
 							points.add( new PlanPoint( p2.x, p1.y ) );
 							points.add( new PlanPoint( p1.x, p1.y ) );
 							newPolygonClosed = zcontrol.addPoints( points );
-						} else if( GUIOptionManager.getEditMode().getType() == EditMode.Type.CREATION_POINTWISE )
+						} else if( GUIOptionManager.getEditMode().getType() == EditMode.Type.CreationPointwise )
 							try {
 								// check if the new point will close the polygon or the area will be zero
 								if( zcontrol.latestPolygon().willClose( p1, p2 ) && zcontrol.latestPolygon().area() == 0 && !(zcontrol.latestPolygon() instanceof Barrier) ) {
@@ -819,7 +823,7 @@ public class JFloor extends AbstractFloor implements EventListener<ZModelChanged
 				}
 			else if( e.getButton() == MouseEvent.BUTTON3 )
 				// This method already contains the EditMode analysis
-				if( GUIOptionManager.getEditMode().getType() == EditMode.Type.CREATION_POINTWISE ) {
+				if( GUIOptionManager.getEditMode().getType() == EditMode.Type.CreationPointwise ) {
 					// Create last Edge and close the polygon
 					try {
 						zcontrol.closePolygon();

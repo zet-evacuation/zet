@@ -105,6 +105,10 @@ public abstract class GUIOptionManager {
 		return propertyContainer.getAsColor( "gui.optionManager.StairAreaColor" );
 	}
 
+	public static Color getTeleportAreaColor() {
+		return propertyContainer.getAsColor( "gui.optionManager.SaveAreaColor" );
+	}
+
 	public static Color getDragNodeColor() {
 		return propertyContainer.getAsColor( "gui.optionManager.DragNodeColor" );
 	}
@@ -129,27 +133,28 @@ public abstract class GUIOptionManager {
 		/** The currently selected visible areas. */
 		EnumSet<AreaVisibility> areaVisibility = EnumSet.noneOf( AreaVisibility.class );
 		if( propertyContainer.getAsBoolean( "gui.optionManager.AssignmentAreaVisibility" ) )
-			areaVisibility.add( AreaVisibility.ASSIGNMENT );
+			areaVisibility.add( AreaVisibility.Assignment );
 		if( propertyContainer.getAsBoolean( "gui.optionManager.DelayAreaVisibility" ) )
-			areaVisibility.add( AreaVisibility.DELAY );
+			areaVisibility.add( AreaVisibility.Delay );
 		if( propertyContainer.getAsBoolean( "gui.optionManager.EvacuationAreaVisibility" ) )
-			areaVisibility.add( AreaVisibility.EVACUATION );
+			areaVisibility.add( AreaVisibility.Evacuation );
 		if( propertyContainer.getAsBoolean( "gui.optionManager.InaccessibleAreaVisibility" ) )
-			areaVisibility.add( AreaVisibility.INACCESSIBLE );
+			areaVisibility.add( AreaVisibility.Inaccessible );
 		if( propertyContainer.getAsBoolean( "gui.optionManager.SaveAreaVisibility" ) )
-			areaVisibility.add( AreaVisibility.SAVE );
+			areaVisibility.add( AreaVisibility.Save );
 		if( propertyContainer.getAsBoolean( "gui.optionManager.StairAreaVisibility" ) )
-			areaVisibility.add( AreaVisibility.STAIR );
+			areaVisibility.add( AreaVisibility.Stair );
+		areaVisibility.add( AreaVisibility.Teleport );
 		return areaVisibility;
 	}
 
 	public static void setAreaVisibility( EnumSet<AreaVisibility> av ) {
-		propertyContainer.set( "gui.optionManager.AssignmentAreaVisibility", av.contains( AreaVisibility.ASSIGNMENT ) );
-		propertyContainer.set( "gui.optionManager.DelayAreaVisibility", av.contains( AreaVisibility.DELAY ) );
-		propertyContainer.set( "gui.optionManager.EvacuationAreaVisibility", av.contains( AreaVisibility.EVACUATION ) );
-		propertyContainer.set( "gui.optionManager.InaccessibleAreaVisibility", av.contains( AreaVisibility.INACCESSIBLE ) );
-		propertyContainer.set( "gui.optionManager.SaveAreaVisibility", av.contains( AreaVisibility.SAVE ) );
-		propertyContainer.set( "gui.optionManager.StairAreaVisibility", av.contains( AreaVisibility.STAIR ) );
+		propertyContainer.set( "gui.optionManager.AssignmentAreaVisibility", av.contains( AreaVisibility.Assignment ) );
+		propertyContainer.set( "gui.optionManager.DelayAreaVisibility", av.contains( AreaVisibility.Delay ) );
+		propertyContainer.set( "gui.optionManager.EvacuationAreaVisibility", av.contains( AreaVisibility.Evacuation ) );
+		propertyContainer.set( "gui.optionManager.InaccessibleAreaVisibility", av.contains( AreaVisibility.Inaccessible ) );
+		propertyContainer.set( "gui.optionManager.SaveAreaVisibility", av.contains( AreaVisibility.Save ) );
+		propertyContainer.set( "gui.optionManager.StairAreaVisibility", av.contains( AreaVisibility.Stair ) );
 	}
 
 	public static EditMode getEditMode() {

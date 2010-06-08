@@ -23,13 +23,16 @@ import ds.z.Area;
 
 import ds.z.Room;
 import ds.z.StairArea;
+import ds.z.TeleportArea;
 import java.util.ArrayList;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  * A converter that behaves just like a normal converter would do, he only adds
  * the functionality of recreating the changeListeners.
  *
- * @author Timon Kelter
+ * @author Timon Kelter, Jan-Philipp Kappmeier
  */
 public class RoomConverter extends PlanPolygonConverter {
 
@@ -64,9 +67,26 @@ public class RoomConverter extends PlanPolygonConverter {
 	 * @return the created <code>Room</code> instance
 	 */
 	@Override
-	public Object unmarshal( final HierarchicalStreamReader reader,
-					final UnmarshallingContext context ) {
+	public Object unmarshal( final HierarchicalStreamReader reader, final UnmarshallingContext context ) {
+		System.err.println( " EIN ROAUM WIRD KONVERTIERT" );
 		Room result = (Room)super.unmarshal( reader, context );
+
+				Class<?> c = result.getClass();
+
+				java.lang.reflect.Field field;
+		try {
+			field = c.getDeclaredField( "teleportAreas" );
+				field.setAccessible( true );
+				field.set( result, new ArrayList<TeleportArea>() );
+		} catch( IllegalArgumentException ex ) {
+			Logger.getLogger( RoomConverter.class.getName() ).log( Level.SEVERE, null, ex );
+		} catch( IllegalAccessException ex ) {
+			Logger.getLogger( RoomConverter.class.getName() ).log( Level.SEVERE, null, ex );
+		} catch( NoSuchFieldException ex ) {
+			Logger.getLogger( RoomConverter.class.getName() ).log( Level.SEVERE, null, ex );
+		} catch( SecurityException ex ) {
+			Logger.getLogger( RoomConverter.class.getName() ).log( Level.SEVERE, null, ex );
+		}
 
 		for( Area t : result.getAssignmentAreas() ) {
 //			t.addChangeListener( result );
@@ -90,8 +110,7 @@ public class RoomConverter extends PlanPolygonConverter {
 			}
 		} catch( Exception ex ) {
 			try {
-				Class<?> c = result.getClass();
-				java.lang.reflect.Field field = c.getDeclaredField( "stairAreas" );
+				field = c.getDeclaredField( "stairAreas" );
 				field.setAccessible( true );
 				field.set( result, new ArrayList<StairArea>() );
 				for( Area t : result.getStairAreas() ) {
