@@ -25,40 +25,44 @@ import de.tu_berlin.math.coga.common.localization.Localization;
  */
 public enum EditMode {
 
-	Selection( 1, Type.SELECTION, null, false ),
-	RoomCreation( 2, Type.CREATION_RECTANGLED, GUIOptionManager.getRoomEdgeColor(), false ),
-	InaccessibleAreaCreation( 3, Type.CREATION_RECTANGLED, GUIOptionManager.getInaccessibleAreaColor(), true ),
-	AssignmentAreaCreation( 4, Type.CREATION_RECTANGLED, GUIOptionManager.getAssignmentAreaColor(), true ),
-	DelayAreaCreation( 5, Type.CREATION_RECTANGLED, GUIOptionManager.getDelayAreaColor(), true ),
-	StairAreaCreation( 17, Type.CREATION_RECTANGLED, GUIOptionManager.getStairAreaColor(), true ),
-	StairAreaMarkLowerLevel( 19, Type.EDIT_EXISTING, GUIOptionManager.getStairAreaColor(), true ),
-	StairAreaMarkUpperLevel( 20, Type.EDIT_EXISTING, GUIOptionManager.getStairAreaColor(), true ),
-	SaveAreaCreation( 6, Type.CREATION_RECTANGLED, GUIOptionManager.getSaveAreaColor(), true ),
-	EvacuationAreaCreation( 7, Type.CREATION_RECTANGLED, GUIOptionManager.getEvacuationAreaColor(), true ),
-	RoomCreationPointwise( 8, Type.CREATION_POINTWISE, GUIOptionManager.getRoomEdgeColor(), false ),
-	BarrierCreationPointwise( 9, Type.CREATION_POINTWISE, GUIOptionManager.getRoomEdgeColor(), true ),
-	InaccessibleAreaCreationPointwise( 10, Type.CREATION_POINTWISE, GUIOptionManager.getInaccessibleAreaColor(), true ),
-	AssignmentAreaCreationPointwise( 11, Type.CREATION_POINTWISE, GUIOptionManager.getAssignmentAreaColor(), true ),
-	DelayAreaCreationPointwise( 12, Type.CREATION_POINTWISE, GUIOptionManager.getDelayAreaColor(), true ),
-	StairAreaCreationPointwise( 18, Type.CREATION_POINTWISE, GUIOptionManager.getStairAreaColor(), true ),
-	SaveAreaCreationPointwise( 13, Type.CREATION_POINTWISE, GUIOptionManager.getSaveAreaColor(), true ),
-	EvacuationAreaCreationPointwise( 14, Type.CREATION_POINTWISE, GUIOptionManager.getEvacuationAreaColor(), true ),
-	TeleportEdgeCreation( 15, Type.EDIT_EXISTING, GUIOptionManager.getRoomEdgeColor(), false ),
-	PassableRoomCreation( 16, Type.EDIT_EXISTING, GUIOptionManager.getRoomEdgeColor(), false );
+	Selection( 1, Type.Selection, null, false ),
+	RoomCreation( 2, Type.CreationRectangled, GUIOptionManager.getRoomEdgeColor(), false ),
+	InaccessibleAreaCreation( 3, Type.CreationRectangled, GUIOptionManager.getInaccessibleAreaColor(), true ),
+	AssignmentAreaCreation( 4, Type.CreationRectangled, GUIOptionManager.getAssignmentAreaColor(), true ),
+	DelayAreaCreation( 5, Type.CreationRectangled, GUIOptionManager.getDelayAreaColor(), true ),
+	StairAreaCreation( 17, Type.CreationRectangled, GUIOptionManager.getStairAreaColor(), true ),
+	StairAreaMarkLowerLevel( 19, Type.EditExisting, GUIOptionManager.getStairAreaColor(), true ),
+	StairAreaMarkUpperLevel( 20, Type.EditExisting, GUIOptionManager.getStairAreaColor(), true ),
+	SaveAreaCreation( 6, Type.CreationRectangled, GUIOptionManager.getSaveAreaColor(), true ),
+	EvacuationAreaCreation( 7, Type.CreationRectangled, GUIOptionManager.getEvacuationAreaColor(), true ),
+	RoomCreationPointwise( 8, Type.CreationPointwise, GUIOptionManager.getRoomEdgeColor(), false ),
+	BarrierCreationPointwise( 9, Type.CreationPointwise, GUIOptionManager.getRoomEdgeColor(), true ),
+	InaccessibleAreaCreationPointwise( 10, Type.CreationPointwise, GUIOptionManager.getInaccessibleAreaColor(), true ),
+	AssignmentAreaCreationPointwise( 11, Type.CreationPointwise, GUIOptionManager.getAssignmentAreaColor(), true ),
+	DelayAreaCreationPointwise( 12, Type.CreationPointwise, GUIOptionManager.getDelayAreaColor(), true ),
+	StairAreaCreationPointwise( 18, Type.CreationPointwise, GUIOptionManager.getStairAreaColor(), true ),
+	SaveAreaCreationPointwise( 13, Type.CreationPointwise, GUIOptionManager.getSaveAreaColor(), true ),
+	EvacuationAreaCreationPointwise( 14, Type.CreationPointwise, GUIOptionManager.getEvacuationAreaColor(), true ),
+	TeleportEdgeCreation( 15, Type.EditExisting, GUIOptionManager.getRoomEdgeColor(), false ),
+	PassableRoomCreation( 16, Type.EditExisting, GUIOptionManager.getRoomEdgeColor(), false ),
+	TeleportAreaCreationPointwise( 21, Type.CreationPointwise, GUIOptionManager.getTeleportAreaColor(), true ),
+	TeleportAreaCreation( 22, Type.CreationRectangled, GUIOptionManager.getTeleportAreaColor(), true );
 		/** The localization class. */
 	Localization loc = Localization.getInstance();
 	
 	static {
 		// Here the partnerModes set. This cannot be done in the constructor because it would need
 		// illegal forward references
-		setPartners (RoomCreation, RoomCreationPointwise);
-		setPartners (InaccessibleAreaCreation, InaccessibleAreaCreationPointwise);
-		setPartners (AssignmentAreaCreation, AssignmentAreaCreationPointwise);
-		setPartners (DelayAreaCreation, DelayAreaCreationPointwise);
-		setPartners (StairAreaCreation, StairAreaCreationPointwise);
-		setPartners (SaveAreaCreation, SaveAreaCreationPointwise);
-		setPartners (EvacuationAreaCreation, EvacuationAreaCreationPointwise);
+		setPartners( RoomCreation, RoomCreationPointwise );
+		setPartners( InaccessibleAreaCreation, InaccessibleAreaCreationPointwise );
+		setPartners( AssignmentAreaCreation, AssignmentAreaCreationPointwise );
+		setPartners( DelayAreaCreation, DelayAreaCreationPointwise );
+		setPartners( StairAreaCreation, StairAreaCreationPointwise );
+		setPartners( SaveAreaCreation, SaveAreaCreationPointwise );
+		setPartners( EvacuationAreaCreation, EvacuationAreaCreationPointwise );
+		setPartners( TeleportAreaCreation, TeleportAreaCreationPointwise );
 	}
+
 	private static void setPartners (EditMode e1, EditMode e2) {
 		e1.partnerMode = e2;
 		e2.partnerMode = e1;
@@ -88,8 +92,8 @@ public enum EditMode {
 		LinkedList<EditMode> trueEditModes = new LinkedList<EditMode>();
 
 		for( EditMode e : values() ) {
-			if( e.getType().equals( Type.CREATION_POINTWISE ) ||
-							e.getType().equals( Type.CREATION_RECTANGLED ) ) {
+			if( e.getType().equals( Type.CreationPointwise ) ||
+							e.getType().equals( Type.CreationRectangled ) ) {
 				trueEditModes.add( e );
 			}
 		}
@@ -161,6 +165,10 @@ public enum EditMode {
 				return loc.getString( "gui.editor.EditMode.StairAreaMarkLowerLevel");
 			case 20:
 				return loc.getString( "gui.editor.EditMode.StairAreaMarkUpperLevel");
+			case 21:
+				return loc.getString( "gui.editor.EditMode.CreateTeleportArea");
+			case 22:
+				return loc.getString( "gui.editor.EditMode.CreateTeleportAreaPointwise");
 		}
 		return loc.getString( "gui.UnknownEditMode" );
 	}
@@ -185,7 +193,7 @@ public enum EditMode {
 	
 	/** @return whether this edit mode creates polygons that are part of 
 	 * other polygons (f.e. Areas). This field is always false for edit modes
-	 * that are not of type CREATION_POINTWISE or CREATION_RECTANGLED */
+	 * that are not of type CreationPointwise or CreationRectangled */
 	public boolean doesCreateSubpolygons() {
 		return createSubpolygons;
 	}
@@ -204,12 +212,12 @@ public enum EditMode {
 	/** The types of EditModes. */
 	public enum Type {
 		/** Any edit mode that is focused on selection of polygons on screen. */
-		SELECTION,
+		Selection,
 		/** Any edit mode that is used to create polygons on screen in rectangle form. */
-		CREATION_RECTANGLED,
+		CreationRectangled,
 		/** Any edit mode that is used to create polygons on screen in free form. */
-		CREATION_POINTWISE,
+		CreationPointwise,
 		/** Any edit mode that is used to modify existing polygons. */
-		EDIT_EXISTING;
+		EditExisting;
 	}
 }

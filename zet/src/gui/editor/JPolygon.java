@@ -117,6 +117,7 @@ public class JPolygon extends AbstractPolygon {
 		this.myFloor = myFloor;
 		setOpaque( false );
 
+
 		// Create a transparent color with which we will fill out the polygon
 		// in case it represents an area
 		transparentForeground = new Color( getForeground().getColorSpace(),
@@ -217,39 +218,39 @@ public class JPolygon extends AbstractPolygon {
 
 				// Display areas
 				EnumSet<AreaVisibility> areaVisibility = GUIOptionManager.getAreaVisibility();
-				if( areaVisibility.contains( AreaVisibility.ASSIGNMENT ) )
+				if( areaVisibility.contains( AreaVisibility.Assignment ) )
 					for( Area a : room.getAssignmentAreas() ) {
 						JPolygon ne = new JPolygon( myFloor, GUIOptionManager.getAssignmentAreaColor() );
 						add( ne );
 						ne.displayPolygon( a );
 					}
-				if( areaVisibility.contains( AreaVisibility.DELAY ) )
+				if( areaVisibility.contains( AreaVisibility.Delay ) )
 					for( Area a : room.getDelayAreas() ) {
 						JPolygon ne = new JPolygon( myFloor, GUIOptionManager.getDelayAreaColor() );
 						add( ne );
 						ne.displayPolygon( a );
 					}
-				if( areaVisibility.contains( AreaVisibility.EVACUATION ) )
+				if( areaVisibility.contains( AreaVisibility.Evacuation ) )
 					for( Area a : room.getSaveAreas() )
 						if( a instanceof EvacuationArea ) {
 							JPolygon ne = new JPolygon( myFloor, GUIOptionManager.getEvacuationAreaColor() );
 							add( ne );
 							ne.displayPolygon( a );
 						}
-				if( areaVisibility.contains( AreaVisibility.SAVE ) )
+				if( areaVisibility.contains( AreaVisibility.Save ) )
 					for( Area a : room.getSaveAreas() )
 						if( !(a instanceof EvacuationArea) ) {
 							JPolygon ne = new JPolygon( myFloor, GUIOptionManager.getSaveAreaColor() );
 							add( ne );
 							ne.displayPolygon( a );
 						}
-				if( areaVisibility.contains( AreaVisibility.STAIR ) )
+				if( areaVisibility.contains( AreaVisibility.Stair ) )
 					for( Area a : room.getStairAreas() ) {
 						JPolygon ne = new JPolygon( myFloor, GUIOptionManager.getStairAreaColor() );
 						add( ne );
 						ne.displayPolygon( a );
 					}
-				if( areaVisibility.contains( AreaVisibility.INACCESSIBLE ) ) {
+				if( areaVisibility.contains( AreaVisibility.Inaccessible ) ) {
 					for( Area a : room.getInaccessibleAreas() ) {
 						JPolygon ne = new JPolygon( myFloor, GUIOptionManager.getInaccessibleAreaColor() );
 						add( ne );
@@ -261,6 +262,14 @@ public class JPolygon extends AbstractPolygon {
 						ne.displayPolygon( a );
 					}
 				}
+					// TODO area visiblity for teleport areas
+				if( areaVisibility.contains( AreaVisibility.Teleport ) )
+					for( Area a : room.getTeleportAreas() ) {
+						JPolygon ne = new JPolygon( myFloor, GUIOptionManager.getTeleportAreaColor() );
+						add( ne );
+						ne.displayPolygon( a );
+					}
+
 			}
 
 			// Display own edges - This must come after the areas have been created,

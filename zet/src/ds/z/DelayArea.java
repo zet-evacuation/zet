@@ -54,7 +54,7 @@ public class DelayArea extends Area<Edge> {
 	private DelayType delayType;
 	
 	/**
-         * Constucts a new <code>DelayArea</code> with the default <code>speedFactor</code>
+	 * Constucts a new <code>DelayArea</code> with the default <code>speedFactor</code>
 	 * provided by the specified {@link DelayType}.
 	 * 
 	 * @param room to which the area belongs
@@ -122,6 +122,7 @@ public class DelayArea extends Area<Edge> {
 //		throwChangeEvent (new ChangeEvent (this));
 	}
 	
+	@Override
 	public boolean equals (Object o) {
 		if (o instanceof DelayArea) {
 			DelayArea p = (DelayArea)o;

@@ -215,6 +215,8 @@ public class ZControl {
 			newPolygon = new InaccessibleArea( (Room)parent );
 		else if( a == SaveArea.class )
 			newPolygon = new SaveArea( (Room)parent );
+		else if( a == TeleportArea.class )
+			newPolygon = new TeleportArea( (Room)parent );
 
 		latestPolygon = newPolygon;
 	}

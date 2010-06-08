@@ -67,6 +67,8 @@ public class Room extends BaseRoom<RoomEdge> implements Cloneable {
 	private ArrayList<SaveArea> saveAreas;
 	/** A list of all stair areas of the current room. */
 	private ArrayList<StairArea> stairAreas;
+	/** A list of all teleport areas of the current room. */
+	private ArrayList<TeleportArea> teleportAreas;
 
 	/**
 	 * Creates a new <code>Room</code> with a default name "Room x", where x
@@ -84,6 +86,7 @@ public class Room extends BaseRoom<RoomEdge> implements Cloneable {
 		inaccessibleAreas = new ArrayList<InaccessibleArea>();
 		saveAreas = new ArrayList<SaveArea>();
 		stairAreas = new ArrayList<StairArea>();
+		teleportAreas = new ArrayList<TeleportArea>();
 		floor.addRoom( this );
 	}
 
@@ -93,21 +96,13 @@ public class Room extends BaseRoom<RoomEdge> implements Cloneable {
 	 * @param name the name of the room
 	 */
 	public Room( Floor floor, String name ) {
-		super( RoomEdge.class );
+		this( floor );
+		//super( RoomEdge.class );
 		this.name = name;
-		associatedFloor = floor;
-		assignmentAreas = new ArrayList<AssignmentArea>();
-		barriers = new ArrayList<Barrier>();
-		delayAreas = new ArrayList<DelayArea>();
-		evacuationAreas = new ArrayList<EvacuationArea>();
-		inaccessibleAreas = new ArrayList<InaccessibleArea>();
-		saveAreas = new ArrayList<SaveArea>();
-		stairAreas = new ArrayList<StairArea>();
-		floor.addRoom( this );
 	}
 
-	/** {@inheritDoc}
-	 * 
+	/**
+	 * {@inheritDoc}
 	 * The Areas that are contained within this Room are assigned to the new room that contains them.
 	 * If any area intersects with both rooms, then the area will not be contained in any of the rooms.
 	 * 
@@ -175,27 +170,22 @@ public class Room extends BaseRoom<RoomEdge> implements Cloneable {
 	@Override
 	public void rasterize() {
 		super.rasterize();
-		for( Area a : assignmentAreas ) {
+		for( Area a : assignmentAreas )
 			a.rasterize();
-		}
-		for( Area a : barriers ) {
+		for( Area a : barriers )
 			a.rasterize();
-		}
-		for( Area a : delayAreas ) {
+		for( Area a : delayAreas )
 			a.rasterize();
-		}
-		for( Area a : evacuationAreas ) {
+		for( Area a : evacuationAreas )
 			a.rasterize();
-		}
-		for( Area a : inaccessibleAreas ) {
+		for( Area a : inaccessibleAreas )
 			a.rasterize();
-		}
-		for( Area a : saveAreas ) {
+		for( Area a : saveAreas )
 			a.rasterize();
-		}
-		for( Area a : stairAreas ) {
+		for( Area a : stairAreas )
 			a.rasterize();
-		}
+		for( Area a : teleportAreas )
+			a.rasterize();
 	}
 
 	/**
@@ -266,6 +256,13 @@ public class Room extends BaseRoom<RoomEdge> implements Cloneable {
 				throw new IllegalArgumentException( Localization.getInstance().getString( "ds.z.Room.AlreadyContainsAreaException" ) );
 			} else {
 				stairAreas.add( (StairArea) area );
+			}
+		}
+		if( area instanceof TeleportArea ) {
+			if( teleportAreas.contains( (TeleportArea)area ) ) {
+				throw new IllegalArgumentException( Localization.getInstance().getString( "ds.z.Room.AlreadyContainsAreaException" ) );
+			}	else {
+				teleportAreas.add( (TeleportArea)area );
 			}
 		}
 
@@ -346,6 +343,12 @@ public class Room extends BaseRoom<RoomEdge> implements Cloneable {
 			sa.check( rasterized );
 			if( !(contains( sa )) ) {
 				throw new AreaNotInsideException( sa, Localization.getInstance().getString( "ds.z.Room.NotCompletelyInException" ) );
+			}
+		}
+		for( TeleportArea ta : teleportAreas ) {
+			ta.check( rasterized );
+			if( !(contains( ta )) ) {
+				throw new AreaNotInsideException( ta, Localization.getInstance().getString( "ds.z.Room.NotCompletelyInException" ) );
 			}
 		}
 		checkTooManyPersonsInRoom();
@@ -605,8 +608,7 @@ public class Room extends BaseRoom<RoomEdge> implements Cloneable {
 	 * polygon is not closed, an IllegalArgumentException may be thrown because 
 	 * the deletion of a RoomEdge (source/linkTarget) may fail.
 	 */
-	public static void connectToWithTeleportEdge( RoomEdge sourceEdge,
-					RoomEdge targetEdge ) throws IllegalArgumentException {
+	public static void connectToWithTeleportEdge( RoomEdge sourceEdge, RoomEdge targetEdge ) throws IllegalArgumentException {
 		if( sourceEdge.isPassable() || targetEdge.isPassable() ) {
 			throw new IllegalArgumentException( Localization.getInstance().getString( "ds.z.Room.PassableException" ) );
 		}
@@ -662,6 +664,9 @@ public class Room extends BaseRoom<RoomEdge> implements Cloneable {
 		}
 		if( area instanceof StairArea ) {
 			result = stairAreas.remove( (StairArea) area );
+		}
+		if( area instanceof TeleportArea ) {
+			result = teleportAreas.remove( (TeleportArea) area );
 		}
 		if( !result ) {
 			throw new IllegalArgumentException( Localization.getInstance().getString( "ds.z.Room.NoAreaException" ) );
@@ -766,6 +771,14 @@ public class Room extends BaseRoom<RoomEdge> implements Cloneable {
 		return Collections.unmodifiableList( stairAreas );
 	}
 
+	/**
+	 * Returns a view of the list of all teleport areas.
+	 * @return the view of all teleport areas
+	 */
+	public Iterable<TeleportArea> getTeleportAreas() {
+		return Collections.unmodifiableList( teleportAreas );
+	}
+
 	/** @return All areas that are in the room. */
 	public List<Area> getAreas() {
 		ArrayList<Area> a = new ArrayList<Area>( assignmentAreas.size() +
@@ -778,6 +791,7 @@ public class Room extends BaseRoom<RoomEdge> implements Cloneable {
 		a.addAll( inaccessibleAreas );
 		a.addAll( saveAreas );
 		a.addAll( stairAreas );
+		a.addAll( teleportAreas );
 		return a;
 	}
 
@@ -1111,4 +1125,5 @@ public class Room extends BaseRoom<RoomEdge> implements Cloneable {
 			}
 		}
 	}
+
 }

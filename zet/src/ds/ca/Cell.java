@@ -29,46 +29,28 @@ import de.tu_berlin.math.coga.common.util.Level;
  * door cells, stair cells and exit cells.
  * Generally each cell can be occupied by an individual and can be crossed with a
  * certain speed.
- * @author marcel
+ * @author Marcel Preuß, Jan-Philipp Kappmeier
  *
  */
 public abstract class Cell implements Comparable<Cell> {
 
-	/**
-	 * This character is used for graphic-like ASCII-output 
-	 */
+	/** This character is used for graphic-like ASCII-output.  */
 	protected char graphicalRepresentation = ' ';
-	/**
-	 * Defines the Speed-Factor of the Cell. In other words it defines a value, how
-	 * fast this cell can be crossed.
-	 */
+	/** Defines the Speed-Factor of the Cell. In other words it defines a value, how fast this cell can be crossed. */
 	protected double speedFactor;
-	/**
-	 * Manages the individual that occupies the cell.
-	 */
+	/** Manages the individual that occupies the cell. */
 	protected Individual individual;
-	/**
-	 * x-coordinate of the cell in the room
-	 */
+	/** x-coordinate of the cell in the room. */
 	protected int x;
-	/**
-	 * y-coordinate of the cell in the room
-	 */
+	/** y-coordinate of the cell in the room. */
 	protected int y;
-	/**
-	 * The room to which the cell belongs
-	 */
+	/** The room to which the cell belongs. */
 	protected Room room;
-	/**
-	 * The bounds of the  cell
-	 */
+	/** The bounds of the  cell. */
 	protected EnumSet<Direction> bounds;
-	/**
-	 * Tells whether the surrounding squares are higher, equal or lower.
-	 */
+	/** Tells whether the surrounding squares are higher, equal or lower. */
 	protected EnumMap<Direction, Level> levels;
-	/** Stores the hashCode of this cell. 
-	 */
+	/** Stores the hashCode of this cell.  */
 	protected int hash;
 
 	/**
@@ -120,10 +102,6 @@ public abstract class Cell implements Comparable<Cell> {
 		//Cell old = individual.getCell();
 		}
 		this.individual = i;
-	//individual.setCell(this);
-	// remove from old cell if it had an old cell
-	//if(old != null && !(old == this))
-	//	old.removeIndividual();
 	}
 
 	void removeIndividual() {
@@ -155,20 +133,6 @@ public abstract class Cell implements Comparable<Cell> {
 	 * @return ArrayList of direct-neighbour-cells of "cell"
 	 */
 	public ArrayList<Cell> getNeighbours() {
-
-//    	int[][] neighbourCoord = {{this.getX()+0, this.getY()+1},
-//    							  {this.getX()+1, this.getY()+1},
-//    						   	  {this.getX()+1, this.getY()+0},
-//    							  {this.getX()+1, this.getY()-1},
-//    							  {this.getX()+0, this.getY()-1},
-//    							  {this.getX()-1, this.getY()-1},
-//    							  {this.getX()-1, this.getY()+0},
-//    							  {this.getX()-1, this.getY()+1}};
-//    	for (int i = 0 ; i < neighbourCoord.length ; i++)
-//    		if (room.existsCellAt(neighbourCoord[i][0], neighbourCoord[i][1]))
-//    			neighbours.add(room.getCell(neighbourCoord[i][0], neighbourCoord[i][1]));
-
-
 		return getNeighbours( true, false );
 	}
 
@@ -321,6 +285,7 @@ public abstract class Cell implements Comparable<Cell> {
 	public Cell clone( boolean cloneIndividual ) {
 		return clone();
 	}
+	// TODO?
 //  HashCode und Equals auskommentiert: Wenn zwei Zellen schon gleich sind,
 //  wenn sie im gleichen Raum liegen und die gleichen Koordinaten haben, 
 //  verlieren wir die MÃ¶glichkeit, Zellen zu Klonen und in einer HashMap
@@ -394,7 +359,6 @@ public abstract class Cell implements Comparable<Cell> {
 					case TopRight:
 						boolean f1 = false;
 						boolean f2 = false;
-//try{
 						if( cellRoom.existsCellAt( this.getX() + direction.xOffset(), this.getY() ) && cellRoom.getCell( this.getX() + direction.xOffset(), this.getY() ).individual != null )
 							//add = false;
 							f1 = true;
@@ -403,13 +367,8 @@ public abstract class Cell implements Comparable<Cell> {
 							f2 = true;
 						if( f1 && f2 )
 							add = false;
-//} catch (java.lang.NullPointerException ex) {
-//	int i = 1;
-//i++
-//					;
-//}
 				}
-				add=true;
+				add = true;
 				if( add )
 					neighbours.add( cellRoom.getCell( cellx, celly ) );
 				else
@@ -481,7 +440,7 @@ public abstract class Cell implements Comparable<Cell> {
 
 		return aClone;
 	}
-	// ob das so funktioniert?
+	// TODO ob das so funktioniert?
 	/**
 	 * @param c the cell that is compared to
 	 * @return -1, 0 or 1

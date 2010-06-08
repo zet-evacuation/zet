@@ -60,7 +60,7 @@ public class PolygonPopupListener implements ActionListener {
 		AssignmentArea newAA = new AssignmentArea ((Room)myPolygon, myType);
 		newAA.replace( newPoints );
 
-		JEditor.getInstance().showArea( AreaVisibility.ASSIGNMENT );
+		JEditor.getInstance().showArea( AreaVisibility.Assignment );
 		JEditor.getInstance ().getEditView ().getFloor ().setSelectedPolygon (newAA);
 	}
 }

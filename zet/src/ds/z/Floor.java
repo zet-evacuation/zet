@@ -658,6 +658,9 @@ public class Floor implements Serializable, Cloneable, Iterable<Room> {
 						s.defineByPoints( PlanPoint.pointCopy( t.getPlanPoints() ) );
 					}
 				}
+				for( TeleportArea t : r.getTeleportAreas() ) {
+
+				}
 				for( EvacuationArea t : r.getEvacuationAreas() ) {
 					EvacuationArea e = new EvacuationArea( newRoom, t.getAttractivity(), t.getName() );
 					e.defineByPoints( PlanPoint.pointCopy( t.getPlanPoints() ) );
