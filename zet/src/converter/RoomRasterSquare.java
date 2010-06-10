@@ -31,6 +31,7 @@ import java.util.Locale;
 import java.util.Set;
 import de.tu_berlin.math.coga.common.util.Direction;
 import de.tu_berlin.math.coga.common.util.Level;
+import ds.z.TeleportArea;
 
 /**
  * The <code>RoomRasterSquare</code> is a special type of {@link RasterSquare} containing
@@ -43,14 +44,15 @@ public class RoomRasterSquare extends RasterSquare {
 
 	public static enum Property {
 		/* RasterSquare is accessible */
-
 		ACCESSIBLE,
 		/* RasterSquare is a stair */
 		STAIR,
 		/* RasterSquare belongs to a save area*/
 		SAVE,
 		/* RasterSquare belongs to an evacuation area*/
-		EXIT
+		EXIT,
+		/* RasterSquare is a teleport cell. */
+		TELEPORT
 	}
 	/** The {@link ds.z.Room} that is rasterized. Redundant save helps avoiding casts. */
 	//Room r;
@@ -176,6 +178,18 @@ public class RoomRasterSquare extends RasterSquare {
 		return getProperty( Property.ACCESSIBLE );
 	}
 
+	public void setTeleport() {
+		setProperty( Property.TELEPORT );
+	}
+
+	public void clearTeleport() {
+		clearProperty( Property.TELEPORT );
+	}
+
+	public boolean isTeleport() {
+		return getProperty( Property.TELEPORT );
+	}
+
 	@Override
 	protected void check() {
 		super.check();
@@ -208,6 +222,10 @@ public class RoomRasterSquare extends RasterSquare {
 			} else {
 				setProperty( Property.EXIT, false );
 			}
+		}
+
+		for( TeleportArea teleportArea : r.getTeleportAreas() ) {
+			setProperty( Property.TELEPORT, this.isTeleport() || (teleportArea.contains( this.getSquare() ) & accessible()) );
 		}
 
 	//for(Barrier barrier : r.getBarriers()){

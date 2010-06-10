@@ -13,18 +13,21 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
+
 /*
  * ZToCAConverter.java
  *
  */
+
 package converter;
 
-import java.util.ArrayList;
-import java.util.Collection;
-
+import algo.ca.PotentialController;
+import algo.ca.SPPotentialController;
+import algo.ca.parameter.AbstractDefaultParameterSet;
+import algo.ca.parameter.ParameterSet;
+import batch.tasks.AlgorithmTask;
 import de.tu_berlin.math.coga.common.util.Direction;
 import de.tu_berlin.math.coga.common.util.Level;
-
 import ds.z.BuildingPlan;
 import ds.z.ConcreteAssignment;
 import ds.z.Floor;
@@ -34,24 +37,19 @@ import ds.ca.Individual;
 import ds.ca.Cell;
 import ds.ca.ExitCell;
 import ds.ca.StaticPotential;
-import algo.ca.PotentialController;
-import algo.ca.SPPotentialController;
-import algo.ca.parameter.AbstractDefaultParameterSet;
-import algo.ca.parameter.ParameterSet;
-import batch.tasks.AlgorithmTask;
 import ds.PropertyContainer;
 import ds.ca.SaveCell;
 import ds.ca.TargetCell;
 import ds.z.PlanPoint;
 import evacuationplan.BidirectionalNodeCellMapping;
-
 import exitdistributions.ZToExitMapping;
+import java.util.ArrayList;
 import java.util.ArrayDeque;
-
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import de.tu_berlin.math.coga.common.localization.Localization;
-import de.tu_berlin.math.coga.rndutils.distribution.continuous.NormalDistribution;
+import ds.z.TeleportArea;
 import statistics.Statistic;
 import static de.tu_berlin.math.coga.common.util.Direction.*;
 
@@ -84,8 +82,7 @@ public class ZToCAConverter {
 		 * 
 		 */
 		public ConversionNotSupportedException() {
-			super( Localization.getInstance (
-			).getString ("converter.ZConversionException"));
+			super( Localization.getInstance().getString( "converter.ZConversionException" ) );
 		}
 
 		/**
@@ -426,8 +423,37 @@ public class ZToCAConverter {
 			return newCell;
 		}
 
+		// TODO insertTuple is very inefficient!
+
 		if( square.isStair() ) {
 			ds.ca.Cell newCell = new ds.ca.StairCell( square.getSpeedFactor(), square.getUpSpeedFactor(), square.getDownSpeedFactor(), x, y );
+			convertedRoom.setCell( newCell );
+			lastMapping.insertTuple( newCell, square );
+			return newCell;
+		}
+
+		if( square.isTeleport() ) {
+			System.out.println( "this was a teleport cell" );
+			ds.ca.TeleportCell newCell = new ds.ca.TeleportCell( square.getSpeedFactor(), x, y );
+			//System.out.println( square.getPolygon() );
+			// Find the appropriate TeleportArea
+			ds.z.Room r = (ds.z.Room) square.getPolygon();
+			for( TeleportArea t : r.getTeleportAreas() ) {
+				if( t.contains( square.getSquare() ) ) {
+					System.out.println( "Teleport-Area gefunden: " + t.getName() );
+					if( t.getTargetArea() == null ) {
+						System.out.println( "Zielgebiet ist: " + " --- " );
+					} else {
+						System.out.println( "Zielgebiet ist: " + t.getTargetArea().getName() );
+					}
+				}
+			}
+
+
+			// Find the partner cell
+			//ZToCARoomRaster partnerRoom = getInstance().getLatestContainer() .getRasteredRoom( (ds.z.Room) () );
+
+			//getInstance().getLatestContainer().getRasteredRoom( null )
 			convertedRoom.setCell( newCell );
 			lastMapping.insertTuple( newCell, square );
 			return newCell;

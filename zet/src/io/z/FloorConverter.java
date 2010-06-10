@@ -36,10 +36,12 @@ public class FloorConverter extends ReflectionConverter {
 		super( mapper, reflectionProvider );
 	}
 
+	@Override
 	public boolean canConvert( Class type ) {
 		return myClass.isAssignableFrom( type );
 	}
 
+	@Override
 	public Object unmarshal( final HierarchicalStreamReader reader,
 					final UnmarshallingContext context ) {
 		Object created = instantiateNewInstance( reader, context );
