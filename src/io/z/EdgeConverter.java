@@ -25,8 +25,6 @@ import ds.z.Edge;
 import ds.z.RoomEdge;
 import ds.z.TeleportEdge;
 
-import java.util.ArrayList;
-import javax.swing.event.ChangeListener;
 
 /** A converter that behaves just like a normal converter would do, he only adds
  * the functionality of recreating the changeListeners.
@@ -40,10 +38,12 @@ public class EdgeConverter extends ReflectionConverter {
 		super (mapper, reflectionProvider);
 	}
 	
+	@Override
 	public boolean canConvert (Class type) {
 		return myClass.isAssignableFrom (type);
 	}
 	
+	@Override
 	public Object unmarshal (final HierarchicalStreamReader reader, 
 			final UnmarshallingContext context) {
 		Object created = instantiateNewInstance(reader, context);

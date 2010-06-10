@@ -55,11 +55,7 @@ public class AssignmentArea extends Area<Edge> {
 	 */
 	public void setExitArea( EvacuationArea exit ) {
 		this.exit = exit;
-		if( exit != null )
-			System.out.println( "Setze Ausgang " + exit.getName() );
 	}
-
-	
 	
 	/**
 	 * Creates a new instance of {@link AssignmentArea}.

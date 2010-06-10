@@ -74,21 +74,22 @@ public class ProjectConverter extends ReflectionConverter {
 		boolean stairAreaRecreated = false;
 		for( Floor f : result.getBuildingPlan().getFloors() )
 			for( Room r : f )
-				try {
-					Class<?> c = Room.class;
-					java.lang.reflect.Field field = c.getDeclaredField( "teleportAreas" );
-					field.setAccessible( true );
-					field.set( r, new ArrayList<TeleportArea>() );
-					stairAreaRecreated = true;
-				} catch( IllegalArgumentException ex ) {
-					Logger.getLogger( RoomConverter.class.getName() ).log( Level.SEVERE, null, ex );
-				} catch( IllegalAccessException ex ) {
-					Logger.getLogger( RoomConverter.class.getName() ).log( Level.SEVERE, null, ex );
-				} catch( NoSuchFieldException ex ) {
-					Logger.getLogger( RoomConverter.class.getName() ).log( Level.SEVERE, null, ex );
-				} catch( SecurityException ex ) {
-					Logger.getLogger( RoomConverter.class.getName() ).log( Level.SEVERE, null, ex );
-				}
+				if( r.getTeleportAreas() == null )
+					try {
+						Class<?> c = Room.class;
+						java.lang.reflect.Field field = c.getDeclaredField( "teleportAreas" );
+						field.setAccessible( true );
+						field.set( r, new ArrayList<TeleportArea>() );
+						stairAreaRecreated = true;
+					} catch( IllegalArgumentException ex ) {
+						Logger.getLogger( RoomConverter.class.getName() ).log( Level.SEVERE, null, ex );
+					} catch( IllegalAccessException ex ) {
+						Logger.getLogger( RoomConverter.class.getName() ).log( Level.SEVERE, null, ex );
+					} catch( NoSuchFieldException ex ) {
+						Logger.getLogger( RoomConverter.class.getName() ).log( Level.SEVERE, null, ex );
+					} catch( SecurityException ex ) {
+						Logger.getLogger( RoomConverter.class.getName() ).log( Level.SEVERE, null, ex );
+					}
 
 		if( stairAreaRecreated )
 			System.err.println( "TeleportArea recreated for project." );

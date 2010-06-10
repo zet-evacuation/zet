@@ -35,6 +35,7 @@ import ds.z.Room;
 import ds.z.RoomEdge;
 import ds.z.StairArea;
 import ds.z.StairPreset;
+import ds.z.TeleportArea;
 import ds.z.TeleportEdge;
 import ds.z.ZControl;
 import gui.JEditor;
@@ -100,6 +101,8 @@ public class JEditView extends AbstractSplitPropertyWindow<JFloorScrollPane<JFlo
 	public static final int EVACUATION_AREA_PANEL = 5;
 	/** Message code indicating that the stair area panel should be displayed. @see setEastPanelType() */
 	public static final int STAIR_AREA_PANEL = 6;
+	/** Message code indicating that the stair area panel should be displayed. @see setEastPanelType() */
+	public static final int TELEPORT_AREA_PANEL = 7;
 	/** The currently active panel type */
 	private static int eastPanelType;
 	/** The control object for the loaded project. */
@@ -176,6 +179,21 @@ public class JEditView extends AbstractSplitPropertyWindow<JFloorScrollPane<JFlo
 	private JLabel lblEvacuationAreaName;
 	private JTextField txtEvacuationAreaName;
 
+	/** Describes the teleport area name field. */
+	private JLabel lblTeleportAreaName;
+	/** The anme filed for a teleport area. */
+	private JTextField txtTeleportAreaName;
+
+	/** Describes the target area combo box.  */
+	private JLabel lblTargetArea;
+	/** A combo box selecting the target area of a target area. */
+	private JComboBox cbxTargetArea;
+
+	/** A combo box selecting the possible exits for a teleport area. */
+	private JComboBox cbxTargetExit;
+	/** Describes the target exit combo box. */
+	private JLabel lblTargetExit;
+
 	/**
 	 * Initializes the editing view of ZET.
 	 * @param projectControl the project which is displayed in the editor
@@ -201,6 +219,8 @@ public class JEditView extends AbstractSplitPropertyWindow<JFloorScrollPane<JFlo
 						setEastPanelType( ASSIGNMENT_AREA_PANEL );
 					else if( p instanceof StairArea )
 						setEastPanelType( STAIR_AREA_PANEL );
+					else if ( p instanceof TeleportArea )
+						setEastPanelType( TELEPORT_AREA_PANEL );
 					else
 						setEastPanelType( DEFAULT_PANEL );
 				}
@@ -231,6 +251,8 @@ public class JEditView extends AbstractSplitPropertyWindow<JFloorScrollPane<JFlo
 						setEastPanelType( ASSIGNMENT_AREA_PANEL );
 					else if( p instanceof StairArea )
 						setEastPanelType( STAIR_AREA_PANEL );
+					else if( p instanceof TeleportArea )
+						setEastPanelType( TELEPORT_AREA_PANEL );
 					else
 						setEastPanelType( DEFAULT_PANEL );
 				}
@@ -307,6 +329,10 @@ public class JEditView extends AbstractSplitPropertyWindow<JFloorScrollPane<JFlo
 				txtEvacuationAreaName.setText( ((EvacuationArea)selectedPolygon).getName() );
 				txtEvacuationAttractivity.setText( nfInteger.format( ((EvacuationArea)selectedPolygon).getAttractivity() ) );
 				eastSubBarCardLayout.show( eastSubBar, "evacuation" );
+				break;
+			case TELEPORT_AREA_PANEL:
+				eastSubBarCardLayout.show( eastSubBar, "teleport" );
+				txtEvacuationAreaName.setText( ((TeleportArea)selectedPolygon).getName() );
 				break;
 			default:
 				JOptionPane.showMessageDialog( JEditor.getInstance(),
@@ -443,6 +469,9 @@ public class JEditView extends AbstractSplitPropertyWindow<JFloorScrollPane<JFlo
 		card = getEastEvacuationAreaPanel();
 		eastSubBar.add( card, "evacuation" );
 
+		card = getEastTeleportAreaPanel();
+		eastSubBar.add( card, "teleport" );
+
 		eastPanel.add( eastSubBar, "1, " + row++ );
 
 		return eastPanel;
@@ -532,7 +561,7 @@ public class JEditView extends AbstractSplitPropertyWindow<JFloorScrollPane<JFlo
 		eastPanel.add( btnAssignmentSetDefaultEvacuees, "0, " + row++ );
 		row++;
 
-		// Delay-Selector
+		// Preferred-Exit-Selector
 		lblPreferredExit = new JLabel( loc.getString( "gui.editor.JEditorPanel.labelPreferredExit" ) );
 		eastPanel.add( lblPreferredExit, "0, " + row++ );
 		cbxPreferredExit = new JComboBox();
@@ -973,7 +1002,114 @@ public class JEditView extends AbstractSplitPropertyWindow<JFloorScrollPane<JFlo
 		return eastPanel;
 	}
 
-	public void localize() {
+private JPanel getEastTeleportAreaPanel() {
+		double size[][] = // Columns
+						{{TableLayout.FILL},
+			//Rows
+			{TableLayout.PREFERRED, TableLayout.PREFERRED, 20,
+				TableLayout.PREFERRED, TableLayout.PREFERRED, 20,
+				TableLayout.PREFERRED, TableLayout.PREFERRED, 20,
+				TableLayout.PREFERRED, 20, TableLayout.FILL
+			}
+		};
+
+		JPanel eastPanel = new JPanel( new TableLayout( size ) );
+
+		int row = 0;
+
+		// The area name
+		lblTeleportAreaName = new JLabel( "Name dieses Zielbereichs." );
+		eastPanel.add( lblTeleportAreaName, "0, " + row++ );
+		txtTeleportAreaName = new JTextField();
+		txtTeleportAreaName.addFocusListener( new FocusListener() {
+			public void focusGained( FocusEvent e ) {
+				JEditor.setEditing( true );
+			}
+
+			public void focusLost( FocusEvent e ) {
+				JEditor.setEditing( false );
+			}
+		} );
+		txtTeleportAreaName.addKeyListener( new KeyListener() {
+			public void keyTyped( KeyEvent e ) {
+			}
+
+			public void keyPressed( KeyEvent e ) {
+				if( e.getKeyCode() == KeyEvent.VK_ENTER )
+					((TeleportArea)getLeftPanel().getMainComponent().getSelectedPolygons().get( 0 ).getPlanPolygon()).setName( txtTeleportAreaName.getText() );
+			}
+
+			public void keyReleased( KeyEvent e ) {
+			}
+		} );
+		eastPanel.add( txtTeleportAreaName, "0, " + row++ );
+		row++;
+
+		// Target-Aea-Selector
+		lblTargetArea = new JLabel( "Zielbereich:" );
+		eastPanel.add( lblTargetArea, "0, " + row++ );
+		cbxTargetArea = new JComboBox();
+		cbxTargetArea.addItemListener( new ItemListener() {
+			public void itemStateChanged( ItemEvent e ) {
+				//if( e.getStateChange() == ItemEvent.SELECTED ) {
+				if( cbxTargetArea.getSelectedIndex() == -1 )
+					return;
+				if( getLeftPanel().getMainComponent().getSelectedPolygons().size() > 0 ) {
+					TeleportArea a = (TeleportArea)getLeftPanel().getMainComponent().getSelectedPolygons().get( 0 ).getPlanPolygon();
+					a.setTargetArea( (TeleportArea)cbxTargetArea.getSelectedItem() );
+				}
+			//}
+			}
+		} );
+		cbxTargetArea.setRenderer( new ComboBoxRenderer() {
+			@Override
+			public Component getListCellRendererComponent( JList list, Object value, int index, boolean isSelected, boolean cellHasFocus ) {
+				super.getListCellRendererComponent( list, value, index, isSelected, cellHasFocus );
+				if( value != null )
+					setText( ((TeleportArea)value).getName() );
+				else
+					setText( "" );
+				return this;
+			}
+		} );
+		eastPanel.add( cbxTargetArea, "0, " + row++ );
+		row++;
+
+		// Target-Exit-Selector
+		lblTargetExit = new JLabel( "Zielpotential:" );
+		eastPanel.add( lblTargetExit, "0, " + row++ );
+		cbxTargetExit = new JComboBox();
+		cbxTargetExit.addItemListener( new ItemListener() {
+			public void itemStateChanged( ItemEvent e ) {
+				//if( e.getStateChange() == ItemEvent.SELECTED ) {
+				if( cbxTargetExit.getSelectedIndex() == -1 )
+					return;
+				if( getLeftPanel().getMainComponent().getSelectedPolygons().size() > 0 ) {
+					TeleportArea a = (TeleportArea)getLeftPanel().getMainComponent().getSelectedPolygons().get( 0 ).getPlanPolygon();
+					a.setExitArea( (EvacuationArea)cbxTargetExit.getSelectedItem() );
+				}
+			//}
+			}
+		} );
+		cbxTargetExit.setRenderer( new ComboBoxRenderer() {
+			@Override
+			public Component getListCellRendererComponent( JList list, Object value, int index, boolean isSelected, boolean cellHasFocus ) {
+				super.getListCellRendererComponent( list, value, index, isSelected, cellHasFocus );
+				if( value != null )
+					setText( ((EvacuationArea)value).getName() );
+				else
+					setText( "" );
+				return this;
+			}
+		} );
+		eastPanel.add( cbxTargetExit, "0, " + row++ );
+		row++;
+
+
+		return eastPanel;
+	}
+
+public void localize() {
 		// Title of the window
 		// Localization of child components
 		getLeftPanel().localize();
@@ -1127,10 +1263,17 @@ public class JEditView extends AbstractSplitPropertyWindow<JFloorScrollPane<JFlo
 	 */
 	public void update() {
 		cbxPreferredExit.removeAllItems();
+		cbxTargetExit.removeAllItems();
+		cbxTargetArea.removeAllItems();
 		for( Floor f : projectControl.getProject().getBuildingPlan().getFloors() )
-			for( Room r : f.getRooms() )
-				for( EvacuationArea e : r.getEvacuationAreas() )
+			for( Room r : f.getRooms() ) {
+				for( EvacuationArea e : r.getEvacuationAreas() ) {
 					cbxPreferredExit.addItem( e );
+					cbxTargetExit.addItem( e );
+				}
+				for( TeleportArea t : r.getTeleportAreas() )
+					cbxTargetArea.addItem( t );
+			}
 	}
 
 	public void updateFloorView() {
