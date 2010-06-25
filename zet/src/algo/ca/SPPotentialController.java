@@ -219,42 +219,42 @@ public class SPPotentialController implements PotentialController {
 	 * @param exitBlock list of ExitCells
 	 * @return the calculated StaticPotential
 	 */
-	public StaticPotential calculateStaticPotential(ArrayList<ExitCell> exitBlock){
+	public StaticPotential createStaticPotential( ArrayList<ExitCell> exitBlock ) {
 		StaticPotential newSP = new StaticPotential();
-		newSP.setAssociatedExitCells(exitBlock);
-		newSP.setAttractivity(exitBlock.get(0).getAttractivity());
+		newSP.setAssociatedExitCells( exitBlock );
+		newSP.setAttractivity( exitBlock.get( 0 ).getAttractivity() );
 		ArrayList<? extends Cell> parentList;
 		ArrayList<Cell> childList = new ArrayList<Cell>();
 		HashMap<Cell, SmoothingTupel> childTupel = new HashMap<Cell, SmoothingTupel>();
-		
-		for(ExitCell c : exitBlock){
-			newSP.setPotential(c, 0);
-			newSP.setDistance(c, 0.0);
+
+		for( ExitCell c : exitBlock ) {
+			newSP.setPotential( c, 0 );
+			newSP.setDistance( c, 0.0 );
 		}
-		
+
 		parentList = exitBlock;
-		while(!parentList.isEmpty()){
+		while( !parentList.isEmpty() ) {
 			childList = new ArrayList<Cell>();
 			childTupel = new HashMap<Cell, SmoothingTupel>();
-			for(Cell p : parentList){
-				for(Cell c : getNeighbours(p)){
-					if(!(c instanceof ExitCell) && !(newSP.contains(c))){
+			for(Cell p : parentList ) {
+				for( Cell c : getNeighbours( p ) ) {
+					if( !(c instanceof ExitCell) && !(newSP.contains( c )) ) {
 						//check if there already exists a tuple for this cell
-						if(childTupel.containsKey(c)){
-							childTupel.get(c).addParent(newSP.getPotentialDouble(p), calculateDistance(p,c));
-							childTupel.get(c).addDistanceParent(newSP.getDistance(p), calculateRealDistance(p,c));
+						if( childTupel.containsKey( c ) ) {
+							childTupel.get( c ).addParent( newSP.getPotentialDouble( p ), calculateDistance( p, c ) );
+							childTupel.get( c ).addDistanceParent( newSP.getDistance( p ), calculateRealDistance( p, c ) );
 						} else {
-							childTupel.put(c, new SmoothingTupel(c, calculateDistance(p,c)+newSP.getPotentialDouble(p), calculateRealDistance(p,c)+newSP.getDistance(p), 1, newSP.getPotentialDouble(p)));
+							childTupel.put( c, new SmoothingTupel( c, calculateDistance( p, c ) + newSP.getPotentialDouble( p ), calculateRealDistance( p, c ) + newSP.getDistance( p ), 1, newSP.getPotentialDouble( p ) ) );
 							
 						}
 					}
 				}
 			}
-			for(SmoothingTupel sT : childTupel.values()){
+			for( SmoothingTupel sT : childTupel.values() ) {
 				sT.applySmoothing();
-				newSP.setPotential(sT.getCell(), sT.getValue());
-				newSP.setDistance(sT.getCell(), sT.getDistanceValue());
-				childList.add(sT.getCell());
+				newSP.setPotential( sT.getCell(), sT.getValue() );
+				newSP.setDistance( sT.getCell(), sT.getDistanceValue() );
+				childList.add( sT.getCell() );
 			}
 			parentList = childList;
 		}
@@ -268,7 +268,7 @@ public class SPPotentialController implements PotentialController {
 	 * @return 10 if the two cells are horizontal or vertical neighbours, 14 else
 	 */
 	public int calculateDistance(Cell c, Cell n){
-		if((c.getX() == n.getX()) || (c.getY() == n.getY()) || (c instanceof DoorCell && n instanceof DoorCell)){
+		if( (c.getX() == n.getX()) || (c.getY() == n.getY()) || (c instanceof DoorCell && n instanceof DoorCell) ) {
 			return 10;
 		} else {
 			return 14;
@@ -282,7 +282,7 @@ public class SPPotentialController implements PotentialController {
 	 * @return 10 if the two cells are horizontal or vertical neighbours, 14 else
 	 */
 	public double calculateRealDistance(Cell c, Cell n){
-		if((c.getX() == n.getX()) || (c.getY() == n.getY()) || (c instanceof DoorCell && n instanceof DoorCell)){
+		if( (c.getX() == n.getX()) || (c.getY() == n.getY()) || (c instanceof DoorCell && n instanceof DoorCell) ) {
 			return 0.4;
 		} else {
 			return Math.sqrt(2) * 0.4;
@@ -293,9 +293,9 @@ public class SPPotentialController implements PotentialController {
 	 * Returns a random StaticPotential
 	 * @return random StaticPotential
 	 */
-	public StaticPotential getRandomStaticPotential(){
+	public StaticPotential getRandomStaticPotential() {
 		GeneralRandom rnd = RandomUtils.getInstance().getRandomGenerator();
-		return pm.getStaticPotential(rnd.nextInt(pm.getStaticPotentials().size()));
+		return pm.getStaticPotential( rnd.nextInt( pm.getStaticPotentials().size() ) );
 	}
 
 	/**
@@ -368,7 +368,7 @@ public class SPPotentialController implements PotentialController {
 	 * @param cell A cell in the cellular automaton.
 	 * @return The neighbor cells of this cell.
 	 */
-	public ArrayList<Cell> getNeighbours(Cell cell){
+	public ArrayList<Cell> getNeighbours( Cell cell ) {
 		return cell.getNeighbours();
 	}
 }

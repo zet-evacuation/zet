@@ -84,7 +84,7 @@ public abstract class AbstractDrawable<U extends AbstractDrawable<?, ?>, V exten
 	public void drawAllChildren( GL gl ) {
 		for( U child : children ) {
 			if( this instanceof GLCA ) {
-				System.out.println( "GLCA " + ((GLCAFloor)child).getControl().getFloorNumber() );
+				//System.out.println( "GLCA " + ((GLCAFloor)child).getControl().getFloorNumber() );
 			}
 			child.draw( gl );
 		}

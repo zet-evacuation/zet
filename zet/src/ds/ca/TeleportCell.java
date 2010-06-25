@@ -20,14 +20,23 @@
  */
 package ds.ca;
 
-import java.util.ArrayList;
-
 
 /**
  *
  * @author Jan-Philipp Kappmeier
  */
-public class TeleportCell extends DoorCell {
+public class TeleportCell extends BaseTeleportCell<TeleportCell> {
+
+	boolean teleportFailed = false;
+
+	public boolean isTeleportFailed() {
+		return teleportFailed;
+	}
+
+	public void setTeleportFailed( boolean teleportFailed ) {
+		this.teleportFailed = teleportFailed;
+	}
+	
 
 	/**
 	 * Constructs an empty DoorCell which is NOT connected with any other DoorCell
@@ -82,30 +91,58 @@ public class TeleportCell extends DoorCell {
 		graphicalRepresentation = '?';
 	}
 
-	@Override
-	protected ArrayList<Cell> getNeighbours( boolean passableOnly, boolean freeOnly ) {
-		ArrayList<Cell> neighbours = new ArrayList<Cell>();
-
-		if( nrOfNextDoors() == 0 )
-			neighbours.add( this );
-		else
-			neighbours.add( getNextDoor( 0 ) );
-
-		return neighbours;
-	}
-
 	/**
-	 * Adds a DoorCell which is connected to this DoorCell and registers itself
-	 * as a connected DoorCell in "door".
+	 * Adds a TeleportCell which is connected to this TeleportCell.
 	 * @param door Defines the reference to the Door-Cell of the room you can
 	 * enter by using this Door-Cell of the current room.
 	 * @throws IllegalArgumentException if the parameter "Door" is null
 	 * or if "Door" has already been added to the list of doors.
 	 */
-	@Override
-	public void addNextDoor( DoorCell door ) throws IllegalArgumentException {
-		if( nrOfNextDoors() == 0 )
-			super.addTarget( door );
+	public void addTarget( TeleportCell door ) throws IllegalArgumentException {
+		if( targetCount() == 0 )
+			addTargetSimple( door );
 	}
+
+	@Override
+	public void removeTarget( TeleportCell door ) {
+		teleportTargets.clear();
+	}
+
+	/**
+	 * Returns a copy of itself as a new Object.
+	 */
+	@Override
+	public TeleportCell clone() {
+		return clone( false );
+	}
+
+	@Override
+	public TeleportCell clone( boolean cloneIndividual ) {
+		TeleportCell aClone = new TeleportCell( this.getX(), this.getY() );
+		basicClone( aClone, cloneIndividual );
+		for( TeleportCell cell : teleportTargets ) {
+			aClone.addTarget( cell );
+		}
+		return aClone;
+	}
+
+
+	@Override
+	public String toString() {
+		return "T;" + super.toString();
+	}
+
+	private int usedInTimeStep = -1;
+
+	public void setUsedInTimeStep( int i ) {
+		this.usedInTimeStep = i;
+	}
+
+	public int getUsedInTimeStep() {
+		return usedInTimeStep;
+	}
+	
+
+
 
 }

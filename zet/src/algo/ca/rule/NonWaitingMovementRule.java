@@ -402,19 +402,23 @@ public class NonWaitingMovementRule extends AbstractMovementRule {
 
 		// update times
 		if( this.caController().getCA().absoluteSpeed( i.getCurrentSpeed() ) >= 0.0001 ) {
-			double speed = this.caController().getCA().absoluteSpeed( i.getCurrentSpeed() );
-			speed *= targetCell.getSpeedFactor() * stairSpeedFactor;
+			double speedInMeterPerSecond = this.caController().getCA().absoluteSpeed( i.getCurrentSpeed() );
+			speedInMeterPerSecond *= targetCell.getSpeedFactor() * stairSpeedFactor;
 			//System.out.println( "Speed ist " + speed );
 			// zu diesem zeitpunkt ist die StepEndtime aktualisiert, falls ein individual vorher geslackt hat
 			// oder sich nicht bewegen konnte.
-			timeCounter += (dist / speed);
+			timeCounter += (dist / speedInMeterPerSecond);
 			distCounter += dist;
-			i.setStepStartTime( i.getStepEndTime() );
-			setStepEndTime( i, i.getStepEndTime() + (dist / speed) * this.caController().getCA().getStepsPerSecond() );
+
+			double beginTime = Math.max( i.getCell().getOccupiedUntil(), i.getStepEndTime() );
+			i.setStepStartTime( beginTime );
+
+			setStepEndTime( i, beginTime + (dist / speedInMeterPerSecond) * this.caController().getCA().getStepsPerSecond() );
 			if( performMove ) {
+				i.getCell().setOccupiedUntil( i.getStepEndTime() );
 				//i.getCell().getRoom().moveIndividual( i.getCell(), targetCell );
 				caController().getCA().moveIndividual( i.getCell(), targetCell );
-				caController().getCaStatisticWriter().getStoredCAStatisticResults().getStoredCAStatisticResultsForIndividuals().addCurrentSpeedToStatistic( i, this.caController().getCA().getTimeStep(), speed * this.caController().getCA().getSecondsPerStep() );
+				caController().getCaStatisticWriter().getStoredCAStatisticResults().getStoredCAStatisticResultsForIndividuals().addCurrentSpeedToStatistic( i, this.caController().getCA().getTimeStep(), speedInMeterPerSecond * this.caController().getCA().getSecondsPerStep() );
 				caController().getCaStatisticWriter().getStoredCAStatisticResults().getStoredCAStatisticResultsForIndividuals().addCoveredDistanceToStatistic( i, (int) Math.ceil( i.getStepEndTime() ), dist );
 			} else {
 				if( util.DebugFlags.CA_SWAP_USED_OUTPUT )

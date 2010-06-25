@@ -52,6 +52,8 @@ public abstract class Cell implements Comparable<Cell> {
 	protected EnumMap<Direction, Level> levels;
 	/** Stores the hashCode of this cell.  */
 	protected int hash;
+	/** The time up to which the cell is blocked by an individuum (even if it is no longer set to the cell). */
+	protected double occupiedUntil = 0;
 
 	/**
 	 * Constructor defining the values of individual and speedFactor.
@@ -97,6 +99,8 @@ public abstract class Cell implements Comparable<Cell> {
 	 * value to "null" in order to mark this cell as not occupied.
 	 */
 	void setIndividual( Individual i ) {
+		if( individual != null && !i.equals( individual ) )
+			throw new java.lang.IllegalStateException( "Individual was already set!" );
 		if( i == null ) {
 			throw new java.lang.NullPointerException( "Individual is null." );
 		//Cell old = individual.getCell();
@@ -394,19 +398,28 @@ public abstract class Cell implements Comparable<Cell> {
 		}
 	}
 
+	public boolean isOccupied() {
+		return individual != null;
+	}
+
+	public boolean isOccupied( double time ) {
+		return individual != null || time < occupiedUntil;
+	}
+
+	public double getOccupiedUntil() {
+		return occupiedUntil;
+	}
+
+	public void setOccupiedUntil( double occupiedUntil ) {
+		this.occupiedUntil = occupiedUntil;
+	}
+
 	/**
 	 * Returns a string with a graphic like representation of this room.
-	 * @return A string representing this room.
+	 * @return a string representing this room.
 	 */
 	public String graphicalToString() {
-		String graphic = "";
-		if( individual == null ) {
-			graphic = graphicalRepresentation + " " + graphicalRepresentation;
-		} else {
-			graphic = graphicalRepresentation + "I" + graphicalRepresentation;
-		}
-
-		return graphic;
+		return individual == null ? graphicalRepresentation + " " + graphicalRepresentation : graphicalRepresentation + "I" + graphicalRepresentation;
 	}
 
 	/**

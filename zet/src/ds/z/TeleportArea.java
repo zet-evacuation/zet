@@ -72,7 +72,7 @@ public class TeleportArea extends Area<Edge> {
 	}
 
 	public void setName( String name ) {
-		this.name = name;
+		this.name = name.trim();
 	}
 
 	/**
@@ -100,12 +100,12 @@ public class TeleportArea extends Area<Edge> {
 //		setDelayType (type);
 //		setSpeedFactor (speedFactor);
 //	}
-	@Override
-	public boolean equals( Object o ) {
-		if( o instanceof DelayArea ) {
-			DelayArea p = (DelayArea) o;
-			return super.equals( p );
-		} else
-			return false;
-	}
+//	@Override
+//	public boolean equals( Object o ) {
+//		if( o instanceof TeleportArea ) {
+//			TeleportArea t = (TeleportArea) o;
+//			return super.equals( t );
+//		} else
+//			return false;
+//	}
 }

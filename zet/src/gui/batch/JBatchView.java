@@ -204,6 +204,9 @@ public class JBatchView extends JPanel {
 					// TODO new statistic tests
 					if( !true )
 						gs.getAgeHistogram();
+
+					System.out.println( "Perform SpecificFlow computation" );
+					Statistic.instance.getSpecificFlowCollector().execute();
 					
 				} catch( Exception ex ) {
 					ZETMain.sendError( ex.getLocalizedMessage() );

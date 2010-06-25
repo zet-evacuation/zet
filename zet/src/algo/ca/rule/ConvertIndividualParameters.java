@@ -52,6 +52,7 @@ public class ConvertIndividualParameters extends AbstractRule {
 		// converted to cells per step
 		final double speed = Math.min( 1, i.getMaxSpeed()/caController().getParameterSet().getAbsoluteMaxSpeed() );
 		i.setMaxSpeed( speed );
+		i.setCurrentSpeed( speed );
 	}
 
 }

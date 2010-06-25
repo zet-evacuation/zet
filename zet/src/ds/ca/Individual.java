@@ -57,8 +57,10 @@ public class Individual implements Identifiable {
 	private DeathCause deathCause;
 	/** The number of the individual. Each Individual of an CA should have a unique identifier. */
 	private int individualNumber = 0;
+	/** The (accurate) time when the moving of the individual is over. Initializes with 0 as step 0 is the first cellular automaton step. */
 	private double stepEndTime = 0;
-	private double stepStartTime = 0;
+	/** The (accurate) time when the first moving of the individual starts. Initializes invalid. */
+	private double stepStartTime = -1;
 	/** Unique ID of the assignment type this individual is in */
 	private UUID uid;
 	/**

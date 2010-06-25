@@ -72,7 +72,7 @@ public class ExitDistributionBasedCAFactory extends ZToCAConverter {
 	 * Potentials are added separately.
 	 *//*
 	@Override
-	protected void calculateAndAddStaticPotentials(CellularAutomaton convertedCA ){		
+	protected void computeAndAddStaticPotentials(CellularAutomaton convertedCA ){
 	}*/
 
 	/**

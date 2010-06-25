@@ -332,7 +332,16 @@ public class JEditView extends AbstractSplitPropertyWindow<JFloorScrollPane<JFlo
 				break;
 			case TELEPORT_AREA_PANEL:
 				eastSubBarCardLayout.show( eastSubBar, "teleport" );
-				txtEvacuationAreaName.setText( ((TeleportArea)selectedPolygon).getName() );
+				txtTeleportAreaName.setText( ((TeleportArea)selectedPolygon).getName() );
+				if( ((TeleportArea)selectedPolygon).getExitArea() == null )
+					cbxTargetExit.setSelectedIndex( -1 );
+				else
+					cbxTargetExit.setSelectedItem( ((TeleportArea)selectedPolygon).getExitArea() );
+
+				if( ((TeleportArea)selectedPolygon).getTargetArea() == null )
+					cbxTargetArea.setSelectedIndex( -1 );
+				else
+					cbxTargetArea.setSelectedItem( ((TeleportArea)selectedPolygon).getTargetArea() );
 				break;
 			default:
 				JOptionPane.showMessageDialog( JEditor.getInstance(),
@@ -1051,24 +1060,20 @@ private JPanel getEastTeleportAreaPanel() {
 		cbxTargetArea = new JComboBox();
 		cbxTargetArea.addItemListener( new ItemListener() {
 			public void itemStateChanged( ItemEvent e ) {
-				//if( e.getStateChange() == ItemEvent.SELECTED ) {
 				if( cbxTargetArea.getSelectedIndex() == -1 )
 					return;
 				if( getLeftPanel().getMainComponent().getSelectedPolygons().size() > 0 ) {
-					TeleportArea a = (TeleportArea)getLeftPanel().getMainComponent().getSelectedPolygons().get( 0 ).getPlanPolygon();
+					final TeleportArea a = (TeleportArea)getLeftPanel().getMainComponent().getSelectedPolygons().get( 0 ).getPlanPolygon();
 					a.setTargetArea( (TeleportArea)cbxTargetArea.getSelectedItem() );
 				}
-			//}
 			}
 		} );
 		cbxTargetArea.setRenderer( new ComboBoxRenderer() {
 			@Override
 			public Component getListCellRendererComponent( JList list, Object value, int index, boolean isSelected, boolean cellHasFocus ) {
+
 				super.getListCellRendererComponent( list, value, index, isSelected, cellHasFocus );
-				if( value != null )
-					setText( ((TeleportArea)value).getName() );
-				else
-					setText( "" );
+				setText( value != null ? ((TeleportArea)value).getName() : "" );
 				return this;
 			}
 		} );
@@ -1081,30 +1086,24 @@ private JPanel getEastTeleportAreaPanel() {
 		cbxTargetExit = new JComboBox();
 		cbxTargetExit.addItemListener( new ItemListener() {
 			public void itemStateChanged( ItemEvent e ) {
-				//if( e.getStateChange() == ItemEvent.SELECTED ) {
 				if( cbxTargetExit.getSelectedIndex() == -1 )
 					return;
 				if( getLeftPanel().getMainComponent().getSelectedPolygons().size() > 0 ) {
-					TeleportArea a = (TeleportArea)getLeftPanel().getMainComponent().getSelectedPolygons().get( 0 ).getPlanPolygon();
+					final TeleportArea a = (TeleportArea)getLeftPanel().getMainComponent().getSelectedPolygons().get( 0 ).getPlanPolygon();
 					a.setExitArea( (EvacuationArea)cbxTargetExit.getSelectedItem() );
 				}
-			//}
 			}
 		} );
 		cbxTargetExit.setRenderer( new ComboBoxRenderer() {
 			@Override
 			public Component getListCellRendererComponent( JList list, Object value, int index, boolean isSelected, boolean cellHasFocus ) {
 				super.getListCellRendererComponent( list, value, index, isSelected, cellHasFocus );
-				if( value != null )
-					setText( ((EvacuationArea)value).getName() );
-				else
-					setText( "" );
+				setText( value != null ? ((EvacuationArea)value).getName() : "" );
 				return this;
 			}
 		} );
 		eastPanel.add( cbxTargetExit, "0, " + row++ );
 		row++;
-
 
 		return eastPanel;
 	}
@@ -1271,8 +1270,8 @@ public void localize() {
 					cbxPreferredExit.addItem( e );
 					cbxTargetExit.addItem( e );
 				}
-				for( TeleportArea t : r.getTeleportAreas() )
-					cbxTargetArea.addItem( t );
+				for( TeleportArea e : r.getTeleportAreas() )
+					cbxTargetArea.addItem( e );
 			}
 	}
 

@@ -13,10 +13,12 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
+
 /**
  * Class JBatchProgressDialog
  * Erstellt 19.07.2008, 17:42:07
  */
+
 package gui.batch;
 
 import batch.tasks.AlgorithmTask;
@@ -85,12 +87,14 @@ public class JBatchProgressDialog extends JDialog implements AlgorithmListener, 
         mte.setAlgorithmListener(this);
         worker.setTask(mte);
 
+				// TODO allow selection, if multi threads are used, or not
         worker.addPropertyChangeListener(this);
         try {
             //mte.run();
             worker.executeAlgorithm(true);
         } catch (Exception ex) {
-            System.out.println("Fehler trat auf");
+          System.out.println("Fehler trat auf");
+					ex.printStackTrace();
         } finally {
         }
     }

@@ -1,16 +1,12 @@
 /**
  * Statistic.java
- * input:
- * output:
- *
- * method:
- *
- * Created: May 12, 2010,3:32:16 PM
+ * Created: 12.05.2010 15:32:16
  */
 package statistics;
 
 import de.tu_berlin.math.coga.datastructure.Tupel;
 import statistics.collectors.AgeCollector;
+import statistics.collectors.SpecificFlowCollector;
 import statistics.collectors.SpeedCollector;
 
 
@@ -24,6 +20,7 @@ public class Statistic {
 	private int numberOfPersons;
 	AgeCollector ageCollector;
 	SpeedCollector speedCollector;
+	SpecificFlowCollector specificFlowCollector;
 	public static Statistic instance = new Statistic();
 	private int ageTries = 0;
 
@@ -33,6 +30,7 @@ public class Statistic {
 	private Statistic() {
 		ageCollector = new AgeCollector();
 		speedCollector = new SpeedCollector();
+		specificFlowCollector = new SpecificFlowCollector();
 	}
 
 	/**
@@ -75,6 +73,12 @@ public class Statistic {
 	public int getAgeTries() {
 		return ageTries;
 	}
+
+	public SpecificFlowCollector getSpecificFlowCollector() {
+		return specificFlowCollector;
+	}
+
+
 
 	
 

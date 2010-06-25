@@ -34,7 +34,7 @@ import java.util.logging.Logger;
  * A converter that behaves just like a normal converter would do, he only adds
  * the functionality of recreating the changeListeners.
  *
- * @author Timon Kelter
+ * @author Timon Kelter, Jan-Philipp Kappmeier
  */
 public class ProjectConverter extends ReflectionConverter {
 
@@ -50,19 +50,11 @@ public class ProjectConverter extends ReflectionConverter {
 	}
 
 	@Override
-	public Object unmarshal( final HierarchicalStreamReader reader,
-					final UnmarshallingContext context ) {
+	public Object unmarshal( final HierarchicalStreamReader reader, final UnmarshallingContext context ) {
 		Object created = instantiateNewInstance( reader, context );
-
-		// Early recreation of changeListener List neccessary
-//		reflectionProvider.writeField (created, "changeListeners", new ArrayList<ChangeListener> (), myClass);
 
 		created = doUnmarshal( created, reader, context );
 		Project result = (Project) serializationMethodInvoker.callReadResolve( created );
-
-
-		// Recreate changeListener list
-//		result.getBuildingPlan().addChangeListener( result );
 
 		// Check if project is old version and does not contain visual properties
 		if( result.getVisualProperties() == null ) {
@@ -71,27 +63,27 @@ public class ProjectConverter extends ReflectionConverter {
 		}
 
 		// Set correct value for targetAreas
-		boolean stairAreaRecreated = false;
+		boolean teleportArea = false;
 		for( Floor f : result.getBuildingPlan().getFloors() )
 			for( Room r : f )
-				if( r.getTeleportAreas() == null )
-					try {
-						Class<?> c = Room.class;
-						java.lang.reflect.Field field = c.getDeclaredField( "teleportAreas" );
-						field.setAccessible( true );
+				try {
+					final java.lang.reflect.Field field = Room.class.getDeclaredField( "teleportAreas" );
+					field.setAccessible( true );
+					if( field.get( r ) == null ) {
 						field.set( r, new ArrayList<TeleportArea>() );
-						stairAreaRecreated = true;
-					} catch( IllegalArgumentException ex ) {
-						Logger.getLogger( RoomConverter.class.getName() ).log( Level.SEVERE, null, ex );
-					} catch( IllegalAccessException ex ) {
-						Logger.getLogger( RoomConverter.class.getName() ).log( Level.SEVERE, null, ex );
-					} catch( NoSuchFieldException ex ) {
-						Logger.getLogger( RoomConverter.class.getName() ).log( Level.SEVERE, null, ex );
-					} catch( SecurityException ex ) {
-						Logger.getLogger( RoomConverter.class.getName() ).log( Level.SEVERE, null, ex );
+						teleportArea = true;
 					}
+				} catch( IllegalArgumentException ex ) {
+					Logger.getLogger( RoomConverter.class.getName() ).log( Level.SEVERE, null, ex );
+				} catch( IllegalAccessException ex ) {
+					Logger.getLogger( RoomConverter.class.getName() ).log( Level.SEVERE, null, ex );
+				} catch( NoSuchFieldException ex ) {
+					Logger.getLogger( RoomConverter.class.getName() ).log( Level.SEVERE, null, ex );
+				} catch( SecurityException ex ) {
+					Logger.getLogger( RoomConverter.class.getName() ).log( Level.SEVERE, null, ex );
+				}
 
-		if( stairAreaRecreated )
+		if( teleportArea )
 			System.err.println( "TeleportArea recreated for project." );
 
 		return result;

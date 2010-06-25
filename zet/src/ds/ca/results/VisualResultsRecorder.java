@@ -244,7 +244,7 @@ public class VisualResultsRecorder {
 
 		for( Room room : clonedRooms ) {
 			for( DoorCell door : room.getDoors() ) {
-				//door.removeAllNextDoors();
+				//door.removeAllTargets();
 				door.removeAllNextDoorsWithoutNotify();
 			}
 		}
@@ -255,10 +255,10 @@ public class VisualResultsRecorder {
 		for( Room room : orig.getRooms() ) {
 			for( DoorCell oldDoor : room.getDoors() ) {
 				DoorCell clonedDoor = (DoorCell) cellMapping.get( oldDoor );
-				for( int i = 0; i < oldDoor.nrOfNextDoors(); i++ ) {
-					DoorCell oldNextDoor = oldDoor.getNextDoor( i );
+				for( int i = 0; i < oldDoor.targetCount(); i++ ) {
+					DoorCell oldNextDoor = oldDoor.getTarget( i );
 					DoorCell newNextDoor = (DoorCell) cellMapping.get( oldNextDoor );
-					clonedDoor.addNextDoor( newNextDoor );
+					clonedDoor.addTarget( newNextDoor );
 				}
 			}
 		}
@@ -369,7 +369,7 @@ public class VisualResultsRecorder {
 	 * @return A cloned cell with a cloned individual
 	 */
 	private static Cell cloneCell( Cell orig ) {
-		Cell clone = (Cell) orig.clone( true );
+		Cell clone = orig.clone( true );
 		return clone;
 	}
 }
