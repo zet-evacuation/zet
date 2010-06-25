@@ -119,10 +119,11 @@ public class EvacuationArea extends SaveArea {
 
 	/**
 	 * Sets the name of this <code>AssignmentArea</code> to a given string value.
+	 * Spaces at the front and end are removed.
 	 * @param name the new name
 	 */
 	public void setName( String name ) {
-		this.name = name;
+		this.name = name.trim();
 	}
 	
 	/**

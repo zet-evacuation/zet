@@ -46,21 +46,21 @@ public class GLIndividualControl extends AbstractZETVisualizationControl<GLIndiv
 	private double lastEnd;
 	/** The current index on the history data structure that is reached during linear search. */
 	private int index;
-	/** The time when the current step of the individual began */
+	/** The time when the current step of the individual began. */
 	private double startTimeOfMove;
-	/** The time the individual needs to perform the current step */
+	/** The time the individual needs to perform the current step. */
 	double timeForMove;
-	/** The current time */
+	/** The current time. */
 	private double step;
-	/** The position where the individual has started the current step */
+	/** The position where the individual has started the current step. */
 	private Tuple sourcePos;
-	/** The direction the individual walks */
+	/** The direction the individual walks. */
 	private Tuple moveVector;
-	/** Indicates that the individual shall not be drawn on screen */
+	/** Indicates that the individual shall not be drawn on screen. */
 	private boolean invisible;
-	/** The value used for the calculation of the current color */
+	/** The value used for the calculation of the current color. */
 	private double headInformationValue;
-	/** The type of the information displayed on the head */
+	/** The type of the information displayed on the head. */
 	private IndividualInformationDisplay headInformationType = IndividualInformationDisplay.PANIC;
 	private Individual controlled;
 
@@ -243,8 +243,9 @@ public class GLIndividualControl extends AbstractZETVisualizationControl<GLIndiv
 	 * @param arrival the time when the individual arrives at the destination
 	 */
 	public void addHistoryTriple( GLCellControl from, GLCellControl to, double start, double arrival ) {
-		path.add( new VisHistoryTriple<Double, GLCellControl, GLCellControl>( start, from, to ) );
-		lastEnd = arrival;
+		path.add( new VisHistoryTriple<Double, GLCellControl, GLCellControl>( start, from, to ) );		
+		if( arrival > lastEnd )
+			lastEnd = arrival;
 	}
 
 	/**

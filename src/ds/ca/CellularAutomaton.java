@@ -32,6 +32,7 @@ import exitdistributions.IndividualToExitMapping;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
+import statistics.Statistic;
 import util.DebugFlags;
 
 /**
@@ -389,17 +390,27 @@ public class CellularAutomaton implements Iterable<Individual> {
 	 */
 	public void moveIndividual( Cell from, Cell to ) throws java.lang.IllegalArgumentException {
 		if (DebugFlags.EVAPLANCHECKER)
-			System.out.println("Individual "+from.getIndividual().id()+" moving from cell ("+from.x+","+from.y+") to cell ("+to.x+","+to.y+")");
+			System.out.println( "Individual " + from.getIndividual().id() + " moving from cell (" + from.x + "," + from.y + ") to cell (" + to.x + "," + to.y + ")" );
 		if( from.getIndividual() == null )
 			throw new IllegalArgumentException( "No Individual standing on the ''from''-Cell!" );
 		if( from.equals( to ) ) {
-		  VisualResultsRecorder.getInstance().recordAction(new MoveAction(from, from, from.getIndividual()));
+			VisualResultsRecorder.getInstance().recordAction( new MoveAction( from, from, from.getIndividual() ) );
 		  return;
 		}
 		if( to.getIndividual() != null )
 			throw new IllegalArgumentException( "Another Individual already standing on the ''to''-Cell!" );
-		
-		VisualResultsRecorder.getInstance().recordAction(new MoveAction(from, to, from.getIndividual()));
+
+		// beobachte 76,5 genauer:
+		if( from.getX() == 76 && from.getY() == 5 ) {
+			System.out.println( "Individual " + from.getIndividual().getNumber() + " verlässt Teleport zur Zeit " + this.getTimeStep() );
+		}
+		if( to.getX() == 76 && to.getY() == 5 ) {
+			System.out.println( "Individual " + from.getIndividual().getNumber() + " betritt Teleport zur Zeit " + this.getTimeStep() );
+		}
+
+
+
+		VisualResultsRecorder.getInstance().recordAction( new MoveAction( from, to, from.getIndividual() ) );
 		if( from.getRoom().equals( to.getRoom() ) ) {
 			from.getRoom().moveIndividual( from, to );
 		} else {
@@ -407,6 +418,8 @@ public class CellularAutomaton implements Iterable<Individual> {
 			from.getRoom().removeIndividual( i );
 			to.getRoom().addIndividual( to, i );
 		}
+
+		Statistic.instance.getSpecificFlowCollector().collect( timeStep, from, to );
 	}
 	
 	public void swapIndividuals( Cell cell1, Cell cell2 ) {

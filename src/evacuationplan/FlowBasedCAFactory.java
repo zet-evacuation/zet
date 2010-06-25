@@ -76,7 +76,7 @@ public class FlowBasedCAFactory extends ZToCAConverter {
 	 * Potentials are added separately.
 	 */
 	@Override
-	protected void calculateAndAddStaticPotentials(CellularAutomaton convertedCA ){		
+	protected void computeAndAddStaticPotentials(CellularAutomaton convertedCA ){
 	}
 
 	public static FlowBasedCAFactory getFlowBasedCAFactoryInstance(){

@@ -37,6 +37,7 @@ import gui.visualization.draw.ca.GLStairCell;
 import gui.visualization.util.Tuple;
 import opengl.drawingutils.GLColor;
 import de.tu_berlin.math.coga.common.util.Direction;
+import ds.ca.TeleportCell;
 import gui.visualization.control.AbstractZETVisualizationControl;
 import statistic.ca.CAStatistic;
 
@@ -77,21 +78,23 @@ public class GLCellControl extends AbstractZETVisualizationControl<GLCellControl
 
 		floorID = controlled.getRoom().getFloorID();
 
-		GLCell gLCell = null;
+		GLCell glCell = null;
 		if( cell instanceof DoorCell || cell instanceof RoomCell )
 			if( cell.getSpeedFactor() == RoomCell.STANDARD_ROOMCELL_SPEEDFACTOR )
-				gLCell = new GLCell( this );
+				glCell = new GLCell( this );
 			else
-				gLCell = new GLDelayCell( this );
+				glCell = new GLDelayCell( this );
 		else if( cell instanceof ExitCell )
-			gLCell = new GLEvacuationCell( this );
+			glCell = new GLEvacuationCell( this );
 		else if( cell instanceof SaveCell )
-			gLCell = new GLSaveCell( this );
+			glCell = new GLSaveCell( this );
 		else if( cell instanceof StairCell )
-			gLCell = new GLStairCell( this );
+			glCell = new GLStairCell( this );
+		else if( cell instanceof TeleportCell )
+			glCell = new GLSaveCell( this );
 		else
 			throw new java.lang.IllegalStateException( "Illegal Cell Type" );
-		this.setView( gLCell );
+		this.setView( glCell );
 		glControl.cellProgress();
 	}
 

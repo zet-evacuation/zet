@@ -205,7 +205,7 @@ public class CAPathPassabilityChecker {
 			    exitCellList.add((ExitCell)cell);
 			}
 		}
-		StaticPotential pot = indPotCal.calculateStaticPotential(exitCellList);
+		StaticPotential pot = indPotCal.createStaticPotential(exitCellList);
 		return pot.getAsEvacPotential(i, this);
 	}
 	

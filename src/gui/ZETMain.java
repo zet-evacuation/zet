@@ -313,10 +313,17 @@ public class ZETMain {
 
 				if( !loadedProject.equals( "" ) ) {
 					File f = new File( loadedProject );
-					checkFile( f, "Project file" );
+					if( !loadLast)
+						checkFile( f, "Project file" );
+					else {
+						if( !f.exists() )
+							f = null;
+					}
 					zcontrol = new ZControl( f );
-					System.out.println( "Projekt " + f.getAbsolutePath() + " geladen." );
-					GUIOptionManager.setLastFile( 1, f.getAbsolutePath() );
+					if( f != null) {
+						System.out.println( "Projekt " + f.getAbsolutePath() + " geladen." );
+						GUIOptionManager.setLastFile( 1, f.getAbsolutePath() );
+					}
 				} else {
 					zcontrol = new ZControl();
 				}

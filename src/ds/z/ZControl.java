@@ -55,9 +55,10 @@ public class ZControl {
 	 * @param file the file that should be loaded as project.
 	 */
 	public ZControl( File file ) {
-		if( !loadProject( file ) ) {
+		if( file == null )
+			newProject();
+		else if( !loadProject( file ) )
 			p = newProject();
-		}
 	}
 
 	/**

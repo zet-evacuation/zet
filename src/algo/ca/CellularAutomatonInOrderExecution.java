@@ -156,7 +156,6 @@ public class CellularAutomatonInOrderExecution extends EvacuationCellularAutomat
 		if( !isInitialized() )
 			throw new IllegalArgumentException( Localization.getInstance().getString( "algo.ca.NotInitializedException" ) );
 
-		ca.nextTimeStep();
 		if( ProgressBooleanFlags.CA_PROGRESS ) {
 			int t = ca.getTimeStep();
 			if( t % stepsBetweenProgressOutputs == 1 )
@@ -173,6 +172,7 @@ public class CellularAutomatonInOrderExecution extends EvacuationCellularAutomat
 		}
 		ca.removeMarkedIndividuals();
 		caController.getPotentialController().updateDynamicPotential( caController.parameterSet.probabilityDynamicIncrease(), caController.parameterSet.probabilityDynamicDecrease() );
+		ca.nextTimeStep();
 	}
 
 	@Override

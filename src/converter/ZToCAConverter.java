@@ -49,6 +49,7 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import de.tu_berlin.math.coga.common.localization.Localization;
+import ds.ca.TeleportCell;
 import ds.z.TeleportArea;
 import statistics.Statistic;
 import static de.tu_berlin.math.coga.common.util.Direction.*;
@@ -138,20 +139,18 @@ public class ZToCAConverter {
 
 		AlgorithmTask.getInstance().publish( "Erzeuge Räume", "" );
 
-		for( Floor floor : lastContainer.getFloors() ) {
+		for( Floor floor : lastContainer.getFloors() )
 			createAllRooms( floor, lastContainer.getAllRasteredRooms( floor ), buildingPlan.getFloorID( floor ) );
-		}
 
 		AlgorithmTask.getInstance().publish( "Konvertiere Räume", "" );
 
 		for( Floor floor : lastContainer.getFloors() ) {
 			Collection<ZToCARoomRaster> rooms = lastContainer.getAllRasteredRooms( floor );
-			if( rooms != null ) {
+			if( rooms != null )
 				for( ZToCARoomRaster rasteredRoom : rooms ) {
 					ds.ca.Room convertedRoom = convertRoom( rasteredRoom, floor, buildingPlan.getFloorID( floor ) );
 					convertedCA.addRoom( convertedRoom );
 				}
-			}
 		}
 
 		// TODO: delete
@@ -159,11 +158,11 @@ public class ZToCAConverter {
 		//for( ExitCell e : exitCells ) {
 		//	convertedCA.addExit( e );
 		//}
-		
+
 		AlgorithmTask.getInstance().publish( "Berechne statische Potenziale", "" );
 
-		calculateAndAddStaticPotentials(convertedCA);
-		
+		computeAndAddStaticPotentials( convertedCA );
+
 		lastCA = convertedCA;
 		return convertedCA;
 	}
@@ -173,15 +172,15 @@ public class ZToCAConverter {
 	 * converted ca and adds them to a (new) potential controller for the ca.
 	 * @param convertedCA The cellular automaton that needs potentials.
 	 */
-	protected void calculateAndAddStaticPotentials(CellularAutomaton convertedCA ){
+	protected void computeAndAddStaticPotentials( CellularAutomaton convertedCA ) {
 		//calculate and defineByPoints staticPotentials to CA
 		PotentialController pc = new SPPotentialController( convertedCA );
 		for( ArrayList<ExitCell> cells : convertedCA.clusterExitCells() ) {
-			StaticPotential sp = pc.calculateStaticPotential( cells );
+			StaticPotential sp = pc.createStaticPotential( cells );
 			convertedCA.getPotentialManager().addStaticPotential( sp );
 			// Bestimme die angrenzenden Save-Cells
 			saveCellSearch( cells, sp );
-		}		
+		}
 		pc.generateSafePotential();
 	}
 
@@ -204,9 +203,9 @@ public class ZToCAConverter {
 		ArrayList<SaveCell> V = new ArrayList<SaveCell>();
 		for( Cell cell : exitCells ) {
 			for( Cell c : cell.getNeighbours() ) {
-				if( c instanceof SaveCell && !V.contains( c ) ) {
-					Q.addLast( (SaveCell) c );
-					V.add( (SaveCell) c );
+				if( c instanceof SaveCell && !V.contains( (SaveCell)c ) ) {
+					Q.addLast( (SaveCell)c );
+					V.add( (SaveCell)c );
 				}
 			}
 		}
@@ -216,7 +215,7 @@ public class ZToCAConverter {
 				c.setExitPotential( sp );
 			}
 			for( Cell cell : c.getNeighbours() ) {
-				if( cell instanceof SaveCell && !V.contains( cell ) ) {
+				if( cell instanceof SaveCell && !V.contains( (SaveCell)cell ) ) {
 					Q.addLast( (SaveCell) cell );
 					V.add( (SaveCell) cell );
 				}
@@ -244,10 +243,8 @@ public class ZToCAConverter {
 	 * @return The mapping that was created during the last conversion.
 	 */
 	public ZToCAMapping getLatestMapping() {
-		if( lastMapping == null ) {
-			throw new IllegalStateException(Localization.getInstance (
-			).getString ("converter.CallConvertFirstException"));
-		}
+		if( lastMapping == null )
+			throw new IllegalStateException(Localization.getInstance ().getString ("converter.CallConvertFirstException"));
 
 		return lastMapping;
 	}
@@ -268,10 +265,8 @@ public class ZToCAConverter {
 	 * @throws IllegalStateException if no container has been created yet
 	 */
 	public ZToCARasterContainer getLatestContainer() throws IllegalStateException {
-		if( lastContainer == null ) {
-			throw new IllegalStateException(Localization.getInstance (
-			).getString ("converter.CallConvertFirstException"));
-		}
+		if( lastContainer == null )
+			throw new IllegalStateException(Localization.getInstance ().getString ("converter.CallConvertFirstException"));
 
 		return lastContainer;
 	}
@@ -382,25 +377,16 @@ public class ZToCAConverter {
 				ds.ca.DoorCell partnerDoor = (ds.ca.DoorCell) lastMapping.get( partner );
 				if( partnerDoor == null ) {
 					ZToCARoomRaster partnerRoom = getInstance().getLatestContainer().getRasteredRoom( (ds.z.Room) (partner.getPolygon()) );
-					int newX = converter.RasterTools.polyCoordToRasterCoord(
-									partner.getX(),
-									partnerRoom.getXOffset(),
-									partnerRoom );
-					int newY = converter.RasterTools.polyCoordToRasterCoord(
-									partner.getY(),
-									partnerRoom.getYOffset(),
-									partnerRoom );
+					int newX = converter.RasterTools.polyCoordToRasterCoord( partner.getX(), partnerRoom.getXOffset(), partnerRoom );
+					int newY = converter.RasterTools.polyCoordToRasterCoord( partner.getY(), partnerRoom.getYOffset(), partnerRoom );
 
-					partnerDoor = new ds.ca.DoorCell(
-									partner.getSpeedFactor(),
-									newX,
-									newY );
+					partnerDoor = new ds.ca.DoorCell( partner.getSpeedFactor(), newX, newY );
 					ds.ca.Room newRoom = roomRasterRoomMapping.get( partnerRoom );
 					newRoom.setCell( partnerDoor );
 					lastMapping.insertTuple( partnerDoor, partner );
 				}
 
-				door.addNextDoor( partnerDoor );
+				door.addTarget( partnerDoor );
 			}
 
 			return door;
@@ -434,7 +420,16 @@ public class ZToCAConverter {
 
 		if( square.isTeleport() ) {
 			System.out.println( "this was a teleport cell" );
-			ds.ca.TeleportCell newCell = new ds.ca.TeleportCell( square.getSpeedFactor(), x, y );
+
+
+			ds.ca.TeleportCell teleport = (ds.ca.TeleportCell) lastMapping.get( square );
+			// create only, if not already was created
+			if( teleport == null ) {
+				teleport = new ds.ca.TeleportCell( square.getSpeedFactor(), x, y );
+				convertedRoom.setCell( teleport );
+				lastMapping.insertTuple( teleport, square );
+			}
+
 			//System.out.println( square.getPolygon() );
 			// Find the appropriate TeleportArea
 			ds.z.Room r = (ds.z.Room) square.getPolygon();
@@ -445,6 +440,45 @@ public class ZToCAConverter {
 						System.out.println( "Zielgebiet ist: " + " --- " );
 					} else {
 						System.out.println( "Zielgebiet ist: " + t.getTargetArea().getName() );
+						if( t.equals( t.getTargetArea() ) ) {
+							System.out.println( "Die gleichen Bereiche. Ignorieren. " );
+						} else {
+							System.out.println( "Suche die Zielzelle:" );
+
+							ds.z.Room targetRoom = t.getAssociatedRoom();
+							ZToCARoomRaster targetRoomRaster = lastContainer.getRasteredRoom( targetRoom);
+							//ZToCARoomRaster roomRaster = lastMapping.get( lastContainer.getRasteredRoom( targetRoom) );
+							for( ZToCARasterSquare sq : targetRoomRaster.getAccessibleSquares() ) {
+								if( t.getTargetArea().contains( sq.getSquare() ) ) {
+									// Die zielarea liegt im rastersquare sq
+									int k = 3;
+									k++;
+									//Cell targetCell = lastMapping.get( sq );
+									ds.ca.TeleportCell targetCell = (ds.ca.TeleportCell) lastMapping.get( sq );
+									if( targetCell == null ) {
+										// zielzelle muss erstellt werden
+					//ZToCARoomRaster partnerRoom = getInstance().getLatestContainer().getRasteredRoom( (ds.z.Room) (sq.getPolygon()) );
+					int newX = converter.RasterTools.polyCoordToRasterCoord( sq.getX(), targetRoomRaster.getXOffset(), targetRoomRaster );
+					int newY = converter.RasterTools.polyCoordToRasterCoord( sq.getY(), targetRoomRaster.getYOffset(), targetRoomRaster );
+					targetCell = new ds.ca.TeleportCell( sq.getSpeedFactor(), newX, newY );
+					ds.ca.Room newRoom = roomRasterRoomMapping.get( targetRoomRaster );
+					newRoom.setCell( targetCell );
+					lastMapping.insertTuple( targetCell, sq );
+
+									}
+
+
+									// Setze die partnerzelle
+									teleport.addTarget( targetCell );
+
+//									if( targetCell instanceof TeleportCell ) {
+//										System.out.println( "Die Zielzelle ist vom Typ Teleport-Cell" );
+//									}
+								}
+							}
+
+							System.out.println( "" );
+						}
 					}
 				}
 			}
@@ -454,9 +488,7 @@ public class ZToCAConverter {
 			//ZToCARoomRaster partnerRoom = getInstance().getLatestContainer() .getRasteredRoom( (ds.z.Room) () );
 
 			//getInstance().getLatestContainer().getRasteredRoom( null )
-			convertedRoom.setCell( newCell );
-			lastMapping.insertTuple( newCell, square );
-			return newCell;
+			return teleport;
 		}
 
 		ds.ca.Cell newCell = new ds.ca.RoomCell( square.getSpeedFactor(), x, y );

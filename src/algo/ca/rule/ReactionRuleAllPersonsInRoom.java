@@ -32,7 +32,7 @@ public class ReactionRuleAllPersonsInRoom extends AbstractReactionRule {
 
 	@Override
 	public boolean executableOn( Cell cell ) {
-		return cell.getIndividual() == null ? false : cell.getIndividual().getReactionTime() > 1;
+		return cell.getIndividual() == null ? false : cell.getIndividual().getReactionTime() >= 0;
 	}
 
 

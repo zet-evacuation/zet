@@ -39,7 +39,7 @@ public abstract class AbstractRule implements Rule {
 	 */
 	@Override
 	public boolean executableOn( Cell cell ) {
-		return (cell.getIndividual() != null);
+		return cell.getIndividual() != null;
 	}
 
 	@Override
