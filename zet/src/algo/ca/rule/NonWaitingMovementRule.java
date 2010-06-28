@@ -411,9 +411,13 @@ public class NonWaitingMovementRule extends AbstractMovementRule {
 			distCounter += dist;
 
 			double beginTime = Math.max( i.getCell().getOccupiedUntil(), i.getStepEndTime() );
+			//beginTime = Math.ceil( beginTime );
 			i.setStepStartTime( beginTime );
 
-			setStepEndTime( i, beginTime + (dist / speedInMeterPerSecond) * this.caController().getCA().getStepsPerSecond() );
+			double endTime = beginTime + (dist / speedInMeterPerSecond) * this.caController().getCA().getStepsPerSecond();
+			//endTime = Math.ceil( endTime );
+			
+			setStepEndTime( i, endTime );
 			if( performMove ) {
 				i.getCell().setOccupiedUntil( i.getStepEndTime() );
 				//i.getCell().getRoom().moveIndividual( i.getCell(), targetCell );
