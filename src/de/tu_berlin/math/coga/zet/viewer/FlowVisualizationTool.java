@@ -2,7 +2,7 @@
  * FlowVisualizationTool.java
  * Created: 15.03.2010, 12:29:16
  */
-package zet.viewer;
+package de.tu_berlin.math.coga.zet.viewer;
 
 import algo.graph.dynamicflow.eat.EarliestArrivalFlowProblem;
 import algo.graph.dynamicflow.eat.LongestShortestPathTimeHorizonEstimator;
@@ -55,9 +55,9 @@ import javax.swing.UIManager;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 import javax.swing.filechooser.FileFilter;
-import zet.DatFileReaderWriter;
-import zet.xml.FlowVisualization;
-import zet.xml.XMLReader;
+import de.tu_berlin.math.coga.zet.DatFileReaderWriter;
+import de.tu_berlin.math.coga.graph.io.xml.FlowVisualization;
+import de.tu_berlin.math.coga.graph.io.xml.XMLReader;
 
 /**
  *
@@ -245,7 +245,7 @@ public class FlowVisualizationTool extends JFrame implements PropertyChangeListe
 						FlowVisualization fv = null;
 						try {
 							reader = new XMLReader( "./testinstanz/test.xml" );
-							fv = (FlowVisualization)reader.read();
+							fv = (FlowVisualization)reader.readFlowVisualization();
 						} catch( IOException ex ) {
 							System.err.println( "Fehler beim laden!" );
 							ex.printStackTrace();

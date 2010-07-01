@@ -50,7 +50,7 @@ public class NonWaitingMovementRule extends AbstractMovementRule {
 		if( actor.isAlarmed() == true ) {
 			if( canMove( actor ) ) {
 				if( slack( actor ) ) {
-					System.out.println( "SLACK" );
+					//System.out.println( "SLACK" );
 					this.updateExhaustion( actor, cell );
 					this.setPerformMove( true );
 					doMove( actor, cell );
@@ -419,7 +419,7 @@ public class NonWaitingMovementRule extends AbstractMovementRule {
 			
 			setStepEndTime( i, endTime );
 			if( performMove ) {
-				i.getCell().setOccupiedUntil( i.getStepEndTime() );
+				i.getCell().setOccupiedUntil( i.getStepEndTime() + 3 );
 				//i.getCell().getRoom().moveIndividual( i.getCell(), targetCell );
 				caController().getCA().moveIndividual( i.getCell(), targetCell );
 				caController().getCaStatisticWriter().getStoredCAStatisticResults().getStoredCAStatisticResultsForIndividuals().addCurrentSpeedToStatistic( i, this.caController().getCA().getTimeStep(), speedInMeterPerSecond * this.caController().getCA().getSecondsPerStep() );

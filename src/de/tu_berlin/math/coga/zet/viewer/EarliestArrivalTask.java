@@ -2,7 +2,7 @@
  * EarliestArrivalTask.java
  * Created: 16.03.2010, 12:27:50
  */
-package zet.viewer;
+package de.tu_berlin.math.coga.zet.viewer;
 
 import algo.graph.dynamicflow.eat.EarliestArrivalFlowProblem;
 import algo.graph.dynamicflow.eat.SEAAPAlgorithm;

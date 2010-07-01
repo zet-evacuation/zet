@@ -1,0 +1,214 @@
+/**
+ * GraphConverter.java
+ * Created: 29.06.2010 16:48:10
+ */
+package de.tu_berlin.math.coga.graph.io.xml;
+
+import com.thoughtworks.xstream.converters.Converter;
+import com.thoughtworks.xstream.converters.MarshallingContext;
+import com.thoughtworks.xstream.converters.UnmarshallingContext;
+import com.thoughtworks.xstream.io.HierarchicalStreamReader;
+import com.thoughtworks.xstream.io.HierarchicalStreamWriter;
+import ds.graph.Edge;
+import ds.graph.IdentifiableIntegerMapping;
+import ds.graph.Network;
+import ds.graph.Node;
+import java.util.Iterator;
+import java.util.ArrayList;
+import java.util.Collection;
+
+/**
+ *
+ * @author Jan-Philipp Kappmeier
+ */
+public class GraphConverter implements Converter {
+
+	private HierarchicalStreamReader reader;
+	private MarshallingContext context;
+	private UnmarshallingContext uncontext;
+	private XMLData xmlData;
+	private HierarchicalStreamWriter writer;
+
+	public GraphConverter( XMLData xmlData ) {
+		this.xmlData = xmlData;
+	}
+
+	/**
+	 * {@inheritDoc }
+	 * @param type the type of the class that is to be converted
+	 * @return {@code true} if the instance is of the type {@link Network}
+	 */
+	public boolean canConvert( Class type ) {
+		return type.equals( Network.class );
+	}
+
+	public void marshal( Object source, HierarchicalStreamWriter writer, MarshallingContext context ) {
+		Network graph = (Network) source;
+		this.writer = writer;
+		// automatically done before. either by xstream or by GraphViewConverter
+		//writer.startNode("graph");
+		for( Node node : graph.nodes() )
+			convertNode( node );
+		for( Edge edge : graph.edges() )
+			convertEdge( edge );
+		// same as above
+		//writer.endNode();
+
+	}
+
+	protected void convertNode( Node node ) {
+		//NodeAttributes attributes = graphView.getNodeAttributes( node );
+		writer.startNode( "node" );
+		writer.addAttribute( "id", Integer.toString( node.id() ) );
+		if( xmlData.containsSupplies() )
+			if( xmlData.supplies.get( node ) != 0 )
+				writer.addAttribute( "balance", Integer.toString( xmlData.supplies.get( node ) ) );
+		writer.endNode();
+	}
+
+	protected void convertEdge( Edge edge ) {
+		writer.startNode( "edge" );
+		writer.addAttribute( "id", Integer.toString( edge.id() ) );
+		writer.addAttribute( "start", Integer.toString( edge.start().id() ) );
+		writer.addAttribute( "end", Integer.toString( edge.end().id() ) );
+		if( xmlData.containsEdgeCapacities() )
+			if( xmlData.edgeCapacities.get( edge ) != 1 )
+				writer.addAttribute( "capacity", Integer.toString( xmlData.edgeCapacities.get( edge ) ) );
+		if( xmlData.containsTransitTimes() )
+			if( xmlData.transitTimes.get( edge ) != 1 )
+				writer.addAttribute( "transitTime", Integer.toString( xmlData.transitTimes.get( edge ) ) );
+		writer.endNode();
+	}
+
+	public Object unmarshal( HierarchicalStreamReader reader, UnmarshallingContext context ) {
+		Network graph = new Network( 0, 0 );
+		int nid = 0;
+		int eid = 0;
+		this.reader = reader;
+		this.uncontext = context;
+
+
+		int nodeCount = -1;
+		int edgeCount = -1;
+		// check, if node has number of vertices and edges
+		final Iterator i = reader.getAttributeNames();
+		while( i.hasNext() ) {
+			Object name = i.next();
+			if( name.equals( "n" ) )
+				nodeCount = Integer.parseInt( reader.getAttribute( "n" ) );
+			else if( name.equals( "m" ) )
+				edgeCount = Integer.parseInt( reader.getAttribute( "m" ) );
+		}
+
+		xmlData.edgeCapacities = new IdentifiableIntegerMapping<Edge>( edgeCount > 0 ? edgeCount : 10 );
+		xmlData.nodeCapacities = new IdentifiableIntegerMapping<Node>( nodeCount > 0 ? nodeCount : 10 );
+		xmlData.transitTimes = new IdentifiableIntegerMapping<Edge>( edgeCount > 0 ? edgeCount : 10 );
+		xmlData.supplies = new IdentifiableIntegerMapping<Node>( nodeCount > 0 ? nodeCount : 10 );
+
+		xmlData.sources = new ArrayList<Node>();
+		xmlData.sinks = new ArrayList<Node>();
+
+		while( reader.hasMoreChildren() ) {
+			reader.moveDown();
+			if( reader.getNodeName().equals( "node" ) )
+				readNode( graph, nid++ );
+			else if( reader.getNodeName().equals( "sink" ) )
+				readSink( graph, nid++ );
+			else if( reader.getNodeName().equals( "source" ) )
+				readSource( graph, nid++ );
+			else if( reader.getNodeName().equals( "edge" ) )
+				readEdge( graph, eid++ );
+			reader.moveUp();
+		}
+
+		Collection<Node> n = xmlData.nodes.values();
+		Collection<Edge> e = xmlData.edges.values();
+		if( nodeCount < 0 )
+			nodeCount = n.size();
+		if( edgeCount < 0 )
+			edgeCount = e.size();
+		graph.setNodeCapacity( nodeCount );
+		graph.setEdgeCapacity( edgeCount );
+		if( nodeCount < n.size() )
+			throw new InvalidFileFormatException( "Number of nodes to large: " + n.size() );
+		graph.setNodes( n );
+		if( nodeCount < n.size() )
+			throw new InvalidFileFormatException( "Number of edges to large: " + e.size() );
+		graph.setEdges( e );
+
+		xmlData.network = graph;
+
+		return graph;
+	}
+
+	protected Node readNode( Network graph, int nid ) {
+		Node node;
+		String id = null;
+		String balance = "0";
+		String capacity = "0";
+		for( Iterator i = reader.getAttributeNames(); i.hasNext(); ) {
+			Object name = i.next();
+			if( name.equals( "id" ) )
+				id = reader.getAttribute( "id" );
+			else if( name.equals( "balance" ) )
+				balance = reader.getAttribute( "balance" );
+			else if( name.equals( "capacity" ) )
+				capacity = reader.getAttribute( "capacity" );
+		}
+		node = new Node( nid );
+		xmlData.nodes.put( id, node );
+		int balanceVal = (int) Double.parseDouble( balance );
+		xmlData.supplies.add( node, balanceVal );
+		xmlData.nodeCapacities.add( node, (int) Double.parseDouble( capacity ) );
+
+		if( balanceVal > 0 )
+			xmlData.sources.add( node );
+		else if( balanceVal < 0 )
+			xmlData.sinks.add( node );
+		return node;
+	}
+
+	protected void readSink( Network graph, int nid ) {
+		Node node = readNode( graph, nid );
+		if( xmlData.supplies.get( node ) > 0 )
+			throw new InvalidFileFormatException( "Positive supply for a sink node." );
+		// handle special case: a node is marked as sink in the xml-file but no supplies are set.
+		if( xmlData.supplies.get( node ) == 0 )
+			xmlData.sinks.add( node );
+	}
+
+	protected void readSource( Network graph, int nid ) {
+		Node node = readNode( graph, nid );
+		if( xmlData.supplies.get( node ) < 0 )
+			throw new InvalidFileFormatException( "Negative supply for a source node." );
+		// handle special case: a nodeis marked as source in the xml-file but no supplies are set.
+		if( xmlData.supplies.get( node ) == 0 )
+			xmlData.sources.add( node );
+	}
+
+	protected void readEdge( Network graph, int eid ) {
+		String id = null;
+		String source = null;
+		String target = null;
+		String capacity = "1.0";
+		String transitTime = "1.0";
+		for( Iterator i = reader.getAttributeNames(); i.hasNext(); ) {
+			Object name = i.next();
+			if( name.equals( "id" ) )
+				id = reader.getAttribute( "id" );
+			else if( name.equals( "start" ) )
+				source = reader.getAttribute( "start" );
+			else if( name.equals( "end" ) )
+				target = reader.getAttribute( "end" );
+			else if( name.equals( "capacity" ) )
+				capacity = reader.getAttribute( "capacity" );
+			else if( name.equals( "transitTime" ) )
+				transitTime = reader.getAttribute( "transitTime" );
+		}
+		Edge edge = new Edge( eid, xmlData.nodes.get( source ), xmlData.nodes.get( target ) );
+		// TODO only integral transit times here!
+		xmlData.transitTimes.add( edge, (int) Double.parseDouble( transitTime ) );
+		xmlData.edgeCapacities.add( edge, (int) Double.parseDouble( capacity ) );
+		xmlData.edges.put( id, edge );
+	}
+}

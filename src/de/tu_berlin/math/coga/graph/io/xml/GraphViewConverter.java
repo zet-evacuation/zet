@@ -2,7 +2,7 @@
  * GraphViewConverter.java
  *
  */
-package zet.xml;
+package de.tu_berlin.math.coga.graph.io.xml;
 
 import com.thoughtworks.xstream.converters.Converter;
 import com.thoughtworks.xstream.converters.MarshallingContext;
@@ -10,16 +10,11 @@ import com.thoughtworks.xstream.converters.UnmarshallingContext;
 import com.thoughtworks.xstream.io.HierarchicalStreamReader;
 import com.thoughtworks.xstream.io.HierarchicalStreamWriter;
 import de.tu_berlin.math.coga.math.vectormath.Vector3;
-import ds.graph.Edge;
-import ds.graph.IdentifiableIntegerMapping;
 import ds.graph.IdentifiableObjectMapping;
 import ds.graph.Network;
 import ds.graph.Node;
-import java.util.ArrayList;
-import java.util.Collection;
 import java.util.HashMap;
 import java.util.Iterator;
-import java.util.LinkedHashMap;
 
 /**
  *
@@ -27,26 +22,14 @@ import java.util.LinkedHashMap;
  */
 public class GraphViewConverter implements Converter {
 
-	private MarshallingContext context;
-	private UnmarshallingContext uncontext;
-	private GraphView graphView;
 	private HierarchicalStreamReader reader;
+	private XMLData xmlData;
+	private GraphView graphView;
+	private GraphConverter graphConverter;
 	private HierarchicalStreamWriter writer;
-	protected LinkedHashMap<String, Node> nodes = new LinkedHashMap<String, Node>();
-	protected LinkedHashMap<String, Edge> edges = new LinkedHashMap<String, Edge>();
-	protected IdentifiableObjectMapping<Node, Vector3> nodePositionMapping = new IdentifiableObjectMapping<Node, Vector3>( 0, Vector3.class );
-	IdentifiableIntegerMapping<Edge> edgeCapacities;
-	IdentifiableIntegerMapping<Node> nodeCapacities;
-	IdentifiableIntegerMapping<Edge> transitTimes;
-	IdentifiableIntegerMapping<Node> supplies;
-	ArrayList<Node> sources;
-	ArrayList<Node> sinks;
 
-	public GraphViewConverter() {
-	}
-
-	public LinkedHashMap<String, Edge> getEdges() {
-		return edges;
+	public GraphViewConverter( XMLData xmlData ) {
+		this.xmlData = xmlData;
 	}
 
 	public boolean canConvert( Class type ) {
@@ -54,22 +37,25 @@ public class GraphViewConverter implements Converter {
 	}
 
 	public void marshal( Object source, HierarchicalStreamWriter writer, MarshallingContext context ) {
-//        this.context = context;
-//        this.graphView = (GraphView) source;
-//        this.writer = writer;
-//        DynamicGraph graph = graphView.getGraph();
-//        writer.startNode("graph");
-//        for (Node node : graph.nodes()) {
-//            convertNode(node);
-//        }
-//        for (Edge edge : graph.edges()) {
-//            convertEdge(edge);
-//        }
-//        writer.endNode();
-//        writer.startNode("layouts");
-//        for (int v=0; v<graph.numberOfNodes(); v++) {
-//            convertNodeLayout(graphView.getNodeAttributes(graph.getNode(v)),v);
-//        }
+		this.writer = writer;
+		graphView = (GraphView) source;
+
+		// write parameter for the graph view element
+		if( xmlData.scaleVal != 1 )
+			writer.addAttribute( "scale", Double.toString( xmlData.scaleVal ) );
+		if( xmlData.containsSuperSink == true )
+			writer.addAttribute( "containsSuperSink", "1" );
+		if( xmlData.doubleEdges == true )
+			writer.addAttribute( "doubleEdges", "1" );
+
+		// write the graph
+		writer.startNode( "graph" );
+		context.convertAnother( graphView.getNetwork() );
+		writer.endNode();
+
+		// write layouts
+		writer.startNode( "layouts" );
+		this.writeLayouts();
 //        for (int e=0; e<graph.numberOfEdges(); e++) {
 //            convertEdgeLayout(graphView.getEdgeAttributes(graph.getEdge(e)));
 //        }
@@ -92,78 +78,76 @@ public class GraphViewConverter implements Converter {
 //        writer.startNode("edgeprofile");
 //        writer.addAttribute("id","defaultEdgeLayout");
 //        convertLayoutProfile(graphView.getAttributes().getEdgeDefaults());
-//        writer.endNode();
-//        writer.endNode();
+		writer.endNode();
+	}
+
+	protected void writeLayouts() {
+		writeNodeLayout();
+	}
+
+	protected void writeNodeLayout() {
+		for( Node node : xmlData.network.nodes() ) {
+			final double x = xmlData.nodePositionMapping.get( node ).x;
+			final double y = xmlData.nodePositionMapping.get( node ).y;
+			final double z = xmlData.nodePositionMapping.get( node ).z;
+			writer.startNode( "nodelayout" );
+			writer.addAttribute( "node", Integer.toString( node.id() ) );
+			writer.addAttribute( "x", Double.toString( x ) );
+			writer.addAttribute( "y", Double.toString( y ) );
+			if( z != 0 )
+				writer.addAttribute( "z", Double.toString( z ) );
+//		if( !a.getType().equals( "" ) )
+//			writer.addAttribute( "basedOn", a.getType() );
+			writer.endNode();
+		}
 	}
 
 	public Object unmarshal( HierarchicalStreamReader reader, UnmarshallingContext context ) {
-		Network graph = new Network( 0, 0 );
-		int nid = 0;
-		int eid = 0;
 		this.reader = reader;
-		this.uncontext = context;
 
-		// read <graph>
-		// reader starts in <graphLayout>, so set down to get the graph
-		reader.moveDown();
+		// read the scale factor and the information about supersinks
+		double scaleVal = 1;
+		boolean doubleEdges = false;
+		boolean containsSuperSink = false;
+		Iterator iter = reader.getAttributeNames();
+		while( iter.hasNext() ) {
+			Object name = iter.next();
+			if( name.equals( "scale" ) )
+				scaleVal = Double.parseDouble( reader.getAttribute( "scale" ) );
+			else if( name.equals( "doubleEdges" ) ) {
+				final String res = reader.getAttribute( "doubleEdges" );
+				if( res.equals( "1" ) )
+					doubleEdges = true;
+				else if( res.equals( "0" ) )
+					doubleEdges = false;
+				else
+					throw new InvalidFileFormatException( "doubleEdges has to be either 0 or 1" );
+			} else if( name.equals( "containsSuperSink" ) ) {
+				final String res = reader.getAttribute( "containsSuperSink" );
+				if( res.equals( "1" ) )
+					containsSuperSink = true;
+				else if( res.equals( "0" ) )
+					containsSuperSink = false;
+				else
+					throw new InvalidFileFormatException( "containsSuperSink has to be either 0 or 1" );
+			}
+		}
+		xmlData.doubleEdges = doubleEdges;
+		xmlData.scaleVal = scaleVal;
+		xmlData.containsSuperSink = containsSuperSink;
+
+		// convert the graph
+		reader.moveDown(); // reader starts in <graphLayout>, so set down to get the graph
 		if( !reader.getNodeName().equals( "graph" ) )
 			throw new InvalidFileFormatException( "Graph layout must start with a graph." );
-
-		int nodeCount = -1;
-		int edgeCount = -1;
-		// check, if node has number of vertices and edges
-		final Iterator i = reader.getAttributeNames();
-		while(i.hasNext()) {
-			Object name = i.next();
-			if( name.equals( "n" ) )
-				nodeCount = Integer.parseInt( reader.getAttribute( "n" ) );
-			else if( name.equals( "m" ) )
-				edgeCount = Integer.parseInt( reader.getAttribute( "m" ) );
-		}
-
-		edgeCapacities = new IdentifiableIntegerMapping<Edge>( edgeCount > 0 ? edgeCount : 10 );
-		nodeCapacities = new IdentifiableIntegerMapping<Node>( nodeCount > 0 ? nodeCount : 10 );
-		transitTimes = new IdentifiableIntegerMapping<Edge>( edgeCount > 0 ? edgeCount : 10 );
-		supplies = new IdentifiableIntegerMapping<Node>( nodeCount > 0 ? nodeCount : 10 );
-
-		sources = new ArrayList<Node>();
-		sinks = new ArrayList<Node>();
-
-		while(reader.hasMoreChildren()) {
-			reader.moveDown();
-			if( reader.getNodeName().equals( "node" ) )
-				readNode( graph, nid++ );
-			else if( reader.getNodeName().equals( "sink" ) )
-				readSink( graph, nid++ );
-			else if( reader.getNodeName().equals( "source" ) )
-				readSource( graph, nid++ );
-			else if( reader.getNodeName().equals( "edge" ) )
-				readEdge( graph, eid++ );
-			reader.moveUp();
-		}
+		graphConverter = new GraphConverter( xmlData );
+		xmlData.network = (Network) graphConverter.unmarshal( reader, context );
 		reader.moveUp();
 
-		Collection<Node> n = nodes.values();
-		Collection<Edge> e = edges.values();
-		if( nodeCount < 0 )
-			nodeCount = n.size();
-		if( edgeCount < 0 )
-			edgeCount = e.size();
-		graph.setNodeCapacity( nodeCount );
-		graph.setEdgeCapacity( edgeCount );
-		if( nodeCount < n.size() )
-			throw new InvalidFileFormatException( "Number of nodes to large: " + n.size() );
-		graph.setNodes( n );
-		if( nodeCount < n.size() )
-			throw new InvalidFileFormatException( "Number of edges to large: " + e.size() );
-		graph.setEdges( e );
-
-		nodePositionMapping = new IdentifiableObjectMapping<Node, Vector3>( nodeCount, Vector3.class );
 		// assign default position to all nodes
-		for( Node node : nodes.values() )
-			//graphAttributes.setNodeAttributes( nodes.get( key ), nodeAttributes.get( key ) );
-			nodePositionMapping.set( node, new Vector3() );
-
+		xmlData.nodePositionMapping = new IdentifiableObjectMapping<Node, Vector3>( xmlData.network.numberOfNodes(), Vector3.class );
+		for( Node node : xmlData.nodes.values() )
+			xmlData.nodePositionMapping.set( node, new Vector3() );
 
 		// read <layouts>. no other graphs are allowed
 		if( reader.hasMoreChildren() ) {
@@ -180,7 +164,6 @@ public class GraphViewConverter implements Converter {
 //		GraphAttributes graphAttributes = new GraphAttributes();
 //		graphAttributes.setNodeDefaults( nodeLayoutProfiles.get( "defaultNodeLayout" ) );
 //		graphAttributes.setEdgeDefaults( edgeLayoutProfiles.get( "defaultEdgeLayout" ) );
-
 
 //		for( String key : edges.keySet() )
 //			graphAttributes.setEdgeAttributes( edges.get( key ), edgeAttributes.get( key ) );
@@ -199,7 +182,11 @@ public class GraphViewConverter implements Converter {
 //			profile.setDefaults( edgeLayoutProfiles.get( basedOn ) );
 //		}
 
-		graphView = new GraphView( graph, nodePositionMapping, edgeCapacities, nodeCapacities, transitTimes, supplies, sources, sinks );
+		graphView = xmlData.generateGraphView();
+		xmlData.graphView = graphView;
+//		graphView = new GraphView( xmlData.network, xmlData.nodePositionMapping, xmlData.getEdgeCapacities(), xmlData.getNodeCapacities(), xmlData.getTransitTimes(), xmlData.getSupplies(), xmlData.getSources(), xmlData.getSinks() );
+//		graphView.setScale( scaleVal );
+//		graphView.setContainsSuperSink( containsSuperSink );
 
 //		for( NodeAttributes profile : nodeLayoutProfiles.values() ) {
 //			if( profile.getID().equals( "defaultNodeLayout" ) )
@@ -249,22 +236,11 @@ public class GraphViewConverter implements Converter {
 //			if( !graphAttributes.getNodeAttributes( edge.start() ).isVisible() || !graphAttributes.getNodeAttributes( edge.end() ).isVisible() )
 //				a.setVisible( false );
 //		}
-
-//		System.out.println( "Edge capacities: " + edgeCapacities.toString() );
-//		System.out.println( "Node capacities: " + nodeCapacities.toString() );
-//		System.out.println( "Transit times: " + transitTimes.toString() );
-//		System.out.println( "Supplies: " + supplies.toString() );
-//		System.out.println( "Sources: " + sources.toString() );
-//		System.out.println( "Sinks: " + sinks.toString() );
-
-
-
 		return graphView;
 	}
 
 	protected void readLayouts() {
-
-		while(reader.hasMoreChildren()) {
+		while( reader.hasMoreChildren() ) {
 			reader.moveDown();
 			if( reader.getNodeName().equals( "nodelayout" ) )
 				readNodeLayout();
@@ -306,130 +282,7 @@ public class GraphViewConverter implements Converter {
 //		}
 	}
 
-	protected void convertNode( Node node ) {
-//		NodeAttributes attributes = graphView.getNodeAttributes( node );
-//		writer.startNode( "node" );
-//		writer.addAttribute( "id", attributes.getID() );
-//		if( attributes.getBalance() != 0 )
-//			writer.addAttribute( "balance", String.valueOf( attributes.getBalance() ) );
-//		writer.endNode();
-	}
-
-	protected Node readNode( Network graph, int nid ) {
-		Node node;
-		String id = null;
-		String balance = "0";
-		String capacity = "0";
-		for( Iterator i = reader.getAttributeNames(); i.hasNext(); ) {
-			Object name = i.next();
-			if( name.equals( "id" ) )
-				id = reader.getAttribute( "id" );
-			else if( name.equals( "balance" ) )
-				balance = reader.getAttribute( "balance" );
-			else if( name.equals( "capacity" ) )
-				balance = reader.getAttribute( "capacity" );
-		}
-		node = new Node( nid );
-		nodes.put( id, node );
-		int balanceVal = (int)Double.parseDouble( balance );
-		supplies.add( node, balanceVal );
-		nodeCapacities.add( node, (int)Double.parseDouble( capacity ) );
-
-		if( balanceVal > 0 )
-			sources.add( node );
-		else if( balanceVal < 0 )
-			sinks.add( node );
-		return node;
-	}
-
-	protected void readSink( Network graph, int nid ) {
-		Node node = readNode( graph, nid );
-		if( supplies.get( node ) == 0 )
-			sinks.add( node );
-	}
-
-	protected void readSource( Network graph, int nid ) {
-		Node node = readNode( graph, nid );
-		if( supplies.get( node ) == 0 )
-			sources.add( node );
-	}
-
-	protected void convertEdge( Edge edge ) {
-//		writer.startNode( "edge" );
-//		writer.addAttribute( "id", graphView.getEdgeAttributes( edge ).getID() );
-//		writer.addAttribute( "start", graphView.getNodeAttributes( edge.start() ).getID() );
-//		writer.addAttribute( "end", graphView.getNodeAttributes( edge.end() ).getID() );
-//		if( graphView.getEdgeAttributes( edge ).getCapacity() != 1 )
-//			writer.addAttribute( "capacity", String.valueOf( graphView.getEdgeAttributes( edge ).getCapacity() ) );
-//		if( graphView.getEdgeAttributes( edge ).getTransitTime() != 1 )
-//			writer.addAttribute( "transitTime", String.valueOf( graphView.getEdgeAttributes( edge ).getTransitTime() ) );
-//		writer.endNode();
-	}
-
-	protected void readEdge( Network graph, int eid ) {
-		String id = null;
-		String source = null;
-		String target = null;
-		String capacity = "1.0";
-		String transitTime = "1.0";
-		for( Iterator i = reader.getAttributeNames(); i.hasNext(); ) {
-			Object name = i.next();
-			if( name.equals( "id" ) )
-				id = reader.getAttribute( "id" );
-			else if( name.equals( "start" ) )
-				source = reader.getAttribute( "start" );
-			else if( name.equals( "end" ) )
-				target = reader.getAttribute( "end" );
-			else if( name.equals( "capacity" ) )
-				capacity = reader.getAttribute( "capacity" );
-			else if( name.equals( "transitTime" ) )
-				transitTime = reader.getAttribute( "transitTime" );
-		}
-		Edge edge = new Edge( eid, nodes.get( source ), nodes.get( target ) );
-		// TODO only integral transit times here!
-		transitTimes.add( edge, (int)Double.parseDouble( transitTime ) );
-		edgeCapacities.add( edge, (int)Double.parseDouble( capacity ) );
-		edges.put( id, edge );
-	}
-
-//	protected void convertNodeLayout( NodeAttributes a, int v ) {
-//		/*
-//		if (0 <= v && v <= 132) { a.setType("sitzI"); a.setX(a.getX()+3.7); a.setY(a.getY()+3.7); }
-//		else if (133 <= v && v <= 134) { a.setType("blockI"); a.setX(a.getX()-32); a.setY(a.getY()-13.5); }
-//		else if (135 <= v && v <= 135) { a.setType("blockII"); a.setX(a.getX()-17); a.setY(a.getY()-41.3); }
-//		else if (136 <= v && v <= 166) { a.setType("sitzI"); a.setX(a.getX()+3.7); a.setY(a.getY()+3.7); }
-//		else if (167 <= v && v <= 167) { a.setType("blockIII"); a.setX(a.getX()+10.7); a.setY(a.getY()-6.2); }
-//		else if (168 <= v && v <= 168) { a.setType("blockIV"); a.setX(a.getX()+10.7); a.setY(a.getY()-21.7); }
-//		else if (169 <= v && v <= 169) { a.setType("blockIII"); a.setX(a.getX()+10.7); a.setY(a.getY()-6.2); }
-//		else if (170 <= v && v <= 205) { a.setType("sitzII"); a.setX(a.getX()-2.6); a.setY(a.getY()+2.0); }
-//		else if (206 <= v && v <= 207) { a.setType("blockV"); a.setX(a.getX()-8.2); a.setY(a.getY()-19.5); }
-//		else if (208 <= v && v <= 208) { a.setType("blockVI"); a.setX(a.getX()-5.2); a.setY(a.getY()-25.6); }
-//		else if (209 <= v && v <= 209) { a.setType("blockVII"); a.setX(a.getX()-5.2); a.setY(a.getY()-19.5); }
-//		else if (210 <= v && v <= 221) { a.setType("sitzIII"); a.setX(a.getX()-2.0); a.setY(a.getY()+0.7); }
-//		else if (222 <= v && v <= 229) { a.setType("sitzIV"); a.setX(a.getX()-16.7); a.setY(a.getY()-0.4); }
-//		else if (230 <= v && v <= 231) { a.setType("blockVIII"); a.setX(a.getX()-6.9); a.setY(a.getY()-18.3); }
-//		else if (232 <= v && v <= 232) { a.setType("blockIX"); a.setX(a.getX()+8.6); a.setY(a.getY()-9.3); }
-//		else if (233 <= v && v <= 233) { a.setType("blockX"); a.setX(a.getX()+6.2); a.setY(a.getY()-16.7); }
-//		else if (234 <= v && v <= 234) { a.setType("blockXI"); a.setX(a.getX()+9.4); a.setY(a.getY()-8.5); }
-//		else if (235 <= v && v <= 235) { a.setType("blockXII"); a.setX(a.getX()+6.2); a.setY(a.getY()-17.5); }
-//		else if (236 <= v && v <= 236) { a.setType("blockXIII"); a.setX(a.getX()-3.6); a.setY(a.getY()-99.2); }
-//		else if (237 <= v && v <= 237) { a.setType("blockXIV"); a.setX(a.getX()-0.6); a.setY(a.getY()-77.9); }
-//		else if (238 <= v && v <= 287) { a.setType("zwischenknoten"); a.setX(a.getX()+7.5); a.setY(a.getY()+7.5); }
-//		else if (288 <= v && v <= 289) { a.setType("sitzI"); a.setX(a.getX()+3.7); a.setY(a.getY()+3.7); }
-//		else if (290 <= v && v <= 317) { a.setType("zwischenknoten"); a.setX(a.getX()+7.5); a.setY(a.getY()+7.5); }
-//		else if (318 <= v && v <= 318) { a.setType("supersink"); a.setX(a.getX()+4.4); a.setY(a.getY()+4.4); }
-//		else if (319 <= v && v <= 339) { a.setType("zwischenknoten"); a.setX(a.getX()+7.5); a.setY(a.getY()+7.5); }
-//		 */
-//		writer.startNode( "nodelayout" );
-//		writer.addAttribute( "node", a.getID() );
-//		if( !a.getType().equals( "" ) )
-//			writer.addAttribute( "basedOn", a.getType() );
-//		writer.addAttribute( "x", String.valueOf( Math.round( a.getX() * 10 ) / 10.0 ) );
-//		writer.addAttribute( "y", String.valueOf( Math.round( a.getY() * 10 ) / 10.0 ) );
-//		writer.endNode();
-//	}
 	protected void readNodeLayout() {
-//		NodeAttributes a = null;
 //		String basedOn = null;
 		double x = 0;
 		double y = 0;
@@ -438,8 +291,8 @@ public class GraphViewConverter implements Converter {
 		for( Iterator i = reader.getAttributeNames(); i.hasNext(); ) {
 			Object name = i.next();
 			if( name.equals( "node" ) )
-				node = nodes.get( reader.getAttribute( "node" ) );
-	//		else if( name.equals( "basedOn" ) ); // ignore based on layout right now basedOn = reader.getAttribute( "basedOn" );
+				node = xmlData.nodes.get( reader.getAttribute( "node" ) );
+			//		else if( name.equals( "basedOn" ) ); // ignore based on layout right now basedOn = reader.getAttribute( "basedOn" );
 			else if( name.equals( "x" ) )
 				x = Double.parseDouble( reader.getAttribute( "x" ) );
 			else if( name.equals( "y" ) )
@@ -449,7 +302,7 @@ public class GraphViewConverter implements Converter {
 		}
 		if( node == null )
 			throw new InvalidFileFormatException( "Node id needed for node layout." );
-		nodePositionMapping.get( node ).set( x, y, z );
+		xmlData.nodePositionMapping.get( node ).set( x, y, z );
 //		a.setType( basedOn );
 	}
 //	protected void convertEdgeLayout( EdgeAttributes a ) {

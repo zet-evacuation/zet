@@ -27,7 +27,7 @@ import java.util.ArrayList;
 
 import de.tu_berlin.math.coga.math.vectormath.Vector3;
 import gui.visualization.control.AbstractZETVisualizationControl;
-import zet.xml.FlowVisualization;
+import de.tu_berlin.math.coga.graph.io.xml.FlowVisualization;
 
 /**
  * The control class for edges in an MVC-design. This class controls the visualization of such an edge represented

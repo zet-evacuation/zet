@@ -2,7 +2,7 @@
  * FlowVisualisationConverter.java
  *
  */
-package zet.xml;
+package de.tu_berlin.math.coga.graph.io.xml;
 
 import algo.graph.util.PathComposition;
 import com.thoughtworks.xstream.converters.Converter;
@@ -18,14 +18,18 @@ import ds.graph.flow.PathBasedFlowOverTime;
 import java.util.Iterator;
 
 /**
- *
+ * A converter that can convert a flow visualization datastracture out of an XML
+ * file using {@code XStream}.
  * @author Martin Groß, Jan-Philipp Kappmeier
  */
 public class FlowVisualisationConverter implements Converter {
 
+	private XMLData xmlData;
+
 //    protected LinkedHashMap<String, PathFlow> flows = new LinkedHashMap<String,PathFlow>();
 //    protected LinkedHashMap<String, FlowAttributes> flowAttributes = new LinkedHashMap<String,FlowAttributes>();
-	public FlowVisualisationConverter() {
+	public FlowVisualisationConverter( XMLData xmlData ) {
+		this.xmlData = xmlData;
 	}
 
 	public boolean canConvert( Class type ) {
@@ -89,37 +93,11 @@ public class FlowVisualisationConverter implements Converter {
 		if( !reader.getNodeName().equals( "graphLayout" ) )
 			throw new InvalidFileFormatException( "First node has to be graphlayout" );
 
-		double scaleVal = 1;
-		boolean doubleEdges = false;
-		boolean containsSuperSink = false;
-		Iterator iter = reader.getAttributeNames();
-		while(iter.hasNext()) {
-			Object name = iter.next();
-			if( name.equals( "scale" ) )
-				scaleVal = Double.parseDouble( reader.getAttribute( "scale" ) );
-			else if( name.equals( "doubleEdges" ) ) {
-				final String res = reader.getAttribute( "doubleEdges" );
-				if( res.equals( "1" ) )
-					doubleEdges = true;
-				else if( res.equals( "0" ) )
-					doubleEdges = false;
-				else
-					throw new InvalidFileFormatException( "doubleEdges has to be either 0 or 1" );
-			} else if( name.equals( "containsSuperSink" ) ) {
-				final String res = reader.getAttribute( "containsSuperSink" );
-				if( res.equals( "1" ) )
-					containsSuperSink = true;
-				else if( res.equals( "0" ) )
-					containsSuperSink = false;
-				else
-					throw new InvalidFileFormatException( "containsSuperSink has to be either 0 or 1" );
-			}
-		}
+		// TODO the scale and subersink things are moved to GraphViewConverter (as they should!)
 		
-		GraphViewConverter gvc = new GraphViewConverter();
+		GraphViewConverter gvc = new GraphViewConverter( xmlData );
 		GraphView graphView = (GraphView) gvc.unmarshal( reader, context );
 		reader.moveUp();	// close graphLayout reading
-		graphView.setScale( scaleVal );
 
 		System.out.println( "converted network: " );
 		System.out.println( graphView.getNetwork().toString() );
@@ -144,7 +122,7 @@ public class FlowVisualisationConverter implements Converter {
 					int amount = 1;
 					int rate = 1;
 
-					iter = reader.getAttributeNames();
+					Iterator iter = reader.getAttributeNames();
 					while(iter.hasNext()) {
 						Object name = iter.next();
 						if( name.equals( "rate" ) )
@@ -167,7 +145,7 @@ public class FlowVisualisationConverter implements Converter {
 					for( int i = 0; i < sp.length; ++i ) {
 						// Baue den Pfad zusammen
 						final int delay = sp[i].contains( "." ) ? (int) Double.parseDouble( sp[i++] ) : 0;
-						es.addLast( new FlowOverTimeEdge( gvc.edges.get( sp[i] ), delay ) );
+						es.addLast( new FlowOverTimeEdge( xmlData.getEdges().get( sp[i] ), delay ) );
 					}
 					// füge den Pfad hinzu
 					final FlowOverTimePath p = new FlowOverTimePath( es );
@@ -259,8 +237,8 @@ public class FlowVisualisationConverter implements Converter {
 //        }
 		FlowVisualization fv = new FlowVisualization( graphView );
 
-		fv.setEdgesDoubled( doubleEdges );
-		fv.getGv().setContainsSuperSink( containsSuperSink );
+		fv.setEdgesDoubled( xmlData.doubleEdges );
+		
 
 		PathComposition pathComposition = new PathComposition( fv.getGv().network, fv.getGv().transitTimes, dynamicFlow );
 		pathComposition.run();
@@ -268,8 +246,8 @@ public class FlowVisualisationConverter implements Converter {
 		fv.setFlow( pathComposition.getEdgeFlows() );
 
 		int maxTimeHorizon = 0;
-		for( Edge edge : gvc.edges.values() )
-			maxTimeHorizon = Math.max( maxTimeHorizon, pathComposition.getEdgeFlows().get( edge ).getLastTimeWithNonZeroValue() + gvc.transitTimes.get( edge ) );
+		for( Edge edge : xmlData.getEdges().values() )
+			maxTimeHorizon = Math.max( maxTimeHorizon, pathComposition.getEdgeFlows().get( edge ).getLastTimeWithNonZeroValue() + xmlData.getTransitTimes().get( edge ) );
 
 		fv.setTimeHorizon( maxTimeHorizon );
 		fv.setMaxFlowRate( maxFlowRate );

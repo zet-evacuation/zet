@@ -23,7 +23,7 @@ import gui.visualization.draw.graph.GLNode;
 import gui.visualization.control.FlowHistroryTriple;
 import gui.visualization.util.FlowCalculator;
 import java.util.ArrayList;
-import zet.xml.FlowVisualization;
+import de.tu_berlin.math.coga.graph.io.xml.FlowVisualization;
 
 //public class GLNodeControl extends AbstractControl<GLNode, Node, GraphVisualizationResult, GLEdge, GLEdgeControl, GLControl> {
 public class GLNodeControl extends AbstractZETVisualizationControl<GLEdgeControl, GLNode, GLGraphControl> {

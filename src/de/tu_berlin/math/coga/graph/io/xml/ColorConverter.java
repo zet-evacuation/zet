@@ -3,7 +3,7 @@
  *
  */
 
-package zet.xml;
+package de.tu_berlin.math.coga.graph.io.xml;
 
 import com.thoughtworks.xstream.converters.Converter;
 import com.thoughtworks.xstream.converters.MarshallingContext;

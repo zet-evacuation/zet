@@ -2,7 +2,7 @@
  * DatFileReaderWriter.java
  * Created: Mar 11, 2010,10:59:01 AM
  */
-package zet;
+package de.tu_berlin.math.coga.zet;
 
 import algo.graph.dynamicflow.eat.EarliestArrivalFlowProblem;
 import algo.graph.dynamicflow.eat.LongestShortestPathTimeHorizonEstimator;
@@ -16,6 +16,7 @@ import de.tu_berlin.math.coga.common.algorithm.AlgorithmStartedEvent;
 import de.tu_berlin.math.coga.common.algorithm.AlgorithmTerminatedEvent;
 import de.tu_berlin.math.coga.common.algorithm.AlgorithmProgressEvent;
 import de.tu_berlin.math.coga.common.util.Formatter;
+import de.tu_berlin.math.coga.math.vectormath.Vector3;
 import ds.graph.Edge;
 import ds.graph.IdentifiableCollection;
 import ds.graph.IdentifiableIntegerMapping;
@@ -35,7 +36,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-
 /**
  *
  * @author Jan-Philipp Kappmeier
@@ -48,6 +48,18 @@ public class DatFileReaderWriter implements AlgorithmListener {
 
 	static int factor = 2;
 	static boolean verbose = false;
+
+	public static EarliestArrivalFlowProblem read( String filename, IdentifiableObjectMapping<Node, Vector3> nodePositionMapping ) throws FileNotFoundException, IOException {
+		IdentifiableIntegerMapping<Node> xPos = new IdentifiableIntegerMapping<Node>( 0 );
+		IdentifiableIntegerMapping<Node> yPos = new IdentifiableIntegerMapping<Node>( 0 );
+		EarliestArrivalFlowProblem eafp = read( filename, xPos, yPos );
+
+		// convert positions
+		for( Node node : eafp.getNetwork().nodes() )
+			nodePositionMapping.set( node, new Vector3( xPos.get( node ), yPos.get( node ), 0 ) );
+
+		return eafp;
+	}
 
 	public static EarliestArrivalFlowProblem read( String filename, IdentifiableIntegerMapping<Node> x, IdentifiableIntegerMapping<Node> y ) throws FileNotFoundException, IOException {
 		BufferedReader read = new BufferedReader( new FileReader( new File( filename ) ) );

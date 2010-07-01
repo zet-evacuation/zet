@@ -153,7 +153,7 @@ import gui.components.JLogPane;
 import gui.statistic.JStatisticsPanel;
 import gui.visualization.Visualization.RecordingMode;
 import io.visualization.BuildingResults;
-import zet.DatFileReaderWriter;
+import de.tu_berlin.math.coga.zet.DatFileReaderWriter;
 import zet.util.ConversionTools;
 
 /**
