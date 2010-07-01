@@ -243,7 +243,12 @@ public class GLIndividualControl extends AbstractZETVisualizationControl<GLIndiv
 	 * @param arrival the time when the individual arrives at the destination
 	 */
 	public void addHistoryTriple( GLCellControl from, GLCellControl to, double start, double arrival ) {
-		path.add( new VisHistoryTriple<Double, GLCellControl, GLCellControl>( start, from, to ) );		
+		if( Math.abs(start - lastEnd) > 0.001 ) {
+			int k = 8;
+			k++;
+			path.add( new VisHistoryTriple<Double, GLCellControl, GLCellControl>( lastEnd, from, from ) );
+		}
+		path.add( new VisHistoryTriple<Double, GLCellControl, GLCellControl>( start, from, to ) );
 		if( arrival > lastEnd )
 			lastEnd = arrival;
 	}

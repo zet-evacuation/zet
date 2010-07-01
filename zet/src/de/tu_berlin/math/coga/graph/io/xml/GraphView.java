@@ -2,8 +2,9 @@
  * GraphView.java
  * Created: 18.3.2010, 12:02:46
  */
-package zet.xml;
+package de.tu_berlin.math.coga.graph.io.xml;
 
+import algo.graph.dynamicflow.eat.EarliestArrivalFlowProblem;
 import de.tu_berlin.math.coga.math.vectormath.Vector3;
 import ds.graph.Edge;
 import ds.graph.IdentifiableIntegerMapping;
@@ -11,6 +12,7 @@ import ds.graph.IdentifiableObjectMapping;
 import ds.graph.Network;
 import ds.graph.Node;
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  *
@@ -31,7 +33,7 @@ public class GraphView {
 	/** Supplies (balance values) for all nodes. */
 	IdentifiableIntegerMapping<Node> supplies;
 	/** A list of the nodes that are sources. */
-	ArrayList<Node> sources;
+	List<Node> sources;
 	/** A list of the nodes that are sinks. */
 	ArrayList<Node> sinks;
 	/** A scale value that should be used for displaying the graph. */
@@ -53,7 +55,7 @@ public class GraphView {
 	double maxZ = Double.MIN_VALUE;
 
 
-	public GraphView( Network network, IdentifiableObjectMapping<Node, Vector3> nodePositionMapping, IdentifiableIntegerMapping<Edge> edgeCapacities, IdentifiableIntegerMapping<Node> nodeCapacities, IdentifiableIntegerMapping<Edge> transitTimes, IdentifiableIntegerMapping<Node> supplies, ArrayList<Node> sources, ArrayList<Node> sinks ) {
+	public GraphView( Network network, IdentifiableObjectMapping<Node, Vector3> nodePositionMapping, IdentifiableIntegerMapping<Edge> edgeCapacities, IdentifiableIntegerMapping<Node> nodeCapacities, IdentifiableIntegerMapping<Edge> transitTimes, IdentifiableIntegerMapping<Node> supplies, List<Node> sources, ArrayList<Node> sinks ) {
 		this.network = network;
 		setNodePositionMapping( nodePositionMapping );
 		this.edgeCapacities = edgeCapacities;
@@ -62,6 +64,20 @@ public class GraphView {
 		this.supplies = supplies;
 		this.sources = sources;
 		this.sinks = sinks;
+	}
+
+	public GraphView( EarliestArrivalFlowProblem eafp, IdentifiableObjectMapping<Node, Vector3> nodePositionMapping ) {
+		this.network = eafp.getNetwork();
+		setNodePositionMapping( nodePositionMapping );
+		this.edgeCapacities = eafp.getEdgeCapacities();
+		this.nodeCapacities = eafp.getNodeCapacities();
+		this.transitTimes = eafp.getTransitTimes();
+		this.supplies = eafp.getSupplies();
+		this.sources = eafp.getSources();
+		final ArrayList<Node> sink = new ArrayList<Node>( 1 );
+		sink.add( eafp.getSink() );
+		this.sinks = sink;
+		setNodePositionMapping( nodePositionMapping );
 	}
 
 
@@ -77,7 +93,7 @@ public class GraphView {
 		return nodePositionMapping;
 	}
 
-	public void setNodePositionMapping( IdentifiableObjectMapping<Node, Vector3> nodePositionMapping ) {
+	public final void setNodePositionMapping( IdentifiableObjectMapping<Node, Vector3> nodePositionMapping ) {
 		this.nodePositionMapping = nodePositionMapping;
 
 		// compute min and max values
@@ -153,7 +169,7 @@ public class GraphView {
 		this.sinks = sinks;
 	}
 
-	public ArrayList<Node> getSources() {
+	public List<Node> getSources() {
 		return sources;
 	}
 

@@ -34,7 +34,7 @@ import java.util.Iterator;
 import javax.media.opengl.GL;
 import opengl.framework.abs.DrawableControlable;
 import opengl.helper.Frustum;
-import zet.xml.FlowVisualization;
+import de.tu_berlin.math.coga.graph.io.xml.FlowVisualization;
 
 /**
  *  @author Jan-Philipp Kappmeier

@@ -19,7 +19,7 @@
  * Created: 16.03.2010, 11:04:02
  */
 
-package zet.viewer;
+package de.tu_berlin.math.coga.zet.viewer;
 
 import de.tu_berlin.math.coga.common.algorithm.AlgorithmEvent;
 import de.tu_berlin.math.coga.common.algorithm.AlgorithmListener;

@@ -1,3 +1,5 @@
+package de.tu_berlin.math.coga.graph.io.xml;
+
 ///*
 // * GWAdapter.java
 // *

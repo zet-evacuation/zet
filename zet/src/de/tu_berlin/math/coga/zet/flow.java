@@ -2,11 +2,12 @@
  * flow.java
  * Created: 17.03.2010, 14:33:35
  */
-package zet;
+package de.tu_berlin.math.coga.zet;
 
 import algo.graph.dynamicflow.eat.EarliestArrivalFlowProblem;
 import algo.graph.dynamicflow.eat.LongestShortestPathTimeHorizonEstimator;
 import algo.graph.dynamicflow.eat.SEAAPAlgorithm;
+import algo.graph.nashflow.NodePartition;
 import com.martiansoftware.jsap.FlaggedOption;
 import com.martiansoftware.jsap.JSAP;
 import com.martiansoftware.jsap.JSAPException;
@@ -20,8 +21,13 @@ import de.tu_berlin.math.coga.common.algorithm.AlgorithmStartedEvent;
 import de.tu_berlin.math.coga.common.algorithm.AlgorithmStatusEvent;
 import de.tu_berlin.math.coga.common.algorithm.AlgorithmTerminatedEvent;
 import de.tu_berlin.math.coga.common.util.Formatter;
+import de.tu_berlin.math.coga.graph.io.xml.GraphView;
+import de.tu_berlin.math.coga.graph.io.xml.XMLReader;
+import de.tu_berlin.math.coga.graph.io.xml.XMLWriter;
+import de.tu_berlin.math.coga.math.vectormath.Vector3;
 import ds.GraphVisualizationResult;
 import ds.graph.IdentifiableIntegerMapping;
+import ds.graph.IdentifiableObjectMapping;
 import ds.graph.Node;
 import ds.graph.flow.PathBasedFlowOverTime;
 import java.io.File;
@@ -40,35 +46,44 @@ public class flow implements AlgorithmListener {
 	GraphVisualizationResult graphVisResult;
 	IdentifiableIntegerMapping<Node> xPos;
 	IdentifiableIntegerMapping<Node> yPos;
+	IdentifiableObjectMapping<Node, Vector3> nodePositionMapping;
 	PathBasedFlowOverTime df;
 	int neededTimeHorizon;
 	int percentInterval = 100;
+	GraphView graphView = null;
 
 	public static void main ( String[] args ) throws JSAPException, IOException {
-		System.out.println( "flow 0.1.7" );
+		System.out.println( "flow 0.2.0" );
 
 		JSAP jsap = new JSAP();
 
 		UnflaggedOption inputFile = new UnflaggedOption( "flowfile" )
 						.setStringParser( JSAP.STRING_PARSER )
-						.setRequired( false );
-		inputFile.setHelp( "" );
+						.setRequired( true );
+		inputFile.setHelp( "A file with the problem specification (a graph or network) that is read." );
 		jsap.registerParameter( inputFile );
 
 		UnflaggedOption outputFile = new UnflaggedOption( "outputfile" )
 						.setStringParser( JSAP.STRING_PARSER )
 						.setRequired( false );
-		outputFile.setHelp( "" );
+		outputFile.setHelp( "Specifies an output file for the results." );
 		jsap.registerParameter( outputFile );
 
 		FlaggedOption optProperty = new FlaggedOption( "outputFormat" ).setStringParser( JSAP.STRING_PARSER )
 						.setRequired( false )
 						.setShortFlag( 'o' );
-		optProperty.setHelp( "The output file format. Can be dot or flow or xml" );
+		optProperty.setHelp( "The output file format. Can be 'dot' or 'flow' or 'xml'." );
 		jsap.registerParameter( optProperty );
 
+		FlaggedOption optMode = new FlaggedOption( "mode" ).setStringParser( JSAP.STRING_PARSER )
+						.setRequired( true )
+						.setLongFlag( "mode" )
+						.setDefault( "compute" );
+		optMode.setHelp( "The mode. 'compute' computes a flow, 'convert' only reads and maybe converts to a different format." );
+		jsap.registerParameter( optMode );
+
 		JSAPResult config = jsap.parse( args );
-		if( !config.success() || !config.contains( "flowfile" ) ) {
+		if( !config.success() || !(config.getString( "mode").equals( "convert") || config.getString( "mode" ).equals( "compute" ) ) ) {
 			System.err.println();
 			for( java.util.Iterator errs = config.getErrorMessageIterator();
 							errs.hasNext();) {
@@ -90,9 +105,12 @@ public class flow implements AlgorithmListener {
 			// Use internal dat format
 			System.out.println( "Reading from dat-file." );
 			try {
+				// .dat files must contain node positions
+				theInstance.nodePositionMapping = new IdentifiableObjectMapping<Node, Vector3>( 0, Vector3.class );
 				theInstance.xPos = new IdentifiableIntegerMapping<Node>( 0 );
 				theInstance.yPos = new IdentifiableIntegerMapping<Node>( 0 );
-				theInstance.eafp = DatFileReaderWriter.read( filename, theInstance.xPos, theInstance.yPos );
+				theInstance.eafp = DatFileReaderWriter.read( filename, theInstance.nodePositionMapping );
+				theInstance.graphView = new GraphView( theInstance.eafp, theInstance.nodePositionMapping );
 				// version without x and y positions:
 				//				theInstance.eafp = DatFileReaderWriter.read( filename );
 			} catch( FileNotFoundException ex ) {
@@ -101,23 +119,25 @@ public class flow implements AlgorithmListener {
 			}
 		} else if( filename.endsWith( ".xml" ) ) {
 			// Use xml-format
-			System.err.println( "XML not supported yet." );
+			System.out.println( "Reading from xml-file." );
+			XMLReader reader = new XMLReader( filename );
+			theInstance.eafp = reader.readFlowInstance();
+			theInstance.graphView = reader.getXmlData().getGraphView();
 		}
 
-		theInstance.compute();
-
-		theInstance.graphVisResult = new GraphVisualizationResult( theInstance.eafp, theInstance.xPos, theInstance.yPos, theInstance.df );
-		theInstance.graphVisResult.setNeededTimeHorizon( theInstance.neededTimeHorizon );
+		theInstance.performAction( config.getString( "mode" ) );
 
 		if( config.contains( "outputFormat" ) ) {
+			final String format = config.getString( "outputFormat" );
 			String outFilename;
 			if( !config.contains( "outputfile" ) ) {
 				System.out.println( "No output file specified. Using input filename as output." );
-				outFilename = filename.substring( 0, filename.length()-4 ) + ".flow";
+				outFilename = filename.substring( 0, filename.length()-4 ) + "." + format;
 			} else
 				outFilename = config.getString( "outputfile" );
-			final String format = config.getString( "outputFormat" );
 			if( format.equals( "flow" ) ) {
+				theInstance.graphVisResult = new GraphVisualizationResult( theInstance.eafp, theInstance.xPos, theInstance.yPos, theInstance.df );
+				theInstance.graphVisResult.setNeededTimeHorizon( theInstance.neededTimeHorizon );
 				try {
 //					if( !outFilename.endsWith( ".flow" ) )
 //						outFilename += ".flow";
@@ -129,7 +149,15 @@ public class flow implements AlgorithmListener {
 					System.exit( 1 );
 				}
 			} else if( format.equals( "xml" ) ) {
-				System.err.println( "XML-out not supported yet." );
+				// try to give out an xml-file. if flow computation was performed, give out the result.
+				// if convert only was active, give out the graph.
+				if( config.getString( "mode" ).equals( "convert" ) ) {
+					XMLWriter writer = new XMLWriter( outFilename );
+					if( theInstance.graphView != null ) {
+						writer.writeLayoutedNetwork( theInstance.graphView );
+					} else
+						writer.writeNetwork( theInstance.eafp );
+				}
 			} else if( format.equals( "dot" ) ) {
 				System.err.println( "dot-out not supported yet." );
 			}
@@ -196,6 +224,15 @@ public class flow implements AlgorithmListener {
 			}
 		} else
 			System.out.println( event.toString() );
+	}
+
+
+	private void performAction( String mode ) {
+		if( mode.equals( "compute" ) ) {
+			theInstance.compute();
+		} else if( mode.equals( "convert" ) ) {
+			System.out.println( "Only converting..." );
+		}
 	}
 
 }

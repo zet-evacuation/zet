@@ -7,7 +7,7 @@
  *
  * Created: Mar 11, 2010,10:59:01 AM
  */
-package zet;
+package de.tu_berlin.math.coga.zet;
 
 import algo.graph.dynamicflow.eat.EarliestArrivalFlowProblem;
 import algo.graph.dynamicflow.eat.SEAAPAlgorithm;
@@ -112,7 +112,7 @@ public class FileFlow implements AlgorithmListener {
 				edge_len.add( Integer.parseInt( split[4] ) );
 				continue;
 			}
-			throw new IllegalStateException( "Unbekannte Zeile" );
+			throw new IllegalStateException( "Unbekannte Zeile: " + s );
 		}
 
 		int edgeCount = edge_start.size();

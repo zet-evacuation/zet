@@ -18,7 +18,7 @@
  *
  */
 
-package zet;
+package de.tu_berlin.math.coga.zet;
 
 import ds.graph.*;
 import java.util.LinkedList;

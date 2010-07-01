@@ -391,7 +391,14 @@ public class DefaultParameterSet extends AbstractDefaultParameterSet {
 		return randSpeed;
 	}
 
+	/**
+	 * Returns the invertec probability of decisiveness. This is due to the fact
+	 * that slackness is a value to stop an individual while decisiveness gives
+	 * a value how fast an individual performs an action.
+	 * @param pDecisiveness the decisiveness of the person
+	 * @return the inverted probability.
+	 */
 	public double getSlacknessFromDecisiveness( double pDecisiveness ) {
-		return (1 - pDecisiveness) * 0.25;
+		return 1 - pDecisiveness;
 	}
 }

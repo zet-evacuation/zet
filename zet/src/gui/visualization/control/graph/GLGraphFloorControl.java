@@ -27,7 +27,7 @@ import ds.graph.Node;
 import gui.visualization.control.AbstractZETVisualizationControl;
 import gui.visualization.draw.graph.GLGraphFloor;
 import java.util.Iterator;
-import zet.xml.FlowVisualization;
+import de.tu_berlin.math.coga.graph.io.xml.FlowVisualization;
 
 /**
  * The <code>GLGraphFloorControl</code> class represents an floor of the

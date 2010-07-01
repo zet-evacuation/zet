@@ -20,7 +20,6 @@
  */
 package de.tu_berlin.math.coga.common.algorithm;
 
-import algo.graph.dynamicflow.eat.SEAAPAlgorithm;
 import de.tu_berlin.math.coga.common.util.Formatter;
 import java.util.LinkedHashSet;
 import java.util.LinkedList;

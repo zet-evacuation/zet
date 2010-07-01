@@ -2,7 +2,7 @@
  * DotWriter.java
  * Created: Mar 12, 2010,12:56:25 PM
  */
-package zet;
+package de.tu_berlin.math.coga.zet;
 
 import algo.graph.dynamicflow.eat.EarliestArrivalFlowProblem;
 import ds.graph.Edge;

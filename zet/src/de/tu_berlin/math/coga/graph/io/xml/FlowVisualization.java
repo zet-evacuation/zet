@@ -2,7 +2,7 @@
  * FlowVisualization.java
  * Created: 18.03.2010, 12:28:26
  */
-package zet.xml;
+package de.tu_berlin.math.coga.graph.io.xml;
 
 import ds.graph.flow.EdgeBasedFlowOverTime;
 
