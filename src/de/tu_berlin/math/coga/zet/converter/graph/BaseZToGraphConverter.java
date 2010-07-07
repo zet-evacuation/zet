@@ -7,26 +7,11 @@ package de.tu_berlin.math.coga.zet.converter.graph;
 import converter.RasterContainerCreator;
 import converter.ZToGraphMapping;
 import converter.ZToGraphRasterContainer;
-import converter.ZToGraphRasterSquare;
-import converter.ZToGraphRoomRaster;
 import de.tu_berlin.math.coga.common.algorithm.Algorithm;
-import de.tu_berlin.math.coga.common.util.Level;
 import de.tu_berlin.math.coga.zet.NetworkFlowModel;
-import ds.PropertyContainer;
 import ds.graph.Edge;
-import ds.graph.Graph;
-import ds.graph.IdentifiableCollection;
 import ds.graph.IdentifiableDoubleMapping;
-import ds.graph.IdentifiableIntegerMapping;
-import ds.graph.Node;
 import ds.z.BuildingPlan;
-import ds.z.PlanPoint;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Hashtable;
-import java.util.LinkedList;
-import java.util.List;
 
 /**
  *
