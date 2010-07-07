@@ -78,6 +78,10 @@ public class Edge implements Identifiable {
         return edgeID;
     }
 
+    public boolean isIncidentTo(Node node) {
+        return start.equals(node) || end.equals(node);
+    }
+
     /**
      * Returns the startnode of this edge. Runtime O(1).
      * @return the startnode of this edge.

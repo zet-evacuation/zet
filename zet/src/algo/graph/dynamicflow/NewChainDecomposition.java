@@ -226,6 +226,8 @@ public class NewChainDecomposition extends Algorithm<ChainDecompositionProblem, 
     protected void addCycleToUsageLists(FlowOverTimeCycle cycle) {
         System.out.println(cycle);
         int time = cycle.getOffset();
+        
+        boolean first = true;
         for (FlowOverTimeEdge edge : cycle) {
             Edge e = edge.getEdge();
             Node start = e.start();
@@ -238,7 +240,11 @@ public class NewChainDecomposition extends Algorithm<ChainDecompositionProblem, 
                 }
                 pathsUsingNode.get(start)[t].add(cycle);
             }
-            time += cycle.delay(edge);
+            if (first) {
+                first = false;
+            } else {
+                time += cycle.delay(edge);
+            }
             if (!pathsUsingEdge.isDefinedFor(edge.getEdge())) {
                 pathsUsingEdge.set(edge.getEdge(), new LinkedList[network.getTimeHorizon()]);
             }

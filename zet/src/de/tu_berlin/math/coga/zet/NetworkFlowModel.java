@@ -59,6 +59,11 @@ public class NetworkFlowModel {
         return new FlowProblemInstance(network.getAsStaticNetwork(), edgeCapacities, nodeCapacities, transitTimes, currentAssignment);
     }*/
 
+    public void setNumberOfEdges(int numberOfEdges) {
+       edgeCapacities.setDomainSize(numberOfEdges);
+       transitTimes.setDomainSize(numberOfEdges);
+    }
+
     public IdentifiableIntegerMapping<Node> getCurrentAssignment() {
         return currentAssignment;
     }
