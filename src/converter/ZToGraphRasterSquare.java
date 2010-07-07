@@ -122,21 +122,21 @@ public class ZToGraphRasterSquare extends RoomRasterSquare {
 	 * Returns whether this raster square is marked.
 	 * @return whether this raster square is marked.
 	 */
-	boolean isMarked(){
+	   public boolean isMarked(){
 		return marked;
 	}
 	
 	/**
 	 * Marks this raster square.
 	 */
-	void mark(){
+	   public void mark(){
 		marked = true;
 	}
 	
 	/**
 	 * Unmarks this raster square.
 	 */
-	void unmark(){
+	   public void unmark(){
 		marked = false;
 	}
 	
@@ -167,7 +167,7 @@ public class ZToGraphRasterSquare extends RoomRasterSquare {
 	 * Returns whether there can be people on this square.
 	 * @return whether there can be people on this square.
 	 */
-	protected boolean isSource(){
+	   public  boolean isSource(){
 		return isSource;
 	}
 
