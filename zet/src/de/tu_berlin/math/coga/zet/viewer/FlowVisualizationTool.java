@@ -75,7 +75,8 @@ public class FlowVisualizationTool extends JFrame implements PropertyChangeListe
 	private JMenuItem mnuFlowExecute;
 	private JMenuItem mnuFlowRestart;
 	private JMenuItem mnuFlowPause;
-	final Visualization<GLGraphControl> vis = new Visualization<GLGraphControl>( new GLCapabilities() );
+	//final Visualization<GLGraphControl> vis = new Visualization<GLGraphControl>( new GLCapabilities() );
+	final Visualization<GLGraphControl> vis = new NashFlowVisualization( new GLCapabilities() );
 	JEventStatusBar sb = new JEventStatusBar();
 	JSlider slider = new JSlider(0,0);
 	FlowVisualizationTool theInstance;

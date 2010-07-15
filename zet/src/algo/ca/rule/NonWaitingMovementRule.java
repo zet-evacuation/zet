@@ -419,7 +419,7 @@ public class NonWaitingMovementRule extends AbstractMovementRule {
 			
 			setStepEndTime( i, endTime );
 			if( performMove ) {
-				i.getCell().setOccupiedUntil( i.getStepEndTime() + 3 );
+				i.getCell().setOccupiedUntil( i.getStepEndTime()  );
 				//i.getCell().getRoom().moveIndividual( i.getCell(), targetCell );
 				caController().getCA().moveIndividual( i.getCell(), targetCell );
 				caController().getCaStatisticWriter().getStoredCAStatisticResults().getStoredCAStatisticResultsForIndividuals().addCurrentSpeedToStatistic( i, this.caController().getCA().getTimeStep(), speedInMeterPerSecond * this.caController().getCA().getSecondsPerStep() );

@@ -95,7 +95,7 @@ abstract public class AbstractOpenGLCanvas extends GLCanvas implements GLEventLi
 
 	/**
 	 * Decides, wheather animation is turned on or of.
-	 * @return {@code true} if animation is on, {@code false} otherwiseś
+	 * @return {@code true} if animation is on, {@code false} otherwise
 	 */
 	public final boolean isAnimating() {
 		return animator.isAnimating();

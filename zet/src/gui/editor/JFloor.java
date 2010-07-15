@@ -276,7 +276,7 @@ public class JFloor extends AbstractFloor implements EventListener<ZModelChanged
 	/**
 	 * <p>Paints the panel in the graphics object. It is possible to pass any
 	 * graphics object, but it is particularly used for painting this panel. This
-	 * can be used to save as bitmap or jpeg.</p>
+	 * can be used to save as bitmap or JPEG.</p>
 	 * <p>It draws points and a raster and a background image, if setLocation.</p>
 	 * @param g The graphics object
 	 */
@@ -294,9 +294,7 @@ public class JFloor extends AbstractFloor implements EventListener<ZModelChanged
 		if( dragStart == null ) {
 			// Paint new Raster Point when in normal edit mode
 			if( rasterizedPaintMode && newRasterizedPoint != null )
-				g2.drawRect( newRasterizedPoint.x - JPolygon.NODE_PAINT_RADIUS,
-								newRasterizedPoint.y - JPolygon.NODE_PAINT_RADIUS,
-								2 * JPolygon.NODE_PAINT_RADIUS, 2 * JPolygon.NODE_PAINT_RADIUS );
+				g2.drawRect( newRasterizedPoint.x - JPolygon.NODE_PAINT_RADIUS, newRasterizedPoint.y - JPolygon.NODE_PAINT_RADIUS, 2 * JPolygon.NODE_PAINT_RADIUS, 2 * JPolygon.NODE_PAINT_RADIUS );
 		} else // a) Paint drag Targets when dragging real objects
 		if( dragTargets != null ) {
 			g2.setPaint( GUIOptionManager.getDragNodeColor() );
