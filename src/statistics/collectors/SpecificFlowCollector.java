@@ -124,8 +124,11 @@ public class SpecificFlowCollector {
 	}
 
 	private double getSpecificFlow2( int index ) {
-		return personCount.get( index )/(2.0*300);
+		return personCount.get( index )/(wall*time);
 	}
+
+	double time = 600;
+	double wall = 8;
 
 	private double getSpecificFlow( int index ) {
 		int count = 0;
@@ -140,7 +143,7 @@ public class SpecificFlowCollector {
 				}
 			}
 		}
-		double specificFlow = (double)count/(2*300);
+		double specificFlow = (double)count/(wall*time);
 		System.out.println( "Specific flow for index " + index + ": " + specificFlow );
 		return specificFlow;
 

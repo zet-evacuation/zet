@@ -13,5 +13,4 @@ public class Conversion {
 	public final static double nanoSecondsToSec = 1.0 / secToNanoSeconds;
 	public static final double ANGLE2DEG = java.lang.Math.PI / 180.0;
 	public static final double DEG2ANGLE = 180.0 / java.lang.Math.PI;
-
 }

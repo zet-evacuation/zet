@@ -101,13 +101,13 @@ public class AbstractFloor extends JPanel {
 	 * @return a raster point that is closest to the given point
 	 */
 	public static Point getNextRasterPoint( Point p ) {
-		int rasterWidth = CoordinateTools.translateToScreen( 400 );
+		int rasterWidth = CoordinateTools.translateToScreen( 200 );
 		return new Point(
 						(int)Math.round( p.getX() / (double)rasterWidth ) * rasterWidth,
 						(int)Math.round( p.getY() / (double)rasterWidth ) * rasterWidth );
 	}
 
-	/** Sets the style in which the raster shall be oainted.
+	/** Sets the style in which the raster shall be painted.
 	 * @param rasterPaintType 
 	 */
 	public void setRasterPaintStyle( RasterPaintStyle rasterPaintType ) {
