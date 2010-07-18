@@ -38,6 +38,7 @@ import ds.z.StairPreset;
 import ds.z.TeleportArea;
 import ds.z.TeleportEdge;
 import ds.z.ZControl;
+import gui.Control;
 import gui.JEditor;
 import gui.ZETMain;
 import gui.ZETProperties;
@@ -178,6 +179,7 @@ public class JEditView extends AbstractSplitPropertyWindow<JFloorScrollPane<JFlo
 	private boolean disableUpdate = false;
 	private JLabel lblEvacuationAreaName;
 	private JTextField txtEvacuationAreaName;
+	private final Control guiControl;
 
 	/** Describes the teleport area name field. */
 	private JLabel lblTeleportAreaName;
@@ -197,9 +199,11 @@ public class JEditView extends AbstractSplitPropertyWindow<JFloorScrollPane<JFlo
 	/**
 	 * Initializes the editing view of ZET.
 	 * @param projectControl the project which is displayed in the editor
+	 * @param guiControl
 	 */
-	public JEditView( ZControl projectControl ) {
-		super( new JFloorScrollPane<JFloor>( new JFloor() ) );
+	public JEditView( ZControl projectControl, Control guiControl ) {
+		super( new JFloorScrollPane<JFloor>( new JFloor( guiControl ) ) );
+		this.guiControl = guiControl;
 		// this.myProject = project; is now called later - TIMON
 		final JFloor centerPanel = this.getLeftPanel().getMainComponent();
 		centerPanel.addActionListener( new ActionListener() {
@@ -231,8 +235,9 @@ public class JEditView extends AbstractSplitPropertyWindow<JFloorScrollPane<JFlo
 		this.getLeftPanel().getVerticalScrollBar().addAdjustmentListener( adlPlanImage );
 	}
 	
-	public JEditView( ) {
-		super( new JFloorScrollPane<JFloor>( new JFloor() ) );
+	public JEditView( Control guiControl ) {
+		super( new JFloorScrollPane<JFloor>( new JFloor( guiControl ) ) );
+		this.guiControl = guiControl;
 		final JFloor centerPanel = this.getLeftPanel().getMainComponent();
 		centerPanel.addActionListener( new ActionListener() {
 			public void actionPerformed( ActionEvent e ) {
@@ -1409,7 +1414,7 @@ public void localize() {
 		if( currentAssignment != null ) {
 			PolygonPopupListener listener;
 			for( AssignmentType t : currentAssignment.getAssignmentTypes() ) {
-				listener = new PolygonPopupListener( t );
+				listener = new PolygonPopupListener( t , guiControl );
 				polygonPopupListeners.add( listener );
 				Menu.addMenuItem( jmnCreateAssArea, t.getName(), listener );
 			}

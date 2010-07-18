@@ -63,6 +63,7 @@ import ds.z.TeleportArea;
 import event.EventListener;
 import event.EventServer;
 import event.ZModelChangedEvent;
+import gui.Control;
 
 /**
  * Graphical representation of a Floor from the BuildingPlan. Also offers features
@@ -127,6 +128,7 @@ public class JFloor extends AbstractFloor implements EventListener<ZModelChanged
 	private final static BasicStroke selection_stroke = new BasicStroke( 1.0f,
 					BasicStroke.CAP_BUTT, BasicStroke.JOIN_MITER, 3.0f, new float[]{4.0f, 2.0f}, 0.0f );
 	private ZControl zcontrol;
+	private final Control guiControl;
 
 	public ZControl getZcontrol() {
 		return zcontrol;
@@ -144,8 +146,9 @@ public class JFloor extends AbstractFloor implements EventListener<ZModelChanged
 	/**
 	 * Creates a new instance of <code>JFloor</code>.
 	 */
-	public JFloor() {
+	public JFloor( Control guiControl ) {
 		super();
+		this.guiControl = guiControl;
 		setLayout( null );
 		planImage = new PlanImage();
 		setBackground( GUIOptionManager.getEditorBackgroundColor() );
@@ -1119,7 +1122,8 @@ public class JFloor extends AbstractFloor implements EventListener<ZModelChanged
 			else
 				oldZoom = Math.max( oldZoom - offset, 0.01d );
 		}
-		JEditor.getInstance().setZoomFactor( oldZoom );
+		//JEditor.getInstance().setZoomFactor( oldZoom );
+		guiControl.setZoomFactor( oldZoom );
 	}
 
 	// ACTION LISTENER STUFF

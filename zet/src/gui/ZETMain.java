@@ -281,7 +281,8 @@ public class ZETMain {
 				GUIOptionManager.changeLookAndFeel( UIManager.getSystemLookAndFeelClassName() );
 
 				// Start our editor in the event-dispatch-thread
-				JEditor edit = JEditor.getInstance();
+				Control guiControl = new Control();
+				JEditor edit = new JEditor( guiControl );//JEditor.getInstance();
 				// The control object for projects
 				ZControl zcontrol = null;
 

@@ -209,7 +209,9 @@ public enum EditMode {
 		return payload;
 	}
 	
-	/** The types of EditModes. */
+	/**
+	 * The types of EditModes.
+	 */
 	public enum Type {
 		/** Any edit mode that is focused on selection of polygons on screen. */
 		Selection,
