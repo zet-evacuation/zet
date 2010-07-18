@@ -151,6 +151,7 @@ import ds.z.ZControl;
 import event.VisualizationEvent;
 import gui.components.JLogPane;
 import gui.statistic.JStatisticsPanel;
+import gui.toolbar.JEditToolbar;
 import gui.visualization.Visualization.RecordingMode;
 import io.visualization.BuildingResults;
 import de.tu_berlin.math.coga.zet.DatFileReaderWriter;
@@ -176,7 +177,7 @@ public class JEditor extends JFrame implements Localized, EventListener<Progress
 	/** The delimter used if numbers are stored in a tuple. */
 	final static String delimiter = Localization.getInstance().getStringWithoutPrefix( "numberSeparator" );
 	/** Singleton instance variable. */
-	private static final JEditor instance = new JEditor();
+	private static JEditor instance = null;
 
 	/** Control class for projects and editing */
 	private ZControl zcontrol;
@@ -188,7 +189,9 @@ public class JEditor extends JFrame implements Localized, EventListener<Progress
 	// Options
 	private boolean createCopy;
 	private boolean firstSwitch = false;
-	private EditMode.Type creationType = EditMode.Type.CreationPointwise;
+
+//	private EditMode.Type creationType = EditMode.Type.CreationPointwise;
+
 	/** The number format used to display the zoomfactor in the textfield. */
 	private NumberFormat nfZoom = NumberFormat.getPercentInstance();	// Main window components
 	/** The status bar. */
@@ -236,12 +239,12 @@ public class JEditor extends JFrame implements Localized, EventListener<Progress
 	private JMenu mVisibleAreas;
 	private JMenuItem mnuShowAllAreas;
 	private JMenuItem mnuHideAllAreas;
-	private JCheckBoxMenuItem mnuDelayArea;
-	private JCheckBoxMenuItem mnuStairArea;
-	private JCheckBoxMenuItem mnuEvacuationArea;
-	private JCheckBoxMenuItem mnuInaccessibleArea;
-	private JCheckBoxMenuItem mnuSaveArea;
-	private JCheckBoxMenuItem mnuAssignmentArea;
+	JCheckBoxMenuItem mnuDelayArea;
+	JCheckBoxMenuItem mnuStairArea;
+	JCheckBoxMenuItem mnuEvacuationArea;
+	JCheckBoxMenuItem mnuInaccessibleArea;
+	JCheckBoxMenuItem mnuSaveArea;
+	JCheckBoxMenuItem mnuAssignmentArea;
 	private JMenu mGrid;
 	private JRadioButtonMenuItem mnuGridLines;
 	private JRadioButtonMenuItem mnuGridPoints;
@@ -280,7 +283,7 @@ public class JEditor extends JFrame implements Localized, EventListener<Progress
 	private JMenu mHelp;
 	private JMenuItem mnuHelpAbout;
 	/** The tool bars */
-	private JToolBar toolBarEdit;
+	private JEditToolbar toolBarEdit;
 	private JToolBar toolBarBatch;
 	private JToolBar toolBarCA;
 	private JToolBar toolBarVisualization;
@@ -290,19 +293,6 @@ public class JEditor extends JFrame implements Localized, EventListener<Progress
 	private JToolBar toolBarLog;
 	private JToolBar currentToolbar;
 	// Toolbar items
-	// Edit toolbar
-	private JButton btnExit1;
-	private JButton btnOpen;
-	private JButton btnSave;
-	private JButton btnEditSelect;
-	private JButton btnEditPointwise;
-	private JButton btnEditRectangled;
-	private JLabel lblAreaType;
-	private JComboBox cbxEdit;
-	private JButton btnZoomIn;
-	private JButton btnZoomOut;
-	private JTextField txtZoomFactor;
-	private JButton btnRasterize;
 	// Batch toolbar
 	private JButton btnExit5;
 	private JButton btnSaveResults1;
@@ -351,8 +341,6 @@ public class JEditor extends JFrame implements Localized, EventListener<Progress
 	/** A tabbed pane that allows switching of the different views. */
 	private JTabbedPane tabPane;
 	// Additional GUI stuff
-	/** Model for the edit-mode combo box. */
-	private EditComboBoxModel editSelector;
 	private boolean disableUpdate = false;
 	private int currentMode = EDIT_FLOOR;
 	private JAssignment distribution;
@@ -362,6 +350,8 @@ public class JEditor extends JFrame implements Localized, EventListener<Progress
 	/** Decides wheather visualization runs in loop-mode, that means it automatically starts again. */
 	private boolean loop = false;
 
+	private Control guiControl;
+
 	/**
 	 * Creates a new instance of <code>JEditor</code>.
 	 * @param p the currentProject to display
@@ -369,8 +359,12 @@ public class JEditor extends JFrame implements Localized, EventListener<Progress
 	 * @param width the width of the window
 	 * @param height the height of the window
 	 */
-	private JEditor() {
+	public JEditor( Control control ) {
 		super();
+
+		this.guiControl = control;
+		control.editor = this;
+		instance = this;
 
 		loc.setLocale( Locale.getDefault() );
 
@@ -389,7 +383,8 @@ public class JEditor extends JFrame implements Localized, EventListener<Progress
 		statusBar = new JEventStatusBar();
 		add( statusBar, BorderLayout.SOUTH );
 
-		createEditToolBar();
+		//createEditToolBar();
+		toolBarEdit = new JEditToolbar( control );
 		createBatchToolBar();
 		createQuickVisualizationToolBar();
 		createVisualizationToolBar();
@@ -454,7 +449,7 @@ public class JEditor extends JFrame implements Localized, EventListener<Progress
 		this.getEditView().update();
 
 		editView.setEditMode( EditMode.Selection );
-		setZoomFactor( 0.04d );
+		guiControl.setZoomFactor( 0.04d );
 
 		// Set up the last camera position
 		visualizationView.getGLContainer().getCamera().setPos( zcontrol.getProject().getVisualProperties().getCameraPosition().pos );
@@ -526,7 +521,7 @@ public class JEditor extends JFrame implements Localized, EventListener<Progress
 	 *                                                                           *
 	 ****************************************************************************/
 	public void addMainComponents() {
-		editView = new JEditView( );
+		editView = new JEditView( guiControl );
 		batchView = new JBatchView();
 		visualizationView = new JVisualizationView( new GLCapabilities() );
 		visualizationView.getGLContainer().setControl( new GLControl() );
@@ -733,108 +728,7 @@ public class JEditor extends JFrame implements Localized, EventListener<Progress
 	}
 
 	/**
-	 * Creates the <code>JToolBar</code> for the edit mode.
-	 */
-	private void createEditToolBar() {
-		loc.setPrefix( "gui.editor.JEditor." );
 
-		toolBarEdit = new JToolBar();
-		btnExit1 = Button.newButton( IconSet.Exit, new ActionListener() {
-			public void actionPerformed( ActionEvent e ) {
-				System.exit( 0 );
-			}
-		}, "", loc.getString( "toolbarTooltipExit" ) );
-		toolBarEdit.add( btnExit1 );
-		toolBarEdit.addSeparator();
-
-		btnOpen = Button.newButton( IconSet.Open, aclFile, "loadProject", loc.getString( "toolbarTooltipOpen" ) );
-		toolBarEdit.add( btnOpen );
-		btnSave = Button.newButton( IconSet.Save, aclFile, "saveProject", loc.getString( "toolbarTooltipSave" ) );
-		toolBarEdit.add( btnSave );
-		toolBarEdit.addSeparator();
-
-		btnEditSelect = Button.newButton( IconSet.EditSelect, new ActionListener() {
-			@Override
-			public void actionPerformed( ActionEvent e ) {
-				btnEditSelect.setSelected( true );
-				btnEditPointwise.setSelected( false );
-				btnEditRectangled.setSelected( false );
-				editView.setEditMode( EditMode.Selection );
-				sendReady();
-			}
-		}, "", loc.getString( "toolbarTooltipSelectionMode" ) );
-		toolBarEdit.add( btnEditSelect );
-		btnEditSelect.setSelected( true );
-		btnEditPointwise = Button.newButton( IconSet.EditDrawPointwise, new ActionListener() {
-			@Override
-			public void actionPerformed( ActionEvent e ) {
-				btnEditSelect.setSelected( false );
-				btnEditPointwise.setSelected( true );
-				btnEditRectangled.setSelected( false );
-				creationType = EditMode.Type.CreationPointwise;
-				editSelector.rebuild();
-				editView.setEditMode( (EditMode)editSelector.getSelectedItem() );
-				ZETMain.sendMessage( "Wählen sie die Koordinaten." ); // TODO loc
-			}
-		}, "", loc.getString( "toolbarTooltipPointSequence" ) );
-		toolBarEdit.add( btnEditPointwise );
-		btnEditRectangled = Button.newButton( IconSet.EditDrawRectangled, new ActionListener() {
-			@Override
-			public void actionPerformed( ActionEvent e ) {
-				btnEditSelect.setSelected( false );
-				btnEditPointwise.setSelected( false );
-				btnEditRectangled.setSelected( true );
-				creationType = EditMode.Type.CreationRectangled;
-				editSelector.rebuild();
-				ZETMain.sendMessage( "Wählen sie die Koordinaten." ); // TODO loc
-			}
-		}, "", loc.getString( "toolbarTooltipDragCreate" ) );
-		toolBarEdit.add( btnEditRectangled );
-
-		toolBarEdit.add( new JLabel( " " ) ); //Spacer
-		lblAreaType = new JLabel( loc.getString( "labelAreaType" ) );
-		toolBarEdit.add( lblAreaType );
-		editSelector = new EditComboBoxModel();
-		cbxEdit = new JComboBox();
-		cbxEdit.setMaximumRowCount( 25 );
-		cbxEdit.setMaximumSize( new Dimension( 250, cbxEdit.getPreferredSize().height ) );
-		cbxEdit.setPreferredSize( new Dimension( 250, cbxEdit.getPreferredSize().height ) );
-		cbxEdit.setAlignmentX( 0 );
-		loc.setPrefix( "gui.editor.JEditor." );
-		cbxEdit.setToolTipText( loc.getString( "toolbarTooltipAreaType" ) );
-		cbxEdit.setModel( editSelector );
-		cbxEdit.setRenderer( new EditComboBoxRenderer() );
-		// Don't use an item/change listener here, because then we can't capture the event
-		// that the user re-selects the same entry as before
-		cbxEdit.addPopupMenuListener( pmlEditMode );
-		toolBarEdit.add( cbxEdit );
-		toolBarEdit.addSeparator();
-
-		btnZoomIn = Button.newButton( IconSet.ZoomIn, aclZoom, "zoomIn", loc.getString( "toolbarTooltipZoomIn" ) );
-		toolBarEdit.add( btnZoomIn );
-		btnZoomOut = Button.newButton( IconSet.ZoomOut, aclZoom, "zoomOut", loc.getString( "toolbarTooltipZoomOut" ) );
-		toolBarEdit.add( btnZoomOut );
-		toolBarEdit.add( new JLabel( " " ) );
-		txtZoomFactor = new JTextField( nfZoom.format( CoordinateTools.getZoomFactor() ) );
-		txtZoomFactor.setToolTipText( loc.getString( "toolbarTooltipZoomTextBox" ) );
-		txtZoomFactor.setMaximumSize( new Dimension( 40, txtZoomFactor.getPreferredSize().height ) );
-		txtZoomFactor.addKeyListener( kylZoom );
-		txtZoomFactor.addFocusListener( new java.awt.event.FocusAdapter() {
-			@Override
-			public void focusLost( java.awt.event.FocusEvent evt ) {
-				updateZoomFactor();
-			}
-		} );
-		toolBarEdit.add( txtZoomFactor );
-		toolBarEdit.addSeparator();
-
-		btnRasterize = Button.newButton( IconSet.Rasterize, aclStart, "rasterize", loc.getString( "toolbarTooltipRasterize" ) );
-		toolBarEdit.add( btnRasterize );
-
-		loc.setPrefix( "" );
-	}
-
-	/**
 	 * Creates the <code>JToolBar</code> for the visualization mode.
 	 */
 	private void createVisualizationToolBar() {
@@ -1171,35 +1065,22 @@ public class JEditor extends JFrame implements Localized, EventListener<Progress
 
 		// Tool tips for buttons and text views in the menu bar
 		loc.setPrefix( "gui.editor.JEditor." );
-		cbxEdit.setToolTipText( loc.getString( "toolbarTooltipAreaType" ) );
-		btnExit1.setToolTipText( loc.getString( "toolbarTooltipExit" ) );
+
+		toolBarEdit.localize();
+
 		btnExit2.setToolTipText( loc.getString( "toolbarTooltipExit" ) );
 		btnExit3.setToolTipText( loc.getString( "toolbarTooltipExit" ) );
 		btnExit4.setToolTipText( loc.getString( "toolbarTooltipExit" ) );
 		btnExit5.setToolTipText( loc.getString( "toolbarTooltipExit" ) );
 		btnExit6.setToolTipText( loc.getString( "toolbarTooltipExit" ) );
 		btnExit7.setToolTipText( loc.getString( "toolbarTooltipExit" ) );
-		btnOpen.setToolTipText( loc.getString( "toolbarTooltipOpen" ) );
-		btnSave.setToolTipText( loc.getString( "toolbarTooltipSave" ) );
-
-		btnOpen.setToolTipText( loc.getString( "toolbarTooltipOpen" ) );
 		btnOpenResults1.setToolTipText( loc.getString( "toolbarTooltipOpen" ) );
 		btnOpenResults2.setToolTipText( loc.getString( "toolbarTooltipOpen" ) );
 		btnOpenResults3.setToolTipText( loc.getString( "toolbarTooltipOpen" ) );
-		btnSave.setToolTipText( loc.getString( "toolbarTooltipSave" ) );
 		btnSaveResults1.setToolTipText( loc.getString( "toolbarTooltipSave" ) );
 		btnSaveResults2.setToolTipText( loc.getString( "toolbarTooltipSave" ) );
 		btnSaveResults3.setToolTipText( loc.getString( "toolbarTooltipSave" ) );
-
-		btnEditSelect.setToolTipText( loc.getString( "toolbarTooltipSelectionMode" ) );
-		btnEditPointwise.setToolTipText( loc.getString( "toolbarTooltipPointSequence" ) );
-		btnEditRectangled.setToolTipText( loc.getString( "toolbarTooltipDragCreate" ) );
-		lblAreaType.setText( loc.getString( "labelAreaType" ) );
-		btnZoomIn.setToolTipText( loc.getString( "toolbarTooltipZoomIn" ) );
-		btnZoomOut.setToolTipText( loc.getString( "toolbarTooltipZoomOut" ) );
-		txtZoomFactor.setToolTipText( loc.getString( "toolbarTooltipZoomTextBox" ) );
-		btnRasterize.setToolTipText( loc.getString( "toolbarTooltipRasterize" ) );
-
+		
 		labelBatchName1.setText( loc.getString( "batchName" ) );
 		labelBatchName2.setText( loc.getString( "batchName" ) );
 		labelBatchRun.setText( loc.getString( "batchRun" ) );
@@ -2019,23 +1900,6 @@ public class JEditor extends JFrame implements Localized, EventListener<Progress
 
 		}
 	};
-	ActionListener aclZoom = new ActionListener() {
-		@Override
-		public void actionPerformed( ActionEvent e ) {
-			try {
-				if( e.getActionCommand().equals( "zoomIn" ) )
-					setZoomFactor( Math.min( 0.4, CoordinateTools.getZoomFactor() * 2 ) );
-				else if( e.getActionCommand().equals( "zoomOut" ) )
-					setZoomFactor( Math.max( 0.00004, CoordinateTools.getZoomFactor() / 2 ) );
-				else
-					ZETMain.sendError( loc.getString( "gui.UnknownCommand" ) + " '" + e.getActionCommand() + "'. " + loc.getString( "gui.ContactDeveloper" ) );
-			} catch( Exception ex ) {
-				JOptionPane.showMessageDialog( getInstance(),
-								ex.getLocalizedMessage(), loc.getString( "gui.Error" ),
-								JOptionPane.ERROR_MESSAGE );
-			}
-		}
-	};
 	ChangeListener chlTab = new ChangeListener() {
 		public void stateChanged( ChangeEvent e ) {
 			final int i = tabPane.getSelectedIndex();
@@ -2065,72 +1929,7 @@ public class JEditor extends JFrame implements Localized, EventListener<Progress
 				ZETMain.sendError( "Unknown tab index:" + tabPane.getSelectedIndex() + ". " + loc.getString( "gui.ContactDeveloper" ) );
 		}
 	};
-	KeyListener kylZoom = new KeyListener() {
-		public void keyTyped( KeyEvent e ) {
-		}
 
-		public void keyPressed( KeyEvent e ) {
-		}
-
-		public void keyReleased( KeyEvent e ) {
-			if( e.getKeyCode() != KeyEvent.VK_ENTER )
-				return;
-			updateZoomFactor();
-		}
-	};
-	PopupMenuListener pmlEditMode = new PopupMenuListener() {
-		private EditMode lastEditMode = null;
-
-		public void popupMenuWillBecomeVisible( PopupMenuEvent e ) {
-		}
-
-		public void popupMenuWillBecomeInvisible( PopupMenuEvent e ) {
-			EditMode currentEditMode = (EditMode)editSelector.getSelectedItem();
-
-
-			// Einblenden der gewählten Area, falls ausgeblendet
-			switch( currentEditMode ) {
-				case AssignmentAreaCreation:
-				case AssignmentAreaCreationPointwise:
-					showArea( AreaVisibility.Assignment );
-					break;
-				case DelayAreaCreation:
-				case DelayAreaCreationPointwise:
-					showArea( AreaVisibility.Delay );
-					break;
-				case StairAreaCreation:
-				case StairAreaCreationPointwise:
-					showArea( AreaVisibility.Stair );
-					break;
-				case EvacuationAreaCreation:
-				case EvacuationAreaCreationPointwise:
-					showArea( AreaVisibility.Evacuation );
-					break;
-				case InaccessibleAreaCreation:
-				case InaccessibleAreaCreationPointwise:
-					showArea( AreaVisibility.Inaccessible );
-					break;
-				case SaveAreaCreation:
-				case SaveAreaCreationPointwise:
-					showArea( AreaVisibility.Save );
-					break;
-				default:
-					break;
-			}
-			updateAreaVisiblity();
-			if( editView != null && lastEditMode == currentEditMode ) {
-				editView.setEditMode( currentEditMode );
-				btnEditSelect.setSelected( false );
-				btnEditPointwise.setSelected( creationType == EditMode.Type.CreationPointwise );
-				btnEditRectangled.setSelected( creationType == EditMode.Type.CreationRectangled );
-
-			}
-			lastEditMode = currentEditMode;
-		}
-
-		public void popupMenuCanceled( PopupMenuEvent e ) {
-		}
-	};
 
 	/*****************************************************************************
 	 *                                                                           *
@@ -2363,43 +2162,6 @@ caRes.statistic = caStatistic;
 		return visualizationView;
 	}
 
-	/**
-	 * Sets the Zoom factor on the currently shown shown JFloor.
-	 * @param zoomFactor the zoom factor
-	 */
-	public void setZoomFactor( double zoomFactor ) {
-		double zoomChange = zoomFactor / CoordinateTools.getZoomFactor();
-		Rectangle oldView = new Rectangle( editView.getLeftPanel().getViewport().getViewRect() );
-		oldView.x *= zoomChange;
-		oldView.y *= zoomChange;
-		if( zoomChange > 1 ) {
-			// If we are zooming in, then we have to move our window to the "middle"
-			// of what the user previously saw. Right now we are in the upper left edge
-			// of what he previously saw, and now we are doing this "move"
-			int widthIncrement = (int)(oldView.width * zoomChange) - oldView.width;
-			int heightIncrement = (int)(oldView.height * zoomChange) - oldView.height;
-
-			oldView.x += widthIncrement / 2;
-			oldView.y += heightIncrement / 2;
-		}
-
-		//CoordinateTools.setZoomFactor( zoomFactor );
-		editView.getLeftPanel().setZoomFactor( zoomFactor );
-		editView.getFloor().getPlanImage().update();
-		editView.updateFloorView();
-		if( worker != null ) {
-			caView.getLeftPanel().setZoomFactor( zoomFactor );
-			caView.updateFloorView();
-		}
-
-		// Pretend a smaller Zoom factor, so that the user is actually only zomming 
-		// in the range [0,0.25]. This is still close enough for the user.
-		txtZoomFactor.setText( nfZoom.format( zoomFactor * 2.5d ) );
-
-		//Redisplay the same portion of the Floor as before (move scrollbars)
-		editView.getLeftPanel().getViewport().setViewPosition( oldView.getLocation() );
-	}
-
 	public static void printException( Exception ex ) {
 		System.out.println( "Eine Exception trat auf:" );
 		System.out.println( "Message: " + ex.getMessage() );
@@ -2412,6 +2174,8 @@ caRes.statistic = caStatistic;
 	}
 
 	/**
+<<<<<<< .mine
+=======
 	 * Displays a specified type of areas. The selection parameter of the
 	 * menu entry is set correct, too.
 	 * @param areaType the are type
@@ -2443,6 +2207,7 @@ caRes.statistic = caStatistic;
 	}
 
 	/**
+>>>>>>> .r2124
 	 * Shows a <code>JToolBar</code> and hides all others.
 	 * @param toolBar the tool bar that is shown
 	 */
@@ -2504,7 +2269,7 @@ caRes.statistic = caStatistic;
 	 * associated menu entries. The menu entries to hide and show all areas
 	 * are updated and, if neccessery, disabled or enabled.
 	 */
-	private void updateAreaVisiblity() {
+	public void updateAreaVisiblity() {
 		ArrayList<AreaVisibility> mode = new ArrayList<AreaVisibility>();
 		if( mnuDelayArea.isSelected() )
 			mode.add( AreaVisibility.Delay );
@@ -2521,34 +2286,6 @@ caRes.statistic = caStatistic;
 		mnuShowAllAreas.setEnabled( mode.size() != 6 );
 		mnuHideAllAreas.setEnabled( mode.size() != 0 );
 		editView.changeAreaView( mode );
-	}
-
-	/**
-	 * Reads the current value of the Zoomfactor textfield and sets the
-	 * zoomfactor. If the last character is '%' it is removed. It is possible to
-	 * insert real and integer values.
-	 */
-	private void updateZoomFactor() {
-		NumberFormat nf = NumberFormat.getNumberInstance( loc.getLocale() );
-		String text = txtZoomFactor.getText();
-		char c = text.charAt( text.length() - 1 );
-		boolean percent = false;
-		if( c == '%' ) {
-			StringBuffer sb = new StringBuffer( text ).delete( text.length() - 1, text.length() );
-			text = sb.toString();
-			percent = true;
-		}
-		try {
-			double val = nf.parse( text ).doubleValue();
-			if( val < 1 && percent == false )
-				val = val * 100;
-			val = val / 2.5d;
-			setZoomFactor( val / 100 );
-		} catch( ParseException ex2 ) {
-			ZETMain.sendError( loc.getString( "gui.error.NonParsableNumber" ) );
-		} catch( IllegalArgumentException ex ) {
-			ZETMain.sendError( loc.getString( ex.getLocalizedMessage() ) );
-		}
 	}
 
 	public void disableProjectUpdate( boolean disableUpdate ) {
@@ -2662,69 +2399,6 @@ caRes.statistic = caStatistic;
 	 * Models and renderer for control elements.                                 *
 	 *                                                                           *
 	 ****************************************************************************/
-	/** This class serves as a model for the JComboBox that contains the EditModes. */
-	private class EditComboBoxModel extends DefaultComboBoxModel {
-		/**
-		 * Creates a new combo box model containing edit types that are of a
-		 * specified type.
-		 * @param type the type of the displayed edit modes
-		 */
-		public EditComboBoxModel() {
-			rebuild();
-		}
-
-		public void rebuild() {
-			// In case that the creationType really changed we must restore the partner edit mode.
-			// If we change to the same creation type as before, we must restore the old selection itself.
-			boolean restore_partner = getSelectedItem() != null &&
-							creationType != ((EditMode)getSelectedItem()).getType();
-			EditMode next_selection = restore_partner ? ((EditMode)getSelectedItem()).getPartnerMode() : (EditMode)getSelectedItem();
-
-			// Build new edit mode list
-			this.removeAllElements();
-			for( EditMode e : EditMode.getCreationModes( creationType ) )
-				addElement( e );
-
-			// Restore the selection with the associated partner editmode if neccessary
-			if( next_selection != null )
-				setSelectedItem( next_selection );
-		}
-
-		// This was moved to a change listener too, to be able to capture selections that
-		// dont change the selected value, but only re-select it. In any other case this part
-		// of the code is used (that is also needed, because the popuplistener can't deal with
-		// other selection types)
-		@Override
-		public void setSelectedItem( Object object ) {
-			super.setSelectedItem( object );
-			if( editView != null ) {
-				editView.setEditMode( (EditMode)object );
-
-				btnEditSelect.setSelected( false );
-				btnEditPointwise.setSelected( creationType == EditMode.Type.CreationPointwise );
-				btnEditRectangled.setSelected( creationType == EditMode.Type.CreationRectangled );
-			}
-		}
-	}
-
-	/** This class can display EditMode Objects in a JComboBox. */
-	private class EditComboBoxRenderer extends ComboBoxRenderer {
-		@Override
-		public Component getListCellRendererComponent( JList list, Object value, int index, boolean isSelected, boolean cellHasFocus ) {
-			JLabel me = (JLabel)super.getListCellRendererComponent( list, value, index, isSelected, cellHasFocus );
-			setHorizontalAlignment( LEFT );
-
-			if( value != null ) {
-				EditMode e = (EditMode)value;
-				if( e.getEditorColor() != null &&
-								!e.getEditorColor().equals( Color.BLACK ) )
-					setBackground( e.getEditorColor() );
-				setText( e.toString() );
-			}
-			return this;
-		}
-	}
-
 	/** This class serves as a model for the JComboBox that contains the 
 	 * BatchResultEntries for the Visualization Tab. */
 	private class BatchResultEntryVisComboBoxModel extends DefaultComboBoxModel {
