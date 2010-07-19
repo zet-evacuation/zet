@@ -53,10 +53,10 @@ public class JEditToolbar extends JToolBar implements ActionListener, PopupMenuL
 	private JButton btnRasterize;
 	/** Model for the edit-mode combo box. */
 	private EditComboBoxModel editSelector;
-	/** The number format used to display the zoomfactor in the textfield. */
+	/** The number format used to display the zoom factor in the text field. */
 	private NumberFormat nfZoom = NumberFormat.getPercentInstance();	// Main window components
 	private final Control control;
-	private EditMode.Type creationType = EditMode.Type.CREATION_POINTWISE;
+	private EditMode.Type creationType = EditMode.Type.CreationPointwise;
 
 	/**
 	 * Creates a new instance of <code>JEditToolbar</code>.
@@ -157,7 +157,7 @@ public class JEditToolbar extends JToolBar implements ActionListener, PopupMenuL
 						//				btnEditSelect.setSelected( false );
 						//				btnEditPointwise.setSelected( true );
 						//				btnEditRectangled.setSelected( false );
-										creationType = EditMode.Type.CREATION_POINTWISE;
+										creationType = EditMode.Type.CreationPointwise;
 										editSelector.rebuild();
 										control.setEditMode( (EditMode)editSelector.getSelectedItem() );
 						//				editView.setEditMode( (EditMode)editSelector.getSelectedItem() );
@@ -166,7 +166,7 @@ public class JEditToolbar extends JToolBar implements ActionListener, PopupMenuL
 						//				btnEditSelect.setSelected( false );
 						//				btnEditPointwise.setSelected( false );
 						//				btnEditRectangled.setSelected( true );
-										creationType = EditMode.Type.CREATION_RECTANGLED;
+										creationType = EditMode.Type.CreationRectangled;
 										editSelector.rebuild();
 										control.setEditMode( (EditMode)editSelector.getSelectedItem() );
 						//				ZETMain.sendMessage( "Wählen sie die Koordinaten." ); // TODO loc
@@ -191,27 +191,31 @@ public class JEditToolbar extends JToolBar implements ActionListener, PopupMenuL
 		switch( currentEditMode ) {
 			case AssignmentAreaCreation:
 			case AssignmentAreaCreationPointwise:
-				control.showArea( AreaVisibility.ASSIGNMENT );
+				control.showArea( AreaVisibility.Assignment );
 				break;
 			case DelayAreaCreation:
 			case DelayAreaCreationPointwise:
-				control.showArea( AreaVisibility.DELAY );
+				control.showArea( AreaVisibility.Delay );
 				break;
 			case StairAreaCreation:
 			case StairAreaCreationPointwise:
-				control.showArea( AreaVisibility.STAIR );
+				control.showArea( AreaVisibility.Stair );
 				break;
 			case EvacuationAreaCreation:
 			case EvacuationAreaCreationPointwise:
-				control.showArea( AreaVisibility.EVACUATION );
+				control.showArea( AreaVisibility.Evacuation );
 				break;
 			case InaccessibleAreaCreation:
 			case InaccessibleAreaCreationPointwise:
-				control.showArea( AreaVisibility.INACCESSIBLE );
+				control.showArea( AreaVisibility.Inaccessible );
 				break;
 			case SaveAreaCreation:
 			case SaveAreaCreationPointwise:
-				control.showArea( AreaVisibility.SAVE );
+				control.showArea( AreaVisibility.Save );
+				break;
+			case TeleportAreaCreation:
+			case TeleportAreaCreationPointwise:
+				control.showArea( AreaVisibility.Teleport );
 				break;
 			default:
 				break;
@@ -243,8 +247,8 @@ public class JEditToolbar extends JToolBar implements ActionListener, PopupMenuL
 	}
 
 	/**
-	 * Reads the current value of the Zoomfactor textfield and sets the
-	 * zoomfactor. If the last character is '%' it is removed. It is possible to
+	 * Reads the current value of the zoom factor text field and sets the
+	 * zoom factor. If the last character is '%' it is removed. It is possible to
 	 * insert real and integer values.
 	 */
 	private void updateZoomFactor() {

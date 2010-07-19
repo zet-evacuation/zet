@@ -74,23 +74,26 @@ public class Control {
 	 */
 	public void showArea( AreaVisibility areaType ) {
 		switch( areaType ) {
-			case DELAY:
+			case Delay:
 				editor.mnuDelayArea.setSelected( true );
 				break;
-			case STAIR:
+			case Stair:
 				editor.mnuStairArea.setSelected( true );
 				break;
-			case EVACUATION:
+			case Evacuation:
 				editor.mnuEvacuationArea.setSelected( true );
 				break;
-			case INACCESSIBLE:
+			case Inaccessible:
 				editor.mnuInaccessibleArea.setSelected( true );
 				break;
-			case SAVE:
+			case Save:
 				editor.mnuSaveArea.setSelected( true );
 				break;
-			case ASSIGNMENT:
+			case Assignment:
 				editor.mnuAssignmentArea.setSelected( true );
+				break;
+			case Teleport:
+				// TODO
 				break;
 			default:
 				JEditor.showErrorMessage( "Error", "Dieser Area-Typ wird nicht unterstützt." );
@@ -103,8 +106,8 @@ public class Control {
 				editor.getEditView().setEditMode( mode );
 
 				editToolBar.setEditSelectionSelected( false );
-				editToolBar.setEditPointwiseSelected( mode.getType() == EditMode.Type.CREATION_POINTWISE );
-				editToolBar.setEditRectangledSelected( mode.getType() == EditMode.Type.CREATION_RECTANGLED );
+				editToolBar.setEditPointwiseSelected( mode.getType() == EditMode.Type.CreationPointwise );
+				editToolBar.setEditRectangledSelected( mode.getType() == EditMode.Type.CreationRectangled );
 			}
 	}
 
