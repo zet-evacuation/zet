@@ -523,9 +523,9 @@ public class JEditor extends JFrame implements Localized, EventListener<Progress
 		toolBarCAStats.add( btnExit3 );
 		toolBarCAStats.addSeparator();
 
-		btnOpenResults2 = Button.newButton( IconSet.Open, aclFile, "loadBatchResult", loc.getString( "toolbarTooltipOpen" ) );
+		btnOpenResults2 = Button.newButton( IconSet.Open, null, "loadBatchResult", loc.getString( "toolbarTooltipOpen" ) );
 		toolBarCAStats.add( btnOpenResults2 );
-		btnSaveResults2 = Button.newButton( IconSet.Save, aclFile, "saveResultAs", loc.getString( "toolbarTooltipSave" ) );
+		btnSaveResults2 = Button.newButton( IconSet.Save, null, "saveResultAs", loc.getString( "toolbarTooltipSave" ) );
 		toolBarCAStats.add( btnSaveResults2 );
 
 		/** ########## Graph Statistics tool bar ############ */
@@ -538,9 +538,9 @@ public class JEditor extends JFrame implements Localized, EventListener<Progress
 		toolBarGraphStats.add( btnExit4 );
 		toolBarGraphStats.addSeparator();
 
-		btnOpenResults3 = Button.newButton( IconSet.Open, aclFile, "loadBatchResult", loc.getString( "toolbarTooltipOpen" ) );
+		btnOpenResults3 = Button.newButton( IconSet.Open, null, "loadBatchResult", loc.getString( "toolbarTooltipOpen" ) );
 		toolBarGraphStats.add( btnOpenResults3 );
-		btnSaveResults3 = Button.newButton( IconSet.Save, aclFile, "saveResultAs", loc.getString( "toolbarTooltipSave" ) );
+		btnSaveResults3 = Button.newButton( IconSet.Save, null, "saveResultAs", loc.getString( "toolbarTooltipSave" ) );
 		toolBarGraphStats.add( btnSaveResults3 );
 		toolBarGraphStats.addSeparator();
 
@@ -587,9 +587,9 @@ public class JEditor extends JFrame implements Localized, EventListener<Progress
 		toolBarBatch.add( btnExit5 );
 		toolBarBatch.addSeparator();
 
-		btnOpenResults1 = Button.newButton( IconSet.Open, aclFile, "loadBatchResult", loc.getString( "toolbarTooltipOpen" ) );
+		btnOpenResults1 = Button.newButton( IconSet.Open, null, "loadBatchResult", loc.getString( "toolbarTooltipOpen" ) );
 		toolBarBatch.add( btnOpenResults1 );
-		btnSaveResults1 = Button.newButton( IconSet.Save, aclFile, "saveResultAs", loc.getString( "toolbarTooltipSave" ) );
+		btnSaveResults1 = Button.newButton( IconSet.Save, null, "saveResultAs", loc.getString( "toolbarTooltipSave" ) );
 		toolBarBatch.add( btnSaveResults1 );
 		loc.setPrefix( "" );
 	}
@@ -619,98 +619,7 @@ public class JEditor extends JFrame implements Localized, EventListener<Progress
 
 		loc.setPrefix( "gui.editor.JEditor." );
 
-		Menu.updateMenu( mFile, loc.getString( "menuFile" ) );
-		Menu.updateMenu( mEdit, loc.getString( "menuEdit" ) );
-		Menu.updateMenu( mView, loc.getString( "menuView" ) );
-		Menu.updateMenu( mExtras, loc.getString( "menuExtras" ) );
-		//Menu.updateMenu( mWindow, loc.getString( "menuWindow" ) );
-		Menu.updateMenu( mHelp, loc.getString( "menuHelp" ) );
 
-		// Dateimenu
-		Menu.updateMenu( mnuFileNew, loc.getString( "menuNew" ) );
-		Menu.updateMenu( mnuFileOpen, loc.getString( "menuOpen" ) );
-		Menu.updateMenu( mnuFileSave, loc.getString( "menuSave" ) );
-		Menu.updateMenu( mnuFileSaveAs, loc.getString( "menuSaveAs" ) );
-		Menu.updateMenu( mnuFileExportAsDXF, loc.getString( "menuDXF" ) );
-		Menu.updateMenu( mnuFileSaveResultAs, loc.getString( "menuSaveResultAs" ) );
-		Menu.updateMenu( mnuFileLoadResult, loc.getString( "menuLoadBatchResult" ) );
-		//Menu.updateMenu (mnuFileStart, loc.getString ("menuStart"));
-		Menu.updateMenu( mnuFileExit, loc.getString( "menuExit" ) );
-
-		// Bearbeiten menu
-		//Menu.updateMenu( mnuEditUndo, loc.getString( "menuUndo" ) );
-		//Menu.updateMenu( mnuEditGoTo, loc.getString( "menuGoToRoom" ) );
-		Menu.updateMenu( mnuEditFloorNew, loc.getString( "menuFloorNew" ) );
-		Menu.updateMenu( mnuEditFloorUp, loc.getString( "menuFloorUp" ) );
-		Menu.updateMenu( mnuEditFloorDown, loc.getString( "menuFloorDown" ) );
-		Menu.updateMenu( mnuEditFloorDelete, loc.getString( "menuFloorDelete" ) );
-		Menu.updateMenu( mnuEditFloorCopy, loc.getString( "menuFloorCopy" ) );
-		Menu.updateMenu( mnuEditFloorImport, loc.getString( "menuFloorImport" ) );
-		Menu.updateMenu( mnuEditRasterize, loc.getString( "menuRasterize" ) );
-		Menu.updateMenu( mnuEditDistributeEvacuees, loc.getString( "menuDistributeEvacuees" ) );
-		Menu.updateMenu( mnuEditDistribution, loc.getString( "menuDistributions" ) );
-		Menu.updateMenu( mnuEditProperties, loc.getString( "menuProperties" ) );
-		Menu.updateMenu( mnuScreenshot, loc.getString( "menuScreenshot" ) );
-
-		// Anzeige-menu
-		Menu.updateMenu( mVisibleAreas, loc.getString( "menuVisibleAreas" ) );
-		Menu.updateMenu( mnuShowAllAreas, loc.getString( "menuShowAllAreas" ) );
-		Menu.updateMenu( mnuHideAllAreas, loc.getString( "menuHideAllAreas" ) );
-		Menu.updateMenu( mnuDelayArea, loc.getString( "menuShowDelayAreas" ) );
-		Menu.updateMenu( mnuStairArea, loc.getString( "menuShowStairAreas" ) );
-		Menu.updateMenu( mnuEvacuationArea, loc.getString( "menuShowEvacuationAreas" ) );
-		Menu.updateMenu( mnuInaccessibleArea, loc.getString( "menuShowInaccessibleAreas" ) );
-		Menu.updateMenu( mnuSaveArea, loc.getString( "menuShowSaveAreas" ) );
-		Menu.updateMenu( mnuAssignmentArea, loc.getString( "menuShowAssignmentAreas" ) );
-		Menu.updateMenu( mGrid, loc.getString( "menuGridstyle" ) );
-		Menu.updateMenu( mnuGridLines, loc.getString( "menuGridstyleLines" ) );
-		Menu.updateMenu( mnuGridPoints, loc.getString( "menuGridstylePoints" ) );
-		Menu.updateMenu( mnuGridNotVisible, loc.getString( "menuGridstyleNone" ) );
-		Menu.updateMenu( mnuPaintRasterized, loc.getString( "menuDrawOnGrid" ) );
-		Menu.updateMenu( mnuHideDefaultFloor, loc.getString( "menuHideDefaultEvacuationFloor" ) );
-
-		// Execute menu (debug only)
-		if( ZETMain.isDebug() ) {
-			Menu.updateMenu( mExecute, loc.getString( "menuExecute" ) );
-			Menu.updateMenu( mSimulation, loc.getString( "menuSimulation" ) );
-/**/			Menu.updateMenu( mnuCreateCA, loc.getString( "menuSimulationCreateCA" ) );
-/**/			Menu.updateMenu( mnuApplyAssignment, loc.getString( "menuSimulationApplyConcreteAssignment" ) );
-			Menu.updateMenu( mnuStartSimulation, loc.getString( "menuSimulationStart" ) );
-			//TODO if paused use other
-			if( caAlgo != null )
-				if( caAlgo.isPaused() )
-/**/					Menu.updateMenu( mnuPauseSimulation, loc.getString( "menuSimulationContinue" ) );
-				else
-/**/					Menu.updateMenu( mnuPauseSimulation, loc.getString( "menuSimulationPause" ) );
-			else
-/**/				Menu.updateMenu( mnuPauseSimulation, loc.getString( "menuSimulationPause" ) );
-			Menu.updateMenu( mnuStepByStepSimulation, loc.getString( "menuSimulationStepByStep" ) );
-			Menu.updateMenu( mnuQuickVisualization, loc.getString( "menuSimulationQuickVisualization" ) );
-			Menu.updateMenu( mOptimization, loc.getString( "menuOptimization" ) );
-/**/			Menu.updateMenu( mnuCreateGraph, loc.getString( "menuOptimizationCreateGraph" ) );
-			Menu.updateMenu( mnuQuickestTransshipment, loc.getString( "menuOptAlgoQuickestTransshipment" ) );
-			Menu.updateMenu( mnuMaxFlowOverTimeMC, loc.getString( "menuOptAlgoMaxFlowOverTimeMinCost" ) );
-			Menu.updateMenu( mnuMaxFlowOverTimeTEN, loc.getString( "menuOptAlgoMaxFlowOverTimeTEN" ) );
-			Menu.updateMenu( mnuEarliestArrivalTransshipment, loc.getString( "menuOptAlgoEATransshipment" ) );
-		}
-
-		// Extras menu
-		Menu.updateMenu( mLanguage, loc.getString( "menuLanguages" ) );
-		Menu.updateMenu( mPlanImage, loc.getString( "menuPlanDisplaying" ) );
-		Menu.updateMenu( mnuPlanImageLoad, loc.getString( "menuLoadPlan" ) );
-		Menu.updateMenu( mnuPlanImageHide, loc.getString( "menuHidePlan" ) );
-		Menu.updateMenu( mnuPlanImageResize, loc.getString( "menuResizePlan" ) );
-		Menu.updateMenu( mnuPlanImageLocate, loc.getString( "menuMovePlan" ) );
-		Menu.updateMenu( mnuPlanImageTransparency, loc.getString( "menuSetPlanTransparency" ) );
-		Menu.updateMenu( mnuOptions, loc.getString( "menuOptions" ) );
-		if( ZETMain.isDebug() ) {
-			Menu.updateMenu( mnuSettings, loc.getString( "menuSettings" ) );
-		}
-
-		// Window menu
-
-		// Help menu
-		Menu.updateMenu( mnuHelpAbout, loc.getString( "menuAbout" ) );
 
 		// Tabs in the tabbed view
 		loc.setPrefix( "gui.editor.JEditor.tab" );
@@ -778,40 +687,7 @@ public class JEditor extends JFrame implements Localized, EventListener<Progress
 	 * Some listener for needed updates                                          *
 	 *                                                                           *
 	 ****************************************************************************/
-	ActionListener aclAreaVisibility = new ActionListener() {
-		@Override
-		public void actionPerformed( ActionEvent e ) {
-			if( e.getActionCommand().equals( "showAll" ) ) {
-				mnuDelayArea.setSelected( true );
-				mnuStairArea.setSelected( true );
-				mnuEvacuationArea.setSelected( true );
-				mnuInaccessibleArea.setSelected( true );
-				mnuSaveArea.setSelected( true );
-				mnuAssignmentArea.setSelected( true );
-			} else if( e.getActionCommand().equals( "hideAll" ) ) {
-				mnuDelayArea.setSelected( false );
-				mnuStairArea.setSelected( false );
-				mnuEvacuationArea.setSelected( false );
-				mnuInaccessibleArea.setSelected( false );
-				mnuSaveArea.setSelected( false );
-				mnuAssignmentArea.setSelected( false );
-			} // do not check for other commands as the other select and unselect!
-			updateAreaVisiblity();
-		}
-	};
-	ActionListener aclDistribution = new ActionListener() {
-		@Override
-		public void actionPerformed( ActionEvent e ) {
-		}
-	};
-	ActionListener aclDebug = new ActionListener() {
- 	@Override
-		public void actionPerformed( ActionEvent e ) {
-			if( e.getActionCommand().equals( "outputInformation" ) ) {
-			} else if( e.getActionCommand().equals( "outputGraph" ) ) {
-			}
-		}
-	};
+	 // TODO move to control/JZETMEnuBar and reimplement that stuff...
 	ActionListener aclExecute = new ActionListener() {
 		@Override
 		public void actionPerformed( ActionEvent e ) {
@@ -896,144 +772,6 @@ public class JEditor extends JFrame implements Localized, EventListener<Progress
 			} catch( Exception ex ) {
 				ZETMain.sendError( ex.getLocalizedMessage() );
 			}
-		}
-	};
-	
-	ActionListener aclPaint = new ActionListener() {
-		@Override
-		public void actionPerformed( ActionEvent e ) {
-			try {
-				if( e.getActionCommand().equals( "grid" ) )
-					editView.getFloor().setRasterizedPaintMode( mnuPaintRasterized.isSelected() );
-				else if( e.getActionCommand().equals( "defaultFloor" ) ) {
-					ZETProperties.isDefaultFloorHidden();
-					PropertyContainer.getInstance().set( "editor.options.view.hideDefaultFloor", mnuHideDefaultFloor.isSelected() );
-					editView.displayProject();
-				} else if( e.getActionCommand().equals( "gridLine" ) ) {
-					mnuGridPoints.setSelected( false );
-					mnuGridNotVisible.setSelected( false );
-					editView.getFloor().setRasterPaintStyle( RasterPaintStyle.Lines );
-				} else if( e.getActionCommand().equals( "gridPoint" ) ) {
-					mnuGridLines.setSelected( false );
-					mnuGridNotVisible.setSelected( false );
-					editView.getFloor().setRasterPaintStyle( RasterPaintStyle.Points );
-				} else if( e.getActionCommand().equals( "gridNo" ) ) {
-					mnuGridLines.setSelected( false );
-					mnuGridPoints.setSelected( false );
-					editView.getFloor().setRasterPaintStyle( RasterPaintStyle.Nothing );
-				} else
-					ZETMain.sendError( loc.getString( "gui.UnknownCommand" ) + " '" + e.getActionCommand() + "'. " + loc.getString( "gui.ContactDeveloper" ) );
-			} catch( Exception ex ) {
-				JOptionPane.showMessageDialog( getInstance(),
-								ex.getLocalizedMessage(), loc.getString( "gui.Error" ),
-								JOptionPane.ERROR_MESSAGE );
-			}
-		}
-	};
-	ActionListener aclPlanImage = new ActionListener() {
-		@Override
-		public void actionPerformed( ActionEvent e ) {
-			try {
-				if( e.getActionCommand().equals( "load" ) ) {
-					JFileChooser d = new JFileChooser( GUIOptionManager.getBuildingPlanPath() );
-					d.setFileFilter( new FileFilter() {
-						@Override
-						public boolean accept( File f ) {
-							return f.isDirectory() || f.getName().toLowerCase().endsWith( ".jpg" ) || f.getName().toLowerCase().endsWith( ".png" ) || f.getName().toLowerCase().endsWith( ".gif" );
-						}
-
-						@Override
-						public String getDescription() {
-							return "Bilddateien (*.jpg;*.png;*.gif)";
-						}
-					} );
-					d.showOpenDialog( null );
-					File file = d.getSelectedFile();
-					BufferedImage image = null;
-					if( file != null ) {
-						GUIOptionManager.setBuildingPlanPath( d.getCurrentDirectory().getPath() );
-						try {
-							image = ImageIO.read( file );
-						} catch( IOException ex ) {
-							ex.printStackTrace();
-						}
-
-						// Show Zoom/Size Dialogue
-						JPlanImageProperties ip = new JPlanImageProperties( image );
-						if( ip.showPlanImageZoomDialog( getInstance() ) == JPlanImageProperties.OK ) {
-							CoordinateTools.setPictureZoomFactor( (double)ip.getMillimeterCount() / (double)ip.getPixelCount() );
-							editView.getFloor().getPlanImage().setImage( image );
-							mnuPlanImageHide.setEnabled( true );
-							mnuPlanImageResize.setEnabled( true );
-							mnuPlanImageLocate.setEnabled( true );
-							mnuPlanImageTransparency.setEnabled( true );
-							ZETMain.sendMessage( "Plan für Hintergrunddarstellung geladen." );
-						}
-					}
-				} else if( e.getActionCommand().equals( "hide" ) ) {
-					editView.getFloor().getPlanImage().setImage( (BufferedImage)null );
-					mnuPlanImageHide.setEnabled( false );
-					mnuPlanImageResize.setEnabled( false );
-					mnuPlanImageLocate.setEnabled( false );
-					mnuPlanImageTransparency.setEnabled( false );
-				} else if( e.getActionCommand().equals( "resize" ) ) {
-					BufferedImage image = editView.getFloor().getPlanImage().getImage();
-					// Show Zoom/Size Dialogue
-					JPlanImageProperties ip = new JPlanImageProperties( image );
-					if( ip.showPlanImageZoomDialog( getInstance() ) == JPlanImageProperties.OK ) {
-						CoordinateTools.setPictureZoomFactor( (double)ip.getMillimeterCount() / (double)ip.getPixelCount() );
-						editView.getFloor().getPlanImage().resize();
-					}
-				} else if( e.getActionCommand().equals( "move" ) ) {
-					JPlanImageProperties ip = new JPlanImageProperties();
-					ip.setXOffset( editView.getFloor().getPlanImage().getImageX() );
-					ip.setYOffset( editView.getFloor().getPlanImage().getImageY() );
-					if( ip.showPlanMoveDialog( getInstance() ) == JPlanImageProperties.OK ) {
-						editView.getFloor().getPlanImage().setImageX( ip.getXOffset() );
-						editView.getFloor().getPlanImage().setImageY( ip.getYOffset() );
-					}
-				} else if( e.getActionCommand().equals( "transparency" ) ) {
-					JPlanImageProperties ip = new JPlanImageProperties();
-					ip.setAlpha( editView.getFloor().getPlanImage().getAlpha() );
-					if( ip.showPlanAlphaDialog( getInstance() ) == JPlanImageProperties.OK )
-						editView.getFloor().getPlanImage().setAlpha( ip.getAlpha() );
-				} else
-					ZETMain.sendError( loc.getString( "gui.UnknownCommand" ) + " '" + e.getActionCommand() + "'. " + loc.getString( "gui.ContactDeveloper" ) );
-
-			} catch( Exception ex ) {
-				JOptionPane.showMessageDialog( getInstance(),
-								ex.getLocalizedMessage(), loc.getString( "gui.Error" ),
-								JOptionPane.ERROR_MESSAGE );
-			}
-		}
-	};
-	ActionListener aclProperties = new ActionListener() {
-		@Override
-		public void actionPerformed( ActionEvent e ) {
-			if( e.getActionCommand().equals( "properties" ) ) {
-				JPropertySelectorWindow propertySelector = new JPropertySelectorWindow( instance, loc.getString( "gui.editor.JPropertySelector.Title" ), 700, 500 );
-				propertySelector.setVisible( true );
-				System.out.println( "Properties saved." ); // TODO loc
-			} else if( e.getActionCommand().equals( "options" ) ) {
-				ZETMain.ptmOptions.getRoot().reloadFromPropertyContainer();
-				JOptionsWindow propertySelector = new JOptionsWindow( instance, loc.getString( "gui.editor.JOptions.Title" ), 700, 500, ZETMain.ptmOptions );
-				propertySelector.setVisible( true );
-				try {	// Save results in options file
-					PropertyContainer.saveConfigFile( ZETMain.ptmOptions, new File( ZETMain.optionFilename ) );
-				} catch( IOException ex ) {
-					ZETMain.sendError( "Error saving config file!" ); // TODO loc
-				}
-			} else if( e.getActionCommand().equals( "settings" ) ) {
-				ZETMain.ptmInformation.getRoot().reloadFromPropertyContainer();
-				JOptionsWindow propertySelector = new JOptionsWindow( instance, loc.getString( "gui.editor.settings.Title" ), 700, 500, ZETMain.ptmInformation );
-				propertySelector.setVisible( true );
-				try {	// Save results in settings file
-					PropertyContainer.saveConfigFile( ZETMain.ptmInformation, new File( ZETMain.informationFilename ) );
-				} catch( IOException ex ) {
-					ZETMain.sendError( "Error saving settings file!" ); // TODO loc
-				}
-			}else
-				ZETMain.sendError( loc.getString( "gui.UnknownCommand" ) + " '" + e.getActionCommand() + "'. " + loc.getString( "gui.ContactDeveloper" ) );
 		}
 	};
 
@@ -1197,7 +935,7 @@ public class JEditor extends JFrame implements Localized, EventListener<Progress
 		//entryModelVis.rebuild( result );
 		guiControl.rebuild( result );
 
-		mnuFileSaveResultAs.setEnabled( result != null );
+//		mnuFileSaveResultAs.setEnabled( result != null );
 	}
 
 	private void stepByStepSimulation() {
@@ -1240,21 +978,21 @@ public class JEditor extends JFrame implements Localized, EventListener<Progress
 	 *                                                                           *
 	 ****************************************************************************/
 
-	/**
-	 * Enables and disables the menu item that moves a floor up.
-	 * @param enabled the enabled status
-	 */
-	public void enableMenuFloorUp( boolean enabled ) {
-		mnuEditFloorUp.setEnabled( enabled );
-	}
-
-	/**
-	 * Enables and disables the menu item that moves a floor down.
-	 * @param enabled the enabled status
-	 */
-	public void enableMenuFloorDown( boolean enabled ) {
-		mnuEditFloorDown.setEnabled( enabled );
-	}
+//	/**
+//	 * Enables and disables the menu item that moves a floor up.
+//	 * @param enabled the enabled status
+//	 */
+//	public void enableMenuFloorUp( boolean enabled ) {
+//		mnuEditFloorUp.setEnabled( enabled );
+//	}
+//
+//	/**
+//	 * Enables and disables the menu item that moves a floor down.
+//	 * @param enabled the enabled status
+//	 */
+//	public void enableMenuFloorDown( boolean enabled ) {
+//		mnuEditFloorDown.setEnabled( enabled );
+//	}
 
 	/**
 	 * Returns the edit view component.
@@ -1283,36 +1021,6 @@ public class JEditor extends JFrame implements Localized, EventListener<Progress
 		JOptionPane.showMessageDialog( null, bos.toString(), "Error", JOptionPane.ERROR_MESSAGE );
 	}
 
-	/**
-	 * Displays a specified type of areas. The selection parameter of the
-	 * menu entry is set correct, too.
-	 * @param areaType the are type
-	 */
-	public void showArea( AreaVisibility areaType ) {
-		switch( areaType ) {
-			case Delay:
-				mnuDelayArea.setSelected( true );
-				break;
-			case Stair:
-				mnuStairArea.setSelected( true );
-				break;
-			case Evacuation:
-				mnuEvacuationArea.setSelected( true );
-				break;
-			case Inaccessible:
-				mnuInaccessibleArea.setSelected( true );
-				break;
-			case Save:
-				mnuSaveArea.setSelected( true );
-				break;
-			case Assignment:
-				mnuAssignmentArea.setSelected( true );
-				break;
-			default:
-				showErrorMessage( "Error", "Dieser Area-Typ wird nicht unterstützt." );
-		}
-		updateAreaVisiblity();
-	}
 
 	/**
 	 * Shows a <code>JToolBar</code> and hides all others.
@@ -1368,30 +1076,6 @@ public class JEditor extends JFrame implements Localized, EventListener<Progress
 		validate();
 	}
 
-	/**
-	 * Hides and unhides the areas in the plan depending on the status of the
-	 * associated menu entries. The menu entries to hide and show all areas
-	 * are updated and, if neccessery, disabled or enabled.
-	 */
-	public void updateAreaVisiblity() {
-		ArrayList<AreaVisibility> mode = new ArrayList<AreaVisibility>();
-		if( mnuDelayArea.isSelected() )
-			mode.add( AreaVisibility.Delay );
-		if( mnuStairArea.isSelected() )
-			mode.add( AreaVisibility.Stair );
-		if( mnuEvacuationArea.isSelected() )
-			mode.add( AreaVisibility.Evacuation );
-		if( mnuInaccessibleArea.isSelected() )
-			mode.add( AreaVisibility.Inaccessible );
-		if( mnuSaveArea.isSelected() )
-			mode.add( AreaVisibility.Save );
-		if( mnuAssignmentArea.isSelected() )
-			mode.add( AreaVisibility.Assignment );
-		mnuShowAllAreas.setEnabled( mode.size() != 6 );
-		mnuHideAllAreas.setEnabled( mode.size() != 0 );
-		editView.changeAreaView( mode );
-	}
-
 	public void disableProjectUpdate( boolean disableUpdate ) {
 		System.out.println( "update wird auf " + disableUpdate + "gesetzt" );
 		this.disableUpdate = disableUpdate;
@@ -1400,7 +1084,6 @@ public class JEditor extends JFrame implements Localized, EventListener<Progress
 	public boolean isUpdateDisabled() {
 		return this.disableUpdate;
 	}
-
 
 	/** This class serves as a model for the JComboBox that contains the
 	 * BatchResultEntries for the Graph statistics Tab. */
