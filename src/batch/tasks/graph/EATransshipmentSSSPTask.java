@@ -21,7 +21,7 @@ package batch.tasks.graph;
 
 import ds.NetworkFlowModelAlgorithm;
 import algo.graph.dynamicflow.eat.EATransshipmentSSSP;
-import ds.NetworkFlowModel;
+import de.tu_berlin.math.coga.zet.NetworkFlowModel;
 import ds.graph.flow.PathBasedFlowOverTime;
 
 public class EATransshipmentSSSPTask extends NetworkFlowModelAlgorithm {

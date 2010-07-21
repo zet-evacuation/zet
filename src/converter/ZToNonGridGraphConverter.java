@@ -22,7 +22,7 @@ package converter;
 
 import algo.graph.util.GraphInstanceChecker;
 import de.tu_berlin.math.coga.common.localization.Localization;
-import ds.NetworkFlowModel;
+import de.tu_berlin.math.coga.zet.NetworkFlowModel;
 import ds.PropertyContainer;
 import ds.graph.DynamicNetwork;
 import ds.graph.Edge;

@@ -27,7 +27,7 @@ import ds.z.TeleportEdge;
 import ds.z.PlanPoint;
 import ds.z.RoomEdge;
 import ds.z.StairArea;
-import gui.JEditor;
+import zet.gui.JEditor;
 import java.awt.AWTEvent;
 import java.awt.Color;
 import java.awt.Component;

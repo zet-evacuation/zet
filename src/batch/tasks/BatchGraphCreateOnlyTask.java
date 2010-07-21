@@ -7,7 +7,7 @@ package batch.tasks;
 import batch.BatchResultEntry;
 import converter.ZToGraphConverter;
 import de.tu_berlin.math.coga.common.algorithm.AlgorithmListener;
-import ds.NetworkFlowModel;
+import de.tu_berlin.math.coga.zet.NetworkFlowModel;
 import ds.Project;
 import ds.z.Assignment;
 import ds.z.ConcreteAssignment;

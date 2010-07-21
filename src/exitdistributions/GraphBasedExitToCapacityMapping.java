@@ -20,7 +20,7 @@ import ds.ca.CellularAutomaton;
 import ds.ca.StaticPotential;
 import ds.ca.TargetCell;
 import ds.graph.IdentifiableCollection;
-import ds.NetworkFlowModel;
+import de.tu_berlin.math.coga.zet.NetworkFlowModel;
 import ds.graph.Node;
 import evacuationplan.BidirectionalNodeCellMapping;
 import java.util.ArrayList;

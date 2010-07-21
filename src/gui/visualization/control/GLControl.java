@@ -66,21 +66,30 @@ public class GLControl implements DrawableControlable {
 	}
 
 	/**
-	 * Describes the differend types of information which can be illustrated
+	 * Describes the different types of information which can be illustrated
 	 * by different colors of the cells of the cellular automaton.
 	 */
 	public enum CellInformationDisplay {
 
 		/** Disables displaying any potential on the floor of cells */
-		NO_POTENTIAL,
+		NoPotential( 0 ),
 		/** Enables displaying of static potential on the floor of cells */
-		STATIC_POTENTIAL,
+		StaticPotential( 1 ),
 		/** Enables displaying of the dynamic potential on the floor of cells */
-		DYNAMIC_POTENTIAL,
+		DynamicPotential( 2 ),
 		/** Enables displaying usage statistic on the cells */
-		UTILIZATION,
+		Utilization( 3 ),
 		/** Shows waiting times on cells. */
-		WAITING
+		Waiting( 4 );
+		private int id;
+
+		private CellInformationDisplay( int id ) {
+			this.id = id;
+		}
+
+		public int id() {
+			return id;
+		}
 	}
 
 	/** 
@@ -106,15 +115,15 @@ public class GLControl implements DrawableControlable {
 	}
 	/** The localization class. */
 	private Localization loc = Localization.getInstance();
-	/** Indicates wheather the graph is currently visible, or not. */
+	/** Indicates whether the graph is currently visible, or not. */
 	private boolean showGraph;
-	/** Indicates wheather the cellular automaton is currently visible, or not. */
+	/** Indicates whether the cellular automaton is currently visible, or not. */
 	private boolean showCA;
-	/** Indicates wheather the walls are drawn. */
+	/** Indicates whether the walls are drawn. */
 	private boolean showWalls = true;
-	/** Indicates wheather the currently loaded visualizationresult contains a cellular automaton, or not. */
+	/** Indicates whether the currently loaded visualization result contains a cellular automaton, or not. */
 	private boolean hasCellularAutomaton;
-	/** Indicates wheather the currently loaded visualizationresult contains a graph, or not. */
+	/** Indicates whether the currently loaded visualization result contains a graph, or not. */
 	private boolean hasGraph;
 	/** Represents the static structure of the building, e.g. walls. */
 	private BuildingResults buildingResults;
@@ -194,20 +203,20 @@ public class GLControl implements DrawableControlable {
 
 		switch( PropertyContainer.getInstance().getAsInt( "settings.gui.visualization.floorInformation" ) ) {
 			case 1:
-				showPotential( CellInformationDisplay.STATIC_POTENTIAL );
+				showPotential( CellInformationDisplay.StaticPotential );
 				break;
 			case 2:
-				showPotential( CellInformationDisplay.DYNAMIC_POTENTIAL );
+				showPotential( CellInformationDisplay.DynamicPotential );
 				break;
 			case 3:
-				showPotential( CellInformationDisplay.UTILIZATION );
+				showPotential( CellInformationDisplay.Utilization );
 				break;
 			case 4:
-				showPotential( CellInformationDisplay.WAITING );
+				showPotential( CellInformationDisplay.Waiting );
 				break;
 			case 0:
 			default:
-				showPotential( CellInformationDisplay.NO_POTENTIAL );
+				showPotential( CellInformationDisplay.NoPotential );
 				break;
 		}
 	}

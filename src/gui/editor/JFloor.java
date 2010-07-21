@@ -31,7 +31,7 @@ import ds.z.SaveArea;
 import ds.z.StairArea;
 import ds.z.ZControl;
 import ds.z.exception.AssignmentException;
-import gui.JEditor;
+import zet.gui.JEditor;
 import gui.ZETMain;
 import gui.editor.planimage.PlanImage;
 import java.awt.AWTEvent;

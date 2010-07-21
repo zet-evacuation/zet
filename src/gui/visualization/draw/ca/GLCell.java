@@ -112,7 +112,7 @@ public class GLCell extends AbstractDrawable<GLCell, GLCellControl> {
 	 * is calculated.
 	 */
 	protected void updateFloorColor() {
-		if( control.getDisplayMode() == CellInformationDisplay.NO_POTENTIAL )
+		if( control.getDisplayMode() == CellInformationDisplay.NoPotential )
 			this.color = getDefaultColor();
 		else
 			this.color = potentialToColor( control.getCellInformation( control.getDisplayMode() ), control.getMaxCellInformation( control.getDisplayMode() ), VisualizationOptionManager.getCellInformationLowColor( control.getDisplayMode() ), VisualizationOptionManager.getCellInformationHighColor( control.getDisplayMode() ) );

@@ -15,7 +15,7 @@
  */
 package converter;
 
-import ds.NetworkFlowModel;
+import de.tu_berlin.math.coga.zet.NetworkFlowModel;
 import ds.z.BuildingPlan;
 import ds.z.ConcreteAssignment;
 

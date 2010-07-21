@@ -29,7 +29,7 @@ import de.tu_berlin.math.coga.common.algorithm.AlgorithmProgressEvent;
 import de.tu_berlin.math.coga.common.debug.DebugEnum;
 import ds.graph.Localization;
 import info.clearthought.layout.TableLayout;
-import gui.JEditor;
+import zet.gui.JEditor;
 import gui.components.progress.ProgressTaskEntry;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;

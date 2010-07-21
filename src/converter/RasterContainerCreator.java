@@ -30,7 +30,7 @@ import util.DebugFlags;
 
 import ds.Project;
 import ds.PropertyContainer;
-import ds.NetworkFlowModel;
+import de.tu_berlin.math.coga.zet.NetworkFlowModel;
 import ds.z.BuildingPlan;
 import ds.z.DelayArea;
 import ds.z.EvacuationArea;

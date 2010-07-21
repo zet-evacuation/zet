@@ -25,7 +25,7 @@ import algo.graph.util.PathComposition;
 import ds.graph.Edge;
 import ds.graph.IdentifiableIntegerMapping;
 import ds.graph.Network;
-import ds.NetworkFlowModel;
+import de.tu_berlin.math.coga.zet.NetworkFlowModel;
 import ds.graph.Node;
 import java.awt.BorderLayout;
 import java.awt.event.ActionEvent;

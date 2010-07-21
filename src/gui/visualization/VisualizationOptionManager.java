@@ -156,13 +156,13 @@ public class VisualizationOptionManager {
 	 */
 	public static GLColor getCellInformationLowColor( GLControl.CellInformationDisplay cid ) {
 		switch( cid ) {
-			case DYNAMIC_POTENTIAL:
+			case DynamicPotential:
 				return getCellFloorColor();
-			case STATIC_POTENTIAL:
+			case StaticPotential:
 				return new GLColor( Color.white );
-			case UTILIZATION:
+			case Utilization:
 				return getCellFloorColor();
-			case WAITING:
+			case Waiting:
 				return new GLColor( Color.green );
 			default:
 				return getCellFloorColor();
@@ -177,13 +177,13 @@ public class VisualizationOptionManager {
 	 */
 	public static GLColor getCellInformationHighColor( GLControl.CellInformationDisplay cid ) {
 		switch( cid ) {
-			case DYNAMIC_POTENTIAL:
+			case DynamicPotential:
 				return new GLColor( Color.red );
-			case STATIC_POTENTIAL:
+			case StaticPotential:
 				return new GLColor( Color.blue );
-			case UTILIZATION:
+			case Utilization:
 				return new GLColor( Color.orange );
-			case WAITING:
+			case Waiting:
 				return new GLColor( Color.red );
 			default:
 				return getCellFloorColor();

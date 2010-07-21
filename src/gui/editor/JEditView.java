@@ -39,7 +39,7 @@ import ds.z.TeleportArea;
 import ds.z.TeleportEdge;
 import ds.z.ZControl;
 import gui.Control;
-import gui.JEditor;
+import zet.gui.JEditor;
 import gui.ZETMain;
 import gui.ZETProperties;
 import gui.components.ComboBoxRenderer;

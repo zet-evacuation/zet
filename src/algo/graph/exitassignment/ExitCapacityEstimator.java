@@ -24,7 +24,7 @@ import ds.graph.problem.MaximumFlowProblem;
 import ds.graph.Edge;
 import ds.graph.IdentifiableCollection;
 import ds.graph.IdentifiableIntegerMapping;
-import ds.NetworkFlowModel;
+import de.tu_berlin.math.coga.zet.NetworkFlowModel;
 import ds.graph.Node;
 import ds.graph.flow.MaximumFlow;
 import de.tu_berlin.math.coga.common.algorithm.Algorithm;

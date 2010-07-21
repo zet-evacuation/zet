@@ -123,6 +123,17 @@ public class PropertyContainer {
 		return (ArrayList<String>)getAs( key, ArrayList.class );
 	}
 
+	/**
+	 * Toggles a boolean value and returns the new value.
+	 * @param key
+	 * @return
+	 */
+	public boolean toggle( String key ) {
+		final boolean temp = !getAsBoolean( key );
+		set( key, temp );
+		return temp;
+	}
+
 	public void set( String key, Object value ) {
 		if( !propertyTypes.containsKey( key ) )
 			throw new IllegalArgumentException( Localization.getInstance().getString( "ds.PropertyNotDefinedException" + key ) );

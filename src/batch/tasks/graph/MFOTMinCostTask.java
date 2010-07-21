@@ -22,7 +22,7 @@ package batch.tasks.graph;
 import algo.graph.dynamicflow.maxflow.MaxFlowOverTime;
 import algo.graph.dynamicflow.maxflow.MaximumFlowOverTimeProblem;
 import ds.NetworkFlowModelAlgorithm;
-import ds.NetworkFlowModel;
+import de.tu_berlin.math.coga.zet.NetworkFlowModel;
 import ds.graph.flow.PathBasedFlowOverTime;
 
 public class MFOTMinCostTask extends NetworkFlowModelAlgorithm {

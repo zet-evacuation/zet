@@ -22,7 +22,7 @@ import batch.load.BatchProjectEntry;
 import ds.Project;
 import ds.PropertyContainer;
 import ds.z.Assignment;
-import gui.JEditor;
+import zet.gui.JEditor;
 import gui.ZETMain;
 import gui.editor.properties.JPropertyComboBox;
 import gui.editor.properties.PropertyFilesSelectionModel;

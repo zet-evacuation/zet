@@ -21,7 +21,7 @@ package batch.tasks.graph;
 
 import algo.graph.dynamicflow.maxflow.MaximumFlowOverTimeProblem;
 import ds.NetworkFlowModelAlgorithm;
-import ds.NetworkFlowModel;
+import de.tu_berlin.math.coga.zet.NetworkFlowModel;
 import algo.graph.dynamicflow.maxflow.TimeExpandedMaximumFlowOverTime;
 import ds.graph.flow.PathBasedFlowOverTime;
 

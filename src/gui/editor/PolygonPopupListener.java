@@ -26,7 +26,7 @@ import ds.z.PlanPoint;
 import ds.z.PlanPolygon;
 import ds.z.Room;
 import gui.Control;
-import gui.JEditor;
+import zet.gui.JEditor;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;

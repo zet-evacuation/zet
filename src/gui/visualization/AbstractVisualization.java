@@ -25,7 +25,7 @@ import de.tu_berlin.math.coga.math.Conversion;
 import event.EventServer;
 import event.MessageEvent;
 import event.MessageEvent.MessageType;
-import gui.JEditor;
+import zet.gui.JEditor;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.event.KeyEvent;
