@@ -389,9 +389,11 @@ public class JEditView extends AbstractSplitPropertyWindow<JFloorScrollPane<JFlo
 				final int add = PropertyContainer.getInstance().getAsBoolean( "editor.options.view.hideDefaultFloor" ) ? 1 : 0;
 				lblFloorNumber.setText( String.format( loc.getStringWithoutPrefix( "gui.editor.JEditorPanel.labelOnFloor" ), cbxFloors.getSelectedIndex() + add ) );
 				btnFloorDown.setEnabled( !(cbxFloors.getSelectedIndex() == 0 || cbxFloors.getSelectedIndex() == 1 && add == 0) );
-				JEditor.getInstance().enableMenuFloorDown( !(cbxFloors.getSelectedIndex() == 0 || cbxFloors.getSelectedIndex() == 1 && add == 0) );
+
+				// TODO call the method somehow with the control class...
+				//JEditor.getInstance().enableMenuFloorDown( !(cbxFloors.getSelectedIndex() == 0 || cbxFloors.getSelectedIndex() == 1 && add == 0) );
 				btnFloorUp.setEnabled( !(cbxFloors.getSelectedIndex() == cbxFloors.getItemCount() - 1 || cbxFloors.getSelectedIndex() == 0 && add == 0) );
-				JEditor.getInstance().enableMenuFloorUp( !(cbxFloors.getSelectedIndex() == cbxFloors.getItemCount() - 1 || cbxFloors.getSelectedIndex() == 0 && add == 0) );
+				//JEditor.getInstance().enableMenuFloorUp( !(cbxFloors.getSelectedIndex() == cbxFloors.getItemCount() - 1 || cbxFloors.getSelectedIndex() == 0 && add == 0) );
 				Floor dspFloor = (Floor)cbxFloors.getSelectedItem();
 				currentFloor = dspFloor;
 				updateFloorView();
