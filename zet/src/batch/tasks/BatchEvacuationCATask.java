@@ -35,7 +35,7 @@ import ds.Project;
 import ds.PropertyContainer;
 import ds.ca.CellularAutomaton;
 import ds.ca.results.VisualResultsRecorder;
-import ds.NetworkFlowModel;
+import de.tu_berlin.math.coga.zet.NetworkFlowModel;
 import ds.graph.flow.PathBasedFlowOverTime;
 import ds.z.Assignment;
 import ds.z.AssignmentType;

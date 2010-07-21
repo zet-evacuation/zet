@@ -25,7 +25,7 @@ import ds.PropertyContainer;
 import ds.graph.DynamicNetwork;
 import ds.graph.IdentifiableIntegerMapping;
 import ds.graph.Network;
-import ds.NetworkFlowModel;
+import de.tu_berlin.math.coga.zet.NetworkFlowModel;
 import ds.graph.Node;
 import ds.graph.Edge;
 import ds.graph.Graph;

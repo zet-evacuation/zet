@@ -21,6 +21,7 @@
 
 package gui;
 
+import zet.gui.JEditor;
 import batch.load.BatchProject;
 import batch.load.BatchProjectEntry;
 import com.martiansoftware.jsap.FlaggedOption;
@@ -68,25 +69,25 @@ public class ZETMain {
 	public static String version = "1.1.0";
 	/** The localization class. */
 	private static Localization loc = Localization.getInstance();
-	/** Indicates wheather debug mode is active, or not. */
+	/** Indicates whether debug mode is active, or not. */
 	private static boolean debug;
-	/** The project file that should be loaded (submitted via commandline). */
+	/** The project file that should be loaded (submitted via command line). */
 	static String loadedProject = "";
-	/** The property file that is loaded when the program starts. Can be changed via commandline. */
+	/** The property file that is loaded when the program starts. Can be changed via command line. */
 	static String propertyFilename = "./properties/properties.xml";
 	/** The filename for the file that contains the program options. */
-	static final String optionFilename = "zetoptions.xml";
+	public static final String optionFilename = "zetoptions.xml";
 	/** The filename for the file that contains additional options. */
-	static final String informationFilename = "options.xml";
-	/** The file to which the log is written (if specified via commandline). */
+	public static final String informationFilename = "options.xml";
+	/** The file to which the log is written (if specified via command line). */
 	static String logFile = "output.log";
-	/** The file to which the error log is written (if specified via commandline). */
+	/** The file to which the error log is written (if specified via command line). */
 	static String errFile = "error.log";
 	/** The batch project which is loaded if -batch command option is used. */
 	static BatchProject bp = null;
-	/** States if visualization is used, or not. Can be changed via commandline. */
+	/** States if visualization is used, or not. Can be changed via command line. */
 	public static boolean useVisualization = true;
-	/** States if statistic is used, or not. Can be changed via commandline. */
+	/** States if statistic is used, or not. Can be changed via command line. */
 	public static boolean useStatistic = true;
 	/** The properties in the information file. */
 	public static PropertyTreeModel ptmInformation;

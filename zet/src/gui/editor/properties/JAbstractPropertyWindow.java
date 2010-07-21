@@ -20,7 +20,7 @@
 package gui.editor.properties;
 
 import ds.PropertyContainer;
-import gui.JEditor;
+import zet.gui.JEditor;
 import gui.editor.properties.framework.AbstractPropertyValue;
 import info.clearthought.layout.TableLayout;
 import java.awt.BorderLayout;

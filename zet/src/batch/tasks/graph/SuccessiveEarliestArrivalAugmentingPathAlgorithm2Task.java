@@ -19,7 +19,7 @@
  */
 package batch.tasks.graph;
 
-import ds.NetworkFlowModel;
+import de.tu_berlin.math.coga.zet.NetworkFlowModel;
 import algo.graph.dynamicflow.eat.EarliestArrivalFlowProblem;
 import algo.graph.dynamicflow.eat.LongestShortestPathTimeHorizonEstimator;
 import algo.graph.dynamicflow.eat.SuccessiveEarliestArrivalAugmentingPathAlgorithm;

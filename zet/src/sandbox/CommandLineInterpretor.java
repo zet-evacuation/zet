@@ -36,7 +36,7 @@ import converter.ZToGraphConverter;
 import converter.ZToNonGridGraphConverter;
 import ds.Project;
 import ds.PropertyContainer;
-import ds.NetworkFlowModel;
+import de.tu_berlin.math.coga.zet.NetworkFlowModel;
 import ds.z.Assignment;
 import ds.z.ConcreteAssignment;
 

@@ -16,6 +16,7 @@
 package ds;
 
 import de.tu_berlin.math.coga.common.algorithm.Algorithm;
+import de.tu_berlin.math.coga.zet.NetworkFlowModel;
 import ds.graph.flow.PathBasedFlowOverTime;
 
 /** The superclass of all tasks who execute graph algorithms. This class is

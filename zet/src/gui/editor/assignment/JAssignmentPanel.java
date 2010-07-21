@@ -30,7 +30,7 @@ import de.tu_berlin.math.coga.rndutils.distribution.continuous.UniformDistributi
 import ds.Project;
 import ds.z.Assignment;
 import ds.z.AssignmentType;
-import gui.JEditor;
+import zet.gui.JEditor;
 import gui.components.ComboBoxRenderer;
 import gui.components.framework.Button;
 import info.clearthought.layout.TableLayout;

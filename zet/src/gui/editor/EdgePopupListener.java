@@ -27,7 +27,7 @@ import ds.z.RoomEdge;
 import ds.z.TeleportEdge;
 import event.EventServer;
 import event.MessageEvent;
-import gui.JEditor;
+import zet.gui.JEditor;
 import java.awt.Point;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;

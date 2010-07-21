@@ -21,7 +21,7 @@ package gui.components;
 
 import ds.PropertyContainer;
 import ds.z.Floor;
-import gui.JEditor;
+import zet.gui.JEditor;
 import gui.editor.CoordinateTools;
 import gui.editor.GUIOptionManager;
 import java.awt.AWTEvent;

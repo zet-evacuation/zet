@@ -32,7 +32,7 @@ import ds.graph.IdentifiableCollection;
 import ds.graph.IdentifiableIntegerMapping;
 import ds.graph.IdentifiableObjectMapping;
 import ds.graph.Network;
-import ds.NetworkFlowModel;
+import de.tu_berlin.math.coga.zet.NetworkFlowModel;
 import ds.graph.Node;
 import ds.graph.Path;
 import ds.graph.flow.FlowOverTime;

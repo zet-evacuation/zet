@@ -24,7 +24,7 @@ import ds.NetworkFlowModelAlgorithm;
 import de.tu_berlin.math.coga.common.algorithm.Transformation;
 import batch.tasks.*;
 import algo.graph.dynamicflow.QuickestTransshipment;
-import ds.NetworkFlowModel;
+import de.tu_berlin.math.coga.zet.NetworkFlowModel;
 import ds.graph.flow.PathBasedFlowOverTime;
 
 /**

@@ -2,7 +2,7 @@
  * JEditToolbar.java
  * Created 16.07.2010, 10:24:23
  */
-package gui.toolbar;
+package zet.gui.components.toolbar;
 
 import de.tu_berlin.math.coga.common.localization.Localization;
 import gui.Control;
@@ -39,7 +39,7 @@ import javax.swing.event.PopupMenuListener;
 public class JEditToolbar extends JToolBar implements ActionListener, PopupMenuListener, KeyListener {
 	/** The localization class. */
 	static final Localization loc = Localization.getInstance();
-	private JButton btnExit1;
+	private JButton btnExit;
 	private JButton btnOpen;
 	private JButton btnSave;
 	private JButton btnEditSelect;
@@ -75,8 +75,8 @@ public class JEditToolbar extends JToolBar implements ActionListener, PopupMenuL
 	private void createEditToolBar() {
 		loc.setPrefix( "gui.editor.JEditor." );
 
-		btnExit1 = Button.newButton( IconSet.Exit, this, "exit", loc.getString( "toolbarTooltipExit" ) );
-		add( btnExit1 );
+		btnExit = Button.newButton( IconSet.Exit, this, "exit", loc.getString( "toolbarTooltipExit" ) );
+		add( btnExit );
 		addSeparator();
 
 		btnOpen = Button.newButton( IconSet.Open, this, "loadProject", loc.getString( "toolbarTooltipOpen" ) );
@@ -140,11 +140,11 @@ public class JEditToolbar extends JToolBar implements ActionListener, PopupMenuL
 		if( e.getActionCommand().equals( "exit" ) ) {
 			control.exit();
 		} else if( e.getActionCommand().equals( "loadProject" ) ) {
-
+			control.loadProject();
 		} else if( e.getActionCommand().equals( "saveProject" ) ) {
-
+			control.saveProject();
 		} else if( e.getActionCommand().equals( "newProject" ) ) {
-			
+			control.newProject();
 		} else if( e.getActionCommand().equals( "editSelect" ) ) {
 			control.setEditMode( EditMode.Selection );
 						//				btnEditSelect.setSelected( true );
@@ -293,13 +293,13 @@ public class JEditToolbar extends JToolBar implements ActionListener, PopupMenuL
 	}
 
 /**
-	 * Changes the appearance of the gui to the selected language.
+	 * Changes the appearance of the GUI to the selected language.
 	 * @see de.tu_berlin.math.coga.common.localization.Localization
 	 */
 	public void localize() {
 
 		cbxEdit.setToolTipText( loc.getString( "toolbarTooltipAreaType" ) );
-		btnExit1.setToolTipText( loc.getString( "toolbarTooltipExit" ) );
+		btnExit.setToolTipText( loc.getString( "toolbarTooltipExit" ) );
 		btnOpen.setToolTipText( loc.getString( "toolbarTooltipOpen" ) );
 		btnSave.setToolTipText( loc.getString( "toolbarTooltipSave" ) );
 

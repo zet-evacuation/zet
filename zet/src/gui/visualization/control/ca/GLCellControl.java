@@ -52,7 +52,7 @@ public class GLCellControl extends AbstractZETVisualizationControl<GLCellControl
 	private static StaticPotential mergedPotential = null;
 	private static StaticPotential activePotential = null;
 	private static long MAX_DYNAMIC_POTENTIAL = -1;
-	private CellInformationDisplay displayMode = CellInformationDisplay.STATIC_POTENTIAL;
+	private CellInformationDisplay displayMode = CellInformationDisplay.StaticPotential;
 	private Cell controlled;
 
 	public static void invalidateMergedPotential() {
@@ -154,7 +154,7 @@ public class GLCellControl extends AbstractZETVisualizationControl<GLCellControl
 
 	public void stepUpdate() {
 		// Update the floor colors if in an mode that can change every step
-		if( displayMode == CellInformationDisplay.DYNAMIC_POTENTIAL || displayMode == CellInformationDisplay.UTILIZATION || displayMode == CellInformationDisplay.WAITING )
+		if( displayMode == CellInformationDisplay.DynamicPotential || displayMode == CellInformationDisplay.Utilization || displayMode == CellInformationDisplay.Waiting )
 			getView().update();
 	}
 
@@ -182,16 +182,16 @@ public class GLCellControl extends AbstractZETVisualizationControl<GLCellControl
 	 */
 	public long getCellInformation( CellInformationDisplay cid ) {
 		switch( cid ) {
-			case DYNAMIC_POTENTIAL:
+			case DynamicPotential:
 				return pm.getDynamicPotential().getPotential( controlled );
-			case STATIC_POTENTIAL:
+			case StaticPotential:
 				return activePotential.getPotential( controlled );
-			case UTILIZATION:
+			case Utilization:
 				//return 0;
 				// TODO statistic visualization
 				//return mainControl.getCAStatistic().getCellStatistic().getCellUtilization( controlled, (int) mainControl.getStep() );
 				return statistic.getCellStatistic().getCellUtilization( controlled, (int) mainControl.getStep() );
-			case WAITING:
+			case Waiting:
 				//return 0;
 				// TODO statistic visualization
 				//return mainControl.getCAStatistic().getCellStatistic().getCellWaitingTime( controlled, (int) mainControl.getStep() );
@@ -209,15 +209,15 @@ public class GLCellControl extends AbstractZETVisualizationControl<GLCellControl
 	 */
 	public long getMaxCellInformation( CellInformationDisplay cid ) {
 		switch( cid ) {
-			case DYNAMIC_POTENTIAL:
+			case DynamicPotential:
 				return MAX_DYNAMIC_POTENTIAL;
-			case STATIC_POTENTIAL:
+			case StaticPotential:
 				return activePotential.getMaxPotential();
-			case UTILIZATION:
+			case Utilization:
 				return 0;
 				// TODO opengL statistic visualization
 				//return mainControl.getCAStatistic().getCellStatistic().getMaxUtilization();
-			case WAITING:
+			case Waiting:
 				return 0;
 				// TODO opengL statistic visualization
 				//return mainControl.getCAStatistic().getCellStatistic().getMaxWaiting();

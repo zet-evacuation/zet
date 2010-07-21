@@ -11,7 +11,7 @@ import event.EventListener;
 import event.EventServer;
 import event.OptionsChangedEvent;
 import event.VisualizationEvent;
-import gui.JEditor;
+import zet.gui.JEditor;
 import gui.ZETProperties;
 import gui.visualization.control.GLControl;
 import java.awt.event.KeyEvent;

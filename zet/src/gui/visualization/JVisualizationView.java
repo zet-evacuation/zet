@@ -201,7 +201,7 @@ public class JVisualizationView extends AbstractVisualizationView<ZETVisualizati
 				//btnShowPotential.setSelected( false );
 				//btnShowDynamicPotential.setSelected( false );
 				visualization.getControl().activatePotential( potentialEntry.getPotential() );
-				visualization.getControl().showPotential( CellInformationDisplay.STATIC_POTENTIAL );
+				visualization.getControl().showPotential( CellInformationDisplay.StaticPotential );
 				getGLContainer().repaint();
 			}
 		} );

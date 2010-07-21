@@ -21,7 +21,7 @@ package gui.editor.flooredit;
 
 import ds.Project;
 import ds.z.Floor;
-import gui.JEditor;
+import zet.gui.JEditor;
 import gui.ZETMain;
 import gui.components.framework.Button;
 import gui.editor.GUIOptionManager;

@@ -29,7 +29,7 @@ import converter.ZToGraphMapping;
 import ds.graph.Edge;
 import ds.graph.IdentifiableIntegerMapping;
 import ds.graph.Network;
-import ds.NetworkFlowModel;
+import de.tu_berlin.math.coga.zet.NetworkFlowModel;
 import ds.graph.Node;
 import java.util.LinkedList;
 

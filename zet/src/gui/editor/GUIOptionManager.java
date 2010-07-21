@@ -18,7 +18,7 @@ package gui.editor;
 import ds.PropertyContainer;
 import event.EventServer;
 import event.MessageEvent;
-import gui.JEditor;
+import zet.gui.JEditor;
 import java.awt.Color;
 import java.awt.Font;
 import java.util.EnumSet;

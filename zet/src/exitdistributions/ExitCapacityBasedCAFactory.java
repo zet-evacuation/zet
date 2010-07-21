@@ -22,7 +22,7 @@ package exitdistributions;
 import converter.ZToCAConverter;
 import converter.ZToGraphRasterContainer;
 import ds.ca.CellularAutomaton;
-import ds.NetworkFlowModel;
+import de.tu_berlin.math.coga.zet.NetworkFlowModel;
 import ds.z.BuildingPlan;
 import ds.z.ConcreteAssignment;
 import evacuationplan.BidirectionalNodeCellMapping;

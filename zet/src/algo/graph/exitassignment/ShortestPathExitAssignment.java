@@ -25,7 +25,7 @@ import ds.graph.IdentifiableCollection;
 import ds.graph.IdentifiableObjectMapping;
 import ds.graph.MinHeap;
 import ds.graph.Network;
-import ds.NetworkFlowModel;
+import de.tu_berlin.math.coga.zet.NetworkFlowModel;
 import ds.graph.Node;
 import de.tu_berlin.math.coga.common.algorithm.Algorithm;
 

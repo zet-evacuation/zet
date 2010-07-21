@@ -27,7 +27,7 @@ import de.tu_berlin.math.coga.common.algorithm.Algorithm;
 import de.tu_berlin.math.coga.common.algorithm.AlgorithmListener;
 import ds.Project;
 import ds.GraphVisualizationResult;
-import ds.NetworkFlowModel;
+import de.tu_berlin.math.coga.zet.NetworkFlowModel;
 import ds.graph.flow.PathBasedFlowOverTime;
 import ds.z.Assignment;
 import ds.z.ConcreteAssignment;
