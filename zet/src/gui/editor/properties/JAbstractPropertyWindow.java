@@ -244,7 +244,7 @@ public abstract class JAbstractPropertyWindow extends JDialog {
 
 			File configFile;
 			if( e.getActionCommand().equals( "open" ) ) {
-				if( jfcProject.showOpenDialog( JEditor.getInstance() ) == JFileChooser.APPROVE_OPTION ) {
+				if( jfcProject.showOpenDialog( getOwner() ) == JFileChooser.APPROVE_OPTION ) {
 					configFile = jfcProject.getSelectedFile();
 					try {
 					propertyTreeModel = PropertyContainer.loadConfigFile( configFile );

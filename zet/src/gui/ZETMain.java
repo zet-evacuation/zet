@@ -435,7 +435,7 @@ public class ZETMain {
 	 * @param msg the message
 	 */
 	public static void sendError( String msg ) {
-		EventServer.getInstance().dispatchEvent( new MessageEvent<JEditor>( JEditor.getInstance(), MessageType.Error, msg ) );
+		EventServer.getInstance().dispatchEvent( new MessageEvent<JEditor>( null, MessageType.Error, msg ) );
 	}
 
 	/**
@@ -443,11 +443,11 @@ public class ZETMain {
 	 * @param msg the message
 	 */
 	public static void sendMessage( String msg ) {
-		EventServer.getInstance().dispatchEvent( new MessageEvent<JEditor>( JEditor.getInstance(), MessageType.Status, msg ) );
+		EventServer.getInstance().dispatchEvent( new MessageEvent<JEditor>( null, MessageType.Status, msg ) );
 	}
 
 	/**
-	 * Indicates wheather the program is in debug mode, or not.
+	 * Indicates whether the program is in debug mode, or not.
 	 * @return <code>true</code> if debug mode is on, <code>false</code> otherwise.
 	 */
 	public static boolean isDebug() {

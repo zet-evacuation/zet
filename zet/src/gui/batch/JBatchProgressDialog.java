@@ -35,6 +35,7 @@ import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.util.ArrayList;
 import javax.swing.JDialog;
+import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JProgressBar;
 
@@ -66,12 +67,13 @@ public class JBatchProgressDialog extends JDialog implements AlgorithmListener, 
      * Creates new form JBatchProgressDialog. Initializes all components and sets
      * up the position and size of the window.
      */
-    public JBatchProgressDialog() {
-        super(JEditor.getInstance(), Localization.getInstance().getString( "batch.ProgressTitle" ), true);
+    public JBatchProgressDialog( JFrame owner ) {
+        super(owner, Localization.getInstance().getString( "batch.ProgressTitle" ), true);
         addComponents();
         pack();
         setSize(500, 150);
-        setLocationRelativeTo(JEditor.getInstance());
+				// TODO locale
+        //setLocationRelativeTo(JEditor.getInstance());
         tasks = new ArrayList<ProgressTaskEntry>();
     }    
 

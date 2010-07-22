@@ -346,7 +346,8 @@ public class JAssignmentPanel extends JPanel {
 				assignmentSelector.displayAssignments( myProject );
 				lstAssignment.setSelectedValue( add, true );
 			} catch( IllegalArgumentException ex ) {
-				JEditor.showErrorMessage( "Fehler", ex.getLocalizedMessage() );
+//				JEditor.showErrorMessage( "Fehler", ex.getLocalizedMessage() );
+				// TODO correct error handling
 			}
 		}
 	};
@@ -368,9 +369,11 @@ public class JAssignmentPanel extends JPanel {
 					assignmentTypeSelector.displayAssignmentTypes();
 					lstAssignmentType.setSelectedValue( at, true );
 				} catch( NumberFormatException ex ) {
-					JEditor.showErrorMessage( "Fehler", loc.getString( "gui.error.NonParsableNumber" ) );
+//					JEditor.showErrorMessage( "Fehler", loc.getString( "gui.error.NonParsableNumber" ) );
+// TODO correct error handling
 				} catch( IllegalArgumentException ex ) {
-					JEditor.showErrorMessage( "Fehler", ex.getLocalizedMessage() );
+					//JEditor.showErrorMessage( "Fehler", ex.getLocalizedMessage() );
+// TODO correct error handling
 				}
 			}
 		}
@@ -382,7 +385,8 @@ public class JAssignmentPanel extends JPanel {
 				currentAssignment.setName( addText1.getText() );
 				lstAssignment.repaint();
 			} catch( IllegalArgumentException ex ) {
-				JEditor.showErrorMessage( "Fehler", ex.getLocalizedMessage() );
+//				JEditor.showErrorMessage( "Fehler", ex.getLocalizedMessage() );
+// TODO correct error handling
 			}
 		}
 	};
@@ -395,9 +399,11 @@ public class JAssignmentPanel extends JPanel {
 					currentAssignmentType.setDefaultEvacuees( Integer.parseInt( txtDefaultEvacuees.getText() ) );
 					lstAssignmentType.repaint();
 				} catch( NumberFormatException ex ) {
-					JEditor.showErrorMessage( "Fehler", loc.getString( "gui.error.NonParsableNumber" ) );
+//					JEditor.showErrorMessage( "Fehler", loc.getString( "gui.error.NonParsableNumber" ) );
+// TODO correct error handling
 				} catch( IllegalArgumentException ex ) {
-					JEditor.showErrorMessage( "Fehler", ex.getLocalizedMessage() );
+//					JEditor.showErrorMessage( "Fehler", ex.getLocalizedMessage() );
+// TODO correct error handling
 				}
 			}
 		}
@@ -870,7 +876,8 @@ public class JAssignmentPanel extends JPanel {
 								}
 								break;
 							default:
-								JEditor.showErrorMessage( "Error", "Unbekannte Verteilung" );
+//								JEditor.showErrorMessage( "Error", "Unbekannte Verteilung" );
+								// TODO correct error handling
 						}
 						drawCharts();
 						break;

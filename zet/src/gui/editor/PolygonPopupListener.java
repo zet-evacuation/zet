@@ -65,6 +65,6 @@ public class PolygonPopupListener implements ActionListener {
 
 		//JEditor.getInstance().showArea( AreaVisibility.ASSIGNMENT );
 		guiControl.showArea( AreaVisibility.Assignment );
-		JEditor.getInstance().getEditView().getFloor().setSelectedPolygon( newAA );
+		guiControl.setSelectedPolygon( newAA );
 	}
 }

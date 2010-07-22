@@ -380,13 +380,4 @@ public class ZControl {
 	public void moveFloorDown( int id ) {
 		p.getBuildingPlan().moveFloorDown( id );
 	}
-
-	/**
-	 * Returns the name of the class.
-	 * @return the name of the class
-	 */
-	@Override
-	public String toString() {
-		return "ZControl";
-	}
 }

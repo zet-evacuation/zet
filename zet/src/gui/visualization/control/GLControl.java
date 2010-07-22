@@ -142,7 +142,7 @@ public class GLControl implements DrawableControlable {
 	 * Initializes a new empty instance of the general control class for the
 	 * visualization of an evacuation simulation. The instance does not contain
 	 * any graph, building or cellular automaton data, its
-	 * {@link #draw( GLAutoDrawable )} method doeas nothing.
+	 * {@link #draw( GLAutoDrawable )} method does nothing.
 	 */
 	public GLControl() {
 		showCA = false;
@@ -250,14 +250,14 @@ public class GLControl implements DrawableControlable {
 	/**
 	 * Returns the estimated time needed to play the complete visualization,
 	 * including cellular automaton and dynamic flow, if present.
-	 * @return tge estimated visualization time.
+	 * @return the estimated visualization time.
 	 */
 	public double getEstimatedTime() {
 		return estimatedTime;
 	}
 
 	/**
-	 * Checks wheather all parts of the simulation are finished, or not.
+	 * Checks whether all parts of the simulation are finished, or not.
 	 *  @return true if the simulation is finished, false otherwise
 	 */
 	public boolean isFinished() {
@@ -265,7 +265,7 @@ public class GLControl implements DrawableControlable {
 	}
 
 	/**
-	 * Checks wheather the replay of the cellular automaton simulation is finished, or not.
+	 * Checks whether the replay of the cellular automaton simulation is finished, or not.
 	 * @return true if the cellular automaton is finished, false otherwise
 	 */
 	public boolean isCaFinshed() {
@@ -273,7 +273,7 @@ public class GLControl implements DrawableControlable {
 	}
 
 	/**
-	 * Checks wheather the replay of the dynamic flow is finished, or not
+	 * Checks whether the replay of the dynamic flow is finished, or not
 	 * @return true if the flow has completely reached the sink, false otherwise
 	 */
 	public final boolean isGraphFinished() {
@@ -307,7 +307,7 @@ public class GLControl implements DrawableControlable {
 	}
 
 	/**
-	 * Sets the new time in the model and updates the gl datastructure.
+	 * Sets the new time in the model and updates the gl data structure.
 	 * @param timeNanoSeconds
 	 */
 	@Override
@@ -373,7 +373,7 @@ public class GLControl implements DrawableControlable {
 	}
 
 	/**
-	 * Checks wheather a cellular automaton is present in the current visualization run.
+	 * Checks whether a cellular automaton is present in the current visualization run.
 	 * @return true if a cellular automaton is present, otherwise false
 	 */
 	public boolean hasCellularAutomaton() {
@@ -381,7 +381,7 @@ public class GLControl implements DrawableControlable {
 	}
 
 	/**
-	 * Checks wheather a graph and dynamic flow are present in the current visualization run.
+	 * Checks whether a graph and dynamic flow are present in the current visualization run.
 	 * @return true if a graph and dynamic flow are present, otherwise false
 	 */
 	public boolean hasGraph() {
@@ -416,7 +416,7 @@ public class GLControl implements DrawableControlable {
 
 	/**
 	 * Enables and disables drawing of the cellular automaton
-	 * @param val indicates wheather the cellular automaton is shown or not
+	 * @param val indicates whether the cellular automaton is shown or not
 	 */
 	public void showCellularAutomaton( boolean val ) {
 		showCA = val;
@@ -436,7 +436,7 @@ public class GLControl implements DrawableControlable {
 
 	/**
 	 * Enables and disables drawing of the graph.
-	 * @param val indicates wheather the graph is shown or not
+	 * @param val indicates whether the graph is shown or not
 	 */
 	public void showGraph( boolean val ) {
 		showGraph = val;
@@ -444,7 +444,7 @@ public class GLControl implements DrawableControlable {
 
 	/**
 	 * Enables drawing of the rectangles defining the area which a node occupies.
-	 * @param selected decides wheather the node rectangles are visible, or not.
+	 * @param selected decides whether the node rectangles are visible, or not.
 	 */
 	public void showNodeRectangles( boolean selected ) {
 		if( !hasGraph() )
@@ -477,13 +477,12 @@ public class GLControl implements DrawableControlable {
 		if( !hasCellularAutomaton )
 			return;
 		caControl.setPotentialDisplay( pdm );
-		System.out.println( "Show potential " + pdm );
 		update();
 	}
 
 	/**
 	 * Enables and disables drawing of the cellular automaton
-	 * @param val indicates wheather the cellular automaton is shown or not
+	 * @param val indicates whether the cellular automaton is shown or not
 	 */
 	public void showWalls( boolean val ) {
 		showWalls = val;

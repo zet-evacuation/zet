@@ -37,15 +37,12 @@ import event.MessageEvent.MessageType;
 import event.ProgressEvent;
 import gui.batch.JBatchView;
 import gui.components.JEventStatusBar;
-import gui.components.framework.Button;
-import gui.components.framework.IconSet;
 import gui.editor.EditMode;
 import gui.ca.JCAView;
 import gui.editor.JEditView;
 import gui.editor.assignment.JAssignment;
 import gui.statistic.JGraphStatisticPanel;
 import gui.statistic.JStatisticPanel;
-import gui.visualization.AbstractVisualization;
 import gui.visualization.JVisualizationView;
 import gui.visualization.control.GLControl;
 import de.tu_berlin.math.coga.common.localization.Localization;
@@ -75,7 +72,6 @@ import java.io.PrintStream;
 import java.text.NumberFormat;
 import java.util.Locale;
 import javax.media.opengl.GLCapabilities;
-import javax.swing.JButton;
 import javax.swing.JComponent;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
@@ -124,8 +120,6 @@ public class JEditor extends JFrame implements Localized, EventListener<Progress
 	private static Point lastMouse = new Point( 0, 0 );
 	/** The delimiter used if numbers are stored in a tuple. */
 	final static String delimiter = Localization.getInstance().getStringWithoutPrefix( "numberSeparator" );
-	/** Singleton instance variable. */
-	private static JEditor instance = null;
 	/** Control class for projects and editing */
 	private ZControl zcontrol;
 	private static boolean editing = false;
@@ -178,52 +172,46 @@ public class JEditor extends JFrame implements Localized, EventListener<Progress
 	private Control guiControl;
 
 	/**
-	 * Creates a new instance of <code>JEditor</code>.
-	 * @param p the currentProject to display
-	 * @param title the window title
-	 * @param width the width of the window
-	 * @param height the height of the window
+	 * Creates a new instance of <code>JEditor</code>. Sets the editor position
+	 * and size, loads file icon, tool bars and menus.
+	 * @param guiControl the control class for the ZET GUI
 	 */
-	public JEditor( Control control ) {
+	public JEditor( Control guiControl ) {
 		super();
+		this.guiControl = guiControl;
 
-		this.guiControl = control;
-		control.editor = this;
-		instance = this;
-
+		// Set up locale information
 		loc.setLocale( Locale.getDefault() );
-
 		nfZoom.setMaximumFractionDigits( 2 );
 
+		// Set window position
 		setDefaultCloseOperation( JFrame.EXIT_ON_CLOSE );
 		setSize( 800, 600 );
 		Dimension d = Toolkit.getDefaultToolkit().getScreenSize();
 		setLocation( (d.width - getSize().width) / 2, (d.height - getSize().height) / 2 );
-		//createMenuBar();
+
+		// Create elements: menu, toolbars, status bar
 		setJMenuBar( new JZETMenuBar( guiControl ) );
-
 		getContentPane().setLayout( new BorderLayout() );
-
 		statusBar = new JEventStatusBar();
 		add( statusBar, BorderLayout.SOUTH );
-
-		toolBarEdit = new JEditToolbar( control );
-		toolBarBatch = new JBatchToolBar( control );
-		toolBarCellularAutomatonQuickVisualization = new JQuickVisualizationToolBar( control );
-		toolBarVisualization = new JVisualizationToolbar( control );
-		toolBarCAStats = new JStatisticCellularAutomatonToolbar( control );
-		toolBarGraphStats = new JStatisticGraphToolBar( control );
-		toolBarLog = new JLogToolBar( control );
-
-		add( toolBarEdit, BorderLayout.NORTH );
+		toolBarEdit = new JEditToolbar( guiControl );
+		toolBarBatch = new JBatchToolBar( guiControl );
+		toolBarCellularAutomatonQuickVisualization = new JQuickVisualizationToolBar( guiControl );
+		toolBarVisualization = new JVisualizationToolbar( guiControl );
+		toolBarCAStats = new JStatisticCellularAutomatonToolbar( guiControl );
+		toolBarGraphStats = new JStatisticGraphToolBar( guiControl );
+		toolBarLog = new JLogToolBar( guiControl );
 		currentToolbar = toolBarEdit;
+		add( toolBarEdit, BorderLayout.NORTH );
 
+		// register class for progress events
 		EventServer.getInstance().registerListener( this, ProgressEvent.class );
 
+		// window listener
 		this.addWindowListener( new WindowListener() {
 
-			public void windowOpened( WindowEvent e ) {
-			}
+			public void windowOpened( WindowEvent e ) { }
 
 			public void windowClosing( WindowEvent e ) {
 				if( graphStatisticView != null )
@@ -238,32 +226,25 @@ public class JEditor extends JFrame implements Localized, EventListener<Progress
 				}
 			}
 
-			public void windowClosed( WindowEvent e ) {
-			}
+			public void windowClosed( WindowEvent e ) { }
 
-			public void windowIconified( WindowEvent e ) {
-			}
+			public void windowIconified( WindowEvent e ) { }
 
-			public void windowDeiconified( WindowEvent e ) {
-			}
+			public void windowDeiconified( WindowEvent e ) { }
 
-			public void windowActivated( WindowEvent e ) {
-			}
+			public void windowActivated( WindowEvent e ) { }
 
-			public void windowDeactivated( WindowEvent e ) {
-			}
+			public void windowDeactivated( WindowEvent e ) { }
 		} );
 
-		
-		File iconFile = new File( "./icon.gif" );
+		// set up the icon
+		final File iconFile = new File( "./icon.gif" );
 		ZETMain.checkFile( iconFile );
 		try {
-			Image img = ImageIO.read( iconFile );
-			setIconImage( img );
+			setIconImage( ImageIO.read( iconFile ) );
 		} catch( IOException e ) {
 			ZETMain.exit( "Error loding icon." );
 		}
-
 	}
 
 	/**
@@ -295,10 +276,6 @@ public class JEditor extends JFrame implements Localized, EventListener<Progress
 		visualizationView.updateCameraInformation();
 	}
 
-	public static JEditor getInstance() {
-		return instance;
-	}
-
 	/**
 	 * Displays the mouse position in the right edge of the status bar
 	 * @param position the mouse position in millimeter.
@@ -310,7 +287,7 @@ public class JEditor extends JFrame implements Localized, EventListener<Progress
 		String realCoordsMeter = "(" + Localization.getInstance().getFloatConverter().format( ConversionTools.toMeter( position.x ) ) + delimiter + Localization.getInstance().getFloatConverter().format( ConversionTools.toMeter( position.y ) ) + ")";
 		//String text = /*"Pixel: " + pixelCoords + " - */ "Millimeter: " + realCoordsMillimeter + " - Meter: " + realCoordsMeter;
 		String text = String.format( Localization.getInstance().getString( "gui.mousePositionMillimeterMeter" ), realCoordsMillimeter, realCoordsMeter );
-		EventServer.getInstance().dispatchEvent( new MessageEvent<JEditor>( getInstance(), MessageType.MousePosition, text ) );
+		EventServer.getInstance().dispatchEvent( new MessageEvent<JEditor>( null, MessageType.MousePosition, text ) );
 	}
 
 	/**
@@ -336,44 +313,21 @@ public class JEditor extends JFrame implements Localized, EventListener<Progress
 		ZETMain.sendMessage( loc.getString( "gui.message.ready" ) );
 	}
 
-	/**
-	 * Displays a box displaying an error message.
-	 * @param title the title of the message box
-	 * @param message the message
-	 */
-	public static void showErrorMessage( String title, String message ) {
-		JOptionPane.showMessageDialog( getInstance(), message, title, JOptionPane.ERROR_MESSAGE );
-	}
-
 	/*****************************************************************************
 	 *                                                                           *
 	 * GUI initialization                                                        *
 	 *                                                                           *
 	 ****************************************************************************/
+	/**
+	 * Adds the main views to the window. These views are all included in
+	 * tabs.
+	 */
 	public void addMainComponents() {
 		editView = new JEditView( guiControl );
 		batchView = new JBatchView( guiControl );
-		visualizationView = new JVisualizationView( new GLCapabilities() );
-		visualizationView.getGLContainer().setControl( new GLControl() );
+		visualizationView = new JVisualizationView( new GLCapabilities(), guiControl );
 		visualizationView.setFloorSelectorEnabled( !PropertyContainer.getInstance().getAsBoolean( "settings.gui.visualization.floors" ) );
-		if( PropertyContainer.getInstance().getAsBoolean( "settings.gui.visualization.isometric" ) )
-			visualizationView.getGLContainer().setParallelViewMode( AbstractVisualization.ParallelViewMode.Isometric );
-		else
-			visualizationView.getGLContainer().setParallelViewMode( AbstractVisualization.ParallelViewMode.Orthogonal );
-		visualizationView.getGLContainer().setView( !PropertyContainer.getInstance().getAsBoolean( "settings.gui.visualization.2d" ) );
 
-		visualizationView.addPotentialItemListener( new ItemListener() {
-
-			public void itemStateChanged( ItemEvent e ) {
-				if( e.getItem() == null || e.getStateChange() == ItemEvent.DESELECTED )
-					return;
-				// TODO das hier in die control klasse verschieben
-//				btnShowPotential.setSelected( false );
-//				btnShowDynamicPotential.setSelected( false );
-//				btnShowUtilization.setSelected( false );
-//				btnShowWaiting.setSelected( false );
-			}
-		} );
 		caView = new JCAView();
 		caStatisticView = new JStatisticPanel();
 		graphStatisticView = new JGraphStatisticPanel();
@@ -398,6 +352,19 @@ public class JEditor extends JFrame implements Localized, EventListener<Progress
 
 		getContentPane().add( tabPane, BorderLayout.CENTER );
 
+		tabPane.addChangeListener( new ChangeListener() {
+
+			public void stateChanged( ChangeEvent e ) {
+				if( tabPane.getSelectedIndex() == LOG )
+					logView.update();
+			}
+		} );
+
+		ZETMain.sendMessage( loc.getString( "gui.status.EditorInitialized" ) );
+	}
+
+
+	public void setUpKeyStrokes() {
 		// Register Shortcuts (no-menu-shortcuts)
 		KeyStroke up = KeyStroke.getKeyStroke( KeyEvent.VK_R, InputEvent.CTRL_DOWN_MASK );
 		ActionListener acl = new ActionListener() {
@@ -415,19 +382,9 @@ public class JEditor extends JFrame implements Localized, EventListener<Progress
 				}
 			}
 		};
-
 		tabPane.registerKeyboardAction( acl, "test", up, JComponent.WHEN_ANCESTOR_OF_FOCUSED_COMPONENT );
-
-		tabPane.addChangeListener( new ChangeListener() {
-
-			public void stateChanged( ChangeEvent e ) {
-				if( tabPane.getSelectedIndex() == LOG )
-					logView.update();
-			}
-		} );
-
-		ZETMain.sendMessage( loc.getString( "gui.status.EditorInitialized" ) );
 	}
+
 
 	public void resetAssignment() {
 		distribution = null;
@@ -435,7 +392,7 @@ public class JEditor extends JFrame implements Localized, EventListener<Progress
 
 	public void showAssignmentDialog() {
 		//if( distribution == null ) {
-		distribution = new JAssignment( instance, zcontrol.getProject(), loc.getString( "gui.editor.assignment.JAssignment.Title" ), 850, 400 );
+		distribution = new JAssignment( this, zcontrol.getProject(), loc.getString( "gui.editor.assignment.JAssignment.Title" ), 850, 400 );
 		//}
 		distribution.setVisible( true );
 		distribution.dispose();

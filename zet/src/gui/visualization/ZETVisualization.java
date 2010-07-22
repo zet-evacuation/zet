@@ -12,6 +12,7 @@ import event.EventListener;
 import event.EventServer;
 import event.OptionsChangedEvent;
 import event.VisualizationEvent;
+import gui.Control;
 import zet.gui.JEditor;
 import gui.ZETProperties;
 import gui.visualization.control.GLControl;
@@ -21,10 +22,8 @@ import java.awt.event.MouseWheelEvent;
 import javax.media.opengl.GL;
 import javax.media.opengl.GLAutoDrawable;
 import javax.media.opengl.GLCapabilities;
-import javax.media.opengl.glu.GLU;
 import javax.media.opengl.glu.GLUquadric;
 import opengl.drawingutils.GLColor;
-import opengl.helper.Frustum.CullingLocation;
 import opengl.helper.ProjectionHelper;
 
 /**
@@ -40,9 +39,11 @@ public class ZETVisualization extends Visualization<GLControl> implements EventL
 
 	private boolean showTimestepGraph = ZETProperties.isShowTimestepGraph();
 	private boolean showTimestepCellularAutomaton = ZETProperties.isShowTimestepCellularAutomaton();
+	private final Control guiControl;
 
-	public ZETVisualization( GLCapabilities capabilities ) {
+	public ZETVisualization( GLCapabilities capabilities, Control guiControl ) {
 		super( capabilities );
+		this.guiControl = guiControl;
 		showEye = ZETProperties.isShowEye();
 		showFPS = ZETProperties.isShowFPS();
 		EventServer.getInstance().registerListener( this, OptionsChangedEvent.class );
@@ -52,14 +53,15 @@ public class ZETVisualization extends Visualization<GLControl> implements EventL
 		scrollInvert = PropertyContainer.getInstance().getAsBoolean( "editor.options.visualization.invertScroll" ) ? 1 : -1;
 
 		// this will create errors!
-		if( PropertyContainer.getInstance().getAsBoolean( "settings.gui.visualization.2d" ) )
-			set2DView();
-		else
-			set3DView();
-		if( PropertyContainer.getInstance().getAsBoolean( "settings.gui.visualization.isometric" ) )
-			this.setParallelViewMode( ParallelViewMode.Isometric );
-		else
-			this.setParallelViewMode( ParallelViewMode.Orthogonal );
+//		if( PropertyContainer.getInstance().getAsBoolean( "settings.gui.visualization.2d" ) )
+//			set2DView();
+//		else
+//			set3DView();
+//		if( PropertyContainer.getInstance().getAsBoolean( "settings.gui.visualization.isometric" ) )
+//			this.setParallelViewMode( ParallelViewMode.Isometric );
+//		else
+//			this.setParallelViewMode( ParallelViewMode.Orthogonal );
+		setControl( new GLControl() );
 	}
 	
 	private ZControl zcontrol;
@@ -199,7 +201,7 @@ public class ZETVisualization extends Visualization<GLControl> implements EventL
 			case KeyEvent.VK_RIGHT:
 			case KeyEvent.VK_UP:
 			case KeyEvent.VK_DOWN:
-				JEditor.getInstance().getVisualizationView().updateCameraInformation();
+				guiControl.updateCameraInformation();
 				zcontrol.getProject().getVisualProperties().getCameraPosition().pos = camera.getPos();
 				zcontrol.getProject().getVisualProperties().getCameraPosition().view = camera.getView();
 				zcontrol.getProject().getVisualProperties().getCameraPosition().up = camera.getUp();
@@ -213,7 +215,7 @@ public class ZETVisualization extends Visualization<GLControl> implements EventL
 	@Override
 	public void mousePressed( MouseEvent e ) {
 		super.mousePressed( e );
-		JEditor.getInstance().getVisualizationView().updateCameraInformation();
+		guiControl.updateCameraInformation();
 		zcontrol.getProject().getVisualProperties().getCameraPosition().pos = camera.getPos();
 		zcontrol.getProject().getVisualProperties().getCameraPosition().view = camera.getView();
 		zcontrol.getProject().getVisualProperties().getCameraPosition().up = camera.getUp();
@@ -224,7 +226,7 @@ public class ZETVisualization extends Visualization<GLControl> implements EventL
 	@Override
 	public void mouseDragged( MouseEvent e ) {
 		super.mouseDragged( e );
-		JEditor.getInstance().getVisualizationView().updateCameraInformation();
+		guiControl.updateCameraInformation();
 		zcontrol.getProject().getVisualProperties().getCameraPosition().pos = camera.getPos();
 		zcontrol.getProject().getVisualProperties().getCameraPosition().view = camera.getView();
 		zcontrol.getProject().getVisualProperties().getCameraPosition().up = camera.getUp();
@@ -235,7 +237,7 @@ public class ZETVisualization extends Visualization<GLControl> implements EventL
 	@Override
 	public void mouseWheelMoved( MouseWheelEvent e ) {
 		super.mouseWheelMoved( e );
-		JEditor.getInstance().getVisualizationView().updateCameraInformation();
+		guiControl.updateCameraInformation();
 		zcontrol.getProject().getVisualProperties().getCameraPosition().pos = camera.getPos();
 		zcontrol.getProject().getVisualProperties().getCameraPosition().view = camera.getView();
 		zcontrol.getProject().getVisualProperties().getCameraPosition().up = camera.getUp();

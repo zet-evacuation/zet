@@ -27,6 +27,7 @@ import ds.z.TeleportEdge;
 import ds.z.PlanPoint;
 import ds.z.RoomEdge;
 import ds.z.StairArea;
+import gui.Control;
 import zet.gui.JEditor;
 import java.awt.AWTEvent;
 import java.awt.Color;
@@ -80,6 +81,7 @@ public class JPolygon extends AbstractPolygon {
 	private final static BasicStroke stroke_dashed_thick = new BasicStroke( EDGE_PAINT_WIDTH,
 					BasicStroke.CAP_BUTT, BasicStroke.JOIN_MITER, 10.0f, dash1, 0.0f );
 	private final static BasicStroke stroke_thick = new BasicStroke( EDGE_PAINT_WIDTH );
+	private final Control guiControl;
 
 	//############## EDGE RELATED FIELDS ###################
 	private class EdgeData {
@@ -111,8 +113,9 @@ public class JPolygon extends AbstractPolygon {
 	 * @param myFloor The {@link JFloor} on which this polygon is displayed
 	 * @param foreground the border color of the polygon
 	 */
-	public JPolygon( AbstractFloor myFloor, Color foreground ) {
+	public JPolygon( AbstractFloor myFloor, Color foreground, Control guiControl ) {
 		super( foreground );
+		this.guiControl = guiControl;
 
 		this.myFloor = myFloor;
 		setOpaque( false );
@@ -220,44 +223,44 @@ public class JPolygon extends AbstractPolygon {
 				EnumSet<AreaVisibility> areaVisibility = GUIOptionManager.getAreaVisibility();
 				if( areaVisibility.contains( AreaVisibility.Assignment ) )
 					for( Area a : room.getAssignmentAreas() ) {
-						JPolygon ne = new JPolygon( myFloor, GUIOptionManager.getAssignmentAreaColor() );
+						JPolygon ne = new JPolygon( myFloor, GUIOptionManager.getAssignmentAreaColor(), guiControl );
 						add( ne );
 						ne.displayPolygon( a );
 					}
 				if( areaVisibility.contains( AreaVisibility.Delay ) )
 					for( Area a : room.getDelayAreas() ) {
-						JPolygon ne = new JPolygon( myFloor, GUIOptionManager.getDelayAreaColor() );
+						JPolygon ne = new JPolygon( myFloor, GUIOptionManager.getDelayAreaColor(), guiControl );
 						add( ne );
 						ne.displayPolygon( a );
 					}
 				if( areaVisibility.contains( AreaVisibility.Evacuation ) )
 					for( Area a : room.getSaveAreas() )
 						if( a instanceof EvacuationArea ) {
-							JPolygon ne = new JPolygon( myFloor, GUIOptionManager.getEvacuationAreaColor() );
+							JPolygon ne = new JPolygon( myFloor, GUIOptionManager.getEvacuationAreaColor(), guiControl );
 							add( ne );
 							ne.displayPolygon( a );
 						}
 				if( areaVisibility.contains( AreaVisibility.Save ) )
 					for( Area a : room.getSaveAreas() )
 						if( !(a instanceof EvacuationArea) ) {
-							JPolygon ne = new JPolygon( myFloor, GUIOptionManager.getSaveAreaColor() );
+							JPolygon ne = new JPolygon( myFloor, GUIOptionManager.getSaveAreaColor(), guiControl );
 							add( ne );
 							ne.displayPolygon( a );
 						}
 				if( areaVisibility.contains( AreaVisibility.Stair ) )
 					for( Area a : room.getStairAreas() ) {
-						JPolygon ne = new JPolygon( myFloor, GUIOptionManager.getStairAreaColor() );
+						JPolygon ne = new JPolygon( myFloor, GUIOptionManager.getStairAreaColor(), guiControl );
 						add( ne );
 						ne.displayPolygon( a );
 					}
 				if( areaVisibility.contains( AreaVisibility.Inaccessible ) ) {
 					for( Area a : room.getInaccessibleAreas() ) {
-						JPolygon ne = new JPolygon( myFloor, GUIOptionManager.getInaccessibleAreaColor() );
+						JPolygon ne = new JPolygon( myFloor, GUIOptionManager.getInaccessibleAreaColor(), guiControl );
 						add( ne );
 						ne.displayPolygon( a );
 					}
 					for( Area a : room.getBarriers() ) {
-						JPolygon ne = new JPolygon( myFloor, GUIOptionManager.getRoomEdgeColor() );
+						JPolygon ne = new JPolygon( myFloor, GUIOptionManager.getRoomEdgeColor(), guiControl );
 						add( ne );
 						ne.displayPolygon( a );
 					}
@@ -265,7 +268,7 @@ public class JPolygon extends AbstractPolygon {
 					// TODO area visiblity for teleport areas
 				if( areaVisibility.contains( AreaVisibility.Teleport ) )
 					for( Area a : room.getTeleportAreas() ) {
-						JPolygon ne = new JPolygon( myFloor, GUIOptionManager.getTeleportAreaColor() );
+						JPolygon ne = new JPolygon( myFloor, GUIOptionManager.getTeleportAreaColor(), guiControl );
 						add( ne );
 						ne.displayPolygon( a );
 					}
@@ -519,24 +522,24 @@ public class JPolygon extends AbstractPolygon {
 				if( hitPoint == null ) {
 					// Show edge popup
 					if( selectedUsed == false ) {
-						JEditor.getInstance().getEditView().setPopupEdge( hitEdge.myEdge,
-									JEditor.getInstance().getEditView().convertPointToFloorCoordinates(
+						guiControl.editor.getEditView().setPopupEdge( hitEdge.myEdge,
+									guiControl.editor.getEditView().convertPointToFloorCoordinates(
 									(Component)e.getSource(), e.getPoint() ) );
-						JEditor.getInstance().getEditView().getEdgePopup().show( this, e.getX(), e.getY() );
+						guiControl.editor.getEditView().getEdgePopup().show( this, e.getX(), e.getY() );
 					}
 					selectedUsed = isSelected();
 				} else {
 					// Show point popup
 					if( selectedUsed == false ) {
-						JEditor.getInstance().getEditView().setPopupPoint( hitEdge.myEdge, hitPoint );
-						JEditor.getInstance().getEditView().getPointPopup().show( this, e.getX(), e.getY() );
+						guiControl.editor.getEditView().setPopupPoint( hitEdge.myEdge, hitPoint );
+						guiControl.editor.getEditView().getPointPopup().show( this, e.getX(), e.getY() );
 					}
 					selectedUsed = isSelected();
 				}
 			} else if( Room.class.isInstance( myPolygon ) && drawingPolygon.contains( e.getPoint() ) ) {
 				if( selectedUsed == false ) {
-					JEditor.getInstance().getEditView().setPopupPolygon( myPolygon );
-					JEditor.getInstance().getEditView().getPolygonPopup().show( this, e.getX(), e.getY() );
+					guiControl.editor.getEditView().setPopupPolygon( myPolygon );
+					guiControl.editor.getEditView().getPolygonPopup().show( this, e.getX(), e.getY() );
 				}
 					selectedUsed = isSelected();
 			}

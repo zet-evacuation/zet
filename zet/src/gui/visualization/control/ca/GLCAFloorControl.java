@@ -17,7 +17,6 @@ package gui.visualization.control.ca;
 
 import ds.ca.Room;
 import gui.visualization.control.AbstractZETVisualizationControl;
-import gui.visualization.control.GLControl;
 import gui.visualization.control.GLControl.CellInformationDisplay;
 import gui.visualization.draw.ca.GLCAFloor;
 import io.visualization.CAVisualizationResults;
@@ -84,10 +83,8 @@ public class GLCAFloorControl extends AbstractZETVisualizationControl<GLRoomCont
 	}
 	
 	void setPotentialDisplay( CellInformationDisplay potentialDisplay ) {
-		System.out.println( "PotentialDisplay: " + potentialDisplay );
-		for( GLRoomControl roomControl : roomControls.values() ) {
+		for( GLRoomControl roomControl : roomControls.values() )
 			roomControl.setPotentialDisplay(potentialDisplay);
-		}
 	}
 
 	public List<GLIndividualControl> getIndividualControls() {

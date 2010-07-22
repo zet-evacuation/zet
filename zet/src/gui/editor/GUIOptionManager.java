@@ -125,7 +125,7 @@ public abstract class GUIOptionManager {
 		try {
 			UIManager.setLookAndFeel( lookAndFeelClass );
 		} catch( Exception e ) {
-			JOptionPane.showMessageDialog( JEditor.getInstance(), e.getLocalizedMessage(), "Error", JOptionPane.ERROR_MESSAGE );
+			JOptionPane.showMessageDialog( null, e.getLocalizedMessage(), "Error", JOptionPane.ERROR_MESSAGE );
 		}
 	}
 
