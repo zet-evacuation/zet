@@ -16,7 +16,7 @@
 
 /**
  * Class JEditView
- * Erstellt 29.04.2008, 21:06:42
+ * Created 29.04.2008, 21:06:42
  */
 package gui.editor;
 
@@ -116,7 +116,7 @@ public class JEditView extends AbstractSplitPropertyWindow<JFloorScrollPane<JFlo
 	private RoomComboBoxModel roomSelector;
 	/** Model for a assignmentType-selector combo box. */
 	private gui.components.AssignmentTypeComboBoxModel assignmentTypeSelector;
-	/** A lable that shows a string explaining the floor selection combo box. */
+	/** A label that shows a string explaining the floor selection combo box. */
 	private JLabel lblFloorSelector;
 	/** A label that contains the number of the currently visible floor. */
 	private JLabel lblFloorNumber;
@@ -183,7 +183,7 @@ public class JEditView extends AbstractSplitPropertyWindow<JFloorScrollPane<JFlo
 
 	/** Describes the teleport area name field. */
 	private JLabel lblTeleportAreaName;
-	/** The anme filed for a teleport area. */
+	/** The name filed for a teleport area. */
 	private JTextField txtTeleportAreaName;
 
 	/** Describes the target area combo box.  */
@@ -955,13 +955,9 @@ public class JEditView extends AbstractSplitPropertyWindow<JFloorScrollPane<JFlo
 			@Override
 			public void actionPerformed( ActionEvent e ) {
 				if( e.getActionCommand().equals( "down" ) ) {
-					final int oldIndex = cbxFloors.getSelectedIndex();
-					JEditor.getInstance().getZControl().moveFloorDown( getFloorID() + (ZETProperties.isDefaultFloorHidden() ? 1 : 0) );
-					cbxFloors.setSelectedIndex( oldIndex - 1 );
+					guiControl.moveFloorDown();
 				} else if( e.getActionCommand().equals( "up" ) ) {
-					final int oldIndex = cbxFloors.getSelectedIndex();
-					JEditor.getInstance().getZControl().moveFloorUp( getFloorID() + (ZETProperties.isDefaultFloorHidden() ? 1 : 0) );
-					cbxFloors.setSelectedIndex( oldIndex + 1 );
+					guiControl.moveFloorUp();
 				} else
 					ZETMain.sendError( loc.getString( "gui.UnknownCommand" ) + " '" + e.getActionCommand() + "'. " +
 									loc.getString( "gui.ContactDeveloper" ) );
@@ -1150,7 +1146,7 @@ public void localize() {
 	}
 
 	/**
-	 * Returns the current titlebar text of the window, so it can be set if
+	 * Returns the current title bar text of the window, so it can be set if
 	 * the editor panel is displayed inside an window.
 	 * @return the text
 	 */
@@ -1264,7 +1260,7 @@ public void localize() {
 
 
 	/**
-	 * Updates the gui if a new project has been loaded. Loads new combo boxes,
+	 * Updates the GUI if a new project has been loaded. Loads new combo boxes,
 	 * list boxes etc.
 	 */
 	public void update() {

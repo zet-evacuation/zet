@@ -192,7 +192,7 @@ public class JVisualizationToolbar extends JToolBar implements ActionListener {
 		} else if( e.getActionCommand().equals( "stop" ) ) {
 			control.visualizationStop();
 		} else if( e.getActionCommand().equals( "end" ) ) {
-			ZETMain.sendError( "Not completeley supported yet" );
+			ZETMain.sendError( "Go to end is not supported yet" );
 		} else if( e.getActionCommand().equals( "walls" ) ) {
 			control.visualizationShowWalls();
 		} else if( e.getActionCommand().equals( "graph" ) ) {

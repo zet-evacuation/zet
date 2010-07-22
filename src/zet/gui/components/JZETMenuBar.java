@@ -1,6 +1,6 @@
 /**
  * JZETMenuBar.java
- * Created: Jul 21, 2010,10:03:06 AM
+ * Created: 21.07.2010 10:03:06
  */
 package zet.gui.components;
 
@@ -8,7 +8,6 @@ import de.tu_berlin.math.coga.common.localization.Localization;
 import de.tu_berlin.math.coga.common.localization.Localized;
 import ds.PropertyContainer;
 import gui.Control;
-import gui.CreditsDialog;
 import gui.ZETMain;
 import gui.components.AbstractFloor.RasterPaintStyle;
 import gui.components.framework.Menu;
@@ -24,7 +23,6 @@ import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.JRadioButtonMenuItem;
-
 
 /**
  *
@@ -401,6 +399,7 @@ public class JZETMenuBar extends JMenuBar implements ActionListener, Localized {
 	}
 
 	public void localize() {
+		loc.setPrefix( "gui.editor.JEditor." );
 		Menu.updateMenu( mFile, loc.getString( "menuFile" ) );
 		Menu.updateMenu( mEdit, loc.getString( "menuEdit" ) );
 		Menu.updateMenu( mView, loc.getString( "menuView" ) );
@@ -493,5 +492,6 @@ public class JZETMenuBar extends JMenuBar implements ActionListener, Localized {
 
 		// Help menu
 		Menu.updateMenu( mnuHelpAbout, loc.getString( "menuAbout" ) );
+		loc.setPrefix( "" );
 	}
 }

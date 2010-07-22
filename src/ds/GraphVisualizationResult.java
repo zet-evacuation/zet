@@ -21,6 +21,7 @@ import algo.graph.Flags;
 import algo.graph.dynamicflow.eat.EarliestArrivalFlowProblem;
 import algo.graph.util.PathComposition;
 import converter.ZToGraphMapping;
+import de.tu_berlin.math.coga.zet.NetworkFlowModel;
 import ds.graph.Edge;
 import ds.graph.IdentifiableIntegerMapping;
 import ds.graph.IdentifiableObjectMapping;

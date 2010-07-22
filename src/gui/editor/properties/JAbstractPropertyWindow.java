@@ -103,7 +103,8 @@ public abstract class JAbstractPropertyWindow extends JDialog {
 		getContentPane().setLayout( new BorderLayout() );
 
 		setSize( width, height );
-		setLocation( owner.getX() + (owner.getWidth() - width) / 2, owner.getY() + (owner.getHeight() - height) / 2 );
+		if( owner != null)
+			setLocation( owner.getX() + (owner.getWidth() - width) / 2, owner.getY() + (owner.getHeight() - height) / 2 );
 
 		// Load model from file
 		try {
