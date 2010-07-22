@@ -48,11 +48,12 @@ public class JRasterizeProgressBarDialog extends JProgressBarDialog {
 				if( evt.getPropertyName().equals( "progress" ) ) {
 					int progress = (Integer)evt.getNewValue();
 					handleProgressEvent( progress );
-					JEditor.getInstance().disableProjectUpdate( false );
-					JEditor.getInstance().getEditView().displayProject();
-					JEditor.getInstance().disableProjectUpdate( true );
+					// TODO project update (maybe in control class?)
+					//JEditor.getInstance().disableProjectUpdate( false );
+					//JEditor.getInstance().getEditView().displayProject();
+					//JEditor.getInstance().disableProjectUpdate( true );
 					if( AlgorithmTask.getInstance().getState() == StateValue.DONE ) {
-						JEditor.getInstance().disableProjectUpdate( false );
+						//JEditor.getInstance().disableProjectUpdate( false );
 					}
 				}
 			}
@@ -66,7 +67,8 @@ public class JRasterizeProgressBarDialog extends JProgressBarDialog {
 		worker.setTask( getTask() );
 		worker.addPropertyChangeListener( pcl );
 		try {
-			JEditor.getInstance().disableProjectUpdate( true );
+			// TODO disableproject update during rasterization
+			//JEditor.getInstance().disableProjectUpdate( true );
 			worker.executeAlgorithm( true );
 		} catch( Exception ex ) {
 			System.out.println( "Fehler trat auf" );

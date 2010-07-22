@@ -196,7 +196,7 @@ public class JBatchView extends JPanel {
 
 					Statistic.instance.getAgeCollector().storeCompleteData( true );
 
-					JEditor.getInstance().setBatchResult( batch.execute( chkTempFiles.isSelected() ) );
+					guiControl.editor.setBatchResult( batch.execute( chkTempFiles.isSelected() ) );
 					// Try the new statistic thing here
 					Statistic.instance.getAgeCollector().storeCompleteData( true );
 					GUIStatistic gs = new GUIStatistic( Statistic.instance );

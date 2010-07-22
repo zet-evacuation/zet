@@ -349,9 +349,7 @@ public class JEditView extends AbstractSplitPropertyWindow<JFloorScrollPane<JFlo
 					cbxTargetArea.setSelectedItem( ((TeleportArea)selectedPolygon).getTargetArea() );
 				break;
 			default:
-				JOptionPane.showMessageDialog( JEditor.getInstance(),
-								loc.getString( "gui.editor.JEditorPanel.WrongPanelID" ),
-								loc.getString( "gui.NotGraveError" ), JOptionPane.ERROR_MESSAGE );
+				guiControl.showErrorMessage( loc.getString( "gui.editor.JEditorPanel.WrongPanelID" ), loc.getString( "gui.NotGraveError" ) );
 				return;
 		}
 		eastPanelType = panel;
@@ -406,7 +404,7 @@ public class JEditView extends AbstractSplitPropertyWindow<JFloorScrollPane<JFlo
 				// FloorName
 				txtFloorName.setText( dspFloor.getName() );
 				// Title of the window
-				JEditor.getInstance().setTitle( getTitleBarText() );
+				guiControl.setZETWindowTitle( getTitleBarText() );
 			}
 		} );
 		cbxFloors.setRenderer( new ComboBoxRenderer() {
@@ -1163,7 +1161,7 @@ public void localize() {
 	 * that it displays "floor" instead of the previously displayed Floor object. 
 	 * @param floor the new floor that is shown
 	 */
-	protected void changeFloor( Floor floor ) {
+	public void changeFloor( Floor floor ) {
 		floorSelector.setSelectedItem( floor );
 	}
 
@@ -1355,7 +1353,7 @@ public void localize() {
 	private void recreateEdgePopupMenu() {
 		if( pupEdge == null ) {
 			edgePopupListeners = new LinkedList<EdgePopupListener>();
-			edgePopupListeners.add( new EdgePopupListener() );
+			edgePopupListeners.add( new EdgePopupListener( guiControl ) );
 
 			pupEdge = new JPopupMenu();
 			loc.setPrefix( "gui.editor.JEditorPanel." );

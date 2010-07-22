@@ -23,6 +23,7 @@ package gui.visualization;
 
 import de.tu_berlin.math.coga.common.localization.Localization;
 import ds.PropertyContainer;
+import gui.Control;
 import gui.ZETMain;
 import gui.components.ComboBoxRenderer;
 import gui.components.FloorComboBoxModel;
@@ -50,7 +51,6 @@ import javax.swing.JSlider;
 import javax.swing.JTextField;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
-import opengl.framework.Camera;
 
 /**
  *
@@ -89,8 +89,6 @@ public class JVisualizationView extends AbstractVisualizationView<ZETVisualizati
 	private JLabel lblCameraUp;
 	/** A button that sets a new camera position. */
 	private JButton setCameraPosition;
-	/** The camera. */
-	private Camera camera;
 	// TODO better, directly take the enum
 	private final int HEAD_INFORMATION_NOTHING = 0;
 	private final int HEAD_INFORMATION_PANIC = 1;
@@ -101,10 +99,11 @@ public class JVisualizationView extends AbstractVisualizationView<ZETVisualizati
 	private final int HEAD_INFORMATION_REACTION = 6;
 	
 	JArrayPanel cameraPanel;
-	public JVisualizationView( GLCapabilities caps ) {
-		super( new VisualizationPanel<ZETVisualization>( new ZETVisualization( caps ) ) );
+	private final Control guiControl;
+	public JVisualizationView( GLCapabilities caps, Control guiControl ) {
+		super( new VisualizationPanel<ZETVisualization>( new ZETVisualization( caps, guiControl ) ) );
 		visualization = getGLContainer();
-		setCamera( visualization.getCamera() );
+		this.guiControl = guiControl;
 
 		final JSlider slider = new JSlider();
 		slider.setMinimum( -90 );
@@ -127,6 +126,7 @@ public class JVisualizationView extends AbstractVisualizationView<ZETVisualizati
 					control.setSpeedFactor( (slider.getValue() + 10) * 0.1 );
 			}
 		} );
+		@SuppressWarnings( "UseOfObsoleteCollectionType" ) // hashtable has to be used here due to slider
 		Hashtable<Integer, JComponent> table = new Hashtable<Integer, JComponent>();
 		for( int i = 1; i <= 10; i++ )
 			table.put( new Integer( -i * 10 ), new JLabel( Localization.getInstance().getFloatConverter().format( (10 - i) * 0.1 ) ) );
@@ -198,8 +198,7 @@ public class JVisualizationView extends AbstractVisualizationView<ZETVisualizati
 				if( e.getItem() == null || e.getStateChange() == ItemEvent.DESELECTED )
 					return;
 				PotentialSelectionModel.PotentialEntry potentialEntry = (PotentialSelectionModel.PotentialEntry)e.getItem();
-				//btnShowPotential.setSelected( false );
-				//btnShowDynamicPotential.setSelected( false );
+				guiControl.visualizationShowCellInformation( CellInformationDisplay.NoPotential );
 				visualization.getControl().activatePotential( potentialEntry.getPotential() );
 				visualization.getControl().showPotential( CellInformationDisplay.StaticPotential );
 				getGLContainer().repaint();
@@ -271,9 +270,9 @@ public class JVisualizationView extends AbstractVisualizationView<ZETVisualizati
 		setCameraPosition.addActionListener( new ActionListener() {
 			public void actionPerformed( ActionEvent e ) {
 				try {
-					camera.getPos().parse( txtCameraPosition.getText() );
-					camera.getView().parse( txtCameraView.getText() );
-					camera.getUp().parse( txtCameraUp.getText() );
+					visualization.getCamera().getPos().parse( txtCameraPosition.getText() );
+					visualization.getCamera().getView().parse( txtCameraView.getText() );
+					visualization.getCamera().getUp().parse( txtCameraUp.getText() );
 					visualization.repaint();
 				} catch( ParseException ex ) {
 					ZETMain.sendError( loc.getStringWithoutPrefix( "gui.error.CameraParseError" ) );
@@ -310,27 +309,17 @@ public class JVisualizationView extends AbstractVisualizationView<ZETVisualizati
 	}
 
 	/**
-	 * Sets the camera object used for the setting and viewing of position in the
-	 * 3d world.
-	 * @param camera the camera
-	 */
-	public void setCamera( Camera camera ) {
-		this.camera = camera;
-		updateCameraInformation();
-	}
-
-	/**
 	 * Updates the camera position information in the text fields.
 	 */
 	public void updateCameraInformation() {
-		this.txtCameraPosition.setText( camera.getPos().toString() );
-		this.txtCameraView.setText( camera.getView().toString() );
-		this.txtCameraUp.setText( camera.getUp().toString() );
+		this.txtCameraPosition.setText( visualization.getCamera().getPos().toString() );
+		this.txtCameraView.setText( visualization.getCamera().getView().toString() );
+		this.txtCameraUp.setText( visualization.getCamera().getUp().toString() );
 	}
 
 	/**
 	 * Enables and disables the floor selector on the right part of the view.
-	 * @param val decides wheather the floor selector is enabled or disabled
+	 * @param val decides whether the floor selector is enabled or disabled
 	 */
 	public void setFloorSelectorEnabled( boolean val ) {
 		floorSelector.setEnabled( val );
@@ -363,7 +352,7 @@ public class JVisualizationView extends AbstractVisualizationView<ZETVisualizati
 
 	/**
 	 * Adds another <code>ItemListener</code> to the potential selection box. This
-	 * can be used to access external gui elements.
+	 * can be used to access external GUI elements.
 	 * @param listener
 	 */
 	public void addPotentialItemListener( ItemListener listener ) {

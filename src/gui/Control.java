@@ -26,6 +26,7 @@ import ds.z.AssignmentArea;
 import ds.z.ConcreteAssignment;
 import ds.z.EvacuationArea;
 import ds.z.Floor;
+import ds.z.PlanPolygon;
 import ds.z.Room;
 import ds.z.ZControl;
 import ds.z.exception.TooManyPeopleException;
@@ -42,7 +43,7 @@ import gui.editor.properties.JPropertySelectorWindow;
 import zet.gui.components.JZETMenuBar;
 import zet.gui.components.toolbar.JEditToolbar;
 import zet.gui.components.toolbar.JVisualizationToolbar;
-import gui.visualization.AbstractVisualization;
+import gui.visualization.AbstractVisualization.ParallelViewMode;
 import gui.visualization.Visualization.RecordingMode;
 import gui.visualization.ZETVisualization;
 import gui.visualization.control.GLControl.CellInformationDisplay;
@@ -93,6 +94,7 @@ public class Control {
 		editor = new JEditor( this );
 		editor.addMainComponents();
 		visualization = editor.getVisualizationView().getGLContainer();
+		updateVisualizationElements();
 		editview = editor.getEditView();
 		zcontrol = new ZControl();
 		editor.setZControl2( zcontrol );
@@ -205,27 +207,24 @@ public class Control {
 		this.graphStatisticToolBar = graphStatisticToolBar;
 	}
 
-	boolean visualization3D = true;
-	boolean visualization2D = true;
-
 	public void visualizationToggle2D3D() {
-		visualization3D = !visualization3D;
-		visualizationToolBar.setSelected2d3d( visualization3D );
-		visualizationToolBar.setEnabled2d( visualization2D );
-		PropertyContainer.getInstance().set( "settings.gui.visualization.2d", !visualization3D );
-		visualization.toggleView();
-		visualization.repaint();
+		PropertyContainer.getInstance().toggle( "settings.gui.visualization.2d" );
+		updateVisualizationElements();
 	}
 
 	public void visualizationToggle2D() {
-		visualization2D = !visualization2D;
+		PropertyContainer.getInstance().toggle( "settings.gui.visualization.isometric" );
+		updateVisualizationElements();
+	}
+
+	public void updateVisualizationElements() {
+		final boolean visualization3D = PropertyContainer.getInstance().getAsBoolean( "settings.gui.visualization.2d" );
+		final boolean visualization2D = PropertyContainer.getInstance().getAsBoolean( "settings.gui.visualization.isometric" );
+		visualizationToolBar.setSelected2d3d( visualization3D );
+		visualizationToolBar.setEnabled2d( visualization2D );
 		visualizationToolBar.setSelected2d( visualization2D );
-		//btn2dSwitch.setSelected( !btn2dSwitch.isSelected() );
-		PropertyContainer.getInstance().set( "settings.gui.visualization.isometric", visualization2D );
-		if( visualization.getParallelViewMode() == AbstractVisualization.ParallelViewMode.Orthogonal )
-			visualization.setParallelViewMode( AbstractVisualization.ParallelViewMode.Isometric );
-		else
-			visualization.setParallelViewMode( AbstractVisualization.ParallelViewMode.Orthogonal );
+		visualization.setParallelViewMode( visualization2D ? ParallelViewMode.Isometric : ParallelViewMode.Orthogonal );
+		visualization.setView( !visualization3D );
 		visualization.repaint();
 	}
 
@@ -627,9 +626,9 @@ public class Control {
 					target = new File( target.getAbsolutePath() + ".zet" );
 				zcontrol.getProject().save( target );
 			} catch( java.lang.StackOverflowError soe ) {
-				JEditor.showErrorMessage( Localization.getInstance().getString( "gui.editor.JEditor.error.stackOverflowTitle" ), Localization.getInstance().getString( "gui.editor.JEditor.error.stackOverflow" ) );
+				showErrorMessage( Localization.getInstance().getString( "gui.editor.JEditor.error.stackOverflowTitle" ), Localization.getInstance().getString( "gui.editor.JEditor.error.stackOverflow" ) );
 			} catch( Exception ex ) {
-				JEditor.showErrorMessage( Localization.getInstance().getString( "gui.editor.JEditor.error.SaveTitle" ), Localization.getInstance().getString( "gui.editor.JEditor.error.Save" ) );
+				showErrorMessage( Localization.getInstance().getString( "gui.editor.JEditor.error.SaveTitle" ), Localization.getInstance().getString( "gui.editor.JEditor.error.Save" ) );
 			}
 			editview.displayProject( zcontrol );
 			ZETMain.sendMessage( Localization.getInstance().getString( "gui.editor.JEditor.message.saved" ) );
@@ -646,9 +645,9 @@ public class Control {
 			try {
 				zcontrol.getProject().save();
 			} catch( java.lang.StackOverflowError soe ) {
-				JEditor.showErrorMessage( Localization.getInstance().getString( "gui.editor.JEditor.error.stackOverflowTitle" ), Localization.getInstance().getString( "gui.editor.JEditor.error.stackOverflow" ) );
+				showErrorMessage( Localization.getInstance().getString( "gui.editor.JEditor.error.stackOverflowTitle" ), Localization.getInstance().getString( "gui.editor.JEditor.error.stackOverflow" ) );
 			} catch( Exception ex ) {
-				JEditor.showErrorMessage( Localization.getInstance().getString( "gui.editor.JEditor.error.SaveTitle" ), Localization.getInstance().getString( "gui.editor.JEditor.error.Save" ) );
+				showErrorMessage( Localization.getInstance().getString( "gui.editor.JEditor.error.SaveTitle" ), Localization.getInstance().getString( "gui.editor.JEditor.error.Save" ) );
 				ex.printStackTrace( System.err );
 				return;
 			}
@@ -681,9 +680,9 @@ public class Control {
 								target = new File( target.getAbsolutePath() + ".zet" );
 							zcontrol.getProject().save( target );
 						} catch( java.lang.StackOverflowError soe ) {
-							JEditor.showErrorMessage( Localization.getInstance().getString( "gui.editor.JEditor.error.stackOverflowTitle" ), Localization.getInstance().getString( "gui.editor.error.JEditor.stackOverflow" ) );
+							showErrorMessage( Localization.getInstance().getString( "gui.editor.JEditor.error.stackOverflowTitle" ), Localization.getInstance().getString( "gui.editor.error.JEditor.stackOverflow" ) );
 						} catch( Exception ex ) {
-							JEditor.showErrorMessage( Localization.getInstance().getString( "gui.editor.JEditor.error.SaveTitle" ), Localization.getInstance().getString( "gui.editor.JEditor.error.Save" ) );
+							showErrorMessage( Localization.getInstance().getString( "gui.editor.JEditor.error.SaveTitle" ), Localization.getInstance().getString( "gui.editor.JEditor.error.Save" ) );
 							ex.printStackTrace( System.err );
 							return;
 						}
@@ -694,9 +693,9 @@ public class Control {
 					try {
 						zcontrol.getProject().save();
 					} catch( java.lang.StackOverflowError soe ) {
-						JEditor.showErrorMessage( Localization.getInstance().getString( "gui.editor.JEditor.error.stackOverflowTitle" ), Localization.getInstance().getString( "gui.editor.JEditor.error.stackOverflow" ) );
+						showErrorMessage( Localization.getInstance().getString( "gui.editor.JEditor.error.stackOverflowTitle" ), Localization.getInstance().getString( "gui.editor.JEditor.error.stackOverflow" ) );
 					} catch( Exception ex ) {
-						JEditor.showErrorMessage( Localization.getInstance().getString( "gui.editor.JEditor.error.SaveTitle" ), Localization.getInstance().getString( "gui.editor.JEditor.error.Save" ) );
+						showErrorMessage( Localization.getInstance().getString( "gui.editor.JEditor.error.SaveTitle" ), Localization.getInstance().getString( "gui.editor.JEditor.error.Save" ) );
 						ex.printStackTrace( System.err );
 						return;
 					}
@@ -720,7 +719,7 @@ public class Control {
 		try {
 			DXFWriter.exportIntoDXF( filename, zcontrol.getProject().getBuildingPlan() );
 		} catch( IOException ex ) {
-			JEditor.showErrorMessage( Localization.getInstance().getString( "gui.editor.JEditor.error.SaveTitle" ), Localization.getInstance().getString( "gui.editor.JEditor.error.Save" ) );
+			showErrorMessage( Localization.getInstance().getString( "gui.editor.JEditor.error.SaveTitle" ), Localization.getInstance().getString( "gui.editor.JEditor.error.Save" ) );
 			ex.printStackTrace( System.err );
 			return;
 		}
@@ -951,7 +950,44 @@ public class Control {
 	public ZControl getZControl() {
 		return zcontrol;
 	}
+
+
+	/**
+	 * Displays a box displaying an error message.
+	 * @param title the title of the message box
+	 * @param message the message
+	 */
+	public void showErrorMessage( String title, String message ) {
+		JOptionPane.showMessageDialog( editor, message, title, JOptionPane.ERROR_MESSAGE );
+	}
+
+	public void updateCameraInformation() {
+		editor.getVisualizationView().updateCameraInformation();
+	}
+
+	public void setZETWindowTitle( String titleBarText ) {
+		editor.setTitle( titleBarText );
+	}
+
+	public void showFloor( Floor floor ) {
+		editview.changeFloor( floor );
+	}
+
+	public void showPolygon( PlanPolygon room ) {
+		editview.getFloor().showPolygon( room );
+	}
+
+	public void setSelectedPolygon() {
+
+	}
+
+	public void setSelectedPolygon( PlanPolygon poly ) {
+		editview.getFloor().setSelectedPolygon( poly );
+	}
+
 }
+
+
 // TODO get status out of property container, without creating new class variables!
 /*
 editview

@@ -48,6 +48,7 @@ import statistic.ca.CAStatistic;
 import statistic.ca.MultipleCycleCAStatistic;
 import batch.tasks.RasterizeTask;
 import gui.batch.JBatchProgressDialog;
+import opengl.framework.abs.control;
 
 /**
  * A wrapper class that represents a single entry in the batch list.
@@ -113,9 +114,9 @@ public class BatchEntry {
      * @param cycles the number of times the ca is simulated
      * @param ga the graph algorithm that is called
      * @param caa the cellular automaton algorithm that should be called
-     * @param useCA indicates wheather simulation using ca is performed
+     * @param useCA indicates whether simulation using ca is performed
      * @param caTime the maximal time used by ca
-     * @param useGraph indicates wheather a graph optimization is used, or not
+     * @param useGraph indicates whether a graph optimization is used, or not
      * @param graphMaxTime the time horizon for the graph algorithms
      * @param eot the evacuation optimization type
      * @param eoRuns the number of evacuation optimization runs
@@ -170,7 +171,7 @@ public class BatchEntry {
     public BatchResultEntry[] execute() throws ConversionNotSupportedException {
         Runtime runtime = Runtime.getRuntime();
         long memStart = (runtime.totalMemory() - runtime.freeMemory());
-        JBatchProgressDialog bpd = new JBatchProgressDialog();
+        JBatchProgressDialog bpd = new JBatchProgressDialog( null );
 
 		boolean useCaRes = (useCa && cycles > 0) || (useGraph && optimizedEvacuationPlanCycles <= 0);
 		boolean useOptRes = useGraph && optimizedEvacuationPlanCycles > 0;

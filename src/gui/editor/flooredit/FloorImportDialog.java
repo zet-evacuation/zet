@@ -21,7 +21,6 @@ package gui.editor.flooredit;
 
 import ds.Project;
 import ds.z.Floor;
-import zet.gui.JEditor;
 import gui.ZETMain;
 import gui.components.framework.Button;
 import gui.editor.GUIOptionManager;
@@ -54,6 +53,7 @@ public class FloorImportDialog extends JDialog {
     JList list;
     /** The project loaded in the editor. */
     Project project;
+	private final JFrame owner;
 
     /**
      * Creates aclButton new instance of <code>FloorImportDialog</code>.
@@ -65,6 +65,7 @@ public class FloorImportDialog extends JDialog {
      */
     public FloorImportDialog(JFrame owner, Project project, String title, int width, int height) {
         super(owner, title, true);
+				this.owner = owner;
         this.project = project;
 
         initComponents();
@@ -122,7 +123,7 @@ public class FloorImportDialog extends JDialog {
 
         public void actionPerformed(ActionEvent e) {
             if (e.getActionCommand().equals("load")) {
-                if (jfcProject.showOpenDialog(JEditor.getInstance()) == JFileChooser.APPROVE_OPTION) {
+                if (jfcProject.showOpenDialog( owner ) == JFileChooser.APPROVE_OPTION) {
                     GUIOptionManager.setImportPath(jfcProject.getCurrentDirectory().getPath());
                 }
                 try {
@@ -137,7 +138,7 @@ public class FloorImportDialog extends JDialog {
                             loc.getString("gui.editor.JEditor.error.loadError"),
                             loc.getString("gui.editor.JEditor.error.loadErrorTitle"),
                             JOptionPane.ERROR_MESSAGE);
-                    ex.printStackTrace();
+                    ex.printStackTrace( System.err );
                     ZETMain.sendMessage(loc.getString("gui.editor.JEditor.message.loadError"));
                 }
             } else if (e.getActionCommand().equals("import")) {

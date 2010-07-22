@@ -139,7 +139,8 @@ public class JFloor extends AbstractFloor implements EventListener<ZModelChanged
 	}
 
 	public void handleEvent( ZModelChangedEvent e ) {
-		if( !JEditor.getInstance().isUpdateDisabled() )
+		// TODO handle updates
+		//if( !JEditor.getInstance().isUpdateDisabled() )
 			displayFloor( myFloor );
 	}
 
@@ -194,7 +195,7 @@ public class JFloor extends AbstractFloor implements EventListener<ZModelChanged
 			// TODO: Provide better implementation - Do not recreate everything each time			
 			for( Room r : f.getRooms() ) {
 				JPolygon poly = new JPolygon( this,
-								GUIOptionManager.getRoomEdgeColor() );
+								GUIOptionManager.getRoomEdgeColor(), guiControl );
 				add( poly );
 				poly.displayPolygon( r );
 			}
@@ -264,8 +265,7 @@ public class JFloor extends AbstractFloor implements EventListener<ZModelChanged
 		dragStarts = null;
 		draggedPlanPoints = null;
 		if( newPolygon != null ) {
-			JEditor.getInstance().getEditView().getProjectControl().delete( newPolygon );
-//			newPolygon.delete();
+			guiControl.getZControl().delete( newPolygon );
 			newPolygon = null;
 		}
 	}
@@ -1080,8 +1080,7 @@ public class JFloor extends AbstractFloor implements EventListener<ZModelChanged
 			switch( e.getKeyCode() ) {
 				case KeyEvent.VK_ESCAPE:
 					if( newPolygon != null ) {
-						JEditor.getInstance().getEditView().getProjectControl().delete( newPolygon );
-//						newPolygon.delete();
+						guiControl.getZControl().delete( newPolygon );
 						newPolygon = null;
 						lastClick = null;
 						lastPlanClick = null;
@@ -1094,8 +1093,7 @@ public class JFloor extends AbstractFloor implements EventListener<ZModelChanged
 						for( JPolygon sel : selectedPolygons )
 							toDelete.add( sel.getPlanPolygon() );
 						for( PlanPolygon p : toDelete )
-							JEditor.getInstance().getEditView().getProjectControl().delete( p );
-//							p.delete();
+							guiControl.getZControl().delete( p );
 					}
 					break;
 				default:

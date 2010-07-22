@@ -27,6 +27,7 @@ import ds.z.RoomEdge;
 import ds.z.TeleportEdge;
 import event.EventServer;
 import event.MessageEvent;
+import gui.Control;
 import zet.gui.JEditor;
 import java.awt.Point;
 import java.awt.event.ActionEvent;
@@ -41,6 +42,11 @@ public class EdgePopupListener implements ActionListener {
 	private Edge myEdge;
 	private Point mousePosition;
 	private boolean rasterizedPaintMode;
+	private Control guiControl;
+
+	public EdgePopupListener( Control guiControl ) {
+		this.guiControl = guiControl;
+	}
 
 	/** This method should be called every time before the popup is shown.
 	 * @param currentEdge The Edge on which the popup is shown.
@@ -120,7 +126,7 @@ public class EdgePopupListener implements ActionListener {
 					EventServer.getInstance().dispatchEvent( new MessageEvent( this, MessageEvent.MessageType.Error, "Nur Raumbegrenzungen können zu Stockwerksdurchgängen gemacht werden!" ) );
 			else if( e.getActionCommand().equals( "makeEvacEdge" ) )
 				if( myEdge instanceof RoomEdge )
-					JEditor.getInstance().getEditView().getProjectControl().getProject().getBuildingPlan().getDefaultFloor().addEvacuationRoom( (RoomEdge)myEdge );
+					guiControl.getZControl().getProject().getBuildingPlan().getDefaultFloor().addEvacuationRoom( (RoomEdge)myEdge );
 				else
 					EventServer.getInstance().dispatchEvent( new MessageEvent( this, MessageEvent.MessageType.Error, "Nur Raumbegrenzungen können zu Evakuierungsausgängen gemacht werden!" ) );
 			else if( e.getActionCommand().equals( "createPassageRoom" ) ) {
@@ -189,10 +195,9 @@ public class EdgePopupListener implements ActionListener {
 			} else if( e.getActionCommand().equals( "showPassageTarget" ) ) {
 				Room partnerRoom = ((TeleportEdge)myEdge).getLinkTarget().getRoom();
 				// Show the right floor
-				JEditor.getInstance().getEditView().changeFloor(
-								partnerRoom.getAssociatedFloor() );
+				guiControl.showFloor( partnerRoom.getAssociatedFloor() );
 				// Show the right room
-				JEditor.getInstance().getEditView().getFloor().showPolygon( partnerRoom );
+				guiControl.showPolygon( partnerRoom );
 			} else if( e.getActionCommand().equals( "revertPassage" ) )
 				((RoomEdge)myEdge).makeImpassable();
 		} catch( RuntimeException ex ) {
