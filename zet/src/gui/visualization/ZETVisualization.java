@@ -7,6 +7,7 @@ package gui.visualization;
 import de.tu_berlin.math.coga.common.util.Formatter;
 import de.tu_berlin.math.coga.math.vectormath.Vector3;
 import ds.PropertyContainer;
+import ds.z.ZControl;
 import event.EventListener;
 import event.EventServer;
 import event.OptionsChangedEvent;
@@ -60,13 +61,20 @@ public class ZETVisualization extends Visualization<GLControl> implements EventL
 		else
 			this.setParallelViewMode( ParallelViewMode.Orthogonal );
 	}
+	
+	private ZControl zcontrol;
 
-		static Vector3 camPos = new Vector3(0,0,10);
-		static Vector3 camView = new Vector3(0,0,-1);
-		static Vector3 camUp = new Vector3(0,1,0);
-static boolean done = false;
-		static Vector3 pointPos = new Vector3( 0,0,0);
-		static GLUquadric quadObj = null;
+	public void setZcontrol( ZControl zcontrol ) {
+		this.zcontrol = zcontrol;
+	}
+	
+	
+		static Vector3 camPos = new Vector3( 0, 0, 10 );
+	static Vector3 camView = new Vector3( 0, 0, -1 );
+	static Vector3 camUp = new Vector3( 0, 1, 0 );
+	static boolean done = false;
+	static Vector3 pointPos = new Vector3( 0, 0, 0 );
+	static GLUquadric quadObj = null;
 
 		@Override
 	public void display( GLAutoDrawable drawable ) {
@@ -192,11 +200,11 @@ static boolean done = false;
 			case KeyEvent.VK_UP:
 			case KeyEvent.VK_DOWN:
 				JEditor.getInstance().getVisualizationView().updateCameraInformation();
-				JEditor.getInstance().getZControl().getProject().getVisualProperties().getCameraPosition().pos = camera.getPos();
-				JEditor.getInstance().getZControl().getProject().getVisualProperties().getCameraPosition().view = camera.getView();
-				JEditor.getInstance().getZControl().getProject().getVisualProperties().getCameraPosition().up = camera.getUp();
-				JEditor.getInstance().getZControl().getProject().getVisualProperties().setCurrentWidth( getViewWidth() );
-				JEditor.getInstance().getZControl().getProject().getVisualProperties().setCurrentHeight( getViewHeight() );
+				zcontrol.getProject().getVisualProperties().getCameraPosition().pos = camera.getPos();
+				zcontrol.getProject().getVisualProperties().getCameraPosition().view = camera.getView();
+				zcontrol.getProject().getVisualProperties().getCameraPosition().up = camera.getUp();
+				zcontrol.getProject().getVisualProperties().setCurrentWidth( getViewWidth() );
+				zcontrol.getProject().getVisualProperties().setCurrentHeight( getViewHeight() );
 			default:
 				super.keyPressed( e );
 		}
@@ -206,34 +214,33 @@ static boolean done = false;
 	public void mousePressed( MouseEvent e ) {
 		super.mousePressed( e );
 		JEditor.getInstance().getVisualizationView().updateCameraInformation();
-		JEditor.getInstance().getZControl().getProject().getVisualProperties().getCameraPosition().pos = camera.getPos();
-		JEditor.getInstance().getZControl().getProject().getVisualProperties().getCameraPosition().view = camera.getView();
-		JEditor.getInstance().getZControl().getProject().getVisualProperties().getCameraPosition().up = camera.getUp();
-		JEditor.getInstance().getZControl().getProject().getVisualProperties().setCurrentWidth( getViewWidth() );
-		JEditor.getInstance().getZControl().getProject().getVisualProperties().setCurrentHeight( getViewHeight() );
+		zcontrol.getProject().getVisualProperties().getCameraPosition().pos = camera.getPos();
+		zcontrol.getProject().getVisualProperties().getCameraPosition().view = camera.getView();
+		zcontrol.getProject().getVisualProperties().getCameraPosition().up = camera.getUp();
+		zcontrol.getProject().getVisualProperties().setCurrentWidth( getViewWidth() );
+		zcontrol.getProject().getVisualProperties().setCurrentHeight( getViewHeight() );
 	}
 
 	@Override
 	public void mouseDragged( MouseEvent e ) {
 		super.mouseDragged( e );
 		JEditor.getInstance().getVisualizationView().updateCameraInformation();
-		JEditor.getInstance().getZControl().getProject().getVisualProperties().getCameraPosition().pos = camera.getPos();
-		JEditor.getInstance().getZControl().getProject().getVisualProperties().getCameraPosition().view = camera.getView();
-		JEditor.getInstance().getZControl().getProject().getVisualProperties().getCameraPosition().up = camera.getUp();
-		JEditor.getInstance().getZControl().getProject().getVisualProperties().setCurrentWidth( getViewWidth() );
-		JEditor.getInstance().getZControl().getProject().getVisualProperties().setCurrentHeight( getViewHeight() );
+		zcontrol.getProject().getVisualProperties().getCameraPosition().pos = camera.getPos();
+		zcontrol.getProject().getVisualProperties().getCameraPosition().view = camera.getView();
+		zcontrol.getProject().getVisualProperties().getCameraPosition().up = camera.getUp();
+		zcontrol.getProject().getVisualProperties().setCurrentWidth( getViewWidth() );
+		zcontrol.getProject().getVisualProperties().setCurrentHeight( getViewHeight() );
 	}
 
 	@Override
 	public void mouseWheelMoved( MouseWheelEvent e ) {
 		super.mouseWheelMoved( e );
 		JEditor.getInstance().getVisualizationView().updateCameraInformation();
-		JEditor.getInstance().getZControl().getProject().getVisualProperties().getCameraPosition().pos = camera.getPos();
-		JEditor.getInstance().getZControl().getProject().getVisualProperties().getCameraPosition().view = camera.getView();
-		JEditor.getInstance().getZControl().getProject().getVisualProperties().getCameraPosition().up = camera.getUp();
-		JEditor.getInstance().getZControl().getProject().getVisualProperties().setCurrentWidth( getViewWidth() );
-		JEditor.getInstance().getZControl().getProject().getVisualProperties().setCurrentHeight( getViewHeight() );
-
+		zcontrol.getProject().getVisualProperties().getCameraPosition().pos = camera.getPos();
+		zcontrol.getProject().getVisualProperties().getCameraPosition().view = camera.getView();
+		zcontrol.getProject().getVisualProperties().getCameraPosition().up = camera.getUp();
+		zcontrol.getProject().getVisualProperties().setCurrentWidth( getViewWidth() );
+		zcontrol.getProject().getVisualProperties().setCurrentHeight( getViewHeight() );
 	}
 
 	/**

@@ -46,7 +46,6 @@ import gui.editor.properties.PropertyLoadException;
 import gui.editor.properties.PropertyTreeModel;
 import de.tu_berlin.math.coga.common.util.IOTools;
 import ds.z.ZControl;
-import java.awt.Image;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
@@ -54,7 +53,6 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.io.PrintStream;
 import java.util.Calendar;
-import javax.imageio.ImageIO;
 import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
 
@@ -282,29 +280,21 @@ public class ZETMain {
 				GUIOptionManager.changeLookAndFeel( UIManager.getSystemLookAndFeelClassName() );
 
 				// Start our editor in the event-dispatch-thread
+				JPropertySelectorWindow a = new JPropertySelectorWindow( null, "", 100, 100, propertyFilename );
+				a.saveWorking();
+				a = null;
 				Control guiControl = new Control();
-				JEditor edit = new JEditor( guiControl );//JEditor.getInstance();
+				guiControl.createZETWindow();
+
 				// The control object for projects
 				ZControl zcontrol = null;
 
-				File iconFile = new File( "./icon.gif" );
-				checkFile( iconFile );
-				try {
-					Image img = ImageIO.read( iconFile );
-					edit.setIconImage( img );
-				} catch( IOException e ) {
-					exit( "Error loding icon." );
-				}
 
-				JPropertySelectorWindow a = new JPropertySelectorWindow( edit, "", 100, 100, propertyFilename );
-				a.saveWorking();
-				a = null;
-
-				edit.addMainComponents();
+				
 				System.out.println( "ZET-Fenster geladen." );
 				if( bp != null ) {
 					for( BatchProjectEntry bpe : bp ) {
-						edit.addBatchEntry( bpe );
+						guiControl.addBatchEntry( bpe );
 					}
 				}
 
@@ -315,23 +305,24 @@ public class ZETMain {
 
 				if( !loadedProject.equals( "" ) ) {
 					File f = new File( loadedProject );
-					if( !loadLast)
+					if( !loadLast )
 						checkFile( f, "Project file" );
 					else {
 						if( !f.exists() )
 							f = null;
 					}
-					zcontrol = new ZControl( f );
+					//zcontrol = new ZControl( f );
+					guiControl.loadProject( f );
 					if( f != null) {
 						System.out.println( "Projekt " + f.getAbsolutePath() + " geladen." );
 						GUIOptionManager.setLastFile( 1, f.getAbsolutePath() );
 					}
 				} else {
-					zcontrol = new ZControl();
+					//zcontrol = new ZControl();
 				}
-				edit.setZControl( zcontrol );
+				//guiControl.setZControl( zcontrol );
 
-				edit.setVisible( true );
+				guiControl.showZETWindow();
 			}
 		} );
 	}
@@ -373,7 +364,7 @@ public class ZETMain {
 	 * @param file the file that is to be checked
 	 * @param fileType the file type that is checked. The error output will start with fileType
 	 */
-	private static void checkFile( File file, String fileType ) {
+	public static void checkFile( File file, String fileType ) {
 		if( fileType.equals( "" ) )
 			fileType = "File '";
 		else
@@ -391,16 +382,16 @@ public class ZETMain {
 	 * 1 if not.
 	 * @param file the file that is to be checked
 	 */
-	private static void checkFile( File file ) {
+	public static void checkFile( File file ) {
 		checkFile( file, "" );
 	}
 
 	/**
 	 * Sets up the standard output and the error output to some logging files.
-	 * @param log indicates wheather standard out is redirected to a file
-	 * @param err indicates wheather error out is redirected to a file
-	 * @param auto indicates wheather the filenames are automatically created
-	 * @param verbose indicates wheather the default output is also used, or not
+	 * @param log indicates whether standard out is redirected to a file
+	 * @param err indicates whether error out is redirected to a file
+	 * @param auto indicates whether the filenames are automatically created
+	 * @param verbose indicates whether the default output is also used, or not
 	 */
 	public static void setUpLog( boolean log, boolean err, boolean auto, boolean verbose ) {
 		log = true;

@@ -18,65 +18,39 @@
  * JEditor.java
  * Created on 4. Dezember 2007, 17:08
  */
-
 package zet.gui;
 
 import algo.ca.CellularAutomatonInOrderExecution;
-import algo.graph.dynamicflow.eat.EarliestArrivalFlowProblem;
 import batch.Batch;
 import batch.BatchResult;
-import batch.BatchResultEntry;
 import batch.CellularAutomatonAlgorithm;
 import batch.GraphAlgorithm;
-import batch.load.BatchProjectEntry;
 import converter.ZToCAConverter;
 import ds.PropertyContainer;
 import ds.ca.CellularAutomaton;
-import ds.GraphVisualizationResult;
 import ds.z.AssignmentType;
 import ds.z.Floor;
-import ds.z.exception.TooManyPeopleException;
 import event.EventListener;
 import event.EventServer;
 import event.MessageEvent;
 import event.MessageEvent.MessageType;
 import event.ProgressEvent;
 import gui.batch.JBatchView;
-import gui.components.ComboBoxRenderer;
 import gui.components.JEventStatusBar;
 import gui.components.framework.Button;
 import gui.components.framework.IconSet;
-import gui.components.framework.Menu;
-import gui.editor.CoordinateTools;
 import gui.editor.EditMode;
-import gui.editor.GUIOptionManager;
 import gui.ca.JCAView;
-import gui.components.AbstractFloor.RasterPaintStyle;
-import gui.components.NamedIndex;
-import gui.components.progress.JProgressBarDialog;
-import gui.components.progress.JRasterizeProgressBarDialog;
-import gui.editor.AreaVisibility;
 import gui.editor.JEditView;
 import gui.editor.assignment.JAssignment;
-import gui.editor.flooredit.FloorImportDialog;
-import gui.editor.planimage.JPlanImageProperties;
-import gui.editor.properties.JOptionsWindow;
-import gui.editor.properties.JPropertySelectorWindow;
 import gui.statistic.JGraphStatisticPanel;
 import gui.statistic.JStatisticPanel;
 import gui.visualization.AbstractVisualization;
 import gui.visualization.JVisualizationView;
 import gui.visualization.control.GLControl;
-import gui.visualization.control.GLControl.CellInformationDisplay;
-import io.DXFWriter;
 import de.tu_berlin.math.coga.common.localization.Localization;
 import de.tu_berlin.math.coga.common.localization.Localized;
-import de.tu_berlin.math.coga.common.util.IOTools;
-import io.movie.MovieManager;
-import io.visualization.CAVisualizationResults;
 import java.awt.BorderLayout;
-import java.awt.Color;
-import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.Point;
 import java.awt.Toolkit;
@@ -88,71 +62,45 @@ import java.awt.event.ItemListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
-import java.awt.image.BufferedImage;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.PrintStream;
 import java.text.NumberFormat;
-import java.util.ArrayList;
 import java.util.Locale;
-import javax.imageio.ImageIO;
 import javax.media.opengl.GLCapabilities;
-import javax.swing.ButtonGroup;
-import javax.swing.DefaultComboBoxModel;
-import javax.swing.Icon;
 import javax.swing.JButton;
-import javax.swing.JCheckBoxMenuItem;
-import javax.swing.JComboBox;
 import javax.swing.JComponent;
-import javax.swing.JFileChooser;
 import javax.swing.JFrame;
-import javax.swing.JLabel;
-import javax.swing.JList;
-import javax.swing.JMenu;
-import javax.swing.JMenuBar;
-import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
-import javax.swing.JRadioButtonMenuItem;
 import javax.swing.JTabbedPane;
 import javax.swing.JToolBar;
 import javax.swing.KeyStroke;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
-import javax.swing.filechooser.FileFilter;
-import statistic.ca.CAStatistic;
-import statistic.graph.Controller;
 import batch.tasks.AlgorithmTask;
-import batch.tasks.BatchGraphCreateOnlyTask;
 import batch.tasks.CARealTime;
-import batch.tasks.RasterizeTask;
-import batch.tasks.VisualizationDataStructureTask;
-import de.tu_berlin.math.coga.zet.NetworkFlowModel;
-import ds.z.Assignment;
-import ds.z.AssignmentArea;
-import ds.z.ConcreteAssignment;
-import ds.z.EvacuationArea;
-import ds.z.Room;
 import ds.z.ZControl;
 import event.VisualizationEvent;
 import gui.components.JLogPane;
 import gui.statistic.JStatisticsPanel;
 import zet.gui.components.toolbar.JEditToolbar;
-import gui.visualization.Visualization.RecordingMode;
-import io.visualization.BuildingResults;
-import de.tu_berlin.math.coga.zet.DatFileReaderWriter;
 import gui.Control;
-import gui.CreditsDialog;
 import gui.ZETMain;
-import gui.ZETProperties;
+import java.awt.Image;
+import javax.imageio.ImageIO;
 import zet.gui.components.JZETMenuBar;
+import zet.gui.components.toolbar.JBatchToolBar;
+import zet.gui.components.toolbar.JLogToolBar;
+import zet.gui.components.toolbar.JQuickVisualizationToolBar;
+import zet.gui.components.toolbar.JStatisticCellularAutomatonToolbar;
+import zet.gui.components.toolbar.JStatisticGraphToolBar;
 import zet.gui.components.toolbar.JVisualizationToolbar;
 import zet.util.ConversionTools;
 
@@ -161,6 +109,7 @@ import zet.util.ConversionTools;
  * @author Jan-Philipp Kappmeier, Timon Kelter
  */
 public class JEditor extends JFrame implements Localized, EventListener<ProgressEvent> {
+
 	public static final int EDIT_FLOOR = 0;
 	public static final int BATCH = 1;
 	public static final int CA_FLOOR = ZETMain.isDebug() ? 2 : -1;
@@ -173,23 +122,19 @@ public class JEditor extends JFrame implements Localized, EventListener<Progress
 	static final Localization loc = Localization.getInstance();
 	/** Stores the last mouse position if a mouse position event is sent. */
 	private static Point lastMouse = new Point( 0, 0 );
-	/** The delimter used if numbers are stored in a tuple. */
+	/** The delimiter used if numbers are stored in a tuple. */
 	final static String delimiter = Localization.getInstance().getStringWithoutPrefix( "numberSeparator" );
 	/** Singleton instance variable. */
 	private static JEditor instance = null;
-
 	/** Control class for projects and editing */
 	private ZControl zcontrol;
-
 	private static boolean editing = false;
 	private CellularAutomatonInOrderExecution caAlgo = null;
 	private AlgorithmTask worker;
 	private BatchResult result;
 	// Options
 	private boolean firstSwitch = false;
-
 //	private EditMode.Type creationType = EditMode.Type.CreationPointwise;
-
 	/** The number format used to display the zoom factor in the text field. */
 	private NumberFormat nfZoom = NumberFormat.getPercentInstance();	// Main window components
 	/** The status bar. */
@@ -210,49 +155,26 @@ public class JEditor extends JFrame implements Localized, EventListener<Progress
 	private JLogPane logView;
 	/** The general statistic tab. */
 	public JStatisticsPanel statisticView;
-
 	/** The tool bars */
 	private JEditToolbar toolBarEdit;
-	private JToolBar toolBarBatch;
-	private JToolBar toolBarCA;
+	private JBatchToolBar toolBarBatch;
+	private JQuickVisualizationToolBar toolBarCellularAutomatonQuickVisualization;
 	private JVisualizationToolbar toolBarVisualization;
-	private JToolBar toolBarCAStats;
+	private JStatisticCellularAutomatonToolbar toolBarCAStats;
 	private JToolBar toolBarGraphStats;
 	/** The tool bar that is visible if the log view is active. */
-	private JToolBar toolBarLog;
+	private JLogToolBar toolBarLog;
 	private JToolBar currentToolbar;
-	// Toolbar items
-	// Batch toolbar
-	private JButton btnExit5;
-	private JButton btnSaveResults1;
-	private JButton btnOpenResults1;
-	// Quick visualization toolbar
-	private JButton btnExit6;
-	// Visualization toolbar
-	// Statistic Toolbar
-	private JButton btnOpenResults2;
-	private JButton btnExit3;
-	private JButton btnExit7;
-	private JButton btnSaveResults2;
-	// Graph statistic Toolbar
-	private JButton btnExit4;
-	private JButton btnOpenResults3;
-	private JButton btnSaveResults3;
-	private JLabel labelBatchName2;
-	private BatchResultEntryGRSComboBoxModel entryModelGraph;
-
 	/** A tabbed pane that allows switching of the different views. */
 	private JTabbedPane tabPane;
 	// Additional GUI stuff
 	private boolean disableUpdate = false;
 	private int currentMode = EDIT_FLOOR;
 	private JAssignment distribution;
-
 	/** Decides whether the visualization should be restarted if 'play' is pressed. */
 	private boolean restartVisualization = false;
 	/** Decides whether visualization runs in loop-mode, that means it automatically starts again. */
 	private boolean loop = false;
-
 	private Control guiControl;
 
 	/**
@@ -285,14 +207,13 @@ public class JEditor extends JFrame implements Localized, EventListener<Progress
 		statusBar = new JEventStatusBar();
 		add( statusBar, BorderLayout.SOUTH );
 
-		//createEditToolBar();
 		toolBarEdit = new JEditToolbar( control );
-		createBatchToolBar();
-		createQuickVisualizationToolBar();
+		toolBarBatch = new JBatchToolBar( control );
+		toolBarCellularAutomatonQuickVisualization = new JQuickVisualizationToolBar( control );
 		toolBarVisualization = new JVisualizationToolbar( control );
-		//createVisualizationToolBar();
-		createStatisticsToolBar();
-		createLogToolBar();
+		toolBarCAStats = new JStatisticCellularAutomatonToolbar( control );
+		toolBarGraphStats = new JStatisticGraphToolBar( control );
+		toolBarLog = new JLogToolBar( control );
 
 		add( toolBarEdit, BorderLayout.NORTH );
 		currentToolbar = toolBarEdit;
@@ -300,6 +221,7 @@ public class JEditor extends JFrame implements Localized, EventListener<Progress
 		EventServer.getInstance().registerListener( this, ProgressEvent.class );
 
 		this.addWindowListener( new WindowListener() {
+
 			public void windowOpened( WindowEvent e ) {
 			}
 
@@ -331,6 +253,17 @@ public class JEditor extends JFrame implements Localized, EventListener<Progress
 			public void windowDeactivated( WindowEvent e ) {
 			}
 		} );
+
+		
+		File iconFile = new File( "./icon.gif" );
+		ZETMain.checkFile( iconFile );
+		try {
+			Image img = ImageIO.read( iconFile );
+			setIconImage( img );
+		} catch( IOException e ) {
+			ZETMain.exit( "Error loding icon." );
+		}
+
 	}
 
 	/**
@@ -338,7 +271,6 @@ public class JEditor extends JFrame implements Localized, EventListener<Progress
 	 * the view to edit window and resets the zoom factor to 10%
 	 */
 	public void loadProject() {
-		//zcontrol = projectControl.getZControl();
 
 		if( tabPane.getSelectedIndex() > 1 )
 			tabPane.setSelectedIndex( 0 );
@@ -420,18 +352,18 @@ public class JEditor extends JFrame implements Localized, EventListener<Progress
 	 ****************************************************************************/
 	public void addMainComponents() {
 		editView = new JEditView( guiControl );
-		batchView = new JBatchView();
+		batchView = new JBatchView( guiControl );
 		visualizationView = new JVisualizationView( new GLCapabilities() );
 		visualizationView.getGLContainer().setControl( new GLControl() );
 		visualizationView.setFloorSelectorEnabled( !PropertyContainer.getInstance().getAsBoolean( "settings.gui.visualization.floors" ) );
-		if( PropertyContainer.getInstance().getAsBoolean( "settings.gui.visualization.isometric" ) ) {
+		if( PropertyContainer.getInstance().getAsBoolean( "settings.gui.visualization.isometric" ) )
 			visualizationView.getGLContainer().setParallelViewMode( AbstractVisualization.ParallelViewMode.Isometric );
-		} else {
+		else
 			visualizationView.getGLContainer().setParallelViewMode( AbstractVisualization.ParallelViewMode.Orthogonal );
-		}
 		visualizationView.getGLContainer().setView( !PropertyContainer.getInstance().getAsBoolean( "settings.gui.visualization.2d" ) );
-					
+
 		visualizationView.addPotentialItemListener( new ItemListener() {
+
 			public void itemStateChanged( ItemEvent e ) {
 				if( e.getItem() == null || e.getStateChange() == ItemEvent.DESELECTED )
 					return;
@@ -467,8 +399,9 @@ public class JEditor extends JFrame implements Localized, EventListener<Progress
 		getContentPane().add( tabPane, BorderLayout.CENTER );
 
 		// Register Shortcuts (no-menu-shortcuts)
-		KeyStroke up = KeyStroke.getKeyStroke( KeyEvent.VK_R, InputEvent.CTRL_DOWN_MASK);
+		KeyStroke up = KeyStroke.getKeyStroke( KeyEvent.VK_R, InputEvent.CTRL_DOWN_MASK );
 		ActionListener acl = new ActionListener() {
+
 			public void actionPerformed( ActionEvent e ) {
 				switch( editView.getEastPanelType() ) {
 					case JEditView.FLOOR_PANEL:
@@ -483,13 +416,13 @@ public class JEditor extends JFrame implements Localized, EventListener<Progress
 			}
 		};
 
-		tabPane.registerKeyboardAction( acl, "test", up, JComponent.WHEN_ANCESTOR_OF_FOCUSED_COMPONENT);
+		tabPane.registerKeyboardAction( acl, "test", up, JComponent.WHEN_ANCESTOR_OF_FOCUSED_COMPONENT );
 
 		tabPane.addChangeListener( new ChangeListener() {
+
 			public void stateChanged( ChangeEvent e ) {
-				if( tabPane.getSelectedIndex() == LOG ) {
+				if( tabPane.getSelectedIndex() == LOG )
 					logView.update();
-				}
 			}
 		} );
 
@@ -509,111 +442,20 @@ public class JEditor extends JFrame implements Localized, EventListener<Progress
 	}
 
 	/**
-	 * Creates the <code>JToolBar</code> for the statistic view.
-	 */
-	private void createStatisticsToolBar() {
-		loc.setPrefix( "gui.editor.JEditor." );
-		/** ########## CA Statistics tool bar ############ */
-		toolBarCAStats = new JToolBar();
-		btnExit3 = Button.newButton( IconSet.Exit, new ActionListener() {
-			public void actionPerformed( ActionEvent e ) {
-				System.exit( 0 );
-			}
-		}, "", loc.getString( "toolbarTooltipExit" ) );
-		toolBarCAStats.add( btnExit3 );
-		toolBarCAStats.addSeparator();
-
-		btnOpenResults2 = Button.newButton( IconSet.Open, null, "loadBatchResult", loc.getString( "toolbarTooltipOpen" ) );
-		toolBarCAStats.add( btnOpenResults2 );
-		btnSaveResults2 = Button.newButton( IconSet.Save, null, "saveResultAs", loc.getString( "toolbarTooltipSave" ) );
-		toolBarCAStats.add( btnSaveResults2 );
-
-		/** ########## Graph Statistics tool bar ############ */
-		toolBarGraphStats = new JToolBar();
-		btnExit4 = Button.newButton( IconSet.Exit, new ActionListener() {
-			public void actionPerformed( ActionEvent e ) {
-				System.exit( 0 );
-			}
-		}, "", loc.getString( "toolbarTooltipExit" ) );
-		toolBarGraphStats.add( btnExit4 );
-		toolBarGraphStats.addSeparator();
-
-		btnOpenResults3 = Button.newButton( IconSet.Open, null, "loadBatchResult", loc.getString( "toolbarTooltipOpen" ) );
-		toolBarGraphStats.add( btnOpenResults3 );
-		btnSaveResults3 = Button.newButton( IconSet.Save, null, "saveResultAs", loc.getString( "toolbarTooltipSave" ) );
-		toolBarGraphStats.add( btnSaveResults3 );
-		toolBarGraphStats.addSeparator();
-
-		labelBatchName2 = new JLabel( loc.getString( "batchName" ) );
-		toolBarGraphStats.add( labelBatchName2 );
-		entryModelGraph = new BatchResultEntryGRSComboBoxModel();
-		JComboBox cbxBatchEntry = new JComboBox( entryModelGraph );
-		cbxBatchEntry.setMaximumRowCount( 10 );
-		cbxBatchEntry.setMaximumSize( new Dimension( 250, cbxBatchEntry.getPreferredSize().height ) );
-		cbxBatchEntry.setPreferredSize( new Dimension( 250, cbxBatchEntry.getPreferredSize().height ) );
-		cbxBatchEntry.setAlignmentX( 0 );
-		toolBarGraphStats.add( cbxBatchEntry );
-		loc.setPrefix( "" );
-	}
-
-	/**
-	 * Creates the <code>JToolBar</code> for the log view.
-	 */
-	private void createLogToolBar()	 {
-		loc.setPrefix( "gui.editor.JEditor." );
-		/** ########## Log View Statistics tool bar ############ */
-		toolBarLog = new JToolBar();
-		btnExit7 = Button.newButton( IconSet.Exit, new ActionListener() {
-			public void actionPerformed( ActionEvent e ) {
-				System.exit( 0 );
-			}
-		}, "", loc.getString( "toolbarTooltipExit" ) );
-		toolBarLog.add( btnExit7 );
-		
-		loc.setPrefix( "" );
-	}
-
-	/**
-	 * Creates the <code>JToolBar</code> for the batch panel.
-	 */
-	private void createBatchToolBar() {
-		loc.setPrefix( "gui.editor.JEditor." );
-		toolBarBatch = new JToolBar();
-		btnExit5 = Button.newButton( IconSet.Exit, new ActionListener() {
-			public void actionPerformed( ActionEvent e ) {
-				System.exit( 0 );
-			}
-		}, "", loc.getString( "toolbarTooltipExit" ) );
-		toolBarBatch.add( btnExit5 );
-		toolBarBatch.addSeparator();
-
-		btnOpenResults1 = Button.newButton( IconSet.Open, null, "loadBatchResult", loc.getString( "toolbarTooltipOpen" ) );
-		toolBarBatch.add( btnOpenResults1 );
-		btnSaveResults1 = Button.newButton( IconSet.Save, null, "saveResultAs", loc.getString( "toolbarTooltipSave" ) );
-		toolBarBatch.add( btnSaveResults1 );
-		loc.setPrefix( "" );
-	}
-
-	/**
-	 * Creates the <code>JToolBar</code> for the quick visualization.
-	 */
-	private final void createQuickVisualizationToolBar() {
-		loc.setPrefix( "gui.editor.JEditor." );
-		toolBarCA = new JToolBar();
-		btnExit6 = Button.newButton( IconSet.Exit, new ActionListener() {
-			public void actionPerformed( ActionEvent e ) {
-				System.exit( 0 );
-			}
-		}, "", loc.getString( "toolbarTooltipExit" ) );
-		toolBarCA.add( btnExit6 );
-		loc.setPrefix( "" );
-	}
-
-	/**
 	 * Changes the appearance of the GUI to the selected language.
 	 * @see de.tu_berlin.math.coga.common.localization.Localization
 	 */
 	public void localize() {
+		// Localize tool bars
+		loc.setPrefix( "gui.editor.JEditor." );
+		toolBarEdit.localize();
+		toolBarVisualization.localize();
+		toolBarLog.localize();
+		toolBarBatch.localize();
+		toolBarCellularAutomatonQuickVisualization.localize();
+		loc.setPrefix( "" );
+
+		// Localize other main components
 		editView.localize();
 		visualizationView.localize();
 
@@ -621,61 +463,28 @@ public class JEditor extends JFrame implements Localized, EventListener<Progress
 
 
 
-		// Tabs in the tabbed view
+		// Localize tabs
 		loc.setPrefix( "gui.editor.JEditor.tab" );
 		tabPane.setTitleAt( EDIT_FLOOR, loc.getString( "Edit" ) );
 		tabPane.setToolTipTextAt( EDIT_FLOOR, loc.getString( "EditToolTip" ) );
-
 		tabPane.setTitleAt( BATCH, loc.getString( "Batch" ) );
 		tabPane.setToolTipTextAt( BATCH, loc.getString( "BatchToolTip" ) );
-
 		if( ZETMain.isDebug() ) {
 			tabPane.setTitleAt( CA_FLOOR, loc.getString( "CAView" ) );
 			tabPane.setToolTipTextAt( CA_FLOOR, loc.getString( "CAViewToolTip" ) );
 		}
-
 		tabPane.setTitleAt( VISUALIZATION, loc.getString( "Visualization" ) );
 		tabPane.setToolTipTextAt( VISUALIZATION, loc.getString( "VisualizationToolTip" ) );
-
 		tabPane.setTitleAt( STATISTIC, loc.getString( "Statistic" ) );
 		tabPane.setToolTipTextAt( STATISTIC, loc.getString( "StatisticToolTip" ) );
-
 		tabPane.setTitleAt( GRAPH_STATISTIC, loc.getString( "GraphStatistic" ) );
 		tabPane.setToolTipTextAt( GRAPH_STATISTIC, loc.getString( "GraphStatisticToolTip" ) );
-
 		tabPane.setTitleAt( LOG, loc.getString( "LogWindow" ) );
 		tabPane.setToolTipTextAt( LOG, loc.getString( "LogWindowToolTip" ) );
-
 		if( ZETMain.isDebug() ) {
 			tabPane.setTitleAt( STATISTICS, loc.getString( "Statistics" ) );
 			tabPane.setToolTipTextAt( STATISTICS, loc.getString( "StatisticsToolTip" ) );
 		}
-		loc.setPrefix( "" );
-
-
-		// Tool tips for buttons and text views in the menu bar
-		loc.setPrefix( "gui.editor.JEditor." );
-
-		toolBarEdit.localize();
-
-		toolBarVisualization.localize();
-
-		labelBatchName2.setText( loc.getString( "batchName" ) );
-
-		btnExit3.setToolTipText( loc.getString( "toolbarTooltipExit" ) );
-		btnExit4.setToolTipText( loc.getString( "toolbarTooltipExit" ) );
-		btnExit5.setToolTipText( loc.getString( "toolbarTooltipExit" ) );
-		btnExit6.setToolTipText( loc.getString( "toolbarTooltipExit" ) );
-		btnExit7.setToolTipText( loc.getString( "toolbarTooltipExit" ) );
-		btnOpenResults1.setToolTipText( loc.getString( "toolbarTooltipOpen" ) );
-		btnOpenResults2.setToolTipText( loc.getString( "toolbarTooltipOpen" ) );
-		btnOpenResults3.setToolTipText( loc.getString( "toolbarTooltipOpen" ) );
-		btnSaveResults1.setToolTipText( loc.getString( "toolbarTooltipSave" ) );
-		btnSaveResults2.setToolTipText( loc.getString( "toolbarTooltipSave" ) );
-		btnSaveResults3.setToolTipText( loc.getString( "toolbarTooltipSave" ) );
-		
-
-
 		loc.setPrefix( "" );
 
 		sendMouse( lastMouse );
@@ -687,8 +496,9 @@ public class JEditor extends JFrame implements Localized, EventListener<Progress
 	 * Some listener for needed updates                                          *
 	 *                                                                           *
 	 ****************************************************************************/
-	 // TODO move to control/JZETMEnuBar and reimplement that stuff...
+	// TODO move to control/JZETMEnuBar and reimplement that stuff...
 	ActionListener aclExecute = new ActionListener() {
+
 		@Override
 		public void actionPerformed( ActionEvent e ) {
 			if( e.getActionCommand().equals( "startSimulation" ) )
@@ -774,8 +584,8 @@ public class JEditor extends JFrame implements Localized, EventListener<Progress
 			}
 		}
 	};
-
 	ChangeListener chlTab = new ChangeListener() {
+
 		public void stateChanged( ChangeEvent e ) {
 			final int i = tabPane.getSelectedIndex();
 			if( i == EDIT_FLOOR ) {
@@ -805,21 +615,11 @@ public class JEditor extends JFrame implements Localized, EventListener<Progress
 		}
 	};
 
-
 	/*****************************************************************************
 	 *                                                                           *
 	 * Algorithm starter methods                                                 *
 	 *                                                                           *
 	 ****************************************************************************/
-
-	/**
-	 * Adds a {@link BatchProjectEntry} that can be loaded from a batch task file
-	 * into the batch view.
-	 * @param batchProjectEntry
-	 */
-	public void addBatchEntry( BatchProjectEntry batchProjectEntry ) {
-		batchView.add( batchProjectEntry );
-	}
 
 	private boolean continueTask() {
 		if( JOptionPane.showOptionDialog( this,
@@ -851,7 +651,7 @@ public class JEditor extends JFrame implements Localized, EventListener<Progress
 			caAlgo.setMaxTimeInSeconds( PropertyContainer.getInstance().getAsDouble( "algo.ca.maxTime" ) );
 
 			caAlgo = new CARealTime( ca );
-			CARealTime caRealTime = (CARealTime)caAlgo;
+			CARealTime caRealTime = (CARealTime) caAlgo;
 			caRealTime.setStepTime( 550 );
 
 			worker = AlgorithmTask.getNewInstance();
@@ -923,16 +723,15 @@ public class JEditor extends JFrame implements Localized, EventListener<Progress
 	 * @param r
 	 */
 	public void setBatchResult( BatchResult r ) {
-		if( result != null && JOptionPane.showConfirmDialog( this, "Alte Ergebnisse werden " +
-						"hiermit überschrieben. Wollen Sie fortfahren?", "Überschreiben",
+		if( result != null && JOptionPane.showConfirmDialog( this, "Alte Ergebnisse werden "
+						+ "hiermit überschrieben. Wollen Sie fortfahren?", "Überschreiben",
 						JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE ) != JOptionPane.YES_OPTION )
 			return;
 
 		this.result = r;
 
+		// TODO move setResult from caStatisticView call from here to control
 		caStatisticView.setResult( result );
-		entryModelGraph.rebuild( result );
-		//entryModelVis.rebuild( result );
 		guiControl.rebuild( result );
 
 //		mnuFileSaveResultAs.setEnabled( result != null );
@@ -965,6 +764,7 @@ public class JEditor extends JFrame implements Localized, EventListener<Progress
 		}
 	}
 	PropertyChangeListener pclStepByStep = new PropertyChangeListener() {
+
 		public void propertyChange( PropertyChangeEvent evt ) {
 			if( evt.getPropertyName().equals( "progress" ) ) {
 				//int progress = (Integer)evt.getNewValue();
@@ -977,7 +777,6 @@ public class JEditor extends JFrame implements Localized, EventListener<Progress
 	 * Some helper and tool methods                                              *
 	 *                                                                           *
 	 ****************************************************************************/
-
 //	/**
 //	 * Enables and disables the menu item that moves a floor up.
 //	 * @param enabled the enabled status
@@ -993,7 +792,6 @@ public class JEditor extends JFrame implements Localized, EventListener<Progress
 //	public void enableMenuFloorDown( boolean enabled ) {
 //		mnuEditFloorDown.setEnabled( enabled );
 //	}
-
 	/**
 	 * Returns the edit view component.
 	 * @return the edit view component.
@@ -1020,7 +818,6 @@ public class JEditor extends JFrame implements Localized, EventListener<Progress
 		ex.printStackTrace( new PrintStream( bos ) );
 		JOptionPane.showMessageDialog( null, bos.toString(), "Error", JOptionPane.ERROR_MESSAGE );
 	}
-
 
 	/**
 	 * Shows a <code>JToolBar</code> and hides all others.
@@ -1058,7 +855,7 @@ public class JEditor extends JFrame implements Localized, EventListener<Progress
 		else if( tabID == BATCH )
 			showToolBar( toolBarBatch );
 		else if( tabID == CA_FLOOR )
-			showToolBar( toolBarCA );
+			showToolBar( toolBarCellularAutomatonQuickVisualization );
 		else if( tabID == VISUALIZATION ) {
 			showToolBar( toolBarVisualization );
 			visualizationView.requestFocusInWindow();
@@ -1085,41 +882,10 @@ public class JEditor extends JFrame implements Localized, EventListener<Progress
 		return this.disableUpdate;
 	}
 
-	/** This class serves as a model for the JComboBox that contains the
-	 * BatchResultEntries for the Graph statistics Tab. */
-	private class BatchResultEntryGRSComboBoxModel extends DefaultComboBoxModel {
-		BatchResult result;
-
-		public void rebuild( BatchResult result ) {
-			this.result = result;
-
-			removeAllElements();
-			int index = 0;
-			for( String e : result.getEntryNames() )
-				super.addElement( new NamedIndex( e, index++ ) );
-		}
-
-		@Override
-		public void setSelectedItem( Object object ) {
-			super.setSelectedItem( object );
-
-			BatchResultEntry entry = (BatchResultEntry)getSelectedItem();
-			Controller.getInstance().setFlow( entry.getGraph(), entry.getFlow() );
-		}
-
-		@Override
-		public Object getSelectedItem() {
-			try {
-				if( result != null && super.getSelectedItem() != null )
-					return result.getResult( ((NamedIndex)super.getSelectedItem()).getIndex() );
-				else
-					return null;
-			} catch( IOException ex ) {
-				ZETMain.sendError( "Error while loading temp file: " + ex.getLocalizedMessage() );
-				return null;
-			}
-		}
+	public JBatchView getBatchView() {
+		return batchView;
 	}
+
 
 	/*****************************************************************************
 	 *                                                                           *
@@ -1133,14 +899,13 @@ public class JEditor extends JFrame implements Localized, EventListener<Progress
 		if( event instanceof VisualizationEvent ) {
 			if( loop )
 				control.resetTime();
-			else {
+			else
 				// TODO restartvisualization
 //				this.restartVisualization = true;
 //				btnPlay.setIcon( playIcon );
 //				visualizationView.getGLContainer().stopAnimation();
 //				btnPlay.setSelected( false );
 				ZETMain.sendMessage( "Replaying visualization finished." );
-			}
 			return;
 		}
 //		if( stepByStep ) {
@@ -1174,7 +939,7 @@ public class JEditor extends JFrame implements Localized, EventListener<Progress
 	 * that this project is <code>null</code>
 	 * @param zcontrol the zet model control class
 	 */
-	public void setZControl( ZControl zcontrol ) {
+	public void setZControl2( ZControl zcontrol ) {
 		this.zcontrol = zcontrol;
 		loadProject();
 	}
@@ -1183,8 +948,7 @@ public class JEditor extends JFrame implements Localized, EventListener<Progress
 	 * Returns the control class controlling the currently visible project.
 	 * @return the control class controlling the currently visible project
 	 */
-	public final ZControl getZControl() {
-		return zcontrol;
-	}
-
+//	public final ZControl getZControl() {
+//		return zcontrol;
+//	}
 }
