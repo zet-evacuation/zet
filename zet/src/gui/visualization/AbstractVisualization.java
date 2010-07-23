@@ -21,6 +21,7 @@ package gui.visualization;
 
 import com.sun.opengl.util.Animator;
 import com.sun.opengl.util.Screenshot;
+import de.tu_berlin.math.coga.common.debug.Debug;
 import de.tu_berlin.math.coga.math.Conversion;
 import event.EventServer;
 import event.MessageEvent;
@@ -360,11 +361,11 @@ public abstract class AbstractVisualization extends AbstractOpenGLCanvas {
 		try {
 			Screenshot.writeToFile( new File( screenshotFilename ), drawable.getWidth(), drawable.getHeight(), false );
 		} catch( IOException ex ) {
-			JEditor.printException( ex );
+			Debug.printException( ex );
 		} catch( GLException ex ) {
-			JEditor.printException( ex );
+			Debug.printException( ex );
 		} catch( Exception ex ) {
-			JEditor.printException( ex );
+			Debug.printException( ex );
 		}
 		takeScreenshot = false;
 	}

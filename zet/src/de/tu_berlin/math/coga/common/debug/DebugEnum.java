@@ -1,14 +1,8 @@
 /**
  * DebugEnum.java
- * input:
- * output:
- *
- * method:
- *
- * Created: Apr 14, 2010,6:30:10 PM
+ * Created: 14.04.2010 18:30:10
  */
 package de.tu_berlin.math.coga.common.debug;
-
 
 /**
  *

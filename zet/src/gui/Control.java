@@ -36,6 +36,7 @@ import gui.editor.AreaVisibility;
 import gui.editor.CoordinateTools;
 import gui.editor.EditMode;
 import gui.editor.GUIOptionManager;
+import gui.editor.assignment.JAssignment;
 import gui.editor.flooredit.FloorImportDialog;
 import gui.editor.planimage.JPlanImageProperties;
 import gui.editor.properties.JOptionsWindow;
@@ -707,9 +708,6 @@ public class Control {
 		}
 		// TODO: better (next 3 lines)
 		zcontrol.newProject();
-
-		//distribution = null; // Throw away the old assignment window
-		editor.resetAssignment(); // TODO warum so?
 		editview.displayProject( zcontrol );
 		ZETMain.sendMessage( status );
 	}
@@ -790,9 +788,12 @@ public class Control {
 		}
 	}
 
-	public void distribution() {
-		editor.showAssignmentDialog();
+	public void showAssignmentDialog() {
+		JAssignment distribution = new JAssignment( editor, zcontrol.getProject(), Localization.getInstance().getString( "gui.editor.assignment.JAssignment.Title" ), 850, 400 );
+		distribution.setVisible( true );
+		distribution.dispose();
 	}
+
 	ArrayList<AreaVisibility> mode = new ArrayList<AreaVisibility>();
 
 	// TODO set anstelle von arraylist
@@ -866,7 +867,7 @@ public class Control {
 			try {
 				image = ImageIO.read( file );
 			} catch( IOException ex ) {
-				ex.printStackTrace();
+				ex.printStackTrace( System.err );
 			}
 
 			// Show Zoom/Size Dialogue

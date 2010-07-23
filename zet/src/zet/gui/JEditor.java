@@ -40,7 +40,6 @@ import gui.components.JEventStatusBar;
 import gui.editor.EditMode;
 import gui.ca.JCAView;
 import gui.editor.JEditView;
-import gui.editor.assignment.JAssignment;
 import gui.statistic.JGraphStatisticPanel;
 import gui.statistic.JStatisticPanel;
 import gui.visualization.JVisualizationView;
@@ -54,21 +53,17 @@ import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.InputEvent;
-import java.awt.event.ItemEvent;
-import java.awt.event.ItemListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
-import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
-import java.io.PrintStream;
 import java.text.NumberFormat;
 import java.util.Locale;
 import javax.media.opengl.GLCapabilities;
@@ -82,6 +77,7 @@ import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 import batch.tasks.AlgorithmTask;
 import batch.tasks.CARealTime;
+import de.tu_berlin.math.coga.common.debug.Debug;
 import ds.z.ZControl;
 import event.VisualizationEvent;
 import gui.components.JLogPane;
@@ -89,7 +85,7 @@ import gui.statistic.JStatisticsPanel;
 import zet.gui.components.toolbar.JEditToolbar;
 import gui.Control;
 import gui.ZETMain;
-import java.awt.Image;
+import java.util.ArrayList;
 import javax.imageio.ImageIO;
 import zet.gui.components.JZETMenuBar;
 import zet.gui.components.toolbar.JBatchToolBar;
@@ -106,14 +102,41 @@ import zet.util.ConversionTools;
  */
 public class JEditor extends JFrame implements Localized, EventListener<ProgressEvent> {
 
-	public static final int EDIT_FLOOR = 0;
-	public static final int BATCH = 1;
-	public static final int CA_FLOOR = ZETMain.isDebug() ? 2 : -1;
-	public static final int VISUALIZATION = ZETMain.isDebug() ? 3 : 2;
-	public static final int STATISTIC = ZETMain.isDebug() ? 4 : 3;
-	public static final int GRAPH_STATISTIC = ZETMain.isDebug() ? 5 : 4;
-	public static final int LOG = ZETMain.isDebug() ? 6 : 5;
-	public static final int STATISTICS = LOG + 1;
+	public enum ZETWindowTabs {
+		EditFloor( true, "Edit" ),
+		QuickView( ZETMain.isDebug(), "CAView" ),
+		Batch( true, "Batch" ),
+		CellularAutomatonStatistic( true, "Statistic" ),
+		GraphStatistic( true, "GraphStatistic" ),
+		Log( true, "LogWindow" ),
+		Visualization( true, "Visualization" ),
+		Statistic( true, "Statistics" );
+		private boolean visible;
+		private String name;
+
+		ZETWindowTabs( boolean visible, String name ) {
+			this.visible = visible;
+			this.name = name;
+		}
+
+		public boolean isVisible() {
+			return visible;
+		}
+
+		public String getName() {
+			return name;
+		}
+	}
+
+		ArrayList<ZETWindowTabs> tabs = new ArrayList<ZETWindowTabs>( ZETWindowTabs.values().length );
+//	public static final int EDIT_FLOOR = 0;
+//	public static final int BATCH = 1;
+//	public static final int CA_FLOOR = ZETMain.isDebug() ? 2 : -1;
+//	public static final int VISUALIZATION = ZETMain.isDebug() ? 3 : 2;
+//	public static final int STATISTIC = ZETMain.isDebug() ? 4 : 3;
+//	public static final int GRAPH_STATISTIC = ZETMain.isDebug() ? 5 : 4;
+//	public static final int LOG = ZETMain.isDebug() ? 6 : 5;
+//	public static final int STATISTICS = LOG + 1;
 	/** The localization class. */
 	static final Localization loc = Localization.getInstance();
 	/** Stores the last mouse position if a mouse position event is sent. */
@@ -163,8 +186,7 @@ public class JEditor extends JFrame implements Localized, EventListener<Progress
 	private JTabbedPane tabPane;
 	// Additional GUI stuff
 	private boolean disableUpdate = false;
-	private int currentMode = EDIT_FLOOR;
-	private JAssignment distribution;
+	private ZETWindowTabs currentMode = ZETWindowTabs.EditFloor;
 	/** Decides whether the visualization should be restarted if 'play' is pressed. */
 	private boolean restartVisualization = false;
 	/** Decides whether visualization runs in loop-mode, that means it automatically starts again. */
@@ -248,6 +270,153 @@ public class JEditor extends JFrame implements Localized, EventListener<Progress
 	}
 
 	/**
+	 * Adds the main views to the window. These views are all included in
+	 * tabs.
+	 */
+	public void addMainComponents() {
+		editView = new JEditView( guiControl );
+		caView = new JCAView();
+		batchView = new JBatchView( guiControl );
+		visualizationView = new JVisualizationView( new GLCapabilities(), guiControl );
+		caStatisticView = new JStatisticPanel();
+		graphStatisticView = new JGraphStatisticPanel();
+		logView = new JLogPane( ZETMain.log );
+		statisticView = new JStatisticsPanel();
+
+		tabPane = new JTabbedPane();
+
+		loc.setPrefix( "gui.editor.JEditor.tab" );		
+		for( ZETWindowTabs tab : ZETWindowTabs.values() ) {
+			if( tab.isVisible() ) {
+				tabPane.addTab( loc.getString( tab.getName() ), null, getComponent( tab ), loc.getString( tab.getName() + "ToolTip" ) );
+				tabs.add( tab );
+			}
+		}
+//		tabPane.addTab( loc.getString(  ), null, editView, loc.getString( "EditToolTip" ) );
+//		tabPane.addTab( loc.getString( "Batch" ), null, batchView, loc.getString( "BatchToolTip" ) );
+//		if( ZETMain.isDebug() )
+//			tabPane.addTab( loc.getString( "CAView" ), null, caView, loc.getString( "CAViewToolTip" ) );
+//		tabPane.addTab( loc.getString( "Visualization" ), null, visualizationView, loc.getString( "VisualizationToolTip" ) );
+//		tabPane.addTab( loc.getString( "Statistic" ), null, caStatisticView, loc.getString( "StatisticToolTip" ) );
+//		tabPane.addTab( loc.getString( "GraphStatistic" ), null, graphStatisticView, loc.getString( "GraphStatisticToolTip" ) );
+//		tabPane.addTab( loc.getString( "LogWindow" ), null, logView, loc.getString( "LogWindowToolTip" ) );
+//		if( ZETMain.isDebug() )
+//			tabPane.addTab( loc.getString( "Statistics" ), null, statisticView, loc.getString( "StatisticsToolTip" ) );
+		tabPane.addChangeListener( chlTab );
+		loc.setPrefix( "" );
+
+		getContentPane().add( tabPane, BorderLayout.CENTER );
+
+		tabPane.addChangeListener( new ChangeListener() {
+			public void stateChanged( ChangeEvent e ) {
+				if( tabs.get( tabPane.getSelectedIndex() ) == ZETWindowTabs.Log )
+					logView.update();
+			}
+		} );
+
+		ZETMain.sendMessage( loc.getString( "gui.status.EditorInitialized" ) );
+	}
+
+	private JComponent getComponent( ZETWindowTabs tab ) {
+		switch( tab ) {
+			case Batch:
+				return batchView;
+			case CellularAutomatonStatistic:
+				return caStatisticView;
+			case EditFloor:
+				return editView;
+			case Visualization:
+				return visualizationView;
+			case GraphStatistic:
+				return graphStatisticView;
+			case Log:
+				return logView;
+			case QuickView:
+				return caView;
+			case Statistic:
+				return statisticView;
+		}
+		throw new IllegalArgumentException( "Unknown tab component: " + tab.getName() + "!" );
+	}
+
+	/**
+	 * Sets up shortcuts for several actions.
+	 */
+	public void setUpKeyStrokes() {
+		// Register Shortcuts (no-menu-shortcuts)
+		KeyStroke up = KeyStroke.getKeyStroke( KeyEvent.VK_R, InputEvent.CTRL_DOWN_MASK );
+		ActionListener acl = new ActionListener() {
+
+			public void actionPerformed( ActionEvent e ) {
+				switch( editView.getEastPanelType() ) {
+					case JEditView.FLOOR_PANEL:
+						editView.setFloorNameFocus();
+						break;
+					case JEditView.ROOM_PANEL:
+						editView.setRoomNameFocus();
+						break;
+					default:
+						System.out.println( "Nothing" );
+				}
+			}
+		};
+		tabPane.registerKeyboardAction( acl, "test", up, JComponent.WHEN_ANCESTOR_OF_FOCUSED_COMPONENT );
+	}
+
+	/**
+	 * Changes the appearance of the GUI to the selected language.
+	 * @see de.tu_berlin.math.coga.common.localization.Localization
+	 */
+	public void localize() {
+		// Localize tool bars
+		loc.setPrefix( "gui.editor.JEditor." );
+		toolBarEdit.localize();
+		toolBarVisualization.localize();
+		toolBarLog.localize();
+		toolBarBatch.localize();
+		toolBarCellularAutomatonQuickVisualization.localize();
+		loc.setPrefix( "" );
+
+		// Localize other main components
+		editView.localize();
+		visualizationView.localize();
+
+		// Localize tabs
+		loc.setPrefix( "gui.editor.JEditor.tab" );
+
+		for( int i = 0; i < tabs.size(); ++i ) {
+			tabPane.setTitleAt( i, loc.getString( tabs.get( i ).getName() ) );
+			tabPane.setToolTipTextAt( i, loc.getString( tabs.get( i ).getName() + "ToolTip" ) );
+		}
+
+//		tabPane.setTitleAt( EDIT_FLOOR, loc.getString( "Edit" ) );
+//		tabPane.setToolTipTextAt( EDIT_FLOOR, loc.getString( "EditToolTip" ) );
+//		tabPane.setTitleAt( BATCH, loc.getString( "Batch" ) );
+//		tabPane.setToolTipTextAt( BATCH, loc.getString( "BatchToolTip" ) );
+//		if( ZETMain.isDebug() ) {
+//			tabPane.setTitleAt( CA_FLOOR, loc.getString( "CAView" ) );
+//			tabPane.setToolTipTextAt( CA_FLOOR, loc.getString( "CAViewToolTip" ) );
+//		}
+//		tabPane.setTitleAt( VISUALIZATION, loc.getString( "Visualization" ) );
+//		tabPane.setToolTipTextAt( VISUALIZATION, loc.getString( "VisualizationToolTip" ) );
+//		tabPane.setTitleAt( STATISTIC, loc.getString( "Statistic" ) );
+//		tabPane.setToolTipTextAt( STATISTIC, loc.getString( "StatisticToolTip" ) );
+//		tabPane.setTitleAt( GRAPH_STATISTIC, loc.getString( "GraphStatistic" ) );
+//		tabPane.setToolTipTextAt( GRAPH_STATISTIC, loc.getString( "GraphStatisticToolTip" ) );
+//		tabPane.setTitleAt( LOG, loc.getString( "LogWindow" ) );
+//		tabPane.setToolTipTextAt( LOG, loc.getString( "LogWindowToolTip" ) );
+//		if( ZETMain.isDebug() ) {
+//			tabPane.setTitleAt( STATISTICS, loc.getString( "Statistics" ) );
+//			tabPane.setToolTipTextAt( STATISTICS, loc.getString( "StatisticsToolTip" ) );
+//		}
+		loc.setPrefix( "" );
+
+		sendMouse( lastMouse );
+		ZETMain.sendError( "" );
+		ZETMain.sendMessage( loc.getStringWithoutPrefix( "gui.status.LanguageChangedTo" ) );
+	}
+
+	/**
 	 * Loads the project currently controlled by the project controller. Resets
 	 * the view to edit window and resets the zoom factor to 10%
 	 */
@@ -262,7 +431,7 @@ public class JEditor extends JFrame implements Localized, EventListener<Progress
 		if( !PropertyContainer.getInstance().getAsBoolean( "editor.options.view.hideDefaultFloor" ) )
 			editView.setFloor( 1 );
 		// Updaten der gui
-		this.getEditView().update();
+		editView.update();
 
 		editView.setEditMode( EditMode.Selection );
 		guiControl.setZoomFactor( 0.04d );
@@ -318,136 +487,7 @@ public class JEditor extends JFrame implements Localized, EventListener<Progress
 	 * GUI initialization                                                        *
 	 *                                                                           *
 	 ****************************************************************************/
-	/**
-	 * Adds the main views to the window. These views are all included in
-	 * tabs.
-	 */
-	public void addMainComponents() {
-		editView = new JEditView( guiControl );
-		batchView = new JBatchView( guiControl );
-		visualizationView = new JVisualizationView( new GLCapabilities(), guiControl );
-		visualizationView.setFloorSelectorEnabled( !PropertyContainer.getInstance().getAsBoolean( "settings.gui.visualization.floors" ) );
 
-		caView = new JCAView();
-		caStatisticView = new JStatisticPanel();
-		graphStatisticView = new JGraphStatisticPanel();
-		logView = new JLogPane( ZETMain.log );
-		statisticView = new JStatisticsPanel();
-
-		tabPane = new JTabbedPane();
-
-		loc.setPrefix( "gui.editor.JEditor.tab" );
-		tabPane.addTab( loc.getString( "Edit" ), null, editView, loc.getString( "EditToolTip" ) );
-		tabPane.addTab( loc.getString( "Batch" ), null, batchView, loc.getString( "BatchToolTip" ) );
-		if( ZETMain.isDebug() )
-			tabPane.addTab( loc.getString( "CAView" ), null, caView, loc.getString( "CAViewToolTip" ) );
-		tabPane.addTab( loc.getString( "Visualization" ), null, visualizationView, loc.getString( "VisualizationToolTip" ) );
-		tabPane.addTab( loc.getString( "Statistic" ), null, caStatisticView, loc.getString( "StatisticToolTip" ) );
-		tabPane.addTab( loc.getString( "GraphStatistic" ), null, graphStatisticView, loc.getString( "GraphStatisticToolTip" ) );
-		tabPane.addTab( loc.getString( "LogWindow" ), null, logView, loc.getString( "LogWindowToolTip" ) );
-		if( ZETMain.isDebug() )
-			tabPane.addTab( loc.getString( "Statistics" ), null, statisticView, loc.getString( "StatisticsToolTip" ) );
-		tabPane.addChangeListener( chlTab );
-		loc.setPrefix( "" );
-
-		getContentPane().add( tabPane, BorderLayout.CENTER );
-
-		tabPane.addChangeListener( new ChangeListener() {
-
-			public void stateChanged( ChangeEvent e ) {
-				if( tabPane.getSelectedIndex() == LOG )
-					logView.update();
-			}
-		} );
-
-		ZETMain.sendMessage( loc.getString( "gui.status.EditorInitialized" ) );
-	}
-
-
-	public void setUpKeyStrokes() {
-		// Register Shortcuts (no-menu-shortcuts)
-		KeyStroke up = KeyStroke.getKeyStroke( KeyEvent.VK_R, InputEvent.CTRL_DOWN_MASK );
-		ActionListener acl = new ActionListener() {
-
-			public void actionPerformed( ActionEvent e ) {
-				switch( editView.getEastPanelType() ) {
-					case JEditView.FLOOR_PANEL:
-						editView.setFloorNameFocus();
-						break;
-					case JEditView.ROOM_PANEL:
-						editView.setRoomNameFocus();
-						break;
-					default:
-						System.out.println( "Nothing" );
-				}
-			}
-		};
-		tabPane.registerKeyboardAction( acl, "test", up, JComponent.WHEN_ANCESTOR_OF_FOCUSED_COMPONENT );
-	}
-
-
-	public void resetAssignment() {
-		distribution = null;
-	}
-
-	public void showAssignmentDialog() {
-		//if( distribution == null ) {
-		distribution = new JAssignment( this, zcontrol.getProject(), loc.getString( "gui.editor.assignment.JAssignment.Title" ), 850, 400 );
-		//}
-		distribution.setVisible( true );
-		distribution.dispose();
-	}
-
-	/**
-	 * Changes the appearance of the GUI to the selected language.
-	 * @see de.tu_berlin.math.coga.common.localization.Localization
-	 */
-	public void localize() {
-		// Localize tool bars
-		loc.setPrefix( "gui.editor.JEditor." );
-		toolBarEdit.localize();
-		toolBarVisualization.localize();
-		toolBarLog.localize();
-		toolBarBatch.localize();
-		toolBarCellularAutomatonQuickVisualization.localize();
-		loc.setPrefix( "" );
-
-		// Localize other main components
-		editView.localize();
-		visualizationView.localize();
-
-		loc.setPrefix( "gui.editor.JEditor." );
-
-
-
-		// Localize tabs
-		loc.setPrefix( "gui.editor.JEditor.tab" );
-		tabPane.setTitleAt( EDIT_FLOOR, loc.getString( "Edit" ) );
-		tabPane.setToolTipTextAt( EDIT_FLOOR, loc.getString( "EditToolTip" ) );
-		tabPane.setTitleAt( BATCH, loc.getString( "Batch" ) );
-		tabPane.setToolTipTextAt( BATCH, loc.getString( "BatchToolTip" ) );
-		if( ZETMain.isDebug() ) {
-			tabPane.setTitleAt( CA_FLOOR, loc.getString( "CAView" ) );
-			tabPane.setToolTipTextAt( CA_FLOOR, loc.getString( "CAViewToolTip" ) );
-		}
-		tabPane.setTitleAt( VISUALIZATION, loc.getString( "Visualization" ) );
-		tabPane.setToolTipTextAt( VISUALIZATION, loc.getString( "VisualizationToolTip" ) );
-		tabPane.setTitleAt( STATISTIC, loc.getString( "Statistic" ) );
-		tabPane.setToolTipTextAt( STATISTIC, loc.getString( "StatisticToolTip" ) );
-		tabPane.setTitleAt( GRAPH_STATISTIC, loc.getString( "GraphStatistic" ) );
-		tabPane.setToolTipTextAt( GRAPH_STATISTIC, loc.getString( "GraphStatisticToolTip" ) );
-		tabPane.setTitleAt( LOG, loc.getString( "LogWindow" ) );
-		tabPane.setToolTipTextAt( LOG, loc.getString( "LogWindowToolTip" ) );
-		if( ZETMain.isDebug() ) {
-			tabPane.setTitleAt( STATISTICS, loc.getString( "Statistics" ) );
-			tabPane.setToolTipTextAt( STATISTICS, loc.getString( "StatisticsToolTip" ) );
-		}
-		loc.setPrefix( "" );
-
-		sendMouse( lastMouse );
-		ZETMain.sendError( "" );
-		ZETMain.sendMessage( loc.getStringWithoutPrefix( "gui.status.LanguageChangedTo" ) );
-	}
 	/*****************************************************************************
 	 *                                                                           *
 	 * Some listener for needed updates                                          *
@@ -462,12 +502,12 @@ public class JEditor extends JFrame implements Localized, EventListener<Progress
 				simulateCA();
 			else if( e.getActionCommand().equals( "stepByStepSimulation" ) ) {
 				stepByStepSimulation();
-				if( tabPane.getSelectedIndex() != CA_FLOOR )
-					tabPane.setSelectedIndex( CA_FLOOR );
+				if( tabs.get( tabPane.getSelectedIndex() ) != ZETWindowTabs.QuickView )
+					tabPane.setSelectedIndex( tabs.indexOf( ZETWindowTabs.QuickView ) );
 			} else if( e.getActionCommand().equals( "visualization" ) ) {
 				quickVisualization();
-				if( tabPane.getSelectedIndex() != CA_FLOOR )
-					tabPane.setSelectedIndex( CA_FLOOR );
+				if( tabs.get( tabPane.getSelectedIndex() ) != ZETWindowTabs.QuickView )
+					tabPane.setSelectedIndex( tabs.indexOf( ZETWindowTabs.QuickView ) );
 			} else if( e.getActionCommand().equals( "QT" ) )
 				//createGraph();	// nf wird gesetzt
 				quickestTransshipment();
@@ -487,7 +527,7 @@ public class JEditor extends JFrame implements Localized, EventListener<Progress
 				res.addEntry( "EA Transshipment with SSSP", zcontrol.getProject(), 1, GraphAlgorithm.EarliestArrivalTransshipmentSuccessiveShortestPaths, CellularAutomatonAlgorithm.Swap );
 				res.getEntries().get( 0 ).setUseCa( false );
 				setBatchResult( res.execute( false ) );
-				tabPane.setSelectedIndex( VISUALIZATION );
+				tabPane.setSelectedIndex( tabs.indexOf( ZETWindowTabs.Visualization ) );
 			} catch( Exception ex ) {
 				ZETMain.sendError( ex.getLocalizedMessage() );
 			}
@@ -499,7 +539,7 @@ public class JEditor extends JFrame implements Localized, EventListener<Progress
 				res.addEntry( "MaxFlow", zcontrol.getProject(), 1, GraphAlgorithm.MaxFlowOverTimeMinCost, CellularAutomatonAlgorithm.Swap );
 				res.getEntries().get( 0 ).setUseCa( false );
 				setBatchResult( res.execute( false ) );
-				tabPane.setSelectedIndex( VISUALIZATION );
+				tabPane.setSelectedIndex( tabs.indexOf( ZETWindowTabs.Visualization ) );
 			} catch( Exception ex ) {
 				ZETMain.sendError( ex.getLocalizedMessage() );
 			}
@@ -511,7 +551,7 @@ public class JEditor extends JFrame implements Localized, EventListener<Progress
 				res.addEntry( "MaxFlow", zcontrol.getProject(), 1, GraphAlgorithm.MaxFlowOverTimeTimeExpanded, CellularAutomatonAlgorithm.Swap );
 				res.getEntries().get( 0 ).setUseCa( false );
 				setBatchResult( res.execute( false ) );
-				tabPane.setSelectedIndex( VISUALIZATION );
+				tabPane.setSelectedIndex( tabs.indexOf( ZETWindowTabs.Visualization ) );
 			} catch( Exception ex ) {
 				ZETMain.sendError( ex.getLocalizedMessage() );
 			}
@@ -523,7 +563,7 @@ public class JEditor extends JFrame implements Localized, EventListener<Progress
 				res.addEntry( "Quickest Transshipment", zcontrol.getProject(), 1, GraphAlgorithm.QuickestTransshipment, CellularAutomatonAlgorithm.Swap );
 				res.getEntries().get( 0 ).setUseCa( false );
 				setBatchResult( res.execute( false ) );
-				tabPane.setSelectedIndex( VISUALIZATION );
+				tabPane.setSelectedIndex( tabs.indexOf( ZETWindowTabs.Visualization ) );
 			} catch( Exception ex ) {
 				ZETMain.sendError( ex.getLocalizedMessage() );
 			}
@@ -535,7 +575,7 @@ public class JEditor extends JFrame implements Localized, EventListener<Progress
 				res.addEntry( "CA", zcontrol.getProject(), 1, GraphAlgorithm.EarliestArrivalTransshipmentSuccessiveShortestPaths, CellularAutomatonAlgorithm.Swap );
 				res.getEntries().get( 0 ).setUseGraph( false );
 				setBatchResult( res.execute( false ) );
-				tabPane.setSelectedIndex( VISUALIZATION );
+				tabPane.setSelectedIndex( tabs.indexOf( ZETWindowTabs.Visualization ) );
 			} catch( Exception ex ) {
 				ZETMain.sendError( ex.getLocalizedMessage() );
 			}
@@ -545,30 +585,21 @@ public class JEditor extends JFrame implements Localized, EventListener<Progress
 
 		public void stateChanged( ChangeEvent e ) {
 			final int i = tabPane.getSelectedIndex();
-			if( i == EDIT_FLOOR ) {
-				switchTo( EDIT_FLOOR );
-				editView.updateFloorView();
-			} else if( i == BATCH ) {
-				// Add curent project, if not already done
+			switch( tabs.get( i ) ) {
+				case EditFloor:
+					switchTo( i );
+					editView.updateFloorView();
+					break;
+				case Batch:
 				if( firstSwitch ) {
 					batchView.addProject( zcontrol.getProject() );
 					firstSwitch = false;
 				}
-				switchTo( BATCH );
-			} else if( i == CA_FLOOR )
-				switchTo( CA_FLOOR );
-			else if( i == VISUALIZATION )
-				switchTo( VISUALIZATION );
-			else if( i == STATISTIC )
-				switchTo( STATISTIC );
-			else if( i == GRAPH_STATISTIC )
-				switchTo( GRAPH_STATISTIC );
-			else if( i == LOG )
-				switchTo( LOG );
-			else if( i == STATISTICS )
-				switchTo( STATISTICS );
-			else
-				ZETMain.sendError( "Unknown tab index:" + tabPane.getSelectedIndex() + ". " + loc.getString( "gui.ContactDeveloper" ) );
+				switchTo( i );
+					break;
+				default:
+					switchTo( i );
+			}
 		}
 	};
 
@@ -616,7 +647,7 @@ public class JEditor extends JFrame implements Localized, EventListener<Progress
 			try {
 				worker.executeAlgorithm( true );
 			} catch( Exception ex ) {
-				printException( ex );
+				Debug.printException( ex );
 			}
 		} catch( ZToCAConverter.ConversionNotSupportedException ex ) {
 			ZETMain.sendError( ex.getLocalizedMessage() );
@@ -714,7 +745,7 @@ public class JEditor extends JFrame implements Localized, EventListener<Progress
 			try {
 				worker.executeAlgorithm( true );
 			} catch( Exception ex ) {
-				printException( ex );
+				Debug.printException( ex );
 			}
 		} catch( ZToCAConverter.ConversionNotSupportedException ex ) {
 			ZETMain.sendError( ex.getLocalizedMessage() );
@@ -765,24 +796,15 @@ public class JEditor extends JFrame implements Localized, EventListener<Progress
 		return visualizationView;
 	}
 
-	public static void printException( Exception ex ) {
-		System.out.println( "Eine Exception trat auf:" );
-		System.out.println( "Message: " + ex.getMessage() );
-		System.out.println( "Localized: " + ex.getLocalizedMessage() );
-		System.out.println( "Cause: " + ex.getCause() );
-		ex.printStackTrace( System.err );
-		ByteArrayOutputStream bos = new ByteArrayOutputStream();
-		ex.printStackTrace( new PrintStream( bos ) );
-		JOptionPane.showMessageDialog( null, bos.toString(), "Error", JOptionPane.ERROR_MESSAGE );
-	}
-
 	/**
 	 * Shows a <code>JToolBar</code> and hides all others.
 	 * @param toolBar the tool bar that is shown
 	 */
 	private void showToolBar( JToolBar newToolbar ) {
-		getContentPane().remove( currentToolbar );
-		getContentPane().add( newToolbar, BorderLayout.NORTH );
+		if( currentToolbar != null )
+			getContentPane().remove( currentToolbar );
+		if( newToolbar != null )
+			getContentPane().add( newToolbar, BorderLayout.NORTH );
 		currentToolbar = newToolbar;
 	}
 
@@ -791,41 +813,49 @@ public class JEditor extends JFrame implements Localized, EventListener<Progress
 	 * tool bar elements.
 	 * @param tabID the tab id as specified in {@link JEditor}.
 	 */
-	private void switchTo( int tabID ) {
-		if( tabID == CA_FLOOR && worker == null ) {
-			ZETMain.sendError( loc.getStringWithoutPrefix( "gui.error.StartSimulation" ) );
-			tabPane.setSelectedIndex( currentMode );
-			return;
-		}
+	private void switchTo( int tabIndex ) {
+		ZETWindowTabs tab = tabs.get( tabIndex );
+//		if( tab == ZETWindowTabs.QuickView && worker == null ) {
+//			ZETMain.sendError( loc.getStringWithoutPrefix( "gui.error.StartSimulation" ) );
+//			tabPane.setSelectedIndex( tabIndex );
+//			return;
+//		}
 		// TODO better implementation of this stuff for debug mode ?
-		if( ((ZETMain.isDebug() && tabID > CA_FLOOR) || (!ZETMain.isDebug() && tabID > BATCH)) && result == null && tabID != LOG && tabID != STATISTICS ) {
-			ZETMain.sendError( loc.getStringWithoutPrefix( "gui.error.CreateBatch" ) );
-			tabPane.setSelectedIndex( currentMode );
-			return;
-		}
+		//if( ((ZETMain.isDebug() && tabID > CA_FLOOR) || (!ZETMain.isDebug() && tabID > BATCH)) && result == null && tabID != LOG && tabID != STATISTICS ) {
+		//	ZETMain.sendError( loc.getStringWithoutPrefix( "gui.error.CreateBatch" ) );
+		//	tabPane.setSelectedIndex( tabIndex );
+		//	return;
+		//}
 
-		currentMode = tabID;
+		currentMode = tab;
 		// code using the switch-bar is disabled!
 		guiControl.visualizationPause();
-		if( tabID == EDIT_FLOOR )
-			showToolBar( toolBarEdit );
-		else if( tabID == BATCH )
-			showToolBar( toolBarBatch );
-		else if( tabID == CA_FLOOR )
-			showToolBar( toolBarCellularAutomatonQuickVisualization );
-		else if( tabID == VISUALIZATION ) {
-			showToolBar( toolBarVisualization );
-			visualizationView.requestFocusInWindow();
-		} else if( tabID == STATISTIC )
-			showToolBar( toolBarCAStats );
-		else if( tabID == GRAPH_STATISTIC )
-			showToolBar( toolBarGraphStats );
-		else if( tabID == LOG )
-			showToolBar( toolBarLog );
-		else if( tabID == STATISTICS )
-			showToolBar( toolBarLog );
-		else
-			ZETMain.sendError( "Unbekannte TabID: " + Integer.toString( tabID ) + ". " + loc.getString( "gui.ContactDeveloper" ) );
+		switch( tab ) {
+			case EditFloor:
+				showToolBar( toolBarEdit );
+				break;
+			case Batch:
+				showToolBar( toolBarBatch );
+				break;
+			case QuickView:
+				showToolBar( toolBarCellularAutomatonQuickVisualization );
+				break;
+			case Visualization:
+				showToolBar( toolBarVisualization );
+				visualizationView.requestFocus();
+				break;
+			case CellularAutomatonStatistic:
+				showToolBar( toolBarCAStats );
+				break;
+			case GraphStatistic:
+				showToolBar( toolBarGraphStats );
+				break;
+			case Log:
+				showToolBar( toolBarLog );
+				break;
+			case Statistic:
+				showToolBar( null );
+		}
 		repaint();
 		validate();
 	}
@@ -873,7 +903,7 @@ public class JEditor extends JFrame implements Localized, EventListener<Progress
 //			//JEditorPanel.instance.getRasterizedFloor().displayFloor( myProject.getBuildingPlan().getFloors().get(1), ZToCAConverter.getInstance().getLatestMapping(), ZToCAConverter.getInstance().getLatestContainer() );
 		//updateFloorView();
 		//caView.updateFloorView();
-		if( currentMode == CA_FLOOR ) {
+		if( currentMode == ZETWindowTabs.QuickView ) {
 			Floor floor = editView.getCurrentFloor();
 			caView.getLeftPanel().getMainComponent().displayFloor( floor, ZToCAConverter.getInstance().getLatestMapping(), ZToCAConverter.getInstance().getLatestContainer() );
 		}
