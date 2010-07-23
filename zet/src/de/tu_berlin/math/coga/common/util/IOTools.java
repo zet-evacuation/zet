@@ -24,6 +24,11 @@ package de.tu_berlin.math.coga.common.util;
 import java.io.File;
 import java.text.ParseException;
 import de.tu_berlin.math.coga.common.localization.Localization;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -44,7 +49,7 @@ public class IOTools {
 	 * @throws java.lang.IllegalArgumentException if digits is less or equal to zero
 	 * @throws java.lang.IllegalStateException if there are too many files beginning with prefix for the specified number of digits or if an error converting the digits occured.
 	 */
-	public final static String getNextFreeNumberedFilepath( String path, String filePrefix, int digits ) throws java.lang.IllegalArgumentException, java.lang.IllegalStateException {
+	public static String getNextFreeNumberedFilepath( String path, String filePrefix, int digits ) throws java.lang.IllegalArgumentException, java.lang.IllegalStateException {
 		return path + getNextFreeNumberedFilename( path, filePrefix, digits );
 	}
 	
@@ -59,7 +64,7 @@ public class IOTools {
 	 * @throws java.lang.IllegalArgumentException if digits is less or equal to zero
 	 * @throws java.lang.IllegalStateException if there are too many files beginning with prefix for the specified number of digits or if an error converting the digits occured.
 	 */
-	public final static String getNextFreeNumberedFilename( String path, String filePrefix, int digits ) throws java.lang.IllegalArgumentException, java.lang.IllegalStateException {
+	public static String getNextFreeNumberedFilename( String path, String filePrefix, int digits ) throws java.lang.IllegalArgumentException, java.lang.IllegalStateException {
 		if( digits <= 0 )
 			throw new IllegalArgumentException( "Digits must not be negative." );
 		final int prefixLen = filePrefix.length();
@@ -99,7 +104,7 @@ public class IOTools {
 	 * @return the number with leading zeros
 	 * @throws java.lang.IllegalArgumentException if the number has to many digits
 	 */
-	public final static String fillLeadingZeros( int number, int digits ) throws IllegalArgumentException {
+	public static String fillLeadingZeros( int number, int digits ) throws IllegalArgumentException {
 		String ret = Integer.toString( number );
 		if( ret.length() > digits )
 			throw new java.lang.IllegalArgumentException( "Number " + number + " is too long. Only " + digits + " digits are allowed." );
@@ -110,11 +115,11 @@ public class IOTools {
 
 	/**
 	 * Splits a string up at spaces but ignores spaces that are in parts between
-	 * quotes. This is the normal behaviour of command line interfaces.
+	 * quotes. This is the normal behavior of command line interfaces.
 	 * @param command the string to be splitted up
 	 * @return a {@link List} containing all parts of the command
 	 */
-	public final static List<String> parseCommandString( String command ) {
+	public static List<String> parseCommandString( String command ) {
 		LinkedList<String> ret = new LinkedList<String>();
 		int i = -1;
 		String s = "";
@@ -137,10 +142,54 @@ public class IOTools {
 	 * @param s the {@code String} that is added
 	 * @return the empty string
 	 */
-	private final static String addElement( List<String> list, String s ) {
+	private static String addElement( List<String> list, String s ) {
 		if( !s.equals( "" ) )
 			list.add( s );
 		return "";
 	}
-}
 
+	public static void createBackup( File file ) throws IOException {
+		if( file != null && !file.getPath().equals( "" ) ) {
+			String source = file.getPath();
+			String dest = source.substring( 0, source.length() - 3 ) + "bak";
+				copyFile( file, new File( dest ), 100, true );
+		}
+	}
+
+	public static void copyFile( File src, File dest, int bufSize, boolean force ) throws IOException {
+		if( dest.exists() )
+			if( force )
+				dest.delete();
+			else
+				throw new IOException( "Cannot overwrite existing file: " + dest.getName() );
+		byte[] buffer = new byte[bufSize];
+		int read = 0;
+		InputStream in = null;
+		OutputStream out = null;
+		try {
+			in = new FileInputStream( src );
+			out = new FileOutputStream( dest );
+			while( true ) {
+				read = in.read( buffer );
+				if( read == -1 )
+					//-1 bedeutet EOF
+					break;
+				out.write( buffer, 0, read );
+			}
+		} finally {
+			// Sicherstellen, dass die Streams auch
+			// bei einem throw geschlossen werden.
+			// Falls in null ist, ist out auch null!
+			if( in != null )
+				//Falls tatsächlich in.close() und out.close()
+				//Exceptions werfen, diejenige von 'out' geworfen wird.
+				try {
+					in.close();
+				} finally {
+					if( out != null )
+						out.close();
+				}
+		}
+	}
+
+}
