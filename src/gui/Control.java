@@ -92,13 +92,12 @@ public class Control {
 	}
 
 	public void createZETWindow() {
-		editor = new JEditor( this );
+		zcontrol = new ZControl();
+		editor = new JEditor( this, zcontrol );
 		editor.addMainComponents();
 		visualization = editor.getVisualizationView().getGLContainer();
 		updateVisualizationElements();
 		editview = editor.getEditView();
-		zcontrol = new ZControl();
-		editor.setZControl2( zcontrol );
 		visualization.setZcontrol( zcontrol );
 	}
 
@@ -619,9 +618,9 @@ public class Control {
 		if( jfcProject.showSaveDialog( editor ) == JFileChooser.APPROVE_OPTION ) {
 			GUIOptionManager.setSavePath( jfcProject.getCurrentDirectory().getPath() );
 			GUIOptionManager.setLastFile( 1, jfcProject.getSelectedFile().getAbsolutePath() );
-			if( jfcProject.getSelectedFile().exists() && createCopy )
-				JEditor.createBackup( jfcProject.getSelectedFile() );
 			try {
+				if( jfcProject.getSelectedFile().exists() && createCopy )
+					IOTools.createBackup( jfcProject.getSelectedFile() );
 				File target = jfcProject.getSelectedFile();
 				if( !target.getName().endsWith( ".zet" ) && !target.getName().endsWith( ".gzet" ) )
 					target = new File( target.getAbsolutePath() + ".zet" );
@@ -641,9 +640,9 @@ public class Control {
 		if( zcontrol.getProject().getProjectFile() == null )
 			saveProjectAs();
 		else {
-			if( createCopy == true )
-				editor.createBackup();
 			try {
+				if( createCopy == true )
+					IOTools.createBackup( zcontrol.getProject().getProjectFile() );
 				zcontrol.getProject().save();
 			} catch( java.lang.StackOverflowError soe ) {
 				showErrorMessage( Localization.getInstance().getString( "gui.editor.JEditor.error.stackOverflowTitle" ), Localization.getInstance().getString( "gui.editor.JEditor.error.stackOverflow" ) );
@@ -673,9 +672,9 @@ public class Control {
 				if( zcontrol.getProject().getProjectFile() == null ) {
 					if( jfcProject.showSaveDialog( editor ) == JFileChooser.APPROVE_OPTION ) {
 						GUIOptionManager.setSavePath( jfcProject.getCurrentDirectory().getPath() );
-						if( jfcProject.getSelectedFile().exists() && createCopy )
-							JEditor.createBackup( jfcProject.getSelectedFile() );
 						try {
+							if( jfcProject.getSelectedFile().exists() && createCopy )
+								IOTools.createBackup( jfcProject.getSelectedFile() );
 							File target = jfcProject.getSelectedFile();
 							if( !target.getName().endsWith( ".zet" ) && !target.getName().endsWith( ".gzet" ) )
 								target = new File( target.getAbsolutePath() + ".zet" );
@@ -689,9 +688,9 @@ public class Control {
 						}
 					}
 				} else {
-					if( createCopy )
-						editor.createBackup();
 					try {
+						if( createCopy )
+							IOTools.createBackup( zcontrol.getProject().getProjectFile() );
 						zcontrol.getProject().save();
 					} catch( java.lang.StackOverflowError soe ) {
 						showErrorMessage( Localization.getInstance().getString( "gui.editor.JEditor.error.stackOverflowTitle" ), Localization.getInstance().getString( "gui.editor.JEditor.error.stackOverflow" ) );

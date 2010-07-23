@@ -66,6 +66,8 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.text.NumberFormat;
 import java.util.Locale;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.media.opengl.GLCapabilities;
 import javax.swing.JComponent;
 import javax.swing.JFrame;
@@ -78,6 +80,7 @@ import javax.swing.event.ChangeListener;
 import batch.tasks.AlgorithmTask;
 import batch.tasks.CARealTime;
 import de.tu_berlin.math.coga.common.debug.Debug;
+import de.tu_berlin.math.coga.common.util.IOTools;
 import ds.z.ZControl;
 import event.VisualizationEvent;
 import gui.components.JLogPane;
@@ -106,10 +109,10 @@ public class JEditor extends JFrame implements Localized, EventListener<Progress
 		EditFloor( true, "Edit" ),
 		QuickView( ZETMain.isDebug(), "CAView" ),
 		Batch( true, "Batch" ),
+		Visualization( true, "Visualization" ),
 		CellularAutomatonStatistic( true, "Statistic" ),
 		GraphStatistic( true, "GraphStatistic" ),
 		Log( true, "LogWindow" ),
-		Visualization( true, "Visualization" ),
 		Statistic( true, "Statistics" );
 		private boolean visible;
 		private String name;
@@ -127,16 +130,7 @@ public class JEditor extends JFrame implements Localized, EventListener<Progress
 			return name;
 		}
 	}
-
-		ArrayList<ZETWindowTabs> tabs = new ArrayList<ZETWindowTabs>( ZETWindowTabs.values().length );
-//	public static final int EDIT_FLOOR = 0;
-//	public static final int BATCH = 1;
-//	public static final int CA_FLOOR = ZETMain.isDebug() ? 2 : -1;
-//	public static final int VISUALIZATION = ZETMain.isDebug() ? 3 : 2;
-//	public static final int STATISTIC = ZETMain.isDebug() ? 4 : 3;
-//	public static final int GRAPH_STATISTIC = ZETMain.isDebug() ? 5 : 4;
-//	public static final int LOG = ZETMain.isDebug() ? 6 : 5;
-//	public static final int STATISTICS = LOG + 1;
+	ArrayList<ZETWindowTabs> tabs = new ArrayList<ZETWindowTabs>( ZETWindowTabs.values().length );
 	/** The localization class. */
 	static final Localization loc = Localization.getInstance();
 	/** Stores the last mouse position if a mouse position event is sent. */
@@ -151,7 +145,6 @@ public class JEditor extends JFrame implements Localized, EventListener<Progress
 	private BatchResult result;
 	// Options
 	private boolean firstSwitch = false;
-//	private EditMode.Type creationType = EditMode.Type.CreationPointwise;
 	/** The number format used to display the zoom factor in the text field. */
 	private NumberFormat nfZoom = NumberFormat.getPercentInstance();	// Main window components
 	/** The status bar. */
@@ -198,9 +191,10 @@ public class JEditor extends JFrame implements Localized, EventListener<Progress
 	 * and size, loads file icon, tool bars and menus.
 	 * @param guiControl the control class for the ZET GUI
 	 */
-	public JEditor( Control guiControl ) {
+	public JEditor( Control guiControl, ZControl zcontrol ) {
 		super();
 		this.guiControl = guiControl;
+		this.zcontrol = zcontrol;
 
 		// Set up locale information
 		loc.setLocale( Locale.getDefault() );
@@ -292,16 +286,6 @@ public class JEditor extends JFrame implements Localized, EventListener<Progress
 				tabs.add( tab );
 			}
 		}
-//		tabPane.addTab( loc.getString(  ), null, editView, loc.getString( "EditToolTip" ) );
-//		tabPane.addTab( loc.getString( "Batch" ), null, batchView, loc.getString( "BatchToolTip" ) );
-//		if( ZETMain.isDebug() )
-//			tabPane.addTab( loc.getString( "CAView" ), null, caView, loc.getString( "CAViewToolTip" ) );
-//		tabPane.addTab( loc.getString( "Visualization" ), null, visualizationView, loc.getString( "VisualizationToolTip" ) );
-//		tabPane.addTab( loc.getString( "Statistic" ), null, caStatisticView, loc.getString( "StatisticToolTip" ) );
-//		tabPane.addTab( loc.getString( "GraphStatistic" ), null, graphStatisticView, loc.getString( "GraphStatisticToolTip" ) );
-//		tabPane.addTab( loc.getString( "LogWindow" ), null, logView, loc.getString( "LogWindowToolTip" ) );
-//		if( ZETMain.isDebug() )
-//			tabPane.addTab( loc.getString( "Statistics" ), null, statisticView, loc.getString( "StatisticsToolTip" ) );
 		tabPane.addChangeListener( chlTab );
 		loc.setPrefix( "" );
 
@@ -388,27 +372,6 @@ public class JEditor extends JFrame implements Localized, EventListener<Progress
 			tabPane.setTitleAt( i, loc.getString( tabs.get( i ).getName() ) );
 			tabPane.setToolTipTextAt( i, loc.getString( tabs.get( i ).getName() + "ToolTip" ) );
 		}
-
-//		tabPane.setTitleAt( EDIT_FLOOR, loc.getString( "Edit" ) );
-//		tabPane.setToolTipTextAt( EDIT_FLOOR, loc.getString( "EditToolTip" ) );
-//		tabPane.setTitleAt( BATCH, loc.getString( "Batch" ) );
-//		tabPane.setToolTipTextAt( BATCH, loc.getString( "BatchToolTip" ) );
-//		if( ZETMain.isDebug() ) {
-//			tabPane.setTitleAt( CA_FLOOR, loc.getString( "CAView" ) );
-//			tabPane.setToolTipTextAt( CA_FLOOR, loc.getString( "CAViewToolTip" ) );
-//		}
-//		tabPane.setTitleAt( VISUALIZATION, loc.getString( "Visualization" ) );
-//		tabPane.setToolTipTextAt( VISUALIZATION, loc.getString( "VisualizationToolTip" ) );
-//		tabPane.setTitleAt( STATISTIC, loc.getString( "Statistic" ) );
-//		tabPane.setToolTipTextAt( STATISTIC, loc.getString( "StatisticToolTip" ) );
-//		tabPane.setTitleAt( GRAPH_STATISTIC, loc.getString( "GraphStatistic" ) );
-//		tabPane.setToolTipTextAt( GRAPH_STATISTIC, loc.getString( "GraphStatisticToolTip" ) );
-//		tabPane.setTitleAt( LOG, loc.getString( "LogWindow" ) );
-//		tabPane.setToolTipTextAt( LOG, loc.getString( "LogWindowToolTip" ) );
-//		if( ZETMain.isDebug() ) {
-//			tabPane.setTitleAt( STATISTICS, loc.getString( "Statistics" ) );
-//			tabPane.setToolTipTextAt( STATISTICS, loc.getString( "StatisticsToolTip" ) );
-//		}
 		loc.setPrefix( "" );
 
 		sendMouse( lastMouse );
@@ -481,12 +444,6 @@ public class JEditor extends JFrame implements Localized, EventListener<Progress
 	public static void sendReady() {
 		ZETMain.sendMessage( loc.getString( "gui.message.ready" ) );
 	}
-
-	/*****************************************************************************
-	 *                                                                           *
-	 * GUI initialization                                                        *
-	 *                                                                           *
-	 ****************************************************************************/
 
 	/*****************************************************************************
 	 *                                                                           *
@@ -654,58 +611,6 @@ public class JEditor extends JFrame implements Localized, EventListener<Progress
 		}
 	}
 
-	public void createBackup() {
-		createBackup( zcontrol.getProject().getProjectFile() );
-	}
-
-	public static void createBackup( File file ) {
-		if( file != null && !file.getPath().equals( "" ) ) {
-			String source = file.getPath();
-			String dest = source.substring( 0, source.length() - 3 ) + "bak";
-			try {
-				copyFile( file, new File( dest ), 100, true );
-			} catch( Exception e ) {
-				ZETMain.sendError( "Fehler beim anlegen der Sicherungskopie" );
-			}
-		}
-	}
-
-	public static void copyFile( File src, File dest, int bufSize, boolean force ) throws IOException {
-		if( dest.exists() )
-			if( force )
-				dest.delete();
-			else
-				throw new IOException( "Cannot overwrite existing file: " + dest.getName() );
-		byte[] buffer = new byte[bufSize];
-		int read = 0;
-		InputStream in = null;
-		OutputStream out = null;
-		try {
-			in = new FileInputStream( src );
-			out = new FileOutputStream( dest );
-			while( true ) {
-				read = in.read( buffer );
-				if( read == -1 )
-					//-1 bedeutet EOF
-					break;
-				out.write( buffer, 0, read );
-			}
-		} finally {
-			// Sicherstellen, dass die Streams auch
-			// bei einem throw geschlossen werden.
-			// Falls in null ist, ist out auch null!
-			if( in != null )
-				//Falls tatsächlich in.close() und out.close()
-				//Exceptions werfen, diejenige von 'out' geworfen wird.
-				try {
-					in.close();
-				} finally {
-					if( out != null )
-						out.close();
-				}
-		}
-	}
-
 	/**
 	 * 
 	 * @param r
@@ -765,21 +670,7 @@ public class JEditor extends JFrame implements Localized, EventListener<Progress
 	 * Some helper and tool methods                                              *
 	 *                                                                           *
 	 ****************************************************************************/
-//	/**
-//	 * Enables and disables the menu item that moves a floor up.
-//	 * @param enabled the enabled status
-//	 */
-//	public void enableMenuFloorUp( boolean enabled ) {
-//		mnuEditFloorUp.setEnabled( enabled );
-//	}
-//
-//	/**
-//	 * Enables and disables the menu item that moves a floor down.
-//	 * @param enabled the enabled status
-//	 */
-//	public void enableMenuFloorDown( boolean enabled ) {
-//		mnuEditFloorDown.setEnabled( enabled );
-//	}
+
 	/**
 	 * Returns the edit view component.
 	 * @return the edit view component.
@@ -919,23 +810,4 @@ public class JEditor extends JFrame implements Localized, EventListener<Progress
 	public void setControl( GLControl control ) {
 		this.control = control;
 	}
-
-	/**
-	 * Sets a new project controller. For reasons of consistency the project
-	 * currently controlled by the control class is loaded. It should not happen,
-	 * that this project is <code>null</code>
-	 * @param zcontrol the zet model control class
-	 */
-	public void setZControl2( ZControl zcontrol ) {
-		this.zcontrol = zcontrol;
-		loadProject();
-	}
-
-	/**
-	 * Returns the control class controlling the currently visible project.
-	 * @return the control class controlling the currently visible project
-	 */
-//	public final ZControl getZControl() {
-//		return zcontrol;
-//	}
 }
