@@ -135,6 +135,7 @@ public class JVisualizationView extends AbstractVisualizationView<ZETVisualizati
 			table.put( new Integer( i * 10 ), new JLabel( "" + (i + 1) ) );
 		slider.setLabelTable( table );
 		this.getLeftPanel().add( slider, BorderLayout.SOUTH );
+		setFloorSelectorEnabled( !PropertyContainer.getInstance().getAsBoolean( "settings.gui.visualization.floors" ) );
 	}
 
 	@Override

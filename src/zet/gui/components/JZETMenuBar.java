@@ -299,7 +299,7 @@ public class JZETMenuBar extends JMenuBar implements ActionListener, Localized {
 		} else if( e.getActionCommand().equals( "distributeEvacuees" ) ) {
 			control.distributeEvacuees();
 		} else if( e.getActionCommand().equals( "distribution" ) ) {
-			control.distribution();
+			control.showAssignmentDialog();
 		} else if( e.getActionCommand().equals( "properties" ) ) {
 			control.showPropertiesDialog();
 		} else if( e.getActionCommand().equals("showAll") ) {

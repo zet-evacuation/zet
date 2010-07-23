@@ -54,7 +54,7 @@ public class JLogPane extends JPanel {
 
 		add( scrollPane, "0,0" );
 		this.log = log;
-
+		update();
 	}
 	
 	public void update() {
