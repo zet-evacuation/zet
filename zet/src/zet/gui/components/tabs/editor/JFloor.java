@@ -13,9 +13,9 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
-package gui.editor;
+package zet.gui.components.tabs.editor;
 
-import gui.components.AbstractFloor;
+import zet.gui.components.tabs.base.AbstractFloor;
 import ds.z.Area;
 import ds.z.AssignmentArea;
 import ds.z.Barrier;
@@ -64,6 +64,9 @@ import event.EventListener;
 import event.EventServer;
 import event.ZModelChangedEvent;
 import gui.Control;
+import gui.editor.CoordinateTools;
+import gui.editor.GUIOptionManager;
+import zet.gui.components.tabs.base.JPolygon;
 
 /**
  * Graphical representation of a Floor from the BuildingPlan. Also offers features
@@ -76,7 +79,6 @@ public class JFloor extends AbstractFloor implements EventListener<ZModelChanged
 	private Floor myFloor;
 	/** The currently selected polygons. */
 	private LinkedList<JPolygon> selectedPolygons = new LinkedList<JPolygon>();
-	// User interaction
 	/** This field stored where the new PlanPoint would be inserted in rasterized
 	 * paint mode if the user clicked into the {@link JFloor}. */
 	private Point newRasterizedPoint;
@@ -660,8 +662,7 @@ public class JFloor extends AbstractFloor implements EventListener<ZModelChanged
 							else if( ne.getTarget() == a.getLowerLevelStart() )
 								a.setLowerLevel( ne.getSource(), a.getLowerLevelEnd() );
 							else
-								ZETMain.sendError( Localization.getInstance().getString(
-												"gui.error.ConnectedEdgeTrailsOnly" ) );
+								ZETMain.sendError( Localization.getInstance().getString( "gui.error.ConnectedEdgeTrailsOnly" ) );
 							if( !e.isControlDown() ) {
 								// Workaround to keep the previous edit mode setting
 								GUIOptionManager.setEditMode( GUIOptionManager.getPreviousEditMode() );
@@ -681,9 +682,7 @@ public class JFloor extends AbstractFloor implements EventListener<ZModelChanged
 					// The stair must be selected when we enter this code
 					JPolygon stair = selectedPolygons.getFirst();
 
-					Object clickedOn = stair.findClickTargetAt(
-									SwingUtilities.convertPoint( JFloor.this, e.getPoint(),
-									stair ) );
+					Object clickedOn = stair.findClickTargetAt( SwingUtilities.convertPoint( JFloor.this, e.getPoint(), stair ) );
 					if( clickedOn instanceof Edge && ((Edge)clickedOn).getAssociatedPolygon() == stair.getPlanPolygon() ) {
 						StairArea a = (StairArea)stair.getPlanPolygon();
 						Edge ne = (Edge)clickedOn;
@@ -864,7 +863,7 @@ public class JFloor extends AbstractFloor implements EventListener<ZModelChanged
 						zcontrol.movePoints( draggedPlanPoints, xNew - xOld, yNew - yOld );
 					} catch( Exception ex ) {
 						ZETMain.sendError( Localization.getInstance().getString( "gui.message.ExceptionDuringDrag" ) );
-						ex.printStackTrace();
+						ex.printStackTrace( System.err );
 					}
 
 					// The event that is thrown by setLocation triggers an automatic
@@ -1107,20 +1106,12 @@ public class JFloor extends AbstractFloor implements EventListener<ZModelChanged
 	protected void processMouseWheelEvent( MouseWheelEvent e ) {
 		double oldZoom = CoordinateTools.getZoomFactor();
 		if( e.getScrollType() == MouseWheelEvent.WHEEL_BLOCK_SCROLL )
-			if( e.getWheelRotation() < 0 )
-				oldZoom = Math.min( oldZoom * 2, 0.25d );
-			else
-				oldZoom = Math.max( oldZoom * 2, 0.01d );
+			oldZoom = e.getWheelRotation() < 0 ? Math.min( oldZoom * 2, 0.25d ) : Math.max( oldZoom * 2, 0.01d );
 		else {
 			double offset = (e.getScrollAmount() * Math.abs( e.getWheelRotation() )) / 100.0d;
 			offset /= 4; // Make offset smaller, otherwise it's too fast
-
-			if( e.getWheelRotation() < 0 )
-				oldZoom = Math.min( oldZoom + offset, 0.25d );
-			else
-				oldZoom = Math.max( oldZoom - offset, 0.01d );
+			oldZoom = e.getWheelRotation() < 0 ? Math.min( oldZoom + offset, 0.25d ) : Math.max( oldZoom - offset, 0.01d );
 		}
-		//JEditor.getInstance().setZoomFactor( oldZoom );
 		guiControl.setZoomFactor( oldZoom );
 	}
 

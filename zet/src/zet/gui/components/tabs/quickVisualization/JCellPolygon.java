@@ -17,11 +17,11 @@
  * JCellPolygon.java
  * Created on 28.01.2008, 00:41:39
  */
-package gui.ca;
+package zet.gui.components.tabs.quickVisualization;
 
 import ds.z.PlanPolygon;
-import gui.components.AbstractFloor;
-import gui.components.AbstractPolygon;
+import zet.gui.components.tabs.base.AbstractFloor;
+import zet.gui.components.tabs.base.AbstractPolygon;
 import gui.editor.CoordinateTools;
 import java.awt.BasicStroke;
 import java.awt.Color;

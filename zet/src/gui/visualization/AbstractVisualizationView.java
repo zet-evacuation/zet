@@ -20,7 +20,7 @@
 
 package gui.visualization;
 
-import gui.components.AbstractSplitPropertyWindow;
+import zet.gui.components.tabs.base.AbstractSplitPropertyWindow;
 import javax.media.opengl.GLCanvas;
 
 /**
@@ -45,7 +45,7 @@ public abstract class AbstractVisualizationView<T extends GLCanvas> extends Abst
 	 * @return the text for the title bar
 	 */
 	@Override
-	protected String getTitleBarText() {
+	protected String getAdditionalTitleBarText() {
 		return "";
 	}
 	

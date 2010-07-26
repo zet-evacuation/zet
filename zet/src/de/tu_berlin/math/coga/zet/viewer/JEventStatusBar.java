@@ -25,7 +25,7 @@ import de.tu_berlin.math.coga.common.algorithm.AlgorithmEvent;
 import de.tu_berlin.math.coga.common.algorithm.AlgorithmListener;
 import de.tu_berlin.math.coga.common.algorithm.AlgorithmProgressEvent;
 import de.tu_berlin.math.coga.common.util.Formatter;
-import gui.components.JStatusBar;
+import de.tu_berlin.math.coga.components.JStatusBar;
 import javax.swing.JProgressBar;
 
 /**

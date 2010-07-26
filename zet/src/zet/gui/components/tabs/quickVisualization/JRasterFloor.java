@@ -13,11 +13,13 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
+
 /*
  * JRasterFloor.java
  * Created on 27.01.2008, 18:54:52
  */
-package gui.ca;
+
+package zet.gui.components.tabs.quickVisualization;
 
 import algo.ca.PotentialController;
 import algo.ca.SPPotentialController;
@@ -26,6 +28,7 @@ import converter.ZToCAMapping;
 import converter.ZToCARasterContainer;
 import converter.ZToCARasterSquare;
 import converter.ZToCARoomRaster;
+import de.tu_berlin.math.coga.common.util.Direction;
 import ds.PropertyContainer;
 import ds.z.Floor;
 import ds.z.Room;
@@ -37,16 +40,14 @@ import ds.ca.PotentialManager;
 import ds.ca.SaveCell;
 import ds.ca.StairCell;
 import ds.ca.StaticPotential;
-import gui.components.AbstractFloor;
-import gui.editor.JPolygon;
+import zet.gui.components.tabs.base.AbstractFloor;
+import zet.gui.components.tabs.base.JPolygon;
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.Graphics;
 import java.util.ArrayList;
 import java.util.LinkedList;
-
 import statistic.ca.CAStatistic;
-import de.tu_berlin.math.coga.common.util.Direction;
 
 /**
  * Represents a rastered floor, all rooms have to be squares of the raster size

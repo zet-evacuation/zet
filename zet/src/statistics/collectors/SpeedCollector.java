@@ -1,11 +1,6 @@
 /**
  * SpeedCollector.java
- * input:
- * output:
- *
- * method:
- *
- * Created: May 18, 2010,12:49:38 PM
+ * Created 18.05.2010, 12:49:38
  */
 package statistics.collectors;
 
@@ -66,20 +61,20 @@ public class SpeedCollector {
 
 	public void add( Tupel<Double, Double> t ) {
 		data.add( t );
-		completeDataset.add( t.v );
+		completeDataset.add( t.getV() );
 		findBin( t );
 	}
 
 	private void findBin( Tupel<Double, Double> t ) {
 		for( int i = 0; i < binBounds.size(); ++i ) {
-			if( t.u < binBounds.get( i ) ) {
+			if( t.getU() < binBounds.get( i ) ) {
 				binSizes.set( i, binSizes.get( i ) + 1 );
-				bins.get( i ).add( t.v );
+				bins.get( i ).add( t.getV() );
 				return;
 			}
 		}
 		binSizes.set( binBounds.size(), binSizes.get( binBounds.size() ) + 1 );
-		bins.get( binBounds.size() ).add( t.v );
+		bins.get( binBounds.size() ).add( t.getV() );
 	}
 
 	public void printBin( int bin ) {

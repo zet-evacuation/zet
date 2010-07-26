@@ -13,28 +13,30 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
+
 /**
- * Class JCAView
- * Erstellt 30.04.2008, 09:51:45
+ * Class JQuickVisualizationView
+ * Created 30.04.2008, 09:51:45
  */
 
-package gui.ca;
+package zet.gui.components.tabs;
 
 import converter.ZToCAConverter;
-import gui.components.JFloorScrollPane;
-import gui.components.AbstractSplitPropertyWindow;
+import zet.gui.components.tabs.base.JFloorScrollPane;
+import zet.gui.components.tabs.base.AbstractSplitPropertyWindow;
 import javax.swing.JButton;
 import javax.swing.JPanel;
 
 import statistic.ca.CAStatistic;
+import zet.gui.components.tabs.quickVisualization.JRasterFloor;
 
 /**
  *
  * @author Jan-Philipp Kappmeier
  */
-public class JCAView extends AbstractSplitPropertyWindow<JFloorScrollPane<JRasterFloor>> {
+public class JQuickVisualizationView extends AbstractSplitPropertyWindow<JFloorScrollPane<JRasterFloor>> {
 	
-	public JCAView() {
+	public JQuickVisualizationView() {
 		super( new JFloorScrollPane<JRasterFloor>( new JRasterFloor() ) );
 	}
 
@@ -60,7 +62,7 @@ public class JCAView extends AbstractSplitPropertyWindow<JFloorScrollPane<JRaste
 	 * @return the text for the title bar
 	 */
 	@Override
-	protected String getTitleBarText() {
+	protected String getAdditionalTitleBarText() {
 		return "";
 	}
 

@@ -13,12 +13,14 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
+
 /*
  * JZoomableRuler.java
  * Created on 14. Dezember 2007, 00:47
  */
-package gui.components;
+package zet.gui.components;
 
+import de.tu_berlin.math.coga.components.JRuler;
 import gui.editor.CoordinateTools;
 import javax.swing.JSlider;
 import javax.swing.event.ChangeListener;

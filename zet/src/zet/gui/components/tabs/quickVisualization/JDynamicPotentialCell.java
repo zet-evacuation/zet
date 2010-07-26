@@ -18,9 +18,9 @@
  * Erstellt 05.05.2008, 18:16:07
  */
 
-package gui.ca;
+package zet.gui.components.tabs.quickVisualization;
 
-import gui.components.AbstractFloor;
+import zet.gui.components.tabs.base.AbstractFloor;
 import java.awt.Color;
 import java.awt.Graphics;
 

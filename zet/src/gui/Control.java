@@ -6,8 +6,8 @@ package gui;
 
 import algo.graph.dynamicflow.eat.EarliestArrivalFlowProblem;
 import batch.load.BatchProjectEntry;
-import gui.components.AbstractFloor.RasterPaintStyle;
-import gui.editor.JEditView;
+import zet.gui.components.tabs.base.AbstractFloor.RasterPaintStyle;
+import zet.gui.components.tabs.JEditView;
 import java.util.Arrays;
 import java.util.Locale;
 import zet.gui.JEditor;
@@ -34,7 +34,7 @@ import gui.components.progress.JProgressBarDialog;
 import gui.components.progress.JRasterizeProgressBarDialog;
 import gui.editor.AreaVisibility;
 import gui.editor.CoordinateTools;
-import gui.editor.EditMode;
+import zet.gui.components.tabs.editor.EditMode;
 import gui.editor.GUIOptionManager;
 import gui.editor.assignment.JAssignment;
 import gui.editor.flooredit.FloorImportDialog;
@@ -965,7 +965,9 @@ public class Control {
 		editor.getVisualizationView().updateCameraInformation();
 	}
 
-	public void setZETWindowTitle( String titleBarText ) {
+	public void setZETWindowTitle( String additionalTitleBarText ) {
+		String titleBarText = zcontrol.getProject().getProjectFile() != null ? zcontrol.getProject().getProjectFile().getName() : Localization.getInstance().getString( "NewFile" );
+		titleBarText += " " + additionalTitleBarText + " - " + Localization.getInstance().getString( "AppTitle" );
 		editor.setTitle( titleBarText );
 	}
 

@@ -18,10 +18,10 @@
  * Erstellt 23.04.2008, 17:01:37
  */
 
-package gui.ca;
+package zet.gui.components.tabs.quickVisualization;
 
 import ds.PropertyContainer;
-import gui.components.AbstractFloor;
+import zet.gui.components.tabs.base.AbstractFloor;
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Graphics2D;

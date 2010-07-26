@@ -3,7 +3,7 @@
  * Created 16.06.2009, 22:04:07
  */
 
-package gui.components;
+package de.tu_berlin.math.coga.components;
 
 import info.clearthought.layout.TableLayout;
 import java.lang.reflect.Array;
@@ -11,7 +11,7 @@ import javax.swing.JComponent;
 import javax.swing.JPanel;
 
 /**
- * The class <code>JArrayPanel</code> represents an <code>Jpanel</code> that
+ * The class <code>JArrayPanel</code> represents an <code>JPanel</code> that
  * contains <code>JComponents</code> arranged on a table. It bases on the
  * {@link TableLayout} layout manager but every array position has to be
  * filled with at most one component.
@@ -97,14 +97,5 @@ public class JArrayPanel extends JPanel {
 			for( int j = 0; j < rows; j++ )
 				if( components[i][j] != null )
 					this.add( components[i][j], i + ", " + j );
-	}
-
-	/**
-	 * Returns the name of the class.
-	 * @return the name of the class
-	 */
-	@Override
-	public String toString() {
-		return "JArrayPanel";
 	}
 }

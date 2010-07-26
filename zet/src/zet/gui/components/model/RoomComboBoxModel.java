@@ -19,7 +19,7 @@
  * Erstellt 29.04.2008, 21:30:27
  */
 
-package gui.components;
+package zet.gui.components.model;
 
 import ds.z.Floor;
 import ds.z.Room;

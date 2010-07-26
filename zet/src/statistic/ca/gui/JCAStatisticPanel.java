@@ -65,7 +65,7 @@ import ds.ca.CellularAutomaton;
 import ds.ca.Individual;
 import ds.ca.Individual.DeathCause;
 import gui.ZETMain;
-import gui.components.NamedIndex;
+import de.tu_berlin.math.coga.datastructure.NamedIndex;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;

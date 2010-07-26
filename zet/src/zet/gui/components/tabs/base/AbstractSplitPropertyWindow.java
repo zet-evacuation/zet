@@ -13,12 +13,13 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
+
 /**
  * Class AbstractSplitPropertyWindow
- * Erstellt 29.04.2008, 21:03:51
+ * Created 29.04.2008, 21:03:51
  */
 
-package gui.components;
+package zet.gui.components.tabs.base;
 
 import java.awt.BorderLayout;
 import java.awt.Dimension;
@@ -49,7 +50,7 @@ public abstract class AbstractSplitPropertyWindow<T extends JComponent> extends 
 		addComponents();
 	}
 	
-	protected void addComponents() {
+	protected final void addComponents() {
 		setLayout( new BorderLayout() );
 		// Initialize the window as a whole by putting everything together
 		JSplitPane splitPane = new JSplitPane( JSplitPane.HORIZONTAL_SPLIT,
@@ -71,5 +72,5 @@ public abstract class AbstractSplitPropertyWindow<T extends JComponent> extends 
 		leftPanel = panel;
 	}
 	
-	abstract protected String getTitleBarText();
+	abstract protected String getAdditionalTitleBarText();
 }

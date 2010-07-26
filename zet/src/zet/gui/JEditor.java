@@ -36,10 +36,10 @@ import event.MessageEvent;
 import event.MessageEvent.MessageType;
 import event.ProgressEvent;
 import gui.batch.JBatchView;
-import gui.components.JEventStatusBar;
-import gui.editor.EditMode;
-import gui.ca.JCAView;
-import gui.editor.JEditView;
+import zet.gui.components.JEventStatusBar;
+import zet.gui.components.tabs.editor.EditMode;
+import zet.gui.components.tabs.JQuickVisualizationView;
+import zet.gui.components.tabs.JEditView;
 import gui.statistic.JGraphStatisticPanel;
 import gui.statistic.JStatisticPanel;
 import gui.visualization.JVisualizationView;
@@ -83,7 +83,7 @@ import de.tu_berlin.math.coga.common.debug.Debug;
 import de.tu_berlin.math.coga.common.util.IOTools;
 import ds.z.ZControl;
 import event.VisualizationEvent;
-import gui.components.JLogPane;
+import de.tu_berlin.math.coga.components.JLogPane;
 import gui.statistic.JStatisticsPanel;
 import zet.gui.components.toolbar.JEditToolbar;
 import gui.Control;
@@ -156,7 +156,7 @@ public class JEditor extends JFrame implements Localized, EventListener<Progress
 	/** The batch view tab. */
 	private JBatchView batchView;
 	/** The tab for quick CA visualization. */
-	private JCAView caView;
+	private JQuickVisualizationView caView;
 	/** The tab containing the CA statistic. */
 	private JStatisticPanel caStatisticView;
 	/** The tab containing the graph statistic. */
@@ -269,7 +269,7 @@ public class JEditor extends JFrame implements Localized, EventListener<Progress
 	 */
 	public void addMainComponents() {
 		editView = new JEditView( guiControl );
-		caView = new JCAView();
+		caView = new JQuickVisualizationView();
 		batchView = new JBatchView( guiControl );
 		visualizationView = new JVisualizationView( new GLCapabilities(), guiControl );
 		caStatisticView = new JStatisticPanel();

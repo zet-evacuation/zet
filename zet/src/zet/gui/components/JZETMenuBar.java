@@ -9,7 +9,7 @@ import de.tu_berlin.math.coga.common.localization.Localized;
 import ds.PropertyContainer;
 import gui.Control;
 import gui.ZETMain;
-import gui.components.AbstractFloor.RasterPaintStyle;
+import zet.gui.components.tabs.base.AbstractFloor.RasterPaintStyle;
 import gui.components.framework.Menu;
 import gui.editor.AreaVisibility;
 import java.awt.event.ActionEvent;

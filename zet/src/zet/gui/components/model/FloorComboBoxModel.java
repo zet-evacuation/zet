@@ -19,7 +19,7 @@
  * Erstellt 29.04.2008, 21:29:56
  */
 
-package gui.components;
+package zet.gui.components.model;
 
 import ds.Project;
 import ds.PropertyContainer;
