@@ -18,9 +18,9 @@
  * Erstellt 23.04.2008, 11:39:56
  */
 
-package gui.ca;
+package zet.gui.components.tabs.quickVisualization;
 
-import gui.components.AbstractFloor;
+import zet.gui.components.tabs.base.AbstractFloor;
 import ds.PropertyContainer;
 import ds.ca.CellularAutomaton;
 import ds.ca.Individual;

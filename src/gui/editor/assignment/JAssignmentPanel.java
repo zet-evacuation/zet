@@ -31,7 +31,7 @@ import ds.Project;
 import ds.z.Assignment;
 import ds.z.AssignmentType;
 import zet.gui.JEditor;
-import gui.components.ComboBoxRenderer;
+import zet.gui.components.model.ComboBoxRenderer;
 import gui.components.framework.Button;
 import info.clearthought.layout.TableLayout;
 import java.awt.BorderLayout;

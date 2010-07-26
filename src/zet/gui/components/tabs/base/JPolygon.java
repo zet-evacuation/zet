@@ -13,10 +13,10 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
-package gui.editor;
+package zet.gui.components.tabs.base;
 
-import gui.components.AbstractPolygon;
-import gui.components.AbstractFloor;
+import zet.gui.components.tabs.base.AbstractPolygon;
+import zet.gui.components.tabs.base.AbstractFloor;
 import ds.z.Area;
 import ds.z.Barrier;
 import ds.z.Edge;
@@ -28,7 +28,9 @@ import ds.z.PlanPoint;
 import ds.z.RoomEdge;
 import ds.z.StairArea;
 import gui.Control;
-import zet.gui.JEditor;
+import gui.editor.AreaVisibility;
+import gui.editor.CoordinateTools;
+import gui.editor.GUIOptionManager;
 import java.awt.AWTEvent;
 import java.awt.Color;
 import java.awt.Component;
@@ -51,7 +53,7 @@ import java.util.LinkedList;
 /**
  * Graphical representation of a {@link ds.z.PlanPolygon}. This class has the
  * special feature of forwarding mouse events to it's parent component before
- * dealing with them itself. This is different to the java standard behaviour,
+ * dealing with them itself. This is different to the java standard behavior,
  * where only the topmost component that has been clicked on is notified of the
  * event.
  * @author Timon Kelter
@@ -63,7 +65,7 @@ public class JPolygon extends AbstractPolygon {
 	 * bounding boxes, to enable them to paint themselves thicker when they are
 	 * marked as selected. */
 	public static final int EDGE_WIDTH_ADDITION = 2;
-	/** The width of the edge when selected, in pixels. The unequality 
+	/** The width of the edge when selected, in pixels. The inequality
 	 * 1 + 2 * EDGE_WIDTH_ADDITION >= EDGE_PAINT_WIDTH must hold. */
 	public static final float EDGE_PAINT_WIDTH = 2.2f;
 	/** The radius of the nodes on screen. This should be less than or equal to
@@ -557,7 +559,7 @@ public class JPolygon extends AbstractPolygon {
 		}
 	}
 
-	/** MouseEvents occuring on this component are also forwarded to the parent component. */
+	/** MouseEvents occurring on this component are also forwarded to the parent component. */
 	@Override
 	protected void processMouseMotionEvent( MouseEvent e ) {
 		if( getParent() != null ) {
@@ -573,7 +575,7 @@ public class JPolygon extends AbstractPolygon {
 	/**
 	 * Determines whether the given <code>MouseEvent</code> will lead to a popup
 	 * menu when dispatched to this JPolygon.
-	 * @param e the mouse event that occured
+	 * @param e the mouse event that occurred
 	 * @return <code>true</code> if the popup is displayed, <code>false</code> otherwise
 	 */
 	public boolean isPopupTrigger( MouseEvent e ) {

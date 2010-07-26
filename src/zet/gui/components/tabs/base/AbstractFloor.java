@@ -17,7 +17,7 @@
  * AbstractFloor.java
  * Created on 27.01.2008, 19:39:18
  */
-package gui.components;
+package zet.gui.components.tabs.base;
 
 import ds.PropertyContainer;
 import ds.z.Floor;

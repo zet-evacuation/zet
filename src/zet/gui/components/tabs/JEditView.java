@@ -18,9 +18,9 @@
  * Class JEditView
  * Created 29.04.2008, 21:06:42
  */
-package gui.editor;
+package zet.gui.components.tabs;
 
-import gui.components.AbstractSplitPropertyWindow;
+import zet.gui.components.tabs.base.AbstractSplitPropertyWindow;
 import ds.PropertyContainer;
 import ds.z.Assignment;
 import ds.z.AssignmentArea;
@@ -41,15 +41,22 @@ import ds.z.ZControl;
 import gui.Control;
 import zet.gui.JEditor;
 import gui.ZETMain;
-import gui.ZETProperties;
-import gui.components.ComboBoxRenderer;
+import zet.gui.components.model.ComboBoxRenderer;
 import gui.components.framework.Button;
-import gui.components.AssignmentTypeComboBoxModel;
-import gui.components.FloorComboBoxModel;
-import gui.components.JFloorScrollPane;
-import gui.components.JRuler;
-import gui.components.RoomComboBoxModel;
+import zet.gui.components.model.AssignmentTypeComboBoxModel;
+import zet.gui.components.model.FloorComboBoxModel;
+import zet.gui.components.tabs.base.JFloorScrollPane;
+import de.tu_berlin.math.coga.components.JRuler;
+import zet.gui.components.model.RoomComboBoxModel;
 import gui.components.framework.Menu;
+import gui.editor.AreaVisibility;
+import gui.editor.EdgePopupListener;
+import zet.gui.components.tabs.editor.EditMode;
+import gui.editor.GUIOptionManager;
+import zet.gui.components.tabs.editor.JFloor;
+import zet.gui.components.tabs.base.JPolygon;
+import gui.editor.PointPopupListener;
+import gui.editor.PolygonPopupListener;
 import info.clearthought.layout.TableLayout;
 import java.awt.CardLayout;
 import java.awt.Component;
@@ -77,7 +84,6 @@ import javax.swing.JLabel;
 import javax.swing.JList;
 import javax.swing.JMenu;
 import javax.swing.JMenuItem;
-import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JPopupMenu;
 import javax.swing.JTextField;
@@ -115,7 +121,7 @@ public class JEditView extends AbstractSplitPropertyWindow<JFloorScrollPane<JFlo
 	/** Model for a room-selector combo box. */
 	private RoomComboBoxModel roomSelector;
 	/** Model for a assignmentType-selector combo box. */
-	private gui.components.AssignmentTypeComboBoxModel assignmentTypeSelector;
+	private zet.gui.components.model.AssignmentTypeComboBoxModel assignmentTypeSelector;
 	/** A label that shows a string explaining the floor selection combo box. */
 	private JLabel lblFloorSelector;
 	/** A label that contains the number of the currently visible floor. */
@@ -404,7 +410,7 @@ public class JEditView extends AbstractSplitPropertyWindow<JFloorScrollPane<JFlo
 				// FloorName
 				txtFloorName.setText( dspFloor.getName() );
 				// Title of the window
-				guiControl.setZETWindowTitle( getTitleBarText() );
+				guiControl.setZETWindowTitle( getAdditionalTitleBarText() );
 			}
 		} );
 		cbxFloors.setRenderer( new ComboBoxRenderer() {
@@ -963,9 +969,7 @@ public class JEditView extends AbstractSplitPropertyWindow<JFloorScrollPane<JFlo
 		};
 		btnFloorUp = Button.newButton( loc.getString( "gui.editor.JEditorPanel.floorUp" ), aclFloor, "up", loc.getString( "gui.editor.JEditorPanel.floorUp.ToolTip" ) );
 		eastPanel.add( btnFloorUp, "0,3,0,3" );
-
 		btnFloorDown = Button.newButton( loc.getString( "gui.editor.JEditorPanel.floorDown" ), aclFloor, "down", loc.getString( "gui.editor.JEditorPanel.floorDown.ToolTip" ) );
-
 		eastPanel.add( btnFloorDown, "2,3" );
 		return eastPanel;
 	}
@@ -1148,17 +1152,13 @@ public void localize() {
 	 * the editor panel is displayed inside an window.
 	 * @return the text
 	 */
-	protected String getTitleBarText() {
-		if( projectControl.getProject().getProjectFile() != null )
-			return projectControl.getProject().getProjectFile().getName() + " [" + currentFloor.getName() + "]" + " - " +
-							loc.getString( "AppTitle" );
-		else
-			return loc.getString( "NewFile" ) + " [" + currentFloor.getName() + "]" + " - " + loc.getString( "AppTitle" );
+	protected String getAdditionalTitleBarText() {
+		return projectControl.getProject().getProjectFile() != null ? "[" + currentFloor.getName() + "]" : "[" + currentFloor.getName() + "]";
 	}
 
 	/**
 	 * Changes the selected displayed floor. This includes changing the GUI so
-	 * that it displays "floor" instead of the previously displayed Floor object. 
+	 * that it displays the new floor.
 	 * @param floor the new floor that is shown
 	 */
 	public void changeFloor( Floor floor ) {
@@ -1211,8 +1211,8 @@ public void localize() {
 	}
 
 	/**
-	 * Returns the gui component of the floor.
-	 * @return the gui component of the floor
+	 * Returns the GUI component of the floor.
+	 * @return the GUI component of the floor
 	 */
 	public JFloor getFloor() {
 		return getLeftPanel().getMainComponent();
@@ -1246,16 +1246,6 @@ public void localize() {
 	public ZControl getProjectControl() {
 		return projectControl;
 	}
-
-	/**
-	 * Returns the currently displayed project.
-	 * @return the currently displayed project
-	 */
-//	public Project getZControl() {
-//		return projectControl.getZControl();
-//	}
-
-
 
 	/**
 	 * Updates the GUI if a new project has been loaded. Loads new combo boxes,
@@ -1390,9 +1380,7 @@ public void localize() {
 
 			pupPoint = new JPopupMenu();
 
-			Menu.addMenuItem( pupPoint, loc.getString(
-							"gui.editor.JEditorPanel.popupDeletePoint" ),
-							pointPopupListeners.get( 0 ), "deletePoint" );
+			Menu.addMenuItem( pupPoint, loc.getString( "gui.editor.JEditorPanel.popupDeletePoint" ), pointPopupListeners.get( 0 ), "deletePoint" );
 		}
 	}
 
@@ -1424,7 +1412,8 @@ public void localize() {
 	 * @param mousePosition the position at which the popup menu is shown with
 	 * coordinates that must be relative to the whole Floor
 	 */
-	protected void setPopupEdge( Edge currentEdge, Point mousePosition ) {
+	// TODO maybe protected???
+	public void setPopupEdge( Edge currentEdge, Point mousePosition ) {
 		boolean passable = (currentEdge instanceof RoomEdge) && ((RoomEdge)currentEdge).isPassable();
 		// passage-Creation
 		((JMenuItem)pupEdge.getComponent( 1 )).setVisible( !passable );
@@ -1450,7 +1439,8 @@ public void localize() {
 	 * shall be shown. 
 	 * @param currentPoint The PlanPoint on which the PointPopupMenu 
 	 * shall be shown. */
-	protected void setPopupPoint( Edge currentEdge, PlanPoint currentPoint ) {
+	// todo maybe protected
+	public void setPopupPoint( Edge currentEdge, PlanPoint currentPoint ) {
 		for( PointPopupListener p : pointPopupListeners )
 			p.setPoint( currentEdge, currentPoint );
 	}
@@ -1459,7 +1449,8 @@ public void localize() {
 	 * is shown.
 	 * @param currentPolygon The PlanPolygon that is displayed by the JPolygon
 	 * on which the PopupMenu shall be shown. */
-	protected void setPopupPolygon( PlanPolygon currentPolygon ) {
+	// todo protected???
+	public void setPopupPolygon( PlanPolygon currentPolygon ) {
 		System.out.println( "Popup now belongs to " + currentPolygon.toString() );
 		for( PolygonPopupListener p : polygonPopupListeners )
 			p.setPolygon( currentPolygon );
@@ -1479,8 +1470,8 @@ public void localize() {
 //			else
 //				cbxPreferredExit.removeItem( eac.getSource() );
 //		}
-		JRuler topRuler = getLeftPanel().getTopRuler();
-		JRuler leftRuler = getLeftPanel().getLeftRuler();
+		final JRuler topRuler = getLeftPanel().getTopRuler();
+		final JRuler leftRuler = getLeftPanel().getLeftRuler();
 		Floor floor = getCurrentFloor();
 		topRuler.setWidth( floor.getWidth() );
 		leftRuler.setHeight( floor.getHeight() );
@@ -1506,7 +1497,7 @@ public void localize() {
 	 * @returns The same point as "toConvert", but relative to the surrounding
 	 * JFloor object.
 	 */
-	Point convertPointToFloorCoordinates( Component source, Point toConvert ) {
+	public Point convertPointToFloorCoordinates( Component source, Point toConvert ) {
 		return SwingUtilities.convertPoint( source, toConvert, getFloor() );
 	}
 }

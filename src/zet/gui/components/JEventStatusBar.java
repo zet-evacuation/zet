@@ -19,11 +19,12 @@
  * Created on 19.12.2007, 02:16:58
  */
 
-package gui.components;
+package zet.gui.components;
 
 import event.EventListener;
 import event.EventServer;
 import event.MessageEvent;
+import de.tu_berlin.math.coga.components.JStatusBar;
 import java.awt.Color;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -31,7 +32,7 @@ import javax.swing.Timer;
 
 /**
  * The status bar for the Z-Editor. Consisting (basically) of 4 fields used to
- * display error- status- mouse- and editmode messages.
+ * display error- status- mouse- and edit mode messages.
  * TODO: resize (has to be done in base class)
  * @author Jan-Philipp Kappmeier
  */

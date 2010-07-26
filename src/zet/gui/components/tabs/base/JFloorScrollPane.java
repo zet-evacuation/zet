@@ -18,8 +18,10 @@
  * Erstellt 29.04.2008, 22:36:38
  */
 
-package gui.components;
+package zet.gui.components.tabs.base;
 
+import zet.gui.components.JZoomableRuler;
+import zet.gui.components.tabs.base.AbstractFloor;
 import gui.editor.CoordinateTools;
 import java.awt.Color;
 import java.awt.Font;
@@ -31,6 +33,8 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import de.tu_berlin.math.coga.common.localization.Localization;
 import de.tu_berlin.math.coga.common.localization.Localized;
+import de.tu_berlin.math.coga.components.JCorner;
+import de.tu_berlin.math.coga.components.JRuler;
 
 /**
  *

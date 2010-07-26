@@ -10,7 +10,7 @@ import de.tu_berlin.math.coga.common.localization.Localization;
 import de.tu_berlin.math.coga.common.localization.Localized;
 import gui.Control;
 import gui.ZETMain;
-import gui.components.NamedIndex;
+import de.tu_berlin.math.coga.datastructure.NamedIndex;
 import gui.components.framework.Button;
 import gui.components.framework.IconSet;
 import java.awt.Dimension;

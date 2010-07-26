@@ -18,8 +18,7 @@
  * JLogPane.java
  * Created 29.10.2009, 15:57:37
  */
-
-package gui.components;
+package de.tu_berlin.math.coga.components;
 
 import de.tu_berlin.math.coga.common.debug.Log;
 import info.clearthought.layout.TableLayout;
@@ -28,10 +27,11 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 
 /**
- * The class <code>JLogPane</code> ...
+ * The class <code>JLogPane</code> is a panel giving out formatted log messages.
  * @author Jan-Philipp Kappmeier
  */
 public class JLogPane extends JPanel {
+
 	JEditorPane logPane;
 	Log log;
 
@@ -50,24 +50,16 @@ public class JLogPane extends JPanel {
 
 		logPane = new JEditorPane( "text/html", "" );
 
-    JScrollPane scrollPane = new JScrollPane( logPane );
+		JScrollPane scrollPane = new JScrollPane( logPane );
 
 		add( scrollPane, "0,0" );
 		this.log = log;
 		update();
 	}
-	
+
 	public void update() {
 		final String pre = "<html><font face=\"sans-serif\" size=\"-1\">";
 		final String post = "</font></html>";
 		logPane.setText( pre + log.getText() + post );
-	}
-	/**
-	 * Returns the name of the class.
-	 * @return the name of the class
-	 */
-	@Override
-	public String toString() {
-		return "JLogView";
 	}
 }

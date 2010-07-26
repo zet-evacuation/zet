@@ -13,31 +13,30 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
-package gui.components;
+package de.tu_berlin.math.coga.datastructure;
+
+import de.tu_berlin.math.coga.datastructure.Tupel;
 
 /**
  * A string that is connected to an integer.
  * @author Timon
  */
-public class NamedIndex {
-	private String name;
-	private int index;
+public class NamedIndex extends Tupel<String,Integer> {
 	
 	public NamedIndex (String name, int index) {
-		this.name = name;
-		this.index = index;
+		super(name, index );
 	}
 
 	public String getName () {
-		return name;
+		return super.u;
 	}
 
 	public int getIndex () {
-		return index;
+		return super.v;
 	}
 	
 	@Override
 	public String toString () {
-		return name;
+		return super.u;
 	}
 }

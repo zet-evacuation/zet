@@ -13,11 +13,12 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
-package gui.editor;
+package zet.gui.components.tabs.editor;
 
 import java.awt.Color;
 import java.util.LinkedList;
 import de.tu_berlin.math.coga.common.localization.Localization;
+import gui.editor.GUIOptionManager;
 
 /**
  * An enumeration of all possible edit modes of the editor.
@@ -201,7 +202,7 @@ public enum EditMode {
 	/**
 	 * Returns a list of further objects that are associated with the edit mode.
 	 * The returned list is fully editable. For example in TeleportEdgeCreation 
-	 * mode, this list ist used to store the first edge which must be connected
+	 * mode, this list is used to store the first edge which must be connected
 	 * to the second one.
 	 * @return the objects
 	 */

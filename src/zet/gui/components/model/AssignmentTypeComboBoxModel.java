@@ -16,17 +16,16 @@
 
 /**
  * Class AssignmentTypeComboBoxModel
- * Erstellt 29.04.2008, 21:30:15
+ * Created 29.04.2008, 21:30:15
  */
-package gui.components;
+package zet.gui.components.model;
 
-import ds.Project;
 import ds.z.Assignment;
 import ds.z.AssignmentArea;
 import ds.z.AssignmentType;
 import ds.z.ZControl;
-import gui.editor.JFloor;
-import gui.editor.JPolygon;
+import zet.gui.components.tabs.editor.JFloor;
+import zet.gui.components.tabs.base.JPolygon;
 import javax.swing.DefaultComboBoxModel;
 
 /**

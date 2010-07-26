@@ -13,8 +13,7 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
-
-package gui.components;
+package de.tu_berlin.math.coga.components;
 
 import info.clearthought.layout.TableLayout;
 import java.util.ArrayList;
@@ -24,48 +23,50 @@ import javax.swing.JPanel;
 import javax.swing.border.EtchedBorder;
 
 /**
- * The <code>JStatusBar</code> implements a status bar, that means an panel
+ * <p>The <code>JStatusBar</code> implements a status bar, that means an panel
  * usually positioned at the button of a window that contains some fields
- * containing text information.
+ * containing text information.</p>
  * <p>In this class the fields are considered as "elements". The elements can
  * be added and deleted separately and the status bar can be edited, but to
  * the changes are not displayed until {@code reset()} is called.</p>
  * <p>The appearance of the status bar can not be changed, the elements look
- * just like bordered components, however, it is possible to assign a percential
+ * just like bordered components, however, it is possible to assign a percentaged
  * size to each element. If no size is set, the space is divided equally to
  * the elements.</p>
  * @author Jan-Philipp Kappmeier
  */
 public class JStatusBar extends JPanel {
-	protected ArrayList<JComponent> components = new ArrayList<JComponent>(3);
-  
+
+	/** The array containing the components visible in the status bar. */
+	protected ArrayList<JComponent> components = new ArrayList<JComponent>( 3 );
+
 	/**
-	 * Creates a new instance of the <code>JStatusBar</code> containing one
+	 * Creates a new instance of the {@code JStatusBar} containing one
 	 * empty element.
 	 */
 	public JStatusBar() {
-    super();
+		super();
 		addElement();
 		rebuild();
 	}
-  
+
 	/**
-	 * Creates a new instance of the <code>JStatusBar</code> containing one
+	 * Creates a new instance of the {@code JStatusBar} containing one
 	 * element with a specified text.
 	 * @param text the specified text.
 	 */
-  public JStatusBar( String text ) {
+	public JStatusBar( String text ) {
 		this();
-    setStatusText( 0, text );
-  }
-  
+		setStatusText( 0, text );
+	}
+
 	/**
 	 * Adds an empty element to the status bar.
 	 */
 	public void addElement() {
 		addElement( "" );
 	}
-	
+
 	/**
 	 * Adds a new element to the status bar.
 	 * @param text the initial text of the new element
@@ -87,42 +88,40 @@ public class JStatusBar extends JPanel {
 	public void clear() {
 		components.clear();
 	}
-	
+
 	/**
 	 * Rebuilds the panel, that means a new layout is set. This method has to be
 	 * called if elements where added or deleted.
 	 */
 	protected void rebuild() {
-		if( components.size() == 0 ) {
+		if( components.isEmpty() ) {
 			setLayout( new TableLayout() );
 			return;
 		}
-		
+
 		// set array		
 		double size2[][] = new double[2][];
-		size2[0] = new double[components.size() ];
-		size2[1] = new double[ 1 ];
+		size2[0] = new double[components.size()];
+		size2[1] = new double[1];
 		size2[1][0] = TableLayout.PREFERRED;
-		for( int i=0; i < components.size(); i++ ) {
+		for( int i = 0; i < components.size(); i++ )
 			size2[0][i] = TableLayout.FILL;
-		}
 		setLayout( new TableLayout( size2 ) );
-		
+
 		// for all components, add them
-		for( int i=0; i < components.size(); i++ ) {
+		for( int i = 0; i < components.size(); i++ )
 			this.add( components.get( i ), i + ", 0" );
-		}
 	}
-	
-  /**
+
+	/**
 	 * Sets a new text on a specified status bar element. The text is also set as
-	 * tooltip, so that the text can be read if the space is to small. Converts
+	 * tool tip, so that the text can be read if the space is to small. Converts
 	 * the component to {@link JLabel} without testing.
 	 * @param index the index of the element, begins with 0
 	 * @param text the new text
 	 */
-  public void setStatusText( int index, String text ) {
-    ((JLabel)components.get( index )).setText( text );
-		components.get( index ).setToolTipText (text);
-  }
+	public void setStatusText( int index, String text ) {
+		((JLabel) components.get( index )).setText( text );
+		components.get( index ).setToolTipText( text );
+	}
 }
