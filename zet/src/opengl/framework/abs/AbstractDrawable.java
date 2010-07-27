@@ -15,8 +15,6 @@
  */
 package opengl.framework.abs;
 
-import gui.visualization.draw.ca.GLCA;
-import gui.visualization.draw.ca.GLCAFloor;
 import java.util.ArrayList;
 import javax.media.opengl.GL;
 import javax.media.opengl.glu.GLU;
@@ -30,9 +28,8 @@ import opengl.drawingutils.GLVector;
  * @param <V> The type of the associated control object
  * @param <W> The type of the associated children control object
  * @author Jan-Philipp Kapmeier, Daniel Plümpe
-  */
+ */
 public abstract class AbstractDrawable<U extends AbstractDrawable<?, ?>, V extends AbstractControl<?, ?>> implements Drawable {
-//public abstract class AbstractDrawable<T extends CullingShape, U extends AbstractDrawable<?,?,?,?>, V extends AbstractControl<?, ?, ?, U, W>, W extends AbstractControl<U,?,?,?,?>> implements Drawable {
 
 	//private CullingTester tester;
 	protected static GLU glu = new GLU();
@@ -46,9 +43,7 @@ public abstract class AbstractDrawable<U extends AbstractDrawable<?, ?>, V exten
 	protected GLVector position = new GLVector();
 	protected ArrayList<U> children;
 
-
 	public AbstractDrawable( V control ) {
-//	public AbstractDrawable(V control, T cullingShape ) {
 		children = new ArrayList<U>();
 		this.control = control;
 		update();
@@ -70,30 +65,18 @@ public abstract class AbstractDrawable<U extends AbstractDrawable<?, ?>, V exten
 		return true;
 	}
 
-//	public CullingTester getTester() {
-//		return tester;
-//	}
-
-//	public void setTester( CullingTester val ) {
-//		this.tester = val;
-//	}
 	/**
 	 * Calls {@link #draw( GLAutoDrawable) } for all contained objects.
 	 * @param Drawable
 	 */
 	public void drawAllChildren( GL gl ) {
-		for( U child : children ) {
-			if( this instanceof GLCA ) {
-				//System.out.println( "GLCA " + ((GLCAFloor)child).getControl().getFloorNumber() );
-			}
+		for( U child : children )
 			child.draw( gl );
-		}
 	}
 
 	public void staticDrawAllChildren( GL gl ) {
-		for( U child : children ) {
+		for( U child : children )
 			child.performStaticDrawing( gl );
-		}
 	}
 
 	@Override
@@ -136,5 +119,12 @@ public abstract class AbstractDrawable<U extends AbstractDrawable<?, ?>, V exten
 	}
 
 	public abstract void update();
-}
 
+	/**
+	 * Sets the control object to {@code null} and clears the list of children.
+	 */
+	public void delete() {
+		control = null;
+		children.clear();
+	}
+}

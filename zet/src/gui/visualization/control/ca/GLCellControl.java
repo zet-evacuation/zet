@@ -68,13 +68,18 @@ public class GLCellControl extends AbstractZETVisualizationControl<GLCellControl
 		xPosition = caVisResults.get( cell ).x;
 		yPosition = caVisResults.get( cell ).y;
 		this.glRoomControlObject = glRoomControl;
-		if( mergedPotential == null ) {
-			pm = caVisResults.getRecording().getInitialConfig().getPotentialManager();
-			//pm = getVisResult().getRecording().getInitialConfig().getPotentialManager();
-			mergedPotential = PotentialUtils.mergePotentials( pm.getStaticPotentials() );
-			activePotential = mergedPotential;
+		if( mainControl.containsRecording ) {
+			if( mergedPotential == null ) {
+				pm = caVisResults.getRecording().getInitialConfig().getPotentialManager();
+				//pm = getVisResult().getRecording().getInitialConfig().getPotentialManager();
+				mergedPotential = PotentialUtils.mergePotentials( pm.getStaticPotentials() );
+				activePotential = mergedPotential;
+			}
+			MAX_DYNAMIC_POTENTIAL = caVisResults.getRecording().getMaxDynamicPotential();
+		} else {
+			mergedPotential = new StaticPotential();
+			activePotential = new StaticPotential();
 		}
-		MAX_DYNAMIC_POTENTIAL = caVisResults.getRecording().getMaxDynamicPotential();
 
 		floorID = controlled.getRoom().getFloorID();
 

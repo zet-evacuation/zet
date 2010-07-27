@@ -29,7 +29,7 @@ import ds.z.PlanPolygon.RelativePosition;
 import java.util.Vector;
 
 /**
- * @author Daniel Pluempe
+ * @author Daniel Plümpe
  *
  */
 public class BuildingResults implements VisualizationResult {
@@ -47,16 +47,8 @@ public class BuildingResults implements VisualizationResult {
 			PASSABLE,
 			/** A wall that belongs to an inaccessible area. */
 			INACCESSIBLE
-		}
-
-		
-		
-		  ;
-		private  Vector 
-		 <Point2D 
-		  
-		  
-		    .Double> points;
+		};
+		private Vector<Point2D.Double> points;
 		private Floor floor;
 		//protected ElementType wallType;
 		private Vector<ElementType> wallTypes;
@@ -67,7 +59,6 @@ public class BuildingResults implements VisualizationResult {
 		public Wall( Floor floor ) {
 			this.points = new Vector<Point2D.Double>();
 			this.wallTypes = new Vector<ElementType>();
-			//this.wallType = ElementType.SIMPLE;
 			this.floor = floor;
 		}
 
@@ -97,7 +88,7 @@ public class BuildingResults implements VisualizationResult {
 
 		public void addPoint( double x, double y, ElementType type ) {
 			if( points.size() == 0 ) {
-			// nothing
+				// nothing
 			} else
 				wallTypes.add( type );
 			points.add( new Point2D.Double( x, y ) );
@@ -231,7 +222,7 @@ public class BuildingResults implements VisualizationResult {
 	}
 
 	/**
-	 * Checks wheather an room is on the right or left side of an edge and stores
+	 * Checks whether an room is on the right or left side of an edge and stores
 	 * the result in an corresponding {@link Wall} object.
 	 * @param edge the edge
 	 * @param room the room
@@ -244,6 +235,6 @@ public class BuildingResults implements VisualizationResult {
 			curWall.roomIsLeft = isLeft;
 			curWall.roomIsRight = isRight;
 		}// else
-	//	System.err.println( "Kante konnte nicht genutzt werden!");
+		//	System.err.println( "Kante konnte nicht genutzt werden!");
 	}
 }

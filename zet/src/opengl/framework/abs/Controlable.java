@@ -1,7 +1,3 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 /**
  * Controlable.java
  * Created 04.03.2010, 18:48:16
@@ -21,8 +17,10 @@ public interface Controlable {
 
 	void resetTime();
 
+	void delete();
+
 	/**
-	 * Checks wheather all parts of the simulation are finished, or not.
+	 * Checks whether all parts of the simulation are finished, or not.
 	 *  @return true if the simulation is finished, false otherwise
 	 */
 	public boolean isFinished();

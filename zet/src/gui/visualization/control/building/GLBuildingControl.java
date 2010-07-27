@@ -45,8 +45,8 @@ public class GLBuildingControl extends AbstractZETVisualizationControl<GLWallCon
 
 	/**
 	 * Creates a new object of this control class. The wall objects (a control and
-	 * the corrisponding view object) are created and stored in datastructures to
-	 * easy assign them by their floor id. Note that no default floor is enabled!
+	 * the corresponding view object) are created and stored in data structures to
+	 * easily assign them by their floor id. Note that no default floor is enabled!
 	 * @param visResult
 	 * @param mainControl
 	 */
@@ -144,5 +144,17 @@ public class GLBuildingControl extends AbstractZETVisualizationControl<GLWallCon
 	 */
 	@Override
 	public void resetTime() {
+	}
+
+	/**
+	 * Prepares this object for deletion, removes all pointers and calls this
+	 * method on all child elements.
+	 */
+	public void delete() {
+		for( GLWallControl wall : this ) {
+			wall.delete();
+		}
+		view.delete();
+		view = null;
 	}
 }

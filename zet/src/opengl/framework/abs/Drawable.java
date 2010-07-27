@@ -40,5 +40,7 @@ public interface Drawable {
 	 * representation of the object needs to be changed.
 	 */
 	void update();
+
+	void delete();
 }
 
