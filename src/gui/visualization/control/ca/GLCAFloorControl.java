@@ -52,7 +52,7 @@ public class GLCAFloorControl extends AbstractZETVisualizationControl<GLRoomCont
 		for( GLRoomControl room : this )
 			view.addChild( room.getView() );
 	}
-		
+
 	/**
 	 * Returns the offset of this floor. The offset is in real (z-format) coordinates
 	 * @return the y offset

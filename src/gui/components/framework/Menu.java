@@ -133,6 +133,8 @@ public class Menu {
 		JMenuItem menuItem = processMnemonic( s );
 		m.add( menuItem );
 
+		menuItem.setAccelerator( KeyStroke.getKeyStroke( inputEvent, inputEvent ));
+
 		if( keyChar != 0 )
 			menuItem.setAccelerator( KeyStroke.getKeyStroke( keyChar, inputEvent ) );
 		if( al != null )

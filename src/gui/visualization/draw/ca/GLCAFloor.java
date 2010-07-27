@@ -31,7 +31,6 @@ import javax.media.opengl.GL;
  *  @author Jan-Philipp Kappmeier
  */
 
-//public class GLCAFloor extends AbstractDrawable<CullingShapeCube, GLRoom, GLCAFloorControl, GLRoomControl> {
 public class GLCAFloor extends AbstractDrawable<GLRoom, GLCAFloorControl> {
 	private List<GLIndividualControl> individuals;
 	private int floorID;
@@ -61,10 +60,8 @@ public class GLCAFloor extends AbstractDrawable<GLRoom, GLCAFloorControl> {
 	public void performDrawing( GL gl ) {
 		super.performDrawing( gl );
 		for( GLIndividualControl ic : control.getIndividualControls() ) {
-			//individual.performDrawing( drawable );
 			if( ic.onFloor() == floorID )
 				ic.getView().performDrawing( gl );
 		}
-		//GLIndividualControl ic = individuals.get(0);		
 	}
 }

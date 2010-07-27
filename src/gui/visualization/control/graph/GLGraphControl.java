@@ -28,7 +28,6 @@ import ds.GraphVisualizationResult;
 import ds.graph.Node;
 import gui.visualization.control.AbstractZETVisualizationControl;
 import gui.visualization.draw.graph.GLGraph;
-import gui.visualization.draw.graph.GLGraphFloor;
 import java.util.HashMap;
 import java.util.Iterator;
 import javax.media.opengl.GL;
@@ -275,5 +274,9 @@ public class GLGraphControl extends AbstractZETVisualizationControl<GLGraphFloor
 
 	public Frustum getFrustum() {
 		return frustum;
+	}
+
+	public void delete() {
+		view.delete();
 	}
 }

@@ -65,6 +65,12 @@ public class GLControl implements DrawableControlable {
 		return frustum;
 	}
 
+	public void delete() {
+		buildingControl.delete();
+		caControl.delete();
+		graphControl.delete();
+	}
+
 	/**
 	 * Describes the different types of information which can be illustrated
 	 * by different colors of the cells of the cellular automaton.
@@ -186,6 +192,27 @@ public class GLControl implements DrawableControlable {
 		AlgorithmTask.getInstance().setProgress( 100, loc.getStringWithoutPrefix( "batch.tasks.progress.visualizationDatastructureComplete" ), "" );
 		initSettings();
 	}
+
+
+	/**
+	 * Resets the building control for this graphics control class.
+	 */
+	public void setBuildingControl( BuildingResults buildingResults ) {
+		if( buildingControl != null )
+			buildingControl.delete();
+		System.gc();
+		buildingControl = new GLBuildingControl( buildingResults );
+		showWalls( PropertyContainer.getInstance().getAsBoolean( "settings.gui.visualization.walls" ) );
+	}
+
+	public void setCellularAutomatonControl( CAVisualizationResults caVis, CellularAutomaton ca ) {
+		hasCellularAutomaton = true;
+		this.ca = ca;
+		caControl = new GLCellularAutomatonControl( caVis, ca );
+		estimatedTime = 0;
+		showCellularAutomaton( PropertyContainer.getInstance().getAsBoolean( "settings.gui.visualization.cellularAutomaton" ) );
+	}
+
 
 	/**
 	 * Initializes the visualization settings with the values stored in the

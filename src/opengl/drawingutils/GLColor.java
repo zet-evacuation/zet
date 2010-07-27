@@ -16,14 +16,13 @@
 
 /**
  * Class GLColor
- * Erstellt 08.05.2008, 02:29:56
+ * Created 08.05.2008, 02:29:56
  */
 
 package opengl.drawingutils;
 
 import java.awt.Color;
 import javax.media.opengl.GL;
-import javax.media.opengl.GLAutoDrawable;
 import opengl.framework.abs.Drawable;
 
 /**
@@ -334,6 +333,10 @@ public final class GLColor implements Drawable {
 	@Override
 	public String toString() {
 		return "("+ Math.round(R*255) + "," + Math.round(G*255) + "," + Math.round(B*255) + ")";
+	}
+
+	public void delete() {
+		
 	}
 
 

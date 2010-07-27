@@ -6,6 +6,9 @@ package gui;
 
 import algo.graph.dynamicflow.eat.EarliestArrivalFlowProblem;
 import batch.load.BatchProjectEntry;
+import converter.ZToCAConverter.ConversionNotSupportedException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import zet.gui.components.tabs.base.AbstractFloor.RasterPaintStyle;
 import zet.gui.components.tabs.JEditView;
 import java.util.Arrays;
@@ -16,6 +19,7 @@ import batch.BatchResultEntry;
 import batch.tasks.BatchGraphCreateOnlyTask;
 import batch.tasks.RasterizeTask;
 import batch.tasks.VisualizationDataStructureTask;
+import converter.ZToCAConverter;
 import de.tu_berlin.math.coga.common.localization.Localization;
 import de.tu_berlin.math.coga.common.util.IOTools;
 import de.tu_berlin.math.coga.zet.DatFileReaderWriter;
@@ -84,6 +88,7 @@ public class Control {
 	private JZETMenuBar menuBar;
 	private ZETVisualization visualization;
 	private JEditView editview;
+	private AlgorithmControl algorithmControl;
 
 	/**
 	 * Creates a new instance of <code>Control</code>.
@@ -98,6 +103,7 @@ public class Control {
 		visualization = editor.getVisualizationView().getGLContainer();
 		updateVisualizationElements();
 		editview = editor.getEditView();
+		algorithmControl = new AlgorithmControl( zcontrol.getProject() );
 		visualization.setZcontrol( zcontrol );
 	}
 
@@ -565,6 +571,7 @@ public class Control {
 		if( jfcProject.showOpenDialog( editor ) == JFileChooser.APPROVE_OPTION ) {
 			zcontrol.loadProject( jfcProject.getSelectedFile() );
 			editor.loadProject();	// Load the currently loaded project by the control file
+			algorithmControl.setProject( zcontrol.getProject() );
 			GUIOptionManager.setSavePath( jfcProject.getCurrentDirectory().getPath() );
 			GUIOptionManager.setLastFile( 1, jfcProject.getSelectedFile().getAbsolutePath() );
 		}
@@ -573,6 +580,7 @@ public class Control {
 	public void loadProject( File f ) {
 		zcontrol.loadProject( f );
 		editor.loadProject();
+		algorithmControl.setProject( zcontrol.getProject() );
 	}
 
 	/**
@@ -987,6 +995,21 @@ public class Control {
 		editview.getFloor().setSelectedPolygon( poly );
 	}
 
+
+	public void createBuildingDataStructure() {
+		algorithmControl.convertBuildingPlan();
+		visualization.getControl().setBuildingControl( algorithmControl.getBuildingResults() );
+	}
+
+	public void createCellularAutomaton() {
+		try {
+			algorithmControl.convertCellularAutomaton();
+			CAVisualizationResults caVis = new CAVisualizationResults( ZToCAConverter.getInstance().getLatestMapping() );
+			visualization.getControl().setCellularAutomatonControl( caVis, algorithmControl.getCellularAutomaton() );
+		} catch( ConversionNotSupportedException ex ) {
+			Logger.getLogger( Control.class.getName() ).log( Level.SEVERE, null, ex );
+		}
+	}
 }
 
 

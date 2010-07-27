@@ -16,7 +16,7 @@
 
 /**
  * Class GLVector
- * Erstellt 08.05.2008, 02:30:02
+ * Created 08.05.2008, 02:30:02
  */
 
 package opengl.drawingutils;
@@ -50,7 +50,7 @@ public class GLVector extends Vector3 implements Drawable {
 	}
 
 	/**
-	 * Initalizes this vector as a copy of a given vector.
+	 * Initializes this vector as a copy of a given vector.
 	 * @param vec the given vector
 	 */
 	public GLVector( Vector3 vec ) {
@@ -83,5 +83,7 @@ public class GLVector extends Vector3 implements Drawable {
 		gl.glNormal3d( x, y, z );
 	}
 	
-	public void update(){ }
+	public void update() { }
+
+	public void delete() { }
 }

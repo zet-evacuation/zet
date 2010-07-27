@@ -16,7 +16,7 @@
 
 /*
  * JEditor.java
- * Created on 4. Dezember 2007, 17:08
+ * Created 04.12.2007, 17:08
  */
 package zet.gui;
 
@@ -59,15 +59,9 @@ import java.awt.event.WindowListener;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
 import java.text.NumberFormat;
 import java.util.Locale;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.media.opengl.GLCapabilities;
 import javax.swing.JComponent;
 import javax.swing.JFrame;
@@ -80,7 +74,6 @@ import javax.swing.event.ChangeListener;
 import batch.tasks.AlgorithmTask;
 import batch.tasks.CARealTime;
 import de.tu_berlin.math.coga.common.debug.Debug;
-import de.tu_berlin.math.coga.common.util.IOTools;
 import ds.z.ZControl;
 import event.VisualizationEvent;
 import de.tu_berlin.math.coga.components.JLogPane;

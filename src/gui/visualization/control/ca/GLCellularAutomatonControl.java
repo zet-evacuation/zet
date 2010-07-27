@@ -16,7 +16,7 @@
 
 /**
  * Class GLCellularAutomatonControl
- * Erstellt 02.05.2008, 18:44:21
+ * Created 02.05.2008, 18:44:21
  */
 
 package gui.visualization.control.ca;
@@ -74,10 +74,12 @@ public class GLCellularAutomatonControl extends AbstractZETVisualizationControl<
 	private int recordingCount;
 	private int recordingDone;
 	private int maxReactionTime;
+	boolean containsRecording = false;
 
 
 	public GLCellularAutomatonControl( CAVisualizationResults caVisResults, CellularAutomaton ca ) {
 		super();
+		containsRecording = caVisResults.getRecording() != null;
 		mainControl = this;
 
 		this.ca = ca;
@@ -86,7 +88,10 @@ public class GLCellularAutomatonControl extends AbstractZETVisualizationControl<
 		cellsDone = 0;
 		AlgorithmTask.getInstance().setProgress( 0, Localization.getInstance().getStringWithoutPrefix( "batch.tasks.progress.createCellularAutomatonVisualizationDatastructure" ), "" );
 
-		recordingCount = caVisResults.getRecording().length();
+		if( containsRecording ) {
+			recordingCount = caVisResults.getRecording().length();
+		} else
+			recordingCount = 0;
 		recordingDone = 0;
 
 		allFloorsByID = new HashMap<Integer, GLCAFloorControl>();
@@ -102,25 +107,29 @@ public class GLCellularAutomatonControl extends AbstractZETVisualizationControl<
 
 		showAllFloors();
 
-		convertIndividualMovements();
-
 		// Set up timing:
 		secondsPerStep = ca.getSecondsPerStep();
 		nanoSecondsPerStep = Math.round( secondsPerStep * Conversion.secToNanoSeconds );
 		step = 0;
-		caVisResults.getRecording().rewind();
-		for( Action action : caVisResults.getRecording().nextActions() )
-			try {
-				action.execute( ca );
-				if( action instanceof MoveAction )
-					System.out.println( action );
-			} catch( InconsistentPlaybackStateException e ) {
-				e.printStackTrace();
-			}
+		if( containsRecording ) {
+			convertIndividualMovements();
+			caVisResults.getRecording().rewind();
+			for( Action action : caVisResults.getRecording().nextActions() )
+				try {
+					action.execute( ca );
+					if( action instanceof MoveAction )
+						System.out.println( action );
+				} catch( InconsistentPlaybackStateException e ) {
+					e.printStackTrace( System.err );
+				}
+			for( GLCAFloorControl floor : this )
+				floor.getView().setIndividuals( getIndividualControls() );
+		} else {
+			individuals = new ArrayList<GLIndividualControl>();
+		}
 
-		for( GLCAFloorControl floor : this )
-			floor.getView().setIndividuals( getIndividualControls() );
 	}
+
 
 	public double getSecondsPerStep() {
 		return secondsPerStep;
@@ -390,4 +399,13 @@ public class GLCellularAutomatonControl extends AbstractZETVisualizationControl<
 	public void update() {
 		throw new UnsupportedOperationException( "Not supported yet." );
 	}
+
+	public void delete() {
+		for( GLCAFloorControl floor : this ) {
+			//floor.delete();
+		}
+		view.delete();
+		ca = null;
+	}
+
 }

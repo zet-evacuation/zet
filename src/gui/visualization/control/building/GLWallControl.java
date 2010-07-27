@@ -13,17 +13,16 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
+
 /*
- * Created on 18.06.2008
+ * Created 18.06.2008
  *
  */
 package gui.visualization.control.building;
 
 import gui.visualization.VisualizationOptionManager;
 import gui.visualization.control.AbstractZETVisualizationControl;
-import gui.visualization.control.GLControl;
 import gui.visualization.draw.building.GLWall;
-import io.visualization.BuildingResults;
 import io.visualization.BuildingResults.Wall;
 
 import java.awt.geom.Point2D;
@@ -32,12 +31,13 @@ import java.util.LinkedList;
 import java.util.List;
 
 import opengl.drawingutils.GLVector;
+import opengl.framework.abs.Controlable;
 
 /**
  * @author Daniel Plümpe, Jan-Philipp Kappmeier
  */
 //public class GLWallControl extends AbstractControl<GLWall, BuildingResults.Wall, BuildingResults, GLWall, GLWallControl, GLControl> {
-public class GLWallControl extends AbstractZETVisualizationControl<GLWallControl, GLWall, GLBuildingControl> {
+public class GLWallControl extends AbstractZETVisualizationControl<GLWallControl, GLWall, GLBuildingControl> implements Controlable {
 
 	private LinkedList<GLVector> basePoints;
 	Wall controlled;
@@ -94,5 +94,20 @@ public class GLWallControl extends AbstractZETVisualizationControl<GLWallControl
 	 */
 	public Wall.ElementType getWallType( int segmentNumber ) {
 		return controlled.getWallType( segmentNumber );
+	}
+
+	public void addTime( long timeNanoSeconds ) { }
+
+	public void setTime( long time ) { }
+
+	public void resetTime() { }
+
+	public void delete() {
+		controlled = null;
+		view.delete();
+	}
+
+	public boolean isFinished() {
+		return true;
 	}
 }

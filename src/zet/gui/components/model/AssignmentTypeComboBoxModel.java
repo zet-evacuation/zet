@@ -29,7 +29,8 @@ import zet.gui.components.tabs.base.JPolygon;
 import javax.swing.DefaultComboBoxModel;
 
 /**
- * This class serves as a model for the JComboBox that contains the current assignment types.
+ * This class serves as a model for the {@link JComboBox} that contains the
+ * current assignment types.
  * @author Jan-Philipp Kappmeier
  */
 public class AssignmentTypeComboBoxModel extends DefaultComboBoxModel {
