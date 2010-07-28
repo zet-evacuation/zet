@@ -9,6 +9,8 @@ import de.tu_berlin.math.coga.graph.io.xml.GraphView;
 import java.io.IOException;
 import de.tu_berlin.math.coga.graph.io.xml.XMLReader;
 import de.tu_berlin.math.coga.graph.io.xml.XMLWriter;
+import ds.graph.DynamicNetwork;
+import ds.graph.Network;
 import ds.graph.Node;
 import java.util.ArrayList;
 
@@ -23,14 +25,22 @@ public class XmlFileReaderWriter {
 		//XMLReader reader = new XMLReader( "./testinstanz/test.xml" );
 		//FlowVisualization fv = (FlowVisualization)reader.readFlowVisualization();
 
-//		XMLReader reader = new XMLReader( "./testinstanz/test_graph.xml" );
-//		Network n = reader.readGraph();
-//		System.out.println( n.toString() );
+		XMLReader reader = new XMLReader( "./testinstanz/test_graph.xml" );
+		Network n = reader.readGraph();
+		System.out.println( n.toString() );
 
-			XMLReader reader = new XMLReader( "./testinstanz/test.xml" );
-			EarliestArrivalFlowProblem eafp = reader.readFlowInstance();
 
-			System.out.println( "Schreibe nun die Ausgabe..." );
+		DynamicNetwork dn = new DynamicNetwork( n );
+		System.out.println( dn.toString() );
+
+		if( true )
+			return;
+
+
+		reader = new XMLReader( "./testinstanz/test.xml" );
+		EarliestArrivalFlowProblem eafp = reader.readFlowInstance();
+
+		System.out.println( "Schreibe nun die Ausgabe..." );
 		// Write
 		XMLWriter writer = new XMLWriter( "./testinstanz/output.xml" );
 		final ArrayList<Node> sinks = new ArrayList<Node>(1);
