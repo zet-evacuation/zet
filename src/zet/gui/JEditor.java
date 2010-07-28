@@ -456,6 +456,9 @@ public class JEditor extends JFrame implements Localized, EventListener<Progress
 					tabPane.setSelectedIndex( tabs.indexOf( ZETWindowTabs.QuickView ) );
 			} else if( e.getActionCommand().equals( "visualization" ) ) {
 				quickVisualization();
+
+
+
 				if( tabs.get( tabPane.getSelectedIndex() ) != ZETWindowTabs.QuickView )
 					tabPane.setSelectedIndex( tabs.indexOf( ZETWindowTabs.QuickView ) );
 			} else if( e.getActionCommand().equals( "QT" ) )
@@ -680,6 +683,10 @@ public class JEditor extends JFrame implements Localized, EventListener<Progress
 		return visualizationView;
 	}
 
+	public JQuickVisualizationView getQuickVisualizationView() {
+		return caView;
+	}
+
 	/**
 	 * Shows a <code>JToolBar</code> and hides all others.
 	 * @param toolBar the tool bar that is shown
@@ -789,7 +796,7 @@ public class JEditor extends JFrame implements Localized, EventListener<Progress
 		//caView.updateFloorView();
 		if( currentMode == ZETWindowTabs.QuickView ) {
 			Floor floor = editView.getCurrentFloor();
-			caView.getLeftPanel().getMainComponent().displayFloor( floor, ZToCAConverter.getInstance().getLatestMapping(), ZToCAConverter.getInstance().getLatestContainer() );
+			caView.getLeftPanel().getMainComponent().displayFloor( floor );
 		}
 		//editView.updateFloorView();
 //		} else {

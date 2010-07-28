@@ -337,8 +337,6 @@ public class Control {
 	public void visualizationLoop() {
 		loop = !loop;
 		visualizationToolBar.setSelectedLoop( loop );
-
-
 	}
 
 	public void visualizationStop() {
@@ -1004,19 +1002,60 @@ public class Control {
 	public void createCellularAutomaton() {
 		try {
 			algorithmControl.convertCellularAutomaton();
-			CAVisualizationResults caVis = new CAVisualizationResults( ZToCAConverter.getInstance().getLatestMapping() );
+			CAVisualizationResults caVis = new CAVisualizationResults( ZToCAConverter.getInstance().getLatestMapping(), algorithmControl.getCellularAutomaton().getPotentialManager() );
 			visualization.getControl().setCellularAutomatonControl( caVis, algorithmControl.getCellularAutomaton() );
+			editor.getVisualizationView().updatePotentialSelector();
+//			editor.getVisualizationView().updateFloorSelector();
+			visualizationToolBar.setEnabledPlayback( false );
+			editor.getQuickVisualizationView().getLeftPanel().getMainComponent().setCa( algorithmControl.getCellularAutomaton() );
+			editor.getQuickVisualizationView().getLeftPanel().getMainComponent().setMapping( ZToCAConverter.getInstance().getLatestMapping() );
+			editor.getQuickVisualizationView().getLeftPanel().getMainComponent().setContainer( ZToCAConverter.getInstance().getLatestContainer() );
+			editor.getQuickVisualizationView().displayFloor( editview.getCurrentFloor() );
 		} catch( ConversionNotSupportedException ex ) {
 			Logger.getLogger( Control.class.getName() ).log( Level.SEVERE, null, ex );
+		}
+	}
+
+	public void createConcreteAssignment() {
+		try {
+			algorithmControl.createConcreteAssignment();
+		} catch( IllegalArgumentException ex ) {
+			Logger.getLogger( Control.class.getName() ).log( Level.SEVERE, null, ex );
+		} catch( ConversionNotSupportedException ex ) {
+			Logger.getLogger( Control.class.getName() ).log( Level.SEVERE, null, ex );
+		}
+	}
+
+	public void performSimulation() {
+		createCellularAutomaton();
+		createConcreteAssignment();
+		setUpSimulationAlgorithm();
+		algorithmControl.simulate();
+	}
+
+	public void setUpSimulationAlgorithm() {
+		algorithmControl.setUpSimulationAlgorithm();
+	}
+
+	boolean init = false;
+
+	public void performOneStep() {
+		if( !init ) {
+			createCellularAutomaton();
+			createConcreteAssignment();
+			setUpSimulationAlgorithm();
+			algorithmControl.getCaAlgo().setStepByStep( true );
+			init = true;
+			editor.getQuickVisualizationView().getLeftPanel().getMainComponent().setCa( algorithmControl.getCellularAutomaton() );
+			editor.getQuickVisualizationView().getLeftPanel().getMainComponent().setMapping( ZToCAConverter.getInstance().getLatestMapping() );
+			editor.getQuickVisualizationView().getLeftPanel().getMainComponent().setContainer( ZToCAConverter.getInstance().getLatestContainer() );
+			editor.getQuickVisualizationView().updateFloorView();
+		} else {
+			algorithmControl.getCaAlgo().run();
+			editor.getQuickVisualizationView().getLeftPanel().getMainComponent().update();
 		}
 	}
 }
 
 
 // TODO get status out of property container, without creating new class variables!
-/*
-editview
-Localization.getInstance()
-editor.getVisualizationView()
-visualization.getControl()
- */

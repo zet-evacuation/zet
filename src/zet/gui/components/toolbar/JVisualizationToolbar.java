@@ -274,8 +274,21 @@ public class JVisualizationToolbar extends JToolBar implements ActionListener {
 		btnShowGraphGrid.setEnabled( control.hasGraph() );
 	}
 
+	/**
+	 * Enables the controls for playback (video, play, back, forward etc.) or
+	 * disables them.
+	 * @param enabled decides if the controls should be enabled or disabled
+	 */
+	public void setEnabledPlayback( boolean enabled ) {
+		btnPlay.setEnabled( enabled );
+		btnPlayEnd.setEnabled( enabled );
+		btnPlayLoop.setEnabled( enabled );
+		btnPlayStart.setEnabled( enabled );
+		btnVideo.setEnabled( enabled );
+		btnStop.setEnabled( enabled );
+	}
+
 	public void localize() {
-		// Visualization toolbar
 		btnExit.setToolTipText( loc.getString( "toolbarTooltipExit" ) );
 		labelBatchName.setText( loc.getString( "batchName" ) );
 		labelBatchRun.setText( loc.getString( "batchRun" ) );
