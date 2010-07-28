@@ -58,7 +58,9 @@ public class JRasterFloor extends AbstractFloor /*implements ds.z.event.ChangeLi
 	// Main objects
 	/** The displayed floor. */
 	private Floor myFloor;
-	
+	private CellularAutomaton ca;
+	private ZToCAMapping mapping;
+	private ZToCARasterContainer container	;
 	private CAStatistic cas;
 	
 	public void setCAStatistic(CAStatistic cas){
@@ -68,6 +70,18 @@ public class JRasterFloor extends AbstractFloor /*implements ds.z.event.ChangeLi
 	public JRasterFloor() {
 		setLayout( null );
 		setBackground( Color.black );
+	}
+
+	public void setCa( CellularAutomaton ca ) {
+		this.ca = ca;
+	}
+
+	public void setContainer( ZToCARasterContainer container ) {
+		this.container = container;
+	}
+
+	public void setMapping( ZToCAMapping mapping ) {
+		this.mapping = mapping;
 	}
 
 	/** @return The floor that is currently displayed by this JRasterFloor. */
@@ -81,7 +95,7 @@ public class JRasterFloor extends AbstractFloor /*implements ds.z.event.ChangeLi
 	 * @param mapping the mapping to the given cellular automaton
 	 * @param container the container containing the raster squares
 	 */
-	public void displayFloor( Floor floor, ZToCAMapping mapping, ZToCARasterContainer container ) {
+	public void displayFloor( Floor floor ) {
 		boolean showPotentialValue = PropertyContainer.getInstance().getAsBoolean( "editor.options.cavis.staticPotential" );
 		boolean showDynamicPotential = PropertyContainer.getInstance().getAsBoolean( "editor.options.cavis.dynamicPotential" );
 		boolean showCellUtilization = false;
@@ -99,13 +113,11 @@ public class JRasterFloor extends AbstractFloor /*implements ds.z.event.ChangeLi
 
 		myFloor = floor;
 		System.out.println( "Switch to floor " + floor.getName() );
-		if( floor.getName().equals( "Etage 1" ) )
-			myFloor=floor;
 
 		updateOffsets( floor );
 		
 		// TODO: Provide better implementation - Do not recreate everything each time
-		CellularAutomaton ca = ZToCAConverter.getInstance().getLatestCellularAutomaton();
+		//CellularAutomaton ca = ZToCAConverter.getInstance().getLatestCellularAutomaton();
 		PotentialManager pm = ca.getPotentialManager();
 		PotentialController pc = new SPPotentialController( ca );
 		StaticPotential sp = null;
@@ -120,32 +132,29 @@ public class JRasterFloor extends AbstractFloor /*implements ds.z.event.ChangeLi
 					// Color depending of the cell type
 					Cell cell = mapping.get( square );
 					JCellPolygon poly = null;
-					mapping.get( cell );
-					if( cell.getIndividual() != null )
-						poly = new JIndividualCell( this, Color.black, cell.getIndividual(), ca );
-					else if( cell instanceof ExitCell )
-						poly = new JCellPolygon( this, Color.white, Color.black );
+					if( cell instanceof ExitCell )
+						poly = new JCellPolygon( cell, this, Color.white, Color.black, ca );
 					else if( cell instanceof StairCell )
-						poly = new JCellPolygon( this, Color.red, Color.black );
+						poly = new JCellPolygon( cell, this, Color.red, Color.black, ca );
 					else if( cell instanceof SaveCell )
-						poly = new JCellPolygon( this, Color.yellow, Color.black );
+						poly = new JCellPolygon( cell, this, Color.yellow, Color.black, ca );
 					else {
 						Color c = Color.lightGray;
 						if( showPotentialValue ) {
 							if( sp != null ) {
 								int pot = sp.getPotential( cell );
-								poly = new JPotentialCell( this, Color.black, pot, sp.getMaxPotential() );	// border color white
+								poly = new JPotentialCell( cell, this, Color.black, pot, sp.getMaxPotential(), ca );	// border color white
 							} else
-								poly = new JCellPolygon( this, Color.lightGray, Color.black );
+								poly = new JCellPolygon( cell, this, Color.lightGray, Color.black, ca );
 						} else if( showDynamicPotential ) {
 							if( dp != null )
-								poly = new JDynamicPotentialCell( this, Color.black, dp.getPotential( cell ), dp.getMaxPotential() );
+								poly = new JDynamicPotentialCell( cell, this, Color.black, dp.getPotential( cell ), dp.getMaxPotential(), ca );
 							else
-								poly = new JCellPolygon( this, Color.lightGray, Color.black );
+								poly = new JCellPolygon( cell, this, Color.lightGray, Color.black, ca );
 						} else if( showCellUtilization ) {
-								if(cas != null) poly = new JDynamicPotentialCell( this, Color.black, cas.getCellStatistic().getCellUtilization(cell,ca.getTimeStep()), dp.getMaxPotential() );
+								if(cas != null) poly = new JDynamicPotentialCell( cell, this, Color.black, cas.getCellStatistic().getCellUtilization(cell,ca.getTimeStep()), dp.getMaxPotential(), ca );
 						} else
-							poly = new JCellPolygon( this, Color.lightGray, Color.black );
+							poly = new JCellPolygon( cell, this, Color.lightGray, Color.black, ca );
 					}
 					if( !cell.isPassable( Direction.Left) )
 						poly.addWall( Direction.Left );
@@ -159,11 +168,17 @@ public class JRasterFloor extends AbstractFloor /*implements ds.z.event.ChangeLi
 					add( poly );
 					poly.displayPolygon( square.getSquare() );
 				}
-
 			}
 		}
 
 		revalidate();
+		repaint();
+	}
+
+	public void update() {
+		for( Component component : getComponents() ) {
+			((JCellPolygon)component).update();
+		}
 		repaint();
 	}
 

@@ -14,7 +14,7 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 /*
- * CA.java
+ * CellularAutomatonInOrderExecution.java
  * Created on 26.01.2008, 14:39:39
  */
 package algo.ca;

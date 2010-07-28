@@ -15,14 +15,15 @@
  */
 /**
  * Class JDynamicPotentialCell
- * Erstellt 05.05.2008, 18:16:07
+ * Created on 05.05.2008, 18:16:07
  */
 
 package zet.gui.components.tabs.quickVisualization;
 
+import ds.ca.Cell;
+import ds.ca.CellularAutomaton;
 import zet.gui.components.tabs.base.AbstractFloor;
 import java.awt.Color;
-import java.awt.Graphics;
 
 /**
  *
@@ -30,20 +31,15 @@ import java.awt.Graphics;
  */
 public class JDynamicPotentialCell extends JPotentialCell {
 
-	public JDynamicPotentialCell( AbstractFloor floor, int potential, int maxPotential ) {
-		super( floor, potential, maxPotential );
+	public JDynamicPotentialCell( Cell cell, AbstractFloor floor, int potential, int maxPotential, CellularAutomaton ca ) {
+		super( cell, floor, potential, maxPotential, ca );
 		Color fillColor = potential > 0 ? new Color( 1.0f, 1-(float)potential/maxPotential, 1-(float)potential/maxPotential ) : Color.white;
 		this.setFillColor( fillColor );
 	}
 	
-	public JDynamicPotentialCell( AbstractFloor floor, Color lineColor, int potential, int maxPotential ) {
-		super( floor, lineColor, potential, maxPotential );
+	public JDynamicPotentialCell( Cell cell, AbstractFloor floor, Color lineColor, int potential, int maxPotential, CellularAutomaton ca ) {
+		super( cell, floor, lineColor, potential, maxPotential, ca );
 		Color fillColor = potential > 0 ? new Color( 1.0f, 1-(float)potential/maxPotential, 1-(float)potential/maxPotential ) : Color.white;
 		this.setFillColor( fillColor );
-	}
-	
-	@Override
-	public void paintComponent( Graphics g ) {
-		super.paintComponent( g );
 	}
 }

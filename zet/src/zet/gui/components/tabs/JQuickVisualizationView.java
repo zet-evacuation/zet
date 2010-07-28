@@ -21,7 +21,7 @@
 
 package zet.gui.components.tabs;
 
-import converter.ZToCAConverter;
+import ds.z.Floor;
 import zet.gui.components.tabs.base.JFloorScrollPane;
 import zet.gui.components.tabs.base.AbstractSplitPropertyWindow;
 import javax.swing.JButton;
@@ -41,10 +41,13 @@ public class JQuickVisualizationView extends AbstractSplitPropertyWindow<JFloorS
 	}
 
 	public void updateFloorView() {
-		getLeftPanel().getMainComponent().displayFloor(getLeftPanel().getMainComponent().getFloor (), 
-				ZToCAConverter.getInstance().getLatestMapping(), ZToCAConverter.getInstance().getLatestContainer());
+		getLeftPanel().getMainComponent().displayFloor( getLeftPanel().getMainComponent().getFloor () );
 	}
-	
+
+	public void displayFloor( Floor floor ) {
+		getLeftPanel().getMainComponent().displayFloor( floor );
+	}
+
 	/**
 	 * Returns a panel displayed on the right side of the window.
 	 * @return a panel displayed on the right side of the window

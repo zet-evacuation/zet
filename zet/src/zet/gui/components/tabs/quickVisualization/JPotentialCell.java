@@ -21,9 +21,10 @@
 package zet.gui.components.tabs.quickVisualization;
 
 import ds.PropertyContainer;
+import ds.ca.Cell;
+import ds.ca.CellularAutomaton;
 import zet.gui.components.tabs.base.AbstractFloor;
 import java.awt.Color;
-import java.awt.Graphics;
 import java.awt.Graphics2D;
 
 /**
@@ -36,8 +37,8 @@ public class JPotentialCell extends JCellPolygon {
 	private float colorValue = 0f;
 	private boolean showPotentialValue;
 
-	public JPotentialCell( AbstractFloor floor, int potential, int maxPotential ) {
-		super( floor, potential > 0 ? new Color( 1-(float)potential/maxPotential, 1-(float)potential/maxPotential, 1.0f ) : Color.white );
+	public JPotentialCell( Cell cell, AbstractFloor floor, int potential, int maxPotential, CellularAutomaton ca  ) {
+		super( cell, floor, potential > 0 ? new Color( 1-(float)potential/maxPotential, 1-(float)potential/maxPotential, 1.0f ) : Color.white, ca );
 		this.potential = potential;
 		this.maxPotential = maxPotential;
 		setToolTipText();
@@ -50,8 +51,8 @@ public class JPotentialCell extends JCellPolygon {
 	 * @param potential
 	 * @param maxPotential
 	 */
-	public JPotentialCell( AbstractFloor floor, Color lineColor, int potential, int maxPotential ) {
-		super( floor, potential > 0 ? new Color( 1-(float)potential/maxPotential, 1-(float)potential/maxPotential, 1.0f ) : Color.white, lineColor);
+	public JPotentialCell( Cell cell, AbstractFloor floor, Color lineColor, int potential, int maxPotential, CellularAutomaton ca ) {
+		super( cell, floor, potential > 0 ? new Color( 1-(float)potential/maxPotential, 1-(float)potential/maxPotential, 1.0f ) : Color.white, lineColor, ca );
 		colorValue = 1-(float)potential/maxPotential;
 		this.potential = potential;
 		this.maxPotential = maxPotential;
@@ -68,40 +69,13 @@ public class JPotentialCell extends JCellPolygon {
 	}
 
 	@Override
-	public void paintComponent( Graphics g ) {
-		super.paintComponent( g );
+	public void paintCell( Graphics2D g2 ) {
+		super.paintCell( g2 );
 		if( !showPotentialValue )
 			return;
-		Graphics2D g2 = (Graphics2D) g;
 		if( colorValue <= 0.5)
 			drawName( Integer.toString( potential ), g2, Color.white );
 		else
 			drawName( Integer.toString( potential ), g2, Color.black );
 	}
-
-//	public boolean isShowPotentialValue() {
-//		return showPotentialValue;
-//	}
-//
-//	public void setShowPotentialValue( boolean showPotentialValue ) {
-//		this.showPotentialValue = showPotentialValue;
-//	}
-//	
-//	public void setMaxPotential( int maxPotential ) {
-//		this.maxPotential = maxPotential;
-//		setToolTipText();
-//	}
-//
-//	public void setPotential( int potential ) {
-//		this.potential = potential;
-//		setToolTipText();
-//	}
-//
-//	protected void setColorValue( float colorValue ) {
-//		this.colorValue = colorValue;
-//	}
-//	
-//	protected float getColorValue( ) {
-//		return colorValue;
-//	}
 }

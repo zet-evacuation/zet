@@ -23,6 +23,7 @@ package io.visualization;
 import converter.ZToCAMapping;
 import de.tu_berlin.math.coga.math.vectormath.Vector3;
 import ds.ca.CellularAutomaton;
+import ds.ca.PotentialManager;
 import ds.ca.results.VisualResultsRecording;
 import java.util.HashMap;
 import opengl.framework.abs.VisualizationResult;
@@ -56,6 +57,9 @@ public class CAVisualizationResults implements VisualizationResult {
 	 * origin of the z-project.
 	 */
 	private HashMap<Integer, Vector3> caFloorToZOffsetMapping;
+
+	private PotentialManager pm;
+
 	//TODO correct
 	public CAStatistic statistic;
 
@@ -73,15 +77,17 @@ public class CAVisualizationResults implements VisualizationResult {
 		this.visRecording = visRecording;
 
 		caMapping = caMapping.adoptToCA( new CellularAutomaton( visRecording.getInitialConfig() ) );
+		pm = visRecording.getInitialConfig().getPotentialManager();
 
 		convertMapping( caMapping );
 	}
 
-	public CAVisualizationResults( ZToCAMapping caMapping ) {
+	public CAVisualizationResults( ZToCAMapping caMapping, PotentialManager pm ) {
 		caCellToZOffsetMapping = new HashMap<ds.ca.Cell, Vector3>();
 		caRoomToZOffsetMapping = new HashMap<ds.ca.Room, Vector3>();
 		caFloorToZOffsetMapping = new HashMap<Integer, Vector3>();
 		convertMapping( caMapping );
+		this.pm = pm;
 	}
 
 	private void convertMapping( ZToCAMapping caMapping ) {
@@ -132,5 +138,9 @@ public class CAVisualizationResults implements VisualizationResult {
 
 	public VisualResultsRecording getRecording() {
 		return this.visRecording;
+	}
+
+	public PotentialManager getPotentialManager() {
+		return pm;
 	}
 }

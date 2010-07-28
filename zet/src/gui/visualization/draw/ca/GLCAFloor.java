@@ -13,6 +13,7 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
+
 /**
  * Class GLCAFloor
  * Created 25.04.2008, 01:01:24
@@ -30,38 +31,37 @@ import javax.media.opengl.GL;
 /**
  *  @author Jan-Philipp Kappmeier
  */
-
 public class GLCAFloor extends AbstractDrawable<GLRoom, GLCAFloorControl> {
+
 	private List<GLIndividualControl> individuals;
 	private int floorID;
-    
-    public GLCAFloor(GLCAFloorControl control ) {
-		super(control );
-//		super(control, new CullingShapeCube() );
-	    this.position.x = control.getXPosition();
-	    this.position.y = control.getYPosition();
-	    this.position.z = (control.getFloorNumber() - 1) * VisualizationOptionManager.getFloorDistance() * GLCellularAutomatonControl.sizeMultiplicator;
-			floorID = control.getFloorNumber();
+
+	public GLCAFloor( GLCAFloorControl control ) {
+		super( control );
+		this.position.x = control.getXPosition();
+		this.position.y = control.getYPosition();
+		this.position.z = (control.getFloorNumber() - 1) * VisualizationOptionManager.getFloorDistance() * GLCellularAutomatonControl.sizeMultiplicator;
+		floorID = control.getFloorNumber();
 	}
-	
+
 	@Override
-  public void update() { }
-	
+	public void update() {
+	}
+
 	public void setIndividuals( List<GLIndividualControl> li ) {
-		individuals = li;	
+		individuals = li;
 	}
 
 	@Override
 	public String toString() {
 		return "GLCAFloor";
 	}
-	
+
 	@Override
 	public void performDrawing( GL gl ) {
 		super.performDrawing( gl );
-		for( GLIndividualControl ic : control.getIndividualControls() ) {
+		for( GLIndividualControl ic : control.getIndividualControls() )
 			if( ic.onFloor() == floorID )
 				ic.getView().performDrawing( gl );
-		}
 	}
 }

@@ -19,6 +19,7 @@
  */
 package zet.gui.components.tabs.quickVisualization;
 
+import de.tu_berlin.math.coga.common.localization.Localization;
 import ds.z.PlanPolygon;
 import zet.gui.components.tabs.base.AbstractFloor;
 import zet.gui.components.tabs.base.AbstractPolygon;
@@ -30,6 +31,10 @@ import java.awt.Graphics2D;
 import java.awt.Rectangle;
 import java.util.EnumSet;
 import de.tu_berlin.math.coga.common.util.Direction;
+import ds.PropertyContainer;
+import ds.ca.Cell;
+import ds.ca.CellularAutomaton;
+import java.text.NumberFormat;
 
 /**
  *
@@ -39,22 +44,17 @@ public class JCellPolygon extends AbstractPolygon {
 
 	private Color fillColor;
 	EnumSet<Direction> borders = EnumSet.noneOf( Direction.class );
+	private Cell cell;
+	private final boolean showIndividualNames;
+	private static final NumberFormat nfFloat = Localization.getInstance().getFloatConverter();// NumberFormat.getNumberInstance( Localization.getInstance().getLocale() );
+	private CellularAutomaton ca;
 
 	/**
 	 * @param myFloor the JFloor on which this polygon is displayed.
 	 * @param fillColor the border color
 	 */
-	public JCellPolygon( AbstractFloor myFloor, Color fillColor ) {
-		super( Color.black );
-
-		this.myFloor = myFloor;
-		this.fillColor = fillColor;
-		setOpaque( false );
-
-		// Create a transparent color with which we will fill out the polygon
-		// in case it represents an area
-		// transparentForeground = new Color( fillColor.getColorSpace(), fillColor.getColorComponents( null ), 0.75f );
-	//transparentForeground = fillColor;
+	public JCellPolygon( Cell cell, AbstractFloor myFloor, Color fillColor, CellularAutomaton ca ) {
+		this( cell, myFloor, fillColor, Color.black, ca );
 	}
 
 	/**
@@ -62,15 +62,15 @@ public class JCellPolygon extends AbstractPolygon {
 	 * @param fillColor the border color
 	 * @param lineColor 
 	 */
-	public JCellPolygon( AbstractFloor myFloor, Color fillColor, Color lineColor ) {
+	public JCellPolygon( Cell cell, AbstractFloor myFloor, Color fillColor, Color lineColor, CellularAutomaton ca ) {
 		super( lineColor );
-
+		this.ca = ca;
+		this.cell = cell;
 		this.myFloor = myFloor;
 		this.fillColor = fillColor;
 		setOpaque( false );
-
-		// Create a transparent color with which we will fill out the polygon
-		// in case it represents an area
+		showIndividualNames = PropertyContainer.getInstance().getAsBoolean( "editor.options.cavis.showIndividualNames" );
+		setUpToolTipText();
 	}
 
 	protected void setFillColor( Color fillColor ) {
@@ -99,19 +99,33 @@ public class JCellPolygon extends AbstractPolygon {
 	@Override
 	public void paintComponent( Graphics g ) {
 		super.paintComponent( g );
-
 		Graphics2D g2 = (Graphics2D) g;
+		if( cell.getIndividual() == null )
+			paintCell( g2 );
+		else
+			paintIndividual( g2 );
+	}
 
-		g2.setPaint( fillColor );
-		//if( drawingPolygon != null )
-		if( drawingPolygon.npoints > 0 ) {
+	public void paintCell( Graphics2D g2 ) {
+		fill( g2, getForeground(), getBackground(), fillColor );
+	}
+
+	public void paintIndividual( Graphics2D g2 ) {
+		if( !showIndividualNames )
+			return;
+		fill( g2, getForeground(), getBackground(), Color.green );
+		drawName( Integer.toString( cell.getIndividual().getNumber() ), g2, Color.black );
+	}
+
+	private void fill( Graphics2D g2, Color foreground, Color background, Color fill ) {
+		g2.setPaint( fill	);
+		if( drawingPolygon.npoints > 0 )
 			g2.fillPolygon( drawingPolygon );
-		}
 
-		g2.setPaint( getForeground() );
+		g2.setPaint( foreground );
 		g2.drawPolygon( drawingPolygon );
-		
-		g2.setPaint( getBackground() );
+
+		g2.setPaint( background );
 		Rectangle bounds = drawingPolygon.getBounds();
 		BasicStroke thick = new BasicStroke ( 5 );
 		g2.setStroke( thick );
@@ -123,43 +137,31 @@ public class JCellPolygon extends AbstractPolygon {
 			g2.drawLine( bounds.x, bounds.y, bounds.x, bounds.y + bounds.height );
 		if( borders.contains( Direction.Right ) )
 			g2.drawLine( bounds.x + bounds.width, bounds.y, bounds.x + bounds.width, bounds.y + bounds.height );
-
-	//g2.fillPolygon( drawingPolygon );
-
-//		if ( Room.class.isInstance( myPolygon ) ) {//myPolygon instanceof Room) {
-//			// Paint the name of the room
-//			Font originalFont = g2.getFont ();
-//			g2.setFont (GUIOptionManager.getRoomNameFont ());
-//			String name = Room.class.cast( myPolygon ).getName(); //((Room)myPolygon).getName ();
-//			FontMetrics metrics = g2.getFontMetrics ();
-//			
-//			Rectangle name_bounds = metrics.getStringBounds (name, g2).getBounds ();
-//			Rectangle my_bounds = getBounds ();
-//			Rectangle my_normalized_bounds = new Rectangle (
-//				0, 0, my_bounds.width, my_bounds.height);
-//			
-//			int pos_x = (my_bounds.width - name_bounds.width) / 2;
-//			int pos_y = (my_bounds.height - name_bounds.height) / 2;
-//			name_bounds.x += pos_x;
-//			name_bounds.y += pos_y;
-//			// Only paint if there is enough screen space for the string
-//			if (my_normalized_bounds.contains (name_bounds)) {
-//				g2.setPaint (GUIOptionManager.getRoomEdgeColor ());
-//				// *5/6 because the name_bounds' height is inaccurate (too big)
-//				g2.drawString (name, pos_x, pos_y + name_bounds.height*5/6);
-//			}
-//			
-//			g2.setFont (originalFont);
-//		}	
 	}
-	
+
 	public void addWall( Direction direction ) {
    borders.add( direction );
 	}
 	
 	/**
 	 * This function does nothing. Overwrite this function in derived components
-	 * to automatically set an appropriate tooltip.
+	 * to automatically set an appropriate tool tip.
 	 */
 	protected void setToolTipText() { }
+
+	void update() {
+		setUpToolTipText();
+	}
+
+	private void setUpToolTipText() {
+		if( cell.getIndividual() != null ) {
+			String s = "<html>";
+			s += "Alter: " + Integer.toString( cell.getIndividual().getAge() ) + "<br>";
+			nfFloat.setMaximumFractionDigits( 2 );
+			s += "Wunschgeschwindigkeit: " + nfFloat.format( ca.absoluteSpeed( cell.getIndividual().getMaxSpeed() ) ) + "m/s";
+			s += "</html>";
+			setToolTipText( s );
+		} else
+			setToolTipText();
+	}
 }

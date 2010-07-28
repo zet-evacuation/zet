@@ -52,7 +52,7 @@ public class CreateCellularAutomatonTask implements Runnable {
 	}
 
 	/**
-	 * Converts a cellular automaaton. The automaton is stored in the array of
+	 * Converts a cellular automaton. The automaton is stored in the array of
 	 * automatons at the specified position.
 	 */
 	public void run() {
@@ -60,7 +60,7 @@ public class CreateCellularAutomatonTask implements Runnable {
 		try {
 			ca = ZToCAConverter.getInstance().convert( project.getBuildingPlan() );
 		} catch( ConversionNotSupportedException e ) {
-			e.printStackTrace();
+			e.printStackTrace( System.err );
 			return;
 		}
 		res.setCellularAutomaton( runNumber, ca );
