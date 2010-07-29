@@ -20,8 +20,6 @@
  */
 package converter;
 
-import converter.RoomRaster;
-import converter.RoomRasterSquare;
 import java.util.LinkedList;
 import java.util.List;
 

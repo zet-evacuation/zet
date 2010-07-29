@@ -19,6 +19,9 @@
  */
 package converter;
 
+import converter.cellularAutomaton.ZToCARasterContainer;
+import converter.cellularAutomaton.ZToCARasterSquare;
+import converter.cellularAutomaton.ZToCARoomRaster;
 import batch.tasks.AlgorithmTask;
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -43,6 +46,7 @@ import ds.z.SaveArea;
 import ds.z.DelayArea.DelayType;
 
 public class RasterContainerCreator {
+
 	private static RasterContainerCreator instance = null;
 
 	protected RasterContainerCreator() {
@@ -101,7 +105,7 @@ public class RasterContainerCreator {
 				raster.rasterize();
 				container.setRoomRaster( room, raster );
 				++i;
-				AlgorithmTask.getInstance().publish( (int)(100*(i/(double)count)) );
+				AlgorithmTask.getInstance().publish( (int) (100 * (i / (double) count)) );
 			}
 
 		AlgorithmTask.getInstance().publish( "Konvertiere Türen", "" );
@@ -110,7 +114,7 @@ public class RasterContainerCreator {
 		for( Floor floor : buildingPlan.getFloors() )
 			for( Room room : floor.getRooms() ) {
 				for( ds.z.Edge edge : room.getEdges() ) {
-					RoomEdge rEdge = (RoomEdge)edge;
+					RoomEdge rEdge = (RoomEdge) edge;
 					ZToCARoomRaster raster = container.getRasteredRoom( room );
 					if( (rEdge).isPassable() ) {
 						List<ZToCARasterSquare> squares = converter.RasterTools.getSquaresAlongEdge( rEdge, raster );
@@ -137,7 +141,7 @@ public class RasterContainerCreator {
 					}
 				}
 				++i;
-				AlgorithmTask.getInstance().publish( (int)(100*(i/(double)count)) );
+				AlgorithmTask.getInstance().publish( (int) (100 * (i / (double) count)) );
 			}
 
 
@@ -148,7 +152,7 @@ public class RasterContainerCreator {
 	private void saveListOfDoors( ZToGraphRoomRaster roomRaster, ZToGraphRasterContainer container ) {
 		ds.z.Room room = roomRaster.getRoom();
 		for( ds.z.Edge edge : room.getEdges() ) {
-			RoomEdge rEdge = (RoomEdge)edge;
+			RoomEdge rEdge = (RoomEdge) edge;
 			if( (rEdge).isPassable() ) {
 				List<ZToGraphRasterSquare> squares = converter.RasterTools.getSquaresAlongEdge( rEdge, roomRaster );
 				RoomEdge partnerEdge = rEdge.getLinkTarget();

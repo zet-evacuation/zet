@@ -23,11 +23,11 @@ package zet.gui.components.tabs.quickVisualization;
 
 import algo.ca.PotentialController;
 import algo.ca.SPPotentialController;
-import converter.ZToCAConverter;
-import converter.ZToCAMapping;
-import converter.ZToCARasterContainer;
-import converter.ZToCARasterSquare;
-import converter.ZToCARoomRaster;
+import converter.cellularAutomaton.ZToCAConverter;
+import converter.cellularAutomaton.ZToCAMapping;
+import converter.cellularAutomaton.ZToCARasterContainer;
+import converter.cellularAutomaton.ZToCARasterSquare;
+import converter.cellularAutomaton.ZToCARoomRaster;
 import de.tu_berlin.math.coga.common.util.Direction;
 import ds.PropertyContainer;
 import ds.z.Floor;

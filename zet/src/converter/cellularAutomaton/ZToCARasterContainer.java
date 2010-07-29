@@ -17,7 +17,9 @@
  * ZToCARasterContainer.java
  *
  */
-package converter;
+package converter.cellularAutomaton;
+
+import converter.RasterContainer;
 
 public class ZToCARasterContainer extends RasterContainer<ZToCARoomRaster>{
 

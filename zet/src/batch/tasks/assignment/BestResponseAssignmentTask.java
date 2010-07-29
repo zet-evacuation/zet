@@ -17,8 +17,8 @@ package batch.tasks.assignment;
 
 import algo.ca.EvacuationCellularAutomatonAlgorithm;
 import batch.BatchResultEntry;
-import converter.ZToCAConverter;
-import converter.ZToCAConverter.ConversionNotSupportedException;
+import converter.cellularAutomaton.ZToCAConverter;
+import converter.cellularAutomaton.ZToCAConverter.ConversionNotSupportedException;
 import ds.Project;
 import ds.PropertyContainer;
 import ds.ca.CellularAutomaton;
@@ -112,11 +112,10 @@ public class BestResponseAssignmentTask extends AssignmentTask {
 		//System.out.println ("Laufzeit CA:" + (end - start) + " ms");
 
 		// Get the results
-		res.setCellularAutomatonStatistic( runNumber, new CAStatistic( caAlgo.getCaController().getCaStatisticWriter().
-						getStoredCAStatisticResults() ) );
-		res.setCellularAutomatonVisualization( runNumber, new CAVisualizationResults(
-						VisualResultsRecorder.getInstance().getRecording(),
-						ZToCAConverter.getInstance().getLatestMapping() ) );
+		res.setCellularAutomatonStatistic( runNumber, new CAStatistic( caAlgo.getCaController().getCaStatisticWriter().getStoredCAStatisticResults() ) );
+		// TODO RASTER
+		res.setCellularAutomatonVisualization( runNumber, new CAVisualizationResults( VisualResultsRecorder.getInstance().getRecording(), null ) );
+		//res.setCellularAutomatonVisualization( runNumber, new CAVisualizationResults( VisualResultsRecorder.getInstance().getRecording(), ZToCAConverter.getInstance().getLatestMapping() ) );
 
 		// Gather median information
 		median.put( new Integer( caAlgo.getCellularAutomaton().getTimeStep() ), runNumber );

@@ -6,7 +6,8 @@ package gui;
 
 import algo.graph.dynamicflow.eat.EarliestArrivalFlowProblem;
 import batch.load.BatchProjectEntry;
-import converter.ZToCAConverter.ConversionNotSupportedException;
+import converter.cellularAutomaton.ZToCAConverter.ConversionNotSupportedException;
+import java.beans.PropertyChangeEvent;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import zet.gui.components.tabs.base.AbstractFloor.RasterPaintStyle;
@@ -19,7 +20,7 @@ import batch.BatchResultEntry;
 import batch.tasks.BatchGraphCreateOnlyTask;
 import batch.tasks.RasterizeTask;
 import batch.tasks.VisualizationDataStructureTask;
-import converter.ZToCAConverter;
+import converter.cellularAutomaton.ZToCAConverter;
 import de.tu_berlin.math.coga.common.localization.Localization;
 import de.tu_berlin.math.coga.common.util.IOTools;
 import de.tu_berlin.math.coga.zet.DatFileReaderWriter;
@@ -58,6 +59,7 @@ import io.visualization.BuildingResults;
 import io.visualization.CAVisualizationResults;
 import java.awt.Rectangle;
 import java.awt.image.BufferedImage;
+import java.beans.PropertyChangeListener;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -65,6 +67,7 @@ import java.util.ArrayList;
 import javax.imageio.ImageIO;
 import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
+import javax.swing.SwingWorker;
 import javax.swing.filechooser.FileFilter;
 import statistic.ca.CAStatistic;
 import zet.gui.components.toolbar.JStatisticGraphToolBar;
@@ -711,9 +714,9 @@ public class Control {
 			case 1:
 				status = Localization.getInstance().getString( "gui.editor.JEditor.status.newProjectDiscard" );
 		}
-		// TODO: better (next 3 lines)
 		zcontrol.newProject();
-		editview.displayProject( zcontrol );
+		editor.loadProject();	// Load the currently loaded project by the control file
+		algorithmControl.setProject( zcontrol.getProject() );
 		ZETMain.sendMessage( status );
 	}
 
@@ -995,25 +998,39 @@ public class Control {
 
 
 	public void createBuildingDataStructure() {
-		algorithmControl.convertBuildingPlan();
-		visualization.getControl().setBuildingControl( algorithmControl.getBuildingResults() );
+		algorithmControl.convertBuildingPlan( new PropertyChangeListener() {
+
+			public void propertyChange( PropertyChangeEvent pce ) {
+				if( isDone( pce ) )
+					visualization.getControl().setBuildingControl( algorithmControl.getBuildingResults() );
+			}
+		});
+	}
+	
+	private boolean isDone( PropertyChangeEvent pce ) {
+		if( pce.getPropertyName().equals( "state" ) )
+			if( pce.getNewValue().equals( SwingWorker.StateValue.DONE ) )
+				return true;
+		return false;
 	}
 
 	public void createCellularAutomaton() {
-		try {
-			algorithmControl.convertCellularAutomaton();
-			CAVisualizationResults caVis = new CAVisualizationResults( ZToCAConverter.getInstance().getLatestMapping(), algorithmControl.getCellularAutomaton().getPotentialManager() );
-			visualization.getControl().setCellularAutomatonControl( caVis, algorithmControl.getCellularAutomaton() );
-			editor.getVisualizationView().updatePotentialSelector();
-//			editor.getVisualizationView().updateFloorSelector();
-			visualizationToolBar.setEnabledPlayback( false );
-			editor.getQuickVisualizationView().getLeftPanel().getMainComponent().setCa( algorithmControl.getCellularAutomaton() );
-			editor.getQuickVisualizationView().getLeftPanel().getMainComponent().setMapping( ZToCAConverter.getInstance().getLatestMapping() );
-			editor.getQuickVisualizationView().getLeftPanel().getMainComponent().setContainer( ZToCAConverter.getInstance().getLatestContainer() );
-			editor.getQuickVisualizationView().displayFloor( editview.getCurrentFloor() );
-		} catch( ConversionNotSupportedException ex ) {
-			Logger.getLogger( Control.class.getName() ).log( Level.SEVERE, null, ex );
-		}
+		algorithmControl.convertCellularAutomaton( new PropertyChangeListener() {
+
+			public void propertyChange( PropertyChangeEvent pce ) {
+				if( isDone( pce ) ) {
+					CAVisualizationResults caVis = new CAVisualizationResults( algorithmControl.getMapping(), algorithmControl.getCellularAutomaton().getPotentialManager() );
+					visualization.getControl().setCellularAutomatonControl( caVis, algorithmControl.getCellularAutomaton() );
+					editor.getVisualizationView().updatePotentialSelector();
+//					editor.getVisualizationView().updateFloorSelector();
+					visualizationToolBar.setEnabledPlayback( false );
+					editor.getQuickVisualizationView().getLeftPanel().getMainComponent().setCa( algorithmControl.getCellularAutomaton() );
+					editor.getQuickVisualizationView().getLeftPanel().getMainComponent().setMapping( algorithmControl.getMapping() );
+					editor.getQuickVisualizationView().getLeftPanel().getMainComponent().setContainer( algorithmControl.getContainer() );
+					editor.getQuickVisualizationView().displayFloor( editview.getCurrentFloor() );
+				}
+			}
+		});
 	}
 
 	public void createConcreteAssignment() {
@@ -1027,10 +1044,21 @@ public class Control {
 	}
 
 	public void performSimulation() {
-		createCellularAutomaton();
-		createConcreteAssignment();
-		setUpSimulationAlgorithm();
-		algorithmControl.simulate();
+		createBuildingDataStructure();
+		algorithmControl.performSimulation( new PropertyChangeListener() {
+
+			public void propertyChange( PropertyChangeEvent pce ) {
+				if( isDone( pce ) ) {
+					visualization.getControl().setCellularAutomatonControl( algorithmControl.getCaVisResults(), algorithmControl.getCellularAutomaton() );
+					editor.getVisualizationView().updatePotentialSelector();
+					visualizationToolBar.setEnabledPlayback( true );
+					editor.getQuickVisualizationView().getLeftPanel().getMainComponent().setCa( algorithmControl.getCellularAutomaton() );
+					editor.getQuickVisualizationView().getLeftPanel().getMainComponent().setMapping( algorithmControl.getMapping() );
+					editor.getQuickVisualizationView().getLeftPanel().getMainComponent().setContainer( algorithmControl.getContainer() );
+					editor.getQuickVisualizationView().displayFloor( editview.getCurrentFloor() );
+				}
+			}
+		});
 	}
 
 	public void setUpSimulationAlgorithm() {
@@ -1040,22 +1068,23 @@ public class Control {
 	boolean init = false;
 
 	public void performOneStep() {
-		if( !init ) {
-			createCellularAutomaton();
-			createConcreteAssignment();
-			setUpSimulationAlgorithm();
-			algorithmControl.getCaAlgo().setStepByStep( true );
-			init = true;
-			editor.getQuickVisualizationView().getLeftPanel().getMainComponent().setCa( algorithmControl.getCellularAutomaton() );
-			editor.getQuickVisualizationView().getLeftPanel().getMainComponent().setMapping( ZToCAConverter.getInstance().getLatestMapping() );
-			editor.getQuickVisualizationView().getLeftPanel().getMainComponent().setContainer( ZToCAConverter.getInstance().getLatestContainer() );
-			editor.getQuickVisualizationView().updateFloorView();
-		} else {
-			algorithmControl.getCaAlgo().run();
-			editor.getQuickVisualizationView().getLeftPanel().getMainComponent().update();
+		boolean initialized = false;
+		try {
+			initialized = algorithmControl.performOneStep();
+		} catch( ConversionNotSupportedException ex ) {
+			Logger.getLogger( Control.class.getName() ).log( Level.SEVERE, null, ex );
 		}
+			if( initialized ) {
+				editor.getQuickVisualizationView().getLeftPanel().getMainComponent().setCa( algorithmControl.getCellularAutomaton() );
+				editor.getQuickVisualizationView().getLeftPanel().getMainComponent().setMapping( algorithmControl.getMapping() );
+				editor.getQuickVisualizationView().getLeftPanel().getMainComponent().setContainer( algorithmControl.getContainer() );
+				editor.getQuickVisualizationView().displayFloor( editview.getCurrentFloor() );
+				editor.getQuickVisualizationView().getLeftPanel().getMainComponent().update();
+			} else
+				editor.getQuickVisualizationView().getLeftPanel().getMainComponent().update();
 	}
 }
+
 
 
 // TODO get status out of property container, without creating new class variables!

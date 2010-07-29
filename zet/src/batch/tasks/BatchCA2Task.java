@@ -24,8 +24,8 @@ import algo.ca.EvacuationCellularAutomatonAlgorithm;
 import algo.graph.exitassignment.ExitAssignment;
 import batch.BatchResultEntry;
 import batch.CellularAutomatonAlgorithm;
-import converter.ZToCAConverter;
-import converter.ZToCAConverter.ConversionNotSupportedException;
+import converter.cellularAutomaton.ZToCAConverter;
+import converter.cellularAutomaton.ZToCAConverter.ConversionNotSupportedException;
 import ds.Project;
 import ds.PropertyContainer;
 import ds.ca.CellularAutomaton;
@@ -123,9 +123,9 @@ public class BatchCA2Task implements Runnable {
 		CAStatistic statistic = new CAStatistic (caAlgo.getCaController ().getCaStatisticWriter ().
 				getStoredCAStatisticResults ());
 		res.setCellularAutomatonStatistic (runNumber, statistic);
-		CAVisualizationResults visres = new CAVisualizationResults (
-				VisualResultsRecorder.getInstance ().getRecording (),
-				ZToCAConverter.getInstance ().getLatestMapping ());
+		// TODO RASTER
+		CAVisualizationResults visres = new CAVisualizationResults ( VisualResultsRecorder.getInstance ().getRecording (), null);
+//		CAVisualizationResults visres = new CAVisualizationResults ( VisualResultsRecorder.getInstance ().getRecording (), ZToCAConverter.getInstance ().getLatestMapping ());
    	visres.statistic = statistic;
 
 		res.setCellularAutomatonVisualization (runNumber, visres );

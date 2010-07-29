@@ -17,7 +17,7 @@ package evacuationplan;
 
 import java.util.List;
 
-import converter.ZToCAConverter;
+import converter.cellularAutomaton.ZToCAConverter;
 import converter.ZToGraphRasterContainer;
 import ds.graph.flow.PathBasedFlowOverTime;
 import ds.z.BuildingPlan;
@@ -48,29 +48,30 @@ public class FlowBasedCAFactory extends ZToCAConverter {
 	 * @throws ConversionNotSupportedException
 	 */
 	public CellularAutomaton convertAndApplyConcreteAssignment( BuildingPlan buildingPlan, PathBasedFlowOverTime transshipment, ConcreteAssignment concreteAssignment, ZToGraphRasterContainer graphRaster ) throws ConversionNotSupportedException {
-		CellularAutomaton ca = super.convert(buildingPlan);
-		CAPartOfMapping caPartOfMapping = this.getLatestCAPartOfNodeCellMapping();
-		applyConcreteAssignment(concreteAssignment);
-		BidirectionalNodeCellMapping nodeCellMapping = new BidirectionalNodeCellMapping(graphRaster, caPartOfMapping);
-		CAPathPassabilityChecker checker = new CAPathPassabilityChecker(ca, nodeCellMapping, transshipment);
-		lastChecker = checker;
-		List<Individual> individualList = ca.getIndividuals();
-		for (Individual ind : individualList){
-			EvacPotential ep = checker.getPotential(ind);
-			ca.getPotentialManager().addStaticPotential(ep);
-			ind.setStaticPotential(ep);
-		}
-		return ca;
+//		//CellularAutomaton ca = super.convert(buildingPlan);
+//		CAPartOfMapping caPartOfMapping = this.getLatestCAPartOfNodeCellMapping();
+//		//applyConcreteAssignment(concreteAssignment);
+//		BidirectionalNodeCellMapping nodeCellMapping = new BidirectionalNodeCellMapping(graphRaster, caPartOfMapping);
+//		CAPathPassabilityChecker checker = new CAPathPassabilityChecker(ca, nodeCellMapping, transshipment);
+//		lastChecker = checker;
+//		//List<Individual> individualList = ca.getIndividuals();
+//		for (Individual ind : individualList){
+//			EvacPotential ep = checker.getPotential(ind);
+//			//ca.getPotentialManager().addStaticPotential(ep);
+//			ind.setStaticPotential(ep);
+//		}
+		//return ca;
+		return new CellularAutomaton();
 	}
 	
 	/**
 	 * The usual convert method may not be used because a transshipment is also needed.
 	 */
-	@Override
-	public CellularAutomaton convert( BuildingPlan buildingPlan) throws ConversionNotSupportedException {
-		throw new UnsupportedOperationException("Use the convert-method that additionaly takes a transshipment.");
-	}
-	
+//	@Override
+//	public CellularAutomaton convert( BuildingPlan buildingPlan) throws ConversionNotSupportedException {
+//		throw new UnsupportedOperationException("Use the convert-method that additionaly takes a transshipment.");
+//	}
+//
 	/**
 	 * Empty method to stop the converter from calculating static potentials. 
 	 * Potentials are added separately.

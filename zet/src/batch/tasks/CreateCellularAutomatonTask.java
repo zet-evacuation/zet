@@ -22,8 +22,8 @@
 package batch.tasks;
 
 import batch.BatchResultEntry;
-import converter.ZToCAConverter;
-import converter.ZToCAConverter.ConversionNotSupportedException;
+import converter.cellularAutomaton.ZToCAConverter;
+import converter.cellularAutomaton.ZToCAConverter.ConversionNotSupportedException;
 import ds.Project;
 import ds.ca.CellularAutomaton;
 
@@ -57,12 +57,10 @@ public class CreateCellularAutomatonTask implements Runnable {
 	 */
 	public void run() {
 		CellularAutomaton ca;
-		try {
-			ca = ZToCAConverter.getInstance().convert( project.getBuildingPlan() );
-		} catch( ConversionNotSupportedException e ) {
-			e.printStackTrace( System.err );
-			return;
-		}
+		ZToCAConverter conv = new ZToCAConverter();
+		conv.setProblem( project.getBuildingPlan() );
+		conv.run();
+		ca = conv.getSolution().getCellularAutomaton();
 		res.setCellularAutomaton( runNumber, ca );
 		res = null;
 	}
