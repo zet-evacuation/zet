@@ -38,7 +38,7 @@ import javax.swing.JPanel;
 import javax.swing.JRadioButton;
 import javax.swing.JTextField;
 import de.tu_berlin.math.coga.common.localization.Localization;
-import converter.RasterTools;
+import de.tu_berlin.math.coga.zet.converter.RasterTools;
 import zet.util.ConversionTools;
 
 /**

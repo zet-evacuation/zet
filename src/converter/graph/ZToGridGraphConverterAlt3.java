@@ -17,10 +17,16 @@
  * ZToGraphConverter.java
  *
  */
-package converter;
+package converter.graph;
 
 
+import de.tu_berlin.math.coga.zet.converter.graph.ZToGraphRasterContainer;
+import de.tu_berlin.math.coga.zet.converter.graph.ZToGraphRasterSquare;
+import de.tu_berlin.math.coga.zet.converter.graph.ZToGraphMapping;
+import de.tu_berlin.math.coga.zet.converter.graph.ZToGraphRoomRaster;
+import de.tu_berlin.math.coga.zet.converter.graph.ZToGraphRasteredDoor;
 import algo.graph.util.GraphInstanceChecker;
+import de.tu_berlin.math.coga.zet.converter.RasterContainerCreator;
 import de.tu_berlin.math.coga.common.localization.Localization;
 import ds.PropertyContainer;
 import ds.graph.DynamicNetwork;

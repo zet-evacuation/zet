@@ -4,7 +4,7 @@
  */
 package ds.z;
 
-import converter.cellularAutomaton.ZToCAConverter;
+import de.tu_berlin.math.coga.zet.converter.cellularAutomaton.ZToCAConverter;
 import ds.Project;
 import ds.z.exception.AssignmentException;
 import java.util.List;

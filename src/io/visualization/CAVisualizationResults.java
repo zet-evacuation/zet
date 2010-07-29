@@ -20,7 +20,7 @@
  */
 package io.visualization;
 
-import converter.cellularAutomaton.ZToCAMapping;
+import de.tu_berlin.math.coga.zet.converter.cellularAutomaton.ZToCAMapping;
 import de.tu_berlin.math.coga.math.vectormath.Vector3;
 import ds.ca.CellularAutomaton;
 import ds.ca.PotentialManager;
@@ -108,7 +108,7 @@ public class CAVisualizationResults implements VisualizationResult {
 		}
 
 		for( ds.ca.Cell cell : caMapping.getCACells() ) {
-			converter.cellularAutomaton.ZToCARasterSquare zRasterSquare = caMapping.get( cell );
+			de.tu_berlin.math.coga.zet.converter.cellularAutomaton.ZToCARasterSquare zRasterSquare = caMapping.get( cell );
 
 			double xOffset = zRasterSquare.getRelativeX() * Z_TO_OPENGL_SCALING;
 			double yOffset = zRasterSquare.getRelativeY() * Z_TO_OPENGL_SCALING;

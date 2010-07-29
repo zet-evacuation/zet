@@ -22,11 +22,11 @@ package batch.tasks;
 import batch.BatchResultEntry;
 import batch.GraphAlgorithm;
 import batch.tasks.graph.SuccessiveEarliestArrivalAugmentingPathAlgorithmTask3;
-import converter.ZToGraphConverter;
+import converter.graph.ZToGraphConverter;
 import de.tu_berlin.math.coga.common.algorithm.Algorithm;
 import de.tu_berlin.math.coga.common.algorithm.AlgorithmListener;
 import ds.Project;
-import ds.GraphVisualizationResult;
+import ds.GraphVisualizationResults;
 import de.tu_berlin.math.coga.zet.NetworkFlowModel;
 import ds.graph.flow.PathBasedFlowOverTime;
 import ds.z.Assignment;
@@ -105,7 +105,7 @@ public class BatchGraphTask implements Runnable {
         gt.run();
 
         res.setFlow(gt.getSolution());
-        res.setGraphVis(new GraphVisualizationResult(nfo, gt.getSolution()));
+        res.setGraphVis(new GraphVisualizationResults(nfo, gt.getSolution()));
 
         // Forget the used batch result entry. This is necessary in case that the batch entries
         // are stored on disk. Then this reference will inhibit the deletion of the batch result entry

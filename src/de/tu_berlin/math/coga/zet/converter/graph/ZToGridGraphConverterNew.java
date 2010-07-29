@@ -20,7 +20,7 @@
 package de.tu_berlin.math.coga.zet.converter.graph;
 
 
-import converter.*;
+import de.tu_berlin.math.coga.zet.converter.RasterContainerCreator;
 import algo.graph.util.GraphInstanceChecker;
 import de.tu_berlin.math.coga.common.localization.Localization;
 import ds.PropertyContainer;

@@ -18,9 +18,10 @@
  * 
  */
 
-package converter;
+package de.tu_berlin.math.coga.zet.converter.graph;
 
-import converter.RoomRasterSquare.Property;
+import de.tu_berlin.math.coga.zet.converter.RoomRasterSquare;
+import de.tu_berlin.math.coga.zet.converter.RoomRasterSquare.Property;
 import ds.graph.Node;
 import ds.z.AssignmentArea;
 import ds.z.Room;

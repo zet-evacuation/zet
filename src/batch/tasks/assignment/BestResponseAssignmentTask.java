@@ -17,8 +17,8 @@ package batch.tasks.assignment;
 
 import algo.ca.EvacuationCellularAutomatonAlgorithm;
 import batch.BatchResultEntry;
-import converter.cellularAutomaton.ZToCAConverter;
-import converter.cellularAutomaton.ZToCAConverter.ConversionNotSupportedException;
+import de.tu_berlin.math.coga.zet.converter.cellularAutomaton.ZToCAConverter;
+import de.tu_berlin.math.coga.zet.converter.cellularAutomaton.ZToCAConverter.ConversionNotSupportedException;
 import ds.Project;
 import ds.PropertyContainer;
 import ds.ca.CellularAutomaton;

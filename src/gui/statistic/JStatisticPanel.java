@@ -29,7 +29,7 @@ import javax.swing.JPanel;
 import batch.BatchResult;
 import statistic.ca.MultipleCycleCAStatistic;
 import statistic.ca.gui.JCAStatisticPanel;
-import ds.GraphVisualizationResult;
+import ds.GraphVisualizationResults;
 import ds.ca.CellularAutomaton;
 
 /**
@@ -58,7 +58,7 @@ public class JStatisticPanel extends JPanel {
 		jcasp.setCA(cavr);
 	}
 	
-	public void setGraph(GraphVisualizationResult gvr){
+	public void setGraph(GraphVisualizationResults gvr){
 		jcasp.setGraph(gvr);
 	}
 	

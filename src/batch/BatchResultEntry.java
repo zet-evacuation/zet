@@ -17,7 +17,7 @@ package batch;
 
 import com.thoughtworks.xstream.XStream;
 import ds.graph.flow.PathBasedFlowOverTime;
-import ds.GraphVisualizationResult;
+import ds.GraphVisualizationResults;
 import de.tu_berlin.math.coga.zet.NetworkFlowModel;
 import ds.ca.CellularAutomaton;
 import io.visualization.BuildingResults;
@@ -36,7 +36,7 @@ import statistic.ca.MultipleCycleCAStatistic;
 /** A set of results that were computed for a single BatchEntry. For every CA
  * cycle a new CA datastructure, a new CA statistic and a new CA visual result is
  * stored. For teh graph there is only one cycle, and so there is only one dynamic
- * flow that is stored. The GraphVisualizationResult can be generated with the
+ * flow that is stored. The GraphVisualizationResults can be generated with the
  * flow and the networkmodel, but we store it too to boost the performance when loading
  * the results.
  *
@@ -54,7 +54,7 @@ public class BatchResultEntry {
 	protected CAStatistic[] caStatistics;
 	protected MultipleCycleCAStatistic mccaStatistic;
 	protected CAVisualizationResults[] caVis;
-	protected GraphVisualizationResult graphVis;
+	protected GraphVisualizationResults graphVis;
 	private double averageCAStepsPerSecond;
 	
 	/** The index of the CA cycle with the median evacuation time. */
@@ -75,7 +75,7 @@ public class BatchResultEntry {
 	public MultipleCycleCAStatistic getMultipleCycleCAStatistics () { return mccaStatistic; }
 	public CAVisualizationResults[] getCaVis () { return caVis; }
 	public CAStatistic[] getCaStatistics() { return caStatistics; }
-	public GraphVisualizationResult getGraphVis () { return graphVis; }
+	public GraphVisualizationResults getGraphVis () { return graphVis; }
 
 	/** @return The index of the CA cycle with the median evacuation time. */
 	public int getMedianIndex () { return medianIndex; }
@@ -157,7 +157,7 @@ public class BatchResultEntry {
 	 * Sets the graph visualization results for the result entry.
 	 * @param graphVis the visualization results
 	 */
-	public void setGraphVis( GraphVisualizationResult graphVis ) {
+	public void setGraphVis( GraphVisualizationResults graphVis ) {
 		this.graphVis = graphVis;
 	}
 	

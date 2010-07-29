@@ -19,8 +19,8 @@
  */
 package exitdistributions;
 
-import converter.cellularAutomaton.ZToCAConverter;
-import converter.ZToGraphRasterContainer;
+import de.tu_berlin.math.coga.zet.converter.cellularAutomaton.ZToCAConverter;
+import de.tu_berlin.math.coga.zet.converter.graph.ZToGraphRasterContainer;
 import ds.ca.CellularAutomaton;
 import de.tu_berlin.math.coga.zet.NetworkFlowModel;
 import ds.z.BuildingPlan;
@@ -40,7 +40,7 @@ public class ExitCapacityBasedCAFactory extends ZToCAConverter {
 	protected ExitCapacityBasedCAFactory() {
 	}
 
-	public CellularAutomaton convertAndApplyConcreteAssignment( BuildingPlan buildingPlan, NetworkFlowModel model, ConcreteAssignment concreteAssignment, ZToGraphRasterContainer graphRaster ) throws converter.cellularAutomaton.ZToCAConverter.ConversionNotSupportedException {
+	public CellularAutomaton convertAndApplyConcreteAssignment( BuildingPlan buildingPlan, NetworkFlowModel model, ConcreteAssignment concreteAssignment, ZToGraphRasterContainer graphRaster ) throws de.tu_berlin.math.coga.zet.converter.cellularAutomaton.ZToCAConverter.ConversionNotSupportedException {
 //		CellularAutomaton ca = super.convert( buildingPlan );
 //		CAPartOfMapping caPartOfMapping = this.getLatestCAPartOfNodeCellMapping();
 //		applyConcreteAssignment( concreteAssignment );

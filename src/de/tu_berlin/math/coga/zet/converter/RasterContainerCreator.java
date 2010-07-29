@@ -17,11 +17,16 @@
  * RasterContainerCreator.java
  *
  */
-package converter;
+package de.tu_berlin.math.coga.zet.converter;
 
-import converter.cellularAutomaton.ZToCARasterContainer;
-import converter.cellularAutomaton.ZToCARasterSquare;
-import converter.cellularAutomaton.ZToCARoomRaster;
+import converter.graph.ZToGraphConverter;
+import de.tu_berlin.math.coga.zet.converter.graph.ZToGraphRoomRaster;
+import de.tu_berlin.math.coga.zet.converter.graph.ZToGraphRasteredDoor;
+import de.tu_berlin.math.coga.zet.converter.graph.ZToGraphRasterSquare;
+import de.tu_berlin.math.coga.zet.converter.graph.ZToGraphRasterContainer;
+import de.tu_berlin.math.coga.zet.converter.cellularAutomaton.ZToCARasterContainer;
+import de.tu_berlin.math.coga.zet.converter.cellularAutomaton.ZToCARasterSquare;
+import de.tu_berlin.math.coga.zet.converter.cellularAutomaton.ZToCARoomRaster;
 import batch.tasks.AlgorithmTask;
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -117,7 +122,7 @@ public class RasterContainerCreator {
 					RoomEdge rEdge = (RoomEdge) edge;
 					ZToCARoomRaster raster = container.getRasteredRoom( room );
 					if( (rEdge).isPassable() ) {
-						List<ZToCARasterSquare> squares = converter.RasterTools.getSquaresAlongEdge( rEdge, raster );
+						List<ZToCARasterSquare> squares = de.tu_berlin.math.coga.zet.converter.RasterTools.getSquaresAlongEdge( rEdge, raster );
 						//RoomEdge partnerEdge;
 						Room partnerRoom = rEdge.getLinkTarget().getRoom();
 
@@ -126,7 +131,7 @@ public class RasterContainerCreator {
 //                        }
 
 						ZToCARoomRaster partnerRaster = container.getRasteredRoom( partnerRoom );
-						List<ZToCARasterSquare> partnerSquares = converter.RasterTools.getSquaresAlongEdge( rEdge.getLinkTarget(), partnerRaster );
+						List<ZToCARasterSquare> partnerSquares = de.tu_berlin.math.coga.zet.converter.RasterTools.getSquaresAlongEdge( rEdge.getLinkTarget(), partnerRaster );
 
 						Iterator<ZToCARasterSquare> myIt = squares.iterator();
 						Iterator<ZToCARasterSquare> partnerIt = partnerSquares.iterator();
@@ -154,7 +159,7 @@ public class RasterContainerCreator {
 		for( ds.z.Edge edge : room.getEdges() ) {
 			RoomEdge rEdge = (RoomEdge) edge;
 			if( (rEdge).isPassable() ) {
-				List<ZToGraphRasterSquare> squares = converter.RasterTools.getSquaresAlongEdge( rEdge, roomRaster );
+				List<ZToGraphRasterSquare> squares = de.tu_berlin.math.coga.zet.converter.RasterTools.getSquaresAlongEdge( rEdge, roomRaster );
 				RoomEdge partnerEdge = rEdge.getLinkTarget();
 				Room partnerRoom = rEdge.getLinkTarget().getRoom();
 
@@ -162,7 +167,7 @@ public class RasterContainerCreator {
 					throw new RuntimeException( Localization.getInstance().getString( "converter.InconsistencyException" ) );
 
 				ZToGraphRoomRaster partnerRaster = container.getRasteredRoom( partnerRoom );
-				List<ZToGraphRasterSquare> partnerSquares = converter.RasterTools.getSquaresAlongEdge( partnerEdge, partnerRaster );
+				List<ZToGraphRasterSquare> partnerSquares = de.tu_berlin.math.coga.zet.converter.RasterTools.getSquaresAlongEdge( partnerEdge, partnerRaster );
 
 				Iterator<ZToGraphRasterSquare> myIt = squares.iterator();
 				Iterator<ZToGraphRasterSquare> partnerIt = partnerSquares.iterator();

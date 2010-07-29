@@ -60,7 +60,7 @@ import ds.PropertyContainer;
 import statistic.ca.MultipleCycleCAStatistic;
 import statistic.ca.exception.GroupOfIndsNoPotentialException;
 import statistic.ca.exception.OneIndNoPotentialException;
-import ds.GraphVisualizationResult;
+import ds.GraphVisualizationResults;
 import ds.ca.CellularAutomaton;
 import ds.ca.Individual;
 import ds.ca.Individual.DeathCause;
@@ -131,7 +131,7 @@ public class JCAStatisticPanel extends JPanel {
 	private ArrayList<String> categoryDatasetAssignments;
 	private ChartData chartData;
 	private CAVisualizationResults cavr;
-	private GraphVisualizationResult gvr;
+	private GraphVisualizationResults gvr;
 	private MultipleCycleCAStatistic mccas;
 	private BatchResultEntry selectedBatchResultEntry;
 	private CellularAutomaton ca;
@@ -166,7 +166,7 @@ public class JCAStatisticPanel extends JPanel {
 		this.cavr = cavr;
 	}
 
-	public void setGraph( GraphVisualizationResult gvr ) {
+	public void setGraph( GraphVisualizationResults gvr ) {
 		this.gvr = gvr;
 	}
 

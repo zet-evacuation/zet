@@ -1,12 +1,12 @@
 /**
- * ConcreteAssignmentConverter.java
+ * CellularAutomatonAssignmentConverter.java
  * Created: Jul 28, 2010,5:15:56 PM
  */
-package converter.cellularAutomaton;
+package de.tu_berlin.math.coga.zet.converter.cellularAutomaton;
 
 import algo.ca.parameter.AbstractDefaultParameterSet;
 import algo.ca.parameter.ParameterSet;
-import converter.cellularAutomaton.ZToCAConverter.ConversionNotSupportedException;
+import de.tu_berlin.math.coga.zet.converter.cellularAutomaton.ZToCAConverter.ConversionNotSupportedException;
 import de.tu_berlin.math.coga.common.algorithm.Algorithm;
 import de.tu_berlin.math.coga.common.localization.Localization;
 import ds.PropertyContainer;
@@ -28,16 +28,16 @@ import statistics.Statistic;
  *
  * @author Jan-Philipp Kappmeier
  */
-public class ConcreteAssignmentConverter extends Algorithm<AssignmentApplicationInstance, ConvertedCellularAutomaton> {
+public class CellularAutomatonAssignmentConverter extends Algorithm<AssignmentApplicationInstance, ConvertedCellularAutomaton> {
 
 	@Override
 	protected ConvertedCellularAutomaton runAlgorithm( AssignmentApplicationInstance problem ) {
 		try {
 			applyConcreteAssignment( problem.getV(), problem.getU() );
 		} catch( IllegalArgumentException ex ) {
-			Logger.getLogger( ConcreteAssignmentConverter.class.getName() ).log( Level.SEVERE, null, ex );
+			Logger.getLogger( CellularAutomatonAssignmentConverter.class.getName() ).log( Level.SEVERE, null, ex );
 		} catch( ConversionNotSupportedException ex ) {
-			Logger.getLogger( ConcreteAssignmentConverter.class.getName() ).log( Level.SEVERE, null, ex );
+			Logger.getLogger( CellularAutomatonAssignmentConverter.class.getName() ).log( Level.SEVERE, null, ex );
 		}
 		return problem.getU();
 	}

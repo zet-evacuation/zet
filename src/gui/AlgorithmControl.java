@@ -6,13 +6,17 @@ package gui;
 
 import algo.ca.EvacuationCellularAutomatonAlgorithm;
 import batch.CellularAutomatonAlgorithm;
-import converter.cellularAutomaton.AssignmentApplicationInstance;
-import converter.cellularAutomaton.ConcreteAssignmentConverter;
-import converter.cellularAutomaton.ConvertedCellularAutomaton;
-import converter.cellularAutomaton.ZToCAConverter;
-import converter.cellularAutomaton.ZToCAConverter.ConversionNotSupportedException;
-import converter.cellularAutomaton.ZToCAMapping;
-import converter.cellularAutomaton.ZToCARasterContainer;
+import batch.GraphAlgorithm;
+import de.tu_berlin.math.coga.zet.converter.cellularAutomaton.AssignmentApplicationInstance;
+import de.tu_berlin.math.coga.zet.converter.cellularAutomaton.CellularAutomatonAssignmentConverter;
+import de.tu_berlin.math.coga.zet.converter.cellularAutomaton.ConvertedCellularAutomaton;
+import de.tu_berlin.math.coga.zet.converter.cellularAutomaton.ZToCAConverter;
+import de.tu_berlin.math.coga.zet.converter.cellularAutomaton.ZToCAConverter.ConversionNotSupportedException;
+import de.tu_berlin.math.coga.zet.converter.cellularAutomaton.ZToCAMapping;
+import de.tu_berlin.math.coga.zet.converter.cellularAutomaton.ZToCARasterContainer;
+import de.tu_berlin.math.coga.zet.converter.graph.ZToNonGridGraphConverter;
+import de.tu_berlin.math.coga.zet.NetworkFlowModel;
+import ds.GraphVisualizationResults;
 import ds.Project;
 import ds.PropertyContainer;
 import ds.ca.CellularAutomaton;
@@ -23,6 +27,7 @@ import io.visualization.CAVisualizationResults;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import tasks.CellularAutomatonTask;
+import tasks.GraphAlgorithmTask;
 import tasks.SerialTask;
 import tasks.conversion.BuildingPlanConverter;
 
@@ -42,6 +47,8 @@ public class AlgorithmControl implements PropertyChangeListener {
 	ZToCAMapping mapping;
 	ZToCARasterContainer container;
 	CAVisualizationResults caVisResults;
+	NetworkFlowModel networkFlowModel;
+	GraphVisualizationResults graphVisResults;
 
 
 	public AlgorithmControl( Project project ) {
@@ -148,7 +155,7 @@ public class AlgorithmControl implements PropertyChangeListener {
 		for( AssignmentType at : project.getCurrentAssignment().getAssignmentTypes() )
 			cellularAutomaton.setAssignmentType( at.getName(), at.getUid() );
 		concreteAssignment = project.getCurrentAssignment().createConcreteAssignment( 400 );
-		final ConcreteAssignmentConverter cac = new ConcreteAssignmentConverter();
+		final CellularAutomatonAssignmentConverter cac = new CellularAutomatonAssignmentConverter();
 		cac.setProblem( new AssignmentApplicationInstance( new ConvertedCellularAutomaton( cellularAutomaton, mapping, container ), concreteAssignment ) );
 		cac.run();
 	}
@@ -186,5 +193,57 @@ public class AlgorithmControl implements PropertyChangeListener {
 
 	public void propertyChange( PropertyChangeEvent pce ) {
 		System.out.println( pce.getPropertyName() );
+	}
+
+	public void convertGraph() {
+		convertGraph( null );
+	}
+
+	public void convertGraph( PropertyChangeListener propertyChangeListener ) {
+		final ZToNonGridGraphConverter conv = new ZToNonGridGraphConverter();
+		conv.setProblem( project.getBuildingPlan() );
+		final SerialTask st = new SerialTask( conv );
+		st.addPropertyChangeListener( new PropertyChangeListener() {
+
+			public void propertyChange( PropertyChangeEvent pce ) {
+				if( st.isDone() ) {
+					networkFlowModel = conv.getSolution();
+				}
+			}
+		});
+		if( propertyChangeListener != null )
+			st.addPropertyChangeListener( propertyChangeListener );
+		st.execute();
+	}
+
+	public NetworkFlowModel getNetworkFlowModel() {
+		return networkFlowModel;
+	}
+
+	public void performOptimization() {
+		performOptimization( null );
+	}
+
+	public void performOptimization( PropertyChangeListener propertyChangeListener ) {
+		final GraphAlgorithmTask gat = new GraphAlgorithmTask( GraphAlgorithm.SuccessiveEarliestArrivalAugmentingPathOptimized );
+		gat.setProblem( project );
+
+		final SerialTask st = new SerialTask( gat );
+		st.addPropertyChangeListener( new PropertyChangeListener() {
+
+			public void propertyChange( PropertyChangeEvent pce ) {
+				if( st.isDone() ) {
+					networkFlowModel = gat.getNetworkFlowModel();
+					graphVisResults = gat.getSolution();
+				}
+			}
+		});
+		if( propertyChangeListener != null )
+			st.addPropertyChangeListener( propertyChangeListener );
+		st.execute();
+	}
+
+	public GraphVisualizationResults getGraphVisResults() {
+		return graphVisResults;
 	}
 }

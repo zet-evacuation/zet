@@ -13,9 +13,9 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
-package converter.cellularAutomaton;
+package de.tu_berlin.math.coga.zet.converter.cellularAutomaton;
 
-import converter.RoomRasterSquare;
+import de.tu_berlin.math.coga.zet.converter.RoomRasterSquare;
 import java.util.Collections;
 import java.util.List;
 import java.util.Vector;

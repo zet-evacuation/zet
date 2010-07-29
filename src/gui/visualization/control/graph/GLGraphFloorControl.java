@@ -21,7 +21,7 @@
 
 package gui.visualization.control.graph;
 
-import ds.GraphVisualizationResult;
+import ds.GraphVisualizationResults;
 import ds.graph.IdentifiableCollection;
 import ds.graph.Node;
 import gui.visualization.control.AbstractZETVisualizationControl;
@@ -35,7 +35,7 @@ import de.tu_berlin.math.coga.graph.io.xml.FlowVisualization;
  * the floor are created and submitted to the view object.
  * @author Jan-Philipp Kappmeier
  */
-//public class GLGraphFloorControl extends AbstractControl<GLGraphFloor, Integer, GraphVisualizationResult, GLNode, GLNodeControl, GLControl>{
+//public class GLGraphFloorControl extends AbstractControl<GLGraphFloor, Integer, GraphVisualizationResults, GLNode, GLNodeControl, GLControl>{
 public class GLGraphFloorControl extends AbstractZETVisualizationControl<GLNodeControl, GLGraphFloor, GLGraphControl> {
 
 	/**
@@ -47,7 +47,7 @@ public class GLGraphFloorControl extends AbstractZETVisualizationControl<GLNodeC
 	 * @param floor the number of the floor
 	 * @param glControl the general control object for visualization
 	 */
-	public GLGraphFloorControl( GraphVisualizationResult graphVisResult, Iterable<Node> nodesOnTheFloor, Integer floor, GLGraphControl glControl ) {
+	public GLGraphFloorControl( GraphVisualizationResults graphVisResult, Iterable<Node> nodesOnTheFloor, Integer floor, GLGraphControl glControl ) {
 		super( glControl );
 		Iterator<Node> it = nodesOnTheFloor.iterator();
 		Node supersink = graphVisResult.getSupersink();

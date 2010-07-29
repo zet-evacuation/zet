@@ -16,7 +16,7 @@
 /*
  * RoomRaster.java
  */
-package converter;
+package de.tu_berlin.math.coga.zet.converter;
 
 import java.util.ArrayList;
 import java.util.LinkedList;
@@ -24,7 +24,7 @@ import java.util.List;
 
 import de.tu_berlin.math.coga.common.util.Direction;
 import de.tu_berlin.math.coga.common.util.Level;
-import converter.RoomRasterSquare.Property;
+import de.tu_berlin.math.coga.zet.converter.RoomRasterSquare.Property;
 import ds.z.Barrier;
 import ds.z.Edge;
 import ds.z.Floor;
@@ -147,25 +147,25 @@ public class RoomRaster<T extends RoomRasterSquare> extends Raster<T, Room> {
 			for (Edge barrierEdge : barrier.getEdges ()) {
 
 				// Für über der Kante liegende Rastersquares den Übergang nach unten sperren.
-				List<T> squares = converter.RasterTools.getSquaresAboveEdge (barrierEdge, this);
+				List<T> squares = de.tu_berlin.math.coga.zet.converter.RasterTools.getSquaresAboveEdge (barrierEdge, this);
 				for (T square : squares) {
 					square.blockDirection (Direction.Down);
 				}
 
 				// Für unter der Kante liegende Rastersquares den Übergang nach oben sperren.
-				squares = converter.RasterTools.getSquaresBelowEdge (barrierEdge, this);
+				squares = de.tu_berlin.math.coga.zet.converter.RasterTools.getSquaresBelowEdge (barrierEdge, this);
 				for (T square : squares) {
 					square.blockDirection (Direction.Top);
 				}
 
 				// Für links von der Kante liegende Rastersquares den Übergang nach rechts sperren.
-				squares = converter.RasterTools.getSquaresLeftOfEdge (barrierEdge, this);
+				squares = de.tu_berlin.math.coga.zet.converter.RasterTools.getSquaresLeftOfEdge (barrierEdge, this);
 				for (T square : squares) {
 					square.blockDirection (Direction.Right);
 				}
 
 				// Für rechts von der Kante liegende Rastersquares den Übergang nach links sperren.
-				squares = converter.RasterTools.getSquaresRightOfEdge (barrierEdge, this);
+				squares = de.tu_berlin.math.coga.zet.converter.RasterTools.getSquaresRightOfEdge (barrierEdge, this);
 				for (T square : squares) {
 					square.blockDirection (Direction.Left);
 				}
@@ -205,7 +205,7 @@ public class RoomRaster<T extends RoomRasterSquare> extends Raster<T, Room> {
 		while (itEd.hasNext()){
 			Edge e = itEd.next();
 			
-			List<T> squaresAlongE = converter.RasterTools.getSquaresAlongEdge(e, this);
+			List<T> squaresAlongE = de.tu_berlin.math.coga.zet.converter.RasterTools.getSquaresAlongEdge(e, this);
 			for (T square : squaresAlongE){				
 				if (stair.contains(square.getSquare())){
 					result.add(square);

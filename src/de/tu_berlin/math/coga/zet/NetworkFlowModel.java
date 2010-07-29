@@ -24,7 +24,7 @@ import ds.graph.*;
 import java.util.LinkedList;
 
 import com.thoughtworks.xstream.annotations.XStreamAlias;
-import converter.ZToGraphMapping;
+import de.tu_berlin.math.coga.zet.converter.graph.ZToGraphMapping;
 
 /**
  *

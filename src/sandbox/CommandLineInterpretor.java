@@ -32,8 +32,9 @@ import java.util.logging.Logger;
 
 import algo.graph.exitassignment.ExitAssignment;
 import algo.graph.exitassignment.ShortestPathExitAssignment;
-import converter.ZToGraphConverter;
-import converter.ZToNonGridGraphConverter;
+import de.tu_berlin.math.coga.zet.converter.graph.GraphAssignmentConverter;
+import converter.graph.ZToGraphConverter;
+import de.tu_berlin.math.coga.zet.converter.graph.ZToNonGridGraphConverter;
 import ds.Project;
 import ds.PropertyContainer;
 import de.tu_berlin.math.coga.zet.NetworkFlowModel;
@@ -210,7 +211,10 @@ public class CommandLineInterpretor {
         
         start = System.currentTimeMillis();
         try {
-            ZToNonGridGraphConverter.convertConcreteAssignment(concreteAssignment, model);
+          GraphAssignmentConverter ac = new GraphAssignmentConverter( model );
+					ac.setProblem( concreteAssignment );
+					ac.run();
+					//ZToNonGridGraphConverter.convertConcreteAssignment(concreteAssignment, model);
         } catch (Exception e) {
             if (log != null) log.write(", exception");
             return; 

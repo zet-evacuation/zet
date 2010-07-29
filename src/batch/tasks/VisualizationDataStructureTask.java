@@ -20,7 +20,7 @@
 
 package batch.tasks;
 
-import ds.GraphVisualizationResult;
+import ds.GraphVisualizationResults;
 import gui.visualization.control.GLControl;
 import io.visualization.BuildingResults;
 import io.visualization.CAVisualizationResults;
@@ -33,7 +33,7 @@ import statistic.ca.CAStatistic;
  */
 public class VisualizationDataStructureTask implements Runnable {
 	private CAVisualizationResults caRes;
-	private GraphVisualizationResult graphRes;
+	private GraphVisualizationResults graphRes;
 	private BuildingResults buildingRes;
 	private GLControl control;
 	private CAStatistic caStatistic;
@@ -45,7 +45,7 @@ public class VisualizationDataStructureTask implements Runnable {
 	 * @param buildingResults the structure of the building
 	 * @param caStatistic the statistic for the current run
 	 */
-	public VisualizationDataStructureTask( CAVisualizationResults caVisResults, GraphVisualizationResult graphVisResults, BuildingResults buildingResults, CAStatistic caStatistic ) {
+	public VisualizationDataStructureTask( CAVisualizationResults caVisResults, GraphVisualizationResults graphVisResults, BuildingResults buildingResults, CAStatistic caStatistic ) {
 		//if( caVisResults == null )
 		//	throw new java.lang.IllegalArgumentException( "Cellular Automaton results are null." );
 		//if( graphVisResults == null )

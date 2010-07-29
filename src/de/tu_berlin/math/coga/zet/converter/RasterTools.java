@@ -18,7 +18,7 @@
  * RasterTools.java
  * Created on 12. February 2010, 12:50
  */
-package converter;
+package de.tu_berlin.math.coga.zet.converter;
 
 import java.util.LinkedList;
 import java.util.List;

@@ -20,7 +20,7 @@ import ds.graph.flow.EdgeBasedFlowOverTime;
 import algo.graph.Flags;
 import algo.graph.dynamicflow.eat.EarliestArrivalFlowProblem;
 import algo.graph.util.PathComposition;
-import converter.ZToGraphMapping;
+import de.tu_berlin.math.coga.zet.converter.graph.ZToGraphMapping;
 import de.tu_berlin.math.coga.zet.NetworkFlowModel;
 import ds.graph.Edge;
 import ds.graph.IdentifiableIntegerMapping;
@@ -32,12 +32,12 @@ import opengl.framework.abs.VisualizationResult;
 import java.util.ArrayList;
 
 /**
- * The class <code>GraphVisualizationResult</code> contains all information necessary to visualize the result of a dynamic flow algorithm.
+ * The class <code>GraphVisualizationResults</code> contains all information necessary to visualize the result of a dynamic flow algorithm.
  * Therefore the network itself is included, as well as the result flow and a mapping giving the rectangle in the real world that each node
  * is covering. Also the floor that each node belongs to is saved. The floors have indices according to their position in the list of
  * floors in the z-format.  
  */
-public class GraphVisualizationResult implements VisualizationResult {
+public class GraphVisualizationResults implements VisualizationResult {
 
 	/**
 	 * The structure of the network the algorithm was applied to.
@@ -107,7 +107,7 @@ public class GraphVisualizationResult implements VisualizationResult {
 	 * @param networkFlowModel A network flow model containing the graph and the <code>ZToGraphMapping</code>.
 	 * @param dynamicFlow The result flow that shall be visualized.
 	 */
-	public GraphVisualizationResult( NetworkFlowModel networkFlowModel, PathBasedFlowOverTime dynamicFlow ) {
+	public GraphVisualizationResults( NetworkFlowModel networkFlowModel, PathBasedFlowOverTime dynamicFlow ) {
 		this( networkFlowModel );
 		this.dynamicFlow = dynamicFlow;
 		PathComposition pathComposition = new PathComposition( network, transitTimes, dynamicFlow );
@@ -123,7 +123,7 @@ public class GraphVisualizationResult implements VisualizationResult {
 		this.dynamicFlow = null;
 	}
 
-	private GraphVisualizationResult( NetworkFlowModel networkFlowModel ) {
+	public GraphVisualizationResults( NetworkFlowModel networkFlowModel ) {
 		this.network = networkFlowModel.getNetwork();
 		ZToGraphMapping mapping = networkFlowModel.getZToGraphMapping();
 		this.nodeRectangle = mapping.getNodeRectangles();
@@ -149,13 +149,16 @@ public class GraphVisualizationResult implements VisualizationResult {
 				this.floorToNodeMapping.get( floor ).add( node );
 			}
 		}
+		maxFlowRate = 0;
+		//dynamicFlow = new PathBasedFlowOverTime();
+		flowOverTime = new EdgeBasedFlowOverTime( network );
 	}
 
 	public Node getSupersink() {
 		return supersink;
 	}
 
-	public GraphVisualizationResult( NetworkFlowModel networkFlowModel, EdgeBasedFlowOverTime flowOverTime ) {
+	public GraphVisualizationResults( NetworkFlowModel networkFlowModel, EdgeBasedFlowOverTime flowOverTime ) {
 		this( networkFlowModel );
 		this.maxFlowRate = 0;
 		for( Edge edge : networkFlowModel.getNetwork().edges() )
@@ -165,7 +168,7 @@ public class GraphVisualizationResult implements VisualizationResult {
 		this.dynamicFlow = null;
 	}
 
-	public GraphVisualizationResult( EarliestArrivalFlowProblem eatf, IdentifiableIntegerMapping<Node> xPos, IdentifiableIntegerMapping<Node> yPos ) {
+	public GraphVisualizationResults( EarliestArrivalFlowProblem eatf, IdentifiableIntegerMapping<Node> xPos, IdentifiableIntegerMapping<Node> yPos ) {
 		this.network = eatf.getNetwork();
 
 		int nodeCount = eatf.getNetwork().numberOfNodes();
@@ -220,7 +223,7 @@ public class GraphVisualizationResult implements VisualizationResult {
 		flowOverTime = new EdgeBasedFlowOverTime( network );
 	}
 
-	public GraphVisualizationResult( EarliestArrivalFlowProblem eatf, IdentifiableIntegerMapping<Node> xPos, IdentifiableIntegerMapping<Node> yPos, PathBasedFlowOverTime dynamicFlow ) {
+	public GraphVisualizationResults( EarliestArrivalFlowProblem eatf, IdentifiableIntegerMapping<Node> xPos, IdentifiableIntegerMapping<Node> yPos, PathBasedFlowOverTime dynamicFlow ) {
 		this( eatf, xPos, yPos );
 
 		System.out.print( "Start converting path based to edge based flow..." );
@@ -243,7 +246,7 @@ public class GraphVisualizationResult implements VisualizationResult {
 	 * Constructor creating an object where no nodes and edges exists.
 	 * For testing!
 	 */
-	public GraphVisualizationResult() {
+	public GraphVisualizationResults() {
 		this.network = new Network( 0, 0 );
 		//this.dynamicFlow = new PathBasedFlowOverTime();
 		this.nodeRectangle = new IdentifiableObjectMapping<Node, NodeRectangle>( 0, NodeRectangle.class );

@@ -19,15 +19,15 @@
  *
  */
 
-package converter.cellularAutomaton;
+package de.tu_berlin.math.coga.zet.converter.cellularAutomaton;
 
 import ds.Project;
 import de.tu_berlin.math.coga.common.algorithm.Algorithm;
 import algo.ca.PotentialController;
 import algo.ca.SPPotentialController;
 import batch.tasks.AlgorithmTask;
-import converter.RasterContainerCreator;
-import converter.RoomRasterSquare;
+import de.tu_berlin.math.coga.zet.converter.RasterContainerCreator;
+import de.tu_berlin.math.coga.zet.converter.RoomRasterSquare;
 import de.tu_berlin.math.coga.common.util.Direction;
 import de.tu_berlin.math.coga.common.util.Level;
 import ds.z.BuildingPlan;
@@ -386,8 +386,8 @@ public class ZToCAConverter extends Algorithm<BuildingPlan,ConvertedCellularAuto
 				if( partnerDoor == null ) {
 					//ZToCARoomRaster partnerRoom = getInstance().getContainer().getRasteredRoom( (ds.z.Room) (partner.getPolygon()) );
 					ZToCARoomRaster partnerRoom = getContainer().getRasteredRoom( (ds.z.Room) ( partner.getPolygon()) );
-					int newX = converter.RasterTools.polyCoordToRasterCoord( partner.getX(), partnerRoom.getXOffset(), partnerRoom );
-					int newY = converter.RasterTools.polyCoordToRasterCoord( partner.getY(), partnerRoom.getYOffset(), partnerRoom );
+					int newX = de.tu_berlin.math.coga.zet.converter.RasterTools.polyCoordToRasterCoord( partner.getX(), partnerRoom.getXOffset(), partnerRoom );
+					int newY = de.tu_berlin.math.coga.zet.converter.RasterTools.polyCoordToRasterCoord( partner.getY(), partnerRoom.getYOffset(), partnerRoom );
 
 					partnerDoor = new ds.ca.DoorCell( partner.getSpeedFactor(), newX, newY );
 					ds.ca.Room newRoom = roomRasterRoomMapping.get( partnerRoom );
@@ -467,8 +467,8 @@ public class ZToCAConverter extends Algorithm<BuildingPlan,ConvertedCellularAuto
 									if( targetCell == null ) {
 										// zielzelle muss erstellt werden
 					//ZToCARoomRaster partnerRoom = getInstance().getContainer().getRasteredRoom( (ds.z.Room) (sq.getPolygon()) );
-					int newX = converter.RasterTools.polyCoordToRasterCoord( sq.getX(), targetRoomRaster.getXOffset(), targetRoomRaster );
-					int newY = converter.RasterTools.polyCoordToRasterCoord( sq.getY(), targetRoomRaster.getYOffset(), targetRoomRaster );
+					int newX = de.tu_berlin.math.coga.zet.converter.RasterTools.polyCoordToRasterCoord( sq.getX(), targetRoomRaster.getXOffset(), targetRoomRaster );
+					int newY = de.tu_berlin.math.coga.zet.converter.RasterTools.polyCoordToRasterCoord( sq.getY(), targetRoomRaster.getYOffset(), targetRoomRaster );
 					targetCell = new ds.ca.TeleportCell( sq.getSpeedFactor(), newX, newY );
 					ds.ca.Room newRoom = roomRasterRoomMapping.get( targetRoomRaster );
 					newRoom.setCell( targetCell );

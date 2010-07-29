@@ -17,8 +17,8 @@ package evacuationplan;
 
 import java.util.List;
 
-import converter.cellularAutomaton.ZToCAConverter;
-import converter.ZToGraphRasterContainer;
+import de.tu_berlin.math.coga.zet.converter.cellularAutomaton.ZToCAConverter;
+import de.tu_berlin.math.coga.zet.converter.graph.ZToGraphRasterContainer;
 import ds.graph.flow.PathBasedFlowOverTime;
 import ds.z.BuildingPlan;
 import ds.z.ConcreteAssignment;
