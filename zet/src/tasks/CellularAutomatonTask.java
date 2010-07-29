@@ -6,12 +6,12 @@ package tasks;
 
 import algo.ca.EvacuationCellularAutomatonAlgorithm;
 import batch.CellularAutomatonAlgorithm;
-import converter.cellularAutomaton.AssignmentApplicationInstance;
-import converter.cellularAutomaton.ConcreteAssignmentConverter;
-import converter.cellularAutomaton.ConvertedCellularAutomaton;
-import converter.cellularAutomaton.ZToCAConverter;
-import converter.cellularAutomaton.ZToCAMapping;
-import converter.cellularAutomaton.ZToCARasterContainer;
+import de.tu_berlin.math.coga.zet.converter.cellularAutomaton.AssignmentApplicationInstance;
+import de.tu_berlin.math.coga.zet.converter.cellularAutomaton.CellularAutomatonAssignmentConverter;
+import de.tu_berlin.math.coga.zet.converter.cellularAutomaton.ConvertedCellularAutomaton;
+import de.tu_berlin.math.coga.zet.converter.cellularAutomaton.ZToCAConverter;
+import de.tu_berlin.math.coga.zet.converter.cellularAutomaton.ZToCAMapping;
+import de.tu_berlin.math.coga.zet.converter.cellularAutomaton.ZToCARasterContainer;
 import de.tu_berlin.math.coga.common.algorithm.Algorithm;
 import ds.Project;
 import ds.PropertyContainer;
@@ -50,7 +50,7 @@ public class CellularAutomatonTask extends Algorithm<Project, CAVisualizationRes
 		for( AssignmentType at : project.getCurrentAssignment().getAssignmentTypes() )
 			ca.setAssignmentType( at.getName(), at.getUid() );
 		ConcreteAssignment concreteAssignment = project.getCurrentAssignment().createConcreteAssignment( 400 );
-		final ConcreteAssignmentConverter cac = new ConcreteAssignmentConverter();
+		final CellularAutomatonAssignmentConverter cac = new CellularAutomatonAssignmentConverter();
 		cac.setProblem( new AssignmentApplicationInstance( cca, concreteAssignment ) );
 		cac.run();
 

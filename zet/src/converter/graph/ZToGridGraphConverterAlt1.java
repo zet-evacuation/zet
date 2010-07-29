@@ -15,11 +15,18 @@
  */
 
 /*
- * ZToGridGraphConverterAlt2.java
+ * ZToGridGraphConverterAlt1.java
+ *
  */
-package converter;
+package converter.graph;
 
+import de.tu_berlin.math.coga.zet.converter.graph.ZToGraphMapping;
+import de.tu_berlin.math.coga.zet.converter.graph.ZToGraphRoomRaster;
+import de.tu_berlin.math.coga.zet.converter.graph.ZToGraphRasteredDoor;
+import de.tu_berlin.math.coga.zet.converter.graph.ZToGraphRasterContainer;
+import de.tu_berlin.math.coga.zet.converter.graph.ZToGraphRasterSquare;
 import algo.graph.util.GraphInstanceChecker;
+import de.tu_berlin.math.coga.zet.converter.RasterContainerCreator;
 import de.tu_berlin.math.coga.common.localization.Localization;
 import ds.PropertyContainer;
 import ds.graph.DynamicNetwork;
@@ -51,7 +58,7 @@ import static de.tu_berlin.math.coga.common.util.Level.*;
 /**
  *
  */
-public class ZToGridGraphConverterAlt2 {
+public class ZToGridGraphConverterAlt1 {
 
 	final static boolean debug = false;
 	final static boolean progress = false;
@@ -631,7 +638,7 @@ public class ZToGridGraphConverterAlt2 {
 	 * The transit times are weighted by the rooms speed factors and rounded to the multiple of the graph precision value.
 	 * @param raster Supplies a list of all rastered rooms
 	 * @param model A reference to the network flow model to set it's transit times.
-	 * @param doorEdgeToSquare is a HashMap, that maps the separate room raster to the corresponding dynamic networks.
+	 * @param doorEdgeToSquare Is a HashMap, that maps the separate room raster to the corresponding dynamic networks.
 	 */
 	protected static void computeTransitTimes( ZToGraphRasterContainer raster, NetworkFlowModel model, Hashtable<Edge, ArrayList<ZToGraphRasterSquare>> doorEdgeToSquare ) {
 		long startTT = System.currentTimeMillis();
@@ -683,8 +690,136 @@ public class ZToGridGraphConverterAlt2 {
 						// add a transitTime-0-entry to the IIMapping for the current edge if there is not yet such an entry
 						if( !transitTimes.isDefinedFor( edge ) || transitTimes.get( edge ) <= 0 )
 							transitTimes.set( edge, 0 );
-						// write the new transitTime into the IIMapping
-						transitTimes.set( edge, 1 );
+						// if the transitTime for the current edge is not already modified
+						if( transitTimes.get( edge ) <= 0 ) {
+							int startBreadth;
+							int startHeight;
+							int endBreadth;
+							int endHeight;
+
+							int startCentreX;
+							int startCentreY;
+							int endCentreX;
+							int endCentreY;
+
+							// the new transit time between node "start" and "end"
+							int transitTimeStartEnd;
+
+							// coordinates of the upper Left corner of the upper Left square of the start node
+							int startUpperLeftX = Integer.MAX_VALUE;
+							int startUpperLeftY = Integer.MAX_VALUE;
+							// coordinates of the lower Right corner of the lower Right square of the start node
+							int startLowerRightX = 0;
+							int startLowerRightY = 0;
+
+							// coordinates of the upper Left corner of the upper Left square of the end node
+							int endUpperLeftX = Integer.MAX_VALUE;
+							int endUpperLeftY = Integer.MAX_VALUE;
+							// coordinates of the lower Right corner of the lower Right square of the end node
+							int endLowerRightX = 0;
+							int endLowerRightY = 0;
+
+							// find the coordinates of the upper Left and the lower Right square of the current start-node
+							for( ZToGraphRasterSquare square : nodeToSquare.get( start ) ) {
+								if( square.getXOffset() <= startUpperLeftX )
+									startUpperLeftX = square.getXOffset();
+								if( square.getYOffset() <= startUpperLeftY )
+									startUpperLeftY = square.getYOffset();
+								if( square.getXOffset() >= startLowerRightX )
+									startLowerRightX = square.getXOffset();
+								if( square.getYOffset() >= startLowerRightY )
+									startLowerRightY = square.getYOffset();
+							}
+							// adapt to rectangle corner coordinates
+							startLowerRightX += 400;
+							startLowerRightY += 400;
+							// calculate the centre-coordinates of the start-node-rectangle
+							startBreadth = Math.abs( startLowerRightX - startUpperLeftX );
+							startHeight = Math.abs( startLowerRightY - startUpperLeftY );
+							startCentreX = (int) Math.round( 0.5 * startBreadth ) + startUpperLeftX;
+							startCentreY = (int) Math.round( 0.5 * startHeight ) + startUpperLeftY;
+
+							// find the coordinates of the upper Left and the lower Right square of the current end-node
+							for( ZToGraphRasterSquare square : nodeToSquare.get( end ) ) {
+								if( square.getXOffset() <= endUpperLeftX )
+									endUpperLeftX = square.getXOffset();
+								if( square.getYOffset() <= endUpperLeftY )
+									endUpperLeftY = square.getYOffset();
+								if( square.getXOffset() >= endLowerRightX )
+									endLowerRightX = square.getXOffset();
+								if( square.getYOffset() >= endLowerRightY )
+									endLowerRightY = square.getYOffset();
+							}
+							// adapt to rectangle corner coordinates
+							endLowerRightX += 400;
+							endLowerRightY += 400;
+							// calculate the centre-coordinates of the end-node-rectangle
+							endBreadth = Math.abs( endLowerRightX - endUpperLeftX );
+							endHeight = Math.abs( endLowerRightY - endUpperLeftY );
+							endCentreX = (int) Math.round( 0.5 * endBreadth ) + endUpperLeftX;
+							endCentreY = (int) Math.round( 0.5 * endHeight ) + endUpperLeftY;
+
+							// describes the relative orientation of the start- and end-node rectangles
+							boolean startAboveEnd = false;
+							boolean startBeneathEnd = false;
+							boolean startLeftOfEnd = false;
+							boolean startRightOfEnd = false;
+
+							if( startLowerRightY == endUpperLeftY )
+								startAboveEnd = true;
+							if( startUpperLeftY == endLowerRightY )
+								startBeneathEnd = true;
+							if( startLowerRightX == endUpperLeftX )
+								startLeftOfEnd = true;
+							if( startUpperLeftX == endLowerRightX )
+								startRightOfEnd = true;
+
+							// coordinates of the point on the centre of the intersecting edge part
+							int intersectionPointX = 0;
+							int intersectionPointY = 0;
+
+							// calculate the coordinates of the intersection point depending on the relative orientation of the two rectangles
+							if( startAboveEnd ) {
+								intersectionPointX = (int) Math.round( 0.5 * Math.abs( Math.min( startLowerRightX, endLowerRightX ) - Math.max( endUpperLeftX, startUpperLeftX ) ) ) + Math.max( endUpperLeftX, startUpperLeftX );
+								intersectionPointY = startLowerRightY;
+							}
+							if( startBeneathEnd ) {
+								intersectionPointX = (int) Math.round( 0.5 * Math.abs( Math.min( startLowerRightX, endLowerRightX ) - Math.max( endUpperLeftX, startUpperLeftX ) ) ) + Math.max( endUpperLeftX, startUpperLeftX );
+								intersectionPointY = startUpperLeftY;
+							}
+							if( startLeftOfEnd ) {
+								intersectionPointX = startLowerRightX;
+								intersectionPointY = (int) Math.round( 0.5 * Math.abs( Math.min( endLowerRightY, startLowerRightY ) - Math.max( endUpperLeftY, startUpperLeftY ) ) ) + Math.max( endUpperLeftY, startUpperLeftY );
+							}
+							if( startRightOfEnd ) {
+								intersectionPointX = startUpperLeftX;
+								intersectionPointY = (int) Math.round( 0.5 * Math.abs( Math.min( endLowerRightY, startLowerRightY ) - Math.max( endUpperLeftY, startUpperLeftY ) ) ) + Math.max( endUpperLeftY, startUpperLeftY );
+							}
+
+							// speed factor within the node-squares
+							double startSpeedFactor = model.getZToGraphMapping().getNodeSpeedFactor( start );
+							double endSpeedFactor = model.getZToGraphMapping().getNodeSpeedFactor( end );
+
+							// path from the start centre point to the intersection point
+							int startPath;
+							// path from the intersection point to the end centre point
+							int endPath;
+
+							// calculate the path length weighted with the appropriate node's speed factor
+							startPath = (int) Math.round( (1 / startSpeedFactor) * Math.sqrt( Math.pow( Math.abs( intersectionPointY - startCentreY ), 2 ) + Math.pow( Math.abs( intersectionPointX - startCentreX ), 2 ) ) );
+							endPath = (int) Math.round( (1 / endSpeedFactor) * Math.sqrt( Math.pow( Math.abs( intersectionPointY - endCentreY ), 2 ) + Math.pow( Math.abs( intersectionPointX - endCentreX ), 2 ) ) );
+							transitTimeStartEnd = startPath + endPath;
+
+							// getting the graph precision factor, defining the exactness of the distances
+							PropertyContainer propertyContainer = PropertyContainer.getInstance();
+							int precision = propertyContainer.getAs( "converter.GraphPrecision", Integer.class );
+
+							// adjusting the transit time according to the graph precision value
+							transitTimeStartEnd = (int) Math.round( (double) transitTimeStartEnd * (double) precision / 400.0d );
+
+							// write the new transitTime into the IIMapping
+							transitTimes.set( edge, transitTimeStartEnd );
+						}
 					}
 				} // END of for(start)
 		} // END of for(roomRaster)
@@ -710,8 +845,55 @@ public class ZToGridGraphConverterAlt2 {
 				for( Node nodeA : nodeListOfStartRoom )
 					for( Node nodeB : nodeListOfEndRoom ) {
 						Edge edge = graph.getEdge( nodeA, nodeB );
-						if( edge != null && graph.contains( edge ) && doorEdgeToSquare.get( edge ) != null && !doorEdgeToSquare.get( edge ).isEmpty() )
-							transitTimes.set( edge, 1 );
+						if( edge != null && graph.contains( edge ) && doorEdgeToSquare.get( edge ) != null && !doorEdgeToSquare.get( edge ).isEmpty() ) {
+							ArrayList<ZToGraphRasterSquare> doorSquareListAB = doorEdgeToSquare.get( edge );
+							ArrayList<ZToGraphRasterSquare> doorSquareListA = new ArrayList<ZToGraphRasterSquare>();
+							ArrayList<ZToGraphRasterSquare> doorSquareListB = new ArrayList<ZToGraphRasterSquare>();
+							for( ZToGraphRasterSquare square : doorSquareListAB ) {
+								if( square.getNode() == nodeA )
+									doorSquareListA.add( square );
+								if( square.getNode() == nodeB )
+									doorSquareListB.add( square );
+							}
+							int transitTimeA = 0;
+							int transitTimeB = 0;
+							int transitTimeAB;
+
+							// CALCULATE centre of nodeA
+							PlanPoint mitteA = calculateCentre( nodeA, startRoomSquareList );
+							// END CALCULATE centre of nodeA
+
+							// CALCULATE centre of nodeB
+							PlanPoint mitteB = calculateCentre( nodeB, endRoomSquareList );
+							// END CALCULATE centre of nodeB
+
+							PlanPoint mitteSquare;
+
+							double nodeASpeedFactor = model.getZToGraphMapping().getNodeSpeedFactor( nodeA );
+							for( ZToGraphRasterSquare square : doorSquareListA ) {
+								mitteSquare = calculateCentre( square );
+								transitTimeA += calculateDistance( mitteA, mitteSquare );
+							}
+							transitTimeA = (int) Math.round( (1 / nodeASpeedFactor) * transitTimeA / doorSquareListA.size() );
+
+							double nodeBSpeedFactor = model.getZToGraphMapping().getNodeSpeedFactor( nodeB );
+							for( ZToGraphRasterSquare square : doorSquareListB ) {
+								mitteSquare = calculateCentre( square );
+								transitTimeB += calculateDistance( mitteB, mitteSquare );
+							}
+							transitTimeB = (int) Math.round( (1 / nodeBSpeedFactor) * transitTimeB / doorSquareListB.size() );
+
+							transitTimeAB = transitTimeA + transitTimeB;
+
+							// getting the graph precision factor, defining the exactness of the distances
+							PropertyContainer propertyContainer = PropertyContainer.getInstance();
+							int precision = propertyContainer.getAs( "converter.GraphPrecision", Integer.class );
+
+							// adjusting the transit time according to the graph precision value
+							transitTimeAB = (int) Math.round( (double) transitTimeAB * (double) precision / 400.0d );
+
+							transitTimes.set( edge, transitTimeAB );
+						}
 					}
 			}
 		// END calculate INTER-Room-Edge-Transit-Times

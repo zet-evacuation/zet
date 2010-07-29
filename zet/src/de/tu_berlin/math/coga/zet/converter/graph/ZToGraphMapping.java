@@ -17,7 +17,7 @@
  * ZToGraphMapping.java
  *
  */
-package converter;
+package de.tu_berlin.math.coga.zet.converter.graph;
 
 import ds.graph.Edge;
 import ds.graph.IdentifiableIntegerMapping;

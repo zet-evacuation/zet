@@ -13,7 +13,7 @@ import de.tu_berlin.math.coga.common.algorithm.AlgorithmStartedEvent;
 import de.tu_berlin.math.coga.common.algorithm.AlgorithmTerminatedEvent;
 import de.tu_berlin.math.coga.common.localization.Localization;
 import de.tu_berlin.math.coga.common.util.Formatter;
-import ds.GraphVisualizationResult;
+import ds.GraphVisualizationResults;
 import ds.graph.IdentifiableIntegerMapping;
 import ds.graph.Node;
 import event.EventListener;
@@ -84,7 +84,7 @@ public class FlowVisualizationTool extends JFrame implements PropertyChangeListe
 	IdentifiableIntegerMapping<Node> yPos;
 	EarliestArrivalTask sw;
 	EarliestArrivalFlowProblem eafp = null;
-	GraphVisualizationResult graphVisResult = null;
+	GraphVisualizationResults graphVisResult = null;
 	boolean pause = false;
 
 	public FlowVisualizationTool() {
@@ -104,7 +104,7 @@ public class FlowVisualizationTool extends JFrame implements PropertyChangeListe
 		vis.set3DView();
 		vis.getCamera().getView().invert();
 		vis.getCamera().getPos().z = 140;
-		graphVisResult = new GraphVisualizationResult();
+		graphVisResult = new GraphVisualizationResults();
 		GLGraphControl control = new GLGraphControl( graphVisResult );
 		vis.setControl( control );
 
@@ -272,7 +272,7 @@ public class FlowVisualizationTool extends JFrame implements PropertyChangeListe
 							eafp = null;
 							return;
 						}
-						GraphVisualizationResult graphVisResult = new GraphVisualizationResult( eafp, xPos, yPos );
+						GraphVisualizationResults graphVisResult = new GraphVisualizationResults( eafp, xPos, yPos );
 						sb.setStatusText( 0, "Baue Visualisierung" );
 						control = new GLGraphControl( graphVisResult );
 					}
@@ -299,7 +299,7 @@ public class FlowVisualizationTool extends JFrame implements PropertyChangeListe
 					try {
 						XStream xml_convert = new XStream();
 						FileReader input = new FileReader( jfc.getSelectedFile() );
-						graphVisResult = (GraphVisualizationResult)xml_convert.fromXML( input );
+						graphVisResult = (GraphVisualizationResults)xml_convert.fromXML( input );
 						loadGraphVisResults();
 					} catch( IOException e ) {
 						sb.setStatusText( 0, "Fehler beim laden der Datei!" );
@@ -396,7 +396,7 @@ public class FlowVisualizationTool extends JFrame implements PropertyChangeListe
 				vis.stopAnimation();
 
 			sb.setStatusText( 0, "Erzeuge Kantenbasierte Variante..." );
-			graphVisResult = new GraphVisualizationResult( sw.getEarliestArrivalFlowProblem(), xPos, yPos, sw.getFlowOverTime() );
+			graphVisResult = new GraphVisualizationResults( sw.getEarliestArrivalFlowProblem(), xPos, yPos, sw.getFlowOverTime() );
 			graphVisResult.setNeededTimeHorizon( sw.getNeededTimeHorizon() );
 			loadGraphVisResults();
 		}

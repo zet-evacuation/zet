@@ -6,7 +6,7 @@ package gui;
 
 import algo.graph.dynamicflow.eat.EarliestArrivalFlowProblem;
 import batch.load.BatchProjectEntry;
-import converter.cellularAutomaton.ZToCAConverter.ConversionNotSupportedException;
+import de.tu_berlin.math.coga.zet.converter.cellularAutomaton.ZToCAConverter.ConversionNotSupportedException;
 import java.beans.PropertyChangeEvent;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -20,11 +20,11 @@ import batch.BatchResultEntry;
 import batch.tasks.BatchGraphCreateOnlyTask;
 import batch.tasks.RasterizeTask;
 import batch.tasks.VisualizationDataStructureTask;
-import converter.cellularAutomaton.ZToCAConverter;
 import de.tu_berlin.math.coga.common.localization.Localization;
 import de.tu_berlin.math.coga.common.util.IOTools;
 import de.tu_berlin.math.coga.zet.DatFileReaderWriter;
 import de.tu_berlin.math.coga.zet.NetworkFlowModel;
+import ds.GraphVisualizationResults;
 import ds.PropertyContainer;
 import ds.z.Assignment;
 import ds.z.AssignmentArea;
@@ -453,7 +453,7 @@ public class Control {
 		CAStatistic caStatistic = e.getCaStatistics() != null ? e.getCaStatistics()[nrOfCycle] : null;
 		caRes.statistic = caStatistic;
 
-		ds.GraphVisualizationResult graphRes = e.getGraphVis();
+		ds.GraphVisualizationResults graphRes = e.getGraphVis();
 
 		VisualizationDataStructureTask visualizationDataStructure = new VisualizationDataStructureTask( caRes, graphRes, e.getBuildingResults(), caStatistic );
 		JProgressBarDialog pbd = new JProgressBarDialog( editor, Localization.getInstance().getStringWithoutPrefix( "batch.tasks.buildVisualizationDatastructure" ), true, visualizationDataStructure );
@@ -1023,7 +1023,6 @@ public class Control {
 					visualization.getControl().setCellularAutomatonControl( caVis, algorithmControl.getCellularAutomaton() );
 					editor.getVisualizationView().updatePotentialSelector();
 //					editor.getVisualizationView().updateFloorSelector();
-					visualizationToolBar.setEnabledPlayback( false );
 					editor.getQuickVisualizationView().getLeftPanel().getMainComponent().setCa( algorithmControl.getCellularAutomaton() );
 					editor.getQuickVisualizationView().getLeftPanel().getMainComponent().setMapping( algorithmControl.getMapping() );
 					editor.getQuickVisualizationView().getLeftPanel().getMainComponent().setContainer( algorithmControl.getContainer() );
@@ -1082,6 +1081,30 @@ public class Control {
 				editor.getQuickVisualizationView().getLeftPanel().getMainComponent().update();
 			} else
 				editor.getQuickVisualizationView().getLeftPanel().getMainComponent().update();
+	}
+
+	public void createGraph() {
+		algorithmControl.convertGraph( new PropertyChangeListener() {
+
+			public void propertyChange( PropertyChangeEvent pce ) {
+				if( isDone( pce ) ) {
+					GraphVisualizationResults gvr = new GraphVisualizationResults( algorithmControl.getNetworkFlowModel() );
+					visualization.getControl().setGraphControl( gvr );
+				}
+			}
+		});
+	}
+
+	public void performOptimization() {
+		algorithmControl.performOptimization( new PropertyChangeListener() {
+
+			public void propertyChange( PropertyChangeEvent pce ) {
+				if( isDone( pce ) ) {
+					GraphVisualizationResults gvr = algorithmControl.getGraphVisResults();
+					visualization.getControl().setGraphControl( gvr );
+				}
+			}
+		} );
 	}
 }
 

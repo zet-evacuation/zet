@@ -15,7 +15,7 @@
  */
 package gui.visualization.control.graph;
 
-import ds.GraphVisualizationResult;
+import ds.GraphVisualizationResults;
 import ds.graph.Node;
 import ds.graph.Edge;
 import gui.visualization.control.AbstractZETVisualizationControl;
@@ -25,7 +25,7 @@ import gui.visualization.util.FlowCalculator;
 import java.util.ArrayList;
 import de.tu_berlin.math.coga.graph.io.xml.FlowVisualization;
 
-//public class GLNodeControl extends AbstractControl<GLNode, Node, GraphVisualizationResult, GLEdge, GLEdgeControl, GLControl> {
+//public class GLNodeControl extends AbstractControl<GLNode, Node, GraphVisualizationResults, GLEdge, GLEdgeControl, GLControl> {
 public class GLNodeControl extends AbstractZETVisualizationControl<GLEdgeControl, GLNode, GLGraphControl> {
 	private double xPosition;
 	private double yPosition;
@@ -48,7 +48,7 @@ public class GLNodeControl extends AbstractZETVisualizationControl<GLEdgeControl
 	private int floor;
 	private boolean gridVisible = true;
 
-	public GLNodeControl( GraphVisualizationResult graphVisResult, Node node, GLGraphControl glControl ) {
+	public GLNodeControl( GraphVisualizationResults graphVisResult, Node node, GLGraphControl glControl ) {
 		super( glControl );
 
 		nwX = graphVisResult.getNodeRectangles().get( node ).get_nw_point().getX();

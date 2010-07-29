@@ -18,7 +18,7 @@
  * Raster.java
  */
 
-package converter;
+package de.tu_berlin.math.coga.zet.converter;
 
 import java.lang.reflect.Array;
 import java.util.ArrayList;

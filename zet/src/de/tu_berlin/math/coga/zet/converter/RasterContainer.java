@@ -18,7 +18,7 @@
  *
  */
 
-package converter;
+package de.tu_berlin.math.coga.zet.converter;
 
 import java.util.ArrayList;
 import java.util.Collection;

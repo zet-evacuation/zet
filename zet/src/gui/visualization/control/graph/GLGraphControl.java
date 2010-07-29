@@ -24,7 +24,7 @@ package gui.visualization.control.graph;
 import batch.tasks.AlgorithmTask;
 import de.tu_berlin.math.coga.common.localization.Localization;
 import de.tu_berlin.math.coga.math.Conversion;
-import ds.GraphVisualizationResult;
+import ds.GraphVisualizationResults;
 import ds.graph.Node;
 import gui.visualization.control.AbstractZETVisualizationControl;
 import gui.visualization.draw.graph.GLGraph;
@@ -60,7 +60,7 @@ public class GLGraphControl extends AbstractZETVisualizationControl<GLGraphFloor
 	private int superSinkID = 0;
 	private boolean supportsFloors = false;
 
-	public GLGraphControl( GraphVisualizationResult graphVisResult ) {
+	public GLGraphControl( GraphVisualizationResults graphVisResult ) {
 		super();
 		mainControl = this;
 

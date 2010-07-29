@@ -365,6 +365,7 @@ public class JZETMenuBar extends JMenuBar implements ActionListener, Localized {
 			control.createBuildingDataStructure();
 			control.createCellularAutomaton();
 		} else if( e.getActionCommand().equals( "createGraph" ) ) {
+			control.createGraph();
 		} else if( e.getActionCommand().equals( "applyConcreteAssignment" ) ) {
 		} else if( e.getActionCommand().equals( "startSimulation" ) ) {
 			control.performSimulation();
@@ -372,7 +373,7 @@ public class JZETMenuBar extends JMenuBar implements ActionListener, Localized {
 		} else if( e.getActionCommand().equals( "stepByStepSimulation" ) ) {
 			control.performOneStep();
 		} else if( e.getActionCommand().equals( "EAT" ) ) {
-
+			control.performOptimization();
 		} else if( e.getActionCommand().equals( "options" ) ) {
 			control.showOptionsDialog();
 		} else if( e.getActionCommand().equals( "settings" ) ) {

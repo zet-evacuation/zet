@@ -32,7 +32,7 @@ import batch.tasks.assignment.MinCostAssignmentTask;
 import batch.tasks.assignment.ReducedEarliestArrivalAssignmentTask;
 import batch.tasks.assignment.ShortestPathAssignmentTask;
 import batch.tasks.assignment.ShortestPathGraphEarliestArrivalAssignmentTask;
-import converter.cellularAutomaton.ZToCAConverter.ConversionNotSupportedException;
+import de.tu_berlin.math.coga.zet.converter.cellularAutomaton.ZToCAConverter.ConversionNotSupportedException;
 import ds.Project;
 import ds.PropertyContainer;
 import ds.z.Assignment;

@@ -25,7 +25,7 @@ import batch.Batch;
 import batch.BatchResult;
 import batch.CellularAutomatonAlgorithm;
 import batch.GraphAlgorithm;
-import converter.cellularAutomaton.ZToCAConverter;
+import de.tu_berlin.math.coga.zet.converter.cellularAutomaton.ZToCAConverter;
 import ds.PropertyContainer;
 import ds.ca.CellularAutomaton;
 import ds.z.AssignmentType;
@@ -443,97 +443,6 @@ public class JEditor extends JFrame implements Localized, EventListener<Progress
 	 * Some listener for needed updates                                          *
 	 *                                                                           *
 	 ****************************************************************************/
-	// TODO move to control/JZETMEnuBar and reimplement that stuff...
-	ActionListener aclExecute = new ActionListener() {
-
-		@Override
-		public void actionPerformed( ActionEvent e ) {
-			if( e.getActionCommand().equals( "startSimulation" ) )
-				simulateCA();
-			else if( e.getActionCommand().equals( "stepByStepSimulation" ) ) {
-				stepByStepSimulation();
-				if( tabs.get( tabPane.getSelectedIndex() ) != ZETWindowTabs.QuickView )
-					tabPane.setSelectedIndex( tabs.indexOf( ZETWindowTabs.QuickView ) );
-			} else if( e.getActionCommand().equals( "visualization" ) ) {
-				quickVisualization();
-
-
-
-				if( tabs.get( tabPane.getSelectedIndex() ) != ZETWindowTabs.QuickView )
-					tabPane.setSelectedIndex( tabs.indexOf( ZETWindowTabs.QuickView ) );
-			} else if( e.getActionCommand().equals( "QT" ) )
-				//createGraph();	// nf wird gesetzt
-				quickestTransshipment();
-			else if( e.getActionCommand().equals( "MFOTMC" ) )
-				maxFlowOverTimeMinCost();
-			else if( e.getActionCommand().equals( "MFOTTEN" ) )
-				maxFlowOverTimeTimeExpanded();
-			else if( e.getActionCommand().equals( "EAT" ) )
-				earliestArrivalTransshipment();
-			else
-				ZETMain.sendError( loc.getString( "gui.UnknownCommand" ) + " '" + e.getActionCommand() + "'. " + loc.getString( "gui.ContactDeveloper" ) );
-		}
-
-		private void earliestArrivalTransshipment() {
-			try {
-				Batch res = new Batch();
-				res.addEntry( "EA Transshipment with SSSP", zcontrol.getProject(), 1, GraphAlgorithm.EarliestArrivalTransshipmentSuccessiveShortestPaths, CellularAutomatonAlgorithm.Swap );
-				res.getEntries().get( 0 ).setUseCa( false );
-				setBatchResult( res.execute( false ) );
-				tabPane.setSelectedIndex( tabs.indexOf( ZETWindowTabs.Visualization ) );
-			} catch( Exception ex ) {
-				ZETMain.sendError( ex.getLocalizedMessage() );
-			}
-		}
-
-		private void maxFlowOverTimeMinCost() {
-			try {
-				Batch res = new Batch();
-				res.addEntry( "MaxFlow", zcontrol.getProject(), 1, GraphAlgorithm.MaxFlowOverTimeMinCost, CellularAutomatonAlgorithm.Swap );
-				res.getEntries().get( 0 ).setUseCa( false );
-				setBatchResult( res.execute( false ) );
-				tabPane.setSelectedIndex( tabs.indexOf( ZETWindowTabs.Visualization ) );
-			} catch( Exception ex ) {
-				ZETMain.sendError( ex.getLocalizedMessage() );
-			}
-		}
-
-		private void maxFlowOverTimeTimeExpanded() {
-			try {
-				Batch res = new Batch();
-				res.addEntry( "MaxFlow", zcontrol.getProject(), 1, GraphAlgorithm.MaxFlowOverTimeTimeExpanded, CellularAutomatonAlgorithm.Swap );
-				res.getEntries().get( 0 ).setUseCa( false );
-				setBatchResult( res.execute( false ) );
-				tabPane.setSelectedIndex( tabs.indexOf( ZETWindowTabs.Visualization ) );
-			} catch( Exception ex ) {
-				ZETMain.sendError( ex.getLocalizedMessage() );
-			}
-		}
-
-		private void quickestTransshipment() {
-			try {
-				Batch res = new Batch();
-				res.addEntry( "Quickest Transshipment", zcontrol.getProject(), 1, GraphAlgorithm.QuickestTransshipment, CellularAutomatonAlgorithm.Swap );
-				res.getEntries().get( 0 ).setUseCa( false );
-				setBatchResult( res.execute( false ) );
-				tabPane.setSelectedIndex( tabs.indexOf( ZETWindowTabs.Visualization ) );
-			} catch( Exception ex ) {
-				ZETMain.sendError( ex.getLocalizedMessage() );
-			}
-		}
-
-		private void simulateCA() {
-			try {
-				Batch res = new Batch();
-				res.addEntry( "CA", zcontrol.getProject(), 1, GraphAlgorithm.EarliestArrivalTransshipmentSuccessiveShortestPaths, CellularAutomatonAlgorithm.Swap );
-				res.getEntries().get( 0 ).setUseGraph( false );
-				setBatchResult( res.execute( false ) );
-				tabPane.setSelectedIndex( tabs.indexOf( ZETWindowTabs.Visualization ) );
-			} catch( Exception ex ) {
-				ZETMain.sendError( ex.getLocalizedMessage() );
-			}
-		}
-	};
 	ChangeListener chlTab = new ChangeListener() {
 
 		public void stateChanged( ChangeEvent e ) {
@@ -562,46 +471,6 @@ public class JEditor extends JFrame implements Localized, EventListener<Progress
 	 *                                                                           *
 	 ****************************************************************************/
 
-	private boolean continueTask() {
-		if( JOptionPane.showOptionDialog( this,
-						"Es läuft ein Task. Soll der aktuelle Lauf abgebrochen werden und ein neuer gestartet werden?", //TODO loc
-						"Task läuft", // TODO loc
-						JOptionPane.YES_NO_OPTION,
-						JOptionPane.QUESTION_MESSAGE,
-						null, null, null ) == JOptionPane.YES_OPTION ) {
-			// Task abbrechen
-			caAlgo.cancel();
-			worker.cancel( true );
-			caAlgo = null;
-			return false;
-		} else
-			return true;
-	}
-
-	private void quickVisualization() {
-		if( worker != null && !worker.isDone() && continueTask() )
-			return;
-
-			CellularAutomaton ca = null;//ZToCAConverter.getInstance().convert( zcontrol.getProject().getBuildingPlan() );
-			for( AssignmentType at : zcontrol.getProject().getCurrentAssignment().getAssignmentTypes() )
-				ca.setAssignmentType( at.getName(), at.getUid() );
-			//ZToCAConverter.applyConcreteAssignment( zcontrol.getProject().getCurrentAssignment().createConcreteAssignment( 400 ) );
-			caAlgo = new CellularAutomatonInOrderExecution( ca );
-			caAlgo.setMaxTimeInSeconds( PropertyContainer.getInstance().getAsDouble( "algo.ca.maxTime" ) );
-
-			caAlgo = new CARealTime( ca );
-			CARealTime caRealTime = (CARealTime) caAlgo;
-			caRealTime.setStepTime( 550 );
-
-			worker = AlgorithmTask.getNewInstance();
-			worker.setTask( caRealTime );
-			try {
-				worker.executeAlgorithm( true );
-			} catch( Exception ex ) {
-				Debug.printException( ex );
-			}
-	}
-
 	/**
 	 * 
 	 * @param r
@@ -620,37 +489,6 @@ public class JEditor extends JFrame implements Localized, EventListener<Progress
 
 //		mnuFileSaveResultAs.setEnabled( result != null );
 	}
-
-	private void stepByStepSimulation() {
-		if( worker != null && !worker.isDone() && continueTask() )
-			return;
-
-			CellularAutomaton ca = null;//sZToCAConverter.getInstance().convert( zcontrol.getProject().getBuildingPlan() );
-			for( AssignmentType at : zcontrol.getProject().getCurrentAssignment().getAssignmentTypes() )
-				ca.setAssignmentType( at.getName(), at.getUid() );
-//			ZToCAConverter.applyConcreteAssignment( zcontrol.getProject().getCurrentAssignment().createConcreteAssignment( 400 ) );
-			caAlgo = new CellularAutomatonInOrderExecution( ca );
-			caAlgo.setMaxTimeInSeconds( PropertyContainer.getInstance().getAsDouble( "algo.ca.maxTime" ) );
-
-			caAlgo = new CARealTime( ca );
-			caAlgo.setStepByStep( true );
-
-			worker = AlgorithmTask.getNewInstance();
-			worker.setTask( caAlgo );
-			try {
-				worker.executeAlgorithm( true );
-			} catch( Exception ex ) {
-				Debug.printException( ex );
-			}
-	}
-	PropertyChangeListener pclStepByStep = new PropertyChangeListener() {
-
-		public void propertyChange( PropertyChangeEvent evt ) {
-			if( evt.getPropertyName().equals( "progress" ) ) {
-				//int progress = (Integer)evt.getNewValue();
-			}
-		}
-	};
 
 	/*****************************************************************************
 	 *                                                                           *
@@ -777,25 +615,11 @@ public class JEditor extends JFrame implements Localized, EventListener<Progress
 				ZETMain.sendMessage( "Replaying visualization finished." );
 			return;
 		}
-//		if( stepByStep ) {
-//			if( event.getProcessMessage().progress >= 0 )
-//				progressBar.setValue( event.getProcessMessage().progress );
-//			lblTaskMain.setText( event.getProcessMessage().taskName );
-//			lblTaskInfo.setText( event.getProcessMessage().taskProgressInformation );
-//			//JEditorPanel.instance.getRasterizedFloor().displayFloor( myProject.getBuildingPlan().getFloors().get(1), ZToCAConverter.getInstance().getLatestMapping(), ZToCAConverter.getInstance().getLatestContainer() );
-		//updateFloorView();
-		//caView.updateFloorView();
 		if( currentMode == ZETWindowTabs.QuickView ) {
 			Floor floor = editView.getCurrentFloor();
 			caView.getLeftPanel().getMainComponent().displayFloor( floor );
 		}
-		//editView.updateFloorView();
-//		} else {
-//			if( event.getProcessMessage().progress >= 0 )
-//				progressBar.setValue( event.getProcessMessage().progress );
 		ZETMain.sendMessage( event.getProcessMessage().taskName );
-//			lblTaskInfo.setText( event.getProcessMessage().taskProgressInformation );
-//		}
 	}
 
 	public void setControl( GLControl control ) {

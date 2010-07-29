@@ -13,7 +13,7 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
-package converter;
+package converter.graph;
 
 import de.tu_berlin.math.coga.zet.NetworkFlowModel;
 import ds.z.BuildingPlan;
@@ -46,7 +46,7 @@ public class ZToGraphConverter {
 			NetworkFlowModel model) {
 		switch (USED_CONVERTER) {
 		case RECTANGLE_BASED_CONVERTER:
-			ZToNonGridGraphConverter.convertBuildingPlan(plan, model);
+			//ZToNonGridGraphConverter.convertBuildingPlan(plan, model);
 			break;
 		case EXACT_CONVERTER_BY_MELANIE:
 			ZToGridGraphConverterAlt2.convertBuildingPlan(plan, model);
@@ -55,17 +55,14 @@ public class ZToGraphConverter {
 			ZToGridGraphConverterAlt3.convertBuildingPlan(plan, model);
 			break;
 		default:
-			throw new AssertionError(
-					"I cannot handle the converter type"
-							+ USED_CONVERTER
-							+ ". You need to extend the switch-statement in this method.");
+			throw new AssertionError( "I cannot handle the converter type" + USED_CONVERTER + ". You need to extend the switch-statement in this method.");
 		}
 	}
 	
 	public static void convertConcreteAssignment(ConcreteAssignment assignment, NetworkFlowModel model) {
 		switch (USED_CONVERTER) {
 		case RECTANGLE_BASED_CONVERTER:
-			ZToNonGridGraphConverter.convertConcreteAssignment(assignment, model);
+			//ZToNonGridGraphConverter.convertConcreteAssignment(assignment, model);
 			break;
 		case EXACT_CONVERTER_BY_MELANIE:
 			ZToGridGraphConverterAlt2.convertConcreteAssignment(assignment,
@@ -75,10 +72,7 @@ public class ZToGraphConverter {
 			ZToGridGraphConverterAlt3.convertConcreteAssignment(assignment, model);
 			break;
 		default:
-			throw new AssertionError(
-					"I cannot handle the converter type"
-							+ USED_CONVERTER
-							+ ". You need to extend the switch-statement in this method.");
+			throw new AssertionError( "I cannot handle the converter type" + USED_CONVERTER + ". You need to extend the switch-statement in this method.");
 		}
 	}
 	

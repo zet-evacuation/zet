@@ -25,7 +25,7 @@ import de.tu_berlin.math.coga.graph.io.xml.GraphView;
 import de.tu_berlin.math.coga.graph.io.xml.XMLReader;
 import de.tu_berlin.math.coga.graph.io.xml.XMLWriter;
 import de.tu_berlin.math.coga.math.vectormath.Vector3;
-import ds.GraphVisualizationResult;
+import ds.GraphVisualizationResults;
 import ds.graph.IdentifiableIntegerMapping;
 import ds.graph.IdentifiableObjectMapping;
 import ds.graph.Node;
@@ -43,7 +43,7 @@ public class flow implements AlgorithmListener {
 	/** The instance of the earliest arrival problem that should be solved. */
 	EarliestArrivalFlowProblem eafp = null;
 	static flow theInstance;
-	GraphVisualizationResult graphVisResult;
+	GraphVisualizationResults graphVisResult;
 	IdentifiableIntegerMapping<Node> xPos;
 	IdentifiableIntegerMapping<Node> yPos;
 	IdentifiableObjectMapping<Node, Vector3> nodePositionMapping;
@@ -136,7 +136,7 @@ public class flow implements AlgorithmListener {
 			} else
 				outFilename = config.getString( "outputfile" );
 			if( format.equals( "flow" ) ) {
-				theInstance.graphVisResult = new GraphVisualizationResult( theInstance.eafp, theInstance.xPos, theInstance.yPos, theInstance.df );
+				theInstance.graphVisResult = new GraphVisualizationResults( theInstance.eafp, theInstance.xPos, theInstance.yPos, theInstance.df );
 				theInstance.graphVisResult.setNeededTimeHorizon( theInstance.neededTimeHorizon );
 				try {
 //					if( !outFilename.endsWith( ".flow" ) )

@@ -16,7 +16,7 @@
 package gui.visualization.control;
 
 import ds.PropertyContainer;
-import ds.GraphVisualizationResult;
+import ds.GraphVisualizationResults;
 import ds.ca.CellularAutomaton;
 import ds.ca.PotentialManager;
 import ds.ca.StaticPotential;
@@ -166,7 +166,7 @@ public class GLControl implements DrawableControlable {
 	 * @param buildingResults the visual information about the building
 	 * @param caStatistic the calculated statistic for cellular automaton
 	 */
-	public GLControl( CAVisualizationResults caVisResults, GraphVisualizationResult graphVisResult, BuildingResults buildingResults, CAStatistic caStatistic ) {
+	public GLControl( CAVisualizationResults caVisResults, GraphVisualizationResults graphVisResult, BuildingResults buildingResults, CAStatistic caStatistic ) {
 		this.caStatistic = caStatistic;
 		this.buildingResults = buildingResults;
 		GLCellControl.invalidateMergedPotential();
@@ -205,12 +205,33 @@ public class GLControl implements DrawableControlable {
 		showWalls( PropertyContainer.getInstance().getAsBoolean( "settings.gui.visualization.walls" ) );
 	}
 
+	/**
+	 * Resets the cellular automaton control for this graphics control class.
+	 * @param caVis
+	 * @param ca
+	 */
 	public void setCellularAutomatonControl( CAVisualizationResults caVis, CellularAutomaton ca ) {
 		hasCellularAutomaton = true;
 		this.ca = ca;
 		caControl = new GLCellularAutomatonControl( caVis, ca );
 		estimatedTime = 0;
 		showCellularAutomaton( PropertyContainer.getInstance().getAsBoolean( "settings.gui.visualization.cellularAutomaton" ) );
+	}
+
+	public void setGraphControl( GraphVisualizationResults graphVisResult ) {
+		if( graphVisResult != null ) {
+			hasGraph = true;
+			graphControl = new GLGraphControl( graphVisResult );
+
+			this.secondsPerStepGraph();
+
+			// TODO OpenGL equal-flow-arrival, see
+			estimatedTime = Math.max( estimatedTime, graphControl.getStepCount() * graphControl.getSecondsPerStep() );
+			showGraph( PropertyContainer.getInstance().getAsBoolean( "settings.gui.visualization.graph" ) );
+			showNodeRectangles( PropertyContainer.getInstance().getAsBoolean( "settings.gui.visualization.nodeArea" ) );
+		} else {
+			hasGraph = false;
+		}
 	}
 
 
@@ -568,8 +589,8 @@ public class GLControl implements DrawableControlable {
 	}
 
 	/**
-	 * Returns the statistic object for the current cellularautomaton.
-	 * @return the statistic object for the current cellularautomaton.
+	 * Returns the statistic object for the current cellular automaton.
+	 * @return the statistic object for the current cellular automaton.
 	 */
 	public CAStatistic getCAStatistic() {
 		return hasCellularAutomaton ? caStatistic : null;

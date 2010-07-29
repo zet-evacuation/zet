@@ -2,7 +2,7 @@
  * AssignmentApplicationInstance.java
  * Created: Jul 28, 2010,5:30:04 PM
  */
-package converter.cellularAutomaton;
+package de.tu_berlin.math.coga.zet.converter.cellularAutomaton;
 
 import de.tu_berlin.math.coga.datastructure.Tupel;
 import ds.z.ConcreteAssignment;

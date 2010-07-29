@@ -18,7 +18,7 @@ package gui.visualization.control.graph;
 import de.tu_berlin.math.coga.math.Conversion;
 import ds.graph.Edge;
 import ds.graph.flow.EdgeBasedFlowOverTime;
-import ds.GraphVisualizationResult;
+import ds.GraphVisualizationResults;
 import ds.graph.IdentifiableIntegerMapping;
 import ds.graph.Node;
 import ds.graph.NodeRectangle;
@@ -34,7 +34,7 @@ import de.tu_berlin.math.coga.graph.io.xml.FlowVisualization;
  * by {@code GLEdge}. That means it sets the correct positions depending on the time of the visualization.
  * @author Jan-Philipp Kappmeier
  */
-//public class GLEdgeControl extends AbstractControl<GLEdge, Edge, GraphVisualizationResult, GLEdge, GLEdgeControl, GLControl> {
+//public class GLEdgeControl extends AbstractControl<GLEdge, Edge, GraphVisualizationResults, GLEdge, GLEdgeControl, GLControl> {
 public class GLEdgeControl extends AbstractZETVisualizationControl<GLEdgeControl, GLEdge, GLGraphControl> {
 	private static final double Z_TO_OPENGL_SCALING = 0.1d;
 	private double time;
@@ -44,7 +44,7 @@ public class GLEdgeControl extends AbstractZETVisualizationControl<GLEdgeControl
 	private int maxFlowRate;
 	private double deltaStep;
 	private Edge controlled;
-	//private GraphVisualizationResult graphVisResult;
+	//private GraphVisualizationResults graphVisResult;
 	private double length = 0;
 	private double length3d = 0;
 	private Vector3 differenceVectorInOpenGLScaling;
@@ -60,7 +60,7 @@ public class GLEdgeControl extends AbstractZETVisualizationControl<GLEdgeControl
 	 * @param edge the edge for this control object.
 	 * @param glControl the main control class.
 	 */
-	public GLEdgeControl( GraphVisualizationResult graphVisResult, Edge edge, GLGraphControl glControl ) {
+	public GLEdgeControl( GraphVisualizationResults graphVisResult, Edge edge, GLGraphControl glControl ) {
 		super( glControl );
 		controlled = edge;
 		setView( new GLEdge( this ) );

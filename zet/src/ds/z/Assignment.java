@@ -22,8 +22,8 @@ package ds.z;
 
 import com.thoughtworks.xstream.annotations.XStreamAlias;
 import com.thoughtworks.xstream.annotations.XStreamAsAttribute;
-import converter.Raster;
-import converter.RasterSquare;
+import de.tu_berlin.math.coga.zet.converter.Raster;
+import de.tu_berlin.math.coga.zet.converter.RasterSquare;
 import de.tu_berlin.math.coga.rndutils.RandomUtils;
 import ds.z.exception.TooManyPeopleException;
 import io.z.AssignmentConverter;

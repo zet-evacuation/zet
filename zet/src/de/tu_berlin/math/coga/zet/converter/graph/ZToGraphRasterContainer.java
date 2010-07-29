@@ -18,8 +18,9 @@
  *
  */
 
-package converter;
+package de.tu_berlin.math.coga.zet.converter.graph;
 
+import de.tu_berlin.math.coga.zet.converter.RasterContainer;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.LinkedList;
