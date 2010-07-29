@@ -6,13 +6,25 @@ package gui;
 
 import algo.ca.EvacuationCellularAutomatonAlgorithm;
 import batch.CellularAutomatonAlgorithm;
-import converter.ZToCAConverter;
-import converter.ZToCAConverter.ConversionNotSupportedException;
+import converter.cellularAutomaton.AssignmentApplicationInstance;
+import converter.cellularAutomaton.ConcreteAssignmentConverter;
+import converter.cellularAutomaton.ConvertedCellularAutomaton;
+import converter.cellularAutomaton.ZToCAConverter;
+import converter.cellularAutomaton.ZToCAConverter.ConversionNotSupportedException;
+import converter.cellularAutomaton.ZToCAMapping;
+import converter.cellularAutomaton.ZToCARasterContainer;
 import ds.Project;
 import ds.PropertyContainer;
 import ds.ca.CellularAutomaton;
+import ds.z.AssignmentType;
 import ds.z.ConcreteAssignment;
 import io.visualization.BuildingResults;
+import io.visualization.CAVisualizationResults;
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
+import tasks.CellularAutomatonTask;
+import tasks.SerialTask;
+import tasks.conversion.BuildingPlanConverter;
 
 
 /**
@@ -20,13 +32,17 @@ import io.visualization.BuildingResults;
  * zet.
  * @author Jan-Philipp Kappmeier
  */
-public class AlgorithmControl {
+public class AlgorithmControl implements PropertyChangeListener {
 
 	BuildingResults buildingResults;
 	Project project;
 	CellularAutomaton cellularAutomaton;
 	ConcreteAssignment concreteAssignment;
 	EvacuationCellularAutomatonAlgorithm caAlgo;
+	ZToCAMapping mapping;
+	ZToCARasterContainer container;
+	CAVisualizationResults caVisResults;
+
 
 	public AlgorithmControl( Project project ) {
 		this.project = project;
@@ -37,38 +53,104 @@ public class AlgorithmControl {
 	}
 
 	public void convertBuildingPlan( ) {
-		buildingResults = new BuildingResults( project.getBuildingPlan() );
+		convertBuildingPlan( null );
+	}
+	
+	public void convertBuildingPlan( PropertyChangeListener pcl ) {
+		final BuildingPlanConverter bpc = new BuildingPlanConverter();
+		bpc.setProblem( project.getBuildingPlan() );
+
+		final SerialTask st = new SerialTask();
+		st.add( bpc );
+		st.addPropertyChangeListener( new PropertyChangeListener() {
+
+			public void propertyChange( PropertyChangeEvent pce ) {
+				if( st.isDone() )
+					buildingResults = bpc.getSolution();
+			}
+		});
+		if( pcl != null)
+			st.addPropertyChangeListener( pcl );
+		st.execute();
 	}
 
 	public BuildingResults getBuildingResults() {
 		return buildingResults;
 	}
 
-	public void convertCellularAutomaton( ) throws ConversionNotSupportedException {
-		cellularAutomaton = ZToCAConverter.getInstance().convert( project.getBuildingPlan() );
+	public void convertCellularAutomaton( ) {
+		convertCellularAutomaton( null );
+	}
+
+	void convertCellularAutomaton( PropertyChangeListener propertyChangeListener ) {
+		final ZToCAConverter conv = new ZToCAConverter();
+		conv.setProblem( project.getBuildingPlan() );
+
+		final SerialTask st = new SerialTask( conv );
+		st.addPropertyChangeListener( new PropertyChangeListener() {
+
+			public void propertyChange( PropertyChangeEvent pce ) {
+				if( st.isDone() ) {
+					cellularAutomaton = conv.getCellularAutomaton();
+					mapping = conv.getMapping();
+					container = conv.getContainer();
+				}
+			}
+		});
+		if( propertyChangeListener != null )
+			st.addPropertyChangeListener( propertyChangeListener );
+		st.execute();
 	}
 
 	public CellularAutomaton getCellularAutomaton() {
 		return cellularAutomaton;
 	}
 
-	void createConcreteAssignment() throws IllegalArgumentException, ConversionNotSupportedException {
-		concreteAssignment = project.getCurrentAssignment().createConcreteAssignment( 400 );
-		ZToCAConverter.applyConcreteAssignment( concreteAssignment );
+	public ZToCARasterContainer getContainer() {
+		return container;
 	}
 
-	void simulate() {
+	public ZToCAMapping getMapping() {
+		return mapping;
+	}
 
-//		long start;
-//		long end;
+	void performSimulation() {
+		performSimulation( null );
+	}
 
-		//Run the CA
-//		start = System.currentTimeMillis();
-//		caAlgo.getCellularAutomaton().startRecording();
-		caAlgo.run();	// hier wird initialisiert
-//		caAlgo.getCellularAutomaton().stopRecording();
-//		end = System.currentTimeMillis();
-		System.out.println( "Lauf fertig." );
+	void performSimulation( PropertyChangeListener propertyChangeListener ) {
+		final CellularAutomatonTask cat = new CellularAutomatonTask();
+		cat.setCaAlgo( CellularAutomatonAlgorithm.RandomOrder );
+		cat.setProblem( project );
+
+		final SerialTask st = new SerialTask( cat );
+		st.addPropertyChangeListener( new PropertyChangeListener() {
+
+			public void propertyChange( PropertyChangeEvent pce ) {
+				if( st.isDone() ) {
+					cellularAutomaton = cat.getCa();
+					mapping = cat.getMapping();
+					container = cat.getContainer();
+					caVisResults = cat.getSolution();
+				}
+			}
+		});
+		if( propertyChangeListener != null )
+			st.addPropertyChangeListener( propertyChangeListener );
+		st.execute();
+	}
+
+	public CAVisualizationResults getCaVisResults() {
+		return caVisResults;
+	}
+
+	void createConcreteAssignment() throws IllegalArgumentException, ConversionNotSupportedException {
+		for( AssignmentType at : project.getCurrentAssignment().getAssignmentTypes() )
+			cellularAutomaton.setAssignmentType( at.getName(), at.getUid() );
+		concreteAssignment = project.getCurrentAssignment().createConcreteAssignment( 400 );
+		final ConcreteAssignmentConverter cac = new ConcreteAssignmentConverter();
+		cac.setProblem( new AssignmentApplicationInstance( new ConvertedCellularAutomaton( cellularAutomaton, mapping, container ), concreteAssignment ) );
+		cac.run();
 	}
 
 	void setUpSimulationAlgorithm() {
@@ -78,17 +160,31 @@ public class AlgorithmControl {
 		caAlgo.setMaxTimeInSeconds( caMaxTime );
 	}
 
-	void performOneStep() {
-		caAlgo.setStepByStep( true );
-		caAlgo.run();
+	boolean caInitialized = false;
+
+	boolean performOneStep() throws ConversionNotSupportedException {
+		if( !caInitialized ) {
+			final ZToCAConverter conv = new ZToCAConverter( project );
+			conv.run();
+			cellularAutomaton = conv.getCellularAutomaton();
+			mapping = conv.getMapping();
+			container = conv.getContainer();
+			createConcreteAssignment();
+			setUpSimulationAlgorithm();
+			caAlgo.setStepByStep( true );
+			caAlgo.initialize();
+			caInitialized = true;
+			return true;
+		} else {
+			caAlgo.run();
+			if( caAlgo.isFinished() )
+				caInitialized = false;
+			return false;
+		}
 	}
 
-	public EvacuationCellularAutomatonAlgorithm getCaAlgo() {
-		return caAlgo;
+
+	public void propertyChange( PropertyChangeEvent pce ) {
+		System.out.println( pce.getPropertyName() );
 	}
-
-
-
-
-
 }

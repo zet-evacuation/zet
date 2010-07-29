@@ -25,7 +25,7 @@ import batch.Batch;
 import batch.BatchResult;
 import batch.CellularAutomatonAlgorithm;
 import batch.GraphAlgorithm;
-import converter.ZToCAConverter;
+import converter.cellularAutomaton.ZToCAConverter;
 import ds.PropertyContainer;
 import ds.ca.CellularAutomaton;
 import ds.z.AssignmentType;
@@ -382,7 +382,7 @@ public class JEditor extends JFrame implements Localized, EventListener<Progress
 			tabPane.setSelectedIndex( 0 );
 		editView.displayProject( zcontrol );
 		// Löschen eingestellter parameter
-		ZToCAConverter.getInstance().clear();
+//		ZToCAConverter.getInstance().clear();
 		firstSwitch = true;
 		if( !PropertyContainer.getInstance().getAsBoolean( "editor.options.view.hideDefaultFloor" ) )
 			editView.setFloor( 1 );
@@ -582,12 +582,10 @@ public class JEditor extends JFrame implements Localized, EventListener<Progress
 		if( worker != null && !worker.isDone() && continueTask() )
 			return;
 
-		try {
-			CellularAutomaton ca = ZToCAConverter.getInstance().convert( zcontrol.getProject().getBuildingPlan() );
+			CellularAutomaton ca = null;//ZToCAConverter.getInstance().convert( zcontrol.getProject().getBuildingPlan() );
 			for( AssignmentType at : zcontrol.getProject().getCurrentAssignment().getAssignmentTypes() )
 				ca.setAssignmentType( at.getName(), at.getUid() );
-			ZToCAConverter.applyConcreteAssignment(
-							zcontrol.getProject().getCurrentAssignment().createConcreteAssignment( 400 ) );
+			//ZToCAConverter.applyConcreteAssignment( zcontrol.getProject().getCurrentAssignment().createConcreteAssignment( 400 ) );
 			caAlgo = new CellularAutomatonInOrderExecution( ca );
 			caAlgo.setMaxTimeInSeconds( PropertyContainer.getInstance().getAsDouble( "algo.ca.maxTime" ) );
 
@@ -602,9 +600,6 @@ public class JEditor extends JFrame implements Localized, EventListener<Progress
 			} catch( Exception ex ) {
 				Debug.printException( ex );
 			}
-		} catch( ZToCAConverter.ConversionNotSupportedException ex ) {
-			ZETMain.sendError( ex.getLocalizedMessage() );
-		}
 	}
 
 	/**
@@ -630,11 +625,10 @@ public class JEditor extends JFrame implements Localized, EventListener<Progress
 		if( worker != null && !worker.isDone() && continueTask() )
 			return;
 
-		try {
-			CellularAutomaton ca = ZToCAConverter.getInstance().convert( zcontrol.getProject().getBuildingPlan() );
+			CellularAutomaton ca = null;//sZToCAConverter.getInstance().convert( zcontrol.getProject().getBuildingPlan() );
 			for( AssignmentType at : zcontrol.getProject().getCurrentAssignment().getAssignmentTypes() )
 				ca.setAssignmentType( at.getName(), at.getUid() );
-			ZToCAConverter.applyConcreteAssignment( zcontrol.getProject().getCurrentAssignment().createConcreteAssignment( 400 ) );
+//			ZToCAConverter.applyConcreteAssignment( zcontrol.getProject().getCurrentAssignment().createConcreteAssignment( 400 ) );
 			caAlgo = new CellularAutomatonInOrderExecution( ca );
 			caAlgo.setMaxTimeInSeconds( PropertyContainer.getInstance().getAsDouble( "algo.ca.maxTime" ) );
 
@@ -648,9 +642,6 @@ public class JEditor extends JFrame implements Localized, EventListener<Progress
 			} catch( Exception ex ) {
 				Debug.printException( ex );
 			}
-		} catch( ZToCAConverter.ConversionNotSupportedException ex ) {
-			ZETMain.sendError( ex.getLocalizedMessage() );
-		}
 	}
 	PropertyChangeListener pclStepByStep = new PropertyChangeListener() {
 

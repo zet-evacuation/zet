@@ -19,7 +19,7 @@
  */
 package exitdistributions;
 
-import converter.ZToCAConverter;
+import converter.cellularAutomaton.ZToCAConverter;
 import converter.ZToGraphRasterContainer;
 import ds.ca.CellularAutomaton;
 import de.tu_berlin.math.coga.zet.NetworkFlowModel;
@@ -40,15 +40,16 @@ public class ExitCapacityBasedCAFactory extends ZToCAConverter {
 	protected ExitCapacityBasedCAFactory() {
 	}
 
-	public CellularAutomaton convertAndApplyConcreteAssignment( BuildingPlan buildingPlan, NetworkFlowModel model, ConcreteAssignment concreteAssignment, ZToGraphRasterContainer graphRaster ) throws converter.ZToCAConverter.ConversionNotSupportedException {
-		CellularAutomaton ca = super.convert( buildingPlan );
-		CAPartOfMapping caPartOfMapping = this.getLatestCAPartOfNodeCellMapping();
-		applyConcreteAssignment( concreteAssignment );
-		BidirectionalNodeCellMapping nodeCellMapping = new BidirectionalNodeCellMapping( graphRaster, caPartOfMapping );
-		graphBasedExitToCapacityMapping = new GraphBasedExitToCapacityMapping( ca, nodeCellMapping, model );
-		graphBasedExitToCapacityMapping.calculate();
-		ca.setExitToCapacityMapping( graphBasedExitToCapacityMapping.getExitCapacity() );
-		return ca;
+	public CellularAutomaton convertAndApplyConcreteAssignment( BuildingPlan buildingPlan, NetworkFlowModel model, ConcreteAssignment concreteAssignment, ZToGraphRasterContainer graphRaster ) throws converter.cellularAutomaton.ZToCAConverter.ConversionNotSupportedException {
+//		CellularAutomaton ca = super.convert( buildingPlan );
+//		CAPartOfMapping caPartOfMapping = this.getLatestCAPartOfNodeCellMapping();
+//		applyConcreteAssignment( concreteAssignment );
+//		BidirectionalNodeCellMapping nodeCellMapping = new BidirectionalNodeCellMapping( graphRaster, caPartOfMapping );
+//		graphBasedExitToCapacityMapping = new GraphBasedExitToCapacityMapping( ca, nodeCellMapping, model );
+//		graphBasedExitToCapacityMapping.calculate();
+//		ca.setExitToCapacityMapping( graphBasedExitToCapacityMapping.getExitCapacity() );
+//		return ca;
+		return new CellularAutomaton();
 	}
 
 	public static ExitCapacityBasedCAFactory getInstance() {

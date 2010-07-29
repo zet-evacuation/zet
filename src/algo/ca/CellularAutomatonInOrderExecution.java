@@ -62,8 +62,11 @@ public class CellularAutomatonInOrderExecution extends EvacuationCellularAutomat
 		if( isStepByStep() )
 			if( !initRulesPerformed )
 				executeInitialization();
-			else
+			else {
 				executeStep();
+				if( (ca.getNotSafeIndividualsCount() == 0 && ca.getTimeStep() >= ca.getNeededTime()) || ca.getTimeStep() >= getMaxTimeInSteps() || isCancelled() )
+					setFinished( true );
+			}
 		else {
 			int individuals = ca.individualCount();
 

@@ -19,49 +19,42 @@
  *
  */
 
-package converter;
+package converter.cellularAutomaton;
 
+import ds.Project;
+import de.tu_berlin.math.coga.common.algorithm.Algorithm;
 import algo.ca.PotentialController;
 import algo.ca.SPPotentialController;
-import algo.ca.parameter.AbstractDefaultParameterSet;
-import algo.ca.parameter.ParameterSet;
 import batch.tasks.AlgorithmTask;
+import converter.RasterContainerCreator;
+import converter.RoomRasterSquare;
 import de.tu_berlin.math.coga.common.util.Direction;
 import de.tu_berlin.math.coga.common.util.Level;
 import ds.z.BuildingPlan;
-import ds.z.ConcreteAssignment;
 import ds.z.Floor;
 import ds.ca.CellularAutomaton;
-import ds.z.Person;
-import ds.ca.Individual;
 import ds.ca.Cell;
 import ds.ca.ExitCell;
 import ds.ca.StaticPotential;
-import ds.PropertyContainer;
 import ds.ca.SaveCell;
-import ds.ca.TargetCell;
-import ds.z.PlanPoint;
 import evacuationplan.BidirectionalNodeCellMapping;
-import exitdistributions.ZToExitMapping;
 import java.util.ArrayList;
 import java.util.ArrayDeque;
 import java.util.Collection;
 import java.util.HashMap;
-import java.util.List;
 import de.tu_berlin.math.coga.common.localization.Localization;
-import ds.ca.TeleportCell;
 import ds.z.TeleportArea;
-import statistics.Statistic;
+import java.util.logging.Logger;
 import static de.tu_berlin.math.coga.common.util.Direction.*;
 
 /**
  * This singleton class converts a rasterized z-Project to a cellular automaton.
- * @author Daniel Pluempe, Jan-Philipp Kappmeier
+ * @author Daniel Plümpe, Jan-Philipp Kappmeier
  *
  */
-public class ZToCAConverter {
+public class ZToCAConverter extends Algorithm<BuildingPlan,ConvertedCellularAutomaton> {
 	/** The private instance of this singleton. */
-	private static ZToCAConverter instance = null;
+	//private static ZToCAConverter instance = null;
 	/** The latest created mapping of the z-format to the cellular automaton. */
 	private static ZToCAMapping lastMapping = null;
 	/** The latest created container of rastered elements. */
@@ -72,6 +65,17 @@ public class ZToCAConverter {
 	private static CellularAutomaton lastCA = null;
 	/** A map that maps rastered rooms to rooms in the cellular automaton. */
 	private static HashMap<ZToCARoomRaster, ds.ca.Room> roomRasterRoomMapping = null;
+
+	@Override
+	protected ConvertedCellularAutomaton runAlgorithm( BuildingPlan problem ) {
+		try {
+			convert( problem );
+		} catch( ConversionNotSupportedException ex ) {
+			Logger.getLogger( ZToCAConverter.class.getName() ).log( java.util.logging.Level.SEVERE, null, ex );
+		}
+		ConvertedCellularAutomaton cca = new ConvertedCellularAutomaton( lastCA, lastMapping, lastContainer );
+		return cca;
+	}
 
 	public static class ConversionNotSupportedException extends Exception {
 
@@ -100,8 +104,12 @@ public class ZToCAConverter {
 	/**
 	 * Creates a new instance of this singleton class.
 	 */
-	protected ZToCAConverter() {
+	public ZToCAConverter() {
 		//lastMapping = new ZToCAMapping();
+	}
+
+	public ZToCAConverter( Project project ) {
+		setProblem( project.getBuildingPlan() );
 	}
 
 	/**
@@ -109,13 +117,13 @@ public class ZToCAConverter {
 	 * exists yet, this method will create one and return it.
 	 * @return The unique instance of this class.
 	 */
-	public static ZToCAConverter getInstance() {
-		if( instance == null ) {
-			instance = new ZToCAConverter();
-		}
+//	public static ZToCAConverter getInstance() {
+//		if( instance == null ) {
+//			instance = new ZToCAConverter();
+//		}
 
-		return instance;
-	}
+//		return instance;
+//	}
 
 	/**
 	 * Call this method to convert the rastered rooms of a z-project to
@@ -127,7 +135,7 @@ public class ZToCAConverter {
 	 * @return A cellular automaton corresponding to the rastered rooms.
 	 * @throws converter.ZToCAConverter.ConversionNotSupportedException 
 	 */
-	public CellularAutomaton convert( BuildingPlan buildingPlan ) throws ConversionNotSupportedException {
+	private CellularAutomaton convert( BuildingPlan buildingPlan ) throws ConversionNotSupportedException {
 		AlgorithmTask.getInstance().publish( "Starte Konvertierung", "" );
 		CellularAutomaton convertedCA = new CellularAutomaton();
 		lastMapping = new ZToCAMapping();
@@ -242,7 +250,7 @@ public class ZToCAConverter {
 	 * convert-operation. 
 	 * @return The mapping that was created during the last conversion.
 	 */
-	public ZToCAMapping getLatestMapping() {
+	public ZToCAMapping getMapping() {
 		if( lastMapping == null )
 			throw new IllegalStateException(Localization.getInstance ().getString ("converter.CallConvertFirstException"));
 
@@ -250,13 +258,13 @@ public class ZToCAConverter {
 	}
 	
 	/**
-	 * This method returns the data needed from tha ca converter
+	 * This method returns the data needed from thes ca converter
 	 * to create a <code>BidirectionalNodeCellMapping</code>.
 	 * @return A <code>BidirectionalNodeCellMapping.CAPartOfMapping</code> object
 	 * containing a raster container and a <code>ZToCAMapping</code>.
 	 */
-	public BidirectionalNodeCellMapping.CAPartOfMapping getLatestCAPartOfNodeCellMapping(){
-		return new BidirectionalNodeCellMapping.CAPartOfMapping( getLatestContainer(), getLatestMapping() );
+	public BidirectionalNodeCellMapping.CAPartOfMapping getLatestCAPartOfNodeCellMapping() {
+		return new BidirectionalNodeCellMapping.CAPartOfMapping( getContainer(), getMapping() );
 	}
 
 	/**
@@ -264,7 +272,7 @@ public class ZToCAConverter {
 	 * @return the last <code>ZToCARasterContainer</code> that has been created.
 	 * @throws IllegalStateException if no container has been created yet
 	 */
-	public ZToCARasterContainer getLatestContainer() throws IllegalStateException {
+	public ZToCARasterContainer getContainer() throws IllegalStateException {
 		if( lastContainer == null )
 			throw new IllegalStateException(Localization.getInstance ().getString ("converter.CallConvertFirstException"));
 
@@ -275,7 +283,7 @@ public class ZToCAConverter {
 	 * Returns the last <code>CellularAutomaton</code>that was created.
 	 * @return the cellular automaton
 	 */
-	public CellularAutomaton getLatestCellularAutomaton() {
+	public CellularAutomaton getCellularAutomaton() {
 		return lastCA;
 	}
 
@@ -288,7 +296,7 @@ public class ZToCAConverter {
 	 * @return the created {@link ds.ca.Room}
 	 * @throws converter.ZToCAConverter.ConversionNotSupportedException if an error occurs
 	 */
-	protected static ds.ca.Room convertRoom( ZToCARoomRaster rasteredRoom, Floor onFloor, int floorID ) throws ConversionNotSupportedException {
+	protected ds.ca.Room convertRoom( ZToCARoomRaster rasteredRoom, Floor onFloor, int floorID ) throws ConversionNotSupportedException {
 		final int width = rasteredRoom.getColumnCount();
 		final int height = rasteredRoom.getRowCount();
 		ds.ca.Room convertedRoom = roomRasterRoomMapping.get( rasteredRoom );
@@ -319,7 +327,7 @@ public class ZToCAConverter {
 	 * collection, also the <code>Floor</code> and the corresponding id in the
 	 * z-format have to be submitted to the method.
 	 * @param onFloor the Floor that contains the rooms
-	 * @param rooms a colleciton of rooms on the floor. This is not checked!
+	 * @param rooms a collection of rooms on the floor. This is not checked!
 	 * @param floorID the id of the floor
 	 */
 	protected static void createAllRooms( Floor onFloor, Collection<ZToCARoomRaster> rooms, int floorID ) {
@@ -346,7 +354,7 @@ public class ZToCAConverter {
 	 * @return the new (or already existing) cell or null if the square is inaccessible
 	 * @throws ConversionNotSupportedException if an initialization error occured.
 	 */
-	protected static ds.ca.Cell convertCell( ZToCARasterSquare square, int x, int y, ds.ca.Room convertedRoom ) throws ConversionNotSupportedException {
+	protected ds.ca.Cell convertCell( ZToCARasterSquare square, int x, int y, ds.ca.Room convertedRoom ) throws ConversionNotSupportedException {
 		if( square == null )
 			return null;
 
@@ -376,7 +384,8 @@ public class ZToCAConverter {
 			for( ZToCARasterSquare partner : square.getPartners() ) {
 				ds.ca.DoorCell partnerDoor = (ds.ca.DoorCell) lastMapping.get( partner );
 				if( partnerDoor == null ) {
-					ZToCARoomRaster partnerRoom = getInstance().getLatestContainer().getRasteredRoom( (ds.z.Room) (partner.getPolygon()) );
+					//ZToCARoomRaster partnerRoom = getInstance().getContainer().getRasteredRoom( (ds.z.Room) (partner.getPolygon()) );
+					ZToCARoomRaster partnerRoom = getContainer().getRasteredRoom( (ds.z.Room) ( partner.getPolygon()) );
 					int newX = converter.RasterTools.polyCoordToRasterCoord( partner.getX(), partnerRoom.getXOffset(), partnerRoom );
 					int newY = converter.RasterTools.polyCoordToRasterCoord( partner.getY(), partnerRoom.getYOffset(), partnerRoom );
 
@@ -457,7 +466,7 @@ public class ZToCAConverter {
 									ds.ca.TeleportCell targetCell = (ds.ca.TeleportCell) lastMapping.get( sq );
 									if( targetCell == null ) {
 										// zielzelle muss erstellt werden
-					//ZToCARoomRaster partnerRoom = getInstance().getLatestContainer().getRasteredRoom( (ds.z.Room) (sq.getPolygon()) );
+					//ZToCARoomRaster partnerRoom = getInstance().getContainer().getRasteredRoom( (ds.z.Room) (sq.getPolygon()) );
 					int newX = converter.RasterTools.polyCoordToRasterCoord( sq.getX(), targetRoomRaster.getXOffset(), targetRoomRaster );
 					int newY = converter.RasterTools.polyCoordToRasterCoord( sq.getY(), targetRoomRaster.getYOffset(), targetRoomRaster );
 					targetCell = new ds.ca.TeleportCell( sq.getSpeedFactor(), newX, newY );
@@ -485,9 +494,9 @@ public class ZToCAConverter {
 
 
 			// Find the partner cell
-			//ZToCARoomRaster partnerRoom = getInstance().getLatestContainer() .getRasteredRoom( (ds.z.Room) () );
+			//ZToCARoomRaster partnerRoom = getInstance().getContainer() .getRasteredRoom( (ds.z.Room) () );
 
-			//getInstance().getLatestContainer().getRasteredRoom( null )
+			//getInstance().getContainer().getRasteredRoom( null )
 			return teleport;
 		}
 
@@ -498,94 +507,8 @@ public class ZToCAConverter {
 	}
 
 	/**
-	 * This method returns an individual whose attributes are based upon die assignment specified by the Z-Assignment group.<br>
-	 * To do this the different assignments could be extracted form the passed assignment object. With these values the specific 
-	 * random attributes for the generated individual can be calculated.
-	 * @param assignment The specific Assignment for the new created individual
-	 * @return Returns an individual of type Individual
-	 */
-	private static Individual generateIndividual( Person p ) {
-		String parameterName = PropertyContainer.getInstance().getAsString( "algo.ca.parameterSet" );
-		AbstractDefaultParameterSet.createParameterSet( "DefaultParameterSet" );
-		ParameterSet ps = AbstractDefaultParameterSet.createParameterSet( parameterName );
-
-		double pDecisiveness = p.getDecisiveness();
-		double pFamiliarity = p.getFamiliarity();
-		double pAge = p.getAge();
-		//double pDiameter = p.getDiameter(); // not used in current implementation
-
-		// here is specified how the different properties of an individual are calculated
-		double familiarity = pFamiliarity;
-		double panicFactor = p.getPanic();
-		double slackness = ps.getSlacknessFromDecisiveness( pDecisiveness );
-		double exhaustionFactor = ps.getExhaustionFromAge( pAge );
-		double maxSpeed = ps.getSpeedFromAge( pAge );
-
-		// Collect statistic
-		Statistic.instance.collectAgeSpeed( pAge, maxSpeed );
-
-		// Reaction time is now (since 1.1) computed directly from the correct
-		// individual assignment parameter.
-		double reactiontime = p.getReaction();
-		return new Individual( (int) pAge, familiarity, panicFactor, slackness, exhaustionFactor, maxSpeed, reactiontime, p.getUid() );
-	}
-
-	/**
-	 * Puts persons which are specified in an concrete assignment into the Right
-	 * cells of the cellular automaton. This is done by first get the rastered
-	 * square version of the room specified in the person object. Afterwards the
-	 * cell, in which the person has to be located, is calculated in the following
-	 * way: (coordinate-200)/400
-	 * @param concreteAssignment the concrete assignment containing the individuals
-	 * @throws java.lang.IllegalArgumentException if the calculated cell is not in the room of the cellular automaton
-	 */
-	public static void applyConcreteAssignment( ConcreteAssignment concreteAssignment ) throws IllegalArgumentException, ConversionNotSupportedException {
-		ZToCARoomRaster room;
-		// Create ZToExitMapping
-		HashMap<Individual, TargetCell> individualExitMapping = new HashMap<Individual, TargetCell>();
-		Cell c;
-		int x, y;
-		int individualCounter = 1;
-		for( Person p : concreteAssignment.getPersons() ) {
-			room = lastContainer.getRasteredRoom( p.getRoom() );
-			x = Math.round( (p.getPosition().getXInt() - 200 - p.getRoom().getxOffset()) / 400 );
-			y = Math.round( (p.getPosition().getYInt() - 200 - p.getRoom().getyOffset()) / 400 );
-			if( !room.isValid( x, y ) ) {
-				throw new IllegalArgumentException(Localization.getInstance().getString ( "converter.IndividualOutsideException" ));
-			}
-			c = lastMapping.get( room.getSquare( x, y ) );
-			if( c == null ) {
-				//JEditor.showErrorMessage( "Fehler", "Individuen konnten nicht erzeugt werden in Raum '" + room.getRoom().getName() + "'. Eventuell keine freien Plätze durch unbetretbare Bereiche?" );
-				//throw new ConversionNotSupportedException();
-				// Individual mapped to inaccessible area
-				// skip
-
-			} else {
-				Individual i = generateIndividual( p );
-				i.setNumber( individualCounter++ );
-
-				List<ExitCell> exits = lastCA.getExits();
-				for( ExitCell e : exits ) {
-					// Calculate absolute position
-					// TODO 400 hardcoded hier!
-					int cellCenterX = (e.getX() + e.getRoom().getXOffset())*400 + 200;
-					int cellCenterY = (e.getY() + e.getRoom().getYOffset())*400 + 200;
-					if( p.getSaveArea() != null && p.getSaveArea().contains(  new PlanPoint( cellCenterX, cellCenterY ) ) ) {
-						individualExitMapping.put( i, e );
-						break;
-					}
-				}
-
-				lastCA.addIndividual( c, i );
-			}
-		}
-		ZToExitMapping mapping = new ZToExitMapping( individualExitMapping );
-		lastCA.setIndividualToExitMapping( mapping );
-	}
-
-	/**
-	 * Copies the bonds from a square to the corrisponding cell. That means, if a
-	 * direction of the square is unpassable the direction is set unpassable in the
+	 * Copies the bonds from a square to the corresponding cell. That means, if a
+	 * direction of the square is impassable the direction is set impassable in the
 	 * cell, too and vice versa.
 	 * @param fromSquare the square
 	 * @param toCell the cell
@@ -715,7 +638,7 @@ public class ZToCAConverter {
 	}
 
 	/**
-	 * Checks wether a given direction for a cell is blocked, or not.
+	 * Checks whether a given direction for a cell is blocked, or not.
 	 * @param aCell the cell
 	 * @param direction the direction
 	 * @return true if the cell cannot be leaved in the given direction.

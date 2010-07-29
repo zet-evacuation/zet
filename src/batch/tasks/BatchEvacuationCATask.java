@@ -29,7 +29,7 @@ import batch.BatchResultEntry;
 import batch.CellularAutomatonAlgorithm;
 import batch.GraphAlgorithm;
 import converter.ZToGraphConverter;
-import converter.ZToCAConverter.ConversionNotSupportedException;
+import converter.cellularAutomaton.ZToCAConverter.ConversionNotSupportedException;
 import de.tu_berlin.math.coga.common.algorithm.Algorithm;
 import ds.Project;
 import ds.PropertyContainer;
@@ -158,7 +158,7 @@ public class BatchEvacuationCATask implements Runnable {
 		res.setCellularAutomatonStatistic (runNumber, new CAStatistic (caAlgo.getCaController ().getCaStatisticWriter ().
 				getStoredCAStatisticResults ()));
 		res.setCellularAutomatonVisualization (runNumber, new CAVisualizationResults (VisualResultsRecorder.getInstance ().
-				getRecording (), FlowBasedCAFactory.getFlowBasedCAFactoryInstance ().getLatestMapping ()));
+				getRecording (), FlowBasedCAFactory.getFlowBasedCAFactoryInstance ().getMapping ()));
 
 		// Gather median information
 		median.put (new Integer (caAlgo.getCellularAutomaton ().getTimeStep ()), runNumber);

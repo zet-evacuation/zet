@@ -18,12 +18,12 @@ package evacuationplan;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-import converter.ZToCAMapping;
-import converter.ZToCARasterSquare;
-import converter.ZToCARoomRaster;
+import converter.cellularAutomaton.ZToCAMapping;
+import converter.cellularAutomaton.ZToCARasterSquare;
+import converter.cellularAutomaton.ZToCARoomRaster;
 import converter.ZToGraphRasterContainer;
 import converter.ZToGraphRasterSquare;
-import converter.ZToCARasterContainer;
+import converter.cellularAutomaton.ZToCARasterContainer;
 import converter.ZToGraphRoomRaster;
 
 import ds.graph.Node;

@@ -63,9 +63,9 @@ public class RasterSquare {
   private int column;
   /** The row-index of the square in the raster array created during a rasterization of a polygon. */
   private int row;
-  /** the <code>x</code>-coordiante of the upper left corner in the global coordinate system. */
+  /** the <code>x</code>-coordinate of the upper left corner in the global coordinate system. */
   private int x;
-  /** the <code>y</code>-coordiante of the upper left corner in the global coordinate system */
+  /** the <code>y</code>-coordinate of the upper left corner in the global coordinate system */
   private int y;
   
   /** The size of the raster used in rasterization process. Defines width and height of the square. */
@@ -145,7 +145,7 @@ public class RasterSquare {
     return intersectType;
   }
  
-  protected PlanPolygon getPolygon() {
+  public PlanPolygon getPolygon() {
     return p;
   }
    

@@ -17,8 +17,9 @@
  * ZToCARoomRaster.java
  *
  */
-package converter;
+package converter.cellularAutomaton;
 
+import converter.RoomRaster;
 import ds.z.Room;
 
 /**

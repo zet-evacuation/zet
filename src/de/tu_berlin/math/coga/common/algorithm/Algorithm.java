@@ -53,7 +53,7 @@ public abstract class Algorithm<Problem, Solution> implements Runnable {
         SOLVED;
     }
     /**
-     * The set of listeners that recieves events from this algorithm.
+     * The set of listeners that receives events from this algorithm.
      */
     private Set<AlgorithmListener> algorithmListeners;
     /**
@@ -91,7 +91,7 @@ public abstract class Algorithm<Problem, Solution> implements Runnable {
     private State state;
 
     /**
-     * Adds the specified listener to the set of listeners recieving events from
+     * Adds the specified listener to the set of listeners receiving events from
      * this algorithm. If the specified listener is already part of this list,
      * nothing happens.
      * @param listener the listener to be added to the notification list.
@@ -109,7 +109,7 @@ public abstract class Algorithm<Problem, Solution> implements Runnable {
     }
 
     /**
-     * Removes the specified listener from the set of listeners recieving events
+     * Removes the specified listener from the set of listeners receiving events
      * from this algorithm.
      * @param listener the listener to be removed from the notification list.
      */
@@ -396,14 +396,6 @@ public abstract class Algorithm<Problem, Solution> implements Runnable {
                 handleException(ex);
             } finally {
                 runtime = System.currentTimeMillis() - startTime;
-//								if( this instanceof SEAAPAlgorithm ) {
-//									System.out.print( "SEAAPA Algorithm terminated" );
-//									System.out.println( " with status: " + getState().toString() );
-//									if( getState() != State.SOLVED )
-//									System.out.println( "Runtime: " + runtime );
-//									//System.out.println( this.toString() );
-//									//System.out.println( "Rutnime: " + getRuntime() );
-//								}
 								AlgorithmTerminatedEvent ev = null;
 								try {
 									ev = new AlgorithmTerminatedEvent( this );
@@ -423,12 +415,12 @@ public abstract class Algorithm<Problem, Solution> implements Runnable {
      * The default exception handling method. It records that the algorithm 
      * failed to solve the instance and rethrows the runtime exception that 
      * caused the premature termination of the algorithm. Subclasses can
-     * override this method to change this behaviour.
+     * override this method to change this behavior.
      * @param exception the exception that caused the termination of the algorithm.
      */
     protected void handleException(RuntimeException exception) {
 			System.out.println( "Exception handler" );
-			exception.printStackTrace();
+			exception.printStackTrace( System.err );
         throw exception;
     }
 
@@ -441,7 +433,7 @@ public abstract class Algorithm<Problem, Solution> implements Runnable {
     protected abstract Solution runAlgorithm(Problem problem);
 
     /**
-     * A private listener class for recieving events and logging them.
+     * A private listener class for receiving events and logging them.
      */
     private class EventLogger implements AlgorithmListener {
 

@@ -23,8 +23,9 @@ package batch.tasks;
 import algo.ca.EvacuationCellularAutomatonAlgorithm;
 import batch.BatchResultEntry;
 import batch.CellularAutomatonAlgorithm;
-import converter.ZToCAConverter;
-import converter.ZToCAConverter.ConversionNotSupportedException;
+import converter.cellularAutomaton.AssignmentApplicationInstance;
+import converter.cellularAutomaton.ConcreteAssignmentConverter;
+import converter.cellularAutomaton.ConvertedCellularAutomaton;
 import ds.Project;
 import ds.PropertyContainer;
 import ds.z.Assignment;
@@ -101,12 +102,16 @@ public class BatchCATask implements Runnable {
 		ConcreteAssignment concreteAssignment;
 		concreteAssignment = assignment.createConcreteAssignment( 400 );
 		concreteAssignments[runNumber] = concreteAssignment;
-		try {
-			ZToCAConverter.applyConcreteAssignment( concreteAssignment );
-		} catch( ConversionNotSupportedException e ) {
-			// The exception occurs if an individual can not be set.
-			return;
-		}
+		ConcreteAssignmentConverter cac = new ConcreteAssignmentConverter();
+		ConvertedCellularAutomaton cca = new ConvertedCellularAutomaton( ca, null, null );
+		cac.setProblem( new AssignmentApplicationInstance( cca, concreteAssignment ) );
+		cac.run();
+//		try {
+//			ZToCAConverter.applyConcreteAssignment( concreteAssignment );
+//		} catch( ConversionNotSupportedException e ) {
+//			// The exception occurs if an individual can not be set.
+//			return;
+//		}
 
 		caAlgo = cellularAutomatonAlgo.createTask( ca );
 		double caMaxTime = PropertyContainer.getInstance().getAsDouble( "algo.ca.maxTime" );
@@ -124,11 +129,11 @@ public class BatchCATask implements Runnable {
 		//System.out.println( "Laufzeit CA:" + (end - start) + " ms" );
 
 		// Get the results
-		res.setCellularAutomatonStatistic( runNumber, new CAStatistic( caAlgo.getCaController().getCaStatisticWriter().
-						getStoredCAStatisticResults() ) );
-		res.setCellularAutomatonVisualization( runNumber, new CAVisualizationResults(
-						VisualResultsRecorder.getInstance().getRecording(),
-					ZToCAConverter.getInstance().getLatestMapping() ) );
+		res.setCellularAutomatonStatistic( runNumber, new CAStatistic( caAlgo.getCaController().getCaStatisticWriter().getStoredCAStatisticResults() ) );
+		
+		// TODO raster
+		res.setCellularAutomatonVisualization( runNumber, new CAVisualizationResults( VisualResultsRecorder.getInstance().getRecording(), null ) );
+		//res.setCellularAutomatonVisualization( runNumber, new CAVisualizationResults( VisualResultsRecorder.getInstance().getRecording(), ZToCAConverter.getInstance().getLatestMapping() ) );
 
 //// Get the results
 //		CAStatistic statistic = new CAStatistic (caAlgo.getCaController ().getCaStatisticWriter ().
