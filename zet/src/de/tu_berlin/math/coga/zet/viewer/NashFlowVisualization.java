@@ -1,10 +1,5 @@
 /**
  * NashFlowVisualization.java
- * input:
- * output:
- *
- * method:
- *
  * Created: Jul 14, 2010,11:50:11 AM
  */
 package de.tu_berlin.math.coga.zet.viewer;
@@ -14,6 +9,7 @@ import de.tu_berlin.math.coga.math.vectormath.Vector3;
 import gui.visualization.Visualization;
 import gui.visualization.VisualizationOptionManager;
 import gui.visualization.control.graph.GLGraphControl;
+import java.awt.Color;
 import javax.media.opengl.GL;
 import javax.media.opengl.GLAutoDrawable;
 import javax.media.opengl.GLCapabilities;
@@ -31,9 +27,10 @@ public class NashFlowVisualization extends Visualization<GLGraphControl> {
 	protected GLUquadric quadObj = glu.gluNewQuadric();
 
 	double figNr = 0;
+	double lastFigNr = -1;
 
 	GLColor edgeColor = VisualizationOptionManager.getEdgeColor();;
-	GLColor flowColor = new GLColor( 1, 0, 0 );
+	GLColor flowColor = new GLColor( Color.red );
 
 	public NashFlowVisualization( GLCapabilities capabilities ) {
 		super( capabilities );
@@ -54,7 +51,12 @@ public class NashFlowVisualization extends Visualization<GLGraphControl> {
 
 
 		figNr = Math.floor( Conversion.nanoSecondsToSec * getTimeSinceStart() * 2 ) ;
-		System.out.println( figNr );
+		boolean giveOut = false;
+		if( lastFigNr < figNr ) {
+			System.out.println( figNr );
+			lastFigNr = figNr;
+			giveOut = true;
+		}
 
 		gl.glMatrixMode( GL.GL_MODELVIEW );
 		gl.glLoadIdentity();
@@ -109,7 +111,7 @@ public class NashFlowVisualization extends Visualization<GLGraphControl> {
 		double endtime = 2;
 		double inflow = 3;
 		double waittime = 0;
-		double tu = 22;
+		double tu = 20;
 
 
 
@@ -121,11 +123,6 @@ public class NashFlowVisualization extends Visualization<GLGraphControl> {
 		gl.glTranslated(-2,0,0);
 
 
-		gl.glPushMatrix();
-		// Draw the edge
-		gl.glRotated( 90, 0, 1, 0 );
-		glu.gluCylinder( quadObj, 0.01, 0.01, 4, 16, 1 );
-		gl.glPopMatrix();
 
 		// draw the border thing
 		double corStartPos = 0.2;
@@ -141,6 +138,7 @@ public class NashFlowVisualization extends Visualization<GLGraphControl> {
 		int len = 4;
 		double distWallFromEdge = corCap * fu * 0.5 + 0.5*corWallWidth;
 
+		// draw the corridors
 		gl.glBegin( GL.GL_LINE_STRIP );
 			GLVector x1 = new GLVector ( corStartPos * len, distWallFromEdge, 0 );
 			GLVector y1 = new GLVector( exitPos * len + 0.5 * corWallWidth, distWallFromEdge, 0 );
@@ -157,7 +155,6 @@ public class NashFlowVisualization extends Visualization<GLGraphControl> {
 			x2.draw( gl );
 			y2.draw( gl );
 			z2.draw( gl );
-
 		gl.glEnd();
 
 
@@ -175,11 +172,156 @@ public class NashFlowVisualization extends Visualization<GLGraphControl> {
 			double lastLeaveExit = lastEnterExit + (waittime + (endtime - starttime)*(inflow-cap) / cap );
 			double lastAtHead = lastLeaveExit + (1-exitPos) * taue;
 
+			if( figNr < 1 && giveOut ) {
+				System.out.println( "firstAtTail: " + firstAtTail );
+				System.out.println( "firstEnterExit: " + firstEnterExit );
+				System.out.println( "firstLeaveExit: " + firstLeaveExit );
+				System.out.println( "firstAtHead: " + firstAtHead );
+				System.out.println( "lastAtTail: " + lastAtTail );
+				System.out.println( "lastEnterExit: " + lastEnterExit );
+				System.out.println( "lastLeaveExit: " + lastLeaveExit );
+				System.out.println( "lastAtHead: " + lastAtHead );
+			}
+
 			// queue stuff
 			double queueLengthForFirst = waittime * cap / corCap;
 			double queueLengthForLast = queueLengthForFirst + (endtime - starttime) * (inflow - cap) / corCap;
 
-			
+			double firstAfterTail = firstAtTail * tu + 2;
+			double firstBeforeEnterExit = firstEnterExit*tu + 1;
+			double firstAfterEnterExit = firstEnterExit * tu + 2;
+			double firstBeforeLeaveExit = firstLeaveExit * tu + 1;
+			double firstAfterLeaveExit = firstLeaveExit * tu + 2;
+			double firstBeforeHead = firstAtHead * tu + 1;
+
+			double lastAfterTail = lastAtTail * tu + 2;
+
+			double lastBeforeEnterExit = lastEnterExit * tu + 1;
+			double lastAfterEnterExit = lastEnterExit * tu+2;
+			double lastBeforeLeaveExit = lastLeaveExit*tu + 1;
+			double lastAfterLeaveExit = lastLeaveExit*tu + 2;
+			double lastBeforeHead = lastAtHead*tu + 1;
+
+			double currentTime = (figNr -1) / tu;
+
+			double posFirst = 1;
+			double posLast = 0;
+
+			double physicalQueueLength = queueLengthForFirst / taue;
+			if( figNr >= firstAfterEnterExit && figNr <= lastBeforeEnterExit ) {
+//				if( giveOut )
+//					System.out.println( figNr + ": Fall 1 für physicalQueueLength" );
+				physicalQueueLength = (queueLengthForFirst + (currentTime - firstEnterExit)*(inflow-cap)/corCap)/taue;
+			}
+			if( figNr >= lastAfterEnterExit && figNr <= lastBeforeLeaveExit ) {
+				if( giveOut )
+					System.out.println( figNr + ": Fall 2 für physicalQueueLength" );
+				physicalQueueLength = (queueLengthForLast - (currentTime - lastEnterExit)*cap / corCap) / taue;
+			}
+
+			double shownQueueLength = physicalQueueLength * exitPos / (physicalQueueLength + exitPos);
+			if( giveOut ) {
+				System.out.println( "Shown queue length: " + shownQueueLength );
+			}
+
+
+			if( figNr >= firstAfterTail && figNr <= firstBeforeEnterExit ) {
+				if( giveOut )
+					System.out.println( figNr + ": posFirst wird neue definiert, fall 1" );
+				posFirst = (currentTime-firstAtTail) / (firstEnterExit - firstAtTail) * (exitPos - shownQueueLength );
+			}
+			if( figNr >= firstAfterEnterExit && figNr <= firstBeforeLeaveExit ) {
+				if( giveOut )
+					System.out.println( figNr + ": posFirst wird neue definiert, Fall 2" );
+				double physicalRemainingQueueLength = (queueLengthForFirst - (currentTime - firstEnterExit)*cap/corCap)/taue;
+				double shownRemainingQueueLength = physicalRemainingQueueLength*exitPos / (physicalRemainingQueueLength+exitPos);
+				posFirst = exitPos - shownRemainingQueueLength;
+			}
+
+			if( figNr >= firstAfterLeaveExit && figNr <= firstBeforeHead ) {
+				if( giveOut )
+					System.out.println( figNr + ": posFirst wird neue definiert, Fall 3" );
+				posFirst = exitPos + (currentTime - firstLeaveExit) / (firstAtHead - firstLeaveExit) * (1-exitPos);
+			}
+
+			if( figNr >= lastAfterTail && figNr <= lastBeforeEnterExit ) {
+				if( giveOut )
+					System.out.println( figNr + ": posLast wird neue definiert, Fall 1" );
+				double shownQueueLengthForLast = queueLengthForLast/taue*exitPos/(queueLengthForLast/taue+exitPos);
+				posLast = (currentTime-lastAtTail)/(lastEnterExit-lastAtTail) * (exitPos-shownQueueLengthForLast);
+			}
+			if( figNr >= lastAfterEnterExit && figNr <= lastBeforeLeaveExit) {
+				if( giveOut )
+					System.out.println( figNr + ": posLast wird neue definiert, Fall 2" );
+				posLast = exitPos - shownQueueLength;
+			}
+			if( figNr >= lastAfterLeaveExit && figNr <= lastBeforeHead) {
+				if( giveOut )
+					System.out.println( figNr + ": posLast wird neue definiert, Fall 3" );
+				posLast = exitPos + (currentTime - lastLeaveExit) / (lastAtHead-lastLeaveExit) * (1-exitPos);
+			}
+
+			// computing start and end positions of the flow
+			double rectOnex = posLast;
+			double rectOney = exitPos - shownQueueLength;
+
+			double rectTwox = exitPos - shownQueueLength;
+			double rectTwoy = exitPos;
+
+			double rectThreex = exitPos;
+			double rectThreey = posFirst;
+
+			if( figNr >= firstAfterTail && figNr <= firstBeforeEnterExit ) {
+				if( giveOut )
+					System.out.println( "rectOney is changed to " + posFirst );
+				rectOney = posFirst;
+			}
+
+			if( figNr >= firstAfterEnterExit && figNr <= firstBeforeLeaveExit) {
+				rectTwoy = posFirst;
+			}
+
+			if( figNr >= lastAfterLeaveExit && figNr <= lastBeforeHead ) {
+				rectThreex = posLast;
+			}
+
+
+		// Draw the edge
+		gl.glPushMatrix();
+			edgeColor.draw( gl );
+			gl.glRotated( 90, 0, 1, 0 );
+			glu.gluCylinder( quadObj, 0.01, 0.01, 4, 16, 1 );
+
+		gl.glPopMatrix();
+
+
+
+
+			// zeichnen
+			if( figNr >= firstAfterTail && figNr <= lastBeforeEnterExit ) {
+				if( giveOut )
+					System.out.println( "DRAW 1: from " + rectOnex + " to " + rectOney );
+		// draw the flow
+		gl.glPushMatrix();
+			edgeColor.draw( gl );
+			gl.glRotated( 90, 0, 1, 0 );
+			gl.glTranslated( 0, 0, 4*rectOnex );
+			glu.gluCylinder( quadObj, 0.05, 0.05, 4*(rectOney-rectOnex), 16, 1 );
+
+		gl.glPopMatrix();
+
+			}
+
+			if( figNr >= firstAfterEnterExit && figNr <= lastBeforeLeaveExit ) {
+				if( giveOut )
+					System.out.println( "DRAW 2" );
+			}
+
+			if( figNr >= firstAfterLeaveExit && figNr <= lastBeforeHead ) {
+				if( giveOut )
+					System.out.println( "DRAW 3" );
+			}
+
 		}
 
 
