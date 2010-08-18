@@ -36,7 +36,7 @@ import de.tu_berlin.math.coga.graph.io.xml.FlowVisualization;
  * @author Jan-Philipp Kappmeier
  */
 //public class GLGraphFloorControl extends AbstractControl<GLGraphFloor, Integer, GraphVisualizationResults, GLNode, GLNodeControl, GLControl>{
-public class GLGraphFloorControl extends AbstractZETVisualizationControl<GLNodeControl, GLGraphFloor, GLGraphControl> {
+public class GLGraphFloorControl extends AbstractZETVisualizationControl<GLNodeControl, GLGraphFloor, GLFlowGraphControl> {
 
 	/**
 	 * Creates a new instance of <code>GLGraphFloorControl</code>. Therefore for
@@ -47,7 +47,7 @@ public class GLGraphFloorControl extends AbstractZETVisualizationControl<GLNodeC
 	 * @param floor the number of the floor
 	 * @param glControl the general control object for visualization
 	 */
-	public GLGraphFloorControl( GraphVisualizationResults graphVisResult, Iterable<Node> nodesOnTheFloor, Integer floor, GLGraphControl glControl ) {
+	public GLGraphFloorControl( GraphVisualizationResults graphVisResult, Iterable<Node> nodesOnTheFloor, Integer floor, GLFlowGraphControl glControl ) {
 		super( glControl );
 		Iterator<Node> it = nodesOnTheFloor.iterator();
 		Node supersink = graphVisResult.getSupersink();
@@ -61,7 +61,7 @@ public class GLGraphFloorControl extends AbstractZETVisualizationControl<GLNodeC
 			view.addChild( node.getView() );
 	}
 
-	GLGraphFloorControl( FlowVisualization fv, IdentifiableCollection<Node> nodes, GLGraphControl mainControl ) {
+	GLGraphFloorControl( FlowVisualization fv, IdentifiableCollection<Node> nodes, GLFlowGraphControl mainControl ) {
 		super( mainControl );
 		Iterator<Node> it = nodes.iterator();
 		Node supersink = fv.getGv().getSinks().get( 0 );

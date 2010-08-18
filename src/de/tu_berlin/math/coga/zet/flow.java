@@ -7,7 +7,6 @@ package de.tu_berlin.math.coga.zet;
 import algo.graph.dynamicflow.eat.EarliestArrivalFlowProblem;
 import algo.graph.dynamicflow.eat.LongestShortestPathTimeHorizonEstimator;
 import algo.graph.dynamicflow.eat.SEAAPAlgorithm;
-import algo.graph.nashflow.NodePartition;
 import com.martiansoftware.jsap.FlaggedOption;
 import com.martiansoftware.jsap.JSAP;
 import com.martiansoftware.jsap.JSAPException;
@@ -25,6 +24,7 @@ import de.tu_berlin.math.coga.graph.io.xml.GraphView;
 import de.tu_berlin.math.coga.graph.io.xml.XMLReader;
 import de.tu_berlin.math.coga.graph.io.xml.XMLWriter;
 import de.tu_berlin.math.coga.math.vectormath.Vector3;
+import de.tu_berlin.math.coga.zet.viewer.NodePositionMapping;
 import ds.GraphVisualizationResults;
 import ds.graph.IdentifiableIntegerMapping;
 import ds.graph.IdentifiableObjectMapping;
@@ -46,7 +46,7 @@ public class flow implements AlgorithmListener {
 	GraphVisualizationResults graphVisResult;
 	IdentifiableIntegerMapping<Node> xPos;
 	IdentifiableIntegerMapping<Node> yPos;
-	IdentifiableObjectMapping<Node, Vector3> nodePositionMapping;
+	NodePositionMapping nodePositionMapping;
 	PathBasedFlowOverTime df;
 	int neededTimeHorizon;
 	int percentInterval = 100;
@@ -106,7 +106,7 @@ public class flow implements AlgorithmListener {
 			System.out.println( "Reading from dat-file." );
 			try {
 				// .dat files must contain node positions
-				theInstance.nodePositionMapping = new IdentifiableObjectMapping<Node, Vector3>( 0, Vector3.class );
+				theInstance.nodePositionMapping = new NodePositionMapping();
 				theInstance.xPos = new IdentifiableIntegerMapping<Node>( 0 );
 				theInstance.yPos = new IdentifiableIntegerMapping<Node>( 0 );
 				theInstance.eafp = DatFileReaderWriter.read( filename, theInstance.nodePositionMapping );

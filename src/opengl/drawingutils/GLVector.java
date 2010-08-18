@@ -70,7 +70,7 @@ public class GLVector extends Vector3 implements Drawable {
 	 * @param drawable the drawable context
 	 */
 	public final void translate( GL gl ) {
-		gl.glTranslated(+1.0d*x, +1.0d*y, +1.0d*z);
+		gl.glTranslated( (double)x, (double)y, (double)z );
 	}
 	
 	/**

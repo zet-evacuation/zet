@@ -4,16 +4,14 @@
  */
 package de.tu_berlin.math.coga.graph.io.xml;
 
-import de.tu_berlin.math.coga.math.vectormath.Vector3;
+import de.tu_berlin.math.coga.zet.viewer.NodePositionMapping;
 import ds.graph.Edge;
 import ds.graph.IdentifiableIntegerMapping;
-import ds.graph.IdentifiableObjectMapping;
 import ds.graph.Network;
 import ds.graph.Node;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
-
 
 /**
  * A class that stores the data found in the XML file that is read. Thus we can
@@ -31,7 +29,7 @@ public class XMLData {
 	LinkedHashMap<String, Node> nodes = new LinkedHashMap<String, Node>();
 	LinkedHashMap<String, Edge> edges = new LinkedHashMap<String, Edge>();
 	Network network;
-	IdentifiableObjectMapping<Node, Vector3> nodePositionMapping = new IdentifiableObjectMapping<Node, Vector3>( 0, Vector3.class );
+	NodePositionMapping nodePositionMapping = new NodePositionMapping();
 	boolean doubleEdges = false;
 	double scaleVal;
 	boolean containsSuperSink;
@@ -97,7 +95,7 @@ public class XMLData {
 		return doubleEdges;
 	}
 
-	public IdentifiableObjectMapping<Node, Vector3> getNodePositionMapping() {
+	public NodePositionMapping getNodePositionMapping() {
 		return nodePositionMapping;
 	}
 

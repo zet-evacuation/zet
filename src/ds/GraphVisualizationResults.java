@@ -20,8 +20,10 @@ import ds.graph.flow.EdgeBasedFlowOverTime;
 import algo.graph.Flags;
 import algo.graph.dynamicflow.eat.EarliestArrivalFlowProblem;
 import algo.graph.util.PathComposition;
+import de.tu_berlin.math.coga.math.vectormath.Vector3;
 import de.tu_berlin.math.coga.zet.converter.graph.ZToGraphMapping;
 import de.tu_berlin.math.coga.zet.NetworkFlowModel;
+import de.tu_berlin.math.coga.zet.viewer.NodePositionMapping;
 import ds.graph.Edge;
 import ds.graph.IdentifiableIntegerMapping;
 import ds.graph.IdentifiableObjectMapping;
@@ -39,68 +41,40 @@ import java.util.ArrayList;
  */
 public class GraphVisualizationResults implements VisualizationResult {
 
-	/**
-	 * The structure of the network the algorithm was applied to.
-	 */
+	/** The structure of the network the algorithm was applied to. */
 	private Network network;
-	/**
-	 * The capacities of all edges in the network.
-	 */
+	/** The capacities of all edges in the network. */
 	private IdentifiableIntegerMapping<Edge> edgeCapacities;
-	/**
-	 * The capacities of all nodes in the network.
-	 */
+	/** The capacities of all nodes in the network. */
 	private IdentifiableIntegerMapping<Node> nodeCapacities;
-	/**
-	 * The transit times of all edges in the network.
-	 */
+	/** The transit times of all edges in the network. */
 	private IdentifiableIntegerMapping<Edge> transitTimes;
-	/**
-	 * The supplies of all nodes in the network.
-	 */
+	/** The supplies of all nodes in the network. */
 	private IdentifiableIntegerMapping<Node> supplies;
-	/**
-	 * The result flow.
-	 */
+	/** The resulting flow. */
 	private PathBasedFlowOverTime dynamicFlow = null;
-	/**
-	 * A mapping saving a rectangle in the real world for each node.
-	 */
-	private IdentifiableObjectMapping<Node, NodeRectangle> nodeRectangle;
-	/**
-	 * A mapping giving the number of the floor (this node lies in) in the list in the z-format.
-	 */
+	/** A mapping saving a rectangle in the real world for each node. */
+	private IdentifiableObjectMapping<Node, NodeRectangle> nodeRectangles;
+	/** A mapping giving the number of the floor (this node lies in) in the list in the z-format. */
 	private IdentifiableIntegerMapping<Node> nodeToFloorMapping;
-	/**
-	 * A mapping telling whether each node is an evacuation node.
-	 */
+	/** A mapping telling whether each node is an evacuation node. */
 	private IdentifiableObjectMapping<Node, Boolean> isEvacuationNode;
-	/**
-	 * A mapping telling whether each node is a source node.
-	 */
+	/** A mapping telling whether each node is a source node. */
 	private IdentifiableObjectMapping<Node, Boolean> isSourceNode;
-	/**
-	 * A mapping telling whether each node has been a source node that has been deleted.
-	 */
+	/** A mapping telling whether each node has been a source node that has been deleted. */
 	private IdentifiableObjectMapping<Node, Boolean> isDeletedSourceNode;
-	/**
-	 *
-	 */
+	/** */
 	private ArrayList<ArrayList<Node>> floorToNodeMapping;
-	/**
-	 * The composed flow over time
-	 */
+	/** The composed flow over time */
 	private EdgeBasedFlowOverTime flowOverTime;
-	/**
-	 * The maximal flow rate in the calculated flow.
-	 */
+	/** The maximal flow rate in the calculated flow. */
 	private int maxFlowRate;
-	/**
-	 * The super sink.
-	 */
+	/** The super sink. */
 	private Node supersink;
-
+	/** An lower bound to the time horizon. If negative, no value is known yet. */
 	private int neededTimeHorizon = -1;
+	/** The node position mapping. */
+	private NodePositionMapping nodePositionMapping = null;
 
 	/**
 	 * Create a new <code>GraphVisualization</code> object from a network flow model and a dynamic flow.
@@ -126,7 +100,7 @@ public class GraphVisualizationResults implements VisualizationResult {
 	public GraphVisualizationResults( NetworkFlowModel networkFlowModel ) {
 		this.network = networkFlowModel.getNetwork();
 		ZToGraphMapping mapping = networkFlowModel.getZToGraphMapping();
-		this.nodeRectangle = mapping.getNodeRectangles();
+		this.nodeRectangles = mapping.getNodeRectangles();
 		this.nodeToFloorMapping = mapping.getNodeFloorMapping();
 		this.isEvacuationNode = mapping.getIsEvacuationNode();
 		this.isSourceNode = mapping.getIsSourceNode();
@@ -152,10 +126,7 @@ public class GraphVisualizationResults implements VisualizationResult {
 		maxFlowRate = 0;
 		//dynamicFlow = new PathBasedFlowOverTime();
 		flowOverTime = new EdgeBasedFlowOverTime( network );
-	}
-
-	public Node getSupersink() {
-		return supersink;
+		setUpNodeCoordinates();
 	}
 
 	public GraphVisualizationResults( NetworkFlowModel networkFlowModel, EdgeBasedFlowOverTime flowOverTime ) {
@@ -169,15 +140,19 @@ public class GraphVisualizationResults implements VisualizationResult {
 	}
 
 	public GraphVisualizationResults( EarliestArrivalFlowProblem eatf, IdentifiableIntegerMapping<Node> xPos, IdentifiableIntegerMapping<Node> yPos ) {
+		// change this to something with NodePositionMapping!
 		this.network = eatf.getNetwork();
 
+		nodePositionMapping = new NodePositionMapping( network.numberOfNodes() );
+
 		int nodeCount = eatf.getNetwork().numberOfNodes();
-		this.nodeRectangle = new IdentifiableObjectMapping<Node, NodeRectangle>( nodeCount, NodeRectangle.class );
+		this.nodeRectangles = new IdentifiableObjectMapping<Node, NodeRectangle>( nodeCount, NodeRectangle.class );
 		for( Node node : eatf.getNetwork().nodes() ) {
 			int x = xPos.get( node );
 			int y = yPos.get( node );
-			NodeRectangle nr = new NodeRectangle( x, y, x, y );
-			nodeRectangle.set( node, nr );
+			nodePositionMapping.set( node, new Vector3( x, y, 0 ) );
+			NodeRectangle nodeRectangle = new NodeRectangle( x, y, x, y );
+			nodeRectangles.set( node, nodeRectangle );
 		}
 
 		supersink = eatf.getSink();
@@ -249,7 +224,7 @@ public class GraphVisualizationResults implements VisualizationResult {
 	public GraphVisualizationResults() {
 		this.network = new Network( 0, 0 );
 		//this.dynamicFlow = new PathBasedFlowOverTime();
-		this.nodeRectangle = new IdentifiableObjectMapping<Node, NodeRectangle>( 0, NodeRectangle.class );
+		this.nodeRectangles = new IdentifiableObjectMapping<Node, NodeRectangle>( 0, NodeRectangle.class );
 		this.nodeToFloorMapping = new IdentifiableIntegerMapping<Node>( 0 );
 		this.nodeCapacities = new IdentifiableIntegerMapping<Node>( 0 );
 		this.edgeCapacities = new IdentifiableIntegerMapping<Edge>( 0 );
@@ -257,6 +232,32 @@ public class GraphVisualizationResults implements VisualizationResult {
 		this.supplies = new IdentifiableIntegerMapping<Node>( 0 );
 		this.floorToNodeMapping = new ArrayList<ArrayList<Node>>();
 		this.supersink = new Node( 0 );
+		setUpNodeCoordinates();
+	}
+
+	private void setUpNodeCoordinates() {
+		nodePositionMapping = new NodePositionMapping( network.numberOfNodes() );
+		for( Node n : network ) {
+			NodeRectangle rect = getNodeRectangles().get( n );
+			final double xs = rect.get_nw_point().getX() + (rect.get_ne_point().getX() - rect.get_nw_point().getX()) * 0.5;
+			final double ys = rect.get_nw_point().getY() + (rect.get_sw_point().getY() - rect.get_nw_point().getY()) * 0.5;
+			// TODO read the value from VisualizationOptionManager (is 70 maybe)
+			final double zs = getNodeToFloorMapping().get( n ) * 70 * 10; // whereever this 10 comes from... probably scaling factor?
+			final Vector3 v = new Vector3( xs, ys, zs );
+			nodePositionMapping.set( n, v );
+		}
+	}
+
+	/**
+	 * Returns the mapping of nodes to coordinates in the 3 dimensional space.
+	 * @return the mapping of nodes to coordinates in the 3 dimensional space
+	 */
+	public NodePositionMapping getNodePositionMapping() {
+		return nodePositionMapping;
+	}
+
+	public Node getSupersink() {
+		return supersink;
 	}
 
 	/**
@@ -279,7 +280,7 @@ public class GraphVisualizationResults implements VisualizationResult {
 	 * @return a mapping that assigns nodes to rectangles in the real world.
 	 */
 	public IdentifiableObjectMapping<Node, NodeRectangle> getNodeRectangles() {
-		return nodeRectangle;
+		return nodeRectangles;
 	}
 
 	/**
@@ -380,7 +381,7 @@ public class GraphVisualizationResults implements VisualizationResult {
 	@Override
 	public String toString() {
 		String result = "Network: " + network + "\n";
-		result += "Node Rectangles: " + nodeRectangle + "\n";
+		result += "Node Rectangles: " + nodeRectangles + "\n";
 		result += "Node to floor mapping:" + nodeToFloorMapping + "\n";
 		result += "DynamicFlow" + dynamicFlow + "\n";
 		return result;

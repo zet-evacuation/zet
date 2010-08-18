@@ -69,7 +69,7 @@ public class XMLWriter {
 		BufferedWriter writer = null;
 		xmlData.network = eafp.getNetwork();
 
-		final ArrayList<Node> sinks = new ArrayList<Node>(1);
+		final ArrayList<Node> sinks = new ArrayList<Node>( 1 );
 		sinks.add( eafp.getSink() );
 		xmlData.sinks = sinks;	// not needed during conversation in normal mode
 		xmlData.sources = eafp.getSources(); // not needed during conversation in normal mode

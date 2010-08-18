@@ -25,8 +25,7 @@ import gui.visualization.util.FlowCalculator;
 import java.util.ArrayList;
 import de.tu_berlin.math.coga.graph.io.xml.FlowVisualization;
 
-//public class GLNodeControl extends AbstractControl<GLNode, Node, GraphVisualizationResults, GLEdge, GLEdgeControl, GLControl> {
-public class GLNodeControl extends AbstractZETVisualizationControl<GLEdgeControl, GLNode, GLGraphControl> {
+public class GLNodeControl extends AbstractZETVisualizationControl<GLFlowEdgeControl, GLNode, GLFlowGraphControl> {
 	private double xPosition;
 	private double yPosition;
 	// TODO read data from file in ZET
@@ -48,7 +47,7 @@ public class GLNodeControl extends AbstractZETVisualizationControl<GLEdgeControl
 	private int floor;
 	private boolean gridVisible = true;
 
-	public GLNodeControl( GraphVisualizationResults graphVisResult, Node node, GLGraphControl glControl ) {
+	public GLNodeControl( GraphVisualizationResults graphVisResult, Node node, GLFlowGraphControl glControl ) {
 		super( glControl );
 
 		nwX = graphVisResult.getNodeRectangles().get( node ).get_nw_point().getX();
@@ -69,7 +68,7 @@ public class GLNodeControl extends AbstractZETVisualizationControl<GLEdgeControl
 				if( nodeFloor1 != nodeFloor2 && !showEdgesBetweenFloors )
 					System.out.println( "Knoten auf verschiedenen Etagen." );
 				else
-					add( new GLEdgeControl( graphVisResult, edge, glControl ) );
+					add( new GLFlowEdgeControl( graphVisResult, edge, glControl ) );
 			}
 		isEvacuationNode = graphVisResult.isEvacuationNode( node );
 		isSourceNode = graphVisResult.isSourceNode( node );
@@ -81,7 +80,7 @@ public class GLNodeControl extends AbstractZETVisualizationControl<GLEdgeControl
 		zPosition += (floor - 1) * 70;
 
 		setView( new GLNode( this ) );
-		for( GLEdgeControl edge : this ) {
+		for( GLFlowEdgeControl edge : this ) {
 			view.addChild( edge.getView() );
 			edge.getView().update();
 		}
@@ -90,7 +89,7 @@ public class GLNodeControl extends AbstractZETVisualizationControl<GLEdgeControl
 		glControl.nodeProgress();
 	}
 
-	GLNodeControl( FlowVisualization fv, Node node, GLGraphControl mainControl ) {
+	GLNodeControl( FlowVisualization fv, Node node, GLFlowGraphControl mainControl ) {
 		super( mainControl );
 
 		nwX = fv.getGv().getNodePositionMapping().get( node ).x * fv.getGv().getScale();
@@ -109,7 +108,7 @@ public class GLNodeControl extends AbstractZETVisualizationControl<GLEdgeControl
 
 		for( Edge edge : fv.getGv().getNetwork().outgoingEdges( node ) )
 			if( !fv.getGv().isContainsSuperSink() )
-				add( new GLEdgeControl( fv, edge, mainControl ) );
+				add( new GLFlowEdgeControl( fv, edge, mainControl ) );
 			else if( edge.start().id() != mainControl.superSinkID() && edge.end().id() != mainControl.superSinkID() ) {
 				// edit ignore floors
 //				int nodeFloor1 = graphVisResult.getNodeToFloorMapping().get( edge.start() );
@@ -117,7 +116,7 @@ public class GLNodeControl extends AbstractZETVisualizationControl<GLEdgeControl
 //				if( nodeFloor1 != nodeFloor2 && !showEdgesBetweenFloors )
 //					System.out.println( "Knoten auf verschiedenen Etagen." );
 //				else
-					add( new GLEdgeControl( fv, edge, mainControl ) );
+					add( new GLFlowEdgeControl( fv, edge, mainControl ) );
 			}
 		isEvacuationNode = fv.getGv().isEvacuationNode( node );
 		isSourceNode = fv.getGv().isSourceNode( node );
@@ -129,7 +128,7 @@ public class GLNodeControl extends AbstractZETVisualizationControl<GLEdgeControl
 		zPosition = fv.getGv().getNodePositionMapping().get( node ).z * fv.getGv().getScale();
 
 		setView( new GLNode( this ) );
-		for( GLEdgeControl edge : this ) {
+		for( GLFlowEdgeControl edge : this ) {
 			view.addChild( edge.getView() );
 			edge.getView().update();
 		}

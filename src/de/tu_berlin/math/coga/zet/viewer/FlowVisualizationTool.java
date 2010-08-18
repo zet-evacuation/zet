@@ -22,7 +22,7 @@ import event.MessageEvent;
 import gui.components.framework.Menu;
 import gui.editor.GUIOptionManager;
 import gui.visualization.Visualization;
-import gui.visualization.control.graph.GLGraphControl;
+import gui.visualization.control.graph.GLFlowGraphControl;
 import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.Toolkit;
@@ -75,8 +75,8 @@ public class FlowVisualizationTool extends JFrame implements PropertyChangeListe
 	private JMenuItem mnuFlowExecute;
 	private JMenuItem mnuFlowRestart;
 	private JMenuItem mnuFlowPause;
-	//final Visualization<GLGraphControl> vis = new Visualization<GLGraphControl>( new GLCapabilities() );
-	final Visualization<GLGraphControl> vis = new NashFlowVisualization( new GLCapabilities() );
+	//final Visualization<GLFlowGraphControl> vis = new Visualization<GLFlowGraphControl>( new GLCapabilities() );
+	final Visualization<GLFlowGraphControl> vis = new NashFlowVisualization( new GLCapabilities() );
 	JEventStatusBar sb = new JEventStatusBar();
 	JSlider slider = new JSlider(0,0);
 	FlowVisualizationTool theInstance;
@@ -105,7 +105,7 @@ public class FlowVisualizationTool extends JFrame implements PropertyChangeListe
 		vis.getCamera().getView().invert();
 		vis.getCamera().getPos().z = 140;
 		graphVisResult = new GraphVisualizationResults();
-		GLGraphControl control = new GLGraphControl( graphVisResult );
+		GLFlowGraphControl control = new GLFlowGraphControl( graphVisResult );
 		vis.setControl( control );
 
 		vis.addKeyListener( new KeyListener() {
@@ -128,7 +128,7 @@ public class FlowVisualizationTool extends JFrame implements PropertyChangeListe
 
 	/**
 	 * Initializes the components of the visualization window. That are menus,
-	 * toolbar and status bar.
+	 * tool bar and status bar.
 	 */
 	private void initializeComponents() {
 		loc.setLocale( Locale.GERMAN );
@@ -240,7 +240,7 @@ public class FlowVisualizationTool extends JFrame implements PropertyChangeListe
 				if( jfc.showOpenDialog( theInstance ) == JFileChooser.APPROVE_OPTION ) {
 					String path = jfc.getSelectedFile().getPath();
 					sb.setStatusText( 0, "Lade Datei '" + path + "' " );
-					GLGraphControl control = null;
+					GLFlowGraphControl control = null;
 					if( path.endsWith( ".xml" ) ) {
 						XMLReader reader;
 						FlowVisualization fv = null;
@@ -249,10 +249,10 @@ public class FlowVisualizationTool extends JFrame implements PropertyChangeListe
 							fv = (FlowVisualization)reader.readFlowVisualization();
 						} catch( IOException ex ) {
 							System.err.println( "Fehler beim laden!" );
-							ex.printStackTrace();
+							ex.printStackTrace( System.err );
 						}
 						sb.setStatusText( 0, "Baue Visualisierung" );
-						control = new GLGraphControl( fv );
+						control = new GLFlowGraphControl( fv );
 						slider.setMaximum( (fv.getTimeHorizon()+1) * sliderAccuracy );
 					} else {
 						try {
@@ -274,7 +274,7 @@ public class FlowVisualizationTool extends JFrame implements PropertyChangeListe
 						}
 						GraphVisualizationResults graphVisResult = new GraphVisualizationResults( eafp, xPos, yPos );
 						sb.setStatusText( 0, "Baue Visualisierung" );
-						control = new GLGraphControl( graphVisResult );
+						control = new GLFlowGraphControl( graphVisResult );
 					}
 					if( vis.isAnimating() )
 						vis.stopAnimation();
@@ -381,7 +381,7 @@ public class FlowVisualizationTool extends JFrame implements PropertyChangeListe
 	private void loadGraphVisResults() {
 		sb.setStatusText( 0, "Baue Visualisierung" );
 		slider.setMaximum( (graphVisResult.getNeededTimeHorizon()+1) * sliderAccuracy );
-		GLGraphControl control = new GLGraphControl( graphVisResult );
+		GLFlowGraphControl control = new GLFlowGraphControl( graphVisResult );
 		vis.setControl( control );
 		vis.update();
 		vis.repaint();
