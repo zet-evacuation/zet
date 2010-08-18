@@ -20,6 +20,7 @@
 package ds.graph;
 
 import com.thoughtworks.xstream.annotations.XStreamAlias;
+import java.util.Iterator;
 
 /**
  * The <code>Network</class> provides an implementation of a directed graph
@@ -29,7 +30,7 @@ import com.thoughtworks.xstream.annotations.XStreamAlias;
  * is useful for residual networks, for instance).
  */
 @XStreamAlias("network")
-public class Network implements Graph, Cloneable {
+public class Network implements Graph, Cloneable, Iterable<Node>  {
 
     /**
      * The nodes of the network. Must not be null.
@@ -673,5 +674,9 @@ public class Network implements Graph, Cloneable {
 	@Override
 	public Network getAsStaticNetwork() {
 		return this;
+	}
+
+	public Iterator<Node> iterator() {
+		return nodes.iterator();
 	}
 }

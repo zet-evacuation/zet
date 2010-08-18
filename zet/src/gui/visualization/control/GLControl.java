@@ -26,7 +26,7 @@ import gui.visualization.control.ca.GLCAFloorControl;
 import gui.visualization.control.ca.GLCellControl;
 import gui.visualization.control.ca.GLIndividualControl;
 import gui.visualization.control.ca.GLRoomControl;
-import gui.visualization.control.graph.GLGraphControl;
+import gui.visualization.control.graph.GLFlowGraphControl;
 import gui.visualization.control.graph.GLGraphFloorControl;
 import gui.visualization.control.graph.GLNodeControl;
 import gui.visualization.draw.ca.GLIndividual;
@@ -136,7 +136,7 @@ public class GLControl implements DrawableControlable {
 	/** Represents the statistic  */
 	private CAStatistic caStatistic;
 	private GLCellularAutomatonControl caControl;
-	private GLGraphControl graphControl;
+	private GLFlowGraphControl graphControl;
 	private GLBuildingControl buildingControl;
 	/** The estimated time used for the whole visualization in seconds. */
 	private double estimatedTime = 0;
@@ -179,7 +179,7 @@ public class GLControl implements DrawableControlable {
 			hasCellularAutomaton = false;
 		if( graphVisResult != null ) {
 			hasGraph = true;
-			graphControl = new GLGraphControl( graphVisResult );
+			graphControl = new GLFlowGraphControl( graphVisResult );
 
 			this.secondsPerStepGraph();
 			
@@ -221,7 +221,7 @@ public class GLControl implements DrawableControlable {
 	public void setGraphControl( GraphVisualizationResults graphVisResult ) {
 		if( graphVisResult != null ) {
 			hasGraph = true;
-			graphControl = new GLGraphControl( graphVisResult );
+			graphControl = new GLFlowGraphControl( graphVisResult );
 
 			this.secondsPerStepGraph();
 

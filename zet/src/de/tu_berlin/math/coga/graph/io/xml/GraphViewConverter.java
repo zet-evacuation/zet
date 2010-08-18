@@ -10,7 +10,7 @@ import com.thoughtworks.xstream.converters.UnmarshallingContext;
 import com.thoughtworks.xstream.io.HierarchicalStreamReader;
 import com.thoughtworks.xstream.io.HierarchicalStreamWriter;
 import de.tu_berlin.math.coga.math.vectormath.Vector3;
-import ds.graph.IdentifiableObjectMapping;
+import de.tu_berlin.math.coga.zet.viewer.NodePositionMapping;
 import ds.graph.Network;
 import ds.graph.Node;
 import java.util.HashMap;
@@ -145,7 +145,7 @@ public class GraphViewConverter implements Converter {
 		reader.moveUp();
 
 		// assign default position to all nodes
-		xmlData.nodePositionMapping = new IdentifiableObjectMapping<Node, Vector3>( xmlData.network.numberOfNodes(), Vector3.class );
+		xmlData.nodePositionMapping = new NodePositionMapping( xmlData.network.numberOfNodes() );
 		for( Node node : xmlData.nodes.values() )
 			xmlData.nodePositionMapping.set( node, new Vector3() );
 

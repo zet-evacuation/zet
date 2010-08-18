@@ -6,6 +6,7 @@ package de.tu_berlin.math.coga.graph.io.xml;
 
 import algo.graph.dynamicflow.eat.EarliestArrivalFlowProblem;
 import de.tu_berlin.math.coga.math.vectormath.Vector3;
+import de.tu_berlin.math.coga.zet.viewer.NodePositionMapping;
 import ds.graph.Edge;
 import ds.graph.IdentifiableIntegerMapping;
 import ds.graph.IdentifiableObjectMapping;
@@ -23,7 +24,7 @@ public class GraphView {
 	/** The graph. */
 	Network network;
 	/** The positions for the nodes. */
-	IdentifiableObjectMapping<Node, Vector3> nodePositionMapping;
+	NodePositionMapping nodePositionMapping;
 	/** Capacities for all edges. */
 	IdentifiableIntegerMapping<Edge> edgeCapacities;
 	/** Capacities for all nodes. */
@@ -55,7 +56,7 @@ public class GraphView {
 	double maxZ = Double.MIN_VALUE;
 
 
-	public GraphView( Network network, IdentifiableObjectMapping<Node, Vector3> nodePositionMapping, IdentifiableIntegerMapping<Edge> edgeCapacities, IdentifiableIntegerMapping<Node> nodeCapacities, IdentifiableIntegerMapping<Edge> transitTimes, IdentifiableIntegerMapping<Node> supplies, List<Node> sources, ArrayList<Node> sinks ) {
+	public GraphView( Network network, NodePositionMapping nodePositionMapping, IdentifiableIntegerMapping<Edge> edgeCapacities, IdentifiableIntegerMapping<Node> nodeCapacities, IdentifiableIntegerMapping<Edge> transitTimes, IdentifiableIntegerMapping<Node> supplies, List<Node> sources, ArrayList<Node> sinks ) {
 		this.network = network;
 		setNodePositionMapping( nodePositionMapping );
 		this.edgeCapacities = edgeCapacities;
@@ -66,9 +67,8 @@ public class GraphView {
 		this.sinks = sinks;
 	}
 
-	public GraphView( EarliestArrivalFlowProblem eafp, IdentifiableObjectMapping<Node, Vector3> nodePositionMapping ) {
+	public GraphView( EarliestArrivalFlowProblem eafp, NodePositionMapping nodePositionMapping ) {
 		this.network = eafp.getNetwork();
-		setNodePositionMapping( nodePositionMapping );
 		this.edgeCapacities = eafp.getEdgeCapacities();
 		this.nodeCapacities = eafp.getNodeCapacities();
 		this.transitTimes = eafp.getTransitTimes();
@@ -89,11 +89,11 @@ public class GraphView {
 		this.network = network;
 	}
 
-	public IdentifiableObjectMapping<Node, Vector3> getNodePositionMapping() {
+	public NodePositionMapping getNodePositionMapping() {
 		return nodePositionMapping;
 	}
 
-	public final void setNodePositionMapping( IdentifiableObjectMapping<Node, Vector3> nodePositionMapping ) {
+	public final void setNodePositionMapping( NodePositionMapping nodePositionMapping ) {
 		this.nodePositionMapping = nodePositionMapping;
 
 		// compute min and max values
