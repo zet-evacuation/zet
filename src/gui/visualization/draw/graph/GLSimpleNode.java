@@ -47,6 +47,8 @@ public class GLSimpleNode extends AbstractDrawable<GLEdge, GLSimpleNodeControl> 
 		endDraw( gl );
 	}
 
+	final GLColor lineColor = new GLColor( Color.black );
+
 	private void drawNode( GL gl ) {
 //		if( getControl().isCurrentlyOccupied() ) {
 //			performFlowDrawing( drawable );
@@ -61,9 +63,17 @@ public class GLSimpleNode extends AbstractDrawable<GLEdge, GLSimpleNodeControl> 
 		//gl.glBlendFunc( gl.GL_SRC_ALPHA, gl.GL_ONE );
 
 		nodeColor.draw( gl );
-		//}
 
+		//}
+		nodeDisplayMode = GLU.GLU_FILL;//GLU.GLU_SILHOUETTE;
 		glu.gluSphere( quadObj, radius, qualityPreset.nodeSlices, qualityPreset.nodeStacks );
+
+		lineColor.draw( gl );
+
+		glu.gluQuadricDrawStyle( quadObj, GLU.GLU_SILHOUETTE );
+		glu.gluSphere( quadObj, radius, qualityPreset.nodeSlices, qualityPreset.nodeStacks );
+		glu.gluQuadricDrawStyle( quadObj, nodeDisplayMode );
+
 	}
 
 	@Override

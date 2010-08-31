@@ -15,6 +15,7 @@ public class GLNashNode extends GLSimpleNode {
 
 	public GLNashNode( GLNashNodeControl control ) {
 		super( control );
+		
 	}
 
 }
