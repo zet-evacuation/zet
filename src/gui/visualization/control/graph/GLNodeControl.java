@@ -33,7 +33,7 @@ public class GLNodeControl extends AbstractZETVisualizationControl<GLFlowEdgeCon
 	private int capacity;
 	private FlowCalculator flowCalculator;
 	// TODO transfer the scaling parameter somewhere else (probably into the graphVisResults)
-	private static final double Z_TO_OPENGL_SCALING = 0.1d;
+	private static final double Z_TO_OPENGL_SCALING = 0.01d;
 	double nwX;
 	double nwY;
 	double seX;
@@ -46,18 +46,22 @@ public class GLNodeControl extends AbstractZETVisualizationControl<GLFlowEdgeCon
 	private int startTime;
 	private int floor;
 	private boolean gridVisible = true;
+	private double scaling = 1;
 
 	public GLNodeControl( GraphVisualizationResults graphVisResult, Node node, GLFlowGraphControl glControl ) {
 		super( glControl );
 
-		nwX = graphVisResult.getNodeRectangles().get( node ).get_nw_point().getX();
-		nwY = graphVisResult.getNodeRectangles().get( node ).get_nw_point().getY();
-		seX = graphVisResult.getNodeRectangles().get( node ).get_se_point().getX();
-		seY = graphVisResult.getNodeRectangles().get( node ).get_se_point().getY();
+		scaling = Z_TO_OPENGL_SCALING;
 
-		xPosition = (nwX + 0.5 * (seX - nwX)) * Z_TO_OPENGL_SCALING;
-		yPosition = (nwY + 0.5 * (seY - nwY)) * Z_TO_OPENGL_SCALING;
+		nwX = graphVisResult.getNodeRectangles().get( node ).get_nw_point().getX() * scaling;
+		nwY = graphVisResult.getNodeRectangles().get( node ).get_nw_point().getY() * scaling;
+		seX = graphVisResult.getNodeRectangles().get( node ).get_se_point().getX() * scaling;
+		seY = graphVisResult.getNodeRectangles().get( node ).get_se_point().getY() * scaling;
+
+		xPosition = graphVisResult.getNodePositionMapping().get( node ).x * scaling;
+		yPosition = graphVisResult.getNodePositionMapping().get( node ).y * scaling;
 		capacity = graphVisResult.getNodeCapacities().get( node );
+		System.out.println( "Node coordinates: (" + xPosition + "," + yPosition + ")" );
 
 		final boolean showEdgesBetweenFloors = false;
 
@@ -92,13 +96,13 @@ public class GLNodeControl extends AbstractZETVisualizationControl<GLFlowEdgeCon
 	GLNodeControl( FlowVisualization fv, Node node, GLFlowGraphControl mainControl ) {
 		super( mainControl );
 
-		nwX = fv.getGv().getNodePositionMapping().get( node ).x * fv.getGv().getScale();
-		nwY = fv.getGv().getNodePositionMapping().get( node ).y * fv.getGv().getScale();
-		seX = fv.getGv().getNodePositionMapping().get( node ).x * fv.getGv().getScale();
-		seY = fv.getGv().getNodePositionMapping().get( node ).y * fv.getGv().getScale();
+		nwX = fv.getGv().getNodePositionMapping().get( node ).x * fv.getGv().getScale() * scaling;
+		nwY = fv.getGv().getNodePositionMapping().get( node ).y * fv.getGv().getScale() * scaling;
+		seX = fv.getGv().getNodePositionMapping().get( node ).x * fv.getGv().getScale() * scaling;
+		seY = fv.getGv().getNodePositionMapping().get( node ).y * fv.getGv().getScale() * scaling;
 
-		xPosition = (nwX + 0.5 * (seX - nwX));
-		yPosition = (nwY + 0.5 * (seY - nwY));
+		xPosition = (nwX + 0.5 * (seX - nwX)) * scaling;
+		yPosition = (nwY + 0.5 * (seY - nwY)) * scaling;
 
 		xPosition = (fv.getGv().getNodePositionMapping().get( node ).x + fv.getGv().getEffectiveOffset().x) * fv.getGv().getScale();
 		yPosition = (fv.getGv().getNodePositionMapping().get( node ).y + fv.getGv().getEffectiveOffset().y) * fv.getGv().getScale();
@@ -150,19 +154,19 @@ public class GLNodeControl extends AbstractZETVisualizationControl<GLFlowEdgeCon
 	}
 
 	public double getNwX() {
-		return nwX * Z_TO_OPENGL_SCALING;
+		return nwX ;
 	}
 
 	public double getNwY() {
-		return nwY * Z_TO_OPENGL_SCALING;
+		return nwY ;
 	}
 
 	public double getSeX() {
-		return seX * Z_TO_OPENGL_SCALING;
+		return seX ;
 	}
 
 	public double getSeY() {
-		return seY * Z_TO_OPENGL_SCALING;
+		return seY ;
 	}
 
 	public GLNode getGLNode() {
@@ -178,7 +182,7 @@ public class GLNodeControl extends AbstractZETVisualizationControl<GLFlowEdgeCon
 	}
 
 	public double getYPosition() {
-		return -yPosition;
+		return yPosition;
 	}
 
 	public double getZPosition() {

@@ -241,8 +241,7 @@ public class GraphVisualizationResults implements VisualizationResult {
 			NodeRectangle rect = getNodeRectangles().get( n );
 			final double xs = rect.get_nw_point().getX() + (rect.get_ne_point().getX() - rect.get_nw_point().getX()) * 0.5;
 			final double ys = rect.get_nw_point().getY() + (rect.get_sw_point().getY() - rect.get_nw_point().getY()) * 0.5;
-			// TODO read the value from VisualizationOptionManager (is 70 maybe)
-			final double zs = getNodeToFloorMapping().get( n ) * 70 * 10; // whereever this 10 comes from... probably scaling factor?
+			final double zs = getNodeToFloorMapping().get( n ) * 700;
 			final Vector3 v = new Vector3( xs, ys, zs );
 			nodePositionMapping.set( n, v );
 		}

@@ -30,7 +30,6 @@ import opengl.drawingutils.GLColor;
 import de.tu_berlin.math.coga.math.vectormath.Vector3;
 import gui.visualization.control.graph.GLFlowGraphControl;
 
-//public class GLFlowEdge extends AbstractDrawable<CullingShapeCube, GLFlowEdge, GLFlowEdgeControl, GLFlowEdgeControl> {
 public class GLFlowEdge extends GLEdge {
 	GLFlowEdgeControl fcontrol;
 

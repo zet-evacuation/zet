@@ -494,7 +494,7 @@ public class ZToGridGraphConverterAlt3 {
 						int nodeRectangleSE_x = roomOffsetX + room.getRaster() * (maxX + 1);
 						int nodeRectangleSE_y = roomOffsetY + room.getRaster() * (maxY + 1);
 						// save the node rectangle in the mapping
-						mapping.setNodeRectangle( node, new NodeRectangle( nodeRectangleNW_x, nodeRectangleNW_y, nodeRectangleSE_x, nodeRectangleSE_y ) );
+						mapping.setNodeRectangle( node, new NodeRectangle( nodeRectangleNW_x, -nodeRectangleNW_y, nodeRectangleSE_x, -nodeRectangleSE_y ) );
 						// save the number of the floor the node belongs to
 						mapping.setFloorForNode( node, rasterContainer.getFloors().indexOf( room.getFloor() ) );
 						if( nodeIsSource )

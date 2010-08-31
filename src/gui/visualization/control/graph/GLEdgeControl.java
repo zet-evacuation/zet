@@ -16,7 +16,6 @@ import opengl.framework.abs.AbstractControl;
  *
  * @author Jan-Philipp Kappmeier
  */
-//public class GLEdgeControl extends AbstractZETVisualizationControl<GLEdgeControl, GLEdge, GLFlowGraphControl> {
 public class GLEdgeControl extends AbstractControl<GLEdgeControl, GLEdge> {
 
 	/** Decides whether this edge is the one from the node with lower id to the one with higher id of the two edges between two nodes. */
@@ -29,22 +28,23 @@ public class GLEdgeControl extends AbstractControl<GLEdgeControl, GLEdge> {
 	double scaling = 1;
 
 	public GLEdgeControl( NodePositionMapping nodePositionMapping, Edge edge ) {
+		this( nodePositionMapping, edge, true );
+	}
+
+	public GLEdgeControl( NodePositionMapping nodePositionMapping, Edge edge, boolean setView ) {
 		super();
-		//super( glControl );
 
 		// Do not set a view here. maybe changed later on
-		setView();
+		if( setView )
+			setView();
 
 		if( edge.start().id() < edge.end().id() )	// checks weather this edge is the first one of the two representing one undirected edge
 			isFirst = true;
 
-
-		init( nodePositionMapping.get( edge.start() ), nodePositionMapping.get( edge.end() ) );
-
-		view.update();
-
+		init( nodePositionMapping.get( edge.start() ).clone(), nodePositionMapping.get( edge.end() ).clone() );
+		if( setView )
+			view.update();
 	}
-
 
 	protected void setView() {
 		System.out.println( "A normal edge was set" );
@@ -53,9 +53,9 @@ public class GLEdgeControl extends AbstractControl<GLEdgeControl, GLEdge> {
 
 	private void init( Vector3 startPos, Vector3 endPos ) {
 		// calculate differences between the points
-		final double dx = (startPos.x - endPos.x) ;//* scaling;
-		final double dy = (-startPos.y + endPos.y);// * scaling;
-		final double dz = (startPos.z - endPos.z);// * scaling;
+		final double dx = (startPos.x - endPos.x) * scaling;
+		final double dy = (startPos.y - endPos.y) * scaling;
+		final double dz = (startPos.z - endPos.z) * scaling;
 		differenceVectorInOpenGLScaling = new Vector3( dx, dy, dz );
 
 		// calculate length and 3d length
@@ -64,33 +64,33 @@ public class GLEdgeControl extends AbstractControl<GLEdgeControl, GLEdge> {
 
 		// compare the y-coordinates and set the point with lower coordinate
 		// as start point
-		if( startPos.y <= endPos.y ) {
+//		if( startPos.y >= endPos.y ) {
 			startPoint = startPos;
 			endPoint = endPos;
-		} else {
-			startPoint = endPos;
-			endPoint = startPos;
-		}
+//		} else {
+//			startPoint = endPos;
+//			endPoint = startPos;
+//		}
 	}
 
 	public void setScaling( double scaling ) {
-		startPoint.scalarMultiplicateTo( 1/this.scaling );
-		endPoint.scalarMultiplicateTo( 1/this.scaling );
+//		startPoint.scalarMultiplicateTo( 1/this.scaling );
+//		endPoint.scalarMultiplicateTo( 1/this.scaling );
 		this.scaling = scaling;
-		startPoint.scalarMultiplicateTo( scaling );
-		endPoint.scalarMultiplicateTo( scaling );
+//		startPoint.scalarMultiplicateTo( scaling );
+//		endPoint.scalarMultiplicateTo( scaling );
 		// recompute everything...
 		init( startPoint, endPoint );
 	}
 
 
 
-	public Vector3 getStartPosition() {
-		return startPoint;
+	final public Vector3 getStartPosition() {
+		return startPoint.scalarMultiplicate( scaling );
 	}
 
-	public Vector3 getEndPosition() {
-		return endPoint;
+	final public Vector3 getEndPosition() {
+		return endPoint.scalarMultiplicate( scaling );
 	}
 
 	/**
@@ -98,7 +98,7 @@ public class GLEdgeControl extends AbstractControl<GLEdgeControl, GLEdge> {
 	 * (of the two edges between two nodes).
 	 * @return whether this edge is the one going from lower ID to higher ID.
 	 */
-	public boolean isFirstEdge() {
+	final public boolean isFirstEdge() {
 		return isFirst;
 	}
 
@@ -107,7 +107,7 @@ public class GLEdgeControl extends AbstractControl<GLEdgeControl, GLEdge> {
 	 * Returns the model-length of the edge, NOT taking the z-coordinate into account.
 	 * @return the model-length of the edge, NOT taking the z-coordinate into account.
 	 */
-	public double getLength() {
+	final public double getLength() {
 		return length;
 	}
 
@@ -115,7 +115,7 @@ public class GLEdgeControl extends AbstractControl<GLEdgeControl, GLEdge> {
 	 * Returns the model length of the edge, taking the z-coordinate into account.
 	 * @return the model length of the edge, taking the z-coordinate into account.
 	 */
-	public double get3DLength() {
+	final public double get3DLength() {
 		return length3d;
 	}
 
@@ -126,7 +126,7 @@ public class GLEdgeControl extends AbstractControl<GLEdgeControl, GLEdge> {
 	 * and the end node of the controlled edge, i.e. start-end
 	 * in each component.
 	 */
-	public Vector3 getDifferenceVectorInOpenGlScaling() {
+	final public Vector3 getDifferenceVectorInOpenGlScaling() {
 		return differenceVectorInOpenGLScaling;
 	}
 
@@ -139,9 +139,9 @@ public class GLEdgeControl extends AbstractControl<GLEdgeControl, GLEdge> {
 	 * @param b another vector.
 	 * @return the angle between the two vectors.
 	 */
-	public double getAngleBetween( Vector3 a, Vector3 b ) {
-		double cosine = (a.dotProduct( b ) / a.length()) / b.length();
-		double angle = Math.acos( cosine ) / Conversion.ANGLE2DEG;
+	final public double getAngleBetween( Vector3 a, Vector3 b ) {
+		final double cosine = (a.dotProduct( b ) / a.length()) / b.length();
+		final double angle = Math.acos( cosine ) / Conversion.ANGLE2DEG;
 		return 180 - angle;
 	}
 
@@ -151,7 +151,7 @@ public class GLEdgeControl extends AbstractControl<GLEdgeControl, GLEdge> {
 	 * @param b another vector.
 	 * @return the cross product of a and b (a being the first vector).
 	 */
-	public Vector3 getRotationAxis( Vector3 a, Vector3 b ) {
+	final public Vector3 getRotationAxis( Vector3 a, Vector3 b ) {
 		return a.crossProduct( b );
 	}
 

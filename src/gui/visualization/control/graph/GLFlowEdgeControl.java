@@ -29,7 +29,6 @@ import de.tu_berlin.math.coga.graph.io.xml.FlowVisualization;
  * by {@code GLFlowEdge}. That means it sets the correct positions depending on the time of the visualization.
  * @author Jan-Philipp Kappmeier
  */
-//public class GLFlowEdgeControl extends AbstractControl<GLFlowEdge, Edge, GraphVisualizationResults, GLFlowEdge, GLFlowEdgeControl, GLControl> {
 public class GLFlowEdgeControl extends GLEdgeControl {
 	protected GLFlowGraphControl mainControl;
 	private double time;
@@ -38,7 +37,7 @@ public class GLFlowEdgeControl extends GLEdgeControl {
 	private double deltaStep;
 	private int transitTime;
 	private int capacity;
-	private static final double Z_TO_OPENGL_SCALING = 0.1d;
+	private static final double Z_TO_OPENGL_SCALING = 0.01d;
 
 	/**
 	 * Creates a new <code>GLFlowEdgeControl</code> object for the edge <code>edge</code> using data from
