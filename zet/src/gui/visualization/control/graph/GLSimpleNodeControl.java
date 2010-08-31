@@ -10,7 +10,6 @@ import ds.graph.Edge;
 import ds.graph.Graph;
 import ds.graph.Node;
 import gui.visualization.control.FlowHistroryTriple;
-import gui.visualization.draw.graph.GLEdge;
 import gui.visualization.draw.graph.GLSimpleNode;
 import gui.visualization.util.FlowCalculator;
 import java.util.ArrayList;
@@ -35,10 +34,28 @@ public class GLSimpleNodeControl extends AbstractControl<GLEdgeControl, GLSimple
 	private int duration;
 	private int startTime;
 	private boolean gridVisible = true;
+	protected final Graph graph;
+	protected final NodePositionMapping nodePositionMapping;
+	protected final Node node;
 
 	public GLSimpleNodeControl( Graph graph, Node node, NodePositionMapping nodePositionMapping ) {
 		this.position = nodePositionMapping.get( node );
+		this.graph = graph;
+		this.nodePositionMapping = nodePositionMapping;
+		this.node = node;
+		setUpEdges();
+	}
 
+	public GLSimpleNodeControl( Graph graph, Node node, NodePositionMapping nodePositionMapping, boolean setUpEdges ) {
+		this.position = nodePositionMapping.get( node );
+		this.graph = graph;
+		this.nodePositionMapping = nodePositionMapping;
+		this.node = node;
+		if( setUpEdges )
+			setUpEdges();
+	}
+
+	protected void setUpEdges() {
 		// add outgoing edges as children
 		for( Edge edge : graph.outgoingEdges( node ) ) {
 			//if( edge.start().id() != glControl.superSinkID() && edge.end().id() != glControl.superSinkID() ) {
@@ -50,7 +67,7 @@ public class GLSimpleNodeControl extends AbstractControl<GLEdgeControl, GLSimple
 			// TODO skip first
 			GLEdgeControl edgeControl = new GLEdgeControl( nodePositionMapping, edge );
 			add( edgeControl );
-			
+
 		}
 
 		setView( new GLSimpleNode( this ) );

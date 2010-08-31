@@ -142,7 +142,7 @@ public class ZToGraphMapping {
     }
     
     public void setNodeRectangle(Node node, NodeRectangle nodeRectangle){
-    	nodeRectangles.set(node,nodeRectangle);
+    	nodeRectangles.set( node, nodeRectangle );
     }
     
     public void setFloorForNode(Node node, int floor){

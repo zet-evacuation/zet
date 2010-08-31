@@ -19,9 +19,21 @@ import opengl.helper.Frustum;
  * @author Jan-Philipp Kappmeier
  */
 public class GLGraphControl extends AbstractControl<GLSimpleNodeControl, GLGraph> implements DrawableControlable {
+	protected NodePositionMapping nodePositionMapping;
+	protected Graph graph;
 
 	public GLGraphControl( Graph graph, NodePositionMapping nodePositionMapping ) {
+		this( graph, nodePositionMapping, true );
+	}
 
+public GLGraphControl( Graph graph, NodePositionMapping nodePositionMapping, boolean setUpNodes ) {
+		this.nodePositionMapping = nodePositionMapping;
+		this.graph = graph;
+		if( setUpNodes )
+			setUpNodes();
+	}
+
+	protected void setUpNodes() {
 		for( Node n : graph.nodes() ) {
 			GLSimpleNodeControl nodeControl = new GLSimpleNodeControl( graph, n, nodePositionMapping );
 			add( nodeControl );

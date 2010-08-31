@@ -46,7 +46,7 @@ public abstract class AbstractDrawable<U extends AbstractDrawable<?, ?>, V exten
 	public AbstractDrawable( V control ) {
 		children = new ArrayList<U>();
 		this.control = control;
-		update();
+		//update();
 	}
 
 	public void clear() {
