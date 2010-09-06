@@ -58,6 +58,12 @@ import javax.swing.filechooser.FileFilter;
 import de.tu_berlin.math.coga.zet.DatFileReaderWriter;
 import de.tu_berlin.math.coga.graph.io.xml.FlowVisualization;
 import de.tu_berlin.math.coga.graph.io.xml.XMLReader;
+import gui.visualization.Visualization.RecordingMode;
+import gui.visualization.control.graph.GLNashGraphControl;
+import io.movie.MovieManager;
+import io.visualization.ImageFormat;
+import io.visualization.MovieFormat;
+import io.visualization.MovieWriters;
 
 /**
  *
@@ -75,8 +81,11 @@ public class FlowVisualizationTool extends JFrame implements PropertyChangeListe
 	private JMenuItem mnuFlowExecute;
 	private JMenuItem mnuFlowRestart;
 	private JMenuItem mnuFlowPause;
+	private JMenu mView;
+	private JMenuItem mnuScreenshot;
+	
 	//final Visualization<GLFlowGraphControl> vis = new Visualization<GLFlowGraphControl>( new GLCapabilities() );
-	final Visualization<GLFlowGraphControl> vis = new NashFlowVisualization( new GLCapabilities() );
+	final Visualization<GLNashGraphControl> vis = new NashFlowVisualization( new GLCapabilities() );
 	JEventStatusBar sb = new JEventStatusBar();
 	JSlider slider = new JSlider(0,0);
 	FlowVisualizationTool theInstance;
@@ -105,8 +114,9 @@ public class FlowVisualizationTool extends JFrame implements PropertyChangeListe
 		vis.getCamera().getView().invert();
 		vis.getCamera().getPos().z = 140;
 		graphVisResult = new GraphVisualizationResults();
-		GLFlowGraphControl control = new GLFlowGraphControl( graphVisResult );
-		vis.setControl( control );
+
+		//GLFlowGraphControl control = new GLFlowGraphControl( graphVisResult );
+		//vis.setControl( control );
 
 		vis.addKeyListener( new KeyListener() {
 
@@ -139,6 +149,7 @@ public class FlowVisualizationTool extends JFrame implements PropertyChangeListe
 		JMenuBar bar = new JMenuBar();
 		mFile = Menu.addMenu( bar, loc.getString( "menuFile" ) );
 		mFlow = Menu.addMenu( bar, loc.getString( "menuFlow" ) );
+		mView = Menu.addMenu( bar, loc.getString( "menuView" ) );
 
 		// Dateimenue
 		mnuFileOpen = Menu.addMenuItem( mFile, loc.getString( "menuOpen" ), 'O', aclFile, "open" );
@@ -149,6 +160,10 @@ public class FlowVisualizationTool extends JFrame implements PropertyChangeListe
 		mnuFlowExecute = Menu.addMenuItem( mFlow, loc.getString( "menuExecute" ), KeyEvent.VK_F5, aclFlow, "execute", 0 );
 		mnuFlowPause = Menu.addMenuItem( mFlow, loc.getString( "menuPause" ), 'T', aclFlow, "pause" );
 		mnuFlowRestart = Menu.addMenuItem( mFlow, loc.getString( "menuRestart" ), KeyEvent.VK_F6, aclFlow, "restart", 0 );
+
+		// View menu
+		mnuScreenshot = Menu.addMenuItem( mView, loc.getString( "menuScreenshot" ), KeyEvent.VK_F12, acl, "screenshot", 0 );
+
 
 		setJMenuBar( bar );
 		loc.setPrefix( "" );
@@ -278,7 +293,7 @@ public class FlowVisualizationTool extends JFrame implements PropertyChangeListe
 					}
 					if( vis.isAnimating() )
 						vis.stopAnimation();
-					vis.setControl( control );
+					//vis.setControl( control ); // nash-flow-outcommented
 					vis.update();
 					vis.repaint();
 				}
@@ -364,12 +379,59 @@ public class FlowVisualizationTool extends JFrame implements PropertyChangeListe
 			}
 		}
 	};
+	/** Action listener for the rest. */
+	ActionListener acl = new ActionListener() {
+
+		public void actionPerformed( ActionEvent event ) {
+			if( event.getActionCommand().equals( "screenshot" ) ) {
+				//vis.takeScreenshot( "./screenshot_example.png" );
+
+
+
+
+
+// make a movie...
+			String movieFrameName = "movieFrame";
+			// TODO BUG: wenn ein projekt noch nicht gespeichert worden ist, liefert das hier iene null pointer exception. (tritt auf, wenn ein video gedreht werden soll)
+			//String projectName = zcontrol.getProject().getProjectFile().getName().substring( 0, zcontrol.getProject().getProjectFile().getName().length() - 4 );
+			MovieManager movieCreator =  vis.getMovieCreator();
+//			if( movieFrameName.equals( "" ) )
+//				movieCreator.setFramename( projectName );
+//			else
+				movieCreator.setFramename( movieFrameName );
+			String path = "./nashvideo";
+			if( !(path.endsWith( "/" ) || path.endsWith( "\\" )) )
+				path = path + "/";
+			String movieFileName = "nash_example_video";
+			movieCreator.setFilename( movieFileName );
+			movieCreator.setPath( "./nashvideo" );
+			movieCreator.setFramename( "movieFrame" );
+			MovieWriters mw = MovieWriters.FFmpeg;
+			
+			movieCreator.setMovieWriter( mw.getWriter() );
+			vis.setRecording( RecordingMode.Recording, new Dimension( 800, 600 ) );
+			movieCreator.setWidth( 800 );
+			movieCreator.setHeight( 600 );
+			movieCreator.setCreateMovie( true );
+			movieCreator.setDeleteFrames( false );
+			movieCreator.setMovieFormat( MovieFormat.DIVX );
+			movieCreator.setFramerate( 30 );
+			movieCreator.setBitrate( 3000 );
+			vis.setMovieFramerate( 30 );
+			movieCreator.setFrameFormat( ImageFormat.PNG );
+			//visualizationToolBar.play();
+			if( !vis.isAnimating() )
+				vis.startAnimation();
+
+			}
+		}
+	};
   /** Change listener for the slider. Sets the visualization time. */
 	ChangeListener chl = new ChangeListener() {
 
 		public void stateChanged( ChangeEvent event ) {
 			int time = slider.getValue();
-			vis.getControl().setTime( time * vis.getControl().getNanoSecondsPerStep() / sliderAccuracy );
+			//vis.getControl().setTime( time * vis.getControl().getNanoSecondsPerStep() / sliderAccuracy ); // nash-flow-outcommented
 			vis.repaint();
 		}
 	};
@@ -382,7 +444,7 @@ public class FlowVisualizationTool extends JFrame implements PropertyChangeListe
 		sb.setStatusText( 0, "Baue Visualisierung" );
 		slider.setMaximum( (graphVisResult.getNeededTimeHorizon()+1) * sliderAccuracy );
 		GLFlowGraphControl control = new GLFlowGraphControl( graphVisResult );
-		vis.setControl( control );
+		//vis.setControl( control ); // nash-flow-outcommented
 		vis.update();
 		vis.repaint();
 		sb.setStatusText( 0, "Fertig. Animation startet" );
@@ -404,7 +466,7 @@ public class FlowVisualizationTool extends JFrame implements PropertyChangeListe
 
 	public void handleEvent( MessageEvent event ) {
 		if( vis.isAnimating() ) {
-			slider.setValue( (int)(100*vis.getControl().getStep()) );
+			//slider.setValue( (int)(100*vis.getControl().getStep()) ); // nash-flow-outcommented
 		}
 	}
 }

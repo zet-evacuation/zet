@@ -347,6 +347,7 @@ public abstract class AbstractVisualization extends AbstractOpenGLCanvas {
 	public void takeScreenshot( String filename ) {
 		takeScreenshot = true;
 		screenshotFilename = filename;
+		System.out.println( "screenshot" );
 		repaint();
 	}
 

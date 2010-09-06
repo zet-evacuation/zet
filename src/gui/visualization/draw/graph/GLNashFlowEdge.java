@@ -19,33 +19,29 @@ import opengl.drawingutils.GLColor;
  * @author Jan-Philipp Kappmeier
  */
 public class GLNashFlowEdge extends GLEdge {
+
 	final static double tu = 30;
 	final static double exitPos = 0.75;
 	final static double acceleration = 1;	// the time in seconds that we want to display ist...
-
 	GLNashFlowEdgeControl ncontrol;
-
 	double figNr = 0;
 	double lastFigNr = -1;
-	
 	GLColor flowColor = new GLColor( Color.red );
-
 	// sizes of corridor and flow unit
 	double corStartPos = 0.2;
 	double fu = 0.15;
 	double corCap = 4;
 	double corWallWidth = 0;
 	double distWallFromEdge = corCap * fu * 0.5 + 0.5 * corWallWidth;
-
-		double numberOfFrames = tu / acceleration;
-		// berechne faktor:
-		double factor = numberOfFrames;
+	double numberOfFrames = tu / acceleration;
+	// berechne faktor:
+	double factor = numberOfFrames;
 	private double cap;
 	private double taue;
 
 	public GLNashFlowEdge( GLEdgeControl control ) {
 		super( control );
-		ncontrol = (GLNashFlowEdgeControl)control;
+		ncontrol = (GLNashFlowEdgeControl) control;
 		edgeColor = VisualizationOptionManager.getEdgeColor();
 		update();
 	}
@@ -60,6 +56,8 @@ public class GLNashFlowEdge extends GLEdge {
 
 		figNr = Conversion.nanoSecondsToSec * ncontrol.getTimeSinceStart() * factor;
 
+		double currentTime = (figNr - 1) / tu;
+
 
 		displayEdge( gl );
 
@@ -73,7 +71,6 @@ public class GLNashFlowEdge extends GLEdge {
 	public void performStaticDrawing( GL gl ) {
 		// nothing
 	}
-
 	double scale = 4;
 
 	private void displayEdge( GL gl ) {
@@ -85,9 +82,9 @@ public class GLNashFlowEdge extends GLEdge {
 		Vector3 b = new Vector3( 0, 0, 1 );
 		Vector3 a = control.getDifferenceVectorInOpenGlScaling();
 		Vector3 axis = control.getRotationAxis( a, b );
-		gl.glRotated( control.getAngleBetween( a, b ), axis.x, axis.y, axis.z );		
+		gl.glRotated( control.getAngleBetween( a, b ), axis.x, axis.y, axis.z );
 		//gl.glRotated( 90, 0, 1, 0 );
-		
+
 		final double eps = 0.999;
 		gl.glPolygonMode( GL.GL_FRONT_AND_BACK, GL.GL_LINE );
 		glu.gluCylinder( quadObj, scale * cap * fu * 0.5 * eps, scale * cap * fu * 0.5 * eps, control.get3DLength(), 16, 1 );
@@ -117,11 +114,11 @@ public class GLNashFlowEdge extends GLEdge {
 		//gl.glPolygonMode( GL.GL_FRONT_AND_BACK, GL.GL_LINE );
 		double width = eps * scale * distWallFromEdge;
 		double drawnLength = exitPos * len - corStartPos * len;
-		glu.gluCylinder( quadObj, width, width, drawnLength*eps, 16, 1 );
+		glu.gluCylinder( quadObj, width, width, drawnLength * eps, 16, 1 );
 		//gl.glPolygonMode( GL.GL_FRONT, GL.GL_FILL );
 
 		//glu.gluDisk( quadObj, 0, width, 16, 1 );
-		gl.glTranslated( 0, 0, drawnLength*eps );
+		gl.glTranslated( 0, 0, drawnLength * eps );
 		glu.gluDisk( quadObj, scale * cap * fu * 0.5 * eps, width, 16, 1 );
 
 
@@ -151,18 +148,19 @@ public class GLNashFlowEdge extends GLEdge {
 //		gl.glLineWidth( 1 );
 	}
 
-	private void displayFlow( FlowData flowData,  GL gl ) {
+	private void displayFlow( FlowData flowData, GL gl ) {
 		boolean giveOut = false;
 		if( lastFigNr < figNr ) {
-			System.out.println( figNr );
+			//System.out.println( figNr );
 			lastFigNr = figNr;
-			giveOut = true;
+			giveOut = false;
 		}
 
 		boolean capGreaterThanInflow = cap > flowData.inflow;
 		boolean waittimePositive = flowData.waittime > 0;
-		
+
 		double currentTime = (figNr - 1) / tu;
+		currentTime = Conversion.nanoSecondsToSec * ncontrol.getTimeSinceStart();
 
 		double posFirst = 1;
 		double posLast = 0;
@@ -171,7 +169,6 @@ public class GLNashFlowEdge extends GLEdge {
 
 
 			//currentTime = ((Conversion.nanoSecondsToSec * getTimeSinceStart() * 2)-1) / tu;
-
 
 			double physicalQueueLength = flowData.queueLengthForFirst / taue;
 
@@ -257,14 +254,14 @@ public class GLNashFlowEdge extends GLEdge {
 				// draw the flow
 				//dgeColor.draw( gl );
 				gl.glPushMatrix();
-		Vector3 b = new Vector3( 0, 0, 1 );
-		Vector3 a = control.getDifferenceVectorInOpenGlScaling();
-		Vector3 axis = control.getRotationAxis( a, b );
-		gl.glRotated( control.getAngleBetween( a, b ), axis.x, axis.y, axis.z );
+				Vector3 b = new Vector3( 0, 0, 1 );
+				Vector3 a = control.getDifferenceVectorInOpenGlScaling();
+				Vector3 axis = control.getRotationAxis( a, b );
+				gl.glRotated( control.getAngleBetween( a, b ), axis.x, axis.y, axis.z );
 //				gl.glRotated( 90, 0, 1, 0 );
 				gl.glTranslated( 0, 0, control.get3DLength() * rectOnex );
 				double drawnLength = control.get3DLength() * (rectOney - rectOnex);
-				double width = scale * fu*flowData.inflow*0.5;
+				double width = scale * fu * flowData.inflow * 0.5;
 				glu.gluCylinder( quadObj, width, width, drawnLength, 16, 1 );
 
 				glu.gluDisk( quadObj, 0, width, 16, 1 );
@@ -281,10 +278,10 @@ public class GLNashFlowEdge extends GLEdge {
 					System.out.println( "DRAW 2" );
 				//edgeColor.draw( gl );
 				gl.glPushMatrix();
-		Vector3 b = new Vector3( 0, 0, 1 );
-		Vector3 a = control.getDifferenceVectorInOpenGlScaling();
-		Vector3 axis = control.getRotationAxis( a, b );
-		gl.glRotated( control.getAngleBetween( a, b ), axis.x, axis.y, axis.z );
+				Vector3 b = new Vector3( 0, 0, 1 );
+				Vector3 a = control.getDifferenceVectorInOpenGlScaling();
+				Vector3 axis = control.getRotationAxis( a, b );
+				gl.glRotated( control.getAngleBetween( a, b ), axis.x, axis.y, axis.z );
 //				gl.glRotated( 90, 0, 1, 0 );
 				gl.glTranslated( 0, 0, control.get3DLength() * rectTwox );
 				double drawnLength = control.get3DLength() * (rectTwoy - rectTwox);
@@ -306,13 +303,13 @@ public class GLNashFlowEdge extends GLEdge {
 					System.out.println( "DRAW 3" );
 				//edgeColor.draw( gl );
 				gl.glPushMatrix();
-		Vector3 b = new Vector3( 0, 0, 1 );
-		Vector3 a = control.getDifferenceVectorInOpenGlScaling();
-		Vector3 axis = control.getRotationAxis( a, b );
-		gl.glRotated( control.getAngleBetween( a, b ), axis.x, axis.y, axis.z );
+				Vector3 b = new Vector3( 0, 0, 1 );
+				Vector3 a = control.getDifferenceVectorInOpenGlScaling();
+				Vector3 axis = control.getRotationAxis( a, b );
+				gl.glRotated( control.getAngleBetween( a, b ), axis.x, axis.y, axis.z );
 //				gl.glRotated( 90, 0, 1, 0 );
 				gl.glTranslated( 0, 0, control.get3DLength() * rectThreex );
-				
+
 				double drawnLength = control.get3DLength() * (rectThreey - rectThreex);
 				double width = scale * cap * fu * 0.5;
 				glu.gluCylinder( quadObj, width, width, drawnLength, 16, 1 );
@@ -331,35 +328,33 @@ public class GLNashFlowEdge extends GLEdge {
 			flowData.lastAtTail = flowData.endtime;
 			flowData.lastAtHead = flowData.lastAtTail + flowData.taue;
 			flowData.firstAfterTail = flowData.firstAtTail * flowData.tu + 1;
-			flowData.firstBeforeHead = flowData.firstAtHead*flowData.tu+1;
-			flowData.lastAfterTail = flowData.lastAtTail*tu + 1;
-			flowData.lastBeforeHead = flowData.lastAtHead*flowData.tu + 1;
+			flowData.firstBeforeHead = flowData.firstAtHead * flowData.tu + 1;
+			flowData.lastAfterTail = flowData.lastAtTail * tu + 1;
+			flowData.lastBeforeHead = flowData.lastAtHead * flowData.tu + 1;
 
 
-			if( figNr >= flowData.firstAfterTail && figNr <= flowData.firstBeforeHead ) {
-				posFirst = (currentTime - flowData.firstAtTail)/(flowData.firstAtHead - flowData.firstAtTail);
-			}
+			if( figNr >= flowData.firstAfterTail && figNr <= flowData.firstBeforeHead )
+				posFirst = (currentTime - flowData.firstAtTail) / (flowData.firstAtHead - flowData.firstAtTail);
 
-			if( figNr >= flowData.lastAfterTail && figNr <= flowData.lastBeforeHead ) {
-				posLast = (currentTime - flowData.lastAtTail) / (flowData.lastAtHead-flowData.lastAtTail);
-			}
+			if( figNr >= flowData.lastAfterTail && figNr <= flowData.lastBeforeHead )
+				posLast = (currentTime - flowData.lastAtTail) / (flowData.lastAtHead - flowData.lastAtTail);
 
 			if( figNr >= flowData.firstAfterTail && figNr <= flowData.lastBeforeHead ) {
-				//if( giveOut )
+				if( giveOut )
 					System.out.println( "DER LETZTE FALL IST AKTIV" );
 				//edgeColor.draw( gl );
-			flowData.color.draw( gl );
+				flowData.color.draw( gl );
 
 				gl.glPushMatrix();
-		Vector3 b = new Vector3( 0, 0, 1 );
-		Vector3 a = control.getDifferenceVectorInOpenGlScaling();
-		Vector3 axis = control.getRotationAxis( a, b );
-		gl.glRotated( control.getAngleBetween( a, b ), axis.x, axis.y, axis.z );
+				Vector3 b = new Vector3( 0, 0, 1 );
+				Vector3 a = control.getDifferenceVectorInOpenGlScaling();
+				Vector3 axis = control.getRotationAxis( a, b );
+				gl.glRotated( control.getAngleBetween( a, b ), axis.x, axis.y, axis.z );
 //				gl.glRotated( 90, 0, 1, 0 );
 				gl.glTranslated( 0, 0, control.get3DLength() * posFirst );
 
-				double drawnLength = control.get3DLength() * (posLast-posFirst);
-				double width = scale * fu*flowData.inflow*0.5;
+				double drawnLength = control.get3DLength() * (posLast - posFirst);
+				double width = scale * fu * flowData.inflow * 0.5;
 
 				glu.gluCylinder( quadObj, width, width, drawnLength, 16, 1 );
 
@@ -378,6 +373,4 @@ public class GLNashFlowEdge extends GLEdge {
 		cap = ncontrol.getNashFlowEdgeData().getCapacity();
 		taue = ncontrol.getNashFlowEdgeData().getTransitTime();
 	}
-
-
 }
