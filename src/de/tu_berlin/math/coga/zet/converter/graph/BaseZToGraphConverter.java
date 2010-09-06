@@ -5,9 +5,11 @@
 package de.tu_berlin.math.coga.zet.converter.graph;
 
 import de.tu_berlin.math.coga.zet.converter.RasterContainerCreator;
+
 import de.tu_berlin.math.coga.common.algorithm.Algorithm;
 import de.tu_berlin.math.coga.zet.NetworkFlowModel;
 import ds.graph.Edge;
+import ds.graph.Graph;
 import ds.graph.IdentifiableDoubleMapping;
 import ds.z.BuildingPlan;
 
@@ -22,6 +24,7 @@ public abstract class BaseZToGraphConverter extends Algorithm<BuildingPlan, Netw
 	protected NetworkFlowModel model;
 	protected BuildingPlan plan;
 	protected ZToGraphRasterContainer raster;
+    protected Graph roomGraph;
 
 	@Override
 	protected NetworkFlowModel runAlgorithm( BuildingPlan problem ) {

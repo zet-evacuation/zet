@@ -1,4 +1,4 @@
-/* zet evacuation tool copyright (c) 2007-09 zet evacuation team
+/* zet evacuation tool copyright (c) 2007-10 zet evacuation team
  *
  * This program is free software; you can redistribute it and/or
  * as published by the Free Software Foundation; either version 2
@@ -6,7 +6,7 @@
  *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
  * GNU General Public License for more details.
  *
  * You should have received a copy of the GNU General Public License
@@ -18,13 +18,20 @@
  *
  */
 
-package de.tu_berlin.math.coga.zet;
+package ds;
 
-import ds.graph.*;
 import java.util.LinkedList;
 
 import com.thoughtworks.xstream.annotations.XStreamAlias;
 import de.tu_berlin.math.coga.zet.converter.graph.ZToGraphMapping;
+
+import ds.graph.DynamicNetwork;
+import ds.graph.Edge;
+import ds.graph.Graph;
+import ds.graph.IdentifiableIntegerMapping;
+import ds.graph.Localization;
+import ds.graph.Network;
+import ds.graph.Node; 
 
 /**
  *
@@ -39,8 +46,6 @@ public class NetworkFlowModel {
     protected IdentifiableIntegerMapping<Node> nodeCapacities;
     
     protected IdentifiableIntegerMapping<Edge> transitTimes;
-
-    protected IdentifiableDoubleMapping<Edge> exactTransitTimes;
     
     protected IdentifiableIntegerMapping<Node> currentAssignment;
     
@@ -55,18 +60,11 @@ public class NetworkFlowModel {
         this.edgeCapacities = new IdentifiableIntegerMapping<Edge>(0);
         this.nodeCapacities = new IdentifiableIntegerMapping<Node>(0);
         this.transitTimes = new IdentifiableIntegerMapping<Edge>(0);
-        this.exactTransitTimes = new IdentifiableDoubleMapping<Edge>(0);
     }
     /*
     public FlowProblemInstance getFlowProblemInstance() {
         return new FlowProblemInstance(network.getAsStaticNetwork(), edgeCapacities, nodeCapacities, transitTimes, currentAssignment);
     }*/
-
-    public void setNumberOfEdges(int numberOfEdges) {
-       edgeCapacities.setDomainSize(numberOfEdges);
-       transitTimes.setDomainSize(numberOfEdges);
-       exactTransitTimes.setDomainSize(numberOfEdges);
-    }
 
     public IdentifiableIntegerMapping<Node> getCurrentAssignment() {
         return currentAssignment;
@@ -201,9 +199,4 @@ public class NetworkFlowModel {
     public void setSupersink(Node supersink) {
         this.supersink = supersink;
     }
-
-    public void setExactTransitTimes(IdentifiableDoubleMapping<Edge> exactTransitTimes) {
-        this.exactTransitTimes = exactTransitTimes;
-    }
-
 }
