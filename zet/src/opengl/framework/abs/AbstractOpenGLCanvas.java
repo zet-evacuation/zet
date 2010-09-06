@@ -55,7 +55,7 @@ abstract public class AbstractOpenGLCanvas extends GLCanvas implements GLEventLi
 	private int fps = 0;
 	private int frameCount = 0;
 	private long deltaTime;
-	private long lastTime = 0;
+	protected long lastTime = 0;
 	protected GL gl;
 	protected GLU glu;
 
@@ -154,7 +154,7 @@ abstract public class AbstractOpenGLCanvas extends GLCanvas implements GLEventLi
 	 */
 	final public void computeFPS() {
 		// calculate real FPS and delay time for animation
-		long currentTime = System.nanoTime();
+		final long currentTime = System.nanoTime();
 		deltaTime = currentTime - lastTime;
 		lastTime = currentTime;
 		if( currentTime - lastFrameTime >= Conversion.secToNanoSeconds ) {

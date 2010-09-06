@@ -29,7 +29,6 @@ public class FlowData {
 		public double lastEnterExit;
 		public double lastLeaveExit;
 		public double lastAtHead;
-		public double tu = 30;
 		public double queueLengthForFirst;
 		public double queueLengthForLast;
 		public double firstAfterTail;
@@ -70,19 +69,19 @@ public class FlowData {
 			queueLengthForFirst = waittime * cap / corCap;
 			queueLengthForLast = queueLengthForFirst + (endtime - starttime) * (inflow - cap) / corCap;
 
-			firstAfterTail = firstAtTail * tu + 1;
-			firstBeforeEnterExit = firstEnterExit * tu + 1;
-			firstAfterEnterExit = firstEnterExit * tu + 1;
-			firstBeforeLeaveExit = firstLeaveExit * tu + 1;
-			firstAfterLeaveExit = firstLeaveExit * tu + 1;
-			firstBeforeHead = firstAtHead * tu + 1;
+			firstAfterTail = firstAtTail;
+			firstBeforeEnterExit = firstEnterExit;
+			firstAfterEnterExit = firstEnterExit;
+			firstBeforeLeaveExit = firstLeaveExit;
+			firstAfterLeaveExit = firstLeaveExit;
+			firstBeforeHead = firstAtHead;
 
-			lastAfterTail = lastAtTail * tu + 1;
+			lastAfterTail = lastAtTail;
 
-			lastBeforeEnterExit = lastEnterExit * tu + 1;
-			lastAfterEnterExit = lastEnterExit * tu + 1;
-			lastBeforeLeaveExit = lastLeaveExit * tu + 1;
-			lastAfterLeaveExit = lastLeaveExit * tu + 1;
-			lastBeforeHead = lastAtHead * tu + 1;
+			lastBeforeEnterExit = lastEnterExit;
+			lastAfterEnterExit = lastEnterExit;
+			lastBeforeLeaveExit = lastLeaveExit;
+			lastAfterLeaveExit = lastLeaveExit;
+			lastBeforeHead = lastAtHead;
 		}
 	}

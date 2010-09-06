@@ -409,18 +409,18 @@ public class FlowVisualizationTool extends JFrame implements PropertyChangeListe
 			MovieWriters mw = MovieWriters.FFmpeg;
 			
 			movieCreator.setMovieWriter( mw.getWriter() );
-			vis.setRecording( RecordingMode.Recording, new Dimension( 800, 600 ) );
-			movieCreator.setWidth( 800 );
-			movieCreator.setHeight( 600 );
+			vis.setRecording( RecordingMode.Recording, new Dimension( 1024, 768) );
+			movieCreator.setWidth( 1024 );
+			movieCreator.setHeight( 768 );
 			movieCreator.setCreateMovie( true );
 			movieCreator.setDeleteFrames( false );
 			movieCreator.setMovieFormat( MovieFormat.DIVX );
 			movieCreator.setFramerate( 30 );
-			movieCreator.setBitrate( 3000 );
-			vis.setMovieFramerate( 30 );
+			movieCreator.setBitrate( 6000 );
+			vis.setMovieFramerate( 25 );
 			movieCreator.setFrameFormat( ImageFormat.PNG );
 			//visualizationToolBar.play();
-			if( !vis.isAnimating() )
+			//if( !vis.isAnimating() )
 				vis.startAnimation();
 
 			}

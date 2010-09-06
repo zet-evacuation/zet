@@ -130,6 +130,7 @@ public class FFmpegWrapper extends MovieWriter {
 //				height += 1;
 			String thisCommand = "";
 			// Basic command
+			//String programPath = "./tools/ffmpeg/ffmpeg";
 			String programPath = "./tools/ffmpeg/ffmpeg";
 			thisCommand += programPath + " -f image2";
 
