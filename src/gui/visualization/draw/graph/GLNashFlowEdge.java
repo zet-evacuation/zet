@@ -20,7 +20,6 @@ import opengl.drawingutils.GLColor;
  */
 public class GLNashFlowEdge extends GLEdge {
 
-	final static double tu = 30;
 	final static double exitPos = 0.75;
 	final static double acceleration = 1;	// the time in seconds that we want to display ist...
 	GLNashFlowEdgeControl ncontrol;
@@ -33,11 +32,11 @@ public class GLNashFlowEdge extends GLEdge {
 	double corCap = 4;
 	double corWallWidth = 0;
 	double distWallFromEdge = corCap * fu * 0.5 + 0.5 * corWallWidth;
-	double numberOfFrames = tu / acceleration;
 	// berechne faktor:
-	double factor = numberOfFrames;
+	//double factor = numberOfFrames;
 	private double cap;
 	private double taue;
+	double currentTime;
 
 	public GLNashFlowEdge( GLEdgeControl control ) {
 		super( control );
@@ -54,10 +53,9 @@ public class GLNashFlowEdge extends GLEdge {
 	public void performDrawing( GL gl ) {
 		//drawFlow( gl );
 
-		figNr = Conversion.nanoSecondsToSec * ncontrol.getTimeSinceStart() * factor;
+		figNr = Conversion.nanoSecondsToSec * ncontrol.getTimeSinceStart() / acceleration;
 
-		double currentTime = (figNr - 1) / tu;
-
+		currentTime = figNr;
 
 		displayEdge( gl );
 
@@ -159,8 +157,8 @@ public class GLNashFlowEdge extends GLEdge {
 		boolean capGreaterThanInflow = cap > flowData.inflow;
 		boolean waittimePositive = flowData.waittime > 0;
 
-		double currentTime = (figNr - 1) / tu;
-		currentTime = Conversion.nanoSecondsToSec * ncontrol.getTimeSinceStart();
+		//double currentTime = (figNr);
+		//currentTime = Conversion.nanoSecondsToSec * ncontrol.getTimeSinceStart();
 
 		double posFirst = 1;
 		double posLast = 0;
@@ -172,11 +170,11 @@ public class GLNashFlowEdge extends GLEdge {
 
 			double physicalQueueLength = flowData.queueLengthForFirst / taue;
 
-			if( figNr >= flowData.firstAfterEnterExit && figNr <= flowData.lastBeforeEnterExit )
+			if( currentTime >= flowData.firstAfterEnterExit && currentTime <= flowData.lastBeforeEnterExit )
 //				if( giveOut )
 //					System.out.println( figNr + ": Fall 1 für physicalQueueLength" );
 				physicalQueueLength = (flowData.queueLengthForFirst + (currentTime - flowData.firstEnterExit) * (flowData.inflow - cap) / corCap) / taue;
-			if( figNr >= flowData.lastAfterEnterExit && figNr <= flowData.lastBeforeLeaveExit ) {
+			if( currentTime >= flowData.lastAfterEnterExit && currentTime <= flowData.lastBeforeLeaveExit ) {
 				if( giveOut )
 					System.out.println( figNr + ": Fall 2 für physicalQueueLength" );
 				physicalQueueLength = (flowData.queueLengthForLast - (currentTime - flowData.lastEnterExit) * cap / corCap) / taue;
@@ -187,12 +185,12 @@ public class GLNashFlowEdge extends GLEdge {
 				System.out.println( "Shown queue length: " + shownQueueLength );
 
 
-			if( figNr >= flowData.firstAfterTail && figNr <= flowData.firstBeforeEnterExit ) {
+			if( currentTime >= flowData.firstAfterTail && currentTime <= flowData.firstBeforeEnterExit ) {
 				if( giveOut )
 					System.out.println( figNr + ": posFirst wird neue definiert, fall 1" );
 				posFirst = (currentTime - flowData.firstAtTail) / (flowData.firstEnterExit - flowData.firstAtTail) * (exitPos - shownQueueLength);
 			}
-			if( figNr >= flowData.firstAfterEnterExit && figNr <= flowData.firstBeforeLeaveExit ) {
+			if( currentTime >= flowData.firstAfterEnterExit && currentTime <= flowData.firstBeforeLeaveExit ) {
 				if( giveOut )
 					System.out.println( figNr + ": posFirst wird neue definiert, Fall 2" );
 				double physicalRemainingQueueLength = (flowData.queueLengthForFirst - (currentTime - flowData.firstEnterExit) * cap / corCap) / taue;
@@ -200,24 +198,24 @@ public class GLNashFlowEdge extends GLEdge {
 				posFirst = exitPos - shownRemainingQueueLength;
 			}
 
-			if( figNr >= flowData.firstAfterLeaveExit && figNr <= flowData.firstBeforeHead ) {
+			if( currentTime >= flowData.firstAfterLeaveExit && currentTime <= flowData.firstBeforeHead ) {
 				if( giveOut )
 					System.out.println( figNr + ": posFirst wird neue definiert, Fall 3" );
 				posFirst = exitPos + (currentTime - flowData.firstLeaveExit) / (flowData.firstAtHead - flowData.firstLeaveExit) * (1 - exitPos);
 			}
 
-			if( figNr >= flowData.lastAfterTail && figNr <= flowData.lastBeforeEnterExit ) {
+			if( currentTime >= flowData.lastAfterTail && currentTime <= flowData.lastBeforeEnterExit ) {
 				if( giveOut )
 					System.out.println( figNr + ": posLast wird neue definiert, Fall 1" );
 				final double shownQueueLengthForLast = flowData.queueLengthForLast / taue * exitPos / (flowData.queueLengthForLast / taue + exitPos);
 				posLast = (currentTime - flowData.lastAtTail) / (flowData.lastEnterExit - flowData.lastAtTail) * (exitPos - shownQueueLengthForLast);
 			}
-			if( figNr >= flowData.lastAfterEnterExit && figNr <= flowData.lastBeforeLeaveExit ) {
+			if( currentTime >= flowData.lastAfterEnterExit && currentTime <= flowData.lastBeforeLeaveExit ) {
 				if( giveOut )
 					System.out.println( figNr + ": posLast wird neue definiert, Fall 2" );
 				posLast = exitPos - shownQueueLength;
 			}
-			if( figNr >= flowData.lastAfterLeaveExit && figNr <= flowData.lastBeforeHead ) {
+			if( currentTime >= flowData.lastAfterLeaveExit && currentTime <= flowData.lastBeforeHead ) {
 				if( giveOut )
 					System.out.println( figNr + ": posLast wird neue definiert, Fall 3" );
 				posLast = exitPos + (currentTime - flowData.lastLeaveExit) / (flowData.lastAtHead - flowData.lastLeaveExit) * (1 - exitPos);
@@ -233,22 +231,22 @@ public class GLNashFlowEdge extends GLEdge {
 			double rectThreex = exitPos;
 			double rectThreey = posFirst;
 
-			if( figNr >= flowData.firstAfterTail && figNr <= flowData.firstBeforeEnterExit ) {
+			if( currentTime >= flowData.firstAfterTail && currentTime <= flowData.firstBeforeEnterExit ) {
 				if( giveOut )
 					System.out.println( "rectOney is changed to " + posFirst );
 				rectOney = posFirst;
 			}
 
-			if( figNr >= flowData.firstAfterEnterExit && figNr <= flowData.firstBeforeLeaveExit )
+			if( currentTime >= flowData.firstAfterEnterExit && currentTime <= flowData.firstBeforeLeaveExit )
 				rectTwoy = posFirst;
 
-			if( figNr >= flowData.lastAfterLeaveExit && figNr <= flowData.lastBeforeHead )
+			if( currentTime >= flowData.lastAfterLeaveExit && currentTime <= flowData.lastBeforeHead )
 				rectThreex = posLast;
 
 
 			// zeichnen
 			flowData.color.draw( gl );
-			if( figNr >= flowData.firstAfterTail && figNr <= flowData.lastBeforeEnterExit ) {
+			if( currentTime >= flowData.firstAfterTail && currentTime <= flowData.lastBeforeEnterExit ) {
 				if( giveOut )
 					System.out.println( "DRAW 1: from " + rectOnex + " to " + rectOney );
 				// draw the flow
@@ -273,7 +271,7 @@ public class GLNashFlowEdge extends GLEdge {
 
 			}
 
-			if( figNr >= flowData.firstAfterEnterExit && figNr <= flowData.lastBeforeLeaveExit ) {
+			if( currentTime >= flowData.firstAfterEnterExit && currentTime <= flowData.lastBeforeLeaveExit ) {
 				if( giveOut )
 					System.out.println( "DRAW 2" );
 				//edgeColor.draw( gl );
@@ -298,7 +296,7 @@ public class GLNashFlowEdge extends GLEdge {
 				gl.glPopMatrix();
 			}
 
-			if( figNr >= flowData.firstAfterLeaveExit && figNr <= flowData.lastBeforeHead ) {
+			if( currentTime >= flowData.firstAfterLeaveExit && currentTime <= flowData.lastBeforeHead ) {
 				if( giveOut )
 					System.out.println( "DRAW 3" );
 				//edgeColor.draw( gl );
@@ -327,19 +325,19 @@ public class GLNashFlowEdge extends GLEdge {
 			flowData.firstAtHead = flowData.firstAtTail + flowData.taue;
 			flowData.lastAtTail = flowData.endtime;
 			flowData.lastAtHead = flowData.lastAtTail + flowData.taue;
-			flowData.firstAfterTail = flowData.firstAtTail * flowData.tu + 1;
-			flowData.firstBeforeHead = flowData.firstAtHead * flowData.tu + 1;
-			flowData.lastAfterTail = flowData.lastAtTail * tu + 1;
-			flowData.lastBeforeHead = flowData.lastAtHead * flowData.tu + 1;
+			flowData.firstAfterTail = flowData.firstAtTail;
+			flowData.firstBeforeHead = flowData.firstAtHead;
+			flowData.lastAfterTail = flowData.lastAtTail;
+			flowData.lastBeforeHead = flowData.lastAtHead;
 
 
-			if( figNr >= flowData.firstAfterTail && figNr <= flowData.firstBeforeHead )
+			if( currentTime >= flowData.firstAfterTail && currentTime <= flowData.firstBeforeHead )
 				posFirst = (currentTime - flowData.firstAtTail) / (flowData.firstAtHead - flowData.firstAtTail);
 
-			if( figNr >= flowData.lastAfterTail && figNr <= flowData.lastBeforeHead )
+			if( currentTime >= flowData.lastAfterTail && currentTime <= flowData.lastBeforeHead )
 				posLast = (currentTime - flowData.lastAtTail) / (flowData.lastAtHead - flowData.lastAtTail);
 
-			if( figNr >= flowData.firstAfterTail && figNr <= flowData.lastBeforeHead ) {
+			if( currentTime >= flowData.firstAfterTail && currentTime <= flowData.lastBeforeHead ) {
 				if( giveOut )
 					System.out.println( "DER LETZTE FALL IST AKTIV" );
 				//edgeColor.draw( gl );

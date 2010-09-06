@@ -225,6 +225,7 @@ public class Visualization<U extends DrawableControlable> extends AbstractVisual
 	 */
 	final public void movieStep() {
 		animate( Math.round( (1000. / movieFrameRate) * 1000 * 1000 )  );
+		lastTime += Math.round( (1000. / movieFrameRate) * 1000 * 1000 );
 	}
 
 	/**

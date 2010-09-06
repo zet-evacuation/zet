@@ -40,16 +40,20 @@ public class GLNashGraphControl extends GLGraphControl {
 			view.addChild( nodeControl.getView() );
 	}
 
-	int count = 300;
-
 	@Override
 	public boolean isFinished() {
-		if( true )
-			return false;
-		count--;
-		if( count > 0 )
-			return false;
-		else
-			return true;
+		return time > endTime;
+	}
+
+	double time = 0;
+	double endTime = 0;
+
+	@Override
+	public void addTime( long timeNanoSeconds ) {
+		time += timeNanoSeconds;
+	}
+
+	public void setEndTime( long timeNanoSeconds ) {
+		endTime = timeNanoSeconds;
 	}
 }

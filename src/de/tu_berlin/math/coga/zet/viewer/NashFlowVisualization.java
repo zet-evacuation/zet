@@ -4,20 +4,17 @@
  */
 package de.tu_berlin.math.coga.zet.viewer;
 
+import de.tu_berlin.math.coga.math.Conversion;
 import de.tu_berlin.math.coga.math.vectormath.Vector3;
 import ds.graph.Edge;
 import ds.graph.IdentifiableObjectMapping;
 import ds.graph.Network;
 import ds.graph.Node;
-import event.EventServer;
-import event.MessageEvent;
-import event.MessageEvent.MessageType;
 import gui.visualization.Visualization;
 import gui.visualization.control.graph.GLNashGraphControl;
 import gui.visualization.draw.graph.GLEdge;
 import java.awt.Color;
 import java.util.ArrayList;
-import javax.media.opengl.GL;
 import javax.media.opengl.GLAutoDrawable;
 import javax.media.opengl.GLCapabilities;
 import opengl.drawingutils.GLColor;
@@ -124,9 +121,15 @@ public class NashFlowVisualization extends Visualization<GLNashGraphControl> {
 	boolean first = false;
 
 	@Override
+	public void startAnimation() {
+		graphControl.setEndTime( 39 * Conversion.secToNanoSeconds );
+		super.startAnimation();
+	}
+
+	@Override
 	public void display( GLAutoDrawable drawable ) {
 		if( !first ) {
-			startAnimation();
+			//startAnimation();
 			first = true;
 		}
 		super.display( drawable );
