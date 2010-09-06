@@ -50,7 +50,6 @@ public class IdentifiableConstantMapping<D extends Identifiable> extends Identif
         throw new UnsupportedOperationException();
     }
 
-
     @Override
     public void add(D identifiableObject, int value) {
         throw new UnsupportedOperationException();
