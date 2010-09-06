@@ -9,9 +9,10 @@ import ds.graph.Edge;
 import ds.graph.IdentifiableObjectMapping;
 import ds.graph.Network;
 import ds.graph.Node;
+import event.EventServer;
+import event.MessageEvent;
+import event.MessageEvent.MessageType;
 import gui.visualization.Visualization;
-import gui.visualization.control.graph.GLFlowGraphControl;
-import gui.visualization.control.graph.GLGraphControl;
 import gui.visualization.control.graph.GLNashGraphControl;
 import gui.visualization.draw.graph.GLEdge;
 import java.awt.Color;
@@ -25,7 +26,7 @@ import opengl.drawingutils.GLColor;
  *
  * @author Jan-Philipp Kappmeier
  */
-public class NashFlowVisualization extends Visualization<GLFlowGraphControl> {
+public class NashFlowVisualization extends Visualization<GLNashGraphControl> {
 
 	NashFlowEdgeData flowDatas0 = new NashFlowEdgeData( 2, 1 );
 	NashFlowEdgeData flowDatas1 = new NashFlowEdgeData( 1, 6.75 );
@@ -33,7 +34,7 @@ public class NashFlowVisualization extends Visualization<GLFlowGraphControl> {
 	NashFlowEdgeData flowDatas3 = new NashFlowEdgeData( 2, 9.125 );
 	NashFlowEdgeData flowDatas4 = new NashFlowEdgeData( 1, 1 );
 	ArrayList<GLEdge> edges = new ArrayList<GLEdge>();
-	GLGraphControl graphControl;
+	GLNashGraphControl graphControl;
 
 	public NashFlowVisualization( GLCapabilities capabilities ) {
 		super( capabilities );
@@ -114,124 +115,52 @@ public class NashFlowVisualization extends Visualization<GLFlowGraphControl> {
 
 		graphControl = new GLNashGraphControl( network, nodePositionMapping, mapping, this );
 
+		setControl( graphControl );
+
+		this.set3DView();
+
 		//GLEdgeControl ec1 = new GLEdgeControl( nodePositionMapping, network.getEdge( 0 ) );
 	}
 	boolean first = false;
 
 	@Override
 	public void display( GLAutoDrawable drawable ) {
-		gl.glClear( clearBits );
-		computeFPS();
-
 		if( !first ) {
 			startAnimation();
 			first = true;
 		}
+		super.display( drawable );
+		// TODO: richtig machen mit dem update :D
+		// Status-Variablen die angezeigte Elemente steuern
 
 
-		gl.glMatrixMode( GL.GL_MODELVIEW );
-		gl.glLoadIdentity();
+		// here begins old stuff...
 
-//		Camera camera = getCamera();
-//		camera.setPos( new Vector3( 0, 0, 10 ) );
-//		camera.setUp( new Vector3( 0, 1, 0 ) );
-//		camera.setView( new Vector3( 0, 0, -1 ) );
-		look();
-
-		graphControl.getView().draw( gl );
-
-		drawFPS();
-
-		printErrors();
-		gl.glFlush();
-
-
-//		if( true )
-//			return;
+//		super.display( drawable );
+//		gl.glClear( clearBits );
+//		computeFPS();
+//
 //		if( !first ) {
 //			startAnimation();
 //			first = true;
 //		}
-//		gl.glClear( clearBits );
 //
-//		this.computeFPS();
-//
-//		// value for this edge
-////		double cap = 2;
-////		double taue = 1;
-////		double starttime = 0;
-////		double endtime = 2;
-////		double inflow = 3;
-////		double waittime = 0;
-//
-//
-//
-//		//double numberOfFrames = flowData.lastAtHead * tu / acceleration;
-//		double numberOfFrames = tu / acceleration;
-//		// berechne faktor:
-//		double factor = numberOfFrames;
-//
-//		figNr = Conversion.nanoSecondsToSec * getTimeSinceStart() * factor;
 //
 //		gl.glMatrixMode( GL.GL_MODELVIEW );
 //		gl.glLoadIdentity();
-//		float[] light_position = new float[4];
-//		light_position[0] = (float) getCamera().getView().x;
-//		light_position[1] = (float) getCamera().getView().y;
-//		light_position[2] = (float) getCamera().getView().z;
-//		//light_position[0] = 0;
-//		//light_position[1] = 1;
-//		//light_position[2] = 0;
-//		light_position[3] = 1.0f;
-//		gl.glEnable( GL.GL_LIGHTING );
 //
-//		gl.glLightfv(GL.GL_LIGHT0, GL.GL_POSITION, light_position, 0);
-////		if( is3D )
-////			look();
-////		else {
-////			if( pvm != ParallelViewMode.Orthogonal ) {	// Isometric view
-////				if( pvm == ParallelViewMode.Isometric )
-////					gl.glRotatef( 35.264f, 1.0f, 0.0f, 0.0f );
-////				else
-////					gl.glRotatef( 30f, 1.0f, 0.0f, 0.0f );
-////				gl.glRotatef( -45.0f, 0.0f, 1.0f, 0.0f );
-////				gl.glRotated( -90, 1, 0., 0. );
-////			} else	// Orthogonal view
-////				gl.glLoadIdentity();
-////		}
-////
-////		if( control != null )
-////
-////		control.draw( gl );
-//
-//
-//		// Draw here
-//		Camera camera = getCamera();
-//		camera.setPos( new Vector3( 0, 0, 10 ) );
-//		camera.setUp( new Vector3( 0, 1, 0 ) );
-//		camera.setView( new Vector3( 0, 0, -1 ) );
+////		Camera camera = getCamera();
+////		camera.setPos( new Vector3( 0, 0, 10 ) );
+////		camera.setUp( new Vector3( 0, 1, 0 ) );
+////		camera.setView( new Vector3( 0, 0, -1 ) );
 //		look();
 //
-//		gl.glPushMatrix();
-//		gl.glTranslated( -2, 0, 0 );
+//		graphControl.getView().draw( gl );
 //
-//		// draw the edge
-//		displayEdge();
-//
-//		for( FlowData flowData : flowDatas0 )
-//			displayFlow( flowData );
-//
-//		displayCorridor();
-//
-//		gl.glPopMatrix();
-//
-//
-//		gl.glClear( GL.GL_DEPTH_BUFFER_BIT );
 //		drawFPS();
 //
 //		printErrors();
 //		gl.glFlush();
+
 	}
-
-
 }

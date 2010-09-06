@@ -8,7 +8,6 @@ import de.tu_berlin.math.coga.zet.viewer.NodePositionMapping;
 import ds.graph.Graph;
 import ds.graph.Node;
 import gui.visualization.draw.graph.GLGraph;
-import javax.media.opengl.GL;
 import opengl.framework.abs.AbstractControl;
 import opengl.framework.abs.DrawableControlable;
 import opengl.helper.Frustum;
@@ -45,15 +44,11 @@ public GLGraphControl( Graph graph, NodePositionMapping nodePositionMapping, boo
 	}
 
 	public void setFrustum( Frustum frustum ) {
-		throw new UnsupportedOperationException( "Not supported yet." );
+		
 	}
 
 	public Frustum getFrustum() {
 		throw new UnsupportedOperationException( "Not supported yet." );
-	}
-
-	public void draw( GL gl ) {
-		
 	}
 
 	public void update() {
@@ -65,7 +60,7 @@ public GLGraphControl( Graph graph, NodePositionMapping nodePositionMapping, boo
 	}
 
 	public void addTime( long timeNanoSeconds ) {
-		throw new UnsupportedOperationException( "Not supported yet." );
+		
 	}
 
 	public void setTime( long time ) {
@@ -77,7 +72,7 @@ public GLGraphControl( Graph graph, NodePositionMapping nodePositionMapping, boo
 	}
 
 	public boolean isFinished() {
-		throw new UnsupportedOperationException( "Not supported yet." );
+		return false;
 	}
 
 }

@@ -56,7 +56,6 @@ import javax.swing.table.AbstractTableModel;
 import de.tu_berlin.math.coga.common.localization.Localization;
 import opengl.helper.TextureFontStrings;
 import de.tu_berlin.math.coga.common.util.Formatter;
-import de.tu_berlin.math.coga.common.util.Helper;
 
 /**
  * A window allowing to set the options used to create a video. The
@@ -111,11 +110,11 @@ public class VideoOptions extends javax.swing.JDialog {
 	private JTextField txtWidth;
 	/** The height of the movie. */
 	private JTextField txtHeight;
-	/** The bitrate in kilobits per second. */
+	/** The bit rate in kilobits per second. */
 	private JTextField txtBitrate;
-	/** The framerate of the movie in frames per second. */
+	/** The frame rate of the movie in frames per second. */
 	private JTextField txtFramerate;
-	/** A label displaying the approximated filesize. */
+	/** A label displaying the approximated file size. */
 	private JLabel lblEstimatedFilesize;
 	/** The selected movie writer. */
 	private MovieWriters mw = MovieWriters.FFmpeg;
@@ -393,7 +392,7 @@ public class VideoOptions extends javax.swing.JDialog {
 	 *                                                                           *
 	 ****************************************************************************/
 	/**
-	 * Indicates wheather frames should be saved.
+	 * Indicates whether frames should be saved.
 	 * @return true, if frames should be created instead of a video
 	 */
 	public boolean isFrameMode() {
@@ -401,7 +400,7 @@ public class VideoOptions extends javax.swing.JDialog {
 	}
 
 	/**
-	 * Indicates wheather a movie should be saved.
+	 * Indicates whether a movie should be saved.
 	 * @return true, if a movie should be created instead of frames
 	 */
 	public boolean isMovieMode() {
@@ -409,7 +408,7 @@ public class VideoOptions extends javax.swing.JDialog {
 	}
 
 	/**
-	 * Indicates wheather frames should be deleted after a video is created.
+	 * Indicates whether frames should be deleted after a video is created.
 	 * @return true if the frames should be deleted
 	 */
 	public boolean isDeleteFrames() {
@@ -438,16 +437,16 @@ public class VideoOptions extends javax.swing.JDialog {
 	 *                                                                           *
 	 ****************************************************************************/
 	/**
-	 * Returns the bitrate from the video options in kilobits.
-	 * @return the bitrate from the video options
+	 * Returns the bit rate from the video options in kilobits.
+	 * @return the bit rate from the video options
 	 */
 	public int getBitrate() {
 		return (Integer.parseInt( "0" + txtBitrate.getText() ));
 	}
 
 	/**
-	 * Sets the bitrate displayed in the video options in kilobits.
-	 * @param bitrate the bitrate
+	 * Sets the bit rate displayed in the video options in kilobits.
+	 * @param bitrate the bit rate
 	 */
 	public void setBitrate( int bitrate ) {
 		txtBitrate.setText( Integer.toString( bitrate ) );
@@ -455,16 +454,16 @@ public class VideoOptions extends javax.swing.JDialog {
 	}
 
 	/**
-	 * Returns the framerate from the video options in frames per seconds.
-	 * @return the framerate from the video options
+	 * Returns the frame rate from the video options in frames per seconds.
+	 * @return the frame rate from the video options
 	 */
 	public int getFramerate() {
 		return (Integer.parseInt( "0" + txtFramerate.getText() ));
 	}
 
 	/**
-	 * Sets the framerate displayed in the video options in frames per second
-	 * @param framerate the framerate
+	 * Sets the frame rate displayed in the video options in frames per second
+	 * @param framerate the frame rate
 	 */
 	public void setFramerate( int framerate ) {
 		txtFramerate.setText( Integer.toString( framerate ) );
@@ -503,7 +502,7 @@ public class VideoOptions extends javax.swing.JDialog {
 	 ****************************************************************************/
 	/**
 	 * Returns the estimated video time that was used for the calculation of the
-	 * filesize.
+	 * file size.
 	 * @return the estimated video time.
 	 */
 	public double getEstimatedTime() {
@@ -511,7 +510,7 @@ public class VideoOptions extends javax.swing.JDialog {
 	}
 
 	/**
-	 * Sets the estimated video time used to calculate the filesize.
+	 * Sets the estimated video time used to calculate the file size.
 	 * @param estimatedTime the estimated time in seconds
 	 */
 	public void setEstimatedTime( double estimatedTime ) {
@@ -583,7 +582,7 @@ public class VideoOptions extends javax.swing.JDialog {
 				ZETMain.sendError( loc.getString( "gui.UnknownCommand" ) + " '" + e.getActionCommand() + "'. " + loc.getString( "gui.ContactDeveloper" ) );
 		}
 	};
-	/** A listener that handels adding of texts in intro getText tab. */
+	/** A listener that handles adding of texts in intro getText tab. */
 	ActionListener aclIntroText = new ActionListener() {
 		public void actionPerformed( ActionEvent e ) {
 			if( e.getActionCommand().equals( "addText" ) ) {

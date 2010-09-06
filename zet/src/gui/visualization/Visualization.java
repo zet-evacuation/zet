@@ -55,7 +55,6 @@ import opengl.helper.TextureManager;
  * @author Jan-Philipp Kappmeier
  */
 public class Visualization<U extends DrawableControlable> extends AbstractVisualization {
-	//public final static double SIZE_MULTIPLICATOR = 0.1;
 	public enum RecordingMode {
 		Recording,
 		NotRecording,
@@ -83,9 +82,9 @@ public class Visualization<U extends DrawableControlable> extends AbstractVisual
 	private GLAutoDrawable drawable;
 	/** Indicates if mouse movement in 2d-view rotates or moves the building. */
 	protected boolean noRotate = false;
-	/** Decides wheather a movie is captured or not */
+	/** Decides whether a movie is captured or not */
 	private RecordingMode recording = RecordingMode.NotRecording;
-	/** If a movie is captured describes the framerate of the movie */
+	/** If a movie is captured describes the frame rate of the movie */
 	private int movieFrameRate = 24;
 	/** Set to true during drawing if the frame contains some valid information. False at the end of playback. Only valid if in {@code movieRecording} mode.*/
 	private boolean frameUsed;
@@ -225,13 +224,13 @@ public class Visualization<U extends DrawableControlable> extends AbstractVisual
 	 * Sets the new time basing on the movie frame time
 	 */
 	final public void movieStep() {
-		animate( Math.round( (1000. / movieFrameRate) * 1000 * 1000 ) );
+		animate( Math.round( (1000. / movieFrameRate) * 1000 * 1000 )  );
 	}
 
 	/**
 	 * Draws the eye and the lines representing the 3d-sight-field in the 2d-view.
 	 */
-	final private void drawEye() {
+	private void drawEye() {
 		// Compute the vector of the eye rotation with respect to to the current
 		// view vector.
 		Vector3 cameraView = new Vector3( camera.getView() );
@@ -268,7 +267,7 @@ public class Visualization<U extends DrawableControlable> extends AbstractVisual
 	 * Prints some getText on the screen. The getText is shown before the visualization
 	 * starts if a movie is recorded.
 	 */
-	final private void drawIntroText( int index ) {
+	private void drawIntroText( int index ) {
 		gl.glClear( clearBits );
 		ProjectionHelper.setPrintScreenProjection( gl, viewportWidth, viewportHeight );
 		GLColor.white.draw( gl );
@@ -288,7 +287,7 @@ public class Visualization<U extends DrawableControlable> extends AbstractVisual
 	/**
 	 * Draws the ZET logo on the lower right edge.
 	 */
-	final private void drawLogo() {
+	private void drawLogo() {
 		int logoHeight = 128;
 		ProjectionHelper.setPrintScreenProjection( gl, viewportWidth, viewportHeight );
 		gl.glEnable( GL.GL_BLEND );
@@ -329,7 +328,7 @@ public class Visualization<U extends DrawableControlable> extends AbstractVisual
 	 * Prints some getText on the screen. The getText is shown after the visualization
 	 * has finished if a movie is recorded.
 	 */
-	final private void drawOutroText() {
+	private void drawOutroText() {
 		ProjectionHelper.setPrintScreenProjection( gl, viewportWidth, viewportHeight );
 		GLColor.white.draw( gl );
 		gl.glEnable( gl.GL_TEXTURE_2D );
@@ -343,7 +342,7 @@ public class Visualization<U extends DrawableControlable> extends AbstractVisual
 	 * Draws the main scene, that is the walls, the cellular automaton, the individuals and the graph.
 	 * Includes getText visible in the scene but not the copyright notice, etc.
 	 */
-	final private void drawScene() {
+	public void drawScene() {
 		gl.glClear( clearBits );
 
 		gl.glMatrixMode( GL.GL_MODELVIEW );
@@ -375,8 +374,7 @@ public class Visualization<U extends DrawableControlable> extends AbstractVisual
 		}
 
 		if( control != null )
-
-		control.draw( gl );
+			control.draw( gl );
 		gl.glClear( GL.GL_DEPTH_BUFFER_BIT );
 		drawFPS();
 	}
@@ -384,7 +382,7 @@ public class Visualization<U extends DrawableControlable> extends AbstractVisual
 	private int minimalFrameCount = 0;
 
 	/**
-	 * Draws the current framerate on the lower left edge of the screen and
+	 * Draws the current frame rate on the lower left edge of the screen and
 	 * the current time of the cellular automaton and graph, if used.
 	 */
 	protected void drawFPS() {
@@ -394,8 +392,13 @@ public class Visualization<U extends DrawableControlable> extends AbstractVisual
 		gl.glBlendFunc( GL.GL_ONE, GL.GL_ONE );// Copy Image 2 Color To The Screen
 		gl.glEnable( gl.GL_TEXTURE_2D );
 		fontTex.bind();
+		
+		// compute time:
+		double secs = Conversion.nanoSecondsToSec * getTimeSinceStart();
+		secs = Math.round( secs * 100 ) / 100.;
+
 		if( showFPS )
-			font.print( 0, 0, Integer.toString( getFPS() ) + " FPS" );
+			font.print( 0, 0, Integer.toString( getFPS() ) + " FPS " + Double.toString( secs ) );
 
 		if( control.isFinished() )
 			minimalFrameCount--;
@@ -461,16 +464,16 @@ public class Visualization<U extends DrawableControlable> extends AbstractVisual
 	}
 
 	/**
-	 * Returns the currently set framerate for movie capture
-	 * @return the currently set framerate for movie capture
+	 * Returns the currently set frame rate for movie capture
+	 * @return the currently set frame rate for movie capture
 	 */
 	public int getMovieFPS() {
 		return movieFrameRate;
 	}
 
 	/**
-	 * Sets a new framerate for movie capture
-	 * @param movieFPS the framerate
+	 * Sets a new frame rate for movie capture
+	 * @param movieFPS the frame rate
 	 */
 	public void setMovieFramerate( int movieFPS ) {
 		this.movieFrameRate = movieFPS;
@@ -496,7 +499,6 @@ public class Visualization<U extends DrawableControlable> extends AbstractVisual
 	 * @param resolution the resolution used for video recording
 	 */
 	public void setRecording( RecordingMode recording, Dimension resolution ) {
-		
 		this.recording = recording;
 		if( recording == RecordingMode.Recording ) {
 			showIntro = 0;

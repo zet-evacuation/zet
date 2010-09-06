@@ -39,4 +39,17 @@ public class GLNashGraphControl extends GLGraphControl {
 		for( GLSimpleNodeControl nodeControl : this )
 			view.addChild( nodeControl.getView() );
 	}
+
+	int count = 300;
+
+	@Override
+	public boolean isFinished() {
+		if( true )
+			return false;
+		count--;
+		if( count > 0 )
+			return false;
+		else
+			return true;
+	}
 }

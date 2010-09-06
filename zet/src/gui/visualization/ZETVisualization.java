@@ -13,7 +13,6 @@ import event.EventServer;
 import event.OptionsChangedEvent;
 import event.VisualizationEvent;
 import gui.Control;
-import zet.gui.JEditor;
 import gui.ZETProperties;
 import gui.visualization.control.GLControl;
 import java.awt.event.KeyEvent;
@@ -70,8 +69,7 @@ public class ZETVisualization extends Visualization<GLControl> implements EventL
 		this.zcontrol = zcontrol;
 	}
 	
-	
-		static Vector3 camPos = new Vector3( 0, 0, 10 );
+	static Vector3 camPos = new Vector3( 0, 0, 10 );
 	static Vector3 camView = new Vector3( 0, 0, -1 );
 	static Vector3 camUp = new Vector3( 0, 1, 0 );
 	static boolean done = false;
@@ -127,7 +125,7 @@ public class ZETVisualization extends Visualization<GLControl> implements EventL
 	}
 
 	/**
-	 * Draws the current framerate on the lower left edge of the screen and
+	 * Draws the current frame rate on the lower left edge of the screen and
 	 * the current time of the cellular automaton and graph, if used.
 	 */
 	@Override

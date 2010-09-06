@@ -19,6 +19,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
+import javax.media.opengl.GL;
 
 /**
  * 
@@ -75,5 +76,9 @@ public abstract class AbstractControl<T extends AbstractControl<?, ?>, U extends
 
 	public int size() {
 		return childControls.size();
+	}
+
+	public void draw( GL gl ) {
+		view.draw( gl );
 	}
 }
