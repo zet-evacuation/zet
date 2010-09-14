@@ -409,7 +409,7 @@ public class FlowVisualizationTool extends JFrame implements PropertyChangeListe
 			MovieWriters mw = MovieWriters.FFmpeg;
 			
 			movieCreator.setMovieWriter( mw.getWriter() );
-			vis.setRecording( RecordingMode.Recording, new Dimension( 1024, 768) );
+			//vis.setRecording( RecordingMode.Recording, new Dimension( 1024, 768) );
 			movieCreator.setWidth( 1024 );
 			movieCreator.setHeight( 768 );
 			movieCreator.setCreateMovie( true );
