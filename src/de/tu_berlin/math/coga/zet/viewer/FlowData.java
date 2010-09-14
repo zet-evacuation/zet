@@ -10,52 +10,53 @@ import opengl.drawingutils.GLColor;
  *
  * @author Jan-Philipp Kappmeier
  */
-
 public class FlowData {
-		public GLColor color;
-		public double starttime = 2;
-		public double endtime = 3.5;
-		public double inflow = 1.5;
-		public double waittime = 1;
-		public double corCap = 4;
-		public double exitPos = 0.75;
-		public double taue;
-		public double cap;
-		public double firstAtTail;
-		public double firstEnterExit;
-		public double firstLeaveExit;
-		public double firstAtHead;
-		public double lastAtTail;
-		public double lastEnterExit;
-		public double lastLeaveExit;
-		public double lastAtHead;
-		public double queueLengthForFirst;
-		public double queueLengthForLast;
-		public double firstAfterTail;
-		public double firstBeforeEnterExit;
-		public double firstAfterEnterExit;
-		public double firstBeforeLeaveExit;
-		public double firstAfterLeaveExit;
-		public double firstBeforeHead;
-		public double lastAfterTail;
-		public double lastBeforeEnterExit;
-		public double lastAfterEnterExit;
-		public double lastBeforeLeaveExit;
-		public double lastAfterLeaveExit;
-		public double lastBeforeHead;
+	public GLColor color;
+	public double starttime = 2;
+	public double endtime = 3.5;
+	public double inflow = 1.5;
+	public double waittime = 1;
+	public double corCap = 5;
+	public double exitPos = 0.75;
+	public double taue;
+	public double cap;
+	final public double firstAtTail;
+	final public double firstEnterExit;
+	final public double firstLeaveExit;
+	final public double firstAtHead;
+	final public double lastAtTail;
+	final public double lastEnterExit;
+	final public double lastLeaveExit;
+	final public double lastAtHead;
+	final public double queueLengthForFirst;
+	final public double queueLengthForLast;
+	final public double firstAfterTail;
+	final public double firstBeforeEnterExit;
+	final public double firstAfterEnterExit;
+	final public double firstBeforeLeaveExit;
+	final public double firstAfterLeaveExit;
+	final public double firstBeforeHead;
+	final public double lastAfterTail;
+	final public double lastBeforeEnterExit;
+	final public double lastAfterEnterExit;
+	final public double lastBeforeLeaveExit;
+	final public double lastAfterLeaveExit;
+	final public double lastBeforeHead;
+	final public boolean capGreaterThanInflow;
+	final public boolean waittimePositive;
 
-		public FlowData( double startTime, double endTime, double inFlow, double waitTime, double cap, double tau, GLColor color ) {
-			this.starttime = startTime;
-			this.endtime = endTime;
-			this.inflow = inFlow;
-			this.waittime = waitTime;
-			this.taue = tau;
-			this.cap = cap;
-			this.color = color;
-			computeFixData();
-		}
+	public FlowData( double startTime, double endTime, double inFlow, double waitTime, double cap, double tau, GLColor color ) {
+		this.starttime = startTime;
+		this.endtime = endTime;
+		this.inflow = inFlow;
+		this.waittime = waitTime;
+		this.taue = tau;
+		this.cap = cap;
+		this.color = color;
 
-		private void computeFixData() {
+		capGreaterThanInflow = cap > inflow;
+		waittimePositive = waittime > 0;
+		if( waittimePositive || !capGreaterThanInflow ) {
 			firstAtTail = starttime;
 			firstEnterExit = firstAtTail + exitPos * taue;
 			firstLeaveExit = firstEnterExit + waittime;
@@ -83,5 +84,33 @@ public class FlowData {
 			lastBeforeLeaveExit = lastLeaveExit;
 			lastAfterLeaveExit = lastLeaveExit;
 			lastBeforeHead = lastAtHead;
+		} else {
+			firstAtTail = starttime;
+			firstAtHead = firstAtTail + taue;
+			lastAtTail = endtime;
+			lastAtHead = lastAtTail + taue;
+			firstAfterTail = firstAtTail;
+			firstBeforeHead = firstAtHead;
+			lastAfterTail = lastAtTail;
+			lastBeforeHead = lastAtHead;
+
+
+
+			firstEnterExit = 0;
+			firstLeaveExit = 0;
+			lastEnterExit = 0;
+			lastLeaveExit = 0;
+			queueLengthForFirst = 0;
+			queueLengthForLast = 0;
+			firstBeforeEnterExit = 0;
+			firstAfterEnterExit = 0;
+			firstBeforeLeaveExit = 0;
+			firstAfterLeaveExit = 0;
+			lastBeforeEnterExit = 0;
+			lastAfterEnterExit = 0;
+			lastBeforeLeaveExit = 0;
+			lastAfterLeaveExit = 0;
+
 		}
 	}
+}

@@ -18,6 +18,7 @@ public class NashFlowEdgeData implements Iterable<FlowData> {
 	ArrayList<FlowData> flowDatas = new ArrayList<FlowData>();
 	double cap = 2;
 	double taue = 1;
+	double corCapacity = 4;
 
 	public NashFlowEdgeData( double capacity, double transitTime ) {
 		this.cap = capacity;
@@ -54,5 +55,9 @@ public class NashFlowEdgeData implements Iterable<FlowData> {
 
 	public Iterator<FlowData> iterator() {
 		return flowDatas.iterator();
+	}
+
+	public double getCorCapacity() {
+		return corCapacity;
 	}
 }
