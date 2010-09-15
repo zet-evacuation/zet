@@ -28,7 +28,6 @@ public class GLNashFlowEdgeControl extends GLEdgeControl {
 
 	@Override
 	protected void setView() {
-		System.out.println( "A nash flow edge was set" );
 		setView( new GLNashFlowEdge( this ) );
 	}
 

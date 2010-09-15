@@ -61,9 +61,9 @@ public final class GLColor implements Drawable {
 	/** The {@code GLColor} version of pink. */
 	public static final GLColor pink = new GLColor( Color.pink );
 	/** The {@code GLColor} version of orange. */
-	public static final GLColor orange = new GLColor( Color.orange );
+	public static final GLColor orange = new GLColor( 255, 127, 0 );
 	/** The {@code GLColor} version of yellow. */
-	public static final GLColor yellow = new GLColor( Color.yellow );
+	public static final GLColor yellow = new GLColor( 255, 205, 0 );
 	/** The {@code GLColor} version of green. */
 	public static final GLColor green = new GLColor( Color.green );
 	/** The {@code GLColor} version of magenta. */
@@ -72,7 +72,10 @@ public final class GLColor implements Drawable {
 	public static final GLColor cyan = new GLColor( Color.cyan );
 	/** The {@code GLColor} version of blue. */
 	public static final GLColor blue = new GLColor( Color.blue );
-
+	/** The {@code GLColor} version of indigo. */
+	public static final GLColor indigo = new GLColor( 111, 0, 255 );
+	/** The {@code GLColor} version of violet. */
+	public static final GLColor violet = new GLColor( 143, 0, 255 );
 	/**
 	 * Initialize with black.
 	 */
@@ -246,7 +249,7 @@ public final class GLColor implements Drawable {
 	 * @param gl the {@code OpenGL} context on which shall be drawn
 	 */
 	public void draw( GL gl ) {
-	if( gl.glIsEnabled(  GL.GL_LIGHTING) ) {
+	if( gl.glIsEnabled(  GL.GL_LIGHTING ) && !gl.glIsEnabled( GL.GL_COLOR_MATERIAL ) ) {
 			gl.glMaterialfv(GL.GL_FRONT, GL.GL_DIFFUSE, mat, 0);
 			gl.glMaterialfv(GL.GL_FRONT, GL.GL_AMBIENT, mat, 0);
 		} else
@@ -257,7 +260,7 @@ public final class GLColor implements Drawable {
 	 * Sets the color in {@code OpenGL}, can set color using materials and color,
 	 * depending from the value of {@code lighting}.
 	 * @param gl the {@code OpenGL} context on which shall be drawn
-	 * @param lighting sets wheather the lighting or non-lighting version should be used
+	 * @param lighting sets whether the lighting or non-lighting version should be used
 	 */
 	public final void draw( GL gl, boolean lighting ) {
 		if( lighting ) {
@@ -313,6 +316,16 @@ public final class GLColor implements Drawable {
 	    
 	    //blendedColor.setRange();
 	    return blendedColor;
+	}
+
+	public static GLColor blend( GLColor color1, GLColor color2, double percentage ) {
+		GLColor blendedColor = new GLColor(
+						color1.R + (color2.R - color1.R)*percentage,
+						color1.G + (color2.G - color1.G)*percentage,
+						color1.B + (color2.B - color1.B)*percentage,
+						color1.A + (color2.A - color1.A)*percentage
+						);
+		return blendedColor;
 	}
 
 	/**
