@@ -233,6 +233,8 @@ public class FlowVisualizationTool extends JFrame implements PropertyChangeListe
 			System.out.println( event.toString() );
 	}
 
+	boolean pressed = false;
+
 	/** Action listener for the file menu. */
 	ActionListener aclFile = new ActionListener() {
 
@@ -385,6 +387,11 @@ public class FlowVisualizationTool extends JFrame implements PropertyChangeListe
 		public void actionPerformed( ActionEvent event ) {
 			if( event.getActionCommand().equals( "screenshot" ) ) {
 				//vis.takeScreenshot( "./screenshot_example.png" );
+				if( pressed ) {
+					vis.stopAnimation();
+					return;
+				}
+				pressed = true;
 
 
 
