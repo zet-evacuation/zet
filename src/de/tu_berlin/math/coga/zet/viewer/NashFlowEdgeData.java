@@ -22,13 +22,13 @@ public class NashFlowEdgeData implements Iterable<FlowData> {
 	double exitPositionRelative = 0.8;
 
 	public NashFlowEdgeData( double capacity, double transitTime ) {
-		this( capacity, transitTime, 3.9, 0.78 );
+		this( capacity, transitTime, 3.9, 0.77 );
 	}
 
 	public NashFlowEdgeData( double capacity, double transitTime, double corridorCapacity, double exitPosition ) {
 		this.capacity = capacity;
 		this.transitTime = transitTime;
-		this.capacity = capacity;
+		this.corCapacity = corridorCapacity;
 		this.exitPositionRelative = exitPosition;
 	}
 

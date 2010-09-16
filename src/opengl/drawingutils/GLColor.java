@@ -153,7 +153,17 @@ public final class GLColor implements Drawable {
 	public GLColor( Color c, double alpha ) {
 		setValue( c.getRed()/255., c.getGreen()/255., c.getBlue()/255., alpha );
 	}
-	
+
+	/**
+	 * Initialize with java <code>Color</code> object and specified alpha value
+	 * that differs from the colors alpha.
+	 * @param c the color
+	 * @param alpha the alpha value that shall be used
+	 */
+	public GLColor( GLColor c, double alpha ) {
+		setValue( c.getRed()/255., c.getGreen()/255., c.getBlue()/255., alpha );
+	}
+
 	/**
 	 * Sets both, the RGB variables and the material to the specified values.
 	 * @param r the red part of the color

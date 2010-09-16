@@ -44,7 +44,8 @@ public class GLNashFlowEdge extends GLEdge {
 	public GLNashFlowEdge( GLEdgeControl control ) {
 		super( control );
 		ncontrol = (GLNashFlowEdgeControl) control;
-		edgeColor = VisualizationOptionManager.getEdgeColor();
+		edgeColor = GLColor.gray;
+		//edgeColor = new GLColor( GLColor.gray, 0.9 );
 		update();
 	}
 
@@ -56,10 +57,10 @@ public class GLNashFlowEdge extends GLEdge {
 	public void performDrawing( GL gl ) {
 		currentTime = Conversion.nanoSecondsToSec * ncontrol.getTimeSinceStart() * acceleration;
 
-		displayEdge( gl );
 
 		for( FlowData flowData : ncontrol.getNashFlowEdgeData() )
 			displayFlow( flowData, gl );
+		displayEdge( gl );
 
 		displayCorridor( gl );
 	}
@@ -81,15 +82,17 @@ public class GLNashFlowEdge extends GLEdge {
 		gl.glRotated( control.getAngleBetween( a, b ), axis.x, axis.y, axis.z );
 
 		final double eps = 0.999;
-		gl.glPolygonMode( GL.GL_FRONT_AND_BACK, GL.GL_LINE );
+		//gl.glPolygonMode( GL.GL_FRONT_AND_BACK, GL.GL_LINE );
+		gl.glEnable( gl.GL_BLEND );
+		gl.glBlendFunc( gl.GL_ONE_MINUS_DST_COLOR, gl.GL_ONE );
 		glu.gluCylinder( quadObj, scale * cap * fu * 0.5 * eps, scale * cap * fu * 0.5 * eps, control.get3DLength(), 16, 1 );
-		gl.glPolygonMode( GL.GL_FRONT_AND_BACK, GL.GL_FILL );
+		//gl.glPolygonMode( GL.GL_FRONT_AND_BACK, GL.GL_FILL );
+		gl.glDisable( GL.GL_BLEND );
 
 		gl.glPopMatrix();
 	}
 
 	private void displayCorridor( GL gl ) {
-		if( true ) return;
 		GLColor wallColor = new GLColor( 139, 69, 19, 0.1 );
 
 		wallColor.draw( gl );
@@ -126,7 +129,7 @@ public class GLNashFlowEdge extends GLEdge {
 	}
 
 	/**
-	 * A helping method that gives the length of the queue depending of the flow
+	 * An auxiliary method that gives the length of the queue depending of the flow
 	 * data and the current time of visualization.
 	 * @param flowData the flow data which is currently drawn
 	 * @return the length of the queue
@@ -172,14 +175,34 @@ public class GLNashFlowEdge extends GLEdge {
 				flowStartColorValuePhase2 = currentTime <= flowData.lastEnterExit ? -1 : flowData.globalEnd;
 			}
 
+
+			// berechne den faktor, der hier benötigt wird:
+			double numberPart3 = cap * (currentTime - flowData.firstAtHead);
+			double numberUpToNow = flowData.inflow * (Math.min( currentTime, flowData.endTime) - flowData.startTime);
+			double numberPart2 = flowData.inflow * (Math.min( flowData.lastEnterExit, currentTime) - flowData.firstEnterExit );
+			double numberPart1 = Math.max( numberUpToNow - numberPart3 - numberPart2, 0);
+			double f = numberPart1/(numberPart1+numberPart2);
+
 			if( flowStartColorValuePhase2 == -1 )
-				flowStartColorValuePhase2 = 0.5 * (flowStartColorValuePhase1 + flowEndColorValuePhase2);
+				//flowStartColorValuePhase2 = (1-f) * (flowStartColorValuePhase1 + flowEndColorValuePhase2);
+				flowStartColorValuePhase2 = flowEndColorValuePhase2 + (1-f) * (flowStartColorValuePhase1 - flowEndColorValuePhase2);
+//				flowStartColorValuePhase2 = 0.5 * (flowStartColorValuePhase1 + flowEndColorValuePhase2);
 			if( flowEndColorValuePhase1 == -1 )
-				flowEndColorValuePhase1 = 0.5 * (flowStartColorValuePhase1 + flowEndColorValuePhase2);
+				//flowEndColorValuePhase1 = (1-f) * (flowStartColorValuePhase1 + flowEndColorValuePhase2);
+				flowEndColorValuePhase1 = flowStartColorValuePhase1 - f * (flowStartColorValuePhase1-flowEndColorValuePhase2);
+//				flowEndColorValuePhase1 = 0.5 * (flowStartColorValuePhase1 + flowEndColorValuePhase2);
 
+			try {
 			drawPhase1( gl, flowData, shownQueueLength, flowStartColorValuePhase1, flowEndColorValuePhase1 );
+			} catch( Exception e ) {
+				System.out.println( "ERR" );
+			}
 
-			drawPhase2( gl, flowData, shownQueueLength, flowStartColorValuePhase2, flowEndColorValuePhase2 );
+			try {
+				drawPhase2( gl, flowData, shownQueueLength, flowStartColorValuePhase2, flowEndColorValuePhase2 );
+			} catch( Exception e ) {
+				System.out.println( "ERR" );
+			}
 			// Zeichnen des Abschnitts, der nach dem Ausgang kommt
 			if( currentTime >= flowData.firstLeaveExit && currentTime <= flowData.lastAtHead )
 				draw( flowData, gl, currentTime, flowData.firstLeaveExit, flowData.lastAtHead, flowData.lastLeaveExit, flowData.firstAtHead, exitPos );
@@ -199,7 +222,7 @@ public class GLNashFlowEdge extends GLEdge {
 				if( currentTime <= flowData.firstEnterExit )
 					rectOney = (currentTime - flowData.startTime) / (flowData.firstEnterExit - flowData.startTime) * (exitPos - shownQueueLength);
 
-				drawFlow( gl, startColorValue, endColorValue, positionEnd, rectOney, flowData.inflow );
+				drawFlow( gl, startColorValue, endColorValue, control.get3DLength()*(rectOney-positionEnd), control.get3DLength()*(positionEnd), flowData.inflow );
 			}
 	}
 
@@ -211,7 +234,8 @@ public class GLNashFlowEdge extends GLEdge {
 					final double shownRemainingQueueLength = physicalRemainingQueueLength * exitPos / (physicalRemainingQueueLength + exitPos);
 					rectTwoy = exitPos - shownRemainingQueueLength;
 				}
-				drawFlow( gl, startColorValue, endColorValue, exitPos - shownQueueLength, rectTwoy, distWallFromEdge );
+				drawFlow( gl, startColorValue, endColorValue, control.get3DLength()*(rectTwoy-exitPos+shownQueueLength), control.get3DLength()*(exitPos-shownQueueLength), distWallFromEdge );
+				//drawFlow( gl, startColorValue, endColorValue, exitPos - shownQueueLength, rectTwoy, distWallFromEdge );
 			}
 	}
 
@@ -243,7 +267,7 @@ public class GLNashFlowEdge extends GLEdge {
 				flowEndColorValue = flowData.globalStart + fraction * flowData.colorDifference;
 			}
 
-			drawFlow( gl, flowStartColorValue, flowEndColorValue, xPos, endPos, flowData.inflow );
+			drawFlow( gl, flowStartColorValue, flowEndColorValue, control.get3DLength()*(endPos-xPos), control.get3DLength()*xPos, flowData.inflow );
 		}
 	}
 
@@ -262,9 +286,9 @@ public class GLNashFlowEdge extends GLEdge {
 		return index * timeInterval;
 	}
 
-	private void drawFlow( GL gl, double colorFirst, double colorLast, double posFirst, double posLast, double flowThickness ) {
-		double drawnLength = control.get3DLength() * (posLast - posFirst);
-		if( drawnLength <= 0 )
+	private void drawFlow( GL gl, double baseColorValue, double topColorValue, double length, double offset, double flowThickness ) {
+		double temporaryLength = length;
+		if( temporaryLength <= 0 )
 			return;
 
 		gl.glPushMatrix();
@@ -275,38 +299,36 @@ public class GLNashFlowEdge extends GLEdge {
 
 		final double width = scale * fu * flowThickness * 0.5;
 
-		gl.glTranslated( 0, 0, control.get3DLength() * posFirst );
+		gl.glTranslated( 0, 0, offset );
 
 		gl.glPushMatrix();
-		double flowStart = colorFirst;
-		double flowEnd = colorLast;
+		double temporaryBaseColorValue = baseColorValue;
 
-		double sum = 0;
-		if( flowEnd > flowStart )
+		if( topColorValue > temporaryBaseColorValue )
 			throw new IllegalArgumentException( "colorLast < colorFirst" );
 		while( true ) {
-			final int startIndex = getColorIndex( flowStart );
-			final int endIndex = getColorIndex( flowEnd );
+			final int startIndex = getColorIndex( temporaryBaseColorValue );
+			final int endIndex = getColorIndex( topColorValue );
 			if( startIndex == endIndex ) {
 				// easy peasy
-				Cylinder.drawCylinder( gl, width, drawnLength, 16, getColorForTime( flowStart), getColorForTime( flowEnd ) );
+				Cylinder.drawCylinder( gl, width, temporaryLength, 16, getColorForTime( temporaryBaseColorValue), getColorForTime( topColorValue ) );
 				break;
 			} else {
 				// bestimme farbwechselpunkt
 				final double breakPointPosition = getColorIndexEndTime( startIndex );
-				final double len = (flowStart-breakPointPosition)/(flowStart-flowEnd) * drawnLength;
-				Cylinder.drawCylinder( gl, width, len, 16, getColorForTime( flowStart), getColorForTime( breakPointPosition ) );
-				drawnLength -= len;
+				final double len = (temporaryBaseColorValue-breakPointPosition)/(temporaryBaseColorValue-topColorValue) * temporaryLength;
+				Cylinder.drawCylinder( gl, width, len, 16, getColorForTime( temporaryBaseColorValue), getColorForTime( breakPointPosition ) );
+				temporaryLength -= len;
 				gl.glTranslated( 0, 0, len );
-				flowStart = breakPointPosition-0.000001;
+				temporaryBaseColorValue = breakPointPosition-0.000001;
 			}
 		}
 		gl.glPopMatrix();
 
-		getColorForTime( colorFirst ).draw( gl );
+		getColorForTime( baseColorValue ).draw( gl );
 		glu.gluDisk( quadObj, 0, width, 16, 1 );
-		gl.glTranslated( 0, 0, control.get3DLength() * (posLast - posFirst) );
-		getColorForTime( colorLast ).draw( gl );
+		gl.glTranslated( 0, 0, length );
+		getColorForTime( topColorValue ).draw( gl );
 		glu.gluDisk( quadObj, 0, width, 16, 1 );
 
 		gl.glPopMatrix();
@@ -317,6 +339,7 @@ public class GLNashFlowEdge extends GLEdge {
 		cap = ncontrol.getNashFlowEdgeData().getCapacity();
 		transitTime = ncontrol.getNashFlowEdgeData().getTransitTime();
 		corCap = ncontrol.getNashFlowEdgeData().getCorridorCapacity();
+		distWallFromEdge = corCap;
 		exitPos = ncontrol.getNashFlowEdgeData().getExitPosition();
 	}
 }
