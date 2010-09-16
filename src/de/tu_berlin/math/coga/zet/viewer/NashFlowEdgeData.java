@@ -16,30 +16,36 @@ public class NashFlowEdgeData implements Iterable<FlowData> {
 
 	// fixed properties for the edge:
 	ArrayList<FlowData> flowDatas = new ArrayList<FlowData>();
-	double cap = 1;
-	double taue = 1;
+	double capacity = 1;
+	double transitTime = 1;
 	double corCapacity = 4;
-	double exitPos = 0.8;
+	double exitPositionRelative = 0.8;
 
 	public NashFlowEdgeData( double capacity, double transitTime ) {
-		this.cap = capacity;
-		this.taue = transitTime;
+		this( capacity, transitTime, 3.9, 0.78 );
+	}
+
+	public NashFlowEdgeData( double capacity, double transitTime, double corridorCapacity, double exitPosition ) {
+		this.capacity = capacity;
+		this.transitTime = transitTime;
+		this.capacity = capacity;
+		this.exitPositionRelative = exitPosition;
 	}
 
 	public double getCapacity() {
-		return cap;
+		return capacity;
 	}
 
 	public void setCapacity( double capacity ) {
-		this.cap = capacity;
+		this.capacity = capacity;
 	}
 
 	public double getTransitTime() {
-		return taue;
+		return transitTime;
 	}
 
 	public void setTransitTime( double transitTime ) {
-		this.taue = transitTime;
+		this.transitTime = transitTime;
 	}
 
 	private void add( FlowData flowData ) {
@@ -47,7 +53,7 @@ public class NashFlowEdgeData implements Iterable<FlowData> {
 	}
 
 	void add( double start, double end, double inflow, double wait, int iteration, double globalStart, double globalEnd ) {
-		add( new FlowData( start, end, inflow, wait, cap, taue, corCapacity, exitPos, iteration, globalStart, globalEnd ) );
+		add( new FlowData( start, end, inflow, wait, capacity, transitTime, corCapacity, exitPositionRelative, iteration, globalStart, globalEnd ) );
 	}
 
 	public Iterator<FlowData> iterator() {
@@ -80,7 +86,7 @@ public class NashFlowEdgeData implements Iterable<FlowData> {
 	 * @return the relative position of the exit on the edge
 	 */
 	public double getExitPosition() {
-		return exitPos;
+		return exitPositionRelative;
 	}
 
 	/**
@@ -92,7 +98,7 @@ public class NashFlowEdgeData implements Iterable<FlowData> {
 	public void setExitPosition( double exitPosition ) throws IllegalArgumentException {
 		if( exitPosition <= 0 || exitPosition >= 1 )
 			throw new IllegalArgumentException( "Exit position must be in ]0,1[" );
-		this.exitPos = exitPosition;
+		this.exitPositionRelative = exitPosition;
 	}
 
 }
