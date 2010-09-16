@@ -17,6 +17,7 @@ public class FlowData {
 	final public double waittime;
 	public final double globalStart;
 	public final double globalEnd;
+	public final double colorDifference;
 
 	final public double firstEnterExit;
 	final public double firstLeaveExit;
@@ -32,6 +33,7 @@ public class FlowData {
 	public FlowData( double startTime, double endTime, double inFlow, double waitTime, double capacity, double transitTime, double corridorCapacity, double exitPosition, int iteration, double globalStart, double globalEnd ) {
 		this.globalStart = globalStart;
 		this.globalEnd = globalEnd;
+		this.colorDifference = globalEnd - globalStart;
 		this.startTime = startTime;
 		this.endTime = endTime;
 		this.inflow = inFlow;
