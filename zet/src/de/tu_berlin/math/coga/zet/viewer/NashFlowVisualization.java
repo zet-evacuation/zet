@@ -74,10 +74,10 @@ public class NashFlowVisualization extends Visualization<GLNashGraphControl> {
 		Edge e4 = network.createAndSetEdge( network.getNode( 2 ), network.getNode( 3 ) );
 
 		NodePositionMapping nodePositionMapping = new NodePositionMapping( 4 );
-		nodePositionMapping.set( network.getNode( 0 ), new Vector3( -12, 0, 0 ) );
-		nodePositionMapping.set( network.getNode( 1 ), new Vector3( 0, 6, 0 ) );
-		nodePositionMapping.set( network.getNode( 2 ), new Vector3( 0, -6, 0 ) );
-		nodePositionMapping.set( network.getNode( 3 ), new Vector3( 12, 0, 0 ) );
+		nodePositionMapping.set( network.getNode( 0 ), new Vector3( -14, 0, 0 ) );
+		nodePositionMapping.set( network.getNode( 1 ), new Vector3( 0, 8, 0 ) );
+		nodePositionMapping.set( network.getNode( 2 ), new Vector3( 0, -8, 0 ) );
+		nodePositionMapping.set( network.getNode( 3 ), new Vector3( 14, 0, 0 ) );
 
 
 		IdentifiableObjectMapping<Edge, NashFlowEdgeData> mapping = new IdentifiableObjectMapping<Edge,NashFlowEdgeData>( 5, NashFlowEdgeData.class );

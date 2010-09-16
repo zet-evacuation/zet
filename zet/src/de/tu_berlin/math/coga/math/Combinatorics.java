@@ -29,7 +29,7 @@ package de.tu_berlin.math.coga.math;
 public class Combinatorics {
 
 	/**
-	 * Aviods instanciation of the utility class with combinatorial methods.
+	 * Avoids instantiation of the utility class with combinatorial methods.
 	 */
 	private Combinatorics() {
 	}
@@ -92,7 +92,7 @@ public class Combinatorics {
 	}
 
 	/**
-	 * Private helping method used to compute the factorial.
+	 * Private auxiliary method used to compute the factorial.
 	 * @param n
 	 * @return
 	 */

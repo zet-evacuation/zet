@@ -7,7 +7,8 @@ package opengl.drawingutils;
 import javax.media.opengl.GL;
 
 /**
- *
+ * A helping class providing methods to draw a cylinder with more features than
+ * the {@code gluCylinder} provides.
  * @author Jan-Philipp Kappmeier
  */
 public class Cylinder {

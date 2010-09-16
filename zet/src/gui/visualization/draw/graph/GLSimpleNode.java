@@ -49,7 +49,7 @@ public class GLSimpleNode extends AbstractDrawable<GLEdge, GLSimpleNodeControl> 
 
 	final GLColor lineColor = new GLColor( Color.black );
 
-	private void drawNode( GL gl ) {
+	protected void drawNode( GL gl ) {
 //		if( getControl().isCurrentlyOccupied() ) {
 //			performFlowDrawing( drawable );
 //		}
