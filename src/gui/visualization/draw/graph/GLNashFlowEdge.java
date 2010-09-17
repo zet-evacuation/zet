@@ -4,127 +4,119 @@
  */
 package gui.visualization.draw.graph;
 
-import opengl.drawingutils.Cylinder;
+import opengl.drawingutils.RainbowGradient;
 import de.tu_berlin.math.coga.math.Conversion;
 import de.tu_berlin.math.coga.math.vectormath.Vector3;
 import de.tu_berlin.math.coga.zet.viewer.FlowData;
-import gui.visualization.VisualizationOptionManager;
 import gui.visualization.control.graph.GLEdgeControl;
 import gui.visualization.control.graph.GLNashFlowEdgeControl;
-import java.awt.Color;
 import javax.media.opengl.GL;
 import opengl.drawingutils.GLColor;
 
 /**
- *
+ * Draws an edge and a Nash flow. The Nash flow is stored in values for the
+ * different iterations of the algorithm.
  * @author Jan-Philipp Kappmeier
  */
 public class GLNashFlowEdge extends GLEdge {
+	/** The control class for the Nash edge. */
 	GLNashFlowEdgeControl ncontrol;
-	double exitPos = 0.8;
-	double corStartPos = 0.2;
-	/** An accelerating factor. */
+	/** An acceleration factor. */
 	final static double acceleration = 1;
-	/** The width of one flow unit. */
-	double fu = 0.15;
-	/** The capacity of the corridor. */
-	double corCap = 5;
-	double corWallWidth = 0;
-	double distWallFromEdge = corCap;
-	private double cap;
-	private double transitTime;
+	/** The current time during visualization. */
 	double currentTime;
-	double scale = 4;
-	final static GLColor[] colors = { new GLColor( Color.red ), new GLColor( Color.blue ), new GLColor( Color.yellow ), new GLColor( Color.green ), new GLColor( Color.cyan ), new GLColor( Color.magenta ) };
-	//final static GLColor[] rainbow = { GLColor.red, GLColor.orange, GLColor.yellow, GLColor.green, GLColor.blue, GLColor.indigo, GLColor.violet };
-	final static GLColor[] rainbow = { GLColor.red, GLColor.yellow, GLColor.green, GLColor.magenta, GLColor.blue, GLColor.orange, GLColor.indigo, GLColor.cyan, GLColor.violet };
-	double maxTime = 36;
-	double timeInterval = maxTime / 9;
+	/** The capacity of the edge. */
+	private double capacity;
+	/** The transit time of the edge. */
+	private double transitTime;
+	/** The relative exit position on the edge. */
+	double corridorExitPosition = 0.8;
+	/** The relative start position on the edge. */
+	double corridorStartPosition = 0.2;
+	/** The capacity of the corridor. */
+	double corridorCapacity = 5;
+	/** The width of the corridor wall. Not used */
+	double corridorWallWidth = 0;
+	/** A scale factor. */
+	final static double scale = 0.6;
+	/** The color for the wall. */
+	final static GLColor wallColor = new GLColor( 139, 69, 19, 0.1 );
+	/** The rainbow colors used for the color effect on the edges. */
+	RainbowGradient rainbowGradient;
+	/** The axis used to rotate to display the edges. */
+	final Vector3 rotateAxis;
+	/** The angle used to rotate to display the edges. */
+	final double rotateAngle;
 
 	public GLNashFlowEdge( GLEdgeControl control ) {
 		super( control );
 		ncontrol = (GLNashFlowEdgeControl) control;
 		edgeColor = GLColor.gray;
-		//edgeColor = new GLColor( GLColor.gray, 0.9 );
+		final Vector3 b = new Vector3( 0, 0, 1 );
+		final Vector3 a = control.getDifferenceVectorInOpenGlScaling();
+		rotateAxis = control.getRotationAxis( a, b );
+		rotateAngle = control.getAngleBetween( a, b );
 		update();
 	}
 
 	/**
-	 * Draws the flow on the edge. The edge is already drawn using the {@link #performStaticDrawing(javax.media.opengl.GLAutoDrawable)} method.
+	 * Draws the flow on the flow, the edge and the corridor.
 	 * @param gl the {@code OpenGL} drawable object
 	 */
 	@Override
 	public void performDrawing( GL gl ) {
 		currentTime = Conversion.nanoSecondsToSec * ncontrol.getTimeSinceStart() * acceleration;
 
-
 		for( FlowData flowData : ncontrol.getNashFlowEdgeData() )
-			displayFlow( flowData, gl );
+			displayFlow( gl, flowData );
+
+		gl.glEnable( GL.GL_CULL_FACE );
 		displayEdge( gl );
+		gl.glDisable( GL.GL_CULL_FACE );
 
 		displayCorridor( gl );
 	}
 
-	@Override
-	public void performStaticDrawing( GL gl ) {
-		// nothing
-	}
-
+	/**
+	 * Draws the edge. The edge is a solid, semi transparent cylinder. At a first
+	 * step the coordinate system is rotated such that the edge goes in {@code z}
+	 * direction. Then the edge is drawn.
+	 * @param gl the graphics object
+	 */
 	private void displayEdge( GL gl ) {
-		// Draw the edge
 		gl.glPushMatrix();
-
 		edgeColor.draw( gl );
-
-		Vector3 b = new Vector3( 0, 0, 1 );
-		Vector3 a = control.getDifferenceVectorInOpenGlScaling();
-		Vector3 axis = control.getRotationAxis( a, b );
-		gl.glRotated( control.getAngleBetween( a, b ), axis.x, axis.y, axis.z );
-
+		gl.glRotated( rotateAngle, rotateAxis.x, rotateAxis.y, rotateAxis.z );
 		final double eps = 0.999;
-		//gl.glPolygonMode( GL.GL_FRONT_AND_BACK, GL.GL_LINE );
 		gl.glEnable( gl.GL_BLEND );
 		gl.glBlendFunc( gl.GL_ONE_MINUS_DST_COLOR, gl.GL_ONE );
-		glu.gluCylinder( quadObj, scale * cap * fu * 0.5 * eps, scale * cap * fu * 0.5 * eps, control.get3DLength(), 16, 1 );
-		//gl.glPolygonMode( GL.GL_FRONT_AND_BACK, GL.GL_FILL );
+		glu.gluCylinder( quadObj, scale * capacity * 0.5 * eps, scale * capacity * 0.5 * eps, control.get3DLength(), 16, 1 );
 		gl.glDisable( GL.GL_BLEND );
-
 		gl.glPopMatrix();
 	}
 
+	/**
+	 * Displays the corridor. The corridor is a transparent cylinder. The back
+	 * of the cylinder is open, the front of the cylinder is closed but contains
+	 * a hole of the size of the edge as an exit.
+	 * @param gl the graphics object
+	 */
 	private void displayCorridor( GL gl ) {
-		GLColor wallColor = new GLColor( 139, 69, 19, 0.1 );
-
+		gl.glPushMatrix();
 		wallColor.draw( gl );
 		final double len = control.get3DLength();
-
-		gl.glPushMatrix();
-
-		Vector3 b = new Vector3( 0, 0, 1 );
-		Vector3 a = control.getDifferenceVectorInOpenGlScaling();
-		Vector3 axis = control.getRotationAxis( a, b );
-		gl.glRotated( control.getAngleBetween( a, b ), axis.x, axis.y, axis.z );
-		//gl.glRotated( 90, 0, 1, 0 );
-
+		gl.glRotated( rotateAngle, rotateAxis.x, rotateAxis.y, rotateAxis.z );
 		final double eps = 1.001;
 		gl.glEnable( gl.GL_BLEND );
 		gl.glBlendFunc( gl.GL_SRC_ALPHA, gl.GL_ONE );
-
-		gl.glTranslated( 0, 0, corStartPos * len );
-		//gl.glPolygonMode( GL.GL_FRONT_AND_BACK, GL.GL_LINE );
-		double width = eps * scale * distWallFromEdge*fu*0.5;
-		double drawnLength = exitPos * len - corStartPos * len;
-		glu.gluCylinder( quadObj, width, width, drawnLength * eps, 16, 1 );
-		//gl.glPolygonMode( GL.GL_FRONT, GL.GL_FILL );
-
-		//glu.gluDisk( quadObj, 0, width, 16, 1 );
+		gl.glTranslated( 0, 0, corridorStartPosition * len );
+		double width = eps * scale * corridorCapacity * 0.5;
+		double drawnLength = corridorExitPosition * len - corridorStartPosition * len;
+		glu.gluCylinder( quadObj, width, width, drawnLength * eps, 32, 1 );
 		gl.glTranslated( 0, 0, drawnLength * eps );
-		glu.gluDisk( quadObj, scale * cap * fu * 0.5 * eps, width, 16, 1 );
-
-
+		glu.gluDisk( quadObj, scale * capacity * 0.5 * eps, width, 32, 1 );
 		gl.glDisable( GL.GL_BLEND );
 		gl.glPopMatrix();
-
 		gl.glLineWidth( 3 );
 	}
 
@@ -136,210 +128,202 @@ public class GLNashFlowEdge extends GLEdge {
 	 */
 	private double getPhysicalQueueLength( FlowData flowData ) {
 		if( currentTime >= flowData.firstEnterExit && currentTime <= flowData.lastEnterExit )
-			return (flowData.queueLengthForFirst + (currentTime - flowData.firstEnterExit) * (flowData.inflow - cap) / corCap) / transitTime;
+			return (flowData.queueLengthForFirst + (currentTime - flowData.firstEnterExit) * (flowData.inflow - capacity) / corridorCapacity) / transitTime;
 		if( currentTime >= flowData.firstEnterExit && currentTime <= flowData.lastLeaveExit )
-			return (flowData.queueLengthForLast - (currentTime - flowData.lastEnterExit) * cap / corCap) / transitTime;
+			return (flowData.queueLengthForLast - (currentTime - flowData.lastEnterExit) * capacity / corridorCapacity) / transitTime;
 		return flowData.queueLengthForFirst / transitTime;
 	}
 
-	private void displayFlow( FlowData flowData, GL gl ) {
-		if( flowData.waittimePositive || !flowData.capGreaterThanInflow ) {
+	/**
+	 * <p>Draws the flow (based on the flow data). That means, the flow on one
+	 * specific edge computed in one iteration of the Nash flow algorithm.</p>
+	 * <p>The flow consists of three phases.
+	 * <ul>
+	 * <li>The first phase consists of the flow
+	 * entering the edge up to the point where it queues up or leaves the exit.</li>
+	 * <li>The second phase consists of the flow in the queue.</li>
+	 * <li>The third path is the flow coming out of the exit of the corridor.</li>
+	 * </ul>
+	 * There is one special case: when the inflow rate is smaller than the
+	 * capacity and the flow never queues up and has not to wait, than it is
+	 * simply drawn as one single piece of flow. </p>
+	 * @param gl the graphics object
+	 * @param flowData the flow data displayed
+	 */
+	private void displayFlow( GL gl, FlowData flowData ) {
+		if( flowData.waittimePositive || !flowData.capGreaterThanInflow ) {	// the hard part: includes wait times and a visible queue
 			final double physicalQueueLength = getPhysicalQueueLength( flowData );
-			final double shownQueueLength = physicalQueueLength * exitPos / (physicalQueueLength + exitPos);
+			final double shownQueueLength = physicalQueueLength * corridorExitPosition / (physicalQueueLength + corridorExitPosition);
 
-			double fraction = (currentTime - flowData.firstLeaveExit) / (flowData.lastLeaveExit-flowData.firstLeaveExit); // this is the one used by the third part
-			double flowStartColorValuePhase3 = flowData.globalStart + fraction * flowData.colorDifference;
+			// precompute the color value at the exit in case it is needed for the color gradient at the crossing of queue and inflow
+			final double startColorValuePhase3 = flowData.globalStart + ((currentTime - flowData.firstLeaveExit) / (flowData.lastLeaveExit - flowData.firstLeaveExit)) * flowData.colorDifference;
 
-			double flowStartColorValuePhase1 = flowData.globalEnd;
-			double flowEndColorValuePhase1 = flowData.globalStart;
+			// compute the colors for phase 1 (inflowing part of flow)
+			double startColorValuePhase1 = flowData.globalEnd;
+			double endColorValuePhase1 = flowData.globalStart;
 			if( currentTime >= flowData.startTime && currentTime <= flowData.lastEnterExit ) {
 				if( currentTime > flowData.firstEnterExit && shownQueueLength > 0 )
-					flowEndColorValuePhase1 = -1;
-				else if( currentTime > flowData.firstLeaveExit ) // here the queue length is = 0!
-					flowEndColorValuePhase1 = flowStartColorValuePhase3;
-				else
-					flowEndColorValuePhase1 = flowData.globalStart;
-
-				if( currentTime > flowData.endTime )
-					flowStartColorValuePhase1 = flowData.globalEnd;
-				else {
-					final double f = (currentTime - flowData.startTime)/(flowData.endTime - flowData.startTime);
-					flowStartColorValuePhase1 = flowData.globalStart + f * flowData.colorDifference;
-				}
+					endColorValuePhase1 = -1;
+				else	// here the queue length is 0
+					endColorValuePhase1 = currentTime > flowData.firstLeaveExit ? startColorValuePhase3 : flowData.globalStart;
+				startColorValuePhase1 = currentTime > flowData.endTime ? flowData.globalEnd : flowData.globalStart + ((currentTime - flowData.startTime) / (flowData.endTime - flowData.startTime)) * flowData.colorDifference;
 			}
 
-			double flowStartColorValuePhase2 = flowData.globalEnd;
-			double flowEndColorValuePhase2 = flowData.globalStart;
+			// compute the colors for phase 2 (queue part of flow)
+			double startColorValuePhase2 = flowData.globalEnd;
+			double endColorValuePhase2 = flowData.globalStart;
 			if( currentTime >= flowData.firstEnterExit && currentTime <= flowData.lastLeaveExit ) {
-				flowEndColorValuePhase2 = currentTime >= flowData.firstLeaveExit ? flowStartColorValuePhase3 : flowData.globalStart;
-				flowStartColorValuePhase2 = currentTime <= flowData.lastEnterExit ? -1 : flowData.globalEnd;
+				endColorValuePhase2 = currentTime >= flowData.firstLeaveExit ? startColorValuePhase3 : flowData.globalStart;
+				startColorValuePhase2 = currentTime <= flowData.lastEnterExit ? -1 : flowData.globalEnd;
 			}
 
-
-			// berechne den faktor, der hier benötigt wird:
-			double numberPart3 = cap * (currentTime - flowData.firstAtHead);
-			double numberUpToNow = flowData.inflow * (Math.min( currentTime, flowData.endTime) - flowData.startTime);
-			double numberPart2 = flowData.inflow * (Math.min( flowData.lastEnterExit, currentTime) - flowData.firstEnterExit );
-			double numberPart1 = Math.max( numberUpToNow - numberPart3 - numberPart2, 0);
-			double f = numberPart1/(numberPart1+numberPart2);
-
-			if( flowStartColorValuePhase2 == -1 )
-				//flowStartColorValuePhase2 = (1-f) * (flowStartColorValuePhase1 + flowEndColorValuePhase2);
-				flowStartColorValuePhase2 = flowEndColorValuePhase2 + (1-f) * (flowStartColorValuePhase1 - flowEndColorValuePhase2);
-//				flowStartColorValuePhase2 = 0.5 * (flowStartColorValuePhase1 + flowEndColorValuePhase2);
-			if( flowEndColorValuePhase1 == -1 )
-				//flowEndColorValuePhase1 = (1-f) * (flowStartColorValuePhase1 + flowEndColorValuePhase2);
-				flowEndColorValuePhase1 = flowStartColorValuePhase1 - f * (flowStartColorValuePhase1-flowEndColorValuePhase2);
-//				flowEndColorValuePhase1 = 0.5 * (flowStartColorValuePhase1 + flowEndColorValuePhase2);
-
-			try {
-			drawPhase1( gl, flowData, shownQueueLength, flowStartColorValuePhase1, flowEndColorValuePhase1 );
-			} catch( Exception e ) {
-				System.out.println( "ERR" );
+			// in case we have both, phase 1 and phase 2, they meet at some point. compute the color at that specific point.
+			if( startColorValuePhase2 == -1 || endColorValuePhase1 == -1 ) {
+				final double numberUpToNow = flowData.inflow * (Math.min( currentTime, flowData.endTime ) - flowData.startTime);
+				final double numberPart3 = capacity * (currentTime - flowData.firstAtHead);
+				final double numberPart2 = flowData.inflow * (Math.min( flowData.lastEnterExit, currentTime ) - flowData.firstEnterExit);
+				final double numberPart1 = Math.max( numberUpToNow - numberPart3 - numberPart2, 0 );
+				final double f = numberPart1 / (numberPart1 + numberPart2);
+				if( startColorValuePhase2 == -1 )
+					startColorValuePhase2 = endColorValuePhase2 + (1 - f) * (startColorValuePhase1 - endColorValuePhase2);
+				if( endColorValuePhase1 == -1 )
+					endColorValuePhase1 = startColorValuePhase1 - f * (startColorValuePhase1 - endColorValuePhase2);
 			}
-
-			try {
-				drawPhase2( gl, flowData, shownQueueLength, flowStartColorValuePhase2, flowEndColorValuePhase2 );
-			} catch( Exception e ) {
-				System.out.println( "ERR" );
-			}
-			// Zeichnen des Abschnitts, der nach dem Ausgang kommt
-			if( currentTime >= flowData.firstLeaveExit && currentTime <= flowData.lastAtHead )
-				draw( flowData, gl, currentTime, flowData.firstLeaveExit, flowData.lastAtHead, flowData.lastLeaveExit, flowData.firstAtHead, exitPos );
-		} else
-			draw( flowData, gl, currentTime, flowData.startTime, flowData.lastAtHead, flowData.endTime, flowData.firstAtHead, 0 );
+			// draw the actual flow forall three phases
+			drawPhase1( gl, flowData, shownQueueLength, startColorValuePhase1, endColorValuePhase1 );
+			drawPhase2( gl, flowData, shownQueueLength, startColorValuePhase2, endColorValuePhase2 );
+			if( currentTime >= flowData.firstLeaveExit && currentTime <= flowData.lastAtHead )	// the third phase. quite easy.
+				draw( gl, flowData, currentTime, flowData.firstLeaveExit, flowData.lastAtHead, flowData.lastLeaveExit, flowData.firstAtHead, corridorExitPosition );
+		} else	// the easy part: no wait time and no queue: the flow can directly flow through the edge
+			draw( gl, flowData, currentTime, flowData.startTime, flowData.lastAtHead, flowData.endTime, flowData.firstAtHead, 0 );
 	}
 
-	private void drawPhase1( GL gl, FlowData flowData, double shownQueueLength, double startColorValue, double endColorValue  ) {
-		double positionEnd = 0;
-		// Zeichnen des Flussstückes das ungehindert in die Kante fließen kann
-			if( currentTime >= flowData.startTime && currentTime <= flowData.lastEnterExit ) {
-				if( currentTime >= flowData.endTime ) {
-					final double shownQueueLengthForLast = flowData.queueLengthForLast / transitTime * exitPos / (flowData.queueLengthForLast / transitTime + exitPos);
-					positionEnd = (currentTime - flowData.endTime) / (flowData.lastEnterExit - flowData.endTime) * (exitPos - shownQueueLengthForLast);
-				}
-				double rectOney = exitPos - shownQueueLength;
-				if( currentTime <= flowData.firstEnterExit )
-					rectOney = (currentTime - flowData.startTime) / (flowData.firstEnterExit - flowData.startTime) * (exitPos - shownQueueLength);
-
-				drawFlow( gl, startColorValue, endColorValue, control.get3DLength()*(rectOney-positionEnd), control.get3DLength()*(positionEnd), flowData.inflow );
+	/**
+	 * Displays the first phase. The colors used at the start and end point of
+	 * the phase have to be computed first as they may need information about the
+	 * other phases colors. The positions of the flow are computed based on the
+	 * current time and the times where flow queues up from the flow data.
+	 * @param gl the graphics object
+	 * @param flowData the flow data for the current iteration
+	 * @param shownQueueLength the length of the queue at this time for this iteration
+	 * @param startColorValue the color at the start of the flow (this is where it comes out of the node, which in meanings of time is the end of the flow!)
+	 * @param endColorValue the color at the end of the flow (this is the piece of flow furthest away!)
+	 */
+	private void drawPhase1( GL gl, FlowData flowData, double shownQueueLength, double startColorValue, double endColorValue ) {
+		double positionStart = 0; // start position is the last piece of flow that has entered the edge up to now
+		if( currentTime >= flowData.startTime && currentTime <= flowData.lastEnterExit ) {
+			if( currentTime >= flowData.endTime ) {
+				final double shownQueueLengthForLast = flowData.queueLengthForLast / transitTime * corridorExitPosition / (flowData.queueLengthForLast / transitTime + corridorExitPosition);
+				positionStart = (currentTime - flowData.endTime) / (flowData.lastEnterExit - flowData.endTime) * (corridorExitPosition - shownQueueLengthForLast);
 			}
+			final double positionEnd = currentTime <= flowData.firstEnterExit ? (currentTime - flowData.startTime) / (flowData.firstEnterExit - flowData.startTime) * (corridorExitPosition - shownQueueLength) : corridorExitPosition - shownQueueLength;
+			drawFlow( gl, startColorValue, endColorValue, control.get3DLength() * (positionEnd - positionStart), control.get3DLength() * (positionStart), flowData.inflow );
+		}
 	}
 
+	/**
+	 * Draws the second phase of the flow, that is the queue (if it exists). The
+	 * colors used at the start and end point of the phase have to be computed
+	 * first as they may need information about the other phases colors. The
+	 * positions of the flow are computed based on the current time and the times
+	 * where flow queues up from the flow data.
+	 * @param gl the graphics object
+	 * @param flowData the flow data for the current iteration
+	 * @param shownQueueLength the length of the queue at this time for this iteration
+	 * @param startColorValue the color at the start of the flow (this is where it comes out of the node, which in meanings of time is the end of the flow!)
+	 * @param endColorValue the color at the end of the flow (this is the piece of flow furthest away!)
+	 */
 	private void drawPhase2( GL gl, FlowData flowData, double shownQueueLength, double startColorValue, double endColorValue ) {
-			if( currentTime >= flowData.firstEnterExit && currentTime <= flowData.lastLeaveExit ) {
-				double rectTwoy = exitPos;
-				if( currentTime <= flowData.firstLeaveExit ) {
-					final double physicalRemainingQueueLength = (flowData.queueLengthForFirst - (currentTime - flowData.firstEnterExit) * cap / corCap) / transitTime;
-					final double shownRemainingQueueLength = physicalRemainingQueueLength * exitPos / (physicalRemainingQueueLength + exitPos);
-					rectTwoy = exitPos - shownRemainingQueueLength;
-				}
-				drawFlow( gl, startColorValue, endColorValue, control.get3DLength()*(rectTwoy-exitPos+shownQueueLength), control.get3DLength()*(exitPos-shownQueueLength), distWallFromEdge );
-				//drawFlow( gl, startColorValue, endColorValue, exitPos - shownQueueLength, rectTwoy, distWallFromEdge );
+		if( currentTime >= flowData.firstEnterExit && currentTime <= flowData.lastLeaveExit ) {
+			double positionStart = shownQueueLength;
+			if( currentTime <= flowData.firstLeaveExit ) {
+				final double physicalRemainingQueueLength = (flowData.queueLengthForFirst - (currentTime - flowData.firstEnterExit) * capacity / corridorCapacity) / transitTime;
+				final double shownRemainingQueueLength = physicalRemainingQueueLength * corridorExitPosition / (physicalRemainingQueueLength + corridorExitPosition);
+				positionStart -= shownRemainingQueueLength;
 			}
+			drawFlow( gl, startColorValue, endColorValue, control.get3DLength() * positionStart, control.get3DLength() * (corridorExitPosition - shownQueueLength), corridorCapacity );
+		}
 	}
 
-	private void draw( FlowData flowData, GL gl, double current, double firstVisible, double lastVisible, double lastInflow, double firstArrival, double startPos ) {
+	/**
+	 * Draws a "simple" flow. That means, a flow that starts at a point at a
+	 * specific time and ends at an end point at another time. In between the
+	 * colors scale from the global start value up to the global end value.
+	 * @param gl the graphics object
+	 * @param flowData the flow data for the current iteration
+	 * @param current the current time
+	 * @param firstVisible the first time when flow is visible at the start position
+	 * @param lastVisible the time when the last piece of flows has reached the destination point
+	 * @param lastInflow the last time when flow comes out of the start position
+	 * @param firstArrival the first time when flow reaches destination point
+	 * @param relativeStart the (relative) start position on the edge.
+	 */
+	private void draw( GL gl, FlowData flowData, double current, double firstVisible, double lastVisible, double lastInflow, double firstArrival, double relativeStart ) {
 		if( currentTime >= firstVisible && currentTime <= lastVisible ) {
-			double xPos;
+			double startPos;
 			double endPos;
+			double endColorValue;
+			double startColorValue;
 
-			double flowEndColorValue;
-			double flowStartColorValue;
-
-			// first: berechnung der position
+			// first: computation of the start color and position
 			if( current >= lastInflow ) {
-				xPos = ((current - lastInflow) / (lastVisible - lastInflow)) * (1 - startPos) + startPos;
-				flowStartColorValue = flowData.globalEnd;
+				startPos = ((current - lastInflow) / (lastVisible - lastInflow)) * (1 - relativeStart) + relativeStart;
+				startColorValue = flowData.globalEnd;
 			} else {
-				xPos = startPos;
-				final double fraction = (current - firstVisible) / (lastInflow - firstVisible);
-				flowStartColorValue = flowData.globalStart + fraction * flowData.colorDifference;
+				startPos = relativeStart;
+				startColorValue = flowData.globalStart + (current - firstVisible) / (lastInflow - firstVisible) * flowData.colorDifference;
 			}
 
-			// second: berechnung des endwertes
-			if( current <= firstArrival ) { // same as flowData.startTime + transitTime
-				endPos = ((current - firstVisible) / (firstArrival - firstVisible)) * (1 - startPos) + startPos;
-				flowEndColorValue = flowData.globalStart;
+			// second: computation of the end color and position
+			if( current <= firstArrival ) {
+				endPos = ((current - firstVisible) / (firstArrival - firstVisible)) * (1 - relativeStart) + relativeStart;
+				endColorValue = flowData.globalStart;
 			} else {
 				endPos = 1;
-				final double fraction = (current - firstArrival) / (lastInflow - firstVisible);
-				flowEndColorValue = flowData.globalStart + fraction * flowData.colorDifference;
+				endColorValue = flowData.globalStart + (current - firstArrival) / (lastInflow - firstVisible) * flowData.colorDifference;
 			}
 
-			drawFlow( gl, flowStartColorValue, flowEndColorValue, control.get3DLength()*(endPos-xPos), control.get3DLength()*xPos, flowData.inflow );
+			drawFlow( gl, startColorValue, endColorValue, control.get3DLength() * (endPos - startPos), control.get3DLength() * startPos, flowData.inflow );
 		}
 	}
 
-	private GLColor getColorForTime( double time ) {
-		int colorIndex = (int)Math.floor( time/timeInterval );
-		GLColor color = GLColor.blend( rainbow[colorIndex], rainbow[colorIndex+1], time/timeInterval - colorIndex );
-		return color;
-	}
-
-	private int getColorIndex( double time ) {
-		int colorIndex = (int)Math.floor( time/timeInterval );
-		return colorIndex;
-	}
-
-	private double getColorIndexEndTime( int index ) {
-		return index * timeInterval;
-	}
-
-	private void drawFlow( GL gl, double baseColorValue, double topColorValue, double length, double offset, double flowThickness ) {
-		double temporaryLength = length;
-		if( temporaryLength <= 0 )
+	/**
+	 * Draws a cylinder representing a flow. The cylinder will be colored with
+	 * a color gradient, whose start and end values have to be submitted.
+	 * @param gl the graphics object
+	 * @param baseColorValue the color value at the base of the cylinder (within the range of the rainbow gradient)
+	 * @param topColorValuethe color value at the top of the cylinder (within the range of the rainbow gradient)
+	 * @param length the length of the cylinder (piece of flow)
+	 * @param offset the offset, where to draw the base of the cylinder
+	 * @param flowValue the value of the flow. used to compute the thickness
+	 */
+	private void drawFlow( GL gl, double baseColorValue, double topColorValue, double length, double offset, double flowValue ) {
+		if( length <= 0 )
 			return;
-
 		gl.glPushMatrix();
-		Vector3 b = new Vector3( 0, 0, 1 );
-		Vector3 a = control.getDifferenceVectorInOpenGlScaling();
-		Vector3 axis = control.getRotationAxis( a, b );
-		gl.glRotated( control.getAngleBetween( a, b ), axis.x, axis.y, axis.z );
-
-		final double width = scale * fu * flowThickness * 0.5;
-
+		gl.glRotated( rotateAngle, rotateAxis.x, rotateAxis.y, rotateAxis.z );
+		final double width = scale * flowValue * 0.5;
 		gl.glTranslated( 0, 0, offset );
-
-		gl.glPushMatrix();
-		double temporaryBaseColorValue = baseColorValue;
-
-		if( topColorValue > temporaryBaseColorValue )
-			throw new IllegalArgumentException( "colorLast < colorFirst" );
-		while( true ) {
-			final int startIndex = getColorIndex( temporaryBaseColorValue );
-			final int endIndex = getColorIndex( topColorValue );
-			if( startIndex == endIndex ) {
-				// easy peasy
-				Cylinder.drawCylinder( gl, width, temporaryLength, 16, getColorForTime( temporaryBaseColorValue), getColorForTime( topColorValue ) );
-				break;
-			} else {
-				// bestimme farbwechselpunkt
-				final double breakPointPosition = getColorIndexEndTime( startIndex );
-				final double len = (temporaryBaseColorValue-breakPointPosition)/(temporaryBaseColorValue-topColorValue) * temporaryLength;
-				Cylinder.drawCylinder( gl, width, len, 16, getColorForTime( temporaryBaseColorValue), getColorForTime( breakPointPosition ) );
-				temporaryLength -= len;
-				gl.glTranslated( 0, 0, len );
-				temporaryBaseColorValue = breakPointPosition-0.000001;
-			}
-		}
-		gl.glPopMatrix();
-
-		getColorForTime( baseColorValue ).draw( gl );
-		glu.gluDisk( quadObj, 0, width, 16, 1 );
+		rainbowGradient.drawCylinder( gl, width, length, baseColorValue, topColorValue );
+		rainbowGradient.getColorForTime( baseColorValue ).draw( gl );
+		glu.gluDisk( quadObj, 0, width, 32, 1 );
 		gl.glTranslated( 0, 0, length );
-		getColorForTime( topColorValue ).draw( gl );
-		glu.gluDisk( quadObj, 0, width, 16, 1 );
-
+		rainbowGradient.getColorForTime( topColorValue ).draw( gl );
+		glu.gluDisk( quadObj, 0, width, 32, 1 );
 		gl.glPopMatrix();
 	}
 
+	/**
+	 * Updates the values used to draw the edge. The values are gathered from the
+	 * associated control class.
+	 */
 	@Override
 	public void update() {
-		cap = ncontrol.getNashFlowEdgeData().getCapacity();
+		capacity = ncontrol.getNashFlowEdgeData().getCapacity();
 		transitTime = ncontrol.getNashFlowEdgeData().getTransitTime();
-		corCap = ncontrol.getNashFlowEdgeData().getCorridorCapacity();
-		distWallFromEdge = corCap;
-		exitPos = ncontrol.getNashFlowEdgeData().getExitPosition();
+		corridorCapacity = ncontrol.getNashFlowEdgeData().getCorridorCapacity();
+		corridorExitPosition = ncontrol.getNashFlowEdgeData().getExitPosition();
+		corridorStartPosition = 1 - corridorExitPosition;
+		rainbowGradient = ncontrol.getRainbowGradient();
 	}
 }

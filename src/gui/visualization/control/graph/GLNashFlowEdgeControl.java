@@ -9,6 +9,7 @@ import de.tu_berlin.math.coga.zet.viewer.NashFlowVisualization;
 import de.tu_berlin.math.coga.zet.viewer.NodePositionMapping;
 import ds.graph.Edge;
 import gui.visualization.draw.graph.GLNashFlowEdge;
+import opengl.drawingutils.RainbowGradient;
 
 
 /**
@@ -37,5 +38,9 @@ public class GLNashFlowEdgeControl extends GLEdgeControl {
 
 	public double getTimeSinceStart() {
 		return nfv.getTimeSinceStart();
+	}
+
+	public RainbowGradient getRainbowGradient() {
+		return nfv.getRainbowGradient();
 	}
 }

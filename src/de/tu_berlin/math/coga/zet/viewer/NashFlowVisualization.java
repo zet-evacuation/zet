@@ -13,16 +13,18 @@ import ds.graph.Node;
 import gui.visualization.Visualization;
 import gui.visualization.control.graph.GLNashGraphControl;
 import gui.visualization.draw.graph.GLEdge;
+import opengl.drawingutils.RainbowGradient;
 import java.util.ArrayList;
 import javax.media.opengl.GLAutoDrawable;
 import javax.media.opengl.GLCapabilities;
+import opengl.drawingutils.GLColor;
 
 /**
  *
  * @author Jan-Philipp Kappmeier
  */
 public class NashFlowVisualization extends Visualization<GLNashGraphControl> {
-
+	RainbowGradient rainbowGradient;
 	NashFlowEdgeData flowDatas0 = new NashFlowEdgeData( 2, 1 );
 	NashFlowEdgeData flowDatas1 = new NashFlowEdgeData( 1, 6.75 );
 	NashFlowEdgeData flowDatas2 = new NashFlowEdgeData( 1, 1.75 );
@@ -30,9 +32,12 @@ public class NashFlowVisualization extends Visualization<GLNashGraphControl> {
 	NashFlowEdgeData flowDatas4 = new NashFlowEdgeData( 1, 1 );
 	ArrayList<GLEdge> edges = new ArrayList<GLEdge>();
 	GLNashGraphControl graphControl;
+	GLColor[] colors = { GLColor.red, GLColor.yellow, GLColor.green, GLColor.magenta, GLColor.blue, GLColor.orange, GLColor.indigo, GLColor.cyan, GLColor.violet };
 
 	public NashFlowVisualization( GLCapabilities capabilities ) {
 		super( capabilities );
+
+		rainbowGradient = new RainbowGradient( colors );
 
 		// set up data and stacks.
 		flowDatas0.add( 0, 2, 3, 0, 0, 0, 2 );
@@ -93,9 +98,7 @@ public class NashFlowVisualization extends Visualization<GLNashGraphControl> {
 
 		this.set3DView();
 
-		//GLEdgeControl ec1 = new GLEdgeControl( nodePositionMapping, network.getEdge( 0 ) );
 	}
-	boolean first = false;
 
 	@Override
 	public void startAnimation() {
@@ -105,42 +108,10 @@ public class NashFlowVisualization extends Visualization<GLNashGraphControl> {
 
 	@Override
 	public void display( GLAutoDrawable drawable ) {
-		if( !first ) {
-			//startAnimation();
-			first = true;
-		}
 		super.display( drawable );
-		// TODO: richtig machen mit dem update :D
-		// Status-Variablen die angezeigte Elemente steuern
+	}
 
-
-		// here begins old stuff...
-
-//		super.display( drawable );
-//		gl.glClear( clearBits );
-//		computeFPS();
-//
-//		if( !first ) {
-//			startAnimation();
-//			first = true;
-//		}
-//
-//
-//		gl.glMatrixMode( GL.GL_MODELVIEW );
-//		gl.glLoadIdentity();
-//
-////		Camera camera = getCamera();
-////		camera.setPos( new Vector3( 0, 0, 10 ) );
-////		camera.setUp( new Vector3( 0, 1, 0 ) );
-////		camera.setView( new Vector3( 0, 0, -1 ) );
-//		look();
-//
-//		graphControl.getView().draw( gl );
-//
-//		drawFPS();
-//
-//		printErrors();
-//		gl.glFlush();
-
+	public RainbowGradient getRainbowGradient() {
+		return rainbowGradient;
 	}
 }
