@@ -182,7 +182,7 @@ public class FFmpegWrapper extends MovieWriter {
 				command += thisCommand;
 			else
 				command += '\n' + thisCommand;
-			System.out.println( "Encode video with command line: ");
+			System.out.println( "Encode video with command line: " + thisCommand );
 
 			//System.out.println( thisCommand );
 			Process process = new ProcessBuilder( IOTools.parseCommandString( thisCommand ) ).start();
@@ -192,10 +192,10 @@ public class FFmpegWrapper extends MovieWriter {
 			process.waitFor();
 			return process.exitValue();
 		} catch( InterruptedException ex ) {
-			System.err.println( "Encoding-Prozess wurde unterbrochen!!!" );
+			System.err.println( "Encoding process was interupted!" );
 			return -1;
 		} catch( IOException ex ) {
-			System.err.println( "Exception im FFMPEG-Wrapper!!!" );
+			System.err.println( "Exception in FFMPEG-Wrapper!" );
 			return -1;
 		}		
 	}

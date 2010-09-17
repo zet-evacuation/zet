@@ -79,8 +79,6 @@ public class GLNode extends AbstractDrawable<GLFlowEdge, GLNodeControl> {
 		super.performDrawing( gl );
 		glu.gluQuadricDrawStyle( quadObj, flowDisplayMode );
 
-		System.out.print( "Node " + this.toString() + " is drawn." );
-
 		gl.glColor4d( 1.0, 0.0, 0.0, 1.0 );
 
 		//gl.glEnable( gl.GL_BLEND );
@@ -95,17 +93,15 @@ public class GLNode extends AbstractDrawable<GLFlowEdge, GLNodeControl> {
 	@Override
 	public void performStaticDrawing( GL gl ) {
 		beginDraw( gl );
-				System.out.print( "Node " + this.toString() + " is drawn." );
 
 //		if( getControl().isCurrentlyOccupied() ) {
 //			performFlowDrawing( drawable );
 //		}
 		glu.gluQuadricDrawStyle( quadObj, nodeDisplayMode );
 
-		//gl.glColor4d( 1.0, 1.0, 0.0, 0.3 );
 		nodeBorderColor.draw( gl );
-		double xOffset = -this.getControl().getXPosition();// * GLFlowGraphControl.sizeMultiplicator;
-		double yOffset = -this.getControl().getYPosition();// * GLFlowGraphControl.sizeMultiplicator;
+		double xOffset = -this.getControl().getXPosition();
+		double yOffset = -this.getControl().getYPosition();
 		if( control.isRectangleVisible() ) {
 			gl.glBegin( GL.GL_LINES );
 			gl.glVertex3d( this.getControl().getNwX() + xOffset, this.getControl().getNwY() + yOffset, -graphHeight + 0.1 );

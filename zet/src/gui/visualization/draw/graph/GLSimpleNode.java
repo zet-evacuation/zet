@@ -21,10 +21,10 @@ import opengl.framework.abs.AbstractDrawable;
  */
 //public class GLNode extends AbstractDrawable<GLEdge, GLSimpleNodeControl> {
 public class GLSimpleNode extends AbstractDrawable<GLEdge, GLSimpleNodeControl> {
-	int nodeDisplayMode = GLU.GLU_FILL;//GLU.GLU_SILHOUETTE;
-	GLColor nodeColor = new GLColor( Color.red );
+	int nodeDisplayMode = GLU.GLU_FILL;
+	GLColor nodeColor = new GLColor( 154, 154, 147 );
 	double radius;
-	private static QualityPreset qualityPreset = QualityPreset.MediumQuality;
+	private static QualityPreset qualityPreset = QualityPreset.HighQuality;
 	
 	public GLSimpleNode( GLSimpleNodeControl control ) {
 		super( control );
@@ -42,7 +42,6 @@ public class GLSimpleNode extends AbstractDrawable<GLEdge, GLSimpleNodeControl> 
 	public void performStaticDrawing( GL gl ) {
 		beginDraw( gl );
 		drawNode( gl );
-		System.out.println( "Draw node at " + position.toString() );
 		staticDrawAllChildren( gl );
 		endDraw( gl );
 	}
@@ -50,17 +49,10 @@ public class GLSimpleNode extends AbstractDrawable<GLEdge, GLSimpleNodeControl> 
 	final GLColor lineColor = new GLColor( Color.black );
 
 	protected void drawNode( GL gl ) {
-//		if( getControl().isCurrentlyOccupied() ) {
-//			performFlowDrawing( drawable );
-//		}
 		glu.gluQuadricDrawStyle( quadObj, nodeDisplayMode );
-
-		//gl.glColor4d( 1.0, 1.0, 0.0, 0.3 );
 
 		double xOffset = -this.getControl().getXPosition() * GLFlowGraphControl.sizeMultiplicator;
 		double yOffset = this.getControl().getYPosition() * GLFlowGraphControl.sizeMultiplicator;
-		//gl.glEnable( gl.GL_BLEND );
-		//gl.glBlendFunc( gl.GL_SRC_ALPHA, gl.GL_ONE );
 
 		nodeColor.draw( gl );
 
@@ -70,9 +62,9 @@ public class GLSimpleNode extends AbstractDrawable<GLEdge, GLSimpleNodeControl> 
 
 		lineColor.draw( gl );
 
-		glu.gluQuadricDrawStyle( quadObj, GLU.GLU_SILHOUETTE );
-		glu.gluSphere( quadObj, radius, qualityPreset.nodeSlices, qualityPreset.nodeStacks );
-		glu.gluQuadricDrawStyle( quadObj, nodeDisplayMode );
+		//glu.gluQuadricDrawStyle( quadObj, GLU.GLU_SILHOUETTE );
+		//glu.gluSphere( quadObj, radius, qualityPreset.nodeSlices, qualityPreset.nodeStacks );
+		//glu.gluQuadricDrawStyle( quadObj, nodeDisplayMode );
 
 	}
 
