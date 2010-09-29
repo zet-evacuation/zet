@@ -37,6 +37,7 @@ public class NashFlowVisualization extends Visualization<GLNashGraphControl> {
 	public NashFlowVisualization( GLCapabilities capabilities ) {
 		super( capabilities );
 
+		setShowFPS( false );
 		rainbowGradient = new RainbowGradient( colors );
 
 		// set up data and stacks.

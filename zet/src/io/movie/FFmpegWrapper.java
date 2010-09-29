@@ -46,7 +46,7 @@ import javax.swing.filechooser.FileFilter;
 public class FFmpegWrapper extends MovieWriter {
 	/** Is 2-pass encoding enabled or disabled. */
 	private boolean twoPassEncoding = true;
-	/** The name of an mp3 or wav file used as music for the movie. */
+	/** The name of an MP3 or WAV file used as music for the movie. */
 	private String mp3File = "";
 	/** An advanced parameter string that can be created by the user. */
 	private String advancedParameter = "";
@@ -69,6 +69,22 @@ public class FFmpegWrapper extends MovieWriter {
 			case DIVX:
 				codecParameterString = " -vcodec mpeg4 -vtag DX50";
 				break;
+			case H264:
+				// libx264 -fpre "/homes/combi/kappmeie/Dateien/Programme/zet/tools/ffmpeg/presets/libx264-placebo.ffpreset"
+				// path for the presets
+				String programPath = "./tools/ffmpeg/ffmpeg";
+				File f = new File( programPath );
+
+				String fullPath = "";
+				try {
+					fullPath = f.getCanonicalPath();
+				} catch( IOException ex ) {
+					fullPath = f.getAbsolutePath();
+				}
+				fullPath += "/presets/libx264-fast.ffpreset";
+				codecParameterString = " -vcodec libx264 -fpre \""+ fullPath + "\"";
+				if( !twoPassEncoding )
+					codecParameterString += " -crf 22";
 			case MPEG1:
 				codecParameterString = " -vcodec mpeg1video";
 				break;
@@ -113,7 +129,7 @@ public class FFmpegWrapper extends MovieWriter {
 	/**
 	 * Encodes the movie and saves it with a specified filename. Creates the
 	 * string with the parameters send to ffmpeg encoder depending of the settings.
-	 * The resolution is set to a value divisable by two.
+	 * The resolution is set to a value divisible by two.
 	 * @param pass the number of the pass. can be 1, 2 or 0 if no 2-pass encoding is enabled
 	 * @param filename the filename for the movie
 	 * @throws java.lang.IllegalArgumentException if pass is not 0, 1 or 2
@@ -289,6 +305,15 @@ public class FFmpegWrapper extends MovieWriter {
 		panel.add( txtAdvancedCommands, "1,7,3,7" );
 		
 		return panel;
+	}
+
+	public static void main( String[] args) throws IOException {
+		String programPath = "./tools/ffmpeg/ffmpeg";
+		File f = new File( programPath );
+		System.out.println( f.getAbsolutePath() );
+		System.out.println( f.getPath() );
+		System.out.println( f.getCanonicalPath() );
+
 	}
 
 }

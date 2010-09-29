@@ -323,7 +323,7 @@ public class GLNashFlowEdge extends GLEdge {
 		transitTime = ncontrol.getNashFlowEdgeData().getTransitTime();
 		corridorCapacity = ncontrol.getNashFlowEdgeData().getCorridorCapacity();
 		corridorExitPosition = ncontrol.getNashFlowEdgeData().getExitPosition();
-		corridorStartPosition = 1 - corridorExitPosition;
+		//corridorStartPosition = 1 - corridorExitPosition;
 		rainbowGradient = ncontrol.getRainbowGradient();
 	}
 }
