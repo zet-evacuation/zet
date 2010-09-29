@@ -32,6 +32,7 @@ import java.util.EnumSet;
  */
 public enum MovieWriters {
 	/** */
+
 	FFmpeg( "FFmpeg Encoder", 0, new FFmpegWrapper() ),
 	/** */
 	JMF( "Java Media Files", 1, new JMFWrapper() );
@@ -39,7 +40,7 @@ public enum MovieWriters {
 	/** The name of the image format. The result of the {@link toString()} method */
 	private String name;
 	private int formatListsIndex;
-	/** The movie writer for the selected enum item. */
+	/** The movie writer for the selected enumeration item. */
 	private MovieWriter amw;
 	
 	private static final MovieFormat[][] movieFormats = {

@@ -395,10 +395,10 @@ public class FlowVisualizationTool extends JFrame implements PropertyChangeListe
 
 
 
-				int width = 640;
-				int height = 480;
+				int width = 1920;
+				int height = 1080;
 
-// make a movie...
+			// make a movie...
 			String movieFrameName = "movieFrame";
 			// TODO BUG: wenn ein projekt noch nicht gespeichert worden ist, liefert das hier iene null pointer exception. (tritt auf, wenn ein video gedreht werden soll)
 			//String projectName = zcontrol.getProject().getProjectFile().getName().substring( 0, zcontrol.getProject().getProjectFile().getName().length() - 4 );
@@ -417,7 +417,7 @@ public class FlowVisualizationTool extends JFrame implements PropertyChangeListe
 			MovieWriters mw = MovieWriters.FFmpeg;
 			
 			movieCreator.setMovieWriter( mw.getWriter() );
-			//vis.setRecording( RecordingMode.Recording, new Dimension( width, height) );
+			vis.setRecording( RecordingMode.Recording, new Dimension( width, height) );
 			movieCreator.setWidth( width );
 			movieCreator.setHeight( height );
 			movieCreator.setCreateMovie( true );

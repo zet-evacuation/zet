@@ -200,6 +200,12 @@ public class Visualization<U extends DrawableControlable> extends AbstractVisual
 		EventServer.getInstance().dispatchEvent( new MessageEvent<Visualization>( this, MessageType.Status, "Frame rendered" ) );
 	}
 
+	public void setShowFPS( boolean showFPS ) {
+		this.showFPS = showFPS;
+	}
+
+
+
 	/**
 	 * Sets the correct animation time. Calculated by the difference
 	 * from the current time and last time.

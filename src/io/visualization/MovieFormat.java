@@ -25,17 +25,19 @@ package io.visualization;
  * @author Jan-Philipp Kappmeier
  */
 public enum MovieFormat {
-	/** MPEG-4 movie, divx or divx compatible. */
+	/** MPEG-4 movie, DIVX or DIVX compatible. */
 	DIVX( "DivX", "avi"),
+	/** H.264 format. */
+	H264( "H.264", "mkv" ),
 	/** MPEG-1 movie. */
 	MPEG1( "MPEG-1", "mpg" ),
 	/** MPEG-2 movie. */
 	MPEG2( "MPEG-2", "mpg" ),
 	/** MPEG-4 movie. */
 	MPEG4( "MPEG-4", "mp4" ),
-	/** MPEG-4 movie, xvid or xvid compatible. */
+	/** MPEG-4 movie, XVID or XVID compatible. */
 	XVID( "XviD", "avi"),
-	/** Quicktime movie consisting of a collecton of jpeg images. */
+	/** Quicktime movie consisting of a collection of JPEG images. */
 	MOV( "Quicktime", "mov" );
 
 	/** The ending of the movie format. */
