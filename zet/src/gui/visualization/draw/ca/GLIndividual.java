@@ -91,7 +91,8 @@ public class GLIndividual extends AbstractDrawable<GLIndividual, GLIndividualCon
 		// perform frustum test if the center point is within the frustum
 
 		Vector3 check = new Vector3( pos.x * GLCellularAutomatonControl.sizeMultiplicator, pos.y * GLCellularAutomatonControl.sizeMultiplicator, 1 * GLCellularAutomatonControl.sizeMultiplicator );
-		if( frustum.isPointInFrustum( check ) == Frustum.CullingLocation.inside )
+		// TODO Frustum
+		//if( frustum.isPointInFrustum( check ) == Frustum.CullingLocation.inside )
 			glu.gluSphere( quadObj, individualRadius * 0.7, qualityPreset.individualHeadSlices, qualityPreset.individualHeadStacks );
 
 		gl.glPopMatrix();

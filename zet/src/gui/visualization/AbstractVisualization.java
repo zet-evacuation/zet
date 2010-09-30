@@ -358,7 +358,7 @@ public abstract class AbstractVisualization extends AbstractOpenGLCanvas {
 	 * @param drawable the {@code OpenGL} context
 	 */
 	protected void takeScreenshot( GLAutoDrawable drawable ) {
-		//System.out.println( "Save screenshot to " + file.getAbsolutePath() );
+		System.out.println( "Save screenshot to " + screenshotFilename );
 		try {
 			Screenshot.writeToFile( new File( screenshotFilename ), drawable.getWidth(), drawable.getHeight(), false );
 		} catch( IOException ex ) {

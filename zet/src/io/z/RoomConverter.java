@@ -35,7 +35,6 @@ import java.util.logging.Logger;
  * @author Timon Kelter, Jan-Philipp Kappmeier
  */
 public class RoomConverter extends PlanPolygonConverter {
-
 	/** The class that this converter can convert. */
 	private Class myClass = Room.class;
 
@@ -68,16 +67,14 @@ public class RoomConverter extends PlanPolygonConverter {
 	 */
 	@Override
 	public Object unmarshal( final HierarchicalStreamReader reader, final UnmarshallingContext context ) {
-		System.err.println( " EIN ROAUM WIRD KONVERTIERT" );
-		Room result = (Room)super.unmarshal( reader, context );
+		Room result = (Room) super.unmarshal( reader, context );
+		Class<?> c = result.getClass();
 
-				Class<?> c = result.getClass();
-
-				java.lang.reflect.Field field;
+		java.lang.reflect.Field field;
 		try {
 			field = c.getDeclaredField( "teleportAreas" );
-				field.setAccessible( true );
-				field.set( result, new ArrayList<TeleportArea>() );
+			field.setAccessible( true );
+			field.set( result, new ArrayList<TeleportArea>() );
 		} catch( IllegalArgumentException ex ) {
 			Logger.getLogger( RoomConverter.class.getName() ).log( Level.SEVERE, null, ex );
 		} catch( IllegalAccessException ex ) {
@@ -103,7 +100,7 @@ public class RoomConverter extends PlanPolygonConverter {
 		for( Area t : result.getSaveAreas() ) { // Evacuation areas are contained!
 //			t.addChangeListener( result );
 		}
-		
+
 		try {
 			for( Area t : result.getStairAreas() ) {
 //				t.addChangeListener( result );
@@ -117,16 +114,16 @@ public class RoomConverter extends PlanPolygonConverter {
 //					t.addChangeListener( result );
 				}
 			} catch( NoSuchFieldException ex1 ) {
-				System.err.println( "NoSuchFieldException in RoomConverter");
+				System.err.println( "NoSuchFieldException in RoomConverter" );
 			} catch( SecurityException ex1 ) {
-				System.err.println( "SecurityException in RoomConverter");
+				System.err.println( "SecurityException in RoomConverter" );
 			} catch( IllegalArgumentException ex1 ) {
-				System.err.println( "IllegalArgumentException in RoomConverter");
+				System.err.println( "IllegalArgumentException in RoomConverter" );
 			} catch( IllegalAccessException ex1 ) {
-				System.err.println( "IllegalAccessException in RoomConverter");
+				System.err.println( "IllegalAccessException in RoomConverter" );
 			}
 		}
-		
+
 		return result;
 	}
 }

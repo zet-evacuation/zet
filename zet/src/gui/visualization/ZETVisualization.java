@@ -178,14 +178,19 @@ public class ZETVisualization extends Visualization<GLControl> implements EventL
 			row++;
 		}
 
-		if( finished && isAnimating() )
+		if( finished && isAnimating() ) {
 			EventServer.getInstance().dispatchEvent( new VisualizationEvent( this ) );
+		}
+		//if( minimalFrameCount)
+
 
 		//font.print( 0, this.getHeight() - (row++)*fontSize, "Zeit: " + secToMin( getTimeSinceStart()/Conversion.secToNanoSeconds ) );
 		gl.glDisable( GL.GL_TEXTURE_2D );
 		gl.glDisable( GL.GL_BLEND );
 		ProjectionHelper.resetProjection( gl );
 	}
+
+	// TODO: wenn eine Belegung keine Typen enthält, gibts eine Exception anstelle einer Warnung
 
 	@Override
 	@SuppressWarnings("fallthrough")

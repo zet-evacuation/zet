@@ -117,8 +117,6 @@ public class GLCellularAutomatonControl extends AbstractZETVisualizationControl<
 			for( Action action : caVisResults.getRecording().nextActions() )
 				try {
 					action.execute( ca );
-					if( action instanceof MoveAction )
-						System.out.println( action );
 				} catch( InconsistentPlaybackStateException e ) {
 					e.printStackTrace( System.err );
 				}
@@ -129,7 +127,6 @@ public class GLCellularAutomatonControl extends AbstractZETVisualizationControl<
 		}
 
 	}
-
 
 	public double getSecondsPerStep() {
 		return secondsPerStep;

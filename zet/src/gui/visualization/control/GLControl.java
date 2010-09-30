@@ -309,7 +309,7 @@ public class GLControl implements DrawableControlable {
 	 *  @return true if the simulation is finished, false otherwise
 	 */
 	public boolean isFinished() {
-		return graphControl != null && graphControl.isFinished() && caControl != null && caControl.isFinished();
+		return (graphControl == null || graphControl.isFinished()) && (caControl == null || caControl.isFinished() );
 	}
 
 	/**

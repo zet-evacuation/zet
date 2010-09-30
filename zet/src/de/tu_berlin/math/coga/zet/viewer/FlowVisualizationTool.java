@@ -84,8 +84,8 @@ public class FlowVisualizationTool extends JFrame implements PropertyChangeListe
 	private JMenu mView;
 	private JMenuItem mnuScreenshot;
 	
-	//final Visualization<GLFlowGraphControl> vis = new Visualization<GLFlowGraphControl>( new GLCapabilities() );
-	final Visualization<GLNashGraphControl> vis = new NashFlowVisualization( new GLCapabilities() );
+	Visualization<GLFlowGraphControl> vis = new Visualization<GLFlowGraphControl>( new GLCapabilities() );
+	final Visualization<GLNashGraphControl> vis2 = new NashFlowVisualization( new GLCapabilities() );
 	JEventStatusBar sb = new JEventStatusBar();
 	JSlider slider = new JSlider(0,0);
 	FlowVisualizationTool theInstance;
@@ -113,10 +113,10 @@ public class FlowVisualizationTool extends JFrame implements PropertyChangeListe
 		vis.set3DView();
 		vis.getCamera().getView().invert();
 		vis.getCamera().getPos().z = 140;
+		//vis.setControl( new GLFlowGraphControl( new GraphVisualizationResults() ) );
 		graphVisResult = new GraphVisualizationResults();
-
-		//GLFlowGraphControl control = new GLFlowGraphControl( graphVisResult );
-		//vis.setControl( control );
+		GLFlowGraphControl control = new GLFlowGraphControl( graphVisResult );
+		vis.setControl( control );
 
 		vis.addKeyListener( new KeyListener() {
 
@@ -295,7 +295,7 @@ public class FlowVisualizationTool extends JFrame implements PropertyChangeListe
 					}
 					if( vis.isAnimating() )
 						vis.stopAnimation();
-					//vis.setControl( control ); // nash-flow-outcommented
+					vis.setControl( control );
 					vis.update();
 					vis.repaint();
 				}
@@ -439,7 +439,7 @@ public class FlowVisualizationTool extends JFrame implements PropertyChangeListe
 
 		public void stateChanged( ChangeEvent event ) {
 			int time = slider.getValue();
-			//vis.getControl().setTime( time * vis.getControl().getNanoSecondsPerStep() / sliderAccuracy ); // nash-flow-outcommented
+			vis.getControl().setTime( time * vis.getControl().getNanoSecondsPerStep() / sliderAccuracy );
 			vis.repaint();
 		}
 	};
@@ -452,7 +452,7 @@ public class FlowVisualizationTool extends JFrame implements PropertyChangeListe
 		sb.setStatusText( 0, "Baue Visualisierung" );
 		slider.setMaximum( (graphVisResult.getNeededTimeHorizon()+1) * sliderAccuracy );
 		GLFlowGraphControl control = new GLFlowGraphControl( graphVisResult );
-		//vis.setControl( control ); // nash-flow-outcommented
+		vis.setControl( control );
 		vis.update();
 		vis.repaint();
 		sb.setStatusText( 0, "Fertig. Animation startet" );
@@ -474,7 +474,7 @@ public class FlowVisualizationTool extends JFrame implements PropertyChangeListe
 
 	public void handleEvent( MessageEvent event ) {
 		if( vis.isAnimating() ) {
-			//slider.setValue( (int)(100*vis.getControl().getStep()) ); // nash-flow-outcommented
+			slider.setValue( (int)(100*vis.getControl().getStep()) );
 		}
 	}
 }

@@ -41,23 +41,7 @@ public class GLCell extends AbstractDrawable<GLCell, GLCellControl> {
 	protected static GLColor wallColor = VisualizationOptionManager.getCellWallColor();
 
 	public GLCell( GLCellControl control ) {
-		super( control );
-		this.position.x = control.getXPosition() * GLCellularAutomatonControl.sizeMultiplicator;
-		this.position.y = control.getYPosition() * GLCellularAutomatonControl.sizeMultiplicator;
-		if( ul == null )
-			if( VisualizationOptionManager.showSpaceBetweenCells() ) {
-				ul = new GLVector( 1 * GLCellularAutomatonControl.sizeMultiplicator, -1 * GLCellularAutomatonControl.sizeMultiplicator, 0 );
-				ur = new GLVector( 39 * GLCellularAutomatonControl.sizeMultiplicator, -1 * GLCellularAutomatonControl.sizeMultiplicator, 0 );
-				ll = new GLVector( 1 * GLCellularAutomatonControl.sizeMultiplicator, -39 * GLCellularAutomatonControl.sizeMultiplicator, 0 );
-				lr = new GLVector( 39 * GLCellularAutomatonControl.sizeMultiplicator, -39 * GLCellularAutomatonControl.sizeMultiplicator, 0 );
-			} else {
-				ul = new GLVector( 0 * GLCellularAutomatonControl.sizeMultiplicator, 0 * GLCellularAutomatonControl.sizeMultiplicator, 0 );
-				ur = new GLVector( 40 * GLCellularAutomatonControl.sizeMultiplicator, 0 * GLCellularAutomatonControl.sizeMultiplicator, 0 );
-				ll = new GLVector( 0 * GLCellularAutomatonControl.sizeMultiplicator, -40 * GLCellularAutomatonControl.sizeMultiplicator, 0 );
-				lr = new GLVector( 40 * GLCellularAutomatonControl.sizeMultiplicator, -40 * GLCellularAutomatonControl.sizeMultiplicator, 0 );
-			}
-		// Do not set color it should already be set by super call
-		this.defaultColor = VisualizationOptionManager.getCellFloorColor();
+		this( control, VisualizationOptionManager.getCellFloorColor() );
 	}
 
 	public GLCell( GLCellControl control, GLColor color ) {
@@ -86,7 +70,7 @@ public class GLCell extends AbstractDrawable<GLCell, GLCellControl> {
 			boolean lighting = gl.glIsEnabled( GL.GL_LIGHTING );
 			gl.glBegin( GL.GL_QUADS );
 			gl.glNormal3d( 0, 0, 1 );
-			getControl().mixColorWithNeighbours( Direction.TopLeft ).draw( gl, lighting );
+		 	getControl().mixColorWithNeighbours( Direction.TopLeft ).draw( gl, lighting );
 			ul.draw( gl );
 			getControl().mixColorWithNeighbours( Direction.TopRight ).draw( gl, lighting );
 			ur.draw( gl );

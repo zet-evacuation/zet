@@ -86,8 +86,6 @@ public class ZControl {
 		try {
 			p = Project.load( projectFile );
 			p.setProjectFile( projectFile );
-			// delete parameters that are set
-			//ZToCAConverter.getInstance().clear();
 			// Update the graphical user interface
 			ZETMain.sendMessage( loc.getString( "gui.editor.JEditor.message.loaded" ) );	// TODO output changed, use listener
 		} catch( Exception ex ) {

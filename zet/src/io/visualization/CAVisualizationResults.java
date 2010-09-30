@@ -38,9 +38,7 @@ import statistic.ca.CAStatistic;
 public class CAVisualizationResults implements VisualizationResult {
 
 	private static final double Z_TO_OPENGL_SCALING = 0.1d;
-	/**
-	 * The recording of a simulation
-	 */
+	/** The recording of a simulation. */
 	private VisualResultsRecording visRecording;
 	/**
 	 * A mapping from a cell to its offset relative to the room containing it.
