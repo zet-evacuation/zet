@@ -311,13 +311,14 @@ public class ZETMain {
 						if( !f.exists() )
 							f = null;
 					}
-					//zcontrol = new ZControl( f );
-					guiControl.loadProject( f );
 					if( f != null) {
+						guiControl.loadProject( f );
 						System.out.println( "Projekt " + f.getAbsolutePath() + " geladen." );
 						GUIOptionManager.setLastFile( 1, f.getAbsolutePath() );
-					}
+					} else
+						guiControl.newProject();
 				} else {
+					//guiControl.newProject();
 					//zcontrol = new ZControl();
 				}
 				//guiControl.setZControl( zcontrol );

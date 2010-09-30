@@ -66,11 +66,11 @@ import javax.swing.DefaultComboBoxModel;
 			initializing = true;
 			try {
 				clear();
-				
-				for( Room r : ( (Floor)floorSelector.getSelectedItem() ).getRooms() ) {
-					addElement( r );
-					entries.add( r );
-				}
+				if( floorSelector.getSelectedItem() != null )
+					for( Room r : ( (Floor)floorSelector.getSelectedItem() ).getRooms() ) {
+						addElement( r );
+						entries.add( r );
+					}
 			} finally {
 				initializing = false;
 			}

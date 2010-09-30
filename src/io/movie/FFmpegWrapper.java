@@ -54,6 +54,9 @@ public class FFmpegWrapper extends MovieWriter {
 	private double duration = 1;
 	/** A string used to describe the codec used by ffmpeg. Needs to start with a space. */
 	private String codecParameterString = "";
+	private String codecParameterStringPass1 = "";
+	private String codecParameterStringPass2 = "";
+	
 
 	/**
 	 * {@inheritDoc}
@@ -72,19 +75,28 @@ public class FFmpegWrapper extends MovieWriter {
 			case H264:
 				// libx264 -fpre "/homes/combi/kappmeie/Dateien/Programme/zet/tools/ffmpeg/presets/libx264-placebo.ffpreset"
 				// path for the presets
-				String programPath = "./tools/ffmpeg/ffmpeg";
+				String programPath = "./tools/ffmpeg/";
 				File f = new File( programPath );
+				programPath += "ffmpeg";
 
-				String fullPath = "";
+				String preset = "libx264-placebo";
+
+				String presetPath = "";
 				try {
-					fullPath = f.getCanonicalPath();
+					presetPath = f.getCanonicalPath();
 				} catch( IOException ex ) {
-					fullPath = f.getAbsolutePath();
+					presetPath = f.getAbsolutePath();
 				}
-				fullPath += "/presets/libx264-fast.ffpreset";
-				codecParameterString = " -vcodec libx264 -fpre \""+ fullPath + "\"";
+				presetPath += "/presets/";// + preset + ".ffpreset";
+				codecParameterString = " -vcodec libx264"; // -fpre \""+ presetPath + "\"";
 				if( !twoPassEncoding )
-					codecParameterString += " -crf 22";
+					codecParameterString = " -vcodec libx264 -fpre \"" + presetPath + preset + ".ffpreset\" -crf 22";
+				else {
+					codecParameterString = " -vcodec libx264 ";
+					codecParameterStringPass1 = " -fpre \""+ presetPath + preset + "_firstpass.ffpreset\"";
+					codecParameterStringPass2 = " -fpre \""+ presetPath + preset + ".ffpreset\"";
+				}
+				break;
 			case MPEG1:
 				codecParameterString = " -vcodec mpeg1video";
 				break;
@@ -140,13 +152,8 @@ public class FFmpegWrapper extends MovieWriter {
 			// framesize must be a multiple of 2 (at least for mpeg4)
 			width += width % 2;
 			height += height % 2;
-//			if( width % 2 == 1 )
-//				width += 1;
-//			if( height % 2 == 1 )
-//				height += 1;
 			String thisCommand = "";
 			// Basic command
-			//String programPath = "./tools/ffmpeg/ffmpeg";
 			String programPath = "./tools/ffmpeg/ffmpeg";
 			thisCommand += programPath + " -f image2";
 
@@ -166,10 +173,15 @@ public class FFmpegWrapper extends MovieWriter {
 					System.err.println( "Datei '" + mp3.getAbsolutePath() + "' nicht gefunden. Encodiere ohne Audio." );
 			}
 			// Quality parameter
-			thisCommand += " -b " + bitrate + "kb -s " + width + "x" + height;
+			thisCommand += " -b " + bitrate + "k -bt " + bitrate + "k -s " + width + "x" + height;
 			
 			// Video codec
 			thisCommand += codecParameterString;
+			if( pass == 1 )
+				thisCommand += codecParameterStringPass1;
+			if( pass == 2 )
+				thisCommand += codecParameterStringPass2;
+			
 			// duration (needed to stop, if mp3-file is larger)
 			thisCommand += " -t " + Double.toString( duration );
 			// the 2-pass-encoding
@@ -200,10 +212,10 @@ public class FFmpegWrapper extends MovieWriter {
 				command += '\n' + thisCommand;
 			System.out.println( "Encode video with command line: " + thisCommand );
 
-			//System.out.println( thisCommand );
+			System.out.println( thisCommand );
 			Process process = new ProcessBuilder( IOTools.parseCommandString( thisCommand ) ).start();
 			FFmpegInputHandler errorHandler = new FFmpegInputHandler( process.getErrorStream(), "Error Stream" );
-			errorHandler.setVerbose( true );
+			errorHandler.setVerbose( false );
 			errorHandler.start();
 			process.waitFor();
 			return process.exitValue();
@@ -313,7 +325,5 @@ public class FFmpegWrapper extends MovieWriter {
 		System.out.println( f.getAbsolutePath() );
 		System.out.println( f.getPath() );
 		System.out.println( f.getCanonicalPath() );
-
 	}
-
 }

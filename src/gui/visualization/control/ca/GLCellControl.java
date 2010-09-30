@@ -76,8 +76,7 @@ public class GLCellControl extends AbstractZETVisualizationControl<GLCellControl
 		if( mainControl.containsRecording ) {
 			MAX_DYNAMIC_POTENTIAL = caVisResults.getRecording().getMaxDynamicPotential();
 		} else {
-			//mergedPotential = new StaticPotential();
-			//activePotential = new StaticPotential();
+
 		}
 
 		floorID = controlled.getRoom().getFloorID();

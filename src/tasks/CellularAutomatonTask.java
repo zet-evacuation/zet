@@ -16,6 +16,7 @@ import de.tu_berlin.math.coga.common.algorithm.Algorithm;
 import ds.Project;
 import ds.PropertyContainer;
 import ds.ca.CellularAutomaton;
+import ds.ca.results.VisualResultsRecorder;
 import ds.z.AssignmentType;
 import ds.z.ConcreteAssignment;
 import io.visualization.CAVisualizationResults;
@@ -58,10 +59,15 @@ public class CellularAutomatonTask extends Algorithm<Project, CAVisualizationRes
 		EvacuationCellularAutomatonAlgorithm caAlgo = cellularAutomatonAlgorithm.createTask( ca );
 		double caMaxTime = PropertyContainer.getInstance().getAsDouble( "algo.ca.maxTime" );
 		caAlgo.setMaxTimeInSeconds( caMaxTime );
+		caAlgo.getCellularAutomaton().startRecording ();
 		caAlgo.run();	// hier wird initialisiert
+		caAlgo.getCellularAutomaton().stopRecording();
 
 		// create results
-		CAVisualizationResults visResults = new CAVisualizationResults( mapping, ca.getPotentialManager() );
+		//CAVisualizationResults visResults = new CAVisualizationResults( mapping, ca.getPotentialManager() );
+		// TODO visualResultsRecorder normal class, no singleton.
+		CAVisualizationResults visResults = new CAVisualizationResults( VisualResultsRecorder.getInstance().getRecording(), mapping );
+
 		return visResults;
 	}
 

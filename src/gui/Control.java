@@ -730,7 +730,6 @@ public class Control {
 			return;
 		}
 		ZETMain.sendMessage( Localization.getInstance().getString( "gui.editor.JEditor.message.dxfComplete" ) );
-
 	}
 
 	public void newFloor() {
@@ -1020,6 +1019,7 @@ public class Control {
 			public void propertyChange( PropertyChangeEvent pce ) {
 				if( isDone( pce ) ) {
 					CAVisualizationResults caVis = new CAVisualizationResults( algorithmControl.getMapping(), algorithmControl.getCellularAutomaton().getPotentialManager() );
+
 					visualization.getControl().setCellularAutomatonControl( caVis, algorithmControl.getCellularAutomaton() );
 					editor.getVisualizationView().updatePotentialSelector();
 //					editor.getVisualizationView().updateFloorSelector();

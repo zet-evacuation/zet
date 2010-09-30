@@ -49,6 +49,7 @@ public class AlgorithmControl implements PropertyChangeListener {
 	CAVisualizationResults caVisResults;
 	NetworkFlowModel networkFlowModel;
 	GraphVisualizationResults graphVisResults;
+	final CellularAutomatonTask cat = new CellularAutomatonTask();
 
 
 	public AlgorithmControl( Project project ) {
@@ -126,7 +127,7 @@ public class AlgorithmControl implements PropertyChangeListener {
 	}
 
 	void performSimulation( PropertyChangeListener propertyChangeListener ) {
-		final CellularAutomatonTask cat = new CellularAutomatonTask();
+		//final CellularAutomatonTask cat = new CellularAutomatonTask();
 		cat.setCaAlgo( CellularAutomatonAlgorithm.RandomOrder );
 		cat.setProblem( project );
 
@@ -148,7 +149,9 @@ public class AlgorithmControl implements PropertyChangeListener {
 	}
 
 	public CAVisualizationResults getCaVisResults() {
-		return caVisResults;
+		if( cat.isProblemSolved() )
+			return cat.getSolution();
+		else return null;
 	}
 
 	void createConcreteAssignment() throws IllegalArgumentException, ConversionNotSupportedException {
@@ -189,7 +192,6 @@ public class AlgorithmControl implements PropertyChangeListener {
 			return false;
 		}
 	}
-
 
 	public void propertyChange( PropertyChangeEvent pce ) {
 		System.out.println( pce.getPropertyName() );
