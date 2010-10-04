@@ -16,7 +16,7 @@
 
 /**
  * Class FFmpegWrapper
- * Erstellt 09.11.2008, 22:40:51
+ * Created 09.11.2008, 22:40:51
  */
 
 package io.movie;
