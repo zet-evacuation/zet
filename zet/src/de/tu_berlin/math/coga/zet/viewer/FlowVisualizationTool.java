@@ -64,12 +64,23 @@ import io.movie.MovieManager;
 import io.visualization.ImageFormat;
 import io.visualization.MovieFormat;
 import io.visualization.MovieWriters;
+import java.util.ArrayList;
+import opengl.framework.abs.DrawableControlable;
 
 /**
  *
  * @author Jan-Philipp Kappmeier
  */
 public class FlowVisualizationTool extends JFrame implements PropertyChangeListener, EventListener<MessageEvent> {
+	private enum Modes {
+		NashFlow,
+		DynamicFlow
+	}
+
+	private Modes mode = Modes.DynamicFlow;
+	final Visualization<GLFlowGraphControl> visFlow = new Visualization<GLFlowGraphControl>( new GLCapabilities() );
+	final Visualization<GLNashGraphControl> visNash = new NashFlowVisualization( new GLCapabilities() );
+	private ArrayList<Visualization<? extends DrawableControlable>> visualizations = new ArrayList<Visualization<? extends DrawableControlable>>() {{add( visFlow ); add( visNash );}};
 
 	Localization loc = Localization.getInstance();
 	private int sliderAccuracy = 100;
@@ -84,8 +95,7 @@ public class FlowVisualizationTool extends JFrame implements PropertyChangeListe
 	private JMenu mView;
 	private JMenuItem mnuScreenshot;
 	
-	Visualization<GLFlowGraphControl> vis = new Visualization<GLFlowGraphControl>( new GLCapabilities() );
-	final Visualization<GLNashGraphControl> vis2 = new NashFlowVisualization( new GLCapabilities() );
+	Visualization<? extends DrawableControlable> vis = visFlow;
 	JEventStatusBar sb = new JEventStatusBar();
 	JSlider slider = new JSlider(0,0);
 	FlowVisualizationTool theInstance;
@@ -110,26 +120,25 @@ public class FlowVisualizationTool extends JFrame implements PropertyChangeListe
 		this.setSize( 800, 600 );
 		this.setLayout( new BorderLayout() );
 		add( vis, BorderLayout.CENTER );
-		vis.set3DView();
-		vis.getCamera().getView().invert();
-		vis.getCamera().getPos().z = 140;
-		//vis.setControl( new GLFlowGraphControl( new GraphVisualizationResults() ) );
-		graphVisResult = new GraphVisualizationResults();
-		GLFlowGraphControl control = new GLFlowGraphControl( graphVisResult );
-		vis.setControl( control );
+		// Initialize flow visualization with empty flow
+		for( Visualization<? extends DrawableControlable> vis : visualizations ) {
+			vis.set3DView();
+			vis.getCamera().getView().invert();
+			vis.getCamera().getPos().z = 140;
+			vis.addKeyListener( new KeyListener() {
 
-		vis.addKeyListener( new KeyListener() {
+				public void keyTyped( KeyEvent arg0 ) {
+				}
 
-			public void keyTyped( KeyEvent arg0 ) {
-			}
+				public void keyPressed( KeyEvent arg0 ) {
+				}
 
-			public void keyPressed( KeyEvent arg0 ) {
-				//System.out.println( vis.getCamera().toString() );
-			}
-
-			public void keyReleased( KeyEvent arg0 ) {
-			}
-		} );
+				public void keyReleased( KeyEvent arg0 ) {
+				}
+			} );
+		}
+		visFlow.setControl( new GLFlowGraphControl( new GraphVisualizationResults() ) );
+		//visNash.setControl( null ); currently automatically initialized
 
 		EventServer.getInstance().registerListener( this, MessageEvent.class );
 
@@ -155,6 +164,7 @@ public class FlowVisualizationTool extends JFrame implements PropertyChangeListe
 		mnuFileOpen = Menu.addMenuItem( mFile, loc.getString( "menuOpen" ), 'O', aclFile, "open" );
 		mnuFileOpenFlow = Menu.addMenuItem( mFile, loc.getString( "menuOpenFlow" ), 'Q', aclFile, "openFlow" );
 		mnuFileSaveFlow = Menu.addMenuItem( mFile, loc.getString( "menuSaveFlow" ), 'S', aclFile, "saveFlow" );
+		Menu.addMenuItem( mFile, "Nash Flow", 'N', aclFile, "nashFlow" );
 
 		// Flow-Menu
 		mnuFlowExecute = Menu.addMenuItem( mFlow, loc.getString( "menuExecute" ), KeyEvent.VK_F5, aclFlow, "execute", 0 );
@@ -235,6 +245,24 @@ public class FlowVisualizationTool extends JFrame implements PropertyChangeListe
 
 	boolean pressed = false;
 
+	private void switchTo( Modes mode ) {
+		if( vis.isAnimating() )
+			vis.stopAnimation();
+		remove( vis );
+		switch( mode ) {
+			case DynamicFlow:
+				vis = visFlow;
+				break;
+			case NashFlow:
+				vis = visNash;
+				break;
+		}
+		add( vis, BorderLayout.CENTER );
+		vis.repaint();
+		vis.update();
+		repaint();
+	}
+
 	/** Action listener for the file menu. */
 	ActionListener aclFile = new ActionListener() {
 
@@ -255,6 +283,7 @@ public class FlowVisualizationTool extends JFrame implements PropertyChangeListe
 					}
 				} );
 				if( jfc.showOpenDialog( theInstance ) == JFileChooser.APPROVE_OPTION ) {
+					switchTo( Modes.DynamicFlow );
 					String path = jfc.getSelectedFile().getPath();
 					sb.setStatusText( 0, "Lade Datei '" + path + "' " );
 					GLFlowGraphControl control = null;
@@ -295,7 +324,7 @@ public class FlowVisualizationTool extends JFrame implements PropertyChangeListe
 					}
 					if( vis.isAnimating() )
 						vis.stopAnimation();
-					vis.setControl( control );
+					visFlow.setControl( control );
 					vis.update();
 					vis.repaint();
 				}
@@ -313,6 +342,7 @@ public class FlowVisualizationTool extends JFrame implements PropertyChangeListe
 					}
 				} );
 				if( jfc.showOpenDialog( theInstance ) == JFileChooser.APPROVE_OPTION ) {
+					switchTo( Modes.DynamicFlow );
 					try {
 						XStream xml_convert = new XStream();
 						FileReader input = new FileReader( jfc.getSelectedFile() );
@@ -330,6 +360,8 @@ public class FlowVisualizationTool extends JFrame implements PropertyChangeListe
 				} catch( IOException e ) {
 					sb.setStatusText( 0, "Fehler beim schreiben der Datei!" );
 				}
+			} else if( event.getActionCommand().equals( "nashFlow" ) ) {
+				switchTo( Modes.NashFlow );
 			}
 		}
 	};
@@ -393,8 +425,6 @@ public class FlowVisualizationTool extends JFrame implements PropertyChangeListe
 				}
 				pressed = true;
 
-
-
 				int width = 1920;
 				int height = 1080;
 
@@ -417,7 +447,7 @@ public class FlowVisualizationTool extends JFrame implements PropertyChangeListe
 			MovieWriters mw = MovieWriters.FFmpeg;
 			
 			movieCreator.setMovieWriter( mw.getWriter() );
-			vis.setRecording( RecordingMode.Recording, new Dimension( width, height) );
+			//vis.setRecording( RecordingMode.Recording, new Dimension( width, height) );
 			movieCreator.setWidth( width );
 			movieCreator.setHeight( height );
 			movieCreator.setCreateMovie( true );
@@ -439,7 +469,9 @@ public class FlowVisualizationTool extends JFrame implements PropertyChangeListe
 
 		public void stateChanged( ChangeEvent event ) {
 			int time = slider.getValue();
-			vis.getControl().setTime( time * vis.getControl().getNanoSecondsPerStep() / sliderAccuracy );
+			if( mode == Modes.DynamicFlow )
+				vis.getControl().setTime( time * visFlow.getControl().getNanoSecondsPerStep() / sliderAccuracy );
+			// todo Nash-Slider
 			vis.repaint();
 		}
 	};
@@ -452,7 +484,7 @@ public class FlowVisualizationTool extends JFrame implements PropertyChangeListe
 		sb.setStatusText( 0, "Baue Visualisierung" );
 		slider.setMaximum( (graphVisResult.getNeededTimeHorizon()+1) * sliderAccuracy );
 		GLFlowGraphControl control = new GLFlowGraphControl( graphVisResult );
-		vis.setControl( control );
+		visFlow.setControl( control );
 		vis.update();
 		vis.repaint();
 		sb.setStatusText( 0, "Fertig. Animation startet" );
@@ -474,7 +506,8 @@ public class FlowVisualizationTool extends JFrame implements PropertyChangeListe
 
 	public void handleEvent( MessageEvent event ) {
 		if( vis.isAnimating() ) {
-			slider.setValue( (int)(100*vis.getControl().getStep()) );
+			if( mode == Modes.DynamicFlow )
+				slider.setValue( (int)(100*visFlow.getControl().getStep()) );
 		}
 	}
 }
