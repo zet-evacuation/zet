@@ -37,17 +37,19 @@ import java.util.LinkedList;
  */
 public class FlowOverTimeEdgeSequence extends LinkedList<FlowOverTimeEdge> {
 
+    private int amount;
     private int rate;
 
     public FlowOverTimeEdgeSequence() {
         super();
+        amount = 1;
         rate = 1;
     }
 
     public FlowOverTimeEdgeSequence(FlowOverTimePath path) {
         rate = path.getRate();
-        for (Edge edge : path) {
-            addLast(new FlowOverTimeEdge(edge, path.delay(edge)));
+        for (FlowOverTimeEdge edge : path) {
+            addLast(new FlowOverTimeEdge(edge.getEdge(), edge.getDelay()));
         }
     }
 
@@ -66,8 +68,8 @@ public class FlowOverTimeEdgeSequence extends LinkedList<FlowOverTimeEdge> {
     }
 
     public void append(FlowOverTimePath path) {
-        for (Edge edge : path) {
-            addLast(new FlowOverTimeEdge(edge, path.delay(edge)));
+        for (FlowOverTimeEdge edge : path) {
+            addLast(new FlowOverTimeEdge(edge.getEdge(), edge.getDelay()));
         }
     }
 
@@ -85,12 +87,12 @@ public class FlowOverTimeEdgeSequence extends LinkedList<FlowOverTimeEdge> {
 
     public void append(FlowOverTimePath path, int time) {
         boolean first = true;
-        for (Edge edge : path) {
+        for (FlowOverTimeEdge edge : path) {
             if (first) {
-                addLast(new FlowOverTimeEdge(edge, time));
+                addLast(new FlowOverTimeEdge(edge.getEdge(), time));
                 first = false;
             } else {
-                addLast(new FlowOverTimeEdge(edge, path.delay(edge)));
+                addLast(new FlowOverTimeEdge(edge.getEdge(), edge.getDelay()));
             }
         }
     }
@@ -114,6 +116,14 @@ public class FlowOverTimeEdgeSequence extends LinkedList<FlowOverTimeEdge> {
             result += transitTimes.get(edge.getEdge());
         }
         return result;
+    }
+
+    public int getAmount() {
+        return amount;
+    }
+
+    public void setAmount(int amount) {
+        this.amount = amount;
     }
 
     public int getRate() {

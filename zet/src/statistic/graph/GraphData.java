@@ -28,6 +28,7 @@ import ds.graph.IdentifiableIntegerMapping;
 import ds.graph.Network;
 import de.tu_berlin.math.coga.zet.NetworkFlowModel;
 import ds.graph.Node;
+import ds.graph.flow.FlowOverTimeEdge;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -102,9 +103,9 @@ public class GraphData extends Data{
         double max = Integer.MIN_VALUE;
         for (FlowOverTimePath flow : pathFlows) {
             double time = 0;
-            for (Edge edge : flow.getDynamicPath()) {
-                time += flow.delay(edge);
-                time += transitTimes.get(edge);
+            for (FlowOverTimeEdge edge : flow) {
+                time += edge.getDelay();
+                time += transitTimes.get(edge.getEdge());
             }
             if (time > max) {
                 max = time;

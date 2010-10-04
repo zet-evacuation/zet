@@ -247,69 +247,69 @@ public class ChainDecomposition {
 
     private void addPathToUsageLists(FlowOverTimePath path) {
         int time = 0;
-        for (Edge edge : path) {
-            for (int t = time; t < time + path.delay(edge); t++) {
-                if (!pathsUsingNode.isDefinedFor(edge.start())) {
-                    pathsUsingNode.set(edge.start(), new LinkedList[network.getTimeHorizon()]);
+        for (FlowOverTimeEdge edge : path) {
+            for (int t = time; t < time + edge.getDelay(); t++) {
+                if (!pathsUsingNode.isDefinedFor(edge.getEdge().start())) {
+                    pathsUsingNode.set(edge.getEdge().start(), new LinkedList[network.getTimeHorizon()]);
                 }                
-                if (pathsUsingNode.get(edge.start())[t] == null) {
-                    pathsUsingNode.get(edge.start())[t] = new LinkedList();
+                if (pathsUsingNode.get(edge.getEdge().start())[t] == null) {
+                    pathsUsingNode.get(edge.getEdge().start())[t] = new LinkedList();
                 }
-                if (DEBUG_FINE) System.out.println(" Waiting in " + edge.start() + " at time " + t + ": " + path);                
-                pathsUsingNode.get(edge.start())[t].add(path);
+                if (DEBUG_FINE) System.out.println(" Waiting in " + edge.getEdge().start() + " at time " + t + ": " + path);
+                pathsUsingNode.get(edge.getEdge().start())[t].add(path);
             }            
             time += path.delay(edge);
-            if (!pathsUsingEdge.isDefinedFor(edge)) {
-                pathsUsingEdge.set(edge, new LinkedList[network.getTimeHorizon()]);
+            if (!pathsUsingEdge.isDefinedFor(edge.getEdge())) {
+                pathsUsingEdge.set(edge.getEdge(), new LinkedList[network.getTimeHorizon()]);
             }
-            if (pathsUsingEdge.get(edge)[time] == null) {
-                pathsUsingEdge.get(edge)[time] = new LinkedList();
+            if (pathsUsingEdge.get(edge.getEdge())[time] == null) {
+                pathsUsingEdge.get(edge.getEdge())[time] = new LinkedList();
             }
-            pathsUsingEdge.get(edge)[time].add(path);
+            pathsUsingEdge.get(edge.getEdge())[time].add(path);
             if (DEBUG) {
-            if (edge.id() == 4278 && time == 16) {
+            if (edge.getEdge().id() == 4278 && time == 16) {
                 System.out.println("4278@16: " + path);
             } else {
-                System.out.println("Added: " + edge.id() + "@" + time + ":" + path);
+                System.out.println("Added: " + edge.getEdge().id() + "@" + time + ":" + path);
             }
             }
-            time += network.transitTimes().get(edge);
+            time += network.transitTimes().get(edge.getEdge());
         }
     }         
     
     private void removePathFromUsageLists(FlowOverTimePath path) {
         int time = 0;
-        for (Edge edge : path) {
+        for (FlowOverTimeEdge edge : path) {
             for (int t = time; t < time + path.delay(edge); t++) {
-                pathsUsingNode.get(edge.start())[t].remove(path);
+                pathsUsingNode.get(edge.getEdge().start())[t].remove(path);
             }
             time += path.delay(edge);
-            if (edge.id() == 4278 && time == 16 && DEBUG) {
+            if (edge.getEdge().id() == 4278 && time == 16 && DEBUG) {
                 System.out.println("4278@16: remove " + path);
             }            
-            pathsUsingEdge.get(edge)[time].remove(path);
-            time += network.transitTimes().get(edge);
+            pathsUsingEdge.get(edge.getEdge())[time].remove(path);
+            time += network.transitTimes().get(edge.getEdge());
         }
     }
     
     private int getArrivalTime(FlowOverTimePath path, Edge edge) {
         int time = 0;
-        for (Edge e : path) {
-            time += path.delay(e);
-            if (e == edge) {
+        for (FlowOverTimeEdge e : path) {
+            time += e.getDelay();
+            if (e.getEdge() == edge) {
                 return time;
             }
-            time += network.transitTimes().get(e);
+            time += network.transitTimes().get(e.getEdge());
         }       
         return -1;
     }
     
     private int getArrivalTimeEnd(FlowOverTimePath path, Edge edge) {
         int time = 0;
-        for (Edge e : path) {
-            time += path.delay(e);
-            time += network.transitTimes().get(e);
-            if (e == edge) {
+        for (FlowOverTimeEdge e : path) {
+            time += e.getDelay();
+            time += network.transitTimes().get(e.getEdge());
+            if (e.getEdge() == edge) {
                 return time;
             }            
         }       
@@ -354,12 +354,12 @@ public class ChainDecomposition {
 
     private int getArrivalTime(FlowOverTimePath path, Node node) {
         int time = 0;
-        for (Edge e : path) {
-            if (e.start().equals(node)) {
+        for (FlowOverTimeEdge e : path) {
+            if (e.getEdge().start().equals(node)) {
                 return time;
             }
-            time += path.delay(e);
-            time += network.transitTimes().get(e);
+            time += e.getDelay();
+            time += network.transitTimes().get(e.getEdge());
         }       
         throw new AssertionError("This should not happen.");
     }    
@@ -382,15 +382,15 @@ public class ChainDecomposition {
         result.setRate(path.getRate());
         boolean edgeReached = false;
         int t = 0;
-        for (Edge e : path) {
-            t += path.delay(e);
+        for (FlowOverTimeEdge e : path) {
+            t += e.getDelay();
             if (e.equals(edge) && t == time) {
                 edgeReached = true;
                 continue;
             }
-            t += network.transitTimes().get(e);
+            t += network.transitTimes().get(e.getEdge());
             if (edgeReached) {
-                result.getDynamicPath().addLastEdge(e, path.delay(e));
+                result.addLastEdge(e.getEdge(), e.getDelay());
             }
         }
         return result;
@@ -435,13 +435,13 @@ public class ChainDecomposition {
         result.setAmount(path.getAmount());
         result.setRate(path.getRate());
         int t = 0;
-        for (Edge e : path) {
-            t += path.delay(e);
+        for (FlowOverTimeEdge e : path) {
+            t += e.getDelay();
             if (e.equals(edge) && t == time) {
                 break;
             }
-            t += network.transitTimes().get(e);
-            result.getDynamicPath().addLastEdge(e, path.delay(e));
+            t += network.transitTimes().get(e.getEdge());
+            result.addLastEdge(e.getEdge(), e.getDelay());
         }
         return result;        
     }    
@@ -452,16 +452,16 @@ public class ChainDecomposition {
         result.setRate(path.getRate());
         boolean nodeReached = false;
         int t = 0;
-        for (Edge e : path) {
-            if (e.start().equals(node) && isIn(time, t, t + path.delay(e))) {
+        for (FlowOverTimeEdge e : path) {
+            if (e.getEdge().start().equals(node) && isIn(time, t, t + e.getDelay())) {
                 nodeReached = true;
-                result.getDynamicPath().addLastEdge(e, 0);
+                result.addLastEdge(e.getEdge(), 0);
                 continue;
             }
-            t += path.delay(e);
-            t += network.transitTimes().get(e);
+            t += e.getDelay();
+            t += network.transitTimes().get(e.getEdge());
             if (nodeReached) {
-                result.getDynamicPath().addLastEdge(e, path.delay(e));
+                result.addLastEdge(e.getEdge(), e.getDelay());
             }
         }
         return result;
@@ -509,13 +509,13 @@ public class ChainDecomposition {
         result.setAmount(path.getAmount());
         result.setRate(path.getRate());
         int t = 0;
-        for (Edge e : path) {            
-            if (e.start().equals(node) && isIn(time, t, t + path.delay(e))) {
+        for (FlowOverTimeEdge e : path) {
+            if (e.getEdge().start().equals(node) && isIn(time, t, t + path.delay(e))) {
                 break;
             }
-            t += path.delay(e);
-            t += network.transitTimes().get(e);
-            result.getDynamicPath().addLastEdge(e, path.delay(e));
+            t += e.getDelay();
+            t += network.transitTimes().get(e.getEdge());
+            result.addLastEdge(e.getEdge(), e.getDelay());
         }
         return result;
     }    
