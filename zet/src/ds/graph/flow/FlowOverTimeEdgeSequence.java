@@ -64,7 +64,6 @@ public class FlowOverTimeEdgeSequence extends LinkedList<FlowOverTimeEdge> {
         for (FlowOverTimeEdge edge : path) {
             addLast(new FlowOverTimeEdge(edge.getEdge(), edge.getDelay()));
         }
-    //addAll(path);
     }
 
     public void append(FlowOverTimePath path) {
@@ -134,6 +133,17 @@ public class FlowOverTimeEdgeSequence extends LinkedList<FlowOverTimeEdge> {
         this.rate = rate;
     }
 
+    /**
+     * Returns a String consisting of the rate, the amount and a description
+     * of the path that is described in {@link DynamicPath}.
+     * @return a String consisting of the rate, the amount and a description
+     * of the path that is described in {@link DynamicPath}.
+     */
+    @Override
+    public String toString() {
+        return String.format("{%1$s, %2$s}", rate, super.toString());
+    }
+
     public String toText(IdentifiableIntegerMapping transitTimes) {
         StringBuilder result = new StringBuilder();
         result.append(toString() + "\n");
@@ -148,16 +158,5 @@ public class FlowOverTimeEdgeSequence extends LinkedList<FlowOverTimeEdge> {
             time += transitTimes.get(edge.getEdge());
         }
         return result.toString();
-    }
-
-    /**
-     * Returns a String consisting of the rate, the amount and a description
-     * of the path that is described in {@link DynamicPath}.
-     * @return a String consisting of the rate, the amount and a description
-     * of the path that is described in {@link DynamicPath}.
-     */
-    @Override
-    public String toString() {
-        return String.format("{%1$s, %2$s}", rate, super.toString());
     }
 }
