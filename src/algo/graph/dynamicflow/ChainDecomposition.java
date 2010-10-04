@@ -174,7 +174,7 @@ public class ChainDecomposition {
             if (!start2.isEmpty()) {
                 firstEnd = getArrivalTimeEnd(partner, start2.getLastEdge().getEdge());
             }  else {
-                firstEnd = getArrivalTime(partner, lastEdge.start());;
+                firstEnd = getArrivalTime(partner, lastEdge.start());
             }     
             //if (DEBUG) System.out.println(" Delay of " + end1.getFirstEdge() + " is " + (secondStart - firstEnd));
           //end1.getFirstEdge().setDelay(secondStart - firstEnd);
@@ -384,7 +384,7 @@ public class ChainDecomposition {
         int t = 0;
         for (FlowOverTimeEdge e : path) {
             t += e.getDelay();
-            if (e.equals(edge) && t == time) {
+            if (e.getEdge().equals(edge) && t == time) {
                 edgeReached = true;
                 continue;
             }
@@ -437,7 +437,7 @@ public class ChainDecomposition {
         int t = 0;
         for (FlowOverTimeEdge e : path) {
             t += e.getDelay();
-            if (e.equals(edge) && t == time) {
+            if (e.getEdge().equals(edge) && t == time) {
                 break;
             }
             t += network.transitTimes().get(e.getEdge());
