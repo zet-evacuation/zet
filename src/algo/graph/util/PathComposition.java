@@ -25,6 +25,7 @@ import ds.graph.Edge;
 import ds.graph.flow.EdgeBasedFlowOverTime;
 import ds.graph.IdentifiableIntegerMapping;
 import ds.graph.Network;
+import ds.graph.flow.FlowOverTimeEdge;
 
 /**
  *
@@ -53,23 +54,23 @@ public class PathComposition {
     }
 
     private void addPathFlow(FlowOverTimePath pathFlow) {
-        Edge edge = pathFlow.getDynamicPath().first();
-        int time = pathFlow.delay(edge);
+        Edge edge = pathFlow.firstEdge();
+        int time = pathFlow.getFirst().getDelay();
         edgeFlows.get(edge).increase(time, time + pathFlow.getAmount() / pathFlow.getRate(), pathFlow.getRate());
         time += transitTime(edge);
         boolean first = true;
-        for (Edge e : pathFlow.getDynamicPath()) {
+        for (FlowOverTimeEdge e : pathFlow) {
             if (first) {
                 first = false;
                 continue;
             }
-            time += pathFlow.delay(e);
+            time += e.getDelay();
             //System.out.println(e + " " + edgeFlows.get(e));
-            edgeFlows.get(e).increase(time, time + pathFlow.getAmount() / pathFlow.getRate(), pathFlow.getRate());
-            if (edgeFlows.get(e).get(time) > maxFlowRate){
-            	maxFlowRate = edgeFlows.get(e).get(time);
+            edgeFlows.get(e.getEdge()).increase(time, time + pathFlow.getAmount() / pathFlow.getRate(), pathFlow.getRate());
+            if (edgeFlows.get(e.getEdge()).get(time) > maxFlowRate){
+            	maxFlowRate = edgeFlows.get(e.getEdge()).get(time);
             }
-            time += transitTimes.get(e);
+            time += transitTimes.get(e.getEdge());
         }
     }
 

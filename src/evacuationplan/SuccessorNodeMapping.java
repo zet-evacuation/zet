@@ -39,7 +39,7 @@ public class SuccessorNodeMapping {
     
     public SuccessorNodeMapping (FlowOverTimePath dynamicPathFlow) {
         successorMapping = new HashMap<Node,Node>();
-        for (Edge e: dynamicPathFlow){
+        for (Edge e: dynamicPathFlow.edges()){
             successorMapping.put(e.start(), e.end());
         }
         successorMapping.put(dynamicPathFlow.lastEdge().end(), null);

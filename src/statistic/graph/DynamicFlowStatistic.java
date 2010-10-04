@@ -21,6 +21,7 @@ package statistic.graph;
 
 import ds.graph.flow.FlowOverTimePath;
 import ds.graph.Edge;
+import ds.graph.flow.FlowOverTimeEdge;
 
 /**
  *
@@ -34,11 +35,11 @@ public enum DynamicFlowStatistic implements Statistic<FlowOverTimePath, IntegerD
             IntegerDoubleMapping result = new IntegerDoubleMapping(true);
             int time = 0;
             int value = 0;
-            for (Edge edge : flow) {
-                time += flow.delay(edge);
+            for (FlowOverTimeEdge edge : flow) {
+                time += edge.getDelay();
                 result.set(time, value);
-                time += statistics.getData().getTransitTime(edge);
-                value += statistics.getData().getTransitTime(edge);
+                time += statistics.getData().getTransitTime(edge.getEdge());
+                value += statistics.getData().getTransitTime(edge.getEdge());
                 result.set(time, value);
             }
             return result;
@@ -51,11 +52,11 @@ public enum DynamicFlowStatistic implements Statistic<FlowOverTimePath, IntegerD
             int time = 0;
             int value = 0;
             result.set(time, value);
-            for (Edge edge : flow) {
-                time += flow.delay(edge);
-                value += statistics.getData().getTransitTime(edge);
+            for (FlowOverTimeEdge edge : flow) {
+                time += edge.getDelay();
+                value += statistics.getData().getTransitTime(edge.getEdge());
                 result.set(time, value);
-                time += statistics.getData().getTransitTime(edge);
+                time += statistics.getData().getTransitTime(edge.getEdge());
                 result.set(time, value);
             }
             return result;

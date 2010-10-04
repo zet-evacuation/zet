@@ -31,13 +31,13 @@ public enum NodeFlowStatistic implements Statistic<FlowOverTimePath, Node, Graph
     SOURCE {
 
         public Node calculate(Statistics<GraphData> statistics, FlowOverTimePath flow) {
-            return flow.getPath().first().start();
+            return flow.firstEdge().start();
         }
     },
     SINK {
 
         public Node calculate(Statistics<GraphData> statistics, FlowOverTimePath flow) {
-            return flow.getPath().last().end();
+            return flow.lastEdge().end();
         }
     },
     CLOSEST_SINK {

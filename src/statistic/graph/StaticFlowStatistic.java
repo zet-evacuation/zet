@@ -21,6 +21,7 @@ package statistic.graph;
 
 import ds.graph.flow.FlowOverTimePath;
 import ds.graph.Edge;
+import ds.graph.flow.FlowOverTimeEdge;
 import static statistic.graph.NodeFlowStatistic.*;
 
 /**
@@ -33,7 +34,7 @@ public enum StaticFlowStatistic implements Statistic<FlowOverTimePath, Double, G
 
         public Double calculate(Statistics<GraphData> statistics, FlowOverTimePath flow) {
             double time = 0;
-            for (Edge edge : flow.getDynamicPath()) {
+            for (Edge edge : flow.edges()) {
                 time += statistics.getData().getTransitTime(edge);
             }
             return time;
@@ -43,8 +44,8 @@ public enum StaticFlowStatistic implements Statistic<FlowOverTimePath, Double, G
 
         public Double calculate(Statistics<GraphData> statistics, FlowOverTimePath flow) {
             double time = 0;
-            for (Edge edge : flow.getDynamicPath()) {
-                time += flow.delay(edge);
+            for (FlowOverTimeEdge edge : flow) {
+                time += edge.getDelay();
             }
             return time;
         }
@@ -53,9 +54,9 @@ public enum StaticFlowStatistic implements Statistic<FlowOverTimePath, Double, G
 
         public Double calculate(Statistics<GraphData> statistics, FlowOverTimePath flow) {
             double time = 0;
-            for (Edge edge : flow.getDynamicPath()) {
-                time += flow.delay(edge);
-                time += statistics.getData().getTransitTime(edge);
+            for (FlowOverTimeEdge edge : flow) {
+                time += edge.getDelay();
+                time += statistics.getData().getTransitTime(edge.getEdge());
             }
             return time;
         }
