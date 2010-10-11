@@ -23,7 +23,6 @@ import ds.graph.DynamicPath;
 import ds.graph.Edge;
 import ds.graph.IdentifiableIntegerMapping;
 import ds.graph.Path;
-import java.util.LinkedList;
 
 /**
  * The <code>@link FlowOverTimePath</code> class represents the flow on one 
@@ -39,21 +38,22 @@ public class FlowOverTimeCycle extends FlowOverTimeEdgeSequence {
 
     private int offset = 0;
 
-    public FlowOverTimeCycle() {
-        super();
-    }
-
-    public FlowOverTimeCycle(FlowOverTimePath path) {
-        super(path);
-    }
-
-    public FlowOverTimeCycle(FlowOverTimeEdgeSequence edgeSequence) {
-        super(edgeSequence);
-    }
-
     public FlowOverTimeCycle(FlowOverTimeEdgeSequence edgeSequence, int offset) {
         super(edgeSequence);
         this.offset = offset;
+    }
+
+    @Override
+    public FlowOverTimeEdge get(IdentifiableIntegerMapping<Edge> transitTimes, Edge edge, int time) {
+        int t = offset;
+        for (FlowOverTimeEdge e : this) {
+            t += e.getDelay();
+            if (e.getEdge().equals(edge) && t == time) {
+                return e;
+            }
+            t += transitTimes.get(e.getEdge());
+        }
+        return null;
     }
 
     public int getOffset() {
@@ -62,6 +62,42 @@ public class FlowOverTimeCycle extends FlowOverTimeEdgeSequence {
 
     public void setOffset(int offset) {
         this.offset = offset;
+    }
+
+    @Override
+    public int length(IdentifiableIntegerMapping<Edge> transitTimes) {
+        int result = offset;
+        for (FlowOverTimeEdge e : this) {
+            result += e.getDelay();
+            result += transitTimes.get(e.getEdge());
+        }
+        return result;
+    }
+
+    @Override
+    public int lengthUntil(IdentifiableIntegerMapping<Edge> transitTimes, FlowOverTimeEdge edge) {
+        int result = offset;
+        for (FlowOverTimeEdge e : this) {
+            result += e.getDelay();
+            if (edge == e) {
+                break;
+            }
+            result += transitTimes.get(e.getEdge());
+        }
+        return result;
+    }
+
+    @Override
+    public int lengthUpTo(IdentifiableIntegerMapping<Edge> transitTimes, FlowOverTimeEdge edge) {
+        int result = offset;
+        for (FlowOverTimeEdge e : this) {
+            result += e.getDelay();
+            result += transitTimes.get(e.getEdge());
+            if (edge == e) {
+                break;
+            }
+        }
+        return result;
     }
 
     /**

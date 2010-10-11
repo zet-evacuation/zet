@@ -22,6 +22,7 @@ package ds.graph.flow;
 import ds.graph.DynamicPath;
 import ds.graph.Edge;
 import ds.graph.IdentifiableIntegerMapping;
+import ds.graph.Node;
 import ds.graph.Path;
 import java.util.LinkedList;
 
@@ -49,26 +50,20 @@ public class FlowOverTimeEdgeSequence extends LinkedList<FlowOverTimeEdge> {
     public FlowOverTimeEdgeSequence(FlowOverTimePath path) {
         rate = path.getRate();
         for (FlowOverTimeEdge edge : path) {
-            addLast(new FlowOverTimeEdge(edge.getEdge(), edge.getDelay()));
+            add(edge);
         }
     }
 
     public FlowOverTimeEdgeSequence(FlowOverTimeEdgeSequence edgeSequence) {
         rate = edgeSequence.getRate();
         for (FlowOverTimeEdge edge : edgeSequence) {
-            addLast(new FlowOverTimeEdge(edge.getEdge(), edge.getDelay()));
+            add(edge);
         }
     }
 
     public void append(FlowOverTimeEdgeSequence path) {
         for (FlowOverTimeEdge edge : path) {
-            addLast(new FlowOverTimeEdge(edge.getEdge(), edge.getDelay()));
-        }
-    }
-
-    public void append(FlowOverTimePath path) {
-        for (FlowOverTimeEdge edge : path) {
-            addLast(new FlowOverTimeEdge(edge.getEdge(), edge.getDelay()));
+            add(edge);
         }
     }
 
@@ -76,14 +71,15 @@ public class FlowOverTimeEdgeSequence extends LinkedList<FlowOverTimeEdge> {
         boolean first = true;
         for (FlowOverTimeEdge edge : edgeSequence) {
             if (first) {
-                addLast(new FlowOverTimeEdge(edge.getEdge(), time));
+                add(new FlowOverTimeEdge(edge.getEdge(), time));
                 first = false;
             } else {
-                addLast(new FlowOverTimeEdge(edge.getEdge(), edge.getDelay()));
+                add(edge);
             }
         }
     }
 
+    @Deprecated
     public void append(FlowOverTimePath path, int time) {
         boolean first = true;
         for (FlowOverTimeEdge edge : path) {
@@ -107,12 +103,99 @@ public class FlowOverTimeEdgeSequence extends LinkedList<FlowOverTimeEdge> {
     public int delay(FlowOverTimeEdge edge) {
         return edge.getDelay();
     }
-    
+
+    public FlowOverTimeEdge get(Edge edge) {
+        for (FlowOverTimeEdge e : this) {
+            if (e.getEdge().equals(edge)) {
+                return e;
+            }
+        }
+        return null;
+    }
+
+    public FlowOverTimeEdge get(IdentifiableIntegerMapping<Edge> transitTimes, Edge edge, int time) {
+        int t = 0;
+        for (FlowOverTimeEdge e : this) {
+            t += e.getDelay();
+            if (e.getEdge().equals(edge) && t == time) {
+                return e;
+            }
+            t += transitTimes.get(e.getEdge());
+        }
+        return null;
+    }
+
+    public FlowOverTimeEdge get(IdentifiableIntegerMapping<Edge> transitTimes, Node node, int time) {
+        int t = 0;
+        for (FlowOverTimeEdge e : this) {
+            t += e.getDelay();
+            if (e.getEdge().start().equals(node) && t - e.getDelay() <= time && time <= t) {
+                return e;
+            }
+            t += transitTimes.get(e.getEdge());
+        }
+        return null;
+    }
+
     public int length(IdentifiableIntegerMapping<Edge> transitTimes) {
         int result = 0;
+        for (FlowOverTimeEdge e : this) {
+            result += e.getDelay();
+            result += transitTimes.get(e.getEdge());
+        }
+        return result;
+    }
+
+    public int lengthUntil(IdentifiableIntegerMapping<Edge> transitTimes, FlowOverTimeEdge edge) {
+        int result = 0;
+        for (FlowOverTimeEdge e : this) {
+            result += e.getDelay();
+            if (edge == e) {
+                break;
+            }            
+            result += transitTimes.get(e.getEdge());
+        }
+        return result;
+    }
+
+    public int lengthUpTo(IdentifiableIntegerMapping<Edge> transitTimes, FlowOverTimeEdge edge) {
+        int result = 0;
+        for (FlowOverTimeEdge e : this) {
+            result += e.getDelay();
+            result += transitTimes.get(e.getEdge());
+            if (edge == e) {
+                break;
+            }
+        }
+        return result;
+    }
+
+    public FlowOverTimeEdgeSequence subsequence(FlowOverTimeEdge from, FlowOverTimeEdge to) {
+        return subsequence(from, to, false, false);
+    }
+
+    public FlowOverTimeEdgeSequence subsequence(FlowOverTimeEdge from, FlowOverTimeEdge to, boolean fromInclusive, boolean toInclusive) {
+        FlowOverTimeEdgeSequence result = new FlowOverTimeEdgeSequence();
+        result.setAmount(amount);
+        result.setRate(rate);
+        boolean copying = (from == null);
         for (FlowOverTimeEdge edge : this) {
-            result += edge.getDelay();
-            result += transitTimes.get(edge.getEdge());
+            if (copying && edge != to) {
+                result.add(edge);
+            } else if (copying && edge == to) {
+                if (toInclusive) {
+                    result.add(edge);
+                }
+                break;
+            } else if (!copying && edge == from) {
+                copying = true;
+            }
+        }
+        if (fromInclusive && from != null) {
+            result.addFirst(from);
+        }
+        if (toInclusive && to != null) {
+            result.addLast(to);
         }
         return result;
     }
