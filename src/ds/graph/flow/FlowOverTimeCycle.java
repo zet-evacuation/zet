@@ -40,20 +40,7 @@ public class FlowOverTimeCycle extends FlowOverTimeEdgeSequence {
 
     public FlowOverTimeCycle(FlowOverTimeEdgeSequence edgeSequence, int offset) {
         super(edgeSequence);
-        this.offset = offset;
-    }
-
-    @Override
-    public FlowOverTimeEdge get(IdentifiableIntegerMapping<Edge> transitTimes, Edge edge, int time) {
-        int t = offset;
-        for (FlowOverTimeEdge e : this) {
-            t += e.getDelay();
-            if (e.getEdge().equals(edge) && t == time) {
-                return e;
-            }
-            t += transitTimes.get(e.getEdge());
-        }
-        return null;
+        //this.offset = offset;
     }
 
     public int getOffset() {
@@ -63,7 +50,7 @@ public class FlowOverTimeCycle extends FlowOverTimeEdgeSequence {
     public void setOffset(int offset) {
         this.offset = offset;
     }
-
+/*
     @Override
     public int length(IdentifiableIntegerMapping<Edge> transitTimes) {
         int result = offset;
@@ -99,7 +86,7 @@ public class FlowOverTimeCycle extends FlowOverTimeEdgeSequence {
         }
         return result;
     }
-
+*/
     /**
      * Returns a String consisting of the rate, the amount and a description
      * of the path that is described in {@link DynamicPath}.

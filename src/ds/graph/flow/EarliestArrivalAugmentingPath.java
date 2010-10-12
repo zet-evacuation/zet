@@ -77,14 +77,14 @@ public class EarliestArrivalAugmentingPath extends LinkedList<NodeTimePair> {
                     continue;
                 }
                 if (previous == first) {
-                    dpf.addLast(new FlowOverTimeEdge(network.getEdge(previous.getNode(), ntp.getNode(), previous.getEnd(), ntp.getStart()), previous.getEnd()));
+                    dpf.addLast(new FlowOverTimeEdge(network.getEdge(previous.getNode(), ntp.getNode(), previous.getEnd(), ntp.getStart()), previous.getEnd(), previous.getEnd()));
                     //dpf.getDynamicPath().addLastEdge(network.getEdge(previous.getNode(), ntp.getNode(), previous.getEnd(), ntp.getStart()), previous.getEnd());
                 } else {
                     //System.out.println("Edges: " + network.getEdges(previous.getNode(), ntp.getNode()));
                     //for (Edge edge : network.getEdges(previous.getNode(), ntp.getNode())) {
                     //    System.out.println("Edge: " + edge + " TT = " + network.transitTimes().get(edge));
                     //}
-                    dpf.addLast(new FlowOverTimeEdge(network.getEdge(previous.getNode(), ntp.getNode(), previous.getEnd(), ntp.getStart()), previous.getEnd() - previous.getStart()));
+                    dpf.addLast(new FlowOverTimeEdge(network.getEdge(previous.getNode(), ntp.getNode(), previous.getEnd(), ntp.getStart()), previous.getEnd() - previous.getStart(), previous.getEnd()));
                     //dpf.getDynamicPath().addLastEdge(network.getEdge(previous.getNode(), ntp.getNode(), previous.getEnd(), ntp.getStart()), previous.getEnd() - previous.getStart());
                 }
                 previous = ntp;                
