@@ -431,10 +431,10 @@ public class ChainDecomposition2 {
                 edgeReached = true;
                 continue;
             }
-            t += network.transitTimes().get(e.getEdge());
             if (edgeReached) {
-                result.add(new FlowOverTimeEdge(e.getEdge(), e.getDelay()));
+                result.add(new FlowOverTimeEdge(e.getEdge(), e.getDelay(), t));
             }
+            t += network.transitTimes().get(e.getEdge());
         }
         return result;
     }
@@ -483,8 +483,9 @@ public class ChainDecomposition2 {
             if (e.getEdge().equals(edge) && t == time) {
                 break;
             }
+            result.add(new FlowOverTimeEdge(e.getEdge(), e.getDelay(), t));
             t += network.transitTimes().get(e.getEdge());
-            result.add(new FlowOverTimeEdge(e.getEdge(), e.getDelay()));
+            
             //result.getDynamicPath().addLastEdge(e, path.delay(e));
         }
         return result;        

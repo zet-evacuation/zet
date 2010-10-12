@@ -30,13 +30,20 @@ import ds.graph.IdentifiableIntegerMapping;
 public class FlowOverTimeEdge implements Cloneable {
     
     private int delay;
+    private int time;
     private Edge edge;
 
     public FlowOverTimeEdge(Edge edge, int delay) {
         this.edge = edge;
         this.delay = delay;
     }
-    
+
+    public FlowOverTimeEdge(Edge edge, int delay, int time) {
+        this.edge = edge;
+        this.delay = delay;
+        this.time = time;
+    }
+
     public int length(IdentifiableIntegerMapping<Edge> transitTimes) {
         return delay + transitTimes.get(edge);
     }
@@ -57,8 +64,17 @@ public class FlowOverTimeEdge implements Cloneable {
         this.edge = edge;
     }
 
-    public FlowOverTimeEdge clone() {
-        return new FlowOverTimeEdge(edge, delay);
+    public int getTime() {
+        return time;
+    }
+
+    public void setTime(int time) {
+        this.time = time;
+    }
+
+    @Override
+    protected FlowOverTimeEdge clone() {
+        return new FlowOverTimeEdge(edge, delay, time);
     }
     
     @Override
@@ -89,6 +105,6 @@ public class FlowOverTimeEdge implements Cloneable {
     
     @Override
     public String toString() {
-        return String.format("(%1$s, %2$s)", delay, edge);
+        return String.format("(%1$s, %2$s)", time, edge);
     }
 }

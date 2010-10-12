@@ -60,6 +60,7 @@ public class FlowOverTimePath extends FlowOverTimeEdgeSequence /*extends StaticP
         super(edgeSequence);
     }
 
+    @Deprecated
     public FlowOverTimePath(DynamicPath path, int rate, int amount) {
         // super(path, rate);
         //if (path == null) {
@@ -105,6 +106,7 @@ public class FlowOverTimePath extends FlowOverTimeEdgeSequence /*extends StaticP
         return getFirstEdge().getEdge();
     }
 
+    @Deprecated
     public void addLastEdge(Edge edge, int delay) {
         addLast(new FlowOverTimeEdge(edge, delay));
     }

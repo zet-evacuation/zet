@@ -43,11 +43,11 @@ import java.util.Queue;
  */
 public class NewChainDecomposition extends Algorithm<ChainDecompositionProblem, PathBasedFlowOverTime> {
 
-    private static final boolean DEBUG = true;
+    private static final boolean DEBUG = false;
     private transient LinkedList<FlowOverTimeEdgeSequence> complete;
     private transient DynamicResidualNetwork network;
-    private transient IdentifiableObjectMapping<Edge, Queue[]> pathsUsingEdge;
-    private transient IdentifiableObjectMapping<Node, Queue[]> pathsUsingNode;
+    private transient IdentifiableObjectMapping<Edge, Queue[]> sequencesUsingEdge;
+    private transient IdentifiableObjectMapping<Node, Queue[]> sequencesUsingNode;
     private transient IdentifiableIntegerMapping<Edge> transitTimes;
     private transient Deque<FlowOverTimeEdgeSequence> sequences;
 
@@ -55,67 +55,87 @@ public class NewChainDecomposition extends Algorithm<ChainDecompositionProblem, 
     protected PathBasedFlowOverTime runAlgorithm(ChainDecompositionProblem problem) {
         complete = new LinkedList<FlowOverTimeEdgeSequence>();
         network = problem.getNetwork();
-        pathsUsingEdge = new IdentifiableObjectMapping<Edge, Queue[]>(network.edges(), Queue[].class);
-        pathsUsingNode = new IdentifiableObjectMapping<Node, Queue[]>(network.nodes(), Queue[].class);
+        sequencesUsingEdge = new IdentifiableObjectMapping<Edge, Queue[]>(network.edges(), Queue[].class);
+        sequencesUsingNode = new IdentifiableObjectMapping<Node, Queue[]>(network.nodes(), Queue[].class);
         transitTimes = problem.getNetwork().transitTimes();
+
+        for (FlowOverTimeEdgeSequence edgeSequence : problem.getEdgeSequences()) {
+            int time = 0;
+            for (FlowOverTimeEdge edge : edgeSequence) {
+                time += edge.getDelay();
+                edge.setTime(time);
+                time += transitTimes.get(edge.getEdge());
+            }
+        }
 
         // Remove all cycles from the edge sequences and store them for uncrossing
         for (FlowOverTimeEdgeSequence edgeSequence : problem.getEdgeSequences()) {
             FlowOverTimeCycle cycle = extractCycle(edgeSequence);
             while (cycle != null) {
                 addSequenceToUsageLists(cycle);
-                System.out.println("Cycle: " + cycle);
+                if (DEBUG) {
+                    System.out.println("Cycle: " + cycle);
+                }
                 cycle = extractCycle(edgeSequence);
             }
         }
 
         // We have removed the cycles for the edge sequences now; what remains are residual paths
         sequences = new LinkedList(problem.getEdgeSequences());
+
+
         while (!sequences.isEmpty()) {
-            System.out.println("Sequences: " + sequences);
-            System.out.println("Complete: " + complete);
+            if (DEBUG) {
+                System.out.println("Sequences: " + sequences);
+                System.out.println("Complete: " + complete);
+            }
             FlowOverTimeEdgeSequence sequence = sequences.poll();
 
             // Look for the first reverse edge / node with negative waiting time
-            FlowOverTimeEdge reverseEdge = null;
-            boolean waiting = false;
+            FlowOverTimeEdge currentEdge = null;
+            boolean reverseEdge = false, waiting = false;
+            int lastArrival = 0;
             for (FlowOverTimeEdge edge : sequence) {
                 if (network.isReverseEdge(edge.getEdge())) {
-                    reverseEdge = edge;
+                    currentEdge = edge;
+                    reverseEdge = true;
                     break;
-                } else if (sequence.delay(edge) < 0) {
-                    reverseEdge = edge;
+                } else if (lastArrival > edge.getTime()) {                    
                     waiting = true;
                     break;
                 }
+                currentEdge = edge;
+                lastArrival = edge.getTime();
             }
 
             // If we do not find any, then residual path is a normal path
-            if (reverseEdge == null && !waiting) {
+            if (!reverseEdge && !waiting) {
                 // Register the path for uncrossing purposes
                 addSequenceToUsageLists(sequence);
                 // Add it to the result
                 complete.add(sequence);
-            } else if (reverseEdge != null && !waiting) {
-                Edge edge = network.reverseEdge(reverseEdge.getEdge());
-                int normalTime = sequence.lengthUpTo(transitTimes, reverseEdge);
+            } else if (reverseEdge && !waiting) {
+                Edge edge = network.reverseEdge(currentEdge.getEdge());
+                int normalTime = sequence.lengthUpTo(transitTimes, currentEdge);
                 //System.out.println("Partner: " + pathsUsingEdge.get(edge) + " " + edge);
-                Queue<FlowOverTimeEdgeSequence> uncrossingPartners = pathsUsingEdge.get(edge)[normalTime];
+                Queue<FlowOverTimeEdgeSequence> uncrossingPartners = sequencesUsingEdge.get(edge)[normalTime];
                 do {
                     FlowOverTimeEdgeSequence partner = uncrossingPartners.peek();
-                    FlowOverTimeEdge normalEdge = partner.get(transitTimes, edge, normalTime);
-                    uncrossSequences(sequence, partner, reverseEdge, normalEdge);
+                    FlowOverTimeEdge normalEdge = partner.get(edge, normalTime);
+                    uncrossSequences(sequence, partner, currentEdge, normalEdge);
                 } while (sequence.getRate() > 0);
             } else {
                 // Get the first node at which negative waiting occurs
-                int t = sequence.lengthUntil(transitTimes, reverseEdge) - reverseEdge.getDelay();
-                Queue<FlowOverTimeEdgeSequence> uncrossingPartners = pathsUsingNode.get(reverseEdge.getEdge().start())[t - 1];
+                int t = sequence.lengthUpTo(transitTimes, currentEdge);
+                Queue<FlowOverTimeEdgeSequence> uncrossingPartners = sequencesUsingNode.get(currentEdge.getEdge().end())[t - 1];
                 do {
                     FlowOverTimeEdgeSequence partner = uncrossingPartners.peek();
-                    uncrossSequences(sequence, partner, reverseEdge.getEdge().start(), reverseEdge, partner.get(transitTimes, reverseEdge.getEdge().start(), t - 1), t);
+                    uncrossSequences2(sequence, partner, currentEdge, partner.get(transitTimes, currentEdge.getEdge().end(), t - 1));
                 } while (sequence.getRate() > 0);
             }
-            System.out.println("");
+            if (DEBUG) {
+                System.out.println("");
+            }
         }
 
         PathBasedFlowOverTime pathFlow = new PathBasedFlowOverTime();
@@ -125,45 +145,37 @@ public class NewChainDecomposition extends Algorithm<ChainDecompositionProblem, 
         return pathFlow;
     }
 
-    protected void addSequenceToUsageLists(FlowOverTimeEdgeSequence path) {
-        int time = 0;
-        if (path instanceof FlowOverTimeCycle) {
-            time = ((FlowOverTimeCycle) path).getOffset();
-        }
-        for (FlowOverTimeEdge edge : path) {
-            for (int t = time; t < time + edge.getDelay(); t++) {
-                if (!pathsUsingNode.isDefinedFor(edge.getEdge().start())) {
-                    pathsUsingNode.set(edge.getEdge().start(), new LinkedList[network.getTimeHorizon()]);
+    protected void addSequenceToUsageLists(FlowOverTimeEdgeSequence sequence) {
+        int lastArrival = Integer.MAX_VALUE;
+        for (FlowOverTimeEdge edge : sequence) {
+            for (int t = lastArrival; t < edge.getTime(); t++) {
+                if (!sequencesUsingNode.isDefinedFor(edge.getEdge().start())) {
+                    sequencesUsingNode.set(edge.getEdge().start(), new LinkedList[network.getTimeHorizon()]);
                 }
-                if (pathsUsingNode.get(edge.getEdge().start())[t] == null) {
-                    pathsUsingNode.get(edge.getEdge().start())[t] = new LinkedList();
+                if (sequencesUsingNode.get(edge.getEdge().start())[t] == null) {
+                    sequencesUsingNode.get(edge.getEdge().start())[t] = new LinkedList();
                 }
-                pathsUsingNode.get(edge.getEdge().start())[t].add(path);
+                sequencesUsingNode.get(edge.getEdge().start())[t].add(sequence);
             }
-            time += edge.getDelay();
-            if (!pathsUsingEdge.isDefinedFor(edge.getEdge())) {
-                pathsUsingEdge.set(edge.getEdge(), new LinkedList[network.getTimeHorizon()]);
+            if (!sequencesUsingEdge.isDefinedFor(edge.getEdge())) {
+                sequencesUsingEdge.set(edge.getEdge(), new LinkedList[network.getTimeHorizon()]);
             }
-            if (pathsUsingEdge.get(edge.getEdge())[time] == null) {
-                pathsUsingEdge.get(edge.getEdge())[time] = new LinkedList();
+            if (sequencesUsingEdge.get(edge.getEdge())[edge.getTime()] == null) {
+                sequencesUsingEdge.get(edge.getEdge())[edge.getTime()] = new LinkedList();
             }
-            pathsUsingEdge.get(edge.getEdge())[time].add(path);
-            time += network.transitTimes().get(edge.getEdge());
+            sequencesUsingEdge.get(edge.getEdge())[edge.getTime()].add(sequence);
+            lastArrival = edge.getTime() + transitTimes.get(edge.getEdge());
         }
     }
 
     protected void removeSequenceFromUsageLists(FlowOverTimeEdgeSequence sequence) {
-        int time = 0;
-        if (sequence instanceof FlowOverTimeCycle) {
-            time = ((FlowOverTimeCycle) sequence).getOffset();
-        }
+        int lastArrival = Integer.MAX_VALUE;
         for (FlowOverTimeEdge edge : sequence) {
-            for (int t = time; t < time + edge.getDelay(); t++) {
-                pathsUsingNode.get(edge.getEdge().start())[t].remove(sequence);
+            for (int t = lastArrival; t < edge.getTime(); t++) {
+                sequencesUsingNode.get(edge.getEdge().start())[t].remove(sequence);
             }
-            time += sequence.delay(edge);
-            pathsUsingEdge.get(edge.getEdge())[time].remove(sequence);
-            time += network.transitTimes().get(edge.getEdge());
+            sequencesUsingEdge.get(edge.getEdge())[edge.getTime()].remove(sequence);
+            lastArrival = edge.getTime() + network.transitTimes().get(edge.getEdge());
         }
     }
 
@@ -172,19 +184,18 @@ public class NewChainDecomposition extends Algorithm<ChainDecompositionProblem, 
         IdentifiableIntegerMapping<Node> arrivalTime = new IdentifiableIntegerMapping<Node>(network.nodes());
         arrivalTime.initializeWith(-1);
         Node node = null;
-        int time = 0;
+        int lastArrivalTime = 0;
         for (FlowOverTimeEdge edge : edgeSequence) {
             Edge e = edge.getEdge();
             if (arrivalTime.get(e.start()) != -1) {
                 node = e.start();
                 break;
             }
-            arrivalTime.set(e.start(), time);
-            time += edge.getDelay();
-            time += transitTimes.get(edge.getEdge());
+            arrivalTime.set(e.start(), lastArrivalTime);
+            lastArrivalTime = edge.getTime() + transitTimes.get(edge.getEdge());
         } // The first node that is visited twice is now stored in node, if there is such a node
         if (node != null) {
-            // Split the sequence at the points where the node is visited the first and second times
+            // Split the sequence where the node is visited the first and the second time
             FlowOverTimeEdgeSequence[] sequenceParts = new FlowOverTimeEdgeSequence[3];
             for (int i = 0; i < 3; i++) {
                 sequenceParts[i] = new FlowOverTimeEdgeSequence();
@@ -199,11 +210,9 @@ public class NewChainDecomposition extends Algorithm<ChainDecompositionProblem, 
             // Remove the part in between the occurences of the node
             edgeSequence.clear();
             edgeSequence.append(sequenceParts[0]);
-            edgeSequence.append(sequenceParts[2], time - arrivalTime.get(node) + sequenceParts[2].delay(sequenceParts[2].getFirst()));
+            edgeSequence.append(sequenceParts[2]);//, time - arrivalTime.get(node) + sequenceParts[2].delay(sequenceParts[2].getFirst()));
             // Return the cycle
-            //return new FlowOverTimeCycle(sequences[1], arrivalTime.get(node));
-            sequenceParts[1].getFirstEdge().setDelay(sequenceParts[1].getFirstEdge().getDelay() + arrivalTime.get(node) - time);
-            return new FlowOverTimeCycle(sequenceParts[1], time);
+            return new FlowOverTimeCycle(sequenceParts[1], 0);
         } else {
             return null;
         }
@@ -223,18 +232,22 @@ public class NewChainDecomposition extends Algorithm<ChainDecompositionProblem, 
         partner.setRate(partner.getRate() - rate);
         if (partner.getRate() == 0) {
             removeSequenceFromUsageLists(partner);
-            if (complete.contains(partner)) {
+            if (DEBUG && complete.contains(partner)) {
                 System.out.println(" Removing from complete: " + partner);
             }
             complete.remove(partner);
         }
         if (!start2.isEmpty()) {
             addSequenceToUsageLists(start2);
-            System.out.println(" Adding to sequences: " + start2);
+            if (DEBUG) {
+                System.out.println(" Adding to sequences: " + start2);
+            }
             sequences.addFirst(start2);
         }
         if (!start1.isEmpty()) {
-            System.out.println(" Adding to sequences: " + start1);
+            if (DEBUG) {
+                System.out.println(" Adding to sequences: " + start1);
+            }
             addSequenceToUsageLists(start1);
             sequences.addFirst(start1);
         }
@@ -245,7 +258,8 @@ public class NewChainDecomposition extends Algorithm<ChainDecompositionProblem, 
             FlowOverTimeEdgeSequence baseTimeReference,
             FlowOverTimeEdgeSequence appendixTimeReference) {
         System.out.println("  Join:\n   " + base + "\n   " + baseTimeReference + "\n   " + appendix + "\n   " + appendixTimeReference);
-        if (!appendix.isEmpty()) {
+        base.append(appendix);    
+        /*if (!appendix.isEmpty()) {
             int appendixStart = appendixTimeReference.lengthUntil(transitTimes, appendix.getFirstEdge());
             int baseEnd;
             if (baseTimeReference != null) {
@@ -259,7 +273,7 @@ public class NewChainDecomposition extends Algorithm<ChainDecompositionProblem, 
             }
             System.out.println("    " + appendixStart + " " + baseEnd);
             base.append(appendix, appendixStart - baseEnd);
-        }
+        }*/
     }
 
     private void uncrossSequences(FlowOverTimeEdgeSequence sequenceWithReverseEdge, FlowOverTimeEdgeSequence partner, FlowOverTimeEdge reverseEdge, FlowOverTimeEdge normalEdge) {
@@ -292,77 +306,33 @@ public class NewChainDecomposition extends Algorithm<ChainDecompositionProblem, 
             System.out.println(" Partner is cleaned to:\n  " + start2 + "\n  " + end2);
         }
         if (partner instanceof FlowOverTimeCycle) {
-            join(end2, start2, partner, partner);
-            join(start1, end2, sequenceWithReverseEdge, partner);
-            //join(start1, start2, sequenceWithReverseEdge, partner);
-            join(start1, end1, null, sequenceWithReverseEdge);
+            start1.append(end2);
+            start1.append(start2);
+            start1.append(end1);
+            start2.clear();
         } else {
-            /*
-            if (!end2.isEmpty()) {
-                int secondStart = partner.lengthUntil(transitTimes, end2.getFirstEdge());
-                int firstEnd;
-                if (!start1.isEmpty()) {
-                    firstEnd = sequenceWithReverseEdge.lengthUpTo(transitTimes, start1.getLastEdge());
-                } else {
-                    firstEnd = getArrivalTime(sequenceWithReverseEdge, reverseEdge.getEdge().start());
-                }
-                start1.append(end2, secondStart - firstEnd);
-            }*/
             join(start1, end2, sequenceWithReverseEdge, partner);
             join(start2, end1, partner, sequenceWithReverseEdge);
-            /*
-            if (!end1.isEmpty()) {
-                int secondStart = sequenceWithReverseEdge.lengthUntil(transitTimes, end1.getFirstEdge());
-                int firstEnd = 0;
-                if (!start2.isEmpty()) {
-                    firstEnd = partner.lengthUpTo(transitTimes, start2.getLastEdge());
-                } else {
-                    firstEnd = getArrivalTime(partner, lastEdge.start());
-                }
-                start2.append(end1, secondStart - firstEnd);
-            }*/
         }
         adjustRates(sequenceWithReverseEdge, partner, start1, start2);
     }
 
-    private void uncrossSequences(FlowOverTimeEdgeSequence pathWithReverseNode, FlowOverTimeEdgeSequence partner, Node reverseNode, FlowOverTimeEdge reverseNodeEdge, FlowOverTimeEdge partnerEdge, int t) {
-        FlowOverTimeEdgeSequence start1 = pathWithReverseNode.subsequence(null, reverseNodeEdge);//
+    private void uncrossSequences2(FlowOverTimeEdgeSequence pathWithReverseNode, FlowOverTimeEdgeSequence partner, FlowOverTimeEdge reverseNodeEdge, FlowOverTimeEdge partnerEdge) {
+        if (DEBUG) {
+            System.out.println("Path is: " + pathWithReverseNode);
+            System.out.println("Partner is: " + partner);
+        }
+        FlowOverTimeEdgeSequence start1 = pathWithReverseNode.subsequence(null, reverseNodeEdge, false, true);//
         FlowOverTimeEdgeSequence start2 = partner.subsequence(null, partnerEdge);// new FlowOverTimeEdgeSequence(getPathUntil(partner, reverseNode, t - 1));
-        FlowOverTimeEdgeSequence end1 = pathWithReverseNode.subsequence(reverseNodeEdge, null, true, false);
+        FlowOverTimeEdgeSequence end1 = pathWithReverseNode.subsequence(reverseNodeEdge, null);
         FlowOverTimeEdgeSequence end2 = partner.subsequence(partnerEdge, null, true, false);
         if (DEBUG) {
             System.out.println(" Path is split to:\n  " + start1 + "\n  " + end1);
             System.out.println(" Partner is split to:\n  " + start2 + "\n  " + end2);
         }
-        if (!end2.isEmpty()) {
-            int time = partner.lengthUntil(transitTimes, end2.getFirstEdge()) - pathWithReverseNode.lengthUntil(transitTimes, reverseNodeEdge) - reverseNodeEdge.getDelay();
-            start1.append(end2, time);
-        }
-        if (!end1.isEmpty()) {
-            int time = 0;
-            if (!start2.isEmpty()) {
-                time = pathWithReverseNode.lengthUntil(transitTimes, end1.getFirstEdge()) - partner.lengthUpTo(transitTimes, start2.getLastEdge());
-                if (DEBUG) {
-                    System.out.println(" Delay: " + time + " " + pathWithReverseNode.lengthUntil(transitTimes, end1.getFirstEdge()) + " " + partner.lengthUpTo(transitTimes, start2.getLastEdge()));
-                }
-            } else {
-                time = pathWithReverseNode.lengthUntil(transitTimes, end1.getFirstEdge()) - getArrivalTime(partner, reverseNode);
-            }
-            start2.append(end1, time);
-        }
+        start1.append(end2);
+        start2.append(end1);
         adjustRates(pathWithReverseNode, partner, start1, start2);
-    }
-
-    protected int getArrivalTime(FlowOverTimeEdgeSequence path, Node node) {
-        int time = 0;
-        for (FlowOverTimeEdge e : path) {
-            if (e.getEdge().start().equals(node)) {
-                return time;
-            }
-            time += path.delay(e);
-            time += network.transitTimes().get(e.getEdge());
-        }
-        return -1;
     }
 
     public static void main(String[] args) {
@@ -384,24 +354,24 @@ public class NewChainDecomposition extends Algorithm<ChainDecompositionProblem, 
                 IdentifiableConstantMapping.UNIT_NODE_MAPPING,
                 20);
         FlowOverTimeEdgeSequence sequence = new FlowOverTimeEdgeSequence();
-        sequence.add(new FlowOverTimeEdge(rn.getEdge(rn.getNode(0), rn.getNode(1)), 0));
-        sequence.add(new FlowOverTimeEdge(rn.getEdge(rn.getNode(1), rn.getNode(2)), 1));
-        sequence.add(new FlowOverTimeEdge(rn.getEdge(rn.getNode(2), rn.getNode(3)), 0));
-        sequence.add(new FlowOverTimeEdge(rn.getEdge(rn.getNode(3), rn.getNode(1)), 0));
-        sequence.add(new FlowOverTimeEdge(rn.getEdge(rn.getNode(1), rn.getNode(4)), 1));
-        sequence.add(new FlowOverTimeEdge(rn.getEdge(rn.getNode(4), rn.getNode(5)), 0));
-        sequence.add(new FlowOverTimeEdge(rn.getEdge(rn.getNode(5), rn.getNode(1)), 0));
-        sequence.add(new FlowOverTimeEdge(rn.getEdge(rn.getNode(1), rn.getNode(6)), 0));
+        sequence.add(new FlowOverTimeEdge(rn.getEdge(rn.getNode(0), rn.getNode(1)), 0, 0));
+        sequence.add(new FlowOverTimeEdge(rn.getEdge(rn.getNode(1), rn.getNode(2)), 1, 2));
+        sequence.add(new FlowOverTimeEdge(rn.getEdge(rn.getNode(2), rn.getNode(3)), 0, 3));
+        sequence.add(new FlowOverTimeEdge(rn.getEdge(rn.getNode(3), rn.getNode(1)), 0, 4));
+        sequence.add(new FlowOverTimeEdge(rn.getEdge(rn.getNode(1), rn.getNode(4)), 1, 6));
+        sequence.add(new FlowOverTimeEdge(rn.getEdge(rn.getNode(4), rn.getNode(5)), 0, 7));
+        sequence.add(new FlowOverTimeEdge(rn.getEdge(rn.getNode(5), rn.getNode(1)), 0, 8));
+        sequence.add(new FlowOverTimeEdge(rn.getEdge(rn.getNode(1), rn.getNode(6)), 0, 9));
 
         FlowOverTimeEdgeSequence sequence2 = new FlowOverTimeEdgeSequence();
-        sequence2.add(new FlowOverTimeEdge(rn.getEdge(rn.getNode(0), rn.getNode(2)), 2));
-        sequence2.add(new FlowOverTimeEdge(rn.reverseEdge(rn.getEdge(rn.getNode(1), rn.getNode(2))), 0));
-        sequence2.add(new FlowOverTimeEdge(rn.getEdge(rn.getNode(1), rn.getNode(6)), 0));
+        sequence2.add(new FlowOverTimeEdge(rn.getEdge(rn.getNode(0), rn.getNode(2)), 2, 2));
+        sequence2.add(new FlowOverTimeEdge(rn.reverseEdge(rn.getEdge(rn.getNode(1), rn.getNode(2))), 0, 3));
+        sequence2.add(new FlowOverTimeEdge(rn.getEdge(rn.getNode(1), rn.getNode(6)), 0, 2));
 
         FlowOverTimeEdgeSequence sequence3 = new FlowOverTimeEdgeSequence();
-        sequence3.add(new FlowOverTimeEdge(rn.getEdge(rn.getNode(0), rn.getNode(5)), 7));
-        sequence3.add(new FlowOverTimeEdge(rn.reverseEdge(rn.getEdge(rn.getNode(4), rn.getNode(5))), 0));
-        sequence3.add(new FlowOverTimeEdge(rn.getEdge(rn.getNode(4), rn.getNode(6)), 0));
+        sequence3.add(new FlowOverTimeEdge(rn.getEdge(rn.getNode(0), rn.getNode(5)), 7, 7));
+        sequence3.add(new FlowOverTimeEdge(rn.reverseEdge(rn.getEdge(rn.getNode(4), rn.getNode(5))), 0, 8));
+        sequence3.add(new FlowOverTimeEdge(rn.getEdge(rn.getNode(4), rn.getNode(6)), 0, 7));
 
         LinkedList<FlowOverTimeEdgeSequence> edgeSequences = new LinkedList<FlowOverTimeEdgeSequence>();
         edgeSequences.add(sequence);
