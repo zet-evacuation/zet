@@ -61,6 +61,11 @@ public class IdentifiableConstantMapping<D extends Identifiable> extends Identif
     }
 
     @Override
+    public int maximum() {
+        return constant;
+    }
+
+    @Override
     public int minimum(Iterable<D> identifiableObjects) {
         return constant;
     }
