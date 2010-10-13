@@ -18,7 +18,6 @@
  * SEAAPAlgorithm.java
  *
  */
-
 package algo.graph.dynamicflow.eat;
 
 import ds.graph.flow.EarliestArrivalAugmentingPath;
@@ -43,9 +42,8 @@ public class SEAAPAlgorithm extends Algorithm<EarliestArrivalFlowProblem, FlowOv
     private EarliestArrivalAugmentingPath path;
     private EarliestArrivalAugmentingPathAlgorithm pathAlgorithm;
     private EarliestArrivalAugmentingPathProblem pathProblem;
-
     private boolean autoConvert = true;
-    
+
     public SEAAPAlgorithm() {
         pathAlgorithm = new EarliestArrivalAugmentingPathAlgorithm();
     }
@@ -54,18 +52,18 @@ public class SEAAPAlgorithm extends Algorithm<EarliestArrivalFlowProblem, FlowOv
         pathAlgorithm = new EarliestArrivalAugmentingPathAlgorithm();
         autoConvert = b;
     }
-    
+
     @Override
     protected FlowOverTime runAlgorithm(EarliestArrivalFlowProblem problem) {
         if (problem.getTotalSupplies() == 0) {
             drn = new DynamicResidualNetwork(problem.getNetwork(), problem.getEdgeCapacities(), problem.getNodeCapacities(), problem.getTransitTimes(), problem.getSources(), problem.getSupplies(), problem.getTimeHorizon());
-            paths = new LinkedList<EarliestArrivalAugmentingPath>(); 
+            paths = new LinkedList<EarliestArrivalAugmentingPath>();
             return new FlowOverTime(drn, paths);
         }
         flowUnitsSent = 0;
-        calculateShortestPathLengths();        
+        calculateShortestPathLengths();
         drn = new DynamicResidualNetwork(problem.getNetwork(), problem.getEdgeCapacities(), problem.getNodeCapacities(), problem.getTransitTimes(), problem.getSources(), problem.getSupplies(), problem.getTimeHorizon());
-        pathProblem = new EarliestArrivalAugmentingPathProblem(drn, drn.getSuperSource(), problem.getSink(), getNextDistance(0) + 1);        
+        pathProblem = new EarliestArrivalAugmentingPathProblem(drn, drn.getSuperSource(), problem.getSink(), getNextDistance(0) + 1);
         pathAlgorithm.setProblem(pathProblem);
         calculateEarliestArrivalAugmentingPath();
         paths = new LinkedList<EarliestArrivalAugmentingPath>();
@@ -77,28 +75,16 @@ public class SEAAPAlgorithm extends Algorithm<EarliestArrivalFlowProblem, FlowOv
             calculateEarliestArrivalAugmentingPath();
         }
         if (autoConvert) {
-					// save to x-stream
-//					PrintWriter output;
-//			try {
-//				output = new PrintWriter( new File( "debug_dynamic_residual_network.txt" ) );
-//				XStream xml_convert = new XStream();
-//				xml_convert.toXML( drn, output );
-//				output = new PrintWriter( new File( "debug_paths.txt"));
-//				xml_convert.toXML( paths, output );
-//			} catch( FileNotFoundException ex ) {
-//				System.err.println( "XSTREAM-out did not work." );
-//			}
-					fireEvent( new AlgorithmStatusEvent( this, "INIT_PATH_DECOMPOSITION" ) );
-					FlowOverTime flow		= new FlowOverTime(drn, paths);
-				  return flow;
+            fireEvent(new AlgorithmStatusEvent(this, "INIT_PATH_DECOMPOSITION"));
+            FlowOverTime flow = new FlowOverTime(drn, paths);
+            return flow;
         } else {
             return null;
         }
     }
-    
     public LinkedList<EarliestArrivalAugmentingPath> paths;
     public DynamicResidualNetwork drn;
-    
+
     private void calculateEarliestArrivalAugmentingPath() {
         if (flowUnitsSent == getProblem().getTotalSupplies()) {
             path = new EarliestArrivalAugmentingPath();
@@ -121,28 +107,28 @@ public class SEAAPAlgorithm extends Algorithm<EarliestArrivalFlowProblem, FlowOv
             pathProblem.setTimeHorizon(pathProblem.getTimeHorizon() + 1);
         }
     }
-    
+
     private void calculateShortestPathLengths() {
         distances = new int[getProblem().getSources().size()];
         int index = 0;
+        Dijkstra dijkstra = new Dijkstra(getProblem().getNetwork(), getProblem().getTransitTimes(), getProblem().getSink(), true);
+        dijkstra.run();
         for (Node source : getProblem().getSources()) {
-            Dijkstra dijkstra = new Dijkstra(getProblem().getNetwork(), getProblem().getTransitTimes(), source);
-            dijkstra.run();
-            distances[index++] = dijkstra.getDistance(getProblem().getSink());
+            distances[index++] = dijkstra.getDistance(source);
         }
         Arrays.sort(distances);
     }
-    
+
     public int getCurrentArrivalTime() {
         return arrivalTime;
     }
-    
+
     private int getNextDistance(int currentDistance) {
         int index = Arrays.binarySearch(distances, currentDistance + 1);
         if (index >= 0) {
             return currentDistance + 1;
         } else {
-            return distances[-index - 1]; 
+            return distances[-index - 1];
         }
     }
 }
