@@ -368,4 +368,12 @@ public class IdentifiableIntegerMapping<D extends Identifiable> implements Clone
         builder.append(']');
         return builder.toString();
     }
+
+    public int maximum() {
+        int result = Integer.MIN_VALUE;
+        for (int i = 0; i < mapping.length; ++i) {
+            if (mapping[i] > result) result = mapping[i];
+        }
+        return result;
+    }
 }
