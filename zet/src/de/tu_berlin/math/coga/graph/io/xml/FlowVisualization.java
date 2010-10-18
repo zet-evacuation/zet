@@ -19,6 +19,8 @@ public class FlowVisualization {
 
 	public FlowVisualization( GraphView gv ) {
 		this.gv = gv;
+		flow = new EdgeBasedFlowOverTime( gv.getNetwork() );
+		//int maxFlowRate = 0;
 	}
 
 	public GraphView getGv() {

@@ -1,41 +1,30 @@
-/* zet evacuation tool copyright (c) 2007-09 zet evacuation team
- *
- * This program is free software; you can redistribute it and/or
- * as published by the Free Software Foundation; either version 2
- * of the License, or (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with this program; if not, write to the Free Software
- * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
- */
-/*
- * PreflowPushAlgorithm.java
- *
+/**
+ * GenericPushRelabelAlgorithm.java
+ * Created: Oct 5, 2010,5:46:52 PM
  */
 package algo.graph.staticflow.maxflow;
 
-import ds.graph.problem.MaximumFlowProblem;
+import algo.graph.Flags;
+import de.tu_berlin.math.coga.common.algorithm.Algorithm;
 import ds.graph.Edge;
 import ds.graph.IdentifiableIntegerMapping;
-import ds.graph.MaxHeap;
 import ds.graph.Node;
 import ds.graph.ResidualNetwork;
 import ds.graph.flow.MaximumFlow;
-import de.tu_berlin.math.coga.common.algorithm.Algorithm;
-import algo.graph.Flags;
+import ds.graph.problem.MaximumFlowProblem;
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.LinkedList;
+import java.util.Queue;
+
 
 /**
  *
- * @author Martin Groß
+ * @author Jan-Philipp Kappmeier
  */
-public class PreflowPushAlgorithm extends Algorithm<MaximumFlowProblem, MaximumFlow> {
+public class GenericPushRelabelAlgorithm extends Algorithm<MaximumFlowProblem, MaximumFlow> {
 	protected ResidualNetwork residualNetwork;
-	protected transient MaxHeap<Node, Integer> activeNodes;
+	//protected transient MaxHeap<Node, Integer> activeNodes;
 	protected transient IdentifiableIntegerMapping<Node> distanceLabels;
 	protected transient IdentifiableIntegerMapping<Node> excess;
 	private transient long totalExcess, startExcess;
@@ -44,14 +33,10 @@ public class PreflowPushAlgorithm extends Algorithm<MaximumFlowProblem, MaximumF
 	private transient int sumOfLabels;
 	private final transient int increasesBeforeOutput = 100;
 	private transient int progressOutputCounter = increasesBeforeOutput;
+	private HashSet<Node> activeNodes = new HashSet<Node>();
 
 	long pushes = 0;
 	long relabels = 0;
-
-
-	public ResidualNetwork getResidualNetwork() {
-		return residualNetwork;
-	}
 
 	@Override
 	protected MaximumFlow runAlgorithm( MaximumFlowProblem problem ) {
@@ -61,19 +46,40 @@ public class PreflowPushAlgorithm extends Algorithm<MaximumFlowProblem, MaximumF
 		return new MaximumFlow( getProblem(), residualNetwork.flow() );
 	}
 
-	Node sink;
 
 	protected void initializeDatastructures() {
-		activeNodes = new MaxHeap<Node, Integer>( getProblem().getNetwork().numberOfNodes() );
+		//activeNodes = new MaxHeap<Node, Integer>( getProblem().getNetwork().numberOfNodes() );
+		activeNodes = new HashSet<Node>( (int)Math.ceil( getProblem().getNetwork().numberOfNodes() * 1.25 ) );
+		//activeNodes = new TreeSet<Node>();
+
+
 		distanceLabels = new IdentifiableIntegerMapping<Node>( getProblem().getNetwork().numberOfNodes() );
+
 		excess = new IdentifiableIntegerMapping<Node>( getProblem().getNetwork().numberOfNodes() );
+		
 		residualNetwork = new ResidualNetwork( getProblem().getNetwork(), getProblem().getCapacities() );
-		sink = getProblem().getSink();
+
+		// init distance labels to real distances
+		distanceLabels.set( getProblem().getSource(), 0 );
+		Queue<Node> q = new LinkedList<Node>();
+		q.add( getProblem().getSource() );
+		int d = 1;
+		while( q.size() != 0 ) {
+			Node current = q.poll();
+			d = distanceLabels.get( current );
+			for( Node n : getProblem().getNetwork().predecessorNodes( current ) ) {
+				if( !distanceLabels.isDefinedFor( current ) ) {
+					distanceLabels.set( n, d+1 );
+					q.add( n );
+				}
+			}
+		}
+		distanceLabels.set( getProblem().getSource(), getProblem().getNetwork().numberOfNodes() );
 		for( Node source : getProblem().getSources() ) {
 			for( Edge edge : residualNetwork.outgoingEdges( source ) )
 				if( !getProblem().getSources().contains( edge.opposite( source ) ) )
 					augmentFlow( edge, getProblem().getCapacities().get( edge ) );
-			distanceLabels.set( source, getProblem().getNetwork().numberOfNodes() );
+			//distanceLabels.set( source, getProblem().getNetwork().numberOfNodes() );
 		}
 	}
 
@@ -109,31 +115,57 @@ public class PreflowPushAlgorithm extends Algorithm<MaximumFlowProblem, MaximumF
 
 	protected void preflowPush() {
 		while( !activeNodes.isEmpty() ) {
-			Node node = activeNodes.getMaximumObject();
-			boolean hasAdmissibleEdge = false;
-			for( Edge edge : residualNetwork.outgoingEdges( node ) )
+			// select one node
+			//Node node = activeNodes.getMaximumObject();
+			//Node node = activeNodes.first();
+			Iterator<Node> it = activeNodes.iterator();
+			it.hasNext();
+			Node node = it.next();
+
+			Edge admissible = null;
+
+			// push/relabel
+			// find admissible edge
+			for( Edge edge : residualNetwork.outgoingEdges( node ) ) {
 				if( isAdmissible( edge ) ) {
-					push( edge );
-					hasAdmissibleEdge = true;
+					admissible = edge;
 					break;
 				}
-			if( !hasAdmissibleEdge )
+			}
+			if( admissible != null ) {
+				push( admissible );
+			} else {
 				relabel( node );
+			}
+//			boolean hasAdmissibleEdge = false;
+//			for( Edge edge : residualNetwork.outgoingEdges( node ) )
+//				if( isAdmissible( edge ) ) {
+//					push( edge );
+//					hasAdmissibleEdge = true;
+//					break;
+//				}
+//			if( !hasAdmissibleEdge )
+//				relabel( node );
 			if( excess.get( node ) == 0 )
-				activeNodes.extractMax();
+				//activeNodes.extractMax();
+				activeNodes.remove( node );
 		}
 	}
 
-	protected void augmentFlow( final Edge edge, int amount ) {
+	protected boolean isAdmissible( Edge edge ) {
+		return distanceLabels.get( edge.start() ) == distanceLabels.get( edge.end() ) + 1;
+	}
 
+protected void augmentFlow( final Edge edge, int amount ) {
 		if( excess.get( edge.end() ) == 0 && !getProblem().getSinks().contains( edge.end() ) && amount > 0 )
-			activeNodes.insert( edge.end(), distanceLabels.get( edge.end() ) );
+			//activeNodes.insert( edge.end(), distanceLabels.get( edge.end() ) );
+			activeNodes.add( edge.end() );
 		residualNetwork.augmentFlow( edge, amount );
 		excess.decrease( edge.start(), amount );
 		if( getProblem().getSinks().contains( edge.end() ) || getProblem().getSources().contains( edge.end() ) ) {
 			if( isLogging() ) {
 				totalExcess -= amount;
-				/** The total excess changed, so print it if debug is activated. */
+				/* The total excess changed, so print it if debug is activated. */
 				if( Flags.PP )
 					System.out.println( "Total excess " + totalExcess + " Max Label: " + maxLabel + " Sum of Labels: " + sumOfLabels + " "
 									+ (sumOfLabels + (startExcess - totalExcess)) + " of " + done + "." );
@@ -144,35 +176,13 @@ public class PreflowPushAlgorithm extends Algorithm<MaximumFlowProblem, MaximumF
 				} else
 					progressOutputCounter++;
 			}
-			excess.increase( edge.end(), amount );
 		} else
 			excess.increase( edge.end(), amount );
-		if( edge.end().id() == sink.id() ) {
-//		if( pushes % 1000 == 0 )
-			//System.out.println( "Relabels: " + relabels + ", Pushes: " + pushes + ", Excess: " + excess.get( sink ) );
-			//System.out.println( "Pushed flow to sink." );
-		}
-	}
-
-	public long getPushes() {
-		return pushes;
-	}
-
-	public long getRelabels() {
-		return relabels;
-	}
-
-	
-
-	protected boolean isAdmissible( Edge edge ) {
-		return distanceLabels.get( edge.start() ) == distanceLabels.get( edge.end() ) + 1;
 	}
 
 	protected void push( Edge edge ) {
 		pushes++;
 		augmentFlow( edge, Math.min( residualNetwork.residualCapacities().get( edge ), excess.get( edge.start() ) ) );
-		//if( pushes % 1000 == 0 )
-		//	System.out.println( "Relabels: " + relabels + ", Pushes: " + pushes + ", Excess: " + excess.get( sink ) );
 	}
 
 	protected void relabel( Node node ) {
@@ -182,12 +192,9 @@ public class PreflowPushAlgorithm extends Algorithm<MaximumFlowProblem, MaximumF
 			if( min > distanceLabels.get( edge.end() ) + 1 )
 				min = distanceLabels.get( edge.end() ) + 1;
 		updateDistanceLabel( node, min );
-		//if( relabels % 1000 == 0 )
-		//	System.out.println( "Relabels: " + relabels + ", Pushes: " + pushes );
-
 	}
 
-	protected void updateDistanceLabel( Node node, int value ) {
+protected void updateDistanceLabel( Node node, int value ) {
 		if( isLogging() )
 			sumOfLabels -= distanceLabels.get( node );
 		distanceLabels.set( node, value );
@@ -206,8 +213,18 @@ public class PreflowPushAlgorithm extends Algorithm<MaximumFlowProblem, MaximumF
 					progressOutputCounter++;
 			maxLabel = Math.max( value, maxLabel );
 		}
-		distanceLabels.set( node, value );
-		if( activeNodes.contains( node ) )
-			activeNodes.increasePriority( node, value );
+		//distanceLabels.set( node, value );
+		//if( activeNodes.contains( node ) )
+		//	activeNodes.increasePriority( node, value );
 	}
+
+	public long getPushes() {
+		return pushes;
+	}
+
+	public long getRelabels() {
+		return relabels;
+	}
+
+
 }

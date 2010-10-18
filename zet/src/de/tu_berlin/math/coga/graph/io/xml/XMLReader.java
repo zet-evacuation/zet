@@ -7,12 +7,11 @@ package de.tu_berlin.math.coga.graph.io.xml;
 import algo.graph.dynamicflow.eat.EarliestArrivalFlowProblem;
 import com.thoughtworks.xstream.XStream;
 import com.thoughtworks.xstream.io.xml.DomDriver;
-import de.tu_berlin.math.coga.math.vectormath.Vector3;
 import ds.graph.Edge;
 import ds.graph.IdentifiableIntegerMapping;
-import ds.graph.IdentifiableObjectMapping;
 import ds.graph.Network;
 import ds.graph.Node;
+import io.FileTypeException;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -26,6 +25,14 @@ import java.util.List;
  * @author Martin Groß, Jan-Philipp Kappmeier
  */
 public class XMLReader {
+
+	public static enum XMLFileData {
+		Graph,
+		GraphView,
+		FlowVisualization,
+		NashFlow,
+		Invalid
+	}
 
 	/** The file that is readFlowVisualization. */
 	private File file;
@@ -103,6 +110,27 @@ public class XMLReader {
 		return result;
 	}
 
+	public GraphView readGraphView() throws FileNotFoundException, IOException {
+		BufferedReader reader = null;
+		GraphView result = null;
+		try {
+			reader = new BufferedReader( new FileReader( file ) );
+			xstream.alias( "graphLayout", GraphView.class );
+			xstream.setMode( XStream.NO_REFERENCES );
+			xstream.registerConverter( new ColorConverter() );
+			xstream.registerConverter( new FontConverter() );
+			xstream.registerConverter( new GraphViewConverter( xmlData ) );
+			//xstream.registerConverter( new GraphConverter( xmlData ) );
+			//xstream.registerConverter( new FlowVisualisationConverter() );
+			//xstream.registerConverter(new NodeShapeConverter());
+			result = (GraphView)xstream.fromXML( reader );
+		} finally {
+			if( reader != null )
+				reader.close();
+		}
+		return result;
+	}
+
 	public EarliestArrivalFlowProblem readFlowInstance() throws FileNotFoundException, IOException {
 		BufferedReader reader = null;
 		EarliestArrivalFlowProblem eafp = null;
@@ -143,5 +171,25 @@ public class XMLReader {
 		return xmlData;
 	}
 
-
+	public static XMLFileData getFileData( File f ) throws FileNotFoundException, IOException {
+		BufferedReader reader = new BufferedReader( new FileReader( f ) );
+		String line = reader.readLine().trim();
+		if( line.charAt( 0 ) == '<') {
+			final int i1 = line.indexOf( " " );
+			final int i2 = line.indexOf( ">" );
+			final int end = i1 * i2 > 0 ? Math.min( i1, i2 ) : Math.max( i1, i2 );
+			String s = line.substring( 1, end );
+			if( s.equals( "graphLayout") ) {
+				return XMLFileData.GraphView;
+			} else if( s.equals( "graph") ) {
+				return XMLFileData.Graph;
+			} else if( s.equals( "fv") ) {
+				return XMLFileData.FlowVisualization;
+			} else if( s.equals( "nf") ) {
+				return XMLFileData.NashFlow;
+			} else
+				throw new FileTypeException( "Not supported XML-Format" );
+		} else
+			throw new FileTypeException( "Not a valid XML-File" );
+	}
 }

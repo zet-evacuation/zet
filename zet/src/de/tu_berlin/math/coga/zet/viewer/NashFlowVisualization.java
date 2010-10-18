@@ -98,7 +98,6 @@ public class NashFlowVisualization extends Visualization<GLNashGraphControl> {
 		setControl( graphControl );
 
 		this.set3DView();
-
 	}
 
 	@Override

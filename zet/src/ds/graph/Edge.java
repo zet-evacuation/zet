@@ -30,7 +30,7 @@ import com.thoughtworks.xstream.annotations.XStreamAsAttribute;
  * The ID must be set at the creation of a new edge.
  * 
  * A edge consists of two nodes of the Type {@link Node}: 
- * a startnode and endnode. Thus edges are by default directed.
+ * a start node and end node. Thus edges are by default directed.
  */
 //@XStreamAlias("edge") - Avoid duplicate edge tags (ds.z.Edge also exists)
 public class Edge implements Identifiable {
@@ -43,21 +43,17 @@ public class Edge implements Identifiable {
      * here, hasn't solved the problem. */
     @XStreamAsAttribute
     private int edgeID;
-    /**
-     * The startnode of this edge.
-     */
+    /** The start node of this edge. */
     private Node start;
-    /**
-     * The endnode of this edge.
-     */
+    /** The end node of this edge. */
     private Node end;
 
     /**
      * Constructs a new <code>Edge</code> object with a given given start-
-     * and endnode and given ID. Runtime O(1).
+     * and end node and given ID. Runtime O(1).
      * @param id the ID of the new edge.
-     * @param start the startnode of the new  edge.
-     * @param end the endnode of the new  edge.
+     * @param start the start node of the new  edge.
+     * @param end the end node of the new  edge.
      * @exception NullPointerException if <code>start</code> or 
      * <code>end</code> is null.
      */
@@ -69,6 +65,13 @@ public class Edge implements Identifiable {
         this.start = start;
         this.end = end;
     }
+
+		public void setP( int id, Node start, Node end ) {
+			this.edgeID = id;
+			this.start = start;
+			this.end = end;
+		}
+
 
     /**
      * Returns the ID of this edge. Runtime O(1).
@@ -83,16 +86,16 @@ public class Edge implements Identifiable {
     }
 
     /**
-     * Returns the startnode of this edge. Runtime O(1).
-     * @return the startnode of this edge.
+     * Returns the start node of this edge. Runtime O(1).
+     * @return the start node of this edge.
      */
     public Node start() {
         return start;
     }
 
     /**
-     * Returns the endnode of this edge. Runtime O(1).
-     * @return the endnode of this edge.
+     * Returns the end node of this edge. Runtime O(1).
+     * @return the end node of this edge.
      */
     public Node end() {
         return end;
@@ -117,8 +120,8 @@ public class Edge implements Identifiable {
     }
 
     /**
-     * Returns a String containing the IDs of start- and endnode of this edge.
-     * @return a String containing the IDs of start- and endnode of this edge.
+     * Returns a String containing the IDs of start- and end node of this edge.
+     * @return a String containing the IDs of start- and end node of this edge.
      */
     public String nodesToString() {
         return String.format("(%1$s,%2$s)", start.id(), end.id());

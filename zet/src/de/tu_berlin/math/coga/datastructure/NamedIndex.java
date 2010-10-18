@@ -15,8 +15,6 @@
  */
 package de.tu_berlin.math.coga.datastructure;
 
-import de.tu_berlin.math.coga.datastructure.Tupel;
-
 /**
  * A string that is connected to an integer.
  * @author Timon

@@ -57,14 +57,17 @@ import javax.swing.event.ChangeListener;
 import javax.swing.filechooser.FileFilter;
 import de.tu_berlin.math.coga.zet.DatFileReaderWriter;
 import de.tu_berlin.math.coga.graph.io.xml.FlowVisualization;
+import de.tu_berlin.math.coga.graph.io.xml.GraphView;
 import de.tu_berlin.math.coga.graph.io.xml.XMLReader;
-import gui.visualization.Visualization.RecordingMode;
+import de.tu_berlin.math.coga.graph.io.xml.XMLReader.XMLFileData;
+import ds.graph.Network;
 import gui.visualization.control.graph.GLNashGraphControl;
 import io.movie.MovieManager;
 import io.visualization.ImageFormat;
 import io.visualization.MovieFormat;
 import io.visualization.MovieWriters;
 import java.util.ArrayList;
+import javax.swing.JOptionPane;
 import opengl.framework.abs.DrawableControlable;
 
 /**
@@ -76,12 +79,15 @@ public class FlowVisualizationTool extends JFrame implements PropertyChangeListe
 		NashFlow,
 		DynamicFlow
 	}
-
 	private Modes mode = Modes.DynamicFlow;
 	final Visualization<GLFlowGraphControl> visFlow = new Visualization<GLFlowGraphControl>( new GLCapabilities() );
 	final Visualization<GLNashGraphControl> visNash = new NashFlowVisualization( new GLCapabilities() );
-	private ArrayList<Visualization<? extends DrawableControlable>> visualizations = new ArrayList<Visualization<? extends DrawableControlable>>() {{add( visFlow ); add( visNash );}};
-
+	private ArrayList<Visualization<? extends DrawableControlable>> visualizations = new ArrayList<Visualization<? extends DrawableControlable>>() {
+		{
+			add( visFlow );
+			add( visNash );
+		}
+	};
 	Localization loc = Localization.getInstance();
 	private int sliderAccuracy = 100;
 	private JMenu mFile;
@@ -94,10 +100,9 @@ public class FlowVisualizationTool extends JFrame implements PropertyChangeListe
 	private JMenuItem mnuFlowPause;
 	private JMenu mView;
 	private JMenuItem mnuScreenshot;
-	
 	Visualization<? extends DrawableControlable> vis = visFlow;
 	JEventStatusBar sb = new JEventStatusBar();
-	JSlider slider = new JSlider(0,0);
+	JSlider slider = new JSlider( 0, 0 );
 	FlowVisualizationTool theInstance;
 	IdentifiableIntegerMapping<Node> xPos;
 	IdentifiableIntegerMapping<Node> yPos;
@@ -126,7 +131,6 @@ public class FlowVisualizationTool extends JFrame implements PropertyChangeListe
 			vis.getCamera().getView().invert();
 			vis.getCamera().getPos().z = 140;
 			vis.addKeyListener( new KeyListener() {
-
 				public void keyTyped( KeyEvent arg0 ) {
 				}
 
@@ -181,10 +185,9 @@ public class FlowVisualizationTool extends JFrame implements PropertyChangeListe
 		add( slider, BorderLayout.NORTH );
 		slider.addChangeListener( chl );
 		slider.addMouseListener( new MouseListener() {
-
 			boolean wasAnimating = false;
-			public void mouseClicked( MouseEvent arg0 ) {
 
+			public void mouseClicked( MouseEvent arg0 ) {
 			}
 
 			public void mousePressed( MouseEvent arg0 ) {
@@ -200,11 +203,9 @@ public class FlowVisualizationTool extends JFrame implements PropertyChangeListe
 			}
 
 			public void mouseEntered( MouseEvent arg0 ) {
-
 			}
 
 			public void mouseExited( MouseEvent arg0 ) {
-
 			}
 		} );
 	}
@@ -216,7 +217,6 @@ public class FlowVisualizationTool extends JFrame implements PropertyChangeListe
 	 */
 	public static void main( String[] arguments ) {
 		SwingUtilities.invokeLater( new Runnable() {
-
 			@Override
 			public void run() {
 				// Change look and feel to native
@@ -242,7 +242,6 @@ public class FlowVisualizationTool extends JFrame implements PropertyChangeListe
 		else
 			System.out.println( event.toString() );
 	}
-
 	boolean pressed = false;
 
 	private void switchTo( Modes mode ) {
@@ -262,16 +261,13 @@ public class FlowVisualizationTool extends JFrame implements PropertyChangeListe
 		vis.update();
 		repaint();
 	}
-
 	/** Action listener for the file menu. */
 	ActionListener aclFile = new ActionListener() {
-
 		public void actionPerformed( ActionEvent event ) {
 			JFileChooser jfc = new JFileChooser();
 			jfc.setCurrentDirectory( new File( "./" ) );
 			if( event.getActionCommand().equals( "open" ) ) {
 				jfc.setFileFilter( new FileFilter() {
-
 					@Override
 					public boolean accept( File f ) {
 						return f.isDirectory() || f.getName().toLowerCase().endsWith( ".dat" ) || f.getName().toLowerCase().endsWith( ".xml" );
@@ -290,16 +286,55 @@ public class FlowVisualizationTool extends JFrame implements PropertyChangeListe
 					if( path.endsWith( ".xml" ) ) {
 						XMLReader reader;
 						FlowVisualization fv = null;
+						//String filename = jfc.getSelectedFile();
+						File file = jfc.getSelectedFile();
+
+						XMLFileData fileData = XMLFileData.Invalid;
 						try {
-							reader = new XMLReader( "./testinstanz/test.xml" );
-							fv = (FlowVisualization)reader.readFlowVisualization();
+							fileData = XMLReader.getFileData( file );
+						} catch( FileNotFoundException ex ) {
+							Logger.getLogger( FlowVisualizationTool.class.getName() ).log( Level.SEVERE, null, ex );
 						} catch( IOException ex ) {
-							System.err.println( "Fehler beim laden!" );
-							ex.printStackTrace( System.err );
+							Logger.getLogger( FlowVisualizationTool.class.getName() ).log( Level.SEVERE, null, ex );
 						}
-						sb.setStatusText( 0, "Baue Visualisierung" );
-						control = new GLFlowGraphControl( fv );
-						slider.setMaximum( (fv.getTimeHorizon()+1) * sliderAccuracy );
+
+						switch( fileData ) {
+							case FlowVisualization:
+								try {
+									reader = new XMLReader( file );
+									fv = (FlowVisualization) reader.readFlowVisualization();
+								} catch( IOException ex ) {
+									System.err.println( "Fehler beim laden!" );
+									ex.printStackTrace( System.err );
+								}
+								sb.setStatusText( 0, "Baue Visualisierung" );
+								control = new GLFlowGraphControl( fv );
+								slider.setMaximum( (fv.getTimeHorizon() + 1) * sliderAccuracy );
+								break;
+							case Graph:
+								JOptionPane.showMessageDialog( theInstance,
+							"Graphen ohne Koordinaten werden nicht unterstützt.",
+							"Formatfehler",
+							JOptionPane.ERROR_MESSAGE );
+								return;
+								//break;
+							case GraphView:
+								try {
+									reader = new XMLReader( file );
+									//Network n = reader.readGraph();
+									final GraphView gv = reader.readGraphView();
+									fv = new FlowVisualization( gv );
+									sb.setStatusText( 0, "Baue Visualisierung" );
+									control = new GLFlowGraphControl( fv );
+
+								} catch( FileNotFoundException ex ) {
+									Logger.getLogger( FlowVisualizationTool.class.getName() ).log( Level.SEVERE, null, ex );
+								} catch( IOException ex ) {
+									Logger.getLogger( FlowVisualizationTool.class.getName() ).log( Level.SEVERE, null, ex );
+								}
+								break;
+						}
+
 					} else {
 						try {
 							xPos = new IdentifiableIntegerMapping<Node>( 0 );
@@ -330,7 +365,6 @@ public class FlowVisualizationTool extends JFrame implements PropertyChangeListe
 				}
 			} else if( event.getActionCommand().equals( "openFlow" ) ) {
 				jfc.setFileFilter( new FileFilter() {
-
 					@Override
 					public boolean accept( File f ) {
 						return f.isDirectory() || f.getName().toLowerCase().endsWith( ".flow" );
@@ -346,13 +380,13 @@ public class FlowVisualizationTool extends JFrame implements PropertyChangeListe
 					try {
 						XStream xml_convert = new XStream();
 						FileReader input = new FileReader( jfc.getSelectedFile() );
-						graphVisResult = (GraphVisualizationResults)xml_convert.fromXML( input );
+						graphVisResult = (GraphVisualizationResults) xml_convert.fromXML( input );
 						loadGraphVisResults();
 					} catch( IOException e ) {
 						sb.setStatusText( 0, "Fehler beim laden der Datei!" );
 					}
 				}
-			} else if( event.getActionCommand().equals( "saveFlow" ) ) {
+			} else if( event.getActionCommand().equals( "saveFlow" ) )
 				try {
 					PrintWriter output = new PrintWriter( new File( "./testinstanz/testoutput.flow" ) );
 					XStream xml_convert = new XStream();
@@ -360,19 +394,16 @@ public class FlowVisualizationTool extends JFrame implements PropertyChangeListe
 				} catch( IOException e ) {
 					sb.setStatusText( 0, "Fehler beim schreiben der Datei!" );
 				}
-			} else if( event.getActionCommand().equals( "nashFlow" ) ) {
+			else if( event.getActionCommand().equals( "nashFlow" ) )
 				switchTo( Modes.NashFlow );
-			}
 		}
 	};
 	/** Action listener for the flow menu. */
 	ActionListener aclFlow = new ActionListener() {
-
 		public void actionPerformed( ActionEvent event ) {
 			JFileChooser jfc = new JFileChooser();
 			jfc.setCurrentDirectory( new File( "./" ) );
 			jfc.setFileFilter( new FileFilter() {
-
 				@Override
 				public boolean accept( File f ) {
 					return f.isDirectory() || f.getName().toLowerCase().endsWith( ".dat" );
@@ -408,14 +439,12 @@ public class FlowVisualizationTool extends JFrame implements PropertyChangeListe
 				else
 					vis.stopAnimation();
 				pause = !pause;
-			} else if( event.getActionCommand().equals( "restart" ) ) {
+			} else if( event.getActionCommand().equals( "restart" ) )
 				vis.getControl().resetTime();
-			}
 		}
 	};
 	/** Action listener for the rest. */
 	ActionListener acl = new ActionListener() {
-
 		public void actionPerformed( ActionEvent event ) {
 			if( event.getActionCommand().equals( "screenshot" ) ) {
 				//vis.takeScreenshot( "./screenshot_example.png" );
@@ -428,45 +457,44 @@ public class FlowVisualizationTool extends JFrame implements PropertyChangeListe
 				int width = 1920;
 				int height = 1080;
 
-			// make a movie...
-			String movieFrameName = "movieFrame";
-			// TODO BUG: wenn ein projekt noch nicht gespeichert worden ist, liefert das hier iene null pointer exception. (tritt auf, wenn ein video gedreht werden soll)
-			//String projectName = zcontrol.getProject().getProjectFile().getName().substring( 0, zcontrol.getProject().getProjectFile().getName().length() - 4 );
-			MovieManager movieCreator =  vis.getMovieCreator();
+				// make a movie...
+				String movieFrameName = "movieFrame";
+				// TODO BUG: wenn ein projekt noch nicht gespeichert worden ist, liefert das hier iene null pointer exception. (tritt auf, wenn ein video gedreht werden soll)
+				//String projectName = zcontrol.getProject().getProjectFile().getName().substring( 0, zcontrol.getProject().getProjectFile().getName().length() - 4 );
+				MovieManager movieCreator = vis.getMovieCreator();
 //			if( movieFrameName.equals( "" ) )
 //				movieCreator.setFramename( projectName );
 //			else
 				movieCreator.setFramename( movieFrameName );
-			String path = "./nashvideo";
-			if( !(path.endsWith( "/" ) || path.endsWith( "\\" )) )
-				path = path + "/";
-			String movieFileName = "nash_example_video";
-			movieCreator.setFilename( movieFileName );
-			movieCreator.setPath( "./nashvideo" );
-			movieCreator.setFramename( "movieFrame" );
-			MovieWriters mw = MovieWriters.FFmpeg;
-			
-			movieCreator.setMovieWriter( mw.getWriter() );
-			//vis.setRecording( RecordingMode.Recording, new Dimension( width, height) );
-			movieCreator.setWidth( width );
-			movieCreator.setHeight( height );
-			movieCreator.setCreateMovie( true );
-			movieCreator.setDeleteFrames( false );
-			movieCreator.setMovieFormat( MovieFormat.DIVX );
-			movieCreator.setFramerate( 30 );
-			movieCreator.setBitrate( 6000 );
-			vis.setMovieFramerate( 25 );
-			movieCreator.setFrameFormat( ImageFormat.PNG );
-			//visualizationToolBar.play();
-			//if( !vis.isAnimating() )
+				String path = "./nashvideo";
+				if( !(path.endsWith( "/" ) || path.endsWith( "\\" )) )
+					path = path + "/";
+				String movieFileName = "nash_example_video";
+				movieCreator.setFilename( movieFileName );
+				movieCreator.setPath( "./nashvideo" );
+				movieCreator.setFramename( "movieFrame" );
+				MovieWriters mw = MovieWriters.FFmpeg;
+
+				movieCreator.setMovieWriter( mw.getWriter() );
+				//vis.setRecording( RecordingMode.Recording, new Dimension( width, height) );
+				movieCreator.setWidth( width );
+				movieCreator.setHeight( height );
+				movieCreator.setCreateMovie( true );
+				movieCreator.setDeleteFrames( false );
+				movieCreator.setMovieFormat( MovieFormat.DIVX );
+				movieCreator.setFramerate( 30 );
+				movieCreator.setBitrate( 6000 );
+				vis.setMovieFramerate( 25 );
+				movieCreator.setFrameFormat( ImageFormat.PNG );
+				//visualizationToolBar.play();
+				//if( !vis.isAnimating() )
 				vis.startAnimation();
 
 			}
 		}
 	};
-  /** Change listener for the slider. Sets the visualization time. */
+	/** Change listener for the slider. Sets the visualization time. */
 	ChangeListener chl = new ChangeListener() {
-
 		public void stateChanged( ChangeEvent event ) {
 			int time = slider.getValue();
 			if( mode == Modes.DynamicFlow )
@@ -482,7 +510,7 @@ public class FlowVisualizationTool extends JFrame implements PropertyChangeListe
 	 */
 	private void loadGraphVisResults() {
 		sb.setStatusText( 0, "Baue Visualisierung" );
-		slider.setMaximum( (graphVisResult.getNeededTimeHorizon()+1) * sliderAccuracy );
+		slider.setMaximum( (graphVisResult.getNeededTimeHorizon() + 1) * sliderAccuracy );
 		GLFlowGraphControl control = new GLFlowGraphControl( graphVisResult );
 		visFlow.setControl( control );
 		vis.update();
@@ -505,9 +533,8 @@ public class FlowVisualizationTool extends JFrame implements PropertyChangeListe
 	}
 
 	public void handleEvent( MessageEvent event ) {
-		if( vis.isAnimating() ) {
+		if( vis.isAnimating() )
 			if( mode == Modes.DynamicFlow )
-				slider.setValue( (int)(100*visFlow.getControl().getStep()) );
-		}
+				slider.setValue( (int) (100 * visFlow.getControl().getStep()) );
 	}
 }
