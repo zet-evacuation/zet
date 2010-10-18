@@ -112,7 +112,9 @@ public class GLFlowEdgeControl extends GLEdgeControl {
 		IdentifiableIntegerMapping<Edge> transitTimes = fv.getGv().getTransitTimes();
 
 		EdgeBasedFlowOverTime flowOverTime = fv.getFlow();
+		if( flowOverTime != null ) {
 
+		}
 		int maxT = flowOverTime.get( edge ).getLastTimeWithNonZeroValue(); // maximaler Zeithorizont
 		int transit = transitTimes.get( edge );
 //		if( maxT > 0 )

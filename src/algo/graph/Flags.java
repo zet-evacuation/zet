@@ -37,7 +37,7 @@ public class Flags {
     public final static boolean TIMON = false;    //****************************************************************************
     // General Debug Flags
     public final static boolean TEMFOT = MARTIN && false;
-    public final static boolean PP = MARTIN && false;    // The following two debug flags influence all classes having 'Transshipment' in their names. 
+    public final static boolean PP = MARTIN && true;    // The following two debug flags influence all classes having 'Transshipment' in their names.
     public final static boolean TRANSSHIPMENT_SHORT = false;
     public final static boolean TRANSSHIPMENT_LONG = !TRANSSHIPMENT_SHORT && false;
     public final static boolean TRANSSHIPMENT_RESULT_FLOW = false;
