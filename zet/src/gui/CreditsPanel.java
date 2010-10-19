@@ -20,6 +20,7 @@
  */
 package gui;
 
+import de.tu_berlin.math.coga.math.Conversion;
 import javax.media.opengl.GL;
 import javax.media.opengl.GLAutoDrawable;
 import javax.media.opengl.glu.GLU;
@@ -95,11 +96,16 @@ public class CreditsPanel extends JMovingEyePanel {
 	public void display( GLAutoDrawable drawable ) {
 		super.display( drawable );	// clear the screen
 
+		System.out.println( "Display" );
+
 		// reset view
 		gl.glLoadIdentity();
 		this.look();
 
 		// enable texture mode and draw logo
+		
+		System.out.println( "Startpos:" + startPos );
+
 		texLogo.bind();
 		gl.glBegin( GL.GL_QUADS );
 			gl.glTexCoord2f( 0.0f, 1.0f );
@@ -125,16 +131,13 @@ public class CreditsPanel extends JMovingEyePanel {
 	 * lags can occur on slower hardware.
 	 */
 	public void animate() {
-		double timePerPixel = 39;	// in milliseconds
-		timePerPixel = 1000;
-		startPos -= ( this.getDeltaTime() / timePerPixel );
-		if( true ) return;
 		super.animate();
-		startPos += ( this.getDeltaTime() / timePerPixel );
+		final double timePerPixel = Conversion.secToNanoSeconds / 1;
+		startPos -= ( this.getDeltaTime() / timePerPixel );
 	}
 
 	/**
-	 * Loads the texture files from harddisk.
+	 * Loads the texture files from hard disk.
 	 */
 	private void loadTextures() {
 		texLogo = texMan.newTexture( "logo1", "./textures/logo1.png" );
@@ -143,7 +146,7 @@ public class CreditsPanel extends JMovingEyePanel {
 
 	/**
 	 * Draws some lines on the screen using the texture font. If the getText was
-	 * completely scrolled over the whole screen, the top getX is resetted.
+	 * completely scrolled over the whole screen, the top getX is reseted.
 	 * @param lines an array containing all lines that should be displayed
 	 */
 	private void drawLines( TextureFontStrings lines, float start ) {
@@ -160,8 +163,11 @@ public class CreditsPanel extends JMovingEyePanel {
 	private void initLines() {
 		lines.setXoffset( 10.3 );
 		lines.add( "zet evakuierungs-tool", true );
+		lines.add( "", true );
+		lines.add( "Version " + ZETMain.version, true );
+		lines.add( "", true );
 		lines.add( "(c) 2007-08 Projektgruppe 517, TU-Dortmund", true );
-		lines.add( "(c) 2008-09 zet development team", true );
+		lines.add( "(c) 2008-10 zet development team", true );
 		lines.add( "", false );
 		lines.add( "http://www.zet-evakuierung.de", true );
 		lines.add( "", false );
@@ -225,12 +231,12 @@ public class CreditsPanel extends JMovingEyePanel {
 		lines.add( "Copyright (c) 2001 by Daniel Barbalace.", false );
 		lines.add( "https://tablelayout.dev.java.net/", false );
 		lines.add( "", false );
-		lines.add( "JFreeChart 1.0.3", false );
+		lines.add( "JFreeChart 1.0.10", false );
 		lines.add( "Copyright (c) 2000-2009 by Object", false );
 		lines.add( "Refinery and Contributors.", false );
 		lines.add( "http://www.jfree.org/jfreechart/", false );
 		lines.add( "", false );
-		lines.add( "JCommon 1.0.7", false );
+		lines.add( "JCommon 1.0.13", false );
 		lines.add( "Copyright (c) 2007-2009 by Object", false );
 		lines.add( "Refinery and Contributors.", false );
 		lines.add( "http://www.jfree.org/jcommon/", false );
@@ -253,5 +259,9 @@ public class CreditsPanel extends JMovingEyePanel {
 		lines.add( "Copyright (c) 1995-2003 Sun Microsystems", false );
 		lines.add( "http://java.sun.com/javase/technologies/", false );
 		lines.add( "desktop/media/jmf/", false );
+		lines.add( "", false );
+		lines.add( "JAMA 1.0.2", false );
+		lines.add( "Copyright (c) 1998-2005 The Jama Team", false );
+		lines.add( "http://math.nist.gov/javanumerics/jama/", false );
 	}
 }

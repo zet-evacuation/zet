@@ -140,22 +140,21 @@ abstract public class AbstractOpenGLCanvas extends GLCanvas implements GLEventLi
 	}
 
 	/**
-	 * Returns the current framerate per second.
-	 * @return the current framerate per second
+	 * Returns the current frame rate per second.
+	 * @return the current frame rate per second
 	 */
 	public final int getFPS() {
 		return fps;
 	}
 
 	/**
-	 * Computes the current framerate and updates the elapsed time from the last
+	 * Computes the current frame rate and updates the elapsed time from the last
 	 * rendered frame. This method should be called in the display-method if
 	 * animation is on.
 	 */
 	final public void computeFPS() {
 		// calculate real FPS and delay time for animation
 		final long currentTime = System.nanoTime();
-		deltaTime = currentTime - lastTime;
 		lastTime = currentTime;
 		if( currentTime - lastFrameTime >= Conversion.secToNanoSeconds ) {
 			lastFrameTime = currentTime;
@@ -164,6 +163,15 @@ abstract public class AbstractOpenGLCanvas extends GLCanvas implements GLEventLi
 		} else
 			frameCount++;
 	}
+
+	public void animate() {
+		final long currentTime = System.nanoTime();
+		deltaTime = currentTime - lastTime;
+		lastTime = currentTime;
+
+	}
+
+
 
 	/**
 	 * 

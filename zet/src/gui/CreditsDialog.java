@@ -13,9 +13,10 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
+
 /**
- * Class CreditsDialog
- * Erstellt 18.05.2008, 20:03:38
+ * CreditsDialog.java
+ * Created 18.05.2008, 20:03:38
  */
 
 package gui;
@@ -26,7 +27,7 @@ import de.tu_berlin.math.coga.common.localization.Localization;
 
 /**
  * A window that contains a {@link CreditsPanel} to represent the
- * credits for zet.
+ * credits for zet evacuation tool.
  * @author Jan-Philipp Kappmeier
  */
 public class CreditsDialog extends JDialog {
