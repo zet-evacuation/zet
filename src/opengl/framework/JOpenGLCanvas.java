@@ -85,6 +85,7 @@ public class JOpenGLCanvas extends AbstractOpenGLCanvas {
 	 */
 	@Override
 	public void animate() {
+		super.animate();
 	}
 
 	@Override

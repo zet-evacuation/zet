@@ -159,7 +159,7 @@ public class Project implements Serializable {
 				}
 	}
 
-	/** Used to initalize the XStream related stuff concerning the given type. */
+	/** Used to initialize the XStream related stuff concerning the given type. */
 	private static void processClassObject( Class type ) throws Exception {
 		// Inhibit alias processing on the converter classes themselves
 		// as this will lead to unwanted behaviour in XStream
