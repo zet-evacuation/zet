@@ -4,7 +4,8 @@
  */
 package de.tu_berlin.math.coga.graph.io.dimacs;
 
-import algo.graph.staticflow.maxflow.HIPR;
+import algo.graph.staticflow.maxflow.PushRelabel;
+import algo.graph.staticflow.maxflow.PushRelabelHighestLabelGlobalGapRelabelling;
 import de.tu_berlin.math.coga.common.util.Formatter;
 import de.tu_berlin.math.coga.common.util.Formatter.BinaryUnits;
 import de.tu_berlin.math.coga.graph.generator.RMFGEN;
@@ -97,12 +98,16 @@ public class DimacsReader {
 			}
 		}
 		long memEnd = rt.totalMemory() - rt.freeMemory();
-		System.out.println( "Memory for edges: " + Formatter.fileSizeUnit( memEnd-memStart, BinaryUnits.Byte ) ) ;
+
+		if( verbose ) {
+			System.out.println( "Memory for edges: " + Formatter.fileSizeUnit( memEnd-memStart, BinaryUnits.Byte ) ) ;
+			System.out.println( "Estimated: " + Formatter.fileSizeUnit( edges*(40+40), BinaryUnits.Byte ) );
+			System.out.println( "Space per edge: " + (memEnd-memStart) / edges );
+		}
 
 		caps = null;
 		ends = null;
 		starts = null;
-
 
 		//network.setEdges( edgesList );
 		//for( Edge e : edgesList ) {
@@ -137,20 +142,25 @@ public class DimacsReader {
 		long memStart = rt.totalMemory() - rt.freeMemory();
 		network = new Network( nodes, edges );
 		long memEnd = rt.totalMemory() - rt.freeMemory();
-		System.out.println( "Memory for network: " + Formatter.fileSizeUnit( memEnd-memStart, BinaryUnits.Byte ) ) ;
+		if( verbose )
+			System.out.println( "Memory for network: " + Formatter.fileSizeUnit( memEnd-memStart, BinaryUnits.Byte ) ) ;
 
 
 		memStart = rt.totalMemory() - rt.freeMemory();
 		capacities = new IdentifiableIntegerMapping<Edge>( edges );
 		memEnd = rt.totalMemory() - rt.freeMemory();
-		System.out.println( "Memory for capacities: " + Formatter.fileSizeUnit( memEnd-memStart, BinaryUnits.Byte ) ) ;
+		if( verbose )
+			System.out.println( "Memory for capacities: " + Formatter.fileSizeUnit( memEnd-memStart, BinaryUnits.Byte ) ) ;
 
 		memStart = rt.totalMemory() - rt.freeMemory();
 		caps = new int[edges];
 		starts = new int[edges];
 		ends = new int[edges];
 		memEnd = rt.totalMemory() - rt.freeMemory();
-		System.out.println( "Memory for arrays: " + Formatter.fileSizeUnit( memEnd-memStart, BinaryUnits.Byte ) ) ;
+		if( verbose ) {
+			System.out.println( "Memory for arrays: " + Formatter.fileSizeUnit( memEnd-memStart, BinaryUnits.Byte ) ) ;
+			System.out.println( "Estimated for arrays: " + Formatter.fileSizeUnit( 8*edges , BinaryUnits.Byte) );
+		}
 
 
 		//System.out.println( " done." );
@@ -223,6 +233,45 @@ public class DimacsReader {
 		return mfp;
 	}
 
+	long solution;
+
+	public void loadSolution() {
+		try {
+			reader = new BufferedReader( new FileReader( new File( filename.substring( 0, filename.length()-3 ) + "sol" ) ), 10000);
+		} catch( IOException ex ) {
+			//System.out.println( "Datei konnte nicht zum lesen geöffnet werden!" );
+			solution = -1;
+			return;
+		}
+
+		try {
+			String line = reader.readLine();
+			while( line  != null ) {
+				final StringTokenizer st = new StringTokenizer( line );
+				//Format.sprintf( line, os );
+
+
+				final String indicator = st.hasMoreTokens() ? st.nextToken() : "";
+				if( indicator.equals( "c" ) ) {
+					readComment( line );
+				} else if( indicator.equals( "s" ) ) {
+					// solution line, like "c 3"
+					long sol = Long.parseLong( st.nextToken() );
+					solution = sol;
+				} 
+				line = reader.readLine();
+			}
+		} catch( IOException ex ) {
+			System.err.println( "Exception during DimacsLoader loaded file from " + filename + " (solution)" );
+		}
+	}
+
+	public long getSolution() {
+		return solution;
+	}
+
+	
+
 	/**
 	 * Writes the specified network to the specified file.
 	 */
@@ -286,22 +335,27 @@ public class DimacsReader {
 
 	public static void main( String[] arguments ) {
 		long end;
-		//DimacsReader dl = new DimacsReader( "./testinstanz/ahuja5.max" );
-		//DimacsReader dl = new DimacsReader( "./testinstanz/BVZ-tsukuba/BVZ-tsukuba1.max" );
-		DimacsReader dl = new DimacsReader( "./testinstanz/BVZ-venus/BVZ-venus12.max" );
+		DimacsReader dl = new DimacsReader( "./testinstanz/ahuja5.max" );
+		//DimacsReader dl = new DimacsReader( "./testinstanz/maxflow/BVZ-tsukuba/BVZ-tsukuba0.max" );
+		//DimacsReader dl = new DimacsReader( "./testinstanz/maxflow/BVZ-venus/BVZ-venus12.max" );
+		//DimacsReader dl = new DimacsReader( "./testinstanz/maxflow/KZ2-tsukuba/KZ2-tsukuba12.max" );
+		//DimacsReader dl = new DimacsReader( "./testinstanz/maxflow/BL06-gargoyle-sml/BL06-gargoyle-sml.max" );
 		long memStart = rt.totalMemory() - rt.freeMemory();
 		System.out.println( "Free Memory: " + Formatter.fileSizeUnit( rt.freeMemory(), BinaryUnits.Byte ) );
 		long start = System.nanoTime();
 
 		dl.verbose = true;
 		dl.load();
-		//rt.gc();
+		rt.gc();
 		end = System.nanoTime();
 		long memEnd = rt.totalMemory() - rt.freeMemory();
 		System.out.println( Formatter.formatTimeNanoseconds( end-start) );
 		System.out.println( "Memory: " + Formatter.fileSizeUnit(memEnd - memStart, BinaryUnits.Byte ) );
 		System.out.println( "Loading complete" );
 		System.out.println( "Free Memory: " + Formatter.fileSizeUnit( rt.freeMemory(), BinaryUnits.Byte ) );
+
+		//if( true )
+			//return;
 
 		UniformDistribution dist = new UniformDistribution( 1, 20);
 		//BinomialDistribution dist = new BinomialDistribution( 10, 50, 0.1 );
@@ -373,27 +427,23 @@ public class DimacsReader {
 		// new algorithm
 		System.out.println();
 		System.out.println( "Start HIPR" );
-		HIPR hipr = new HIPR();
+		PushRelabel hipr = new PushRelabelHighestLabelGlobalGapRelabelling();
 		hipr.setProblem( mfp );
 		start = System.nanoTime();
 		hipr.run();
 		end = System.nanoTime();
 		mf = hipr.getSolution();
 
-		//System.out.println( "Flow value: " + mf.getFlowValue() );
-		System.out.println( "Sink-Arrival value: " + hipr.getFlow() );
-		hiprf = hipr.getFlow();
+		System.out.println( "Flow value: " + mf.getFlowValue() );
+		System.out.println( "Sink-Arrival value: " + hipr.getFlowValue() );
+		hiprf = hipr.getFlowValue();
 		System.out.println( "Pushes: " + hipr.getPushes() + ", Relabels: " + hipr.getRelabels() );
-		System.out.println( "Global relabels: " + hipr.getGlobalRelabels() );
-		System.out.println( "Gaps : " + hipr.getGaps() + " Gap nodes: " + hipr.getGapNodes() );
+		//System.out.println( "Global relabels: " + hipr.getGlobalRelabels() );
+		//System.out.println( "Gaps : " + hipr.getGaps() + " Gap nodes: " + hipr.getGapNodes() );
 
 		System.out.println( Formatter.formatTimeNanoseconds( end-start) );
 
 		System.out.println();
-		if( ekf == hiprf )
-			System.out.println( ekf + " == " + hiprf );
-		else
-			System.err.println( ekf + " != " + hiprf );
 	}
 }
 

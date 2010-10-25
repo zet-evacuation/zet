@@ -5,9 +5,10 @@
 package algo.graph.staticflow.maxflow;
 
 import de.tu_berlin.math.coga.common.algorithm.Algorithm;
+import de.tu_berlin.math.coga.datastructure.BucketSet;
+import de.tu_berlin.math.coga.datastructure.priorityQueue.BucketPriorityQueue;
 import ds.graph.Edge;
 import ds.graph.IdentifiableIntegerMapping;
-import ds.graph.IdentifiableObjectMapping;
 import ds.graph.Network;
 import ds.graph.Node;
 import ds.graph.flow.MaximumFlow;
@@ -19,34 +20,27 @@ import ds.graph.problem.MaximumFlowProblem;
  */
 public class HIPR extends Algorithm<MaximumFlowProblem, MaximumFlow> {
 
-	boolean useBugHeuristic = false;
+	boolean useBugHeuristic = true;
 
-	private class myEdge {
-		int id;
-		Node start;
-		Node end;
-		myEdge reverse;
+	private class ResidualEdge extends Edge {
+		ResidualEdge reverse;
 		int residualCapacity;
-		myEdge( int id, Node start, Node end, int cap ) {
-			this.id = id;
-			this.start = start;
-			this.end = end;
+		boolean reverseEdge;
+		Edge original;
+		ResidualEdge( int id, Node start, Node end, int cap, boolean reverse ) {
+			super( id, start, end );
 			this.residualCapacity = cap;
-		}
-
-		@Override
-		public String toString() {
-			return( "(" + start.id() + "," + end.id() + ")" );
+			reverseEdge = reverse;
 		}
 
 	}
 
-	protected int[] excess;
-	protected int[] distanceLabels;
+	protected IdentifiableIntegerMapping excess;
+	protected IdentifiableIntegerMapping distanceLabels;
 
 	boolean performGlobalRelabel = true;
 
-	long flow;
+	long flowValue;
 
 	int pushes;
 	int relabels;
@@ -63,33 +57,17 @@ public class HIPR extends Algorithm<MaximumFlowProblem, MaximumFlow> {
 
 	Node source;
 	Node sink;
-	//LinkedList<UnorderedEdge>[] incidentEdges;
-	//IdentifiableObjectMapping<Node, ArrayList> incidentEdges;
-	myEdge[] residualEdges;
+	ResidualEdge[] residualEdges;
 	IdentifiableIntegerMapping<Node> current;
 	IdentifiableIntegerMapping<Node> first;
 	IdentifiableIntegerMapping<Node> last;
 
-	IdentifiableObjectMapping<Node, Node> next;
-	IdentifiableObjectMapping<Node, Node> prev;
-	boolean[] active;
-	boolean[] inactive;
+	BucketPriorityQueue<Node> activeBuckets;
+	BucketSet<Node> inactiveBuckets;
 
-	//int[] reverseEdges;
-
-	Node[] activeBuckets;
-	Node[] inactiveBuckets;
-	int dMax;	// maximum distance label
-	int aMax;	// maximum active label
-	int aMin; // maximum inactive label
-
-	//IdentifiableIntegerMapping<Edge> residualCapacities;
-	//int[] residualCapacities;
 
 	@Override
 	protected MaximumFlow runAlgorithm( MaximumFlowProblem problem ) {
-		//return new MaximumFlow( getProblem(), residualNetwork.flow() );
-
 		source = getProblem().getSource();
 		sink = getProblem().getSink();
 		n = getProblem().getNetwork().numberOfNodes();
@@ -98,33 +76,31 @@ public class HIPR extends Algorithm<MaximumFlowProblem, MaximumFlow> {
 		alloc();
 		init();
 		stageOne();
+		stageTwo();
 
-		return null;
+		IdentifiableIntegerMapping<Edge> flow = new IdentifiableIntegerMapping<Edge>( m );
+		for( ResidualEdge e : residualEdges ) {
+			if( e.original == null )
+				continue;
+			flow.set( e.original, e.reverse.residualCapacity );
+		}
+		return new MaximumFlow( getProblem(), flow );
 	}
 
 	/**
-	 * Allocates the memory for the data structures.
+	 * Allocates the memory for the data structures. These contain information
+	 * for the nodes and edges
 	 */
 	private void alloc() {
-		// Node information
-		//distanceLabels = new IdentifiableIntegerMapping<Node>( n );	// distance
-		distanceLabels = new int[n];
-		//excess = new IdentifiableIntegerMapping<Node>( n );	// excess
-		excess = new int[n];
+		distanceLabels = new IdentifiableIntegerMapping<Node>( n );	// distance
+		excess = new IdentifiableIntegerMapping<Node>( n );	// excess
 		current = new IdentifiableIntegerMapping<Node>( n );	// current edge datastructure (index)
-		first = new IdentifiableIntegerMapping<Node>( n ); // first outgoing arc (index)
-		last = new IdentifiableIntegerMapping<Node>( n ); // last outgoing arc (index)
-		next = new IdentifiableObjectMapping<Node, Node> ( n, Node.class );	// next node in the bucket list
-		prev = new IdentifiableObjectMapping<Node, Node> ( n, Node.class ); // previous node in the bucket list
-		
-		// edge information
-		//residualEdges = new ArraySet<Edge>(Edge.class, 2*m);	// array of all edges (including reverse edges)
-		residualEdges = new myEdge[2*m];
-
-		activeBuckets = new Node[n+1];
-		inactiveBuckets = new Node[n+1];
-		active = new boolean[n+1];
-		inactive = new boolean[n+1];
+		first = new IdentifiableIntegerMapping<Node>( n ); // first outgoing edge (index)
+		last = new IdentifiableIntegerMapping<Node>( n ); // last outgoing edge (index)
+		activeBuckets = new BucketPriorityQueue<Node>( n+1, Node.class );
+		activeBuckets.setDistanceLabels( distanceLabels );
+		inactiveBuckets = new BucketSet<Node>( n+1, Node.class );
+		residualEdges = new ResidualEdge[2*m];
 	}
 
 	/**
@@ -135,82 +111,70 @@ public class HIPR extends Algorithm<MaximumFlowProblem, MaximumFlow> {
 	private void init() {
 		nm = 6*n+m;
 		globalRelabelThreshold = (int)0.5*nm;
-		globalRelabels = 0;	// set to -1 here, as it will be set to 0 during initialization
 
-		int[] temp = new int[2*m];
-
+		// set up residual edges
 		int edgeCounter = 0;
-
+		int[] temp = new int[2*m];
 		for( Node v : getProblem().getNetwork() ) {
 			first.set( v, edgeCounter );
 			current.set( v, edgeCounter );
 			// add the outgoing edges to the arc list
 			for( Edge e : getProblem().getNetwork().outgoingEdges( v ) ) {
-				residualEdges[edgeCounter] = new myEdge( edgeCounter, e.start(), e.end(), getProblem().getCapacities().get( e ) );
+				residualEdges[edgeCounter] = new ResidualEdge( edgeCounter, e.start(), e.end(), getProblem().getCapacities().get( e ), false );
+				residualEdges[edgeCounter].original = e;
 				temp[e.id()] = edgeCounter++;
 			}
 			// add the reverse edge for incoming edges to the arc list (they are also outgoing!
 			for( Edge e : getProblem().getNetwork().incomingEdges( v ) ) {
-				residualEdges[edgeCounter] = new myEdge( edgeCounter, e.end(), e.start(), 0 );
+				residualEdges[edgeCounter] = new ResidualEdge( edgeCounter, e.end(), e.start(), 0, true );
 				temp[e.id()+m] = edgeCounter++;
 			}
 			last.set( v, edgeCounter );
 		}
 		for( int i = 0; i < m; ++i ) {
-			final myEdge newEdge = residualEdges[temp[i]];
-			final myEdge newRevEdge = residualEdges[temp[i+m]];
-			newEdge.reverse = newRevEdge;
-			newRevEdge.reverse = newEdge;
+			residualEdges[temp[i]].reverse = residualEdges[temp[i+m]];
+			residualEdges[temp[i+m]].reverse = residualEdges[temp[i]];
 		}
-		// set up residual edges
 	  // initialize excesses
-		excess[source.id()] = 0;
+		excess.set( source, 0 );
 		for( int i = first.get( source ); i < last.get( source ); ++i ) {
-			myEdge e = residualEdges[i];
-			if( e.end.id() != source.id() ) {
+			ResidualEdge e = residualEdges[i];
+			if( e.end().id() != source.id() ) {
 				pushes++;
 				final int delta = e.residualCapacity;
 				e.residualCapacity -= delta;
 				e.reverse.residualCapacity += delta;
-				excess[e.end.id()] += delta;
+				excess.increase( e.end(), delta );
 			}
 		}
-
-		// bucket indizes
-		aMax = 0;
-		aMin = n;
 
 		for( Node v : getProblem().getNetwork() ) {
 			final int id = v.id();
 			if( id == sink.id() ) {
-				distanceLabels[id] = 0;
-				addInactive( 0, v );
+				distanceLabels.set( v, 0 );
+				inactiveBuckets.addInactive( 0, v );
 				continue;
 			}
-			distanceLabels[id] = id == source.id() ? n : 1;
-			if( excess[id] > 0 )
-				addActive( 1, v );
-			else if( distanceLabels[id] < n )
-				addInactive( 1, v );
+			distanceLabels.set( v, id == source.id() ? n : 1 );
+			if( excess.get( v ) > 0 )
+				activeBuckets.addActive( 1, v );
+			else if( distanceLabels.get( v ) < n )
+				inactiveBuckets.addInactive( 1, v );
 		}
-		dMax = 1;
+		activeBuckets.setdMax( 1 );
 	}
 
-
 	protected void stageOne() {
-		while( aMax >= aMin ) {
-			final Node v = activeBuckets[aMax];
+		while( activeBuckets.getMaxIndex() >= activeBuckets.getMinIndex() ) {
+			final Node v = activeBuckets.max();
 			if( v == null ) {
-				aMax--;
-				if( aMax < aMin && useBugHeuristic )
+				if( activeBuckets.getMaxIndex() < activeBuckets.getMinIndex() && useBugHeuristic )
 					globalUpdate();
 			} else {
-				removeActive( aMax, v );
-
-				assert excess[v.id()] > 0;
+				activeBuckets.removeActive( activeBuckets.getMaxIndex(), v );
 				discharge( v );
-
-				if( aMax < aMin )
+				
+				if( activeBuckets.getMaxIndex() < activeBuckets.getMinIndex() )
 					break;
 
 				/* is it time for global update? */
@@ -218,196 +182,299 @@ public class HIPR extends Algorithm<MaximumFlowProblem, MaximumFlow> {
 					globalUpdate();
 			}
 		}
-		// we have a max flow
-		flow = excess[sink.id()];
+		// we have a max flowValue
+		flowValue = excess.get( sink );
 	}
 
-	protected void discharge( Node v ) {
-		// note here v is not in the activeBuckets of active nodes!
-		//boolean applicable = isActive( v );
-		//if( !applicable )
-		//	throw new IllegalArgumentException( "Discharging not applicable" );
+	protected void stageTwo() {
+		Node[] buckets = new Node[n];
+		Node[] next = new Node[n];
 
-		//System.out.println( "Discharge " + v.toString() );
+		/* deal with self-loops */
+//		forAllNodes( i ) {
+//			forAllArcs( i, a )
+//      if( a ->  head == i )
+//				a ->  resCap = cap[a - arcs];
+//		}
 
-  assert excess[v.id()] > 0;
-  assert v.id() != sink.id();
-	do {
-		int l = distanceLabels[v.id()];	// current node distance
-		int jD = l-1;	// the distance of applicable nodes
+		final int WHITE = 0;
+		final int GREY = 1;
+		final int BLACK = 2;
 
-		/* outarcs of v */
-		int i;
-		for( i = current.get( v ); i < last.get( v ); ++i ) {
-			myEdge e = residualEdges[i];
-			if( e.residualCapacity > 0 ) {
-				Node j = e.end;
+		Node tos, bos;
+		// init
+		tos = bos = null;
+		for( Node i : getProblem().getNetwork() ) {
+			distanceLabels.set( i, WHITE );
+			//i -> d = WHITE;
+			//    buckets[i-nodes].firstActive = NULL;
+			activeBuckets.reset();
+			//buckets[i-nodes].firstActive = sentinelNode;
+			current.set( i, first.get( i ) );
+			//i ->  current = i ->  first;
+		}
 
-				if( distanceLabels[j.id()] == jD ) {	// if is applicable
-					// push
-					if ( push( e ) == 0 )
-						break;
+		/* eliminate flowValue cycles, topologicaly order vertices */
+
+		for( Node i : getProblem().getNetwork() )
+			if( distanceLabels.get( i ) == WHITE && excess.get( i ) > 0 && !i.equals( source ) && !i.equals( sink ) ) {
+
+				Node r = i;
+				distanceLabels.set( r, GREY );
+				do {
+					for( ; current.get( i ) != last.get( i ); current.increase( i, 1 ) ) {
+						ResidualEdge a = residualEdges[current.get( i )];
+						// ???? if( (cap[a - arcs] == 0) && (a.residualCapacity > 0) ) {
+						if( (a.reverseEdge) && (a.residualCapacity > 0) ) {
+							Node j = a.end();
+							if( distanceLabels.get( j ) == WHITE ) {
+								/* start scanning j */
+								distanceLabels.set( j, GREY );
+								//activeBuckets.addActive( j.id(), i); // ?????
+								buckets[j.id()] = i;
+								//buckets[j - nodes].firstActive = i;
+								i = j;
+								break;
+							} else if( distanceLabels.get( j ) == GREY ) {
+								/* find minimum flowValue on the cycle */
+								int delta = a.residualCapacity;
+								while( true ) {
+									delta = Math.min( delta, residualEdges[current.get( j )].residualCapacity );
+									if( j.equals( i ) )
+										break;
+									else
+										j = residualEdges[current.get( j )].end();
+								}
+
+								/* remove delta flowValue units */
+								j = i;
+								while( true ) {
+									a = residualEdges[current.get( j )];
+									a.residualCapacity -= delta;
+									a.reverse.residualCapacity += delta;
+									j = a.end();
+									;
+									if( j.equals( i ) )
+										break;
+								}
+
+								/* backup DFS to the first saturated arc */
+								Node restart = i;
+								for( j = residualEdges[current.get( i )].end(); !j.equals( i ); j = a.end() ) {
+									a = residualEdges[current.get( j )];
+									if( (distanceLabels.get( j ) == WHITE) || (a.residualCapacity == 0) ) {
+										distanceLabels.set( residualEdges[current.get( j )].end(), WHITE );
+										if( distanceLabels.get( j ) != WHITE )
+											restart = j;
+									}
+								}
+
+								if( !restart.equals( i ) ) {
+									i = restart;
+									current.increase( i, 1 );
+									break;
+								}
+							}
+						}
+					}
+
+					if( current.get( i ) == last.get( i ) ) {
+						/* scan of i complete */
+						distanceLabels.set( i, BLACK );
+						if( !i.equals( source ) )
+							if( bos == null ) {
+								bos = i;
+								tos = i;
+							} else {
+								next[i.id()] = tos;
+								//next i ->  bNext = tos;
+								tos = i;
+							}
+
+						if( i != r ) {
+							i = buckets[i.id()];
+							current.increase( i, 1 );
+						} else
+							break;
+					}
+				} while( true );
+			}
+
+		/* return excesses */
+		/* note that sink is not on the stack */
+		if( bos != null ) {
+			for( Node i = tos; !i.equals( bos ) ; i = next[i.id()] ) {
+				int pos = first.get( i );
+				ResidualEdge a = residualEdges[pos];
+				while( excess.get( i ) > 0 ) {
+					if( (a.reverseEdge) && (a.residualCapacity > 0) ) {
+						int delta;
+						if( a.residualCapacity < excess.get( i ) )
+							delta = a.residualCapacity;
+						else
+							delta = excess.get( i );
+						a.residualCapacity -= delta;
+						a.reverse.residualCapacity += delta;
+						excess.decrease( i, delta );
+						excess.increase( a.end(), delta );
+					}
+					a = residualEdges[++pos];
 				}
+			}
+			/* now do the bottom */
+			Node i = bos;
+			int pos = first.get( i );
+			ResidualEdge a = residualEdges[pos];
+			while( excess.get( i ) > 0 ) {
+				if( (a.reverseEdge) && (a.residualCapacity > 0) ) {
+					int delta;
+					if( a.residualCapacity < excess.get( i ) )
+						delta = a.residualCapacity;
+					else
+						delta = excess.get( i );
+					a.residualCapacity -= delta;
+					a.reverse.residualCapacity += delta;
+					excess.decrease( i, delta );
+					excess.increase( a.end(), delta );
+				}
+				a = residualEdges[++pos];
 			}
 		}
 
-		// all outgoing arcs are scanned now.
-		if( i == last.get( v ) ) {
-			// relabel, ended due to pointer at the last arc
-			relabel( v );
+	}
 
-			if( distanceLabels[v.id()] == n )
+	protected void discharge( Node v ) {
+		assert excess.get( v ) > 0;
+		assert v.id() != sink.id();
+		do {
+			int nodeDistance = distanceLabels.get( v );	// current node distance. -1 is applicable distance
+
+			int i;	// for all outarcs
+			for( i = current.get( v ); i < last.get( v ); ++i ) {
+				final ResidualEdge e = residualEdges[i];
+				// if is applicable, push. break if no excess is leftover
+				if( e.residualCapacity > 0 && distanceLabels.get( e.end() ) == nodeDistance - 1 && push( e ) == 0 )
+					break;
+			}
+
+			// all outgoing arcs are scanned now.
+			if( i == last.get( v ) ) {
+				// relabel, ended due to pointer at the last arc
+				relabel( v );
+
+				if( distanceLabels.get( v ) == n )
+					break;
+
+				if( activeBuckets.get( nodeDistance ) == null && inactiveBuckets.get( nodeDistance ) == null )
+					gap( nodeDistance );
+
+				if( distanceLabels.get( v ) == n )
+					break;
+			} else {
+				// node is no longer active
+				current.set( v, i );
+				// put the vertex on the inactive list
+				inactiveBuckets.addInactive( nodeDistance, v );
 				break;
-
-			// todo: gap
-			if( activeBuckets[l] == null && inactiveBuckets[l] == null )
-				gap( l );
-
-			// todo gap-break
-
-			if( distanceLabels[v.id()] == n )
-				break;
-
-//			if ((l -> firstActive == sentinelNode) &&
-//         (l -> firstInactive == sentinelNode)
-//          )
-//        gap (l);
-		} else {
-			// node is no longer active
-			current.set( v, i );
-			// put the vertex on the inactive list
-			addInactive( l, v );
-			break;
-		}
-	} while( true );
-
-}
+			}
+		} while( true );
+	}
 
 	/**
-	 * Gap relabeling
+	 * Gap relabeling (maybe move to bucket?)
 	 * @param l
 	 */
 	protected int gap( int emptyB ) {
 		gaps++;
-		int r = emptyB-1;
+		int r = emptyB - 1;
 		int cc;
 
-  /* set labels of nodes beyond the gap to "infinity" */
-  for ( int l = emptyB + 1; l <= dMax; l++ ) {
-    /* this does nothing for high level selection
-    for (i = l -> firstActive; i != sentinelNode; i = i -> bNext) {
-      i -> d = n;
-      gNodeCnt++;
-    }
-    l -> firstActive = sentinelNode;
-    */
+		/* set labels of nodes beyond the gap to "infinity" */
+		for( int l = emptyB + 1; l <= activeBuckets.getdMax(); l++ ) {
+			/* this does nothing for high level selection
+			for (i = l -> firstActive; i != sentinelNode; i = i -> bNext) {
+			i -> d = n;
+			gNodeCnt++;
+			}
+			l -> firstActive = sentinelNode;
+			 */
 
-		for( Node node = inactiveBuckets[l]; node != null; node = next.get( node ) ) {
-			distanceLabels[node.id()] = n;
-			gapNodes++;
+			// TODO iterator
+			//for( Node node = inactiveBuckets.get( l ); node != null; node = next.get( node ) ) {
+			for( Node node = inactiveBuckets.get( l ); node != null; node = inactiveBuckets.next( node ) ) {
+				distanceLabels.set( node, n );
+				gapNodes++;
+			}
+			// TODO change somehow...
+			inactiveBuckets.set( l, null );
+
 		}
-		inactiveBuckets[l] = null;
 
-//    for ( int i =  l -> firstInactive; i != sentinelNode; i = i -> bNext ) {
-//      i -> d = n;
-//      gNodeCnt ++;
-//    }
-//
-//    l -> firstInactive = sentinelNode;
-  }
+		cc = (activeBuckets.getMinIndex() > r) ? 1 : 0;
 
-  cc = ( aMin > r ) ? 1 : 0;
-
-  dMax = r;
-  aMax = r;
-
+		activeBuckets.setMaxIndex( r );
 		return cc;
 	}
 
 	/**
 	 *
-	 * @param a
+	 * @param e
 	 * @return the rest excess at the start node of the edge
 	 */
-	private int push( myEdge a /* * (v,w) */ ) {
+	private int push( ResidualEdge e ) {
 		pushes++;
-		int delta;
-		if( a.residualCapacity < excess[a.start.id()] ) {
-			delta = a.residualCapacity;
-		} else {
-			delta = excess[a.start.id()];
-		}
-		a.residualCapacity -= delta;
-		a.reverse.residualCapacity += delta;
+		final int delta = e.residualCapacity < excess.get( e.start() ) ? e.residualCapacity : excess.get( e.start() );
+		e.residualCapacity -= delta;
+		e.reverse.residualCapacity += delta;
 
-		if( a.end.id() != sink.id() ) {
-			int dist = distanceLabels[a.start.id()]-1;
-			if( excess[a.end.id()] == 0 ) {	// excess of a.end will be positive after the push!
-				// remove from j from inactive list
-				deleteInactive( dist, a.end );
-				// put j to active list
-				addActive( dist, a.end );
-			}
+		if( !e.end().equals( sink ) && excess.get( e.end() ) == 0 ) {
+			// excess of a.end will be positive after the push!
+			// remove j from the inactive list and put to the active list
+			final int dist = distanceLabels.get( e.start() )-1;
+			inactiveBuckets.deleteInactive( dist, e.end() );
+			activeBuckets.addActive( dist, e.end() );
 		}
 
-		excess[a.start.id()] -= delta;
-		excess[a.end.id()] += delta;
+		excess.decrease( e.start(), delta );
+		excess.increase( e.end(), delta );
 
-//		if( a.end.equals( sink ) ) {
-//			System.out.println( "Flow: " + excess[sink.id()] + " Pushes: " + pushes + "Relabels: " + relabels );
-//		}
-
-
-
-		return excess[a.start.id()];
+		return excess.get( e.start() );
 	}
 
-	private boolean pushApplicable( myEdge e ) {
-		return isActive( e.start ) && isAdmissible( e );
+	private boolean pushApplicable( ResidualEdge e ) {
+		return isActive( e.start() ) && isAdmissible( e );
 	}
 
 	protected int relabel( Node v ) {
-		//boolean applicable = relabelApplicable( v );
-		//if( !applicable ) {
-		//	throw new IllegalStateException( "Relabel not applicable!" );
-			//applicable = relabelApplicable( v );
-		//}
-
-		//int oldDistance = distanceLabels.get( v );
-
-		assert excess[v.id()] > 0;
+		assert excess.get( v ) > 0;
 
 		relabels++;
 		relabelsSinceLastGlobalRelabel += 12;
 
-		distanceLabels[v.id()] = n;
-		int minD = n;
-		myEdge minEdge = null;
+		distanceLabels.set( v, n );
+		int minDistance = n;
+		ResidualEdge minEdge = null;
 
 		// search for the minimum distance value
 		for( int i = useBugHeuristic ? current.get( v ) : first.get( v ); i < last.get( v ); ++i ) {
 			relabelsSinceLastGlobalRelabel++;
-			final myEdge e = residualEdges[i];
-
-			if( e.residualCapacity > 0 ) {
-				final int id = distanceLabels[e.end.id()];
-				if( id < minD ) {
-					minD = id;
-					minEdge = e;
-				}
+			final ResidualEdge e = residualEdges[i];
+			if( e.residualCapacity > 0 && distanceLabels.get( e.end() ) < minDistance ) {
+				minDistance = distanceLabels.get( e.end() );
+				minEdge = e;
 			}
 		}
 
-		minD++;
+		minDistance++;
 
-		if( minD < n ) {
-			distanceLabels[v.id()] = minD;
-			current.set( v, minEdge.id );
-			if( dMax < minD )
-				dMax = minD;
+		if( minDistance < n ) {
+			distanceLabels.set( v, minDistance );
+			current.set( v, minEdge.id() );
+			if( activeBuckets.getdMax() < minDistance )
+				activeBuckets.setdMax( minDistance );
 		}
 
-		return minD;
+		return minDistance;
 	}
 
 	protected boolean relabelApplicable( Node v ) {
@@ -424,101 +491,6 @@ public class HIPR extends Algorithm<MaximumFlowProblem, MaximumFlow> {
 		return true;
 	}
 
-	private  final void addInactive( int distance, Node node ) {
-		if( inactive[node.id()] )
-			return;
-		inactive[node.id()] = true;
-		
-		if( inactiveBuckets[distance] != null ) {
-			final Node next_t = inactiveBuckets[distance];
-			next.set( node, next_t );
-			prev.set( node, null );
-			prev.set( next_t, node );
-		} else {
-			next.set( node, null );
-		}
-		inactiveBuckets[distance] = node;
-	}
-
-	private  final void deleteInactive( int distance, Node node ) {
-		assert inactive[node.id()];
-		inactive[node.id()] = false;
-
-		final Node next_t = next.get( node );
-		if( inactiveBuckets[distance].id() == node.id() ) {
-			inactiveBuckets[distance] = next_t;
-			if( next_t != null )
-				prev.set( next_t, null );
-		} else {
-			final Node prev_t = prev.get( node );
-			next.set( prev_t, next.get( node ) );
-			if( next_t != null)
-				prev.set( next_t, prev_t );
-
-		}
-	}
-
-	private  final void addActive( int distance, Node node ) {
-		if( active[node.id()] == true )
-			return;	// was already active
-
-		active[node.id()] = true;
-
-		next.set( node, activeBuckets[distance] );
-		activeBuckets[distance] = node;
-		final int dist = distanceLabels[node.id()];
-		if( dist < aMin )
-			aMin = dist;
-		if( dist > aMax )
-			aMax = dist;
-		if( dMax < aMax )
-			dMax = aMax;
-	}
-
-	/**
-	 * Removes the first element in the bucket list of the given distance. Only
-	 * works if {@code node} is the first element.
-	 * @param distance
-	 * @param node
-	 */
-	private final void removeActive( int distance, Node node ) {
-		assert active[node.id()];
-		active[node.id()] = false;
-		activeBuckets[distance] = next.get( node );
-	}
-
-	public void printActiveBucket( int distance ) {
-		Node node = activeBuckets[distance];
-		System.out.print( "ABucket " + distance + ": " );
-		while( node != null ) {
-			System.out.print( node.id() );
-			if( prev.get( node ) != null ) {
-				System.out.print( "<");
-			}
-			if( next.get( node ) != null ) {
-				System.out.print( "->" );
-			}
-			node = next.get( node );
-		}
-		System.out.println();
-	}
-
-	public void printInactiveBucket( int distance ) {
-		Node node = inactiveBuckets[distance];
-		System.out.print( "IBucket " + distance + ": " );
-		while( node != null ) {
-			System.out.print( node.id() );
-			if( next.get( node ) != null && prev.get( next.get( node ) ) != null ) {
-				System.out.print( "<");
-			}
-			if( next.get( node ) != null ) {
-				System.out.print( "->" );
-			}
-			node = next.get( node );
-		}
-		System.out.println();
-	}
-
 	private static enum States {
 		inactiveFirst,
 		inactiveNext,
@@ -529,47 +501,39 @@ public class HIPR extends Algorithm<MaximumFlowProblem, MaximumFlow> {
 	protected void globalUpdate() {
 		relabelsSinceLastGlobalRelabel = 0;
 		globalRelabels++;
-		
-		for( int i = 0; i <= dMax; ++i ) {
-			activeBuckets[i] = null;
-			inactiveBuckets[i] = null;
-		}
-		dMax = aMax = 0;
-		aMin = n;
+
+		inactiveBuckets.reset( activeBuckets.getdMax() );
+		activeBuckets.reset();
 
 		// all node distances to n
-		for( Node node : getProblem().getNetwork().nodes() ) {
-			distanceLabels[node.id()] = n;
-			active[node.id()] = false;
-			inactive[node.id()] = false;
-		}
-		distanceLabels[sink.id()] = 0;
+		for( Node node : getProblem().getNetwork().nodes() )
+			distanceLabels.set( node, n );
+		distanceLabels.set( sink, 0 );
 
-		Node node = null;
-
-		addInactive( 0, sink );
+		//addInactive( 0, sink );
+		inactiveBuckets.addInactive( 0, sink );
 		for( int curDist = 0; true; curDist++ ) {
-			final int cdpo = curDist+1;
-			//int nextNodeState = INACTIVE_FIRST; // which type is the next node.
-			States nextNodeState = States.inactiveFirst; // which type is the next node.
-			if( activeBuckets[curDist] == null && inactiveBuckets[curDist] == null )
+			final int curDistPlusOne = curDist+1;
+			if( activeBuckets.get( curDist ) == null && inactiveBuckets.get( curDist ) == null )
 				break;
 
+			Node node = null;
+			States nextNodeState = States.inactiveFirst; // which type is the next node.
 			while( true ) {
 				switch( nextNodeState ) {
 					case inactiveFirst:
-						node = inactiveBuckets[curDist];
+						node = inactiveBuckets.get( curDist );
 						nextNodeState = States.inactiveNext;
 						break;
 					case inactiveNext:
-						node = next.get( node );
+						node = inactiveBuckets.next( node );
 						break;
 					case activeFirst:
-						node = activeBuckets[curDist];
+						node = activeBuckets.get( curDist );
 						nextNodeState = States.activeNext;
 						break;
 					case activeNext:
-						node = next.get( node );
+						node = activeBuckets.next( node );
 						break;
 					default:
 						throw new AssertionError( nextNodeState );
@@ -586,21 +550,18 @@ public class HIPR extends Algorithm<MaximumFlowProblem, MaximumFlow> {
 
 				// scanning arcs incoming to a node (these are reverse arcs from outgoing arcs)
 				for( int i = first.get( node ); i < last.get( node ); ++i ) {
-					final myEdge a = residualEdges[i];
+					final ResidualEdge a = residualEdges[i];
 					if( a.reverse.residualCapacity > 0 ) {
-						final Node j = a.end;
-						if( distanceLabels[j.id()] == n ) {
-							distanceLabels[j.id()] = cdpo;
+						final Node j = a.end();
+						if( distanceLabels.get( j ) == n ) {
+							distanceLabels.set( j, curDistPlusOne );
 							current.set( j, first.get( j ) );
-							if( cdpo > dMax)
-								dMax = cdpo;
-
-							if( excess[j.id()] > 0 )
-								// put into active list
-								addActive( cdpo, j );
-							else
-							// put into inactive list
-								addInactive( cdpo, j);
+							if( curDistPlusOne > activeBuckets.getdMax() )
+								activeBuckets.setdMax( curDistPlusOne );
+							if( excess.get( j ) > 0 ) // put into active list
+								activeBuckets.addActive( curDistPlusOne, j );
+							else // put into inactive list
+								inactiveBuckets.addInactive( curDistPlusOne, j);
 						}
 					}
 				}
@@ -608,16 +569,38 @@ public class HIPR extends Algorithm<MaximumFlowProblem, MaximumFlow> {
 		}
 	}
 
-	private boolean isAdmissible( myEdge e ) {
-		return e.residualCapacity > 0 && distanceLabels[e.start.id()] == distanceLabels[e.end.id()] + 1;
+	public void checkFlow() {
+		IdentifiableIntegerMapping<Edge> flow = new IdentifiableIntegerMapping<Edge>( m );
+		for( ResidualEdge e : residualEdges ) {
+			//System.out.println( e.toString() + " residual capacity: " + e.residualCapacity );
+			if( e.original == null )
+				continue;
+
+			//int capacity = getProblem().getCapacities().get( original );
+			//int used = e.reverse.residualCapacity;
+			flow.set( e.original, e.reverse.residualCapacity );
+			//System.out.println( original.toString() + " used " + used + " of " + capacity );
+		}
+
+		MaximumFlow mf = new MaximumFlow( getProblem(), flow );
+//		if( mf.check() )
+//			System.out.println( "ERRORS FOUND" );
+//		else
+//			System.out.println( "NO ERRORS FOUND" );
+		System.out.println( "Flow value: " + mf.getFlowValue() );
+		//System.out.println( mf.toString() );
+	}
+
+	private boolean isAdmissible( ResidualEdge e ) {
+		return e.residualCapacity > 0 && distanceLabels.get( e.start() ) == distanceLabels.get( e.end() ) + 1;
 	}
 
 	protected boolean isActive( Node v ) {
-		return /*!v.equals( source ) && */ !v.equals( sink ) && distanceLabels[v.id()] < n && excess[v.id()] > 0;
+		return /*!v.equals( source ) && */ !v.equals( sink ) && distanceLabels.get( v ) < n && excess.get( v ) > 0;
 	}
 
 	public long getFlow() {
-		return flow;
+		return flowValue;
 	}
 
 	public int getPushes() {
