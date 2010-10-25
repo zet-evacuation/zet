@@ -136,28 +136,32 @@ public class IdentifiableIntegerMapping<D extends Identifiable> implements Clone
         }
         mapping[identifiableObject.id()] = value;
     }
-
+		
     /**
-     * A convenience method equaling to <code>set(identifiableObject, 
+     * A convenience method equaling to <code>set(identifiableObject,
      * get(identifiableObject) + amount)</code>, with the exception that the
      * domain is to automatically expanded to accommodate to large ID.
      * Runtime O(1).
-     * @param identifiableObject the object for which the value is to be 
+     * @param identifiableObject the object for which the value is to be
      * increased.
-     * @param amount the amount by which the integer currently associated with 
+     * @param amount the amount by which the integer currently associated with
      * <code>identifiableObject</code> is to be increased.
-     * @exception ArrayIndexOutOfBoundsException if 
-     * <code>identifiableObject</code>'s ID is less then 0 or greater equal than 
+     * @exception ArrayIndexOutOfBoundsException if
+     * <code>identifiableObject</code>'s ID is less then 0 or greater equal than
      * the size of the domain.
-     * @exception NullPointerException if <code>identifiableObject</code> is 
+     * @exception NullPointerException if <code>identifiableObject</code> is
      * null.
      * @see #getDomainSize
      * @see #setDomainSize
      * @see Identifiable
      */
-    public void increase(D identifiableObject, int amount) {
-        mapping[identifiableObject.id()] += amount;
-    }
+		public void increase( D identifiableObject, int amount ) {
+			if( identifiableObject == null )
+				throw new RuntimeException( "IdentifiableObject contains null, amount contains " + amount + "." );
+			if( identifiableObject.id() >= getDomainSize() )
+				setDomainSize( identifiableObject.id() + 1 );
+			mapping[identifiableObject.id()] += amount;
+		}
 
     /**
      * Associates <code>identifiableObject</code> with <code>value</code> in
@@ -181,12 +185,10 @@ public class IdentifiableIntegerMapping<D extends Identifiable> implements Clone
      * @see Identifiable
      */
     public void add(D identifiableObject, int value) {
-        if (identifiableObject == null) {
+        if (identifiableObject == null)
             throw new RuntimeException("IdentifiableObject contains null, value contains " + value + ".");
-        }
-        if (identifiableObject.id() >= getDomainSize()) {
+        if (identifiableObject.id() >= getDomainSize())
             setDomainSize(Math.min(identifiableObject.id() + 1, getDomainSize() * 2));
-        }
         mapping[identifiableObject.id()] = value;
     }
 
@@ -209,7 +211,11 @@ public class IdentifiableIntegerMapping<D extends Identifiable> implements Clone
      * @see Identifiable
      */
     public void decrease(D identifiableObject, int amount) {
-        mapping[identifiableObject.id()] -= amount;
+			if( identifiableObject == null )
+				throw new RuntimeException( "IdentifiableObject contains null, amount contains " + amount + "." );
+			if( identifiableObject.id() >= getDomainSize() )
+				setDomainSize( identifiableObject.id() + 1 );
+			mapping[identifiableObject.id()] -= amount;
     }
 
     /**

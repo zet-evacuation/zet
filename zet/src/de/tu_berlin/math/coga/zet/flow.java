@@ -7,6 +7,8 @@ package de.tu_berlin.math.coga.zet;
 import algo.graph.dynamicflow.eat.EarliestArrivalFlowProblem;
 import algo.graph.dynamicflow.eat.LongestShortestPathTimeHorizonEstimator;
 import algo.graph.dynamicflow.eat.SEAAPAlgorithm;
+import algo.graph.staticflow.maxflow.PushRelabel;
+import algo.graph.staticflow.maxflow.PushRelabelHighestLabelGlobalGapRelabelling;
 import com.martiansoftware.jsap.FlaggedOption;
 import com.martiansoftware.jsap.JSAP;
 import com.martiansoftware.jsap.JSAPException;
@@ -20,16 +22,16 @@ import de.tu_berlin.math.coga.common.algorithm.AlgorithmStartedEvent;
 import de.tu_berlin.math.coga.common.algorithm.AlgorithmStatusEvent;
 import de.tu_berlin.math.coga.common.algorithm.AlgorithmTerminatedEvent;
 import de.tu_berlin.math.coga.common.util.Formatter;
+import de.tu_berlin.math.coga.graph.io.dimacs.DimacsReader;
 import de.tu_berlin.math.coga.graph.io.xml.GraphView;
 import de.tu_berlin.math.coga.graph.io.xml.XMLReader;
 import de.tu_berlin.math.coga.graph.io.xml.XMLWriter;
-import de.tu_berlin.math.coga.math.vectormath.Vector3;
 import de.tu_berlin.math.coga.zet.viewer.NodePositionMapping;
 import ds.GraphVisualizationResults;
 import ds.graph.IdentifiableIntegerMapping;
-import ds.graph.IdentifiableObjectMapping;
 import ds.graph.Node;
 import ds.graph.flow.PathBasedFlowOverTime;
+import ds.graph.problem.MaximumFlowProblem;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -40,6 +42,10 @@ import java.io.PrintWriter;
  * @author Jan-Philipp Kappmeier
  */
 public class flow implements AlgorithmListener {
+	private static enum ComputationMode {
+		EarliestArrivalFlow,
+		StaticMaximumFlow;
+	}
 	/** The instance of the earliest arrival problem that should be solved. */
 	EarliestArrivalFlowProblem eafp = null;
 	static flow theInstance;
@@ -52,8 +58,12 @@ public class flow implements AlgorithmListener {
 	int percentInterval = 100;
 	GraphView graphView = null;
 
+	// General stuff
+	String inputFileName;
+	ComputationMode computationMode;
+
 	public static void main ( String[] args ) throws JSAPException, IOException {
-		System.out.println( "flow 0.2.0" );
+		System.out.println( "flow 0.3.0" );
 
 		JSAP jsap = new JSAP();
 
@@ -97,11 +107,11 @@ public class flow implements AlgorithmListener {
 			System.exit( 1 );
 		}
 
-		theInstance = new flow();
+		theInstance = new flow( config.getString( "flowfile" ) );
 
 		// Scan the input file type by its ending
-		final String filename = config.getString( "flowfile" );
-		if( filename.endsWith( ".dat" ) ) {
+		
+		if( theInstance.inputFileName.endsWith( ".dat" ) ) {
 			// Use internal dat format
 			System.out.println( "Reading from dat-file." );
 			try {
@@ -109,20 +119,24 @@ public class flow implements AlgorithmListener {
 				theInstance.nodePositionMapping = new NodePositionMapping();
 				theInstance.xPos = new IdentifiableIntegerMapping<Node>( 0 );
 				theInstance.yPos = new IdentifiableIntegerMapping<Node>( 0 );
-				theInstance.eafp = DatFileReaderWriter.read( filename, theInstance.nodePositionMapping );
+				theInstance.eafp = DatFileReaderWriter.read( theInstance.inputFileName, theInstance.nodePositionMapping );
 				theInstance.graphView = new GraphView( theInstance.eafp, theInstance.nodePositionMapping );
 				// version without x and y positions:
 				//				theInstance.eafp = DatFileReaderWriter.read( filename );
 			} catch( FileNotFoundException ex ) {
-				System.err.println( "File '" + filename + "' not found." );
+				System.err.println( "File '" + theInstance.inputFileName + "' not found." );
 				System.exit( 1 );
 			}
-		} else if( filename.endsWith( ".xml" ) ) {
+		} else if( theInstance.inputFileName.endsWith( ".xml" ) ) {
 			// Use xml-format
 			System.out.println( "Reading from xml-file." );
-			XMLReader reader = new XMLReader( filename );
+			XMLReader reader = new XMLReader( theInstance.inputFileName );
 			theInstance.eafp = reader.readFlowInstance();
 			theInstance.graphView = reader.getXmlData().getGraphView();
+		} else if(theInstance.inputFileName.endsWith( ".max" ) ) {
+			// use a dimacs challenge max flow
+			theInstance.computationMode = ComputationMode.StaticMaximumFlow;
+			
 		}
 
 		theInstance.performAction( config.getString( "mode" ) );
@@ -132,7 +146,7 @@ public class flow implements AlgorithmListener {
 			String outFilename;
 			if( !config.contains( "outputfile" ) ) {
 				System.out.println( "No output file specified. Using input filename as output." );
-				outFilename = filename.substring( 0, filename.length()-4 ) + "." + format;
+				outFilename = theInstance.inputFileName.substring( 0, theInstance.inputFileName.length()-4 ) + "." + format;
 			} else
 				outFilename = config.getString( "outputfile" );
 			if( format.equals( "flow" ) ) {
@@ -145,7 +159,7 @@ public class flow implements AlgorithmListener {
 					XStream xml_convert = new XStream();
 					xml_convert.toXML( theInstance.graphVisResult, output );
 				} catch( IOException e ) {
-					System.err.println( "Error writing the file '" + filename + "'");
+					System.err.println( "Error writing the file '" + theInstance.inputFileName + "'");
 					System.exit( 1 );
 				}
 			} else if( format.equals( "xml" ) ) {
@@ -162,10 +176,25 @@ public class flow implements AlgorithmListener {
 				System.err.println( "dot-out not supported yet." );
 			}
 		} else
-			System.out.println( "No output." );
+			;//System.out.println( "No output." );
+	}
+
+	public flow( String inputFileName ) {
+		this.inputFileName = inputFileName;
 	}
 
 	public void compute( ) {
+		switch( computationMode ) {
+			case EarliestArrivalFlow:
+				computeMaximumFlow();
+				break;
+			case StaticMaximumFlow:
+				computeMaximumFlow();
+				break;
+		}
+	}
+
+	private void computeEarliestArrivalFlow() {
 		if( eafp.getTimeHorizon() <= 0 ) {
 			System.out.print( "Estimating time horizon..." );
 			LongestShortestPathTimeHorizonEstimator estimator = new LongestShortestPathTimeHorizonEstimator();
@@ -191,8 +220,53 @@ public class flow implements AlgorithmListener {
 		System.out.println( "Total cost: " + algo.getSolution().getTotalCost() );
 	}
 
+	private void computeMaximumFlow() {
+
+		DimacsReader dl = new DimacsReader( inputFileName );
+		start = System.nanoTime();
+
+		dl.load();
+		end = System.nanoTime();
+		System.out.println( "Loading: " + Formatter.formatTimeNanoseconds( end-start) );
+
+		MaximumFlowProblem mfp = dl.getMaximumFlowProblem();
+		PushRelabelHighestLabelGlobalGapRelabelling hipr = new PushRelabelHighestLabelGlobalGapRelabelling();
+		hipr.setProblem( mfp );
+		start = System.nanoTime();
+		hipr.run();
+		end = System.nanoTime();
+		System.out.println( "Init: " + Formatter.formatTimeNanoseconds( hipr.getInitTime() ) );
+		System.out.println( "MaxFlow: " + Formatter.formatTimeNanoseconds( hipr.getPhase1Time() ) );
+		System.out.println( "Cut: " + Formatter.formatTimeNanoseconds( hipr.getPhase2Time() ) );
+		System.out.println( "" );
+		System.out.println( "Overall: " + Formatter.formatTimeNanoseconds( end-start) );
+		System.out.println();
+		System.out.println( "Flow value: " + hipr.getFlowValue() );
+		System.out.println();
+		System.out.println( "Pushes: " + hipr.getPushes() );
+		System.out.println( "Relabels: " + hipr.getRelabels() );
+		System.out.println( "Global updates: " + hipr.getGlobalRelabels() );
+		System.out.println( "Gaps: " + hipr.getGaps() );
+		System.out.println( "Gap nodes: " + hipr.getGapNodes() );
+
+		System.out.println();
+		dl.loadSolution();
+		// check solution and compare with .sol if exists
+		if( dl.getSolution() != -1 ) {
+			if( dl.getSolution() == hipr.getFlowValue() )
+				System.out.println( "Solution checked with .sol and correct." );
+			else
+				System.out.println( "Solution incorrect!" );
+		} else {
+			System.out.println( "No solution .sol available." );
+		}
+	}
+
+
+
 	int index = 1;
 
+	long end;
 	long start = 0;
 	long pathDecompositionStart = 0;
 	public void eventOccurred( AlgorithmEvent event ) {
