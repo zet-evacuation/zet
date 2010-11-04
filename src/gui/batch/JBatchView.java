@@ -62,7 +62,7 @@ import javax.swing.table.AbstractTableModel;
 import javax.swing.table.DefaultTableCellRenderer;
 import de.tu_berlin.math.coga.common.localization.Localization;
 import de.tu_berlin.math.coga.rndutils.RandomUtils;
-import gui.Control;
+import gui.GUIControl;
 import statistics.GUIStatistic;
 import statistics.Statistic;
 
@@ -92,9 +92,9 @@ public class JBatchView extends JPanel {
 	private JTextField txtSeed;
 	private JPopupMenu popup;
 	private JCheckBox chkTempFiles;
-	private final Control guiControl;
+	private final GUIControl guiControl;
 
-	public JBatchView( Control guiControl ) {
+	public JBatchView( GUIControl guiControl ) {
 		super( new BorderLayout() );
 		this.guiControl = guiControl;
 		batch = new Batch();

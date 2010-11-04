@@ -8,7 +8,7 @@ import batch.BatchResult;
 import batch.BatchResultEntry;
 import de.tu_berlin.math.coga.common.localization.Localization;
 import de.tu_berlin.math.coga.common.localization.Localized;
-import gui.Control;
+import gui.GUIControl;
 import gui.ZETMain;
 import de.tu_berlin.math.coga.datastructure.NamedIndex;
 import gui.components.framework.Button;
@@ -30,7 +30,7 @@ import statistic.graph.Controller;
  */
 public class JStatisticGraphToolBar extends JToolBar implements ActionListener, Localized {
 
-	private final Control control;
+	private final GUIControl control;
 	/** The localization class. */
 	static final Localization loc = Localization.getInstance();
 	private JButton btnExit;
@@ -39,7 +39,7 @@ public class JStatisticGraphToolBar extends JToolBar implements ActionListener, 
 	private JLabel labelBatchName;
 	private BatchResultEntryGRSComboBoxModel entryModelGraph;
 
-	public JStatisticGraphToolBar( Control control ) {
+	public JStatisticGraphToolBar( GUIControl control ) {
 		this.control = control;
 		createStatisticsToolBar();
 		control.setGraphStatisticToolBar( this );

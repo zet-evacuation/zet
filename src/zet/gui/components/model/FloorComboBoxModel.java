@@ -16,7 +16,7 @@
 
 /**
  * Class FloorComboBoxModel
- * Erstellt 29.04.2008, 21:29:56
+ * Created 29.04.2008, 21:29:56
  */
 
 package zet.gui.components.model;
@@ -34,7 +34,7 @@ import javax.swing.DefaultComboBoxModel;
  * This class serves as a model for the JComboBox that contains the current floors.
  * 
  * ## This class is used in too many different environments. Sometimes it contains Strings, 
- * ## sometimes Floors, and there are other inconsitencies. Thus this class should be re-integrated 
+ * ## sometimes Floors, and there are other inconsistencies. Thus this class should be re-integrated
  * ## (as a nested class) into the classes who use it.
  * 
  * @author Jan-Philipp Kappmeier
@@ -63,12 +63,10 @@ public class FloorComboBoxModel extends DefaultComboBoxModel {
 					if( !f.equals( p.getBuildingPlan().getDefaultFloor() ) ) {
 						addElement( f );
 						entries.add( f );
-//						f.addChangeListener( this );
 					}
 				} else {
 					addElement( f );
 					entries.add( f );//
-//					f.addChangeListener( this );
 				}
 			}
 		}	
@@ -92,13 +90,7 @@ public class FloorComboBoxModel extends DefaultComboBoxModel {
 	}
 
 	public void clear() {
-//		if( getSelectedItem() != null  && getSelectedItem () instanceof Floor)
-//			((Floor) getSelectedItem()).removeChangeListener( roomSelector );
-
-//		for( Floor f : entries )
-//			f.removeChangeListener( this );
 		entries.clear();
-
 		removeAllElements();
 	}
 

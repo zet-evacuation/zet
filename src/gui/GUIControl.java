@@ -1,5 +1,5 @@
 /*
- * Control.java
+ * GUIControl.java
  * Created 16.07.2010, 12:18:41
  */
 package gui;
@@ -77,7 +77,7 @@ import zet.gui.components.toolbar.JStatisticGraphToolBar;
  * menus etc. and delegates them to other classes.
  * @author Jan-Philipp Kappmeier
  */
-public class Control {
+public class GUIControl {
 
 	/** The editor. */
 	public JEditor editor;
@@ -94,9 +94,9 @@ public class Control {
 	private AlgorithmControl algorithmControl;
 
 	/**
-	 * Creates a new instance of <code>Control</code>.
+	 * Creates a new instance of <code>GUIControl</code>.
 	 */
-	public Control() {
+	public GUIControl() {
 	}
 
 	public void createZETWindow() {
@@ -733,8 +733,11 @@ public class Control {
 	}
 
 	public void newFloor() {
-		zcontrol.getProject().getBuildingPlan().addFloor( new Floor( Localization.getInstance().getString( "ds.z.DefaultName.Floor" ) + " " + zcontrol.getProject().getBuildingPlan().floorCount() ) );
+		Floor f = zcontrol.createNewFloor();
 		ZETMain.sendMessage( "Neue Etage angelegt." ); // TODO loc
+		// update the floor-boxes in the GUI
+		editor.getEditView().updateFloorlist();
+		editor.getEditView().changeFloor( f );		
 	}
 
 	public void moveFloorUp() {
@@ -952,7 +955,7 @@ public class Control {
 	public void addBatchEntry( BatchProjectEntry batchProjectEntry ) {
 		editor.getBatchView().add( batchProjectEntry );
 	}
-	/** Control class for projects and editing */
+	/** GUIControl class for projects and editing */
 	private ZControl zcontrol;
 
 	public ZControl getZControl() {
@@ -1036,9 +1039,9 @@ public class Control {
 		try {
 			algorithmControl.createConcreteAssignment();
 		} catch( IllegalArgumentException ex ) {
-			Logger.getLogger( Control.class.getName() ).log( Level.SEVERE, null, ex );
+			Logger.getLogger( GUIControl.class.getName() ).log( Level.SEVERE, null, ex );
 		} catch( ConversionNotSupportedException ex ) {
-			Logger.getLogger( Control.class.getName() ).log( Level.SEVERE, null, ex );
+			Logger.getLogger( GUIControl.class.getName() ).log( Level.SEVERE, null, ex );
 		}
 	}
 
@@ -1071,7 +1074,7 @@ public class Control {
 		try {
 			initialized = algorithmControl.performOneStep();
 		} catch( ConversionNotSupportedException ex ) {
-			Logger.getLogger( Control.class.getName() ).log( Level.SEVERE, null, ex );
+			Logger.getLogger( GUIControl.class.getName() ).log( Level.SEVERE, null, ex );
 		}
 			if( initialized ) {
 				editor.getQuickVisualizationView().getLeftPanel().getMainComponent().setCa( algorithmControl.getCellularAutomaton() );

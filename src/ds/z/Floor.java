@@ -21,6 +21,7 @@ package ds.z;
 
 import com.thoughtworks.xstream.annotations.XStreamAlias;
 import com.thoughtworks.xstream.annotations.XStreamAsAttribute;
+import de.tu_berlin.math.coga.common.localization.Localization;
 import ds.z.exception.AreaNotInsideException;
 import ds.z.exception.PolygonNotClosedException;
 import ds.z.exception.RoomIntersectException;
@@ -36,14 +37,11 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 
-import javax.swing.event.ChangeEvent;
-import de.tu_berlin.math.coga.common.localization.Localization;
-
 /**
  * A <code>Floor</code> is a plane that can contain {@link Room}-objects. It is
  * generally not allowed that the rooms (which are basically polygons) intersect
  * each other. In fact, it is possible to create such a not allowed state. It is
- * recommended to check wheter a <code>Floor</code> is valid, or not before
+ * recommended to check whether a <code>Floor</code> is valid, or not before
  * using it for critical operations.
  * @see Floor#check( boolean )
  * @see ds.z.PlanPolygon
@@ -85,17 +83,6 @@ public class Floor implements Serializable, Cloneable, Iterable<Room> {
 	/** The Room that has the maximum y value (yOffset + width). */
 	private Room maxY_DefiningRoom;
 	
-	/** A flag that indicates whether events that are thrown are handed over to
-	 * the listeners. In case of complex manipulations you may want to suppress single 
-	 * events that arise
-	 * during the course of the manipulation and only send out a single event
-	 * at the end. Then you can set this variable to "false", but you should always
-	 * ensure that it is switched back to the state that it had before by using
-	 * try & finally constructions.
-	 */
-//	@XStreamOmitField ()
-//	private transient boolean enableEventGeneration = true;
-	
 	/**
 	 * Creates a new empty instance of <code>Floor</code> with the name "NewFloor".
 	 */
@@ -112,72 +99,14 @@ public class Floor implements Serializable, Cloneable, Iterable<Room> {
 		rooms = new ArrayList<Room>();
 	}
 
-	/** {@inheritDoc}
-	 * @param e the event
+	/**
+	 * To be called before the floor is finally deleted.
 	 */
-//	@Override
-//	public void throwChangeEvent( ChangeEvent e ) {
-//		if (enableEventGeneration) {
-//			// Workaround: Notify only the listeners who are registered at the time when this method starts
-//			// This point may be thrown away when the resulting edge must be rastered, and then the list
-//			// "changeListeners" will be altered during "c.stateChanged (e)", which produces exceptions.
-//			ChangeListener[] listenerCopy = changeListeners.toArray (
-//					new ChangeListener[changeListeners.size ()]);
-//
-//			for (ChangeListener c : listenerCopy) {
-//				c.stateChanged (e);
-//			}
-//		}
-//	}
-
-	/** To be called before the floor is finally deleted. */
 	void delete () {
-//		boolean eAG_old = enableEventGeneration;
-		try {
-//			enableEventGeneration = false;
-			
-			while (!rooms.isEmpty ()) {
-				rooms.get (0).delete ();
-			}
-		} finally {
-//			enableEventGeneration = eAG_old;
-		}
-		// Event is thrown by BuildingPlan
+		while( !rooms.isEmpty() )
+			rooms.get( 0 ).delete();
 	}
 	
-	/** {@inheritDoc}
-	 * @param c the listener
-	 */
-//	@Override
-//	public void addChangeListener( ChangeListener c ) {
-//		if( !changeListeners.contains( c ) ) {
-//			changeListeners.defineByPoints( c );
-//		}
-//	}
-//
-//	/** {@inheritDoc}
-//	 * @param c the listener
-//	 */
-//	@Override
-//	public void removeChangeListener( ChangeListener c ) {
-//		changeListeners.remove( c );
-//	}
-//
-//	/** {@inheritDoc}
-//	 * @param e the event
-//	 */
-//	@Override
-//	public void stateChanged( ChangeEvent e ) {
-//		if (e instanceof EdgeChangeEvent && ((EdgeChangeEvent)e).getEdge () instanceof RoomEdge) {
-//			roomChangeHandler ( ((RoomEdge) ((EdgeChangeEvent)e).getEdge ()).getRoom () );
-//		} else if (e.getSource () instanceof Room) {
-//			roomChangeHandler ((Room)e.getSource ());
-//		}
-//
-//		// Simply forward the event
-//		throwChangeEvent( e );
-//	}
-
 	/**
 	 * Adds a room to the floor and sets this floor as the associated floor of the room to be added.
 	 * @param room the room to be added
@@ -185,16 +114,9 @@ public class Floor implements Serializable, Cloneable, Iterable<Room> {
 	 */
 	void addRoom( Room room ) throws IllegalArgumentException {
 		try {
-			if( rooms.contains( room ) ) {
-				throw new IllegalArgumentException(Localization.getInstance (
-				).getString ("ds.z.RoomAlreadyExistsException"));
-			}
+			if( rooms.contains( room ) )
+				throw new IllegalArgumentException(Localization.getInstance ( ).getString ("ds.z.RoomAlreadyExistsException"));
 			rooms.add( room );
-//			room.addChangeListener( this );
-//			roomChangeHandler (room);
-//			throwChangeEvent( new ChangeEvent( this, Localization.getInstance (			).getString ("ds.z.RoomAdded") ) );
-		// The room calls this method, so there is no need to set it's field here
-		// room.setAssociatedFloor (this);
 		} catch( IllegalArgumentException ex ) {
 			throw ex;
 		}
@@ -214,14 +136,11 @@ public class Floor implements Serializable, Cloneable, Iterable<Room> {
 	 * @throws IllegalArgumentException if the given room is not associated with this floor
 	 */
 	void deleteRoom( Room room ) throws IllegalArgumentException {
-		if( !( rooms.contains( room ) ) ) {
-			throw new IllegalArgumentException(Localization.getInstance (
-			).getString ("ds.z.NoRoomException"));
-		} else {
+		if( !( rooms.contains( room ) ) )
+			throw new IllegalArgumentException(Localization.getInstance ( ).getString ("ds.z.NoRoomException"));
+		else {
 			rooms.remove( room );
-//			room.removeChangeListener( this );
 			roomDeleteHandler (room);
-//			throwChangeEvent( new ChangeEvent( this ) );
 		}
 	}
 
@@ -235,9 +154,8 @@ public class Floor implements Serializable, Cloneable, Iterable<Room> {
 	 * @param rasterized Indicates, if the BuildingPlan should be rasterized.
 	 */
 	public void check( boolean rasterized ) throws PolygonNotClosedException, AreaNotInsideException, RoomIntersectException, TeleportEdgeInvalidTargetException {
-		//try{
-		for( Room room1 : rooms ) {
-			room1.check( rasterized );
+		for( Room room : rooms ) {
+			room.check( rasterized );
 			// Check floors using direct access as rooms is an ArrayList
 			for( int i = 0; i < rooms.size(); i++ )
 				for( int j = i+1; j < rooms.size(); j++ )
@@ -330,7 +248,7 @@ public class Floor implements Serializable, Cloneable, Iterable<Room> {
 	}
 
 	/**
-	 * Returns the boudning box of this <code>Floor</code>. The bounding box
+	 * Returns the bounding box of this <code>Floor</code>. The bounding box
 	 * is the smallest {@link java.awt.Rectangle} that completely contains the
 	 * whole Floor. The calculation of this bounding box is accurate in the
 	 * integer coordinates of millimeter positions.
@@ -606,7 +524,7 @@ public class Floor implements Serializable, Cloneable, Iterable<Room> {
 	
 	/**
 	 * Indicates whether this is a <code>Floor</code> that was loaded from a legacy file.
-	 * @return <code>true</code> if the squared boundings are known, <code>false</code> otherwise
+	 * @return <code>true</code> if the squared bounding box is known, <code>false</code> otherwise
 	 */
 	public boolean boundStructureAvailable () {
 		return minX_DefiningRoom != null;

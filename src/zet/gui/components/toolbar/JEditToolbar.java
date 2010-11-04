@@ -5,7 +5,7 @@
 package zet.gui.components.toolbar;
 
 import de.tu_berlin.math.coga.common.localization.Localization;
-import gui.Control;
+import gui.GUIControl;
 import gui.ZETMain;
 import zet.gui.components.model.ComboBoxRenderer;
 import gui.components.framework.Button;
@@ -55,7 +55,7 @@ public class JEditToolbar extends JToolBar implements ActionListener, PopupMenuL
 	private EditComboBoxModel editSelector;
 	/** The number format used to display the zoom factor in the text field. */
 	private NumberFormat nfZoom = NumberFormat.getPercentInstance();	// Main window components
-	private final Control control;
+	private final GUIControl control;
 	private EditMode.Type creationType = EditMode.Type.CreationPointwise;
 
 	/**
@@ -63,7 +63,7 @@ public class JEditToolbar extends JToolBar implements ActionListener, PopupMenuL
 	 *
 	 * @param control
 	 */
-	public JEditToolbar( Control control ) {
+	public JEditToolbar( GUIControl control ) {
 		this.control = control;
 		createEditToolBar();
 		control.setEditToolbar( this );
