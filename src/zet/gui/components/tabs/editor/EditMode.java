@@ -25,7 +25,6 @@ import gui.editor.GUIOptionManager;
  * @author Jan-Philipp Kappmeier, Timon Kelter
  */
 public enum EditMode {
-
 	Selection( 1, Type.Selection, null, false ),
 	RoomCreation( 2, Type.CreationRectangled, GUIOptionManager.getRoomEdgeColor(), false ),
 	InaccessibleAreaCreation( 3, Type.CreationRectangled, GUIOptionManager.getInaccessibleAreaColor(), true ),
@@ -48,9 +47,9 @@ public enum EditMode {
 	PassableRoomCreation( 16, Type.EditExisting, GUIOptionManager.getRoomEdgeColor(), false ),
 	TeleportAreaCreationPointwise( 21, Type.CreationPointwise, GUIOptionManager.getTeleportAreaColor(), true ),
 	TeleportAreaCreation( 22, Type.CreationRectangled, GUIOptionManager.getTeleportAreaColor(), true );
-		/** The localization class. */
+	/** The localization class. */
 	Localization loc = Localization.getInstance();
-	
+
 	static {
 		// Here the partnerModes set. This cannot be done in the constructor because it would need
 		// illegal forward references
@@ -64,11 +63,10 @@ public enum EditMode {
 		setPartners( TeleportAreaCreation, TeleportAreaCreationPointwise );
 	}
 
-	private static void setPartners (EditMode e1, EditMode e2) {
+	private static void setPartners( EditMode e1, EditMode e2 ) {
 		e1.partnerMode = e2;
 		e2.partnerMode = e1;
 	}
-	
 	//private String name;
 	private int ID;
 	private Type editType;
@@ -76,13 +74,13 @@ public enum EditMode {
 	private boolean createSubpolygons;
 	private LinkedList payload;
 	private EditMode partnerMode;
-	
-	EditMode( Integer ID, Type editType, Color editorColor, boolean createSubpolygons) {
+
+	EditMode( Integer ID, Type editType, Color editorColor, boolean createSubpolygons ) {
 		this.ID = ID;
 		this.editType = editType;
 		this.editorColor = editorColor;
 		this.createSubpolygons = createSubpolygons;
-		this.payload = new LinkedList ();
+		this.payload = new LinkedList();
 		this.partnerMode = null;
 	}
 
@@ -92,12 +90,10 @@ public enum EditMode {
 	public static LinkedList<EditMode> getCreationModes() {
 		LinkedList<EditMode> trueEditModes = new LinkedList<EditMode>();
 
-		for( EditMode e : values() ) {
-			if( e.getType().equals( Type.CreationPointwise ) ||
-							e.getType().equals( Type.CreationRectangled ) ) {
+		for( EditMode e : values() )
+			if( e.getType().equals( Type.CreationPointwise )
+							|| e.getType().equals( Type.CreationRectangled ) )
 				trueEditModes.add( e );
-			}
-		}
 		return trueEditModes;
 	}
 
@@ -108,11 +104,9 @@ public enum EditMode {
 	public static LinkedList<EditMode> getCreationModes( Type editType ) {
 		LinkedList<EditMode> trueEditModes = new LinkedList<EditMode>();
 
-		for( EditMode e : values() ) {
-			if( e.getType().equals( editType ) ) {
+		for( EditMode e : values() )
+			if( e.getType().equals( editType ) )
 				trueEditModes.add( e );
-			}
-		}
 		return trueEditModes;
 	}
 
@@ -150,30 +144,30 @@ public enum EditMode {
 				return loc.getString( "gui.editor.EditMode.AssignmentAreaCreationPointwise" );
 			case 12:
 				return loc.getString( "gui.editor.EditMode.DelayAreaCreationPointwise" );
-			case 13:			
+			case 13:
 				return loc.getString( "gui.editor.EditMode.SaveAreaCreationPointwise" );
-			case 14:			
+			case 14:
 				return loc.getString( "gui.editor.EditMode.EvacuationAreaCreationPointwise" );
-			case 15:			
+			case 15:
 				return loc.getString( "gui.editor.EditMode.TeleportEdgeCreation" );
 			case 16:
-				return loc.getString( "gui.editor.EditMode.CreatePassageRoom");
+				return loc.getString( "gui.editor.EditMode.CreatePassageRoom" );
 			case 17:
-				return loc.getString( "gui.editor.EditMode.CreateStairArea");
+				return loc.getString( "gui.editor.EditMode.CreateStairArea" );
 			case 18:
-				return loc.getString( "gui.editor.EditMode.CreateStairAreaPointwise");
+				return loc.getString( "gui.editor.EditMode.CreateStairAreaPointwise" );
 			case 19:
-				return loc.getString( "gui.editor.EditMode.StairAreaMarkLowerLevel");
+				return loc.getString( "gui.editor.EditMode.StairAreaMarkLowerLevel" );
 			case 20:
-				return loc.getString( "gui.editor.EditMode.StairAreaMarkUpperLevel");
+				return loc.getString( "gui.editor.EditMode.StairAreaMarkUpperLevel" );
 			case 21:
-				return loc.getString( "gui.editor.EditMode.CreateTeleportArea");
+				return loc.getString( "gui.editor.EditMode.CreateTeleportArea" );
 			case 22:
-				return loc.getString( "gui.editor.EditMode.CreateTeleportAreaPointwise");
+				return loc.getString( "gui.editor.EditMode.CreateTeleportAreaPointwise" );
 		}
 		return loc.getString( "gui.UnknownEditMode" );
 	}
-	
+
 	/** 
 	 * @return The type of edits actions that are performed in this edit mode. */
 	public Type getType() {
@@ -188,10 +182,10 @@ public enum EditMode {
 	/** @return The partner mode of a creation mode (PointWise Creation <-> Rectangled Creation)
 	 *  or null if the current mode is not a polygon creation mode.
 	 */
-	public EditMode getPartnerMode () {
+	public EditMode getPartnerMode() {
 		return partnerMode;
 	}
-	
+
 	/** @return whether this edit mode creates polygons that are part of 
 	 * other polygons (f.e. Areas). This field is always false for edit modes
 	 * that are not of type CreationPointwise or CreationRectangled */
@@ -209,7 +203,7 @@ public enum EditMode {
 	public LinkedList getPayload() {
 		return payload;
 	}
-	
+
 	/**
 	 * The types of EditModes.
 	 */

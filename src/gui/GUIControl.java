@@ -92,6 +92,7 @@ public class GUIControl {
 	private ZETVisualization visualization;
 	private JEditView editview;
 	private AlgorithmControl algorithmControl;
+	ArrayList<AreaVisibility> mode = new ArrayList<AreaVisibility>( Arrays.asList( AreaVisibility.values() ) );
 
 	/**
 	 * Creates a new instance of <code>GUIControl</code>.
@@ -158,6 +159,7 @@ public class GUIControl {
 	 */
 	public void showArea( AreaVisibility areaType ) {
 		updateVisibility( areaType, true );
+		// TODO make them visible!
 //		switch( areaType ) {
 //			case Delay:
 //				//TODO Menu
@@ -187,13 +189,12 @@ public class GUIControl {
 		//editor.updateAreaVisiblity();
 	}
 
-	public void setEditMode( EditMode mode ) {
+	public void setEditMode( EditMode editMode ) {
 		if( editview != null ) {
-			editview.setEditMode( mode );
-
+			editview.setEditMode( editMode );
 			editToolBar.setEditSelectionSelected( false );
-			editToolBar.setEditPointwiseSelected( mode.getType() == EditMode.Type.CreationPointwise );
-			editToolBar.setEditRectangledSelected( mode.getType() == EditMode.Type.CreationRectangled );
+			editToolBar.setEditPointwiseSelected( editMode.getType() == EditMode.Type.CreationPointwise );
+			editToolBar.setEditRectangledSelected( editMode.getType() == EditMode.Type.CreationRectangled );
 		}
 	}
 
@@ -804,13 +805,15 @@ public class GUIControl {
 		distribution.dispose();
 	}
 
-	ArrayList<AreaVisibility> mode = new ArrayList<AreaVisibility>();
 
 	// TODO set anstelle von arraylist
 	/**
 	 * Hides and unhides the areas in the plan depending on the status of the
 	 * associated menu entries. The menu entries to hide and show all areas
 	 * are updated and, if necessary, disabled or enabled.
+	 *
+	 * @param areaVisibility
+	 * @param value
 	 */
 	public void updateVisibility( AreaVisibility areaVisibility, boolean value ) {
 		if( value && !mode.contains( areaVisibility ) )

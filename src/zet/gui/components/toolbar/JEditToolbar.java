@@ -328,7 +328,7 @@ public class JEditToolbar extends JToolBar implements ActionListener, PopupMenuL
 			rebuild();
 		}
 
-		public void rebuild() {
+		final public void rebuild() {
 			// In case that the creationType really changed we must restore the partner edit mode.
 			// If we change to the same creation type as before, we must restore the old selection itself.
 //			boolean restore_partner = getSelectedItem() != null
