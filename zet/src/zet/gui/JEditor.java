@@ -20,7 +20,6 @@
  */
 package zet.gui;
 
-import algo.ca.CellularAutomatonInOrderExecution;
 import batch.BatchResult;
 import ds.PropertyContainer;
 import ds.z.Floor;
@@ -63,13 +62,12 @@ import javax.swing.JToolBar;
 import javax.swing.KeyStroke;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
-import batch.tasks.AlgorithmTask;
 import ds.z.ZControl;
 import event.VisualizationEvent;
 import de.tu_berlin.math.coga.components.JLogPane;
 import gui.statistic.JStatisticsPanel;
 import zet.gui.components.toolbar.JEditToolbar;
-import gui.Control;
+import gui.GUIControl;
 import gui.ZETMain;
 import java.util.ArrayList;
 import javax.imageio.ImageIO;
@@ -120,11 +118,9 @@ public class JEditor extends JFrame implements Localized, EventListener<Progress
 	private static Point lastMouse = new Point( 0, 0 );
 	/** The delimiter used if numbers are stored in a tuple. */
 	final static String delimiter = Localization.getInstance().getStringWithoutPrefix( "numberSeparator" );
-	/** Control class for projects and editing */
+	/** GUIControl class for projects and editing */
 	private ZControl zcontrol;
 	private static boolean editing = false;
-	private CellularAutomatonInOrderExecution caAlgo = null;
-	private AlgorithmTask worker;
 	private BatchResult result;
 	// Options
 	private boolean firstSwitch = false;
@@ -164,17 +160,18 @@ public class JEditor extends JFrame implements Localized, EventListener<Progress
 	private boolean disableUpdate = false;
 	private ZETWindowTabs currentMode = ZETWindowTabs.EditFloor;
 	/** Decides whether the visualization should be restarted if 'play' is pressed. */
-	private boolean restartVisualization = false;
+	//private boolean restartVisualization = false;
 	/** Decides whether visualization runs in loop-mode, that means it automatically starts again. */
 	private boolean loop = false;
-	private Control guiControl;
+	private GUIControl guiControl;
 
 	/**
 	 * Creates a new instance of <code>JEditor</code>. Sets the editor position
 	 * and size, loads file icon, tool bars and menus.
 	 * @param guiControl the control class for the ZET GUI
+	 * @param zcontrol the control class for the Z-model
 	 */
-	public JEditor( Control guiControl, ZControl zcontrol ) {
+	public JEditor( GUIControl guiControl, ZControl zcontrol ) {
 		super();
 		this.guiControl = guiControl;
 		this.zcontrol = zcontrol;
@@ -525,18 +522,6 @@ public class JEditor extends JFrame implements Localized, EventListener<Progress
 	 */
 	private void switchTo( int tabIndex ) {
 		ZETWindowTabs tab = tabs.get( tabIndex );
-//		if( tab == ZETWindowTabs.QuickView && worker == null ) {
-//			ZETMain.sendError( loc.getStringWithoutPrefix( "gui.error.StartSimulation" ) );
-//			tabPane.setSelectedIndex( tabIndex );
-//			return;
-//		}
-		// TODO better implementation of this stuff for debug mode ?
-		//if( ((ZETMain.isDebug() && tabID > CA_FLOOR) || (!ZETMain.isDebug() && tabID > BATCH)) && result == null && tabID != LOG && tabID != STATISTICS ) {
-		//	ZETMain.sendError( loc.getStringWithoutPrefix( "gui.error.CreateBatch" ) );
-		//	tabPane.setSelectedIndex( tabIndex );
-		//	return;
-		//}
-
 		currentMode = tab;
 		// code using the switch-bar is disabled!
 		guiControl.visualizationPause();

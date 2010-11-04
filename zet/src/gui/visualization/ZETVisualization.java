@@ -12,7 +12,7 @@ import event.EventListener;
 import event.EventServer;
 import event.OptionsChangedEvent;
 import event.VisualizationEvent;
-import gui.Control;
+import gui.GUIControl;
 import gui.ZETProperties;
 import gui.visualization.control.GLControl;
 import java.awt.event.KeyEvent;
@@ -38,9 +38,9 @@ public class ZETVisualization extends Visualization<GLControl> implements EventL
 
 	private boolean showTimestepGraph = ZETProperties.isShowTimestepGraph();
 	private boolean showTimestepCellularAutomaton = ZETProperties.isShowTimestepCellularAutomaton();
-	private final Control guiControl;
+	private final GUIControl guiControl;
 
-	public ZETVisualization( GLCapabilities capabilities, Control guiControl ) {
+	public ZETVisualization( GLCapabilities capabilities, GUIControl guiControl ) {
 		super( capabilities );
 		this.guiControl = guiControl;
 		showEye = ZETProperties.isShowEye();

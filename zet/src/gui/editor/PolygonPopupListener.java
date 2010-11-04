@@ -25,7 +25,7 @@ import ds.z.AssignmentType;
 import ds.z.PlanPoint;
 import ds.z.PlanPolygon;
 import ds.z.Room;
-import gui.Control;
+import gui.GUIControl;
 import zet.gui.JEditor;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -39,10 +39,10 @@ import java.util.List;
 public class PolygonPopupListener implements ActionListener {
 	private AssignmentType myType;
 	private PlanPolygon myPolygon;
-	private final Control guiControl;
+	private final GUIControl guiControl;
 
 
-	public PolygonPopupListener( AssignmentType myType, Control guiControl ) {
+	public PolygonPopupListener( AssignmentType myType, GUIControl guiControl ) {
 		this.guiControl = guiControl;
 		this.myType = myType;
 	}

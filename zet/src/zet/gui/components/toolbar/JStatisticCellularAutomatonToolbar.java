@@ -6,7 +6,7 @@ package zet.gui.components.toolbar;
 
 import de.tu_berlin.math.coga.common.localization.Localization;
 import de.tu_berlin.math.coga.common.localization.Localized;
-import gui.Control;
+import gui.GUIControl;
 import gui.ZETMain;
 import gui.components.framework.Button;
 import gui.components.framework.IconSet;
@@ -21,14 +21,14 @@ import javax.swing.JToolBar;
  * @author Jan-Philipp Kappmeier
  */
 public class JStatisticCellularAutomatonToolbar extends JToolBar implements ActionListener, Localized {
-	private final Control control;
+	private final GUIControl control;
 	/** The localization class. */
 	static final Localization loc = Localization.getInstance();
 	private JButton btnExit;
 	private JButton btnOpenResults;
 	private JButton btnSaveResults;
 
-	public JStatisticCellularAutomatonToolbar( Control control ) {
+	public JStatisticCellularAutomatonToolbar( GUIControl control ) {
 		this.control = control;
 		createStatisticsToolBar();
 	}

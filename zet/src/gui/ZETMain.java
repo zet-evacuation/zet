@@ -283,7 +283,7 @@ public class ZETMain {
 				JPropertySelectorWindow a = new JPropertySelectorWindow( null, "", 100, 100, propertyFilename );
 				a.saveWorking();
 				a = null;
-				Control guiControl = new Control();
+				GUIControl guiControl = new GUIControl();
 				guiControl.createZETWindow();
 
 				// The control object for projects

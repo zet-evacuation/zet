@@ -27,7 +27,7 @@ import ds.z.TeleportEdge;
 import ds.z.PlanPoint;
 import ds.z.RoomEdge;
 import ds.z.StairArea;
-import gui.Control;
+import gui.GUIControl;
 import gui.editor.AreaVisibility;
 import gui.editor.CoordinateTools;
 import gui.editor.GUIOptionManager;
@@ -83,7 +83,7 @@ public class JPolygon extends AbstractPolygon {
 	private final static BasicStroke stroke_dashed_thick = new BasicStroke( EDGE_PAINT_WIDTH,
 					BasicStroke.CAP_BUTT, BasicStroke.JOIN_MITER, 10.0f, dash1, 0.0f );
 	private final static BasicStroke stroke_thick = new BasicStroke( EDGE_PAINT_WIDTH );
-	private final Control guiControl;
+	private final GUIControl guiControl;
 
 	//############## EDGE RELATED FIELDS ###################
 	private class EdgeData {
@@ -115,7 +115,7 @@ public class JPolygon extends AbstractPolygon {
 	 * @param myFloor The {@link JFloor} on which this polygon is displayed
 	 * @param foreground the border color of the polygon
 	 */
-	public JPolygon( AbstractFloor myFloor, Color foreground, Control guiControl ) {
+	public JPolygon( AbstractFloor myFloor, Color foreground, GUIControl guiControl ) {
 		super( foreground );
 		this.guiControl = guiControl;
 

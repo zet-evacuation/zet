@@ -63,7 +63,7 @@ import ds.z.TeleportArea;
 import event.EventListener;
 import event.EventServer;
 import event.ZModelChangedEvent;
-import gui.Control;
+import gui.GUIControl;
 import gui.editor.CoordinateTools;
 import gui.editor.GUIOptionManager;
 import zet.gui.components.tabs.base.JPolygon;
@@ -130,7 +130,7 @@ public class JFloor extends AbstractFloor implements EventListener<ZModelChanged
 	private final static BasicStroke selection_stroke = new BasicStroke( 1.0f,
 					BasicStroke.CAP_BUTT, BasicStroke.JOIN_MITER, 3.0f, new float[]{4.0f, 2.0f}, 0.0f );
 	private ZControl zcontrol;
-	private final Control guiControl;
+	private final GUIControl guiControl;
 
 	public ZControl getZcontrol() {
 		return zcontrol;
@@ -149,7 +149,7 @@ public class JFloor extends AbstractFloor implements EventListener<ZModelChanged
 	/**
 	 * Creates a new instance of <code>JFloor</code>.
 	 */
-	public JFloor( Control guiControl ) {
+	public JFloor( GUIControl guiControl ) {
 		super();
 		this.guiControl = guiControl;
 		setLayout( null );
@@ -740,12 +740,12 @@ public class JFloor extends AbstractFloor implements EventListener<ZModelChanged
 						switch( GUIOptionManager.getEditMode() ) {
 							case RoomCreationPointwise:
 							case RoomCreation:
-								zcontrol.createNew( Room.class, myFloor );
+								zcontrol.createNewPolygon( Room.class, myFloor );
 								break;
 							case AssignmentAreaCreationPointwise:
 							case AssignmentAreaCreation:
 								try {
-									zcontrol.createNew( AssignmentArea.class, parent );
+									zcontrol.createNewPolygon( AssignmentArea.class, parent );
 								} catch( AssignmentException ex ) {
 									if( ex.getState() == AssignmentException.State.NoAssignmentCreated )
 										ZETMain.sendError( Localization.getInstance().getString( "gui.error.CreateAnAssignmentFirst" ) );
@@ -756,31 +756,31 @@ public class JFloor extends AbstractFloor implements EventListener<ZModelChanged
 								}
 								break;
 							case BarrierCreationPointwise:
-								zcontrol.createNew( Barrier.class, parent );
+								zcontrol.createNewPolygon( Barrier.class, parent );
 								break;
 							case DelayAreaCreationPointwise:
 							case DelayAreaCreation:
-								zcontrol.createNew( DelayArea.class, parent );
+								zcontrol.createNewPolygon( DelayArea.class, parent );
 								break;
 							case StairAreaCreationPointwise:
 							case StairAreaCreation:
-								zcontrol.createNew( StairArea.class, parent );
+								zcontrol.createNewPolygon( StairArea.class, parent );
 								break;
 							case EvacuationAreaCreationPointwise:
 							case EvacuationAreaCreation:
-								zcontrol.createNew( EvacuationArea.class, parent );
+								zcontrol.createNewPolygon( EvacuationArea.class, parent );
 								break;
 							case InaccessibleAreaCreationPointwise:
 							case InaccessibleAreaCreation:
-								zcontrol.createNew( InaccessibleArea.class, parent );
+								zcontrol.createNewPolygon( InaccessibleArea.class, parent );
 								break;
 							case SaveAreaCreationPointwise:
 							case SaveAreaCreation:
-								zcontrol.createNew( SaveArea.class, parent );
+								zcontrol.createNewPolygon( SaveArea.class, parent );
 								break;
 							case TeleportAreaCreationPointwise:
 							case TeleportAreaCreation:
-								zcontrol.createNew( TeleportArea.class, parent );
+								zcontrol.createNewPolygon( TeleportArea.class, parent );
 								break;
 							default:
 								ZETMain.sendError( "Unknown Edit mode selected." );

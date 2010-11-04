@@ -8,7 +8,7 @@ import batch.BatchResult;
 import batch.BatchResultEntry;
 import de.tu_berlin.math.coga.common.localization.Localization;
 import ds.PropertyContainer;
-import gui.Control;
+import gui.GUIControl;
 import gui.ZETMain;
 import zet.gui.components.model.ComboBoxRenderer;
 import de.tu_berlin.math.coga.datastructure.NamedIndex;
@@ -36,7 +36,7 @@ import javax.swing.JToolBar;
  * @author Jan-Philipp Kappmeier
  */
 public class JVisualizationToolbar extends JToolBar implements ActionListener {
-	private final Control control;
+	private final GUIControl control;
 	/** The localization class. */
 	static final Localization loc = Localization.getInstance();
 	private JButton btnExit;
@@ -66,7 +66,7 @@ public class JVisualizationToolbar extends JToolBar implements ActionListener {
 	private JButton btnShowUtilization;
 	private JButton btnShowWaiting;
 
-	public JVisualizationToolbar( Control control ) {
+	public JVisualizationToolbar( GUIControl control ) {
 		this.control = control;
 		createVisualizationToolBar();
 		control.setVisualizationToolbar( this );

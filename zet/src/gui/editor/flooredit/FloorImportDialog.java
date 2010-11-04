@@ -36,7 +36,7 @@ import javax.swing.JLabel;
 import javax.swing.JList;
 import javax.swing.JOptionPane;
 import de.tu_berlin.math.coga.common.localization.Localization;
-import gui.Control;
+import gui.GUIControl;
 
 /**
  * The class <code>FloorImportDialog</code> allows importing floors from other
@@ -117,7 +117,7 @@ public class FloorImportDialog extends JDialog {
 
         {
             jfcProject = new JFileChooser(GUIOptionManager.getImportPath());
-            jfcProject.setFileFilter(Control.getProjectFilter());
+            jfcProject.setFileFilter(GUIControl.getProjectFilter());
             jfcProject.setAcceptAllFileFilterUsed(false);
         }
 

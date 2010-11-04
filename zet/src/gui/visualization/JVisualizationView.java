@@ -23,7 +23,7 @@ package gui.visualization;
 
 import de.tu_berlin.math.coga.common.localization.Localization;
 import ds.PropertyContainer;
-import gui.Control;
+import gui.GUIControl;
 import gui.ZETMain;
 import zet.gui.components.model.ComboBoxRenderer;
 import zet.gui.components.model.FloorComboBoxModel;
@@ -99,8 +99,8 @@ public class JVisualizationView extends AbstractVisualizationView<ZETVisualizati
 	private final int HEAD_INFORMATION_REACTION = 6;
 	
 	JArrayPanel cameraPanel;
-	private final Control guiControl;
-	public JVisualizationView( GLCapabilities caps, Control guiControl ) {
+	private final GUIControl guiControl;
+	public JVisualizationView( GLCapabilities caps, GUIControl guiControl ) {
 		super( new VisualizationPanel<ZETVisualization>( new ZETVisualization( caps, guiControl ) ) );
 		visualization = getGLContainer();
 		this.guiControl = guiControl;

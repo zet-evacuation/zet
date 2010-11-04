@@ -28,7 +28,7 @@ import ds.z.RoomEdge;
 import ds.z.TeleportEdge;
 import event.EventServer;
 import event.MessageEvent;
-import gui.Control;
+import gui.GUIControl;
 import zet.gui.JEditor;
 import java.awt.Point;
 import java.awt.event.ActionEvent;
@@ -43,9 +43,9 @@ public class EdgePopupListener implements ActionListener {
 	private Edge myEdge;
 	private Point mousePosition;
 	private boolean rasterizedPaintMode;
-	private Control guiControl;
+	private GUIControl guiControl;
 
-	public EdgePopupListener( Control guiControl ) {
+	public EdgePopupListener( GUIControl guiControl ) {
 		this.guiControl = guiControl;
 	}
 

@@ -38,7 +38,7 @@ import ds.z.StairPreset;
 import ds.z.TeleportArea;
 import ds.z.TeleportEdge;
 import ds.z.ZControl;
-import gui.Control;
+import gui.GUIControl;
 import zet.gui.JEditor;
 import gui.ZETMain;
 import zet.gui.components.model.ComboBoxRenderer;
@@ -185,7 +185,7 @@ public class JEditView extends AbstractSplitPropertyWindow<JFloorScrollPane<JFlo
 	private boolean disableUpdate = false;
 	private JLabel lblEvacuationAreaName;
 	private JTextField txtEvacuationAreaName;
-	private final Control guiControl;
+	private final GUIControl guiControl;
 
 	/** Describes the teleport area name field. */
 	private JLabel lblTeleportAreaName;
@@ -207,7 +207,7 @@ public class JEditView extends AbstractSplitPropertyWindow<JFloorScrollPane<JFlo
 	 * @param projectControl the project which is displayed in the editor
 	 * @param guiControl
 	 */
-	public JEditView( ZControl projectControl, Control guiControl ) {
+	public JEditView( ZControl projectControl, GUIControl guiControl ) {
 		super( new JFloorScrollPane<JFloor>( new JFloor( guiControl ) ) );
 		this.guiControl = guiControl;
 		// this.myProject = project; is now called later - TIMON
@@ -241,7 +241,7 @@ public class JEditView extends AbstractSplitPropertyWindow<JFloorScrollPane<JFlo
 		this.getLeftPanel().getVerticalScrollBar().addAdjustmentListener( adlPlanImage );
 	}
 	
-	public JEditView( Control guiControl ) {
+	public JEditView( GUIControl guiControl ) {
 		super( new JFloorScrollPane<JFloor>( new JFloor( guiControl ) ) );
 		this.guiControl = guiControl;
 		final JFloor centerPanel = this.getLeftPanel().getMainComponent();
@@ -1169,14 +1169,14 @@ public void localize() {
 		displayProject( projectControl );
 	}
 
-	public void displayProject( ZControl projectControl ) {
+	final public void displayProject( ZControl projectControl ) {
 		//boolean show_different_project = (this.projectControl.getZControl() != projectControl.getZControl());
 		if( projectControl != null ) {
 //			if( show_different_project )
 //				myProject.removeChangeListener( this );
 
 			// Clearing is done in the set-methods called later
-			floorSelector.clear();
+			//floorSelector.clear();
 			roomSelector.clear();
 			assignmentTypeSelector.clear();
 
@@ -1198,7 +1198,8 @@ public void localize() {
 		}
 
 		//This is independent of the rest of the displaying work
-		floorSelector.displayFloors( projectControl.getProject() );
+		//floorSelector.displayFloors( projectControl.getProject() );
+		updateFloorlist();
 		assignmentTypeSelector.setControl( projectControl );
 		assignmentTypeSelector.displayAssignmentTypesForCurrentProject();
 		// If more than one floor, display the second.
@@ -1272,6 +1273,15 @@ public void localize() {
 		currentFloor = (Floor)floorSelector.getSelectedItem();
 		getLeftPanel().getMainComponent().displayFloor( currentFloor );
 		roomSelector.displayRoomsForCurrentFloor();
+	}
+
+	/**
+	 * Displays the floor with name {@code floorName}
+	 * @param floorName
+	 */
+	public void updateFloorlist() {
+		floorSelector.clear();
+		floorSelector.displayFloors( projectControl.getProject() );
 	}
 
 	public void setEditMode( EditMode em ) {
@@ -1494,7 +1504,7 @@ public void localize() {
 	 * is specified. It must be an object which is located directly or indirectly
 	 * upon the JEditorPanel's JFloor object.
 	 * @param toConvert The point to convert
-	 * @returns The same point as "toConvert", but relative to the surrounding
+	 * @return The same point as "toConvert", but relative to the surrounding
 	 * JFloor object.
 	 */
 	public Point convertPointToFloorCoordinates( Component source, Point toConvert ) {

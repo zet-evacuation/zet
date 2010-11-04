@@ -4,7 +4,6 @@
  */
 package ds.z;
 
-import de.tu_berlin.math.coga.zet.converter.cellularAutomaton.ZToCAConverter;
 import ds.Project;
 import ds.z.exception.AssignmentException;
 import java.util.List;
@@ -82,7 +81,7 @@ public class ZControl {
 	 * @param projectFile the project file
 	 * @return returns true, if the project loaded correctly
 	 */
-	public boolean loadProject( File projectFile ) {
+	final public boolean loadProject( File projectFile ) {
 		try {
 			p = Project.load( projectFile );
 			p.setProjectFile( projectFile );
@@ -91,7 +90,7 @@ public class ZControl {
 		} catch( Exception ex ) {
 			System.err.println( loc.getString( "gui.editor.JEditor.error.loadErrorTitle" ) + ":" );
 			System.err.println( " - " + loc.getString( "gui.editor.JEditor.error.loadError" ) );
-			ex.printStackTrace();
+			ex.printStackTrace( System.err );
 			ZETMain.sendMessage( loc.getString( "gui.editor.JEditor.message.loadError" ) );
 			return false;
 		}
@@ -102,11 +101,11 @@ public class ZControl {
 	 * <p>Creates a new project with default settings and returns it. The old
 	 * model controlled by this class is replaced by the new empty model for the
 	 * new project.</p>
-	 * <p>The model parameters follow the guides from RiMEA (www.rimea.de) if they
+	 * <p>The model parameters follow the guides from RiMEA (http://www.rimea.de) if they
 	 * are specified.</p>
 	 * @return the newly created project
 	 */
-	public Project newProject() {
+	final public Project newProject() {
 		p = new Project();
 		Floor fl = new Floor( loc.getString( "ds.z.DefaultName.Floor" ) + " 1" );
 		p.getBuildingPlan().addFloor( fl );
@@ -126,7 +125,7 @@ public class ZControl {
 	/**
 	 * Returns default values for a {@link util.Distribution} distribution
 	 * for a specified parameter. Reaction time and age follow the guidelines of
-	 * RiMEA (www.rimea.de).
+	 * RiMEA (http://www.rimea.de).
 	 * @param type the parameter
 	 * @return the distribution for the parameter
 	 * @throws IllegalArgumentException if type is an unknown string
@@ -183,14 +182,28 @@ public class ZControl {
 		return latestPolygon;
 	}
 
-	// Methoden, um neue Objekte zu erzeugen:
-	public void createNew( Class a, Object parent ) throws AssignmentException {
-		if( newPolygon != null ) {
+	/**
+	 * Creates a new polygonal object in the hierarchy. These objects are rooms
+	 * and the different types of areas (also barriers). A new object is created,
+	 * but it will contain no points. Methods such as {@link #addPoint} have to
+	 * be called afterwards. The creation process is completed with a call to
+	 * {@link closePolygon()}.
+	 * @param polygonClass the Class type of the object to be created
+	 * @param parent the parent object. See details in the polygonal object, which is the correct parent type
+	 * @throws AssignmentException if an assignment area is to be created without any valid assignment
+	 * @throws IllegalArgumentException if object creation is already started or an invalid class was submitted
+	 */
+	 Floor f;
+	public void createNewPolygon( Class polygonClass, Object parent ) throws AssignmentException, IllegalArgumentException {
+		if( newPolygon != null )
 			throw new IllegalArgumentException( "Creation already started." );
-		}
-		if( a == Room.class )
+
+		System.out.println( "Parent: " + parent.toString() );
+		f = (Floor)parent;
+
+		if( polygonClass == Room.class )
 			newPolygon = new Room( (Floor)parent );
-		else if( a == AssignmentArea.class ) {
+		else if( polygonClass == AssignmentArea.class ) {
 			Assignment cur2 = getProject().getCurrentAssignment();
 			if( cur2 != null )
 				if( cur2.getAssignmentTypes().size() > 0 )
@@ -199,23 +212,25 @@ public class ZControl {
 					throw new AssignmentException( AssignmentException.State.NoAssignmentCreated );
 			else
 				throw new AssignmentException( AssignmentException.State.NoAssignmentSelected );
-		} else if( a == Barrier.class )
+		} else if( polygonClass == Barrier.class )
 			newPolygon = new Barrier( (Room)parent );
-		else if( a == DelayArea.class )
+		else if( polygonClass == DelayArea.class )
 			newPolygon = new DelayArea( (Room)parent, DelayArea.DelayType.OBSTACLE, 0.7d );
-		else if( a == StairArea.class )
+		else if( polygonClass == StairArea.class )
 			newPolygon = new StairArea( (Room)parent );
-		else if( a == EvacuationArea.class ) {
+		else if( polygonClass == EvacuationArea.class ) {
 			newPolygon = new EvacuationArea( (Room)parent );
 			int count = getProject().getBuildingPlan().getEvacuationAreasCount();
 			String name = Localization.getInstance().getString( "ds.z.DefaultName.EvacuationArea" ) + " " + count;
 			((EvacuationArea)newPolygon).setName( name );
-		} else if( a == InaccessibleArea.class )
+		} else if( polygonClass == InaccessibleArea.class )
 			newPolygon = new InaccessibleArea( (Room)parent );
-		else if( a == SaveArea.class )
+		else if( polygonClass == SaveArea.class )
 			newPolygon = new SaveArea( (Room)parent );
-		else if( a == TeleportArea.class )
+		else if( polygonClass == TeleportArea.class )
 			newPolygon = new TeleportArea( (Room)parent );
+		else
+			throw new IllegalArgumentException( "No valid plygon class given" );
 
 		latestPolygon = newPolygon;
 	}
@@ -282,7 +297,38 @@ public class ZControl {
 			} else
 				throw new IllegalStateException( "Three edges" );
 		}
+		// todo remove event server
+
+		for( Room r : f ) {
+			System.out.println( r.toString() );
+		}
+
 		EventServer.getInstance().dispatchEvent( new ZModelChangedEvent() {} );
+	}
+
+	/**
+	 * <p>Creates a new floor in the hierarchy. A floor does not have a parent and
+	 * is immediately created. It has no explicit bounds that have to be specified
+	 * (in contrast to polygonal objects).</p>
+	 * <p>The floor will have the default name followed by a number (which is
+	 * the current number of floors).</p>
+	 * @return the newly created floor
+	 */
+	public Floor createNewFloor() {
+		return createFloor( Localization.getInstance().getString( "ds.z.DefaultName.Floor" ) + " " + p.getBuildingPlan().floorCount() );
+	}
+	
+	/**
+	 * <p>Creates a new floor in the hierarchy. A floor does not have a parent and
+	 * is immediately created. It has no explicit bounds that have to be specified
+	 * (in contrast to polygonal objects).</p>
+	 * @param name the name of the floor
+	 * @return the newly created floor
+	 */
+	public Floor createFloor( String name ) {
+		final Floor f = new Floor( name );
+		p.getBuildingPlan().addFloor( f );
+		return f;
 	}
 
 	public void movePolygon( PlanPolygon polygon, int x, int y ) {
@@ -350,10 +396,10 @@ public class ZControl {
 
 	/**
 	 * Clones the floor and adds it to the project. The name of the floor is
-	 * extanded by '_##' where ## represents a number. If the name of the floor
+	 * extended by '_##' where ## represents a number. If the name of the floor
 	 * was ending with a two-digit number, this number is increased by one. It is
 	 * not possible to have more than 100 floors with the same name
-	 * (only automatically crated).
+	 * (only automatically created).
 	 * @param f the floor that is copied
 	 */
 	public void copyFloor( Floor f ) {

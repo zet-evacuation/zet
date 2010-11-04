@@ -7,7 +7,7 @@ package zet.gui.components;
 import de.tu_berlin.math.coga.common.localization.Localization;
 import de.tu_berlin.math.coga.common.localization.Localized;
 import ds.PropertyContainer;
-import gui.Control;
+import gui.GUIControl;
 import gui.ZETMain;
 import zet.gui.components.tabs.base.AbstractFloor.RasterPaintStyle;
 import gui.components.framework.Menu;
@@ -29,7 +29,7 @@ import javax.swing.JRadioButtonMenuItem;
  * @author Jan-Philipp Kappmeier
  */
 public class JZETMenuBar extends JMenuBar implements ActionListener, Localized {
-	private final Control control;
+	private final GUIControl control;
 	/** The localization class. */
 	static final Localization loc = Localization.getInstance();
 	private JMenu mFile;
@@ -105,7 +105,7 @@ public class JZETMenuBar extends JMenuBar implements ActionListener, Localized {
 	private JMenu mHelp;
 	private JMenuItem mnuHelpAbout;
 
-	public JZETMenuBar( Control control ) {
+	public JZETMenuBar( GUIControl control ) {
 		this.control = control;
 		createMenuBar();
 		control.setMenuBar( this );
