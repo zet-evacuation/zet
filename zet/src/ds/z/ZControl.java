@@ -193,13 +193,9 @@ public class ZControl {
 	 * @throws AssignmentException if an assignment area is to be created without any valid assignment
 	 * @throws IllegalArgumentException if object creation is already started or an invalid class was submitted
 	 */
-	 Floor f;
 	public void createNewPolygon( Class polygonClass, Object parent ) throws AssignmentException, IllegalArgumentException {
 		if( newPolygon != null )
 			throw new IllegalArgumentException( "Creation already started." );
-
-		System.out.println( "Parent: " + parent.toString() );
-		f = (Floor)parent;
 
 		if( polygonClass == Room.class )
 			newPolygon = new Room( (Floor)parent );
@@ -298,11 +294,6 @@ public class ZControl {
 				throw new IllegalStateException( "Three edges" );
 		}
 		// todo remove event server
-
-		for( Room r : f ) {
-			System.out.println( r.toString() );
-		}
-
 		EventServer.getInstance().dispatchEvent( new ZModelChangedEvent() {} );
 	}
 

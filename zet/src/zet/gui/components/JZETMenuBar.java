@@ -328,16 +328,22 @@ public class JZETMenuBar extends JMenuBar implements ActionListener, Localized {
 			mnuAssignmentArea.setSelected( false );
 			control.updateVisibility( false );
 		} else if( e.getActionCommand().equals( "delayArea" ) ) {
+			System.err.println( "Update DELAY AREA called" );
 			control.updateVisibility( AreaVisibility.Delay, mnuDelayArea.isSelected() );
 		} else if( e.getActionCommand().equals( "stairArea" ) ) {
+			System.err.println( "Update STAIR AREA called" );
 			control.updateVisibility( AreaVisibility.Stair, mnuStairArea.isSelected() );
 		} else if( e.getActionCommand().equals( "evacuationArea" ) ) {
+			System.err.println( "Update EVACUATION AREA called" );
 			control.updateVisibility( AreaVisibility.Evacuation, mnuEvacuationArea.isSelected() );
 		} else if( e.getActionCommand().equals( "inaccessibleArea" ) ) {
+			System.err.println( "Update INACCESSIBLE called" );
 			control.updateVisibility( AreaVisibility.Inaccessible, mnuInaccessibleArea.isSelected() );
 		} else if( e.getActionCommand().equals( "saveArea" ) ) {
+			System.err.println( "Update SAVE AREA called" );
 			control.updateVisibility( AreaVisibility.Save, mnuSaveArea.isSelected() );
 		} else if( e.getActionCommand().equals( "assignmentArea" ) ) {
+			System.err.println( "Update ASSIGNMENT called" );
 			control.updateVisibility( AreaVisibility.Assignment, mnuAssignmentArea.isSelected() );
 		} else if( e.getActionCommand().equals( "grid" ) ) {
 			control.setRasterizedPaintMode( mnuPaintRasterized.isSelected() );

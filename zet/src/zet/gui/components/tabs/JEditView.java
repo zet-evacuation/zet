@@ -1277,7 +1277,6 @@ public void localize() {
 
 	/**
 	 * Displays the floor with name {@code floorName}
-	 * @param floorName
 	 */
 	public void updateFloorlist() {
 		floorSelector.clear();
