@@ -111,7 +111,6 @@ public class JZETMenuBar extends JMenuBar implements ActionListener, Localized {
 		control.setMenuBar( this );
 	}
 
-
 	/**
 	 * Creates the menu.
 	 */
@@ -139,6 +138,7 @@ public class JZETMenuBar extends JMenuBar implements ActionListener, Localized {
 		mnuFileSaveResultAs = Menu.addMenuItem( mFile, loc.getString( "menuSaveResultAs" ), 'E', this, "saveResultAs" );
 		mnuFileSaveResultAs.setEnabled( false );
 		mnuFileLoadResult = Menu.addMenuItem( mFile, loc.getString( "menuLoadBatchResult" ), 'B', this, "loadBatchResult" );
+		mnuFileLoadResult.setEnabled( false );
 		Menu.addMenuItem( mFile, "-" );
 		mnuFileExit = Menu.addMenuItem( mFile, loc.getString( "menuExit" ), 'X', this, "exit" );
 
@@ -181,23 +181,23 @@ public class JZETMenuBar extends JMenuBar implements ActionListener, Localized {
 		mnuScreenshot = Menu.addMenuItem( mView, loc.getString( "menuScreenshot" ), KeyEvent.VK_F12, this, "screenshot", 0 );
 
 		// execute menu
-		if( ZETMain.isDebug() ) {
-			mnuExecuteCreateCellularAutomaton = Menu.addMenuItem( mExecute, loc.getString( "menuExecuteCreateCellularAutomaton" ), this, "createCellularAutomaton" );
-			mnuExecuteCreateGraph = Menu.addMenuItem( mExecute, loc.getString( "menuExecuteCreateGraph" ), this, "createGraph" );
-			mnuExecuteApplyAssignment = Menu.addMenuItem( mExecute, loc.getString( "menuExecuteApplyConcreteAssignment" ), this, "applyConcreteAssignment" );
+		//if( ZETMain.isDebug() ) {
+		mnuExecuteCreateCellularAutomaton = Menu.addMenuItem( mExecute, loc.getString( "menuExecuteCreateCellularAutomaton" ), this, "createCellularAutomaton" );
+		mnuExecuteCreateGraph = Menu.addMenuItem( mExecute, loc.getString( "menuExecuteCreateGraph" ), this, "createGraph" );
+		mnuExecuteApplyAssignment = Menu.addMenuItem( mExecute, loc.getString( "menuExecuteApplyConcreteAssignment" ), this, "applyConcreteAssignment" );
 
-			mSimulation = Menu.addMenu( mExecute, loc.getString( "menuSimulation" ) );
-			mnuSimulationQuickVisualization = Menu.addMenuItem( mSimulation, loc.getString( "menuSimulationQuickVisualization" ), KeyEvent.VK_F5, this, "visualization", 0 );
-			mnuSimulationStart = Menu.addMenuItem( mSimulation, loc.getString( "menuSimulationStart" ), KeyEvent.VK_F5, this, "startSimulation", InputEvent.CTRL_DOWN_MASK );
-			mnuSimulationPauseQuickVisualization = Menu.addMenuItem( mSimulation, loc.getString( "menuSimulationPauseQuickVisualization" ), KeyEvent.VK_F6, this, "visualizationPause", 0 );
-			mnuStepByStepSimulation = Menu.addMenuItem( mSimulation, loc.getString( "menuSimulationStepByStep" ), KeyEvent.VK_F7, this, "stepByStepSimulation", 0 );
+		mSimulation = Menu.addMenu( mExecute, loc.getString( "menuSimulation" ) );
+		mnuSimulationQuickVisualization = Menu.addMenuItem( mSimulation, loc.getString( "menuSimulationQuickVisualization" ), KeyEvent.VK_F5, this, "quickVisualization", 0 );
+		mnuSimulationStart = Menu.addMenuItem( mSimulation, loc.getString( "menuSimulationStart" ), KeyEvent.VK_F5, this, "startSimulation", InputEvent.CTRL_DOWN_MASK );
+		mnuSimulationPauseQuickVisualization = Menu.addMenuItem( mSimulation, loc.getString( "menuSimulationPauseQuickVisualization" ), KeyEvent.VK_F6, this, "visualizationPause", 0 );
+		mnuStepByStepSimulation = Menu.addMenuItem( mSimulation, loc.getString( "menuSimulationStepByStep" ), KeyEvent.VK_F7, this, "stepByStepSimulation", 0 );
 
-			mOptimization = Menu.addMenu( mExecute, loc.getString( "menuOptimization" ) );
-			mnuOptimizationEarliestArrivalTransshipment = Menu.addMenuItem( mOptimization, loc.getString( "menuOptAlgoEATransshipment" ), KeyEvent.VK_F8, this, "EAT", 0 );
-			//			mnuExecuteQuickestTransshipment = Menu.addMenuItem( mOptimization, loc.getString( "menuOptAlgoQuickestTransshipment" ), this, "QT" );
-			//			mnuExecuteMaxFlowOverTimeMC = Menu.addMenuItem( mOptimization, loc.getString( "menuOptAlgoMaxFlowOverTimeMinCost" ), this, "MFOTMC" );
-			//			mnuExecuteMaxFlowOverTimeTEN = Menu.addMenuItem( mOptimization, loc.getString( "menuOptAlgoMaxFlowOverTimeTEN" ), this, "MFOTTEN" );
-		}
+		mOptimization = Menu.addMenu( mExecute, loc.getString( "menuOptimization" ) );
+		mnuOptimizationEarliestArrivalTransshipment = Menu.addMenuItem( mOptimization, loc.getString( "menuOptAlgoEATransshipment" ), KeyEvent.VK_F8, this, "EAT", 0 );
+		//			mnuExecuteQuickestTransshipment = Menu.addMenuItem( mOptimization, loc.getString( "menuOptAlgoQuickestTransshipment" ), this, "QT" );
+		//			mnuExecuteMaxFlowOverTimeMC = Menu.addMenuItem( mOptimization, loc.getString( "menuOptAlgoMaxFlowOverTimeMinCost" ), this, "MFOTMC" );
+		//			mnuExecuteMaxFlowOverTimeTEN = Menu.addMenuItem( mOptimization, loc.getString( "menuOptAlgoMaxFlowOverTimeTEN" ), this, "MFOTTEN" );
+		//}
 
 		// Extras-Menu
 		mLanguage = Menu.addMenu( mExtras, loc.getString( "menuLanguages" ) );
@@ -273,6 +273,7 @@ public class JZETMenuBar extends JMenuBar implements ActionListener, Localized {
 //				}
 
 
+	@Override
 	public void actionPerformed( ActionEvent e ) {
 		if( e.getActionCommand().equals( "exit" ) ) {
 			// quits the program
@@ -328,22 +329,16 @@ public class JZETMenuBar extends JMenuBar implements ActionListener, Localized {
 			mnuAssignmentArea.setSelected( false );
 			control.updateVisibility( false );
 		} else if( e.getActionCommand().equals( "delayArea" ) ) {
-			System.err.println( "Update DELAY AREA called" );
 			control.updateVisibility( Areas.Delay, mnuDelayArea.isSelected() );
 		} else if( e.getActionCommand().equals( "stairArea" ) ) {
-			System.err.println( "Update STAIR AREA called" );
 			control.updateVisibility( Areas.Stair, mnuStairArea.isSelected() );
 		} else if( e.getActionCommand().equals( "evacuationArea" ) ) {
-			System.err.println( "Update EVACUATION AREA called" );
 			control.updateVisibility( Areas.Evacuation, mnuEvacuationArea.isSelected() );
 		} else if( e.getActionCommand().equals( "inaccessibleArea" ) ) {
-			System.err.println( "Update INACCESSIBLE called" );
 			control.updateVisibility( Areas.Inaccessible, mnuInaccessibleArea.isSelected() );
 		} else if( e.getActionCommand().equals( "saveArea" ) ) {
-			System.err.println( "Update SAVE AREA called" );
 			control.updateVisibility( Areas.Save, mnuSaveArea.isSelected() );
 		} else if( e.getActionCommand().equals( "assignmentArea" ) ) {
-			System.err.println( "Update ASSIGNMENT called" );
 			control.updateVisibility( Areas.Assignment, mnuAssignmentArea.isSelected() );
 		} else if( e.getActionCommand().equals( "grid" ) ) {
 			control.setRasterizedPaintMode( mnuPaintRasterized.isSelected() );
@@ -374,9 +369,12 @@ public class JZETMenuBar extends JMenuBar implements ActionListener, Localized {
 		} else if( e.getActionCommand().equals( "createGraph" ) ) {
 			control.createGraph();
 		} else if( e.getActionCommand().equals( "applyConcreteAssignment" ) ) {
+		} else if( e.getActionCommand().equals( "quickVisualization" ) ) {
+			control.performQuickVisualization();
 		} else if( e.getActionCommand().equals( "startSimulation" ) ) {
 			control.performSimulation();
 		} else if( e.getActionCommand().equals( "visualizationPause" ) ) {
+
 		} else if( e.getActionCommand().equals( "stepByStepSimulation" ) ) {
 			control.performOneStep();
 		} else if( e.getActionCommand().equals( "EAT" ) ) {
@@ -394,8 +392,7 @@ public class JZETMenuBar extends JMenuBar implements ActionListener, Localized {
 		} else if( e.getActionCommand().equals( "outputGraph" ) ) {
 			control.outputGraph();
 		} else if( e.getActionCommand().equals( "about" ) ) {
-			// show the about screen
-			control.showAbout();
+			control.showAbout(); // show the about screen
 		} else
 			ZETMain.sendError( loc.getString( "gui.UnknownCommand" ) + " '" + e.getActionCommand() + "'. " + loc.getString( "gui.ContactDeveloper" ) );
 	}
@@ -427,6 +424,10 @@ public class JZETMenuBar extends JMenuBar implements ActionListener, Localized {
 		mnuPlanImageTransparency.setEnabled( b );
 	}
 
+	/**
+	 * Changes the localization texts for the menu items.
+	 */
+	@Override
 	public void localize() {
 		loc.setPrefix( "gui.editor.JEditor." );
 		Menu.updateMenu( mFile, loc.getString( "menuFile" ) );
@@ -480,34 +481,20 @@ public class JZETMenuBar extends JMenuBar implements ActionListener, Localized {
 		Menu.updateMenu( mnuHideDefaultFloor, loc.getString( "menuHideDefaultEvacuationFloor" ) );
 
 		// Execute menu (debug only)
-		if( ZETMain.isDebug() ) {
-			Menu.updateMenu( mExecute, loc.getString( "menuExecute" ) );
-			Menu.updateMenu( mSimulation, loc.getString( "menuSimulation" ) );
-/**/			Menu.updateMenu( mnuExecuteCreateCellularAutomaton, loc.getString( "menuSimulationCreateCA" ) );
-/**/			Menu.updateMenu( mnuExecuteApplyAssignment, loc.getString( "menuSimulationApplyConcreteAssignment" ) );
-			//TODO if paused use other
-			//if( caAlgo != null )
-			//	if( caAlgo.isPaused() )
-/*					Menu.updateMenu( mnuExecutePauseSimulation, loc.getString( "menuSimulationContinue" ) );
-			//	else
-					Menu.updateMenu( mnuExecutePauseSimulation, loc.getString( "menuSimulationPause" ) );
-			//else
-*/
+		Menu.updateMenu( mExecute, loc.getString( "menuExecute" ) );
+		Menu.updateMenu( mSimulation, loc.getString( "menuSimulation" ) );
+		Menu.updateMenu( mnuExecuteCreateCellularAutomaton, loc.getString( "menuExecuteCreateCellularAutomaton" ) );
+		Menu.updateMenu( mnuExecuteApplyAssignment, loc.getString( "menuExecuteApplyConcreteAssignment" ) );
 
-			Menu.updateMenu( mnuSimulationQuickVisualization, loc.getString( "menuSimulationQuickVisualization" ) );
-			Menu.updateMenu( mnuSimulationStart, loc.getString( "menuSimulationStart" ) );
-			Menu.updateMenu( mnuSimulationPauseQuickVisualization, loc.getString( "menuSimulationPauseQuickVisualization" ) );
-			Menu.updateMenu( mnuStepByStepSimulation, loc.getString( "menuSimulationStepByStep" ) );
+		Menu.updateMenu( mnuSimulationQuickVisualization, loc.getString( "menuSimulationQuickVisualization" ) );
+		Menu.updateMenu( mnuSimulationStart, loc.getString( "menuSimulationStart" ) );
+		Menu.updateMenu( mnuSimulationPauseQuickVisualization, loc.getString( "menuSimulationPauseQuickVisualization" ) );
+		Menu.updateMenu( mnuStepByStepSimulation, loc.getString( "menuSimulationStepByStep" ) );
 
 
-//Menu.updateMenu( mnuExecutePauseSimulation, loc.getString( "menuSimulationPause" ) );
-			Menu.updateMenu( mOptimization, loc.getString( "menuOptimization" ) );
-			Menu.updateMenu( mnuExecuteCreateGraph, loc.getString( "menuOptimizationCreateGraph" ) );
-//			Menu.updateMenu( mnuExecuteQuickestTransshipment, loc.getString( "menuOptAlgoQuickestTransshipment" ) );
-//			Menu.updateMenu( mnuExecuteMaxFlowOverTimeMC, loc.getString( "menuOptAlgoMaxFlowOverTimeMinCost" ) );
-//			Menu.updateMenu( mnuExecuteMaxFlowOverTimeTEN, loc.getString( "menuOptAlgoMaxFlowOverTimeTEN" ) );
-			Menu.updateMenu( mnuOptimizationEarliestArrivalTransshipment, loc.getString( "menuOptAlgoEATransshipment" ) );
-		}
+		Menu.updateMenu( mOptimization, loc.getString( "menuOptimization" ) );
+		Menu.updateMenu( mnuExecuteCreateGraph, loc.getString( "menuOptimizationCreateGraph" ) );
+		Menu.updateMenu( mnuOptimizationEarliestArrivalTransshipment, loc.getString( "menuOptAlgoEATransshipment" ) );
 
 		// Extras menu
 		Menu.updateMenu( mLanguage, loc.getString( "menuLanguages" ) );

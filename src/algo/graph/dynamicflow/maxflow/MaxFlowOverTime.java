@@ -13,14 +13,12 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
+
 /*
  * MaxFlowOverTime.java
- *
  * Created on 22. Januar 2008, 03:39
- *
- * To change this template, choose Tools | Template Manager
- * and open the template in the editor.
  */
+
 package algo.graph.dynamicflow.maxflow;
 
 import de.tu_berlin.math.coga.common.algorithm.Algorithm;
@@ -36,12 +34,10 @@ import ds.graph.StaticPath;
 import ds.graph.flow.StaticPathFlow;
 import java.util.LinkedList;
 import java.util.List;
-
 import algo.graph.Flags;
 import algo.graph.staticflow.mincost.MinimumMeanCycleCancelling;
 import algo.graph.util.PathDecomposition;
-
-import ds.graph.Localization;
+import de.tu_berlin.math.coga.common.localization.Localization;
 import ds.graph.problem.MinimumCostFlowProblem;
 
 /**

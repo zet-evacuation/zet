@@ -18,8 +18,8 @@
  *
  */
 package algo.graph.shortestpath;
+import de.tu_berlin.math.coga.common.localization.Localization;
 
-import ds.graph.Localization;
 import ds.graph.Edge;
 import ds.graph.Forest;
 import ds.graph.IdentifiableCollection;

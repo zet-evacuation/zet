@@ -26,9 +26,7 @@ package de.tu_berlin.math.coga.common.algorithm;
  */
 public class AlgorithmProgressEvent extends AlgorithmEvent {
 
-    /**
-     * The current progress value, 0 <= progress <= 1.
-     */
+    /** The current progress value, 0 <= progress <= 1. */
     private double progress;
 
     /**
@@ -47,7 +45,8 @@ public class AlgorithmProgressEvent extends AlgorithmEvent {
      * Creates an <code>AlgorithmProgressEvent</code> for the specified
      * algorithm and the current progress value.
      * @param algorithm the algorithm for which progress occurred.
-     * @param progress the progress value.
+		 * @param eventTime the time when the event was fired
+		 * @param progress the progress value.
      * @throws IllegalArgumentException if the progress value is not between 0
      * and 1 (inclusively).
      */

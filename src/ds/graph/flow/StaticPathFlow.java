@@ -20,12 +20,11 @@
 
 package ds.graph.flow;
 
+import de.tu_berlin.math.coga.common.localization.Localization;
 import ds.graph.Edge;
 import ds.graph.IdentifiableCollection;
 import ds.graph.StaticPath;
 import java.util.Iterator;
-
-import ds.graph.Localization;
 
 /**
  * The <code>@link StaticPathFlow</code> class represents the static flow 

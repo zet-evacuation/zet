@@ -20,12 +20,16 @@ import batch.BatchResultEntry;
 import batch.tasks.BatchGraphCreateOnlyTask;
 import batch.tasks.RasterizeTask;
 import batch.tasks.VisualizationDataStructureTask;
+import de.tu_berlin.math.coga.common.algorithm.AlgorithmEvent;
+import de.tu_berlin.math.coga.common.algorithm.AlgorithmListener;
+import de.tu_berlin.math.coga.common.algorithm.AlgorithmProgressEvent;
 import de.tu_berlin.math.coga.common.localization.Localization;
 import de.tu_berlin.math.coga.common.util.IOTools;
 import de.tu_berlin.math.coga.zet.DatFileReaderWriter;
 import de.tu_berlin.math.coga.zet.NetworkFlowModel;
 import ds.GraphVisualizationResults;
 import ds.PropertyContainer;
+import ds.ca.CellularAutomaton;
 import ds.z.Assignment;
 import ds.z.AssignmentArea;
 import ds.z.ConcreteAssignment;
@@ -35,8 +39,6 @@ import ds.z.PlanPolygon;
 import ds.z.Room;
 import ds.z.ZControl;
 import ds.z.exception.TooManyPeopleException;
-import event.EventServer;
-import event.ZModelChangedEvent;
 import gui.components.progress.JProgressBarDialog;
 import gui.components.progress.JRasterizeProgressBarDialog;
 import gui.editor.Areas;
@@ -80,7 +82,7 @@ import zet.gui.components.toolbar.JStatisticGraphToolBar;
  * menus etc. and delegates them to other classes.
  * @author Jan-Philipp Kappmeier
  */
-public class GUIControl {
+public class GUIControl implements AlgorithmListener {
 
 	/** The editor. */
 	public JEditor editor;
@@ -1038,6 +1040,7 @@ public class GUIControl {
 	public void createCellularAutomaton() {
 		algorithmControl.convertCellularAutomaton( new PropertyChangeListener() {
 
+			@Override
 			public void propertyChange( PropertyChangeEvent pce ) {
 				if( isDone( pce ) ) {
 					CAVisualizationResults caVis = new CAVisualizationResults( algorithmControl.getMapping(), algorithmControl.getCellularAutomaton().getPotentialManager() );
@@ -1067,7 +1070,7 @@ public class GUIControl {
 	public void performSimulation() {
 		createBuildingDataStructure();
 		algorithmControl.performSimulation( new PropertyChangeListener() {
-
+			@Override
 			public void propertyChange( PropertyChangeEvent pce ) {
 				if( isDone( pce ) ) {
 					visualization.getControl().setCellularAutomatonControl( algorithmControl.getCaVisResults(), algorithmControl.getCellularAutomaton() );
@@ -1079,7 +1082,19 @@ public class GUIControl {
 					editor.getQuickVisualizationView().displayFloor( editview.getCurrentFloor() );
 				}
 			}
-		});
+		} );
+	}
+
+	public void performQuickVisualization() {
+		//createBuildingDataStructure();
+		algorithmControl.performSimulationA( new PropertyChangeListener() {
+
+			@Override
+			public void propertyChange( PropertyChangeEvent pce ) {
+				System.out.println( "Property Change Event" );
+			}
+
+		}, this );
 	}
 
 	public void setUpSimulationAlgorithm() {
@@ -1095,14 +1110,14 @@ public class GUIControl {
 		} catch( ConversionNotSupportedException ex ) {
 			Logger.getLogger( GUIControl.class.getName() ).log( Level.SEVERE, null, ex );
 		}
-			if( initialized ) {
-				editor.getQuickVisualizationView().getLeftPanel().getMainComponent().setCa( algorithmControl.getCellularAutomaton() );
-				editor.getQuickVisualizationView().getLeftPanel().getMainComponent().setMapping( algorithmControl.getMapping() );
-				editor.getQuickVisualizationView().getLeftPanel().getMainComponent().setContainer( algorithmControl.getContainer() );
-				editor.getQuickVisualizationView().displayFloor( editview.getCurrentFloor() );
-				editor.getQuickVisualizationView().getLeftPanel().getMainComponent().update();
-			} else
-				editor.getQuickVisualizationView().getLeftPanel().getMainComponent().update();
+		if( initialized ) {
+			editor.getQuickVisualizationView().getLeftPanel().getMainComponent().setCa( algorithmControl.getCellularAutomaton() );
+			editor.getQuickVisualizationView().getLeftPanel().getMainComponent().setMapping( algorithmControl.getMapping() );
+			editor.getQuickVisualizationView().getLeftPanel().getMainComponent().setContainer( algorithmControl.getContainer() );
+			editor.getQuickVisualizationView().displayFloor( editview.getCurrentFloor() );
+			editor.getQuickVisualizationView().getLeftPanel().getMainComponent().update();
+		} else
+			editor.getQuickVisualizationView().getLeftPanel().getMainComponent().update();
 	}
 
 	public void createGraph() {
@@ -1127,6 +1142,32 @@ public class GUIControl {
 				}
 			}
 		} );
+	}
+
+	boolean firstProgress = false;
+
+	@Override
+	public void eventOccurred( AlgorithmEvent event ) {
+		if( event instanceof AlgorithmProgressEvent ) {
+			AlgorithmProgressEvent ape = (AlgorithmProgressEvent) event;
+			System.out.println( "Progress: " + ape.getProgress() );
+
+		if( !firstProgress ) {
+			CellularAutomaton ca = algorithmControl.getCellularAutomaton();
+			if( ca != null ) {
+				editor.getQuickVisualizationView().getLeftPanel().getMainComponent().setCa( algorithmControl.getCellularAutomaton() );
+				editor.getQuickVisualizationView().getLeftPanel().getMainComponent().setMapping( algorithmControl.getMapping() );
+				editor.getQuickVisualizationView().getLeftPanel().getMainComponent().setContainer( algorithmControl.getContainer() );
+				editor.getQuickVisualizationView().displayFloor( editview.getCurrentFloor() );
+				editor.getQuickVisualizationView().getLeftPanel().getMainComponent().update();
+				firstProgress = true;
+				System.out.println( "First time floor drawn." );
+			}
+		} else
+			editor.getQuickVisualizationView().getLeftPanel().getMainComponent().update();
+
+		}
+
 	}
 }
 

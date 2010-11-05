@@ -19,6 +19,7 @@
  */
 package ds.graph;
 
+import de.tu_berlin.math.coga.common.localization.Localization;
 import java.lang.reflect.Array;
 
 /**
@@ -32,17 +33,17 @@ import java.lang.reflect.Array;
  * the objects' IDs are from the set <code>{0,...,#objects-1}</code> to ensure
  * the best performance. For mappings of objects to integers the use of the
  * specialized class {@link IdentifiableIntegerMapping} is advised.
- * @param D the type of this mapping's domain, i.e. the type of the objects that
+ * @param <D> the type of this mapping's domain, i.e. the type of the objects that
  * are to be mapped to values. <code>D</code> must implement 
  * {@link Identifiable}.
- * @param R the type of this mapping's range, i.e. the type of the values the
+ * @param <R> the type of this mapping's range, i.e. the type of the values the
  * objects can be mapped to.
  */
 public class IdentifiableObjectMapping<D extends Identifiable, R> implements Cloneable {
 
     /**
      * The type of the elements stored in the <code>mapping</code> array. Since
-     * Generics are compile-time only, we need to store its type explicitly in
+     * generics are compile-time only, we need to store its type explicitly in
      * order to be able to increase the length of <code>mapping</code> array
      * later on.
      */

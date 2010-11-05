@@ -61,6 +61,7 @@ public enum CellularAutomatonAlgorithm {
 	},
 	/** A simulation algorithm where all individuals are simulated in the same order in each step. */
 	InOrder( Localization.getInstance().getString( "batch.caOrder.unifom" ) ) {
+		@Override
 		public EvacuationCellularAutomatonAlgorithm createTask( CellularAutomaton ca ) {
 			return new CellularAutomatonInOrderExecution( ca );
 		}

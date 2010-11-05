@@ -20,6 +20,7 @@
 
 package ds.graph;
 
+import de.tu_berlin.math.coga.common.localization.Localization;
 import java.util.Iterator;
 
 /**
@@ -79,7 +80,7 @@ public class HidingSet<E extends Identifiable> extends ArraySet<E> implements Id
 
     /**
      * Constructs a <code>HidingSet</code> containing the elements in the 
-     * given array. The elements must be stored in the field corrisponding
+     * given array. The elements must be stored in the field corresponding
      * to their ID, elsewise an <code>IllegalArgumentException</code> 
      * is thrown. No elements are hidden at the start.
      * @param elements an array with elements that shall be contained in this
@@ -296,7 +297,8 @@ public class HidingSet<E extends Identifiable> extends ArraySet<E> implements Id
      * if the ID of the element is negative outside the range of this
      * <code>HidingSet</code>.
      * Elsewise the element will be stored at the appropriate array position.
-     * @param element element to be add.
+		 * @param element element to be add.
+		 * @return {@code true} if adding was successful, {@code false} otherwise
      */
     @Override
     public boolean add(E element){
@@ -487,6 +489,7 @@ public class HidingSet<E extends Identifiable> extends ArraySet<E> implements Id
          * @return <code>true</code> if there are elements not yet returned,
          *         <code>false</code> else.
          */
+		@Override
         public boolean hasNext() {
             if (next != null)
                 return true;
@@ -508,6 +511,7 @@ public class HidingSet<E extends Identifiable> extends ArraySet<E> implements Id
          * <code>null</code> is returned.
          * @return the next element if there are more, <code>null</code> else.
          */
+		@Override
         public E next() {
             if (next == null) hasNext();
             current = next;
@@ -520,6 +524,7 @@ public class HidingSet<E extends Identifiable> extends ArraySet<E> implements Id
          * last returned. If no element has been returned yet,
          * an <code>IllegalStateException</code> will be thrown.
          */
+		@Override
         public void remove() {
             if (current == null)
                 throw new IllegalStateException(Localization.getInstance (

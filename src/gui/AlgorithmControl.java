@@ -7,6 +7,7 @@ package gui;
 import algo.ca.EvacuationCellularAutomatonAlgorithm;
 import batch.CellularAutomatonAlgorithm;
 import batch.GraphAlgorithm;
+import de.tu_berlin.math.coga.common.algorithm.AlgorithmListener;
 import de.tu_berlin.math.coga.zet.converter.cellularAutomaton.AssignmentApplicationInstance;
 import de.tu_berlin.math.coga.zet.converter.cellularAutomaton.CellularAutomatonAssignmentConverter;
 import de.tu_berlin.math.coga.zet.converter.cellularAutomaton.ConvertedCellularAutomaton;
@@ -26,7 +27,10 @@ import io.visualization.BuildingResults;
 import io.visualization.CAVisualizationResults;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import tasks.CellularAutomatonTask;
+import tasks.CellularAutomatonTaskStepByStep;
 import tasks.GraphAlgorithmTask;
 import tasks.SerialTask;
 import tasks.conversion.BuildingPlanConverter;
@@ -34,7 +38,7 @@ import tasks.conversion.BuildingPlanConverter;
 
 /**
  * A class that starts, stops and pauses the algorithms that can be used in
- * zet.
+ * ZET.
  * @author Jan-Philipp Kappmeier
  */
 public class AlgorithmControl implements PropertyChangeListener {
@@ -134,6 +138,7 @@ public class AlgorithmControl implements PropertyChangeListener {
 		final SerialTask st = new SerialTask( cat );
 		st.addPropertyChangeListener( new PropertyChangeListener() {
 
+			@Override
 			public void propertyChange( PropertyChangeEvent pce ) {
 				if( st.isDone() ) {
 					cellularAutomaton = cat.getCa();
@@ -145,6 +150,45 @@ public class AlgorithmControl implements PropertyChangeListener {
 		});
 		if( propertyChangeListener != null )
 			st.addPropertyChangeListener( propertyChangeListener );
+		st.execute();
+	}
+
+	void performSimulationA( PropertyChangeListener propertyChangeListener, AlgorithmListener listener ) {
+		//final CellularAutomatonTask cat = new CellularAutomatonTask();
+		final CellularAutomatonTaskStepByStep cat = new CellularAutomatonTaskStepByStep();
+
+		cat.setCaAlgo( CellularAutomatonAlgorithm.InOrder );
+		cat.setProblem( project );
+		cat.addAlgorithmListener( listener );
+
+		final SerialTask st = new SerialTask( cat );
+		st.addPropertyChangeListener( new PropertyChangeListener() {
+			boolean first = true;
+
+			@Override
+			public void propertyChange( PropertyChangeEvent pce ) {
+				//System.out.println( "HAHA" );
+				if( first ) {
+					while( cat.getCa() == null ) {
+						try {
+							Thread.sleep( 100 );
+						} catch( InterruptedException ex ) {
+							Logger.getLogger( AlgorithmControl.class.getName() ).log( Level.SEVERE, null, ex );
+						}
+					}
+					cellularAutomaton = cat.getCa();
+					mapping = cat.getMapping();
+					container = cat.getContainer();
+					caVisResults = null;
+					first = false;
+				}
+			}
+		});
+		if( propertyChangeListener != null )
+			st.addPropertyChangeListener( propertyChangeListener );
+
+		System.out.println( "Start slow execution..." );
+
 		st.execute();
 	}
 
@@ -193,6 +237,7 @@ public class AlgorithmControl implements PropertyChangeListener {
 		}
 	}
 
+	@Override
 	public void propertyChange( PropertyChangeEvent pce ) {
 		System.out.println( pce.getPropertyName() );
 	}

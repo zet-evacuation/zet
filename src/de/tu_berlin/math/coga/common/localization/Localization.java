@@ -78,15 +78,10 @@ public class Localization {
 	 * @return the localized string
 	 */
 	public String getString( String key ) {
-		if( key.equals( "" ) )
-			return "";
 		try {
-			return bundle.getString( prefix + key );
+			return key.isEmpty() ? "" : bundle.getString( prefix + key );
 		} catch( MissingResourceException ex ) {
-			if( returnKeyOnly )
-				return prefix + key;
-			else
-				return "Unknown Language key: '" + prefix + key + "'";
+			return returnKeyOnly ? prefix + key : "Unknown Language key: '" + prefix + key + "'";
 		}
 	}
 
@@ -96,15 +91,10 @@ public class Localization {
 	 * @return the localized string
 	 */
 	public String getStringWithoutPrefix( String key ) {
-		if( key.equals( "" ) )
-			return "";
 		try {
-			return bundle.getString( key );
+			return key.isEmpty() ? "" : bundle.getString( key );
 		} catch( MissingResourceException ex ) {
-			if( returnKeyOnly )
-				return key;
-			else
-				return "Unknown Language key: '" + key + "'";
+			return returnKeyOnly ? key : "Unknown Language key: '" + key + "'";
 		}
 	}
 
@@ -117,11 +107,11 @@ public class Localization {
 	}
 	
 	/**
-	 * Loads a new localization ressource file from hard disk and sets new
+	 * Loads a new localization resource file from hard disk and sets new
 	 * localized number converters. The language is set by a
 	 * {@link java.util.Locale} object.
-	 * <p>The localisation file has to be found in the localization folder and has
-	 * the name zevacuate.properties with the language information respectiveley.
+	 * <p>The localization file has to be found in the localization folder and has
+	 * the name zevacuate.properties with the language information respectively.
 	 * </p>
 	 * @param locale the locale that should be used
 	 * @throws java.util.MissingResourceException if the locale cannot be found
@@ -159,6 +149,10 @@ public class Localization {
 		return nfInteger;
 	}
 
+	/**
+	 * Returns a formatter that reads and writes percent values in the current locale.
+	 * @return a formatter that reads and writes percent values in the current locale
+	 */
 	public final NumberFormat getPercentConverter() {
 		return nfPercent;
 	}

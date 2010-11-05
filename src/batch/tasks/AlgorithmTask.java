@@ -13,10 +13,12 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
+
 /*
  * GraphCreate.java
  * Created on 23.01.2008, 23:13:35
  */
+
 package batch.tasks;
 
 import de.tu_berlin.math.coga.common.algorithm.AlgorithmEvent;
@@ -42,197 +44,192 @@ import javax.swing.SwingWorker;
  * @author Jan-Philipp Kappmeier
  */
 public class AlgorithmTask extends SwingWorker<Integer, ProcessUpdateMessage> implements AlgorithmListener {
+	private static AlgorithmTask instance;
+	private boolean useUpdates;
+	private Runnable algorithmTask;
+	private String taskName;
+	private String taskProgressInformation;
+	private String taskDetailedProgressInformation;
+	private boolean oldUpdateStatus;
 
-    private static AlgorithmTask instance;
-    private boolean useUpdates;
-    private Runnable algorithmTask;
-    private String taskName;
-    private String taskProgressInformation;
-    private String taskDetailedProgressInformation;
-    private boolean oldUpdateStatus;
+	@Override
+	public void eventOccurred( AlgorithmEvent event ) {
+		if( event instanceof AlgorithmProgressEvent ) {
+			System.out.print( "Here;" );
+			publish( new ProcessUpdateMessage( ((AlgorithmProgressEvent) event).getProgressAsInteger(), "taskName", "taskProgressInformation", "taskDetailedProgressInformation" ) );
+		}
+	}
 
-    public void eventOccurred(AlgorithmEvent event) {
-        if (event instanceof AlgorithmProgressEvent) {
-            System.out.print("Here;");
-            publish(new ProcessUpdateMessage(((AlgorithmProgressEvent) event).getProgressAsInteger(), "taskName", "taskProgressInformation", "taskDetailedProgressInformation"));
-        }
-    }
+	/**
+	 *
+	 */
+	private AlgorithmTask() {
+		useUpdates = false;
+		oldUpdateStatus = false;
+	}
 
+	/**
+	 * Returns this singleton object
+	 * @return object of RandomUtils
+	 */
+	public static AlgorithmTask getInstance() {
+		if( instance == null )
+			instance = new AlgorithmTask();
+		return instance;
+	}
 
+	/**
+	 * Returns a new instance of this singleton object.
+	 * @return a new instance of this singleton object
+	 */
+	public static AlgorithmTask getNewInstance() {
+		if( instance != null )
+			instance.cancel( true );
+		instance = new AlgorithmTask();
+		return instance;
+	}
 
-    /**
-     *
-     */
-    private AlgorithmTask() {
-        useUpdates = false;
-        oldUpdateStatus = false;
-    }
+	@Override
+	public Integer doInBackground() throws Exception {
+		if( algorithmTask != null )
+			try {
+				algorithmTask.run();
+			} catch( Exception ex ) {
+				ex.printStackTrace( System.err );
+			}
+		return 1;
+	}
 
-    /**
-     * Returns this singleton object
-     * @return object of RandomUtils
-     */
-    public static AlgorithmTask getInstance() {
-        if (instance == null) {
-            instance = new AlgorithmTask();
-        }
-        return instance;
-    }
+	@Override
+	protected void process( List<ProcessUpdateMessage> chunks ) {
+		if( chunks.size() > 0 ) {
+			ProcessUpdateMessage pum = chunks.get( chunks.size() - 1 );
+			EventServer.getInstance().dispatchEvent( new ProgressEvent( this, pum ) );
+		}
+	}
 
-    /**
-     * Returns a new instance of this singleton object.
-     * @return a new instance of this singleton object
-     */
-    public static AlgorithmTask getNewInstance() {
-        if (instance != null) {
-            instance.cancel(true);
-        }
-        instance = new AlgorithmTask();
-        return instance;
-    }
+	/**
+	 * Returns the name of the currently executed task. The task can set and
+	 * change the name if it wants.
+	 * @return the name
+	 */
+	public String getName() {
+		return taskName;
+	}
 
-    @Override
-    public Integer doInBackground() throws Exception {
-        if (algorithmTask != null) {
-            try {
-                algorithmTask.run();
-            } catch (Exception ex) {
-                ex.printStackTrace();
-            }
-        }
-        return 1;
-    }
+	/**
+	 * Returns an information <code>String</code> describing the current status.
+	 * This message can be updated by the task.
+	 * @return the message
+	 */
+	public String getProgressInformation() {
+		return taskProgressInformation;
+	}
 
-    @Override
-    protected void process(List<ProcessUpdateMessage> chunks) {
-        if (chunks.size() > 0) {
-            ProcessUpdateMessage pum = chunks.get(chunks.size() - 1);
-            EventServer.getInstance().dispatchEvent(new ProgressEvent(this, pum));
-        }
-    }
+	public String getDetailedProgressInformation() {
+		return taskDetailedProgressInformation;
+	}
 
-    /**
-     * Returns the name of the currently executed task. The task can set and
-     * change the name if it wants.
-     * @return the name
-     */
-    public String getName() {
-        return taskName;
-    }
+	public void publish( String taskProgressInformation, String taskDetailedProgressInformation ) {
+		this.taskProgressInformation = taskProgressInformation;
+		this.taskDetailedProgressInformation = taskDetailedProgressInformation;
+		int progress = getProgress();
+		progress = (progress + 1) % 2;
+		setProgress( progress );
+		publish( new ProcessUpdateMessage( -1, taskName, taskProgressInformation, taskDetailedProgressInformation ) );
+	}
 
-    /**
-     * Returns an information <code>String</code> describing the current status.
-     * This message can be upadted by the task.
-     * @return the message
-     */
-    public String getProgressInformation() {
-        return taskProgressInformation;
-    }
+	public void publish( int progress, String taskProgressInformation, String taskDetailedProgressInformation ) {
+		this.taskProgressInformation = taskProgressInformation;
+		this.taskDetailedProgressInformation = taskDetailedProgressInformation;
+		setProgress( progress );
+		publish( new ProcessUpdateMessage( progress, taskName, taskProgressInformation, taskDetailedProgressInformation ) );
+	}
 
-    public String getDetailedProgressInformation() {
-        return taskDetailedProgressInformation;
-    }
+	/**
+	 * This method publishes a new task that is started. It sets the task name
+	 * to the submitted name and resets the progress information and sets the
+	 * progress to 0.
+	 * @param taskName the name of the new task.
+	 */
+	public void publish( String taskName ) {
+		this.taskName = taskName;
+		this.taskProgressInformation = "";
+		this.taskDetailedProgressInformation = "";
+		setProgress( 0 );
+		publish( new ProcessUpdateMessage( 0, taskName, taskProgressInformation, taskDetailedProgressInformation ) );
+	}
 
-    public void publish(String taskProgressInformation, String taskDetailedProgressInformation) {
-        this.taskProgressInformation = taskProgressInformation;
-        this.taskDetailedProgressInformation = taskDetailedProgressInformation;
-        int progress = getProgress();
-        progress = (progress + 1) % 2;
-        setProgress(progress);
-        publish(new ProcessUpdateMessage(-1, taskName, taskProgressInformation, taskDetailedProgressInformation));
-    }
+	/**
+	 * Publishes a new progress without changing either the task name or the
+	 * progress information status.
+	 * @param progress the name of the new task.
+	 */
+	public void publish( int progress ) {
+		setProgress( progress );
+		publish( new ProcessUpdateMessage( progress, taskName, taskProgressInformation, taskDetailedProgressInformation ) );
+	}
 
-    public void publish(int progress, String taskProgressInformation, String taskDetailedProgressInformation) {
-        this.taskProgressInformation = taskProgressInformation;
-        this.taskDetailedProgressInformation = taskDetailedProgressInformation;
-        setProgress(progress);
-        publish(new ProcessUpdateMessage(progress, taskName, taskProgressInformation, taskDetailedProgressInformation));
-    }
+	/**
+	 * Sets a new progress status and new status information texts.
+	 * @param progress the progress in the interval 0 to 100
+	 * @param taskProgressInformation an information text
+	 * @param taskDetailedProgressInformation some detailed information text
+	 */
+	public void setProgress( int progress, String taskProgressInformation, String taskDetailedProgressInformation ) {
+		this.taskProgressInformation = taskProgressInformation;
+		this.taskDetailedProgressInformation = taskDetailedProgressInformation;
+		setProgress( progress );
+	}
 
-    /**
-     * This method publishes a new task that is started. It sets the task name
-     * to the submitted name and resets the progress information and sets the
-     * progress to 0.
-     * @param taskName the name of the new task.
-     */
-    public void publish(String taskName) {
-        this.taskName = taskName;
-        this.taskProgressInformation = "";
-        this.taskDetailedProgressInformation = "";
-        setProgress(0);
-        publish(new ProcessUpdateMessage(0, taskName, taskProgressInformation, taskDetailedProgressInformation));
-    }
+	/**
+	 * Sets a new progress status, a new task name and new status information
+	 * texts.
+	 * @param progress the progress in the interval 0 to 100
+	 * @param taskName the new name of the task
+	 * @param taskProgressInformation an information text
+	 * @param taskDetailedProgressInformation some detailed information text
+	 */
+	public void setProgress( int progress, String taskName, String taskProgressInformation, String taskDetailedProgressInformation ) {
+		this.taskName = taskName;
+		this.taskProgressInformation = taskProgressInformation;
+		this.taskDetailedProgressInformation = taskDetailedProgressInformation;
+		setProgress( progress );
+	}
 
-    /**
-     * Publishes a new progress without changing either the task name or the
-     * progress information status.
-     * @param progress the name of the new task.
-     */
-    public void publish(int progress) {
-        setProgress(progress);
-        publish(new ProcessUpdateMessage(progress, taskName, taskProgressInformation, taskDetailedProgressInformation));
-    }
+	/**
+	 * Sets the task that is executed.
+	 * @param task the task that is executed
+	 */
+	public void setTask( Runnable task ) {
+		algorithmTask = task;
+	}
 
-    /**
-     * Sets a new progress status and new status information texts.
-     * @param progress the progress in the interval 0 to 100
-     * @param taskProgressInformation an information text
-     * @param taskDetailedProgressInformation some detailed information text
-     */
-    public void setProgress(int progress, String taskProgressInformation, String taskDetailedProgressInformation) {
-        this.taskProgressInformation = taskProgressInformation;
-        this.taskDetailedProgressInformation = taskDetailedProgressInformation;
-        setProgress(progress);
-    }
+	/**
+	 * Is called when the task has finished.
+	 */
+	@Override
+	public void done() {
+		useUpdates = oldUpdateStatus;
+	}
 
-    /**
-     * Sets a new progress status, a new task name and new status information
-     * texts.
-     * @param progress the progress in the interval 0 to 100
-     * @param taskName the new name of the task
-     * @param taskProgressInformation an information text
-     * @param taskDetailedProgressInformation some detailed information text
-     */
-    public void setProgress(int progress, String taskName, String taskProgressInformation, String taskDetailedProgressInformation) {
-        this.taskName = taskName;
-        this.taskProgressInformation = taskProgressInformation;
-        this.taskDetailedProgressInformation = taskDetailedProgressInformation;
-        setProgress(progress);
-    }
+	// the use useUpdates value that is set is only used for one execution!
+	/**
+	 *
+	 * @param useUpdates
+	 */
+	public void executeAlgorithm( boolean useUpdates ) {
+		oldUpdateStatus = this.useUpdates;
+		this.useUpdates = useUpdates;
+		execute();
+	}
 
-    /**
-     * Sets the task that is executed.
-     * @param task the task that is executed
-     */
-    public void setTask(Runnable task) {
-        algorithmTask = task;
-    }
+	public void useUpdates( boolean useUpdates ) {
+		this.useUpdates = useUpdates;
+		oldUpdateStatus = useUpdates;
+	}
 
-    /**
-     * Is called when the task has finished.
-     */
-    @Override
-    public void done() {
-        useUpdates = oldUpdateStatus;
-    }
-
-    // the use useUpdates value that is set is only used for one execution!
-    /**
-     *
-     * @param useUpdates
-     */
-    public void executeAlgorithm(boolean useUpdates) {
-        oldUpdateStatus = this.useUpdates;
-        this.useUpdates = useUpdates;
-        execute();
-    }
-
-    public void useUpdates(boolean useUpdates) {
-        this.useUpdates = useUpdates;
-        oldUpdateStatus = useUpdates;
-    }
-
-    public boolean useUpdates() {
-        return useUpdates;
-    }
+	public boolean useUpdates() {
+		return useUpdates;
+	}
 }

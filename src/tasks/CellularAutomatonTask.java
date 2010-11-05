@@ -36,6 +36,10 @@ public class CellularAutomatonTask extends Algorithm<Project, CAVisualizationRes
 		this.cellularAutomatonAlgorithm = caAlgo;
 	}
 
+	public CellularAutomatonAlgorithm getCellularAutomatonAlgorithm() {
+		return cellularAutomatonAlgorithm;
+	}
+
 	@Override
 	protected CAVisualizationResults runAlgorithm( Project project ) {
 		// convert cellular automaton
@@ -60,6 +64,7 @@ public class CellularAutomatonTask extends Algorithm<Project, CAVisualizationRes
 		double caMaxTime = PropertyContainer.getInstance().getAsDouble( "algo.ca.maxTime" );
 		caAlgo.setMaxTimeInSeconds( caMaxTime );
 		caAlgo.getCellularAutomaton().startRecording ();
+
 		caAlgo.run();	// hier wird initialisiert
 		caAlgo.getCellularAutomaton().stopRecording();
 

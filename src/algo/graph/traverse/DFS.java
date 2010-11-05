@@ -20,6 +20,7 @@
 
 package algo.graph.traverse;
 
+import de.tu_berlin.math.coga.common.localization.Localization;
 import ds.graph.Edge;
 import ds.graph.Graph;
 import ds.graph.IdentifiableCollection;
@@ -28,8 +29,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
-import ds.graph.Localization;
 
 /**
  *
