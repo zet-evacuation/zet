@@ -147,16 +147,16 @@ public class ZControl {
 		throw new IllegalArgumentException( "Unknown parameter type." );
 	}
 
-	public void delete( PlanPolygon p ) {
+	public void deletePolygon( PlanPolygon p ) {
 		if( p instanceof Area )
 			delete( (Area)p );
 		else if( p instanceof Room )
-			delete( (Room)p );
+			deletePolygon( (Room)p );
 		else
 			throw new IllegalArgumentException( "Polygon not of type Area or Room" );
 	}
 
-	public void delete( Room r ) {
+	public void deletePolygon( Room r ) {
 		r.delete();
 	}
 
@@ -235,14 +235,14 @@ public class ZControl {
 		if( newPolygon == null )
 			throw new IllegalStateException( "No polygon creation started." );
 
-		if( points.size() == 0 )
+		if( points.isEmpty() )
 			throw new IllegalArgumentException( "No Points." );
 		if( points.size() == 1 )
 			return addPoint( points.get(0) );
 
-		for( int i = 0; i < points.size()-1; ++i ) {
+		for( int i = 0; i < points.size()-1; ++i )
 			addPoint( points.get( i ), false );
-		}
+
 		return addPoint( points.get( points.size()-1 ), true );
 	}
 
@@ -379,7 +379,7 @@ public class ZControl {
 //								} else
 //									// Delete the area if it was dragged out of
 //									// its old room and not into any new one
-//									a.delete();
+//									a.deletePolygon();
 //							}
 			EventServer.getInstance().dispatchEvent( new ZModelChangedEvent() {} );
 		}

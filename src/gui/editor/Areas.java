@@ -15,25 +15,32 @@
  */
 
 /*
- * AreaVisibility.java
+ * Areas.java
  * Created on 11. Dezember 2007, 21:56
  */
 
 package gui.editor;
 
 /**
- * This enumeration is used to mark what kinds of areas shall be displayed 
- * on the screen. The user may want some kinds of areas to be hidden if he is
- * not interested in them for some reason.
- *
+ * This enumeration gives all types of areas that exists (except barriers). It
+ * is used to mark what kind of areas shall be displayed on the screen. The user
+ * may want some kinds of areas to be hidden if he is not interested in them for
+ * some reason.
  * @author Timon Kelter, Jan-Philipp Kappmeier
  */
-public enum AreaVisibility { 
+public enum Areas {
+	/** Delay areas. */
 	Delay,
+	/** Stair areas. */
 	Stair,
+	/** Inaccessible areas. */
 	Inaccessible,
+	/** Save areas. */
 	Save,
+	/** Evacuation areas. */
 	Evacuation,
+	/** Assignment areas. */
 	Assignment,
-	Teleport;
+	/** Teleportation areas. */
+	Teleportation;
 }

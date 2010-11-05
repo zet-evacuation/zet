@@ -130,32 +130,32 @@ public abstract class GUIOptionManager {
 		}
 	}
 
-	public static EnumSet<AreaVisibility> getAreaVisibility() {
+	public static EnumSet<Areas> getAreaVisibility() {
 		/** The currently selected visible areas. */
-		EnumSet<AreaVisibility> areaVisibility = EnumSet.noneOf( AreaVisibility.class );
+		EnumSet<Areas> areaVisibility = EnumSet.noneOf( Areas.class );
 		if( propertyContainer.getAsBoolean( "gui.optionManager.AssignmentAreaVisibility" ) )
-			areaVisibility.add( AreaVisibility.Assignment );
+			areaVisibility.add( Areas.Assignment );
 		if( propertyContainer.getAsBoolean( "gui.optionManager.DelayAreaVisibility" ) )
-			areaVisibility.add( AreaVisibility.Delay );
+			areaVisibility.add( Areas.Delay );
 		if( propertyContainer.getAsBoolean( "gui.optionManager.EvacuationAreaVisibility" ) )
-			areaVisibility.add( AreaVisibility.Evacuation );
+			areaVisibility.add( Areas.Evacuation );
 		if( propertyContainer.getAsBoolean( "gui.optionManager.InaccessibleAreaVisibility" ) )
-			areaVisibility.add( AreaVisibility.Inaccessible );
+			areaVisibility.add( Areas.Inaccessible );
 		if( propertyContainer.getAsBoolean( "gui.optionManager.SaveAreaVisibility" ) )
-			areaVisibility.add( AreaVisibility.Save );
+			areaVisibility.add( Areas.Save );
 		if( propertyContainer.getAsBoolean( "gui.optionManager.StairAreaVisibility" ) )
-			areaVisibility.add( AreaVisibility.Stair );
-		areaVisibility.add( AreaVisibility.Teleport );
+			areaVisibility.add( Areas.Stair );
+		areaVisibility.add( Areas.Teleportation );
 		return areaVisibility;
 	}
 
-	public static void setAreaVisibility( EnumSet<AreaVisibility> av ) {
-		propertyContainer.set( "gui.optionManager.AssignmentAreaVisibility", av.contains( AreaVisibility.Assignment ) );
-		propertyContainer.set( "gui.optionManager.DelayAreaVisibility", av.contains( AreaVisibility.Delay ) );
-		propertyContainer.set( "gui.optionManager.EvacuationAreaVisibility", av.contains( AreaVisibility.Evacuation ) );
-		propertyContainer.set( "gui.optionManager.InaccessibleAreaVisibility", av.contains( AreaVisibility.Inaccessible ) );
-		propertyContainer.set( "gui.optionManager.SaveAreaVisibility", av.contains( AreaVisibility.Save ) );
-		propertyContainer.set( "gui.optionManager.StairAreaVisibility", av.contains( AreaVisibility.Stair ) );
+	public static void setAreaVisibility( EnumSet<Areas> av ) {
+		propertyContainer.set( "gui.optionManager.AssignmentAreaVisibility", av.contains( Areas.Assignment ) );
+		propertyContainer.set( "gui.optionManager.DelayAreaVisibility", av.contains( Areas.Delay ) );
+		propertyContainer.set( "gui.optionManager.EvacuationAreaVisibility", av.contains( Areas.Evacuation ) );
+		propertyContainer.set( "gui.optionManager.InaccessibleAreaVisibility", av.contains( Areas.Inaccessible ) );
+		propertyContainer.set( "gui.optionManager.SaveAreaVisibility", av.contains( Areas.Save ) );
+		propertyContainer.set( "gui.optionManager.StairAreaVisibility", av.contains( Areas.Stair ) );
 	}
 
 	public static EditMode getEditMode() {

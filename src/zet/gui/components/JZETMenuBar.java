@@ -11,7 +11,7 @@ import gui.GUIControl;
 import gui.ZETMain;
 import zet.gui.components.tabs.base.AbstractFloor.RasterPaintStyle;
 import gui.components.framework.Menu;
-import gui.editor.AreaVisibility;
+import gui.editor.Areas;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.InputEvent;
@@ -329,22 +329,22 @@ public class JZETMenuBar extends JMenuBar implements ActionListener, Localized {
 			control.updateVisibility( false );
 		} else if( e.getActionCommand().equals( "delayArea" ) ) {
 			System.err.println( "Update DELAY AREA called" );
-			control.updateVisibility( AreaVisibility.Delay, mnuDelayArea.isSelected() );
+			control.updateVisibility( Areas.Delay, mnuDelayArea.isSelected() );
 		} else if( e.getActionCommand().equals( "stairArea" ) ) {
 			System.err.println( "Update STAIR AREA called" );
-			control.updateVisibility( AreaVisibility.Stair, mnuStairArea.isSelected() );
+			control.updateVisibility( Areas.Stair, mnuStairArea.isSelected() );
 		} else if( e.getActionCommand().equals( "evacuationArea" ) ) {
 			System.err.println( "Update EVACUATION AREA called" );
-			control.updateVisibility( AreaVisibility.Evacuation, mnuEvacuationArea.isSelected() );
+			control.updateVisibility( Areas.Evacuation, mnuEvacuationArea.isSelected() );
 		} else if( e.getActionCommand().equals( "inaccessibleArea" ) ) {
 			System.err.println( "Update INACCESSIBLE called" );
-			control.updateVisibility( AreaVisibility.Inaccessible, mnuInaccessibleArea.isSelected() );
+			control.updateVisibility( Areas.Inaccessible, mnuInaccessibleArea.isSelected() );
 		} else if( e.getActionCommand().equals( "saveArea" ) ) {
 			System.err.println( "Update SAVE AREA called" );
-			control.updateVisibility( AreaVisibility.Save, mnuSaveArea.isSelected() );
+			control.updateVisibility( Areas.Save, mnuSaveArea.isSelected() );
 		} else if( e.getActionCommand().equals( "assignmentArea" ) ) {
 			System.err.println( "Update ASSIGNMENT called" );
-			control.updateVisibility( AreaVisibility.Assignment, mnuAssignmentArea.isSelected() );
+			control.updateVisibility( Areas.Assignment, mnuAssignmentArea.isSelected() );
 		} else if( e.getActionCommand().equals( "grid" ) ) {
 			control.setRasterizedPaintMode( mnuPaintRasterized.isSelected() );
 		} else if( e.getActionCommand().equals( "gridLine" ) ) {
