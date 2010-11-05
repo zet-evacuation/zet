@@ -49,7 +49,7 @@ import zet.gui.components.tabs.base.JFloorScrollPane;
 import de.tu_berlin.math.coga.components.JRuler;
 import zet.gui.components.model.RoomComboBoxModel;
 import gui.components.framework.Menu;
-import gui.editor.AreaVisibility;
+import gui.editor.Areas;
 import gui.editor.EdgePopupListener;
 import zet.gui.components.tabs.editor.EditMode;
 import gui.editor.GUIOptionManager;
@@ -1306,9 +1306,9 @@ public void localize() {
 	 * 
 	 * @param mode
 	 */
-	public void changeAreaView( ArrayList<AreaVisibility> mode ) {
+	public void changeAreaView( ArrayList<Areas> mode ) {
 		// EnumSet.copyOf will not work for empty lists
-		GUIOptionManager.setAreaVisibility( mode.isEmpty() ? EnumSet.noneOf( AreaVisibility.class ) : EnumSet.copyOf( mode ) );
+		GUIOptionManager.setAreaVisibility( mode.isEmpty() ? EnumSet.noneOf( Areas.class ) : EnumSet.copyOf( mode ) );
 		updateFloorView();
 	}
 
@@ -1428,7 +1428,7 @@ public void localize() {
 		((JMenuItem)pupEdge.getComponent( 1 )).setVisible( !passable );
 		// passage-room creation
 		((JMenuItem)pupEdge.getComponent( 2 )).setVisible( !passable );
-		// Teleport-Creation
+		// Teleportation-Creation
 		((JMenuItem)pupEdge.getComponent( 3 )).setVisible( !passable );
 		// EvacuationEdge-Creation
 		((JMenuItem)pupEdge.getComponent( 4 )).setVisible( !passable );

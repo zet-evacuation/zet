@@ -28,7 +28,7 @@ import ds.z.PlanPoint;
 import ds.z.RoomEdge;
 import ds.z.StairArea;
 import gui.GUIControl;
-import gui.editor.AreaVisibility;
+import gui.editor.Areas;
 import gui.editor.CoordinateTools;
 import gui.editor.GUIOptionManager;
 import java.awt.AWTEvent;
@@ -222,40 +222,40 @@ public class JPolygon extends AbstractPolygon {
 				Room room = Room.class.cast( myPolygon );
 
 				// Display areas
-				EnumSet<AreaVisibility> areaVisibility = GUIOptionManager.getAreaVisibility();
-				if( areaVisibility.contains( AreaVisibility.Assignment ) )
+				EnumSet<Areas> areaVisibility = GUIOptionManager.getAreaVisibility();
+				if( areaVisibility.contains( Areas.Assignment ) )
 					for( Area a : room.getAssignmentAreas() ) {
 						JPolygon ne = new JPolygon( myFloor, GUIOptionManager.getAssignmentAreaColor(), guiControl );
 						add( ne );
 						ne.displayPolygon( a );
 					}
-				if( areaVisibility.contains( AreaVisibility.Delay ) )
+				if( areaVisibility.contains( Areas.Delay ) )
 					for( Area a : room.getDelayAreas() ) {
 						JPolygon ne = new JPolygon( myFloor, GUIOptionManager.getDelayAreaColor(), guiControl );
 						add( ne );
 						ne.displayPolygon( a );
 					}
-				if( areaVisibility.contains( AreaVisibility.Evacuation ) )
+				if( areaVisibility.contains( Areas.Evacuation ) )
 					for( Area a : room.getSaveAreas() )
 						if( a instanceof EvacuationArea ) {
 							JPolygon ne = new JPolygon( myFloor, GUIOptionManager.getEvacuationAreaColor(), guiControl );
 							add( ne );
 							ne.displayPolygon( a );
 						}
-				if( areaVisibility.contains( AreaVisibility.Save ) )
+				if( areaVisibility.contains( Areas.Save ) )
 					for( Area a : room.getSaveAreas() )
 						if( !(a instanceof EvacuationArea) ) {
 							JPolygon ne = new JPolygon( myFloor, GUIOptionManager.getSaveAreaColor(), guiControl );
 							add( ne );
 							ne.displayPolygon( a );
 						}
-				if( areaVisibility.contains( AreaVisibility.Stair ) )
+				if( areaVisibility.contains( Areas.Stair ) )
 					for( Area a : room.getStairAreas() ) {
 						JPolygon ne = new JPolygon( myFloor, GUIOptionManager.getStairAreaColor(), guiControl );
 						add( ne );
 						ne.displayPolygon( a );
 					}
-				if( areaVisibility.contains( AreaVisibility.Inaccessible ) ) {
+				if( areaVisibility.contains( Areas.Inaccessible ) ) {
 					for( Area a : room.getInaccessibleAreas() ) {
 						JPolygon ne = new JPolygon( myFloor, GUIOptionManager.getInaccessibleAreaColor(), guiControl );
 						add( ne );
@@ -268,7 +268,7 @@ public class JPolygon extends AbstractPolygon {
 					}
 				}
 					// TODO area visiblity for teleport areas
-				if( areaVisibility.contains( AreaVisibility.Teleport ) )
+				if( areaVisibility.contains( Areas.Teleportation ) )
 					for( Area a : room.getTeleportAreas() ) {
 						JPolygon ne = new JPolygon( myFloor, GUIOptionManager.getTeleportAreaColor(), guiControl );
 						add( ne );

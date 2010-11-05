@@ -10,7 +10,7 @@ import gui.ZETMain;
 import zet.gui.components.model.ComboBoxRenderer;
 import gui.components.framework.Button;
 import gui.components.framework.IconSet;
-import gui.editor.AreaVisibility;
+import gui.editor.Areas;
 import gui.editor.CoordinateTools;
 import zet.gui.components.tabs.editor.EditMode;
 import java.awt.Color;
@@ -191,31 +191,31 @@ public class JEditToolbar extends JToolBar implements ActionListener, PopupMenuL
 		switch( currentEditMode ) {
 			case AssignmentAreaCreation:
 			case AssignmentAreaCreationPointwise:
-				control.showArea( AreaVisibility.Assignment );
+				control.showArea( Areas.Assignment );
 				break;
 			case DelayAreaCreation:
 			case DelayAreaCreationPointwise:
-				control.showArea( AreaVisibility.Delay );
+				control.showArea( Areas.Delay );
 				break;
 			case StairAreaCreation:
 			case StairAreaCreationPointwise:
-				control.showArea( AreaVisibility.Stair );
+				control.showArea( Areas.Stair );
 				break;
 			case EvacuationAreaCreation:
 			case EvacuationAreaCreationPointwise:
-				control.showArea( AreaVisibility.Evacuation );
+				control.showArea( Areas.Evacuation );
 				break;
 			case InaccessibleAreaCreation:
 			case InaccessibleAreaCreationPointwise:
-				control.showArea( AreaVisibility.Inaccessible );
+				control.showArea( Areas.Inaccessible );
 				break;
 			case SaveAreaCreation:
 			case SaveAreaCreationPointwise:
-				control.showArea( AreaVisibility.Save );
+				control.showArea( Areas.Save );
 				break;
 			case TeleportAreaCreation:
 			case TeleportAreaCreationPointwise:
-				control.showArea( AreaVisibility.Teleport );
+				control.showArea( Areas.Teleportation );
 				break;
 			default:
 				break;

@@ -126,7 +126,7 @@ public class JFloor extends AbstractFloor implements EventListener<ZModelChanged
 	/** The standard stroke. */
 	private final static BasicStroke stroke_standard = new BasicStroke( 1.0f,
 					BasicStroke.CAP_BUTT, BasicStroke.JOIN_MITER );
-	/** The stroke used for painting the selection recatngle. */
+	/** The stroke used for painting the selection rectangle. */
 	private final static BasicStroke selection_stroke = new BasicStroke( 1.0f,
 					BasicStroke.CAP_BUTT, BasicStroke.JOIN_MITER, 3.0f, new float[]{4.0f, 2.0f}, 0.0f );
 	private ZControl zcontrol;
@@ -140,6 +140,7 @@ public class JFloor extends AbstractFloor implements EventListener<ZModelChanged
 		this.zcontrol = zcontrol;
 	}
 
+	@Override
 	public void handleEvent( ZModelChangedEvent e ) {
 		// TODO handle updates
 		//if( !JEditor.getInstance().isUpdateDisabled() )
@@ -148,6 +149,8 @@ public class JFloor extends AbstractFloor implements EventListener<ZModelChanged
 
 	/**
 	 * Creates a new instance of <code>JFloor</code>.
+	 *
+	 * @param guiControl
 	 */
 	public JFloor( GUIControl guiControl ) {
 		super();
@@ -160,6 +163,10 @@ public class JFloor extends AbstractFloor implements EventListener<ZModelChanged
 		enableEvents( AWTEvent.KEY_EVENT_MASK );
 		enableEvents( AWTEvent.MOUSE_WHEEL_EVENT_MASK );
 		EventServer.getInstance().registerListener( this, ZModelChangedEvent.class );
+	}
+
+	public void displayFloor() {
+		displayFloor( myFloor );
 	}
 
 	/**
@@ -267,7 +274,7 @@ public class JFloor extends AbstractFloor implements EventListener<ZModelChanged
 		dragStarts = null;
 		draggedPlanPoints = null;
 		if( newPolygon != null ) {
-			guiControl.getZControl().delete( newPolygon );
+			guiControl.getZControl().deletePolygon( newPolygon );
 			newPolygon = null;
 		}
 	}
@@ -1071,6 +1078,7 @@ public class JFloor extends AbstractFloor implements EventListener<ZModelChanged
 	/**
 	 * Key Event Handler
 	 * Delete deletes selected polygons
+	 * @param e
 	 */
 	@Override
 	protected void processKeyEvent( KeyEvent e ) {
@@ -1079,7 +1087,7 @@ public class JFloor extends AbstractFloor implements EventListener<ZModelChanged
 			switch( e.getKeyCode() ) {
 				case KeyEvent.VK_ESCAPE:
 					if( newPolygon != null ) {
-						guiControl.getZControl().delete( newPolygon );
+						guiControl.getZControl().deletePolygon( newPolygon );
 						newPolygon = null;
 						lastClick = null;
 						lastPlanClick = null;
@@ -1091,8 +1099,7 @@ public class JFloor extends AbstractFloor implements EventListener<ZModelChanged
 						List<PlanPolygon> toDelete = new LinkedList<PlanPolygon>();
 						for( JPolygon sel : selectedPolygons )
 							toDelete.add( sel.getPlanPolygon() );
-						for( PlanPolygon p : toDelete )
-							guiControl.getZControl().delete( p );
+						guiControl.deletePolygon( toDelete );
 					}
 					break;
 				default:
@@ -1101,7 +1108,9 @@ public class JFloor extends AbstractFloor implements EventListener<ZModelChanged
 
 	}
 
-	/** Used for zooming in and out with the mouse wheel. */
+	/** Used for zooming in and out with the mouse wheel.
+	 * @param e the mouse event
+	 */
 	@Override
 	protected void processMouseWheelEvent( MouseWheelEvent e ) {
 		double oldZoom = CoordinateTools.getZoomFactor();

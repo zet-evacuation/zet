@@ -35,9 +35,11 @@ import ds.z.PlanPolygon;
 import ds.z.Room;
 import ds.z.ZControl;
 import ds.z.exception.TooManyPeopleException;
+import event.EventServer;
+import event.ZModelChangedEvent;
 import gui.components.progress.JProgressBarDialog;
 import gui.components.progress.JRasterizeProgressBarDialog;
-import gui.editor.AreaVisibility;
+import gui.editor.Areas;
 import gui.editor.CoordinateTools;
 import zet.gui.components.tabs.editor.EditMode;
 import gui.editor.GUIOptionManager;
@@ -64,6 +66,7 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.List;
 import javax.imageio.ImageIO;
 import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
@@ -92,7 +95,7 @@ public class GUIControl {
 	private ZETVisualization visualization;
 	private JEditView editview;
 	private AlgorithmControl algorithmControl;
-	ArrayList<AreaVisibility> mode = new ArrayList<AreaVisibility>( Arrays.asList( AreaVisibility.values() ) );
+	ArrayList<Areas> mode = new ArrayList<Areas>( Arrays.asList( Areas.values() ) );
 
 	/**
 	 * Creates a new instance of <code>GUIControl</code>.
@@ -157,7 +160,7 @@ public class GUIControl {
 	 * menu entry is set correct, too.
 	 * @param areaType the are type
 	 */
-	public void showArea( AreaVisibility areaType ) {
+	public void showArea( Areas areaType ) {
 		updateVisibility( areaType, true );
 		// TODO make them visible!
 //		switch( areaType ) {
@@ -555,6 +558,7 @@ public class GUIControl {
 		editor.localize();
 		menuBar.localize();
 	}
+
 	private JFileChooser jfcProject;
 	private JFileChooser jfcResults;
 
@@ -610,7 +614,6 @@ public class GUIControl {
 	 */
 	public static FileFilter getResultsFilter() {
 		return new FileFilter() {
-
 			@Override
 			public boolean accept( File f ) {
 				return f.isDirectory() || f.getName().toLowerCase().endsWith( ".ers" );
@@ -733,6 +736,17 @@ public class GUIControl {
 		ZETMain.sendMessage( Localization.getInstance().getString( "gui.editor.JEditor.message.dxfComplete" ) );
 	}
 
+	/**
+	 * Deletes some polygons from the underlying model and updates the graphical
+	 * user interface.
+	 * @param toDelete
+	 */
+	public void deletePolygon( List<PlanPolygon> toDelete ) {
+		for( PlanPolygon p : toDelete )
+			zcontrol.deletePolygon( p );
+		editview.getLeftPanel().getMainComponent().displayFloor();
+	}
+
 	public void newFloor() {
 		Floor f = zcontrol.createNewFloor();
 		ZETMain.sendMessage( "Neue Etage angelegt." ); // TODO loc
@@ -805,32 +819,34 @@ public class GUIControl {
 		distribution.dispose();
 	}
 
-
-	// TODO set anstelle von arraylist
 	/**
-	 * Hides and unhides the areas in the plan depending on the status of the
+	 * Hides and shows the areas in the plan depending on the status of the
 	 * associated menu entries. The menu entries to hide and show all areas
 	 * are updated and, if necessary, disabled or enabled.
-	 *
-	 * @param areaVisibility
-	 * @param value
+	 * @param areaVisibility the type of area that should be hidden or shown
+	 * @param value shows the specified type of area if {@code true}, hides it otherwise
 	 */
-	public void updateVisibility( AreaVisibility areaVisibility, boolean value ) {
+	public void updateVisibility( Areas areaVisibility, boolean value ) {
 		if( value && !mode.contains( areaVisibility ) )
 			mode.add( areaVisibility );
 		else if( !value )
 			mode.remove( areaVisibility );
 		editview.changeAreaView( mode );
-		menuBar.setEnabledShowAllAreas( mode.size() != AreaVisibility.values().length );
+		menuBar.setEnabledShowAllAreas( mode.size() != Areas.values().length );
 		menuBar.setEnabledHideAllAreas( !mode.isEmpty() );
 	}
 
+	/**
+	 * Enables and disables visibility of areas in the ZET editor. The boolean
+	 * parameter decides whether all areas should be visible or hidden.
+	 * @param b shows all types of areas if {@code true}, hides them otherwise
+	 */
 	public void updateVisibility( boolean b ) {
 		mode.clear();
 		if( b )
-			mode.addAll( Arrays.asList( AreaVisibility.values() ) );
+			mode.addAll( Arrays.asList( Areas.values() ) );
 		editview.changeAreaView( mode );
-		menuBar.setEnabledShowAllAreas( mode.size() != AreaVisibility.values().length );
+		menuBar.setEnabledShowAllAreas( mode.size() != Areas.values().length );
 		menuBar.setEnabledHideAllAreas( !mode.isEmpty() );
 	}
 
