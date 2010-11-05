@@ -19,12 +19,9 @@
  */
 package ds.graph.flow;
 
-import ds.graph.Localization;
 import ds.graph.DynamicPath;
 import ds.graph.Edge;
-import ds.graph.IdentifiableIntegerMapping;
 import ds.graph.Path;
-import ds.graph.StaticPath;
 import java.util.Iterator;
 
 /**

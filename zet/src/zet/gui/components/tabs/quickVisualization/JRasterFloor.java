@@ -92,8 +92,6 @@ public class JRasterFloor extends AbstractFloor /*implements ds.z.event.ChangeLi
 	/**
 	 * Opens a floor and adds the rooms as components to the floor.
 	 * @param floor the displayed floor
-	 * @param mapping the mapping to the given cellular automaton
-	 * @param container the container containing the raster squares
 	 */
 	public void displayFloor( Floor floor ) {
 		boolean showPotentialValue = PropertyContainer.getInstance().getAsBoolean( "editor.options.cavis.staticPotential" );

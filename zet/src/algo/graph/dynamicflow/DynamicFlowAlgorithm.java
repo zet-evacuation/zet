@@ -16,8 +16,8 @@
 package algo.graph.dynamicflow;
 
 import de.tu_berlin.math.coga.common.algorithm.Algorithm;
-import ds.graph.Localization;
 import algo.graph.util.PathComposition;
+import de.tu_berlin.math.coga.common.localization.Localization;
 import ds.graph.flow.PathBasedFlowOverTime;
 import ds.graph.Edge;
 import ds.graph.flow.EdgeBasedFlowOverTime;

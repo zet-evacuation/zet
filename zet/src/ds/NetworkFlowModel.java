@@ -23,13 +23,13 @@ package ds;
 import java.util.LinkedList;
 
 import com.thoughtworks.xstream.annotations.XStreamAlias;
+import de.tu_berlin.math.coga.common.localization.Localization;
 import de.tu_berlin.math.coga.zet.converter.graph.ZToGraphMapping;
 
 import ds.graph.DynamicNetwork;
 import ds.graph.Edge;
 import ds.graph.Graph;
 import ds.graph.IdentifiableIntegerMapping;
-import ds.graph.Localization;
 import ds.graph.Network;
 import ds.graph.Node; 
 

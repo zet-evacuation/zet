@@ -20,12 +20,13 @@
 
 package ds.graph;
 
+import de.tu_berlin.math.coga.common.localization.Localization;
 import java.util.Iterator;
 
 /**
  * The <code>StaticPath</code> class represents a static path in a {@link Network}.
  * A static path is a sequence of <code>Edge</code> objects, where the 
- * endnode of an edge must be equal to the startnode of the next edge 
+ * end node of an edge must be equal to the start node of the next edge
  * (if there is one).
  * The sequence is internally stored as a {@link ListSequence}.
  */
@@ -38,7 +39,7 @@ public class StaticPath implements Path, Iterable<Edge> {
     
     /**
      * Constructs a new path without edges. 
-     * Edges can be added with the corrisponding methods.
+     * Edges can be added with the corresponding methods.
      */
     public StaticPath() {
         edges = new ListSequence<Edge>();

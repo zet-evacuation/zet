@@ -20,6 +20,7 @@
 
 package ds.graph;
 
+import de.tu_berlin.math.coga.common.localization.Localization;
 import java.util.LinkedList;
 
 import java.util.List;
