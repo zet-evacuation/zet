@@ -32,10 +32,12 @@ public class GraphViewConverter implements Converter {
 		this.xmlData = xmlData;
 	}
 
+	@Override
 	public boolean canConvert( Class type ) {
 		return type.equals( GraphView.class );
 	}
 
+	@Override
 	public void marshal( Object source, HierarchicalStreamWriter writer, MarshallingContext context ) {
 		this.writer = writer;
 		graphView = (GraphView) source;
@@ -102,6 +104,13 @@ public class GraphViewConverter implements Converter {
 		}
 	}
 
+	/**
+	 * 
+	 * @param reader
+	 * @param context
+	 * @return
+	 */
+	@Override
 	public Object unmarshal( HierarchicalStreamReader reader, UnmarshallingContext context ) {
 		this.reader = reader;
 
