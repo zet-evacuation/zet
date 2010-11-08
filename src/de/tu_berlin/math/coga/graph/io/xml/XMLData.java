@@ -6,6 +6,7 @@ package de.tu_berlin.math.coga.graph.io.xml;
 
 import de.tu_berlin.math.coga.zet.viewer.NodePositionMapping;
 import ds.graph.Edge;
+import ds.graph.IdentifiableDoubleMapping;
 import ds.graph.IdentifiableIntegerMapping;
 import ds.graph.Network;
 import ds.graph.Node;
@@ -20,10 +21,14 @@ import java.util.List;
  * @author Jan-Philipp Kappmeier
  */
 public class XMLData {
-	IdentifiableIntegerMapping<Edge> edgeCapacities;
-	IdentifiableIntegerMapping<Node> nodeCapacities;
-	IdentifiableIntegerMapping<Edge> transitTimes;
-	IdentifiableIntegerMapping<Node> supplies;
+	IdentifiableIntegerMapping<Edge> edgeCapacitiesIntegral;
+	IdentifiableIntegerMapping<Node> nodeCapacitiesIntegral;
+	IdentifiableIntegerMapping<Edge> transitTimesIntegral;
+	IdentifiableIntegerMapping<Node> suppliesIntegral;
+	IdentifiableDoubleMapping<Edge> edgeCapacities;
+	IdentifiableDoubleMapping<Node> nodeCapacities;
+	IdentifiableDoubleMapping<Edge> transitTimes;
+	IdentifiableDoubleMapping<Node> supplies;
 	List<Node> sources;
 	ArrayList<Node> sinks;
 	LinkedHashMap<String, Node> nodes = new LinkedHashMap<String, Node>();
@@ -35,16 +40,28 @@ public class XMLData {
 	boolean containsSuperSink;
 	GraphView graphView;
 
-	public IdentifiableIntegerMapping<Edge> getEdgeCapacities() {
+	public IdentifiableDoubleMapping<Edge> getEdgeCapacities() {
 		return edgeCapacities;
+	}
+
+	public IdentifiableIntegerMapping<Edge> getEdgeCapacitiesIntegral() {
+		if( edgeCapacitiesIntegral == null )
+			edgeCapacitiesIntegral = new IdentifiableIntegerMapping<Edge>( edgeCapacities );
+		return edgeCapacitiesIntegral;
 	}
 
 	public LinkedHashMap<String, Edge> getEdges() {
 		return edges;
 	}
 
-	public IdentifiableIntegerMapping<Node> getNodeCapacities() {
+	public IdentifiableDoubleMapping<Node> getNodeCapacities() {
 		return nodeCapacities;
+	}
+
+	public IdentifiableIntegerMapping<Node> getNodeCapacitiesIntegral() {
+		if( nodeCapacitiesIntegral == null )
+			nodeCapacitiesIntegral = new IdentifiableIntegerMapping<Node>( nodeCapacities );
+		return nodeCapacitiesIntegral;
 	}
 
 	public LinkedHashMap<String, Node> getNodes() {
@@ -59,12 +76,24 @@ public class XMLData {
 		return sources;
 	}
 
-	public IdentifiableIntegerMapping<Node> getSupplies() {
+	public IdentifiableDoubleMapping<Node> getSupplies() {
 		return supplies;
 	}
 
-	public IdentifiableIntegerMapping<Edge> getTransitTimes() {
+	public IdentifiableIntegerMapping<Node> getSuppliesIntegral() {
+		if( suppliesIntegral == null )
+			suppliesIntegral = new IdentifiableIntegerMapping<Node>( supplies );
+		return suppliesIntegral;
+	}
+
+	public IdentifiableDoubleMapping<Edge> getTransitTimes() {
 		return transitTimes;
+	}
+
+	public IdentifiableIntegerMapping<Edge> getTransitTimesIntegral() {
+		if( transitTimesIntegral == null )
+			transitTimesIntegral = new IdentifiableIntegerMapping<Edge>( transitTimes );
+		return transitTimesIntegral;
 	}
 
 	public Network getNetwork() {
@@ -72,19 +101,19 @@ public class XMLData {
 	}
 
 	public boolean containsSupplies() {
-		return supplies != null;
+		return suppliesIntegral != null;
 	}
 
 	boolean containsEdgeCapacities() {
-		return edgeCapacities != null;
+		return edgeCapacitiesIntegral != null;
 	}
 
 	boolean containsNodeCapacities() {
-		return nodeCapacities != null;
+		return nodeCapacitiesIntegral != null;
 	}
 
 	boolean containsTransitTimes() {
-		return transitTimes != null;
+		return transitTimesIntegral != null;
 	}
 
 	public boolean isContainsSuperSink() {
@@ -104,10 +133,10 @@ public class XMLData {
 	}
 
 	public GraphView generateGraphView() {
-		GraphView graphView = new GraphView( getNetwork(), getNodePositionMapping(), getEdgeCapacities(), getNodeCapacities(), getTransitTimes(), getSupplies(), getSources(), sinks );
-		graphView.setScale( scaleVal );
-		graphView.containsSuperSink = containsSuperSink;
-		return graphView;
+		GraphView createdGraphView = new GraphView( getNetwork(), getNodePositionMapping(), getEdgeCapacitiesIntegral(), getNodeCapacitiesIntegral(), getTransitTimesIntegral(), getSuppliesIntegral(), getSources(), sinks );
+		createdGraphView.setScale( scaleVal );
+		createdGraphView.containsSuperSink = containsSuperSink;
+		return createdGraphView;
 	}
 
 	public GraphView getGraphView() {

@@ -86,6 +86,18 @@ public class IdentifiableDoubleMapping<D extends Identifiable> implements Clonea
         mapping = new double[domainSize];
     }
 
+		/**
+		 * Creates a new instance with copied values from another instance. The new
+		 * instance contains one element more, than the old one.
+		 * @param oldMapping the old mapping (which is copied)
+		 * @param d the added value
+		 */
+	public IdentifiableDoubleMapping( IdentifiableDoubleMapping<D> oldMapping, double d ) {
+		mapping = new double[oldMapping.mapping.length + 1];
+		System.arraycopy( oldMapping.mapping, 0, mapping, 0, oldMapping.mapping.length );
+		mapping[oldMapping.mapping.length] = d;
+	}
+
     public IdentifiableIntegerMapping<D> round() {
         int[] roundedMapping = new int[mapping.length];
         for (int i = 0; i < mapping.length; i++) {

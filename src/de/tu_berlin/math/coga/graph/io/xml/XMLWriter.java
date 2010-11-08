@@ -73,10 +73,10 @@ public class XMLWriter {
 		sinks.add( eafp.getSink() );
 		xmlData.sinks = sinks;	// not needed during conversation in normal mode
 		xmlData.sources = eafp.getSources(); // not needed during conversation in normal mode
-		xmlData.edgeCapacities = eafp.getEdgeCapacities();
-		xmlData.nodeCapacities = eafp.getNodeCapacities();
-		xmlData.transitTimes = eafp.getTransitTimes();
-		xmlData.supplies = eafp.getSupplies();
+		xmlData.edgeCapacitiesIntegral = eafp.getEdgeCapacities();
+		xmlData.nodeCapacitiesIntegral = eafp.getNodeCapacities();
+		xmlData.transitTimesIntegral = eafp.getTransitTimes();
+		xmlData.suppliesIntegral = eafp.getSupplies();
 
 		try {
 			writer = new BufferedWriter( new FileWriter( file ) );
@@ -103,10 +103,10 @@ public class XMLWriter {
 
 		xmlData.sinks = graphView.sinks;	// not needed during conversation in normal mode
 		xmlData.sources = graphView.getSources(); // not needed during conversation in normal mode
-		xmlData.edgeCapacities = graphView.getEdgeCapacities();
-		xmlData.nodeCapacities = graphView.getNodeCapacities();
-		xmlData.transitTimes = graphView.getTransitTimes();
-		xmlData.supplies = graphView.getSupplies();
+		xmlData.edgeCapacitiesIntegral = graphView.getEdgeCapacities();
+		xmlData.nodeCapacitiesIntegral = graphView.getNodeCapacities();
+		xmlData.transitTimesIntegral = graphView.getTransitTimes();
+		xmlData.suppliesIntegral = graphView.getSupplies();
 		xmlData.scaleVal = graphView.getScale();
 		xmlData.containsSuperSink = graphView.isContainsSuperSink();
 		xmlData.nodePositionMapping = graphView.getNodePositionMapping();

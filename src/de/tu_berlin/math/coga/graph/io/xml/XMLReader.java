@@ -158,10 +158,10 @@ public class XMLReader {
 
 		Node sink = xmlData.getSinks().get( 0 );
 		List<Node> sources = xmlData.getSources();
-		IdentifiableIntegerMapping<Edge> edgeCapacities = xmlData.getEdgeCapacities();
-		IdentifiableIntegerMapping<Node> nodeCapacities = xmlData.getNodeCapacities();
-		IdentifiableIntegerMapping<Edge> transitTimes = xmlData.getTransitTimes();
-		IdentifiableIntegerMapping<Node> supplies = xmlData.getSupplies();
+		IdentifiableIntegerMapping<Edge> edgeCapacities = xmlData.getEdgeCapacitiesIntegral();
+		IdentifiableIntegerMapping<Node> nodeCapacities = xmlData.getNodeCapacitiesIntegral();
+		IdentifiableIntegerMapping<Edge> transitTimes = xmlData.getTransitTimesIntegral();
+		IdentifiableIntegerMapping<Node> supplies = xmlData.getSuppliesIntegral();
 
 		eafp = new EarliestArrivalFlowProblem( edgeCapacities, xmlData.network, nodeCapacities, sink, sources, -1, transitTimes, supplies );
 		return eafp;

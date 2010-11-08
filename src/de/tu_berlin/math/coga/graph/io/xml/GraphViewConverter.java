@@ -193,7 +193,7 @@ public class GraphViewConverter implements Converter {
 
 		graphView = xmlData.generateGraphView();
 		xmlData.graphView = graphView;
-//		graphView = new GraphView( xmlData.network, xmlData.nodePositionMapping, xmlData.getEdgeCapacities(), xmlData.getNodeCapacities(), xmlData.getTransitTimes(), xmlData.getSupplies(), xmlData.getSources(), xmlData.getSinks() );
+//		graphView = new GraphView( xmlData.network, xmlData.nodePositionMapping, xmlData.getEdgeCapacitiesIntegral(), xmlData.getNodeCapacitiesIntegral(), xmlData.getTransitTimesIntegral(), xmlData.getSuppliesIntegral(), xmlData.getSources(), xmlData.getSinks() );
 //		graphView.setScale( scaleVal );
 //		graphView.setContainsSuperSink( containsSuperSink );
 
