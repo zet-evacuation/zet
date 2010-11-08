@@ -38,10 +38,12 @@ public class GraphConverter implements Converter {
 	 * @param type the type of the class that is to be converted
 	 * @return {@code true} if the instance is of the type {@link Network}
 	 */
+	@Override
 	public boolean canConvert( Class type ) {
 		return type.equals( Network.class );
 	}
 
+	@Override
 	public void marshal( Object source, HierarchicalStreamWriter writer, MarshallingContext context ) {
 		Network graph = (Network) source;
 		this.writer = writer;
@@ -80,6 +82,7 @@ public class GraphConverter implements Converter {
 		writer.endNode();
 	}
 
+	@Override
 	public Object unmarshal( HierarchicalStreamReader reader, UnmarshallingContext context ) {
 		Network graph = new Network( 0, 0 );
 		int nid = 0;

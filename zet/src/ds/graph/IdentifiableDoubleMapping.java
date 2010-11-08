@@ -271,10 +271,7 @@ public class IdentifiableDoubleMapping<D extends Identifiable> implements Clonea
      */
     public void setDomainSize(int value) {
         double[] newMapping = new double[value];
-        System.arraycopy(
-                mapping, 0,
-                newMapping, 0,
-                Math.min(mapping.length, newMapping.length));
+        System.arraycopy( mapping, 0, newMapping, 0, Math.min(mapping.length, newMapping.length) );
         mapping = newMapping;
     }
 

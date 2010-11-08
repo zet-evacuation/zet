@@ -32,15 +32,13 @@ import java.util.Arrays;
  * the objects' IDs are from the set <code>{0,...,#objects-1}</code> to ensure
  * the best performance. For mappings of objects to arbitrary values see
  * {@link IdentifiableObjectMapping}.
- * @param D the type of this mapping's domain, i.e. the type of the objects that
+ * @param <D> the type of this mapping's domain, i.e. the type of the objects that
  * are to be mapped to integers. <code>D</code> must implement 
  * {@link Identifiable}.
  */
 public class IdentifiableIntegerMapping<D extends Identifiable> implements Cloneable {
 
-    /**
-     * The array storing all associations. Must not be <code>null</code>.
-     */
+    /** The array storing all associations. Must not be <code>null</code>. */
     protected int[] mapping;
 
     protected IdentifiableIntegerMapping() {
