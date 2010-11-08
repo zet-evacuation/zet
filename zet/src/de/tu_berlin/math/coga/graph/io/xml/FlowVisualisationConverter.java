@@ -247,7 +247,7 @@ public class FlowVisualisationConverter implements Converter {
 
 		int maxTimeHorizon = 0;
 		for( Edge edge : xmlData.getEdges().values() )
-			maxTimeHorizon = Math.max( maxTimeHorizon, pathComposition.getEdgeFlows().get( edge ).getLastTimeWithNonZeroValue() + xmlData.getTransitTimes().get( edge ) );
+			maxTimeHorizon = Math.max( maxTimeHorizon, pathComposition.getEdgeFlows().get( edge ).getLastTimeWithNonZeroValue() + xmlData.getTransitTimesIntegral().get( edge ) );
 
 		fv.setTimeHorizon( maxTimeHorizon );
 		fv.setMaxFlowRate( maxFlowRate );

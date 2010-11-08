@@ -19,6 +19,7 @@ package ds.graph.problem;
 import ds.graph.DoubleMap;
 import ds.graph.DynamicNetwork;
 import ds.graph.Edge;
+import ds.graph.IdentifiableDoubleMapping;
 import ds.graph.Node;
 import java.util.HashMap;
 import java.util.List;
@@ -32,8 +33,10 @@ public class NashFlowProblem {
 
     private double initcap = 0.0;
     private DynamicNetwork graph;
-    private DoubleMap<Edge> capacities;
-    private DoubleMap<Edge> transitTimes;
+    private IdentifiableDoubleMapping<Edge> capacities;
+    private IdentifiableDoubleMapping<Edge> transitTimes;
+    //private DoubleMap<Edge> capacities;
+    //private DoubleMap<Edge> transitTimes;
     private Node sink;
     private Node source;
     private Node origSource;
@@ -46,16 +49,18 @@ public class NashFlowProblem {
     public NashFlowProblem() {
     }
     
-    public NashFlowProblem(DynamicNetwork graph, DoubleMap<Edge> capacities, 
-        DoubleMap<Edge> transit, Node oldsource, Node sink) {
+    public NashFlowProblem(DynamicNetwork graph, IdentifiableDoubleMapping<Edge> capacities,
+        IdentifiableDoubleMapping<Edge> transit, Node oldsource, Node sink) {
         DynamicNetwork graphWithNewSource = new DynamicNetwork(graph);
         Node newSource = new Node(graph.numberOfNodes());
         Edge newEdge = new Edge(graph.numberOfEdges(),newSource,oldsource);
         edgeSourceToOrigSource = newEdge;
         graphWithNewSource.addNode(newSource);
         graphWithNewSource.addEdge(newEdge);
-        DoubleMap<Edge> newCapacities = new DoubleMap(capacities,Double.MAX_VALUE);
-        DoubleMap<Edge> newTransitTimes = new DoubleMap(transit,0.0);
+        //DoubleMap<Edge> newCapacities = new DoubleMap(capacities,Double.MAX_VALUE);
+        //DoubleMap<Edge> newTransitTimes = new DoubleMap(transit,0.0);
+        IdentifiableDoubleMapping<Edge> newCapacities = new IdentifiableDoubleMapping(capacities,Double.MAX_VALUE);
+        IdentifiableDoubleMapping<Edge> newTransitTimes = new IdentifiableDoubleMapping(transit,0.0);
         setGraph(graphWithNewSource);
         setCapacities(newCapacities);
         setTransitTimes(newTransitTimes);
@@ -64,16 +69,18 @@ public class NashFlowProblem {
         setSink(sink);
     }
     
-    public NashFlowProblem(DynamicNetwork graph, DoubleMap<Edge> capacities, 
-        DoubleMap<Edge> transit, Node oldsource, Node sink, double initcapacity) {
+    public NashFlowProblem(DynamicNetwork graph, IdentifiableDoubleMapping<Edge> capacities,
+        IdentifiableDoubleMapping<Edge> transit, Node oldsource, Node sink, double initcapacity) {
         DynamicNetwork graphWithNewSource = new DynamicNetwork(graph);
         Node newSource = new Node(graph.numberOfNodes());
         Edge newEdge = new Edge(graph.numberOfEdges(),newSource,oldsource);
         edgeSourceToOrigSource = newEdge;
         graphWithNewSource.addNode(newSource);
         graphWithNewSource.addEdge(newEdge);
-        DoubleMap<Edge> newCapacities = new DoubleMap(capacities,initcapacity);
-        DoubleMap<Edge> newTransitTimes = new DoubleMap(transit,0.0);
+        //DoubleMap<Edge> newCapacities = new DoubleMap(capacities,initcapacity);
+        //DoubleMap<Edge> newTransitTimes = new DoubleMap(transit,0.0);
+        IdentifiableDoubleMapping<Edge> newCapacities = new IdentifiableDoubleMapping(capacities,initcapacity);
+        IdentifiableDoubleMapping<Edge> newTransitTimes = new IdentifiableDoubleMapping(transit,0.0);
         setGraph(graphWithNewSource);
         setCapacities(newCapacities);
         setTransitTimes(newTransitTimes);
@@ -84,8 +91,8 @@ public class NashFlowProblem {
         
     }
     
-    public NashFlowProblem(DynamicNetwork graph, DoubleMap<Edge> capacities,
-            DoubleMap<Edge> transit, Node source, Node sink, boolean test) {
+    public NashFlowProblem(DynamicNetwork graph, IdentifiableDoubleMapping<Edge> capacities,
+            IdentifiableDoubleMapping<Edge> transit, Node source, Node sink, boolean test) {
         setGraph(graph);
         setCapacities(capacities);
         setTransitTimes(transit);
@@ -94,8 +101,8 @@ public class NashFlowProblem {
         initcap = Double.MAX_VALUE;
     }
     
-    public NashFlowProblem(DynamicNetwork graph, DoubleMap<Edge> capacities,
-            DoubleMap<Edge> transit, HashMap<Node,Double> sourceDemands, Node sink) {
+    public NashFlowProblem(DynamicNetwork graph, IdentifiableDoubleMapping<Edge> capacities,
+            IdentifiableDoubleMapping<Edge> transit, HashMap<Node,Double> sourceDemands, Node sink) {
         
         Node SuperSource = new Node(graph.numberOfNodes());
         graph.addNode(SuperSource);
@@ -149,7 +156,7 @@ public class NashFlowProblem {
         getNodeLabelDerivations().set(n, label);
     }
     
-    public DoubleMap<Edge> getCapacities() {
+    public IdentifiableDoubleMapping<Edge> getCapacities() {
         return capacities;
     }
     
@@ -161,15 +168,15 @@ public class NashFlowProblem {
         return transitTimes.get(e);
     }
     
-    public void setTransitTimes(DoubleMap<Edge> value) {
+    public void setTransitTimes(IdentifiableDoubleMapping<Edge> value) {
         transitTimes = value;
     }
     
-    public DoubleMap<Edge> getTransitTimes() {
+    public IdentifiableDoubleMapping<Edge> getTransitTimes() {
         return transitTimes;
     }
     
-    public void setCapacities(DoubleMap<Edge> value) {
+    public void setCapacities(IdentifiableDoubleMapping<Edge> value) {
         capacities = value;
     }
     

@@ -10,7 +10,7 @@ import com.thoughtworks.xstream.converters.UnmarshallingContext;
 import com.thoughtworks.xstream.io.HierarchicalStreamReader;
 import com.thoughtworks.xstream.io.HierarchicalStreamWriter;
 import ds.graph.Edge;
-import ds.graph.IdentifiableIntegerMapping;
+import ds.graph.IdentifiableDoubleMapping;
 import ds.graph.Network;
 import ds.graph.Node;
 import java.util.Iterator;
@@ -63,8 +63,8 @@ public class GraphConverter implements Converter {
 		writer.startNode( "node" );
 		writer.addAttribute( "id", Integer.toString( node.id() ) );
 		if( xmlData.containsSupplies() )
-			if( xmlData.supplies.get( node ) != 0 )
-				writer.addAttribute( "balance", Integer.toString( xmlData.supplies.get( node ) ) );
+			if( xmlData.suppliesIntegral.get( node ) != 0 )
+				writer.addAttribute( "balance", Integer.toString( xmlData.suppliesIntegral.get( node ) ) );
 		writer.endNode();
 	}
 
@@ -74,11 +74,11 @@ public class GraphConverter implements Converter {
 		writer.addAttribute( "start", Integer.toString( edge.start().id() ) );
 		writer.addAttribute( "end", Integer.toString( edge.end().id() ) );
 		if( xmlData.containsEdgeCapacities() )
-			if( xmlData.edgeCapacities.get( edge ) != 1 )
-				writer.addAttribute( "capacity", Integer.toString( xmlData.edgeCapacities.get( edge ) ) );
+			if( xmlData.edgeCapacitiesIntegral.get( edge ) != 1 )
+				writer.addAttribute( "capacity", Integer.toString( xmlData.edgeCapacitiesIntegral.get( edge ) ) );
 		if( xmlData.containsTransitTimes() )
-			if( xmlData.transitTimes.get( edge ) != 1 )
-				writer.addAttribute( "transitTime", Integer.toString( xmlData.transitTimes.get( edge ) ) );
+			if( xmlData.transitTimesIntegral.get( edge ) != 1 )
+				writer.addAttribute( "transitTime", Integer.toString( xmlData.transitTimesIntegral.get( edge ) ) );
 		writer.endNode();
 	}
 
@@ -103,10 +103,14 @@ public class GraphConverter implements Converter {
 				edgeCount = Integer.parseInt( reader.getAttribute( "m" ) );
 		}
 
-		xmlData.edgeCapacities = new IdentifiableIntegerMapping<Edge>( edgeCount > 0 ? edgeCount : 10 );
-		xmlData.nodeCapacities = new IdentifiableIntegerMapping<Node>( nodeCount > 0 ? nodeCount : 10 );
-		xmlData.transitTimes = new IdentifiableIntegerMapping<Edge>( edgeCount > 0 ? edgeCount : 10 );
-		xmlData.supplies = new IdentifiableIntegerMapping<Node>( nodeCount > 0 ? nodeCount : 10 );
+		xmlData.edgeCapacities = new IdentifiableDoubleMapping<Edge>( edgeCount > 0 ? edgeCount : 10 );
+		xmlData.nodeCapacities = new IdentifiableDoubleMapping<Node>( nodeCount > 0 ? nodeCount : 10 );
+		xmlData.transitTimes = new IdentifiableDoubleMapping<Edge>( edgeCount > 0 ? edgeCount : 10 );
+		xmlData.supplies = new IdentifiableDoubleMapping<Node>( nodeCount > 0 ? nodeCount : 10 );
+//		xmlData.edgeCapacitiesIntegral = new IdentifiableIntegerMapping<Edge>( edgeCount > 0 ? edgeCount : 10 );
+//		xmlData.nodeCapacitiesIntegral = new IdentifiableIntegerMapping<Node>( nodeCount > 0 ? nodeCount : 10 );
+//		xmlData.transitTimesIntegral = new IdentifiableIntegerMapping<Edge>( edgeCount > 0 ? edgeCount : 10 );
+//		xmlData.suppliesIntegral = new IdentifiableIntegerMapping<Node>( nodeCount > 0 ? nodeCount : 10 );
 
 		xmlData.sources = new ArrayList<Node>();
 		xmlData.sinks = new ArrayList<Node>();
@@ -160,9 +164,11 @@ public class GraphConverter implements Converter {
 		}
 		node = new Node( nid );
 		xmlData.nodes.put( id, node );
-		int balanceVal = (int) Double.parseDouble( balance );
+		double balanceVal = Double.parseDouble( balance );
+		//xmlData.suppliesIntegral.add( node, (int) balanceVal );
 		xmlData.supplies.add( node, balanceVal );
-		xmlData.nodeCapacities.add( node, (int) Double.parseDouble( capacity ) );
+		//xmlData.nodeCapacitiesIntegral.add( node, (int) Double.parseDouble( capacity ) );
+		xmlData.nodeCapacities.add( node, Double.parseDouble( capacity ) );
 
 		if( balanceVal > 0 )
 			xmlData.sources.add( node );
@@ -173,18 +179,22 @@ public class GraphConverter implements Converter {
 
 	protected void readSink( Network graph, int nid ) {
 		Node node = readNode( graph, nid );
+		//if( xmlData.suppliesIntegral.get( node ) > 0 )
 		if( xmlData.supplies.get( node ) > 0 )
 			throw new InvalidFileFormatException( "Positive supply for a sink node." );
-		// handle special case: a node is marked as sink in the xml-file but no supplies are set.
+		// handle special case: a node is marked as sink in the xml-file but no suppliesIntegral are set.
+		//if( xmlData.suppliesIntegral.get( node ) == 0 )
 		if( xmlData.supplies.get( node ) == 0 )
 			xmlData.sinks.add( node );
 	}
 
 	protected void readSource( Network graph, int nid ) {
 		Node node = readNode( graph, nid );
+		//if( xmlData.suppliesIntegral.get( node ) < 0 )
 		if( xmlData.supplies.get( node ) < 0 )
 			throw new InvalidFileFormatException( "Negative supply for a source node." );
-		// handle special case: a nodeis marked as source in the xml-file but no supplies are set.
+		// handle special case: a nodeis marked as source in the xml-file but no suppliesIntegral are set.
+		//if( xmlData.suppliesIntegral.get( node ) == 0 )
 		if( xmlData.supplies.get( node ) == 0 )
 			xmlData.sources.add( node );
 	}
@@ -210,8 +220,10 @@ public class GraphConverter implements Converter {
 		}
 		Edge edge = new Edge( eid, xmlData.nodes.get( source ), xmlData.nodes.get( target ) );
 		// TODO only integral transit times here!
-		xmlData.transitTimes.add( edge, (int) Double.parseDouble( transitTime ) );
-		xmlData.edgeCapacities.add( edge, (int) Double.parseDouble( capacity ) );
+		//xmlData.transitTimesIntegral.add( edge, (int) Double.parseDouble( transitTime ) );
+		xmlData.transitTimes.add( edge, Double.parseDouble( transitTime ) );
+		//xmlData.edgeCapacitiesIntegral.add( edge, (int) Double.parseDouble( capacity ) );
+		xmlData.edgeCapacities.add( edge, Double.parseDouble( capacity ) );
 		xmlData.edges.put( id, edge );
 	}
 }
