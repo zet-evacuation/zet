@@ -65,7 +65,7 @@ import event.EventServer;
 import event.ZModelChangedEvent;
 import gui.GUIControl;
 import gui.editor.CoordinateTools;
-import gui.editor.GUIOptionManager;
+import gui.GUIOptionManager;
 import zet.gui.components.tabs.base.JPolygon;
 
 /**
@@ -91,11 +91,11 @@ public class JFloor extends AbstractFloor implements EventListener<ZModelChanged
 	/** The last point that was clicked in model coordinate space. This is used during
 	 * the creation of new polygons, to let the event handler know where the next edge
 	 * that he creates must start (pointwise creation) or where the starting point of
-	 * the polygon is (rectangled creation). */
+	 * the polygon is (rectangle creation). */
 	private PlanPoint lastPlanClick = null;
 	/** The current position of the mouse.  This is used during the creation of new 
 	 * polygons to paint the preview of the next edge (pointwise creation) or the
-	 * preview of the whole polygon (rectangled creation). */
+	 * preview of the whole polygon (rectangle creation). */
 	private Point mousePos = null;
 	/** The point of the mouse click with which the user started dragging something. */
 	private Point dragStart = null;
@@ -179,8 +179,6 @@ public class JFloor extends AbstractFloor implements EventListener<ZModelChanged
 		LinkedList<PlanPolygon> old_selection = new LinkedList<PlanPolygon>();
 
 		if( myFloor != null ) {
-//			if( showDifferentFloor )
-//				myFloor.removeChangeListener( this );
 
 			// Clear & Save old selection
 			for( JPolygon p : selectedPolygons )
@@ -197,8 +195,6 @@ public class JFloor extends AbstractFloor implements EventListener<ZModelChanged
 		myFloor = f;
 
 		if( f != null ) {
-//			if( showDifferentFloor )
-//				myFloor.addChangeListener( this );
 			updateOffsets( f );
 
 			// TODO: Provide better implementation - Do not recreate everything each time			
@@ -279,12 +275,6 @@ public class JFloor extends AbstractFloor implements EventListener<ZModelChanged
 		}
 	}
 
-	// TODO-Event
-//	@Override
-//	public void stateChanged( ds.z.event.ChangeEvent event ) {
-//		if( !JEditor.getInstance().isUpdateDisabled() )
-//			displayFloor( myFloor );
-//	}
 	/**
 	 * <p>Paints the panel in the graphics object. It is possible to pass any
 	 * graphics object, but it is particularly used for painting this panel. This
@@ -477,7 +467,9 @@ public class JFloor extends AbstractFloor implements EventListener<ZModelChanged
 
 	/** Show the given polygon to the user by scrolling until it is visible and
 	 * setting it as the selected polygon (clears the previous selection). If the
-	 * given polygon is not shown on this JFloor nothing will happen. */
+	 * given polygon is not shown on this JFloor nothing will happen.
+	 * @param p the polygon that is shown
+	 */
 	public void showPolygon( PlanPolygon p ) {
 		if( p instanceof Area )
 			p = ((Area)p).getAssociatedRoom();
@@ -495,7 +487,7 @@ public class JFloor extends AbstractFloor implements EventListener<ZModelChanged
 	 *
 	 * @param c The container in which the search should be performed
 	 * @param p The point, which the sought-after components must contain. The 
-	 * coordinates must be relative to Conatiner c
+	 * coordinates must be relative to container c
 	 * @return A list of JPolygons which contain point p. This list will be
 	 * empty in the case that such JPolygons do not exist.
 	 */
@@ -540,7 +532,9 @@ public class JFloor extends AbstractFloor implements EventListener<ZModelChanged
 		}
 	}
 
-	/** Mouse Event Handler */
+	/** Mouse Event Handler
+	 * @param e
+	 */
 	@Override
 	protected void processMouseEvent( MouseEvent e ) {
 		if( e.getID() == MouseEvent.MOUSE_PRESSED ) {
@@ -1067,10 +1061,8 @@ public class JFloor extends AbstractFloor implements EventListener<ZModelChanged
 			PlanPolygon poly = ((JPolygon)clickedOn).getPlanPolygon();
 			if( poly instanceof Area ) // find parent area
 				return ((Area)poly).getAssociatedRoom();
-			else if( poly instanceof Room )
-				return (Room)poly;
 			else
-				return null;
+				return poly instanceof Room ? (Room)poly : null;
 		} else
 			return null;
 	}

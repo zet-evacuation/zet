@@ -40,7 +40,6 @@ import ds.PropertyContainer;
 import event.EventServer;
 import event.MessageEvent;
 import event.MessageEvent.MessageType;
-import gui.editor.GUIOptionManager;
 import gui.editor.properties.JPropertySelectorWindow;
 import gui.editor.properties.PropertyLoadException;
 import gui.editor.properties.PropertyTreeModel;

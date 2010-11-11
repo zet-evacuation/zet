@@ -20,7 +20,7 @@ import event.EventListener;
 import event.EventServer;
 import event.MessageEvent;
 import gui.components.framework.Menu;
-import gui.editor.GUIOptionManager;
+import gui.GUIOptionManager;
 import gui.visualization.Visualization;
 import gui.visualization.control.graph.GLFlowGraphControl;
 import java.awt.BorderLayout;

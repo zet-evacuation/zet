@@ -21,7 +21,6 @@
 package gui;
 
 import gui.components.framework.Button;
-import gui.editor.GUIOptionManager;
 import info.clearthought.layout.TableLayout;
 import io.movie.MovieWriter;
 import io.visualization.ImageFormat;

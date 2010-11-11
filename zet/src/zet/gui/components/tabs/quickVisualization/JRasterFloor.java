@@ -23,7 +23,6 @@ package zet.gui.components.tabs.quickVisualization;
 
 import algo.ca.PotentialController;
 import algo.ca.SPPotentialController;
-import de.tu_berlin.math.coga.zet.converter.cellularAutomaton.ZToCAConverter;
 import de.tu_berlin.math.coga.zet.converter.cellularAutomaton.ZToCAMapping;
 import de.tu_berlin.math.coga.zet.converter.cellularAutomaton.ZToCARasterContainer;
 import de.tu_berlin.math.coga.zet.converter.cellularAutomaton.ZToCARasterSquare;

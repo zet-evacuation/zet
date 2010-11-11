@@ -13,9 +13,10 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
+
 /**
  * Class AbstractPropertyConverter
- * Erstellt 11.04.2008, 17:27:12
+ * Created 11.04.2008, 17:27:12
  */
 
 package gui.editor.properties.framework;
@@ -28,8 +29,8 @@ import com.thoughtworks.xstream.io.HierarchicalStreamWriter;
 
 /**
  * 
- * @param T die Propertyselector-Klasse
- * @param U die Klasse der Property selbst
+ * @param <T> the property class
+ * @param <U> the class of the property itself
  * @author Jan-Philipp Kappmeier
  */
 public abstract class AbstractPropertyConverter<T extends AbstractPropertyValue<U>, U extends Object> implements Converter {
@@ -43,6 +44,7 @@ public abstract class AbstractPropertyConverter<T extends AbstractPropertyValue<
 
 	public abstract void readValue( UnmarshallingContext context );
 	
+	@Override
 	public void marshal( Object source, HierarchicalStreamWriter writer, MarshallingContext context ) {
     prop = (T)source;
     writer.startNode( getNodeName() );
@@ -68,8 +70,8 @@ public abstract class AbstractPropertyConverter<T extends AbstractPropertyValue<
 		writer.addAttribute( "parameter", prop.getPropertyName() );
 	}
 
+	@Override
 	public Object unmarshal( HierarchicalStreamReader reader, UnmarshallingContext context ) {
-    //prop = new BooleanProperty();
 		createNewProp();
 		readAttributes( reader );
 		readValue( context );

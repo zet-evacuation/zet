@@ -20,6 +20,7 @@
  */
 package gui.editor;
 
+import gui.GUIOptionManager;
 import zet.gui.components.tabs.editor.EditMode;
 import ds.z.Edge;
 import ds.z.PlanPoint;
