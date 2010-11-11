@@ -26,6 +26,7 @@ import ds.graph.DoubleMap;
 import ds.graph.Edge;
 import ds.graph.Node;
 import ds.graph.DynamicNetwork;
+import ds.graph.IdentifiableDoubleMapping;
 
 
 
@@ -110,8 +111,8 @@ public class NashFlowAlgoTest {
         dnet.setEdge(e18);
         dnet.setEdge(e19);
         
-        DoubleMap<Edge> capacities = new DoubleMap<Edge>(dnet.numberOfEdges());
-        DoubleMap<Edge> transitTimes = new DoubleMap<Edge>(dnet.numberOfEdges());
+        IdentifiableDoubleMapping<Edge> capacities = new IdentifiableDoubleMapping<Edge>(dnet.numberOfEdges());
+        IdentifiableDoubleMapping<Edge> transitTimes = new IdentifiableDoubleMapping<Edge>(dnet.numberOfEdges());
         for(Edge e: dnet.edges()) {
             capacities.set(e, 2.0);
             transitTimes.set(e, 1.0);

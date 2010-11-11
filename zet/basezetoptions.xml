@@ -9,6 +9,9 @@
     </treeNode>
     <boolNode name="options.view.editor.hideDefaultFloor" useAsLocString="true" description="desc" information="options.view.editor.hideDefaultFloor.info" parameter="editor.options.view.hideDefaultFloor">true</boolNode>
     <boolNode name="options.view.editor.rasterizedPaintMode" useAsLocString="true" description="desc" information="options.view.editor.rasterizedPaintMode.info" parameter="editor.options.view.rasterizedPaintMode">true</boolNode>
+    <intNode name="options.view.editor.editRasterSize" useAsLocString="true" description="desc" information="options.view.editor.editRasterSize.info" parameter="editor.options.view.editRasterSize">400</intNode>
+    <intNode name="options.view.editor.editSmallRasterSize" useAsLocString="true" description="desc" information="options.view.editor.editSmallRasterSize.info" parameter="editor.options.view.editSmallRasterSize">400</intNode>
+    <intNode name="options.view.editor.editRasterSizeSnap" useAsLocString="true" description="desc" information="options.view.editor.editRasterSizeSnap.info" parameter="editor.options.view.editRasterSizeSnap">400</intNode>
   </treeNode>
   <treeNode name="options.filehandling" useAsLocString="true">
     <boolNode name="options.filehandling.createBackup" useAsLocString="true" description="" information="options.filehandling.createBackup.info" parameter="options.filehandling.createBackup">true</boolNode>

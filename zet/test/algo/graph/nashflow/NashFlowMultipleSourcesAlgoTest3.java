@@ -22,11 +22,10 @@ import org.junit.Test;
 import ds.graph.problem.NashFlowProblem;
 import ds.graph.flow.NashFlow;
 
-import ds.graph.DoubleMap;
 import ds.graph.Edge;
 import ds.graph.Node;
 import ds.graph.DynamicNetwork;
-import java.util.HashMap;
+import ds.graph.IdentifiableDoubleMapping;
 
 
 
@@ -62,8 +61,8 @@ public class NashFlowMultipleSourcesAlgoTest3 {
         dnet.setEdge(e4);
         dnet.setEdge(e5);
         
-        DoubleMap<Edge> capacities = new DoubleMap<Edge>(dnet.numberOfEdges());
-        DoubleMap<Edge> transitTimes = new DoubleMap<Edge>(dnet.numberOfEdges());
+        IdentifiableDoubleMapping<Edge> capacities = new IdentifiableDoubleMapping<Edge>(dnet.numberOfEdges());
+        IdentifiableDoubleMapping<Edge> transitTimes = new IdentifiableDoubleMapping<Edge>(dnet.numberOfEdges());
         capacities.set(e1, 5.4);
         transitTimes.set(e1, 4.5);
         capacities.set(e2, 3.0);
