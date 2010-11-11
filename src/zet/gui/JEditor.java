@@ -48,7 +48,6 @@ import java.awt.event.ActionListener;
 import java.awt.event.InputEvent;
 import java.awt.event.KeyEvent;
 import java.awt.event.WindowEvent;
-import java.awt.event.WindowListener;
 import java.io.File;
 import java.io.IOException;
 import java.text.NumberFormat;
@@ -69,6 +68,7 @@ import gui.statistic.JStatisticsPanel;
 import zet.gui.components.toolbar.JEditToolbar;
 import gui.GUIControl;
 import gui.ZETMain;
+import java.awt.event.WindowAdapter;
 import java.util.ArrayList;
 import javax.imageio.ImageIO;
 import zet.gui.components.JZETMenuBar;
@@ -205,10 +205,8 @@ public class JEditor extends JFrame implements Localized, EventListener<Progress
 		EventServer.getInstance().registerListener( this, ProgressEvent.class );
 
 		// window listener
-		this.addWindowListener( new WindowListener() {
-
-			public void windowOpened( WindowEvent e ) { }
-
+		this.addWindowListener( new WindowAdapter() {
+			@Override
 			public void windowClosing( WindowEvent e ) {
 				if( graphStatisticView != null )
 					graphStatisticView.saveSettings();
@@ -221,16 +219,6 @@ public class JEditor extends JFrame implements Localized, EventListener<Progress
 					System.err.println( "Error saving information file." );
 				}
 			}
-
-			public void windowClosed( WindowEvent e ) { }
-
-			public void windowIconified( WindowEvent e ) { }
-
-			public void windowDeiconified( WindowEvent e ) { }
-
-			public void windowActivated( WindowEvent e ) { }
-
-			public void windowDeactivated( WindowEvent e ) { }
 		} );
 
 		// set up the icon
@@ -272,6 +260,7 @@ public class JEditor extends JFrame implements Localized, EventListener<Progress
 		getContentPane().add( tabPane, BorderLayout.CENTER );
 
 		tabPane.addChangeListener( new ChangeListener() {
+			@Override
 			public void stateChanged( ChangeEvent e ) {
 				if( tabs.get( tabPane.getSelectedIndex() ) == ZETWindowTabs.Log )
 					logView.update();
@@ -311,6 +300,7 @@ public class JEditor extends JFrame implements Localized, EventListener<Progress
 		KeyStroke up = KeyStroke.getKeyStroke( KeyEvent.VK_R, InputEvent.CTRL_DOWN_MASK );
 		ActionListener acl = new ActionListener() {
 
+			@Override
 			public void actionPerformed( ActionEvent e ) {
 				switch( editView.getEastPanelType() ) {
 					case JEditView.FLOOR_PANEL:
@@ -331,6 +321,7 @@ public class JEditor extends JFrame implements Localized, EventListener<Progress
 	 * Changes the appearance of the GUI to the selected language.
 	 * @see de.tu_berlin.math.coga.common.localization.Localization
 	 */
+	@Override
 	public void localize() {
 		// Localize tool bars
 		loc.setPrefix( "gui.editor.JEditor." );
@@ -432,6 +423,7 @@ public class JEditor extends JFrame implements Localized, EventListener<Progress
 	 ****************************************************************************/
 	ChangeListener chlTab = new ChangeListener() {
 
+		@Override
 		public void stateChanged( ChangeEvent e ) {
 			final int i = tabPane.getSelectedIndex();
 			switch( tabs.get( i ) ) {
@@ -577,6 +569,7 @@ public class JEditor extends JFrame implements Localized, EventListener<Progress
 	/**
 	 * @param event 
 	 */
+	@Override
 	public void handleEvent( ProgressEvent event ) {
 		if( event instanceof VisualizationEvent ) {
 			if( loop )

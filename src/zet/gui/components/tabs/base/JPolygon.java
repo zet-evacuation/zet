@@ -30,7 +30,7 @@ import ds.z.StairArea;
 import gui.GUIControl;
 import gui.editor.Areas;
 import gui.editor.CoordinateTools;
-import gui.editor.GUIOptionManager;
+import gui.GUIOptionManager;
 import java.awt.AWTEvent;
 import java.awt.Color;
 import java.awt.Component;

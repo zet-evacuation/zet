@@ -49,9 +49,7 @@ import java.util.List;
 @XStreamAlias( "floor" )
 @XMLConverter( FloorConverter.class )
 public class Floor implements Serializable, Cloneable, Iterable<Room> {
-	/** A list of all listeners of the floor. */
-//	@XStreamOmitField()
-//	private transient ArrayList<ChangeListener> changeListeners = new ArrayList<ChangeListener>();
+	/** The name of the floor. */
 	@XStreamAsAttribute()
 	private String name;
 	/** A list of all rooms contained in the floor. */
@@ -82,7 +80,7 @@ public class Floor implements Serializable, Cloneable, Iterable<Room> {
 	private int height = 0;
 	/** The Room that has the maximum y value (yOffset + width). */
 	private Room maxY_DefiningRoom;
-	
+
 	/**
 	 * Creates a new empty instance of <code>Floor</code> with the name "NewFloor".
 	 */
@@ -178,14 +176,11 @@ public class Floor implements Serializable, Cloneable, Iterable<Room> {
 	 * Tests, if this floor equals the given object. First assures that the object is an instance of the floor class.
 	 * Returns false if the object is not a floor. Two floors are equal, if they have the same name.
 	 * @param o the object that is to be tested for equality
+	 * @return
 	 */
 	@Override
 	public boolean equals( Object o ) {
-		if( o instanceof Floor ) {
-			return this.equals( (Floor) o );
-		} else {
-			return false;
-		}
+		return o instanceof Floor ? this.equals( (Floor)o) : false;
 	}
 
 	/**
@@ -485,8 +480,10 @@ public class Floor implements Serializable, Cloneable, Iterable<Room> {
 	 * 
 	 * This method is not intended to be used by any other class except 
 	 * for io.z.FloorConverter for legacy support of old example files.
+	 *
+	 * @param holdLastSize does not decrease the size of the floor, if the new bounds are smaller, than the old ones, if set to {@code true}
 	 */
-	public void recomputeBounds () {
+	public void recomputeBounds ( boolean holdLastSize ) {
 		minX_DefiningRoom = null;
 		minY_DefiningRoom = null;
 		maxX_DefiningRoom = null;
@@ -516,10 +513,25 @@ public class Floor implements Serializable, Cloneable, Iterable<Room> {
 			}
 		}
 		
-		xOffset = minX;
-		yOffset = minY;
-		width = maxX - minX;
-		height = maxY - minY;
+		xOffset = holdLastSize ? Math.min( minX, xOffset ) : minX;
+		yOffset = holdLastSize ? Math.min( minY, yOffset ) : minY;
+		// TODO add offset if holdLastSize is true and such that xOffset + new width >= old x-coordinate!
+		width = holdLastSize ? Math.max( maxX - minX, width ) : maxX - minX;
+		height = holdLastSize ? Math.max( maxY - minY, height ) : maxY - minY;
+	}
+
+	/**
+	 * Sets a minimum size that this floor should have.
+	 * @param xOffset
+	 * @param yOffset
+	 * @param width
+	 * @param height
+	 */
+	public void setMinimumSize( int xOffset, int yOffset, int width, int height ) {
+		this.xOffset = Math.min( xOffset, this.xOffset );
+		this.yOffset = Math.min( yOffset, this.yOffset );
+		this.width = Math.max( width, this.width );
+		this.height = Math.max( height, this.height );
 	}
 	
 	/**
@@ -533,6 +545,8 @@ public class Floor implements Serializable, Cloneable, Iterable<Room> {
 	/**
 	 * Returns a copy of the <code>Floor</code>, but deletes all {@link AssignmentArea} objects
 	 * as they would most likely refer to assignments that do not exist.
+	 *
+	 * @return a copy of the floor
 	 */
 	@Override
 	public Floor clone() {
@@ -618,6 +632,7 @@ public class Floor implements Serializable, Cloneable, Iterable<Room> {
 	 * Returns an iterator over all rooms contained in this floor.
 	 * @return an iterator over all rooms contained in this floor
 	 */
+	@Override
 	public Iterator<Room> iterator() {
 		return this.getRooms().iterator();
 	}

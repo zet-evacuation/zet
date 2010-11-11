@@ -73,6 +73,6 @@ public class JOptionsWindow extends JAbstractPropertyWindow {
 
 	@Override
 	public void performOK() {
-		EventServer.getInstance().dispatchEvent( new OptionsChangedEvent<JOptionsWindow>( this ) );
+		EventServer.getInstance().dispatchEvent( new OptionsChangedEvent() );
 	}
 }

@@ -20,10 +20,8 @@ import com.thoughtworks.xstream.converters.reflection.ReflectionConverter;
 import com.thoughtworks.xstream.converters.reflection.ReflectionProvider;
 import com.thoughtworks.xstream.io.HierarchicalStreamReader;
 import com.thoughtworks.xstream.mapper.Mapper;
-
 import ds.z.BuildingPlan;
 import ds.z.Floor;
-
 import java.util.ArrayList;
 
 /** A converter that behaves just like a normal converter would do, he only adds
@@ -33,41 +31,40 @@ import java.util.ArrayList;
  */
 public class BuildingPlanConverter extends ReflectionConverter {
 	private Class myClass = BuildingPlan.class;
-	
-	public BuildingPlanConverter (Mapper mapper, ReflectionProvider reflectionProvider) {
-		super (mapper, reflectionProvider);
+
+	public BuildingPlanConverter( Mapper mapper, ReflectionProvider reflectionProvider ) {
+		super( mapper, reflectionProvider );
 	}
-	
+
 	@Override
-	public boolean canConvert (Class type) {
-		return myClass.isAssignableFrom (type);
+	public boolean canConvert( Class type ) {
+		return myClass.isAssignableFrom( type );
 	}
-	
+
 	@Override
-	public Object unmarshal (final HierarchicalStreamReader reader, 
-			final UnmarshallingContext context) {
-		Object created = instantiateNewInstance(reader, context);
-		
+	public Object unmarshal( final HierarchicalStreamReader reader,
+					final UnmarshallingContext context ) {
+		Object created = instantiateNewInstance( reader, context );
+
 		// Early recreation of changeListener List neccessary
 //		reflectionProvider.writeField (created, "changeListeners", new ArrayList<ChangeListener> (), myClass);
 		// Recreate empty implicit lists
 		try {
-			if (reflectionProvider.getField (myClass, "floors").get (created) == null) {
-				reflectionProvider.writeField (created, "floors", 
-					new ArrayList<Floor> (), myClass);
-			}
-		} catch (IllegalAccessException ex) {
-			ex.printStackTrace ();
+			if( reflectionProvider.getField( myClass, "floors" ).get( created ) == null )
+				reflectionProvider.writeField( created, "floors",
+								new ArrayList<Floor>(), myClass );
+		} catch( IllegalAccessException ex ) {
+			ex.printStackTrace( System.err );
 		}
-		
-        created = doUnmarshal(created, reader, context);
-		BuildingPlan result = (BuildingPlan)serializationMethodInvoker.callReadResolve(created);
-				
+
+		created = doUnmarshal( created, reader, context );
+		BuildingPlan result = (BuildingPlan) serializationMethodInvoker.callReadResolve( created );
+
 		// Recreate changeListener list
-		for (Floor t : result.getFloors ()) {
+		for( Floor t : result.getFloors() ) {
 //			t.addChangeListener (result);
 		}
-		
+
 		return result;
 	}
 }

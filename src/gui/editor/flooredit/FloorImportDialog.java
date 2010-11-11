@@ -23,7 +23,7 @@ import ds.Project;
 import ds.z.Floor;
 import gui.ZETMain;
 import gui.components.framework.Button;
-import gui.editor.GUIOptionManager;
+import gui.GUIOptionManager;
 import info.clearthought.layout.TableLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;

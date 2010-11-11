@@ -18,7 +18,7 @@ package zet.gui.components.tabs.editor;
 import java.awt.Color;
 import java.util.LinkedList;
 import de.tu_berlin.math.coga.common.localization.Localization;
-import gui.editor.GUIOptionManager;
+import gui.GUIOptionManager;
 
 /**
  * An enumeration of all possible edit modes of the editor.

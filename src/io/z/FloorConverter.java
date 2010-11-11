@@ -61,7 +61,7 @@ public class FloorConverter extends ReflectionConverter {
 
 		// Legacy support for old example files
 		if( !result.boundStructureAvailable() )
-			result.recomputeBounds();
+			result.recomputeBounds( false );
 
 		return result;
 	}

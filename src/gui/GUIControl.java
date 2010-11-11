@@ -44,7 +44,6 @@ import gui.components.progress.JRasterizeProgressBarDialog;
 import gui.editor.Areas;
 import gui.editor.CoordinateTools;
 import zet.gui.components.tabs.editor.EditMode;
-import gui.editor.GUIOptionManager;
 import gui.editor.assignment.JAssignment;
 import gui.editor.flooredit.FloorImportDialog;
 import gui.editor.planimage.JPlanImageProperties;

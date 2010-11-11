@@ -13,9 +13,10 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
+
 /**
  * Class OptionsChangedEvent
- * Erstellt 28.10.2008, 00:35:04
+ * Created 28.10.2008, 00:35:04
  */
 
 package event;
@@ -23,17 +24,8 @@ package event;
 /**
  * An event that is thrown if the program options are changed, so that the
  * values can be reloaded. Especially used for the visualization.
- * @param <S> 
  * @author Jan-Philipp Kappmeier
  */
-public class OptionsChangedEvent<S> implements Event {
-	protected S source;
+public class OptionsChangedEvent implements Event {
 
-	public OptionsChangedEvent( S source ) {
-		this.source = source;
-	}
-
-	public S getSource() {
-		return source;
-	}
 }

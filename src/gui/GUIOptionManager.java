@@ -13,13 +13,13 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
-package gui.editor;
+package gui;
 
 import zet.gui.components.tabs.editor.EditMode;
 import ds.PropertyContainer;
 import event.EventServer;
 import event.MessageEvent;
-import zet.gui.JEditor;
+import gui.editor.Areas;
 import java.awt.Color;
 import java.awt.Font;
 import java.util.EnumSet;
@@ -35,13 +35,12 @@ import javax.swing.UIManager;
  */
 public abstract class GUIOptionManager {
 	/** The instance of the PropertyContainer. */
-	private static PropertyContainer propertyContainer = PropertyContainer.getInstance();
+	private static final PropertyContainer propertyContainer = PropertyContainer.getInstance();
 	/** The previously selected edit mode. */
 	private static EditMode previousEditMode;
 	/** The selected edit mode. */
 	private static EditMode editMode;
 	/** Global initialization of the GUIOptionManager. */
-
 
 	static {
 		// stores the needed values to the property container, as saving is not supported yet
@@ -217,4 +216,6 @@ public abstract class GUIOptionManager {
 	public static String getLastFile( int i ) {
 		return PropertyContainer.getInstance().getAsString( "information.file.lastFile" + Integer.toString( i ) );
 	}
+
+	private GUIOptionManager() { }
 }

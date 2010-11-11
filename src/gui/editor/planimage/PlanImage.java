@@ -15,7 +15,7 @@
  */
 /**
  * Class PlanImage
- * Erstellt 18.04.2008, 11:43:18
+ * Created 18.04.2008, 11:43:18
  */
 
 package gui.editor.planimage;
@@ -42,6 +42,8 @@ public class PlanImage {
 	private int offsetY = 0;
 	private float alpha = 0.5f;
 	private Rectangle visible;
+	int correctnessX = 0;
+	int correctnessY = 0;
 	
 	/**
 	 * Returns the currently set background image.
@@ -49,10 +51,7 @@ public class PlanImage {
 	 */
 	public BufferedImage getImage() {
 		return image;
-	}
-	
-	int correctnessX = 0;
-	int correctnessY = 0;
+	}	
 	
 	/**
 	 * 
@@ -80,35 +79,31 @@ public class PlanImage {
 		this.drawnImageX = CoordinateTools.translateToScreen( imageX + offsetX );
 		this.drawnImageY = CoordinateTools.translateToScreen( imageY + offsetY );
 		
-		visible.x = visible.x - drawnImageX;
-		if( visible.x < 0 )
-			visible.x = 0;
-		visible.y = visible.y - drawnImageY;
-		if( visible.y < 0 )
-			visible.y = 0;
+		visible.x = Math.max( visible.x - drawnImageX, 0 );
+		visible.y = Math.max( visible.y - drawnImageY, 0 );
 		
-		double visiblePixelWidth  = CoordinateTools.getPictureZoomFactor() * CoordinateTools.translateToScreenW( image.getWidth() );
-		double visiblePixelHeight = CoordinateTools.getPictureZoomFactor() * CoordinateTools.translateToScreenW( image.getHeight() );
+		final double visiblePixelWidth  = CoordinateTools.getPictureZoomFactor() * CoordinateTools.translateToScreenW( image.getWidth() );
+		final double visiblePixelHeight = CoordinateTools.getPictureZoomFactor() * CoordinateTools.translateToScreenW( image.getHeight() );
 		if( visible.x >= visiblePixelWidth || visible.y >= visiblePixelHeight ) {
-			System.out.println( "Ausserhalb des bildschirms!" );
+			System.out.println( "Außerhalb des Bildschirms!" );
 			drawnImage = null;
 			return;
 		}
 
-		double pixelsize = CoordinateTools.getPictureZoomFactor() * CoordinateTools.translateToScreenW( 1 );
-		double usedPixelX = Math.ceil( visible.width / pixelsize )+1;
-		double usedPixelY = Math.ceil( visible.height / pixelsize )+1;
-		int x;
-		int y;
-		int h;
-		int w;
+		final double pixelsize = CoordinateTools.getPictureZoomFactor() * CoordinateTools.translateToScreenW( 1 );
+		final double usedPixelX = Math.ceil( visible.width / pixelsize )+1;
+		final double usedPixelY = Math.ceil( visible.height / pixelsize )+1;
+		final int x;
+		final int y;
+		final int h;
+		final int w;
 		BufferedImage vi;
 		if( usedPixelX >= image.getWidth() ) {
 			x = 0;
 			w = image.getWidth();
 		} else {
 			w = (int)usedPixelX;
-			double xt = ( visible.x / visiblePixelWidth ) * image.getWidth();
+			final double xt = ( visible.x / visiblePixelWidth ) * image.getWidth();
 			int xl = (int)Math.floor( xt );
 			if( xl + w > image.getWidth() )
 				xl = image.getWidth() - w;
@@ -119,7 +114,7 @@ public class PlanImage {
 			h = image.getHeight();
 		} else {
 			h = (int)usedPixelY;
-			double yt = ( visible.y / visiblePixelHeight ) * image.getHeight();
+			final double yt = ( visible.y / visiblePixelHeight ) * image.getHeight();
 			int yl = (int)Math.floor( yt );
 			if( yl + h > image.getHeight() )
 				yl = image.getHeight() - h;
@@ -204,10 +199,7 @@ public class PlanImage {
 	 * @return the width
 	 */
 	public int getWidth() {
-		if( drawnImage == null )
-			return 0;
-		else
-			return drawnImage.getWidth( null );
+		return drawnImage == null ? 0 : drawnImage.getWidth( null );
 	}
 	
 	/**
@@ -216,10 +208,7 @@ public class PlanImage {
 	 * @return the height
 	 */
 	public int getHeight() {
-		if( drawnImage == null )
-			return 0;
-		else
-			return drawnImage.getHeight( null );
+		return drawnImage == null ? 0 : drawnImage.getHeight( null );
 	}
 	
 }
