@@ -19,9 +19,9 @@
  */
 package ds.z;
 
+import de.tu_berlin.math.coga.common.localization.ZLocalization;
 import java.util.UUID;
 
-import de.tu_berlin.math.coga.common.localization.Localization;
 
 /**
  * Represents a person that should be evacuated. The person has a specified position
@@ -59,7 +59,7 @@ public class Person {
 	 */
 	public Person( PlanPoint position, Room room ) throws IllegalArgumentException {
 		if( !room.contains( position ) ) {
-			throw new IllegalArgumentException( Localization.getInstance().getString( "ds.z.NoPersonException" ) );
+			throw new IllegalArgumentException( ZLocalization.getSingleton().getString( "ds.z.NoPersonException" ) );
 		}
 		this.position = position;
 		this.room = room;
@@ -137,7 +137,7 @@ public class Person {
 	 */
 	public void setDiameter( double diameter ) throws java.lang.IllegalArgumentException {
 		if( diameter <= 0 )
-			throw new java.lang.IllegalArgumentException( Localization.getInstance().getString( "ds.z.DiameterException" ) );
+			throw new java.lang.IllegalArgumentException( ZLocalization.getSingleton().getString( "ds.z.DiameterException" ) );
 		this.diameter = diameter;
 	}
 
@@ -148,7 +148,7 @@ public class Person {
 	 */
 	public void setAge( double age ) throws java.lang.IllegalArgumentException {
 		if( age < 0 )
-			throw new java.lang.IllegalArgumentException( Localization.getInstance().getString( "ds.z.AgeException" ) );
+			throw new java.lang.IllegalArgumentException( ZLocalization.getSingleton().getString( "ds.z.AgeException" ) );
 		this.age = age;
 	}
 
@@ -159,7 +159,7 @@ public class Person {
 	 */
 	public void setFamiliarity( double familiarity ) throws java.lang.IllegalArgumentException {
 		if( familiarity <= 0 )
-			throw new java.lang.IllegalArgumentException( Localization.getInstance().getString( "ds.z.FamilarityException" ) );
+			throw new java.lang.IllegalArgumentException( ZLocalization.getSingleton().getString( "ds.z.FamilarityException" ) );
 		this.familiarity = familiarity;
 	}
 
@@ -170,7 +170,7 @@ public class Person {
 	 */
 	public void setPanic( double panic ) throws java.lang.IllegalArgumentException {
 		if( panic < 0 )
-			throw new java.lang.IllegalArgumentException( Localization.getInstance().getString( "ds.z.PanicException" ) );
+			throw new java.lang.IllegalArgumentException( ZLocalization.getSingleton().getString( "ds.z.PanicException" ) );
 		this.panic = panic;
 	}
 
@@ -181,7 +181,7 @@ public class Person {
 	 */
 	public void setDecisiveness( double decisiveness ) throws java.lang.IllegalArgumentException {
 		if( decisiveness <= 0 )
-			throw new java.lang.IllegalArgumentException( Localization.getInstance().getString( "ds.z.DecisivenessException" ) );
+			throw new java.lang.IllegalArgumentException( ZLocalization.getSingleton().getString( "ds.z.DecisivenessException" ) );
 		this.decisiveness = decisiveness;
 	}
 
@@ -192,7 +192,7 @@ public class Person {
 	 */
 	public void setReaction( double reaction ) throws java.lang.IllegalArgumentException {
 		if( reaction < 0 )
-			throw new java.lang.IllegalArgumentException( Localization.getInstance().getString( "ds.z.ReactionException" ) );
+			throw new java.lang.IllegalArgumentException( ZLocalization.getSingleton().getString( "ds.z.ReactionException" ) );
 		this.reaction = reaction;
 	}
 

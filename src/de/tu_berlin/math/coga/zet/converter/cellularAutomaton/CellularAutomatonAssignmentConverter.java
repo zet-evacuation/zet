@@ -8,7 +8,7 @@ import algo.ca.parameter.AbstractDefaultParameterSet;
 import algo.ca.parameter.ParameterSet;
 import de.tu_berlin.math.coga.zet.converter.cellularAutomaton.ZToCAConverter.ConversionNotSupportedException;
 import de.tu_berlin.math.coga.common.algorithm.Algorithm;
-import de.tu_berlin.math.coga.common.localization.Localization;
+import de.tu_berlin.math.coga.common.localization.DefaultLoc;
 import ds.PropertyContainer;
 import ds.ca.Cell;
 import ds.ca.ExitCell;
@@ -63,7 +63,7 @@ public class CellularAutomatonAssignmentConverter extends Algorithm<AssignmentAp
 			x = Math.round( (p.getPosition().getXInt() - 200 - p.getRoom().getxOffset()) / 400 );
 			y = Math.round( (p.getPosition().getYInt() - 200 - p.getRoom().getyOffset()) / 400 );
 			if( !room.isValid( x, y ) )
-				throw new IllegalArgumentException( Localization.getInstance().getString( "converter.IndividualOutsideException" ) );
+				throw new IllegalArgumentException( DefaultLoc.getSingleton().getString( "converter.IndividualOutsideException" ) );
 			c = cca.getMapping().get( room.getSquare( x, y ) );
 			if( c == null ) {
 				//JEditor.showErrorMessage( "Fehler", "Individuen konnten nicht erzeugt werden in Raum '" + room.getRoom().getName() + "'. Eventuell keine freien Plätze durch unbetretbare Bereiche?" );

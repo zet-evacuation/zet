@@ -21,7 +21,7 @@ package ds.z;
 
 import com.thoughtworks.xstream.annotations.XStreamAlias;
 import com.thoughtworks.xstream.annotations.XStreamOmitField;
-import de.tu_berlin.math.coga.common.localization.Localization;
+import de.tu_berlin.math.coga.common.localization.ZLocalization;
 
 /**
  * Implements a special type of {@link Edge} that has to be associated with a
@@ -173,10 +173,10 @@ public class RoomEdge extends Edge {
 	protected void setAssociatedPolygon (PlanPolygon p) throws NullPointerException, IllegalArgumentException,
 			IllegalStateException {
 		if (this.linkTarget != null) {
-			throw new java.lang.IllegalStateException (Localization.getInstance ().getString ("ds.z.RoomEdge.RoomChangeOnlyIfImpassable"));
+			throw new java.lang.IllegalStateException (ZLocalization.getSingleton ().getString ("ds.z.RoomEdge.RoomChangeOnlyIfImpassable"));
 		}
 		if (!(p instanceof Room)) {
-			throw new java.lang.IllegalArgumentException (Localization.getInstance ().getString ("ds.z.RoomEdge.OnlyRoomsAsOwnerPolygon"));
+			throw new java.lang.IllegalArgumentException (ZLocalization.getSingleton ().getString ("ds.z.RoomEdge.OnlyRoomsAsOwnerPolygon"));
 		}
 		super.setAssociatedPolygon (p);
 	}
@@ -196,7 +196,7 @@ public class RoomEdge extends Edge {
 		// each other, have the same coordinates, but of course different targets (the other edge)
 		// Therefore we use super.equals() here
 		if (ensureMatchWithLinkTarget && target != null && !super.equals (target)) {
-			throw new IllegalArgumentException (Localization.getInstance ().getString ("ds.z.RoomEdge.InequalLinkTarget"));
+			throw new IllegalArgumentException (ZLocalization.getSingleton ().getString ("ds.z.RoomEdge.InequalLinkTarget"));
 		}
 		this.linkTarget = target;
 

@@ -23,6 +23,7 @@ import algo.ca.parameter.AbstractDefaultParameterSet;
 import algo.ca.parameter.ParameterSet;
 import algo.ca.rule.Rule;
 import batch.tasks.AlgorithmTask;
+import de.tu_berlin.math.coga.common.localization.DefaultLoc;
 import de.tu_berlin.math.coga.common.localization.Localization;
 import ds.ca.CAController;
 import ds.PropertyContainer;
@@ -66,7 +67,7 @@ public class CellularAutomatonInOrderExecution extends EvacuationCellularAutomat
 				executeStep();
 				int individualProgress = Math.min( 100 - (int)Math.round( ((double)ca.individualCount() / ca.individualCount()) * 100 ), 99 );
 				int timeProgress = Math.min( (int)Math.round( (ca.getTimeStep() / getMaxTimeInSteps()) * 100 ), 99 );
-				AlgorithmTask.getInstance().publish( Math.max( individualProgress, timeProgress ), (ca.getInitialIndividualCount() - ca.getNotSafeIndividualsCount() - ca.deadIndividualsCount()) + " " + Localization.getInstance().getString( "algo.ca.safe" ) + " " + ca.deadIndividualsCount() + " " + Localization.getInstance().getString( "algo.ca.notSafe" ), Localization.getInstance().getString( "algo.ca.execute" ) + " " + ca.getTimeStep() + ". " + Localization.getInstance().getString( "algo.ca.step" ) );
+				AlgorithmTask.getInstance().publish( Math.max( individualProgress, timeProgress ), (ca.getInitialIndividualCount() - ca.getNotSafeIndividualsCount() - ca.deadIndividualsCount()) + " " + DefaultLoc.getSingleton().getString( "algo.ca.safe" ) + " " + ca.deadIndividualsCount() + " " + DefaultLoc.getSingleton().getString( "algo.ca.notSafe" ), DefaultLoc.getSingleton().getString( "algo.ca.execute" ) + " " + ca.getTimeStep() + ". " + DefaultLoc.getSingleton().getString( "algo.ca.step" ) );
 				if( (ca.getNotSafeIndividualsCount() == 0 && ca.getTimeStep() >= ca.getNeededTime()) || ca.getTimeStep() >= getMaxTimeInSteps() || isCancelled() )
 					setFinished( true );
 			}
@@ -76,7 +77,7 @@ public class CellularAutomatonInOrderExecution extends EvacuationCellularAutomat
 
 			// Execute loop rules
 			if( ca.individualCount() > 0 )
-				AlgorithmTask.getInstance().publish( 0, ca.evacuatedIndividualsCount() + " " + Localization.getInstance().getString( "algo.ca.IndividualEvacuated" ), Localization.getInstance().getString( "algo.ca.execute" ) + " " + (ca.getTimeStep() + 1) + ". " + Localization.getInstance().getString( "algo.ca.step" ) );
+				AlgorithmTask.getInstance().publish( 0, ca.evacuatedIndividualsCount() + " " + DefaultLoc.getSingleton().getString( "algo.ca.IndividualEvacuated" ), DefaultLoc.getSingleton().getString( "algo.ca.execute" ) + " " + (ca.getTimeStep() + 1) + ". " + DefaultLoc.getSingleton().getString( "algo.ca.step" ) );
 			while( (ca.getNotSafeIndividualsCount() > 0 || ca.getTimeStep() < ca.getNeededTime()) && ca.getTimeStep() < getMaxTimeInSteps() && !isCancelled() ) {
 				if( isPaused() ) {
 					try {
@@ -88,7 +89,7 @@ public class CellularAutomatonInOrderExecution extends EvacuationCellularAutomat
 				executeStep();
 				int individualProgress = Math.min( 100 - (int)Math.round( ((double)ca.individualCount() / ca.individualCount() ) * 100 ), 99 );
 				int timeProgress = Math.min( (int)Math.round( (ca.getTimeStep() / getMaxTimeInSteps()) * 100 ), 99 );
-				AlgorithmTask.getInstance().publish( Math.max( individualProgress, timeProgress ), (ca.getInitialIndividualCount() - ca.getNotSafeIndividualsCount() - ca.deadIndividualsCount()) + " " + Localization.getInstance().getString( "algo.ca.safe" ) + " " + ca.deadIndividualsCount() + " " + Localization.getInstance().getString( "algo.ca.notSafe" ), Localization.getInstance().getString( "algo.ca.execute" ) + " " + ca.getTimeStep() + ". " + Localization.getInstance().getString( "algo.ca.step" ) );
+				AlgorithmTask.getInstance().publish( Math.max( individualProgress, timeProgress ), (ca.getInitialIndividualCount() - ca.getNotSafeIndividualsCount() - ca.deadIndividualsCount()) + " " + DefaultLoc.getSingleton().getString( "algo.ca.safe" ) + " " + ca.deadIndividualsCount() + " " + DefaultLoc.getSingleton().getString( "algo.ca.notSafe" ), DefaultLoc.getSingleton().getString( "algo.ca.execute" ) + " " + ca.getTimeStep() + ". " + DefaultLoc.getSingleton().getString( "algo.ca.step" ) );
 			}
 			// let die all individuals which are not already dead and not safe
 			if( ca.getNotSafeIndividualsCount() != 0 ) {
@@ -99,8 +100,8 @@ public class CellularAutomatonInOrderExecution extends EvacuationCellularAutomat
 			}
 			setFinished( true );
 			if( !isCancelled() ) {
-				String text = (ca.getInitialIndividualCount() - ca.getNotSafeIndividualsCount() - ca.deadIndividualsCount()) + " " + Localization.getInstance().getString( "algo.ca.safe" ) + " " + ca.deadIndividualsCount() + " " + Localization.getInstance().getString( "algo.ca.notEvacuated" );
-				AlgorithmTask.getInstance().publish( 100, Localization.getInstance().getString( "algo.ca.end" ) + " " + text, ca.getTimeStep() + " " + Localization.getInstance().getString( "algo.ca.steps" ) );
+				String text = (ca.getInitialIndividualCount() - ca.getNotSafeIndividualsCount() - ca.deadIndividualsCount()) + " " + DefaultLoc.getSingleton().getString( "algo.ca.safe" ) + " " + ca.deadIndividualsCount() + " " + DefaultLoc.getSingleton().getString( "algo.ca.notEvacuated" );
+				AlgorithmTask.getInstance().publish( 100, DefaultLoc.getSingleton().getString( "algo.ca.end" ) + " " + text, ca.getTimeStep() + " " + DefaultLoc.getSingleton().getString( "algo.ca.steps" ) );
 			}
 
 			ca.stop();
@@ -158,7 +159,7 @@ public class CellularAutomatonInOrderExecution extends EvacuationCellularAutomat
 	 */
 	protected void executeStep() {
 		if( !isInitialized() )
-			throw new IllegalArgumentException( Localization.getInstance().getString( "algo.ca.NotInitializedException" ) );
+			throw new IllegalArgumentException( DefaultLoc.getSingleton().getString( "algo.ca.NotInitializedException" ) );
 
 		if( ProgressBooleanFlags.CA_PROGRESS ) {
 			int t = ca.getTimeStep();

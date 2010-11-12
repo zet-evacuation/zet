@@ -20,6 +20,7 @@
  */
 package zet.gui.components.tabs;
 
+import de.tu_berlin.math.coga.common.localization.DefaultLoc;
 import de.tu_berlin.math.coga.components.JRuler;
 import ds.PropertyContainer;
 import ds.z.Assignment;
@@ -39,7 +40,6 @@ import ds.z.TeleportArea;
 import ds.z.TeleportEdge;
 import ds.z.ZControl;
 import event.EventListener;
-import event.EventServer;
 import event.OptionsChangedEvent;
 import gui.GUIControl;
 import gui.ZETMain;
@@ -57,7 +57,6 @@ import zet.gui.JEditor;
 import zet.gui.components.tabs.editor.EditMode;
 import gui.GUIOptionManager;
 import zet.gui.components.tabs.editor.JFloor;
-import zet.gui.components.tabs.base.JPolygon;
 import gui.editor.PointPopupListener;
 import gui.editor.PolygonPopupListener;
 import info.clearthought.layout.TableLayout;
@@ -91,30 +90,50 @@ import javax.swing.JPanel;
 import javax.swing.JPopupMenu;
 import javax.swing.JTextField;
 import javax.swing.SwingUtilities;
+import zet.gui.components.tabs.base.JPolygon;
 
 /**
- *
+ * <p>One of the main components of the ZET software. This is a component
+ * consisting of two parts which are divided by a split, which can be removed
+ * to resize the left and right part.</p>
+ * <p>The left part contains an {@link JFloor}. This component displays a floor
+ * and all the objects on it. These are rooms and areas. For more details about
+ * this elements see the documentation of the z-data structure.</p>
+ * <p>The right part contains a panel with properties for the currently selected
+ * element on the floor on the left side. For each type of elements, a different
+ * panel with the appropriate properties is visible. These properties include
+ * names and several information that can be stored in the z-data structure.</p>
+ * @see ds.z.Floor
+ * @see zet.gui.components.tabs.editor.JFloor
  * @author Jan-Philipp Kappmeier
  */
 public class JEditView extends AbstractSplitPropertyWindow<JFloorScrollPane<JFloor>> implements EventListener<OptionsChangedEvent> {
-	/** Message code indicating that the delay area panel should be displayed. @see setEastPanelType() */
-	public static final int DELAY_AREA_PANEL = 0;
-	/** Message code indicating that the assignment area panel should be displayed. @see setEastPanelType() */
-	public static final int ASSIGNMENT_AREA_PANEL = 1;
-	/** Message code indicating that the room panel should be displayed. @see setEastPanelType() */
-	public static final int ROOM_PANEL = 2;
-	/** Message code indicating that the default panel should be displayed. @see setEastPanelType() */
-	public static final int DEFAULT_PANEL = 3;
-	/** Message code indicating that the floor panel should be displayed. @see setEastPanelType() */
-	public static final int FLOOR_PANEL = 4;
-	/** Message code indicating that the evacuation area panel should be displayed. @see setEastPanelType() */
-	public static final int EVACUATION_AREA_PANEL = 5;
-	/** Message code indicating that the stair area panel should be displayed. @see setEastPanelType() */
-	public static final int STAIR_AREA_PANEL = 6;
-	/** Message code indicating that the stair area panel should be displayed. @see setEastPanelType() */
-	public static final int TELEPORT_AREA_PANEL = 7;
+	DefaultLoc loc;
+
+	/**
+	 * An enumeration of all possible panels visible in the edit view on the right part.
+	 * @see #setEastPanelType(zet.gui.components.tabs.JEditView.Panels)
+	 */
+	public enum Panels {
+		/** Message code indicating that the delay area panel should be displayed.  */
+		DelayArea,
+		/** Message code indicating that the assignment area panel should be displayed.*/
+		AssignmentArea,
+		/** Message code indicating that the room panel should be displayed. */
+		Room,
+		/** Message code indicating that the default panel should be displayed. */
+		Default,
+		/** Message code indicating that the floor panel should be displayed. */
+		Floor,
+		/** Message code indicating that the evacuation area panel should be displayed. */
+		EvacuationArea,
+		/** Message code indicating that the stair area panel should be displayed. */
+		StairArea,
+		/** Message code indicating that the stair area panel should be displayed. */
+		TeleportArea;
+	}
 	/** The currently active panel type */
-	private static int eastPanelType;
+	private static Panels eastPanelType;
 	/** The control object for the loaded project. */
   private ZControl projectControl;
 	/** The currently visible {@link ds.z.Floor} */
@@ -132,18 +151,17 @@ public class JEditView extends AbstractSplitPropertyWindow<JFloorScrollPane<JFlo
 	/** A label that shows a string explaining the room selection combo box. */
 	private JLabel lblRoomSelector;
 	// Graphics components that are not directly displayed on this JEditorPanel
-	/** All JPolygons share the same popup menu, which is stored here. */
+	/** All JPolygons share the same pop-up menu, which is stored here. */
 	private JPopupMenu pupPolygon;
-	/** All JPolygons share the same popup menu listeners, which are stored here. */
+	/** All JPolygons share the same pop-up menu listeners, which are stored here. */
 	private List<PolygonPopupListener> polygonPopupListeners;
-	/** All JEdges share the same popup menu, which is stored here. */
+	/** All JEdges share the same pop-up menu, which is stored here. */
 	private JPopupMenu pupEdge;
-	/** All JEdges share the same popup menu listeners, which are stored here. */
+	/** All JEdges share the same pop-up menu listeners, which are stored here. */
 	private List<EdgePopupListener> edgePopupListeners;
-	/** All JEdges share a second popup menu which is only displayed on edge points. 
-	 * This menu is stored here. */
+	/** All JEdges share a second pop-up menu which is only displayed on edge points. */
 	private JPopupMenu pupPoint;
-	/** All JEdges share the same popup menu listeners for pupPoint, which are stored here. */
+	/** All JEdges share the same pop-up menu listeners for pupPoint, which are stored here. */
 	private List<PointPopupListener> pointPopupListeners;
 	// Components for the east bar
 	private JComboBox cbxFloors;
@@ -213,49 +231,12 @@ public class JEditView extends AbstractSplitPropertyWindow<JFloorScrollPane<JFlo
 	private JTextField txtFloorWidth;
 	private JTextField txtFloorHeight;
 
-	/**
-	 * Initializes the editing view of ZET.
-	 * @param projectControl the project which is displayed in the editor
-	 * @param guiControl
-	 */
-	public JEditView( ZControl projectControl, GUIControl guiControl ) {
-		super( new JFloorScrollPane<JFloor>( new JFloor( guiControl ) ) );
-		this.guiControl = guiControl;
-		// this.myProject = project; is now called later - TIMON
-		final JFloor centerPanel = this.getLeftPanel().getMainComponent();
-		centerPanel.addActionListener( new ActionListener() {
-			@Override
-			public void actionPerformed( ActionEvent e ) {
-				if( centerPanel.getSelectedPolygons() == null ||
-								centerPanel.getSelectedPolygons().size() != 1 )
-					setEastPanelType( FLOOR_PANEL );
-				else {
-					PlanPolygon p = centerPanel.getSelectedPolygons().get( 0 ).getPlanPolygon();
-					if( p instanceof Room )
-						setEastPanelType( ROOM_PANEL );
-					else if( p instanceof DelayArea )
-						setEastPanelType( DELAY_AREA_PANEL );
-					else if( p instanceof EvacuationArea )
-						setEastPanelType( EVACUATION_AREA_PANEL );
-					else if( p instanceof AssignmentArea )
-						setEastPanelType( ASSIGNMENT_AREA_PANEL );
-					else if( p instanceof StairArea )
-						setEastPanelType( STAIR_AREA_PANEL );
-					else if ( p instanceof TeleportArea )
-						setEastPanelType( TELEPORT_AREA_PANEL );
-					else
-						setEastPanelType( DEFAULT_PANEL );
-				}
-			}
-		} );
-		displayProject( projectControl );
-		this.getLeftPanel().getHorizontalScrollBar().addAdjustmentListener( adlPlanImage );
-		this.getLeftPanel().getVerticalScrollBar().addAdjustmentListener( adlPlanImage );
-		EventServer.getInstance().registerListener( this, OptionsChangedEvent.class );
-	}
-	
+	final NumberFormat nfFloat = DefaultLoc.getSingleton().getFloatConverter();
+	final NumberFormat nfInteger = DefaultLoc.getSingleton().getIntegerConverter();
+
 	public JEditView( GUIControl guiControl ) {
 		super( new JFloorScrollPane<JFloor>( new JFloor( guiControl ) ) );
+		loc = DefaultLoc.getSingleton();
 		this.guiControl = guiControl;
 		final JFloor centerPanel = this.getLeftPanel().getMainComponent();
 		centerPanel.addActionListener( new ActionListener() {
@@ -263,29 +244,29 @@ public class JEditView extends AbstractSplitPropertyWindow<JFloorScrollPane<JFlo
 			public void actionPerformed( ActionEvent e ) {
 				if( centerPanel.getSelectedPolygons() == null ||
 								centerPanel.getSelectedPolygons().size() != 1 )
-					setEastPanelType( FLOOR_PANEL );
+					setEastPanelType( Panels.Floor );
 				else {
 					PlanPolygon p = centerPanel.getSelectedPolygons().get( 0 ).getPlanPolygon();
 					if( p instanceof Room )
-						setEastPanelType( ROOM_PANEL );
+						setEastPanelType( Panels.Room );
 					else if( p instanceof DelayArea )
-						setEastPanelType( DELAY_AREA_PANEL );
+						setEastPanelType( Panels.DelayArea );
 					else if( p instanceof EvacuationArea )
-						setEastPanelType( EVACUATION_AREA_PANEL );
+						setEastPanelType( Panels.EvacuationArea );
 					else if( p instanceof AssignmentArea )
-						setEastPanelType( ASSIGNMENT_AREA_PANEL );
+						setEastPanelType( Panels.AssignmentArea );
 					else if( p instanceof StairArea )
-						setEastPanelType( STAIR_AREA_PANEL );
+						setEastPanelType( Panels.StairArea );
 					else if( p instanceof TeleportArea )
-						setEastPanelType( TELEPORT_AREA_PANEL );
+						setEastPanelType( Panels.TeleportArea );
 					else
-						setEastPanelType( DEFAULT_PANEL );
+						setEastPanelType( Panels.Default );
 				}
 			}
 		} );
 		this.getLeftPanel().getHorizontalScrollBar().addAdjustmentListener( adlPlanImage );
 		this.getLeftPanel().getVerticalScrollBar().addAdjustmentListener( adlPlanImage );
-		EventServer.getInstance().registerListener( this, OptionsChangedEvent.class );
+		
 	}
 	private AdjustmentListener adlPlanImage = new AdjustmentListener() {
 		@Override
@@ -300,7 +281,7 @@ public class JEditView extends AbstractSplitPropertyWindow<JFloorScrollPane<JFlo
 	 * Returns the index of the panel currently visible in the east panel.
 	 * @return the index of the panel currently visible in the east panel
 	 */
-	public int getEastPanelType() {
+	public Panels getEastPanelType() {
 		return eastPanelType;
 	}
 
@@ -308,20 +289,20 @@ public class JEditView extends AbstractSplitPropertyWindow<JFloorScrollPane<JFlo
 	 * Sets the panel visible in the east panel.
 	 * @param panel the panel
 	 */
-	public void setEastPanelType( int panel ) {
-		PlanPolygon selectedPolygon = (panel == DEFAULT_PANEL || panel == FLOOR_PANEL) ? null : getLeftPanel().getMainComponent().getSelectedPolygons().get( 0 ).getPlanPolygon();
+	private void setEastPanelType( Panels panel ) {
+		PlanPolygon selectedPolygon = (panel == Panels.Default || panel == Panels.Floor) ? null : getLeftPanel().getMainComponent().getSelectedPolygons().get( 0 ).getPlanPolygon();
 		switch( panel ) {
-			case DELAY_AREA_PANEL:
+			case DelayArea:
 				txtDelayFactor.setText( nfFloat.format( ((DelayArea)selectedPolygon).getSpeedFactor() ) );
 				cbxDelayType.setSelectedItem( ((DelayArea)selectedPolygon).getDelayType() );
 				eastSubBarCardLayout.show( eastSubBar, "delayArea" );
 				break;
-			case STAIR_AREA_PANEL:
+			case StairArea:
 				txtStairFactorUp.setText( nfFloat.format( ((StairArea)selectedPolygon).getSpeedFactorUp() ) );
 				txtStairFactorDown.setText( nfFloat.format( ((StairArea)selectedPolygon).getSpeedFactorDown() ) );
 				eastSubBarCardLayout.show( eastSubBar, "stairArea" );
 				break;
-			case ASSIGNMENT_AREA_PANEL:
+			case AssignmentArea:
 				txtNumberOfPersons.setText( nfInteger.format( ((AssignmentArea)selectedPolygon).getEvacuees() ) );
 				assignmentTypeSelector.setSelectedItem( ((AssignmentArea)selectedPolygon).getAssignmentType() );
 				eastSubBarCardLayout.show( eastSubBar, "assignmentArea" );
@@ -340,20 +321,15 @@ public class JEditView extends AbstractSplitPropertyWindow<JFloorScrollPane<JFlo
 				else
 					cbxPreferredExit.setSelectedItem( ((AssignmentArea)selectedPolygon).getExitArea() );
 				break;
-			case ROOM_PANEL:
+			case Room:
 				txtRoomName.setText( ((Room)selectedPolygon).getName() );
 				eastSubBarCardLayout.show( eastSubBar, "room" );
 				break;
-			case DEFAULT_PANEL:
+			case Default:
 				eastSubBarCardLayout.show( eastSubBar, "default" );
 				break;
-			case FLOOR_PANEL:
+			case Floor:
 				txtFloorName.setText( this.currentFloor.getName() );
-				String s = "<html>";
-				s += "x-Offset: " + currentFloor.getxOffset() + "<br>";
-				s += "y-Offset: " + currentFloor.getyOffset() + "<br>";
-				s += "Width: " + currentFloor.getWidth() + "<br>";
-				s += "Height: " + currentFloor.getHeight() + "<br>";
 				txtFloorxOffset.setText( Integer.toString( currentFloor.getxOffset() ) );
 				txtFlooryOffset.setText( Integer.toString( currentFloor.getyOffset() ) );
 				txtFloorWidth.setText( Integer.toString( currentFloor.getWidth() ) );
@@ -361,12 +337,12 @@ public class JEditView extends AbstractSplitPropertyWindow<JFloorScrollPane<JFlo
 
 				eastSubBarCardLayout.show( eastSubBar, "floor" );
 				break;
-			case EVACUATION_AREA_PANEL:
+			case EvacuationArea:
 				txtEvacuationAreaName.setText( ((EvacuationArea)selectedPolygon).getName() );
 				txtEvacuationAttractivity.setText( nfInteger.format( ((EvacuationArea)selectedPolygon).getAttractivity() ) );
 				eastSubBarCardLayout.show( eastSubBar, "evacuation" );
 				break;
-			case TELEPORT_AREA_PANEL:
+			case TeleportArea:
 				eastSubBarCardLayout.show( eastSubBar, "teleport" );
 				txtTeleportAreaName.setText( ((TeleportArea)selectedPolygon).getName() );
 				if( ((TeleportArea)selectedPolygon).getExitArea() == null )
@@ -479,6 +455,9 @@ public class JEditView extends AbstractSplitPropertyWindow<JFloorScrollPane<JFlo
 
 		int row = 1;
 
+
+
+		loc = DefaultLoc.getSingleton();
 		loc.setPrefix( "" );
 		lblFloorSelector = new JLabel( loc.getString( "gui.editor.JEditorPanel.labelFloors" ) + ":" );
 		eastPanel.add( lblFloorSelector, "1, " + row++ );

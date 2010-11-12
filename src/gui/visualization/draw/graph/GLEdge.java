@@ -39,7 +39,7 @@ public class GLEdge extends AbstractDrawable<GLEdge, GLEdgeControl> {
 	/**
 	 * Draws the static structure of the edge that means the edge, if it is the first one
 	 * of the two edges. The flow is not painted.
-	 * {@see GLFlowEdgeControl#isFirstEdge()}
+	 * @see GLFlowEdgeControl#isFirstEdge()
 	 * @param gl the {@code OpenGL} drawable object
 	 */
 	@Override

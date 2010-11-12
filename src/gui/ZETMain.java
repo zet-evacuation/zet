@@ -35,6 +35,7 @@ import com.thoughtworks.xstream.annotations.Annotations;
 import de.tu_berlin.math.coga.common.debug.DebugStream;
 import de.tu_berlin.math.coga.common.debug.DebugStreamVerbose;
 import de.tu_berlin.math.coga.common.debug.Log;
+import de.tu_berlin.math.coga.common.localization.DefaultLoc;
 import de.tu_berlin.math.coga.common.localization.Localization;
 import ds.PropertyContainer;
 import event.EventServer;
@@ -65,7 +66,7 @@ public class ZETMain {
 	/** The version of zet. */
 	public static String version = "1.1.0";
 	/** The localization class. */
-	private static Localization loc = Localization.getInstance();
+	private static Localization loc = DefaultLoc.getSingleton();
 	/** Indicates whether debug mode is active, or not. */
 	private static boolean debug;
 	/** The project file that should be loaded (submitted via command line). */

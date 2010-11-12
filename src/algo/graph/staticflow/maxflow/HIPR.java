@@ -196,7 +196,7 @@ public class HIPR extends Algorithm<MaximumFlowProblem, MaximumFlow> {
 //      if( a ->  head == i )
 //				a ->  resCap = cap[a - arcs];
 //		}
-
+	//TODO enum, inactive, active, finish
 		final int WHITE = 0;
 		final int GREY = 1;
 		final int BLACK = 2;
@@ -206,12 +206,10 @@ public class HIPR extends Algorithm<MaximumFlowProblem, MaximumFlow> {
 		tos = bos = null;
 		for( Node i : getProblem().getNetwork() ) {
 			distanceLabels.set( i, WHITE );
-			//i -> d = WHITE;
 			//    buckets[i-nodes].firstActive = NULL;
 			activeBuckets.reset();
 			//buckets[i-nodes].firstActive = sentinelNode;
 			current.set( i, first.get( i ) );
-			//i ->  current = i ->  first;
 		}
 
 		/* eliminate flowValue cycles, topologicaly order vertices */
@@ -224,15 +222,12 @@ public class HIPR extends Algorithm<MaximumFlowProblem, MaximumFlow> {
 				do {
 					for( ; current.get( i ) != last.get( i ); current.increase( i, 1 ) ) {
 						ResidualEdge a = residualEdges[current.get( i )];
-						// ???? if( (cap[a - arcs] == 0) && (a.residualCapacity > 0) ) {
 						if( (a.reverseEdge) && (a.residualCapacity > 0) ) {
 							Node j = a.end();
 							if( distanceLabels.get( j ) == WHITE ) {
 								/* start scanning j */
 								distanceLabels.set( j, GREY );
-								//activeBuckets.addActive( j.id(), i); // ?????
 								buckets[j.id()] = i;
-								//buckets[j - nodes].firstActive = i;
 								i = j;
 								break;
 							} else if( distanceLabels.get( j ) == GREY ) {
@@ -253,7 +248,7 @@ public class HIPR extends Algorithm<MaximumFlowProblem, MaximumFlow> {
 									a.residualCapacity -= delta;
 									a.reverse.residualCapacity += delta;
 									j = a.end();
-									;
+									
 									if( j.equals( i ) )
 										break;
 								}
@@ -287,7 +282,6 @@ public class HIPR extends Algorithm<MaximumFlowProblem, MaximumFlow> {
 								tos = i;
 							} else {
 								next[i.id()] = tos;
-								//next i ->  bNext = tos;
 								tos = i;
 							}
 
@@ -382,15 +376,14 @@ public class HIPR extends Algorithm<MaximumFlowProblem, MaximumFlow> {
 
 	/**
 	 * Gap relabeling (maybe move to bucket?)
-	 * @param l
+	 * @param emptyBucket the index of an empty bucket, where a gap possibly starts
+	 * @return {@code true} if a gap was found, {@code false} otherwise
 	 */
-	protected int gap( int emptyB ) {
+	protected boolean gap( int emptyBucket ) {
 		gaps++;
-		int r = emptyB - 1;
-		int cc;
 
 		/* set labels of nodes beyond the gap to "infinity" */
-		for( int l = emptyB + 1; l <= activeBuckets.getdMax(); l++ ) {
+		for( int l = emptyBucket + 1; l <= activeBuckets.getdMax(); l++ ) {
 			/* this does nothing for high level selection
 			for (i = l -> firstActive; i != sentinelNode; i = i -> bNext) {
 			i -> d = n;
@@ -400,7 +393,6 @@ public class HIPR extends Algorithm<MaximumFlowProblem, MaximumFlow> {
 			 */
 
 			// TODO iterator
-			//for( Node node = inactiveBuckets.get( l ); node != null; node = next.get( node ) ) {
 			for( Node node = inactiveBuckets.get( l ); node != null; node = inactiveBuckets.next( node ) ) {
 				distanceLabels.set( node, n );
 				gapNodes++;
@@ -410,9 +402,9 @@ public class HIPR extends Algorithm<MaximumFlowProblem, MaximumFlow> {
 
 		}
 
-		cc = (activeBuckets.getMinIndex() > r) ? 1 : 0;
+		final boolean cc = (activeBuckets.getMinIndex() > emptyBucket - 1) ? true : false;
 
-		activeBuckets.setMaxIndex( r );
+		activeBuckets.setMaxIndex( emptyBucket - 1 );
 		return cc;
 	}
 
@@ -491,7 +483,7 @@ public class HIPR extends Algorithm<MaximumFlowProblem, MaximumFlow> {
 		return true;
 	}
 
-	private static enum States {
+	private static enum GlobalUpdateState {
 		inactiveFirst,
 		inactiveNext,
 		activeFirst,
@@ -518,19 +510,19 @@ public class HIPR extends Algorithm<MaximumFlowProblem, MaximumFlow> {
 				break;
 
 			Node node = null;
-			States nextNodeState = States.inactiveFirst; // which type is the next node.
+			GlobalUpdateState nextNodeState = GlobalUpdateState.inactiveFirst; // which type is the next node.
 			while( true ) {
 				switch( nextNodeState ) {
 					case inactiveFirst:
 						node = inactiveBuckets.get( curDist );
-						nextNodeState = States.inactiveNext;
+						nextNodeState = GlobalUpdateState.inactiveNext;
 						break;
 					case inactiveNext:
 						node = inactiveBuckets.next( node );
 						break;
 					case activeFirst:
 						node = activeBuckets.get( curDist );
-						nextNodeState = States.activeNext;
+						nextNodeState = GlobalUpdateState.activeNext;
 						break;
 					case activeNext:
 						node = activeBuckets.next( node );
@@ -540,11 +532,11 @@ public class HIPR extends Algorithm<MaximumFlowProblem, MaximumFlow> {
 				}
 
 				if( node == null )
-					if( nextNodeState == States.inactiveNext ) {
-						nextNodeState = States.activeFirst.activeFirst;
+					if( nextNodeState == GlobalUpdateState.inactiveNext ) {
+						nextNodeState = GlobalUpdateState.activeFirst.activeFirst;
 						continue;
 					} else {
-						assert nextNodeState == States.activeNext : nextNodeState;
+						assert nextNodeState == GlobalUpdateState.activeNext : nextNodeState;
 						break;
 					}
 
@@ -572,23 +564,13 @@ public class HIPR extends Algorithm<MaximumFlowProblem, MaximumFlow> {
 	public void checkFlow() {
 		IdentifiableIntegerMapping<Edge> flow = new IdentifiableIntegerMapping<Edge>( m );
 		for( ResidualEdge e : residualEdges ) {
-			//System.out.println( e.toString() + " residual capacity: " + e.residualCapacity );
 			if( e.original == null )
 				continue;
-
-			//int capacity = getProblem().getCapacities().get( original );
-			//int used = e.reverse.residualCapacity;
 			flow.set( e.original, e.reverse.residualCapacity );
-			//System.out.println( original.toString() + " used " + used + " of " + capacity );
 		}
 
 		MaximumFlow mf = new MaximumFlow( getProblem(), flow );
-//		if( mf.check() )
-//			System.out.println( "ERRORS FOUND" );
-//		else
-//			System.out.println( "NO ERRORS FOUND" );
 		System.out.println( "Flow value: " + mf.getFlowValue() );
-		//System.out.println( mf.toString() );
 	}
 
 	private boolean isAdmissible( ResidualEdge e ) {

@@ -8,6 +8,7 @@ import ds.Project;
 import ds.z.exception.AssignmentException;
 import java.util.List;
 import de.tu_berlin.math.coga.common.localization.Localization;
+import de.tu_berlin.math.coga.common.localization.ZLocalization;
 import de.tu_berlin.math.coga.common.util.Helper;
 import de.tu_berlin.math.coga.common.util.IOTools;
 import de.tu_berlin.math.coga.rndutils.distribution.Distribution;
@@ -31,7 +32,7 @@ import java.util.Iterator;
  */
 public class ZControl {
 	/** The localization class. */
-	static final Localization loc = Localization.getInstance();
+	static final Localization loc = ZLocalization.getSingleton();
 	/** The project that is root of the controlled model. */
 	private Project p;
 
@@ -123,7 +124,7 @@ public class ZControl {
 	}
 
 	/**
-	 * Returns default values for a {@link util.Distribution} distribution
+	 * Returns default values for a {@link de.tu_berlin.math.coga.rndutils.distribution.Distribution} distribution
 	 * for a specified parameter. Reaction time and age follow the guidelines of
 	 * RiMEA (http://www.rimea.de).
 	 * @param type the parameter
@@ -217,7 +218,7 @@ public class ZControl {
 		else if( polygonClass == EvacuationArea.class ) {
 			newPolygon = new EvacuationArea( (Room)parent );
 			int count = getProject().getBuildingPlan().getEvacuationAreasCount();
-			String name = Localization.getInstance().getString( "ds.z.DefaultName.EvacuationArea" ) + " " + count;
+			String name = ZLocalization.getSingleton().getString( "ds.z.DefaultName.EvacuationArea" ) + " " + count;
 			((EvacuationArea)newPolygon).setName( name );
 		} else if( polygonClass == InaccessibleArea.class )
 			newPolygon = new InaccessibleArea( (Room)parent );
@@ -306,7 +307,7 @@ public class ZControl {
 	 * @return the newly created floor
 	 */
 	public Floor createNewFloor() {
-		return createFloor( Localization.getInstance().getString( "ds.z.DefaultName.Floor" ) + " " + p.getBuildingPlan().floorCount() );
+		return createFloor( ZLocalization.getSingleton().getString( "ds.z.DefaultName.Floor" ) + " " + p.getBuildingPlan().floorCount() );
 	}
 	
 	/**

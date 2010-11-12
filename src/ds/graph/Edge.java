@@ -20,7 +20,7 @@
 package ds.graph;
 
 import com.thoughtworks.xstream.annotations.XStreamAsAttribute;
-import de.tu_berlin.math.coga.common.localization.Localization;
+import de.tu_berlin.math.coga.common.localization.GraphLocalization;
 
 /**
  * The <code>Edge</code> class represents a edge in a graph.
@@ -60,7 +60,7 @@ public class Edge implements Identifiable {
      */
     public Edge(int id, Node start, Node end) {
         if (start == null || end == null) {
-            throw new NullPointerException(Localization.getInstance().getString("ds.graph.StartEndNodeIsNullException"));
+            throw new NullPointerException(GraphLocalization.getSingleton().getString("ds.graph.StartEndNodeIsNullException"));
         }
         this.edgeID = id;
         this.start = start;

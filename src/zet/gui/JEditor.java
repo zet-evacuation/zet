@@ -21,6 +21,7 @@
 package zet.gui;
 
 import batch.BatchResult;
+import de.tu_berlin.math.coga.common.localization.DefaultLoc;
 import ds.PropertyContainer;
 import ds.z.Floor;
 import event.EventListener;
@@ -64,6 +65,7 @@ import javax.swing.event.ChangeListener;
 import ds.z.ZControl;
 import event.VisualizationEvent;
 import de.tu_berlin.math.coga.components.JLogPane;
+import event.OptionsChangedEvent;
 import gui.statistic.JStatisticsPanel;
 import zet.gui.components.toolbar.JEditToolbar;
 import gui.GUIControl;
@@ -113,11 +115,11 @@ public class JEditor extends JFrame implements Localized, EventListener<Progress
 	}
 	ArrayList<ZETWindowTabs> tabs = new ArrayList<ZETWindowTabs>( ZETWindowTabs.values().length );
 	/** The localization class. */
-	static final Localization loc = Localization.getInstance();
+	static final Localization loc = DefaultLoc.getSingleton();
 	/** Stores the last mouse position if a mouse position event is sent. */
 	private static Point lastMouse = new Point( 0, 0 );
 	/** The delimiter used if numbers are stored in a tuple. */
-	final static String delimiter = Localization.getInstance().getStringWithoutPrefix( "numberSeparator" );
+	final static String delimiter = DefaultLoc.getSingleton().getStringWithoutPrefix( "numberSeparator" );
 	/** GUIControl class for projects and editing */
 	private ZControl zcontrol;
 	private static boolean editing = false;
@@ -237,6 +239,7 @@ public class JEditor extends JFrame implements Localized, EventListener<Progress
 	 */
 	public void addMainComponents() {
 		editView = new JEditView( guiControl );
+		EventServer.getInstance().registerListener( editView, OptionsChangedEvent.class );
 		caView = new JQuickVisualizationView();
 		batchView = new JBatchView( guiControl );
 		visualizationView = new JVisualizationView( new GLCapabilities(), guiControl );
@@ -303,10 +306,10 @@ public class JEditor extends JFrame implements Localized, EventListener<Progress
 			@Override
 			public void actionPerformed( ActionEvent e ) {
 				switch( editView.getEastPanelType() ) {
-					case JEditView.FLOOR_PANEL:
+					case Floor:
 						editView.setFloorNameFocus();
 						break;
-					case JEditView.ROOM_PANEL:
+					case Room:
 						editView.setRoomNameFocus();
 						break;
 					default:
@@ -387,9 +390,9 @@ public class JEditor extends JFrame implements Localized, EventListener<Progress
 		lastMouse = position;
 		//String pixelCoords = "(" + Integer.toString (e.getX ()) + "," + Integer.toString (e.getY ()) + ")";
 		String realCoordsMillimeter = "(" + Integer.toString( position.x ) + delimiter + Integer.toString( position.y ) + ")";
-		String realCoordsMeter = "(" + Localization.getInstance().getFloatConverter().format( ConversionTools.toMeter( position.x ) ) + delimiter + Localization.getInstance().getFloatConverter().format( ConversionTools.toMeter( position.y ) ) + ")";
+		String realCoordsMeter = "(" + DefaultLoc.getSingleton().getFloatConverter().format( ConversionTools.toMeter( position.x ) ) + delimiter + DefaultLoc.getSingleton().getFloatConverter().format( ConversionTools.toMeter( position.y ) ) + ")";
 		//String text = /*"Pixel: " + pixelCoords + " - */ "Millimeter: " + realCoordsMillimeter + " - Meter: " + realCoordsMeter;
-		String text = String.format( Localization.getInstance().getString( "gui.mousePositionMillimeterMeter" ), realCoordsMillimeter, realCoordsMeter );
+		String text = String.format( DefaultLoc.getSingleton().getString( "gui.mousePositionMillimeterMeter" ), realCoordsMillimeter, realCoordsMeter );
 		EventServer.getInstance().dispatchEvent( new MessageEvent<JEditor>( null, MessageType.MousePosition, text ) );
 	}
 

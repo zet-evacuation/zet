@@ -23,7 +23,7 @@ import batch.tasks.VisualizationDataStructureTask;
 import de.tu_berlin.math.coga.common.algorithm.AlgorithmEvent;
 import de.tu_berlin.math.coga.common.algorithm.AlgorithmListener;
 import de.tu_berlin.math.coga.common.algorithm.AlgorithmProgressEvent;
-import de.tu_berlin.math.coga.common.localization.Localization;
+import de.tu_berlin.math.coga.common.localization.DefaultLoc;
 import de.tu_berlin.math.coga.common.util.IOTools;
 import de.tu_berlin.math.coga.zet.DatFileReaderWriter;
 import de.tu_berlin.math.coga.zet.NetworkFlowModel;
@@ -461,10 +461,10 @@ public class GUIControl implements AlgorithmListener {
 		ds.GraphVisualizationResults graphRes = e.getGraphVis();
 
 		VisualizationDataStructureTask visualizationDataStructure = new VisualizationDataStructureTask( caRes, graphRes, e.getBuildingResults(), caStatistic );
-		JProgressBarDialog pbd = new JProgressBarDialog( editor, Localization.getInstance().getStringWithoutPrefix( "batch.tasks.buildVisualizationDatastructure" ), true, visualizationDataStructure );
+		JProgressBarDialog pbd = new JProgressBarDialog( editor, DefaultLoc.getSingleton().getStringWithoutPrefix( "batch.tasks.buildVisualizationDatastructure" ), true, visualizationDataStructure );
 		pbd.executeTask();
 		pbd.setVisible( true );
-		ZETMain.sendMessage( Localization.getInstance().getStringWithoutPrefix( "batch.tasks.progress.visualizationDatastructureComplete" ) );
+		ZETMain.sendMessage( DefaultLoc.getSingleton().getStringWithoutPrefix( "batch.tasks.progress.visualizationDatastructureComplete" ) );
 
 		editor.setControl( visualizationDataStructure.getControl() );
 
@@ -555,7 +555,7 @@ public class GUIControl implements AlgorithmListener {
 	}
 
 	public void switchToLanguage( Locale locale ) {
-		Localization.getInstance().setLocale( locale );
+		DefaultLoc.getSingleton().setLocale( locale );
 		editor.localize();
 		menuBar.localize();
 	}
@@ -640,12 +640,12 @@ public class GUIControl implements AlgorithmListener {
 					target = new File( target.getAbsolutePath() + ".zet" );
 				zcontrol.getProject().save( target );
 			} catch( java.lang.StackOverflowError soe ) {
-				showErrorMessage( Localization.getInstance().getString( "gui.editor.JEditor.error.stackOverflowTitle" ), Localization.getInstance().getString( "gui.editor.JEditor.error.stackOverflow" ) );
+				showErrorMessage( DefaultLoc.getSingleton().getString( "gui.editor.JEditor.error.stackOverflowTitle" ), DefaultLoc.getSingleton().getString( "gui.editor.JEditor.error.stackOverflow" ) );
 			} catch( Exception ex ) {
-				showErrorMessage( Localization.getInstance().getString( "gui.editor.JEditor.error.SaveTitle" ), Localization.getInstance().getString( "gui.editor.JEditor.error.Save" ) );
+				showErrorMessage( DefaultLoc.getSingleton().getString( "gui.editor.JEditor.error.SaveTitle" ), DefaultLoc.getSingleton().getString( "gui.editor.JEditor.error.Save" ) );
 			}
 			editview.displayProject( zcontrol );
-			ZETMain.sendMessage( Localization.getInstance().getString( "gui.editor.JEditor.message.saved" ) );
+			ZETMain.sendMessage( DefaultLoc.getSingleton().getString( "gui.editor.JEditor.message.saved" ) );
 		}
 
 	}
@@ -659,13 +659,13 @@ public class GUIControl implements AlgorithmListener {
 					IOTools.createBackup( zcontrol.getProject().getProjectFile() );
 				zcontrol.getProject().save();
 			} catch( java.lang.StackOverflowError soe ) {
-				showErrorMessage( Localization.getInstance().getString( "gui.editor.JEditor.error.stackOverflowTitle" ), Localization.getInstance().getString( "gui.editor.JEditor.error.stackOverflow" ) );
+				showErrorMessage( DefaultLoc.getSingleton().getString( "gui.editor.JEditor.error.stackOverflowTitle" ), DefaultLoc.getSingleton().getString( "gui.editor.JEditor.error.stackOverflow" ) );
 			} catch( Exception ex ) {
-				showErrorMessage( Localization.getInstance().getString( "gui.editor.JEditor.error.SaveTitle" ), Localization.getInstance().getString( "gui.editor.JEditor.error.Save" ) );
+				showErrorMessage( DefaultLoc.getSingleton().getString( "gui.editor.JEditor.error.SaveTitle" ), DefaultLoc.getSingleton().getString( "gui.editor.JEditor.error.Save" ) );
 				ex.printStackTrace( System.err );
 				return;
 			}
-			ZETMain.sendMessage( Localization.getInstance().getString( "gui.editor.JEditor.message.saved" ) );
+			ZETMain.sendMessage( DefaultLoc.getSingleton().getString( "gui.editor.JEditor.message.saved" ) );
 		}
 	}
 
@@ -673,8 +673,8 @@ public class GUIControl implements AlgorithmListener {
 	public void newProject() {
 		String status = "";
 		switch( JOptionPane.showOptionDialog( editor,
-						Localization.getInstance().getString( "gui.editor.JEditor.SaveQuestion" ),
-						Localization.getInstance().getString( "gui.editor.JEditor.NewProject" ),
+						DefaultLoc.getSingleton().getString( "gui.editor.JEditor.SaveQuestion" ),
+						DefaultLoc.getSingleton().getString( "gui.editor.JEditor.NewProject" ),
 						JOptionPane.YES_NO_CANCEL_OPTION,
 						JOptionPane.QUESTION_MESSAGE,
 						null, null, null ) ) {
@@ -694,9 +694,9 @@ public class GUIControl implements AlgorithmListener {
 								target = new File( target.getAbsolutePath() + ".zet" );
 							zcontrol.getProject().save( target );
 						} catch( java.lang.StackOverflowError soe ) {
-							showErrorMessage( Localization.getInstance().getString( "gui.editor.JEditor.error.stackOverflowTitle" ), Localization.getInstance().getString( "gui.editor.error.JEditor.stackOverflow" ) );
+							showErrorMessage( DefaultLoc.getSingleton().getString( "gui.editor.JEditor.error.stackOverflowTitle" ), DefaultLoc.getSingleton().getString( "gui.editor.error.JEditor.stackOverflow" ) );
 						} catch( Exception ex ) {
-							showErrorMessage( Localization.getInstance().getString( "gui.editor.JEditor.error.SaveTitle" ), Localization.getInstance().getString( "gui.editor.JEditor.error.Save" ) );
+							showErrorMessage( DefaultLoc.getSingleton().getString( "gui.editor.JEditor.error.SaveTitle" ), DefaultLoc.getSingleton().getString( "gui.editor.JEditor.error.Save" ) );
 							ex.printStackTrace( System.err );
 							return;
 						}
@@ -707,17 +707,17 @@ public class GUIControl implements AlgorithmListener {
 							IOTools.createBackup( zcontrol.getProject().getProjectFile() );
 						zcontrol.getProject().save();
 					} catch( java.lang.StackOverflowError soe ) {
-						showErrorMessage( Localization.getInstance().getString( "gui.editor.JEditor.error.stackOverflowTitle" ), Localization.getInstance().getString( "gui.editor.JEditor.error.stackOverflow" ) );
+						showErrorMessage( DefaultLoc.getSingleton().getString( "gui.editor.JEditor.error.stackOverflowTitle" ), DefaultLoc.getSingleton().getString( "gui.editor.JEditor.error.stackOverflow" ) );
 					} catch( Exception ex ) {
-						showErrorMessage( Localization.getInstance().getString( "gui.editor.JEditor.error.SaveTitle" ), Localization.getInstance().getString( "gui.editor.JEditor.error.Save" ) );
+						showErrorMessage( DefaultLoc.getSingleton().getString( "gui.editor.JEditor.error.SaveTitle" ), DefaultLoc.getSingleton().getString( "gui.editor.JEditor.error.Save" ) );
 						ex.printStackTrace( System.err );
 						return;
 					}
 				}
-				status = Localization.getInstance().getString( "gui.editor.JEditor.status.newProject" );
+				status = DefaultLoc.getSingleton().getString( "gui.editor.JEditor.status.newProject" );
 				break;
 			case 1:
-				status = Localization.getInstance().getString( "gui.editor.JEditor.status.newProjectDiscard" );
+				status = DefaultLoc.getSingleton().getString( "gui.editor.JEditor.status.newProjectDiscard" );
 		}
 		zcontrol.newProject();
 		editor.loadProject();	// Load the currently loaded project by the control file
@@ -730,11 +730,11 @@ public class GUIControl implements AlgorithmListener {
 		try {
 			DXFWriter.exportIntoDXF( filename, zcontrol.getProject().getBuildingPlan() );
 		} catch( IOException ex ) {
-			showErrorMessage( Localization.getInstance().getString( "gui.editor.JEditor.error.SaveTitle" ), Localization.getInstance().getString( "gui.editor.JEditor.error.Save" ) );
+			showErrorMessage( DefaultLoc.getSingleton().getString( "gui.editor.JEditor.error.SaveTitle" ), DefaultLoc.getSingleton().getString( "gui.editor.JEditor.error.Save" ) );
 			ex.printStackTrace( System.err );
 			return;
 		}
-		ZETMain.sendMessage( Localization.getInstance().getString( "gui.editor.JEditor.message.dxfComplete" ) );
+		ZETMain.sendMessage( DefaultLoc.getSingleton().getString( "gui.editor.JEditor.message.dxfComplete" ) );
 	}
 
 	/**
@@ -790,7 +790,7 @@ public class GUIControl implements AlgorithmListener {
 			JProgressBarDialog pbd = new JRasterizeProgressBarDialog( editor, "Rastern", true, rasterize );
 			pbd.executeTask();
 			pbd.setVisible( true );
-			ZETMain.sendMessage( Localization.getInstance().getString( "gui.message.RasterizationComplete" ) );
+			ZETMain.sendMessage( DefaultLoc.getSingleton().getString( "gui.message.RasterizationComplete" ) );
 		} catch( Exception ex ) {
 			ZETMain.sendError( ex.getLocalizedMessage() );
 		}
@@ -805,17 +805,17 @@ public class GUIControl implements AlgorithmListener {
 
 			if( res != null ) {
 				zcontrol.getProject().getBuildingPlan().distributeEvacuees( Integer.parseInt( res ) );
-				ZETMain.sendMessage( Localization.getInstance().getString( "gui.message.RasterizationComplete" ) );
+				ZETMain.sendMessage( DefaultLoc.getSingleton().getString( "gui.message.RasterizationComplete" ) );
 			}
 		} catch( NumberFormatException ex ) {
-			ZETMain.sendError( Localization.getInstance().getString( "gui.error.NonParsableNumber" ) );
+			ZETMain.sendError( DefaultLoc.getSingleton().getString( "gui.error.NonParsableNumber" ) );
 		} catch( TooManyPeopleException ex ) {
 			ZETMain.sendError( ex.getLocalizedMessage() );
 		}
 	}
 
 	public void showAssignmentDialog() {
-		JAssignment distribution = new JAssignment( editor, zcontrol.getProject(), Localization.getInstance().getString( "gui.editor.assignment.JAssignment.Title" ), 850, 400 );
+		JAssignment distribution = new JAssignment( editor, zcontrol.getProject(), DefaultLoc.getSingleton().getString( "gui.editor.assignment.JAssignment.Title" ), 850, 400 );
 		distribution.setVisible( true );
 		distribution.dispose();
 	}
@@ -852,7 +852,7 @@ public class GUIControl implements AlgorithmListener {
 	}
 
 	public void showPropertiesDialog() {
-		JPropertySelectorWindow propertySelector = new JPropertySelectorWindow( editor, Localization.getInstance().getString( "gui.editor.JPropertySelector.Title" ), 700, 500 );
+		JPropertySelectorWindow propertySelector = new JPropertySelectorWindow( editor, DefaultLoc.getSingleton().getString( "gui.editor.JPropertySelector.Title" ), 700, 500 );
 		propertySelector.setVisible( true );
 		System.out.println( "Properties saved." ); // TODO loc
 	}
@@ -946,7 +946,7 @@ public class GUIControl implements AlgorithmListener {
 
 	public void showOptionsDialog() {
 		ZETMain.ptmOptions.getRoot().reloadFromPropertyContainer();
-		JOptionsWindow propertySelector = new JOptionsWindow( editor, Localization.getInstance().getString( "gui.editor.JOptions.Title" ), 700, 500, ZETMain.ptmOptions );
+		JOptionsWindow propertySelector = new JOptionsWindow( editor, DefaultLoc.getSingleton().getString( "gui.editor.JOptions.Title" ), 700, 500, ZETMain.ptmOptions );
 		propertySelector.setVisible( true );
 		try {	// Save results in options file
 			PropertyContainer.saveConfigFile( ZETMain.ptmOptions, new File( ZETMain.optionFilename ) );
@@ -958,7 +958,7 @@ public class GUIControl implements AlgorithmListener {
 
 	public void showSettingsDialog() {
 		ZETMain.ptmInformation.getRoot().reloadFromPropertyContainer();
-		JOptionsWindow propertySelector = new JOptionsWindow( editor, Localization.getInstance().getString( "gui.editor.settings.Title" ), 700, 500, ZETMain.ptmInformation );
+		JOptionsWindow propertySelector = new JOptionsWindow( editor, DefaultLoc.getSingleton().getString( "gui.editor.settings.Title" ), 700, 500, ZETMain.ptmInformation );
 		propertySelector.setVisible( true );
 		try {	// Save results in settings file
 			PropertyContainer.saveConfigFile( ZETMain.ptmInformation, new File( ZETMain.informationFilename ) );
@@ -997,8 +997,8 @@ public class GUIControl implements AlgorithmListener {
 	}
 
 	public void setZETWindowTitle( String additionalTitleBarText ) {
-		String titleBarText = zcontrol.getProject().getProjectFile() != null ? zcontrol.getProject().getProjectFile().getName() : Localization.getInstance().getString( "NewFile" );
-		titleBarText += " " + additionalTitleBarText + " - " + Localization.getInstance().getString( "AppTitle" );
+		String titleBarText = zcontrol.getProject().getProjectFile() != null ? zcontrol.getProject().getProjectFile().getName() : DefaultLoc.getSingleton().getString( "NewFile" );
+		titleBarText += " " + additionalTitleBarText + " - " + DefaultLoc.getSingleton().getString( "AppTitle" );
 		editor.setTitle( titleBarText );
 	}
 

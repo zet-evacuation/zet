@@ -21,7 +21,7 @@
 package gui.visualization.control.building;
 
 import batch.tasks.AlgorithmTask;
-import de.tu_berlin.math.coga.common.localization.Localization;
+import de.tu_berlin.math.coga.common.localization.DefaultLoc;
 import gui.visualization.control.AbstractZETVisualizationControl;
 import gui.visualization.draw.building.GLBuilding;
 import io.visualization.BuildingResults;
@@ -48,12 +48,11 @@ public class GLBuildingControl extends AbstractZETVisualizationControl<GLWallCon
 	 * the corresponding view object) are created and stored in data structures to
 	 * easily assign them by their floor id. Note that no default floor is enabled!
 	 * @param visResult
-	 * @param mainControl
 	 */
 	public GLBuildingControl( BuildingResults visResult ) {
 		super();
 		mainControl = this;
-		AlgorithmTask.getInstance().setProgress( 1, Localization.getInstance().getStringWithoutPrefix( "batch.tasks.progress.createBuildingVisualizationDataStructure" ), "" );
+		AlgorithmTask.getInstance().setProgress( 1, DefaultLoc.getSingleton().getStringWithoutPrefix( "batch.tasks.progress.createBuildingVisualizationDataStructure" ), "" );
 		wallCount = visResult.getWalls().size();
 		wallsDone = 0;
 		allFloorsByID = new HashMap<Integer, ArrayList<GLWallControl>>();
@@ -126,6 +125,7 @@ public class GLBuildingControl extends AbstractZETVisualizationControl<GLWallCon
 	 * Returns {@code true} as the building is static.
 	 * @return {@code true}
 	 */
+	@Override
 	public final boolean isFinished() {
 		return true;
 	}
@@ -135,12 +135,11 @@ public class GLBuildingControl extends AbstractZETVisualizationControl<GLWallCon
 	 * @param timeNanoSeconds the time that has passed.
 	 */
 	@Override
-	public void setTime( long time ) {
+	public void setTime( long timeNanoSeconds ) {
 	}
 
 	/**
 	 * Does nothing, as the building is static at the moment.
-	 * @param timeNanoSeconds the time that has passed.
 	 */
 	@Override
 	public void resetTime() {
@@ -150,10 +149,10 @@ public class GLBuildingControl extends AbstractZETVisualizationControl<GLWallCon
 	 * Prepares this object for deletion, removes all pointers and calls this
 	 * method on all child elements.
 	 */
+	@Override
 	public void delete() {
-		for( GLWallControl wall : this ) {
+		for( GLWallControl wall : this )
 			wall.delete();
-		}
 		view.delete();
 		view = null;
 	}

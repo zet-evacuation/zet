@@ -15,12 +15,13 @@
  */
 /**
  * Class SwapCellularAutomaton
- * Erstellt 07.07.2008, 22:46:48
+ * Created 07.07.2008, 22:46:48
  */
 package algo.ca;
 
 import algo.ca.rule.AbstractMovementRule;
 import algo.ca.rule.Rule;
+import de.tu_berlin.math.coga.common.localization.DefaultLoc;
 import ds.ca.Cell;
 import ds.ca.CellularAutomaton;
 import ds.ca.Individual;
@@ -28,7 +29,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
-import de.tu_berlin.math.coga.common.localization.Localization;
 import util.ProgressBooleanFlags;
 
 /**
@@ -47,7 +47,7 @@ public class SwapCellularAutomaton extends CellularAutomatonRandomOrderExecution
 	@Override
 	protected void executeStep() {
 		if( !isInitialized() ) {
-			throw new IllegalArgumentException( Localization.getInstance().getString( "algo.ca.NotInitializedException" ) );
+			throw new IllegalArgumentException( DefaultLoc.getSingleton().getString( "algo.ca.NotInitializedException" ) );
 		}
 		ca.nextTimeStep();
 		if( ProgressBooleanFlags.CA_PROGRESS ) {

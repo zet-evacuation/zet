@@ -19,6 +19,7 @@
  */
 package gui.editor.properties;
 
+import de.tu_berlin.math.coga.common.localization.DefaultLoc;
 import ds.PropertyContainer;
 import gui.components.framework.Button;
 import gui.editor.properties.types.StringProperty;
@@ -29,7 +30,6 @@ import java.io.File;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
-import de.tu_berlin.math.coga.common.localization.Localization;
 
 /**
  *
@@ -78,10 +78,10 @@ public class JPropertySelectorWindow extends JAbstractPropertyWindow {
 		// Create Buttons
 		JPanel buttonPanel = new JPanel();
 
-		JButton btnOpen = Button.newButton( Localization.getInstance().getString( "gui.Open" ), aclButton, "open" );
-		JButton btnSave = Button.newButton( Localization.getInstance().getString( "gui.Save" ), aclButton, "save" );
-		JButton btnQuit = Button.newButton( Localization.getInstance().getString( "gui.Quit" ), aclButton, "quit" );
-		JButton btnOK = Button.newButton( Localization.getInstance().getString( "gui.OK" ), aclButton, "ok" );
+		JButton btnOpen = Button.newButton( DefaultLoc.getSingleton().getString( "gui.Open" ), aclButton, "open" );
+		JButton btnSave = Button.newButton( DefaultLoc.getSingleton().getString( "gui.Save" ), aclButton, "save" );
+		JButton btnQuit = Button.newButton( DefaultLoc.getSingleton().getString( "gui.Quit" ), aclButton, "quit" );
+		JButton btnOK = Button.newButton( DefaultLoc.getSingleton().getString( "gui.OK" ), aclButton, "ok" );
 		double size2[][] = {{TableLayout.FILL, TableLayout.PREFERRED, space, TableLayout.PREFERRED, space, TableLayout.PREFERRED, space, TableLayout.PREFERRED, space, TableLayout.PREFERRED, space}, {TableLayout.PREFERRED, space}};
 		buttonPanel.setLayout( new TableLayout( size2 ) );
 		//buttonPanel.add( btnOpen, "3,0" );

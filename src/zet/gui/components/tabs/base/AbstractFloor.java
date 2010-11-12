@@ -139,6 +139,7 @@ public class AbstractFloor extends JPanel {
 
 	/**
 	 * Draws a raster on the floor. The raster can be drawn as lines or points.
+	 * Additionally, it is possible to draw a smaller helping grid as points.
 	 * @param g2
 	 */
 	public void drawRaster( Graphics2D g2 ) {
@@ -230,7 +231,8 @@ public class AbstractFloor extends JPanel {
 	}
 
 	/**
-	 * 
+	 * Reloads the minimum x and y positions, the border width and the grind sizes
+	 * and updates the values. Call this, if some of them have been changed.
 	 */
 	final public void reloadValues() {
 		min_x = PropertyContainer.getInstance().getAsInt( "editor.options.view.size.minx" );

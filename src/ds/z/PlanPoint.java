@@ -21,14 +21,13 @@ package ds.z;
 
 import com.thoughtworks.xstream.annotations.XStreamAlias;
 import com.thoughtworks.xstream.annotations.XStreamOmitField;
+import de.tu_berlin.math.coga.common.localization.ZLocalization;
 import io.z.PlanPointConverter;
 import io.z.XMLConverter;
 import java.awt.Point;
 import java.awt.geom.Point2D;
 import java.util.ArrayList;
-
 import java.util.List;
-import de.tu_berlin.math.coga.common.localization.Localization;
 import zet.util.ConversionTools;
 
 /**
@@ -216,7 +215,7 @@ public class PlanPoint extends Point {
 		} else if( absoluteEqual( previousEdge, e ) ) {
 			return nextEdge;
 		} else {
-			throw new IllegalArgumentException( Localization.getInstance().getString( "ds.z.NotIncidentException" ) );
+			throw new IllegalArgumentException( ZLocalization.getSingleton().getString( "ds.z.NotIncidentException" ) );
 		}
 	}
 

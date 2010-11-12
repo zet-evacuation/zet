@@ -22,7 +22,7 @@
 package gui.visualization.control.ca;
 
 import batch.tasks.AlgorithmTask;
-import de.tu_berlin.math.coga.common.localization.Localization;
+import de.tu_berlin.math.coga.common.localization.DefaultLoc;
 import de.tu_berlin.math.coga.math.Conversion;
 import ds.ca.CellularAutomaton;
 import ds.ca.Individual;
@@ -86,7 +86,7 @@ public class GLCellularAutomatonControl extends AbstractZETVisualizationControl<
 
 		cellCount = ca.getCellCount();
 		cellsDone = 0;
-		AlgorithmTask.getInstance().setProgress( 0, Localization.getInstance().getStringWithoutPrefix( "batch.tasks.progress.createCellularAutomatonVisualizationDatastructure" ), "" );
+		AlgorithmTask.getInstance().setProgress( 0, DefaultLoc.getSingleton().getStringWithoutPrefix( "batch.tasks.progress.createCellularAutomatonVisualizationDatastructure" ), "" );
 
 		if( containsRecording ) {
 			recordingCount = caVisResults.getRecording().length();

@@ -19,17 +19,14 @@
  */
 package de.tu_berlin.math.coga.zet.converter.graph;
 
+import de.tu_berlin.math.coga.common.localization.DefaultLoc;
+import de.tu_berlin.math.coga.common.util.Level;
 import ds.graph.Edge;
 import ds.graph.IdentifiableIntegerMapping;
 import ds.graph.IdentifiableObjectMapping;
 import ds.graph.Node;
 import ds.graph.NodeRectangle;
-
 import java.awt.Shape;
-
-import de.tu_berlin.math.coga.common.localization.Localization;
-
-import de.tu_berlin.math.coga.common.util.Level;
 
 /**
  * The <code>ZToGraphMapping</code> class stores a mapping between an
@@ -111,7 +108,7 @@ public class ZToGraphMapping {
     	if (edgeLevels.isDefinedFor(edge))
     		return edgeLevels.get(edge);
     	else {
-    		throw new IllegalArgumentException(Localization.getInstance (
+    		throw new IllegalArgumentException(DefaultLoc.getSingleton (
 			).getString ("converter.EdgeLvlNotDefinedException"+" ("+edge+")"));
     	}
     	
@@ -161,7 +158,7 @@ public class ZToGraphMapping {
         if (nodeShapes.isDefinedFor(node)) {
             return nodeShapes.get(node);
         } else {
-            throw new IllegalArgumentException(Localization.getInstance (
+            throw new IllegalArgumentException(DefaultLoc.getSingleton (
 			).getString ("converter.NodeShapeNotDefinedException"+" ("+node+")"));
         }
     }
@@ -174,7 +171,7 @@ public class ZToGraphMapping {
         if (nodeSpeedFactors.isDefinedFor(node)) {
             return nodeSpeedFactors.get(node);
         } else {
-            throw new IllegalArgumentException(Localization.getInstance (
+            throw new IllegalArgumentException(DefaultLoc.getSingleton (
 			).getString ("converter.NodeSpeedNotDefinedException"+" ("+node+")"));
         }
     }    
@@ -183,7 +180,7 @@ public class ZToGraphMapping {
         if (nodeUpSpeedFactors.isDefinedFor(node)) {
             return nodeUpSpeedFactors.get(node);
         } else {
-            throw new IllegalArgumentException(Localization.getInstance (
+            throw new IllegalArgumentException(DefaultLoc.getSingleton (
 			).getString ("converter.NodeSpeedNotDefinedException"+" ("+node+")"));
         }
     }    
@@ -192,7 +189,7 @@ public class ZToGraphMapping {
         if (nodeDownSpeedFactors.isDefinedFor(node)) {
             return nodeDownSpeedFactors.get(node);
         } else {
-            throw new IllegalArgumentException(Localization.getInstance (
+            throw new IllegalArgumentException(DefaultLoc.getSingleton (
 			).getString ("converter.NodeSpeedNotDefinedException"+" ("+node+")"));
         }
     }
@@ -201,7 +198,7 @@ public class ZToGraphMapping {
     	if (isEvacuationNode.isDefinedFor(node)){
     		return isEvacuationNode.get(node);
     	} else {
-    		throw new IllegalArgumentException(Localization.getInstance (
+    		throw new IllegalArgumentException(DefaultLoc.getSingleton (
 			).getString ("converter.NodeStatusNotDefinedException"+" ("+node+")"));
     	}
     }
@@ -210,7 +207,7 @@ public class ZToGraphMapping {
     	if (isSourceNode.isDefinedFor(node)){
     		return isSourceNode.get(node);
     	} else {
-    		throw new IllegalArgumentException(Localization.getInstance (
+    		throw new IllegalArgumentException(DefaultLoc.getSingleton (
 			).getString ("converter.NodeSourceNotDefinedException"+" ("+node+")"));
     	}
     }
@@ -219,7 +216,7 @@ public class ZToGraphMapping {
     	if (isDeletedSourceNode.isDefinedFor(node)){
     		return isDeletedSourceNode.get(node);
     	} else {
-    		throw new IllegalArgumentException(Localization.getInstance (
+    		throw new IllegalArgumentException(DefaultLoc.getSingleton (
 			).getString ("converter.NodeSourceNotDefinedException"+" ("+node+")"));
     	}
     }

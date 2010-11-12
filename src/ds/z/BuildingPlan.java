@@ -35,8 +35,8 @@ import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Random;
-import de.tu_berlin.math.coga.common.localization.Localization;
 import batch.tasks.AlgorithmTask;
+import de.tu_berlin.math.coga.common.localization.ZLocalization;
 
 /**
  * The <code>BuildingPlan</code> represents a complete building plan, consisting of
@@ -244,14 +244,14 @@ public class BuildingPlan implements Serializable, Iterable<Floor> {
 	 */
 	public void removeFloor( Floor f ) throws java.lang.IllegalArgumentException {
 		if( f.equals( floors.get( 0 ) ) )
-			throw new java.lang.IllegalArgumentException( Localization.getInstance().getString( "ds.z.BuildingPlan.DeleteDefaultEvacuationFloorException" ) );
+			throw new java.lang.IllegalArgumentException( ZLocalization.getSingleton().getString( "ds.z.BuildingPlan.DeleteDefaultEvacuationFloorException" ) );
 		else if( floors.size() == 2 ) {
 			// Delete the floor and defineByPoints a new and empty one
 			if( floors.remove( f) ) {
 				f.delete();
 //				f.removeChangeListener( this );
 //				throwChangeEvent( new ChangeEvent( this ) );
-				addFloor( new Floor( Localization.getInstance().getString( "ds.z.DefaultName.Floor" ) + " " + 1 ) );
+				addFloor( new Floor( ZLocalization.getSingleton().getString( "ds.z.DefaultName.Floor" ) + " " + 1 ) );
 			}
 		} else if( floors.remove( f ) ) {
 			f.delete();
@@ -335,7 +335,7 @@ public class BuildingPlan implements Serializable, Iterable<Floor> {
 		for( Floor f : floors )
 			for( Room r : f.getRooms() ) {
 				AlgorithmTask.getInstance().setProgress( 100 / (Math.max( f.roomCount(), 1 )),
-								Localization.getInstance().getString( "ds.z.floor" ) + ":" + f.getName(), r.getName() );
+								ZLocalization.getSingleton().getString( "ds.z.floor" ) + ":" + f.getName(), r.getName() );
 
 				// Checking if r is rasterized before rasterizing it makes no sense??
 				// but it makes sense to ensure that all polygons are closed!!
@@ -345,7 +345,7 @@ public class BuildingPlan implements Serializable, Iterable<Floor> {
 				r.cleanUpPassableEdgesForRooms();
 
 			}
-		AlgorithmTask.getInstance().setProgress( 100, Localization.getInstance().getString( "ds.z.RasterizeFinished" ), "" );
+		AlgorithmTask.getInstance().setProgress( 100, ZLocalization.getSingleton().getString( "ds.z.RasterizeFinished" ), "" );
 		rasterized = true;
 	}
 
@@ -371,7 +371,7 @@ public class BuildingPlan implements Serializable, Iterable<Floor> {
 				}
 
 		if( max_persons < nrOfEvacuees )
-			throw new TooManyPeopleException( null, Localization.getInstance().getString( "ds.TooManyEvacuees" ) );
+			throw new TooManyPeopleException( null, ZLocalization.getSingleton().getString( "ds.TooManyEvacuees" ) );
 
 		// Try to distribute the persons and gather all ass. areas
 		int already_distributed = 0;

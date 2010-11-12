@@ -13,37 +13,24 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
-/* zet evacuation tool copyright (c) 2007-10 zet evacuation team
- *
- * This program is free software; you can redistribute it and/or
- * as published by the Free Software Foundation; either version 2
- * of the License, or (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with this program; if not, write to the Free Software
- * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
- */
+
 /**
  * Class PropertyTreeNode
- * Erstellt 22.02.2008, 01:36:06
+ * Created 22.02.2008, 01:36:06
  */
 package gui.editor.properties;
 
 import com.thoughtworks.xstream.annotations.XStreamAlias;
 import com.thoughtworks.xstream.annotations.XStreamConverter;
+import de.tu_berlin.math.coga.common.localization.DefaultLoc;
 import gui.editor.properties.framework.PropertyElement;
 import gui.editor.properties.framework.AbstractPropertyValue;
 import gui.editor.properties.converter.DefaultPropertyTreeNodeConverter;
 import java.util.Collections;
 import java.util.List;
-import java.util.Vector;
 import javax.swing.tree.DefaultMutableTreeNode;
 import de.tu_berlin.math.coga.common.localization.Localization;
+import java.util.ArrayList;
 
 /**
  *
@@ -54,7 +41,7 @@ import de.tu_berlin.math.coga.common.localization.Localization;
 public class PropertyTreeNode extends DefaultMutableTreeNode implements PropertyElement {
 	boolean useAsLocString = false;
 	String name;
-	Vector<AbstractPropertyValue> properties;
+	ArrayList<AbstractPropertyValue> properties;
 
 	public void addProperty( AbstractPropertyValue property ) {
 		properties.add( property );
@@ -81,7 +68,7 @@ public class PropertyTreeNode extends DefaultMutableTreeNode implements Property
 	public PropertyTreeNode( String name ) {
 		super( name );
 		this.name = name;
-		properties = new Vector<AbstractPropertyValue>();
+		properties = new ArrayList<AbstractPropertyValue>();
 	}
 
 	/**
@@ -90,6 +77,7 @@ public class PropertyTreeNode extends DefaultMutableTreeNode implements Property
 	 * @return {@code true} if the XML-file contains localization tags, {@code false} otherwise
 	 * @see Localization
 	 */
+	@Override
 	public boolean isUsedAsLocString() {
 		return useAsLocString;
 	}
@@ -98,6 +86,7 @@ public class PropertyTreeNode extends DefaultMutableTreeNode implements Property
 	 *
 	 * @param useAsLocString
 	 */
+	@Override
 	public void useAsLocString( boolean useAsLocString ) {
 		this.useAsLocString = useAsLocString;
 		setUserObject( getName() );
@@ -108,17 +97,16 @@ public class PropertyTreeNode extends DefaultMutableTreeNode implements Property
 	 * {@link #isUsedAsLocString()}, the localized string is returned.
 	 * @return the name of the property stored in this node
 	 */
+	@Override
 	public String getName() {
-		if( isUsedAsLocString() )
-			return Localization.getInstance().getString( name );
-		else
-			return name;
+		return isUsedAsLocString() ? DefaultLoc.getSingleton().getString( name ) : name;
 	}
 
 	/**
 	 * Assigns a new name to the property stored in this node.
 	 * @param name the new name
 	 */
+	@Override
 	public void setName( String name ) {
 		this.name = name;
 		setUserObject( getName() );
@@ -127,7 +115,7 @@ public class PropertyTreeNode extends DefaultMutableTreeNode implements Property
 	@Override
 	public void setUserObject( Object userObject ) {
 		if( !(userObject instanceof String) )
-			throw new IllegalArgumentException( Localization.getInstance().getString( "gui.propertyselector.DefaultPropertyTreeNodeConverter.noStringException" ) );
+			throw new IllegalArgumentException( DefaultLoc.getSingleton().getString( "gui.propertyselector.DefaultPropertyTreeNodeConverter.noStringException" ) );
 		super.setUserObject( userObject );
 	}
 
@@ -137,6 +125,7 @@ public class PropertyTreeNode extends DefaultMutableTreeNode implements Property
 	 * @return the name stored in the XML-file
 	 * @see #isUsedAsLocString()
 	 */
+	@Override
 	public String getNameTag() {
 		return name;
 	}

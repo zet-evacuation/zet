@@ -20,6 +20,7 @@
  */
 package gui;
 
+import de.tu_berlin.math.coga.common.localization.DefaultLoc;
 import gui.components.framework.Button;
 import info.clearthought.layout.TableLayout;
 import io.movie.MovieWriter;
@@ -78,7 +79,7 @@ public class VideoOptions extends javax.swing.JDialog {
 	/** The return value, cancel by default. */
 	private int retVal = CANCEL;
 	/** The localization class. */
-	static final Localization loc = Localization.getInstance();
+	static final Localization loc = DefaultLoc.getSingleton();
 	/** The default cancel button. */
 	private JButton btnCancel;
 	/** The default ok button. */
@@ -648,11 +649,11 @@ public class VideoOptions extends javax.swing.JDialog {
 		public String getColumnName( int column ) {
 			switch( column ) {
 				case COL_TEXT:
-					return Localization.getInstance().getStringWithoutPrefix( "gui.visualization.createMovieDialog.textTable.text" );
+					return DefaultLoc.getSingleton().getStringWithoutPrefix( "gui.visualization.createMovieDialog.textTable.text" );
 				case COL_Y:
-					return Localization.getInstance().getStringWithoutPrefix( "gui.visualization.createMovieDialog.textTable.y" );
+					return DefaultLoc.getSingleton().getStringWithoutPrefix( "gui.visualization.createMovieDialog.textTable.y" );
 				case COL_BOLD:
-					return Localization.getInstance().getStringWithoutPrefix( "gui.visualization.createMovieDialog.textTable.bold" );
+					return DefaultLoc.getSingleton().getStringWithoutPrefix( "gui.visualization.createMovieDialog.textTable.bold" );
 				default:
 					return null;
 			}

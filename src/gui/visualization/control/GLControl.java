@@ -40,6 +40,9 @@ import de.tu_berlin.math.coga.common.localization.Localization;
 import opengl.helper.Frustum;
 import statistic.ca.CAStatistic;
 import batch.tasks.AlgorithmTask;
+import de.tu_berlin.math.coga.common.localization.DefaultLoc;
+import gui.visualization.draw.ca.GLCA;
+import gui.visualization.draw.graph.GLGraph;
 import javax.media.opengl.GL;
 import opengl.framework.abs.DrawableControlable;
 
@@ -53,6 +56,7 @@ public class GLControl implements DrawableControlable {
 
 	Frustum frustum;
 
+	@Override
 	public void setFrustum( Frustum frustum ) {
 		this.frustum = frustum;
 		if( caControl != null )
@@ -61,10 +65,12 @@ public class GLControl implements DrawableControlable {
 			graphControl.setFrustum( frustum );
 	}
 
+	@Override
 	public Frustum getFrustum() {
 		return frustum;
 	}
 
+	@Override
 	public void delete() {
 		buildingControl.delete();
 		caControl.delete();
@@ -120,7 +126,7 @@ public class GLControl implements DrawableControlable {
 		REACTION_TIME
 	}
 	/** The localization class. */
-	private Localization loc = Localization.getInstance();
+	private Localization loc = DefaultLoc.getSingleton();
 	/** Indicates whether the graph is currently visible, or not. */
 	private boolean showGraph;
 	/** Indicates whether the cellular automaton is currently visible, or not. */
@@ -196,6 +202,8 @@ public class GLControl implements DrawableControlable {
 
 	/**
 	 * Resets the building control for this graphics control class.
+	 *
+	 * @param buildingResults
 	 */
 	public void setBuildingControl( BuildingResults buildingResults ) {
 		if( buildingControl != null )
@@ -308,6 +316,7 @@ public class GLControl implements DrawableControlable {
 	 * Checks whether all parts of the simulation are finished, or not.
 	 *  @return true if the simulation is finished, false otherwise
 	 */
+	@Override
 	public boolean isFinished() {
 		return (graphControl == null || graphControl.isFinished()) && (caControl == null || caControl.isFinished() );
 	}
@@ -367,6 +376,7 @@ public class GLControl implements DrawableControlable {
 			graphControl.addTime( timeNanoSeconds );
 	}
 
+	@Override
 	public void setTime( long timeNanoSeconds ) {
 		if( hasCellularAutomaton )
 			caControl.setTime( timeNanoSeconds );
@@ -374,6 +384,7 @@ public class GLControl implements DrawableControlable {
 			graphControl.setTime( timeNanoSeconds );
 	}
 
+	@Override
 	public void resetTime() {
 		if( hasCellularAutomaton )
 			caControl.resetTime();
@@ -539,7 +550,7 @@ public class GLControl implements DrawableControlable {
 	/**
 	 * This method draws the scene. That means it calls the {@link GLCA } and
 	 * {@link GLGraph} objects and calls their drawing routines.
-	 * @param Drawable
+	 * @param gl the graphics context on which the object is drawn
 	 */
 	@Override
 	public final void draw( GL gl ) {

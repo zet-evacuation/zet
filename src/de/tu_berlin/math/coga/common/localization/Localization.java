@@ -22,6 +22,7 @@
 package de.tu_berlin.math.coga.common.localization;
 
 import java.text.NumberFormat;
+import java.util.ArrayList;
 import java.util.Locale;
 import java.util.MissingResourceException;
 import java.util.ResourceBundle;
@@ -29,47 +30,50 @@ import java.util.ResourceBundle;
 /**
  * <code>Loalization</code> is a class that provides the ability to localize an application. It supports access to files
  * containing localized strings and number format conventions.
- * @author Jan-Philipp Kappmeier, Timon Kelter
+ * @author Jan-Philipp Kappmeier
  */
-public class Localization {
-	/** The instance of the singleton. */
-	private static Localization instance;
-	/** The currently set locale (the information about the country).  */
-	private Locale currentLocale;
+public abstract class Localization {
 	/** The resource bundle that is selected (containing the localized strings). */
 	private ResourceBundle bundle;
 	/** A prefix that is added to the keys for localized strings. */
 	private String prefix = "";
 	/** Indicates if only the key is returned, if an unknown key was used. Otherwise some larger text is returned. */
 	private boolean returnKeyOnly = true;
+	/** The currently set locale (the information about the country).  */
+	private static Locale currentLocale;
 	/** A number formatter for floating point numbers. */
 	private static NumberFormat nfFloat;
 	/** A number formatter for integral numbers. */
 	private static NumberFormat nfInteger;
 	/** A number formatter for percent values. */
 	private static NumberFormat nfPercent;
-					
-	/**
-	 * Returns the instance of the singleton class. The default locale of the system is loaded at the beginning.
-	 * @return the instance of the localization class
-	 */
-	public static Localization getInstance() {
-		if( instance == null ) {
-			instance = new Localization();
-			instance.currentLocale = Locale.getDefault();
-			nfFloat = NumberFormat.getNumberInstance( instance.getLocale() );
-			nfInteger = NumberFormat.getIntegerInstance( instance.getLocale() );
-			nfPercent = NumberFormat.getPercentInstance( instance.getLocale() );
-		}
-		return instance;
-	}
+	/** The resource bundle that is used by this localization instance. */
+	private final String bundleName;
+	/** A list of all localization objects. */
+	private static ArrayList<Localization> locs = new ArrayList<Localization>();
 
 	/**
 	 * Creates a new instance of the singleton and initializes with the default locale of the system.
+	 * @param bundleName
 	 * @throws MissingResourceException if no resource bundle for the default system locale is found
 	 */
-	private Localization() throws MissingResourceException {
-		bundle = ResourceBundle.getBundle( "de.tu_berlin.math.coga.common.localization.zevacuate", Locale.getDefault() );
+	protected Localization( String bundleName ) throws MissingResourceException {
+		this.bundleName = bundleName;
+		bundle = ResourceBundle.getBundle( bundleName, Locale.getDefault() );
+		if( locs.isEmpty() ) {	// we have the first constructor call. Create static objects.
+			currentLocale = Locale.getDefault();
+			nfFloat = NumberFormat.getNumberInstance( currentLocale );
+			nfInteger = NumberFormat.getIntegerInstance( currentLocale );
+			nfPercent = NumberFormat.getPercentInstance( currentLocale );
+		}
+		add();
+	}
+
+	/**
+	 * Adds this
+	 */
+	private void add() {
+		locs.add( this );
 	}
 	
 	/**
@@ -77,7 +81,7 @@ public class Localization {
 	 * @param key the key specifying the loaded string
 	 * @return the localized string
 	 */
-	public String getString( String key ) {
+	public final String getString( String key ) {
 		try {
 			return key.isEmpty() ? "" : bundle.getString( prefix + key );
 		} catch( MissingResourceException ex ) {
@@ -90,7 +94,7 @@ public class Localization {
 	 * @param key the key specifying the loaded string
 	 * @return the localized string
 	 */
-	public String getStringWithoutPrefix( String key ) {
+	public final String getStringWithoutPrefix( String key ) {
 		try {
 			return key.isEmpty() ? "" : bundle.getString( key );
 		} catch( MissingResourceException ex ) {
@@ -102,7 +106,7 @@ public class Localization {
 	 * Sets a prefix that is added to the key if {@link #getString(String)} is used.
 	 * @param prefix the prefix that is added
 	 */
-	public void setPrefix( String prefix ) {
+	public final void setPrefix( String prefix ) {
 		this.prefix = prefix;
 	}
 	
@@ -116,12 +120,12 @@ public class Localization {
 	 * @param locale the locale that should be used
 	 * @throws java.util.MissingResourceException if the locale cannot be found
 	 */
-	public void setLocale( Locale locale ) throws MissingResourceException {
-		bundle = ResourceBundle.getBundle( "de.tu_berlin.math.coga.common.localization.zevacuate", locale );
+	public final void setLocale( Locale locale ) throws MissingResourceException {
+		bundle = ResourceBundle.getBundle( bundleName, locale );
 		currentLocale = locale;
-		nfFloat = NumberFormat.getNumberInstance( instance.getLocale() );
-		nfInteger = NumberFormat.getIntegerInstance( instance.getLocale() );
-		nfPercent = NumberFormat.getPercentInstance( instance.getLocale() );
+		nfFloat = NumberFormat.getNumberInstance( currentLocale );
+		nfInteger = NumberFormat.getIntegerInstance( currentLocale );
+		nfPercent = NumberFormat.getPercentInstance( currentLocale );
 	}
 	
 	/**
@@ -129,7 +133,7 @@ public class Localization {
 	 * format and read localized numbers.
 	 * @return The currently selected locale.
 	 */
-	public Locale getLocale () {
+	public final Locale getLocale () {
 		return currentLocale;
 	}
 	

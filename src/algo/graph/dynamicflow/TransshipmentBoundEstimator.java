@@ -28,7 +28,7 @@ import ds.graph.Node;
 import ds.graph.flow.PathBasedFlow;
 import ds.graph.flow.StaticPathFlow;
 import algo.graph.Flags;
-import de.tu_berlin.math.coga.common.localization.Localization;
+import de.tu_berlin.math.coga.common.localization.GraphLocalization;
 
 /** 
  * Calculates an upper bound for the time horizon needed
@@ -92,8 +92,7 @@ public class TransshipmentBoundEstimator {
 		for (Node node : network.nodes()){
 			if (supplies.get(node)<0){
 				if (sink!= null)
-					throw new AssertionError(Localization.getInstance (
-					).getString ("algo.graph.dynamicflow.OnlyOneSinkException"));
+					throw new AssertionError(GraphLocalization.getSingleton().getString ("algo.graph.dynamicflow.OnlyOneSinkException"));
 				if (sink==null)
 					sink = node;
 			}
@@ -204,7 +203,7 @@ public class TransshipmentBoundEstimator {
 		for (Node node : network.nodes()){
 			if (supplies.get(node)<0){
 				if (sink!= null)
-					throw new AssertionError(Localization.getInstance (
+					throw new AssertionError(GraphLocalization.getSingleton (
 					).getString ("algo.graph.dynamicflow.OnlyOneSinkException"));
 				if (sink==null)
 					sink = node;
@@ -353,7 +352,7 @@ public class TransshipmentBoundEstimator {
 		for (Node node : network.nodes()){
 			if (supplies.get(node)<0){
 				if (sink!= null)
-					throw new AssertionError(Localization.getInstance (
+					throw new AssertionError(GraphLocalization.getSingleton (
 					).getString ("algo.graph.dynamicflow.OnlyOneSinkException"));
 				if (sink==null)
 					sink = node;

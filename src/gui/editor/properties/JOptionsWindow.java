@@ -20,6 +20,7 @@
 
 package gui.editor.properties;
 
+import de.tu_berlin.math.coga.common.localization.DefaultLoc;
 import event.EventServer;
 import event.OptionsChangedEvent;
 import gui.components.framework.Button;
@@ -27,7 +28,6 @@ import info.clearthought.layout.TableLayout;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
-import de.tu_berlin.math.coga.common.localization.Localization;
 
 /**
  *
@@ -62,8 +62,8 @@ public class JOptionsWindow extends JAbstractPropertyWindow {
 	protected JPanel createButtonPanel() {
 		// Create Buttons
 		JPanel buttonPanel = new JPanel( );
-		JButton btnQuit = Button.newButton( Localization.getInstance().getString( "gui.Quit" ), aclButton, "quit"  );
-		JButton btnOK = Button.newButton( Localization.getInstance().getString( "gui.OK" ), aclButton, "ok"  );
+		JButton btnQuit = Button.newButton( DefaultLoc.getSingleton().getString( "gui.Quit" ), aclButton, "quit"  );
+		JButton btnOK = Button.newButton( DefaultLoc.getSingleton().getString( "gui.OK" ), aclButton, "ok"  );
 		double size2[][] = { {TableLayout.FILL, TableLayout.PREFERRED, space, TableLayout.PREFERRED, space }, {TableLayout.PREFERRED, space} };
 		buttonPanel.setLayout( new TableLayout( size2 ) );
 		buttonPanel.add( btnQuit, "1,0" );

@@ -22,6 +22,7 @@ package ds;
 
 import com.thoughtworks.xstream.XStream;
 import com.thoughtworks.xstream.annotations.Annotations;
+import de.tu_berlin.math.coga.common.localization.DefaultLoc;
 import gui.editor.properties.PropertyLoadException;
 import gui.editor.properties.PropertyTreeModel;
 import gui.editor.properties.types.BooleanProperty;
@@ -44,7 +45,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import de.tu_berlin.math.coga.common.localization.Localization;
 
 /**
  * Stores properties of arbitrary type accessible via a string.
@@ -72,7 +72,7 @@ public class PropertyContainer {
 
 	public <T> void define( String key, Class<T> type, T defaultValue ) {
 		if( propertyTypes.containsKey( key ) )
-			throw new IllegalArgumentException( Localization.getInstance().getString( "ds.PropertyAlreadyDefinedException" + key ) );
+			throw new IllegalArgumentException( DefaultLoc.getSingleton().getString( "ds.PropertyAlreadyDefinedException" + key ) );
 		else {
 			properties.put( key, defaultValue );
 			propertyTypes.put( key, type );
@@ -81,16 +81,16 @@ public class PropertyContainer {
 
 	public Object get( String key ) {
 		if( !propertyTypes.containsKey( key ) )
-			throw new IllegalArgumentException( Localization.getInstance().getString( "ds.PropertyNotDefinedException" + key ) );
+			throw new IllegalArgumentException( DefaultLoc.getSingleton().getString( "ds.PropertyNotDefinedException" + key ) );
 		return properties.get( key );
 	}
 
 	public <T> T getAs( String key, Class<T> type ) {
 		if( !propertyTypes.containsKey( key ) )
-			throw new IllegalArgumentException( Localization.getInstance().getString( "ds.PropertyNotDefinedException" + key ) );
+			throw new IllegalArgumentException( DefaultLoc.getSingleton().getString( "ds.PropertyNotDefinedException" + key ) );
 		else
 			if( !type.isAssignableFrom( propertyTypes.get( key ) ) )
-				throw new IllegalArgumentException( Localization.getInstance().getString( "ds.PropertyTypeCastException" + key + ", " + propertyTypes.get( key ) + ", " + type ) );
+				throw new IllegalArgumentException( DefaultLoc.getSingleton().getString( "ds.PropertyTypeCastException" + key + ", " + propertyTypes.get( key ) + ", " + type ) );
 			else
 				return type.cast( properties.get( key ) );
 	}
@@ -136,10 +136,10 @@ public class PropertyContainer {
 
 	public void set( String key, Object value ) {
 		if( !propertyTypes.containsKey( key ) )
-			throw new IllegalArgumentException( Localization.getInstance().getString( "ds.PropertyNotDefinedException" + key ) );
+			throw new IllegalArgumentException( DefaultLoc.getSingleton().getString( "ds.PropertyNotDefinedException" + key ) );
 		else
 			if( !propertyTypes.get( key ).isInstance( value ) )
-				throw new IllegalArgumentException( Localization.getInstance().getString( "ds.PropertyValueException" + key + ", " + propertyTypes.get( key ) + ", " + value ) );
+				throw new IllegalArgumentException( DefaultLoc.getSingleton().getString( "ds.PropertyValueException" + key + ", " + propertyTypes.get( key ) + ", " + value ) );
 			else
 				properties.put( key, value );
 	}

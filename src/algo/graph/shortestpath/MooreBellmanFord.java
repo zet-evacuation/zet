@@ -19,7 +19,7 @@
  */
 package algo.graph.shortestpath;
 
-import de.tu_berlin.math.coga.common.localization.Localization;
+import de.tu_berlin.math.coga.common.localization.GraphLocalization;
 import ds.graph.Edge;
 import ds.graph.IdentifiableIntegerMapping;
 import ds.graph.IdentifiableObjectMapping;
@@ -52,7 +52,7 @@ public class MooreBellmanFord {
 
     public IdentifiableIntegerMapping<Node> getDistances() {
         if (distances == null) {
-            throw new IllegalStateException(Localization.getInstance (
+            throw new IllegalStateException(GraphLocalization.getSingleton (
 			).getString ("algo.graph.shortestpath.NotCalledYetException"));
         }
         return distances;
@@ -60,7 +60,7 @@ public class MooreBellmanFord {
 
     public double getDistance(Node node) {
         if (distances == null) {
-            throw new IllegalStateException(Localization.getInstance (
+            throw new IllegalStateException(GraphLocalization.getSingleton (
 			).getString ("algo.graph.shortestpath.NotCalledYetException"));
         }
         return distances.get(node);
@@ -68,7 +68,7 @@ public class MooreBellmanFord {
 
     public IdentifiableObjectMapping<Node, Edge> getLastEdges() {
         if (edges == null) {
-            throw new IllegalStateException(Localization.getInstance (
+            throw new IllegalStateException(GraphLocalization.getSingleton (
 			).getString ("algo.graph.shortestpath.NotCalledYetException"));
         }
         return edges;
@@ -76,7 +76,7 @@ public class MooreBellmanFord {
 
     public Edge getLastEdge(Node node) {
         if (edges == null) {
-            throw new IllegalStateException(Localization.getInstance (
+            throw new IllegalStateException(GraphLocalization.getSingleton (
 			).getString ("algo.graph.shortestpath.NotCalledYetException"));
         }
         return edges.get(node);
@@ -84,7 +84,7 @@ public class MooreBellmanFord {
 
     public IdentifiableObjectMapping<Node, Node> getPredecessors() {
         if (nodes == null) {
-            throw new IllegalStateException(Localization.getInstance (
+            throw new IllegalStateException(GraphLocalization.getSingleton (
 			).getString ("algo.graph.shortestpath.NotCalledYetException"));
         }
         return nodes;
@@ -92,7 +92,7 @@ public class MooreBellmanFord {
 
     public Node getPredecessor(Node node) {
         if (nodes == null) {
-            throw new IllegalStateException(Localization.getInstance (
+            throw new IllegalStateException(GraphLocalization.getSingleton (
 			).getString ("algo.graph.shortestpath.NotCalledYetException"));
         }
         return nodes.get(node);
@@ -115,11 +115,11 @@ public class MooreBellmanFord {
 
     public void run() {
         if (graph == null) {
-            throw new IllegalStateException(Localization.getInstance (
+            throw new IllegalStateException(GraphLocalization.getSingleton (
     		).getString ("algo.graph.shortestpath.GraphIsNullException"));
         }
         if (source == null) {
-            throw new IllegalStateException(Localization.getInstance (
+            throw new IllegalStateException(GraphLocalization.getSingleton (
     		).getString ("algo.graph.shortestpath.SourceIsNullException"));
         }
         if (distances != null) {

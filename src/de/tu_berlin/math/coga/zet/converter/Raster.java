@@ -20,13 +20,12 @@
 
 package de.tu_berlin.math.coga.zet.converter;
 
+import de.tu_berlin.math.coga.common.localization.DefaultLoc;
+import ds.z.PlanPolygon;
 import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-
-import de.tu_berlin.math.coga.common.localization.Localization;
-import ds.z.PlanPolygon;
 import zet.util.ConversionTools;
 
 /**
@@ -86,7 +85,7 @@ public class Raster<T extends RasterSquare, P extends PlanPolygon> {
 	 */
 	public Raster( Class<T> squareClassType, Class<P> polygonClassType, PlanPolygon p, int raster ) throws java.lang.IllegalArgumentException {
 		if( raster < 1 ) {
-			throw new java.lang.IllegalArgumentException (Localization.getInstance (
+			throw new java.lang.IllegalArgumentException (DefaultLoc.getSingleton (
 			).getString ("converter.NegativeRasterException"));
 		}
 		this.squareClassType = squareClassType;
@@ -114,7 +113,7 @@ public class Raster<T extends RasterSquare, P extends PlanPolygon> {
 	 */
 	public Raster( Class<T> squareClassType, Class<P> polygonClassType, PlanPolygon p, double raster ) throws java.lang.IllegalArgumentException {
 		if( zet.util.ConversionTools.floatToInt( raster ) < 1 ) {
-			throw new java.lang.IllegalArgumentException (Localization.getInstance (
+			throw new java.lang.IllegalArgumentException (DefaultLoc.getSingleton (
 			).getString ("converter.NegativeRasterException"));
 		}
 		this.squareClassType = squareClassType;

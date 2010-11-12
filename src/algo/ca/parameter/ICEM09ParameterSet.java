@@ -15,12 +15,12 @@
  */
 package algo.ca.parameter;
 
+import de.tu_berlin.math.coga.common.localization.DefaultLoc;
 import ds.PropertyContainer;
 import ds.ca.Cell;
 import ds.ca.Individual;
 import ds.ca.StaticPotential;
 import java.util.Collection;
-import de.tu_berlin.math.coga.common.localization.Localization;
 
 /**
  * @author Sylvie Temme
@@ -121,7 +121,7 @@ public class ICEM09ParameterSet extends AbstractDefaultParameterSet {
 	@Override
 	public double effectivePotential( Cell referenceCell, Cell targetCell ) {
 		if( referenceCell.getIndividual() == null )
-			throw new IllegalArgumentException( Localization.getInstance().getString( "algo.ca.parameter.NoIndividualOnReferenceCellException" ) );
+			throw new IllegalArgumentException( DefaultLoc.getSingleton().getString( "algo.ca.parameter.NoIndividualOnReferenceCellException" ) );
 		StaticPotential staticPotential = referenceCell.getIndividual().getStaticPotential();
 		final double statPotlDiff = staticPotential.getPotential( referenceCell ) - staticPotential.getPotential( targetCell );
 		return statPotlDiff;

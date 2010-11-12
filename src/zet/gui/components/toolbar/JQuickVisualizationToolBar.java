@@ -4,6 +4,7 @@
  */
 package zet.gui.components.toolbar;
 
+import de.tu_berlin.math.coga.common.localization.DefaultLoc;
 import de.tu_berlin.math.coga.common.localization.Localization;
 import de.tu_berlin.math.coga.common.localization.Localized;
 import gui.GUIControl;
@@ -22,7 +23,7 @@ import javax.swing.JToolBar;
 public class JQuickVisualizationToolBar extends JToolBar implements ActionListener, Localized {
 	private final GUIControl control;
 	/** The localization class. */
-	static final Localization loc = Localization.getInstance();
+	static final Localization loc = DefaultLoc.getSingleton();
 	private JButton btnExit;
 
 	public JQuickVisualizationToolBar( GUIControl control ) {

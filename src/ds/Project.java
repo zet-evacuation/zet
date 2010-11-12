@@ -28,6 +28,7 @@ import com.thoughtworks.xstream.annotations.XStreamOmitField;
 import com.thoughtworks.xstream.converters.Converter;
 import com.thoughtworks.xstream.converters.reflection.ReflectionProvider;
 import com.thoughtworks.xstream.mapper.Mapper;
+import de.tu_berlin.math.coga.common.localization.ZLocalization;
 import de.tu_berlin.math.coga.rndutils.distribution.continuous.NormalDistribution;
 import de.tu_berlin.math.coga.rndutils.distribution.continuous.UniformDistribution;
 import ds.z.Assignment;
@@ -38,9 +39,7 @@ import io.z.ProjectConverter;
 import io.z.UniformDistributionConverter;
 import io.z.XMLConverter;
 import java.io.File;
-import java.io.FileReader;
 import java.io.IOException;
-import java.io.PrintWriter;
 import java.io.Serializable;
 import java.net.URI;
 import java.net.URISyntaxException;
@@ -52,8 +51,6 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.jar.JarFile;
 import java.util.zip.ZipEntry;
-
-import de.tu_berlin.math.coga.common.localization.Localization;
 import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
 import java.io.FileInputStream;
@@ -64,7 +61,7 @@ import java.util.zip.GZIPInputStream;
 import java.util.zip.GZIPOutputStream;
 
 /**
- * The central Projekt class for the Z format. All information about
+ * The central project class for the Z format. All information about
  * the evacuation scenario is linked together in this class.
  */
 @XStreamAlias("project")
@@ -129,7 +126,7 @@ public class Project implements Serializable {
 						}
 				}
 			} catch( Exception ex ) {
-				throw new RuntimeException( Localization.getInstance().getString( "ds.InitProjectException" + ex.getLocalizedMessage() ) );
+				throw new RuntimeException( ZLocalization.getSingleton().getString( "ds.InitProjectException" + ex.getLocalizedMessage() ) );
 			}
 		else if( url.startsWith( "file:" ) )
 			try {
@@ -137,10 +134,10 @@ public class Project implements Serializable {
 				assert (dir.isDirectory());
 				scanPackage( dir, "" );
 			} catch( URISyntaxException ex ) {
-				throw new RuntimeException( Localization.getInstance().getString( "ds.InitProjectException" ) );
+				throw new RuntimeException( ZLocalization.getSingleton().getString( "ds.InitProjectException" ) );
 			}
 		else
-			throw new IllegalStateException( Localization.getInstance().getString( "ds.DeterminingJarException" ) );
+			throw new IllegalStateException( ZLocalization.getSingleton().getString( "ds.DeterminingJarException" ) );
 	}
 
 	/** Crawls the given directory for class files and processes them. */
@@ -253,7 +250,7 @@ public class Project implements Serializable {
 	 */
 	public void addEvacuationPlan( EvacuationPlan val ) throws IllegalArgumentException {
 		if( evacuationPlans.contains( val ) )
-			throw new IllegalArgumentException( Localization.getInstance().getString( "ds.PlanAlreadyExistsException" ) );
+			throw new IllegalArgumentException( ZLocalization.getSingleton().getString( "ds.PlanAlreadyExistsException" ) );
 		else {
 			if( currentEvacuationPlan == null )
 				currentEvacuationPlan = val;
@@ -274,7 +271,7 @@ public class Project implements Serializable {
 	 */
 	public void deleteEvacuationPlan( EvacuationPlan val ) throws IllegalArgumentException {
 		if( !evacuationPlans.remove( val ) )
-			throw new IllegalArgumentException( Localization.getInstance().getString( "ds.PlanNotRegisteredException" ) );
+			throw new IllegalArgumentException( ZLocalization.getSingleton().getString( "ds.PlanNotRegisteredException" ) );
 		else {
 			val.delete();
 
@@ -306,7 +303,7 @@ public class Project implements Serializable {
 			this.currentEvacuationPlan = val;
 //			throwChangeEvent( new ChangeEvent( this ) );
 		} else
-			throw new IllegalArgumentException( Localization.getInstance().getString( "ds.PlanNotInProjectException" ) );
+			throw new IllegalArgumentException( ZLocalization.getSingleton().getString( "ds.PlanNotInProjectException" ) );
 	}
 
 	/** Adds a new Assignment to the Project. If the Project hasn't had a "CurrentAssignment"
@@ -318,7 +315,7 @@ public class Project implements Serializable {
 	 */
 	public void addAssignment( Assignment val ) throws IllegalArgumentException {
 		if( assignments.contains( val ) )
-			throw new IllegalArgumentException( Localization.getInstance().getString( "ds.AssignmentAlreadyRegisteredException" ) );
+			throw new IllegalArgumentException( ZLocalization.getSingleton().getString( "ds.AssignmentAlreadyRegisteredException" ) );
 		else {
 			if( currentAssignment == null )
 				currentAssignment = val;
@@ -340,7 +337,7 @@ public class Project implements Serializable {
 	 */
 	public void deleteAssignment( Assignment val ) throws IllegalArgumentException {
 		if( !assignments.remove( val ) )
-			throw new IllegalArgumentException( Localization.getInstance().getString( "ds.AssignmentNotRegisteredException" ) );
+			throw new IllegalArgumentException( ZLocalization.getSingleton().getString( "ds.AssignmentNotRegisteredException" ) );
 		else {
 //			val.removeChangeListener( this );
 			val.delete();
@@ -379,7 +376,7 @@ public class Project implements Serializable {
 			this.currentAssignment.setActive();
 //			throwChangeEvent( new ChangeEvent( this ) );
 		} else
-			throw new IllegalArgumentException( Localization.getInstance().getString( "ds.AssignmentNotInProjectException" ) );
+			throw new IllegalArgumentException( ZLocalization.getSingleton().getString( "ds.AssignmentNotInProjectException" ) );
 	}
 
 	/**

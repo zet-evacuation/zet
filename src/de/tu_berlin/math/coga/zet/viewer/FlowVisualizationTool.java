@@ -11,6 +11,7 @@ import de.tu_berlin.math.coga.common.algorithm.AlgorithmEvent;
 import de.tu_berlin.math.coga.common.algorithm.AlgorithmProgressEvent;
 import de.tu_berlin.math.coga.common.algorithm.AlgorithmStartedEvent;
 import de.tu_berlin.math.coga.common.algorithm.AlgorithmTerminatedEvent;
+import de.tu_berlin.math.coga.common.localization.DefaultLoc;
 import de.tu_berlin.math.coga.common.localization.Localization;
 import de.tu_berlin.math.coga.common.util.Formatter;
 import ds.GraphVisualizationResults;
@@ -60,7 +61,6 @@ import de.tu_berlin.math.coga.graph.io.xml.FlowVisualization;
 import de.tu_berlin.math.coga.graph.io.xml.GraphView;
 import de.tu_berlin.math.coga.graph.io.xml.XMLReader;
 import de.tu_berlin.math.coga.graph.io.xml.XMLReader.XMLFileData;
-import ds.graph.Network;
 import gui.visualization.control.graph.GLNashGraphControl;
 import io.movie.MovieManager;
 import io.visualization.ImageFormat;
@@ -88,7 +88,7 @@ public class FlowVisualizationTool extends JFrame implements PropertyChangeListe
 			add( visNash );
 		}
 	};
-	Localization loc = Localization.getInstance();
+	Localization loc = DefaultLoc.getSingleton();
 	private int sliderAccuracy = 100;
 	private JMenu mFile;
 	private JMenuItem mnuFileOpen;

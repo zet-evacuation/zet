@@ -4,6 +4,7 @@
  */
 package zet.gui.components;
 
+import de.tu_berlin.math.coga.common.localization.DefaultLoc;
 import de.tu_berlin.math.coga.common.localization.Localization;
 import de.tu_berlin.math.coga.common.localization.Localized;
 import ds.PropertyContainer;
@@ -31,7 +32,7 @@ import javax.swing.JRadioButtonMenuItem;
 public class JZETMenuBar extends JMenuBar implements ActionListener, Localized {
 	private final GUIControl control;
 	/** The localization class. */
-	static final Localization loc = Localization.getInstance();
+	static final Localization loc = DefaultLoc.getSingleton();
 	private JMenu mFile;
 	private JMenuItem mnuFileNew;
 	private JMenuItem mnuFileOpen;

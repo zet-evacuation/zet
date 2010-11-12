@@ -27,7 +27,7 @@ import javax.media.opengl.GL;
 import opengl.framework.abs.AbstractDrawable;
 
 /**
- * <p>This class draws a floor in the graph (which does not explecitly exist
+ * <p>This class draws a floor in the graph (which does not explicitly exist
  * in the graph itself). It consists of the nodes belonging to rooms on one
  * floor in a {@link ds.Project}.</p>
  * <p>The nodes are stored in a display list to speed up the visualization,
@@ -38,8 +38,6 @@ import opengl.framework.abs.AbstractDrawable;
  * @see AbstractDrawable
  * @author Jan-Philipp Kappmeier
  */
-//public class GLGraphFloor extends AbstractDrawable<CullingShapeCube, GLNode, GLGraphFloorControl, GLNodeControl> {
-//public class GLGraphFloor extends AbstractDrawable<GLNode, GLGraphFloorControl, GLNodeControl> {
 public class GLGraphFloor extends AbstractDrawable<GLNode, GLGraphFloorControl> {
 
 	public GLGraphFloor( GLGraphFloorControl control ) {

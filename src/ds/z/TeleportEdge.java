@@ -21,8 +21,7 @@ package ds.z;
 
 import com.thoughtworks.xstream.annotations.XStreamAlias;
 import com.thoughtworks.xstream.annotations.XStreamOmitField;
-import ds.z.exception.TeleportEdgeNotConnected;
-import de.tu_berlin.math.coga.common.localization.Localization;
+import de.tu_berlin.math.coga.common.localization.ZLocalization;
 
 /** A specialized case of a RoomEdge, where we do not want to model a door, but rather a stair,
  *  that is, the linkTarget of the Edge is set to another Edge which must be located on a different floor.
@@ -93,10 +92,10 @@ public class TeleportEdge extends RoomEdge {
 	public void setLinkTarget (RoomEdge val) {
 		if (val != null) {
 			if (!(val instanceof TeleportEdge)) {
-				throw new IllegalArgumentException (Localization.getInstance (
+				throw new IllegalArgumentException (ZLocalization.getSingleton (
 						).getString("ds.z.TeleportEdge.OnlyTeleportEdgesAsTarget"));
 			} else if (val.length () != length ()) {
-				throw new IllegalArgumentException (Localization.getInstance (
+				throw new IllegalArgumentException (ZLocalization.getSingleton (
 						).getString("ds.z.TeleportEdge.DifferentLengthLinkTarget"));
 			}
 		}

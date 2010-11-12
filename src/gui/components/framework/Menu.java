@@ -20,6 +20,7 @@
 
 package gui.components.framework;
 
+import de.tu_berlin.math.coga.common.localization.DefaultLoc;
 import java.awt.event.ActionListener;
 import java.awt.event.InputEvent;
 import java.awt.event.KeyEvent;
@@ -30,7 +31,6 @@ import javax.swing.JMenuItem;
 import javax.swing.JPopupMenu;
 import javax.swing.JRadioButtonMenuItem;
 import javax.swing.KeyStroke;
-import de.tu_berlin.math.coga.common.localization.Localization;
 
 /**
  * Creates a complete framework to create menus inclusive shortcuts and
@@ -329,7 +329,7 @@ public class Menu {
 
 	public static void updateMenu( JMenuItem menu, String text ) {
 		if( menu == null ) { //throw new IllegalArgumentException( "Menu item '" + text + "' is null." );
-			System.err.println( String.format( Localization.getInstance().getStringWithoutPrefix( "menu.updateMenuNullPointer" ), text ) );
+			System.err.println( String.format( DefaultLoc.getSingleton().getStringWithoutPrefix( "menu.updateMenuNullPointer" ), text ) );
 			return;
 		}
 		menu.setText( extractMnemonic( text ) );

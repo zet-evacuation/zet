@@ -21,9 +21,9 @@
 
 package de.tu_berlin.math.coga.common.util;
 
+import de.tu_berlin.math.coga.common.localization.DefaultLoc;
 import java.io.File;
 import java.text.ParseException;
-import de.tu_berlin.math.coga.common.localization.Localization;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -78,7 +78,7 @@ public class IOTools {
 						String foundNumber = files[i].getName().substring( prefixLen, prefixLen + digits );
 						int number;
 						try {
-							number = Localization.getInstance().getIntegerConverter().parse( foundNumber ).intValue();
+							number = DefaultLoc.getSingleton().getIntegerConverter().parse( foundNumber ).intValue();
 						} catch( ParseException ex ) {
 							System.out.println( "Skipped file with same prefix: " + files[i].getName() );
 							number = -1;

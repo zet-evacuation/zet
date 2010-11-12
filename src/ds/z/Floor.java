@@ -13,15 +13,17 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
+
 /*
  * Floor.java
  * Created on 26. November 2007, 21:32
  */
+
 package ds.z;
 
 import com.thoughtworks.xstream.annotations.XStreamAlias;
 import com.thoughtworks.xstream.annotations.XStreamAsAttribute;
-import de.tu_berlin.math.coga.common.localization.Localization;
+import de.tu_berlin.math.coga.common.localization.ZLocalization;
 import ds.z.exception.AreaNotInsideException;
 import ds.z.exception.PolygonNotClosedException;
 import ds.z.exception.RoomIntersectException;
@@ -113,7 +115,7 @@ public class Floor implements Serializable, Cloneable, Iterable<Room> {
 	void addRoom( Room room ) throws IllegalArgumentException {
 		try {
 			if( rooms.contains( room ) )
-				throw new IllegalArgumentException(Localization.getInstance ( ).getString ("ds.z.RoomAlreadyExistsException"));
+				throw new IllegalArgumentException(ZLocalization.getSingleton ( ).getString ("ds.z.RoomAlreadyExistsException"));
 			rooms.add( room );
 		} catch( IllegalArgumentException ex ) {
 			throw ex;
@@ -135,7 +137,7 @@ public class Floor implements Serializable, Cloneable, Iterable<Room> {
 	 */
 	void deleteRoom( Room room ) throws IllegalArgumentException {
 		if( !( rooms.contains( room ) ) )
-			throw new IllegalArgumentException(Localization.getInstance ( ).getString ("ds.z.NoRoomException"));
+			throw new IllegalArgumentException(ZLocalization.getSingleton ( ).getString ("ds.z.NoRoomException"));
 		else {
 			rooms.remove( room );
 			roomDeleteHandler (room);
@@ -515,23 +517,23 @@ public class Floor implements Serializable, Cloneable, Iterable<Room> {
 		
 		xOffset = holdLastSize ? Math.min( minX, xOffset ) : minX;
 		yOffset = holdLastSize ? Math.min( minY, yOffset ) : minY;
-		// TODO add offset if holdLastSize is true and such that xOffset + new width >= old x-coordinate!
-		width = holdLastSize ? Math.max( maxX - minX, width ) : maxX - minX;
-		height = holdLastSize ? Math.max( maxY - minY, height ) : maxY - minY;
+		width = holdLastSize ? Math.max( maxX - minX, width ) + Math.max( minX - xOffset , 0 ): maxX - minX;
+		height = holdLastSize ? Math.max( maxY - minY, height ) + Math.max( minY - yOffset, 0 ) : maxY - minY;
 	}
 
 	/**
 	 * Sets a minimum size that this floor should have.
-	 * @param xOffset
-	 * @param yOffset
-	 * @param width
-	 * @param height
+	 * @param xOffset the x-coordinate of the left upper corner
+	 * @param yOffset the y-coordinate of the left upper corner
+	 * @param width the width of the usable area
+	 * @param height the height of the usable area
 	 */
 	public void setMinimumSize( int xOffset, int yOffset, int width, int height ) {
-		this.xOffset = Math.min( xOffset, this.xOffset );
-		this.yOffset = Math.min( yOffset, this.yOffset );
-		this.width = Math.max( width, this.width );
-		this.height = Math.max( height, this.height );
+		this.xOffset = xOffset;
+		this.yOffset = yOffset;
+		this.width = width;
+		this.height = height;
+		recomputeBounds( true );
 	}
 	
 	/**

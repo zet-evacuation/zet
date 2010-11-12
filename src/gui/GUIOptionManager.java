@@ -27,7 +27,7 @@ import javax.swing.JOptionPane;
 import javax.swing.UIManager;
 
 /**
- * Stores options concering the graphical representation of projects
+ * Stores options concerning the graphical representation of projects
  * in the editor. In the future these options could also be user-editable
  * and be made persistent by storing them in a separate options file.
  *
@@ -68,6 +68,9 @@ public abstract class GUIOptionManager {
 		previousEditMode = EditMode.Selection;
 		editMode = EditMode.Selection;
 	}
+
+	/** Not instantiable class.  */
+	private GUIOptionManager() { }
 
 	public static Font getRoomNameFont() {
 		return propertyContainer.getAsFont( "gui.optionManager.RoomNameFont" );
@@ -217,5 +220,4 @@ public abstract class GUIOptionManager {
 		return PropertyContainer.getInstance().getAsString( "information.file.lastFile" + Integer.toString( i ) );
 	}
 
-	private GUIOptionManager() { }
 }

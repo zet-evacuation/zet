@@ -21,6 +21,7 @@
 
 package de.tu_berlin.math.coga.zet.converter.cellularAutomaton;
 
+import de.tu_berlin.math.coga.common.localization.DefaultLoc;
 import ds.Project;
 import de.tu_berlin.math.coga.common.algorithm.Algorithm;
 import algo.ca.PotentialController;
@@ -42,7 +43,6 @@ import java.util.ArrayList;
 import java.util.ArrayDeque;
 import java.util.Collection;
 import java.util.HashMap;
-import de.tu_berlin.math.coga.common.localization.Localization;
 import ds.z.TeleportArea;
 import java.util.logging.Logger;
 import static de.tu_berlin.math.coga.common.util.Direction.*;
@@ -87,7 +87,7 @@ public class ZToCAConverter extends Algorithm<BuildingPlan,ConvertedCellularAuto
 		 * 
 		 */
 		public ConversionNotSupportedException() {
-			super( Localization.getInstance().getString( "converter.ZConversionException" ) );
+			super( DefaultLoc.getSingleton().getString( "converter.ZConversionException" ) );
 		}
 
 		/**
@@ -252,7 +252,7 @@ public class ZToCAConverter extends Algorithm<BuildingPlan,ConvertedCellularAuto
 	 */
 	public ZToCAMapping getMapping() {
 		if( lastMapping == null )
-			throw new IllegalStateException(Localization.getInstance ().getString ("converter.CallConvertFirstException"));
+			throw new IllegalStateException(DefaultLoc.getSingleton ().getString ("converter.CallConvertFirstException"));
 
 		return lastMapping;
 	}
@@ -274,7 +274,7 @@ public class ZToCAConverter extends Algorithm<BuildingPlan,ConvertedCellularAuto
 	 */
 	public ZToCARasterContainer getContainer() throws IllegalStateException {
 		if( lastContainer == null )
-			throw new IllegalStateException(Localization.getInstance ().getString ("converter.CallConvertFirstException"));
+			throw new IllegalStateException(DefaultLoc.getSingleton ().getString ("converter.CallConvertFirstException"));
 
 		return lastContainer;
 	}
@@ -359,7 +359,7 @@ public class ZToCAConverter extends Algorithm<BuildingPlan,ConvertedCellularAuto
 			return null;
 
 		if( square.inaccessible() && square.isDoor() )
-			throw new ConversionNotSupportedException(Localization.getInstance ().getString ("algo.ca.NotInitializedException" + x + ", " + y ));
+			throw new ConversionNotSupportedException(DefaultLoc.getSingleton ().getString ("algo.ca.NotInitializedException" + x + ", " + y ));
 
 //        if(square.isExit() && square.isDoor()){
 //            throw new ConversionNotSupportedException("Doors in exit areas are currently not supported.");

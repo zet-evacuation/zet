@@ -15,6 +15,7 @@
  */
 package zet.gui.components.tabs.editor;
 
+import de.tu_berlin.math.coga.common.localization.DefaultLoc;
 import java.awt.Color;
 import java.util.LinkedList;
 import de.tu_berlin.math.coga.common.localization.Localization;
@@ -48,7 +49,7 @@ public enum EditMode {
 	TeleportAreaCreationPointwise( 21, Type.CreationPointwise, GUIOptionManager.getTeleportAreaColor(), true ),
 	TeleportAreaCreation( 22, Type.CreationRectangled, GUIOptionManager.getTeleportAreaColor(), true );
 	/** The localization class. */
-	Localization loc = Localization.getInstance();
+	Localization loc = DefaultLoc.getSingleton();
 
 	static {
 		// Here the partnerModes set. This cannot be done in the constructor because it would need

@@ -20,7 +20,7 @@
 
 package ds.graph.flow;
 
-import de.tu_berlin.math.coga.common.localization.Localization;
+import de.tu_berlin.math.coga.common.localization.GraphLocalization;
 import ds.graph.Edge;
 import ds.graph.IdentifiableCollection;
 import ds.graph.StaticPath;
@@ -62,7 +62,7 @@ public class StaticPathFlow implements Iterable<Edge> {
      * @exception NullPointerException if <code>path</code> is null.
      */
     public StaticPathFlow(StaticPath path, int amount){
-        if (path == null) throw new NullPointerException(Localization.getInstance (
+        if (path == null) throw new NullPointerException(GraphLocalization.getSingleton (
 		).getString ("ds.graph.PathIsNullException"));
         setPath(path);
         setAmount(amount);
@@ -135,7 +135,7 @@ public class StaticPathFlow implements Iterable<Edge> {
      * @exception NullPointerException if <code>path</code> is null.
      */
     public void setPath(StaticPath path) {
-        if (path == null) throw new NullPointerException(Localization.getInstance (
+        if (path == null) throw new NullPointerException(GraphLocalization.getSingleton (
 		).getString ("ds.graph.PathIsNullException"));
         this.path = path;
     }    

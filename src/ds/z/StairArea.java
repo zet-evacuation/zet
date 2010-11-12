@@ -18,10 +18,10 @@ package ds.z;
 import com.thoughtworks.xstream.annotations.XStreamAlias;
 import com.thoughtworks.xstream.annotations.XStreamAsAttribute;
 //import ds.z.event.ChangeEvent;
+import de.tu_berlin.math.coga.common.localization.ZLocalization;
 import ds.z.exception.PolygonNotClosedException;
 import ds.z.exception.PolygonNotRasterizedException;
 import java.util.ListIterator;
-import de.tu_berlin.math.coga.common.localization.Localization;
 
 /**
  * Represents a Stair (whether in a room or between floors). The "upper" and
@@ -142,9 +142,9 @@ public class StairArea extends Area<Edge> {
 	 */
 	public void setSpeedFactorDown( double val ) throws IllegalArgumentException {
 		if( val <= 0 )
-			throw new IllegalArgumentException( Localization.getInstance().getString( "ds.z.DelayArea.SpeedFactorNegativeException" ) );
+			throw new IllegalArgumentException( ZLocalization.getSingleton().getString( "ds.z.DelayArea.SpeedFactorNegativeException" ) );
 		else if( val > 1 )
-			throw new IllegalArgumentException( Localization.getInstance().getString( "ds.z.DelayArea.SpeedFactorToHighException" ) );
+			throw new IllegalArgumentException( ZLocalization.getSingleton().getString( "ds.z.DelayArea.SpeedFactorToHighException" ) );
 		else
 			this.speedFactorDown = val;
 	}
@@ -162,9 +162,9 @@ public class StairArea extends Area<Edge> {
 	 */
 	public void setSpeedFactorUp( double val ) throws IllegalArgumentException {
 		if( val <= 0 )
-			throw new IllegalArgumentException( Localization.getInstance().getString( "ds.z.DelayArea.SpeedFactorNegativeException" ) );
+			throw new IllegalArgumentException( ZLocalization.getSingleton().getString( "ds.z.DelayArea.SpeedFactorNegativeException" ) );
 		else if( val > 1 )
-			throw new IllegalArgumentException( Localization.getInstance().getString( "ds.z.DelayArea.SpeedFactorToHighException" ) );
+			throw new IllegalArgumentException( ZLocalization.getSingleton().getString( "ds.z.DelayArea.SpeedFactorToHighException" ) );
 		else
 			this.speedFactorUp = val;
 	}
@@ -228,14 +228,14 @@ public class StairArea extends Area<Edge> {
 				PlanPoint i = itP.next();
 				// First check for invalid points then accept eventually
 				if( i == upperLevel[0] || i == upperLevel[1] )
-					throw new IllegalArgumentException( Localization.getInstance().getString( "ds.z.StairArea.LevelProgressionsOverlap" ) );
+					throw new IllegalArgumentException( ZLocalization.getSingleton().getString( "ds.z.StairArea.LevelProgressionsOverlap" ) );
 				else if( i == lowerLevelEnd ) {
 					foundEnd = true;
 					break;
 				}
 			}
 			if( !foundEnd )
-				throw new IllegalArgumentException( Localization.getInstance().getString( "ds.z.StairArea.InvalidEdgeProgression" ) );
+				throw new IllegalArgumentException( ZLocalization.getSingleton().getString( "ds.z.StairArea.InvalidEdgeProgression" ) );
 		}
 
 		lowerLevel[0] = lowerLevelStart;
@@ -261,7 +261,7 @@ public class StairArea extends Area<Edge> {
 				PlanPoint i = itP.next();
 				// First check for invalid points then accept eventually
 				if( i == lowerLevel[0] || i == lowerLevel[1] )
-					throw new IllegalArgumentException( Localization.getInstance().getString(
+					throw new IllegalArgumentException( ZLocalization.getSingleton().getString(
 									"ds.z.StairArea.LevelProgressionsOverlap" ) );
 				else if( i == upperLevelEnd ) {
 					foundEnd = true;
@@ -269,7 +269,7 @@ public class StairArea extends Area<Edge> {
 				}
 			}
 			if( !foundEnd )
-				throw new IllegalArgumentException( Localization.getInstance().getString(
+				throw new IllegalArgumentException( ZLocalization.getSingleton().getString(
 								"ds.z.StairArea.InvalidEdgeProgression" ) );
 		}
 
@@ -287,10 +287,10 @@ public class StairArea extends Area<Edge> {
 		super.check( rasterized );
 
 		if( area() <= 0 )
-			throw new NullPointerException( Localization.getInstance().getString( "ds.z.StairArea.ZeroArea" ) );
+			throw new NullPointerException( ZLocalization.getSingleton().getString( "ds.z.StairArea.ZeroArea" ) );
 
 		if( upperLevel[0] == null || upperLevel[1] == null || lowerLevel[0] == null || lowerLevel[1] == null )
-			throw new NullPointerException( Localization.getInstance().getString(
+			throw new NullPointerException( ZLocalization.getSingleton().getString(
 							"ds.z.StairArea.LevelNotMarked" ) );
 	}
 

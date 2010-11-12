@@ -37,7 +37,7 @@ import java.util.List;
 import algo.graph.Flags;
 import algo.graph.staticflow.mincost.MinimumMeanCycleCancelling;
 import algo.graph.util.PathDecomposition;
-import de.tu_berlin.math.coga.common.localization.Localization;
+import de.tu_berlin.math.coga.common.localization.GraphLocalization;
 import ds.graph.problem.MinimumCostFlowProblem;
 
 /**
@@ -360,7 +360,7 @@ public class MaxFlowOverTime extends Algorithm<MaximumFlowOverTimeProblem, PathB
 
 
         if ((sources == null) || (sinks == null)) {
-            throw new IllegalArgumentException(Localization.getInstance().getString(
+            throw new IllegalArgumentException(GraphLocalization.getSingleton().getString(
                     "algo.graph.MaxFlowOverTime.SpecifySourceSinkFirst"));
         }
 

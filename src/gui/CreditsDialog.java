@@ -21,9 +21,9 @@
 
 package gui;
 
+import de.tu_berlin.math.coga.common.localization.DefaultLoc;
 import java.awt.Frame;
 import javax.swing.JDialog;
-import de.tu_berlin.math.coga.common.localization.Localization;
 
 /**
  * A window that contains a {@link CreditsPanel} to represent the
@@ -38,7 +38,7 @@ public class CreditsDialog extends JDialog {
 	 * @param parent the parent window
 	 */
 	public CreditsDialog( Frame parent ) {
-		super(parent, Localization.getInstance().getString( "AppTitle" ) + " v" + ZETMain.version, true);
+		super(parent, DefaultLoc.getSingleton().getString( "AppTitle" ) + " v" + ZETMain.version, true);
 		setSize( 640, 480 );
 		setLocation ( parent.getX () + ((parent.getWidth() - getWidth()) / 2), parent.getY () + ((parent.getHeight() - getHeight()) / 2));
 		CreditsPanel credits = new CreditsPanel();

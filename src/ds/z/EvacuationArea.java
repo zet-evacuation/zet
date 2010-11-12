@@ -22,7 +22,7 @@ package ds.z;
 
 import com.thoughtworks.xstream.annotations.XStreamAlias;
 import com.thoughtworks.xstream.annotations.XStreamAsAttribute;
-import de.tu_berlin.math.coga.common.localization.Localization;
+import de.tu_berlin.math.coga.common.localization.ZLocalization;
 
 /**
  * Represents a EvacuationArea. 
@@ -105,7 +105,7 @@ public class EvacuationArea extends SaveArea {
 	 */
 	public void setAttractivity( int attractivity ) throws java.lang.IllegalArgumentException {
 		if( attractivity <=0 )
-			throw new java.lang.IllegalArgumentException( Localization.getInstance().getString( "ds.z.EvacuationArea.AttractivityLessThanZeroException" ) );
+			throw new java.lang.IllegalArgumentException( ZLocalization.getSingleton().getString( "ds.z.EvacuationArea.AttractivityLessThanZeroException" ) );
 		this.attractivity = attractivity;
 	}
 

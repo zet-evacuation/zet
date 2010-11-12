@@ -19,7 +19,7 @@
  */
 package ds.graph;
 
-import de.tu_berlin.math.coga.common.localization.Localization;
+import de.tu_berlin.math.coga.common.localization.GraphLocalization;
 import java.util.Iterator;
 
 /**
@@ -80,6 +80,6 @@ public class ArrayIterator<E> implements Iterator<E> {
      * Method is not yet implemented.
      */
     public void remove() {
-        throw new UnsupportedOperationException(Localization.getInstance().getString("ds.graph.NotSupportedException"));
+        throw new UnsupportedOperationException(GraphLocalization.getSingleton().getString("ds.graph.NotSupportedException"));
     }
 }

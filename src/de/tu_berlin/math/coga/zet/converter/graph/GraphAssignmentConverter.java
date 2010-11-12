@@ -6,7 +6,7 @@ package de.tu_berlin.math.coga.zet.converter.graph;
 
 import algo.graph.util.GraphInstanceChecker;
 import de.tu_berlin.math.coga.common.algorithm.Algorithm;
-import de.tu_berlin.math.coga.common.localization.Localization;
+import de.tu_berlin.math.coga.common.localization.DefaultLoc;
 import de.tu_berlin.math.coga.zet.NetworkFlowModel;
 import ds.graph.IdentifiableCollection;
 import ds.graph.IdentifiableIntegerMapping;
@@ -118,6 +118,6 @@ public class GraphAssignmentConverter extends Algorithm<ConcreteAssignment, Netw
 				mapping.setIsDeletedSourceNode( oldSource, true );
 			}
 		} else
-			throw new AssertionError( Localization.getInstance().getString( "converter.NoCheckException" ) );
+			throw new AssertionError( DefaultLoc.getSingleton().getString( "converter.NoCheckException" ) );
 	}
 }

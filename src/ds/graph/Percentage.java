@@ -15,7 +15,7 @@
  */
 package ds.graph;
 
-import de.tu_berlin.math.coga.common.localization.Localization;
+import de.tu_berlin.math.coga.common.localization.GraphLocalization;
 
 /**
  * Represents a percentage value, i.e. the contained double value
@@ -36,11 +36,11 @@ public class Percentage {
 	 */
 	public Percentage(double percentage){
 		if (percentage < 0){
-			throw new AssertionError(Localization.getInstance (
+			throw new AssertionError(GraphLocalization.getSingleton (
 			).getString ("ds.PercentageNegativeException"));
 		}
 		if (percentage > 100){
-			throw new AssertionError(Localization.getInstance (
+			throw new AssertionError(GraphLocalization.getSingleton (
 			).getString ("ds.PercentageGreater100Exception"));
 		}
 		this.percentage = percentage;

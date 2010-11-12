@@ -20,6 +20,7 @@
 package converter.graph;
 
 
+import de.tu_berlin.math.coga.common.localization.DefaultLoc;
 import de.tu_berlin.math.coga.zet.converter.graph.ZToGraphRasterContainer;
 import de.tu_berlin.math.coga.zet.converter.graph.ZToGraphRasterSquare;
 import de.tu_berlin.math.coga.zet.converter.graph.ZToGraphMapping;
@@ -27,7 +28,6 @@ import de.tu_berlin.math.coga.zet.converter.graph.ZToGraphRoomRaster;
 import de.tu_berlin.math.coga.zet.converter.graph.ZToGraphRasteredDoor;
 import algo.graph.util.GraphInstanceChecker;
 import de.tu_berlin.math.coga.zet.converter.RasterContainerCreator;
-import de.tu_berlin.math.coga.common.localization.Localization;
 import ds.PropertyContainer;
 import ds.graph.DynamicNetwork;
 import ds.graph.IdentifiableIntegerMapping;
@@ -165,7 +165,7 @@ public class ZToGridGraphConverterAlt3 {
 				mapping.setIsDeletedSourceNode( oldSource, true );
 			}
 		} else
-			throw new AssertionError( Localization.getInstance().getString( "converter.NoCheckException" ) );
+			throw new AssertionError( DefaultLoc.getSingleton().getString( "converter.NoCheckException" ) );
 	}
 
 	protected static ZToGraphRasterContainer createRaster( BuildingPlan plan ) {
@@ -594,7 +594,7 @@ public class ZToGridGraphConverterAlt3 {
 							if( row > 0 )
 								lastSquare = room.getSquare( col, row - 1 );
 							else
-								throw new AssertionError( Localization.getInstance().getString( "converter.RowIsZeroException" ) );
+								throw new AssertionError( DefaultLoc.getSingleton().getString( "converter.RowIsZeroException" ) );
 							mapping.setEdgeLevel( edge, lastSquare.getLevel( Direction.getDirection( 0, 1 ) ) );
 						}
 						edgesCap.increase( edge, 1 * FACTOR );

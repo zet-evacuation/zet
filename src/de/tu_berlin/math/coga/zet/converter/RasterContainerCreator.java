@@ -19,7 +19,9 @@
  */
 package de.tu_berlin.math.coga.zet.converter;
 
+import batch.tasks.AlgorithmTask;
 import converter.graph.ZToGraphConverter;
+import de.tu_berlin.math.coga.common.localization.DefaultLoc;
 import de.tu_berlin.math.coga.zet.converter.graph.ZToGraphRoomRaster;
 import de.tu_berlin.math.coga.zet.converter.graph.ZToGraphRasteredDoor;
 import de.tu_berlin.math.coga.zet.converter.graph.ZToGraphRasterSquare;
@@ -27,15 +29,6 @@ import de.tu_berlin.math.coga.zet.converter.graph.ZToGraphRasterContainer;
 import de.tu_berlin.math.coga.zet.converter.cellularAutomaton.ZToCARasterContainer;
 import de.tu_berlin.math.coga.zet.converter.cellularAutomaton.ZToCARasterSquare;
 import de.tu_berlin.math.coga.zet.converter.cellularAutomaton.ZToCARoomRaster;
-import batch.tasks.AlgorithmTask;
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
-
-import de.tu_berlin.math.coga.common.localization.Localization;
-
-import util.DebugFlags;
-
 import ds.Project;
 import ds.PropertyContainer;
 import de.tu_berlin.math.coga.zet.NetworkFlowModel;
@@ -49,6 +42,10 @@ import ds.z.Room;
 import ds.z.RoomEdge;
 import ds.z.SaveArea;
 import ds.z.DelayArea.DelayType;
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
+import util.DebugFlags;
 
 public class RasterContainerCreator {
 
@@ -164,7 +161,7 @@ public class RasterContainerCreator {
 				Room partnerRoom = rEdge.getLinkTarget().getRoom();
 
 				if( partnerEdge == null )
-					throw new RuntimeException( Localization.getInstance().getString( "converter.InconsistencyException" ) );
+					throw new RuntimeException( DefaultLoc.getSingleton().getString( "converter.InconsistencyException" ) );
 
 				ZToGraphRoomRaster partnerRaster = container.getRasteredRoom( partnerRoom );
 				List<ZToGraphRasterSquare> partnerSquares = de.tu_berlin.math.coga.zet.converter.RasterTools.getSquaresAlongEdge( partnerEdge, partnerRaster );
@@ -186,7 +183,7 @@ public class RasterContainerCreator {
 	public static Project makeComplexExample() {
 		Project project = new Project();
 		BuildingPlan bp = project.getBuildingPlan();
-		Floor mainFloor = new Floor( Localization.getInstance().getString( "converter.groundFloor" ) );
+		Floor mainFloor = new Floor( DefaultLoc.getSingleton().getString( "converter.groundFloor" ) );
 		bp.addFloor( mainFloor );
 
 		ArrayList<PlanPoint> points;

@@ -23,11 +23,9 @@ package zet.gui.components.tabs.base;
 
 import java.awt.BorderLayout;
 import java.awt.Dimension;
-import java.text.NumberFormat;
 import javax.swing.JComponent;
 import javax.swing.JPanel;
 import javax.swing.JSplitPane;
-import de.tu_berlin.math.coga.common.localization.Localization;
 import de.tu_berlin.math.coga.common.localization.Localized;
 
 /**
@@ -37,15 +35,9 @@ import de.tu_berlin.math.coga.common.localization.Localized;
  */
 public abstract class AbstractSplitPropertyWindow<T extends JComponent> extends JPanel implements Localized {
 	/** The class-type of the container. This is set only one single time in the constructor. */
-	//private final Class<T> leftPanelType;
 	private T leftPanel;
-	/** The localization class. */
-	protected static final Localization loc = Localization.getInstance();
-	protected static final NumberFormat nfFloat = loc.getFloatConverter(); //NumberFormat.getNumberInstance( Localization.getInstance().getLocale() );
-	protected static final NumberFormat nfInteger = loc.getIntegerConverter(); //NumberFormat.getIntegerInstance( Localization.getInstance().getLocale() );
 
 	public AbstractSplitPropertyWindow( T panel ) {
-		//this.leftPanelType = leftPanelType;
 		leftPanel = panel;
 		addComponents();
 	}

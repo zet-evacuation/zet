@@ -13,14 +13,15 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
+
 /**
  * Class JAbstractPropertyWindow
- * Erstellt 22.04.2008, 18:25:29
+ * Created 22.04.2008, 18:25:29
  */
 package gui.editor.properties;
 
+import de.tu_berlin.math.coga.common.localization.DefaultLoc;
 import ds.PropertyContainer;
-import zet.gui.JEditor;
 import gui.editor.properties.framework.AbstractPropertyValue;
 import info.clearthought.layout.TableLayout;
 import java.awt.BorderLayout;
@@ -44,7 +45,6 @@ import javax.swing.event.TreeSelectionListener;
 import javax.swing.filechooser.FileFilter;
 import javax.swing.tree.TreeModel;
 import javax.swing.tree.TreePath;
-import de.tu_berlin.math.coga.common.localization.Localization;
 
 /**
  *
@@ -180,6 +180,7 @@ public abstract class JAbstractPropertyWindow extends JDialog {
 		tree.getSelectionModel().addTreeSelectionListener(
 						new TreeSelectionListener() {
 
+			@Override
 							public void valueChanged( TreeSelectionEvent e ) {
 								TreePath path = e.getNewLeadSelectionPath();
 								if( path == null ) {
@@ -226,6 +227,7 @@ public abstract class JAbstractPropertyWindow extends JDialog {
 	protected abstract JPanel createButtonPanel();
 	ActionListener aclButton = new ActionListener() {
 
+		@Override
 		public void actionPerformed( ActionEvent e ) {
 			JFileChooser jfcProject = new JFileChooser( new File( "./properties/" ) );
 			FileFilter filter = new FileFilter() {
@@ -299,8 +301,8 @@ public abstract class JAbstractPropertyWindow extends JDialog {
 			PropertyContainer.saveConfigFile( propertyTreeModel, file );
 		} catch( IOException ex ) {
 			JOptionPane.showMessageDialog( null,
-							Localization.getInstance().getString( "gui.ContactDeveloper" ),
-							Localization.getInstance().getString( "gui.Error" ),
+							DefaultLoc.getSingleton().getString( "gui.ContactDeveloper" ),
+							DefaultLoc.getSingleton().getString( "gui.Error" ),
 							JOptionPane.ERROR_MESSAGE );
 		}
 	}
@@ -315,8 +317,8 @@ public abstract class JAbstractPropertyWindow extends JDialog {
 			PropertyContainer.saveConfigFile( propertyTreeModel, new File( defaultConfigFile ) );
 		} catch( IOException ex ) {
 			JOptionPane.showMessageDialog( null,
-							Localization.getInstance().getString( "gui.ContactDeveloper" ),
-							Localization.getInstance().getString( "gui.Error" ),
+							DefaultLoc.getSingleton().getString( "gui.ContactDeveloper" ),
+							DefaultLoc.getSingleton().getString( "gui.Error" ),
 							JOptionPane.ERROR_MESSAGE );
 		}
 	}

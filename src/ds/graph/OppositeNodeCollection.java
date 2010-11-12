@@ -20,7 +20,7 @@
 
 package ds.graph;
 
-import de.tu_berlin.math.coga.common.localization.Localization;
+import de.tu_berlin.math.coga.common.localization.GraphLocalization;
 import java.util.Iterator;
 
 /**
@@ -57,7 +57,7 @@ public class OppositeNodeCollection implements IdentifiableCollection<Node> {
      * @exception UnsupportedOperationException if this method is called.
      */
     public boolean add(Node element) {
-        throw new UnsupportedOperationException(Localization.getInstance (
+        throw new UnsupportedOperationException(GraphLocalization.getSingleton (
 		).getString ("ds.graph.NotSupportedException"));
     }
 
@@ -66,7 +66,7 @@ public class OppositeNodeCollection implements IdentifiableCollection<Node> {
      * @exception UnsupportedOperationException if this method is called.
      */
     public void remove(Node element) {
-        throw new UnsupportedOperationException(Localization.getInstance (
+        throw new UnsupportedOperationException(GraphLocalization.getSingleton (
 		).getString ("ds.graph.NotSupportedException"));
     }
 
@@ -75,7 +75,7 @@ public class OppositeNodeCollection implements IdentifiableCollection<Node> {
      * @exception UnsupportedOperationException if this method is called.
      */
     public Node removeLast() {
-        throw new UnsupportedOperationException(Localization.getInstance (
+        throw new UnsupportedOperationException(GraphLocalization.getSingleton (
 		).getString ("ds.graph.NotSupportedException"));
     }
 
@@ -122,7 +122,7 @@ public class OppositeNodeCollection implements IdentifiableCollection<Node> {
      * @exception UnsupportedOperationException if this method is called.
      */        
     public Node get(int id) {
-        throw new UnsupportedOperationException(Localization.getInstance (
+        throw new UnsupportedOperationException(GraphLocalization.getSingleton (
 		).getString ("ds.graph.NotSupportedException"));
     }
 

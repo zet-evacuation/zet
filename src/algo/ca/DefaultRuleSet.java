@@ -22,9 +22,9 @@ package algo.ca;
 
 import algo.ca.rule.AbstractMovementRule;
 import algo.ca.rule.Rule;
+import de.tu_berlin.math.coga.common.localization.DefaultLoc;
 import ds.PropertyContainer;
 import java.util.ArrayList;
-import de.tu_berlin.math.coga.common.localization.Localization;
 
 /**
  * <p>The <code>DefaultRuleSet</code> is a {@link RuleSet} consisting of two
@@ -55,7 +55,7 @@ public class DefaultRuleSet extends RuleSet {
 			if( movementRule == null )
 				movementRule = (AbstractMovementRule)rule;
 			else
-				throw new IllegalArgumentException( Localization.getInstance().getString( "algo.ca.RuleSet.MovementRuleException" ) );
+				throw new IllegalArgumentException( DefaultLoc.getSingleton().getString( "algo.ca.RuleSet.MovementRuleException" ) );
 		}
 		super.add( rule );
 	}
@@ -73,7 +73,7 @@ public class DefaultRuleSet extends RuleSet {
 			if( movementRule == null )
 				movementRule = (AbstractMovementRule)rule;
 			else
-				throw new IllegalArgumentException( Localization.getInstance().getString( "algo.ca.RuleSet.MovementRuleException" ) );
+				throw new IllegalArgumentException( DefaultLoc.getSingleton().getString( "algo.ca.RuleSet.MovementRuleException" ) );
 		}
 		super.add( rule, useInPrimarySet, useInLoopSet );
 	}

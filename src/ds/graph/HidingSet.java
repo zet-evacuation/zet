@@ -20,7 +20,7 @@
 
 package ds.graph;
 
-import de.tu_berlin.math.coga.common.localization.Localization;
+import de.tu_berlin.math.coga.common.localization.GraphLocalization;
 import java.util.Iterator;
 
 /**
@@ -527,7 +527,7 @@ public class HidingSet<E extends Identifiable> extends ArraySet<E> implements Id
 		@Override
         public void remove() {
             if (current == null)
-                throw new IllegalStateException(Localization.getInstance (
+                throw new IllegalStateException(GraphLocalization.getSingleton (
     			).getString ("ds.graph.IterateFirstException"));
             else {
                 HidingSet.this.remove(current);
