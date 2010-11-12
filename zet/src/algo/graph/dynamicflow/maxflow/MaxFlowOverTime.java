@@ -37,7 +37,7 @@ import java.util.List;
 import algo.graph.Flags;
 import algo.graph.staticflow.mincost.MinimumMeanCycleCancelling;
 import algo.graph.util.PathDecomposition;
-import de.tu_berlin.math.coga.common.localization.GraphLocalization;
+import ds.graph.GraphLocalization;
 import ds.graph.problem.MinimumCostFlowProblem;
 
 /**

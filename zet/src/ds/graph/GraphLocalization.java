@@ -2,8 +2,10 @@
  * GraphLocalization.java
  * Created: Nov 12, 2010, 3:13:18 PM
  */
-package de.tu_berlin.math.coga.common.localization;
+package ds.graph;
 
+import de.tu_berlin.math.coga.common.localization.Localization;
+import ds.z.ZLocalization;
 import java.util.MissingResourceException;
 
 

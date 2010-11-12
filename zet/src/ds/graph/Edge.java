@@ -20,7 +20,6 @@
 package ds.graph;
 
 import com.thoughtworks.xstream.annotations.XStreamAsAttribute;
-import de.tu_berlin.math.coga.common.localization.GraphLocalization;
 
 /**
  * The <code>Edge</code> class represents a edge in a graph.

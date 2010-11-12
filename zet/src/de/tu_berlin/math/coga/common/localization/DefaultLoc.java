@@ -4,6 +4,7 @@
  */
 package de.tu_berlin.math.coga.common.localization;
 
+import ds.z.ZLocalization;
 import java.util.MissingResourceException;
 
 

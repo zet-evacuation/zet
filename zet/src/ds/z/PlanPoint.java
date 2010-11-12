@@ -21,7 +21,6 @@ package ds.z;
 
 import com.thoughtworks.xstream.annotations.XStreamAlias;
 import com.thoughtworks.xstream.annotations.XStreamOmitField;
-import de.tu_berlin.math.coga.common.localization.ZLocalization;
 import io.z.PlanPointConverter;
 import io.z.XMLConverter;
 import java.awt.Point;

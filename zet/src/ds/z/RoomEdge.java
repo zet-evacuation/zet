@@ -21,7 +21,6 @@ package ds.z;
 
 import com.thoughtworks.xstream.annotations.XStreamAlias;
 import com.thoughtworks.xstream.annotations.XStreamOmitField;
-import de.tu_berlin.math.coga.common.localization.ZLocalization;
 
 /**
  * Implements a special type of {@link Edge} that has to be associated with a

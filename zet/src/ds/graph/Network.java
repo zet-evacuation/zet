@@ -20,7 +20,6 @@
 package ds.graph;
 
 import com.thoughtworks.xstream.annotations.XStreamAlias;
-import de.tu_berlin.math.coga.common.localization.GraphLocalization;
 import java.util.Iterator;
 
 /**

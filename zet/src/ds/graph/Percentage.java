@@ -15,8 +15,6 @@
  */
 package ds.graph;
 
-import de.tu_berlin.math.coga.common.localization.GraphLocalization;
-
 /**
  * Represents a percentage value, i.e. the contained double value
  * must lie in [0,100].

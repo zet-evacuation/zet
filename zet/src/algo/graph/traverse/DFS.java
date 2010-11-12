@@ -20,7 +20,7 @@
 
 package algo.graph.traverse;
 
-import de.tu_berlin.math.coga.common.localization.GraphLocalization;
+import ds.graph.GraphLocalization;
 import ds.graph.Edge;
 import ds.graph.Graph;
 import ds.graph.IdentifiableCollection;

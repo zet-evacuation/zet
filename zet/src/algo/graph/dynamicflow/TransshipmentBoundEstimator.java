@@ -28,7 +28,7 @@ import ds.graph.Node;
 import ds.graph.flow.PathBasedFlow;
 import ds.graph.flow.StaticPathFlow;
 import algo.graph.Flags;
-import de.tu_berlin.math.coga.common.localization.GraphLocalization;
+import ds.graph.GraphLocalization;
 
 /** 
  * Calculates an upper bound for the time horizon needed

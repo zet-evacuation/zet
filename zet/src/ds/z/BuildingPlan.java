@@ -36,7 +36,6 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Random;
 import batch.tasks.AlgorithmTask;
-import de.tu_berlin.math.coga.common.localization.ZLocalization;
 
 /**
  * The <code>BuildingPlan</code> represents a complete building plan, consisting of

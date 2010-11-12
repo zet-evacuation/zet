@@ -20,7 +20,6 @@
 
 package ds.graph;
 
-import de.tu_berlin.math.coga.common.localization.GraphLocalization;
 import java.util.Iterator;
 import java.util.NavigableSet;
 import java.util.TreeSet;

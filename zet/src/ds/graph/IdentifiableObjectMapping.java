@@ -19,7 +19,6 @@
  */
 package ds.graph;
 
-import de.tu_berlin.math.coga.common.localization.GraphLocalization;
 import java.lang.reflect.Array;
 
 /**

@@ -22,7 +22,6 @@
 package ds.z;
 
 import com.thoughtworks.xstream.annotations.XStreamAlias;
-import de.tu_berlin.math.coga.common.localization.ZLocalization;
 
 /**
  *
