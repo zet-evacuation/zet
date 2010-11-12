@@ -21,7 +21,6 @@ package ds.z;
 
 import com.thoughtworks.xstream.annotations.XStreamAlias;
 import com.thoughtworks.xstream.annotations.XStreamOmitField;
-import de.tu_berlin.math.coga.common.localization.ZLocalization;
 
 /** A specialized case of a RoomEdge, where we do not want to model a door, but rather a stair,
  *  that is, the linkTarget of the Edge is set to another Edge which must be located on a different floor.

@@ -2,8 +2,9 @@
  * ZLocalization.java
  * Created: Nov 12, 2010, 2:32:12 PM
  */
-package de.tu_berlin.math.coga.common.localization;
+package ds.z;
 
+import de.tu_berlin.math.coga.common.localization.Localization;
 import java.util.MissingResourceException;
 
 /**

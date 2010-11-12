@@ -21,7 +21,6 @@
 package ds.z;
 
 import com.thoughtworks.xstream.annotations.XStreamOmitField;
-import de.tu_berlin.math.coga.common.localization.ZLocalization;
 import ds.z.exception.PointsAlreadyConnectedException;
 import io.z.EdgeConverter;
 import io.z.XMLConverter;
