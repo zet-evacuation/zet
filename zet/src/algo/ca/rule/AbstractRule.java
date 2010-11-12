@@ -15,10 +15,11 @@
  */
 package algo.ca.rule;
 
-import de.tu_berlin.math.coga.common.localization.Localization;
-import ds.ca.CAController;
 import algo.ca.parameter.ParameterSet;
+import de.tu_berlin.math.coga.common.localization.DefaultLoc;
+import ds.ca.CAController;
 import ds.ca.Cell;
+import ds.ca.Individual;
 
 /**
  * @author Daniel Plümpe
@@ -54,10 +55,10 @@ public abstract class AbstractRule implements Rule {
 
 	public void setCAController( CAController caController ) {
 		if( this.caController != null )
-			throw new RuntimeException( Localization.getInstance().getString( "algo.ca.rule.RuleAlreadyHaveCAControllerException" ) );
+			throw new RuntimeException( DefaultLoc.getSingleton().getString( "algo.ca.rule.RuleAlreadyHaveCAControllerException" ) );
 
 		if( caController == null )
-			throw new RuntimeException( Localization.getInstance().getString( "algo.ca.rule.CAControllerIsNullException" ) );
+			throw new RuntimeException( DefaultLoc.getSingleton().getString( "algo.ca.rule.CAControllerIsNullException" ) );
 
 		this.caController = caController;
 		this.parameterSet = caController.getParameterSet();

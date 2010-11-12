@@ -26,8 +26,8 @@ import algo.ca.CellularAutomatonInOrderExecution;
 import algo.ca.CellularAutomatonRandomOrderExecution;
 import algo.ca.EvacuationCellularAutomatonAlgorithm;
 import algo.ca.SwapCellularAutomaton;
+import de.tu_berlin.math.coga.common.localization.DefaultLoc;
 import ds.ca.CellularAutomaton;
-import de.tu_berlin.math.coga.common.localization.Localization;
 
 /**
  * Some cellular automaton simulation algorithms. Creates the algorithm objects
@@ -36,31 +36,31 @@ import de.tu_berlin.math.coga.common.localization.Localization;
  */
 public enum CellularAutomatonAlgorithm {
 	/** A simulation algorithm where all individuals move in the order of decreasing distances. */
-	BackToFront( Localization.getInstance().getString( "batch.caOrder.backToFront" ) ) {
+	BackToFront( DefaultLoc.getSingleton().getString( "batch.caOrder.backToFront" ) ) {
 		public EvacuationCellularAutomatonAlgorithm createTask( CellularAutomaton ca ) {
 			return new CellularAutomatonBackToFrontExecution( ca );
 		}
 	},
 	/** A simulation algorithm where all individuals move in the order of increasing distances. */
-	FrontToBack( Localization.getInstance().getString( "batch.caOrder.frontToBack" ) ) {
+	FrontToBack( DefaultLoc.getSingleton().getString( "batch.caOrder.frontToBack" ) ) {
 		public EvacuationCellularAutomatonAlgorithm createTask( CellularAutomaton ca ) {
 			return new CellularAutomatonFrontToBackExecution( ca );
 		}
 	},
 	/** A simulation algorithm where all individuals are simulated in a random order in each step. */
-	RandomOrder( Localization.getInstance().getString( "batch.caOrder.random" ) ) {
+	RandomOrder( DefaultLoc.getSingleton().getString( "batch.caOrder.random" ) ) {
 		public EvacuationCellularAutomatonAlgorithm createTask( CellularAutomaton ca ) {
 			return new CellularAutomatonRandomOrderExecution( ca );
 		}
 	},
 	/** A simulation algorithm where all individuals are simulated in a random order and where two individuals can swap position. */
-	Swap( Localization.getInstance().getString( "batch.caOrder.swap" ) ) {
+	Swap( DefaultLoc.getSingleton().getString( "batch.caOrder.swap" ) ) {
 		public EvacuationCellularAutomatonAlgorithm createTask( CellularAutomaton ca ) {
 			return new SwapCellularAutomaton( ca );
 		}
 	},
 	/** A simulation algorithm where all individuals are simulated in the same order in each step. */
-	InOrder( Localization.getInstance().getString( "batch.caOrder.unifom" ) ) {
+	InOrder( DefaultLoc.getSingleton().getString( "batch.caOrder.unifom" ) ) {
 		@Override
 		public EvacuationCellularAutomatonAlgorithm createTask( CellularAutomaton ca ) {
 			return new CellularAutomatonInOrderExecution( ca );

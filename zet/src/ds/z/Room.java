@@ -22,6 +22,7 @@ package ds.z;
 
 import com.thoughtworks.xstream.annotations.XStreamAlias;
 import com.thoughtworks.xstream.annotations.XStreamAsAttribute;
+import de.tu_berlin.math.coga.common.localization.ZLocalization;
 import ds.z.exception.AreaNotInsideException;
 import ds.z.exception.PolygonNotClosedException;
 import ds.z.exception.RoomEdgeInvalidTargetException;
@@ -35,7 +36,6 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
-import de.tu_berlin.math.coga.common.localization.Localization;
 
 /**
  * Represents a room in a {@link BuildingPlan}. Generally a room is nothing else than
@@ -213,35 +213,35 @@ public class Room extends BaseRoom<RoomEdge> implements Cloneable {
 	void addArea( Area area ) throws IllegalArgumentException {
 		if( area instanceof AssignmentArea ) {
 			if( assignmentAreas.contains( (AssignmentArea)area ) ) {
-				throw new IllegalArgumentException( Localization.getInstance().getString( "ds.z.Room.AlreadyContainsAreaException" ) );
+				throw new IllegalArgumentException( ZLocalization.getSingleton().getString( "ds.z.Room.AlreadyContainsAreaException" ) );
 			} else {
 				assignmentAreas.add( (AssignmentArea) area );
 			}
 		}
 		if( area instanceof DelayArea ) {
 			if( delayAreas.contains( (DelayArea)area ) ) {
-				throw new IllegalArgumentException( Localization.getInstance().getString( "ds.z.Room.AlreadyContainsAreaException" ) );
+				throw new IllegalArgumentException( ZLocalization.getSingleton().getString( "ds.z.Room.AlreadyContainsAreaException" ) );
 			} else {
 				delayAreas.add( (DelayArea) area );
 			}
 		}
 		if( area instanceof Barrier ) {
 			if( barriers.contains( (Barrier)area ) ) {
-				throw new IllegalArgumentException( Localization.getInstance().getString( "ds.z.Room.AlreadyContainsAreaException" ) );
+				throw new IllegalArgumentException( ZLocalization.getSingleton().getString( "ds.z.Room.AlreadyContainsAreaException" ) );
 			} else {
 				barriers.add( (Barrier) area );
 			}
 		// Check also for evacuation barriers
 		} else if( area instanceof InaccessibleArea ) {
 			if( inaccessibleAreas.contains( (InaccessibleArea)area ) ) {
-				throw new IllegalArgumentException( Localization.getInstance().getString( "ds.z.Room.AlreadyContainsAreaException" ) );
+				throw new IllegalArgumentException( ZLocalization.getSingleton().getString( "ds.z.Room.AlreadyContainsAreaException" ) );
 			}
 			// is _not_ contained because if it would be in inaccessibleAreas and the exception is already thrown
 			inaccessibleAreas.add( (InaccessibleArea) area );
 		}
 		if( area instanceof SaveArea ) {
 			if( saveAreas.contains( (SaveArea)area ) ) {
-				throw new IllegalArgumentException( Localization.getInstance().getString( "ds.z.Room.AlreadyContainsAreaException" ) );
+				throw new IllegalArgumentException( ZLocalization.getSingleton().getString( "ds.z.Room.AlreadyContainsAreaException" ) );
 			} else {
 				saveAreas.add( (SaveArea) area );
 			}
@@ -253,14 +253,14 @@ public class Room extends BaseRoom<RoomEdge> implements Cloneable {
 		}
 		if( area instanceof StairArea ) {
 			if( stairAreas.contains( (StairArea)area ) ) {
-				throw new IllegalArgumentException( Localization.getInstance().getString( "ds.z.Room.AlreadyContainsAreaException" ) );
+				throw new IllegalArgumentException( ZLocalization.getSingleton().getString( "ds.z.Room.AlreadyContainsAreaException" ) );
 			} else {
 				stairAreas.add( (StairArea) area );
 			}
 		}
 		if( area instanceof TeleportArea ) {
 			if( teleportAreas.contains( (TeleportArea)area ) ) {
-				throw new IllegalArgumentException( Localization.getInstance().getString( "ds.z.Room.AlreadyContainsAreaException" ) );
+				throw new IllegalArgumentException( ZLocalization.getSingleton().getString( "ds.z.Room.AlreadyContainsAreaException" ) );
 			}	else {
 				teleportAreas.add( (TeleportArea)area );
 			}
@@ -288,67 +288,67 @@ public class Room extends BaseRoom<RoomEdge> implements Cloneable {
 			if( e instanceof TeleportEdge ) {
 				TeleportEdge e2 = ((TeleportEdge) e).getLinkTarget();
 				if( e2.getLinkTarget() == null ) {
-					throw new TeleportEdgeNotConnected( e2, Localization.getInstance().getString( "ds.z.TeleportEdge.LinkTargetNotSet" ) );
+					throw new TeleportEdgeNotConnected( e2, ZLocalization.getSingleton().getString( "ds.z.TeleportEdge.LinkTargetNotSet" ) );
 				} else if( e2.getLinkTarget().getLinkTarget() != e2 ) {
-					throw new TeleportEdgeNotConnected( e2, Localization.getInstance().getString( "ds.z.TeleportEdge.InconsistentLinkage" ) );
+					throw new TeleportEdgeNotConnected( e2, ZLocalization.getSingleton().getString( "ds.z.TeleportEdge.InconsistentLinkage" ) );
 				}
 
 				Room r = (Room) e2.getAssociatedPolygon();
 				if( r.getAssociatedFloor() == associatedFloor ) {
 					throw new TeleportEdgeInvalidTargetException( e2,
-									Localization.getInstance().getString( "ds.z.TeleportEdge.SameFloorException" ) );
+									ZLocalization.getSingleton().getString( "ds.z.TeleportEdge.SameFloorException" ) );
 				}
 				if( e.length() != e2.length() ) {
 					throw new TeleportEdgeTargetLengthException( e2,
-									Localization.getInstance().getString( "ds.z.TeleportEdge.LengthNotMatchException" ) + "(" + e2 + ", " + e + ")" );
+									ZLocalization.getSingleton().getString( "ds.z.TeleportEdge.LengthNotMatchException" ) + "(" + e2 + ", " + e + ")" );
 				}
 			} else {
 				if( e.isPassable() && e.getLinkTarget().getRoom().getAssociatedFloor() != associatedFloor ) {
 					throw new RoomEdgeInvalidTargetException( e,
-									Localization.getInstance().getString( "ds.z.Room.DifferentFloorException" ) );
+									ZLocalization.getSingleton().getString( "ds.z.Room.DifferentFloorException" ) );
 				}
 			}
 		}
 		for( AssignmentArea aa : assignmentAreas ) {
 			aa.check( rasterized );
 			if( !(contains( aa )) ) {
-				throw new AreaNotInsideException( aa, Localization.getInstance().getString( "ds.z.Room.NotCompletelyInException" ) );
+				throw new AreaNotInsideException( aa, ZLocalization.getSingleton().getString( "ds.z.Room.NotCompletelyInException" ) );
 			}
 		}
 		for( Barrier b : barriers ) {
 			b.check( rasterized );
 			if( !(contains( b )) ) {
-				throw new AreaNotInsideException( b, Localization.getInstance().getString( "ds.z.Room.NotCompletelyInException" ) );
+				throw new AreaNotInsideException( b, ZLocalization.getSingleton().getString( "ds.z.Room.NotCompletelyInException" ) );
 			}
 		}
 		for( DelayArea da : delayAreas ) {
 			da.check( rasterized );
 			if( !(contains( da )) ) {
-				throw new AreaNotInsideException( da, Localization.getInstance().getString( "ds.z.Room.NotCompletelyInException" ) );
+				throw new AreaNotInsideException( da, ZLocalization.getSingleton().getString( "ds.z.Room.NotCompletelyInException" ) );
 			}
 		}
 		for( InaccessibleArea ia : inaccessibleAreas ) { // including barriers
 			ia.check( rasterized );
 			if( !(contains( ia )) ) {
-				throw new AreaNotInsideException( ia, Localization.getInstance().getString( "ds.z.Room.NotCompletelyInException" ) );
+				throw new AreaNotInsideException( ia, ZLocalization.getSingleton().getString( "ds.z.Room.NotCompletelyInException" ) );
 			}
 		}
 		for( SaveArea sa : saveAreas ) { // Including evacuation areas
 			sa.check( rasterized );
 			if( !(contains( sa )) ) {
-				throw new AreaNotInsideException( sa, Localization.getInstance().getString( "ds.z.Room.NotCompletelyInException" ) );
+				throw new AreaNotInsideException( sa, ZLocalization.getSingleton().getString( "ds.z.Room.NotCompletelyInException" ) );
 			}
 		}
 		for( StairArea sa : stairAreas ) {
 			sa.check( rasterized );
 			if( !(contains( sa )) ) {
-				throw new AreaNotInsideException( sa, Localization.getInstance().getString( "ds.z.Room.NotCompletelyInException" ) );
+				throw new AreaNotInsideException( sa, ZLocalization.getSingleton().getString( "ds.z.Room.NotCompletelyInException" ) );
 			}
 		}
 		for( TeleportArea ta : teleportAreas ) {
 			ta.check( rasterized );
 			if( !(contains( ta )) ) {
-				throw new AreaNotInsideException( ta, Localization.getInstance().getString( "ds.z.Room.NotCompletelyInException" ) );
+				throw new AreaNotInsideException( ta, ZLocalization.getSingleton().getString( "ds.z.Room.NotCompletelyInException" ) );
 			}
 		}
 		checkTooManyPersonsInRoom();
@@ -365,7 +365,7 @@ public class Room extends BaseRoom<RoomEdge> implements Cloneable {
 		}
 		// Avoid Division by Zero here!
 		if( persons != 0 && (area() / persons) < Assignment.spacePerPerson ) {
-			throw new TooManyPeopleException( this, Localization.getInstance().getString( "ds.z.Room.OverfullRoomException" ) );
+			throw new TooManyPeopleException( this, ZLocalization.getSingleton().getString( "ds.z.Room.OverfullRoomException" ) );
 		}
 	}
 
@@ -475,12 +475,12 @@ public class Room extends BaseRoom<RoomEdge> implements Cloneable {
 				if( teleportEdges ) {
 					// Both are TeleportEdges
 					if( !e1.isNeighbour( e2 ) ) {
-						throw new IllegalArgumentException( Localization.getInstance().getString(
+						throw new IllegalArgumentException( ZLocalization.getSingleton().getString(
 										"ds.z.Room.CombineTeleportEdgesNonincidentTargets" ) );
 					}
 				} else if( (e1 instanceof TeleportEdge) || (e2 instanceof TeleportEdge) ) {
 					// One of them is a teleport edge
-					throw new IllegalArgumentException( Localization.getInstance().getString(
+					throw new IllegalArgumentException( ZLocalization.getSingleton().getString(
 									"ds.z.Room.CombineTeleportEdgeWithNonTeleportEdge" ) );
 				}
 
@@ -500,14 +500,14 @@ public class Room extends BaseRoom<RoomEdge> implements Cloneable {
 						e2_partner.setLinkTarget( e1_partner );
 					} else {
 						// Normal behaviour: Edges point to different rooms --> Exception
-						throw new IllegalArgumentException( Localization.getInstance().getString( "ds.z.Room.CombinePassablesToDifferentRooms" ) );
+						throw new IllegalArgumentException( ZLocalization.getSingleton().getString( "ds.z.Room.CombinePassablesToDifferentRooms" ) );
 					}
 				} else {
 					// Combine passables to a single link-target room
 					Room target = e1.getLinkTarget().getRoom();
 					// Stop here if the operation will fail because of the target size
 					if( keepMinSize && target.getNumberOfEdges() - 1 < 3 ) {
-						throw new IllegalStateException( Localization.getInstance().getString( "ds.z.Room.TargetNotEnoughEdgesException" ) );
+						throw new IllegalStateException( ZLocalization.getSingleton().getString( "ds.z.Room.TargetNotEnoughEdgesException" ) );
 					}
 
 					result = combineEdgesInternal( e1, e2, keepMinSize );
@@ -571,7 +571,7 @@ public class Room extends BaseRoom<RoomEdge> implements Cloneable {
 		RoomEdge e1 = getEdge( e );
 		RoomEdge e2 = r.getEdge( e );
 		if( e1.isPassable() || e2.isPassable() ) {
-			throw new IllegalStateException( Localization.getInstance().getString( "ds.z.Room.NoMoreConnectionsPossibleException" ) );
+			throw new IllegalStateException( ZLocalization.getSingleton().getString( "ds.z.Room.NoMoreConnectionsPossibleException" ) );
 		}
 		e1.setLinkTarget( e2 );
 		e2.setLinkTarget( e1 );
@@ -591,7 +591,7 @@ public class Room extends BaseRoom<RoomEdge> implements Cloneable {
 		RoomEdge e1 = getEdge( p1, p2 );
 		RoomEdge e2 = r.getEdge( p1, p2 );
 		if( e1.isPassable() || e2.isPassable() ) {
-			throw new java.lang.IllegalStateException( Localization.getInstance().getString( "ds.z.Room.NoMoreConnectionsPossibleException" ) );
+			throw new java.lang.IllegalStateException( ZLocalization.getSingleton().getString( "ds.z.Room.NoMoreConnectionsPossibleException" ) );
 		}
 		e1.setLinkTarget( e2 );
 		e2.setLinkTarget( e1 );
@@ -610,14 +610,14 @@ public class Room extends BaseRoom<RoomEdge> implements Cloneable {
 	 */
 	public static void connectToWithTeleportEdge( RoomEdge sourceEdge, RoomEdge targetEdge ) throws IllegalArgumentException {
 		if( sourceEdge.isPassable() || targetEdge.isPassable() ) {
-			throw new IllegalArgumentException( Localization.getInstance().getString( "ds.z.Room.PassableException" ) );
+			throw new IllegalArgumentException( ZLocalization.getSingleton().getString( "ds.z.Room.PassableException" ) );
 		}
 		if( targetEdge.getRoom() == sourceEdge.getRoom() ) {
-			throw new IllegalArgumentException( Localization.getInstance().getString( "ds.z.Room.NoDifferentRoomsException" ) );
+			throw new IllegalArgumentException( ZLocalization.getSingleton().getString( "ds.z.Room.NoDifferentRoomsException" ) );
 		}
 		if( targetEdge.getRoom().getAssociatedFloor() ==
 						sourceEdge.getRoom().getAssociatedFloor() ) {
-			throw new IllegalArgumentException( Localization.getInstance().getString( "ds.z.Room.NoDifferentFloorsException" ) );
+			throw new IllegalArgumentException( ZLocalization.getSingleton().getString( "ds.z.Room.NoDifferentFloorsException" ) );
 		}
 
 		Room s = sourceEdge.getRoom();
@@ -669,7 +669,7 @@ public class Room extends BaseRoom<RoomEdge> implements Cloneable {
 			result = teleportAreas.remove( (TeleportArea) area );
 		}
 		if( !result ) {
-			throw new IllegalArgumentException( Localization.getInstance().getString( "ds.z.Room.NoAreaException" ) );
+			throw new IllegalArgumentException( ZLocalization.getSingleton().getString( "ds.z.Room.NoAreaException" ) );
 		}
 
 //		area.removeChangeListener( this );
@@ -808,7 +808,7 @@ public class Room extends BaseRoom<RoomEdge> implements Cloneable {
 				associatedFloor = floor;
 				floor.addRoom( this );
 			} else {
-				throw new IllegalArgumentException( Localization.getInstance().getString( "ds.z.Room.NoFloorException" ) );
+				throw new IllegalArgumentException( ZLocalization.getSingleton().getString( "ds.z.Room.NoFloorException" ) );
 			}
 		} catch( IllegalArgumentException ex ) {
 			throw ex;

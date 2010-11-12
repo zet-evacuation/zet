@@ -19,6 +19,7 @@
  */
 package gui.editor.properties.framework;
 
+import de.tu_berlin.math.coga.common.localization.DefaultLoc;
 import ds.PropertyContainer;
 import javax.swing.JPanel;
 import de.tu_berlin.math.coga.common.localization.Localization;
@@ -53,7 +54,7 @@ public abstract class AbstractPropertyValue<T> implements PropertyValue<T>, Prop
 	 */
 	public String getDescription() {
 		if( isUsedAsLocString() )
-			return Localization.getInstance().getString( description );
+			return DefaultLoc.getSingleton().getString( description );
 		else
 			return description;
 	}
@@ -86,7 +87,7 @@ public abstract class AbstractPropertyValue<T> implements PropertyValue<T>, Prop
 
 	public String getInformation() {
 		if( isUsedAsLocString() )
-			return Localization.getInstance().getString( information );
+			return DefaultLoc.getSingleton().getString( information );
 		else
 			return information;
 	}
@@ -105,7 +106,7 @@ public abstract class AbstractPropertyValue<T> implements PropertyValue<T>, Prop
 
 	public String getName() {
 		if( isUsedAsLocString() )
-			return Localization.getInstance().getString( name );
+			return DefaultLoc.getSingleton().getString( name );
 		else
 			return name;
 	}

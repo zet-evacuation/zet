@@ -138,7 +138,7 @@ public class Individual implements Identifiable {
 
 	/**
 	 * Used for some potential change rule...
-	 * @return
+	 * @param index
 	 */
 	public void setMemoryIndex( int index ) {
 		memoryIndex = index;

@@ -19,9 +19,9 @@
  */
 package de.tu_berlin.math.coga.zet.converter.graph;
 
+import de.tu_berlin.math.coga.common.localization.DefaultLoc;
 import de.tu_berlin.math.coga.zet.converter.RasterContainerCreator;
 import algo.graph.util.GraphInstanceChecker;
-import de.tu_berlin.math.coga.common.localization.Localization;
 import ds.PropertyContainer;
 import ds.graph.DynamicNetwork;
 import ds.graph.IdentifiableIntegerMapping;
@@ -167,7 +167,7 @@ public class ZToRoomGridGraphConverter {
                 mapping.setIsDeletedSourceNode(oldSource, true);
             }
         } else {
-            throw new AssertionError(Localization.getInstance().getString("converter.NoCheckException"));
+            throw new AssertionError(DefaultLoc.getSingleton().getString("converter.NoCheckException"));
         }
     }
 
@@ -650,7 +650,7 @@ public class ZToRoomGridGraphConverter {
                             if (row > 0) {
                                 lastSquare = room.getSquare(col, row - 1);
                             } else {
-                                throw new AssertionError(Localization.getInstance().getString("converter.RowIsZeroException"));
+                                throw new AssertionError(DefaultLoc.getSingleton().getString("converter.RowIsZeroException"));
                             }
                             mapping.setEdgeLevel(edge, lastSquare.getLevel(Direction.getDirection(0, 1)));
                         }

@@ -21,13 +21,13 @@
 package ds.z;
 
 import com.thoughtworks.xstream.annotations.XStreamOmitField;
+import de.tu_berlin.math.coga.common.localization.ZLocalization;
 import ds.z.exception.PointsAlreadyConnectedException;
 import io.z.EdgeConverter;
 import io.z.XMLConverter;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
-import de.tu_berlin.math.coga.common.localization.Localization;
 
 /**
  * Implements a simple edge that can be used to create boundings of polygons.
@@ -171,7 +171,7 @@ public class Edge implements Serializable {
 		else if( target.getNextEdge() == e )
 			return source.getPreviousEdge();
 		else
-			throw new IllegalArgumentException( Localization.getInstance().getString( "ds.z.EdgeException" ) );
+			throw new IllegalArgumentException( ZLocalization.getSingleton().getString( "ds.z.EdgeException" ) );
 	}
 
 	/**
@@ -234,7 +234,7 @@ public class Edge implements Serializable {
 		else if( e1.getTarget().equals( e2.getTarget() ) )
 			return e1.getTarget();
 		else
-			throw new java.lang.IllegalArgumentException( Localization.getInstance().getString( "ds.z.NoCommonPointException" ) );
+			throw new java.lang.IllegalArgumentException( ZLocalization.getSingleton().getString( "ds.z.NoCommonPointException" ) );
 	}
 
 	/**
@@ -344,7 +344,7 @@ public class Edge implements Serializable {
 			return getTarget();
 		if( p == target || p.equals( target ) )
 			return getSource();
-		throw new IllegalArgumentException( Localization.getInstance().getString( "ds.z.NoCoindidesException" ) );
+		throw new IllegalArgumentException( ZLocalization.getSingleton().getString( "ds.z.NoCoindidesException" ) );
 	}
 
 	/**
@@ -477,7 +477,7 @@ public class Edge implements Serializable {
 	protected void setAssociatedPolygon( PlanPolygon polygon )
 					throws NullPointerException, IllegalArgumentException, IllegalStateException {
 		if( polygon == null )
-			throw new NullPointerException( Localization.getInstance().getString( "ds.z.PolygonIsNullException" ) );
+			throw new NullPointerException( ZLocalization.getSingleton().getString( "ds.z.PolygonIsNullException" ) );
 		if( polygon.fits( this ) ) {
 			if( associatedPolygon != null )
 				associatedPolygon.removeEdge( this );
@@ -486,7 +486,7 @@ public class Edge implements Serializable {
 			//ChangeEvents are thrown by polygons
 //			throwChangeEvent( new ChangeEvent( this ) );
 		} else
-			throw new IllegalArgumentException( Localization.getInstance().getString( "ds.z.CanNotConnectException" ) );
+			throw new IllegalArgumentException( ZLocalization.getSingleton().getString( "ds.z.CanNotConnectException" ) );
 	}
 
 	/**
@@ -510,7 +510,7 @@ public class Edge implements Serializable {
 		else if( target.equals( p ) )
 			setTarget( newPoint, overwrite );
 		else
-			throw new IllegalArgumentException( Localization.getInstance().getString(
+			throw new IllegalArgumentException( ZLocalization.getSingleton().getString(
 							"ds.z.PlanPolygon.PointNotContainedInEdgeException" ) );
 	}
 
@@ -531,7 +531,7 @@ public class Edge implements Serializable {
 		}*/
 		if( !overwrite && newSource != source && newSource.getNextEdge() != null )
 			throw new PointsAlreadyConnectedException( newSource,
-							Localization.getInstance().getString( "ds.z.SourceAlreadyConnectedException" ) );
+							ZLocalization.getSingleton().getString( "ds.z.SourceAlreadyConnectedException" ) );
 
 		if( source != null ) {
 //			source.removeChangeListener( this );
@@ -562,7 +562,7 @@ public class Edge implements Serializable {
 		}*/
 		if( !overwrite && newTarget != target && newTarget.getPreviousEdge() != null )
 			throw new PointsAlreadyConnectedException( newTarget,
-							Localization.getInstance().getString( "ds.z.TargetAlreadyConnectedException" ) );
+							ZLocalization.getSingleton().getString( "ds.z.TargetAlreadyConnectedException" ) );
 
 		if( target != null ) {
 //			target.removeChangeListener( this );

@@ -5,9 +5,9 @@
 package de.tu_berlin.math.coga.math.vectormath;
 
 
+import de.tu_berlin.math.coga.common.localization.DefaultLoc;
 import java.text.NumberFormat;
 import java.text.ParseException;
-import de.tu_berlin.math.coga.common.localization.Localization;
 
 /**
  * Implements a two dimensional vector.
@@ -48,6 +48,7 @@ public class Vector2 implements Cloneable {
 
 	/**
 	 * Creates a copy of this vector.
+	 * @return a copy of this vector
 	 */
 	@Override
 	public Vector2 clone() {
@@ -269,7 +270,7 @@ public class Vector2 implements Cloneable {
 	 */
 	@Override
 	public String toString(){
-		return toString( Localization.getInstance().getFloatConverter() );
+		return toString( DefaultLoc.getSingleton().getFloatConverter() );
 	}
 
 	/**
@@ -293,7 +294,7 @@ public class Vector2 implements Cloneable {
 	 * @throws ParseException if an error occurs during parsing
 	 */
 	public void parse( String value ) throws ParseException {
-		parse( value, Localization.getInstance().getFloatConverter() );
+		parse( value, DefaultLoc.getSingleton().getFloatConverter() );
 	}
 
 	/**
@@ -322,14 +323,13 @@ public class Vector2 implements Cloneable {
 
 	/**
 	 * Computes a normal to a plane defined by three vectors or points. It is
-	 * computed using the formular {@code n = (x - y) \cross (y - z)}, where
+	 * computed using the formula {@code n = (x - y) \cross (y - z)}, where
 	 * \cross denotes the {@link #crossProduct(de.tu_berlin.math.coga.math.vectormath.Vector3)}.
 	 * @param x the first vector
 	 * @param y the second vector
-	 * @param z the third vector
 	 * @return the normal to the three vectors.
 	 */
-	public final static Vector3 normal( Vector2 x, Vector2 y ) {
+	public static Vector3 normal( Vector2 x, Vector2 y ) {
 		return new Vector3( x.x, x.y ).crossProduct( new Vector3( y.x, y.y ) );
 	}
 
@@ -337,19 +337,20 @@ public class Vector2 implements Cloneable {
 	 * Computes the orientation between two vectors.
 	 * @param v1 the first vector
 	 * @param v2 the second vector
-	 * @return a value indiciating the orientation between the two vectors
+	 * @return a value indicating the orientation between the two vectors in the plane
 	 */
-	public final static int orientation( Vector2 v1, Vector2 v2 ) {
+	public static int orientation( Vector2 v1, Vector2 v2 ) {
 		return (int) Math.signum( v2.x * v1.y - v2.y * v1.x );
 	}
 
 	/**
 	 * Computes the orientation of three points.
-	 * @param v1 the first vector
-	 * @param v2 the second vector
-	 * @return a value indiciating the orientation between the two vectors
+	 * @param p the first vector
+	 * @param q the second vector
+	 * @param r the third vector
+	 * @return the value indicates the orientation between the two vectors
 	 */
-	public final static int orientation( Vector2 p, Vector2 q, Vector2 r ) {
+	public static int orientation( Vector2 p, Vector2 q, Vector2 r ) {
 		final Vector2 u = p.sub( q );
 		final Vector2 v = r.sub( q );
 		return (int) Math.signum( v.x * u.y - v.y * u.x ); // return sign of determinancy

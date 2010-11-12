@@ -20,7 +20,7 @@
 
 package algo.graph.traverse;
 
-import de.tu_berlin.math.coga.common.localization.Localization;
+import de.tu_berlin.math.coga.common.localization.GraphLocalization;
 import ds.graph.Edge;
 import ds.graph.Graph;
 import ds.graph.IdentifiableCollection;
@@ -68,25 +68,25 @@ public class DFS {
     }
 
     public List<Edge> getBackEdges() {
-        if (backEdges == null) throw new IllegalStateException(Localization.getInstance (
+        if (backEdges == null) throw new IllegalStateException(GraphLocalization.getSingleton (
 		).getString ("algo.graph.traverse.NotCalledYetException"));
         return backEdges;
     }    
     
     public List<Edge> getCrossEdges() {
-        if (crossEdges == null) throw new IllegalStateException(Localization.getInstance (
+        if (crossEdges == null) throw new IllegalStateException(GraphLocalization.getSingleton (
 		).getString ("algo.graph.traverse.NotCalledYetException"));
         return crossEdges;
     }    
     
     public List<Edge> getForwardEdges() {
-        if (forwardEdges == null) throw new IllegalStateException(Localization.getInstance (
+        if (forwardEdges == null) throw new IllegalStateException(GraphLocalization.getSingleton (
 		).getString ("algo.graph.traverse.NotCalledYetException"));
         return forwardEdges;
     }    
     
     public List<Edge> getTreeEdges() {
-        if (treeEdges == null) throw new IllegalStateException(Localization.getInstance (
+        if (treeEdges == null) throw new IllegalStateException(GraphLocalization.getSingleton (
 		).getString ("algo.graph.traverse.NotCalledYetException"));
         return treeEdges;
     }
@@ -96,7 +96,7 @@ public class DFS {
     }
     
     public void run(boolean reverse) {
-        if (graph == null) throw new IllegalStateException(Localization.getInstance (
+        if (graph == null) throw new IllegalStateException(GraphLocalization.getSingleton (
 		).getString ("algo.graph.traverse.NotCalledYetException"));
         if (backEdges != null) return;
         for (int i=0; i<graph.numberOfNodes(); i++) {

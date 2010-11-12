@@ -17,7 +17,7 @@ package algo.graph.dynamicflow;
 
 import de.tu_berlin.math.coga.common.algorithm.Algorithm;
 import algo.graph.util.PathComposition;
-import de.tu_berlin.math.coga.common.localization.Localization;
+import de.tu_berlin.math.coga.common.localization.GraphLocalization;
 import ds.graph.flow.PathBasedFlowOverTime;
 import ds.graph.Edge;
 import ds.graph.flow.EdgeBasedFlowOverTime;
@@ -63,12 +63,10 @@ public abstract class DynamicFlowAlgorithm /*extends GraphAlgorithm*/ extends Al
 	 * @return the calculated flow as <code>PathBasedFlowOverTime</code> object.
 	 */
 	public final PathBasedFlowOverTime getResultFlowPathBased(){
-		if (resultFlowPathBased != null){
+		if (resultFlowPathBased != null)
 			return resultFlowPathBased;
-		}
-		if (resultFlowEdgeBased != null){
-			throw new AssertionError(Localization.getInstance (
-			).getString ("algo.graph.dynmicflow.NoEdgeBasedFlowException"));
+		if (resultFlowEdgeBased != null) {
+			throw new AssertionError(GraphLocalization.getSingleton().getString ("algo.graph.dynmicflow.NoEdgeBasedFlowException"));
 		}
 		return null;
 	}

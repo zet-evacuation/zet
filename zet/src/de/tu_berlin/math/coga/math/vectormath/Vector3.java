@@ -21,9 +21,9 @@
 
 package de.tu_berlin.math.coga.math.vectormath;
 
+import de.tu_berlin.math.coga.common.localization.DefaultLoc;
 import java.text.NumberFormat;
 import java.text.ParseException;
-import de.tu_berlin.math.coga.common.localization.Localization;
 
 /**
  * Implements a three dimensional vector.
@@ -82,6 +82,8 @@ public class Vector3 implements Cloneable {
 
 	/**
 	 * Creates a copy of this vector.
+	 *
+	 * @return a copy of the vector
 	 */
 	@Override
 	public Vector3 clone() {
@@ -110,7 +112,7 @@ public class Vector3 implements Cloneable {
 	 * Sets all three coordinates at once
 	 * @param x the first or {@code x}-coordinate
 	 * @param y the second or {@code y}-coordinate
-	 * @param z the thirc or {@code z}-coordinate
+	 * @param z the third or {@code z}-coordinate
 	 */
 	public void set( double x, double y, double z ) {
 		this.x = x;
@@ -319,7 +321,7 @@ public class Vector3 implements Cloneable {
 	 */
 	@Override
 	public String toString(){
-		return toString( Localization.getInstance().getFloatConverter() );
+		return toString( DefaultLoc.getSingleton().getFloatConverter() );
 	}
 
 	/**
@@ -343,7 +345,7 @@ public class Vector3 implements Cloneable {
 	 * @throws ParseException if an error occurs during parsing
 	 */
 	public void parse( String value ) throws ParseException {
-		parse( value, Localization.getInstance().getFloatConverter() );
+		parse( value, DefaultLoc.getSingleton().getFloatConverter() );
 	}
 
 	/**
@@ -373,14 +375,14 @@ public class Vector3 implements Cloneable {
 
 	/**
 	 * Computes a normal to a plane defined by three vectors or points. It is
-	 * computed using the formular {@code n = (x - y) \cross (y - z)}, where
+	 * computed using the formula {@code n = (x - y) \cross (y - z)}, where
 	 * \cross denotes the {@link #crossProduct(de.tu_berlin.math.coga.math.vectormath.Vector3)}.
 	 * @param x the first vector
 	 * @param y the second vector
 	 * @param z the third vector
 	 * @return the normal to the three vectors.
 	 */
-	public final static Vector3 normal( Vector3 x, Vector3 y, Vector3 z ) {
+	public static Vector3 normal( Vector3 x, Vector3 y, Vector3 z ) {
 		return x.sub( y ).crossProduct( y.sub( z ) );
 	}
 
@@ -389,19 +391,20 @@ public class Vector3 implements Cloneable {
 	 * vectors is ignored.
 	 * @param v1 the first vector
 	 * @param v2 the second vector
-	 * @return a value indiciating the orientation between the two vectors
+	 * @return a value indicating the orientation between the two vectors
 	 */
-	public final static int orientation( Vector3 v1, Vector3 v2 ) {
+	public static int orientation( Vector3 v1, Vector3 v2 ) {
 		return (int) Math.signum( v2.x * v1.y - v2.y * v1.x );
 	}
 
 	/**
 	 * Computes the orientation of three points.
-	 * @param v1 the first vector
-	 * @param v2 the second vector
-	 * @return a value indiciating the orientation between the two vectors
+	 * @param p the first vector
+	 * @param q the second vector
+	 * @param r the second vector
+	 * @return a value indicating the orientation between the two vectors
 	 */
-	public final static int orientation( Vector3 p, Vector3 q, Vector3 r ) {
+	public static int orientation( Vector3 p, Vector3 q, Vector3 r ) {
 		final Vector3 u = p.sub( q );
 		final Vector3 v = r.sub( q );
 		return (int) Math.signum( v.x * u.y - v.y * u.x ); // return sign of determinancy

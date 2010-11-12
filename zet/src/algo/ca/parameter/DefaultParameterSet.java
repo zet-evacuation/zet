@@ -21,6 +21,7 @@
 
 package algo.ca.parameter;
 
+import de.tu_berlin.math.coga.common.localization.DefaultLoc;
 import ds.PropertyContainer;
 import ds.ca.Cell;
 import ds.ca.DynamicPotential;
@@ -28,7 +29,6 @@ import ds.ca.Individual;
 import ds.ca.StaticPotential;
 import java.util.Collection;
 import java.util.List;
-import de.tu_berlin.math.coga.common.localization.Localization;
 import de.tu_berlin.math.coga.rndutils.RandomUtils;
 import de.tu_berlin.math.coga.rndutils.distribution.continuous.NormalDistribution;
 
@@ -91,7 +91,7 @@ public class DefaultParameterSet extends AbstractDefaultParameterSet {
 	@Override
 	public double effectivePotential( Cell referenceCell, Cell targetCell ) {
 		if( referenceCell.getIndividual() == null ) {
-			throw new IllegalArgumentException( Localization.getInstance().getString( "algo.ca.parameter.NoIndividualOnReferenceCellException" ) );
+			throw new IllegalArgumentException( DefaultLoc.getSingleton().getString( "algo.ca.parameter.NoIndividualOnReferenceCellException" ) );
 		}
 		final double panic = referenceCell.getIndividual().getPanic();
 		StaticPotential staticPotential = referenceCell.getIndividual().getStaticPotential();

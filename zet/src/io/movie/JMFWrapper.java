@@ -21,11 +21,11 @@
 
 package io.movie;
 
+import de.tu_berlin.math.coga.common.localization.DefaultLoc;
 import java.util.Vector;
 import javax.media.MediaLocator;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
-import de.tu_berlin.math.coga.common.localization.Localization;
 
 /**
  * <p>The JMFWriter can write files with arbitrary names.</p>
@@ -58,7 +58,7 @@ public class JMFWrapper extends PicturesOnlyWriter {
 	@Override
 	public JPanel getAdvancedConfigurationPanel() {
 		JPanel panel = new JPanel();
-		panel.add( new JLabel( Localization.getInstance().getString( "gui.visualization.createMovieDialog.jmf.noSupport" ) ) );
+		panel.add( new JLabel( DefaultLoc.getSingleton().getString( "gui.visualization.createMovieDialog.jmf.noSupport" ) ) );
 		return panel;
 	}
 

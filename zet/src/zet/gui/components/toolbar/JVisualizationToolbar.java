@@ -6,6 +6,7 @@ package zet.gui.components.toolbar;
 
 import batch.BatchResult;
 import batch.BatchResultEntry;
+import de.tu_berlin.math.coga.common.localization.DefaultLoc;
 import de.tu_berlin.math.coga.common.localization.Localization;
 import ds.PropertyContainer;
 import gui.GUIControl;
@@ -38,7 +39,7 @@ import javax.swing.JToolBar;
 public class JVisualizationToolbar extends JToolBar implements ActionListener {
 	private final GUIControl control;
 	/** The localization class. */
-	static final Localization loc = Localization.getInstance();
+	static final Localization loc = DefaultLoc.getSingleton();
 	private JButton btnExit;
 	private JLabel labelBatchName;
 	private BatchResultEntryVisComboBoxModel entryModelVis;

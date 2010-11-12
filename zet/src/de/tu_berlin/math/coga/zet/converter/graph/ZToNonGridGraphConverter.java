@@ -19,9 +19,7 @@
  */
 package de.tu_berlin.math.coga.zet.converter.graph;
 
-import de.tu_berlin.math.coga.zet.converter.RasterContainerCreator;
-import de.tu_berlin.math.coga.common.localization.Localization;
-import de.tu_berlin.math.coga.zet.NetworkFlowModel;
+import de.tu_berlin.math.coga.common.localization.DefaultLoc;
 import ds.PropertyContainer;
 import ds.graph.DynamicNetwork;
 import ds.graph.Edge;
@@ -29,7 +27,6 @@ import ds.graph.Graph;
 import ds.graph.IdentifiableIntegerMapping;
 import ds.graph.Node;
 import ds.graph.NodeRectangle;
-import ds.z.BuildingPlan;
 import ds.z.PlanPoint;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -41,7 +38,6 @@ import java.util.List;
 import de.tu_berlin.math.coga.common.util.Direction;
 import de.tu_berlin.math.coga.common.util.Level;
 import de.tu_berlin.math.coga.common.util.Formatter;
-import de.tu_berlin.math.coga.zet.converter.graph.BaseZToGraphConverter;
 import ds.graph.IdentifiableDoubleMapping;
 
 /**
@@ -380,7 +376,7 @@ public class ZToNonGridGraphConverter extends BaseZToGraphConverter {
 							if( row > 0 )
 								lastSquare = room.getSquare( col, row - 1 );
 							else
-								throw new AssertionError( Localization.getInstance().getString( "converter.RowIsZeroException" ) );
+								throw new AssertionError( DefaultLoc.getSingleton().getString( "converter.RowIsZeroException" ) );
 							mapping.setEdgeLevel( edge, lastSquare.getLevel( Direction.getDirection( 0, 1 ) ) );
 						}
 						edgesCap.increase( edge, 1 * FACTOR );

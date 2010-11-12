@@ -16,6 +16,7 @@
 package algo.ca;
 
 import algo.ca.util.PotentialUtils;
+import de.tu_berlin.math.coga.common.localization.DefaultLoc;
 import de.tu_berlin.math.coga.rndutils.RandomUtils;
 import de.tu_berlin.math.coga.rndutils.generators.GeneralRandom;
 import ds.ca.Cell;
@@ -30,7 +31,6 @@ import ds.ca.TargetCell;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
-import de.tu_berlin.math.coga.common.localization.Localization;
 
 /**
  * This class provides general functionality for manipulation of PotentialMaps.
@@ -189,7 +189,7 @@ public class SPPotentialController implements PotentialController {
 	public void decreaseDynamicPotential (Cell cell) throws IllegalArgumentException{
 		DynamicPotential dynPot = pm.getDynamicPotential();
 		if(!(dynPot.contains(cell))){
-			throw new IllegalArgumentException (Localization.getInstance (
+			throw new IllegalArgumentException (DefaultLoc.getSingleton (
 			).getString ("algo.ca.InsertCellPreviouslyException"));
 		}
 		

@@ -22,9 +22,9 @@ package ds.z;
 
 import com.thoughtworks.xstream.annotations.XStreamAlias;
 import com.thoughtworks.xstream.annotations.XStreamAsAttribute;
+import de.tu_berlin.math.coga.common.localization.ZLocalization;
 import ds.z.exception.PolygonNotClosedException;
 import ds.z.exception.TooManyPeopleException;
-import de.tu_berlin.math.coga.common.localization.Localization;
 
 
 /**
@@ -138,7 +138,7 @@ public class AssignmentArea extends Area<Edge> {
 	 */
 	public void setEvacuees (int val) throws IllegalArgumentException {
 		if (val<0) {
-			throw new IllegalArgumentException ( Localization.getInstance().getString("ds.z.AssignmentArea.NegativePersonValueException") );
+			throw new IllegalArgumentException ( ZLocalization.getSingleton().getString("ds.z.AssignmentArea.NegativePersonValueException") );
 		} else {
 			evacuees=val;
 //			throwChangeEvent (new ChangeEvent (this));
@@ -161,7 +161,7 @@ public class AssignmentArea extends Area<Edge> {
 	 * (Doesn`t give notice of departure to the previous assignmentType of the area.)
 	 */
 	public void setAssignmentType (AssignmentType val) throws NullPointerException {
-		if( val == null ) throw new NullPointerException ( Localization.getInstance().getString("ds.z.AssignmentArea.NoAssignmentTypeException") );
+		if( val == null ) throw new NullPointerException ( ZLocalization.getSingleton().getString("ds.z.AssignmentArea.NoAssignmentTypeException") );
 		if( val.equals( assignmentType ) )
 			return; // no change
 		
@@ -238,7 +238,7 @@ public class AssignmentArea extends Area<Edge> {
 	private void checkTooManyPersonsInArea() throws TooManyPeopleException {
 		if (getEvacuees()!=0) {
 			if( area() / getEvacuees() < Assignment.spacePerPerson )
-				throw new TooManyPeopleException( this, Localization.getInstance().getString( "ds.z.AssignmentArea.ContainsToManyPersonsException" ) );
+				throw new TooManyPeopleException( this, ZLocalization.getSingleton().getString( "ds.z.AssignmentArea.ContainsToManyPersonsException" ) );
 		}
   }
 	

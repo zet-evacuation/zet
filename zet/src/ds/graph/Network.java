@@ -20,7 +20,7 @@
 package ds.graph;
 
 import com.thoughtworks.xstream.annotations.XStreamAlias;
-import de.tu_berlin.math.coga.common.localization.Localization;
+import de.tu_berlin.math.coga.common.localization.GraphLocalization;
 import java.util.Iterator;
 
 /**
@@ -99,6 +99,7 @@ public class Network implements Graph, Cloneable, Iterable<Node> {
 	 * Checks whether the graph is directed. Runtime O(1).
 	 * @return <code>true</code>.
 	 */
+	@Override
 	public boolean isDirected() {
 		return true;
 	}
@@ -109,6 +110,7 @@ public class Network implements Graph, Cloneable, Iterable<Node> {
 	 * @return an {@link HidingSet} containing all the edges of
 	 * this graph.
 	 */
+	@Override
 	public IdentifiableCollection<Edge> edges() {
 		return edges;
 	}
@@ -119,6 +121,7 @@ public class Network implements Graph, Cloneable, Iterable<Node> {
 	 * @return an {@link HidingSet} containing all the nodes of
 	 * this graph.
 	 */
+	@Override
 	public IdentifiableCollection<Node> nodes() {
 		return nodes;
 	}
@@ -127,6 +130,7 @@ public class Network implements Graph, Cloneable, Iterable<Node> {
 	 * Returns the number of edges in this graph. Runtime O(1).
 	 * @return the number of edges in this graph.
 	 */
+	@Override
 	public int numberOfEdges() {
 		return edges().size();
 	}
@@ -135,6 +139,7 @@ public class Network implements Graph, Cloneable, Iterable<Node> {
 	 * Returns the number of nodes in this graph. Runtime O(1).
 	 * @return the number of nodes in this graph.
 	 */
+	@Override
 	public int numberOfNodes() {
 		return nodes().size();
 	}
@@ -142,9 +147,11 @@ public class Network implements Graph, Cloneable, Iterable<Node> {
 	/**
 	 * Returns an {@link DependingListSequence} containing all the edges incident to
 	 * the specified node. Runtime O(1).
+	 * @param node the node whose incident are to be returned
 	 * @return an {@link DependingListSequence} containing all the edges incident to
 	 * the specified node.
 	 */
+	@Override
 	public IdentifiableCollection<Edge> incidentEdges( Node node ) {
 		return incidentEdges.get( node );
 	}
@@ -152,9 +159,11 @@ public class Network implements Graph, Cloneable, Iterable<Node> {
 	/**
 	 * Returns an {@link DependingListSequence} containing all the edges ending at
 	 * the specified node. Runtime O(1).
+	 * @param node the node whose incoming edges are to be returned
 	 * @return an {@link DependingListSequence} containing all the edges ending at
 	 * the specified node.
 	 */
+	@Override
 	public IdentifiableCollection<Edge> incomingEdges( Node node ) {
 		return incomingEdges.get( node );
 	}
@@ -162,9 +171,11 @@ public class Network implements Graph, Cloneable, Iterable<Node> {
 	/**
 	 * Returns an {@link DependingListSequence} containing all the edges starting at
 	 * the specified node. Runtime O(1).
+	 * @param node the node whose outgoing edges are to be returned
 	 * @return an {@link DependingListSequence} containing all the edges starting at
 	 * the specified node.
 	 */
+	@Override
 	public IdentifiableCollection<Edge> outgoingEdges( Node node ) {
 		return outgoingEdges.get( node );
 	}
@@ -172,9 +183,11 @@ public class Network implements Graph, Cloneable, Iterable<Node> {
 	/**
 	 * Returns an {@link IdentifiableCollection} containing all the nodes adjacent to
 	 * the specified node. Runtime O(1).
+	 * @param node the nodes which adjacent nodes are to be computed
 	 * @return an {@link IdentifiableCollection} containing all the nodes adjacent to
 	 * the specified node.
 	 */
+	@Override
 	public IdentifiableCollection<Node> adjacentNodes( Node node ) {
 		return new OppositeNodeCollection( node, incidentEdges.get( node ) );
 	}
@@ -182,9 +195,11 @@ public class Network implements Graph, Cloneable, Iterable<Node> {
 	/**
 	 * Returns an {@link IdentifiableCollection} containing all the nodes that are
 	 * incident to an edge ending at the specified node. Runtime O(1).
+	 * @param node the node which predecessor nodes are to be computed
 	 * @return an {@link IdentifiableCollection} containing all the nodes that are
 	 * incident to an edge ending at the specified node.
 	 */
+	@Override
 	public IdentifiableCollection<Node> predecessorNodes( Node node ) {
 		return new OppositeNodeCollection( node, incomingEdges.get( node ) );
 	}
@@ -192,9 +207,11 @@ public class Network implements Graph, Cloneable, Iterable<Node> {
 	/**
 	 * Returns an {@link IdentifiableCollection} containing all the nodes that are
 	 * incident to an edge starting at the specified node. Runtime O(1).
+	 * @param node the node which successor nodes are to be computed
 	 * @return an {@link IdentifiableCollection} containing all the nodes that are
 	 * incident to an edge starting at the specified node.
 	 */
+	@Override
 	public IdentifiableCollection<Node> successorNodes( Node node ) {
 		return new OppositeNodeCollection( node, outgoingEdges.get( node ) );
 	}
@@ -205,6 +222,7 @@ public class Network implements Graph, Cloneable, Iterable<Node> {
 	 * @param node the node for which the degree is to be returned.
 	 * @return the degree of the specified node.
 	 */
+	@Override
 	public int degree( Node node ) {
 		return degree.get( node );
 	}
@@ -215,6 +233,7 @@ public class Network implements Graph, Cloneable, Iterable<Node> {
 	 * @param node the node for which the indegree is to be returned.
 	 * @return the indegree of the specified node.
 	 */
+	@Override
 	public int indegree( Node node ) {
 		return indegree.get( node );
 	}
@@ -225,6 +244,7 @@ public class Network implements Graph, Cloneable, Iterable<Node> {
 	 * @param node the node for which the outdegree is to be returned.
 	 * @return the outdegree of the specified node.
 	 */
+	@Override
 	public int outdegree( Node node ) {
 		return outdegree.get( node );
 	}
@@ -236,6 +256,7 @@ public class Network implements Graph, Cloneable, Iterable<Node> {
 	 * @return <code>true</code> if the edge is contained in this graph,
 	 * <code>false</code> otherwise.
 	 */
+	@Override
 	public boolean contains( Edge edge ) {
 		return edges.contains( edge );
 	}
@@ -247,6 +268,7 @@ public class Network implements Graph, Cloneable, Iterable<Node> {
 	 * @return <code>true</code> if the node is contained in this graph,
 	 * <code>false</code> otherwise.
 	 */
+	@Override
 	public boolean contains( Node node ) {
 		return nodes.contains( node );
 	}
@@ -258,6 +280,7 @@ public class Network implements Graph, Cloneable, Iterable<Node> {
 	 * @return the edge with the specified id or <code>null</code> if the graph
 	 * does not contain an edge with the specified id.
 	 */
+	@Override
 	public Edge getEdge( int id ) {
 		return edges.get( id );
 	}
@@ -271,6 +294,7 @@ public class Network implements Graph, Cloneable, Iterable<Node> {
 	 * @return an edge starting at <code>start</code> and ending at
 	 * <code>end</code>.
 	 */
+	@Override
 	public Edge getEdge( Node start, Node end ) {
 		for( Edge edge : outgoingEdges( start ) )
 			if( edge.end().equals( end ) )
@@ -288,6 +312,7 @@ public class Network implements Graph, Cloneable, Iterable<Node> {
 	 * @return an {@link ListSequence} containing all edges starting at
 	 * <code>start</code> and ending at <code>end</code>.
 	 */
+	@Override
 	public IdentifiableCollection<Edge> getEdges( Node start, Node end ) {
 		ListSequence<Edge> result = new ListSequence<Edge>();
 		for( Edge edge : outgoingEdges( start ) )
@@ -303,6 +328,7 @@ public class Network implements Graph, Cloneable, Iterable<Node> {
 	 * @return the node with the specified id or <code>null</code> if the graph
 	 * does not contain a node with the specified id.
 	 */
+	@Override
 	public Node getNode( int id ) {
 		return nodes.get( id );
 	}
@@ -448,7 +474,7 @@ public class Network implements Graph, Cloneable, Iterable<Node> {
 			idOfLastCreatedEdge = id % capacity;
 			return edge;
 		} else
-			throw new IllegalStateException( Localization.getInstance().getString( "ds.Graph.NoCapacityException" ) );
+			throw new IllegalStateException( GraphLocalization.getSingleton().getString( "ds.Graph.NoCapacityException" ) );
 	}
 
 	/**
@@ -458,6 +484,7 @@ public class Network implements Graph, Cloneable, Iterable<Node> {
 	 * @param edge the edge to be added to the graph.
 	 * @exception IllegalArgumentException if the specified position is not empty.
 	 */
+	@Override
 	public void setEdge( Edge edge ) {
 		if( edges.get( edge.id() ) == null ) {
 			edges.add( edge );
@@ -494,6 +521,7 @@ public class Network implements Graph, Cloneable, Iterable<Node> {
 	 * outgoing edges of any replaced node will be valid for the new one.
 	 * @param node the node to be added to the graph.
 	 */
+	@Override
 	public void setNode( Node node ) {
 		if( nodes.get( node.id() ) == null ) {
 			incidentEdges.set( node, new DependingListSequence<Edge>( edges ) );
@@ -533,7 +561,7 @@ public class Network implements Graph, Cloneable, Iterable<Node> {
 
 	/**
 	 * Compares the specified object to this object and returns whether the
-	 * specified object is equivalen to this one. An object is considered
+	 * specified object is equivalent to this one. An object is considered
 	 * equivalent to this network, if and only if it is a network with an
 	 * equivalent node and edge set. Note that both the node and the edge set
 	 * must be completely equivalent (i.e. both the visible and hidden parts
@@ -594,6 +622,7 @@ public class Network implements Graph, Cloneable, Iterable<Node> {
 		return buffer.toString();
 	}
 
+	@Override
 	public String deepToString() {
 		StringBuilder buffer = new StringBuilder();
 		buffer.append( "V = {" );
@@ -628,6 +657,7 @@ public class Network implements Graph, Cloneable, Iterable<Node> {
 	 * @return <code>true</code> if a directed path between the start node and
 	 * the end node exists, <code>false</code> otherwise.
 	 */
+	@Override
 	public boolean existsPath( Node start, Node end ) {
 		throw new UnsupportedOperationException( "Not supported yet." );
 	}
@@ -638,7 +668,6 @@ public class Network implements Graph, Cloneable, Iterable<Node> {
 	 * @param start the start node of the edge to be checked
 	 * @param end the end node of the path to be checked
 	 * @return {@code true} if the edge between the start node and the end node exists, {@code false} otherwise
-	 * @return
 	 */
 	public boolean existsEdge( Node start, Node end ) {
 		return getEdge( start, end ) != null;
@@ -666,6 +695,7 @@ public class Network implements Graph, Cloneable, Iterable<Node> {
 		return this;
 	}
 
+	@Override
 	public Iterator<Node> iterator() {
 		return nodes.iterator();
 	}

@@ -257,7 +257,7 @@ public class GLFlowEdge extends GLEdge {
 		}
 
 	/**
-	 * Draws the flow on the edge. The edge is already drawn using the {@link #performStaticDrawing(javax.media.opengl.GLAutoDrawable)} method.
+	 * Draws the flow on the edge. The edge is already drawn using the {@link #performStaticDrawing(javax.media.opengl.GL)} method.
 	 * @param gl the {@code OpenGL} drawable object
 	 */
 	@Override

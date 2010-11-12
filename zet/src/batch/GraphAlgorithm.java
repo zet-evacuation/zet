@@ -15,7 +15,6 @@
  */
 package batch;
 
-import de.tu_berlin.math.coga.common.localization.Localization;
 import de.tu_berlin.math.coga.zet.NetworkFlowModel;
 import batch.tasks.graph.EATransshipmentMinCostTask;
 import batch.tasks.graph.EATransshipmentSSSPTask;
@@ -27,6 +26,7 @@ import batch.tasks.graph.SuccessiveEarliestArrivalAugmentingPathAlgorithm2Task;
 import batch.tasks.graph.SuccessiveEarliestArrivalAugmentingPathAlgorithmTask;
 import batch.tasks.graph.SuccessiveEarliestArrivalAugmentingPathAlgorithmTask3;
 import de.tu_berlin.math.coga.common.algorithm.Algorithm;
+import de.tu_berlin.math.coga.common.localization.DefaultLoc;
 import ds.graph.flow.PathBasedFlowOverTime;
 
 /** Enumerates the types of graph algorithms and assigns each of them a way
@@ -36,49 +36,49 @@ import ds.graph.flow.PathBasedFlowOverTime;
  */
 public enum GraphAlgorithm {
 
-    EarliestArrivalTransshipmentSuccessiveShortestPaths(Localization.getInstance().getString("gui.EATransshipmentSSSP")) {
+    EarliestArrivalTransshipmentSuccessiveShortestPaths(DefaultLoc.getSingleton().getString("gui.EATransshipmentSSSP")) {
 
         public NetworkFlowModelAlgorithm createTask(NetworkFlowModel model, int timeHorizon) {
             return new EATransshipmentSSSPTask();
         }
     },
-    EarliestArrivalTransshipmentMinCost(Localization.getInstance().getString("gui.EATransshipmentMinCost")) {
+    EarliestArrivalTransshipmentMinCost(DefaultLoc.getSingleton().getString("gui.EATransshipmentMinCost")) {
 
         public NetworkFlowModelAlgorithm createTask(NetworkFlowModel model, int timeHorizon) {
             return new EATransshipmentMinCostTask();
         }
     },
-    SuccessiveEarliestArrivalAugmentingPathBinarySearch(Localization.getInstance().getString("gui.SuccEAAugPathBS")) {
+    SuccessiveEarliestArrivalAugmentingPathBinarySearch(DefaultLoc.getSingleton().getString("gui.SuccEAAugPathBS")) {
 
         public NetworkFlowModelAlgorithm createTask(NetworkFlowModel model, int timeHorizon) {
             return new SuccessiveEarliestArrivalAugmentingPathAlgorithmTask();
         }
     },
-    SuccessiveEarliestArrivalAugmentingPath(Localization.getInstance().getString("gui.SuccEAAugPath")) {
+    SuccessiveEarliestArrivalAugmentingPath(DefaultLoc.getSingleton().getString("gui.SuccEAAugPath")) {
 
         public NetworkFlowModelAlgorithm createTask(NetworkFlowModel model, int timeHorizon) {
             return new SuccessiveEarliestArrivalAugmentingPathAlgorithm2Task();
         }
     },
-    MaxFlowOverTimeMinCost(Localization.getInstance().getString("gui.MaxFlowMinCost")) {
+    MaxFlowOverTimeMinCost(DefaultLoc.getSingleton().getString("gui.MaxFlowMinCost")) {
 
         public NetworkFlowModelAlgorithm createTask(NetworkFlowModel model, int timeHorizon) {
             return new MFOTMinCostTask(timeHorizon);
         }
     },
-    MaxFlowOverTimeTimeExpanded(Localization.getInstance().getString("gui.MaxFlowTimeExtended")) {
+    MaxFlowOverTimeTimeExpanded(DefaultLoc.getSingleton().getString("gui.MaxFlowTimeExtended")) {
 
         public NetworkFlowModelAlgorithm createTask(NetworkFlowModel model, int timeHorizon) {
             return new MFOTimeExpandedTask(timeHorizon);
         }
     },
-    QuickestTransshipment(Localization.getInstance().getString("gui.QuickestTransshipment")) {
+    QuickestTransshipment(DefaultLoc.getSingleton().getString("gui.QuickestTransshipment")) {
 
         public NetworkFlowModelAlgorithm createTask(NetworkFlowModel model, int timeHorizon) {
             return new QuickestTransshipmentTask();
         }
     },
-    SuccessiveEarliestArrivalAugmentingPathOptimized(Localization.getInstance().getString("gui.SEAAP")) {
+    SuccessiveEarliestArrivalAugmentingPathOptimized(DefaultLoc.getSingleton().getString("gui.SEAAP")) {
 
         public Algorithm<NetworkFlowModel, PathBasedFlowOverTime> createTask(NetworkFlowModel model, int timeHorizon) {
             return new SuccessiveEarliestArrivalAugmentingPathAlgorithmTask3();

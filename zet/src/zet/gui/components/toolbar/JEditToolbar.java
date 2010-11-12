@@ -4,6 +4,7 @@
  */
 package zet.gui.components.toolbar;
 
+import de.tu_berlin.math.coga.common.localization.DefaultLoc;
 import de.tu_berlin.math.coga.common.localization.Localization;
 import gui.GUIControl;
 import gui.ZETMain;
@@ -38,7 +39,7 @@ import javax.swing.event.PopupMenuListener;
  */
 public class JEditToolbar extends JToolBar implements ActionListener, PopupMenuListener, KeyListener {
 	/** The localization class. */
-	static final Localization loc = Localization.getInstance();
+	static final Localization loc = DefaultLoc.getSingleton();
 	private JButton btnExit;
 	private JButton btnOpen;
 	private JButton btnSave;
@@ -136,6 +137,7 @@ public class JEditToolbar extends JToolBar implements ActionListener, PopupMenuL
 		loc.setPrefix( "" );
 	}
 
+	@Override
 	public void actionPerformed( ActionEvent e ) {
 		if( e.getActionCommand().equals( "exit" ) ) {
 			control.exit();
@@ -180,9 +182,11 @@ public class JEditToolbar extends JToolBar implements ActionListener, PopupMenuL
 
 
 
+	@Override
 	public void popupMenuWillBecomeVisible( PopupMenuEvent e ) {
 	}
 
+	@Override
 	public void popupMenuWillBecomeInvisible( PopupMenuEvent e ) {
 		EditMode currentEditMode = (EditMode)editSelector.getSelectedItem();
 
@@ -231,15 +235,19 @@ public class JEditToolbar extends JToolBar implements ActionListener, PopupMenuL
 //		lastEditMode = currentEditMode;
 	}
 
+	@Override
 	public void popupMenuCanceled( PopupMenuEvent e ) {
 	}
 
+	@Override
 	public void keyTyped( KeyEvent e ) {
 	}
 
+	@Override
 	public void keyPressed( KeyEvent e ) {
 	}
 
+	@Override
 	public void keyReleased( KeyEvent e ) {
 		if( e.getKeyCode() != KeyEvent.VK_ENTER )
 			return;

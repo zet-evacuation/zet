@@ -19,6 +19,7 @@
  */
 package gui.editor.assignment;
 
+import de.tu_berlin.math.coga.common.localization.DefaultLoc;
 import ds.Project;
 import java.awt.BorderLayout;
 import java.awt.event.ActionEvent;
@@ -28,7 +29,6 @@ import javax.swing.JDialog;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
-import de.tu_berlin.math.coga.common.localization.Localization;
 
 /**
  * Displays a dialoge that allows editing assignments and the associated
@@ -52,7 +52,7 @@ public class JAssignment extends JDialog {
 
 		// Add close button
 		JPanel pnlButton = new JPanel (new BorderLayout ());
-		JButton btnClose = new JButton (Localization.getInstance().getString( "gui.Quit" ));
+		JButton btnClose = new JButton (DefaultLoc.getSingleton().getString( "gui.Quit" ));
 		btnClose.addActionListener (new ActionListener () {
 			public void actionPerformed (ActionEvent e) {
 				JAssignment.this.setVisible( false );

@@ -20,7 +20,7 @@
 
 package ds.graph;
 
-import de.tu_berlin.math.coga.common.localization.Localization;
+import de.tu_berlin.math.coga.common.localization.GraphLocalization;
 import java.util.LinkedList;
 
 import java.util.List;
@@ -297,13 +297,13 @@ public class TimeExpandedNetwork extends Network {
 			Node sink, int timeHorizon, boolean allowStorageInNodes) {
 		this(allowStorageInNodes, network, timeHorizon);
 		if (source ==null && sink==null)
-			throw new AssertionError(Localization.getInstance (
+			throw new AssertionError(GraphLocalization.getSingleton (
 			).getString ("ds.graph.SinkSourceNullException"));
 		if (source ==null)
-			throw new AssertionError(Localization.getInstance (
+			throw new AssertionError(GraphLocalization.getSingleton (
 			).getString ("ds.graph.SourceIsNullException"));
 		if (sink==null)
-			throw new AssertionError(Localization.getInstance (
+			throw new AssertionError(GraphLocalization.getSingleton (
 			).getString ("ds.graph.SinkIsNullException"));
 		sources = new ListSequence<Node>();
 		sources.add(source);
@@ -350,10 +350,10 @@ public class TimeExpandedNetwork extends Network {
     private void createSuperSourceAndSink(int supersouceOutgoingCapacitiy){
     	
     	if (originalSources.size() <= 0)
-    		throw new AssertionError(Localization.getInstance (
+    		throw new AssertionError(GraphLocalization.getSingleton (
 			).getString ("ds.graph.OriginalSourcesException"));
     	if (originalSinks.size() <= 0)
-    		throw new AssertionError(Localization.getInstance (
+    		throw new AssertionError(GraphLocalization.getSingleton (
 			).getString ("ds.graph.OriginalSinksException"));
     	
     	if (originalSources.size()>1)
@@ -413,7 +413,7 @@ public class TimeExpandedNetwork extends Network {
 		int overallSupply=0;
 		for (Node node : network.nodes()) {
 			if (!supplies.isDefinedFor(node))
-				throw new AssertionError(Localization.getInstance (
+				throw new AssertionError(GraphLocalization.getSingleton (
 				).getString ("ds.graph.NoSupplyNodeException"));
 			else {
 				overallSupply += supplies.get(node);
@@ -426,7 +426,7 @@ public class TimeExpandedNetwork extends Network {
 		originalSources = sources;
 		
 		if (overallSupply != 0)
-			throw new AssertionError(Localization.getInstance (
+			throw new AssertionError(GraphLocalization.getSingleton (
 			).getString ("ds.graph.SumNotZeroException"));
 		
 		createTimeExpansion(network, capacities, transitTimes, timeHorizon,
@@ -510,10 +510,10 @@ public class TimeExpandedNetwork extends Network {
     	}
     	
     	if (originalSources.size() <= 0)
-    		throw new AssertionError(Localization.getInstance (
+    		throw new AssertionError(GraphLocalization.getSingleton (
 			).getString ("ds.graph.OriginalSourcesException"));
     	if (originalSinks.size() <= 0)
-    		throw new AssertionError(Localization.getInstance (
+    		throw new AssertionError(GraphLocalization.getSingleton (
 			).getString ("ds.graph.OriginalSinksException"));
     	
     	if (originalSources.size()>1)
@@ -586,13 +586,13 @@ public class TimeExpandedNetwork extends Network {
     // This method uses that the original network does not include loops!
     private boolean isHoldoverArc(Edge edge){
     	if (edge==null)
-    		throw new AssertionError(Localization.getInstance (
+    		throw new AssertionError(GraphLocalization.getSingleton (
 			).getString ("ds.graph.EdgeIsNullException"));
     	if (edge.start() == null)
-    		throw new AssertionError(Localization.getInstance (
+    		throw new AssertionError(GraphLocalization.getSingleton (
 			).getString ("ds.graph.StartNodeIsNullException"));
     	if (edge.end() == null)
-    		throw new AssertionError(Localization.getInstance (
+    		throw new AssertionError(GraphLocalization.getSingleton (
 			).getString ("ds.graph.EndNodeIsNullException"));
     	return (originalID.get(edge.start()) == originalID.get(edge.end()));
     }
@@ -671,7 +671,7 @@ public class TimeExpandedNetwork extends Network {
      */
     public Node singleSink(){
     	if (sink == null)
-    		throw new AssertionError(Localization.getInstance (
+    		throw new AssertionError(GraphLocalization.getSingleton (
 			).getString ("ds.graph.NoSingleSinkException"));
     	else
     		return sink;
@@ -698,7 +698,7 @@ public class TimeExpandedNetwork extends Network {
      */
     public Node singleSource(){
     	if (source == null)
-    		throw new AssertionError(Localization.getInstance (
+    		throw new AssertionError(GraphLocalization.getSingleton (
 			).getString ("ds.graph.NoSingleSourceException"));
     	else
     		return source;

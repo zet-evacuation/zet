@@ -19,7 +19,7 @@
  */
 package ds.graph;
 
-import de.tu_berlin.math.coga.common.localization.Localization;
+import de.tu_berlin.math.coga.common.localization.GraphLocalization;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
@@ -170,7 +170,7 @@ public class DynamicNetwork implements Graph {
 		else if( node == edge.end() )
 			return edge.start();
 		else
-			throw new IllegalArgumentException( Localization.getInstance().getString( "ds.graph.NotIncidentException" + node + ", " + edge ) );
+			throw new IllegalArgumentException( GraphLocalization.getSingleton().getString( "ds.graph.NotIncidentException" + node + ", " + edge ) );
 	}
 
 	public Node opposite( Node node, Edge edge ) {
@@ -347,11 +347,11 @@ public class DynamicNetwork implements Graph {
 	}
 
 	public IdentifiableCollection<Edge> getEdges( Node start, Node end ) {
-		throw new UnsupportedOperationException( Localization.getInstance().getString( "ds.graph.NotSupportedException" ) );
+		throw new UnsupportedOperationException( GraphLocalization.getSingleton().getString( "ds.graph.NotSupportedException" ) );
 	}
 
 	public boolean existsPath( Node start, Node end ) {
-		throw new UnsupportedOperationException( Localization.getInstance().getString( "ds.graph.NotSupportedException" ) );
+		throw new UnsupportedOperationException( GraphLocalization.getSingleton().getString( "ds.graph.NotSupportedException" ) );
 	}
 
 	public Network getAsStaticNetwork() {

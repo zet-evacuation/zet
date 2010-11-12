@@ -20,12 +20,18 @@
 
 package de.tu_berlin.math.coga.zet;
 
-import ds.graph.*;
 import java.util.LinkedList;
 
 import com.thoughtworks.xstream.annotations.XStreamAlias;
-import de.tu_berlin.math.coga.common.localization.Localization;
+import de.tu_berlin.math.coga.common.localization.DefaultLoc;
 import de.tu_berlin.math.coga.zet.converter.graph.ZToGraphMapping;
+import ds.graph.DynamicNetwork;
+import ds.graph.Edge;
+import ds.graph.Graph;
+import ds.graph.IdentifiableDoubleMapping;
+import ds.graph.IdentifiableIntegerMapping;
+import ds.graph.Network;
+import ds.graph.Node;
 
 /**
  *
@@ -81,7 +87,7 @@ public class NetworkFlowModel {
         if (edgeCapacities.isDefinedFor(edge)) {
             return edgeCapacities.get(edge);
         } else {
-            throw new IllegalArgumentException(Localization.getInstance (
+            throw new IllegalArgumentException(DefaultLoc.getSingleton (
 			).getString ("ds.Graph.NoEdgeCapacityException"+edge+"."));
         }        
     }
@@ -144,7 +150,7 @@ public class NetworkFlowModel {
     public DynamicNetwork getDynamicNetwork(){
     	if (network instanceof DynamicNetwork)
     		return (DynamicNetwork)network;
-    	else throw new RuntimeException(Localization.getInstance (
+    	else throw new RuntimeException(DefaultLoc.getSingleton (
 		).getString ("ds.Graph.NoDynamicGraphException"));
 
     }
@@ -157,7 +163,7 @@ public class NetworkFlowModel {
         if (nodeCapacities.isDefinedFor(node)) {
             return nodeCapacities.get(node);
         } else {
-            throw new IllegalArgumentException(Localization.getInstance (
+            throw new IllegalArgumentException(DefaultLoc.getSingleton (
 			).getString ("ds.Graph.NoNodeCapacityException"+ node + "."));
         }        
     }
@@ -178,7 +184,7 @@ public class NetworkFlowModel {
         if (transitTimes.isDefinedFor(edge)) {
             return transitTimes.get(edge);
         } else {
-            throw new IllegalArgumentException(Localization.getInstance (
+            throw new IllegalArgumentException(DefaultLoc.getSingleton (
 			).getString ("ds.Graph.NoTransitTimeException" + edge + "."));
         }
     }

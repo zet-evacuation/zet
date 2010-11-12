@@ -20,6 +20,7 @@
  */
 package gui.visualization;
 
+import de.tu_berlin.math.coga.common.localization.DefaultLoc;
 import de.tu_berlin.math.coga.common.localization.Localization;
 import de.tu_berlin.math.coga.math.Conversion;
 import de.tu_berlin.math.coga.math.vectormath.Vector3;
@@ -52,6 +53,7 @@ import opengl.helper.TextureManager;
 /**
  * Implements the {@code OpenGL} visualization on a JOGL canvas. The class initializes
  * the canvas, sets up light, textures and other stuff and draws the scene.
+ * @param <U> the object that is visualized
  * @author Jan-Philipp Kappmeier
  */
 public class Visualization<U extends DrawableControlable> extends AbstractVisualization {
@@ -63,7 +65,7 @@ public class Visualization<U extends DrawableControlable> extends AbstractVisual
 	
 	protected double sizeMultiplikator = 0.1;
 	/** The localization class. */
-	protected Localization loc = Localization.getInstance();
+	protected Localization loc = DefaultLoc.getSingleton();
 	protected static final int fontSize = 16;
 	private TextureManager texMan;
 	/** The {@link TextureFont} used to display informations in the screen. */

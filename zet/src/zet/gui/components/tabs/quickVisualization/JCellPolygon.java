@@ -19,7 +19,7 @@
  */
 package zet.gui.components.tabs.quickVisualization;
 
-import de.tu_berlin.math.coga.common.localization.Localization;
+import de.tu_berlin.math.coga.common.localization.DefaultLoc;
 import ds.z.PlanPolygon;
 import zet.gui.components.tabs.base.AbstractFloor;
 import zet.gui.components.tabs.base.AbstractPolygon;
@@ -46,7 +46,7 @@ public class JCellPolygon extends AbstractPolygon {
 	EnumSet<Direction> borders = EnumSet.noneOf( Direction.class );
 	private Cell cell;
 	private final boolean showIndividualNames;
-	private static final NumberFormat nfFloat = Localization.getInstance().getFloatConverter();// NumberFormat.getNumberInstance( Localization.getInstance().getLocale() );
+	private static final NumberFormat nfFloat = DefaultLoc.getSingleton().getFloatConverter();// NumberFormat.getNumberInstance( DefaultLoc.getSingleton().getLocale() );
 	private CellularAutomaton ca;
 
 	/**

@@ -9,6 +9,7 @@ import batch.tasks.ProcessUpdateMessage;
 
 /**
  *
+ * @param <S> 
  * @author Jan-Philipp Kappmeier
  */
 public class VisualizationEvent<S> extends ProgressEvent<S> {

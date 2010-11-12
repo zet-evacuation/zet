@@ -21,8 +21,8 @@ package ds.z;
 
 import com.thoughtworks.xstream.annotations.XStreamAlias;
 import com.thoughtworks.xstream.annotations.XStreamAsAttribute;
+import de.tu_berlin.math.coga.common.localization.ZLocalization;
 import java.util.ArrayList;
-import de.tu_berlin.math.coga.common.localization.Localization;
 
 /**
  * A <code>DefaultEvacuationFloor</code> basically behaves as a normal {@link ds.z.Floor}.
@@ -64,7 +64,7 @@ public class DefaultEvacuationFloor extends Floor {
 	 */
 	public DefaultEvacuationFloor() {
 		super();
-		this.setName( Localization.getInstance().getString( "ds.z.DefaultName.EvacuationFloor" ) );
+		this.setName( ZLocalization.getSingleton().getString( "ds.z.DefaultName.EvacuationFloor" ) );
 	}
 
 	/**
@@ -84,11 +84,11 @@ public class DefaultEvacuationFloor extends Floor {
 	 */
 	public void addEvacuationRoom( RoomEdge sourceEdge ) {
 		if( sourceEdge.length() > defaultRoomSize )
-			throw new java.lang.IllegalArgumentException( Localization.getInstance().getString( "ds.z.DefaultEvacuationFloor.EdgeToLongException" ) );
+			throw new java.lang.IllegalArgumentException( ZLocalization.getSingleton().getString( "ds.z.DefaultEvacuationFloor.EdgeToLongException" ) );
 		if( !( sourceEdge.isHorizontal() | sourceEdge.isVertical() ) )
-			throw new java.lang.IllegalArgumentException( Localization.getInstance().getString( "ds.z.DefaultEvacuationFloor.EdgeNotVerticalOrHorizontalException" ) );
+			throw new java.lang.IllegalArgumentException( ZLocalization.getSingleton().getString( "ds.z.DefaultEvacuationFloor.EdgeNotVerticalOrHorizontalException" ) );
 		if( sourceEdge.length() % rasterSize != 0 )
-			throw new java.lang.IllegalArgumentException( Localization.getInstance().getString( "ds.z.DefaultEvacuationFloor.EdgeLengthRasterException" ) );
+			throw new java.lang.IllegalArgumentException( ZLocalization.getSingleton().getString( "ds.z.DefaultEvacuationFloor.EdgeLengthRasterException" ) );
 
 		//int i = ++roomCount;
 		int index = (int)Math.ceil( Math.sqrt( ++roomCount ) );
@@ -111,7 +111,7 @@ public class DefaultEvacuationFloor extends Floor {
 			defaultRoomSize *= 2; // TODO: respect the rasterSize
 		int roomX = xPos * ( rasterSize + defaultRoomSize );
 		int roomY = yPos * ( rasterSize + defaultRoomSize );
-		Room newRoom = new Room( this, Localization.getInstance().getString( "ds.z.DefaultName.EvacuationRoom" ) + " " + Integer.toString( roomCount ) );
+		Room newRoom = new Room( this, ZLocalization.getSingleton().getString( "ds.z.DefaultName.EvacuationRoom" ) + " " + Integer.toString( roomCount ) );
 		int w1 = rasterSize * (int)Math.floor( ( defaultRoomSize / 4 ) / rasterSize ); // Coordinate of the left / upper coordinate of the door in local coordinate system starting with (roomX, roomY)
 		PlanPoint p1;
 		PlanPoint p2;
@@ -159,7 +159,7 @@ public class DefaultEvacuationFloor extends Floor {
 	 * @return the number of rooms
 	 */
 	private String getNewEvacuationAreaName() {
-		String base = Localization.getInstance().getString( "ds.z.DefaultName.DefaultEvacuationArea" );
+		String base = ZLocalization.getSingleton().getString( "ds.z.DefaultName.DefaultEvacuationArea" );
 		int rooms = this.getRooms().size();
 		return base + " " + rooms;
 	}
@@ -174,9 +174,9 @@ public class DefaultEvacuationFloor extends Floor {
 	 */
 	public void setDefaultRoomSize( int size ) {
 		if( size % rasterSize != 0 )
-			throw new java.lang.IllegalArgumentException( Localization.getInstance().getString( "ds.z.DefaultEvacuationFloor.RoomSizeRasterException" ) );
+			throw new java.lang.IllegalArgumentException( ZLocalization.getSingleton().getString( "ds.z.DefaultEvacuationFloor.RoomSizeRasterException" ) );
 		if( size < defaultRoomSize & normalMode )
-			throw new java.lang.IllegalArgumentException( Localization.getInstance().getString( "ds.z.DefaultEvacuationFloor.DefaultRoomSizeDecreasedException" ) );
+			throw new java.lang.IllegalArgumentException( ZLocalization.getSingleton().getString( "ds.z.DefaultEvacuationFloor.DefaultRoomSizeDecreasedException" ) );
 		defaultRoomSize = size;
 	}
 
@@ -188,7 +188,7 @@ public class DefaultEvacuationFloor extends Floor {
 	 */
 	public void setRasterSize( int size ) {
 		if( size <= 0 )
-			throw new java.lang.IllegalArgumentException( Localization.getInstance().getString( "ds.z.DefaultEvacuationFloor.RasterNegativeException" ) );
+			throw new java.lang.IllegalArgumentException( ZLocalization.getSingleton().getString( "ds.z.DefaultEvacuationFloor.RasterNegativeException" ) );
 		rasterSize = size;
 	}
 
@@ -201,6 +201,6 @@ public class DefaultEvacuationFloor extends Floor {
 		if( val == true )
 			normalMode = false;
 		else
-			throw new java.lang.UnsupportedOperationException( Localization.getInstance().getString( "ds.z.DefaultEvacuationFloor.SwitchToNormalModeException" ) );
+			throw new java.lang.UnsupportedOperationException( ZLocalization.getSingleton().getString( "ds.z.DefaultEvacuationFloor.SwitchToNormalModeException" ) );
 	}
 }

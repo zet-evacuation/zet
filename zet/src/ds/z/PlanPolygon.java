@@ -24,6 +24,7 @@ import com.thoughtworks.xstream.annotations.XStreamAlias;
 import com.thoughtworks.xstream.annotations.XStreamAsAttribute;
 import com.thoughtworks.xstream.annotations.XStreamConverter;
 import com.thoughtworks.xstream.annotations.XStreamOmitField;
+import de.tu_berlin.math.coga.common.localization.ZLocalization;
 import ds.z.exception.PolygonNotClosedException;
 import ds.z.exception.PolygonNotRasterizedException;
 import io.z.CompactEdgeListConverter;
@@ -38,7 +39,6 @@ import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.ListIterator;
-import de.tu_berlin.math.coga.common.localization.Localization;
 import zet.util.ConversionTools;
 
 /**
@@ -190,11 +190,11 @@ public class PlanPolygon<T extends Edge> implements Serializable, Iterable<T> {
 	 */
 	public void defineByPoints( List<PlanPoint> points ) throws IllegalArgumentException, IllegalStateException, NullPointerException {
 		if( start != null )
-			throw new IllegalStateException( Localization.getInstance().getString( "ds.z.PlanPolygon.ContainerNotEmptyException" ) );
+			throw new IllegalStateException( ZLocalization.getSingleton().getString( "ds.z.PlanPolygon.ContainerNotEmptyException" ) );
 		if( points == null )
-			throw new NullPointerException( Localization.getInstance().getString( "ds.z.PlanPolygon.PointListIsNullException" ) );
+			throw new NullPointerException( ZLocalization.getSingleton().getString( "ds.z.PlanPolygon.PointListIsNullException" ) );
 		if( points.size() <= 1 )
-			throw new IllegalArgumentException( Localization.getInstance().getString( "ds.z.PlanPolygon.ListDoesNotContainenoughPointsException" ) );
+			throw new IllegalArgumentException( ZLocalization.getSingleton().getString( "ds.z.PlanPolygon.ListDoesNotContainenoughPointsException" ) );
 
 		// At least two point is in the list
 		PlanPoint firstPoint = points.get( 0 );
@@ -292,7 +292,7 @@ public class PlanPolygon<T extends Edge> implements Serializable, Iterable<T> {
 			maxY_DefiningEdge = e;
 		} else {
 			if( isClosed() )
-				throw new IllegalStateException( Localization.getInstance().getString( "ds.z.PlanPolygon.AddEdgeToClosedPolygonException" ) );
+				throw new IllegalStateException( ZLocalization.getSingleton().getString( "ds.z.PlanPolygon.AddEdgeToClosedPolygonException" ) );
 
 			if( fitsTogether( e, this ) ) {
 				// --> "e" is the closing edge
@@ -316,7 +316,7 @@ public class PlanPolygon<T extends Edge> implements Serializable, Iterable<T> {
 				e.setPoints( end, copyPoint, false );
 				end = copyPoint;
 			} else
-				throw new IllegalArgumentException( Localization.getInstance().getString( "ds.z.PlanPolygon.CoordinateMismatchException" ) );
+				throw new IllegalArgumentException( ZLocalization.getSingleton().getString( "ds.z.PlanPolygon.CoordinateMismatchException" ) );
 
 			// Scan for new boundaries
 			edgeChangeHandler( e, null );
@@ -351,7 +351,7 @@ public class PlanPolygon<T extends Edge> implements Serializable, Iterable<T> {
 	 */
 	public void addPointFirst( PlanPoint p ) throws IllegalArgumentException, IllegalStateException {
 		if( start.equals( p ) )
-			throw new IllegalArgumentException( Localization.getInstance().getString( "ds.z.PlanPolygon.StartPointException" ) );
+			throw new IllegalArgumentException( ZLocalization.getSingleton().getString( "ds.z.PlanPolygon.StartPointException" ) );
 		// Insert closing edge. addEdge is automatically called by Edge-Constructor
 		newEdge( p, start );
 	}
@@ -367,7 +367,7 @@ public class PlanPolygon<T extends Edge> implements Serializable, Iterable<T> {
 	 */
 	public void addPointLast( PlanPoint p ) throws IllegalArgumentException, IllegalStateException {
 		if( end.equals( p ) )
-			throw new IllegalArgumentException( Localization.getInstance().getString( "ds.z.PlanPolygon.EndPointException" ) );
+			throw new IllegalArgumentException( ZLocalization.getSingleton().getString( "ds.z.PlanPolygon.EndPointException" ) );
 		// Insert closing edge. addEdge() is automatically called by Edge-Constructor
 		newEdge( end, p );
 	}
@@ -472,26 +472,26 @@ public class PlanPolygon<T extends Edge> implements Serializable, Iterable<T> {
 			// falls die x-Koordinate des Startpunktes der Kante nicht durch 400mm teilbar ist-->nicht gerastert
 			if( !((edge.getSource().getXInt() % (BuildingPlan.rasterSize * 1000)) == 0) )
 				throw new PolygonNotRasterizedException( this,
-								Localization.getInstance().getString( "ds.z.PlanPolygon.PointNotOnRasterException" ) );
+								ZLocalization.getSingleton().getString( "ds.z.PlanPolygon.PointNotOnRasterException" ) );
 			// falls die y-Koordinate des Startpunktes der Kante nicht durch 400mm teilbar ist-->nicht gerastert
 			if( !((edge.getSource().getYInt() % (BuildingPlan.rasterSize * 1000)) == 0) )
 				throw new PolygonNotRasterizedException( this,
-								Localization.getInstance().getString( "ds.z.PlanPolygon.PointNotOnRasterException" ) );
+								ZLocalization.getSingleton().getString( "ds.z.PlanPolygon.PointNotOnRasterException" ) );
 			// falls die x-Koordinate des Endpunktes der Kante nicht durch 400mm teilbar ist-->nicht gerastert
 			if( !((edge.getTarget().getXInt() % (BuildingPlan.rasterSize * 1000)) == 0) )
 				throw new PolygonNotRasterizedException( this,
-								Localization.getInstance().getString( "ds.z.PlanPolygon.PointNotOnRasterException" ) );
+								ZLocalization.getSingleton().getString( "ds.z.PlanPolygon.PointNotOnRasterException" ) );
 			// falls die y-Koordinate des Endpunktes der Kante nicht durch 400mm teilbar ist-->nicht gerastert
 			if( !((edge.getTarget().getYInt() % (BuildingPlan.rasterSize * 1000)) == 0) )
 				throw new PolygonNotRasterizedException( this,
-								Localization.getInstance().getString( "ds.z.PlanPolygon.PointNotOnRasterException" ) );
+								ZLocalization.getSingleton().getString( "ds.z.PlanPolygon.PointNotOnRasterException" ) );
 			// falls die x-Koordinaten der beiden Punkte der Kante nicht gleich sind
 			// UND die y-Koordinaten der beiden Punkte der Kante nicht gleich sind-->nicht gerastert
 			//if( !( edge.getSource().getXInt() == edge.getTarget().getXInt() ) ) {
 			//	if( !( edge.getSource().getYInt() == edge.getTarget().getYInt() ) ) {
 			if( !edge.isHorizontal() && !edge.isVertical() )
 				throw new PolygonNotRasterizedException( this,
-								Localization.getInstance().getString( "ds.z.PlanPolygon.PointNotOnRasterException" ) );
+								ZLocalization.getSingleton().getString( "ds.z.PlanPolygon.PointNotOnRasterException" ) );
 		//	}
 		//}
 		}
@@ -534,14 +534,14 @@ public class PlanPolygon<T extends Edge> implements Serializable, Iterable<T> {
 	public T combineEdges( T e1, T e2, boolean keepMinSize ) throws IllegalArgumentException,
 					IllegalStateException {
 		if( e1.getAssociatedPolygon() != this || e2.getAssociatedPolygon() != this )
-			throw new IllegalArgumentException( Localization.getInstance().getString( "ds.z.PlanPolygon.EdgeNotContained" ) );
+			throw new IllegalArgumentException( ZLocalization.getSingleton().getString( "ds.z.PlanPolygon.EdgeNotContained" ) );
 		if( keepMinSize && (size - 1) < 3 )
-			throw new IllegalStateException( Localization.getInstance().getString( "ds.z.PlanPolygon.NotEnoughEdgesException" ) );
+			throw new IllegalStateException( ZLocalization.getSingleton().getString( "ds.z.PlanPolygon.NotEnoughEdgesException" ) );
 		PlanPoint common = null;
 		try {
 			common = e1.commonPoint( e2 );
 		} catch( IllegalArgumentException ex ) {
-			throw new IllegalArgumentException( Localization.getInstance().getString(
+			throw new IllegalArgumentException( ZLocalization.getSingleton().getString(
 							"ds.z.PlanPolygon.NoConsecutiveEdgesException" ) );
 		}
 		T result = null;
@@ -593,7 +593,7 @@ public class PlanPolygon<T extends Edge> implements Serializable, Iterable<T> {
 					//     would be 2 then or something went terribly wrong with
 					//     our data structures.
 					if( keepMinSize )
-						throw new RuntimeException( Localization.getInstance().getString(
+						throw new RuntimeException( ZLocalization.getSingleton().getString(
 										"ds.z.PlanPolygon.InternalError" ) );
 					else {
 						e1.delete();
@@ -680,9 +680,9 @@ public class PlanPolygon<T extends Edge> implements Serializable, Iterable<T> {
 	 */
 	public T combineEdges( List<PlanPoint> points, boolean keepMinSize ) {
 		if( points.size() < 3 )
-			throw new IllegalArgumentException( Localization.getInstance().getString( "ds.z.PlanPolygon.ListDoesNotContainenoughPointsException" ) );
+			throw new IllegalArgumentException( ZLocalization.getSingleton().getString( "ds.z.PlanPolygon.ListDoesNotContainenoughPointsException" ) );
 		if( keepMinSize && (size - (points.size() - 2)) < 3 )
-			throw new IllegalStateException( Localization.getInstance().getString( "ds.z.PlanPolygon.NotEnoughEdgesException" ) );
+			throw new IllegalStateException( ZLocalization.getSingleton().getString( "ds.z.PlanPolygon.NotEnoughEdgesException" ) );
 		T result = null;
 
 		// Switch off events while working on the polygon structure
@@ -716,7 +716,7 @@ public class PlanPolygon<T extends Edge> implements Serializable, Iterable<T> {
 					PlanPoint nextPoint = reversed ? itPoints.previous() : itPoints.next();
 
 					if( !combinationEdge.getTarget().equals( nextPoint ) )
-						throw new IllegalArgumentException( Localization.getInstance().getString( "ds.z.PlanPolygon.NotEqualException" ) + " (" + nextPoint +
+						throw new IllegalArgumentException( ZLocalization.getSingleton().getString( "ds.z.PlanPolygon.NotEqualException" ) + " (" + nextPoint +
 										", " + combinationEdge.getTarget() + ")" );
 					else {
 						// Combine a new edge
@@ -975,7 +975,7 @@ public class PlanPolygon<T extends Edge> implements Serializable, Iterable<T> {
 		//if( det == 0 ){
 		if( Math.abs( det ) <= 0.00000001 )
 			//Lines are parallel
-			throw new java.lang.IllegalArgumentException( Localization.getInstance().getString( "ds.z.PlanPolygon.ParallelLinesException" ) );
+			throw new java.lang.IllegalArgumentException( ZLocalization.getSingleton().getString( "ds.z.PlanPolygon.ParallelLinesException" ) );
 		else {
 			double x = (B2 * C1 - B1 * C2) / det;
 			double y = (A1 * C2 - A2 * C1) / det;
@@ -1286,12 +1286,12 @@ public class PlanPolygon<T extends Edge> implements Serializable, Iterable<T> {
 	 */
 	public T getEdge( PlanPoint p1, PlanPoint p2 ) throws IllegalArgumentException {
 		if( p1.equals( p2 ) )
-			throw new IllegalArgumentException( Localization.getInstance().getString(
+			throw new IllegalArgumentException( ZLocalization.getSingleton().getString(
 							"ds.z.PlanPolygon.EqualPointsException" ) );
 		for( T e : this )
 			if( e.fits( p1 ) && e.fits( p2 ) )
 				return e;
-		throw new IllegalArgumentException( Localization.getInstance().getString(
+		throw new IllegalArgumentException( ZLocalization.getSingleton().getString(
 						"ds.z.PlanPolygon.EdgeNotFoundException" ) );
 	}
 
@@ -1344,9 +1344,9 @@ public class PlanPolygon<T extends Edge> implements Serializable, Iterable<T> {
 	public PlanPoint getPointAfterTheNext( T e, PlanPoint p )
 					throws IllegalArgumentException, IllegalStateException {
 		if( e.getSource() != p && e.getTarget() != p )
-			throw new IllegalArgumentException( Localization.getInstance().getString( "ds.z.PlanPolygon.PointNotContainedInEdgeException" ) );
+			throw new IllegalArgumentException( ZLocalization.getSingleton().getString( "ds.z.PlanPolygon.PointNotContainedInEdgeException" ) );
 		if( !closed )
-			throw new IllegalStateException( Localization.getInstance().getString( "ds.z.PlanPolygon.PolygonNotClosedException" ) );
+			throw new IllegalStateException( ZLocalization.getSingleton().getString( "ds.z.PlanPolygon.PolygonNotClosedException" ) );
 		T e2 = (T)p.getOtherEdge( e ); // First neighbour
 		PlanPoint p2 = e2.getOther( p ); // First next point
 		T e3 = (T)p2.getOtherEdge( e2 ); // Second neighbour
@@ -1523,16 +1523,16 @@ public class PlanPolygon<T extends Edge> implements Serializable, Iterable<T> {
 			// This calls addEdge internally
 			edge.setAssociatedPolygon( poly );
 		} catch( java.lang.NoSuchMethodException ex ) {
-			throw new RuntimeException( Localization.getInstance().getString(
+			throw new RuntimeException( ZLocalization.getSingleton().getString(
 							"ds.z.PlanPolygon.InternalError" ) );
 		} catch( java.lang.InstantiationException ex ) {
-			throw new RuntimeException( Localization.getInstance().getString(
+			throw new RuntimeException( ZLocalization.getSingleton().getString(
 							"ds.z.PlanPolygon.InternalError" ) );
 		} catch( java.lang.IllegalAccessException ex ) {
-			throw new RuntimeException( Localization.getInstance().getString(
+			throw new RuntimeException( ZLocalization.getSingleton().getString(
 							"ds.z.PlanPolygon.InternalError" ) );
 		} catch( java.lang.reflect.InvocationTargetException ex ) {
-			throw new RuntimeException( Localization.getInstance().getString(
+			throw new RuntimeException( ZLocalization.getSingleton().getString(
 							"ds.z.PlanPolygon.InternalError" ) );
 		}
 		return edge;
@@ -1643,7 +1643,7 @@ public class PlanPolygon<T extends Edge> implements Serializable, Iterable<T> {
 			else if( last == e )
 				end = last.getOther( end );
 			else if( length != 0 )
-				throw new IllegalStateException( Localization.getInstance().getString(
+				throw new IllegalStateException( ZLocalization.getSingleton().getString(
 								"ds.z.PlanPolygon.EdgeIsNotFirstOrLastOneExcpetion" ) );
 		}
 
@@ -1711,23 +1711,23 @@ public class PlanPolygon<T extends Edge> implements Serializable, Iterable<T> {
 	 */
 	public ArrayList<T> replaceEdge( T e, List<PlanPoint> points ) throws IllegalArgumentException {
 		if( points.size() < 3 )
-			throw new IllegalArgumentException( Localization.getInstance().getString( "ds.z.PlanPolygon.ListDoesNotContainenoughPointsException" ) );
+			throw new IllegalArgumentException( ZLocalization.getSingleton().getString( "ds.z.PlanPolygon.ListDoesNotContainenoughPointsException" ) );
 		if( !closed )
-			throw new IllegalStateException( Localization.getInstance().getString(
+			throw new IllegalStateException( ZLocalization.getSingleton().getString(
 							"ds.z.PlanPolygon.PolygonNotClosedException" ) );
 		if( e.getAssociatedPolygon() != this )
-			throw new IllegalArgumentException( Localization.getInstance().getString( "ds.z.PlanPolygon.EdgeNotFoundException" ) );
+			throw new IllegalArgumentException( ZLocalization.getSingleton().getString( "ds.z.PlanPolygon.EdgeNotFoundException" ) );
 		if( !(e.getSource().equals( points.get( 0 ) ) &&
 						e.getTarget().equals( points.get( points.size() - 1 ) ) || e.getSource().equals( points.get( points.size() - 1 ) ) &&
 						e.getTarget().equals( points.get( 0 ) )) )
-			throw new IllegalArgumentException( Localization.getInstance().getString( "ds.z.PlanPolygon.ReplacementEndPointsMismatch" ) );
+			throw new IllegalArgumentException( ZLocalization.getSingleton().getString( "ds.z.PlanPolygon.ReplacementEndPointsMismatch" ) );
 		// Check for invalid points before having to revert the whole
 		// replacement process when recognizing the error later
 		PlanPoint lastPoint = null;
 		for( PlanPoint currentPoint : points ) {
 			if( lastPoint != null )
 				if( lastPoint.equals( currentPoint ) )
-					throw new IllegalArgumentException( Localization.getInstance().getString( "ds.z.PlanPolygon.SubsequentPointsEqualException" ) );
+					throw new IllegalArgumentException( ZLocalization.getSingleton().getString( "ds.z.PlanPolygon.SubsequentPointsEqualException" ) );
 			lastPoint = currentPoint;
 		}
 
@@ -1899,13 +1899,13 @@ public class PlanPolygon<T extends Edge> implements Serializable, Iterable<T> {
 	public PlanPolygon<T> splitClosedPolygon( T edge1, T edge2 ) throws IllegalArgumentException,
 					IllegalArgumentException {
 		if( !closed )
-			throw new IllegalStateException( Localization.getInstance().getString(
+			throw new IllegalStateException( ZLocalization.getSingleton().getString(
 							"ds.z.PlanPolygon.PolygonNotClosedException" ) );
 		if( edge1.getAssociatedPolygon() != this || edge2.getAssociatedPolygon() != this )
-			throw new IllegalArgumentException( Localization.getInstance().getString(
+			throw new IllegalArgumentException( ZLocalization.getSingleton().getString(
 							"ds.z.PlanPolygon.EdgeNotContained" ) );
 		if( edge1.isNeighbour( edge2 ) )
-			throw new IllegalArgumentException( Localization.getInstance().getString(
+			throw new IllegalArgumentException( ZLocalization.getSingleton().getString(
 							"ds.z.PlanPolygon.AdjacentEdges" ) );
 
 		// Save the edges' end points		
@@ -1970,10 +1970,10 @@ public class PlanPolygon<T extends Edge> implements Serializable, Iterable<T> {
 	public PlanPolygon<T> splitUnclosedPolygon( T splitEdge ) throws IllegalArgumentException,
 					IllegalArgumentException {
 		if( closed )
-			throw new IllegalStateException( Localization.getInstance().getString(
+			throw new IllegalStateException( ZLocalization.getSingleton().getString(
 							"ds.z.PlanPolygon.PolygonClosedException" ) );
 		if( splitEdge.getAssociatedPolygon() != this )
-			throw new IllegalArgumentException( Localization.getInstance().getString(
+			throw new IllegalArgumentException( ZLocalization.getSingleton().getString(
 							"ds.z.PlanPolygon.EdgeNotContained" ) );
 
 		// Save the edges' end points		

@@ -20,7 +20,7 @@
 
 package ds.graph;
 
-import de.tu_berlin.math.coga.common.localization.Localization;
+import de.tu_berlin.math.coga.common.localization.GraphLocalization;
 import java.util.Iterator;
 
 /**
@@ -60,7 +60,7 @@ public class StaticPath implements Path, Iterable<Edge> {
             consistent &= addLastEdge(edge);
         }
         if (!consistent)
-            throw new IllegalArgumentException(Localization.getInstance (
+            throw new IllegalArgumentException(GraphLocalization.getSingleton (
 			).getString ("ds.Graph.NotConsistentException"));
     }
     
@@ -79,7 +79,7 @@ public class StaticPath implements Path, Iterable<Edge> {
             consistent &= addLastEdge(edge);
         }
         if (!consistent)
-            throw new IllegalArgumentException(Localization.getInstance (
+            throw new IllegalArgumentException(GraphLocalization.getSingleton (
 			).getString ("ds.Graph.NotConsistentException"));
     }
 
@@ -120,7 +120,7 @@ public class StaticPath implements Path, Iterable<Edge> {
         } else {
             System.out.println("StaticPath: " + edges.last() + " " + edge);
             throw new IllegalArgumentException("");
-        	//throw new AssertionError(Localization.getInstance ().getString ("ds.Graph.EdgeCanNotAddedException"));
+        	//throw new AssertionError(GraphLocalization.getSingleton ().getString ("ds.Graph.EdgeCanNotAddedException"));
         }
     }
 

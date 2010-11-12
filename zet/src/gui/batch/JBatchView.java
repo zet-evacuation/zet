@@ -19,10 +19,10 @@ import batch.Batch;
 import batch.CellularAutomatonAlgorithm;
 import batch.GraphAlgorithm;
 import batch.load.BatchProjectEntry;
+import de.tu_berlin.math.coga.common.localization.DefaultLoc;
 import ds.Project;
 import ds.PropertyContainer;
 import ds.z.Assignment;
-import zet.gui.JEditor;
 import gui.ZETMain;
 import gui.editor.properties.JPropertyComboBox;
 import gui.editor.properties.PropertyFilesSelectionModel;
@@ -60,7 +60,6 @@ import javax.swing.JTextField;
 import javax.swing.plaf.basic.BasicComboBoxRenderer;
 import javax.swing.table.AbstractTableModel;
 import javax.swing.table.DefaultTableCellRenderer;
-import de.tu_berlin.math.coga.common.localization.Localization;
 import de.tu_berlin.math.coga.rndutils.RandomUtils;
 import gui.GUIControl;
 import statistics.GUIStatistic;
@@ -106,19 +105,19 @@ public class JBatchView extends JPanel {
 	private JPanel createSouthPanel() {
 		txtCycles = new JTextField( Integer.toString( STARTING_CYCLES ), 3 );
 		txtSeed = new JTextField( Long.toString( RandomUtils.getInstance().getSeed() ), 20 );
-		chkTempFiles = new JCheckBox( Localization.getInstance().getString( "gui.editor.JBatchView.tempfiles" ), false );
-		JButton btnRun = new JButton( Localization.getInstance().getString( "gui.editor.JBatchView.start" ) );
+		chkTempFiles = new JCheckBox( DefaultLoc.getSingleton().getString( "gui.editor.JBatchView.tempfiles" ), false );
+		JButton btnRun = new JButton( DefaultLoc.getSingleton().getString( "gui.editor.JBatchView.start" ) );
 
 		int x = 0;
 
 		JPanel south = new JPanel( new GridBagLayout() );
-		south.add( new JLabel( Localization.getInstance().getString( "gui.editor.JBatchView.cycles" ) + " " ), new GridBagConstraints(
+		south.add( new JLabel( DefaultLoc.getSingleton().getString( "gui.editor.JBatchView.cycles" ) + " " ), new GridBagConstraints(
 						x++, 0, 1, 1, 0.0, 1.0, GridBagConstraints.WEST, GridBagConstraints.NONE,
 						new Insets( 5, 5, 5, 5 ), 0, 0 ) );
 		south.add( txtCycles, new GridBagConstraints(
 						x++, 0, 1, 1, 0.0, 1.0, GridBagConstraints.WEST, GridBagConstraints.NONE,
 						new Insets( 5, 5, 5, 5 ), 0, 0 ) );
-		south.add( new JLabel( Localization.getInstance().getString( "gui.editor.JBatchView.seed" ) + " " ), new GridBagConstraints(
+		south.add( new JLabel( DefaultLoc.getSingleton().getString( "gui.editor.JBatchView.seed" ) + " " ), new GridBagConstraints(
 						x++, 0, 1, 1, 1.0, 1.0, GridBagConstraints.EAST, GridBagConstraints.NONE,
 						new Insets( 5, 5, 5, 5 ), 0, 0 ) );
 		south.add( txtSeed, new GridBagConstraints(
@@ -138,7 +137,7 @@ public class JBatchView extends JPanel {
 				try {
 					cycles = Integer.parseInt( txtCycles.getText() );
 				} catch( NumberFormatException ex ) {
-					errorMessage = Localization.getInstance().getString(
+					errorMessage = DefaultLoc.getSingleton().getString(
 									"gui.error.NonParsableNumber" );
 				} catch( RuntimeException ex ) {
 					errorMessage = ex.getLocalizedMessage();
@@ -162,7 +161,7 @@ public class JBatchView extends JPanel {
 				try {
 					RandomUtils.getInstance().setSeed( Long.parseLong( txtSeed.getText() ) );
 				} catch( NumberFormatException ex ) {
-					errorMessage = Localization.getInstance().getString(
+					errorMessage = DefaultLoc.getSingleton().getString(
 									"gui.error.NonParsableNumber" );
 				} catch( RuntimeException ex ) {
 					errorMessage = ex.getLocalizedMessage();
@@ -182,7 +181,7 @@ public class JBatchView extends JPanel {
 			public void actionPerformed( ActionEvent e ) {
 				try {
 					if( batch.getEntries().isEmpty() ) {
-						ZETMain.sendError( Localization.getInstance().getString( "gui.editor.JBatchView.emptyBatch" ) );
+						ZETMain.sendError( DefaultLoc.getSingleton().getString( "gui.editor.JBatchView.emptyBatch" ) );
 						return;
 					}
 
@@ -190,7 +189,7 @@ public class JBatchView extends JPanel {
 					try {
 						RandomUtils.getInstance().setSeed( Long.parseLong( txtSeed.getText() ) );
 					} catch( NumberFormatException ex ) {
-						ZETMain.sendError( Localization.getInstance().getString( "gui.error.NonParsableNumber" ) );
+						ZETMain.sendError( DefaultLoc.getSingleton().getString( "gui.error.NonParsableNumber" ) );
 						return;
 					}
 
@@ -277,7 +276,7 @@ public class JBatchView extends JPanel {
 
 
 		int y = 0;
-		main.add( new JLabel( Localization.getInstance().getString( "gui.editor.JBatchView.batchCaption" ) + " " ), new GridBagConstraints(
+		main.add( new JLabel( DefaultLoc.getSingleton().getString( "gui.editor.JBatchView.batchCaption" ) + " " ), new GridBagConstraints(
 						0, y++, 1, 1, 1.0, 0.0, GridBagConstraints.WEST, GridBagConstraints.NONE,
 						new Insets( 5, 5, 0, 5 ), 0, 0 ) );
 		main.add( new JScrollPane( tblEntries ), new GridBagConstraints(
@@ -287,14 +286,14 @@ public class JBatchView extends JPanel {
 						0, y++, 1, 1, 1.0, 0.0, GridBagConstraints.NORTH, GridBagConstraints.BOTH,
 						new Insets( 5, 5, 20, 5 ), 0, 0 ) );
 
-		JButton btnNewEntry = new JButton( Localization.getInstance().getString( "gui.editor.JBatchView.newEntry" ) );
+		JButton btnNewEntry = new JButton( DefaultLoc.getSingleton().getString( "gui.editor.JBatchView.newEntry" ) );
 		btnNewEntry.addActionListener( new ActionListener() {
 			public void actionPerformed( ActionEvent e ) {
 				addProject( guiControl.getZControl().getProject() );
 			}
 		} );
 		tableButtons.add( btnNewEntry );
-		JButton btnDeleteEntry = new JButton( Localization.getInstance().getString( "gui.editor.JBatchView.deleteEntry" ) );
+		JButton btnDeleteEntry = new JButton( DefaultLoc.getSingleton().getString( "gui.editor.JBatchView.deleteEntry" ) );
 		btnDeleteEntry.addActionListener( new ActionListener() {
 			public void actionPerformed( ActionEvent e ) {
 				if( tblEntries.getSelectedRow() >= 0 ) {
@@ -303,11 +302,11 @@ public class JBatchView extends JPanel {
 					batch.removeEntry( batch.getEntries().get( tblEntries.getSelectedRow() ) );
 					tablemodel.fireTableDataChanged();
 				} else
-					ZETMain.sendMessage( Localization.getInstance().getString( "gui.editor.JBatchView.selectLineFirst" ) );
+					ZETMain.sendMessage( DefaultLoc.getSingleton().getString( "gui.editor.JBatchView.selectLineFirst" ) );
 			}
 		} );
 		tableButtons.add( btnDeleteEntry );
-		JButton btnClearEntries = new JButton( Localization.getInstance().getString( "gui.editor.JBatchView.clearEntries" ) );
+		JButton btnClearEntries = new JButton( DefaultLoc.getSingleton().getString( "gui.editor.JBatchView.clearEntries" ) );
 		btnClearEntries.addActionListener( new ActionListener() {
 			public void actionPerformed( ActionEvent e ) {
 				if( tblEntries.isEditing() )
@@ -320,10 +319,10 @@ public class JBatchView extends JPanel {
 
 		// Install popup menu for the table
 		popup = new JPopupMenu();
-		JMenuItem menuItem = new JMenuItem( Localization.getInstance().getString( "gui.editor.JBatchView.confidenceIntervalCaption" ) );
+		JMenuItem menuItem = new JMenuItem( DefaultLoc.getSingleton().getString( "gui.editor.JBatchView.confidenceIntervalCaption" ) );
 		menuItem.addActionListener( new ActionListener() {
 			public void actionPerformed( ActionEvent e ) {
-				JOptionPane.showInputDialog( tblEntries, Localization.getInstance().getString( "gui.editor.JBatchView.confidenceIntervalText" ) + " " );
+				JOptionPane.showInputDialog( tblEntries, DefaultLoc.getSingleton().getString( "gui.editor.JBatchView.confidenceIntervalText" ) + " " );
 			// TODO: # Cycles berechnen ...
 			}
 		} );
@@ -442,29 +441,29 @@ public class JBatchView extends JPanel {
 		public String getColumnName( int column ) {
 			switch( column ) {
 				case COL_NAME:
-					return Localization.getInstance().getString( "gui.editor.JBatchView.table.column.name" );
+					return DefaultLoc.getSingleton().getString( "gui.editor.JBatchView.table.column.name" );
 				case COL_ASSIGNMENT:
-					return Localization.getInstance().getString( "gui.editor.JBatchView.table.column.assignment" );
+					return DefaultLoc.getSingleton().getString( "gui.editor.JBatchView.table.column.assignment" );
 				case COL_CA_ALGO:
-					return Localization.getInstance().getString( "gui.editor.JBatchView.table.column.caAlgo" );
+					return DefaultLoc.getSingleton().getString( "gui.editor.JBatchView.table.column.caAlgo" );
 				case COL_SIMULATE:
-					return Localization.getInstance().getString( "gui.editor.JBatchView.table.column.simulate" );
+					return DefaultLoc.getSingleton().getString( "gui.editor.JBatchView.table.column.simulate" );
 				case COL_CYCLES:
-					return Localization.getInstance().getString( "gui.editor.JBatchView.table.column.cycles" );
+					return DefaultLoc.getSingleton().getString( "gui.editor.JBatchView.table.column.cycles" );
 				case COL_CA_MAX_TIME:
-					return Localization.getInstance().getString( "gui.editor.JBatchView.table.column.caMaxTime" );
+					return DefaultLoc.getSingleton().getString( "gui.editor.JBatchView.table.column.caMaxTime" );
 				case COL_GRAPH_MAX_TIME:
-					return Localization.getInstance().getString( "gui.editor.JBatchView.table.column.graphMaxTime" );
+					return DefaultLoc.getSingleton().getString( "gui.editor.JBatchView.table.column.graphMaxTime" );
 				case COL_OPTIMIZE:
-					return Localization.getInstance().getString( "gui.editor.JBatchView.table.column.optimize" );
+					return DefaultLoc.getSingleton().getString( "gui.editor.JBatchView.table.column.optimize" );
 				case COL_GRAPH_ALGO:
-					return Localization.getInstance().getString( "gui.editor.JBatchView.table.column.algo" );
+					return DefaultLoc.getSingleton().getString( "gui.editor.JBatchView.table.column.algo" );
 				case COL_EVACUATION_PLAN_CYCLES:
-					return Localization.getInstance().getString( "gui.editor.JBatchView.table.column.evacCycles" );
+					return DefaultLoc.getSingleton().getString( "gui.editor.JBatchView.table.column.evacCycles" );
 				case COL_EVACUATION_PLAN_TYPE:
-					return Localization.getInstance().getString( "gui.editor.JBatchView.table.column.evacType" );
+					return DefaultLoc.getSingleton().getString( "gui.editor.JBatchView.table.column.evacType" );
 				case COL_PROPERTIES:
-					return Localization.getInstance().getString( "gui.editor.JBatchView.table.column.properties" );
+					return DefaultLoc.getSingleton().getString( "gui.editor.JBatchView.table.column.properties" );
 				default:
 					return null;
 			}
@@ -550,7 +549,7 @@ public class JBatchView extends JPanel {
 					try {
 						batch.getEntries().get( row ).setCycles( Integer.parseInt( aValue.toString() ) );
 					} catch( NumberFormatException ex ) {
-						ZETMain.sendError( Localization.getInstance().getString(
+						ZETMain.sendError( DefaultLoc.getSingleton().getString(
 										"gui.error.NonParsableNumber" ) );
 					} catch( RuntimeException ex ) {
 						ZETMain.sendError( ex.getLocalizedMessage() );
@@ -560,7 +559,7 @@ public class JBatchView extends JPanel {
 					try {
 						batch.getEntries().get( row ).setCaMaxTime( Double.parseDouble( aValue.toString() ) );
 					} catch( NumberFormatException ex ) {
-						ZETMain.sendError( Localization.getInstance().getString(
+						ZETMain.sendError( DefaultLoc.getSingleton().getString(
 										"gui.error.NonParsableFloatString" ) );
 					} catch( RuntimeException ex ) {
 						ZETMain.sendError( ex.getLocalizedMessage() );
@@ -576,7 +575,7 @@ public class JBatchView extends JPanel {
 					try {
 						batch.getEntries().get( row ).setOptimizedEvacuationPlanCycles( Integer.parseInt( aValue.toString() ) );
 					} catch( NumberFormatException ex ) {
-						ZETMain.sendError( Localization.getInstance().getString(
+						ZETMain.sendError( DefaultLoc.getSingleton().getString(
 										"gui.error.NonParsableNumber" ) );
 					} catch( RuntimeException ex ) {
 						ZETMain.sendError( ex.getLocalizedMessage() );
@@ -597,7 +596,7 @@ public class JBatchView extends JPanel {
 					try {
 						batch.getEntries().get( row ).setGraphMaxTime( Integer.parseInt( aValue.toString() ) );
 					} catch( NumberFormatException ex ) {
-						ZETMain.sendError( Localization.getInstance().getString(
+						ZETMain.sendError( DefaultLoc.getSingleton().getString(
 										"gui.error.NonParsableNumber" ) );
 					} catch( RuntimeException ex ) {
 						ZETMain.sendError( ex.getLocalizedMessage() );

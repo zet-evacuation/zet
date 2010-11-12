@@ -19,7 +19,7 @@
  */
 package ds.graph;
 
-import de.tu_berlin.math.coga.common.localization.Localization;
+import de.tu_berlin.math.coga.common.localization.GraphLocalization;
 import java.lang.reflect.Array;
 
 /**
@@ -79,9 +79,9 @@ public class IdentifiableObjectMapping<D extends Identifiable, R> implements Clo
      * <code>rangeType</code> are null.
      */
     protected IdentifiableObjectMapping(R[] mapping, Class<R> rangeType) {
-        if (rangeType == Void.TYPE) throw new IllegalArgumentException(Localization.getInstance (
+        if (rangeType == Void.TYPE) throw new IllegalArgumentException(GraphLocalization.getSingleton (
 		).getString ("algo.ca.NotInitializedException"));
-        if (mapping == null || rangeType == null) throw new NullPointerException(Localization.getInstance (
+        if (mapping == null || rangeType == null) throw new NullPointerException(GraphLocalization.getSingleton (
 		).getString ("ds.Graph.ParametersNullException"));
         this.mapping = mapping;
         this.rangeType = rangeType;

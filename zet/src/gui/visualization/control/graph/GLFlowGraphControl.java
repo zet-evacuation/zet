@@ -22,7 +22,7 @@
 package gui.visualization.control.graph;
 
 import batch.tasks.AlgorithmTask;
-import de.tu_berlin.math.coga.common.localization.Localization;
+import de.tu_berlin.math.coga.common.localization.DefaultLoc;
 import de.tu_berlin.math.coga.math.Conversion;
 import ds.GraphVisualizationResults;
 import ds.graph.Node;
@@ -64,7 +64,7 @@ public class GLFlowGraphControl extends AbstractZETVisualizationControl<GLGraphF
 		super();
 		mainControl = this;
 
-		AlgorithmTask.getInstance().setProgress( 0, Localization.getInstance().getStringWithoutPrefix( "batch.tasks.progress.createGraphVisualizationDataStructure" ), "" );
+		AlgorithmTask.getInstance().setProgress( 0, DefaultLoc.getSingleton().getStringWithoutPrefix( "batch.tasks.progress.createGraphVisualizationDataStructure" ), "" );
 		nodeCount = graphVisResult.getNetwork().nodes().size();
 		nodesDone = 0;
 		superSinkID = graphVisResult.getSupersink().id();
@@ -85,7 +85,7 @@ public class GLFlowGraphControl extends AbstractZETVisualizationControl<GLGraphF
 	public GLFlowGraphControl( FlowVisualization fv ) {
 		mainControl = this;
 
-		AlgorithmTask.getInstance().setProgress( 0, Localization.getInstance().getStringWithoutPrefix( "batch.tasks.progress.createGraphVisualizationDataStructure" ), "" );
+		AlgorithmTask.getInstance().setProgress( 0, DefaultLoc.getSingleton().getStringWithoutPrefix( "batch.tasks.progress.createGraphVisualizationDataStructure" ), "" );
 		nodeCount = fv.getGv().getNetwork().nodes().size();
 		nodesDone = 0;
 		//superSinkID = graphVisResult.getSupersink().id();

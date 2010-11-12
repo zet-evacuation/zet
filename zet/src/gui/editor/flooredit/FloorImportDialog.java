@@ -19,9 +19,9 @@
  */
 package gui.editor.flooredit;
 
+import de.tu_berlin.math.coga.common.localization.DefaultLoc;
 import ds.Project;
 import ds.z.Floor;
-import gui.ZETMain;
 import gui.components.framework.Button;
 import gui.GUIOptionManager;
 import info.clearthought.layout.TableLayout;
@@ -37,6 +37,7 @@ import javax.swing.JList;
 import javax.swing.JOptionPane;
 import de.tu_berlin.math.coga.common.localization.Localization;
 import gui.GUIControl;
+import gui.ZETMain;
 
 /**
  * The class <code>FloorImportDialog</code> allows importing floors from other
@@ -46,7 +47,7 @@ import gui.GUIControl;
 public class FloorImportDialog extends JDialog {
 
     /** The localization class. */
-    static final Localization loc = Localization.getInstance();
+    static final Localization loc = DefaultLoc.getSingleton();
     /** The elements of the floor list. */
     Vector<Floor> floors = new Vector<Floor>();
     /** The list of floors available in the newly loaded project. */

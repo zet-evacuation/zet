@@ -32,6 +32,7 @@ import batch.tasks.assignment.MinCostAssignmentTask;
 import batch.tasks.assignment.ReducedEarliestArrivalAssignmentTask;
 import batch.tasks.assignment.ShortestPathAssignmentTask;
 import batch.tasks.assignment.ShortestPathGraphEarliestArrivalAssignmentTask;
+import de.tu_berlin.math.coga.common.localization.DefaultLoc;
 import de.tu_berlin.math.coga.zet.converter.cellularAutomaton.ZToCAConverter.ConversionNotSupportedException;
 import ds.Project;
 import ds.PropertyContainer;
@@ -42,13 +43,10 @@ import gui.batch.EvacuationOptimizationType;
 import gui.editor.properties.PropertyFilesSelectionModel;
 import io.visualization.BuildingResults;
 import io.visualization.CAVisualizationResults;
-import de.tu_berlin.math.coga.common.localization.Localization;
 import de.tu_berlin.math.coga.common.util.Formatter;
 import statistic.ca.CAStatistic;
 import statistic.ca.MultipleCycleCAStatistic;
-import batch.tasks.RasterizeTask;
 import gui.batch.JBatchProgressDialog;
-import opengl.framework.abs.control;
 
 /**
  * A wrapper class that represents a single entry in the batch list.
@@ -148,11 +146,11 @@ public class BatchEntry {
 	 */
 	private void check( Project p ) {
 		if( p == null ) {
-			throw new IllegalArgumentException( Localization.getInstance().getString( "batch.ProjectIsNullException" ) );
+			throw new IllegalArgumentException( DefaultLoc.getSingleton().getString( "batch.ProjectIsNullException" ) );
 		} else if( p.getBuildingPlan().isEmpty() ) {
-			throw new IllegalArgumentException( Localization.getInstance().getString( "batch.EmptyProjectException" ) );
+			throw new IllegalArgumentException( DefaultLoc.getSingleton().getString( "batch.EmptyProjectException" ) );
 		}// else if( !p.getBuildingPlan().hasEvacuationAreas() ) {
-		//	throw new IllegalArgumentException( Localization.getInstance().getString( "batch.NoEvacAreas" ) );
+		//	throw new IllegalArgumentException( DefaultLoc.getSingleton().getString( "batch.NoEvacAreas" ) );
 		//}
 	}
 
@@ -178,7 +176,7 @@ public class BatchEntry {
 		
 		BatchResultEntry ca_res = new BatchResultEntry( name, new BuildingResults( project.getBuildingPlan() ) );
 		BatchResultEntry opt_res = new BatchResultEntry( name + (useCaRes ? 
-			" " + Localization.getInstance().getString( "gui.editor.JEditor.optimizedEvacuation" )
+			" " + DefaultLoc.getSingleton().getString( "gui.editor.JEditor.optimizedEvacuation" )
 			: ""), new BuildingResults( project.getBuildingPlan() ) );
 
         // Try to load the file
@@ -188,7 +186,7 @@ public class BatchEntry {
         } else {
             blp = new BatchLoadProperties(propertyFile.getFile(), caMaxTime);
         }
-        bpd.addTask(Localization.getInstance().getString("batch.LoadProperties"), blp);
+        bpd.addTask(DefaultLoc.getSingleton().getString("batch.LoadProperties"), blp);
 
         /* look how many ca's will be calculated */
         ConcreteAssignment[] concreteAssignments;
@@ -223,14 +221,14 @@ public class BatchEntry {
 				CreateCellularAutomatonTask ccat = new CreateCellularAutomatonTask( ca_res, i, project );
 				bpd.addTask( "Konvertiere zellulären Automat " + (i+1), ccat );
 				BatchCATask bct = new BatchCATask( cellularAutomatonAlgo, ca_res, i, findMedian, project, assignment, concreteAssignments );
-				bpd.addTask( String.format( Localization.getInstance().getString( "batch.CaCount" ), i + 1, getCycles() ), bct );
+				bpd.addTask( String.format( DefaultLoc.getSingleton().getString( "batch.CaCount" ), i + 1, getCycles() ), bct );
 			}
 			MedianTask mt = new MedianTask( ca_res, findMedian );
-			bpd.addTask( Localization.getInstance().getString( "batch.ComputeMedian" ), mt );
+			bpd.addTask( DefaultLoc.getSingleton().getString( "batch.ComputeMedian" ), mt );
 
 
             ComputeAvgStepPerSecondTask ct = new ComputeAvgStepPerSecondTask(ca_res);
-            bpd.addTask(Localization.getInstance().getString("batch.ComputeCAStepAvg"), ct);
+            bpd.addTask(DefaultLoc.getSingleton().getString("batch.ComputeCAStepAvg"), ct);
         }
 
         //Graph Part
@@ -239,12 +237,12 @@ public class BatchEntry {
                 int assignmentNumber = useCa ? 0 : -1;
                 BatchGraphTask bgt = new BatchGraphTask(graphAlgo, ca_res, assignmentNumber, graphMaxTime,
                         project, assignment, concreteAssignments);
-                bpd.addTask(Localization.getInstance().getString("batch.GraphAlgo"), bgt);
+                bpd.addTask(DefaultLoc.getSingleton().getString("batch.GraphAlgo"), bgt);
             } else if (optimizedEvacuationPlanCycles > 0) {
                 // Run Graph algorithm
 
                 BatchGraphTask bgt = new BatchGraphTask(graphAlgo, opt_res, -1, graphMaxTime, project, assignment, concreteAssignments);
-                bpd.addTask(Localization.getInstance().getString("batch.GraphAlgo"), bgt);
+                bpd.addTask(DefaultLoc.getSingleton().getString("batch.GraphAlgo"), bgt);
 
                 // Add concrete assignments (if we have too few CAs)
                 for (int i = useCa ? cycles : 0; i < concreteAssignments.length; i++) {
@@ -264,23 +262,23 @@ public class BatchEntry {
                             break;
                         case MinCost:
                             mat = new MinCostAssignmentTask(project, assignment, opt_res, concreteAssignments, i);
-                            bpd.addTask(Localization.getInstance().getString("batch.evacuationPlan.MinCost"), mat);
+                            bpd.addTask(DefaultLoc.getSingleton().getString("batch.evacuationPlan.MinCost"), mat);
                             break;
                         case EarliestArrivalTransshipment:
                             mat = new EarliestArrivalAssignmentTask(project, assignment, opt_res, concreteAssignments, i);
-                            bpd.addTask(Localization.getInstance().getString("batch.evacuationPlan.EarliestArrival"), mat);
+                            bpd.addTask(DefaultLoc.getSingleton().getString("batch.evacuationPlan.EarliestArrival"), mat);
                             break;
                         case ReducedGraphEAT:
                             mat = new ReducedEarliestArrivalAssignmentTask(project, assignment, opt_res, concreteAssignments, i);
-                            bpd.addTask(Localization.getInstance().getString("batch.evacuationPlan.ReducedEAT"), mat);
+                            bpd.addTask(DefaultLoc.getSingleton().getString("batch.evacuationPlan.ReducedEAT"), mat);
                             break;
                         case ShortestPathGraphEAT:
                             mat = new ShortestPathGraphEarliestArrivalAssignmentTask(project, assignment, opt_res, concreteAssignments, i);
-                            bpd.addTask(Localization.getInstance().getString("batch.evacuationPlan.SPG_EAT"), mat);
+                            bpd.addTask(DefaultLoc.getSingleton().getString("batch.evacuationPlan.SPG_EAT"), mat);
                             break;
                         case ShortestPaths:
                             mat = new ShortestPathAssignmentTask(project, assignment, opt_res, concreteAssignments, i);
-                            bpd.addTask(Localization.getInstance().getString("batch.evacuationPlan.ShortestPaths"), mat);
+                            bpd.addTask(DefaultLoc.getSingleton().getString("batch.evacuationPlan.ShortestPaths"), mat);
                             break;
                         case BestResponse:
                             break;
@@ -291,7 +289,7 @@ public class BatchEntry {
                         case PersonalEvacuationPlan:
                             BatchEvacuationCATask bct = new BatchEvacuationCATask(cellularAutomatonAlgo, graphAlgo, opt_res, i,
                                     graphMaxTime, findMedian, project, assignment, concreteAssignments);
-                            bpd.addTask(String.format(Localization.getInstance().getString("batch.EvacCount"),
+                            bpd.addTask(String.format(DefaultLoc.getSingleton().getString("batch.EvacCount"),
                                     i + 1, optimizedEvacuationPlanCycles), bct);
                             break;
                         case MinCost:
@@ -301,21 +299,21 @@ public class BatchEntry {
                         case ShortestPaths:
                             BatchCA2Task bct2 = new BatchCA2Task(project, assignment, opt_res, mat, concreteAssignments,
                                     i, cellularAutomatonAlgo, findMedian);
-                            bpd.addTask(String.format(Localization.getInstance().getString("batch.EvacCount"),
+                            bpd.addTask(String.format(DefaultLoc.getSingleton().getString("batch.EvacCount"),
                                     i + 1, optimizedEvacuationPlanCycles), bct2);
                             break;
                         case BestResponse:
                             BestResponseAssignmentTask brat = new BestResponseAssignmentTask(project, opt_res, concreteAssignments, i, findMedian, assignment, cellularAutomatonAlgo);
-                            bpd.addTask(String.format(Localization.getInstance().getString("batch.EvacCount"), i + 1, optimizedEvacuationPlanCycles), brat);
+                            bpd.addTask(String.format(DefaultLoc.getSingleton().getString("batch.EvacCount"), i + 1, optimizedEvacuationPlanCycles), brat);
                             break;
                     }
                 }
 
                 MedianTask mt = new MedianTask(opt_res, findMedian);
-                bpd.addTask(Localization.getInstance().getString("batch.ComputeMedian"), mt);
+                bpd.addTask(DefaultLoc.getSingleton().getString("batch.ComputeMedian"), mt);
 
                 ComputeAvgStepPerSecondTask ct = new ComputeAvgStepPerSecondTask(opt_res);
-                bpd.addTask(Localization.getInstance().getString("batch.ComputeCAStepAvg"), ct);
+                bpd.addTask(DefaultLoc.getSingleton().getString("batch.ComputeCAStepAvg"), ct);
             }
         }
 
@@ -406,7 +404,7 @@ public class BatchEntry {
     /** @throws IllegalArgumentException When cycles is equal to zero or less than zero. */
     public void setCycles(int cycles) throws IllegalArgumentException {
         if (cycles <= 0) {
-            throw new IllegalArgumentException(Localization.getInstance().getString("batch.NumberOfCyclesException"));
+            throw new IllegalArgumentException(DefaultLoc.getSingleton().getString("batch.NumberOfCyclesException"));
         }
         this.cycles = cycles;
     }
@@ -419,7 +417,7 @@ public class BatchEntry {
     /** @throws IllegalArgumentException If assignment is null or not in the project. */
     public void setAssignment(Assignment assignment) throws IllegalArgumentException {
         if (assignment == null || !project.getAssignments().contains(assignment)) {
-            throw new IllegalArgumentException(Localization.getInstance().getString("batch.AssignmentIsNullException"));
+            throw new IllegalArgumentException(DefaultLoc.getSingleton().getString("batch.AssignmentIsNullException"));
         }
         this.assignment = assignment;
     }
@@ -437,7 +435,7 @@ public class BatchEntry {
     /** @throws IllegalArgumentException If the caMaxTime is less than or equal to zero. */
     public void setCaMaxTime(double caMaxTime) {
         if (caMaxTime <= 0) {
-            throw new IllegalArgumentException(Localization.getInstance().getString("batch.caMaxTimeException"));
+            throw new IllegalArgumentException(DefaultLoc.getSingleton().getString("batch.caMaxTimeException"));
         }
         this.caMaxTime = caMaxTime;
     }
@@ -450,7 +448,7 @@ public class BatchEntry {
     /** @throws IllegalArgumentException If the graphMaxTime is less than or equal to zero. */
     public void setGraphMaxTime(int graphMaxTime) {
         if (graphMaxTime <= 0) {
-            throw new IllegalArgumentException(Localization.getInstance().getString("batch.caMaxTimeException"));
+            throw new IllegalArgumentException(DefaultLoc.getSingleton().getString("batch.caMaxTimeException"));
         }
         this.graphMaxTime = graphMaxTime;
     }
@@ -468,7 +466,7 @@ public class BatchEntry {
      * @throws IllegalArgumentException When cycles is less than zero. */
     public void setOptimizedEvacuationPlanCycles(int optimizedEvacuationPlanCycles) {
         if (optimizedEvacuationPlanCycles < 0) {
-            throw new IllegalArgumentException(Localization.getInstance().getString("batch.NumberOfCyclesException"));
+            throw new IllegalArgumentException(DefaultLoc.getSingleton().getString("batch.NumberOfCyclesException"));
         }
         this.optimizedEvacuationPlanCycles = optimizedEvacuationPlanCycles;
     }

@@ -13,15 +13,16 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
+
 /**
  * Class JFloorScrollPane
- * Erstellt 29.04.2008, 22:36:38
+ * Created 29.04.2008, 22:36:38
  */
 
 package zet.gui.components.tabs.base;
 
+import de.tu_berlin.math.coga.common.localization.DefaultLoc;
 import zet.gui.components.JZoomableRuler;
-import zet.gui.components.tabs.base.AbstractFloor;
 import gui.editor.CoordinateTools;
 import java.awt.Color;
 import java.awt.Font;
@@ -31,7 +32,6 @@ import java.awt.event.ActionListener;
 import javax.swing.JButton;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
-import de.tu_berlin.math.coga.common.localization.Localization;
 import de.tu_berlin.math.coga.common.localization.Localized;
 import de.tu_berlin.math.coga.components.JCorner;
 import de.tu_berlin.math.coga.components.JRuler;
@@ -80,43 +80,43 @@ public class JFloorScrollPane<T extends AbstractFloor> extends JScrollPane imple
 					int bs = 40;
 					int ss = 10;
 					String m = "cm";
-					String tt = Localization.getInstance().getString( "gui.editor.JEditorPanel.unitCentimeter" );
+					String tt = DefaultLoc.getSingleton().getString( "gui.editor.JEditorPanel.unitCentimeter" );
 					switch( topRuler.getDisplayUnit() ) {
 						case Centimeter:
 							t = JRuler.RulerDisplayUnits.Decimeter;
 							bs = 4;
 							ss = 1;
-							tt = Localization.getInstance().getString( "gui.editor.JEditorPanel.unitDecimeter" );
+							tt = DefaultLoc.getSingleton().getString( "gui.editor.JEditorPanel.unitDecimeter" );
 							break;
 						case Decimeter:
 							t = JRuler.RulerDisplayUnits.Meter;
 							bs = 2;
 							ss = 1;
-							tt = Localization.getInstance().getString( "gui.editor.JEditorPanel.unitMeter" );
+							tt = DefaultLoc.getSingleton().getString( "gui.editor.JEditorPanel.unitMeter" );
 							break;
 						case Meter:
 							t = JRuler.RulerDisplayUnits.Inch;
 							bs = 10;
 							ss = 5;
-							tt = Localization.getInstance().getString( "gui.editor.JEditorPanel.unitInch" );
+							tt = DefaultLoc.getSingleton().getString( "gui.editor.JEditorPanel.unitInch" );
 							break;
 						case Inch:
 							t = JRuler.RulerDisplayUnits.Foot;
 							bs = 5;
 							ss = 1;
-							tt = Localization.getInstance().getString( "gui.editor.JEditorPanel.unitFoot" );
+							tt = DefaultLoc.getSingleton().getString( "gui.editor.JEditorPanel.unitFoot" );
 							break;
 						case Foot:
 							t = JRuler.RulerDisplayUnits.Yard;
 							bs = 2;
 							ss = 1;
-							tt = Localization.getInstance().getString( "gui.editor.JEditorPanel.unitYard" );
+							tt = DefaultLoc.getSingleton().getString( "gui.editor.JEditorPanel.unitYard" );
 							break;
 						case Yard:
 							t = JRuler.RulerDisplayUnits.Centimeter;
 							bs = 40;
 							ss = 10;
-							tt = Localization.getInstance().getString( "gui.editor.JEditorPanel.unitCentimeter" );
+							tt = DefaultLoc.getSingleton().getString( "gui.editor.JEditorPanel.unitCentimeter" );
 							break;
 					}
 					topRuler.setDisplayUnit( t );
@@ -133,8 +133,8 @@ public class JFloorScrollPane<T extends AbstractFloor> extends JScrollPane imple
 			}
 		});
 		buttonCorner.add( unitButton );
-		Localization.getInstance().setPrefix( "" );
-		unitButton.setToolTipText( Localization.getInstance().getString( "gui.editor.JEditorPanel.unitMeter" ) );
+		DefaultLoc.getSingleton().setPrefix( "" );
+		unitButton.setToolTipText( DefaultLoc.getSingleton().getString( "gui.editor.JEditorPanel.unitMeter" ) );
 
 		setCorner( JScrollPane.UPPER_LEFT_CORNER, buttonCorner );
 		setCorner( JScrollPane.UPPER_RIGHT_CORNER, new JCorner() );
@@ -155,7 +155,7 @@ public class JFloorScrollPane<T extends AbstractFloor> extends JScrollPane imple
 	}
 
 	public void localize() {
-		unitButton.setToolTipText( Localization.getInstance().getString( "gui.editor.JEditorPanel.unitMeter" ) );
+		unitButton.setToolTipText( DefaultLoc.getSingleton().getString( "gui.editor.JEditorPanel.unitMeter" ) );
 	}
 	
 	/**

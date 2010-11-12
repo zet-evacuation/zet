@@ -15,16 +15,16 @@
  */
 package algo.graph.dynamicflow;
 
-import java.lang.reflect.Constructor;
-import java.lang.reflect.InvocationTargetException;
+import algo.graph.Flags;
 import algo.graph.util.GraphInstanceChecker;
+import de.tu_berlin.math.coga.common.localization.DefaultLoc;
 import ds.graph.flow.PathBasedFlowOverTime;
 import ds.graph.Edge;
 import ds.graph.IdentifiableIntegerMapping;
 import ds.graph.Network;
 import ds.graph.Node;
-import algo.graph.Flags;
-import de.tu_berlin.math.coga.common.localization.Localization;
+import java.lang.reflect.Constructor;
+import java.lang.reflect.InvocationTargetException;
 
 /**
  * The class <code>Transshipment</code> implements a binary search to compute the minimal
@@ -88,11 +88,11 @@ public abstract class Transshipment<TT extends TransshipmentWithTimeHorizon> ext
 		}
 		transshipmentAlgorithm.run();
 		if (!transshipmentAlgorithm.isProblemSolved()){
-			throw new AssertionError (Localization.getInstance (
+			throw new AssertionError (DefaultLoc.getSingleton (
 					).getString ("algo.graph.dynamicflow.RunNotCalledException"));
 		}
 		if (!transshipmentAlgorithm.isPathBasedFlowAvailable()){
-			throw new AssertionError(Localization.getInstance (
+			throw new AssertionError(DefaultLoc.getSingleton (
 			).getString ("algo.graph.dynamicflow.NoPathBasedFlowException"));
 		}
 		return transshipmentAlgorithm.getResultFlowPathBased();

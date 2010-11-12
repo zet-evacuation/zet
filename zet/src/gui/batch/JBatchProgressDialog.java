@@ -27,7 +27,7 @@ import de.tu_berlin.math.coga.common.algorithm.AlgorithmEvent;
 import de.tu_berlin.math.coga.common.algorithm.AlgorithmListener;
 import de.tu_berlin.math.coga.common.algorithm.AlgorithmProgressEvent;
 import de.tu_berlin.math.coga.common.debug.DebugEnum;
-import de.tu_berlin.math.coga.common.localization.Localization;
+import de.tu_berlin.math.coga.common.localization.DefaultLoc;
 import info.clearthought.layout.TableLayout;
 import gui.components.progress.ProgressTaskEntry;
 import java.beans.PropertyChangeEvent;
@@ -67,7 +67,7 @@ public class JBatchProgressDialog extends JDialog implements AlgorithmListener, 
      * up the position and size of the window.
      */
     public JBatchProgressDialog( JFrame owner ) {
-        super(owner, Localization.getInstance().getString( "batch.ProgressTitle" ), true);
+        super(owner, DefaultLoc.getSingleton().getString( "batch.ProgressTitle" ), true);
         addComponents();
         pack();
         setSize(500, 150);

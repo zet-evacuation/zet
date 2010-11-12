@@ -4,9 +4,8 @@
  */
 package de.tu_berlin.math.coga.common.util;
 
-import de.tu_berlin.math.coga.common.localization.Localization;
+import de.tu_berlin.math.coga.common.localization.DefaultLoc;
 import java.text.NumberFormat;
-import java.util.Locale;
 
 /**
  * The class <code>Formatter</code> is a utility class that provides methods
@@ -218,7 +217,7 @@ public class Formatter {
 	 * @return the converted and formatted string.
 	 */
 	public final static String formatTimeNanoseconds( long timeInNanoseconds ) {
-		NumberFormat nf = Localization.getInstance().getFloatConverter();
+		NumberFormat nf = DefaultLoc.getSingleton().getFloatConverter();
 		nf.setMaximumFractionDigits( 3 );
 		nf.setMinimumFractionDigits( 0 );
 		double time = timeInNanoseconds;
@@ -288,7 +287,7 @@ public class Formatter {
 	 * @return a string containing the decimal value
 	 */
 	public final static String formatPercent( double value ) {
-		NumberFormat nfPercent = Localization.getInstance().getPercentConverter();
+		NumberFormat nfPercent = DefaultLoc.getSingleton().getPercentConverter();
 		nfPercent.setMaximumFractionDigits( 2 );
 		nfPercent.setMinimumFractionDigits( 2 );
 		return nfPercent.format( value );

@@ -20,7 +20,7 @@
 
 package ds.graph;
 
-import de.tu_berlin.math.coga.common.localization.Localization;
+import de.tu_berlin.math.coga.common.localization.GraphLocalization;
 import java.util.Iterator;
 import java.util.NavigableSet;
 import java.util.TreeSet;
@@ -177,7 +177,7 @@ public class IntegerIntegerMapping implements Cloneable, Iterable<TimeIntegerPai
      * than <code>fromTime</code>.
      */
     public void increase(int fromTime, int toTime, int amount) {
-        if (toTime <= fromTime) throw new IllegalArgumentException(Localization.getInstance (
+        if (toTime <= fromTime) throw new IllegalArgumentException(GraphLocalization.getSingleton (
 		).getString ("ds.Graph.toTimeException"));
         TimeIntegerPair from = new TimeIntegerPair(fromTime, 0);
         TimeIntegerPair to = new TimeIntegerPair(toTime, 0);

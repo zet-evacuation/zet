@@ -21,6 +21,7 @@
 
 package gui.editor.assignment;
 
+import de.tu_berlin.math.coga.common.localization.DefaultLoc;
 import de.tu_berlin.math.coga.rndutils.distribution.Distribution;
 import de.tu_berlin.math.coga.rndutils.distribution.continuous.ErlangDistribution;
 import de.tu_berlin.math.coga.rndutils.distribution.continuous.ExponentialDistribution;
@@ -30,7 +31,6 @@ import de.tu_berlin.math.coga.rndutils.distribution.continuous.UniformDistributi
 import ds.Project;
 import ds.z.Assignment;
 import ds.z.AssignmentType;
-import zet.gui.JEditor;
 import zet.gui.components.model.ComboBoxRenderer;
 import gui.components.framework.Button;
 import info.clearthought.layout.TableLayout;
@@ -72,6 +72,7 @@ import javax.swing.table.AbstractTableModel;
 import javax.swing.table.DefaultTableCellRenderer;
 import de.tu_berlin.math.coga.common.localization.Localization;
 import ds.z.ZControl;
+import java.awt.event.KeyAdapter;
 import org.jfree.chart.ChartFactory;
 import org.jfree.chart.ChartPanel;
 import org.jfree.chart.JFreeChart;
@@ -106,7 +107,7 @@ public class JAssignmentPanel extends JPanel {
 	private static final int DIST_ERLANG = 3;
 	private static final int DIST_HYPEREXPONENTIAL = 4;
 	Project myProject;
-	private static final Localization loc = Localization.getInstance();	// Objekte für die Listen
+	private static final Localization loc = DefaultLoc.getSingleton();	// Objekte für die Listen
 	private Assignment currentAssignment;
 	private AssignmentType currentAssignmentType;
 	private JTextField addText1;
@@ -148,6 +149,7 @@ public class JAssignmentPanel extends JPanel {
 		tablemodel = new AssignmentTableModel();
 		tablemodel.addTableModelListener( new TableModelListener() {
 
+			@Override
 			public void tableChanged( TableModelEvent e ) {
 				drawCharts();
 			}
@@ -338,6 +340,7 @@ public class JAssignmentPanel extends JPanel {
 	 ****************************************************************************/
 	ActionListener aclAddAssignment = new ActionListener() {
 
+		@Override
 		public void actionPerformed( ActionEvent e ) {
 			try {
 				Assignment add = new Assignment( addText1.getText() );
@@ -353,6 +356,7 @@ public class JAssignmentPanel extends JPanel {
 	};
 	ActionListener aclAddAssignmentType = new ActionListener() {
 
+		@Override
 		public void actionPerformed( ActionEvent e ) {
 			if( currentAssignment != null ) {
 				try {
@@ -380,6 +384,7 @@ public class JAssignmentPanel extends JPanel {
 	};
 	ActionListener aclAssignmentSaveChanges = new ActionListener() {
 
+		@Override
 		public void actionPerformed( ActionEvent e ) {
 			try {
 				currentAssignment.setName( addText1.getText() );
@@ -392,6 +397,7 @@ public class JAssignmentPanel extends JPanel {
 	};
 	ActionListener aclAssignmentTypeSaveChanges = new ActionListener() {
 
+		@Override
 		public void actionPerformed( ActionEvent e ) {
 			if( currentAssignmentType != null ) {
 				try {
@@ -410,6 +416,7 @@ public class JAssignmentPanel extends JPanel {
 	};
 	ActionListener aclDeleteAssignment = new ActionListener() {
 
+		@Override
 		public void actionPerformed( ActionEvent e ) {
 			if( currentAssignment != null ) {
 				if( distributionTable.isEditing() ) {
@@ -424,6 +431,7 @@ public class JAssignmentPanel extends JPanel {
 	};
 	ActionListener aclDeleteAssignmentType = new ActionListener() {
 
+		@Override
 		public void actionPerformed( ActionEvent e ) {
 			if( currentAssignment != null && currentAssignmentType != null ) {
 				if( distributionTable.isEditing() ) {
@@ -436,8 +444,9 @@ public class JAssignmentPanel extends JPanel {
 			}
 		}
 	};
-	KeyListener kylEvacuees = new KeyListener() {
+	KeyListener kylEvacuees = new KeyAdapter() {
 
+		@Override
 		public void keyTyped( KeyEvent e ) {
 			switch( e.getKeyChar() ) {
 				case KeyEvent.VK_0:
@@ -455,12 +464,6 @@ public class JAssignmentPanel extends JPanel {
 				default:
 					e.consume();
 			}
-		}
-
-		public void keyPressed( KeyEvent e ) {
-		}
-
-		public void keyReleased( KeyEvent e ) {
 		}
 	};
 
@@ -795,14 +798,17 @@ public class JAssignmentPanel extends JPanel {
 			}
 		}
 
+		@Override
 		public int getRowCount() {
 			return params.size();
 		}
 
+		@Override
 		public int getColumnCount() {
 			return COL_PARAM4 + 1;
 		}
 
+		@Override
 		public Object getValueAt( int row, int column ) {
 			switch( column ) {
 				case COL_NAME:

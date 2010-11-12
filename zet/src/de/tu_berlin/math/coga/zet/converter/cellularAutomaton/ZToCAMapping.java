@@ -16,18 +16,16 @@
 
 package de.tu_berlin.math.coga.zet.converter.cellularAutomaton;
 
+import de.tu_berlin.math.coga.common.localization.DefaultLoc;
+import ds.ca.Cell;
+import ds.ca.CellularAutomaton;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 
-import de.tu_berlin.math.coga.common.localization.Localization;
-
-import ds.ca.Cell;
-import ds.ca.CellularAutomaton;
-
 /**
  * This class maps bidirectionally between "Cell"-Objects and "ZToCARasterSquare"-Objects, 
- * and moreover maps bidirectionally between Rooms of the Z-Datastructure and Rooms of
+ * and moreover maps bidirectionally between Rooms of the Z-data structure and Rooms of
  * the CellularAutomaton-Datastructure.
  * @author marcel
  *
@@ -92,10 +90,10 @@ public class ZToCAMapping
 	 */
 	public boolean insertTuple(Cell cell, ZToCARasterSquare rasterSquare) throws IllegalArgumentException {
 		if (cell == null)
-			throw new IllegalArgumentException(Localization.getInstance (
+			throw new IllegalArgumentException(DefaultLoc.getSingleton (
 			).getString ("converter.CellIsNullException"));
 		if (rasterSquare == null)
-			throw new IllegalArgumentException(Localization.getInstance (
+			throw new IllegalArgumentException(DefaultLoc.getSingleton (
 			).getString ("converter.RasterSquareIsNullException"));
 		boolean overwrite = false;
 		
@@ -132,10 +130,10 @@ public class ZToCAMapping
 	 */
 	public boolean insertTuple(ZToCARoomRaster roomRaster, ds.ca.Room zARoom) throws IllegalArgumentException {
 		if (roomRaster == null)
-			throw new IllegalArgumentException(Localization.getInstance (
+			throw new IllegalArgumentException(DefaultLoc.getSingleton (
 			).getString ("converter.zRoomIsNullException"));
 		if (zARoom == null)
-			throw new IllegalArgumentException(Localization.getInstance (
+			throw new IllegalArgumentException(DefaultLoc.getSingleton (
 			).getString ("converter.ZARoomIsNullException"));
 		boolean overwrite = false;
 		
@@ -156,10 +154,10 @@ public class ZToCAMapping
 	
 	public boolean insertTuple(Integer floorID, ds.z.Floor zFloor){
        if (floorID == null)
-            throw new IllegalArgumentException(Localization.getInstance (
+            throw new IllegalArgumentException(DefaultLoc.getSingleton (
 			).getString ("converter.FloorIDIsNullException"));
         if (zFloor == null)
-            throw new IllegalArgumentException(Localization.getInstance (
+            throw new IllegalArgumentException(DefaultLoc.getSingleton (
 			).getString ("converter.ZFloorIsNullException"));
         
         boolean overwrite = false;
@@ -185,7 +183,7 @@ public class ZToCAMapping
 	 */
 	public ZToCARasterSquare get(Cell cell) throws IllegalArgumentException {
 		if (cell == null)
-			throw new IllegalArgumentException(Localization.getInstance (
+			throw new IllegalArgumentException(DefaultLoc.getSingleton (
 			).getString ("converter.CellIsNullException"));
         
 		return this.cellToRasterSquare.get(cell);
@@ -200,7 +198,7 @@ public class ZToCAMapping
 	 */
 	public Cell get(ZToCARasterSquare rasterSquare) throws IllegalArgumentException {
 		if (rasterSquare == null)
-			throw new IllegalArgumentException(Localization.getInstance (
+			throw new IllegalArgumentException(DefaultLoc.getSingleton (
 			).getString ("converter.RasterSquareIsNullException"));
 		return this.rasterSquareToCell.get(rasterSquare);
 	}
@@ -217,7 +215,7 @@ public class ZToCAMapping
 	 */
 	public ZToCARoomRaster get(ds.ca.Room zARoom) throws IllegalArgumentException {
 		if (zARoom == null)
-			throw new IllegalArgumentException(Localization.getInstance (
+			throw new IllegalArgumentException(DefaultLoc.getSingleton (
 			).getString ("converter.ZARoomParameterException"));
 		return this.zARoomToZRoom.get(zARoom);
 	}
@@ -242,7 +240,7 @@ public class ZToCAMapping
 	 */
 	public ds.ca.Room get(ZToCARoomRaster rasteredRoom) throws IllegalArgumentException {
 		if (rasteredRoom == null)
-			throw new IllegalArgumentException(Localization.getInstance (
+			throw new IllegalArgumentException(DefaultLoc.getSingleton (
 			).getString ("converter.ZRoomParameterIsNullException"));
 		return this.zRoomToZARoom.get(rasteredRoom);
 	}

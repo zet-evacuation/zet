@@ -22,6 +22,7 @@ package ds.z;
 
 import com.thoughtworks.xstream.annotations.XStreamAlias;
 import com.thoughtworks.xstream.annotations.XStreamAsAttribute;
+import de.tu_berlin.math.coga.common.localization.ZLocalization;
 import de.tu_berlin.math.coga.zet.converter.Raster;
 import de.tu_berlin.math.coga.zet.converter.RasterSquare;
 import de.tu_berlin.math.coga.rndutils.RandomUtils;
@@ -34,7 +35,6 @@ import java.util.HashSet;
 import java.util.HashMap;
 import java.util.List;
 import java.util.ArrayList;
-import de.tu_berlin.math.coga.common.localization.Localization;
 import de.tu_berlin.math.coga.rndutils.distribution.continuous.NormalDistribution;
 import statistics.Statistic;
 
@@ -87,7 +87,7 @@ public class Assignment implements Serializable {
 	 */
 	public void setName( String val ) throws IllegalArgumentException {
 		if( val == null || val.equals( "" ) )
-			throw new IllegalArgumentException( Localization.getInstance().getString( "ds.z.Assignment.NoNameException" ) );
+			throw new IllegalArgumentException( ZLocalization.getSingleton().getString( "ds.z.Assignment.NoNameException" ) );
 		name = val;
 	}
 
@@ -106,7 +106,7 @@ public class Assignment implements Serializable {
 	 */
 	public void addAssignmentType( AssignmentType val ) throws IllegalArgumentException {
 		if( assignmentTypes.contains( val ) )
-			throw new IllegalArgumentException( Localization.getInstance().getString( "ds.z.Assignment.DoubleAssignmentTypeException" ) );
+			throw new IllegalArgumentException( ZLocalization.getSingleton().getString( "ds.z.Assignment.DoubleAssignmentTypeException" ) );
 		else {
 			assignmentTypes.add( val );
 //			val.addChangeListener( this );
@@ -121,7 +121,7 @@ public class Assignment implements Serializable {
 	 */
 	public void deleteAssignmentType( AssignmentType val ) throws IllegalArgumentException {
 		if( !assignmentTypes.contains( val ) )
-			throw new IllegalArgumentException( Localization.getInstance().getString( "ds.z.Assignment.AssignmentTypeNotNotFoundException" ) );
+			throw new IllegalArgumentException( ZLocalization.getSingleton().getString( "ds.z.Assignment.AssignmentTypeNotNotFoundException" ) );
 		else {
 			assignmentTypes.remove( val );
 //			val.removeChangeListener( this );
@@ -228,12 +228,12 @@ public class Assignment implements Serializable {
 					rasterSquaresInArea.add( new RasterSquare( assignmentArea, s.getColumn(), s.getRow(), s.getRaster() ) );
 
 				if( squareCount < numberOfPersons )
-					throw new TooManyPeopleException( assignmentArea, Localization.getInstance().getString( "ds.z.Assignment.NotEnoughSpaceException" ) );
+					throw new TooManyPeopleException( assignmentArea, ZLocalization.getSingleton().getString( "ds.z.Assignment.NotEnoughSpaceException" ) );
 
 				while(numberOfPersons > 0) {
 					// this case could occur, if all available cells are already used by an overlaying area
 					if( rasterSquaresInArea.size() == 0 )
-						throw new TooManyPeopleException( assignmentArea, Localization.getInstance().getString( "ds.z.Assignment.NotEnoughSpaceException" ) );
+						throw new TooManyPeopleException( assignmentArea, ZLocalization.getSingleton().getString( "ds.z.Assignment.NotEnoughSpaceException" ) );
 					int squareNumber = random.getRandomGenerator().nextInt( rasterSquaresInArea.size() );
 					RasterSquare square = rasterSquaresInArea.get( squareNumber );
 

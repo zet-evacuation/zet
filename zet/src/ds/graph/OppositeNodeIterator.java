@@ -19,7 +19,7 @@
  */
 package ds.graph;
 
-import de.tu_berlin.math.coga.common.localization.Localization;
+import de.tu_berlin.math.coga.common.localization.GraphLocalization;
 import java.util.HashMap;
 import java.util.Iterator;
 
@@ -99,6 +99,6 @@ public class OppositeNodeIterator implements Iterator<Node> {
 	 */
 	@Override
 	public void remove() {
-		throw new UnsupportedOperationException( Localization.getInstance().getString( "ds.graph.NotSupportedException" ) );
+		throw new UnsupportedOperationException( GraphLocalization.getSingleton().getString( "ds.graph.NotSupportedException" ) );
 	}
 }

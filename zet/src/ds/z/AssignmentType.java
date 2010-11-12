@@ -23,6 +23,7 @@ package ds.z;
 
 import com.thoughtworks.xstream.annotations.XStreamAlias;
 import com.thoughtworks.xstream.annotations.XStreamAsAttribute;
+import de.tu_berlin.math.coga.common.localization.ZLocalization;
 import de.tu_berlin.math.coga.rndutils.distribution.Distribution;
 import io.z.AssignmentTypeConverter;
 import io.z.XMLConverter;
@@ -31,7 +32,6 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.UUID;
-import de.tu_berlin.math.coga.common.localization.Localization;
 
 /**
  * This class pools several {@link AssignmentArea}s.
@@ -162,7 +162,7 @@ public class AssignmentType implements Serializable {
 	 */
 	public void setDefaultEvacuees( int evacuees ) throws IllegalArgumentException {
 		if( evacuees < 0 )
-			throw new IllegalArgumentException( Localization.getInstance().getString( "ds.z.AssignmentArea.NegativePersonValueException" ) );
+			throw new IllegalArgumentException( ZLocalization.getSingleton().getString( "ds.z.AssignmentArea.NegativePersonValueException" ) );
 		else
 			standardEvacuees = evacuees;
 	}
@@ -278,7 +278,7 @@ public class AssignmentType implements Serializable {
 	 */
 	void addAssignmentArea( AssignmentArea val ) throws IllegalArgumentException {
 		if( assignmentAreas.contains( val ) )
-			throw new IllegalArgumentException( Localization.getInstance().getString( "ds.z.AssignmentType.DoubleAssignmentAreaException" ) );
+			throw new IllegalArgumentException( ZLocalization.getSingleton().getString( "ds.z.AssignmentType.DoubleAssignmentAreaException" ) );
 		else
 			assignmentAreas.add( val );
 	}
@@ -290,7 +290,7 @@ public class AssignmentType implements Serializable {
 	 */
 	void deleteAssignmentArea( AssignmentArea val ) throws IllegalArgumentException {
 		if( !assignmentAreas.contains( val ) )
-			throw new IllegalArgumentException( Localization.getInstance().getString( "ds.z.AssignmentType.AssignmentAreaNotFound" ) );
+			throw new IllegalArgumentException( ZLocalization.getSingleton().getString( "ds.z.AssignmentType.AssignmentAreaNotFound" ) );
 		else
 			assignmentAreas.remove( val );
 	}
@@ -353,7 +353,7 @@ public class AssignmentType implements Serializable {
 	 */
 	public void setName( String name ) throws IllegalArgumentException {
 		if( name == null || name.equals( "" ) )
-			throw new IllegalArgumentException( Localization.getInstance().getString( "ds.z.Assignment.NoNameException" ) );
+			throw new IllegalArgumentException( ZLocalization.getSingleton().getString( "ds.z.Assignment.NoNameException" ) );
 		this.name = name;
 	}
 }

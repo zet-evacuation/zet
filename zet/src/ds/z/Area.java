@@ -22,7 +22,7 @@
 package ds.z;
 
 import com.thoughtworks.xstream.annotations.XStreamAlias;
-import de.tu_berlin.math.coga.common.localization.Localization;
+import de.tu_berlin.math.coga.common.localization.ZLocalization;
 
 /**
  *
@@ -75,7 +75,7 @@ public abstract class Area<T extends Edge> extends PlanPolygon<T> {
 	 */
 	public void setAssociatedRoom( Room room ) throws IllegalArgumentException {
 		if( room == null ) {
-			throw new IllegalArgumentException( Localization.getInstance().getString("ds.z.Area.NoRoomException") );
+			throw new IllegalArgumentException( ZLocalization.getSingleton().getString("ds.z.Area.NoRoomException") );
 		}
 
 		if(associatedRoom != null ) {

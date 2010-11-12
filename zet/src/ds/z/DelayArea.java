@@ -23,7 +23,7 @@ package ds.z;
 
 import com.thoughtworks.xstream.annotations.XStreamAlias;
 import com.thoughtworks.xstream.annotations.XStreamAsAttribute;
-import de.tu_berlin.math.coga.common.localization.Localization;
+import de.tu_berlin.math.coga.common.localization.ZLocalization;
 
 /**
  * Represents a delayArea.
@@ -36,8 +36,8 @@ public class DelayArea extends Area<Edge> {
 	/** Gives the GUI an indication what the source of the delay is, so that the
 	 * GUI can create an appropriate graphical representation. */
 	public enum DelayType {
-		OBSTACLE (0.6d, Localization.getInstance ().getString ("ds.z.DelayArea.DelayType.OBSTACLE.description")),
-		OTHER (1.0d, Localization.getInstance ().getString ("ds.z.DelayArea.DelayType.OTHER.description"));
+		OBSTACLE (0.6d, ZLocalization.getSingleton ().getString ("ds.z.DelayArea.DelayType.OBSTACLE.description")),
+		OTHER (1.0d, ZLocalization.getSingleton ().getString ("ds.z.DelayArea.DelayType.OTHER.description"));
 		
 		DelayType (double defaultSpeedFactor, String description) {
 			this.defaultSpeedFactor = defaultSpeedFactor;
@@ -104,9 +104,9 @@ public class DelayArea extends Area<Edge> {
 	 */
 	public void setSpeedFactor (double val) throws IllegalArgumentException {
 		if ( val <= 0 ) {
-			throw new IllegalArgumentException ( Localization.getInstance().getString("ds.z.DelayArea.SpeedFactorNegativeException") );
+			throw new IllegalArgumentException ( ZLocalization.getSingleton().getString("ds.z.DelayArea.SpeedFactorNegativeException") );
 		} else if ( val > 1 )
-                  throw new IllegalArgumentException( Localization.getInstance().getString("ds.z.DelayArea.SpeedFactorToHighException") );
+                  throw new IllegalArgumentException( ZLocalization.getSingleton().getString("ds.z.DelayArea.SpeedFactorToHighException") );
                 else {
 			this.speedFactor = val;
 //			throwChangeEvent (new ChangeEvent (this));

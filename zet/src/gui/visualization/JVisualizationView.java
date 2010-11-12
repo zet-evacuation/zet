@@ -21,7 +21,7 @@
 
 package gui.visualization;
 
-import de.tu_berlin.math.coga.common.localization.Localization;
+import de.tu_berlin.math.coga.common.localization.DefaultLoc;
 import ds.PropertyContainer;
 import gui.GUIControl;
 import gui.ZETMain;
@@ -97,6 +97,7 @@ public class JVisualizationView extends AbstractVisualizationView<ZETVisualizati
 	private final int HEAD_INFORMATION_ALARMED = 4;
 	private final int HEAD_INFORMATION_CHOSEN_EXIT = 5;
 	private final int HEAD_INFORMATION_REACTION = 6;
+	DefaultLoc loc = DefaultLoc.getSingleton();
 	
 	JArrayPanel cameraPanel;
 	private final GUIControl guiControl;
@@ -114,6 +115,7 @@ public class JVisualizationView extends AbstractVisualizationView<ZETVisualizati
 		slider.setPaintTicks( true );
 		slider.setPaintLabels( true );
 		slider.addChangeListener( new ChangeListener() {
+			@Override
 			public void stateChanged( ChangeEvent e ) {
 				GLControl control = visualization.getControl();
 				if( control == null )
@@ -129,7 +131,7 @@ public class JVisualizationView extends AbstractVisualizationView<ZETVisualizati
 		@SuppressWarnings( "UseOfObsoleteCollectionType" ) // hashtable has to be used here due to slider
 		Hashtable<Integer, JComponent> table = new Hashtable<Integer, JComponent>();
 		for( int i = 1; i <= 10; i++ )
-			table.put( new Integer( -i * 10 ), new JLabel( Localization.getInstance().getFloatConverter().format( (10 - i) * 0.1 ) ) );
+			table.put( new Integer( -i * 10 ), new JLabel( DefaultLoc.getSingleton().getFloatConverter().format( (10 - i) * 0.1 ) ) );
 		table.put( new Integer( 0 ), new JLabel( "1" ) );
 		for( int i = 1; i < 10; i++ )
 			table.put( new Integer( i * 10 ), new JLabel( "" + (i + 1) ) );
@@ -160,6 +162,7 @@ public class JVisualizationView extends AbstractVisualizationView<ZETVisualizati
 
 		floorSelector.setModel( floorSelectorModel );
 		floorSelector.addActionListener( new ActionListener() {
+			@Override
 			public void actionPerformed( ActionEvent e ) {
 				if( PropertyContainer.getInstance().getAsBoolean( "settings.gui.visualization.floors" ) )
 					return;
@@ -188,6 +191,10 @@ public class JVisualizationView extends AbstractVisualizationView<ZETVisualizati
 		} );
 		int row = 1;
 
+		if( loc == null )
+			loc = DefaultLoc.getSingleton();
+
+
 		lblFloorSelector = new JLabel( loc.getString( "gui.editor.JEditorPanel.labelFloors" ) + ":" );
 		eastPanel.add( lblFloorSelector, "1, " + row++ );
 		eastPanel.add( floorSelector, "1, " + row++ );
@@ -195,6 +202,7 @@ public class JVisualizationView extends AbstractVisualizationView<ZETVisualizati
 
 		potentialSelector = new JComboBox();
 		potentialSelector.addItemListener( new ItemListener() {
+			@Override
 			public void itemStateChanged( ItemEvent e ) {
 				if( e.getItem() == null || e.getStateChange() == ItemEvent.DESELECTED )
 					return;
@@ -220,6 +228,7 @@ public class JVisualizationView extends AbstractVisualizationView<ZETVisualizati
 		headColorSelector.addItem( loc.getString( "gui.visualizationView.headsReactionTime" ) );
 		headColorSelector.setSelectedIndex( 1 );
 		headColorSelector.addActionListener( new ActionListener() {
+			@Override
 			public void actionPerformed( ActionEvent e ) {
 				switch( headColorSelector.getSelectedIndex() ) {
 					default:
@@ -269,6 +278,7 @@ public class JVisualizationView extends AbstractVisualizationView<ZETVisualizati
 		setCameraPosition = new JButton( loc.getStringWithoutPrefix( "gui.visualizationView.cameraSetPosition" ) );
 		eastPanel.add( setCameraPosition, "1, " + row++ );
 		setCameraPosition.addActionListener( new ActionListener() {
+			@Override
 			public void actionPerformed( ActionEvent e ) {
 				try {
 					visualization.getCamera().getPos().parse( txtCameraPosition.getText() );
