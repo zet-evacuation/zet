@@ -6,8 +6,6 @@ package zet.gui.components.toolbar;
 
 import batch.BatchResult;
 import batch.BatchResultEntry;
-import de.tu_berlin.math.coga.common.localization.DefaultLoc;
-import de.tu_berlin.math.coga.common.localization.Localization;
 import ds.PropertyContainer;
 import gui.GUIControl;
 import gui.ZETMain;
@@ -30,6 +28,7 @@ import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import javax.swing.JList;
 import javax.swing.JToolBar;
+import zet.gui.GUILocalization;
 
 
 /**
@@ -39,7 +38,7 @@ import javax.swing.JToolBar;
 public class JVisualizationToolbar extends JToolBar implements ActionListener {
 	private final GUIControl control;
 	/** The localization class. */
-	static final Localization loc = DefaultLoc.getSingleton();
+	static final GUILocalization loc = GUILocalization.getSingleton();
 	private JButton btnExit;
 	private JLabel labelBatchName;
 	private BatchResultEntryVisComboBoxModel entryModelVis;
@@ -56,7 +55,7 @@ public class JVisualizationToolbar extends JToolBar implements ActionListener {
 	private JButton btnStop;
 	private Icon playIcon;
 	private Icon pauseIcon;
-	private JButton btnPlayEnd;
+	//private JButton btnPlayEnd;
 	private JButton btnShowWalls;
 	private JButton btnShowGraph;
 	private JButton btnShowGraphGrid;
@@ -78,13 +77,13 @@ public class JVisualizationToolbar extends JToolBar implements ActionListener {
 	 */
 	private void createVisualizationToolBar() {
 		// todo loc
-		loc.setPrefix( "gui.editor.JEditor." );
+		loc.setPrefix( "gui.toolbar." );
 
 		//toolBarVisualization = new JToolBar();
-		btnExit = Button.newButton( IconSet.Exit, this, "", loc.getString( "toolbarTooltipExit" ) );
+		btnExit = Button.newButton( IconSet.Exit, this, "", loc.getString( "Exit" ) );
 		add( btnExit );
 		addSeparator();
-		labelBatchName = new JLabel( loc.getString( "batchName" ) );
+		labelBatchName = new JLabel( loc.getString( "Visualization.BatchName" ) );
 		add( labelBatchName );
 		entryModelVis = new BatchResultEntryVisComboBoxModel();
 		JComboBox cbxBatchEntry = new JComboBox( entryModelVis );
@@ -94,7 +93,7 @@ public class JVisualizationToolbar extends JToolBar implements ActionListener {
 		cbxBatchEntry.setPreferredSize( new Dimension( 250, cbxBatchEntry.getPreferredSize().height ) );
 		cbxBatchEntry.setAlignmentX( 0 );
 		add( cbxBatchEntry );
-		labelBatchRun = new JLabel( loc.getString( "batchRun" ) );
+		labelBatchRun = new JLabel( loc.getString( "Visualization.BatchRun" ) );
 		add( labelBatchRun );
 		cycleModel = new CycleComboBoxModel();
 		JComboBox cbxBatchCycle = new JComboBox( cycleModel );
@@ -109,58 +108,58 @@ public class JVisualizationToolbar extends JToolBar implements ActionListener {
 		addSeparator();
 		add( new JLabel( " " ) );
 
-		btn2d3dSwitch = Button.newButton( IconSet.Toggle2D3D, this, "2d3dSwitch", loc.getString( "switch2d3d" ) );
+		btn2d3dSwitch = Button.newButton( IconSet.Toggle2D3D, this, "2d3dSwitch", loc.getString( "Visualization.Switch2d3d" ) );
 		btn2d3dSwitch.setSelected( !PropertyContainer.getInstance().getAsBoolean( "settings.gui.visualization.2d" ) );
 		add( btn2d3dSwitch );
-		btn2dSwitch = Button.newButton( IconSet.ToggleOrthogonalIsometric, this, "2dSwitch", loc.getString( "switchIso" ) );
+		btn2dSwitch = Button.newButton( IconSet.ToggleOrthogonalIsometric, this, "2dSwitch", loc.getString( "Visualization.SwitchIso" ) );
 		btn2dSwitch.setSelected( PropertyContainer.getInstance().getAsBoolean( "settings.gui.visualization.isometric" ) );
 		btn2dSwitch.setEnabled( PropertyContainer.getInstance().getAsBoolean( "settings.gui.visualization.2d" ) );
 		add( btn2dSwitch );
 		addSeparator();
-		btnVideo = Button.newButton( IconSet.Video, this, "video", loc.getString( "saveVideo" ) );
+		btnVideo = Button.newButton( IconSet.Video, this, "video", loc.getString( "Visualization.SaveVideo" ) );
 		add( btnVideo );
-		btnPlayStart = Button.newButton( IconSet.PlayStart, this, "start", loc.getString( "playBackToStart" ) );
+		btnPlayStart = Button.newButton( IconSet.PlayStart, this, "start", loc.getString( "Visualization.PlayBackToStart" ) );
 		add( btnPlayStart );
-		btnPlay = Button.newButton( IconSet.Play, this, "play", loc.getString( "playPause" ) );
+		btnPlay = Button.newButton( IconSet.Play, this, "play", loc.getString( "Visualization.PlayPause" ) );
 		playIcon = gui.components.framework.Icon.newIcon( IconSet.Play );
 		pauseIcon = gui.components.framework.Icon.newIcon( IconSet.PlayPause );
 		add( btnPlay );
-		btnPlayLoop = Button.newButton( IconSet.PlayLoop, this, "loop", loc.getString( "playLoop" ) );
+		btnStop = Button.newButton( IconSet.PlayStop, this, "stop", loc.getString( "Visualization.PlayStop" ) );
+		add( btnStop );
+		btnPlayLoop = Button.newButton( IconSet.PlayLoop, this, "loop", loc.getString( "Visualization.PlayLoop" ) );
 		btnPlayLoop.setSelected( false );
 		add( btnPlayLoop );
-		btnStop = Button.newButton( IconSet.PlayStop, this, "stop", loc.getString( "playStop" ) );
-		add( btnStop );
-		btnPlayEnd = Button.newButton( IconSet.PlayEnd, this, "end", loc.getString( "playToEnd" ) );
-		add( btnPlayEnd );
+		//btnPlayEnd = Button.newButton( IconSet.PlayEnd, this, "end", loc.getString( "playToEnd" ) );
+		//add( btnPlayEnd );
 		addSeparator();
-		btnShowWalls = Button.newButton( IconSet.ShowWalls, this, "walls", loc.getString( "showWalls" ) );
+		btnShowWalls = Button.newButton( IconSet.ShowWalls, this, "walls", loc.getString( "Visualization.ShowWalls" ) );
 		btnShowWalls.setSelected( PropertyContainer.getInstance().getAsBoolean( "settings.gui.visualization.walls" ) );
 		add( btnShowWalls );
-		btnShowGraph = Button.newButton( IconSet.ShowGraph, this, "graph", loc.getString( "showGraph" ) );
+		btnShowGraph = Button.newButton( IconSet.ShowGraph, this, "graph", loc.getString( "Visualization.ShowGraph" ) );
 		btnShowGraph.setSelected( PropertyContainer.getInstance().getAsBoolean( "settings.gui.visualization.graph" ) );
 		add( btnShowGraph );
-		btnShowGraphGrid = Button.newButton( IconSet.ShowGraphGrid, this, "graphgrid", loc.getString( "showGridRectangles" ) );
+		btnShowGraphGrid = Button.newButton( IconSet.ShowGraphGrid, this, "graphgrid", loc.getString( "Visualization.ShowGridRectangles" ) );
 		btnShowGraphGrid.setSelected( PropertyContainer.getInstance().getAsBoolean( "settings.gui.visualization.nodeArea" ) );
 		add( btnShowGraphGrid );
-		btnShowCellularAutomaton = Button.newButton( IconSet.ShowCellularAutomaton, this, "ca", loc.getString( "showCellularAutomaton" ) );
+		btnShowCellularAutomaton = Button.newButton( IconSet.ShowCellularAutomaton, this, "ca", loc.getString( "Visualization.ShowCellularAutomaton" ) );
 		btnShowCellularAutomaton.setSelected( PropertyContainer.getInstance().getAsBoolean( "settings.gui.visualization.cellularAutomaton" ) );
 		add( btnShowCellularAutomaton );
 		addSeparator();
-		btnShowAllFloors = Button.newButton( IconSet.ShowAllFloors, this, "floors", loc.getString( "showAllFloors" ) );
+		btnShowAllFloors = Button.newButton( IconSet.ShowAllFloors, this, "floors", loc.getString( "Visualization.ShowAllFloors" ) );
 		add( btnShowAllFloors );
 		btnShowAllFloors.setSelected( PropertyContainer.getInstance().getAsBoolean( "settings.gui.visualization.floors" ) );
 		addSeparator();
 
-		btnShowPotential = Button.newButton( IconSet.ShowPotential, this, "potential", loc.getString( "showPotential" ) );
+		btnShowPotential = Button.newButton( IconSet.ShowPotential, this, "potential", loc.getString( "Visualization.ShowPotential" ) );
 		btnShowPotential.setSelected( PropertyContainer.getInstance().getAsInt( "settings.gui.visualization.floorInformation" ) == 1 );
 		add( btnShowPotential );
-		btnShowDynamicPotential = Button.newButton( IconSet.ShowDynamicPotential, this, "dynamic", loc.getString( "showDynamicPotential" ) );
+		btnShowDynamicPotential = Button.newButton( IconSet.ShowDynamicPotential, this, "dynamic", loc.getString( "Visualization.ShowDynamicPotential" ) );
 		btnShowDynamicPotential.setSelected( PropertyContainer.getInstance().getAsInt( "settings.gui.visualization.floorInformation" ) == 2 );
 		add( btnShowDynamicPotential );
-		btnShowUtilization = Button.newButton( IconSet.ShowUsage, this, "utilization", loc.getString( "showUtilization" ) );
+		btnShowUtilization = Button.newButton( IconSet.ShowUsage, this, "utilization", loc.getString( "Visualization.ShowUtilization" ) );
 		btnShowUtilization.setSelected( PropertyContainer.getInstance().getAsInt( "settings.gui.visualization.floorInformation" ) == 3 );
 		add( btnShowUtilization );
-		btnShowWaiting = Button.newButton( IconSet.ShowWaiting, this, "waiting", loc.getString( "showWaitingTime" ) );
+		btnShowWaiting = Button.newButton( IconSet.ShowWaiting, this, "waiting", loc.getString( "Visualization.ShowWaitingTime" ) );
 		btnShowWaiting.setSelected( PropertyContainer.getInstance().getAsInt( "settings.gui.visualization.floorInformation" ) == 4 );
 		add( btnShowWaiting );
 		addSeparator();
@@ -282,7 +281,7 @@ public class JVisualizationToolbar extends JToolBar implements ActionListener {
 	 */
 	public void setEnabledPlayback( boolean enabled ) {
 		btnPlay.setEnabled( enabled );
-		btnPlayEnd.setEnabled( enabled );
+		//btnPlayEnd.setEnabled( enabled );
 		btnPlayLoop.setEnabled( enabled );
 		btnPlayStart.setEnabled( enabled );
 		btnVideo.setEnabled( enabled );
@@ -290,30 +289,31 @@ public class JVisualizationToolbar extends JToolBar implements ActionListener {
 	}
 
 	public void localize() {
-		btnExit.setToolTipText( loc.getString( "toolbarTooltipExit" ) );
-		labelBatchName.setText( loc.getString( "batchName" ) );
-		labelBatchRun.setText( loc.getString( "batchRun" ) );
-		btn2d3dSwitch.setToolTipText( loc.getString( "switch2d3d" ) );
-		btn2dSwitch.setToolTipText( loc.getString( "switchIso" ) );
-		btnVideo.setToolTipText( loc.getString( "saveVideo" ) );
-		btnPlayStart.setToolTipText( loc.getString( "playBackToStart" ) );
-		btnPlay.setToolTipText( loc.getString( "playPause" ) );
-		btnPlayEnd.setToolTipText( loc.getString( "playToEnd" ) );
-		btnShowWalls.setToolTipText( loc.getString( "showWalls" ) );
-		btnShowGraph.setToolTipText( loc.getString( "showGraph" ) );
-		btnShowGraphGrid.setToolTipText( loc.getString( "showGridRectangles" ) );
-		btnShowCellularAutomaton.setToolTipText( loc.getString( "showCellularAutomaton" ) );
-		btnShowAllFloors.setToolTipText( loc.getString( "showAllFloors" ) );
-		btnShowPotential.setToolTipText( loc.getString( "showPotential" ) );
-		btnShowDynamicPotential.setToolTipText( loc.getString( "showDynamicPotential" ) );
-		btnShowUtilization.setToolTipText( loc.getString( "showUtilization" ) );
-		btnShowWaiting.setToolTipText( loc.getString( "showWaitingTime" ) );
+		loc.setPrefix( "gui.toolbar." );
+		btnExit.setToolTipText( loc.getString( "Exit" ) );
+		labelBatchName.setText( loc.getString( "Visualization.BatchName" ) );
+		labelBatchRun.setText( loc.getString( "Visualization.BatchRun" ) );
+		btn2d3dSwitch.setToolTipText( loc.getString( "Visualization.Switch2d3d" ) );
+		btn2dSwitch.setToolTipText( loc.getString( "Visualization.SwitchIso" ) );
+		btnVideo.setToolTipText( loc.getString( "Visualization.SaveVideo" ) );
+		btnPlayStart.setToolTipText( loc.getString( "Visualization.PlayBackToStart" ) );
+		btnPlay.setToolTipText( loc.getString( "Visualization.PlayPause" ) );
+		btnPlayLoop.setToolTipText( loc.getString( "Visualization.PlayLoop" ) );
+		//btnPlayEnd.setToolTipText( loc.getString( "Visualization.PlayToEnd" ) );
+		btnShowWalls.setToolTipText( loc.getString( "Visualization.ShowWalls" ) );
+		btnShowGraph.setToolTipText( loc.getString( "Visualization.ShowGraph" ) );
+		btnShowGraphGrid.setToolTipText( loc.getString( "Visualization.ShowGridRectangles" ) );
+		btnShowCellularAutomaton.setToolTipText( loc.getString( "Visualization.ShowCellularAutomaton" ) );
+		btnShowAllFloors.setToolTipText( loc.getString( "Visualization.ShowAllFloors" ) );
+		btnShowPotential.setToolTipText( loc.getString( "Visualization.ShowPotential" ) );
+		btnShowDynamicPotential.setToolTipText( loc.getString( "Visualization.ShowDynamicPotential" ) );
+		btnShowUtilization.setToolTipText( loc.getString( "Visualization.ShowUtilization" ) );
+		btnShowWaiting.setToolTipText( loc.getString( "Visualization.ShowWaitingTime" ) );
 	}
 
 	public void rebuild( BatchResult result ) {
 		entryModelVis.rebuild( result );
 	}
-
 
 	/**
 	 * This class serves as a model for the JComboBox that contains the

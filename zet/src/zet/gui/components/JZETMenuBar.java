@@ -4,8 +4,6 @@
  */
 package zet.gui.components;
 
-import de.tu_berlin.math.coga.common.localization.DefaultLoc;
-import de.tu_berlin.math.coga.common.localization.Localization;
 import de.tu_berlin.math.coga.common.localization.Localized;
 import ds.PropertyContainer;
 import gui.GUIControl;
@@ -24,6 +22,7 @@ import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.JRadioButtonMenuItem;
+import zet.gui.GUILocalization;
 
 /**
  *
@@ -32,7 +31,7 @@ import javax.swing.JRadioButtonMenuItem;
 public class JZETMenuBar extends JMenuBar implements ActionListener, Localized {
 	private final GUIControl control;
 	/** The localization class. */
-	static final Localization loc = DefaultLoc.getSingleton();
+	static final GUILocalization loc = GUILocalization.getSingleton();
 	private JMenu mFile;
 	private JMenuItem mnuFileNew;
 	private JMenuItem mnuFileOpen;
@@ -60,12 +59,12 @@ public class JZETMenuBar extends JMenuBar implements ActionListener, Localized {
 	private JMenu mVisibleAreas;
 	private JMenuItem mnuShowAllAreas;
 	private JMenuItem mnuHideAllAreas;
-	JCheckBoxMenuItem mnuDelayArea;
-	JCheckBoxMenuItem mnuStairArea;
-	JCheckBoxMenuItem mnuEvacuationArea;
-	JCheckBoxMenuItem mnuInaccessibleArea;
-	JCheckBoxMenuItem mnuSaveArea;
-	JCheckBoxMenuItem mnuAssignmentArea;
+	private JCheckBoxMenuItem mnuDelayArea;
+	private JCheckBoxMenuItem mnuStairArea;
+	private JCheckBoxMenuItem mnuEvacuationArea;
+	private JCheckBoxMenuItem mnuInaccessibleArea;
+	private JCheckBoxMenuItem mnuSaveArea;
+	private JCheckBoxMenuItem mnuAssignmentArea;
 	private JMenu mGrid;
 	private JRadioButtonMenuItem mnuGridLines;
 	private JRadioButtonMenuItem mnuGridPoints;
@@ -100,9 +99,6 @@ public class JZETMenuBar extends JMenuBar implements ActionListener, Localized {
 	private JMenuItem mnuOptions;
 	private JMenuItem mnuSettings;
 	private JMenu mnuDebug;
-	private JMenuItem mnuOutputInformation;
-	private JMenuItem mnuOutputGraphAsText;
-	private JMenu mWindow;
 	private JMenu mHelp;
 	private JMenuItem mnuHelpAbout;
 
@@ -116,92 +112,90 @@ public class JZETMenuBar extends JMenuBar implements ActionListener, Localized {
 	 * Creates the menu.
 	 */
 	private void createMenuBar() {
-		loc.setPrefix( "gui.editor.JEditor." );
+		loc.setPrefix( "gui.menu." );
 
 		//JMenuBar bar = new JMenuBar();
-		mFile = Menu.addMenu( this, loc.getString( "menuFile" ) );
-		mEdit = Menu.addMenu( this, loc.getString( "menuEdit" ) );
-		mView = Menu.addMenu( this, loc.getString( "menuView" ) );
+		mFile = Menu.addMenu( this, loc.getString( "File" ) );
+		mEdit = Menu.addMenu( this, loc.getString( "Edit" ) );
+		mView = Menu.addMenu( this, loc.getString( "View" ) );
 		if( ZETMain.isDebug() )
-			mExecute = Menu.addMenu( this, loc.getString( "menuExecute" ) );
-		mExtras = Menu.addMenu( this, loc.getString( "menuExtras" ) );
-		mHelp = Menu.addMenu( this, loc.getString( "menuHelp" ) );
+			mExecute = Menu.addMenu( this, loc.getString( "Execute" ) );
+		mExtras = Menu.addMenu( this, loc.getString( "Extras" ) );
+		mHelp = Menu.addMenu( this, loc.getString( "Help" ) );
 
 		// Dateimenue
-		mnuFileNew = Menu.addMenuItem( mFile, loc.getString( "menuNew" ), 'N', this, "newProject" );
+		mnuFileNew = Menu.addMenuItem( mFile, loc.getString( "File.New" ), 'N', this, "newProject" );
 		Menu.addMenuItem( mFile, "-" );
-		mnuFileOpen = Menu.addMenuItem( mFile, loc.getString( "menuOpen" ), 'O', this, "loadProject" );
-		mnuFileSave = Menu.addMenuItem( mFile, loc.getString( "menuSave" ), 'S', this, "saveProject" );
-		mnuFileSaveAs = Menu.addMenuItem( mFile, loc.getString( "menuSaveAs" ), 'U', this, "saveProjectAs" );
+		mnuFileOpen = Menu.addMenuItem( mFile, loc.getString( "File.Open" ), 'O', this, "loadProject" );
+		mnuFileSave = Menu.addMenuItem( mFile, loc.getString( "File.Save" ), 'S', this, "saveProject" );
+		mnuFileSaveAs = Menu.addMenuItem( mFile, loc.getString( "File.SaveAs" ), 'U', this, "saveProjectAs" );
 		Menu.addMenuItem( mFile, "-" );
-		mnuFileExportAsDXF = Menu.addMenuItem( mFile, loc.getString( "menuDXF" ), this, "saveAsDXF" );
+		mnuFileExportAsDXF = Menu.addMenuItem( mFile, loc.getString( "File.DXF" ), this, "saveAsDXF" );
 		Menu.addMenuItem( mFile, "-" );
-		mnuFileSaveResultAs = Menu.addMenuItem( mFile, loc.getString( "menuSaveResultAs" ), 'E', this, "saveResultAs" );
+		mnuFileSaveResultAs = Menu.addMenuItem( mFile, loc.getString( "File.SaveResultAs" ), 'E', this, "saveResultAs" );
 		mnuFileSaveResultAs.setEnabled( false );
-		mnuFileLoadResult = Menu.addMenuItem( mFile, loc.getString( "menuLoadBatchResult" ), 'B', this, "loadBatchResult" );
+		mnuFileLoadResult = Menu.addMenuItem( mFile, loc.getString( "File.LoadBatchResult" ), 'B', this, "loadBatchResult" );
 		mnuFileLoadResult.setEnabled( false );
 		Menu.addMenuItem( mFile, "-" );
-		mnuFileExit = Menu.addMenuItem( mFile, loc.getString( "menuExit" ), 'X', this, "exit" );
+		mnuFileExit = Menu.addMenuItem( mFile, loc.getString( "File.Exit" ), 'X', this, "exit" );
 
 		// Bearbeiten menue
-		mnuEditFloorNew = Menu.addMenuItem( mEdit, loc.getString( "menuFloorNew" ), this, "new" );
-		mnuEditFloorUp = Menu.addMenuItem( mEdit, loc.getString( "menuFloorUp" ), this, "up" );
-		mnuEditFloorDown = Menu.addMenuItem( mEdit, loc.getString( "menuFloorDown" ), this, "down" );
-		mnuEditFloorDelete = Menu.addMenuItem( mEdit, loc.getString( "menuFloorDelete" ), this, "delete" );
-		mnuEditFloorCopy = Menu.addMenuItem( mEdit, loc.getString( "menuFloorCopy" ), this, "copy" );
-		mnuEditFloorImport = Menu.addMenuItem( mEdit, loc.getString( "menuFloorImport" ), this, "import" );
+		mnuEditFloorNew = Menu.addMenuItem( mEdit, loc.getString( "Edit.FloorNew" ), this, "new" );
+		mnuEditFloorUp = Menu.addMenuItem( mEdit, loc.getString( "Edit.FloorUp" ), this, "up" );
+		mnuEditFloorDown = Menu.addMenuItem( mEdit, loc.getString( "Edit.FloorDown" ), this, "down" );
+		mnuEditFloorDelete = Menu.addMenuItem( mEdit, loc.getString( "Edit.FloorDelete" ), this, "delete" );
+		mnuEditFloorCopy = Menu.addMenuItem( mEdit, loc.getString( "Edit.FloorCopy" ), this, "copy" );
+		mnuEditFloorImport = Menu.addMenuItem( mEdit, loc.getString( "Edit.FloorImport" ), this, "import" );
 
 		Menu.addMenuItem( mEdit, "-" );
-		mnuEditRasterize = Menu.addMenuItem( mEdit, loc.getString( "menuRasterize" ), 'R', InputEvent.CTRL_DOWN_MASK + InputEvent.SHIFT_DOWN_MASK, this, "rasterize" );
+		mnuEditRasterize = Menu.addMenuItem( mEdit, loc.getString( "Edit.Rasterize" ), 'R', InputEvent.CTRL_DOWN_MASK + InputEvent.SHIFT_DOWN_MASK, this, "rasterize" );
 		Menu.addMenuItem( mEdit, "-" );
-		mnuEditDistributeEvacuees = Menu.addMenuItem( mEdit, loc.getString( "menuDistributeEvacuees" ), this, "distributeEvacuees" );
+		mnuEditDistributeEvacuees = Menu.addMenuItem( mEdit, loc.getString( "Edit.DistributeEvacuees" ), this, "distributeEvacuees" );
 		Menu.addMenuItem( mEdit, "-" );
-		mnuEditDistribution = Menu.addMenuItem( mEdit, loc.getString( "menuDistributions" ), 'V', this, "distribution" );
-		mnuEditProperties = Menu.addMenuItem( mEdit, loc.getString( "menuProperties" ), 'P', this, "properties" );
+		mnuEditDistribution = Menu.addMenuItem( mEdit, loc.getString( "Edit.Distributions" ), 'V', this, "distribution" );
+		mnuEditProperties = Menu.addMenuItem( mEdit, loc.getString( "Edit.Properties" ), 'P', this, "properties" );
 
 		// Anzeige-menue
-		mVisibleAreas = Menu.addMenu( mView, loc.getString( "menuVisibleAreas" ) );
-		mnuShowAllAreas = Menu.addMenuItem( mVisibleAreas, loc.getString( "menuShowAllAreas" ), this, "showAll" );
+		mVisibleAreas = Menu.addMenu( mView, loc.getString( "View.VisibleAreas" ) );
+		mnuShowAllAreas = Menu.addMenuItem( mVisibleAreas, loc.getString( "View.ShowAllAreas" ), this, "showAll" );
 		mnuShowAllAreas.setEnabled( false );
-		mnuHideAllAreas = Menu.addMenuItem( mVisibleAreas, loc.getString( "menuHideAllAreas" ), this, "hideAll" );
+		mnuHideAllAreas = Menu.addMenuItem( mVisibleAreas, loc.getString( "View.HideAllAreas" ), this, "hideAll" );
 		mVisibleAreas.addSeparator();
-		mnuDelayArea = Menu.addCheckMenuItem( mVisibleAreas, loc.getString( "menuShowDelayAreas" ), true, this, "delayArea" );
-		mnuStairArea = Menu.addCheckMenuItem( mVisibleAreas, loc.getString( "menuShowStairAreas" ), true, this, "stairArea" );
-		mnuEvacuationArea = Menu.addCheckMenuItem( mVisibleAreas, loc.getString( "menuShowEvacuationAreas" ), true, this, "evacuationArea" );
-		mnuInaccessibleArea = Menu.addCheckMenuItem( mVisibleAreas, loc.getString( "menuShowInaccessibleAreas" ), true, this, "inaccessibleArea" );
-		mnuSaveArea = Menu.addCheckMenuItem( mVisibleAreas, loc.getString( "menuShowSaveAreas" ), true, this, "saveArea" );
-		mnuAssignmentArea = Menu.addCheckMenuItem( mVisibleAreas, loc.getString( "menuShowAssignmentAreas" ), true, this, "assignmentArea" );
+		mnuDelayArea = Menu.addCheckMenuItem( mVisibleAreas, loc.getString( "View.ShowDelayAreas" ), true, this, "delayArea" );
+		mnuStairArea = Menu.addCheckMenuItem( mVisibleAreas, loc.getString( "View.ShowStairAreas" ), true, this, "stairArea" );
+		mnuEvacuationArea = Menu.addCheckMenuItem( mVisibleAreas, loc.getString( "View.ShowEvacuationAreas" ), true, this, "evacuationArea" );
+		mnuInaccessibleArea = Menu.addCheckMenuItem( mVisibleAreas, loc.getString( "View.ShowInaccessibleAreas" ), true, this, "inaccessibleArea" );
+		mnuSaveArea = Menu.addCheckMenuItem( mVisibleAreas, loc.getString( "View.ShowSaveAreas" ), true, this, "saveArea" );
+		mnuAssignmentArea = Menu.addCheckMenuItem( mVisibleAreas, loc.getString( "View.ShowAssignmentAreas" ), true, this, "assignmentArea" );
 		Menu.addMenuItem( mView, "-" );
-		mGrid = Menu.addMenu( mView, loc.getString( "menuGridstyle" ) );
-		mnuGridLines = Menu.addRadioButtonMenuItem( mGrid, loc.getString( "menuGridstyleLines" ), false, this, "gridLine" );
-		mnuGridPoints = Menu.addRadioButtonMenuItem( mGrid, loc.getString( "menuGridstylePoints" ), true, this, "gridPoint" );
-		mnuGridNotVisible = Menu.addRadioButtonMenuItem( mGrid, loc.getString( "menuGridstyleNone" ), false, this, "gridNo" );
-		mnuPaintRasterized = Menu.addCheckMenuItem( mView, loc.getString( "menuDrawOnGrid" ), true, this, "grid" );
-		mnuHideDefaultFloor = Menu.addCheckMenuItem( mView, loc.getString( "menuHideDefaultEvacuationFloor" ), PropertyContainer.getInstance().getAsBoolean( "editor.options.view.hideDefaultFloor" ), this, "defaultFloor" );
+		mGrid = Menu.addMenu( mView, loc.getString( "View.Gridstyle" ) );
+		mnuGridLines = Menu.addRadioButtonMenuItem( mGrid, loc.getString( "View.GridstyleLines" ), false, this, "gridLine" );
+		mnuGridPoints = Menu.addRadioButtonMenuItem( mGrid, loc.getString( "View.GridstylePoints" ), true, this, "gridPoint" );
+		mnuGridNotVisible = Menu.addRadioButtonMenuItem( mGrid, loc.getString( "View.GridstyleNone" ), false, this, "gridNo" );
+		mnuPaintRasterized = Menu.addCheckMenuItem( mView, loc.getString( "View.DrawOnGrid" ), true, this, "grid" );
+		mnuHideDefaultFloor = Menu.addCheckMenuItem( mView, loc.getString( "View.HideDefaultEvacuationFloor" ), PropertyContainer.getInstance().getAsBoolean( "editor.options.view.hideDefaultFloor" ), this, "defaultFloor" );
 		mView.addSeparator();
-		mnuScreenshot = Menu.addMenuItem( mView, loc.getString( "menuScreenshot" ), KeyEvent.VK_F12, this, "screenshot", 0 );
+		mnuScreenshot = Menu.addMenuItem( mView, loc.getString( "View.Screenshot" ), KeyEvent.VK_F12, this, "screenshot", 0 );
 
 		// execute menu
-		//if( ZETMain.isDebug() ) {
-		mnuExecuteCreateCellularAutomaton = Menu.addMenuItem( mExecute, loc.getString( "menuExecuteCreateCellularAutomaton" ), this, "createCellularAutomaton" );
-		mnuExecuteCreateGraph = Menu.addMenuItem( mExecute, loc.getString( "menuExecuteCreateGraph" ), this, "createGraph" );
-		mnuExecuteApplyAssignment = Menu.addMenuItem( mExecute, loc.getString( "menuExecuteApplyConcreteAssignment" ), this, "applyConcreteAssignment" );
+		mnuExecuteCreateCellularAutomaton = Menu.addMenuItem( mExecute, loc.getString( "Execute.CreateCellularAutomaton" ), this, "createCellularAutomaton" );
+		mnuExecuteCreateGraph = Menu.addMenuItem( mExecute, loc.getString( "Execute.CreateGraph" ), this, "createGraph" );
+		mnuExecuteApplyAssignment = Menu.addMenuItem( mExecute, loc.getString( "Execute.ApplyConcreteAssignment" ), this, "applyConcreteAssignment" );
 
-		mSimulation = Menu.addMenu( mExecute, loc.getString( "menuSimulation" ) );
-		mnuSimulationQuickVisualization = Menu.addMenuItem( mSimulation, loc.getString( "menuSimulationQuickVisualization" ), KeyEvent.VK_F5, this, "quickVisualization", 0 );
-		mnuSimulationStart = Menu.addMenuItem( mSimulation, loc.getString( "menuSimulationStart" ), KeyEvent.VK_F5, this, "startSimulation", InputEvent.CTRL_DOWN_MASK );
-		mnuSimulationPauseQuickVisualization = Menu.addMenuItem( mSimulation, loc.getString( "menuSimulationPauseQuickVisualization" ), KeyEvent.VK_F6, this, "visualizationPause", 0 );
-		mnuStepByStepSimulation = Menu.addMenuItem( mSimulation, loc.getString( "menuSimulationStepByStep" ), KeyEvent.VK_F7, this, "stepByStepSimulation", 0 );
+		mSimulation = Menu.addMenu( mExecute, loc.getString( "Execute.Simulation" ) );
+		mnuSimulationQuickVisualization = Menu.addMenuItem( mSimulation, loc.getString( "Execute.Simulation.QuickVisualization" ), KeyEvent.VK_F5, this, "quickVisualization", 0 );
+		mnuSimulationStart = Menu.addMenuItem( mSimulation, loc.getString( "Execute.Simulation.Start" ), KeyEvent.VK_F5, this, "startSimulation", InputEvent.CTRL_DOWN_MASK );
+		mnuSimulationPauseQuickVisualization = Menu.addMenuItem( mSimulation, loc.getString( "Execute.Simulation.PauseQuickVisualization" ), KeyEvent.VK_F6, this, "visualizationPause", 0 );
+		mnuStepByStepSimulation = Menu.addMenuItem( mSimulation, loc.getString( "Execute.Simulation.StepByStep" ), KeyEvent.VK_F7, this, "stepByStepSimulation", 0 );
 
-		mOptimization = Menu.addMenu( mExecute, loc.getString( "menuOptimization" ) );
-		mnuOptimizationEarliestArrivalTransshipment = Menu.addMenuItem( mOptimization, loc.getString( "menuOptAlgoEATransshipment" ), KeyEvent.VK_F8, this, "EAT", 0 );
-		//			mnuExecuteQuickestTransshipment = Menu.addMenuItem( mOptimization, loc.getString( "menuOptAlgoQuickestTransshipment" ), this, "QT" );
-		//			mnuExecuteMaxFlowOverTimeMC = Menu.addMenuItem( mOptimization, loc.getString( "menuOptAlgoMaxFlowOverTimeMinCost" ), this, "MFOTMC" );
-		//			mnuExecuteMaxFlowOverTimeTEN = Menu.addMenuItem( mOptimization, loc.getString( "menuOptAlgoMaxFlowOverTimeTEN" ), this, "MFOTTEN" );
-		//}
+		mOptimization = Menu.addMenu( mExecute, loc.getString( "Execute.Optimization" ) );
+		mnuOptimizationEarliestArrivalTransshipment = Menu.addMenuItem( mOptimization, loc.getString( "Execute.Optimization.AlgoEATransshipment" ), KeyEvent.VK_F8, this, "EAT", 0 );
+		//mnuExecuteQuickestTransshipment = Menu.addMenuItem( mOptimization, loc.getString( "Execute.Optimization.AlgoQuickestTransshipment" ), this, "QT" );
+		//mnuExecuteMaxFlowOverTimeMC = Menu.addMenuItem( mOptimization, loc.getString( "Execute.Optimization.AlgoMaxFlowOverTimeMinCost" ), this, "MFOTMC" );
+		//mnuExecuteMaxFlowOverTimeTEN = Menu.addMenuItem( mOptimization, loc.getString( "Execute.Optimization.AlgoMaxFlowOverTimeTEN" ), this, "MFOTTEN" );
 
 		// Extras-Menu
-		mLanguage = Menu.addMenu( mExtras, loc.getString( "menuLanguages" ) );
+		mLanguage = Menu.addMenu( mExtras, loc.getString( "Extras.Languages" ) );
 		ButtonGroup grpLanguage = new ButtonGroup();
 
 		JRadioButtonMenuItem mnuGerman;
@@ -219,28 +213,24 @@ public class JZETMenuBar extends JMenuBar implements ActionListener, Localized {
 		mnuLanguages[0] = mnuGerman;
 		mnuLanguages[1] = mnuEnglish;
 		Menu.addMenuItem( mExtras, "-" );
-		mPlanImage = Menu.addMenu( mExtras, loc.getString( "menuPlanDisplaying" ) );
-		mnuPlanImageLoad = Menu.addMenuItem( mPlanImage, loc.getString( "menuLoadPlan" ), this, "loadBuildingPlan" );
-		mnuPlanImageHide = Menu.addMenuItem( mPlanImage, loc.getString( "menuHidePlan" ), this, "hideBuildingPlan" );
+		mPlanImage = Menu.addMenu( mExtras, loc.getString( "Extras.PlanDisplaying" ) );
+		mnuPlanImageLoad = Menu.addMenuItem( mPlanImage, loc.getString( "Extras.LoadPlan" ), this, "loadBuildingPlan" );
+		mnuPlanImageHide = Menu.addMenuItem( mPlanImage, loc.getString( "Extras.HidePlan" ), this, "hideBuildingPlan" );
 		mnuPlanImageHide.setEnabled( false );
-		mnuPlanImageResize = Menu.addMenuItem( mPlanImage, loc.getString( "menuResizePlan" ), this, "resizeBuildingPlan" );
+		mnuPlanImageResize = Menu.addMenuItem( mPlanImage, loc.getString( "Extras.ResizePlan" ), this, "resizeBuildingPlan" );
 		mnuPlanImageResize.setEnabled( false );
-		mnuPlanImageLocate = Menu.addMenuItem( mPlanImage, loc.getString( "menuMovePlan" ), this, "moveBuildingPlan" );
+		mnuPlanImageLocate = Menu.addMenuItem( mPlanImage, loc.getString( "Extras.MovePlan" ), this, "moveBuildingPlan" );
 		mnuPlanImageLocate.setEnabled( false );
-		mnuPlanImageTransparency = Menu.addMenuItem( mPlanImage, loc.getString( "menuSetPlanTransparency" ), this, "transparencyBuldingPlan" );
+		mnuPlanImageTransparency = Menu.addMenuItem( mPlanImage, loc.getString( "Extras.SetPlanTransparency" ), this, "transparencyBuldingPlan" );
 		mnuPlanImageTransparency.setEnabled( false );
 		Menu.addMenuItem( mExtras, "-" );
-		mnuOptions = Menu.addMenuItem( mExtras, loc.getString( "menuOptions" ), 'T', this, "options" );
+		mnuOptions = Menu.addMenuItem( mExtras, loc.getString( "Extras.Options" ), 'T', this, "options" );
 		if( ZETMain.isDebug() ) {
-			mnuSettings = Menu.addMenuItem( mExtras, loc.getString( "menuSettings" ), this, "settings" );
-			mnuDebug = Menu.addMenu( mExtras, "Debug" );
-			mnuOutputInformation = Menu.addMenuItem( mnuDebug, "Ausgabe", this, "outputInformation" );
-			mnuOutputGraphAsText = Menu.addMenuItem( mnuDebug, "Zugehöriger Graph als Datei ausgeben", this, "outputGraph" );
+			mnuSettings = Menu.addMenuItem( mExtras, loc.getString( "Extras.Settings" ), this, "settings" );
+			mnuDebug = Menu.addMenu( mExtras, loc.getString( "Extras.Debug" ) );
 		}
 		// Hilfe-menu
-		mnuHelpAbout = Menu.addMenuItem( mHelp, loc.getString( "menuAbout" ), 'I', this, "about" );
-
-		//setJMenuBar( bar );
+		mnuHelpAbout = Menu.addMenuItem( mHelp, loc.getString( "Help.About" ), 'I', this, "about" );
 
 		loc.setPrefix( "" );
 	}
@@ -430,90 +420,86 @@ public class JZETMenuBar extends JMenuBar implements ActionListener, Localized {
 	 */
 	@Override
 	public void localize() {
-		loc.setPrefix( "gui.editor.JEditor." );
-		Menu.updateMenu( mFile, loc.getString( "menuFile" ) );
-		Menu.updateMenu( mEdit, loc.getString( "menuEdit" ) );
-		Menu.updateMenu( mView, loc.getString( "menuView" ) );
-		Menu.updateMenu( mExtras, loc.getString( "menuExtras" ) );
-		//Menu.updateMenu( mWindow, loc.getString( "menuWindow" ) );
-		Menu.updateMenu( mHelp, loc.getString( "menuHelp" ) );
+		loc.setPrefix( "gui.menu." );
+		Menu.updateMenu( mFile, loc.getString( "File" ) );
+		Menu.updateMenu( mEdit, loc.getString( "Edit" ) );
+		Menu.updateMenu( mView, loc.getString( "View" ) );
+		Menu.updateMenu( mExtras, loc.getString( "Extras" ) );
+		Menu.updateMenu( mHelp, loc.getString( "Help" ) );
 
 		// Dateimenu
-		Menu.updateMenu( mnuFileNew, loc.getString( "menuNew" ) );
-		Menu.updateMenu( mnuFileOpen, loc.getString( "menuOpen" ) );
-		Menu.updateMenu( mnuFileSave, loc.getString( "menuSave" ) );
-		Menu.updateMenu( mnuFileSaveAs, loc.getString( "menuSaveAs" ) );
-		Menu.updateMenu( mnuFileExportAsDXF, loc.getString( "menuDXF" ) );
-		Menu.updateMenu( mnuFileSaveResultAs, loc.getString( "menuSaveResultAs" ) );
-		Menu.updateMenu( mnuFileLoadResult, loc.getString( "menuLoadBatchResult" ) );
-		//Menu.updateMenu (mnuFileStart, loc.getString ("menuStart"));
-		Menu.updateMenu( mnuFileExit, loc.getString( "menuExit" ) );
+		Menu.updateMenu( mnuFileNew, loc.getString( "File.New" ) );
+		Menu.updateMenu( mnuFileOpen, loc.getString( "File.Open" ) );
+		Menu.updateMenu( mnuFileSave, loc.getString( "File.Save" ) );
+		Menu.updateMenu( mnuFileSaveAs, loc.getString( "File.SaveAs" ) );
+		Menu.updateMenu( mnuFileExportAsDXF, loc.getString( "File.DXF" ) );
+		Menu.updateMenu( mnuFileSaveResultAs, loc.getString( "File.SaveResultAs" ) );
+		Menu.updateMenu( mnuFileLoadResult, loc.getString( "File.LoadBatchResult" ) );
+		Menu.updateMenu( mnuFileExit, loc.getString( "File.Exit" ) );
 
 		// Bearbeiten menu
-		//Menu.updateMenu( mnuEditUndo, loc.getString( "menuUndo" ) );
-		//Menu.updateMenu( mnuEditGoTo, loc.getString( "menuGoToRoom" ) );
-		Menu.updateMenu( mnuEditFloorNew, loc.getString( "menuFloorNew" ) );
-		Menu.updateMenu( mnuEditFloorUp, loc.getString( "menuFloorUp" ) );
-		Menu.updateMenu( mnuEditFloorDown, loc.getString( "menuFloorDown" ) );
-		Menu.updateMenu( mnuEditFloorDelete, loc.getString( "menuFloorDelete" ) );
-		Menu.updateMenu( mnuEditFloorCopy, loc.getString( "menuFloorCopy" ) );
-		Menu.updateMenu( mnuEditFloorImport, loc.getString( "menuFloorImport" ) );
-		Menu.updateMenu( mnuEditRasterize, loc.getString( "menuRasterize" ) );
-		Menu.updateMenu( mnuEditDistributeEvacuees, loc.getString( "menuDistributeEvacuees" ) );
-		Menu.updateMenu( mnuEditDistribution, loc.getString( "menuDistributions" ) );
-		Menu.updateMenu( mnuEditProperties, loc.getString( "menuProperties" ) );
-		Menu.updateMenu( mnuScreenshot, loc.getString( "menuScreenshot" ) );
+		Menu.updateMenu( mnuEditFloorNew, loc.getString( "Edit.FloorNew" ) );
+		Menu.updateMenu( mnuEditFloorUp, loc.getString( "Edit.FloorUp" ) );
+		Menu.updateMenu( mnuEditFloorDown, loc.getString( "Edit.FloorDown" ) );
+		Menu.updateMenu( mnuEditFloorDelete, loc.getString( "Edit.FloorDelete" ) );
+		Menu.updateMenu( mnuEditFloorCopy, loc.getString( "Edit.FloorCopy" ) );
+		Menu.updateMenu( mnuEditFloorImport, loc.getString( "Edit.FloorImport" ) );
+		Menu.updateMenu( mnuEditRasterize, loc.getString( "Edit.Rasterize" ) );
+		Menu.updateMenu( mnuEditDistributeEvacuees, loc.getString( "Edit.DistributeEvacuees" ) );
+		Menu.updateMenu( mnuEditDistribution, loc.getString( "Edit.Distributions" ) );
+		Menu.updateMenu( mnuEditProperties, loc.getString( "Edit.Properties" ) );
+		Menu.updateMenu( mnuScreenshot, loc.getString( "Edit.Screenshot" ) );
 
 		// Anzeige-menu
-		Menu.updateMenu( mVisibleAreas, loc.getString( "menuVisibleAreas" ) );
-		Menu.updateMenu( mnuShowAllAreas, loc.getString( "menuShowAllAreas" ) );
-		Menu.updateMenu( mnuHideAllAreas, loc.getString( "menuHideAllAreas" ) );
-		Menu.updateMenu( mnuDelayArea, loc.getString( "menuShowDelayAreas" ) );
-		Menu.updateMenu( mnuStairArea, loc.getString( "menuShowStairAreas" ) );
-		Menu.updateMenu( mnuEvacuationArea, loc.getString( "menuShowEvacuationAreas" ) );
-		Menu.updateMenu( mnuInaccessibleArea, loc.getString( "menuShowInaccessibleAreas" ) );
-		Menu.updateMenu( mnuSaveArea, loc.getString( "menuShowSaveAreas" ) );
-		Menu.updateMenu( mnuAssignmentArea, loc.getString( "menuShowAssignmentAreas" ) );
-		Menu.updateMenu( mGrid, loc.getString( "menuGridstyle" ) );
-		Menu.updateMenu( mnuGridLines, loc.getString( "menuGridstyleLines" ) );
-		Menu.updateMenu( mnuGridPoints, loc.getString( "menuGridstylePoints" ) );
-		Menu.updateMenu( mnuGridNotVisible, loc.getString( "menuGridstyleNone" ) );
-		Menu.updateMenu( mnuPaintRasterized, loc.getString( "menuDrawOnGrid" ) );
-		Menu.updateMenu( mnuHideDefaultFloor, loc.getString( "menuHideDefaultEvacuationFloor" ) );
+		Menu.updateMenu( mVisibleAreas, loc.getString( "View.VisibleAreas" ) );
+		Menu.updateMenu( mnuShowAllAreas, loc.getString( "View.ShowAllAreas" ) );
+		Menu.updateMenu( mnuHideAllAreas, loc.getString( "View.HideAllAreas" ) );
+		Menu.updateMenu( mnuDelayArea, loc.getString( "View.ShowDelayAreas" ) );
+		Menu.updateMenu( mnuStairArea, loc.getString( "View.ShowStairAreas" ) );
+		Menu.updateMenu( mnuEvacuationArea, loc.getString( "View.ShowEvacuationAreas" ) );
+		Menu.updateMenu( mnuInaccessibleArea, loc.getString( "View.ShowInaccessibleAreas" ) );
+		Menu.updateMenu( mnuSaveArea, loc.getString( "View.ShowSaveAreas" ) );
+		Menu.updateMenu( mnuAssignmentArea, loc.getString( "View.ShowAssignmentAreas" ) );
+		Menu.updateMenu( mGrid, loc.getString( "View.Gridstyle" ) );
+		Menu.updateMenu( mnuGridLines, loc.getString( "View.GridstyleLines" ) );
+		Menu.updateMenu( mnuGridPoints, loc.getString( "View.GridstylePoints" ) );
+		Menu.updateMenu( mnuGridNotVisible, loc.getString( "View.GridstyleNone" ) );
+		Menu.updateMenu( mnuPaintRasterized, loc.getString( "View.DrawOnGrid" ) );
+		Menu.updateMenu( mnuHideDefaultFloor, loc.getString( "View.HideDefaultEvacuationFloor" ) );
 
 		// Execute menu (debug only)
-		Menu.updateMenu( mExecute, loc.getString( "menuExecute" ) );
-		Menu.updateMenu( mSimulation, loc.getString( "menuSimulation" ) );
-		Menu.updateMenu( mnuExecuteCreateCellularAutomaton, loc.getString( "menuExecuteCreateCellularAutomaton" ) );
-		Menu.updateMenu( mnuExecuteApplyAssignment, loc.getString( "menuExecuteApplyConcreteAssignment" ) );
+		Menu.updateMenu( mExecute, loc.getString( "Execute" ) );
+		Menu.updateMenu( mSimulation, loc.getString( "Execute.Simulation" ) );
+		Menu.updateMenu( mnuExecuteCreateCellularAutomaton, loc.getString( "Execute.CreateCellularAutomaton" ) );
+		Menu.updateMenu( mnuExecuteApplyAssignment, loc.getString( "Execute.ApplyConcreteAssignment" ) );
 
-		Menu.updateMenu( mnuSimulationQuickVisualization, loc.getString( "menuSimulationQuickVisualization" ) );
-		Menu.updateMenu( mnuSimulationStart, loc.getString( "menuSimulationStart" ) );
-		Menu.updateMenu( mnuSimulationPauseQuickVisualization, loc.getString( "menuSimulationPauseQuickVisualization" ) );
-		Menu.updateMenu( mnuStepByStepSimulation, loc.getString( "menuSimulationStepByStep" ) );
+		Menu.updateMenu( mnuSimulationQuickVisualization, loc.getString( "Execute.Simulation.QuickVisualization" ) );
+		Menu.updateMenu( mnuSimulationStart, loc.getString( "Execute.Simulation.Start" ) );
+		Menu.updateMenu( mnuSimulationPauseQuickVisualization, loc.getString( "Execute.Simulation.PauseQuickVisualization" ) );
+		Menu.updateMenu( mnuStepByStepSimulation, loc.getString( "Execute.Simulation.StepByStep" ) );
 
 
-		Menu.updateMenu( mOptimization, loc.getString( "menuOptimization" ) );
-		Menu.updateMenu( mnuExecuteCreateGraph, loc.getString( "menuOptimizationCreateGraph" ) );
-		Menu.updateMenu( mnuOptimizationEarliestArrivalTransshipment, loc.getString( "menuOptAlgoEATransshipment" ) );
+		Menu.updateMenu( mOptimization, loc.getString( "Execute.Optimization" ) );
+		Menu.updateMenu( mnuExecuteCreateGraph, loc.getString( "Execute.Optimization.CreateGraph" ) );
+		Menu.updateMenu( mnuOptimizationEarliestArrivalTransshipment, loc.getString( "Execute.Optimization.AlgoEATransshipment" ) );
 
 		// Extras menu
-		Menu.updateMenu( mLanguage, loc.getString( "menuLanguages" ) );
-		Menu.updateMenu( mPlanImage, loc.getString( "menuPlanDisplaying" ) );
-		Menu.updateMenu( mnuPlanImageLoad, loc.getString( "menuLoadPlan" ) );
-		Menu.updateMenu( mnuPlanImageHide, loc.getString( "menuHidePlan" ) );
-		Menu.updateMenu( mnuPlanImageResize, loc.getString( "menuResizePlan" ) );
-		Menu.updateMenu( mnuPlanImageLocate, loc.getString( "menuMovePlan" ) );
-		Menu.updateMenu( mnuPlanImageTransparency, loc.getString( "menuSetPlanTransparency" ) );
-		Menu.updateMenu( mnuOptions, loc.getString( "menuOptions" ) );
+		Menu.updateMenu( mLanguage, loc.getString( "Extras.Languages" ) );
+		Menu.updateMenu( mPlanImage, loc.getString( "Extras.PlanDisplaying" ) );
+		Menu.updateMenu( mnuPlanImageLoad, loc.getString( "Extras.LoadPlan" ) );
+		Menu.updateMenu( mnuPlanImageHide, loc.getString( "Extras.HidePlan" ) );
+		Menu.updateMenu( mnuPlanImageResize, loc.getString( "Extras.ResizePlan" ) );
+		Menu.updateMenu( mnuPlanImageLocate, loc.getString( "Extras.MovePlan" ) );
+		Menu.updateMenu( mnuPlanImageTransparency, loc.getString( "Extras.SetPlanTransparency" ) );
+		Menu.updateMenu( mnuOptions, loc.getString( "Extras.Options" ) );
+
 		if( ZETMain.isDebug() ) {
-			Menu.updateMenu( mnuSettings, loc.getString( "menuSettings" ) );
+			Menu.updateMenu( mnuSettings, loc.getString( "Extras.Settings" ) );
+			Menu.updateMenu( mnuDebug, loc.getString( "Extras.Debug" ) );
 		}
 
-		// Window menu
-
 		// Help menu
-		Menu.updateMenu( mnuHelpAbout, loc.getString( "menuAbout" ) );
+		Menu.updateMenu( mnuHelpAbout, loc.getString( "Help.About" ) );
 		loc.setPrefix( "" );
 	}
 }

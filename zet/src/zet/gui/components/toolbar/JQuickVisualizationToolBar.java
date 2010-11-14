@@ -4,8 +4,6 @@
  */
 package zet.gui.components.toolbar;
 
-import de.tu_berlin.math.coga.common.localization.DefaultLoc;
-import de.tu_berlin.math.coga.common.localization.Localization;
 import de.tu_berlin.math.coga.common.localization.Localized;
 import gui.GUIControl;
 import gui.components.framework.Button;
@@ -14,6 +12,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import javax.swing.JButton;
 import javax.swing.JToolBar;
+import zet.gui.GUILocalization;
 
 
 /**
@@ -23,7 +22,7 @@ import javax.swing.JToolBar;
 public class JQuickVisualizationToolBar extends JToolBar implements ActionListener, Localized {
 	private final GUIControl control;
 	/** The localization class. */
-	static final Localization loc = DefaultLoc.getSingleton();
+	static final GUILocalization loc = GUILocalization.getSingleton();
 	private JButton btnExit;
 
 	public JQuickVisualizationToolBar( GUIControl control ) {
@@ -35,11 +34,10 @@ public class JQuickVisualizationToolBar extends JToolBar implements ActionListen
 	 * Creates the <code>JToolBar</code> for the quick visualization.
 	 */
 	private void createQuickVisualizationToolBar() {
-		loc.setPrefix( "gui.editor.JEditor." );
-
-		btnExit = Button.newButton( IconSet.Exit, this, "exit", loc.getString( "toolbarTooltipExit" ) );
+		loc.setPrefix( "gui.toolbar." );
+		btnExit = Button.newButton( IconSet.Exit, this, "exit", loc.getString( "Exit" ) );
 		add( btnExit );
-		loc.setPrefix( "" );
+		loc.clearPrefix();
 	}
 
 	public void actionPerformed( ActionEvent e ) {
@@ -47,6 +45,6 @@ public class JQuickVisualizationToolBar extends JToolBar implements ActionListen
 	}
 
 	public void localize() {
-		btnExit.setToolTipText( loc.getString( "toolbarTooltipExit" ) );
+		btnExit.setToolTipText( loc.getString( "gui.toolbar.Exit" ) );
 	}
 }

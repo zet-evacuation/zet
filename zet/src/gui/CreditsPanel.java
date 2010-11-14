@@ -29,7 +29,6 @@ import opengl.helper.TextureFontStrings;
 import opengl.helper.Texture;
 import opengl.helper.TextureFont;
 import opengl.helper.TextureManager;
-import de.tu_berlin.math.coga.math.vectormath.Vector3;
 
 /**
  * An OpenGL-panel displaying some textual copyright information about the zet
@@ -71,21 +70,21 @@ public class CreditsPanel extends JMovingEyePanel {
 	public void initGFX( GLAutoDrawable drawable ) {
 		drawable.getGL().glEnable( GL.GL_TEXTURE_2D );
 		super.initGFX( drawable );
+		glu = new GLU();
 		if( !texturesLoaded ) {
 			texMan = TextureManager.getInstance();
 			texMan.setGL( drawable.getGL() );
-			GLU glu = new GLU();
 			texMan.setGLU( glu );
 			loadTextures();
-			texturesLoaded = true;
 			font = new TextureFont( drawable.getGL(), texFont );
 			font.buildFont3( 16, 14, 16, 0.7f, (0.7f*3)/4 );
 			texFont.bind();
+			texturesLoaded = true;
 		}
 		drawable.getGL().glEnable( GL.GL_TEXTURE_2D );
-		this.pitch( 20 );
-		Vector3 pos = getPos();
-		pos.y += 7;
+		// move camera to the right position
+		pitch( 20 );
+		getPos().y += 7;
 	}
 
 	/**
@@ -96,32 +95,26 @@ public class CreditsPanel extends JMovingEyePanel {
 	public void display( GLAutoDrawable drawable ) {
 		super.display( drawable );	// clear the screen
 
-		System.out.println( "Display" );
-
 		// reset view
 		gl.glLoadIdentity();
 		this.look();
 
 		// enable texture mode and draw logo
-		
-		System.out.println( "Startpos:" + startPos );
-
 		texLogo.bind();
 		gl.glBegin( GL.GL_QUADS );
 			gl.glTexCoord2f( 0.0f, 1.0f );
-			gl.glVertex3d( -10, -4, startPos );					// Unten links
+			gl.glVertex3d( -10, -4, startPos );					// lower left
 			gl.glTexCoord2f( 0.0f, 0.0f );
-			gl.glVertex3d( -10, -4, startPos -10 );					// Oben links
+			gl.glVertex3d( -10, -4, startPos -10 );			// upper left
 			gl.glTexCoord2f( 1.0f, 0.0f );
-			gl.glVertex3d( 10, -4, startPos- 10 );						// Oben rechts
+			gl.glVertex3d( 10, -4, startPos- 10 );			// upper right
 			gl.glTexCoord2f( 1.0f, 1.0f );
-			gl.glVertex3d( 10, -4, startPos );						// Unten rechts
+			gl.glVertex3d( 10, -4, startPos );					// lower right
 		gl.glEnd();
 
 
 		// load font texture and draw text
 		texFont.bind();
-		String text = "Text";
 		drawLines( lines, startPos + 1  );
 	}
 

@@ -60,6 +60,16 @@ abstract public class AbstractOpenGLCanvas extends GLCanvas implements GLEventLi
 	protected GLU glu;
 
 	/**
+	 *
+	 */
+	public AbstractOpenGLCanvas() {
+		super( new GLCapabilities() );
+		setBackground( Color.black );
+		addGLEventListener( this );
+		animator = new FPSAnimator( this, maxFPS );
+	}
+
+	/**
 	 * 
 	 * @param caps 
 	 */
@@ -67,7 +77,6 @@ abstract public class AbstractOpenGLCanvas extends GLCanvas implements GLEventLi
 		super( caps );
 		setBackground( Color.black );
 		addGLEventListener( this );
-		//animator = new FPSAnimator( this, maxFPS );
 		animator = new Animator( this );
 	}
 
@@ -75,8 +84,6 @@ abstract public class AbstractOpenGLCanvas extends GLCanvas implements GLEventLi
 	 * Starts animation and resets the counter.
 	 */
 	public void startAnimation() {
-		//System.out.print( "Try to start animation. Previous state was" );
-		//System.out.println( animator.isAnimating() ? " animating." : " not animating." );
 		animationStartTime = System.nanoTime();
 		animator.start();
 		//animator.setRunAsFastAsPossible( true );
@@ -87,8 +94,6 @@ abstract public class AbstractOpenGLCanvas extends GLCanvas implements GLEventLi
 	 * Stops the animation.
 	 */
 	public void stopAnimation() {
-		//System.out.print( "Try to stop animation. Previous state was" );
-		//System.out.println( animator.isAnimating() ? " animating." : " not animating." );
 		animator.stop();
 		fps = 0;
 	}
@@ -169,18 +174,6 @@ abstract public class AbstractOpenGLCanvas extends GLCanvas implements GLEventLi
 		deltaTime = currentTime - lastTime;
 		lastTime = currentTime;
 
-	}
-
-
-
-	/**
-	 * 
-	 */
-	public AbstractOpenGLCanvas() {
-		super( new GLCapabilities() );
-		setBackground( Color.black );
-		addGLEventListener( this );
-		animator = new FPSAnimator( this, maxFPS );
 	}
 
 	/**

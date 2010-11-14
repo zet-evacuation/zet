@@ -15,7 +15,7 @@ public class ZLocalization extends Localization {
 	private volatile static ZLocalization singleton;
 
 	private ZLocalization() throws MissingResourceException {
-		super( "ds.z.zevacuate" );
+		super( "ds.z.ZLocalization" );
 	}
 
 	// synchronized keyword has been removed from here

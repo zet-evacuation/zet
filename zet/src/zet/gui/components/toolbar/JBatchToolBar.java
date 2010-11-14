@@ -4,8 +4,6 @@
  */
 package zet.gui.components.toolbar;
 
-import de.tu_berlin.math.coga.common.localization.DefaultLoc;
-import de.tu_berlin.math.coga.common.localization.Localization;
 import de.tu_berlin.math.coga.common.localization.Localized;
 import gui.GUIControl;
 import gui.ZETMain;
@@ -15,6 +13,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import javax.swing.JButton;
 import javax.swing.JToolBar;
+import zet.gui.GUILocalization;
 
 
 /**
@@ -24,7 +23,7 @@ import javax.swing.JToolBar;
 public class JBatchToolBar extends JToolBar implements ActionListener, Localized {
 	private final GUIControl control;
 	/** The localization class. */
-	static final Localization loc = DefaultLoc.getSingleton();
+	static final GUILocalization loc = GUILocalization.getSingleton();
 	private JButton btnExit;
 	private JButton btnSaveResults;
 	private JButton btnOpenResults;
@@ -38,15 +37,15 @@ public class JBatchToolBar extends JToolBar implements ActionListener, Localized
 	 * Creates the <code>JToolBar</code> for the batch panel.
 	 */
 	private void createBatchToolBar() {
-		loc.setPrefix( "gui.editor.JEditor." );
+		loc.setPrefix( "gui.toolbar." );
 
-		btnExit = Button.newButton( IconSet.Exit, this, "exit", loc.getString( "toolbarTooltipExit" ) );
+		btnExit = Button.newButton( IconSet.Exit, this, "exit", loc.getString( "Exit" ) );
 		add( btnExit );
 		addSeparator();
 
-		btnOpenResults = Button.newButton( IconSet.Open, this, "loadBatchResult", loc.getString( "toolbarTooltipOpen" ) );
+		btnOpenResults = Button.newButton( IconSet.Open, this, "loadBatchResult", loc.getString( "Open" ) );
 		add( btnOpenResults );
-		btnSaveResults = Button.newButton( IconSet.Save, this, "saveResultAs", loc.getString( "toolbarTooltipSave" ) );
+		btnSaveResults = Button.newButton( IconSet.Save, this, "saveResultAs", loc.getString( "Save" ) );
 		add( btnSaveResults );
 		loc.setPrefix( "" );
 	}
@@ -64,10 +63,11 @@ public class JBatchToolBar extends JToolBar implements ActionListener, Localized
 	}
 
 	public void localize() {
-		btnExit.setToolTipText( loc.getString( "toolbarTooltipExit" ) );
-		btnOpenResults.setToolTipText( loc.getString( "toolbarTooltipOpen" ) );
-		btnSaveResults.setToolTipText( loc.getString( "toolbarTooltipSave" ) );
-
+		loc.setPrefix( "gui.toolbar." );
+		btnExit.setToolTipText( loc.getString( "Exit" ) );
+		btnOpenResults.setToolTipText( loc.getString( "Open" ) );
+		btnSaveResults.setToolTipText( loc.getString( "Save" ) );
+		loc.clearPrefix();
 	}
 
 

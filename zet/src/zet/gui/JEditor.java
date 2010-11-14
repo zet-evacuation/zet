@@ -24,22 +24,25 @@ import batch.BatchResult;
 import de.tu_berlin.math.coga.common.localization.DefaultLoc;
 import ds.PropertyContainer;
 import ds.z.Floor;
+import de.tu_berlin.math.coga.common.localization.Localization;
+import de.tu_berlin.math.coga.common.localization.Localized;
+import de.tu_berlin.math.coga.components.JLogPane;
+import ds.z.ZControl;
 import event.EventListener;
 import event.EventServer;
 import event.MessageEvent;
 import event.MessageEvent.MessageType;
 import event.ProgressEvent;
+import event.VisualizationEvent;
+import event.OptionsChangedEvent;
 import gui.batch.JBatchView;
-import zet.gui.components.JEventStatusBar;
-import zet.gui.components.tabs.editor.EditMode;
-import zet.gui.components.tabs.JQuickVisualizationView;
-import zet.gui.components.tabs.JEditView;
 import gui.statistic.JGraphStatisticPanel;
 import gui.statistic.JStatisticPanel;
 import gui.visualization.JVisualizationView;
 import gui.visualization.control.GLControl;
-import de.tu_berlin.math.coga.common.localization.Localization;
-import de.tu_berlin.math.coga.common.localization.Localized;
+import gui.statistic.JStatisticsPanel;
+import gui.GUIControl;
+import gui.ZETMain;
 import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.Point;
@@ -53,6 +56,8 @@ import java.io.File;
 import java.io.IOException;
 import java.text.NumberFormat;
 import java.util.Locale;
+import java.awt.event.WindowAdapter;
+import java.util.ArrayList;
 import javax.media.opengl.GLCapabilities;
 import javax.swing.JComponent;
 import javax.swing.JFrame;
@@ -62,19 +67,14 @@ import javax.swing.JToolBar;
 import javax.swing.KeyStroke;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
-import ds.z.ZControl;
-import event.VisualizationEvent;
-import de.tu_berlin.math.coga.components.JLogPane;
-import event.OptionsChangedEvent;
-import gui.statistic.JStatisticsPanel;
-import zet.gui.components.toolbar.JEditToolbar;
-import gui.GUIControl;
-import gui.ZETMain;
-import java.awt.event.WindowAdapter;
-import java.util.ArrayList;
 import javax.imageio.ImageIO;
+import zet.gui.components.JEventStatusBar;
 import zet.gui.components.JZETMenuBar;
+import zet.gui.components.tabs.editor.EditMode;
+import zet.gui.components.tabs.JQuickVisualizationView;
+import zet.gui.components.tabs.JEditView;
 import zet.gui.components.toolbar.JBatchToolBar;
+import zet.gui.components.toolbar.JEditToolbar;
 import zet.gui.components.toolbar.JLogToolBar;
 import zet.gui.components.toolbar.JQuickVisualizationToolBar;
 import zet.gui.components.toolbar.JStatisticCellularAutomatonToolbar;
@@ -115,7 +115,7 @@ public class JEditor extends JFrame implements Localized, EventListener<Progress
 	}
 	ArrayList<ZETWindowTabs> tabs = new ArrayList<ZETWindowTabs>( ZETWindowTabs.values().length );
 	/** The localization class. */
-	static final Localization loc = DefaultLoc.getSingleton();
+	static final Localization loc = GUILocalization.getSingleton();
 	/** Stores the last mouse position if a mouse position event is sent. */
 	private static Point lastMouse = new Point( 0, 0 );
 	/** The delimiter used if numbers are stored in a tuple. */
@@ -194,6 +194,7 @@ public class JEditor extends JFrame implements Localized, EventListener<Progress
 		statusBar = new JEventStatusBar();
 		add( statusBar, BorderLayout.SOUTH );
 		toolBarEdit = new JEditToolbar( guiControl );
+		guiControl.setEditToolbar( toolBarEdit );
 		toolBarBatch = new JBatchToolBar( guiControl );
 		toolBarCellularAutomatonQuickVisualization = new JQuickVisualizationToolBar( guiControl );
 		toolBarVisualization = new JVisualizationToolbar( guiControl );
@@ -250,7 +251,7 @@ public class JEditor extends JFrame implements Localized, EventListener<Progress
 
 		tabPane = new JTabbedPane();
 
-		loc.setPrefix( "gui.editor.JEditor.tab" );		
+		loc.setPrefix( "gui.tabs." );
 		for( ZETWindowTabs tab : ZETWindowTabs.values() ) {
 			if( tab.isVisible() ) {
 				tabPane.addTab( loc.getString( tab.getName() ), null, getComponent( tab ), loc.getString( tab.getName() + "ToolTip" ) );
@@ -340,7 +341,7 @@ public class JEditor extends JFrame implements Localized, EventListener<Progress
 		visualizationView.localize();
 
 		// Localize tabs
-		loc.setPrefix( "gui.editor.JEditor.tab" );
+		loc.setPrefix( "gui.tabs." );
 
 		for( int i = 0; i < tabs.size(); ++i ) {
 			tabPane.setTitleAt( i, loc.getString( tabs.get( i ).getName() ) );
@@ -562,7 +563,6 @@ public class JEditor extends JFrame implements Localized, EventListener<Progress
 	public JBatchView getBatchView() {
 		return batchView;
 	}
-
 
 	/*****************************************************************************
 	 *                                                                           *

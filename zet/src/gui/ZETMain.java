@@ -21,7 +21,6 @@
 
 package gui;
 
-import zet.gui.JEditor;
 import batch.load.BatchProject;
 import batch.load.BatchProjectEntry;
 import com.martiansoftware.jsap.FlaggedOption;
@@ -35,17 +34,16 @@ import com.thoughtworks.xstream.annotations.Annotations;
 import de.tu_berlin.math.coga.common.debug.DebugStream;
 import de.tu_berlin.math.coga.common.debug.DebugStreamVerbose;
 import de.tu_berlin.math.coga.common.debug.Log;
-import de.tu_berlin.math.coga.common.localization.DefaultLoc;
 import de.tu_berlin.math.coga.common.localization.Localization;
+import de.tu_berlin.math.coga.common.util.IOTools;
 import ds.PropertyContainer;
+import ds.z.ZControl;
 import event.EventServer;
 import event.MessageEvent;
 import event.MessageEvent.MessageType;
 import gui.editor.properties.JPropertySelectorWindow;
 import gui.editor.properties.PropertyLoadException;
 import gui.editor.properties.PropertyTreeModel;
-import de.tu_berlin.math.coga.common.util.IOTools;
-import ds.z.ZControl;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
@@ -55,6 +53,8 @@ import java.io.PrintStream;
 import java.util.Calendar;
 import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
+import zet.gui.GUILocalization;
+import zet.gui.JEditor;
 
 /**
  * The <code>ZETMain</code> class is the main entry for the graphical user
@@ -64,9 +64,9 @@ import javax.swing.UIManager;
  */
 public class ZETMain {
 	/** The version of zet. */
-	public static String version = "1.1.0";
+	public static String version = "1.1.0 Beta";
 	/** The localization class. */
-	private static Localization loc = DefaultLoc.getSingleton();
+	private static Localization loc = GUILocalization.getSingleton();
 	/** Indicates whether debug mode is active, or not. */
 	private static boolean debug;
 	/** The project file that should be loaded (submitted via command line). */

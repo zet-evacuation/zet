@@ -4,8 +4,6 @@
  */
 package zet.gui.components.toolbar;
 
-import de.tu_berlin.math.coga.common.localization.DefaultLoc;
-import de.tu_berlin.math.coga.common.localization.Localization;
 import gui.GUIControl;
 import gui.ZETMain;
 import zet.gui.components.model.ComboBoxRenderer;
@@ -32,6 +30,7 @@ import javax.swing.JTextField;
 import javax.swing.JToolBar;
 import javax.swing.event.PopupMenuEvent;
 import javax.swing.event.PopupMenuListener;
+import zet.gui.GUILocalization;
 
 /**
  * The class <code>JEditToolbar</code> ...
@@ -39,7 +38,7 @@ import javax.swing.event.PopupMenuListener;
  */
 public class JEditToolbar extends JToolBar implements ActionListener, PopupMenuListener, KeyListener {
 	/** The localization class. */
-	static final Localization loc = DefaultLoc.getSingleton();
+	static final GUILocalization loc = GUILocalization.getSingleton();
 	private JButton btnExit;
 	private JButton btnOpen;
 	private JButton btnSave;
@@ -61,41 +60,39 @@ public class JEditToolbar extends JToolBar implements ActionListener, PopupMenuL
 
 	/**
 	 * Creates a new instance of <code>JEditToolbar</code>.
-	 *
 	 * @param control
 	 */
 	public JEditToolbar( GUIControl control ) {
 		this.control = control;
 		createEditToolBar();
-		control.setEditToolbar( this );
 	}
 
 	/**
 	 * Creates the <code>JToolBar</code> for the edit mode.
 	 */
 	private void createEditToolBar() {
-		loc.setPrefix( "gui.editor.JEditor." );
+		loc.setPrefix( "gui.toolbar." );
 
-		btnExit = Button.newButton( IconSet.Exit, this, "exit", loc.getString( "toolbarTooltipExit" ) );
+		btnExit = Button.newButton( IconSet.Exit, this, "exit", loc.getString( "Exit" ) );
 		add( btnExit );
 		addSeparator();
 
-		btnOpen = Button.newButton( IconSet.Open, this, "loadProject", loc.getString( "toolbarTooltipOpen" ) );
+		btnOpen = Button.newButton( IconSet.Open, this, "loadProject", loc.getString( "Open" ) );
 		add( btnOpen );
-		btnSave = Button.newButton( IconSet.Save, this, "saveProject", loc.getString( "toolbarTooltipSave" ) );
+		btnSave = Button.newButton( IconSet.Save, this, "saveProject", loc.getString( "Save" ) );
 		add( btnSave );
 		addSeparator();
 
-		btnEditSelect = Button.newButton( IconSet.EditSelect, this , "editSelect", loc.getString( "toolbarTooltipSelectionMode" ) );
+		btnEditSelect = Button.newButton( IconSet.EditSelect, this , "editSelect", loc.getString( "Edit.SelectionMode" ) );
 		add( btnEditSelect );
 		btnEditSelect.setSelected( true );
-		btnEditPointwise = Button.newButton( IconSet.EditDrawPointwise, this, "editPointwise", loc.getString( "toolbarTooltipPointSequence" ) );
+		btnEditPointwise = Button.newButton( IconSet.EditDrawPointwise, this, "editPointwise", loc.getString( "Edit.PointSequence" ) );
 		add( btnEditPointwise );
-		btnEditRectangled = Button.newButton( IconSet.EditDrawRectangled, this, "editRectangled", loc.getString( "toolbarTooltipDragCreate" ) );
+		btnEditRectangled = Button.newButton( IconSet.EditDrawRectangled, this, "editRectangled", loc.getString( "Edit.DragCreate" ) );
 		add( btnEditRectangled );
 
 		add( new JLabel( " " ) ); //Spacer
-		lblAreaType = new JLabel( loc.getString( "labelAreaType" ) );
+		lblAreaType = new JLabel( loc.getString( "Edit.AreaTypeLabel" ) );
 		add( lblAreaType );
 		editSelector = new EditComboBoxModel();
 		cbxEdit = new JComboBox();
@@ -103,8 +100,7 @@ public class JEditToolbar extends JToolBar implements ActionListener, PopupMenuL
 		cbxEdit.setMaximumSize( new Dimension( 250, cbxEdit.getPreferredSize().height ) );
 		cbxEdit.setPreferredSize( new Dimension( 250, cbxEdit.getPreferredSize().height ) );
 		cbxEdit.setAlignmentX( 0 );
-		loc.setPrefix( "gui.editor.JEditor." );
-		cbxEdit.setToolTipText( loc.getString( "toolbarTooltipAreaType" ) );
+		cbxEdit.setToolTipText( loc.getString( "Edit.AreaType" ) );
 		cbxEdit.setModel( editSelector );
 		cbxEdit.setRenderer( new EditComboBoxRenderer() );
 		// Don't use an item/change listener here, because then we can't capture the event
@@ -113,13 +109,13 @@ public class JEditToolbar extends JToolBar implements ActionListener, PopupMenuL
 		add( cbxEdit );
 		addSeparator();
 
-		btnZoomIn = Button.newButton( IconSet.ZoomIn, this, "zoomIn", loc.getString( "toolbarTooltipZoomIn" ) );
+		btnZoomIn = Button.newButton( IconSet.ZoomIn, this, "zoomIn", loc.getString( "Edit.ZoomIn" ) );
 		add( btnZoomIn );
-		btnZoomOut = Button.newButton( IconSet.ZoomOut, this, "zoomOut", loc.getString( "toolbarTooltipZoomOut" ) );
+		btnZoomOut = Button.newButton( IconSet.ZoomOut, this, "zoomOut", loc.getString( "Edit.ZoomOut" ) );
 		add( btnZoomOut );
 		add( new JLabel( " " ) );
 		txtZoomFactor = new JTextField( nfZoom.format( CoordinateTools.getZoomFactor() ) );
-		txtZoomFactor.setToolTipText( loc.getString( "toolbarTooltipZoomTextBox" ) );
+		txtZoomFactor.setToolTipText( loc.getString( "Edit.ZoomTextBox" ) );
 		txtZoomFactor.setMaximumSize( new Dimension( 40, txtZoomFactor.getPreferredSize().height ) );
 		txtZoomFactor.addKeyListener( this );
 		txtZoomFactor.addFocusListener( new java.awt.event.FocusAdapter() {
@@ -131,7 +127,7 @@ public class JEditToolbar extends JToolBar implements ActionListener, PopupMenuL
 		add( txtZoomFactor );
 		addSeparator();
 
-		btnRasterize = Button.newButton( IconSet.Rasterize, this, "rasterize", loc.getString( "toolbarTooltipRasterize" ) );
+		btnRasterize = Button.newButton( IconSet.Rasterize, this, "rasterize", loc.getString( "Edit.Rasterize" ) );
 		add( btnRasterize );
 
 		loc.setPrefix( "" );
@@ -305,23 +301,20 @@ public class JEditToolbar extends JToolBar implements ActionListener, PopupMenuL
 	 * @see de.tu_berlin.math.coga.common.localization.Localization
 	 */
 	public void localize() {
-
-		cbxEdit.setToolTipText( loc.getString( "toolbarTooltipAreaType" ) );
-		btnExit.setToolTipText( loc.getString( "toolbarTooltipExit" ) );
-		btnOpen.setToolTipText( loc.getString( "toolbarTooltipOpen" ) );
-		btnSave.setToolTipText( loc.getString( "toolbarTooltipSave" ) );
-
-		btnOpen.setToolTipText( loc.getString( "toolbarTooltipOpen" ) );
-		btnSave.setToolTipText( loc.getString( "toolbarTooltipSave" ) );
-		btnEditSelect.setToolTipText( loc.getString( "toolbarTooltipSelectionMode" ) );
-		btnEditPointwise.setToolTipText( loc.getString( "toolbarTooltipPointSequence" ) );
-		btnEditRectangled.setToolTipText( loc.getString( "toolbarTooltipDragCreate" ) );
-		lblAreaType.setText( loc.getString( "labelAreaType" ) );
-		btnZoomIn.setToolTipText( loc.getString( "toolbarTooltipZoomIn" ) );
-		btnZoomOut.setToolTipText( loc.getString( "toolbarTooltipZoomOut" ) );
-		txtZoomFactor.setToolTipText( loc.getString( "toolbarTooltipZoomTextBox" ) );
-		btnRasterize.setToolTipText( loc.getString( "toolbarTooltipRasterize" ) );
-
+		loc.setPrefix( "gui.toolbar." );
+		btnExit.setToolTipText( loc.getString( "Exit" ) );
+		btnOpen.setToolTipText( loc.getString( "Open" ) );
+		btnSave.setToolTipText( loc.getString( "Save" ) );
+		btnEditSelect.setToolTipText( loc.getString( "Edit.SelectionMode" ) );
+		btnEditPointwise.setToolTipText( loc.getString( "Edit.PointSequence" ) );
+		btnEditRectangled.setToolTipText( loc.getString( "Edit.DragCreate" ) );
+		lblAreaType.setText( loc.getString( "Edit.AreaTypeLabel" ) );
+		cbxEdit.setToolTipText( loc.getString( "Edit.AreaType" ) );
+		btnZoomIn.setToolTipText( loc.getString( "Edit.ZoomIn" ) );
+		btnZoomOut.setToolTipText( loc.getString( "Edit.ZoomOut" ) );
+		txtZoomFactor.setToolTipText( loc.getString( "Edit.ZoomTextBox" ) );
+		btnRasterize.setToolTipText( loc.getString( "Edit.Rasterize" ) );
+		loc.clearPrefix();
 	}
 		/**
 	 * This class serves as a model for the JComboBox that contains the EditModes.
