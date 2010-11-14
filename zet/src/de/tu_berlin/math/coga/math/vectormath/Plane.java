@@ -30,7 +30,7 @@ public class Plane {
 	private Vector3 normal;
 	/** One point of the plane. */
 	private Vector3 point;
-	/** Help value for distance computation. The length of the anchor point projected on the normal line. */
+	/** The d in a plane equation. Also the length of the anchor point projected on the normal line. */
 	private double d;
 	
 	/**
@@ -80,8 +80,8 @@ public class Plane {
  * @param v3 the third point 
  */
   public void setPlane( Vector3 v1, Vector3 v2, Vector3 v3 ) {
-		Vector3 aux1 = v1.clone();
-		Vector3 aux2 = v3.clone();
+		final Vector3 aux1 = v1.clone();
+		final Vector3 aux2 = v3.clone();
 		aux1.subTo( v2 );
 		aux2.subTo( v2 );
 		normal = aux2.crossProduct( aux1 );
