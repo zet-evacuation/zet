@@ -59,13 +59,13 @@ public abstract class Localization {
 	 */
 	protected Localization( String bundleName ) throws MissingResourceException {
 		this.bundleName = bundleName;
-		bundle = ResourceBundle.getBundle( bundleName, Locale.getDefault() );
 		if( locs.isEmpty() ) {	// we have the first constructor call. Create static objects.
 			currentLocale = Locale.getDefault();
 			nfFloat = NumberFormat.getNumberInstance( currentLocale );
 			nfInteger = NumberFormat.getIntegerInstance( currentLocale );
 			nfPercent = NumberFormat.getPercentInstance( currentLocale );
 		}
+		bundle = ResourceBundle.getBundle( bundleName, currentLocale );
 		add();
 	}
 
@@ -109,7 +109,15 @@ public abstract class Localization {
 	public final void setPrefix( String prefix ) {
 		this.prefix = prefix;
 	}
-	
+
+	/**
+	 * Clears any prefix.
+	 * @see #setPrefix(java.lang.String) 
+	 */
+	public final void clearPrefix() {
+		setPrefix( "" );
+	}
+
 	/**
 	 * Loads a new localization resource file from hard disk and sets new
 	 * localized number converters. The language is set by a
@@ -121,11 +129,16 @@ public abstract class Localization {
 	 * @throws java.util.MissingResourceException if the locale cannot be found
 	 */
 	public final void setLocale( Locale locale ) throws MissingResourceException {
-		bundle = ResourceBundle.getBundle( bundleName, locale );
 		currentLocale = locale;
 		nfFloat = NumberFormat.getNumberInstance( currentLocale );
 		nfInteger = NumberFormat.getIntegerInstance( currentLocale );
 		nfPercent = NumberFormat.getPercentInstance( currentLocale );
+		for( Localization loc : locs )
+			loc.setLocaleIntern( locale );
+	}
+
+	private void setLocaleIntern( Locale locale ) throws MissingResourceException {
+		bundle = ResourceBundle.getBundle( bundleName, locale );
 	}
 	
 	/**
@@ -160,4 +173,10 @@ public abstract class Localization {
 	public final NumberFormat getPercentConverter() {
 		return nfPercent;
 	}
+
+	@Override
+	public String toString() {
+		return "Localization: " + bundleName;
+	}
+
 }

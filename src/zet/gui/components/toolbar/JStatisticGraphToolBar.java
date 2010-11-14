@@ -6,8 +6,6 @@ package zet.gui.components.toolbar;
 
 import batch.BatchResult;
 import batch.BatchResultEntry;
-import de.tu_berlin.math.coga.common.localization.DefaultLoc;
-import de.tu_berlin.math.coga.common.localization.Localization;
 import de.tu_berlin.math.coga.common.localization.Localized;
 import gui.GUIControl;
 import gui.ZETMain;
@@ -24,6 +22,7 @@ import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import javax.swing.JToolBar;
 import statistic.graph.Controller;
+import zet.gui.GUILocalization;
 
 /**
  *
@@ -33,7 +32,7 @@ public class JStatisticGraphToolBar extends JToolBar implements ActionListener, 
 
 	private final GUIControl control;
 	/** The localization class. */
-	static final Localization loc = DefaultLoc.getSingleton();
+	static final GUILocalization loc = GUILocalization.getSingleton();
 	private JButton btnExit;
 	private JButton btnOpenResults;
 	private JButton btnSaveResults;
@@ -50,19 +49,19 @@ public class JStatisticGraphToolBar extends JToolBar implements ActionListener, 
 	 * Creates the <code>JToolBar</code> for the statistic view.
 	 */
 	private void createStatisticsToolBar() {
-		loc.setPrefix( "gui.editor.JEditor." );
+		loc.setPrefix( "gui.toolbar." );
 
-		btnExit = Button.newButton( IconSet.Exit, this, "exit", loc.getString( "toolbarTooltipExit" ) );
+		btnExit = Button.newButton( IconSet.Exit, this, "exit", loc.getString( "Exit" ) );
 		add( btnExit );
 		addSeparator();
 
-		btnOpenResults = Button.newButton( IconSet.Open, null, "loadBatchResult", loc.getString( "toolbarTooltipOpen" ) );
+		btnOpenResults = Button.newButton( IconSet.Open, null, "loadBatchResult", loc.getString( "Open" ) );
 		add( btnOpenResults );
-		btnSaveResults = Button.newButton( IconSet.Save, null, "saveResultAs", loc.getString( "toolbarTooltipSave" ) );
+		btnSaveResults = Button.newButton( IconSet.Save, null, "saveResultAs", loc.getString( "Save" ) );
 		add( btnSaveResults );
 		addSeparator();
 
-		labelBatchName = new JLabel( loc.getString( "batchName" ) );
+		labelBatchName = new JLabel( loc.getString( "Visualization.BatchName" ) );
 		add( labelBatchName );
 		entryModelGraph = new BatchResultEntryGRSComboBoxModel();
 		JComboBox cbxBatchEntry = new JComboBox( entryModelGraph );
@@ -87,10 +86,12 @@ public class JStatisticGraphToolBar extends JToolBar implements ActionListener, 
 	}
 
 	public void localize() {
-		labelBatchName.setText( loc.getString( "batchName" ) );
-		btnExit.setToolTipText( loc.getString( "toolbarTooltipExit" ) );
-		btnSaveResults.setToolTipText( loc.getString( "toolbarTooltipSave" ) );
-		btnOpenResults.setToolTipText( loc.getString( "toolbarTooltipOpen" ) );
+		loc.setPrefix( "gui.toolbar." );
+		labelBatchName.setText( loc.getString( "Visualization.BatchName" ) );
+		btnExit.setToolTipText( loc.getString( "Exit" ) );
+		btnSaveResults.setToolTipText( loc.getString( "Save" ) );
+		btnOpenResults.setToolTipText( loc.getString( "Open" ) );
+		loc.clearPrefix();
 	}
 
 	public void rebuild( BatchResult result ) {

@@ -39,6 +39,7 @@ import ds.z.StairPreset;
 import ds.z.TeleportArea;
 import ds.z.TeleportEdge;
 import ds.z.ZControl;
+import ds.z.ZLocalization;
 import event.EventListener;
 import event.OptionsChangedEvent;
 import gui.GUIControl;
@@ -90,6 +91,7 @@ import javax.swing.JPanel;
 import javax.swing.JPopupMenu;
 import javax.swing.JTextField;
 import javax.swing.SwingUtilities;
+import zet.gui.GUILocalization;
 import zet.gui.components.tabs.base.JPolygon;
 
 /**
@@ -108,7 +110,7 @@ import zet.gui.components.tabs.base.JPolygon;
  * @author Jan-Philipp Kappmeier
  */
 public class JEditView extends AbstractSplitPropertyWindow<JFloorScrollPane<JFloor>> implements EventListener<OptionsChangedEvent> {
-	DefaultLoc loc;
+	GUILocalization loc;
 
 	/**
 	 * An enumeration of all possible panels visible in the edit view on the right part.
@@ -236,17 +238,16 @@ public class JEditView extends AbstractSplitPropertyWindow<JFloorScrollPane<JFlo
 
 	public JEditView( GUIControl guiControl ) {
 		super( new JFloorScrollPane<JFloor>( new JFloor( guiControl ) ) );
-		loc = DefaultLoc.getSingleton();
+		loc = GUILocalization.getSingleton();
 		this.guiControl = guiControl;
 		final JFloor centerPanel = this.getLeftPanel().getMainComponent();
 		centerPanel.addActionListener( new ActionListener() {
 			@Override
 			public void actionPerformed( ActionEvent e ) {
-				if( centerPanel.getSelectedPolygons() == null ||
-								centerPanel.getSelectedPolygons().size() != 1 )
+				if( centerPanel.getSelectedPolygons() == null || centerPanel.getSelectedPolygons().size() != 1 )
 					setEastPanelType( Panels.Floor );
 				else {
-					PlanPolygon p = centerPanel.getSelectedPolygons().get( 0 ).getPlanPolygon();
+					final PlanPolygon p = centerPanel.getSelectedPolygons().get( 0 ).getPlanPolygon();
 					if( p instanceof Room )
 						setEastPanelType( Panels.Room );
 					else if( p instanceof DelayArea )
@@ -266,7 +267,6 @@ public class JEditView extends AbstractSplitPropertyWindow<JFloorScrollPane<JFlo
 		} );
 		this.getLeftPanel().getHorizontalScrollBar().addAdjustmentListener( adlPlanImage );
 		this.getLeftPanel().getVerticalScrollBar().addAdjustmentListener( adlPlanImage );
-		
 	}
 	private AdjustmentListener adlPlanImage = new AdjustmentListener() {
 		@Override
@@ -275,7 +275,6 @@ public class JEditView extends AbstractSplitPropertyWindow<JFloorScrollPane<JFlo
 			getLeftPanel().getMainComponent().getPlanImage().update();
 		}
 	};
-
 
 	/**
 	 * Returns the index of the panel currently visible in the east panel.
@@ -393,7 +392,7 @@ public class JEditView extends AbstractSplitPropertyWindow<JFloorScrollPane<JFlo
 					return;
 
 				final int add = PropertyContainer.getInstance().getAsBoolean( "editor.options.view.hideDefaultFloor" ) ? 1 : 0;
-				lblFloorNumber.setText( String.format( loc.getStringWithoutPrefix( "gui.editor.JEditorPanel.labelOnFloor" ), cbxFloors.getSelectedIndex() + add ) );
+				lblFloorNumber.setText( String.format( loc.getStringWithoutPrefix( "gui.EditPanel.Default.OnFloor" ), cbxFloors.getSelectedIndex() + add ) );
 				btnFloorDown.setEnabled( !(cbxFloors.getSelectedIndex() == 0 || cbxFloors.getSelectedIndex() == 1 && add == 0) );
 
 				// TODO call the method somehow with the control class...
@@ -417,11 +416,8 @@ public class JEditView extends AbstractSplitPropertyWindow<JFloorScrollPane<JFlo
 		} );
 		cbxFloors.setRenderer( new ComboBoxRenderer() {
 			@Override
-			public Component getListCellRendererComponent( JList list, Object value,
-							int index, boolean isSelected, boolean cellHasFocus ) {
-				JLabel me = (JLabel)super.getListCellRendererComponent( list, value, index,
-								isSelected, cellHasFocus );
-
+			public Component getListCellRendererComponent( JList list, Object value, int index, boolean isSelected, boolean cellHasFocus ) {
+//				JLabel me = (JLabel)super.getListCellRendererComponent( list, value, index, isSelected, cellHasFocus );
 				if( value != null )
 					setText( ((Floor)value).getName() );
 				return this;
@@ -440,32 +436,25 @@ public class JEditView extends AbstractSplitPropertyWindow<JFloorScrollPane<JFlo
 		} );
 		cbxRooms.setRenderer( new ComboBoxRenderer() {
 			@Override
-			public Component getListCellRendererComponent( JList list, Object value,
-							int index, boolean isSelected, boolean cellHasFocus ) {
-				JLabel me = (JLabel)super.getListCellRendererComponent( list, value, index,
-								isSelected, cellHasFocus );
-
-				if( value != null ) {
-					Room p = (Room)value;
-					setText( p.getName() );
-				}
+			public Component getListCellRendererComponent( JList list, Object value, int index, boolean isSelected, boolean cellHasFocus ) {
+				//JLabel me = (JLabel)super.getListCellRendererComponent( list, value, index, isSelected, cellHasFocus );
+				if( value != null )
+					setText( ((Room)value).getName() );
 				return this;
 			}
 		} );
 
 		int row = 1;
 
-
-
-		loc = DefaultLoc.getSingleton();
-		loc.setPrefix( "" );
-		lblFloorSelector = new JLabel( loc.getString( "gui.editor.JEditorPanel.labelFloors" ) + ":" );
+		loc = GUILocalization.getSingleton();
+		loc.setPrefix( "gui.EditPanel." );
+		lblFloorSelector = new JLabel( loc.getString( "Default.Floors" ) + ":" );
 		eastPanel.add( lblFloorSelector, "1, " + row++ );
 		eastPanel.add( cbxFloors, "1, " + row++ );
 		lblFloorNumber = new JLabel( "1" );
 		eastPanel.add( lblFloorNumber, "1, " + row++ );
 		row++;
-		lblRoomSelector = new JLabel( loc.getString( "gui.editor.JEditorPanel.labelRooms" ) + ":" );
+		lblRoomSelector = new JLabel( loc.getString( "Default.Rooms" ) + ":" );
 		eastPanel.add( lblRoomSelector, "1, " + row++ );
 		eastPanel.add( cbxRooms, "1, " + row++ );
 		row++;
@@ -500,6 +489,7 @@ public class JEditView extends AbstractSplitPropertyWindow<JFloorScrollPane<JFlo
 
 		eastPanel.add( eastSubBar, "1, " + row++ );
 
+		loc.clearPrefix();
 		return eastPanel;
 	}
 
@@ -523,7 +513,7 @@ public class JEditView extends AbstractSplitPropertyWindow<JFloorScrollPane<JFlo
 		int row = 0;
 
 		// AssignmentType-Selector
-		lblAssignmentType = new JLabel( loc.getString( "gui.editor.JEditorPanel.labelAssignmentType" ) );
+		lblAssignmentType = new JLabel( loc.getString( "Assignment.Type" ) );
 		eastPanel.add( lblAssignmentType, "0, " + row++ );
 		assignmentTypeSelector = new AssignmentTypeComboBoxModel( projectControl );
 		assignmentTypeSelector.setFloorPanel( this.getLeftPanel().getMainComponent() );
@@ -544,7 +534,7 @@ public class JEditView extends AbstractSplitPropertyWindow<JFloorScrollPane<JFlo
 		row++;
 
 		// Number of Evacuees
-		lblAssignmentEvacueeNumber = new JLabel( loc.getString( "gui.editor.JEditorPanel.labelPersons" ) );
+		lblAssignmentEvacueeNumber = new JLabel( loc.getString( "Assignment.Persons" ) );
 		eastPanel.add( lblAssignmentEvacueeNumber, "0, " + row++ );
 		txtNumberOfPersons = new JTextField( "10" );
 		txtNumberOfPersons.addFocusListener( new FocusListener() {
@@ -572,7 +562,7 @@ public class JEditView extends AbstractSplitPropertyWindow<JFloorScrollPane<JFlo
 		} );
 		eastPanel.add( txtNumberOfPersons, "0, " + row++ );
 		row++;
-		btnAssignmentSetDefaultEvacuees = Button.newButton( loc.getString( "gui.editor.JEditorPanel.assignmentNameDefault" ), loc.getString( "gui.editor.JEditorPanel.assignmentTooltipDefault" ) );
+		btnAssignmentSetDefaultEvacuees = Button.newButton( loc.getString( "Assignment.SetDefaultEvacuees" ), loc.getString( "Assignment.SetDefaultEvacuees.ToolTip" ) );
 		btnAssignmentSetDefaultEvacuees.addActionListener( new ActionListener() {
 			@Override
 			public void actionPerformed( ActionEvent e ) {
@@ -586,7 +576,7 @@ public class JEditView extends AbstractSplitPropertyWindow<JFloorScrollPane<JFlo
 		row++;
 
 		// Preferred-Exit-Selector
-		lblPreferredExit = new JLabel( loc.getString( "gui.editor.JEditorPanel.labelPreferredExit" ) );
+		lblPreferredExit = new JLabel( loc.getString( "Assignment.PreferredExit" ) );
 		eastPanel.add( lblPreferredExit, "0, " + row++ );
 		cbxPreferredExit = new JComboBox();
 		cbxPreferredExit.addItemListener( new ItemListener() {
@@ -616,19 +606,19 @@ public class JEditView extends AbstractSplitPropertyWindow<JFloorScrollPane<JFlo
 		eastPanel.add( cbxPreferredExit, "0, " + row++ );
 		row++;
 
-		lblAreaSizeDesc = new JLabel( loc.getString( "gui.editor.JEditorPanel.labelArea" ) );
+		lblAreaSizeDesc = new JLabel( loc.getString( "Assignment.Area" ) );
 		lblAreaSize = new JLabel( "" );
 		eastPanel.add( lblAreaSizeDesc, "0, " + row++ );
 		eastPanel.add( lblAreaSize, "0, " + row++ );
 		row++;
 
-		lblMaxPersonsDesc = new JLabel( loc.getString( "gui.editor.JEditorPanel.labelMaxPersons" ) );
+		lblMaxPersonsDesc = new JLabel( loc.getString( "Assignment.MaxPersons" ) );
 		lblMaxPersons = new JLabel( "" );
 		eastPanel.add( lblMaxPersonsDesc, "0, " + row++ );
 		eastPanel.add( lblMaxPersons, "0, " + row++ );
 		row++;
 
-		lblMaxPersonsWarning = new JLabel( loc.getString( "gui.editor.JEditorPanel.labelAreaWarning" ) );
+		lblMaxPersonsWarning = new JLabel( loc.getString( "Assignment.AreaWarning" ) );
 		eastPanel.add( lblMaxPersonsWarning, "0, " + row++ );
 		row++;
 
@@ -660,7 +650,7 @@ public class JEditView extends AbstractSplitPropertyWindow<JFloorScrollPane<JFlo
 		int row = 0;
 
 		// Delay-Selector
-		lblDelayType = new JLabel( loc.getString( "gui.editor.JEditorPanel.labelDelayType" ) + ":" );
+		lblDelayType = new JLabel( loc.getString( "Delay.Type" ) + ":" );
 		eastPanel.add( lblDelayType, "0, " + row++ );
 		cbxDelayType = new JComboBox( new DefaultComboBoxModel( DelayArea.DelayType.values() ) );
 		cbxDelayType.addItemListener( new ItemListener() {
@@ -684,7 +674,7 @@ public class JEditView extends AbstractSplitPropertyWindow<JFloorScrollPane<JFlo
 		row++;
 
 		// Delay-Factor
-		lblDelayFactor = new JLabel( loc.getString( "gui.editor.JEditorPanel.labelFactor" ) );
+		lblDelayFactor = new JLabel( loc.getString( "Delay.Factor" ) );
 		eastPanel.add( lblDelayFactor, "0, " + row++ );
 		txtDelayFactor = new JTextField( " " );
 		txtDelayFactor.addFocusListener( new FocusListener() {
@@ -714,8 +704,7 @@ public class JEditView extends AbstractSplitPropertyWindow<JFloorScrollPane<JFlo
 		eastPanel.add( txtDelayFactor, "0, " + row++ );
 		row++;
 
-		btnDelaySetDefault = Button.newButton( loc.getString( "gui.editor.JEditorPanel.delayTypeDefault" ),
-						loc.getString( "gui.editor.JEditorPanel.delayTypeDefaultToolTip" ) );
+		btnDelaySetDefault = Button.newButton( loc.getString( "Delay.TypeDefault" ), loc.getString( "Delay.TypeDefault.ToolTip" ) );
 		btnDelaySetDefault.addActionListener( new ActionListener() {
 			@Override
 			public void actionPerformed( ActionEvent e ) {
@@ -745,7 +734,7 @@ public class JEditView extends AbstractSplitPropertyWindow<JFloorScrollPane<JFlo
 		int row = 0;
 
 		// DelayFactor for going upwards
-		lblStairFactorUp = new JLabel( loc.getString( "gui.editor.JEditorPanel.labelStairFactorUp" ) + ":" );
+		lblStairFactorUp = new JLabel( loc.getString( "Stair.FactorUp" ) + ":" );
 		eastPanel.add( lblStairFactorUp, "0, " + row++ );
 		txtStairFactorUp = new JTextField( " " );
 		txtStairFactorUp.addFocusListener( new FocusListener() {
@@ -777,7 +766,7 @@ public class JEditView extends AbstractSplitPropertyWindow<JFloorScrollPane<JFlo
 		row++;
 
 		// DelayFactor for going downwards
-		lblStairFactorDown = new JLabel( loc.getString( "gui.editor.JEditorPanel.labelStairFactorDown" ) + ":" );
+		lblStairFactorDown = new JLabel( loc.getString( "Stair.FactorDown" ) + ":" );
 		eastPanel.add( lblStairFactorDown, "0, " + row++ );
 		txtStairFactorDown = new JTextField( " " );
 		txtStairFactorDown.addFocusListener( new FocusListener() {
@@ -808,14 +797,13 @@ public class JEditView extends AbstractSplitPropertyWindow<JFloorScrollPane<JFlo
 		row++;
 
 		// Add combo box with presets
-		lblStairPreset = new JLabel( loc.getString( "gui.editor.JEditorPanel.labelStairPreset" ) + ":" );
+		lblStairPreset = new JLabel( loc.getString( "Stair.Preset" ) + ":" );
 		cbxStairPresets = new JComboBox();
 		cbxStairPresets.addItem( StairPreset.Indoor );
 		cbxStairPresets.addItem( StairPreset.Outdoor );
 		eastPanel.add( lblStairPreset, "0, " + row++ );
 		eastPanel.add( cbxStairPresets, "0, " + row++ );
 		cbxStairPresets.addActionListener( new ActionListener() {
-
 			@Override
 			public void actionPerformed( ActionEvent arg0 ) {
 				StairPreset sp = (StairPreset)cbxStairPresets.getSelectedItem();
@@ -824,7 +812,7 @@ public class JEditView extends AbstractSplitPropertyWindow<JFloorScrollPane<JFlo
 				txtStairFactorDown.setText( nf.format( sp.getSpeedFactorDown() ) );
 			}
 		});
-		lblStairPresetDescription = new JLabel( loc.getString( ((StairPreset)cbxStairPresets.getSelectedItem()).getText() ) ) ;
+		lblStairPresetDescription = new JLabel( ZLocalization.getSingleton().getString( ((StairPreset)cbxStairPresets.getSelectedItem()).getText() ) ) ;
 		eastPanel.add( lblStairPresetDescription, "0, " + row++ );
 		row++;
 
@@ -845,8 +833,7 @@ public class JEditView extends AbstractSplitPropertyWindow<JFloorScrollPane<JFlo
 		JPanel eastPanel = new JPanel( new TableLayout( size ) );
 
 		int row = 0;
-
-		lblEvacuationAreaName = new JLabel( loc.getString( "gui.editor.JEditorPanel.labelNameEvacuationArea" ) );
+		lblEvacuationAreaName = new JLabel( loc.getString( "Evacuation.Name" ) );
 		eastPanel.add( lblEvacuationAreaName, "0, " + row++ );
 		txtEvacuationAreaName = new JTextField();
 		txtEvacuationAreaName.addFocusListener( new FocusListener() {
@@ -871,7 +858,7 @@ public class JEditView extends AbstractSplitPropertyWindow<JFloorScrollPane<JFlo
 		row++;
 
 		// Attractivity
-		lblEvacuationAttractivity = new JLabel( loc.getString( "gui.editor.JEditorPanel.labelAttractivity" ) );
+		lblEvacuationAttractivity = new JLabel( loc.getString( "Evacuation.Attractivity" ) );
 		eastPanel.add( lblEvacuationAttractivity, "0, " + row++ );
 
 		txtEvacuationAttractivity = new JTextField( " " );
@@ -927,7 +914,7 @@ public class JEditView extends AbstractSplitPropertyWindow<JFloorScrollPane<JFlo
 
 		JPanel eastPanel = new JPanel( new TableLayout( size ) );
 
-		lblFloorName = new JLabel( loc.getString( "gui.editor.JEditorPanel.labelNameFloor" ) );
+		lblFloorName = new JLabel( loc.getString( "Floor.Name" ) );
 		eastPanel.add( lblFloorName, "0,0,2,0" );
 		txtFloorName = new JTextField();
 		txtFloorName.addFocusListener( new FocusListener() {
@@ -962,17 +949,16 @@ public class JEditView extends AbstractSplitPropertyWindow<JFloorScrollPane<JFlo
 									loc.getString( "gui.ContactDeveloper" ) );
 			}
 		};
-		btnFloorUp = Button.newButton( loc.getString( "gui.editor.JEditorPanel.floorUp" ), aclFloor, "up", loc.getString( "gui.editor.JEditorPanel.floorUp.ToolTip" ) );
+		btnFloorUp = Button.newButton( loc.getString( "Floor.Up" ), aclFloor, "up", loc.getString( "Floor.Up.ToolTip" ) );
 		eastPanel.add( btnFloorUp, "0,3,0,3" );
-		btnFloorDown = Button.newButton( loc.getString( "gui.editor.JEditorPanel.floorDown" ), aclFloor, "down", loc.getString( "gui.editor.JEditorPanel.floorDown.ToolTip" ) );
+		btnFloorDown = Button.newButton( loc.getString( "Floor.Down" ), aclFloor, "down", loc.getString( "Floor.Down.ToolTip" ) );
 		eastPanel.add( btnFloorDown, "2,3" );
 
-
 		// Additional Infos:
-		lblFloorxOffset = new JLabel( "x-Offset: " );
-		lblFlooryOffset = new JLabel( "y-Offset: " );
-		lblFloorWidth = new JLabel( "Breite: " );
-		lblFloorHeight = new JLabel( "Höhe: " );
+		lblFloorxOffset = new JLabel( loc.getString( "Floor.xOffset" ) );
+		lblFlooryOffset = new JLabel( loc.getString( "Floor.yOffset" ) );
+		lblFloorWidth = new JLabel( loc.getString( "Floor.Width" ) );
+		lblFloorHeight = new JLabel( loc.getString( "Floor.Height" ) );
 		txtFloorxOffset = new JTextField();
 		txtFlooryOffset = new JTextField();
 		txtFloorWidth = new JTextField();
@@ -986,8 +972,7 @@ public class JEditView extends AbstractSplitPropertyWindow<JFloorScrollPane<JFlo
 		eastPanel.add( txtFloorWidth, "2,7" );
 		eastPanel.add( txtFloorHeight, "2,8" );
 
-		ActionListener acl = new ActionListener() {
-
+		ActionListener aclFloorSize = new ActionListener() {
 			@Override
 			public void actionPerformed( ActionEvent ae ) {
 				try {
@@ -998,16 +983,16 @@ public class JEditView extends AbstractSplitPropertyWindow<JFloorScrollPane<JFlo
 					currentFloor.setMinimumSize( xOffset, yOffset, width, height );
 					getLeftPanel().getMainComponent().displayFloor();
 				} catch( ParseException ex ) {
-					ZETMain.sendError( "Parsing nicht möglich." );
+					ZETMain.sendError( "Parsing nicht möglich." ); // TODO loc
 					return;
 				}
-				ZETMain.sendMessage( "Floor-Size geändert." );
+				ZETMain.sendMessage( "Floor-Size geändert." ); // TODO loc
 			}
 		};
-		txtFloorxOffset.addActionListener( acl );
-		txtFlooryOffset.addActionListener( acl );
-		txtFloorWidth.addActionListener( acl );
-		txtFloorHeight.addActionListener( acl );
+		txtFloorxOffset.addActionListener( aclFloorSize );
+		txtFlooryOffset.addActionListener( aclFloorSize );
+		txtFloorWidth.addActionListener( aclFloorSize );
+		txtFloorHeight.addActionListener( aclFloorSize );
 
 		return eastPanel;
 	}
@@ -1025,7 +1010,7 @@ public class JEditView extends AbstractSplitPropertyWindow<JFloorScrollPane<JFlo
 
 		int row = 0;
 
-		lblRoomName = new JLabel( loc.getString( "gui.editor.JEditorPanel.labelNameRoom" ) );
+		lblRoomName = new JLabel( loc.getString( "Room.Name" ) );
 		eastPanel.add( lblRoomName, "0, " + row++ );
 		txtRoomName = new JTextField();
 		txtRoomName.addFocusListener( new FocusListener() {
@@ -1051,7 +1036,7 @@ public class JEditView extends AbstractSplitPropertyWindow<JFloorScrollPane<JFlo
 		return eastPanel;
 	}
 
-private JPanel getEastTeleportAreaPanel() {
+	private JPanel getEastTeleportAreaPanel() {
 		double size[][] = // Columns
 						{{TableLayout.FILL},
 			//Rows
@@ -1067,7 +1052,7 @@ private JPanel getEastTeleportAreaPanel() {
 		int row = 0;
 
 		// The area name
-		lblTeleportAreaName = new JLabel( "Name dieses Zielbereichs." );
+		lblTeleportAreaName = new JLabel( loc.getString( "Teleportation.Name") );
 		eastPanel.add( lblTeleportAreaName, "0, " + row++ );
 		txtTeleportAreaName = new JTextField();
 		txtTeleportAreaName.addFocusListener( new FocusListener() {
@@ -1092,7 +1077,7 @@ private JPanel getEastTeleportAreaPanel() {
 		row++;
 
 		// Target-Aea-Selector
-		lblTargetArea = new JLabel( "Zielbereich:" );
+		lblTargetArea = new JLabel( loc.getString( "Teleportation.TargetArea") );
 		eastPanel.add( lblTargetArea, "0, " + row++ );
 		cbxTargetArea = new JComboBox();
 		cbxTargetArea.addItemListener( new ItemListener() {
@@ -1119,7 +1104,7 @@ private JPanel getEastTeleportAreaPanel() {
 		row++;
 
 		// Target-Exit-Selector
-		lblTargetExit = new JLabel( "Zielpotential:" );
+		lblTargetExit = new JLabel( loc.getString( "Teleportation.TargetExit" ) );
 		eastPanel.add( lblTargetExit, "0, " + row++ );
 		cbxTargetExit = new JComboBox();
 		cbxTargetExit.addItemListener( new ItemListener() {
@@ -1148,38 +1133,65 @@ private JPanel getEastTeleportAreaPanel() {
 	}
 
 	@Override
-public void localize() {
+	public void localize() {
 		// Title of the window
 		// Localization of child components
 		getLeftPanel().localize();
+
+		loc.setPrefix( "gui.EditPanel." );
 		// Localization of own components
-		lblFloorSelector.setText( loc.getString( "gui.editor.JEditorPanel.labelFloors" ) + ":" );
-		lblFloorNumber.setText( String.format( loc.getStringWithoutPrefix( "gui.editor.JEditorPanel.labelOnFloor" ), cbxFloors.getSelectedIndex() + (PropertyContainer.getInstance().getAsBoolean( "editor.options.view.hideDefaultFloor" ) ? 1 : 0) ) );
-		lblRoomSelector.setText( loc.getString( "gui.editor.JEditorPanel.labelRooms" ) + ":" );
-		lblAssignmentType.setText( loc.getString( "gui.editor.JEditorPanel.labelAssignmentType" ) );
-		lblAssignmentEvacueeNumber.setText( loc.getString( "gui.editor.JEditorPanel.labelPersons" ) );
-		btnAssignmentSetDefaultEvacuees.setText( loc.getString( "gui.editor.JEditorPanel.assignmentNameDefault" ) );
-		btnAssignmentSetDefaultEvacuees.setToolTipText( loc.getString( "gui.editor.JEditorPanel.assignmentTooltipDefault" ) );
-		lblPreferredExit.setText( loc.getString( "gui.editor.JEditorPanel.labelPreferredExit" ) );
-		lblDelayType.setText( loc.getString( "gui.editor.JEditorPanel.labelDelayType" ) + ":" );
-		lblDelayFactor.setText( loc.getString( "gui.editor.JEditorPanel.labelFactor" ) );
-		btnDelaySetDefault.setText( loc.getString( "gui.editor.JEditorPanel.delayTypeDefault" ) );
-		btnDelaySetDefault.setToolTipText( loc.getString( "gui.editor.JEditorPanel.delayTypeDefaultToolTip" ) );
-		btnFloorUp.setText( loc.getString( "gui.editor.JEditorPanel.floorUp" ) );
-		btnFloorUp.setToolTipText( loc.getString( "gui.editor.JEditorPanel.floorUp.ToolTip" ) );
-		btnFloorDown.setText( loc.getString( "gui.editor.JEditorPanel.floorDown" ) );
-		btnFloorDown.setToolTipText( loc.getString( "gui.editor.JEditorPanel.floorDown.ToolTip" ) );
-		lblFloorName.setText( loc.getString( "gui.editor.JEditorPanel.labelNameFloor" ) );
-		lblRoomName.setText( loc.getString( "gui.editor.JEditorPanel.labelNameRoom" ) );
-		lblEvacuationAreaName.setText( loc.getString( "gui.editor.JEditorPanel.labelNameEvacuationArea" ) );
-		lblEvacuationAttractivity.setText( loc.getString( "gui.editor.JEditorPanel.labelAttractivity" ) );
-		lblMaxPersonsDesc.setText( loc.getString( "gui.editor.JEditorPanel.labelMaxPersons" ) );
-		lblMaxPersonsWarning.setText( loc.getString( "gui.editor.JEditorPanel.labelArea" ) );
-		lblAreaSizeDesc.setText( loc.getString( "gui.editor.JEditorPanel.labelAreaWarning" ) );
-		lblStairFactorUp.setText( loc.getString( "gui.editor.JEditorPanel.labelStairFactorUp" ) + ":" );
-		lblStairFactorDown.setText( loc.getString( "gui.editor.JEditorPanel.labelStairFactorDown" ) + ":" );
-		lblStairPreset.setText( loc.getString( "gui.editor.JEditorPanel.labelStairPreset" ) + ":" );
-		lblStairPresetDescription.setText(loc.getString( ((StairPreset)cbxStairPresets.getSelectedItem() ).getText() ) );
+		lblFloorSelector.setText( loc.getString( "Default.Floors" ) + ":" );
+		lblFloorNumber.setText( String.format( loc.getStringWithoutPrefix( "gui.EditPanel.Default.OnFloor" ), cbxFloors.getSelectedIndex() + (PropertyContainer.getInstance().getAsBoolean( "editor.options.view.hideDefaultFloor" ) ? 1 : 0) ) );
+		lblRoomSelector.setText( loc.getString( "Default.Rooms" ) + ":" );
+
+		// Floor properties
+		lblFloorName.setText( loc.getString( "Floor.Name" ) );
+		btnFloorUp.setText( loc.getString( "Floor.Up" ) );
+		btnFloorUp.setToolTipText( loc.getString( "Floor.Up.ToolTip" ) );
+		btnFloorDown.setText( loc.getString( "Floor.Down" ) );
+		btnFloorDown.setToolTipText( loc.getString( "Floor.Down.ToolTip" ) );
+		lblFloorxOffset.setText( loc.getString( "Floor.xOffset" ) );
+		lblFlooryOffset.setText( loc.getString( "Floor.yOffset" ) );
+		lblFloorWidth.setText( loc.getString( "Floor.Width" ) );
+		lblFloorHeight.setText( loc.getString( "Floor.Height" ) );
+
+		// Room properties
+		lblRoomName.setText( loc.getString( "Room.Name" ) );
+
+		// Assignment area
+		lblAssignmentType.setText( loc.getString( "Assignment.Type" ) );
+		lblAssignmentEvacueeNumber.setText( loc.getString( "Assignment.Persons" ) );
+		btnAssignmentSetDefaultEvacuees.setText( loc.getString( "Assignment.SetDefaultEvacuees" ) );
+		btnAssignmentSetDefaultEvacuees.setToolTipText( loc.getString( "Assignment.SetDefaultEvacuees.ToolTip" ) );
+		lblPreferredExit.setText( loc.getString( "Assignment.PreferredExit" ) );
+		lblMaxPersonsDesc.setText( loc.getString( "Assignment.MaxPersons" ) );
+		lblMaxPersonsWarning.setText( loc.getString( "Assignment.Area" ) );
+		lblAreaSizeDesc.setText( loc.getString( "Assignment.AreaWarning" ) );
+
+		// Delay area
+		lblDelayType.setText( loc.getString( "Delay.Type" ) + ":" );
+		lblDelayFactor.setText( loc.getString( "Delay.Factor" ) );
+		btnDelaySetDefault.setText( loc.getString( "Delay.TypeDefault" ) );
+		btnDelaySetDefault.setToolTipText( loc.getString( "Delay.TypeDefault.ToolTip" ) );
+
+		// Save area
+
+		// Evacuation area
+		lblEvacuationAreaName.setText( loc.getString( "Evacuation.Name" ) );
+		lblEvacuationAttractivity.setText( loc.getString( "Evacuation.Attractivity" ) );
+
+		// Stair Area
+		lblStairFactorUp.setText( loc.getString( "Stair.FactorUp" ) + ":" );
+		lblStairFactorDown.setText( loc.getString( "Stair.FactorDown" ) + ":" );
+		lblStairPreset.setText( loc.getString( "Stair.Preset" ) + ":" );
+		lblStairPresetDescription.setText( ZLocalization.getSingleton().getString( ((StairPreset)cbxStairPresets.getSelectedItem() ).getText() ) );
+
+		// Teleportation area
+		lblTeleportAreaName.setText( "Teleportation.Name" );
+		lblTargetArea.setText( loc.getString( "Teleportation.TargetArea" ) );
+		lblTargetExit.setText( loc.getString( "Teleportation.TargetExit" ) );
+
+		loc.clearPrefix();
 	}
 
 	/**
