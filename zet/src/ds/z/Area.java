@@ -70,16 +70,14 @@ public abstract class Area<T extends Edge> extends PlanPolygon<T> {
 	 * This operation takes care of setting the room that is associated to this
 	 * area. It also conserves the consistence with the area lists in the rooms.
 	 * @param room is the associated room of the area.
-	 * @throws java.lang.IllegalArgumentException when val = null.
+	 * @throws java.lang.IllegalArgumentException when room is {@code null}.
 	 */
-	public void setAssociatedRoom( Room room ) throws IllegalArgumentException {
-		if( room == null ) {
+	final public void setAssociatedRoom( Room room ) throws IllegalArgumentException {
+		if( room == null )
 			throw new IllegalArgumentException( ZLocalization.getSingleton().getString("ds.z.Area.NoRoomException") );
-		}
 
-		if(associatedRoom != null ) {
+		if(associatedRoom != null )
 			associatedRoom.deleteArea( this );
-		}
 		associatedRoom= room;
 		associatedRoom.addArea( this );
 	}
@@ -89,111 +87,7 @@ public abstract class Area<T extends Edge> extends PlanPolygon<T> {
 		if( o instanceof Area ) {
 			Area p = (Area)o;
 			return super.equals( p ) && ( (associatedRoom == null ) ? p.getAssociatedRoom() == null :associatedRoom.equals( p.getAssociatedRoom() ) );
-		} else {
+		} else
 			return false;
-		}
 	}
-        
-    /**
-     * cleanUp in Areas.
-     * Deletes all "thorns"(=pairs of neighboured edges, one from a to b and the other from b to a),
-     * deletes all edges that are made up of the same two points and
-     * combines all pairs of edges that are combineable (=all x-coordinates OR all y-coordinates
-     * of both edges are the same).
-     */
-        void cleanUpForAreas() {
-            
-            // cleanUp for Areas
-            PlanPoint p1,p2,p3;
-            Edge e1,e2,temp1,temp2;
-            e1=getFirstEdge();
-            e2=(e1.getTarget().getNextEdge());
-            p1=e1.getSource();
-            p2=e1.getTarget();
-            p3=e2.getTarget();
-            
-            boolean lastStepsBegin = false;
-            boolean lastSteps =false;
-            
-            boolean combineable = false;
-            
-            while (getNumberOfEdges()>1) {
-                // for the breaking condition:
-                if (e2.equals(getLastEdge())) {
-                    lastStepsBegin=true;
-                }
-                if (lastStepsBegin && e1.equals(getLastEdge())) {
-                    lastSteps=true;
-                }
-
-                               
-                
-                // if the edges e1 and e2 are a "thorn":
-                if (p1.equals(p3)) {
-                    temp1=e1.getSource().getPreviousEdge();
-                    temp2=e2.getTarget().getNextEdge();
-                    combineEdges((T)e1,(T)e2,false);
-                    if (getNumberOfEdges() == 0) {
-                        break;
-                    }
-                    else {
-                        e1=temp1;
-                        e2=temp2;
-                        p1=e1.getSource();
-                        p2=e1.getTarget();
-                        p3=e2.getTarget();
-                    }
-                    continue;
-                }
-                
-                
-                // if the points of one edge are the same:
-                // edge e1:
-                if (p1.equals(p2)) {
-                    e1=e1.getSource().getPreviousEdge();
-                    e1.getTarget().getNextEdge().delete();
-                    p1=e1.getSource();
-                    continue;
-                }
-                // edge e2:
-                if (p2.equals(p3)) {
-                    e2=e2.getTarget().getNextEdge();
-                    e2.getSource().getPreviousEdge().delete();
-                    p3=e2.getTarget();
-                    continue;
-                }
-                
-                // if the edges are combineable
-                combineable = ( ( (p1.getXInt()==p2.getXInt())&&(p2.getXInt()==p3.getXInt()) )  ||  ( (p1.getYInt()==p2.getYInt())&&(p2.getYInt()==p3.getYInt()) ) );
-
-                if (combineable) {
-                    e1=(Edge)combineEdges((T)e1,(T)e2,false);
-                    e2=e1.getTarget().getNextEdge();
-                    p2=e1.getTarget();
-                    p3=e2.getTarget();
-                }
-                //if none of the cases above is true
-                else {
-                    if (lastSteps) {
-                        break;
-                    }
-                    else {
-                        e1=e1.getTarget().getNextEdge();
-                        e2=e2.getTarget().getNextEdge();
-                        p1=e1.getSource();
-                        p2=e1.getTarget();
-                        p3=e2.getTarget();
-                    }
-                }
-
-                 
-            }
-            
-
-                
-            
-
-            
-        }
-       
 }

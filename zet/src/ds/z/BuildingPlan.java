@@ -321,7 +321,7 @@ public class BuildingPlan implements Serializable, Iterable<Floor> {
 	}
 
 	/**
-	 * Rasterizes each Room / Area on every Floor. 
+	 * Rasters each Room / Area on every Floor.
 	 * Sets the rasterized flag to "true" upon completion.
 	 */
 	public void rasterize() {
@@ -340,7 +340,6 @@ public class BuildingPlan implements Serializable, Iterable<Floor> {
 				// but it makes sense to ensure that all polygons are closed!!
 				r.check( rasterized );
 				r.rasterize();
-				//r.cleanUpThornsAndNormalEdgesForRooms ();
 				r.cleanUpPassableEdgesForRooms();
 
 			}
