@@ -45,9 +45,9 @@ import zet.util.ConversionTools;
  * bounded by edges extending the general type {@link Edge}. To allow editing it
  * is possible to represent not valid areas. Thus are areas not open or
  * containing self-cutting edges.
- * <p>The class provides all neccessary methods to edit a polygon describing
+ * <p>The class provides all necessary methods to edit a polygon describing
  * rooms. Supported operations are connecting open polygons, breaking up a
- * closed polygon, inserting edges/points, or mor preciseley, replacing an
+ * closed polygon, inserting edges/points, or mor precisely, replacing an
  * existing <code>Edge</code> by some edges fitting into the gap, and
  * calculating the cut of two polygons.</p>
  * @param <T> the type describing the edges (borders) of the polygon
@@ -72,8 +72,8 @@ public class PlanPolygon<T extends Edge> implements Serializable, Iterable<T> {
 	/** The change listeners that are informed if any change of the polygon occurs. */
 //	@XStreamOmitField()
 //	private transient ArrayList<ChangeListener> changeListeners = new ArrayList<ChangeListener>();
-	/** Determines, if the polygon is closed. That means that the <CODE>end</CODE>
-	 * and <CODE>start</CODE> edges have a common point. */
+	/** Determines, if the polygon is closed. That means that the {@code end}
+	 * and {@code start} edges have a common point. */
 	@XStreamAsAttribute()
 	private boolean closed = false;
 	/** The start point of the polygon. At this point new edges or polygons can be added. */
@@ -132,7 +132,7 @@ public class PlanPolygon<T extends Edge> implements Serializable, Iterable<T> {
 	/**
 	 * Creates an new instance of <code>PlanPolygon</code> without any assigned
 	 * edges or points. All parameters are initialized with <code>null</code>.
-	 * <p>It is neccessary to submit the class type of the generic parameter in
+	 * <p>It is necessary to submit the class type of the generic parameter in
 	 * order to create new edges.</p>
 	 * @param edgeClassType the type of the generic edges
 	 */
@@ -142,17 +142,10 @@ public class PlanPolygon<T extends Edge> implements Serializable, Iterable<T> {
 		this.edgeClassType = edgeClassType;
 	}
 
-//	void resetListener() {
-//		changeListeners = new ArrayList<ChangeListener>();
-//		for( T e : this ) {
-//			e.resetListener();
-//		}
-//	}
-//
 	/**
 	 * Creates an new instance of <code>PlanPolygon</code> without any assigned
 	 * edges or points. All parameters are initialized with <code>null</code>.
-	 * <p>It is neccessary to submit the class type of the generic parameter in
+	 * <p>It is necessary to submit the class type of the generic parameter in
 	 * order to create new edges.</p>
 	 * @param edgeClassType the type of the generic edges
 	 * @param firstEdge An edge that shall be added to the polygon immediately
@@ -168,7 +161,7 @@ public class PlanPolygon<T extends Edge> implements Serializable, Iterable<T> {
 	/**
 	 * Fills an empty instance of <code>PlanPolygon</code> with a setLocation of
 	 * {@link PlanPoint}. The border of the polygon is defined by the order of
-	 * points, following the points and the neccessary edges are created. The last
+	 * points, following the points and the necessary edges are created. The last
 	 * edge between the <code>n</code>-th and <code>1</code>st point closes the
 	 * polygon.
 	 * <p>Note that the polygon has to empty to use this method. If you want to
@@ -253,10 +246,10 @@ public class PlanPolygon<T extends Edge> implements Serializable, Iterable<T> {
 	 * Inserts a new edge at one end of the polygon, if it is open. It is not
 	 * possible to defineByPoints further edges to closed polygons, such polygons have to be
 	 * opened before adding new edges. This method is only called, if a new
-	 * instance of edge is created that schould be part of this instance of the
+	 * instance of edge is created that should be part of this instance of the
 	 * polygon. It is called from the constructor of {@link Edge} and methods of
 	 * <code>PlanPolygon</code>.
-	 * <p>During the adding process the neccessary status information is updated.
+	 * <p>During the adding process the necessary status information is updated.
 	 * These are the start and end points, the offset of the entire polygon and
 	 * its width and height.</p>
 	 * @param e the edge to be added
@@ -323,21 +316,8 @@ public class PlanPolygon<T extends Edge> implements Serializable, Iterable<T> {
 
 		changed = true;
 		size++;
-
-//		e.addChangeListener( this );
-//		throwChangeEvent( new ChangeEvent( this ) );
 	}
 
-//	/**
-//	 * {@inheritDoc}
-//	 * @param c the new listener
-//	 */
-//	@Override
-//	public void addChangeListener( ChangeListener c ) {
-//		if( !changeListeners.contains( c ) )
-//			changeListeners.defineByPoints( c );
-//	}
-//
 	/**
 	 * Adds a new {@link PlanPoint} to the <code>PlanPolygon</code>. The point is
 	 * added at the beginning of the polygon. That means, an edge from
@@ -372,20 +352,17 @@ public class PlanPolygon<T extends Edge> implements Serializable, Iterable<T> {
 	}
 
 	/**
-	 * Calculates the area of this polygon with the guassian area formular in
+	 * Calculates the area of this polygon with the guassian area formula in
 	 * square millimeters.
 	 * @return the area
 	 */
 	public int area() {
 		List<PlanPoint> points = this.getPolygonPoints();
-		if( points.size() <= 0 )
+		if( points.isEmpty() )
 			return 0;
-		int area = 0;
+		int area = ((points.get( points.size() - 1 ).getYInt() + points.get( 0 ).getYInt()) * (points.get( points.size() - 1 ).getXInt() - points.get( 0 ).getXInt()));
 		for( int i = 0; i < points.size() - 1; i++ )
-			area += ((points.get( i ).getYInt() + points.get( i + 1 ).getYInt()) *
-							(points.get( i ).getXInt() - points.get( i + 1 ).getXInt()));
-		area += ((points.get( points.size() - 1 ).getYInt() + points.get( 0 ).getYInt()) *
-						(points.get( points.size() - 1 ).getXInt() - points.get( 0 ).getXInt()));
+			area += ((points.get( i ).getYInt() + points.get( i + 1 ).getYInt()) * (points.get( i ).getXInt() - points.get( i + 1 ).getXInt()));
 		return (int)(Math.abs( area ) * 0.5f);
 	}
 
@@ -396,19 +373,16 @@ public class PlanPolygon<T extends Edge> implements Serializable, Iterable<T> {
 	 */
 	public double areaMeter() {
 		List<PlanPoint> points = this.getPolygonPoints();
-		if( points.size() <= 0 )
+		if( points.isEmpty() )
 			return 0;
-		float area = 0;
+		double area = ((points.get( points.size() - 1 ).getYMeter() + points.get( 0 ).getYMeter()) * (points.get( points.size() - 1 ).getXMeter() - points.get( 0 ).getXMeter()));
 		for( int i = 0; i < points.size() - 1; i++ )
-			area += ((points.get( i ).getYMeter() + points.get( i + 1 ).getYMeter()) *
-							(points.get( i ).getXMeter() - points.get( i + 1 ).getXMeter()));
-		area += ((points.get( points.size() - 1 ).getYMeter() + points.get( 0 ).getYMeter()) *
-						(points.get( points.size() - 1 ).getXMeter() - points.get( 0 ).getXMeter()));
+			area += ((points.get( i ).getYMeter() + points.get( i + 1 ).getYMeter()) * (points.get( i ).getXMeter() - points.get( i + 1 ).getXMeter()));
 		return Math.abs( area ) * 0.5f;
 	}
 
 	/**
-	 * Returns the boudning box of this <code>PlanPolygon</code>. The boudning box
+	 * Returns the bounding box of this <code>PlanPolygon</code>. The bounding box
 	 * is the smallest {@link java.awt.Rectangle} that completely contains the
 	 * whole polygon. The calculation of this bounding box is accurate in the
 	 * integer coordinates of millimeter positions.
@@ -419,7 +393,7 @@ public class PlanPolygon<T extends Edge> implements Serializable, Iterable<T> {
 	}
 
 	/**
-	 * Returns the boudning box of this <code>PlanPolygon</code>. The boudning box
+	 * Returns the bounding box of this <code>PlanPolygon</code>. The bounding box
 	 * is the smallest {@link java.awt.geom.Rectangle2D} that completely contains
 	 * the whole polygon. The calculation of this bounding box is accurate in the
 	 * integer coordinates of millimeter positions.
@@ -432,7 +406,7 @@ public class PlanPolygon<T extends Edge> implements Serializable, Iterable<T> {
 	/**
 	 * Checks if this polygon is valid. That means, that it is closed, simple and
 	 * has no self-cuts. If any invalid positions are found, an exception is
-	 * thrown. If the param rasterized is true, it also checks if the polygon is
+	 * thrown. If the parameter rasterized is true, it also checks if the polygon is
 	 * really rasterized with a call of {@link PlanPolygon#checkRasterized() }).
 	 * <p>The runtime of this operation is O(n), where <code>n</code> is the
 	 * number of edges.</p>
@@ -443,8 +417,7 @@ public class PlanPolygon<T extends Edge> implements Serializable, Iterable<T> {
 	 * @throws ds.z.exception.PolygonNotRasterizedException if the polygon is not
 	 * rasterized but should be
 	 */
-	public void check( boolean rasterized ) throws PolygonNotClosedException,
-					PolygonNotRasterizedException {
+	public void check( boolean rasterized ) throws PolygonNotClosedException, PolygonNotRasterizedException {
 		if( !isClosed() )
 			throw new PolygonNotClosedException( this );
 		if( rasterized )
@@ -2286,9 +2259,9 @@ public class PlanPolygon<T extends Edge> implements Serializable, Iterable<T> {
 	}
 
 	/**
-	 * This method rasterizes a PlanPolygon. In detail all diagonal edges are 
+	 * This method rasters a PlanPolygon. In detail all diagonal edges are
 	 * converted to edges with 90 or 180 degree. Also all
-	 * start and end edgepoint are moved to lay on a raster of 40x40cm.
+	 * start and end edge point are moved to lay on a raster of 40x40cm.
 	 */
 	public void rasterize() {
 		boolean eAG_old = enableEventGeneration;
@@ -2300,7 +2273,7 @@ public class PlanPolygon<T extends Edge> implements Serializable, Iterable<T> {
 			for( T e : getEdges() ) {
 				int oldLength = e.length();
 				int newLength = 0;
-				newLength = rasterizeEdge( e, false );
+				newLength = rasterEdge( e, false );
 				if( oldLength - 199 > newLength )
 					alertDoors.add( e );
 			}
@@ -2311,14 +2284,13 @@ public class PlanPolygon<T extends Edge> implements Serializable, Iterable<T> {
 	}
 
 	/**
-	 * This method rasterizes an edge inside this polygon. At the end the original 
-	 * edge is replaced by the generated, rasterized, edges.
-	 * @param edgeToRasterize The edge that shall be rasterized
-	 * @param check if this variable is true, a cleanUp() is called to erease bad 
-	 * constructed egdes
+	 * This method rasters an edge inside this polygon. At the end the original
+	 * edge is replaced by the generated, rastered, edges.
+	 * @param edgeToRasterize The edge that shall be rastered
+	 * @param check if this variable is true, a cleanUp() is called to erase badly constructed edges
 	 * @return
 	 */
-	private int rasterizeEdge( T edgeToRasterize, boolean check ) {
+	private int rasterEdge( T edgeToRasterize, boolean check ) {
 		PlanPoint p1 = edgeToRasterize.getSource();
 		PlanPoint p2 = edgeToRasterize.getTarget();
 		PlanPoint work1, work2, predecessor;
@@ -2329,12 +2301,8 @@ public class PlanPolygon<T extends Edge> implements Serializable, Iterable<T> {
 
 		//rasterizes the coordinates of an edge
 
-		p1.setLocation( Math.round( p1.getXInt() / 400 ) * 400, Math.round( p1.getYInt() / 400 ) *
-						400 );
-		p2.setLocation( Math.round( p2.getXInt() / 400 ) * 400, Math.round( p2.getYInt() / 400 ) *
-						400 );
-
-		//System.out.println("edge to build: ("+p1.getXInt()+","+p1.getYInt()+") - ("+p2.getXInt()+","+p2.getYInt()+")");
+		p1.setLocation( Math.round( p1.getXInt() / 400 ) * 400, Math.round( p1.getYInt() / 400 ) * 400 );
+		p2.setLocation( Math.round( p2.getXInt() / 400 ) * 400, Math.round( p2.getYInt() / 400 ) * 400 );
 
 		//rasterizes the gradient of an edge
 
@@ -2387,8 +2355,7 @@ public class PlanPolygon<T extends Edge> implements Serializable, Iterable<T> {
 				//crossingpoint with the next x-coordinate
 				yCord = Math.round( start.getYInt() + (xCord - start.getXInt()) * m );
 				//creates the next PlanPoint which has to be setLocation due to rasterization.
-				nextPlanPoint = new PlanPoint( xCord, Math.round( (new Float( yCord ).floatValue() /
-								400.0f) ) * 400 );
+				nextPlanPoint = new PlanPoint( xCord, Math.round( (new Float( yCord ).floatValue() / 400.0f) ) * 400 );
 
 				//check, if nextPlanPoint has the same y-value as its predecessor and the predecessor of this one in newPlanPoints
 				//if yes then delete the predecessor.
@@ -2396,8 +2363,7 @@ public class PlanPolygon<T extends Edge> implements Serializable, Iterable<T> {
 
 				//if the y-value of nextPlanPoint is the same as it's predesessor, we do not have to "walk around the corner",
 				//otherwise we have to decide if we go left down or down left
-				predecessor = this.transformPlanPoint( newBetweenPlanPoints.get( newBetweenPlanPoints.size() - 1 ),
-								transformMatrix );
+				predecessor = this.transformPlanPoint( newBetweenPlanPoints.get( newBetweenPlanPoints.size() - 1 ), transformMatrix );
 				if( predecessor.getYInt() == nextPlanPoint.getYInt() ) {
 					//do nothing :)
 				} else {
@@ -2405,8 +2371,7 @@ public class PlanPolygon<T extends Edge> implements Serializable, Iterable<T> {
 					// method: calculate the half of the distance between the crosspoints the original edge has with the raster in
 					// this square and decides when it's greater than 0.5, it goes over otherwise under the line!! (8=)
 					// necessary: the exakt crosspoints, not the rounded ones!
-					yCordPredecessor = Math.round( start.getYInt() + (xCord - 400 -
-									start.getXInt()) * m );
+					yCordPredecessor = Math.round( start.getYInt() + (xCord - 400 - start.getXInt()) * m );
 
 					if( yCordPredecessor - this.transformPlanPoint( newBetweenPlanPoints.get( newBetweenPlanPoints.size() - 1 ),
 									transformMatrix ).getYInt() + (yCord - yCordPredecessor) / 2 < 200 )
@@ -2414,8 +2379,7 @@ public class PlanPolygon<T extends Edge> implements Serializable, Iterable<T> {
 										this.transformPlanPoint( newBetweenPlanPoints.get( newBetweenPlanPoints.size() - 1 ),
 										transformMatrix ).getYInt() ), retransformMatrix ) );
 					else
-						newBetweenPlanPoints.add( this.transformPlanPoint( new PlanPoint( xCord -
-										400,
+						newBetweenPlanPoints.add( this.transformPlanPoint( new PlanPoint( xCord - 400,
 										this.transformPlanPoint( newBetweenPlanPoints.get( newBetweenPlanPoints.size() - 1 ),
 										transformMatrix ).getYInt() + 400 ), retransformMatrix ) );
 				}
@@ -2489,22 +2453,6 @@ public class PlanPolygon<T extends Edge> implements Serializable, Iterable<T> {
 			newLength = newLength + Edge.length( p1, p2 );
 
 		return newLength;
-	}
-
-	/**
-	 * Rasterizes an edge and calls cleanUp() after rasterization
-	 * @param edgeToRasterize The edge that shall be rasterized
-	 */
-	public void rasterizeEdge( T edgeToRasterize ) {
-		boolean eAG_old = enableEventGeneration;
-		try {
-			enableEventGeneration = false;
-
-			rasterizeEdge( edgeToRasterize, true );
-		} finally {
-			enableEventGeneration = eAG_old;
-		}
-//		throwChangeEvent( new ChangeEvent( this ) );
 	}
 
 	/**

@@ -171,6 +171,8 @@ public class JEditView extends AbstractSplitPropertyWindow<JFloorScrollPane<JFlo
 	private CardLayout eastSubBarCardLayout;
 	/** The panel representing the variable part of the east bar. */
 	private JPanel eastSubBar;
+	private JLabel lblRoomSize;
+	private JLabel lblRoomSizeDesc;
 	private JComboBox cbxDelayType;
 	private JTextField txtDelayFactor;
 	private JTextField txtStairFactorUp;
@@ -208,6 +210,8 @@ public class JEditView extends AbstractSplitPropertyWindow<JFloorScrollPane<JFlo
 	private boolean disableUpdate = false;
 	private JLabel lblEvacuationAreaName;
 	private JTextField txtEvacuationAreaName;
+	private JLabel lblFloorSize;
+	private JLabel lblFloorSizeDesc;
 	private final GUIControl guiControl;
 
 	/** Describes the teleportation area name field. */
@@ -313,7 +317,7 @@ public class JEditView extends AbstractSplitPropertyWindow<JFloorScrollPane<JFlo
 				} else {
 					double persons = Math.round( (area / (0.4 * 0.4)) * 100 ) / 100.0;
 					lblMaxPersons.setText( nfFloat.format( persons ) );
-					lblMaxPersonsWarning.setText( loc.getString( "gui.editor.JEditorPanel.labelAreaWarning" ) );
+					lblMaxPersonsWarning.setText( loc.getString( "gui.EditPanel.Assignment.AreaWarning" ) );
 				}
 				if( ((AssignmentArea)selectedPolygon).getExitArea() == null )
 					cbxPreferredExit.setSelectedIndex( -1 );
@@ -323,6 +327,8 @@ public class JEditView extends AbstractSplitPropertyWindow<JFloorScrollPane<JFlo
 			case Room:
 				txtRoomName.setText( ((Room)selectedPolygon).getName() );
 				eastSubBarCardLayout.show( eastSubBar, "room" );
+				double areaRoom = Math.round( selectedPolygon.areaMeter() * 100 ) / 100.0;
+				lblRoomSize.setText( nfFloat.format( areaRoom ) + " m²" );
 				break;
 			case Default:
 				eastSubBarCardLayout.show( eastSubBar, "default" );
@@ -333,6 +339,13 @@ public class JEditView extends AbstractSplitPropertyWindow<JFloorScrollPane<JFlo
 				txtFlooryOffset.setText( Integer.toString( currentFloor.getyOffset() ) );
 				txtFloorWidth.setText( Integer.toString( currentFloor.getWidth() ) );
 				txtFloorHeight.setText( Integer.toString( currentFloor.getHeight() ) );
+
+
+				double areaFloor = 0;
+				for( PlanPolygon p : currentFloor )
+					areaFloor += p.areaMeter();
+
+				lblFloorSize.setText( nfFloat.format( areaFloor ) + " m²" );
 
 				eastSubBarCardLayout.show( eastSubBar, "floor" );
 				break;
@@ -908,6 +921,8 @@ public class JEditView extends AbstractSplitPropertyWindow<JFloorScrollPane<JFlo
 				TableLayout.PREFERRED,
 				TableLayout.PREFERRED,
 				TableLayout.PREFERRED,
+				TableLayout.PREFERRED,
+				TableLayout.PREFERRED,
 				TableLayout.FILL
 			}
 		};
@@ -994,6 +1009,11 @@ public class JEditView extends AbstractSplitPropertyWindow<JFloorScrollPane<JFlo
 		txtFloorWidth.addActionListener( aclFloorSize );
 		txtFloorHeight.addActionListener( aclFloorSize );
 
+		lblFloorSizeDesc = new JLabel( loc.getString( "Floor.Area" ) );
+		lblFloorSize = new JLabel( "" );
+		eastPanel.add( lblFloorSizeDesc, "0,10,2,10" );
+		eastPanel.add( lblFloorSize, "0,11,2,11" );
+
 		return eastPanel;
 	}
 
@@ -1002,6 +1022,7 @@ public class JEditView extends AbstractSplitPropertyWindow<JFloorScrollPane<JFlo
 						{{TableLayout.FILL},
 			//Rows
 			{TableLayout.PREFERRED, TableLayout.PREFERRED, 20,
+				TableLayout.PREFERRED, TableLayout.PREFERRED,
 				TableLayout.FILL
 			}
 		};
@@ -1032,7 +1053,15 @@ public class JEditView extends AbstractSplitPropertyWindow<JFloorScrollPane<JFlo
 			}
 		} );
 		eastPanel.add( txtRoomName, "0, " + row++ );
+		row++;
 
+		// add size information
+		lblRoomSizeDesc = new JLabel( loc.getString( "Room.Area" ) );
+		lblRoomSize = new JLabel( "" );
+		eastPanel.add( lblRoomSizeDesc, "0, " + row++ );
+		eastPanel.add( lblRoomSize, "0, " + row++ );
+
+		
 		return eastPanel;
 	}
 
@@ -1154,9 +1183,11 @@ public class JEditView extends AbstractSplitPropertyWindow<JFloorScrollPane<JFlo
 		lblFlooryOffset.setText( loc.getString( "Floor.yOffset" ) );
 		lblFloorWidth.setText( loc.getString( "Floor.Width" ) );
 		lblFloorHeight.setText( loc.getString( "Floor.Height" ) );
+		lblFloorSizeDesc.setText( loc.getString( "Floor.Area" ) );
 
 		// Room properties
 		lblRoomName.setText( loc.getString( "Room.Name" ) );
+		lblRoomSizeDesc.setText( loc.getString( "Room.Area" ) );
 
 		// Assignment area
 		lblAssignmentType.setText( loc.getString( "Assignment.Type" ) );
@@ -1165,8 +1196,8 @@ public class JEditView extends AbstractSplitPropertyWindow<JFloorScrollPane<JFlo
 		btnAssignmentSetDefaultEvacuees.setToolTipText( loc.getString( "Assignment.SetDefaultEvacuees.ToolTip" ) );
 		lblPreferredExit.setText( loc.getString( "Assignment.PreferredExit" ) );
 		lblMaxPersonsDesc.setText( loc.getString( "Assignment.MaxPersons" ) );
-		lblMaxPersonsWarning.setText( loc.getString( "Assignment.Area" ) );
-		lblAreaSizeDesc.setText( loc.getString( "Assignment.AreaWarning" ) );
+		lblMaxPersonsWarning.setText( loc.getString( "Assignment.AreaWarning" ) );
+		lblAreaSizeDesc.setText( loc.getString( "Assignment.Area" ) );
 
 		// Delay area
 		lblDelayType.setText( loc.getString( "Delay.Type" ) + ":" );

@@ -854,230 +854,30 @@ public class Room extends BaseRoom<RoomEdge> implements Cloneable {
 	@Override
 	public void getPlanPoints( List<PlanPoint> planPoints ) {
 		super.getPlanPoints( planPoints );
-
-		for( Area a : assignmentAreas ) {
+		
+		for( Area a : assignmentAreas )
 			a.getPlanPoints( planPoints );
-		}
-		for( Area a : barriers ) {
+		for( Area a : barriers )
 			a.getPlanPoints( planPoints );
-		}
-		for( Area a : delayAreas ) {
+		for( Area a : delayAreas )
 			a.getPlanPoints( planPoints );
-		}
-		for( Area a : evacuationAreas ) {
+		for( Area a : evacuationAreas )
 			a.getPlanPoints( planPoints );
-		}
-		for( Area a : inaccessibleAreas ) {
+		for( Area a : inaccessibleAreas )
 			a.getPlanPoints( planPoints );
-		}
-		for( Area a : saveAreas ) {
+		for( Area a : saveAreas )
 			a.getPlanPoints( planPoints );
-		}
-		for( Area a : stairAreas ) {
+		for( Area a : stairAreas )
 			a.getPlanPoints( planPoints );
-		}
 	}
 
 	/**
-	 * First traversion of cleanUp in Rooms.
-	 * Deletes (regardless of passabiblity of the edges) all "thorns"
-	 * (=pairs of neighboured edges, one from a to b and the other from b to a),
-	 * deletes all edges that are made up of the same two points
-	 * and combines all pairs of normal (=not passable) edges that are combineable
-	 * (=all x-coordinates OR all y-coordinates of both edges are the same).
-	 * (Deleting a thorn of two passable edges that are passable to differnent rooms,
-	 * connects these rooms together = deleting too little door-rooms)
-	 * 
-	 * In addition:
-	 * Calls cleanUp for the room`s "normal" areas and its barriers,
-	 * Temporally stores each InaccessibleArea for a potential restoring.
-	 * Then calls the normal cleanUp for Areas (see {@link Area#cleanUpThornsAndNormalEdges() }).
-	 * If that cleanUp founds out that the InaccessibleArea has area 0,
-	 * this InaccessibleArea is restored and a special cleanUp for "zero-InaccessibleAreas"
-	 * is called for the restored InaccessibleArea.
-	 */
-	void cleanUpThornsAndNormalEdgesForRooms() {
-		if( 1 != 0 ) {
-			return;
-		}
-		//toDo: Zipefl und combinedZipfel einarbeiten!
-		// cleanUp for Rooms (first traversion)
-		PlanPoint p1, p2, p3;
-		RoomEdge e1, e2, temp1, temp2;
-		e1 = getFirstEdge();
-		e2 = (RoomEdge) (e1.getTarget().getNextEdge());
-		p1 = e1.getSource();
-		p2 = e1.getTarget();
-		p3 = e2.getTarget();
-
-		boolean lastStepsBegin = false;
-		boolean lastSteps = false;
-
-		while( getNumberOfEdges() > 1 ) {
-			// for the breaking condition:
-			if( e2.equals( getLastEdge() ) ) {
-				lastStepsBegin = true;
-			}
-			if( lastStepsBegin && e1.equals( getLastEdge() ) ) {
-				lastSteps = true;
-			}
-
-
-
-			// if the edges e1 and e2 are a "thorn":
-			if( p1.equals( p3 ) ) {
-				temp1 = (RoomEdge) e1.getSource().getPreviousEdge();
-				temp2 = (RoomEdge) e2.getTarget().getNextEdge();
-				combineEdges( e1, e2, false );
-				if( getNumberOfEdges() == 0 ) {
-					break;
-				} else {
-					e1 = temp1;
-					e2 = temp2;
-					p1 = e1.getSource();
-					p2 = e1.getTarget();
-					p3 = e2.getTarget();
-				}
-				continue;
-			}
-
-
-			// if the points of one edge are the same:
-			// edge e1:
-			if( p1.equals( p2 ) ) {
-				e1 = (RoomEdge) e1.getSource().getPreviousEdge();
-				e1.getTarget().getNextEdge().delete();
-				p1 = e1.getSource();
-				continue;
-			}
-			// edge e2:
-			if( p2.equals( p3 ) ) {
-				e2 = (RoomEdge) e2.getTarget().getNextEdge();
-				e2.getSource().getPreviousEdge().delete();
-				p3 = e2.getTarget();
-				continue;
-			}
-
-			// if the edges are combineable and both are not passable Edges
-			boolean combineable = (((p1.getXInt() == p2.getXInt()) && (p2.getXInt() == p3.getXInt())) || ((p1.getYInt() == p2.getYInt()) && (p2.getYInt() == p3.getYInt())));
-			boolean bothNotPassable = (!(e1.isPassable()) && !(e2.isPassable()));
-			if( combineable && bothNotPassable ) {
-				e1 = combineEdges( e1, e2, false );
-				e2 = (RoomEdge) e1.getTarget().getNextEdge();
-				p2 = e1.getTarget();
-				p3 = e2.getTarget();
-			} //if none of the cases above is true
-			else {
-				if( lastSteps ) {
-					break;
-				} else {
-					e1 = (RoomEdge) e1.getTarget().getNextEdge();
-					e2 = (RoomEdge) e2.getTarget().getNextEdge();
-					p1 = e1.getSource();
-					p2 = e1.getTarget();
-					p3 = e2.getTarget();
-				}
-			}
-
-
-		}
-
-		List<PlanPoint> temp_points;
-
-		// Ennumeration?? temp_type;
-
-
-		for( SaveArea sa : saveAreas ) {
-			//get copies of the area`s points
-			temp_points = sa.getPlanPoints();
-			for( int i = 0; i < temp_points.size(); i++ ) {
-				temp_points.set( i, (PlanPoint) (temp_points.get( i ).clone()) );
-			}
-			if( sa instanceof EvacuationArea ) {
-				//temp_type=EVACUATIONAREA;
-			} else {
-				//temp_type=EVACUATIONAREA;
-			}
-
-			sa.cleanUpForAreas();
-			if( sa.getNumberOfEdges() < 4 ) {
-				//staticClass.defineByPoints(temp_type,temp_points,getFloor());
-				sa.delete();
-			}
-		}
-
-
-		//temp_type =DELAYAREA
-		for( DelayArea da : delayAreas ) {
-			//get copies of the area`s points
-			temp_points = da.getPlanPoints();
-			for( int i = 0; i < temp_points.size(); i++ ) {
-				temp_points.set( i, (PlanPoint) (temp_points.get( i ).clone()) );
-			}
-			da.cleanUpForAreas();
-			if( da.getNumberOfEdges() < 4 ) {
-				//staticClass.defineByPoints(temp_type,temp_points,getFloor());
-				da.delete();
-			}
-		}
-
-
-		for( StairArea sa : stairAreas ) {
-			//get copies of the area`s points
-			temp_points = sa.getPlanPoints();
-			for( int i = 0; i < temp_points.size(); i++ ) {
-				temp_points.set( i, (PlanPoint) (temp_points.get( i ).clone()) );
-			}
-			sa.cleanUpForAreas();
-			if( sa.getNumberOfEdges() < 4 ) {
-				//staticClass.defineByPoints(temp_type,temp_points,getFloor());
-				sa.delete();
-			}
-		}
-
-
-		//temp_type =ASSIGNMENTAREA
-		for( AssignmentArea aa : assignmentAreas ) {
-			//get copies of the area`s points
-			temp_points = aa.getPlanPoints();
-			for( int i = 0; i < temp_points.size(); i++ ) {
-				temp_points.set( i, (PlanPoint) (temp_points.get( i ).clone()) );
-			}
-			aa.cleanUpForAreas();
-			if( aa.getNumberOfEdges() < 4 ) {
-				//staticClass.defineByPoints(temp_type,temp_points,getFloor(),aa.getAssignmentType(),aa.getEvacuees());
-				aa.delete();
-			}
-		}
-
-
-
-		//temp_type =INACCESSIBLEAREA
-		boolean convertedToBarrier = false;
-		for( InaccessibleArea ia : inaccessibleAreas ) {
-			//get copies of the area`s points
-			temp_points = ia.getPlanPoints();
-			for( int i = 0; i < temp_points.size(); i++ ) {
-				temp_points.set( i, (PlanPoint) (temp_points.get( i ).clone()) );
-			}
-			convertedToBarrier = ia.cleanUpForInaccessibleAreas();
-			if( ia.getNumberOfEdges() < 4 ) {
-				ia.delete();
-				if( !(convertedToBarrier) ) {
-					//staticClass.defineByPoints(temp_type,temp_points,getFloor());
-				}
-			}
-		}
-	}
-
-	/**
-	 * Second traversion of cleanUp in Rooms.
-	 * Combines all pairs of passable edges that are combineable (=all x-coordinates OR all y-coordinates
-	 * of both edges are the same) and which`s linkTargets are neighbours in the same room and also combineable.
+	 * Second pass of cleanUp in Rooms.
+	 * Combines all pairs of passable edges that are combinable (=all x-coordinates OR all y-coordinates
+	 * of both edges are the same) and which`s linkTargets are neighbors in the same room and also combinable.
 	 */
 	void cleanUpPassableEdgesForRooms() {
-
-		// cleanUp for Rooms (second traversion)
+		// cleanUp for Rooms (second passs)
 		PlanPoint p1, p2, p3;
 		RoomEdge e1, e2;
 		e1 = getFirstEdge();

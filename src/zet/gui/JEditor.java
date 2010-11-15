@@ -58,7 +58,6 @@ import java.text.NumberFormat;
 import java.util.Locale;
 import java.awt.event.WindowAdapter;
 import java.util.ArrayList;
-import javax.media.opengl.GLCapabilities;
 import javax.swing.JComponent;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
@@ -389,10 +388,8 @@ public class JEditor extends JFrame implements Localized, EventListener<Progress
 	 */
 	public static void sendMouse( Point position ) {
 		lastMouse = position;
-		//String pixelCoords = "(" + Integer.toString (e.getX ()) + "," + Integer.toString (e.getY ()) + ")";
 		String realCoordsMillimeter = "(" + Integer.toString( position.x ) + delimiter + Integer.toString( position.y ) + ")";
 		String realCoordsMeter = "(" + DefaultLoc.getSingleton().getFloatConverter().format( ConversionTools.toMeter( position.x ) ) + delimiter + DefaultLoc.getSingleton().getFloatConverter().format( ConversionTools.toMeter( position.y ) ) + ")";
-		//String text = /*"Pixel: " + pixelCoords + " - */ "Millimeter: " + realCoordsMillimeter + " - Meter: " + realCoordsMeter;
 		String text = String.format( GUILocalization.getSingleton().getString( "gui.EditPanel.Mouse.PositionMillimeterMeter" ), realCoordsMillimeter, realCoordsMeter );
 		EventServer.getInstance().dispatchEvent( new MessageEvent<JEditor>( null, MessageType.MousePosition, text ) );
 	}
