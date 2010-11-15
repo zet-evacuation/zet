@@ -8,6 +8,7 @@ import de.tu_berlin.math.coga.common.algorithm.Algorithm;
 import ds.graph.Edge;
 import ds.graph.IdentifiableIntegerMapping;
 import ds.graph.Node;
+import ds.graph.ResidualNetwork;
 import ds.graph.flow.MaximumFlow;
 import ds.graph.problem.MaximumFlowProblem;
 
@@ -158,4 +159,11 @@ public abstract class PushRelabel extends Algorithm<MaximumFlowProblem, MaximumF
 	protected boolean isActive( Node v ) {
 		return /*!v.equals( source ) && */ !v.equals( sink ) && distanceLabels.get( v ) < n && excess.get( v ) > 0;
 	}
+
+	// TODO
+	public ResidualNetwork getResidualNetwork() {
+		throw new UnsupportedOperationException( "Not supported yet." );
+	}
+
+
 }

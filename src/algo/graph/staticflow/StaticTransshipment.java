@@ -19,7 +19,6 @@
  */
 package algo.graph.staticflow;
 
-import algo.graph.staticflow.maxflow.DischargingGlobalGapHighestLabelPreflowPushAlgorithm;
 import ds.graph.problem.MaximumFlowProblem;
 import ds.graph.Edge;
 import ds.graph.IdentifiableIntegerMapping;
@@ -29,7 +28,8 @@ import ds.graph.ResidualNetwork;
 import java.util.LinkedList;
 import java.util.List;
 
-import algo.graph.staticflow.maxflow.PreflowPushAlgorithm;
+import algo.graph.staticflow.maxflow.PushRelabel;
+import algo.graph.staticflow.maxflow.PushRelabelHighestLabelGlobalGapRelabelling;
 
 /**
  *
@@ -44,13 +44,13 @@ public class StaticTransshipment implements Runnable {
     private ResidualNetwork residualNetwork;
     private boolean feasible;
     private int valueOfFlow;
-    private PreflowPushAlgorithm algorithm;
+    private PushRelabel algorithm;
 
-    public PreflowPushAlgorithm getAlgorithm() {
+    public PushRelabel getAlgorithm() {
         return algorithm;
     }
 
-    public void setAlgorithm(PreflowPushAlgorithm algorithm) {
+    public void setAlgorithm(PushRelabel algorithm) {
         this.algorithm = algorithm;
     }    
 
@@ -58,7 +58,7 @@ public class StaticTransshipment implements Runnable {
         this.balances = balances;
         this.capacities = capacities;
         this.network = network;
-        algorithm = new DischargingGlobalGapHighestLabelPreflowPushAlgorithm();
+        algorithm = new PushRelabelHighestLabelGlobalGapRelabelling();
     }
 
     protected int getBalanceOfNode(Node node) {

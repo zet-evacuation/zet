@@ -4,13 +4,10 @@
  */
 package algo.graph.staticflow.maxflow;
 
-import de.tu_berlin.math.coga.datastructure.BucketSet;
-import de.tu_berlin.math.coga.datastructure.priorityQueue.BucketPriorityQueue;
 import ds.graph.Edge;
 import ds.graph.IdentifiableIntegerMapping;
 import ds.graph.Network;
 import ds.graph.Node;
-import ds.graph.flow.MaximumFlow;
 import ds.graph.problem.MaximumFlowProblem;
 
 /**
@@ -61,15 +58,16 @@ public class PushRelabelHighestLabelGlobalGapRelabelling extends PushRelabelHigh
 
 	/**
 	 * Gap relabeling (maybe move to bucket?)
-	 * @param l
+	 * @param emptyBucket
+	 * @return
 	 */
-	protected int gap( int emptyB ) {
+	protected int gap( int emptyBucket ) {
 		gaps++;
-		int r = emptyB - 1;
+		int r = emptyBucket - 1;
 		int cc;
 
 		/* set labels of nodes beyond the gap to "infinity" */
-		for( int l = emptyB + 1; l <= activeBuckets.getdMax(); l++ ) {
+		for( int l = emptyBucket + 1; l <= activeBuckets.getdMax(); l++ ) {
 			// TODO iterator
 			for( Node node = inactiveBuckets.get( l ); node != null; node = inactiveBuckets.next( node ) ) {
 				distanceLabels.set( node, n );
@@ -108,11 +106,11 @@ public class PushRelabelHighestLabelGlobalGapRelabelling extends PushRelabelHigh
 
 		MaximumFlowProblem mfp = new MaximumFlowProblem( network, capacities, network.getNode( 0 ), network.getNode( 3 ) );
 
-		HIPR hipr = new HIPR();
+		PushRelabelHighestLabelGlobalGapRelabelling hipr = new PushRelabelHighestLabelGlobalGapRelabelling();
 		hipr.setProblem( mfp );
 		hipr.run();
 
-		System.out.println( "Flow: " + hipr.getFlow() );
-		//System.out.println( "Flow: " + hipr.getSolution().getFlowValue() );
+		//System.out.println( "Flow: " + hipr.getFlow() );
+		System.out.println( "Flow: " + hipr.getSolution().getFlowValue() );
 	}
 }
