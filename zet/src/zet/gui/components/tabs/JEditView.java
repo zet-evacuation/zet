@@ -417,7 +417,7 @@ public class JEditView extends AbstractSplitPropertyWindow<JFloorScrollPane<JFlo
 		cbxFloors.setRenderer( new ComboBoxRenderer() {
 			@Override
 			public Component getListCellRendererComponent( JList list, Object value, int index, boolean isSelected, boolean cellHasFocus ) {
-//				JLabel me = (JLabel)super.getListCellRendererComponent( list, value, index, isSelected, cellHasFocus );
+				super.getListCellRendererComponent( list, value, index, isSelected, cellHasFocus ); // Needed for correct displaying! Forget return
 				if( value != null )
 					setText( ((Floor)value).getName() );
 				return this;
@@ -437,7 +437,7 @@ public class JEditView extends AbstractSplitPropertyWindow<JFloorScrollPane<JFlo
 		cbxRooms.setRenderer( new ComboBoxRenderer() {
 			@Override
 			public Component getListCellRendererComponent( JList list, Object value, int index, boolean isSelected, boolean cellHasFocus ) {
-				//JLabel me = (JLabel)super.getListCellRendererComponent( list, value, index, isSelected, cellHasFocus );
+				super.getListCellRendererComponent( list, value, index, isSelected, cellHasFocus );	// Needed for correct displaying! Forget return
 				if( value != null )
 					setText( ((Room)value).getName() );
 				return this;
@@ -1220,8 +1220,6 @@ public class JEditView extends AbstractSplitPropertyWindow<JFloorScrollPane<JFlo
 	final public void displayProject( ZControl projectControl ) {
 		//boolean show_different_project = (this.projectControl.getZControl() != projectControl.getZControl());
 		if( projectControl != null ) {
-//			if( show_different_project )
-//				myProject.removeChangeListener( this );
 
 			// Clearing is done in the set-methods called later
 			//floorSelector.clear();
@@ -1233,13 +1231,9 @@ public class JEditView extends AbstractSplitPropertyWindow<JFloorScrollPane<JFlo
 			getLeftPanel().getMainComponent().displayFloor( null );
 		}
 
-//		myProject = p;
 		this.projectControl = projectControl;
 
 		if( projectControl != null ) {
-//			if( show_different_project )
-//				p.addChangeListener( this );
-
 			recreatePolygonPopupMenu( projectControl.getProject().getCurrentAssignment() );
 			recreateEdgePopupMenu();
 			recreatePointPopupMenu();
@@ -1361,28 +1355,28 @@ public class JEditView extends AbstractSplitPropertyWindow<JFloorScrollPane<JFlo
 
 	/*****************************************************************************
 	 *                                                                           *
-	 * Popup methods                                                             *
+	 * Pop-up methods                                                             *
 	 *                                                                           *
 	 ****************************************************************************/
 	/**
-	 * Returns the up-to-date popup menu that is shown on all edges.
-	 * @return the up-to-date popup menu that is shown on all edges
+	 * Returns the up-to-date pop-up menu that is shown on all edges.
+	 * @return the up-to-date pop-up menu that is shown on all edges
 	 */
 	public JPopupMenu getEdgePopup() {
 		return pupEdge;
 	}
 
 	/**
-	 * Returns the up-to-date popup menu that is shown on all edges end points.
-	 * @return the up-to-date popup menu that is shown on all edges and end points
+	 * Returns the up-to-date pop-up menu that is shown on all edges end points.
+	 * @return the up-to-date pop-up menu that is shown on all edges and end points
 	 */
 	public JPopupMenu getPointPopup() {
 		return pupPoint;
 	}
 
 	/**
-	 * Returns the up-to-date popup menu that is shown on all {@link JPolygon}s.
-	 * @return the up-to-date popup menu that is shown on all polygons
+	 * Returns the up-to-date pop-up menu that is shown on all {@link JPolygon}s.
+	 * @return the up-to-date pop-up menu that is shown on all polygons
 	 */
 	public JPopupMenu getPolygonPopup() {
 		return pupPolygon;
@@ -1419,7 +1413,7 @@ public class JEditView extends AbstractSplitPropertyWindow<JFloorScrollPane<JFlo
 	 * for the JEdge (Point) objects. It also recreates the JEdgePopupListeners. 
 	 *
 	 * This whole method is superfluous until now, because the JEdges' point PopupMenu
-	 * does not include any dynamic elements till now. To kepp up the consistency 
+	 * does not include any dynamic elements till now. To keep up the consistency
 	 * with the JPolygon PopupMenu we nevertheless created this method.
 	 */
 	private void recreatePointPopupMenu() {

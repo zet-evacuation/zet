@@ -15,7 +15,7 @@
  */
 /**
  * Class AbstractVisualisation
- * Erstellt 20.05.2008, 23:51:14
+ * Created 20.05.2008, 23:51:14
  */
 package gui.visualization;
 
@@ -26,7 +26,6 @@ import de.tu_berlin.math.coga.math.Conversion;
 import event.EventServer;
 import event.MessageEvent;
 import event.MessageEvent.MessageType;
-import zet.gui.JEditor;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.event.KeyEvent;
@@ -40,7 +39,6 @@ import javax.media.opengl.GLCapabilities;
 import javax.media.opengl.GLException;
 import javax.media.opengl.glu.GLU;
 import opengl.framework.Camera;
-import opengl.helper.Frustum;
 import opengl.helper.ProjectionHelper;
 import de.tu_berlin.math.coga.math.vectormath.Vector3;
 import opengl.framework.abs.AbstractOpenGLCanvas;
@@ -177,7 +175,7 @@ public abstract class AbstractVisualization extends AbstractOpenGLCanvas {
 	/**
 	 * Sets up the projection matrix for 3-dimensional view.
 	 */
-	final private void set3DProjection() {
+	private void set3DProjection() {
 		gl.glMatrixMode( GL.GL_PROJECTION );
 		gl.glLoadIdentity();
 		glu.gluPerspective( fov, aspect, zNear, zFar );
@@ -186,9 +184,9 @@ public abstract class AbstractVisualization extends AbstractOpenGLCanvas {
 	}
 
 	/**
-	 * Sets up the projection matrix for 2-dimensonal (orthogonal or parallel) view.
+	 * Sets up the projection matrix for 2-dimensional (orthogonal or parallel) view.
 	 */
-	final private void set2DProjection() {
+	private void set2DProjection() {
 		ProjectionHelper.setViewOrthogonal( gl, viewportWidth, viewportHeight, camera.getPos().x, camera.getPos().y, camera.getPos().z, currentWidth, currentHeight, depth );
 		// We need to reset the model/view matrix (and swith to the mode!)
 		gl.glMatrixMode( GL.GL_MODELVIEW );			// Set model/view matrix-mode
@@ -305,6 +303,22 @@ public abstract class AbstractVisualization extends AbstractOpenGLCanvas {
 	 */
 	public double getViewWidth() {
 		return currentWidth;
+	}
+
+	/**
+	 * Returns the height of the viewport.
+	 * @return the height of the viewport
+	 */
+	protected int getViewportHeight() {
+		return viewportHeight;
+	}
+
+	/**
+	 * Returns the width of the viewport.
+	 * @return the width of the viewport
+	 */
+	protected int getViewportWidth() {
+		return viewportWidth;
 	}
 
 	/**
@@ -432,7 +446,7 @@ public abstract class AbstractVisualization extends AbstractOpenGLCanvas {
 	 * The submitted angle describes the direction. 0 means to the right, 180 to the left etc.
 	 * @param angle the angle in degrees from 0 to 360
 	 */
-	private final void moveAbsolute( double angle ) {
+	private void moveAbsolute( double angle ) {
 		Vector3 oldView = new Vector3( camera.getView().x, camera.getView().y, camera.getView().z );
 		//Vector3 oldUp = new Vector3(camera.getUp().x, camera.getUp().y, camera.getUp().z);
 

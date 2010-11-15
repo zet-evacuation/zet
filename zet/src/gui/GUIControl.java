@@ -53,7 +53,7 @@ import zet.gui.components.toolbar.JEditToolbar;
 import zet.gui.components.toolbar.JVisualizationToolbar;
 import gui.visualization.AbstractVisualization.ParallelViewMode;
 import gui.visualization.Visualization.RecordingMode;
-import gui.visualization.ZETVisualization;
+import zet.gui.components.tabs.visualization.ZETVisualization;
 import gui.visualization.control.GLControl.CellInformationDisplay;
 import io.DXFWriter;
 import io.movie.MovieManager;

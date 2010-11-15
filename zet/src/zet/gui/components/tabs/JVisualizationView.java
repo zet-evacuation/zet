@@ -19,7 +19,7 @@
  * Created 10.06.2008, 11:07:01
  */
 
-package gui.visualization;
+package zet.gui.components.tabs;
 
 import de.tu_berlin.math.coga.common.localization.DefaultLoc;
 import ds.PropertyContainer;
@@ -28,6 +28,9 @@ import gui.ZETMain;
 import zet.gui.components.model.ComboBoxRenderer;
 import zet.gui.components.model.FloorComboBoxModel;
 import de.tu_berlin.math.coga.components.JArrayPanel;
+import gui.visualization.AbstractVisualizationView;
+import gui.visualization.VisualizationPanel;
+import zet.gui.components.tabs.visualization.ZETVisualization;
 import zet.gui.components.tabs.visualization.PotentialSelectionModel;
 import gui.visualization.control.GLControl;
 import gui.visualization.control.GLControl.CellInformationDisplay;
@@ -51,12 +54,15 @@ import javax.swing.JSlider;
 import javax.swing.JTextField;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
+import zet.gui.GUILocalization;
 
 /**
  *
  * @author Jan-Philipp Kappmeier
  */
 public class JVisualizationView extends AbstractVisualizationView<ZETVisualization> {
+	private final GUIControl guiControl;
+	private GUILocalization loc = GUILocalization.getSingleton();
 	/** The visualization panel. */
 	private ZETVisualization visualization;
 	/** A combo box that allows selecting the visible floor (if not all are visible) */
@@ -89,20 +95,42 @@ public class JVisualizationView extends AbstractVisualizationView<ZETVisualizati
 	private JLabel lblCameraUp;
 	/** A button that sets a new camera position. */
 	private JButton setCameraPosition;
-	// TODO better, directly take the enum
-	private final int HEAD_INFORMATION_NOTHING = 0;
-	private final int HEAD_INFORMATION_PANIC = 1;
-	private final int HEAD_INFORMATION_SPEED = 2;
-	private final int HEAD_INFORMATION_EXHAUSTION = 3;
-	private final int HEAD_INFORMATION_ALARMED = 4;
-	private final int HEAD_INFORMATION_CHOSEN_EXIT = 5;
-	private final int HEAD_INFORMATION_REACTION = 6;
-	DefaultLoc loc = DefaultLoc.getSingleton();
+	/** A button that resets the camera position to a fixed coordinate. */
+	private JButton resetCameraPosition;
+
+	public enum HeadInformation {	// todo move to visualization
+		Nothing( "gui.VisualizationPanel.HeadInformation.Nothing" ),
+		Panic( "gui.VisualizationPanel.HeadInformation.Panic" ),
+		Speed( "gui.VisualizationPanel.HeadInformation.Speed" ),
+		Exhaustion( "gui.VisualizationPanel.HeadInformation.Exhaustion" ),
+		Alarmed( "gui.VisualizationPanel.HeadInformation.Alarmed" ),
+		ChosenExit( "gui.VisualizationPanel.HeadInformation.ChosenExit" ),
+		ReactionTime( "gui.VisualizationPanel.HeadInformation.ReactionTime" );
+
+		/** A string used to get the string representation for this information type (localized). */
+		private String locString;
+
+		/** Initializes the enumeration element with its localization string */
+		private HeadInformation( String locString ) {
+			this.locString = locString;
+		}
+
+		/**
+		 * Returns the localized description for this enumeration element.
+		 * @return the localized description for this enumeration element.
+		 */
+		@Override
+		public String toString() {
+			return GUILocalization.getSingleton().getStringWithoutPrefix( locString );
+		}
+	}
 	
-	JArrayPanel cameraPanel;
-	private final GUIControl guiControl;
-	public JVisualizationView( GLCapabilities caps, GUIControl guiControl ) {
-		super( new VisualizationPanel<ZETVisualization>( new ZETVisualization( caps, guiControl ) ) );
+	/**
+	 *
+	 * @param guiControl
+	 */
+	public JVisualizationView( GUIControl guiControl ) {
+		super( new VisualizationPanel<ZETVisualization>( new ZETVisualization( new GLCapabilities(), guiControl ) ) );
 		visualization = getGLContainer();
 		this.guiControl = guiControl;
 
@@ -192,14 +220,15 @@ public class JVisualizationView extends AbstractVisualizationView<ZETVisualizati
 		int row = 1;
 
 		if( loc == null )
-			loc = DefaultLoc.getSingleton();
+			loc = GUILocalization.getSingleton();
 
 
-		lblFloorSelector = new JLabel( loc.getString( "gui.editor.JEditorPanel.labelFloors" ) + ":" );
+		lblFloorSelector = new JLabel( loc.getString( "gui.EditPanel.Default.Floors" ) + ":" );
 		eastPanel.add( lblFloorSelector, "1, " + row++ );
 		eastPanel.add( floorSelector, "1, " + row++ );
 		row++;
 
+		loc.setPrefix( "gui.VisualizationPanel." );
 		potentialSelector = new JComboBox();
 		potentialSelector.addItemListener( new ItemListener() {
 			@Override
@@ -213,70 +242,45 @@ public class JVisualizationView extends AbstractVisualizationView<ZETVisualizati
 				getGLContainer().repaint();
 			}
 		} );
-		lblPotentialSelector = new JLabel( loc.getString( "gui.visualizationView.labelPotentials" ) + ":" );
+		lblPotentialSelector = new JLabel( loc.getString( "Potentials" ) + ":" );
 		eastPanel.add( lblPotentialSelector, "1, " + row++ );
 		eastPanel.add( potentialSelector, "1, " + row++ );
 		row++;
 
 		headColorSelector = new JComboBox();
-		headColorSelector.addItem( loc.getString( "gui.visualizationView.headsNothing" ) );
-		headColorSelector.addItem( loc.getString( "gui.visualizationView.headsPanic" ) );
-		headColorSelector.addItem( loc.getString( "gui.visualizationView.headsSpeed" ) );
-		headColorSelector.addItem( loc.getString( "gui.visualizationView.headsExhaustion" ) );
-		headColorSelector.addItem( loc.getString( "gui.visualizationView.headsAlarmed" ) );
-		headColorSelector.addItem( loc.getString( "gui.visualizationView.headsChosenExit" ) );
-		headColorSelector.addItem( loc.getString( "gui.visualizationView.headsReactionTime" ) );
+		for( HeadInformation hi : HeadInformation.values() )
+			headColorSelector.addItem( hi );
 		headColorSelector.setSelectedIndex( 1 );
 		headColorSelector.addActionListener( new ActionListener() {
 			@Override
 			public void actionPerformed( ActionEvent e ) {
-				switch( headColorSelector.getSelectedIndex() ) {
-					default:
-					case HEAD_INFORMATION_NOTHING:
-						visualization.getControl().showIndividualInformation( GLControl.IndividualInformationDisplay.NOTHING );
-						break;
-					case HEAD_INFORMATION_PANIC:
-						visualization.getControl().showIndividualInformation( GLControl.IndividualInformationDisplay.PANIC );
-						break;
-					case HEAD_INFORMATION_SPEED:
-						visualization.getControl().showIndividualInformation( GLControl.IndividualInformationDisplay.SPEED );
-						break;
-					case HEAD_INFORMATION_EXHAUSTION:
-						visualization.getControl().showIndividualInformation( GLControl.IndividualInformationDisplay.EXHAUSTION );
-						break;
-					case HEAD_INFORMATION_ALARMED:
-						visualization.getControl().showIndividualInformation( GLControl.IndividualInformationDisplay.ALARMED );
-						break;
-					case HEAD_INFORMATION_CHOSEN_EXIT:
-						visualization.getControl().showIndividualInformation( GLControl.IndividualInformationDisplay.CHOSEN_EXIT );
-						break;
-					case HEAD_INFORMATION_REACTION:
-						visualization.getControl().showIndividualInformation( GLControl.IndividualInformationDisplay.REACTION_TIME );
-				}
+				visualization.getControl().showIndividualInformation( (HeadInformation)(headColorSelector.getSelectedItem()) );
 				getLeftPanel().getGLContainer().repaint();
 			}
 		} );
-		lblHeadSelector = new JLabel( loc.getString( "gui.visualizationView.labelHeads" ) + ":" );
+		lblHeadSelector = new JLabel( loc.getString( "HeadInformation" ) + ":" );
 		eastPanel.add( lblHeadSelector, "1, " + row++ );
 		eastPanel.add( headColorSelector, "1, " + row++ );
 		row++;
 
-		txtCameraPosition = new JTextField( "(0;0;0)" );
-		txtCameraView = new JTextField( "(0;0;0)" );
-		txtCameraUp = new JTextField( "(0;0;0)" );
-		lblCameraPosition = new JLabel( loc.getStringWithoutPrefix( "gui.visualizationView.cameraPosition" ) );
-		lblCameraView = new JLabel( loc.getStringWithoutPrefix( "gui.visualizationView.cameraView" ) );
-		lblCameraUp = new JLabel( loc.getStringWithoutPrefix( "gui.visualizationView.cameraUp" ) );
-		cameraPanel = new JArrayPanel(1,7);
+		JArrayPanel cameraPanel = new JArrayPanel( 1, 10 );
+		lblCameraPosition = new JLabel( loc.getString( "Camera.Position" ) );
 		cameraPanel.set( lblCameraPosition, 0, 0 );
-		cameraPanel.set( lblCameraView, 0, 2 );
-		cameraPanel.set( lblCameraUp, 0, 4 );
+		txtCameraPosition = new JTextField( "(0;0;0)" );
 		cameraPanel.set( txtCameraPosition, 0, 1 );
+		lblCameraView = new JLabel( loc.getString( "Camera.View" ) );
+		cameraPanel.set( lblCameraView, 0, 2 );
+		txtCameraView = new JTextField( "(0;0;0)" );
 		cameraPanel.set( txtCameraView, 0, 3 );
+		lblCameraUp = new JLabel( loc.getString( "Camera.Up" ) );
+		cameraPanel.set( lblCameraUp, 0, 4 );
+		txtCameraUp = new JTextField( "(0;0;0)" );
 		cameraPanel.set( txtCameraUp, 0, 5 );
 
-		setCameraPosition = new JButton( loc.getStringWithoutPrefix( "gui.visualizationView.cameraSetPosition" ) );
-		eastPanel.add( setCameraPosition, "1, " + row++ );
+		cameraPanel.setRowHeight( 6, 16 );
+
+		setCameraPosition = new JButton( loc.getString( "Camera.SetPosition" ) );
+		setCameraPosition.setToolTipText( loc.getString( "Camera.SetPosition.ToolTip" ) );
 		setCameraPosition.addActionListener( new ActionListener() {
 			@Override
 			public void actionPerformed( ActionEvent e ) {
@@ -290,9 +294,24 @@ public class JVisualizationView extends AbstractVisualizationView<ZETVisualizati
 				}
 			}
 		});
-		cameraPanel.set( setCameraPosition, 0, 6 );
+		cameraPanel.set( setCameraPosition, 0, 7 );
+		
+		cameraPanel.setRowHeight( 8, 16 );
+
+		resetCameraPosition = new JButton( loc.getString( "Camera.ResetPosition" ) );
+		resetCameraPosition.setToolTipText( loc.getString( "Camera.ResetPosition.ToolTip" ) );
+		resetCameraPosition.addActionListener( new ActionListener() {
+			@Override
+			public void actionPerformed( ActionEvent ae ) {
+				ZETMain.sendError( "Not supported yet." );
+			}
+		});
+		cameraPanel.set( resetCameraPosition, 0, 9 );
+		
 		cameraPanel.rebuild();
 		eastPanel.add( cameraPanel, "1, " + row++ );
+
+		loc.clearPrefix();
 		return eastPanel;
 	}
 
@@ -301,22 +320,18 @@ public class JVisualizationView extends AbstractVisualizationView<ZETVisualizati
 	 */
 	@Override
 	public void localize() {
-		lblFloorSelector.setText( loc.getString( "gui.editor.JEditorPanel.labelFloors" ) + ":" );
-		lblPotentialSelector.setText( loc.getString( "gui.visualizationView.labelPotentials" ) + ":" );
-		lblHeadSelector.setText( loc.getString( "gui.visualizationView.labelHeads" ) + ":" );
-		lblCameraPosition.setText( loc.getStringWithoutPrefix( "gui.visualizationView.cameraPosition" ) );
-		lblCameraView.setText( loc.getStringWithoutPrefix( "gui.visualizationView.cameraView" ) );
-		lblCameraUp.setText( loc.getStringWithoutPrefix( "gui.visualizationView.cameraUp" ) );
-		setCameraPosition.setText( loc.getStringWithoutPrefix( "gui.visualizationView.cameraSetPosition" ) );
-		int index = headColorSelector.getSelectedIndex();
-		headColorSelector.removeAllItems();
-		headColorSelector.addItem( loc.getString( "gui.visualizationView.headsNothing" ) );
-		headColorSelector.addItem( loc.getString( "gui.visualizationView.headsPanic" ) );
-		headColorSelector.addItem( loc.getString( "gui.visualizationView.headsSpeed" ) );
-		headColorSelector.addItem( loc.getString( "gui.visualizationView.headsExhaustion" ) );
-		headColorSelector.addItem( loc.getString( "gui.visualizationView.headsAlarmed" ) );
-		headColorSelector.addItem( loc.getString( "gui.visualizationView.headsChosenExit" ) );
-		headColorSelector.setSelectedIndex( index );
+		lblFloorSelector.setText( loc.getString( "gui.EditPanel.Default.Floors" ) + ":" );
+		loc.setPrefix( "gui.VisualizationPanel." );
+		lblPotentialSelector.setText( loc.getString( "Potentials" ) + ":" );
+		lblHeadSelector.setText( loc.getString( "HeadInformation" ) + ":" );
+		lblCameraPosition.setText( loc.getString( "Camera.Position" ) );
+		lblCameraView.setText( loc.getString( "Camera.View" ) );
+		lblCameraUp.setText( loc.getString( "Camera.Up" ) );
+		setCameraPosition.setText( loc.getString( "Camera.SetPosition" ) );
+		setCameraPosition.setToolTipText( loc.getString( "Camera.SetPosition.ToolTip" ) );
+		resetCameraPosition.setText( loc.getString( "Camera.ResetPosition" ) );
+		resetCameraPosition.setToolTipText( loc.getString( "Camera.ResetPosition.ToolTip" ) );
+		loc.clearPrefix();
 	}
 
 	/**
