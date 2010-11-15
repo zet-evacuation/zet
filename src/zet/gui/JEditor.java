@@ -393,7 +393,7 @@ public class JEditor extends JFrame implements Localized, EventListener<Progress
 		String realCoordsMillimeter = "(" + Integer.toString( position.x ) + delimiter + Integer.toString( position.y ) + ")";
 		String realCoordsMeter = "(" + DefaultLoc.getSingleton().getFloatConverter().format( ConversionTools.toMeter( position.x ) ) + delimiter + DefaultLoc.getSingleton().getFloatConverter().format( ConversionTools.toMeter( position.y ) ) + ")";
 		//String text = /*"Pixel: " + pixelCoords + " - */ "Millimeter: " + realCoordsMillimeter + " - Meter: " + realCoordsMeter;
-		String text = String.format( DefaultLoc.getSingleton().getString( "gui.mousePositionMillimeterMeter" ), realCoordsMillimeter, realCoordsMeter );
+		String text = String.format( GUILocalization.getSingleton().getString( "gui.EditPanel.Mouse.PositionMillimeterMeter" ), realCoordsMillimeter, realCoordsMeter );
 		EventServer.getInstance().dispatchEvent( new MessageEvent<JEditor>( null, MessageType.MousePosition, text ) );
 	}
 

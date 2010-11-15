@@ -10,8 +10,6 @@ import de.tu_berlin.math.coga.zet.converter.cellularAutomaton.ZToCAConverter.Con
 import java.beans.PropertyChangeEvent;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import zet.gui.components.tabs.base.AbstractFloor.RasterPaintStyle;
-import zet.gui.components.tabs.JEditView;
 import java.util.Arrays;
 import java.util.Locale;
 import zet.gui.JEditor;
@@ -74,6 +72,8 @@ import javax.swing.SwingWorker;
 import javax.swing.filechooser.FileFilter;
 import statistic.ca.CAStatistic;
 import zet.gui.GUILocalization;
+import zet.gui.components.tabs.base.AbstractFloor.RasterPaintStyle;
+import zet.gui.components.tabs.JEditView;
 import zet.gui.components.toolbar.JStatisticGraphToolBar;
 
 /**
@@ -101,8 +101,7 @@ public class GUIControl implements AlgorithmListener {
 	/**
 	 * Creates a new instance of <code>GUIControl</code>.
 	 */
-	public GUIControl() {
-	}
+	public GUIControl() { }
 
 	public void createZETWindow() {
 		zcontrol = new ZControl();
@@ -748,11 +747,15 @@ public class GUIControl implements AlgorithmListener {
 		editview.getLeftPanel().getMainComponent().displayFloor();
 	}
 
+	/**
+	 * Creates a new floor in the z-format and sets its initial size to some value
+	 * that is defined in the options.
+	 */
 	public void newFloor() {
 		Floor f = zcontrol.createNewFloor();
+		f.setMinimumSize( ZETProperties.getDefaultFloorSizeMinX(), ZETProperties.getDefaultFloorSizeMinY(), ZETProperties.getDefaultFloorSizeMaxX()-ZETProperties.getDefaultFloorSizeMinX(), ZETProperties.getDefaultFloorSizeMaxY()-ZETProperties.getDefaultFloorSizeMinY() );
 		ZETMain.sendMessage( "Neue Etage angelegt." ); // TODO loc
-		// update the floor-boxes in the GUI
-		editor.getEditView().updateFloorlist();
+		editor.getEditView().updateFloorlist(); // update the floor-boxes in the GUI
 		editor.getEditView().changeFloor( f );		
 	}
 
