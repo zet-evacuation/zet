@@ -139,4 +139,21 @@ public final class ZETProperties {
 //public static void setRasterSize( int rasterSize ) {
 	//	PropertyContainer.getInstance().set( "editor.options.view.editRasterSize", rasterSize );
 	//}
+
+	public static int getDefaultFloorSizeMinX() {
+		return PropertyContainer.getInstance().getAsInt( "editor.options.view.size.minx" );
+	}
+
+	public static int getDefaultFloorSizeMaxX() {
+		return PropertyContainer.getInstance().getAsInt( "editor.options.view.size.maxx" );
+	}
+
+	public static int getDefaultFloorSizeMinY() {
+		return PropertyContainer.getInstance().getAsInt( "editor.options.view.size.miny" );
+	}
+
+	public static int getDefaultFloorSizeMaxY() {
+		return PropertyContainer.getInstance().getAsInt( "editor.options.view.size.maxy" );
+	}
+
 }
