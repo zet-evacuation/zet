@@ -46,12 +46,12 @@ public class JArrayPanel extends JPanel {
 		this.rows = rows;
 		components = (JComponent[][]) Array.newInstance( JComponent.class, columns, rows );
 		sizeC = (double[])Array.newInstance( double.class, columns ); // Columns
-		sizeR = (double[])Array.newInstance( double.class, rows ); // Columns
+		sizeR = (double[])Array.newInstance( double.class, rows ); // Rows
 		for( int i = 0; i < columns; i++ )
 			sizeC[i] = TableLayout.FILL;
 		for( int i = 0; i < rows; i++ )
 			sizeR[i] = TableLayout.PREFERRED;
-		setLayout( new TableLayout(sizeC,sizeR) );
+		setLayout( new TableLayout( sizeC, sizeR ) );
 	}
 
 	/**

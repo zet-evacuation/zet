@@ -38,7 +38,7 @@ import event.OptionsChangedEvent;
 import gui.batch.JBatchView;
 import gui.statistic.JGraphStatisticPanel;
 import gui.statistic.JStatisticPanel;
-import gui.visualization.JVisualizationView;
+import zet.gui.components.tabs.JVisualizationView;
 import gui.visualization.control.GLControl;
 import gui.statistic.JStatisticsPanel;
 import gui.GUIControl;
@@ -243,7 +243,7 @@ public class JEditor extends JFrame implements Localized, EventListener<Progress
 		EventServer.getInstance().registerListener( editView, OptionsChangedEvent.class );
 		caView = new JQuickVisualizationView();
 		batchView = new JBatchView( guiControl );
-		visualizationView = new JVisualizationView( new GLCapabilities(), guiControl );
+		visualizationView = new JVisualizationView( guiControl );
 		caStatisticView = new JStatisticPanel();
 		graphStatisticView = new JGraphStatisticPanel();
 		logView = new JLogPane( ZETMain.log );

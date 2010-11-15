@@ -16,20 +16,19 @@
 
 /**
  * Class GLIndividualControl
- * Erstellt 10.06.2008, 22:22:41
+ * Created 10.06.2008, 22:22:41
  */
 
 package gui.visualization.control.ca;
 
 import ds.ca.Individual;
 import gui.visualization.control.AbstractZETVisualizationControl;
-import gui.visualization.control.GLControl;
-import gui.visualization.control.GLControl.IndividualInformationDisplay;
 import gui.visualization.control.StepUpdateListener;
 import gui.visualization.control.VisHistoryTriple;
 import gui.visualization.draw.ca.GLIndividual;
 import gui.visualization.util.Tuple;
 import java.util.ArrayList;
+import zet.gui.components.tabs.JVisualizationView;
 
 /**
  * This class controls an {@link Individual} in the {@link ds.ca.CellularAutomaton}
@@ -61,7 +60,7 @@ public class GLIndividualControl extends AbstractZETVisualizationControl<GLIndiv
 	/** The value used for the calculation of the current color. */
 	private double headInformationValue;
 	/** The type of the information displayed on the head. */
-	private IndividualInformationDisplay headInformationType = IndividualInformationDisplay.PANIC;
+	private JVisualizationView.HeadInformation headInformationType = JVisualizationView.HeadInformation.Panic;
 	private Individual controlled;
 
 	/**
@@ -92,6 +91,7 @@ public class GLIndividualControl extends AbstractZETVisualizationControl<GLIndiv
 	 * data structure. This method must be called if a new step of the cellular
 	 * automaton is reached.
 	 */
+	@Override
 	public void stepUpdate() {
 		if( mainControl.getStep() < step )
 			index = 0;
@@ -154,7 +154,7 @@ public class GLIndividualControl extends AbstractZETVisualizationControl<GLIndiv
 	 * Sets the information type displayed on the individuals head
 	 * @param idm the information type
 	 */
-	public void setHeadInformation( GLControl.IndividualInformationDisplay idm ) {
+	public void setHeadInformation( JVisualizationView.HeadInformation idm ) {
 		this.headInformationType = idm;
 	}
 
@@ -165,35 +165,35 @@ public class GLIndividualControl extends AbstractZETVisualizationControl<GLIndiv
 	private void calcHeadInformation() {
 		switch( headInformationType ) {
 			default:
-			case NOTHING:
+			case Nothing:
 				headInformationValue = 0;
 				break;
-			case PANIC:
+			case Panic:
 				headInformationValue = controlled.getPanic();
 				break;
-			case SPEED:
+			case Speed:
 				headInformationValue = 0;
 				break;
-			case EXHAUSTION:
+			case Exhaustion:
 				headInformationValue = controlled.getExhaustion();
 				break;
-			case ALARMED:
+			case Alarmed:
 				headInformationValue = controlled.isAlarmed() ? 0 : 1;
 				break;
-			case CHOSEN_EXIT:
+			case ChosenExit:
 				headInformationValue = 0;
 				// TODO visualization statistic
 				//final int potentials = mainControl.getPotentialManager().getStaticPotentials().size();
 				//headInformationValue = (controlled.getStaticPotential().getID() % potentials) / (double) potentials;
 				break;
-			case REACTION_TIME:
+			case ReactionTime:
 				headInformationValue = 1-(mainControl.getTimeInSeconds()/controlled.getReactionTime());
 				break;
 		}
 	}
 
 	/**
-	 * Checks wheather the individual is evacuated
+	 * Checks whether the individual is evacuated
 	 * @return true if the individual is evacuated
 	 */
 	public boolean isEvacuated() {
@@ -201,7 +201,7 @@ public class GLIndividualControl extends AbstractZETVisualizationControl<GLIndiv
 	}
 
 	/**
-	 * Checks wheather the individual is dead
+	 * Checks whether the individual is dead
 	 * @return true if the individual is dead
 	 */
 	public boolean isDead() {

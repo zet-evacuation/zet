@@ -45,6 +45,7 @@ import gui.visualization.draw.ca.GLCA;
 import gui.visualization.draw.graph.GLGraph;
 import javax.media.opengl.GL;
 import opengl.framework.abs.DrawableControlable;
+import zet.gui.components.tabs.JVisualizationView;
 
 /**
  * A control class for visualization in ZET. It combines three types of
@@ -108,23 +109,23 @@ public class GLControl implements DrawableControlable {
 	 * Describes the different types of information which can be illustrated
 	 * by different colors of the heads of the individuals.
 	 */
-	public enum IndividualInformationDisplay {
-
-		/** Shows default individual */
-		NOTHING,
-		/** Shows panic at the head */
-		PANIC,
-		/** Shows speed at the head */
-		SPEED,
-		/** Shows exhaustion at the head */
-		EXHAUSTION,
-		/** Shows the alarm-status at the head */
-		ALARMED,
-		/** Shows the chosen exit at the head*/
-		CHOSEN_EXIT,
-		/** The rest of the reaction time */
-		REACTION_TIME
-	}
+//	public enum IndividualInformationDisplay {
+//
+//		/** Shows default individual */
+//		NOTHING,
+//		/** Shows panic at the head */
+//		PANIC,
+//		/** Shows speed at the head */
+//		SPEED,
+//		/** Shows exhaustion at the head */
+//		EXHAUSTION,
+//		/** Shows the alarm-status at the head */
+//		ALARMED,
+//		/** Shows the chosen exit at the head*/
+//		CHOSEN_EXIT,
+//		/** The rest of the reaction time */
+//		REACTION_TIME
+//	}
 	/** The localization class. */
 	private Localization loc = DefaultLoc.getSingleton();
 	/** Indicates whether the graph is currently visible, or not. */
@@ -520,7 +521,7 @@ public class GLControl implements DrawableControlable {
 	 * displayed using different colors on the individual heads.
 	 * @param idm the information.
 	 */
-	public void showIndividualInformation( IndividualInformationDisplay idm ) {
+	public void showIndividualInformation( JVisualizationView.HeadInformation idm ) {
 		if( !hasCellularAutomaton )
 			return;
 		for( GLIndividualControl control : getIndividualControls() )

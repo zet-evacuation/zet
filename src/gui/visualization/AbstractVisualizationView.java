@@ -13,9 +13,10 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
+
 /**
  * Class JVisualizationView
- * Erstellt 08.06.2008, 00:12:49
+ * Created 08.06.2008, 00:12:49
  */
 
 package gui.visualization;
@@ -55,12 +56,5 @@ public abstract class AbstractVisualizationView<T extends GLCanvas> extends Abst
 	 */
 	public final T getGLContainer() {
 		return canvas;
-	}
-
-	/**
-	 * 
-	 */
-	 public void localize() {
-
 	}
 }

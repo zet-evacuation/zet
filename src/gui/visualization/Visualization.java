@@ -20,8 +20,6 @@
  */
 package gui.visualization;
 
-import de.tu_berlin.math.coga.common.localization.DefaultLoc;
-import de.tu_berlin.math.coga.common.localization.Localization;
 import de.tu_berlin.math.coga.math.Conversion;
 import de.tu_berlin.math.coga.math.vectormath.Vector3;
 import event.EventServer;
@@ -64,8 +62,6 @@ public class Visualization<U extends DrawableControlable> extends AbstractVisual
 	}
 	
 	protected double sizeMultiplikator = 0.1;
-	/** The localization class. */
-	protected Localization loc = DefaultLoc.getSingleton();
 	protected static final int fontSize = 16;
 	private TextureManager texMan;
 	/** The {@link TextureFont} used to display informations in the screen. */
@@ -119,7 +115,7 @@ public class Visualization<U extends DrawableControlable> extends AbstractVisual
 	/**
 	 * Creates a new instance of the {@code Visualization} panel with given 
 	 * properties in an {@code GLCapabilities}.
-	 * @param capabilities the open gl properties of the panel
+	 * @param capabilities the OpenGL properties of the panel
 	 */
 	public Visualization( GLCapabilities capabilities ) {
 		super( capabilities );
@@ -205,8 +201,6 @@ public class Visualization<U extends DrawableControlable> extends AbstractVisual
 	public void setShowFPS( boolean showFPS ) {
 		this.showFPS = showFPS;
 	}
-
-
 
 	/**
 	 * Sets the correct animation time. Calculated by the difference
@@ -342,7 +336,7 @@ public class Visualization<U extends DrawableControlable> extends AbstractVisual
 		GLColor.white.draw( gl );
 		gl.glEnable( gl.GL_TEXTURE_2D );
 		int row = 1;
-		font.print( 100, this.getHeight() - (7) * fontSize, loc.getString( "testtext" ) );
+		font.print( 100, this.getHeight() - (7) * fontSize, "dummy text");
 		gl.glDisable( gl.GL_TEXTURE_2D );
 		ProjectionHelper.resetProjection( gl );
 	}
@@ -543,16 +537,15 @@ public class Visualization<U extends DrawableControlable> extends AbstractVisual
 	public void initGFX( GLAutoDrawable drawable ) {
 		gl = drawable.getGL();
 
-		gl.glClearDepth( 1.0f );																						// Initialize depth-buffer precision
-		gl.glDepthFunc( GL.GL_LEQUAL );																		// Quality of depht-testing
-		gl.glEnable( GL.GL_DEPTH_TEST );																	// Enable depth-buffer. (z-buffer)
-		gl.glShadeModel( GL.GL_SMOOTH );																 // Activate smooth-shading (Gauraud)
-		gl.glHint( GL.GL_PERSPECTIVE_CORRECTION_HINT, GL.GL_NICEST );	 // Perspective calculations with high precision
-		gl.glHint( GL.GL_GENERATE_MIPMAP_HINT, GL.GL_NICEST );				 //
-//    gl.glHint( GL.GL_FOG_HINT, GL.GL_NICEST );											 //
-		gl.glHint( GL.GL_LINE_SMOOTH_HINT, GL.GL_NICEST );              //
-		gl.glHint( GL.GL_POINT_SMOOTH_HINT, GL.GL_NICEST );            //
-		gl.glHint( GL.GL_POLYGON_SMOOTH_HINT, GL.GL_NICEST );         //
+		gl.glClearDepth( 1.0f );																				// Initialize depth-buffer precision
+		gl.glDepthFunc( GL.GL_LEQUAL );																	// Quality of depht-testing
+		gl.glEnable( GL.GL_DEPTH_TEST );																// Enable depth-buffer. (z-buffer)
+		gl.glShadeModel( GL.GL_SMOOTH );																// Activate smooth-shading (Gauraud)
+		gl.glHint( GL.GL_PERSPECTIVE_CORRECTION_HINT, GL.GL_NICEST );		// Perspective calculations with high precision
+		gl.glHint( GL.GL_GENERATE_MIPMAP_HINT, GL.GL_NICEST );					//
+		gl.glHint( GL.GL_LINE_SMOOTH_HINT, GL.GL_NICEST );							//
+		gl.glHint( GL.GL_POINT_SMOOTH_HINT, GL.GL_NICEST );							//
+		gl.glHint( GL.GL_POLYGON_SMOOTH_HINT, GL.GL_NICEST );						//
 
 		// Enable VSync
 		gl.setSwapInterval( 1 );

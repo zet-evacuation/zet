@@ -21,7 +21,6 @@
 
 package zet.gui.components.tabs.base;
 
-import de.tu_berlin.math.coga.common.localization.DefaultLoc;
 import zet.gui.components.JZoomableRuler;
 import gui.editor.CoordinateTools;
 import java.awt.Color;
@@ -35,6 +34,7 @@ import javax.swing.JScrollPane;
 import de.tu_berlin.math.coga.common.localization.Localized;
 import de.tu_berlin.math.coga.components.JCorner;
 import de.tu_berlin.math.coga.components.JRuler;
+import zet.gui.GUILocalization;
 
 /**
  *
@@ -50,6 +50,8 @@ public class JFloorScrollPane<T extends AbstractFloor> extends JScrollPane imple
 	private JZoomableRuler leftRuler;
 	/** A button used to change the units of the rulers. */
 	private JButton unitButton;
+	/** The localization string for the unit button. */
+	private String locString = "gui.EditPanel.Unit.Meter";
 
 	public JFloorScrollPane( T floorPanel ) {
 		super( floorPanel );
@@ -74,67 +76,65 @@ public class JFloorScrollPane<T extends AbstractFloor> extends JScrollPane imple
 		unitButton.setMargin( new Insets( 2, 2, 2, 2 ) );
 		unitButton.setActionCommand( "unit" );
 		unitButton.addActionListener( new ActionListener() {
+			@Override
 			public void actionPerformed( ActionEvent e ) {
 				if( e.getActionCommand().equals( "unit" ) ) {
-					JRuler.RulerDisplayUnits t = JRuler.RulerDisplayUnits.Centimeter;
-					int bs = 40;
-					int ss = 10;
-					String m = "cm";
-					String tt = DefaultLoc.getSingleton().getString( "gui.editor.JEditorPanel.unitCentimeter" );
+					JRuler.RulerDisplayUnits nextUnit = JRuler.RulerDisplayUnits.Centimeter;
+					int bigStep = 40;
+					int smallStep = 10;
 					switch( topRuler.getDisplayUnit() ) {
 						case Centimeter:
-							t = JRuler.RulerDisplayUnits.Decimeter;
-							bs = 4;
-							ss = 1;
-							tt = DefaultLoc.getSingleton().getString( "gui.editor.JEditorPanel.unitDecimeter" );
+							nextUnit = JRuler.RulerDisplayUnits.Decimeter;
+							bigStep = 4;
+							smallStep = 1;
+							locString = "gui.EditPanel.Unit.Decimeter";
 							break;
 						case Decimeter:
-							t = JRuler.RulerDisplayUnits.Meter;
-							bs = 2;
-							ss = 1;
-							tt = DefaultLoc.getSingleton().getString( "gui.editor.JEditorPanel.unitMeter" );
+							nextUnit = JRuler.RulerDisplayUnits.Meter;
+							bigStep = 2;
+							smallStep = 1;
+							locString = "gui.EditPanel.Unit.Meter";
 							break;
 						case Meter:
-							t = JRuler.RulerDisplayUnits.Inch;
-							bs = 10;
-							ss = 5;
-							tt = DefaultLoc.getSingleton().getString( "gui.editor.JEditorPanel.unitInch" );
+							nextUnit = JRuler.RulerDisplayUnits.Inch;
+							bigStep = 10;
+							smallStep = 5;
+							locString = "gui.EditPanel.Unit.Inch";
 							break;
 						case Inch:
-							t = JRuler.RulerDisplayUnits.Foot;
-							bs = 5;
-							ss = 1;
-							tt = DefaultLoc.getSingleton().getString( "gui.editor.JEditorPanel.unitFoot" );
+							nextUnit = JRuler.RulerDisplayUnits.Foot;
+							bigStep = 5;
+							smallStep = 1;
+							locString = "gui.EditPanel.Unit.Foot";
 							break;
 						case Foot:
-							t = JRuler.RulerDisplayUnits.Yard;
-							bs = 2;
-							ss = 1;
-							tt = DefaultLoc.getSingleton().getString( "gui.editor.JEditorPanel.unitYard" );
+							nextUnit = JRuler.RulerDisplayUnits.Yard;
+							bigStep = 2;
+							smallStep = 1;
+							locString = "gui.EditPanel.Unit.Yard";
 							break;
 						case Yard:
-							t = JRuler.RulerDisplayUnits.Centimeter;
-							bs = 40;
-							ss = 10;
-							tt = DefaultLoc.getSingleton().getString( "gui.editor.JEditorPanel.unitCentimeter" );
+							nextUnit = JRuler.RulerDisplayUnits.Centimeter;
+							bigStep = 40;
+							smallStep = 10;
+							locString = "gui.EditPanel.Unit.Centimeter";
 							break;
 					}
-					topRuler.setDisplayUnit( t );
-					topRuler.setBigScaleStep( bs );
-					topRuler.setSmallScaleStep( ss );
-					leftRuler.setDisplayUnit( t );
-					leftRuler.setBigScaleStep( bs );
-					leftRuler.setSmallScaleStep( ss );
+					topRuler.setDisplayUnit( nextUnit );
+					topRuler.setBigScaleStep( bigStep );
+					topRuler.setSmallScaleStep( smallStep );
+					leftRuler.setDisplayUnit( nextUnit );
+					leftRuler.setBigScaleStep( bigStep );
+					leftRuler.setSmallScaleStep( smallStep );
 					topRuler.repaint();
 					leftRuler.repaint();
-					unitButton.setText( t.toString() );
-					unitButton.setToolTipText( tt );
+					unitButton.setText( nextUnit.toString() );
+					unitButton.setToolTipText( GUILocalization.getSingleton().getStringWithoutPrefix( locString ) );
 				}
 			}
 		});
 		buttonCorner.add( unitButton );
-		DefaultLoc.getSingleton().setPrefix( "" );
-		unitButton.setToolTipText( DefaultLoc.getSingleton().getString( "gui.editor.JEditorPanel.unitMeter" ) );
+		unitButton.setToolTipText( GUILocalization.getSingleton().getStringWithoutPrefix( locString ) );
 
 		setCorner( JScrollPane.UPPER_LEFT_CORNER, buttonCorner );
 		setCorner( JScrollPane.UPPER_RIGHT_CORNER, new JCorner() );
@@ -154,8 +154,9 @@ public class JFloorScrollPane<T extends AbstractFloor> extends JScrollPane imple
 		return topRuler;
 	}
 
+	@Override
 	public void localize() {
-		unitButton.setToolTipText( DefaultLoc.getSingleton().getString( "gui.editor.JEditorPanel.unitMeter" ) );
+		unitButton.setToolTipText( GUILocalization.getSingleton().getStringWithoutPrefix( locString ) );
 	}
 	
 	/**
