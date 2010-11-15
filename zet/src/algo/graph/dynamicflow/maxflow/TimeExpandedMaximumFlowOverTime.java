@@ -21,12 +21,10 @@
 package algo.graph.dynamicflow.maxflow;
 
 import de.tu_berlin.math.coga.common.algorithm.Algorithm;
-import algo.graph.staticflow.maxflow.DischargingGlobalGapHighestLabelPreflowPushAlgorithm;
+import algo.graph.staticflow.maxflow.PushRelabelHighestLabelGlobalGapRelabelling;
 import algo.graph.util.PathDecomposition;
 import ds.graph.DynamicPath;
 import ds.graph.Edge;
-import ds.graph.IdentifiableIntegerMapping;
-import ds.graph.Network;
 import ds.graph.Node;
 import ds.graph.StaticPath;
 import ds.graph.TimeExpandedNetwork;
@@ -36,7 +34,6 @@ import ds.graph.flow.PathBasedFlow;
 import ds.graph.flow.PathBasedFlowOverTime;
 import ds.graph.flow.StaticPathFlow;
 import ds.graph.problem.MaximumFlowProblem;
-import java.util.LinkedList;
 
 /**
  * Calculates a maximum flow over time by reducing it to the maximum flow 
@@ -47,7 +44,7 @@ public class TimeExpandedMaximumFlowOverTime extends Algorithm<MaximumFlowOverTi
 
     @Override
     protected PathBasedFlowOverTime runAlgorithm(MaximumFlowOverTimeProblem problem) {
-        if (problem.getSources().size() == 0 || problem.getSinks().size() == 0) {
+			if( problem.getSources().isEmpty() || problem.getSinks().isEmpty() ) {
             System.out.println("TimeExpandedMaximumFlowOverTime: The problem is invalid - this should not happen!");
             return new PathBasedFlowOverTime();
         }
@@ -59,7 +56,7 @@ public class TimeExpandedMaximumFlowOverTime extends Algorithm<MaximumFlowOverTi
         }
         TimeExpandedNetwork ten = new TimeExpandedNetwork(problem.getNetwork(), problem.getCapacities(), problem.getTransitTimes(), problem.getTimeHorizon(), problem.getSources(), problem.getSinks(), v, false);
         MaximumFlowProblem maximumFlowProblem = new MaximumFlowProblem(ten, ten.capacities(), ten.sources(), ten.sinks());
-        Algorithm<MaximumFlowProblem, MaximumFlow> algorithm = new DischargingGlobalGapHighestLabelPreflowPushAlgorithm();
+        Algorithm<MaximumFlowProblem, MaximumFlow> algorithm = new PushRelabelHighestLabelGlobalGapRelabelling();
         algorithm.setProblem(maximumFlowProblem);
         algorithm.run();
 

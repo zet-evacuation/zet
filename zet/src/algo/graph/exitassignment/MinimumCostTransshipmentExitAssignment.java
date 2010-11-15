@@ -20,7 +20,7 @@
 package algo.graph.exitassignment;
 
 import algo.graph.shortestpath.Dijkstra;
-import algo.graph.staticflow.maxflow.DischargingGlobalGapHighestLabelPreflowPushAlgorithm;
+import algo.graph.staticflow.maxflow.PushRelabelHighestLabelGlobalGapRelabelling;
 import ds.graph.problem.MaximumFlowProblem;
 import algo.graph.staticflow.mincost.SuccessiveShortestPath;
 import algo.graph.util.PathDecomposition;
@@ -140,7 +140,7 @@ public class MinimumCostTransshipmentExitAssignment extends Algorithm<NetworkFlo
             }
         }
         MaximumFlowProblem problem = new MaximumFlowProblem(model.getNetwork(), newCapacities, model.getSources(), sink);
-        Algorithm<MaximumFlowProblem, MaximumFlow> algorithm = new DischargingGlobalGapHighestLabelPreflowPushAlgorithm();
+        Algorithm<MaximumFlowProblem, MaximumFlow> algorithm = new PushRelabelHighestLabelGlobalGapRelabelling();
         algorithm.setProblem(problem);
         algorithm.run();
         return algorithm.getSolution().getFlowValue();

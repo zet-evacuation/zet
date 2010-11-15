@@ -24,7 +24,6 @@ import java.util.Queue;
  */
 public class GenericPushRelabelAlgorithm extends Algorithm<MaximumFlowProblem, MaximumFlow> {
 	protected ResidualNetwork residualNetwork;
-	//protected transient MaxHeap<Node, Integer> activeNodes;
 	protected transient IdentifiableIntegerMapping<Node> distanceLabels;
 	protected transient IdentifiableIntegerMapping<Node> excess;
 	private transient long totalExcess, startExcess;

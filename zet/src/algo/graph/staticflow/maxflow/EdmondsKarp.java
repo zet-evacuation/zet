@@ -14,7 +14,10 @@ import ds.graph.problem.MaximumFlowProblem;
 
 
 /**
+ * An implementation of the algorithm of Edmonds and Karp. Successively flow is
+ * augmented along shortest s-t-paths.
  *
+ * Warning: there is a bug in here, on some instances, the result is not correct.
  * @author Jan-Philipp Kappmeier
  */
 public class EdmondsKarp extends Algorithm<MaximumFlowProblem, MaximumFlow> {
@@ -23,9 +26,6 @@ public class EdmondsKarp extends Algorithm<MaximumFlowProblem, MaximumFlow> {
 	public EdmondsKarp() {
 		super();
 	}
-
-
-
 
 	@Override
 	protected MaximumFlow runAlgorithm( MaximumFlowProblem problem ) {

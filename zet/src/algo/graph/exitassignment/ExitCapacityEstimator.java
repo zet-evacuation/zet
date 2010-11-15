@@ -19,7 +19,7 @@
  */
 package algo.graph.exitassignment;
 
-import algo.graph.staticflow.maxflow.DischargingGlobalGapHighestLabelPreflowPushAlgorithm;
+import algo.graph.staticflow.maxflow.PushRelabelHighestLabelGlobalGapRelabelling;
 import ds.graph.problem.MaximumFlowProblem;
 import ds.graph.Edge;
 import ds.graph.IdentifiableCollection;
@@ -46,7 +46,7 @@ public class ExitCapacityEstimator {
 				//if (sinks.contains(edge.start())) {
 				newCapacities.set( edge, 0 );
 		MaximumFlowProblem problem = new MaximumFlowProblem( model.getNetwork(), newCapacities, model.getSources(), sink );
-		Algorithm<MaximumFlowProblem, MaximumFlow> algorithm = new DischargingGlobalGapHighestLabelPreflowPushAlgorithm();
+		Algorithm<MaximumFlowProblem, MaximumFlow> algorithm = new PushRelabelHighestLabelGlobalGapRelabelling();
 		algorithm.setProblem( problem );
 		algorithm.run();
 		return algorithm.getSolution().getFlowValue();

@@ -24,7 +24,7 @@ import algo.graph.dynamicflow.eat.LongestShortestPathTimeHorizonEstimator;
 import algo.graph.dynamicflow.eat.SEAAPAlgorithm;
 import algo.graph.dynamicflow.eat.TimeHorizonBounds;
 import algo.graph.shortestpath.Dijkstra;
-import algo.graph.staticflow.maxflow.DischargingGlobalGapHighestLabelPreflowPushAlgorithm;
+import algo.graph.staticflow.maxflow.PushRelabelHighestLabelGlobalGapRelabelling;
 import ds.graph.problem.MaximumFlowProblem;
 import ds.graph.Edge;
 import ds.graph.Forest;
@@ -157,7 +157,7 @@ public class ReducedEarliestArrivalTransshipmentExitAssignment extends Algorithm
             }
         }
         MaximumFlowProblem problem = new MaximumFlowProblem(model.getNetwork(), newCapacities, model.getSources(), sink);
-        Algorithm<MaximumFlowProblem, MaximumFlow> algorithm = new DischargingGlobalGapHighestLabelPreflowPushAlgorithm();
+        Algorithm<MaximumFlowProblem, MaximumFlow> algorithm = new PushRelabelHighestLabelGlobalGapRelabelling();
         algorithm.setProblem(problem);
         algorithm.run();
         return algorithm.getSolution().getFlowValue();
