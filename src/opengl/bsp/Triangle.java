@@ -17,6 +17,10 @@ public class Triangle {
 	Plane plane;
 	Vector3 faceNormal;
 
+	public Triangle() {
+		// gefährlich ;)
+	}
+
 	public Triangle( Vector3 v0, Vector3 v1, Vector3 v2 ) {
 		v[0] = v0;
 		v[1] = v1;
