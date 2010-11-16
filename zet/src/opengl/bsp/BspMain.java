@@ -7,11 +7,14 @@ package opengl.bsp;
 import de.tu_berlin.math.coga.math.vectormath.Plane;
 import de.tu_berlin.math.coga.math.vectormath.Vector3;
 import java.awt.Color;
+import java.awt.event.KeyEvent;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.nio.DoubleBuffer;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
+import java.util.Queue;
 import javax.media.opengl.GL;
 import javax.media.opengl.GLAutoDrawable;
 import javax.media.opengl.glu.GLU;
@@ -24,13 +27,18 @@ import opengl.framework.JFlyingEyePanel;
  */
 public class BspMain extends JFlyingEyePanel {
 
+	static int printMode = 0;
+
+
 	static List<Plane> planes;
 	static List<Vector3> vertices;
 	static List<Vector3> faceNormals;
 	static int drawmode = 0;
 	static Vector3 eye;
 	static BspTree _bsp;
-	static List<Triangle> model;
+	static Queue<Triangle> model;
+	static ArrayList<Triangle> originalList;
+	static ArrayList<Triangle> copiedList;
 	static BspMain instance;
 
 	// current rotation of object
@@ -136,14 +144,24 @@ public class BspMain extends JFlyingEyePanel {
 		double[] e = new double[4];
 		multMatrixVector( modelviewInv, origin, e );
 
-
-		//if( _bsp != null ) {
-			eye.x = e[0];
-			eye.y = e[1];
-			eye.z = e[2];
-			//traverse( _bsp );
-			draw( model, Sign.Zero );
-		//}
+		switch( printMode ) {
+			case 0:
+				draw( copiedList, Sign.Zero );
+				break;
+			case 1:
+				draw( originalList, Sign.Zero );
+				break;
+			case 2:
+			if( _bsp != null ) {
+				eye.x = e[0];
+				eye.y = e[1];
+				eye.z = e[2];
+				//BspTree.traverse( _bsp );
+				BspTree.traverse( _bsp );
+				//draw( model, Sign.Zero );
+			}
+				break;
+		}
 
 		//glutSwapBuffers();
 		gl.glFlush();
@@ -230,7 +248,7 @@ public class BspMain extends JFlyingEyePanel {
 		result[3] = m[3] * v[0] + m[7] * v[1] + m[11] * v[2] + m[15] * v[3];
 	}
 	
-	void draw( List<Triangle> triangles, Sign sign ) {
+	void draw( Collection<Triangle> triangles, Sign sign ) {
 
 		if( triangles == null )
 			return;
@@ -303,8 +321,27 @@ public class BspMain extends JFlyingEyePanel {
 		gl.glEnd();
 	}
 
+	@Override
+	public void keyPressed( KeyEvent e ) {
+		switch( e.getKeyCode() ) {
+			case KeyEvent.VK_A:
+				printMode = ++printMode % 3;
+				System.out.println( "Printmode: " + printMode );
+				break;
+			case KeyEvent.VK_D:
+				drawmode = ++drawmode % 3;
+				System.out.println( "Drawmode: " + drawmode );
+				break;
+		}
+	}
+
 	public static void main( String[] args ) throws FileNotFoundException, IOException {
-		String path = "D:\\Desktop\\BSP\\cg1_ex3\\meshes\\teapot.off";
+		//String path = "D:\\Desktop\\BSP\\cg1_ex3\\meshes\\teapot.off";
+		//String path = "D:\\Desktop\\BSP\\cg1_ex3\\meshes\\bunnysimple.off";
+		//String path = "D:\\Desktop\\BSP\\cg1_ex3\\meshes\\sphere.off";
+		//String path = "D:\\Desktop\\BSP\\cg1_ex3\\meshes\\head.off";
+		String path = "D:\\Desktop\\BSP\\cg1_ex3\\meshes\\dragon.off";
+
 
 
 		JFrame window = new JFrame( "BSP Test Application" );
@@ -327,6 +364,7 @@ public class BspMain extends JFlyingEyePanel {
 		if( model == null )
 			System.exit( 0 );
 
+		System.out.println( "Bsp has " + vertices.size() + " vertices" );
 		/** need to unitize the model before computing normals etc.
 		to avoid numerical problems due to very small triangles in
 		high res model */
@@ -341,6 +379,24 @@ public class BspMain extends JFlyingEyePanel {
 		System.out.print( "Computing normals..." );
 		OFFReader.computeNormals( model );
 		System.out.println( " done." );
+
+		System.out.print( "Copy to the original list... " );
+		originalList = new ArrayList<Triangle>( model.size() );
+		copiedList = new ArrayList<Triangle>( model.size() );
+		for( Triangle t: model ) {
+			Triangle newt = new Triangle( t.v[0].clone(), t.v[1].clone(), t.v[2].clone() );
+			newt.plane = new Plane();
+			newt.computePlane();
+			newt.faceNormal = newt.plane.getNormal();
+			copiedList.add( newt );
+			originalList.add( t );
+		}
+		System.out.println( "done." );
+
+		System.out.print( "Building bsp, this may take a long time..." );
+		_bsp = BspTree.constructBsp( model );
+		System.out.println( " done." );
+
 
 		window.setVisible( true );
 		main.startAnimation();

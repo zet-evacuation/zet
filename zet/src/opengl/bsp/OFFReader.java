@@ -11,8 +11,9 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
-import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
+import java.util.Queue;
 
 /**
  *
@@ -20,7 +21,7 @@ import java.util.List;
  */
 public class OFFReader {
 
-	static List<Triangle> readOff( String filename ) throws FileNotFoundException, IOException {
+	static Queue<Triangle> readOff( String filename ) throws FileNotFoundException, IOException {
 
 		System.out.println( "Reading model file " + filename );
 
@@ -46,7 +47,7 @@ public class OFFReader {
 		numFaces = Integer.parseInt( split[1] );
 		numEdges = Integer.parseInt( split[2] );
 
-		List<Triangle> tList = new ArrayList<Triangle>();
+		Queue<Triangle> tList = new LinkedList<Triangle>();
 		Vector3[] vertexArray = new Vector3[numVertices];
 
 		// read vertices
@@ -159,7 +160,7 @@ public class OFFReader {
 		}
 	}
 
-	static void computePlaneEquations( List<Triangle> model ) {
+	static void computePlaneEquations( Queue<Triangle> model ) {
 		for( Triangle t : model ) {
 			Plane p = new Plane();
 			BspMain.planes.add( p );
@@ -168,7 +169,7 @@ public class OFFReader {
 		}
 	}
 
-	static void computeNormals( List<Triangle> model ) {
+	static void computeNormals( Queue<Triangle> model ) {
 		// TODO compute face normal for each triangle in the model
 		// create a new normal (Vertex object) and store a pointer
 		// to it in the faceNormals list
