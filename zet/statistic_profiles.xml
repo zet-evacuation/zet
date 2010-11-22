@@ -4,15 +4,15 @@
     <type>GLOBAL</type>
     <diagrams class="linked-list">
       <diagram>
-        <title>Tabelle 1: Insgesamt ben�tigte Zeit</title>
-        <type>TABLE</type>
-        <xAxisLabel></xAxisLabel>
-      </diagram>
-      <diagram>
         <title>Stufendiagramm 1: Minima und Maxima</title>
         <type>STEP_CHART</type>
         <xAxisLabel>Personen</xAxisLabel>
         <yAxisLabel>Zeit</yAxisLabel>
+      </diagram>
+      <diagram>
+        <title>Tabelle 1: Insgesamt ben�tigte Zeit</title>
+        <type>TABLE</type>
+        <xAxisLabel></xAxisLabel>
       </diagram>
       <diagram>
         <title>Stufenfl�chendiagramm 1: Quantile</title>
@@ -50,7 +50,7 @@
           <statistic class="statistic.graph.StaticStatistic">TOTAL_TIME</statistic>
         </statistic>
         <attributes>
-          <diagram reference="../../../../diagrams/diagram"/>
+          <diagram reference="../../../../diagrams/diagram[2]"/>
           <name>Insgesamt ben�tigte Zeit</name>
         </attributes>
       </statistic>
@@ -62,7 +62,7 @@
           <statistic class="statistic.graph.DynamicStatistic">TIME_NEEDED_FOR_FLOW</statistic>
         </statistic>
         <attributes>
-          <diagram reference="../../../../diagrams/diagram[2]"/>
+          <diagram reference="../../../../diagrams/diagram"/>
           <name>Maximum</name>
         </attributes>
       </statistic>
@@ -74,7 +74,7 @@
           <statistic class="statistic.graph.DynamicStatistic">TIME_NEEDED_FOR_FLOW</statistic>
         </statistic>
         <attributes>
-          <diagram reference="../../../../diagrams/diagram[2]"/>
+          <diagram reference="../../../../diagrams/diagram"/>
           <name>Minimum</name>
         </attributes>
       </statistic>
@@ -202,7 +202,7 @@
           <statistic class="statistic.graph.DynamicStatistic">TIME_NEEDED_FOR_FLOW</statistic>
         </statistic>
         <attributes>
-          <diagram reference="../../../../diagrams/diagram[2]"/>
+          <diagram reference="../../../../diagrams/diagram"/>
           <name>Zeit ben�tigt f�r Individuen</name>
         </attributes>
       </statistic>
@@ -388,6 +388,236 @@
         <type>TABLE</type>
       </diagram>
     </diagrams>
+    <statistics class="linked-list"/>
+  </profile>
+  <profile>
+    <name>Neues Profil</name>
+    <type>GLOBAL</type>
+    <diagrams class="linked-list"/>
+    <statistics class="linked-list"/>
+  </profile>
+  <profile>
+    <name>Kopie von Zur Evakuierung ben�tigte Zeit</name>
+    <type>GLOBAL</type>
+    <diagrams class="linked-list">
+      <diagram>
+        <title>Stufendiagramm 1: Minima und Maxima</title>
+        <type>STEP_CHART</type>
+        <xAxisLabel>Personen</xAxisLabel>
+        <yAxisLabel>Zeit</yAxisLabel>
+      </diagram>
+      <diagram>
+        <title>Säulendiagramm 1: Insgesamt ben�tigte Zeit</title>
+        <type>BAR_CHART</type>
+        <xAxisLabel></xAxisLabel>
+      </diagram>
+      <diagram>
+        <title>Stufenfl�chendiagramm 1: Quantile</title>
+        <type>STEP_AREA_CHART</type>
+        <xAxisLabel>Personen</xAxisLabel>
+        <yAxisLabel>Zeit</yAxisLabel>
+      </diagram>
+      <diagram>
+        <title>Liniendiagramm 1: Konfidenzintervalle</title>
+        <type>LINE_CHART</type>
+      </diagram>
+      <diagram>
+        <title>Fl�chendiagramm 1: Minima und Maxima</title>
+        <type>AREA_CHART</type>
+        <xAxisLabel>Personen</xAxisLabel>
+        <yAxisLabel>Zeit</yAxisLabel>
+      </diagram>
+      <diagram>
+        <title>S�ulendiagramm 1: Ben�tigte Zeit</title>
+        <type>BAR_CHART</type>
+        <xAxisLabel>Durchlauf</xAxisLabel>
+        <yAxisLabel>Zeit</yAxisLabel>
+      </diagram>
+      <diagram>
+        <title>Tabelle 2: Titel</title>
+        <type>TABLE</type>
+      </diagram>
+    </diagrams>
+    <statistics class="linked-list">
+      <statistic>
+        <statistic>
+          <objectParameters/>
+          <runOperation class="statistic.graph.DoubleOperation">COMPARISON</runOperation>
+          <runParameters/>
+          <statistic class="statistic.graph.StaticStatistic">TOTAL_TIME</statistic>
+        </statistic>
+        <attributes>
+          <diagram reference="../../../../../profile/diagrams/diagram[2]"/>
+          <name>Insgesamt ben�tigte Zeit</name>
+        </attributes>
+      </statistic>
+      <statistic>
+        <statistic>
+          <objectParameters/>
+          <runOperation class="statistic.graph.DynamicOperation">MAXIMUM</runOperation>
+          <runParameters/>
+          <statistic class="statistic.graph.DynamicStatistic">TIME_NEEDED_FOR_FLOW</statistic>
+        </statistic>
+        <attributes>
+          <diagram reference="../../../../../profile/diagrams/diagram"/>
+          <name>Maximum</name>
+        </attributes>
+      </statistic>
+      <statistic>
+        <statistic>
+          <objectParameters/>
+          <runOperation class="statistic.graph.DynamicOperation">MINIMUM</runOperation>
+          <runParameters/>
+          <statistic class="statistic.graph.DynamicStatistic">TIME_NEEDED_FOR_FLOW</statistic>
+        </statistic>
+        <attributes>
+          <diagram reference="../../../../../profile/diagrams/diagram"/>
+          <name>Minimum</name>
+        </attributes>
+      </statistic>
+      <statistic>
+        <statistic>
+          <objectParameters/>
+          <runOperation class="statistic.graph.DynamicOperation">QUANTIL</runOperation>
+          <runParameters>
+            <double>0.25</double>
+          </runParameters>
+          <statistic class="statistic.graph.DynamicStatistic">TIME_NEEDED_FOR_FLOW</statistic>
+        </statistic>
+        <attributes>
+          <diagram reference="../../../../../profile/diagrams/diagram[3]"/>
+          <name>1. Quartil</name>
+        </attributes>
+      </statistic>
+      <statistic>
+        <statistic>
+          <objectParameters/>
+          <runOperation class="statistic.graph.DynamicOperation">MEDIAN</runOperation>
+          <runParameters/>
+          <statistic class="statistic.graph.DynamicStatistic">TIME_NEEDED_FOR_FLOW</statistic>
+        </statistic>
+        <attributes>
+          <diagram reference="../../../../../profile/diagrams/diagram[3]"/>
+          <name>Median</name>
+        </attributes>
+      </statistic>
+      <statistic>
+        <statistic>
+          <objectParameters/>
+          <runOperation class="statistic.graph.DynamicOperation">QUANTIL</runOperation>
+          <runParameters>
+            <double>0.75</double>
+          </runParameters>
+          <statistic class="statistic.graph.DynamicStatistic">TIME_NEEDED_FOR_FLOW</statistic>
+        </statistic>
+        <attributes>
+          <diagram reference="../../../../../profile/diagrams/diagram[3]"/>
+          <name>3. Quartil</name>
+        </attributes>
+      </statistic>
+      <statistic>
+        <statistic>
+          <objectParameters/>
+          <runOperation class="statistic.graph.DynamicOperation">MEAN</runOperation>
+          <runParameters/>
+          <statistic class="statistic.graph.DynamicStatistic">TIME_NEEDED_FOR_FLOW</statistic>
+        </statistic>
+        <attributes>
+          <diagram reference="../../../../../profile/diagrams/diagram[4]"/>
+          <name>Arithmetrisches Mittel</name>
+        </attributes>
+      </statistic>
+      <statistic>
+        <statistic>
+          <objectParameters/>
+          <runOperation class="statistic.graph.DynamicOperation">CONFIDENCE_INTERVAL_LOWER</runOperation>
+          <runParameters>
+            <double>0.95</double>
+          </runParameters>
+          <statistic class="statistic.graph.DynamicStatistic">TIME_NEEDED_FOR_FLOW</statistic>
+        </statistic>
+        <attributes>
+          <diagram reference="../../../../../profile/diagrams/diagram[4]"/>
+          <name>Konfidenzintervall, untere Grenze</name>
+        </attributes>
+      </statistic>
+      <statistic>
+        <statistic>
+          <objectParameters/>
+          <runOperation class="statistic.graph.DynamicOperation">CONFIDENCE_INTERVAL_UPPER</runOperation>
+          <runParameters>
+            <double>0.95</double>
+          </runParameters>
+          <statistic class="statistic.graph.DynamicStatistic">TIME_NEEDED_FOR_FLOW</statistic>
+        </statistic>
+        <attributes>
+          <diagram reference="../../../../../profile/diagrams/diagram[4]"/>
+          <name>Konfidenzintervall, obere Grenze</name>
+        </attributes>
+      </statistic>
+      <statistic>
+        <statistic>
+          <objectParameters/>
+          <runOperation class="statistic.graph.DynamicOperation">MAXIMUM</runOperation>
+          <runParameters/>
+          <statistic class="statistic.graph.DynamicStatistic">TIME_NEEDED_FOR_FLOW</statistic>
+        </statistic>
+        <attributes>
+          <diagram reference="../../../../../profile/diagrams/diagram[5]"/>
+          <name>Maximum</name>
+        </attributes>
+      </statistic>
+      <statistic>
+        <statistic>
+          <objectParameters/>
+          <runOperation class="statistic.graph.DynamicOperation">MINIMUM</runOperation>
+          <runParameters/>
+          <statistic class="statistic.graph.DynamicStatistic">TIME_NEEDED_FOR_FLOW</statistic>
+        </statistic>
+        <attributes>
+          <diagram reference="../../../../../profile/diagrams/diagram[5]"/>
+          <name>Minimum</name>
+        </attributes>
+      </statistic>
+      <statistic>
+        <statistic>
+          <objectParameters/>
+          <runOperation class="statistic.graph.DoubleOperation">COMPARISON</runOperation>
+          <runParameters/>
+          <statistic class="statistic.graph.StaticStatistic">TOTAL_TIME</statistic>
+        </statistic>
+        <attributes>
+          <diagram reference="../../../../../profile/diagrams/diagram[6]"/>
+          <name>Insgesamt ben�tigte Zeit</name>
+        </attributes>
+      </statistic>
+      <statistic>
+        <statistic>
+          <objectParameters/>
+          <runOperation class="statistic.graph.DynamicOperation">MEAN</runOperation>
+          <runParameters/>
+          <statistic class="statistic.graph.DynamicStatistic">TIME_NEEDED_FOR_FLOW</statistic>
+        </statistic>
+        <attributes>
+          <diagram reference="../../../../../profile/diagrams/diagram"/>
+          <name>Zeit ben�tigt f�r Individuen</name>
+        </attributes>
+      </statistic>
+      <statistic>
+        <statistic>
+          <objectParameters/>
+          <runParameters/>
+        </statistic>
+        <attributes>
+          <name>Neue Statistik</name>
+        </attributes>
+      </statistic>
+    </statistics>
+  </profile>
+  <profile>
+    <name>Neues Profil</name>
+    <type>GLOBAL</type>
+    <diagrams class="linked-list"/>
     <statistics class="linked-list"/>
   </profile>
 </linked-list>

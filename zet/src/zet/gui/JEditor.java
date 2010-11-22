@@ -240,7 +240,7 @@ public class JEditor extends JFrame implements Localized, EventListener<Progress
 	public void addMainComponents() {
 		editView = new JEditView( guiControl );
 		EventServer.getInstance().registerListener( editView, OptionsChangedEvent.class );
-		caView = new JQuickVisualizationView();
+		caView = new JQuickVisualizationView(guiControl);
 		batchView = new JBatchView( guiControl );
 		visualizationView = new JVisualizationView( guiControl );
 		caStatisticView = new JStatisticPanel();
@@ -362,6 +362,7 @@ public class JEditor extends JFrame implements Localized, EventListener<Progress
 		if( tabPane.getSelectedIndex() > 1 )
 			tabPane.setSelectedIndex( 0 );
 		editView.displayProject( zcontrol );
+                caView.displayProject(zcontrol);
 		// Löschen eingestellter parameter
 //		ZToCAConverter.getInstance().clear();
 		firstSwitch = true;
@@ -369,6 +370,8 @@ public class JEditor extends JFrame implements Localized, EventListener<Progress
 			editView.setFloor( 1 );
 		// Updaten der gui
 		editView.update();
+                caView.update();
+
 
 		editView.setEditMode( EditMode.Selection );
 		guiControl.setZoomFactor( 0.04d );

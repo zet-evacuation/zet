@@ -91,7 +91,7 @@ public class Project implements Serializable {
 //		xml_convert.useAttributeFor(NormalDistribution.class, "variance" );
 //		xml_convert.useAttributeFor(NormalDistribution.class, "expectedValue" );
 
-				xml_convert.alias( "normalDistribution", NormalDistribution.class );
+		xml_convert.alias( "normalDistribution", NormalDistribution.class );
                 xml_convert.registerConverter(new NormalDistributionConverter() );
 
 		//Configure aliases for all ds.* classes
