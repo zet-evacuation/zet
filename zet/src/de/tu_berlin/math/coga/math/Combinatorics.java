@@ -28,11 +28,8 @@ package de.tu_berlin.math.coga.math;
  */
 public class Combinatorics {
 
-	/**
-	 * Avoids instantiation of the utility class with combinatorial methods.
-	 */
-	private Combinatorics() {
-	}
+	/** Avoids instantiation of the utility class with combinatorial methods. */
+	private Combinatorics() { }
 
 	/**
 	 * Computes the binomial coefficient {@code n} choose {@code k}.
@@ -40,7 +37,7 @@ public class Combinatorics {
 	 * @param k parameter {@code k}
 	 * @return the binomial coefficient
 	 */
-	public static long bink( int n, int k ) {
+	public static long bink( final int n, final int k ) {
 		if( k < 0 || k > java.lang.Math.abs( n ) )
 			return 0;
 		if( k == 1 )
@@ -65,7 +62,7 @@ public class Combinatorics {
 	 * @param n the number whose factorial is computed
 	 * @return the factorial of {@code n}
 	 */
-	public static long factorial( int n ) {
+	public static long factorial( final int n ) {
 		if( n < 0 )
 			throw new IllegalArgumentException( "n must not be at least zero." );
 		if( n < 2 )
@@ -96,8 +93,8 @@ public class Combinatorics {
 	 * @param n
 	 * @return
 	 */
-	private static long factorialProduct( int n ) {
-		int m = n / 2;
+	private static long factorialProduct( final int n ) {
+		final int m = n / 2;
 		if( m == 0 )
 			return N += 2;
 		if( n == 2 )

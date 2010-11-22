@@ -11,7 +11,7 @@ import java.awt.event.KeyEvent;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.nio.DoubleBuffer;
-import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Queue;
 import javax.media.opengl.GL;
@@ -36,8 +36,8 @@ public class BspMain extends JFlyingEyePanel {
 	static Vector3 eye;
 	static BspTree _bsp;
 	//static Queue<Triangle> model;
-	static ArrayList<Triangle> originalList;
-	static ArrayList<Triangle> copiedList;
+	static Queue<Triangle> originalList;
+	static Queue<Triangle> copiedList;
 	static BspMain instance;
 
 	// current rotation of object
@@ -146,10 +146,10 @@ public class BspMain extends JFlyingEyePanel {
 
 		switch( printMode ) {
 			case 0:
-				//draw( copiedList, Sign.Zero );
+				draw( copiedList, Sign.Zero );
 				break;
 			case 1:
-				//draw( originalList, Sign.Zero );
+				draw( originalList, Sign.Zero );
 				break;
 			case 2:
 			if( _bsp != null ) {
@@ -351,11 +351,11 @@ public class BspMain extends JFlyingEyePanel {
 		switch( e.getKeyCode() ) {
 			case KeyEvent.VK_A:
 				printMode = ++printMode % 3;
-				System.out.println( "Printmode: " + printMode );
+				//System.out.println( "Printmode: " + printMode );
 				break;
 			case KeyEvent.VK_D:
 				drawmode = ++drawmode % 3;
-				System.out.println( "Drawmode: " + drawmode );
+				//System.out.println( "Drawmode: " + drawmode );
 				break;
 		}
 	}
@@ -367,13 +367,20 @@ public class BspMain extends JFlyingEyePanel {
 		//String path = "D:\\Desktop\\BSP\\cg1_ex3\\meshes\\head.off";
 		//String path = "D:\\Desktop\\BSP\\cg1_ex3\\meshes\\dragon.off";
 
-		String path = "./testinstanz/off/teapot.off";
+		//String path = "./testinstanz/off/teapot.off";
 		//String path = "./testinstanz/off/bunnysimple.off";
-		//String path = "D:\\Desktop\\BSP\\cg1_ex3\\meshes\\sphere.off";
+		//String path = "./testinstanz/off/sphere.off";
 		//String path = "D:\\Desktop\\BSP\\cg1_ex3\\meshes\\head.off";
 		//String path = "./testinstanz/off/dragon.off";
 
     //String path = "./testinstanz/test.off";
+
+		//String path = "./testinstanz/off/dl1/cone.off";
+		String path = "./testinstanz/off/dl1/icosa.off";
+		//String path = "./testinstanz/off/dl1/mctet.off";
+		//String path = "./testinstanz/off/dl1/mctri.off";
+		//String path = "./testinstanz/off/dl1/octa.off";
+		//String path = "./testinstanz/off/dl1/tetra.off";
 
 
 		JFrame window = new JFrame( "BSP Test Application" );
@@ -390,24 +397,19 @@ public class BspMain extends JFlyingEyePanel {
 		window.add( main );
 
 		// Read the stuff
-		//TriangleList* model = readOff(argv[1]);
 		OFFReader off = new OFFReader();
 		off.readOff(path );
 		mesh = off.getMesh();
-		//model = OFFReader.readOff( path );
-		//if( model == null )
-		//	System.exit( 0 );
 
 		System.out.println( "Bsp has " + mesh.vertexCount() + " vertices" );
 		/** need to unitize the model before computing normals etc.
 		to avoid numerical problems due to very small triangles in
 		high res model */
 		System.out.print( "Unitizing model... " );
-		mesh.unitize( 100 );
+		mesh.unitize( 50 );
 		System.out.println( "done." );
 
 		System.out.print( "Computing plane equations and normals..." );
-		//off..computePlaneEquations();//
 		for( Triangle t : mesh ) {
 			if( t.plane == null )
 				throw new Exception( "ERROR" );
@@ -419,14 +421,14 @@ public class BspMain extends JFlyingEyePanel {
 		System.out.println( " done." );
 
 		System.out.print( "Copy to the original list... " );
-		originalList = new ArrayList<Triangle>( mesh.faceCount() );
-		copiedList = new ArrayList<Triangle>( mesh.faceCount() );
+		originalList = new LinkedList<Triangle>( );
+		copiedList = new LinkedList<Triangle>( );
 		for( Triangle t: mesh ) {
-			Triangle newt = new Triangle( t.v[0].clone(), t.v[1].clone(), t.v[2].clone() );
-			newt.plane = new Plane();
-			newt.computePlane();
-			newt.faceNormal = newt.plane.getNormal();
-			copiedList.add( newt );
+			final Triangle newTriangle = new Triangle( t.v[0].clone(), t.v[1].clone(), t.v[2].clone() );
+			newTriangle.plane = new Plane();
+			newTriangle.computePlane();
+			newTriangle.faceNormal = newTriangle.plane.getNormal();
+			copiedList.add( newTriangle );
 			originalList.add( t );
 		}
 		System.out.println( "done." );
@@ -435,8 +437,10 @@ public class BspMain extends JFlyingEyePanel {
 		BinarySpacePartitioningTreeBuilder bspBuilder = new BinarySpacePartitioningTreeBuilder();
 		bspBuilder.setProblem( mesh );
 		bspBuilder.run();
-		_bsp = bspBuilder.getSolution(); // = BspTree.constructBsp( mesh );
+		_bsp = bspBuilder.getSolution();
 		System.out.println( " done." );
+
+		System.out.println( "Runtime: " + bspBuilder.getRuntimeAsString() );
 
 		window.setVisible( true );
 		main.startAnimation();

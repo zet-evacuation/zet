@@ -21,8 +21,10 @@
 
 package de.tu_berlin.math.coga.math.vectormath;
 
+import opengl.bsp.Sign;
+
 /**
- * Reprensentates a plane in the three dimensional space.
+ * Represents a plane in the three dimensional space.
  * @author Jan-Philipp Kappmeier
  */
 public class Plane {
@@ -46,7 +48,7 @@ public class Plane {
 	}
 
 	/**
-	 * Initialize the plane by trhee points on the plane.
+	 * Initialize the plane by three points on the plane.
 	 * @param v1 the first point
 	 * @param v2 the second point
 	 * @param v3 the third point
@@ -98,7 +100,7 @@ public class Plane {
 	
 /**
  * Sets up the plane defined through the four coefficients of an equation of 
- * the type ax_1 + b_x2 + cx_3 + d = 0.
+ * the type ax_1 + b_x2 + c_x_3 + d = 0.
  * @param a the first parameter
  * @param b the second parameter
  * @param c the third parameter
@@ -177,10 +179,6 @@ public class Plane {
 	public Vector3 intersectionPoint( Vector3 v1, Vector3 v2 ) {
 		final double eps = 0.0074;// todo set eps somehow
 		int sign1, sign2;		/* must be int since gonna do a bitwise ^ */
-		//double a = plane.getA();
-		//double b = plane.getB();
-		//double c = plane.getC();
-		//double d = plane.getD();
 
 		/* get signs */
 		double temp = a * v1.x + b * v1.y + c * v1.z + d;
@@ -192,7 +190,7 @@ public class Plane {
 			/* edges beginning with a 0 sign are not considered valid intersections
 			 * case 1 & 6 & 7, see Gems III.
 			 */
-			assert (Math.abs( temp ) < eps); // IS_EQ( temp1, 0.0 ));
+			assert (Math.abs( temp ) < eps);
 			return null;
 		}
 
@@ -204,11 +202,6 @@ public class Plane {
 		else {			/* case 8 & 9, see Gems III */
 			assert (Math.abs( temp ) < eps);// IS_EQ( temp2, 0.0 ));
 			return new Vector3( v2.x, v2.y, v2.z );
-//			i.x = v2.x;
-//			i.y = v2.y;
-//			i.z = v2.z;
-
-			//return ((sign1 == -1) ? Sign.Negative : Sign.Positive);
 		}
 
 		/* signs different?
@@ -230,11 +223,13 @@ public class Plane {
 			assert (sign1 == 1 || sign1 == -1);
 
 			return new Vector3( v1.x + (tt * dx), v1.y + (tt * dy), v1.z + (tt * dz) );
-//			i.x = v1.x + (tt * dx);
-//			i.y = v1.y + (tt * dy);
-//			i.z = v1.z + (tt * dz);
-			//return ((sign1 == -1) ? Sign.Negative : Sign.Positive);
 		} else
 			return null;
+	}
+
+	public Sign getSign( Vector3 v2 ) {
+		final double eps = 0.0074;// todo set eps somehow
+		final double val = a * v2.x + b * v2.y + c * v2.z + d;
+		return val < -eps ? Sign.Negative : val > eps ? Sign.Positive : Sign.Zero;
 	}
 }
