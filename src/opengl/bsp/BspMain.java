@@ -367,13 +367,13 @@ public class BspMain extends JFlyingEyePanel {
 		//String path = "D:\\Desktop\\BSP\\cg1_ex3\\meshes\\head.off";
 		//String path = "D:\\Desktop\\BSP\\cg1_ex3\\meshes\\dragon.off";
 
-		//String path = "./testinstanz/off/teapot.off";
+		String path = "./testinstanz/off/teapot.off";
 		//String path = "./testinstanz/off/bunnysimple.off";
 		//String path = "D:\\Desktop\\BSP\\cg1_ex3\\meshes\\sphere.off";
 		//String path = "D:\\Desktop\\BSP\\cg1_ex3\\meshes\\head.off";
 		//String path = "./testinstanz/off/dragon.off";
 
-      String path = "./testinstanz/test.off";
+    //String path = "./testinstanz/test.off";
 
 
 		JFrame window = new JFrame( "BSP Test Application" );
@@ -441,21 +441,4 @@ public class BspMain extends JFlyingEyePanel {
 		window.setVisible( true );
 		main.startAnimation();
 	}
-//OFF
-//6 8 0
-//0 1 0
-//1 0 0
-//0 0 -1
-//-1 0 0
-//0 0 1
-//0 -1 0
-//3 0 1 2
-//3 0 2 3
-//3 0 3 4
-//3 0 4 1
-//3 5 1 2
-//3 5 2 3
-//3 5 3 4
-//3 5 4 1
-
 }

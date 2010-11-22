@@ -120,7 +120,10 @@ public class JRasterFloor extends AbstractFloor /*implements ds.z.event.ChangeLi
 		}
 
 		myFloor = floor;
-		System.out.println( "Switch to floor " + floor.getName() );
+		if( floor == null || ca == null )
+			return;
+		if( floor != null )
+			System.out.println( "Switch to floor " + floor.getName() );
 
 		updateOffsets( floor );
 		

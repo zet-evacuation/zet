@@ -16,6 +16,7 @@ import de.tu_berlin.math.coga.common.algorithm.AlgorithmStartedEvent;
 import de.tu_berlin.math.coga.common.algorithm.AlgorithmTerminatedEvent;
 import de.tu_berlin.math.coga.common.algorithm.AlgorithmProgressEvent;
 import de.tu_berlin.math.coga.common.util.Formatter;
+import de.tu_berlin.math.coga.common.util.Formatter.TimeUnits;
 import de.tu_berlin.math.coga.math.vectormath.Vector3;
 import ds.graph.Edge;
 import ds.graph.IdentifiableCollection;
@@ -426,7 +427,7 @@ public class DatFileReaderWriter implements AlgorithmListener {
 		System.out.println( result );
 		AlgorithmTask.getInstance().publish( 100, result, "" );
 		long end = System.nanoTime();
-		System.err.println( Formatter.formatTimeNanoseconds( end - start ) );
+		System.err.println( Formatter.formatTimeUnit( end - start, TimeUnits.NanoSeconds ) );
 		return algo;
 	}
 
@@ -437,7 +438,7 @@ public class DatFileReaderWriter implements AlgorithmListener {
 		else if( event instanceof AlgorithmStartedEvent )
 			System.out.println( "Algorithmus startet." );
 		else if( event instanceof AlgorithmTerminatedEvent )
-			System.out.println( "Laufzeit Flussalgorithmus: " + Formatter.formatTimeMilliseconds( event.getAlgorithm().getRuntime() ) );
+			System.out.println( "Laufzeit Flussalgorithmus: " + Formatter.formatTimeUnit( event.getAlgorithm().getRuntime(), TimeUnits.MilliSeconds ) );
 		else
 			System.out.println( event.toString() );
 	}

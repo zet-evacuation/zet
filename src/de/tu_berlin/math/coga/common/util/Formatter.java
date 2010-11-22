@@ -5,12 +5,13 @@
 package de.tu_berlin.math.coga.common.util;
 
 import de.tu_berlin.math.coga.common.localization.DefaultLoc;
+import de.tu_berlin.math.coga.datastructure.Tupel;
 import java.text.NumberFormat;
 
 /**
  * The class <code>Formatter</code> is a utility class that provides methods
  * for formatting texts.
- * @author Jan-Philipp Kappmeier, Martin Groß
+ * @author Jan-Philipp Kappmeier
  */
 public class Formatter {
 	public enum BinaryUnits {
@@ -149,10 +150,126 @@ public class Formatter {
 	}
 
 	/**
-	 * No instantiating of <code>ConversationTools</code> possible.
+	 * An enumeration containing time units following the SI system for times less
+	 * than a seconds. For larger times, the non-SI units minutes, hours etc. are
+	 * used.
 	 */
-	private Formatter() {
+	public enum TimeUnits {
+		/** One picosecond equals 10^-12 seconds. */
+		PicoSeconds( "ps", "picosecond", 1000, null ),
+		/** One picosecond equals 10^-9 seconds. */
+		NanoSeconds( "ns", "nanoseconds", 1000, PicoSeconds ),
+		/** One picosecond equals 10^-6 seconds. */
+		Microsecond( "µs", "mycroseconds", 1000, NanoSeconds ),
+		/** One picosecond equals 10^-3 seconds. */
+		MilliSeconds( "ms", "milliseconds", 1000, Microsecond ),
+		/** The international second. */
+		Seconds( "s", "seconds", 60, MilliSeconds ),
+		/** The non-SI unit for 60 seconds. */
+		Minutes( "min", "minutes", 60, Seconds ),
+		/** The non-SI unit for 60 minutes. */
+		Hours( "h", "hour", 24, Minutes ),
+		/** The non-SI unit for 24 hours. */
+		Days( "d", "day", 365.25, Hours ),
+		/** The non-SI unit for a Julian year which is 365.25 days. */
+		Years( "a", "year", 100, Days ),
+		/** The rarely used unit for a century, which are approximately 100 years. */
+		Centuries( "c", "century", 10, Years ),
+		/** A Julian millennium consists of 365,250 days. */
+		Millenia( "m", "millenium", Integer.MAX_VALUE, Centuries );
+
+		/** A scientific representation for the time unit. */
+		private String rep;
+		/** A longer representation for the time unit. */
+		private String longRep;
+		/** Describes how much of this unit gives one unit of the next larger scale. */
+		private double toNext;
+		/** The predecessor unit (next smaller scale). */
+		private TimeUnits pre;
+		/** The successor unit (next larger scale). */
+		private TimeUnits next;
+		
+		static {
+			PicoSeconds.next = NanoSeconds;
+			NanoSeconds.next = Microsecond;
+			Microsecond.next = MilliSeconds;
+			MilliSeconds.next = Seconds;
+			Seconds.next = Minutes;
+			Minutes.next = Hours;
+			Hours.next = Days;
+			Days.next = Years;
+			Years.next = null;
+		}
+
+		/**
+		 * Initializes the time unit with the correct values.
+		 * @param rep the short representation string
+		 * @param longRep the long representation string
+		 * @param toNext how much of the unit is the next larger scale
+		 * @param pre the predecessor unit. Note that successor units are initialized in a static-initializer block
+		 */
+		private TimeUnits( String rep, String longRep, double toNext, TimeUnits pre ) {
+			this.rep = rep;
+			this.longRep = longRep;
+			this.toNext = toNext;
+			this.pre = pre;
+		}
+
+		/**
+		 * Checks, if the value is good for the current unit, or if it can be scaled to fit better.
+		 * @param value the value that is checked
+		 * @return {@code true} if there is no need to scale the value to fit a better unit, {@code false} otherwise
+		 */
+		public boolean isOK( double value ) {
+			return getNextBetter( value ) == this;
+		}
+
+		/**
+		 * Returns the next better value to represent the time measure.
+		 * @param value the current value (in the unit specified by the instance of the enumeration)
+		 * @return the transformed time measure
+		 */
+		public TimeUnits getNextBetter( double value ) {
+			if( value < 1 && pre != null )
+				return this.pre;
+			else if( value >= toNext )
+				return next;
+			else 
+				return this;
+		}
+
+		/**
+		 * Returns the next better time unit to represent the time measure
+		 * @param value the current value (in the unit specified by the instance of the enumeration)
+		 * @return the transformed time unit
+		 */
+		public double getNextBetterValue( double value ) {
+			if( value < 1 && pre != null )
+				return value * pre.toNext;
+			else if( value >= toNext )
+				return value / toNext;
+			else return value;
+		}
+
+		/**
+		 * The short scientific representation for this time unit
+		 * @return the short scientific representation for this time unit
+		 */
+		public String getName() {
+			return rep;
+		}
+
+		/**
+		 * A longer representation of the time unit.
+		 * @return a longer representation of the time unit
+		 */
+		public String getLongName() {
+			return longRep;
+		}
 	}
+
+	/** No instantiating of {@code ConversationTools} possible. */
+	private Formatter() { }
 
 	/**
 	 * Formats a given number of some unit to the most fitting unit.
@@ -182,104 +299,6 @@ public class Formatter {
 		return n.format( value ) + " " + unit.getName();
 	}
 
-
-	/**
-	 * Helper method that converts an double seconds value in an string
-	 * representing minutes and seconds.
-	 * @param sec
-	 * @return a string representing the time in minutes
-	 */
-	public final static String secToMin( double sec ) {
-		int min = (int)Math.floor( sec / 60 );
-		int secs = (int)Math.floor( sec - (60 * min) );
-		String ssecs = secs < 10 ? "0" + Integer.toString( secs ) : Integer.toString( secs );
-		return ssecs.length() >= 2 ? Integer.toString( min ) + ":" + ssecs.substring( 0, 2 ) + " Min" : Integer.toString( min ) + ":" + ssecs + " Min";
-	}
-
-	/**
-	 * Converts a time specified in milliseconds into a time unit appropriate
-	 * for the length of the specified time and formats it as a human readable
-	 * string. For example, 1445997 ms would be converted and formatted to
-	 * "1.445 s".
-	 * @param timeInMilliseconds the time in milliseconds
-	 * @return the converted and formatted string
-	 */
-	public final static String formatTimeMilliseconds( long timeInMilliseconds ) {
-		return formatTimeNanoseconds( timeInMilliseconds * 1000 * 1000 );
-	}
-
-	/**
-	 * Converts a time specified in nanoseconds into a time unit appropriate for
-	 * the length of the specified time and formats it as a human readable
-	 * string. For example, 1445997106 ns would be converted and formatted to
-	 * "1.445 s".
-	 * @param timeInNanoseconds the time in nanoseconds.
-	 * @return the converted and formatted string.
-	 */
-	public final static String formatTimeNanoseconds( long timeInNanoseconds ) {
-		NumberFormat nf = DefaultLoc.getSingleton().getFloatConverter();
-		nf.setMaximumFractionDigits( 3 );
-		nf.setMinimumFractionDigits( 0 );
-		double time = timeInNanoseconds;
-		int counter = 0;
-		//int last = 0;
-		while( time >= 1000 && counter < 3 ) {
-			//last = (int)(time % 1000);
-			time /= 1000;
-			counter++;
-		}
-		switch( counter ) {
-			case 0:
-				return nf.format( time ) + " ns"; //String.format( "%1$s ns", time );
-			case 1:
-				return nf.format( time ) + " µs"; //String.format( "%1$s ns", time );
-			case 2:
-				return nf.format( time ) + " ms"; //String.format( "%1$s ns", time );
-			case 3:
-				if( time <= 60 )
-					return nf.format( time ) + " s";
-					//return String.format( "%1$s.%2$03d s", time, last );
-				else if( time > 60 ) {
-					//last = (int)(time % 60);
-					time /= 60;
-					return nf.format( time ) + " min"; //String.format( "%1$s.%2$02d min", time, last );
-				} else
-					throw new AssertionError( "This should not happen." );
-			default:
-				throw new AssertionError( "This should not happen." );
-		}
-	}
-
-	public final static String formatTimeNanosecondsWithoutLocale( long timeInNanoseconds ) {
-		long time = timeInNanoseconds;
-		int counter = 0;
-		int last = 0;
-		while( time >= 1000 && counter < 3 ) {
-			last = (int)(time % 1000);
-			time /= 1000;
-			counter++;
-		}
-		switch( counter ) {
-			case 0:
-				return String.format( "%1$s ns", time );
-			case 1:
-				return String.format( "%1$s.%2$03d µs", time, last );
-			case 2:
-				return String.format( "%1$s.%2$03d ms", time, last );
-			case 3:
-				if( time <= 60 )
-					return String.format( "%1$s.%2$03d s", time, last );
-				else if( time > 60 ) {
-					last = (int)(time % 60);
-					time /= 60;
-					return String.format( "%1$s.%2$02d min", time, last );
-				} else
-					throw new AssertionError( "This should not happen." );
-			default:
-				throw new AssertionError( "This should not happen." );
-		}
-	}
-
 	/**
 	 * Formats a double value (between 0 and 1) into a percent value, always
 	 * showing 2 fraction digits.
@@ -291,5 +310,45 @@ public class Formatter {
 		nfPercent.setMaximumFractionDigits( 2 );
 		nfPercent.setMinimumFractionDigits( 2 );
 		return nfPercent.format( value );
+	}
+
+	/**
+	 * Computes the correct value and fitting time unit for a given pair of value
+	 * and time unit. The result is stored as a tuple.
+	 * @param value the value of the number to be formatted
+	 * @param unit the unit of the number
+	 * @return the pair containing the transformed value and the fitting unit
+	 */
+	public final static Tupel<Double,TimeUnits> timeUnit( double value, TimeUnits unit ) {
+		while( !unit.isOK( value ) ) {
+			final double newValue = unit.getNextBetterValue( value );
+			unit = unit.getNextBetter( value );
+			value = newValue;
+		}
+		return new Tupel( value, unit );
+	}
+
+	/**
+	 * Formats a given number of some unit to the most fitting unit.
+	 * @param value the value of the number to be formatted
+	 * @param unit the unit of the number
+	 * @return the string in the calculated unit with one decimal place and the shortcut for the unit
+	 */
+	public final static String formatTimeUnit( double value, TimeUnits unit ) {
+		return formatTimeUnit( value, unit, 2 );
+	}
+
+	/**
+	 * Formats a given number of some unit to the most fitting unit.
+	 * @param value the value of the number to be formatted
+	 * @param unit the unit of the number
+	 * @param digits the number of digits after the comma in the representation
+	 * @return the string in the calculated unit with one decimal place and the shortcut for the unit
+	 */
+	public final static String formatTimeUnit( double value, TimeUnits unit, int digits ) {
+		final Tupel<Double,TimeUnits> res = timeUnit( value, unit );
+		final NumberFormat n = NumberFormat.getInstance();
+		n.setMaximumFractionDigits( digits );
+		return n.format( res.u ) + " " + res.v.getName() ;
 	}
 }

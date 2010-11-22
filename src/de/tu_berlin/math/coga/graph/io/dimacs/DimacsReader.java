@@ -8,6 +8,7 @@ import algo.graph.staticflow.maxflow.PushRelabel;
 import algo.graph.staticflow.maxflow.PushRelabelHighestLabelGlobalGapRelabelling;
 import de.tu_berlin.math.coga.common.util.Formatter;
 import de.tu_berlin.math.coga.common.util.Formatter.BinaryUnits;
+import de.tu_berlin.math.coga.common.util.Formatter.TimeUnits;
 import de.tu_berlin.math.coga.graph.generator.RMFGEN;
 import de.tu_berlin.math.coga.rndutils.distribution.discrete.UniformDistribution;
 import ds.graph.Edge;import ds.graph.IdentifiableIntegerMapping;
@@ -284,7 +285,7 @@ public class DimacsReader {
 //			writeLine( "p max " + network.vertexCount() + " " + network.edgesAlreadyRead() );
 //
 //			// node descriptors
-//			writeLine( "n " + (network.getSource().getId() + 1) + " s" );
+//			writeLine( "n " + (network.getSource().getId() + 1) + " Seconds" );
 //			writeLine( "n " + (network.getSink().getId() + 1) + " t" );
 //
 //			// edges
@@ -349,7 +350,7 @@ public class DimacsReader {
 		rt.gc();
 		end = System.nanoTime();
 		long memEnd = rt.totalMemory() - rt.freeMemory();
-		System.out.println( Formatter.formatTimeNanoseconds( end-start) );
+		System.out.println( Formatter.formatTimeUnit( end-start, TimeUnits.NanoSeconds ) );
 		System.out.println( "Memory: " + Formatter.fileSizeUnit(memEnd - memStart, BinaryUnits.Byte ) );
 		System.out.println( "Loading complete" );
 		System.out.println( "Free Memory: " + Formatter.fileSizeUnit( rt.freeMemory(), BinaryUnits.Byte ) );
@@ -441,7 +442,7 @@ public class DimacsReader {
 		//System.out.println( "Global relabels: " + hipr.getGlobalRelabels() );
 		//System.out.println( "Gaps : " + hipr.getGaps() + " Gap nodes: " + hipr.getGapNodes() );
 
-		System.out.println( Formatter.formatTimeNanoseconds( end-start) );
+		System.out.println( Formatter.formatTimeUnit( end-start, TimeUnits.NanoSeconds ) );
 
 		System.out.println();
 	}

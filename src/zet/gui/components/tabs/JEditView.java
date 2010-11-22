@@ -340,7 +340,6 @@ public class JEditView extends AbstractSplitPropertyWindow<JFloorScrollPane<JFlo
 				txtFloorWidth.setText( Integer.toString( currentFloor.getWidth() ) );
 				txtFloorHeight.setText( Integer.toString( currentFloor.getHeight() ) );
 
-
 				double areaFloor = 0;
 				for( PlanPolygon p : currentFloor )
 					areaFloor += p.areaMeter();

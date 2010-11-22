@@ -35,7 +35,7 @@ import java.util.Set;
  * <code>handleException</code>. It also keeps track of the algorithms runtime
  * and offers simple logging features that should be preferred to System.out
  * logging. Finally it offers the possibility to dispatch information about the
- * algorithm's state and progress to listeners, that can register and unregister
+ * algorithm'Seconds state and progress to listeners, that can register and unregister
  * themselves for the algorithms events.
  * 
  * @param <Problem>
@@ -205,7 +205,7 @@ public abstract class Algorithm<Problem, Solution> implements Runnable {
 	 */
 	public final String getRuntimeAsString() {
 		if( state == State.SOLVED || state == State.SOLVING_FAILED )
-			return Formatter.formatTimeMilliseconds( runtime );
+			return Formatter.formatTimeUnit( runtime, Formatter.TimeUnits.MilliSeconds, 2 );
 		else
 			throw new IllegalStateException( "The algorithm has not terminated yet. Please call run() first and wait for its termination." );
 	}
@@ -307,7 +307,7 @@ public abstract class Algorithm<Problem, Solution> implements Runnable {
 	 * instance of the problem given to it. If this is <code>true</code>, then
 	 * the solution to the instance of the problem can be obtained by <code>
 	 * getSolution</code>.
-	 * @return <code>true</code> if the algorithm's instance of the problem has
+	 * @return <code>true</code> if the algorithm'Seconds instance of the problem has
 	 * been solved successfully and <code>false</code> otherwise.
 	 */
 	public final boolean isProblemSolved() {

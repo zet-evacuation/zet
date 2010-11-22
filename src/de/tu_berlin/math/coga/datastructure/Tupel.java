@@ -10,8 +10,8 @@ package de.tu_berlin.math.coga.datastructure;
  * @author Jan-Philipp Kappmeier
  */
 public class Tupel<U,V> {
-	protected U u;
-	protected V v;
+	public U u;
+	public V v;
 
 	public Tupel( U u, V v ) {
 		this.u = u;

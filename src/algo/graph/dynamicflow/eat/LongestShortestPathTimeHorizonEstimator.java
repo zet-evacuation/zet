@@ -40,7 +40,9 @@ public class LongestShortestPathTimeHorizonEstimator extends Algorithm<EarliestA
                 longest = dijkstra.getDistance(problem.getSink());
             }
         }
-        int supply = Math.abs(problem.getSupplies().get(problem.getSink()));
+        int supply = 0;
+				for( Node source : problem.getSources() )
+					supply += problem.getSupplies().get( source );
         return new TimeHorizonBounds(longest + 1, longest + supply + 1);
     }
 
