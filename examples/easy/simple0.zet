@@ -79,44 +79,45 @@
                 <familiarity class="normalDistribution" id="31" min="0.7" max="1.0" variance="1.0" expectedValue="0.8"/>
                 <panic class="normalDistribution" id="32" min="0.0" max="1.0" variance="1.0" expectedValue="0.5"/>
                 <decisiveness class="normalDistribution" id="33" min="0.0" max="1.0" variance="1.0" expectedValue="0.3"/>
+                <reaction class="uniformDistribution" id="34" min="0.0" max="60.0"/>
                 <standardEvacuees>10</standardEvacuees>
-                <assignmentAreas id="34">
+                <assignmentAreas id="35">
                   <assignmentArea reference="19"/>
                 </assignmentAreas>
               </assignmentType>
             </assignmentArea>
           </assignmentAreas>
-          <barriers id="35"/>
-          <delayAreas id="36"/>
-          <evacuationAreas id="37">
-            <evacuationArea id="38" closed="true" xOffset="800" yOffset="0" width="400" height="400" changed="true">
+          <barriers id="36"/>
+          <delayAreas id="37"/>
+          <evacuationAreas id="38">
+            <evacuationArea id="39" closed="true" xOffset="800" yOffset="0" width="400" height="400" changed="true">
               <edgeClassType>ds.z.Edge</edgeClassType>
-              <start id="39" x="800" y="0">
+              <start id="40" x="800" y="0">
                 <edges>
-                  <planPoint reference="39"/>
-                  <ds.z.Edge id="40">
-                    <associatedPolygon class="evacuationArea" reference="38"/>
+                  <planPoint reference="40"/>
+                  <ds.z.Edge id="41">
+                    <associatedPolygon class="evacuationArea" reference="39"/>
                   </ds.z.Edge>
-                  <planPoint id="41" x="800" y="400"/>
-                  <ds.z.Edge id="42">
-                    <associatedPolygon class="evacuationArea" reference="38"/>
+                  <planPoint id="42" x="800" y="400"/>
+                  <ds.z.Edge id="43">
+                    <associatedPolygon class="evacuationArea" reference="39"/>
                   </ds.z.Edge>
-                  <planPoint id="43" x="1200" y="400"/>
-                  <ds.z.Edge id="44">
-                    <associatedPolygon class="evacuationArea" reference="38"/>
+                  <planPoint id="44" x="1200" y="400"/>
+                  <ds.z.Edge id="45">
+                    <associatedPolygon class="evacuationArea" reference="39"/>
                   </ds.z.Edge>
-                  <planPoint id="45" x="1200" y="0"/>
-                  <ds.z.Edge id="46">
-                    <associatedPolygon class="evacuationArea" reference="38"/>
+                  <planPoint id="46" x="1200" y="0"/>
+                  <ds.z.Edge id="47">
+                    <associatedPolygon class="evacuationArea" reference="39"/>
                   </ds.z.Edge>
                 </edges>
               </start>
-              <end reference="39"/>
+              <end reference="40"/>
               <size>4</size>
-              <minX__DefiningEdge reference="46"/>
-              <minY__DefiningEdge reference="46"/>
-              <maxX__DefiningEdge reference="46"/>
-              <maxY__DefiningEdge reference="44"/>
+              <minX__DefiningEdge reference="47"/>
+              <minY__DefiningEdge reference="47"/>
+              <maxX__DefiningEdge reference="47"/>
+              <maxY__DefiningEdge reference="45"/>
               <xOffsetAll>0</xOffsetAll>
               <yOffsetAll>0</yOffsetAll>
               <heightAll>0</heightAll>
@@ -125,14 +126,15 @@
               <attractivity>100</attractivity>
             </evacuationArea>
           </evacuationAreas>
-          <inaccessibleAreas id="47"/>
-          <saveAreas id="48">
-            <evacuationArea reference="38"/>
+          <inaccessibleAreas id="48"/>
+          <saveAreas id="49">
+            <evacuationArea reference="39"/>
           </saveAreas>
-          <stairAreas id="49"/>
+          <stairAreas id="50"/>
+          <teleportAreas id="51"/>
         </room>
       </rooms>
-      <edges id="50"/>
+      <edges id="52"/>
       <minX__DefiningRoom reference="9"/>
       <minY__DefiningRoom reference="9"/>
       <maxX__DefiningRoom reference="9"/>
@@ -140,13 +142,49 @@
     </floor>
     <rasterized>false</rasterized>
   </plan>
-  <currentAssignment id="51" name="Standardbelegung">
-    <assignmentTypes id="52">
+  <currentAssignment id="53" name="Standardbelegung">
+    <assignmentTypes id="54">
       <assignmentType reference="28"/>
     </assignmentTypes>
   </currentAssignment>
-  <assignments id="53">
-    <assignment reference="51"/>
+  <assignments id="55">
+    <assignment reference="53"/>
   </assignments>
-  <evacuationPlans id="54"/>
+  <evacuationPlans id="56"/>
+  <vp id="57">
+    <tfs id="58">
+      <opengl.helper.TextureFontStrings id="59">
+        <centered id="60"/>
+        <strings id="61"/>
+        <width>0.0</width>
+        <ortho>true</ortho>
+        <x id="62"/>
+        <y id="63"/>
+        <bold id="64"/>
+        <xoffset>0.0</xoffset>
+      </opengl.helper.TextureFontStrings>
+    </tfs>
+    <cameraPositions id="65">
+      <ds.CameraPosition id="66">
+        <view id="67">
+          <x>0.7071067811865475</x>
+          <y>-0.7071067811865475</y>
+          <z>0.0</z>
+        </view>
+        <up id="68">
+          <x>0.0</x>
+          <y>0.0</y>
+          <z>1.0</z>
+        </up>
+        <pos id="69">
+          <x>0.0</x>
+          <y>0.0</y>
+          <z>100.0</z>
+        </pos>
+        <text>CameraPosition</text>
+      </ds.CameraPosition>
+    </cameraPositions>
+    <currentWidth>1000.0</currentWidth>
+    <currentHeight>1000.0</currentHeight>
+  </vp>
 </project>

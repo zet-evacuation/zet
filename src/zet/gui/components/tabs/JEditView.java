@@ -137,7 +137,7 @@ public class JEditView extends AbstractSplitPropertyWindow<JFloorScrollPane<JFlo
 	/** The currently active panel type */
 	private static Panels eastPanelType;
 	/** The control object for the loaded project. */
-  private ZControl projectControl;
+        private ZControl projectControl;
 	/** The currently visible {@link ds.z.Floor} */
 	private Floor currentFloor;
 	/** Model for a floor-selector combo box. */

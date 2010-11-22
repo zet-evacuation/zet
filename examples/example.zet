@@ -466,24 +466,124 @@
                           <standardEvacuees>1</standardEvacuees>
                           <assignmentAreas id="177">
                             <assignmentArea reference="161"/>
+                            <assignmentArea id="178" closed="true" xOffset="800" yOffset="4800" width="12000" height="3600" changed="true" evacuees="20">
+                              <edgeClassType>ds.z.Edge</edgeClassType>
+                              <start id="179" x="12800" y="6400">
+                                <edges>
+                                  <planPoint reference="179"/>
+                                  <ds.z.Edge id="180">
+                                    <associatedPolygon class="assignmentArea" reference="178"/>
+                                  </ds.z.Edge>
+                                  <planPoint id="181" x="12800" y="4800"/>
+                                  <ds.z.Edge id="182">
+                                    <associatedPolygon class="assignmentArea" reference="178"/>
+                                  </ds.z.Edge>
+                                  <planPoint id="183" x="8800" y="4800"/>
+                                  <ds.z.Edge id="184">
+                                    <associatedPolygon class="assignmentArea" reference="178"/>
+                                  </ds.z.Edge>
+                                  <planPoint id="185" x="7600" y="4800"/>
+                                  <ds.z.Edge id="186">
+                                    <associatedPolygon class="assignmentArea" reference="178"/>
+                                  </ds.z.Edge>
+                                  <planPoint id="187" x="2800" y="4800"/>
+                                  <ds.z.Edge id="188">
+                                    <associatedPolygon class="assignmentArea" reference="178"/>
+                                  </ds.z.Edge>
+                                  <planPoint id="189" x="1600" y="4800"/>
+                                  <ds.z.Edge id="190">
+                                    <associatedPolygon class="assignmentArea" reference="178"/>
+                                  </ds.z.Edge>
+                                  <planPoint id="191" x="800" y="4800"/>
+                                  <ds.z.Edge id="192">
+                                    <associatedPolygon class="assignmentArea" reference="178"/>
+                                  </ds.z.Edge>
+                                  <planPoint id="193" x="800" y="6400"/>
+                                  <ds.z.Edge id="194">
+                                    <associatedPolygon class="assignmentArea" reference="178"/>
+                                  </ds.z.Edge>
+                                  <planPoint id="195" x="7600" y="6400"/>
+                                  <ds.z.Edge id="196">
+                                    <associatedPolygon class="assignmentArea" reference="178"/>
+                                  </ds.z.Edge>
+                                  <planPoint id="197" x="7600" y="8400"/>
+                                  <ds.z.Edge id="198">
+                                    <associatedPolygon class="assignmentArea" reference="178"/>
+                                  </ds.z.Edge>
+                                  <planPoint id="199" x="8000" y="8400"/>
+                                  <ds.z.Edge id="200">
+                                    <associatedPolygon class="assignmentArea" reference="178"/>
+                                  </ds.z.Edge>
+                                  <planPoint id="201" x="8000" y="8000"/>
+                                  <ds.z.Edge id="202">
+                                    <associatedPolygon class="assignmentArea" reference="178"/>
+                                  </ds.z.Edge>
+                                  <planPoint id="203" x="9200" y="8000"/>
+                                  <ds.z.Edge id="204">
+                                    <associatedPolygon class="assignmentArea" reference="178"/>
+                                  </ds.z.Edge>
+                                  <planPoint id="205" x="9200" y="7600"/>
+                                  <ds.z.Edge id="206">
+                                    <associatedPolygon class="assignmentArea" reference="178"/>
+                                  </ds.z.Edge>
+                                  <planPoint id="207" x="10400" y="7600"/>
+                                  <ds.z.Edge id="208">
+                                    <associatedPolygon class="assignmentArea" reference="178"/>
+                                  </ds.z.Edge>
+                                  <planPoint id="209" x="10400" y="7200"/>
+                                  <ds.z.Edge id="210">
+                                    <associatedPolygon class="assignmentArea" reference="178"/>
+                                  </ds.z.Edge>
+                                  <planPoint id="211" x="11200" y="7200"/>
+                                  <ds.z.Edge id="212">
+                                    <associatedPolygon class="assignmentArea" reference="178"/>
+                                  </ds.z.Edge>
+                                  <planPoint id="213" x="11200" y="6800"/>
+                                  <ds.z.Edge id="214">
+                                    <associatedPolygon class="assignmentArea" reference="178"/>
+                                  </ds.z.Edge>
+                                  <planPoint id="215" x="12400" y="6800"/>
+                                  <ds.z.Edge id="216">
+                                    <associatedPolygon class="assignmentArea" reference="178"/>
+                                  </ds.z.Edge>
+                                  <planPoint id="217" x="12400" y="6400"/>
+                                  <ds.z.Edge id="218">
+                                    <associatedPolygon class="assignmentArea" reference="178"/>
+                                  </ds.z.Edge>
+                                </edges>
+                              </start>
+                              <end reference="179"/>
+                              <size>20</size>
+                              <minX__DefiningEdge reference="194"/>
+                              <minY__DefiningEdge reference="192"/>
+                              <maxX__DefiningEdge reference="218"/>
+                              <maxY__DefiningEdge reference="200"/>
+                              <xOffsetAll>0</xOffsetAll>
+                              <yOffsetAll>0</yOffsetAll>
+                              <heightAll>0</heightAll>
+                              <widthAll>0</widthAll>
+                              <associatedRoom reference="20"/>
+                              <assignmentType reference="170"/>
+                            </assignmentArea>
                           </assignmentAreas>
-                          <uid id="178">b307e964-09a8-4fdd-ae75-428eabf888b9</uid>
+                          <uid id="219">b307e964-09a8-4fdd-ae75-428eabf888b9</uid>
                         </assignmentType>
                       </assignmentArea>
+                      <assignmentArea reference="178"/>
                     </assignmentAreas>
-                    <barriers id="179"/>
-                    <delayAreas id="180"/>
-                    <evacuationAreas id="181"/>
-                    <inaccessibleAreas id="182"/>
-                    <saveAreas id="183"/>
-                    <stairAreas id="184"/>
-                    <teleportAreas id="185"/>
+                    <barriers id="220"/>
+                    <delayAreas id="221"/>
+                    <evacuationAreas id="222"/>
+                    <inaccessibleAreas id="223"/>
+                    <saveAreas id="224"/>
+                    <stairAreas id="225"/>
+                    <teleportAreas id="226"/>
                   </associatedPolygon>
                   <linkTarget reference="18"/>
                 </linkTarget>
               </roomEdge>
-              <planPoint id="186" x="2800" y="4800"/>
-              <roomEdge id="187">
+              <planPoint id="227" x="2800" y="4800"/>
+              <roomEdge id="228">
                 <associatedPolygon class="room" reference="8"/>
               </roomEdge>
             </edges>
@@ -492,21 +592,21 @@
           <size>6</size>
           <minX__DefiningEdge class="roomEdge" reference="16"/>
           <minY__DefiningEdge class="roomEdge" reference="12"/>
-          <maxX__DefiningEdge class="roomEdge" reference="187"/>
+          <maxX__DefiningEdge class="roomEdge" reference="228"/>
           <maxY__DefiningEdge class="roomEdge" reference="18"/>
           <xOffsetAll>0</xOffsetAll>
           <yOffsetAll>0</yOffsetAll>
           <heightAll>0</heightAll>
           <widthAll>0</widthAll>
           <associatedFloor reference="6"/>
-          <assignmentAreas id="188"/>
-          <barriers id="189"/>
-          <delayAreas id="190"/>
-          <evacuationAreas id="191"/>
-          <inaccessibleAreas id="192"/>
-          <saveAreas id="193"/>
-          <stairAreas id="194"/>
-          <teleportAreas id="195"/>
+          <assignmentAreas id="229"/>
+          <barriers id="230"/>
+          <delayAreas id="231"/>
+          <evacuationAreas id="232"/>
+          <inaccessibleAreas id="233"/>
+          <saveAreas id="234"/>
+          <stairAreas id="235"/>
+          <teleportAreas id="236"/>
         </room>
         <room reference="28"/>
         <room reference="20"/>
@@ -519,60 +619,60 @@
     </floor>
     <rasterized>true</rasterized>
   </plan>
-  <currentAssignment id="196" name="Wenig">
-    <assignmentTypes id="197">
+  <currentAssignment id="237" name="Wenig">
+    <assignmentTypes id="238">
       <assignmentType reference="170"/>
     </assignmentTypes>
   </currentAssignment>
-  <assignments id="198">
-    <assignment id="199" name="Default assignment">
-      <assignmentTypes id="200">
+  <assignments id="239">
+    <assignment id="240" name="Default assignment">
+      <assignmentTypes id="241">
         <assignmentType reference="49"/>
-        <assignmentType id="201" name="Guests">
-          <diameter class="normalDistribution" id="202" min="0.4" max="0.7" variance="1.0" expectedValue="0.5"/>
-          <age class="normalDistribution" id="203" min="14.0" max="18.0" variance="1.0" expectedValue="16.0"/>
-          <familiarity class="normalDistribution" id="204" min="0.7" max="1.0" variance="1.0" expectedValue="0.8"/>
-          <panic class="normalDistribution" id="205" min="0.0" max="1.0" variance="1.0" expectedValue="0.5"/>
-          <decisiveness class="normalDistribution" id="206" min="0.0" max="1.0" variance="1.0" expectedValue="0.3"/>
-          <reaction class="uniformDistribution" id="207" min="25.0" max="60.0"/>
+        <assignmentType id="242" name="Guests">
+          <diameter class="normalDistribution" id="243" min="0.4" max="0.7" variance="1.0" expectedValue="0.5"/>
+          <age class="normalDistribution" id="244" min="14.0" max="18.0" variance="1.0" expectedValue="16.0"/>
+          <familiarity class="normalDistribution" id="245" min="0.7" max="1.0" variance="1.0" expectedValue="0.8"/>
+          <panic class="normalDistribution" id="246" min="0.0" max="1.0" variance="1.0" expectedValue="0.5"/>
+          <decisiveness class="normalDistribution" id="247" min="0.0" max="1.0" variance="1.0" expectedValue="0.3"/>
+          <reaction class="uniformDistribution" id="248" min="25.0" max="60.0"/>
           <standardEvacuees>3</standardEvacuees>
-          <assignmentAreas id="208"/>
-          <uid id="209">d902ae90-9a9b-4fc7-9064-4517f36b0bcb</uid>
+          <assignmentAreas id="249"/>
+          <uid id="250">d902ae90-9a9b-4fc7-9064-4517f36b0bcb</uid>
         </assignmentType>
       </assignmentTypes>
     </assignment>
-    <assignment reference="196"/>
+    <assignment reference="237"/>
   </assignments>
-  <evacuationPlans id="210"/>
-  <vp id="211">
-    <tfs id="212">
-      <opengl.helper.TextureFontStrings id="213">
-        <centered id="214"/>
-        <strings id="215"/>
+  <evacuationPlans id="251"/>
+  <vp id="252">
+    <tfs id="253">
+      <opengl.helper.TextureFontStrings id="254">
+        <centered id="255"/>
+        <strings id="256"/>
         <width>0.0</width>
         <ortho>true</ortho>
-        <x id="216"/>
-        <y id="217"/>
-        <bold id="218"/>
+        <x id="257"/>
+        <y id="258"/>
+        <bold id="259"/>
         <xoffset>0.0</xoffset>
       </opengl.helper.TextureFontStrings>
     </tfs>
-    <cameraPositions id="219">
-      <ds.CameraPosition id="220">
-        <view id="221">
-          <x>-3.7809617527182144E-5</x>
-          <y>0.006537380261021936</y>
-          <z>-0.9999786303865477</z>
+    <cameraPositions id="260">
+      <ds.CameraPosition id="261">
+        <view id="262">
+          <x>-0.0</x>
+          <y>0.006999828506302368</y>
+          <z>-0.9999755009003382</z>
         </view>
-        <up id="222">
-          <x>0.005783383511882684</x>
-          <y>-0.9999619061268838</y>
-          <z>-0.006537489598031812</z>
+        <up id="263">
+          <x>0.0060</x>
+          <y>-1.0</y>
+          <z>-0.0070</z>
         </up>
-        <pos id="223">
-          <x>65.30714715162868</x>
-          <y>-44.99345966070026</y>
-          <z>104.9994095751787</z>
+        <pos id="264">
+          <x>65.307</x>
+          <y>-44.993</y>
+          <z>104.999</z>
         </pos>
         <text>CameraPosition</text>
       </ds.CameraPosition>

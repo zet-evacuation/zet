@@ -39,6 +39,7 @@ import ds.ca.PotentialManager;
 import ds.ca.SaveCell;
 import ds.ca.StairCell;
 import ds.ca.StaticPotential;
+import ds.z.ZControl;
 import zet.gui.components.tabs.base.AbstractFloor;
 import zet.gui.components.tabs.base.JPolygon;
 import java.awt.Color;
@@ -61,14 +62,24 @@ public class JRasterFloor extends AbstractFloor /*implements ds.z.event.ChangeLi
 	private ZToCAMapping mapping;
 	private ZToCARasterContainer container	;
 	private CAStatistic cas;
+        private ZControl zcontrol;
 	
 	public void setCAStatistic(CAStatistic cas){
 		this.cas = cas;
 	}
 
 	public JRasterFloor() {
+                super();
 		setLayout( null );
 		setBackground( Color.black );
+	}
+
+        public ZControl getZcontrol() {
+		return zcontrol;
+	}
+
+	public void setZcontrol( ZControl zcontrol ) {
+		this.zcontrol = zcontrol;
 	}
 
 	public void setCa( CellularAutomaton ca ) {

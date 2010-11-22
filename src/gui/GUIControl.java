@@ -85,6 +85,7 @@ public class GUIControl implements AlgorithmListener {
 
 	/** The editor. */
 	public JEditor editor;
+
 	/** The edit tool bar. */
 	JEditToolbar editToolBar;
 	/** The visualization tool bar. */
@@ -756,7 +757,10 @@ public class GUIControl implements AlgorithmListener {
 		f.setMinimumSize( ZETProperties.getDefaultFloorSizeMinX(), ZETProperties.getDefaultFloorSizeMinY(), ZETProperties.getDefaultFloorSizeMaxX()-ZETProperties.getDefaultFloorSizeMinX(), ZETProperties.getDefaultFloorSizeMaxY()-ZETProperties.getDefaultFloorSizeMinY() );
 		ZETMain.sendMessage( "Neue Etage angelegt." ); // TODO loc
 		editor.getEditView().updateFloorlist(); // update the floor-boxes in the GUI
-		editor.getEditView().changeFloor( f );		
+		editor.getEditView().changeFloor( f );
+                editor.getQuickVisualizationView().updateQuickFloorlist();
+                editor.getQuickVisualizationView().changeQuickFloor(f);
+
 	}
 
 	public void moveFloorUp() {
