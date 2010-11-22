@@ -409,4 +409,8 @@ public class Vector3 implements Cloneable {
 		final Vector3 v = r.sub( q );
 		return (int) Math.signum( v.x * u.y - v.y * u.x ); // return sign of determinancy
 	}
+
+	public boolean equals( Vector3 v, double eps ) {
+		return Math.abs( x - v.x ) < eps && Math.abs( y - v.y) < eps && Math.abs( z - v.z ) < eps;
+	}
 }
