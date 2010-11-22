@@ -29,22 +29,16 @@ public class BinarySpacePartitioningTreeBuilder extends Algorithm<DynamicTriangl
 	@Override
 	protected BspTree runAlgorithm( DynamicTriangleMesh problem ) {
 		// here we have a mesh and a triangle given
-
-		//BspTree root = new BspTree();
-
 		// start the recursion with the root node
-		//constructBspRec( triangles, root );
-		BspTree root = constructBspRec( problem.getQueue() );
-
-		return root;
+		return constructBspRec( problem.getQueue() );
 	}
 
 	private BspTree constructBspRec( Queue<Triangle> triangles ) {
-		/** TODO: find the best partitioning plane among the list of triangles */
-		Plane plane = computePartitioningPlane( triangles );
+		/** find the best partitioning plane among the list of triangles */
+		final Plane plane = computePartitioningPlane( triangles );
 
 
-		/** TODO: partiton the triangles according to that plane. if no triangles
+		/** partition the triangles according to that plane. if no triangles
 		have been put into some of the sets, the set will simply be empty. However,
 		you must not forget to delete the TriangleList objects if they are not used.*/
 		Queue<Triangle> neg = new LinkedList<Triangle>();
@@ -54,78 +48,40 @@ public class BinarySpacePartitioningTreeBuilder extends Algorithm<DynamicTriangl
 
 		partition( triangles, plane, neg, pos, same, opp );
 
-		//if( neg.faceCount() == 0 ) {
-		if( neg.size() == 0 ) {
-			//neg.clear();
-			neg = null;
-		}
-		if( pos.size() == 0 ) {
-		//if( pos.faceCount() == 0 ) {
-			//pos.clear();
-			pos = null;
-		}
-		//if( opp.faceCount() == 0 ) {
-		if( opp.size() == 0 ) {
-			//opp.clear();
-			opp = null;
-		}
-
 		/** all the triangles need to have been parceled out to neg, pos, same, opp */
-		//assert (triangles.faceCount() != 0);
 		assert (triangles.size() != 0);
 
 		/** at least the triangle that defined the partitioning plane must be
 		coincident with the partitioning plane */
-		//assert (same.faceCount() != 0);
 		assert (same.size() != 0);
-
-		/** no more contents delete the list itself */
-		//delete triangles;
-		//triangles = NULL;
-		/** TODO: create a new bsp tree node */
-		// node must be allocated
-		//assert (node != null);
 
 		BspTree node = new BspTree( plane, same, opp );
 
-		//node.partitionPlane = plane;
-		//node.oppDir = opp;
-		//node.sameDir = same;
-
-		/** TODO: now compute the negative subtree of the current treenode */
-		if( neg != null ) {
-			//node.negativeSide = new BspTree();
-			BspTree negativeTree = constructBspRec( neg );
-			node.setNegativeSide( negativeTree );
-
-		}
+		/** now compute the negative subtree of the current treenode */
+		if( !neg.isEmpty() )
+			node.setNegativeSide( constructBspRec( neg ) );
 
 		/** TODO: and the positive subtree */
-		if( pos != null ) {
-			//node.positiveSide = new BspTree();
-			BspTree positiveTree = constructBspRec( pos );
-			node.setPositiveSide( positiveTree );
-		}
+		if( !pos.isEmpty() )
+			node.setPositiveSide( constructBspRec( pos ) );
 
 		return node;
 	}
 
 	/** Given a TriangleList computes the "optimal" partitioning plane */
 	private Plane computePartitioningPlane( Queue<Triangle> triangles ) {
-// the best plane so far
+		// the best plane so far
 		Plane best_plane = null;
 		int best_value = -1;
 
 		// algorithm tries to find a compromise between balance and splits
 
 		for( Triangle t : triangles ) {
-			//for (std::list<Triangle*>::iterator it=triangles->begin(); it!=triangles->end(); it++) {
 			// to speed things up and put some randomness into everything
-
 			if( best_value >= 0 && rand.nextInt() % 2 > 0 )
 				continue; //check every other triangle
 
-			Plane plane = t.plane;//(*it)->plane;
+			Plane plane = t.plane;
 
 			// count the split up triangles and the triangles in front and behind the plane
 			int splits = 0;
@@ -133,21 +89,15 @@ public class BinarySpacePartitioningTreeBuilder extends Algorithm<DynamicTriangl
 			int pos = 0;
 
 			for( Triangle tri : triangles ) {
-				//for (std::list<Triangle*>::iterator it2=triangles->begin(); it2!=triangles->end(); it2++) {
-
-				//if (*it == *it2)
-				if( tri == t )
+				if( tri == t )	// skip current triangle
 					continue;
-
-				//Triangle* tri = *it2;
 
 				if( straddlesPlane( tri, plane ) )
 					splits++; // the triangle is splitted
+				else if( plane.isInPositiveSide( tri.v[0] ) ) //isInPositiveSide( plane, tri.v[0] ) )
+					pos++;
 				else
-					if( plane.isInPositiveSide( tri.v[0] ) ) //isInPositiveSide( plane, tri.v[0] ) )
-						pos++;
-					else
-						neg++;
+					neg++;
 			}
 
 			// calculate the "value" of the plane, splitting and balance
@@ -160,7 +110,6 @@ public class BinarySpacePartitioningTreeBuilder extends Algorithm<DynamicTriangl
 			}
 		}
 
-		// return the best plane
 		return best_plane;
 	}
 

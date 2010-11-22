@@ -9,15 +9,12 @@ import junit.framework.TestCase;
 
 /**
  * The class <code>MathTest</code> ...
- * @author Kap
+ * @author Jan-Philipp Kappmeier
  */
 public class MathTest extends TestCase {
 
-	/**
-	 * Creates a new instance of <code>MathTest</code>.
-	 */
-	public MathTest() {
-	}
+	/** Creates a new instance of <code>MathTest</code>. */
+	public MathTest() { }
 
 	public void testFactorial() {
 

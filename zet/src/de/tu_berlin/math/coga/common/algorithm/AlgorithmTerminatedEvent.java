@@ -30,12 +30,12 @@ public class AlgorithmTerminatedEvent extends AlgorithmEvent {
 	long runtime = -1;
 
 	/**
-	 * Creates an <code>AlgorithmTerminatedEvent</code> for the specified
-	 * algorithm.
+	 * Creates an <code>AlgorithmTerminatedEvent</code> for the specified algorithm.
 	 * @param algorithm the algorithm that has terminated.
 	 */
 	public AlgorithmTerminatedEvent( Algorithm algorithm ) {
 		super( algorithm, algorithm.getStartTime() + algorithm.getRuntime() );
+		runtime = algorithm.getRuntime();
 	}
 
 	/**

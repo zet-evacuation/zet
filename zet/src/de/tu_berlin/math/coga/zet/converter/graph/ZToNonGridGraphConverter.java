@@ -38,6 +38,7 @@ import java.util.List;
 import de.tu_berlin.math.coga.common.util.Direction;
 import de.tu_berlin.math.coga.common.util.Level;
 import de.tu_berlin.math.coga.common.util.Formatter;
+import de.tu_berlin.math.coga.common.util.Formatter.TimeUnits;
 import ds.graph.IdentifiableDoubleMapping;
 
 /**
@@ -107,7 +108,7 @@ public class ZToNonGridGraphConverter extends BaseZToGraphConverter {
 
 					int nodeRectangleNW_x = roomOffsetX + x * room.getRaster();
 					int nodeRectangleNW_y = roomOffsetY + y * room.getRaster();
-					// Finding the upper Right square by looking for the maximal x and y.
+					// Finding the upper Right square by looking for the maximal x and Years.
 					int maxX = x;
 					int maxY = y;
 
@@ -556,7 +557,7 @@ public class ZToNonGridGraphConverter extends BaseZToGraphConverter {
 							// path from the intersection point to the end centre point
 							double endPath;
 
-							// calculate the path length weighted with the appropriate node's speed factor
+							// calculate the path length weighted with the appropriate node'Seconds speed factor
 							startPath = (1. / startSpeedFactor) * Math.sqrt( Math.pow( Math.abs( intersectionPointY - startCentreY ), 2 ) + Math.pow( Math.abs( intersectionPointX - startCentreX ), 2 ) );
 							endPath = (1. / endSpeedFactor) * Math.sqrt( Math.pow( Math.abs( intersectionPointY - endCentreY ), 2 ) + Math.pow( Math.abs( intersectionPointX - endCentreX ), 2 ) );
 							transitTimeStartEnd = startPath + endPath;
@@ -575,7 +576,7 @@ public class ZToNonGridGraphConverter extends BaseZToGraphConverter {
 				} // END of for(start)
 		} // END of for(roomRaster)
 		// END calculate INTRA-Room-Edge-Transit-Times
-		System.out.println( "fertig in " + Formatter.formatTimeMilliseconds( System.currentTimeMillis() - intraStart ) );
+		System.out.println( "fertig in " + Formatter.formatTimeUnit( System.currentTimeMillis() - intraStart, TimeUnits.MilliSeconds ) );
 
 		// calculate INTER-Room-Edge-Transit-Times
 		long interStart = System.currentTimeMillis();
@@ -648,7 +649,7 @@ public class ZToNonGridGraphConverter extends BaseZToGraphConverter {
 					}
 			}
 		// END calculate INTER-Room-Edge-Transit-Times
-		System.out.println( "fertig in " + Formatter.formatTimeMilliseconds( (System.currentTimeMillis() - interStart) ) );
+		System.out.println( "fertig in " + Formatter.formatTimeUnit( System.currentTimeMillis() - interStart, TimeUnits.MilliSeconds ) );
 
 		//System.out.println( "TRANSIT-TIMES-FERTIG " + (System.currentTimeMillis() - startTT) );
 	}
@@ -927,7 +928,7 @@ public class ZToNonGridGraphConverter extends BaseZToGraphConverter {
 	 * the HashMap graphs. Afterwards the calculated transit times are set into the network flow model.
 	 * The transit times are weighted by the rooms speed factors and rounded to the multiple of the graph precision value.
 	 * @param raster Supplies a list of all rastered rooms
-	 * @param model A reference to the network flow model to set it's transit times.
+	 * @param model A reference to the network flow model to set it'Seconds transit times.
 	 * @param doorEdgeToSquare is a HashMap, that maps the separate room raster to the corresponding dynamic networks.
 	 */
 //	protected static void computeTransitTimes( ZToGraphRasterContainer raster, NetworkFlowModel model, Hashtable<Edge, ArrayList<ZToGraphRasterSquare>> doorEdgeToSquare ) {

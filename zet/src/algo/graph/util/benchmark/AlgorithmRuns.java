@@ -59,12 +59,12 @@ public class AlgorithmRuns<T extends AlgorithmRunData> extends LinkedList<T> {
 
 	public String results() {
 		StringBuilder builder = new StringBuilder();
-		builder.append( "Minimum: " + Formatter.formatTimeNanoseconds( min ) + "\n" );
-		builder.append( "Maximum: " + Formatter.formatTimeNanoseconds( max ) + "\n" );
-		builder.append( "Mittelwert: " + Formatter.formatTimeNanoseconds( mean ) + "\n" );
-		builder.append( "Varianz: " + Formatter.formatTimeNanoseconds( variance ) + "\n" );
-		builder.append( "Standardabweichung: " + Formatter.formatTimeNanoseconds( deviation ) + "\n" );
-		builder.append( "Median: " + Formatter.formatTimeNanoseconds( median ) + "\n" );
+		builder.append( "Minimum: " + Formatter.formatTimeUnit( min, Formatter.TimeUnits.NanoSeconds ) + "\n" );
+		builder.append( "Maximum: " + Formatter.formatTimeUnit( max, Formatter.TimeUnits.NanoSeconds ) + "\n" );
+		builder.append( "Mittelwert: " + Formatter.formatTimeUnit( mean, Formatter.TimeUnits.NanoSeconds ) + "\n" );
+		builder.append( "Varianz: " + Formatter.formatTimeUnit( variance, Formatter.TimeUnits.NanoSeconds ) + "\n" );
+		builder.append( "Standardabweichung: " + Formatter.formatTimeUnit( deviation, Formatter.TimeUnits.NanoSeconds ) + "\n" );
+		builder.append( "Median: " + Formatter.formatTimeUnit( median, Formatter.TimeUnits.NanoSeconds ) + "\n" );
 		return builder.toString();
 	}
 }

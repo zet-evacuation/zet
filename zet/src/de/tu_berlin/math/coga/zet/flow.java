@@ -7,7 +7,6 @@ package de.tu_berlin.math.coga.zet;
 import algo.graph.dynamicflow.eat.EarliestArrivalFlowProblem;
 import algo.graph.dynamicflow.eat.LongestShortestPathTimeHorizonEstimator;
 import algo.graph.dynamicflow.eat.SEAAPAlgorithm;
-import algo.graph.staticflow.maxflow.PushRelabel;
 import algo.graph.staticflow.maxflow.PushRelabelHighestLabelGlobalGapRelabelling;
 import com.martiansoftware.jsap.FlaggedOption;
 import com.martiansoftware.jsap.JSAP;
@@ -22,6 +21,7 @@ import de.tu_berlin.math.coga.common.algorithm.AlgorithmStartedEvent;
 import de.tu_berlin.math.coga.common.algorithm.AlgorithmStatusEvent;
 import de.tu_berlin.math.coga.common.algorithm.AlgorithmTerminatedEvent;
 import de.tu_berlin.math.coga.common.util.Formatter;
+import de.tu_berlin.math.coga.common.util.Formatter.TimeUnits;
 import de.tu_berlin.math.coga.graph.io.dimacs.DimacsReader;
 import de.tu_berlin.math.coga.graph.io.xml.GraphView;
 import de.tu_berlin.math.coga.graph.io.xml.XMLReader;
@@ -63,7 +63,7 @@ public class flow implements AlgorithmListener {
 	ComputationMode computationMode;
 
 	public static void main ( String[] args ) throws JSAPException, IOException {
-		System.out.println( "flow 0.3.0" );
+		System.out.println( "flow 0.3.1" );
 
 		JSAP jsap = new JSAP();
 
@@ -121,7 +121,8 @@ public class flow implements AlgorithmListener {
 				theInstance.yPos = new IdentifiableIntegerMapping<Node>( 0 );
 				theInstance.eafp = DatFileReaderWriter.read( theInstance.inputFileName, theInstance.nodePositionMapping );
 				theInstance.graphView = new GraphView( theInstance.eafp, theInstance.nodePositionMapping );
-				// version without x and y positions:
+				theInstance.computationMode = ComputationMode.EarliestArrivalFlow;
+				// version without x and Years positions:
 				//				theInstance.eafp = DatFileReaderWriter.read( filename );
 			} catch( FileNotFoundException ex ) {
 				System.err.println( "File '" + theInstance.inputFileName + "' not found." );
@@ -186,7 +187,7 @@ public class flow implements AlgorithmListener {
 	public void compute( ) {
 		switch( computationMode ) {
 			case EarliestArrivalFlow:
-				computeMaximumFlow();
+				computeEarliestArrivalFlow();
 				break;
 			case StaticMaximumFlow:
 				computeMaximumFlow();
@@ -227,7 +228,7 @@ public class flow implements AlgorithmListener {
 
 		dl.load();
 		end = System.nanoTime();
-		System.out.println( "Loading: " + Formatter.formatTimeNanoseconds( end-start) );
+		System.out.println( "Loading: " + Formatter.formatTimeUnit( end-start, TimeUnits.NanoSeconds ) );
 
 		MaximumFlowProblem mfp = dl.getMaximumFlowProblem();
 		PushRelabelHighestLabelGlobalGapRelabelling hipr = new PushRelabelHighestLabelGlobalGapRelabelling();
@@ -235,11 +236,11 @@ public class flow implements AlgorithmListener {
 		start = System.nanoTime();
 		hipr.run();
 		end = System.nanoTime();
-		System.out.println( "Init: " + Formatter.formatTimeNanoseconds( hipr.getInitTime() ) );
-		System.out.println( "MaxFlow: " + Formatter.formatTimeNanoseconds( hipr.getPhase1Time() ) );
-		System.out.println( "Cut: " + Formatter.formatTimeNanoseconds( hipr.getPhase2Time() ) );
+		System.out.println( "Init: " + Formatter.formatTimeUnit( hipr.getInitTime(), TimeUnits.NanoSeconds ) );
+		System.out.println( "MaxFlow: " + Formatter.formatTimeUnit( hipr.getPhase1Time(), TimeUnits.NanoSeconds ) );
+		System.out.println( "Cut: " + Formatter.formatTimeUnit( hipr.getPhase2Time(), TimeUnits.NanoSeconds ) );
 		System.out.println( "" );
-		System.out.println( "Overall: " + Formatter.formatTimeNanoseconds( end-start) );
+		System.out.println( "Overall: " + Formatter.formatTimeUnit( end-start, TimeUnits.NanoSeconds ) );
 		System.out.println();
 		System.out.println( "Flow value: " + hipr.getFlowValue() );
 		System.out.println();
@@ -274,9 +275,9 @@ public class flow implements AlgorithmListener {
 			if( index++ == percentInterval ) {
 				System.out.println( '\n' + Formatter.formatPercent( ((AlgorithmProgressEvent)event).getProgress() ));
 				index = 1;
-			} else
+			} else {
 				System.out.print( '.' );
-			if( (int)(((AlgorithmProgressEvent)event).getProgress() * 100) == 100 )
+			} if( (int)(((AlgorithmProgressEvent)event).getProgress() * 100) == 100 )
 				System.out.println( "\n100%" );
 		} else if( event instanceof AlgorithmStartedEvent )
 			//System.out.println( "Algorithm starts." );
@@ -284,9 +285,9 @@ public class flow implements AlgorithmListener {
 		else if( event instanceof AlgorithmTerminatedEvent ) {
 			System.out.println( "" );
 			final long end = event.getEventTime();
-			System.out.println( "PathDecomposition runtime: " + Formatter.formatTimeMilliseconds( end - pathDecompositionStart ) );
+			System.out.println( "PathDecomposition runtime: " + Formatter.formatTimeUnit( end - pathDecompositionStart, TimeUnits.MilliSeconds ) );
 			try {
-				System.out.println( "Overall runtime flow computation: " + Formatter.formatTimeMilliseconds( event.getAlgorithm().getRuntime() ) );
+				System.out.println( "Overall runtime flow computation: " + Formatter.formatTimeUnit( event.getAlgorithm().getRuntime(), TimeUnits.MilliSeconds ) );
 			} catch( IllegalStateException ex ) {
 				System.out.println( "The illegal state exception occured once again." );
 			}
@@ -294,7 +295,7 @@ public class flow implements AlgorithmListener {
 		} else if( event instanceof AlgorithmStatusEvent ) {
 			if( ((AlgorithmStatusEvent)event).getMessage().equals( "INIT_PATH_DECOMPOSITION" ) ) {
 				pathDecompositionStart = event.getEventTime();
-				System.out.println( "\nSEAAP runtime: " + Formatter.formatTimeMilliseconds( pathDecompositionStart - start ) );
+				System.out.println( "\nSEAAP runtime: " + Formatter.formatTimeUnit( pathDecompositionStart - start, TimeUnits.MilliSeconds ) );
 			}
 		} else
 			System.out.println( event.toString() );
@@ -310,16 +311,3 @@ public class flow implements AlgorithmListener {
 	}
 
 }
-
-
-//
-//java.lang.NullPointerException
-//        at ds.graph.flow.ChainDecomposition2.split(ChainDecomposition2.java:140)
-//        at ds.graph.flow.ChainDecomposition2.uncrossPaths(ChainDecomposition2.java:204)
-//        at ds.graph.flow.ChainDecomposition2.uncrossPaths(ChainDecomposition2.java:124)
-//        at ds.graph.flow.FlowOverTime.<init>(FlowOverTime.java:55)
-//        at algo.graph.dynamicflow.eat.SEAAPAlgorithm.runAlgorithm(SEAAPAlgorithm.java:85)
-//        at algo.graph.dynamicflow.eat.SEAAPAlgorithm.runAlgorithm(SEAAPAlgorithm.java:37)
-//        at de.tu_berlin.math.coga.common.algorithm.Algorithm.run(Algorithm.java:393)
-//        at zet.flow.compute(flow.java:155)
-//        at zet.flow.main(flow.java:106)
