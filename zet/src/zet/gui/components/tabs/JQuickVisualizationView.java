@@ -30,7 +30,6 @@ import javax.swing.JPanel;
 import statistic.ca.CAStatistic;
 import zet.gui.components.tabs.quickVisualization.JRasterFloor;
 
-/** try */
 import javax.swing.JComboBox;
 import zet.gui.components.model.FloorComboBoxModel;
 import java.awt.event.ActionEvent;
@@ -45,16 +44,14 @@ import java.util.Collections;
 import javax.swing.JLabel;
 import zet.gui.GUILocalization;
 import ds.z.ZControl;
-import zet.gui.components.tabs.editor.JFloor;
-import gui.ZETMain;
-import zet.gui.JEditor;
+
 /**
  *
  * @author Jan-Philipp Kappmeier
  */
 public class JQuickVisualizationView extends AbstractSplitPropertyWindow<JFloorScrollPane<JRasterFloor>> {
 	GUILocalization loc;
-    /** try */
+
         private JComboBox QuickfloorSelector;
 	private FloorComboBoxModel QuickfloorSelectorModel;
         private int selectedFloor = 0;
@@ -68,8 +65,7 @@ public class JQuickVisualizationView extends AbstractSplitPropertyWindow<JFloorS
         private ZControl projectControl;
         private boolean disableUpdate = false;
 
-     /** try */
-
+   
 	public JQuickVisualizationView(GUIControl guiControl ) {
 
                 
@@ -105,9 +101,9 @@ public class JQuickVisualizationView extends AbstractSplitPropertyWindow<JFloorS
 
         public void update() {
              QuickfloorSelector.removeAllItems();
-		//for( Floor f : projectControl.getProject().getBuildingPlan().getFloors() )
+		for( Floor f : projectControl.getProject().getBuildingPlan().getFloors() )
 			 
-				//QuickfloorSelector.addItem(f);
+				QuickfloorSelector.addItem(f);
 	}
 
         
