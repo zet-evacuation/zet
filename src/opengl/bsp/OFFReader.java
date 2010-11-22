@@ -38,8 +38,12 @@ public class OFFReader {
 		mesh.prepareSize( numVertices, numEdges, numFaces );
 
 
-		line = reader.readLine();
-		String[] split = line.split( " " );
+		do { // skip comments
+			line = reader.readLine().trim();
+		} while( line.charAt( 0 ) == '#' );
+
+
+		String[] split = line.split( "[\\s]+" );
 		numVertices = Integer.parseInt( split[0] );
 		numFaces = Integer.parseInt( split[1] );
 		numEdges = Integer.parseInt( split[2] );
@@ -48,8 +52,8 @@ public class OFFReader {
 		System.out.println( "Read " + numVertices + " vertices." );
 		for( int i = 0; i < numVertices; i++ ) {
 			float x, y, z;
-			line = reader.readLine();
-			split = line.split( " " );
+			line = reader.readLine().trim();
+			split = line.split( "[\\s]+" );
 			x = Float.parseFloat( split[0] );
 			y = Float.parseFloat( split[1] );
 			z = Float.parseFloat( split[2] );
@@ -65,8 +69,8 @@ public class OFFReader {
 		for( int i = 0; i < numFaces; i++ ) {
 			int i1, i2, i3;
 
-			line = reader.readLine();
-			split = line.split( " " );
+			line = reader.readLine().trim();
+			split = line.split( "[\\s]+" );
 			int n = Integer.parseInt( split[0] );
 
 			switch( n ) {

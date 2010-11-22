@@ -19,7 +19,7 @@ import java.util.Random;
 public class BinarySpacePartitioningTreeBuilder extends Algorithm<DynamicTriangleMesh,BspTree> {
 	final static double eps = 0.000076;
 	private Random rand = new Random();
-	private Sign tempSign;
+	private Sign signTemp;
 	private boolean contains;
 	private Triangle newTriangle1;
 	private Triangle newTriangle2;
@@ -57,7 +57,7 @@ public class BinarySpacePartitioningTreeBuilder extends Algorithm<DynamicTriangl
 
 		BspTree node = new BspTree( plane, same, opp );
 
-		/** now compute the negative subtree of the current treenode */
+		/** now compute the negative subtree of the current tree node */
 		if( !neg.isEmpty() )
 			node.setNegativeSide( constructBspRec( neg ) );
 
@@ -121,166 +121,113 @@ public class BinarySpacePartitioningTreeBuilder extends Algorithm<DynamicTriangl
 	The contents of the original TriangleList (pointers to Triangles) will be parceled
 	out to the four resulting TriangleList, s.t. that the passed TriangleList will be
 	empty after this function has finished. */
-	private void partition( Queue<Triangle> triangles,
-					Plane p,
-					Queue<Triangle> negativeSide,
-					Queue<Triangle> positiveSide,
-					Queue<Triangle> sameDir,
-					Queue<Triangle> oppDir ) {
-/** remove one triangle from the list in each step and distribute it
-	to the four other list according to the partitioning plane p. */
-	//while ( triangles.faceCount() > 0 ) {
-	while ( triangles.size() > 0 ) {
+	private void partition( Queue<Triangle> triangles, Plane p, Queue<Triangle> negativeSide, Queue<Triangle> positiveSide, Queue<Triangle> sameDir, Queue<Triangle> oppDir ) {
+		/** remove one triangle from the list in each step and distribute it
+		to the four other list according to the partitioning plane p. */
+		while( triangles.size() > 0 ) {
+			/** sign of the starting point of the edge that causes the intersection */
+			Sign signV1 = Sign.Negative;//(SIGN)-1;
+			Sign signV2 = Sign.Negative;//(SIGN)-1;
 
-		//Vector3 i1 = new Vector3();// vector könnte aßerhalb der schleife stehen, würde speicher sparen
-		//Vector3 i2 = new Vector3();
+			/** get the first triangle from the list and remove it since we
+			are going to partition it into one of the four sets */
+			Triangle t = triangles.remove();
 
-		/** index of the vertex that is the first vertex of the intersecting
-		edge. -1 if no intersection */
-		//;
-		//intersection1 = intersection2 = -1;
+			/** compute the first intersection point. the index of the vertex is stored
+			 * in the private class variable intersectionTemp the position with respect
+			 * to the plane is stored in signTemp. intersection index is -1 if no
+			 * intersection occurred.
+			 */
+			Vector3 i1 = findNextIntersection( 0, t, p );
+			int intersection1 = intersectionTemp;
+			signV1 = signTemp;
 
-		/** sign of the starting point of the edge that causes the intersection */
-		Sign signV1 = Sign.Negative;//(SIGN)-1;
-		Sign signV2 = Sign.Negative;//(SIGN)-1;
+			/** if found a first intersection, check if we also have a second one */
+			int intersection2 = -1;
+			Vector3 i2 = null;
+			if( intersection1 != -1 ) {
+				// check in the same style as above. return values by temporary class variables
+				i2 = findNextIntersection( (intersection1 + 1) % 3, t, p );
+				intersection2 = intersectionTemp;
+				signV2 = signTemp;
 
+				/** Due to numerical instabilities, both intersection points may
+				have the same sign such as in the case when splitting very close
+				to a vertex. This should not count as a split. */
+				if( i2 != null && i1.equals( i2, eps ) )
+					intersection2 = -1;
 
-		/** get the first triangle from the list and remove it since we
-		are going to partition it into one of the four sets */
-		Triangle t = triangles.remove();// .get( 0 );//->front();
-		//triangles->pop_front();
+				if( intersection2 != -1 && signV1 == signV2 )
+					intersection2 = -1;
 
+				/** found two intersections, need to split the triangle
+				and then split any possibly resulting trapezoids into
+				another two triangles */
+				if( intersection2 != -1 ) {
+					/** split the triangle into a triangle and a quadrangle */
+					Quadrangle q = splitTriangle( t, intersection1, intersection2, i1.x, i1.y, i1.z, i2.x, i2.y, i2.z );
 
-		/** try if any of the triangles edges intersects with the plane */
-		//intersection1 = findNextIntersection(0, t, p, &ix1, &iy1, &iz1, &signV1);
-		Vector3 i1 = findNextIntersection( 0, t, p );
-		int intersection1 = intersectionTemp;
-		signV1 = tempSign; // set by findNextIntersection
+					splitQuadrangle( q );
 
-		int intersection2 = -1;
-		Vector3 i2 = null;
-		/** found first intersection, check if we also have a second one */
-		if( intersection1 != -1 ) {
+					/** copy normal and plane pointer */
+					newTriangle1.faceNormal = t.faceNormal;
+					newTriangle1.plane = t.plane;
+					if( newTriangle2 != null ) {
+						newTriangle2.faceNormal = t.faceNormal;
+						newTriangle2.plane = t.plane;
+					}
 
-			i2 = findNextIntersection( (intersection1 + 1) % 3, t, p );
-			intersection2 = intersectionTemp;
-			signV2 = tempSign; // set by findNextIntersection
-
-			/** Due to numerical instabilities, both intersection points may
-			have the same sign such as in the case when splitting very close
-			to a vertex. This should not count as a split. */
-			//Vertex* vtemp1 = new Vertex(ix1, iy1, iz1);
-			//Vertex* vtemp2 = new Vertex(ix2, iy2, iz2);
-			if( i2 != null && i1.equals( i2, eps ) ) // ISVERTEX_EQ( i1, i2 ) )
-				intersection2 = -1;
-
-			if( intersection2 != -1 && signV1 == signV2 )
-				intersection2 = -1;
+					if( contains ) {
+						if( signV1 == Sign.Positive ) {
+							positiveSide.add( t );
+							negativeSide.add( newTriangle1 );
+							if( newTriangle2 != null )
+								negativeSide.add( newTriangle2 );
+						} else if( signV1 == Sign.Negative ) {
+							negativeSide.add( t );
+							positiveSide.add( newTriangle1 );
+							if( newTriangle2 != null )
+								positiveSide.add( newTriangle2 );
+						}
+					} else if( signV1 == Sign.Negative ) {
+						positiveSide.add( t );
+						negativeSide.add( newTriangle1 );
+						if( newTriangle2 != null )
+							negativeSide.add( newTriangle2 );
+					} else if( signV1 == Sign.Positive ) {
+						negativeSide.add( t );
+						positiveSide.add( newTriangle1 );
+						if( newTriangle2 != null )
+							positiveSide.add( newTriangle2 );
+					}
+				}
+			}
+			if( intersection1 == -1 || intersection2 == -1 ) // no intersection
+				switch( whichSideIsFaceWRTplane( t, p ) ) { // add to the correct list, depending on the sign
+					case Negative:
+						negativeSide.add( t );
+						break;
+					case Positive:
+						positiveSide.add( t );
+						break;
+					default:
+						// depending if the normal equals or not, add to sameDir or oppDir
+						(t.plane.getNormal().equals( p.getNormal(), eps ) ? sameDir : oppDir).add( t );
+				}
 		}
-
-		/** found two intersections, need to split the triangle
-		and then split any possibly resulting trapezoids into
-		another two triangles */
-		if( intersection1 != -1 && intersection2 != -1 ) {
-
-			//boolean containsV1;
-			/** split the triangle into a triangle and a quadrangle */
-			Quadrangle q = splitTriangle( t, intersection1, intersection2, i1.x, i1.y, i1.z, i2.x, i2.y, i2.z );
-			//containsV1 = lastContains;
-
-			splitQuadrangle( q );
-			// newTriangle is set here
-
-
-			/** copy normal and plane pointer */
-			newTriangle1.faceNormal = t.faceNormal;
-			newTriangle1.plane = t.plane;
-			if( newTriangle2 != null ) {
-				newTriangle2.faceNormal = t.faceNormal;
-				newTriangle2.plane = t.plane;
-			}
-
-			if (contains) {
-				if (signV1 == Sign.Positive) {
-					positiveSide.add( t );//->push_back(t);
-					negativeSide.add( newTriangle1 );//->push_back(t1);
-					if (newTriangle2 != null)
-						negativeSide.add( newTriangle2 );
-				} else if (signV1 == Sign.Negative) {
-					negativeSide.add( t ); //->push_back(t);
-					positiveSide.add( newTriangle1 ); //->push_back(t1);
-					if (newTriangle2 != null)
-						positiveSide.add( newTriangle2 );//->push_back(t2);
-				}
-			}
-			else {
-				if (signV1 == Sign.Negative) {
-					positiveSide.add( t );//->push_back(t);
-					negativeSide.add( newTriangle1 );//->push_back(t1);
-					if (newTriangle2 != null)
-						negativeSide.add( newTriangle2 ); //->push_back(t2);
-				}
-				else if (signV1 == Sign.Positive) {
-					negativeSide.add( t ); //->push_back(t);
-					positiveSide.add( newTriangle1 ); //->push_back(t1);
-					if (newTriangle2 != null)
-						positiveSide.add( newTriangle2 );//->push_back(t2);
-				}
-			}
-		}
- /** no intersection */
-			else {
-				Sign side = whichSideIsFaceWRTplane( t, p );
-				if( side == Sign.Negative )
-					negativeSide.add( t );//->push_back(t);
-				else if( side == Sign.Positive )
-					positiveSide.add( t );//->push_back(t);
-				else {
-					assert (side == Sign.Zero);
-
-					if( t.plane.getNormal().equals( p.getNormal(), eps ) )// IS_EQ( t.plane.getA(), p.getA() ) && IS_EQ( t.plane.getB(), p.getB() ) && IS_EQ( t.plane.getC(), p.getC() ) )
-						sameDir.add( t );//push_back(t);
-					else
-						oppDir.add( t );//->push_back(t);
-				}
-			}
-		}
-
 	}
 
 	/** Returns true if t straddles p, false otherwise */
 	private boolean straddlesPlane( Triangle t, Plane p ) {
 		boolean anyPositive = false;
 		boolean anyNegative = false;
-
-		Vector3 v1 = t.v[0];
-		Vector3 v2 = t.v[1];
-		Vector3 v3 = t.v[2];
-
-		double val;
-		Sign sign;
-
-		val = p.getA() * v1.x + p.getB() * v1.y + p.getC() * v1.z + p.getD();
-		sign = val < -eps ? Sign.Negative : val > eps ? Sign.Positive : Sign.Zero;
-		if( sign == Sign.Negative )
-			anyNegative = true;
-		else if( sign == Sign.Positive )
-			anyPositive = true;
-
-		val = p.getA() * v2.x + p.getB() * v2.y + p.getC() * v2.z + p.getD();
-		sign = val < -eps ? Sign.Negative : val > eps ? Sign.Positive : Sign.Zero;
-		if( sign == Sign.Negative )
-			anyNegative = true;
-		else if( sign == Sign.Positive )
-			anyPositive = true;
-
-		val = p.getA() * v3.x + p.getB() * v3.y + p.getC() * v3.z + p.getD();
-		sign = val < -eps ? Sign.Negative : val > eps ? Sign.Positive : Sign.Zero;
-		if( sign == Sign.Negative )
-			anyNegative = true;
-		else if( sign == Sign.Positive )
-			anyPositive = true;
-
+		for( int i = 0; i < 2; ++i ) {
+			final Sign sign = p.getSign( t.v[i] );
+			if( sign == Sign.Negative )
+				anyNegative = true;
+			else if( sign == Sign.Positive )
+				anyPositive = true;
+			}
 
 		/* if vertices on both sides of plane then face straddles else not */
 		if( anyNegative && anyPositive )
@@ -290,29 +237,24 @@ public class BinarySpacePartitioningTreeBuilder extends Algorithm<DynamicTriangl
 
 	private Vector3 findNextIntersection( int start, Triangle triangle, Plane plane ) {
 		assert (start < 3 && start >= 0);
-		for( int i = start; i < 3; i++ ) {
-			Vector3 v = triangle.v[i];
-			int ii = (i + 1) % 3;
-			Vector3 vv = triangle.v[ii];
-			Vector3 newIntersection = plane.intersectionPoint( v, vv );
+		for( int i = start; i < 3; i++ ) { // check for intersections with all pairs of vertices (calculation modulo 3
+			final Vector3 startVertex = triangle.v[i];
+			final Vector3 nextVertex = triangle.v[(i + 1) % 3]; // the next index modulo 3
+			final Vector3 newIntersection = plane.intersectionPoint( startVertex, nextVertex );
 			if( newIntersection != null ) {
 				intersectionTemp = i;
-				tempSign = plane.isInPositiveSide( v ) ? Sign.Positive : Sign.Negative;
+				signTemp = plane.isInPositiveSide( startVertex ) ? Sign.Positive : Sign.Negative;
 				return newIntersection;
 			}
-			
-			//tempSign = edgeIntersectsPlane( v, vv, plane );
-			//if( tempSign != Sign.Zero )
-			//	return i;
 		}
 		intersectionTemp = -1;
-		tempSign = Sign.Zero;
+		signTemp = Sign.Zero;
 		return null;
 	}
 
 		/** Split the triangle t into a triangle and a quadrangle. Note that the
 	quadrangle may be degenerate, i.e. nearly a triangle itself
-	containsIntersection1 ist true if the triangle contains the predecessor
+	containsIntersection1 is true if the triangle contains the predecessor
 	vertex of intersection point 1 */
 	// containsV1 ist statisch als lastContains
 	private Quadrangle splitTriangle( Triangle t, int intersection1, int intersection2,
@@ -345,35 +287,19 @@ public class BinarySpacePartitioningTreeBuilder extends Algorithm<DynamicTriangl
 			Vector3 v;
 
 			v = new Vector3(ix1, iy1, iz1);
-			//v->normal = triOld1->normal;
-			//vertices .push_back(v);
-//			BspMain.vertices.add( v );
-
 			t.v[(intersection1+1)%3] = v;
-
 			v = new Vector3(ix2, iy2, iz2);
-			//v->normal = triOld1->normal;
-			//vertices.push_back(v);
-//			BspMain.vertices.add( v );
-
 			t.v[(intersection1+2)%3] = v;
-
 
 			/** the quadrangle resulting from the split keeps two
 			vertices from the original triangle and gets two new
 			vertices (the intersection points) */
 			v = new Vector3(ix1, iy1, iz1);
-			//v->normal = triOld1->normal;
-			//vertices.push_back(v);
-//		BspMain.vertices.add( v );
 
 			q.v[0] = v;
 			q.v[1] = triOld1;
 			q.v[2] = triOld2;
 			v = new Vector3(ix2, iy2, iz2);
-			//v->normal = triOld1->normal;
-			//vertices.push_back(v);
-//			BspMain.vertices.add( v );
 			q.v[3] = v;
 		} else {
 			contains = false;
@@ -384,27 +310,15 @@ public class BinarySpacePartitioningTreeBuilder extends Algorithm<DynamicTriangl
 			Vector3 v;
 
 			v = new Vector3(ix1, iy1, iz1);
-			//v->normal = triOld1->normal;
-			//vertices.push_back(v);
-//			BspMain.vertices.add( v );
 			t.v[intersection1] = v;
 			v = new Vector3(ix2, iy2, iz2);
-			//v->normal = triOld1->normal;
-			//vertices.push_back(v);
-//			BspMain.vertices.add( v );
 			t.v[(intersection2+1) % 3] = v;
 
 			v = new Vector3(ix2, iy2, iz2);
-			//v->normal = triOld1->normal;
-			//vertices.push_back(v);
-//			BspMain.vertices.add( v );
 			q.v[0] = v;
 			q.v[1] = triOld2;
 			q.v[2] = triOld1;
 			v = new Vector3(ix1, iy1, iz1);
-			//v->normal = triOld1->normal;
-			//vertices.push_back(v);
-//			BspMain.vertices.add( v );
 			q.v[3] = v;
 		}
 
@@ -419,34 +333,23 @@ public class BinarySpacePartitioningTreeBuilder extends Algorithm<DynamicTriangl
 		int numEqual = 0;
 		int deleteVertex = -1;
 		for (int i = 0; i < 4; i++) {
-			if ( q.v[i].equals( q.v[(i+1)%4], eps ) ) { //ISVERTEX_EQ(q.v[i], q.v[(i+1)%4])) {
+			if ( q.v[i].equals( q.v[(i+1)%4], eps ) ) {
 				numEqual++;
-				/** mark the duplicate for later deletion */
-				deleteVertex = i;
+				deleteVertex = i;  // mark the duplicate for later deletion
 			}
 		}
 
 		/** we only expect a maximum of one pair of vertices being equal */
 		assert(numEqual <= 1);
 
-
 		/** no numerical problems, can split the quadrangle into two triangles */
 		if (numEqual == 0) {
-
-			Vector3 v0dup = new Vector3(q.v[0].x, q.v[0].y, q.v[0].z);
-			//v0dup->normal = q->v[0]->normal;
-			//vertices.push_back(v0dup);
-//			BspMain.vertices.add( v0dup );
-			Vector3 v2dup = new Vector3(q.v[2].x, q.v[2].y, q.v[2].z);
-			//v2dup->normal = q->v[0]->normal;
-			//vertices.push_back(v2dup);
-//			BspMain.vertices.add( v2dup );
+			Vector3 v0Clone = new Vector3(q.v[0].x, q.v[0].y, q.v[0].z);
+			Vector3 v2Clone = new Vector3(q.v[2].x, q.v[2].y, q.v[2].z);
 
 			newTriangle1 = new Triangle(q.v[0], q.v[1], q.v[2]);
-			newTriangle2 = new Triangle(v2dup, q.v[3], v0dup);
+			newTriangle2 = new Triangle(v2Clone, q.v[3], v0Clone);
 		} else {
-
-			//newTriangle1;// = new Triangle();
 			newTriangle2 = null;
 			Vector3[] triangleVertices = new Vector3[3];
 
@@ -458,7 +361,6 @@ public class BinarySpacePartitioningTreeBuilder extends Algorithm<DynamicTriangl
 					// so we will be able to delete it
 				} else {
 					triangleVertices[vIndex] = q.v[i];
-					//newTriangle1.v[vIndex] = q.v[i];
 					vIndex++;
 				}
 			}
@@ -486,12 +388,15 @@ public class BinarySpacePartitioningTreeBuilder extends Algorithm<DynamicTriangl
 		for( int i = 0; i < 3; i++ ) {
 			v = t.v[i];
 			value = plane.getA() * v.x + plane.getB() * v.y + plane.getC() * v.z + plane.getD();
-			if( value < -eps )
+			final Sign sign = plane.getSign( t.v[i] );
+			if( sign == Sign.Negative )
+			//if( value < -eps )
 				isNeg = true;
-			else if( value > eps )
+			//else if( value > eps )
+			else if( sign == Sign.Positive )
 				isPos = true;
-			else
-				assert ( Math.abs( value ) < eps ); // IS_EQ( value, 0.0 ));
+			//else
+			//	assert ( Math.abs( value ) < eps );
 		}
 
 		/** in the very rare case that some vertices slipped thru to other side of

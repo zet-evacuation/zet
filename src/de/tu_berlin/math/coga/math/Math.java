@@ -5,16 +5,13 @@
 package de.tu_berlin.math.coga.math;
 
 /**
- * The class <code>Math</code> is a utility clas that provides some additional
+ * The class <code>Math</code> is a utility class that provides some additional
  * mathematical methods.
  * @author Jan-Philipp Kappmeier
  */
 public class Math {
-	/**
-	 * Creates a new instance of <code>Math</code>.
-	 */
-	private Math() {
-	}
+	/** Creates a new instance of <code>Math</code>. */
+	private Math() { }
 
 	/**
 	 * Computes the rounded down logarithm to the basis 2 of an integral number.
