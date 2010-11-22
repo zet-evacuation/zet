@@ -32,6 +32,9 @@ public class Plane {
 	private Vector3 point;
 	/** The d in a plane equation. Also the length of the anchor point projected on the normal line. */
 	private double d;
+  double a;
+  double b;
+  double c;
 	
 	/**
 	 * Initialize with the {@code x}-{@code y}-plane.
@@ -87,6 +90,9 @@ public class Plane {
 		normal = aux2.crossProduct( aux1 );
 		normal.normalize();
 		point = v2.clone();
+		a = normal.x;
+		b = normal.y;
+		c = normal.z;
 		d = -( normal.dotProduct( point ) );
 	}
 	
@@ -123,5 +129,112 @@ public class Plane {
 	public Vector3 getNormal( ) {
 		return this.normal;
 		// TODO COpy or const
+	}
+
+    public double getA() {
+        return a;
+    }
+
+    public double getB() {
+        return b;
+    }
+
+    public double getC() {
+        return c;
+    }
+
+    public double getD() {
+        return d;
+    }
+
+	/** Determines whether pos is on the positive side of plane
+	Returns true if pos is in the positive side of plane, false otherwise */
+//	static boolean isInPositiveSide( Plane plane, Vector3 pos ) {
+//		return (plane.getA()*pos.x + plane.getB()*pos.y + plane.getC()*pos.z + plane.getD() > 0);
+//	}
+
+	/**
+	 * Determines, if a point lies in the positive half of the half space defined
+	 * by this edge.
+	 * @param pos the point that is checked
+	 * @return {@code true}, if {@code pos} lies in the positive half space, {@code false} otherwise
+	 */
+	public boolean isInPositiveSide( Vector3 pos ) {
+		return a*pos.x + b*pos.y + c*pos.z + d > 0;
+		//return isInPositiveSide( this, pos );
+	}
+
+	public boolean isInNegativeSide( Vector3 pos ) {
+		return a*pos.x + b*pos.y + c*pos.z + d < 0;
+		//return isInPositiveSide( this, pos );
+	}
+
+	/** Determines if an edge bounded by (x1,y1,z1)->(x2,y2,z2) intersects
+	the plane.
+	If there's an intersection, the sign of (x1,y1,z1), NEGATIVE or POSITIVE,
+	w.r.t. the plane is returned with the intersection (ix,iy,iz) updated.
+	Otherwise ZERO is returned. */
+	public Vector3 intersectionPoint( Vector3 v1, Vector3 v2 ) {
+		final double eps = 0.0074;// todo set eps somehow
+		int sign1, sign2;		/* must be int since gonna do a bitwise ^ */
+		//double a = plane.getA();
+		//double b = plane.getB();
+		//double c = plane.getC();
+		//double d = plane.getD();
+
+		/* get signs */
+		double temp = a * v1.x + b * v1.y + c * v1.z + d;
+		if( temp < -eps )
+			sign1 = -1;
+		else if( temp > eps )
+			sign1 = 1;
+		else {
+			/* edges beginning with a 0 sign are not considered valid intersections
+			 * case 1 & 6 & 7, see Gems III.
+			 */
+			assert (Math.abs( temp ) < eps); // IS_EQ( temp1, 0.0 ));
+			return null;
+		}
+
+		temp = (a * v2.x) + (b * v2.y) + (c * v2.z) + d;
+		if( temp < -eps )
+			sign2 = -1;
+		else if( temp > eps )
+			sign2 = 1;
+		else {			/* case 8 & 9, see Gems III */
+			assert (Math.abs( temp ) < eps);// IS_EQ( temp2, 0.0 ));
+			return new Vector3( v2.x, v2.y, v2.z );
+//			i.x = v2.x;
+//			i.y = v2.y;
+//			i.z = v2.z;
+
+			//return ((sign1 == -1) ? Sign.Negative : Sign.Positive);
+		}
+
+		/* signs different?
+		 * recall: -1^1 == 1^-1 ==> 1    case 4 & 5, see Gems III
+		 *         -1^-1 == 1^1 ==> 0    case 2 & 3, see Gems III
+		 */
+		if( (sign1 ^ sign2) != 0 ) {
+			double dx, dy, dz;
+			double denom, tt;
+
+			/* compute intersection point */
+			dx = v2.x - v1.x;
+			dy = v2.y - v1.y;
+			dz = v2.z - v1.z;
+
+			denom = (a * dx) + (b * dy) + (c * dz);
+			tt = -((a * v1.x) + (b * v1.y) + (c * v1.z) + d) / denom;
+
+			assert (sign1 == 1 || sign1 == -1);
+
+			return new Vector3( v1.x + (tt * dx), v1.y + (tt * dy), v1.z + (tt * dz) );
+//			i.x = v1.x + (tt * dx);
+//			i.y = v1.y + (tt * dy);
+//			i.z = v1.z + (tt * dz);
+			//return ((sign1 == -1) ? Sign.Negative : Sign.Positive);
+		} else
+			return null;
 	}
 }
