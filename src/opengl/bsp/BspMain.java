@@ -424,7 +424,7 @@ public class BspMain extends JFlyingEyePanel {
 		originalList = new LinkedList<Triangle>( );
 		copiedList = new LinkedList<Triangle>( );
 		for( Triangle t: mesh ) {
-			final Triangle newTriangle = new Triangle( t.v[0].clone(), t.v[1].clone(), t.v[2].clone() );
+			final Triangle newTriangle = new Triangle( t.v[0].clone(), t.v[1].clone(), t.v[2].clone(), -1, -1, -1 );
 			newTriangle.plane = new Plane();
 			newTriangle.computePlane();
 			newTriangle.faceNormal = newTriangle.plane.getNormal();

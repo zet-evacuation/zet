@@ -18,6 +18,7 @@ import java.util.Queue;
 public class DynamicTriangleMesh extends Mesh<Triangle> {
 	Queue<Triangle> facesQueue;
 	ArrayList<Vector3> verticesArray;
+
 	public DynamicTriangleMesh() {
 		verticesArray = new ArrayList<Vector3>();
 		facesQueue = new LinkedList<Triangle>();
@@ -33,12 +34,12 @@ public class DynamicTriangleMesh extends Mesh<Triangle> {
 	 * @return
 	 */
 	public Triangle addTriangle( int i1, int i2, int i3 ) {
-		final Triangle t = new Triangle( verticesArray.get(i1), verticesArray.get(i2), verticesArray.get(i3) );
-		faces.add(t);
+		final Triangle t = new Triangle( verticesArray.get( i1 ), verticesArray.get( i2 ), verticesArray.get( i3 ), i1, i2, i3 );
+		faces.add( t );
 		return t;
 	}
 
-	public boolean offer(Triangle e) {
+	public boolean offer( Triangle e ) {
 		return facesQueue.offer( e );
 	}
 
@@ -59,12 +60,11 @@ public class DynamicTriangleMesh extends Mesh<Triangle> {
 	}
 
 	@Override
-	public void prepareSize(int vertices, int edges, int faces) {
+	public void prepareSize( int vertices, int edges, int faces ) {
 		verticesArray.ensureCapacity( vertices );
 	}
 
 	Queue<Triangle> getQueue() {
 		return facesQueue;
 	}
-
 }
