@@ -14,6 +14,7 @@ import de.tu_berlin.math.coga.math.vectormath.Vector3;
  */
 public class Triangle implements Face {
 	Vector3 v[] = new Vector3[3];
+	int vidx[] = new int[3];
 	Plane plane;
 	Vector3 faceNormal;
 
@@ -21,10 +22,13 @@ public class Triangle implements Face {
 		// gefährlich ;)
 	}
 
-	public Triangle( Vector3 v0, Vector3 v1, Vector3 v2 ) {
+	public Triangle( Vector3 v0, Vector3 v1, Vector3 v2, int v0idx, int v1idx, int v2idx ) {
 		v[0] = v0;
 		v[1] = v1;
 		v[2] = v2;
+		vidx[0] = v0idx;
+		vidx[1] = v1idx;
+		vidx[2] = v2idx;
 		computePlane();
 	}
 
