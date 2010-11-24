@@ -134,7 +134,7 @@ public class Floor implements Serializable, Cloneable, Iterable<Room> {
 	 * @param the room to be removed
 	 * @throws IllegalArgumentException if the given room is not associated with this floor
 	 */
-	void deleteRoom( Room room ) throws IllegalArgumentException {
+	public void deleteRoom( Room room ) throws IllegalArgumentException {
 		if( !( rooms.contains( room ) ) )
 			throw new IllegalArgumentException(ZLocalization.getSingleton ( ).getString ("ds.z.NoRoomException"));
 		else {
