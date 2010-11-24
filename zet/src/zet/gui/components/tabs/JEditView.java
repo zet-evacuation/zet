@@ -240,6 +240,10 @@ public class JEditView extends AbstractSplitPropertyWindow<JFloorScrollPane<JFlo
 	final NumberFormat nfFloat = DefaultLoc.getSingleton().getFloatConverter();
 	final NumberFormat nfInteger = DefaultLoc.getSingleton().getIntegerConverter();
 
+        private JButton deleteRoom;
+        private ArrayList<Room> rooms;
+        private LinkedList<JPolygon> selectedPolygons = new LinkedList<JPolygon>();
+
 	public JEditView( GUIControl guiControl ) {
 		super( new JFloorScrollPane<JFloor>( new JFloor( guiControl ) ) );
 		loc = GUILocalization.getSingleton();
@@ -1022,7 +1026,8 @@ public class JEditView extends AbstractSplitPropertyWindow<JFloorScrollPane<JFlo
 			//Rows
 			{TableLayout.PREFERRED, TableLayout.PREFERRED, 20,
 				TableLayout.PREFERRED, TableLayout.PREFERRED,
-				TableLayout.FILL
+				TableLayout.PREFERRED,
+                                TableLayout.FILL,
 			}
 		};
 
@@ -1059,6 +1064,22 @@ public class JEditView extends AbstractSplitPropertyWindow<JFloorScrollPane<JFlo
 		lblRoomSize = new JLabel( "" );
 		eastPanel.add( lblRoomSizeDesc, "0, " + row++ );
 		eastPanel.add( lblRoomSize, "0, " + row++ );
+                deleteRoom = new JButton("Raum Loeschen");
+
+                deleteRoom.addActionListener( new ActionListener() {
+			@Override
+			public void actionPerformed( ActionEvent e ) {
+
+                Room  currentRoom = (Room)roomSelector.getSelectedItem();
+                currentFloor.deleteRoom(currentRoom);
+                updateRoomlist();
+                getLeftPanel().getMainComponent().displayFloor();
+		
+              
+                        }
+		} );
+                eastPanel.add(deleteRoom,  "0, " + row);
+                row++;
 
 		
 		return eastPanel;
@@ -1355,6 +1376,11 @@ public class JEditView extends AbstractSplitPropertyWindow<JFloorScrollPane<JFlo
 		floorSelector.displayFloors( projectControl.getProject() );
 	}
 
+        public void updateRoomlist() {
+                roomSelector.clear();
+                roomSelector.displayRoomsForCurrentFloor();
+        }
+
 	public void setEditMode( EditMode em ) {
 		if( getLeftPanel().getMainComponent() == null )
 			return;
@@ -1579,4 +1605,6 @@ public class JEditView extends AbstractSplitPropertyWindow<JFloorScrollPane<JFlo
 		getLeftPanel().getMainComponent().reloadValues();
 		repaint();
 	}
+
+
 }

@@ -116,19 +116,11 @@ public class JQuickVisualizationView extends AbstractSplitPropertyWindow<JFloorS
 	@Override
 	protected JPanel createEastBar() {
 		JPanel panel = new JPanel();
-		JButton button = new JButton( "Klick mich" );
-		panel.add( button );
-                control = new GLControl();
-                 /** try */
-                
-                //ProjectFloors = new Collections();
-               
+                control = new GLControl(); 
 		QuickfloorSelectorModel = new FloorComboBoxModel();
                 QuickfloorSelector = new JComboBox(QuickfloorSelectorModel);
 		QuickfloorSelector.setModel( QuickfloorSelectorModel );
-               // QuickfloorSelectorModel.displayFloors( projectControl.getProject() );
-
-
+           
 		QuickfloorSelector.addActionListener( new ActionListener() {
 			@Override
 			public void actionPerformed( ActionEvent e ) {
@@ -137,8 +129,7 @@ public class JQuickVisualizationView extends AbstractSplitPropertyWindow<JFloorS
 				else
 					return;
 
-				final int add = PropertyContainer.getInstance().getAsBoolean( "editor.options.view.hideDefaultFloor" ) ? 1 : 0;
-                                //lblFloorNumber.setText( String.format( loc.getStringWithoutPrefix( "gui.EditPanel.Default.OnFloor" ), QuickfloorSelector.getSelectedIndex() + add ) );
+				final int add = PropertyContainer.getInstance().getAsBoolean( "editor.options.view.hideDefaultFloor" ) ? 1 : 0;                          
 
 				Floor dspFloor = (Floor)QuickfloorSelector.getSelectedItem();
 				currentFloor = dspFloor;
@@ -189,7 +180,7 @@ public class JQuickVisualizationView extends AbstractSplitPropertyWindow<JFloorS
 
 		loc.setPrefix( "gui.EditPanel." );
 		// Localization of own components
-		lblFloorSelector.setText( loc.getString( "Floors" ) + ":" );
+		lblFloorSelector.setText( loc.getString( "Etagen" ) + ":" );
 
 		loc.clearPrefix();
 
