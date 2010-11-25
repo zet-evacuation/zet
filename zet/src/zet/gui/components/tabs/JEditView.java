@@ -1071,7 +1071,7 @@ public class JEditView extends AbstractSplitPropertyWindow<JFloorScrollPane<JFlo
 			public void actionPerformed( ActionEvent e ) {
 
                 Room  currentRoom = (Room)roomSelector.getSelectedItem();
-                currentFloor.deleteRoom(currentRoom);
+                projectControl.deletePolygon(currentRoom);
                 updateRoomlist();
                 getLeftPanel().getMainComponent().displayFloor();
 		
