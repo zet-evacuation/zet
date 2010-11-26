@@ -22,11 +22,17 @@ public class BinarySpacePartitioningTreeBuilder extends Algorithm<DynamicTriangl
 	private Triangle newTriangle1;
 	private Triangle newTriangle2;
 	private int intersectionTemp;
+	private Vector3[] iVector = new Vector3[2];
+
+	private Vector3[] quadrangle;
+	private int[] quadrangleIndex;
+	private DynamicTriangleMesh mesh;
 
 	@Override
 	protected BspTree runAlgorithm( DynamicTriangleMesh problem ) {
 		// here we have a mesh and a triangle given
 		// start the recursion with the root node
+		mesh = problem;
 		return constructBspRec( problem.getQueue() );
 	}
 
@@ -135,23 +141,23 @@ public class BinarySpacePartitioningTreeBuilder extends Algorithm<DynamicTriangl
 			 * to the plane is stored in signTemp. intersection index is -1 if no
 			 * intersection occurred.
 			 */
-			Vector3 i1 = findNextIntersection( 0, t, p );
+			iVector[0] = findNextIntersection( 0, t, p );
 			int intersection1 = intersectionTemp;
 			signV1 = signTemp;
 
 			/** if found a first intersection, check if we also have a second one */
 			int intersection2 = -1;
-			Vector3 i2 = null;
+			iVector[1] = null;
 			if( intersection1 != -1 ) {
 				// check in the same style as above. return values by temporary class variables
-				i2 = findNextIntersection( (intersection1 + 1) % 3, t, p );
+				iVector[1] = findNextIntersection( (intersection1 + 1) % 3, t, p );
 				intersection2 = intersectionTemp;
 				signV2 = signTemp;
 
 				/** Due to numerical instabilities, both intersection points may
 				have the same sign such as in the case when splitting very close
 				to a vertex. This should not count as a split. */
-				if( i2 != null && i1.equals( i2, eps ) )
+				if( iVector[1] != null && iVector[0].equals( iVector[1], eps ) )
 					intersection2 = -1;
 
 				if( intersection2 != -1 && signV1 == signV2 )
@@ -163,9 +169,11 @@ public class BinarySpacePartitioningTreeBuilder extends Algorithm<DynamicTriangl
 				if( intersection2 != -1 ) {
 					/** split the triangle into a triangle and a quadrangle */
 					//Quadrangle q = splitTriangle( t, intersection1, intersection2, i1.x, i1.y, i1.z, i2.x, i2.y, i2.z );
-					Quadrangle q = splitTriangle( t, intersection1, intersection2, i1, i2 );
+					//Quadrangle q =
+					splitTriangle( t, intersection1, intersection2, iVector[0], iVector[1] );
 
-					splitQuadrangle( q );
+					splitQuadrangle( t );
+
 
 					/** copy normal and plane pointer */
 					newTriangle1.faceNormal = t.faceNormal;
@@ -255,7 +263,7 @@ public class BinarySpacePartitioningTreeBuilder extends Algorithm<DynamicTriangl
 	containsIntersection1 is true if the triangle contains the predecessor
 	vertex of intersection point 1 */
 	// containsV1 ist statisch als lastContains
-	private Quadrangle splitTriangle( Triangle t, int intersection1, int intersection2, Vector3 i1, Vector3 i2 ) {
+	private void splitTriangle( Triangle t, int intersection1, int intersection2, Vector3 i1, Vector3 i2 ) {
 
 		/** Split a triangle into a triangle and a quadrangle.
 		The resulting quadrangle will itself be split into two
@@ -266,7 +274,8 @@ public class BinarySpacePartitioningTreeBuilder extends Algorithm<DynamicTriangl
 		We detect this case (two vertices of the quadrangle below
 		a certain distance threshold) and merge the problematic
 		vertices into a single one thus generating a triangle */
-		Quadrangle q = new Quadrangle();
+		quadrangle = new Vector3[4];
+		quadrangleIndex = new int[4];
 
 		if( t.v[(intersection1 + 2) % 3] == t.v[intersection2 % 3] ) {
 			contains = true;
@@ -275,57 +284,63 @@ public class BinarySpacePartitioningTreeBuilder extends Algorithm<DynamicTriangl
 			will be modified */
 			Vector3 triOld1 = t.v[(intersection1 + 1) % 3];
 			Vector3 triOld2 = t.v[(intersection1 + 2) % 3];
-
+			int iOld1 = t.vidx[(intersection1 + 1) % 3];
+			int iOld2 = t.vidx[(intersection1 + 2) % 3];
 
 			/** the triangle resulting from the split keeps one old
 			vertex from the original triangle and gets two new
 			vertices (the intersection points) */
 
-			//v = i1; //new Vector3( ix1, iy1, iz1 );
 			t.v[(intersection1 + 1) % 3] = i1;
-			//v = i2; //new Vector3( ix2, iy2, iz2 );
+			t.vidx[(intersection1 + 1) % 3] = -1;
 			t.v[(intersection1 + 2) % 3] = i2;
+			t.vidx[(intersection1 + 2) % 3] = -2;
 
 			/** the quadrangle resulting from the split keeps two
 			vertices from the original triangle and gets two new
 			vertices (the intersection points) */
-			//v = i1; //new Vector3( ix1, iy1, iz1 );
 
-			q.v[0] = i1;
-			q.v[1] = triOld1;
-			q.v[2] = triOld2;
+			quadrangle[0] = i1;
+			quadrangleIndex[0] = -1;
+			quadrangle[1] = triOld1;
+			quadrangleIndex[1] = iOld1;
+			quadrangle[2] = triOld2;
+			quadrangleIndex[2] = iOld2;
 			//v = i2;
-			q.v[3] = i2;
+			quadrangle[3] = i2;
+			quadrangleIndex[3] = -2;
 		} else {
 			contains = false;
-
+	
 			Vector3 triOld1 = t.v[(intersection1) % 3];
-			Vector3 triOld2 = t.v[(intersection2 + 1) % 3];
+			Vector3 triOld2 = t.v[(intersection2+1) % 3];
+			int iOld1 = t.vidx[(intersection1) % 3];
+			int iOld2 = t.vidx[(intersection2+1) % 3];
 
-			//v = i1; //new Vector3( ix1, iy1, iz1 );
 			t.v[intersection1] = i1;
-			//v = i2; //new Vector3( ix2, iy2, iz2 );
-			t.v[(intersection2 + 1) % 3] = i2;
+			t.vidx[intersection1] = -1;
+			t.v[(intersection2+1) % 3] = i2;
+			t.vidx[(intersection2+1) % 3] = -2;
 
-			//v = i2; //new Vector3( ix2, iy2, iz2 );
-			q.v[0] = i2;
-			q.v[1] = triOld2;
-			q.v[2] = triOld1;
-			//v = i1; //new Vector3( ix1, iy1, iz1 );
-			q.v[3] = i1;
+			quadrangle[0] = i2;
+			quadrangleIndex[0] = -2;
+			quadrangle[1] = triOld2;
+			quadrangleIndex[1] = iOld2;
+			quadrangle[2] = triOld1;
+			quadrangleIndex[2] = iOld1;
+			quadrangle[3] = i1;
+			quadrangleIndex[3] = -1;
 		}
-
-		return q;
 	}
 
 	// Triangles are stored as lastT1, lastT2
-	private void splitQuadrangle( Quadrangle q ) {
+	private void splitQuadrangle( Triangle t/*Quadrangle q*/ ) {
 		/** now check split the quadrangle into two triangles,
 		but first check for numerical problems */
 		int numEqual = 0;
 		int deleteVertex = -1;
 		for( int i = 0; i < 4; i++ )
-			if( q.v[i].equals( q.v[(i + 1) % 4], eps ) ) {
+			if( quadrangle[i].equals( quadrangle[(i + 1) % 4], eps ) ) {
 				numEqual++;
 				deleteVertex = i;  // mark the duplicate for later deletion
 			}
@@ -333,17 +348,40 @@ public class BinarySpacePartitioningTreeBuilder extends Algorithm<DynamicTriangl
 		/** we only expect a maximum of one pair of vertices being equal */
 		assert (numEqual <= 1);
 
+
+		int new1 = -1;
+		int new2 = -1;
+
 		/** no numerical problems, can split the quadrangle into two triangles */
 		if( numEqual == 0 ) {
-			Vector3 v0Clone = new Vector3( q.v[0].x, q.v[0].y, q.v[0].z );
-			Vector3 v2Clone = new Vector3( q.v[2].x, q.v[2].y, q.v[2].z );
+			if( quadrangleIndex[0] == -1 ) {
+				quadrangleIndex[0] = new1 == -1 ? (new1=mesh.addVertex( iVector[0] )) : new1;
+			} else if( quadrangleIndex[0] == -2 ) {
+				quadrangleIndex[0] = new2 == -1 ? new2 = mesh.addVertex( iVector[1] ): new2;
+			}  else {
+				// nothing
+			}
+			if( quadrangleIndex[3] == -1 ) {
+				quadrangleIndex[3] = new1 == -1 ? new1 = mesh.addVertex( iVector[0] ): new1;
+			} else if( quadrangleIndex[3] == -2 ){
+				quadrangleIndex[3] = new2 == -1 ? new2 = mesh.addVertex( iVector[1] ) : new2;
+			} else {
+				// nothing
+			}
 
-			newTriangle1 = new Triangle( q.v[0], q.v[1], q.v[2], -1, -1, -1 );
+				//Triangle ta = mesh.addTriangle2( quadrangleIndex[0], quadrangleIndex[1], quadrangleIndex[2] );
+				//new Triangle( verticesArray.get( i1 ), verticesArray.get( i2 ), verticesArray.get( i3 ), i1, i2, i3 )
+			newTriangle1 = new Triangle( quadrangle[0], quadrangle[1], quadrangle[2], quadrangleIndex[0], quadrangleIndex[1], quadrangleIndex[2] );
+			
+		
 			//newTriangle2 = new Triangle( v2Clone, q.v[3], v0Clone );
-			newTriangle2 = new Triangle( q.v[0], q.v[3], q.v[0], -1, -1, -1 );
+			//newTriangle2 = mesh.addTriangle2( quadrangleIndex[2], quadrangleIndex[3], quadrangleIndex[0] );
+			newTriangle2 = new Triangle( quadrangle[2], quadrangle[3], quadrangle[0], quadrangleIndex[2], quadrangleIndex[3], quadrangleIndex[0] );
 		} else {
+			//System.err.println( "THE OTHER CASE" );
 			newTriangle2 = null;
 			Vector3[] triangleVertices = new Vector3[3];
+			int[] triangleVerticesID = new int[3];
 
 			int vIndex = 0;
 			for( int i = 0; i < 4; i++ )
@@ -351,11 +389,36 @@ public class BinarySpacePartitioningTreeBuilder extends Algorithm<DynamicTriangl
 					// don't do anything we have the pointer in the vertices list
 					// so we will be able to delete it
 				} else {
-					triangleVertices[vIndex] = q.v[i];
+					triangleVertices[vIndex] = quadrangle[i];
+					triangleVerticesID[vIndex] = quadrangleIndex[i];
 					vIndex++;
 				}
-			newTriangle1 = new Triangle( triangleVertices[0], triangleVertices[1], triangleVertices[2], -1, -1, -1 );
+
+			for( int i = 0; i < 3; ++i ) {
+				if( triangleVerticesID[i] == -1 ) {
+					triangleVerticesID[i] = new1 == -1 ? new1 = mesh.addVertex( iVector[0] ) : new1;
+				} else if( triangleVerticesID[i] == -2 ) {
+					triangleVerticesID[i] = new2 == -1 ? new2 = mesh.addVertex( iVector[1] ) : new2;
+				} else {
+					// nothing, index was correct already
+				}
+			}
+
+			newTriangle1 = new Triangle( triangleVertices[0], triangleVertices[1], triangleVertices[2], triangleVerticesID[0], triangleVerticesID[1], triangleVerticesID[2] );
+			//newTriangle1 = mesh.addTriangle2( triangleVerticesID[0], triangleVerticesID[1], triangleVerticesID[2] );
 		}
+
+		// change the existing triangle. pointers point to new triangle maybe!
+			for( int i = 0; i < 3; ++i ) {
+				if( t.vidx[i] == -1 ) {
+					t.vidx[i] = new1 == -1 ? new1 = mesh.addVertex( iVector[0] ) : new1;
+				} else if( t.vidx[i] == -2 ) {
+					t.vidx[i] = new2 == -1 ? new2 = mesh.addVertex( iVector[1] ) : new2;
+				} else {
+					// nothing, index was correct already
+				}
+			}
+
 	}
 
 	/* Determines which side a face is with respect to a plane.

@@ -39,6 +39,12 @@ public class DynamicTriangleMesh extends Mesh<Triangle> {
 		return t;
 	}
 
+	public Triangle addTriangle2( int i1, int i2, int i3 ) {
+		final Triangle t = new Triangle( verticesArray.get( i1 ), verticesArray.get( i2 ), verticesArray.get( i3 ), i1, i2, i3 );
+		//faces.add( t );
+		return t;
+	}
+
 	public boolean offer( Triangle e ) {
 		return facesQueue.offer( e );
 	}

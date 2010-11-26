@@ -43,6 +43,11 @@ public abstract class Mesh<T extends Face> implements Iterable<T> {
 		return newVertex;
 	}
 
+	public int addVertex( Vector3 v ) {
+		vertices.add( v );
+		return vertices.size()-1;
+	}
+
 	public int vertexCount() {
 		return vertices.size();
 	}
