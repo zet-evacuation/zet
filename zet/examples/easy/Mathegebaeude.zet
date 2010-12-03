@@ -18448,7 +18448,7 @@
       <maxX__DefiningRoom reference="5328"/>
       <maxY__DefiningRoom reference="5480"/>
     </floor>
-    <floor id="7396" name="4.Etage" xOffset="0" yOffset="0" width="100000" height="57000">
+    <floor id="7396" name="4.Etage" xOffset="0" yOffset="0" width="86400" height="57000">
       <rooms id="7397">
         <room id="7398" closed="true" xOffset="9200" yOffset="3600" width="5600" height="5800" changed="true" name="MA 477">
           <edgeClassType>ds.z.RoomEdge</edgeClassType>
