@@ -18,14 +18,14 @@ import javax.media.opengl.GL;
 import javax.media.opengl.GLAutoDrawable;
 import javax.media.opengl.glu.GLU;
 import javax.swing.JFrame;
-import opengl.framework.JFlyingEyePanel;
+import opengl.framework.JMovingEyePanel;
 
 /**
  *
  * @author Jan-Philipp Kappmeier
  */
-public class BspMain extends JFlyingEyePanel {
-
+public class BspMain extends JMovingEyePanel {
+// Works with inheritance from JMovingEyePanel
 	static int printMode = 2;
 
 
@@ -33,16 +33,15 @@ public class BspMain extends JFlyingEyePanel {
 	//static List<Vector3> vertices;
 	static List<Vector3> faceNormals;
 	static int drawmode = 2;
-	static Vector3 eye;
+	//static Vector3 eye;
 	static BspTree _bsp;
-	//static Queue<Triangle> model;
 	static Queue<Triangle> originalList;
 	static Queue<Triangle> copiedList;
 	static BspMain instance;
 
 	// current rotation of object
-	float _rotObjectX = 0.0f;
-	float _rotObjectY = 0.0f;
+	float rotationX = 0.0f;
+	float rotationY = 0.0f;
 
 	double[] modelview = new double[16];
 	double[] modelviewInv = new double[16];
@@ -52,9 +51,10 @@ public class BspMain extends JFlyingEyePanel {
 
 	public BspMain() {
 		super();
-		//vertices = new ArrayList<Vector3>();
-		//planes = new ArrayList<Plane>();
-		//faceNormals = new ArrayList<Vector3>();
+		useMouseWheelListener();
+		pos.set( 0, 0, +10);
+		view.set( 0, 0, +1 );
+		up.set( 0, 1, 0 );
 	}
 
 	@Override
@@ -88,7 +88,6 @@ public class BspMain extends JFlyingEyePanel {
 		gl.glDisable( GL.GL_DEPTH_TEST );
 		gl.glDisable( GL.GL_BLEND );
 
-		eye = new Vector3();
 	}
 
 	@Override
@@ -123,7 +122,9 @@ public class BspMain extends JFlyingEyePanel {
 		gl.glLoadIdentity();
 		if( glu == null )
 			glu = new GLU();
-		glu.gluLookAt( 0, 0, +100, 0.0, 0.0, 0, 0.0, 1.0, 0.0 );
+
+		super.look();
+		//glu.gluLookAt( 0, 0, +100, 0.0, 0.0, 0, 0.0, 1.0, 0.0 );
 
 		gl.glBegin(GL.GL_TRIANGLES);
 		gl.glColor3f(1, 0, 0); gl.glVertex3f(-1,-1, 0);
@@ -131,11 +132,11 @@ public class BspMain extends JFlyingEyePanel {
 		gl.glColor3f(0, 1, 0); gl.glVertex3f( 0, 1, 0);
 		gl.glEnd();
 
-			_rotObjectY += 0.66;
-			//_rotObjectY += 0.1;
+		rotationY += 0.66;
+		rotationX += 0.66;
 
-		gl.glRotatef( _rotObjectX, 1.0f, 0.0f, 0.0f );
-		gl.glRotatef( _rotObjectY, 0.0f, 1.0f, 0.0f );
+		gl.glRotatef( rotationX, 1.0f, 0.0f, 0.0f );
+		gl.glRotatef( rotationY, 0.0f, 1.0f, 0.0f );
 
 		/** compute viewer position */
 		gl.glGetDoublev( GL.GL_MODELVIEW_MATRIX, modelviewBuf );
@@ -153,12 +154,8 @@ public class BspMain extends JFlyingEyePanel {
 				break;
 			case 2:
 			if( _bsp != null ) {
-				eye.x = e[0];
-				eye.y = e[1];
-				eye.z = e[2];
-				//BspTree.traverse( _bsp );
-				traverse( _bsp );
-				//draw( model, Sign.Zero );
+				Vector3 eye = new Vector3( e[0], e[1], e[2] );
+				traverse( _bsp, eye );
 			}
 				break;
 		}
@@ -173,7 +170,7 @@ public class BspMain extends JFlyingEyePanel {
 	 */
 	void identity( double[] m ) {
 		if( m.length != 16 )
-			throw new IllegalArgumentException( "m must be of length 16" );
+			throw new IllegalArgumentException( "m must be of length 16 (4x4 matrix)" );
     m[0+4*0] = 1; m[0+4*1] = 0; m[0+4*2] = 0; m[0+4*3] = 0;
     m[1+4*0] = 0; m[1+4*1] = 1; m[1+4*2] = 0; m[1+4*3] = 0;
     m[2+4*0] = 0; m[2+4*1] = 0; m[2+4*2] = 1; m[2+4*3] = 0;
@@ -182,7 +179,7 @@ public class BspMain extends JFlyingEyePanel {
 
 	boolean invert( double[] src, double[] inverse ) {
 		if( src.length != 16 || inverse.length != 16 )
-			throw new IllegalArgumentException( "matrices must be of length 16" );
+			throw new IllegalArgumentException( "matrices must be of length 16 (4x4 matrix)" );
 
 		double t;
 		int i, j, k, swap;
@@ -322,8 +319,8 @@ public class BspMain extends JFlyingEyePanel {
 	}
 
 
-	/** traverses the bsp and calls the draw() function on each node */
-	void traverse( BspTree bsp ) {
+	/** traverses the binary space partition tree  and calls the draw() function on each node */
+	void traverse( BspTree bsp, Vector3 eye ) {
 		if( bsp == null )
 			return;
 
@@ -331,18 +328,18 @@ public class BspMain extends JFlyingEyePanel {
 		// Note: the current eye position is given
 		// in the eye variable
 
-		if( bsp.getPartitionPlane().isInPositiveSide( eye ) ) { // isInPositiveSide( bsp.partitionPlane, BspMain.eye ) ) {
-			traverse( bsp.getNegativeSide() );
+		if( bsp.getPartitionPlane().isInPositiveSide( eye ) ) {
+			traverse( bsp.getNegativeSide(), eye );
 			// the sign is ignored, so we can set zero (should not be like this, or?
 			draw( bsp.getOppDir(), Sign.Zero );
 			draw( bsp.getSameDir(), Sign.Zero );
-			traverse( bsp.getPositiveSide() );
+			traverse( bsp.getPositiveSide(), eye );
 		} else {
-			traverse( bsp.getPositiveSide() );
+			traverse( bsp.getPositiveSide(), eye );
 			// the sign is ignored, so we can set zero
 			draw( bsp.getOppDir(), Sign.Zero );
 			draw( bsp.getSameDir(), Sign.Zero );
-			traverse( bsp.getNegativeSide() );
+			traverse( bsp.getNegativeSide(), eye );
 		}
 	}
 
@@ -357,6 +354,8 @@ public class BspMain extends JFlyingEyePanel {
 				drawmode = ++drawmode % 3;
 				//System.out.println( "Drawmode: " + drawmode );
 				break;
+			default:
+				super.keyPressed( e );
 		}
 	}
 
@@ -367,7 +366,7 @@ public class BspMain extends JFlyingEyePanel {
 		//String path = "D:\\Desktop\\BSP\\cg1_ex3\\meshes\\head.off";
 		//String path = "D:\\Desktop\\BSP\\cg1_ex3\\meshes\\dragon.off";
 
-		//String path = "./testinstanz/off/teapot.off";
+		String path = "./testinstanz/off/teapot.off";
 		//String path = "./testinstanz/off/bunnysimple.off";
 		//String path = "./testinstanz/off/sphere.off";
 		//String path = "D:\\Desktop\\BSP\\cg1_ex3\\meshes\\head.off";
@@ -375,7 +374,7 @@ public class BspMain extends JFlyingEyePanel {
 
     //String path = "./testinstanz/test.off";
 
-		String path = "./testinstanz/off/dl1/cone.off";
+		//String path = "./testinstanz/off/dl1/cone.off";
 		//String path = "./testinstanz/off/dl1/icosa.off";
 		//String path = "./testinstanz/off/dl1/mctet.off";
 		//String path = "./testinstanz/off/dl1/mctri.off";
@@ -385,9 +384,7 @@ public class BspMain extends JFlyingEyePanel {
 
 		JFrame window = new JFrame( "BSP Test Application" );
 		window.setSize( 800, 600 );
-
-		//GLCanvas canvas = new GLCanvas();
-
+		window.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
 		BspMain main = new BspMain();
 		//canvas.addGLEventListener( main );
@@ -406,7 +403,7 @@ public class BspMain extends JFlyingEyePanel {
 		to avoid numerical problems due to very small triangles in
 		high res model */
 		System.out.print( "Unitizing model... " );
-		mesh.unitize( 50 );
+		mesh.unitize( 5 );
 		System.out.println( "done." );
 
 		System.out.print( "Computing plane equations and normals..." );

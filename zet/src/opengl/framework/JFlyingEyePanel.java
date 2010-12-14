@@ -34,9 +34,9 @@ import de.tu_berlin.math.coga.math.vectormath.Vector3;
  * @author Jan-Philipp Kappmeier
  */
 public class JFlyingEyePanel extends JOpenGLPanel {
-	Vector3 pos = new Vector3();								// position
-	Vector3 view = new Vector3( 0, 0, 1 );			// direction of view (z-axis)
-	Vector3 up = new Vector3( 0, 1, 0 );				// direction of up   (y-axis)
+	protected Vector3 pos = new Vector3();								// position
+	protected Vector3 view = new Vector3( 0, 0, 1 );			// direction of view (z-axis)
+	protected Vector3 up = new Vector3( 0, 1, 0 );				// direction of up   (y-axis)
 	private int initMouseX;
 	private int initMouseY;
 	private boolean mouseMove;

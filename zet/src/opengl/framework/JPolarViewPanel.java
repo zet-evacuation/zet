@@ -39,15 +39,15 @@ public class JPolarViewPanel extends JOpenGLCanvas {
 	private double twistAngle = 0;
 	private double azimAngle = 0;
 	private double incAngle = 0;
-	private double distance = -1;
+	private double distance = 10;
 	private int viewportWidth = 0;
 	private int viewportHeight = 0;
 	private boolean updateProjection = false;
 	private double minDistance = 20;
 	private double maxDistance = 1;
 	private double speed = 0.1;
-	private double nearDist = 1;
-	private double farDist = 20;
+	private double nearDist = 0.1;
+	private double farDist = 2000;
 	private int initMouseX;
 	private int initMouseY;
 	private boolean mouseMove = false;
