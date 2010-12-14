@@ -18,7 +18,7 @@
  * JPolygonPopupListener.java
  * Created on 28. Dezember 2007, 13:11
  */
-package gui.editor;
+package zet.gui.components.menu.popup;
 
 import gui.GUIOptionManager;
 import zet.gui.components.tabs.editor.EditMode;
@@ -27,37 +27,39 @@ import ds.z.PlanPoint;
 import ds.z.Room;
 import ds.z.RoomEdge;
 import ds.z.TeleportEdge;
+import ds.z.ZControl;
 import event.EventServer;
 import event.MessageEvent;
 import gui.GUIControl;
-import zet.gui.JEditor;
+import gui.editor.CoordinateTools;
 import java.awt.Point;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
 
-/** This popup listener is responsible for handling menu events
- *
+/**
+ * This pop-up listener is responsible for handling menu events
  * @author Timon Kelter
  */
 public class EdgePopupListener implements ActionListener {
 	private Edge myEdge;
 	private Point mousePosition;
 	private boolean rasterizedPaintMode;
+	private ZControl projectControl;
 	private GUIControl guiControl;
 
-	public EdgePopupListener( GUIControl guiControl ) {
+	public EdgePopupListener( GUIControl guiControl, ZControl projectControl ) {
 		this.guiControl = guiControl;
+		this.projectControl = projectControl;
 	}
 
-	/** This method should be called every time before the popup is shown.
-	 * @param currentEdge The Edge on which the popup is shown.
-	 * @param mousePosition the position at which the popup menu is shown with
+	/** This method should be called every time before the pop-up is shown.
+	 * @param currentEdge The Edge on which the pop-up is shown.
+	 * @param mousePosition the position at which the pop-up menu is shown with
 	 * coordinates that must be relative to the whole Floor
-	 * @param rasterizedPaintMode Whether we are painting rasterized
+	 * @param rasterizedPaintMode Whether we are painting rastered
 	 */
-	public void setEdge( Edge currentEdge, Point mousePosition,
-											 boolean rasterizedPaintMode ) {
+	public void setEdge( Edge currentEdge, Point mousePosition, boolean rasterizedPaintMode ) {
 		myEdge = currentEdge;
 		this.mousePosition = mousePosition;
 		this.rasterizedPaintMode = rasterizedPaintMode;
@@ -87,29 +89,20 @@ public class EdgePopupListener implements ActionListener {
 						((RoomEdge)myEdge).setLinkTarget( partner );
 						partner.setLinkTarget( (RoomEdge)myEdge );
 					} else
-						EventServer.getInstance().dispatchEvent( new MessageEvent(
-										this, MessageEvent.MessageType.Error,
-										"Erzeugen Sie zuerst 2 übereinanderliegende Raumbegrenzungen!" ) );
+						EventServer.getInstance().dispatchEvent( new MessageEvent( this, MessageEvent.MessageType.Error, "Erzeugen Sie zuerst 2 übereinanderliegende Raumbegrenzungen!" ) );
 				} else
-					EventServer.getInstance().dispatchEvent( new MessageEvent(
-									this, MessageEvent.MessageType.Error,
-									"Nur Raumbegrenzungen können passierbar gemacht werden!" ) );
+					EventServer.getInstance().dispatchEvent( new MessageEvent( this, MessageEvent.MessageType.Error, "Nur Raumbegrenzungen können passierbar gemacht werden!" ) );
 			else if( e.getActionCommand().equals( "insertPoint" ) ) {
 				// Compute a point that is ON the edge (the click is not neccessarily)
-				PlanPoint newPoint = new PlanPoint(
-								CoordinateTools.translateToModel( mousePosition ) );
+
+				PlanPoint newPoint = new PlanPoint( CoordinateTools.translateToModel( mousePosition ) );
 				newPoint = myEdge.getPointOnEdge( newPoint );
 				if( rasterizedPaintMode ) {
 					newPoint.x = (int)Math.round( (double)newPoint.x / 400.0d ) * 400;
 					newPoint.y = (int)Math.round( (double)newPoint.y / 400.0d ) * 400;
 				}
 
-				// Replace the old edge
-				ArrayList<PlanPoint> pointList = new ArrayList<PlanPoint>( 3 );
-				pointList.add( myEdge.getSource() );
-				pointList.add( newPoint );
-				pointList.add( myEdge.getTarget() );
-				myEdge.getAssociatedPolygon().replaceEdge( myEdge, pointList );
+				projectControl.insertPoint( myEdge, newPoint );
 			} else if( e.getActionCommand().equals( "makeTeleport" ) )
 				if( myEdge instanceof RoomEdge )
 					if( GUIOptionManager.getEditMode() != EditMode.TeleportEdgeCreation ) {
@@ -119,9 +112,7 @@ public class EdgePopupListener implements ActionListener {
 
 						EventServer.getInstance().dispatchEvent( new MessageEvent( this, MessageEvent.MessageType.Status, "Wählen Sie jetzt die Gegenseite aus (Rechtsklick+Menu)!" ) );
 					} else {
-						Room.connectToWithTeleportEdge(
-										(RoomEdge)EditMode.TeleportEdgeCreation.getPayload().getFirst(),
-										(RoomEdge)myEdge );
+						Room.connectToWithTeleportEdge( (RoomEdge)EditMode.TeleportEdgeCreation.getPayload().getFirst(), (RoomEdge)myEdge );
 						GUIOptionManager.setEditMode( GUIOptionManager.getPreviousEditMode() );
 					}
 				else

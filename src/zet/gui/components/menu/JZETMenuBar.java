@@ -2,7 +2,7 @@
  * JZETMenuBar.java
  * Created: 21.07.2010 10:03:06
  */
-package zet.gui.components;
+package zet.gui.components.menu;
 
 import de.tu_berlin.math.coga.common.localization.Localized;
 import ds.PropertyContainer;

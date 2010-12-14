@@ -53,13 +53,13 @@ import zet.gui.components.tabs.base.AbstractSplitPropertyWindow;
 import zet.gui.components.model.RoomComboBoxModel;
 import gui.components.framework.Menu;
 import gui.editor.Areas;
-import gui.editor.EdgePopupListener;
+import zet.gui.components.menu.popup.EdgePopupListener;
 import zet.gui.JEditor;
 import zet.gui.components.tabs.editor.EditMode;
 import gui.GUIOptionManager;
 import zet.gui.components.tabs.editor.JFloor;
-import gui.editor.PointPopupListener;
-import gui.editor.PolygonPopupListener;
+import zet.gui.components.menu.popup.PointPopupListener;
+import zet.gui.components.menu.popup.PolygonPopupListener;
 import info.clearthought.layout.TableLayout;
 import java.awt.CardLayout;
 import java.awt.Component;
@@ -137,7 +137,7 @@ public class JEditView extends AbstractSplitPropertyWindow<JFloorScrollPane<JFlo
 	/** The currently active panel type */
 	private static Panels eastPanelType;
 	/** The control object for the loaded project. */
-        private ZControl projectControl;
+	private ZControl projectControl;
 	/** The currently visible {@link ds.z.Floor} */
 	private Floor currentFloor;
 	/** Model for a floor-selector combo box. */
@@ -1064,23 +1064,19 @@ public class JEditView extends AbstractSplitPropertyWindow<JFloorScrollPane<JFlo
 		lblRoomSize = new JLabel( "" );
 		eastPanel.add( lblRoomSizeDesc, "0, " + row++ );
 		eastPanel.add( lblRoomSize, "0, " + row++ );
-                deleteRoom = new JButton("Raum Loeschen");
+		deleteRoom = new JButton( "Raum Loeschen" );
 
-                deleteRoom.addActionListener( new ActionListener() {
+		deleteRoom.addActionListener( new ActionListener() {
 			@Override
 			public void actionPerformed( ActionEvent e ) {
-
-                Room  currentRoom = (Room)roomSelector.getSelectedItem();
-                projectControl.deletePolygon(currentRoom);
-                updateRoomlist();
-                getLeftPanel().getMainComponent().displayFloor();
-		
-              
-                        }
+				Room currentRoom = (Room) roomSelector.getSelectedItem();
+				projectControl.deletePolygon( currentRoom );
+				updateRoomList();
+				getLeftPanel().getMainComponent().displayFloor();
+			}
 		} );
-                eastPanel.add(deleteRoom,  "0, " + row);
-                row++;
-
+		eastPanel.add( deleteRoom, "0, " + row );
+		row++;
 		
 		return eastPanel;
 	}
@@ -1292,7 +1288,7 @@ public class JEditView extends AbstractSplitPropertyWindow<JFloorScrollPane<JFlo
 
 		//This is independent of the rest of the displaying work
 		//floorSelector.displayFloors( projectControl.getProject() );
-		updateFloorlist();
+		updateFloorList();
 		assignmentTypeSelector.setControl( projectControl );
 		assignmentTypeSelector.displayAssignmentTypesForCurrentProject();
 		// If more than one floor, display the second.
@@ -1365,21 +1361,24 @@ public class JEditView extends AbstractSplitPropertyWindow<JFloorScrollPane<JFlo
 			return;
 		currentFloor = (Floor)floorSelector.getSelectedItem();
 		getLeftPanel().getMainComponent().displayFloor( currentFloor );
-		roomSelector.displayRoomsForCurrentFloor();
+		updateRoomList();
 	}
 
 	/**
 	 * Displays the floor with name {@code floorName}
 	 */
-	public void updateFloorlist() {
+	public void updateFloorList() {
 		floorSelector.clear();
 		floorSelector.displayFloors( projectControl.getProject() );
 	}
 
-        public void updateRoomlist() {
-                roomSelector.clear();
-                roomSelector.displayRoomsForCurrentFloor();
-        }
+	/**
+	 * Resets the room list on the current floor.
+	 */
+	public void updateRoomList() {
+		roomSelector.clear();
+		roomSelector.displayRoomsForCurrentFloor();
+	}
 
 	public void setEditMode( EditMode em ) {
 		if( getLeftPanel().getMainComponent() == null )
@@ -1449,7 +1448,7 @@ public class JEditView extends AbstractSplitPropertyWindow<JFloorScrollPane<JFlo
 	private void recreateEdgePopupMenu() {
 		if( pupEdge == null ) {
 			edgePopupListeners = new LinkedList<EdgePopupListener>();
-			edgePopupListeners.add( new EdgePopupListener( guiControl ) );
+			edgePopupListeners.add( new EdgePopupListener( guiControl, projectControl ) );
 
 			pupEdge = new JPopupMenu();
 			loc.setPrefix( "gui.editor.JEditorPanel." );
@@ -1475,7 +1474,7 @@ public class JEditView extends AbstractSplitPropertyWindow<JFloorScrollPane<JFlo
 	private void recreatePointPopupMenu() {
 		if( pupPoint == null ) {
 			pointPopupListeners = new LinkedList<PointPopupListener>();
-			pointPopupListeners.add( new PointPopupListener() );
+			pointPopupListeners.add( new PointPopupListener( projectControl ) );
 
 			pupPoint = new JPopupMenu();
 
@@ -1491,8 +1490,7 @@ public class JEditView extends AbstractSplitPropertyWindow<JFloorScrollPane<JFlo
 		polygonPopupListeners = new LinkedList<PolygonPopupListener>();
 
 		pupPolygon = new JPopupMenu();
-		JMenu jmnCreateAssArea = Menu.addMenu( pupPolygon,
-						loc.getString( "gui.editor.JEditorPanel.popupDefaultAssignmentArea" ) );
+		JMenu jmnCreateAssArea = Menu.addMenu( pupPolygon, loc.getString( "gui.editor.JEditorPanel.popupDefaultAssignmentArea" ) );
 		jmnCreateAssArea.setEnabled( currentAssignment != null );
 		if( currentAssignment != null ) {
 			PolygonPopupListener listener;
@@ -1528,11 +1526,10 @@ public class JEditView extends AbstractSplitPropertyWindow<JFloorScrollPane<JFlo
 		((JMenuItem)pupEdge.getComponent( 6 )).setVisible( passable );
 
 		for( EdgePopupListener p : edgePopupListeners )
-			p.setEdge( currentEdge, mousePosition, PropertyContainer.getInstance().getAsBoolean(
-							"editor.options.view.rasterizedPaintMode" ) );
+			p.setEdge( currentEdge, mousePosition, PropertyContainer.getInstance().getAsBoolean( "editor.options.view.rasterizedPaintMode" ) );
 	}
 
-	/** This method should be called every time before the JEdge point popup menu
+	/** This method should be called every time before the JEdge point pop-up menu
 	 * is shown.
 	 * @param currentEdge The Edge on which the PointPopupMenu 
 	 * shall be shown. 
@@ -1544,7 +1541,7 @@ public class JEditView extends AbstractSplitPropertyWindow<JFloorScrollPane<JFlo
 			p.setPoint( currentEdge, currentPoint );
 	}
 
-	/** This method should be called every time before the JPolygon popup menu
+	/** This method should be called every time before the JPolygon pop-up menu
 	 * is shown.
 	 * @param currentPolygon The PlanPolygon that is displayed by the JPolygon
 	 * on which the PopupMenu shall be shown. */

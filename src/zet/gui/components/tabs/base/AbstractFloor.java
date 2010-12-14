@@ -143,7 +143,7 @@ public class AbstractFloor extends JPanel {
 	 * @param g2
 	 */
 	public void drawRaster( Graphics2D g2 ) {
-		final  Point p = CoordinateTools.translateToModel( 0, 0 );
+		final Point p = CoordinateTools.translateToModel( 0, 0 );
 		final int startx = CoordinateTools.translateToScreen((int)(Math.floor( (double)p.x/bigRaster ))*bigRaster - p.x);
 		final int starty = CoordinateTools.translateToScreen((int)(Math.floor( (double)p.y/bigRaster ))*bigRaster - p.y);
 

@@ -46,7 +46,7 @@ import gui.editor.flooredit.FloorImportDialog;
 import gui.editor.planimage.JPlanImageProperties;
 import gui.editor.properties.JOptionsWindow;
 import gui.editor.properties.JPropertySelectorWindow;
-import zet.gui.components.JZETMenuBar;
+import zet.gui.components.menu.JZETMenuBar;
 import zet.gui.components.toolbar.JEditToolbar;
 import zet.gui.components.toolbar.JVisualizationToolbar;
 import gui.visualization.AbstractVisualization.ParallelViewMode;
@@ -756,7 +756,7 @@ public class GUIControl implements AlgorithmListener {
 		Floor f = zcontrol.createNewFloor();
 		f.setMinimumSize( ZETProperties.getDefaultFloorSizeMinX(), ZETProperties.getDefaultFloorSizeMinY(), ZETProperties.getDefaultFloorSizeMaxX()-ZETProperties.getDefaultFloorSizeMinX(), ZETProperties.getDefaultFloorSizeMaxY()-ZETProperties.getDefaultFloorSizeMinY() );
 		ZETMain.sendMessage( "Neue Etage angelegt." ); // TODO loc
-		editor.getEditView().updateFloorlist(); // update the floor-boxes in the GUI
+		editor.getEditView().updateFloorList(); // update the floor-boxes in the GUI
 		editor.getEditView().changeFloor( f );
                 editor.getQuickVisualizationView().updateQuickFloorlist();
                 editor.getQuickVisualizationView().changeQuickFloor(f);
@@ -788,6 +788,7 @@ public class GUIControl implements AlgorithmListener {
 	public void copyFloor() {
 		final int oldIndex = editview.getFloorID();
 		zcontrol.copyFloor( editview.getCurrentFloor() );
+		editview.updateFloorList();
 		editview.setFloor( oldIndex );
 	}
 

@@ -68,7 +68,7 @@ import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 import javax.imageio.ImageIO;
 import zet.gui.components.JEventStatusBar;
-import zet.gui.components.JZETMenuBar;
+import zet.gui.components.menu.JZETMenuBar;
 import zet.gui.components.tabs.editor.EditMode;
 import zet.gui.components.tabs.JQuickVisualizationView;
 import zet.gui.components.tabs.JEditView;

@@ -17,6 +17,7 @@ import event.EventServer;
 import event.ZModelChangedEvent;
 import gui.ZETMain;
 import java.io.File;
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Iterator;
 
@@ -414,5 +415,21 @@ public class ZControl {
 
 	public void moveFloorDown( int id ) {
 		p.getBuildingPlan().moveFloorDown( id );
+	}
+
+	public void deletePoint( PlanPolygon poly, PlanPoint currentPoint ) {
+		Edge currentEdge = currentPoint.getNextEdge();
+		poly.combineEdges( currentEdge, currentPoint.getOtherEdge( currentEdge ), true );
+		EventServer.getInstance().dispatchEvent( new ZModelChangedEvent() {} );
+	}
+
+	public void insertPoint( Edge onEdge, PlanPoint newPoint ) {
+		// Replace the old edge
+		ArrayList<PlanPoint> pointList = new ArrayList<PlanPoint>( 3 );
+		pointList.add( onEdge.getSource() );
+		pointList.add( newPoint );
+		pointList.add( onEdge.getTarget() );
+		onEdge.getAssociatedPolygon().replaceEdge( onEdge, pointList );
+		EventServer.getInstance().dispatchEvent( new ZModelChangedEvent() {} );
 	}
 }

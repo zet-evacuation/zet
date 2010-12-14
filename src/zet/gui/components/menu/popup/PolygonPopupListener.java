@@ -18,7 +18,7 @@
  * PolygonPopupListener.java
  * Created on 28. Dezember 2007, 13:11
  */
-package gui.editor;
+package zet.gui.components.menu.popup;
 
 import ds.z.AssignmentArea;
 import ds.z.AssignmentType;
@@ -26,6 +26,7 @@ import ds.z.PlanPoint;
 import ds.z.PlanPolygon;
 import ds.z.Room;
 import gui.GUIControl;
+import gui.editor.Areas;
 import zet.gui.JEditor;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
