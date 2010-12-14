@@ -361,7 +361,7 @@ public class BspMain extends JFlyingEyePanel {
 	}
 
 	public static void main( String[] args ) throws FileNotFoundException, IOException, Exception {
-		String path = "D:\\Desktop\\BSP\\cg1_ex3\\meshes\\teapot.off";
+		//String path = "D:\\Desktop\\BSP\\cg1_ex3\\meshes\\teapot.off";
 		//String path = "D:\\Desktop\\BSP\\cg1_ex3\\meshes\\bunnysimple.off";
 		//String path = "D:\\Desktop\\BSP\\cg1_ex3\\meshes\\sphere.off";
 		//String path = "D:\\Desktop\\BSP\\cg1_ex3\\meshes\\head.off";
@@ -375,7 +375,7 @@ public class BspMain extends JFlyingEyePanel {
 
     //String path = "./testinstanz/test.off";
 
-		//String path = "./testinstanz/off/dl1/cone.off";
+		String path = "./testinstanz/off/dl1/cone.off";
 		//String path = "./testinstanz/off/dl1/icosa.off";
 		//String path = "./testinstanz/off/dl1/mctet.off";
 		//String path = "./testinstanz/off/dl1/mctri.off";
