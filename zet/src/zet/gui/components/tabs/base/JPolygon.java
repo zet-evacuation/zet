@@ -64,24 +64,21 @@ public class JPolygon extends AbstractPolygon {
 	/** The amount of space (in pixels) that is added on each side of all edges'
 	 * bounding boxes, to enable them to paint themselves thicker when they are
 	 * marked as selected. */
-	public static final int EDGE_WIDTH_ADDITION = 2;
+	public static final int EDGE_WIDTH_ADDITION = 3;
 	/** The width of the edge when selected, in pixels. The inequality
 	 * 1 + 2 * EDGE_WIDTH_ADDITION >= EDGE_PAINT_WIDTH must hold. */
 	public static final float EDGE_PAINT_WIDTH = 2.2f;
 	/** The radius of the nodes on screen. This should be less than or equal to
 	 * EDGE_WIDTH_ADDITION + 1 */
-	public static final int NODE_PAINT_RADIUS = 3;
+	public static final int NODE_PAINT_RADIUS = 4;
 	/** The radius around the nodes of the edge in which a click on the edge is 
 	 * also counted as a click on the node. This should be less than or equal to
 	 * EDGE_WIDTH_ADDITION + 1 */
-	public static final int NODE_SELECTION_RADIUS = 3;
+	public static final int NODE_SELECTION_RADIUS = 4;
 	private final static float dash1[] = {10.0f};
-	private final static BasicStroke stroke_standard = new BasicStroke( 1.0f,
-					BasicStroke.CAP_BUTT, BasicStroke.JOIN_MITER );
-	private final static BasicStroke stroke_dashed_slim = new BasicStroke( 1.0f,
-					BasicStroke.CAP_BUTT, BasicStroke.JOIN_MITER, 10.0f, dash1, 0.0f );
-	private final static BasicStroke stroke_dashed_thick = new BasicStroke( EDGE_PAINT_WIDTH,
-					BasicStroke.CAP_BUTT, BasicStroke.JOIN_MITER, 10.0f, dash1, 0.0f );
+	private final static BasicStroke stroke_standard = new BasicStroke( 1.0f, BasicStroke.CAP_BUTT, BasicStroke.JOIN_MITER );
+	private final static BasicStroke stroke_dashed_slim = new BasicStroke( 1.0f, BasicStroke.CAP_BUTT, BasicStroke.JOIN_MITER, 10.0f, dash1, 0.0f );
+	private final static BasicStroke stroke_dashed_thick = new BasicStroke( EDGE_PAINT_WIDTH, BasicStroke.CAP_BUTT, BasicStroke.JOIN_MITER, 10.0f, dash1, 0.0f );
 	private final static BasicStroke stroke_thick = new BasicStroke( EDGE_PAINT_WIDTH );
 	private final GUIControl guiControl;
 
@@ -109,6 +106,7 @@ public class JPolygon extends AbstractPolygon {
 	 * {@link JFloor#processMouseEvent(MouseEvent)} */
 	private MouseEvent lastMouseEventToPassToFloor = null;
 	private boolean selected = false;
+	private Color selectedColor = Color.red;
 
 	/**
 	 * Creates a new instance of <code>JPolygon</code>.
@@ -391,9 +389,10 @@ public class JPolygon extends AbstractPolygon {
 					g2.setStroke( stroke_dashed_thick );
 				else
 					g2.setStroke( stroke_dashed_slim );
-			else if( selected )
+			else if( selected ) {
+				g2.setPaint( selectedColor );
 				g2.setStroke( stroke_thick );
-			else
+			} else
 				g2.setStroke( stroke_standard );
 
 			// Set stair options

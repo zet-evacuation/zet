@@ -317,8 +317,7 @@ public class JFloor extends AbstractFloor implements EventListener<ZModelChanged
 		}
 
 		// If in PolygonCreationMode, draw help-line
-		if( GUIOptionManager.getEditMode().getType() == EditMode.Type.CreationPointwise ||
-						GUIOptionManager.getEditMode().getType() == EditMode.Type.CreationRectangled )
+		if( GUIOptionManager.getEditMode().getType() == EditMode.Type.CreationPointwise || GUIOptionManager.getEditMode().getType() == EditMode.Type.CreationRectangled )
 			if( lastClick != null & mousePos != null ) {
 				Point p1;
 				Point p2;
@@ -338,8 +337,7 @@ public class JFloor extends AbstractFloor implements EventListener<ZModelChanged
 				if( GUIOptionManager.getEditMode().getType() == EditMode.Type.CreationPointwise )
 					g2.drawLine( p1.x, p1.y, p2.x, p2.y );
 				else if( GUIOptionManager.getEditMode().getType() == EditMode.Type.CreationRectangled )
-					g2.drawRect( Math.min( p1.x, p2.x ), Math.min( p1.y, p2.y ),
-									Math.abs( p1.x - p2.x ), Math.abs( p1.y - p2.y ) );
+					g2.drawRect( Math.min( p1.x, p2.x ), Math.min( p1.y, p2.y ), Math.abs( p1.x - p2.x ), Math.abs( p1.y - p2.y ) );
 			}
 	}
 
@@ -419,6 +417,11 @@ public class JFloor extends AbstractFloor implements EventListener<ZModelChanged
 		if( p != null && !selectedPolygons.contains( p ) ) {
 			selectedPolygons.add( p );
 			p.setSelected( true );
+			//p.setComponentZOrder( p, 0 );
+//			System.out.println( "THis: " + this );
+			this.setComponentZOrder( p, 0 );
+//			System.out.println( "p: " + p );
+//			System.out.println( "Parent: " + p.getParent() );
 			fireActionEvent();
 		}
 	}
