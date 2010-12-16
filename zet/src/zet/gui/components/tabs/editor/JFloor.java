@@ -66,6 +66,7 @@ import event.ZModelChangedEvent;
 import gui.GUIControl;
 import gui.editor.CoordinateTools;
 import gui.GUIOptionManager;
+import gui.ZETProperties;
 import zet.gui.components.tabs.base.JPolygon;
 
 /**
@@ -79,7 +80,7 @@ public class JFloor extends AbstractFloor implements EventListener<ZModelChanged
 	private Floor myFloor;
 	/** The currently selected polygons. */
 	private LinkedList<JPolygon> selectedPolygons = new LinkedList<JPolygon>();
-	/** This field stored where the new PlanPoint would be inserted in rasterized
+	/** This field stored where the new PlanPoint would be inserted in raster
 	 * paint mode if the user clicked into the {@link JFloor}. */
 	private Point newRasterizedPoint;
 	/** The last point that was clicked in GUI coordinate space. This is used during
@@ -197,8 +198,7 @@ public class JFloor extends AbstractFloor implements EventListener<ZModelChanged
 
 			// TODO: Provide better implementation - Do not recreate everything each time			
 			for( Room r : f.getRooms() ) {
-				JPolygon poly = new JPolygon( this,
-								GUIOptionManager.getRoomEdgeColor(), guiControl );
+				JPolygon poly = new JPolygon( this, GUIOptionManager.getRoomEdgeColor(), guiControl );
 				add( poly );
 				poly.displayPolygon( r );
 			}
@@ -243,8 +243,7 @@ public class JFloor extends AbstractFloor implements EventListener<ZModelChanged
 	private void recreateSelection( JComponent c, List<PlanPolygon> old_selection ) {
 		for( PlanPolygon p : old_selection )
 			for( Component x : c.getComponents() ) {
-				if( x instanceof JPolygon &&
-								((JPolygon)x).getPlanPolygon() == p ) {
+				if( x instanceof JPolygon && ((JPolygon)x).getPlanPolygon() == p ) {
 
 					selectPolygon( (JPolygon)x );
 					break;
@@ -307,10 +306,7 @@ public class JFloor extends AbstractFloor implements EventListener<ZModelChanged
 			g2.setPaint( GUIOptionManager.getDragNodeColor() );
 			g2.setStroke( selection_stroke );
 			// No negative width/height allowed here, so work around it with Math
-			g2.drawRect( Math.min( dragStart.x, mousePos.x ),
-							Math.min( dragStart.y, mousePos.y ),
-							Math.abs( mousePos.x - dragStart.x ),
-							Math.abs( mousePos.y - dragStart.y ) );
+			g2.drawRect( Math.min( dragStart.x, mousePos.x ), Math.min( dragStart.y, mousePos.y ), Math.abs( mousePos.x - dragStart.x ), Math.abs( mousePos.y - dragStart.y ) );
 			g2.setStroke( stroke_standard );
 		}
 
@@ -382,8 +378,7 @@ public class JFloor extends AbstractFloor implements EventListener<ZModelChanged
 
 				for( Component cx : ((JPolygon)c).getComponents() )
 					// Area level
-					if( cx instanceof JPolygon &&
-									((JPolygon)cx).getPlanPolygon() == poly )
+					if( cx instanceof JPolygon && ((JPolygon)cx).getPlanPolygon() == poly )
 						return (JPolygon)cx;
 			}
 		return null;
@@ -473,6 +468,7 @@ public class JFloor extends AbstractFloor implements EventListener<ZModelChanged
 		JPolygon jp = getJPolygon( p );
 
 		if( jp != null ) {
+			scrollRectToVisible( null );
 			scrollRectToVisible( jp.getBounds() );
 			setSelectedPolygon( jp );
 		}
@@ -1017,7 +1013,7 @@ public class JFloor extends AbstractFloor implements EventListener<ZModelChanged
 					Point p;
 
 					if( rasterizedPaintMode ) {
-						int rasterWidth = CoordinateTools.translateToScreen( 400 );
+						int rasterWidth = CoordinateTools.translateToScreen( ZETProperties.getRasterSizeSnap() );
 
 						while( itDS.hasNext() && itDT.hasNext() ) {
 							p = itDS.next();
@@ -1101,8 +1097,10 @@ public class JFloor extends AbstractFloor implements EventListener<ZModelChanged
 	@Override
 	protected void processMouseWheelEvent( MouseWheelEvent e ) {
 		if( strgPressed ) {
-			
+			// move up/down
+			guiControl.scrollVertical(e.getWheelRotation() );
 		} else {
+			// zoom in and out
 			double oldZoom = CoordinateTools.getZoomFactor();
 			if( e.getScrollType() == MouseWheelEvent.WHEEL_BLOCK_SCROLL )
 				oldZoom = e.getWheelRotation() < 0 ? Math.min( oldZoom * 2, 0.25d ) : Math.max( oldZoom * 2, 0.01d );
