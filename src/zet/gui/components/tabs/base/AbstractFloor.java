@@ -108,9 +108,7 @@ public class AbstractFloor extends JPanel {
 	 */
 	public Point getNextRasterPoint( Point p ) {
 		int rasterWidth = CoordinateTools.translateToScreen( rasterSnap );
-		return new Point(
-						(int)Math.round( p.getX() / (double)rasterWidth ) * rasterWidth,
-						(int)Math.round( p.getY() / (double)rasterWidth ) * rasterWidth );
+		return new Point( (int)Math.round( p.getX() / (double)rasterWidth ) * rasterWidth, (int)Math.round( p.getY() / (double)rasterWidth ) * rasterWidth );
 	}
 
 	/** Sets the style in which the raster shall be painted.

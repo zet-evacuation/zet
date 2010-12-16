@@ -31,6 +31,7 @@ import ds.z.ZControl;
 import event.EventServer;
 import event.MessageEvent;
 import gui.GUIControl;
+import gui.ZETProperties;
 import gui.editor.CoordinateTools;
 import java.awt.Point;
 import java.awt.event.ActionEvent;
@@ -57,7 +58,7 @@ public class EdgePopupListener implements ActionListener {
 	 * @param currentEdge The Edge on which the pop-up is shown.
 	 * @param mousePosition the position at which the pop-up menu is shown with
 	 * coordinates that must be relative to the whole Floor
-	 * @param rasterizedPaintMode Whether we are painting rastered
+	 * @param rasterizedPaintMode Whether we are painting in raster mode
 	 */
 	public void setEdge( Edge currentEdge, Point mousePosition, boolean rasterizedPaintMode ) {
 		myEdge = currentEdge;
@@ -82,9 +83,7 @@ public class EdgePopupListener implements ActionListener {
 							try {
 								partner = r.getEdge( (RoomEdge)myEdge );
 								break; // Break when successful
-							} catch( IllegalArgumentException ex ) {
-							}
-
+							} catch( IllegalArgumentException ex ) { }
 					if( partner != null ) {
 						((RoomEdge)myEdge).setLinkTarget( partner );
 						partner.setLinkTarget( (RoomEdge)myEdge );
@@ -97,9 +96,10 @@ public class EdgePopupListener implements ActionListener {
 
 				PlanPoint newPoint = new PlanPoint( CoordinateTools.translateToModel( mousePosition ) );
 				newPoint = myEdge.getPointOnEdge( newPoint );
+				final double rasterSnap = ZETProperties.getRasterSizeSnap();
 				if( rasterizedPaintMode ) {
-					newPoint.x = (int)Math.round( (double)newPoint.x / 400.0d ) * 400;
-					newPoint.y = (int)Math.round( (double)newPoint.y / 400.0d ) * 400;
+					newPoint.x = (int)Math.round( (double)newPoint.x / rasterSnap ) * (int)rasterSnap;
+					newPoint.y = (int)Math.round( (double)newPoint.y / rasterSnap ) * (int)rasterSnap;
 				}
 
 				projectControl.insertPoint( myEdge, newPoint );

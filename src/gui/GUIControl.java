@@ -1176,6 +1176,39 @@ public class GUIControl implements AlgorithmListener {
 		}
 
 	}
+
+	final static int scrollCount = 20;
+
+	/**
+	 * <p>Adjusts the horizontal scroll bar position. Change is a value given by how
+	 * much the value is adjusted. The sign decides whether it is scrolled up or
+	 * down. The wheel rotation value of the wheel event can directly be used
+	 * here.</p>
+	 * <p>Note that the given {@code change} value is scaled so that the scrolling
+	 * is done in 20 ticks.</p>
+	 * @param change by how much the scroll bar value should be changed
+	 */
+	public void scrollHorizontal( int change ) {
+		int fact = (editview.getLeftPanel().getHorizontalScrollBar().getMaximum() - editview.getLeftPanel().getHorizontalScrollBar().getMinimum())/scrollCount;
+		int value = editview.getLeftPanel().getHorizontalScrollBar().getValue();
+		editview.getLeftPanel().getHorizontalScrollBar().setValue( value + change*fact );
+	}
+
+	/**
+	 * <p>Adjusts the vertical scroll bar position. Change is a value given by how
+	 * much the value is adjusted. The sign decides whether it is scrolled up or
+	 * down. The wheel rotation value of the wheel event can directly be used
+	 * here.</p>
+	 * <p>Note that the given {@code change} value is scaled so that the scrolling
+	 * is done in 20 ticks.</p>
+	 * @param change by how much the scroll bar value should be changed
+	 */
+	public void scrollVertical( int change ) {
+		int fact = (editview.getLeftPanel().getVerticalScrollBar().getMaximum() - editview.getLeftPanel().getVerticalScrollBar().getMinimum())/scrollCount;
+		int value = editview.getLeftPanel().getVerticalScrollBar().getValue();
+		editview.getLeftPanel().getVerticalScrollBar().setValue( value + change*fact );
+	}
+
 }
 
 
