@@ -116,7 +116,7 @@ public class JFloor extends AbstractFloor implements EventListener<ZModelChanged
 	// Paint Styles
 	/** The background image */
 	private PlanImage planImage;
-	/** Whether we are painting new mode in rasterized mode. */
+	/** Whether we are painting new mode in raster mode. */
 	private boolean rasterizedPaintMode = true;
 	// Helper methods and vars.
 	/** The last color used for painting helping lines. */
@@ -124,11 +124,9 @@ public class JFloor extends AbstractFloor implements EventListener<ZModelChanged
 	/** Helper variable for redirecting events to all JPolygons on screen. */
 	private boolean eventRedirectionGoingOn = false;
 	/** The standard stroke. */
-	private final static BasicStroke stroke_standard = new BasicStroke( 1.0f,
-					BasicStroke.CAP_BUTT, BasicStroke.JOIN_MITER );
+	private final static BasicStroke stroke_standard = new BasicStroke( 1.0f, BasicStroke.CAP_BUTT, BasicStroke.JOIN_MITER );
 	/** The stroke used for painting the selection rectangle. */
-	private final static BasicStroke selection_stroke = new BasicStroke( 1.0f,
-					BasicStroke.CAP_BUTT, BasicStroke.JOIN_MITER, 3.0f, new float[]{4.0f, 2.0f}, 0.0f );
+	private final static BasicStroke selection_stroke = new BasicStroke( 1.0f, BasicStroke.CAP_BUTT, BasicStroke.JOIN_MITER, 3.0f, new float[]{4.0f, 2.0f}, 0.0f );
 	private ZControl zcontrol;
 	private final GUIControl guiControl;
 
@@ -341,8 +339,8 @@ public class JFloor extends AbstractFloor implements EventListener<ZModelChanged
 			}
 	}
 
-	/** Determines whether rasterized paint mode is active or not.
-	 * @return true if rasterized mode is active, false otherwise
+	/** Determines whether raster paint mode is active or not.
+	 * @return true if raster mode is active, false otherwise
 	 */
 	public boolean getRasterizedPaintMode() {
 		return rasterizedPaintMode;
@@ -363,7 +361,7 @@ public class JFloor extends AbstractFloor implements EventListener<ZModelChanged
 	}
 
 	/**
-	 * Sets the rasterize mode active or inactive.
+	 * Sets the raster mode active or inactive.
 	 * @param rasterizedPaintMode indicates the status
 	 */
 	public void setRasterizedPaintMode( boolean rasterizedPaintMode ) {
@@ -417,11 +415,7 @@ public class JFloor extends AbstractFloor implements EventListener<ZModelChanged
 		if( p != null && !selectedPolygons.contains( p ) ) {
 			selectedPolygons.add( p );
 			p.setSelected( true );
-			//p.setComponentZOrder( p, 0 );
-//			System.out.println( "THis: " + this );
 			this.setComponentZOrder( p, 0 );
-//			System.out.println( "p: " + p );
-//			System.out.println( "Parent: " + p.getParent() );
 			fireActionEvent();
 		}
 	}
@@ -503,8 +497,7 @@ public class JFloor extends AbstractFloor implements EventListener<ZModelChanged
 
 	/** This is an internal helper method. Never call it. 
 	 * Call findAllComponentsAt (Container c, Point p) instead. */
-	private static void findAllPolygonsAtImpl( Container c, Point p,
-																						 List<JPolygon> polygonList ) {
+	private static void findAllPolygonsAtImpl( Container c, Point p, List<JPolygon> polygonList ) {
 		for( Component comp : c.getComponents() ) {
 			Point relative_point = SwingUtilities.convertPoint( c, p, comp );
 			if( comp instanceof JPolygon ) {
@@ -888,11 +881,7 @@ public class JFloor extends AbstractFloor implements EventListener<ZModelChanged
 					// b) Dragged a selection rectangle
 				} else if( !dragStart.equals( e.getPoint() ) ) {
 					// No negative width/height allowed here, so work around it with Math
-					Rectangle selectionArea = new Rectangle(
-									Math.min( dragStart.x, mousePos.x ),
-									Math.min( dragStart.y, mousePos.y ),
-									Math.abs( mousePos.x - dragStart.x ),
-									Math.abs( mousePos.y - dragStart.y ) );
+					Rectangle selectionArea = new Rectangle( Math.min( dragStart.x, mousePos.x ), Math.min( dragStart.y, mousePos.y ), Math.abs( mousePos.x - dragStart.x ), Math.abs( mousePos.y - dragStart.y ) );
 					clearSelection();
 
 					for( Component room : getComponents() ) {
@@ -926,37 +915,33 @@ public class JFloor extends AbstractFloor implements EventListener<ZModelChanged
 		if( e.getButton() == MouseEvent.BUTTON3 && !eventRedirectionGoingOn )
 			try {
 				eventRedirectionGoingOn = true;
-				Room clickedOn = findParent( (Component)e.getSource() );
+				Room clickedOn = findParent( (Component) e.getSource() );
 
-				if( clickedOn != null )
-					for( Component c : getComponents() )
-						if( (c instanceof JPolygon) &&
-										c.getBounds().contains( e.getPoint() ) ) {
+				if( clickedOn != null ) {
+					Component c = (Component)e.getSource();
+					//for( Component c : getComponents() )
+						if( (c instanceof JPolygon) && c.getBounds().contains( e.getPoint() ) ) {
 							// Dispatch only to an area or to a room
 							boolean area_popup = false;
 
 							Point translated = SwingUtilities.convertPoint( this, e.getPoint(), c );
-							for( Component ed : ((JPolygon)c).getComponents() ) {
-								Point tempTrans = SwingUtilities.convertPoint( c, translated, ed );
-								MouseEvent areaEvent = new MouseEvent( ed,
-												e.getID(), e.getWhen(), e.getModifiers(), tempTrans.x,
-												tempTrans.y, e.getClickCount(), e.isPopupTrigger() );
-								if( ed.contains( tempTrans ) && ed instanceof JPolygon &&
-												((JPolygon)ed).isPopupTrigger( areaEvent ) ) {
+							for( Component component : ((JPolygon) c).getComponents() ) {
+								Point tempTrans = SwingUtilities.convertPoint( c, translated, component );
+								MouseEvent areaEvent = new MouseEvent( component, e.getID(), e.getWhen(), e.getModifiers(), tempTrans.x, tempTrans.y, e.getClickCount(), e.isPopupTrigger() );
+								if( component.contains( tempTrans ) && component instanceof JPolygon && ((JPolygon) component).isPopupTrigger( areaEvent ) ) {
 									// Dispatch to the area
-									ed.dispatchEvent( areaEvent );
+									component.dispatchEvent( areaEvent );
 									area_popup = true;
 									break;
 								}
 							}
 
 							// Dispatch to the room
-							MouseEvent roomEvent = new MouseEvent( c,
-											e.getID(), e.getWhen(), e.getModifiers(), translated.x,
-											translated.y, e.getClickCount(), e.isPopupTrigger() );
-							if( !area_popup && ((JPolygon)c).isPopupTrigger( roomEvent ) )
+							MouseEvent roomEvent = new MouseEvent( c, e.getID(), e.getWhen(), e.getModifiers(), translated.x, translated.y, e.getClickCount(), e.isPopupTrigger() );
+							if( !area_popup && ((JPolygon) c).isPopupTrigger( roomEvent ) )
 								c.dispatchEvent( roomEvent );
 						}
+				}
 			} finally {
 				eventRedirectionGoingOn = false;
 			}
@@ -984,7 +969,6 @@ public class JFloor extends AbstractFloor implements EventListener<ZModelChanged
 
 	/** Only internal: To be called after a polygon was created to clean up our data structures. */
 	private void polygonFinishedHandler() {
-		//displayFloor( myFloor );
 		// Select the newly created polygon
 		setSelectedPolygon( zcontrol.latestPolygon() );
 
@@ -1038,16 +1022,13 @@ public class JFloor extends AbstractFloor implements EventListener<ZModelChanged
 						while( itDS.hasNext() && itDT.hasNext() ) {
 							p = itDS.next();
 							itDT.next().setLocation(
-											(int)Math.round( (p.getX() + x_offset) /
-											(double)rasterWidth ) * rasterWidth,
-											(int)Math.round( (p.getY() + y_offset) /
-											(double)rasterWidth ) * rasterWidth );
+											(int)Math.round( (p.getX() + x_offset) / (double)rasterWidth ) * rasterWidth,
+											(int)Math.round( (p.getY() + y_offset) / (double)rasterWidth ) * rasterWidth );
 						}
 					} else
 						while( itDS.hasNext() && itDT.hasNext() ) {
 							p = itDS.next();
-							itDT.next().setLocation( p.getX() + x_offset,
-											p.getY() + y_offset );
+							itDT.next().setLocation( p.getX() + x_offset, p.getY() + y_offset );
 						}
 				}
 		repaint();
@@ -1070,6 +1051,8 @@ public class JFloor extends AbstractFloor implements EventListener<ZModelChanged
 			return null;
 	}
 
+	boolean strgPressed = false;
+
 	/**
 	 * Key Event Handler
 	 * Delete deletes selected polygons
@@ -1080,6 +1063,9 @@ public class JFloor extends AbstractFloor implements EventListener<ZModelChanged
 		if( e.getID() == KeyEvent.KEY_PRESSED )
 			// Escape finishes the currently edited polygon
 			switch( e.getKeyCode() ) {
+				case KeyEvent.VK_CONTROL:
+					strgPressed = true;
+					break;
 				case KeyEvent.VK_ESCAPE:
 					if( newPolygon != null ) {
 						guiControl.getZControl().deletePolygon( newPolygon );
@@ -1100,6 +1086,12 @@ public class JFloor extends AbstractFloor implements EventListener<ZModelChanged
 				default:
 					super.processKeyEvent( e );
 			}
+		else if( e.getID() == KeyEvent.KEY_RELEASED )
+			switch( e.getKeyCode() ) {
+				case KeyEvent.VK_CONTROL:
+					strgPressed = false;
+					break;
+			}
 
 	}
 
@@ -1108,15 +1100,19 @@ public class JFloor extends AbstractFloor implements EventListener<ZModelChanged
 	 */
 	@Override
 	protected void processMouseWheelEvent( MouseWheelEvent e ) {
-		double oldZoom = CoordinateTools.getZoomFactor();
-		if( e.getScrollType() == MouseWheelEvent.WHEEL_BLOCK_SCROLL )
-			oldZoom = e.getWheelRotation() < 0 ? Math.min( oldZoom * 2, 0.25d ) : Math.max( oldZoom * 2, 0.01d );
-		else {
-			double offset = (e.getScrollAmount() * Math.abs( e.getWheelRotation() )) / 100.0d;
-			offset /= 4; // Make offset smaller, otherwise it's too fast
-			oldZoom = e.getWheelRotation() < 0 ? Math.min( oldZoom + offset, 0.25d ) : Math.max( oldZoom - offset, 0.01d );
+		if( strgPressed ) {
+			
+		} else {
+			double oldZoom = CoordinateTools.getZoomFactor();
+			if( e.getScrollType() == MouseWheelEvent.WHEEL_BLOCK_SCROLL )
+				oldZoom = e.getWheelRotation() < 0 ? Math.min( oldZoom * 2, 0.25d ) : Math.max( oldZoom * 2, 0.01d );
+			else {
+				double offset = (e.getScrollAmount() * Math.abs( e.getWheelRotation() )) / 100.0d;
+				offset /= 4; // Make offset smaller, otherwise it's too fast
+				oldZoom = e.getWheelRotation() < 0 ? Math.min( oldZoom + offset, 0.25d ) : Math.max( oldZoom - offset, 0.01d );
+			}
+			guiControl.setZoomFactor( oldZoom );
 		}
-		guiControl.setZoomFactor( oldZoom );
 	}
 
 	// ACTION LISTENER STUFF

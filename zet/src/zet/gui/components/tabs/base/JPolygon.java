@@ -491,7 +491,7 @@ public class JPolygon extends AbstractPolygon {
 	}
 
 	/**
-	 * MouseEvents occuring on this component are forwarded to the parent 
+	 * MouseEvents occur on this component are forwarded to the parent
 	 * component, if the click does not trigger the PopupMenu of the component. 
 	 * @param e the <code>MouseEvent</code>
 	 */
@@ -523,9 +523,7 @@ public class JPolygon extends AbstractPolygon {
 				if( hitPoint == null ) {
 					// Show edge popup
 					if( selectedUsed == false ) {
-						guiControl.editor.getEditView().setPopupEdge( hitEdge.myEdge,
-									guiControl.editor.getEditView().convertPointToFloorCoordinates(
-									(Component)e.getSource(), e.getPoint() ) );
+						guiControl.editor.getEditView().setPopupEdge( hitEdge.myEdge, guiControl.editor.getEditView().convertPointToFloorCoordinates( (Component)e.getSource(), e.getPoint() ) );
 						guiControl.editor.getEditView().getEdgePopup().show( this, e.getX(), e.getY() );
 					}
 					selectedUsed = isSelected();
