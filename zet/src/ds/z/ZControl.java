@@ -13,6 +13,7 @@ import de.tu_berlin.math.coga.common.util.IOTools;
 import de.tu_berlin.math.coga.rndutils.distribution.Distribution;
 import de.tu_berlin.math.coga.rndutils.distribution.continuous.NormalDistribution;
 import de.tu_berlin.math.coga.rndutils.distribution.continuous.UniformDistribution;
+import ds.z.exception.UnknownZModelError;
 import event.EventServer;
 import event.ZModelChangedEvent;
 import gui.ZETMain;
@@ -22,7 +23,7 @@ import java.util.HashSet;
 import java.util.Iterator;
 
 /**
- * The class <code>ZControl</code> represents a front end class to the Z-model.
+ * The class {@code ZControl} represents a front end class to the Z-model.
  * It is called for whatever action should be performed on the model. It will
  * send appropriate actions to the model and will take care for a consistent
  * model description.
@@ -41,7 +42,7 @@ public class ZControl {
 	}
 
 	/**
-	 * Creates a new instance of <code>ProjectControl</code> which controls a
+	 * Creates a new instance of {@code ProjectControl} which controls a
 	 * given project.
 	 * @param filename the path to a file that should be loaded as project.
 	 */
@@ -50,7 +51,7 @@ public class ZControl {
 	}
 
 	/**
-	 * Creates a new instance of <code>ProjectControl</code> which controls a
+	 * Creates a new instance of {@code ProjectControl} which controls a
 	 * given project.
 	 * @param file the file that should be loaded as project.
 	 */
@@ -62,7 +63,7 @@ public class ZControl {
 	}
 
 	/**
-	 * Creates a new instance of <code>ZControl</code>.
+	 * Creates a new instance of {@code ZControl}.
 	 * @param p 
 	 */
 	ZControl( Project p ) {
@@ -395,7 +396,19 @@ public class ZControl {
 	 * @param f the floor that is copied
 	 */
 	public void copyFloor( Floor f ) {
-		final Floor fc = f.clone();
+		Floor fc = null;
+		try {
+			 fc = f.clone();
+		} catch( UnknownZModelError ex ) {
+			if( ZETMain.isDebug() ) {
+				System.err.println( "DEBUG-out:" );
+				ex.printOriginalStackTrace();
+				System.out.println();
+			}
+			System.err.println( "Floor copy failed due to unknown reason. Check the model for errors." );
+			return;
+		}
+
 		int number = 0;
 		String newName = f.getName() + "_";
 
