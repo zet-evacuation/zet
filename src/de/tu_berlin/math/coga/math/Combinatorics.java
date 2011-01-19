@@ -22,7 +22,7 @@
 package de.tu_berlin.math.coga.math;
 
 /**
- * The class <code>Combinatorics</code> is a utility class that provides
+ * The class {@code Combinatorics} is a utility class that provides
  * several combinatorial methods.
  * @author Jan-Philipp Kappmeier
  */
@@ -41,6 +41,8 @@ public class Combinatorics {
 		if( k < 0 || k > java.lang.Math.abs( n ) )
 			return 0;
 		if( k == 1 )
+			return n;
+		if( k == 0 )
 			return 1;
 		if( n > 0 ) {
 			if( 2 * k > n )

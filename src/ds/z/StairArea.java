@@ -149,11 +149,11 @@ public class StairArea extends Area<Edge> {
 	}
 
 	/**
-	 * Sets a new value for the speedFactor in the area. The speedfactor is
+	 * Sets a new value for the speedFactor in the area. The speed factor is
 	 * the percentage of the original speed that can be achieved on this area.
-	 * A speedfactor of 1 would be normal speed and speedfactor of almost 0 would mean
+	 * A speed factor of 1 would be normal speed and speed factor of almost 0 would mean
 	 * total halt.
-	 * <p>The speedfactor has to be greater than 0 and smaller than 1 or equal to 1
+	 * <p>The speed factor has to be greater than 0 and smaller than 1 or equal to 1
 	 * </p>
 	 * @throws java.lang.IllegalArgumentException If the speedFactor is smaller 
 	 * than 0 or bigger than 1.
@@ -169,10 +169,11 @@ public class StairArea extends Area<Edge> {
 	}
 
 	/**
-	 * @return The PlanPoint at which the edge progression begins, which describes
+	 * Returns the {@link PlanPoint} at which the edge progression begins, which describes
 	 * the lower part of the stair. This edge progression can be obtained by repeatedly
-	 * calling getLowerLevelStart ().getNextEdge ().getTarget().getNextEdge () etc. 
+	 * calling {@code getLowerLevelStart().getNextEdge().getTarget().getNextEdge()} etc.
 	 * until the PlanPoint 'LowerLevelEnd' is reached.
+	 * @return 
 	 */
 	public PlanPoint getLowerLevelStart() {
 		return lowerLevel[0];

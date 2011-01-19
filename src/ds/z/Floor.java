@@ -27,6 +27,8 @@ import ds.z.exception.AreaNotInsideException;
 import ds.z.exception.PolygonNotClosedException;
 import ds.z.exception.RoomIntersectException;
 import ds.z.exception.TeleportEdgeInvalidTargetException;
+import ds.z.exception.UnknownZModelError;
+import ds.z.exception.ZModelErrorException;
 import gui.ZETMain;
 import io.z.FloorConverter;
 import io.z.XMLConverter;
@@ -546,17 +548,18 @@ public class Floor implements Serializable, Cloneable, Iterable<Room> {
 	/**
 	 * Returns a copy of the <code>Floor</code>, but deletes all {@link AssignmentArea} objects
 	 * as they would most likely refer to assignments that do not exist.
-	 *
+	 * @throws UnknownZModelError if an unexpected error occurred. This usually means that something in the model is incorrect.
 	 * @return a copy of the floor
 	 */
 	@Override
-	public Floor clone() {
+	public Floor clone() throws UnknownZModelError {
 		Floor deepCopy = new Floor( this.name );
 		try {
 			HashMap<Room,Room> m = new HashMap<Room,Room>();
 
 			for( Room r : getRooms() ) {
 				Room newRoom = new Room( deepCopy, r.getName() );
+				System.out.println( "Copying room " + r.getName() );
 				newRoom.defineByPoints( PlanPoint.pointCopy( r.getBorderPlanPoints() ) );
 
 				// Reconnect the rooms
@@ -625,6 +628,7 @@ public class Floor implements Serializable, Cloneable, Iterable<Room> {
 			}
 		} catch ( Exception ex ) {
 			ZETMain.sendError( ex.getMessage() );
+			throw new UnknownZModelError( "Unexpected error during copying. Try to check the model.", ex );
 		}
 		return deepCopy;
 	}
