@@ -56,7 +56,7 @@ public class GLEdge extends AbstractDrawable<GLEdge, GLEdgeControl> {
 	 * Therefore, the coordinate system is rotated in such a  way that the cylinder is drawn into the direction
 	 * of the difference vector of start and end node. Usually {@code OpenGL} draws cylinders into the direction
 	 * (0,0,1), so the difference vector has to be rotated into this vector.
-	 * @param drawable a <code>GLAutoDrawable</code> on which the edges are drawn.
+	 * @param drawable a {@code GLAutoDrawable} on which the edges are drawn.
 	 */
 	private void drawStaticStructure( GL gl ) {
 		gl.glPushMatrix();

@@ -143,7 +143,7 @@ public class GLFlowGraphControl extends AbstractZETVisualizationControl<GLGraphF
 	 * calculates a new progress. The progress will at most reach 99% so that
 	 * after all objects are created a final "Done" message can be submitted.</p>
 	 * <p>Note that before this method can be used in the proper way the private
-	 * variable <code>nodesDone</code> and <code>nodeCount</code> should be
+	 * variable {@code nodesDone} and {@code nodeCount} should be
 	 * initialized correct. However, it is guaranteed to calculate a value from
 	 * 0 to 99.
 	 */

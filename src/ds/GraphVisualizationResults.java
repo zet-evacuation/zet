@@ -34,7 +34,7 @@ import opengl.framework.abs.VisualizationResult;
 import java.util.ArrayList;
 
 /**
- * The class <code>GraphVisualizationResults</code> contains all information necessary to visualize the result of a dynamic flow algorithm.
+ * The class {@code GraphVisualizationResults} contains all information necessary to visualize the result of a dynamic flow algorithm.
  * Therefore the network itself is included, as well as the result flow and a mapping giving the rectangle in the real world that each node
  * is covering. Also the floor that each node belongs to is saved. The floors have indices according to their position in the list of
  * floors in the z-format.  
@@ -77,8 +77,8 @@ public class GraphVisualizationResults implements VisualizationResult {
 	private NodePositionMapping nodePositionMapping = null;
 
 	/**
-	 * Create a new <code>GraphVisualization</code> object from a network flow model and a dynamic flow.
-	 * @param networkFlowModel A network flow model containing the graph and the <code>ZToGraphMapping</code>.
+	 * Create a new {@code GraphVisualization} object from a network flow model and a dynamic flow.
+	 * @param networkFlowModel A network flow model containing the graph and the {@code ZToGraphMapping}.
 	 * @param dynamicFlow The result flow that shall be visualized.
 	 */
 	public GraphVisualizationResults( NetworkFlowModel networkFlowModel, PathBasedFlowOverTime dynamicFlow ) {
@@ -299,27 +299,27 @@ public class GraphVisualizationResults implements VisualizationResult {
 	}
 
 	/**
-	 * Returns whether <code>node</code> is an evacuation node.
+	 * Returns whether {@code node} is an evacuation node.
 	 * @param node a node
-	 * @return whether <code>node</code> is an evacuation node.
+	 * @return whether {@code node} is an evacuation node.
 	 */
 	public boolean isEvacuationNode( Node node ) {
 		return isEvacuationNode.get( node );
 	}
 
 	/**
-	 * Returns whether <code>node</code> is a source node.
+	 * Returns whether {@code node} is a source node.
 	 * @param node a node
-	 * @return whether <code>node</code> is a source node.
+	 * @return whether {@code node} is a source node.
 	 */
 	public boolean isSourceNode( Node node ) {
 		return isSourceNode.get( node );
 	}
 
 	/**
-	 * Returns whether <code>node</code> has been a source node that was deleted.
+	 * Returns whether {@code node} has been a source node that was deleted.
 	 * @param node a node
-	 * @return whether <code>node</code> has been a source node that was deleted.
+	 * @return whether {@code node} has been a source node that was deleted.
 	 */
 	public boolean isDeletedSourceNode( Node node ) {
 		return isDeletedSourceNode.get( node );

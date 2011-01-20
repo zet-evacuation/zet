@@ -9,7 +9,7 @@ package opengl.helper;
 import javax.media.opengl.GL;
 
 /**
- * The class <code>Texture</code> represents a texture used by OpenGL. It can
+ * The class {@code Texture} represents a texture used by OpenGL. It can
  * bind and mipmap them.
  * @author Jan-Philipp Kappmeier
  */
@@ -25,7 +25,7 @@ public class Texture {
 	
 	public String resourceName = null;
 /**
-	 * Creates a new instance of <code>Texture</code>.
+	 * Creates a new instance of {@code Texture}.
  * @param gl the graphics context in which this texture is used
  * @param target the OpenGL target, for example ({@link javax.media.opengl.GL#GL_TEXTURE_2D})
  * @param textureID the internal id of the texture (OpenGL texture name)
@@ -39,7 +39,7 @@ public class Texture {
 	/**
 	 * <p>Binds this texture to the current GL context. This method is a shorthand
 	 * equivalent of the OpenGL code</p>
-	 * <p><code>gl.glBindTexture(texture.getTarget(), texture.getTextureID());</code></p>
+	 * <p>{@code gl.glBindTexture(texture.getTarget(), texture.getTextureID());}</p>
 	 */
 	public final void bind() {
 		if( lastbind == null || lastbind != this ) {

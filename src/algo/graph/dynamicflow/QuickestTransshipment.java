@@ -21,7 +21,7 @@ import ds.graph.Network;
 import ds.graph.Node;
 
 /**
- * The class <code>QuickestTransshipment</code> calculates the smallest
+ * The class {@code QuickestTransshipment} calculates the smallest
  * time horizon T such that it is
  * possible to fulfill given supplies and demands in a network
  * with capacities and transit times within this time horizon. 
@@ -32,7 +32,7 @@ import ds.graph.Node;
  * is implemented by using binary search and calling a dynamic transshipment
  * algorithm at each point of the search. Therefore
  * the classes {@link DynamicTransshipment} is used.
- * The class <code>Transshipment</code> implements the binary search
+ * The class {@code Transshipment} implements the binary search
  * for an arbitrary dynamic transshipment algorithm which possibly guarantees more properties.
  */
 public class QuickestTransshipment extends Transshipment<DynamicTransshipment> {

@@ -5,12 +5,12 @@
 package de.tu_berlin.math.coga.math;
 
 /**
- * The class <code>Math</code> is a utility class that provides some additional
+ * The class {@code Math} is a utility class that provides some additional
  * mathematical methods.
  * @author Jan-Philipp Kappmeier
  */
 public class Math {
-	/** Creates a new instance of <code>Math</code>. */
+	/** Creates a new instance of {@code Math}. */
 	private Math() { }
 
 	/**

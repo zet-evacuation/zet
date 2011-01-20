@@ -44,7 +44,7 @@ import java.util.List;
 @XMLConverter(EdgeConverter.class)
 public class Edge implements Serializable {
 	/**
-	 * The <code>LineIntersectionType</code> enumeration defines the type of
+	 * The {@code LineIntersectionType} enumeration defines the type of
 	 * intersection of two line segments.
 	 */
 	public enum LineIntersectionType {
@@ -74,7 +74,7 @@ public class Edge implements Serializable {
 	private PlanPoint source;
 
 	/**
-	 * Creates a new instance of <code>Edge</code> with two different ending points 
+	 * Creates a new instance of {@code Edge} with two different ending points 
 	 * and no associated polygon. The edge will try to defineByPoints itself to the ending
 	 * points' list of incident edges.
 	 *
@@ -91,7 +91,7 @@ public class Edge implements Serializable {
 	}
 
 	/**
-	 * Creates a new instance of <code>Edge</code> with two different ending points.
+	 * Creates a new instance of {@code Edge} with two different ending points.
 	 * The edge will try to defineByPoints itself to the ending points' list of incident edges.
 	 *
 	 * @param newSource one ending point
@@ -206,7 +206,7 @@ public class Edge implements Serializable {
 	}
 
 	/**
-	 * Determines the common point of the <code>Edge</code> with another specified edge.
+	 * Determines the common point of the {@code Edge} with another specified edge.
 	 * @param e the edge
 	 * @throws java.lang.IllegalArgumentException if the edges have no point in common
 	 * @return the common point
@@ -237,9 +237,9 @@ public class Edge implements Serializable {
 	}
 
 	/**
-	 * Deletes this <code>Edge</code>. That means, the edge removes itself out of
+	 * Deletes this {@code Edge}. That means, the edge removes itself out of
 	 * the list of edges in the associated polygon. After that all used references are
-	 * setLocation to <code>null</code>.
+	 * setLocation to {@code null}.
 	 * @throws java.lang.IllegalArgumentException sent from super-class, not supposed to occur
 	 * @throws java.lang.IllegalStateException if the edge is not the first or last 
 	 * edge in the polygon. first and last edges also occur in closed polygons.
@@ -277,7 +277,7 @@ public class Edge implements Serializable {
 	}
 
 	/**
-	 * Checks if a specified {@link PlanPoint} fits to the <code>Edge</code>. That
+	 * Checks if a specified {@link PlanPoint} fits to the {@code Edge}. That
 	 * means that the point has the same coordinates than one of the end points
 	 * of the Edge.
 	 * @param p the point
@@ -288,7 +288,7 @@ public class Edge implements Serializable {
 	}
 
 	/**
-	 * Checks if a specified {@link PlanPoint} fits a specified <code>Edge</code>.
+	 * Checks if a specified {@link PlanPoint} fits a specified {@code Edge}.
 	 * That means that the point has the same coordinates than one of the end points
 	 * of the Edge.
 	 * @param p the point
@@ -300,7 +300,7 @@ public class Edge implements Serializable {
 	}
 
 	/**
-	 * Checks if a specified <code>Edge</code> fits to the edge. That means that
+	 * Checks if a specified {@code Edge} fits to the edge. That means that
 	 * the edges have ending points with the same coordinates.
 	 * @param e the edge
 	 * @return true if the edges have an ending point in common
@@ -310,7 +310,7 @@ public class Edge implements Serializable {
 	}
 
 	/**
-	 * Checks whether an {@link Edge} fits into another <code>Edge<&/code>. An
+	 * Checks whether an {@link Edge} fits into another {@code Edge<&/code>. An
 	 * edge is said to fit, if the coordinates of the edges are the same. That
 	 * means that the edge are superposed.
 	 * @param e1 the first edge
@@ -322,7 +322,7 @@ public class Edge implements Serializable {
 	}
 
 	/**
-	 * Returns the {@link PlanPolygon} that is associated to the<code>Edge</code>.
+	 * Returns the {@link PlanPolygon} that is associated to the{@code Edge}.
 	 * A polygon is associated if it contains the edge.
 	 * <p>Every edge must have exactly one associated polygon.</p>
 	 * @return the associated polygon.
@@ -332,7 +332,7 @@ public class Edge implements Serializable {
 	}
 
 	/**
-	 * Returns the end point of the <code>Edge</code> that is not the specified
+	 * Returns the end point of the {@code Edge} that is not the specified
 	 * point.
 	 * @param p the one end point (or equal to the end point)
 	 * @return the other end point
@@ -441,7 +441,7 @@ public class Edge implements Serializable {
 
 	/**
 	 * Checks whether the edge is horizontally aligned. The edge is considered
-	 * horizontal if the <code>y</code>-coordinates of the two end points are equal.
+	 * horizontal if the {@code y}-coordinates of the two end points are equal.
 	 * @return true if the edge is horizontal
 	 */
 	public boolean isHorizontal() {
@@ -453,7 +453,7 @@ public class Edge implements Serializable {
 
 	/**
 	 * Checks whether the edge is vertically aligned. The edge is considered
-	 * vertical if the <code>x</code>-coordinates of the two end points are equal.
+	 * vertical if the {@code x}-coordinates of the two end points are equal.
 	 * @return true if the edge is vertical
 	 */
 	public boolean isVertical() {
@@ -467,7 +467,7 @@ public class Edge implements Serializable {
 	 * is created. An edge should typically keep its polygon during its entire
 	 * lifetime.
 	 *
-	 * @throws java.lang.NullPointerException if the passed <code>PlanPolygon</code> is null.
+	 * @throws java.lang.NullPointerException if the passed {@code PlanPolygon} is null.
 	 * @throws IllegalArgumentException if this edge cannot be added to the new polygon 
 	 * because it does not fit to its start- and end points.
 	 * @throws IllegalStateException if the edge is part of a polygon with more than one
@@ -593,7 +593,7 @@ public class Edge implements Serializable {
 	}
 
 	/**
-	 * Returns a string representation of the <code>Edge</code> that
+	 * Returns a string representation of the {@code Edge} that
 	 * textually represents the edge.
 	 * <p>An edge is represented as a tupel of its end points and will look
 	 * as follows:

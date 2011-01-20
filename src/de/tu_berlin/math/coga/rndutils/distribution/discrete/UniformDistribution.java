@@ -9,7 +9,7 @@ import de.tu_berlin.math.coga.rndutils.RandomUtils;
 import de.tu_berlin.math.coga.rndutils.distribution.DiscreteDistribution;
 
 /**
- * The class <code>UniformDistribution</code> represents a discrete uniformly
+ * The class {@code UniformDistribution} represents a discrete uniformly
  * distributet random variable.
  * @author Jan-Philipp Kappmeier
  */
@@ -17,7 +17,7 @@ public class UniformDistribution extends DiscreteDistribution {
 	private double p;
 
 	/**
-	 * Creates a new instance of <code>BinomialDistribution</code>.
+	 * Creates a new instance of {@code BinomialDistribution}.
 	 * @param min
 	 * @param max
 	 */

@@ -28,7 +28,7 @@ import ds.Project;
 import ds.ca.CellularAutomaton;
 
 /**
- * The class <code>CreateCellularAutomatonTask</code> transforms the z-model
+ * The class {@code CreateCellularAutomatonTask} transforms the z-model
  * to a cellular automaton.
  * @author Jan-Philipp Kappmeier
  */

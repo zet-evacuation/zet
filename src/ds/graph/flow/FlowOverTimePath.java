@@ -25,14 +25,14 @@ import ds.graph.Path;
 import java.util.Iterator;
 
 /**
- * The <code>@link FlowOverTimePath</code> class represents the flow on one 
+ * The {@code @link FlowOverTimePath} class represents the flow on one 
  * {@link Path} in a network. The delay time in the first node of the path
  * implies the time when the represented flow would start to leave the first node.
- * The flow is send with a constant rate of <code>rate</code>. It sends a
- * total quantity of <code>amount<code> units of flow. Together with the rate
+ * The flow is send with a constant rate of {@code rate}. It sends a
+ * total quantity of {@code amount{@code  units of flow. Together with the rate
  * and the starting time this implies the point in time where the flow
  * will stop sending.
- * <code>DynamicPathFlows</code> are needed to represent dynamic flows path based.
+ * {@code DynamicPathFlows} are needed to represent dynamic flows path based.
  */
 public class FlowOverTimePath extends FlowOverTimeEdgeSequence /*extends StaticPathFlow*/ {
 
@@ -46,7 +46,7 @@ public class FlowOverTimePath extends FlowOverTimeEdgeSequence /*extends StaticP
     //private int rate;
 
     /**
-     * Creates a <code>FlowOverTimePath</code> with unit rate, amount zero
+     * Creates a {@code FlowOverTimePath} with unit rate, amount zero
      * and an empty path.
      */
     public FlowOverTimePath() {
@@ -109,12 +109,12 @@ public class FlowOverTimePath extends FlowOverTimeEdgeSequence /*extends StaticP
     }
 
     /**
-     * Creates a <code>FlowOverTimePath</code> with rate <code>rate</code>, 
-     * amount <code>amount</code> and underlying path <code>path</code>.
+     * Creates a {@code FlowOverTimePath} with rate {@code rate}, 
+     * amount {@code amount} and underlying path {@code path}.
      * @param path the path along which flow is to be sent.
      * @param rate the number of flow units sent per time unit.
      * @param amount the total number of flow units to be sent.
-     * @exception NullPointerException if <code>path</code> is null.
+     * @exception NullPointerException if {@code path} is null.
      */
 /*    public FlowOverTimePath(StaticPath path, int rate, int amount) {
         super(path, rate);
@@ -161,21 +161,21 @@ public class FlowOverTimePath extends FlowOverTimeEdgeSequence /*extends StaticP
     }
 */
     /**
-     * Returns the delay on the startnode of edge <code>edge</code>.
-     * If the edge is not returned in the path of this <code>FlowOverTimePath</code>,
+     * Returns the delay on the startnode of edge {@code edge}.
+     * If the edge is not returned in the path of this {@code FlowOverTimePath},
      * -1 will be returned.
      * @param edge the edge with the startnode which the delay is wanted of.
-     * @return the delay of the startnode of edge <code>edge</code>.
+     * @return the delay of the startnode of edge {@code edge}.
      *//*
     public int delay(Edge edge) {
         return dynamicPath.getDelay(edge);
     }*/
 
     /**
-     * Sets the path belonging to this <code>FlowOverTimePath</code>.
-     * If the object is a <code>DynamicPath</code>, it is set directly.
-     * Else a <code>DynamicPath</code> will be created from
-     * the edges of <code>path</code> 
+     * Sets the path belonging to this {@code FlowOverTimePath}.
+     * If the object is a {@code DynamicPath}, it is set directly.
+     * Else a {@code DynamicPath} will be created from
+     * the edges of {@code path} 
      * that has zero delay times before edges and this path will be set.
      * @param path The path to be set.
      */
@@ -196,9 +196,9 @@ public class FlowOverTimePath extends FlowOverTimeEdgeSequence /*extends StaticP
     }*/
 
     /**
-     * Sets the path belonging to this <code>FlowOverTimePath</code>.
+     * Sets the path belonging to this {@code FlowOverTimePath}.
      * @param path the path to be set
-     * @exception NullPointerException if <code>path</code> is null.
+     * @exception NullPointerException if {@code path} is null.
      */
 /*    public void setPath(DynamicPath path) {
         if (path == null) {
@@ -209,8 +209,8 @@ public class FlowOverTimePath extends FlowOverTimeEdgeSequence /*extends StaticP
     }
 */
     /**
-     * Returns the rate flow in this <code>FlowOverTimePath</code> is flowing with.
-     * @return the rate flow in this <code>FlowOverTimePath</code> is flowing with.
+     * Returns the rate flow in this {@code FlowOverTimePath} is flowing with.
+     * @return the rate flow in this {@code FlowOverTimePath} is flowing with.
      *//*
     public int getRate() {
         return rate;
@@ -221,8 +221,8 @@ public class FlowOverTimePath extends FlowOverTimeEdgeSequence /*extends StaticP
     }*/
 
     /**
-     * Sets the rate flow in this <code>FlowOverTimePath</code> shall flow with.
-     * @param rate the rate flow in this <code>FlowOverTimePath</code> shall flow with.
+     * Sets the rate flow in this {@code FlowOverTimePath} shall flow with.
+     * @param rate the rate flow in this {@code FlowOverTimePath} shall flow with.
      */
     /*public void setRate(int rate) {
         this.rate = rate;
@@ -256,13 +256,13 @@ public class FlowOverTimePath extends FlowOverTimeEdgeSequence /*extends StaticP
     }
 */
     /**
-     * Returns whether an object is equal to this <code>FlowOverTimePath</code>.
-     * The result is <code>true</code> if and only if the argument is not null
-     * and is a <code>FlowOverTimePath</code> object having the same rate and amount
-     * and containing a path equal to the path in this <code>FlowOverTimePath</code>.
+     * Returns whether an object is equal to this {@code FlowOverTimePath}.
+     * The result is {@code true} if and only if the argument is not null
+     * and is a {@code FlowOverTimePath} object having the same rate and amount
+     * and containing a path equal to the path in this {@code FlowOverTimePath}.
      * @param o object to compare.
-     * @return <code>true</code> if the given object represents a
-     * <code>FlowOverTimePath</code> equivalent to this node, <code>false</code> otherwise.
+     * @return {@code true} if the given object represents a
+     * {@code FlowOverTimePath} equivalent to this node, {@code false} otherwise.
      */
 /*    @Override
     public boolean equals(Object o) {
@@ -275,13 +275,13 @@ public class FlowOverTimePath extends FlowOverTimeEdgeSequence /*extends StaticP
     }*/
 
     /**
-     * Returns the hash code of this <code>FlowOverTimePath</code>.
+     * Returns the hash code of this {@code FlowOverTimePath}.
      * The hash code is calculated by computing the arithmetic mean
      * of the rate, the amount and the hashcode of the underlying
-     * {@link DynamicPath} of this <code>FlowOverTimePath</code>.
+     * {@link DynamicPath} of this {@code FlowOverTimePath}.
      * Therefore the hash code is equal for path flows that are equal 
-     * according to the <code>equals</code>-method, but not necessarily
-     * different for path flows different to the <code>equals</code>-method.
+     * according to the {@code equals}-method, but not necessarily
+     * different for path flows different to the {@code equals}-method.
      * If hashing of path flows is heavily used,
      * the implementation of this method should be reconsidered.
      * @return the hash code of this object
@@ -292,10 +292,10 @@ public class FlowOverTimePath extends FlowOverTimeEdgeSequence /*extends StaticP
     }
 */
     /**
-     * Clones this <code>FlowOverTimePath</code> by cloning the underlying {@link DynamicPath}
-     * and creating a new <code>FlowOverTimePath</code> with the clone and the same
-     * <code>rate</code> and <code>amount</code> as this <code>FlowOverTimePath</code>.
-     * @return a <code>FlowOverTimePath</code> object with a clone of the path of this
+     * Clones this {@code FlowOverTimePath} by cloning the underlying {@link DynamicPath}
+     * and creating a new {@code FlowOverTimePath} with the clone and the same
+     * {@code rate} and {@code amount} as this {@code FlowOverTimePath}.
+     * @return a {@code FlowOverTimePath} object with a clone of the path of this
      * path flow and the same rate and amount as this path flow.
      */
 /*    @Override

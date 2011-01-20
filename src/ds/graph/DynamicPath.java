@@ -24,21 +24,21 @@ import java.util.ArrayList;
 import java.util.Iterator;
 
 /**
- * The <code>DynamicPath</code> class represents a dynamic path in a {@link Network}.
+ * The {@code DynamicPath} class represents a dynamic path in a {@link Network}.
  * It extends the {@link StaticPath} by the possibility to save delay times
  * in nodes: Flow going through a network can (sometimes) wait in nodes, therefore
  * we consider a dynamic flow as a alternating sequence of delay times and edges.
  * In this class delay times get saved together with edges: The delay time
  * corresponding to an edge is the delay time in the start node of the edge, 
  * i.e. the delays are always directly before the corresponding edge.
- * The delay times are internally stored in a <code>ArrayList</code>.
+ * The delay times are internally stored in a {@code ArrayList}.
  */
 public class DynamicPath extends StaticPath{
     
     private ArrayList<Integer> delays;
     
     /**
-     * Constructs a new <code>DynamicPath</code> without edges. 
+     * Constructs a new {@code DynamicPath} without edges. 
      * Edges can be added with the corresponding methods.
      */
     public DynamicPath() {
@@ -47,13 +47,13 @@ public class DynamicPath extends StaticPath{
     }
     
     /**
-     * Constructs a new <code>DynamicPath</code> with the given edges. 
+     * Constructs a new {@code DynamicPath} with the given edges. 
      * The delays in the startnode of the edges are set to zero. 
-     * They can be changed later by using <code>setDelay(Edge edge, int delay</code>.
+     * They can be changed later by using {@code setDelay(Edge edge, int delay}.
      * The edges must be consistent,
      * i.e. the endnode of an edge must be equal to the startnode of the next edge
      * (if there follows one more).
-     * If the edges are not consistent, an <code>IllegalArgumentException</code> 
+     * If the edges are not consistent, an {@code IllegalArgumentException} 
      * is thrown.
      * @param edges the edges the path shall be contained of
      */
@@ -65,13 +65,13 @@ public class DynamicPath extends StaticPath{
     }
     
     /**
-     * Constructs a new <code>DynamicPath</code> with the given edges. 
+     * Constructs a new {@code DynamicPath} with the given edges. 
      * The delays in the startnode of the edges are set to zero. 
-     * They can be changed later by using <code>setDelay(Edge edge, int delay</code>.
+     * They can be changed later by using {@code setDelay(Edge edge, int delay}.
      * The edges must be consistent,
      * i.e. the endnode of an edge must be equal to the startnode of the next edge
      * (if there follows one more).
-     * If the edges are not consistent, an <code>IllegalArgumentException</code> 
+     * If the edges are not consistent, an {@code IllegalArgumentException} 
      * is thrown.
      * @param edges the edges the path shall be contained of
      */
@@ -84,14 +84,14 @@ public class DynamicPath extends StaticPath{
     
     /**
      * Extends the path by adding an edge at the end and sets the delay
-     * in the startnode of <code>edge</code> to <code>delay</code>.
+     * in the startnode of {@code edge} to {@code delay}.
      * The edge must be consistent to the current last edge of the path,
      * i.e. i.e. the endnode of the current last edge must be
-     * equal to the startnode of <code>edge</code>.
+     * equal to the startnode of {@code edge}.
      * @param edge the edge to insert at the end of the path.
-     * @param delay the delay in the startnode of <code>edge</code>
-     * @return <code>true</code> if the insertion was successful,
-     * <code>false</code> else.
+     * @param delay the delay in the startnode of {@code edge}
+     * @return {@code true} if the insertion was successful,
+     * {@code false} else.
      */
     public boolean addLastEdge(Edge edge, int delay) {
         boolean successful = super.addLastEdge(edge);
@@ -102,16 +102,16 @@ public class DynamicPath extends StaticPath{
     
     /**
      * Extends the path by adding an edge at the start and sets the delay
-     * in the startnode of <code>edge</code> to <code>delay</code>.
+     * in the startnode of {@code edge} to {@code delay}.
      * Until additional edges are added at the start, the delay
-     * in this node will be the delay at the beginning of the <code>DynamicPath</code>,
+     * in this node will be the delay at the beginning of the {@code DynamicPath},
      * i.e. the time before flow on this path would start leaving the first node.
      * The new edge must be consistent to the current first edge of the path,
      * i.e. i.e. the startnode of the current first edge must be
-     * equal to the endnode of <code>edge</code>.
+     * equal to the endnode of {@code edge}.
      * @param edge the edge to insert at the end of the path.
-     * @return <code>true</code> if the insertion was successful,
-     *         <code>false</code> else.
+     * @return {@code true} if the insertion was successful,
+     *         {@code false} else.
      */
     public boolean addFirstEdge(Edge edge, int delay){
         boolean successful = super.addFirstEdge(edge);
@@ -124,11 +124,11 @@ public class DynamicPath extends StaticPath{
      * Extends the path by adding an edge at the end.
      * The edge must be consistent to the current last edge of the path,
      * i.e. i.e. the endnode of the current last edge must be
-     * equal to the startnode of <code>edge</code>.
-     * The delay in the startnode of <code>edge</code> is set to zero.
+     * equal to the startnode of {@code edge}.
+     * The delay in the startnode of {@code edge} is set to zero.
      * @param edge the edge to insert at the end of the path.
-     * @return <code>true</code> if the insertion was successful,
-     * <code>false</code> else.
+     * @return {@code true} if the insertion was successful,
+     * {@code false} else.
      */
     @Override
     public boolean addLastEdge(Edge edge) {        
@@ -139,11 +139,11 @@ public class DynamicPath extends StaticPath{
      * Extends the path by adding an edge at the start.
      * The edge must be consistent to the current first edge of the path,
      * i.e. i.e. the startnode of the current first edge must be
-     * equal to the endnode of <code>edge</code>.
-     * The delay in the startnode of <code>edge</code> is set to zero.
+     * equal to the endnode of {@code edge}.
+     * The delay in the startnode of {@code edge} is set to zero.
      * @param edge the edge to insert at the end of the path.
-     * @return <code>true</code> if the insertion was successful,
-     *         <code>false</code> else.
+     * @return {@code true} if the insertion was successful,
+     *         {@code false} else.
      */
     @Override
     public boolean addFirstEdge(Edge edge){
@@ -165,7 +165,7 @@ public class DynamicPath extends StaticPath{
      * Returns the delay in the startnode of an edge.
      * If the edge is not present in the path, -1 will be returned.
      * @param edge the delay in the startnode of this edge is returned.
-     * @return the delay in the startnode of <code>edge</code>.
+     * @return the delay in the startnode of {@code edge}.
      */
     public int getDelay(Edge edge) {
         if (edges.contains(edge)) {
@@ -181,7 +181,7 @@ public class DynamicPath extends StaticPath{
     }
     
     /**
-     * Sets the delay in the startnode of edge <code>edge</code>.
+     * Sets the delay in the startnode of edge {@code edge}.
      * If the edge is not present in the path, nothing happens.
      * @param edge the delay of the startnode of this edge will be set.
      * @param delay the delay to be set.
@@ -199,8 +199,8 @@ public class DynamicPath extends StaticPath{
      * Shortens the path by removing the first edge. The delay time in the
      * startnode of this edge will also be deleted.
      * If the path is empty, nothing happens.
-     * @return <code>false</code> if there was no element to be removed,
-     *         <code>true</code> else.
+     * @return {@code false} if there was no element to be removed,
+     *         {@code true} else.
      */    @Override
     public boolean removeFirstEdge(){
         boolean successful = super.removeFirstEdge();
@@ -215,8 +215,8 @@ public class DynamicPath extends StaticPath{
      * Shortens the path by removing the last edge. The delay time in the
      * startnode of this edge will also be deleted.
      * If the path is empty, nothing happens.
-     * @return <code>false</code> if there was no element to be removed,
-     *         <code>true</code> else.
+     * @return {@code false} if there was no element to be removed,
+     *         {@code true} else.
      */
     @Override
     public boolean removeLastEdge() {
@@ -262,8 +262,8 @@ public class DynamicPath extends StaticPath{
 
     /**
      * Clones this path by cloning all edges and delays
-     * and creating a new <code>DynamicPath</code> object with the clone.
-     * @return a <code>Dynamic</code> object with clones of the edges and 
+     * and creating a new {@code DynamicPath} object with the clone.
+     * @return a {@code Dynamic} object with clones of the edges and 
      * delays of this object.
      */
     @Override
@@ -286,8 +286,8 @@ public class DynamicPath extends StaticPath{
      * The hash code is calculated by computing the arithmetic mean
      * of the delays together with the hash codes of all edges.
      * Therefore the hash code is equal for dynamic path equal according to
-     * the <code>equals</code>-method, but not necessarily different
-     * for dynamic path different according to the <code>equals</code>-method.
+     * the {@code equals}-method, but not necessarily different
+     * for dynamic path different according to the {@code equals}-method.
      * If hashing of dynamic path is heavily used,
      * the implementation of this method should be reconsidered.
      * @return the hash code of this dynamic path.
@@ -307,12 +307,12 @@ public class DynamicPath extends StaticPath{
     /**
      * Returns whether an object is equal to this dynamic path.
      * The result is true if and only if the argument is not null and is a 
-     * <code>DynamicPath</code> object having a sequence of edges that is
+     * {@code DynamicPath} object having a sequence of edges that is
      * equal to this path's sequence of edges (i.e. all edges must have
      * the same IDs) and all the delays are equal.
      * @param o object to compare.
-     * @return <code>true</code> if the given object represents a
-     * <code>DynamicPath</code> equivalent to this node, <code>false</code> otherwise.
+     * @return {@code true} if the given object represents a
+     * {@code DynamicPath} equivalent to this node, {@code false} otherwise.
      */
     @Override
     public boolean equals(Object o){

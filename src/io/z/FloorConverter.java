@@ -42,8 +42,7 @@ public class FloorConverter extends ReflectionConverter {
 	}
 
 	@Override
-	public Object unmarshal( final HierarchicalStreamReader reader,
-					final UnmarshallingContext context ) {
+	public Object unmarshal( final HierarchicalStreamReader reader, final UnmarshallingContext context ) {
 		Object created = instantiateNewInstance( reader, context );
 
 		// Early recreation of changeListener List neccessary

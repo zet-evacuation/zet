@@ -11,8 +11,8 @@ import javax.swing.JComponent;
 import javax.swing.JPanel;
 
 /**
- * The class <code>JArrayPanel</code> represents an <code>JPanel</code> that
- * contains <code>JComponents</code> arranged on a table. It bases on the
+ * The class {@code JArrayPanel} represents an {@code JPanel} that
+ * contains {@code JComponents} arranged on a table. It bases on the
  * {@link TableLayout} layout manager but every array position has to be
  * filled with at most one component.
  * @author Jan-Philipp Kappmeier
@@ -30,7 +30,7 @@ public class JArrayPanel extends JPanel {
 	private int rows;
 	
 	/**
-	 * Creates a new instance of <code>JArrayPanel</code>. Initializes it with
+	 * Creates a new instance of {@code JArrayPanel}. Initializes it with
 	 * the {@link TableLayout} with the specified number of columns and rows. The
 	 * columns are initialized with the fill constant and the rows are initialized
 	 * with the preferred constant.

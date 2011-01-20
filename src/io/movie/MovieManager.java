@@ -22,7 +22,7 @@ import java.io.File;
 import java.util.Vector;
 
 /**
- * A <code>MovieManager</code> controls {@link MovieWriter} objects,
+ * A {@code MovieManager} controls {@link MovieWriter} objects,
  * which basically only create movie files out of a list of files. The
  * controller allows the {@link gui.visualization.Visualization} easyly to access different
  * writer to support a wide variation of both, image and movie formats.
@@ -59,7 +59,7 @@ public class MovieManager {
 	private boolean deleteFrames = true;
 	
 	/**
-	 * Creates a new instance of <code>MovieManager</code> with default settings.
+	 * Creates a new instance of {@code MovieManager} with default settings.
 	 * The default writer for the movies is the {@link FFmpegWrapper} and the
 	 * format is {@link MovieFormat#DIVX}.
 	 */
@@ -120,9 +120,9 @@ public class MovieManager {
 
 	/**
 	 * Call this method after all video frames have been created. The method
-	 * will create a video if {@link #isCreateVideo()} returns <code>true</code>
+	 * will create a video if {@link #isCreateVideo()} returns {@code true}
 	 * and will delete. At last the current list of frames is cleared, if
-	 * {@link #isDeleteFrames()} returns <code>true</code>.
+	 * {@link #isDeleteFrames()} returns {@code true}.
 	 */
 	public void performFinishingActions() {
 		if( createVideo ) {
@@ -145,7 +145,7 @@ public class MovieManager {
 	/**
 	 * Returns the video create status, i.e. if a video is created when
 	 * {@link #performFinishingActions()} is called.
-	 * @return <code>true</code>, if a video is created
+	 * @return {@code true}, if a video is created
 	 */
 	public boolean isCreateVideo() {
 		return createVideo;
@@ -309,7 +309,7 @@ public class MovieManager {
 
 	/**
 	 * Sets a new movie writer. The movie writer is initialized with the settings
-	 * stored in the <code>MovieManager</code>. <b>Note, that the original
+	 * stored in the {@code MovieManager}. <b>Note, that the original
 	 * settings are overwritten and the settings of the manager are used!</b>
 	 * @param writer the new movie writer
 	 */

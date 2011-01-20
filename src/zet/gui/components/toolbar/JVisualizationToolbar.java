@@ -73,7 +73,7 @@ public class JVisualizationToolbar extends JToolBar implements ActionListener {
 	}
 
 	/**
-	 * Creates the <code>JToolBar</code> for the visualization mode.
+	 * Creates the {@code JToolBar} for the visualization mode.
 	 */
 	private void createVisualizationToolBar() {
 		// todo loc

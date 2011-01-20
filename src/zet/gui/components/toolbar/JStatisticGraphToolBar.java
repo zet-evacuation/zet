@@ -46,7 +46,7 @@ public class JStatisticGraphToolBar extends JToolBar implements ActionListener, 
 	}
 
 	/**
-	 * Creates the <code>JToolBar</code> for the statistic view.
+	 * Creates the {@code JToolBar} for the statistic view.
 	 */
 	private void createStatisticsToolBar() {
 		loc.setPrefix( "gui.toolbar." );

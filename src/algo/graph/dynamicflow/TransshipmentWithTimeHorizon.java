@@ -32,7 +32,7 @@ import ds.graph.TimeExpandedNetwork;
 import algo.graph.Flags;
 
 /** 
- * The class <code>TransshipmentWithTimeHorizon</code> provides a method to calculate 
+ * The class {@code TransshipmentWithTimeHorizon} provides a method to calculate 
  * a dynamic transshipment with certain properties by using the time-expanded network
  * if the method to compute a adequate transshipment in the time-expanded network is overridden. 
  */

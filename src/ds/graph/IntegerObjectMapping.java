@@ -25,14 +25,14 @@ import java.util.TreeSet;
 import ds.graph.IntegerObjectMapping.TimeObjectPair;
 
 /**
- * The <code>IntegerObjectMapping</code> class represents a mapping from 
+ * The {@code IntegerObjectMapping} class represents a mapping from 
  * integers to arbitrary. Values of this mapping's domain are referred
  * to as time henceforth, since time being the domain will be the primary
  * application for such mappings.
- * Internally, the <code>IntegerObjectMapping</code> is considered as a step
+ * Internally, the {@code IntegerObjectMapping} is considered as a step
  * function. Consequently, the mapping is stored as a sorted collection of step
  * starts which is obviously sufficient to encode the mapping. 
- * The size needed to encode an <code>IntegerObjectMapping</code> is therefore
+ * The size needed to encode an {@code IntegerObjectMapping} is therefore
  * linear in the number of steps required.
  * In order to access steps efficiently, a TreeSet is used which in turn is 
  * based on a red-black tree. This allows the addition, removal and search for
@@ -48,7 +48,7 @@ public class IntegerObjectMapping<R> implements Cloneable, Iterable<IntegerObjec
     protected TreeSet<TimeObjectPair> mapping;
     
     /**
-     * Creates a new <code>IntegerObjectMapping</code> that is defined for all
+     * Creates a new {@code IntegerObjectMapping} that is defined for all
      * integer values. Initially, all integers are mapped to null. Runtime O(1).
      */
     public IntegerObjectMapping() {
@@ -76,7 +76,7 @@ public class IntegerObjectMapping<R> implements Cloneable, Iterable<IntegerObjec
     }
     
     /**
-     * Maps the integer <code>time</code> to the object <code>value</code>.
+     * Maps the integer {@code time} to the object {@code value}.
      * Runtime O(log (number of steps)).
      * @param time the integer for which an association is to be made.
      * @param value the value to be associated with the integer.
@@ -93,9 +93,9 @@ public class IntegerObjectMapping<R> implements Cloneable, Iterable<IntegerObjec
     
     /**
      * Returns an iterator over the time - value mappings in this
-     * <code>IntegerObjectMapping</code>. Runtime O(1).
+     * {@code IntegerObjectMapping}. Runtime O(1).
      * @return an iterator over the time - value mappings in this
-     * <code>IntegerObjectMapping</code>.
+     * {@code IntegerObjectMapping}.
      */    
     @Override
     public Iterator<TimeObjectPair> iterator() {
@@ -117,13 +117,13 @@ public class IntegerObjectMapping<R> implements Cloneable, Iterable<IntegerObjec
     
     /**
      * Checks whether the specified object is equivalent to this mapping. This
-     * is the case if and only if the specified object is not <code>null</code,
-     * of type <code>IntegerObjectMapping</code> and makes exactly the same
+     * is the case if and only if the specified object is not {@code null</code,
+     * of type {@code IntegerObjectMapping} and makes exactly the same
      * time - value associations. Runtime O(number of steps).
      * @param o the object to be compared with this mapping.
      * @return true if the specified object is an 
-     * <code>IntegerObjectMapping</code> that is equivalent with this one,
-     * <code>false</code> otherwise.
+     * {@code IntegerObjectMapping} that is equivalent with this one,
+     * {@code false} otherwise.
      */
     @Override
     public boolean equals(Object o) {
@@ -132,7 +132,7 @@ public class IntegerObjectMapping<R> implements Cloneable, Iterable<IntegerObjec
     
     /**
      * Returns a hash code for this mapping. Runtime O(number of steps).
-     * @return the hash code of the underlying <code>TreeSet</code>.
+     * @return the hash code of the underlying {@code TreeSet}.
      */
     @Override
     public int hashCode() {
@@ -142,7 +142,7 @@ public class IntegerObjectMapping<R> implements Cloneable, Iterable<IntegerObjec
     /**
      * Returns a string representation of this mapping.
      * Runtime O(number of steps).
-     * @return the string representation of the underlying <code>TreeSet</code>.
+     * @return the string representation of the underlying {@code TreeSet}.
      */
     @Override
     public String toString() {
@@ -150,9 +150,9 @@ public class IntegerObjectMapping<R> implements Cloneable, Iterable<IntegerObjec
     }
     
     /**
-     * A utility class used for the underlying <code>TreeSet</code>. A mapping
-     * of a time <code>t</code> to an arbitrary object <code>v</code> is stored 
-     * by adding a <code>TimeObjectPair (t,v)</code> to the tree set.
+     * A utility class used for the underlying {@code TreeSet}. A mapping
+     * of a time {@code t} to an arbitrary object {@code v} is stored 
+     * by adding a {@code TimeObjectPair (t,v)} to the tree set.
      */
     public class TimeObjectPair implements Cloneable, Comparable<TimeObjectPair> {
         
@@ -167,7 +167,7 @@ public class IntegerObjectMapping<R> implements Cloneable, Iterable<IntegerObjec
         protected R value;
         
         /**
-         * Constructs a new <code>TimeObjectPair</code> with the specified
+         * Constructs a new {@code TimeObjectPair} with the specified
          * values. Runtime O(1).
          * @param time the time component of the pair.
          * @param value the value component of the pair.
@@ -178,7 +178,7 @@ public class IntegerObjectMapping<R> implements Cloneable, Iterable<IntegerObjec
         }
         
         /**
-         * Sets the value of this <code>TimeObjectPair</code> to the specified
+         * Sets the value of this {@code TimeObjectPair} to the specified
          * value. Runtime O(1).
          * @param newValue the new value of this time - object pair.
          */
@@ -187,27 +187,27 @@ public class IntegerObjectMapping<R> implements Cloneable, Iterable<IntegerObjec
         }
         
         /**
-         * Returns the time component of this <code>TimeObjectPair</code>.
+         * Returns the time component of this {@code TimeObjectPair}.
          * Runtime O(1).
-         * @return the time component of this <code>TimeObjectPair</code>.
+         * @return the time component of this {@code TimeObjectPair}.
          */
         public int time() {
             return time;
         }
 
         /**
-         * Returns the value component of this <code>TimeObjectPair</code>.
+         * Returns the value component of this {@code TimeObjectPair}.
          * Runtime O(1).
-         * @return the value component of this <code>TimeObjectPair</code>.
+         * @return the value component of this {@code TimeObjectPair}.
          */
         public R value() {
             return value;
         }
 
         /**
-         * Compares two <code>TimeObjectPair</code>s by their time component.
+         * Compares two {@code TimeObjectPair}s by their time component.
          * Runtime O(1).
-         * @param o the <code>TimeObjectPair</code> to be compared.
+         * @param o the {@code TimeObjectPair} to be compared.
          * @return 0 if this pair is equal to the specified pair; a value less
          * than 0 if this pair's time component is numerically less than the 
          * specified pair's time component; and a value greater than 0 if this 
@@ -228,8 +228,8 @@ public class IntegerObjectMapping<R> implements Cloneable, Iterable<IntegerObjec
         }
         
         /**
-         * Creates a copy of this <code>TimeObjectPair</code>. Runtime O(1).
-         * @return a copy of this <code>TimeObjectPair</code>.
+         * Creates a copy of this {@code TimeObjectPair}. Runtime O(1).
+         * @return a copy of this {@code TimeObjectPair}.
          */
         @Override
         public TimeObjectPair clone() {
@@ -237,17 +237,17 @@ public class IntegerObjectMapping<R> implements Cloneable, Iterable<IntegerObjec
         }
         
         /**
-         * Compares this <code>TimeObjectPair</code> to the specified object.
+         * Compares this {@code TimeObjectPair} to the specified object.
          * The result is true if and only if the argument is not null and is a
-         * <code>TimeObjectPair</code> which has the same time component. The
+         * {@code TimeObjectPair} which has the same time component. The
          * value component is ignored. This is due to the fact that the
          * underlying tree set must not contain two 
-         * <code>TimeObjectPair</code>s with the same time component.
+         * {@code TimeObjectPair}s with the same time component.
          * Runtime O(1).
          * @param o the object this mapping is to be compared with.
-         * @return <code>true</code> if the given object represents an 
-         * <code>TimeObjectPair</code> equivalent to this pair, 
-         * <code>false</code> otherwise.
+         * @return {@code true} if the given object represents an 
+         * {@code TimeObjectPair} equivalent to this pair, 
+         * {@code false} otherwise.
          */
         @Override
         public boolean equals(Object o) {
@@ -255,10 +255,10 @@ public class IntegerObjectMapping<R> implements Cloneable, Iterable<IntegerObjec
         }
         
         /**
-         * Returns a hash code for this <code>TimeObjectPair</code>. Since
+         * Returns a hash code for this {@code TimeObjectPair}. Since
          * this hash code should be consistent with {@link #equals} just the
          * time component of the pair is used. Runtime O(1).
-         * @return the time component of this <code>TimeObjectPair</code>.
+         * @return the time component of this {@code TimeObjectPair}.
          */
         @Override
         public int hashCode() {
@@ -266,9 +266,9 @@ public class IntegerObjectMapping<R> implements Cloneable, Iterable<IntegerObjec
         }
         
         /**
-         * Returns a string representation of this <code>TimeObjectPair</code>.
+         * Returns a string representation of this {@code TimeObjectPair}.
          * This representation is of the form "time = value". Runtime O(1).
-         * @return a string representation of this <code>TimeObjectPair</code>.
+         * @return a string representation of this {@code TimeObjectPair}.
          */
         @Override
         public String toString() {

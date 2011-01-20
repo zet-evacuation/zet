@@ -28,8 +28,8 @@ import com.thoughtworks.xstream.annotations.XStreamOmitField;
  * With this distinction a differentiation between rooms and areas in a
  * building plan can be realized.
  * A room edge has the special ability to can be associated to two rooms at
- * the same time. As an <code>Edge</code> has to be in the border of a simple
- * polygon (at least, if it is valid), all instances of <code>RoomEdge</code>
+ * the same time. As an {@code Edge} has to be in the border of a simple
+ * polygon (at least, if it is valid), all instances of {@code RoomEdge}
  * which are associated to two rooms realize an inner edge in a polygonial net.
  * These are considered as intersections between the rooms.
  * The order of the rooms is not important.
@@ -64,7 +64,7 @@ public class RoomEdge extends Edge {
 	}
 
 	/**
-	 * Creates a new instance of <code>RoomEdge</code> specified by the two
+	 * Creates a new instance of {@code RoomEdge} specified by the two
 	 * end points of the edge. A {@link Room} is needed that is associated to
 	 * the instance. The edge is added to the room. If an error occurs, e.g.
 	 * the edge does not fix to the room an exception is throws.
@@ -160,7 +160,7 @@ public class RoomEdge extends Edge {
 
 	/** {@inheritDoc}
 	 * <p>
-	 * In the case of <code>RoomEdge</code> this is only allowed, if the associated 
+	 * In the case of {@code RoomEdge} this is only allowed, if the associated 
 	 * polygon is a room. If the polygon is a room, the same restrictions
 	 * as for {@link Edge#setAssociatedPolygon( PlanPolygon )} hold.
 	 *

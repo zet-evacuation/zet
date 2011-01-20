@@ -103,7 +103,7 @@ public class GLBuildingControl extends AbstractZETVisualizationControl<GLWallCon
 	 * calculates a new progress. The progress will at most reach 99% so that
 	 * after all objects are created a final "Done" message can be submitted.</p>
 	 * <p>Note that before this method can be used in the proper way the private
-	 * variable <code>wallsDone</code> and <code>WallCount</code> should be
+	 * variable {@code wallsDone} and {@code WallCount} should be
 	 * initialized correct. However, it is guaranteed to calculate a value from
 	 * 0 to 99.
 	 */

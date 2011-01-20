@@ -25,7 +25,7 @@ import ds.graph.Node;
 /**
  * This class calculates an earliest arrival transshipment
  * by using a successive earliest arrival augmenting path algorithm.
- * The optimal time horizon is found as specified in <code>Transshipment</code>. 
+ * The optimal time horizon is found as specified in {@code Transshipment}. 
  */
 public class SuccessiveEarliestArrivalAugmentingPathAlgorithmNoTH extends
 		Transshipment<SuccessiveEarliestArrivalAugmentingPathAlgorithmTH> {

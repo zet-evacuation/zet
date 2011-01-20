@@ -50,12 +50,12 @@ import java.util.Map;
  * Stores properties of arbitrary type accessible via a string.
  */
 public class PropertyContainer {
-	/** The instance of the singleton <code>PropertyContainer</code>.*/
+	/** The instance of the singleton {@code PropertyContainer}.*/
 	private static PropertyContainer instance;
 
 	/**
-	 * Returns the instance of the singleton <code>PropertyContainer</code>.
-	 * @return the instance of the singleton <code>PropertyContainer</code>
+	 * Returns the instance of the singleton {@code PropertyContainer}.
+	 * @return the instance of the singleton {@code PropertyContainer}
 	 */
 	public static PropertyContainer getInstance() {
 		if( instance == null )

@@ -9,7 +9,7 @@ import java.util.ArrayList;
 import opengl.helper.TextureFontStrings;
 
 /**
- * The class <code>VisualProperties</code> stores visualization information
+ * The class {@code VisualProperties} stores visualization information
  * that is project specific. That could be current camera positions that allow
  * a good view and so forth.
  * @author Jan-Philipp Kappmeier
@@ -24,7 +24,7 @@ public class VisualProperties {
 	private double currentHeight;
 
 	/**
-	 * Creates a new instance of <code>VisualProperties</code> with default
+	 * Creates a new instance of {@code VisualProperties} with default
 	 * camera position and empty texts for video intro.
 	 */
 	public VisualProperties() {

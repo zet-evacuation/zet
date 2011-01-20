@@ -17,13 +17,13 @@ package ds.graph;
 
 /**
  * This class represents a rectangle used to specify the region that is covered by a node.
- * The rectangle is given by four objects of the inner class <code>NodeRectanglePoint</code> that
+ * The rectangle is given by four objects of the inner class {@code NodeRectanglePoint} that
  * tell the position of the four corners.
  */
 public class NodeRectangle{
 	
 	/**
-	 * This enclosed class of <code>NodeRectangle</code> represents a point by specifying its x- and y-coordinate.
+	 * This enclosed class of {@code NodeRectangle} represents a point by specifying its x- and y-coordinate.
 	 */
 	public class NodeRectanglePoint{
 		
@@ -31,7 +31,7 @@ public class NodeRectangle{
 		private int x,y;
 		
 		/**
-		 * Creates a new point with the coordinates <code>x</code> and <code>y</code>.
+		 * Creates a new point with the coordinates {@code x} and {@code y}.
 		 * @param x the x-coordinate of the new point.
 		 * @param y the y-coordinate of the new point.
 		 */
@@ -63,7 +63,7 @@ public class NodeRectangle{
 	private NodeRectanglePoint nw, ne, sw, se;
 	
 	/**
-	 * Creates a new <code>NodeRectangle</code> with four corners given as <code>NodeRectanglePoint</code> objects.
+	 * Creates a new {@code NodeRectangle} with four corners given as {@code NodeRectanglePoint} objects.
 	 * @param nw The north west corner of the rectangle.
 	 * @param ne The north east corner of the rectangle.
 	 * @param sw The south west corner of the rectangle.
@@ -77,7 +77,7 @@ public class NodeRectangle{
 	}
 	
 	/**
-	 * Creates a new <code>NodeRectangle</code> with four corners given by the coordinates of the corners.
+	 * Creates a new {@code NodeRectangle} with four corners given by the coordinates of the corners.
 	 * @param nw_x The x-coordinate of the north west corner of the rectangle.
 	 * @param nw_y The y-coordinate of the north west corner of the rectangle.
 	 * @param ne_x The x-coordinate of the north east corner of the rectangle.
@@ -95,7 +95,7 @@ public class NodeRectangle{
 	}
 	
 	/**
-	 * Creates a new <code>NodeRectangle</code> given by the upper left and lower down corner specified by coordinates.
+	 * Creates a new {@code NodeRectangle} given by the upper left and lower down corner specified by coordinates.
 	 * @param nw_x The x-coordinate of the north west corner of the rectangle.
 	 * @param nw_y The y-coordinate of the north west corner of the rectangle.
 	 * @param se_x The x-coordinate of the south east corner of the rectangle.	 
@@ -106,7 +106,7 @@ public class NodeRectangle{
 	}
 	
 	/**
-	 * Creates a new <code>NodeRectangle</code> given by the upper left and lower down corner specified by <code>NodeRectanglePoint</code> objects.
+	 * Creates a new {@code NodeRectangle} given by the upper left and lower down corner specified by {@code NodeRectanglePoint} objects.
 	 * @param nw The north west corner of the rectangle.
 	 * @param se The south east corner of the rectangle.
 	 */
@@ -116,40 +116,40 @@ public class NodeRectangle{
 
 	
 	/**
-	 * Returns the north west corner of the rectangle as <code>NodeRectanglePoint</code> object.
-	 * @return the north west corner of the rectangle as <code>NodeRectanglePoint</code> object.
+	 * Returns the north west corner of the rectangle as {@code NodeRectanglePoint} object.
+	 * @return the north west corner of the rectangle as {@code NodeRectanglePoint} object.
 	 */
 	public NodeRectanglePoint get_nw_point(){
 		return nw;
 	}
 	
 	/**
-	 * Returns the north east corner of the rectangle as <code>NodeRectanglePoint</code>object.
-	 * @return the north east corner of the rectangle as <code>NodeRectanglePoint</code>object.
+	 * Returns the north east corner of the rectangle as {@code NodeRectanglePoint}object.
+	 * @return the north east corner of the rectangle as {@code NodeRectanglePoint}object.
 	 */
 	public NodeRectanglePoint get_ne_point(){
 		return ne;
 	}
 	
 	/**
-	 * Returns the south west corner of the rectangle as <code>NodeRectanglePoint</code>object.
-	 * @return the south west corner of the rectangle as <code>NodeRectanglePoint</code>object.
+	 * Returns the south west corner of the rectangle as {@code NodeRectanglePoint}object.
+	 * @return the south west corner of the rectangle as {@code NodeRectanglePoint}object.
 	 */
 	public NodeRectanglePoint get_sw_point(){
 		return sw;
 	}
 	
 	/**
-	 * Returns the south east corner of the rectangle as <code>NodeRectanglePoint</code>object.
-	 * @return the south east corner of the rectangle as <code>NodeRectanglePoint</code>object.
+	 * Returns the south east corner of the rectangle as {@code NodeRectanglePoint}object.
+	 * @return the south east corner of the rectangle as {@code NodeRectanglePoint}object.
 	 */
 	public NodeRectanglePoint get_se_point(){
 		return se;
 	}
 	
 	/**
-	 * Returns a <code>String</code> containing the north west and the south east corner of the rectangle.
-	 * @return a <code>String</code> containing the north west and the south east corner of the rectangle.
+	 * Returns a {@code String} containing the north west and the south east corner of the rectangle.
+	 * @return a {@code String} containing the north west and the south east corner of the rectangle.
 	 */
 	@Override
 	public String toString(){

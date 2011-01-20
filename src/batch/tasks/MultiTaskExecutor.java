@@ -27,8 +27,8 @@ import java.util.ArrayList;
 import de.tu_berlin.math.coga.common.util.Helper;
 
 /**
- * A <code>Runnable</code> class that allows to execute several tasks
- * implementing <code>Runnable</code> themselves. The tasks are expected to be
+ * A {@code Runnable} class that allows to execute several tasks
+ * implementing {@code Runnable} themselves. The tasks are expected to be
  * in an list of {@link ProgressTaskEntry} objects.
  * @author Jan-Philipp Kappmeier
  */

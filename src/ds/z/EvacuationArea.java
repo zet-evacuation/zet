@@ -31,14 +31,14 @@ import com.thoughtworks.xstream.annotations.XStreamAsAttribute;
  */
 @XStreamAlias( "evacuationArea" )
 public class EvacuationArea extends SaveArea {
-	/** The attractivity of this <code>EvacuationArea</code> */
+	/** The attractivity of this {@code EvacuationArea} */
 	private int attractivity;
  	@XStreamAsAttribute()
-	/** The name of the <code>EvacuationArea</code>. */
+	/** The name of the {@code EvacuationArea}. */
 	private String name = "EvacuationArea";
 
 	/**
-	 * Creates a new instance of <code>EvacuationArea</code> and sets the
+	 * Creates a new instance of {@code EvacuationArea} and sets the
 	 * room containing this area. The attractivity is initialized to 100.
 	 * @param room the room
 	 * @see #setAttractivity( int )
@@ -48,7 +48,7 @@ public class EvacuationArea extends SaveArea {
 	}
 
 	/**
-	 * Creates a new instance of <code>EvacuationArea</code> and sets the
+	 * Creates a new instance of {@code EvacuationArea} and sets the
 	 * room containing this area.
 	 * @param room the room
 	 * @param attractivity the initial attractivity
@@ -61,7 +61,7 @@ public class EvacuationArea extends SaveArea {
 	}
 	
 	/**
-	 * Creates a new instance of <code>EvacuationArea</code> and sets the
+	 * Creates a new instance of {@code EvacuationArea} and sets the
 	 * room containing this area.
 	 * @param room the room
 	 * @param attractivity the initial attractivity
@@ -109,7 +109,7 @@ public class EvacuationArea extends SaveArea {
 	}
 
 	/**
-	 * Returns the name of this <code>AssignmentArea</code>
+	 * Returns the name of this {@code AssignmentArea}
 	 * @return the name
 	 */
 	public String getName() {
@@ -117,7 +117,7 @@ public class EvacuationArea extends SaveArea {
 	}
 
 	/**
-	 * Sets the name of this <code>AssignmentArea</code> to a given string value.
+	 * Sets the name of this {@code AssignmentArea} to a given string value.
 	 * Spaces at the front and end are removed.
 	 * @param name the new name
 	 */
@@ -126,8 +126,8 @@ public class EvacuationArea extends SaveArea {
 	}
 	
 	/**
-	 * Deletes this <code>EvacuationArea</code>. The exit of all assignemt areas
-	 * that use this <code>EvacuationArea</code> as exit are set to <code>null</code>
+	 * Deletes this {@code EvacuationArea}. The exit of all assignemt areas
+	 * that use this {@code EvacuationArea} as exit are set to {@code null}
 	 * using the event system.
 	 */
 //	@Override

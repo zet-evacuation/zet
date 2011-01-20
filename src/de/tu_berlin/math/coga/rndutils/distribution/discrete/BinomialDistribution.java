@@ -10,7 +10,7 @@ import de.tu_berlin.math.coga.rndutils.RandomUtils;
 import de.tu_berlin.math.coga.rndutils.distribution.DiscreteDistribution;
 
 /**
- * The class <code>BinomialDistribution</code> represents a binomial distributed
+ * The class {@code BinomialDistribution} represents a binomial distributed
  * random variable.
  * @author Jan-Philipp Kappmeier
  */
@@ -20,7 +20,7 @@ public class BinomialDistribution extends DiscreteDistribution {
 	int n;
 
 	/**
-	 * Creates a new instance of <code>BinomialDistribution</code>.
+	 * Creates a new instance of {@code BinomialDistribution}.
 	 * @param n
 	 */
 	public BinomialDistribution( int n ) {
@@ -28,7 +28,7 @@ public class BinomialDistribution extends DiscreteDistribution {
 	}
 
 	/**
-	 * Creates a new instance of <code>BinomialDistribution</code>.
+	 * Creates a new instance of {@code BinomialDistribution}.
 	 * @param n
 	 * @param p
 	 */

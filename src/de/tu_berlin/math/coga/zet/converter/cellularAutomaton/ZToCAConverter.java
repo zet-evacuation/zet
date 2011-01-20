@@ -83,7 +83,7 @@ public class ZToCAConverter extends Algorithm<BuildingPlan,ConvertedCellularAuto
 
 		/**
 		 * Creates a new default instance of
-		 * <code>ConversionNotSupportedException</code>.
+		 * {@code ConversionNotSupportedException}.
 		 * 
 		 */
 		public ConversionNotSupportedException() {
@@ -92,7 +92,7 @@ public class ZToCAConverter extends Algorithm<BuildingPlan,ConvertedCellularAuto
 
 		/**
 		 * Creates a new instance of
-		 * <code>ConversionNotSupportedException</code> with a specified error
+		 * {@code ConversionNotSupportedException} with a specified error
 		 * message.
 		 * @param message the error message
 		 */
@@ -259,17 +259,17 @@ public class ZToCAConverter extends Algorithm<BuildingPlan,ConvertedCellularAuto
 	
 	/**
 	 * This method returns the data needed from thes ca converter
-	 * to create a <code>BidirectionalNodeCellMapping</code>.
-	 * @return A <code>BidirectionalNodeCellMapping.CAPartOfMapping</code> object
-	 * containing a raster container and a <code>ZToCAMapping</code>.
+	 * to create a {@code BidirectionalNodeCellMapping}.
+	 * @return A {@code BidirectionalNodeCellMapping.CAPartOfMapping} object
+	 * containing a raster container and a {@code ZToCAMapping}.
 	 */
 	public BidirectionalNodeCellMapping.CAPartOfMapping getLatestCAPartOfNodeCellMapping() {
 		return new BidirectionalNodeCellMapping.CAPartOfMapping( getContainer(), getMapping() );
 	}
 
 	/**
-	 * Returns the last <code>ZToCARasterContainer</code> that has been created.
-	 * @return the last <code>ZToCARasterContainer</code> that has been created.
+	 * Returns the last {@code ZToCARasterContainer} that has been created.
+	 * @return the last {@code ZToCARasterContainer} that has been created.
 	 * @throws IllegalStateException if no container has been created yet
 	 */
 	public ZToCARasterContainer getContainer() throws IllegalStateException {
@@ -280,7 +280,7 @@ public class ZToCAConverter extends Algorithm<BuildingPlan,ConvertedCellularAuto
 	}
 
 	/**
-	 * Returns the last <code>CellularAutomaton</code>that was created.
+	 * Returns the last {@code CellularAutomaton}that was created.
 	 * @return the cellular automaton
 	 */
 	public CellularAutomaton getCellularAutomaton() {
@@ -288,7 +288,7 @@ public class ZToCAConverter extends Algorithm<BuildingPlan,ConvertedCellularAuto
 	}
 
 	/**
-	 * Converts a rastered room (from z-format) to a <code>Room</code> used by the
+	 * Converts a rastered room (from z-format) to a {@code Room} used by the
 	 * cellular automaton.
 	 * @param rasteredRoom the rastered room
 	 * @param onFloor the floor on which the room lies
@@ -324,7 +324,7 @@ public class ZToCAConverter extends Algorithm<BuildingPlan,ConvertedCellularAuto
 	
 	/**
 	 * Creates all rooms for a given floor. The rooms have to be submitted as a
-	 * collection, also the <code>Floor</code> and the corresponding id in the
+	 * collection, also the {@code Floor} and the corresponding id in the
 	 * z-format have to be submitted to the method.
 	 * @param onFloor the Floor that contains the rooms
 	 * @param rooms a collection of rooms on the floor. This is not checked!

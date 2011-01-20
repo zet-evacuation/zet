@@ -38,7 +38,7 @@ import de.tu_berlin.math.coga.rndutils.distribution.continuous.NormalDistributio
 import statistics.Statistic;
 
 /**
- * The <code>Assignment</code> class holds all information about one assignment
+ * The {@code Assignment} class holds all information about one assignment
  * in the Z-format. It is a container for some assignment types and can submit
  * lists of all assignments.
  * @author Sylvie Temme

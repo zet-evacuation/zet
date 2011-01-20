@@ -40,7 +40,7 @@ public class JZoomableRuler extends JRuler implements ChangeListener {
 
 	/**
 	 * Handles Swing events sent to the floor. Components adding some of the displaying styles of the
-	 * floor can send their events to the <code>JFloor</code> class directly.
+	 * floor can send their events to the {@code JFloor} class directly.
 	 * <p>The possibility to handle events sent by slider events is implemented. The slider needs to
 	 * have positive values (0 is not allowed, though). A value of 100 implies a zoom factor of 1, that
 	 * is displayed as 1mm for 1 pixel.</p>

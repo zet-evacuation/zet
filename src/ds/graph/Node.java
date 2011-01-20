@@ -24,7 +24,7 @@ import com.thoughtworks.xstream.annotations.XStreamAlias;
 import com.thoughtworks.xstream.annotations.XStreamAsAttribute;
 
 /**
- * The <code>Node</code> class represents a node in a graph. A node is 
+ * The {@code Node} class represents a node in a graph. A node is 
  * identifiable, e.g. the class implements the Interface 
  * {@link Identifiable}. 
  * This means that every node has a ID that can be used for storing nodes in
@@ -41,7 +41,7 @@ public class Node implements Identifiable {
     private final int nodeID;
      
     /**
-     * Constructs a new <code>Node</code> object with a given ID. Runtime O(1).
+     * Constructs a new {@code Node} object with a given ID. Runtime O(1).
      * @param id the ID of the new node.
      */
     public Node(int id) {
@@ -66,7 +66,7 @@ public class Node implements Identifiable {
     }
     
     /**
-     * Returns a new <code>Node</code> with the same ID as this node.
+     * Returns a new {@code Node} with the same ID as this node.
      * @return a clone of this node (a node with the same nodeID, not the same object).
      */
     @Override
@@ -87,10 +87,10 @@ public class Node implements Identifiable {
     /**
      * Returns whether an object is equal to this node.
      * The result is true if and only if the argument is not null and is a 
-     * <code>Node</code> object having the same ID as this node.
+     * {@code Node} object having the same ID as this node.
      * @param o object to compare.
-     * @return <code>true</code> if the given object represents a
-     * <code>Node</code> equivalent to this node, <code>false</code> otherwise.
+     * @return {@code true} if the given object represents a
+     * {@code Node} equivalent to this node, {@code false} otherwise.
      */
     @Override
     public boolean equals(Object o){

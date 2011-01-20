@@ -23,7 +23,7 @@ import java.util.Iterator;
 
 /**
  * An iterator to comfortably iterate through the elements of an 
- * <code>ArraySet</code>. The elements in an <code>ArraySet</code>
+ * {@code ArraySet}. The elements in an {@code ArraySet}
  * are ordered by their IDs.
  */
 public class ArrayIterator<E> implements Iterator<E> {
@@ -40,7 +40,7 @@ public class ArrayIterator<E> implements Iterator<E> {
     /**
      * Constructs an iterator for a given dataarray. 
      * The ArraySet uses this constructor with its internal array.
-     * @param data the dataarray of the <code>ArraySet</code>.
+     * @param data the dataarray of the {@code ArraySet}.
      */
     public ArrayIterator(E[] data) {
         this.data = data;
@@ -48,9 +48,9 @@ public class ArrayIterator<E> implements Iterator<E> {
     }
 
     /**
-     * Returns whether there is one more element in the <code>ArraySet</code>.
-     * @return <code>true</code> if there is one more element in the
-     *         <code>ArraySet</code>, <code>false</code> else.
+     * Returns whether there is one more element in the {@code ArraySet}.
+     * @return {@code true} if there is one more element in the
+     *         {@code ArraySet}, {@code false} else.
      */
     public boolean hasNext() {
         while (index < data.length && data[index] == null) {
@@ -60,10 +60,10 @@ public class ArrayIterator<E> implements Iterator<E> {
     }
 
     /**
-     * Returns the next element of the <code>ArraySet</code>.
-     * Returns <code>null</code> if there is no more element.
-     * @return the next element of the <code>ArraySet</code> if there is one more,
-     *        <code>null</code> else.
+     * Returns the next element of the {@code ArraySet}.
+     * Returns {@code null} if there is no more element.
+     * @return the next element of the {@code ArraySet} if there is one more,
+     *        {@code null} else.
      */
     public E next() {
         if (index < data.length) {
@@ -75,7 +75,7 @@ public class ArrayIterator<E> implements Iterator<E> {
     }
 
     /**
-     * Removes the element that was last returned by <code>public E next()</code>.
+     * Removes the element that was last returned by {@code public E next()}.
      * Method is not yet implemented.
      */
     public void remove() {

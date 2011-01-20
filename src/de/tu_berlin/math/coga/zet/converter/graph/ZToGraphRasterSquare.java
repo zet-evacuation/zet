@@ -27,9 +27,9 @@ import ds.z.AssignmentArea;
 import ds.z.Room;
 
 /**
- * The class <code>ZToGraphRasterSquare</code> represents a raster square used to
+ * The class {@code ZToGraphRasterSquare} represents a raster square used to
  * store a rasterized room in a raster for the conversion from Z to Z-Graph. 
- * It extends the <code>RoomRaster</code> class by adding a node attribute that is
+ * It extends the {@code RoomRaster} class by adding a node attribute that is
  * used to define a mapping of raster squares to nodes in a graph.
  */
 public class ZToGraphRasterSquare extends RoomRasterSquare {
@@ -51,9 +51,9 @@ public class ZToGraphRasterSquare extends RoomRasterSquare {
 	private boolean marked = false;
 	
 	/**
-	 * Creates a new <code>RasterSquare</code> connected to the room it lies in
+	 * Creates a new {@code RasterSquare} connected to the room it lies in
 	 * and to a matrix that represents this room and includes this square.
-	 * The parameter <code>raster</code> is the width / height of the square.
+	 * The parameter {@code raster} is the width / height of the square.
 	 * @param r the room the square belongs to in the original Z-Plan.
 	 * @param column the column of this square in the corresponding room matrix.
 	 * @param row the row of this square in the corresponding room matrix.
@@ -100,9 +100,9 @@ public class ZToGraphRasterSquare extends RoomRasterSquare {
 	}	
 	
 	/**
-	 * Returns the <code>x</code>-coordinate of the upper left corner of
+	 * Returns the {@code x}-coordinate of the upper left corner of
 	 * this raster square in the global coordinate system.
-	 * @return the <code>x</code>-coordinate of the upper left corner of
+	 * @return the {@code x}-coordinate of the upper left corner of
 	 *         this raster in the global coordinate system.
 	 */
 	public int getXOffset() {
@@ -110,9 +110,9 @@ public class ZToGraphRasterSquare extends RoomRasterSquare {
 	}
 	
 	/**
-	 * Returns the <code>y</code>-coordinate of the upper left corner of
+	 * Returns the {@code y}-coordinate of the upper left corner of
 	 * this raster square in the global coordinate system.
-	 * @return the <code>y</code>-coordinate of the upper left corner of
+	 * @return the {@code y}-coordinate of the upper left corner of
 	 *         this raster in the global coordinate system.
 	 */
 	public int getYOffset(){
@@ -142,7 +142,7 @@ public class ZToGraphRasterSquare extends RoomRasterSquare {
 	}
 	
 	/**
-	 * Needed for support of the <code>isSquare</code>
+	 * Needed for support of the {@code isSquare}
 	 * boolean flag.
 	 */
 	@Override

@@ -41,10 +41,10 @@ import java.util.Iterator;
 import java.util.List;
 
 /**
- * A <code>Floor</code> is a plane that can contain {@link Room}-objects. It is
+ * A {@code Floor} is a plane that can contain {@link Room}-objects. It is
  * generally not allowed that the rooms (which are basically polygons) intersect
  * each other. In fact, it is possible to create such a not allowed state. It is
- * recommended to check whether a <code>Floor</code> is valid, or not before
+ * recommended to check whether a {@code Floor} is valid, or not before
  * using it for critical operations.
  * @see Floor#check( boolean )
  * @see ds.z.PlanPolygon
@@ -63,36 +63,36 @@ public class Floor implements Serializable, Cloneable, Iterable<Room> {
 	// TODO Delete this field and adjust all example files
 	private ArrayList<Edge> edges;
 
-	/** The leftmost point coordinate of the <code>Floor</code>. */
+	/** The leftmost point coordinate of the {@code Floor}. */
 	@XStreamAsAttribute ()
 	private int xOffset = 0;
 	/** The Room that has the minimum x value (xOffset). */
 	private Room minX_DefiningRoom;
-	/** The uppermost point coordinate of the <code>Floor</code>. */
+	/** The uppermost point coordinate of the {@code Floor}. */
 	@XStreamAsAttribute ()
 	private int yOffset = 0;
 	/** The Room that has the minimum y value (yOffset). */
 	private Room minY_DefiningRoom;
-	/** The difference between the left- and rightmost point coordinate of the <code>Floor</code>. */
+	/** The difference between the left- and rightmost point coordinate of the {@code Floor}. */
 	@XStreamAsAttribute ()
 	private int width = 0;
 	/** The Room that has the maximum x value (xOffset + width). */
 	private Room maxX_DefiningRoom;
-	/** The difference between the upper- and lowermost point coordinate of the <code>Floor</code>. */
+	/** The difference between the upper- and lowermost point coordinate of the {@code Floor}. */
 	@XStreamAsAttribute ()
 	private int height = 0;
 	/** The Room that has the maximum y value (yOffset + width). */
 	private Room maxY_DefiningRoom;
 
 	/**
-	 * Creates a new empty instance of <code>Floor</code> with the name "NewFloor".
+	 * Creates a new empty instance of {@code Floor} with the name "NewFloor".
 	 */
 	public Floor() {
 		this ("NewFloor");
 	}
 
 	/**
-	 * Creates a new empty instance of <code>Floor</code> with the indicated name.
+	 * Creates a new empty instance of {@code Floor} with the indicated name.
 	 * @param name the name of the floor
 	 */
 	public Floor( String name ) {
@@ -187,7 +187,7 @@ public class Floor implements Serializable, Cloneable, Iterable<Room> {
 	}
 
 	/**
-	 * Returns the height of the <code>Floor</code>. That is the difference between the
+	 * Returns the height of the {@code Floor}. That is the difference between the
 	 * uppermost and lowermost y-coordinates of contained rooms.
 	 * @return the height
 	 */
@@ -204,7 +204,7 @@ public class Floor implements Serializable, Cloneable, Iterable<Room> {
 	}
 
 	/**
-	 * Returns the width of the <code>Floor</code>. That is the difference between the
+	 * Returns the width of the {@code Floor}. That is the difference between the
 	 * leftmost and rightmost x-coordinates of contained rooms.
 	 * @return the width
 	 */
@@ -213,7 +213,7 @@ public class Floor implements Serializable, Cloneable, Iterable<Room> {
 	}
 
 	/**
-	 * The leftmost point coordinate of the <code>Floor</code>.
+	 * The leftmost point coordinate of the {@code Floor}.
 	 * @return the leftmost coordinate
 	 */
 	public final int getxOffset() {
@@ -221,7 +221,7 @@ public class Floor implements Serializable, Cloneable, Iterable<Room> {
 	}
 
 	/**
-	 * The uppermost point coordinate of the <code>Floor</code>.
+	 * The uppermost point coordinate of the {@code Floor}.
 	 * @return the uppermost coordinate
 	 */
 	public final int getyOffset() {
@@ -246,7 +246,7 @@ public class Floor implements Serializable, Cloneable, Iterable<Room> {
 	}
 
 	/**
-	 * Returns the bounding box of this <code>Floor</code>. The bounding box
+	 * Returns the bounding box of this {@code Floor}. The bounding box
 	 * is the smallest {@link java.awt.Rectangle} that completely contains the
 	 * whole Floor. The calculation of this bounding box is accurate in the
 	 * integer coordinates of millimeter positions.
@@ -538,15 +538,15 @@ public class Floor implements Serializable, Cloneable, Iterable<Room> {
 	}
 	
 	/**
-	 * Indicates whether this is a <code>Floor</code> that was loaded from a legacy file.
-	 * @return <code>true</code> if the squared bounding box is known, <code>false</code> otherwise
+	 * Indicates whether this is a {@code Floor} that was loaded from a legacy file.
+	 * @return {@code true} if the squared bounding box is known, {@code false} otherwise
 	 */
 	public boolean boundStructureAvailable () {
 		return minX_DefiningRoom != null;
 	}
 
 	/**
-	 * Returns a copy of the <code>Floor</code>, but deletes all {@link AssignmentArea} objects
+	 * Returns a copy of the {@code Floor}, but deletes all {@link AssignmentArea} objects
 	 * as they would most likely refer to assignments that do not exist.
 	 * @throws UnknownZModelError if an unexpected error occurred. This usually means that something in the model is incorrect.
 	 * @return a copy of the floor
@@ -649,5 +649,21 @@ public class Floor implements Serializable, Cloneable, Iterable<Room> {
 	@Override
 	public String toString() {
 		return this.getName();
+	}
+
+	StringBuilder summaryBuilder() {
+		StringBuilder sb = new StringBuilder();
+
+		sb.append( "Floor: " + name + ", " + rooms.size() + " Räume.\n" );
+		for( Room room : rooms ) {
+			sb.append( room.summaryBuilder() );
+			sb.append( '\n' );
+		}
+
+		return sb;
+	}
+
+	public String summary() {
+		return summaryBuilder().toString();
 	}
 }

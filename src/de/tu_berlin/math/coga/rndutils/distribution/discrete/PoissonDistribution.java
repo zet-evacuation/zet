@@ -8,7 +8,7 @@ package de.tu_berlin.math.coga.rndutils.distribution.discrete;
 import de.tu_berlin.math.coga.rndutils.distribution.DiscreteDistribution;
 
 /**
- * The class <code>PoissonDistribution</code> represents a poisson distributed
+ * The class {@code PoissonDistribution} represents a poisson distributed
  * random variable.
  * @author Jan-Philipp Kappmeier
  */
@@ -16,7 +16,7 @@ public class PoissonDistribution extends DiscreteDistribution {
 	private double lambda = 1;
 
 	/**
-	 * Creates a new instance of <code>PoissonDistribution</code>.
+	 * Creates a new instance of {@code PoissonDistribution}.
 	 * @param lambda 
 	 */
 	public PoissonDistribution( double lambda ) {

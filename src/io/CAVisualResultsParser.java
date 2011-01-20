@@ -37,7 +37,7 @@ import ds.ca.results.MoveAction;
 import ds.ca.results.VisualResultsRecording;
 
 /**
- * This class serializes and deserializes <code>VisualResultsRecording</code>
+ * This class serializes and deserializes {@code VisualResultsRecording}
  * objects to XML files. Use this class to store simulation results to disc.
  * 
  * The (de-)serializing is done via the XStream-library. 
@@ -86,7 +86,7 @@ public class CAVisualResultsParser {
     }
     
     /**
-     * Converts a <code>VisualResultRecording</code> to an XML string and 
+     * Converts a {@code VisualResultRecording} to an XML string and 
      * saves it in a file.
      * @param recording The recording you want to store
      * @param file The file in which to store the object for later
@@ -114,9 +114,9 @@ public class CAVisualResultsParser {
     }
     
     /**
-     * Re-builds a <code>VisualResultsRecording</code> from an XML string
+     * Re-builds a {@code VisualResultsRecording} from an XML string
      * @param xmlStr An XML string with a serialized 
-     * <code>VisualResultsRecording</code> object
+     * {@code VisualResultsRecording} object
      * 
      * @return The deserialized object.
      */
@@ -147,7 +147,7 @@ public class CAVisualResultsParser {
     
     
     /**
-     * Serializes a <code>VisualResultsRecording</code> object to an
+     * Serializes a {@code VisualResultsRecording} object to an
      * XML string via XStream.
      * @param recording The object you want to serialize
      * @return The serialized object

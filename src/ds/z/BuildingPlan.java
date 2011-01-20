@@ -38,9 +38,9 @@ import java.util.Random;
 import batch.tasks.AlgorithmTask;
 
 /**
- * The <code>BuildingPlan</code> represents a complete building plan, consisting of
+ * The {@code BuildingPlan} represents a complete building plan, consisting of
  * some floors which contains rooms themselves.
- * <p> Each plan is supposted to have at least two floors. One floor containing the rooms of
+ * <p> Each plan is supposed to have at least two floors. One floor containing the rooms of
  * the building and another one which is the special outside floor. This outside
  * floor is used to automatically create rooms containing an {@link EvacuationArea}
  * to rescue people. </p>
@@ -54,9 +54,9 @@ public class BuildingPlan implements Serializable, Iterable<Floor> {
 	/** A list of all floors of the plan. */
 	@XStreamImplicit()
 	private ArrayList<Floor> floors;
-	/** Indicates, if the BuildingPlan is rasterized, or at least should be. */
+	/** Indicates, if the BuildingPlan is rastered, or at least should be. */
 	private boolean rasterized;
-	/** Static variable that stores the default-value for the rastersize in meter. */
+	/** Static variable that stores the default-value for the raster size in meter. */
 	public static double rasterSize = 0.4;
   /** Transformation matrix that flips vertically (mirrors at the {@code x}-axis. */
 	public static final int[][] flipXAxis = {{1, 0}, {0, -1}};
@@ -68,7 +68,7 @@ public class BuildingPlan implements Serializable, Iterable<Floor> {
 	public static final int[][] identity = {{1, 0}, {0, 1}};
 
 	/**
-	 * Creates a new instance of <code>BuildingPlan</code> that is not rasetrized
+	 * Creates a new instance of {@code BuildingPlan} that is not rastered
 	 * by default and contains the {@link ds.z.DefaultEvacuationFloor}.
 	 */
 	public BuildingPlan() {
@@ -82,63 +82,22 @@ public class BuildingPlan implements Serializable, Iterable<Floor> {
 
 	/**
 	 * Returns the id of the selected floor.
-	 * @param floor the selected flor whose index should be computed
+	 * @param floor the selected floor whose index should be computed
 	 * @return the id of the selected floor
 	 */
 	public int getFloorID( Floor floor ) {
 		return (floors.indexOf( floor ));
 	}
 
-//	/**
-//	 * {@inheritDoc}
-//	 * @param e the change event
-//	 */
-//	public void throwChangeEvent( ChangeEvent e ) {
-//		for( ChangeListener c : changeListeners )
-//			c.stateChanged( e );
-//	}
-//
-//	/**
-//	 * {@inheritDoc}
-//	 * @param c the change listener
-//	 */
-//	public void addChangeListener( ChangeListener c ) {
-//		if( !changeListeners.contains( c ) )
-//			changeListeners.defineByPoints( c );
-//	}
-//
-//	/**
-//	 * {@inheritDoc}
-//	 * @param c the change listener
-//	 */
-//	public void removeChangeListener( ChangeListener c ) {
-//		changeListeners.remove( c );
-//	}
-//
-//	/**
-//	 * {@inheritDoc}
-//	 * @param e the change event
-//	 */
-//	public void stateChanged( ChangeEvent e ) {
-//		// The change may have broken the rasterization. We are pessimistic here and
-//		// reset the "rasterized" flag in any case.
-//		rasterized = false;
-//
-//		// Simply forward the event
-//		throwChangeEvent( e );
-//	}
-//
 	/**
 	 * Adds the denoted floor to the building plan, only if it has not
 	 * been present in the list of floors until now.
 	 * @param f the new floor
-	 * @return <code>true</code> if the floor was added, <code>false</code> otherwise
+	 * @return {@code true} if the floor was added, {@code false} otherwise
 	 */
 	public boolean addFloor( Floor f ) {
 		if( !floors.contains( f ) ) {
 			floors.add( f );
-//			f.addChangeListener( this );
-//			throwChangeEvent( new ChangeEvent( this ) );
 			return true;
 		}
 		return false;
@@ -160,7 +119,6 @@ public class BuildingPlan implements Serializable, Iterable<Floor> {
 			final Floor f = floors.get( level );
 			floors.set( level, floors.get( level + 1 ) );
 			floors.set( level + 1, f );
-//			throwChangeEvent( new ChangeEvent( this ) );
 		} else
 			throw new IllegalArgumentException( "The given floor is not on the list." );
 	}
@@ -181,7 +139,6 @@ public class BuildingPlan implements Serializable, Iterable<Floor> {
 			final Floor f = floors.get( level );
 			floors.set( level, floors.get( level - 1 ) );
 			floors.set( level - 1, f );
-//			throwChangeEvent( new ChangeEvent( this ) );
 		} else
 			throw new IllegalArgumentException( "The given floor is not on the list." );
 	}
@@ -194,7 +151,7 @@ public class BuildingPlan implements Serializable, Iterable<Floor> {
 	}
 
 	/**
-	 * Returns view of all <code>Floors</code> that this <code>BuildingPlan<code> contains.
+	 * Returns view of all {@code Floors} that this {@code BuildingPlan{@code  contains.
 	 * @return the list of {@link Floor} objects (including the default floor)
 	 */
 	public List<Floor> getFloors() {
@@ -202,8 +159,8 @@ public class BuildingPlan implements Serializable, Iterable<Floor> {
 	}
 
 	/**
-	 * Returns, if the Flag rasterized ist set to TRUE.
-	 * @return True, if the Flag rasterized ist set to TRUE. False else.
+	 * Returns, if the Flag rastered is set to {@code true}.
+	 * @return {@code true}, if the flag rastered is set to {@code true}, {@code false} otherwise
 	 */
 	public boolean getRasterized() {
 		return rasterized;
@@ -248,15 +205,10 @@ public class BuildingPlan implements Serializable, Iterable<Floor> {
 			// Delete the floor and defineByPoints a new and empty one
 			if( floors.remove( f) ) {
 				f.delete();
-//				f.removeChangeListener( this );
-//				throwChangeEvent( new ChangeEvent( this ) );
 				addFloor( new Floor( ZLocalization.getSingleton().getString( "ds.z.DefaultName.Floor" ) + " " + 1 ) );
 			}
-		} else if( floors.remove( f ) ) {
+		} else if( floors.remove( f ) )
 			f.delete();
-//			f.removeChangeListener( this );
-//			throwChangeEvent( new ChangeEvent( this ) );
-		}
 	}
 
 	/**
@@ -321,8 +273,8 @@ public class BuildingPlan implements Serializable, Iterable<Floor> {
 	}
 
 	/**
-	 * Rasters each Room / Area on every Floor.
-	 * Sets the rasterized flag to "true" upon completion.
+	 * Rasters each {@link Room} / {@link Area} on every Floor.
+	 * Sets the rastered flag to "true" upon completion.
 	 */
 	public void rasterize() {
 		try {
@@ -418,4 +370,19 @@ public class BuildingPlan implements Serializable, Iterable<Floor> {
 		return getFloors().iterator();
 	}
 
+	StringBuilder summaryBuilder() {
+		StringBuilder sb = new StringBuilder( 10000 );
+		
+		sb.append( "Gebäude: " + floors.size() + " Stockwerke\n" );
+		for( Floor f : floors ) {
+			sb.append( f.summaryBuilder() );
+			sb.append( '\n' );
+		}
+
+		return sb;
+	}
+
+	public String summary() {
+		return summaryBuilder().toString();
+	}
 }

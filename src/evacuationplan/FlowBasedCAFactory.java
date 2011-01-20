@@ -88,10 +88,10 @@ public class FlowBasedCAFactory extends ZToCAConverter {
 	}
 	
 	/**
-	 * Returns the <code>CAPathPassabilityChecker</code> object created
-	 * during the last call of <code>convertAndApplyConcreteAssignment</code>.
-	 * @return the <code>CAPathPassabilityChecker</code> object created
-	 * during the last call of <code>convertAndApplyConcreteAssignment</code>.
+	 * Returns the {@code CAPathPassabilityChecker} object created
+	 * during the last call of {@code convertAndApplyConcreteAssignment}.
+	 * @return the {@code CAPathPassabilityChecker} object created
+	 * during the last call of {@code convertAndApplyConcreteAssignment}.
 	 */
 	public CAPathPassabilityChecker getLatestCheckerInstance(){
 		return lastChecker;

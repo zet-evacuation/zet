@@ -147,7 +147,7 @@ public class JFloor extends AbstractFloor implements EventListener<ZModelChanged
 	}
 
 	/**
-	 * Creates a new instance of <code>JFloor</code>.
+	 * Creates a new instance of {@code JFloor}.
 	 *
 	 * @param guiControl
 	 */
@@ -348,7 +348,7 @@ public class JFloor extends AbstractFloor implements EventListener<ZModelChanged
 
 	/**
 	 * Returns the currently selected polygons on the floor. These are 
-	 * <code>JPolygon</code>s which can contain any polygon, such as rooms, areas
+	 * {@code JPolygon}s which can contain any polygon, such as rooms, areas
 	 * or any general {@link PlanPolygon}.
 	 * @return the selected polygons
 	 */
@@ -394,7 +394,7 @@ public class JFloor extends AbstractFloor implements EventListener<ZModelChanged
 	}
 
 	/** Sets the given Polygon to be the one and only selected polygon on the
-	 * <code>JFloor</code> if it is shown on this <code>JFloor</code> at all.
+	 * {@code JFloor} if it is shown on this {@code JFloor} at all.
 	 * @param p the polygon
 	 */
 	public void setSelectedPolygon( PlanPolygon p ) {
@@ -944,7 +944,7 @@ public class JFloor extends AbstractFloor implements EventListener<ZModelChanged
 	}
 
 	/**
-	 * <p>Tries to find the <code>ds.z.Room</code> that lies at a given point p.
+	 * <p>Tries to find the {@code ds.z.Room} that lies at a given point p.
 	 * The point is assumed to be in the coordinate system of the floor and thus
 	 * transformed to model coordinates first.</p>
 	 * <p>The first room in which the point is contained is returned. </p>
@@ -1032,9 +1032,9 @@ public class JFloor extends AbstractFloor implements EventListener<ZModelChanged
 
 	/**
 	 * Returns the Room that is connected to the {@link JPolygon} which must be a
-	 * parent of the given Component <code>clickedOn</code>. Returns <code>null</code>
+	 * parent of the given Component {@code clickedOn}. Returns {@code null}
 	 * if such a Room does not exist
-	 * @return the connected room or <code>null</code> if no such room exists
+	 * @return the connected room or {@code null} if no such room exists
 	 */
 	private Room findParent( Component clickedOn ) {
 		if( clickedOn instanceof JPolygon ) {
@@ -1115,32 +1115,32 @@ public class JFloor extends AbstractFloor implements EventListener<ZModelChanged
 
 	// ACTION LISTENER STUFF
 	/** 
-	 * Adds an <code>ActionListener</code>. 
+	 * Adds an {@code ActionListener}. 
 	 * <p>
-	 * The <code>ActionListener</code> will receive an <code>ActionEvent</code>
+	 * The {@code ActionListener} will receive an {@code ActionEvent}
 	 * when a selection has been made. If the combo box is editable, then
-	 * an <code>ActionEvent</code> will be fired when editing has stopped.
+	 * an {@code ActionEvent} will be fired when editing has stopped.
 	 *
-	 * @param l the <code>ActionListener</code> that is to be notified
+	 * @param l the {@code ActionListener} that is to be notified
 	 * @see javax.swing.JComboBox#setSelectedItem(java.lang.Object)
 	 */
 	public void addActionListener( ActionListener l ) {
 		listenerList.add( ActionListener.class, l );
 	}
 
-	/** Removes an <code>ActionListener</code>.
+	/** Removes an {@code ActionListener}.
 	 *
-	 * @param l  the <code>ActionListener</code> to remove
+	 * @param l  the {@code ActionListener} to remove
 	 */
 	public void removeActionListener( ActionListener l ) {
 		listenerList.remove( ActionListener.class, l );
 	}
 
 	/**
-	 * Returns an array of all the <code>ActionListener</code>s added
+	 * Returns an array of all the {@code ActionListener}s added
 	 * to this JComboBox with addActionListener().
 	 *
-	 * @return all of the <code>ActionListener</code>s added or an empty
+	 * @return all of the {@code ActionListener}s added or an empty
 	 *         array if no listeners have been added
 	 * @since 1.4
 	 */

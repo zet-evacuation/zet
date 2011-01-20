@@ -93,7 +93,7 @@ public abstract class AbstractDrawable<U extends AbstractDrawable<?, ?>, V exten
 	/**
 	 * This method is called prior to performing the actual 
 	 * drawing. In its default behavior, it translates the
-	 * <code>AbstractDrawable</code> to the origin.
+	 * {@code AbstractDrawable} to the origin.
 	 * @param gl
 	 */
 	public void beginDraw( GL gl ) {
@@ -103,7 +103,7 @@ public abstract class AbstractDrawable<U extends AbstractDrawable<?, ?>, V exten
 
 	/**
 	 * This method is called after the drawing has been performed.
-	 * In its default behavior, it tranlates the <code>AbstractDrawable</code>
+	 * In its default behavior, it tranlates the {@code AbstractDrawable}
 	 * back to where it has been.
 	 * @param gl the {@code OpenGL} context on which it is drawn
 	 */

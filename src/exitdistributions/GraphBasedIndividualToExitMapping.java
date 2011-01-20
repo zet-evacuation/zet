@@ -82,7 +82,7 @@ public class GraphBasedIndividualToExitMapping extends IndividualToExitMapping{
 	private ExitAssignment exitAssignment;
 
 	/**
-	 * This mapping is the main part of the <code>GraphBasedIndividualToExitMapping</code>.
+	 * This mapping is the main part of the {@code GraphBasedIndividualToExitMapping}.
 	 * It maps individuals to {@link ds.ca.TargetCell} objects, i.e. it maps
 	 * an individual to the cell it should go to. The target cell represents 
 	 * the exit the individual shall go to.
@@ -96,7 +96,7 @@ public class GraphBasedIndividualToExitMapping extends IndividualToExitMapping{
 	private boolean isInitialised; 
 	
 	/**
-	 * Creates a new <code>GraphBasedIndividualToExitMapping</code> object based on a 
+	 * Creates a new {@code GraphBasedIndividualToExitMapping} object based on a 
 	 * given cellular automaton, a bidirectional mapping between nodes and cells and an
 	 * exit assignment. The mapping can be used to get the corresponding target cell
 	 * for each individual, where the target cell represents the exit it belongs to.

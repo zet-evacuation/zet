@@ -25,11 +25,11 @@ import ds.z.PlanPolygon;
 import java.util.ArrayList;
 
 /**
- * A <code>RasterSquare</code> is an element of a {@link RoomRaster} of a {@link ds.z.PlanPolygon},
+ * A {@code RasterSquare} is an element of a {@link RoomRaster} of a {@link ds.z.PlanPolygon},
  * especially for a {@link ds.z.Room}.
  * The polygon is divided in a raster of squares. Each square can intersect the polyonom, or not and
  * has a position in the global coordinate system of the rasterized polygon.
- * <p>Basically a square consists of a <code>PlanPolygon</code> whose coordinates describe a square. It is unique
+ * <p>Basically a square consists of a {@code PlanPolygon} whose coordinates describe a square. It is unique
  * defined by the coordinates of the upper left edge and its height and width, which depends from the rasterization
  * grid.</p>
  * @author Jan-Philipp Kappmeier
@@ -37,8 +37,8 @@ import java.util.ArrayList;
 public class RasterSquare {
 
   /**
-   * The <code>FieldIntersectType</code> enumeration stores the three different
-	 * intersection types that an <code>RasterSquare</code> element of a rasterization
+   * The {@code FieldIntersectType} enumeration stores the three different
+	 * intersection types that an {@code RasterSquare} element of a rasterization
 	 * can be.
    * @author Jan-Philipp Kappmeier
    */
@@ -63,9 +63,9 @@ public class RasterSquare {
   private int column;
   /** The row-index of the square in the raster array created during a rasterization of a polygon. */
   private int row;
-  /** the <code>x</code>-coordinate of the upper left corner in the global coordinate system. */
+  /** the {@code x}-coordinate of the upper left corner in the global coordinate system. */
   private int x;
-  /** the <code>y</code>-coordinate of the upper left corner in the global coordinate system */
+  /** the {@code y}-coordinate of the upper left corner in the global coordinate system */
   private int y;
   
   /** The size of the raster used in rasterization process. Defines width and height of the square. */
@@ -74,7 +74,7 @@ public class RasterSquare {
   private int stairPotential;
   
   /**
-   * Creates a new instance of <code>RasterSquare</code> belonging to a {@link ds.z.PlanPolygon}.
+   * Creates a new instance of {@code RasterSquare} belonging to a {@link ds.z.PlanPolygon}.
    * @param p the polygon to which this square belongs
    * @param column the column-index of this square in the array of raster-squares, starting with 0
    * @param row the row-index of this square in the array of raster-squares, starting with 0
@@ -179,34 +179,34 @@ public class RasterSquare {
   
   
   /**
-   * Returns the <code>x</code>-coordinate of the upper left corner.
-   * @return the <code>x</code>-coordinate of the upper left corner
+   * Returns the {@code x}-coordinate of the upper left corner.
+   * @return the {@code x}-coordinate of the upper left corner
    */
    public int getX() { 
     return x;
    }
  
   /**
-   * Returns the <code>y</code>-coordinate of the upper left corner
-   * @return the <code>y</code>-coordinate of the upper left corner
+   * Returns the {@code y}-coordinate of the upper left corner
+   * @return the {@code y}-coordinate of the upper left corner
    */
    public int getY() {
      return y;
    }
    
    /**
-    * Returns the <code>x</code>-coordinate of the upper left corner
+    * Returns the {@code x}-coordinate of the upper left corner
     * relative to the position of the sourrounding room.
-    * @return the <code>x</code>-coordinate of the upper left corner
+    * @return the {@code x}-coordinate of the upper left corner
     */  
    public int getRelativeX(){
        return x - p.getxOffset();
    }
 
    /**
-    * Returns the <code>y</code>-coordinate of the upper left corner
+    * Returns the {@code y}-coordinate of the upper left corner
     * relative to the position of the sourrounding room.
-    * @return the <code>y</code>-coordinate of the upper left corner
+    * @return the {@code y}-coordinate of the upper left corner
     */  
    public int getRelativeY(){
        return y - p.getyOffset();

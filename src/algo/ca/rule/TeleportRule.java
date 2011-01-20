@@ -53,8 +53,8 @@ public class TeleportRule extends AbstractRule {
 	/**
 	 * Decides randomly if an individual moves. (falsch)
 	 * @param i An individual with a given parameterSet
-	 * @return <code>true</code> if the individual moves or
-	 * <code>false</code> otherwise.
+	 * @return {@code true} if the individual moves or
+	 * {@code false} otherwise.
 	 */
 	//gibt true wieder, wenn geschwindigkeit von zelle und individuel (wkeit darueber) bewegung bedeuten
 	protected boolean canMove( Individual i ) {

@@ -24,18 +24,18 @@ import java.util.Iterator;
 import java.util.Vector;
 
 /**
- * The <code>PathBasedFlowOverTime</code> class represents a dynamic flow in a path based representation.
- * The dynamic flow is stored as a <code>Vector</code> of {@link FlowOverTimePath} objects.
+ * The {@code PathBasedFlowOverTime} class represents a dynamic flow in a path based representation.
+ * The dynamic flow is stored as a {@code Vector} of {@link FlowOverTimePath} objects.
  */
 public class PathBasedFlowOverTime implements Iterable<FlowOverTimePath>{
     
 	/**
-	 * The path flows belonging to this <code>PathBasedFlowOverTime</code>.
+	 * The path flows belonging to this {@code PathBasedFlowOverTime}.
 	 */
     Vector<FlowOverTimePath> pathFlows;
     
     /**
-     * Creates a new <code>PathBasedFlowOverTime</code> object without any path flows.
+     * Creates a new {@code PathBasedFlowOverTime} object without any path flows.
      */
     public PathBasedFlowOverTime(){
         pathFlows = new Vector<FlowOverTimePath>();
@@ -55,10 +55,10 @@ public class PathBasedFlowOverTime implements Iterable<FlowOverTimePath>{
     }    
     
     /**
-     * Returns an iterator to iterate over the <code>DynamicPathFlows</code> 
-     * contained in this <code>PathBasedFlowOverTime</Code>.
-     * @return an iterator to iterate over the <code>DynamicPathFlows</code> 
-     * contained in this <code>PathBasedFlowOverTime</Code>.
+     * Returns an iterator to iterate over the {@code DynamicPathFlows} 
+     * contained in this {@code PathBasedFlowOverTime}.
+     * @return an iterator to iterate over the {@code DynamicPathFlows} 
+     * contained in this {@code PathBasedFlowOverTime}.
      */
     @Override
     public Iterator<FlowOverTimePath> iterator(){
@@ -67,9 +67,9 @@ public class PathBasedFlowOverTime implements Iterable<FlowOverTimePath>{
     
     /**
      * Returns a String containing a description of all 
-     * contained <code>DynamicPathFlows</code>.
+     * contained {@code DynamicPathFlows}.
      * @return a String containing a description of all 
-     * contained <code>DynamicPathFlows</code>.
+     * contained {@code DynamicPathFlows}.
      */
     @Override
     public String toString(){

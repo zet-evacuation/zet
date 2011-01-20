@@ -24,16 +24,16 @@ import ds.graph.IntegerIntegerArrayMapping.TimeIntegerPair;
 import java.util.Arrays;
 
 /**
- * The <code>IntegerIntegerMapping</code> class represents a mapping from 
+ * The {@code IntegerIntegerMapping} class represents a mapping from 
  * integers to integers. It is a specialized version of 
- * <code>IntegerObjectMapping</code> made for mappings from integers to 
+ * {@code IntegerObjectMapping} made for mappings from integers to 
  * integers. These mappings are particulary useful for functions taking
  * time as a parameter. Therefore values of this mapping's domain are referred
  * to as time henceforth.
- * Internally, the <code>IntegerIntegerMapping</code> is considered as a step
+ * Internally, the {@code IntegerIntegerMapping} is considered as a step
  * function. Consequently, the mapping is stored as a sorted collection of step
  * starts which is obviously sufficient to encode the mapping. 
- * The size needed to encode an <code>IntegerIntegerMapping</code> is therefore
+ * The size needed to encode an {@code IntegerIntegerMapping} is therefore
  * linear in the number of steps required.
  * In order to access steps efficiently, a TreeSet is used which in turn is 
  * based on a red-black tree. This allows the addition, removal and search for
@@ -49,7 +49,7 @@ public class IntegerIntegerArrayMapping {
     private final int[] mapping;
     
     /**
-     * Creates a new <code>IntegerIntegerMapping</code> that is defined for all
+     * Creates a new {@code IntegerIntegerMapping} that is defined for all
      * integer values. Initially, all integers are mapped to 0. Runtime O(1).
      */
     public IntegerIntegerArrayMapping(int timeHorizon) {
@@ -72,7 +72,7 @@ public class IntegerIntegerArrayMapping {
     }
     
     /**
-     * Maps the integer <code>time</code> to the integer <code>value</code>.
+     * Maps the integer {@code time} to the integer {@code value}.
      * Runtime O(log (number of steps)).
      * @param time the integer for which an association is to be made.
      * @param value the value to be associated with the integer.
@@ -113,7 +113,7 @@ public class IntegerIntegerArrayMapping {
     /**
      * Returns a string representation of this mapping.
      * Runtime O(number of steps).
-     * @return the string representation of the underlying <code>TreeSet</code>.
+     * @return the string representation of the underlying {@code TreeSet}.
      */
     @Override
     public String toString() {
@@ -127,9 +127,9 @@ public class IntegerIntegerArrayMapping {
     }
     
     /**
-     * A utility class used for the underlying <code>TreeSet</code>. A mapping
-     * of a time <code>t</code> to an integer value <code>v</code> is stored by 
-     * adding a <code>TimeIntegerPair (t,v)</code> to the tree set.
+     * A utility class used for the underlying {@code TreeSet}. A mapping
+     * of a time {@code t} to an integer value {@code v} is stored by 
+     * adding a {@code TimeIntegerPair (t,v)} to the tree set.
      */
     public class TimeIntegerPair implements Cloneable, Comparable<TimeIntegerPair> {
         
@@ -144,7 +144,7 @@ public class IntegerIntegerArrayMapping {
         protected int value;
         
         /**
-         * Constructs a new <code>TimeIntegerPair</code> with the specified
+         * Constructs a new {@code TimeIntegerPair} with the specified
          * values. Runtime O(1).
          * @param time the time component of the pair.
          * @param value the integer component of the pair.
@@ -155,7 +155,7 @@ public class IntegerIntegerArrayMapping {
         }
         
         /**
-         * Sets the value of this <code>TimeIntegerPair</code> to the specified
+         * Sets the value of this {@code TimeIntegerPair} to the specified
          * value. Runtime O(1).
          * @param newValue the new value of this time - integer pair.
          */
@@ -164,27 +164,27 @@ public class IntegerIntegerArrayMapping {
         }
         
         /**
-         * Returns the time component of this <code>TimeIntegerPair</code>.
+         * Returns the time component of this {@code TimeIntegerPair}.
          * Runtime O(1).
-         * @return the time component of this <code>TimeIntegerPair</code>.
+         * @return the time component of this {@code TimeIntegerPair}.
          */
         public int time() {
             return time;
         }
 
         /**
-         * Returns the integer component of this <code>TimeIntegerPair</code>.
+         * Returns the integer component of this {@code TimeIntegerPair}.
          * Runtime O(1).
-         * @return the integer component of this <code>TimeIntegerPair</code>.
+         * @return the integer component of this {@code TimeIntegerPair}.
          */
         public int value() {
             return value;
         }
 
         /**
-         * Compares two <code>TimeIntegerPair</code>s by their time component.
+         * Compares two {@code TimeIntegerPair}s by their time component.
          * Runtime O(1).
-         * @param o the <code>TimeIntegerPair</code> to be compared.
+         * @param o the {@code TimeIntegerPair} to be compared.
          * @return 0 if this pair is equal to the specified pair; a value less
          * than 0 if this pair's time component is numerically less than the 
          * specified pair's time component; and a value greater than 0 if this 
@@ -204,8 +204,8 @@ public class IntegerIntegerArrayMapping {
         }
         
         /**
-         * Creates a copy of this <code>TimeIntegerPair</code>. Runtime O(1).
-         * @return a copy of this <code>TimeIntegerPair</code>.
+         * Creates a copy of this {@code TimeIntegerPair}. Runtime O(1).
+         * @return a copy of this {@code TimeIntegerPair}.
          */
         @Override
         public TimeIntegerPair clone() {
@@ -213,17 +213,17 @@ public class IntegerIntegerArrayMapping {
         }
         
         /**
-         * Compares this <code>TimeIntegerPair</code> to the specified object.
+         * Compares this {@code TimeIntegerPair} to the specified object.
          * The result is true if and only if the argument is not null and is a
-         * <code>TimeIntegerPair</code> which has the same time component. The
+         * {@code TimeIntegerPair} which has the same time component. The
          * integer component is ignored. This is due to the fact that the
          * underlying tree set must not contain two 
-         * <code>TimeIntegerPair</code>s with the same time component.
+         * {@code TimeIntegerPair}s with the same time component.
          * Runtime O(1).
          * @param o the object this mapping is to be compared with.
-         * @return <code>true</code> if the given object represents an 
-         * <code>TimeIntegerPair</code> equivalent to this pair, 
-         * <code>false</code> otherwise.
+         * @return {@code true} if the given object represents an 
+         * {@code TimeIntegerPair} equivalent to this pair, 
+         * {@code false} otherwise.
          */
         @Override
         public boolean equals(Object o) {
@@ -231,10 +231,10 @@ public class IntegerIntegerArrayMapping {
         }
         
         /**
-         * Returns a hash code for this <code>TimeIntegerPair</code>. Since
+         * Returns a hash code for this {@code TimeIntegerPair}. Since
          * this hash code should be consistent with {@link #equals} just the
          * time component of the pair is used. Runtime O(1).
-         * @return the time component of this <code>TimeIntegerPair</code>.
+         * @return the time component of this {@code TimeIntegerPair}.
          */
         @Override
         public int hashCode() {
@@ -242,9 +242,9 @@ public class IntegerIntegerArrayMapping {
         }
         
         /**
-         * Returns a string representation of this <code>TimeIntegerPair</code>.
+         * Returns a string representation of this {@code TimeIntegerPair}.
          * This representation is of the form "time = value". Runtime O(1).
-         * @return a string representation of this <code>TimeIntegerPair</code>.
+         * @return a string representation of this {@code TimeIntegerPair}.
          */
         @Override
         public String toString() {

@@ -31,7 +31,7 @@ public class JLogToolBar extends JToolBar implements ActionListener, Localized {
 	}
 
 	/**
-	 * Creates the <code>JToolBar</code> for the log view.
+	 * Creates the {@code JToolBar} for the log view.
 	 */
 	private void createLogToolBar() {
 		loc.setPrefix( "gui.toolbar." );

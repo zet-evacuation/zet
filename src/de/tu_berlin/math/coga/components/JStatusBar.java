@@ -23,7 +23,7 @@ import javax.swing.JPanel;
 import javax.swing.border.EtchedBorder;
 
 /**
- * <p>The <code>JStatusBar</code> implements a status bar, that means an panel
+ * <p>The {@code JStatusBar} implements a status bar, that means an panel
  * usually positioned at the button of a window that contains some fields
  * containing text information.</p>
  * <p>In this class the fields are considered as "elements". The elements can

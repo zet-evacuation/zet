@@ -24,7 +24,7 @@ import com.thoughtworks.xstream.annotations.XStreamAsAttribute;
 import java.util.ArrayList;
 
 /**
- * A <code>DefaultEvacuationFloor</code> basically behaves as a normal {@link ds.z.Floor}.
+ * A {@code DefaultEvacuationFloor} basically behaves as a normal {@link ds.z.Floor}.
  * It can create automatically designed "evacuation rooms" that are rooms containing only
  * one evacuation area that are connected to another floor with an {@link ds.z.TeleportEdge}.
  * It is possible to use the normal methods to edit the floor, but it is recommended only
@@ -58,7 +58,7 @@ public class DefaultEvacuationFloor extends Floor {
 	private int roomCount = 0;
 
 	/**
-	 * Creates a new instance of <code>DefaultEvacuationFloor</code> with the default name
+	 * Creates a new instance of {@code DefaultEvacuationFloor} with the default name
 	 * "EvacuationFloor".
 	 */
 	public DefaultEvacuationFloor() {
@@ -67,7 +67,7 @@ public class DefaultEvacuationFloor extends Floor {
 	}
 
 	/**
-	 * Creates a new instance of <code>DefaultEvacuationFloor</code> with the specified name
+	 * Creates a new instance of {@code DefaultEvacuationFloor} with the specified name
 	 * @param name the name of the floor
 	 */
 	public DefaultEvacuationFloor( String name ) {

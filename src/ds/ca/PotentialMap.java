@@ -31,7 +31,7 @@ public abstract class PotentialMap {
 	protected final static int UNKNOWN_POTENTIAL_VALUE = -1;
 	protected final static int INVALID_POTENTIAL_VALUE = Integer.MAX_VALUE;
 	
-	/** A <code>HashMap</code> that assign each Cell a Int value (the potential). */
+	/** A {@code HashMap} that assign each Cell a Int value (the potential). */
 	protected HashMap<Cell, Double> cellToPotential;
 	/** Stores the maximal value of this potential map */
 	private double maxPotential = -1;
@@ -93,7 +93,7 @@ public abstract class PotentialMap {
 
 	/**
 	 * Removes the mapping for the specified Cell.
-	 * The method throws <code>IllegalArgumentExceptions</code> if you
+	 * The method throws {@code IllegalArgumentExceptions} if you
 	 * try to remove the mapping of a Cell that does not exists.
 	 * @param cell A Cell that mapping you want to remove.
 	 * @throws IllegalArgumentException if the cell is not contained in the map
@@ -120,7 +120,7 @@ public abstract class PotentialMap {
 	/**
 	 * <p>Returns a set of all cell which are mapped by this potential.</p>
 	 * <p>It is secured that the elements in the set have the same ordering
-	 * using a <code>SortedSet</code>. This is needed due to the fact that the
+	 * using a {@code SortedSet}. This is needed due to the fact that the
 	 * keys can have different order even if the values are inserted using
 	 * default hashcodes. The sorting ensures??? deterministic behaviour</p>
 	 * @return set of mapped cells

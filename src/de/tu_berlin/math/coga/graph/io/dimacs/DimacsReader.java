@@ -40,7 +40,7 @@ public class DimacsReader {
 	MaximumFlowProblem mfp;
 
 	/**
-	 * Creates a new instance of <code>DimacsLoader</code>.
+	 * Creates a new instance of {@code DimacsLoader}.
 	 * @param filename
 	 * @param network
 	 */

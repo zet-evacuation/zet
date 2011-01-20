@@ -109,7 +109,7 @@ public class JPolygon extends AbstractPolygon {
 	private Color selectedColor = Color.red;
 
 	/**
-	 * Creates a new instance of <code>JPolygon</code>.
+	 * Creates a new instance of {@code JPolygon}.
 	 * @param myFloor The {@link JFloor} on which this polygon is displayed
 	 * @param foreground the border color of the polygon
 	 */
@@ -134,7 +134,7 @@ public class JPolygon extends AbstractPolygon {
 	 * This method returns the ds.z object at the given point. In contrast to 
 	 * findComponentAt it not just checks whether the point is inside the
 	 * bounding box of the Component, but also whether the point is inside
-	 * the shape of the <code>Component</code>
+	 * the shape of the {@code Component}
 	 * (only works for edges / {@link JPolygon}).
 	 * @param p 
 	 * @return The topmost plan component that was clicked on, e.g. a PlanPoint,
@@ -472,7 +472,7 @@ public class JPolygon extends AbstractPolygon {
 	}
 
 	/**
-	 * Indicates whether the <code>JPolygon</code> is selected or not.
+	 * Indicates whether the {@code JPolygon} is selected or not.
 	 * @return true if the polygon is selected
 	 */
 	public boolean isSelected() {
@@ -480,7 +480,7 @@ public class JPolygon extends AbstractPolygon {
 	}
 
 	/**
-	 * Determines if the <code>JPolygon</code> is selected. Other polygons that
+	 * Determines if the {@code JPolygon} is selected. Other polygons that
 	 * my be selected are not touched, thus it is possible to select more than
 	 * one.
 	 * @param selected the selection state, true if it is selected
@@ -493,7 +493,7 @@ public class JPolygon extends AbstractPolygon {
 	/**
 	 * MouseEvents occur on this component are forwarded to the parent
 	 * component, if the click does not trigger the PopupMenu of the component. 
-	 * @param e the <code>MouseEvent</code>
+	 * @param e the {@code MouseEvent}
 	 */
 	@Override
 	protected void processMouseEvent( MouseEvent e ) {
@@ -570,10 +570,10 @@ public class JPolygon extends AbstractPolygon {
 	}
 
 	/**
-	 * Determines whether the given <code>MouseEvent</code> will lead to a popup
+	 * Determines whether the given {@code MouseEvent} will lead to a popup
 	 * menu when dispatched to this JPolygon.
 	 * @param e the mouse event that occurred
-	 * @return <code>true</code> if the popup is displayed, <code>false</code> otherwise
+	 * @return {@code true} if the popup is displayed, {@code false} otherwise
 	 */
 	public boolean isPopupTrigger( MouseEvent e ) {
 		// Do not use e.isPopupTrigger() here - Won't work under linux
@@ -597,7 +597,7 @@ public class JPolygon extends AbstractPolygon {
 	 * edge.
 	 * @param ed The edge on which the user clicked
 	 * @param click The click coordinates <u>in the coordinate space of the JPolygon</u>
-	 * @return The {@link ds.z.PlanPoint} that the user clicked on, if such a point exists, <code>null</code> if no point was hit.
+	 * @return The {@link ds.z.PlanPoint} that the user clicked on, if such a point exists, {@code null} if no point was hit.
 	 */
 	private PlanPoint clickHitsPlanPoint( EdgeData ed, Point click ) {
 		if( ed.node1.distance( click ) <= NODE_SELECTION_RADIUS )

@@ -40,7 +40,7 @@ public class IOTools {
 
 	/**
 	 * Creates a new filename of the type pathPrefix### where ### indicates an
-	 * increasing number with <code>digits</code> digits. The new created filename
+	 * increasing number with {@code digits} digits. The new created filename
 	 * has a greatest number. Gaps in the numbering are ignored.
 	 * @param path the path
 	 * @param filePrefix the prefix of the files
@@ -55,7 +55,7 @@ public class IOTools {
 	
 	/**
 	 * Creates a new filename of the type pathPrefix### where ### indicates an
-	 * increasing number with <code>digits</code> digits. The new created filename
+	 * increasing number with {@code digits} digits. The new created filename
 	 * has a greatest number. Gaps in the numbering are ignored.
 	 * @param path the path in which the file shall be created.
 	 * @param filePrefix the prefix of the files
@@ -97,7 +97,7 @@ public class IOTools {
 	}
 	
 	/**
-	 * Creates a <code>String</code> containing an integer number with leading
+	 * Creates a {@code String} containing an integer number with leading
 	 * zeros.
 	 * @param number the number that is converted to string representation
 	 * @param digits the digits of the number

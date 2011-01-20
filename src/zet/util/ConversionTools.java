@@ -28,7 +28,7 @@ package zet.util;
 public final class ConversionTools {
 
 	/**
-	 * No instantiating of <code>ConversationTools</code> possible.
+	 * No instantiating of {@code ConversationTools} possible.
 	 */
 	private ConversionTools() {
 	}
@@ -38,7 +38,7 @@ public final class ConversionTools {
 	 * value is assumed to have the millimeter unit and the returned value has
 	 * the unit meter.</p>
 	 * <p>The resulting value is rounded to three decimal places, which is the
-	 * default accurancy in <code>z</code>-format.</p>
+	 * default accurancy in {@code z}-format.</p>
 	 * @param mm the millimeter value
 	 * @return the meter value for the millimeter
 	 */

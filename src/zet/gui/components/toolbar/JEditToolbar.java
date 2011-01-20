@@ -33,7 +33,7 @@ import javax.swing.event.PopupMenuListener;
 import zet.gui.GUILocalization;
 
 /**
- * The class <code>JEditToolbar</code> ...
+ * The class {@code JEditToolbar} ...
  * @author Jan-Philipp Kappmeier
  */
 public class JEditToolbar extends JToolBar implements ActionListener, PopupMenuListener, KeyListener {
@@ -59,7 +59,7 @@ public class JEditToolbar extends JToolBar implements ActionListener, PopupMenuL
 	private EditMode.Type creationType = EditMode.Type.CreationPointwise;
 
 	/**
-	 * Creates a new instance of <code>JEditToolbar</code>.
+	 * Creates a new instance of {@code JEditToolbar}.
 	 * @param control
 	 */
 	public JEditToolbar( GUIControl control ) {
@@ -68,7 +68,7 @@ public class JEditToolbar extends JToolBar implements ActionListener, PopupMenuL
 	}
 
 	/**
-	 * Creates the <code>JToolBar</code> for the edit mode.
+	 * Creates the {@code JToolBar} for the edit mode.
 	 */
 	private void createEditToolBar() {
 		loc.setPrefix( "gui.toolbar." );

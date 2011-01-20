@@ -21,7 +21,7 @@
 package ds.graph;
 
 /**
- * The <code>Identifiable</code> interface defines what we mean by
+ * The {@code Identifiable} interface defines what we mean by
  * saying that an object is identifiable: the object must be able
  * to return its ID, an integer value, that is used to identify the object.
  * The ID is used to store identifiable objects efficiently in arraybased
@@ -39,8 +39,8 @@ public interface Identifiable extends Cloneable {
     int id();
     
     /**
-     * Returns a clone of this <code>Identifiable</code> object.
-     * @return a clone of this <code>Identifiable</code> object.
+     * Returns a clone of this {@code Identifiable} object.
+     * @return a clone of this {@code Identifiable} object.
      */
     Identifiable clone();
 

@@ -22,7 +22,7 @@ package gui.components.progress;
 
 /**
  * A class representing a task used for progress display. It simply stores an
- * object implementing <code>Runnable</code> and its name.
+ * object implementing {@code Runnable} and its name.
  * @author Jan-Philipp Kappmeier
  */
 public class ProgressTaskEntry {

@@ -39,7 +39,7 @@ import javax.swing.JLabel;
 import javax.swing.JProgressBar;
 
 /**
- * <p>A window containing a <code>JProgressBar</code> and some <code>JLabel</code>
+ * <p>A window containing a {@code JProgressBar} and some {@code JLabel}
  * objects. The lables display the status of a task and its name.</p>
  * <p>The window takes some tasks as {@link ProgressTaskEntry} and allows
  * executing them all at once.</p>

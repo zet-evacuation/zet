@@ -22,7 +22,7 @@ package ds.graph;
 import ds.graph.flow.Flow;
 
 /**
- * The <code>ResidualNetwork</code> class provides flow algorithms with the 
+ * The {@code ResidualNetwork} class provides flow algorithms with the 
  * functionality to create and work with residual networks. The residual 
  * networks implemented by this class are based on the {@link Network} class and
  * make use of the speed of its static implementation as well as its ability to
@@ -147,7 +147,7 @@ public class ResidualNetwork extends Network {
 
     /**
      * Returns the transit times in this residual network (with regard
-     * to the flow associated with the network). Returns <code>null</code> if
+     * to the flow associated with the network). Returns {@code null} if
      * this network has been created without transit times. Runtime O(1).
      * @return the transit times in this residual network.
      */
@@ -180,8 +180,8 @@ public class ResidualNetwork extends Network {
      * Checks is whether the specified edge is a reverse edge. An edge is called
      * reverse if it does not exist in the original network. Runtime O(1).
      * @param edge the edge to be tested.
-     * @return <code>true</code> if the specified edge is a reverse edge,
-     * <code>false</code> otherwise.
+     * @return {@code true} if the specified edge is a reverse edge,
+     * {@code false} otherwise.
      */
     public boolean isReverseEdge(Edge edge) {
         return edge.id() >= originalNumberOfEdges;
@@ -237,14 +237,14 @@ public class ResidualNetwork extends Network {
 
     /**
      * Compares this object with the specified object. If the specified object
-     * is equivalent to this one <code>true</code> is returned, <code>false
-     * </code> otherwise. A object is considered equivalent if and only if it is
+     * is equivalent to this one {@code true} is returned, {@code false
+     * } otherwise. A object is considered equivalent if and only if it is
      * a residual network with equals components (nodes, edges, base network,
      * flow, ...). Runtime O(n + m). 
      * @param o the object to compare this one to.
-     * @return <code>true</code> if the specified object
-     * is equivalent to this one, <code>false
-     * </code> otherwise.
+     * @return {@code true} if the specified object
+     * is equivalent to this one, {@code false
+     * } otherwise.
      */
     @Override
     public boolean equals(Object o) {

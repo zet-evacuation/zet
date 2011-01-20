@@ -227,7 +227,7 @@ public class Room {
 	 * This method allows an individual to enter the room by using a DoorCell.
 	 * The entering individual is registered in the list of individuals staying in
 	 * the room.
-	 * @throws The method throws an <code>IllegalArgumentException</code> if you
+	 * @throws The method throws an {@code IllegalArgumentException} if you
 	 * try to enter this Room with a Individual not standing on a DoorCell, if the 
 	 * DoorCell does not belong to this Room, or if the current DoorCell of the 
 	 * individual does not have a reference to the the defined "nextDoor"-Cell.
@@ -252,10 +252,10 @@ public class Room {
 	 * The individual standing on the DoorCell "exit" leaves the room. This individual
 	 * is removed from the list of individuals staying in the room and it is also
 	 * removed from the DoorCell "exit" and then returned by this method.
-	 * @throws The method throws an <code>IllegalArgumentException</code>
+	 * @throws The method throws an {@code IllegalArgumentException}
 	 * if you try to call "leave()" with a 
 	 * DoorCell which is not occupied by an Individual.
-	 * @throws Throws an <code>IllegalArgumentException</code>, if the cell, from
+	 * @throws Throws an {@code IllegalArgumentException}, if the cell, from
 	 * which the individual should leave the room, is not of type "ExitCell" or "DoorCell".
 	 * @param exit The DoorCell the individual uses for leaving the room.
 	 * @return The individual leaving the room by using the DoorCell "exit".

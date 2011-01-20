@@ -147,7 +147,7 @@ public class ZToGridGraphConverterAlt2 {
 
 	/**
 	 * Deletes sources that cannot reach a sink. These nodes are marked as deleted sources.
-	 * @param model the <code>NetworkFlowModel</code> object.
+	 * @param model the {@code NetworkFlowModel} object.
 	 */
 	private static void checkSupplies( NetworkFlowModel model ) {
 		Network network = model.getNetwork();
@@ -578,7 +578,7 @@ public class ZToGridGraphConverterAlt2 {
 	/**
 	 * Private method to duplicate all edges in the graph contained in model
 	 * except edges that concern the super sink.
-	 * @param model The <code>NetworkFlowModel</code> containing the graph which edges shall be dublicated.
+	 * @param model The {@code NetworkFlowModel} containing the graph which edges shall be dublicated.
 	 */
 	private static void dublicateEdges( NetworkFlowModel model ) {
 		Graph graph = model.getGraph();

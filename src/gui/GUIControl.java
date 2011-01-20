@@ -100,7 +100,7 @@ public class GUIControl implements AlgorithmListener {
 	ArrayList<Areas> mode = new ArrayList<Areas>( Arrays.asList( Areas.values() ) );
 
 	/**
-	 * Creates a new instance of <code>GUIControl</code>.
+	 * Creates a new instance of {@code GUIControl}.
 	 */
 	public GUIControl() { }
 

@@ -8,7 +8,7 @@ package ds;
 import de.tu_berlin.math.coga.math.vectormath.Vector3;
 
 /**
- * The class <code>CameraPosition</code> stores a camera position. The position
+ * The class {@code CameraPosition} stores a camera position. The position
  * consists of vectors for position, up, view and a name.
  * @author Jan-Philipp Kappmeier
  */
@@ -23,7 +23,7 @@ public class CameraPosition {
 	public String text = "CameraPosition";
 
 	/**
-	 * Creates a new instance of <code>CameraPosition</code>.
+	 * Creates a new instance of {@code CameraPosition}.
 	 */
 	public CameraPosition() {	}
 }

@@ -22,24 +22,24 @@ package ds.graph;
 import java.util.Arrays;
 
 /**
- * The <code>IdentifiableIntegerMapping</code> class represents a mapping from a
+ * The {@code IdentifiableIntegerMapping} class represents a mapping from a
  * set of identifiable objects to integers. It is a specialized version of 
- * <code>IdentifiableObjectMapping</code> made for mappings to integers. 
+ * {@code IdentifiableObjectMapping} made for mappings to integers. 
  * An array is used for
  * storing the mapping internally. The ID of an identifiable object determines 
  * the position in the array where the object's value is stored. This approach 
  * allows a very efficient implementation of mappings. It is recommended that 
- * the objects' IDs are from the set <code>{0,...,#objects-1}</code> to ensure
+ * the objects' IDs are from the set {@code {0,...,#objects-1}} to ensure
  * the best performance. For mappings of objects to arbitrary values see
  * {@link IdentifiableObjectMapping}.
  * @param D the type of this mapping's domain, i.e. the type of the objects that
- * are to be mapped to integers. <code>D</code> must implement 
+ * are to be mapped to integers. {@code D} must implement 
  * {@link Identifiable}.
  */
 public class IdentifiableDoubleMapping<D extends Identifiable> implements Cloneable {
 
     /**
-     * The array storing all associations. Must not be <code>null</code>.
+     * The array storing all associations. Must not be {@code null}.
      */
     protected double[] mapping;
 
@@ -64,23 +64,23 @@ public class IdentifiableDoubleMapping<D extends Identifiable> implements Clonea
     }
 
     /**
-     * Constructs a new <code>IdentifiableIntegerMapping</code> object with a
+     * Constructs a new {@code IdentifiableIntegerMapping} object with a
      * specified initial mapping. The
      * default association for an object is as specified by 
-     * <code>mapping</code>. Runtime O(1).
+     * {@code mapping}. Runtime O(1).
      * @param mapping the array defining the initial mapping.
-     * @exception NullPointerException if <code>mapping</code> is null.
+     * @exception NullPointerException if {@code mapping} is null.
      */
     protected IdentifiableDoubleMapping(double[] mapping) {
         this.mapping = mapping;
     }
 
     /**
-     * Constructs a new <code>IdentifiableObjectMapping</code> object with a
+     * Constructs a new {@code IdentifiableObjectMapping} object with a
      * domain of the specified size. The default association for an object is 
-     * <code>0</code>. Runtime O(domainSize).
+     * {@code 0}. Runtime O(domainSize).
      * @param domainSize the initial size of the domain.
-     * @exception NegativeArraySizeException if <code>value</code> is negative.
+     * @exception NegativeArraySizeException if {@code value} is negative.
      */
     public IdentifiableDoubleMapping(int domainSize) {
         mapping = new double[domainSize];
@@ -107,16 +107,16 @@ public class IdentifiableDoubleMapping<D extends Identifiable> implements Clonea
     }
 
     /**
-     * Returns the integer associated with <code>identifiableObject</code> in 
+     * Returns the integer associated with {@code identifiableObject} in 
      * this mapping. Runtime O(1).
      * @param identifiableObject the object for which the associated value is to
      * be returned.
-     * @return the integer associated with <code>identifiableObject</code> in 
+     * @return the integer associated with {@code identifiableObject} in 
      * this mapping.
      * @exception ArrayIndexOutOfBoundsException if 
-     * <code>identifiableObject</code>'s ID is less then 0 or greater equal than 
+     * {@code identifiableObject}'s ID is less then 0 or greater equal than 
      * the size of the domain.
-     * @exception NullPointerException if <code>identifiableObject</code> is 
+     * @exception NullPointerException if {@code identifiableObject} is 
      * null.
      * @see #getDomainSize
      * @see #setDomainSize
@@ -127,21 +127,21 @@ public class IdentifiableDoubleMapping<D extends Identifiable> implements Clonea
     }
 
     /**
-     * Associates <code>identifiableObject</code> with <code>value</code> in 
+     * Associates {@code identifiableObject} with {@code value} in 
      * this mapping. Any previously made association for 
-     * <code>identifiableObject</code> is lost in the process. Calling 
-     * <code>set</code> with an <code>identifiableObject</code> whose ID is 
+     * {@code identifiableObject} is lost in the process. Calling 
+     * {@code set} with an {@code identifiableObject} whose ID is 
      * greater equal than the current size of the domain will automatically 
      * increase the size of the domain to accommodate 
-     * <code>identifiableObject</code>'s ID. Runtime O(1) (O(ID) if the domain 
+     * {@code identifiableObject}'s ID. Runtime O(1) (O(ID) if the domain 
      * is expanded).
      * @param identifiableObject the object for which an association is to be 
      * made.
      * @param value the integer to be associated with 
-     * <code>identifiableObject</code>.
+     * {@code identifiableObject}.
      * @exception ArrayIndexOutOfBoundsException if 
-     * <code>identifiableObject</code>'s ID is less then 0.
-     * @exception NullPointerException if <code>identifiableObject</code> is 
+     * {@code identifiableObject}'s ID is less then 0.
+     * @exception NullPointerException if {@code identifiableObject} is 
      * null.
      * @see #getDomainSize
      * @see #setDomainSize
@@ -158,18 +158,18 @@ public class IdentifiableDoubleMapping<D extends Identifiable> implements Clonea
     }
 
     /**
-     * A convenience method equaling to <code>set(identifiableObject, 
-     * get(identifiableObject) + amount)</code>, with the exception that the
+     * A convenience method equaling to {@code set(identifiableObject, 
+     * get(identifiableObject) + amount)}, with the exception that the
      * domain is to automatically expanded to accommodate to large ID.
      * Runtime O(1).
      * @param identifiableObject the object for which the value is to be 
      * increased.
      * @param amount the amount by which the integer currently associated with 
-     * <code>identifiableObject</code> is to be increased.
+     * {@code identifiableObject} is to be increased.
      * @exception ArrayIndexOutOfBoundsException if 
-     * <code>identifiableObject</code>'s ID is less then 0 or greater equal than 
+     * {@code identifiableObject}'s ID is less then 0 or greater equal than 
      * the size of the domain.
-     * @exception NullPointerException if <code>identifiableObject</code> is 
+     * @exception NullPointerException if {@code identifiableObject} is 
      * null.
      * @see #getDomainSize
      * @see #setDomainSize
@@ -184,21 +184,21 @@ public class IdentifiableDoubleMapping<D extends Identifiable> implements Clonea
     }
 
     /**
-     * Associates <code>identifiableObject</code> with <code>value</code> in
+     * Associates {@code identifiableObject} with {@code value} in
      * this mapping. Any previously made association for
-     * <code>identifiableObject</code> is lost in the process. Calling
-     * <code>add</code> with an <code>identifiableObject</code> whose ID is
+     * {@code identifiableObject} is lost in the process. Calling
+     * {@code add} with an {@code identifiableObject} whose ID is
      * greater equal than the current size of the domain will automatically
      * increase the size of the domain to accommodate
-     * <code>identifiableObject</code>'s ID, at least the capacity is doubled.
+     * {@code identifiableObject}'s ID, at least the capacity is doubled.
      * Runtime O(1) (O(min{ID, 2*oldDomainSize}) if the domain is expanded).
      * @param identifiableObject the object for which an association is to be
      * made.
      * @param value the integer to be associated with
-     * <code>identifiableObject</code>.
+     * {@code identifiableObject}.
      * @exception ArrayIndexOutOfBoundsException if
-     * <code>identifiableObject</code>'s ID is less then 0.
-     * @exception NullPointerException if <code>identifiableObject</code> is
+     * {@code identifiableObject}'s ID is less then 0.
+     * @exception NullPointerException if {@code identifiableObject} is
      * null.
      * @see #getDomainSize
      * @see #setDomainSize
@@ -215,18 +215,18 @@ public class IdentifiableDoubleMapping<D extends Identifiable> implements Clonea
     }
 
     /**
-     * A convenience method equaling to <code>set(identifiableObject, 
-     * get(identifiableObject) - amount)</code>, with the exception that the
+     * A convenience method equaling to {@code set(identifiableObject, 
+     * get(identifiableObject) - amount)}, with the exception that the
      * domain is to automatically expanded to accommodate to large ID.
      * Runtime O(1).
      * @param identifiableObject the object for which the value is to be 
      * decreased.
      * @param amount the amount by which the integer currently associated with 
-     * <code>identifiableObject</code> is to be decreased.
+     * {@code identifiableObject} is to be decreased.
      * @exception ArrayIndexOutOfBoundsException if 
-     * <code>identifiableObject</code>'s ID is less then 0 or greater equal than 
+     * {@code identifiableObject}'s ID is less then 0 or greater equal than 
      * the size of the domain.
-     * @exception NullPointerException if <code>identifiableObject</code> is 
+     * @exception NullPointerException if {@code identifiableObject} is 
      * null.
      * @see #getDomainSize
      * @see #setDomainSize
@@ -267,8 +267,8 @@ public class IdentifiableDoubleMapping<D extends Identifiable> implements Clonea
 
     /**
      * Returns the size of this mapping's domain. Associations of objects and 
-     * integers can only be made for objects with an ID between <code>0</code> 
-     * and <code>getDomainSize()-1</code>. Runtime O(1).
+     * integers can only be made for objects with an ID between {@code 0} 
+     * and {@code getDomainSize()-1}. Runtime O(1).
      * @return the size of this mapping's domain.
      */
     public int getDomainSize() {
@@ -276,10 +276,10 @@ public class IdentifiableDoubleMapping<D extends Identifiable> implements Clonea
     }
 
     /**
-     * Sets the size of this mapping's domain to <code>value</code>.
+     * Sets the size of this mapping's domain to {@code value}.
      * Runtime O(value).
      * @param value the new size of this mapping's domain.
-     * @exception NegativeArraySizeException if <code>value</code> is negative.
+     * @exception NegativeArraySizeException if {@code value} is negative.
      */
     public void setDomainSize(int value) {
         double[] newMapping = new double[value];
@@ -288,13 +288,13 @@ public class IdentifiableDoubleMapping<D extends Identifiable> implements Clonea
     }
 
     /**
-     * Checks whether <code>identifiableObject</code> has been defined in this
+     * Checks whether {@code identifiableObject} has been defined in this
      * mapping, i.e. whether its ID fits the size of the domain. Runtime O(1).
      * @param identifiableObject the object to check for whether it is defined
      * in this mapping.
-     * @return true if <code>get(identifiableObject)</code> would return a
-     * non-<code>null</code> value and false otherwise.
-     * @exception NullPointerException if <code>identifiableObject</code> is 
+     * @return true if {@code get(identifiableObject)} would return a
+     * non-{@code null} value and false otherwise.
+     * @exception NullPointerException if {@code identifiableObject} is 
      * null.
      */
     public boolean isDefinedFor(D identifiableObject) {
@@ -315,13 +315,13 @@ public class IdentifiableDoubleMapping<D extends Identifiable> implements Clonea
     /**
      * Compares this mapping to the specified object. The result is true if and
      * only if the argument is not null and is an 
-     * <code>IdentifiableIntegerMapping</code> object which has an domain of 
+     * {@code IdentifiableIntegerMapping} object which has an domain of 
      * equal size and makes exactly the same object - integer
      * associations. Runtime O(size of the domain).
      * @param o the object this mapping is to be compared with.
-     * @return <code>true</code> if the given object represents an 
-     * <code>IdentifiableIntegerMapping</code> equivalent to this mapping, 
-     * <code>false</code> otherwise.
+     * @return {@code true} if the given object represents an 
+     * {@code IdentifiableIntegerMapping} equivalent to this mapping, 
+     * {@code false} otherwise.
      */
     @Override
     public boolean equals(Object o) {
@@ -341,7 +341,7 @@ public class IdentifiableDoubleMapping<D extends Identifiable> implements Clonea
     }
 
     /**
-     * Returns a hash code for this <code>IdentifiableIntegerMapping</code>.
+     * Returns a hash code for this {@code IdentifiableIntegerMapping}.
      * Runtime O(size of the domain).
      * @return the sum of the integers associated with objects 
      * in this mapping.
@@ -356,8 +356,8 @@ public class IdentifiableDoubleMapping<D extends Identifiable> implements Clonea
     }
 
     /**
-     * Return a <code>String</code> object representing this mapping. The 
-     * returned <code>String</code> will consist of a list of all object - 
+     * Return a {@code String} object representing this mapping. The 
+     * returned {@code String} will consist of a list of all object - 
      * integer associations made in this mapping. Runtime O(size of the domain).
      * @return a string representation of this mapping.
      */

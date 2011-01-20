@@ -22,7 +22,7 @@ import ds.graph.Network;
 import ds.graph.Node;
 
 /**
- * The class <code>EATransshipment</code> solves two variants
+ * The class {@code EATransshipment} solves two variants
  * of the earliest arrival transshipment problem: with or
  * without a given time horizon.
  * The implementation is done with time-expanded networks.

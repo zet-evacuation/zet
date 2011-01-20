@@ -16,7 +16,7 @@
 package de.tu_berlin.math.coga.zet.converter.graph;
 
 /**
- * The class <code>ZToGraphRasteredDoor</code> represents a rasterized door
+ * The class {@code ZToGraphRasteredDoor} represents a rasterized door
  * in a format that the graph conversion needs.
  * A door connects two different raster squares in rooms that may be in two different floors
  * (actually these doors would be teleport edges ;-)). 

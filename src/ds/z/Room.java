@@ -22,6 +22,7 @@ package ds.z;
 
 import com.thoughtworks.xstream.annotations.XStreamAlias;
 import com.thoughtworks.xstream.annotations.XStreamAsAttribute;
+import com.thoughtworks.xstream.annotations.XStreamOmitField;
 import ds.z.exception.AreaNotInsideException;
 import ds.z.exception.PolygonNotClosedException;
 import ds.z.exception.RoomEdgeInvalidTargetException;
@@ -48,9 +49,9 @@ import java.util.List;
 public class Room extends BaseRoom<RoomEdge> implements Cloneable {
 //public class Room<T extends RoomEdge> extends PlanPolygon<T> {
 	@XStreamAsAttribute()
-	/** The name of the <code>Room</code>. */
+	/** The name of the {@code Room}. */
 	private String name;
-	/** The floor containing the <code>Room</code>. */
+	/** The floor containing the {@code Room}. */
 	private Floor associatedFloor;
 	/** A list of all assignment areas of the current assignment in the room. */
 	private ArrayList<AssignmentArea> assignmentAreas;
@@ -68,9 +69,11 @@ public class Room extends BaseRoom<RoomEdge> implements Cloneable {
 	private ArrayList<StairArea> stairAreas;
 	/** A list of all teleport areas of the current room. */
 	private ArrayList<TeleportArea> teleportAreas;
+	@XStreamOmitField	// This field is accessed manually during loading of a file
+	private ArrayList<Area>[] areas = new ArrayList[] {assignmentAreas, barriers, delayAreas, evacuationAreas, inaccessibleAreas, saveAreas, stairAreas, teleportAreas};
 
 	/**
-	 * Creates a new <code>Room</code> with a default name "Room x", where x
+	 * Creates a new {@code Room} with a default name "Room x", where x
 	 * is the number of the new room.
 	 * @param floor the floor containing the room
 	 */
@@ -90,7 +93,7 @@ public class Room extends BaseRoom<RoomEdge> implements Cloneable {
 	}
 
 	/**
-	 * Creates a new <code>Room</code> with a specified name and adds it to a {@link Floor}.
+	 * Creates a new {@code Room} with a specified name and adds it to a {@link Floor}.
 	 * @param floor the floor containing the room
 	 * @param name the name of the room
 	 */
@@ -129,12 +132,6 @@ public class Room extends BaseRoom<RoomEdge> implements Cloneable {
 		return new Room( getAssociatedFloor(), getName() );
 	}
 
-	/** Just as super.toString() but includes the rooms name. */
-	@Override
-	public String toString() {
-		return name + ": " + super.toString();
-	}
-
 	/**
 	 * Tests, if this room equals the given room r. Two rooms are equal, if they
 	 * have the same shape, name and associated floors.
@@ -164,7 +161,7 @@ public class Room extends BaseRoom<RoomEdge> implements Cloneable {
 
 	/** {@inheritDoc}
 	 *
-	 * The Room implementation also rasterizes all Areas within this Room.
+	 * The Room implementation also rasters all Areas within this Room.
 	 */
 	@Override
 	public void rasterize() {
@@ -450,13 +447,13 @@ public class Room extends BaseRoom<RoomEdge> implements Cloneable {
 	 * <table>
 	 * <tr><td>One of them is passable </td><td>Then the previous linkTarget will be the linkTarget of the
 	 * resulting edge and will be relocated to fit the new edge.</td></tr>
-	 * <tr><td>Both are passable</td><td>If they lead to two linkTarget edges who are neighbours themselves
+	 * <tr><td>Both are passable</td><td>If they lead to two linkTarget edges who are neighbors themselves
 	 * these two linkTarget edges will also be combined and the be the new linkTarget. In every other case an
 	 * IllegalArgumentException is thrown.</td></tr>
 	 * </table>
 	 * 
-	 * @exception IllegalArgumentException See superclass + If two edges are combined who have targets
-	 * which are not neighbours (only possible for TeleportEdges) or if two RoomEdges shall be combined
+	 * @throws IllegalArgumentException See superclass + If two edges are combined who have targets
+	 * which are not neighbors (only possible for TeleportEdges) or if two RoomEdges shall be combined
 	 * who point to different rooms with their link targets.
 	 */
 	@Override
@@ -560,7 +557,7 @@ public class Room extends BaseRoom<RoomEdge> implements Cloneable {
 	 * Connects this room with another room at a specified {@link RoomEdge}. 
 	 * This edge must be contained in both rooms. That means, the
 	 * underlying polygons must intersect themselves at this edge.
-	 * <p>The <code>RoomEdge</code> is associated to both rooms and is setLocation as passable.
+	 * <p>The {@code RoomEdge} is associated to both rooms and is setLocation as passable.
 	 * This creates a "door" between the two rooms.</p>
 	 * @param r the other room
 	 * @param e the edge
@@ -580,7 +577,7 @@ public class Room extends BaseRoom<RoomEdge> implements Cloneable {
 	 * Connects this room with another room at an {@link RoomEdge}. The edge is specified by its
 	 * two end points. This edge must be contained in both rooms. That means, the
 	 * underlying polygons must intersect themselves at this edge.
-	 * <p>The <code>RoomEdge</code> is associated to both rooms and is setLocation as passable.
+	 * <p>The {@code RoomEdge} is associated to both rooms and is setLocation as passable.
 	 * This creates a "door" between the two rooms.</p>
 	 * @param r the other room
 	 * @param p1 one end point of the connecting edge
@@ -596,10 +593,10 @@ public class Room extends BaseRoom<RoomEdge> implements Cloneable {
 		e2.setLinkTarget( e1 );
 	}
 
-	/** This method replaces sourceEdge and targetEdge with two TeleportEdges.
+	/**
+	 * This method replaces sourceEdge and targetEdge with two TeleportEdges.
 	 * The old edges are deleted and the new TeleportEdges are connected to each 
 	 * other. This method is only guaranteed to work on closed polygons.
-	 *
 	 * @param sourceEdge An edge within a room
 	 * @param targetEdge An edge within another room on a different floor
 	 * @exception IllegalArgumentException If both edges are in the same room or 
@@ -608,16 +605,12 @@ public class Room extends BaseRoom<RoomEdge> implements Cloneable {
 	 * the deletion of a RoomEdge (source/linkTarget) may fail.
 	 */
 	public static void connectToWithTeleportEdge( RoomEdge sourceEdge, RoomEdge targetEdge ) throws IllegalArgumentException {
-		if( sourceEdge.isPassable() || targetEdge.isPassable() ) {
+		if( sourceEdge.isPassable() || targetEdge.isPassable() )
 			throw new IllegalArgumentException( ZLocalization.getSingleton().getString( "ds.z.Room.PassableException" ) );
-		}
-		if( targetEdge.getRoom() == sourceEdge.getRoom() ) {
+		if( targetEdge.getRoom() == sourceEdge.getRoom() )
 			throw new IllegalArgumentException( ZLocalization.getSingleton().getString( "ds.z.Room.NoDifferentRoomsException" ) );
-		}
-		if( targetEdge.getRoom().getAssociatedFloor() ==
-						sourceEdge.getRoom().getAssociatedFloor() ) {
+		if( targetEdge.getRoom().getAssociatedFloor() == sourceEdge.getRoom().getAssociatedFloor() )
 			throw new IllegalArgumentException( ZLocalization.getSingleton().getString( "ds.z.Room.NoDifferentFloorsException" ) );
-		}
 
 		Room s = sourceEdge.getRoom();
 		Room t = targetEdge.getRoom();
@@ -774,15 +767,13 @@ public class Room extends BaseRoom<RoomEdge> implements Cloneable {
 	 * Returns a view of the list of all teleport areas.
 	 * @return the view of all teleport areas
 	 */
-	public Iterable<TeleportArea> getTeleportAreas() {
+	public List<TeleportArea> getTeleportAreas() {
 		return Collections.unmodifiableList( teleportAreas );
 	}
 
 	/** @return All areas that are in the room. */
 	public List<Area> getAreas() {
-		ArrayList<Area> a = new ArrayList<Area>( assignmentAreas.size() +
-						barriers.size() + delayAreas.size() + evacuationAreas.size() +
-						inaccessibleAreas.size() + saveAreas.size() + stairAreas.size() );
+		ArrayList<Area> a = new ArrayList<Area>( assignmentAreas.size() + barriers.size() + delayAreas.size() + evacuationAreas.size() + inaccessibleAreas.size() + saveAreas.size() + stairAreas.size() );
 		a.addAll( assignmentAreas );
 		a.addAll( barriers );
 		a.addAll( delayAreas );
@@ -923,6 +914,34 @@ public class Room extends BaseRoom<RoomEdge> implements Cloneable {
 				}
 			}
 		}
+	}
+
+	/** Just as super.toString() but includes the rooms name. */
+	@Override
+	public String toString() {
+		return name + ": " + super.toString();
+	}
+
+	StringBuilder summaryBuilder() {
+		StringBuilder sb = new StringBuilder();
+
+		sb.append( "Room: " + name );
+		sb.append( '\n' );
+
+		for( ArrayList<Area> areaList : areas ) {
+			for( Area area : areaList ) {
+				sb.append( area.getClass().toString() + " " );
+				sb.append( area.toString() );
+				sb.append( " Fläche: " + area.areaMeter() + "m²" );
+				sb.append( '\n' );
+			}
+		}
+
+		return sb;
+	}
+
+	public String summary() {
+		return summaryBuilder().toString();
 	}
 
 }

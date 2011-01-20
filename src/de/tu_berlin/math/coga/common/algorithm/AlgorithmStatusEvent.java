@@ -18,7 +18,7 @@ public class AlgorithmStatusEvent extends AlgorithmEvent {
     private String message;
 
     /**
-     * Creates an <code>AlgorithmStatusEvent</code> for the specified
+     * Creates an {@code AlgorithmStatusEvent} for the specified
      * algorithm and the current progress value.
      * @param algorithm the algorithm for which progress occurred.
      * @param progress the progress value.
@@ -29,7 +29,7 @@ public class AlgorithmStatusEvent extends AlgorithmEvent {
     }
 
     /**
-     * Creates an <code>AlgorithmStatusEvent</code> for the specified algorithm
+     * Creates an {@code AlgorithmStatusEvent} for the specified algorithm
 		 * and sets a status message.
      * @param algorithm the algorithm for which this status is defined
 		 * @param eventTime the time (in milliseconds) when the event occured

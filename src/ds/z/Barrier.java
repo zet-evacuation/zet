@@ -24,7 +24,7 @@ import ds.z.exception.PolygonNotRasterizedException;
 import java.util.ArrayList;
 
 /**
- * The <code>Barrier</code> class represents a special inaccessible area, that
+ * The {@code Barrier} class represents a special inaccessible area, that
  * is not closed but only an arbitrary polygonial chain. However, it can be
  * closed.
  * @author Jan-Philipp Kappmeier
@@ -32,7 +32,7 @@ import java.util.ArrayList;
 public class Barrier extends InaccessibleArea {
 	
 	/**
-	 * Creates a new instance of <code>Barrier</code> in a specified room.
+	 * Creates a new instance of {@code Barrier} in a specified room.
 	 * @param room the room
 	 */
 	public Barrier( Room room ) {
@@ -40,13 +40,13 @@ public class Barrier extends InaccessibleArea {
 	}
 	
 	/**
-	 * Checks if this {@link PlanPolygon} describing the <code>Barrier</code> is
+	 * Checks if this {@link PlanPolygon} describing the {@code Barrier} is
 	 * valid. That means, that it is simple and has no self-cuts. If any invalid
 	 * positions are found, an exception is thrown. If the param rasterized is
 	 * true, it also checks if the polygon is really rasterized with a call of
 	 * {@link PlanPolygon#checkRasterized() }).<b>Note</b> that the polygon can be
 	 * open, contrary to {@link ds.z.InaccessibleArea}.
-	 * <p>The runtime of this operation is O(n), where <code>n</code> is the
+	 * <p>The runtime of this operation is O(n), where {@code n} is the
 	 * number of edges.</p>
 	 * @param rasterized indicates that the {@link BuildingPlan} should be
 	 * rasterized

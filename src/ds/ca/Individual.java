@@ -24,7 +24,7 @@ import java.util.UUID;
  * characteristics: familiarity, panic, slackness, maxSpeed. Also an
  * exhaustion factor exists, which simulates exhaustion after walking a long
  * way. An Individual is located in a {@link Cell} of the building and each
- * <code>Individual</code> has a {@link StaticPotential}, which guides the
+ * {@code Individual} has a {@link StaticPotential}, which guides the
  * person to an exit.
  */
 public class Individual implements Identifiable {
@@ -36,7 +36,7 @@ public class Individual implements Identifiable {
 
 		/** If no exit is reachable. Happens if a person is surrounded by barriers. */
 		EXIT_UNREACHABLE,
-		/** If the <code>Individual</code> is inside the building when the maximum evacuation time is over. */
+		/** If the {@code Individual} is inside the building when the maximum evacuation time is over. */
 		NOT_ENOUGH_TIME
 	}
 	private int age;
@@ -100,7 +100,7 @@ public class Individual implements Identifiable {
 
 		/**
 		 * Calibratingfactor - 
-		 * The bigger <code>cellCountToChange</code>, the longer an individual moves before a possible potential change
+		 * The bigger {@code cellCountToChange}, the longer an individual moves before a possible potential change
 		 */
 		cellCountToChange = (int) Math.round( currentSpeed * 15 / 0.4 );
 		potentialMemoryStart = new PotentialValueTuple( -1, null );
@@ -169,7 +169,7 @@ public class Individual implements Identifiable {
 	}
 
 	/**
-	 * Sets this <code>Individual</code> evacuated
+	 * Sets this {@code Individual} evacuated
 	 */
 	public void setEvacuated() {
 		isEvacuated = true;
@@ -235,7 +235,7 @@ public class Individual implements Identifiable {
 	 * Sets a new reaction time. If the time is smaller or equal to zero, the
 	 * individual is alarmed.
 	 * @param reactionTime the reaction time.
-	 * @throws IllegalArgumentException if <code>reactionTime</code> is negative.
+	 * @throws IllegalArgumentException if {@code reactionTime} is negative.
 	 */
 	public void setReactionTime( double reactionTime ) throws IllegalArgumentException {
 		if( reactionTime < 0 )
@@ -277,7 +277,7 @@ public class Individual implements Identifiable {
 	}
 
 	/**
-	 * Returns the exchaustion factor of the <code>Individual</code>
+	 * Returns the exchaustion factor of the {@code Individual}
 	 * @return the exhaustion factor
 	 */
 	public double getExhaustionFactor() {
@@ -285,7 +285,7 @@ public class Individual implements Identifiable {
 	}
 
 	/**
-	 * Sets the exhaustion factor of the <code>Individual</code> to a specified value
+	 * Sets the exhaustion factor of the {@code Individual} to a specified value
 	 * @param val the exhaustion factor
 	 */
 	public void setExhaustionFactor( double val ) {
@@ -317,7 +317,7 @@ public class Individual implements Identifiable {
 	}
 
 	/** 
-	 * Sets the identification Number of the <code>Individual</code>.
+	 * Sets the identification Number of the {@code Individual}.
 	 * @param i the number
 	 */
 	public void setNumber( int i ) {
@@ -405,7 +405,7 @@ public class Individual implements Identifiable {
 	}
 
 	/**
-	 * Set the {@link ds.ca.Cell} on which the <code>Individual</code> stands.
+	 * Set the {@link ds.ca.Cell} on which the {@code Individual} stands.
 	 * @param c the cell
 	 */
 	public void setCell( Cell c ) {
@@ -413,7 +413,7 @@ public class Individual implements Identifiable {
 	}
 
 	/**
-	 * Returns the {@link ds.ca.Cell} on which the <code>Individual</code> stands.
+	 * Returns the {@link ds.ca.Cell} on which the {@code Individual} stands.
 	 * @return The Cell 
 	 */
 	public Cell getCell() {
@@ -530,8 +530,8 @@ public class Individual implements Identifiable {
 	/**
 	 * <p>Two individuals are equal, if they have both the same id.</p>
 	 * @param o the reference object with which to compare.
-	 * @return <code>true</code> if this object is the same as the obj
-	 *          argument; <code>false</code> otherwise.
+	 * @return {@code true} if this object is the same as the obj
+	 *          argument; {@code false} otherwise.
 	 * @see     #hashCode()
 	 */
 	@Override

@@ -40,7 +40,7 @@ import gui.GUIControl;
 import gui.ZETMain;
 
 /**
- * The class <code>FloorImportDialog</code> allows importing floors from other
+ * The class {@code FloorImportDialog} allows importing floors from other
  * evacuation projects.
  * @author Jan-Philipp Kappmeier
  */
@@ -57,7 +57,7 @@ public class FloorImportDialog extends JDialog {
 	private final JFrame owner;
 
     /**
-     * Creates aclButton new instance of <code>FloorImportDialog</code>.
+     * Creates aclButton new instance of {@code FloorImportDialog}.
      * @param owner the parent window
      * @param project the project to which the floor is added
      * @param title the title of the floor import dialog

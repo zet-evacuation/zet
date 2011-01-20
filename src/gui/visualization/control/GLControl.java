@@ -421,7 +421,7 @@ public class GLControl implements DrawableControlable {
 
 	/**
 	 * Sets a factor that is multiplicated with the visualization speed. Use
-	 * <code>1.0</code> for normal (real-time) speed.
+	 * {@code 1.0} for normal (real-time) speed.
 	 * @param speedFactor the speed factor
 	 */
 	public void setSpeedFactor( double speedFactor ) {

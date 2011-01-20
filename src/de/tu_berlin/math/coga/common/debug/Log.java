@@ -53,20 +53,20 @@ public class Log implements EventListener<MessageEvent> {
 	 * {@link event.MessageEvent.MessageType#LogError} are handled.</p>
 	 * <p>{@code Log} events are displayed in normal font style while
 	 * {@code LogError} events are displayed red.</p>
-	 * @param event the event that occured.
+	 * @param event the event that occurred.
 	 */
 	public void handleEvent( MessageEvent event ) {
 		String s = "";
 		switch( event.getType() ) {
 			case Log:
 				s = event.getMessage() + "<br>";
-				//s = event.getMessage() + '\n';
 				break;
 			case LogError:
 				s = "<font color=\"red\">" + event.getMessage() + "</font><br>";
 				//s = event.getMessage() + '\n';
 				break;
 		}
+		s = s.replace( "\n", "<br>" );
 		strings.add( s );
 		text.append( s );
 	}

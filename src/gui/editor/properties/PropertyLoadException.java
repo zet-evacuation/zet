@@ -24,7 +24,7 @@ import java.io.File;
 import java.io.IOException;
 
 /**
- * A <code>PropertyLoadException</code> is thrown if an error during loading
+ * A {@code PropertyLoadException} is thrown if an error during loading
  * of a property file occured. It is possible to submit the file that created
  * the error.
  * @author Jan-Philipp Kappmeier
@@ -34,14 +34,14 @@ public class PropertyLoadException extends IOException {
 	private File file;
 	
 	/**
-	 * Creates a new <code>PropertyLoadException</code> with default error string.
+	 * Creates a new {@code PropertyLoadException} with default error string.
 	 */
 	public PropertyLoadException() {
 		this( "Error loading properties." );
 	}
 	
 	/**
-	 * Creates a new <code>PropertyLoadException</code> with an error string.
+	 * Creates a new {@code PropertyLoadException} with an error string.
 	 * @param s the error string
 	 */
 	public PropertyLoadException ( String s ) {
@@ -49,7 +49,7 @@ public class PropertyLoadException extends IOException {
 	}
 
 	/**
-	 * Creates a new <code>PropertyLoadException</code>, sets the file and sets
+	 * Creates a new {@code PropertyLoadException}, sets the file and sets
 	 * an error message containing the filename.
 	 * @param f the file
 	 */
@@ -59,7 +59,7 @@ public class PropertyLoadException extends IOException {
 	}
 
 	/**
-	 * Returns the file that created the error. Can be <code>null</code>.
+	 * Returns the file that created the error. Can be {@code null}.
 	 * @return the file that created the error.
 	 */
 	public File getFile() {

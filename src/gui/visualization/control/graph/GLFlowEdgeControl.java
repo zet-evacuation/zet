@@ -40,8 +40,8 @@ public class GLFlowEdgeControl extends GLEdgeControl {
 	private static final double Z_TO_OPENGL_SCALING = 0.01d;
 
 	/**
-	 * Creates a new <code>GLFlowEdgeControl</code> object for the edge <code>edge</code> using data from
-	 * the <code>graphVisResult</code> object.
+	 * Creates a new {@code GLFlowEdgeControl} object for the edge {@code edge} using data from
+	 * the {@code graphVisResult} object.
 	 * @param graphVisResult contains all information necessary to visualize a result of a flow algorithm.
 	 * @param edge the edge for this control object.
 	 * @param glControl the main control class.

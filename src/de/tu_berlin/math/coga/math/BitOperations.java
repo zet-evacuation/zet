@@ -21,7 +21,7 @@
 package de.tu_berlin.math.coga.math;
 
 /**
- * The class <code>BitOperations</code> is a utility class that provides some
+ * The class {@code BitOperations} is a utility class that provides some
  * bit operations.
  * @author Jan-Philipp Kappmeier
  */

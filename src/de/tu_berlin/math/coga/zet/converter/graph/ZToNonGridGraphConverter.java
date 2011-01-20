@@ -872,7 +872,7 @@ public class ZToNonGridGraphConverter extends BaseZToGraphConverter {
 	/**
 	 * Private method to duplicate all edges in the graph contained in model
 	 * except edges that concern the super sink.
-	 * @param model The <code>NetworkFlowModel</code> containing the graph which edges shall be dublicated.
+	 * @param model The {@code NetworkFlowModel} containing the graph which edges shall be dublicated.
 	 */
 //	private static void dublicateEdges( NetworkFlowModel model ) {
 //		Graph graph = model.getGraph();

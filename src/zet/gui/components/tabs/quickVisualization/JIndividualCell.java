@@ -31,7 +31,7 @@
 //import de.tu_berlin.math.coga.common.localization.Localization;
 //
 ///**
-// * The swing component <code>JIndividualCell</code> represents an individual of
+// * The swing component {@code JIndividualCell} represents an individual of
 // * the {@link CellularAutomaton} in the quick on-line visualization. It has
 // * a green color and has some information about the Individual.
 // * @author Jan-Philipp Kappmeier

@@ -41,8 +41,8 @@ public class BestResponseMovementRule extends AbstractMovementRule {
 
 	/**
 	 * Decides whether the rule can be applied to the current cell. 
-	 * Returns <code>true</code> if the cell is occupied by an individual
-	 * or <code>false</code> otherwise.
+	 * Returns {@code true} if the cell is occupied by an individual
+	 * or {@code false} otherwise.
 	 * @param cell
 	 * @return true if the rule can be executed
 	 */
@@ -174,11 +174,11 @@ public class BestResponseMovementRule extends AbstractMovementRule {
 	/**
 	 * Given a starting cell, this method picks one 
 	 * of its reachable neighbours at random. The i-th neighbour is 
-	 * chosen with probability <code>p(i) := N * exp[mergePotentials(i, cell)]</code>
+	 * chosen with probability {@code p(i) := N * exp[mergePotentials(i, cell)]}
 	 * where N is a constant used for normalisation. 
 	 * 
 	 * @param cell The starting cell
-	 * @return A neighbour of <code>cell</code> chosen at random.
+	 * @return A neighbour of {@code cell} chosen at random.
 	 */
 	@Override
 	public Cell selectTargetCell( Cell cell, ArrayList<Cell> targets ) {
@@ -268,8 +268,8 @@ public class BestResponseMovementRule extends AbstractMovementRule {
 	/**
 	 * Decides randomly if an individual moves. (falsch)
 	 * @param i An individual with a given parameters
-	 * @return <code>true</code> if the individual moves or
-	 * <code>false</code> otherwise. 
+	 * @return {@code true} if the individual moves or
+	 * {@code false} otherwise. 
 	 */
 	//gibt true wieder, wenn geschwindigkeit von zelle und individuel (wkeit darueber) bewegung bedeuten
 	protected boolean canMove( Individual i ) {

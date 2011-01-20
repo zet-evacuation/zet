@@ -24,18 +24,18 @@ import java.util.Iterator;
 import java.util.Vector;
 
 /**
- * The <code>PathBasedFlow</code> class represents a static flow in a path based representation.
- * The static flow is stored as a <code>Vector</code> of {@link StaticPathFlow} objects.
+ * The {@code PathBasedFlow} class represents a static flow in a path based representation.
+ * The static flow is stored as a {@code Vector} of {@link StaticPathFlow} objects.
  */
 public class PathBasedFlow implements Iterable<StaticPathFlow>{
     
 	/**
-	 * The static path flows belonging to this <code>PathBasedFlow</code>.
+	 * The static path flows belonging to this {@code PathBasedFlow}.
 	 */
     Vector<StaticPathFlow> staticPathFlows;
     
     /**
-     * Creates a new <code>DynamicFlow</code> object without any path flows.
+     * Creates a new {@code DynamicFlow} object without any path flows.
      */
     public PathBasedFlow(){
     	staticPathFlows = new Vector<StaticPathFlow>();
@@ -51,10 +51,10 @@ public class PathBasedFlow implements Iterable<StaticPathFlow>{
     }
     
     /**
-     * Returns an iterator to iterate over the <code>StaticPathFlows</code> 
-     * contained in this <code>PathBasedFlow</Code>.
-     * @return an iterator to iterate over the <code>StaticPathFlows</code> 
-     * contained in this <code>PathBasedFlow</Code>.
+     * Returns an iterator to iterate over the {@code StaticPathFlows} 
+     * contained in this {@code PathBasedFlow}.
+     * @return an iterator to iterate over the {@code StaticPathFlows} 
+     * contained in this {@code PathBasedFlow}.
 
      */
     @Override
@@ -64,9 +64,9 @@ public class PathBasedFlow implements Iterable<StaticPathFlow>{
     
     /**
      * Returns a String containing a description of all 
-     * contained <code>StaticPathFlows</code>.
+     * contained {@code StaticPathFlows}.
      * @return a String containing a description of all 
-     * contained <code>StaticPathFlows</code>.
+     * contained {@code StaticPathFlows}.
      */
     @Override
     public String toString(){

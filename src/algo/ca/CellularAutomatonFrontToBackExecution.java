@@ -13,13 +13,13 @@ import java.util.Collections;
 import java.util.List;
 
 /**
- * The class <code>CellularAutomatonFrontToBackExecution</code> ...
+ * The class {@code CellularAutomatonFrontToBackExecution} ...
  * @author Jan-Philipp Kappmeier
  */
 public class CellularAutomatonFrontToBackExecution extends CellularAutomatonInOrderExecution {
 
 	/**
-	 * Creates a new instance of <code>CellularAutomatonFrontToBackExecution</code>.
+	 * Creates a new instance of {@code CellularAutomatonFrontToBackExecution}.
 	 * @param ca the cellular automaton that is executed
 	 */
 	public CellularAutomatonFrontToBackExecution( CellularAutomaton ca ) {

@@ -45,7 +45,7 @@ public class ExitDistributionBasedCAFactory extends ZToCAConverter {
 	 * @param exitAssignment An exit assignment computed by a graph algorithm that gives an exit distribution for each source node. The exit assignment must belong to the same building and concrete assignment.
 	 * @param concreteAssignment All individuals and their positions.
 	 * @param graphRaster 
-	 * @return A cellular automation that realizes the exit distribution given by <code>exitAssignment</code>.
+	 * @return A cellular automation that realizes the exit distribution given by {@code exitAssignment}.
 	 * @throws converter.ZToCAConverter.ConversionNotSupportedException
 	 */
 	public CellularAutomaton convertAndApplyConcreteAssignment( BuildingPlan buildingPlan, ExitAssignment exitAssignment, ConcreteAssignment concreteAssignment, ZToGraphRasterContainer graphRaster ) throws de.tu_berlin.math.coga.zet.converter.cellularAutomaton.ZToCAConverter.ConversionNotSupportedException {
@@ -77,8 +77,8 @@ public class ExitDistributionBasedCAFactory extends ZToCAConverter {
 	}*/
 
 	/**
-	 * Returns the (only) instance of the <code>ExitDistributionBasedCAFactory</code>.
-	 * @return the (only) instance of the <code>ExitDistributionBasedCAFactory</code>.
+	 * Returns the (only) instance of the {@code ExitDistributionBasedCAFactory}.
+	 * @return the (only) instance of the {@code ExitDistributionBasedCAFactory}.
 	 */
 	public static ExitDistributionBasedCAFactory getInstance(){
 		if (instance==null){
@@ -88,10 +88,10 @@ public class ExitDistributionBasedCAFactory extends ZToCAConverter {
 	}
 	
 	/**
-	 * Returns the <code>GraphBasedIndividualToExitMapping</code> object created
-	 * during the last call of <code>convertAndApplyConcreteAssignment</code>.
-	 * @return the <code>GraphBasedIndividualToExitMapping</code> object created
-	 * during the last call of <code>convertAndApplyConcreteAssignment</code>.
+	 * Returns the {@code GraphBasedIndividualToExitMapping} object created
+	 * during the last call of {@code convertAndApplyConcreteAssignment}.
+	 * @return the {@code GraphBasedIndividualToExitMapping} object created
+	 * during the last call of {@code convertAndApplyConcreteAssignment}.
 	 */
 	public GraphBasedIndividualToExitMapping getLatestMappingInstance(){
 		return graphBasedIndividualToExitMaping;

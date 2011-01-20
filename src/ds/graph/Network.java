@@ -23,7 +23,7 @@ import com.thoughtworks.xstream.annotations.XStreamAlias;
 import java.util.Iterator;
 
 /**
- * The <code>Network</class> provides an implementation of a directed graph
+ * The {@code Network</class> provides an implementation of a directed graph
  * optimized for use by flow algorithms. Examples of these optimizations 
  * include use of array based data structures for edges and nodes in order to
  * provide fast access, as well as the possiblity to hide edges and nodes (which
@@ -96,7 +96,7 @@ public class Network implements Graph, Cloneable, Iterable<Node> {
 
 	/**
 	 * Checks whether the graph is directed. Runtime O(1).
-	 * @return <code>true</code>.
+	 * @return {@code true}.
 	 */
 	@Override
 	public boolean isDirected() {
@@ -252,8 +252,8 @@ public class Network implements Graph, Cloneable, Iterable<Node> {
 	 * Checks whether the specified edge is contained in this graph. Runtime
 	 * O(1).
 	 * @param edge the edge to be checked.
-	 * @return <code>true</code> if the edge is contained in this graph,
-	 * <code>false</code> otherwise.
+	 * @return {@code true} if the edge is contained in this graph,
+	 * {@code false} otherwise.
 	 */
 	@Override
 	public boolean contains( Edge edge ) {
@@ -264,8 +264,8 @@ public class Network implements Graph, Cloneable, Iterable<Node> {
 	 * Checks whether the specified node is contained in this graph. Runtime
 	 * O(1).
 	 * @param node the node to be checked.
-	 * @return <code>true</code> if the node is contained in this graph,
-	 * <code>false</code> otherwise.
+	 * @return {@code true} if the node is contained in this graph,
+	 * {@code false} otherwise.
 	 */
 	@Override
 	public boolean contains( Node node ) {
@@ -273,10 +273,10 @@ public class Network implements Graph, Cloneable, Iterable<Node> {
 	}
 
 	/**
-	 * Returns the edge with the specified id or <code>null</code> if the graph
+	 * Returns the edge with the specified id or {@code null} if the graph
 	 * does not contain an edge with the specified id. Runtime O(1).
 	 * @param id the id of the edge to be returned.
-	 * @return the edge with the specified id or <code>null</code> if the graph
+	 * @return the edge with the specified id or {@code null} if the graph
 	 * does not contain an edge with the specified id.
 	 */
 	@Override
@@ -285,13 +285,13 @@ public class Network implements Graph, Cloneable, Iterable<Node> {
 	}
 
 	/**
-	 * Returns an edge starting at <code>start</code> and ending at
-	 * <code>end</code>. If no such edge exists, <code>null</code> is returned.
+	 * Returns an edge starting at {@code start} and ending at
+	 * {@code end}. If no such edge exists, {@code null} is returned.
 	 * Runtime O(outdegree(start)).
 	 * @param start the start node of the edge to be returned.
 	 * @param end the end node of the edge to be returned.
-	 * @return an edge starting at <code>start</code> and ending at
-	 * <code>end</code>.
+	 * @return an edge starting at {@code start} and ending at
+	 * {@code end}.
 	 */
 	@Override
 	public Edge getEdge( Node start, Node end ) {
@@ -303,13 +303,13 @@ public class Network implements Graph, Cloneable, Iterable<Node> {
 
 	/**
 	 * Returns an {@link ListSequence} containing all edges starting at
-	 * <code>start</code> and ending at
-	 * <code>end</code>. If no such edge exists, an empty list is returned.
+	 * {@code start} and ending at
+	 * {@code end}. If no such edge exists, an empty list is returned.
 	 * Runtime O(outdegree(start)).
 	 * @param start the start node of the edges to be returned.
 	 * @param end the end node of the edges to be returned.
 	 * @return an {@link ListSequence} containing all edges starting at
-	 * <code>start</code> and ending at <code>end</code>.
+	 * {@code start} and ending at {@code end}.
 	 */
 	@Override
 	public IdentifiableCollection<Edge> getEdges( Node start, Node end ) {
@@ -321,10 +321,10 @@ public class Network implements Graph, Cloneable, Iterable<Node> {
 	}
 
 	/**
-	 * Returns the node with the specified id or <code>null</code> if the graph
+	 * Returns the node with the specified id or {@code null} if the graph
 	 * does not contain a node with the specified id. Runtime O(1).
 	 * @param id the id of the node to be returned.
-	 * @return the node with the specified id or <code>null</code> if the graph
+	 * @return the node with the specified id or {@code null} if the graph
 	 * does not contain a node with the specified id.
 	 */
 	@Override
@@ -387,8 +387,8 @@ public class Network implements Graph, Cloneable, Iterable<Node> {
 	/**
 	 * Checks whether the specified edge is hidden. Runtime O(1).
 	 * @param edge the edge to be tested.
-	 * @return <code>true</code> if the specified edge is hidden, <code>false
-	 * </code> otherwise.
+	 * @return {@code true} if the specified edge is hidden, {@code false
+	 * } otherwise.
 	 */
 	public boolean isHidden( Edge edge ) {
 		return edges.isHidden( edge );
@@ -423,8 +423,8 @@ public class Network implements Graph, Cloneable, Iterable<Node> {
 	/**
 	 * Checks whether the specified node is hidden. Runtime O(1).
 	 * @param node the node to be tested.
-	 * @return <code>true</code> if the specified node is hidden, <code>false
-	 * </code> otherwise.
+	 * @return {@code true} if the specified node is hidden, {@code false
+	 * } otherwise.
 	 */
 	public boolean isHidden( Node node ) {
 		return nodes.isHidden( node );
@@ -501,7 +501,7 @@ public class Network implements Graph, Cloneable, Iterable<Node> {
 	}
 
 	/**
-	 * Adds the specified edges to the graph by calling <code>setEdge</code> for
+	 * Adds the specified edges to the graph by calling {@code setEdge} for
 	 * each edge. Runtime O(number of edges).
 	 * @param edges the edges to be added to the graph.
 	 */
@@ -534,7 +534,7 @@ public class Network implements Graph, Cloneable, Iterable<Node> {
 	}
 
 	/**
-	 * Adds the specified nodes to the graph by calling <code>setNode</code> for
+	 * Adds the specified nodes to the graph by calling {@code setNode} for
 	 * each node. Runtime O(number of nodes).
 	 * @param nodes the nodes to be added to the graph.
 	 */
@@ -566,7 +566,7 @@ public class Network implements Graph, Cloneable, Iterable<Node> {
 	 * must be completely equivalent (i.e. both the visible and hidden parts
 	 * must be equivalent). Runtime O(n + m).
 	 * @param o the object to compare with.
-	 * @return <code>true</code> if the specified object is a network equivalent
+	 * @return {@code true} if the specified object is a network equivalent
 	 * to this network, false otherwise.
 	 */
 	@Override
@@ -590,7 +590,7 @@ public class Network implements Graph, Cloneable, Iterable<Node> {
 	/**
 	 * Returns a string representation of this network. The representation is
 	 * a list of all nodes and edges contained in this graph. The conversion of
-	 * nodes and edges to strings is done by the <code>toString</code> methods
+	 * nodes and edges to strings is done by the {@code toString} methods
 	 * of their classes. Runtime O(n + m).
 	 * @return a string representation of this network
 	 */
@@ -653,8 +653,8 @@ public class Network implements Graph, Cloneable, Iterable<Node> {
 	 * exists by performing a breadth first search. Runtime O(n + m).
 	 * @param start the start node of the path to be checked.
 	 * @param end the end node of the path to be checked.
-	 * @return <code>true</code> if a directed path between the start node and
-	 * the end node exists, <code>false</code> otherwise.
+	 * @return {@code true} if a directed path between the start node and
+	 * the end node exists, {@code false} otherwise.
 	 */
 	@Override
 	public boolean existsPath( Node start, Node end ) {
@@ -685,7 +685,7 @@ public class Network implements Graph, Cloneable, Iterable<Node> {
 	}
 
 	/**
-	 * Returns the network as a <code>Network</code> object.
+	 * Returns the network as a {@code Network} object.
 	 * As this graph is already static, the object itself is returned.
 	 * @return this object
 	 */

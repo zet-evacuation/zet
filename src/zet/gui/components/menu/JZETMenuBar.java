@@ -8,7 +8,6 @@ import de.tu_berlin.math.coga.common.localization.Localized;
 import ds.PropertyContainer;
 import gui.GUIControl;
 import gui.ZETMain;
-import zet.gui.components.tabs.base.AbstractFloor.RasterPaintStyle;
 import gui.components.framework.Menu;
 import gui.editor.Areas;
 import java.awt.event.ActionEvent;
@@ -22,6 +21,7 @@ import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.JRadioButtonMenuItem;
+import zet.gui.components.tabs.base.AbstractFloor.RasterPaintStyle;
 import zet.gui.GUILocalization;
 
 /**
@@ -228,6 +228,8 @@ public class JZETMenuBar extends JMenuBar implements ActionListener, Localized {
 		if( ZETMain.isDebug() ) {
 			mnuSettings = Menu.addMenuItem( mExtras, loc.getString( "Extras.Settings" ), this, "settings" );
 			mnuDebug = Menu.addMenu( mExtras, loc.getString( "Extras.Debug" ) );
+
+			Menu.addMenuItem( mnuDebug, "Building status", this, "debugBuildingStatus" );
 		}
 		// Hilfe-menu
 		mnuHelpAbout = Menu.addMenuItem( mHelp, loc.getString( "Help.About" ), 'I', this, "about" );
@@ -374,6 +376,8 @@ public class JZETMenuBar extends JMenuBar implements ActionListener, Localized {
 			control.showOptionsDialog();
 		} else if( e.getActionCommand().equals( "settings" ) ) {
 			control.showSettingsDialog();
+		} else if ( e.getActionCommand().equals( "debugBuildingStatus" ) ) {
+			System.out.println( control.getZControl().getProject().getBuildingPlan().summary() );
 		} else if( e.getActionCommand().equals( "german" ) ) {
 			control.switchToLanguage( Locale.GERMAN );
 		} else if( e.getActionCommand().equals( "english" ) ) {

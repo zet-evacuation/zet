@@ -100,7 +100,7 @@ public class GraphAssignmentConverter extends Algorithm<ConcreteAssignment, Netw
 
 	/**
 	 * Deletes sources that cannot reach a sink. These nodes are marked as deleted sources.
-	 * @param model the <code>NetworkFlowModel</code> object.
+	 * @param model the {@code NetworkFlowModel} object.
 	 */
 	private void checkSupplies( NetworkFlowModel model ) {
 		Network network = model.getNetwork();

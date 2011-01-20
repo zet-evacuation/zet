@@ -41,7 +41,7 @@ public class AssignmentArea extends Area<Edge> {
 	private EvacuationArea exit = null;
 
 	/**
-	 * Returns the exit assigned to this <code>AssignmentArea</code>
+	 * Returns the exit assigned to this {@code AssignmentArea}
 	 * @return the assigned exit
 	 */
 	public EvacuationArea getExitArea() {
@@ -49,7 +49,7 @@ public class AssignmentArea extends Area<Edge> {
 	}
 
 	/**
-	 * Sets the exit assigned to this <code>AssignmentArea</code>.
+	 * Sets the exit assigned to this {@code AssignmentArea}.
 	 * @param exit the {@link EvacuationArea} representing the exit.
 	 */
 	public void setExitArea( EvacuationArea exit ) {
@@ -194,7 +194,7 @@ public class AssignmentArea extends Area<Edge> {
 	/**
 	 * See @return
 	 * @return True, if the area has the same number of evacuees
-	 * as the default number of evacuees of its <code>AssignmentType</code>.
+	 * as the default number of evacuees of its {@code AssignmentType}.
 	 * False else.
 	 */
 	public boolean hasStandardEvacuees () {

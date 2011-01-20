@@ -30,7 +30,7 @@ import java.util.List;
 public final class RasterTools {
 
 	/**
-	 * No instantiating of <code>ConversationTools</code> possible.
+	 * No instantiating of {@code ConversationTools} possible.
 	 */
 	private RasterTools() {
 	}
@@ -105,8 +105,8 @@ public final class RasterTools {
 	 * upper left corner has a y-coordinate that is strictly greater than the
 	 * maximum of the y-coordinates of the endpoints of the edge.
 	 *
-	 * @param <T> A <code>RoomRasterSquare</code>-Type
-	 * @param edge An edge that lies on the <code>raster</code>
+	 * @param <T> A {@code RoomRasterSquare}-Type
+	 * @param edge An edge that lies on the {@code raster}
 	 * @param raster a rastering of a room.
 	 * @return All adjacent raster squares above this edge. If the edge is parallel to
 	 * the y-axis, the returned list is empty.
@@ -138,8 +138,8 @@ public final class RasterTools {
 	 * upper left corner has a y-coordinate that is equal to the
 	 * maximum of the y-coordinates of the endpoints of the edge.
 	 *
-	 * @param <T> A <code>RoomRasterSquare</code>-Type
-	 * @param edge An edge that lies on the <code>raster</code>
+	 * @param <T> A {@code RoomRasterSquare}-Type
+	 * @param edge An edge that lies on the {@code raster}
 	 * @param raster a rastering of a room.
 	 * @return All adjacent raster squares below this edge. If the edge is parallel to
 	 * the y-axis, the returned list is empty.
@@ -171,8 +171,8 @@ public final class RasterTools {
 	 * upper left corner has an x-coordinate that is strictly greater than the
 	 * maximum of the x-coordinates of the endpoints of the edge.
 	 *
-	 * @param <T> A <code>RoomRasterSquare</code>-Type
-	 * @param edge An edge that lies on the <code>raster</code>
+	 * @param <T> A {@code RoomRasterSquare}-Type
+	 * @param edge An edge that lies on the {@code raster}
 	 * @param raster a rastering of a room.
 	 * @return All adjacent raster squares left of this edge. If the edge is parallel to
 	 * the x-axis, the returned list is empty.
@@ -204,8 +204,8 @@ public final class RasterTools {
 	 * upper left corner has an x-coordinate that is equal to the
 	 * maximum of the x-coordinates of the endpoints of the edge.
 	 *
-	 * @param <T> A <code>RoomRasterSquare</code>-Type
-	 * @param edge An edge that lies on the <code>raster</code>
+	 * @param <T> A {@code RoomRasterSquare}-Type
+	 * @param edge An edge that lies on the {@code raster}
 	 * @param raster a rastering of a room.
 	 * @return All adjacent raster squares right of this edge. If the edge is parallel to
 	 * the x-axis, the returned list is empty.

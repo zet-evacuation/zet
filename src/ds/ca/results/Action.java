@@ -62,7 +62,7 @@ public abstract class Action implements Cloneable{
     public abstract void execute(CellularAutomaton onCA) throws InconsistentPlaybackStateException;
     
     /**
-     * Every subclass of this class should override the <code>toString()</code>.
+     * Every subclass of this class should override the {@code toString()}.
      */
     @Override
     public abstract String toString();

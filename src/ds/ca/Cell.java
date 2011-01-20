@@ -198,7 +198,7 @@ public abstract class Cell implements Comparable<Cell> {
 
 	/**
 	 * Specifies the level difference between this cell and the cell
-	 * at the relative position <code>relPosition</code>.
+	 * at the relative position {@code relPosition}.
 	 * @param relPosition The relative position of the wished neighbour cell.
 	 * @param level The level of the other cell according to this cell, can be higher, equal or lower.
 	 */
@@ -257,8 +257,8 @@ public abstract class Cell implements Comparable<Cell> {
 	 * cell of this cell is clear.
 	 * @param relPosition The relative position of
 	 * the neighbour cell
-	 * @return <code>true</code> if the way is
-	 * clear or <code>false</code> if the way
+	 * @return {@code true} if the way is
+	 * clear or {@code false} if the way
 	 * is blocked.
 	 */
 	public boolean isPassable( Direction relPosition ) {
@@ -267,10 +267,10 @@ public abstract class Cell implements Comparable<Cell> {
 
 	/**
 	 * Returns the level difference between this cell and the cell 
-	 * at the relative position <code>relPosition</code>.
+	 * at the relative position {@code relPosition}.
 	 * If the level has never been set explicitly, Equal is returned.
 	 * @param direction The square in this direction is considered.
-	 * @return the level of the square in direction <code>direction</code> (higher, equal or lower).
+	 * @return the level of the square in direction {@code direction} (higher, equal or lower).
 	 */
 	public Level getLevel( Direction direction ) {
 		if( levels.containsKey( direction ) ) {
@@ -340,7 +340,7 @@ public abstract class Cell implements Comparable<Cell> {
 
 	/**
 	 * A string representation that only consists of the coordinates.
-	 * @return a tupel of the <code>x</code> and <code>y</code> coordinates.
+	 * @return a tupel of the {@code x} and {@code y} coordinates.
 	 */
 	public String coordToString() {
 		return "(" + x + "," + y + ")";

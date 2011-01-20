@@ -23,11 +23,11 @@ package ds.graph;
 import java.util.Iterator;
 
 /**
- * The <code>HidingSet</code> class extends the {@link ArraySet} class by the 
+ * The {@code HidingSet} class extends the {@link ArraySet} class by the 
  * functionality of hiding elements.
- * A hidden element remains in the set but is not counted in <code>size()<code>
- * and will also be skipped in methods like <code>first()</code> or
- * <code>predecessor(E element)</code>. The iterator of the class will also
+ * A hidden element remains in the set but is not counted in {@code size(){@code 
+ * and will also be skipped in methods like {@code first()} or
+ * {@code predecessor(E element)}. The iterator of the class will also
  * jump over hidden elements.
  */
 public class HidingSet<E extends Identifiable> extends ArraySet<E> implements IdentifiableCollection<E> {
@@ -43,16 +43,16 @@ public class HidingSet<E extends Identifiable> extends ArraySet<E> implements Id
     private int numberOfHiddenElements;
     
     /**
-     * The type of the elements stored in the <code>HidingSet</code>.
+     * The type of the elements stored in the {@code HidingSet}.
      */
     private Class<? extends Identifiable> elementType;
     
     /**
-     * Creates a new <code>HidingSet</code> that can store elements
-     * of type <code>elementType</code> with capacity to store elements
-     * with IDs between zero and <code>capacity-1</code>.
+     * Creates a new {@code HidingSet} that can store elements
+     * of type {@code elementType} with capacity to store elements
+     * with IDs between zero and {@code capacity-1}.
      * No elements are hidden at the start.
-     * @param elementType the type the elements in this <code>HidingSet</code>
+     * @param elementType the type the elements in this {@code HidingSet}
      *                    will have.
      * @param capacity the highest possible ID for elements plus one.
      */
@@ -64,12 +64,12 @@ public class HidingSet<E extends Identifiable> extends ArraySet<E> implements Id
     }
     
     /**
-     * Constructs a <code>HidingSet</code>, 
-     * typed to <code>elementType</code>, but containing no elements and
+     * Constructs a {@code HidingSet}, 
+     * typed to {@code elementType}, but containing no elements and
      * with zero capacity.
-     * The capacity must be set by <code>public void setCapacity(int capacity)</code>
-     * before storing elements in the <code>HidingSet</code>.
-     * @param elementType the type the elements in this <code>HidingSet</code>
+     * The capacity must be set by {@code public void setCapacity(int capacity)}
+     * before storing elements in the {@code HidingSet}.
+     * @param elementType the type the elements in this {@code HidingSet}
      *                    will have.
      */
     public HidingSet(Class<E> elementType) {
@@ -78,12 +78,12 @@ public class HidingSet<E extends Identifiable> extends ArraySet<E> implements Id
     }
 
     /**
-     * Constructs a <code>HidingSet</code> containing the elements in the 
+     * Constructs a {@code HidingSet} containing the elements in the 
      * given array. The elements must be stored in the field corresponding
-     * to their ID, elsewise an <code>IllegalArgumentException</code> 
+     * to their ID, elsewise an {@code IllegalArgumentException} 
      * is thrown. No elements are hidden at the start.
      * @param elements an array with elements that shall be contained in this
-     *        <code>ArraySet</code>.
+     *        {@code ArraySet}.
      */
     public HidingSet(E[] elements) {
         super(elements);
@@ -92,15 +92,15 @@ public class HidingSet<E extends Identifiable> extends ArraySet<E> implements Id
     } 
     
     /**
-     * Returns whether the element is contained in this <code>HidingSet</code>.
+     * Returns whether the element is contained in this {@code HidingSet}.
      * The test checks for containedness of the specified element (not for
      * containedness of an element having the same ID).
      * The test is efficient because of the array based implementation. 
      * Hidden elements are skipped.
      * Runtime O(1).
      * @param element the element that shall be checked for containedness.
-     * @return whether the element <code>element</code> contained in this 
-     *         <code>ArraySet</code>, returns <code>false</code> if the
+     * @return whether the element {@code element} contained in this 
+     *         {@code ArraySet}, returns {@code false} if the
      *         element is stored but hidden.
      */
     @Override
@@ -109,10 +109,10 @@ public class HidingSet<E extends Identifiable> extends ArraySet<E> implements Id
     }
 
     /**
-     * Returns whether this <code>ArraySet</code> contains no non hidden
+     * Returns whether this {@code ArraySet} contains no non hidden
      * elements. Runtime O(1).
-     * @return <code>false</code> if there is a stored element that is not 
-     *         hidden, <code>true</code> else.
+     * @return {@code false} if there is a stored element that is not 
+     *         hidden, {@code true} else.
      */    
     @Override
     public boolean empty() {
@@ -138,16 +138,16 @@ public class HidingSet<E extends Identifiable> extends ArraySet<E> implements Id
     }
     
     /**
-     * Returns the element with the ID <code>id</code> that is stored in this 
-     * <code>HidingSet</code> or null if no element with this ID is stored or
+     * Returns the element with the ID {@code id} that is stored in this 
+     * {@code HidingSet} or null if no element with this ID is stored or
      * if the stored element is hidden.
-     * A <code>HidingSet</code>  is especially a set, i.e. the returned
+     * A {@code HidingSet}  is especially a set, i.e. the returned
      * element is uniquely defined.
      * The test is efficient because of the array based implementation. 
      * Runtime O(1).
      * @param id the ID that shall be checked
-     * @return the element with the ID <code>id</code> that is stored in this 
-     * <code>ArraySet</code>, <code>null</code> if no element with this
+     * @return the element with the ID {@code id} that is stored in this 
+     * {@code ArraySet}, {@code null} if no element with this
      * ID is stored or the stored element is hidden.
      */
     @Override
@@ -158,16 +158,16 @@ public class HidingSet<E extends Identifiable> extends ArraySet<E> implements Id
     }
     
     /**
-     * Returns the element with the ID <code>id</code> that is stored in this 
-     * <code>HidingSet</code> or null if no element with this ID is stored.
+     * Returns the element with the ID {@code id} that is stored in this 
+     * {@code HidingSet} or null if no element with this ID is stored.
      * The element is returned even if it is hidden.
-     * A <code>HidingSet</code> is especially a set, i.e. the returned
+     * A {@code HidingSet} is especially a set, i.e. the returned
      * element is uniquely defined.
      * The test is efficient because of the array based implementation. 
      * Runtime O(1).
      * @param id the ID that shall be checked
-     * @return the element with the ID <code>id</code> that is stored in this 
-     * <code>ArraySet</code> (even if hidden), <code>null</code> if no element with this
+     * @return the element with the ID {@code id} that is stored in this 
+     * {@code ArraySet} (even if hidden), {@code null} if no element with this
      * ID is stored.
      */    
     public E getEvenIfHidden(int id){
@@ -175,13 +175,13 @@ public class HidingSet<E extends Identifiable> extends ArraySet<E> implements Id
     }
 
     /**
-     * Returns the first non hidden element stored in this <code>HidingSet</code>.
-     * The order in <code>HidingSet</code> depends on the IDs, 
+     * Returns the first non hidden element stored in this {@code HidingSet}.
+     * The order in {@code HidingSet} depends on the IDs, 
      * thus the first element is the non hidden element with the smallest ID.
-     * If the <code>HidingSet</code> is empty or all elements are hidden,
-     * <code>null</code> is returned.
+     * If the {@code HidingSet} is empty or all elements are hidden,
+     * {@code null} is returned.
      * Runtime O(ID_first), where ID_first is the ID of the first non hidden element.
-     * @return the first non hidden element stored in this <code>HidingSet</code>,
+     * @return the first non hidden element stored in this {@code HidingSet},
      *         null if no element is stored or all elements are hidden.
      */
     @Override
@@ -195,13 +195,13 @@ public class HidingSet<E extends Identifiable> extends ArraySet<E> implements Id
     }
 
     /**
-     * Returns the last non hidden element stored in this <code>HidingSet</code>.
-     * The order in <code>HidingSet</code> depends on the IDs, 
+     * Returns the last non hidden element stored in this {@code HidingSet}.
+     * The order in {@code HidingSet} depends on the IDs, 
      * thus the last element is the non hidden element with the highest ID.
-     * If the <code>HidingSet</code> is empty of all elements are hidden,
-     * <code>null</code> is returned.
+     * If the {@code HidingSet} is empty of all elements are hidden,
+     * {@code null} is returned.
      * Runtime O(ID_last), where ID_first is the ID of the last non hidden element.
-     * @return the last non hidden element stored in this <code>HidingSet</code>,
+     * @return the last non hidden element stored in this {@code HidingSet},
      *         null if no element is stored or all elements are hidden.
      */
     @Override
@@ -216,18 +216,18 @@ public class HidingSet<E extends Identifiable> extends ArraySet<E> implements Id
     }
 
     /**
-     * Returns the (non hidden) predecessor of the element <code>element</code>.
-     * Returns null if the  <code>element</code> is the first non hidden element
-     * in the <code>HidingSet</code> or if it is not stored in the 
-     * <code>HidingSet</code>. 
-     * The order in <code>HidingSet</code> depends on the IDs, 
-     * thus the predecessor of the element <code>element</code> is the non
-     * hidden element with the highest ID smaller than the ID of <code>element</code>. 
-     * Runtime O(ID_element) where ID_element is the ID of <code>element</code>.
+     * Returns the (non hidden) predecessor of the element {@code element}.
+     * Returns null if the  {@code element} is the first non hidden element
+     * in the {@code HidingSet} or if it is not stored in the 
+     * {@code HidingSet}. 
+     * The order in {@code HidingSet} depends on the IDs, 
+     * thus the predecessor of the element {@code element} is the non
+     * hidden element with the highest ID smaller than the ID of {@code element}. 
+     * Runtime O(ID_element) where ID_element is the ID of {@code element}.
      * @param element the element which predecessor is wanted
-     * @return the predecessor of <code>element<\code> or null if the element 
-     * is the first non hidden element in the <code>HidingSet</code> or is not contained 
-     * in the <code>HidingSet</code>.
+     * @return the predecessor of {@code element<\code> or null if the element 
+     * is the first non hidden element in the {@code HidingSet} or is not contained 
+     * in the {@code HidingSet}.
      */
     @Override
     public E predecessor(E element) {
@@ -242,19 +242,19 @@ public class HidingSet<E extends Identifiable> extends ArraySet<E> implements Id
     }
 
     /**
-     * Returns the (non hidden) successor of the element <code>element</code>.
-     * Returns null if the  <code>element</code> is the last non hidden element
-     * in the <code>HidingSet</code> or if it is not stored in the 
-     * <code>HidingSet</code>. 
-     * The order in <code>ArraySet</code> depends on the IDs, 
-     * thus the successor of the element <code>element</code> ist the non hidden
-     * element with the smallest ID higher than the ID of <code>element</code>. 
-     * Runtime O(n-ID_element) where ID_element is the ID of <code>element</code>
+     * Returns the (non hidden) successor of the element {@code element}.
+     * Returns null if the  {@code element} is the last non hidden element
+     * in the {@code HidingSet} or if it is not stored in the 
+     * {@code HidingSet}. 
+     * The order in {@code ArraySet} depends on the IDs, 
+     * thus the successor of the element {@code element} ist the non hidden
+     * element with the smallest ID higher than the ID of {@code element}. 
+     * Runtime O(n-ID_element) where ID_element is the ID of {@code element}
      * and n is the number of possible IDs.
      * @param element the element which successor is wanted
-     * @return the successor of <code>element<\code> or null if the element 
-     * is the first non hidden element in the <code>HidingSet</code> or is not contained 
-     * in the <code>HidingSet</code>.
+     * @return the successor of {@code element<\code> or null if the element 
+     * is the first non hidden element in the {@code HidingSet} or is not contained 
+     * in the {@code HidingSet}.
      */
     @Override
     public E successor(E element) {
@@ -269,14 +269,14 @@ public class HidingSet<E extends Identifiable> extends ArraySet<E> implements Id
     }
 
     /**
-     * Removes the element from the <code>HidingSet</code> having the
-     * same ID as the element <code>element</code>.  
-     * If there is no such element in the <code>ArraySet</code>,
+     * Removes the element from the {@code HidingSet} having the
+     * same ID as the element {@code element}.  
+     * If there is no such element in the {@code ArraySet},
      * nothing happens.
      * Due to the array based implementation this operation is efficient.
      * If a new element with the same ID
      * will be added later, it will not be hidden, regardless whether
-     * this element was hidden in the <code>HidingSet</code>.
+     * this element was hidden in the {@code HidingSet}.
      * Runtime O(1).
      * @param element element element to be removed.
      */
@@ -289,12 +289,12 @@ public class HidingSet<E extends Identifiable> extends ArraySet<E> implements Id
     }
     
     /**
-     * Adds an element to the <code>HidingSet</code> and returns
+     * Adds an element to the {@code HidingSet} and returns
      * whether the insertion was successful. 
      * The new inserted element will not be hidden.
      * The insertion fails
      * if the ID of the element is negative outside the range of this
-     * <code>HidingSet</code>.
+     * {@code HidingSet}.
      * Elsewise the element will be stored at the appropriate array position.
 		 * @param element element to be add.
 		 * @return {@code true} if adding was successful, {@code false} otherwise
@@ -310,9 +310,9 @@ public class HidingSet<E extends Identifiable> extends ArraySet<E> implements Id
     }
     
     /**
-     * Returns an iterator for the elements of this <code>HidingSet</code>.
+     * Returns an iterator for the elements of this {@code HidingSet}.
      * With the iterator one can iterate comfortable through all elements.
-     * @return an iterator for the elements of this <code>HidingSet</code>.
+     * @return an iterator for the elements of this {@code HidingSet}.
      */
     @Override
     public Iterator<E> iterator() {
@@ -329,11 +329,11 @@ public class HidingSet<E extends Identifiable> extends ArraySet<E> implements Id
     
     /**
      * Returns whether an element is hidden. 
-     * If the element is not stored in the <code>HidingSet</code>
-     * <code>false</code> will be returned.
+     * If the element is not stored in the {@code HidingSet}
+     * {@code false} will be returned.
      * @param element the element that shall be checked
-     * @return <code>true</code> it the element is contained in the set
-     *         and hidden, <code>false</code> else.
+     * @return {@code true} it the element is contained in the set
+     *         and hidden, {@code false} else.
      */
     public boolean isHidden(E element) {
         if (!super.contains(element)) {
@@ -345,14 +345,14 @@ public class HidingSet<E extends Identifiable> extends ArraySet<E> implements Id
     
     /**
      * Returns whether there is an element with
-     * ID <code>id</code> that is hidden. 
+     * ID {@code id} that is hidden. 
      * If there is no element with this ID
-     * stored in the <code>HidingSet</code>
-     * <code>false</code> will be returned.
+     * stored in the {@code HidingSet}
+     * {@code false} will be returned.
      * @param id the ID that shall be checked
-     * @return <code>true</code> if an element
+     * @return {@code true} if an element
      *         with the given ID is contained in the set
-     *         and hidden, <code>false</code> else.
+     *         and hidden, {@code false} else.
      */
     public boolean isHidden(int id){
     	E element = super.get(id);
@@ -362,10 +362,10 @@ public class HidingSet<E extends Identifiable> extends ArraySet<E> implements Id
     }
     
     /**
-     * Sets whether the element <code>element</code> is hidden from now on.
-     * If <code>hidden</code> contains <code>true</code> the element will
+     * Sets whether the element {@code element} is hidden from now on.
+     * If {@code hidden} contains {@code true} the element will
      * be hidden, else it will be visible.
-     * If the element is not contained in the <code>HidingSet</code>
+     * If the element is not contained in the {@code HidingSet}
      * nothing happens.
      * @param element the element that shall be made hidden or visible.
      * @param hidden whether the element will be visible from now on.
@@ -394,10 +394,10 @@ public class HidingSet<E extends Identifiable> extends ArraySet<E> implements Id
     }
     
     /**
-     * Sets whether the element with ID <code>id</code> is hidden from now on.
-     * If <code>hidden</code> contains <code>true</code> the element will
+     * Sets whether the element with ID {@code id} is hidden from now on.
+     * If {@code hidden} contains {@code true} the element will
      * be hidden, else it will be visible.
-     * If the element is not contained in the <code>HidingSet</code>
+     * If the element is not contained in the {@code HidingSet}
      * nothing happens.
      * @param id the id of the element that shall be made hidden or visible.
      * @param hidden whether the element will be visible from now on.
@@ -410,12 +410,12 @@ public class HidingSet<E extends Identifiable> extends ArraySet<E> implements Id
     }
     
     /**
-     * Sets the the capacity of this <code>HidingSet</code>.
+     * Sets the the capacity of this {@code HidingSet}.
      * The capacity is one higher than the highest accepted ID.
      * Should only be used if the constructor 
-     * <code>public HidingSet(Class<E> elementType)</code>
+     * {@code public HidingSet(Class<E> elementType)}
      * was used. Dynamic resizing is not recommended!
-     * Elements with IDs greater or equal to <code>capacity</code> will be
+     * Elements with IDs greater or equal to {@code capacity} will be
      * cut off.
      * @param capacity the capacity to be set.
      */
@@ -434,9 +434,9 @@ public class HidingSet<E extends Identifiable> extends ArraySet<E> implements Id
     }    
          
     /**
-     * Returns an <code>ArraySet</code> where those elements hidden in this
-     * <code>HidingSet</code> are not contained.
-     * @return an <code>ArraySet</code> without hidden elements. 
+     * Returns an {@code ArraySet} where those elements hidden in this
+     * {@code HidingSet} are not contained.
+     * @return an {@code ArraySet} without hidden elements. 
      */
     @SuppressWarnings("unchecked")
     public ArraySet<E> getSetWithoutHiddenElements(){
@@ -449,20 +449,20 @@ public class HidingSet<E extends Identifiable> extends ArraySet<E> implements Id
 
     /**
      * An iterator to comfortably iterate through the elements of a
-     * <code>HidingSet</code>. The elements in an <code>HidingSet</code>
+     * {@code HidingSet}. The elements in an {@code HidingSet}
      * are ordered by their IDs. Hidden elements will be skipped.
      */
     public class HidingSetIterator implements Iterator<E> {
 
         /**
          * The element that was last returned by the iterator, 
-         * <code>null</code> at the start.
+         * {@code null} at the start.
          */
         private E current;
         
         /**
          * The element that will be returned next by the iterator,
-         * <code>null</code> at the start and after the last element
+         * {@code null} at the start and after the last element
          * was returned.
          */
         private E next;
@@ -484,9 +484,9 @@ public class HidingSet<E extends Identifiable> extends ArraySet<E> implements Id
 
         /**
          * Checks whether there are more non returned elements in this
-         * <code>HidingSet</code>.
-         * @return <code>true</code> if there are elements not yet returned,
-         *         <code>false</code> else.
+         * {@code HidingSet}.
+         * @return {@code true} if there are elements not yet returned,
+         *         {@code false} else.
          */
 		@Override
         public boolean hasNext() {
@@ -506,9 +506,9 @@ public class HidingSet<E extends Identifiable> extends ArraySet<E> implements Id
 
         /**
          * Returns the next non returned element in  this
-         * <code>HidingSet</code>. If there are no more elements,
-         * <code>null</code> is returned.
-         * @return the next element if there are more, <code>null</code> else.
+         * {@code HidingSet}. If there are no more elements,
+         * {@code null} is returned.
+         * @return the next element if there are more, {@code null} else.
          */
 		@Override
         public E next() {
@@ -519,9 +519,9 @@ public class HidingSet<E extends Identifiable> extends ArraySet<E> implements Id
         }
 
         /**
-         * Removes the element from this <code>HidingSet</code> that was
+         * Removes the element from this {@code HidingSet} that was
          * last returned. If no element has been returned yet,
-         * an <code>IllegalStateException</code> will be thrown.
+         * an {@code IllegalStateException} will be thrown.
          */
 		@Override
         public void remove() {
@@ -537,12 +537,12 @@ public class HidingSet<E extends Identifiable> extends ArraySet<E> implements Id
     }   
 
     /**
-     * Returns a String describing the <code>HidingSet</code>.
+     * Returns a String describing the {@code HidingSet}.
      * The String contains the indices of the internal array that have
      * a stored and non hidden element. 
      * As the elements have the same ID as the position
      * they are stored in, die output String is also a list of the IDs
-     * of all elements stored in the <code>HidingSet</code> and not hidden.
+     * of all elements stored in the {@code HidingSet} and not hidden.
      * @return a String containing the indices of the internal array that have a stored
      *         and non hidden element.
      */
@@ -565,10 +565,10 @@ public class HidingSet<E extends Identifiable> extends ArraySet<E> implements Id
     }
     
     /**
-     * Clones this <code>HidingSet</code> by cloning the elements 
+     * Clones this {@code HidingSet} by cloning the elements 
      * and the hiding array and creating a new 
-     * <code>HidingSet</code> object with the clones.
-     * @return a <code>HidingSet</code> object with clones of the elements
+     * {@code HidingSet} object with the clones.
+     * @return a {@code HidingSet} object with clones of the elements
      * and the hiding array of this object.
      */
     @Override
@@ -587,13 +587,13 @@ public class HidingSet<E extends Identifiable> extends ArraySet<E> implements Id
     /**
      * Returns whether an object is equal to this hiding set.
      * The result is true if and only if the argument is not null and is a
-     * <code>HidingSet</code> object including the same number of
+     * {@code HidingSet} object including the same number of
      * elements where all the elements are pairwise equal according
-     * to their <code>equals</code>-Method.
+     * to their {@code equals}-Method.
      * Only visible elements are taken into account.
      * @param o object to compare.
-     * @return <code>true</code> if the given object represents a
-     * <code>HidingSet</code> equivalent to this object, <code>false</code> otherwise.
+     * @return {@code true} if the given object represents a
+     * {@code HidingSet} equivalent to this object, {@code false} otherwise.
      */
     @Override
     @SuppressWarnings("unchecked")
@@ -625,8 +625,8 @@ public class HidingSet<E extends Identifiable> extends ArraySet<E> implements Id
      * of the hash codes of the contained elements, where
      * hidden elements are skipped.
      * Therefore the hash code is equal for hiding sets equal according to
-     * the <code>equals</code>-method, but not necessarily different
-     * for hiding sets different according to the <code>equals</code>-method
+     * the {@code equals}-method, but not necessarily different
+     * for hiding sets different according to the {@code equals}-method
      * If hashing of hiding sets is heavily used,
      * the implementation of this method should be reconsidered.
      * @return the hash code of this node.
