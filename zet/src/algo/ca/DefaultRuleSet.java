@@ -27,7 +27,7 @@ import ds.PropertyContainer;
 import java.util.ArrayList;
 
 /**
- * <p>The <code>DefaultRuleSet</code> is a {@link RuleSet} consisting of two
+ * <p>The {@code DefaultRuleSet} is a {@link RuleSet} consisting of two
  * sets, the <b>primary rules</b> and the <b>loop rules</b>. The primary rules
  * are supposed to be only executed once to initialize the {@link ds.ca.CellularAutomaton} while
  * the loop rules are supposed to be executed in every step.</p>
@@ -79,7 +79,7 @@ public class DefaultRuleSet extends RuleSet {
 	}
 	
 	/**
-	 * Returns the <code>MovementRule</code> of this ruleset, and <code>null</code>
+	 * Returns the {@code MovementRule} of this ruleset, and {@code null}
 	 * if no such rule is set.
 	 * @return the movement rule
 	 */

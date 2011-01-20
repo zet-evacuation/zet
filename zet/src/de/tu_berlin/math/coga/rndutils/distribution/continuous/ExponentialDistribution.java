@@ -19,14 +19,14 @@ public class ExponentialDistribution extends ContinousDistribution {
 	private double lambda;
 
   /**
-   * Creates a new instance of <code>ExponentialDistribution</code>.
+   * Creates a new instance of {@code ExponentialDistribution}.
    */
   public ExponentialDistribution() {
     this( 1 );
   }
   
   /**
-   * Creates a new instance of <code>ExponentialDistribution</code> within a given interval.
+   * Creates a new instance of {@code ExponentialDistribution} within a given interval.
    * @param lambda the parameter describing the failure rate
    * @throws IllegalArgumentException if min is smaller than max
    */

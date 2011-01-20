@@ -60,7 +60,7 @@ public class CellularAutomaton implements Iterable<Individual> {
 	private ArrayList<Individual> evacuatedIndividuals;
 	/** an ArrayList of all Individual objects, which are marked as "dead". */
 	private ArrayList<Individual> deadIndividuals;
-	/** An <code>ArrayList</code> marked to be removed. */
+	/** An {@code ArrayList} marked to be removed. */
 	private ArrayList<Individual> markedForRemoval;
 	/** an ArrayList of all ExitCell objects (i.e. all exits) of the building */
 	private ArrayList<ExitCell> exits;
@@ -122,7 +122,7 @@ public class CellularAutomaton implements Iterable<Individual> {
 	}
 
 	/**
-	 * Creates a <code>Cellularautomaton</code> from an {@link InitialConfiguration}
+	 * Creates a {@code Cellularautomaton} from an {@link InitialConfiguration}
 	 * that is stored in an visual results recorder. This is used to replay a
 	 * simulation.
 	 * @param initialConfiguration the initial configuration of the simulation.
@@ -696,7 +696,7 @@ public class CellularAutomaton implements Iterable<Individual> {
 	/**
 	 * Resets the cellular automaton in order to let it run again. All individuals
 	 * are deleted, timestamp and lists are resettet and the status is set to
-	 * ready. The recording of actions is stopped; Call <code>startRecording()</code>
+	 * ready. The recording of actions is stopped; Call {@code startRecording()}
 	 * after you placed individuals in the ca to start recording again.
 	 */
 	public void reset() {
@@ -814,7 +814,7 @@ public class CellularAutomaton implements Iterable<Individual> {
 	 * is connected to the DoorCell "exit".
 	 * @param exit The DoorCell from which the individual belonging
 	 * to exit changes the room.
-	 * @throws java.lang.IllegalArgumentException if the <code>DoorCell</code> is
+	 * @throws java.lang.IllegalArgumentException if the {@code DoorCell} is
 	 * not occupied by an individual.
 	 */
 //	public void changeRoom( DoorCell exit ) throws IllegalArgumentException {

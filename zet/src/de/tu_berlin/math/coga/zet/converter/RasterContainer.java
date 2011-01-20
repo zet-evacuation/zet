@@ -50,7 +50,7 @@ public class RasterContainer<T extends RoomRaster<?>> {
     protected ArrayList<T> rasteredRooms;
 
     /**
-     * Creates a new <code>ZToGraphRasterContainer</code> object.
+     * Creates a new {@code ZToGraphRasterContainer} object.
      */
     public RasterContainer(){
         map = new HashMap<Floor,HashMap<Room,T>>();
@@ -86,7 +86,7 @@ public class RasterContainer<T extends RoomRaster<?>> {
     }
     
     /**
-     * Returns the rooms in the floor <code>floor</code>
+     * Returns the rooms in the floor {@code floor}
      * that the container has rastered versions for.
      * @param floor A floor in the Z-Format.
      * @return All rooms (in Z-Format) for which the container has rastered versions.
@@ -104,10 +104,10 @@ public class RasterContainer<T extends RoomRaster<?>> {
     }
     
     /**
-     * Returns the rastered version of the room <code>room</code> that is stored
+     * Returns the rastered version of the room {@code room} that is stored
      * in this container.
      * @param room the rastered version of this room will be returned.
-     * @return the rastered version of <code>room</code>.
+     * @return the rastered version of {@code room}.
      */
     public T getRasteredRoom(Room room){
         if (room == null)
@@ -122,9 +122,9 @@ public class RasterContainer<T extends RoomRaster<?>> {
     
     /**
      * Returns an unmodifiable list of all rastered versions of rooms contained in this 
-     * <code>ZToGraphRasterContainer</code>.
+     * {@code ZToGraphRasterContainer}.
      * @return an unmodifiable list of all rooms contained in this 
-     * <code>ZToGraphRasterContainer</code>.
+     * {@code ZToGraphRasterContainer}.
      */
     public List<T> getAllRasteredRooms(){
         return Collections.unmodifiableList(rasteredRooms);
@@ -132,12 +132,12 @@ public class RasterContainer<T extends RoomRaster<?>> {
     
     /**
      * Returns an unmodifiable collection of all rastered versions of rooms contained 
-     * in this <code>ZToGraphRasterContainer</code> that lie in the floor 
-     * <code>floor</code>.
+     * in this {@code ZToGraphRasterContainer} that lie in the floor 
+     * {@code floor}.
      * @param floor the floor which rastered roomes are wished.
      * @return all an unmodifiable collection of all rastered versions of rooms contained 
-     * in this <code>ZToGraphRasterContainer</code> that lie in the floor 
-     * <code>floor</code>.
+     * in this {@code ZToGraphRasterContainer} that lie in the floor 
+     * {@code floor}.
      */
     public Collection<T> getAllRasteredRooms(Floor floor){
         if (map.containsKey(floor)) return Collections.unmodifiableCollection(((map.get(floor)).values())); else return null;

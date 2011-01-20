@@ -34,12 +34,12 @@ import javax.swing.SwingWorker;
 // algorithm, probably like a factory. This would lead to more or less grave
 // changes to the algorithm classes as they have to know their SwingWorker.
 /**
- * A singleton task starting class. As a <code>SwingWorker</code> class can only
+ * A singleton task starting class. As a {@code SwingWorker} class can only
  * be executed once, this singleton has the method {@code #getNewInstance()}
  * that returns a new instance. It is recommended to use this method before
  * starting the execution of a task, otherwise it can happen that the task is
  * not executed! <p>
- * Be aware, that during process runtime <code>getNewInstance()</code> should
+ * Be aware, that during process runtime {@code getNewInstance()} should
  * not be called.
  * @author Jan-Philipp Kappmeier
  */
@@ -118,7 +118,7 @@ public class AlgorithmTask extends SwingWorker<Integer, ProcessUpdateMessage> im
 	}
 
 	/**
-	 * Returns an information <code>String</code> describing the current status.
+	 * Returns an information {@code String} describing the current status.
 	 * This message can be updated by the task.
 	 * @return the message
 	 */

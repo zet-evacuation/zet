@@ -23,7 +23,7 @@ import ds.graph.Node;
 import ds.graph.TimeExpandedNetwork;
 
 /**
- * The class <code>DynamicTransshipment</code> tests whether it is
+ * The class {@code DynamicTransshipment} tests whether it is
  * possible to fulfill given supplies and demands in a network
  * with capacities and transit times within a given time horizon. 
  * If this is possible, a flow that satisfies the supplies and

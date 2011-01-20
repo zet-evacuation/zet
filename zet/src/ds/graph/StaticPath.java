@@ -23,8 +23,8 @@ package ds.graph;
 import java.util.Iterator;
 
 /**
- * The <code>StaticPath</code> class represents a static path in a {@link Network}.
- * A static path is a sequence of <code>Edge</code> objects, where the 
+ * The {@code StaticPath} class represents a static path in a {@link Network}.
+ * A static path is a sequence of {@code Edge} objects, where the 
  * end node of an edge must be equal to the start node of the next edge
  * (if there is one).
  * The sequence is internally stored as a {@link ListSequence}.
@@ -48,7 +48,7 @@ public class StaticPath implements Path, Iterable<Edge> {
      * Constructs a new path with the given edges. The edges must be consistent,
      * i.e. the endnode of an edge must be equal to the startnode of the next edge
      * (if there follows one more).
-     * If the edges are not consistent, an <code>IllegalArgumentException</code> 
+     * If the edges are not consistent, an {@code IllegalArgumentException} 
      * is thrown.
      * @param edges the edges the path shall be contained of
      */
@@ -67,7 +67,7 @@ public class StaticPath implements Path, Iterable<Edge> {
      * Constructs a new path with the given edges. The edges must be consistent,
      * i.e. the endnode of an edge must be equal to the startnode of the next edge
      * (if there follows one more).
-     * If the edges are not consistent, an <code>IllegalArgumentException</code> 
+     * If the edges are not consistent, an {@code IllegalArgumentException} 
      * is thrown.
      * @param edges the edges the path shall be contained of
      */
@@ -91,13 +91,13 @@ public class StaticPath implements Path, Iterable<Edge> {
     }
     
     /**
-     * Private method to test whether the edge <code>pred<\code> can be followed
-     * by the edge <code>succ</code>, i.e. the endnode of <code>pred<\code> 
-     * is equal to the startnode of <code>succ</code>.
+     * Private method to test whether the edge {@code pred<\code> can be followed
+     * by the edge {@code succ}, i.e. the endnode of {@code pred<\code> 
+     * is equal to the startnode of {@code succ}.
      * @param pred first node
      * @param succ second node
-     * @return <code>true</code> if <code>pred<\code> can be followed
-     * by <code>succ</code>, <code>false</code> else.
+     * @return {@code true} if {@code pred<\code> can be followed
+     * by {@code succ}, {@code false} else.
      */
     private boolean isConsistent(Edge pred, Edge succ){
         return pred.end().equals(succ.start());
@@ -107,10 +107,10 @@ public class StaticPath implements Path, Iterable<Edge> {
      * Extends the path by adding an edge at the end.
      * The edge must be consistent to the current last edge of the path,
      * i.e. i.e. the end node of the current last edge must be
-     * equal to the start node of <code>edge</code>,
+     * equal to the start node of {@code edge},
      * else an exception is thrown.
      * @param edge the edge to insert at the end of the path.
-     * @return <code>true</code> if the insertion was successful.
+     * @return {@code true} if the insertion was successful.
      */
     public boolean addLastEdge(Edge edge) {
         if (edges.empty() || isConsistent(edges.last(), edge)) {
@@ -127,9 +127,9 @@ public class StaticPath implements Path, Iterable<Edge> {
      * Extends the path by adding an edge at the start.
      * The edge must be consistent to the current first edge of the path,
      * i.e. i.e. the startnode of the current first edge must be
-     * equal to the endnode of <code>edge</code>.
+     * equal to the endnode of {@code edge}.
      * @param edge the edge to insert at the end of the path.
-     * @return <code>true</code> if the insertion was successfull, <code>false</code> else.
+     * @return {@code true} if the insertion was successfull, {@code false} else.
      */
     public boolean addFirstEdge(Edge edge) {
         if (edges.empty() || isConsistent(edge, edges.first())) {
@@ -143,8 +143,8 @@ public class StaticPath implements Path, Iterable<Edge> {
     /**
      * Shortens the path by removing the last edge.
      * If the path is empty, nothing happens.
-     * @return <code>false</code> if there was no element to be removed,
-     *         <code>true</code> else.
+     * @return {@code false} if there was no element to be removed,
+     *         {@code true} else.
      */
     public boolean removeLastEdge() {
         if (!edges.empty()) {
@@ -157,8 +157,8 @@ public class StaticPath implements Path, Iterable<Edge> {
     /**
      * Shortens the path by removing the first edge.
      * If the path is empty, nothing happens.
-     * @return <code>false</code> if there was no element to be removed,
-     *         <code>true</code> else.
+     * @return {@code false} if there was no element to be removed,
+     *         {@code true} else.
      */
     public boolean removeFirstEdge() {
         if (!edges.empty()) {
@@ -254,8 +254,8 @@ public class StaticPath implements Path, Iterable<Edge> {
     
     /**
      * Clones this path by cloning the sequence of edges (i.e. all edges are
-     * cloned) and creating a new <code>StaticPath</code> with the clone.
-     * @return a <code>StaticPath</code> object with clones of the edges of this object.
+     * cloned) and creating a new {@code StaticPath} with the clone.
+     * @return a {@code StaticPath} object with clones of the edges of this object.
      */
     @Override
     public StaticPath clone(){
@@ -265,12 +265,12 @@ public class StaticPath implements Path, Iterable<Edge> {
     /**
      * Returns whether an object is equal to this static path.
      * The result is true if and only if the argument is not null and is a 
-     * <code>StaticPath</code> object having a sequence of edges that is
+     * {@code StaticPath} object having a sequence of edges that is
      * equal to this path's sequence of edges (i.e. all edges must have
      * the same IDs).
      * @param o object to compare.
-     * @return <code>true</code> if the given object represents a
-     * <code>StaticPath</code> equivalent to this node, <code>false</code> otherwise.
+     * @return {@code true} if the given object represents a
+     * {@code StaticPath} equivalent to this node, {@code false} otherwise.
      */
     @Override
     public boolean equals(Object o) {
@@ -285,7 +285,7 @@ public class StaticPath implements Path, Iterable<Edge> {
     /**
      * Returns the hash code of this static path. 
      * The hash code is equal to the hash code of the contained
-     * <code>ListSequence</code> object for the edges.
+     * {@code ListSequence} object for the edges.
      * @return the hash code of this static path.
      */
     @Override

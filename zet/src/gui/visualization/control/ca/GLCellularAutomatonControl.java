@@ -247,7 +247,7 @@ public class GLCellularAutomatonControl extends AbstractZETVisualizationControl<
 	 * calculates a new progress. The progress will at most reach 99% so that
 	 * after all objects are created a final "Done" message can be submitted.</p>
 	 * <p>Note that before this method can be used in the proper way the private
-	 * variable <code>cellsDone</code> and <code>cellCount</code> should be
+	 * variable {@code cellsDone} and {@code cellCount} should be
 	 * initialized correct. However, it is guaranteed to calculate a value from
 	 * 0 to 99.
 	 */
@@ -262,7 +262,7 @@ public class GLCellularAutomatonControl extends AbstractZETVisualizationControl<
 	 * calculates a new progress. The progress will at most reach 99% so that
 	 * after all objects are created a final "Done" message can be submitted.</p>
 	 * <p>Note that before this method can be used in the proper way the private
-	 * variable <code>cellsDone</code> and <code>cellCount</code> should be
+	 * variable {@code cellsDone} and {@code cellCount} should be
 	 * initialized correct. However, it is guaranteed to calculate a value from
 	 * 0 to 99.
 	 */
@@ -360,7 +360,7 @@ public class GLCellularAutomatonControl extends AbstractZETVisualizationControl<
 
 	/**
 	 * Sets a factor that is multiplicated with the visualization speed. Use
-	 * <code>1.0</code> for normal (real-time) speed.
+	 * {@code 1.0} for normal (real-time) speed.
 	 * @param speedFactor the speed factor
 	 */
 	public void setSpeedFactor( double speedFactor ) {

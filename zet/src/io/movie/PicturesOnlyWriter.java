@@ -43,7 +43,7 @@ public class PicturesOnlyWriter extends MovieWriter {
 
 	/**
 	 * {@inheritDoc}
-	 * @throws java.lang.UnsupportedOperationException because the <code>PicturesOnlyWriter</code> does not support movie encoding.
+	 * @throws java.lang.UnsupportedOperationException because the {@code PicturesOnlyWriter} does not support movie encoding.
 	 */
 	@Override
 	public void create( Vector<String> inputFiles, String filename ) throws java.lang.UnsupportedOperationException {

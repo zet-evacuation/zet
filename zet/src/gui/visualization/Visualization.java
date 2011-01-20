@@ -135,7 +135,7 @@ public class Visualization<U extends DrawableControlable> extends AbstractVisual
 
 	/**
 	 * Sets a new set of texts that are shown as the intro.
-	 * @param texts the <code>ArrayList</code> containing the texts.
+	 * @param texts the {@code ArrayList} containing the texts.
 	 */
 	public void setTexts( ArrayList<TextureFontStrings> texts ) {
 		this.texts = texts;
@@ -494,7 +494,7 @@ public class Visualization<U extends DrawableControlable> extends AbstractVisual
 	 * <p>Enables or disables the movie capture mode and sets the movie resolution
 	 * if recording is enabled and resets back to normal resolution if recording
 	 * is disabled.</p>
-	 * <p>If called with <code>recording</code> set to true the current resolution
+	 * <p>If called with {@code recording} set to true the current resolution
 	 * is stored and rewritten if called with false. Thus automatic resetting of
 	 * the resolution only works if the method is called with true and false
 	 * in this order.</p>

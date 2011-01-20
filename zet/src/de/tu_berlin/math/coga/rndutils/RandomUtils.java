@@ -171,8 +171,8 @@ public class RandomUtils {
 	/**
 	 * Takes a random, binary decision.
 	 * @param probability A number between 0 and 1
-	 * @return <code>true</code> with probability <code>probability</code> and
-	 * <code>false</code> otherwise.
+	 * @return {@code true} with probability {@code probability} and
+	 * {@code false} otherwise.
 	 */
 	public boolean binaryDecision( double probability ) {
 		double randomNumber = getRandomGenerator().nextDouble();
@@ -184,7 +184,7 @@ public class RandomUtils {
 	 * Picks an integer with respect to a discrete distribution.
 	 * @param probabilities A discrete distribution. The entry with index i should
 	 * contain the probability of i
-	 * @return A number between <code>0</code> and <code>probabilities.length-1</code>
+	 * @return A number between {@code 0} and {@code probabilities.length-1}
 	 */
 	public int chooseRandomly( double[] probabilities ) {
 		int probability = 0;
@@ -206,7 +206,7 @@ public class RandomUtils {
 	 * an array of absolute frequencies.
 	 * @param frequencies A discrete distribution. The entry with index i should
 	 * contain the frequency of i
-	 * @return A number between <code>0</code> and <code>probabilities.length-1</code>
+	 * @return A number between {@code 0} and {@code probabilities.length-1}
 	 */
 	public int chooseRandomlyAbsolute( double[] frequencies ) {
 		int sum = 0;

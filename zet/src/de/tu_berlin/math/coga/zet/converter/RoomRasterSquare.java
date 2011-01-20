@@ -34,7 +34,7 @@ import de.tu_berlin.math.coga.common.util.Level;
 import ds.z.TeleportArea;
 
 /**
- * The <code>RoomRasterSquare</code> is a special type of {@link RasterSquare} containing
+ * The {@code RoomRasterSquare} is a special type of {@link RasterSquare} containing
  * additional information for rooms. The inaccessible areas and speed factors for
  * delayed areas are stored. Additionally, it has possibility to hold connections
  * up to four connected squares through doors.
@@ -285,7 +285,7 @@ public class RoomRasterSquare extends RasterSquare {
 	}
 
 	/**
-	 * Defines that the square in direction <code>direction</code>
+	 * Defines that the square in direction {@code direction}
 	 * lies higher, equal or lower.
 	 * @param direction The square in this direction is considered.
 	 * @param level Gives the level of the other square according to this square.
@@ -295,11 +295,11 @@ public class RoomRasterSquare extends RasterSquare {
 	}
 
 	/**
-	 * Returns whether the square in direction <code>direction</code> lies
+	 * Returns whether the square in direction {@code direction} lies
 	 * higher, equal or lower than this square.
 	 * If the level has never been set explicitly, Equal is returned.
 	 * @param direction The square in this direction is considered.
-	 * @return whether the square in direction <code>direction</code> lies
+	 * @return whether the square in direction {@code direction} lies
 	 * higher, equal or lower than this square.
 	 */
 	public Level getLevel( Direction direction ) {
@@ -312,7 +312,7 @@ public class RoomRasterSquare extends RasterSquare {
 
 	/**
 	 * Defines that the current square is not connected to the square that lies in 
-	 * direction <code>direction</code>.
+	 * direction {@code direction}.
 	 * @param direction the direction of the partner square that shall be disconnected
 	 */
 	public void blockDirection( Direction direction ) {
@@ -321,7 +321,7 @@ public class RoomRasterSquare extends RasterSquare {
 
 	/**
 	 * Defines that the current square is connected to the square that lies in 
-	 * direction <code>direction</code>.
+	 * direction {@code direction}.
 	 * @param direction the direction of the partner square that shall be connected
 	 */
 	public void openDirection( Direction direction ) {
@@ -330,10 +330,10 @@ public class RoomRasterSquare extends RasterSquare {
 
 	/**
 	 * Returns whether the square is connected to the neighbor in the
-	 * direction <code>direction</code>.
+	 * direction {@code direction}.
 	 * @param direction the neighbor in this direction is checked
 	 * @return whether the square is connected to the neighbor in the
-	 * direction <code>direction</code>.
+	 * direction {@code direction}.
 	 */
 	public boolean isBlocked( Direction direction ) {
 		return !passable.contains( direction );
@@ -342,9 +342,9 @@ public class RoomRasterSquare extends RasterSquare {
 	@Override
 	/**
 	 * Returns a String containing the coordinates, the accessibility and the speed factor
-	 * of this <code>RoomRasterSquare</code>.
+	 * of this {@code RoomRasterSquare}.
 	 * @return a String containing the coordinates, the accessibility and the speed factor
-	 * of this <code>RoomRasterSquare</code>.
+	 * of this {@code RoomRasterSquare}.
 	 */
 	public String toString() {
 		String result = "[(" + getX() + "," + getY() + ")" + ";";

@@ -38,10 +38,10 @@ import util.DebugFlags;
  * First, every individual is assigned to one path of the flow (of course the
  * given flow must use the same concrete assignment, else this assignment 
  * isn't possible).
- * A <code>EvacPotential</code> is then calculated for each individual. This
+ * A {@code EvacPotential} is then calculated for each individual. This
  * is a special type of potential that does not allow the individuals to
- * leave the path or to cut short. It uses the <code>canPass()</code> method
- * of the <code>CAPathPassabilityChecker</code> object to test whether
+ * leave the path or to cut short. It uses the {@code canPass()} method
+ * of the {@code CAPathPassabilityChecker} object to test whether
  * two cells lie on neighbour nodes of the path.
  */
 public class CAPathPassabilityChecker {
@@ -49,7 +49,7 @@ public class CAPathPassabilityChecker {
 	/** A cellular automaton with start individuals. 
 	 * The checker manages the potentials of the individuals in this ca. */
 	CellularAutomaton ca;
-	/** The potential manager of the cellular automation <code>ca</code.> */
+	/** The potential manager of the cellular automation {@code ca</code.> */
 	PotentialManager pm;
 	/** The bidirectional node cell mapping describes the relation between 
 	 * graph and ca. It consists of a mapping that gives all cells for a 
@@ -59,8 +59,8 @@ public class CAPathPassabilityChecker {
 	 * calculated by a graph algorithm and shall be used to calculate the
 	 * potentials of the individuals. */ 
 	PathBasedFlowOverTime transshipment;
-	/** A mapping that gives a <code>SuccessorNodeMapping</code> for each individual.
-	 * the <code>SuccessorNodeMapping</code> represents the path that has been
+	/** A mapping that gives a {@code SuccessorNodeMapping} for each individual.
+	 * the {@code SuccessorNodeMapping} represents the path that has been
 	 * chosen for the individual. */
 	IdentifiableObjectMapping<Individual, SuccessorNodeMapping> individualSuccessorNodeMapping;
 	/** A mapping that gives a potential for each individual. The potential
@@ -71,7 +71,7 @@ public class CAPathPassabilityChecker {
 	 * Constructs an CAPathPassabilityChecker instance for a given cellular automaton,
 	 * a bidirectional mapping between nodes and cells and a transshipment.
 	 * @param ca CellularAutomaton instance to work with
-	 * @param transshipment a <code>PathBasedFlowOverTime</code> object containing a transshipment.
+	 * @param transshipment a {@code PathBasedFlowOverTime} object containing a transshipment.
 	 * @param nodeCellMapping an object containing a mapping from nodes to lists of cells and containing a mapping from cells to nodes.
 	 */
 	public CAPathPassabilityChecker(CellularAutomaton ca, BidirectionalNodeCellMapping nodeCellMapping, PathBasedFlowOverTime transshipment){
@@ -134,7 +134,7 @@ public class CAPathPassabilityChecker {
 	
 	/**
 	 * Private method to assign a path to each individual.
-	 * The paths are not stored explicitly but as <code>CAPath</code> object.
+	 * The paths are not stored explicitly but as {@code CAPath} object.
 	 */
 	private void calculateIndivualPathMapping(){
 		// get individuals from ca
@@ -185,11 +185,11 @@ public class CAPathPassabilityChecker {
 	}
 
 	/**
-	 * Private method to calculate the <code>EvacPotential</code> for a given individual.
+	 * Private method to calculate the {@code EvacPotential} for a given individual.
 	 * The last node of this individuals path is also needed.
 	 * @param i The individual for which the potential shall be calculated.
 	 * @param exitNode The last node on the path of this individual.
-	 * @return An <code>EvacPotential</code> object for the given individual, calculated with the
+	 * @return An {@code EvacPotential} object for the given individual, calculated with the
 	 * cells of the exitNode as destination.
 	 */
 	private EvacPotential calculateIndividualPotential(Individual i, Node exitNode){

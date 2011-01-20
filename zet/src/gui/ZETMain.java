@@ -57,7 +57,7 @@ import zet.gui.GUILocalization;
 import zet.gui.JEditor;
 
 /**
- * The <code>ZETMain</code> class is the main entry for the graphical user
+ * The {@code ZETMain} class is the main entry for the graphical user
  * interface of the evacuation tool. It creates an editor window and displays
  * an empty project.
  * @author Jan-Philipp Kappmeier
@@ -97,7 +97,7 @@ public class ZETMain {
 	private static boolean loadLast = false;
 	
 	/**
-	 * Creates a new instance of <code>ZETMain</code>
+	 * Creates a new instance of {@code ZETMain}
 	 */
 	private ZETMain() { }
 
@@ -449,7 +449,7 @@ public class ZETMain {
 
 	/**
 	 * Indicates whether the program is in debug mode, or not.
-	 * @return <code>true</code> if debug mode is on, <code>false</code> otherwise.
+	 * @return {@code true} if debug mode is on, {@code false} otherwise.
 	 */
 	public static boolean isDebug() {
 		return debug;

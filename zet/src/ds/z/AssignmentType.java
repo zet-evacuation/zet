@@ -156,7 +156,7 @@ public class AssignmentType implements Serializable {
 	 * Sets a new value for the standradnumber of evacuees of this AssignmentType.
 	 * It has to be greater or equal 0. If it is less than 0, the number of
 	 * evacuees is set to 0.
-	 * @param evacuees the default number of evacuees of this <code>AssignmentType</code>.
+	 * @param evacuees the default number of evacuees of this {@code AssignmentType}.
 	 * @throws java.lang.IllegalArgumentException if the standard number of evacuees is less than 0.
 	 */
 	public void setDefaultEvacuees( int evacuees ) throws IllegalArgumentException {

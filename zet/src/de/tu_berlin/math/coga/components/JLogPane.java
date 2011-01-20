@@ -27,7 +27,7 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 
 /**
- * The class <code>JLogPane</code> is a panel giving out formatted log messages.
+ * The class {@code JLogPane} is a panel giving out formatted log messages.
  * @author Jan-Philipp Kappmeier
  */
 public class JLogPane extends JPanel {
@@ -36,7 +36,7 @@ public class JLogPane extends JPanel {
 	Log log;
 
 	/**
-	 * Creates a new instance of <code>JLogPane</code>.
+	 * Creates a new instance of {@code JLogPane}.
 	 */
 	public JLogPane( Log log ) {
 		double size[][] = // Columns

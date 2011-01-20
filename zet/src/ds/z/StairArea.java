@@ -42,7 +42,7 @@ public class StairArea extends Area<Edge> {
 	private double speedFactorUp;
 
 	/**
-	 * Constucts a new <code>StairArea</code> with default <code>speedFactors</code>
+	 * Constucts a new {@code StairArea} with default {@code speedFactors}
 	 * and without marked levels.
 	 * 
 	 * @param room The room to which the area belongs
@@ -52,7 +52,7 @@ public class StairArea extends Area<Edge> {
 	}
 
 	/**
-	 * Constucts a new <code>StairArea</code> with default <code>speedFactors</code>
+	 * Constucts a new {@code StairArea} with default {@code speedFactors}
 	 * @param room The room to which the area belongs
 	 * @param lowerLevelStart The plan point at which the edge progression starts that
 	 * constitutes the lower part of the stair

@@ -30,7 +30,7 @@ import java.util.Iterator;
 import de.tu_berlin.math.coga.graph.io.xml.FlowVisualization;
 
 /**
- * The <code>GLGraphFloorControl</code> class represents an floor of the
+ * The {@code GLGraphFloorControl} class represents an floor of the
  * graph network in an MVC-design. It guarantees that the nodes belonging to
  * the floor are created and submitted to the view object.
  * @author Jan-Philipp Kappmeier
@@ -39,8 +39,8 @@ import de.tu_berlin.math.coga.graph.io.xml.FlowVisualization;
 public class GLGraphFloorControl extends AbstractZETVisualizationControl<GLNodeControl, GLGraphFloor, GLFlowGraphControl> {
 
 	/**
-	 * Creates a new instance of <code>GLGraphFloorControl</code>. Therefore for
-	 * any node in the list <code>nodesOnTheFloor</code> the related control and
+	 * Creates a new instance of {@code GLGraphFloorControl}. Therefore for
+	 * any node in the list {@code nodesOnTheFloor} the related control and
 	 * visualization objects are created.
 	 * @param graphVisResult the graph visualization results
 	 * @param nodesOnTheFloor the nodes that lie on this floor

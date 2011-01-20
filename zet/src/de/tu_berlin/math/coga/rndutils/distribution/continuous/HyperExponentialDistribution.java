@@ -10,8 +10,8 @@ import de.tu_berlin.math.coga.rndutils.distribution.ContinousDistribution;
 
 /**
  * Represents a hyper-exponential distribution based on two exponential
- * distributions and a probability of choosing the first one of <code>p</code>
- * and the second one of <code>1-p</code>.
+ * distributions and a probability of choosing the first one of {@code p}
+ * and the second one of {@code 1-p}.
  * @author Jan-Philipp Kappmeier
  */
 public class HyperExponentialDistribution extends ContinousDistribution {
@@ -20,7 +20,7 @@ public class HyperExponentialDistribution extends ContinousDistribution {
 	private ExponentialDistribution e2;
 	
 	/**
-   * Creates a new instance of <code>HyperExponentialDistributionstribution</code>.
+   * Creates a new instance of {@code HyperExponentialDistributionstribution}.
 	 * with parameters \lambda_1 = 1, \lambda_2 = 2 and p = 0.5.
    */
   public HyperExponentialDistribution() {
@@ -28,7 +28,7 @@ public class HyperExponentialDistribution extends ContinousDistribution {
   }
   
   /**
-   * Creates a new instance of <code>HyperExponentialDistribution</code>.
+   * Creates a new instance of {@code HyperExponentialDistribution}.
    * @param lambda1 the parameter describing the failure rate of exponential distribution 1
    * @param lambda2 the parameter describing the failure rate of exponential distribution 2
 	 * @param p the probability of choosing exponential distribution 1
@@ -90,7 +90,7 @@ public class HyperExponentialDistribution extends ContinousDistribution {
 	}
 
 	/**
-	 * Returns the parameter <code>p</code> that describes the probability of
+	 * Returns the parameter {@code p} that describes the probability of
 	 * choosing exponential distribution 1.
 	 * @return the parameter p
 	 */
@@ -99,7 +99,7 @@ public class HyperExponentialDistribution extends ContinousDistribution {
 	}
 
 	/**
-	 * Sets the parameter <code>p</code> that describes the probability of
+	 * Sets the parameter {@code p} that describes the probability of
 	 * choosing exponential distribution 1.
 	 * @param p
 	 * @throws java.lang.IllegalArgumentException if p is smaller than zero or greater than one
@@ -127,8 +127,8 @@ public class HyperExponentialDistribution extends ContinousDistribution {
 	
 	/**
 	 * Returns the next hyper-exponential distributed value. The random value is
-	 * calculated using two exponential distributions with probability <code>p</code> and
-	 * <code>1-p</code>.
+	 * calculated using two exponential distributions with probability {@code p} and
+	 * {@code 1-p}.
 	 * @return a hyper-exponentially distributed random value less than the maximal value.
 	 */
 	@Override

@@ -25,10 +25,10 @@ import java.util.LinkedList;
 import java.util.Iterator;
 
 /**
- * The <code>ListSequence</code> class represents a sequence of 
- * <code>Identifiable</code> objects. They are ordered by the order of their
+ * The {@code ListSequence} class represents a sequence of 
+ * {@code Identifiable} objects. They are ordered by the order of their
  * adding to the list sequence. 
- * The class implements the interface <code>IdentifiableCollection</code> 
+ * The class implements the interface {@code IdentifiableCollection} 
  * and thus provides all specified methods. Anyway, the class is best used
  * by only adding and deleting elements without asking for containedness of 
  * elements with specified IDs or removing arbitrary elements.
@@ -36,15 +36,15 @@ import java.util.Iterator;
 public class ListSequence<E extends Identifiable> extends LinkedList<E> implements IdentifiableCollection<E> {
 
     /**
-     * Creates a <code>ListSequence</code> object without elements.
+     * Creates a {@code ListSequence} object without elements.
      */
     public ListSequence() {
         super();
     }
 
     /**
-     * Creates a <code>ListSequence</code> object containing the elements
-     * contained in <code>c</code>. The contained elements are not cloned.
+     * Creates a {@code ListSequence} object containing the elements
+     * contained in {@code c}. The contained elements are not cloned.
      * @param c
      */
     public ListSequence(Collection<? extends E> c) {
@@ -52,9 +52,9 @@ public class ListSequence<E extends Identifiable> extends LinkedList<E> implemen
     }    
     
     /**
-     * Adds an element to the <code>ListSequence</code> and returns
+     * Adds an element to the {@code ListSequence} and returns
      * whether the insertion was successful.
-     * The element will be added at the end of the <code>ListSequence</code>. 
+     * The element will be added at the end of the {@code ListSequence}. 
      * @param element element to be add.
      */
     @Override
@@ -63,10 +63,10 @@ public class ListSequence<E extends Identifiable> extends LinkedList<E> implemen
     }
     
     /**
-     * Removes and returns the last element of this <code>ListSequence</code>.
+     * Removes and returns the last element of this {@code ListSequence}.
      * The order of the elements depends on the order of their addings.
-     * If the <code>ArraySet</ArraySet> is empty, nothing happens.
-     * @return the last element of this <code>ListSequence</code>.
+     * If the {@code ArraySet</ArraySet> is empty, nothing happens.
+     * @return the last element of this {@code ListSequence}.
      */
     @Override
     public E removeLast(){
@@ -74,8 +74,8 @@ public class ListSequence<E extends Identifiable> extends LinkedList<E> implemen
     }
     
     /**
-     * Removes the first element in this <code>ListSequence</code>
-     * having the same ID as <code>element</code>.
+     * Removes the first element in this {@code ListSequence}
+     * having the same ID as {@code element}.
      * @param element the element to be removed.
      */
     public void remove(E element){
@@ -93,34 +93,34 @@ public class ListSequence<E extends Identifiable> extends LinkedList<E> implemen
     }
     
     /**
-     * Returns whether the element is contained in this <code>ListSequence</code>.
+     * Returns whether the element is contained in this {@code ListSequence}.
      * @param element the element that shall be checked for containedness.
-     * @return whether the element <code>element</code> contained in this 
-     *         <code>ListSequence</code>.
+     * @return whether the element {@code element} contained in this 
+     *         {@code ListSequence}.
      */
     public boolean contains(E element) {
         return super.contains(element);
     }
     
     /**
-     * Returns whether this <code>ListSequence</code> is empty. Runtime O(1).
-     * @return whether this <code>ListSequence</code> is empty
+     * Returns whether this {@code ListSequence} is empty. Runtime O(1).
+     * @return whether this {@code ListSequence} is empty
      */
     public boolean empty(){
         return (super.isEmpty());
     }
 
     /**
-     * Returns the predecessor of the element <code>element</code>.
-     * Returns null if the  <code>element</code> is the first in the 
-     * <code>ListSequence</code> or if it is not stored in the 
-     * <code>ListSequence</code>.
+     * Returns the predecessor of the element {@code element}.
+     * Returns null if the  {@code element} is the first in the 
+     * {@code ListSequence} or if it is not stored in the 
+     * {@code ListSequence}.
      * The order of the elements does not regard the IDs but the 
      * order of their addings.
      * @param element the element which predecessor is wanted
-     * @return the predecessor of <code>element<\code> or null if the element 
-     * is the first in the <code>ListSequence</code> or is not contained 
-     * in the <code>ListSequence</code>.
+     * @return the predecessor of {@code element<\code> or null if the element 
+     * is the first in the {@code ListSequence} or is not contained 
+     * in the {@code ListSequence}.
      */
     public E predecessor(E element) {
         int i = (super.indexOf(element));
@@ -132,16 +132,16 @@ public class ListSequence<E extends Identifiable> extends LinkedList<E> implemen
     
         
     /**
-     * Returns the successor of the element <code>element</code>.
-     * Returns null if the  <code>element</code> is the last in the 
-     * <code>ListSequence</code> or if it is not stored in the 
-     * <code>ListSequence</code>.
+     * Returns the successor of the element {@code element}.
+     * Returns null if the  {@code element} is the last in the 
+     * {@code ListSequence} or if it is not stored in the 
+     * {@code ListSequence}.
      * The order of the elements does not regard the IDs but the 
      * order of their addings.
      * @param element the element which successor is wanted
-     * @return the successor of <code>element<\code> or null if the element 
-     * is the last in the <code>ListSequence</code> or is not contained 
-     * in the <code>ListSequence</code>.
+     * @return the successor of {@code element<\code> or null if the element 
+     * is the last in the {@code ListSequence} or is not contained 
+     * in the {@code ListSequence}.
      */
     public E successor(E element) {
         int i = (super.indexOf(element));
@@ -204,8 +204,8 @@ public class ListSequence<E extends Identifiable> extends LinkedList<E> implemen
 
     /**
      * Clones this list sequence by cloning the elements and creating a new 
-     * <code>ListSequence</code> object with the clones.
-     * @return a <code>ListSequence</code> object with clones of the elements
+     * {@code ListSequence} object with the clones.
+     * @return a {@code ListSequence} object with clones of the elements
      *         of this object.
      */
     @Override
@@ -220,12 +220,12 @@ public class ListSequence<E extends Identifiable> extends LinkedList<E> implemen
     /**
      * Returns whether an object is equal to this list sequence.
      * The result is true if and only if the argument is not null and is a
-     * <code>ListSequence</code> object including the same number of
+     * {@code ListSequence} object including the same number of
      * elements where all the elements are pairwise equal according
-     * to their <code>equals</code>-Method.
+     * to their {@code equals}-Method.
      * @param o object to compare.
-     * @return <code>true</code> if the given object represents a
-     * <code>ListSequence</code> equivalent to this object, <code>false</code> otherwise.
+     * @return {@code true} if the given object represents a
+     * {@code ListSequence} equivalent to this object, {@code false} otherwise.
      */
     @Override
     public boolean equals(Object o) {
@@ -251,8 +251,8 @@ public class ListSequence<E extends Identifiable> extends LinkedList<E> implemen
      * The hash code is calculated by computing the arithmetic mean
      * of the hash codes of the contained elements.
      * Therefore the hash code is equal for list sequences equal according to
-     * the <code>equals</code>-method, but not necessarily different
-     * for list sequences different according to the <code>equals</code>-method.
+     * the {@code equals}-method, but not necessarily different
+     * for list sequences different according to the {@code equals}-method.
      * If hashing of list sequences is heavily used,
      * the implementation of this method should be reconsidered.
      * @return the hash code of this node.

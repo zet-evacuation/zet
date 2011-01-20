@@ -30,13 +30,13 @@ import ds.ca.InitialConfiguration;
  * in the correct order. To do so, we provide a "current time step" in the
  * recording. You can move this time step forward and backwards in the
  * recording to see the actions at different points in time. The time step
- * is initialized with <code>-1</code>, yet the recording starts at time 
- * <code>0</code>! This enables you to iterate through all time steps by 
- * repeatedly calling <code>nextActions()</code> (in particular, you first get
+ * is initialized with {@code -1}, yet the recording starts at time 
+ * {@code 0}! This enables you to iterate through all time steps by 
+ * repeatedly calling {@code nextActions()} (in particular, you first get
  * the actions at time 0 if you do so!).
  * 
  * You can serialize an instance of this class to disc with the 
- * <code>CAVisualResultsParser</code>. Thus, you can use this class
+ * {@code CAVisualResultsParser}. Thus, you can use this class
  * to store simulation results.
  *  
  * @author Daniel Pluempe
@@ -62,7 +62,7 @@ public class VisualResultsRecording{
     private long maxDynamicPotential = -1;
     
     /**
-     * Creates a new <code>VisualResultsRecording</code> instance. 
+     * Creates a new {@code VisualResultsRecording} instance. 
      * @param initialConfig The initial configuration of a cellular automaton
      * @param actions A vector which contains a vector of actions for every
      * time step. 
@@ -87,8 +87,8 @@ public class VisualResultsRecording{
     /**
      * Tells you whether there is a next time step (i.e. if you
      * have not yet reached the end of the recording).
-     * @return <code>true</code> if the recording extends
-     * to the next time step or <code>false</code> otherwise.
+     * @return {@code true} if the recording extends
+     * to the next time step or {@code false} otherwise.
      */
     public boolean hasNext(){
         return (curTime < actions.size() -1);
@@ -97,8 +97,8 @@ public class VisualResultsRecording{
     /**
      * Tells you whether there is a previous time step (i.e. if you
      * have not yet reached the start of the recording).
-     * @return <code>true</code> if the recording extends
-     * to the previous time step or <code>false</code> otherwise.
+     * @return {@code true} if the recording extends
+     * to the previous time step or {@code false} otherwise.
      */  
     public boolean hasPrevious(){
         return (curTime > 0);
@@ -107,7 +107,7 @@ public class VisualResultsRecording{
     /**
      * Tells you the current time step.
      * @return The current time step. The time step is initialized with
-     * <code>-1</code>
+     * {@code -1}
      */
     public int getCurTime(){
         return curTime;
@@ -115,7 +115,7 @@ public class VisualResultsRecording{
     
     /** 
      * Rewinds the recording to its start, i.e. resets the current time step 
-     * to <code>-1</code>.
+     * to {@code -1}.
      */
     public void rewind(){
         //if(actions.size() > 0){
@@ -125,14 +125,14 @@ public class VisualResultsRecording{
     
     /** 
      * Fast forwards the recording to its end, i.e. sets the current time step 
-     * to <code>length-1</code>.
+     * to {@code length-1}.
      */
     public void forward(){
         curTime = Math.max(0,actions.size() - 1);
     }
     
     /**
-     * Sets the current time step to <code>time</code>.
+     * Sets the current time step to {@code time}.
      * @param time The time you want to jump to.
      */
     public void jumpToTime(int time){
@@ -163,8 +163,8 @@ public class VisualResultsRecording{
     
     /**
      * Gets all actions for the current time step in a vector. Note that
-     * the current time step is initialized with <code>-1</code> so you need
-     * to either call <code>jumpToTime()</code> or <code>nextActions()</code>
+     * the current time step is initialized with {@code -1} so you need
+     * to either call {@code jumpToTime()} or {@code nextActions()}
      * at least once before you can use this method.
      * 
      * @return A vector with all actions recorded at the current time
@@ -196,7 +196,7 @@ public class VisualResultsRecording{
     
     /**
      * Removes all actions of the given type from the current time step of the
-     * recording and returns all removed actions in a <code>Vector</code>
+     * recording and returns all removed actions in a {@code Vector}
      * @param <T> An action type. All removed actions will be a sub-type of this type.
      * @param actionType All actions of this type will be removed. Must be a sub-type of T.
      * @return All actions that have been removed in the same order as they were in the

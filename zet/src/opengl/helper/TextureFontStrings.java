@@ -38,17 +38,17 @@ public class TextureFontStrings {
 	private double width;
 	/** Decides wheather the string is used in an orthogonal view, or not (otherwise it is perspective). */
 	private final boolean ortho;
-	/** Decides the <code>x</code>-position of a line. */
+	/** Decides the {@code x}-position of a line. */
 	private ArrayList<Double> x;
-	/** Decides the <code>y</code>-position of a line. */
+	/** Decides the {@code y}-position of a line. */
 	private ArrayList<Double> y;
 	/** Decides wheather a line is bold, or not. */
 	private ArrayList<Boolean> bold;
-	/** Defines the default <code>x</code>-position of a line. */
+	/** Defines the default {@code x}-position of a line. */
 	private double xoffset = 0;
 
 	/**
-	 * Creates a new <code>TextureFontStrings</code> object.
+	 * Creates a new {@code TextureFontStrings} object.
 	 * @param ortho specifies if an orthogonal view is used
 	 */
 	public TextureFontStrings( boolean ortho ) {
@@ -95,25 +95,25 @@ public class TextureFontStrings {
 	}
 
 	/**
-	 * Returns the <code>x</code>-position of the line
+	 * Returns the {@code x}-position of the line
 	 * @param i the index of the string
-	 * @return the <code>x</code>-position of the line
+	 * @return the {@code x}-position of the line
 	 */
 	public float getX( int i ) {
 		return x.get( i ).floatValue();
 	}
 
 	/**
-	 * Returns the <code>y</coide>-position of the line.
+	 * Returns the {@code y</coide>-position of the line.
 	 * @param i the index of the string
-	 * @return the <code>y</coide>-position of the line
+	 * @return the {@code y</coide>-position of the line
 	 */
 	public float getY( int i ) {
 		return y.get( i ).floatValue();
 	}
 
 	/**
-	 * Sets a new <code>y</code>-position to a specified text element.
+	 * Sets a new {@code y}-position to a specified text element.
 	 * @param i the index of the text
 	 * @param y the new position
 	 */
@@ -124,7 +124,7 @@ public class TextureFontStrings {
 	/**
 	 * Returns if the iondicated line is drawn bold.
 	 * @param i specifies the line
-	 * @return <code>true</code> if the specified line is drawn bold, <code>false</code> otherwise
+	 * @return {@code true} if the specified line is drawn bold, {@code false} otherwise
 	 */
 	public boolean getBold( int i ) {
 		return bold.get( i );
@@ -190,8 +190,8 @@ public class TextureFontStrings {
 	}
 
 	/**
-	 * Returns the string represented by this <code>TextureFontStrings</code>.
-	 * @return the string represented by this <code>TextureFontStrings</code>
+	 * Returns the string represented by this {@code TextureFontStrings}.
+	 * @return the string represented by this {@code TextureFontStrings}
 	 */
 	@Override
 	public String toString() {

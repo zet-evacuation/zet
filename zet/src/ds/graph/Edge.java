@@ -22,7 +22,7 @@ package ds.graph;
 import com.thoughtworks.xstream.annotations.XStreamAsAttribute;
 
 /**
- * The <code>Edge</code> class represents a edge in a graph.
+ * The {@code Edge} class represents a edge in a graph.
  * An edge is identifiable, e.g. the class implements the Interface 
  * {@link Identifiable}.
  * This means that every edge has an ID that can be used for storing edges
@@ -49,13 +49,13 @@ public class Edge implements Identifiable {
     private Node end;
 
     /**
-     * Constructs a new <code>Edge</code> object with a given given start-
+     * Constructs a new {@code Edge} object with a given given start-
      * and end node and given ID. Runtime O(1).
      * @param id the ID of the new edge.
      * @param start the start node of the new  edge.
      * @param end the end node of the new  edge.
-     * @exception NullPointerException if <code>start</code> or 
-     * <code>end</code> is null.
+     * @exception NullPointerException if {@code start} or 
+     * {@code end} is null.
      */
     public Edge(int id, Node start, Node end) {
         if (start == null || end == null) {
@@ -102,10 +102,10 @@ public class Edge implements Identifiable {
     }
 
     /**
-     * Given a node <code>node</code>, this method returns the other node
-     * (the node that is not <code>node</code>).
+     * Given a node {@code node}, this method returns the other node
+     * (the node that is not {@code node}).
      * @param node the node this method shall give the opposite of.
-     * @return the opposite node to <code>node</code>.
+     * @return the opposite node to {@code node}.
      */
     public Node opposite(Node node) {
         if (node == start && node != end) {
@@ -149,10 +149,10 @@ public class Edge implements Identifiable {
     /**
      * Returns whether an object is equal to this edge.
      * The result is true if and only if the argument is not null and is an 
-     * <code>Edge></code> object having the same ID as this edge.
+     * {@code Edge>} object having the same ID as this edge.
      * @param o the object to compare.
-     * @return <code>true</code> if the given object represents an
-     * <code>Edge</code> equivalent to this edge, <code>false</code> otherwise.
+     * @return {@code true} if the given object represents an
+     * {@code Edge} equivalent to this edge, {@code false} otherwise.
      */
     @Override
     public boolean equals(Object o) {
@@ -165,7 +165,7 @@ public class Edge implements Identifiable {
     }
 
     /**
-     * Returns a new <code>Edge</code> with the same ID as this edge.
+     * Returns a new {@code Edge} with the same ID as this edge.
      * @return a clone of this edge (a edge with the same edgeID, not the same object).
      */
     @Override

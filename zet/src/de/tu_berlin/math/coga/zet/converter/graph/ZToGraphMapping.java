@@ -29,7 +29,7 @@ import ds.graph.NodeRectangle;
 import java.awt.Shape;
 
 /**
- * The <code>ZToGraphMapping</code> class stores a mapping between an
+ * The {@code ZToGraphMapping} class stores a mapping between an
  * evacuation problem based on the Z format and an evacuation problem based on 
  * graphs. This mapping is necessary to transfer results from graph algorithms
  * back to the Z format.

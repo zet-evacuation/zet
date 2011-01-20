@@ -167,7 +167,7 @@ public class JEditor extends JFrame implements Localized, EventListener<Progress
 	private GUIControl guiControl;
 
 	/**
-	 * Creates a new instance of <code>JEditor</code>. Sets the editor position
+	 * Creates a new instance of {@code JEditor}. Sets the editor position
 	 * and size, loads file icon, tool bars and menus.
 	 * @param guiControl the control class for the ZET GUI
 	 * @param zcontrol the control class for the Z-model
@@ -500,7 +500,7 @@ public class JEditor extends JFrame implements Localized, EventListener<Progress
 	}
 
 	/**
-	 * Shows a <code>JToolBar</code> and hides all others.
+	 * Shows a {@code JToolBar} and hides all others.
 	 * @param toolBar the tool bar that is shown
 	 */
 	private void showToolBar( JToolBar newToolbar ) {

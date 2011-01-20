@@ -52,7 +52,7 @@ public class NormalDistribution extends ContinousDistribution {
   }
   
   /**
-   * Creates a new instance of <code>NormalDistribution</code> with variance 1 and expected value 0. This represents a standard normally
+   * Creates a new instance of {@code NormalDistribution} with variance 1 and expected value 0. This represents a standard normally
    * distributed random variable. The limits are automatically set to -3 and 3, all results lie in this interval with a
    * probability of 99%.
    */

@@ -48,14 +48,14 @@ public class ChangePotentialInsufficientAdvancementRule extends AbstractPotentia
 	@Override
 	protected void onExecute( Cell cell ) {
 
-		// Get the potential of the individual on the <code>cell</code> as well as some other concerning constants of the individual
+		// Get the potential of the individual on the {@code cell} as well as some other concerning constants of the individual
 		Individual individual = cell.getIndividual();
 		StaticPotential sp = individual.getStaticPotential();
 		int cellPotential = sp.getPotential( cell );
 		int cellCountToChange = individual.getCellCountToChange();
 		int memoryIndex = individual.getMemoryIndex();
 
-		// Update the <code>potentialMemory</code>        
+		// Update the {@code potentialMemory}        
 		if( memoryIndex == 0 )
 			individual.setPotentialMemoryStart( new PotentialValueTuple( cellPotential, sp ) );
 
@@ -64,7 +64,7 @@ public class ChangePotentialInsufficientAdvancementRule extends AbstractPotentia
 
 			/**
 			 * Calibratingfactor - 
-			 * The smaller <code>epsilon</code>, the lower the probability of a potential-change
+			 * The smaller {@code epsilon}, the lower the probability of a potential-change
 			 */
 			int epsilon = 10;
 
@@ -73,7 +73,7 @@ public class ChangePotentialInsufficientAdvancementRule extends AbstractPotentia
 			int potentialDifference = individual.getPotentialMemoryStart().getLengthOfWay() - individual.getPotentialMemoryEnd().getLengthOfWay();
 			if( (potentialDifference < epsilon) && (sp == individual.getPotentialMemoryStart().getStaticPotential()) ) {
 
-				// Calculate the second best Potential and the associated potential value on the <code>cell</code>
+				// Calculate the second best Potential and the associated potential value on the {@code cell}
 				ArrayList<StaticPotential> staticPotentials = new ArrayList<StaticPotential>();
 				staticPotentials.addAll( this.caController().getCA().getPotentialManager().getStaticPotentials() );
 				StaticPotential minWayLengthPotential = sp;

@@ -28,10 +28,10 @@ import java.io.OutputStream;
 import java.io.PrintStream;
 
 /**
- * <p>The class <code>DebugStream</code> mirrors outputs on an {@link OutputStream}
+ * <p>The class {@code DebugStream} mirrors outputs on an {@link OutputStream}
  * to another {@link PrintStream}. This can be used to write both, file output
  * and command line output at the same time using the default
- * <code>System.out</code></p>
+ * {@code System.out}</p>
  * <p>All texts are also sent to an {@link EventServer} and thus can be
  * received by some other logging components such as {@link gui.components.JLogPane}.</p>
  * @author Jan-Philipp Kappmeier
@@ -43,7 +43,7 @@ public class DebugStream extends PrintStream {
 	String message = "";
 
 	/**
-	 * Creates messageType new instance of <code>DebugStream</code>.
+	 * Creates messageType new instance of {@code DebugStream}.
 	 * @param out the outputstream that is used
 	 */
 	public DebugStream( OutputStream out ) {
@@ -51,7 +51,7 @@ public class DebugStream extends PrintStream {
 	}
 
 	/**
-	 * Creates messageType new instance of <code>DebugStream</code>.
+	 * Creates messageType new instance of {@code DebugStream}.
 	 * @param out the outputstream that is used
 	 * @param m the type of messages handeled by this debug stream.
 	 */

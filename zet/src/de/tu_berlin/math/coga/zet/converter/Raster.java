@@ -29,12 +29,12 @@ import java.util.List;
 import zet.util.ConversionTools;
 
 /**
- * The <code>Raster</code> class provides basic rasterization of polygonal objects. These
+ * The {@code Raster} class provides basic rasterization of polygonal objects. These
  * object have to be of the type {@link ds.z.PlanPolygon}. The bounding of the polygon is
  * divided into squares, which can be inside or outside the polygon or intersect, if they
  * are not completely inside or outside.
  * <p>The type of the squares is defined through the generic parameter, which has to be
- * of the type {@link RasterSquare} or any subtypes. A <code>RasterSquare</codes> does all
+ * of the type {@link RasterSquare} or any subtypes. A {@code RasterSquare</codes> does all
  * checks itself and calculates all necessary values. Thus, new features can be provided
  * by a subclass.</p>
  * @param <T> the type of the {@link RasterSquare} objects that is used for rasterization
@@ -227,10 +227,10 @@ public class Raster<T extends RasterSquare, P extends PlanPolygon> {
 	}
 
 	/**
-	 * Returns a String containing the information about every <code>RasterSquare</code>
-	 * of this <code>Raster</code>.
-	 * @return a String containing the information about every <code>RasterSquare</code>
-	 * of this <code>Raster</code>.
+	 * Returns a String containing the information about every {@code RasterSquare}
+	 * of this {@code Raster}.
+	 * @return a String containing the information about every {@code RasterSquare}
+	 * of this {@code Raster}.
 	 */
 	@Override
 	public String toString() {
@@ -266,16 +266,16 @@ public class Raster<T extends RasterSquare, P extends PlanPolygon> {
 	}
 
 	/**
-	 * Returns the <code>x</code>-coordinate of the upper left corner of this raster in the global coordinate system. 
-	 * @return the <code>x</code>-coordinate of the upper left corner of this raster in the global coordinate system.
+	 * Returns the {@code x}-coordinate of the upper left corner of this raster in the global coordinate system. 
+	 * @return the {@code x}-coordinate of the upper left corner of this raster in the global coordinate system.
 	 */
 	public int getXOffset() {
 		return p.getxOffset();
 	}
 
 	/**
-	 * Returns the <code>y</code>-coordinate of the upper left corner of this raster in the global coordinate system. 
-	 * @return the <code>y</code>-coordinate of the upper left corner of this raster in the global coordinate system.
+	 * Returns the {@code y}-coordinate of the upper left corner of this raster in the global coordinate system. 
+	 * @return the {@code y}-coordinate of the upper left corner of this raster in the global coordinate system.
 	 */
 	public int getYOffset() {
 		return p.getyOffset();

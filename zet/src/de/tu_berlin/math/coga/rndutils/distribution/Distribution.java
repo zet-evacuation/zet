@@ -19,7 +19,7 @@ public abstract class Distribution<T extends Number> implements Cloneable {
 	protected T max;
 	
 	/**
-	 * Creates a new instance of <code>Distribution</code>
+	 * Creates a new instance of {@code Distribution}
 	 * @param min the minimal value that can be taken by the random variable
 	 * @param max the maximal value that can be taken by the random variable
 	 * @throws java.lang.IllegalArgumentException if min is smaller than max

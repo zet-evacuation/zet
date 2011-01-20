@@ -9,7 +9,7 @@ import de.tu_berlin.math.coga.rndutils.RandomUtils;
 import de.tu_berlin.math.coga.rndutils.distribution.DiscreteDistribution;
 
 /**
- * The class <code>GeometricDistribution</code> represents a geometrically
+ * The class {@code GeometricDistribution} represents a geometrically
  * distributed random variable.
  * @author Jan-Philipp Kappmeier
  */
@@ -19,7 +19,7 @@ public class GeometricDistribution extends DiscreteDistribution {
 	private double q;
 
 	/**
-	 * Creates a new instance of <code>GeometricDistribution</code>.
+	 * Creates a new instance of {@code GeometricDistribution}.
 	 * @param min the minimal value for the random value
 	 * @param max the maximal value for the random value
 	 */
@@ -28,7 +28,7 @@ public class GeometricDistribution extends DiscreteDistribution {
 	}
 
 	/**
-	 * Creates a new instance of <code>GeometricDistribution</code>.
+	 * Creates a new instance of {@code GeometricDistribution}.
 	 * @param min the minimal value for the random value
 	 * @param max the maximal value for the random value
 	 * @param p the parameter for the distribution the 

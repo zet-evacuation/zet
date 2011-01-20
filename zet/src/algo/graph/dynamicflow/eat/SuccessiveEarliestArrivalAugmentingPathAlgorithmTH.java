@@ -32,8 +32,8 @@ public class SuccessiveEarliestArrivalAugmentingPathAlgorithmTH extends
 		TransshipmentWithTimeHorizon {
 	
 	/**
-	 * Creates a new <code>SuccessiveEarliestArrivalAugmentingPathAlgorithmTH</code> object
-	 * with the given parameters. The method <code>runAlgorithm()</code> tests a time horizon and 
+	 * Creates a new {@code SuccessiveEarliestArrivalAugmentingPathAlgorithmTH} object
+	 * with the given parameters. The method {@code runAlgorithm()} tests a time horizon and 
 	 * finds an earliest arrival transshipment for the time horizon, if possible.
 	 * @param network The original network.
 	 * @param transitTimes The transit times of all edges in the network.
@@ -72,7 +72,7 @@ public class SuccessiveEarliestArrivalAugmentingPathAlgorithmTH extends
 	}
 
 	/**
-	 * As we do not use the original <code>runAlgorithm()</code> method, <code>transshipmentWithTimeHorizon</code>
+	 * As we do not use the original {@code runAlgorithm()} method, {@code transshipmentWithTimeHorizon}
 	 * is never called. Thus it's only a stub.
 	 */
 	@Override

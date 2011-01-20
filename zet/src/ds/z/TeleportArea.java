@@ -19,12 +19,12 @@ public class TeleportArea extends Area<Edge> {
 	/** The evacuation area representing the exit that the pearsons this rooms should use. */
 	private TeleportArea target = null;
  	@XStreamAsAttribute()
-	/** The name of the <code>EvacuationArea</code>. */
+	/** The name of the {@code EvacuationArea}. */
 	private String name = "TeleportArea";
 
 
 	/**
-	 * Constucts a new <code>DelayArea</code> with the default <code>speedFactor</code>
+	 * Constucts a new {@code DelayArea} with the default {@code speedFactor}
 	 * provided by the specified {@link DelayType}.
 	 *
 	 * @param room to which the area belongs
@@ -36,7 +36,7 @@ public class TeleportArea extends Area<Edge> {
 	}
 
 	/**
-	 * Returns the exit assigned to this <code>AssignmentArea</code>
+	 * Returns the exit assigned to this {@code AssignmentArea}
 	 * @return the assigned exit
 	 */
 	public EvacuationArea getExitArea() {
@@ -44,7 +44,7 @@ public class TeleportArea extends Area<Edge> {
 	}
 
 	/**
-	 * Sets the exit assigned to this <code>AssignmentArea</code>.
+	 * Sets the exit assigned to this {@code AssignmentArea}.
 	 * @param exit the {@link EvacuationArea} representing the exit.
 	 */
 	public void setExitArea( EvacuationArea exit ) {
@@ -52,7 +52,7 @@ public class TeleportArea extends Area<Edge> {
 	}
 
 	/**
-	 * Returns the exit assigned to this <code>AssignmentArea</code>
+	 * Returns the exit assigned to this {@code AssignmentArea}
 	 * @return the assigned exit
 	 */
 	public TeleportArea getTargetArea() {
@@ -60,7 +60,7 @@ public class TeleportArea extends Area<Edge> {
 	}
 
 	/**
-	 * Sets the exit assigned to this <code>AssignmentArea</code>.
+	 * Sets the exit assigned to this {@code AssignmentArea}.
 	 * @param exit the {@link EvacuationArea} representing the exit.
 	 */
 	public void setTargetArea( TeleportArea target ) {

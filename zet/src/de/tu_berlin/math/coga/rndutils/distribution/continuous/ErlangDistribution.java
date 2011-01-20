@@ -15,7 +15,7 @@ public class ErlangDistribution extends ExponentialDistribution {
 	private int n;
 
   /**
-   * Creates a new instance of <code>ErlangDistribution</code> with parameters
+   * Creates a new instance of {@code ErlangDistribution} with parameters
 	 * lambda = 1 and k = 1.
    */
   public ErlangDistribution() {
@@ -23,7 +23,7 @@ public class ErlangDistribution extends ExponentialDistribution {
   }
 	
   /**
-   * Creates a new instance of <code>ErlangDistribution</code> within a given interval.
+   * Creates a new instance of {@code ErlangDistribution} within a given interval.
    * @param lambda the parameter describing the failure rate
    * @param k the parameter describing the number of used exponential distributed values
    */

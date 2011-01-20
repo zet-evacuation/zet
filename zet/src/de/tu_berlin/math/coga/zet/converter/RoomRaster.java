@@ -33,7 +33,7 @@ import ds.z.StairArea;
 import java.util.Iterator;
 
 /**
- * The <code>RoomRaster</code> class provides rasterization of a {@link ds.z.Room} object.
+ * The {@code RoomRaster} class provides rasterization of a {@link ds.z.Room} object.
  * The squares of the raster have to be of the type {@link RoomRaster} which allows
  * to describe the {@link ds.z.Area} in which a square lies.
  * @param T the type of the used raster, have to be at least {@link RoomRasterSquare} objects
@@ -47,7 +47,7 @@ public class RoomRaster<T extends RoomRasterSquare> extends Raster<T, Room> {
 	Room r;
 	LinkedList<T> accessibleSquares;
 
-	/** Creates a new instance of <code>RoomRaster</code>
+	/** Creates a new instance of {@code RoomRaster}
 	 * @param squareClassType the type of the raster squares
 	 * @param r the room
 	 */
@@ -59,7 +59,7 @@ public class RoomRaster<T extends RoomRasterSquare> extends Raster<T, Room> {
 	}
 
 	/**
-	 * Creates a new instance of <code>RoomRaster</code>.
+	 * Creates a new instance of {@code RoomRaster}.
 	 * @param squareClassType the type of the squares used during rasterization
 	 * @param r the room that will be rasterized
 	 * @param raster the raster size
@@ -73,7 +73,7 @@ public class RoomRaster<T extends RoomRasterSquare> extends Raster<T, Room> {
 	}
 
 	/**
-	 * Creates a new instance of <code>RoomRaster</code>
+	 * Creates a new instance of {@code RoomRaster}
 	 * @param squareClassType the type of the squares used during rasterization
 	 * @param r the room that will be rasterized
 	 * @param raster the raster size

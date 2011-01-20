@@ -182,7 +182,7 @@ public class SPPotentialController implements PotentialController {
 	/**
 	 * Decreases the potential of the specified Cell about one if its dynamic potential is greater than zero.
 	 * Associates the specified potential with the specified Cell in this PotentialMap.
-	 * The method throws <code>IllegalArgumentExceptions</code> if you
+	 * The method throws {@code IllegalArgumentExceptions} if you
 	 * try to decrease the potential of a Cell that not exists in this PotentialMap.
 	 * @param cell A cell which potential you want to decrease.  
 	 */
@@ -364,7 +364,7 @@ public class SPPotentialController implements PotentialController {
     }
 
 	/**
-	 * Returns the neighbors of the cell. Uses the method of <code>Cell</code>.
+	 * Returns the neighbors of the cell. Uses the method of {@code Cell}.
 	 * @param cell A cell in the cellular automaton.
 	 * @return The neighbor cells of this cell.
 	 */

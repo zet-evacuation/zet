@@ -219,8 +219,8 @@ public class GLNodeControl extends AbstractZETVisualizationControl<GLFlowEdgeCon
 	}
 
 	/**
-	 * Returns <code>true</code> if the rectangled area belonging to the node is visible.
-	 * @return <code>true</code> if the rectangled node area is visible, <code>false</code> otherwise
+	 * Returns {@code true} if the rectangled area belonging to the node is visible.
+	 * @return {@code true} if the rectangled node area is visible, {@code false} otherwise
 	 */
 	public boolean isRectangleVisible() {
 		return gridVisible;

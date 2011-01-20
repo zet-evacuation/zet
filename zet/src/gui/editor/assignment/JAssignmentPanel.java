@@ -983,7 +983,7 @@ public class JAssignmentPanel extends JPanel {
 	}
 
 	/**
-	 * This class can display Assignment Objects in a <code>JList</code>.
+	 * This class can display Assignment Objects in a {@code JList}.
 	 */
 	private class AssignmentListRenderer extends ComboBoxRenderer {
 

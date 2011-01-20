@@ -6,14 +6,14 @@
 package de.tu_berlin.math.coga.rndutils.distribution;
 
 /**
- * The class <code>DiscreteDistribution</code> represents a discrete probability
+ * The class {@code DiscreteDistribution} represents a discrete probability
  * distribution.
  * @author Jan-Philipp Kappmeier
  */
 public abstract class DiscreteDistribution extends Distribution<Integer> {
 
 	/**
-	 * Creates a new instance of <code>DiscreteDistribution</code>.
+	 * Creates a new instance of {@code DiscreteDistribution}.
 	 * @param min
 	 * @param max
 	 */

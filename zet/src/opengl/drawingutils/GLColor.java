@@ -145,7 +145,7 @@ public final class GLColor implements Drawable {
 	}
 
 	/**
-	 * Initialize with java <code>Color</code> object and specified alpha value
+	 * Initialize with java {@code Color} object and specified alpha value
 	 * that differs from the colors alpha.
 	 * @param c the color
 	 * @param alpha the alpha value that shall be used
@@ -155,7 +155,7 @@ public final class GLColor implements Drawable {
 	}
 
 	/**
-	 * Initialize with java <code>Color</code> object and specified alpha value
+	 * Initialize with java {@code Color} object and specified alpha value
 	 * that differs from the colors alpha.
 	 * @param c the color
 	 * @param alpha the alpha value that shall be used

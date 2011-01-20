@@ -9,7 +9,7 @@ import de.tu_berlin.math.coga.datastructure.Tupel;
 import java.text.NumberFormat;
 
 /**
- * The class <code>Formatter</code> is a utility class that provides methods
+ * The class {@code Formatter} is a utility class that provides methods
  * for formatting texts.
  * @author Jan-Philipp Kappmeier
  */

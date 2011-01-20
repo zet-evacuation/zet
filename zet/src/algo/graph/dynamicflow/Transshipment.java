@@ -27,10 +27,10 @@ import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 
 /**
- * The class <code>Transshipment</code> implements a binary search to compute the minimal
+ * The class {@code Transshipment} implements a binary search to compute the minimal
  * time horizon needed to get a transshipment with given properties. The wished transshipment
- * is defined and calculated by the generic class <code>TT</code> that has to inherit the
- * class <code>TransshipmentWithTimeHorizon</code>. 
+ * is defined and calculated by the generic class {@code TT} that has to inherit the
+ * class {@code TransshipmentWithTimeHorizon}. 
  * @param <TT> The type of the algorithm used to compute the transshipments for each time step.
  */
 public abstract class Transshipment<TT extends TransshipmentWithTimeHorizon> extends DynamicFlowAlgorithm{

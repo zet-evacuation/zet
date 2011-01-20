@@ -41,7 +41,7 @@ import ds.graph.GraphLocalization;
 import ds.graph.problem.MinimumCostFlowProblem;
 
 /**
- * The class <code>MaxFlowOverTime</code> solves the max flow over time 
+ * The class {@code MaxFlowOverTime} solves the max flow over time 
  * problem.
  * 
  * @author Gordon Schlechter

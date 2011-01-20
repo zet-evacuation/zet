@@ -13,7 +13,7 @@ import java.util.Collections;
 import java.util.List;
 
 /**
- * The class <code>CellularAutomatonBackToFrontExecution</code> changes the
+ * The class {@code CellularAutomatonBackToFrontExecution} changes the
  * execution order of the individuals using an overwritten method
  * {@link #getIndividuals()}. The individuals are sorted in the reverse order of
  * their distance (by means of their currently selected potential field).
@@ -22,7 +22,7 @@ import java.util.List;
 public class CellularAutomatonBackToFrontExecution extends CellularAutomatonInOrderExecution {
 
 	/**
-	 * Creates a new instance of <code>CellularAutomatonBackToFrontExecution</code>.
+	 * Creates a new instance of {@code CellularAutomatonBackToFrontExecution}.
 	 * @param ca the cellular automaton that is executed
 	 */
 	public CellularAutomatonBackToFrontExecution( CellularAutomaton ca ) {

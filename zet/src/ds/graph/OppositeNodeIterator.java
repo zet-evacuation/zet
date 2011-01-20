@@ -31,7 +31,7 @@ public class OppositeNodeIterator implements Iterator<Node> {
 	protected Node node;
 	/** An iterator iterating over all edges leading to adjacent nodes. */
 	protected Iterator<Edge> edgeIterator;
-	/** The node to be returned when <code>next</code> is called the first time. */
+	/** The node to be returned when {@code next} is called the first time. */
 	protected transient Node next;
 	/**
 	 * A map for marking nodes which have already been returned by this
@@ -41,12 +41,12 @@ public class OppositeNodeIterator implements Iterator<Node> {
 	protected transient HashMap<Node, Boolean> visited;
 
 	/**
-	 * Creates a new <code>OppositeNodeIterator</code> iterating over all
+	 * Creates a new {@code OppositeNodeIterator} iterating over all
 	 * nodes that are opposite to the specified node with regard to the
 	 * specified collection of edges. Runtime O(1).
 	 * @param node the base node for which the adjacent nodes are to be
 	 * returned.
-	 * @param edgeIterator the edges incident to <code>node</code>.
+	 * @param edgeIterator the edges incident to {@code node}.
 	 */
 	protected OppositeNodeIterator( Node node, Iterator<Edge> edgeIterator ) {
 		this.node = node;
@@ -56,9 +56,9 @@ public class OppositeNodeIterator implements Iterator<Node> {
 
 	/**
 	 * Checks whether there is a node adjacent to the base node which has
-	 * not been returned by a call to <code>next</code> yet.
+	 * not been returned by a call to {@code next} yet.
 	 * @return whether there is a node adjacent to the base node which has
-	 * not been returned by a call to <code>next</code> yet.
+	 * not been returned by a call to {@code next} yet.
 	 */
 	@Override
 	public boolean hasNext() {
@@ -76,11 +76,11 @@ public class OppositeNodeIterator implements Iterator<Node> {
 
 	/**
 	 * Returns a node adjacent to the base node which has
-	 * not been returned by a call to <code>next</code> yet, or <code>null
-	 * </code> if no such node exists. Runtime O(1).
+	 * not been returned by a call to {@code next} yet, or {@code null
+	 * } if no such node exists. Runtime O(1).
 	 * @return  a node adjacent to the base node which has
-	 * not been returned by a call to <code>next</code> yet, or <code>null
-	 * </code> if no such node exists.
+	 * not been returned by a call to {@code next} yet, or {@code null
+	 * } if no such node exists.
 	 */
 	@Override
 	public Node next() {

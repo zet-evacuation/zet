@@ -35,23 +35,23 @@ import gui.ZETMain;
 /**
  * This class helps you to store all the parts of a simulation that are
  * needed to visualize the simulation at a later point. This is done by
- * recording <code>Action</code>s to a <code>VisualResultsRecording</code>-Object.
+ * recording {@code Action}s to a {@code VisualResultsRecording}-Object.
  * The actions are stored together with a full deep clone of the initial configuration 
  * of your cellular automaton. The cloning is done in the constructor of this 
  * class, so the automaton is saved in the state that it has when you <b>create</b> 
- * the <code> VisualResultsRecorder</code>. 
+ * the {@code  VisualResultsRecorder}. 
  * 
  * Usage: Build your initial configuration and THEN instantiate a new
- * VisualResultsRecorder with it. Call <code>startRecording()</code>. 
- * You can now record Actions by calling <code>recordAction</code>. 
+ * VisualResultsRecorder with it. Call {@code startRecording()}. 
+ * You can now record Actions by calling {@code recordAction}. 
  * The recorded actions are stored based on the simulation time when they occur, 
- * starting at time <code>t=0</code>. Every time your simulation time advances, 
- * call <code>nextTimeStep()</code>. Thus, all actions that are recorded 
- * afterwards will be stored at time <code>t+1</code>. 
+ * starting at time {@code t=0}. Every time your simulation time advances, 
+ * call {@code nextTimeStep()}. Thus, all actions that are recorded 
+ * afterwards will be stored at time {@code t+1}. 
  * All actions are stored in the order of their recording.
  * 
- * To replay the simulation, call <code>getRecording()</code> to get all 
- * recorded actions nicely packed in a <code>VisualResultsRecording</code>.
+ * To replay the simulation, call {@code getRecording()} to get all 
+ * recorded actions nicely packed in a {@code VisualResultsRecording}.
  * 
  * @author Daniel Pluempe
  *
@@ -148,7 +148,7 @@ public class VisualResultsRecorder {
 	 * the constructor of this class. The method will convert it 
 	 * automatically to match the cloned configuration (which has clones
 	 * of the original cells). 
-	 * The method throws <code>IllegalArgumentExceptions</code> if you
+	 * The method throws {@code IllegalArgumentExceptions} if you
 	 * try to pass an action that does not refer to the original configuration.
 	 * 
 	 * @param action An action that you want to record. The parameters of
@@ -189,7 +189,7 @@ public class VisualResultsRecorder {
 	 * individuals in the returned actions refer to objects in the 
 	 * cloned configuration. A new recording is constructed each time
 	 * you call this method.
-	 * @return A new <code>VisualResultsRecording</code> containing all 
+	 * @return A new {@code VisualResultsRecording} containing all 
 	 * recorded actions and the corresponding configuration. 
 	 */
 	public VisualResultsRecording getRecording() {
@@ -213,10 +213,10 @@ public class VisualResultsRecorder {
 	 * 
 	 * @param orig The initial configuration that you want to clone
 	 * @param cellMapping A HashMap mapping the cells in the original configuration
-	 * to their copies. If this is <code>null</code>, a new HashMap will be 
+	 * to their copies. If this is {@code null}, a new HashMap will be 
 	 * created. Else, the mapping is added to the existing entries in the
 	 * HashMap. Existing entries may be overwritten.
-	 * @return A deep copy of <code>orig</code>.
+	 * @return A deep copy of {@code orig}.
 	 */
 	private static InitialConfiguration cloneConfig( InitialConfiguration orig,
 					HashMap<Cell, Cell> cellMapping, HashMap<StaticPotential, StaticPotential> potentialMapping ) {
@@ -336,10 +336,10 @@ public class VisualResultsRecorder {
 	/**
 	 * Does a deep copy of a room and updates all internal references.
 	 * @param room The room you want to clone
-	 * @param cellMapping A HashMap mapping the cells in <code>room</code> to
-	 * those in its clone. If this is <code>null</code>, a new mapping is
+	 * @param cellMapping A HashMap mapping the cells in {@code room} to
+	 * those in its clone. If this is {@code null}, a new mapping is
 	 * created. Else, existing entries may be overwritten.
-	 * @return A deep copy of <code>room</code>
+	 * @return A deep copy of {@code room}
 	 */
 	private static Room cloneRoom( Room room, HashMap<Cell, Cell> cellMapping ) {
 		if( cellMapping == null ) {

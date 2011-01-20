@@ -34,17 +34,17 @@ public class OppositeNodeCollection implements IdentifiableCollection<Node> {
     protected Node node;
 
     /**
-     * The edges incident to <code>node</code>.
+     * The edges incident to {@code node}.
      */
     protected IdentifiableCollection<Edge> edges;
 
     /**
-     * Creates a new <code>OppositeNodeCollection</code> containing all 
+     * Creates a new {@code OppositeNodeCollection} containing all 
      * nodes that are opposite to the specified node with regard to the
      * specified collection of edges. Runtime O(1).
      * @param node the base node for which the adjacent nodes are to be 
      * returned.
-     * @param edges the edges incident to <code>node</code>.
+     * @param edges the edges incident to {@code node}.
      */
     protected OppositeNodeCollection(Node node, IdentifiableCollection<Edge> edges) {
         this.node = node;
@@ -82,8 +82,8 @@ public class OppositeNodeCollection implements IdentifiableCollection<Node> {
      * Returns whether the specified node is contained in this collection.
      * Runtime O(degree(node)).
      * @param element the node to be checked.
-     * @return <code>true</code> if the specified node is contained in this
-     * collection, false <code>otherwise</code>.
+     * @return {@code true} if the specified node is contained in this
+     * collection, false {@code otherwise}.
      */
     public boolean contains(Node element) {
         for (Node n : this) {
@@ -95,9 +95,9 @@ public class OppositeNodeCollection implements IdentifiableCollection<Node> {
     }
 
     /**
-     * Returns whether this <code>IdentifiableCollection</code> is empty.
+     * Returns whether this {@code IdentifiableCollection} is empty.
      * Runtime O(1).
-     * @return whether this <code>IdentifiableCollection</code> is empty.
+     * @return whether this {@code IdentifiableCollection} is empty.
      */
     public boolean empty() {
         return edges.empty();
@@ -148,7 +148,7 @@ public class OppositeNodeCollection implements IdentifiableCollection<Node> {
     /**
      * Returns the predecessor of the specified node with regard to the 
      * order implements imposed by this collections iterator. If such an 
-     * element does not exists, <code>null</code> is returned.
+     * element does not exists, {@code null} is returned.
      * Runtime O(degree(node)).
      * @param element the node for which the predecessor is to be returned.
      * @return the predecessor of the specified node.
@@ -165,7 +165,7 @@ public class OppositeNodeCollection implements IdentifiableCollection<Node> {
     /**
      * Returns the successor of the specified node with regard to the 
      * order implements imposed by this collections iterator.  If such an 
-     * element does not exists, <code>null</code> is returned.
+     * element does not exists, {@code null} is returned.
  * Runtime O(degree(node)).
      * @param element the node for which the successor is to be returned.
      * @return the successor of the specified node.

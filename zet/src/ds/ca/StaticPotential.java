@@ -132,7 +132,7 @@ public class StaticPotential extends PotentialMap {
     
     /**
      * Removes the mapping for the specified Cell.
-     * The method throws <code>IllegalArgumentExceptions</code> if you
+     * The method throws {@code IllegalArgumentExceptions} if you
      * try to remove the mapping of a Cell that does not exists.
      * @param cell A Cell that mapping you want to remove.
      */

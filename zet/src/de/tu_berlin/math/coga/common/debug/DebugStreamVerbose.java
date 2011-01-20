@@ -36,7 +36,7 @@ public class DebugStreamVerbose extends DebugStream {
 	PrintStream oldOutputStream = null;
 
 	/**
-	 * Creates messageType new instance of <code>DebugStream</code>.
+	 * Creates messageType new instance of {@code DebugStream}.
 	 * @param out the outputstream that is used
 	 * @param oldOutputStream the printstream to which the outputs are sended, too
 	 */
@@ -46,7 +46,7 @@ public class DebugStreamVerbose extends DebugStream {
 	}
 
 	/**
-	 * Creates messageType new instance of <code>DebugStream</code>.
+	 * Creates messageType new instance of {@code DebugStream}.
 	 * @param out the outputstream that is used
 	 * @param oldOutputStream the printstream to which the outputs are sended, too
 	 * @param m the type of messages handeled by this debug stream.

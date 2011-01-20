@@ -76,7 +76,7 @@ public class StaticGraph implements Graph {
 
 	/**
 	 * Gibt zur�ck, ob der Graph als gerichtet oder ungerichtet zu interpretieren ist. Laufzeit O(1).
-	 * @return <code>true</code>, wenn der Graph als gerichtet interpretiert werden soll, <code>false</code> anderenfalls.
+	 * @return {@code true}, wenn der Graph als gerichtet interpretiert werden soll, {@code false} anderenfalls.
 	 */
 	@Override
 	public boolean isDirected() {
@@ -84,9 +84,9 @@ public class StaticGraph implements Graph {
 	}
 
 	/**
-	 * Testet, ob der Graph der leere Graph ist. Enth�lt der Graph keine Knoten, wird <code>true</code> zur�ckgeben,
-	 * anderenfalls <code>false</code>. Laufzeit O(1).
-	 * @return <code>true</code>, wenn der Graph keine Knoten (und damit auch keine Kanten) enth�lt, <code>false</code>
+	 * Testet, ob der Graph der leere Graph ist. Enth�lt der Graph keine Knoten, wird {@code true} zur�ckgeben,
+	 * anderenfalls {@code false}. Laufzeit O(1).
+	 * @return {@code true}, wenn der Graph keine Knoten (und damit auch keine Kanten) enth�lt, {@code false}
 	 * anderenfalls.
 	 */
 	public boolean empty() {
@@ -168,7 +168,7 @@ public class StaticGraph implements Graph {
 	 * Gibt alle zum gegebenen Knoten sichtbaren adjazenten Kanten zur�ck. Im Falle von gerichteten Graphen werden sowohl
 	 * eingehende als auch ausgehende Kanten als adjazent betrachtet. Laufzeit O(1).
 	 * @param node der Knoten, zu dem die adjazenten Kanten ausgegeben werden sollen.
-	 * @return eine nicht-�nderbare Menge aller zu <code>node</code> sichtbaren adjazenten Kanten des Graphen.
+	 * @return eine nicht-�nderbare Menge aller zu {@code node} sichtbaren adjazenten Kanten des Graphen.
 	 */
 	@Override
 	public IdentifiableCollection<Edge> incidentEdges( Node node ) {
@@ -179,7 +179,7 @@ public class StaticGraph implements Graph {
 	 * Gibt alle zum gegebenen Knoten sichtbaren eingehenden Kanten zur�ck. Im Falle von ungerichteten Graphen ist dies nicht
 	 * m�glich, daher wird in diesem Fall eine {@link GraphNotDirectedException} geworfen. Laufzeit O(1).
 	 * @param node der Knoten, zu dem die eingehenden Kanten ausgegeben werden sollen.
-	 * @return eine nicht-�nderbare Menge aller zu <code>node</code> sichtbaren eingehenden Kanten des Graphen.
+	 * @return eine nicht-�nderbare Menge aller zu {@code node} sichtbaren eingehenden Kanten des Graphen.
 	 */
 	@Override
 	public IdentifiableCollection<Edge> incomingEdges( Node node ) {
@@ -192,7 +192,7 @@ public class StaticGraph implements Graph {
 	 * Gibt alle zum gegebenen Knoten sichtbaren ausgehenden Kanten zur�ck. Im Falle von ungerichteten Graphen ist dies nicht
 	 * m�glich, daher wird in diesem Fall eine {@link GraphNotDirectedException} geworfen. Laufzeit O(1).
 	 * @param node der Knoten, zu dem die ausgehenden Kanten ausgegeben werden sollen.
-	 * @return eine nicht-�nderbare Menge aller zu <code>node</code> sichtbaren eingehenden Kanten des Graphen.
+	 * @return eine nicht-�nderbare Menge aller zu {@code node} sichtbaren eingehenden Kanten des Graphen.
 	 */
 	@Override
 	public IdentifiableCollection<Edge> outgoingEdges( Node node ) {
@@ -227,7 +227,7 @@ public class StaticGraph implements Graph {
 	 * Gibt die Anzahl aller zum gegebenen Knoten sichtbaren adjazenten Kanten zur�ck. Im Falle von gerichteten Graphen
 	 * werden sowohl eingehende als auch ausgehende Kanten als adjazent betrachtet. Laufzeit O(1).
 	 * @param node der Knoten, zu dem die Anzahl der adjazenten Kanten ausgegeben werden soll.
-	 * @return die Anzahl der zu <code>node</code> adjazenten Kanten, d.h. der Grad von <code>node</code>.
+	 * @return die Anzahl der zu {@code node} adjazenten Kanten, d.h. der Grad von {@code node}.
 	 */
 	@Override
 	public int degree( Node node ) {
@@ -347,7 +347,7 @@ public class StaticGraph implements Graph {
 	/**
 	 * Gibt zur�ck, ob der angegebene Knoten versteckt ist. Laufzeit O(1).
 	 * @param node der Knoten, f�r den die Sichtbarkeit �berpr�ft werden soll.
-	 * @return <code>true</code>, wenn der Knoten <code>node</code> versteckt ist, <code>false</code> anderenfalls.
+	 * @return {@code true}, wenn der Knoten {@code node} versteckt ist, {@code false} anderenfalls.
 	 */
 	/* public boolean isVisible(Node node) {
 	return visibleNodes.isVisible(node);
@@ -355,7 +355,7 @@ public class StaticGraph implements Graph {
 	/**
 	 * �ndert die Sichtbarkeit des angegebenen Knotens auf den angegebenen Zustand. Laufzeit O(1).
 	 * @param node der Knoten, f�r den die Sichtbarkeit ge�ndert werden soll.
-	 * @param hidden der neue Sichtbarkeits-Status: <code>true</code> versteckt den Knoten, <code>false</code> macht ihn
+	 * @param hidden der neue Sichtbarkeits-Status: {@code true} versteckt den Knoten, {@code false} macht ihn
 	 * sichtbar.
 	 */
 	/* public void changeVisibility(Node node, boolean hidden) {
@@ -422,7 +422,7 @@ public class StaticGraph implements Graph {
 	/**
 	 * Gibt zur�ck, ob die angegebene Kanten versteckt ist. Laufzeit O(1).
 	 * @param edge die Kanten, f�r die die Sichtbarkeit �berpr�ft werden soll.
-	 * @return <code>true</code>, wenn die Kanten <code>node</code> versteckt ist, <code>false</code> anderenfalls.
+	 * @return {@code true}, wenn die Kanten {@code node} versteckt ist, {@code false} anderenfalls.
 	 */
 	public boolean isVisible( Edge edge ) {
 		return visibleEdges.isVisible( edge );
@@ -431,7 +431,7 @@ public class StaticGraph implements Graph {
 	/**
 	 * �ndert die Sichtbarkeit der angegebenen Kante auf den angegebenen Zustand. Laufzeit O(1).
 	 * @param edge die Kante, f�r die die Sichtbarkeit ge�ndert werden soll.
-	 * @param visible der neue Sichtbarkeits-Status: <code>true</code> versteckt die Kanten, <code>false</code> macht sie
+	 * @param visible der neue Sichtbarkeits-Status: {@code true} versteckt die Kanten, {@code false} macht sie
 	 * sichtbar.
 	 */
 	public void changeVisibility( Edge edge, boolean visible ) {
@@ -456,8 +456,8 @@ public class StaticGraph implements Graph {
 	}
 
 	/**
-	 * Implementiert die <code>removeEdge</code> Methode des {@link Graph}-Interfaces. Da es sich um einen statischen Graphen
-	 * handelt, wird das entfernen der angegebenen Kante nur simuliert, d.h. es wird <code>setHidden(edge, true)</code>
+	 * Implementiert die {@code removeEdge} Methode des {@link Graph}-Interfaces. Da es sich um einen statischen Graphen
+	 * handelt, wird das entfernen der angegebenen Kante nur simuliert, d.h. es wird {@code setHidden(edge, true)}
 	 * aufgerufen.
 	 * @param edge die Kante, die entfernt werden soll.
 	 */

@@ -24,16 +24,16 @@ import ds.graph.Node;
 import ds.z.Room;
 
 /**
- * The class <code>ZToGraphRoomRaster</code> represents a rastered room.
- * It extends the class <code>RoomRaster</code> by specifying the generic type
- * of raster squares to <code>ZToGraphRasterSquare</code>.
+ * The class {@code ZToGraphRoomRaster} represents a rastered room.
+ * It extends the class {@code RoomRaster} by specifying the generic type
+ * of raster squares to {@code ZToGraphRasterSquare}.
  *
  */
 public class ZToGraphRoomRaster extends RoomRaster<ZToGraphRasterSquare> {
 
 	/**
-	 * Creates a new <code>ZToGraphRoomRaster</code> object connected with the
-	 * room <code>room</code>.
+	 * Creates a new {@code ZToGraphRoomRaster} object connected with the
+	 * room {@code room}.
 	 * @param room the room connected to the new object.
 	 */
 	public ZToGraphRoomRaster(Room room) {
@@ -42,17 +42,17 @@ public class ZToGraphRoomRaster extends RoomRaster<ZToGraphRasterSquare> {
 
 	@Override
 	/**
-	 * Returns the <code>ZToGraphRasterSquare</code> at position <code>(x,y)</code>.
-	 * @return the <code>ZToGraphRasterSquare</code> at position <code>(x,y)</code>.
+	 * Returns the {@code ZToGraphRasterSquare} at position {@code (x,y)}.
+	 * @return the {@code ZToGraphRasterSquare} at position {@code (x,y)}.
 	 */
 	public ZToGraphRasterSquare getSquare(int x, int y) {
 		return super.getSquare(x, y);
 	}
 	
 	/**
-	 * Returns the <code>ZToGraphRasterSquare</code> that includes the point (x,y)
+	 * Returns the {@code ZToGraphRasterSquare} that includes the point (x,y)
 	 * (global coordinates).
-	 * @return  the <code>ZToGraphRasterSquare</code> that includes the point (x,y)
+	 * @return  the {@code ZToGraphRasterSquare} that includes the point (x,y)
 	 * (global coordinates).
 	 */
 	public ZToGraphRasterSquare getSquareWithGlobalCoordinates(int x, int y){
@@ -65,8 +65,8 @@ public class ZToGraphRoomRaster extends RoomRaster<ZToGraphRasterSquare> {
 
 	@Override
     /**
-     * Returns the number of columns of the <code>RoomRaster</code>.
-     * @return the number of columns of the <code>RoomRaster</code>.
+     * Returns the number of columns of the {@code RoomRaster}.
+     * @return the number of columns of the {@code RoomRaster}.
      */
 	public int getColumnCount() {
 		return super.getColumnCount();
@@ -74,15 +74,15 @@ public class ZToGraphRoomRaster extends RoomRaster<ZToGraphRasterSquare> {
 
 	@Override
     /**
-     * Returns the number of rows of the <code>RoomRaster</code>.
-     * @return the number of rows of the <code>RoomRaster</code>.
+     * Returns the number of rows of the {@code RoomRaster}.
+     * @return the number of rows of the {@code RoomRaster}.
      */
 	public int getRowCount() {
 		return super.getRowCount();
 	}
 	
     /**
-     * Sets the mark flag of all squares in this rastered room to <code>false</code>.
+     * Sets the mark flag of all squares in this rastered room to {@code false}.
      */
 	public void unmarkAllSquares(){
 		for (int i = 0; i < getColumnCount(); i++){
@@ -94,8 +94,8 @@ public class ZToGraphRoomRaster extends RoomRaster<ZToGraphRasterSquare> {
 
 	@Override
     /**
-     * Returns a String containing a description of the underlying <code>RoomRaster</code>.
-     * @return a String containing a description of the underlying <code>RoomRaster</code>.
+     * Returns a String containing a description of the underlying {@code RoomRaster}.
+     * @return a String containing a description of the underlying {@code RoomRaster}.
      */
 	public String toString() {
 			  String result = "";

@@ -154,7 +154,7 @@ public class RMFGEN implements Generator {
 
 	/**
 	 * Method that checks whether the generated graph is really cycle free.
-	 * @return <code>true</code> if the graph is cycle free.
+	 * @return {@code true} if the graph is cycle free.
 	 */
 	public boolean isAcyclic() {
 		return true;

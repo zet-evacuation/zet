@@ -27,9 +27,9 @@ public class Percentage {
 	private double percentage;
 	
 	/**
-	 * Creates a new <code>Percentage</code> object containing
-	 * the double value <code>percentage</code>. 
-	 * If <code>percentage</code> is not within [0,100],
+	 * Creates a new {@code Percentage} object containing
+	 * the double value {@code percentage}. 
+	 * If {@code percentage} is not within [0,100],
 	 * an exception is thrown.
 	 */
 	public Percentage(double percentage){

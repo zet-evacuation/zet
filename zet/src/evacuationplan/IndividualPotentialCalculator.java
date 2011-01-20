@@ -24,9 +24,9 @@ import algo.ca.SPPotentialController;
 
 /**
  * This class provides the possibility to calculate a individual specific potential.
- * It extends the <code>SPPotentialController</code> and only changes
- * the <code>getNeighbour()</code> method to forbid transitions that
- * the individual may not do according to the <code>checker</code>. 
+ * It extends the {@code SPPotentialController} and only changes
+ * the {@code getNeighbour()} method to forbid transitions that
+ * the individual may not do according to the {@code checker}. 
  */
 public class IndividualPotentialCalculator extends SPPotentialController {
 
@@ -35,8 +35,8 @@ public class IndividualPotentialCalculator extends SPPotentialController {
 	
 	/**
 	 * Create a new calculator that can calculate a individual specific potential for 
-	 * the cellular automaton <code>ca</code> and a given individual <code>i</code>.
-	 * The <code>checker</code> is used to check which transitions are forbidden for 
+	 * the cellular automaton {@code ca} and a given individual {@code i}.
+	 * The {@code checker} is used to check which transitions are forbidden for 
 	 * the individual. 
 	 * @param ca A cellular automaton.
 	 * @param i A certain individual that is already placed in the cellular automaton.
@@ -51,9 +51,9 @@ public class IndividualPotentialCalculator extends SPPotentialController {
 	@Override
 	/**
 	 * Overwritten method that obtains all original neighbors of a cell and sorts
-	 * those out that the individual may not reach from <code>cell</code> 
+	 * those out that the individual may not reach from {@code cell} 
 	 * because the transition is forbidden for the individual (according
-	 * to the <code>checker</code> object).
+	 * to the {@code checker} object).
 	 */
 	public ArrayList<Cell> getNeighbours(Cell cell){
             ArrayList<Cell> evacPlanNeighbours = new ArrayList<Cell>();

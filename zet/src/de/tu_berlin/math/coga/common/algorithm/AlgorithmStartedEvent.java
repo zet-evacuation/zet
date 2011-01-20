@@ -29,7 +29,7 @@ package de.tu_berlin.math.coga.common.algorithm;
 public class AlgorithmStartedEvent extends AlgorithmEvent {
 
     /**
-     * Creates a <code>AlgorithmStartedEvent</code> for the specified algorithm.
+     * Creates a {@code AlgorithmStartedEvent} for the specified algorithm.
      * @param algorithm the algorithm whose execution started.
      */
     public AlgorithmStartedEvent(Algorithm algorithm) {

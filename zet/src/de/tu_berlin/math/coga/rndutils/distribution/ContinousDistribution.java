@@ -6,14 +6,14 @@
 package de.tu_berlin.math.coga.rndutils.distribution;
 
 /**
- * The class <code>ContinousDistribution</code> rperesents a continous
+ * The class {@code ContinousDistribution} rperesents a continous
  * probability distribution with values in the real numbers.
  * @author Jan-Philipp Kappmeier
  */
 public abstract class ContinousDistribution extends Distribution<Double> {
 
 	/**
-	 * Creates a new instance of <code>ContinousDistribution</code>.
+	 * Creates a new instance of {@code ContinousDistribution}.
 	 * @param min
 	 * @param max
 	 */

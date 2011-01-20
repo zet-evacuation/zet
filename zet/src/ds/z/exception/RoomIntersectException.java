@@ -18,13 +18,13 @@ package ds.z.exception;
 import ds.z.*;
 
 /**
- * The <code>RoomInterstException</code> indicates that two rooms in one {@link ds.z.Floor} intersect
+ * The {@code RoomInterstException} indicates that two rooms in one {@link ds.z.Floor} intersect
  * each other, what is not allowed.
  * @author Joscha Kulbatzki
  */
 public class RoomIntersectException extends ValidationException {
   /**
-   * Creates a new instance of <code>RoomIntersectException</code>. The submittet parameters
+   * Creates a new instance of {@code RoomIntersectException}. The submittet parameters
    * are a pair of rooms which intersect and have caused the exception.
    * @param room1 the first room
    * @param room2 the second room
@@ -35,7 +35,7 @@ public class RoomIntersectException extends ValidationException {
   }
   
   /**
-   * Creates a new instance of <code>RoomIntersectException</code>. The submittet parameters
+   * Creates a new instance of {@code RoomIntersectException}. The submittet parameters
    * are a pair of rooms which intersect and have caused the exception.
    * @param room1 the first room
    * @param room2 the second room
@@ -56,7 +56,7 @@ public class RoomIntersectException extends ValidationException {
   }
   
   /**
-   * <code>RoomPair</code> is a container for two rooms that is merely used
+   * {@code RoomPair} is a container for two rooms that is merely used
    * to connect two intersecting rooms .
    */
   public class RoomPair {
@@ -66,7 +66,7 @@ public class RoomIntersectException extends ValidationException {
     public final Room room2;
     
     /**
-     * Creates a new instance of <code>RoomPair</code> with two rooms.
+     * Creates a new instance of {@code RoomPair} with two rooms.
      * @param r1 the first room
      * @param r2 the second room
      */

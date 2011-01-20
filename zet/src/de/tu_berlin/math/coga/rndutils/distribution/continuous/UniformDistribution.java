@@ -18,14 +18,14 @@ import de.tu_berlin.math.coga.rndutils.distribution.Distribution;
 public class UniformDistribution extends ContinousDistribution {
   
   /**
-   * Creates a new instance of <code>UniformDistribution</code> with values in the interval 0 and 1.
+   * Creates a new instance of {@code UniformDistribution} with values in the interval 0 and 1.
    */
   public UniformDistribution() {
     super( 0, 1 );
   }
   
   /**
-   * Creates a new instance of <code>UniformDistribution</code> within a given interval.
+   * Creates a new instance of {@code UniformDistribution} within a given interval.
    * @param min the minimal value that can be taken by the random variable
    * @param max the maximal value that can be taken by the random variable
    * @throws IllegalArgumentException if min is smaller than max

@@ -21,7 +21,7 @@ package gui.batch;
 
 /**
  * The different types of evacuation optimization supported by zet. If no
- * optimization is used, <code>None</code> should be used.
+ * optimization is used, {@code None} should be used.
  * @author Jan-Philipp Kappmeier
  */
 public enum EvacuationOptimizationType {

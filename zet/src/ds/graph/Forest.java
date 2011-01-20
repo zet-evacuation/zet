@@ -22,7 +22,7 @@ package ds.graph;
 import com.thoughtworks.xstream.annotations.XStreamAlias;
 
 /**
- * The <code>Network</class> provides an implementation of a directed graph
+ * The {@code Network</class> provides an implementation of a directed graph
  * optimized for use by flow algorithms. Examples of these optimizations 
  * include use of array based data structures for edges and nodes in order to
  * provide fast access, as well as the possiblity to hide edges and nodes (which

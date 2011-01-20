@@ -34,7 +34,7 @@ public class JBatchToolBar extends JToolBar implements ActionListener, Localized
 	}
 
 /**
-	 * Creates the <code>JToolBar</code> for the batch panel.
+	 * Creates the {@code JToolBar} for the batch panel.
 	 */
 	private void createBatchToolBar() {
 		loc.setPrefix( "gui.toolbar." );

@@ -25,7 +25,7 @@ import java.util.LinkedList;
 import java.util.List;
 
 /**
- * The class <code>TimeExpandedNetwork</code> provides flow algorithms with the
+ * The class {@code TimeExpandedNetwork} provides flow algorithms with the
  * methods to create and work with time expanded networks in order to transform
  * dynamic flow problems into static ones.
  * The construction of the time expanded network depends on whether the
@@ -287,7 +287,7 @@ public class TimeExpandedNetwork extends Network {
      * @param source the flow problem's source, may not be null.
      * @param sink the flow problem's sink, may not be null.
      * @param timeHorizon the flow problem's time horizon.
-     * @param allowStorageInNodes <code>true</code> if flow can wait in all nodes, <code>false</code>
+     * @param allowStorageInNodes {@code true} if flow can wait in all nodes, {@code false}
      * otherwise.
      */
     public TimeExpandedNetwork(Network network,
@@ -625,7 +625,7 @@ public class TimeExpandedNetwork extends Network {
     /**
      * Returns whether flow can wait in all nodes, or only in sources and sinks.
      * Runtime O(1).
-     * @return <code>true</code> if flow can wait in all nodes, <code>false</code>
+     * @return {@code true} if flow can wait in all nodes, {@code false}
      * otherwise.
      */
     public boolean allowStorageInNodes() {
@@ -662,7 +662,7 @@ public class TimeExpandedNetwork extends Network {
   
     /**
      * Returns the single sink of the time expanded network,
-     * if it has one. Else an <code>AssertionError</code> will be thrown.
+     * if it has one. Else an {@code AssertionError} will be thrown.
      * The network does for example not contain a single sink
      * if it has multiple sinks and does not contain a super sink.
      * @return the single sink of this time expanded network,
@@ -689,7 +689,7 @@ public class TimeExpandedNetwork extends Network {
     
     /**
      * Returns the single source of the time expanded network,
-     * if it has one. Else an <code>AssertionError</code> will be thrown.
+     * if it has one. Else an {@code AssertionError} will be thrown.
      * The network does for example not contain a single source
      * if it has multiple sources and does not contain a super source.
      * @return the single source of this time expanded network,
@@ -753,14 +753,14 @@ public class TimeExpandedNetwork extends Network {
     
     /**
      * Compares this object with the specified object. If the specified object
-     * is equivalent to this one <code>true</code> is returned, <code>false
-     * </code> otherwise. A object is considered equivalent if and only if it is
+     * is equivalent to this one {@code true} is returned, {@code false
+     * } otherwise. A object is considered equivalent if and only if it is
      * a time expanded network with equals components (nodes, edges, 
      * base network, capacities, ...). Runtime O(n + m). 
      * @param o the object to compare this one to.
-     * @return <code>true</code> if the specified object
-     * is equivalent to this one, <code>false
-     * </code> otherwise.
+     * @return {@code true} if the specified object
+     * is equivalent to this one, {@code false
+     * } otherwise.
      */
     @Override
     public boolean equals(Object o) {

@@ -15,7 +15,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * The class <code>BestResponseDynamics</code> ...
+ * The class {@code BestResponseDynamics} ...
  * @author Joscha Kulbatzki, Jan-Philipp Kappmeier
  */
 public class BestResponseDynamics {
@@ -25,7 +25,7 @@ public class BestResponseDynamics {
 
 
 	/**
-	 * Creates a new instance of <code>BestResponseDynamics</code>.
+	 * Creates a new instance of {@code BestResponseDynamics}.
 	 */
 	public BestResponseDynamics() {
 

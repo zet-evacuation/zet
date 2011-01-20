@@ -30,7 +30,7 @@ import java.util.List;
 import zet.util.ConversionTools;
 
 /**
- * <code>PlanPoint</code> represents a point with integer coordinates. It represents a position
+ * {@code PlanPoint} represents a point with integer coordinates. It represents a position
  * in a {@link BuildingPlan} to a accuracy to millimeters. It is possible to get and setLocation coordinates
  * as float values, rounded to three decimals, representing the current value in meters.
  *
@@ -53,14 +53,14 @@ public class PlanPoint extends Point {
 	private Edge previousEdge;
 
 	/**
-	 * Creates a new instance of <code>PlanPoint</code> with default coordinates.
+	 * Creates a new instance of {@code PlanPoint} with default coordinates.
 	 */
 	public PlanPoint() {
 		super();
 	}
 
 	/**
-	 * Creates a new instance of <code>PlanPoint</code> with initialized coordinates.
+	 * Creates a new instance of {@code PlanPoint} with initialized coordinates.
 	 * @param p the point position as an arbitrary point object
 	 */
 	public PlanPoint( Point p ) {
@@ -69,7 +69,7 @@ public class PlanPoint extends Point {
 	}
 
 	/**
-	 * Creates a new instance of <code>PlanPoint</code> with initialized coordinates. These values
+	 * Creates a new instance of {@code PlanPoint} with initialized coordinates. These values
 	 * are are assumed to have accurancy of millimeter.
 	 * @param x the {@code x}-coordinate of the point
 	 * @param y the {@code y}-coordinate of the point
@@ -86,7 +86,7 @@ public class PlanPoint extends Point {
 	}
 
 	/**
-	 * Creates a new instance of <code>PlanPoint</code> with initialized coordinates. These values
+	 * Creates a new instance of {@code PlanPoint} with initialized coordinates. These values
 	 * are assumed to be meters and tare transformed to meter.
 	 * @param x the {@code x}-coordinate of the point
 	 * @param y the {@code y}-coordinate of the point
@@ -99,7 +99,7 @@ public class PlanPoint extends Point {
 	}
 
 	/**
-	 * Creates a new instance of <code>PlanPoint</code> with initialized coordinates. The coordinates
+	 * Creates a new instance of {@code PlanPoint} with initialized coordinates. The coordinates
 	 * can be specified as integer or double values, defining values in millimeter and meter.
 	 * @param x the {@code x}-coordinate of the point
 	 * @param y the {@code y}-coordinate of the point
@@ -155,12 +155,12 @@ public class PlanPoint extends Point {
 //	}
 
 	/**
-	 * Checks if an object is equal to this instance of <code>PlanPoint</code>. A point
+	 * Checks if an object is equal to this instance of {@code PlanPoint}. A point
 	 * can only be equal to variables of the same type. In that case two points are
-	 * are considered equal, if and only if their <code>x</code> and <code>y</code>
+	 * are considered equal, if and only if their {@code x} and {@code y}
 	 * coordinates are equal.
-	 * @param obj the <code>Object</code> that is compared to this <code>PlanPoint</code>
-	 * @return true if obj is of <code>PlanPoint</code> type and both coordinates are equal.
+	 * @param obj the {@code Object} that is compared to this {@code PlanPoint}
+	 * @return true if obj is of {@code PlanPoint} type and both coordinates are equal.
 	 */
 	@Override
 	public boolean equals( Object obj ) {
@@ -202,7 +202,7 @@ public class PlanPoint extends Point {
 	 * Returns the second edge that is incident to this point
 	 * @param e An edge that must be incident to this point
 	 * @return The second edge that is incident to this point. 
-	 * @throws IllegalArgumentException Is thrown when <code>e</code> is not
+	 * @throws IllegalArgumentException Is thrown when {@code e} is not
 	 * incident to the plan point.
 	 */
 	public Edge getOtherEdge( Edge e ) throws IllegalArgumentException {
@@ -228,7 +228,7 @@ public class PlanPoint extends Point {
 	 * Returns the value of this point als float value. Due to the limitations of
 	 * integer it is possible to setLocation coordinates between about -2147483 and
 	 * 2147483 meters.
-	 * @return integer transformed <code>x</code>-coordinate
+	 * @return integer transformed {@code x}-coordinate
 	 */
 	public double getXMeter() {
 		return ConversionTools.roundScale3( getX() / 1000.0 );
@@ -242,7 +242,7 @@ public class PlanPoint extends Point {
 	 * Returns the value of this point als float value. Due to the limitations of
 	 * integer it is possible to setLocation coordinates between about -2147483 and
 	 * 2147483 meters.
-	 * @return integer transformed <code>y</code>-coordinate
+	 * @return integer transformed {@code y}-coordinate
 	 */
 	public double getYMeter() {
 		return ConversionTools.roundScale3( getY() / 1000.0 );
@@ -266,8 +266,8 @@ public class PlanPoint extends Point {
 	 * Sets the new location of this point. The coordinates are (even if they are double values)
 	 * assumed to be integers refering to millimeter positions. Thus the real parts of the
 	 * values are cutted off.
-	 * @param x the <cide>x</code>-coordinate of the point
-	 * @param y the <code>y</code>-coordinate of the point
+	 * @param x the <cide>x}-coordinate of the point
+	 * @param y the {@code y}-coordinate of the point
 	 */
 	@Override
 	public void setLocation( double x, double y ) {
@@ -322,7 +322,7 @@ public class PlanPoint extends Point {
 	}
 
 	/**
-	 * Creates a copy of a list of <code>PlanPoint</code> objects. The copies are
+	 * Creates a copy of a list of {@code PlanPoint} objects. The copies are
 	 * new instances.
 	 * @param original the original list of points
 	 * @return the new list containing the copies
@@ -335,7 +335,7 @@ public class PlanPoint extends Point {
 	}
 
 	/**
-	 * Returns a string representation of the <code>PlanPoint</code> that
+	 * Returns a string representation of the {@code PlanPoint} that
 	 * textually represents the point.
 	 * <p>A point is represented as a tupel of its coordinates like this:</p>
 	 * <blockquote><pre>

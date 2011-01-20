@@ -6,7 +6,7 @@
 package ds.z.exception;
 
 /**
- * The class <code>AssignmentException</code> ...
+ * The class {@code AssignmentException} ...
  * @author Jan-Philipp Kappmeier
  */
 public class AssignmentException extends RuntimeException {
@@ -19,7 +19,7 @@ public class AssignmentException extends RuntimeException {
 	State state;
 
 	/**
-	 * Creates a new instance of <code>AssignmentException</code>.
+	 * Creates a new instance of {@code AssignmentException}.
 	 */
 	public AssignmentException() {
 		super();

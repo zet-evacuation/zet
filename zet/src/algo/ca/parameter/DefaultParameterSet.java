@@ -75,7 +75,7 @@ public class DefaultParameterSet extends AbstractDefaultParameterSet {
 	}
 
 	/**
-	 * <p>Given a cell <code>referenceCell</code> that is occupied by an
+	 * <p>Given a cell {@code referenceCell} that is occupied by an
 	 * individual I, this method calculates the potential of a cell with respect 
 	 * to I's panic and both the static and the dynamic potential. One can
 	 * think of the resulting potential as an "average" of the static and the
@@ -85,8 +85,8 @@ public class DefaultParameterSet extends AbstractDefaultParameterSet {
 	 * dynamic potential will become while the influence of the static 
 	 * potential lessens.</p>
 	 * @param referenceCell A cell with an individual
-	 * @param targetCell A neighbour of <code>cell</code>
-	 * @return The potential between <code>referenceCell</code> and  <code>targetCell</code> with respect to the static and the  dynamic potential.
+	 * @param targetCell A neighbour of {@code cell}
+	 * @return The potential between {@code referenceCell} and  {@code targetCell} with respect to the static and the  dynamic potential.
 	 */
 	@Override
 	public double effectivePotential( Cell referenceCell, Cell targetCell ) {

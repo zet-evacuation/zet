@@ -23,7 +23,7 @@ import java.util.HashMap;
  */
 public class PotentialManager {
 
-	/** A <code>TreeMap</code> of all StaticPotentials. */
+	/** A {@code TreeMap} of all StaticPotentials. */
 	private HashMap<Integer, StaticPotential> staticPotentials;
 	/** The safe potential*/
 	private StaticPotential safePotential;
@@ -49,9 +49,9 @@ public class PotentialManager {
 
 	/**
 	 * Adds the StaticPotential into the List of staticPotentials.
-	 * The method throws <code>IllegalArgumentException</code> if the StaticPtential already exists.
+	 * The method throws {@code IllegalArgumentException} if the StaticPtential already exists.
 	 * @param potential The StaticPotential you want to add to the List.
-	 * @throws IllegalArgumentException if the <code>StaticPotential</code> already exists
+	 * @throws IllegalArgumentException if the {@code StaticPotential} already exists
 	 */
 	public void addStaticPotential( StaticPotential potential ) throws IllegalArgumentException {
 		if( staticPotentials.containsKey( potential.getID() ) )
@@ -62,7 +62,7 @@ public class PotentialManager {
 
 	/**
 	 * Get the StaticPotential with the specified ID.
-	 * The method throws <code>IllegalArgumentException</code> if the specified ID not exists.
+	 * The method throws {@code IllegalArgumentException} if the specified ID not exists.
 	 * @param id
 	 * @return The StaticPotential
 	 * @throws IllegalArgumentException

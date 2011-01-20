@@ -24,7 +24,7 @@ import ds.z.Edge;
 import ds.z.PlanPolygon;
 
 /**
- * The exception <code>PolygonNotClosedException</code> indicates that a
+ * The exception {@code PolygonNotClosedException} indicates that a
  * polygon is not closed. You have to submit the polygon in which the error
  * occurs. That gives a possibility to tell the user where the error occured.
  * This exception is especially used by {@link ds.z.Room} and {@link ds.z.Area}.
@@ -33,7 +33,7 @@ import ds.z.PlanPolygon;
 public class PolygonNotClosedException extends ValidationException {
 	
 	/**
-	 * Creates a new instance of <code>PolygonNotClosedException</code>. A {@link PlanPolygon} needs
+	 * Creates a new instance of {@code PolygonNotClosedException}. A {@link PlanPolygon} needs
 	 * to be passed.
 	 * @param polygon the polygon that caused this exception
 	 */
@@ -42,7 +42,7 @@ public class PolygonNotClosedException extends ValidationException {
 	}
 	
 	/**
-	 * Creates a new instance of <code>PolygonNotClosedException</code> that contains the errorous {@link PlanPolygon}.
+	 * Creates a new instance of {@code PolygonNotClosedException} that contains the errorous {@link PlanPolygon}.
 	 * @param polygon the polygon that caused this exception
 	 * @param s an additional information string
 	 */

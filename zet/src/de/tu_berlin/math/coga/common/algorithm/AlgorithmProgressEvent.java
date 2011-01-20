@@ -30,7 +30,7 @@ public class AlgorithmProgressEvent extends AlgorithmEvent {
     private double progress;
 
     /**
-     * Creates an <code>AlgorithmProgressEvent</code> for the specified 
+     * Creates an {@code AlgorithmProgressEvent} for the specified 
      * algorithm and the current progress value.
      * @param algorithm the algorithm for which progress occurred.
      * @param progress the progress value.
@@ -42,7 +42,7 @@ public class AlgorithmProgressEvent extends AlgorithmEvent {
     }
 
     /**
-     * Creates an <code>AlgorithmProgressEvent</code> for the specified
+     * Creates an {@code AlgorithmProgressEvent} for the specified
      * algorithm and the current progress value.
      * @param algorithm the algorithm for which progress occurred.
 		 * @param eventTime the time when the event was fired

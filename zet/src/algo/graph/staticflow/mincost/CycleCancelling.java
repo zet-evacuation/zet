@@ -43,7 +43,7 @@ public abstract class CycleCancelling extends Algorithm<MinimumCostFlowProblem, 
      * afterwards by augmenting cycles of negative cost.
      * @param problem the minium cost flow problem.
      * @return a minimum cost flow for the specified problem or 
-     * <code>null</code> if there is no feasible flow.
+     * {@code null} if there is no feasible flow.
      */
     @Override
     protected Flow runAlgorithm(MinimumCostFlowProblem problem) {
@@ -69,7 +69,7 @@ public abstract class CycleCancelling extends Algorithm<MinimumCostFlowProblem, 
 
     /**
      * Obtain a cycle with negative total cost if such a cycle exists.
-     * @return a cycle of negative total cost or <code>null</code> if no such 
+     * @return a cycle of negative total cost or {@code null} if no such 
      * cycle exists.
      */
     protected abstract StaticPath findCycle(Network network, IdentifiableIntegerMapping<Edge> costs);

@@ -30,7 +30,7 @@ import java.util.HashMap;
  */
 public class ZToExitMapping  extends IndividualToExitMapping {
 	/**
-	 * This mapping is the main part of the <code>GraphBasedIndividualToExitMapping</code>.
+	 * This mapping is the main part of the {@code GraphBasedIndividualToExitMapping}.
 	 * It maps individuals to {@link ds.ca.TargetCell} objects, i.e. it maps
 	 * an individual to the cell it should go to. The target cell represents 
 	 * the exit the individual shall go to.

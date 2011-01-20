@@ -31,7 +31,7 @@ public class JQuickVisualizationToolBar extends JToolBar implements ActionListen
 	}
 
 	/**
-	 * Creates the <code>JToolBar</code> for the quick visualization.
+	 * Creates the {@code JToolBar} for the quick visualization.
 	 */
 	private void createQuickVisualizationToolBar() {
 		loc.setPrefix( "gui.toolbar." );

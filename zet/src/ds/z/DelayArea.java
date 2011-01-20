@@ -53,7 +53,7 @@ public class DelayArea extends Area<Edge> {
 	private DelayType delayType;
 	
 	/**
-	 * Constucts a new <code>DelayArea</code> with the default <code>speedFactor</code>
+	 * Constucts a new {@code DelayArea} with the default {@code speedFactor}
 	 * provided by the specified {@link DelayType}.
 	 * 
 	 * @param room to which the area belongs

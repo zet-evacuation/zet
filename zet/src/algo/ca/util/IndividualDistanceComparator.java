@@ -9,7 +9,7 @@ import ds.ca.Individual;
 import java.util.Comparator;
 
 /**
- * The class <code>IndividualDistanceComparator</code> compares two individuals
+ * The class {@code IndividualDistanceComparator} compares two individuals
  * in means of their distance to the exit using their currently selected
  * potential field.
  * @param <E> the compared object class, that must extend {@link ds.ca.Individual}
@@ -18,7 +18,7 @@ import java.util.Comparator;
 public class IndividualDistanceComparator<E extends Individual> implements Comparator<E> {
 
 	/**
-	 * Creates a new instance of <code>IndividualDistanceComparator</code>. No
+	 * Creates a new instance of {@code IndividualDistanceComparator}. No
 	 * initialization is needed.
 	 */
 	public IndividualDistanceComparator() { }

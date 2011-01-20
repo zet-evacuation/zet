@@ -224,8 +224,8 @@ public abstract class AbstractVisualization extends AbstractOpenGLCanvas {
 	}
 
 	/**
-	 * Returns <code>true</code> if the 3-dimensonal perspective view is enabled.
-	 * @return <code>true</code> if 3-dimensonal perspective view is enabled, <code>false</code> otherwise.
+	 * Returns {@code true} if the 3-dimensonal perspective view is enabled.
+	 * @return {@code true} if 3-dimensonal perspective view is enabled, {@code false} otherwise.
 	 */
 	final public boolean is3D() {
 		return is3D;

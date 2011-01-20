@@ -27,8 +27,8 @@ import ds.graph.IntegerIntegerMapping;
 import ds.graph.Network;
 
 /**
- * The <code>EdgeBasedFlowOverTime</code> class represents an edge based representation
- * of a dynamic flow. For each edge a <code>EdgeBasedFlowOverTime</code> stores an
+ * The {@code EdgeBasedFlowOverTime} class represents an edge based representation
+ * of a dynamic flow. For each edge a {@code EdgeBasedFlowOverTime} stores an
  * {@link IntegerIntegerMapping} representing the value of the flow depending
  * on the time. The mapping between edges and flow functions is internally
  * stored as an {@link IdentifiableObjectMapping} from {@link Edge} objects to
@@ -42,10 +42,10 @@ public class EdgeBasedFlowOverTime {
     private IdentifiableObjectMapping<Edge,IntegerIntegerMapping> map;
     
     /**
-     * Creates a new <code>EdgeBasedFlowOverTime</code> for the network <code>network</code>
+     * Creates a new {@code EdgeBasedFlowOverTime} for the network {@code network}
      * where the flow on all edges is zero all the time.
      * The flow functions can later be set by 
-     * <code>set(Edge edge, IntegerIntegerMapping flowFunction)</code>.
+     * {@code set(Edge edge, IntegerIntegerMapping flowFunction)}.
      * @param network the network for which the empty flow shall be created.
      */
     public EdgeBasedFlowOverTime(Network network) {
@@ -57,10 +57,10 @@ public class EdgeBasedFlowOverTime {
     }
     
     /**
-     * Creates a new <code>EdgeBasedFlowOverTime</code> object where the edges are mapped
-     * to flow functions as given in <code>flowOnEdges</code>.
+     * Creates a new {@code EdgeBasedFlowOverTime} object where the edges are mapped
+     * to flow functions as given in {@code flowOnEdges}.
      * @param flowOnEdges mapping of edges to flow functions that shall be 
-     *        used in this <code>EdgeBasedFlowOverTime</code>
+     *        used in this {@code EdgeBasedFlowOverTime}
      */
     public EdgeBasedFlowOverTime(IdentifiableObjectMapping<Edge,IntegerIntegerMapping> flowOnEdges){
         map = flowOnEdges;
@@ -70,12 +70,12 @@ public class EdgeBasedFlowOverTime {
     }*/
     
     /**
-     * Gets the <code>IntegerIntegerMapping</code> that represents the flow
-     * function on the edge <code>edge</code>. If the flow function is not
+     * Gets the {@code IntegerIntegerMapping} that represents the flow
+     * function on the edge {@code edge}. If the flow function is not
      * stored for this edge, null is returned.
      * @param edge
-     * @return the <code>IntegerIntegerMapping</code> that represents the flow
-     * function on the edge <code>edge</code>
+     * @return the {@code IntegerIntegerMapping} that represents the flow
+     * function on the edge {@code edge}
      */
     public IntegerIntegerMapping get(Edge edge) {
         if (map.isDefinedFor(edge))
@@ -85,24 +85,24 @@ public class EdgeBasedFlowOverTime {
     }   
     
     /**
-     * Sets the flow function of the edge <code>edge</code> to the
-     * <code>IntegerIntegerMapping</code> <code>flowFunction</code>.
+     * Sets the flow function of the edge {@code edge} to the
+     * {@code IntegerIntegerMapping} {@code flowFunction}.
      * @param edge the edge which flow function shall be set
-     * @param flowFunction the flow function that shall be set for <code>edge</code>.
+     * @param flowFunction the flow function that shall be set for {@code edge}.
      */
     public void set(Edge edge, IntegerIntegerMapping flowFunction){
         map.set(edge, flowFunction);
     }
     
     /**
-     * Returns whether the object <code>o</code> is equal to this
-     * <code>EdgeBasedFlowOverTime</code> object. 
+     * Returns whether the object {@code o} is equal to this
+     * {@code EdgeBasedFlowOverTime} object. 
      * The result is true if and only if the argument is not null and is a 
-     * <code>EdgeBasedFlowOverTime</code> object having which flow function is equal
-     * of the one of this <code>EdgeBasedFlowOverTime</code>.
+     * {@code EdgeBasedFlowOverTime} object having which flow function is equal
+     * of the one of this {@code EdgeBasedFlowOverTime}.
      * @param o  o object to compare.
-     * @return <code>true</code> if the given object represents a
-     * <code>EdgeBasedFlowOverTime</code> equivalent to this node, <code>false</code> otherwise.
+     * @return {@code true} if the given object represents a
+     * {@code EdgeBasedFlowOverTime} equivalent to this node, {@code false} otherwise.
      */
     @Override
     public boolean equals(Object o) {
@@ -115,9 +115,9 @@ public class EdgeBasedFlowOverTime {
     }
     
     /**
-     * Returns a hash code for this <code>EdgeBasedFlowOverTime</code> object.
+     * Returns a hash code for this {@code EdgeBasedFlowOverTime} object.
      * The hash code is equal to the hashCode of the underlying 
-     * <code>IdentifiableObjectMapping</code>.
+     * {@code IdentifiableObjectMapping}.
      * @return the hash code of this object
      */
     @Override
@@ -127,9 +127,9 @@ public class EdgeBasedFlowOverTime {
     
     /**
      * Returns a String describing the flow. 
-     * For a description see the <code>toString()</code> method of
+     * For a description see the {@code toString()} method of
      * {@link IdentifiableObjectMapping}.
-     * @return a String describing the flow, see the <code>toString()</code> method of
+     * @return a String describing the flow, see the {@code toString()} method of
      * {@link IdentifiableObjectMapping}.
      */
     @Override
@@ -138,9 +138,9 @@ public class EdgeBasedFlowOverTime {
     }
     
     /**
-     * Clones this <code>EdgeBasedFlowOverTime</code> by cloning the underlying 
-     * <code>IdentifiableObjectMapping</code>.
-     * @return a clone of this <code>EdgeBasedFlowOverTime</code> object.
+     * Clones this {@code EdgeBasedFlowOverTime} by cloning the underlying 
+     * {@code IdentifiableObjectMapping}.
+     * @return a clone of this {@code EdgeBasedFlowOverTime} object.
      */
     @Override
     public EdgeBasedFlowOverTime clone(){

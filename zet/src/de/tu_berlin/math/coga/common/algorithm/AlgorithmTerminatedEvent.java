@@ -30,7 +30,7 @@ public class AlgorithmTerminatedEvent extends AlgorithmEvent {
 	long runtime = -1;
 
 	/**
-	 * Creates an <code>AlgorithmTerminatedEvent</code> for the specified algorithm.
+	 * Creates an {@code AlgorithmTerminatedEvent} for the specified algorithm.
 	 * @param algorithm the algorithm that has terminated.
 	 */
 	public AlgorithmTerminatedEvent( Algorithm algorithm ) {
@@ -39,7 +39,7 @@ public class AlgorithmTerminatedEvent extends AlgorithmEvent {
 	}
 
 	/**
-	 * Creates an <code>AlgorithmTerminatedEvent</code> for the specified
+	 * Creates an {@code AlgorithmTerminatedEvent} for the specified
 	 * algorithm and saves the runtime of the algorithm.
 	 * @param algorithm the algorithm that has terminated.
 	 * @param runtime

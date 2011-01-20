@@ -23,7 +23,7 @@ package ds.graph;
 import java.util.Iterator;
 
 /**
- * The <code>Path</code> interface unites the common methods of paths in graphs.
+ * The {@code Path} interface unites the common methods of paths in graphs.
  * It can be implemented by static paths as well as by dynamic paths.
  */
 public interface Path extends Iterable<Edge> {
@@ -32,10 +32,10 @@ public interface Path extends Iterable<Edge> {
      * Extends the path by adding an edge at the start.
      * The edge must be consistent to the current first edge of the path,
      * i.e. i.e. the startnode of the current first edge must be
-     * equal to the endnode of <code>edge</code>.
+     * equal to the endnode of {@code edge}.
      * @param edge the edge to insert at the end of the path
-     * @return <code>true</code> if the insertion was successfull, 
-     *         <code>false</code> else.
+     * @return {@code true} if the insertion was successfull, 
+     *         {@code false} else.
      */
     boolean addFirstEdge(Edge edge);
 
@@ -43,10 +43,10 @@ public interface Path extends Iterable<Edge> {
      * Extends the path by adding an edge at the end.
      * The edge must be consistent to the current last edge of the path,
      * i.e. i.e. the endnode of the current last edge must be
-     * equal to the startnode of <code>edge</code>.
+     * equal to the startnode of {@code edge}.
      * @param edge the edge to insert at the end of the path
-     * @return <code>true</code> if the insertion was successful,
-     * <code>false</code> else.
+     * @return {@code true} if the insertion was successful,
+     * {@code false} else.
      */
     boolean addLastEdge(Edge edge);
     
@@ -95,16 +95,16 @@ public interface Path extends Iterable<Edge> {
     /**
      * Shortens the path by removing the first edge.
      * If the path is empty, nothing happens.
-     * @return <code>false</code> if there was no element to be removed,
-     *         <code>true</code> else.
+     * @return {@code false} if there was no element to be removed,
+     *         {@code true} else.
      */
     boolean removeFirstEdge();
     
     /**
      * Shortens the path by removing the last edge.
      * If the path is empty, nothing happens.
-     * @return <code>false</code> if there was no element to be removed,
-     *         <code>true</code> else.
+     * @return {@code false} if there was no element to be removed,
+     *         {@code true} else.
      */
     boolean removeLastEdge();    
 }

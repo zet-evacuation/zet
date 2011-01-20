@@ -24,14 +24,14 @@ import java.lang.reflect.Array;
 import java.util.Arrays;
 
 /**
- * The <code>IntegerObjectMapping</code> class represents a mapping from 
+ * The {@code IntegerObjectMapping} class represents a mapping from 
  * integers to arbitrary. Values of this mapping's domain are referred
  * to as time henceforth, since time being the domain will be the primary
  * application for such mappings.
- * Internally, the <code>IntegerObjectMapping</code> is considered as a step
+ * Internally, the {@code IntegerObjectMapping} is considered as a step
  * function. Consequently, the mapping is stored as a sorted collection of step
  * starts which is obviously sufficient to encode the mapping. 
- * The size needed to encode an <code>IntegerObjectMapping</code> is therefore
+ * The size needed to encode an {@code IntegerObjectMapping} is therefore
  * linear in the number of steps required.
  * In order to access steps efficiently, a TreeSet is used which in turn is 
  * based on a red-black tree. This allows the addition, removal and search for
@@ -49,7 +49,7 @@ public class IntegerObjectArrayMapping<R> {
     private int highestIndex;
     
     /**
-     * Creates a new <code>IntegerObjectMapping</code> that is defined for all
+     * Creates a new {@code IntegerObjectMapping} that is defined for all
      * integer values. Initially, all integers are mapped to null. Runtime O(1).
      */
     public IntegerObjectArrayMapping(int timeHorizon, Class<R> type) {
@@ -71,7 +71,7 @@ public class IntegerObjectArrayMapping<R> {
     }
     
     /**
-     * Maps the integer <code>time</code> to the object <code>value</code>.
+     * Maps the integer {@code time} to the object {@code value}.
      * Runtime O(log (number of steps)).
      * @param time the integer for which an association is to be made.
      * @param value the value to be associated with the integer.
@@ -86,7 +86,7 @@ public class IntegerObjectArrayMapping<R> {
     /**
      * Returns a string representation of this mapping.
      * Runtime O(number of steps).
-     * @return the string representation of the underlying <code>TreeSet</code>.
+     * @return the string representation of the underlying {@code TreeSet}.
      */
     @Override
     public String toString() {

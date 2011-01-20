@@ -377,7 +377,7 @@ public class JVisualizationView extends AbstractVisualizationView<ZETVisualizati
 	}
 
 	/**
-	 * Adds another <code>ItemListener</code> to the potential selection box. This
+	 * Adds another {@code ItemListener} to the potential selection box. This
 	 * can be used to access external GUI elements.
 	 * @param listener
 	 */

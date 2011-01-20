@@ -50,7 +50,7 @@ public class Person {
 	private ds.z.SaveArea saveArea;
 
 	/**
-	 * Creates a new instance of <code>Person</code> at the specified position
+	 * Creates a new instance of {@code Person} at the specified position
 	 * inside the specified room.
 	 * @param room the room in which the person is located
 	 * @param position the position
@@ -204,7 +204,7 @@ public class Person {
 	}
 
 	/**
-	 * Returns the save area assigned to this person. It is <code>null</code> if
+	 * Returns the save area assigned to this person. It is {@code null} if
 	 * no explicit area is set.
 	 * @return the save area assigned to this person.
 	 */
@@ -213,7 +213,7 @@ public class Person {
 	}
 
 	/**
-	 * Sets the preferred save area of this person. Use <code>null</code> if no
+	 * Sets the preferred save area of this person. Use {@code null} if no
 	 * explicit area is set.
 	 * @param saveArea the preferred save area
 	 */

@@ -91,8 +91,8 @@ public class JPlanImageProperties extends JComponent {
 	}
 	
 	/**
-	 * Initializes a general dialog. The <code>dialog</code> variable has to be
-	 * initialized before <code>initDialog</code> is called.
+	 * Initializes a general dialog. The {@code dialog} variable has to be
+	 * initialized before {@code initDialog} is called.
 	 */
 	private void initDialog( String title ) {
     dialog.setDefaultCloseOperation( javax.swing.WindowConstants.DISPOSE_ON_CLOSE );

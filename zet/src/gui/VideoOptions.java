@@ -130,7 +130,7 @@ public class VideoOptions extends javax.swing.JDialog {
 	final DefaultListModel listModel = new DefaultListModel();
 
 	/**
-	 * Creates the form <code>VideoOptions</code> and sets the position to
+	 * Creates the form {@code VideoOptions} and sets the position to
 	 * centered.
 	 * @param owner the parent window that owns this window as child
 	 */

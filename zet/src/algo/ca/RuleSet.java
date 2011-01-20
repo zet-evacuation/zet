@@ -24,30 +24,30 @@ import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 
 /**
- * <p>The abstract base class for rule sets. A <code>RuleSet</code> basically is
+ * <p>The abstract base class for rule sets. A {@code RuleSet} basically is
  * a container for {@link Rule} objects. The rules fall into two different
  * types: the initialization rules and the loop rules. </p>
  * <p>When a new instance is created, it should load the rules itself,
  * so all child classes need to implement the  method {@code selfInit()}. It
  * is intended to load the rules out of the {@link ds.PropertyContainer}, but this
- * can easyly be omitted. Nevertheless <code>selfInit()</code> needs to be
+ * can easyly be omitted. Nevertheless {@code selfInit()} needs to be
  * overwritten at least with an empty method.</p>
- * <p>As the objects are divided in two parts, a <code>RuleSet</code> provides
+ * <p>As the objects are divided in two parts, a {@code RuleSet} provides
  * three different iterators: one that iterates through all known rules, one
  * iterating the initialization rules and a third one iterating the loop rules.
  * </p>
  * @author Jan-Philipp Kappmeier
  */
 public abstract class RuleSet implements Iterable<Rule> {
-	/** The <code>ArrayList</code> containing all rules in only one instance. */
+	/** The {@code ArrayList} containing all rules in only one instance. */
 	private ArrayList<Rule>allRules;
-	/** The <code>ArrayList</code> containing all initialization rules, maybe twice or more often. */
+	/** The {@code ArrayList} containing all initialization rules, maybe twice or more often. */
 	private ArrayList<Rule>primaryRules;
-	/** The <code>ArrayList</code> containing all loop rules, maybe twice or more often. */
+	/** The {@code ArrayList} containing all loop rules, maybe twice or more often. */
 	private ArrayList<Rule>loopRules;
 
 	/**
-	 * Creates a new instance of <code>RuleSet</code> and initializes the
+	 * Creates a new instance of {@code RuleSet} and initializes the
 	 * container. The abstract method {@link #selfInit()} is called, that should
 	 * load all neccessary rules.
 	 */
@@ -59,7 +59,7 @@ public abstract class RuleSet implements Iterable<Rule> {
 	}
 	
 	/**
-	 * Returns an <code>Iterator</code> that iterates through all known rules. All
+	 * Returns an {@code Iterator} that iterates through all known rules. All
 	 * rules are only contained once.
 	 * @return the iterator
 	 */
@@ -99,7 +99,7 @@ public abstract class RuleSet implements Iterable<Rule> {
 	/**
 	 * Creates a new instance of the {@link Rule} interface. The object has the
 	 * specified type and is created using the default constructor, thus the
-	 * <code>Rule</code> shall have at least this public constructor.
+	 * {@code Rule} shall have at least this public constructor.
 	 * @param ruleName the classname of the rule without the classpath "algo.ca.rule"
 	 * @return the new instace
 	 */
@@ -128,7 +128,7 @@ public abstract class RuleSet implements Iterable<Rule> {
 	}
 
 	/**
-	 * Creates a new instance of <code>RuleSet</code> of a specified class. The
+	 * Creates a new instance of {@code RuleSet} of a specified class. The
 	 * default constructor is called, thus the rule set shall have at least this
 	 * public constructor.
 	 * @param ruleSetName the classname of the rule set without the classpath "algo.ca"
@@ -157,7 +157,7 @@ public abstract class RuleSet implements Iterable<Rule> {
 	}
 	
 	/**
-	 * Returns an <code>Iterator</code> that iterates through the initialization
+	 * Returns an {@code Iterator} that iterates through the initialization
 	 * rules. These rules can be added twice or more often.
 	 * @return the iterator
 	 */
@@ -166,7 +166,7 @@ public abstract class RuleSet implements Iterable<Rule> {
 	}
 	
 	/**
-	 * Returns an <code>Iterator</code> that iterates through the loop rules.
+	 * Returns an {@code Iterator} that iterates through the loop rules.
 	 * These rules can be added twice or more often.
 	 * @return the iterator
 	 */
@@ -176,7 +176,7 @@ public abstract class RuleSet implements Iterable<Rule> {
 	
 	/**
 	 * Performs the initialization. This method is called by the constructor and
-	 * is supposed to load the rules contained in the <code>RuleSet</code>
+	 * is supposed to load the rules contained in the {@code RuleSet}
 	 */
 	protected abstract void selfInit();
 }

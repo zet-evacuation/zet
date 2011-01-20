@@ -17,13 +17,13 @@ import java.io.IOException;
 import umontreal.iro.lecuyer.charts.XYLineChart;
 
 /**
- * The class <code>DefaultParameterSetTest</code> tests the speed distribution.
+ * The class {@code DefaultParameterSetTest} tests the speed distribution.
  * @author Jan-Philipp Kappmeier
  */
 public class DefaultParameterSetTest {
 
 	/**
-	 * Creates a new instance of <code>DefaultParameterSetTest</code>.
+	 * Creates a new instance of {@code DefaultParameterSetTest}.
 	 */
 	public DefaultParameterSetTest() {
 		File propertyFile = new File( "./properties/rimea.xml" );

@@ -42,7 +42,7 @@ public class DoorCell extends BaseTeleportCell<DoorCell> {
 
 	/**
 	 * Constructs an empty DoorCell which is NOT connected with any other DoorCell
-	 * and has a speed-factor of <code>speedfactor</code>
+	 * and has a speed-factor of {@code speedfactor}
 	 * @param speedFactor The speedfactor for this cell
 	 * @param x x-coordinate of the cell in the room, 0 <= x <= width-1
 	 * @param y y-coordinate of the cell in the room, 0 <= y <= height-1

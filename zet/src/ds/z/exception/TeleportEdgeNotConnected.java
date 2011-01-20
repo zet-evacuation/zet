@@ -24,7 +24,7 @@ package ds.z.exception;
 import ds.z.*;
 
 /**
- * The exception <code>TeleportEdgeNotconnected</code> indicates that a
+ * The exception {@code TeleportEdgeNotconnected} indicates that a
  * teleport has not an associated teleport edge. It can also occur if
  * it is connected to an teleport edge, which is not connected
  * to the original one.

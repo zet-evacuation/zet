@@ -28,7 +28,7 @@ import java.util.MissingResourceException;
 import java.util.ResourceBundle;
 
 /**
- * <code>Loalization</code> is a class that provides the ability to localize an application. It supports access to files
+ * {@code Loalization} is a class that provides the ability to localize an application. It supports access to files
  * containing localized strings and number format conventions.
  * @author Jan-Philipp Kappmeier
  */

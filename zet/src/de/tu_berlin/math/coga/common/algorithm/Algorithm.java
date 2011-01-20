@@ -29,10 +29,10 @@ import java.util.Set;
 /**
  * The basic framework class for algorithms. It allows to define input and
  * output of an algorithm by using generics and provides the framework to run
- * an algorithm in its own thread by implementing <code>Runnable</code>.
+ * an algorithm in its own thread by implementing {@code Runnable}.
  * Furthermore, it keeps track of the current state of the algorithm and
  * provides an generic exception handling that can be extended by overwriting
- * <code>handleException</code>. It also keeps track of the algorithms runtime
+ * {@code handleException}. It also keeps track of the algorithms runtime
  * and offers simple logging features that should be preferred to System.out
  * logging. Finally it offers the possibility to dispatch information about the
  * algorithm'Seconds state and progress to listeners, that can register and unregister
@@ -199,7 +199,7 @@ public abstract class Algorithm<Problem, Solution> implements Runnable {
 	/**
 	 * Returns the runtime of the algorithm as a string formatted with regard to
 	 * human readability. The formatting is done according to
-	 * <code>MillisecondTimeFormatter</code>.
+	 * {@code MillisecondTimeFormatter}.
 	 * @return the runtime of the algorithm formatted as a string.
 	 * @throws IllegalStateException if the algorithm has not terminated yet.
 	 */
@@ -247,8 +247,8 @@ public abstract class Algorithm<Problem, Solution> implements Runnable {
 	/**
 	 * Returns whether log messages of this algorithm are written to System.out
 	 * or not.
-	 * @return <code>true</code>, if log messages are written to System.out,
-	 * <code>false</code> if otherwise.
+	 * @return {@code true}, if log messages are written to System.out,
+	 * {@code false} if otherwise.
 	 */
 	public final boolean isLogging() {
 		return logging;
@@ -266,8 +266,8 @@ public abstract class Algorithm<Problem, Solution> implements Runnable {
 
 	/**
 	 * Returns whether events are also treated as log messages or not.
-	 * @return <code>true</code>, if events are also treated as log messages,
-	 * <code>false</code> if otherwise.
+	 * @return {@code true}, if events are also treated as log messages,
+	 * {@code false} if otherwise.
 	 */
 	public final boolean isLoggingEvents() {
 		return loggingEvents;
@@ -295,8 +295,8 @@ public abstract class Algorithm<Problem, Solution> implements Runnable {
 	/**
 	 * Returns whether a problem instance has been specified for the algorithm.
 	 * This is the prerequisite for beginning the execution of the algorithm.
-	 * @return <code>true</code> if a problem instance has been specified,
-	 * <code>false</code> otherwise.
+	 * @return {@code true} if a problem instance has been specified,
+	 * {@code false} otherwise.
 	 */
 	public final boolean isProblemInitialized() {
 		return problem != null;
@@ -304,11 +304,11 @@ public abstract class Algorithm<Problem, Solution> implements Runnable {
 
 	/**
 	 * Returns whether this algorithm has successfully run and solved the
-	 * instance of the problem given to it. If this is <code>true</code>, then
-	 * the solution to the instance of the problem can be obtained by <code>
-	 * getSolution</code>.
-	 * @return <code>true</code> if the algorithm'Seconds instance of the problem has
-	 * been solved successfully and <code>false</code> otherwise.
+	 * instance of the problem given to it. If this is {@code true}, then
+	 * the solution to the instance of the problem can be obtained by {@code 
+	 * getSolution}.
+	 * @return {@code true} if the algorithm'Seconds instance of the problem has
+	 * been solved successfully and {@code false} otherwise.
 	 */
 	public final boolean isProblemSolved() {
 		return state == State.SOLVED;
@@ -316,8 +316,8 @@ public abstract class Algorithm<Problem, Solution> implements Runnable {
 
 	/**
 	 * Returns whether the algorithm is currently begin executed.
-	 * @return <code>true</code> if this algorithm is currently running and
-	 * <code>false</code> otherwise.
+	 * @return {@code true} if this algorithm is currently running and
+	 * {@code false} otherwise.
 	 */
 	public final boolean isRunning() {
 		return state == State.SOLVING;

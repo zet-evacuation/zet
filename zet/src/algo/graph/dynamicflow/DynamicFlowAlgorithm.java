@@ -27,7 +27,7 @@ import ds.graph.Network;
 /**
  * This class represents a dynamic flow algorithm.
  * A dynamic flow algorithm is a special case of a graph algorithm
- * and therefore this class implements the <code>GraphAlgorithm</code>
+ * and therefore this class implements the {@code GraphAlgorithm}
  * interface. 
  */
 public abstract class DynamicFlowAlgorithm /*extends GraphAlgorithm*/ extends Algorithm<DynamicFlowProblem, PathBasedFlowOverTime>  {
@@ -57,10 +57,10 @@ public abstract class DynamicFlowAlgorithm /*extends GraphAlgorithm*/ extends Al
 	}
 	
 	/**
-	 * Returns the calculated flow as <code>PathBasedFlowOverTime</code> object.
+	 * Returns the calculated flow as {@code PathBasedFlowOverTime} object.
 	 * Returns null if the algorithm has not run yet, but throws an exception
 	 * if it has run and only computed an edge based flow.
-	 * @return the calculated flow as <code>PathBasedFlowOverTime</code> object.
+	 * @return the calculated flow as {@code PathBasedFlowOverTime} object.
 	 */
 	public final PathBasedFlowOverTime getResultFlowPathBased(){
 		if (resultFlowPathBased != null)
@@ -82,10 +82,10 @@ public abstract class DynamicFlowAlgorithm /*extends GraphAlgorithm*/ extends Al
 	}
 	
 	/**
-	 * Returns the calculated flow as <code>EdgeBasedFlowOverTime</code> object.
+	 * Returns the calculated flow as {@code EdgeBasedFlowOverTime} object.
 	 * If the algorithm has not run yet, null is returned. If the algorithm produced a path based flow, 
 	 * the edge based flow is calculated and returned.
-	 * @return the calculated flow as <code>EdgeBasedFlowOverTime</code> object.
+	 * @return the calculated flow as {@code EdgeBasedFlowOverTime} object.
 	 */
 	public final EdgeBasedFlowOverTime getResultFlowEdgeBased(){
 		if (resultFlowEdgeBased != null){

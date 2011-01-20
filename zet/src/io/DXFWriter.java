@@ -37,7 +37,7 @@ public class DXFWriter {
 	private static int floorHeight = 2500;
 	
 	/**
-	 * Returns a String containing the <code>edge</code> as a dxf line.
+	 * Returns a String containing the {@code edge} as a dxf line.
 	 * @param edge the edge to be converted.
 	 * @return the edge converted into a dxf line.
 	 */
@@ -64,8 +64,8 @@ public class DXFWriter {
 	
 	
 	/**
-	 * Exports the given <code>BuildingPlan</code> object into
-	 * a dxf file with the name <code>file</code>.
+	 * Exports the given {@code BuildingPlan} object into
+	 * a dxf file with the name {@code file}.
 	 * @param file the name of the file to export into.
 	 * @param buildingPlan the building plan to be exported.
 	 */

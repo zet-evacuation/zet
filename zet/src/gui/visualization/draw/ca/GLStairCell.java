@@ -39,7 +39,7 @@ public class GLStairCell extends GLCell {
 	}
 
 	/**
-	 * Overriden version of <code>updateFloorColor</code>. It can switch between
+	 * Overriden version of {@code updateFloorColor}. It can switch between
 	 * showing the natural stair color of the color of a given potential.
 	 */
 	@Override

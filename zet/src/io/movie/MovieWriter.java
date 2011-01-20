@@ -27,7 +27,7 @@ import java.util.Vector;
 import javax.swing.JPanel;
 
 /**
- * A <code>MovieWriter</code> is a class that allows to save a list of files
+ * A {@code MovieWriter} is a class that allows to save a list of files
  * to a movie. It can work as a writer itself or as a wrapper for some
  * external movie encoder. It has support to create new filenames used to
  * store new movie frames and also provides a graphical framework allowing

@@ -26,12 +26,12 @@ import java.util.Collections;
 import java.util.LinkedList;
 
 /**
- * The class <code>ZToGraphRasterContainer</code> contains rastered versions of 
+ * The class {@code ZToGraphRasterContainer} contains rastered versions of 
  * (all) rooms of a Z-Plan. 
- * The rastered rooms are stored as a <code>ZToGraphRoomRaster</code>.
+ * The rastered rooms are stored as a {@code ZToGraphRoomRaster}.
  * 
- * The class extends the <code>RasterContainer</code> by a list of 
- * <code>ZToGraphRasteredDoor</code> objects to mark the doors in the
+ * The class extends the {@code RasterContainer} by a list of 
+ * {@code ZToGraphRasteredDoor} objects to mark the doors in the
  * rastered plan.
  */
 public class ZToGraphRasterContainer extends RasterContainer<ZToGraphRoomRaster>{

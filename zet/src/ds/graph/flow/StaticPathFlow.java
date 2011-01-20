@@ -27,10 +27,10 @@ import ds.graph.StaticPath;
 import java.util.Iterator;
 
 /**
- * The <code>@link StaticPathFlow</code> class represents the static flow 
+ * The {@code @link StaticPathFlow} class represents the static flow 
  * on one {@link StaticPath} in a network. 
- * A total amount of <code>amount</code> is send over the path.
- * <code>StaticPathFlows</code> are needed to represent static flows 
+ * A total amount of {@code amount} is send over the path.
+ * {@code StaticPathFlows} are needed to represent static flows 
  * path-based.
  */
 public class StaticPathFlow implements Iterable<Edge> {
@@ -46,7 +46,7 @@ public class StaticPathFlow implements Iterable<Edge> {
     protected int amount;
     
     /**
-     * Creates a <code>StaticPathFlow</code> with amount zero
+     * Creates a {@code StaticPathFlow} with amount zero
      * and an empty path.
      */
     public StaticPathFlow() {
@@ -55,11 +55,11 @@ public class StaticPathFlow implements Iterable<Edge> {
     }    
     
     /**
-     * Creates a <code>StaticPathFlow</code> with  
-     * amount <code>amount</code> and underlying path <code>path</code>.
+     * Creates a {@code StaticPathFlow} with  
+     * amount {@code amount} and underlying path {@code path}.
      * @param path the path along which flow is to be sent.
      * @param amount the total number of flow units to be sent.
-     * @exception NullPointerException if <code>path</code> is null.
+     * @exception NullPointerException if {@code path} is null.
      */
     public StaticPathFlow(StaticPath path, int amount){
         if (path == null) throw new NullPointerException(GraphLocalization.getSingleton (
@@ -69,10 +69,10 @@ public class StaticPathFlow implements Iterable<Edge> {
     }
     
     /**
-     * Returns the edges of the path belonging to this <code>StaticPathFlow</code>.
-     * If no path is set, <code>null</code> is returned.
-     * @return the edges of the path belonging to this <code>StaticPathFlow</code>.
-     *         or <code>null</code> if no path is set.
+     * Returns the edges of the path belonging to this {@code StaticPathFlow}.
+     * If no path is set, {@code null} is returned.
+     * @return the edges of the path belonging to this {@code StaticPathFlow}.
+     *         or {@code null} if no path is set.
      */
     public IdentifiableCollection<Edge> edges() {
         if (path == null) {
@@ -83,10 +83,10 @@ public class StaticPathFlow implements Iterable<Edge> {
     }
     
     /**
-     * Returns the first edge of the path belonging to this <code>StaticPathFlow</code>.
-     * If no path is set, <code>null</code> is returned.
-     * @return the first edge of the path belonging to this <code>StaticPathFlow</code>
-     *         or <code>null</code> if no path is set.
+     * Returns the first edge of the path belonging to this {@code StaticPathFlow}.
+     * If no path is set, {@code null} is returned.
+     * @return the first edge of the path belonging to this {@code StaticPathFlow}
+     *         or {@code null} if no path is set.
      */
     public Edge firstEdge() {
         if (path == null) {
@@ -97,10 +97,10 @@ public class StaticPathFlow implements Iterable<Edge> {
     }
     
     /**
-     * Returns the last edge of the path belonging to this <code>StaticPathFlow</code>.
-     * If no path is set, <code>null</code> is returned.
-     * @return the last edge of the path belonging to this <code>StaticPathFlow</code>
-     *         or <code>null</code> if no path is set.
+     * Returns the last edge of the path belonging to this {@code StaticPathFlow}.
+     * If no path is set, {@code null} is returned.
+     * @return the last edge of the path belonging to this {@code StaticPathFlow}
+     *         or {@code null} if no path is set.
      */
     public Edge lastEdge() {
         if (path == null){
@@ -112,27 +112,27 @@ public class StaticPathFlow implements Iterable<Edge> {
     
     /**
      * Returns an iterator for the edges of the path belonging 
-     * to this <code>StaticPathFlow</code>.
+     * to this {@code StaticPathFlow}.
      * With the iterator one can iterate comfortable through all edges.
      * @return an iterator for the edges of the path belonging 
-     * to this <code>StaticPathFlow</code>.
+     * to this {@code StaticPathFlow}.
      */
     public Iterator<Edge> iterator() {
         return path.iterator();
     }    
     
     /**
-     * Returns the path belonging to this <code>StaticPathFlow</code>.
-     * @return the path belonging to this <code>StaticPathFlow</code>.
+     * Returns the path belonging to this {@code StaticPathFlow}.
+     * @return the path belonging to this {@code StaticPathFlow}.
      */
     public StaticPath getPath() {
         return path;
     }
 
     /**
-     * Sets the path belonging to this  <code>StaticPathFlow</code>.
+     * Sets the path belonging to this  {@code StaticPathFlow}.
      * @param path the path to be set.
-     * @exception NullPointerException if <code>path</code> is null.
+     * @exception NullPointerException if {@code path} is null.
      */
     public void setPath(StaticPath path) {
         if (path == null) throw new NullPointerException(GraphLocalization.getSingleton (
@@ -141,16 +141,16 @@ public class StaticPathFlow implements Iterable<Edge> {
     }    
     
     /**
-     * Returns the amount of flow flowing over this <code>StaticPathFlow</code>.
-     * @return the amount of flow flowing over this <code>StaticPathFlow</code>.
+     * Returns the amount of flow flowing over this {@code StaticPathFlow}.
+     * @return the amount of flow flowing over this {@code StaticPathFlow}.
      */
     public int getAmount() {
         return amount;
     }
     
     /**
-     * Sets the amount of flow flowing over this <code>StaticPathFlow</code>.
-     * @param amount the amount of flow flowing over this <code>StaticPathFlow</code>.
+     * Sets the amount of flow flowing over this {@code StaticPathFlow}.
+     * @param amount the amount of flow flowing over this {@code StaticPathFlow}.
      */
     public void setAmount(int amount) {
         this.amount = amount;
@@ -168,13 +168,13 @@ public class StaticPathFlow implements Iterable<Edge> {
     }
     
     /**
-     * Returns whether an object is equal to this <code>StaticPathFlow</code>.
-     * The result is <code>true</code> if and only if the argument is not null
-     * and is a <code>StaticPathFlow</code> object having the same amount
-     * and containing a path equal to the path in this <code>StaticPathFlow</code>.
+     * Returns whether an object is equal to this {@code StaticPathFlow}.
+     * The result is {@code true} if and only if the argument is not null
+     * and is a {@code StaticPathFlow} object having the same amount
+     * and containing a path equal to the path in this {@code StaticPathFlow}.
      * @param o object to compare.
-     * @return <code>true</code> if the given object represents a
-     * <code>StaticPathFlow</code> equivalent to this object, <code>false</code> otherwise.
+     * @return {@code true} if the given object represents a
+     * {@code StaticPathFlow} equivalent to this object, {@code false} otherwise.
      */    
     @Override
     public boolean equals(Object o){
@@ -188,13 +188,13 @@ public class StaticPathFlow implements Iterable<Edge> {
     }
 
     /**
-     * Returns the hash code of this <code>StaticPathFlow</code>.
+     * Returns the hash code of this {@code StaticPathFlow}.
      * The hash code is calculated by computing the arithmetic mean
      * of the amount and the hash code of the underlying
-     * {@link StaticPath} of this <code>StaticPathFlow</code>.
+     * {@link StaticPath} of this {@code StaticPathFlow}.
      * Therefore the hash code is equal for static path flows that are equal 
-     * according to the <code>equals</code>-method, but not necessarily
-     * different for static path flows different to the <code>equals</code>-method.
+     * according to the {@code equals}-method, but not necessarily
+     * different for static path flows different to the {@code equals}-method.
      * If hashing of path flows is heavily used,
      * the implementation of this method should be reconsidered.
      * @return the hash code of this object
@@ -205,10 +205,10 @@ public class StaticPathFlow implements Iterable<Edge> {
     }
     
     /**
-     * Clones this <code>StaticPathFlow</code> by cloning the underlying {@link StaticPath}
-     * and creating a new <code>StaticPathFlow</code> with the clone and the same
-     * <code>amount</code> as this <code>StaticPathFlow</code>.
-     * @return a <code>StaticPathFlow</code> object with a clone of the path of this
+     * Clones this {@code StaticPathFlow} by cloning the underlying {@link StaticPath}
+     * and creating a new {@code StaticPathFlow} with the clone and the same
+     * {@code amount} as this {@code StaticPathFlow}.
+     * @return a {@code StaticPathFlow} object with a clone of the path of this
      * static path flow and the same amount as this static path flow.
      */
     @Override
