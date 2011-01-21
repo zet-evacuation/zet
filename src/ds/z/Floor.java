@@ -553,13 +553,14 @@ public class Floor implements Serializable, Cloneable, Iterable<Room> {
 	 */
 	@Override
 	public Floor clone() throws UnknownZModelError {
+		String roomName = "";
 		Floor deepCopy = new Floor( this.name );
 		try {
 			HashMap<Room,Room> m = new HashMap<Room,Room>();
 
 			for( Room r : getRooms() ) {
 				Room newRoom = new Room( deepCopy, r.getName() );
-				System.out.println( "Copying room " + r.getName() );
+				roomName = r.getName();
 				newRoom.defineByPoints( PlanPoint.pointCopy( r.getBorderPlanPoints() ) );
 
 				// Reconnect the rooms
@@ -628,7 +629,7 @@ public class Floor implements Serializable, Cloneable, Iterable<Room> {
 			}
 		} catch ( Exception ex ) {
 			ZETMain.sendError( ex.getMessage() );
-			throw new UnknownZModelError( "Unexpected error during copying. Try to check the model.", ex );
+			throw new UnknownZModelError( "Unexpected error during copying. Try to check the model. \n The failure occured copying the room '" + roomName + "'", ex );
 		}
 		return deepCopy;
 	}

@@ -306,4 +306,9 @@ public class StairArea extends Area<Edge> {
 		} else
 			return false;
 	}
+
+	@Override
+	public AreaTypes getAreaType() {
+		return AreaTypes.Stair;
+	}
 }

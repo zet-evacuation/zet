@@ -14,9 +14,9 @@ import ds.z.DelayArea.DelayType;
  */
 @XStreamAlias("teleportArea")
 public class TeleportArea extends Area<Edge> {
-	/** The evacuation area representing the exit that the pearsons this rooms should use. */
+	/** The evacuation area representing the exit that the persons this rooms should use. */
 	private EvacuationArea exit = null;
-	/** The evacuation area representing the exit that the pearsons this rooms should use. */
+	/** The evacuation area representing the exit that the persons this rooms should use. */
 	private TeleportArea target = null;
  	@XStreamAsAttribute()
 	/** The name of the {@code EvacuationArea}. */
@@ -24,7 +24,7 @@ public class TeleportArea extends Area<Edge> {
 
 
 	/**
-	 * Constucts a new {@code DelayArea} with the default {@code speedFactor}
+	 * Constructs a new {@code DelayArea} with the default {@code speedFactor}
 	 * provided by the specified {@link DelayType}.
 	 *
 	 * @param room to which the area belongs
@@ -108,4 +108,9 @@ public class TeleportArea extends Area<Edge> {
 //		} else
 //			return false;
 //	}
+
+	@Override
+	public AreaTypes getAreaType() {
+		return AreaTypes.Teleport;
+	}
 }

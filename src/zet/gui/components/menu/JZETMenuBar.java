@@ -10,6 +10,7 @@ import gui.GUIControl;
 import gui.ZETMain;
 import gui.components.framework.Menu;
 import gui.editor.Areas;
+import zet.gui.components.projecttree.JProjectTreeView;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.InputEvent;
@@ -378,6 +379,9 @@ public class JZETMenuBar extends JMenuBar implements ActionListener, Localized {
 			control.showSettingsDialog();
 		} else if ( e.getActionCommand().equals( "debugBuildingStatus" ) ) {
 			System.out.println( control.getZControl().getProject().getBuildingPlan().summary() );
+			// Show window
+			JProjectTreeView ptv = new JProjectTreeView( control.editor, "Baumansicht", 800, 600, control.getZControl() );
+			ptv.setVisible( true );
 		} else if( e.getActionCommand().equals( "german" ) ) {
 			control.switchToLanguage( Locale.GERMAN );
 		} else if( e.getActionCommand().equals( "english" ) ) {

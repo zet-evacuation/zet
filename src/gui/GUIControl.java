@@ -777,7 +777,7 @@ public class GUIControl implements AlgorithmListener {
 	}
 
 	public void deleteFloor() {
-		zcontrol.getProject().getBuildingPlan().removeFloor( editview.getCurrentFloor() );
+		zcontrol.deleteFloor( editview.getCurrentFloor() );
 	}
 
 	public void importFloor() {

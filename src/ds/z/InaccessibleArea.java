@@ -18,7 +18,6 @@
  * InaccessibleArea.java
  * Created on 26. November 2007, 21:32
  */
-
 package ds.z;
 
 import com.thoughtworks.xstream.annotations.XStreamAlias;
@@ -29,22 +28,26 @@ import java.util.ArrayList;
  * entered.
  * @author Gordon Schlechter
  */
-@XStreamAlias("inaccessibleArea")
+@XStreamAlias( "inaccessibleArea" )
 public class InaccessibleArea extends Area<Edge> {
-    
-    /**
-     * Creates a new instance of {@link InaccessibleArea } contained in a
-     * specified {@link ds.z.Room}.
-     * @param room the room
-     */
-  public InaccessibleArea( Room room ) {
-      super( Edge.class, room );
-  }
-  
+	/**
+	 * Creates a new instance of {@link InaccessibleArea } contained in a
+	 * specified {@link ds.z.Room}.
+	 * @param room the room
+	 */
+	public InaccessibleArea( Room room ) {
+		super( Edge.class, room );
+	}
+
 	/** This method copies the current polygon without it's edges. Every other setting, as f.e. the floor
 	 * for Rooms or the associated Room for Areas is kept as in the original polygon. */
 	@Override
-	protected PlanPolygon<Edge> createPlainCopy () {
-		return new InaccessibleArea (getAssociatedRoom ());
-	}  
+	protected PlanPolygon<Edge> createPlainCopy() {
+		return new InaccessibleArea( getAssociatedRoom() );
+	}
+
+	@Override
+	public AreaTypes getAreaType() {
+		return AreaTypes.Inaccessible;
+	}
 }

@@ -130,4 +130,9 @@ public class DelayArea extends Area<Edge> {
 			return false;
 		}
 	}
+
+	@Override
+	public AreaTypes getAreaType() {
+		return AreaTypes.Delay;
+	}
 }

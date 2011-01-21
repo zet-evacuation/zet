@@ -41,7 +41,7 @@ public abstract class Area<T extends Edge> extends PlanPolygon<T> {
 	 * Deletes the area.
 	 */
 	@Override
-	public void delete() {
+	void delete() {
 		getAssociatedRoom().deleteArea( this );
 		associatedRoom = null;
 		
@@ -90,4 +90,6 @@ public abstract class Area<T extends Edge> extends PlanPolygon<T> {
 		} else
 			return false;
 	}
+
+	public abstract AreaTypes getAreaType();
 }

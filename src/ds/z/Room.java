@@ -773,16 +773,13 @@ public class Room extends BaseRoom<RoomEdge> implements Cloneable {
 
 	/** @return All areas that are in the room. */
 	public List<Area> getAreas() {
-		ArrayList<Area> a = new ArrayList<Area>( assignmentAreas.size() + barriers.size() + delayAreas.size() + evacuationAreas.size() + inaccessibleAreas.size() + saveAreas.size() + stairAreas.size() );
-		a.addAll( assignmentAreas );
-		a.addAll( barriers );
-		a.addAll( delayAreas );
-		a.addAll( evacuationAreas );
-		a.addAll( inaccessibleAreas );
-		a.addAll( saveAreas );
-		a.addAll( stairAreas );
-		a.addAll( teleportAreas );
-		return a;
+		int size = 0;
+		for( ArrayList<Area> areaList : areas )
+			size += areaList.size();
+		ArrayList<Area> allAreas = new ArrayList<Area>( size );
+		for( ArrayList<Area> areaList : areas )
+			allAreas.addAll( areaList );
+		return allAreas;
 	}
 
 	/**

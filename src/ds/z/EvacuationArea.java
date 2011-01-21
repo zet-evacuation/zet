@@ -26,7 +26,7 @@ import com.thoughtworks.xstream.annotations.XStreamAsAttribute;
 /**
  * Represents a EvacuationArea. 
  * An EvacuationArea is an area, where the evacuees reach this area, they are 
- * completly save an they have no influence on the system any more. Every 
+ * completely save an they have no influence on the system any more. Every
  * EvacuationArea is associated to exactly one {@link Room} at every time.
  */
 @XStreamAlias( "evacuationArea" )
@@ -124,6 +124,11 @@ public class EvacuationArea extends SaveArea {
 	public void setName( String name ) {
 		this.name = name.trim();
 	}
+
+	@Override
+	public AreaTypes getAreaType() {
+		return AreaTypes.Evacuation;
+	}
 	
 	/**
 	 * Deletes this {@code EvacuationArea}. The exit of all assignemt areas
@@ -135,4 +140,6 @@ public class EvacuationArea extends SaveArea {
 //		throwChangeEvent( new EvacuationAreaCreatedEvent( this, 2 ) );
 //		super.delete();
 //	}
+
+
 }
