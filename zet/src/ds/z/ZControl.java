@@ -21,6 +21,7 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Iterator;
+import javax.swing.JOptionPane;
 
 /**
  * The class {@code ZControl} represents a front end class to the Z-model.
@@ -147,6 +148,10 @@ public class ZControl {
 			return new UniformDistribution( 0, 60 );
 		}
 		throw new IllegalArgumentException( "Unknown parameter type." );
+	}
+
+	public void deleteFloor( Floor currentFloor ) {
+		getProject().getBuildingPlan().removeFloor( currentFloor );
 	}
 
 	public void deletePolygon( PlanPolygon p ) {
@@ -405,7 +410,8 @@ public class ZControl {
 				ex.printOriginalStackTrace();
 				System.out.println();
 			}
-			System.err.println( "Floor copy failed due to unknown reason. Check the model for errors." );
+			System.err.println( ex.getMessage() );
+			JOptionPane.showMessageDialog( null, ex.getMessage(), "Fehler", JOptionPane.ERROR_MESSAGE );
 			return;
 		}
 

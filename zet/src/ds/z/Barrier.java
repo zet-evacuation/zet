@@ -87,4 +87,9 @@ public class Barrier extends InaccessibleArea {
 			}
 		}
 	}
+
+	@Override
+	public AreaTypes getAreaType() {
+		return AreaTypes.Barrier;
+	}
 }

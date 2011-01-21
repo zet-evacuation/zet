@@ -1826,6 +1826,16 @@ public class PlanPolygon<T extends Edge> implements Serializable, Iterable<T> {
 	 */
 	@Override
 	public String toString() {
+		return getCoordinateString();
+	}
+
+	/**
+	 * Returns a string representation of the {@code PlanPolygon} containing the
+	 * coordinates.
+	 * @return a string representation
+	 * @see #toString() 
+	 */
+	public String getCoordinateString() {
 		String ret = "";
 		for( T e : this )
 			if( ret.equals( "" ) )

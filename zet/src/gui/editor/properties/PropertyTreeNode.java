@@ -33,7 +33,7 @@ import de.tu_berlin.math.coga.common.localization.Localization;
 import java.util.ArrayList;
 
 /**
- *
+ * The user property is overriden with string.
  * @author Jan-Philipp Kappmeier
  */
 @XStreamAlias("treeNode")
@@ -117,6 +117,11 @@ public class PropertyTreeNode extends DefaultMutableTreeNode implements Property
 		if( !(userObject instanceof String) )
 			throw new IllegalArgumentException( DefaultLoc.getSingleton().getString( "gui.propertyselector.DefaultPropertyTreeNodeConverter.noStringException" ) );
 		super.setUserObject( userObject );
+	}
+
+	@Override
+	public String getUserObject() {
+		return name;
 	}
 
 	/**

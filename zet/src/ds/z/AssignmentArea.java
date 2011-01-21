@@ -252,4 +252,9 @@ public class AssignmentArea extends Area<Edge> {
 			return false;
 		}
 	}
+
+	@Override
+	public AreaTypes getAreaType() {
+		return AreaTypes.Assignment;
+	}
 }
