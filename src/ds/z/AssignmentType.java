@@ -39,10 +39,8 @@ import java.util.UUID;
  */
 @XStreamAlias("assignmentType")
 @XMLConverter(AssignmentTypeConverter.class)
-public class AssignmentType implements Serializable {
-	/**
-	 * A name for the assignment type such as "Old People" or "Pedestrians".
-	 */
+public class AssignmentType implements Serializable, ZFormatObject {
+	/** A name for the assignment type such as "Old People" or "Pedestrians". */
 	@XStreamAsAttribute()
 	private String name;
 	/** The distribution of the persons' parameter "diameter". */
@@ -67,7 +65,7 @@ public class AssignmentType implements Serializable {
 	/**
 	 * Creates a new instance of {@link AssignmentType}.
 	 * Sets Distributions diameter, age, familiarity, panic, decisiveness.
-	 * Sets the standardnumber of evacuees to 0.
+	 * Sets the standard number of evacuees to 0.
 	 * @param name The name of the type
 	 * @param diameter The {@link Distribution} diameter.
 	 * @param age The {@link Distribution} age.
@@ -83,7 +81,7 @@ public class AssignmentType implements Serializable {
 	/**
 	 * Creates a new instance of {@link AssignmentType}.
 	 * Sets Distributions diameter, age, familiarity, panic, decisiveness.
-	 * Sets the standardnumber of evacuees.
+	 * Sets the standard number of evacuees.
 	 * This number has to be greater or equal 0.
 	 * If it is less than 0, the number of evacuees is set to 0.
 	 * @param name The name of the type
@@ -93,9 +91,9 @@ public class AssignmentType implements Serializable {
 	 * @param panic the {@link Distribution} for the panic of evacuees
 	 * @param decisiveness the {@link Distribution} decisiveness.
 	 * @param reaction the {@link Distribution } for the reaction time of evacuees
-	 * @param standardEvacuees The standardnumber of evacuees.
-	 * @throws java.lang.IllegalArgumentException If the standardnumber of evacuees is less than 0.
-	 * (The standardnumber of evacuees is set to 0.)
+	 * @param standardEvacuees The standard number of evacuees.
+	 * @throws java.lang.IllegalArgumentException If the standard number of evacuees is less than 0.
+	 * (The standard number of evacuees is set to 0.)
 	 */
 	public AssignmentType( String name, Distribution diameter, Distribution age, Distribution familiarity, Distribution panic, Distribution decisiveness, Distribution reaction, int standardEvacuees ) throws IllegalArgumentException {
 		this.name = name;
@@ -123,37 +121,16 @@ public class AssignmentType implements Serializable {
 		this.uid = uid;
 	}
 
-	/** See {@link ds.z.event.ChangeReporter#throwChangeEvent (ChangeEvent)} for details. */
-//	public void throwChangeEvent (ChangeEvent e) {
-//		for (ChangeListener c : changeListeners) {
-//			c.stateChanged (e);
-//		}
-//	}
-//	/** {@inheritDoc} */
-//	public void addChangeListener (ChangeListener c) {
-//		if (!changeListeners.contains (c)) {
-//			changeListeners.add (c);
-//		}
-//	}
-//	/** {@inheritDoc} */
-//	public void removeChangeListener (ChangeListener c) {
-//		changeListeners.remove (c);
-//	}
-//	/** See {@link ds.z.event.ChangeListener#stateChanged (ChangeEvent)} for details. */
-//	public void stateChanged (ChangeEvent e) {
-//		// Simply forward the event
-//		throwChangeEvent (e);
-//	}
 	/**
-	 * Returns the currently set value for the standardnumber of evacuees.
-	 * @return The standardnumber of evacuees in this area.
+	 * Returns the currently set value for the standard number of evacuees.
+	 * @return The standard number of evacuees in this area.
 	 */
 	public int getDefaultEvacuees() {
 		return standardEvacuees;
 	}
 
 	/**
-	 * Sets a new value for the standradnumber of evacuees of this AssignmentType.
+	 * Sets a new value for the standard number of evacuees of this AssignmentType.
 	 * It has to be greater or equal 0. If it is less than 0, the number of
 	 * evacuees is set to 0.
 	 * @param evacuees the default number of evacuees of this {@code AssignmentType}.
@@ -162,8 +139,7 @@ public class AssignmentType implements Serializable {
 	public void setDefaultEvacuees( int evacuees ) throws IllegalArgumentException {
 		if( evacuees < 0 )
 			throw new IllegalArgumentException( ZLocalization.getSingleton().getString( "ds.z.AssignmentArea.NegativePersonValueException" ) );
-		else
-			standardEvacuees = evacuees;
+		standardEvacuees = evacuees;
 	}
 
 	/**
@@ -278,8 +254,7 @@ public class AssignmentType implements Serializable {
 	void addAssignmentArea( AssignmentArea val ) throws IllegalArgumentException {
 		if( assignmentAreas.contains( val ) )
 			throw new IllegalArgumentException( ZLocalization.getSingleton().getString( "ds.z.AssignmentType.DoubleAssignmentAreaException" ) );
-		else
-			assignmentAreas.add( val );
+		assignmentAreas.add( val );
 	}
 
 	/**
@@ -290,8 +265,7 @@ public class AssignmentType implements Serializable {
 	void deleteAssignmentArea( AssignmentArea val ) throws IllegalArgumentException {
 		if( !assignmentAreas.contains( val ) )
 			throw new IllegalArgumentException( ZLocalization.getSingleton().getString( "ds.z.AssignmentType.AssignmentAreaNotFound" ) );
-		else
-			assignmentAreas.remove( val );
+		assignmentAreas.remove( val );
 	}
 
 	/**
@@ -305,7 +279,7 @@ public class AssignmentType implements Serializable {
 
 	/**
 	 * Sets the number of evacuees of all its assignmentAreas
-	 * to its standardnumber of evacuees.
+	 * to its standard number of evacuees.
 	 */
 	public void setEvacueesOfAllAreasToStandardEvacuees() {
 		for( int i = 0; i < assignmentAreas.size(); i++ )

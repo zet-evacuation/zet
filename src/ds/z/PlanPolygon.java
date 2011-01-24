@@ -24,6 +24,7 @@ import com.thoughtworks.xstream.annotations.XStreamAlias;
 import com.thoughtworks.xstream.annotations.XStreamAsAttribute;
 import com.thoughtworks.xstream.annotations.XStreamConverter;
 import com.thoughtworks.xstream.annotations.XStreamOmitField;
+import ds.z.exception.InvalidRoomZModelError;
 import ds.z.exception.PolygonNotClosedException;
 import ds.z.exception.PolygonNotRasterizedException;
 import io.z.CompactEdgeListConverter;
@@ -180,7 +181,7 @@ public class PlanPolygon<T extends Edge> implements Serializable, Iterable<T> {
 	 * @throws java.lang.NullPointerException if the specified {@code List}
 	 * of points is null
 	 */
-	public void defineByPoints( List<PlanPoint> points ) throws IllegalArgumentException, IllegalStateException, NullPointerException {
+	public int defineByPoints( List<PlanPoint> points ) throws IllegalArgumentException, IllegalStateException, NullPointerException {
 		if( start != null )
 			throw new IllegalStateException( ZLocalization.getSingleton().getString( "ds.z.PlanPolygon.ContainerNotEmptyException" ) );
 		if( points == null )
@@ -188,8 +189,10 @@ public class PlanPolygon<T extends Edge> implements Serializable, Iterable<T> {
 		if( points.size() <= 1 )
 			throw new IllegalArgumentException( ZLocalization.getSingleton().getString( "ds.z.PlanPolygon.ListDoesNotContainenoughPointsException" ) );
 
-		// At least two point is in the list
+		// At least two points are in the list
 		PlanPoint firstPoint = points.get( 0 );
+
+		int createdEdges = 0;
 
 		for( int i = 1; i < points.size(); i++ ) {
 			PlanPoint secondPoint = points.get( i );
@@ -197,6 +200,7 @@ public class PlanPolygon<T extends Edge> implements Serializable, Iterable<T> {
 			if( secondPoint.equals( firstPoint ) )
 				continue;
 
+			createdEdges++;
 			newEdge( firstPoint, secondPoint );
 			firstPoint = secondPoint;
 		}
@@ -205,6 +209,8 @@ public class PlanPolygon<T extends Edge> implements Serializable, Iterable<T> {
 		// if the polygon is already closed, discard edge
 		if( !closed )
 			newEdge( firstPoint, points.get( 0 ) );
+
+		return createdEdges;
 	}
 
 	public void add( List<PlanPoint> points, boolean close ) {

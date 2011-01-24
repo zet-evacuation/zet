@@ -25,7 +25,6 @@ import com.thoughtworks.xstream.annotations.XStreamAsAttribute;
 import ds.z.exception.PolygonNotClosedException;
 import ds.z.exception.TooManyPeopleException;
 
-
 /**
  * Represents an area that can contain several persons that should be evacuated.
  * @author Sylvie Temme
@@ -37,7 +36,7 @@ public class AssignmentArea extends Area<Edge> {
 	private int evacuees;
 	/** The assignmentType of this area. */
 	private AssignmentType assignmentType;
-	/** The evacuation area representing the exit that the pearsons this rooms should use. */
+	/** The evacuation area representing the exit that the persons this rooms should use. */
 	private EvacuationArea exit = null;
 
 	/**
@@ -59,7 +58,7 @@ public class AssignmentArea extends Area<Edge> {
 	/**
 	 * Creates a new instance of {@link AssignmentArea}.
 	 * Sets room and assignmentType of the assignmentArea.
-	 * Sets the number of evacuees to the standardnumber of evacuees of the assignmentType.
+	 * Sets the number of evacuees to the standard number of evacuees of the assignmentType.
 	 * @param room Room, to which the area belongs
 	 * @param type Type, to which the area belongs.
 	 */
@@ -140,7 +139,6 @@ public class AssignmentArea extends Area<Edge> {
 			throw new IllegalArgumentException ( ZLocalization.getSingleton().getString("ds.z.AssignmentArea.NegativePersonValueException") );
 		} else {
 			evacuees=val;
-//			throwChangeEvent (new ChangeEvent (this));
 		}
 	}
 	
@@ -157,7 +155,7 @@ public class AssignmentArea extends Area<Edge> {
 	 * Gives notice of departure to the previous assignmentType of the area.
 	 * @param val The new assignmentType.
 	 * @throws java.lang.NullPointerException If the new assignmentType is null.
-	 * (Doesn`t give notice of departure to the previous assignmentType of the area.)
+	 * (Doesn't give notice of departure to the previous assignmentType of the area.)
 	 */
 	public void setAssignmentType (AssignmentType val) throws NullPointerException {
 		if( val == null ) throw new NullPointerException ( ZLocalization.getSingleton().getString("ds.z.AssignmentArea.NoAssignmentTypeException") );
@@ -169,7 +167,6 @@ public class AssignmentArea extends Area<Edge> {
 		}
 		assignmentType = val;
 		assignmentType.addAssignmentArea (this);
-		//throwChangeEvent (new ChangeEvent (this)); - is thrown by defineByPoints/delete methods
 	}
 
 	/**
@@ -181,16 +178,16 @@ public class AssignmentArea extends Area<Edge> {
 	 * (assignmentType is set to null.)
 	 */
 	@Override
-	public void delete () throws IllegalArgumentException {
-// TODO: warum das hier und wen nötig, text schreiben!
+	public void delete() throws IllegalArgumentException {
+// TODO: warum das hier und wenn nötig, text schreiben!
 		try {
 			assignmentType.deleteAssignmentArea( this );
 		} finally {
-			assignmentType=null;
+			assignmentType = null;
 		}
-		super.delete ();
+		super.delete();
 	}
-	
+
 	/**
 	 * See @return
 	 * @return True, if the area has the same number of evacuees
@@ -198,9 +195,7 @@ public class AssignmentArea extends Area<Edge> {
 	 * False else.
 	 */
 	public boolean hasStandardEvacuees () {
-		if( evacuees == assignmentType.getDefaultEvacuees() )
-			return true;
-		else return false;
+		return evacuees == assignmentType.getDefaultEvacuees();
 	}
         
 	/**
@@ -222,7 +217,7 @@ public class AssignmentArea extends Area<Edge> {
 	 * Checks additional, if this assignmentArea contains too many people.
 	 * @throws ds.z.exception.PolygonNotClosedException If the area is not closed.
 	 * @throws ds.z.exception.TooManyPeopleException If the assignmentArea contains too many persons.
-	 * @param rasterized Indicates, if the BuildingPlan should be rasterized.
+	 * @param rasterized Indicates, if the BuildingPlan should be rastered.
 	 */
 	@Override
 	public void check( boolean rasterized ) throws PolygonNotClosedException, TooManyPeopleException {
@@ -235,22 +230,18 @@ public class AssignmentArea extends Area<Edge> {
 	 * @throws ds.z.exception.TooManyPeopleException If this assignmentArea contains too many people.
 	 */
 	private void checkTooManyPersonsInArea() throws TooManyPeopleException {
-		if (getEvacuees()!=0) {
-			if( area() / getEvacuees() < Assignment.spacePerPerson )
-				throw new TooManyPeopleException( this, ZLocalization.getSingleton().getString( "ds.z.AssignmentArea.ContainsToManyPersonsException" ) );
-		}
-  }
+		if( getEvacuees() != 0 && (area() / getEvacuees() < Assignment.spacePerPerson) )
+			throw new TooManyPeopleException( this, ZLocalization.getSingleton().getString( "ds.z.AssignmentArea.ContainsToManyPersonsException" ) );
+	}
 	
 	@Override
 	public boolean equals (Object o) {
 		if (o instanceof AssignmentArea) {
 			AssignmentArea p = (AssignmentArea)o;
 			return super.equals (p) && evacuees == p.getEvacuees () &&
-				((assignmentType == null) ? p.getAssignmentType () == null : 
-					assignmentType.equals (p.getAssignmentType ()));
-		} else {
+				((assignmentType == null) ? p.getAssignmentType () == null : assignmentType.equals (p.getAssignmentType ()));
+		} else
 			return false;
-		}
 	}
 
 	@Override

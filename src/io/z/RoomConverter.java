@@ -15,11 +15,12 @@
  */
 package io.z;
 
+import com.thoughtworks.xstream.converters.MarshallingContext;
 import com.thoughtworks.xstream.converters.UnmarshallingContext;
 import com.thoughtworks.xstream.converters.reflection.ReflectionProvider;
 import com.thoughtworks.xstream.io.HierarchicalStreamReader;
+import com.thoughtworks.xstream.io.HierarchicalStreamWriter;
 import com.thoughtworks.xstream.mapper.Mapper;
-
 import ds.z.Room;
 import ds.z.StairArea;
 import ds.z.TeleportArea;
@@ -51,6 +52,14 @@ public class RoomConverter extends PlanPolygonConverter {
 		return type.equals( Room.class );
 	}
 
+	@Override
+	public void marshal( Object original, HierarchicalStreamWriter writer, MarshallingContext context ) {
+		//System.out.println( "Room: " + ((Room)original).getName() );
+		super.marshal( original, writer, context );
+	}
+
+
+
 	/**
 	 * Allows reading an {@link ds.z.Room} class. Due to format extensions,
 	 * needed lists for stair areas and teleport areas are created if they are
@@ -63,21 +72,23 @@ public class RoomConverter extends PlanPolygonConverter {
 	@Override
 	public Object unmarshal( final HierarchicalStreamReader reader, final UnmarshallingContext context ) {
 		Room room = (Room) super.unmarshal( reader, context );
-		Class<?> c = room.getClass();
+		//System.out.println( "Room: " + room.getName() );
 
+		Class<?> c = room.getClass();
 		java.lang.reflect.Field field;
 
 		try {
-			if( room.getTeleportAreas() == null ) {
-				field = c.getDeclaredField( "teleportAreas" );
-				field.setAccessible( true );
+			// We need to be a little tricky here and have to access the fields using
+			// the reflecitons API because the methods return Unmodifiable lists, thus
+			// get... would throw a null pointer exception
+			field = c.getDeclaredField( "teleportAreas" );
+			field.setAccessible( true );
+			if( field.get( room ) == null )
 				field.set( room, new ArrayList<TeleportArea>() );
-			}
-			if( room.getStairAreas() == null ) {
-				field = c.getDeclaredField( "stairAreas" );
-				field.setAccessible( true );
+			field = c.getDeclaredField( "stairAreas" );
+			field.setAccessible( true );
+			if( field.get( room ) == null )
 				field.set( room, new ArrayList<StairArea>() );
-			}
 		} catch( NoSuchFieldException ex ) {
 			System.err.println( "NoSuchFieldException in RoomConverter" );
 		} catch( IllegalAccessException ex ) {

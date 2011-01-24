@@ -47,7 +47,6 @@ import java.util.List;
 @XStreamAlias( "room" )
 @XMLConverter( RoomConverter.class )
 public class Room extends BaseRoom<RoomEdge> implements Cloneable {
-//public class Room<T extends RoomEdge> extends PlanPolygon<T> {
 	@XStreamAsAttribute()
 	/** The name of the {@code Room}. */
 	private String name;
@@ -70,7 +69,7 @@ public class Room extends BaseRoom<RoomEdge> implements Cloneable {
 	/** A list of all teleport areas of the current room. */
 	private ArrayList<TeleportArea> teleportAreas;
 	@XStreamOmitField	// This field is accessed manually during loading of a file
-	private ArrayList<Area>[] areas = new ArrayList[] {assignmentAreas, barriers, delayAreas, evacuationAreas, inaccessibleAreas, saveAreas, stairAreas, teleportAreas};
+	private ArrayList<Area>[] areas;
 
 	/**
 	 * Creates a new {@code Room} with a default name "Room x", where x
@@ -89,6 +88,7 @@ public class Room extends BaseRoom<RoomEdge> implements Cloneable {
 		saveAreas = new ArrayList<SaveArea>();
 		stairAreas = new ArrayList<StairArea>();
 		teleportAreas = new ArrayList<TeleportArea>();
+		areas = new ArrayList[] {assignmentAreas, barriers, delayAreas, evacuationAreas, inaccessibleAreas, saveAreas, stairAreas, teleportAreas};
 		floor.addRoom( this );
 	}
 
@@ -99,7 +99,6 @@ public class Room extends BaseRoom<RoomEdge> implements Cloneable {
 	 */
 	public Room( Floor floor, String name ) {
 		this( floor );
-		//super( RoomEdge.class );
 		this.name = name;
 	}
 
@@ -157,6 +156,12 @@ public class Room extends BaseRoom<RoomEdge> implements Cloneable {
 		} else {
 			return false;
 		}
+	}
+
+	@Override
+	protected Object clone() throws CloneNotSupportedException {
+		System.err.println( "Room Clone is called" );
+		return super.clone();
 	}
 
 	/** {@inheritDoc}
@@ -663,9 +668,6 @@ public class Room extends BaseRoom<RoomEdge> implements Cloneable {
 		if( !result ) {
 			throw new IllegalArgumentException( ZLocalization.getSingleton().getString( "ds.z.Room.NoAreaException" ) );
 		}
-
-//		area.removeChangeListener( this );
-//		throwChangeEvent( new ChangeEvent( this ) );
 	}
 
 	/**

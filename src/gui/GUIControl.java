@@ -12,7 +12,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.Arrays;
 import java.util.Locale;
-import zet.gui.JEditor;
+import zet.gui.main.JEditor;
 import batch.BatchResult;
 import batch.BatchResultEntry;
 import batch.tasks.BatchGraphCreateOnlyTask;
@@ -25,6 +25,7 @@ import de.tu_berlin.math.coga.common.util.IOTools;
 import de.tu_berlin.math.coga.zet.DatFileReaderWriter;
 import de.tu_berlin.math.coga.zet.NetworkFlowModel;
 import ds.GraphVisualizationResults;
+import ds.ProjectLoader;
 import ds.PropertyContainer;
 import ds.ca.CellularAutomaton;
 import ds.z.Assignment;
@@ -40,18 +41,18 @@ import gui.components.progress.JProgressBarDialog;
 import gui.components.progress.JRasterizeProgressBarDialog;
 import gui.editor.Areas;
 import gui.editor.CoordinateTools;
-import zet.gui.components.tabs.editor.EditMode;
+import zet.gui.main.tabs.editor.EditMode;
 import gui.editor.assignment.JAssignment;
 import gui.editor.flooredit.FloorImportDialog;
 import gui.editor.planimage.JPlanImageProperties;
 import gui.editor.properties.JOptionsWindow;
 import gui.editor.properties.JPropertySelectorWindow;
-import zet.gui.components.menu.JZETMenuBar;
-import zet.gui.components.toolbar.JEditToolbar;
-import zet.gui.components.toolbar.JVisualizationToolbar;
+import zet.gui.main.menu.JZETMenuBar;
+import zet.gui.main.toolbar.JEditToolbar;
+import zet.gui.main.toolbar.JVisualizationToolbar;
 import gui.visualization.AbstractVisualization.ParallelViewMode;
 import gui.visualization.Visualization.RecordingMode;
-import zet.gui.components.tabs.visualization.ZETVisualization;
+import zet.gui.main.tabs.visualization.ZETVisualization;
 import gui.visualization.control.GLControl.CellInformationDisplay;
 import io.DXFWriter;
 import io.movie.MovieManager;
@@ -72,9 +73,9 @@ import javax.swing.SwingWorker;
 import javax.swing.filechooser.FileFilter;
 import statistic.ca.CAStatistic;
 import zet.gui.GUILocalization;
-import zet.gui.components.tabs.base.AbstractFloor.RasterPaintStyle;
-import zet.gui.components.tabs.JEditView;
-import zet.gui.components.toolbar.JStatisticGraphToolBar;
+import zet.gui.main.tabs.base.AbstractFloor.RasterPaintStyle;
+import zet.gui.main.tabs.JEditView;
+import zet.gui.main.toolbar.JStatisticGraphToolBar;
 
 /**
  * This class receives commands and GUI changes from elements like tool bars,
@@ -638,7 +639,8 @@ public class GUIControl implements AlgorithmListener {
 				File target = jfcProject.getSelectedFile();
 				if( !target.getName().endsWith( ".zet" ) && !target.getName().endsWith( ".gzet" ) )
 					target = new File( target.getAbsolutePath() + ".zet" );
-				zcontrol.getProject().save( target );
+				ProjectLoader.save( zcontrol.getProject(), target );
+				//zcontrol.getProject().save( target );
 			} catch( java.lang.StackOverflowError soe ) {
 				showErrorMessage( GUILocalization.getSingleton().getString( "gui.editor.JEditor.error.stackOverflowTitle" ), GUILocalization.getSingleton().getString( "gui.editor.JEditor.error.stackOverflow" ) );
 			} catch( Exception ex ) {
@@ -657,7 +659,8 @@ public class GUIControl implements AlgorithmListener {
 			try {
 				if( createCopy == true )
 					IOTools.createBackup( zcontrol.getProject().getProjectFile() );
-				zcontrol.getProject().save();
+				ProjectLoader.save( zcontrol.getProject() );
+				//zcontrol.getProject().save();
 			} catch( java.lang.StackOverflowError soe ) {
 				showErrorMessage( GUILocalization.getSingleton().getString( "gui.editor.JEditor.error.stackOverflowTitle" ), GUILocalization.getSingleton().getString( "gui.editor.JEditor.error.stackOverflow" ) );
 			} catch( Exception ex ) {
@@ -692,7 +695,8 @@ public class GUIControl implements AlgorithmListener {
 							File target = jfcProject.getSelectedFile();
 							if( !target.getName().endsWith( ".zet" ) && !target.getName().endsWith( ".gzet" ) )
 								target = new File( target.getAbsolutePath() + ".zet" );
-							zcontrol.getProject().save( target );
+							ProjectLoader.save( zcontrol.getProject(), target );
+							//zcontrol.getProject().save( target );
 						} catch( java.lang.StackOverflowError soe ) {
 							showErrorMessage( GUILocalization.getSingleton().getString( "gui.editor.JEditor.error.stackOverflowTitle" ), GUILocalization.getSingleton().getString( "gui.editor.error.JEditor.stackOverflow" ) );
 						} catch( Exception ex ) {
@@ -705,7 +709,8 @@ public class GUIControl implements AlgorithmListener {
 					try {
 						if( createCopy )
 							IOTools.createBackup( zcontrol.getProject().getProjectFile() );
-						zcontrol.getProject().save();
+						ProjectLoader.save( zcontrol.getProject() );
+						//zcontrol.getProject().save();
 					} catch( java.lang.StackOverflowError soe ) {
 						showErrorMessage( GUILocalization.getSingleton().getString( "gui.editor.JEditor.error.stackOverflowTitle" ), GUILocalization.getSingleton().getString( "gui.editor.JEditor.error.stackOverflow" ) );
 					} catch( Exception ex ) {

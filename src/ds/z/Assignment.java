@@ -38,27 +38,20 @@ import de.tu_berlin.math.coga.rndutils.distribution.continuous.NormalDistributio
 import statistics.Statistic;
 
 /**
- * The {@code Assignment} class holds all information about one assignment
+ * The {@code Assignment} class holds all information about an assignment
  * in the Z-format. It is a container for some assignment types and can submit
  * lists of all assignments.
- * @author Sylvie Temme
+ * @author Sylvie Temme, Jan-Philipp Kappmeier
  */
 @XStreamAlias("assignment")
 @XMLConverter(AssignmentConverter.class)
-//public class Assignment implements Serializable, ChangeReporter, ChangeListener {
-public class Assignment implements Serializable {
-
-//	@XStreamOmitField()
-//	private transient ArrayList<ChangeListener> changeListeners = new ArrayList<ChangeListener>();
+public class Assignment implements Serializable, ZFormatObject {
 	/** The name of the assignment. */
 	@XStreamAsAttribute()
 	private String name;
 	/** The List of assignmentTypes, which belong to this assignment. */
 	private ArrayList<AssignmentType> assignmentTypes;
-	/**
-	 * Static variable that stores the default-value for the area, that a person needs.
-	 * Its unit is squaremillimeter.
-	 */
+	/** Static variable that stores the default-value for the area, that a person needs. Its unit is square millimeter. */
 	public static int spacePerPerson = 160000;
 
 	/**
@@ -108,8 +101,6 @@ public class Assignment implements Serializable {
 			throw new IllegalArgumentException( ZLocalization.getSingleton().getString( "ds.z.Assignment.DoubleAssignmentTypeException" ) );
 		else {
 			assignmentTypes.add( val );
-//			val.addChangeListener( this );
-//			throwChangeEvent( new ChangeEvent( this ) );
 		}
 	}
 
@@ -123,14 +114,11 @@ public class Assignment implements Serializable {
 			throw new IllegalArgumentException( ZLocalization.getSingleton().getString( "ds.z.Assignment.AssignmentTypeNotNotFoundException" ) );
 		else {
 			assignmentTypes.remove( val );
-//			val.removeChangeListener( this );
-//			throwChangeEvent( new ChangeEvent( this ) );
 
 			// Delete corresponding assignment areas
 			// The areas deregister themselves out of the getAssignmentAreas() list, so
 			// this list has to be copied before deleting
-			AssignmentArea[] areaCopy = val.getAssignmentAreas().toArray(
-							new AssignmentArea[val.getAssignmentAreas().size()] );
+			AssignmentArea[] areaCopy = val.getAssignmentAreas().toArray( new AssignmentArea[val.getAssignmentAreas().size()] );
 			for( AssignmentArea a : areaCopy )
 				a.delete();
 		}
@@ -155,8 +143,7 @@ public class Assignment implements Serializable {
 	public boolean equals( Object o ) {
 		if( o instanceof Assignment ) {
 			Assignment p = (Assignment) o;
-			return assignmentTypes.equals( p.getAssignmentTypes() ) &&
-							((name == null) ? p.getName() == null : name.equals( p.getName() ));
+			return assignmentTypes.equals( p.getAssignmentTypes() ) && ((name == null) ? p.getName() == null : name.equals( p.getName() ));
 		} else
 			return false;
 	}

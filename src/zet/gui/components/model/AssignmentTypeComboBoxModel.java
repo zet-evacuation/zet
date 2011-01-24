@@ -24,8 +24,8 @@ import ds.z.Assignment;
 import ds.z.AssignmentArea;
 import ds.z.AssignmentType;
 import ds.z.ZControl;
-import zet.gui.components.tabs.editor.JFloor;
-import zet.gui.components.tabs.base.JPolygon;
+import zet.gui.main.tabs.editor.JFloor;
+import zet.gui.main.tabs.base.JPolygon;
 import javax.swing.DefaultComboBoxModel;
 
 /**

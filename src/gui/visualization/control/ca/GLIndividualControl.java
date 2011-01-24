@@ -28,7 +28,7 @@ import gui.visualization.control.VisHistoryTriple;
 import gui.visualization.draw.ca.GLIndividual;
 import gui.visualization.util.Tuple;
 import java.util.ArrayList;
-import zet.gui.components.tabs.JVisualizationView;
+import zet.gui.main.tabs.JVisualizationView;
 
 /**
  * This class controls an {@link Individual} in the {@link ds.ca.CellularAutomaton}
