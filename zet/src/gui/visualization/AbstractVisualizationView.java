@@ -21,7 +21,7 @@
 
 package gui.visualization;
 
-import zet.gui.components.tabs.base.AbstractSplitPropertyWindow;
+import zet.gui.main.tabs.base.AbstractSplitPropertyWindow;
 import javax.media.opengl.GLCanvas;
 
 /**

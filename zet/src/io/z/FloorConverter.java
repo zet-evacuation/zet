@@ -15,10 +15,12 @@
  */
 package io.z;
 
+import com.thoughtworks.xstream.converters.MarshallingContext;
 import com.thoughtworks.xstream.converters.UnmarshallingContext;
 import com.thoughtworks.xstream.converters.reflection.ReflectionConverter;
 import com.thoughtworks.xstream.converters.reflection.ReflectionProvider;
 import com.thoughtworks.xstream.io.HierarchicalStreamReader;
+import com.thoughtworks.xstream.io.HierarchicalStreamWriter;
 import com.thoughtworks.xstream.mapper.Mapper;
 
 import ds.z.Floor;
@@ -42,18 +44,21 @@ public class FloorConverter extends ReflectionConverter {
 	}
 
 	@Override
+	public void marshal( Object original, HierarchicalStreamWriter writer, MarshallingContext context ) {
+		//System.out.println( "Floor: " + ((Floor)original).getName() );
+		super.marshal( original, writer, context );
+
+	}
+
+	@Override
 	public Object unmarshal( final HierarchicalStreamReader reader, final UnmarshallingContext context ) {
 		Object created = instantiateNewInstance( reader, context );
 
-		// Early recreation of changeListener List neccessary
-//		reflectionProvider.writeField( created, "changeListeners", new ArrayList<ChangeListener>(), myClass );
-
 		created = doUnmarshal( created, reader, context );
+		//System.out.println( "Floor: " + ((Floor)created).getName() );
+
 		Floor result = (Floor)serializationMethodInvoker.callReadResolve( created );
 
-		// Recreate changeListener list
-//		for( Room t : result.getRooms() )
-//			t.addChangeListener( result );
 
 		// Recreate transient flag
 //		reflectionProvider.writeField( result, "enableEventGeneration", new Boolean( true ), myClass );

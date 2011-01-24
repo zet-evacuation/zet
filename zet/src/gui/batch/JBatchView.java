@@ -61,6 +61,7 @@ import javax.swing.plaf.basic.BasicComboBoxRenderer;
 import javax.swing.table.AbstractTableModel;
 import javax.swing.table.DefaultTableCellRenderer;
 import de.tu_berlin.math.coga.rndutils.RandomUtils;
+import ds.ProjectLoader;
 import gui.GUIControl;
 import statistics.GUIStatistic;
 import statistics.Statistic;
@@ -372,7 +373,8 @@ public class JBatchView extends JPanel {
 				tblEntries.getCellEditor().cancelCellEditing();
 			// Lade Projekt
 			File projectFile = new File( batchProjectEntry.getProjectFile() );
-			Project project = Project.load( projectFile );
+			//Project project = Project.load( projectFile );
+			Project project = ProjectLoader.load( projectFile );
 			Assignment assignment = null; // = new Assignment( "bla" );
 			// suche assignment
 			for( Assignment a : project.getAssignments() )

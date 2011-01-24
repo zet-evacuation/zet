@@ -47,7 +47,7 @@ import batch.tasks.AlgorithmTask;
  */
 @XStreamAlias("buildingPlan")
 @XMLConverter(BuildingPlanConverter.class)
-public class BuildingPlan implements Serializable, Iterable<Floor> {
+public class BuildingPlan implements Serializable, Iterable<Floor> , ZFormatObject {
 	/** The change listeners of the plan. */
 //	@XStreamOmitField()
 //	private transient ArrayList<ChangeListener> changeListeners = new ArrayList<ChangeListener>();

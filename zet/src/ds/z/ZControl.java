@@ -13,6 +13,8 @@ import de.tu_berlin.math.coga.common.util.IOTools;
 import de.tu_berlin.math.coga.rndutils.distribution.Distribution;
 import de.tu_berlin.math.coga.rndutils.distribution.continuous.NormalDistribution;
 import de.tu_berlin.math.coga.rndutils.distribution.continuous.UniformDistribution;
+import ds.ProjectLoader;
+import ds.z.exception.InvalidRoomZModelError;
 import ds.z.exception.UnknownZModelError;
 import event.EventServer;
 import event.ZModelChangedEvent;
@@ -86,7 +88,8 @@ public class ZControl {
 	 */
 	final public boolean loadProject( File projectFile ) {
 		try {
-			p = Project.load( projectFile );
+			//p = Project.load( projectFile );
+			p = ProjectLoader.load( projectFile );
 			p.setProjectFile( projectFile );
 			// Update the graphical user interface
 			ZETMain.sendMessage( loc.getString( "gui.editor.JEditor.message.loaded" ) );	// TODO output changed, use listener
@@ -404,6 +407,11 @@ public class ZControl {
 		Floor fc = null;
 		try {
 			 fc = f.clone();
+			 fc.recomputeBounds( false );
+		} catch( InvalidRoomZModelError ex ) {
+			System.err.println( ex.getMessage() );
+			JOptionPane.showMessageDialog( null, ex.getMessage(), "Fehler", JOptionPane.ERROR_MESSAGE );
+			return;
 		} catch( UnknownZModelError ex ) {
 			if( ZETMain.isDebug() ) {
 				System.err.println( "DEBUG-out:" );

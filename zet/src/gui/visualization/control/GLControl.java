@@ -45,7 +45,7 @@ import gui.visualization.draw.ca.GLCA;
 import gui.visualization.draw.graph.GLGraph;
 import javax.media.opengl.GL;
 import opengl.framework.abs.DrawableControlable;
-import zet.gui.components.tabs.JVisualizationView;
+import zet.gui.main.tabs.JVisualizationView;
 
 /**
  * A control class for visualization in ZET. It combines three types of

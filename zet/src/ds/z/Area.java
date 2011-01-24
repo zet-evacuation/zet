@@ -29,7 +29,7 @@ import com.thoughtworks.xstream.annotations.XStreamAlias;
  * @author Jan-Philipp Kappmeier
  */
 @XStreamAlias( "area" )
-public abstract class Area<T extends Edge> extends PlanPolygon<T> {
+public abstract class Area<T extends Edge> extends PlanPolygon<T> implements ZFormatObject {
 	private Room associatedRoom;
 
 	Area( Class<T> edgeClassType, Room associatedPolygon ) {

@@ -24,11 +24,11 @@ package ds.z;
 import com.thoughtworks.xstream.annotations.XStreamAlias;
 import com.thoughtworks.xstream.annotations.XStreamAsAttribute;
 import ds.z.exception.AreaNotInsideException;
+import ds.z.exception.InvalidRoomZModelError;
 import ds.z.exception.PolygonNotClosedException;
 import ds.z.exception.RoomIntersectException;
 import ds.z.exception.TeleportEdgeInvalidTargetException;
 import ds.z.exception.UnknownZModelError;
-import ds.z.exception.ZModelErrorException;
 import gui.ZETMain;
 import io.z.FloorConverter;
 import io.z.XMLConverter;
@@ -51,7 +51,7 @@ import java.util.List;
  */
 @XStreamAlias( "floor" )
 @XMLConverter( FloorConverter.class )
-public class Floor implements Serializable, Cloneable, Iterable<Room> {
+public class Floor implements Serializable, Cloneable, Iterable<Room>, ZFormatObject {
 	/** The name of the floor. */
 	@XStreamAsAttribute()
 	private String name;
@@ -549,10 +549,11 @@ public class Floor implements Serializable, Cloneable, Iterable<Room> {
 	 * Returns a copy of the {@code Floor}, but deletes all {@link AssignmentArea} objects
 	 * as they would most likely refer to assignments that do not exist.
 	 * @throws UnknownZModelError if an unexpected error occurred. This usually means that something in the model is incorrect.
+	 * @throws InvalidRoomZModelError if a room contains to much points at the same position. These would be deleted during copy process.
 	 * @return a copy of the floor
 	 */
 	@Override
-	public Floor clone() throws UnknownZModelError {
+	public Floor clone() throws UnknownZModelError, InvalidRoomZModelError {
 		String roomName = "";
 		Floor deepCopy = new Floor( this.name );
 		try {
@@ -561,7 +562,10 @@ public class Floor implements Serializable, Cloneable, Iterable<Room> {
 			for( Room r : getRooms() ) {
 				Room newRoom = new Room( deepCopy, r.getName() );
 				roomName = r.getName();
-				newRoom.defineByPoints( PlanPoint.pointCopy( r.getBorderPlanPoints() ) );
+				int createdEdges = newRoom.defineByPoints( PlanPoint.pointCopy( r.getBorderPlanPoints() ) );
+
+				if( createdEdges <= 1 )
+					throw new InvalidRoomZModelError( "Error copying Room " + r.getName() + ". \n The number of edges was too low after eliminating points at the same place.", r );
 
 				// Reconnect the rooms
 				m.put( r, newRoom );
@@ -579,20 +583,24 @@ public class Floor implements Serializable, Cloneable, Iterable<Room> {
 				// _NOT_ AssignmentArea
 				for( Barrier t : r.getBarriers() ) {
 					Barrier b = new Barrier( newRoom );
-					b.defineByPoints( PlanPoint.pointCopy( t.getPlanPoints() ) );
+					if( b.defineByPoints( PlanPoint.pointCopy( t.getPlanPoints() ) ) <= 1 )
+						throw new InvalidRoomZModelError( "Error copying Room " + r.getName() + ". \n The number of edges in a barrier was too low after eliminating points.", r );
 				}
 				for( DelayArea t : r.getDelayAreas() ) {
 					DelayArea d = new DelayArea( newRoom, t.getDelayType(), t.getSpeedFactor() );
-					d.defineByPoints( PlanPoint.pointCopy ( t.getPlanPoints() ) );
+					if( d.defineByPoints( PlanPoint.pointCopy ( t.getPlanPoints() ) ) <= 1 )
+						throw new InvalidRoomZModelError( "Error copying Room " + r.getName() + ". \n The number of edges in a delay area was too low after eliminating points.", r );
 				}
 				for( InaccessibleArea t : r.getInaccessibleAreas() ) {
 					InaccessibleArea i = new InaccessibleArea( newRoom );
-					i.defineByPoints( PlanPoint.pointCopy ( t.getPlanPoints() ) );
+					if( i.defineByPoints( PlanPoint.pointCopy ( t.getPlanPoints() ) ) <= 1 )
+						throw new InvalidRoomZModelError( "Error copying Room " + r.getName() + ". \n The number of edges in an inaccessible area was too low after eliminating points.", r );
 				}
 				for( SaveArea t : r.getSaveAreas() ) { // Evacuation areas are contained!
 					if( !(t instanceof EvacuationArea) ) {
 						SaveArea s = new SaveArea( newRoom );
-						s.defineByPoints( PlanPoint.pointCopy( t.getPlanPoints() ) );
+						if( s.defineByPoints( PlanPoint.pointCopy( t.getPlanPoints() ) ) <= 1 )
+							throw new InvalidRoomZModelError( "Error copying Room " + r.getName() + ". \n The number of edges in a save area was too low after eliminating points.", r );
 					}
 				}
 				for( TeleportArea t : r.getTeleportAreas() ) {
@@ -600,12 +608,14 @@ public class Floor implements Serializable, Cloneable, Iterable<Room> {
 				}
 				for( EvacuationArea t : r.getEvacuationAreas() ) {
 					EvacuationArea e = new EvacuationArea( newRoom, t.getAttractivity(), t.getName() );
-					e.defineByPoints( PlanPoint.pointCopy( t.getPlanPoints() ) );
+					if( e.defineByPoints( PlanPoint.pointCopy( t.getPlanPoints() ) ) <= 1 )
+						throw new InvalidRoomZModelError( "Error copying Room " + r.getName() + ". \n The number of edges in an evacuation area was too low after eliminating points.", r );
 				}
 				for( StairArea t : r.getStairAreas() ) {
 					StairArea s = new StairArea( newRoom );
 					List<PlanPoint> points = PlanPoint.pointCopy( t.getPlanPoints() );
-					s.defineByPoints( points );
+					if( s.defineByPoints( points ) <= 1 )
+						throw new InvalidRoomZModelError( "Error copying Room " + r.getName() + ". \n The number of edges in a stair area was too low after eliminating points.", r );
 
 					PlanPoint lowerStart = null;
 					PlanPoint lowerEnd = null;
@@ -627,6 +637,9 @@ public class Floor implements Serializable, Cloneable, Iterable<Room> {
 					s.setSpeedFactorUp( t.getSpeedFactorUp() );
 				}
 			}
+		} catch( InvalidRoomZModelError ex ) {
+			ZETMain.sendError( ex.getMessage() );
+			throw ex;
 		} catch ( Exception ex ) {
 			ZETMain.sendError( ex.getMessage() );
 			throw new UnknownZModelError( "Unexpected error during copying. Try to check the model. \n The failure occured copying the room '" + roomName + "'", ex );

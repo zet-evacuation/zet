@@ -54,7 +54,7 @@ import java.util.Calendar;
 import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
 import zet.gui.GUILocalization;
-import zet.gui.JEditor;
+import zet.gui.main.JEditor;
 
 /**
  * The {@code ZETMain} class is the main entry for the graphical user

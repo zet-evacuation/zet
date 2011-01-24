@@ -38,6 +38,7 @@ import de.tu_berlin.math.coga.zet.converter.graph.ZToNonGridGraphConverter;
 import ds.Project;
 import ds.PropertyContainer;
 import de.tu_berlin.math.coga.zet.NetworkFlowModel;
+import ds.ProjectLoader;
 import ds.z.Assignment;
 import ds.z.ConcreteAssignment;
 
@@ -136,7 +137,8 @@ public class CommandLineInterpretor {
         start = System.currentTimeMillis();
         Project project;
         try {
-            project = Project.load(file);
+					project = ProjectLoader.load( file );
+            //project = Project.load(file);
         } catch (Exception e) {
             if (log != null) log.write(", exception");
             return; 

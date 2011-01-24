@@ -18,7 +18,7 @@
  * JEditor.java
  * Created 04.12.2007, 17:08
  */
-package zet.gui;
+package zet.gui.main;
 
 import batch.BatchResult;
 import de.tu_berlin.math.coga.common.localization.DefaultLoc;
@@ -38,7 +38,7 @@ import event.OptionsChangedEvent;
 import gui.batch.JBatchView;
 import gui.statistic.JGraphStatisticPanel;
 import gui.statistic.JStatisticPanel;
-import zet.gui.components.tabs.JVisualizationView;
+import zet.gui.main.tabs.JVisualizationView;
 import gui.visualization.control.GLControl;
 import gui.statistic.JStatisticsPanel;
 import gui.GUIControl;
@@ -67,18 +67,19 @@ import javax.swing.KeyStroke;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 import javax.imageio.ImageIO;
+import zet.gui.GUILocalization;
 import zet.gui.components.JEventStatusBar;
-import zet.gui.components.menu.JZETMenuBar;
-import zet.gui.components.tabs.editor.EditMode;
-import zet.gui.components.tabs.JQuickVisualizationView;
-import zet.gui.components.tabs.JEditView;
-import zet.gui.components.toolbar.JBatchToolBar;
-import zet.gui.components.toolbar.JEditToolbar;
-import zet.gui.components.toolbar.JLogToolBar;
-import zet.gui.components.toolbar.JQuickVisualizationToolBar;
-import zet.gui.components.toolbar.JStatisticCellularAutomatonToolbar;
-import zet.gui.components.toolbar.JStatisticGraphToolBar;
-import zet.gui.components.toolbar.JVisualizationToolbar;
+import zet.gui.main.menu.JZETMenuBar;
+import zet.gui.main.tabs.editor.EditMode;
+import zet.gui.main.tabs.JQuickVisualizationView;
+import zet.gui.main.tabs.JEditView;
+import zet.gui.main.toolbar.JBatchToolBar;
+import zet.gui.main.toolbar.JEditToolbar;
+import zet.gui.main.toolbar.JLogToolBar;
+import zet.gui.main.toolbar.JQuickVisualizationToolBar;
+import zet.gui.main.toolbar.JStatisticCellularAutomatonToolbar;
+import zet.gui.main.toolbar.JStatisticGraphToolBar;
+import zet.gui.main.toolbar.JVisualizationToolbar;
 import zet.util.ConversionTools;
 
 /**
@@ -122,6 +123,7 @@ public class JEditor extends JFrame implements Localized, EventListener<Progress
 	/** GUIControl class for projects and editing */
 	private ZControl zcontrol;
 	private static boolean editing = false;
+	int a;
 	private BatchResult result;
 	// Options
 	private boolean firstSwitch = false;
@@ -174,6 +176,8 @@ public class JEditor extends JFrame implements Localized, EventListener<Progress
 	 */
 	public JEditor( GUIControl guiControl, ZControl zcontrol ) {
 		super();
+		a = 0;
+		a++;
 		this.guiControl = guiControl;
 		this.zcontrol = zcontrol;
 

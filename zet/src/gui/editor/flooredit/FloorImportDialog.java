@@ -36,6 +36,7 @@ import javax.swing.JLabel;
 import javax.swing.JList;
 import javax.swing.JOptionPane;
 import de.tu_berlin.math.coga.common.localization.Localization;
+import ds.ProjectLoader;
 import gui.GUIControl;
 import gui.ZETMain;
 
@@ -128,7 +129,8 @@ public class FloorImportDialog extends JDialog {
                     GUIOptionManager.setImportPath(jfcProject.getCurrentDirectory().getPath());
                 }
                 try {
-                    Project loaded = Project.load(jfcProject.getSelectedFile());
+                    //Project loaded = Project.load(jfcProject.getSelectedFile());
+										Project loaded = ProjectLoader.load( jfcProject.getSelectedFile() );
                     floors.clear();
                     for (Floor floor : loaded.getBuildingPlan().getFloors()) {
                         floors.add(floor);

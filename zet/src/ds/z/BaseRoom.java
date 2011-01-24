@@ -25,7 +25,7 @@ package ds.z;
  * @param <T> The type of the edges (walls) of this room.
  * @author Jan-Philipp Kappmeier
  */
-public class BaseRoom<T extends RoomEdge> extends PlanPolygon<T> {
+public class BaseRoom<T extends RoomEdge> extends PlanPolygon<T> implements ZFormatObject {
 	BaseRoom( Class<T> edgeClassType ) {
 		super( edgeClassType );
 	}

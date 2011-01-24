@@ -36,7 +36,6 @@ import java.util.List;
 public class ConcreteAssignment {
   /** The list of persons. */
   ArrayList<Person> persons = new ArrayList<Person>();
-	
   /** Creates a new instance of ConcreteAssignment */
   public ConcreteAssignment() { }
   

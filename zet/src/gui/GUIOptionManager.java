@@ -15,7 +15,7 @@
  */
 package gui;
 
-import zet.gui.components.tabs.editor.EditMode;
+import zet.gui.main.tabs.editor.EditMode;
 import ds.PropertyContainer;
 import event.EventServer;
 import event.MessageEvent;

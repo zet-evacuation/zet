@@ -20,7 +20,7 @@
 
 package gui.components.progress;
 
-import zet.gui.JEditor;
+import zet.gui.main.JEditor;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import javax.swing.SwingWorker.StateValue;
