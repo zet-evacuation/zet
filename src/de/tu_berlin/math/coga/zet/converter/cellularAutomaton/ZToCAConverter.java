@@ -22,7 +22,7 @@
 package de.tu_berlin.math.coga.zet.converter.cellularAutomaton;
 
 import de.tu_berlin.math.coga.common.localization.DefaultLoc;
-import ds.Project;
+import ds.z.Project;
 import de.tu_berlin.math.coga.common.algorithm.Algorithm;
 import algo.ca.PotentialController;
 import algo.ca.SPPotentialController;

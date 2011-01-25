@@ -35,7 +35,7 @@ import algo.graph.exitassignment.ShortestPathExitAssignment;
 import de.tu_berlin.math.coga.zet.converter.graph.GraphAssignmentConverter;
 import converter.graph.ZToGraphConverter;
 import de.tu_berlin.math.coga.zet.converter.graph.ZToNonGridGraphConverter;
-import ds.Project;
+import ds.z.Project;
 import ds.PropertyContainer;
 import de.tu_berlin.math.coga.zet.NetworkFlowModel;
 import ds.ProjectLoader;

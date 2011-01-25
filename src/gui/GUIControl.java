@@ -42,7 +42,7 @@ import gui.components.progress.JRasterizeProgressBarDialog;
 import gui.editor.Areas;
 import gui.editor.CoordinateTools;
 import zet.gui.main.tabs.editor.EditMode;
-import gui.editor.assignment.JAssignment;
+import zet.gui.assignmentEditor.JAssignment;
 import gui.editor.flooredit.FloorImportDialog;
 import gui.editor.planimage.JPlanImageProperties;
 import gui.editor.properties.JOptionsWindow;
@@ -828,7 +828,7 @@ public class GUIControl implements AlgorithmListener {
 	}
 
 	public void showAssignmentDialog() {
-		JAssignment distribution = new JAssignment( editor, zcontrol.getProject(), GUILocalization.getSingleton().getString( "gui.editor.assignment.JAssignment.Title" ), 850, 400 );
+		JAssignment distribution = new JAssignment( editor, zcontrol.getProject(), GUILocalization.getSingleton().getString( "gui.AssignmentEditor.Title" ), 850, 400 );
 		distribution.setVisible( true );
 		distribution.dispose();
 	}

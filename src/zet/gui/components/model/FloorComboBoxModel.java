@@ -21,7 +21,7 @@
 
 package zet.gui.components.model;
 
-import ds.Project;
+import ds.z.Project;
 import ds.PropertyContainer;
 import ds.z.Floor;
 import java.util.HashMap;

@@ -61,10 +61,8 @@ public class AssignmentTypeComboBoxModel extends DefaultComboBoxModel {
 		clear();
 
 		if( zcontrol != null && zcontrol.getProject().getCurrentAssignment() != null ) {
-			for( AssignmentType a : zcontrol.getProject().getCurrentAssignment().getAssignmentTypes() ) {
+			for( AssignmentType a : zcontrol.getProject().getCurrentAssignment().getAssignmentTypes() )
 				addElement( a );			// This will only enter me into the list, if i'm not already entered
-			}
-//			zcontrol.addChangeListener( this );
 		}
 	}
 

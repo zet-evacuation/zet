@@ -4,7 +4,7 @@
  */
 package zet.gui.treeview;
 
-import ds.Project;
+import ds.z.Project;
 
 /**
  *

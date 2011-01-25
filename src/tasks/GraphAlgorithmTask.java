@@ -10,7 +10,7 @@ import de.tu_berlin.math.coga.zet.converter.graph.ZToNonGridGraphConverter;
 import de.tu_berlin.math.coga.common.algorithm.Algorithm;
 import de.tu_berlin.math.coga.zet.NetworkFlowModel;
 import ds.GraphVisualizationResults;
-import ds.Project;
+import ds.z.Project;
 import ds.PropertyContainer;
 import ds.graph.flow.PathBasedFlowOverTime;
 import ds.z.ConcreteAssignment;

@@ -21,7 +21,7 @@ import com.thoughtworks.xstream.converters.reflection.ReflectionProvider;
 import com.thoughtworks.xstream.io.HierarchicalStreamReader;
 import com.thoughtworks.xstream.mapper.Mapper;
 
-import ds.Project;
+import ds.z.Project;
 import ds.VisualProperties;
 import ds.z.Floor;
 import ds.z.Room;

@@ -18,7 +18,7 @@ import de.tu_berlin.math.coga.zet.converter.cellularAutomaton.ZToCARasterContain
 import de.tu_berlin.math.coga.zet.converter.graph.ZToNonGridGraphConverter;
 import de.tu_berlin.math.coga.zet.NetworkFlowModel;
 import ds.GraphVisualizationResults;
-import ds.Project;
+import ds.z.Project;
 import ds.PropertyContainer;
 import ds.ca.CellularAutomaton;
 import ds.z.AssignmentType;

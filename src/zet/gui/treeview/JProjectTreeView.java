@@ -4,7 +4,7 @@
  */
 package zet.gui.treeview;
 
-import ds.Project;
+import ds.z.Project;
 import ds.z.Area;
 import ds.z.Floor;
 import ds.z.Room;

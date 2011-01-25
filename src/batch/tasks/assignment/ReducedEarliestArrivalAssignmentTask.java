@@ -24,7 +24,7 @@ import algo.graph.exitassignment.ReducedEarliestArrivalTransshipmentExitAssignme
 import batch.BatchResultEntry;
 import converter.graph.ZToGraphConverter;
 import de.tu_berlin.math.coga.zet.converter.graph.ZToNonGridGraphConverter;
-import ds.Project;
+import ds.z.Project;
 import ds.z.Assignment;
 import ds.z.ConcreteAssignment;
 

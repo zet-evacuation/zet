@@ -34,7 +34,7 @@ import batch.tasks.assignment.ShortestPathAssignmentTask;
 import batch.tasks.assignment.ShortestPathGraphEarliestArrivalAssignmentTask;
 import de.tu_berlin.math.coga.common.localization.DefaultLoc;
 import de.tu_berlin.math.coga.zet.converter.cellularAutomaton.ZToCAConverter.ConversionNotSupportedException;
-import ds.Project;
+import ds.z.Project;
 import ds.PropertyContainer;
 import ds.z.Assignment;
 import ds.z.ConcreteAssignment;

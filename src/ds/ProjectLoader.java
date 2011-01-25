@@ -4,6 +4,7 @@
  */
 package ds;
 
+import ds.z.Project;
 import com.thoughtworks.xstream.XStream;
 import com.thoughtworks.xstream.annotations.Annotations;
 import com.thoughtworks.xstream.converters.Converter;

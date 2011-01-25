@@ -13,14 +13,17 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
+
 /**
  * ComboBoxRenderer.java
  * Created on 15.12.2007, 16:31
  */
 package zet.gui.components.model;
 
-import java.awt.*;
-import javax.swing.*;
+import java.awt.Component;
+import javax.swing.JLabel;
+import javax.swing.JList;
+import javax.swing.ListCellRenderer;
 
 /**
  * A generic ComboBox renderer.
@@ -34,12 +37,13 @@ public class ComboBoxRenderer extends JLabel implements ListCellRenderer {
 		setVerticalAlignment( CENTER );
 	}
 
-	/* This method finds the image and text corresponding
+	/**
+	 * This method finds the image and text corresponding
 	 * to the selected value and returns the label, set up
-	 * to display the text and image. */
+	 * to display the text and image.
+	 */
 	@Override
 	public Component getListCellRendererComponent( JList list, Object value, int index, boolean isSelected, boolean cellHasFocus ) {
-
 		if( isSelected ) {
 			setBackground( list.getSelectionBackground() );
 			setForeground( list.getSelectionForeground() );

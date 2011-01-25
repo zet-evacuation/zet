@@ -15,7 +15,7 @@
  */
 package batch;
 
-import ds.Project;
+import ds.z.Project;
 import ds.z.Assignment;
 import gui.batch.EvacuationOptimizationType;
 import gui.editor.properties.PropertyFilesSelectionModel.Property;

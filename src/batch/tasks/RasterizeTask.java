@@ -20,7 +20,7 @@
 
 package batch.tasks;
 
-import ds.Project;
+import ds.z.Project;
 import gui.ZETMain;
 
 /**

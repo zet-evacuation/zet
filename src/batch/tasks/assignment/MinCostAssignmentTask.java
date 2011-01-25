@@ -24,7 +24,7 @@ import batch.tasks.*;
 import algo.graph.exitassignment.MinimumCostTransshipmentExitAssignment;
 import batch.BatchResultEntry;
 import converter.graph.ZToGraphConverter;
-import ds.Project;
+import ds.z.Project;
 import ds.z.Assignment;
 import ds.z.ConcreteAssignment;
 

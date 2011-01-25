@@ -93,10 +93,9 @@ public class AssignmentType implements Serializable, ZFormatObject {
 	 * @param reaction the {@link Distribution } for the reaction time of evacuees
 	 * @param standardEvacuees The standard number of evacuees.
 	 * @throws java.lang.IllegalArgumentException If the standard number of evacuees is less than 0.
-	 * (The standard number of evacuees is set to 0.)
 	 */
 	public AssignmentType( String name, Distribution diameter, Distribution age, Distribution familiarity, Distribution panic, Distribution decisiveness, Distribution reaction, int standardEvacuees ) throws IllegalArgumentException {
-		this.name = name;
+		setName( name );
 		this.diameter = diameter;
 		this.age = age;
 		this.familiarity = familiarity;
@@ -287,26 +286,26 @@ public class AssignmentType implements Serializable, ZFormatObject {
 	}
 
 	/**
-	 * Two {@code AssignmentType}s are equal if their parameters match each others'.
-	 * They can have different AssignmentAreas though.
+	 * Two {@code AssignmentType}s are equal if they have the same name.
 	 * @param o the object that is compared to this assignment type
 	 */
 	@Override
 	public boolean equals( Object o ) {
 		if( o instanceof AssignmentType ) {
 			AssignmentType p = (AssignmentType)o;
-			return ((name == null) ? p.getName() == null
-							: name.equals( p.getName() ))
-							&& ((age == null) ? p.getAge() == null
-							: age.equals( p.getAge() ))
-							&& ((decisiveness == null) ? p.getDecisiveness() == null
-							: decisiveness.equals( p.getDecisiveness() ))
-							&& ((diameter == null) ? p.getDiameter() == null
-							: diameter.equals( p.getDiameter() ))
-							&& ((familiarity == null) ? p.getFamiliarity() == null
-							: familiarity.equals( p.getFamiliarity() ))
-							&& ((panic == null) ? p.getPanic() == null
-							: panic.equals( p.getPanic() ));
+			return name.equals( p.name );
+//			return ((name == null) ? p.getName() == null
+//							: name.equals( p.getName() ))
+//							&& ((age == null) ? p.getAge() == null
+//							: age.equals( p.getAge() ))
+//							&& ((decisiveness == null) ? p.getDecisiveness() == null
+//							: decisiveness.equals( p.getDecisiveness() ))
+//							&& ((diameter == null) ? p.getDiameter() == null
+//							: diameter.equals( p.getDiameter() ))
+//							&& ((familiarity == null) ? p.getFamiliarity() == null
+//							: familiarity.equals( p.getFamiliarity() ))
+//							&& ((panic == null) ? p.getPanic() == null
+//							: panic.equals( p.getPanic() ));
 		} else
 			return false;
 	}

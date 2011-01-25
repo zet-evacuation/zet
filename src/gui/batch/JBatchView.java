@@ -20,7 +20,7 @@ import batch.CellularAutomatonAlgorithm;
 import batch.GraphAlgorithm;
 import batch.load.BatchProjectEntry;
 import de.tu_berlin.math.coga.common.localization.DefaultLoc;
-import ds.Project;
+import ds.z.Project;
 import ds.PropertyContainer;
 import ds.z.Assignment;
 import gui.ZETMain;

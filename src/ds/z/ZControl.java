@@ -4,7 +4,6 @@
  */
 package ds.z;
 
-import ds.Project;
 import ds.z.exception.AssignmentException;
 import java.util.List;
 import de.tu_berlin.math.coga.common.localization.Localization;
