@@ -29,7 +29,7 @@ import de.tu_berlin.math.coga.zet.converter.graph.ZToGraphRasterContainer;
 import de.tu_berlin.math.coga.zet.converter.cellularAutomaton.ZToCARasterContainer;
 import de.tu_berlin.math.coga.zet.converter.cellularAutomaton.ZToCARasterSquare;
 import de.tu_berlin.math.coga.zet.converter.cellularAutomaton.ZToCARoomRaster;
-import ds.Project;
+import ds.z.Project;
 import ds.PropertyContainer;
 import de.tu_berlin.math.coga.zet.NetworkFlowModel;
 import ds.z.BuildingPlan;

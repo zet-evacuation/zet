@@ -366,7 +366,7 @@ public class JEditor extends JFrame implements Localized, EventListener<Progress
 		if( tabPane.getSelectedIndex() > 1 )
 			tabPane.setSelectedIndex( 0 );
 		editView.displayProject( zcontrol );
-                caView.displayProject(zcontrol);
+		caView.displayProject( zcontrol );
 		// Löschen eingestellter parameter
 //		ZToCAConverter.getInstance().clear();
 		firstSwitch = true;
@@ -374,7 +374,7 @@ public class JEditor extends JFrame implements Localized, EventListener<Progress
 			editView.setFloor( 1 );
 		// Updaten der gui
 		editView.update();
-                caView.update();
+		caView.update();
 
 
 		editView.setEditMode( EditMode.Selection );

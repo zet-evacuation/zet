@@ -31,7 +31,7 @@ import batch.GraphAlgorithm;
 import converter.graph.ZToGraphConverter;
 import de.tu_berlin.math.coga.zet.converter.cellularAutomaton.ZToCAConverter.ConversionNotSupportedException;
 import de.tu_berlin.math.coga.common.algorithm.Algorithm;
-import ds.Project;
+import ds.z.Project;
 import ds.PropertyContainer;
 import ds.ca.CellularAutomaton;
 import ds.ca.results.VisualResultsRecorder;

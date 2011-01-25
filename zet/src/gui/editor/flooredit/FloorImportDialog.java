@@ -20,7 +20,7 @@
 package gui.editor.flooredit;
 
 import de.tu_berlin.math.coga.common.localization.DefaultLoc;
-import ds.Project;
+import ds.z.Project;
 import ds.z.Floor;
 import gui.components.framework.Button;
 import gui.GUIOptionManager;

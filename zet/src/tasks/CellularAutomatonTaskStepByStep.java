@@ -13,7 +13,7 @@ import de.tu_berlin.math.coga.zet.converter.cellularAutomaton.ZToCAConverter;
 import de.tu_berlin.math.coga.zet.converter.cellularAutomaton.ZToCAMapping;
 import de.tu_berlin.math.coga.zet.converter.cellularAutomaton.ZToCARasterContainer;
 import de.tu_berlin.math.coga.common.algorithm.Algorithm;
-import ds.Project;
+import ds.z.Project;
 import ds.PropertyContainer;
 import ds.ca.CellularAutomaton;
 import ds.z.AssignmentType;

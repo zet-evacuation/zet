@@ -19,10 +19,11 @@
  * Created on 26. November 2007, 21:32
  */
 
-package ds;
+package ds.z;
 
 import com.thoughtworks.xstream.annotations.XStreamAlias;
 import com.thoughtworks.xstream.annotations.XStreamOmitField;
+import ds.VisualProperties;
 import ds.z.ZLocalization;
 import ds.z.Assignment;
 import ds.z.BuildingPlan;

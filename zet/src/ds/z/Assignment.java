@@ -75,7 +75,7 @@ public class Assignment implements Serializable, ZFormatObject {
 	/**
 	 * Sets the name of the assignment.
 	 * @param val The name of the assignment.
-	 * @throws IllegalArgumentException If the given name is nul or "".
+	 * @throws IllegalArgumentException If the given name is {@code null} or "".
 	 */
 	public void setName( String val ) throws IllegalArgumentException {
 		if( val == null || val.equals( "" ) )
@@ -139,11 +139,17 @@ public class Assignment implements Serializable, ZFormatObject {
 		assignmentTypes = null;
 	}
 
+	/**
+	 * Two assignments are defined to be equal, if they have the same name.
+	 * @param o
+	 * @return
+	 */
 	@Override
 	public boolean equals( Object o ) {
 		if( o instanceof Assignment ) {
 			Assignment p = (Assignment) o;
-			return assignmentTypes.equals( p.getAssignmentTypes() ) && ((name == null) ? p.getName() == null : name.equals( p.getName() ));
+			return name.equals( p.name );
+			//return assignmentTypes.equals( p.getAssignmentTypes() ) && ((name == null) ? p.getName() == null : name.equals( p.getName() ));
 		} else
 			return false;
 	}

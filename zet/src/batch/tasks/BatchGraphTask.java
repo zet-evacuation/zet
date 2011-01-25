@@ -25,7 +25,7 @@ import batch.tasks.graph.SuccessiveEarliestArrivalAugmentingPathAlgorithmTask3;
 import converter.graph.ZToGraphConverter;
 import de.tu_berlin.math.coga.common.algorithm.Algorithm;
 import de.tu_berlin.math.coga.common.algorithm.AlgorithmListener;
-import ds.Project;
+import ds.z.Project;
 import ds.GraphVisualizationResults;
 import de.tu_berlin.math.coga.zet.NetworkFlowModel;
 import ds.graph.flow.PathBasedFlowOverTime;

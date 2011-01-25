@@ -26,7 +26,7 @@ import batch.CellularAutomatonAlgorithm;
 import de.tu_berlin.math.coga.zet.converter.cellularAutomaton.AssignmentApplicationInstance;
 import de.tu_berlin.math.coga.zet.converter.cellularAutomaton.CellularAutomatonAssignmentConverter;
 import de.tu_berlin.math.coga.zet.converter.cellularAutomaton.ConvertedCellularAutomaton;
-import ds.Project;
+import ds.z.Project;
 import ds.PropertyContainer;
 import ds.z.Assignment;
 import ds.z.AssignmentType;
