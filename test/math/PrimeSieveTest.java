@@ -9,7 +9,7 @@ import de.tu_berlin.math.coga.math.PrimeSieve;
 import junit.framework.TestCase;
 
 /**
- * The class <code>PrimeSieveTest</code> tests different prime sieve variants
+ * The class {@code PrimeSieveTest} tests different prime sieve variants
  * and compares them.
  * @author Jan-Philipp Kappmeier
  */

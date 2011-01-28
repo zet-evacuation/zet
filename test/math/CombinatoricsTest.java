@@ -9,13 +9,13 @@ import de.tu_berlin.math.coga.math.PrimeSieve;
 import junit.framework.TestCase;
 
 /**
- * The class <code>CombinatoricsTest</code> ...
+ * The class {@code CombinatoricsTest} ...
  * @author Jan-Philipp Kappmeier
  */
 public class CombinatoricsTest extends TestCase {
 
 	/**
-	 * Creates a new instance of <code>CombinatoricsTest</code>.
+	 * Creates a new instance of {@code CombinatoricsTest}.
 	 */
 	public CombinatoricsTest() {
 	}

@@ -8,12 +8,12 @@ import de.tu_berlin.math.coga.math.BitOperations;
 import junit.framework.TestCase;
 
 /**
- * The class <code>BitOperationsTest</code> ...
+ * The class {@code BitOperationsTest} ...
  * @author Jan-Philipp Kappmeier
  */
 public class BitOperationsTest extends TestCase {
 	/**
-	 * Creates a new instance of <code>BitOperationsTest</code>.
+	 * Creates a new instance of {@code BitOperationsTest}.
 	 */
 	public BitOperationsTest() {
 	}
