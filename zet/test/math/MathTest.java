@@ -8,12 +8,12 @@ package math;
 import junit.framework.TestCase;
 
 /**
- * The class <code>MathTest</code> ...
+ * The class {@code MathTest} ...
  * @author Jan-Philipp Kappmeier
  */
 public class MathTest extends TestCase {
 
-	/** Creates a new instance of <code>MathTest</code>. */
+	/** Creates a new instance of {@code MathTest}. */
 	public MathTest() { }
 
 	public void testFactorial() {

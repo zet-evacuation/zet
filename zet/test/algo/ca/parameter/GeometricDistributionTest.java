@@ -9,13 +9,13 @@ import de.tu_berlin.math.coga.rndutils.distribution.discrete.GeometricDistributi
 import junit.framework.TestCase;
 
 /**
- * The class <code>GeometricDistributionTest</code> ...
+ * The class {@code GeometricDistributionTest} ...
  * @author Jan-Philipp Kappmeier
  */
 public class GeometricDistributionTest extends TestCase {
 
 	/**
-	 * Creates a new instance of <code>GeometricDistributionTest</code>.
+	 * Creates a new instance of {@code GeometricDistributionTest}.
 	 */
 	public GeometricDistributionTest() {
 
