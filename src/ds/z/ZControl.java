@@ -289,7 +289,7 @@ public class ZControl {
 		return false;
 	}
 
-	public void closePolygon() {
+	public PlanPolygon closePolygon() {
 		if( newPolygon.isClosed() )
 			throw new IllegalStateException( "Polygon closed." );
 
@@ -307,6 +307,7 @@ public class ZControl {
 		}
 		// todo remove event server
 		EventServer.getInstance().dispatchEvent( new ZModelChangedEvent() {} );
+		return latestPolygon;
 	}
 
 	/**
@@ -459,6 +460,41 @@ public class ZControl {
 		pointList.add( newPoint );
 		pointList.add( onEdge.getTarget() );
 		onEdge.getAssociatedPolygon().replaceEdge( onEdge, pointList );
+		EventServer.getInstance().dispatchEvent( new ZModelChangedEvent() {} );
+	}
+
+	/**
+	 * Connect two rooms by a new quadrangular room defined by two edges.
+	 * @param firstEdge an edge of the first room
+	 * @param secondEdge an edge of the second room
+	 * @throws IllegalArgumentException if the two edges belong to the same room
+	 */
+	public void connectRooms( RoomEdge firstEdge, RoomEdge secondEdge ) throws IllegalArgumentException{
+		if( firstEdge.getRoom().equals( secondEdge.getRoom() ) )
+			throw new IllegalArgumentException( "Edges must lie in different rooms." );
+
+		// Create new Room
+		final Edge test1 = new Edge( firstEdge.getSource(), secondEdge.getSource() );
+		final Edge test2 = new Edge( firstEdge.getTarget(), secondEdge.getTarget() );
+
+		createNewPolygon( Room.class, firstEdge.getRoom().getAssociatedFloor() );
+		addPoint( new PlanPoint( firstEdge.getSource() ), false );
+		addPoint( new PlanPoint( firstEdge.getTarget() ), false );
+		switch( Edge.intersects( test1, test2 ) ) {
+			case Intersects:
+				addPoint( new PlanPoint( secondEdge.getSource() ), false );
+				addPoint( new PlanPoint( secondEdge.getTarget() ), false );
+				break;
+			default:	// add the points in swapped order
+				addPoint( new PlanPoint( secondEdge.getTarget() ), false );
+				addPoint( new PlanPoint( secondEdge.getSource() ), false );
+		}
+		closePolygon();
+
+		// connect
+		final Room room = (Room) latestPolygon;
+		room.connectTo( firstEdge.getRoom(), firstEdge.getSource(), firstEdge.getTarget() );
+		room.connectTo( secondEdge.getRoom(), secondEdge.getSource(), secondEdge.getTarget() );
 		EventServer.getInstance().dispatchEvent( new ZModelChangedEvent() {} );
 	}
 }

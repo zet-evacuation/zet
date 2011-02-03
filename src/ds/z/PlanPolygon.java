@@ -1264,13 +1264,11 @@ public class PlanPolygon<T extends Edge> implements Serializable, Iterable<T> {
 	 */
 	public T getEdge( PlanPoint p1, PlanPoint p2 ) throws IllegalArgumentException {
 		if( p1.equals( p2 ) )
-			throw new IllegalArgumentException( ZLocalization.getSingleton().getString(
-							"ds.z.PlanPolygon.EqualPointsException" ) );
+			throw new IllegalArgumentException( ZLocalization.getSingleton().getString( "ds.z.PlanPolygon.EqualPointsException" ) );
 		for( T e : this )
 			if( e.fits( p1 ) && e.fits( p2 ) )
 				return e;
-		throw new IllegalArgumentException( ZLocalization.getSingleton().getString(
-						"ds.z.PlanPolygon.EdgeNotFoundException" ) );
+		throw new IllegalArgumentException( ZLocalization.getSingleton().getString( "ds.z.PlanPolygon.EdgeNotFoundException" ) );
 	}
 
 	/** Returns a view of the {@link java.util.List} of edges of the polygon. The view

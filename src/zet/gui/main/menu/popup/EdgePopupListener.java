@@ -132,59 +132,9 @@ public class EdgePopupListener implements ActionListener {
 					GUIOptionManager.getEditMode().getPayload().add( myEdge );
 					EventServer.getInstance().dispatchEvent( new MessageEvent( this, MessageEvent.MessageType.Status, "Wählen Sie jetzt die Gegenseite aus (Rechtsklick+Menu)!" ) );
 				} else {
-					// Create new Room
-					PlanPoint e1;
-					PlanPoint e2;
-					if( Math.abs( myEdge.getSource().getXInt() - myEdge.getTarget().getXInt() ) > Math.abs( myEdge.getSource().getYInt() - myEdge.getTarget().getYInt() ) )
-						if( myEdge.getSource().getXInt() < myEdge.getTarget().getXInt() ) {
-							e1 = new PlanPoint( myEdge.getSource() );
-							e2 = new PlanPoint( myEdge.getTarget() );
-						} else {
-							e1 = new PlanPoint( myEdge.getTarget() );
-							e2 = new PlanPoint( myEdge.getSource() );
-						}
-					else
-						if( myEdge.getSource().getYInt() > myEdge.getTarget().getYInt() ) {
-							e1 = new PlanPoint( myEdge.getSource() );
-							e2 = new PlanPoint( myEdge.getTarget() );
-						} else {
-							e1 = new PlanPoint( myEdge.getTarget() );
-							e2 = new PlanPoint( myEdge.getSource() );
-						}
-					PlanPoint f1;
-					PlanPoint f2;
-					RoomEdge edge = (RoomEdge)EditMode.PassableRoomCreation.getPayload().getFirst();
-					if( Math.abs( edge.getSource().getXInt() - edge.getTarget().getXInt() ) > Math.abs( edge.getSource().getYInt() - edge.getTarget().getYInt() ) )
-						if( edge.getSource().getXInt() < edge.getTarget().getXInt() ) {
-							f1 = new PlanPoint( edge.getSource() );
-							f2 = new PlanPoint( edge.getTarget() );
-						} else {
-							f1 = new PlanPoint( edge.getTarget() );
-							f2 = new PlanPoint( edge.getSource() );
-						}
-					else
-						if( edge.getSource().getYInt() > edge.getTarget().getYInt() ) {
-							f1 = new PlanPoint( edge.getSource() );
-							f2 = new PlanPoint( edge.getTarget() );
-						} else {
-							f1 = new PlanPoint( edge.getTarget() );
-							f2 = new PlanPoint( edge.getSource() );
-						}
-					// create room
-					Room room = new Room( edge.getRoom().getAssociatedFloor() );
-					ArrayList<PlanPoint> points = new ArrayList<PlanPoint>( 6 );
-					points.add( e1 );
-					points.add( f1 );
-					points.add( f2 );
-					points.add( e2 );
-					room.defineByPoints( points );
-					//room.close();
-					// connect
-					room.connectTo( ((RoomEdge)myEdge).getRoom(), e1, e2 );
-					room.connectTo( edge.getRoom(), f1, f2 );
+					projectControl.connectRooms( (RoomEdge)EditMode.PassableRoomCreation.getPayload().getFirst(), (RoomEdge)myEdge );
 					GUIOptionManager.setEditMode( GUIOptionManager.getPreviousEditMode() );
 				}
-
 			} else if( e.getActionCommand().equals( "showPassageTarget" ) ) {
 				Room partnerRoom = ((TeleportEdge)myEdge).getLinkTarget().getRoom();
 				// Show the right floor
