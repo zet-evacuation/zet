@@ -468,7 +468,6 @@ public class JFloor extends AbstractFloor implements EventListener<ZModelChanged
 		JPolygon jp = getJPolygon( p );
 
 		if( jp != null ) {
-			scrollRectToVisible( null );
 			scrollRectToVisible( jp.getBounds() );
 			setSelectedPolygon( jp );
 		}
