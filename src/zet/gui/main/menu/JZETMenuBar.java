@@ -102,6 +102,7 @@ public class JZETMenuBar extends JMenuBar implements ActionListener, Localized {
 	private JMenu mnuDebug;
 	private JMenu mHelp;
 	private JMenuItem mnuHelpAbout;
+	static JProjectTreeView ptv;
 
 	public JZETMenuBar( GUIControl control ) {
 		this.control = control;
@@ -380,7 +381,8 @@ public class JZETMenuBar extends JMenuBar implements ActionListener, Localized {
 		} else if ( e.getActionCommand().equals( "debugBuildingStatus" ) ) {
 			System.out.println( control.getZControl().getProject().getBuildingPlan().summary() );
 			// Show window
-			JProjectTreeView ptv = new JProjectTreeView( control.editor, "Baumansicht", 800, 600, control.getZControl() );
+			if( ptv == null )
+				ptv = new JProjectTreeView( control.editor, "Baumansicht", 600, 450, control.getZControl() );
 			ptv.setVisible( true );
 		} else if( e.getActionCommand().equals( "german" ) ) {
 			control.switchToLanguage( Locale.GERMAN );
