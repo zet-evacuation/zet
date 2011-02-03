@@ -47,6 +47,7 @@ import java.awt.FontMetrics;
 import java.awt.Paint;
 import java.awt.Polygon;
 import java.awt.RenderingHints;
+import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.LinkedList;
 
@@ -123,8 +124,7 @@ public class JPolygon extends AbstractPolygon {
 
 		// Create a transparent color with which we will fill out the polygon
 		// in case it represents an area
-		transparentForeground = new Color( getForeground().getColorSpace(),
-						getForeground().getColorComponents( null ), 0.1f );
+		transparentForeground = new Color( getForeground().getColorSpace(), getForeground().getColorComponents( null ), 0.1f );
 
 		enableEvents( AWTEvent.MOUSE_EVENT_MASK );
 		enableEvents( AWTEvent.MOUSE_MOTION_EVENT_MASK );
@@ -191,8 +191,7 @@ public class JPolygon extends AbstractPolygon {
 			// Contains room-relative bounds
 			Rectangle bounds = new Rectangle( areabounds );
 			if( myPolygon instanceof Area ) {
-				Rectangle translatedBounds = CoordinateTools.translateToScreen(
-								((Area)myPolygon).getAssociatedRoom().bounds() );
+				Rectangle translatedBounds = CoordinateTools.translateToScreen( ((Area)myPolygon).getAssociatedRoom().bounds() );
 				bounds.x -= translatedBounds.x;
 				bounds.y -= translatedBounds.y;
 			} else {
@@ -202,16 +201,14 @@ public class JPolygon extends AbstractPolygon {
 			setBounds( bounds );
 
 			// This already copies the polygon
-			drawingPolygon = CoordinateTools.translateToScreen(
-							myPolygon.getAWTPolygon() );
+			drawingPolygon = CoordinateTools.translateToScreen( myPolygon.getAWTPolygon() );
 			// We only want to paint the space within the area polygon. The 
 			// drawingpolygon already contains the appropriate size to do that,
 			// because it comes from the model and has no idea of EDGE_WIDTH_ADDITION
 			// But we have to shift the polygon (1) into the coordinate space of the
 			// area and (2) by EDGE_WIDTH_ADDITION because we want to paint inside
 			// the painted edges, not only inside the JEdge Objects.
-			drawingPolygon.translate( -areabounds.x + EDGE_WIDTH_ADDITION,
-							-areabounds.y + EDGE_WIDTH_ADDITION );
+			drawingPolygon.translate( -areabounds.x + EDGE_WIDTH_ADDITION, -areabounds.y + EDGE_WIDTH_ADDITION );
 
 			// Display subobjects
 			// TODO: Provide better implementation - Do not recreate everything each time
@@ -223,56 +220,55 @@ public class JPolygon extends AbstractPolygon {
 				EnumSet<Areas> areaVisibility = GUIOptionManager.getAreaVisibility();
 				if( areaVisibility.contains( Areas.Assignment ) )
 					for( Area a : room.getAssignmentAreas() ) {
-						JPolygon ne = new JPolygon( myFloor, GUIOptionManager.getAssignmentAreaColor(), guiControl );
-						add( ne );
-						ne.displayPolygon( a );
+						JPolygon allignmentAreaPoly = new JPolygon( myFloor, GUIOptionManager.getAssignmentAreaColor(), guiControl );
+						add( allignmentAreaPoly );
+						allignmentAreaPoly.displayPolygon( a );
 					}
 				if( areaVisibility.contains( Areas.Delay ) )
 					for( Area a : room.getDelayAreas() ) {
-						JPolygon ne = new JPolygon( myFloor, GUIOptionManager.getDelayAreaColor(), guiControl );
-						add( ne );
-						ne.displayPolygon( a );
+						JPolygon delayAreaPoly = new JPolygon( myFloor, GUIOptionManager.getDelayAreaColor(), guiControl );
+						add( delayAreaPoly );
+						delayAreaPoly.displayPolygon( a );
 					}
 				if( areaVisibility.contains( Areas.Evacuation ) )
 					for( Area a : room.getSaveAreas() )
 						if( a instanceof EvacuationArea ) {
-							JPolygon ne = new JPolygon( myFloor, GUIOptionManager.getEvacuationAreaColor(), guiControl );
-							add( ne );
-							ne.displayPolygon( a );
+							JPolygon evacuationAreaPoly = new JPolygon( myFloor, GUIOptionManager.getEvacuationAreaColor(), guiControl );
+							add( evacuationAreaPoly );
+							evacuationAreaPoly.displayPolygon( a );
 						}
 				if( areaVisibility.contains( Areas.Save ) )
 					for( Area a : room.getSaveAreas() )
 						if( !(a instanceof EvacuationArea) ) {
-							JPolygon ne = new JPolygon( myFloor, GUIOptionManager.getSaveAreaColor(), guiControl );
-							add( ne );
-							ne.displayPolygon( a );
+							JPolygon saveAreaPoly = new JPolygon( myFloor, GUIOptionManager.getSaveAreaColor(), guiControl );
+							add( saveAreaPoly );
+							saveAreaPoly.displayPolygon( a );
 						}
 				if( areaVisibility.contains( Areas.Stair ) )
 					for( Area a : room.getStairAreas() ) {
-						JPolygon ne = new JPolygon( myFloor, GUIOptionManager.getStairAreaColor(), guiControl );
-						add( ne );
-						ne.displayPolygon( a );
+						JPolygon stairAreaPoly = new JPolygon( myFloor, GUIOptionManager.getStairAreaColor(), guiControl );
+						add( stairAreaPoly );
+						stairAreaPoly.displayPolygon( a );
 					}
 				if( areaVisibility.contains( Areas.Inaccessible ) ) {
 					for( Area a : room.getInaccessibleAreas() ) {
-						JPolygon ne = new JPolygon( myFloor, GUIOptionManager.getInaccessibleAreaColor(), guiControl );
-						add( ne );
-						ne.displayPolygon( a );
+						JPolygon inaccessiblePoly = new JPolygon( myFloor, GUIOptionManager.getInaccessibleAreaColor(), guiControl );
+						add( inaccessiblePoly );
+						inaccessiblePoly.displayPolygon( a );
 					}
 					for( Area a : room.getBarriers() ) {
-						JPolygon ne = new JPolygon( myFloor, GUIOptionManager.getRoomEdgeColor(), guiControl );
-						add( ne );
-						ne.displayPolygon( a );
+						JPolygon barrierPoly = new JPolygon( myFloor, GUIOptionManager.getRoomEdgeColor(), guiControl );
+						add( barrierPoly );
+						barrierPoly.displayPolygon( a );
 					}
 				}
 					// TODO area visiblity for teleport areas
 				if( areaVisibility.contains( Areas.Teleportation ) )
 					for( Area a : room.getTeleportAreas() ) {
-						JPolygon ne = new JPolygon( myFloor, GUIOptionManager.getTeleportAreaColor(), guiControl );
-						add( ne );
-						ne.displayPolygon( a );
+						JPolygon teleportPoly = new JPolygon( myFloor, GUIOptionManager.getTeleportAreaColor(), guiControl );
+						add( teleportPoly );
+						teleportPoly.displayPolygon( a );
 					}
-
 			}
 
 			// Display own edges - This must come after the areas have been created,
@@ -301,32 +297,20 @@ public class JPolygon extends AbstractPolygon {
 				ed.selectionPolygon = new Polygon();
 				if( pLeft == pTop ) {
 					// Edge from left top to right bottom
-					ed.selectionPolygon.addPoint( pLeft.x - EDGE_WIDTH_ADDITION,
-									pLeft.y - EDGE_WIDTH_ADDITION );
-					ed.selectionPolygon.addPoint( pLeft.x + EDGE_WIDTH_ADDITION,
-									pLeft.y - EDGE_WIDTH_ADDITION );
-					ed.selectionPolygon.addPoint( pRight.x + EDGE_WIDTH_ADDITION,
-									pRight.y - EDGE_WIDTH_ADDITION );
-					ed.selectionPolygon.addPoint( pRight.x + EDGE_WIDTH_ADDITION,
-									pRight.y + EDGE_WIDTH_ADDITION );
-					ed.selectionPolygon.addPoint( pRight.x - EDGE_WIDTH_ADDITION,
-									pRight.y + EDGE_WIDTH_ADDITION );
-					ed.selectionPolygon.addPoint( pLeft.x - EDGE_WIDTH_ADDITION,
-									pLeft.y + EDGE_WIDTH_ADDITION );
+					ed.selectionPolygon.addPoint( pLeft.x - EDGE_WIDTH_ADDITION, pLeft.y - EDGE_WIDTH_ADDITION );
+					ed.selectionPolygon.addPoint( pLeft.x + EDGE_WIDTH_ADDITION, pLeft.y - EDGE_WIDTH_ADDITION );
+					ed.selectionPolygon.addPoint( pRight.x + EDGE_WIDTH_ADDITION, pRight.y - EDGE_WIDTH_ADDITION );
+					ed.selectionPolygon.addPoint( pRight.x + EDGE_WIDTH_ADDITION, pRight.y + EDGE_WIDTH_ADDITION );
+					ed.selectionPolygon.addPoint( pRight.x - EDGE_WIDTH_ADDITION, pRight.y + EDGE_WIDTH_ADDITION );
+					ed.selectionPolygon.addPoint( pLeft.x - EDGE_WIDTH_ADDITION, pLeft.y + EDGE_WIDTH_ADDITION );
 				} else {
 					// Edge from left bottom to right top
-					ed.selectionPolygon.addPoint( pLeft.x - EDGE_WIDTH_ADDITION,
-									pLeft.y - EDGE_WIDTH_ADDITION );
-					ed.selectionPolygon.addPoint( pRight.x - EDGE_WIDTH_ADDITION,
-									pRight.y - EDGE_WIDTH_ADDITION );
-					ed.selectionPolygon.addPoint( pRight.x + EDGE_WIDTH_ADDITION,
-									pRight.y - EDGE_WIDTH_ADDITION );
-					ed.selectionPolygon.addPoint( pRight.x + EDGE_WIDTH_ADDITION,
-									pRight.y + EDGE_WIDTH_ADDITION );
-					ed.selectionPolygon.addPoint( pLeft.x + EDGE_WIDTH_ADDITION,
-									pLeft.y + EDGE_WIDTH_ADDITION );
-					ed.selectionPolygon.addPoint( pLeft.x - EDGE_WIDTH_ADDITION,
-									pLeft.y + EDGE_WIDTH_ADDITION );
+					ed.selectionPolygon.addPoint( pLeft.x - EDGE_WIDTH_ADDITION, pLeft.y - EDGE_WIDTH_ADDITION );
+					ed.selectionPolygon.addPoint( pRight.x - EDGE_WIDTH_ADDITION, pRight.y - EDGE_WIDTH_ADDITION );
+					ed.selectionPolygon.addPoint( pRight.x + EDGE_WIDTH_ADDITION, pRight.y - EDGE_WIDTH_ADDITION );
+					ed.selectionPolygon.addPoint( pRight.x + EDGE_WIDTH_ADDITION, pRight.y + EDGE_WIDTH_ADDITION );
+					ed.selectionPolygon.addPoint( pLeft.x + EDGE_WIDTH_ADDITION, pLeft.y + EDGE_WIDTH_ADDITION );
+					ed.selectionPolygon.addPoint( pLeft.x - EDGE_WIDTH_ADDITION, pLeft.y + EDGE_WIDTH_ADDITION );
 				}
 
 				// Always start at the leftmost or, if that is not applicable, at 
@@ -420,8 +404,7 @@ public class JPolygon extends AbstractPolygon {
 					int edge_center_y = (ed.node1.y + ed.node2.y) / 2;
 					Paint oldPaint = g2.getPaint();
 					g2.setPaint( GUIOptionManager.getRoomEdgeColor() );
-					g2.drawString( toDraw, edge_center_x - nameBounds.width / 2,
-									edge_center_y + nameBounds.height / 2 );
+					g2.drawString( toDraw, edge_center_x - nameBounds.width / 2, edge_center_y + nameBounds.height / 2 );
 					g2.setPaint( oldPaint );
 				}
 			}
@@ -457,9 +440,9 @@ public class JPolygon extends AbstractPolygon {
 		if( (myPolygon instanceof Area) && !(myPolygon instanceof Barrier) ) {
 			// Paint the background with the area color
 			g2.setPaint( transparentForeground );
-			//if( drawingPolygon != null )
 			if( drawingPolygon.npoints > 0 )
 				g2.fillPolygon( drawingPolygon );
+			System.out.println();
 		}
 
 		// Redraw the polygon if it is selected. This will give better 

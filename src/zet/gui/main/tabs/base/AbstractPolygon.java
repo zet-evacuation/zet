@@ -39,7 +39,7 @@ abstract public class AbstractPolygon extends JPanel {
 	/** Most global super type of PlanPolygon. */
 	protected PlanPolygon<Edge> myPolygon;
 	//private JFloor myFloor;
-	protected AbstractFloor myFloor;	
+	protected AbstractFloor myFloor;
 
 	public AbstractPolygon( Color foreground ) {
 		super( null );
@@ -82,9 +82,8 @@ abstract public class AbstractPolygon extends JPanel {
 		// Only paint if there is enough screen space for the string. We check it with the
 		// correct height values. But the nameBounds are baseline-relative so we need to
 		// subtract the negative y-offset for the baseline.
-		if( normalizedBounds.contains( stringBounds ) ) {
+		if( normalizedBounds.contains( stringBounds ) )
 			g2.drawString( name, stringBounds.x, stringBounds.y -nameBounds.y);
-		}
 	}
 	
 	/**

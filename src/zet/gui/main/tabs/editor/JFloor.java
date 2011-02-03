@@ -198,9 +198,9 @@ public class JFloor extends AbstractFloor implements EventListener<ZModelChanged
 
 			// TODO: Provide better implementation - Do not recreate everything each time			
 			for( Room r : f.getRooms() ) {
-				JPolygon poly = new JPolygon( this, GUIOptionManager.getRoomEdgeColor(), guiControl );
-				add( poly );
-				poly.displayPolygon( r );
+				JPolygon roomPolygon = new JPolygon( this, GUIOptionManager.getRoomEdgeColor(), guiControl );
+				add( roomPolygon );
+				roomPolygon.displayPolygon( r );
 			}
 
 			// Recreate/Clear the click values and other temporary variables
@@ -384,7 +384,8 @@ public class JFloor extends AbstractFloor implements EventListener<ZModelChanged
 		return null;
 	}
 
-	/** Sets the given Polygon to be the one and only 
+	/**
+	 * Sets the given Polygon to be the one and only
 	 * selected polygon on the JFloor
 	 * @param p the polygon
 	 */
@@ -393,7 +394,8 @@ public class JFloor extends AbstractFloor implements EventListener<ZModelChanged
 		selectPolygon( p );
 	}
 
-	/** Sets the given Polygon to be the one and only selected polygon on the
+	/**
+	 * Sets the given Polygon to be the one and only selected polygon on the
 	 * {@code JFloor} if it is shown on this {@code JFloor} at all.
 	 * @param p the polygon
 	 */
@@ -403,14 +405,15 @@ public class JFloor extends AbstractFloor implements EventListener<ZModelChanged
 			setSelectedPolygon( jp );
 	}
 
-	/** Selects the given polygon on the screen
+	/**
+	 * Selects the given polygon on the screen
 	 * @param p The polygon to be selected. May be null.
 	 */
 	public void selectPolygon( JPolygon p ) {
 		if( p != null && !selectedPolygons.contains( p ) ) {
 			selectedPolygons.add( p );
 			p.setSelected( true );
-			this.setComponentZOrder( p, 0 );
+			p.getParent().setComponentZOrder( p, 0 );
 			fireActionEvent();
 		}
 	}

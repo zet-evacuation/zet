@@ -36,7 +36,6 @@ import gui.editor.CoordinateTools;
 import java.awt.Point;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.util.ArrayList;
 
 /**
  * This pop-up listener is responsible for handling menu events
