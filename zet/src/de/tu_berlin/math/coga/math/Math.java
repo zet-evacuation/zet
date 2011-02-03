@@ -66,8 +66,7 @@ public class Math {
 		do {
 			lower = n / upper;
 			upper += lower;
-			upper >>= 1;
-			//upper = upper/2;
+			upper >>= 1; //upper = upper/2;
 		} while( upper > lower );
 
 		return upper*upper > n ? upper-1 : upper;

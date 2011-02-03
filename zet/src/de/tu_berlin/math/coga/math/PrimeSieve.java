@@ -4,6 +4,8 @@
  */
 package de.tu_berlin.math.coga.math;
 
+import de.tu_berlin.math.coga.common.util.Formatter;
+
 /**
  *
  * @author Jan-Philipp Kappmeier
@@ -86,12 +88,14 @@ public class PrimeSieve {
 		int pindex = 1;
 
 		while( start < n / 2 ) {
-			if( (working[++index >> 5] & (1 << index % 32)) == 0 ) {
+//			if( (working[++index >> 5] & (1 << index % 32)) == 0 ) {
+			if( (working[++index >> 5] & (1 << (index & 31))) == 0 ) {
 				primes[pindex++] = (index << 1) + 3;
 				// erase
 				for( int j = start; j < n / 2; j += skip )
 					//working[j] = true;
-					working[j >> 5] |= (1 << j % 32 );
+//					working[j >> 5] |= (1 << j % 32 );
+					working[j >> 5] |= (1 << (j & 31) );
 			}
 			start += (++skip) << 1;
 			skip++;
@@ -99,7 +103,8 @@ public class PrimeSieve {
 
 		// give out the rest
 		while( ++index < n / 2 && (pindex) < bound )
-			if( (working[index >> 5] & (1 << index % 32)) == 0 )
+//			if( (working[index >> 5] & (1 << index % 32)) == 0 )
+			if( (working[index >> 5] & (1 << (index & 31))) == 0 )
 				primes[pindex++] = (index << 1) + 3;
 		primeCount = pindex;
 	}
@@ -202,9 +207,9 @@ public class PrimeSieve {
 				for( k = first; k >= i; k -= c2 ) {
 					//c2 = c2 == 2 ? 4 : 2;
 					c2 = swap[c2];
-					working[((i*k)-5) / 3 + (((i*k)-5)%3 == 0 ? 0 : 1)] = true;
+					//working[((i*k)-5) / 3 + (((i*k)-5)%3 == 0 ? 0 : 1)] = true;
 					// experiments show that the following (which does the same) is slower:
-					//working[(int)java.lang.Math.ceil( ((i*k)-5) / 3.0 )] = true;
+					working[(int)java.lang.Math.ceil( ((i*k)-5) / 3.0 )] = true;
 				}
 			}
 		} catch( Exception e ) {
@@ -245,7 +250,7 @@ public class PrimeSieve {
 				for( k = first; k >= i; k -= c2 ) {
 					//c2 = c2 == 2 ? 4 : 2;
 					c2 = swap[c2];
-//					final int pos = ((i*k)-5) / 3 + (((i*k)-5)%3 == 0 ? 0 : 1);
+					//final int pos = ((i*k)-5) / 3 + (((i*k)-5)%3 == 0 ? 0 : 1);
 					//working[pos>>5] |= (1 << pos % 32);
 					working[((i*k)-5) / 3 + (((i*k)-5)%3 == 0 ? 0 : 1)>>5] |= (1 << ((i*k)-5) / 3 + (((i*k)-5)%3 == 0 ? 0 : 1) % 32);
 					// experiments show that the following (which does the same) is slower:
@@ -345,9 +350,12 @@ public class PrimeSieve {
 
 				//Wenn die Zahl an Lösungen für diese Gleichung ungerade ist
 				//und n Modulo 12 ist 1 oder 5, dann muss die Zahl prim sein
-				{final int test = 4 * x * x + y * y;
-				if( test <= n && (test % 12 == 1 || test % 12 == 5) )
-					working[test] = !working[test];
+				{
+//					final int test = 4 * x * x + y * y;
+//					if( test <= n && (test % 12 == 1 || test % 12 == 5) )
+//						working[test] = !working[test];
+					if( 4 * x * x + y * y <= n && ((4 * x * x + y * y) % 12 == 1 || (4 * x * x + y * y) % 12 == 5) )
+						working[4 * x * x + y * y] = !working[4 * x * x + y * y];
 				/*hier wird das Ergebnis invertiert und damit
 				sichergestellt, dass nur die Zahlen prim sind,
 				für die eine ungerade Zahl an Lösungen für die
@@ -356,9 +364,11 @@ public class PrimeSieve {
 				//Wenn die Zahl an Lösungen für diese Gleichung ungerade ist
 				//und n Modulo 12 ist 1 oder 5, dann muss die Zahl prim sein
 				{
-					final int test = 3 * x * x + y * y;
-				if( test <= n && test % 12 == 7 )
-					working[test] = !working[test];
+//					final int test = 3 * x * x + y * y;
+//				if( test <= n && test % 12 == 7 )
+//					working[test] = !working[test];
+				if( 3 * x * x + y * y <= n && 3 * x * x + y * y % 12 == 7 )
+					working[3 * x * x + y * y] = !working[3 * x * x + y * y];
 				}
 				/*hier wird das Ergebnis invertiert und damit
 				sichergestellt, dass nur die Zahlen prim sind,
@@ -367,9 +377,11 @@ public class PrimeSieve {
 
 				//das gleiche Prinzip wie oben
 				{
-					final int test = 3 * x * x - y * y;
-				if( x > y && test <= n && test % 12 == 11 )
-					working[test] = !working[test];
+//					final int test = 3 * x * x - y * y;
+//				if( x > y && test <= n && test % 12 == 11 )
+//					working[test] = !working[test];
+				if( x > y && 3 * x * x - y * y <= n && 3 * x * x - y * y % 12 == 11 )
+					working[3 * x * x - y * y] = !working[3 * x * x - y * y];
 				}
 			}
 
@@ -391,19 +403,26 @@ public class PrimeSieve {
 	}
 
 	public static void main( String[] args ) {
-		PrimeSieve p;
+		PrimeSieve p = null;
+		int count=-1;
 		int n = 2;
-		for( int i = 1; i <= 60; ++i ) {
+		long total = 0;
+		for( int i = 1; i <= count+2; ++i ) {
 			n = (int)(n*1.5);
+			//n = 136216567;
+			n = 2000000;
 			System.out.print( "n = ;" + n );
 			long start, end;
-//			System.out.print( ";optimiertes PrimeSieve" );
-//			System.gc();
-//			p = new PrimeSieve( n );
-//			start = System.nanoTime();
-//			p.compute();
-//			end = System.nanoTime();
-//			System.out.print( ";" + (end - start) );
+			System.out.print( ";optimiertes PrimeSieve" );
+			System.gc();
+			p = new PrimeSieve( n );
+			start = System.nanoTime();
+			p.compute();
+			end = System.nanoTime();
+			//System.out.print( ";" + (end - start) );
+			System.out.print( "; " + Formatter.formatTimeUnit( (end - start), Formatter.TimeUnits.NanoSeconds) );
+			if( i > 2 )
+				total += (end-start);
 
 //			System.out.print( ";optimiertes PrimeSieve LowMem" );
 //			System.gc();
@@ -411,7 +430,10 @@ public class PrimeSieve {
 //			start = System.nanoTime();
 //			p.computeLowMem();
 //			end = System.nanoTime();
-//			System.out.print( ";" + (end - start) );
+//			//System.out.print( ";" + (end - start) );
+//			System.out.print( "; " + Formatter.formatTimeUnit( (end - start), Formatter.TimeUnits.NanoSeconds) );
+//			if( i > 2 )
+//				total += (end-start);
 
 //			System.out.print( ";OptAlgo3" );
 //			p = new PrimeSieve( n );
@@ -419,7 +441,8 @@ public class PrimeSieve {
 //			start = System.nanoTime();
 //			p.computeADW3();
 //			end = System.nanoTime();
-//			System.out.print( ";" + (end - start) );
+//			//System.out.print( ";" + (end - start) );
+//			System.out.print( "; " + Formatter.formatTimeUnit( (end - start), Formatter.TimeUnits.NanoSeconds) );
 
 			//			System.out.print( ";OptAlgo3Half" );
 //			p = new PrimeSieve( n );
@@ -435,7 +458,8 @@ public class PrimeSieve {
 //			start = System.nanoTime();
 //			p.computeLuschny();
 //			end = System.nanoTime();
-//			System.out.print( ";" + (end - start) );
+//			//System.out.print( ";" + (end - start) );
+//			System.out.print( "; " + Formatter.formatTimeUnit( (end - start), Formatter.TimeUnits.NanoSeconds) );
 
 //			System.out.print( ";Atkin" );
 //			p = new PrimeSieve( n );
@@ -443,7 +467,9 @@ public class PrimeSieve {
 //			start = System.nanoTime();
 //			p.computeAtkin();
 //			end = System.nanoTime();
-//			System.out.print( ";" + (end - start) );
+//			//System.out.print( ";" + (end - start) );
+//			System.out.print( "; " + Formatter.formatTimeUnit( (end - start), Formatter.TimeUnits.NanoSeconds) );
+
 
 //			System.out.print( ";OptAlgo3Third" );
 //			p = new PrimeSieve( n );
@@ -452,17 +478,33 @@ public class PrimeSieve {
 //			p.computeADW3Third();
 //			end = System.nanoTime();
 //			System.out.print( ";" + (end - start) );
+//			System.out.print( "; " + Formatter.formatTimeUnit( (end - start), Formatter.TimeUnits.NanoSeconds) );
 
-			System.out.print( ";OptAlgo3ThirdLowMem" );
-			p = new PrimeSieve( n );
-			System.gc();
-			start = System.nanoTime();
-			p.computeADW3ThirdLowMem();
-			end = System.nanoTime();
-			System.out.print( ";" + (end - start) );
+//			System.out.print( ";OptAlgo3ThirdLowMem" );
+//			System.out.println( "Memory: " + Runtime.getRuntime().totalMemory() + " " );
+//			p = new PrimeSieve( n );
+//			System.gc();
+//			System.out.println( "Memory: " + Runtime.getRuntime().totalMemory() + " " );
+//			start = System.nanoTime();
+//			p.computeADW3ThirdLowMem();
+//			System.out.println( "Memory: " + Runtime.getRuntime().totalMemory()+ " " );
+//			end = System.nanoTime();
+//			System.out.print( "; " + Formatter.formatTimeUnit( (end - start), Formatter.TimeUnits.NanoSeconds) );
 
+//			long sum = 0;
+//			for( int j : p.getPrimes() ) {
+//				sum += j;
+//			}
+//			System.out.println( sum );
+//
 			System.out.println();
 		}
+		System.out.println( "Total: "+ Formatter.formatTimeUnit( (total/count), Formatter.TimeUnits.NanoSeconds) );
+		System.out.println( p.getPrimeCount() );
+		System.out.println( p.getPrimes()[1] );
+		System.out.println( p.getPrimes()[10001] );
+		System.out.println( p.getPrimes()[10000] );
+
 
 //		for( int i = 0; i < p.primeCount; ++i ) {
 //			System.out.println( p.primes[i] );
