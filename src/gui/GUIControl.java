@@ -781,8 +781,17 @@ public class GUIControl implements AlgorithmListener {
 
 	}
 
+	/**
+	 * Removes a floor from the z format,updates the list of floors and shows a
+	 * another floor in the edit area. If the default evacuation floor is to be
+	 * deleted, nothing happens.
+	 */
 	public void deleteFloor() {
-		zcontrol.deleteFloor( editview.getCurrentFloor() );
+		final int oldIndex = editview.getFloorID();
+		if( zcontrol.deleteFloor( editview.getCurrentFloor() ) ) {
+			editview.updateFloorList();
+			editview.setFloor( oldIndex-1 );
+		}
 	}
 
 	public void importFloor() {

@@ -152,8 +152,11 @@ public class ZControl {
 		throw new IllegalArgumentException( "Unknown parameter type." );
 	}
 
-	public void deleteFloor( Floor currentFloor ) {
+	public boolean deleteFloor( Floor currentFloor ) {
+		if( currentFloor instanceof DefaultEvacuationFloor )
+			return false;
 		getProject().getBuildingPlan().removeFloor( currentFloor );
+		return true;
 	}
 
 	public void deletePolygon( PlanPolygon p ) {
