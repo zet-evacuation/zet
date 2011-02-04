@@ -15,8 +15,6 @@
  */
 package zet.gui.main.tabs.base;
 
-import zet.gui.main.tabs.base.AbstractPolygon;
-import zet.gui.main.tabs.base.AbstractFloor;
 import ds.z.Area;
 import ds.z.Barrier;
 import ds.z.Edge;
@@ -47,9 +45,9 @@ import java.awt.FontMetrics;
 import java.awt.Paint;
 import java.awt.Polygon;
 import java.awt.RenderingHints;
-import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.LinkedList;
+import zet.gui.main.tabs.editor.JFloor;
 
 /**
  * Graphical representation of a {@link ds.z.PlanPolygon}. This class has the
@@ -442,7 +440,6 @@ public class JPolygon extends AbstractPolygon {
 			g2.setPaint( transparentForeground );
 			if( drawingPolygon.npoints > 0 )
 				g2.fillPolygon( drawingPolygon );
-			System.out.println();
 		}
 
 		// Redraw the polygon if it is selected. This will give better 

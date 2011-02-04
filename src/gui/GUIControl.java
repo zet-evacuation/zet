@@ -15,6 +15,7 @@ import java.util.Locale;
 import zet.gui.main.JEditor;
 import batch.BatchResult;
 import batch.BatchResultEntry;
+import batch.tasks.AlgorithmTask;
 import batch.tasks.BatchGraphCreateOnlyTask;
 import batch.tasks.RasterizeTask;
 import batch.tasks.VisualizationDataStructureTask;
@@ -763,8 +764,8 @@ public class GUIControl implements AlgorithmListener {
 		ZETMain.sendMessage( "Neue Etage angelegt." ); // TODO loc
 		editor.getEditView().updateFloorList(); // update the floor-boxes in the GUI
 		editor.getEditView().changeFloor( f );
-                editor.getQuickVisualizationView().updateQuickFloorlist();
-                editor.getQuickVisualizationView().changeQuickFloor(f);
+		editor.getQuickVisualizationView().updateQuickFloorlist();
+		editor.getQuickVisualizationView().changeQuickFloor( f );
 
 	}
 
@@ -1069,9 +1070,7 @@ public class GUIControl implements AlgorithmListener {
 					visualization.getControl().setCellularAutomatonControl( caVis, algorithmControl.getCellularAutomaton() );
 					editor.getVisualizationView().updatePotentialSelector();
 //					editor.getVisualizationView().updateFloorSelector();
-					editor.getQuickVisualizationView().getLeftPanel().getMainComponent().setCa( algorithmControl.getCellularAutomaton() );
-					editor.getQuickVisualizationView().getLeftPanel().getMainComponent().setMapping( algorithmControl.getMapping() );
-					editor.getQuickVisualizationView().getLeftPanel().getMainComponent().setContainer( algorithmControl.getContainer() );
+					editor.getQuickVisualizationView().getLeftPanel().getMainComponent().setSimulationData( algorithmControl.getCellularAutomaton(), algorithmControl.getContainer(), algorithmControl.getMapping() );
 					editor.getQuickVisualizationView().displayFloor( editview.getCurrentFloor() );
 				}
 			}
@@ -1097,9 +1096,7 @@ public class GUIControl implements AlgorithmListener {
 					visualization.getControl().setCellularAutomatonControl( algorithmControl.getCaVisResults(), algorithmControl.getCellularAutomaton() );
 					editor.getVisualizationView().updatePotentialSelector();
 					visualizationToolBar.setEnabledPlayback( true );
-					editor.getQuickVisualizationView().getLeftPanel().getMainComponent().setCa( algorithmControl.getCellularAutomaton() );
-					editor.getQuickVisualizationView().getLeftPanel().getMainComponent().setMapping( algorithmControl.getMapping() );
-					editor.getQuickVisualizationView().getLeftPanel().getMainComponent().setContainer( algorithmControl.getContainer() );
+					editor.getQuickVisualizationView().getLeftPanel().getMainComponent().setSimulationData( algorithmControl.getCellularAutomaton(), algorithmControl.getContainer(), algorithmControl.getMapping() );
 					editor.getQuickVisualizationView().displayFloor( editview.getCurrentFloor() );
 				}
 			}
@@ -1132,9 +1129,7 @@ public class GUIControl implements AlgorithmListener {
 			Logger.getLogger( GUIControl.class.getName() ).log( Level.SEVERE, null, ex );
 		}
 		if( initialized ) {
-			editor.getQuickVisualizationView().getLeftPanel().getMainComponent().setCa( algorithmControl.getCellularAutomaton() );
-			editor.getQuickVisualizationView().getLeftPanel().getMainComponent().setMapping( algorithmControl.getMapping() );
-			editor.getQuickVisualizationView().getLeftPanel().getMainComponent().setContainer( algorithmControl.getContainer() );
+					editor.getQuickVisualizationView().getLeftPanel().getMainComponent().setSimulationData( algorithmControl.getCellularAutomaton(), algorithmControl.getContainer(), algorithmControl.getMapping() );
 			editor.getQuickVisualizationView().displayFloor( editview.getCurrentFloor() );
 			editor.getQuickVisualizationView().getLeftPanel().getMainComponent().update();
 		} else
@@ -1176,9 +1171,7 @@ public class GUIControl implements AlgorithmListener {
 		if( !firstProgress ) {
 			CellularAutomaton ca = algorithmControl.getCellularAutomaton();
 			if( ca != null ) {
-				editor.getQuickVisualizationView().getLeftPanel().getMainComponent().setCa( algorithmControl.getCellularAutomaton() );
-				editor.getQuickVisualizationView().getLeftPanel().getMainComponent().setMapping( algorithmControl.getMapping() );
-				editor.getQuickVisualizationView().getLeftPanel().getMainComponent().setContainer( algorithmControl.getContainer() );
+					editor.getQuickVisualizationView().getLeftPanel().getMainComponent().setSimulationData( algorithmControl.getCellularAutomaton(), algorithmControl.getContainer(), algorithmControl.getMapping() );
 				editor.getQuickVisualizationView().displayFloor( editview.getCurrentFloor() );
 				editor.getQuickVisualizationView().getLeftPanel().getMainComponent().update();
 				firstProgress = true;
@@ -1223,6 +1216,33 @@ public class GUIControl implements AlgorithmListener {
 		editview.getLeftPanel().getVerticalScrollBar().setValue( value + change*fact );
 	}
 
+	protected void handleProgressEvent( int progress ) {
+		editor.setProgressValue( progress );
+		if( progress == 100 )
+			editor.disableProgressBar();
+	}
+
+	public void executeTask( Runnable task ) {
+		// Execute task
+		editor.enableProgressBar();
+		AlgorithmTask worker = AlgorithmTask.getNewInstance();
+		worker.setTask( task );
+		worker.addPropertyChangeListener( pcl );
+		try {
+			worker.executeAlgorithm( true );
+		} catch( Exception ex ) {
+			System.out.println( "Fehler trat auf" );
+		} finally { }
+	}
+	
+	protected PropertyChangeListener pcl = new PropertyChangeListener() {
+		public void propertyChange( PropertyChangeEvent evt ) {
+			if( evt.getPropertyName().equals( "progress" ) ) {
+				int progress = (Integer) evt.getNewValue();
+				handleProgressEvent( progress );
+			}
+		}
+	};
 }
 
 
