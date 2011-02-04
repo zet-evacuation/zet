@@ -285,8 +285,7 @@ public class BuildingPlan implements Serializable, Iterable<Floor> , ZFormatObje
 		}
 		for( Floor f : floors )
 			for( Room r : f.getRooms() ) {
-				AlgorithmTask.getInstance().setProgress( 100 / (Math.max( f.roomCount(), 1 )),
-								ZLocalization.getSingleton().getString( "ds.z.floor" ) + ":" + f.getName(), r.getName() );
+				AlgorithmTask.getInstance().setProgress( 100 / (Math.max( f.roomCount(), 1 )), ZLocalization.getSingleton().getString( "ds.z.floor" ) + ":" + f.getName(), r.getName() );
 
 				// Checking if r is rasterized before rasterizing it makes no sense??
 				// but it makes sense to ensure that all polygons are closed!!

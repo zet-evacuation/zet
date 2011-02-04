@@ -23,6 +23,7 @@ package zet.gui.main.tabs.quickVisualization;
 
 import algo.ca.PotentialController;
 import algo.ca.SPPotentialController;
+import batch.tasks.AlgorithmTask;
 import de.tu_berlin.math.coga.zet.converter.cellularAutomaton.ZToCAMapping;
 import de.tu_berlin.math.coga.zet.converter.cellularAutomaton.ZToCARasterContainer;
 import de.tu_berlin.math.coga.zet.converter.cellularAutomaton.ZToCARasterSquare;
@@ -41,40 +42,40 @@ import ds.ca.StairCell;
 import ds.ca.StaticPotential;
 import ds.z.ZControl;
 import zet.gui.main.tabs.base.AbstractFloor;
-import zet.gui.main.tabs.base.JPolygon;
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.Graphics;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import statistic.ca.CAStatistic;
+import zet.gui.main.tabs.base.AbstractPolygon;
 
 /**
  * Represents a rastered floor, all rooms have to be squares of the raster size
  * of a cellular automaton.
  * @author Jan-Philipp Kappmeier
  */
-public class JRasterFloor extends AbstractFloor /*implements ds.z.event.ChangeListener*/ {
+public class JRasterFloor extends AbstractFloor {
 	// Main objects
 	/** The displayed floor. */
 	private Floor myFloor;
 	private CellularAutomaton ca;
 	private ZToCAMapping mapping;
-	private ZToCARasterContainer container	;
+	private ZToCARasterContainer container;
 	private CAStatistic cas;
-        private ZControl zcontrol;
-	
+	private ZControl zcontrol;
+
 	public void setCAStatistic(CAStatistic cas){
 		this.cas = cas;
 	}
 
 	public JRasterFloor() {
-                super();
+		super();
 		setLayout( null );
 		setBackground( Color.black );
 	}
 
-        public ZControl getZcontrol() {
+	public ZControl getZcontrol() {
 		return zcontrol;
 	}
 
@@ -82,16 +83,22 @@ public class JRasterFloor extends AbstractFloor /*implements ds.z.event.ChangeLi
 		this.zcontrol = zcontrol;
 	}
 
-	public void setCa( CellularAutomaton ca ) {
+	public void setSimulationData( CellularAutomaton ca, ZToCARasterContainer container, ZToCAMapping mapping ) {
 		this.ca = ca;
-	}
-
-	public void setContainer( ZToCARasterContainer container ) {
 		this.container = container;
+		this.mapping = mapping;
 	}
 
-	public void setMapping( ZToCAMapping mapping ) {
-		this.mapping = mapping;
+	public CellularAutomaton getCa() {
+		return ca;
+	}
+
+	public ZToCARasterContainer getContainer() {
+		return container;
+	}
+
+	public ZToCAMapping getMapping() {
+		return mapping;
 	}
 
 	/** @return The floor that is currently displayed by this JRasterFloor. */
@@ -104,6 +111,7 @@ public class JRasterFloor extends AbstractFloor /*implements ds.z.event.ChangeLi
 	 * @param floor the displayed floor
 	 */
 	public void displayFloor( Floor floor ) {
+		System.out.println( "Displaying floor starts" );
 		boolean showPotentialValue = PropertyContainer.getInstance().getAsBoolean( "editor.options.cavis.staticPotential" );
 		boolean showDynamicPotential = PropertyContainer.getInstance().getAsBoolean( "editor.options.cavis.dynamicPotential" );
 		boolean showCellUtilization = false;
@@ -112,11 +120,17 @@ public class JRasterFloor extends AbstractFloor /*implements ds.z.event.ChangeLi
 		
 		DynamicPotential dp = null;
 
+		int i = 0;
 		if( myFloor != null ) {
 			for( Component c : getComponents() )
-				if( c instanceof JPolygon )
-					( (JPolygon)c ).displayPolygon( null );
+				if( c instanceof AbstractPolygon ) {
+					( (AbstractPolygon)c ).displayPolygon( null );
+					System.out.println( "Display polygon " + i++ );
+				}
+
+			System.out.print( "Here is removing stuff" );
 			removeAll();
+			System.out.println( "... done" );
 		}
 
 		myFloor = floor;
@@ -135,6 +149,8 @@ public class JRasterFloor extends AbstractFloor /*implements ds.z.event.ChangeLi
 		sp = pc.mergePotentials( new ArrayList<StaticPotential>( pm.getStaticPotentials() ) );
 		dp = pm.getDynamicPotential();
 
+		final int roomCount = floor.getRooms().size();
+		int count = 0;
 		for( Room r : floor.getRooms() ) {
 			if( container != null ) {
 				ZToCARoomRaster roomRaster = container.getRasteredRoom( r );
@@ -180,10 +196,19 @@ public class JRasterFloor extends AbstractFloor /*implements ds.z.event.ChangeLi
 					poly.displayPolygon( square.getSquare() );
 				}
 			}
+			AlgorithmTask.getInstance().setProgress( (++count)/roomCount, "", "" );
 		}
+		AlgorithmTask.getInstance().setProgress( 100, "", "" );
+
+		System.out.println( "At the end of the method but before revalidating" );
+
+		int k = 1;
+		k++;
+		int a = k * 2;
 
 		revalidate();
 		repaint();
+		System.out.println( "very end" );
 	}
 
 	public void update() {

@@ -21,6 +21,7 @@
 package zet.gui.main;
 
 import batch.BatchResult;
+import batch.tasks.AlgorithmTask;
 import de.tu_berlin.math.coga.common.localization.DefaultLoc;
 import ds.PropertyContainer;
 import ds.z.Floor;
@@ -57,6 +58,8 @@ import java.io.IOException;
 import java.text.NumberFormat;
 import java.util.Locale;
 import java.awt.event.WindowAdapter;
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
 import java.util.ArrayList;
 import javax.swing.JComponent;
 import javax.swing.JFrame;
@@ -67,6 +70,7 @@ import javax.swing.KeyStroke;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 import javax.imageio.ImageIO;
+import javax.swing.JProgressBar;
 import zet.gui.GUILocalization;
 import zet.gui.components.JEventStatusBar;
 import zet.gui.main.menu.JZETMenuBar;
@@ -87,7 +91,6 @@ import zet.util.ConversionTools;
  * @author Jan-Philipp Kappmeier, Timon Kelter
  */
 public class JEditor extends JFrame implements Localized, EventListener<ProgressEvent> {
-
 	public enum ZETWindowTabs {
 		EditFloor( true, "Edit" ),
 		QuickView( ZETMain.isDebug(), "CAView" ),
@@ -131,6 +134,8 @@ public class JEditor extends JFrame implements Localized, EventListener<Progress
 	private NumberFormat nfZoom = NumberFormat.getPercentInstance();	// Main window components
 	/** The status bar. */
 	private JEventStatusBar statusBar;
+	/** The progress bar. */
+	private JProgressBar progressBar;
 	private JVisualizationView visualizationView;
 	private GLControl control;
 	/** The editor tab. */
@@ -196,6 +201,7 @@ public class JEditor extends JFrame implements Localized, EventListener<Progress
 		getContentPane().setLayout( new BorderLayout() );
 		statusBar = new JEventStatusBar();
 		add( statusBar, BorderLayout.SOUTH );
+		progressBar = new JProgressBar( 0, 100 );
 		toolBarEdit = new JEditToolbar( guiControl );
 		guiControl.setEditToolbar( toolBarEdit );
 		toolBarBatch = new JBatchToolBar( guiControl );
@@ -599,5 +605,23 @@ public class JEditor extends JFrame implements Localized, EventListener<Progress
 
 	public void setControl( GLControl control ) {
 		this.control = control;
+	}
+
+	public void enableProgressBar() {
+		remove( statusBar );
+		add( progressBar, BorderLayout.SOUTH );
+		validate();
+		repaint();
+	}
+
+	public void disableProgressBar() {
+		remove( progressBar );
+		add( statusBar, BorderLayout.SOUTH );
+		validate();
+		repaint();
+	}
+
+	public void setProgressValue( int progress ) {
+		progressBar.setValue( progress );
 	}
 }

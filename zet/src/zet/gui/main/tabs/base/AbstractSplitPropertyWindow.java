@@ -36,16 +36,19 @@ import de.tu_berlin.math.coga.common.localization.Localized;
 public abstract class AbstractSplitPropertyWindow<T extends JComponent> extends JPanel implements Localized {
 	/** The class-type of the container. This is set only one single time in the constructor. */
 	private T leftPanel;
+	JSplitPane splitPane = new JSplitPane( JSplitPane.HORIZONTAL_SPLIT, false );
 
 	public AbstractSplitPropertyWindow( T panel ) {
 		leftPanel = panel;
 		addComponents();
 	}
-	
+
 	protected final void addComponents() {
 		setLayout( new BorderLayout() );
 		// Initialize the window as a whole by putting everything together
-		JSplitPane splitPane = new JSplitPane( JSplitPane.HORIZONTAL_SPLIT, false, getLeftPanel(), createEastBar() );
+		//JSplitPane splitPane = new JSplitPane( JSplitPane.HORIZONTAL_SPLIT, false, getLeftPanel(), createEastBar() );#
+		splitPane.setRightComponent( createEastBar() );
+		splitPane.setLeftComponent( getLeftPanel() );
 		splitPane.setResizeWeight( 1.0d );
 		splitPane.setPreferredSize( new Dimension( 800, 600 ) );
 		splitPane.setDividerLocation( 680 );
@@ -57,10 +60,6 @@ public abstract class AbstractSplitPropertyWindow<T extends JComponent> extends 
 	
 	public T getLeftPanel() {
 		return leftPanel;
-	}
-	
-	protected void setLeftPanel( T panel ) {
-		leftPanel = panel;
 	}
 	
 	abstract protected String getAdditionalTitleBarText();

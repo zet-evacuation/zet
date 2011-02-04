@@ -24,7 +24,6 @@ package zet.gui.main.tabs;
 import ds.z.Floor;
 import zet.gui.main.tabs.base.JFloorScrollPane;
 import zet.gui.main.tabs.base.AbstractSplitPropertyWindow;
-import javax.swing.JButton;
 import javax.swing.JPanel;
 
 import statistic.ca.CAStatistic;
@@ -44,6 +43,9 @@ import java.util.Collections;
 import javax.swing.JLabel;
 import zet.gui.GUILocalization;
 import ds.z.ZControl;
+import gui.components.framework.Button;
+import javax.swing.JButton;
+import tasks.TestTask;
 
 /**
  *
@@ -51,63 +53,52 @@ import ds.z.ZControl;
  */
 public class JQuickVisualizationView extends AbstractSplitPropertyWindow<JFloorScrollPane<JRasterFloor>> {
 	GUILocalization loc;
+	private JComboBox quickfloorSelector;
+	private FloorComboBoxModel quickfloorSelectorModel;
+	private int selectedFloor = 0;
+	private final GUIControl guiControl;
+	private Floor currentFloor;
+	private Collections ProjectFloors;
+	public GLControl control;
+	private JLabel lblFloorSelector;
+	private int row;
+	private JLabel lblFloorNumber;
+	private ZControl projectControl;
+	private boolean disableUpdate = false;
 
-        private JComboBox QuickfloorSelector;
-	private FloorComboBoxModel QuickfloorSelectorModel;
-        private int selectedFloor = 0;
-        private final GUIControl guiControl;
-        private Floor currentFloor;
-        private Collections ProjectFloors;
-        public GLControl control;
-        private JLabel lblFloorSelector;
-        private int row;
-        private JLabel lblFloorNumber;
-        private ZControl projectControl;
-        private boolean disableUpdate = false;
-
-   
-	public JQuickVisualizationView(GUIControl guiControl ) {
-
-                
+	public JQuickVisualizationView( GUIControl guiControl ) {
 		super( new JFloorScrollPane<JRasterFloor>( new JRasterFloor() ) );
-                this.guiControl = guiControl;
-                loc = GUILocalization.getSingleton();
+		this.guiControl = guiControl;
+		loc = GUILocalization.getSingleton();
 	}
 
-        public void updateQuickFloorlist() {
-		QuickfloorSelectorModel.clear();
-		QuickfloorSelectorModel.displayFloors( projectControl.getProject() );
+	public void updateQuickFloorlist() {
+		quickfloorSelectorModel.clear();
+		quickfloorSelectorModel.displayFloors( projectControl.getProject() );
 	}
 
-        public void changeQuickFloor( Floor floor ) {
-		QuickfloorSelectorModel.setSelectedItem( floor );
+	public void changeQuickFloor( Floor floor ) {
+		quickfloorSelectorModel.setSelectedItem( floor );
 	}
 
 	public void updateQuickFloorView() {
 		if( this.disableUpdate )
 			return;
-		currentFloor = (Floor)QuickfloorSelectorModel.getSelectedItem();
-		getLeftPanel().getMainComponent().displayFloor( currentFloor );
-		
+		// todo better. do not repaint everything if update is called
+		displayFloor( currentFloor );
 	}
-		
-	
 
 	public void displayFloor( Floor floor ) {
-		getLeftPanel().getMainComponent().displayFloor( floor );
+		//getLeftPanel().getMainComponent().displayFloor( floor );
+		TestTask tt = new TestTask( getLeftPanel().getMainComponent(), floor );
+		guiControl.executeTask( tt );
 	}
 
-
-
-        public void update() {
-             QuickfloorSelector.removeAllItems();
+	public void update() {
+		quickfloorSelector.removeAllItems();
 		for( Floor f : projectControl.getProject().getBuildingPlan().getFloors() )
-			 
-				QuickfloorSelector.addItem(f);
+			quickfloorSelector.addItem( f );
 	}
-
-        
-
 
 	/**
 	 * Returns a panel displayed on the right side of the window.
@@ -116,47 +107,56 @@ public class JQuickVisualizationView extends AbstractSplitPropertyWindow<JFloorS
 	@Override
 	protected JPanel createEastBar() {
 		JPanel panel = new JPanel();
-                control = new GLControl(); 
-		QuickfloorSelectorModel = new FloorComboBoxModel();
-                QuickfloorSelector = new JComboBox(QuickfloorSelectorModel);
-		QuickfloorSelector.setModel( QuickfloorSelectorModel );
-           
-		QuickfloorSelector.addActionListener( new ActionListener() {
+		control = new GLControl();
+		quickfloorSelectorModel = new FloorComboBoxModel();
+		quickfloorSelector = new JComboBox( quickfloorSelectorModel );
+		quickfloorSelector.setModel( quickfloorSelectorModel );
+
+		quickfloorSelector.addActionListener( new ActionListener() {
 			@Override
 			public void actionPerformed( ActionEvent e ) {
-                            if( QuickfloorSelector.getSelectedItem() != null )
-;//					((Floor)cbxFloors.getSelectedItem()).removeChangeListener( roomSelector );
-				else
+				if( quickfloorSelector.getSelectedItem() == null )
 					return;
 
-				final int add = PropertyContainer.getInstance().getAsBoolean( "editor.options.view.hideDefaultFloor" ) ? 1 : 0;                          
+				final int add = PropertyContainer.getInstance().getAsBoolean( "editor.options.view.hideDefaultFloor" ) ? 1 : 0;
 
-				Floor dspFloor = (Floor)QuickfloorSelector.getSelectedItem();
+				Floor dspFloor = (Floor) quickfloorSelector.getSelectedItem();
 				currentFloor = dspFloor;
 				updateQuickFloorView();
+			}
+		} );
 
-				}
-
-			});
-
-                   	QuickfloorSelector.setRenderer( new ComboBoxRenderer() {
+		quickfloorSelector.setRenderer( new ComboBoxRenderer() {
 			@Override
 			public Component getListCellRendererComponent( JList list, Object value, int index, boolean isSelected, boolean cellHasFocus ) {
 				super.getListCellRendererComponent( list, value, index, isSelected, cellHasFocus ); // Needed for correct displaying! Forget return
 				if( value != null )
-					setText( ((Floor)value).getName() );
+					setText( ((Floor) value).getName() );
 				return this;
 			}
 		} );
-                int row = 1;
-                loc = GUILocalization.getSingleton();
-                lblFloorSelector = new JLabel( loc.getString( "Floors" ) + ":" );
+		int row = 1;
+		loc = GUILocalization.getSingleton();
+		lblFloorSelector = new JLabel( loc.getString( "Floors" ) + ":" );
 		panel.add( lblFloorSelector, "1, " + row++ );
-		panel.add( QuickfloorSelector, "1, " + row++ );
-                return panel;
-		} 
-        
-                 
+		panel.add( quickfloorSelector, "1, " + row++ );
+
+
+		JButton btn = Button.newButton( "Floor wechseln" );
+		btn.addActionListener( new ActionListener() {
+
+			@Override
+			public void actionPerformed( ActionEvent e ) {
+				TestTask tt = new TestTask();
+				guiControl.executeTask( tt );
+//				Floor dspFloor = (Floor) quickfloorSelector.getItemAt( quickfloorSelector.getItemCount()/2 );//
+//				currentFloor = dspFloor;
+				updateQuickFloorView();
+			}
+		});
+		panel.add( btn, "1" + row++ );
+		return panel;
+	}
 
 	/**
 	 * Returns the text for the title bar.
@@ -191,13 +191,11 @@ public class JQuickVisualizationView extends AbstractSplitPropertyWindow<JFloorS
 		getLeftPanel().getMainComponent().setCAStatistic(cas);
 	}
 
+	final public void displayProject( ZControl projectControl ) {
 
-        final public void displayProject( ZControl projectControl ) {
-		
 		if( projectControl != null ) {
-
-                        getLeftPanel().getMainComponent().setZcontrol( projectControl );
-			getLeftPanel().getMainComponent().displayFloor(null);
+			getLeftPanel().getMainComponent().setZcontrol( projectControl );
+			getLeftPanel().getMainComponent().displayFloor( null );
 		}
 
 		this.projectControl = projectControl;
@@ -212,20 +210,20 @@ public class JQuickVisualizationView extends AbstractSplitPropertyWindow<JFloorS
 				changeQuickFloor( projectControl.getProject().getBuildingPlan().getFloors().get( 0 ) );
 	}
 
-        public ZControl getProjectControl() {
+	public ZControl getProjectControl() {
 		return projectControl;
-        }
+	}
 
-        public void displayProject() {
+	public void displayProject() {
 		displayProject( projectControl );
 	}
 
-        public Floor getCurrentFloor() {
+	public Floor getCurrentFloor() {
 		return currentFloor;
 	}
 
-        public void setFloor( int id ) {
-		QuickfloorSelector.setSelectedIndex( id );
+	public void setFloor( int id ) {
+		quickfloorSelector.setSelectedIndex( id );
 	}
 
 }

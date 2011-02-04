@@ -31,7 +31,7 @@ import java.awt.event.ActionListener;
 import javax.swing.Timer;
 
 /**
- * The status bar for the Z-Editor. Consisting (basically) of 4 fields used to
+ * The status bar for the Z-Editor. Consisting (basically) of 3 fields used to
  * display error- status- mouse- and edit mode messages.
  * TODO: resize (has to be done in base class)
  * @author Jan-Philipp Kappmeier
@@ -46,44 +46,41 @@ public class JEventStatusBar extends JStatusBar implements EventListener<Message
 	/**
 	 * Initializes an empty status bar.
 	 */
-	public JEventStatusBar () {
+	public JEventStatusBar() {
 		super();
-		EventServer.getInstance ().registerListener ( this, MessageEvent.class );
+		EventServer.getInstance().registerListener( this, MessageEvent.class );
 		addElement();
 		addElement();
 		rebuild();
-		
-		labelBackground = components.get (0).getBackground ();
-		
-		blinkTimer = new Timer ( 200, new ActionListener () {
-			public void actionPerformed (ActionEvent e) {
-				if (blinkCount == 0) {
-					components.get (0).setOpaque (true);
-				}
-				
-				if (blinkCount < 6) {
-					if (components.get (0).getBackground () == labelBackground) {
-						components.get (0).setBackground (blinkColor);
-					} else {
-						components.get (0).setBackground (labelBackground);
-					}
+
+		labelBackground = components.get( 0 ).getBackground();
+
+		blinkTimer = new Timer( 200, new ActionListener() {
+			public void actionPerformed( ActionEvent e ) {
+				if( blinkCount == 0 )
+					components.get( 0 ).setOpaque( true );
+
+				if( blinkCount < 6 ) {
+					if( components.get( 0 ).getBackground() == labelBackground )
+						components.get( 0 ).setBackground( blinkColor );
+					else
+						components.get( 0 ).setBackground( labelBackground );
 					blinkCount++;
-				} else {
-					stopBlinking ();
-				}
+				} else
+					stopBlinking();
 			}
-		});
-		blinkTimer.setInitialDelay (0);
-		blinkTimer.setRepeats (true);
+		} );
+		blinkTimer.setInitialDelay( 0 );
+		blinkTimer.setRepeats( true );
 	}
 
-	private void stopBlinking () {
-		components.get (0).setBackground (labelBackground);
-		blinkTimer.stop ();
+	private void stopBlinking() {
+		components.get( 0 ).setBackground( labelBackground );
+		blinkTimer.stop();
 		blinkCount = 0;
-		components.get (0).setOpaque (false);
+		components.get( 0 ).setOpaque( false );
 	}
-	
+
 	/**
 	 * Handles events sent from the {@link event.EventServer}, if the event is of
 	 * one of the types {@code Error}, {@code Status}, {@code MousePosition} or
