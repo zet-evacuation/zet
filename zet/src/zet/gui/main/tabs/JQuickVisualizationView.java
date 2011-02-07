@@ -45,7 +45,7 @@ import zet.gui.GUILocalization;
 import ds.z.ZControl;
 import gui.components.framework.Button;
 import javax.swing.JButton;
-import tasks.TestTask;
+import tasks.DisplayFloorTask;
 
 /**
  *
@@ -90,7 +90,7 @@ public class JQuickVisualizationView extends AbstractSplitPropertyWindow<JFloorS
 
 	public void displayFloor( Floor floor ) {
 		//getLeftPanel().getMainComponent().displayFloor( floor );
-		TestTask tt = new TestTask( getLeftPanel().getMainComponent(), floor );
+		DisplayFloorTask tt = new DisplayFloorTask( getLeftPanel().getMainComponent(), floor );
 		guiControl.executeTask( tt );
 	}
 
@@ -147,14 +147,14 @@ public class JQuickVisualizationView extends AbstractSplitPropertyWindow<JFloorS
 
 			@Override
 			public void actionPerformed( ActionEvent e ) {
-				TestTask tt = new TestTask();
-				guiControl.executeTask( tt );
+				//DisplayFloorTask tt = new DisplayFloorTask();
+				//guiControl.executeTask( tt );
 //				Floor dspFloor = (Floor) quickfloorSelector.getItemAt( quickfloorSelector.getItemCount()/2 );//
 //				currentFloor = dspFloor;
 				updateQuickFloorView();
 			}
 		});
-		panel.add( btn, "1" + row++ );
+		//panel.add( btn, "1" + row++ );
 		return panel;
 	}
 

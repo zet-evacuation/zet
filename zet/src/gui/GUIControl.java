@@ -1230,6 +1230,7 @@ public class GUIControl implements AlgorithmListener {
 		worker.addPropertyChangeListener( pcl );
 		try {
 			worker.executeAlgorithm( true );
+			AlgorithmTask.getInstance().setProgress( 100, "", "" );
 		} catch( Exception ex ) {
 			System.out.println( "Fehler trat auf" );
 		} finally { }

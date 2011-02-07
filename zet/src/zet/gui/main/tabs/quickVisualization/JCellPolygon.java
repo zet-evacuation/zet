@@ -20,9 +20,11 @@
 package zet.gui.main.tabs.quickVisualization;
 
 import de.tu_berlin.math.coga.common.localization.DefaultLoc;
+import de.tu_berlin.math.coga.common.util.Direction;
+import ds.PropertyContainer;
+import ds.ca.Cell;
+import ds.ca.CellularAutomaton;
 import ds.z.PlanPolygon;
-import zet.gui.main.tabs.base.AbstractFloor;
-import zet.gui.main.tabs.base.AbstractPolygon;
 import gui.editor.CoordinateTools;
 import java.awt.BasicStroke;
 import java.awt.Color;
@@ -30,11 +32,9 @@ import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Rectangle;
 import java.util.EnumSet;
-import de.tu_berlin.math.coga.common.util.Direction;
-import ds.PropertyContainer;
-import ds.ca.Cell;
-import ds.ca.CellularAutomaton;
 import java.text.NumberFormat;
+import zet.gui.main.tabs.base.AbstractFloor;
+import zet.gui.main.tabs.base.AbstractPolygon;
 
 /**
  *
@@ -94,6 +94,8 @@ public class JCellPolygon extends AbstractPolygon {
 			drawingPolygon = CoordinateTools.translateToScreen( myPolygon.getAWTPolygon() );
 			drawingPolygon.translate( -areabounds.x, -areabounds.y);
 		}
+		if( drawingPolygon == null )
+			throw new IllegalStateException( "Drawing polygon is null" );
 	}
 
 	@Override
