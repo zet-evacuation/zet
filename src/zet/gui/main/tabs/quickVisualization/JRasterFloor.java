@@ -105,13 +105,15 @@ public class JRasterFloor extends AbstractFloor {
 	public Floor getFloor () {
 		return myFloor;
 	}
+
+	boolean loaded = false;
 	
 	/**
 	 * Opens a floor and adds the rooms as components to the floor.
 	 * @param floor the displayed floor
 	 */
 	public void displayFloor( Floor floor ) {
-		System.out.println( "Displaying floor starts" );
+		loaded = false;	// disable painting of children during display. would end up in exceptions due to the multi-thread approach
 		boolean showPotentialValue = PropertyContainer.getInstance().getAsBoolean( "editor.options.cavis.staticPotential" );
 		boolean showDynamicPotential = PropertyContainer.getInstance().getAsBoolean( "editor.options.cavis.dynamicPotential" );
 		boolean showCellUtilization = false;
@@ -120,29 +122,25 @@ public class JRasterFloor extends AbstractFloor {
 		
 		DynamicPotential dp = null;
 
-		int i = 0;
 		if( myFloor != null ) {
-			for( Component c : getComponents() )
-				if( c instanceof AbstractPolygon ) {
-					( (AbstractPolygon)c ).displayPolygon( null );
-					System.out.println( "Display polygon " + i++ );
-				}
-
-			System.out.print( "Here is removing stuff" );
-			removeAll();
-			System.out.println( "... done" );
+			//removeAll();
+			final int componentCount = getComponentCount();
+			int count = 0;
+			for( Component c : getComponents() ) {
+				remove( c );
+				AlgorithmTask.getInstance().setProgress( Math.min( 99, (++count*100)/componentCount ), "", "" );
+			}
 		}
 
 		myFloor = floor;
-		if( floor == null || ca == null )
+		if( floor == null || ca == null ) {
+			loaded = true;
 			return;
-		if( floor != null )
-			System.out.println( "Switch to floor " + floor.getName() );
+		}
 
 		updateOffsets( floor );
 		
 		// TODO: Provide better implementation - Do not recreate everything each time
-		//CellularAutomaton ca = ZToCAConverter.getInstance().getLatestCellularAutomaton();
 		PotentialManager pm = ca.getPotentialManager();
 		PotentialController pc = new SPPotentialController( ca );
 		StaticPotential sp = null;
@@ -196,19 +194,12 @@ public class JRasterFloor extends AbstractFloor {
 					poly.displayPolygon( square.getSquare() );
 				}
 			}
-			AlgorithmTask.getInstance().setProgress( (++count)/roomCount, "", "" );
+			AlgorithmTask.getInstance().setProgress( (++count*100)/roomCount, "", "" );
 		}
-		AlgorithmTask.getInstance().setProgress( 100, "", "" );
 
-		System.out.println( "At the end of the method but before revalidating" );
-
-		int k = 1;
-		k++;
-		int a = k * 2;
-
+		loaded = true;	//allow painting again as we are finisched
 		revalidate();
 		repaint();
-		System.out.println( "very end" );
 	}
 
 	public void update() {
@@ -228,5 +219,12 @@ public class JRasterFloor extends AbstractFloor {
 	public void paintComponent( Graphics g ) {
 		super.setBackground( Color.black);
 		super.paintComponent( g );
+	}
+
+	@Override
+	protected void paintChildren(Graphics g) {
+		if( !loaded )
+			return;
+		super.paintChildren( g );
 	}
 }

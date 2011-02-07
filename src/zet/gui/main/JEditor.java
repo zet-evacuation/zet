@@ -607,6 +607,9 @@ public class JEditor extends JFrame implements Localized, EventListener<Progress
 		this.control = control;
 	}
 
+	/**
+	 * Hides the status bar and replaces it with a progress bar.
+	 */
 	public void enableProgressBar() {
 		remove( statusBar );
 		add( progressBar, BorderLayout.SOUTH );
@@ -614,13 +617,21 @@ public class JEditor extends JFrame implements Localized, EventListener<Progress
 		repaint();
 	}
 
+	/**
+	 * Disables the progress bar and shows the status bar again.
+	 */
 	public void disableProgressBar() {
 		remove( progressBar );
 		add( statusBar, BorderLayout.SOUTH );
+		progressBar.setValue( 0 );
 		validate();
 		repaint();
 	}
 
+	/**
+	 * Sets a value for the progress bar.
+	 * @param progress a progress value from 0 to 100
+	 */
 	public void setProgressValue( int progress ) {
 		progressBar.setValue( progress );
 	}
