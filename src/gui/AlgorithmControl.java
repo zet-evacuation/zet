@@ -43,21 +43,35 @@ import tasks.conversion.BuildingPlanConverter;
  */
 public class AlgorithmControl implements PropertyChangeListener {
 
-	BuildingResults buildingResults;
-	Project project;
-	CellularAutomaton cellularAutomaton;
-	ConcreteAssignment concreteAssignment;
-	EvacuationCellularAutomatonAlgorithm caAlgo;
-	ZToCAMapping mapping;
-	ZToCARasterContainer container;
-	CAVisualizationResults caVisResults;
-	NetworkFlowModel networkFlowModel;
-	GraphVisualizationResults graphVisResults;
-	final CellularAutomatonTask cat = new CellularAutomatonTask();
+	private BuildingResults buildingResults;
+	private Project project;
+	private CellularAutomaton cellularAutomaton;
+	private ConcreteAssignment concreteAssignment;
+	private EvacuationCellularAutomatonAlgorithm caAlgo;
+	private ZToCAMapping mapping;
+	private ZToCARasterContainer container;
+	private CAVisualizationResults caVisResults;
+	private NetworkFlowModel networkFlowModel;
+	private GraphVisualizationResults graphVisResults;
+	private final CellularAutomatonTask cat = new CellularAutomatonTask();
+	private boolean createdValid = false;
+	private RuntimeException error;
 
 
 	public AlgorithmControl( Project project ) {
 		this.project = project;
+	}
+
+	public boolean isError() {
+		return error != null;
+	}
+
+	public RuntimeException getError() {
+		return error;
+	}
+
+	public void throwError() {
+		throw error;
 	}
 
 	void setProject( Project project ) {
@@ -95,23 +109,35 @@ public class AlgorithmControl implements PropertyChangeListener {
 	}
 
 	void convertCellularAutomaton( PropertyChangeListener propertyChangeListener ) {
+		error = null;
 		final ZToCAConverter conv = new ZToCAConverter();
 		conv.setProblem( project.getBuildingPlan() );
 
 		final SerialTask st = new SerialTask( conv );
 		st.addPropertyChangeListener( new PropertyChangeListener() {
 
+			@Override
 			public void propertyChange( PropertyChangeEvent pce ) {
 				if( st.isDone() ) {
-					cellularAutomaton = conv.getCellularAutomaton();
-					mapping = conv.getMapping();
-					container = conv.getContainer();
+					if( st.isError() ) {
+						error = st.getError();
+					} else  {
+						cellularAutomaton = conv.getCellularAutomaton();
+						mapping = conv.getMapping();
+						container = conv.getContainer();
+						createdValid = true;
+					}
 				}
 			}
 		});
 		if( propertyChangeListener != null )
 			st.addPropertyChangeListener( propertyChangeListener );
+
 		st.execute();
+	}
+
+	public void invalidateConvertedCellularAutomaton() {
+		createdValid = false;
 	}
 
 	public CellularAutomaton getCellularAutomaton() {
@@ -137,7 +163,6 @@ public class AlgorithmControl implements PropertyChangeListener {
 
 		final SerialTask st = new SerialTask( cat );
 		st.addPropertyChangeListener( new PropertyChangeListener() {
-
 			@Override
 			public void propertyChange( PropertyChangeEvent pce ) {
 				if( st.isDone() ) {
@@ -155,7 +180,12 @@ public class AlgorithmControl implements PropertyChangeListener {
 
 	void performSimulationA( PropertyChangeListener propertyChangeListener, AlgorithmListener listener ) {
 		//final CellularAutomatonTask cat = new CellularAutomatonTask();
-		final CellularAutomatonTaskStepByStep cat = new CellularAutomatonTaskStepByStep();
+		final CellularAutomatonTaskStepByStep cat;
+		if( createdValid ) {
+			System.out.println( "DO not convert automaton, already exists." );
+			cat = new CellularAutomatonTaskStepByStep( new ConvertedCellularAutomaton( cellularAutomaton, mapping, container ) );
+		} else
+			cat = new CellularAutomatonTaskStepByStep();
 
 		cat.setCaAlgo( CellularAutomatonAlgorithm.InOrder );
 		cat.setProblem( project );
@@ -163,7 +193,7 @@ public class AlgorithmControl implements PropertyChangeListener {
 
 		final SerialTask st = new SerialTask( cat );
 		st.addPropertyChangeListener( new PropertyChangeListener() {
-			boolean first = true;
+			private boolean first = true;
 
 			@Override
 			public void propertyChange( PropertyChangeEvent pce ) {
@@ -213,7 +243,7 @@ public class AlgorithmControl implements PropertyChangeListener {
 		caAlgo.setMaxTimeInSeconds( caMaxTime );
 	}
 
-	boolean caInitialized = false;
+	private boolean caInitialized = false;
 
 	boolean performOneStep() throws ConversionNotSupportedException {
 		if( !caInitialized ) {

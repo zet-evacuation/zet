@@ -172,6 +172,15 @@ public class PlanPoint extends Point {
 		}
 	}
 
+	@Override
+	public PlanPoint clone() {
+		PlanPoint p = (PlanPoint)super.clone();
+
+		return p;
+	}
+
+
+
 	/** This should ONLY be called from Edge.setPoints (). Unfortunately Java
 	 * does not provide a mechanism to ensure this, so just don't use this method.
 	 * 

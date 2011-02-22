@@ -32,7 +32,6 @@ import ds.z.EvacuationArea;
 import ds.z.Floor;
 import ds.z.PlanPoint;
 import ds.z.PlanPolygon;
-import ds.z.Project;
 import ds.z.Room;
 import ds.z.RoomEdge;
 import ds.z.StairArea;
@@ -58,6 +57,7 @@ import zet.gui.main.menu.popup.EdgePopupListener;
 import zet.gui.main.JEditor;
 import zet.gui.main.tabs.editor.EditMode;
 import gui.GUIOptionManager;
+import gui.ZETProperties;
 import zet.gui.main.tabs.editor.JFloor;
 import zet.gui.main.menu.popup.PointPopupListener;
 import zet.gui.main.menu.popup.PolygonPopupListener;
@@ -111,8 +111,6 @@ import zet.gui.main.tabs.base.JPolygon;
  * @author Jan-Philipp Kappmeier
  */
 public class JEditView extends AbstractSplitPropertyWindow<JFloorScrollPane<JFloor>> implements EventListener<OptionsChangedEvent> {
-	GUILocalization loc;
-
 	/**
 	 * An enumeration of all possible panels visible in the edit view on the right part.
 	 * @see #setEastPanelType(zet.gui.components.tabs.JEditView.Panels)
@@ -135,6 +133,8 @@ public class JEditView extends AbstractSplitPropertyWindow<JFloorScrollPane<JFlo
 		/** Message code indicating that the stair area panel should be displayed. */
 		TeleportArea;
 	}
+	/** The localization class. */
+	private GUILocalization loc;
 	/** The currently active panel type */
 	private static Panels eastPanelType;
 	/** The control object for the loaded project. */
@@ -214,6 +214,8 @@ public class JEditView extends AbstractSplitPropertyWindow<JFloorScrollPane<JFlo
 	private JLabel lblFloorSize;
 	private JLabel lblFloorSizeDesc;
 	private final GUIControl guiControl;
+	private PlanPolygon<?> selectedPolygon;
+
 
 	/** Describes the teleportation area name field. */
 	private JLabel lblTeleportAreaName;
@@ -242,6 +244,7 @@ public class JEditView extends AbstractSplitPropertyWindow<JFloorScrollPane<JFlo
 	final NumberFormat nfInteger = DefaultLoc.getSingleton().getIntegerConverter();
 
         private JButton deleteRoom;
+        private JButton moveRoom;
         private ArrayList<Room> rooms;
         private LinkedList<JPolygon> selectedPolygons = new LinkedList<JPolygon>();
 
@@ -298,7 +301,7 @@ public class JEditView extends AbstractSplitPropertyWindow<JFloorScrollPane<JFlo
 	 * @param panel the panel
 	 */
 	private void setEastPanelType( Panels panel ) {
-		PlanPolygon selectedPolygon = (panel == Panels.Default || panel == Panels.Floor) ? null : getLeftPanel().getMainComponent().getSelectedPolygons().get( 0 ).getPlanPolygon();
+		selectedPolygon = (panel == Panels.Default || panel == Panels.Floor) ? null : getLeftPanel().getMainComponent().getSelectedPolygons().get( 0 ).getPlanPolygon();
 		switch( panel ) {
 			case DelayArea:
 				txtDelayFactor.setText( nfFloat.format( ((DelayArea)selectedPolygon).getSpeedFactor() ) );
@@ -346,7 +349,7 @@ public class JEditView extends AbstractSplitPropertyWindow<JFloorScrollPane<JFlo
 				txtFloorHeight.setText( Integer.toString( currentFloor.getHeight() ) );
 
 				double areaFloor = 0;
-				for( PlanPolygon p : currentFloor )
+				for( PlanPolygon<?> p : currentFloor )
 					areaFloor += p.areaMeter();
 
 				lblFloorSize.setText( nfFloat.format( areaFloor ) + " m²" );
@@ -770,8 +773,7 @@ public class JEditView extends AbstractSplitPropertyWindow<JFloorScrollPane<JFlo
 			public void keyPressed( KeyEvent e ) {
 				if( e.getKeyCode() == KeyEvent.VK_ENTER )
 					try {
-						((StairArea)getLeftPanel().getMainComponent().getSelectedPolygons().get( 0 ).getPlanPolygon()).setSpeedFactorUp( nfFloat.parse(
-										txtStairFactorUp.getText() ).doubleValue() );
+						((StairArea)getLeftPanel().getMainComponent().getSelectedPolygons().get( 0 ).getPlanPolygon()).setSpeedFactorUp( nfFloat.parse( txtStairFactorUp.getText() ).doubleValue() );
 					} catch( ParseException ex ) {
 						ZETMain.sendError( loc.getString( "gui.error.NonParsableFloatString" ) );
 					} catch( IllegalArgumentException ex ) {
@@ -1027,8 +1029,11 @@ public class JEditView extends AbstractSplitPropertyWindow<JFloorScrollPane<JFlo
 			//Rows
 			{TableLayout.PREFERRED, TableLayout.PREFERRED, 20,
 				TableLayout.PREFERRED, TableLayout.PREFERRED,
+				10,
 				TableLayout.PREFERRED,
-                                TableLayout.FILL,
+				10,
+				TableLayout.PREFERRED,
+        TableLayout.FILL,
 			}
 		};
 
@@ -1065,18 +1070,30 @@ public class JEditView extends AbstractSplitPropertyWindow<JFloorScrollPane<JFlo
 		lblRoomSize = new JLabel( "" );
 		eastPanel.add( lblRoomSizeDesc, "0, " + row++ );
 		eastPanel.add( lblRoomSize, "0, " + row++ );
-		deleteRoom = new JButton( "Raum Loeschen" );
 
+		deleteRoom = new JButton( "Raum Loeschen" );
 		deleteRoom.addActionListener( new ActionListener() {
 			@Override
 			public void actionPerformed( ActionEvent e ) {
-				Room currentRoom = (Room) roomSelector.getSelectedItem();
+				Room currentRoom = (Room)selectedPolygon;
 				projectControl.deletePolygon( currentRoom );
 				updateRoomList();
 				getLeftPanel().getMainComponent().displayFloor();
 			}
 		} );
-		eastPanel.add( deleteRoom, "0, " + row );
+		eastPanel.add( deleteRoom, "0, " + ++row );
+		row++;
+
+
+		moveRoom = new JButton( "Epsilon-Verschieben" );
+		moveRoom.addActionListener( new ActionListener() {
+			@Override
+			public void actionPerformed( ActionEvent e ) {
+				projectControl.refineRoomCoordinates( (Room)selectedPolygon, ZETProperties.getRasterSizeSnap() );
+				getLeftPanel().getMainComponent().displayFloor();
+			}
+		} );
+		eastPanel.add( moveRoom, "0, " + ++row );
 		row++;
 		
 		return eastPanel;
@@ -1547,7 +1564,7 @@ public class JEditView extends AbstractSplitPropertyWindow<JFloorScrollPane<JFlo
 	 * @param currentPolygon The PlanPolygon that is displayed by the JPolygon
 	 * on which the PopupMenu shall be shown. */
 	// todo protected???
-	public void setPopupPolygon( PlanPolygon currentPolygon ) {
+	public void setPopupPolygon( PlanPolygon<?> currentPolygon ) {
 		System.out.println( "Popup now belongs to " + currentPolygon.toString() );
 		for( PolygonPopupListener p : polygonPopupListeners )
 			p.setPolygon( currentPolygon );

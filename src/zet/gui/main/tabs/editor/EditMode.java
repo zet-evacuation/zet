@@ -15,10 +15,8 @@
  */
 package zet.gui.main.tabs.editor;
 
-import de.tu_berlin.math.coga.common.localization.DefaultLoc;
 import java.awt.Color;
 import java.util.LinkedList;
-import de.tu_berlin.math.coga.common.localization.Localization;
 import gui.GUIOptionManager;
 import zet.gui.GUILocalization;
 

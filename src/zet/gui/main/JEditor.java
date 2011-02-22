@@ -21,7 +21,6 @@
 package zet.gui.main;
 
 import batch.BatchResult;
-import batch.tasks.AlgorithmTask;
 import de.tu_berlin.math.coga.common.localization.DefaultLoc;
 import ds.PropertyContainer;
 import ds.z.Floor;
@@ -58,8 +57,6 @@ import java.io.IOException;
 import java.text.NumberFormat;
 import java.util.Locale;
 import java.awt.event.WindowAdapter;
-import java.beans.PropertyChangeEvent;
-import java.beans.PropertyChangeListener;
 import java.util.ArrayList;
 import javax.swing.JComponent;
 import javax.swing.JFrame;
@@ -126,7 +123,6 @@ public class JEditor extends JFrame implements Localized, EventListener<Progress
 	/** GUIControl class for projects and editing */
 	private ZControl zcontrol;
 	private static boolean editing = false;
-	int a;
 	private BatchResult result;
 	// Options
 	private boolean firstSwitch = false;
@@ -181,8 +177,6 @@ public class JEditor extends JFrame implements Localized, EventListener<Progress
 	 */
 	public JEditor( GUIControl guiControl, ZControl zcontrol ) {
 		super();
-		a = 0;
-		a++;
 		this.guiControl = guiControl;
 		this.zcontrol = zcontrol;
 
@@ -598,7 +592,8 @@ public class JEditor extends JFrame implements Localized, EventListener<Progress
 		}
 		if( currentMode == ZETWindowTabs.QuickView ) {
 			Floor floor = editView.getCurrentFloor();
-			caView.getLeftPanel().getMainComponent().displayFloor( floor );
+//			//caView.getLeftPanel().getMainComponent().displayFloor( floor );
+			caView.getLeftPanel().getMainComponent().repaint();
 		}
 		ZETMain.sendMessage( event.getProcessMessage().taskName );
 	}

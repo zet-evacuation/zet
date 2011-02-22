@@ -7,6 +7,7 @@ package gui;
 import algo.graph.dynamicflow.eat.EarliestArrivalFlowProblem;
 import batch.load.BatchProjectEntry;
 import de.tu_berlin.math.coga.zet.converter.cellularAutomaton.ZToCAConverter.ConversionNotSupportedException;
+import ds.z.RoomEdge;
 import java.beans.PropertyChangeEvent;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -37,7 +38,9 @@ import ds.z.Floor;
 import ds.z.PlanPolygon;
 import ds.z.Room;
 import ds.z.ZControl;
+import ds.z.exception.RoomEdgeInvalidTargetException;
 import ds.z.exception.TooManyPeopleException;
+import ds.z.exception.UnknownZModelError;
 import gui.components.progress.JProgressBarDialog;
 import gui.components.progress.JRasterizeProgressBarDialog;
 import gui.editor.Areas;
@@ -1065,13 +1068,42 @@ public class GUIControl implements AlgorithmListener {
 			@Override
 			public void propertyChange( PropertyChangeEvent pce ) {
 				if( isDone( pce ) ) {
-					CAVisualizationResults caVis = new CAVisualizationResults( algorithmControl.getMapping(), algorithmControl.getCellularAutomaton().getPotentialManager() );
+					if( algorithmControl.isError() ) {
+						try {
+							algorithmControl.throwError();
+						} catch( RoomEdgeInvalidTargetException ex ) {
+							if( ZETMain.isDebug() ) {
+								System.err.println( "DEBUG-out:" );
+								System.err.println( "Error during conversion in Room " + ex.getInvalidEdge().getRoom().getName() + ". " + ex.getMessage() );
+								System.err.println();
+							}
+							System.err.println( ex.getMessage() );
+							JOptionPane.showMessageDialog( null, " Fehler in Raum " + ex.getInvalidEdge().getRoom().getName() + ". \n" + ex.getMessage(), "Fehler", JOptionPane.ERROR_MESSAGE );
 
-					visualization.getControl().setCellularAutomatonControl( caVis, algorithmControl.getCellularAutomaton() );
-					editor.getVisualizationView().updatePotentialSelector();
-//					editor.getVisualizationView().updateFloorSelector();
-					editor.getQuickVisualizationView().getLeftPanel().getMainComponent().setSimulationData( algorithmControl.getCellularAutomaton(), algorithmControl.getContainer(), algorithmControl.getMapping() );
-					editor.getQuickVisualizationView().displayFloor( editview.getCurrentFloor() );
+							
+							int ret = JOptionPane.showOptionDialog( editor, "Soll die Kante unpassierbar gemacht werden? \n (Dies in den meisten Fällen sinnvoll.)", "Fehler kann behoben werden.", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE, null, null, null );
+							switch( ret ) {
+								case JOptionPane.YES_OPTION:
+									System.out.println( "YES" );
+									zcontrol.disconnectAtEdge( ex.getInvalidEdge() );
+									break;
+								case JOptionPane.NO_OPTION:
+									System.out.println( "NO" );
+									break;
+								default:
+									throw new IllegalStateException( "A selection that is not supported has been made." );
+							}
+						}
+					} else {
+						CAVisualizationResults caVis = new CAVisualizationResults( algorithmControl.getMapping(), algorithmControl.getCellularAutomaton().getPotentialManager() );
+
+						visualization.getControl().setCellularAutomatonControl( caVis, algorithmControl.getCellularAutomaton() );
+						editor.getVisualizationView().updatePotentialSelector();
+	//					editor.getVisualizationView().updateFloorSelector();
+						editor.getQuickVisualizationView().getLeftPanel().getMainComponent().setSimulationData( algorithmControl.getCellularAutomaton(), algorithmControl.getContainer(), algorithmControl.getMapping() );
+						editor.getQuickVisualizationView().displayFloor( editview.getCurrentFloor() );
+						firstProgress = true;
+					}
 				}
 			}
 		});
@@ -1088,7 +1120,7 @@ public class GUIControl implements AlgorithmListener {
 	}
 
 	public void performSimulation() {
-		createBuildingDataStructure();
+		createBuildingDataStructure(); // kein task
 		algorithmControl.performSimulation( new PropertyChangeListener() {
 			@Override
 			public void propertyChange( PropertyChangeEvent pce ) {
@@ -1097,7 +1129,7 @@ public class GUIControl implements AlgorithmListener {
 					editor.getVisualizationView().updatePotentialSelector();
 					visualizationToolBar.setEnabledPlayback( true );
 					editor.getQuickVisualizationView().getLeftPanel().getMainComponent().setSimulationData( algorithmControl.getCellularAutomaton(), algorithmControl.getContainer(), algorithmControl.getMapping() );
-					editor.getQuickVisualizationView().displayFloor( editview.getCurrentFloor() );
+					editor.getQuickVisualizationView().displayFloor( editview.getCurrentFloor() ); // hier startet ein task!
 				}
 			}
 		} );
@@ -1105,8 +1137,8 @@ public class GUIControl implements AlgorithmListener {
 
 	public void performQuickVisualization() {
 		//createBuildingDataStructure();
+		System.out.println( "QUICK" );
 		algorithmControl.performSimulationA( new PropertyChangeListener() {
-
 			@Override
 			public void propertyChange( PropertyChangeEvent pce ) {
 				System.out.println( "Property Change Event" );
@@ -1179,9 +1211,7 @@ public class GUIControl implements AlgorithmListener {
 			}
 		} else
 			editor.getQuickVisualizationView().getLeftPanel().getMainComponent().update();
-
 		}
-
 	}
 
 	final static int scrollCount = 20;
@@ -1236,6 +1266,9 @@ public class GUIControl implements AlgorithmListener {
 		} finally { }
 	}
 	
+	/**
+	 * 
+	 */
 	protected PropertyChangeListener pcl = new PropertyChangeListener() {
 		public void propertyChange( PropertyChangeEvent evt ) {
 			if( evt.getPropertyName().equals( "progress" ) ) {
@@ -1244,6 +1277,8 @@ public class GUIControl implements AlgorithmListener {
 			}
 		}
 	};
+
+
 }
 
 

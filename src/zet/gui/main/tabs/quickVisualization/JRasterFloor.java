@@ -206,7 +206,6 @@ public class JRasterFloor extends AbstractFloor {
 		for( Component component : getComponents() ) {
 			((JCellPolygon)component).update();
 		}
-		repaint();
 	}
 
 	/**

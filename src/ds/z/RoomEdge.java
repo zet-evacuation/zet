@@ -50,9 +50,9 @@ import com.thoughtworks.xstream.annotations.XStreamOmitField;
 @XStreamAlias ("roomEdge")
 public class RoomEdge extends Edge {
 
-	/** When this flag is turned "true" the RoomEdge will only accept targets
+	/** When this flag is turned {@code true} the RoomEdge will only accept targets
 	 * which have the same location as itself and it will hand through all changes
-	 * that are made to one of it's points to the linkTarget edge. This behaviour
+	 * that are made to one of it's points to the linkTarget edge. This behavior
 	 * is not feasible for some subclasses and thus can be turned off. */
 	@XStreamOmitField
 	protected transient boolean ensureMatchWithLinkTarget = true;
@@ -80,53 +80,6 @@ public class RoomEdge extends Edge {
 		super (p1, p2, p);
 	}
 
-	/** {@inheritDoc} 
-	 *
-	 * This method performs the standard behaviour (forwarding of events to all listeners)
-	 * and additionally applies the changes that were made to this edge to the linkTarget edge
-	 * (if it is != null).
-	 */
-//	@Override
-//	public void stateChanged (ChangeEvent e) {
-//		// In case a passable edge is moved we have to move the attached edge in the other room too
-//		if (ensureMatchWithLinkTarget && isPassable ()) {
-//			if (e.getSource () instanceof PlanPoint) {
-//				// First p = myPoint ; Second p = linkTarget point --> Equal?
-//				boolean p1p1 = linkTarget.getSource ().equals (getSource ());
-//				boolean p2p2 = linkTarget.getTarget ().equals (getTarget ());
-//				boolean p2p1 = linkTarget.getSource ().equals (getTarget ());
-//				boolean p1p2 = linkTarget.getTarget ().equals (getSource ());
-//				//assert (p1p1 ^ p1p2 ^ p2p1 ^ p2p2);
-//
-//				// The following cases may be true here:
-//				// 1) Both edges were of the form p1,p2 before
-//				// 2) One edge was of the form p1,p2 and the other was p2,p1
-//				//    (this makes no difference since we are using undirected edges)
-//
-//				if (p1p1) {
-//					// Case 1) (where "this" edge has already changed)
-//					// Point 2 has changed
-//					linkTarget.getTarget ().setLocation (getTarget ());
-//				} else if (p2p2) {
-//					// Case 1) (where "this" edge has already changed)
-//					// Point 1 has changed
-//					linkTarget.getSource ().setLocation (getSource ());
-//				} else if (p1p2) {
-//					// Case 2) (where "this" edge has already changed)
-//					// Point 2 at "this" has changed --> Point 1 at "linkTarget""
-//					linkTarget.getSource ().setLocation (getTarget ());
-//				} else if (p2p1) {
-//					// Case 2) (where "this" edge has already changed)
-//					// Point 1 at "this" has changed --> Point 2 at "linkTarget""
-//					linkTarget.getTarget ().setLocation (getSource ());
-//				}
-//			}
-//			super.stateChanged (e);
-//		} else {
-//			super.stateChanged (e);
-//		}
-//	}
-
 	/**
 	 * Determines whether the represented edge is considered as passable. That happens 
 	 * if and only if the edge is associated to two (different) rooms.
@@ -151,11 +104,10 @@ public class RoomEdge extends Edge {
 	 * relationship.) */
 	@Override ()
 	public void delete () {
-		if (linkTarget != null) {
-			linkTarget.setLinkTarget (null);
-		}
+		if( linkTarget != null )
+			linkTarget.setLinkTarget( null );
 
-		super.delete ();
+		super.delete();
 	}
 
 	/** {@inheritDoc}
@@ -182,48 +134,51 @@ public class RoomEdge extends Edge {
 
 	/** Returns the edge at which you will pop up, when you "pass through" this 
 	 * edge. This will be null, if the edge is not passable.
+	 *
+	 * @return
 	 */
-	public RoomEdge getLinkTarget () {
+	public RoomEdge getLinkTarget() {
 		return linkTarget;
 	}
 
 	/** Use this method to indicate that the roomEdge is passable and that you get to 
-	 * the Edge "linkTarget" when you pass through "this" edge. */
-	public void setLinkTarget (RoomEdge target) {
+	 * the Edge "linkTarget" when you pass through "this" edge.
+	 * @param target 
+	 */
+	public void setLinkTarget( RoomEdge target ) {
 		// The edges must be equal with respect to their location on the plan. Their linkTarget values
 		// are not forced to match each other. This would be nonsense, because two edges wich linkTarget
 		// each other, have the same coordinates, but of course different targets (the other edge)
 		// Therefore we use super.equals() here
-		if (ensureMatchWithLinkTarget && target != null && !super.equals (target)) {
-			throw new IllegalArgumentException (ZLocalization.getSingleton ().getString ("ds.z.RoomEdge.InequalLinkTarget"));
-		}
+		if( ensureMatchWithLinkTarget && target != null && !super.equals( target ) )
+			throw new IllegalArgumentException( ZLocalization.getSingleton().getString( "ds.z.RoomEdge.InequalLinkTarget" ) );
 		this.linkTarget = target;
-
-//		throwChangeEvent (new ChangeEvent (this));
 	}
 
 	/**
 	 * Determines whether this edge is combineable with the given other edge.
-	 * In this case, combineable means, that the other Edge is a neighbour of this edge (see {@link Edge#isNeighbour( Edge )})
+	 * In this case, combineable means, that the other Edge is a neighbor of this edge (see {@link Edge#isNeighbour( Edge )})
 	 * AND that all x-coordinates or all y-coordinates of both edges are the same.
 	 * @return true if this edge is combineable with the given other edge
 	 * @param otherEdge the given other edge
 	 */
-	public boolean combineableWith (Edge otherEdge) {
-		if (!(this.isNeighbour (otherEdge))) {
+	public boolean combineableWith( Edge otherEdge ) {
+		if( !(this.isNeighbour( otherEdge )) )
 			return false;
-		} else {
-			PlanPoint p2 = this.commonPoint (otherEdge);
-			PlanPoint p1 = this.getOther (p2);
-			PlanPoint p3 = otherEdge.getOther (p2);
-			return (((p1.getXInt () == p2.getXInt ()) && (p2.getXInt () == p3.getXInt ())) || ((p1.getYInt () == p2.getYInt ()) && (p2.getYInt () == p3.getYInt ())));
+		else {
+			PlanPoint p2 = this.commonPoint( otherEdge );
+			PlanPoint p1 = this.getOther( p2 );
+			PlanPoint p3 = otherEdge.getOther( p2 );
+			return (((p1.getXInt() == p2.getXInt()) && (p2.getXInt() == p3.getXInt())) || ((p1.getYInt() == p2.getYInt()) && (p2.getYInt() == p3.getYInt())));
 		}
 	}
 	
-	/** This makes the edge impassable. Trivial for RoomEdges, not so trivial for 
-	 * TeleportEdges which must override this method. */
-	public void makeImpassable () {
-		getLinkTarget ().setLinkTarget (null);
-		setLinkTarget (null);
+	/**
+	 * This makes the edge impassable. Trivial for RoomEdges, not so trivial for
+	 * TeleportEdges which must override this method.
+	 */
+	void makeImpassable () {
+		getLinkTarget().setLinkTarget( null );
+		setLinkTarget( null );
 	}
 }

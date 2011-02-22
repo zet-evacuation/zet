@@ -8,6 +8,7 @@ import de.tu_berlin.math.coga.common.algorithm.Algorithm;
 import de.tu_berlin.math.coga.common.algorithm.AlgorithmEvent;
 import de.tu_berlin.math.coga.common.algorithm.AlgorithmListener;
 import de.tu_berlin.math.coga.common.algorithm.AlgorithmStartedEvent;
+import ds.z.exception.UnknownZModelError;
 import java.util.ArrayList;
 import java.util.List;
 import javax.swing.SwingWorker;
@@ -23,6 +24,19 @@ public class SerialTask extends SwingWorker<Void, AlgorithmEvent> implements Alg
 	public SerialTask() {
 		algorithms = new ArrayList<Algorithm>();
 	}
+	private RuntimeException error = null;
+
+	/**
+	 *
+	 * @return
+	 */
+	public RuntimeException getError() {
+		return error;
+	}
+
+	public boolean isError() {
+		return error != null;
+	}
 
 	public SerialTask( Algorithm algorithm ) {
 		algorithms = new ArrayList<Algorithm>();
@@ -35,14 +49,24 @@ public class SerialTask extends SwingWorker<Void, AlgorithmEvent> implements Alg
 
 	@Override
 	protected Void doInBackground() throws Exception {
-		for( Algorithm algorithm : algorithms ) {
-			algorithm.addAlgorithmListener( this );
-			algorithm.run();
+		try {			
+			for( Algorithm algorithm : algorithms ) {
+				algorithm.addAlgorithmListener( this );
+				algorithm.run();
+			}
+		} catch( RuntimeException ex ) {
+			this.error = ex;
 		}
 
 		return null;
 	}
 
+	/**
+	 * Takes events thrown by the algorithms and forwards it to the swing workers
+	 * publish method. Thus, a listener to the swing worker can also get progress.
+	 * @param event
+	 */
+	@Override
 	public void eventOccurred( AlgorithmEvent event ) {
 		publish( event );
 	}

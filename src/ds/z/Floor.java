@@ -133,7 +133,7 @@ public class Floor implements Serializable, Cloneable, Iterable<Room>, ZFormatOb
 
 	/**
 	 * Removes a room from this floor and deletes the associated floor of the removed room.
-	 * @param the room to be removed
+	 * @param room the room to be removed
 	 * @throws IllegalArgumentException if the given room is not associated with this floor
 	 */
 	public void deleteRoom( Room room ) throws IllegalArgumentException {
@@ -159,9 +159,12 @@ public class Floor implements Serializable, Cloneable, Iterable<Room>, ZFormatOb
 			room.check( rasterized );
 			// Check floors using direct access as rooms is an ArrayList
 			for( int i = 0; i < rooms.size(); i++ )
-				for( int j = i+1; j < rooms.size(); j++ )
-					if( rooms.get(i).intersects( rooms.get(j) ) )
-						throw new RoomIntersectException( rooms.get(i), rooms.get(j) );
+				for( int j = i + 1; j < rooms.size(); j++ ) {
+
+					PlanPoint intersection = rooms.get( i ).intersection( rooms.get( j ) );
+					if( intersection != null )
+						throw new RoomIntersectException( rooms.get( i ), rooms.get( j ), intersection );
+				}
 		}
 	}
 
@@ -254,132 +257,6 @@ public class Floor implements Serializable, Cloneable, Iterable<Room>, ZFormatOb
 	 */
 	public Rectangle bounds () {
 		return new Rectangle (xOffset, yOffset, width, height);
-	}
-	
-	/**
-	 * This helper method updates the values returned by {@link #bounds()} after
-	 * a {@link ds.z.Room} has been added or modified.
-	 *
-	 * @see #roomDeleteHandler
-	 */
-	private void roomChangeHandler (Room r) {
-		// Suppress temporary faults from new polygons (These have xoffset and
-		// yoffset 0, and would pull the floor offsets to 0 while they are created
-		// on the screen.)
-		if (r.getNumberOfEdges () == 0) {
-			if (rooms.size () == 1) {
-				minX_DefiningRoom = r;
-				minY_DefiningRoom = r;
-				maxX_DefiningRoom = r;
-				maxY_DefiningRoom = r;
-			}
-			return;
-		}
-		
-		// Update of offsets, width and height
-
-		// All updates follow a certain schema:
-		// 1) Check for shrinked bounds: In case that one of the boundary rooms
-		//    was changed, so that is is now no longer sure who is defining the
-		//    boundary, scan all rooms for a new minimum / maximum
-		// 2) Check for grown bounds: Simple comparison
-
-		// The minimum values are updated first, because they are used in the
-		// computations that are performed during the updates of the maximums
-
-		// Updates of the minimums
-		if (r == minX_DefiningRoom && r.boundLeft () > xOffset) {
-			// Init with feasible data
-			xOffset = rooms.get (0).boundLeft ();
-			minX_DefiningRoom = rooms.get (0);
-
-			// Scan all edges
-			int value;
-			for (Room scanEdge : rooms) {
-				value = scanEdge.boundLeft ();
-
-				if (value < xOffset) {
-					xOffset = value;
-					minX_DefiningRoom = scanEdge;
-				}
-			}
-			width = maxX_DefiningRoom.boundRight () - xOffset;
-		} else if (r.boundLeft () <= xOffset) {
-			// New xOffset more left then the old one
-			width += Math.abs (r.boundLeft () - xOffset);
-			xOffset = r.boundLeft ();
-
-			minX_DefiningRoom = (Room) r;
-		}
-		if (r == minY_DefiningRoom && r.boundUpper () > yOffset) {
-			// Init with feasible data
-			yOffset = rooms.get (0).boundUpper ();
-			minY_DefiningRoom = rooms.get (0);
-
-			// Scan all edges
-			int value;
-			for (Room scanEdge : rooms) {
-				value = scanEdge.boundUpper ();
-
-				if (value < yOffset) {
-					yOffset = value;
-					minY_DefiningRoom = scanEdge;
-				}
-			}
-			height = maxY_DefiningRoom.boundLower () - yOffset;
-		} else if (r.boundUpper () <= yOffset) {
-			// New yOffset is over the old one, correct also the height
-			height += Math.abs (r.boundUpper () - yOffset);
-			yOffset = r.boundUpper ();
-
-			minY_DefiningRoom = (Room) r;
-		}
-
-		// Update of the maximums
-		if (r == maxX_DefiningRoom && r.boundRight () < (xOffset + width)) {
-			// Init with feasible data
-			// No Math.abs needed - r.boundRight is always bigger than xOffset
-			width = rooms.get (0).boundRight () - xOffset;
-			maxX_DefiningRoom = rooms.get (0);
-
-			// Scan all edges
-			int value;
-			for (Room scanEdge : rooms) {
-				value = scanEdge.boundRight () - xOffset;
-
-				if (value > width) {
-					width = value;
-					maxX_DefiningRoom = scanEdge;
-				}
-			}
-		} else if (r.boundRight () >= xOffset + width) {
-			// No Math.abs needed - r.boundRight is always bigger than xOffset
-			width = r.boundRight () - xOffset;
-
-			maxX_DefiningRoom = (Room) r;
-		}
-		if (r == maxY_DefiningRoom && r.boundLower () < (yOffset + height)) {
-			// Init with feasible data
-			// No Math.abs needed - r.boundLower is always bigger than yOffset
-			height = rooms.get (0).boundLower () - yOffset;
-			maxY_DefiningRoom = rooms.get (0);
-
-			// Scan all edges
-			int value;
-			for (Room scanEdge : rooms) {
-				value = scanEdge.boundLower () - yOffset;
-
-				if (value > height) {
-					height = value;
-					maxY_DefiningRoom = scanEdge;
-				}
-			}
-		} else if (r.boundLower () >= yOffset + height) {
-			// No Math.abs needed - r.boundLower is always bigger than yOffset
-			height = r.boundLower () - yOffset;
-
-			maxY_DefiningRoom = (Room) r;
-		}
 	}
 
 	/**
@@ -668,7 +545,7 @@ public class Floor implements Serializable, Cloneable, Iterable<Room>, ZFormatOb
 	StringBuilder summaryBuilder() {
 		StringBuilder sb = new StringBuilder();
 
-		sb.append( "Floor: " + name + ", " + rooms.size() + " Räume.\n" );
+		sb.append( "Floor: " ).append( name ).append( ", " ).append( rooms.size() ).append( " Räume.\n");
 		for( Room room : rooms ) {
 			sb.append( room.summaryBuilder() );
 			sb.append( '\n' );

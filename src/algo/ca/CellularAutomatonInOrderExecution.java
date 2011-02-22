@@ -24,7 +24,6 @@ import algo.ca.parameter.ParameterSet;
 import algo.ca.rule.Rule;
 import batch.tasks.AlgorithmTask;
 import de.tu_berlin.math.coga.common.localization.DefaultLoc;
-import de.tu_berlin.math.coga.common.localization.Localization;
 import ds.ca.CAController;
 import ds.PropertyContainer;
 import ds.ca.Cell;
@@ -113,6 +112,7 @@ public class CellularAutomatonInOrderExecution extends EvacuationCellularAutomat
 	/**
 	 * 
 	 */
+	@Override
 	public void initialize() {
 		if( util.DebugFlags.CA_ALGO )
 			System.out.print( toString() + " wird ausgeführt. " );
@@ -134,6 +134,8 @@ public class CellularAutomatonInOrderExecution extends EvacuationCellularAutomat
 
 		setInitialized( true );
 		initRulesPerformed = false;
+		if( ca.individualCount() == 0 )
+			setFinished( true );
 	}
 
 	/**

@@ -361,7 +361,7 @@ public abstract class Algorithm<Problem, Solution> implements Runnable {
 				solution = runAlgorithm( problem );
 				state = State.SOLVED;
 			} catch( RuntimeException ex ) {
-				ex.printStackTrace( System.out );
+				//ex.printStackTrace( System.out );
 				state = State.SOLVING_FAILED;
 				handleException( ex );
 			} finally {
@@ -370,12 +370,12 @@ public abstract class Algorithm<Problem, Solution> implements Runnable {
 				try {
 					ev = new AlgorithmTerminatedEvent( this );
 				} catch( IllegalStateException ex2 ) {
-					ex2.printStackTrace( System.out );
-					System.out.println( "Exception during instanciating AlgorithmTerminatedEvent" );
-					System.out.println( this.toString() );
-					System.out.println( "Algorithm terminated." );
-					System.out.println( "Status: " + getState().toString() );
-					System.out.println( "Runtime: " + getRuntime() );
+//					ex2.printStackTrace( System.out );
+//					System.out.println( "Exception during instanciating AlgorithmTerminatedEvent" );
+//					System.out.println( this.toString() );
+//					System.out.println( "Algorithm terminated." );
+//					System.out.println( "Status: " + getState().toString() );
+//					System.out.println( "Runtime: " + getRuntime() );
 				}
 				fireEvent( ev );
 			}
@@ -390,7 +390,7 @@ public abstract class Algorithm<Problem, Solution> implements Runnable {
 	 */
 	protected void handleException( RuntimeException exception ) {
 		System.out.println( "Exception handler" );
-		exception.printStackTrace( System.err );
+		//exception.printStackTrace( System.err );
 		throw exception;
 	}
 

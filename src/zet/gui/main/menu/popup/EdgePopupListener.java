@@ -70,6 +70,7 @@ public class EdgePopupListener implements ActionListener {
 	 * action commands (defined at the menu creation) are invoked.
 	 * @param e 
 	 */
+	@Override
 	public void actionPerformed( ActionEvent e ) {
 		try {
 			if( e.getActionCommand().equals( "makePassable" ) )
@@ -141,7 +142,7 @@ public class EdgePopupListener implements ActionListener {
 				// Show the right room
 				guiControl.showPolygon( partnerRoom );
 			} else if( e.getActionCommand().equals( "revertPassage" ) )
-				((RoomEdge)myEdge).makeImpassable();
+				projectControl.disconnectAtEdge( (RoomEdge)myEdge);
 		} catch( RuntimeException ex ) {
 			EventServer.getInstance().dispatchEvent( new MessageEvent( this, MessageEvent.MessageType.Error, ex.getLocalizedMessage() ) );
 		}

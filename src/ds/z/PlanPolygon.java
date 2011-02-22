@@ -24,7 +24,6 @@ import com.thoughtworks.xstream.annotations.XStreamAlias;
 import com.thoughtworks.xstream.annotations.XStreamAsAttribute;
 import com.thoughtworks.xstream.annotations.XStreamConverter;
 import com.thoughtworks.xstream.annotations.XStreamOmitField;
-import ds.z.exception.InvalidRoomZModelError;
 import ds.z.exception.PolygonNotClosedException;
 import ds.z.exception.PolygonNotRasterizedException;
 import io.z.CompactEdgeListConverter;
@@ -771,7 +770,7 @@ public class PlanPolygon<T extends Edge> implements Serializable, Iterable<T> {
 	}
 
 	/**
-	 * Checks wether a {@code PlanPoint} is inside a {@code PlanPolygon}
+	 * Checks whether a {@code PlanPoint} is inside a {@code PlanPolygon}
 	 * or not. A point is considered inside if it is inside or on the bordering
 	 * edges.
 	 * <p>The runtime of this operation is O(n), where {@code n} is the
@@ -813,6 +812,61 @@ public class PlanPolygon<T extends Edge> implements Serializable, Iterable<T> {
 						Edge inverse_e = new Edge( new PlanPoint( p.getXInt(), p.getYInt() ), new PlanPoint( p.getXInt() - 2 * width, p.getYInt() ), new PlanPolygon<T>( edgeClassType ) );
 						if( Edge.intersects( inverse_e, current ) == Edge.LineIntersectionType.IntersectsBorder )
 							return true;
+						else
+							// the point lies on the ray
+							// only count if the point is _not_ the lower one of the edge
+							if( current.boundLower() != p.getYInt() )
+								inside = !inside;
+						break;
+					case Connected:
+						// Only count point one time. That is done as follows:
+						// An edge is only counted if the point is _not_ the lower one of the edge
+						//if (current.boundLower () != p.getXInt ()) {
+						//	inside = !inside;
+						//}
+						break;
+					case NotIntersects:
+						// Nothing to do
+						break;
+				}
+			}
+		}
+		return inside;
+	}
+	public boolean containsStrict( PlanPoint p ) {
+		// it is not defined what happens if the point is _on_ one line
+		boolean inside = false;
+		if( p.getXInt() < xOffset || p.getYInt() < yOffset ||
+						p.getXInt() > xOffset + width || p.getYInt() > yOffset + height )
+			return false;
+		else {
+			// Test all edges, if they are inside
+			Iterator<T> iter = edgeIterator( false );
+			// Create the edge whose crossings are counted
+			//Edge e = new Edge( p, new PlanPoint( p.getX() + 2 * width, p.getY() ), new PlanPolygon() );
+			PlanPolygon poly = new PlanPolygon<T>( edgeClassType );
+			//poly.addEdge( new Edge( p, new PlanPoint (p.getX () + 2 * width, p.getY ()) ) );
+			Edge e = new Edge( new PlanPoint( p.getXInt(), p.getYInt() ), new PlanPoint( p.getXInt() + 2 * width, p.getYInt() ), poly );
+			T current;
+			while( iter.hasNext() ) {
+				current = iter.next();
+				// Check if the point is one of the end-points
+				if( current.fits( p ) )
+					return false;
+				switch( Edge.intersects( e, current ) ) {
+					case Colinear:
+						if( p.getXInt() < current.getMaxX() & p.getXInt() > current.getMinX() )
+							return false;
+						break;
+					case Intersects:
+						// "Normal" crossing
+						inside = !inside;
+						break;
+					case IntersectsBorder:
+						// Check if p is on the line or the ray goes through the end point of another line
+						Edge inverse_e = new Edge( new PlanPoint( p.getXInt(), p.getYInt() ), new PlanPoint( p.getXInt() - 2 * width, p.getYInt() ), new PlanPolygon<T>( edgeClassType ) );
+						if( Edge.intersects( inverse_e, current ) == Edge.LineIntersectionType.IntersectsBorder )
+							return false;
 						else
 							// the point lies on the ray
 							// only count if the point is _not_ the lower one of the edge
@@ -1416,18 +1470,42 @@ public class PlanPolygon<T extends Edge> implements Serializable, Iterable<T> {
 		return yOffset;
 	}
 
+	private PlanPoint intersectionPoint = null;
+
 	/**
 	 * Checks whether the polygon intersects with another one. The test is
 	 * performed by the java.awt.Polygon.intersects() method.
 	 * @param poly the polygon checked for intersection
 	 * @return true if the two polygons intersect each other
 	 */
-	public boolean intersects( PlanPolygon poly ) {
+	public boolean intersects( PlanPolygon<?> poly ) {
+		for( PlanPoint p : this.getPlanPoints() ) {
+			if( poly.containsStrict( p ) ) {
+//				System.out.println( "Intersection: " + p.toString() );
+				intersectionPoint = p.clone();
+				return true;
+			}
+		}
+		for( PlanPoint p : poly.getPlanPoints() ) {
+			if( containsStrict( p ) ) {
+//				System.out.println( "Intersection: " + p.toString() );
+				intersectionPoint = p.clone();
+				return true;
+			}
+		}
+		intersectionPoint = null;
+		return false;
 		// Does not work correctly
-		java.awt.Polygon awt = getAWTPolygon();
-		java.awt.Polygon awt2 = poly.getAWTPolygon();
-		return awt.intersects( awt2.getBounds2D() );
+		//java.awt.Polygon awt = getAWTPolygon();
+		//java.awt.Polygon awt2 = poly.getAWTPolygon();
+
+		//return awt.intersects( awt2.getBounds2D() );
 	//return false;
+	}
+
+	public PlanPoint intersection( PlanPolygon<?> poly ) {
+		intersects( poly );
+		return intersectionPoint;
 	}
 
 	/**
@@ -1787,7 +1865,7 @@ public class PlanPolygon<T extends Edge> implements Serializable, Iterable<T> {
 
 	/**
 	 * This is a convenience method that returns all PlanPoints of all
-	 * Edges of this polygon. Note that the intended behaviour is of this method
+	 * Edges of this polygon. Note that the intended behavior is of this method
 	 * is to return all plan points that are connected to this Polygon, so
 	 * {@link ds.z.Room} f.e. overwrites this method to include all Area PlanPoints.
 	 * @return a list of all points of the polygon
@@ -1803,7 +1881,7 @@ public class PlanPolygon<T extends Edge> implements Serializable, Iterable<T> {
 
 	/**
 	 * This is a convenience method that adds all PlanPoints of all
-	 * Edges of this polygon to the given list. Note that the intended behaviour
+	 * Edges of this polygon to the given list. Note that the intended behavior
 	 * of this method is to return all plan points that are connected to this
 	 * PlanPolygon, so {@link ds.z.Room} f.e. overwrites this method to include
 	 * all Area PlanPoints
@@ -1819,8 +1897,8 @@ public class PlanPolygon<T extends Edge> implements Serializable, Iterable<T> {
 	/**
 	 * Returns a string representation of the {@code PlanPolygon} that
 	 * textually represents the polygon.
-	 * <p>A polygon is represented by the sequence of edges seperated with
-	 * a "-" inbetween. The result will look like
+	 * <p>A polygon is represented by the sequence of edges separated with
+	 * a "-" in between. The result will look like
 	 * </p>
 	 * <blockquote>
 	 * <pre>

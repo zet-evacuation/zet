@@ -25,57 +25,55 @@ package de.tu_berlin.math.coga.common.algorithm;
  * @author Martin Groß
  */
 public class AlgorithmProgressEvent extends AlgorithmEvent {
+	/** The current progress value, 0 <= progress <= 1. */
+	private double progress;
 
-    /** The current progress value, 0 <= progress <= 1. */
-    private double progress;
+	/**
+	 * Creates an {@code AlgorithmProgressEvent} for the specified
+	 * algorithm and the current progress value.
+	 * @param algorithm the algorithm for which progress occurred.
+	 * @param progress the progress value.
+	 * @throws IllegalArgumentException if the progress value is not between 0
+	 * and 1 (inclusively).
+	 */
+	public AlgorithmProgressEvent( Algorithm algorithm, double progress ) {
+		this( algorithm, System.currentTimeMillis(), progress );
+	}
 
-    /**
-     * Creates an {@code AlgorithmProgressEvent} for the specified 
-     * algorithm and the current progress value.
-     * @param algorithm the algorithm for which progress occurred.
-     * @param progress the progress value.
-     * @throws IllegalArgumentException if the progress value is not between 0
-     * and 1 (inclusively).
-     */
-    public AlgorithmProgressEvent(Algorithm algorithm, double progress) {
-        this(algorithm, System.currentTimeMillis(), progress);
-    }
+	/**
+	 * Creates an {@code AlgorithmProgressEvent} for the specified
+	 * algorithm and the current progress value.
+	 * @param algorithm the algorithm for which progress occurred.
+	 * @param eventTime the time when the event was fired
+	 * @param progress the progress value.
+	 * @throws IllegalArgumentException if the progress value is not between 0
+	 * and 1 (inclusively).
+	 */
+	public AlgorithmProgressEvent( Algorithm algorithm, long eventTime, double progress ) {
+		super( algorithm, eventTime );
+		if( progress < 0.0 )
+			throw new IllegalArgumentException( "The progress value must not be < 0.0." );
+		else if( progress > 1.0 )
+			throw new IllegalArgumentException( "The progress values must not not be > 1.0." );
+		this.progress = progress;
+	}
 
-    /**
-     * Creates an {@code AlgorithmProgressEvent} for the specified
-     * algorithm and the current progress value.
-     * @param algorithm the algorithm for which progress occurred.
-		 * @param eventTime the time when the event was fired
-		 * @param progress the progress value.
-     * @throws IllegalArgumentException if the progress value is not between 0
-     * and 1 (inclusively).
-     */
-    public AlgorithmProgressEvent(Algorithm algorithm, long eventTime, double progress) {
-        super(algorithm, eventTime);
-        if (progress < 0.0) {
-            throw new IllegalArgumentException("The progress value must not be < 0.0.");
-        } else if (progress > 1.0) {
-            throw new IllegalArgumentException("The progress values must not not be > 1.0.");
-        }
-        this.progress = progress;
-    }
+	/**
+	 * Returns the current progress value, which is zero at the beginning and 1
+	 * after successfully terminating.
+	 * @return the current progress value.
+	 */
+	public double getProgress() {
+		return progress;
+	}
 
-    /**
-     * Returns the current progress value, which is zero at the beginning and 1
-     * after successfully terminating.
-     * @return the current progress value.
-     */
-    public double getProgress() {
-        return progress;
-    }
-
-    /**
-     * Returns the current progress value as an integer between 0 and 100. The
-     * progress value is 0 at the beginning of the algorithm and 100 after
-     * a successful termination of the algorithm.
-     * @return the current progress value.
-     */
-    public int getProgressAsInteger() {
-        return (int) Math.round(progress * 100);
-    }
+	/**
+	 * Returns the current progress value as an integer between 0 and 100. The
+	 * progress value is 0 at the beginning of the algorithm and 100 after
+	 * a successful termination of the algorithm.
+	 * @return the current progress value.
+	 */
+	public int getProgressAsInteger() {
+		return (int) Math.round( progress * 100 );
+	}
 }

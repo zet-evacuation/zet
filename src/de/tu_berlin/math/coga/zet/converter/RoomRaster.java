@@ -13,6 +13,7 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
+
 /*
  * RoomRaster.java
  */
@@ -36,14 +37,14 @@ import java.util.Iterator;
  * The {@code RoomRaster} class provides rasterization of a {@link ds.z.Room} object.
  * The squares of the raster have to be of the type {@link RoomRaster} which allows
  * to describe the {@link ds.z.Area} in which a square lies.
- * @param T the type of the used raster, have to be at least {@link RoomRasterSquare} objects
+ * @param <T> the type of the used raster, have to be at least {@link RoomRasterSquare} objects
  * @see Raster
  */
 public class RoomRaster<T extends RoomRasterSquare> extends Raster<T, Room> {
 
 	/** The {@link ds.z.Floor} of this room. */
 	Floor floor;
-	/** The {@link ds.z.Room} that is rasterized. Redundant save helps avoiding casts. */
+	/** The {@link ds.z.Room} that is rastered. Redundant save helps avoiding casts. */
 	Room r;
 	LinkedList<T> accessibleSquares;
 
@@ -61,7 +62,7 @@ public class RoomRaster<T extends RoomRasterSquare> extends Raster<T, Room> {
 	/**
 	 * Creates a new instance of {@code RoomRaster}.
 	 * @param squareClassType the type of the squares used during rasterization
-	 * @param r the room that will be rasterized
+	 * @param r the room that will be rastered
 	 * @param raster the raster size
 	 * @throws java.lang.IllegalArgumentException if raster is negative or zero
 	 */
@@ -75,7 +76,7 @@ public class RoomRaster<T extends RoomRasterSquare> extends Raster<T, Room> {
 	/**
 	 * Creates a new instance of {@code RoomRaster}
 	 * @param squareClassType the type of the squares used during rasterization
-	 * @param r the room that will be rasterized
+	 * @param r the room that will be rastered
 	 * @param raster the raster size
 	 * @throws java.lang.IllegalArgumentException if raster is negative or zero
 	 */
@@ -87,7 +88,7 @@ public class RoomRaster<T extends RoomRasterSquare> extends Raster<T, Room> {
 	}
 
 	/**
-	 * Returns the {@link Room} that is rasterized
+	 * Returns the {@link Room} that is rastered
 	 * @return the room
 	 */
 	public Room getRoom () {
