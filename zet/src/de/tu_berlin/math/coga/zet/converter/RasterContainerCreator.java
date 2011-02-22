@@ -42,6 +42,8 @@ import ds.z.Room;
 import ds.z.RoomEdge;
 import ds.z.SaveArea;
 import ds.z.DelayArea.DelayType;
+import ds.z.exception.RoomEdgeInvalidTargetException;
+import ds.z.exception.UnknownZModelError;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -120,12 +122,12 @@ public class RasterContainerCreator {
 					ZToCARoomRaster raster = container.getRasteredRoom( room );
 					if( (rEdge).isPassable() ) {
 						List<ZToCARasterSquare> squares = de.tu_berlin.math.coga.zet.converter.RasterTools.getSquaresAlongEdge( rEdge, raster );
-						//RoomEdge partnerEdge;
-						Room partnerRoom = rEdge.getLinkTarget().getRoom();
 
-//                        if(partnerEdge == null){
-//                            throw new RuntimeException("Inconsistency found: There is a passible edge that does not lie in two rooms!");
-//                        }
+						Room partnerRoom = rEdge.getLinkTarget().getRoom();
+						if( partnerRoom == null )
+							throw new RoomEdgeInvalidTargetException( rEdge, "Partner Edge has no room." );
+						if( rEdge.getLinkTarget().getLinkTarget() != rEdge )
+							throw new RoomEdgeInvalidTargetException( rEdge, "Partner edge does not point to original edge." );
 
 						ZToCARoomRaster partnerRaster = container.getRasteredRoom( partnerRoom );
 						List<ZToCARasterSquare> partnerSquares = de.tu_berlin.math.coga.zet.converter.RasterTools.getSquaresAlongEdge( rEdge.getLinkTarget(), partnerRaster );

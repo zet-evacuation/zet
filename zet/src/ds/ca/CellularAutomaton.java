@@ -231,7 +231,7 @@ public class CellularAutomaton implements Iterable<Individual> {
 
 	/**
 	 * Returns the number of steps performed by the cellular automaton within one
-	 * second. The time dependds of the absolute max speed and is set if
+	 * second. The time depends of the absolute max speed and is set if
 	 * {@link #setAbsoluteMaxSpeed(double)} is called.
 	 * @return the number of steps performed by the cellular automaton within one second.
 	 */
@@ -347,12 +347,12 @@ public class CellularAutomaton implements Iterable<Individual> {
 				typeIndividualMap.get( i.getUid() ).add( i );
 			}
 		}
-		try {
+//		try {
 		c.getRoom().addIndividual( c, i );
-		} catch( Exception ex ) {
-			int k = 1;
-			k++;
-		}
+//		} catch( Exception ex ) {
+//			int k = 1;
+//			k++;
+//		}
 		
 		// assign shortest path potential to individual, so it is not null.
 		int currentMin = -1;

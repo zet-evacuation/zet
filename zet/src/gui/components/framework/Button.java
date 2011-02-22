@@ -57,7 +57,7 @@ public class Button {
 		if( al != null )
 			b.addActionListener( al );
 		if( commandString != null )
-			b.setActionCommand(commandString );
+			b.setActionCommand( commandString );
 		return b;
 	}
 	

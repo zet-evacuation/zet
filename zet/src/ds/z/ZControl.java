@@ -37,7 +37,7 @@ public class ZControl {
 	/** The localization class. */
 	static final Localization loc = ZLocalization.getSingleton();
 	/** The project that is root of the controlled model. */
-	private Project p;
+	private Project project;
 
 	public ZControl() {
 		newProject();
@@ -61,7 +61,7 @@ public class ZControl {
 		if( file == null )
 			newProject();
 		else if( !loadProject( file ) )
-			p = newProject();
+			project = newProject();
 	}
 
 	/**
@@ -69,11 +69,11 @@ public class ZControl {
 	 * @param p 
 	 */
 	ZControl( Project p ) {
-		this.p = p;
+		this.project = p;
 	}
 
 	public Project getProject() {
-		return p;
+		return project;
 	}
 
 	public void loadProject( String projectFile ) {
@@ -88,8 +88,8 @@ public class ZControl {
 	final public boolean loadProject( File projectFile ) {
 		try {
 			//p = Project.load( projectFile );
-			p = ProjectLoader.load( projectFile );
-			p.setProjectFile( projectFile );
+			project = ProjectLoader.load( projectFile );
+			project.setProjectFile( projectFile );
 			// Update the graphical user interface
 			ZETMain.sendMessage( loc.getString( "gui.editor.JEditor.message.loaded" ) );	// TODO output changed, use listener
 		} catch( Exception ex ) {
@@ -111,11 +111,11 @@ public class ZControl {
 	 * @return the newly created project
 	 */
 	final public Project newProject() {
-		p = new Project();
+		project = new Project();
 		Floor fl = new Floor( loc.getString( "ds.z.DefaultName.Floor" ) + " 1" );
-		p.getBuildingPlan().addFloor( fl );
+		project.getBuildingPlan().addFloor( fl );
 		Assignment assignment = new Assignment( loc.getString( "ds.z.DefaultName.DefaultAssignment" ) );
-		p.addAssignment( assignment );
+		project.addAssignment( assignment );
 		Distribution diameter = getDefaultAssignmentTypeDistribution( "diameter" );
 		Distribution age = getDefaultAssignmentTypeDistribution( "age" );
 		Distribution familiarity = getDefaultAssignmentTypeDistribution( "familiarity" );
@@ -124,7 +124,7 @@ public class ZControl {
 		Distribution reaction = getDefaultAssignmentTypeDistribution( "reaction" );
 		AssignmentType assignmentType = new AssignmentType( loc.getString( "ds.z.DefaultName.DefaultAssignmentType" ), diameter, age, familiarity, panic, decisiveness, reaction, 10 );
 		assignment.addAssignmentType( assignmentType );
-		return p;
+		return project;
 	}
 
 	/**
@@ -175,7 +175,7 @@ public class ZControl {
 	// Delete Stuff
 	public void delete( Area area ) {
 		if( area instanceof EvacuationArea ) {
-			for( Assignment a : p.getAssignments() )
+			for( Assignment a : project.getAssignments() )
 				for( AssignmentType t : a.getAssignmentTypes() )
 					for( AssignmentArea aa : t.getAssignmentAreas() )
 						if( aa.getExitArea() != null && aa.getExitArea().equals( (EvacuationArea)area ) )
@@ -319,7 +319,7 @@ public class ZControl {
 	 * @return the newly created floor
 	 */
 	public Floor createNewFloor() {
-		return createFloor( ZLocalization.getSingleton().getString( "ds.z.DefaultName.Floor" ) + " " + p.getBuildingPlan().floorCount() );
+		return createFloor( ZLocalization.getSingleton().getString( "ds.z.DefaultName.Floor" ) + " " + project.getBuildingPlan().floorCount() );
 	}
 	
 	/**
@@ -331,7 +331,7 @@ public class ZControl {
 	 */
 	public Floor createFloor( String name ) {
 		final Floor f = new Floor( name );
-		p.getBuildingPlan().addFloor( f );
+		project.getBuildingPlan().addFloor( f );
 		return f;
 	}
 
@@ -343,8 +343,8 @@ public class ZControl {
 	public void movePoints( List<PlanPoint> points, int x, int y ) {
 		Iterator<PlanPoint> itPP = points.iterator();
 
-						HashSet<Area> affected_areas = new HashSet<Area>();
-						PlanPolygon lastPolygon = null;
+		HashSet<Area<?>> affected_areas = new HashSet<Area<?>>();
+		PlanPolygon<?> lastPolygon = null;
 		PlanPoint planPoint;
 		while( itPP.hasNext() && itPP.hasNext() ) {
 			// The drag targets are already rasterized, if neccessary
@@ -354,12 +354,10 @@ public class ZControl {
 				// Check for !trueDrag to update "trueDrag" only once
 			//	trueDrag = true;
 
-			// TODO use translate
-			planPoint.setLocation( planPoint.x + x, planPoint.y + y );
+			planPoint.translate( x, y );
 
 			// Keep track of the areas that we move
-			PlanPolygon currentPolygon =
-							planPoint.getNextEdge() != null ? planPoint.getNextEdge().getAssociatedPolygon() : planPoint.getPreviousEdge() != null ? planPoint.getPreviousEdge().getAssociatedPolygon() : null;
+			PlanPolygon<?> currentPolygon = planPoint.getNextEdge() != null ? planPoint.getNextEdge().getAssociatedPolygon() : planPoint.getPreviousEdge() != null ? planPoint.getPreviousEdge().getAssociatedPolygon() : null;
 			currentPolygon.edgeChangeHandler( planPoint.getNextEdge(), planPoint );
 
 			// At the moment disabled area handling...
@@ -436,15 +434,15 @@ public class ZControl {
 		}
 		do {
 			fc.setName( newName + IOTools.fillLeadingZeros( number++, 2 ) );
-		} while( !p.getBuildingPlan().addFloor( fc ) && number <= 99 );
+		} while( !project.getBuildingPlan().addFloor( fc ) && number <= 99 );
 	}
 
 	public void moveFloorUp( int id ) {
-		p.getBuildingPlan().moveFloorUp( id );
+		project.getBuildingPlan().moveFloorUp( id );
 	}
 
 	public void moveFloorDown( int id ) {
-		p.getBuildingPlan().moveFloorDown( id );
+		project.getBuildingPlan().moveFloorDown( id );
 	}
 
 	public void deletePoint( PlanPolygon poly, PlanPoint currentPoint ) {
@@ -496,5 +494,96 @@ public class ZControl {
 		room.connectTo( firstEdge.getRoom(), firstEdge.getSource(), firstEdge.getTarget() );
 		room.connectTo( secondEdge.getRoom(), secondEdge.getSource(), secondEdge.getTarget() );
 		EventServer.getInstance().dispatchEvent( new ZModelChangedEvent() {} );
+	}
+
+	private int check( RoomEdge ed ) {
+		if( ed.getRoom() == null )
+			throw new IllegalStateException( "An edge is not connected to any room." );
+		if( ed.isPassable() ) {
+			RoomEdge ed2 = ed.getLinkTarget();
+			if( ed == ed2 )
+				return 2; // connected to self
+			else {
+				if( ed2.getRoom() == null )
+					return 3; // target edge is not contained in any room (maybe a relict)
+				RoomEdge ed3 = ed2.getLinkTarget();
+				if( ed3 != ed && ed3 != null ) {
+					if( ed3.getLinkTarget() == ed2 )
+						return 4; // target edge is part of another door
+					return 5; // target edge is connected somehow else
+				}
+			}
+		} else
+			return 1; // edge is not passable
+		return 0;
+	}
+
+	/**
+	 * Safely disconnects a given room edge. In the normal case the edge is just
+	 * made passable. It also checks for errors which means, that falsely
+	 * connected rooms are disconnected correctly.
+	 * @param roomEdge
+	 */
+	public void disconnectAtEdge( RoomEdge roomEdge ) {
+		switch( check( roomEdge ) ) {
+			case 0:	// no error found
+				roomEdge.makeImpassable();
+				break;
+			case 1: // not passable
+				break;	// do nothing
+			case 2: // connected to self
+			case 3: // target edge is not contained in any room (maybe a relict)
+			case 4: // target edge is part of another door
+			case 5: // target edge is connected somehow else
+			case 6: // cycle of 3 doors
+				roomEdge.setLinkTarget( null );
+				break;
+			default:
+				throw new IllegalStateException( "Error code not implemented" );
+		}
+	}
+
+	public void autoCorrectEdges() {
+		for( Floor floor : project.getBuildingPlan() ) {
+				for( Room room : floor ) {
+					boolean printed = false;
+					for( RoomEdge ed : room ) {
+						if( check( ed ) != 0 ) {
+							if( !printed ) {
+								System.out.println( "Correct " + room.getName() );
+								printed = true;
+							}
+							ed.setLinkTarget( null );
+						}
+					}
+				}
+			}
+
+	}
+
+	private int coordinate( int position, int raster ) {
+		if( position % raster == 0 )
+			return position;
+		int rest = position % raster;
+		if( rest <= raster/2 )
+			position -= rest;
+		else
+			position += raster-rest;
+		if( raster %2 == 0 && rest == raster/2 && (position/raster)%2 == 1 )
+			position += raster;
+		return position;
+	}
+
+	/**
+	 * Translates the corner of the given room to multiples of a given raster size.
+	 * This may be used if somehow during the edit process some points have been
+	 * placed not on the raster.
+	 * @param currentRoom the room whose corners are translated
+	 * @param rasterSizeSnap the raster size
+	 */
+	public void refineRoomCoordinates( PlanPolygon<?> currentRoom, int rasterSizeSnap ) {
+		for( PlanPoint p : currentRoom.getPlanPoints() ) {
+			p.setLocation( coordinate( p.x, rasterSizeSnap), coordinate( p.y, rasterSizeSnap ) );
+		}
 	}
 }

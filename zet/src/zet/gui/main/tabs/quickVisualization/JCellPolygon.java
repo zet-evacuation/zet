@@ -50,17 +50,21 @@ public class JCellPolygon extends AbstractPolygon {
 	private CellularAutomaton ca;
 
 	/**
+	 * @param cell
 	 * @param myFloor the JFloor on which this polygon is displayed.
 	 * @param fillColor the border color
+	 * @param ca
 	 */
 	public JCellPolygon( Cell cell, AbstractFloor myFloor, Color fillColor, CellularAutomaton ca ) {
 		this( cell, myFloor, fillColor, Color.black, ca );
 	}
 
 	/**
+	 * @param cell
 	 * @param myFloor the JFloor on which this polygon is displayed.
 	 * @param fillColor the border color
-	 * @param lineColor 
+	 * @param lineColor
+	 * @param ca
 	 */
 	public JCellPolygon( Cell cell, AbstractFloor myFloor, Color fillColor, Color lineColor, CellularAutomaton ca ) {
 		super( lineColor );
@@ -82,6 +86,7 @@ public class JCellPolygon extends AbstractPolygon {
 	 * operations like setBounds, which are called herein, will fail.
 	 * @param p the polygon
 	 */
+	@Override
 	public void displayPolygon( PlanPolygon p ) {
 		myPolygon = p;
 

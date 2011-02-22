@@ -13,6 +13,7 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
+
 /*
  * TeleportEdge.java
  * Created on 26. November 2007, 21:32
@@ -29,7 +30,7 @@ import com.thoughtworks.xstream.annotations.XStreamOmitField;
 @XStreamAlias ("teleportEdge")
 public class TeleportEdge extends RoomEdge {
 	/** This is a helper flag that is used during methods were the link target of this edge
-	 * should not be transformed to a standard edge when deleting this edge. This behaviour
+	 * should not be transformed to a standard edge when deleting this edge. This behavior
 	 * is useful in methods like Room.replaceEdge.
 	 */
 	@XStreamOmitField ()
@@ -62,7 +63,7 @@ public class TeleportEdge extends RoomEdge {
 	 * 
 	 * In addition to the superclass' delete method this one also must take care
 	 * of reverting the linkTarget TeleportEdge to a normal RoomEdge. This overwrites 
-	 * the behaviour defined in {@link RoomEdge#delete} 
+	 * the behavior defined in {@link RoomEdge#delete} 
 	 */
 	@Override ()
 	public void delete () {
@@ -86,29 +87,29 @@ public class TeleportEdge extends RoomEdge {
 
 	/**
 	 * It is allowed to set a linkTarget, which is not valid for a moment.
+	 *
+	 * @param val
 	 */
 	@Override
-	public void setLinkTarget (RoomEdge val) {
-		if (val != null) {
-			if (!(val instanceof TeleportEdge)) {
-				throw new IllegalArgumentException (ZLocalization.getSingleton (
-						).getString("ds.z.TeleportEdge.OnlyTeleportEdgesAsTarget"));
-			} else if (val.length () != length ()) {
-				throw new IllegalArgumentException (ZLocalization.getSingleton (
-						).getString("ds.z.TeleportEdge.DifferentLengthLinkTarget"));
-			}
-		}
-		super.setLinkTarget (val);
+	public void setLinkTarget( RoomEdge val ) {
+		if( val != null )
+			if( !(val instanceof TeleportEdge) )
+				throw new IllegalArgumentException( ZLocalization.getSingleton().getString( "ds.z.TeleportEdge.OnlyTeleportEdgesAsTarget" ) );
+			else if( val.length() != length() )
+				throw new IllegalArgumentException( ZLocalization.getSingleton().getString( "ds.z.TeleportEdge.DifferentLengthLinkTarget" ) );
+		super.setLinkTarget( val );
 	}
-	
+
 	/** @return The helper flag {@link #revertLinkTargetOnDelete} */
 	protected boolean revertLinkTargetOnDelete () { return revertLinkTargetOnDelete; }
-	/** Sets the helper flag {@link #revertLinkTargetOnDelete} */
+	/** Sets the helper flag {@link #revertLinkTargetOnDelete}
+	 * @param b
+	 */
 	protected void setRevertLinkTargetOnDelete (boolean b) { revertLinkTargetOnDelete = b; }
 	
 	/** {@inheritDoc} */
 	@Override
-	public void makeImpassable () {
+	void makeImpassable () {
 		Room myRoom = getRoom ();
 		
 		delete (); // Replaces the edge at the link target

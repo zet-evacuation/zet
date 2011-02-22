@@ -4,8 +4,6 @@
  */
 package tasks;
 
-import batch.tasks.AlgorithmTask;
-import de.tu_berlin.math.coga.common.util.Helper;
 import ds.z.Floor;
 import zet.gui.main.tabs.quickVisualization.JRasterFloor;
 
@@ -27,14 +25,6 @@ public class DisplayFloorTask implements Runnable {
 	@Override
 	public void run() {
 		rasterFloor.displayFloor( floor );
-//		for( int i = 1; i < 100; ++i ) {
-//			Helper.pause( 50 );
-//			AlgorithmTask.getInstance().setProgress( i, "", "" );
-//			System.out.println( "Step " + i + " executed." );
-//		}
-//
-//		AlgorithmTask.getInstance().setProgress( 100, "", "" );
-//
 	}
 
 }

@@ -32,7 +32,8 @@ public class Combinatorics {
 	private Combinatorics() { }
 
 	/**
-	 * Computes the binomial coefficient {@code n} choose {@code k}.
+	 * Computes the binomial coefficient {@code n} choose {@code k}. This is very
+	 * slow!
 	 * @param n parameter {@code n}
 	 * @param k parameter {@code k}
 	 * @return the binomial coefficient
@@ -102,5 +103,70 @@ public class Combinatorics {
 		if( n == 2 )
 			return (N += 2) * (N += 2);
 		return factorialProduct( n - m ) * factorialProduct( m );
+	}
+	static double[] table = {1,1,2,6,24,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0};
+	static int ntop = 4;
+//	{
+//		table[0] = 1.0;
+//		table[1] = 1.0;
+//		table[2] = 2.0;
+//		table[3] = 6.0;
+//		table[4] = 24.0;
+//	}
+
+		static final double[] cof = {
+			76.18009172947146,
+			-86.50532032941677,
+			24.01409824083091,
+			-1.231739572450155,
+			0.1208650973866179e-2,
+			-0.5395239384953e-5
+		};
+
+		public static double gammaln( final double xx ) {
+		int j;
+		double x,y,tmp=0,ser;
+		y = x=xx;
+		tmp = x+5.5;
+		tmp -= (x+0.5)*java.lang.Math.log(tmp);
+		ser = 1.000000000190015;
+		for( j = 0; j < 6; ++j )
+			ser += cof[j]/++y;
+		return -tmp+java.lang.Math.log(2.5066282746310005*ser/x);
+		}
+
+	public static double factrl( final int n ) {
+		if( n > 32 )
+			return java.lang.Math.exp( gammaln(n+1.0));
+			int j;
+		while( ntop < n ) {
+			j = ntop++;
+			table[ntop] = table[j]*ntop;
+		}
+		return table[n];
+	}
+
+	public static void main( String[] a ) {
+//		for( int i = 1; i < 50; ++i ) {
+//			System.out.println( factrl(i ) );
+//		}
+		for( int i = 1; i <= 20; ++i ) {
+			System.out.println( (long)bico( 2*i, i) + " - " + bink(2*i,i) );
+		}
+	}
+
+	public static double bico( final int n, final int k ) {
+		return java.lang.Math.floor( 0.5+java.lang.Math.exp(factln(n)-factln(k)-factln(n-k)));
+	}
+
+	static double a[] = new double[101];
+
+	public static double factln( final int n ) {
+		if( n <= 1 )
+			return 0.0;
+		if( n <= 100 )
+			return (a[n] != 0.0 ? a[n] : (a[n] = gammaln(n+1.0)));
+		else
+			return gammaln(n+1.0);
 	}
 }

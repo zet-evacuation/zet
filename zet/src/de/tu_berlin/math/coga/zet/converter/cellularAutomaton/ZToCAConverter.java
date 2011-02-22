@@ -113,19 +113,6 @@ public class ZToCAConverter extends Algorithm<BuildingPlan,ConvertedCellularAuto
 	}
 
 	/**
-	 * Provides the unique instance of this class. If no instance
-	 * exists yet, this method will create one and return it.
-	 * @return The unique instance of this class.
-	 */
-//	public static ZToCAConverter getInstance() {
-//		if( instance == null ) {
-//			instance = new ZToCAConverter();
-//		}
-
-//		return instance;
-//	}
-
-	/**
 	 * Call this method to convert the rastered rooms of a z-project to
 	 * a cellular automaton. The returned automaton is structure-only, i.e. 
 	 * there are no individuals in the automaton. However, all cell types
@@ -143,7 +130,6 @@ public class ZToCAConverter extends Algorithm<BuildingPlan,ConvertedCellularAuto
 		lastContainer = RasterContainerCreator.getInstance().ZToCARasterContainer( buildingPlan );
 		exitCells = new ArrayList<ExitCell>();
 		roomRasterRoomMapping = new HashMap<ZToCARoomRaster, ds.ca.Room>();
-
 
 		AlgorithmTask.getInstance().publish( "Erzeuge Räume", "" );
 
@@ -198,10 +184,10 @@ public class ZToCAConverter extends Algorithm<BuildingPlan,ConvertedCellularAuto
 	 * of the exit cells is assigned. If the save cell has already a static
 	 * potential assigned, the potential of the exit cells is assigned if it is
 	 * better.</p>
-	 * <p>The cells are searched in a breadh first search manner, all found
+	 * <p>The cells are searched in a breadth first search manner, all found
 	 * cells are stored in a queue. As the cells have no label, another list
 	 * is used to retrieve all cells already labeled. This needs more space,
-	 * otherwise wie would have to reset the labels after every call of the
+	 * otherwise we would have to reset the labels after every call of the
 	 * method.</p>
 	 * @param exitCells the bunch of connected exit cells from that the search starts
 	 * @param sp the potential starting at the exit cells
@@ -294,7 +280,7 @@ public class ZToCAConverter extends Algorithm<BuildingPlan,ConvertedCellularAuto
 	 * @param onFloor the floor on which the room lies
 	 * @param floorID the id of the floor (that means the level)
 	 * @return the created {@link ds.ca.Room}
-	 * @throws converter.ZToCAConverter.ConversionNotSupportedException if an error occurs
+	 * @throws de.tu_berlin.math.coga.zet.converter.cellularAutomaton.ZToCAConverter.ConversionNotSupportedException if an error occurs
 	 */
 	protected ds.ca.Room convertRoom( ZToCARoomRaster rasteredRoom, Floor onFloor, int floorID ) throws ConversionNotSupportedException {
 		final int width = rasteredRoom.getColumnCount();
@@ -304,6 +290,8 @@ public class ZToCAConverter extends Algorithm<BuildingPlan,ConvertedCellularAuto
 		int yOffset = rasteredRoom.getRoom().getyOffset() / 400;
 		convertedRoom.setXOffset( xOffset );
 		convertedRoom.setYOffset( yOffset );
+
+		System.out.println( "Convert room " + onFloor.getName() + " " + rasteredRoom.getRoom().getName() );
 
 		for( int x = 0; x < width; x++ ) {
 			for( int y = 0; y < height; y++ ) {
@@ -352,7 +340,7 @@ public class ZToCAConverter extends Algorithm<BuildingPlan,ConvertedCellularAuto
 	 * @param y the row of the cell in the room
 	 * @param convertedRoom the room that contains the cell
 	 * @return the new (or already existing) cell or null if the square is inaccessible
-	 * @throws ConversionNotSupportedException if an initialization error occured.
+	 * @throws ConversionNotSupportedException if an initialization error occurred.
 	 */
 	protected ds.ca.Cell convertCell( ZToCARasterSquare square, int x, int y, ds.ca.Room convertedRoom ) throws ConversionNotSupportedException {
 		if( square == null )
@@ -376,15 +364,14 @@ public class ZToCAConverter extends Algorithm<BuildingPlan,ConvertedCellularAuto
 			ds.ca.DoorCell door = (ds.ca.DoorCell) lastMapping.get( square );
 			if( door == null ) {
 				door = new ds.ca.DoorCell( square.getSpeedFactor(), x, y );
-				//convertedRoom.setCell( aCell );
 				convertedRoom.setCell( door );
 				lastMapping.insertTuple( door, square );
 			}
 
 			for( ZToCARasterSquare partner : square.getPartners() ) {
+
 				ds.ca.DoorCell partnerDoor = (ds.ca.DoorCell) lastMapping.get( partner );
 				if( partnerDoor == null ) {
-					//ZToCARoomRaster partnerRoom = getInstance().getContainer().getRasteredRoom( (ds.z.Room) (partner.getPolygon()) );
 					ZToCARoomRaster partnerRoom = getContainer().getRasteredRoom( (ds.z.Room) ( partner.getPolygon()) );
 					int newX = de.tu_berlin.math.coga.zet.converter.RasterTools.polyCoordToRasterCoord( partner.getX(), partnerRoom.getXOffset(), partnerRoom );
 					int newY = de.tu_berlin.math.coga.zet.converter.RasterTools.polyCoordToRasterCoord( partner.getY(), partnerRoom.getYOffset(), partnerRoom );
@@ -460,13 +447,9 @@ public class ZToCAConverter extends Algorithm<BuildingPlan,ConvertedCellularAuto
 							for( ZToCARasterSquare sq : targetRoomRaster.getAccessibleSquares() ) {
 								if( t.getTargetArea().contains( sq.getSquare() ) ) {
 									// Die zielarea liegt im rastersquare sq
-									int k = 3;
-									k++;
-									//Cell targetCell = lastMapping.get( sq );
 									ds.ca.TeleportCell targetCell = (ds.ca.TeleportCell) lastMapping.get( sq );
 									if( targetCell == null ) {
 										// zielzelle muss erstellt werden
-					//ZToCARoomRaster partnerRoom = getInstance().getContainer().getRasteredRoom( (ds.z.Room) (sq.getPolygon()) );
 					int newX = de.tu_berlin.math.coga.zet.converter.RasterTools.polyCoordToRasterCoord( sq.getX(), targetRoomRaster.getXOffset(), targetRoomRaster );
 					int newY = de.tu_berlin.math.coga.zet.converter.RasterTools.polyCoordToRasterCoord( sq.getY(), targetRoomRaster.getYOffset(), targetRoomRaster );
 					targetCell = new ds.ca.TeleportCell( sq.getSpeedFactor(), newX, newY );
@@ -476,12 +459,8 @@ public class ZToCAConverter extends Algorithm<BuildingPlan,ConvertedCellularAuto
 
 									}
 
-
 									// Setze die partnerzelle
 									teleport.addTarget( targetCell );
-
-//									if( targetCell instanceof TeleportCell ) {
-//										System.out.println( "Die Zielzelle ist vom Typ Teleport-Cell" );
 //									}
 								}
 							}
@@ -496,7 +475,6 @@ public class ZToCAConverter extends Algorithm<BuildingPlan,ConvertedCellularAuto
 			// Find the partner cell
 			//ZToCARoomRaster partnerRoom = getInstance().getContainer() .getRasteredRoom( (ds.z.Room) () );
 
-			//getInstance().getContainer().getRasteredRoom( null )
 			return teleport;
 		}
 
@@ -527,7 +505,7 @@ public class ZToCAConverter extends Algorithm<BuildingPlan,ConvertedCellularAuto
 	}
 
 	/**
-	 * Copies the level from a square to the corrisponding cell.
+	 * Copies the level from a square to the corresponding cell.
 	 * @param fromSquare the square
 	 * @param toCell the cell
 	 */
@@ -595,7 +573,6 @@ public class ZToCAConverter extends Algorithm<BuildingPlan,ConvertedCellularAuto
 				if( room.existsCellAt( x, y ) ) {
 					Cell aCell = room.getCell( x, y );
 					if( ( walkDiagonalStrict && (isDirectionBlocked( aCell, Top ) || isDirectionBlocked( aCell, Left ) ) ) || ( !walkDiagonalStrict && ( isDirectionBlocked( aCell, Top ) && isDirectionBlocked( aCell, Left ) ) ) ) {
-//					if(  ) {
 						aCell.setUnPassable( TopLeft );
 
 						if( room.existsCellAt( x - 1, y - 1 ) ) {
@@ -603,9 +580,7 @@ public class ZToCAConverter extends Algorithm<BuildingPlan,ConvertedCellularAuto
 						}
 					}
 
-//					if( isDirectionBlocked( aCell, Top ) || isDirectionBlocked( aCell, Right ) ) {
 					if( ( walkDiagonalStrict && ( isDirectionBlocked( aCell, Top ) || isDirectionBlocked( aCell, Right ) ) ) || ( !walkDiagonalStrict && ( isDirectionBlocked( aCell, Top ) && isDirectionBlocked( aCell, Right ) ) ) ) {
-//					if( isDirectionBlocked( aCell, Top ) && isDirectionBlocked( aCell, Right ) ) {
 						aCell.setUnPassable( Direction.TopRight );
 
 						if( room.existsCellAt( x + 1, y - 1 ) ) {
@@ -613,9 +588,7 @@ public class ZToCAConverter extends Algorithm<BuildingPlan,ConvertedCellularAuto
 						}
 					}
 
-//					if( isDirectionBlocked( aCell, Down ) || isDirectionBlocked( aCell, Left ) ) {
 					if( ( walkDiagonalStrict && ( isDirectionBlocked( aCell, Down ) || isDirectionBlocked( aCell, Left ) ) ) || ( !walkDiagonalStrict && ( isDirectionBlocked( aCell, Down ) && isDirectionBlocked( aCell, Left ) ) ) ) {
-//					if( isDirectionBlocked( aCell, Down ) && isDirectionBlocked( aCell, Left ) ) {
 						aCell.setUnPassable( Direction.DownLeft );
 
 						if( room.existsCellAt( x - 1, y + 1 ) ) {
@@ -623,9 +596,7 @@ public class ZToCAConverter extends Algorithm<BuildingPlan,ConvertedCellularAuto
 						}
 					}
 
-//					if( isDirectionBlocked( aCell, Down ) || isDirectionBlocked( aCell, Right ) ) {
 					if( ( walkDiagonalStrict && ( isDirectionBlocked( aCell, Down ) || isDirectionBlocked( aCell, Right ) ) ) || ( !walkDiagonalStrict && ( isDirectionBlocked( aCell, Down ) && isDirectionBlocked( aCell, Right ) ) ) ) {
-//					if( isDirectionBlocked( aCell, Down ) && isDirectionBlocked( aCell, Right ) ) {
 						aCell.setUnPassable( Direction.DownRight );
 
 						if( room.existsCellAt( x + 1, y + 1 ) ) {

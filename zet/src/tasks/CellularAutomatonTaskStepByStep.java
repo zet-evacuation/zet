@@ -19,16 +19,23 @@ import ds.ca.CellularAutomaton;
 import ds.z.AssignmentType;
 import ds.z.ConcreteAssignment;
 
-
 /**
  *
  * @author Jan-Philipp Kappmeier
  */
 public class CellularAutomatonTaskStepByStep extends Algorithm<Project, Void> {
-	CellularAutomatonAlgorithm  cellularAutomatonAlgorithm;
-	CellularAutomaton ca;
-	ZToCAMapping mapping;
-	ZToCARasterContainer container;
+	private CellularAutomatonAlgorithm  cellularAutomatonAlgorithm;
+	private boolean performConversion = true;
+	private ConvertedCellularAutomaton cca;// = new ConvertedCellularAutomaton( ca, mapping, container );
+
+	public CellularAutomatonTaskStepByStep() {
+		super();
+	}
+
+	public CellularAutomatonTaskStepByStep( ConvertedCellularAutomaton cca ) {
+		this.cca = cca;
+		performConversion = false;
+	}
 
 	public void setCaAlgo( CellularAutomatonAlgorithm caAlgo ) {
 		this.cellularAutomatonAlgorithm = caAlgo;
@@ -40,25 +47,24 @@ public class CellularAutomatonTaskStepByStep extends Algorithm<Project, Void> {
 
 	@Override
 	protected Void runAlgorithm( Project project ) {
-		// convert cellular automaton
-		final ZToCAConverter conv = new ZToCAConverter();
-		conv.setProblem( project.getBuildingPlan() );
-		conv.run();
-		ca = conv.getCellularAutomaton();
-		mapping = conv.getMapping();
-		container = conv.getContainer();
-		final ConvertedCellularAutomaton cca = new ConvertedCellularAutomaton( ca, mapping, container );
+		// convert cellular automaton, if not provided already
+		if( performConversion ) {
+			final ZToCAConverter conv = new ZToCAConverter();
+			conv.setProblem( project.getBuildingPlan() );
+			conv.run();
+			cca = new ConvertedCellularAutomaton( conv.getCellularAutomaton(), conv.getMapping(), conv.getContainer() );
+		}
 
 		// create and convert concrete assignment
 		for( AssignmentType at : project.getCurrentAssignment().getAssignmentTypes() )
-			ca.setAssignmentType( at.getName(), at.getUid() );
+			cca.getCellularAutomaton().setAssignmentType( at.getName(), at.getUid() );
 		ConcreteAssignment concreteAssignment = project.getCurrentAssignment().createConcreteAssignment( 400 );
 		final CellularAutomatonAssignmentConverter cac = new CellularAutomatonAssignmentConverter();
 		cac.setProblem( new AssignmentApplicationInstance( cca, concreteAssignment ) );
 		cac.run();
 
 		// set up simulation algorithm and compute
-		EvacuationCellularAutomatonAlgorithm caAlgo = cellularAutomatonAlgorithm.createTask( ca );
+		EvacuationCellularAutomatonAlgorithm caAlgo = cellularAutomatonAlgorithm.createTask( cca.getCellularAutomaton() );
 		double caMaxTime = PropertyContainer.getInstance().getAsDouble( "algo.ca.maxTime" );
 		caAlgo.setMaxTimeInSeconds( caMaxTime );
 		//caAlgo.getCellularAutomaton().startRecording ();
@@ -72,8 +78,8 @@ public class CellularAutomatonTaskStepByStep extends Algorithm<Project, Void> {
 			}
 			caAlgo.run();
 			// fire event
-			double progress1 = 1-(double)ca.getNotSafeIndividualsCount()/ca.individualCount();
-			double progress2 = ca.getTimeStep()/caAlgo.getMaxTimeInSteps();
+			double progress1 = 1-(double)cca.getCellularAutomaton().getNotSafeIndividualsCount()/cca.getCellularAutomaton().individualCount();
+			double progress2 = cca.getCellularAutomaton().getTimeStep()/caAlgo.getMaxTimeInSteps();
 			this.fireProgressEvent( Math.max( progress2, progress1 ) );
 		}
 
@@ -90,14 +96,14 @@ public class CellularAutomatonTaskStepByStep extends Algorithm<Project, Void> {
 	}
 
 	public CellularAutomaton getCa() {
-		return ca;
+		return cca.getCellularAutomaton();
 	}
 
 	public ZToCARasterContainer getContainer() {
-		return container;
+		return cca.getContainer();
 	}
 
 	public ZToCAMapping getMapping() {
-		return mapping;
+		return cca.getMapping();
 	}
 }

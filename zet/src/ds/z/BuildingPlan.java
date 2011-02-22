@@ -25,7 +25,6 @@ import com.thoughtworks.xstream.annotations.XStreamImplicit;
 import ds.z.exception.AreaNotInsideException;
 import ds.z.exception.PolygonNotClosedException;
 import ds.z.exception.RoomIntersectException;
-import ds.z.exception.RoomIntersectException.RoomPair;
 import ds.z.exception.TooManyPeopleException;
 import io.z.BuildingPlanConverter;
 import io.z.XMLConverter;
@@ -36,6 +35,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Random;
 import batch.tasks.AlgorithmTask;
+import de.tu_berlin.math.coga.datastructure.Tupel;
 
 /**
  * The {@code BuildingPlan} represents a complete building plan, consisting of
@@ -280,8 +280,8 @@ public class BuildingPlan implements Serializable, Iterable<Floor> , ZFormatObje
 		try {
 			check();
 		} catch( ds.z.exception.RoomIntersectException e ) {
-			RoomPair rooms = e.getIntersectingRooms();
-			System.out.println( "Es schneiden sich die Räume: " + rooms.room1.getName() + " - " + rooms.room2.getName() );
+			Tupel<Room,Room> rooms = e.getIntersectingRooms();
+			System.out.println( "Es schneiden sich die Räume: " + rooms.u.getName() + " - " + rooms.v.getName() );
 		}
 		for( Floor f : floors )
 			for( Room r : f.getRooms() ) {
@@ -365,6 +365,7 @@ public class BuildingPlan implements Serializable, Iterable<Floor> , ZFormatObje
 	 * Returns an iterator over the floors of this building plan.
 	 * @return an iterator over the floors of this building plan.
 	 */
+	@Override
 	public Iterator<Floor> iterator() {
 		return getFloors().iterator();
 	}
@@ -372,7 +373,7 @@ public class BuildingPlan implements Serializable, Iterable<Floor> , ZFormatObje
 	StringBuilder summaryBuilder() {
 		StringBuilder sb = new StringBuilder( 10000 );
 		
-		sb.append( "Gebäude: " + floors.size() + " Stockwerke\n" );
+		sb.append( "Gebäude: " ).append( floors.size() ).append( " Stockwerke\n");
 		for( Floor f : floors ) {
 			sb.append( f.summaryBuilder() );
 			sb.append( '\n' );

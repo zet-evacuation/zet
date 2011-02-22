@@ -6,6 +6,7 @@ package zet.gui.main.menu;
 
 import de.tu_berlin.math.coga.common.localization.Localized;
 import ds.PropertyContainer;
+import ds.z.exception.RoomIntersectException;
 import gui.GUIControl;
 import gui.ZETMain;
 import gui.components.framework.Menu;
@@ -232,6 +233,10 @@ public class JZETMenuBar extends JMenuBar implements ActionListener, Localized {
 			mnuDebug = Menu.addMenu( mExtras, loc.getString( "Extras.Debug" ) );
 
 			Menu.addMenuItem( mnuDebug, "Building status", this, "debugBuildingStatus" );
+			Menu.addMenuItem( mnuDebug, "Door-Check (with auto correction)", this, "debugDoorCheck" );
+			Menu.addMenuItem( mnuDebug, "Check", this, "debugCheck" );
+
+
 		}
 		// Hilfe-menu
 		mnuHelpAbout = Menu.addMenuItem( mHelp, loc.getString( "Help.About" ), 'I', this, "about" );
@@ -384,6 +389,17 @@ public class JZETMenuBar extends JMenuBar implements ActionListener, Localized {
 			if( ptv == null )
 				ptv = new JProjectTreeView( control.editor, "Baumansicht", 600, 450, control.getZControl() );
 			ptv.setVisible( true );
+		} else if( e.getActionCommand().equals( "debugDoorCheck" ) ) {
+			control.getZControl().autoCorrectEdges();
+		} else if( e.getActionCommand().equals( "debugCheck" ) ) {
+				try {
+					control.getZControl().getProject().getBuildingPlan().check();
+					System.out.println( "Everything OK." );
+				} catch( RoomIntersectException ex ) {
+					System.out.println( "Räume " + ex.getIntersectingRooms().u.getName() + " und " + ex.getIntersectingRooms().v.getName() + " schneiden sich in " + ex.getIntersectionPoiont().toString() );
+					System.out.println( ex.getIntersectingRooms().u );
+					System.out.println( ex.getIntersectingRooms().v );
+				}
 		} else if( e.getActionCommand().equals( "german" ) ) {
 			control.switchToLanguage( Locale.GERMAN );
 		} else if( e.getActionCommand().equals( "english" ) ) {
