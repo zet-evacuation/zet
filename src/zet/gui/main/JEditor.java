@@ -113,7 +113,7 @@ public class JEditor extends JFrame implements Localized, EventListener<Progress
 			return name;
 		}
 	}
-	ArrayList<ZETWindowTabs> tabs = new ArrayList<ZETWindowTabs>( ZETWindowTabs.values().length );
+	private ArrayList<ZETWindowTabs> tabs = new ArrayList<ZETWindowTabs>( ZETWindowTabs.values().length );
 	/** The localization class. */
 	static final Localization loc = GUILocalization.getSingleton();
 	/** Stores the last mouse position if a mouse position event is sent. */
@@ -399,6 +399,10 @@ public class JEditor extends JFrame implements Localized, EventListener<Progress
 		String realCoordsMeter = "(" + DefaultLoc.getSingleton().getFloatConverter().format( ConversionTools.toMeter( position.x ) ) + delimiter + DefaultLoc.getSingleton().getFloatConverter().format( ConversionTools.toMeter( position.y ) ) + ")";
 		String text = String.format( GUILocalization.getSingleton().getString( "gui.EditPanel.Mouse.PositionMillimeterMeter" ), realCoordsMillimeter, realCoordsMeter );
 		EventServer.getInstance().dispatchEvent( new MessageEvent<JEditor>( null, MessageType.MousePosition, text ) );
+	}
+
+	public void sendError( String message ) {
+		statusBar.blink( message );
 	}
 
 	/**

@@ -586,4 +586,41 @@ public class ZControl {
 			p.setLocation( coordinate( p.x, rasterSizeSnap), coordinate( p.y, rasterSizeSnap ) );
 		}
 	}
+
+	/**
+	 * Renames a floor if that is possible.
+	 * @param floor the floor that is renamed
+	 * @param name the new name of the floor
+	 * @return {@code true} if the floor could be renamed, {@code false} otherwise
+	 */
+	public boolean renameFloor( Floor floor, String name ) {
+		// try to find out if the name is already used
+		if( floor.getName().equals( name ) )
+			return true;
+		for( Floor f : project.getBuildingPlan() )
+			if( f.getName().equals( name ) )
+				return false;
+		floor.setName( name );
+		return true;
+	}
+
+	/**
+	 * Renames a room if that is possible.
+	 * @param room the room that is renamed
+	 * @param name the new name of the room
+	 * @return {@code true} if the room could be renamed, {@code false} otherwise
+	 */
+	public boolean renameRoom( Room room, String name ) {
+		if( room.getName().equals( name ) )
+			return true;
+		if( room.getAssociatedFloor() == null ) {
+			room.setName( name );
+			return true;
+		}
+		for( Room r : room.getAssociatedFloor() )
+			if( r.getName().equals( name ) )
+				return false;
+		room.setName( name );
+		return true;
+	}
 }

@@ -952,8 +952,13 @@ public class JEditView extends AbstractSplitPropertyWindow<JFloorScrollPane<JFlo
 		txtFloorName.addKeyListener( new KeyAdapter() {
 			@Override
 			public void keyPressed( KeyEvent e ) {
-				if( e.getKeyCode() == KeyEvent.VK_ENTER )
-					currentFloor.setName( txtFloorName.getText() );
+				if( e.getKeyCode() == KeyEvent.VK_ENTER ) {
+					boolean success = projectControl.renameFloor( currentFloor, txtFloorName.getText() );
+					if( !success )
+						guiControl.alertError( "Floor with that name already exists" );
+					else
+						updateFloorView();
+				}
 			}
 		} );
 		eastPanel.add( txtFloorName, "0,1,2,1" );
@@ -1058,8 +1063,13 @@ public class JEditView extends AbstractSplitPropertyWindow<JFloorScrollPane<JFlo
 		txtRoomName.addKeyListener( new KeyAdapter() {
 			@Override
 			public void keyPressed( KeyEvent e ) {
-				if( e.getKeyCode() == KeyEvent.VK_ENTER )
-					((Room)getLeftPanel().getMainComponent().getSelectedPolygons().get( 0 ).getPlanPolygon()).setName( txtRoomName.getText() );
+				if( e.getKeyCode() == KeyEvent.VK_ENTER ) {
+					boolean success = projectControl.renameRoom( (Room)getLeftPanel().getMainComponent().getSelectedPolygons().get( 0 ).getPlanPolygon(), txtRoomName.getText() );
+					if( !success )
+						guiControl.alertError( "Floor with that name already exists" );
+					else
+						updateFloorView();
+				}
 			}
 		} );
 		eastPanel.add( txtRoomName, "0, " + row++ );
