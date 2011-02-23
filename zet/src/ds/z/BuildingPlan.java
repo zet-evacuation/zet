@@ -86,7 +86,7 @@ public class BuildingPlan implements Serializable, Iterable<Floor> , ZFormatObje
 	 * @return the id of the selected floor
 	 */
 	public int getFloorID( Floor floor ) {
-		return (floors.indexOf( floor ));
+		return floors.indexOf( floor );
 	}
 
 	/**
@@ -100,6 +100,21 @@ public class BuildingPlan implements Serializable, Iterable<Floor> , ZFormatObje
 			floors.add( f );
 			return true;
 		}
+		return false;
+	}
+
+	/**
+	 * Tries to add a new floor with a given name.
+	 * @param f
+	 * @param name
+	 * @return
+	 */
+	public boolean addFloor( Floor f, String name ) {
+		String oldName = f.getName();
+		f.setName( name );
+		if( addFloor( f ) )
+			return true;
+		f.setName( oldName );
 		return false;
 	}
 

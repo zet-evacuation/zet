@@ -56,6 +56,7 @@ public class JEventStatusBar extends JStatusBar implements EventListener<Message
 		labelBackground = components.get( 0 ).getBackground();
 
 		blinkTimer = new Timer( 200, new ActionListener() {
+			@Override
 			public void actionPerformed( ActionEvent e ) {
 				if( blinkCount == 0 )
 					components.get( 0 ).setOpaque( true );
@@ -81,6 +82,14 @@ public class JEventStatusBar extends JStatusBar implements EventListener<Message
 		components.get( 0 ).setOpaque( false );
 	}
 
+	public void blink( String message ) {
+		setStatusText( 0, message );
+		if( !message.isEmpty() )
+			blinkTimer.start();
+		else
+			stopBlinking();
+	}
+
 	/**
 	 * Handles events sent from the {@link event.EventServer}, if the event is of
 	 * one of the types {@code Error}, {@code Status}, {@code MousePosition} or
@@ -89,15 +98,12 @@ public class JEventStatusBar extends JStatusBar implements EventListener<Message
 	 * @param event
 	 * @see event.MessageEvent.MessageType
 	 */
+	@Override
 	public void handleEvent ( MessageEvent event ) {
 		switch( event.getType () ) {
 			case Error:
-				setStatusText ( 0, event.getMessage () );
-				if (event.getMessage () != null && !event.getMessage ().equals ("")) {
-					blinkTimer.start ();
-				} else {
-					stopBlinking ();
-				}
+				if( event.getMessage() != null  )
+					blink( event.getMessage() );
 				break;
 			case Status:
 				setStatusText ( 1, event.getMessage () );

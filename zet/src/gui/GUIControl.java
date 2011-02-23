@@ -7,7 +7,6 @@ package gui;
 import algo.graph.dynamicflow.eat.EarliestArrivalFlowProblem;
 import batch.load.BatchProjectEntry;
 import de.tu_berlin.math.coga.zet.converter.cellularAutomaton.ZToCAConverter.ConversionNotSupportedException;
-import ds.z.RoomEdge;
 import java.beans.PropertyChangeEvent;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -40,7 +39,6 @@ import ds.z.Room;
 import ds.z.ZControl;
 import ds.z.exception.RoomEdgeInvalidTargetException;
 import ds.z.exception.TooManyPeopleException;
-import ds.z.exception.UnknownZModelError;
 import gui.components.progress.JProgressBarDialog;
 import gui.components.progress.JRasterizeProgressBarDialog;
 import gui.editor.Areas;
@@ -92,7 +90,7 @@ public class GUIControl implements AlgorithmListener {
 	public JEditor editor;
 
 	/** The edit tool bar. */
-	JEditToolbar editToolBar;
+	private JEditToolbar editToolBar;
 	/** The visualization tool bar. */
 	private JVisualizationToolbar visualizationToolBar;
 	/** The graph statistic tool bar. */
@@ -102,7 +100,7 @@ public class GUIControl implements AlgorithmListener {
 	private ZETVisualization visualization;
 	private JEditView editview;
 	private AlgorithmControl algorithmControl;
-	ArrayList<Areas> mode = new ArrayList<Areas>( Arrays.asList( Areas.values() ) );
+	private ArrayList<Areas> mode = new ArrayList<Areas>( Arrays.asList( Areas.values() ) );
 
 	/**
 	 * Creates a new instance of {@code GUIControl}.
@@ -1279,6 +1277,14 @@ public class GUIControl implements AlgorithmListener {
 	};
 
 
+	/**
+	 * Sends an error to the main window such that the error area in the
+	 * bar is highlighted.
+	 * @param message the error message
+	 */
+	public void alertError( String message ) {
+		editor.sendError( message );
+	}
 }
 
 

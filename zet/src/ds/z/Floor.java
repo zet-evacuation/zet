@@ -118,6 +118,7 @@ public class Floor implements Serializable, Cloneable, Iterable<Room>, ZFormatOb
 			if( rooms.contains( room ) )
 				throw new IllegalArgumentException(ZLocalization.getSingleton ( ).getString ("ds.z.RoomAlreadyExistsException"));
 			rooms.add( room );
+			Collections.sort( rooms );
 		} catch( IllegalArgumentException ex ) {
 			throw ex;
 		}
@@ -240,12 +241,12 @@ public class Floor implements Serializable, Cloneable, Iterable<Room>, ZFormatOb
 	}
 
 	/**
-	 * Renames the floor.
+	 * Renames the floor. Must be taken care off that the floor can only takes a
+	 * name that has not been given to another floor.
 	 * @param val the new name of the floor
 	 */
-	public void setName( String val ) {
+	void setName( String val ) {
 		name = val;
-//		throwChangeEvent( new ChangeEvent( this, null, "name" ) );
 	}
 
 	/**
