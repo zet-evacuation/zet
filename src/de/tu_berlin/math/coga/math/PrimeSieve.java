@@ -5,6 +5,7 @@
 package de.tu_berlin.math.coga.math;
 
 import de.tu_berlin.math.coga.common.util.Formatter;
+import java.util.Arrays;
 
 /**
  *
@@ -400,6 +401,15 @@ public class PrimeSieve {
 			if( working[k] )
 				primes[counter++] = k;
 		primeCount = counter;
+	}
+
+	public void sort() {
+		primes = Arrays.copyOf( primes, primeCount );
+		Arrays.sort( primes );
+	}
+
+	public boolean isPrime( int n ) {
+		return Arrays.binarySearch( primes, n ) >= 0;
 	}
 
 	public static void main( String[] args ) {
