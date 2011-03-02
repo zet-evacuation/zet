@@ -8334,7 +8334,7 @@
                         <roomEdge id="3240">
                           <associatedPolygon class="room" reference="3230"/>
                         </roomEdge>
-                        <planPoint id="3241" x="74595" y="40400"/>
+                        <planPoint id="3241" x="74600" y="40400"/>
                         <roomEdge id="3242">
                           <associatedPolygon class="room" reference="3230"/>
                           <linkTarget id="3243">
@@ -8491,15 +8491,15 @@
                             <linkTarget reference="3242"/>
                           </linkTarget>
                         </roomEdge>
-                        <planPoint id="3298" x="74595" y="41600"/>
+                        <planPoint id="3298" x="74600" y="41600"/>
                         <roomEdge id="3299">
                           <associatedPolygon class="room" reference="3230"/>
                         </roomEdge>
-                        <planPoint id="3300" x="74595" y="41800"/>
+                        <planPoint id="3300" x="74600" y="41800"/>
                         <roomEdge id="3301">
                           <associatedPolygon class="room" reference="3230"/>
                         </roomEdge>
-                        <planPoint id="3302" x="74595" y="41800"/>
+                        <planPoint id="3302" x="74600" y="41800"/>
                         <roomEdge id="3303">
                           <associatedPolygon class="room" reference="3230"/>
                           <linkTarget id="3304">
@@ -8621,7 +8621,7 @@
                             <linkTarget reference="3303"/>
                           </linkTarget>
                         </roomEdge>
-                        <planPoint id="3350" x="74595" y="42800"/>
+                        <planPoint id="3350" x="74600" y="42800"/>
                         <roomEdge id="3351">
                           <associatedPolygon class="room" reference="3230"/>
                         </roomEdge>
@@ -8669,7 +8669,7 @@
                         <roomEdge id="3373">
                           <associatedPolygon class="room" reference="3230"/>
                         </roomEdge>
-                        <planPoint id="3374" x="74795" y="50000"/>
+                        <planPoint id="3374" x="74800" y="50000"/>
                         <roomEdge id="3375">
                           <associatedPolygon class="room" reference="3230"/>
                           <linkTarget id="3376">
@@ -8830,11 +8830,11 @@
                             <linkTarget reference="3375"/>
                           </linkTarget>
                         </roomEdge>
-                        <planPoint id="3433" x="74795" y="51000"/>
+                        <planPoint id="3433" x="74800" y="51000"/>
                         <roomEdge id="3434">
                           <associatedPolygon class="room" reference="3230"/>
                         </roomEdge>
-                        <planPoint id="3435" x="74795" y="51400"/>
+                        <planPoint id="3435" x="74800" y="51400"/>
                         <roomEdge id="3436">
                           <associatedPolygon class="room" reference="3230"/>
                           <linkTarget id="3437">
@@ -8967,7 +8967,7 @@
                             <linkTarget reference="3436"/>
                           </linkTarget>
                         </roomEdge>
-                        <planPoint id="3480" x="74795" y="52200"/>
+                        <planPoint id="3480" x="74800" y="52200"/>
                         <roomEdge id="3481">
                           <associatedPolygon class="room" reference="3230"/>
                         </roomEdge>
@@ -9023,11 +9023,11 @@
                                   <roomEdge id="3507">
                                     <associatedPolygon class="room" reference="3493"/>
                                   </roomEdge>
-                                  <planPoint id="3508" x="75600" y="52200"/>
+                                  <planPoint id="3508" x="75400" y="52200"/>
                                   <roomEdge id="3509">
                                     <associatedPolygon class="room" reference="3493"/>
                                   </roomEdge>
-                                  <planPoint id="3510" x="75600" y="52800"/>
+                                  <planPoint id="3510" x="75400" y="52800"/>
                                   <roomEdge id="3511">
                                     <associatedPolygon class="room" reference="3493"/>
                                   </roomEdge>
@@ -9203,7 +9203,7 @@
                         <roomEdge id="3571">
                           <associatedPolygon class="room" reference="3230"/>
                         </roomEdge>
-                        <planPoint id="3572" x="77795" y="51000"/>
+                        <planPoint id="3572" x="77800" y="51000"/>
                         <roomEdge id="3573">
                           <associatedPolygon class="room" reference="3230"/>
                           <linkTarget id="3574">
@@ -9356,7 +9356,7 @@
                             <linkTarget reference="3573"/>
                           </linkTarget>
                         </roomEdge>
-                        <planPoint id="3627" x="77795" y="50000"/>
+                        <planPoint id="3627" x="77800" y="50000"/>
                         <roomEdge id="3628">
                           <associatedPolygon class="room" reference="3230"/>
                         </roomEdge>
@@ -9408,7 +9408,7 @@
                         <roomEdge id="3652">
                           <associatedPolygon class="room" reference="3230"/>
                         </roomEdge>
-                        <planPoint id="3653" x="77795" y="45200"/>
+                        <planPoint id="3653" x="77800" y="45200"/>
                         <roomEdge id="3654">
                           <associatedPolygon class="room" reference="3230"/>
                           <linkTarget id="3655">
@@ -9530,11 +9530,11 @@
                             <linkTarget reference="3654"/>
                           </linkTarget>
                         </roomEdge>
-                        <planPoint id="3701" x="77795" y="44200"/>
+                        <planPoint id="3701" x="77800" y="44200"/>
                         <roomEdge id="3702">
                           <associatedPolygon class="room" reference="3230"/>
                         </roomEdge>
-                        <planPoint id="3703" x="77795" y="43800"/>
+                        <planPoint id="3703" x="77800" y="43800"/>
                         <roomEdge id="3704">
                           <associatedPolygon class="room" reference="3230"/>
                           <linkTarget id="3705">
@@ -9687,7 +9687,7 @@
                             <linkTarget reference="3704"/>
                           </linkTarget>
                         </roomEdge>
-                        <planPoint id="3758" x="77795" y="43000"/>
+                        <planPoint id="3758" x="77800" y="43000"/>
                         <roomEdge id="3759">
                           <associatedPolygon class="room" reference="3230"/>
                         </roomEdge>
@@ -9739,7 +9739,7 @@
                         <roomEdge id="3783">
                           <associatedPolygon class="room" reference="3230"/>
                         </roomEdge>
-                        <planPoint id="3784" x="77595" y="38000"/>
+                        <planPoint id="3784" x="77600" y="38000"/>
                         <roomEdge id="3785">
                           <associatedPolygon class="room" reference="3230"/>
                           <linkTarget id="3786">
@@ -9861,11 +9861,11 @@
                             <linkTarget reference="3785"/>
                           </linkTarget>
                         </roomEdge>
-                        <planPoint id="3832" x="77595" y="37000"/>
+                        <planPoint id="3832" x="77600" y="37000"/>
                         <roomEdge id="3833">
                           <associatedPolygon class="room" reference="3230"/>
                         </roomEdge>
-                        <planPoint id="3834" x="77595" y="36600"/>
+                        <planPoint id="3834" x="77600" y="36600"/>
                         <roomEdge id="3835">
                           <associatedPolygon class="room" reference="3230"/>
                           <linkTarget id="3836">
@@ -10010,7 +10010,7 @@
                             <linkTarget reference="3835"/>
                           </linkTarget>
                         </roomEdge>
-                        <planPoint id="3885" x="77595" y="35800"/>
+                        <planPoint id="3885" x="77600" y="35800"/>
                         <roomEdge id="3886">
                           <associatedPolygon class="room" reference="3230"/>
                         </roomEdge>
@@ -10034,9 +10034,9 @@
                         <roomEdge id="3896">
                           <associatedPolygon class="room" reference="3230"/>
                         </roomEdge>
-                        <planPoint id="3897" x="76795" y="33200"/>
+                        <planPoint id="3897" x="76800" y="33200"/>
                         <roomEdge reference="3229"/>
-                        <planPoint id="3898" x="75195" y="33200"/>
+                        <planPoint id="3898" x="75200" y="33200"/>
                         <roomEdge id="3899">
                           <associatedPolygon class="room" reference="3230"/>
                         </roomEdge>
