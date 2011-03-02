@@ -31,6 +31,7 @@ import java.util.Iterator;
  * and thus provides all specified methods. Especially the methods that
  * can be implemented using the IDs are very efficient as storing an element
  * or looking for an element with a specified ID.
+ * @param <E> 
  */
 public class ArraySet<E extends Identifiable> implements IdentifiableCollection<E> {
 	/** The concrete type replacing the generics. Is needed because Java does not support generic arrays. */
@@ -93,7 +94,9 @@ public class ArraySet<E extends Identifiable> implements IdentifiableCollection<
 	 * {@code ArraySet}.
 	 * Elsewise the element will be stored at the appropriate array position.
 	 * @param element element to be add.
+	 * @return {@code true} if the element could have been added, {@code false} if the array set is full
 	 */
+	@Override
 	public boolean add( E element ) {
 		if( element.id() < 0 || element.id() >= this.getCapacity() )
 			return false;

@@ -106,8 +106,6 @@ public abstract class PushRelabel extends Algorithm<MaximumFlowProblem, MaximumF
 		return phase2Time;
 	}
 
-	
-
 	/**
 	 * Decides whether a push is applicable to a certain edge. That is, if the node
 	 * is active and is admissible at the same time.
