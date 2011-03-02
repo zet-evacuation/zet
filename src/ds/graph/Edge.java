@@ -32,7 +32,6 @@ import com.thoughtworks.xstream.annotations.XStreamAsAttribute;
  * A edge consists of two nodes of the Type {@link Node}: 
  * a start node and end node. Thus edges are by default directed.
  */
-//@XStreamAlias("edge") - Avoid duplicate edge tags (ds.z.Edge also exists)
 public class Edge implements Identifiable {
 
     /**
