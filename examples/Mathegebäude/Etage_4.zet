@@ -7557,7 +7557,6 @@
                                             <planPoint id="3098" x="24800" y="33000"/>
                                             <roomEdge id="3099">
                                               <associatedPolygon class="room" reference="3087"/>
-                                              <linkTarget reference="3085"/>
                                             </roomEdge>
                                             <planPoint id="3100" x="24800" y="33000"/>
                                             <roomEdge reference="3086"/>
