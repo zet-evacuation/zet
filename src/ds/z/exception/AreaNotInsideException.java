@@ -13,24 +13,35 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
-
 package ds.z.exception;
 
 import ds.z.Area;
+import ds.z.Room;
 
-/** Is thrown ehen an are ais not located insid the room which is is associated to.
- * @author Joscha Kulbatzki
+/** Is thrown when an area is not located inside the room which is is associated to.
+ * @author Joscha Kulbatzki, Jan-Philipp Kappmeier
  */
-public class AreaNotInsideException extends ValidationException {	
-	public AreaNotInsideException ( Area area ) {
-		super (area);
+public class AreaNotInsideException extends ValidationException {
+	Area<?> area;
+
+	public AreaNotInsideException( Room room, Area<?> area ) {
+		this( room, area, "" );
 	}
-	
-	public AreaNotInsideException ( Area area, String s ) {
-		super (area, s );
+
+	public AreaNotInsideException( Room room, Area<?> area, String s ) {
+		super( room, s );
+		this.area = area;
 	}
-	
-	public Area getArea () {
-		return (Area)getSource ();
+
+	public Area<?> getArea() {
+		return (Area<?>)area;
+	}
+
+	/**
+	 * @return the room which contains an area that is not inside.
+	 */
+	@Override
+	public Room getSource() {
+		return (Room)source;
 	}
 }

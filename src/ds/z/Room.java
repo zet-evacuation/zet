@@ -275,8 +275,7 @@ public class Room extends BaseRoom<RoomEdge> implements Cloneable, Comparable<Ro
 	 * @param rasterized Indicates, if the BuildingPlan should be rasterized.
 	 */
 	@Override
-	public void check( boolean rasterized ) throws PolygonNotClosedException, AreaNotInsideException,
-					TeleportEdgeInvalidTargetException, TooManyPeopleException {
+	public void check( boolean rasterized ) throws PolygonNotClosedException, AreaNotInsideException, TeleportEdgeInvalidTargetException, TooManyPeopleException {
 		super.check( rasterized );
 		//if (!(isClosed())) throw new PolygonNotClosedException( this, "This room is not a closed polygon"); // done by super.check()
 		for( RoomEdge e : getEdges() ) {
@@ -307,43 +306,43 @@ public class Room extends BaseRoom<RoomEdge> implements Cloneable, Comparable<Ro
 		for( AssignmentArea aa : assignmentAreas ) {
 			aa.check( rasterized );
 			if( !(contains( aa )) ) {
-				throw new AreaNotInsideException( aa, ZLocalization.getSingleton().getString( "ds.z.Room.NotCompletelyInException" ) );
+				throw new AreaNotInsideException( this, aa, ZLocalization.getSingleton().getString( "ds.z.Room.NotCompletelyInException" ) );
 			}
 		}
 		for( Barrier b : barriers ) {
 			b.check( rasterized );
 			if( !(contains( b )) ) {
-				throw new AreaNotInsideException( b, ZLocalization.getSingleton().getString( "ds.z.Room.NotCompletelyInException" ) );
+				throw new AreaNotInsideException( this, b, ZLocalization.getSingleton().getString( "ds.z.Room.NotCompletelyInException" ) );
 			}
 		}
 		for( DelayArea da : delayAreas ) {
 			da.check( rasterized );
 			if( !(contains( da )) ) {
-				throw new AreaNotInsideException( da, ZLocalization.getSingleton().getString( "ds.z.Room.NotCompletelyInException" ) );
+				throw new AreaNotInsideException( this, da, ZLocalization.getSingleton().getString( "ds.z.Room.NotCompletelyInException" ) );
 			}
 		}
 		for( InaccessibleArea ia : inaccessibleAreas ) { // including barriers
 			ia.check( rasterized );
 			if( !(contains( ia )) ) {
-				throw new AreaNotInsideException( ia, ZLocalization.getSingleton().getString( "ds.z.Room.NotCompletelyInException" ) );
+				throw new AreaNotInsideException( this, ia, ZLocalization.getSingleton().getString( "ds.z.Room.NotCompletelyInException" ) );
 			}
 		}
 		for( SaveArea sa : saveAreas ) { // Including evacuation areas
 			sa.check( rasterized );
 			if( !(contains( sa )) ) {
-				throw new AreaNotInsideException( sa, ZLocalization.getSingleton().getString( "ds.z.Room.NotCompletelyInException" ) );
+				throw new AreaNotInsideException( this, sa, ZLocalization.getSingleton().getString( "ds.z.Room.NotCompletelyInException" ) );
 			}
 		}
 		for( StairArea sa : stairAreas ) {
 			sa.check( rasterized );
 			if( !(contains( sa )) ) {
-				throw new AreaNotInsideException( sa, ZLocalization.getSingleton().getString( "ds.z.Room.NotCompletelyInException" ) );
+				throw new AreaNotInsideException( this, sa, ZLocalization.getSingleton().getString( "ds.z.Room.NotCompletelyInException" ) );
 			}
 		}
 		for( TeleportArea ta : teleportAreas ) {
 			ta.check( rasterized );
 			if( !(contains( ta )) ) {
-				throw new AreaNotInsideException( ta, ZLocalization.getSingleton().getString( "ds.z.Room.NotCompletelyInException" ) );
+				throw new AreaNotInsideException( this, ta, ZLocalization.getSingleton().getString( "ds.z.Room.NotCompletelyInException" ) );
 			}
 		}
 		checkTooManyPersonsInRoom();
