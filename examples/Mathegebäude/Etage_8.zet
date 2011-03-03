@@ -6099,11 +6099,11 @@
                                                                 <roomEdge id="2429">
                                                                   <associatedPolygon class="room" reference="2425"/>
                                                                 </roomEdge>
-                                                                <planPoint id="2430" x="9184" y="4608"/>
+                                                                <planPoint id="2430" x="9200" y="4600"/>
                                                                 <roomEdge id="2431">
                                                                   <associatedPolygon class="room" reference="2425"/>
                                                                 </roomEdge>
-                                                                <planPoint id="2432" x="13784" y="4608"/>
+                                                                <planPoint id="2432" x="13800" y="4600"/>
                                                                 <roomEdge id="2433">
                                                                   <associatedPolygon class="room" reference="2425"/>
                                                                 </roomEdge>
