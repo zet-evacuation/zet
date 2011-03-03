@@ -13,7 +13,9 @@ import de.tu_berlin.math.coga.rndutils.distribution.Distribution;
 import de.tu_berlin.math.coga.rndutils.distribution.continuous.NormalDistribution;
 import de.tu_berlin.math.coga.rndutils.distribution.continuous.UniformDistribution;
 import ds.ProjectLoader;
+import ds.z.exception.AreaNotInsideException;
 import ds.z.exception.InvalidRoomZModelError;
+import ds.z.exception.RoomIntersectException;
 import ds.z.exception.UnknownZModelError;
 import event.EventServer;
 import event.ZModelChangedEvent;
@@ -23,6 +25,7 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Iterator;
 import javax.swing.JOptionPane;
+import opengl.framework.abs.control;
 
 /**
  * The class {@code ZControl} represents a front end class to the Z-model.
@@ -622,5 +625,24 @@ public class ZControl {
 				return false;
 		room.setName( name );
 		return true;
+	}
+
+	/**
+	 * Calls the check methods for the z format objects. If an exception was
+	 * thrown, it is caught and the failure is given out to the debug out.
+	 */
+	public void checkDebugOut() {
+		try {
+			project.getBuildingPlan().check();
+			System.out.println( "Everything OK." );
+		} catch( RoomIntersectException ex ) {
+			System.out.println( "Räume " + ex.getIntersectingRooms().u.getName() + " und " + ex.getIntersectingRooms().v.getName() + " schneiden sich in " + ex.getIntersectionPoiont().toString() );
+			System.out.println( ex.getIntersectingRooms().u );
+			System.out.println( ex.getIntersectingRooms().v );
+		} catch( AreaNotInsideException ex ) {
+			System.out.println( "Im Raum " + ex.getSource().getName() + " liegt eine Area vom Typ " + ex.getArea().getAreaType().name() + " außerhalb." );
+			System.out.println( ex.getSource() );
+			System.out.println( ex.getArea() );
+		}
 	}
 }

@@ -392,14 +392,7 @@ public class JZETMenuBar extends JMenuBar implements ActionListener, Localized {
 		} else if( e.getActionCommand().equals( "debugDoorCheck" ) ) {
 			control.getZControl().autoCorrectEdges();
 		} else if( e.getActionCommand().equals( "debugCheck" ) ) {
-				try {
-					control.getZControl().getProject().getBuildingPlan().check();
-					System.out.println( "Everything OK." );
-				} catch( RoomIntersectException ex ) {
-					System.out.println( "Räume " + ex.getIntersectingRooms().u.getName() + " und " + ex.getIntersectingRooms().v.getName() + " schneiden sich in " + ex.getIntersectionPoiont().toString() );
-					System.out.println( ex.getIntersectingRooms().u );
-					System.out.println( ex.getIntersectingRooms().v );
-				}
+			control.getZControl().checkDebugOut();
 		} else if( e.getActionCommand().equals( "german" ) ) {
 			control.switchToLanguage( Locale.GERMAN );
 		} else if( e.getActionCommand().equals( "english" ) ) {
