@@ -9,6 +9,7 @@ import de.tu_berlin.math.coga.datastructure.Tupel;
 import de.tu_berlin.math.coga.datastructure.priorityQueue.BucketPriorityQueue;
 import ds.graph.Edge;
 import ds.graph.IdentifiableIntegerMapping;
+import ds.graph.Network;
 import ds.graph.Node;
 import ds.graph.flow.MaximumFlow;
 import ds.graph.problem.MaximumFlowProblem;
@@ -18,32 +19,7 @@ import ds.graph.problem.MaximumFlowProblem;
  * @author Jan-Philipp Kappmeier
  */
 public class PushRelabelHighestLabelNeu extends PushRelabel {
-	ResGraph residualGraph;
-	/**
-	 * A class for residual edges that have a residual capacity and a reverse edge.
-	 * The edges save the information, if they are a reverse edge with respect
-	 * to the original network and which edge of the original network they
-	 * correspond with.
-	 */
-	public class ResidualEdge extends Edge {
-		ResidualEdge reverse;
-		int residualCapacity;
-		boolean reverseEdge;
-		Edge original;
-		ResidualEdge( int id, Node start, Node end, int cap, boolean reverse ) {
-			super( id, start, end );
-			this.residualCapacity = cap;
-			reverseEdge = reverse;
-		}
-
-	}
-	/** An array of residual edges for the network. */
-//	protected ResidualEdge[] residualEdges;
-	/** The index of the first outgoing edge of a node in the edges array. */
-	protected IdentifiableIntegerMapping<Node> first;
-	/** The index of the last outgoing edge of a node in the edges array. */
-	protected IdentifiableIntegerMapping<Node> last;
-
+	ResidualGraph residualGraph;
 	/** The index of the current edge for a given node in the edges array. */
 	protected IdentifiableIntegerMapping<Node> current;
 	/** The buckets for active nodes. */
@@ -59,13 +35,10 @@ public class PushRelabelHighestLabelNeu extends PushRelabel {
 		distanceLabels = new IdentifiableIntegerMapping<Node>( n );	// distance
 		excess = new IdentifiableIntegerMapping<Node>( n );	// excess
 		current = new IdentifiableIntegerMapping<Node>( n );	// current edge datastructure (index)
-		first = new IdentifiableIntegerMapping<Node>( n ); // first outgoing edge (index)
-		last = new IdentifiableIntegerMapping<Node>( n ); // last outgoing edge (index)
 		activeBuckets = new BucketPriorityQueue<Node>( n + 1, Node.class );
 		activeBuckets.setDistanceLabels( distanceLabels );
 		inactiveBuckets = new BucketSet<Node>( n + 1, Node.class );
-		//residualEdges = new ResidualEdge[2 * m];
-		residualGraph = new ResGraph( n, m );
+		residualGraph = new ResidualGraph( n, m );
 	}
 
 	@Override
@@ -88,6 +61,14 @@ public class PushRelabelHighestLabelNeu extends PushRelabel {
 		end = System.nanoTime();
 		phase2Time = end-start;
 
+		// compute outgoing flow
+		int s = 0;
+		for( int i = residualGraph.getFirst( source ); i < residualGraph.getLast( source ); ++i ) {// TODO edge iterator
+			Edge e = residualGraph.getReverseEdge( residualGraph.getEdge( i ) );
+			s += residualGraph.getResidualCapacity( e );
+		}
+		System.out.println( "Fluss: " + s );
+
 		IdentifiableIntegerMapping<Edge> flow = new IdentifiableIntegerMapping<Edge>( m );
 // TODO copy results from residual network to maximum flow
 //		for( ResidualEdge e : residualEdges ) {
@@ -104,41 +85,19 @@ public class PushRelabelHighestLabelNeu extends PushRelabel {
 	 * edges to a vertex can be searched by a run through the array.
 	 */
 	protected void init() {
-		// set up residual edges
-		int edgeCounter = 0;
-		int[] temp = new int[2 * m];
-		for( Node v : getProblem().getNetwork() ) {
-			first.set( v, edgeCounter );
-			current.set( v, edgeCounter );
-			// add the outgoing edges to the arc list
-			for( Edge e : getProblem().getNetwork().outgoingEdges( v ) ) {
-				residualEdges[edgeCounter] = new ResidualEdge( edgeCounter, e.start(), e.end(), getProblem().getCapacities().get( e ), false );
-				residualEdges[edgeCounter].original = e;
-				temp[e.id()] = edgeCounter++;
-			}
-			// add the reverse edge for incoming edges to the arc list (they are also outgoing!
-			for( Edge e : getProblem().getNetwork().incomingEdges( v ) ) {
-				residualEdges[edgeCounter] = new ResidualEdge( edgeCounter, e.end(), e.start(), 0, true );
-				temp[e.id() + m] = edgeCounter++;
-			}
-			last.set( v, edgeCounter );
-		}
-		for( int i = 0; i < m; ++i ) {
-			residualEdges[temp[i]].reverse = residualEdges[temp[i + m]];
-			residualEdges[temp[i + m]].reverse = residualEdges[temp[i]];
-		}
+		residualGraph.init( getProblem().getNetwork(), getProblem().getCapacities(), current );
 		// initialize excesses
 		excess.set( source, 0 );
-		for( int i = first.get( source ); i < last.get( source ); ++i ) {
-			ResidualEdge e = residualEdges[i];
-			if( e.end().id() != source.id() ) {
-				pushes++;
-				final int delta = e.residualCapacity;
-				e.residualCapacity -= delta;
-				e.reverse.residualCapacity += delta;
+
+		for( int i = residualGraph.getFirst( source ); i < residualGraph.getLast( source ) ; ++i ) {
+			Edge e = residualGraph.getEdge( i );
+			if( e.end().id() != source.id() ) { // loops?
+				final int delta = residualGraph.getResidualCapacity( e );
+				residualGraph.augment( e, delta );
 				excess.increase( e.end(), delta );
 			}
 		}
+		pushes += residualGraph.getLast( source );
 
 		for( Node v : getProblem().getNetwork() ) {
 			final int id = v.id();
@@ -178,18 +137,14 @@ public class PushRelabelHighestLabelNeu extends PushRelabel {
 			int nodeDistance = distanceLabels.get( v );	// current node distance. -1 is applicable distance
 
 			int i;	// for all outarcs
-			for( i = current.get( v ); i < last.get( v ); ++i ) {
-				//final ResidualEdge e = residualEdges[i];
+			for( i = current.get( v ); i < residualGraph.getLast( v ); ++i ) {
 				final Edge e = residualGraph.getEdge( i );
-				// if is applicable, push. break if no excess is leftover
-				if( residualGraph.getResidualCapacity( i ) > 0 && distanceLabels.get( e.end() ) == nodeDistance - 1 && push( e ) == 0 )
+				if( residualGraph.getResidualCapacity( e ) > 0 && distanceLabels.get( e.end() ) == nodeDistance - 1 && push( e ) == 0 )
 					break;
-//				if( e.residualCapacity > 0 && distanceLabels.get( e.end() ) == nodeDistance - 1 && push( e ) == 0 )
-//					break;
 			}
 
 			// all outgoing arcs are scanned now.
-			if( i == last.get( v ) ) {
+			if( i == residualGraph.getLast( v ) ) {
 				// relabel, ended due to pointer at the last arc
 				relabel( v );
 
@@ -210,11 +165,10 @@ public class PushRelabelHighestLabelNeu extends PushRelabel {
 	 * @param e
 	 * @return the rest excess at the start node of the edge
 	 */
-	protected int push( ResidualEdge e ) {
+	protected int push( Edge e ) {
 		pushes++;
-		final int delta = e.residualCapacity < excess.get( e.start() ) ? e.residualCapacity : excess.get( e.start() );
-		e.residualCapacity -= delta;
-		e.reverse.residualCapacity += delta;
+		final int delta = residualGraph.getResidualCapacity( e ) < excess.get( e.start() ) ? residualGraph.getResidualCapacity( e ) : excess.get( e.start() );
+		residualGraph.augment( e, delta );
 
 		if( !e.end().equals( sink ) && excess.get( e.end() ) == 0 ) {
 			// excess of a.end will be positive after the push!
@@ -231,21 +185,14 @@ public class PushRelabelHighestLabelNeu extends PushRelabel {
 	}
 
 	@Override
-	protected int push( Edge e ) {
-		if( e instanceof ResidualEdge )
-			return push( (ResidualEdge)e );
-		else throw new IllegalArgumentException( "Need to use ResidualEdge class for edges with this algorithm" );
-	}
-
-	@Override
-protected int relabel( Node v ) {
+	protected int relabel( Node v ) {
 		assert excess.get( v ) > 0;
 
 		relabels++;
 
 		distanceLabels.set( v, n );
 
-		final Tupel<Integer,ResidualEdge> minEdge = searchForMinDistance( v );
+		final Tupel<Integer,Edge> minEdge = searchForMinDistance( v );
 		if( minEdge.getU() < n ) {
 			distanceLabels.set( v, minEdge.getU() );
 			current.set( v, minEdge.getV().id() );
@@ -255,12 +202,11 @@ protected int relabel( Node v ) {
 		return minEdge.getU();
 	}
 
-	protected Tupel<Integer,ResidualEdge> searchForMinDistance( Node v ) {
+	protected Tupel<Integer,Edge> searchForMinDistance( Node v ) {
 		int minDistance = n;
 		Edge minEdge = null;
 		// search for the minimum distance value
-		for( int i = first.get( v ); i < last.get( v ); ++i ) {
-			//final ResidualEdge e = residualEdges[i];
+		for( int i = residualGraph.getFirst( v ); i < residualGraph.getLast( v ); ++i ) {
 			final Edge e = residualGraph.getEdge( i );
 			if( residualGraph.getResidualCapacity( e ) > 0 && distanceLabels.get( e.end() ) < minDistance ) {
 				minDistance = distanceLabels.get( e.end() );
@@ -291,7 +237,7 @@ protected int relabel( Node v ) {
 		for( Node i : getProblem().getNetwork() ) {
 			distanceLabels.set( i, FeasibleState.Unused.val );
 			activeBuckets.reset();
-			current.set( i, first.get( i ) );
+			current.set( i, residualGraph.getFirst( i ) );
 		}
 
 		/* eliminate flowValue cycles, topologicaly order vertices */
@@ -301,8 +247,7 @@ protected int relabel( Node v ) {
 				Node r = i;
 				distanceLabels.set( r, FeasibleState.Active.val );
 				do {
-					for( ; current.get( i ) != last.get( i ); current.increase( i, 1 ) ) {
-						//ResidualEdge a = residualEdges[current.get( i )];
+					for( ; current.get( i ) != residualGraph.getLast( i ); current.increase( i, 1 ) ) {
 						Edge a = residualGraph.getEdge( current.get( i ) );
 						if( residualGraph.isReverseEdge( a ) && residualGraph.getResidualCapacity( a )> 0 ) {
 							Node j = a.end();
@@ -315,37 +260,22 @@ protected int relabel( Node v ) {
 							} else if( distanceLabels.get( j ) == FeasibleState.Active.val ) {
 								/* find minimum flowValue on the cycle */
 								int delta = residualGraph.getResidualCapacity( a );
-								while( true ) {
-									delta = Math.min( delta, residualGraph.getReverseResidualCapacity( current.get( j ) ) );
-									if( j.equals( i ) )
-										break;
-									else
-										j = residualGraph.getEdge( current.get( j ) ).end();
-								}
+								while( !j.equals( i ) )
+									j = residualGraph.getEdge( current.get( j ) ).end();
+								delta = Math.min( delta, residualGraph.getReverseResidualCapacity( current.get( j ) ) );
 
 								/* remove delta flowValue units */
-								j = i;
-								while( true ) {
-									//a = residualEdges[current.get( j )];
+								do {
 									a = residualGraph.getEdge( current.get( j ) );
-									//a.residualCapacity -= delta;
 									residualGraph.augment( a, delta );
-									//a.residualCapacity -= delta;
-									//a.reverse.residualCapacity += delta;
 									j = a.end();
-									if( j.equals( i ) )
-										break;
-								}
+								} while( !j.equals( i ) );
 
 								/* backup DFS to the first saturated arc */
 								Node restart = i;
-								//for( j = residualEdges[current.get( i )].end(); !j.equals( i ); j = a.end() ) {
 								for( j = residualGraph.getEdge( current.get( i ) ).end(); !j.equals( i ); j = a.end() ) {
-									//a = residualEdges[current.get( j )];
 									a = residualGraph.getEdge( current.get( j ) );
-									//if( (distanceLabels.get( j ) == FeasibleState.Unused.val) || (a.residualCapacity == 0) ) {
 									if( (distanceLabels.get( j ) == FeasibleState.Unused.val) || (residualGraph.getResidualCapacity( a ) == 0) ) {
-										//distanceLabels.set( residualEdges[current.get( j )].end(), FeasibleState.Unused.val );
 										distanceLabels.set( residualGraph.getEdge( current.get( j ) ).end(), FeasibleState.Unused.val );
 										if( distanceLabels.get( j ) != FeasibleState.Unused.val )
 											restart = j;
@@ -361,7 +291,7 @@ protected int relabel( Node v ) {
 						}
 					}
 
-					if( current.get( i ) == last.get( i ) ) {
+					if( current.get( i ) == residualGraph.getLast( i ) ) {
 						/* scan of i complete */
 						distanceLabels.set( i, FeasibleState.Finished.val );
 						if( !i.equals( source ) )
@@ -385,48 +315,58 @@ protected int relabel( Node v ) {
 		/* note that sink is not on the stack */
 		if( bos != null ) {
 			for( Node i = tos; !i.equals( bos ) ; i = next[i.id()] ) {
-				int pos = first.get( i );
-				//ResidualEdge a = residualEdges[pos];
+				int pos = residualGraph.getFirst( i );
 				Edge a = residualGraph.getEdge( pos );
 				while( excess.get( i ) > 0 ) {
-					//if( (a.reverseEdge) && (a.residualCapacity > 0) ) {
 					if( (residualGraph.isReverseEdge( a ) ) && (residualGraph.getResidualCapacity( a ) > 0) ) {
-						//final int delta = a.residualCapacity < excess.get( i ) ? a.residualCapacity : excess.get( i );
-						final int delta = residualGraph.getResidualCapacity( a ) < excess.get( i ) ? residualGraph.getResidualCapacity( a ) : excess.get( i );
-						residualGraph.augment( a, delta );
-						//residualGraph.augment( a, -delta );
-						//a.residualCapacity -= delta;
-						//a.reverse.residualCapacity += delta;
+						final int delta = residualGraph.augmentMax( a, excess.get( i ) );
 						excess.decrease( i, delta );
 						excess.increase( a.end(), delta );
 					}
-					//a = residualEdges[++pos];
 					a = residualGraph.getEdge( ++pos );
 				}
 			}
 			/* now do the bottom */
 			final Node i = bos;
-			int pos = first.get( i );
-			//ResidualEdge a = residualEdges[pos];
+			int pos = residualGraph.getFirst( i );
 			Edge a = residualGraph.getEdge( pos );
 			while( excess.get( i ) > 0 ) {
-				//if( (a.reverseEdge) && (a.residualCapacity > 0) ) {
 				if( (residualGraph.isReverseEdge( a )) && (residualGraph.getResidualCapacity( a ) > 0) ) {
-					final int delta = residualGraph.getResidualCapacity( a ) < excess.get( i ) ? residualGraph.getResidualCapacity( a ) : excess.get( i );// todo min?
-					residualGraph.augment( a , delta );
-					//a.residualCapacity -= delta;
-					//a.reverse.residualCapacity += delta;
+					final int delta = residualGraph.augmentMax( a, excess.get( i ) );
 					excess.decrease( i, delta );
 					excess.increase( a.end(), delta );
 				}
-				//a = residualEdges[++pos];
 				a = residualGraph.getEdge( ++pos );
 			}
 		}
-
 	}
 
-	private boolean isAdmissible( ResidualEdge e ) {
-		return e.residualCapacity > 0 && distanceLabels.get( e.start() ) == distanceLabels.get( e.end() ) + 1;
+	private boolean isAdmissible( Edge e ) {
+		return residualGraph.getResidualCapacity( e ) > 0 && distanceLabels.get( e.start() ) == distanceLabels.get( e.end() ) + 1;
+	}
+
+	public static void main( String[] arguments ) {
+		Network network = new Network( 4, 5 );
+		network.createAndSetEdge( network.getNode( 0 ), network.getNode( 1 ) );
+		network.createAndSetEdge( network.getNode( 0 ), network.getNode( 2 ) );
+		network.createAndSetEdge( network.getNode( 1 ), network.getNode( 2 ) );
+		network.createAndSetEdge( network.getNode( 1 ), network.getNode( 3 ) );
+		network.createAndSetEdge( network.getNode( 2 ), network.getNode( 3 ) );
+
+		IdentifiableIntegerMapping<Edge> capacities = new IdentifiableIntegerMapping<Edge>( 5 );
+		capacities.add( network.getEdge( 0 ), 2 );
+		capacities.add( network.getEdge( 1 ), 1 );
+		capacities.add( network.getEdge( 2 ), 1 );
+		capacities.add( network.getEdge( 3 ), 1 );
+		capacities.add( network.getEdge( 4 ), 2 );
+
+		MaximumFlowProblem mfp = new MaximumFlowProblem( network, capacities, network.getNode( 0 ), network.getNode( 3 ) );
+
+		PushRelabelHighestLabelNeu hipr = new PushRelabelHighestLabelNeu();
+		hipr.setProblem( mfp );
+		hipr.run();
+
+		//System.out.println( "Flow: " + hipr.getFlow() );
+		System.out.println( "Flow: " + hipr.getSolution().getFlowValue() );
 	}
 }

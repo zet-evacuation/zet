@@ -25,7 +25,6 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Iterator;
 import javax.swing.JOptionPane;
-import opengl.framework.abs.control;
 
 /**
  * The class {@code ZControl} represents a front end class to the Z-model.
@@ -116,6 +115,7 @@ public class ZControl {
 	final public Project newProject() {
 		project = new Project();
 		Floor fl = new Floor( loc.getString( "ds.z.DefaultName.Floor" ) + " 1" );
+		fl.setMinimumSize( 0, 0, 10000, 8000 );
 		project.getBuildingPlan().addFloor( fl );
 		Assignment assignment = new Assignment( loc.getString( "ds.z.DefaultName.DefaultAssignment" ) );
 		project.addAssignment( assignment );
