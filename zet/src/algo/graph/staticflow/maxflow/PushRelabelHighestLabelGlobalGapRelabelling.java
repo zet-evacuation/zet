@@ -5,10 +5,7 @@
 package algo.graph.staticflow.maxflow;
 
 import ds.graph.Edge;
-import ds.graph.IdentifiableIntegerMapping;
-import ds.graph.Network;
 import ds.graph.Node;
-import ds.graph.problem.MaximumFlowProblem;
 
 /**
  *
@@ -26,15 +23,15 @@ public class PushRelabelHighestLabelGlobalGapRelabelling extends PushRelabelHigh
 			final int nodeDistance = distanceLabels.get( v );	// current node distance. -1 is applicable distance
 
 			int i;	// for all outarcs
-			for( i = current.get( v ); i < last.get( v ); ++i ) {
-				final ResidualEdge e = residualEdges[i];
+			for( i = current.get( v ); i < residualGraph.getLast( v ); ++i ) {
+				final Edge e = residualGraph.getEdge( i );
 				// if is applicable, push. break if no excess is leftover
-				if( e.residualCapacity > 0 && distanceLabels.get( e.end() ) == nodeDistance - 1 && push( e ) == 0 )
+				if( residualGraph.getResidualCapacity( e ) > 0 && distanceLabels.get( e.end() ) == nodeDistance - 1 && push( e ) == 0 )
 					break;
 			}
 
 			// all outgoing arcs are scanned now.
-			if( i == last.get( v ) ) {
+			if( i == residualGraph.getLast( v ) ) {
 				// relabel, ended due to pointer at the last arc
 				relabel( v );
 
@@ -87,30 +84,5 @@ public class PushRelabelHighestLabelGlobalGapRelabelling extends PushRelabelHigh
 
 	public int getGaps() {
 		return gaps;
-	}
-
-	public static void main( String[] arguments ) {
-		Network network = new Network( 4, 5 );
-		network.createAndSetEdge( network.getNode( 0 ), network.getNode( 1 ) );
-		network.createAndSetEdge( network.getNode( 0 ), network.getNode( 2 ) );
-		network.createAndSetEdge( network.getNode( 1 ), network.getNode( 2 ) );
-		network.createAndSetEdge( network.getNode( 1 ), network.getNode( 3 ) );
-		network.createAndSetEdge( network.getNode( 2 ), network.getNode( 3 ) );
-
-		IdentifiableIntegerMapping<Edge> capacities = new IdentifiableIntegerMapping<Edge>( 5 );
-		capacities.add( network.getEdge( 0 ), 2 );
-		capacities.add( network.getEdge( 1 ), 1 );
-		capacities.add( network.getEdge( 2 ), 1 );
-		capacities.add( network.getEdge( 3 ), 1 );
-		capacities.add( network.getEdge( 4 ), 2 );
-
-		MaximumFlowProblem mfp = new MaximumFlowProblem( network, capacities, network.getNode( 0 ), network.getNode( 3 ) );
-
-		PushRelabelHighestLabelGlobalGapRelabelling hipr = new PushRelabelHighestLabelGlobalGapRelabelling();
-		hipr.setProblem( mfp );
-		hipr.run();
-
-		//System.out.println( "Flow: " + hipr.getFlow() );
-		System.out.println( "Flow: " + hipr.getSolution().getFlowValue() );
 	}
 }

@@ -5,6 +5,7 @@
 package algo.graph.staticflow.maxflow;
 
 import de.tu_berlin.math.coga.datastructure.Tupel;
+import ds.graph.Edge;
 import ds.graph.Node;
 
 
@@ -12,7 +13,7 @@ import ds.graph.Node;
  *
  * @author Jan-Philipp Kappmeier
  */
-public class PushRelabelHighestLabelGlobalRelabelling extends PushRelabelHighestLabel {
+public class PushRelabelHighestLabelGlobalRelabelling extends PushRelabelHighestLabelNeu {
 
 	protected boolean useBugHeuristic = true;
 	protected int globalRelabels;
@@ -65,14 +66,14 @@ public class PushRelabelHighestLabelGlobalRelabelling extends PushRelabelHighest
 	}
 
 	@Override
-	protected Tupel<Integer,ResidualEdge> searchForMinDistance( Node v ) {
+	protected Tupel<Integer,Edge> searchForMinDistance( Node v ) {
 		int minDistance = n;
-		ResidualEdge minEdge = null;
+		Edge minEdge = null;
 		// search for the minimum distance value
-		for( int i = useBugHeuristic ? current.get( v ) : first.get( v ); i < last.get( v ); ++i ) {
+		for( int i = useBugHeuristic ? current.get( v ) :  residualGraph.getFirst( v ); i < residualGraph.getLast( v ); ++i ) {
 			relabelsSinceLastGlobalRelabel++;
-			final ResidualEdge e = residualEdges[i];
-			if( e.residualCapacity > 0 && distanceLabels.get( e.end() ) < minDistance ) {
+			final Edge e = residualGraph.getEdge( i );
+			if( residualGraph.getResidualCapacity( e ) > 0 && distanceLabels.get( e.end() ) < minDistance ) {
 				minDistance = distanceLabels.get( e.end() );
 				minEdge = e;
 			}
@@ -92,7 +93,6 @@ public class PushRelabelHighestLabelGlobalRelabelling extends PushRelabelHighest
 			distanceLabels.set( node, n );
 		distanceLabels.set( sink, 0 );
 
-		//addInactive( 0, sink );
 		inactiveBuckets.addInactive( 0, sink );
 		for( int curDist = 0; true; curDist++ ) {
 			final int curDistPlusOne = curDist+1;
@@ -131,13 +131,13 @@ public class PushRelabelHighestLabelGlobalRelabelling extends PushRelabelHighest
 					}
 
 				// scanning arcs incoming to a node (these are reverse arcs from outgoing arcs)
-				for( int i = first.get( node ); i < last.get( node ); ++i ) {
-					final ResidualEdge a = residualEdges[i];
-					if( a.reverse.residualCapacity > 0 ) {
+				for( int i = residualGraph.getFirst( node ); i < residualGraph.getLast( node ); ++i ) {
+					final Edge a = residualGraph.getEdge( i );
+					if( residualGraph.getResidualCapacity( residualGraph.getReverseEdge( a ) ) > 0 ) {
 						final Node j = a.end();
 						if( distanceLabels.get( j ) == n ) {
 							distanceLabels.set( j, curDistPlusOne );
-							current.set( j, first.get( j ) );
+							current.set( j, residualGraph.getFirst( j ) );
 							if( curDistPlusOne > activeBuckets.getdMax() )
 								activeBuckets.setdMax( curDistPlusOne );
 							if( excess.get( j ) > 0 ) // put into active list
@@ -154,6 +154,4 @@ public class PushRelabelHighestLabelGlobalRelabelling extends PushRelabelHighest
 	public int getGlobalRelabels() {
 		return globalRelabels;
 	}
-
-
 }

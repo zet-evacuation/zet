@@ -206,6 +206,7 @@ public class PushRelabelHighestLabel extends PushRelabel {
 	protected int push( ResidualEdge e ) {
 		pushes++;
 		final int delta = e.residualCapacity < excess.get( e.start() ) ? e.residualCapacity : excess.get( e.start() );
+//				System.out.println( "Augmenting " + e + " by " + delta );
 		e.residualCapacity -= delta;
 		e.reverse.residualCapacity += delta;
 
@@ -318,6 +319,7 @@ protected int relabel( Node v ) {
 								j = i;
 								while( true ) {
 									a = residualEdges[current.get( j )];
+//				System.out.println( "MF Augmenting " + a + " by " + delta );
 									a.residualCapacity -= delta;
 									a.reverse.residualCapacity += delta;
 									j = a.end();
@@ -374,6 +376,7 @@ protected int relabel( Node v ) {
 				while( excess.get( i ) > 0 ) {
 					if( (a.reverseEdge) && (a.residualCapacity > 0) ) {
 						final int delta = a.residualCapacity < excess.get( i ) ? a.residualCapacity : excess.get( i );
+//				System.out.println( "MF Augmenting " + a + " by " + delta );
 						a.residualCapacity -= delta;
 						a.reverse.residualCapacity += delta;
 						excess.decrease( i, delta );
@@ -389,7 +392,9 @@ protected int relabel( Node v ) {
 			while( excess.get( i ) > 0 ) {
 				if( (a.reverseEdge) && (a.residualCapacity > 0) ) {
 					final int delta = a.residualCapacity < excess.get( i ) ? a.residualCapacity : excess.get( i );
-					a.residualCapacity -= delta;
+//				System.out.println( "MF Augmenting " + a + " by " + delta );
+
+				a.residualCapacity -= delta;
 					a.reverse.residualCapacity += delta;
 					excess.decrease( i, delta );
 					excess.increase( a.end(), delta );
