@@ -7,6 +7,8 @@ package de.tu_berlin.math.coga.datastructure;
 
 /**
  *
+ * @param <U> 
+ * @param <V>
  * @author Jan-Philipp Kappmeier
  */
 public class Tupel<U,V> {
@@ -24,5 +26,10 @@ public class Tupel<U,V> {
 
 	public V getV() {
 		return v;
+	}
+
+	@Override
+	public String toString() {
+		return "(" +  u + ',' + v + ')';
 	}
 }
