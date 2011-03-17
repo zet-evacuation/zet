@@ -116,7 +116,7 @@ public class Floor implements Serializable, Cloneable, Iterable<Room>, ZFormatOb
 	void addRoom( Room room ) throws IllegalArgumentException {
 		try {
 			if( rooms.contains( room ) )
-				throw new IllegalArgumentException(ZLocalization.getSingleton ( ).getString ("ds.z.RoomAlreadyExistsException"));
+				throw new IllegalArgumentException( ZLocalization.getSingleton().getString( "ds.z.RoomAlreadyExistsException" ) + ": " + room.getName() );
 			rooms.add( room );
 			Collections.sort( rooms );
 		} catch( IllegalArgumentException ex ) {
