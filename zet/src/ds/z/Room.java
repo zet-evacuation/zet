@@ -77,7 +77,7 @@ public class Room extends BaseRoom<RoomEdge> implements Cloneable, Comparable<Ro
 	 * @param floor the floor containing the room
 	 */
 	public Room( Floor floor ) {
-		this( floor, "Room " + Integer.toString( floor.getRooms().size() ) );
+		this( floor, floor.getNewRoomName() );
 	}
 
 	/**

@@ -240,6 +240,22 @@ public class Floor implements Serializable, Cloneable, Iterable<Room>, ZFormatOb
 		return Collections.unmodifiableList( rooms );
 	}
 
+	public String getNewRoomName() {
+		int number = rooms.size();
+		String newName;
+		start:
+		do {
+			newName = "Room " + Integer.toString( number );
+			for( Room room : rooms )
+				if( room.getName().equals( newName ) ) {
+					number++;
+					continue start;
+				}
+			break;
+		} while( true );
+		return newName;
+	}
+
 	/**
 	 * Renames the floor. Must be taken care off that the floor can only takes a
 	 * name that has not been given to another floor.
