@@ -240,6 +240,13 @@ public class Floor implements Serializable, Cloneable, Iterable<Room>, ZFormatOb
 		return Collections.unmodifiableList( rooms );
 	}
 
+	/**
+	 * Creates a new room name of the form "Room #" where # is a number. If
+	 * possible, the number equals the number of rooms, such that rooms are
+	 * created in the order "Room 0, Room 1, ...". If the desired name is already
+	 * in use, the room with the lowest possible number is returned.
+	 * @return a possible name for a room on this floor
+	 */
 	public String getNewRoomName() {
 		int number = rooms.size();
 		String newName;
