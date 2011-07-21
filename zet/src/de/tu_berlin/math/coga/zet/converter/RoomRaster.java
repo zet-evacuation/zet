@@ -336,7 +336,15 @@ public class RoomRaster<T extends RoomRasterSquare> extends Raster<T, Room> {
 	 * Generates the stairPotential of RasterSquares for a single stair area.
 	 */
 	private void generateStair (StairArea stair) {
-		List<RoomRasterSquare> lowBlock = generateLowBlock (stair);
+		List<RoomRasterSquare> lowBlock = null;
+		try {
+			lowBlock = generateLowBlock (stair);
+		} catch( Exception e ) {
+			System.err.println( "Exception: " + e.getMessage() );
+			System.err.println( stair.toString() );
+			System.err.println( stair.getAssociatedRoom().toString() );
+			return;
+		}
 
 		List<RoomRasterSquare> aktList = new LinkedList<RoomRasterSquare> ();
 		List<RoomRasterSquare> nextList = new LinkedList<RoomRasterSquare> ();
@@ -369,7 +377,7 @@ public class RoomRaster<T extends RoomRasterSquare> extends Raster<T, Room> {
 		}
 	}
 
-	/** @return All neighbour squares of square c. */
+	/** @return All neighbor squares of square c. */
 	private ArrayList<RoomRasterSquare> getNeighbours (RoomRasterSquare c) {
 
 		int column = c.getColumn ();

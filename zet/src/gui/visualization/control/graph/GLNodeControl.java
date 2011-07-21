@@ -61,7 +61,6 @@ public class GLNodeControl extends AbstractZETVisualizationControl<GLFlowEdgeCon
 		xPosition = graphVisResult.getNodePositionMapping().get( node ).x * scaling;
 		yPosition = graphVisResult.getNodePositionMapping().get( node ).y * scaling;
 		capacity = graphVisResult.getNodeCapacities().get( node );
-		System.out.println( "Node coordinates: (" + xPosition + "," + yPosition + ")" );
 
 		final boolean showEdgesBetweenFloors = false;
 
