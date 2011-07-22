@@ -64,7 +64,7 @@ public class CellularAutomatonInOrderExecution extends EvacuationCellularAutomat
 				executeInitialization();
 			else {
 				executeStep();
-				int individualProgress = Math.min( 100 - (int)Math.round( ((double)ca.individualCount() / ca.individualCount()) * 100 ), 99 );
+				int individualProgress = Math.min( 100 - (int)Math.round( ((double)ca.getIndividualCount() / ca.getIndividualCount()) * 100 ), 99 );
 				int timeProgress = Math.min( (int)Math.round( (ca.getTimeStep() / getMaxTimeInSteps()) * 100 ), 99 );
 				AlgorithmTask.getInstance().publish( Math.max( individualProgress, timeProgress ), (ca.getInitialIndividualCount() - ca.getNotSafeIndividualsCount() - ca.deadIndividualsCount()) + " " + DefaultLoc.getSingleton().getString( "algo.ca.safe" ) + " " + ca.deadIndividualsCount() + " " + DefaultLoc.getSingleton().getString( "algo.ca.notSafe" ), DefaultLoc.getSingleton().getString( "algo.ca.execute" ) + " " + ca.getTimeStep() + ". " + DefaultLoc.getSingleton().getString( "algo.ca.step" ) );
 				if( (ca.getNotSafeIndividualsCount() == 0 && ca.getTimeStep() >= ca.getNeededTime()) || ca.getTimeStep() >= getMaxTimeInSteps() || isCancelled() )
@@ -75,7 +75,7 @@ public class CellularAutomatonInOrderExecution extends EvacuationCellularAutomat
 			executeInitialization();
 
 			// Execute loop rules
-			if( ca.individualCount() > 0 )
+			if( ca.getIndividualCount() > 0 )
 				AlgorithmTask.getInstance().publish( 0, ca.evacuatedIndividualsCount() + " " + DefaultLoc.getSingleton().getString( "algo.ca.IndividualEvacuated" ), DefaultLoc.getSingleton().getString( "algo.ca.execute" ) + " " + (ca.getTimeStep() + 1) + ". " + DefaultLoc.getSingleton().getString( "algo.ca.step" ) );
 			while( (ca.getNotSafeIndividualsCount() > 0 || ca.getTimeStep() < ca.getNeededTime()) && ca.getTimeStep() < getMaxTimeInSteps() && !isCancelled() ) {
 				if( isPaused() ) {
@@ -86,7 +86,7 @@ public class CellularAutomatonInOrderExecution extends EvacuationCellularAutomat
 					continue;
 				}
 				executeStep();
-				int individualProgress = Math.min( 100 - (int)Math.round( ((double)ca.individualCount() / ca.individualCount() ) * 100 ), 99 );
+				int individualProgress = Math.min( 100 - (int)Math.round( ((double)ca.getIndividualCount() / ca.getIndividualCount() ) * 100 ), 99 );
 				int timeProgress = Math.min( (int)Math.round( (ca.getTimeStep() / getMaxTimeInSteps()) * 100 ), 99 );
 				AlgorithmTask.getInstance().publish( Math.max( individualProgress, timeProgress ), (ca.getInitialIndividualCount() - ca.getNotSafeIndividualsCount() - ca.deadIndividualsCount()) + " " + DefaultLoc.getSingleton().getString( "algo.ca.safe" ) + " " + ca.deadIndividualsCount() + " " + DefaultLoc.getSingleton().getString( "algo.ca.notSafe" ), DefaultLoc.getSingleton().getString( "algo.ca.execute" ) + " " + ca.getTimeStep() + ". " + DefaultLoc.getSingleton().getString( "algo.ca.step" ) );
 			}
@@ -134,7 +134,7 @@ public class CellularAutomatonInOrderExecution extends EvacuationCellularAutomat
 
 		setInitialized( true );
 		initRulesPerformed = false;
-		if( ca.individualCount() == 0 )
+		if( ca.getIndividualCount() == 0 )
 			setFinished( true );
 	}
 

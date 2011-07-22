@@ -173,7 +173,7 @@ public class CellularAutomaton implements Iterable<Individual> {
 		VisualResultsRecorder.getInstance().startRecording();
 	}
 
-	public void stopRecording() {
+	final public void stopRecording() {
 		recordingStarted = false;
 		VisualResultsRecorder.getInstance().stopRecording();
 	}
@@ -211,7 +211,7 @@ public class CellularAutomaton implements Iterable<Individual> {
 	 * @param absoluteMaxSpeed
 	 * @throws java.lang.IllegalArgumentException if absoluteMaxSpeed is less or equal to zero
 	 */
-	public void setAbsoluteMaxSpeed( double absoluteMaxSpeed ) throws java.lang.IllegalArgumentException {
+	final public void setAbsoluteMaxSpeed( double absoluteMaxSpeed ) throws java.lang.IllegalArgumentException {
 		if( absoluteMaxSpeed <= 0 )
 			throw new java.lang.IllegalArgumentException( "Maximal speed must be greater than zero!" );
 		this.absoluteMaxSpeed = absoluteMaxSpeed;
@@ -278,7 +278,7 @@ public class CellularAutomaton implements Iterable<Individual> {
 	 * Returns the object which organizes all potentials
 	 * @return PotentialManager object
 	 */
-	public PotentialManager getPotentialManager() {
+	public final PotentialManager getPotentialManager() {
 		return potentialManager;
 	}
 
@@ -332,7 +332,7 @@ public class CellularAutomaton implements Iterable<Individual> {
 	 * @throws IllegalArgumentException if the the specific individual exits already in the list individuals
 	 * @throws IllegalStateException if an individual is added after the simulation has been startet.
 	 */
-	public void addIndividual( Cell c, Individual i ) throws IllegalArgumentException {
+	public final void addIndividual( Cell c, Individual i ) throws IllegalArgumentException {
 		if( this.state != State.ready )
 			throw new IllegalStateException( "Individual added after simulation has started." );
 		if( individuals.contains( i ) ) {
@@ -558,7 +558,7 @@ public class CellularAutomaton implements Iterable<Individual> {
 	 * @param room the Room object to be added
 	 * @throws IllegalArgumentException Is thrown if the the specific room exists already in the list rooms
 	 */
-	public void addRoom( Room room ) throws IllegalArgumentException {
+	final public void addRoom( Room room ) throws IllegalArgumentException {
 		if( rooms.containsKey( room ) ) {
 			throw new IllegalArgumentException( "Specified room exists already in list rooms." );
 		} else {
@@ -579,7 +579,6 @@ public class CellularAutomaton implements Iterable<Individual> {
 			} else {
 				exits.add( (ExitCell) cell );
 			}
-				
 				}
 			}
 			
@@ -734,10 +733,6 @@ public class CellularAutomaton implements Iterable<Individual> {
 			NotDeadIndividuals.add( i );
 		}
 		return NotDeadIndividuals;
-	}
-
-	public int individualCount() {
-		return individuals.size();
 	}
 
 	/**

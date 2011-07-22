@@ -44,7 +44,7 @@ public class CellularAutomatonTaskStepByStep extends Algorithm<Project, Void> {
 	public CellularAutomatonAlgorithm getCellularAutomatonAlgorithm() {
 		return cellularAutomatonAlgorithm;
 	}
-
+	
 	@Override
 	protected Void runAlgorithm( Project project ) {
 		// convert cellular automaton, if not provided already
@@ -78,25 +78,16 @@ public class CellularAutomatonTaskStepByStep extends Algorithm<Project, Void> {
 			}
 			caAlgo.run();
 			// fire event
-			double progress1 = 1-(double)cca.getCellularAutomaton().getNotSafeIndividualsCount()/cca.getCellularAutomaton().individualCount();
+			double progress1 = (double)(cca.getCellularAutomaton().getInitialIndividualCount()-cca.getCellularAutomaton().getNotSafeIndividualsCount())/cca.getCellularAutomaton().getInitialIndividualCount();
 			double progress2 = cca.getCellularAutomaton().getTimeStep()/caAlgo.getMaxTimeInSteps();
+			
 			this.fireProgressEvent( Math.max( progress2, progress1 ) );
 		}
-
-		//caAlgo.run();	// hier wird initialisiert
-		//caAlgo.getCellularAutomaton().stopRecording();
-
-		// create results
-		//CAVisualizationResults visResults = new CAVisualizationResults( mapping, ca.getPotentialManager() );
-		// TODO visualResultsRecorder normal class, no singleton.
-		//CAVisualizationResults visResults = new CAVisualizationResults( VisualResultsRecorder.getInstance().getRecording(), mapping );
-
-		//return visResults;
 		return null;
 	}
 
 	public CellularAutomaton getCa() {
-		return cca.getCellularAutomaton();
+		return cca == null ? null : cca.getCellularAutomaton();
 	}
 
 	public ZToCARasterContainer getContainer() {

@@ -58,8 +58,8 @@ public class CARealTime extends CellularAutomatonInOrderExecution {
 				end = System.currentTimeMillis();
 			} else
 				end = start;
-			int individuals = ca.individualCount();
-			if( ca.individualCount() > 0 ) {
+			int individuals = ca.getIndividualCount();
+			if( ca.getIndividualCount() > 0 ) {
 				AlgorithmTask.getInstance().publish( 0, ca.evacuatedIndividualsCount() + " Individuen sicher", "Führe " + (ca.getTimeStep() + 1) + ". Schritt durch..." );
 			}
 			long wait = stepTime - (end - start);
@@ -77,7 +77,7 @@ public class CARealTime extends CellularAutomatonInOrderExecution {
 				start = System.currentTimeMillis();
 				executeStep();
 				end = System.currentTimeMillis();
-				AlgorithmTask.getInstance().publish( 100 - (int) ((ca.individualCount() / (float) individuals) * 100), ca.getInitialIndividualCount() - ca.getNotSafeIndividualsCount() - ca.deadIndividualsCount() + " Individuen sicher, " + ca.deadIndividualsCount() + " Individuen nicht sicher", "Führe " + ca.getTimeStep() + ". Schritt durch..." );
+				AlgorithmTask.getInstance().publish( 100 - (int) ((ca.getIndividualCount() / (float) individuals) * 100), ca.getInitialIndividualCount() - ca.getNotSafeIndividualsCount() - ca.deadIndividualsCount() + " Individuen sicher, " + ca.deadIndividualsCount() + " Individuen nicht sicher", "Führe " + ca.getTimeStep() + ". Schritt durch..." );
 				wait = stepTime - (end - start);
 				if( wait > 0 ) {
 					try {

@@ -389,8 +389,8 @@ public abstract class Algorithm<Problem, Solution> implements Runnable {
 	 * @param exception the exception that caused the termination of the algorithm.
 	 */
 	protected void handleException( RuntimeException exception ) {
-		System.out.println( "Exception handler" );
-		//exception.printStackTrace( System.err );
+		System.err.println( "Exception handler" );
+		exception.printStackTrace( System.err );
 		throw exception;
 	}
 

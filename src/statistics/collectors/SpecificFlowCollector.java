@@ -60,7 +60,7 @@ public class SpecificFlowCollector {
 
 		// ignore moves by more than one cell (teleportations)
 		if( Math.abs( start.getX() - end.getX() ) > 1 || Math.abs( start.getY() - end.getY() ) > 1 )  {
-			System.out.println( "Teleport ignored" );
+			//System.out.println( "Teleport ignored" );
 			return;
 		}
 
