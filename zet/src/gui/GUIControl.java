@@ -1136,7 +1136,7 @@ public class GUIControl implements AlgorithmListener {
 	public void performQuickVisualization() {
 		//createBuildingDataStructure();
 		System.out.println( "QUICK" );
-		algorithmControl.performSimulationA( new PropertyChangeListener() {
+		algorithmControl.performSimulationQuick( new PropertyChangeListener() {
 			@Override
 			public void propertyChange( PropertyChangeEvent pce ) {
 				System.out.println( "Property Change Event" );
@@ -1151,19 +1151,37 @@ public class GUIControl implements AlgorithmListener {
 
 	boolean init = false;
 
+	public void pauseSimulation() {
+		algorithmControl.pauseStepByStep();
+	}
+	
 	public void performOneStep() {
-		boolean initialized = false;
+		final AlgorithmListener listener = this;
 		try {
-			initialized = algorithmControl.performOneStep();
+			algorithmControl.performOneStep( new PropertyChangeListener() {
+				private boolean first = true;
+				@Override
+				public void propertyChange( PropertyChangeEvent pce ) {
+					if( first ) {
+						while( algorithmControl.getCellularAutomaton() == null ) {
+							try {
+								Thread.sleep( 100 );
+							} catch( InterruptedException ex ) {
+								Logger.getLogger( AlgorithmControl.class.getName() ).log( Level.SEVERE, null, ex );
+							}
+						}
+						editor.getQuickVisualizationView().getLeftPanel().getMainComponent().setSimulationData( algorithmControl.getCellularAutomaton(), algorithmControl.getContainer(), algorithmControl.getMapping() );
+						editor.getQuickVisualizationView().displayFloor( editview.getCurrentFloor() );
+						editor.getQuickVisualizationView().getLeftPanel().getMainComponent().update();
+					} else {
+						editor.getQuickVisualizationView().getLeftPanel().getMainComponent().update();
+					}
+				}
+
+		}, listener );
 		} catch( ConversionNotSupportedException ex ) {
-			Logger.getLogger( GUIControl.class.getName() ).log( Level.SEVERE, null, ex );
+			ex.printStackTrace( System.err );
 		}
-		if( initialized ) {
-					editor.getQuickVisualizationView().getLeftPanel().getMainComponent().setSimulationData( algorithmControl.getCellularAutomaton(), algorithmControl.getContainer(), algorithmControl.getMapping() );
-			editor.getQuickVisualizationView().displayFloor( editview.getCurrentFloor() );
-			editor.getQuickVisualizationView().getLeftPanel().getMainComponent().update();
-		} else
-			editor.getQuickVisualizationView().getLeftPanel().getMainComponent().update();
 	}
 
 	public void createGraph() {

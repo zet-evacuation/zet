@@ -29,7 +29,6 @@ import java.util.List;
  * @author Jan-Philipp Kappmeier
  */
 public abstract class EvacuationCellularAutomatonAlgorithm implements CellularAutomatonAlgorithm {
-
 	protected CAController caController;
 	protected CellularAutomaton ca;
 	protected RuleSet rs;

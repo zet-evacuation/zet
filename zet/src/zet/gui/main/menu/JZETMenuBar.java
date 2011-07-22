@@ -374,7 +374,7 @@ public class JZETMenuBar extends JMenuBar implements ActionListener, Localized {
 		} else if( e.getActionCommand().equals( "startSimulation" ) ) {
 			control.performSimulation();
 		} else if( e.getActionCommand().equals( "visualizationPause" ) ) {
-
+			control.pauseSimulation();
 		} else if( e.getActionCommand().equals( "stepByStepSimulation" ) ) {
 			control.performOneStep();
 		} else if( e.getActionCommand().equals( "EAT" ) ) {
