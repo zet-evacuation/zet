@@ -54,6 +54,7 @@ import opengl.helper.TextureManager;
  * @param <U> the object that is visualized
  * @author Jan-Philipp Kappmeier
  */
+@SuppressWarnings( "serial" )
 public class Visualization<U extends DrawableControlable> extends AbstractVisualization {
 	public enum RecordingMode {
 		Recording,

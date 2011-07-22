@@ -198,6 +198,7 @@ public class AlgorithmControl implements PropertyChangeListener {
 			@Override
 			public void propertyChange( PropertyChangeEvent pce ) {
 				if( first ) {
+					System.out.println( "Received event:" + pce.getPropertyName() );
 					while( cat.getCa() == null ) {
 						try {
 							Thread.sleep( 100 );
