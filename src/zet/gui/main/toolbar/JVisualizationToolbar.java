@@ -35,6 +35,7 @@ import zet.gui.GUILocalization;
  *
  * @author Jan-Philipp Kappmeier
  */
+@SuppressWarnings( "serial" )
 public class JVisualizationToolbar extends JToolBar implements ActionListener {
 	private final GUIControl control;
 	/** The localization class. */
@@ -167,6 +168,7 @@ public class JVisualizationToolbar extends JToolBar implements ActionListener {
 		loc.setPrefix( "" );
 	}
 
+	@Override
 	public void actionPerformed( ActionEvent e ) {
 		if( e.getActionCommand().equals( "exit" ) ) {
 			// quits the program

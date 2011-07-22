@@ -210,6 +210,7 @@ public class Visualization<U extends DrawableControlable> extends AbstractVisual
 	 */
 	@Override
 	final public void animate() {
+		super.animate();
 		computeFPS();
 		control.addTime( getDeltaTime() );
 	}
