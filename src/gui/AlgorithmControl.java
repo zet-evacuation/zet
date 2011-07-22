@@ -54,8 +54,9 @@ public class AlgorithmControl implements PropertyChangeListener {
 	private NetworkFlowModel networkFlowModel;
 	private GraphVisualizationResults graphVisResults;
 	private final CellularAutomatonTask cat = new CellularAutomatonTask();
-	private boolean createdValid = false;
+	//private boolean createdValid = false;
 	private RuntimeException error;
+	private CellularAutomatonTaskStepByStep catsbs;
 
 
 	public AlgorithmControl( Project project ) {
@@ -115,17 +116,16 @@ public class AlgorithmControl implements PropertyChangeListener {
 
 		final SerialTask st = new SerialTask( conv );
 		st.addPropertyChangeListener( new PropertyChangeListener() {
-
 			@Override
 			public void propertyChange( PropertyChangeEvent pce ) {
 				if( st.isDone() ) {
 					if( st.isError() ) {
 						error = st.getError();
-					} else  {
+					} else {
 						cellularAutomaton = conv.getCellularAutomaton();
 						mapping = conv.getMapping();
 						container = conv.getContainer();
-						createdValid = true;
+						caInitialized = true;
 					}
 				}
 			}
@@ -137,7 +137,7 @@ public class AlgorithmControl implements PropertyChangeListener {
 	}
 
 	public void invalidateConvertedCellularAutomaton() {
-		createdValid = false;
+		caInitialized = false;
 	}
 
 	public CellularAutomaton getCellularAutomaton() {
@@ -178,48 +178,15 @@ public class AlgorithmControl implements PropertyChangeListener {
 		st.execute();
 	}
 
-	void performSimulationA( PropertyChangeListener propertyChangeListener, AlgorithmListener listener ) {
+	void performSimulationQuick( PropertyChangeListener propertyChangeListener, AlgorithmListener listener ) {
 		//final CellularAutomatonTask cat = new CellularAutomatonTask();
-		final CellularAutomatonTaskStepByStep cat;
-		if( createdValid ) {
-			System.out.println( "DO not convert automaton, already exists." );
-			cat = new CellularAutomatonTaskStepByStep( new ConvertedCellularAutomaton( cellularAutomaton, mapping, container ) );
-		} else
-			cat = new CellularAutomatonTaskStepByStep();
-
-		cat.setCaAlgo( CellularAutomatonAlgorithm.InOrder );
-		cat.setProblem( project );
-		cat.addAlgorithmListener( listener );
-
-		final SerialTask st = new SerialTask( cat );
-		st.addPropertyChangeListener( new PropertyChangeListener() {
-			private boolean first = true;
-
-			@Override
-			public void propertyChange( PropertyChangeEvent pce ) {
-				if( first ) {
-					System.out.println( "Received event:" + pce.getPropertyName() );
-					while( cat.getCa() == null ) {
-						try {
-							Thread.sleep( 100 );
-						} catch( InterruptedException ex ) {
-							Logger.getLogger( AlgorithmControl.class.getName() ).log( Level.SEVERE, null, ex );
-						}
-					}
-					cellularAutomaton = cat.getCa();
-					mapping = cat.getMapping();
-					container = cat.getContainer();
-					caVisResults = null;
-					first = false;
-				}
-			}
-		});
-		if( propertyChangeListener != null )
-			st.addPropertyChangeListener( propertyChangeListener );
-
-		System.out.println( "Start slow execution..." );
-
-		st.execute();
+		
+		if( catsbs == null ) {
+			initStepByStep( propertyChangeListener, listener, false );
+			System.out.println( "Start slow execution..." );
+		} else {
+			catsbs.setStopMode( false );
+		}
 	}
 
 	public CAVisualizationResults getCaVisResults() {
@@ -246,25 +213,65 @@ public class AlgorithmControl implements PropertyChangeListener {
 
 	private boolean caInitialized = false;
 
-	boolean performOneStep() throws ConversionNotSupportedException {
-		if( !caInitialized ) {
-			final ZToCAConverter conv = new ZToCAConverter( project );
-			conv.run();
-			cellularAutomaton = conv.getCellularAutomaton();
-			mapping = conv.getMapping();
-			container = conv.getContainer();
-			createConcreteAssignment();
-			setUpSimulationAlgorithm();
-			caAlgo.setStepByStep( true );
-			caAlgo.initialize();
-			caInitialized = true;
-			return true;
+	void pauseStepByStep() {
+		if( catsbs != null )
+			catsbs.setStopMode( true );
+	}
+	
+	void performOneStep( PropertyChangeListener propertyChangeListener, AlgorithmListener listener ) throws ConversionNotSupportedException {
+		if( catsbs == null ) {			
+			initStepByStep( propertyChangeListener, listener, true );
 		} else {
-			caAlgo.run();
-			if( caAlgo.isFinished() )
-				caInitialized = false;
-			return false;
+			catsbs.setStopMode( true );
+			catsbs.setPerformOneStep( true );
 		}
+	}
+	
+	private void initStepByStep( PropertyChangeListener propertyChangeListener, AlgorithmListener listener, boolean stopMode ) {
+			if( caInitialized ) {
+				System.out.println( "Do not convert automaton, already exists." );
+				catsbs = new CellularAutomatonTaskStepByStep( new ConvertedCellularAutomaton( cellularAutomaton, mapping, container ) );
+			} else
+				catsbs = new CellularAutomatonTaskStepByStep();
+				//return; // no auto-create so far
+			catsbs.setCaAlgo( CellularAutomatonAlgorithm.InOrder );
+			catsbs.setProblem( project );
+			if( stopMode ) {
+				catsbs.setStopMode( true );
+				catsbs.setPerformOneStep( true );
+			}
+			catsbs.addAlgorithmListener( listener );
+			final SerialTask st = new SerialTask( catsbs );
+			st.addPropertyChangeListener( new PropertyChangeListener() {
+				private boolean first = true;
+				@Override
+				public void propertyChange( PropertyChangeEvent pce ) {
+					if( first ) {
+						System.out.println( "Received event:" + pce.getPropertyName() );
+						while( catsbs.getCa() == null ) {
+							try {
+								Thread.sleep( 100 );
+							} catch( InterruptedException ex ) {
+								Logger.getLogger( AlgorithmControl.class.getName() ).log( Level.SEVERE, null, ex );
+							}
+						}
+						cellularAutomaton = catsbs.getCa();
+						mapping = catsbs.getMapping();
+						container = catsbs.getContainer();
+						caVisResults = null;
+						first = false;
+						// todo: invalidate
+						// invalidateConvertedCellularAutomaton();
+					}
+					if( st.isDone() ) {
+						catsbs = null;
+						//caInitialized = false;
+					}
+				}
+			});
+			if( propertyChangeListener != null )
+				st.addPropertyChangeListener( propertyChangeListener );
+			st.execute();
 	}
 
 	@Override

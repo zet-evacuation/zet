@@ -28,6 +28,9 @@ public class CellularAutomatonTaskStepByStep extends Algorithm<Project, Void> {
 	private boolean performConversion = true;
 	private ConvertedCellularAutomaton cca;// = new ConvertedCellularAutomaton( ca, mapping, container );
 
+	private boolean performOneStep;
+	private boolean stopMode = false;
+	
 	public CellularAutomatonTaskStepByStep() {
 		super();
 	}
@@ -53,6 +56,7 @@ public class CellularAutomatonTaskStepByStep extends Algorithm<Project, Void> {
 			conv.setProblem( project.getBuildingPlan() );
 			conv.run();
 			cca = new ConvertedCellularAutomaton( conv.getCellularAutomaton(), conv.getMapping(), conv.getContainer() );
+			System.out.println( "CCA created" );
 		}
 
 		// create and convert concrete assignment
@@ -76,12 +80,20 @@ public class CellularAutomatonTaskStepByStep extends Algorithm<Project, Void> {
 				Thread.sleep( 500 );
 			} catch( InterruptedException ignore ) {
 			}
-			caAlgo.run();
-			// fire event
-			double progress1 = (double)(cca.getCellularAutomaton().getInitialIndividualCount()-cca.getCellularAutomaton().getNotSafeIndividualsCount())/cca.getCellularAutomaton().getInitialIndividualCount();
-			double progress2 = cca.getCellularAutomaton().getTimeStep()/caAlgo.getMaxTimeInSteps();
-			
-			this.fireProgressEvent( Math.max( progress2, progress1 ) );
+			if( !stopMode ) {
+				caAlgo.run();
+				// fire event
+				double progress1 = (double)(cca.getCellularAutomaton().getInitialIndividualCount()-cca.getCellularAutomaton().getNotSafeIndividualsCount())/cca.getCellularAutomaton().getInitialIndividualCount();
+				double progress2 = cca.getCellularAutomaton().getTimeStep()/caAlgo.getMaxTimeInSteps();
+
+				this.fireProgressEvent( Math.max( progress2, progress1 ) );
+			} else {
+				// stop mode. Do nothing except oneStep is true
+				if( performOneStep ) {
+					caAlgo.run();
+					performOneStep = false;
+				}
+			}
 		}
 		return null;
 	}
@@ -96,5 +108,13 @@ public class CellularAutomatonTaskStepByStep extends Algorithm<Project, Void> {
 
 	public ZToCAMapping getMapping() {
 		return cca.getMapping();
+	}
+
+	public void setPerformOneStep( boolean performOneStep ) {
+		this.performOneStep = performOneStep;
+	}
+
+	public void setStopMode( boolean stopMode ) {
+		this.stopMode = stopMode;
 	}
 }
