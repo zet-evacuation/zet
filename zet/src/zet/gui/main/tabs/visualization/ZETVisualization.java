@@ -78,6 +78,7 @@ public class ZETVisualization extends Visualization<GLControl> implements EventL
 		//showFPS = PropertyContainer.getInstance().getAsBoolean( "options.visualization.elements.fps" );
 		//showTimestepGraph = PropertyContainer.getInstance().getAsBoolean( "options.visualization.elements.timestepGraph" );
 		//showTimestepCellularAutomaton = PropertyContainer.getInstance().getAsBoolean( "options.visualization.elements.timestepCA" );
+		//System.out.println( "display" );
 		super.display( drawable );
 	}
 

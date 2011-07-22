@@ -265,13 +265,13 @@ public class GUIControl implements AlgorithmListener {
 			// TODO BUG: wenn ein projekt noch nicht gespeichert worden ist, liefert das hier iene null pointer exception. (tritt auf, wenn ein video gedreht werden soll)
 			String projectName = zcontrol.getProject().getProjectFile().getName().substring( 0, zcontrol.getProject().getProjectFile().getName().length() - 4 );
 			MovieManager movieCreator = visualization.getMovieCreator();
-			if( movieFrameName.equals( "" ) )
+			if( movieFrameName.isEmpty(  ) )
 				movieCreator.setFramename( projectName );
 			else
 				movieCreator.setFramename( movieFrameName );
 			String path = PropertyContainer.getInstance().getAsString( "options.filehandling.moviePath" );
 			if( !(path.endsWith( "/" ) || path.endsWith( "\\" )) )
-				path = path + "/";
+				path += "/";
 			String movieFileName = IOTools.getNextFreeNumberedFilename( path, projectName, 3 );
 			movieCreator.setFilename( movieFileName );
 			movieCreator.setPath( PropertyContainer.getInstance().getAsString( "options.filehandling.moviePath" ) );
@@ -296,7 +296,7 @@ public class GUIControl implements AlgorithmListener {
 	public void takeScreenshot() {
 		String path = PropertyContainer.getInstance().getAsString( "options.filehandling.screenshotPath" );
 		if( !(path.endsWith( "/" ) || path.endsWith( "\\" )) )
-			path = path + "/";
+			path += "/";
 		String projectName;
 		try {
 			projectName = zcontrol.getProject().getProjectFile().getName().substring( 0, zcontrol.getProject().getProjectFile().getName().length() - 4 );
@@ -327,6 +327,7 @@ public class GUIControl implements AlgorithmListener {
 //					visualization.getControl().resetTime();
 //					restartVisualization = false;
 //				}
+		System.out.println( "animation started" );
 		if( visualization.isAnimating() ) {
 			visualizationToolBar.pause();
 			//btnPlay.setIcon( playIcon );
@@ -749,8 +750,8 @@ public class GUIControl implements AlgorithmListener {
 	 * user interface.
 	 * @param toDelete
 	 */
-	public void deletePolygon( List<PlanPolygon> toDelete ) {
-		for( PlanPolygon p : toDelete )
+	public void deletePolygon( List<PlanPolygon<?>> toDelete ) {
+		for( PlanPolygon<?> p : toDelete )
 			zcontrol.deletePolygon( p );
 		editview.getLeftPanel().getMainComponent().displayFloor();
 	}
@@ -1030,7 +1031,7 @@ public class GUIControl implements AlgorithmListener {
 		editview.changeFloor( floor );
 	}
 
-	public void showPolygon( PlanPolygon room ) {
+	public void showPolygon( PlanPolygon<?> room ) {
 		editview.getFloor().showPolygon( room );
 	}
 
@@ -1038,7 +1039,7 @@ public class GUIControl implements AlgorithmListener {
 
 	}
 
-	public void setSelectedPolygon( PlanPolygon poly ) {
+	public void setSelectedPolygon( PlanPolygon<?> poly ) {
 		editview.getFloor().setSelectedPolygon( poly );
 	}
 
@@ -1046,6 +1047,7 @@ public class GUIControl implements AlgorithmListener {
 	public void createBuildingDataStructure() {
 		algorithmControl.convertBuildingPlan( new PropertyChangeListener() {
 
+			@Override
 			public void propertyChange( PropertyChangeEvent pce ) {
 				if( isDone( pce ) )
 					visualization.getControl().setBuildingControl( algorithmControl.getBuildingResults() );
@@ -1123,11 +1125,13 @@ public class GUIControl implements AlgorithmListener {
 			@Override
 			public void propertyChange( PropertyChangeEvent pce ) {
 				if( isDone( pce ) ) {
+					System.out.println( "Left individuals: " + algorithmControl.getCellularAutomaton().getIndividualCount() );
 					visualization.getControl().setCellularAutomatonControl( algorithmControl.getCaVisResults(), algorithmControl.getCellularAutomaton() );
 					editor.getVisualizationView().updatePotentialSelector();
 					visualizationToolBar.setEnabledPlayback( true );
 					editor.getQuickVisualizationView().getLeftPanel().getMainComponent().setSimulationData( algorithmControl.getCellularAutomaton(), algorithmControl.getContainer(), algorithmControl.getMapping() );
 					editor.getQuickVisualizationView().displayFloor( editview.getCurrentFloor() ); // hier startet ein task!
+					System.out.println( "Simulation beendet." );
 				}
 			}
 		} );
@@ -1187,6 +1191,7 @@ public class GUIControl implements AlgorithmListener {
 	public void createGraph() {
 		algorithmControl.convertGraph( new PropertyChangeListener() {
 
+			@Override
 			public void propertyChange( PropertyChangeEvent pce ) {
 				if( isDone( pce ) ) {
 					GraphVisualizationResults gvr = new GraphVisualizationResults( algorithmControl.getNetworkFlowModel() );
@@ -1199,6 +1204,7 @@ public class GUIControl implements AlgorithmListener {
 	public void performOptimization() {
 		algorithmControl.performOptimization( new PropertyChangeListener() {
 
+			@Override
 			public void propertyChange( PropertyChangeEvent pce ) {
 				if( isDone( pce ) ) {
 					GraphVisualizationResults gvr = algorithmControl.getGraphVisResults();
@@ -1286,6 +1292,7 @@ public class GUIControl implements AlgorithmListener {
 	 * 
 	 */
 	protected PropertyChangeListener pcl = new PropertyChangeListener() {
+		@Override
 		public void propertyChange( PropertyChangeEvent evt ) {
 			if( evt.getPropertyName().equals( "progress" ) ) {
 				int progress = (Integer) evt.getNewValue();
