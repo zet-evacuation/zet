@@ -20,7 +20,7 @@
 package de.tu_berlin.math.coga.zet.converter;
 
 import batch.tasks.AlgorithmTask;
-import converter.graph.ZToGraphConverter;
+import old.ZToGraphConverter;
 import de.tu_berlin.math.coga.common.localization.DefaultLoc;
 import de.tu_berlin.math.coga.zet.converter.graph.ZToGraphRoomRaster;
 import de.tu_berlin.math.coga.zet.converter.graph.ZToGraphRasteredDoor;

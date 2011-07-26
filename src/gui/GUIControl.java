@@ -1199,6 +1199,8 @@ public class GUIControl implements AlgorithmListener {
 				}
 			}
 		});
+		GraphVisualizationResults gvr = new GraphVisualizationResults( algorithmControl.getNetworkFlowModel() );	
+		visualization.getControl().setGraphControl( gvr );
 	}
 
 	public void performOptimization() {

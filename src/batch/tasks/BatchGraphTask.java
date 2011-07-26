@@ -22,7 +22,7 @@ package batch.tasks;
 import batch.BatchResultEntry;
 import batch.GraphAlgorithm;
 import batch.tasks.graph.SuccessiveEarliestArrivalAugmentingPathAlgorithmTask3;
-import converter.graph.ZToGraphConverter;
+import old.ZToGraphConverter;
 import de.tu_berlin.math.coga.common.algorithm.Algorithm;
 import de.tu_berlin.math.coga.common.algorithm.AlgorithmListener;
 import ds.z.Project;

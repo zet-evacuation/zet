@@ -1075,7 +1075,7 @@ public class JFloor extends AbstractFloor implements EventListener<ZModelChanged
 					break;
 				case KeyEvent.VK_DELETE:
 					if( !selectedPolygons.isEmpty() ) {
-						List<PlanPolygon> toDelete = new LinkedList<PlanPolygon>();
+						List<PlanPolygon<?>> toDelete = new LinkedList<PlanPolygon<?>>();
 						for( JPolygon sel : selectedPolygons )
 							toDelete.add( sel.getPlanPolygon() );
 						guiControl.deletePolygon( toDelete );

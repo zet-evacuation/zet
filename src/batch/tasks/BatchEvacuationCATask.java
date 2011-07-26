@@ -28,7 +28,7 @@ import algo.ca.EvacuationSwapCellularAutomatonInOrder;
 import batch.BatchResultEntry;
 import batch.CellularAutomatonAlgorithm;
 import batch.GraphAlgorithm;
-import converter.graph.ZToGraphConverter;
+import old.ZToGraphConverter;
 import de.tu_berlin.math.coga.zet.converter.cellularAutomaton.ZToCAConverter.ConversionNotSupportedException;
 import de.tu_berlin.math.coga.common.algorithm.Algorithm;
 import ds.z.Project;
