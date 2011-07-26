@@ -33,7 +33,7 @@ import java.util.logging.Logger;
 import algo.graph.exitassignment.ExitAssignment;
 import algo.graph.exitassignment.ShortestPathExitAssignment;
 import de.tu_berlin.math.coga.zet.converter.graph.GraphAssignmentConverter;
-import converter.graph.ZToGraphConverter;
+import old.ZToGraphConverter;
 import de.tu_berlin.math.coga.zet.converter.graph.ZToNonGridGraphConverter;
 import ds.z.Project;
 import ds.PropertyContainer;

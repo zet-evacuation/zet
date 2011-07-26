@@ -17,11 +17,9 @@
  * ZToGraphRasterSquare.java
  * 
  */
-
 package de.tu_berlin.math.coga.zet.converter.graph;
 
 import de.tu_berlin.math.coga.zet.converter.RoomRasterSquare;
-import de.tu_berlin.math.coga.zet.converter.RoomRasterSquare.Property;
 import ds.graph.Node;
 import ds.z.AssignmentArea;
 import ds.z.Room;
@@ -33,23 +31,20 @@ import ds.z.Room;
  * used to define a mapping of raster squares to nodes in a graph.
  */
 public class ZToGraphRasterSquare extends RoomRasterSquare {
-
 	/**
 	 * The node this raster square is mapped to.
 	 */
 	private Node node = null;
-	
 	/**
 	 * Private boolean flag telling whether there 
 	 * could be people on this square.
 	 */
 	private boolean isSource;
-	
 	/**
 	 * A marker to mark processed raster squares.
 	 */
 	private boolean marked = false;
-	
+
 	/**
 	 * Creates a new {@code RasterSquare} connected to the room it lies in
 	 * and to a matrix that represents this room and includes this square.
@@ -60,97 +55,91 @@ public class ZToGraphRasterSquare extends RoomRasterSquare {
 	 * @param raster the width / height of the square.
 	 */
 	public ZToGraphRasterSquare( Room r, int column, int row, int raster ) {
-		super(r, column, row, raster);
+		super( r, column, row, raster );
 	}
-	
+
 	/**
 	 * Sets the node this square is mapped to.
 	 * @param node the node this square is mapped to.
 	 */
-	public void setNode(Node node){
+	public void setNode( Node node ) {
 		this.node = node;
 	}
-	
+
 	/**
 	 * Returns the node this square is mapped to.
 	 * @return the node this square is mapped to.
 	 */
-	public Node getNode(){
+	public Node getNode() {
 		return node;
 	}
-	
+
 	@Override
-    /**
-     * Returns the speed factor of this square. The speed factor describes how fast
-     * the square can be traversed (averaged). It lies between zero and one and is 
-     * one if the square has no delay factor.
-     */
-	public double getSpeedFactor(){
+	/**
+	 * Returns the speed factor of this square. The speed factor describes how fast
+	 * the square can be traversed (averaged). It lies between zero and one and is 
+	 * one if the square has no delay factor.
+	 */
+	public double getSpeedFactor() {
 		return super.getSpeedFactor();
 	}
-	
+
 	/**
-	 * Returns whether (the majority of) this square is accessible in the original 
-	 * Z-Plan. 
-	 * @return whether (the majority of) this square is accessible in the original 
-	 * Z-Plan. 
+	 * Returns whether (the majority of) this square is accessible in the original Z-Plan. 
+	 * @return whether (the majority of) this square is accessible in the original Z-Plan. 
 	 */
-	public boolean isAccessible(){
+	public boolean isAccessible() {
 		return super.accessible();
-	}	
-	
+	}
+
 	/**
-	 * Returns the {@code x}-coordinate of the upper left corner of
-	 * this raster square in the global coordinate system.
-	 * @return the {@code x}-coordinate of the upper left corner of
-	 *         this raster in the global coordinate system.
+	 * Returns the {@code x}-coordinate of the upper left corner of this raster square in the global coordinate system.
+	 * @return the {@code x}-coordinate of the upper left corner of this raster in the global coordinate system.
 	 */
 	public int getXOffset() {
 		return super.getX();
 	}
-	
+
 	/**
-	 * Returns the {@code y}-coordinate of the upper left corner of
-	 * this raster square in the global coordinate system.
-	 * @return the {@code y}-coordinate of the upper left corner of
-	 *         this raster in the global coordinate system.
+	 * Returns the {@code y}-coordinate of the upper left corner of this raster square in the global coordinate system.
+	 * @return the {@code y}-coordinate of the upper left corner of this raster in the global coordinate system.
 	 */
-	public int getYOffset(){
+	public int getYOffset() {
 		return super.getY();
 	}
-	
+
 	/**
 	 * Returns whether this raster square is marked.
 	 * @return whether this raster square is marked.
 	 */
-	   public boolean isMarked(){
+	public boolean isMarked() {
 		return marked;
 	}
-	
+
 	/**
 	 * Marks this raster square.
 	 */
-	   public void mark(){
+	public void mark() {
 		marked = true;
 	}
-	
+
 	/**
 	 * Unmarks this raster square.
 	 */
-	   public void unmark(){
+	public void unmark() {
 		marked = false;
 	}
-	
+
 	/**
 	 * Needed for support of the {@code isSquare}
 	 * boolean flag.
 	 */
 	@Override
-	protected void callAtConstructorStart(){
+	protected void callAtConstructorStart() {
 		super.callAtConstructorStart();
 		isSource = false;
 	}
-	
+
 	/**
 	 * Adds the information about sources
 	 * to the raster square.
@@ -159,17 +148,15 @@ public class ZToGraphRasterSquare extends RoomRasterSquare {
 	protected void check() {
 		super.check();
 		Room r = (Room) getPolygon();
-		for (AssignmentArea assignmentArea : r.getAssignmentAreas()) {
-			isSource = isSource || (accessible() && assignmentArea.contains(this.getSquare()));
-		}
+		for( AssignmentArea assignmentArea : r.getAssignmentAreas() )
+			isSource = isSource || (accessible() && assignmentArea.contains( this.getSquare() ));
 	}
-	
+
 	/**
 	 * Returns whether there can be people on this square.
 	 * @return whether there can be people on this square.
 	 */
-	   public  boolean isSource(){
+	public boolean isSource() {
 		return isSource;
 	}
-
 }

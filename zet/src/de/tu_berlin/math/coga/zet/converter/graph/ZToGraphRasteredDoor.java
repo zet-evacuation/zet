@@ -22,20 +22,18 @@ package de.tu_berlin.math.coga.zet.converter.graph;
  * (actually these doors would be teleport edges ;-)). 
  */
 public class ZToGraphRasteredDoor {
-	
 	ZToGraphRasterSquare first, second;
-	
-	public ZToGraphRasteredDoor(ZToGraphRasterSquare first, ZToGraphRasterSquare second){
+
+	public ZToGraphRasteredDoor( ZToGraphRasterSquare first, ZToGraphRasterSquare second ) {
 		this.first = first;
 		this.second = second;
 	}
-	
-	public ZToGraphRasterSquare getFirstDoorPart(){
+
+	public ZToGraphRasterSquare getFirstDoorPart() {
 		return first;
 	}
-	
-	public ZToGraphRasterSquare getSecondDoorPart(){
+
+	public ZToGraphRasterSquare getSecondDoorPart() {
 		return second;
 	}
-	
 }

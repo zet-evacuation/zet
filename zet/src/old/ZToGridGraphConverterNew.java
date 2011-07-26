@@ -17,16 +17,11 @@
  * ZToGraphConverter.java
  *
  */
-package de.tu_berlin.math.coga.zet.converter.graph;
+package old;
 
-
-import algo.graph.util.GraphInstanceChecker;
 import de.tu_berlin.math.coga.common.localization.DefaultLoc;
 import de.tu_berlin.math.coga.zet.converter.RasterContainerCreator;
-import de.tu_berlin.math.coga.common.util.Direction;
-import de.tu_berlin.math.coga.common.util.Level;
-import static de.tu_berlin.math.coga.common.util.Direction.*;
-import static de.tu_berlin.math.coga.common.util.Level.*;
+import algo.graph.util.GraphInstanceChecker;
 import ds.PropertyContainer;
 import ds.graph.DynamicNetwork;
 import ds.graph.IdentifiableIntegerMapping;
@@ -49,6 +44,17 @@ import java.util.HashSet;
 import java.util.Hashtable;
 import java.util.LinkedList;
 import java.util.List;
+import de.tu_berlin.math.coga.common.util.Direction;
+import de.tu_berlin.math.coga.common.util.Level;
+import de.tu_berlin.math.coga.zet.converter.graph.ZToGraphMapping;
+import de.tu_berlin.math.coga.zet.converter.graph.ZToGraphRasterContainer;
+import de.tu_berlin.math.coga.zet.converter.graph.ZToGraphRasterSquare;
+import de.tu_berlin.math.coga.zet.converter.graph.ZToGraphRasteredDoor;
+import de.tu_berlin.math.coga.zet.converter.graph.ZToGraphRoomRaster;
+import ds.z.AssignmentArea;
+import ds.z.EvacuationArea;
+import static de.tu_berlin.math.coga.common.util.Direction.*;
+import static de.tu_berlin.math.coga.common.util.Level.*;
 
 /**
  *
@@ -371,7 +377,7 @@ public class ZToGridGraphConverterNew {
 						int extent = 0;
 						boolean downblocked = false, rightblocked = false, blocked = false;
 
-						while(extent < numOfColumns && extent < numOfRows && !downblocked && !rightblocked && !blocked) {
+						while( extent < numOfColumns && extent < numOfRows && !downblocked && !rightblocked && !blocked ) {
 
 							// check whether a new line can be added at the
 							// Right of the square of raster squares
@@ -430,7 +436,7 @@ public class ZToGridGraphConverterNew {
 						int added = 0;
 
 						// extent down
-						while(!downblocked && added < imbalance) {
+						while( !downblocked && added < imbalance ) {
 							// Check the line under the rectangle of raster
 							// squares
 							for( int offset = 0; offset <= extent; offset++ )
@@ -458,7 +464,7 @@ public class ZToGridGraphConverterNew {
 						}
 
 						// extent to the Right
-						while(!rightblocked && added < imbalance) {
+						while( !rightblocked && added < imbalance ) {
 							// Check the line Right of the rectangle of raster squares
 							for( int offset = 0; offset <= extent; offset++ )
 								rightblocked |= isRightSquareBlocked( room, x + extent + added,
