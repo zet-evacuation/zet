@@ -16,6 +16,7 @@ import de.tu_berlin.math.coga.zet.converter.cellularAutomaton.ZToCAConverter.Con
 import de.tu_berlin.math.coga.zet.converter.cellularAutomaton.ZToCAMapping;
 import de.tu_berlin.math.coga.zet.converter.cellularAutomaton.ZToCARasterContainer;
 import de.tu_berlin.math.coga.zet.NetworkFlowModel;
+import de.tu_berlin.math.coga.zet.converter.graph.BaseZToGraphConverter;
 import de.tu_berlin.math.coga.zet.converter.graph.ZToGridGraphConverter;
 import de.tu_berlin.math.coga.zet.converter.graph.ZToNonGridGraphConverter;
 import ds.GraphVisualizationResults;
@@ -285,36 +286,21 @@ public class AlgorithmControl implements PropertyChangeListener {
 	}
 
 	public void convertGraph( PropertyChangeListener propertyChangeListener ) {
-		System.out.println( "CONVERT GRAPH AS YOU WISH" );
-		//final ZToNonGridGraphConverter conv = new ZToNonGridGraphConverter();
-//		conv.setProblem( project.getBuildingPlan() );
-//		final SerialTask st = new SerialTask( conv );
-//		st.addPropertyChangeListener( new PropertyChangeListener() {
-//
-//			public void propertyChange( PropertyChangeEvent pce ) {
-//				if( st.isDone() ) {
-//					networkFlowModel = conv.getSolution();
-//				}
-//			}
-//		});
-//		if( propertyChangeListener != null )
-//			st.addPropertyChangeListener( propertyChangeListener );
-//		st.execute();
-		//final ZToGridGraphConverterNew conv = new ZToGridGraphConverterNew();
-		
-		//ZToGraphConverter.convertBuildingPlan( testraum(), new NetworkFlowModel() );
-//		NetworkFlowModel nfo = new NetworkFlowModel();
-//		ZToGridGraphConverterNew.convertBuildingPlan( project.getBuildingPlan(), nfo );
-//		ZToRoomGridGraphConverter.convertBuildingPlan( project.getBuildingPlan(), nfo );
-		//ZToGridGraphConverterAlt2.convertBuildingPlan(project.getBuildingPlan(), nfo);
-//		ZToGridGraphConverterAlt3.convertBuildingPlan(project.getBuildingPlan(), nfo);
-//		this.networkFlowModel = nfo;
-		
-		final ZToGridGraphConverter conv = new ZToGridGraphConverter();	
+		final BaseZToGraphConverter conv = new ZToNonGridGraphConverter();
+		//final BaseZToGraphConverter conv = new ZToGridGraphConverter();	
 		conv.setProblem( project.getBuildingPlan() );
-		conv.run();
-		this.networkFlowModel = conv.getSolution();
-		
+		final SerialTask st = new SerialTask( conv );
+		st.addPropertyChangeListener( new PropertyChangeListener() {
+
+			public void propertyChange( PropertyChangeEvent pce ) {
+				if( st.isDone() ) {
+					networkFlowModel = conv.getSolution();
+				}
+			}
+		});
+		if( propertyChangeListener != null )
+			st.addPropertyChangeListener( propertyChangeListener );
+		st.execute();
 	}
 
 	public NetworkFlowModel getNetworkFlowModel() {

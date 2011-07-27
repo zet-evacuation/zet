@@ -45,10 +45,7 @@ import ds.graph.IntegerIntegerMapping.TimeIntegerPair;
  * {@link IntegerObjectMapping}.
  */
 public class IntegerIntegerMapping implements Cloneable, Iterable<TimeIntegerPair> {
-    
-    /**
-     * Stores the mapping internally. Must not be null.
-     */
+    /** Stores the mapping internally. Must not be null. */
     protected TreeSet<TimeIntegerPair> mapping;
     
     /*
@@ -176,8 +173,8 @@ public class IntegerIntegerMapping implements Cloneable, Iterable<TimeIntegerPai
      * than {@code fromTime}.
      */
     public void increase(int fromTime, int toTime, int amount) {
-        if (toTime <= fromTime) throw new IllegalArgumentException(GraphLocalization.getSingleton (
-		).getString ("ds.Graph.toTimeException"));
+        if (toTime <= fromTime)
+					throw new IllegalArgumentException(GraphLocalization.getSingleton().getString ("ds.Graph.toTimeException"));
         TimeIntegerPair from = new TimeIntegerPair(fromTime, 0);
         TimeIntegerPair to = new TimeIntegerPair(toTime, 0);
         TimeIntegerPair first = mapping.floor(from);

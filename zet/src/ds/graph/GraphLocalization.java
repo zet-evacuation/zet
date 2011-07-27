@@ -17,7 +17,7 @@ public class GraphLocalization extends Localization {
 private volatile static GraphLocalization singleton;
 
 	private GraphLocalization() throws MissingResourceException {
-		super( "ds.z.zevacuate" );
+		super( "ds.graph.GraphLocalization" );
 	}
 
 	// synchronized keyword has been removed from here
