@@ -890,7 +890,7 @@ public class PlanPolygon<T extends Edge> implements Serializable, Iterable<T> {
 	}
 
 	/**
-	 * Checks whether a {@code PlanPolygon} is inside this polygon, or not.
+	 * <p>Checks whether a {@code PlanPolygon} is inside this polygon, or not.</p>
 	 * <p>The current implementation only works on the bounding boxes of the polygons, 
 	 * which means the the results will only be correct for rectangular shapes.
 	 * </p>
@@ -898,21 +898,7 @@ public class PlanPolygon<T extends Edge> implements Serializable, Iterable<T> {
 	 * @return true if the entire polygon is inside this polygon
 	 */
 	public boolean contains( PlanPolygon poly ) {
-
 		boolean result = containsI( poly );
-
-//		Rectangle shape_poly = poly.bounds();
-//		Rectangle shape_me = bounds();
-//
-//		boolean result = shape_me.x <= shape_poly.x && shape_me.y <= shape_poly.y &&
-//						(shape_poly.x + shape_poly.width) <= (shape_me.x + shape_me.width) &&
-//						(shape_poly.y + shape_poly.height) <= (shape_me.y + shape_me.height);
-//
-//		// check for bounding box inside. TODO complete test
-//		java.awt.Polygon awt = getAWTPolygon();
-//		boolean result2 = awt.contains( poly.getAWTPolygon().getBounds2D() );
-		//if( result2 != myResult ) System.err.println( "Unterschiedliche Ausgabe im isInside-Test" );
-
 		return result;
 	}
 
@@ -940,8 +926,9 @@ public class PlanPolygon<T extends Edge> implements Serializable, Iterable<T> {
 						return false;
 					case Colinear:
 						//System.out.println( "Colinear: " + e.toString() + " und " + current.toString() );
-						if( current.getMinX() >= e.getMinX() & current.getMaxX() <= e.getMaxX() & current.getMinY() >= e.getMinY() & current.getMaxY() <= e.getMaxY() ) // no problem
-						; else {
+						//if( current.getMinX() >= e.getMinX() & current.getMaxX() <= e.getMaxX() & current.getMinY() >= e.getMinY() & current.getMaxY() <= e.getMaxY() ) // no problem
+						//	;
+						if( !( current.getMinX() >= e.getMinX() & current.getMaxX() <= e.getMaxX() & current.getMinY() >= e.getMinY() & current.getMaxY() <= e.getMaxY() ) ) { // no problem 
 							// Points may create a problem
 							if( isBetween( current.getSource(), e ) && !problemPoints.contains( current.getSource() ) )
 								problemPoints.add( current.getSource() );
@@ -988,7 +975,6 @@ public class PlanPolygon<T extends Edge> implements Serializable, Iterable<T> {
 					//System.out.println( "Mittelpunkt liegt außerhalb!" );
 					return false;
 			}
-		//problemPoints.defineByPoints( null );
 		}
 		//System.out.println( "The Area is inside!" );
 		return true;
@@ -1013,23 +999,6 @@ public class PlanPolygon<T extends Edge> implements Serializable, Iterable<T> {
 			double y = (A1 * C2 - A2 * C1) / det;
 			return new PlanPoint( (int)Math.rint( ConversionTools.roundScale3( x ) ), (int)Math.rint( ConversionTools.roundScale3( y ) ) );
 		}
-	// will make problems if lines are horizontal or vertical
-//		double x1 = e1.getSource().getXInt();
-//		double y1 = e1.getSource().getYInt();
-//		double x2 = e1.getTarget().getXInt();
-//		double y2 = e1.getTarget().getYInt();
-//		double u1 = e2.getSource().getXInt();
-//		double v1 = e2.getSource().getYInt();
-//		double u2 = e2.getTarget().getXInt();
-//		double v2 = e2.getTarget().getYInt();
-//	
-//		double b1 = (y2-y1)/(x2-x1);
-//		double b2 = (v2-v1)/(u2-u1);
-//		double a1 = y1-b1*x1;
-//		double a2 = v1-b2*u1;
-//		double xi = - (a1-a2)/(b1-b2);
-//		double yi = a1+b1*xi;
-//		return new PlanPoint( ConversionTools.roundScale3(xi), ConversionTools.roundScale3(yi) );
 	}
 
 	private boolean isBetween( PlanPoint p, T e ) {
@@ -1071,8 +1040,6 @@ public class PlanPolygon<T extends Edge> implements Serializable, Iterable<T> {
 		} finally {
 			enableEventGeneration = eAG_old;
 		}
-
-//		throwChangeEvent( new ChangeEvent( this ) );
 	}
 
 	/**
@@ -1480,6 +1447,32 @@ public class PlanPolygon<T extends Edge> implements Serializable, Iterable<T> {
 	 */
 	public boolean intersects( PlanPolygon<?> poly ) {
 		for( PlanPoint p : this.getPlanPoints() ) {
+			if( poly.contains( p ) ) {
+//				System.out.println( "Intersection: " + p.toString() );
+				intersectionPoint = p.clone();
+				return true;
+			}
+		}
+		for( PlanPoint p : poly.getPlanPoints() ) {
+			if( contains( p ) ) {
+//				System.out.println( "Intersection: " + p.toString() );
+				intersectionPoint = p.clone();
+				return true;
+			}
+		}
+		intersectionPoint = null;
+		return false;
+	}
+
+
+	/**
+	 * Checks whether the polygon intersects with another one. The test is
+	 * performed by the java.awt.Polygon.intersects() method.
+	 * @param poly the polygon checked for intersection
+	 * @return true if the two polygons intersect each other
+	 */
+	public boolean intersectsStrict( PlanPolygon<?> poly ) {
+		for( PlanPoint p : this.getPlanPoints() ) {
 			if( poly.containsStrict( p ) ) {
 //				System.out.println( "Intersection: " + p.toString() );
 				intersectionPoint = p.clone();
@@ -1495,16 +1488,15 @@ public class PlanPolygon<T extends Edge> implements Serializable, Iterable<T> {
 		}
 		intersectionPoint = null;
 		return false;
-		// Does not work correctly
-		//java.awt.Polygon awt = getAWTPolygon();
-		//java.awt.Polygon awt2 = poly.getAWTPolygon();
-
-		//return awt.intersects( awt2.getBounds2D() );
-	//return false;
 	}
-
+	
 	public PlanPoint intersection( PlanPolygon<?> poly ) {
 		intersects( poly );
+		return intersectionPoint;
+	}
+
+	public PlanPoint intersectionStrict( PlanPolygon<?> poly ) {
+		intersectsStrict( poly );
 		return intersectionPoint;
 	}
 

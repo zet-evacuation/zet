@@ -311,9 +311,10 @@ public class ZToCAConverter extends Algorithm<BuildingPlan,ConvertedCellularAuto
 	}
 	
 	/**
-	 * Creates all rooms for a given floor. The rooms have to be submitted as a
+	 * <p>Creates all rooms for a given floor. The rooms have to be submitted as a
 	 * collection, also the {@code Floor} and the corresponding id in the
-	 * z-format have to be submitted to the method.
+	 * z-format have to be submitted to the method.</p>
+	 * <p>The rooms are only created, they are not filled with cells yet.</p>
 	 * @param onFloor the Floor that contains the rooms
 	 * @param rooms a collection of rooms on the floor. This is not checked!
 	 * @param floorID the id of the floor

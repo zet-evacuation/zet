@@ -25,12 +25,14 @@ import ds.z.PlanPolygon;
 import java.util.ArrayList;
 
 /**
- * A {@code RasterSquare} is an element of a {@link RoomRaster} of a {@link ds.z.PlanPolygon},
- * especially for a {@link ds.z.Room}.
- * The polygon is divided in a raster of squares. Each square can intersect the polyonom, or not and
- * has a position in the global coordinate system of the rasterized polygon.
- * <p>Basically a square consists of a {@code PlanPolygon} whose coordinates describe a square. It is unique
- * defined by the coordinates of the upper left edge and its height and width, which depends from the rasterization
+ * <p>A {@code RasterSquare} is an element of a {@link RoomRaster} of a
+ * {@link ds.z.PlanPolygon}, especially for a {@link ds.z.Room}.</p>
+ * <p>The polygon is divided in a raster of squares. Each square can intersect
+ * the polyonom, or not and has a position in the global coordinate system of
+ * the rasterized polygon.</p>
+ * <p>Basically a square consists of a {@code PlanPolygon} whose coordinates
+ * describe a square. It is uniquely defined by the coordinates of the upper
+ * left edge and its height and width, which depends from the rasterization
  * grid.</p>
  * @author Jan-Philipp Kappmeier
  */
@@ -52,9 +54,9 @@ public class RasterSquare {
   }  
   
   /** The {@link ds.z.PlanPolygon} describing the coordinates of this square. */
-  private PlanPolygon square;
+  private PlanPolygon<?> square;
   /** The {@link ds.z.PlanPolygon} that is rasterized. */
-  private PlanPolygon p;
+  private PlanPolygon<?> p;
 
   /** Describes the the squares intersection status. */
   private FieldIntersectType intersectType;
@@ -80,7 +82,7 @@ public class RasterSquare {
    * @param row the row-index of this square in the array of raster-squares, starting with 0
    * @param raster the grid size of the rasterization defines the width and height of the square
    */
-  public RasterSquare(PlanPolygon p, int column, int row, int raster) {
+  public RasterSquare(PlanPolygon<?> p, int column, int row, int raster) {
 
 	callAtConstructorStart();
 
@@ -116,18 +118,14 @@ public class RasterSquare {
 	 * status is stored and can be accessed via {@link #getIntersectType()}. The
 	 * polygon has to be set in the constructor.
    */
-  protected void check( ) {
-    if( !p.intersects( square ) ) {
-      // No intersection
-      intersectType = FieldIntersectType.Outside;
-    } else if( p.contains( square) ) {
-      // Is inside
-      intersectType = FieldIntersectType.Inside;
-    } else {
-      // Intersects only
-      intersectType = FieldIntersectType.Intersects;
-    }
-  }
+	protected void check() {
+		if( !p.intersects( square ) ) // No intersection
+			intersectType = FieldIntersectType.Outside;
+		else if( p.contains( square ) ) // Is inside
+			intersectType = FieldIntersectType.Inside;
+		else // Intersects only
+			intersectType = FieldIntersectType.Intersects;
+	}
 
   /**
    * Returns the column-index of the square in the raster array created during a rasterization of a polygon.
@@ -145,7 +143,7 @@ public class RasterSquare {
     return intersectType;
   }
  
-  public PlanPolygon getPolygon() {
+  public PlanPolygon<?> getPolygon() {
     return p;
   }
    
@@ -165,7 +163,7 @@ public class RasterSquare {
     return row;
   } 
   
-  public PlanPolygon getSquare() {
+  public PlanPolygon<?> getSquare() {
     return square;
   }
   
@@ -177,49 +175,46 @@ public class RasterSquare {
       return stairPotential;
   }
   
-  
-  /**
-   * Returns the {@code x}-coordinate of the upper left corner.
-   * @return the {@code x}-coordinate of the upper left corner
-   */
-   public int getX() { 
-    return x;
-   }
- 
-  /**
-   * Returns the {@code y}-coordinate of the upper left corner
-   * @return the {@code y}-coordinate of the upper left corner
-   */
-   public int getY() {
-     return y;
-   }
-   
-   /**
-    * Returns the {@code x}-coordinate of the upper left corner
-    * relative to the position of the sourrounding room.
-    * @return the {@code x}-coordinate of the upper left corner
-    */  
-   public int getRelativeX(){
-       return x - p.getxOffset();
-   }
+ 	/**
+	 * Returns the {@code x}-coordinate of the upper left corner.
+	 * @return the {@code x}-coordinate of the upper left corner
+	 */
+	public int getX() {
+		return x;
+	}
 
-   /**
-    * Returns the {@code y}-coordinate of the upper left corner
-    * relative to the position of the sourrounding room.
-    * @return the {@code y}-coordinate of the upper left corner
-    */  
-   public int getRelativeY(){
-       return y - p.getyOffset();
-   }   
-   
-   /**
-    * Returns a String containing the coordinates of this raster square.
-    * @return a String containing the coordinates of this raster square.
-    */
+	/**
+	 * Returns the {@code y}-coordinate of the upper left corner
+	 * @return the {@code y}-coordinate of the upper left corner
+	 */
+	public int getY() {
+		return y;
+	}
+
+	/**
+	 * Returns the {@code x}-coordinate of the upper left corner
+	 * relative to the position of the sourrounding room.
+	 * @return the {@code x}-coordinate of the upper left corner
+	 */
+	public int getRelativeX() {
+		return x - p.getxOffset();
+	}
+
+	/**
+	 * Returns the {@code y}-coordinate of the upper left corner
+	 * relative to the position of the sourrounding room.
+	 * @return the {@code y}-coordinate of the upper left corner
+	 */
+	public int getRelativeY() {
+		return y - p.getyOffset();
+	}
+
+	/**
+	 * Returns a String containing the coordinates of this raster square.
+	 * @return a String containing the coordinates of this raster square.
+	 */
 	@Override
-   public String toString(){
-	   String result = "["+x+y+"]";
-	   return result;
-   }
-   
+	public String toString() {
+		return "[" + x + y + "]";
+	}
 }
