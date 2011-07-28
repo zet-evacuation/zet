@@ -228,16 +228,6 @@ public class RoomRasterSquare extends RasterSquare {
 			setProperty( Property.TELEPORT, this.isTeleport() || (teleportArea.contains( this.getSquare() ) & accessible()) );
 		}
 
-	//for(Barrier barrier : r.getBarriers()){
-	//	List<Edge> edgeList = this.getSquare().getEdges();
-	//	for (Edge edge : edgeList){
-	//PlanPolygon<Edge> p = new PlanPolygon<Edge>(Edge.class, edge);
-	//System.out.println(edge);
-	//if (barrier.intersects(p)) {
-	//	System.out.println("Überschneidet sich mit "+edge);
-	//}
-	//	}
-	//}
 	}
 
 	public boolean inaccessible() {

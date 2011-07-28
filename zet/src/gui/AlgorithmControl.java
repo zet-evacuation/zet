@@ -114,6 +114,7 @@ public class AlgorithmControl implements PropertyChangeListener {
 	void convertCellularAutomaton( PropertyChangeListener propertyChangeListener ) {
 		error = null;
 		final ZToCAConverter conv = new ZToCAConverter();
+
 		conv.setProblem( project.getBuildingPlan() );
 
 		final SerialTask st = new SerialTask( conv );
