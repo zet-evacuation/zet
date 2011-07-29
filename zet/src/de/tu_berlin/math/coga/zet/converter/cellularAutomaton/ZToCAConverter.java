@@ -340,25 +340,25 @@ public class ZToCAConverter extends Algorithm<BuildingPlan,ConvertedCellularAuto
 	 * @param x the column of the cell in the room
 	 * @param y the row of the cell in the room
 	 * @param convertedRoom the room that contains the cell
-	 * @return the new (or already existing) cell or null if the square is inaccessible
+	 * @return the new (or already existing) cell or null if the square is isInaccessible
 	 * @throws ConversionNotSupportedException if an initialization error occurred.
 	 */
 	protected ds.ca.Cell convertCell( ZToCARasterSquare square, int x, int y, ds.ca.Room convertedRoom ) throws ConversionNotSupportedException {
 		if( square == null )
 			return null;
 
-		if( square.inaccessible() && square.isDoor() )
+		if( square.isInaccessible() && square.isDoor() )
 			throw new ConversionNotSupportedException(DefaultLoc.getSingleton ().getString ("algo.ca.NotInitializedException" + x + ", " + y ));
 
 //        if(square.isExit() && square.isDoor()){
 //            throw new ConversionNotSupportedException("Doors in exit areas are currently not supported.");
 //        }
 //        
-//        if(square.getSave() && square.isDoor()){
+//        if(square.isSave() && square.isDoor()){
 //            throw new ConversionNotSupportedException("Doors in save areas are currently not supported.");
 //        }
 
-		if( square.inaccessible() )
+		if( square.isInaccessible() )
 			return null;
 
 		if( square.isDoor() ) {
@@ -399,7 +399,7 @@ public class ZToCAConverter extends Algorithm<BuildingPlan,ConvertedCellularAuto
 			return newCell;
 		}
 
-		if( square.getSave() ) {
+		if( square.isSave() ) {
 			ds.ca.Cell newCell = new ds.ca.SaveCell( square.getSpeedFactor(), x, y );
 			convertedRoom.setCell( newCell );
 			lastMapping.insertTuple( newCell, square );

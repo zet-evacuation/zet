@@ -112,7 +112,7 @@ public class ZToNonGridGraphConverter extends BaseZToGraphConverter {
 					int maxX = x;
 					int maxY = y;
 
-					if( square.accessible() && !square.isMarked() ) {
+					if( square.isAccessible() && !square.isMarked() ) {
 
 						Node node = new Node( nodeCount );
 						model.getZToGraphMapping().getNodeFloorMapping().set( node, plan.getFloorID( room.getFloor() ) );
@@ -150,7 +150,7 @@ public class ZToNonGridGraphConverter extends BaseZToGraphConverter {
 						// such that a the n x n-square having the current
 						// raster square as upper Left corner
 						// fits into the building plan without colliding
-						// with inaccessible areas or similar.
+						// with isInaccessible areas or similar.
 						// (n is stored in the variable extent)
 
 						int extent = 0;
@@ -668,7 +668,7 @@ public class ZToNonGridGraphConverter extends BaseZToGraphConverter {
 
 		ZToGraphRasterSquare right = room.getSquare( i + 1, j );
 
-		if( right.inaccessible() )
+		if( right.isInaccessible() )
 			return true;
 		if( right.isMarked() )
 			return true;
@@ -682,7 +682,7 @@ public class ZToNonGridGraphConverter extends BaseZToGraphConverter {
 				return true;
 
 		// a node is save or not but not both
-		if( square.getSave() != right.getSave() )
+		if( square.isSave() != right.isSave() )
 			return true;
 
 		// Only squares from stairs with the same up and down speedfactor may be in the same node
@@ -710,7 +710,7 @@ public class ZToNonGridGraphConverter extends BaseZToGraphConverter {
 
 		ZToGraphRasterSquare down = room.getSquare( i, j + 1 );
 
-		if( down.inaccessible() )
+		if( down.isInaccessible() )
 			return true;
 		if( down.isMarked() )
 			return true;
@@ -724,7 +724,7 @@ public class ZToNonGridGraphConverter extends BaseZToGraphConverter {
 				return true;
 
 		// a node is save or not but not both
-		if( square.getSave() != down.getSave() )
+		if( square.isSave() != down.isSave() )
 			return true;
 
 		// Only squares from stairs with the same up and down speedfactor may be in the same node
@@ -875,7 +875,7 @@ public class ZToNonGridGraphConverter extends BaseZToGraphConverter {
 				for( int col = 0; col < colCount; col++ ) {
 					ZToGraphRasterSquare square = room.getSquare( col, row );
 
-					if( square.getSave() ) {
+					if( square.isSave() ) {
 						Node node = square.getNode();
 						Edge edge = graph.getEdge( node, supersink );
 						if( edge == null ) {

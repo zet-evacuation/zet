@@ -111,7 +111,7 @@ public class ZToGridGraphConverter extends BaseZToGraphConverter {
 					int maxX = x;
 					int maxY = y;
 
-					if( square.accessible() && !square.isMarked() ) {
+					if( square.isAccessible() && !square.isMarked() ) {
 
 						Node node = new Node( nodeCount );
 						model.getZToGraphMapping().getNodeFloorMapping().set( node, plan.getFloorID( room.getFloor() ) );
@@ -529,7 +529,7 @@ public class ZToGridGraphConverter extends BaseZToGraphConverter {
 				for( int col = 0; col < colCount; col++ ) {
 					ZToGraphRasterSquare square = room.getSquare( col, row );
 
-					if( square.getSave() ) {
+					if( square.isSave() ) {
 						Node node = square.getNode();
 						Edge edge = graph.getEdge( node, supersink );
 						if( edge == null ) {

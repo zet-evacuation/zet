@@ -31,18 +31,11 @@ import ds.z.Room;
  * used to define a mapping of raster squares to nodes in a graph.
  */
 public class ZToGraphRasterSquare extends RoomRasterSquare {
-	/**
-	 * The node this raster square is mapped to.
-	 */
+	/** The node this raster square is mapped to. */
 	private Node node = null;
-	/**
-	 * Private boolean flag telling whether there 
-	 * could be people on this square.
-	 */
+	/** Private boolean flag telling whether there could be people on this square. */
 	private boolean isSource;
-	/**
-	 * A marker to mark processed raster squares.
-	 */
+	/** A marker to mark processed raster squares. */
 	private boolean marked = false;
 
 	/**
@@ -56,6 +49,8 @@ public class ZToGraphRasterSquare extends RoomRasterSquare {
 	 */
 	public ZToGraphRasterSquare( Room r, int column, int row, int raster ) {
 		super( r, column, row, raster );
+		isSource = false;
+		check();
 	}
 
 	/**
@@ -72,24 +67,6 @@ public class ZToGraphRasterSquare extends RoomRasterSquare {
 	 */
 	public Node getNode() {
 		return node;
-	}
-
-	@Override
-	/**
-	 * Returns the speed factor of this square. The speed factor describes how fast
-	 * the square can be traversed (averaged). It lies between zero and one and is 
-	 * one if the square has no delay factor.
-	 */
-	public double getSpeedFactor() {
-		return super.getSpeedFactor();
-	}
-
-	/**
-	 * Returns whether (the majority of) this square is accessible in the original Z-Plan. 
-	 * @return whether (the majority of) this square is accessible in the original Z-Plan. 
-	 */
-	public boolean isAccessible() {
-		return super.accessible();
 	}
 
 	/**
@@ -131,25 +108,13 @@ public class ZToGraphRasterSquare extends RoomRasterSquare {
 	}
 
 	/**
-	 * Needed for support of the {@code isSquare}
-	 * boolean flag.
-	 */
-	@Override
-	protected void callAtConstructorStart() {
-		super.callAtConstructorStart();
-		isSource = false;
-	}
-
-	/**
 	 * Adds the information about sources
 	 * to the raster square.
 	 */
-	@Override
-	protected void check() {
-		super.check();
+	private void check() {
 		Room r = (Room) getPolygon();
 		for( AssignmentArea assignmentArea : r.getAssignmentAreas() )
-			isSource = isSource || (accessible() && assignmentArea.contains( this.getSquare() ));
+			isSource = isSource || (isAccessible() && assignmentArea.contains( this.getSquare() ));
 	}
 
 	/**

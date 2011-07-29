@@ -73,14 +73,14 @@ public class ChainDecomposition2 {
             //test(edgeSequence);
             int time = 0;
             for (FlowOverTimeEdge edge : edgeSequence) {
-                time += edgeSequence.delay(edge);
-                if (edgeSequence.delay(edge) < 0) {
-                    for (int t = time; t > time + edgeSequence.delay(edge); t--) {
+                time += edge.getDelay(); //edge.getDelay();
+                if (edge.getDelay() /**edge.getDelay()*/ < 0) {
+                    for (int t = time; t > time + edge.getDelay() /*edge.getDelay()*/; t--) {
                         if (DEBUG_FINE) System.out.println(" Cancel waiting in " + edge.getEdge().start() + " at time " + t + ": " + edgeSequence);
                     }
                     reverseNodes.add(edge);
-                } else if (edgeSequence.delay(edge) > 0) {
-                    for (int i = time - edgeSequence.delay(edge); i < time; i++) {
+                } else if (edge.getDelay() /*edge.getDelay()*/ > 0) {
+                    for (int i = time - edge.getDelay(); i < time; i++) {
                         if (DEBUG_FINE) System.out.println(" Waiting in " + edge.getEdge().start() + " at time " + i + ": " + edgeSequence);                        
                     }
                 }
@@ -183,7 +183,7 @@ public class ChainDecomposition2 {
 
     //protected void join(FlowOverTimeEdgeSequence start1, FlowOverTimeEdgeSequence start2, FlowOverTimeEdgeSequence end1, FlowOverTimeEdgeSequence end2) {
     protected void join(FlowOverTimeEdgeSequence start1, FlowOverTimeEdgeSequence end2) {
-        int secondStart = end2.delay(end2.getFirstEdge());
+        int secondStart = end2.getFirstEdge().getDelay(); //end2.delay(end2.getFirstEdge());
         int firstEnd = start1.length(network.transitTimes());
         start1.append(end2, secondStart - firstEnd);
         start1.setRate(Math.min(start1.getRate(), end2.getRate()));
@@ -240,7 +240,7 @@ public class ChainDecomposition2 {
         boolean found = false;
         int t = 0;
         for (FlowOverTimeEdge e : sequence) {
-            if (e.getEdge().start().equals(node) && isIn(time, t, t + sequence.delay(e))) {
+            if (e.getEdge().start().equals(node) && isIn(time, t, t + e.getDelay())) {
                 found = true;
             }            
             t += e.getDelay();
@@ -389,7 +389,7 @@ public class ChainDecomposition2 {
             if (e.equals(edge)) {
                 return time;
             }                        
-            time += path.delay(e);
+            time += e.getDelay();
             time += network.transitTimes().get(e.getEdge());
         }       
         throw new AssertionError("This should not happen.");
@@ -398,7 +398,7 @@ public class ChainDecomposition2 {
     private int getArrivalTimeEnd(FlowOverTimeEdgeSequence path, FlowOverTimeEdge edge) {
         int time = 0;
         for (FlowOverTimeEdge e : path) {
-            time += path.delay(e);
+            time += e.getDelay();
             time += network.transitTimes().get(e.getEdge());
             if (e.equals(edge)) {
                 return time;
@@ -413,7 +413,7 @@ public class ChainDecomposition2 {
             if (e.getEdge().start().equals(node)) {
                 return time;
             }
-            time += path.delay(e);
+            time += e.getDelay();
             time += network.transitTimes().get(e.getEdge());
         }       
         throw new AssertionError("This should not happen.");
@@ -445,7 +445,7 @@ public class ChainDecomposition2 {
         boolean edgeReached = false;
         int t = 0;
         for (FlowOverTimeEdge e : path) {
-            t += path.delay(e);
+            t += e.getDelay();
             if (e.equals(edge) && t == time) {
                 edgeReached = true;
                 continue;
@@ -463,7 +463,7 @@ public class ChainDecomposition2 {
         result.setRate(path.getRate());
         int t = 0;
         for (FlowOverTimeEdge e : path) {
-            t += path.delay(e);
+            t += e.getDelay();
             if (e.equals(edge) && t == time) {
                 break;
             }
@@ -486,7 +486,7 @@ public class ChainDecomposition2 {
             result.add(new FlowOverTimeEdge(e.getEdge(), e.getDelay(), t));
             t += network.transitTimes().get(e.getEdge());
             
-            //result.getDynamicPath().addLastEdge(e, path.delay(e));
+            //result.getDynamicPath().addLastEdge(e, e.getDelay());
         }
         return result;        
     }
@@ -497,14 +497,14 @@ public class ChainDecomposition2 {
         boolean nodeReached = false;
         int t = 0;
         for (FlowOverTimeEdge e : path) {
-            if (e.getEdge().start().equals(node) && isIn(time, t, t + path.delay(e))) {
+            if (e.getEdge().start().equals(node) && isIn(time, t, t + e.getDelay())) {
                 nodeReached = true;
                 //e.setDelay(0);
                 result.addLast(e);
                 //result.getDynamicPath().addLastEdge(e, 0);
                 continue;
             }
-            t += path.delay(e);
+            t += e.getDelay();
             t += network.transitTimes().get(e.getEdge());
             if (nodeReached) {
                 result.addLast(e);
@@ -518,12 +518,12 @@ public class ChainDecomposition2 {
         result.setRate(path.getRate());
         int t = 0;
         for (FlowOverTimeEdge e : path) {            
-            if (e.getEdge().start().equals(node) && isIn(time, t, t + path.delay(e))) {
+            if (e.getEdge().start().equals(node) && isIn(time, t, t + e.getDelay())) {
                 break;
             }
-            t += path.delay(e);
+            t += e.getDelay();
             t += network.transitTimes().get(e.getEdge());
-            result.addLast(e);//getDynamicPath().addLastEdge(e, path.delay(e));
+            result.addLast(e);//getDynamicPath().addLastEdge(e, e.getDelay());
         }
         return result;
     }        

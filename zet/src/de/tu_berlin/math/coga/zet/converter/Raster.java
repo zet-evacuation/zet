@@ -219,7 +219,7 @@ public class Raster<T extends RasterSquare, P extends PlanPolygon> {
 					System.err.println("InvocationTargetException in Raster.java at creation of squares in rasterize().");
 				}
 				rasterSquares[i][j] = square;
-				if(square.getIntersectType() != RasterSquare.FieldIntersectType.Outside ) {
+				if( square.getIntersectType() != RasterSquare.FieldIntersectType.Outside ) {
 					insideSquares.add( square );
 				}
 			}

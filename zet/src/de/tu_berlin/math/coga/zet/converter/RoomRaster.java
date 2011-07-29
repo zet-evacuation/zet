@@ -25,7 +25,7 @@ import java.util.List;
 
 import de.tu_berlin.math.coga.common.util.Direction;
 import de.tu_berlin.math.coga.common.util.Level;
-import de.tu_berlin.math.coga.zet.converter.RoomRasterSquare.Property;
+import de.tu_berlin.math.coga.zet.converter.RoomRasterProperty;
 import ds.z.Barrier;
 import ds.z.Edge;
 import ds.z.Floor;
@@ -130,7 +130,7 @@ public class RoomRaster<T extends RoomRasterSquare> extends Raster<T, Room> {
 		}		for (int j = 0; j < rasterSquares[0].length; j++) {
 			for (int i = 0; i < rasterSquares.length; i++) {
 				T square = getSquare (i, j);
-				if (square.accessible ()) {
+				if (square.isAccessible ()) {
 					result.add (square);
 				}
 			}
@@ -180,7 +180,8 @@ public class RoomRaster<T extends RoomRasterSquare> extends Raster<T, Room> {
 			for (int j = 0; j < getRowCount (); j++) {
 				RoomRasterSquare square = getSquare (i, j);
 				if (!insides.contains (square)) {
-					square.clearProperty (Property.ACCESSIBLE); // NOT accessible
+					square.clearAccessible(); // NOT isAccessible
+
 				}
 
 			}
@@ -413,11 +414,11 @@ public class RoomRaster<T extends RoomRasterSquare> extends Raster<T, Room> {
 	}
 
 	/**
-	 * Returns a String containing blanks for accessible and not delayed squares, 'x' for
-	 * accessible but delayed squares and 'X' for inaccessible squares. 
+	 * Returns a String containing blanks for isAccessible and not delayed squares, 'x' for
+	 * isAccessible but delayed squares and 'X' for isInaccessible squares. 
 	 * The room is limited by '-' and '|' characters. 
-	 * @return a String containing blanks for accessible and not delayed squares, 'x' for
-	 * accessible but delayed squares and 'X' for inaccessible squares. 
+	 * @return a String containing blanks for isAccessible and not delayed squares, 'x' for
+	 * isAccessible but delayed squares and 'X' for isInaccessible squares. 
 	 */
 	@Override
 	public String toString () {
@@ -429,11 +430,11 @@ public class RoomRaster<T extends RoomRasterSquare> extends Raster<T, Room> {
 		for (int j = 0; j < rasterSquares[0].length; j++) {
 			result += "|";
 			for (int i = 0; i < rasterSquares.length; i++) {
-				if (getSquare (i, j).accessible ()) {
+				if (getSquare (i, j).isAccessible ()) {
 					if (getSquare (i, j).isExit ()) {
 						result += "e";
 					} else {
-						if (getSquare (i, j).getSave ()) {
+						if (getSquare (i, j).isSave ()) {
 							result += "s";
 						} else {
 							if (getSquare (i, j).getSpeedFactor () < 1.0) {
