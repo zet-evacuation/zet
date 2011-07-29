@@ -287,8 +287,8 @@ public class AlgorithmControl implements PropertyChangeListener {
 	}
 
 	public void convertGraph( PropertyChangeListener propertyChangeListener ) {
-		final BaseZToGraphConverter conv = new ZToNonGridGraphConverter();
-		//final BaseZToGraphConverter conv = new ZToGridGraphConverter();	
+		//final BaseZToGraphConverter conv = new ZToNonGridGraphConverter();
+		final BaseZToGraphConverter conv = new ZToGridGraphConverter();	
 		conv.setProblem( project.getBuildingPlan() );
 		final SerialTask st = new SerialTask( conv );
 		st.addPropertyChangeListener( new PropertyChangeListener() {

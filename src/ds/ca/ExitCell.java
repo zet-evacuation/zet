@@ -54,6 +54,7 @@ public class ExitCell extends TargetCell implements Cloneable {
 	 * Otherwise the standard value "STANDARD_EXITCELL_SPEEDFACTOR" is set.
 	 * @param x x-coordinate of the cell in the room, 0 <= x <= width-1
 	 * @param y y-coordinate of the cell in the room, 0 <= y <= height-1
+	 * @param room  
 	 */
 	public ExitCell( double speedFactor, int x, int y, Room room ) {
 		super( null, speedFactor, x, y, room );
@@ -66,6 +67,7 @@ public class ExitCell extends TargetCell implements Cloneable {
 	 * be a rational number greater than or equal to 0 and smaller or equal to 1.
 	 * Otherwise the standard value "STANDARD_EXITCELL_SPEEDFACTOR" is set.
 	 */
+	@Override
 	public void setSpeedFactor( double speedFactor ) {
 		if( (speedFactor >= 0) && (speedFactor <= 1) )
 			this.speedFactor = speedFactor;
@@ -75,11 +77,14 @@ public class ExitCell extends TargetCell implements Cloneable {
 
 	/**
 	 * Returns a copy of itself as a new Object.
+	 * @return a copy of itself as a new Object
 	 */
+	@Override
 	public ExitCell clone() {
 		return clone( false );
 	}
 
+	@Override
 	public ExitCell clone( boolean cloneIndividual ) {
 		ExitCell aClone = new ExitCell( this.getX(), this.getY() );
 		basicClone( aClone, cloneIndividual );
@@ -87,6 +92,7 @@ public class ExitCell extends TargetCell implements Cloneable {
 		return aClone;
 	}
 
+	@Override
 	public String toString() {
 		return "E;" + super.toString();
 	}
@@ -99,6 +105,7 @@ public class ExitCell extends TargetCell implements Cloneable {
 		this.attractivity = attractivity;
 	}
 
+	@Override
 	public String getName() {
 		return name;
 	}

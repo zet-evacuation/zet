@@ -62,7 +62,7 @@ public final class RasterTools {
 	 * @param b the {@code y}-position of that the square should be
 	 */
 	private final static <T extends RoomRasterSquare> void addIfExistent( LinkedList<T> adjacentSquares, RoomRaster<T> raster, int a, int b ) {
-		if( raster.isValid( a, b ) && raster.getSquare( a, b ).accessible() ) {
+		if( raster.isValid( a, b ) && raster.getSquare( a, b ).isAccessible() ) {
 			T square = raster.getSquare( a, b );
 			adjacentSquares.add( square );
 		}

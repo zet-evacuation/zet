@@ -78,14 +78,14 @@ public class ChainDecomposition {
             //test(edgeSequence);
             int time = 0;
             for (FlowOverTimeEdge edge : edgeSequence) {
-                time += edgeSequence.delay(edge);
-                if (edgeSequence.delay(edge) < 0) {
-                    for (int t = time; t > time + edgeSequence.delay(edge); t--) {
+                time += edge.getDelay();
+                if (edge.getDelay() < 0) {
+                    for (int t = time; t > time + edge.getDelay(); t--) {
                         if (DEBUG_FINE) System.out.println(" Cancel waiting in " + edge.getEdge().start() + " at time " + t + ": " + edgeSequence);
                     }
                     reverseNodes.add(edge);
-                } else if (edgeSequence.delay(edge) > 0) {
-                    for (int i = time - edgeSequence.delay(edge); i < time; i++) {
+                } else if (edge.getDelay() > 0) {
+                    for (int i = time - edge.getDelay(); i < time; i++) {
                         if (DEBUG_FINE) System.out.println(" Waiting in " + edge.getEdge().start() + " at time " + i + ": " + edgeSequence);                        
                     }
                 }
@@ -258,7 +258,7 @@ public class ChainDecomposition {
                 if (DEBUG_FINE) System.out.println(" Waiting in " + edge.getEdge().start() + " at time " + t + ": " + path);
                 pathsUsingNode.get(edge.getEdge().start())[t].add(path);
             }            
-            time += path.delay(edge);
+            time += edge.getDelay();
             if (!pathsUsingEdge.isDefinedFor(edge.getEdge())) {
                 pathsUsingEdge.set(edge.getEdge(), new LinkedList[network.getTimeHorizon()]);
             }
@@ -280,10 +280,10 @@ public class ChainDecomposition {
     private void removePathFromUsageLists(FlowOverTimePath path) {
         int time = 0;
         for (FlowOverTimeEdge edge : path) {
-            for (int t = time; t < time + path.delay(edge); t++) {
+            for (int t = time; t < time + edge.getDelay(); t++) {
                 pathsUsingNode.get(edge.getEdge().start())[t].remove(path);
             }
-            time += path.delay(edge);
+            time += edge.getDelay();
             if (edge.getEdge().id() == 4278 && time == 16 && DEBUG) {
                 System.out.println("4278@16: remove " + path);
             }            
@@ -319,7 +319,7 @@ public class ChainDecomposition {
     private int getArrivalTime(FlowOverTimeEdgeSequence path, FlowOverTimeEdge edge) {
         int time = 0;
         for (FlowOverTimeEdge e : path) {
-            time += path.delay(e);
+            time += e.getDelay();
             if (e.equals(edge)) {
                 return time;
             }
@@ -334,7 +334,7 @@ public class ChainDecomposition {
             if (e.equals(edge)) {
                 return time;
             }                        
-            time += path.delay(e);
+            time += e.getDelay();
             time += network.transitTimes().get(e.getEdge());
         }       
         throw new AssertionError("This should not happen.");
@@ -343,7 +343,7 @@ public class ChainDecomposition {
     private int getArrivalTimeEnd(FlowOverTimeEdgeSequence path, FlowOverTimeEdge edge) {
         int time = 0;
         for (FlowOverTimeEdge e : path) {
-            time += path.delay(e);
+            time += e.getDelay();
             time += network.transitTimes().get(e.getEdge());
             if (e.equals(edge)) {
                 return time;
@@ -370,7 +370,7 @@ public class ChainDecomposition {
             if (e.getEdge().start().equals(node)) {
                 return time;
             }
-            time += path.delay(e);
+            time += e.getDelay();
             time += network.transitTimes().get(e.getEdge());
         }       
         throw new AssertionError("This should not happen.");
@@ -402,7 +402,7 @@ public class ChainDecomposition {
         boolean edgeReached = false;
         int t = 0;
         for (FlowOverTimeEdge e : path) {
-            t += path.delay(e);
+            t += e.getDelay();
             if (e.equals(edge) && t == time) {
                 edgeReached = true;
                 continue;
@@ -420,7 +420,7 @@ public class ChainDecomposition {
         result.setRate(path.getRate());
         int t = 0;
         for (FlowOverTimeEdge e : path) {
-            t += path.delay(e);
+            t += e.getDelay();
             if (e.equals(edge) && t == time) {
                 break;
             }
@@ -473,14 +473,14 @@ public class ChainDecomposition {
         boolean nodeReached = false;
         int t = 0;
         for (FlowOverTimeEdge e : path) {
-            if (e.getEdge().start().equals(node) && isIn(time, t, t + path.delay(e))) {
+            if (e.getEdge().start().equals(node) && isIn(time, t, t + e.getDelay())) {
                 nodeReached = true;
                 //e.setDelay(0);
                 result.addLast(e);
                 //result.getDynamicPath().addLastEdge(e, 0);
                 continue;
             }
-            t += path.delay(e);
+            t += e.getDelay();
             t += network.transitTimes().get(e.getEdge());
             if (nodeReached) {
                 result.addLast(e);
@@ -494,12 +494,12 @@ public class ChainDecomposition {
         result.setRate(path.getRate());
         int t = 0;
         for (FlowOverTimeEdge e : path) {            
-            if (e.getEdge().start().equals(node) && isIn(time, t, t + path.delay(e))) {
+            if (e.getEdge().start().equals(node) && isIn(time, t, t + e.getDelay())) {
                 break;
             }
-            t += path.delay(e);
+            t += e.getDelay();
             t += network.transitTimes().get(e.getEdge());
-            result.addLast(e);//getDynamicPath().addLastEdge(e, path.delay(e));
+            result.addLast(e);//getDynamicPath().addLastEdge(e, e.getDelay());
         }
         return result;
     }        
@@ -510,7 +510,7 @@ public class ChainDecomposition {
         result.setRate(path.getRate());
         int t = 0;
         for (FlowOverTimeEdge e : path) {
-            if (e.getEdge().start().equals(node) && isIn(time, t, t + path.delay(e))) {
+            if (e.getEdge().start().equals(node) && isIn(time, t, t + e.getDelay())) {
                 break;
             }
             t += e.getDelay();

@@ -213,7 +213,7 @@ public class ZToGridGraphConverterNew {
 			return true;
 		ZToGraphRasterSquare right = room.getSquare( i + 1, j );
 
-		if( right.inaccessible() )
+		if( right.isInaccessible() )
 			return true;
 		if( right.isMarked() )
 			return true;
@@ -226,7 +226,7 @@ public class ZToGridGraphConverterNew {
 				return true;
 
 		// a node is save or not but not both
-		if( square.getSave() != right.getSave() )
+		if( square.isSave() != right.isSave() )
 			return true;
 		if( square.getUpSpeedFactor() != right.getUpSpeedFactor() )
 			return true;
@@ -249,7 +249,7 @@ public class ZToGridGraphConverterNew {
 			return true;
 		ZToGraphRasterSquare down = room.getSquare( i, j + 1 );
 
-		if( down.inaccessible() )
+		if( down.isInaccessible() )
 			return true;
 		if( down.isMarked() )
 			return true;
@@ -260,7 +260,7 @@ public class ZToGridGraphConverterNew {
 		if( careForAssignmentAreas )
 			if( square.isSource() != down.isSource() )
 				return true;
-		if( square.getSave() != down.getSave() )
+		if( square.isSave() != down.isSave() )
 			return true;
 		if( square.getUpSpeedFactor() != down.getUpSpeedFactor() )
 			return true;
@@ -343,7 +343,7 @@ public class ZToGridGraphConverterNew {
 					int maxX = x;
 					int maxY = y;
 
-					if( square.accessible() && !square.isMarked() ) {
+					if( square.isAccessible() && !square.isMarked() ) {
 
 						Node node = new Node( nodeCount );
 						model.getZToGraphMapping().getNodeFloorMapping().set( node, plan.getFloorID( room.getFloor() ) );
@@ -1064,7 +1064,7 @@ public class ZToGridGraphConverterNew {
 				for( int col = 0; col < colCount; col++ ) {
 					ZToGraphRasterSquare square = room.getSquare( col, row );
 
-					if( square.getSave() ) {
+					if( square.isSave() ) {
 						Node node = square.getNode();
 						Edge edge = graph.getEdge( node, supersink );
 						if( edge == null ) {

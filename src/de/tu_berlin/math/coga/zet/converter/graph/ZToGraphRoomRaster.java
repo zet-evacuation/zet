@@ -103,7 +103,7 @@ public class ZToGraphRoomRaster extends RoomRaster<ZToGraphRasterSquare> {
 			result += "|";
 			for( int i = 0; i < rasterSquares.length; i++ ) {
 				ZToGraphRasterSquare square = getSquare( i, j );
-				if( square.accessible() ) {
+				if( square.isAccessible() ) {
 					Node node = square.getNode();
 					if( node != null ) {
 						if( node.id() < 10 )
@@ -130,11 +130,11 @@ public class ZToGraphRoomRaster extends RoomRaster<ZToGraphRasterSquare> {
 		for( int j = 0; j < rasterSquares[0].length; j++ ) {
 			result += "|";
 			for( int i = 0; i < rasterSquares.length; i++ )
-				if( getSquare( i, j ).accessible() )
+				if( getSquare( i, j ).isAccessible() )
 					if( getSquare( i, j ).isExit() )
 						result += "e";
 					else
-						if( getSquare( i, j ).getSave() )
+						if( getSquare( i, j ).isSave() )
 							result += "s";
 						else
 							if( getSquare( i, j ).isSource() )

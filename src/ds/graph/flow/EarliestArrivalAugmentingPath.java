@@ -29,6 +29,7 @@ import ds.graph.DynamicResidualNetwork;
  *
  * @author Martin Groß
  */
+@SuppressWarnings( "serial" )
 public class EarliestArrivalAugmentingPath extends LinkedList<NodeTimePair> {
 
     private int capacity;
@@ -65,7 +66,8 @@ public class EarliestArrivalAugmentingPath extends LinkedList<NodeTimePair> {
     
     public FlowOverTimeEdgeSequence getFlowOverTimeEdgeSequence(DynamicResidualNetwork network) {
         FlowOverTimeEdgeSequence dpf = new FlowOverTimeEdgeSequence();
-        dpf.setRate(getCapacity());
+        dpf.setAmount( getCapacity() ); // a path is used once for the capacity.
+				dpf.setRate(getCapacity());			// thus, amount and rate must be equal
         NodeTimePair first = getFirst(), previous = null;
         for (NodeTimePair ntp : this) {
             if (ntp == first) {
@@ -78,14 +80,9 @@ public class EarliestArrivalAugmentingPath extends LinkedList<NodeTimePair> {
                 }
                 if (previous == first) {
                     dpf.addLast(new FlowOverTimeEdge(network.getEdge(previous.getNode(), ntp.getNode(), previous.getEnd(), ntp.getStart()), previous.getEnd(), previous.getEnd()));
-                    //dpf.getDynamicPath().addLastEdge(network.getEdge(previous.getNode(), ntp.getNode(), previous.getEnd(), ntp.getStart()), previous.getEnd());
                 } else {
                     //System.out.println("Edges: " + network.getEdges(previous.getNode(), ntp.getNode()));
-                    //for (Edge edge : network.getEdges(previous.getNode(), ntp.getNode())) {
-                    //    System.out.println("Edge: " + edge + " TT = " + network.transitTimes().get(edge));
-                    //}
                     dpf.addLast(new FlowOverTimeEdge(network.getEdge(previous.getNode(), ntp.getNode(), previous.getEnd(), ntp.getStart()), previous.getEnd() - previous.getStart(), previous.getEnd()));
-                    //dpf.getDynamicPath().addLastEdge(network.getEdge(previous.getNode(), ntp.getNode(), previous.getEnd(), ntp.getStart()), previous.getEnd() - previous.getStart());
                 }
                 previous = ntp;                
             }

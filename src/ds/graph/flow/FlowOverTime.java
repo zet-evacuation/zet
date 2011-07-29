@@ -44,7 +44,7 @@ public class FlowOverTime {
         int index = 0;
 				totalCost = 0;
         for (EarliestArrivalAugmentingPath eaaPath : eaaPaths) {
-            if (DEBUG) System.out.println( (index++) + ":\n " + eaaPath + "\n " + eaaPath.getFlowOverTimeEdgeSequence(network).toText(network.transitTimes()));
+            if (DEBUG ) System.out.println( (index++) + ":\n " + eaaPath + "\n " + eaaPath.getFlowOverTimeEdgeSequence(network).toText(network.transitTimes()));
             paths.add(eaaPath.getFlowOverTimeEdgeSequence(network));
             flowAmount += eaaPath.getCapacity();
             timeHorizon = Math.max(timeHorizon, eaaPath.getArrivalTime() + 1);

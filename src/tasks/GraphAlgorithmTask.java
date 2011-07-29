@@ -9,6 +9,8 @@ import de.tu_berlin.math.coga.zet.converter.graph.GraphAssignmentConverter;
 import de.tu_berlin.math.coga.zet.converter.graph.ZToNonGridGraphConverter;
 import de.tu_berlin.math.coga.common.algorithm.Algorithm;
 import de.tu_berlin.math.coga.zet.NetworkFlowModel;
+import de.tu_berlin.math.coga.zet.converter.graph.BaseZToGraphConverter;
+import de.tu_berlin.math.coga.zet.converter.graph.ZToGridGraphConverter;
 import ds.GraphVisualizationResults;
 import ds.z.Project;
 import ds.PropertyContainer;
@@ -31,7 +33,9 @@ public class GraphAlgorithmTask extends Algorithm<Project, GraphVisualizationRes
 	@Override
 	protected GraphVisualizationResults runAlgorithm( Project project ) {
 		// convert the graph
-		final ZToNonGridGraphConverter conv = new ZToNonGridGraphConverter();
+		//final ZToNonGridGraphConverter conv = new ZToNonGridGraphConverter();
+		//final BaseZToGraphConverter conv = new ZToNonGridGraphConverter();
+		final BaseZToGraphConverter conv = new ZToGridGraphConverter();	
 		conv.setProblem( project.getBuildingPlan() );
 		conv.run();
 
