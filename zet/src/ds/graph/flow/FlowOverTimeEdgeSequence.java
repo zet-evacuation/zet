@@ -35,195 +35,207 @@ import java.util.LinkedList;
  * starting time this implies the point in time where the flow will stop
  * sending.</p>
  */
-@SuppressWarnings( "serial" )
+@SuppressWarnings("serial")
 public class FlowOverTimeEdgeSequence extends LinkedList<FlowOverTimeEdge> {
-	/** The amount of flow flowing through this edge sequence. */
-	private int amount;
-	/** The rate with which the flow enters the edge sequence. */
-	private int rate;
 
-	/**
-	 * Creates an empty flow sequence for an {@code amount} of one unit of flow
-	 * entering with {@code rate} 1.
-	 */
-	public FlowOverTimeEdgeSequence() {
-		super();
-		amount = 1;
-		rate = 1;
-	}
+    /** The amount of flow flowing through this edge sequence. */
+    private int amount;
+    /** The rate with which the flow enters the edge sequence. */
+    private int rate;
 
-	/**
-	 * Creates a new {@code FlowOverTimeEdgeSequence} that contains the same
-	 * edges. Note, that <b>the edges are not copied</b>, thus the instances of
-	 * the objects remain the same.
-	 * @param edgeSequence the edge sequence that is copied.
-	 */
-	public FlowOverTimeEdgeSequence( FlowOverTimeEdgeSequence edgeSequence ) {
-		rate = edgeSequence.getRate();
-		amount = edgeSequence.getAmount();
-		for( FlowOverTimeEdge edge : edgeSequence )
-			add( edge );
-	}
+    /**
+     * Creates an empty flow sequence for an {@code amount} of one unit of flow
+     * entering with {@code rate} 1.
+     */
+    public FlowOverTimeEdgeSequence() {
+        super();
+        amount = 1;
+        rate = 1;
+    }
 
-	/**
-	 * Appends a sequence of edges to this edge sequence.
-	 * @param sequence the added sequence
-	 */
-	public void append( FlowOverTimeEdgeSequence sequence ) {
-		addAll( sequence );
-	}
+    /**
+     * Creates a new {@code FlowOverTimeEdgeSequence} that contains the same
+     * edges. Note, that <b>the edges are not copied</b>, thus the instances of
+     * the objects remain the same.
+     * @param edgeSequence the edge sequence that is copied.
+     */
+    public FlowOverTimeEdgeSequence(FlowOverTimeEdgeSequence edgeSequence) {
+        rate = edgeSequence.getRate();
+        amount = edgeSequence.getAmount();
+        for (FlowOverTimeEdge edge : edgeSequence) {
+            add(edge);
+        }
+    }
 
-	/**
-	 * Appends a sequence to this edge sequence.
-	 * @param sequence the sequence
-	 * @param time ignored.
-	 */
-	public void append( FlowOverTimeEdgeSequence sequence, int time ) {
-		append( sequence );
-		// TODO: time is ignored
-	}
+    /**
+     * Appends a sequence of edges to this edge sequence.
+     * @param sequence the added sequence
+     */
+    public void append(FlowOverTimeEdgeSequence sequence) {
+        addAll(sequence);
+    }
 
-	/**
-	 * Returns the first edge of the sequence.
-	 * @return the first edge of the sequence
-	 */
-	public FlowOverTimeEdge getFirstEdge() {
-		return getFirst();
-	}
+    /**
+     * Appends a sequence to this edge sequence.
+     * @param sequence the sequence
+     * @param time ignored.
+     */
+    public void append(FlowOverTimeEdgeSequence sequence, int time) {
+        append(sequence);
+        // TODO: time is ignored
+    }
 
-	/**
-	 * Returns the last edge of the sequence.
-	 * @return the last edge of the sequence
-	 */
-	public FlowOverTimeEdge getLastEdge() {
-		return getLast();
-	}
+    /**
+     * Returns the first edge of the sequence.
+     * @return the first edge of the sequence
+     */
+    public FlowOverTimeEdge getFirstEdge() {
+        return getFirst();
+    }
 
-	/**
-	 * Returns the copy of the edge that is contained in this edge sequence, if
-	 * it is contained. {@code null} otherwise.
-	 * @param edge the edge sat is searched in this edge sequence
-	 * @return the (maybe copy) of the edge or {@code null}
-	 */
-	public FlowOverTimeEdge get( Edge edge ) {
-		for( FlowOverTimeEdge e : this )
-			if( e.getEdge().equals( edge ) )
-				return e;
-		return null;
-	}
+    /**
+     * Returns the last edge of the sequence.
+     * @return the last edge of the sequence
+     */
+    public FlowOverTimeEdge getLastEdge() {
+        return getLast();
+    }
 
-	public FlowOverTimeEdge get( Edge edge, int time ) {
-		for( FlowOverTimeEdge e : this )
-			if( e.getEdge().equals( edge ) && e.getTime() == time )
-				return e;
-		return null;
-	}
+    /**
+     * Returns the copy of the edge that is contained in this edge sequence, if
+     * it is contained. {@code null} otherwise.
+     * @param edge the edge sat is searched in this edge sequence
+     * @return the (maybe copy) of the edge or {@code null}
+     */
+    public FlowOverTimeEdge get(Edge edge) {
+        for (FlowOverTimeEdge e : this) {
+            if (e.getEdge().equals(edge)) {
+                return e;
+            }
+        }
+        return null;
+    }
 
-	public FlowOverTimeEdge get( IdentifiableIntegerMapping<Edge> transitTimes, Node node, int time ) {
-		int lastArrival = 0;
-		for( FlowOverTimeEdge e : this ) {
-			if( e.getEdge().start().equals( node ) && lastArrival <= time && time <= e.getTime() )
-				return e;
-			lastArrival = e.getTime() + transitTimes.get( e.getEdge() );
-		}
-		return null;
-	}
+    public FlowOverTimeEdge get(Edge edge, int time) {
+        for (FlowOverTimeEdge e : this) {
+            if (e.getEdge().equals(edge) && e.getTime() == time) {
+                return e;
+            }
+        }
+        return null;
+    }
 
-	public int length( IdentifiableIntegerMapping<Edge> transitTimes ) {
-		return getLast().getTime() + transitTimes.get( getLast().getEdge() );
-	}
+    public FlowOverTimeEdge get(IdentifiableIntegerMapping<Edge> transitTimes, Node node, int time) {
+        int lastArrival = 0;
+        for (FlowOverTimeEdge e : this) {
+            if (e.getEdge().start().equals(node) && lastArrival <= time && time <= e.getTime()) {
+                return e;
+            }
+            lastArrival = e.getTime() + transitTimes.get(e.getEdge());
+        }
+        return null;
+    }
 
-	public int lengthUntil( IdentifiableIntegerMapping<Edge> transitTimes, FlowOverTimeEdge edge ) {
-		return edge.getTime();
-	}
+    public int length(IdentifiableIntegerMapping<Edge> transitTimes) {
+        return getLast().getTime() + transitTimes.get(getLast().getEdge());
+    }
 
-	public int lengthUpTo( IdentifiableIntegerMapping<Edge> transitTimes, FlowOverTimeEdge edge ) {
-		return edge.getTime() + transitTimes.get( edge.getEdge() );
-	}
+    public int lengthUntil(IdentifiableIntegerMapping<Edge> transitTimes, FlowOverTimeEdge edge) {
+        return edge.getTime();
+    }
 
-	public FlowOverTimeEdgeSequence subsequence( FlowOverTimeEdge from, FlowOverTimeEdge to ) {
-		return subsequence( from, to, false, false );
-	}
+    public int lengthUpTo(IdentifiableIntegerMapping<Edge> transitTimes, FlowOverTimeEdge edge) {
+        return edge.getTime() + transitTimes.get(edge.getEdge());
+    }
 
-	public FlowOverTimeEdgeSequence subsequence( FlowOverTimeEdge from, FlowOverTimeEdge to, boolean fromInclusive, boolean toInclusive ) {
-		FlowOverTimeEdgeSequence result = new FlowOverTimeEdgeSequence();
-		result.setAmount( amount );
-		result.setRate( rate );
-		boolean copying = (from == null);
-		for( FlowOverTimeEdge edge : this )
-			if( copying && edge != to )
-				result.add( edge );
-			else if( copying && edge == to )
-				break;
-			else if( !copying && edge == from )
-				copying = true;
-		if( fromInclusive && from != null )
-			result.addFirst( from );
-		if( toInclusive && to != null )
-			result.addLast( to );
-		return result;
-	}
+    public FlowOverTimeEdgeSequence subsequence(FlowOverTimeEdge from, FlowOverTimeEdge to) {
+        return subsequence(from, to, false, false);
+    }
 
-	/**
-	 * Returns the amount of flow that is sent through this edge sequence.
-	 * @return the amount of flow that is sent through this edge sequence
-	 */
-	public int getAmount() {
-		return amount;
-	}
+    public FlowOverTimeEdgeSequence subsequence(FlowOverTimeEdge from, FlowOverTimeEdge to, boolean fromInclusive, boolean toInclusive) {
+        FlowOverTimeEdgeSequence result = new FlowOverTimeEdgeSequence();
+        result.setAmount(amount);
+        result.setRate(rate);
+        boolean copying = (from == null);
+        for (FlowOverTimeEdge edge : this) {
+            if (copying && edge != to) {
+                result.add(edge);
+            } else if (copying && edge == to) {
+                break;
+            } else if (!copying && edge == from) {
+                copying = true;
+            }
+        }
+        if (fromInclusive && from != null) {
+            result.addFirst(from);
+        }
+        if (toInclusive && to != null) {
+            result.addLast(to);
+        }
+        return result;
+    }
 
-	/**
-	 * Sets the amount of flow that should be sent through the edge sequence.
-	 * @param amount the amount of flow
-	 */
-	public void setAmount( int amount ) {
-		this.amount = amount;
-	}
+    /**
+     * Returns the amount of flow that is sent through this edge sequence.
+     * @return the amount of flow that is sent through this edge sequence
+     */
+    public int getAmount() {
+        return amount;
+    }
 
-	/**
-	 * Returns the rate with which the flow enters the edge sequence.
-	 * @return the rate with which the flow enters the edge sequence
-	 */
-	public int getRate() {
-		return rate;
-	}
+    /**
+     * Sets the amount of flow that should be sent through the edge sequence.
+     * @param amount the amount of flow
+     */
+    public void setAmount(int amount) {
+        this.amount = amount;
+    }
 
-	/**
-	 * Sets the rate of flow with which the flow can enter the edge sequence.
-	 * @param rate the rate with which the flow enters the sequence
-	 */
-	public void setRate( int rate ) {
-		this.rate = rate;
-	}
+    /**
+     * Returns the rate with which the flow enters the edge sequence.
+     * @return the rate with which the flow enters the edge sequence
+     */
+    public int getRate() {
+        return rate;
+    }
 
-	/**
-	 * Returns a String consisting of the rate, the amount and a description
-	 * of the path that is described in {@link DynamicPath}.
-	 * @return a String consisting of the rate, the amount and a description
-	 * of the path that is described in {@link DynamicPath}.
-	 */
-	@Override
-	public String toString() {
-		return String.format( "{%1$s, %2$s}", rate, super.toString() );
-	}
+    /**
+     * Sets the rate of flow with which the flow can enter the edge sequence.
+     * @param rate the rate with which the flow enters the sequence
+     */
+    public void setRate(int rate) {
+        this.rate = rate;
+    }
 
-	/**
-	 * Returns a detailed text representation of the flow over time. The output
-	 * can be generated using all transit time.
-	 * @param transitTimes the transit times that are used
-	 * @return a detailed multi line text representation
-	 */
-	public String toText( IdentifiableIntegerMapping<Edge> transitTimes ) {
-		StringBuilder result = new StringBuilder( size() * 40 );
-		result.append( toString() ).append( "\n" );
-		int lastArrival = 0;
-		for( FlowOverTimeEdge edge : this ) {
-			result.append( " Reaching node " ).append( edge.getEdge().start() ).append( " at time " ).append( lastArrival ).append( ".\n" );
-			if( edge.getTime() - lastArrival != 0 )
-				result.append( " Waiting for " ).append( edge.getTime() - lastArrival ).append( ".\n" );
-			result.append( " Entering edge " ).append( edge.getEdge().id() ).append( " at " ).append( edge.getTime() ).append( ".\n" );
-			lastArrival = edge.getTime() + transitTimes.get( edge.getEdge() );
-		}
-		return result.toString();
-	}
+    /**
+     * Returns a String consisting of the rate, the amount and a description
+     * of the path that is described in {@link DynamicPath}.
+     * @return a String consisting of the rate, the amount and a description
+     * of the path that is described in {@link DynamicPath}.
+     */
+    @Override
+    public String toString() {
+        return String.format("{%1$s, %2$s}", rate, super.toString());
+    }
+
+    /**
+     * Returns a detailed text representation of the flow over time. The output
+     * can be generated using all transit time.
+     * @param transitTimes the transit times that are used
+     * @return a detailed multi line text representation
+     */
+    public String toText(IdentifiableIntegerMapping<Edge> transitTimes) {
+        StringBuilder result = new StringBuilder(size() * 40);
+        result.append(toString()).append("\n");
+        int lastArrival = 0;
+        for (FlowOverTimeEdge edge : this) {
+            result.append(" Reaching node ").append(edge.getEdge().start()).append(" at time ").append(lastArrival).append(".\n");
+            if (edge.getTime() - lastArrival != 0) {
+                result.append(" Waiting for ").append(edge.getTime() - lastArrival).append(".\n");
+            }
+            result.append(" Entering edge ").append(edge.getEdge().id()).append(" at ").append(edge.getTime()).append(".\n");
+            lastArrival = edge.getTime() + transitTimes.get(edge.getEdge());
+        }
+        return result.toString();
+    }
 }

@@ -101,9 +101,4 @@ public class FlowOverTimePath extends FlowOverTimeEdgeSequence /*extends StaticP
 	public Edge lastEdge() {
 		return getFirstEdge().getEdge();
 	}
-
-	@Deprecated
-	public void addLastEdge( Edge edge, int delay ) {
-		addLast( new FlowOverTimeEdge( edge, delay ) );
-	}
 }
