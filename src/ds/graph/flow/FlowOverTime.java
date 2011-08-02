@@ -19,6 +19,8 @@
  */
 package ds.graph.flow;
 
+import algo.graph.dynamicflow.ChainDecompositionProblem;
+import algo.graph.dynamicflow.NewChainDecomposition;
 import ds.graph.DynamicResidualNetwork;
 import java.util.LinkedList;
 import java.util.Queue;
@@ -51,8 +53,12 @@ public class FlowOverTime {
 						totalCost += eaaPath.getCapacity() * eaaPath.getArrivalTime();
         }
         ChainDecomposition2 pd = new ChainDecomposition2();
-        pd.pathBased = pathBased;
-        pd.uncrossPaths(network, paths);
+        NewChainDecomposition pd2 = new NewChainDecomposition();
+        pd2.setProblem(new ChainDecompositionProblem(paths, network));
+        pd2.run();
+        pathBased = pd2.getSolution();
+        //pd.pathBased = pathBased;
+        //pd.uncrossPaths(network, paths);
     }
     
     public EdgeBasedFlowOverTime getEdgeBased() {
