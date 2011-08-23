@@ -16,7 +16,6 @@ import ds.graph.Graph;
 import ds.graph.IdentifiableCollection;
 import ds.graph.IdentifiableIntegerMapping;
 import ds.graph.ListSequence;
-import ds.graph.Network;
 
 /**
  *
@@ -68,7 +67,6 @@ public class PrimsAlgo extends Algorithm<MinSpanningTreeProblem,MinSpanningTree>
         //gibt zufaellig einen Startknoten wider
         Random r = new Random();
         int num = 0 + Math.abs(r.nextInt()) % numNodes;
-        System.out.println("Knotennummer " + num);
   
         startNode = NumNodes[num];
         
@@ -104,7 +102,7 @@ public class PrimsAlgo extends Algorithm<MinSpanningTreeProblem,MinSpanningTree>
                 }
             }
             Edge edge = new Edge(NumEdges++,MinEdge.start(),MinEdge.end());
-            System.out.println("Minimale Kante gefunden ");
+            overalldist = overalldist + TransitForEdge.get(MinEdge);
             solEdges.add(edge);
             if (solNodes.contains(MinEdge.start()))
             {
@@ -117,56 +115,12 @@ public class PrimsAlgo extends Algorithm<MinSpanningTreeProblem,MinSpanningTree>
             edges.remove(edge);
             
         }
-        
-     
-        /*while (solNodes != OriginGraph.nodes())
-        {
-            currentEdges = OriginGraph.incidentEdges( currentNode );
-            System.out.println("adjazente Kanten " + currentEdges.size());
-            //anderer Endknoten der Kante darf nicht schon in SolNodes enthalten sein
-            for (Edge error: currentEdges)
-            {
-                if (!solNodes.contains(error.opposite(currentNode)))
-                {
-                    remaincurrentEdges = new ListSequence<Edge>();
-                    remaincurrentEdges.add(error);
-                }
-            }
-            System.out.println("verbleibende adjazente Kanten " + currentEdges.size());
-            
-            for (Edge neu : remaincurrentEdges)
-            {
-                //holt aktuelle Transitzeit fuer Kante
-                Transit = TransitForEdge.get(neu);
-                //gibt die Kante mit minimalem Wert zurueck
-                if (Transit < Min )
-                {
-                    MinEdge = neu; 
-                }
-                
-            }
-            
-            Node anode = currentNode;
-            Node bnode = MinEdge.opposite(anode);        
-            Edge edge = new Edge(NumEdges++, anode, bnode);
-            solEdges.add(edge);
-            solNodes.add(bnode);
-            overalldist = overalldist + Transit;
-            currentNode = bnode;
-            //alle Kanten der wieder geloescht
-            /*for (Edge edgeN : remaincurrentEdges)
-            {
-                remaincurrentEdges.remove(edgeN);
-            }*/
-            System.out.println("1. Runde done ");
-           
-        
+       
         }
         catch(Exception e) {
              System.out.println("Fehler in runMinSpan " + e.toString());
          }
         System.out.println("Overalldistance " + overalldist);
-        System.out.println("Number of Solnodes " + solNodes.size());
         return new MinSpanningTree(minspan,solEdges,overalldist);
        
  

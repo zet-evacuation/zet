@@ -37,7 +37,7 @@ public class FlowOverTime {
     private PathBasedFlowOverTime pathBased;
     private int flowAmount;
     private int timeHorizon;
-		private int totalCost;
+    private int totalCost;
 
     public FlowOverTime(DynamicResidualNetwork network, Queue<EarliestArrivalAugmentingPath> eaaPaths) {
         edgeBased = new EdgeBasedFlowOverTime(network.flow());

@@ -192,7 +192,19 @@ public class NetworkFlowModel {
     public void setTransitTime(Edge edge, int value) {
         transitTimes.set(edge, value);
     }
-
+    
+    public void setExactTransitTime(Edge edge, double value) {
+        exactTransitTimes.set(edge, value);
+    }
+    
+    public double getExactTransitTime(Edge edge) {
+        if (exactTransitTimes.isDefinedFor(edge)) {
+            return exactTransitTimes.get(edge);
+        } else {
+            throw new IllegalArgumentException(DefaultLoc.getSingleton (
+			).getString ("ds.Graph.NoExactTransitTimeException" + edge + "."));
+        }
+    }
     public IdentifiableIntegerMapping<Edge> getTransitTimes() {
         return transitTimes;
     }
@@ -200,7 +212,7 @@ public class NetworkFlowModel {
     public void setTransitTimes(IdentifiableIntegerMapping<Edge> transitTimes) {
         this.transitTimes = transitTimes;
     }
-
+    
     public Node getSupersink() {
         return supersink;
     }
