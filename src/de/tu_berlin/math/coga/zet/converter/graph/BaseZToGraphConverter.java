@@ -24,7 +24,7 @@ public abstract class BaseZToGraphConverter extends Algorithm<BuildingPlan, Netw
 	protected NetworkFlowModel model;
 	protected BuildingPlan plan;
 	protected ZToGraphRasterContainer raster;
-    protected Graph roomGraph;
+        protected Graph roomGraph;
 
 	@Override
 	protected NetworkFlowModel runAlgorithm( BuildingPlan problem ) {
@@ -38,8 +38,6 @@ public abstract class BaseZToGraphConverter extends Algorithm<BuildingPlan, Netw
 		createNodes();
 		// create edges, their capacities and the capacities of the nodes
 		createEdgesAndCapacities();
-
-
 		// connect the nodes of different rooms with edges
 		//Hashtable<Edge, ArrayList<ZToGraphRasterSquare>> doorEdgeToSquare = connectRooms(raster, model);
 		// calculate the transit times for all edges

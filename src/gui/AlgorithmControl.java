@@ -19,6 +19,7 @@ import de.tu_berlin.math.coga.zet.NetworkFlowModel;
 import de.tu_berlin.math.coga.zet.converter.graph.BaseZToGraphConverter;
 import de.tu_berlin.math.coga.zet.converter.graph.ZToGridGraphConverter;
 import de.tu_berlin.math.coga.zet.converter.graph.ZToNonGridGraphConverter;
+import de.tu_berlin.math.coga.zet.converter.graph.ZToSpanTreeConverter;
 import ds.GraphVisualizationResults;
 import ds.z.Project;
 import ds.PropertyContainer;
@@ -288,7 +289,8 @@ public class AlgorithmControl implements PropertyChangeListener {
 
 	public void convertGraph( PropertyChangeListener propertyChangeListener ) {
 		//final BaseZToGraphConverter conv = new ZToNonGridGraphConverter();
-		final BaseZToGraphConverter conv = new ZToGridGraphConverter();	
+		//final BaseZToGraphConverter conv = new ZToGridGraphConverter();
+                final BaseZToGraphConverter conv = new ZToSpanTreeConverter();
 		conv.setProblem( project.getBuildingPlan() );
 		final SerialTask st = new SerialTask( conv );
 		st.addPropertyChangeListener( new PropertyChangeListener() {

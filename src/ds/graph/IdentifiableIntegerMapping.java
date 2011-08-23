@@ -109,7 +109,8 @@ public class IdentifiableIntegerMapping<D extends Identifiable> implements Clone
 	public int get( D identifiableObject ) {
 		return mapping[identifiableObject.id()];
 	}
-
+        
+        
 	/**
 	 * Associates {@code identifiableObject} with {@code value} in
 	 * this mapping. Any previously made association for
