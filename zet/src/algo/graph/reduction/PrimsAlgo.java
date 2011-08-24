@@ -53,22 +53,14 @@ public class PrimsAlgo extends Algorithm<MinSpanningTreeProblem,MinSpanningTree>
         //Holt zugehoerigen Graphen dazu
         OriginGraph = OriginNetwork.getGraph();
         int numNodes = OriginGraph.numberOfNodes();
-        System.out.println("Anzahl an Knoten " + numNodes);
         //kalkuliert Distanzen der einzelnen Knoten
         IdentifiableIntegerMapping<Edge> TransitForEdge = OriginNetwork.getTransitTimes();
-        
-        Node[] NumNodes = new Node[OriginGraph.numberOfNodes()];
-        for (Node node : OriginGraph.nodes())
-        {
-            NumNodes[i] = node; 
-            i++;
-        }
-        
+     
         //gibt zufaellig einen Startknoten wider
         Random r = new Random();
         int num = 0 + Math.abs(r.nextInt()) % numNodes;
   
-        startNode = NumNodes[num];
+        startNode = OriginGraph.getNode(num);
         
         if (startNode != OriginNetwork.getSupersink())
         {
@@ -76,31 +68,33 @@ public class PrimsAlgo extends Algorithm<MinSpanningTreeProblem,MinSpanningTree>
         }
         else
         {
-            startNode = NumNodes[num+1];
+            startNode = OriginGraph.getNode(num+1);
             currentNode = startNode;
         }
     
-        //boolean insert = solNodes.add(startNode);
         solNodes.add(startNode);
-        //System.out.println("Startknoten gefunden " + insert);
- 
+        edges = OriginGraph.edges();
+        
         while (solNodes.size() < OriginGraph.numberOfNodes()+1)
         {
-            edges = OriginGraph.edges();
             for (Edge test: edges)
             {
                 if (solNodes.contains(test.end()) ^ solNodes.contains(test.start()))
                 {
                     currentEdges.add(test);
+                    if (TransitForEdge.get(test) < Min)
+                    {
+                        MinEdge = test;
+                    }
                 }
             }
-            for (Edge test2 : currentEdges)
+            /*for (Edge test2 : currentEdges)
             {
                 if (TransitForEdge.get(test2) < Min)
                 {
                     MinEdge = test2;
                 }
-            }
+            }*/
             Edge edge = new Edge(NumEdges++,MinEdge.start(),MinEdge.end());
             overalldist = overalldist + TransitForEdge.get(MinEdge);
             solEdges.add(edge);
@@ -120,7 +114,7 @@ public class PrimsAlgo extends Algorithm<MinSpanningTreeProblem,MinSpanningTree>
         catch(Exception e) {
              System.out.println("Fehler in runMinSpan " + e.toString());
          }
-        System.out.println("Overalldistance " + overalldist);
+        //System.out.println("Overalldistance " + overalldist);
         return new MinSpanningTree(minspan,solEdges,overalldist);
        
  
