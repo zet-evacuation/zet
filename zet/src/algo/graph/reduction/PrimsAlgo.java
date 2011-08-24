@@ -58,11 +58,12 @@ public class PrimsAlgo extends Algorithm<MinSpanningTreeProblem,MinSpanningTree>
      
         //gibt zufaellig einen Startknoten wider
         Random r = new Random();
-        int num = 0 + Math.abs(r.nextInt()) % numNodes;
+        int num = 1 + Math.abs(r.nextInt()) % numNodes;
   
+        //Zufallszahl beginnt erst bei 1, sodass nicht die Supersenke gefunden werden kann
         startNode = OriginGraph.getNode(num);
         
-        if (startNode != OriginNetwork.getSupersink())
+        /*if (startNode != OriginNetwork.getSupersink())
         {
             currentNode = startNode;
         }
@@ -70,8 +71,8 @@ public class PrimsAlgo extends Algorithm<MinSpanningTreeProblem,MinSpanningTree>
         {
             startNode = OriginGraph.getNode(num+1);
             currentNode = startNode;
-        }
-    
+        }*/
+        
         solNodes.add(startNode);
         edges = OriginGraph.edges();
         
@@ -81,22 +82,20 @@ public class PrimsAlgo extends Algorithm<MinSpanningTreeProblem,MinSpanningTree>
             {
                 if (solNodes.contains(test.end()) ^ solNodes.contains(test.start()))
                 {
-                    currentEdges.add(test);
+                    //currentEdges.add(test);
                     if (TransitForEdge.get(test) < Min)
                     {
                         MinEdge = test;
                     }
+                    /*if (TransitForEdge.get(test) == TransitForEdge.minimum(edges))
+                    {
+                        MinEdge = test;
+                    }*/
                 }
             }
-            /*for (Edge test2 : currentEdges)
-            {
-                if (TransitForEdge.get(test2) < Min)
-                {
-                    MinEdge = test2;
-                }
-            }*/
+            
             Edge edge = new Edge(NumEdges++,MinEdge.start(),MinEdge.end());
-            overalldist = overalldist + TransitForEdge.get(MinEdge);
+            //overalldist = overalldist + TransitForEdge.get(MinEdge);
             solEdges.add(edge);
             if (solNodes.contains(MinEdge.start()))
             {
