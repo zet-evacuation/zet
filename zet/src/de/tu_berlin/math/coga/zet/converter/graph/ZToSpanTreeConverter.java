@@ -77,8 +77,12 @@ public class ZToSpanTreeConverter extends ZToNonGridGraphConverter{
                 minspanprob = new MinSpanningTreeProblem(model,model.getTransitTimes());
               
                 primalgo = new PrimsAlgo();
-                minspantree = primalgo.runAlgorithm(minspanprob);
-                System.out.println("Prim done");
+								primalgo.setProblem( minspanprob );
+                //minspantree = primalgo.runAlgorithm(minspanprob);
+                System.out.print("Compute minimum spanning tree using Prim... " );
+								primalgo.run();
+                System.out.println(" fertig in " + primalgo.getRuntimeAsString() );
+								minspantree = primalgo.getSolution();
                 
                 IdentifiableCollection<Edge> MinEdges = minspantree.getEdges();
                 System.out.println("Anzahl der Spanning Tree Kanten " + MinEdges.size());
