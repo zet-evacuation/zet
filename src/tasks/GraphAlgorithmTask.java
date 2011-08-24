@@ -11,6 +11,7 @@ import de.tu_berlin.math.coga.common.algorithm.Algorithm;
 import de.tu_berlin.math.coga.zet.NetworkFlowModel;
 import de.tu_berlin.math.coga.zet.converter.graph.BaseZToGraphConverter;
 import de.tu_berlin.math.coga.zet.converter.graph.ZToGridGraphConverter;
+import de.tu_berlin.math.coga.zet.converter.graph.ZToSpanTreeConverter;
 import ds.GraphVisualizationResults;
 import ds.z.Project;
 import ds.PropertyContainer;
@@ -35,7 +36,9 @@ public class GraphAlgorithmTask extends Algorithm<Project, GraphVisualizationRes
 		// convert the graph
 		//final ZToNonGridGraphConverter conv = new ZToNonGridGraphConverter();
 		//final BaseZToGraphConverter conv = new ZToNonGridGraphConverter();
-		final BaseZToGraphConverter conv = new ZToGridGraphConverter();	
+		//final BaseZToGraphConverter conv = new ZToGridGraphConverter();	
+		final ZToSpanTreeConverter conv = new ZToSpanTreeConverter();	
+
 		conv.setProblem( project.getBuildingPlan() );
 		conv.run();
 
