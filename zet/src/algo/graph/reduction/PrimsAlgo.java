@@ -15,7 +15,11 @@ import ds.graph.DynamicNetwork;
 import ds.graph.Graph;
 import ds.graph.IdentifiableCollection;
 import ds.graph.IdentifiableIntegerMapping;
+import ds.graph.IdentifiableObjectMapping;
 import ds.graph.ListSequence;
+import ds.graph.MinHeap;
+import java.util.PriorityQueue;
+
 
 /**
  *
@@ -42,6 +46,9 @@ public class PrimsAlgo extends Algorithm<MinSpanningTreeProblem,MinSpanningTree>
     Graph OriginGraph;
     DynamicNetwork neu;
     int NumEdges = 0;
+    //Zur Implementation der Priority Queue...
+    IdentifiableIntegerMapping<Node> distances;
+    IdentifiableObjectMapping<Node, Edge> heapedges;
     
     @Override
     public MinSpanningTree runAlgorithm(MinSpanningTreeProblem minspan)
@@ -59,56 +66,102 @@ public class PrimsAlgo extends Algorithm<MinSpanningTreeProblem,MinSpanningTree>
         //gibt zufaellig einen Startknoten wider
         Random r = new Random();
         int num = 1 + Math.abs(r.nextInt()) % numNodes;
-  
-        //Zufallszahl beginnt erst bei 1, sodass nicht die Supersenke gefunden werden kann
+ 
         startNode = OriginGraph.getNode(num);
-        
-        /*if (startNode != OriginNetwork.getSupersink())
-        {
-            currentNode = startNode;
-        }
-        else
-        {
-            startNode = OriginGraph.getNode(num+1);
-            currentNode = startNode;
-        }*/
-        
         solNodes.add(startNode);
-        edges = OriginGraph.edges();
+         
+        distances = new IdentifiableIntegerMapping<Node>(OriginNetwork.getGraph().numberOfNodes());
+        heapedges = new IdentifiableObjectMapping<Node, Edge>(OriginNetwork.getGraph().numberOfEdges(), Edge.class);
+        MinHeap<Node, Integer> queue = new MinHeap<Node, Integer>(OriginNetwork.getGraph().numberOfNodes());
+        IdentifiableCollection<Edge> incidentEdges;
+        
+        for (Node node: OriginNetwork.getGraph().nodes())
+        {
+            distances.add(node, Integer.MAX_VALUE);
+            heapedges.set(node, null);
+        }
+        
+        distances.set(startNode, 0);
+        System.out.println("done");
+        queue.insert(startNode, 0);
+        
+        
+        while (!queue.isEmpty())
+        {
+            MinHeap<Node, Integer>.Element min = queue.extractMin();
+            Node v = min.getObject();
+            solNodes.add(v);
+            distances.set(v, Integer.MIN_VALUE);
+            
+            if (v != startNode)
+            {
+                Edge edge = new Edge(NumEdges++,heapedges.get(v).start(),heapedges.get(v).end());
+                solEdges.add(edge);
+            }
+            incidentEdges = OriginNetwork.getGraph().incidentEdges(v);
+            for (Edge edge: incidentEdges)
+            {
+                Node w = edge.opposite(v);
+                if (distances.get(w) == Integer.MAX_VALUE)
+                {
+                    distances.set(w, TransitForEdge.get(edge));
+                    heapedges.set(w, edge);
+                    queue.insert(w,distances.get(w));
+                }
+                else
+                {
+                    if (TransitForEdge.get(edge) < distances.get(w))
+                    {
+                        distances.set(w, TransitForEdge.get(edge));
+                        queue.decreasePriority(w, TransitForEdge.get(edge));
+                        heapedges.set(w, edge);
+                    }
+                }
+                
+            }
+        }
+        
+               //2. langsamere Implementation
+       
+        /*currentNode = startNode;
+        currentEdges = OriginNetwork.getGraph().incidentEdges(startNode);
         
         while (solNodes.size() < OriginGraph.numberOfNodes()+1)
         {
-            for (Edge test: edges)
+            for (Edge edge: currentEdges)
             {
-                if (solNodes.contains(test.end()) ^ solNodes.contains(test.start()))
+                if (solNodes.contains(edge.start()) ^ solNodes.contains(edge.end()))
                 {
-                    //currentEdges.add(test);
-                    if (TransitForEdge.get(test) < Min)
+                    if (TransitForEdge.get(edge) < Min)
                     {
-                        MinEdge = test;
+                        MinEdge = edge;
                     }
-                    /*if (TransitForEdge.get(test) == TransitForEdge.minimum(edges))
-                    {
-                        MinEdge = test;
-                    }*/
                 }
+
             }
-            
             Edge edge = new Edge(NumEdges++,MinEdge.start(),MinEdge.end());
-            //overalldist = overalldist + TransitForEdge.get(MinEdge);
             solEdges.add(edge);
             if (solNodes.contains(MinEdge.start()))
             {
                solNodes.add(MinEdge.end()); 
+               //currentNode = MinEdge.end();
+               for (Edge neu: OriginNetwork.getGraph().incidentEdges(MinEdge.end()))
+               {
+                    currentEdges.add(neu);
+               }
             }
             else
             {
                 solNodes.add(MinEdge.start());
+                //currentNode = MinEdge.start();
+                for (Edge neu: OriginNetwork.getGraph().incidentEdges(MinEdge.start()))
+               {
+                    currentEdges.add(neu);
+               }
             }
-            edges.remove(edge);
-            
-        }
-       
+           
+        }*/
+        
         }
         catch(Exception e) {
              System.out.println("Fehler in runMinSpan " + e.toString());
