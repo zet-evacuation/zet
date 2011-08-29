@@ -21,6 +21,7 @@ import ds.z.BuildingPlan;
  *
  * @author schwengf
  */
+//Klasse zur Berechnung eines minimalen Spannbaumes fuer Grid Graphen
 public class ZToGridSpanTreeConverter extends ZToGridGraphConverter{
     public NetworkFlowModel minspanmodel;
     public MinSpanningTreeProblem minspanprob;
@@ -76,11 +77,12 @@ public class ZToGridSpanTreeConverter extends ZToGridGraphConverter{
                 minspanprob = new MinSpanningTreeProblem(model,model.getTransitTimes());
               
                 primalgo = new PrimsAlgo();
-                minspantree = primalgo.runAlgorithm(minspanprob);
-                System.out.println("done");
-                
+                primalgo.setProblem( minspanprob );
+                System.out.print("Compute minimum spanning tree using Prim... " );
+		primalgo.run();
+                System.out.println(" fertig in " + primalgo.getRuntimeAsString() );
+		minspantree = primalgo.getSolution();
                 IdentifiableCollection<Edge> MinEdges = minspantree.getEdges();
-                System.out.println("Anzahl der Spanning Tree Kanten " + MinEdges.size());
                 
                 for (Edge neu: MinEdges)
                 {

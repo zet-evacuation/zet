@@ -17,13 +17,13 @@ import ds.graph.Node;
 import ds.graph.IdentifiableCollection;
 import ds.graph.NodeRectangle;
 import algo.graph.reduction.GreedyAlgo;
+
 /**
  *
  * @author schwengf
  */
-//Klasse zur Berechnung eines minimalen Spannbaumes fuer NonGrid Graphen
-public class ZToSpanTreeConverter extends ZToNonGridGraphConverter{
-    
+//Klasse zum Erstellen eines t-Spanngraphen fuer Grid Graphen mittels eines Greedy Algorithmus 
+public class ZToGridGreedyConverter extends ZToGridGraphConverter{
     public NetworkFlowModel minspanmodel;
     public MinSpanningTreeProblem minspanprob;
     public PrimsAlgo primalgo;
@@ -79,16 +79,15 @@ public class ZToSpanTreeConverter extends ZToNonGridGraphConverter{
                 //erstellt das zugehoerige MinimumSpanningTree Problem    
                 minspanprob = new MinSpanningTreeProblem(model,model.getTransitTimes());
               
-                //Erstelle einen Minimum Spanning Tree mit Prims Algorithmus:
-                primalgo = new PrimsAlgo();
-                primalgo.setProblem( minspanprob );
-                System.out.print("Compute minimum spanning tree using Prim... " );
-		primalgo.run();
-                System.out.println(" fertig in " + primalgo.getRuntimeAsString() );
-		minspantree = primalgo.getSolution();
+                //Erstelle einen t-Spanngraphen mit Greedy Algorithmus
+                greedy = new GreedyAlgo();
+                greedy.setProblem(minspanprob);
+                greedy.run();
+                minspantree = greedy.getSolution();
+                System.out.print("Compute t-Spanner using greedy... " );
+                System.out.println(" fertig in " + greedy.getRuntimeAsString() );
                 IdentifiableCollection<Edge> MinEdges = minspantree.getEdges();
-                //System.out.println("Anzahl der Spanning Tree Kanten" + MinEdges.size());
-                
+                System.out.println("Anzahl der t-Spanner Kanten " + MinEdges.size());
                 
                 for (Edge neu: MinEdges)
                 {
@@ -123,6 +122,4 @@ public class ZToSpanTreeConverter extends ZToNonGridGraphConverter{
 		return minspanmodel;
                
 	}
-    
-    
 }
