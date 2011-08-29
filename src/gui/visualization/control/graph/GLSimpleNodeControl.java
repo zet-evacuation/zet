@@ -25,8 +25,6 @@ public class GLSimpleNodeControl extends AbstractControl<GLEdgeControl, GLSimple
 	Vector3 position;
 	private int capacity;
 	private FlowCalculator flowCalculator;
-	// TODO transfer the scaling parameter somewhere else (probably into the graphVisResults)
-	private static final double Z_TO_OPENGL_SCALING = 0.1d;
 	private double time;
 	private int index;
 	private ArrayList<FlowHistroryTriple> graphHistory;
@@ -58,12 +56,6 @@ public class GLSimpleNodeControl extends AbstractControl<GLEdgeControl, GLSimple
 	protected void setUpEdges() {
 		// add outgoing edges as children
 		for( Edge edge : graph.outgoingEdges( node ) ) {
-			//if( edge.start().id() != glControl.superSinkID() && edge.end().id() != glControl.superSinkID() ) {
-			//	int nodeFloor1 = graphVisResult.getNodeToFloorMapping().get( edge.start() );
-			//	int nodeFloor2 = graphVisResult.getNodeToFloorMapping().get( edge.end() );
-			//	if( nodeFloor1 != nodeFloor2 && !showEdgesBetweenFloors )
-			//		System.out.println( "Knoten auf verschiedenen Etagen." );
-			//	else
 			// TODO skip first
 			GLEdgeControl edgeControl = new GLEdgeControl( nodePositionMapping, edge );
 			add( edgeControl );

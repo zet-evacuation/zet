@@ -28,10 +28,8 @@ import opengl.drawingutils.GLColor;
 import opengl.drawingutils.GLVector;
 import opengl.framework.abs.AbstractDrawable;
 import de.tu_berlin.math.coga.common.util.Direction;
-import gui.visualization.control.ca.GLCellularAutomatonControl;
 
 public class GLCell extends AbstractDrawable<GLCell, GLCellControl> {
-	// Vorlaeufige Konstanten bis Verwaltungsklasse fertig // TODO
 	private static GLVector ul = null;	// upper Left
 	private static GLVector ur;	// upper Right
 	private static GLVector ll;	// lower Left
@@ -46,20 +44,14 @@ public class GLCell extends AbstractDrawable<GLCell, GLCellControl> {
 
 	public GLCell( GLCellControl control, GLColor color ) {
 		super( control );
-		this.position.x = control.getXPosition() * GLCellularAutomatonControl.sizeMultiplicator;
-		this.position.y = control.getYPosition() * GLCellularAutomatonControl.sizeMultiplicator;
-		if( ul == null )
-			if( VisualizationOptionManager.showSpaceBetweenCells() ) {
-				ul = new GLVector( 1 * GLCellularAutomatonControl.sizeMultiplicator, -1 * GLCellularAutomatonControl.sizeMultiplicator, 0 );
-				ur = new GLVector( 39 * GLCellularAutomatonControl.sizeMultiplicator, -1 * GLCellularAutomatonControl.sizeMultiplicator, 0 );
-				ll = new GLVector( 1 * GLCellularAutomatonControl.sizeMultiplicator, -39 * GLCellularAutomatonControl.sizeMultiplicator, 0 );
-				lr = new GLVector( 39 * GLCellularAutomatonControl.sizeMultiplicator, -39 * GLCellularAutomatonControl.sizeMultiplicator, 0 );
-			} else {
-				ul = new GLVector( 0 * GLCellularAutomatonControl.sizeMultiplicator, 0 * GLCellularAutomatonControl.sizeMultiplicator, 0 );
-				ur = new GLVector( 40 * GLCellularAutomatonControl.sizeMultiplicator, 0 * GLCellularAutomatonControl.sizeMultiplicator, 0 );
-				ll = new GLVector( 0 * GLCellularAutomatonControl.sizeMultiplicator, -40 * GLCellularAutomatonControl.sizeMultiplicator, 0 );
-				lr = new GLVector( 40 * GLCellularAutomatonControl.sizeMultiplicator, -40 * GLCellularAutomatonControl.sizeMultiplicator, 0 );
-			}
+		this.position.x = control.getXPosition();
+		this.position.y = control.getYPosition();
+		if( ul == null ) {
+			ul = new GLVector( control.getOffset(), -control.getOffset(), 0 );
+			ur = new GLVector( control.getWidth(), -control.getOffset(), 0 );
+			ll = new GLVector( control.getOffset(), -control.getWidth(), 0 );
+			lr = new GLVector( control.getWidth(), -control.getWidth(), 0 );
+		}
 		this.color = color;
 		this.defaultColor = color;
 	}
@@ -103,10 +95,9 @@ public class GLCell extends AbstractDrawable<GLCell, GLCellControl> {
 	}
 
 	protected final GLColor potentialToColor( long potential, long maxPotential, GLColor lowColor, GLColor highColor ) {
-		if( control.isPotentialValid() ) {
-			double blending = potential / (double)maxPotential;
-			return lowColor.blend( highColor, blending );
-		} else
+		if( control.isPotentialValid() )
+			return lowColor.blend( highColor, potential / (double)maxPotential );
+		else
 			return VisualizationOptionManager.getInvalidPotentialColor();
 	}
 

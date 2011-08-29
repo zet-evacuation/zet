@@ -51,8 +51,8 @@ public class GLSimpleNode extends AbstractDrawable<GLEdge, GLSimpleNodeControl> 
 	protected void drawNode( GL gl ) {
 		glu.gluQuadricDrawStyle( quadObj, nodeDisplayMode );
 
-		double xOffset = -this.getControl().getXPosition() * GLFlowGraphControl.sizeMultiplicator;
-		double yOffset = this.getControl().getYPosition() * GLFlowGraphControl.sizeMultiplicator;
+		double xOffset = -this.getControl().getXPosition();
+		double yOffset = this.getControl().getYPosition();
 
 		nodeColor.draw( gl );
 

@@ -37,7 +37,6 @@ import statistic.ca.CAStatistic;
  */
 public class CAVisualizationResults implements VisualizationResult {
 
-	private static final double Z_TO_OPENGL_SCALING = 0.1d;
 	/** The recording of a simulation. */
 	private VisualResultsRecording visRecording;
 	/**
@@ -91,16 +90,16 @@ public class CAVisualizationResults implements VisualizationResult {
 	private void convertMapping( ZToCAMapping caMapping ) {
 		for( Integer floorID : caMapping.getCAFloors() ) {
 			ds.z.Floor zFloor = caMapping.get( floorID );
-			double xOffset = zFloor.getxOffset() * Z_TO_OPENGL_SCALING;
-			double yOffset = zFloor.getyOffset() * Z_TO_OPENGL_SCALING;
+			double xOffset = zFloor.getxOffset();
+			double yOffset = zFloor.getyOffset();
 
 			caFloorToZOffsetMapping.put( floorID, new Vector3( xOffset, yOffset, 0 ) );
 		}
 
 		for( ds.ca.Room room : caMapping.getCARooms() ) {
 			ds.z.Room zRoom = caMapping.get( room ).getRoom();
-			double xOffset = zRoom.getxOffset() * Z_TO_OPENGL_SCALING;
-			double yOffset = zRoom.getyOffset() * Z_TO_OPENGL_SCALING;
+			double xOffset = zRoom.getxOffset();
+			double yOffset = zRoom.getyOffset();
 
 			caRoomToZOffsetMapping.put( room, new Vector3( xOffset, yOffset, 0 ) );
 		}
@@ -108,8 +107,8 @@ public class CAVisualizationResults implements VisualizationResult {
 		for( ds.ca.Cell cell : caMapping.getCACells() ) {
 			de.tu_berlin.math.coga.zet.converter.cellularAutomaton.ZToCARasterSquare zRasterSquare = caMapping.get( cell );
 
-			double xOffset = zRasterSquare.getRelativeX() * Z_TO_OPENGL_SCALING;
-			double yOffset = zRasterSquare.getRelativeY() * Z_TO_OPENGL_SCALING;
+			double xOffset = zRasterSquare.getRelativeX();
+			double yOffset = zRasterSquare.getRelativeY();
 
 			caCellToZOffsetMapping.put( cell, new Vector3( xOffset, yOffset, 0 ) );
 		}

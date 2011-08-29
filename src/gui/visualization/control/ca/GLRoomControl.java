@@ -23,9 +23,7 @@ import gui.visualization.draw.ca.GLRoom;
 import io.visualization.CAVisualizationResults;
 import java.util.HashMap;
 
-//public class GLRoomControl extends AbstractControl<GLRoom, Room, CAVisualizationResults, GLCell, GLCellControl, GLControl> {
 public class GLRoomControl extends AbstractZETVisualizationControl<GLCellControl, GLRoom, GLCellularAutomatonControl> {
-
 	private HashMap<ds.ca.Cell, GLCellControl> cellControls;
 	private GLCAFloorControl glCAFloorControlObject;  // the corresponding GLCAFloorControl of this object
 	private double xPosition;
@@ -35,8 +33,8 @@ public class GLRoomControl extends AbstractZETVisualizationControl<GLCellControl
 	public GLRoomControl( CAVisualizationResults caVisResults, Room room, GLCAFloorControl glCAFloorControl, GLCellularAutomatonControl glControl ) {
 		super( glControl );
 		controlled = room;
-		xPosition = caVisResults.get( room ).x;
-		yPosition = caVisResults.get( room ).y;
+		xPosition = caVisResults.get( room ).x * mainControl.scaling;
+		yPosition = caVisResults.get( room ).y * mainControl.scaling;
 		this.glCAFloorControlObject = glCAFloorControl;
 		cellControls = new HashMap<ds.ca.Cell, GLCellControl>();
 
@@ -70,13 +68,12 @@ public class GLRoomControl extends AbstractZETVisualizationControl<GLCellControl
 		return cellControls.get( cell );
 	}
 
-	public int getWidth() {
-		return controlled.getWidth();
+	public double getWidth() {
+		return controlled.getWidth() * mainControl.scaling * 400;
 	}
 
-	public int getHeight() {
-		return controlled.getHeight();
-
+	public double getHeight() {
+		return controlled.getHeight() * mainControl.scaling * 400;
 	}
 
 	/**

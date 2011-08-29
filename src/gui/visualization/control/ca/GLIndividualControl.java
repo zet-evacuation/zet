@@ -36,9 +36,7 @@ import zet.gui.main.tabs.JVisualizationView;
  * the individual on the screen.
  * @author Jan-Philipp Kappmeier
  */
-//public class GLIndividualControl extends AbstractControl<GLIndividual, Individual, CAVisualizationResults, GLIndividual, GLIndividualControl, GLControl> implements StepUpdateListener {
 public class GLIndividualControl extends AbstractZETVisualizationControl<GLIndividualControl, GLIndividual, GLCellularAutomatonControl> implements StepUpdateListener {
-
 	/** The history data structure that stores information about the positions of the individual at given times */
 	private ArrayList<VisHistoryTriple<Double, GLCellControl, GLCellControl>> path;
 	/** The last time at that the individual moves. */
@@ -62,6 +60,8 @@ public class GLIndividualControl extends AbstractZETVisualizationControl<GLIndiv
 	/** The type of the information displayed on the head. */
 	private JVisualizationView.HeadInformation headInformationType = JVisualizationView.HeadInformation.Panic;
 	private Individual controlled;
+	/** The floor on which the individual is standing in the current moment of simulation. */
+	private int onFloor = 0;
 
 	/**
 	 * Creates a new individual control class for an {@link Individual}.
@@ -76,14 +76,17 @@ public class GLIndividualControl extends AbstractZETVisualizationControl<GLIndiv
 		path = new ArrayList<VisHistoryTriple<Double, GLCellControl, GLCellControl>>();
 		moveVector = new Tuple( 0, 0 );
 		sourcePos = new Tuple( 0, 0 );
+		onFloor = controlled.getCell().getRoom().getFloorID();
 	}
 
 	/**
-	 * Returns the number of the floor on which the individual stands
-	 * @return  the number of the floor on which the individual stands
+	 * Returns the number of the floor on which the individual stands currently.
+	 * If the individual is moving, the returned value equals the floor number of
+	 * the starting cell.
+	 * @return the number of the floor on which the individual stands
 	 */
 	public int onFloor() {
-		return controlled.getCell().getRoom().getFloorID();
+		return onFloor;
 	}
 
 	/**
@@ -109,17 +112,14 @@ public class GLIndividualControl extends AbstractZETVisualizationControl<GLIndiv
 			destination = this.path.get( index ).getThirdValue();
 			index++;
 			stepEnd = index < path.size() ? path.get( index ).getFirstValue() : lastEnd;
-//			if( index < path.size() )
-//				stepEnd = path.get( index ).getFirstValue();
-//			else
-//				stepEnd = lastEnd;
 		}
 		calcHeadInformation();
 		if( stepStart == -1 )
 			return;
 		startTimeOfMove = stepStart;
 		calcPos( step, stepStart, stepEnd, source, destination );
-		invisible = source.getFloorID() != destination.getFloorID();
+		invisible = source.getFloorID() != destination.getFloorID(); // set invisible if the individual is changing floor (or teleporting)
+		onFloor = source.getFloorID();	// update the floor
 	}
 
 	/**
@@ -127,7 +127,7 @@ public class GLIndividualControl extends AbstractZETVisualizationControl<GLIndiv
 	 * @return the current position of the individual in absolute coordinates.
 	 */
 	public Tuple getCurrentPosition() {
-		double cellSize = 20;
+		double cellSize = 200 * mainControl.scaling;
 		double completedPartOfMove = (step - startTimeOfMove) / timeForMove;
 		completedPartOfMove = Math.min( completedPartOfMove, 1.0 );
 		completedPartOfMove = Math.max( completedPartOfMove, 0.0 );
@@ -243,11 +243,8 @@ public class GLIndividualControl extends AbstractZETVisualizationControl<GLIndiv
 	 * @param arrival the time when the individual arrives at the destination
 	 */
 	public void addHistoryTriple( GLCellControl from, GLCellControl to, double start, double arrival ) {
-		if( Math.abs(start - lastEnd) > 0.001 ) {
-			int k = 8;
-			k++;
+		if( Math.abs(start - lastEnd) > 0.001 )
 			path.add( new VisHistoryTriple<Double, GLCellControl, GLCellControl>( lastEnd, from, from ) );
-		}
 		path.add( new VisHistoryTriple<Double, GLCellControl, GLCellControl>( start, from, to ) );
 		if( arrival > lastEnd )
 			lastEnd = arrival;
@@ -258,7 +255,7 @@ public class GLIndividualControl extends AbstractZETVisualizationControl<GLIndiv
 	 * @return the number of the controlled individual
 	 */
 	public int getNumber() {
-		return this.controlled.getNumber();
+		return controlled.getNumber();
 	}
 
 	/**

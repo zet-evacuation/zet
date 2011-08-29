@@ -35,7 +35,6 @@ import de.tu_berlin.math.coga.graph.io.xml.FlowVisualization;
  * the floor are created and submitted to the view object.
  * @author Jan-Philipp Kappmeier
  */
-//public class GLGraphFloorControl extends AbstractControl<GLGraphFloor, Integer, GraphVisualizationResults, GLNode, GLNodeControl, GLControl>{
 public class GLGraphFloorControl extends AbstractZETVisualizationControl<GLNodeControl, GLGraphFloor, GLFlowGraphControl> {
 
 	/**
@@ -77,7 +76,7 @@ public class GLGraphFloorControl extends AbstractZETVisualizationControl<GLNodeC
 
 	/**
 	 * Returns the x-offset of the floor.
-	 * @return the x-offset of the floor.
+	 * @return the x-offset of the floor
 	 */
 	public double getXPosition(){
 		return 0.0d;
@@ -85,7 +84,7 @@ public class GLGraphFloorControl extends AbstractZETVisualizationControl<GLNodeC
 	
 	/**
 	 * Returns the y-offset of the floor.
-	 * @return the y-offset of the floor.
+	 * @return the y-offset of the floor
 	 */
 	public double getYPosition(){
 		return 0.0d;

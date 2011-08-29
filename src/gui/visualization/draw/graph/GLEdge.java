@@ -22,7 +22,7 @@ import opengl.framework.abs.AbstractDrawable;
 public class GLEdge extends AbstractDrawable<GLEdge, GLEdgeControl> {
 	static GLColor edgeColor;
 	/* The thickness of the edges and pieces of flow according to their capacities. */
-	static double thickness = 5 /* *1.5*/ /* 5 */ * GLFlowGraphControl.sizeMultiplicator; // factor of 1.5 used for test evacuation report
+	static double thickness = 5;// factor of 1.5 used for test evacuation report
 	// TODO read quality from VisualOptionManager
 	//private static QualityPreset qualityPreset = VisualizationOptionManager.getQualityPreset();
 	private static QualityPreset qualityPreset = QualityPreset.MediumQuality;
@@ -78,7 +78,8 @@ public class GLEdge extends AbstractDrawable<GLEdge, GLEdgeControl> {
 	public void update() {
 		edgeLength = control.get3DLength();
 		edgeColor = VisualizationOptionManager.getEdgeColor();
-		
+		thickness = control.getThickness();//5;
+
 	}
 
 }

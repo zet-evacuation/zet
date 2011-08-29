@@ -83,8 +83,6 @@ public class GLFlowEdgeControl extends GLEdgeControl {
 	GLFlowEdgeControl( FlowVisualization fv, Edge edge, GLFlowGraphControl mainControl ) {
 		super( fv.getGv().getNodePositionMapping(), edge );
 		this.mainControl = mainControl;
-		//controlled = edge;
-		//setView();
 
 		// todo: usage of isFirst by flag...
 		isFirst = !fv.isEdgesDoubled() || edge.start().id() < edge.end().id() ? true : false;
@@ -96,18 +94,6 @@ public class GLFlowEdgeControl extends GLEdgeControl {
 		capacity = fv.getGv().getEdgeCapacities().get( edge );
 
 
-		// compute the positions for the start ...
-		// todo scaling here...
-//		final double xs = fv.getGv().getNodePositionMapping().get( edge.start() ).x * fv.getGv().getScale();
-//		final double ys = fv.getGv().getNodePositionMapping().get( edge.start() ).y * fv.getGv().getScale();
-//		final double zs = fv.getGv().getNodePositionMapping().get( edge.start() ).z * fv.getGv().getScale();
-//		// ... and for the end node ...
-//		final double xe = fv.getGv().getNodePositionMapping().get( edge.end() ).x * fv.getGv().getScale();
-//		final double ye = fv.getGv().getNodePositionMapping().get( edge.end() ).y * fv.getGv().getScale();
-//		final double ze = fv.getGv().getNodePositionMapping().get( edge.end() ).z * fv.getGv().getScale();
-//		// ... and call init method
-//		init( new Vector3( xs, ys, zs ), new Vector3( xe, ye, ze ) );
-
 		// compute flow visualization data structure
 		IdentifiableIntegerMapping<Edge> transitTimes = fv.getGv().getTransitTimes();
 
@@ -117,8 +103,7 @@ public class GLFlowEdgeControl extends GLEdgeControl {
 		}
 		int maxT = flowOverTime.get( edge ).getLastTimeWithNonZeroValue(); // maximaler Zeithorizont
 		int transit = transitTimes.get( edge );
-//		if( maxT > 0 )
-//			mainControl.setMaxTime( maxT + transit );
+
 		if( maxT > 0 ) {
 			flowOnEdge = new ArrayList<Integer>( maxT + transit + transit );
 			for( int i = 0; i < transit; i++ )
@@ -199,6 +184,4 @@ public class GLFlowEdgeControl extends GLEdgeControl {
 	public GLFlowEdge getView() {
 		return (GLFlowEdge)super.getView();
 	}
-
-
 }

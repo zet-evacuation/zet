@@ -89,14 +89,11 @@ public class DieAction extends Action {
 	 * @see ds.ca.results.Action#execute(ds.ca.CellularAutomaton)
 	 */
 	@Override
-	public void execute( CellularAutomaton onCA )
-					throws InconsistentPlaybackStateException {
-
+	public void execute( CellularAutomaton onCA ) throws InconsistentPlaybackStateException {
 		if( placeOfDeath.getIndividual() == null ) {
 			throw new InconsistentPlaybackStateException(
 							"I could not mark the individual on cell " +
 							"as dead because it was not there (someone was lucky there, hu?)" );
-
 		}
 
 		onCA.setIndividualDead( placeOfDeath.getIndividual(), cause );

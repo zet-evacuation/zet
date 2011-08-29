@@ -34,8 +34,6 @@ import java.util.Vector;
  */
 public class BuildingResults implements VisualizationResult {
 
-	private static final double Z_TO_OPENGL_SCALING = 0.1d;
-
 	public static class Wall implements Iterable<Point2D.Double> {
 
 		/** An enumeration describing the different types of walls that can be visualized. */
@@ -100,7 +98,7 @@ public class BuildingResults implements VisualizationResult {
 		 * @param type
 		 */
 		public void addPoint( PlanPoint zPoint, ElementType type ) {
-			addPoint( zPoint.x * Z_TO_OPENGL_SCALING, zPoint.y * Z_TO_OPENGL_SCALING, type );
+			addPoint( zPoint.x, zPoint.y, type );
 		}
 
 		public ElementType getWallType( int wallSegment ) {

@@ -37,12 +37,12 @@ import opengl.framework.abs.Controlable;
 //public class GLBuildingControl extends AbstractControl<GLBuilding, BuildingResults, BuildingResults, GLWall, GLWallControl, GLControl> {
 public class GLBuildingControl extends AbstractZETVisualizationControl<GLWallControl, GLBuilding, GLBuildingControl> implements Controlable {
 
-	public static double sizeMultiplicator = 0.1;
-
+	double scaling = 1;
 	private int wallCount;
 	private int wallsDone;
 	private HashMap<Integer, ArrayList<GLWallControl>> allFloorsByID;
-
+	private BuildingResults visResult;
+	
 	/**
 	 * Creates a new object of this control class. The wall objects (a control and
 	 * the corresponding view object) are created and stored in data structures to
@@ -51,6 +51,10 @@ public class GLBuildingControl extends AbstractZETVisualizationControl<GLWallCon
 	 */
 	public GLBuildingControl( BuildingResults visResult ) {
 		super();
+		this.visResult = visResult;
+	}
+	
+	public void build() {
 		mainControl = this;
 		AlgorithmTask.getInstance().setProgress( 1, DefaultLoc.getSingleton().getStringWithoutPrefix( "batch.tasks.progress.createBuildingVisualizationDataStructure" ), "" );
 		wallCount = visResult.getWalls().size();
@@ -156,4 +160,10 @@ public class GLBuildingControl extends AbstractZETVisualizationControl<GLWallCon
 		view.delete();
 		view = null;
 	}
+
+	public void setScaling( double scaling ) {
+		this.scaling = scaling;
+	}
+	
+	
 }

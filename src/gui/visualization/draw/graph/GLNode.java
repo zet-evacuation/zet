@@ -28,10 +28,7 @@ import opengl.drawingutils.GLColor;
 import opengl.framework.abs.AbstractDrawable;
 
 public class GLNode extends AbstractDrawable<GLFlowEdge, GLNodeControl> {
-	//private GLNodeControl control;
-	// TODO read value from VisualizationOptionManager
-	//private double graphHeight = VisualizationOptionManager.getGraphHeight() * GLFlowGraphControl.sizeMultiplicator;
-	private double graphHeight = 7.0;
+	private double graphHeight = 70.0;
 	private double radius;
 	int nodeDisplayMode = GLU.GLU_FILL;//GLU.GLU_SILHOUETTE;
 	int flowDisplayMode = GLU.GLU_FILL;
@@ -104,17 +101,17 @@ public class GLNode extends AbstractDrawable<GLFlowEdge, GLNodeControl> {
 		double yOffset = -this.getControl().getYPosition();
 		if( control.isRectangleVisible() ) {
 			gl.glBegin( GL.GL_LINES );
-			gl.glVertex3d( this.getControl().getNwX() + xOffset, this.getControl().getNwY() + yOffset, -graphHeight + 0.1 );
-			gl.glVertex3d( this.getControl().getSeX() + xOffset, this.getControl().getNwY() + yOffset, -graphHeight + 0.1 );
+			gl.glVertex3d( this.getControl().getNwX() + xOffset, this.getControl().getNwY() + yOffset, -control.getFloorHeight() + 0.1 );
+			gl.glVertex3d( this.getControl().getSeX() + xOffset, this.getControl().getNwY() + yOffset, -control.getFloorHeight() + 0.1 );
 
-			gl.glVertex3d( this.getControl().getSeX() + xOffset, this.getControl().getNwY() + yOffset, -graphHeight + 0.1 );
-			gl.glVertex3d( this.getControl().getSeX() + xOffset, this.getControl().getSeY() + yOffset, -graphHeight + 0.1 );
+			gl.glVertex3d( this.getControl().getSeX() + xOffset, this.getControl().getNwY() + yOffset, -control.getFloorHeight() + 0.1 );
+			gl.glVertex3d( this.getControl().getSeX() + xOffset, this.getControl().getSeY() + yOffset, -control.getFloorHeight() + 0.1 );
 
-			gl.glVertex3d( this.getControl().getSeX() + xOffset, this.getControl().getSeY() + yOffset, -graphHeight + 0.1 );
-			gl.glVertex3d( this.getControl().getNwX() + xOffset, this.getControl().getSeY() + yOffset, -graphHeight + 0.1 );
+			gl.glVertex3d( this.getControl().getSeX() + xOffset, this.getControl().getSeY() + yOffset, -control.getFloorHeight() + 0.1 );
+			gl.glVertex3d( this.getControl().getNwX() + xOffset, this.getControl().getSeY() + yOffset, -control.getFloorHeight() + 0.1 );
 
-			gl.glVertex3d( this.getControl().getNwX() + xOffset, this.getControl().getSeY() + yOffset, -graphHeight + 0.1 );
-			gl.glVertex3d( this.getControl().getNwX() + xOffset, this.getControl().getNwY() + yOffset, -graphHeight + 0.1 );
+			gl.glVertex3d( this.getControl().getNwX() + xOffset, this.getControl().getSeY() + yOffset, -control.getFloorHeight() + 0.1 );
+			gl.glVertex3d( this.getControl().getNwX() + xOffset, this.getControl().getNwY() + yOffset, -control.getFloorHeight() + 0.1 );
 			gl.glEnd();
 		}
 		//gl.glEnable( gl.GL_BLEND );

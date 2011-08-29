@@ -39,9 +39,6 @@ import de.tu_berlin.math.coga.graph.io.xml.FlowVisualization;
  *  @author Jan-Philipp Kappmeier
  */
 public class GLFlowGraphControl extends AbstractZETVisualizationControl<GLGraphFloorControl, GLFlowGraph, GLFlowGraphControl> implements DrawableControlable {
-	//public static double sizeMultiplicator = 0.1; // for ZET
-	public static double sizeMultiplicator = 0.1;
-
 	private int nodeCount;
 	private int nodesDone;
 	private HashMap<Integer, GLGraphFloorControl> allFloorsByID;
@@ -59,9 +56,14 @@ public class GLFlowGraphControl extends AbstractZETVisualizationControl<GLGraphF
 	double speedFactor = 1;
 	private int superSinkID = 0;
 	private boolean supportsFloors = false;
+	double scaling = 1;
+	double defaultFloorHeight = 25;
 
 	public GLFlowGraphControl( GraphVisualizationResults graphVisResult ) {
 		super();
+	}
+	
+	public void build( GraphVisualizationResults graphVisResult ) {
 		mainControl = this;
 
 		AlgorithmTask.getInstance().setProgress( 0, DefaultLoc.getSingleton().getStringWithoutPrefix( "batch.tasks.progress.createGraphVisualizationDataStructure" ), "" );
@@ -100,14 +102,6 @@ public class GLFlowGraphControl extends AbstractZETVisualizationControl<GLGraphF
 		allFloorsByID = new HashMap<Integer, GLGraphFloorControl>();
 		allFloorsByID.put( 0, floorControl );
 
-		//allFloorsByID = new HashMap<Integer, GLGraphFloorControl>();
-		//int floorCount = graphVisResult.getFloorToNodeMapping().size();
-		//for( int i = 0; i < floorCount; i++ )
-			//if( graphVisResult.getFloorToNodeMapping().get( i ).size() > 0 ) {
-			//	GLGraphFloorControl floorControl = new GLGraphFloorControl( graphVisResult, graphVisResult.getFloorToNodeMapping().get( i ), i, mainControl );
-			//	add( floorControl );
-			//	allFloorsByID.put( i, floorControl );
-			//}
 		this.setView( new GLFlowGraph( this ) );
 		for( GLGraphFloorControl floor : this )
 			view.addChild( floor.getView() );
@@ -278,5 +272,13 @@ public class GLFlowGraphControl extends AbstractZETVisualizationControl<GLGraphF
 
 	public void delete() {
 		view.delete();
+	}
+
+	public void setScaling( double scaling ) {
+		this.scaling = scaling;
+	}
+
+	public void setDefaultFloorHeight( double defaultFloorHeight ) {
+		this.defaultFloorHeight = defaultFloorHeight;
 	}
 }

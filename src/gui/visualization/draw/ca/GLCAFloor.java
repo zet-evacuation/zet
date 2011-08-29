@@ -21,9 +21,7 @@
 package gui.visualization.draw.ca;
 
 import opengl.framework.abs.AbstractDrawable;
-import gui.visualization.VisualizationOptionManager;
 import gui.visualization.control.ca.GLCAFloorControl;
-import gui.visualization.control.ca.GLCellularAutomatonControl;
 import gui.visualization.control.ca.GLIndividualControl;
 import java.util.List;
 import javax.media.opengl.GL;
@@ -40,7 +38,7 @@ public class GLCAFloor extends AbstractDrawable<GLRoom, GLCAFloorControl> {
 		super( control );
 		this.position.x = control.getXPosition();
 		this.position.y = control.getYPosition();
-		this.position.z = (control.getFloorNumber() - 1) * VisualizationOptionManager.getFloorDistance() * GLCellularAutomatonControl.sizeMultiplicator;
+		this.position.z = control.getZPosition();
 		floorID = control.getFloorNumber();
 	}
 
@@ -60,6 +58,7 @@ public class GLCAFloor extends AbstractDrawable<GLRoom, GLCAFloorControl> {
 	@Override
 	public void performDrawing( GL gl ) {
 		super.performDrawing( gl );
+		
 		for( GLIndividualControl ic : control.getIndividualControls() )
 			if( ic.onFloor() == floorID )
 				ic.getView().performDrawing( gl );

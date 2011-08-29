@@ -28,7 +28,6 @@ import javax.media.opengl.GL;
 import javax.media.opengl.glu.GLU;
 import opengl.drawingutils.GLColor;
 import de.tu_berlin.math.coga.math.vectormath.Vector3;
-import gui.visualization.control.graph.GLFlowGraphControl;
 
 public class GLFlowEdge extends GLEdge {
 	GLFlowEdgeControl fcontrol;
@@ -38,10 +37,10 @@ public class GLFlowEdge extends GLEdge {
 	static int edgeDisplayMode = GLU.GLU_FILL;
 	static GLColor flowColor;
 	static GLColor flowUnitColor;
-	static double flowThickness = 7 /* * 1.5 */ /* 7 */ * GLFlowGraphControl.sizeMultiplicator; //// factor of 1.5 used for test evacuation report
-	static double minFlowThickness = 10; /* 10 */ // original 3
+	static double flowThickness = 7*0.1; /* * 1.5 */ /* 7 */ //* GLFlowGraphControl.sizeMultiplicator; //// factor of 1.5 used for test evacuation report
+	static double minFlowThickness = 10*0.1; /* 10 */ // original 3
 
-	static double maxFlowThickness = 10;
+	static double maxFlowThickness = 10*0.1;
 	static double flowThicknessOfOneCapacityStep;
 	int maxFlowRate;
 	/* Telling the flow on the edge for each time step. */
@@ -275,8 +274,8 @@ public class GLFlowEdge extends GLEdge {
 		flowColor = VisualizationOptionManager.getFlowUnitColor();
 		flowUnitColor = VisualizationOptionManager.getFlowUnitEndColor();
 		maxFlowRate = control.getMaxFlowRate();
-		minFlowThickness = 3 * GLFlowGraphControl.sizeMultiplicator * 1.7;
-		maxFlowThickness = 10 * GLFlowGraphControl.sizeMultiplicator * 1.7;
+		minFlowThickness = 3*0.01;// * GLFlowGraphControl.sizeMultiplicator * 1.7;
+		maxFlowThickness = 10*0.01;// * GLFlowGraphControl.sizeMultiplicator * 1.7;
 		flowThicknessOfOneCapacityStep = (maxFlowThickness - minFlowThickness) / maxFlowRate;
 	}
 }
