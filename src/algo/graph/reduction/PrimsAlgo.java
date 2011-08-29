@@ -57,13 +57,15 @@ public class PrimsAlgo extends Algorithm<MinSpanningTreeProblem,MinSpanningTree>
         try{
         //Holt das Networkflowmodel, das nach dem Konvertieren erstellt wird
         OriginNetwork = minspan.getGraph(); 
+        Node supersink = minspan.getGraph().getSupersink();
         //Holt zugehoerigen Graphen dazu
         OriginGraph = OriginNetwork.getGraph();
         int numNodes = OriginGraph.numberOfNodes();
         //kalkuliert Distanzen der einzelnen Knoten
         IdentifiableIntegerMapping<Edge> TransitForEdge = OriginNetwork.getTransitTimes();
      
-        //gibt zufaellig einen Startknoten wider
+        //gibt zufaellig einen Startknoten wider, Zufallszahl beginnend bei 1, sodass nie
+        //Supersenke gewaehlt werden kann 
         Random r = new Random();
         int num = 1 + Math.abs(r.nextInt()) % numNodes;
  
@@ -77,8 +79,11 @@ public class PrimsAlgo extends Algorithm<MinSpanningTreeProblem,MinSpanningTree>
         
         for (Node node: OriginNetwork.getGraph().nodes())
         {
-            distances.add(node, Integer.MAX_VALUE);
-            heapedges.set(node, null);
+            if (node != supersink)
+            {
+                distances.add(node, Integer.MAX_VALUE);
+                heapedges.set(node, null);
+            }
         }
         
         distances.set(startNode, 0);
@@ -93,10 +98,15 @@ public class PrimsAlgo extends Algorithm<MinSpanningTreeProblem,MinSpanningTree>
             solNodes.add(v);
             distances.set(v, Integer.MIN_VALUE);
             
+            //Supersenke nicht betrachten...
             if (v != startNode)
             {
                 Edge edge = new Edge(NumEdges++,heapedges.get(v).start(),heapedges.get(v).end());
-                solEdges.add(edge);
+                //fuege nur Kanten hinzu, die nicht zur Supersenke adjazent sind
+                if (heapedges.get(v).start() != supersink && heapedges.get(v).end() != supersink)
+                {
+                    solEdges.add(edge);
+                }
             }
             incidentEdges = OriginNetwork.getGraph().incidentEdges(v);
             for (Edge edge: incidentEdges)
@@ -119,6 +129,12 @@ public class PrimsAlgo extends Algorithm<MinSpanningTreeProblem,MinSpanningTree>
                 }
                 
             }
+        }
+        
+        IdentifiableCollection<Edge> addEdges = OriginNetwork.getGraph().incidentEdges(supersink);
+        for (Edge edge: addEdges)
+        {
+            solEdges.add(edge);
         }
         
                //2. langsamere Implementation
