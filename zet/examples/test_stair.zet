@@ -1,0 +1,155 @@
+<project id="1">
+  <plan id="2">
+    <evacuationFloor id="4" name="EvacuationFloor" xOffset="0" yOffset="0" width="0" height="0" normalMode="true" rasterSize="400" defaultRoomSize="4000" roomCount="0">
+      <rooms id="5"/>
+    </evacuationFloor>
+    <floor id="6" name="Floor 1" xOffset="0" yOffset="0" width="4000" height="4000">
+      <rooms id="7">
+        <room id="8" closed="true" xOffset="0" yOffset="0" width="4000" height="4000" changed="true" name="Room 0">
+          <edgeClassType>ds.z.RoomEdge</edgeClassType>
+          <start id="9" x="0" y="0">
+            <edges>
+              <planPoint reference="9"/>
+              <roomEdge id="10">
+                <associatedPolygon class="room" reference="8"/>
+              </roomEdge>
+              <planPoint id="11" x="0" y="4000"/>
+              <roomEdge id="12">
+                <associatedPolygon class="room" reference="8"/>
+              </roomEdge>
+              <planPoint id="13" x="4000" y="4000"/>
+              <roomEdge id="14">
+                <associatedPolygon class="room" reference="8"/>
+              </roomEdge>
+              <planPoint id="15" x="4000" y="0"/>
+              <roomEdge id="16">
+                <associatedPolygon class="room" reference="8"/>
+              </roomEdge>
+            </edges>
+          </start>
+          <end reference="9"/>
+          <size>4</size>
+          <minX__DefiningEdge class="roomEdge" reference="16"/>
+          <minY__DefiningEdge class="roomEdge" reference="16"/>
+          <maxX__DefiningEdge class="roomEdge" reference="16"/>
+          <maxY__DefiningEdge class="roomEdge" reference="14"/>
+          <xOffsetAll>0</xOffsetAll>
+          <yOffsetAll>0</yOffsetAll>
+          <heightAll>0</heightAll>
+          <widthAll>0</widthAll>
+          <associatedFloor reference="6"/>
+          <assignmentAreas id="17"/>
+          <barriers id="18"/>
+          <delayAreas id="19"/>
+          <evacuationAreas id="20"/>
+          <inaccessibleAreas id="21"/>
+          <saveAreas id="22"/>
+          <stairAreas id="23">
+            <stairArea id="24" closed="true" xOffset="600" yOffset="400" width="2800" height="1400" changed="true" speedFactorDown="0.8" speedFactorUp="0.6">
+              <edgeClassType>ds.z.Edge</edgeClassType>
+              <start id="25" x="600" y="400">
+                <edges>
+                  <planPoint reference="25"/>
+                  <ds.z.Edge id="26">
+                    <associatedPolygon class="stairArea" reference="24"/>
+                  </ds.z.Edge>
+                  <planPoint id="27" x="600" y="1800"/>
+                  <ds.z.Edge id="28">
+                    <associatedPolygon class="stairArea" reference="24"/>
+                  </ds.z.Edge>
+                  <planPoint id="29" x="3400" y="1800"/>
+                  <ds.z.Edge id="30">
+                    <associatedPolygon class="stairArea" reference="24"/>
+                  </ds.z.Edge>
+                  <planPoint id="31" x="3400" y="400"/>
+                  <ds.z.Edge id="32">
+                    <associatedPolygon class="stairArea" reference="24"/>
+                  </ds.z.Edge>
+                </edges>
+              </start>
+              <end reference="25"/>
+              <size>4</size>
+              <minX__DefiningEdge reference="32"/>
+              <minY__DefiningEdge reference="32"/>
+              <maxX__DefiningEdge reference="32"/>
+              <maxY__DefiningEdge reference="30"/>
+              <xOffsetAll>0</xOffsetAll>
+              <yOffsetAll>0</yOffsetAll>
+              <heightAll>0</heightAll>
+              <widthAll>0</widthAll>
+              <associatedRoom reference="8"/>
+              <lowerLevel id="33">
+                <planPoint reference="27"/>
+                <planPoint reference="29"/>
+              </lowerLevel>
+              <upperLevel id="34">
+                <planPoint reference="31"/>
+                <planPoint reference="25"/>
+              </upperLevel>
+            </stairArea>
+          </stairAreas>
+          <teleportAreas id="35"/>
+        </room>
+      </rooms>
+      <maxX__DefiningRoom reference="8"/>
+      <maxY__DefiningRoom reference="8"/>
+    </floor>
+    <rasterized>false</rasterized>
+  </plan>
+  <currentAssignment id="36" name="Default assignment">
+    <assignmentTypes id="37">
+      <assignmentType id="38" name="Default type">
+        <diameter class="normalDistribution" id="39" min="0.4" max="0.7" variance="1.0" expectedValue="0.5"/>
+        <age class="normalDistribution" id="40" min="10.0" max="85.0" variance="20.0" expectedValue="50.0"/>
+        <familiarity class="normalDistribution" id="41" min="0.7" max="1.0" variance="1.0" expectedValue="0.8"/>
+        <panic class="normalDistribution" id="42" min="0.0" max="1.0" variance="1.0" expectedValue="0.5"/>
+        <decisiveness class="normalDistribution" id="43" min="0.0" max="1.0" variance="1.0" expectedValue="0.3"/>
+        <reaction class="uniformDistribution" id="44" min="0.0" max="60.0"/>
+        <standardEvacuees>10</standardEvacuees>
+        <assignmentAreas id="45"/>
+        <uid id="46">3b6a0a73-2393-4b0e-8a4b-ab0c596ea87b</uid>
+      </assignmentType>
+    </assignmentTypes>
+  </currentAssignment>
+  <assignments id="47">
+    <assignment reference="36"/>
+  </assignments>
+  <evacuationPlans id="48"/>
+  <vp id="49">
+    <tfs id="50">
+      <opengl.helper.TextureFontStrings id="51">
+        <centered id="52"/>
+        <strings id="53"/>
+        <width>0.0</width>
+        <ortho>true</ortho>
+        <x id="54"/>
+        <y id="55"/>
+        <bold id="56"/>
+        <xoffset>0.0</xoffset>
+      </opengl.helper.TextureFontStrings>
+    </tfs>
+    <cameraPositions id="57">
+      <ds.CameraPosition id="58">
+        <view id="59">
+          <x>0.7071067811865476</x>
+          <y>-0.7071067811865476</y>
+          <z>0.0</z>
+        </view>
+        <up id="60">
+          <x>0.0</x>
+          <y>0.0</y>
+          <z>1.0</z>
+        </up>
+        <pos id="61">
+          <x>0.0</x>
+          <y>0.0</y>
+          <z>100.0</z>
+        </pos>
+        <text>CameraPosition</text>
+      </ds.CameraPosition>
+    </cameraPositions>
+    <currentWidth>1000.0</currentWidth>
+    <currentHeight>1000.0</currentHeight>
+  </vp>
+  <name>New Project</name>
+</project>
