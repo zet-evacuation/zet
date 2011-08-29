@@ -67,8 +67,10 @@ public class PrimsAlgo extends Algorithm<MinSpanningTreeProblem,MinSpanningTree>
         //gibt zufaellig einen Startknoten wider, Zufallszahl beginnend bei 1, sodass nie
         //Supersenke gewaehlt werden kann 
         Random r = new Random();
+        r.setSeed(100000);
         int num = 1 + Math.abs(r.nextInt()) % numNodes;
- 
+        
+        System.out.println("Startknoten: " + num  );
         startNode = OriginGraph.getNode(num);
         solNodes.add(startNode);
          

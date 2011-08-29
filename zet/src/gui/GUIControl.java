@@ -1188,8 +1188,8 @@ public class GUIControl implements AlgorithmListener {
 		}
 	}
 
-	public void createGraph() {
-		algorithmControl.convertGraph( new PropertyChangeListener() {
+	public void createGraph(String Algo) {
+		algorithmControl.convertGraph( new PropertyChangeListener(){
 
 			@Override
 			public void propertyChange( PropertyChangeEvent pce ) {
@@ -1198,7 +1198,7 @@ public class GUIControl implements AlgorithmListener {
 					visualization.getControl().setGraphControl( gvr );
 				}
 			}
-		});
+		}, Algo);
 	}
 
 	public void performOptimization() {

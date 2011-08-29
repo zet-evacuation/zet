@@ -75,7 +75,17 @@ public class JZETMenuBar extends JMenuBar implements ActionListener, Localized {
 	private JCheckBoxMenuItem mnuHideDefaultFloor;
 	private JMenu mExecute;
 	private JMenuItem mnuExecuteCreateCellularAutomaton;
-	private JMenuItem mnuExecuteCreateGraph;
+	//private JMenuItem mnuExecuteCreateGraph;
+        private JMenu mCreateGraph;
+        private JMenu mCreateGraphCompleteGraph;
+        private JMenuItem mnuCreateGraphCompleteGrid;
+        private JMenuItem mnuCreateGraphCompleteNonGrid;
+        private JMenu mCreateGraphSpannerUsingPrim;
+        private JMenuItem mnuCreateGraphSpannerUsingPrimGrid;
+        private JMenuItem mnuCreateGraphSpannerUsingPrimNonGrid;
+        private JMenu mCreateGraphSpannerUsingGreedy;
+        private JMenuItem mnuCreateGraphSpannerUsingGreedyGrid;
+        private JMenuItem mnuCreateGraphSpannerUsingGreedyNonGrid;
 	private JMenuItem mnuExecuteApplyAssignment;
 	private JMenu mSimulation;
 	private JMenuItem mnuSimulationQuickVisualization;;
@@ -122,7 +132,7 @@ public class JZETMenuBar extends JMenuBar implements ActionListener, Localized {
 		mEdit = Menu.addMenu( this, loc.getString( "Edit" ) );
 		mView = Menu.addMenu( this, loc.getString( "View" ) );
 		if( ZETMain.isDebug() )
-			mExecute = Menu.addMenu( this, loc.getString( "Execute" ) );
+		mExecute = Menu.addMenu( this, loc.getString( "Execute" ) );
 		mExtras = Menu.addMenu( this, loc.getString( "Extras" ) );
 		mHelp = Menu.addMenu( this, loc.getString( "Help" ) );
 
@@ -182,7 +192,19 @@ public class JZETMenuBar extends JMenuBar implements ActionListener, Localized {
 
 		// execute menu
 		mnuExecuteCreateCellularAutomaton = Menu.addMenuItem( mExecute, loc.getString( "Execute.CreateCellularAutomaton" ), this, "createCellularAutomaton" );
-		mnuExecuteCreateGraph = Menu.addMenuItem( mExecute, loc.getString( "Execute.CreateGraph" ), this, "createGraph" );
+		//mnuExecuteCreateGraph = Menu.addMenuItem( mExecute, loc.getString( "Execute.CreateGraph" ), this, "createGraph" );
+                mCreateGraph = Menu.addMenu(mExecute, loc.getString("Execute.CreateGraph"));
+                //mnuCreateGraphCompleteGraph = Menu.addMenuItem( mCreateGraph, loc.getString( "Execute.CreateGraph.CompleteGraph" ), this, "completeGraph" );
+                mCreateGraphCompleteGraph = Menu.addMenu(mCreateGraph, "Execute.CreateGraph.CompleteGraph");
+                //mnuCreateGraphCompleteGrid = Menu.addMenuItem(mCreateGraphCompleteGraph, loc.getString("Execute.CreateGraph.CompleteGraph.Grid"), KeyEvent.VK_9, this, "completeGrid");
+                mnuCreateGraphCompleteGrid = Menu.addMenuItem(mCreateGraphCompleteGraph, loc.getString("Execute.CreateGraph.CompleteGraph.Grid"), KeyEvent.VK_6,this, "completeGrid",0);
+                mnuCreateGraphCompleteNonGrid = Menu.addMenuItem(mCreateGraphCompleteGraph, loc.getString("Execute.CreateGraph.CompleteGraph.NonGrid"), KeyEvent.VK_4, this, "completeNonGrid",0);
+                mCreateGraphSpannerUsingPrim = Menu.addMenu(mCreateGraph, loc.getString("Execute.CreateGraph.Prim"));
+                mnuCreateGraphSpannerUsingPrimGrid = Menu.addMenuItem(mCreateGraphSpannerUsingPrim, loc.getString("Execute.CreateGraph.Prim.Grid"), KeyEvent.VK_7, this, "PrimGrid",0);
+                mnuCreateGraphSpannerUsingPrimNonGrid = Menu.addMenuItem(mCreateGraphSpannerUsingPrim, loc.getString("Execute.CreateGraph.Prim.NonGrid"), KeyEvent.VK_5, this, "PrimNonGrid",0);
+                mCreateGraphSpannerUsingGreedy = Menu.addMenu(mCreateGraph, loc.getString("Execute.CreateGraph.Greedy"));
+                mnuCreateGraphSpannerUsingGreedyGrid = Menu.addMenuItem(mCreateGraphSpannerUsingGreedy, loc.getString("Execute.CreateGraph.Greedy.Grid"), KeyEvent.VK_2, this, "GreedyGrid",0);
+                mnuCreateGraphSpannerUsingGreedyNonGrid = Menu.addMenuItem(mCreateGraphSpannerUsingGreedy, loc.getString("Execute.CreateGraph.Greedy.NonGrid"), KeyEvent.VK_7, this, "GreedyNonGrid",0);
 		mnuExecuteApplyAssignment = Menu.addMenuItem( mExecute, loc.getString( "Execute.ApplyConcreteAssignment" ), this, "applyConcreteAssignment" );
 
 		mSimulation = Menu.addMenu( mExecute, loc.getString( "Execute.Simulation" ) );
@@ -366,9 +388,25 @@ public class JZETMenuBar extends JMenuBar implements ActionListener, Localized {
 			System.out.println( "Creating buldingdatastructure" );
 			control.createBuildingDataStructure();
 			control.createCellularAutomaton();
-		} else if( e.getActionCommand().equals( "createGraph" ) ) {
-			control.createGraph();
-		} else if( e.getActionCommand().equals( "applyConcreteAssignment" ) ) {
+		} /*else if( e.getActionCommand().equals( "createGraph" ) ) {
+			control.createGraph("");
+                }*/else if (e.getActionCommand().equals("completeGrid")) {     
+                        control.createGraph("GridGraph");
+                }  
+                else if (e.getActionCommand().equals("completeNonGrid")) {     
+                        control.createGraph("NonGridGraph");
+                }          
+                else if (e.getActionCommand().equals("PrimGrid")) {     
+                        control.createGraph("MinSpanTree(Grid)");
+                }
+                else if (e.getActionCommand().equals("PrimNonGrid")) {     
+                        control.createGraph("MinSpanTree(NonGrid)");
+                }else if (e.getActionCommand().equals("GreedyGrid")) {     
+                        control.createGraph("Greedy t-Spanner(Grid)");       
+                }else if (e.getActionCommand().equals("GreedyNonGrid")) {     
+                        control.createGraph("Greedy t-Spanner(NonGrid)");       
+                }
+                else if( e.getActionCommand().equals( "applyConcreteAssignment" ) ) {
 		} else if( e.getActionCommand().equals( "quickVisualization" ) ) {
 			control.performQuickVisualization();
 		} else if( e.getActionCommand().equals( "startSimulation" ) ) {
@@ -499,7 +537,8 @@ public class JZETMenuBar extends JMenuBar implements ActionListener, Localized {
 
 
 		Menu.updateMenu( mOptimization, loc.getString( "Execute.Optimization" ) );
-		Menu.updateMenu( mnuExecuteCreateGraph, loc.getString( "Execute.Optimization.CreateGraph" ) );
+		//Menu.updateMenu( mnuExecuteCreateGraph, loc.getString( "Execute.Optimization.CreateGraph" ) );
+                Menu.updateMenu( mCreateGraph, loc.getString( "Execute.Optimization.CreateGraph" ) );
 		Menu.updateMenu( mnuOptimizationEarliestArrivalTransshipment, loc.getString( "Execute.Optimization.AlgoEATransshipment" ) );
 
 		// Extras menu

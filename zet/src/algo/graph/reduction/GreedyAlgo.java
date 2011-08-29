@@ -106,7 +106,7 @@ public class GreedyAlgo extends Algorithm<MinSpanningTreeProblem,MinSpanningTree
                         solEdges.add(edge);
                         used[edge.start().id()][edge.end().id()] = 1;
                         used[edge.end().id()][edge.start().id()] = 1;
-                        System.out.println("neue Kante: " + edge);
+                        //System.out.println("neue Kante: " + edge);
                         count++;
                     }
                 }
@@ -116,8 +116,7 @@ public class GreedyAlgo extends Algorithm<MinSpanningTreeProblem,MinSpanningTree
                     
             //}
             }
-      
-            System.out.println("Anzahl neuer Kanten:" + count);
+     
            
         }
         catch(Exception e) {

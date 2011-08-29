@@ -17,7 +17,9 @@ import de.tu_berlin.math.coga.zet.converter.cellularAutomaton.ZToCAMapping;
 import de.tu_berlin.math.coga.zet.converter.cellularAutomaton.ZToCARasterContainer;
 import de.tu_berlin.math.coga.zet.NetworkFlowModel;
 import de.tu_berlin.math.coga.zet.converter.graph.BaseZToGraphConverter;
+import de.tu_berlin.math.coga.zet.converter.graph.ZToGreedySpannerConverter;
 import de.tu_berlin.math.coga.zet.converter.graph.ZToGridGraphConverter;
+import de.tu_berlin.math.coga.zet.converter.graph.ZToGridGreedyConverter;
 import de.tu_berlin.math.coga.zet.converter.graph.ZToNonGridGraphConverter;
 import de.tu_berlin.math.coga.zet.converter.graph.ZToSpanTreeConverter;
 import de.tu_berlin.math.coga.zet.converter.graph.ZToGridSpanTreeConverter;
@@ -285,14 +287,25 @@ public class AlgorithmControl implements PropertyChangeListener {
 	}
 
 	public void convertGraph() {
-		convertGraph( null );
+		convertGraph( null, "");
 	}
 
-	public void convertGraph( PropertyChangeListener propertyChangeListener ) {
-		//final BaseZToGraphConverter conv = new ZToNonGridGraphConverter();
-		//final BaseZToGraphConverter conv = new ZToGridGraphConverter();
-                final BaseZToGraphConverter conv = new ZToSpanTreeConverter();
-                //final BaseZToGraphConverter conv = new ZToGridSpanTreeConverter();
+	public void convertGraph( PropertyChangeListener propertyChangeListener, String Algo ) {
+            final BaseZToGraphConverter conv;
+            if (Algo == "GridGraph"){                
+                 conv = new ZToGridGraphConverter();}
+            else if (Algo == "NonGridGraph" ){
+                 conv = new ZToNonGridGraphConverter(); }           
+            else if (Algo == "MinSpanTree(Grid)"){
+                 conv = new ZToGridSpanTreeConverter();}
+            else if (Algo == "MinSpanTree(NonGrid)"){
+                conv = new ZToSpanTreeConverter();}
+            else if (Algo == "Greedy t-Spanner(Grid)"){
+                 conv = new ZToGridGreedyConverter();}
+            //Greedy fuer NonGridGraphen
+            else {
+                 conv = new ZToGreedySpannerConverter();}
+                
 		conv.setProblem( project.getBuildingPlan() );
 		final SerialTask st = new SerialTask( conv );
 		st.addPropertyChangeListener( new PropertyChangeListener() {
