@@ -25,6 +25,7 @@ public abstract class BaseZToGraphConverter extends Algorithm<BuildingPlan, Netw
 	protected BuildingPlan plan;
 	protected ZToGraphRasterContainer raster;
         protected Graph roomGraph;
+        protected int Algo;
 
 	@Override
 	protected NetworkFlowModel runAlgorithm( BuildingPlan problem ) {
