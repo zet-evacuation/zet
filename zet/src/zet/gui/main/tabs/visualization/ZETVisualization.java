@@ -41,6 +41,8 @@ public class ZETVisualization extends Visualization<GLControl> implements EventL
 	private boolean showTimestepGraph = ZETProperties.isShowTimestepGraph();
 	private boolean showTimestepCellularAutomaton = ZETProperties.isShowTimestepCellularAutomaton();
 	private final GUIControl guiControl;
+	private ZControl zcontrol;
+
 
 	public ZETVisualization( GLCapabilities capabilities, GUIControl guiControl ) {
 		super( capabilities );
@@ -65,8 +67,6 @@ public class ZETVisualization extends Visualization<GLControl> implements EventL
 		setControl( new GLControl() );
 	}
 	
-	private ZControl zcontrol;
-
 	public void setZcontrol( ZControl zcontrol ) {
 		this.zcontrol = zcontrol;
 	}

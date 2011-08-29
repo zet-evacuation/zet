@@ -41,7 +41,7 @@ public class GLEdgeControl extends AbstractControl<GLEdgeControl, GLEdge> {
 		if( edge.start().id() < edge.end().id() )	// checks weather this edge is the first one of the two representing one undirected edge
 			isFirst = true;
 
-		init( nodePositionMapping.get( edge.start() ).clone(), nodePositionMapping.get( edge.end() ).clone() );
+		init( nodePositionMapping.get( edge.start() ), nodePositionMapping.get( edge.end() ) );
 		if( setView )
 			view.update();
 	}
@@ -62,28 +62,14 @@ public class GLEdgeControl extends AbstractControl<GLEdgeControl, GLEdge> {
 		length = Math.sqrt( dx * dx + dy * dy );
 		length3d = Math.sqrt( dz * dz + length * length );
 
-		// compare the y-coordinates and set the point with lower coordinate
-		// as start point
-//		if( startPos.y >= endPos.y ) {
-			startPoint = startPos;
-			endPoint = endPos;
-//		} else {
-//			startPoint = endPos;
-//			endPoint = startPos;
-//		}
+		startPoint = startPos;
+		endPoint = endPos;
 	}
 
 	public void setScaling( double scaling ) {
-//		startPoint.scalarMultiplicateTo( 1/this.scaling );
-//		endPoint.scalarMultiplicateTo( 1/this.scaling );
 		this.scaling = scaling;
-//		startPoint.scalarMultiplicateTo( scaling );
-//		endPoint.scalarMultiplicateTo( scaling );
-		// recompute everything...
 		init( startPoint, endPoint );
 	}
-
-
 
 	final public Vector3 getStartPosition() {
 		return startPoint.scalarMultiplicate( scaling );
@@ -96,7 +82,7 @@ public class GLEdgeControl extends AbstractControl<GLEdgeControl, GLEdge> {
 	/**
 	 * Returns whether this edge is the one going from lower ID to higher ID
 	 * (of the two edges between two nodes).
-	 * @return whether this edge is the one going from lower ID to higher ID.
+	 * @return whether this edge is the one going from lower ID to higher ID
 	 */
 	final public boolean isFirstEdge() {
 		return isFirst;
@@ -105,7 +91,7 @@ public class GLEdgeControl extends AbstractControl<GLEdgeControl, GLEdge> {
 
 	/**
 	 * Returns the model-length of the edge, NOT taking the z-coordinate into account.
-	 * @return the model-length of the edge, NOT taking the z-coordinate into account.
+	 * @return the model-length of the edge, NOT taking the z-coordinate into account
 	 */
 	final public double getLength() {
 		return length;
@@ -113,7 +99,7 @@ public class GLEdgeControl extends AbstractControl<GLEdgeControl, GLEdge> {
 
 	/**
 	 * Returns the model length of the edge, taking the z-coordinate into account.
-	 * @return the model length of the edge, taking the z-coordinate into account.
+	 * @return the model length of the edge, taking the z-coordinate into account
 	 */
 	final public double get3DLength() {
 		return length3d;
@@ -153,6 +139,10 @@ public class GLEdgeControl extends AbstractControl<GLEdgeControl, GLEdge> {
 	 */
 	final public Vector3 getRotationAxis( Vector3 a, Vector3 b ) {
 		return a.crossProduct( b );
+	}
+	
+	public double getThickness() {
+		return 5 * 0.1;
 	}
 
 }

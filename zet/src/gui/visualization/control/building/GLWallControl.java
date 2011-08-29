@@ -44,7 +44,6 @@ public class GLWallControl extends AbstractZETVisualizationControl<GLWallControl
 
 	/**
 	 * @param controlled
-	 * @param visResult
 	 * @param mainControl
 	 */
 	public GLWallControl( Wall controlled, GLBuildingControl mainControl ) {
@@ -55,7 +54,7 @@ public class GLWallControl extends AbstractZETVisualizationControl<GLWallControl
 		final double height = (floor - 1) * VisualizationOptionManager.getFloorDistance();
 
 		for( Point2D.Double point : controlled ) {
-			basePoints.add( new GLVector( point.x, (-1) * point.y, height ) );
+			basePoints.add( new GLVector( point.x * mainControl.scaling, (-1) * point.y * mainControl.scaling, height * mainControl.scaling ) );
 		}
 
 		this.setView( new GLWall( this ) );
@@ -96,17 +95,22 @@ public class GLWallControl extends AbstractZETVisualizationControl<GLWallControl
 		return controlled.getWallType( segmentNumber );
 	}
 
+	@Override
 	public void addTime( long timeNanoSeconds ) { }
 
+	@Override
 	public void setTime( long time ) { }
 
+	@Override
 	public void resetTime() { }
 
+	@Override
 	public void delete() {
 		controlled = null;
 		view.delete();
 	}
 
+	@Override
 	public boolean isFinished() {
 		return true;
 	}

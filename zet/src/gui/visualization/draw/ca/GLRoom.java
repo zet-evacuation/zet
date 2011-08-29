@@ -16,32 +16,34 @@
 package gui.visualization.draw.ca;
 
 import gui.visualization.VisualizationOptionManager;
-import gui.visualization.control.ca.GLCellularAutomatonControl;
 import gui.visualization.control.ca.GLRoomControl;
-import gui.visualization.util.VisualizationConstants;
 import javax.media.opengl.GL;
 import opengl.drawingutils.GLVector;
 import opengl.framework.abs.AbstractDrawable;
 
-//public class GLRoom extends AbstractDrawable<GLCell, GLRoomControl, GLCellControl> {
+/**
+ * Draws a room. That is, it draws a ground rectangle for the room.
+ * @author Jan-Philipp Kappmeier
+ */
 public class GLRoom extends AbstractDrawable<GLCell, GLRoomControl> {
-
-	private GLVector ul;	// upper left
-	private GLVector ur;	// upper right
-	private GLVector ll;	// lower left
-	private GLVector lr;	// lower right
-//public class GLRoom extends AbstractDrawable<CullingShapeCube, GLCell, GLRoomControl, GLCellControl> {
+	/** Upper left coordinate of the room. */
+	private GLVector ul;
+	/** Upper right coordinate of the room. */
+	private GLVector ur;
+	/** Lower left coordinate of the room. */
+	private GLVector ll;
+	/** Lower right coordinate of the room. */
+	private GLVector lr;
 
 	public GLRoom( GLRoomControl control ) {
 		super( control );
-//			super(control, new CullingShapeCube() );
-		this.position.x = control.getXPosition() * GLCellularAutomatonControl.sizeMultiplicator;
-		this.position.y = control.getYPosition() * GLCellularAutomatonControl.sizeMultiplicator;
+		this.position.x = control.getXPosition();
+		this.position.y = control.getYPosition();
 		if( VisualizationOptionManager.showSpaceBetweenCells() ) {
-			ul = new GLVector( 0 * GLCellularAutomatonControl.sizeMultiplicator, 0 * GLCellularAutomatonControl.sizeMultiplicator, -1 * GLCellularAutomatonControl.sizeMultiplicator );
-			ur = new GLVector( control.getWidth() * 40 * GLCellularAutomatonControl.sizeMultiplicator, 0 * GLCellularAutomatonControl.sizeMultiplicator, -1 * GLCellularAutomatonControl.sizeMultiplicator );
-			ll = new GLVector( 0 * GLCellularAutomatonControl.sizeMultiplicator, control.getHeight() * -40 * GLCellularAutomatonControl.sizeMultiplicator, -1 * GLCellularAutomatonControl.sizeMultiplicator );
-			lr = new GLVector( control.getWidth() * 40 * GLCellularAutomatonControl.sizeMultiplicator, control.getHeight() * -40 * GLCellularAutomatonControl.sizeMultiplicator, -1 * GLCellularAutomatonControl.sizeMultiplicator );
+			ul = new GLVector( 0, 0, -0.1 );
+			ur = new GLVector( control.getWidth(), 0 , -0.1 );
+			ll = new GLVector( 0, -control.getHeight(), -0.1 );
+			lr = new GLVector( control.getWidth(), -control.getHeight(), -0.1 );
 		}
 	}
 
@@ -62,7 +64,6 @@ public class GLRoom extends AbstractDrawable<GLCell, GLRoomControl> {
 			lr.draw( gl );
 			ll.draw( gl );
 			gl.glEnd();
-
 		}
 	}
 
@@ -71,4 +72,3 @@ public class GLRoom extends AbstractDrawable<GLCell, GLRoomControl> {
 		return "GLRoom";
 	}
 }
-

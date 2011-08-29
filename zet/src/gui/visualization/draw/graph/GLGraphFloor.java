@@ -42,9 +42,8 @@ public class GLGraphFloor extends AbstractDrawable<GLNode, GLGraphFloorControl> 
 
 	public GLGraphFloor( GLGraphFloorControl control ) {
 		super( control );
-//		super( control, new CullingShapeCube() );
-		this.position.x = control.getXPosition() * GLFlowGraphControl.sizeMultiplicator;
-		this.position.y = control.getYPosition() * GLFlowGraphControl.sizeMultiplicator;
+		this.position.x = control.getXPosition();
+		this.position.y = control.getYPosition();
 	}
 
 	@Override

@@ -24,7 +24,6 @@ package gui.visualization.draw.ca;
 import de.tu_berlin.math.coga.math.vectormath.Vector3;
 import gui.visualization.QualityPreset;
 import gui.visualization.VisualizationOptionManager;
-import gui.visualization.control.ca.GLCellularAutomatonControl;
 import gui.visualization.control.ca.GLIndividualControl;
 import gui.visualization.util.Tuple;
 import java.awt.Color;
@@ -39,11 +38,11 @@ import opengl.helper.Frustum;
  */
 public class GLIndividual extends AbstractDrawable<GLIndividual, GLIndividualControl> {
 
-	private static double individualHeight = VisualizationOptionManager.getIndividualHeight() * GLCellularAutomatonControl.sizeMultiplicator;
-	private static double individualRadius = VisualizationOptionManager.getIndividualRadius() * GLCellularAutomatonControl.sizeMultiplicator;
-	private static GLColor individualColor = VisualizationOptionManager.getIndividualColor();
-	private static GLColor deadColor = new GLColor( 130, 55, 101 );
-	private static QualityPreset qualityPreset = VisualizationOptionManager.getQualityPreset();
+	public static double individualHeight = 30*0.1; // TODO: use the scaling value
+	public static double individualRadius = 10*0.1;
+	public static GLColor individualColor = VisualizationOptionManager.getIndividualColor();
+	public static GLColor deadColor = new GLColor( 130, 55, 101 );
+	public static QualityPreset qualityPreset = VisualizationOptionManager.getQualityPreset();
 
 	Frustum frustum;
 
@@ -80,7 +79,7 @@ public class GLIndividual extends AbstractDrawable<GLIndividual, GLIndividualCon
 		}
 		gl.glPushMatrix();
 		Tuple pos = control.getCurrentPosition();
-		gl.glTranslated( pos.x * GLCellularAutomatonControl.sizeMultiplicator, pos.y * GLCellularAutomatonControl.sizeMultiplicator, 1 * GLCellularAutomatonControl.sizeMultiplicator );
+		gl.glTranslated( pos.x, pos.y, 0.1);
 		bodyColor.draw( gl );
 
 		glu.gluCylinder( quadObj, individualRadius, 0.0, individualHeight, qualityPreset.individualBodySlices, qualityPreset.individualBodyStacks );
@@ -90,7 +89,7 @@ public class GLIndividual extends AbstractDrawable<GLIndividual, GLIndividualCon
 		// here the head is drawn...
 		// perform frustum test if the center point is within the frustum
 
-		Vector3 check = new Vector3( pos.x * GLCellularAutomatonControl.sizeMultiplicator, pos.y * GLCellularAutomatonControl.sizeMultiplicator, 1 * GLCellularAutomatonControl.sizeMultiplicator );
+		Vector3 check = new Vector3( pos.x, pos.y, 1);
 		// TODO Frustum
 		//if( frustum.isPointInFrustum( check ) == Frustum.CullingLocation.inside )
 			glu.gluSphere( quadObj, individualRadius * 0.7, qualityPreset.individualHeadSlices, qualityPreset.individualHeadStacks );

@@ -25,10 +25,8 @@ import javax.media.opengl.GL;
 import opengl.framework.abs.AbstractDrawable;
 
 /**
- * @author Daniel Pluempe, Jan-Philipp Kappmeier
- *
+ * @author Daniel Plümpe, Jan-Philipp Kappmeier
  */
-//public class GLBuilding extends AbstractDrawable<GLWall, GLBuildingControl, GLWallControl> {
 public class GLBuilding extends AbstractDrawable<GLWall, GLBuildingControl> {
 
 	/**
@@ -42,9 +40,8 @@ public class GLBuilding extends AbstractDrawable<GLWall, GLBuildingControl> {
 	@Override
 	public void performDrawing( GL gl ) {
 		super.performDrawing( gl );
-		if( repaint ) {
+		if( repaint )
 			performStaticDrawing( gl );
-		}
 		gl.glCallList( displayList );
 	}
 

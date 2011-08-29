@@ -38,10 +38,10 @@ import gui.visualization.util.Tuple;
 import opengl.drawingutils.GLColor;
 import de.tu_berlin.math.coga.common.util.Direction;
 import ds.ca.TeleportCell;
+import gui.visualization.VisualizationOptionManager;
 import gui.visualization.control.AbstractZETVisualizationControl;
 import statistic.ca.CAStatistic;
 
-//public class GLCellControl extends AbstractControl<GLCell, Cell, CAVisualizationResults, GLCell, GLCellControl, GLControl> implements StepUpdateListener {
 public class GLCellControl extends AbstractZETVisualizationControl<GLCellControl, GLCell, GLCellularAutomatonControl> implements StepUpdateListener {
 
 	private int floorID;
@@ -65,8 +65,8 @@ public class GLCellControl extends AbstractZETVisualizationControl<GLCellControl
 		super( glControl );
 		this.statistic = caVisResults.statistic;
 		this.controlled = cell;
-		xPosition = caVisResults.get( cell ).x;
-		yPosition = caVisResults.get( cell ).y;
+		xPosition = caVisResults.get( cell ).x * mainControl.scaling;
+		yPosition = caVisResults.get( cell ).y * mainControl.scaling;
 		this.glRoomControlObject = glRoomControl;
 		pm = caVisResults.getPotentialManager();
 		if( mergedPotential == null ) {
@@ -106,7 +106,7 @@ public class GLCellControl extends AbstractZETVisualizationControl<GLCellControl
 	}
 
 	public int getFloorID() {
-		return floorID;
+		return controlled.getRoom().getFloorID();
 	}
 
 	public double getXPosition() {
@@ -133,16 +133,6 @@ public class GLCellControl extends AbstractZETVisualizationControl<GLCellControl
 		return controlled.getY();
 	}
 
-	// Ich denke daß man das nicht benötigt ;) Aber mal sehen...
-	public Room getRoom() { // Room eigentlich DS-interne Klasse?!? Wie sonst Zellen zu Rooms zuordnen?
-		return controlled.getRoom();
-	}
-
-	// das bräuchte man eigentlich auch nicht, oder?
-	public String getFloor() {
-		return controlled.getRoom().getFloor();
-	}
-
 	public double getSpeedFactor() {
 		return controlled.getSpeedFactor();
 	}
@@ -155,6 +145,7 @@ public class GLCellControl extends AbstractZETVisualizationControl<GLCellControl
 		return this.glRoomControlObject;
 	}
 
+	@Override
 	public void stepUpdate() {
 		// Update the floor colors if in an mode that can change every step
 		if( displayMode == CellInformationDisplay.DynamicPotential || displayMode == CellInformationDisplay.Utilization || displayMode == CellInformationDisplay.Waiting )
@@ -255,7 +246,6 @@ public class GLCellControl extends AbstractZETVisualizationControl<GLCellControl
 		double b = getView().getColor().getBlue();
 		int count = 1;
 
-
 		switch( direction ) {
 			case TopLeft:
 				c[0] = controlled.getNeighbour( Direction.Top );
@@ -288,9 +278,17 @@ public class GLCellControl extends AbstractZETVisualizationControl<GLCellControl
 				g += cc.getView().getColor().getGreen();
 				b += cc.getView().getColor().getBlue();
 			}
-		r = r / count;
-		g = g / count;
-		b = b / count;
+		r /= count;
+		g /= count;
+		b /= count;
 		return new GLColor( r, g, b, 1 );
+	}
+	
+	public double getWidth() {
+		return mainControl.scaling * (VisualizationOptionManager.showSpaceBetweenCells() ? 390 : 400);
+	}
+	
+	public double getOffset() {
+		return VisualizationOptionManager.showSpaceBetweenCells() ? 10*mainControl.scaling : 0;
 	}
 }

@@ -41,9 +41,9 @@ import opengl.helper.Frustum;
 import statistic.ca.CAStatistic;
 import batch.tasks.AlgorithmTask;
 import de.tu_berlin.math.coga.common.localization.DefaultLoc;
-import gui.visualization.draw.ca.GLCA;
-import gui.visualization.draw.graph.GLGraph;
+import gui.visualization.VisualizationOptionManager;
 import javax.media.opengl.GL;
+import javax.media.opengl.GLAutoDrawable;
 import opengl.framework.abs.DrawableControlable;
 import zet.gui.main.tabs.JVisualizationView;
 
@@ -150,6 +150,7 @@ public class GLControl implements DrawableControlable {
 	private long time;
 	private double speedFactor = 1;
 	private CellularAutomaton ca;
+	public final static double sizeMultiplicator = 0.01;
 
 	/**
 	 * Initializes a new empty instance of the general control class for the
@@ -181,12 +182,19 @@ public class GLControl implements DrawableControlable {
 			hasCellularAutomaton = true;
 			ca = new CellularAutomaton( caVisResults.getRecording().getInitialConfig() );
 			caControl = new GLCellularAutomatonControl( caVisResults, ca );
+			caControl.setScaling( sizeMultiplicator );
+			caControl.setDefaultFloorHeight( VisualizationOptionManager.getFloorDistance() );
+						caControl.build();
+
 			estimatedTime = Math.max( estimatedTime, caVisResults.getRecording().length() * caControl.getSecondsPerStep() );
 		} else
 			hasCellularAutomaton = false;
 		if( graphVisResult != null ) {
 			hasGraph = true;
 			graphControl = new GLFlowGraphControl( graphVisResult );
+			graphControl.setScaling( sizeMultiplicator );
+			graphControl.setDefaultFloorHeight( VisualizationOptionManager.getFloorDistance() );
+			graphControl.build( graphVisResult );
 
 			this.secondsPerStepGraph();
 			
@@ -196,6 +204,8 @@ public class GLControl implements DrawableControlable {
 			hasGraph = false;
 		time = 0;
 		buildingControl = new GLBuildingControl( buildingResults );
+		buildingControl.setScaling( sizeMultiplicator );
+		buildingControl.build();
 		AlgorithmTask.getInstance().setProgress( 100, loc.getStringWithoutPrefix( "batch.tasks.progress.visualizationDatastructureComplete" ), "" );
 		initSettings();
 	}
@@ -211,6 +221,8 @@ public class GLControl implements DrawableControlable {
 			buildingControl.delete();
 		System.gc();
 		buildingControl = new GLBuildingControl( buildingResults );
+		buildingControl.setScaling( sizeMultiplicator );
+		buildingControl.build();
 		showWalls( PropertyContainer.getInstance().getAsBoolean( "settings.gui.visualization.walls" ) );
 	}
 
@@ -223,6 +235,9 @@ public class GLControl implements DrawableControlable {
 		hasCellularAutomaton = true;
 		this.ca = ca;
 		caControl = new GLCellularAutomatonControl( caVis, ca );
+			caControl.setScaling( sizeMultiplicator );
+			caControl.setDefaultFloorHeight( VisualizationOptionManager.getFloorDistance() );
+			caControl.build();
 		estimatedTime = 0;
 		showCellularAutomaton( PropertyContainer.getInstance().getAsBoolean( "settings.gui.visualization.cellularAutomaton" ) );
 	}
@@ -231,6 +246,9 @@ public class GLControl implements DrawableControlable {
 		if( graphVisResult != null ) {
 			hasGraph = true;
 			graphControl = new GLFlowGraphControl( graphVisResult );
+			graphControl.setScaling( sizeMultiplicator );
+			graphControl.setDefaultFloorHeight( VisualizationOptionManager.getFloorDistance() );
+			graphControl.build( graphVisResult );
 
 			this.secondsPerStepGraph();
 

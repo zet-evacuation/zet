@@ -89,5 +89,9 @@ public class GLCAFloorControl extends AbstractZETVisualizationControl<GLRoomCont
 
 	public List<GLIndividualControl> getIndividualControls() {
 		return mainControl.getIndividualControls();
-	} 		
+	}
+
+	public double getZPosition() {
+		return (getFloorNumber() - 1) * mainControl.defaultFloorHeight * mainControl.scaling;
+	}
 }

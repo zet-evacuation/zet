@@ -26,12 +26,11 @@ import de.tu_berlin.math.coga.common.localization.DefaultLoc;
 import de.tu_berlin.math.coga.math.Conversion;
 import ds.ca.CellularAutomaton;
 import ds.ca.Individual;
-import ds.ca.results.Action;
 import ds.ca.results.DieAction;
-import ds.ca.results.InconsistentPlaybackStateException;
 import ds.ca.results.MoveAction;
 import ds.ca.results.SwapAction;
 import ds.ca.results.VisualResultsRecording;
+import gui.visualization.VisualizationOptionManager;
 import gui.visualization.control.AbstractZETVisualizationControl;
 import gui.visualization.draw.ca.GLCA;
 import static gui.visualization.control.GLControl.CellInformationDisplay;
@@ -52,7 +51,6 @@ import opengl.helper.Frustum;
  *  @author Jan-Philipp Kappmeier
  */
 public class GLCellularAutomatonControl extends AbstractZETVisualizationControl<GLCAFloorControl, GLCA, GLCellularAutomatonControl> implements DrawableControlable {
-	public static double sizeMultiplicator = 0.1;
 
 	// general control stuff
 	private HashMap<Integer, GLCAFloorControl> allFloorsByID;
@@ -75,23 +73,25 @@ public class GLCellularAutomatonControl extends AbstractZETVisualizationControl<
 	private int recordingDone;
 	private int maxReactionTime;
 	boolean containsRecording = false;
+	double scaling = 1;
+	double defaultFloorHeight = 10;
 
-
+	private CAVisualizationResults caVisResults;
+	
 	public GLCellularAutomatonControl( CAVisualizationResults caVisResults, CellularAutomaton ca ) {
 		super();
+		this.caVisResults = caVisResults;
+		this.ca = ca;
+	}
+	
+	public void build() {
 		containsRecording = caVisResults.getRecording() != null;
 		mainControl = this;
-
-		this.ca = ca;
-
 		cellCount = ca.getCellCount();
 		cellsDone = 0;
 		AlgorithmTask.getInstance().setProgress( 0, DefaultLoc.getSingleton().getStringWithoutPrefix( "batch.tasks.progress.createCellularAutomatonVisualizationDatastructure" ), "" );
 
-		if( containsRecording ) {
-			recordingCount = caVisResults.getRecording().length();
-		} else
-			recordingCount = 0;
+		recordingCount = containsRecording ? caVisResults.getRecording().length() : 0;
 		recordingDone = 0;
 
 		allFloorsByID = new HashMap<Integer, GLCAFloorControl>();
@@ -114,18 +114,15 @@ public class GLCellularAutomatonControl extends AbstractZETVisualizationControl<
 		if( containsRecording ) {
 			convertIndividualMovements();
 			caVisResults.getRecording().rewind();
-			for( Action action : caVisResults.getRecording().nextActions() )
-				try {
-					action.execute( ca );
-				} catch( InconsistentPlaybackStateException e ) {
-					e.printStackTrace( System.err );
-				}
 			for( GLCAFloorControl floor : this )
 				floor.getView().setIndividuals( getIndividualControls() );
 		} else {
 			individuals = new ArrayList<GLIndividualControl>();
 		}
-
+		
+		// set up individual heights
+		GLIndividual.individualHeight = VisualizationOptionManager.getIndividualHeight() * mainControl.scaling;
+		GLIndividual.individualRadius = VisualizationOptionManager.getIndividualRadius() * mainControl.scaling;
 	}
 
 	public double getSecondsPerStep() {
@@ -143,10 +140,7 @@ public class GLCellularAutomatonControl extends AbstractZETVisualizationControl<
 	public void showOnlyFloor( Integer floorID ) {
 		System.out.println( "Show only floor " + floorID );
 		childControls.clear();
-		if( floorID == 0 && allFloorsByID.get( floorID ) == null )
-			childControls.add( allFloorsByID.get( 1 ) );
-		else
-			childControls.add( allFloorsByID.get( floorID ) );
+		childControls.add( allFloorsByID.get( floorID == 0 && allFloorsByID.get( floorID ) == null ? 1 : floorID ) ); // add the floor if possible, otherwise the first
 		view.clear();
 		for( GLCAFloorControl floor : this )
 			view.addChild( floor.getView() );
@@ -281,17 +275,6 @@ public class GLCellularAutomatonControl extends AbstractZETVisualizationControl<
 		final long stepOld = step;
 		step = (long) realStep;
 		long elapsedSteps = stepOld - step;
-//		for( int i = 1; i <= elapsedSteps; i++ ) {
-//			ca.nextTimeStep();
-//			if( visRecording.hasNext() )
-//				try {
-//					Vector<Action> actions = visRecording.nextActions();
-//					for( Action action : actions )
-//						action.execute( ca );
-//				} catch( InconsistentPlaybackStateException ex ) {
-//					ex.printStackTrace();
-//				}
-//		}
 
 		if( elapsedSteps > 0 )
 			for( GLCAFloorControl floor : this )
@@ -299,9 +282,6 @@ public class GLCellularAutomatonControl extends AbstractZETVisualizationControl<
 					for( GLCellControl cell : room )
 						cell.stepUpdate();
 
-//		if( ca.getState() == CellularAutomaton.State.finish )
-
-//			finished = true;
 			finished = step > recordingCount;
 	}
 
@@ -310,19 +290,7 @@ public class GLCellularAutomatonControl extends AbstractZETVisualizationControl<
 		time = timeNanoSeconds;
 		realStep = ((double) time / (double) nanoSecondsPerStep);
 		step = (long) realStep;
-//		for( int i = 1; i <= elapsedSteps; i++ ) {
-//			ca.nextTimeStep();
-//			if( visRecording.hasNext() )
-//				try {
-//					Vector<Action> actions = visRecording.nextActions();
-//					for( Action action : actions )
-//						action.execute( ca );
-//				} catch( InconsistentPlaybackStateException ex ) {
-//					ex.printStackTrace();
-//				}
-//		}
 
-//		if( elapsedSteps > 0 )
 		for( GLCAFloorControl floor : this )
 			for( GLRoomControl room : floor )
 				for( GLCellControl cell : room )
@@ -405,4 +373,11 @@ public class GLCellularAutomatonControl extends AbstractZETVisualizationControl<
 		ca = null;
 	}
 
+	public void setScaling( double scaling ) {
+		this.scaling = scaling;
+	}
+
+	public void setDefaultFloorHeight( double defaultFloorHeight ) {
+		this.defaultFloorHeight = defaultFloorHeight;
+	}
 }

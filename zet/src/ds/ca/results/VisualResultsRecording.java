@@ -42,222 +42,200 @@ import ds.ca.InitialConfiguration;
  * @author Daniel Pluempe
  *
  */
-public class VisualResultsRecording{
-    
-    /**
-     * The initial configuration of a cellular automaton
-     */
-    private InitialConfiguration initialConfig;
-    
-    /**
-     * A vector which stores a vector of actions for every time step
-     */
-    private Vector<Vector<Action>> actions;
-    
-    /**
-     * The current time step
-     */
-    private int curTime;  
-    
-    private long maxDynamicPotential = -1;
-    
-    /**
-     * Creates a new {@code VisualResultsRecording} instance. 
-     * @param initialConfig The initial configuration of a cellular automaton
-     * @param actions A vector which contains a vector of actions for every
-     * time step. 
-     */    
-    public VisualResultsRecording(InitialConfiguration initialConfig, Vector<Vector<Action>> actions){
-        this.initialConfig = initialConfig;
-        this.actions = actions;
-        this.curTime = -1;
-    }
-    
-    /**
-     * Returns the initial configuration corresponding to the actions
-     * stored in this class. The parameters of the actions stored here
-     * refer to objects in this initial configuration.
-     * @return The initial configuration of a cellular automaton that
-     * provides the objects for the recorded actions.
-     */
-    public InitialConfiguration getInitialConfig(){
-        return initialConfig;
-    }
-        
-    /**
-     * Tells you whether there is a next time step (i.e. if you
-     * have not yet reached the end of the recording).
-     * @return {@code true} if the recording extends
-     * to the next time step or {@code false} otherwise.
-     */
-    public boolean hasNext(){
-        return (curTime < actions.size() -1);
-    }
-    
-    /**
-     * Tells you whether there is a previous time step (i.e. if you
-     * have not yet reached the start of the recording).
-     * @return {@code true} if the recording extends
-     * to the previous time step or {@code false} otherwise.
-     */  
-    public boolean hasPrevious(){
-        return (curTime > 0);
-    }
+public class VisualResultsRecording {
+	/**
+	 * The initial configuration of a cellular automaton
+	 */
+	private InitialConfiguration initialConfig;
+	/**
+	 * A vector which stores a vector of actions for every time step
+	 */
+	private Vector<Vector<Action>> actions;
+	/**
+	 * The current time step
+	 */
+	private int curTime;
+	private long maxDynamicPotential = -1;
 
-    /**
-     * Tells you the current time step.
-     * @return The current time step. The time step is initialized with
-     * {@code -1}
-     */
-    public int getCurTime(){
-        return curTime;
-    }
-    
-    /** 
-     * Rewinds the recording to its start, i.e. resets the current time step 
-     * to {@code -1}.
-     */
-    public void rewind(){
-        //if(actions.size() > 0){
-            curTime = -1;
-        //}
-    }
-    
-    /** 
-     * Fast forwards the recording to its end, i.e. sets the current time step 
-     * to {@code length-1}.
-     */
-    public void forward(){
-        curTime = Math.max(0,actions.size() - 1);
-    }
-    
-    /**
-     * Sets the current time step to {@code time}.
-     * @param time The time you want to jump to.
-     */
-    public void jumpToTime(int time){
-        if(time >= actions.size() || time < 0){
-            throw new IndexOutOfBoundsException("Index " 
-                    + time + " is not a valid timestep.");
-        }
-        
-        curTime = time;
-    }    
-    
-    /**
-     * Gets all actions recorded at the next time step in a vector of
-     * actions. Returns the actions at time step 0 at first call due
-     * to the initialization of time step. 
-     * Advances current time step by one.
-     * @return A vector with all actions at the next time step  
-     */
-    public Vector<Action> nextActions(){
-        if(curTime >= actions.size() - 1){
-            throw new IndexOutOfBoundsException(
-                    "There is no next action (from Index" + curTime+")");
-        }
-            
-        curTime++;
-        return actions.get(curTime);
-    }
-    
-    /**
-     * Gets all actions for the current time step in a vector. Note that
-     * the current time step is initialized with {@code -1} so you need
-     * to either call {@code jumpToTime()} or {@code nextActions()}
-     * at least once before you can use this method.
-     * 
-     * @return A vector with all actions recorded at the current time
-     * step. 
-     */    
-    public Vector<Action> curActions(){
-        if(curTime < 0){
-            throw new IndexOutOfBoundsException("Please call nextActions() once" +
-            		"before calling this method.");
-        }
-        
-        return actions.get(curTime);
-    }
-    
-    /**
-     * Gets all actions for the previous time step in a vector. Decreases
-     * the current time step by one.
-     * @return A vector with all actions recorded at the previous time step.
-     */
-    public Vector<Action> prevActions(){
-        if(curTime <= 0){
-            throw new IndexOutOfBoundsException(
-                    "There is no previous action (from Index " + curTime +")");
-        }
-        
-        curTime--;
-        return actions.get(curTime);
-    }
-    
-    /**
-     * Removes all actions of the given type from the current time step of the
-     * recording and returns all removed actions in a {@code Vector}
-     * @param <T> An action type. All removed actions will be a sub-type of this type.
-     * @param actionType All actions of this type will be removed. Must be a sub-type of T.
-     * @return All actions that have been removed in the same order as they were in the
-     * recording. 
-     */
-    @SuppressWarnings("unchecked") 
-    public <T extends Action> Vector<T> filterActions(Class<? extends T> actionType){
-        Vector<T> filteredActions = new Vector<T>();
-        
-        Iterator<Action> actions = curActions().iterator();
-        while(actions.hasNext()){
-            Action nextAction = actions.next(); 
-            if(actionType.isInstance(nextAction)){
-                filteredActions.add((T)nextAction);
-                //actions.remove();
-            }
-        }
-        
-        return filteredActions;
-    }
-    
-    @SuppressWarnings("unchecked")
-    public <T extends Action> Vector<T> filterAllActions(Class<? extends T> actionType){
-        Vector<T> filteredActions = new Vector<T>();
-        
-        for(Vector<Action> actionsForStep : this.actions){
-            for(Action action : actionsForStep){
-                if(actionType.isInstance(action)){
-                    filteredActions.add((T)action);
-                }
-            }
-        }
-        
-        return filteredActions;
-    }
-   
-    /**
-     * Gets the length of the recording, i.e. the last time step plus one.
-     * @return The length of the recording.
-     */
-    public int length(){
-        return actions.size();
-    }
-    
-    public long getMaxDynamicPotential(){
-        if(maxDynamicPotential == -1){
-            calculateMaxDynamicPotential();
-        }
-        return maxDynamicPotential;
-    }
-    
-    private void calculateMaxDynamicPotential(){
-        long maxDynamicPotential = 0;
-        
-        Vector<DynamicPotentialChangeAction> potentialChanges = filterAllActions(DynamicPotentialChangeAction.class);
-        for(DynamicPotentialChangeAction change : potentialChanges){
-            if(change.getNewPotentialValue() > maxDynamicPotential){
-                maxDynamicPotential = change.getNewPotentialValue();
-            }
-        }
-        
-        this.maxDynamicPotential = maxDynamicPotential;
-    }
+	/**
+	 * Creates a new {@code VisualResultsRecording} instance. 
+	 * @param initialConfig The initial configuration of a cellular automaton
+	 * @param actions A vector which contains a vector of actions for every
+	 * time step. 
+	 */
+	public VisualResultsRecording( InitialConfiguration initialConfig, Vector<Vector<Action>> actions ) {
+		this.initialConfig = initialConfig;
+		this.actions = actions;
+		this.curTime = -1;
+	}
+
+	/**
+	 * Returns the initial configuration corresponding to the actions
+	 * stored in this class. The parameters of the actions stored here
+	 * refer to objects in this initial configuration.
+	 * @return The initial configuration of a cellular automaton that
+	 * provides the objects for the recorded actions.
+	 */
+	public InitialConfiguration getInitialConfig() {
+		return initialConfig;
+	}
+
+	/**
+	 * Tells you whether there is a next time step (i.e. if you
+	 * have not yet reached the end of the recording).
+	 * @return {@code true} if the recording extends
+	 * to the next time step or {@code false} otherwise.
+	 */
+	public boolean hasNext() {
+		return (curTime < actions.size() - 1);
+	}
+
+	/**
+	 * Tells you whether there is a previous time step (i.e. if you
+	 * have not yet reached the start of the recording).
+	 * @return {@code true} if the recording extends
+	 * to the previous time step or {@code false} otherwise.
+	 */
+	public boolean hasPrevious() {
+		return (curTime > 0);
+	}
+
+	/**
+	 * Tells you the current time step.
+	 * @return The current time step. The time step is initialized with
+	 * {@code -1}
+	 */
+	public int getCurTime() {
+		return curTime;
+	}
+
+	/** 
+	 * Rewinds the recording to its start, i.e. resets the current time step 
+	 * to {@code -1}.
+	 */
+	public void rewind() {
+		curTime = -1;
+	}
+
+	/** 
+	 * Fast forwards the recording to its end, i.e. sets the current time step 
+	 * to {@code length-1}.
+	 */
+	public void forward() {
+		curTime = Math.max( 0, actions.size() - 1 );
+	}
+
+	/**
+	 * Sets the current time step to {@code time}.
+	 * @param time The time you want to jump to.
+	 */
+	public void jumpToTime( int time ) {
+		if( time >= actions.size() || time < 0 )
+			throw new IndexOutOfBoundsException( "Index " + time + " is not a valid timestep." );
+
+		curTime = time;
+	}
+
+	/**
+	 * Gets all actions recorded at the next time step in a vector of
+	 * actions. Returns the actions at time step 0 at first call due
+	 * to the initialization of time step. 
+	 * Advances current time step by one.
+	 * @return A vector with all actions at the next time step  
+	 */
+	public Vector<Action> nextActions() {
+		if( curTime >= actions.size() - 1 )
+			throw new IndexOutOfBoundsException( "There is no next action (from Index" + curTime + ")" );
+
+		curTime++;
+		return actions.get( curTime );
+	}
+
+	/**
+	 * Gets all actions for the current time step in a vector. Note that
+	 * the current time step is initialized with {@code -1} so you need
+	 * to either call {@code jumpToTime()} or {@code nextActions()}
+	 * at least once before you can use this method.
+	 * 
+	 * @return A vector with all actions recorded at the current time
+	 * step. 
+	 */
+	public Vector<Action> curActions() {
+		if( curTime < 0 )
+			throw new IndexOutOfBoundsException( "Please call nextActions() once before calling this method." );
+
+		return actions.get( curTime );
+	}
+
+	/**
+	 * Gets all actions for the previous time step in a vector. Decreases
+	 * the current time step by one.
+	 * @return A vector with all actions recorded at the previous time step.
+	 */
+	public Vector<Action> prevActions() {
+		if( curTime <= 0 )
+			throw new IndexOutOfBoundsException( "There is no previous action (from Index " + curTime + ")" );
+
+		curTime--;
+		return actions.get( curTime );
+	}
+
+	/**
+	 * Removes all actions of the given type from the current time step of the
+	 * recording and returns all removed actions in a {@code Vector}
+	 * @param <T> An action type. All removed actions will be a sub-type of this type.
+	 * @param actionType All actions of this type will be removed. Must be a sub-type of T.
+	 * @return All actions that have been removed in the same order as they were in the
+	 * recording. 
+	 */
+	@SuppressWarnings( "unchecked" )
+	public <T extends Action> Vector<T> filterActions( Class<? extends T> actionType ) {
+		Vector<T> filteredActions = new Vector<T>();
+
+		Iterator<Action> actions = curActions().iterator();
+		while( actions.hasNext() ) {
+			Action nextAction = actions.next();
+			if( actionType.isInstance( nextAction ) )
+				filteredActions.add( (T)nextAction ); //actions.remove();
+		}
+
+		return filteredActions;
+	}
+
+	@SuppressWarnings( "unchecked" )
+	public <T extends Action> Vector<T> filterAllActions( Class<? extends T> actionType ) {
+		Vector<T> filteredActions = new Vector<T>();
+
+		for( Vector<Action> actionsForStep : this.actions )
+			for( Action action : actionsForStep )
+				if( actionType.isInstance( action ) )
+					filteredActions.add( (T)action );
+
+		return filteredActions;
+	}
+
+	/**
+	 * Gets the length of the recording, i.e. the last time step plus one.
+	 * @return The length of the recording.
+	 */
+	public int length() {
+		return actions.size();
+	}
+
+	public long getMaxDynamicPotential() {
+		if( maxDynamicPotential == -1 )
+			calculateMaxDynamicPotential();
+		return maxDynamicPotential;
+	}
+
+	private void calculateMaxDynamicPotential() {
+		long maxDynamicPotential = 0;
+
+		Vector<DynamicPotentialChangeAction> potentialChanges = filterAllActions( DynamicPotentialChangeAction.class );
+		for( DynamicPotentialChangeAction change : potentialChanges )
+			if( change.getNewPotentialValue() > maxDynamicPotential )
+				maxDynamicPotential = change.getNewPotentialValue();
+
+		this.maxDynamicPotential = maxDynamicPotential;
+	}
 }

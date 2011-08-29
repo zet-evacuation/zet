@@ -42,20 +42,21 @@ public class VisualizationOptionManager {
 		return PropertyContainer.getInstance().getAsDouble( "options.visualization.appearance.graphHeight" );
 	}
 
+	//TODO: rename, as sthis is not visualization option but zet option!
 	public static double getFloorDistance() {
-		return PropertyContainer.getInstance().getAsDouble( "options.visualization.appearance.floorDistance" );
+		return PropertyContainer.getInstance().getAsDouble( "options.visualization.appearance.floorDistance" )*10;
 	}
 
-	public static double getIndividualHeight() {
-		return PropertyContainer.getInstance().getAsDouble( "options.visualization.appearance.individualHeight" );
+	public static double getIndividualHeight() { // the values in the xml-file are in cm, the computations in the z-format are done in mm
+		return PropertyContainer.getInstance().getAsDouble( "options.visualization.appearance.individualHeight" )*10;
 	}
 
-	public static double getIndividualRadius() {
-		return PropertyContainer.getInstance().getAsDouble( "options.visualization.appearance.individualRadius" );
+	public static double getIndividualRadius() { // the values in the xml-file are in cm, the computations in the z-format are done in mm
+		return PropertyContainer.getInstance().getAsDouble( "options.visualization.appearance.individualRadius" )*10;
 	}
 
-	public static double getWallHeight() {
-		return PropertyContainer.getInstance().getAsDouble( "options.visualization.appearance.wallHeight" );
+	public static double getWallHeight() { // the values in the xml-file are in cm, the computations in the z-format are done in mm
+		return PropertyContainer.getInstance().getAsDouble( "options.visualization.appearance.wallHeight" )*10;
 	}
 
 	public static GLColor getIndividualColor() {
@@ -220,7 +221,7 @@ public class VisualizationOptionManager {
 	}
 
 	public static GLColor getCellSeperationColor() {
-		return new GLColor( Color.black );
+		return new GLColor( Color.lightGray );
 	}
 
 	/**
