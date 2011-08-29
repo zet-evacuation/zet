@@ -51,7 +51,8 @@ public class ZToSpanTreeConverter extends ZToNonGridGraphConverter{
 		model.setTransitTimes( exactTransitTimes.round() );
 		createReverseEdges( model );
         	model.setNetwork( model.getGraph().getAsStaticNetwork() );
-             
+                System.out.println("Anzahl der anfaenglichen Kanten:" + model.getGraph().numberOfEdges());
+                System.out.println("Grad der Senke:" + model.getGraph().degree(model.getSupersink()));
                 //Knoten stimmen bei Original und beim MinSpanModel ueberein
                 minspanmodel.setNetwork(newgraph);
                 newgraph.setNodes(model.getGraph().nodes());
@@ -78,23 +79,30 @@ public class ZToSpanTreeConverter extends ZToNonGridGraphConverter{
                 //erstellt das zugehoerige MinimumSpanningTree Problem    
                 minspanprob = new MinSpanningTreeProblem(model,model.getTransitTimes());
               
+                //Erstelle einen Minimum Spanning Tree mit Prims Algorithmus:
                 primalgo = new PrimsAlgo();
                 primalgo.setProblem( minspanprob );
-                //minspantree = primalgo.runAlgorithm(minspanprob);
                 System.out.print("Compute minimum spanning tree using Prim... " );
 		primalgo.run();
                 System.out.println(" fertig in " + primalgo.getRuntimeAsString() );
 		minspantree = primalgo.getSolution();
-                /*greedy = new GreedyAlgo();
-                minspantree = greedy.runAlgorithm(minspanprob);*/
-                
                 IdentifiableCollection<Edge> MinEdges = minspantree.getEdges();
-                System.out.println("Anzahl der Spanning Tree Kanten " + MinEdges.size());
+                System.out.println("Anzahl der Spanning Tree Kanten" + MinEdges.size());
+                
+                //Erstelle einen t-Spanngraphen mit Greedy Algorithmus
+                /*greedy = new GreedyAlgo();
+                greedy.setProblem(minspanprob);
+                greedy.run();
+                minspantree = greedy.getSolution();
+                System.out.print("Compute t-Spanner using greedy... " );
+                IdentifiableCollection<Edge> MinEdges = minspantree.getEdges();
+                System.out.println("Anzahl der t-Spanner Kanten " + MinEdges.size());*/
                 
                 for (Edge neu: MinEdges)
                 {
                     newgraph.addEdge(neu);
                     minspanmodel.setEdgeCapacity(neu, model.getEdgeCapacity(neu));
+                    //minspanmodel.setEdgeCapacity(neu, 1);
                     minspanmodel.setTransitTime(neu, 1);
                     newmapping.setEdgeLevel(neu, Level.Lower);             
                     minspanmodel.setExactTransitTime(neu, model.getExactTransitTime(neu));
@@ -114,11 +122,12 @@ public class ZToSpanTreeConverter extends ZToNonGridGraphConverter{
                  
                  minspanmodel.setZToGraphMapping(newmapping);                
                  minspanmodel.setSupersink(model.getSupersink());
-                      
+                System.out.println("Anzahl der t-Spanner Kanten vorm Verdoppeln " + minspanmodel.getGraph().numberOfEdges());      
                 createReverseEdges( minspanmodel );
                 minspanmodel.setNetwork(newgraph);
                 minspanmodel.setNetwork( minspanmodel.getGraph().getAsStaticNetwork());
-                
+                System.out.println("Grad der Senke " + minspanmodel.getGraph().degree(minspanmodel.getSupersink()));
+                System.out.println("Anzahl der t-Spanner Kanten " + minspanmodel.getGraph().numberOfEdges());
 		return minspanmodel;
                
 	}

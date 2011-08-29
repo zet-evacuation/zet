@@ -47,12 +47,13 @@ public abstract class BaseZToGraphConverter extends Algorithm<BuildingPlan, Netw
 
 		// set this before reverse edges are computed as they modify the model.
 		model.setTransitTimes( exactTransitTimes.round() );
-
+                
 		// duplicate the edges and their transit times (except those concerning the super sink)
 		createReverseEdges( model );
 
 		model.setNetwork( model.getGraph().getAsStaticNetwork() );
-
+                
+                
 		return model;
 
 	}
