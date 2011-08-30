@@ -23,7 +23,7 @@ import ds.graph.problem.MinSpanningTreeProblem;
  */
 public class GreedyAlgo extends Algorithm<MinSpanningTreeProblem,MinSpanningTree> {
     
-    int t = 1;
+    int t = 3;
     int[][] used;
     int Min = 100000;
     int overalldist = 0;

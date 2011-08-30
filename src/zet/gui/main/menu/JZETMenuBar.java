@@ -86,6 +86,9 @@ public class JZETMenuBar extends JMenuBar implements ActionListener, Localized {
         private JMenu mCreateGraphSpannerUsingGreedy;
         private JMenuItem mnuCreateGraphSpannerUsingGreedyGrid;
         private JMenuItem mnuCreateGraphSpannerUsingGreedyNonGrid;
+        private JMenu mCreateGraphSpannerUsingDijkstra;
+        private JMenuItem mnuCreateGraphSpannerUsingDijkstraGrid;
+        private JMenuItem mnuCreateGraphSpannerUsingDijkstraNonGrid;
 	private JMenuItem mnuExecuteApplyAssignment;
 	private JMenu mSimulation;
 	private JMenuItem mnuSimulationQuickVisualization;;
@@ -205,8 +208,10 @@ public class JZETMenuBar extends JMenuBar implements ActionListener, Localized {
                 mCreateGraphSpannerUsingGreedy = Menu.addMenu(mCreateGraph, loc.getString("Execute.CreateGraph.Greedy"));
                 mnuCreateGraphSpannerUsingGreedyGrid = Menu.addMenuItem(mCreateGraphSpannerUsingGreedy, loc.getString("Execute.CreateGraph.Greedy.Grid"), KeyEvent.VK_2, this, "GreedyGrid",0);
                 mnuCreateGraphSpannerUsingGreedyNonGrid = Menu.addMenuItem(mCreateGraphSpannerUsingGreedy, loc.getString("Execute.CreateGraph.Greedy.NonGrid"), KeyEvent.VK_7, this, "GreedyNonGrid",0);
+                mCreateGraphSpannerUsingDijkstra = Menu.addMenu(mCreateGraph, "Dijkstra Spanner");
+                mnuCreateGraphSpannerUsingDijkstraGrid = Menu.addMenuItem(mCreateGraphSpannerUsingDijkstra, "Dijkstra Spanner for Grid Graphs", KeyEvent.VK_9, this, "DijkstraGrid",0);
+                mnuCreateGraphSpannerUsingDijkstraNonGrid = Menu.addMenuItem(mCreateGraphSpannerUsingDijkstra, "Dijkstar Spanner For Non Grid Graphs", KeyEvent.VK_6, this, "DijkstraNonGrid",0);
 		mnuExecuteApplyAssignment = Menu.addMenuItem( mExecute, loc.getString( "Execute.ApplyConcreteAssignment" ), this, "applyConcreteAssignment" );
-
 		mSimulation = Menu.addMenu( mExecute, loc.getString( "Execute.Simulation" ) );
 		mnuSimulationQuickVisualization = Menu.addMenuItem( mSimulation, loc.getString( "Execute.Simulation.QuickVisualization" ), KeyEvent.VK_F5, this, "quickVisualization", 0 );
 		mnuSimulationStart = Menu.addMenuItem( mSimulation, loc.getString( "Execute.Simulation.Start" ), KeyEvent.VK_F5, this, "startSimulation", InputEvent.CTRL_DOWN_MASK );
@@ -405,8 +410,11 @@ public class JZETMenuBar extends JMenuBar implements ActionListener, Localized {
                         control.createGraph("Greedy t-Spanner(Grid)");       
                 }else if (e.getActionCommand().equals("GreedyNonGrid")) {     
                         control.createGraph("Greedy t-Spanner(NonGrid)");       
-                }
-                else if( e.getActionCommand().equals( "applyConcreteAssignment" ) ) {
+                }else if (e.getActionCommand().equals("DijkstraNonGrid")) {     
+                        control.createGraph("Dijkstra For Non Grid");       
+                }else if (e.getActionCommand().equals("DijkstraGrid")) {     
+                        control.createGraph("Dijkstra For Grid");       
+                }else if( e.getActionCommand().equals( "applyConcreteAssignment" ) ) {
 		} else if( e.getActionCommand().equals( "quickVisualization" ) ) {
 			control.performQuickVisualization();
 		} else if( e.getActionCommand().equals( "startSimulation" ) ) {
