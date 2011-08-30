@@ -17,7 +17,9 @@ import de.tu_berlin.math.coga.zet.converter.cellularAutomaton.ZToCAMapping;
 import de.tu_berlin.math.coga.zet.converter.cellularAutomaton.ZToCARasterContainer;
 import de.tu_berlin.math.coga.zet.NetworkFlowModel;
 import de.tu_berlin.math.coga.zet.converter.graph.BaseZToGraphConverter;
+import de.tu_berlin.math.coga.zet.converter.graph.ZToDijkstraSpannerConverter;
 import de.tu_berlin.math.coga.zet.converter.graph.ZToGreedySpannerConverter;
+import de.tu_berlin.math.coga.zet.converter.graph.ZToGridDijkstraConverter;
 import de.tu_berlin.math.coga.zet.converter.graph.ZToGridGraphConverter;
 import de.tu_berlin.math.coga.zet.converter.graph.ZToGridGreedyConverter;
 import de.tu_berlin.math.coga.zet.converter.graph.ZToNonGridGraphConverter;
@@ -303,6 +305,10 @@ public class AlgorithmControl implements PropertyChangeListener {
             else if (Algo == "Greedy t-Spanner(Grid)"){
                  conv = new ZToGridGreedyConverter();}
             //Greedy fuer NonGridGraphen
+            else if (Algo == "Dijkstra For Non Grid"){
+                conv = new ZToDijkstraSpannerConverter();}
+             else if (Algo == "Dijkstra For Grid"){
+                conv = new ZToGridDijkstraConverter();}       
             else {
                  conv = new ZToGreedySpannerConverter();}
                 
