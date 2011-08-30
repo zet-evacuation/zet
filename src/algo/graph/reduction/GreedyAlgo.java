@@ -23,8 +23,7 @@ import ds.graph.problem.MinSpanningTreeProblem;
  */
 public class GreedyAlgo extends Algorithm<MinSpanningTreeProblem,MinSpanningTree> {
     
-    int t = 2;
-    int[] Sort;
+    int t = 1;
     int[][] used;
     int Min = 100000;
     int overalldist = 0;
@@ -40,20 +39,25 @@ public class GreedyAlgo extends Algorithm<MinSpanningTreeProblem,MinSpanningTree
     IdentifiableCollection<Edge> origedges = new ListSequence<Edge>();
     IdentifiableCollection<Edge> sortededges = new ListSequence<Edge>();
     IdentifiableCollection<Edge> solEdges = new ListSequence<Edge>();
-    IdentifiableCollection<Edge> solEdges2 = new ListSequence<Edge>();
+    Node supersink;
+    Edge supersinkedge;
     @Override
     public MinSpanningTree runAlgorithm(MinSpanningTreeProblem minspan)
     {
         try{
             OriginNetwork = minspan.getGraph();
+            supersink = OriginNetwork.getSupersink();
             int numNodes = OriginNetwork.getGraph().numberOfNodes();
             TransitForEdge = OriginNetwork.getTransitTimes();
             currentTransitForEdge = new IdentifiableIntegerMapping<Edge>(OriginNetwork.getGraph().numberOfEdges());
             for (Edge edge: OriginNetwork.getGraph().edges())
             {
-                origedges.add(edge);                
+                if ((edge.start() != supersink) && (edge.end()!= supersink) )
+                {
+                    origedges.add(edge);                
                 //Transitzeit soll am Anfang in G' sehr hoch gesetzt sein
-                currentTransitForEdge.add(edge, 100000);
+                    currentTransitForEdge.add(edge, 100000);
+                }
             }   
             System.out.println("Anzahl der OriginalKanten " + origedges.size());
             //Sortiere die Kanten nach aufsteigenden Transitzeiten...
@@ -92,17 +96,16 @@ public class GreedyAlgo extends Algorithm<MinSpanningTreeProblem,MinSpanningTree
                 Dijkstra dijkstra = new Dijkstra(network, currentTransitForEdge, sortededges.first().end(), true);
                 dijkstra.run();
                 int dist = dijkstra.getDistance(sortededges.first().start());
-                //System.out.println("Distanz der 1. Kante im Dijkstra: " + dist);
-                //System.out.println("Distanz der 1. Kante im Originalgraphen: " + TransitForEdge.get(sortededges.first()));
+                
                 currentEdge = sortededges.first();
                 if (dist > t* TransitForEdge.get(currentEdge))
                 {
                     currentTransitForEdge.set(currentEdge,TransitForEdge.get(currentEdge));             
                     //verhindere, dass zugehoerige Rueckwaertskanten eingefuegt werden
-                    //Problem: Kante hat andere ID...bloss dieselben Endknoten
-                    Edge edge = new Edge(NumEdges++,currentEdge.start(),currentEdge.end());
-                    if ((used[edge.start().id()][edge.end().id()]) == 0)
+     
+                    if ((used[currentEdge.start().id()][currentEdge.end().id()]) == 0)
                     {
+                        Edge edge = new Edge(NumEdges++,currentEdge.start(),currentEdge.end());
                         solEdges.add(edge);
                         used[edge.start().id()][edge.end().id()] = 1;
                         used[edge.end().id()][edge.start().id()] = 1;
@@ -110,12 +113,18 @@ public class GreedyAlgo extends Algorithm<MinSpanningTreeProblem,MinSpanningTree
                         count++;
                     }
                 }
-                //System.out.println("neue Transitzeit fuer Dijkstra " + currentTransitForEdge.get(sortededges.first()));
+                
                 
                 sortededges.remove(currentEdge);
-                    
-            //}
+                  
             }
+            
+        IdentifiableCollection<Edge> addEdges = OriginNetwork.getGraph().incidentEdges(supersink);
+        for (Edge edge: addEdges)
+        {
+            supersinkedge = new Edge(NumEdges++, edge.start(), edge.end());
+            solEdges.add(supersinkedge);
+        }
      
            
         }
