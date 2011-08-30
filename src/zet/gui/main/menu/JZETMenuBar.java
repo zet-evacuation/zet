@@ -198,7 +198,7 @@ public class JZETMenuBar extends JMenuBar implements ActionListener, Localized {
 		//mnuExecuteCreateGraph = Menu.addMenuItem( mExecute, loc.getString( "Execute.CreateGraph" ), this, "createGraph" );
                 mCreateGraph = Menu.addMenu(mExecute, loc.getString("Execute.CreateGraph"));
                 //mnuCreateGraphCompleteGraph = Menu.addMenuItem( mCreateGraph, loc.getString( "Execute.CreateGraph.CompleteGraph" ), this, "completeGraph" );
-                mCreateGraphCompleteGraph = Menu.addMenu(mCreateGraph, "Execute.CreateGraph.CompleteGraph");
+                mCreateGraphCompleteGraph = Menu.addMenu(mCreateGraph, loc.getString("Execute.CreateGraph.CompleteGraph"));
                 //mnuCreateGraphCompleteGrid = Menu.addMenuItem(mCreateGraphCompleteGraph, loc.getString("Execute.CreateGraph.CompleteGraph.Grid"), KeyEvent.VK_9, this, "completeGrid");
                 mnuCreateGraphCompleteGrid = Menu.addMenuItem(mCreateGraphCompleteGraph, loc.getString("Execute.CreateGraph.CompleteGraph.Grid"), KeyEvent.VK_6,this, "completeGrid",0);
                 mnuCreateGraphCompleteNonGrid = Menu.addMenuItem(mCreateGraphCompleteGraph, loc.getString("Execute.CreateGraph.CompleteGraph.NonGrid"), KeyEvent.VK_4, this, "completeNonGrid",0);
@@ -208,9 +208,9 @@ public class JZETMenuBar extends JMenuBar implements ActionListener, Localized {
                 mCreateGraphSpannerUsingGreedy = Menu.addMenu(mCreateGraph, loc.getString("Execute.CreateGraph.Greedy"));
                 mnuCreateGraphSpannerUsingGreedyGrid = Menu.addMenuItem(mCreateGraphSpannerUsingGreedy, loc.getString("Execute.CreateGraph.Greedy.Grid"), KeyEvent.VK_2, this, "GreedyGrid",0);
                 mnuCreateGraphSpannerUsingGreedyNonGrid = Menu.addMenuItem(mCreateGraphSpannerUsingGreedy, loc.getString("Execute.CreateGraph.Greedy.NonGrid"), KeyEvent.VK_7, this, "GreedyNonGrid",0);
-                mCreateGraphSpannerUsingDijkstra = Menu.addMenu(mCreateGraph, "Shortest Path Tree");
-                mnuCreateGraphSpannerUsingDijkstraGrid = Menu.addMenuItem(mCreateGraphSpannerUsingDijkstra, "Shortest Path Tree for Grid Graphs", KeyEvent.VK_9, this, "DijkstraGrid",0);
-                mnuCreateGraphSpannerUsingDijkstraNonGrid = Menu.addMenuItem(mCreateGraphSpannerUsingDijkstra, "Shortest Path Tree for Non Grid Graphs", KeyEvent.VK_6, this, "DijkstraNonGrid",0);
+                mCreateGraphSpannerUsingDijkstra = Menu.addMenu(mCreateGraph, loc.getString("Execute.CreateGraph.ShortestPathTree"));
+                mnuCreateGraphSpannerUsingDijkstraGrid = Menu.addMenuItem(mCreateGraphSpannerUsingDijkstra, loc.getString("Execute.CreateGraph.ShortestPathTree.Grid"), KeyEvent.VK_9, this, "DijkstraGrid",0);
+                mnuCreateGraphSpannerUsingDijkstraNonGrid = Menu.addMenuItem(mCreateGraphSpannerUsingDijkstra, loc.getString("Execute.CreateGraph.ShortestPathTree.NonGrid"), KeyEvent.VK_6, this, "DijkstraNonGrid",0);
 		mnuExecuteApplyAssignment = Menu.addMenuItem( mExecute, loc.getString( "Execute.ApplyConcreteAssignment" ), this, "applyConcreteAssignment" );
 		mSimulation = Menu.addMenu( mExecute, loc.getString( "Execute.Simulation" ) );
 		mnuSimulationQuickVisualization = Menu.addMenuItem( mSimulation, loc.getString( "Execute.Simulation.QuickVisualization" ), KeyEvent.VK_F5, this, "quickVisualization", 0 );
@@ -544,9 +544,23 @@ public class JZETMenuBar extends JMenuBar implements ActionListener, Localized {
 		Menu.updateMenu( mnuStepByStepSimulation, loc.getString( "Execute.Simulation.StepByStep" ) );
 
 
-		Menu.updateMenu( mOptimization, loc.getString( "Execute.Optimization" ) );
-		//Menu.updateMenu( mnuExecuteCreateGraph, loc.getString( "Execute.Optimization.CreateGraph" ) );
-                Menu.updateMenu( mCreateGraph, loc.getString( "Execute.Optimization.CreateGraph" ) );
+		Menu.updateMenu(mOptimization, loc.getString( "Execute.Optimization" ) );
+		Menu.updateMenu(mCreateGraph, loc.getString( "Execute.CreateGraph" ) );
+                Menu.updateMenu(mCreateGraphCompleteGraph, loc.getString("Execute.CreateGraph.CompleteGraph"));
+                Menu.updateMenu(mnuCreateGraphCompleteGrid, loc.getString("Execute.CreateGraph.CompleteGraph.Grid"));
+                Menu.updateMenu(mnuCreateGraphCompleteNonGrid, loc.getString("Execute.CreateGraph.CompleteGraph.NonGrid"));
+                Menu.updateMenu(mCreateGraphSpannerUsingPrim , loc.getString("Execute.CreateGraph.Prim"));
+                Menu.updateMenu(mnuCreateGraphSpannerUsingPrimGrid, loc.getString("Execute.CreateGraph.Prim.Grid"));
+                Menu.updateMenu(mnuCreateGraphSpannerUsingPrimNonGrid , loc.getString("Execute.CreateGraph.Prim.NonGrid"));
+                Menu.updateMenu(mCreateGraphSpannerUsingGreedy , loc.getString("Execute.CreateGraph.Greedy"));
+                Menu.updateMenu(mnuCreateGraphSpannerUsingGreedyGrid , loc.getString("Execute.CreateGraph.Greedy.Grid"));
+                Menu.updateMenu(mnuCreateGraphSpannerUsingGreedyNonGrid , loc.getString("Execute.CreateGraph.Greedy.NonGrid"));
+                Menu.updateMenu(mCreateGraphSpannerUsingDijkstra, loc.getString("Execute.CreateGraph.ShortestPathTree"));
+                Menu.updateMenu(mnuCreateGraphSpannerUsingDijkstraGrid, loc.getString("Execute.CreateGraph.ShortestPathTree.Grid"));
+                Menu.updateMenu(mnuCreateGraphSpannerUsingDijkstraNonGrid, loc.getString("Execute.CreateGraph.ShortestPathTree.NonGrid"));
+                
+                
+                //Menu.updateMenu( mCreateGraph, loc.getString( "Execute.Optimization.CreateGraph" ) );
 		Menu.updateMenu( mnuOptimizationEarliestArrivalTransshipment, loc.getString( "Execute.Optimization.AlgoEATransshipment" ) );
 
 		// Extras menu
