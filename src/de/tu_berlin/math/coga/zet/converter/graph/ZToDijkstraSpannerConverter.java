@@ -58,7 +58,7 @@ public class ZToDijkstraSpannerConverter extends ZToNonGridGraphConverter{
 		model.setTransitTimes( exactTransitTimes.round() );
 		createReverseEdges( model );
         	model.setNetwork( model.getGraph().getAsStaticNetwork() );
- 
+                System.out.println("Grad der Supersenke im Original: " + model.getGraph().degree(model.getSupersink()));
                 //Knoten stimmen bei Original und beim MinSpanModel ueberein
                 minspanmodel.setNetwork(newgraph);
                 newgraph.setNodes(model.getGraph().nodes());
@@ -93,11 +93,6 @@ public class ZToDijkstraSpannerConverter extends ZToNonGridGraphConverter{
                     solEdges.add(neu);
                 }
                 
-                /*for (Edge sink: model.getGraph().incidentEdges(model.getSupersink()))
-                {
-                    neu2 = new Edge(NumEdges++, sink.start(),sink.end());
-                    solEdges.add(neu2);
-                }*/
                 for (Edge create: solEdges)
                 {
                     newgraph.addEdge(create);
