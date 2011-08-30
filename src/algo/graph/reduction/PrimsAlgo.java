@@ -69,10 +69,17 @@ public class PrimsAlgo extends Algorithm<MinSpanningTreeProblem,MinSpanningTree>
         //Supersenke gewaehlt werden kann 
         Random r = new Random();
         r.setSeed(100000);
-        int num = 1 + Math.abs(r.nextInt()) % numNodes;
-        
-        System.out.println("Startknoten: " + num  );
-        startNode = OriginGraph.getNode(num);
+        int num = 0 + Math.abs(r.nextInt()) % numNodes;
+
+        if (num != 0)
+        {    
+            startNode = OriginGraph.getNode(num);
+        }
+        else
+        {
+            startNode = OriginGraph.getNode(num+1);
+        }
+        System.out.println("Startknoten: " + num);
         solNodes.add(startNode);
          
         distances = new IdentifiableIntegerMapping<Node>(OriginNetwork.getGraph().numberOfNodes());
