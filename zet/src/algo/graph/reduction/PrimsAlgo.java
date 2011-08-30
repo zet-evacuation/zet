@@ -35,6 +35,7 @@ public class PrimsAlgo extends Algorithm<MinSpanningTreeProblem,MinSpanningTree>
     IdentifiableCollection<Edge> remaincurrentEdges = new ListSequence<Edge>();
     IdentifiableCollection<Edge> edges = new ListSequence<Edge>();
     Edge MinEdge;
+    Edge supersinkedge;
     Node startNode;
     Node endNode;
     Node currentNode;
@@ -136,7 +137,8 @@ public class PrimsAlgo extends Algorithm<MinSpanningTreeProblem,MinSpanningTree>
         IdentifiableCollection<Edge> addEdges = OriginNetwork.getGraph().incidentEdges(supersink);
         for (Edge edge: addEdges)
         {
-            solEdges.add(edge);
+            supersinkedge = new Edge(NumEdges++, edge.start(), edge.end());
+            solEdges.add(supersinkedge);
         }
         
                //2. langsamere Implementation
