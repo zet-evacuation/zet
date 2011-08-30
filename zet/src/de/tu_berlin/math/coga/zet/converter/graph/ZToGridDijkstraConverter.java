@@ -91,11 +91,6 @@ public class ZToGridDijkstraConverter extends ZToGridGraphConverter{
                     neu = new Edge(NumEdges++, edge.start(), edge.end());
                     solEdges.add(neu);
                 }
-                for (Edge sink: model.getGraph().incidentEdges(model.getSupersink()))
-                {
-                    neu2 = new Edge(NumEdges++, sink.start(),sink.end());
-                    solEdges.add(neu2);
-                }
                 
                 for (Edge create: solEdges)
                 {

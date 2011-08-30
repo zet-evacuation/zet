@@ -208,9 +208,9 @@ public class JZETMenuBar extends JMenuBar implements ActionListener, Localized {
                 mCreateGraphSpannerUsingGreedy = Menu.addMenu(mCreateGraph, loc.getString("Execute.CreateGraph.Greedy"));
                 mnuCreateGraphSpannerUsingGreedyGrid = Menu.addMenuItem(mCreateGraphSpannerUsingGreedy, loc.getString("Execute.CreateGraph.Greedy.Grid"), KeyEvent.VK_2, this, "GreedyGrid",0);
                 mnuCreateGraphSpannerUsingGreedyNonGrid = Menu.addMenuItem(mCreateGraphSpannerUsingGreedy, loc.getString("Execute.CreateGraph.Greedy.NonGrid"), KeyEvent.VK_7, this, "GreedyNonGrid",0);
-                mCreateGraphSpannerUsingDijkstra = Menu.addMenu(mCreateGraph, "Dijkstra Spanner");
-                mnuCreateGraphSpannerUsingDijkstraGrid = Menu.addMenuItem(mCreateGraphSpannerUsingDijkstra, "Dijkstra Spanner for Grid Graphs", KeyEvent.VK_9, this, "DijkstraGrid",0);
-                mnuCreateGraphSpannerUsingDijkstraNonGrid = Menu.addMenuItem(mCreateGraphSpannerUsingDijkstra, "Dijkstar Spanner For Non Grid Graphs", KeyEvent.VK_6, this, "DijkstraNonGrid",0);
+                mCreateGraphSpannerUsingDijkstra = Menu.addMenu(mCreateGraph, "Shortest Path Tree");
+                mnuCreateGraphSpannerUsingDijkstraGrid = Menu.addMenuItem(mCreateGraphSpannerUsingDijkstra, "Shortest Path Tree for Grid Graphs", KeyEvent.VK_9, this, "DijkstraGrid",0);
+                mnuCreateGraphSpannerUsingDijkstraNonGrid = Menu.addMenuItem(mCreateGraphSpannerUsingDijkstra, "Shortest Path Tree for Non Grid Graphs", KeyEvent.VK_6, this, "DijkstraNonGrid",0);
 		mnuExecuteApplyAssignment = Menu.addMenuItem( mExecute, loc.getString( "Execute.ApplyConcreteAssignment" ), this, "applyConcreteAssignment" );
 		mSimulation = Menu.addMenu( mExecute, loc.getString( "Execute.Simulation" ) );
 		mnuSimulationQuickVisualization = Menu.addMenuItem( mSimulation, loc.getString( "Execute.Simulation.QuickVisualization" ), KeyEvent.VK_F5, this, "quickVisualization", 0 );
