@@ -29,6 +29,7 @@ import ds.GraphVisualizationResults;
 import ds.z.Project;
 import ds.PropertyContainer;
 import ds.ca.CellularAutomaton;
+import ds.graph.MinSpanningTree;
 import ds.z.AssignmentType;
 import ds.z.ConcreteAssignment;
 import io.visualization.BuildingResults;
@@ -289,39 +290,19 @@ public class AlgorithmControl implements PropertyChangeListener {
 	}
 
 	public void convertGraph() {
-		convertGraph( null, "");
+		convertGraph( null, GraphConverterAlgorithms.GreedyTSpannerNonGrid );
 	}
 
-	public void convertGraph( PropertyChangeListener propertyChangeListener, String Algo ) {
-            final BaseZToGraphConverter conv;
-            if (Algo == "GridGraph"){                
-                 conv = new ZToGridGraphConverter();}
-            else if (Algo == "NonGridGraph" ){
-                 conv = new ZToNonGridGraphConverter(); }           
-            else if (Algo == "MinSpanTree(Grid)"){
-                 conv = new ZToGridSpanTreeConverter();}
-            else if (Algo == "MinSpanTree(NonGrid)"){
-                conv = new ZToSpanTreeConverter();}
-            else if (Algo == "Greedy t-Spanner(Grid)"){
-                 conv = new ZToGridGreedyConverter();}
-            //Greedy fuer NonGridGraphen
-            else if (Algo == "Dijkstra For Non Grid"){
-                conv = new ZToDijkstraSpannerConverter();}
-             else if (Algo == "Dijkstra For Grid"){
-                conv = new ZToGridDijkstraConverter();}       
-            else {
-                 conv = new ZToGreedySpannerConverter();}
-                
+	public void convertGraph( PropertyChangeListener propertyChangeListener, GraphConverterAlgorithms Algo ) {
+		final BaseZToGraphConverter conv = Algo.converter();
 		conv.setProblem( project.getBuildingPlan() );
 		final SerialTask st = new SerialTask( conv );
 		st.addPropertyChangeListener( new PropertyChangeListener() {
-
 			public void propertyChange( PropertyChangeEvent pce ) {
-				if( st.isDone() ) {
+				if( st.isDone() )
 					networkFlowModel = conv.getSolution();
-				}
 			}
-		});
+		} );
 		if( propertyChangeListener != null )
 			st.addPropertyChangeListener( propertyChangeListener );
 		st.execute();

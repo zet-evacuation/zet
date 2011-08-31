@@ -8,6 +8,7 @@ import de.tu_berlin.math.coga.common.localization.Localized;
 import ds.PropertyContainer;
 import ds.z.exception.RoomIntersectException;
 import gui.GUIControl;
+import gui.GraphConverterAlgorithms;
 import gui.ZETMain;
 import gui.components.framework.Menu;
 import gui.editor.Areas;
@@ -395,26 +396,23 @@ public class JZETMenuBar extends JMenuBar implements ActionListener, Localized {
 			control.createCellularAutomaton();
 		} /*else if( e.getActionCommand().equals( "createGraph" ) ) {
 			control.createGraph("");
-                }*/else if (e.getActionCommand().equals("completeGrid")) {     
-                        control.createGraph("GridGraph");
-                }  
-                else if (e.getActionCommand().equals("completeNonGrid")) {     
-                        control.createGraph("NonGridGraph");
-                }          
-                else if (e.getActionCommand().equals("PrimGrid")) {     
-                        control.createGraph("MinSpanTree(Grid)");
-                }
-                else if (e.getActionCommand().equals("PrimNonGrid")) {     
-                        control.createGraph("MinSpanTree(NonGrid)");
-                }else if (e.getActionCommand().equals("GreedyGrid")) {     
-                        control.createGraph("Greedy t-Spanner(Grid)");       
-                }else if (e.getActionCommand().equals("GreedyNonGrid")) {     
-                        control.createGraph("Greedy t-Spanner(NonGrid)");       
-                }else if (e.getActionCommand().equals("DijkstraNonGrid")) {     
-                        control.createGraph("Dijkstra For Non Grid");       
-                }else if (e.getActionCommand().equals("DijkstraGrid")) {     
-                        control.createGraph("Dijkstra For Grid");       
-                }else if( e.getActionCommand().equals( "applyConcreteAssignment" ) ) {
+		}*/ else if( e.getActionCommand().equals( "completeGrid" ) )
+			control.createGraph( GraphConverterAlgorithms.GridGraph );
+		else if( e.getActionCommand().equals( "completeNonGrid" ) )
+			control.createGraph( GraphConverterAlgorithms.NonGridGraph );
+		else if( e.getActionCommand().equals( "PrimGrid" ) )
+			control.createGraph( GraphConverterAlgorithms.MinSpanningTreeGrid );
+		else if( e.getActionCommand().equals( "PrimNonGrid" ) )
+			control.createGraph( GraphConverterAlgorithms.MinSpanningTreeNonGrid );
+		else if( e.getActionCommand().equals( "GreedyGrid" ) )
+			control.createGraph( GraphConverterAlgorithms.GreedyTSpannerGrid );
+		else if( e.getActionCommand().equals( "GreedyNonGrid" ) )
+			control.createGraph( GraphConverterAlgorithms.GreedyTSpannerNonGrid );
+		else if( e.getActionCommand().equals( "DijkstraNonGrid" ) )
+			control.createGraph( GraphConverterAlgorithms.DijkstraNonGrid );
+		else if( e.getActionCommand().equals( "DijkstraGrid" ) )
+			control.createGraph( GraphConverterAlgorithms.DijkstraGrid );
+		else if( e.getActionCommand().equals( "applyConcreteAssignment" ) ) {
 		} else if( e.getActionCommand().equals( "quickVisualization" ) ) {
 			control.performQuickVisualization();
 		} else if( e.getActionCommand().equals( "startSimulation" ) ) {
