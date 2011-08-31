@@ -442,95 +442,15 @@ public class ZToNonGridGraphConverter extends BaseZToGraphConverter {
 							exactTransitTimes.set( edge, 0 );
 						// if the transitTime for the current edge is not already modified
 						if( exactTransitTimes.get( edge ) <= 0 ) {
-							int startBreadth;
-							int startHeight;
-							int endBreadth;
-							int endHeight;
+							NodeRectangle.NodeRectanglePoint startUpperLeft = mapping.getNodeRectangles().get( start ).get_nw_point();
+							NodeRectangle.NodeRectanglePoint startLowerRight = mapping.getNodeRectangles().get( start ).get_se_point();
+							int startCentreX = (int) Math.round( mapping.getNodeRectangles().get( start ).getCenterX() );
+							int startCentreY = (int) Math.round( mapping.getNodeRectangles().get( start ).getCenterY() );
 
-							int startCentreX;
-							int startCentreY;
-							int endCentreX;
-							int endCentreY;
-
-							// the new transit time between node "start" and "end"
-							double transitTimeStartEnd;
-
-							// coordinates of the upper Left corner of the upper Left square of the start node
-							int startUpperLeftX = Integer.MAX_VALUE;
-							int startUpperLeftY = Integer.MAX_VALUE;
-							// coordinates of the lower Right corner of the lower Right square of the start node
-							int startLowerRightX = 0;
-							int startLowerRightY = 0;
-
-							// coordinates of the upper Left corner of the upper Left square of the end node
-							int endUpperLeftX = Integer.MAX_VALUE;
-							int endUpperLeftY = Integer.MAX_VALUE;
-							// coordinates of the lower Right corner of the lower Right square of the end node
-							int endLowerRightX = 0;
-							int endLowerRightY = 0;
-
-							// find the coordinates of the upper Left and the lower Right square of the current start-node
-							for( ZToGraphRasterSquare square : nodeToSquare.get( start ) ) {
-								if( square.getXOffset() <= startUpperLeftX )
-									startUpperLeftX = square.getXOffset();
-								if( square.getYOffset() <= startUpperLeftY )
-									startUpperLeftY = square.getYOffset();
-								if( square.getXOffset() >= startLowerRightX )
-									startLowerRightX = square.getXOffset();
-								if( square.getYOffset() >= startLowerRightY )
-									startLowerRightY = square.getYOffset();
-							}
-							// adapt to rectangle corner coordinates
-							startLowerRightX += 400;
-							startLowerRightY += 400;
-							// calculate the centre-coordinates of the start-node-rectangle
-							startBreadth = Math.abs( startLowerRightX - startUpperLeftX );
-							startHeight = Math.abs( startLowerRightY - startUpperLeftY );
-							startCentreX = (int) Math.round( 0.5 * startBreadth ) + startUpperLeftX;
-							startCentreY = (int) Math.round( 0.5 * startHeight ) + startUpperLeftY;
-
-							startUpperLeftX = mapping.getNodeRectangles().get( start ).get_nw_point().getX();
-							startUpperLeftY = mapping.getNodeRectangles().get( start ).get_nw_point().getY();
-
-							
-							startLowerRightX = mapping.getNodeRectangles().get( start ).get_se_point().getX();
-							startLowerRightY = mapping.getNodeRectangles().get( start ).get_se_point().getY();
-
-							
-							startCentreX = (int) Math.round( mapping.getNodeRectangles().get( start ).getCenterX() );
-							startCentreY = (int) Math.round( mapping.getNodeRectangles().get( start ).getCenterY() );
-							
-							
-							// find the coordinates of the upper Left and the lower Right square of the current end-node
-							for( ZToGraphRasterSquare square : nodeToSquare.get( end ) ) {
-								if( square.getXOffset() <= endUpperLeftX )
-									endUpperLeftX = square.getXOffset();
-								if( square.getYOffset() <= endUpperLeftY )
-									endUpperLeftY = square.getYOffset();
-								if( square.getXOffset() >= endLowerRightX )
-									endLowerRightX = square.getXOffset();
-								if( square.getYOffset() >= endLowerRightY )
-									endLowerRightY = square.getYOffset();
-							}
-							// adapt to rectangle corner coordinates
-							endLowerRightX += 400;
-							endLowerRightY += 400;
-							// calculate the centre-coordinates of the end-node-rectangle
-							endBreadth = Math.abs( endLowerRightX - endUpperLeftX );
-							endHeight = Math.abs( endLowerRightY - endUpperLeftY );
-							endCentreX = (int) Math.round( 0.5 * endBreadth ) + endUpperLeftX;
-							endCentreY = (int) Math.round( 0.5 * endHeight ) + endUpperLeftY;
-
-							endUpperLeftX = mapping.getNodeRectangles().get( end ).get_nw_point().getX();
-							endUpperLeftY = mapping.getNodeRectangles().get( end ).get_nw_point().getY();
-
-							endLowerRightX = mapping.getNodeRectangles().get( end ).get_se_point().getX();
-							endLowerRightY = mapping.getNodeRectangles().get( end ).get_se_point().getY();
-							
-							
-							endCentreX = (int) Math.round( mapping.getNodeRectangles().get( end ).getCenterX() );
-							endCentreY = (int) Math.round( mapping.getNodeRectangles().get( end ).getCenterY() );
-							
+							NodeRectangle.NodeRectanglePoint endUpperLeft = mapping.getNodeRectangles().get( end ).get_nw_point();
+							NodeRectangle.NodeRectanglePoint endLowerRight = mapping.getNodeRectangles().get( end ).get_se_point();
+							int endCentreX = (int) Math.round( mapping.getNodeRectangles().get( end ).getCenterX() );
+							int endCentreY = (int) Math.round( mapping.getNodeRectangles().get( end ).getCenterY() );
 							
 							// describes the relative orientation of the start- and end-node rectangles
 							boolean startAboveEnd = false;
@@ -538,13 +458,13 @@ public class ZToNonGridGraphConverter extends BaseZToGraphConverter {
 							boolean startLeftOfEnd = false;
 							boolean startRightOfEnd = false;
 
-							if( startLowerRightY == endUpperLeftY )
+							if( startLowerRight.getY() == endUpperLeft.getY() )
 								startAboveEnd = true;
-							if( startUpperLeftY == endLowerRightY )
+							if( startUpperLeft.getY() == endLowerRight.getY() )
 								startBeneathEnd = true;
-							if( startLowerRightX == endUpperLeftX )
+							if( startLowerRight.getX() == endUpperLeft.getX() )
 								startLeftOfEnd = true;
-							if( startUpperLeftX == endLowerRightX )
+							if( startUpperLeft.getX() == endLowerRight.getX() )
 								startRightOfEnd = true;
 
 							// coordinates of the point on the centre of the intersecting edge part
@@ -553,20 +473,20 @@ public class ZToNonGridGraphConverter extends BaseZToGraphConverter {
 
 							// calculate the coordinates of the intersection point depending on the relative orientation of the two rectangles
 							if( startAboveEnd ) {
-								intersectionPointX = (int) Math.round( 0.5 * Math.abs( Math.min( startLowerRightX, endLowerRightX ) - Math.max( endUpperLeftX, startUpperLeftX ) ) ) + Math.max( endUpperLeftX, startUpperLeftX );
-								intersectionPointY = startLowerRightY;
+								intersectionPointX = (int) Math.round( 0.5 * Math.abs( Math.min( startLowerRight.getX(), endLowerRight.getX() ) - Math.max( endUpperLeft.getX(), startUpperLeft.getX() ) ) ) + Math.max( endUpperLeft.getX(), startUpperLeft.getX() );
+								intersectionPointY = startLowerRight.getY();
 							}
 							if( startBeneathEnd ) {
-								intersectionPointX = (int) Math.round( 0.5 * Math.abs( Math.min( startLowerRightX, endLowerRightX ) - Math.max( endUpperLeftX, startUpperLeftX ) ) ) + Math.max( endUpperLeftX, startUpperLeftX );
-								intersectionPointY = startUpperLeftY;
+								intersectionPointX = (int) Math.round( 0.5 * Math.abs( Math.min( startLowerRight.getX(), endLowerRight.getX() ) - Math.max( endUpperLeft.getX(), startUpperLeft.getX() ) ) ) + Math.max( endUpperLeft.getX(), startUpperLeft.getX() );
+								intersectionPointY = startUpperLeft.getY();
 							}
 							if( startLeftOfEnd ) {
-								intersectionPointX = startLowerRightX;
-								intersectionPointY = (int) Math.round( 0.5 * Math.abs( Math.min( endLowerRightY, startLowerRightY ) - Math.max( endUpperLeftY, startUpperLeftY ) ) ) + Math.max( endUpperLeftY, startUpperLeftY );
+								intersectionPointX = startLowerRight.getX();
+								intersectionPointY = (int) Math.round( 0.5 * Math.abs( Math.min( endLowerRight.getY(), startLowerRight.getY() ) - Math.max( endUpperLeft.getY(), startUpperLeft.getY() ) ) ) + Math.max( endUpperLeft.getY(), startUpperLeft.getY() );
 							}
 							if( startRightOfEnd ) {
-								intersectionPointX = startUpperLeftX;
-								intersectionPointY = (int) Math.round( 0.5 * Math.abs( Math.min( endLowerRightY, startLowerRightY ) - Math.max( endUpperLeftY, startUpperLeftY ) ) ) + Math.max( endUpperLeftY, startUpperLeftY );
+								intersectionPointX = startUpperLeft.getY();
+								intersectionPointY = (int) Math.round( 0.5 * Math.abs( Math.min( endLowerRight.getY(), startLowerRight.getY() ) - Math.max( endUpperLeft.getY(), startUpperLeft.getY() ) ) ) + Math.max( endUpperLeft.getY(), startUpperLeft.getY() );
 							}
 
 							// speed factor within the node-squares
@@ -579,16 +499,16 @@ public class ZToNonGridGraphConverter extends BaseZToGraphConverter {
 							double endPath;
 
 							// calculate the path length weighted with the appropriate node'Seconds speed factor
-							startPath = (1. / startSpeedFactor) * Math.sqrt( Math.pow( Math.abs( intersectionPointY - startCentreY ), 2 ) + Math.pow( Math.abs( intersectionPointX - startCentreX ), 2 ) );
-							endPath = (1. / endSpeedFactor) * Math.sqrt( Math.pow( Math.abs( intersectionPointY - endCentreY ), 2 ) + Math.pow( Math.abs( intersectionPointX - endCentreX ), 2 ) );
-							transitTimeStartEnd = startPath + endPath;
+							startPath = Math.sqrt( Math.pow( Math.abs( intersectionPointY - startCentreY ), 2 ) + Math.pow( Math.abs( intersectionPointX - startCentreX ), 2 ) ) / startSpeedFactor;
+							endPath = Math.sqrt( Math.pow( Math.abs( intersectionPointY - endCentreY ), 2 ) + Math.pow( Math.abs( intersectionPointX - endCentreX ), 2 ) ) / endSpeedFactor;
+							double transitTimeStartEnd = startPath + endPath;
 
 							// getting the graph precision factor, defining the exactness of the distances
 							PropertyContainer propertyContainer = PropertyContainer.getInstance();
 							int precision = propertyContainer.getAs( "converter.GraphPrecision", Integer.class );
 
 							// adjusting the transit time according to the graph precision value
-							transitTimeStartEnd = (double) transitTimeStartEnd * (double) precision / 400.0d;
+							transitTimeStartEnd = transitTimeStartEnd * precision / 400.0d;
 
 							// write the new transitTime into the IIMapping
 							exactTransitTimes.set( edge, transitTimeStartEnd );
@@ -663,7 +583,7 @@ public class ZToNonGridGraphConverter extends BaseZToGraphConverter {
 							int precision = propertyContainer.getAs( "converter.GraphPrecision", Integer.class );
 
 							// adjusting the transit time according to the graph precision value
-							transitTimeAB = (double) transitTimeAB * (double) precision / 400.0d;
+							transitTimeAB = transitTimeAB * precision / 400.0d;
 
 							exactTransitTimes.set( edge, transitTimeAB );
 						}
