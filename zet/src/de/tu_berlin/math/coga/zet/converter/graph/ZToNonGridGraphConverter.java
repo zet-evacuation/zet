@@ -489,6 +489,18 @@ public class ZToNonGridGraphConverter extends BaseZToGraphConverter {
 							startCentreX = (int) Math.round( 0.5 * startBreadth ) + startUpperLeftX;
 							startCentreY = (int) Math.round( 0.5 * startHeight ) + startUpperLeftY;
 
+							startUpperLeftX = mapping.getNodeRectangles().get( start ).get_nw_point().getX();
+							startUpperLeftY = mapping.getNodeRectangles().get( start ).get_nw_point().getY();
+
+							
+							startLowerRightX = mapping.getNodeRectangles().get( start ).get_se_point().getX();
+							startLowerRightY = mapping.getNodeRectangles().get( start ).get_se_point().getY();
+
+							
+							startCentreX = (int) Math.round( mapping.getNodeRectangles().get( start ).getCenterX() );
+							startCentreY = (int) Math.round( mapping.getNodeRectangles().get( start ).getCenterY() );
+							
+							
 							// find the coordinates of the upper Left and the lower Right square of the current end-node
 							for( ZToGraphRasterSquare square : nodeToSquare.get( end ) ) {
 								if( square.getXOffset() <= endUpperLeftX )
@@ -509,6 +521,17 @@ public class ZToNonGridGraphConverter extends BaseZToGraphConverter {
 							endCentreX = (int) Math.round( 0.5 * endBreadth ) + endUpperLeftX;
 							endCentreY = (int) Math.round( 0.5 * endHeight ) + endUpperLeftY;
 
+							endUpperLeftX = mapping.getNodeRectangles().get( end ).get_nw_point().getX();
+							endUpperLeftY = mapping.getNodeRectangles().get( end ).get_nw_point().getY();
+
+							endLowerRightX = mapping.getNodeRectangles().get( end ).get_se_point().getX();
+							endLowerRightY = mapping.getNodeRectangles().get( end ).get_se_point().getY();
+							
+							
+							endCentreX = (int) Math.round( mapping.getNodeRectangles().get( end ).getCenterX() );
+							endCentreY = (int) Math.round( mapping.getNodeRectangles().get( end ).getCenterY() );
+							
+							
 							// describes the relative orientation of the start- and end-node rectangles
 							boolean startAboveEnd = false;
 							boolean startBeneathEnd = false;

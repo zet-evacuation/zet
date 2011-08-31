@@ -238,10 +238,8 @@ public class GraphVisualizationResults implements VisualizationResult {
 		nodePositionMapping = new NodePositionMapping( network.numberOfNodes() );
 		for( Node n : network ) {
 			NodeRectangle rect = getNodeRectangles().get( n );
-			final double xs = rect.get_nw_point().getX() + (rect.get_ne_point().getX() - rect.get_nw_point().getX()) * 0.5;
-			final double ys = rect.get_nw_point().getY() + (rect.get_sw_point().getY() - rect.get_nw_point().getY()) * 0.5;
 			final double zs = getNodeToFloorMapping().get( n ) * VisualizationOptionManager.getFloorDistance();
-			final Vector3 v = new Vector3( xs, ys, zs );
+			final Vector3 v = new Vector3( rect.getCenterX(), rect.getCenterY(), zs );
 			nodePositionMapping.set( n, v );
 		}
 	}

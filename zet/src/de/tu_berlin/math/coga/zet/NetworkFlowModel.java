@@ -225,4 +225,11 @@ public class NetworkFlowModel {
         this.exactTransitTimes = exactTransitTimes;
     }
 
+	@Override
+	public String toString() {
+		return "NetworkFlowModel{" + "network=" + network + ", edgeCapacities=" + edgeCapacities + ", nodeCapacities=" + nodeCapacities + ", transitTimes=" + transitTimes + ", sources=" + sources + ", mapping=" + mapping + ", supersink=" + supersink + '}';
+	}
+		
+		
+
 }

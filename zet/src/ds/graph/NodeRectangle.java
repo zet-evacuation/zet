@@ -147,6 +147,16 @@ public class NodeRectangle{
 		return se;
 	}
 	
+	public double getCenterX() {
+		return nw.getX() + (ne.getX() - nw.getX()) * 0.5;
+	}
+	
+	public double getCenterY() {
+			return nw.getY() + (sw.getY() - nw.getY()) * 0.5;
+	}
+	
+	
+	
 	/**
 	 * Returns a {@code String} containing the north west and the south east corner of the rectangle.
 	 * @return a {@code String} containing the north west and the south east corner of the rectangle.

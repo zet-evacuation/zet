@@ -18,7 +18,6 @@ import ds.graph.IdentifiableIntegerMapping;
 import ds.graph.IdentifiableObjectMapping;
 import ds.graph.ListSequence;
 import ds.graph.MinHeap;
-import java.util.PriorityQueue;
 
 
 /**
@@ -68,7 +67,10 @@ public class PrimsAlgo extends Algorithm<MinSpanningTreeProblem,MinSpanningTree>
         //gibt zufaellig einen Startknoten wider, Zufallszahl beginnend bei 1, sodass nie
         //Supersenke gewaehlt werden kann 
         Random r = new Random();
-        r.setSeed(100000);
+				long seed = r.nextLong();
+				seed = 5706550742198787144l; // this one creates a chain decomposition error in 3-storey 4-rooms.
+				System.out.println( "Spanning Tree Seed: " + seed );
+        r.setSeed( seed );
         int num = 0 + Math.abs(r.nextInt()) % numNodes;
 
         if (num != 0)
