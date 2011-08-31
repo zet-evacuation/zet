@@ -46,7 +46,6 @@ public class PrimsAlgo extends Algorithm<MinSpanningTreeProblem,MinSpanningTree>
     Graph OriginGraph;
     DynamicNetwork neu;
     int NumEdges = 0;
-    //Zur Implementation der Priority Queue...
     IdentifiableIntegerMapping<Node> distances;
     IdentifiableObjectMapping<Node, Edge> heapedges;
     
@@ -55,17 +54,13 @@ public class PrimsAlgo extends Algorithm<MinSpanningTreeProblem,MinSpanningTree>
     {
         
         try{
-        //Holt das Networkflowmodel, das nach dem Konvertieren erstellt wird
         OriginNetwork = minspan.getGraph(); 
         Node supersink = minspan.getGraph().getSupersink();
-        //Holt zugehoerigen Graphen dazu
         OriginGraph = OriginNetwork.getGraph();
         int numNodes = OriginGraph.numberOfNodes();
-        //kalkuliert Distanzen der einzelnen Knoten
         IdentifiableIntegerMapping<Edge> TransitForEdge = OriginNetwork.getTransitTimes();
      
-        //gibt zufaellig einen Startknoten wider, Zufallszahl beginnend bei 1, sodass nie
-        //Supersenke gewaehlt werden kann 
+        //gives a random start node
         Random r = new Random();
 				long seed = r.nextLong();
 				seed = 5706550742198787144l; // this one creates a chain decomposition error in 3-storey 4-rooms.
@@ -110,11 +105,10 @@ public class PrimsAlgo extends Algorithm<MinSpanningTreeProblem,MinSpanningTree>
             solNodes.add(v);
             distances.set(v, Integer.MIN_VALUE);
             
-            //Supersenke nicht betrachten...
             if (v != startNode)
             {
                 Edge edge = new Edge(NumEdges++,heapedges.get(v).start(),heapedges.get(v).end());
-                //fuege nur Kanten hinzu, die nicht zur Supersenke adjazent sind
+                //only consider edges that are not incident to supersink
                 if (heapedges.get(v).start() != supersink && heapedges.get(v).end() != supersink)
                 {
                     solEdges.add(edge);

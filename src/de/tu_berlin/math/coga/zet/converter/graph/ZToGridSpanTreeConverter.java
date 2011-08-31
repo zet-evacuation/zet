@@ -21,7 +21,7 @@ import ds.z.BuildingPlan;
  *
  * @author schwengf
  */
-//Klasse zur Berechnung eines minimalen Spannbaumes fuer Grid Graphen
+//creates a minimum spanning tree for grid graphs
 public class ZToGridSpanTreeConverter extends ZToGridGraphConverter{
     public NetworkFlowModel minspanmodel;
     public MinSpanningTreeProblem minspanprob;
@@ -80,7 +80,7 @@ public class ZToGridSpanTreeConverter extends ZToGridGraphConverter{
                 primalgo.setProblem( minspanprob );
                 System.out.print("Compute minimum spanning tree using Prim... " );
 		primalgo.run();
-                System.out.println(" fertig in " + primalgo.getRuntimeAsString() );
+                System.out.println("used time: " + primalgo.getRuntimeAsString() );
 		minspantree = primalgo.getSolution();
                 IdentifiableCollection<Edge> MinEdges = minspantree.getEdges();
                 
@@ -93,7 +93,6 @@ public class ZToGridSpanTreeConverter extends ZToGridGraphConverter{
                     minspanmodel.setExactTransitTime(neu, model.getExactTransitTime(neu));
                 }
                 
-                 System.out.println("Anzahl der Kanten neu: " + newgraph.numberOfEdges());
                  minspanmodel.setCurrentAssignment(model.getCurrentAssignment());
                  minspanmodel.setSources(model.getSources());
                  
@@ -110,6 +109,7 @@ public class ZToGridSpanTreeConverter extends ZToGridGraphConverter{
                  minspanmodel.setSupersink(model.getSupersink());
                       
                 createReverseEdges( minspanmodel );
+                System.out.println("number of edges in MST: " + minspanmodel.getGraph().numberOfEdges());
                 minspanmodel.setNetwork(newgraph);
                 minspanmodel.setNetwork( minspanmodel.getGraph().getAsStaticNetwork());
                 
