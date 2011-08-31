@@ -58,6 +58,9 @@ public class ZToDijkstraSpannerConverter extends ZToNonGridGraphConverter{
 		super.computeTransitTimes();
 		super.multiplyWithUpAndDownSpeedFactors();
 		model.setTransitTimes( exactTransitTimes.round() );
+		
+		System.out.println( model.toString() );
+		
 		createReverseEdges( model );
         	model.setNetwork( model.getGraph().getAsStaticNetwork() );
                 //Knoten stimmen bei Original und beim MinSpanModel ueberein
