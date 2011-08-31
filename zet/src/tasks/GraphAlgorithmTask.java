@@ -6,11 +6,9 @@ package tasks;
 
 import batch.GraphAlgorithm;
 import de.tu_berlin.math.coga.zet.converter.graph.GraphAssignmentConverter;
-import de.tu_berlin.math.coga.zet.converter.graph.ZToNonGridGraphConverter;
 import de.tu_berlin.math.coga.common.algorithm.Algorithm;
 import de.tu_berlin.math.coga.zet.NetworkFlowModel;
 import de.tu_berlin.math.coga.zet.converter.graph.BaseZToGraphConverter;
-import de.tu_berlin.math.coga.zet.converter.graph.ZToGridGraphConverter;
 import de.tu_berlin.math.coga.zet.converter.graph.ZToSpanTreeConverter;
 import ds.GraphVisualizationResults;
 import ds.z.Project;
@@ -26,6 +24,7 @@ public class GraphAlgorithmTask extends Algorithm<Project, GraphVisualizationRes
 
 	GraphAlgorithm graphAlgorithm;
 	NetworkFlowModel networkFlowModel;
+	BaseZToGraphConverter conv = new ZToSpanTreeConverter();
 
 	public GraphAlgorithmTask( GraphAlgorithm graphAlgorithm ) {
 		this.graphAlgorithm = graphAlgorithm;
@@ -33,18 +32,17 @@ public class GraphAlgorithmTask extends Algorithm<Project, GraphVisualizationRes
 
 	@Override
 	protected GraphVisualizationResults runAlgorithm( Project project ) {
-		// convert the graph
-		//final ZToNonGridGraphConverter conv = new ZToNonGridGraphConverter();
-		//final BaseZToGraphConverter conv = new ZToNonGridGraphConverter();
-		//final BaseZToGraphConverter conv = new ZToGridGraphConverter();	
-		final ZToSpanTreeConverter conv = new ZToSpanTreeConverter();	
-
-		conv.setProblem( project.getBuildingPlan() );
-		conv.run();
+		if( networkFlowModel == null ) {
+			conv.setProblem( project.getBuildingPlan() );
+			conv.run();
+			networkFlowModel = conv.getSolution();
+		}
 
 		// convert and create the concrete assignment
 		ConcreteAssignment concreteAssignment = project.getCurrentAssignment().createConcreteAssignment( 400 );
-		GraphAssignmentConverter cav = new GraphAssignmentConverter( conv.getSolution() );
+		
+		GraphAssignmentConverter cav = new GraphAssignmentConverter( networkFlowModel );
+		
 		cav.setProblem( concreteAssignment );
 		cav.run();
 		networkFlowModel = cav.getSolution();
@@ -55,9 +53,6 @@ public class GraphAlgorithmTask extends Algorithm<Project, GraphVisualizationRes
 		Algorithm<NetworkFlowModel, PathBasedFlowOverTime> gt = null;
 		gt = graphAlgorithm.createTask( cav.getSolution(), maxTime );
 		gt.setProblem( cav.getSolution() );
-		//if (gt instanceof SuccessiveEarliestArrivalAugmentingPathAlgorithmTask3 && listener != null) {
-		//    ((SuccessiveEarliestArrivalAugmentingPathAlgorithmTask3) gt).addAlgorithmListener(listener);
-		//}
 		gt.run();
 
 		// create graph vis result
@@ -68,4 +63,14 @@ public class GraphAlgorithmTask extends Algorithm<Project, GraphVisualizationRes
 	public NetworkFlowModel getNetworkFlowModel() {
 		return networkFlowModel;
 	}
+
+	public void setConv( BaseZToGraphConverter conv ) {
+		this.conv = conv;
+	}
+	
+	public void setNetworkFlowModel( NetworkFlowModel networkFlowModel) {
+		this.networkFlowModel = networkFlowModel;
+	}
+	
+	
 }

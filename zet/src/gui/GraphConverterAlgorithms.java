@@ -1,7 +1,8 @@
 /**
- * Enum.java
- * Created: Aug 31, 2011, 11:22:01 AM
+ * GraphConverterAlgorithms.java
+ * Created: 31.08.2011, 11:22:01
  */
+
 /*
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
@@ -21,9 +22,6 @@ import de.tu_berlin.math.coga.zet.converter.graph.ZToSpanTreeConverter;
 /**
  * An enumeration of the different converter algorithms for graphs. They provide
  * methods to retrieve the converting algorithm objects.
- */
-/**
- *
  * @author Jan-Philipp Kappmeier
  */
 public enum GraphConverterAlgorithms {
