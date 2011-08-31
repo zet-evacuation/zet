@@ -60,7 +60,7 @@ public class ZToGridDijkstraConverter extends ZToGridGraphConverter{
 		createReverseEdges( model );
         	model.setNetwork( model.getGraph().getAsStaticNetwork() );
  
-                //Knoten stimmen bei Original und beim MinSpanModel ueberein
+                //nodes are nodes of original network
                 minspanmodel.setNetwork(newgraph);
                 newgraph.setNodes(model.getGraph().nodes());
        
@@ -103,7 +103,6 @@ public class ZToGridDijkstraConverter extends ZToGridGraphConverter{
                 {
                     newgraph.addEdge(create);
                     minspanmodel.setEdgeCapacity(create, model.getEdgeCapacity(create));
-                    //minspanmodel.setEdgeCapacity(neu, 1);
                     minspanmodel.setTransitTime(create, 1);
                     newmapping.setEdgeLevel(create, Level.Lower);             
                     minspanmodel.setExactTransitTime(create, model.getExactTransitTime(create));
@@ -114,7 +113,7 @@ public class ZToGridDijkstraConverter extends ZToGridGraphConverter{
                  minspanmodel.setCurrentAssignment(model.getCurrentAssignment());
                  minspanmodel.setSources(model.getSources());
                  
-                 //Werte, die aus altem Mapping uebernommen werden
+                 //values of the mapping of the original network
                  newmapping.raster = mapping.getRaster();
                  newmapping.nodeRectangles = mapping.getNodeRectangles();
                  newmapping.nodeFloorMapping = mapping.getNodeFloorMapping();
@@ -124,13 +123,11 @@ public class ZToGridDijkstraConverter extends ZToGridGraphConverter{
                  newmapping.exitName = mapping.exitName;
                  
                  minspanmodel.setZToGraphMapping(newmapping);                
-                 minspanmodel.setSupersink(model.getSupersink());
-                System.out.println("Number of Created SPT Edges (before creation of reverse edges): " + minspanmodel.getGraph().numberOfEdges());      
+                 minspanmodel.setSupersink(model.getSupersink());     
                 createReverseEdges( minspanmodel );
                 minspanmodel.setNetwork(newgraph);
                 minspanmodel.setNetwork( minspanmodel.getGraph().getAsStaticNetwork());
-                System.out.println("Degree of supersink " + minspanmodel.getGraph().degree(minspanmodel.getSupersink()));
-                System.out.println("Number of Created SPT Edges (after creation of reverse edges): " + minspanmodel.getGraph().numberOfEdges());
+                System.out.println("Number of Created SPT Edges: " + minspanmodel.getGraph().numberOfEdges());
 		return minspanmodel;
                 
                 

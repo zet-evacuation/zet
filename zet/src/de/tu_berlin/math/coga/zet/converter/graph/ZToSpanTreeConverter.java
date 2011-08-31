@@ -21,7 +21,7 @@ import algo.graph.reduction.GreedyAlgo;
  *
  * @author schwengf
  */
-//Klasse zur Berechnung eines minimalen Spannbaumes fuer NonGrid Graphen
+//creates a Minimum Spanning tree for Non Grid Graphs
 public class ZToSpanTreeConverter extends ZToNonGridGraphConverter{
     
     public NetworkFlowModel minspanmodel;
@@ -51,9 +51,8 @@ public class ZToSpanTreeConverter extends ZToNonGridGraphConverter{
 		model.setTransitTimes( exactTransitTimes.round() );
 		createReverseEdges( model );
         	model.setNetwork( model.getGraph().getAsStaticNetwork() );
-                System.out.println("Anzahl der anfaenglichen Kanten:" + model.getGraph().numberOfEdges());
-                System.out.println("Grad der Senke:" + model.getGraph().degree(model.getSupersink()));
-                //Knoten stimmen bei Original und beim MinSpanModel ueberein
+                System.out.println("number of edges of original graph:" + model.getGraph().numberOfEdges());
+                // nodes are nodes of original network
                 minspanmodel.setNetwork(newgraph);
                 newgraph.setNodes(model.getGraph().nodes());
        
@@ -76,25 +75,24 @@ public class ZToSpanTreeConverter extends ZToNonGridGraphConverter{
                     }
                 }
               
-                //erstellt das zugehoerige MinimumSpanningTree Problem    
+                //creates a minimum spanning tree problem   
                 minspanprob = new MinSpanningTreeProblem(model,model.getTransitTimes());
               
-                //Erstelle einen Minimum Spanning Tree mit Prims Algorithmus:
+                //using Prims algorithm:
                 primalgo = new PrimsAlgo();
                 primalgo.setProblem( minspanprob );
                 System.out.print("Compute minimum spanning tree using Prim... " );
 		primalgo.run();
-                System.out.println(" fertig in " + primalgo.getRuntimeAsString() );
+                System.out.println("used time: " + primalgo.getRuntimeAsString() );
 		minspantree = primalgo.getSolution();
                 IdentifiableCollection<Edge> MinEdges = minspantree.getEdges();
-                //System.out.println("Anzahl der Spanning Tree Kanten" + MinEdges.size());
+ 
                 
                 
                 for (Edge neu: MinEdges)
                 {
                     newgraph.addEdge(neu);
                     minspanmodel.setEdgeCapacity(neu, model.getEdgeCapacity(neu));
-                    //minspanmodel.setEdgeCapacity(neu, 1);
                     minspanmodel.setTransitTime(neu, 1);
                     newmapping.setEdgeLevel(neu, Level.Lower);             
                     minspanmodel.setExactTransitTime(neu, model.getExactTransitTime(neu));
@@ -103,7 +101,7 @@ public class ZToSpanTreeConverter extends ZToNonGridGraphConverter{
                  minspanmodel.setCurrentAssignment(model.getCurrentAssignment());
                  minspanmodel.setSources(model.getSources());
                  
-                 //Werte, die aus altem Mapping uebernommen werden
+                 //values from mapping of original network 
                  newmapping.raster = mapping.getRaster();
                  newmapping.nodeRectangles = mapping.getNodeRectangles();
                  newmapping.nodeFloorMapping = mapping.getNodeFloorMapping();
@@ -112,14 +110,12 @@ public class ZToSpanTreeConverter extends ZToNonGridGraphConverter{
                  newmapping.isDeletedSourceNode = mapping.isDeletedSourceNode;
                  newmapping.exitName = mapping.exitName;
                  
-                 minspanmodel.setZToGraphMapping(newmapping);                
-                 minspanmodel.setSupersink(model.getSupersink());
-                System.out.println("Anzahl der t-Spanner Kanten vorm Verdoppeln " + minspanmodel.getGraph().numberOfEdges());      
+                minspanmodel.setZToGraphMapping(newmapping);                
+                minspanmodel.setSupersink(model.getSupersink());
                 createReverseEdges( minspanmodel );
                 minspanmodel.setNetwork(newgraph);
                 minspanmodel.setNetwork( minspanmodel.getGraph().getAsStaticNetwork());
-                System.out.println("Grad der Senke " + minspanmodel.getGraph().degree(minspanmodel.getSupersink()));
-                System.out.println("Anzahl der t-Spanner Kantennach Verdoppeln: " + minspanmodel.getGraph().numberOfEdges());
+                System.out.println("Edges used in Minimum Spanning Tree: " + minspanmodel.getGraph().numberOfEdges());
 		return minspanmodel;
                
 	}

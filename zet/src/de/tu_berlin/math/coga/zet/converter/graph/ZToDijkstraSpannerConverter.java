@@ -61,7 +61,7 @@ public class ZToDijkstraSpannerConverter extends ZToNonGridGraphConverter{
 		
 		createReverseEdges( model );
         	model.setNetwork( model.getGraph().getAsStaticNetwork() );
-                //Knoten stimmen bei Original und beim MinSpanModel ueberein
+                //nodes are nodes of original graph
                 minspanmodel.setNetwork(newgraph);
                 newgraph.setNodes(model.getGraph().nodes());
        
@@ -77,7 +77,6 @@ public class ZToDijkstraSpannerConverter extends ZToNonGridGraphConverter{
                     if (node.id()!= 0)
                     {
                         minspanmodel.setNodeCapacity(node, model.getNodeCapacity(node));
-                        //newmapping.setNodeShape(node, mapping.getNodeShape(node));
                         newmapping.setNodeSpeedFactor(node, mapping.getNodeSpeedFactor(node));
                         newmapping.setNodeUpSpeedFactor(node, mapping.getUpNodeSpeedFactor(node));
                         newmapping.setNodeDownSpeedFactor(node, mapping.getDownNodeSpeedFactor(node));   
@@ -104,7 +103,6 @@ public class ZToDijkstraSpannerConverter extends ZToNonGridGraphConverter{
                 {
                     newgraph.addEdge(create);
                     minspanmodel.setEdgeCapacity(create, model.getEdgeCapacity(create));
-                    //minspanmodel.setEdgeCapacity(neu, 1);
                     minspanmodel.setTransitTime(create, 1);
                     newmapping.setEdgeLevel(create, Level.Lower);             
                     minspanmodel.setExactTransitTime(create, model.getExactTransitTime(create));
@@ -113,7 +111,7 @@ public class ZToDijkstraSpannerConverter extends ZToNonGridGraphConverter{
                  minspanmodel.setCurrentAssignment(model.getCurrentAssignment());
                  minspanmodel.setSources(model.getSources());
                  
-                 //Werte, die aus altem Mapping uebernommen werden
+                 //values from mapping of original graph
                  newmapping.raster = mapping.getRaster();
                  newmapping.nodeRectangles = mapping.getNodeRectangles();
                  newmapping.nodeFloorMapping = mapping.getNodeFloorMapping();
@@ -124,13 +122,10 @@ public class ZToDijkstraSpannerConverter extends ZToNonGridGraphConverter{
                  
                  minspanmodel.setZToGraphMapping(newmapping);                
                  minspanmodel.setSupersink(model.getSupersink());
-                System.out.println("Number of Created SPT Edges (before creation of reverse edges): " + minspanmodel.getGraph().numberOfEdges());   
-                //Erstellt nur die Rueckwaertskanten, die nicht adjazent zur Supersenke sind 
                 createReverseEdges( minspanmodel );
                 minspanmodel.setNetwork(newgraph);
                 minspanmodel.setNetwork( minspanmodel.getGraph().getAsStaticNetwork());
-                System.out.println("Degree of supersink " + minspanmodel.getGraph().degree(minspanmodel.getSupersink()));
-                System.out.println("Number of Created SPT Edges (after creation of reverse edges): " + minspanmodel.getGraph().numberOfEdges());
+                System.out.println("Number of Created SPT Edges: " + minspanmodel.getGraph().numberOfEdges());
 		return minspanmodel;
                 
                 

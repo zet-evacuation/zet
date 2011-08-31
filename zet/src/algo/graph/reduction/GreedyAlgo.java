@@ -34,7 +34,7 @@ public class GreedyAlgo extends Algorithm<MinSpanningTreeProblem,MinSpanningTree
     NetworkFlowModel OriginNetwork;
     Network network;
     IdentifiableIntegerMapping<Edge> TransitForEdge;
-    //speichert den Abstand zweier Knoten im aktuell betrachteten Graphen G'
+    //gives distance of nodes in current graph G'
     IdentifiableIntegerMapping<Edge> currentTransitForEdge;
     IdentifiableCollection<Edge> origedges = new ListSequence<Edge>();
     IdentifiableCollection<Edge> sortededges = new ListSequence<Edge>();
@@ -55,12 +55,12 @@ public class GreedyAlgo extends Algorithm<MinSpanningTreeProblem,MinSpanningTree
                 if ((edge.start() != supersink) && (edge.end()!= supersink) )
                 {
                     origedges.add(edge);                
-                //Transitzeit soll am Anfang in G' sehr hoch gesetzt sein
+                 // no edges existent --> high transit times
                     currentTransitForEdge.add(edge, 100000);
                 }
             }   
             System.out.println("Anzahl der OriginalKanten " + origedges.size());
-            //Sortiere die Kanten nach aufsteigenden Transitzeiten...
+            //sorting the edges by transit times
             while (origedges.size() > 0)
             {
                 for (Edge edge: origedges)
@@ -79,7 +79,7 @@ public class GreedyAlgo extends Algorithm<MinSpanningTreeProblem,MinSpanningTree
                 network.setNode(node);
             }
             network.setEdges(OriginNetwork.getGraph().edges());
-            //Array zum Speichern ob Knoten in der Kombination schon verwendet wurden
+            //Array stores if nodes in a certain combination are already used as an edge
             used = new int[numNodes][numNodes];
             for (int i=0; i< numNodes; i++)
             {
@@ -88,11 +88,10 @@ public class GreedyAlgo extends Algorithm<MinSpanningTreeProblem,MinSpanningTree
                     used[i][j] = 0;
                 }
             }
-            //gehe ueber alle geordneten Kanten...
+            //look at sorted edges
             while (sortededges.size()> 0)
             {
-                
-                //Berechnet kuerzesten Weg von einem Knoten der aktuell betrachteten Kante zu allen anderen
+                // Calculates distance from a node of the current considered edge to every other node
                 Dijkstra dijkstra = new Dijkstra(network, currentTransitForEdge, sortededges.first().end(), true);
                 dijkstra.run();
                 int dist = dijkstra.getDistance(sortededges.first().start());
@@ -109,7 +108,6 @@ public class GreedyAlgo extends Algorithm<MinSpanningTreeProblem,MinSpanningTree
                         solEdges.add(edge);
                         used[edge.start().id()][edge.end().id()] = 1;
                         used[edge.end().id()][edge.start().id()] = 1;
-                        //System.out.println("neue Kante: " + edge);
                         count++;
                     }
                 }

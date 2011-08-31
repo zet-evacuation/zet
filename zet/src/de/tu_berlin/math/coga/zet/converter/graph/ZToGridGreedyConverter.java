@@ -22,7 +22,7 @@ import algo.graph.reduction.GreedyAlgo;
  *
  * @author schwengf
  */
-//Klasse zum Erstellen eines t-Spanngraphen fuer Grid Graphen mittels eines Greedy Algorithmus 
+//creates t-Spanner for grid graphs using a greedy algorithm
 public class ZToGridGreedyConverter extends ZToGridGraphConverter{
     public NetworkFlowModel minspanmodel;
     public MinSpanningTreeProblem minspanprob;
@@ -51,8 +51,7 @@ public class ZToGridGreedyConverter extends ZToGridGraphConverter{
 		model.setTransitTimes( exactTransitTimes.round() );
 		createReverseEdges( model );
         	model.setNetwork( model.getGraph().getAsStaticNetwork() );
-                System.out.println("Anzahl der anfaenglichen Kanten:" + model.getGraph().numberOfEdges());
-                System.out.println("Grad der Senke:" + model.getGraph().degree(model.getSupersink()));
+                System.out.println("number of edges of original graph:" + model.getGraph().numberOfEdges());
                 //Knoten stimmen bei Original und beim MinSpanModel ueberein
                 minspanmodel.setNetwork(newgraph);
                 newgraph.setNodes(model.getGraph().nodes());
@@ -85,9 +84,8 @@ public class ZToGridGreedyConverter extends ZToGridGraphConverter{
                 greedy.run();
                 minspantree = greedy.getSolution();
                 System.out.print("Compute t-Spanner using greedy... " );
-                System.out.println(" fertig in " + greedy.getRuntimeAsString() );
+                System.out.println("time used: " + greedy.getRuntimeAsString() );
                 IdentifiableCollection<Edge> MinEdges = minspantree.getEdges();
-                System.out.println("Anzahl der t-Spanner Kanten " + MinEdges.size());
                 
                 for (Edge neu: MinEdges)
                 {
@@ -113,12 +111,10 @@ public class ZToGridGreedyConverter extends ZToGridGraphConverter{
                  
                  minspanmodel.setZToGraphMapping(newmapping);                
                  minspanmodel.setSupersink(model.getSupersink());
-                System.out.println("Anzahl der t-Spanner Kanten vorm Verdoppeln " + minspanmodel.getGraph().numberOfEdges());      
                 createReverseEdges( minspanmodel );
                 minspanmodel.setNetwork(newgraph);
-                minspanmodel.setNetwork( minspanmodel.getGraph().getAsStaticNetwork());
-                System.out.println("Grad der Senke " + minspanmodel.getGraph().degree(minspanmodel.getSupersink()));
-                System.out.println("Anzahl der t-Spanner Kantennach Verdoppeln: " + minspanmodel.getGraph().numberOfEdges());
+                minspanmodel.setNetwork( minspanmodel.getGraph().getAsStaticNetwork());          
+                System.out.println("number of edges of t-spanner: " + minspanmodel.getGraph().numberOfEdges());
 		return minspanmodel;
                
 	}
