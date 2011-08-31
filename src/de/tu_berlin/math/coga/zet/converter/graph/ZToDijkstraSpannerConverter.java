@@ -24,6 +24,7 @@ import ds.z.BuildingPlan;
  *
  * @author schwengf
  */
+//Creates a Shortest Path Tree for Non Grid graphs
 public class ZToDijkstraSpannerConverter extends ZToNonGridGraphConverter{
     
     public NetworkFlowModel minspanmodel;
@@ -33,6 +34,7 @@ public class ZToDijkstraSpannerConverter extends ZToNonGridGraphConverter{
     public IdentifiableCollection<Edge> ForestEdges;
     public Forest forest;
     public Edge neu;
+    public Edge neureverse;
     public Edge neu2;
     public int NumEdges = 0;
     IdentifiableCollection<Edge> solEdges = new ListSequence<Edge>();
@@ -58,7 +60,6 @@ public class ZToDijkstraSpannerConverter extends ZToNonGridGraphConverter{
 		model.setTransitTimes( exactTransitTimes.round() );
 		createReverseEdges( model );
         	model.setNetwork( model.getGraph().getAsStaticNetwork() );
-                System.out.println("Grad der Supersenke im Original: " + model.getGraph().degree(model.getSupersink()));
                 //Knoten stimmen bei Original und beim MinSpanModel ueberein
                 minspanmodel.setNetwork(newgraph);
                 newgraph.setNodes(model.getGraph().nodes());
@@ -91,6 +92,11 @@ public class ZToDijkstraSpannerConverter extends ZToNonGridGraphConverter{
                 {
                     neu = new Edge(NumEdges++, edge.start(), edge.end());
                     solEdges.add(neu);
+                    if (neu.start()== Super || neu.end() == Super)
+                    {
+                        neureverse = new Edge(NumEdges++, neu.end(), neu.start());
+                        solEdges.add(neureverse);
+                    }
                 }
                 
                 for (Edge create: solEdges)
@@ -117,12 +123,13 @@ public class ZToDijkstraSpannerConverter extends ZToNonGridGraphConverter{
                  
                  minspanmodel.setZToGraphMapping(newmapping);                
                  minspanmodel.setSupersink(model.getSupersink());
-                System.out.println("Anzahl der t-Spanner Kanten vorm Verdoppeln " + minspanmodel.getGraph().numberOfEdges());      
+                System.out.println("Number of Created SPT Edges (before creation of reverse edges): " + minspanmodel.getGraph().numberOfEdges());   
+                //Erstellt nur die Rueckwaertskanten, die nicht adjazent zur Supersenke sind 
                 createReverseEdges( minspanmodel );
                 minspanmodel.setNetwork(newgraph);
                 minspanmodel.setNetwork( minspanmodel.getGraph().getAsStaticNetwork());
-                System.out.println("Grad der Senke " + minspanmodel.getGraph().degree(minspanmodel.getSupersink()));
-                System.out.println("Anzahl der t-Spanner Kantennach Verdoppeln: " + minspanmodel.getGraph().numberOfEdges());
+                System.out.println("Degree of supersink " + minspanmodel.getGraph().degree(minspanmodel.getSupersink()));
+                System.out.println("Number of Created SPT Edges (after creation of reverse edges): " + minspanmodel.getGraph().numberOfEdges());
 		return minspanmodel;
                 
                 

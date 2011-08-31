@@ -24,6 +24,7 @@ import ds.z.BuildingPlan;
  *
  * @author schwengf
  */
+//creates a shortest path tree for grid graphs
 public class ZToGridDijkstraConverter extends ZToGridGraphConverter{
     public NetworkFlowModel minspanmodel;
     public MinSpanningTreeProblem minspanprob;
@@ -33,6 +34,7 @@ public class ZToGridDijkstraConverter extends ZToGridGraphConverter{
     public Forest forest;
     public Edge neu;
     public Edge neu2;
+    public Edge neureverse;
     public int NumEdges = 0;
     IdentifiableCollection<Edge> solEdges = new ListSequence<Edge>();
     
@@ -90,6 +92,11 @@ public class ZToGridDijkstraConverter extends ZToGridGraphConverter{
                 {
                     neu = new Edge(NumEdges++, edge.start(), edge.end());
                     solEdges.add(neu);
+                    if (neu.start()== Super || neu.end() == Super)
+                    {
+                        neureverse = new Edge(NumEdges++, neu.end(), neu.start());
+                        solEdges.add(neureverse);
+                    }
                 }
                 
                 for (Edge create: solEdges)
@@ -118,12 +125,12 @@ public class ZToGridDijkstraConverter extends ZToGridGraphConverter{
                  
                  minspanmodel.setZToGraphMapping(newmapping);                
                  minspanmodel.setSupersink(model.getSupersink());
-                System.out.println("Anzahl der t-Spanner Kanten vorm Verdoppeln " + minspanmodel.getGraph().numberOfEdges());      
+                System.out.println("Number of Created SPT Edges (before creation of reverse edges): " + minspanmodel.getGraph().numberOfEdges());      
                 createReverseEdges( minspanmodel );
                 minspanmodel.setNetwork(newgraph);
                 minspanmodel.setNetwork( minspanmodel.getGraph().getAsStaticNetwork());
-                System.out.println("Grad der Senke " + minspanmodel.getGraph().degree(minspanmodel.getSupersink()));
-                System.out.println("Anzahl der t-Spanner Kantennach Verdoppeln: " + minspanmodel.getGraph().numberOfEdges());
+                System.out.println("Degree of supersink " + minspanmodel.getGraph().degree(minspanmodel.getSupersink()));
+                System.out.println("Number of Created SPT Edges (after creation of reverse edges): " + minspanmodel.getGraph().numberOfEdges());
 		return minspanmodel;
                 
                 
