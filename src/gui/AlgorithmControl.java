@@ -293,11 +293,15 @@ public class AlgorithmControl implements PropertyChangeListener {
 		convertGraph( null, GraphConverterAlgorithms.GreedyTSpannerNonGrid );
 	}
 
+	GraphConverterAlgorithms last = GraphConverterAlgorithms.NonGridGraph;
+	
 	public void convertGraph( PropertyChangeListener propertyChangeListener, GraphConverterAlgorithms Algo ) {
 		final BaseZToGraphConverter conv = Algo.converter();
+		last = Algo;
 		conv.setProblem( project.getBuildingPlan() );
 		final SerialTask st = new SerialTask( conv );
 		st.addPropertyChangeListener( new PropertyChangeListener() {
+			@Override
 			public void propertyChange( PropertyChangeEvent pce ) {
 				if( st.isDone() )
 					networkFlowModel = conv.getSolution();
@@ -319,6 +323,9 @@ public class AlgorithmControl implements PropertyChangeListener {
 	public void performOptimization( PropertyChangeListener propertyChangeListener ) {
 		final GraphAlgorithmTask gat = new GraphAlgorithmTask( GraphAlgorithm.SuccessiveEarliestArrivalAugmentingPathOptimized );
 		gat.setProblem( project );
+		
+		gat.setNetworkFlowModel( networkFlowModel );
+		gat.setConv( last.converter() );
 
 		final SerialTask st = new SerialTask( gat );
 		st.addPropertyChangeListener( new PropertyChangeListener() {
