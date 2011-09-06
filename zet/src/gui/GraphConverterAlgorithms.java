@@ -17,6 +17,7 @@ import de.tu_berlin.math.coga.zet.converter.graph.ZToGridGraphConverter;
 import de.tu_berlin.math.coga.zet.converter.graph.ZToGridGreedyConverter;
 import de.tu_berlin.math.coga.zet.converter.graph.ZToGridSpanTreeConverter;
 import de.tu_berlin.math.coga.zet.converter.graph.ZToNonGridGraphConverter;
+import de.tu_berlin.math.coga.zet.converter.graph.ZToNonGridSteinerTreeConverter;
 import de.tu_berlin.math.coga.zet.converter.graph.ZToSpanTreeConverter;
 
 /**
@@ -25,7 +26,7 @@ import de.tu_berlin.math.coga.zet.converter.graph.ZToSpanTreeConverter;
  * @author Jan-Philipp Kappmeier
  */
 public enum GraphConverterAlgorithms {
-	GridGraph, NonGridGraph, MinSpanningTreeGrid, MinSpanningTreeNonGrid, GreedyTSpannerGrid, GreedyTSpannerNonGrid, DijkstraNonGrid, DijkstraGrid;
+	GridGraph, NonGridGraph, MinSpanningTreeGrid, MinSpanningTreeNonGrid, GreedyTSpannerGrid, GreedyTSpannerNonGrid, DijkstraNonGrid, DijkstraGrid, SteinerTreeNonGrid, SteinerTreeGrid;
 
 	public BaseZToGraphConverter converter() {
 		switch( this ) {
@@ -45,6 +46,8 @@ public enum GraphConverterAlgorithms {
 				return new ZToDijkstraSpannerConverter();
 			case DijkstraGrid:
 				return new ZToGridDijkstraConverter();
+                        case SteinerTreeNonGrid:
+                            return new ZToNonGridSteinerTreeConverter();
 			default:
 				throw new IllegalStateException( "Error! Unsupported Graph converter algorithm in enumeration: " + this.toString() );
 		}

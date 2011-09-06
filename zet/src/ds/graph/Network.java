@@ -448,6 +448,11 @@ public class Network implements Graph, Cloneable, Iterable<Node> {
 			nodes.setHidden( node, value );
 		}
 	}
+        
+        public void setHiddenOnlyNode(Node node, boolean value)
+        {
+                nodes.setHidden(node, value);   
+        }
 
 	public void showAllEdges() {
 		edges.showAll();

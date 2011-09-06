@@ -125,7 +125,7 @@ public class ZToDijkstraSpannerConverter extends ZToNonGridGraphConverter{
                 createReverseEdges( minspanmodel );
                 minspanmodel.setNetwork(newgraph);
                 minspanmodel.setNetwork( minspanmodel.getGraph().getAsStaticNetwork());
-                System.out.println("Number of Created SPT Edges: " + minspanmodel.getGraph().numberOfEdges());
+                System.out.println("Number of Created Shortest Path Tree Edges: " + minspanmodel.getGraph().numberOfEdges());
 		return minspanmodel;
                 
                 

@@ -90,6 +90,9 @@ public class JZETMenuBar extends JMenuBar implements ActionListener, Localized {
         private JMenu mCreateGraphSpannerUsingDijkstra;
         private JMenuItem mnuCreateGraphSpannerUsingDijkstraGrid;
         private JMenuItem mnuCreateGraphSpannerUsingDijkstraNonGrid;
+        private JMenu mCreateSteinerTree;
+        private JMenuItem mnuCreateSteinerTreeGrid;
+        private JMenuItem mnuCreateSteinerTreeNonGrid;
 	private JMenuItem mnuExecuteApplyAssignment;
 	private JMenu mSimulation;
 	private JMenuItem mnuSimulationQuickVisualization;;
@@ -212,6 +215,10 @@ public class JZETMenuBar extends JMenuBar implements ActionListener, Localized {
 		mCreateGraphSpannerUsingDijkstra = Menu.addMenu( mCreateGraph, loc.getString( "Execute.CreateGraph.ShortestPathTree" ) );
 		mnuCreateGraphSpannerUsingDijkstraGrid = Menu.addMenuItem( mCreateGraphSpannerUsingDijkstra, loc.getString( "Execute.CreateGraph.ShortestPathTree.Grid" ), KeyEvent.VK_9, this, "DijkstraGrid", InputEvent.CTRL_DOWN_MASK );
 		mnuCreateGraphSpannerUsingDijkstraNonGrid = Menu.addMenuItem( mCreateGraphSpannerUsingDijkstra, loc.getString( "Execute.CreateGraph.ShortestPathTree.NonGrid" ), KeyEvent.VK_6, this, "DijkstraNonGrid", InputEvent.CTRL_DOWN_MASK );
+                mCreateSteinerTree = Menu.addMenu(mCreateGraph, loc.getString("Execute.CreateGraph.Steiner"));
+                mnuCreateSteinerTreeGrid = Menu.addMenuItem( mCreateSteinerTree, loc.getString( "Execute.CreateGraph.Steiner.Grid" ), KeyEvent.VK_9, this, "SteinerGrid", InputEvent.CTRL_DOWN_MASK );
+                mnuCreateSteinerTreeNonGrid = Menu.addMenuItem( mCreateSteinerTree, loc.getString( "Execute.CreateGraph.Steiner.NonGrid" ), KeyEvent.VK_9, this, "SteinerNonGrid", InputEvent.CTRL_DOWN_MASK );
+                        
 		mnuExecuteApplyAssignment = Menu.addMenuItem( mExecute, loc.getString( "Execute.ApplyConcreteAssignment" ), this, "applyConcreteAssignment" );
 		mSimulation = Menu.addMenu( mExecute, loc.getString( "Execute.Simulation" ) );
 		mnuSimulationQuickVisualization = Menu.addMenuItem( mSimulation, loc.getString( "Execute.Simulation.QuickVisualization" ), KeyEvent.VK_F5, this, "quickVisualization", 0 );
@@ -412,6 +419,8 @@ public class JZETMenuBar extends JMenuBar implements ActionListener, Localized {
 			control.createGraph( GraphConverterAlgorithms.DijkstraNonGrid );
 		else if( e.getActionCommand().equals( "DijkstraGrid" ) )
 			control.createGraph( GraphConverterAlgorithms.DijkstraGrid );
+                else if (e.getActionCommand().equals("SteinerNonGrid"))
+                        control.createGraph(GraphConverterAlgorithms.SteinerTreeNonGrid);
 		else if( e.getActionCommand().equals( "applyConcreteAssignment" ) ) {
 		} else if( e.getActionCommand().equals( "quickVisualization" ) ) {
 			control.performQuickVisualization();
@@ -556,8 +565,9 @@ public class JZETMenuBar extends JMenuBar implements ActionListener, Localized {
                 Menu.updateMenu(mCreateGraphSpannerUsingDijkstra, loc.getString("Execute.CreateGraph.ShortestPathTree"));
                 Menu.updateMenu(mnuCreateGraphSpannerUsingDijkstraGrid, loc.getString("Execute.CreateGraph.ShortestPathTree.Grid"));
                 Menu.updateMenu(mnuCreateGraphSpannerUsingDijkstraNonGrid, loc.getString("Execute.CreateGraph.ShortestPathTree.NonGrid"));
-                
-                
+                Menu.updateMenu(mCreateSteinerTree, loc.getString("Execute.CreateGraph.Steiner"));
+                Menu.updateMenu(mnuCreateSteinerTreeGrid, loc.getString("Execute.CreateGraph.Steiner.Grid"));
+                Menu.updateMenu(mnuCreateSteinerTreeNonGrid, loc.getString("Execute.CreateGraph.Steiner.NonGrid"));
                 //Menu.updateMenu( mCreateGraph, loc.getString( "Execute.Optimization.CreateGraph" ) );
 		Menu.updateMenu( mnuOptimizationEarliestArrivalTransshipment, loc.getString( "Execute.Optimization.AlgoEATransshipment" ) );
 

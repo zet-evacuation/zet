@@ -20,6 +20,7 @@
 package ds.graph;
 
 import com.thoughtworks.xstream.annotations.XStreamAsAttribute;
+import de.tu_berlin.math.coga.common.util.Level;
 
 /**
  * The {@code Edge} class represents a edge in a graph.
@@ -46,6 +47,7 @@ public class Edge implements Identifiable {
     private Node start;
     /** The end node of this edge. */
     private Node end;
+    public Level Lower;
 
     /**
      * Constructs a new {@code Edge} object with a given given start-
