@@ -4,31 +4,43 @@
  */
 package de.tu_berlin.math.coga.zet.converter.graph;
 
+import algo.graph.reduction.MSTSteiner;
+import algo.graph.reduction.PrimsAlgo;
+import algo.graph.shortestpath.Dijkstra;
+import de.tu_berlin.math.coga.common.util.Level;
 import de.tu_berlin.math.coga.zet.NetworkFlowModel;
 import de.tu_berlin.math.coga.zet.converter.RasterContainerCreator;
-import ds.z.BuildingPlan;
-import ds.graph.problem.MinSpanningTreeProblem;
-import algo.graph.reduction.PrimsAlgo;
-import de.tu_berlin.math.coga.common.util.Level;
 import ds.graph.DynamicNetwork;
-import ds.graph.MinSpanningTree;
 import ds.graph.Edge;
-import ds.graph.Node;
 import ds.graph.IdentifiableCollection;
+import ds.graph.IdentifiableIntegerMapping;
+import ds.graph.ListSequence;
+import ds.graph.MinSpanningTree;
+import ds.graph.MinSteinerTree;
+import ds.graph.Network;
+import ds.graph.Node;
 import ds.graph.NodeRectangle;
-import algo.graph.reduction.GreedyAlgo;
+import ds.graph.problem.MinSpanningTreeProblem;
+import ds.z.BuildingPlan;
+
 /**
  *
  * @author schwengf
  */
-//creates a Minimum Spanning tree for Non Grid Graphs
-public class ZToSpanTreeConverter extends ZToNonGridGraphConverter{
+public class ZToNonGridSteinerTreeConverter extends ZToNonGridGraphConverter{
     
-    public NetworkFlowModel minspanmodel;
+    private NetworkFlowModel minspanmodel;
+    public IdentifiableCollection<Node> SteinerNodes = new ListSequence<Node>();
     public MinSpanningTreeProblem minspanprob;
-    public PrimsAlgo primalgo;
-    public GreedyAlgo greedy;
-    public MinSpanningTree minspantree;
+    int NumNode = 0;
+    int NumEdges = 0;
+    public IdentifiableIntegerMapping<Edge> TransitForEdge;
+    public MSTSteiner steineralgo;
+    public MinSteinerTree steinertree;
+    public PrimsAlgo prim;
+    public MinSpanningTreeProblem minspan;
+    public MinSpanningTree tree;
+   
     
     @Override
     protected NetworkFlowModel runAlgorithm( BuildingPlan problem ) {
@@ -52,7 +64,7 @@ public class ZToSpanTreeConverter extends ZToNonGridGraphConverter{
 		createReverseEdges( model );
         	model.setNetwork( model.getGraph().getAsStaticNetwork() );
                 System.out.println("number of edges of original graph:" + model.getGraph().numberOfEdges());
-                // nodes are nodes of original network
+               
                 minspanmodel.setNetwork(newgraph);
                 newgraph.setNodes(model.getGraph().nodes());
        
@@ -61,45 +73,76 @@ public class ZToSpanTreeConverter extends ZToNonGridGraphConverter{
                 newmapping.setNodeSpeedFactor( Super, 1 );
 		newmapping.setNodeRectangle( Super, new NodeRectangle( 0, 0, 0, 0 ) );
 		newmapping.setFloorForNode( Super, -1 );
+ 
                 
+                minspanprob = new MinSpanningTreeProblem(model,model.getTransitTimes());
+              
                 
+                //using 
+                steineralgo = new MSTSteiner();
+                steineralgo.setProblem( minspanprob );
+                System.out.print("Compute Steiner... " );
+		steineralgo.run();
+                System.out.println("used time: " + steineralgo.getRuntimeAsString() );
+		steinertree = steineralgo.getSolution();
+                IdentifiableCollection<Edge> MinEdges = steinertree.getEdges();
+                IdentifiableCollection<Node> MinNodes = steinertree.getNodes();
+                IdentifiableIntegerMapping<Edge> MinDist = steinertree.getdist();
+               
+                
+                //Aenderungen...
+                Network netw = minspanmodel.getNetwork();
+                //DynamicNetwork dynnet = minspanmodel.getDynamicNetwork();
+                //newgraph.setNode(Super);
+                
+                IdentifiableCollection<Node> NonMinNodes = new ListSequence();
+                int numberhidden = 0;
                 
                 for (Node node: model.getGraph().nodes())
                 {
                     if (node.id()!= 0)
                     {
+                        
                         minspanmodel.setNodeCapacity(node, model.getNodeCapacity(node));
                         //newmapping.setNodeShape(node, mapping.getNodeShape(node));
                         newmapping.setNodeSpeedFactor(node, mapping.getNodeSpeedFactor(node));
                         newmapping.setNodeUpSpeedFactor(node, mapping.getUpNodeSpeedFactor(node));
-                        newmapping.setNodeDownSpeedFactor(node, mapping.getDownNodeSpeedFactor(node));   
+                        newmapping.setNodeDownSpeedFactor(node, mapping.getDownNodeSpeedFactor(node));  
+                        if (MinNodes.contains(node))
+                    {
+                        netw.setHiddenOnlyNode(node, false);
+                        
                     }
+                    else
+                    {
+                        if (node.id() != 0)
+                        {
+                            NonMinNodes.add(node);
+                            numberhidden++;
+                            netw.setHiddenOnlyNode(node, true);
+                        }
+                    }
+                    }
+                    
                 }
-              
-                //creates a minimum spanning tree problem   
-                minspanprob = new MinSpanningTreeProblem(model,model.getTransitTimes());
-              
-                //using Prims algorithm:
-                primalgo = new PrimsAlgo();
-                primalgo.setProblem( minspanprob );
-                System.out.print("Compute minimum spanning tree using Prim... " );
-		primalgo.run();
-                System.out.println("used time: " + primalgo.getRuntimeAsString() );
-		minspantree = primalgo.getSolution();
-                IdentifiableCollection<Edge> MinEdges = minspantree.getEdges();
-              
                 
-                for (Edge neu: MinEdges)
+               //System.out.print("Number of hidden Nodes: " + numberhidden); 
+               //dynnet.removeNodes(NonMinNodes);
+         
+                //creates edges of new graph
+                 for (Edge neu: MinEdges)
                 {
                     newgraph.addEdge(neu);
-                    minspanmodel.setEdgeCapacity(neu, model.getEdgeCapacity(neu));
+                    minspanmodel.setEdgeCapacity(neu, model.getEdgeCapacity(neu));                   
                     minspanmodel.setTransitTime(neu, 1);
                     newmapping.setEdgeLevel(neu, Level.Lower);             
                     minspanmodel.setExactTransitTime(neu, model.getExactTransitTime(neu));
                 }
+                   
+                    
                 
-                 minspanmodel.setCurrentAssignment(model.getCurrentAssignment());
-                 minspanmodel.setSources(model.getSources());
+                minspanmodel.setCurrentAssignment(model.getCurrentAssignment());
+                minspanmodel.setSources(model.getSources());
                  
                  //values from mapping of original network 
                  newmapping.raster = mapping.getRaster();
@@ -110,19 +153,18 @@ public class ZToSpanTreeConverter extends ZToNonGridGraphConverter{
                  newmapping.isDeletedSourceNode = mapping.isDeletedSourceNode;
                  newmapping.exitName = mapping.exitName;
                  
-                minspanmodel.setZToGraphMapping(newmapping);                
+                minspanmodel.setZToGraphMapping(newmapping);   
                 minspanmodel.setSupersink(model.getSupersink());
                 createReverseEdges( minspanmodel );
+                
                 minspanmodel.setNetwork(newgraph);
                 minspanmodel.setNetwork( minspanmodel.getGraph().getAsStaticNetwork());
-                System.out.println("Edges used in Minimum Spanning Tree: " + minspanmodel.getGraph().numberOfEdges());
-                for (Edge edge: minspanmodel.getGraph().edges())
-                {
-                    System.out.println("Kante...: " + edge);
-                }
-		return minspanmodel;
-               
-	}
+                System.out.println("Number of new Edges: " + minspanmodel.getGraph().numberOfEdges());
+                
+                return minspanmodel;
+                    
+                
+    }
     
     
 }

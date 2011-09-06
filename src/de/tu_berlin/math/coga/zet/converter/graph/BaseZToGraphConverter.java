@@ -82,6 +82,23 @@ public abstract class BaseZToGraphConverter extends Algorithm<BuildingPlan, Netw
 			}
 		}
 	}
+        protected void createReverseEdgesWithoutSuper( NetworkFlowModel model ) {
+		int edgeIndex = model.getGraph().numberOfEdges();
+		final int oldEdgeIndex = edgeIndex;
+		model.setNumberOfEdges( edgeIndex * 2 );
+
+		// don't use an iterator here, as it will result in concurrent modification
+		for( int i = 0; i < oldEdgeIndex; ++i ) {
+			Edge edge = model.getGraph().getEdge( i );
+			Edge newEdge = new Edge( edgeIndex++, edge.end(), edge.start() );
+			mapping.setEdgeLevel( newEdge, mapping.getEdgeLevel( edge ).getInverse() );
+			model.setEdgeCapacity( newEdge, model.getEdgeCapacity( edge ) );
+			model.setTransitTime( newEdge, model.getTransitTime( edge ) );
+			model.getGraph().setEdge( newEdge );
+			
+		}
+	}
+        
 
 	protected void multiplyWithUpAndDownSpeedFactors() {
 		for( Edge edge : model.getGraph().edges() )

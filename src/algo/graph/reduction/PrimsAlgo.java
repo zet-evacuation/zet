@@ -69,7 +69,7 @@ public class PrimsAlgo extends Algorithm<MinSpanningTreeProblem,MinSpanningTree>
         int num = 0 + Math.abs(r.nextInt()) % numNodes;
 
         if (num != 0)
-        {    
+        {   
             startNode = OriginGraph.getNode(num);
         }
         else

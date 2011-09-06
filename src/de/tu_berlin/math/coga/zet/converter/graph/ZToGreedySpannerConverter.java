@@ -55,7 +55,10 @@ public class ZToGreedySpannerConverter extends ZToNonGridGraphConverter{
                 //Knoten stimmen bei Original und beim MinSpanModel ueberein
                 minspanmodel.setNetwork(newgraph);
                 newgraph.setNodes(model.getGraph().nodes());
-       
+                for (Node node: model.getGraph().nodes())
+                {
+                    System.out.println("Knoten: " + node);
+                }
                 minspanmodel.setSupersink(model.getSupersink());
                 Node Super = minspanmodel.getSupersink();
                 newmapping.setNodeSpeedFactor( Super, 1 );

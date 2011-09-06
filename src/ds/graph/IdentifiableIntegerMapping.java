@@ -188,7 +188,8 @@ public class IdentifiableIntegerMapping<D extends Identifiable> implements Clone
 		if( identifiableObject == null )
 			throw new RuntimeException( "IdentifiableObject contains null, value contains " + value + "." );
 		if( identifiableObject.id() >= getDomainSize() )
-			setDomainSize( Math.min( identifiableObject.id() + 1, getDomainSize() * 2 ) );
+			//setDomainSize( Math.min( identifiableObject.id() + 1, getDomainSize() * 2 ) );
+                setDomainSize(identifiableObject.id()+1);
 		mapping[identifiableObject.id()] = value;
 	}
 

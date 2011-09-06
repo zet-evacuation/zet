@@ -1,0 +1,219 @@
+/*
+ * To change this template, choose Tools | Templates
+ * and open the template in the editor.
+ */
+package algo.graph.reduction;
+
+import algo.graph.shortestpath.Dijkstra;
+import de.tu_berlin.math.coga.common.algorithm.Algorithm;
+import de.tu_berlin.math.coga.zet.NetworkFlowModel;
+import de.tu_berlin.math.coga.zet.converter.graph.ZToGraphMapping;
+import ds.graph.DynamicNetwork;
+import ds.graph.Edge;
+import ds.graph.Forest;
+import ds.graph.Graph;
+import ds.graph.IdentifiableCollection;
+import ds.graph.IdentifiableIntegerMapping;
+import ds.graph.ListSequence;
+import ds.graph.MinSpanningTree;
+import ds.graph.MinSteinerTree;
+import ds.graph.NetworkMST;
+import ds.graph.Node;
+import ds.graph.Path;
+import ds.graph.problem.MinSpanningTreeProblem;
+import ds.graph.problem.NetworkMSTProblem;
+
+
+/**
+ *
+ * @author schwengf
+ */
+public class MSTSteiner extends Algorithm<MinSpanningTreeProblem,MinSteinerTree>{
+    
+    int overalldist = 0;
+    NetworkFlowModel OriginNetwork;
+    Graph OriginGraph;
+    Node steiner;
+    Edge edge;
+    Edge supersinkedge;
+    int NumNode = 1;
+    int Nodenum = 1;
+    int NumEdges = 0;
+    int Num = 0;
+    IdentifiableCollection<Node> solNodes = new ListSequence();
+    IdentifiableCollection<Node> solutionNodes = new ListSequence();
+    IdentifiableCollection<Node> SteinerNodes = new ListSequence();
+    IdentifiableCollection<Node> EvacuationNodes = new ListSequence();
+    IdentifiableCollection<Edge> solEdges = new ListSequence();
+    IdentifiableCollection<Edge> solutionEdges = new ListSequence();
+    
+    Path[][] ShortestPaths;
+    IdentifiableIntegerMapping<Edge> shortestpathdist;
+    NetworkMSTProblem networkprob;
+    PrimForNetwork prim;
+    Dijkstra dijkstra;
+    
+    @Override
+    public MinSteinerTree runAlgorithm(MinSpanningTreeProblem minspan){
+    
+    try{    
+        OriginNetwork = minspan.getGraph(); 
+        Node supersink = minspan.getGraph().getSupersink();
+        OriginGraph = OriginNetwork.getGraph();
+        int numNodes = OriginGraph.numberOfNodes();
+        ZToGraphMapping mapping = OriginNetwork.getZToGraphMapping();
+        IdentifiableIntegerMapping<Edge> TransitForEdge = OriginNetwork.getTransitTimes();
+        //saves the current considered network for different iterations
+        DynamicNetwork firstnet = new DynamicNetwork();
+        
+        for (Node node: OriginGraph.nodes())
+        {
+            if (node.id() != 0)
+            {
+                if (mapping.getIsEvacuationNode(node)== true || mapping.getIsSourceNode(node) == true)
+                {
+                    firstnet.addNode(node);
+                    SteinerNodes.add(node);
+                   
+                }
+            }
+        }
+            
+        TransitForEdge = OriginNetwork.getTransitTimes();
+        ShortestPaths = new Path[numNodes][numNodes];
+        shortestpathdist = new IdentifiableIntegerMapping<Edge>(OriginNetwork.getGraph().numberOfEdges());
+        
+        //gives a network connecting the source and evacutaion nodes with shortest path edges...
+        while (!SteinerNodes.empty())
+        {
+            Node node = SteinerNodes.first();
+            dijkstra = new Dijkstra(OriginNetwork.getNetwork(), TransitForEdge, node, true);
+            dijkstra.run();
+            SteinerNodes.remove(SteinerNodes.first());
+            for (Node restnode: SteinerNodes)
+            {    
+                int dist = dijkstra.getDistance(restnode);
+                edge = new Edge(NumEdges++, node, restnode); 
+                firstnet.addEdge(edge); 
+                //weight of edge is shortest distance (using Dijkstra)
+                shortestpathdist.set(edge, dist);
+                solEdges.add(edge);
+                Forest spt = dijkstra.getShortestPathTree();
+                //stores the shortest path from root to certain vertex
+                ShortestPaths[node.id()][restnode.id()] = spt.getPathToRoot(restnode); 
+            }
+            
+         }
+        
+        /*for (Node node: firstnet.nodes())
+        {
+            System.out.println("Evakuierungsknoten: " + node);
+        }
+        for (Edge edge: firstnet.edges())
+        {
+            System.out.println("Kante zwischen Evakuierungsknoten:" + edge);
+            System.out.println("Distance: " + shortestpathdist.get(edge));
+        }*/
+        
+        //creates problem to find a min spanning tree for given network in 1. iteration
+        networkprob = new NetworkMSTProblem(firstnet, shortestpathdist);
+        prim = new PrimForNetwork();
+        prim.setProblem(networkprob);
+        prim.run();
+        NetworkMST solv = prim.getSolution();
+        IdentifiableCollection<Edge> MSTEdges = solv.getEdges();
+        for (Edge edge: MSTEdges)
+        {
+            //System.out.println("MST Kanten: " + edge);
+            //get shortest Path in Original Network
+            Path neu = ShortestPaths[edge.start().id()][edge.end().id()];
+            //gets edges of shortest path
+            IdentifiableCollection<Edge> PathEdges = neu.getEdges();
+            IdentifiableCollection<Node> PathNodes = new ListSequence();
+            //gets nodes of shortest path
+            for (Edge sptedge : PathEdges)
+            {
+                if (!PathNodes.contains(sptedge.end()))
+                {    
+                    PathNodes.add(sptedge.end());
+                }
+                if (!PathNodes.contains(sptedge.start()))
+                {    
+                    PathNodes.add(sptedge.start());
+                }
+            }
+            int count = 0;
+            
+            for (Node currNode: solNodes)
+            {
+                if (PathNodes.contains(currNode))
+                {
+                    count++;
+                }
+            }
+            if (count < 2)
+            {
+                for (Edge sptedge : PathEdges)
+                {
+                    Edge insert = new Edge(Num++, sptedge.start(), sptedge.end());
+                    solutionEdges.add(insert);
+                    //solutionEdges.add(sptedge);
+                    if (!solNodes.contains(sptedge.start()))
+                    {
+                        Node no = new Node(Nodenum++);
+                        solutionNodes.add(no);
+                        solNodes.add(sptedge.start());
+                    }
+                    if (!solNodes.contains(sptedge.end()))
+                    {
+                        Node no = new Node(Nodenum++);
+                        solutionNodes.add(no);
+                        solNodes.add(sptedge.end());
+                    }
+                }
+            }
+            else 
+            {
+                for (Edge sptedge : PathEdges)
+                {
+                    if (!solutionEdges.contains(edge))
+                    {
+                        Edge insert = new Edge(Num++, sptedge.start(), sptedge.end());
+                        solutionEdges.add(insert);
+                        if (!solNodes.contains(sptedge.start()))
+                        {
+                            Node no = new Node(Nodenum++);
+                            solutionNodes.add(no);
+                            solNodes.add(sptedge.start());
+                        }
+                        if (!solNodes.contains(sptedge.end()))
+                        {
+                            Node no = new Node(Nodenum++);
+                            solutionNodes.add(no);
+                            solNodes.add(sptedge.start());
+                        }  
+                          
+                    }
+                }
+            }
+            
+            
+        }
+        
+        IdentifiableCollection<Edge> addEdges = OriginNetwork.getGraph().incidentEdges(supersink);
+        for (Edge edge: addEdges)
+        {
+            supersinkedge = new Edge(Num++, edge.start(), edge.end());
+            solutionEdges.add(supersinkedge);
+        }
+        
+    }
+        
+        
+    catch(Exception e) {
+             System.out.println("Fehler in Steiner-MST " + e.toString());
+         }
+     return new MinSteinerTree(minspan, shortestpathdist, solutionEdges, solNodes, overalldist);
+    
+    }
+}
