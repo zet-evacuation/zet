@@ -93,6 +93,9 @@ public class JZETMenuBar extends JMenuBar implements ActionListener, Localized {
         private JMenu mCreateSteinerTree;
         private JMenuItem mnuCreateSteinerTreeGrid;
         private JMenuItem mnuCreateSteinerTreeNonGrid;
+        private JMenu mCreateClusterGraph;
+        private JMenuItem mnuCreateClusterGraphGrid;
+        private JMenuItem mnuCreateClusterGraphNonGrid;
 	private JMenuItem mnuExecuteApplyAssignment;
 	private JMenu mSimulation;
 	private JMenuItem mnuSimulationQuickVisualization;;
@@ -200,7 +203,7 @@ public class JZETMenuBar extends JMenuBar implements ActionListener, Localized {
 		// execute menu
 		mnuExecuteCreateCellularAutomaton = Menu.addMenuItem( mExecute, loc.getString( "Execute.CreateCellularAutomaton" ), this, "createCellularAutomaton" );
 		//mnuExecuteCreateGraph = Menu.addMenuItem( mExecute, loc.getString( "Execute.CreateGraph" ), this, "createGraph" );
-  mCreateGraph = Menu.addMenu( mExecute, loc.getString( "Execute.CreateGraph" ) );
+                mCreateGraph = Menu.addMenu( mExecute, loc.getString( "Execute.CreateGraph" ) );
 		//mnuCreateGraphCompleteGraph = Menu.addMenuItem( mCreateGraph, loc.getString( "Execute.CreateGraph.CompleteGraph" ), this, "completeGraph" );
 		mCreateGraphCompleteGraph = Menu.addMenu( mCreateGraph, loc.getString( "Execute.CreateGraph.CompleteGraph" ) );
 		//mnuCreateGraphCompleteGrid = Menu.addMenuItem(mCreateGraphCompleteGraph, loc.getString("Execute.CreateGraph.CompleteGraph.Grid"), KeyEvent.VK_9, this, "completeGrid", InputEvent.CTRL_DOWN_MASK );
@@ -218,7 +221,10 @@ public class JZETMenuBar extends JMenuBar implements ActionListener, Localized {
                 mCreateSteinerTree = Menu.addMenu(mCreateGraph, loc.getString("Execute.CreateGraph.Steiner"));
                 mnuCreateSteinerTreeGrid = Menu.addMenuItem( mCreateSteinerTree, loc.getString( "Execute.CreateGraph.Steiner.Grid" ), KeyEvent.VK_9, this, "SteinerGrid", InputEvent.CTRL_DOWN_MASK );
                 mnuCreateSteinerTreeNonGrid = Menu.addMenuItem( mCreateSteinerTree, loc.getString( "Execute.CreateGraph.Steiner.NonGrid" ), KeyEvent.VK_9, this, "SteinerNonGrid", InputEvent.CTRL_DOWN_MASK );
-                        
+                mCreateClusterGraph = Menu.addMenu(mCreateGraph, loc.getString("Execute.CreateGraph.ClusterGraph"));
+                mnuCreateClusterGraphNonGrid =  Menu.addMenuItem( mCreateClusterGraph, loc.getString( "Execute.CreateGraph.ClusterGraph.NonGrid" ), KeyEvent.VK_9, this, "ClusterNonGrid", InputEvent.CTRL_DOWN_MASK );    
+                mnuCreateClusterGraphGrid =  Menu.addMenuItem( mCreateClusterGraph, loc.getString( "Execute.CreateGraph.ClusterGraph.Grid" ), KeyEvent.VK_9, this, "ClusterGrid", InputEvent.CTRL_DOWN_MASK );    
+                
 		mnuExecuteApplyAssignment = Menu.addMenuItem( mExecute, loc.getString( "Execute.ApplyConcreteAssignment" ), this, "applyConcreteAssignment" );
 		mSimulation = Menu.addMenu( mExecute, loc.getString( "Execute.Simulation" ) );
 		mnuSimulationQuickVisualization = Menu.addMenuItem( mSimulation, loc.getString( "Execute.Simulation.QuickVisualization" ), KeyEvent.VK_F5, this, "quickVisualization", 0 );
@@ -421,6 +427,12 @@ public class JZETMenuBar extends JMenuBar implements ActionListener, Localized {
 			control.createGraph( GraphConverterAlgorithms.DijkstraGrid );
                 else if (e.getActionCommand().equals("SteinerNonGrid"))
                         control.createGraph(GraphConverterAlgorithms.SteinerTreeNonGrid);
+                else if (e.getActionCommand().equals("SteinerGrid"))
+                    control.createGraph(GraphConverterAlgorithms.SteinerTreeGrid);
+                else if (e.getActionCommand().equals("ClusterNonGrid"))
+                       control.createGraph(GraphConverterAlgorithms.ClusterNonGrid);
+                else if (e.getActionCommand().equals("ClusterGrid"))
+                       control.createGraph(GraphConverterAlgorithms.ClusterGrid);        
 		else if( e.getActionCommand().equals( "applyConcreteAssignment" ) ) {
 		} else if( e.getActionCommand().equals( "quickVisualization" ) ) {
 			control.performQuickVisualization();
@@ -568,6 +580,11 @@ public class JZETMenuBar extends JMenuBar implements ActionListener, Localized {
                 Menu.updateMenu(mCreateSteinerTree, loc.getString("Execute.CreateGraph.Steiner"));
                 Menu.updateMenu(mnuCreateSteinerTreeGrid, loc.getString("Execute.CreateGraph.Steiner.Grid"));
                 Menu.updateMenu(mnuCreateSteinerTreeNonGrid, loc.getString("Execute.CreateGraph.Steiner.NonGrid"));
+                Menu.updateMenu(mCreateClusterGraph, loc.getString("Execute.CreateGraph.ClusterGraph"));
+                Menu.updateMenu(mnuCreateClusterGraphGrid, loc.getString("Execute.CreateGraph.ClusterGraph.Grid"));                
+                Menu.updateMenu(mnuCreateClusterGraphNonGrid, loc.getString("Execute.CreateGraph.ClusterGraph.NonGrid"));                  
+                
+                
                 //Menu.updateMenu( mCreateGraph, loc.getString( "Execute.Optimization.CreateGraph" ) );
 		Menu.updateMenu( mnuOptimizationEarliestArrivalTransshipment, loc.getString( "Execute.Optimization.AlgoEATransshipment" ) );
 
