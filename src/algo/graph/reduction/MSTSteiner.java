@@ -40,12 +40,14 @@ public class MSTSteiner extends Algorithm<MinSpanningTreeProblem,MinSteinerTree>
     int Nodenum = 1;
     int NumEdges = 0;
     int Num = 0;
+    int count = 0;  
     IdentifiableCollection<Node> solNodes = new ListSequence();
     IdentifiableCollection<Node> solutionNodes = new ListSequence();
     IdentifiableCollection<Node> SteinerNodes = new ListSequence();
     IdentifiableCollection<Node> EvacuationNodes = new ListSequence();
     IdentifiableCollection<Edge> solEdges = new ListSequence();
     IdentifiableCollection<Edge> solutionEdges = new ListSequence();
+    
     
     Path[][] ShortestPaths;
     IdentifiableIntegerMapping<Edge> shortestpathdist;
@@ -78,7 +80,7 @@ public class MSTSteiner extends Algorithm<MinSpanningTreeProblem,MinSteinerTree>
                 }
             }
         }
-            
+        System.out.println("Number of steinernodes: " + SteinerNodes.size());    
         TransitForEdge = OriginNetwork.getTransitTimes();
         ShortestPaths = new Path[numNodes][numNodes];
         shortestpathdist = new IdentifiableIntegerMapping<Edge>(OriginNetwork.getGraph().numberOfEdges());
@@ -89,6 +91,7 @@ public class MSTSteiner extends Algorithm<MinSpanningTreeProblem,MinSteinerTree>
             Node node = SteinerNodes.first();
             dijkstra = new Dijkstra(OriginNetwork.getNetwork(), TransitForEdge, node, true);
             dijkstra.run();
+           
             SteinerNodes.remove(SteinerNodes.first());
             for (Node restnode: SteinerNodes)
             {    
@@ -104,6 +107,8 @@ public class MSTSteiner extends Algorithm<MinSpanningTreeProblem,MinSteinerTree>
             }
             
          }
+        System.out.println("Dijkstra done");
+        
         
         /*for (Node node: firstnet.nodes())
         {
@@ -122,13 +127,13 @@ public class MSTSteiner extends Algorithm<MinSpanningTreeProblem,MinSteinerTree>
         prim.run();
         NetworkMST solv = prim.getSolution();
         IdentifiableCollection<Edge> MSTEdges = solv.getEdges();
-        for (Edge edge: MSTEdges)
+        for (Edge mst: MSTEdges)
         {
             //System.out.println("MST Kanten: " + edge);
             //get shortest Path in Original Network
-            Path neu = ShortestPaths[edge.start().id()][edge.end().id()];
+            Path path = ShortestPaths[mst.start().id()][mst.end().id()];
             //gets edges of shortest path
-            IdentifiableCollection<Edge> PathEdges = neu.getEdges();
+            IdentifiableCollection<Edge> PathEdges = path.getEdges();
             IdentifiableCollection<Node> PathNodes = new ListSequence();
             //gets nodes of shortest path
             for (Edge sptedge : PathEdges)
@@ -142,8 +147,7 @@ public class MSTSteiner extends Algorithm<MinSpanningTreeProblem,MinSteinerTree>
                     PathNodes.add(sptedge.start());
                 }
             }
-            int count = 0;
-            
+             
             for (Node currNode: solNodes)
             {
                 if (PathNodes.contains(currNode))
@@ -160,14 +164,10 @@ public class MSTSteiner extends Algorithm<MinSpanningTreeProblem,MinSteinerTree>
                     //solutionEdges.add(sptedge);
                     if (!solNodes.contains(sptedge.start()))
                     {
-                        Node no = new Node(Nodenum++);
-                        solutionNodes.add(no);
                         solNodes.add(sptedge.start());
                     }
                     if (!solNodes.contains(sptedge.end()))
                     {
-                        Node no = new Node(Nodenum++);
-                        solutionNodes.add(no);
                         solNodes.add(sptedge.end());
                     }
                 }
@@ -182,14 +182,10 @@ public class MSTSteiner extends Algorithm<MinSpanningTreeProblem,MinSteinerTree>
                         solutionEdges.add(insert);
                         if (!solNodes.contains(sptedge.start()))
                         {
-                            Node no = new Node(Nodenum++);
-                            solutionNodes.add(no);
-                            solNodes.add(sptedge.start());
+                            solNodes.add(sptedge.start());                                                    
                         }
                         if (!solNodes.contains(sptedge.end()))
                         {
-                            Node no = new Node(Nodenum++);
-                            solutionNodes.add(no);
                             solNodes.add(sptedge.start());
                         }  
                           
@@ -201,9 +197,9 @@ public class MSTSteiner extends Algorithm<MinSpanningTreeProblem,MinSteinerTree>
         }
         
         IdentifiableCollection<Edge> addEdges = OriginNetwork.getGraph().incidentEdges(supersink);
-        for (Edge edge: addEdges)
+        for (Edge sinkedge: addEdges)
         {
-            supersinkedge = new Edge(Num++, edge.start(), edge.end());
+            supersinkedge = new Edge(Num++, sinkedge.start(), sinkedge.end());
             solutionEdges.add(supersinkedge);
         }
         
