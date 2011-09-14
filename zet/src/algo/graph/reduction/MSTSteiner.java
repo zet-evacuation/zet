@@ -40,7 +40,7 @@ public class MSTSteiner extends Algorithm<MinSpanningTreeProblem,MinSteinerTree>
     int Nodenum = 1;
     int NumEdges = 0;
     int Num = 0;
-    int count = 0;  
+    int count;  
     IdentifiableCollection<Node> solNodes = new ListSequence();
     IdentifiableCollection<Node> solutionNodes = new ListSequence();
     IdentifiableCollection<Node> SteinerNodes = new ListSequence();
@@ -127,9 +127,10 @@ public class MSTSteiner extends Algorithm<MinSpanningTreeProblem,MinSteinerTree>
         prim.run();
         NetworkMST solv = prim.getSolution();
         IdentifiableCollection<Edge> MSTEdges = solv.getEdges();
+        
         for (Edge mst: MSTEdges)
         {
-            //System.out.println("MST Kanten: " + edge);
+            count = 0;
             //get shortest Path in Original Network
             Path path = ShortestPaths[mst.start().id()][mst.end().id()];
             //gets edges of shortest path
@@ -155,6 +156,7 @@ public class MSTSteiner extends Algorithm<MinSpanningTreeProblem,MinSteinerTree>
                     count++;
                 }
             }
+          
             if (count < 2)
             {
                 for (Edge sptedge : PathEdges)
@@ -202,6 +204,7 @@ public class MSTSteiner extends Algorithm<MinSpanningTreeProblem,MinSteinerTree>
             supersinkedge = new Edge(Num++, sinkedge.start(), sinkedge.end());
             solutionEdges.add(supersinkedge);
         }
+        
         
     }
         
