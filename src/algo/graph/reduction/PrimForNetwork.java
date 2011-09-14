@@ -29,7 +29,7 @@ public class PrimForNetwork extends Algorithm<NetworkMSTProblem, NetworkMST>{
     IdentifiableCollection<Edge> solEdges = new ListSequence<Edge>();  
     IdentifiableIntegerMapping<Node> distances;
     IdentifiableObjectMapping<Node, Edge> heapedges;
-    int NumEdges = 0;
+    int NumEdge = 0;
     int overalldist = 0;
     
     @Override
@@ -58,7 +58,7 @@ public class PrimForNetwork extends Algorithm<NetworkMSTProblem, NetworkMST>{
         {
             startNode = OriginNetwork.getNode(num+1);
         }
-        System.out.println("Startknoten: " + num);
+        System.out.println("Startknoten: " + startNode);
         solNodes.add(startNode);
         //distances = new IdentifiableIntegerMapping<Node>(OriginNetwork.numberOfNodes());
         distances = new IdentifiableIntegerMapping<Node>(OriginNetwork.numberOfNodes());
@@ -85,7 +85,7 @@ public class PrimForNetwork extends Algorithm<NetworkMSTProblem, NetworkMST>{
             
             if (v != startNode)
             {
-                Edge edge = new Edge(NumEdges++,heapedges.get(v).start(),heapedges.get(v).end());
+                Edge edge = new Edge(NumEdge++,heapedges.get(v).start(),heapedges.get(v).end());
                 //only consider edges that are not incident to supersink
                 solEdges.add(edge);
             }

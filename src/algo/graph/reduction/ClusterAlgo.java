@@ -111,6 +111,7 @@ public class ClusterAlgo extends Algorithm<MinSpanningTreeProblem, MinSpanningTr
                 {
                     for (Node centernode: centerNodes)
                     {
+                       
                         if (edge.opposite(v) == centernode)
                         {
                             count++;
