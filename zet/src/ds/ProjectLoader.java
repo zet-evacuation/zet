@@ -10,6 +10,7 @@ import com.thoughtworks.xstream.annotations.Annotations;
 import com.thoughtworks.xstream.converters.Converter;
 import com.thoughtworks.xstream.converters.reflection.ReflectionProvider;
 import com.thoughtworks.xstream.mapper.Mapper;
+import com.thoughtworks.xstream.mapper.MapperWrapper;
 import de.tu_berlin.math.coga.rndutils.distribution.continuous.NormalDistribution;
 import de.tu_berlin.math.coga.rndutils.distribution.continuous.UniformDistribution;
 import ds.z.ZLocalization;
@@ -28,6 +29,8 @@ import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.URL;
 import java.util.Enumeration;
+import java.util.HashSet;
+import java.util.Set;
 import java.util.jar.JarFile;
 import java.util.zip.GZIPInputStream;
 import java.util.zip.GZIPOutputStream;
@@ -47,9 +50,35 @@ public class ProjectLoader {
 		return xml_convert;
 	}
 
-	static {
-		System.err.println( "Static initalizer block is executed" );
-		xml_convert = new XStream();
+
+static {
+	final Set<String> ignore = new HashSet<String>() {{
+			add( "xOffsetAll" );
+			add( "yOffsetAll" );
+			add( "heightAll" );
+			add( "widthAll" );
+			add( "maxY_DefiningEdge" );
+			add( "minX_DefiningEdge" );
+			add( "maxX_DefiningEdge" );
+			add( "minY_DefiningEdge" );
+		}};
+		xml_convert = new XStream() {
+		@Override
+			protected MapperWrapper wrapMapper( MapperWrapper next ) {
+				return new MapperWrapper( next ) {
+					@Override
+					public boolean shouldSerializeMember( Class definedIn, String fieldName ) {
+						// ignore some keywords
+						if( ignore.contains( fieldName ) ) {
+							return false;
+						}
+						//if( definedIn != Object.class )
+						//	return false;
+						return super.shouldSerializeMember( definedIn, fieldName );
+					}
+				};
+			}
+		};
 		xml_convert.setMode( XStream.ID_REFERENCES );
 
 		//Configure aliases for external classes (Java API)

@@ -919,6 +919,7 @@ public class Room extends BaseRoom<RoomEdge> implements Cloneable, Comparable<Ro
 
 		sb.append( "Room: " ).append( name);
 		sb.append( '\n' );
+		sb.append( "Size: " ).append( this.getWidth() ).append( 'x' ).append( this.getHeight() ).append( '\n');
 
 		for( ArrayList<Area<?>> areaList : areas ) {
 			for( Area<?> area : areaList ) {

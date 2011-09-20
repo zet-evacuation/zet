@@ -69,9 +69,6 @@ public class PlanPolygon<T extends Edge> implements Serializable, Iterable<T> {
 	}
 	/** The class-type of the edges. This is setLocation only one single time in the constructor. */
 	private final Class<T> edgeClassType;
-	/** The change listeners that are informed if any change of the polygon occurs. */
-//	@XStreamOmitField()
-//	private transient ArrayList<ChangeListener> changeListeners = new ArrayList<ChangeListener>();
 	/** Determines, if the polygon is closed. That means that the {@code end}
 	 * and {@code start} edges have a common point. */
 	@XStreamAsAttribute()
@@ -87,39 +84,37 @@ public class PlanPolygon<T extends Edge> implements Serializable, Iterable<T> {
 	@XStreamAsAttribute()
 	private int xOffset = 0;
 	/** The edge that has the minimum x value (xOffset). */
-	private T minX_DefiningEdge;
+//	private T minX_DefiningEdge;
 	/** The uppermost point coordinate of the polygon. */
 	@XStreamAsAttribute()
 	private int yOffset = 0;
 	/** The edge that has the minimum y value (yOffset). */
-	private T minY_DefiningEdge;
+//	private T minY_DefiningEdge;
 	/** The difference between the left- and rightmost point coordinate of the polygon. */
 	@XStreamAsAttribute()
 	private int width = 0;
 	/** The edge that has the maximum x value (xOffset + width). */
-	private T maxX_DefiningEdge;
+//	private T maxX_DefiningEdge;
 	/** The difference between the upper- and lowermost point coordinate of the polygon. */
 	@XStreamAsAttribute()
 	private int height = 0;
 	/** The edge that has the maximum y value (yOffset + width). */
-	private T maxY_DefiningEdge;
+//	private T maxY_DefiningEdge;
 	/** Determines if the polygon has been changed after a validity test. */
 	@XStreamAsAttribute()
 	private boolean changed = true;
-	private int xOffsetAll = 0;
-	private int yOffsetAll = 0;
-	private int heightAll = 0;
-	private int widthAll = 0;
-	/** A flag that indicates whether events that are thrown are handed over to
-	 * the listeners. In case of complex manipulations (f.e. when
-	 * combining two edges) you may want to suppress single events that arise
-	 * during the course of the manipulation and only send out a single event
-	 * at the end. Then you can setLocation this variable to "false", but you should always
-	 * ensure that it is switched back to the state that it had before by using
-	 * try & finally constructions like those in comineEdges or replaceEdge.
-	 */
-	@XStreamOmitField()
-	private transient boolean enableEventGeneration = true;
+	
+
+	@XStreamOmitField
+	int minx = Integer.MAX_VALUE;
+	@XStreamOmitField
+	int maxx = Integer.MIN_VALUE;
+	@XStreamOmitField
+	int miny = Integer.MAX_VALUE;
+	@XStreamOmitField
+	int maxy = Integer.MIN_VALUE;
+
+	
 	/**
 	 * three transformation matrixes for flip vertically, horizontally and at the main
 	 * diagonal plus identity matrix
@@ -243,8 +238,7 @@ public class PlanPolygon<T extends Edge> implements Serializable, Iterable<T> {
 
 		}
 		if( !closed && close && !end.equals( points.get(0) ) )
-			newEdge( end, points.get( 0 ) );
-		
+			newEdge( end, points.get( 0 ) );		
 	}
 
 	/**
@@ -283,10 +277,10 @@ public class PlanPolygon<T extends Edge> implements Serializable, Iterable<T> {
 			xOffset = e.boundLeft();
 			yOffset = e.boundUpper();
 			// This first edge defines all bounds
-			minX_DefiningEdge = e;
-			minY_DefiningEdge = e;
-			maxX_DefiningEdge = e;
-			maxY_DefiningEdge = e;
+			//minX_DefiningEdge = e;
+			//minY_DefiningEdge = e;
+			//maxX_DefiningEdge = e;
+			//maxY_DefiningEdge = e;
 		} else {
 			if( isClosed() )
 				throw new IllegalStateException( ZLocalization.getSingleton().getString( "ds.z.PlanPolygon.AddEdgeToClosedPolygonException" ) );
@@ -316,8 +310,11 @@ public class PlanPolygon<T extends Edge> implements Serializable, Iterable<T> {
 				throw new IllegalArgumentException( ZLocalization.getSingleton().getString( "ds.z.PlanPolygon.CoordinateMismatchException" ) );
 
 			// Scan for new boundaries
-			edgeChangeHandler( e, null );
+			//edgeChangeHandler( e, null );
 		}
+		
+		recomputeBoundsCheckEdge( e );
+		recomputeBoundsUpdate();
 
 		changed = true;
 		size++;
@@ -518,14 +515,11 @@ public class PlanPolygon<T extends Edge> implements Serializable, Iterable<T> {
 		try {
 			common = e1.commonPoint( e2 );
 		} catch( IllegalArgumentException ex ) {
-			throw new IllegalArgumentException( ZLocalization.getSingleton().getString(
-							"ds.z.PlanPolygon.NoConsecutiveEdgesException" ) );
+			throw new IllegalArgumentException( ZLocalization.getSingleton().getString( "ds.z.PlanPolygon.NoConsecutiveEdgesException" ) );
 		}
 		T result = null;
 
-		boolean eAG_old = enableEventGeneration;
 		try {
-			enableEventGeneration = false;
 			PlanPoint e2_other = e2.getOther( common );
 			PlanPoint e1_other = e1.getOther( common );
 
@@ -561,8 +555,8 @@ public class PlanPolygon<T extends Edge> implements Serializable, Iterable<T> {
 					size -= 2;
 
 					// Call edge delete handlers
-					edgeDeleteHandler( e1 );
-					edgeDeleteHandler( e2 );
+					//edgeDeleteHandler( e1 );
+					//edgeDeleteHandler( e2 );
 				} else
 					// e1 and e2 have no neighbours
 					// --> Either they are alone in the polygon, but in this case
@@ -606,17 +600,17 @@ public class PlanPolygon<T extends Edge> implements Serializable, Iterable<T> {
 				size--;
 
 				if( deleteE1 ) {
-					edgeDeleteHandler( e1 );
-					edgeChangeHandler( e2, null );
+				//	edgeDeleteHandler( e1 );
+				//	edgeChangeHandler( e2, null );
 				} else {
-					edgeDeleteHandler( e2 );
-					edgeChangeHandler( e1, null );
+				//	edgeDeleteHandler( e2 );
+				//	edgeChangeHandler( e1, null );
 				}
 
 				result = deleteE1 ? e2 : e1;
 			}
 		} finally {
-			enableEventGeneration = eAG_old;
+
 		}
 
 //		throwChangeEvent( new ChangeEvent( this ) );
@@ -639,8 +633,7 @@ public class PlanPolygon<T extends Edge> implements Serializable, Iterable<T> {
 	 * or equal to 3 edges. Then no edge can be deleted / no edges combined.
 	 * @see #combineEdges(ds.z.Edge, ds.z.Edge, boolean)
 	 */
-	public void combineEdges( PlanPoint p1, PlanPoint p2, PlanPoint p3, boolean keepMinSize )
-					throws IllegalArgumentException {
+	public void combineEdges( PlanPoint p1, PlanPoint p2, PlanPoint p3, boolean keepMinSize ) throws IllegalArgumentException {
 		combineEdges( this.getEdge( p1, p2 ), getEdge( p2, p3 ), keepMinSize );
 	}
 
@@ -662,10 +655,7 @@ public class PlanPolygon<T extends Edge> implements Serializable, Iterable<T> {
 			throw new IllegalStateException( ZLocalization.getSingleton().getString( "ds.z.PlanPolygon.NotEnoughEdgesException" ) );
 		T result = null;
 
-		// Switch off events while working on the polygon structure
-		boolean eAG_old = enableEventGeneration;
 		try {
-			enableEventGeneration = false;
 			boolean reversed = false;
 			ListIterator<PlanPoint> itPoints = null;
 
@@ -693,24 +683,20 @@ public class PlanPolygon<T extends Edge> implements Serializable, Iterable<T> {
 					PlanPoint nextPoint = reversed ? itPoints.previous() : itPoints.next();
 
 					if( !combinationEdge.getTarget().equals( nextPoint ) )
-						throw new IllegalArgumentException( ZLocalization.getSingleton().getString( "ds.z.PlanPolygon.NotEqualException" ) + " (" + nextPoint +
-										", " + combinationEdge.getTarget() + ")" );
+						throw new IllegalArgumentException( ZLocalization.getSingleton().getString( "ds.z.PlanPolygon.NotEqualException" ) + " (" + nextPoint + ", " + combinationEdge.getTarget() + ")" );
 					else {
 						// Combine a new edge
-						combinationEdge = combineEdges( combinationEdge,
-										(T)combinationEdge.getTarget().getNextEdge(), keepMinSize );
+						combinationEdge = combineEdges( combinationEdge, (T)combinationEdge.getTarget().getNextEdge(), keepMinSize );
 
-						if( combinationEdge.getTarget().equals( points.get( 0 ) ) ||
-										combinationEdge.getTarget().equals( points.get( points.size() - 1 ) ) )
+						if( combinationEdge.getTarget().equals( points.get( 0 ) ) || combinationEdge.getTarget().equals( points.get( points.size() - 1 ) ) )
 							break;
 					}
 				}
 
 		} finally {
-			enableEventGeneration = eAG_old;
+
 		}
 
-//		throwChangeEvent( new ChangeEvent( this ) );
 		return result;
 	}
 
@@ -1018,28 +1004,17 @@ public class PlanPolygon<T extends Edge> implements Serializable, Iterable<T> {
 	 * @throws java.lang.IllegalStateException
 	 */
 	void delete() throws IllegalArgumentException, IllegalStateException {
-		boolean eAG_old = enableEventGeneration;
-		try {
-			enableEventGeneration = false;
+		// Do not use the polygon iterator here - he will fail because you 
+		// delete his cursor when deleting the current edge
+		List<T> edges = getEdges();
+		for( Edge e : edges )
+			e.delete();
 
-			// Do not use the polygon iterator here - he will fail because you 
-			// delete his cursor when deleting the current edge
-			List<T> edges = getEdges();
-			for( Edge e : edges )
-				e.delete();
+		closed = false;
+		changed = true;
 
-			closed = false;
-			changed = true;
-
-			start = null;
-			end = null;
-			minX_DefiningEdge = null;
-			minY_DefiningEdge = null;
-			maxX_DefiningEdge = null;
-			maxY_DefiningEdge = null;
-		} finally {
-			enableEventGeneration = eAG_old;
-		}
+		start = null;
+		end = null;
 	}
 
 	/**
@@ -1145,10 +1120,7 @@ public class PlanPolygon<T extends Edge> implements Serializable, Iterable<T> {
 	 */
 	@Override
 	public boolean equals( Object obj ) {
-		if( obj instanceof PlanPolygon )
-			return this.equals( (PlanPolygon)obj );
-		else
-			return false;
+		return obj instanceof PlanPolygon ? this.equals( (PlanPolygon)obj ) : false;
 	}
 
 	/**
@@ -1159,9 +1131,7 @@ public class PlanPolygon<T extends Edge> implements Serializable, Iterable<T> {
 	 * @return true if the edge can be added to the polygon
 	 */
 	public boolean fits( T e ) {
-		if( size == 0 )
-			return true;
-		return (fits( e.getSource() ) || fits( e.getTarget() )) && !isClosed();
+		return size == 0 ? true : (fits( e.getSource() ) || fits( e.getTarget() )) && !isClosed();
 	}
 
 	/**
@@ -1338,8 +1308,7 @@ public class PlanPolygon<T extends Edge> implements Serializable, Iterable<T> {
 	 * @throws java.lang.IllegalArgumentException if the point is not an end point of the edge
 	 * @throws java.lang.IllegalStateException if the polygon is not closed
 	 */
-	public PlanPoint getPointAfterTheNext( T e, PlanPoint p )
-					throws IllegalArgumentException, IllegalStateException {
+	public PlanPoint getPointAfterTheNext( T e, PlanPoint p ) throws IllegalArgumentException, IllegalStateException {
 		if( e.getSource() != p && e.getTarget() != p )
 			throw new IllegalArgumentException( ZLocalization.getSingleton().getString( "ds.z.PlanPolygon.PointNotContainedInEdgeException" ) );
 		if( !closed )
@@ -1361,8 +1330,7 @@ public class PlanPolygon<T extends Edge> implements Serializable, Iterable<T> {
 	 * of the polygon
 	 */
 	public List<PlanPoint> getPolygonPoints() {
-		ArrayList<PlanPoint> pointList = new ArrayList<PlanPoint>( size +
-						(isClosed() ? 0 : 1) );
+		ArrayList<PlanPoint> pointList = new ArrayList<PlanPoint>( size + (isClosed() ? 0 : 1) );
 
 		Iterator<PlanPoint> itP = pointIterator( false );
 		while( itP.hasNext() )
@@ -1564,22 +1532,17 @@ public class PlanPolygon<T extends Edge> implements Serializable, Iterable<T> {
 	private T newEdge( PlanPoint p1, PlanPoint p2, PlanPolygon poly ) {
 		T edge = null;
 		try {
-			edge = edgeClassType.getDeclaredConstructor( PlanPoint.class, PlanPoint.class ).
-							newInstance( p1, p2 );
+			edge = edgeClassType.getDeclaredConstructor( PlanPoint.class, PlanPoint.class ).newInstance( p1, p2 );
 			// This calls addEdge internally
 			edge.setAssociatedPolygon( poly );
 		} catch( java.lang.NoSuchMethodException ex ) {
-			throw new RuntimeException( ZLocalization.getSingleton().getString(
-							"ds.z.PlanPolygon.InternalError" ) );
+			throw new RuntimeException( ZLocalization.getSingleton().getString( "ds.z.PlanPolygon.InternalError" ) );
 		} catch( java.lang.InstantiationException ex ) {
-			throw new RuntimeException( ZLocalization.getSingleton().getString(
-							"ds.z.PlanPolygon.InternalError" ) );
+			throw new RuntimeException( ZLocalization.getSingleton().getString( "ds.z.PlanPolygon.InternalError" ) );
 		} catch( java.lang.IllegalAccessException ex ) {
-			throw new RuntimeException( ZLocalization.getSingleton().getString(
-							"ds.z.PlanPolygon.InternalError" ) );
+			throw new RuntimeException( ZLocalization.getSingleton().getString( "ds.z.PlanPolygon.InternalError" ) );
 		} catch( java.lang.reflect.InvocationTargetException ex ) {
-			throw new RuntimeException( ZLocalization.getSingleton().getString(
-							"ds.z.PlanPolygon.InternalError" ) );
+			throw new RuntimeException( ZLocalization.getSingleton().getString( "ds.z.PlanPolygon.InternalError" ) );
 		}
 		return edge;
 	}
@@ -1598,8 +1561,7 @@ public class PlanPolygon<T extends Edge> implements Serializable, Iterable<T> {
 	private Edge newEdge( PlanPoint p1, PlanPoint p2, PlanPolygon poly, Class<T> edgeClassType ) {
 		T edge = null;
 		try {
-			edge = edgeClassType.getDeclaredConstructor( PlanPoint.class, PlanPoint.class ).
-							newInstance( p1, p2 );
+			edge = edgeClassType.getDeclaredConstructor( PlanPoint.class, PlanPoint.class ).newInstance( p1, p2 );
 			// This calls addEdge internally
 			edge.setAssociatedPolygon( poly );
 		} catch( java.lang.NoSuchMethodException ex ) {
@@ -1689,27 +1651,15 @@ public class PlanPolygon<T extends Edge> implements Serializable, Iterable<T> {
 			else if( last == e )
 				end = last.getOther( end );
 			else if( length != 0 )
-				throw new IllegalStateException( ZLocalization.getSingleton().getString(
-								"ds.z.PlanPolygon.EdgeIsNotFirstOrLastOneExcpetion" ) );
+				throw new IllegalStateException( ZLocalization.getSingleton().getString( "ds.z.PlanPolygon.EdgeIsNotFirstOrLastOneExcpetion" ) );
 		}
 
 		changed = true;
 		size--;
 
-//		e.removeChangeListener( this );
-		edgeDeleteHandler( e );
+//		edgeDeleteHandler( e );
 
-//		throwChangeEvent( new ChangeEvent( this ) );
 	}
-
-	/**
-	 * {@inheritDoc}
-	 * @param c the listener that is to be removed
-	 */
-//	@Override
-//	public void removeChangeListener( ChangeListener c ) {
-//		changeListeners.remove( c );
-//	}
 
 	/**
 	 * Replaces all edges of the polygon with new ones defined throug a list of
@@ -1719,8 +1669,6 @@ public class PlanPolygon<T extends Edge> implements Serializable, Iterable<T> {
 	 * @see #defineByPoints( List )
 	 */
 	public void replace( List<PlanPoint> points ) {
-//		for( T e : this )
-//			e.removeChangeListener( this );
 		// Drop the current edges
 		start = null;
 		end = null;
@@ -1759,8 +1707,7 @@ public class PlanPolygon<T extends Edge> implements Serializable, Iterable<T> {
 		if( points.size() < 3 )
 			throw new IllegalArgumentException( ZLocalization.getSingleton().getString( "ds.z.PlanPolygon.ListDoesNotContainenoughPointsException" ) );
 		if( !closed )
-			throw new IllegalStateException( ZLocalization.getSingleton().getString(
-							"ds.z.PlanPolygon.PolygonNotClosedException" ) );
+			throw new IllegalStateException( ZLocalization.getSingleton().getString( "ds.z.PlanPolygon.PolygonNotClosedException" ) );
 		if( e.getAssociatedPolygon() != this )
 			throw new IllegalArgumentException( ZLocalization.getSingleton().getString( "ds.z.PlanPolygon.EdgeNotFoundException" ) );
 		if( !(e.getSource().equals( points.get( 0 ) ) &&
@@ -1777,11 +1724,8 @@ public class PlanPolygon<T extends Edge> implements Serializable, Iterable<T> {
 			lastPoint = currentPoint;
 		}
 
-		boolean eAG_old = enableEventGeneration;
 		ArrayList<T> result = new ArrayList<T>( points.size() - 1 );
 		try {
-
-			enableEventGeneration = false;
 
 			PlanPoint old_start = e.getSource();
 
@@ -1793,15 +1737,13 @@ public class PlanPolygon<T extends Edge> implements Serializable, Iterable<T> {
 				if( firstPoint )
 					firstPoint = false;
 				else
-					result.add( (T)newEdge( new PlanPoint( current_start ),
-									new PlanPoint( current_end ), this,
-									(Class<T>)e.getClass() ) );
+					result.add( (T)newEdge( new PlanPoint( current_start ), new PlanPoint( current_end ), this, (Class<T>)e.getClass() ) );
 				current_start = current_end;
 			}
 
 		// Edge count is automatically adjusted by defineByPoints/removeEdge methods
 		} finally {
-			enableEventGeneration = eAG_old;
+
 		}
 
 //		throwChangeEvent( new ChangeEvent( this ) );
@@ -1823,37 +1765,6 @@ public class PlanPolygon<T extends Edge> implements Serializable, Iterable<T> {
 	public ArrayList<T> replaceEdge( PlanPoint p1, PlanPoint p2, List<PlanPoint> points ) {
 		return replaceEdge( getEdge( p1, p2 ), points );
 	}
-
-	/**
-	 * {@inheritDoc}
-	 * @param e the event
-//	 */
-//	@Override
-//	public void stateChanged( ChangeEvent e ) {
-//		// Listen for EdgeChangeEvents and update the polygon bounds eventually
-//		if( (e instanceof EdgeChangeEvent) || (edgeClassType.isInstance( e.getSource() )) )
-//			edgeChangeHandler( (Edge)e.getSource(), (e instanceof EdgeChangeEvent) ? ((EdgeChangeEvent)e).getTarget() : null );
-//		throwChangeEvent( e );
-//	}
-
-	/**
-	 * {@inheritDoc}
-	 * @param e the thrown event
-//	 */
-//	@Override
-//	public void throwChangeEvent( ChangeEvent e ) {
-//		if( enableEventGeneration ) {
-//			// Workaround: Notify only the listeners who are registered at the time when this method starts
-//			// This point may be thrown away when the resulting edge must be rastered, and then the list
-//			// "changeListeners" will be altered during "c.stateChanged (e)", which produces exceptions.
-//			ChangeListener[] listenerCopy = changeListeners.toArray(
-//							new ChangeListener[changeListeners.size()] );
-//
-//
-//			for( ChangeListener c : listenerCopy )
-//				c.stateChanged( e );
-//		}
-//	}
 
 	/**
 	 * This is a convenience method that returns all PlanPoints of all
@@ -1912,7 +1823,7 @@ public class PlanPolygon<T extends Edge> implements Serializable, Iterable<T> {
 	public String getCoordinateString() {
 		String ret = "";
 		for( T e : this )
-			if( ret.equals( "" ) )
+			if( ret.isEmpty(  ) )
 				ret = e.toString();
 			else
 				ret += " - " + e.toString();
@@ -1952,17 +1863,13 @@ public class PlanPolygon<T extends Edge> implements Serializable, Iterable<T> {
 	 * they are adjacent.
 	 * @throws IllegalStateException If the polygon is not closed
 	 */
-	public PlanPolygon<T> splitClosedPolygon( T edge1, T edge2 ) throws IllegalArgumentException,
-					IllegalArgumentException {
+	public PlanPolygon<T> splitClosedPolygon( T edge1, T edge2 ) throws IllegalArgumentException, IllegalArgumentException {
 		if( !closed )
-			throw new IllegalStateException( ZLocalization.getSingleton().getString(
-							"ds.z.PlanPolygon.PolygonNotClosedException" ) );
+			throw new IllegalStateException( ZLocalization.getSingleton().getString( "ds.z.PlanPolygon.PolygonNotClosedException" ) );
 		if( edge1.getAssociatedPolygon() != this || edge2.getAssociatedPolygon() != this )
-			throw new IllegalArgumentException( ZLocalization.getSingleton().getString(
-							"ds.z.PlanPolygon.EdgeNotContained" ) );
+			throw new IllegalArgumentException( ZLocalization.getSingleton().getString( "ds.z.PlanPolygon.EdgeNotContained" ) );
 		if( edge1.isNeighbour( edge2 ) )
-			throw new IllegalArgumentException( ZLocalization.getSingleton().getString(
-							"ds.z.PlanPolygon.AdjacentEdges" ) );
+			throw new IllegalArgumentException( ZLocalization.getSingleton().getString( "ds.z.PlanPolygon.AdjacentEdges" ) );
 
 		// Save the edges' end points		
 		PlanPoint e1_start = edge1.getSource();
@@ -2023,14 +1930,11 @@ public class PlanPolygon<T extends Edge> implements Serializable, Iterable<T> {
 	 * @throws IllegalArgumentException If the given edge is not part of the polygon
 	 * @throws IllegalStateException If the polygon is closed
 	 */
-	public PlanPolygon<T> splitUnclosedPolygon( T splitEdge ) throws IllegalArgumentException,
-					IllegalArgumentException {
+	public PlanPolygon<T> splitUnclosedPolygon( T splitEdge ) throws IllegalArgumentException, IllegalArgumentException {
 		if( closed )
-			throw new IllegalStateException( ZLocalization.getSingleton().getString(
-							"ds.z.PlanPolygon.PolygonClosedException" ) );
+			throw new IllegalStateException( ZLocalization.getSingleton().getString( "ds.z.PlanPolygon.PolygonClosedException" ) );
 		if( splitEdge.getAssociatedPolygon() != this )
-			throw new IllegalArgumentException( ZLocalization.getSingleton().getString(
-							"ds.z.PlanPolygon.EdgeNotContained" ) );
+			throw new IllegalArgumentException( ZLocalization.getSingleton().getString( "ds.z.PlanPolygon.EdgeNotContained" ) );
 
 		// Save the edges' end points		
 		PlanPoint e_start = splitEdge.getSource();
@@ -2062,215 +1966,38 @@ public class PlanPolygon<T extends Edge> implements Serializable, Iterable<T> {
 		return new PlanPolygon<T>( edgeClassType );
 	}
 
-	/**
-	 * This helper method updates the values returned by {@link #bounds()} after
-	 * an {@link ds.z.Edge} has been added or modified.
-	 * @param pointMoved A point that belongs to the edge and that was moved or null
-	 * if that is not the case.
-	 * @see #edgeDeleteHandler
-	 */
-	void edgeChangeHandler( Edge e, PlanPoint pointMoved ) {
-		// Update of offsets, width and height
-
-		// All updates follow a certain schema:
-		// 1) Check for shrinked bounds: In case that one of the boundary edges
-		//    was changed, so that is is now no longer sure who is defining the
-		//    boundary, scan all edges for a new minimum / maximum
-		// 2) Check for grown bounds: Simple comparison
-
-		// The minimum values are updates first, because they are used in the
-		// computations that are performed during the updates of the maximums
-
-		// Updates of the minimums
-		if( e == minX_DefiningEdge && e.boundLeft() > xOffset ) {
-			// Init with feasible data
-			xOffset = getFirstEdge().boundLeft();
-			minX_DefiningEdge = getFirstEdge();
-
-			// Scan all edges
-			int value;
-			for( T scanEdge : this ) {
-				value = scanEdge.boundLeft();
-
-				if( value < xOffset ) {
-					xOffset = value;
-					minX_DefiningEdge = scanEdge;
-				}
-			}
-			width = maxX_DefiningEdge.boundRight() - xOffset;
-		} else if( e.boundLeft() <= xOffset ) {
-			// New xOffset more left then the old one
-			width += Math.abs( e.boundLeft() - xOffset );
-			xOffset = e.boundLeft();
-
-			minX_DefiningEdge = (T)e;
-		}
-		if( e == minY_DefiningEdge && e.boundUpper() > yOffset ) {
-			// Init with feasible data
-			yOffset = getFirstEdge().boundUpper();
-			minY_DefiningEdge = getFirstEdge();
-
-			// Scan all edges
-			int value;
-			for( T scanEdge : this ) {
-				value = scanEdge.boundUpper();
-
-				if( value < yOffset ) {
-					yOffset = value;
-					minY_DefiningEdge = scanEdge;
-				}
-			}
-			height = maxY_DefiningEdge.boundLower() - yOffset;
-		} else if( e.boundUpper() <= yOffset ) {
-			// New yOffset is over the old one, correct also the height
-			height += Math.abs( e.boundUpper() - yOffset );
-			yOffset = e.boundUpper();
-
-			minY_DefiningEdge = (T)e;
-		}
-
-		// Update of the maximums
-		if( e == maxX_DefiningEdge && e.boundRight() < (xOffset + width) ) {
-			// Init with feasible data
-			// No Math.abs needed - e.boundRight is always bigger than xOffset
-			width = getFirstEdge().boundRight() - xOffset;
-			maxX_DefiningEdge = getFirstEdge();
-
-			// Scan all edges
-			int value;
-			for( T scanEdge : this ) {
-				value = scanEdge.boundRight() - xOffset;
-
-				if( value > width ) {
-					width = value;
-					maxX_DefiningEdge = scanEdge;
-				}
-			}
-		} else if( e.boundRight() >= xOffset + width ) {
-			// No Math.abs needed - e.boundRight is always bigger than xOffset
-			width = e.boundRight() - xOffset;
-
-			maxX_DefiningEdge = (T)e;
-		}
-		if( e == maxY_DefiningEdge && e.boundLower() < (yOffset + height) ) {
-			// Init with feasible data
-			// No Math.abs needed - e.boundLower is always bigger than yOffset
-			height = getFirstEdge().boundLower() - yOffset;
-			maxY_DefiningEdge = getFirstEdge();
-
-			// Scan all edges
-			int value;
-			for( T scanEdge : this ) {
-				value = scanEdge.boundLower() - yOffset;
-
-				if( value > height ) {
-					height = value;
-					maxY_DefiningEdge = scanEdge;
-				}
-			}
-		} else if( e.boundLower() >= yOffset + height ) {
-			// No Math.abs needed - e.boundLower is always bigger than yOffset
-			height = e.boundLower() - yOffset;
-
-			maxY_DefiningEdge = (T)e;
-		}
+	public void recomputeBounds() {
+		minx = Integer.MAX_VALUE;
+		maxx = Integer.MIN_VALUE;
+		miny = Integer.MAX_VALUE;
+		maxy = Integer.MIN_VALUE;
+		for( T e : this )
+			recomputeBoundsCheckEdge( e );
+		recomputeBoundsUpdate();
 	}
-
-	/**
-	 * This helper method updates the values returned by {@link #bounds()} after
-	 * an {@link ds.z.Edge} has been deleted.
-	 * @param e An Edge that was deleted.
-	 * @see #edgeChangeHandler
-	 */
-	private void edgeDeleteHandler( Edge e ) {
-		// Update of offsets, width and height
-
-		// The only thing that can happen due to the deletion of an edge is that
-		// bounds may shrink. We must test if the deleted edge defined any bound
-		// and replace it if that is true.
-
-		// The minimum values are updates first, because they are used in the
-		// computations that are performed during the updates of the maximums
-
-		// Updates of the minimums
-		if( e == minX_DefiningEdge ) {
-			// Init with feasible data
-			minX_DefiningEdge = getFirstEdge();
-			if( minX_DefiningEdge != null ) {
-				xOffset = minX_DefiningEdge.boundLeft();
-
-				// Scan all edges
-				int value;
-				for( T scanEdge : this ) {
-					value = scanEdge.boundLeft();
-
-					if( value < xOffset ) {
-						xOffset = value;
-						minX_DefiningEdge = scanEdge;
-					}
-				}
-			}
-		}
-		if( e == minY_DefiningEdge ) {
-			// Init with feasible data
-			minY_DefiningEdge = getFirstEdge();
-			if( minY_DefiningEdge != null ) {
-				yOffset = minY_DefiningEdge.boundUpper();
-
-				// Scan all edges
-				int value;
-				for( T scanEdge : this ) {
-					value = scanEdge.boundUpper();
-
-					if( value < yOffset ) {
-						yOffset = value;
-						minY_DefiningEdge = scanEdge;
-					}
-				}
-			}
-		}
-
-		// Update of the maximums
-		if( e == maxX_DefiningEdge ) {
-			// Init with feasible data
-			maxX_DefiningEdge = getFirstEdge();
-			if( maxX_DefiningEdge != null ) {
-				// No Math.abs needed - e.boundRight is always bigger than xOffset
-				width = maxX_DefiningEdge.boundRight() - xOffset;
-
-				// Scan all edges
-				int value;
-				for( T scanEdge : this ) {
-					value = scanEdge.boundRight() - xOffset;
-
-					if( value > width ) {
-						width = value;
-						maxX_DefiningEdge = scanEdge;
-					}
-				}
-			}
-		}
-		if( e == maxY_DefiningEdge ) {
-			// Init with feasible data
-			maxY_DefiningEdge = getFirstEdge();
-			if( maxY_DefiningEdge != null ) {
-				// No Math.abs needed - e.boundLower is always bigger than yOffset
-				height = maxY_DefiningEdge.boundLower() - yOffset;
-
-				// Scan all edges
-				int value;
-				for( T scanEdge : this ) {
-					value = scanEdge.boundLower() - yOffset;
-
-					if( value > height ) {
-						height = value;
-						maxY_DefiningEdge = scanEdge;
-					}
-				}
-			}
-		}
+	
+	private void recomputeBoundsCheckEdge( T e ) {
+		if( e.boundLeft() < minx )
+			minx = e.boundLeft();
+		if( e.boundRight() > maxx )
+			maxx = e.boundRight();
+		if( e.boundUpper() < miny )
+			miny = e.boundUpper();
+		if( e.boundLower() > maxy )
+			maxy = e.boundLower();
 	}
-
+	
+	private void recomputeBoundsUpdate() {
+		xOffset = minx;
+		yOffset = miny;
+		height = maxy-miny;
+		width = maxx-minx;
+		if( height < 0 )
+			throw new IllegalStateException( "Height < 0" );
+		if( width < 0 )
+			throw new IllegalStateException( "Width < 0" );
+	}
+	
 	public int[][] matrixMultiplication( int[][] m1, int[][] m2 ) {
 		int[][] m = new int[2][2];
 		m[0][0] = m1[0][0] * m2[0][0] + m1[0][1] * m2[1][0];
@@ -2281,8 +2008,7 @@ public class PlanPolygon<T extends Edge> implements Serializable, Iterable<T> {
 	}
 
 	public PlanPoint transformPlanPoint( PlanPoint p, int[][] m ) {
-		return new PlanPoint( m[0][0] * p.getXInt() + m[0][1] * p.getYInt(),
-						m[1][0] * p.getXInt() + m[1][1] * p.getYInt() );
+		return new PlanPoint( m[0][0] * p.getXInt() + m[0][1] * p.getYInt(), m[1][0] * p.getXInt() + m[1][1] * p.getYInt() );
 	}
 
 	public int[][] calculateTransformMatrix( PlanPoint p1, PlanPoint p2 ) {
@@ -2348,9 +2074,7 @@ public class PlanPolygon<T extends Edge> implements Serializable, Iterable<T> {
 	 * start and end edge point are moved to lay on a raster of 40x40cm.
 	 */
 	public void rasterize() {
-		boolean eAG_old = enableEventGeneration;
 		try {
-			enableEventGeneration = false;
 			ArrayList<T> alertDoors = new ArrayList<T>();
 
 			// Don't use for(T e: this) here - The edge replacements will screw up our iterator
@@ -2362,9 +2086,8 @@ public class PlanPolygon<T extends Edge> implements Serializable, Iterable<T> {
 					alertDoors.add( e );
 			}
 		} finally {
-			enableEventGeneration = eAG_old;
+
 		}
-//		throwChangeEvent( new ChangeEvent( this ) );
 	}
 
 	/**

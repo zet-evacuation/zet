@@ -473,8 +473,7 @@ public class Edge implements Serializable {
 	 * @throws IllegalStateException if the edge is part of a polygon with more than one
 	 * @param polygon the new polygon
 	 */
-	protected void setAssociatedPolygon( PlanPolygon polygon )
-					throws NullPointerException, IllegalArgumentException, IllegalStateException {
+	protected void setAssociatedPolygon( PlanPolygon polygon ) throws NullPointerException, IllegalArgumentException, IllegalStateException {
 		if( polygon == null )
 			throw new NullPointerException( ZLocalization.getSingleton().getString( "ds.z.PolygonIsNullException" ) );
 		if( polygon.fits( this ) ) {

@@ -108,7 +108,7 @@ public class RasterSquare {
 		else if( p.contains( square ) ) // Is inside
 			intersectType = FieldIntersectType.Inside;
 		else // Intersects only
-			intersectType = FieldIntersectType.Intersects;
+			intersectType = FieldIntersectType.Outside;
 	}
 
 	/**

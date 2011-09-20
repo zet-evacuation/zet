@@ -361,7 +361,8 @@ public class ZControl {
 
 			// Keep track of the areas that we move
 			PlanPolygon<?> currentPolygon = planPoint.getNextEdge() != null ? planPoint.getNextEdge().getAssociatedPolygon() : planPoint.getPreviousEdge() != null ? planPoint.getPreviousEdge().getAssociatedPolygon() : null;
-			currentPolygon.edgeChangeHandler( planPoint.getNextEdge(), planPoint );
+			//currentPolygon.edgeChangeHandler( planPoint.getNextEdge(), planPoint );
+			currentPolygon.recomputeBounds();
 
 			// At the moment disabled area handling...
 			// TODO reenable. not so important right now
