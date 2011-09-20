@@ -64,6 +64,7 @@ public class PrimsAlgo extends Algorithm<MinSpanningTreeProblem,MinSpanningTree>
         Random r = new Random();
 				long seed = r.nextLong();
 				seed = 5706550742198787144l; // this one creates a chain decomposition error in 3-storey 4-rooms.
+				//1364865666242639293
 				System.out.println( "Spanning Tree Seed: " + seed );
         r.setSeed( seed );
         int num = 0 + Math.abs(r.nextInt()) % numNodes;

@@ -195,6 +195,9 @@ public class Raster<T extends RasterSquare, P extends PlanPolygon> {
 		// Calculate Array width and height (TODO better calculation to avoid +1 in some cases)
 		//width = (int) Math.floor( p.getWidth() / raster ) + 1;
 		//height = (int) Math.floor( p.getHeight() / raster ) + 1;
+		
+		//p.recomputeBounds();
+		
 		width = (int) Math.ceil( p.getWidth() / raster );
 		height = (int) Math.ceil(p.getHeight() / raster) ;
 
@@ -219,6 +222,7 @@ public class Raster<T extends RasterSquare, P extends PlanPolygon> {
 					System.err.println("InvocationTargetException in Raster.java at creation of squares in rasterize().");
 				}
 				rasterSquares[i][j] = square;
+				
 				if( square.getIntersectType() != RasterSquare.FieldIntersectType.Outside ) {
 					insideSquares.add( square );
 				}

@@ -398,6 +398,14 @@ public class BuildingPlan implements Serializable, Iterable<Floor> , ZFormatObje
 	}
 
 	public String summary() {
+		// first: recompute bounds!
+		for( Floor f : floors ) {
+			for( Room r : f ) {
+				r.recomputeBounds();
+			}
+		}
+		
+		
 		return summaryBuilder().toString();
 	}
 }
