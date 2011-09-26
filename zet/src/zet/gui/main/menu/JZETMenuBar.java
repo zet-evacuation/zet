@@ -96,6 +96,9 @@ public class JZETMenuBar extends JMenuBar implements ActionListener, Localized {
         private JMenu mCreateClusterGraph;
         private JMenuItem mnuCreateClusterGraphGrid;
         private JMenuItem mnuCreateClusterGraphNonGrid;
+        private JMenu mCreateShortestPathGraph;
+        private JMenuItem mnuCreateShortestPathGraphGrid;
+        private JMenuItem mnuCreateShortestPathGraphNonGrid;
 	private JMenuItem mnuExecuteApplyAssignment;
 	private JMenu mSimulation;
 	private JMenuItem mnuSimulationQuickVisualization;;
@@ -224,6 +227,9 @@ public class JZETMenuBar extends JMenuBar implements ActionListener, Localized {
                 mCreateClusterGraph = Menu.addMenu(mCreateGraph, loc.getString("Execute.CreateGraph.ClusterGraph"));
                 mnuCreateClusterGraphNonGrid =  Menu.addMenuItem( mCreateClusterGraph, loc.getString( "Execute.CreateGraph.ClusterGraph.NonGrid" ), KeyEvent.VK_9, this, "ClusterNonGrid", InputEvent.CTRL_DOWN_MASK );    
                 mnuCreateClusterGraphGrid =  Menu.addMenuItem( mCreateClusterGraph, loc.getString( "Execute.CreateGraph.ClusterGraph.Grid" ), KeyEvent.VK_9, this, "ClusterGrid", InputEvent.CTRL_DOWN_MASK );    
+                mCreateShortestPathGraph = Menu.addMenu(mCreateGraph, loc.getString("Execute.CreateGraph.ShortestPathGraph"));
+                mnuCreateShortestPathGraphGrid = Menu.addMenuItem(mCreateShortestPathGraph, loc.getString( "Execute.CreateGraph.ShortestPathGraph.Grid" ), KeyEvent.VK_9, this, "ShortestPathGraphGrid", InputEvent.CTRL_DOWN_MASK);
+                mnuCreateShortestPathGraphNonGrid = Menu.addMenuItem(mCreateShortestPathGraph, loc.getString( "Execute.CreateGraph.ShortestPathGraph.NonGrid" ), KeyEvent.VK_9, this, "ShortestPathGraphNonGrid", InputEvent.CTRL_DOWN_MASK);
                 
 		mnuExecuteApplyAssignment = Menu.addMenuItem( mExecute, loc.getString( "Execute.ApplyConcreteAssignment" ), this, "applyConcreteAssignment" );
 		mSimulation = Menu.addMenu( mExecute, loc.getString( "Execute.Simulation" ) );
@@ -432,7 +438,11 @@ public class JZETMenuBar extends JMenuBar implements ActionListener, Localized {
                 else if (e.getActionCommand().equals("ClusterNonGrid"))
                        control.createGraph(GraphConverterAlgorithms.ClusterNonGrid);
                 else if (e.getActionCommand().equals("ClusterGrid"))
-                       control.createGraph(GraphConverterAlgorithms.ClusterGrid);        
+                       control.createGraph(GraphConverterAlgorithms.ClusterGrid); 
+                else if (e.getActionCommand().equals("ShortestPathGraphNonGrid"))
+                        control.createGraph(GraphConverterAlgorithms.ShortestPathGraphNonGrid);
+                else if (e.getActionCommand().equals("ShortestPathGraphGrid"))
+                        control.createGraph(GraphConverterAlgorithms.ShortestPathGraphGrid);
 		else if( e.getActionCommand().equals( "applyConcreteAssignment" ) ) {
 		} else if( e.getActionCommand().equals( "quickVisualization" ) ) {
 			control.performQuickVisualization();
@@ -583,7 +593,9 @@ public class JZETMenuBar extends JMenuBar implements ActionListener, Localized {
                 Menu.updateMenu(mCreateClusterGraph, loc.getString("Execute.CreateGraph.ClusterGraph"));
                 Menu.updateMenu(mnuCreateClusterGraphGrid, loc.getString("Execute.CreateGraph.ClusterGraph.Grid"));                
                 Menu.updateMenu(mnuCreateClusterGraphNonGrid, loc.getString("Execute.CreateGraph.ClusterGraph.NonGrid"));                  
-                
+                Menu.updateMenu(mCreateShortestPathGraph, loc.getString("Execute.CreateGraph.ClusterGraph"));
+                Menu.updateMenu(mnuCreateShortestPathGraphGrid, loc.getString("Execute.CreateGraph.ShortestPathGraph.Grid"));
+                Menu.updateMenu(mnuCreateShortestPathGraphNonGrid, loc.getString("Execute.CreateGraph.ShortestPathGraph.NonGrid"));
                 
                 //Menu.updateMenu( mCreateGraph, loc.getString( "Execute.Optimization.CreateGraph" ) );
 		Menu.updateMenu( mnuOptimizationEarliestArrivalTransshipment, loc.getString( "Execute.Optimization.AlgoEATransshipment" ) );

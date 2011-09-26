@@ -29,6 +29,7 @@ import java.util.Arrays;
 import java.util.LinkedList;
 import de.tu_berlin.math.coga.common.algorithm.Algorithm;
 import de.tu_berlin.math.coga.common.algorithm.AlgorithmStatusEvent;
+import ds.graph.Edge;
 
 /**
  *
@@ -59,10 +60,10 @@ public class SEAAPAlgorithm extends Algorithm<EarliestArrivalFlowProblem, FlowOv
             drn = new DynamicResidualNetwork(problem.getNetwork(), problem.getEdgeCapacities(), problem.getNodeCapacities(), problem.getTransitTimes(), problem.getSources(), problem.getSupplies(), problem.getTimeHorizon());
             paths = new LinkedList<EarliestArrivalAugmentingPath>();
             return new FlowOverTime(drn, paths);
-        }
-        flowUnitsSent = 0;
+        } 
+        flowUnitsSent = 0;        
         calculateShortestPathLengths();
-        drn = new DynamicResidualNetwork(problem.getNetwork(), problem.getEdgeCapacities(), problem.getNodeCapacities(), problem.getTransitTimes(), problem.getSources(), problem.getSupplies(), problem.getTimeHorizon());
+        drn = new DynamicResidualNetwork(problem.getNetwork(), problem.getEdgeCapacities(), problem.getNodeCapacities(), problem.getTransitTimes(), problem.getSources(), problem.getSupplies(), problem.getTimeHorizon()); 
         pathProblem = new EarliestArrivalAugmentingPathProblem(drn, drn.getSuperSource(), problem.getSink(), getNextDistance(0) + 1);
         pathAlgorithm.setProblem(pathProblem);
         calculateEarliestArrivalAugmentingPath();

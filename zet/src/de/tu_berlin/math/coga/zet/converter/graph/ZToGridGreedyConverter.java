@@ -92,8 +92,8 @@ public class ZToGridGreedyConverter extends ZToGridGraphConverter{
                     newgraph.addEdge(neu);
                     minspanmodel.setEdgeCapacity(neu, model.getEdgeCapacity(neu));
                     //minspanmodel.setEdgeCapacity(neu, 1);
-                    minspanmodel.setTransitTime(neu, 1);
-                    newmapping.setEdgeLevel(neu, Level.Lower);             
+                    minspanmodel.setTransitTime(neu, model.getTransitTime(neu));
+                    newmapping.setEdgeLevel(neu, mapping.getEdgeLevel(neu));                
                     minspanmodel.setExactTransitTime(neu, model.getExactTransitTime(neu));
                 }
                 

@@ -20,8 +20,10 @@ import de.tu_berlin.math.coga.zet.converter.graph.ZToGridSpanTreeConverter;
 import de.tu_berlin.math.coga.zet.converter.graph.ZToGridSteinerTreeConverter;
 import de.tu_berlin.math.coga.zet.converter.graph.ZToNonGridClusterConverter;
 import de.tu_berlin.math.coga.zet.converter.graph.ZToNonGridGraphConverter;
+import de.tu_berlin.math.coga.zet.converter.graph.ZToNonGridShortestPathGraphConverter;
 import de.tu_berlin.math.coga.zet.converter.graph.ZToNonGridSteinerTreeConverter;
 import de.tu_berlin.math.coga.zet.converter.graph.ZToSpanTreeConverter;
+import de.tu_berlin.math.coga.zet.converter.graph.ZtoGridShortestPathGraphConverter;
 
 /**
  * An enumeration of the different converter algorithms for graphs. They provide
@@ -29,7 +31,7 @@ import de.tu_berlin.math.coga.zet.converter.graph.ZToSpanTreeConverter;
  * @author Jan-Philipp Kappmeier
  */
 public enum GraphConverterAlgorithms {
-	GridGraph, NonGridGraph, MinSpanningTreeGrid, MinSpanningTreeNonGrid, GreedyTSpannerGrid, GreedyTSpannerNonGrid, DijkstraNonGrid, DijkstraGrid, SteinerTreeNonGrid, SteinerTreeGrid, ClusterGrid, ClusterNonGrid;
+	GridGraph, NonGridGraph, MinSpanningTreeGrid, MinSpanningTreeNonGrid, GreedyTSpannerGrid, GreedyTSpannerNonGrid, DijkstraNonGrid, DijkstraGrid, SteinerTreeNonGrid, SteinerTreeGrid, ClusterGrid, ClusterNonGrid, ShortestPathGraphNonGrid, ShortestPathGraphGrid;
 
 	public BaseZToGraphConverter converter() {
 		switch( this ) {
@@ -57,6 +59,10 @@ public enum GraphConverterAlgorithms {
                             return new ZToNonGridClusterConverter();
                         case ClusterGrid:
                             return new ZToGridClusterConverter();
+                        case ShortestPathGraphNonGrid:
+                            return new ZToNonGridShortestPathGraphConverter();
+                        case ShortestPathGraphGrid:
+                            return new ZtoGridShortestPathGraphConverter();
 			default:
 				throw new IllegalStateException( "Error! Unsupported Graph converter algorithm in enumeration: " + this.toString() );
 		}
