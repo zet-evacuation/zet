@@ -136,7 +136,7 @@ public class PushRelabelHighestLabelNeu extends PushRelabel {
 		do {
 			int nodeDistance = distanceLabels.get( v );	// current node distance. -1 is applicable distance
 
-			int i;	// for all outarcs
+			int i; // for all outarcs
 			for( i = current.get( v ); i < residualGraph.getLast( v ); ++i ) {
 				final Edge e = residualGraph.getEdge( i );
 				if( residualGraph.getResidualCapacity( e ) > 0 && distanceLabels.get( e.end() ) == nodeDistance - 1 && push( e ) == 0 )

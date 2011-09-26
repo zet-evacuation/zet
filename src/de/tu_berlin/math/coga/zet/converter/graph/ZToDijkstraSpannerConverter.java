@@ -103,8 +103,8 @@ public class ZToDijkstraSpannerConverter extends ZToNonGridGraphConverter{
                 {
                     newgraph.addEdge(create);
                     minspanmodel.setEdgeCapacity(create, model.getEdgeCapacity(create));
-                    minspanmodel.setTransitTime(create, 1);
-                    newmapping.setEdgeLevel(create, Level.Lower);             
+                    minspanmodel.setTransitTime(create, model.getTransitTime(create));
+                    newmapping.setEdgeLevel(create,mapping.getEdgeLevel(create) );             
                     minspanmodel.setExactTransitTime(create, model.getExactTransitTime(create));
                 }
                 

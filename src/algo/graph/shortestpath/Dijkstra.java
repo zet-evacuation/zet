@@ -19,6 +19,7 @@
  */
 package algo.graph.shortestpath;
 
+import ds.graph.DynamicNetwork;
 import ds.graph.GraphLocalization;
 import ds.graph.Edge;
 import ds.graph.Forest;
@@ -28,6 +29,10 @@ import ds.graph.IdentifiableObjectMapping;
 import ds.graph.MinHeap;
 import ds.graph.Network;
 import ds.graph.Node;
+import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
 
 /**
  *
@@ -102,7 +107,7 @@ public class Dijkstra {
     public Forest getShortestPathTree() {
         return new Forest(graph.nodes(), getLastEdges());
     }
-
+    
     public boolean isInitialized() {
         return graph != null && source != null;
     }

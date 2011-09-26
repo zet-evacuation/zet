@@ -123,8 +123,12 @@ public class ZToNonGridSteinerTreeConverter extends ZToNonGridGraphConverter{
                         }
                     }
                     }
-                    
                 }
+                
+                /*Network neu1 = minspanmodel.getNetwork();
+                int i = neu1.getNodeCapacity();
+                System.out.println("Kapazitaet: " + i);
+                neu1.setNodeCapacity(i- MinNodes.size());*/
                 
                //System.out.print("Number of hidden Nodes: " + numberhidden); 
                //dynnet.removeNodes(NonMinNodes);
@@ -134,8 +138,8 @@ public class ZToNonGridSteinerTreeConverter extends ZToNonGridGraphConverter{
                 {
                     newgraph.addEdge(neu);
                     minspanmodel.setEdgeCapacity(neu, model.getEdgeCapacity(neu));                   
-                    minspanmodel.setTransitTime(neu, 1);
-                    newmapping.setEdgeLevel(neu, Level.Lower);             
+                    minspanmodel.setTransitTime(neu, model.getTransitTime(neu));
+                    newmapping.setEdgeLevel(neu, mapping.getEdgeLevel(neu));                 
                     minspanmodel.setExactTransitTime(neu, model.getExactTransitTime(neu));
                 }
                    

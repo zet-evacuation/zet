@@ -54,6 +54,14 @@ public class EarliestArrivalAugmentingPathAlgorithm extends Algorithm<EarliestAr
     @Override
     protected EarliestArrivalAugmentingPath runAlgorithm(EarliestArrivalAugmentingPathProblem problem) {
         network = problem.getNetwork();
+        /*for (Node node: problem.getNetwork().nodes())
+        {
+            System.out.println("Knoten: " + node);
+        }
+        for (Edge edge: problem.getNetwork().edges())
+        {
+            System.out.println("Kante: " + edge);
+        }*/
         Node source = problem.getSource();
         Node sink = problem.getSink();
         int timeHorizon = problem.getTimeHorizon();
@@ -77,6 +85,7 @@ public class EarliestArrivalAugmentingPathAlgorithm extends Algorithm<EarliestAr
             setDepartureTime(node, 0, Integer.MAX_VALUE);
         }
         setPredecessorNode(source, 0, SOURCE);
+       // System.out.println("source: " + source);
         for (int time = 0; time < timeHorizon; time++) {
             setDepartureTime(source, time, time);
         }
@@ -84,14 +93,19 @@ public class EarliestArrivalAugmentingPathAlgorithm extends Algorithm<EarliestAr
         while (!candidates.isEmpty()) {
             Node node = candidates.poll();
             if (DEBUG) System.out.println("Processing node: " + node);
+ 
+            //System.out.println("Betrachteter Knoten: " + node);
             for (Edge edge : network.outgoingEdges(node)) {
+                
                 if (DEBUG) System.out.println(" Processing edge: " + edge);
                 int transitTime = transitTime(edge);
+                //System.out.println("Transitzeit fuer Kante: " + transitTime);
                 int lastTime = timeHorizon;
                 if (transitTime > 0) {
                     lastTime -= transitTime;
                 }
                 IntegerIntegerArrayMapping caps = network.capacities().get(edge);
+                //System.out.println("Kapazitaet: " + caps);
                 Node[] predStart = predecessorNodes.get(edge.start());
                 for (int time = getLabel(edge.start()); time < lastTime; time++) {
                     //System.out.println("1: " + time + " " + timeHorizon + " " + transitTime);
@@ -107,6 +121,7 @@ public class EarliestArrivalAugmentingPathAlgorithm extends Algorithm<EarliestAr
                     if (predEnd[time + transitTime] == null) {
                         if (getLabel(edge.end()) > time + transitTime) {
                             setLabel(edge.end(), time + transitTime);
+                           // System.out.println("Label " + getLabel(edge.end()) + "Knoten: " + edge.end()) ;
                         }
                         //setPredecessorNode(edge.end(), time + transitTime, edge.start());
                         predEnd[time + transitTime] = edge.start();
@@ -115,6 +130,7 @@ public class EarliestArrivalAugmentingPathAlgorithm extends Algorithm<EarliestAr
                         candidates.add(edge.end());
                         int newTime = time + transitTime + 1;
                         //while (newTime <= timeHorizon && waitCapacity(edge.end(), newTime - 1) > 0 && getPredecessorNode(edge.end(), newTime) == null) {
+                        //System.out.println("WaitCapacities: " + waitCapacity(edge.end(), newTime -1));
                         while (newTime < timeHorizon && waitCapacity(edge.end(), newTime - 1) > 0 && predEnd[newTime] == null) {
                             //setPredecessorNode(edge.end(), newTime, edge.end());
                             predEnd[newTime] = edge.end();
@@ -123,11 +139,13 @@ public class EarliestArrivalAugmentingPathAlgorithm extends Algorithm<EarliestAr
                             newTime++;
                         }
                         newTime = time + transitTime - 1;
+                        //System.out.println("Wait Cancelling Capacity: " + waitCancellingCapacity(edge.end(), newTime+1));
                         //while (newTime >= 0 && waitCancellingCapacity(edge.end(), newTime + 1) > 0 && getPredecessorNode(edge.end(), newTime) == null) {
                         while (newTime >= 0 && waitCancellingCapacity(edge.end(), newTime + 1) > 0 && predEnd[newTime] == null) {
                             if (DEBUG) System.out.println(String.format("    waitCancellingCapacity(%1$s,%2$s) = %3$s", edge.end(), newTime+1, waitCancellingCapacity(edge.end(), newTime + 1)));
                             if (getLabel(edge.end()) > newTime) {
                                 setLabel(edge.end(), newTime);
+                                //System.out.println("Neues Label: " + getLabel(edge.end()) + "Knoten: " + edge.end());
                             }
                             //setPredecessorNode(edge.end(), newTime, edge.end());
                             predEnd[newTime] = edge.end();
