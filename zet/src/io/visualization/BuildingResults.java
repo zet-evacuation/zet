@@ -23,7 +23,6 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
-
 import ds.z.PlanPoint;
 import ds.z.PlanPolygon.RelativePosition;
 import java.util.Vector;
@@ -116,7 +115,6 @@ public class BuildingResults implements VisualizationResult {
 	}
 
 	public static class Floor {
-
 		/** The id of the floor. Normally this is the floor number in the z-format.*/
 		private int id;
 		/** The name of the floor. */
@@ -174,7 +172,7 @@ public class BuildingResults implements VisualizationResult {
 		return Collections.unmodifiableCollection( floors.values() );
 	}
 
-	protected void addHeterogeneousEdgeList( Iterator<? extends ds.z.RoomEdge> edgeIt, ds.z.PlanPolygon room, Floor floor ) {
+	protected void addHeterogeneousEdgeList( Iterator<? extends ds.z.RoomEdge> edgeIt, ds.z.PlanPolygon<?> room, Floor floor ) {
 		Wall curWall = new Wall( floor );
 
 		if( edgeIt.hasNext() ) {
@@ -200,7 +198,7 @@ public class BuildingResults implements VisualizationResult {
 		addWall( curWall );
 	}
 
-	protected Wall addHomogeneousEdgeList( Iterator<? extends ds.z.Edge> edgeIt, ds.z.PlanPolygon room, Floor floor, Wall.ElementType type ) {
+	protected Wall addHomogeneousEdgeList( Iterator<? extends ds.z.Edge> edgeIt, ds.z.PlanPolygon<?> room, Floor floor, Wall.ElementType type ) {
 		Wall curWall = new Wall( floor );
 
 		if( edgeIt.hasNext() ) {
@@ -226,7 +224,7 @@ public class BuildingResults implements VisualizationResult {
 	 * @param room the room
 	 * @param curWall the wall
 	 */
-	private void checkOrientation( ds.z.Edge edge, ds.z.PlanPolygon room, Wall curWall ) {
+	private void checkOrientation( ds.z.Edge edge, ds.z.PlanPolygon<?> room, Wall curWall ) {
 		boolean isLeft = room.relativePolygonPosition( edge, RelativePosition.Left );
 		boolean isRight = room.relativePolygonPosition( edge, RelativePosition.Right );
 		if( isLeft != isRight ) {
