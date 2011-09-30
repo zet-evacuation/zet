@@ -66,6 +66,12 @@ public class GLWall extends AbstractDrawable<GLWall, GLWallControl> {
 	 */
 	@Override
 	public void performStaticDrawing( GL gl ) {
+		gl.glBegin( GL.GL_POLYGON );
+		VisualizationOptionManager.getCellFloorColor().draw( gl );
+		for( GLVector v : basePoints )
+			v.draw( gl );
+		gl.glEnd();
+
 		final double pi = Math.PI;
 
 		wallColor.draw( gl );

@@ -55,7 +55,7 @@ import zet.util.ConversionTools;
  */
 @XStreamAlias("planPolygon")
 @XMLConverter(PlanPolygonConverter.class)
-public class PlanPolygon<T extends Edge> implements Serializable, Iterable<T> {
+public class PlanPolygon<T extends Edge> implements Iterable<T> {
 	/**
 	 * Enumeration used by the relative position test. Specifies if a 
 	 * polygon is left or right from the border.
@@ -83,28 +83,18 @@ public class PlanPolygon<T extends Edge> implements Serializable, Iterable<T> {
 	/** The leftmost point coordinate of the polygon. */
 	@XStreamAsAttribute()
 	private int xOffset = 0;
-	/** The edge that has the minimum x value (xOffset). */
-//	private T minX_DefiningEdge;
 	/** The uppermost point coordinate of the polygon. */
 	@XStreamAsAttribute()
 	private int yOffset = 0;
-	/** The edge that has the minimum y value (yOffset). */
-//	private T minY_DefiningEdge;
 	/** The difference between the left- and rightmost point coordinate of the polygon. */
 	@XStreamAsAttribute()
 	private int width = 0;
-	/** The edge that has the maximum x value (xOffset + width). */
-//	private T maxX_DefiningEdge;
 	/** The difference between the upper- and lowermost point coordinate of the polygon. */
 	@XStreamAsAttribute()
 	private int height = 0;
-	/** The edge that has the maximum y value (yOffset + width). */
-//	private T maxY_DefiningEdge;
 	/** Determines if the polygon has been changed after a validity test. */
 	@XStreamAsAttribute()
 	private boolean changed = true;
-	
-
 	@XStreamOmitField
 	int minx = Integer.MAX_VALUE;
 	@XStreamOmitField
@@ -113,7 +103,6 @@ public class PlanPolygon<T extends Edge> implements Serializable, Iterable<T> {
 	int miny = Integer.MAX_VALUE;
 	@XStreamOmitField
 	int maxy = Integer.MIN_VALUE;
-
 	
 	/**
 	 * three transformation matrixes for flip vertically, horizontally and at the main

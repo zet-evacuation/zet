@@ -148,7 +148,7 @@ public class VisualizationOptionManager {
 	public static GLColor getCellWallColor() {
 		return new GLColor( Color.lightGray );
 	}
-
+	
 	/**
 	 * Sets the color that is used to display a color gradient for some cell status.
 	 * The low color is the color used if the value is zero.
