@@ -41,6 +41,7 @@ import opengl.helper.Frustum;
 import statistic.ca.CAStatistic;
 import batch.tasks.AlgorithmTask;
 import de.tu_berlin.math.coga.common.localization.DefaultLoc;
+import ds.CompareVisualizationResults;
 import gui.visualization.VisualizationOptionManager;
 import javax.media.opengl.GL;
 import javax.media.opengl.GLAutoDrawable;
@@ -76,6 +77,7 @@ public class GLControl implements DrawableControlable {
 		buildingControl.delete();
 		caControl.delete();
 		graphControl.delete();
+                compareControl.delete();
 	}
 
 	/**
@@ -138,12 +140,15 @@ public class GLControl implements DrawableControlable {
 	private boolean hasCellularAutomaton;
 	/** Indicates whether the currently loaded visualization result contains a graph, or not. */
 	private boolean hasGraph;
+        /**Indicates whether a comparison of the flowvalues for 2 different graphs is done*/
+        private boolean iscompared;       
 	/** Represents the static structure of the building, e.g. walls. */
 	private BuildingResults buildingResults;
 	/** Represents the statistic  */
 	private CAStatistic caStatistic;
 	private GLCellularAutomatonControl caControl;
 	private GLFlowGraphControl graphControl;
+        private CompareControl compareControl;
 	private GLBuildingControl buildingControl;
 	/** The estimated time used for the whole visualization in seconds. */
 	private double estimatedTime = 0;
@@ -164,6 +169,7 @@ public class GLControl implements DrawableControlable {
 		showGraph = false;
 		hasGraph = false;
 		showWalls = false;
+                iscompared = false;
 	}
 
 	/**
@@ -173,8 +179,9 @@ public class GLControl implements DrawableControlable {
 	 * @param graphVisResult the visual results for graph
 	 * @param buildingResults the visual information about the building
 	 * @param caStatistic the calculated statistic for cellular automaton
+         * @param compvisres the visual information to compare 2 different networks
 	 */
-	public GLControl( CAVisualizationResults caVisResults, GraphVisualizationResults graphVisResult, BuildingResults buildingResults, CAStatistic caStatistic ) {
+	public GLControl( CAVisualizationResults caVisResults, GraphVisualizationResults graphVisResult, BuildingResults buildingResults, CAStatistic caStatistic, CompareVisualizationResults compvisres  ) {
 		this.caStatistic = caStatistic;
 		this.buildingResults = buildingResults;
 		GLCellControl.invalidateMergedPotential();
@@ -202,6 +209,12 @@ public class GLControl implements DrawableControlable {
 			estimatedTime = Math.max( estimatedTime, graphControl.getStepCount() * graphControl.getSecondsPerStep() );
 		} else
 			hasGraph = false;
+                if (compvisres != null)
+                {
+                    iscompared = true;
+                    compareControl = new CompareControl(compvisres);
+                    compareControl.build(compvisres);
+                }
 		time = 0;
 		buildingControl = new GLBuildingControl( buildingResults );
 		buildingControl.setScaling( sizeMultiplicator );
@@ -260,6 +273,17 @@ public class GLControl implements DrawableControlable {
 			hasGraph = false;
 		}
 	}
+        
+        public void setCompControl(CompareVisualizationResults compVisresult)
+        {
+            compareControl = new CompareControl(compVisresult);
+            compareControl.build(compVisresult);
+            /*for (CompareControl comp: compareControl.getChildControls())
+            {
+                comp.getView().update();
+            }*/
+            
+        }
 
 
 	/**
@@ -579,6 +603,8 @@ public class GLControl implements DrawableControlable {
 			graphControl.draw( gl );
 		if( showWalls )
 			buildingControl.getView().draw( gl );
+                if (iscompared)
+                        compareControl.getView().draw(gl);
 	}
 
 	/** 

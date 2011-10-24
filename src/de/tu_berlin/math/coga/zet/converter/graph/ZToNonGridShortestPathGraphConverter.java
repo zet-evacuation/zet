@@ -87,12 +87,14 @@ public class ZToNonGridShortestPathGraphConverter extends ZToNonGridGraphConvert
                 costs = new HashMap<Edge,Double>(model.getGraph().numberOfEdges());
                 for (Edge edge: model.getGraph().edges())
                 {
-                    costs.put(edge, (double)model.getTransitTime(edge));
+                    costs.put(edge, (double)model.getTransitTime(edge));                   
                 }
                 DynamicNetwork net =  model.getDynamicNetwork();
                 DijkstraWithRationalDistances dijkstra = new DijkstraWithRationalDistances(net, costs, model.getSupersink());
                 dijkstra.run();
                 DynamicNetwork netw = dijkstra.getShortestPathGraph();
+                
+                System.out.println("Number of Original Edges: " + model.getGraph().numberOfEdges());
                 
                 for (Edge edge: netw.edges() )
                 {
@@ -120,7 +122,6 @@ public class ZToNonGridShortestPathGraphConverter extends ZToNonGridGraphConvert
                 
                 for (Edge create: solEdges)
                 {
-                    System.out.println("Kante: " + create);
                     newgraph.addEdge(create);
                     if (create.start() == Super || create.end() == Super)
                     {
@@ -157,7 +158,7 @@ public class ZToNonGridShortestPathGraphConverter extends ZToNonGridGraphConvert
                 //createReverseEdges( minspanmodel );
                 minspanmodel.setNetwork(newgraph);
                 minspanmodel.setNetwork( minspanmodel.getGraph().getAsStaticNetwork());
-                System.out.println("Number of Created Shortest Path Tree Edges: " + minspanmodel.getGraph().numberOfEdges());
+                System.out.println("Number of Created Shortest Path Graph Edges: " + minspanmodel.getGraph().numberOfEdges());
 		return minspanmodel;
                 
                 

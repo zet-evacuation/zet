@@ -20,6 +20,7 @@
 
 package batch.tasks;
 
+import ds.CompareVisualizationResults;
 import ds.GraphVisualizationResults;
 import gui.visualization.control.GLControl;
 import io.visualization.BuildingResults;
@@ -37,6 +38,7 @@ public class VisualizationDataStructureTask implements Runnable {
 	private BuildingResults buildingRes;
 	private GLControl control;
 	private CAStatistic caStatistic;
+        private CompareVisualizationResults compVisRes;
 
 	/**
 	 * Initializes the task with the needed objects.
@@ -61,8 +63,9 @@ public class VisualizationDataStructureTask implements Runnable {
 	/**
 	 * Creates the GLControl object
 	 */
+
 	public void run() {
-		control = new GLControl( caRes, graphRes, buildingRes, caStatistic );
+		control = new GLControl( caRes, graphRes, buildingRes, caStatistic, compVisRes );
 	}
 
 	/**

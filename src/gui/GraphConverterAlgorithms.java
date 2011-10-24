@@ -18,6 +18,7 @@ import de.tu_berlin.math.coga.zet.converter.graph.ZToGridGraphConverter;
 import de.tu_berlin.math.coga.zet.converter.graph.ZToGridGreedyConverter;
 import de.tu_berlin.math.coga.zet.converter.graph.ZToGridSpanTreeConverter;
 import de.tu_berlin.math.coga.zet.converter.graph.ZToGridSteinerTreeConverter;
+import de.tu_berlin.math.coga.zet.converter.graph.ZToNonGridAPSPGraphConverter;
 import de.tu_berlin.math.coga.zet.converter.graph.ZToNonGridClusterConverter;
 import de.tu_berlin.math.coga.zet.converter.graph.ZToNonGridGraphConverter;
 import de.tu_berlin.math.coga.zet.converter.graph.ZToNonGridShortestPathGraphConverter;
@@ -31,7 +32,7 @@ import de.tu_berlin.math.coga.zet.converter.graph.ZtoGridShortestPathGraphConver
  * @author Jan-Philipp Kappmeier
  */
 public enum GraphConverterAlgorithms {
-	GridGraph, NonGridGraph, MinSpanningTreeGrid, MinSpanningTreeNonGrid, GreedyTSpannerGrid, GreedyTSpannerNonGrid, DijkstraNonGrid, DijkstraGrid, SteinerTreeNonGrid, SteinerTreeGrid, ClusterGrid, ClusterNonGrid, ShortestPathGraphNonGrid, ShortestPathGraphGrid;
+	GridGraph, NonGridGraph, MinSpanningTreeGrid, MinSpanningTreeNonGrid, GreedyTSpannerGrid, GreedyTSpannerNonGrid, DijkstraNonGrid, DijkstraGrid, SteinerTreeNonGrid, SteinerTreeGrid, ClusterGrid, ClusterNonGrid, ShortestPathGraphNonGrid, ShortestPathGraphGrid, APSPGraphNonGrid;
 
 	public BaseZToGraphConverter converter() {
 		switch( this ) {
@@ -63,6 +64,8 @@ public enum GraphConverterAlgorithms {
                             return new ZToNonGridShortestPathGraphConverter();
                         case ShortestPathGraphGrid:
                             return new ZtoGridShortestPathGraphConverter();
+                        case APSPGraphNonGrid:
+                            return new ZToNonGridAPSPGraphConverter();
 			default:
 				throw new IllegalStateException( "Error! Unsupported Graph converter algorithm in enumeration: " + this.toString() );
 		}
