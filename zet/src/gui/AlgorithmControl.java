@@ -17,6 +17,7 @@ import de.tu_berlin.math.coga.zet.converter.cellularAutomaton.ZToCAMapping;
 import de.tu_berlin.math.coga.zet.converter.cellularAutomaton.ZToCARasterContainer;
 import de.tu_berlin.math.coga.zet.NetworkFlowModel;
 import de.tu_berlin.math.coga.zet.converter.graph.BaseZToGraphConverter;
+import ds.CompareVisualizationResults;
 import ds.GraphVisualizationResults;
 import ds.z.Project;
 import ds.PropertyContainer;
@@ -31,6 +32,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import tasks.CellularAutomatonTask;
 import tasks.CellularAutomatonTaskStepByStep;
+import tasks.CompareTask;
 import tasks.GraphAlgorithmTask;
 import tasks.SerialTask;
 import tasks.conversion.BuildingPlanConverter;
@@ -53,6 +55,7 @@ public class AlgorithmControl implements PropertyChangeListener {
 	private CAVisualizationResults caVisResults;
 	private NetworkFlowModel networkFlowModel;
 	private GraphVisualizationResults graphVisResults;
+        private CompareVisualizationResults compVisResults;
 	private final CellularAutomatonTask cat = new CellularAutomatonTask();
 	//private boolean createdValid = false;
 	private RuntimeException error;
@@ -332,8 +335,44 @@ public class AlgorithmControl implements PropertyChangeListener {
 			st.addPropertyChangeListener( propertyChangeListener );
 		st.execute();
 	}
+        
+        public void performOptimizationCompare(PropertyChangeListener propertyChangeListener) {
+            
+            final CompareTask ct = new CompareTask(GraphAlgorithm.SuccessiveEarliestArrivalAugmentingPathOptimizedCompare);
+            ct.setProblem(project);
+            
+            //values for original network
+            GraphConverterAlgorithms ConvOrig = GraphConverterAlgorithms.NonGridGraph; 
+            ct.setConvOriginal(ConvOrig.converter());
+            
+            //values for thin network
+            ct.setConvThinNet(last.converter());
+            ct.setThinNetwork(networkFlowModel);
+            
+            
+            final SerialTask st = new SerialTask( ct );
+            st.addPropertyChangeListener( new PropertyChangeListener() {
+
+			public void propertyChange( PropertyChangeEvent pce ) {
+				if( st.isDone() ) {
+					networkFlowModel = ct.getOriginal();
+					compVisResults = ct.getSolution();
+				}
+			}
+		});
+		if( propertyChangeListener != null )
+			st.addPropertyChangeListener( propertyChangeListener );
+                System.out.println("done");
+		st.execute();
+                System.out.println("done");
+        }
 
 	public GraphVisualizationResults getGraphVisResults() {
 		return graphVisResults;
 	}
+        
+        public CompareVisualizationResults getCompVisResults()
+        {
+            return compVisResults;
+        }
 }

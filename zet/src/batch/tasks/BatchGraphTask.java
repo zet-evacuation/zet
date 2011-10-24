@@ -106,7 +106,7 @@ public class BatchGraphTask implements Runnable {
 
         res.setFlow(gt.getSolution());
         res.setGraphVis(new GraphVisualizationResults(nfo, gt.getSolution()));
-
+        //res.setCompVis(new CompareVisualizationResults(gt.));
         // Forget the used batch result entry. This is necessary in case that the batch entries
         // are stored on disk. Then this reference will inhibit the deletion of the batch result entry
         res = null;

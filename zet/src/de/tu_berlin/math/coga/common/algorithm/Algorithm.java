@@ -153,8 +153,14 @@ public abstract class Algorithm<Problem, Solution> implements Runnable {
 	 * previous one.
 	 */
 	protected final void fireProgressEvent( double progress, String message ) {
+                
 		if( progress < this.progress )
-			throw new IllegalArgumentException( "The progress values must be monotonically increasing." );
+                {
+                    System.out.println("progress: " + progress);
+                System.out.println("this.progress: " + this.progress);
+                throw new IllegalArgumentException( "The progress values must be monotonically increasing." );
+                }
+			
 		this.progress = progress;
 		fireEvent( new AlgorithmDetailedProgressEvent( this, progress, message ) );
 	}

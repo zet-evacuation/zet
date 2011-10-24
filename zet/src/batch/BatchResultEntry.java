@@ -19,6 +19,7 @@ import com.thoughtworks.xstream.XStream;
 import ds.graph.flow.PathBasedFlowOverTime;
 import ds.GraphVisualizationResults;
 import de.tu_berlin.math.coga.zet.NetworkFlowModel;
+import ds.CompareVisualizationResults;
 import ds.ca.CellularAutomaton;
 import io.visualization.BuildingResults;
 import io.visualization.CAVisualizationResults;
@@ -55,6 +56,7 @@ public class BatchResultEntry {
 	protected MultipleCycleCAStatistic mccaStatistic;
 	protected CAVisualizationResults[] caVis;
 	protected GraphVisualizationResults graphVis;
+        protected CompareVisualizationResults compVisRes;
 	private double averageCAStepsPerSecond;
 	
 	/** The index of the CA cycle with the median evacuation time. */
@@ -76,6 +78,7 @@ public class BatchResultEntry {
 	public CAVisualizationResults[] getCaVis () { return caVis; }
 	public CAStatistic[] getCaStatistics() { return caStatistics; }
 	public GraphVisualizationResults getGraphVis () { return graphVis; }
+        public CompareVisualizationResults getCompRes() {return compVisRes; }
 
 	/** @return The index of the CA cycle with the median evacuation time. */
 	public int getMedianIndex () { return medianIndex; }
@@ -160,6 +163,11 @@ public class BatchResultEntry {
 	public void setGraphVis( GraphVisualizationResults graphVis ) {
 		this.graphVis = graphVis;
 	}
+        
+        public void setCompVis (CompareVisualizationResults VisRes)
+        {
+            this.compVisRes = VisRes;
+        }
 	
 	/* Saves BatchResultEntries in GZIPped XML format. */
 	public void save (File selectedFile) throws IOException {

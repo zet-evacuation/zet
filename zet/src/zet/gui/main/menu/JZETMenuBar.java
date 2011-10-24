@@ -99,6 +99,9 @@ public class JZETMenuBar extends JMenuBar implements ActionListener, Localized {
         private JMenu mCreateShortestPathGraph;
         private JMenuItem mnuCreateShortestPathGraphGrid;
         private JMenuItem mnuCreateShortestPathGraphNonGrid;
+        private JMenu mCreateAPSPGraph;
+        private JMenuItem mnuCreateAPSPGraphNonGrid;
+        private JMenuItem mnuCreateAPSPGraphGrid; 
 	private JMenuItem mnuExecuteApplyAssignment;
 	private JMenu mSimulation;
 	private JMenuItem mnuSimulationQuickVisualization;;
@@ -109,6 +112,7 @@ public class JZETMenuBar extends JMenuBar implements ActionListener, Localized {
 	//private JMenuItem mnuExecutePauseSimulation;
 	private JMenu mOptimization;
 	private JMenuItem mnuOptimizationEarliestArrivalTransshipment;
+        private JMenuItem mnuOptimizationEATCompare;
 	//private JMenuItem mnuExecuteQuickestTransshipment;
 	//private JMenuItem mnuExecuteMaxFlowOverTimeMC;
 	//private JMenuItem mnuExecuteMaxFlowOverTimeTEN;
@@ -230,6 +234,9 @@ public class JZETMenuBar extends JMenuBar implements ActionListener, Localized {
                 mCreateShortestPathGraph = Menu.addMenu(mCreateGraph, loc.getString("Execute.CreateGraph.ShortestPathGraph"));
                 mnuCreateShortestPathGraphGrid = Menu.addMenuItem(mCreateShortestPathGraph, loc.getString( "Execute.CreateGraph.ShortestPathGraph.Grid" ), KeyEvent.VK_9, this, "ShortestPathGraphGrid", InputEvent.CTRL_DOWN_MASK);
                 mnuCreateShortestPathGraphNonGrid = Menu.addMenuItem(mCreateShortestPathGraph, loc.getString( "Execute.CreateGraph.ShortestPathGraph.NonGrid" ), KeyEvent.VK_9, this, "ShortestPathGraphNonGrid", InputEvent.CTRL_DOWN_MASK);
+                mCreateAPSPGraph = Menu.addMenu(mCreateGraph, loc.getString("Execute.CreateGraph.APSPGraph"));
+                mnuCreateAPSPGraphNonGrid = Menu.addMenuItem(mCreateAPSPGraph, loc.getString( "Execute.CreateGraph.APSPGraph.NonGrid" ), KeyEvent.VK_9, this, "APSPGraphNonGrid", InputEvent.CTRL_DOWN_MASK);
+                mnuCreateAPSPGraphGrid = Menu.addMenuItem(mCreateAPSPGraph, loc.getString( "Execute.CreateGraph.APSPGraph.Grid" ), KeyEvent.VK_9, this, "APSPGraphGrid", InputEvent.CTRL_DOWN_MASK);
                 
 		mnuExecuteApplyAssignment = Menu.addMenuItem( mExecute, loc.getString( "Execute.ApplyConcreteAssignment" ), this, "applyConcreteAssignment" );
 		mSimulation = Menu.addMenu( mExecute, loc.getString( "Execute.Simulation" ) );
@@ -240,6 +247,7 @@ public class JZETMenuBar extends JMenuBar implements ActionListener, Localized {
 
 		mOptimization = Menu.addMenu( mExecute, loc.getString( "Execute.Optimization" ) );
 		mnuOptimizationEarliestArrivalTransshipment = Menu.addMenuItem( mOptimization, loc.getString( "Execute.Optimization.AlgoEATransshipment" ), KeyEvent.VK_F8, this, "EAT", 0 );
+                mnuOptimizationEATCompare = Menu.addMenuItem( mOptimization, loc.getString( "Execute.Optimization.EATCompare" ), KeyEvent.VK_F9, this, "EATCompare", 0 );
 		//mnuExecuteQuickestTransshipment = Menu.addMenuItem( mOptimization, loc.getString( "Execute.Optimization.AlgoQuickestTransshipment" ), this, "QT" );
 		//mnuExecuteMaxFlowOverTimeMC = Menu.addMenuItem( mOptimization, loc.getString( "Execute.Optimization.AlgoMaxFlowOverTimeMinCost" ), this, "MFOTMC" );
 		//mnuExecuteMaxFlowOverTimeTEN = Menu.addMenuItem( mOptimization, loc.getString( "Execute.Optimization.AlgoMaxFlowOverTimeTEN" ), this, "MFOTTEN" );
@@ -443,6 +451,8 @@ public class JZETMenuBar extends JMenuBar implements ActionListener, Localized {
                         control.createGraph(GraphConverterAlgorithms.ShortestPathGraphNonGrid);
                 else if (e.getActionCommand().equals("ShortestPathGraphGrid"))
                         control.createGraph(GraphConverterAlgorithms.ShortestPathGraphGrid);
+                else if (e.getActionCommand().equals("APSPGraphNonGrid"))
+                        control.createGraph(GraphConverterAlgorithms.APSPGraphNonGrid);
 		else if( e.getActionCommand().equals( "applyConcreteAssignment" ) ) {
 		} else if( e.getActionCommand().equals( "quickVisualization" ) ) {
 			control.performQuickVisualization();
@@ -453,8 +463,10 @@ public class JZETMenuBar extends JMenuBar implements ActionListener, Localized {
 		} else if( e.getActionCommand().equals( "stepByStepSimulation" ) ) {
 			control.performOneStep();
 		} else if( e.getActionCommand().equals( "EAT" ) ) {
-			control.performOptimization();
-		} else if( e.getActionCommand().equals( "options" ) ) {
+			control.performOptimization();       
+		} else if (e.getActionCommand().equals("EATCompare")){
+                        control.performOptimizationCompare();
+                } else if( e.getActionCommand().equals( "options" ) ) {
 			control.showOptionsDialog();
 		} else if( e.getActionCommand().equals( "settings" ) ) {
 			control.showSettingsDialog();
@@ -599,7 +611,7 @@ public class JZETMenuBar extends JMenuBar implements ActionListener, Localized {
                 
                 //Menu.updateMenu( mCreateGraph, loc.getString( "Execute.Optimization.CreateGraph" ) );
 		Menu.updateMenu( mnuOptimizationEarliestArrivalTransshipment, loc.getString( "Execute.Optimization.AlgoEATransshipment" ) );
-
+                Menu.updateMenu(mnuOptimizationEATCompare, loc.getString("Execute.Optimization.EATCompare"));
 		// Extras menu
 		Menu.updateMenu( mLanguage, loc.getString( "Extras.Languages" ) );
 		Menu.updateMenu( mPlanImage, loc.getString( "Extras.PlanDisplaying" ) );

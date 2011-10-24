@@ -25,6 +25,7 @@ import de.tu_berlin.math.coga.common.algorithm.AlgorithmProgressEvent;
 import de.tu_berlin.math.coga.common.util.IOTools;
 import de.tu_berlin.math.coga.zet.DatFileReaderWriter;
 import de.tu_berlin.math.coga.zet.NetworkFlowModel;
+import ds.CompareVisualizationResults;
 import ds.GraphVisualizationResults;
 import ds.ProjectLoader;
 import ds.PropertyContainer;
@@ -1200,6 +1201,7 @@ public class GUIControl implements AlgorithmListener {
 				if( isDone( pce ) ) {
 					GraphVisualizationResults gvr = new GraphVisualizationResults( algorithmControl.getNetworkFlowModel() );
 					visualization.getControl().setGraphControl( gvr );
+                                        
 				}
 			}
 		}, algo);
@@ -1217,6 +1219,26 @@ public class GUIControl implements AlgorithmListener {
 			}
 		} );
 	}
+        
+        public void performOptimizationCompare() {
+                algorithmControl.performOptimizationCompare(new PropertyChangeListener(){
+                
+                @Override
+			public void propertyChange( PropertyChangeEvent pce ) {
+				if( isDone( pce ) ) {
+					GraphVisualizationResults gvr = algorithmControl.getGraphVisResults();
+                                        CompareVisualizationResults cvr = algorithmControl.getCompVisResults();
+					//visualization.getControl().setGraphControl( gvr );
+                                        visualization = editor.getVisualizationView().getGLContainer();
+                                        /*visualization.getControl().setCompControl(cvr);
+                                        visualization.repaint();*/
+                                        
+                                        
+				}
+			}
+            
+            });
+        }
 
 	boolean firstProgress = false;
 

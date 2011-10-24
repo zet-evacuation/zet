@@ -23,6 +23,7 @@ import batch.tasks.graph.MFOTMinCostTask;
 import batch.tasks.graph.MFOTimeExpandedTask;
 import batch.tasks.graph.QuickestTransshipmentTask;
 import batch.tasks.graph.SuccessiveEarliestArrivalAugmentingPathAlgorithm2Task;
+import batch.tasks.graph.SuccessiveEarliestArrivalAugmentingPathAlgorithmCompareTask;
 import batch.tasks.graph.SuccessiveEarliestArrivalAugmentingPathAlgorithmTask;
 import batch.tasks.graph.SuccessiveEarliestArrivalAugmentingPathAlgorithmTask3;
 import de.tu_berlin.math.coga.common.algorithm.Algorithm;
@@ -83,6 +84,12 @@ public enum GraphAlgorithm {
         public Algorithm<NetworkFlowModel, PathBasedFlowOverTime> createTask(NetworkFlowModel model, int timeHorizon) {
             return new SuccessiveEarliestArrivalAugmentingPathAlgorithmTask3();
         }
+    },
+    SuccessiveEarliestArrivalAugmentingPathOptimizedCompare(DefaultLoc.getSingleton().getString("gui.SEAAP")) {
+        public Algorithm<NetworkFlowModel, PathBasedFlowOverTime> createTask(NetworkFlowModel model, int timeHorizon) {
+             return new SuccessiveEarliestArrivalAugmentingPathAlgorithmCompareTask(timeHorizon);
+        }
+       
     },;
     private String name;
 
