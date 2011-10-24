@@ -54,17 +54,10 @@ public class EarliestArrivalAugmentingPathAlgorithm extends Algorithm<EarliestAr
     @Override
     protected EarliestArrivalAugmentingPath runAlgorithm(EarliestArrivalAugmentingPathProblem problem) {
         network = problem.getNetwork();
-        /*for (Node node: problem.getNetwork().nodes())
-        {
-            System.out.println("Knoten: " + node);
-        }
-        for (Edge edge: problem.getNetwork().edges())
-        {
-            System.out.println("Kante: " + edge);
-        }*/
         Node source = problem.getSource();
         Node sink = problem.getSink();
         int timeHorizon = problem.getTimeHorizon();
+        
         candidates = new LinkedList<Node>();
         labels = new IdentifiableIntegerMapping(network.nodes());
         departureTimes = new IdentifiableObjectMapping<Node, IntegerIntegerMapping>(network.nodes(), IntegerIntegerMapping.class);
@@ -96,10 +89,9 @@ public class EarliestArrivalAugmentingPathAlgorithm extends Algorithm<EarliestAr
  
             //System.out.println("Betrachteter Knoten: " + node);
             for (Edge edge : network.outgoingEdges(node)) {
-                
                 if (DEBUG) System.out.println(" Processing edge: " + edge);
                 int transitTime = transitTime(edge);
-                //System.out.println("Transitzeit fuer Kante: " + transitTime);
+                System.out.println("Transitzeit fuer Kante: " + transitTime);
                 int lastTime = timeHorizon;
                 if (transitTime > 0) {
                     lastTime -= transitTime;
@@ -111,7 +103,7 @@ public class EarliestArrivalAugmentingPathAlgorithm extends Algorithm<EarliestAr
                     //System.out.println("1: " + time + " " + timeHorizon + " " + transitTime);
                     //System.out.println("2: " + caps.get(time));
                     //System.out.println("3a: " + predStart.length);
-                    //System.out.println("3b: " + predStart[time]);
+                    //System.out.println("3b: " + predStart[time]);                    
                     if (caps.get(time) == 0 || predStart[time] == null) {
                         continue;
                     }
@@ -131,6 +123,7 @@ public class EarliestArrivalAugmentingPathAlgorithm extends Algorithm<EarliestAr
                         int newTime = time + transitTime + 1;
                         //while (newTime <= timeHorizon && waitCapacity(edge.end(), newTime - 1) > 0 && getPredecessorNode(edge.end(), newTime) == null) {
                         //System.out.println("WaitCapacities: " + waitCapacity(edge.end(), newTime -1));
+                        
                         while (newTime < timeHorizon && waitCapacity(edge.end(), newTime - 1) > 0 && predEnd[newTime] == null) {
                             //setPredecessorNode(edge.end(), newTime, edge.end());
                             predEnd[newTime] = edge.end();
