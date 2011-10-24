@@ -19,7 +19,6 @@
  */
 package algo.graph.shortestpath;
 
-import ds.graph.DynamicNetwork;
 import ds.graph.GraphLocalization;
 import ds.graph.Edge;
 import ds.graph.Forest;
@@ -29,11 +28,6 @@ import ds.graph.IdentifiableObjectMapping;
 import ds.graph.MinHeap;
 import ds.graph.Network;
 import ds.graph.Node;
-import java.util.HashMap;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
-
 /**
  *
  * @author Martin Groß
@@ -143,6 +137,7 @@ public class Dijkstra {
             } else {
                 incidentEdges = graph.incomingEdges(v);
             }
+            System.out.println("incident Edges: " + incidentEdges);
             for (Edge edge : incidentEdges) {
                 Node w = edge.opposite(v);
                 if (queue.contains(w) && (long) queue.priority(w) > (long) pv + (long) costs.get(edge)) {
