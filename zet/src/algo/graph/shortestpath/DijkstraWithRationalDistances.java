@@ -125,7 +125,8 @@ public class DijkstraWithRationalDistances {
             Node v = min.getObject();
             Double pv = min.getPriority();
             distances.put(v,pv);
-            List<Edge> incidentEdges = graph.outgoingEdges(v);
+            //List<Edge> incidentEdges = graph.outgoingEdges(v);
+            List<Edge> incidentEdges = graph.incomingEdges(v);
             for (Edge edge : incidentEdges) {
                 Node w = edge.opposite(v);
                 if (queue.contains(w) && queue.priority(w) > pv + costs.get(edge)) {
