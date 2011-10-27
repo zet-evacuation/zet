@@ -91,7 +91,6 @@ public class EarliestArrivalAugmentingPathAlgorithm extends Algorithm<EarliestAr
             for (Edge edge : network.outgoingEdges(node)) {
                 if (DEBUG) System.out.println(" Processing edge: " + edge);
                 int transitTime = transitTime(edge);
-                System.out.println("Transitzeit fuer Kante: " + transitTime);
                 int lastTime = timeHorizon;
                 if (transitTime > 0) {
                     lastTime -= transitTime;

@@ -62,7 +62,6 @@ public class SEAAPAlgorithm extends Algorithm<EarliestArrivalFlowProblem, FlowOv
             return new FlowOverTime(drn, paths);
         } 
         OriginTime = problem.getTimeHorizon();
-        System.out.println("Original TimeHorizon: " + OriginTime);
         flowUnitsSent = 0;        
         calculateShortestPathLengths();
         drn = new DynamicResidualNetwork(problem.getNetwork(), problem.getEdgeCapacities(), problem.getNodeCapacities(), problem.getTransitTimes(), problem.getSources(), problem.getSupplies(), problem.getTimeHorizon()); 
@@ -74,7 +73,6 @@ public class SEAAPAlgorithm extends Algorithm<EarliestArrivalFlowProblem, FlowOv
         {    
             pathProblem = new EarliestArrivalAugmentingPathProblem(drn, drn.getSuperSource(), problem.getSink(), getNextDistance(0) + 1);
         }
-        System.out.println("TimeHorizon nach Neusetzung: " + pathProblem.getTimeHorizon());
         pathAlgorithm.setProblem(pathProblem);
         calculateEarliestArrivalAugmentingPath();
         paths = new LinkedList<EarliestArrivalAugmentingPath>();
@@ -106,20 +104,18 @@ public class SEAAPAlgorithm extends Algorithm<EarliestArrivalFlowProblem, FlowOv
         while (!pathFound) {
             pathAlgorithm.run();
             path = pathAlgorithm.getSolution();
-            System.out.println("Path: " + path);
-            System.out.println("arrival Time: " + path.getArrivalTime());
-            System.out.println("Capacity: " + path.getCapacity());
+            //System.out.println("Path: " + path);
+            //System.out.println("arrival Time: " + path.getArrivalTime());
+            //System.out.println("Capacity: " + path.getCapacity());
             if (path.isEmpty() || path.getCapacity() == 0) {
                 if (getNextDistance(arrivalTime) + 1 > OriginTime)
                 {
                    path = new EarliestArrivalAugmentingPath();
-                   System.out.println("0");
                    return; 
                 }
                 else
                 {
                     pathProblem.setTimeHorizon(getNextDistance(arrivalTime) + 1);
-                    System.out.println("1");
                 }
             } else {
                 pathFound = true;
@@ -127,15 +123,15 @@ public class SEAAPAlgorithm extends Algorithm<EarliestArrivalFlowProblem, FlowOv
         }
         if (!path.isEmpty() && path.getCapacity() > 0) {
              arrivalTime = path.getArrivalTime();
-             System.out.println("2");
+             //System.out.println("2");
         }
         if (path.getArrivalTime() == pathProblem.getTimeHorizon() - 1) {           
             pathProblem.setTimeHorizon(pathProblem.getTimeHorizon() + 1);
-             System.out.println("3");
+             //System.out.println("3");
             if (pathProblem.getTimeHorizon() > OriginTime)
             {
                 path = new EarliestArrivalAugmentingPath();
-                 System.out.println("4");
+                 //System.out.println("4");
                 return;
             }
            
@@ -148,14 +144,9 @@ public class SEAAPAlgorithm extends Algorithm<EarliestArrivalFlowProblem, FlowOv
         Dijkstra dijkstra = new Dijkstra(getProblem().getNetwork(), getProblem().getTransitTimes(), getProblem().getSink(), true);
         dijkstra.run();
         for (Node source : getProblem().getSources()) {
-            System.out.println("source: " + source);
             distances[index++] = dijkstra.getDistance(source);
         }
         Arrays.sort(distances);
-        for (int i=0; i< distances.length; i++)
-        {
-            System.out.println("Distanzen: " + distances[i]);
-        }
     }
 
     public int getCurrentArrivalTime() {
