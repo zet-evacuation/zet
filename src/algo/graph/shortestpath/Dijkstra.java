@@ -137,7 +137,7 @@ public class Dijkstra {
             } else {
                 incidentEdges = graph.incomingEdges(v);
             }
-            System.out.println("incident Edges: " + incidentEdges);
+            //System.out.println("incident Edges: " + incidentEdges);
             for (Edge edge : incidentEdges) {
                 Node w = edge.opposite(v);
                 if (queue.contains(w) && (long) queue.priority(w) > (long) pv + (long) costs.get(edge)) {
