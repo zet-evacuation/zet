@@ -7,8 +7,7 @@ package algo.graph.shortestpath;
 
 import de.tu_berlin.math.coga.zet.NetworkFlowModel;
 import ds.graph.Edge;
-import ds.graph.IdentifiableCollection;
-import java.lang.Math;
+
  /*
  * @author schwengf
  */
@@ -25,6 +24,7 @@ public class APSPAlgo {
   int[][] P_k;
   int[][][] C;
   int[][] Delta;
+  int[][] distance;
   
   
   public APSPAlgo(NetworkFlowModel model)
@@ -44,15 +44,25 @@ public class APSPAlgo {
     
   public void Step_one()
   {
-    l = (int) Math.ceil(Math.log(numNodes)); 
-    System.out.println("aNZAHL kNOTEN: " + l);
-    double m = Math.log(maxdist);
+    l = (int) Math.ceil(Math.log(numNodes)/Math.log(2)); 
+    System.out.println("l: " + l);
+    for (int k=0; k< Integer.MAX_VALUE; k++)
+    {
+        if (Math.pow(2,k) > maxdist)
+        {
+            maxdist = (int)Math.pow(2,k);
+            break;
+        }
+    } 
+    int m = (int) (Math.log(maxdist)/Math.log(2));
+    System.out.println("m: " + m);
+    System.out.println("Maxdist: " + maxdist);
     weight = new int[numNodes][numNodes]; // matrix D
     for (Edge edge: model.getGraph().edges())
     {
         weight[edge.start().id()][edge.end().id()] = model.getTransitTime(edge);
         used[edge.start().id()][edge.end().id()] = 1;
-        System.out.println("Distance " + weight[edge.start().id()][edge.end().id()] + " " + edge.start() + "---" + edge.end());
+        //System.out.println("Distance " + weight[edge.start().id()][edge.end().id()] + " " + edge.start() + "---" + edge.end());
         weight[edge.end().id()][edge.start().id()] = model.getTransitTime(edge);
         used[edge.end().id()][edge.start().id()] = 1;
        
@@ -67,15 +77,31 @@ public class APSPAlgo {
             {
                 weight[i][j] = Integer.MAX_VALUE;
             }
-            System.out.println("dist " + weight[i][j] + " " + i + " " + j);
+            System.out.println("original weight " + weight[i][j] + " " + i + " " + j);
         }
     }
     
-    int [][] res = distance_product(weight, weight);
+    distance = weight; //saves original distancematrix D
     
     for (int k=1 ; k < m+2 ; k++)
     {
+        System.out.println("k-te Iteration: " + k);
+        int [][] res = distance_product(weight, weight);
+        for (int i=0; i< numNodes ; i++)
+        {
+            for (int j=0; j<numNodes ; j++)
+            {
+                System.out.println("i:" + i + " j:" + j + "Produkt: " + res[i][j]);
+            }
+        }
         weight = clip(res,0,2*maxdist);
+    }
+    for (int i=0; i< numNodes; i++)
+    {
+        for (int j=0 ; j< numNodes ; j++)
+        {
+            System.out.println("i:" + i + " j:" + j + "D ist " + weight[i][j] );
+        }
     }
     
     
@@ -103,7 +129,7 @@ public class APSPAlgo {
   
   public void Step_three()
   {
-     C = new int [numNodes][numNodes][l+1];
+     C = new int [l+1][numNodes][numNodes];
      int[][] Q_k = new int[numNodes][numNodes];
      Q_l = new int[numNodes][numNodes];
      P_k = new int[numNodes][numNodes];
@@ -111,7 +137,7 @@ public class APSPAlgo {
      {
          for (int j=0 ; j< numNodes ; j++)
          {
-             C[i][j][l] = -maxdist;
+             C[l][i][j] = -maxdist;
              Q_l[i][j] = Integer.MAX_VALUE;
          }
      }
@@ -120,9 +146,9 @@ public class APSPAlgo {
     
      
      for (int k=l-1; k > -1 ; k--)
-     {
-         int[][] first = intersect(clip(distance_product(P_l,A_k), -maxdist, maxdist), C[k+1]);
-         int[][] second = intersect_neg(clip(distance_product(Q_l,A_k),-maxdist,maxdist), C[k+1]);
+     {   
+         int[][] first = intersect(clip(distance_product(P_l,A_k), -maxdist, maxdist), C[k]);
+         int[][] second = intersect_neg(clip(distance_product(Q_l,A_k),-maxdist,maxdist), C[k]);
          C[k] = union(first, second);
          P_k = union(P_l,Q_l);
          Q_k = chop(C[k],1-maxdist,maxdist); 
@@ -131,10 +157,10 @@ public class APSPAlgo {
      }
     
   }
-  
+    
   public void Step_four()
   {
-     int[][][] B_k = new int [numNodes][numNodes][l];
+     int[][][] B_k = new int [l+1][numNodes][numNodes];
 
      int[][] R = new int[numNodes][numNodes];
      Delta = new int[numNodes][numNodes];
@@ -150,9 +176,9 @@ public class APSPAlgo {
              R[i][j] = P_k[i][j] % maxdist;
              
              int sum = 0;
-             for (int k=0; k< numNodes; k++)
+             for (int k=0; k< l; k++)
              {
-                 sum += B_k[i][j][k]*(int)Math.pow(2.0, (double) k);
+                 sum += B_k[k][i][j]*(int)Math.pow(2.0, (double) k);
              }
              Delta[i][j] = sum*maxdist + R[i][j];
          }
@@ -163,6 +189,7 @@ public class APSPAlgo {
   public int [][] distance_product(int[][] a, int[][] b)
   {     
       int[][] result = new int[a.length][a.length];
+      int sum;
       for (int i=0 ; i< a.length ; i++)
       {
           for (int j=0; j< a.length; j++)
@@ -170,10 +197,27 @@ public class APSPAlgo {
               int Min = Integer.MAX_VALUE;
               for (int k=0 ; k < a.length ; k++)
               {
-                  if (a[i][k] + b[k][j] < Min)
+                  if (a[i][k] + b[k][j] == -2)
                   {
-                      result[i][j] = a[i][k] + b[k][j];  
+                      sum = Integer.MAX_VALUE;
+                  }
+                  else if (a[i][k] == Integer.MAX_VALUE || b[k][j] == Integer.MAX_VALUE)
+                  {
+                      sum = Integer.MAX_VALUE;
+                  }
+                  else
+                  {
+                      sum = a[i][k] + b[k][j];
+                  }
+                  if (sum < Min)
+                  {
+                      result[i][j] = a[i][k] + b[k][j]; 
+                      //System.out.println("i:" + i + " j:" + j + " k:" + k + "a_i_k" + a[i][k] + "b_i_k" + b[k][j] + "result" + result[i][j]);
                       Min = result[i][j];
+                  }
+                  else
+                  {
+                      result[i][j] = Integer.MAX_VALUE;
                   }
               }
           }
@@ -228,7 +272,6 @@ public class APSPAlgo {
   
   public int[][] intersect(int[][] A, int[][] B)
   {
-      //System.out.println("A lenght: " + A.length);
       int [][] result = new int[A.length][A.length];
       for (int i=0 ; i< A.length ; i++)
       {
@@ -236,6 +279,7 @@ public class APSPAlgo {
           {
               if (B[i][j] < 0)
               {
+                  
                   result[i][j] = A[i][j];
               }
               else
@@ -251,6 +295,7 @@ public class APSPAlgo {
   public int [][] intersect_neg(int[][] A, int [][] B)
   {
       int [][] result = new int[A.length][A.length];
+      
       for (int i=0 ; i< A.length ; i++)
       {
           for (int j=0 ; j< A.length ; j++)
@@ -332,12 +377,92 @@ public class APSPAlgo {
       }
       return result;   
   }
+  
+   public int[][] Compute_Matrix_of_Witnesses()
+   {
+       int [][] Delta_new_1 = new int[numNodes][numNodes]; 
+       int [][] Delta_new_2 = new int[numNodes][numNodes];
+       int [][] Delta_new_3 = new int[numNodes][numNodes];
+       int [][] witnesses_1 = new int[numNodes][numNodes];
+       int [][] witnesses_2 = new int[numNodes][numNodes];
+       int [][] witnesses_3 = new int[numNodes][numNodes];
+       int [][] successors = new int[numNodes][numNodes];
+       
+       for (int i=0; i< numNodes ; i++)
+       {
+           for (int j=0; j< numNodes ; j++)
+           {
+               System.out.println("i:" + i + " j:" + j + "distance "+  Delta[i][j]);
+               if (Delta[i][j] % 3*maxdist >= 0 && Delta[i][j] % 3*maxdist < maxdist)
+               {
+                    Delta_new_1[i][j] = Delta[i][j] % 3*maxdist;
+               }
+               else
+               {
+                   Delta_new_1[i][j] = Integer.MAX_VALUE;
+               }
+               if (Delta[i][j] % 3*maxdist >= maxdist && Delta[i][j] % 3*maxdist <= 2*maxdist)
+               {
+                    Delta_new_2[i][j] = Delta[i][j] % 3*maxdist;
+               }
+               else
+               {
+                   Delta_new_2[i][j] = Integer.MAX_VALUE;
+               }
+               if (Delta[i][j] % 3*maxdist >= 2*maxdist && Delta[i][j] % 3*maxdist < 3*maxdist)
+               {
+                    Delta_new_3[i][j] = Delta[i][j] % 3*maxdist;
+               }
+               else
+               {
+                   Delta_new_3[i][j] = Integer.MAX_VALUE;
+               }
+           }
+       }
+       int [][] a_crime = new int[numNodes][numNodes];
+       int [][] b_crime_1 = new int[numNodes][numNodes];
+       int [][] b_crime_2 = new int[numNodes][numNodes];
+       int [][] b_crime_3 = new int[numNodes][numNodes];
+       
+       for (int i=0; i< numNodes ; i++)
+       {
+           for (int j=0; j< numNodes ; j++)
+           {
+               a_crime[i][j] = numNodes*distance[i][j] + j -1;
+               b_crime_1[i][j] = numNodes*Delta_new_1[j][i];
+               b_crime_2[i][j] = numNodes*Delta_new_2[j][i];
+               b_crime_3[i][j] = numNodes*Delta_new_3[j][i];
+           }
+       }
+       int [][] C_crime_1 = distance_product(a_crime,b_crime_1); 
+       int [][] C_crime_2 = distance_product(a_crime,b_crime_1);
+       int [][] C_crime_3 = distance_product(a_crime,b_crime_1);
+       
+       for (int i=0; i< numNodes ; i++)
+       {
+           for (int j=0; j< numNodes ; j++)
+           {
+               witnesses_1[i][j] = (C_crime_1[i][j] % numNodes) +1;
+               System.out.println("i:" + i + " j:" + j + "witness 1: " + witnesses_1[i][j] );
+               witnesses_2[i][j] = (C_crime_1[i][j] % numNodes) +1;
+               System.out.println("i:" + i + " j:" + j + "witness 2: " + witnesses_1[i][j] );
+               witnesses_3[i][j] = (C_crime_1[i][j] % numNodes) +1;
+               System.out.println("i:" + i + " j:" + j + "witness 3: " + witnesses_1[i][j] );
+               
+               //System.out.println("Succ: " );
+           }
+       }
+           
+       return successors;
+   }
+  
   public void run()
   {
       Step_one();
       Step_two();
       Step_three();
       Step_four();
+      Compute_Matrix_of_Witnesses();
       int[][] res = Delta;
   }
     
