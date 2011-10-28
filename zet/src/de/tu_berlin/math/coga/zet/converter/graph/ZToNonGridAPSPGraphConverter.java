@@ -51,6 +51,7 @@ public class ZToNonGridAPSPGraphConverter extends ZToNonGridGraphConverter{
 		createReverseEdges( model );
         	model.setNetwork( model.getGraph().getAsStaticNetwork() );
                 System.out.println("number of edges of original graph:" + model.getGraph().numberOfEdges());
+                System.out.println("Number of Nodes: " + model.getGraph().numberOfNodes());
                 // nodes are nodes of original network
                 minspanmodel.setNetwork(newgraph);
                 newgraph.setNodes(model.getGraph().nodes());
