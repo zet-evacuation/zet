@@ -18,7 +18,7 @@ public class APSPAlgo {
   int maxdist;
   int[][] weight; 
   int[][] used;
-  int [][] A_k; 
+  int [][][] A_k; 
   int l;
   int[][] Q_l;
   int[][] P_k;
@@ -39,6 +39,10 @@ public class APSPAlgo {
          {
              used[i][j] = 0;
          }
+     }
+     for (Edge edge: model.getGraph().edges())
+     {
+         System.out.println("Edge: " + edge + "Transitzeit: " + model.getTransitTime(edge));
      }
   }
     
@@ -77,7 +81,7 @@ public class APSPAlgo {
             {
                 weight[i][j] = Integer.MAX_VALUE;
             }
-            System.out.println("original weight " + weight[i][j] + " " + i + " " + j);
+            //System.out.println("original weight " + weight[i][j] + " " + i + " " + j);
         }
     }
     
@@ -85,46 +89,45 @@ public class APSPAlgo {
     
     for (int k=1 ; k < m+2 ; k++)
     {
-        System.out.println("k-te Iteration: " + k);
-        int [][] res = distance_product(weight, weight);
+        //System.out.println("k-te Iteration: " + k);
+        int [][] dist = distance_product(weight, weight);
+        //int [][] res = distance_product(weight, distance);
         for (int i=0; i< numNodes ; i++)
         {
-            for (int j=0; j<numNodes ; j++)
+            /*for (int j=0; j<numNodes ; j++)
             {
-                System.out.println("i:" + i + " j:" + j + "Produkt: " + res[i][j]);
-            }
+                System.out.println("i:" + i + " j:" + j + "Distance-Produkt: " + dist[i][j]);
+            }*/
         }
-        weight = clip(res,0,2*maxdist);
+        weight = clip(dist,0,2*maxdist);
     }
-    for (int i=0; i< numNodes; i++)
-    {
-        for (int j=0 ; j< numNodes ; j++)
-        {
-            System.out.println("i:" + i + " j:" + j + "D ist " + weight[i][j] );
-        }
-    }
-    
-    
+   
   }
   
   public void Step_two()
   {
-      int [][] A_0 = new int[numNodes][numNodes];
-      A_k = new int[numNodes][numNodes];
+      A_k = new int[l+1][numNodes][numNodes];
       
       for (int i=0 ; i< numNodes ; i++)
       {
           for (int j=0 ; j< numNodes ; j++)
           {
-              A_0[i][j] = weight[i][j] - maxdist;
+              A_k[0][i][j] = weight[i][j] - maxdist;
+              //System.out.println("i:" + i + " j:" + j + "A_0: " + A_0[i][j]);
           }
       }
-      A_k = distance_product(A_0, A_0);
       
       for (int k=1 ; k< l+1 ; k++)
       {
-          A_k = clip(A_k,-maxdist,maxdist);
+          A_k[k] = clip(distance_product(A_k[k-1],A_k[k-1]),-maxdist,maxdist);
       }
+      /*for (int i=0 ; i< numNodes ; i++)
+      {
+              for (int j=0 ; j< numNodes ; j++)
+              {
+                  System.out.println("i:" + i + " j:" + j + "Matrix A: " + A_k[l][i][j]);
+              }
+      }*/
   }
   
   public void Step_three()
@@ -143,19 +146,34 @@ public class APSPAlgo {
      }
      int[][] P_l = new int[numNodes][numNodes];
      P_l = clip(weight, 0, maxdist);
+     /*for (int i=0; i<numNodes; i++)
+     {
+         for (int j=0 ; j<numNodes; j++)
+         {
+             System.out.println("P_l: " + P_l[i][j]);
+         }
+     }*/
     
      
      for (int k=l-1; k > -1 ; k--)
      {   
-         int[][] first = intersect(clip(distance_product(P_l,A_k), -maxdist, maxdist), C[k]);
-         int[][] second = intersect_neg(clip(distance_product(Q_l,A_k),-maxdist,maxdist), C[k]);
+          System.out.println("k-te Iteration: " + k);
+         int[][] first = intersect(clip(distance_product(P_l,A_k[k]), -maxdist, maxdist), C[k+1]);
+         int[][] second = intersect_neg(clip(distance_product(Q_l,A_k[k]),-maxdist,maxdist), C[k+1]);
          C[k] = union(first, second);
          P_k = union(P_l,Q_l);
          Q_k = chop(C[k],1-maxdist,maxdist); 
+         for (int i=0 ; i< numNodes ; i++)
+         {
+            for (int j=0 ; j<numNodes ; j++)
+            {
+                System.out.println("i:" + i + " j: " + j + "Q_k: " + C[k][i][j]);
+            }
+         }    
          Q_l = Q_k;
          P_l = P_k;
      }
-    
+         
   }
     
   public void Step_four()
@@ -189,7 +207,7 @@ public class APSPAlgo {
   public int [][] distance_product(int[][] a, int[][] b)
   {     
       int[][] result = new int[a.length][a.length];
-      int sum;
+      int sum =0 ;
       for (int i=0 ; i< a.length ; i++)
       {
           for (int j=0; j< a.length; j++)
@@ -211,17 +229,17 @@ public class APSPAlgo {
                   }
                   if (sum < Min)
                   {
-                      result[i][j] = a[i][k] + b[k][j]; 
+                      //result[i][j] = a[i][k] + b[k][j]; 
+                      //result[i][j] = sum;
                       //System.out.println("i:" + i + " j:" + j + " k:" + k + "a_i_k" + a[i][k] + "b_i_k" + b[k][j] + "result" + result[i][j]);
-                      Min = result[i][j];
+                      Min = sum;
                   }
-                  else
-                  {
-                      result[i][j] = Integer.MAX_VALUE;
-                  }
+                  
               }
+              result[i][j] = Min;
           }
       }
+ 
       return result;
   }
   
