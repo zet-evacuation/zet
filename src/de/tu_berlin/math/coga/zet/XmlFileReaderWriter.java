@@ -5,13 +5,26 @@
 package de.tu_berlin.math.coga.zet;
 
 import algo.graph.dynamicflow.eat.EarliestArrivalFlowProblem;
+import algo.graph.staticflow.mincost.SuccessiveShortestPath;
 import de.tu_berlin.math.coga.graph.io.xml.GraphView;
 import java.io.IOException;
 import de.tu_berlin.math.coga.graph.io.xml.XMLReader;
 import de.tu_berlin.math.coga.graph.io.xml.XMLWriter;
-import ds.graph.DynamicNetwork;
+import de.tu_berlin.math.coga.zet.converter.graph.GraphAssignmentConverter;
+import ds.PropertyContainer;
+import ds.graph.Edge;
 import ds.graph.Network;
 import ds.graph.Node;
+import ds.graph.TimeExpandedNetwork;
+import ds.graph.problem.MinimumCostFlowProblem;
+import ds.z.ConcreteAssignment;
+import ds.z.Project;
+import ds.z.ZControl;
+import gui.AlgorithmControl;
+import gui.GraphConverterAlgorithms;
+import gui.ZETMain;
+import gui.editor.properties.PropertyLoadException;
+import java.io.File;
 import java.util.ArrayList;
 
 
@@ -25,24 +38,113 @@ public class XmlFileReaderWriter {
 		//XMLReader reader = new XMLReader( "./testinstanz/test.xml" );
 		//FlowVisualization fv = (FlowVisualization)reader.readFlowVisualization();
 
-		XMLReader reader = new XMLReader( "./testinstanz/test_graph.xml" );
-		Network n = reader.readGraph();
+		//XMLReader reader = new XMLReader( "./testinstanz/test_graph.xml" );
+		System.out.println( "Loading a network." );
+		//XMLReader reader = new XMLReader( "./testinstanz/small_graph.xml" );
+		XMLReader reader = new XMLReader( "./testinstanz/2 rooms demo.xml" );
+		Network n = reader.readGraph();		
 		System.out.println( n.toString() );
+		
+		
+		System.out.println( "Kantenkapazitäten: " + reader.getXmlData().getEdgeCapacities().toString() );
+		System.out.println( "Kantentransitzeiten: " + reader.getXmlData().getTransitTimes().toString() );
+		System.out.println( "Knotenbalances: " + reader.getXmlData().getSupplies().toString() );
+		
+		System.out.println( "Integral:" );
+		System.out.println( "Kantenkapazitäten: " + reader.getXmlData().getEdgeCapacitiesIntegral().toString() );
+		System.out.println( "Kantentransitzeiten: " + reader.getXmlData().getTransitTimesIntegral().toString() );
+		System.out.println( "Knotenbalances: " + reader.getXmlData().getSuppliesIntegral().toString() );
 
+		
+		MinimumCostFlowProblem mcf = new MinimumCostFlowProblem( n, reader.getXmlData().getEdgeCapacitiesIntegral(), reader.getXmlData().getTransitTimesIntegral(), reader.getXmlData().getSuppliesIntegral() );
+    SuccessiveShortestPath algo = new SuccessiveShortestPath(n, mcf.getBalances(), mcf.getCapacities(), mcf.getCosts());
+    algo.run();
+		if( algo.getFlow() != null ) {
+			int costs = 0;
+			for( Edge e : n.edges() ) {
+				costs += algo.getFlow().get( e ) * mcf.getCosts().get( e );
+			}
+			System.out.println( "Flow exists with value " + costs );
+		}
+    System.out.println(algo.getFlow());
 
-		DynamicNetwork dn = new DynamicNetwork( n );
-		System.out.println( dn.toString() );
+		System.out.println( "Time Expansion" );
 
+		TimeExpandedNetwork teg = new TimeExpandedNetwork(n, mcf.getCapacities(), mcf.getCosts(), 27, mcf.getBalances(), true);
+    SuccessiveShortestPath algoTEG = new SuccessiveShortestPath(teg, teg.supplies(), teg.capacities(), teg.costs());
+    algoTEG.run();
+		if( algoTEG.getFlow() != null ) {
+			int costs = 0;
+			for( Edge e : teg.edges() ) {
+				costs += algoTEG.getFlow().get( e ) * teg.costs().get( e );
+			}
+			System.out.println( "Flow exists with value " + costs );
+		}
+    //System.out.println(algoTEG.getFlow());
+
+		//System.out.println( mcf.toString() );
+		//System.out.println( "Creating dynamic network." );
+		//DynamicNetwork dn = new DynamicNetwork( n );
+		//System.out.println( dn.toString() );
+
+		
+		// now try to write it out
+		XMLWriter writer = new XMLWriter( "./testinstanz/small_graph_out.xml" );
+		writer.writeGraph( n, mcf.getCapacities(), mcf.getCosts(), mcf.getBalances() );
+		
+		
+		
 		if( true )
 			return;
+		
+		
+		// now, try to load a project and write it
 
+		// loading properties
+		File propertyFile = new File( "./properties/properties.xml" );
+		try {
+			PropertyContainer.getInstance().applyParameters( propertyFile );
+		} catch( PropertyLoadException ex ) {
+			ZETMain.exit( ex.getMessage() );
+		}
+		
+		
+		Project p;
+		ZControl z = new ZControl();
+		z.loadProject( "/homes/combi/kappmeie/Dateien/Programme/zet/examples/easy/" + "2 rooms demo.zet" );
+		p = z.getProject();
+		
+		AlgorithmControl a = new AlgorithmControl( p );
+		a.convertBuildingPlan();
+		a.convertGraph( null, GraphConverterAlgorithms.NonGridGraph );
+		System.out.println( "Graph converted" );
+		
+		System.out.println( a.getNetworkFlowModel().toString() );
+		
+		NetworkFlowModel nfm = a.getNetworkFlowModel();
+		
+
+		ConcreteAssignment concreteAssignment = p.getCurrentAssignment().createConcreteAssignment( 400 );
+		
+		GraphAssignmentConverter cav = new GraphAssignmentConverter( nfm );
+		
+		cav.setProblem( concreteAssignment );
+		cav.run();
+		nfm = cav.getSolution();		
+		
+		
+		writer = new XMLWriter( "./testinstanz/2 rooms demo.xml" );
+		writer.writeGraph( nfm.getNetwork(), nfm.edgeCapacities, nfm.transitTimes, nfm.currentAssignment );
+		
+		if( true )
+			return;
 
 		reader = new XMLReader( "./testinstanz/test.xml" );
 		EarliestArrivalFlowProblem eafp = reader.readFlowInstance();
 
 		System.out.println( "Schreibe nun die Ausgabe..." );
 		// Write
-		XMLWriter writer = new XMLWriter( "./testinstanz/output.xml" );
+		writer = new XMLWriter( "./testinstanz/output.xml" );
 		final ArrayList<Node> sinks = new ArrayList<Node>(1);
 		sinks.add( eafp.getSink() );
 

@@ -7,6 +7,9 @@ package de.tu_berlin.math.coga.graph.io.xml;
 import algo.graph.dynamicflow.eat.EarliestArrivalFlowProblem;
 import com.thoughtworks.xstream.XStream;
 //import fv.gui.view.FlowVisualisation;
+import ds.graph.Edge;
+import ds.graph.IdentifiableDoubleMapping;
+import ds.graph.IdentifiableIntegerMapping;
 import ds.graph.Network;
 import ds.graph.Node;
 import java.io.BufferedWriter;
@@ -46,6 +49,31 @@ public class XMLWriter {
 	public void writeGraph( Network graph ) throws IOException {
 		BufferedWriter writer = null;
 		xmlData.network = graph;
+		try {
+			writer = new BufferedWriter( new FileWriter( file ) );
+			xstream.alias( "graph", Network.class );
+			xstream.setMode( XStream.NO_REFERENCES );
+			//xstream.alias("flowVisualisation",FlowVisualisation.class);
+			xstream.registerConverter( new ColorConverter() );
+			xstream.registerConverter( new FontConverter() );
+			//xstream.registerConverter( new GraphViewConverter( xmlData ) );
+			xstream.registerConverter( new GraphConverter( xmlData ) );
+			//xstream.registerConverter(new NodeShapeConverter());
+			xstream.toXML( graph, writer );
+		} finally {
+			if( writer != null ) {
+				writer.flush();
+				writer.close();
+			}
+		}
+	}
+
+		public void writeGraph( Network graph, IdentifiableIntegerMapping<Edge> edgeCapacities, IdentifiableIntegerMapping<Edge> edgeCosts, IdentifiableIntegerMapping<Node> nodeSupplies ) throws IOException {
+		BufferedWriter writer = null;
+		xmlData.network = graph;
+		xmlData.edgeCapacitiesIntegral = edgeCapacities;
+		xmlData.transitTimesIntegral = edgeCosts;
+		xmlData.suppliesIntegral = nodeSupplies;
 		try {
 			writer = new BufferedWriter( new FileWriter( file ) );
 			xstream.alias( "graph", Network.class );
