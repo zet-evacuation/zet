@@ -142,7 +142,4 @@ public class XMLData {
 	public GraphView getGraphView() {
 		return graphView;
 	}
-
-	
-
 }
