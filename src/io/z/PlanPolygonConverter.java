@@ -46,6 +46,7 @@ public class PlanPolygonConverter extends ReflectionConverter {
 			created = doUnmarshal( created, reader, context );
 		} catch( com.thoughtworks.xstream.converters.ConversionException ex ) {
 			System.out.println( "Exception beim Speichern eines PlanPolygons!" );
+			ex.printStackTrace( System.err );
 		}
 		PlanPolygon<Edge> result = (PlanPolygon<Edge>) serializationMethodInvoker.callReadResolve( created );
 

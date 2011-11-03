@@ -168,15 +168,26 @@ public class DynamicResidualNetwork extends Network {
         Edge edge = getEdge(first.getNode(), second.getNode(), first.getEnd(), second.getStart());
         if (edge.id() >= 2 * originalNumberOfEdges) {
             residualEdgeCapacities.get(edge).decrease(first.getEnd(), amount);
+						if( residualEdgeCapacities.get( edge ).get( first.getEnd() ) < 0 ) {
+//							throw new IllegalArgumentException( "-1 exception" );
+						}
         } else {
             Edge reverseEdge = reverseEdge(edge);
             if (isReverseEdge(edge)) {
                 flow.get(reverseEdge).decrease(first.getEnd(), amount);
+								
+								
             } else {
                 flow.get(edge).increase(first.getEnd(), amount);
             }
             residualEdgeCapacities.get(edge).decrease(first.getEnd(), amount);
             residualEdgeCapacities.get(reverseEdge).increase(second.getStart(), amount);
+						if( residualEdgeCapacities.get( edge ).get( first.getEnd() ) < 0 ) {
+//							throw new IllegalArgumentException( "-1 exception" );
+						}
+						if( residualEdgeCapacities.get( reverseEdge ).get( second.getStart() ) < 0 ) {
+//							throw new IllegalArgumentException( "-1 exception" );
+						}
             /*
             if (!residualEdgeCapacities.get(reverseEdge).isZero()) {
                 setHidden(reverseEdge, false);
@@ -234,7 +245,7 @@ public class DynamicResidualNetwork extends Network {
     }
 
     public IdentifiableObjectMapping<Edge, IntegerIntegerArrayMapping> capacities() {
-        return residualEdgeCapacities;
+			return residualEdgeCapacities;
     }
 
     public IdentifiableIntegerMapping<Edge> transitTimes() {
