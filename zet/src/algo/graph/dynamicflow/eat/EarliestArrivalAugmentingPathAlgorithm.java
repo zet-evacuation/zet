@@ -118,6 +118,11 @@ public class EarliestArrivalAugmentingPathAlgorithm extends Algorithm<EarliestAr
                         predEnd[time + transitTime] = edge.start();
                         predecessorEdges.get(edge.end())[time + transitTime] = edge;
                         setDepartureTime(edge.end(), time + transitTime, time);
+												
+												if( capacity( edge, time ) ) <= 0 {
+											throw new IllegalStateException( "EXCEPTION wegen -1" );
+										}
+												
                         candidates.add(edge.end());
                         int newTime = time + transitTime + 1;
                         //while (newTime <= timeHorizon && waitCapacity(edge.end(), newTime - 1) > 0 && getPredecessorNode(edge.end(), newTime) == null) {

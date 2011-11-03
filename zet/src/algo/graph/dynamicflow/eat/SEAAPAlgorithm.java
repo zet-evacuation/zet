@@ -65,7 +65,7 @@ public class SEAAPAlgorithm extends Algorithm<EarliestArrivalFlowProblem, FlowOv
         flowUnitsSent = 0;        
         calculateShortestPathLengths();
         drn = new DynamicResidualNetwork(problem.getNetwork(), problem.getEdgeCapacities(), problem.getNodeCapacities(), problem.getTransitTimes(), problem.getSources(), problem.getSupplies(), problem.getTimeHorizon()); 
-        if (getNextDistance(0)+1 > OriginTime)
+        if (getNextDistance(0)+1 > OriginTime || true)
         {
             pathProblem = new EarliestArrivalAugmentingPathProblem(drn, drn.getSuperSource(), problem.getSink(), OriginTime);
         }

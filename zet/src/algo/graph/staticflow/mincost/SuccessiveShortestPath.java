@@ -211,7 +211,7 @@ public class SuccessiveShortestPath /*extends Algorithm<MinimumCostFlowProblem, 
         balances.set(teg.singleSink(), -10);
         SuccessiveShortestPath algo = new SuccessiveShortestPath(teg, balances, teg.capacities(), teg.costs());
         algo.run();
-        //System.out.println(algo.getFlow());
+        System.out.println(algo.getFlow());
         //System.out.println(algo.getPaths());
         for (Path path : algo.getPaths()) {
             //System.out.println(path.toString());
