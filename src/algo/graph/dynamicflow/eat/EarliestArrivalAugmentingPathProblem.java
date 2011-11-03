@@ -20,7 +20,7 @@
 
 package algo.graph.dynamicflow.eat;
 
-import ds.graph.DynamicResidualNetwork;
+import ds.graph.ImplicitTimeExpandedResidualNetwork;
 import ds.graph.Node;
 
 /**
@@ -29,23 +29,23 @@ import ds.graph.Node;
  */
 public class EarliestArrivalAugmentingPathProblem {
     
-    private DynamicResidualNetwork network;
+    private ImplicitTimeExpandedResidualNetwork network;
     private Node source;
     private Node sink;
     private int timeHorizon;
 
-    public EarliestArrivalAugmentingPathProblem(DynamicResidualNetwork network, Node source, Node sink, int timeHorizon) {
+    public EarliestArrivalAugmentingPathProblem(ImplicitTimeExpandedResidualNetwork network, Node source, Node sink, int timeHorizon) {
         this.network = network;
         this.source = source;
         this.sink = sink;
         this.timeHorizon = timeHorizon;
     }
 
-    public DynamicResidualNetwork getNetwork() {
+    public ImplicitTimeExpandedResidualNetwork getNetwork() {
         return network;
     }
 
-    public void setNetwork(DynamicResidualNetwork network) {
+    public void setNetwork(ImplicitTimeExpandedResidualNetwork network) {
         this.network = network;
     }
 

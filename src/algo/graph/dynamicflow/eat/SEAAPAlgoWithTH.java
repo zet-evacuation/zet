@@ -6,7 +6,7 @@ package algo.graph.dynamicflow.eat;
 
 import ds.graph.flow.EarliestArrivalAugmentingPath;
 import algo.graph.shortestpath.Dijkstra;
-import ds.graph.DynamicResidualNetwork;
+import ds.graph.ImplicitTimeExpandedResidualNetwork;
 import ds.graph.Node;
 import ds.graph.flow.FlowOverTime;
 import java.util.Arrays;
@@ -40,15 +40,15 @@ public class SEAAPAlgoWithTH extends Algorithm<EarliestArrivalFlowProblem, FlowO
     @Override
     protected FlowOverTime runAlgorithm(EarliestArrivalFlowProblem problem) {
         if (problem.getTotalSupplies() == 0) {
-            drn = new DynamicResidualNetwork(problem.getNetwork(), problem.getEdgeCapacities(), problem.getNodeCapacities(), problem.getTransitTimes(), problem.getSources(), problem.getSupplies(), problem.getTimeHorizon());
+            drn = new ImplicitTimeExpandedResidualNetwork(problem);
             paths = new LinkedList<EarliestArrivalAugmentingPath>();
             return new FlowOverTime(drn, paths);
         } 
         OriginTime = problem.getTimeHorizon();
         //System.out.println("TimeHorizon: " + OriginTime);
         flowUnitsSent = 0;        
-        drn = new DynamicResidualNetwork(problem.getNetwork(), problem.getEdgeCapacities(), problem.getNodeCapacities(), problem.getTransitTimes(), problem.getSources(), problem.getSupplies(), problem.getTimeHorizon());     
-        pathProblem = new EarliestArrivalAugmentingPathProblem(drn, drn.getSuperSource(), problem.getSink(), problem.getTimeHorizon());
+        drn = new ImplicitTimeExpandedResidualNetwork(problem);     
+        pathProblem = new EarliestArrivalAugmentingPathProblem(drn, drn.superSource(), problem.getSink(), problem.getTimeHorizon());
         pathAlgorithm.setProblem(pathProblem);
         calculateEarliestArrivalAugmentingPath();
         paths = new LinkedList<EarliestArrivalAugmentingPath>();
@@ -70,7 +70,7 @@ public class SEAAPAlgoWithTH extends Algorithm<EarliestArrivalFlowProblem, FlowO
         }
     }
     public LinkedList<EarliestArrivalAugmentingPath> paths;
-    public DynamicResidualNetwork drn;
+    public ImplicitTimeExpandedResidualNetwork drn;
 
     private void calculateEarliestArrivalAugmentingPath() {
         if (flowUnitsSent == getProblem().getTotalSupplies()) {

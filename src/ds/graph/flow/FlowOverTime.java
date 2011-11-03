@@ -21,7 +21,7 @@ package ds.graph.flow;
 
 import algo.graph.dynamicflow.ChainDecompositionProblem;
 import algo.graph.dynamicflow.NewChainDecomposition;
-import ds.graph.DynamicResidualNetwork;
+import ds.graph.ImplicitTimeExpandedResidualNetwork;
 import java.util.LinkedList;
 import java.util.Queue;
 
@@ -39,14 +39,14 @@ public class FlowOverTime {
     private int timeHorizon;
     private int totalCost;
 
-    public FlowOverTime(DynamicResidualNetwork network, Queue<EarliestArrivalAugmentingPath> eaaPaths) {
+    public FlowOverTime(ImplicitTimeExpandedResidualNetwork network, Queue<EarliestArrivalAugmentingPath> eaaPaths) {
         edgeBased = new EdgeBasedFlowOverTime(network.flow());
         pathBased = new PathBasedFlowOverTime();
         LinkedList<FlowOverTimeEdgeSequence> paths = new LinkedList<FlowOverTimeEdgeSequence>();
         int index = 0;
 				totalCost = 0;
         for (EarliestArrivalAugmentingPath eaaPath : eaaPaths) {
-            if (DEBUG ) System.out.println( (index++) + ":\n " + eaaPath + "\n " + eaaPath.getFlowOverTimeEdgeSequence(network).toText(network.transitTimes()));
+            if (DEBUG ) System.out.println( (index++) + ":\n " + eaaPath + "\n " + eaaPath.getFlowOverTimeEdgeSequence(network).toText(network.getProblem().getTransitTimes()));
             paths.add(eaaPath.getFlowOverTimeEdgeSequence(network));
             flowAmount += eaaPath.getCapacity();
             timeHorizon = Math.max(timeHorizon, eaaPath.getArrivalTime() + 1);
