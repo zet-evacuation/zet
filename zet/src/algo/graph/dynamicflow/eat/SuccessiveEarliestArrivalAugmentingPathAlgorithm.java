@@ -20,7 +20,7 @@
 package algo.graph.dynamicflow.eat;
 
 import ds.graph.flow.EarliestArrivalAugmentingPath;
-import ds.graph.DynamicResidualNetwork;
+import ds.graph.ImplicitTimeExpandedResidualNetwork;
 import ds.graph.Node;
 import ds.graph.flow.FlowOverTime;
 import java.util.LinkedList;
@@ -34,8 +34,8 @@ public class SuccessiveEarliestArrivalAugmentingPathAlgorithm extends Algorithm<
 
     @Override
     protected FlowOverTime runAlgorithm(EarliestArrivalFlowProblem problem) {
-        DynamicResidualNetwork drn = new DynamicResidualNetwork(problem.getNetwork(), problem.getEdgeCapacities(), problem.getNodeCapacities(), problem.getTransitTimes(), problem.getSources(), problem.getSupplies(), problem.getTimeHorizon());
-        EarliestArrivalAugmentingPathProblem pathProblem = new EarliestArrivalAugmentingPathProblem(drn, drn.getSuperSource(), problem.getSink(), problem.getTimeHorizon());
+        ImplicitTimeExpandedResidualNetwork drn = new ImplicitTimeExpandedResidualNetwork(problem);
+        EarliestArrivalAugmentingPathProblem pathProblem = new EarliestArrivalAugmentingPathProblem(drn, drn.superSource(), problem.getSink(), problem.getTimeHorizon());
         EarliestArrivalAugmentingPathAlgorithm pathAlgorithm = new EarliestArrivalAugmentingPathAlgorithm();
         pathAlgorithm.setProblem(pathProblem);
         pathAlgorithm.run();

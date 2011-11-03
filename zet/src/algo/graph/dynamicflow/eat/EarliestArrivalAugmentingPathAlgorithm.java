@@ -20,7 +20,7 @@
 package algo.graph.dynamicflow.eat;
 
 import ds.graph.flow.EarliestArrivalAugmentingPath;
-import ds.graph.DynamicResidualNetwork;
+import ds.graph.ImplicitTimeExpandedResidualNetwork;
 import ds.graph.Edge;
 import ds.graph.IdentifiableCollection;
 import ds.graph.IdentifiableIntegerMapping;
@@ -47,7 +47,7 @@ public class EarliestArrivalAugmentingPathAlgorithm extends Algorithm<EarliestAr
     private transient Queue<Node> candidates;
     private transient IdentifiableObjectMapping<Node, IntegerIntegerMapping> departureTimes;
     private transient IdentifiableIntegerMapping<Node> labels;
-    private transient DynamicResidualNetwork network;
+    private transient ImplicitTimeExpandedResidualNetwork network;
     private transient IdentifiableObjectMapping<Node, Node[]> predecessorNodes;
     private transient IdentifiableObjectMapping<Node, Edge[]> predecessorEdges;
 
@@ -81,8 +81,7 @@ public class EarliestArrivalAugmentingPathAlgorithm extends Algorithm<EarliestAr
        // System.out.println("source: " + source);
         for (int time = 0; time < timeHorizon; time++) {
             setDepartureTime(source, time, time);
-        }
-        if (DEBUG) System.out.println("WCCs: " + network.waitCancellingCapacities());
+        }        
         while (!candidates.isEmpty()) {
             Node node = candidates.poll();
             if (DEBUG) System.out.println("Processing node: " + node);
@@ -95,7 +94,6 @@ public class EarliestArrivalAugmentingPathAlgorithm extends Algorithm<EarliestAr
                 if (transitTime > 0) {
                     lastTime -= transitTime;
                 }
-                IntegerIntegerArrayMapping caps = network.capacities().get(edge);
                 //System.out.println("Kapazitaet: " + caps);
                 Node[] predStart = predecessorNodes.get(edge.start());
                 for (int time = getLabel(edge.start()); time < lastTime; time++) {
@@ -103,7 +101,7 @@ public class EarliestArrivalAugmentingPathAlgorithm extends Algorithm<EarliestAr
                     //System.out.println("2: " + caps.get(time));
                     //System.out.println("3a: " + predStart.length);
                     //System.out.println("3b: " + predStart[time]);                    
-                    if (caps.get(time) == 0 || predStart[time] == null) {
+                    if (network.capacity(edge, time) == 0 || predStart[time] == null) {
                         continue;
                     }
                     Node[] predEnd = predecessorNodes.get(edge.end());
@@ -119,7 +117,7 @@ public class EarliestArrivalAugmentingPathAlgorithm extends Algorithm<EarliestAr
                         predecessorEdges.get(edge.end())[time + transitTime] = edge;
                         setDepartureTime(edge.end(), time + transitTime, time);
 												
-												if( capacity( edge, time ) ) <= 0 {
+			if( capacity( edge, time )  <= 0) {
 											throw new IllegalStateException( "EXCEPTION wegen -1" );
 										}
 												
@@ -292,18 +290,18 @@ public class EarliestArrivalAugmentingPathAlgorithm extends Algorithm<EarliestAr
     }
 
     private int capacity(Edge edge, int time) {
-        return network.capacities().get(edge).get(time);
+        return network.capacity(edge, time);
     }
 
     private int transitTime(Edge edge) {
-        return network.transitTimes().get(edge);
+        return network.transitTime(edge);
     }
 
     private int waitCapacity(Node node, int time) {
-        return network.waitCapacities().get(node).get(time);
+        return network.capacity(node, time);
     }
 
     private int waitCancellingCapacity(Node node, int time) {
-        return network.waitCancellingCapacities().get(node).get(time);
+        return network.capacity(node, time, true);
     }
 }

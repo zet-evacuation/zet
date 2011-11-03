@@ -23,7 +23,7 @@ package ds.graph.flow;
 import ds.graph.Node;
 import java.util.LinkedList;
 import ds.graph.flow.EarliestArrivalAugmentingPath.NodeTimePair;
-import ds.graph.DynamicResidualNetwork;
+import ds.graph.ImplicitTimeExpandedResidualNetwork;
 
 /**
  *
@@ -64,7 +64,7 @@ public class EarliestArrivalAugmentingPath extends LinkedList<NodeTimePair> {
         return capacity + ": " + super.toString();
     }
     
-    public FlowOverTimeEdgeSequence getFlowOverTimeEdgeSequence(DynamicResidualNetwork network) {
+    public FlowOverTimeEdgeSequence getFlowOverTimeEdgeSequence(ImplicitTimeExpandedResidualNetwork network) {
         FlowOverTimeEdgeSequence dpf = new FlowOverTimeEdgeSequence();
         dpf.setAmount( getCapacity() ); // a path is used once for the capacity.
 				dpf.setRate(getCapacity());			// thus, amount and rate must be equal
@@ -74,15 +74,15 @@ public class EarliestArrivalAugmentingPath extends LinkedList<NodeTimePair> {
                 previous = first;
                 continue;
             } else {
-                if (previous.getNode() == network.getSuperSource()) {
+                if (previous.getNode() == network.superSource()) {
                     previous = ntp;
                     continue;
                 }
                 if (previous == first) {
-                    dpf.addLast(new FlowOverTimeEdge(network.getEdge(previous.getNode(), ntp.getNode(), previous.getEnd(), ntp.getStart()), previous.getEnd(), previous.getEnd()));
+                    dpf.addLast(new FlowOverTimeEdge(network.findEdge(previous.getNode(), ntp.getNode(), -previous.getEnd()+ ntp.getStart()), previous.getEnd(), previous.getEnd()));
                 } else {
                     //System.out.println("Edges: " + network.getEdges(previous.getNode(), ntp.getNode()));
-                    dpf.addLast(new FlowOverTimeEdge(network.getEdge(previous.getNode(), ntp.getNode(), previous.getEnd(), ntp.getStart()), previous.getEnd() - previous.getStart(), previous.getEnd()));
+                    dpf.addLast(new FlowOverTimeEdge(network.findEdge(previous.getNode(), ntp.getNode(), -previous.getEnd()+ ntp.getStart()), previous.getEnd() - previous.getStart(), previous.getEnd()));
                 }
                 previous = ntp;                
             }

@@ -5,7 +5,7 @@
 
 package algo.graph.dynamicflow;
 
-import ds.graph.DynamicResidualNetwork;
+import ds.graph.ImplicitTimeExpandedResidualNetwork;
 import ds.graph.flow.FlowOverTimeEdgeSequence;
 import java.util.List;
 
@@ -16,9 +16,9 @@ import java.util.List;
 public class ChainDecompositionProblem {
 
     private List<FlowOverTimeEdgeSequence> edgeSequences;
-    private DynamicResidualNetwork network;
+    private ImplicitTimeExpandedResidualNetwork network;
 
-    public ChainDecompositionProblem(List<FlowOverTimeEdgeSequence> edgeSequences, DynamicResidualNetwork network) {
+    public ChainDecompositionProblem(List<FlowOverTimeEdgeSequence> edgeSequences, ImplicitTimeExpandedResidualNetwork network) {
         this.edgeSequences = edgeSequences;
         this.network = network;
     }
@@ -31,11 +31,11 @@ public class ChainDecompositionProblem {
         this.edgeSequences = edgeSequences;
     }
 
-    public DynamicResidualNetwork getNetwork() {
+    public ImplicitTimeExpandedResidualNetwork getNetwork() {
         return network;
     }
 
-    public void setNetwork(DynamicResidualNetwork network) {
+    public void setNetwork(ImplicitTimeExpandedResidualNetwork network) {
         this.network = network;
     }
 }

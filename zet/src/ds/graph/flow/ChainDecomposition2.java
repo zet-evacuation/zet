@@ -19,7 +19,7 @@
  */
 package ds.graph.flow;
 
-import ds.graph.DynamicResidualNetwork;
+import ds.graph.ImplicitTimeExpandedResidualNetwork;
 import ds.graph.Edge;
 import ds.graph.IdentifiableIntegerMapping;
 import ds.graph.IdentifiableObjectMapping;
@@ -42,7 +42,7 @@ public class ChainDecomposition2 {
     
     IdentifiableObjectMapping<Edge, Queue[]> pathsUsingEdge;
     IdentifiableObjectMapping<Node, Queue[]> pathsUsingNode;
-    DynamicResidualNetwork network;
+    ImplicitTimeExpandedResidualNetwork network;
     Queue<FlowOverTimeEdge> reverseEdges;
     Queue<FlowOverTimeEdge> reverseNodes;
     LinkedList<FlowOverTimeEdgeSequence> paths;
@@ -50,17 +50,17 @@ public class ChainDecomposition2 {
     Vector<FlowOverTimeEdgeSequence> pathBased2 = new Vector<FlowOverTimeEdgeSequence>();
     
     
-    public void uncrossPaths(DynamicResidualNetwork network, LinkedList<FlowOverTimeEdgeSequence> edgeSequences) {
+    public void uncrossPaths(ImplicitTimeExpandedResidualNetwork network, LinkedList<FlowOverTimeEdgeSequence> edgeSequences) {
         this.network = network;
         this.paths = edgeSequences;
         pathsUsingEdge = new IdentifiableObjectMapping<Edge, Queue[]>(network.edges(), Queue[].class);
         pathsUsingNode = new IdentifiableObjectMapping<Node, Queue[]>(network.nodes(), Queue[].class);
         reverseEdges = new LinkedList<FlowOverTimeEdge>();
         reverseNodes = new LinkedList<FlowOverTimeEdge>();
-        if (DEBUG) System.out.println("Supersource: " + network.getSuperSource());
-        if (DEBUG) System.out.println("Source: " + network.successorNodes(network.getSuperSource()));
+        if (DEBUG) System.out.println("Supersource: " + network.superSource());
+        if (DEBUG) System.out.println("Source: " + network.successorNodes(network.superSource()));
         //if (DEBUG) System.out.println("Capacities: " + network.capacities());
-        if (DEBUG) System.out.println("TransitTimes: " + network.transitTimes());
+        if (DEBUG) System.out.println("TransitTimes: " + network.getProblem().getTransitTimes());
         int index = 0;
         while (!edgeSequences.isEmpty()) {
             reverseEdges.clear();
@@ -84,7 +84,7 @@ public class ChainDecomposition2 {
                         if (DEBUG_FINE) System.out.println(" Waiting in " + edge.getEdge().start() + " at time " + i + ": " + edgeSequence);                        
                     }
                 }
-                time += network.transitTimes().get(edge.getEdge());
+                time += network.transitTime(edge.getEdge());
                 if (network.isReverseEdge(edge.getEdge())) {
                     reverseEdges.add(edge);
                 }
@@ -147,7 +147,7 @@ public class ChainDecomposition2 {
                 found = true;
                 continue;
             }
-            t += network.transitTimes().get(e.getEdge());
+            t += network.transitTime(e.getEdge());
             if (found) {
                 tail.add(e.clone());
             } else {
@@ -155,11 +155,11 @@ public class ChainDecomposition2 {
             }
         }
         assert !tail.isEmpty();
-        tail.getFirstEdge().setDelay(time + network.transitTimes().get(edge) + tail.getFirstEdge().getDelay());
+        tail.getFirstEdge().setDelay(time + network.transitTime(edge) + tail.getFirstEdge().getDelay());
     }
     
     protected void clean(FlowOverTimeEdgeSequence start1, FlowOverTimeEdgeSequence start2, FlowOverTimeEdgeSequence end1, FlowOverTimeEdge reverseEdge) {
-        IdentifiableIntegerMapping<Edge> transitTimes = network.transitTimes();        
+        IdentifiableIntegerMapping<Edge> transitTimes = network.getProblem().getTransitTimes();        
         if (start2.isEmpty() || end1.isEmpty()) {
             return; 
         }        
@@ -184,7 +184,7 @@ public class ChainDecomposition2 {
     //protected void join(FlowOverTimeEdgeSequence start1, FlowOverTimeEdgeSequence start2, FlowOverTimeEdgeSequence end1, FlowOverTimeEdgeSequence end2) {
     protected void join(FlowOverTimeEdgeSequence start1, FlowOverTimeEdgeSequence end2) {
         int secondStart = end2.getFirstEdge().getDelay(); //end2.delay(end2.getFirstEdge());
-        int firstEnd = start1.length(network.transitTimes());
+        int firstEnd = start1.length(network.getProblem().getTransitTimes());
         start1.append(end2, secondStart - firstEnd);
         start1.setRate(Math.min(start1.getRate(), end2.getRate()));
         //if (DEBUG) System.out.println(" Partner is append to path with " + secondStart + " - " + firstEnd);
@@ -244,7 +244,7 @@ public class ChainDecomposition2 {
                 found = true;
             }            
             t += e.getDelay();
-            t += network.transitTimes().get(e.getEdge());
+            t += network.transitTime(e.getEdge());
             if (found) {
                 tail.add(e.clone());
             } else {
@@ -252,8 +252,8 @@ public class ChainDecomposition2 {
             }
         }
         assert !tail.isEmpty();
-        //tail.getFirstEdge().setDelay(time + network.transitTimes().get(edge) + tail.getFirstEdge().getDelay());
-        tail.getFirstEdge().setDelay(head.length(network.transitTimes()) + tail.getFirstEdge().getDelay());
+        //tail.getFirstEdge().setDelay(time + network.transitTime(edge) + tail.getFirstEdge().getDelay());
+        tail.getFirstEdge().setDelay(head.length(network.getProblem().getTransitTimes()) + tail.getFirstEdge().getDelay());
     }        
     
     private void uncrossPaths(FlowOverTimeEdgeSequence pathWithReverseNode, FlowOverTimeEdgeSequence partner, Node reverseNode, FlowOverTimeEdge reverseNodeEdge, int t) {
@@ -311,7 +311,7 @@ public class ChainDecomposition2 {
         for (FlowOverTimeEdge edge : path) {
             for (int t = time; t < time + edge.getDelay(); t++) {
                 if (!pathsUsingNode.isDefinedFor(edge.getEdge().start())) {
-                    pathsUsingNode.set(edge.getEdge().start(), new LinkedList[network.getTimeHorizon()]);
+                    pathsUsingNode.set(edge.getEdge().start(), new LinkedList[network.timeHorizon()]);
                 }                
                 if (pathsUsingNode.get(edge.getEdge().start())[t] == null) {
                     pathsUsingNode.get(edge.getEdge().start())[t] = new LinkedList();
@@ -321,7 +321,7 @@ public class ChainDecomposition2 {
             }            
             time += edge.getDelay();
             if (!pathsUsingEdge.isDefinedFor(edge.getEdge())) {
-                pathsUsingEdge.set(edge.getEdge(), new LinkedList[network.getTimeHorizon()]);
+                pathsUsingEdge.set(edge.getEdge(), new LinkedList[network.timeHorizon()]);
             }
             if (pathsUsingEdge.get(edge.getEdge())[time] == null) {
                 pathsUsingEdge.get(edge.getEdge())[time] = new LinkedList();
@@ -330,7 +330,7 @@ public class ChainDecomposition2 {
             if (DEBUG) {
                 System.out.println(" " + edge.getEdge().id() + "@" + time + ": " + path);
             }
-            time += network.transitTimes().get(edge.getEdge());
+            time += network.transitTime(edge.getEdge());
         }
     }         
     
@@ -343,7 +343,7 @@ public class ChainDecomposition2 {
             }
             time += e.getDelay();      
             pathsUsingEdge.get(edge)[time].remove(path);
-            time += network.transitTimes().get(edge);
+            time += network.transitTime(edge);
         }
     }
     
@@ -354,7 +354,7 @@ public class ChainDecomposition2 {
             if (e.getEdge() == edge) {
                 return time;
             }
-            time += network.transitTimes().get(e.getEdge());
+            time += network.transitTime(e.getEdge());
         }       
         throw new AssertionError("This should not happen.");
     }
@@ -366,7 +366,7 @@ public class ChainDecomposition2 {
             if (e.equals(edge)) {
                 return time;
             }
-            time += network.transitTimes().get(e.getEdge());
+            time += network.transitTime(e.getEdge());
         }       
         throw new AssertionError("This should not happen.");
     }    
@@ -375,7 +375,7 @@ public class ChainDecomposition2 {
         int time = 0;
         for (FlowOverTimeEdge e : path) {
             time += e.getDelay();
-            time += network.transitTimes().get(e.getEdge());
+            time += network.transitTime(e.getEdge());
             if (e.getEdge() == edge) {
                 return time;
             }            
@@ -390,7 +390,7 @@ public class ChainDecomposition2 {
                 return time;
             }                        
             time += e.getDelay();
-            time += network.transitTimes().get(e.getEdge());
+            time += network.transitTime(e.getEdge());
         }       
         throw new AssertionError("This should not happen.");
     }    
@@ -399,7 +399,7 @@ public class ChainDecomposition2 {
         int time = 0;
         for (FlowOverTimeEdge e : path) {
             time += e.getDelay();
-            time += network.transitTimes().get(e.getEdge());
+            time += network.transitTime(e.getEdge());
             if (e.equals(edge)) {
                 return time;
             }            
@@ -414,7 +414,7 @@ public class ChainDecomposition2 {
                 return time;
             }
             time += e.getDelay();
-            time += network.transitTimes().get(e.getEdge());
+            time += network.transitTime(e.getEdge());
         }       
         throw new AssertionError("This should not happen.");
     }        
@@ -434,7 +434,7 @@ public class ChainDecomposition2 {
             if (edgeReached) {
                 result.add(new FlowOverTimeEdge(e.getEdge(), e.getDelay(), t));
             }
-            t += network.transitTimes().get(e.getEdge());
+            t += network.transitTime(e.getEdge());
         }
         return result;
     }
@@ -450,7 +450,7 @@ public class ChainDecomposition2 {
                 edgeReached = true;
                 continue;
             }
-            t += network.transitTimes().get(e.getEdge());
+            t += network.transitTime(e.getEdge());
             if (edgeReached) {
                 result.addLast(e);
             }
@@ -467,7 +467,7 @@ public class ChainDecomposition2 {
             if (e.equals(edge) && t == time) {
                 break;
             }
-            t += network.transitTimes().get(e.getEdge());
+            t += network.transitTime(e.getEdge());
             result.addLast(e);
         }
         return result;        
@@ -484,7 +484,7 @@ public class ChainDecomposition2 {
                 break;
             }
             result.add(new FlowOverTimeEdge(e.getEdge(), e.getDelay(), t));
-            t += network.transitTimes().get(e.getEdge());
+            t += network.transitTime(e.getEdge());
             
             //result.getDynamicPath().addLastEdge(e, e.getDelay());
         }
@@ -505,7 +505,7 @@ public class ChainDecomposition2 {
                 continue;
             }
             t += e.getDelay();
-            t += network.transitTimes().get(e.getEdge());
+            t += network.transitTime(e.getEdge());
             if (nodeReached) {
                 result.addLast(e);
             }
@@ -522,7 +522,7 @@ public class ChainDecomposition2 {
                 break;
             }
             t += e.getDelay();
-            t += network.transitTimes().get(e.getEdge());
+            t += network.transitTime(e.getEdge());
             result.addLast(e);//getDynamicPath().addLastEdge(e, e.getDelay());
         }
         return result;

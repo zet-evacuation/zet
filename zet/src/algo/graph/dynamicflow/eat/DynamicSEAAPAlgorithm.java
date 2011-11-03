@@ -21,7 +21,7 @@ package algo.graph.dynamicflow.eat;
 
 import ds.graph.flow.EarliestArrivalAugmentingPath;
 import algo.graph.shortestpath.Dijkstra;
-import ds.graph.DynamicResidualNetwork;
+import ds.graph.ImplicitTimeExpandedResidualNetwork;
 import ds.graph.Node;
 import ds.graph.flow.FlowOverTime;
 import java.util.Arrays;
@@ -49,8 +49,8 @@ public class DynamicSEAAPAlgorithm extends Algorithm<EarliestArrivalFlowProblem,
     protected FlowOverTime runAlgorithm(EarliestArrivalFlowProblem problem) {
         flowUnitsSent = 0;
         calculateShortestPathLengths();        
-        DynamicResidualNetwork drn = new DynamicResidualNetwork(problem.getNetwork(), problem.getEdgeCapacities(), problem.getNodeCapacities(), problem.getTransitTimes(), problem.getSources(), problem.getSupplies(), problem.getTimeHorizon());
-        pathProblem = new EarliestArrivalAugmentingPathProblem(drn, drn.getSuperSource(), problem.getSink(), getNextDistance(0) + 1);        
+        ImplicitTimeExpandedResidualNetwork drn = new ImplicitTimeExpandedResidualNetwork(problem);
+        pathProblem = new EarliestArrivalAugmentingPathProblem(drn, drn.superSource(), problem.getSink(), getNextDistance(0) + 1);        
         pathAlgorithm.setProblem(pathProblem);
         calculateEarliestArrivalAugmentingPath();
         LinkedList<EarliestArrivalAugmentingPath> paths = new LinkedList<EarliestArrivalAugmentingPath>();

@@ -23,11 +23,11 @@ import de.tu_berlin.math.coga.common.algorithm.Transformation;
 import de.tu_berlin.math.coga.common.util.Formatter;
 import algo.graph.dynamicflow.eat.EarliestArrivalFlowProblem;
 import algo.graph.dynamicflow.eat.LongestShortestPathTimeHorizonEstimator;
+import algo.graph.dynamicflow.eat.SEAAPAlgorithm;
 import batch.tasks.AlgorithmTask;
 import de.tu_berlin.math.coga.zet.NetworkFlowModel;
 import ds.graph.flow.FlowOverTime;
 import ds.graph.flow.PathBasedFlowOverTime;
-import old.OldSEAAPAlgorithm;
 
 public class SuccessiveEarliestArrivalAugmentingPathAlgorithmTask3 extends Transformation<NetworkFlowModel, EarliestArrivalFlowProblem, FlowOverTime, PathBasedFlowOverTime> {
 

@@ -22,7 +22,7 @@ package algo.graph.dynamicflow.eat;
 
 import ds.graph.flow.EarliestArrivalAugmentingPath;
 import algo.graph.shortestpath.Dijkstra;
-import ds.graph.DynamicResidualNetwork;
+import ds.graph.ImplicitTimeExpandedResidualNetwork;
 import ds.graph.Node;
 import ds.graph.flow.FlowOverTime;
 import java.util.Arrays;
@@ -57,21 +57,21 @@ public class SEAAPAlgorithm extends Algorithm<EarliestArrivalFlowProblem, FlowOv
     @Override
     protected FlowOverTime runAlgorithm(EarliestArrivalFlowProblem problem) {
         if (problem.getTotalSupplies() == 0) {
-            drn = new DynamicResidualNetwork(problem.getNetwork(), problem.getEdgeCapacities(), problem.getNodeCapacities(), problem.getTransitTimes(), problem.getSources(), problem.getSupplies(), problem.getTimeHorizon());
+            drn = new ImplicitTimeExpandedResidualNetwork(problem);
             paths = new LinkedList<EarliestArrivalAugmentingPath>();
             return new FlowOverTime(drn, paths);
         } 
         OriginTime = problem.getTimeHorizon();
         flowUnitsSent = 0;        
         calculateShortestPathLengths();
-        drn = new DynamicResidualNetwork(problem.getNetwork(), problem.getEdgeCapacities(), problem.getNodeCapacities(), problem.getTransitTimes(), problem.getSources(), problem.getSupplies(), problem.getTimeHorizon()); 
+        drn = new ImplicitTimeExpandedResidualNetwork(problem); 
         if (getNextDistance(0)+1 > OriginTime || true)
         {
-            pathProblem = new EarliestArrivalAugmentingPathProblem(drn, drn.getSuperSource(), problem.getSink(), OriginTime);
+            pathProblem = new EarliestArrivalAugmentingPathProblem(drn, drn.superSource(), problem.getSink(), OriginTime);
         }
         else
         {    
-            pathProblem = new EarliestArrivalAugmentingPathProblem(drn, drn.getSuperSource(), problem.getSink(), getNextDistance(0) + 1);
+            pathProblem = new EarliestArrivalAugmentingPathProblem(drn, drn.superSource(), problem.getSink(), getNextDistance(0) + 1);
         }
         pathAlgorithm.setProblem(pathProblem);
         calculateEarliestArrivalAugmentingPath();
@@ -93,7 +93,7 @@ public class SEAAPAlgorithm extends Algorithm<EarliestArrivalFlowProblem, FlowOv
         }
     }
     public LinkedList<EarliestArrivalAugmentingPath> paths;
-    public DynamicResidualNetwork drn;
+    public ImplicitTimeExpandedResidualNetwork drn;
 
     private void calculateEarliestArrivalAugmentingPath() {
         if (flowUnitsSent == getProblem().getTotalSupplies()) {

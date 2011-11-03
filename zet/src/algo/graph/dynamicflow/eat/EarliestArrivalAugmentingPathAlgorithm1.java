@@ -27,10 +27,8 @@ import ds.graph.IdentifiableIntegerMapping;
 import ds.graph.IdentifiableObjectMapping;
 import ds.graph.IntegerIntegerArrayMapping;
 import ds.graph.IntegerIntegerMapping;
-import ds.graph.IntegerObjectMapping;
 import ds.graph.Node;
 import java.util.LinkedList;
-import java.util.List;
 import java.util.Queue;
 import java.util.logging.Logger;
 import de.tu_berlin.math.coga.common.algorithm.Algorithm;
@@ -39,9 +37,9 @@ import de.tu_berlin.math.coga.common.algorithm.Algorithm;
  *
  * @author Martin Groß
  */
-public class DynamicEarliestArrivalAugmentingPathAlgorithm extends Algorithm<EarliestArrivalAugmentingPathProblem, EarliestArrivalAugmentingPath> {
+public class EarliestArrivalAugmentingPathAlgorithm1 extends Algorithm<EarliestArrivalAugmentingPathProblem, EarliestArrivalAugmentingPath> {
 
-    private static final Logger LOGGER = Logger.getLogger(DynamicEarliestArrivalAugmentingPathAlgorithm.class.getCanonicalName());
+    private static final Logger LOGGER = Logger.getLogger(EarliestArrivalAugmentingPathAlgorithm1.class.getCanonicalName());
     
     private static final boolean DEBUG = false;
     
@@ -50,8 +48,8 @@ public class DynamicEarliestArrivalAugmentingPathAlgorithm extends Algorithm<Ear
     private transient IdentifiableObjectMapping<Node, IntegerIntegerMapping> departureTimes;
     private transient IdentifiableIntegerMapping<Node> labels;
     private transient ImplicitTimeExpandedResidualNetwork network;
-    private transient IdentifiableObjectMapping<Node, IntegerObjectMapping> predecessorNodes;
-    private transient IdentifiableObjectMapping<Node, IntegerObjectMapping> successorNodes;
+    private transient IdentifiableObjectMapping<Node, Node[]> predecessorNodes;
+    private transient IdentifiableObjectMapping<Node, Edge[]> predecessorEdges;
 
     @Override
     protected EarliestArrivalAugmentingPath runAlgorithm(EarliestArrivalAugmentingPathProblem problem) {
@@ -59,14 +57,15 @@ public class DynamicEarliestArrivalAugmentingPathAlgorithm extends Algorithm<Ear
         Node source = problem.getSource();
         Node sink = problem.getSink();
         int timeHorizon = problem.getTimeHorizon();
+        
         candidates = new LinkedList<Node>();
         labels = new IdentifiableIntegerMapping(network.nodes());
         departureTimes = new IdentifiableObjectMapping<Node, IntegerIntegerMapping>(network.nodes(), IntegerIntegerMapping.class);
-        predecessorNodes = new IdentifiableObjectMapping<Node, IntegerObjectMapping>(network.nodes(), IntegerObjectMapping.class);
-        successorNodes = new IdentifiableObjectMapping<Node, IntegerObjectMapping>(network.nodes(), IntegerObjectMapping.class);
+        predecessorNodes = new IdentifiableObjectMapping<Node, Node[]>(network.nodes(), Node[].class);
+        predecessorEdges = new IdentifiableObjectMapping<Node, Edge[]>(network.nodes(), Edge[].class);
         for (Node node : network.nodes()) {
-            predecessorNodes.set(node, new IntegerObjectMapping<Node>());
-            successorNodes.set(node, new IntegerObjectMapping<Node>());
+            predecessorNodes.set(node, new Node[timeHorizon]);
+            predecessorEdges.set(node, new Edge[timeHorizon]);
             departureTimes.set(node, new IntegerIntegerMapping());
         }
         candidates.add(source);
@@ -78,44 +77,74 @@ public class DynamicEarliestArrivalAugmentingPathAlgorithm extends Algorithm<Ear
             setPredecessorNode(node, 0, null);
             setDepartureTime(node, 0, Integer.MAX_VALUE);
         }
-        // null -> { SOURCE }
         setPredecessorNode(source, 0, SOURCE);
+       // System.out.println("source: " + source);
         for (int time = 0; time < timeHorizon; time++) {
             setDepartureTime(source, time, time);
         }
         while (!candidates.isEmpty()) {
             Node node = candidates.poll();
             if (DEBUG) System.out.println("Processing node: " + node);
+ 
+            //System.out.println("Betrachteter Knoten: " + node);
             for (Edge edge : network.outgoingEdges(node)) {
                 if (DEBUG) System.out.println(" Processing edge: " + edge);
                 int transitTime = transitTime(edge);
-                for (int time = getLabel(edge.start()); time < timeHorizon - transitTime; time++) {
-                    if (network.capacity(edge, time) == 0 || !hasPredecessorNode(edge.start(), time)) {
+                int lastTime = timeHorizon;
+                if (transitTime > 0) {
+                    lastTime -= transitTime;
+                }
+                //System.out.println("Kapazitaet: " + caps);
+                Node[] predStart = predecessorNodes.get(edge.start());
+                for (int time = getLabel(edge.start()); time < lastTime; time++) {
+                    //System.out.println("1: " + time + " " + timeHorizon + " " + transitTime);
+                    //System.out.println("2: " + caps.get(time));
+                    //System.out.println("3a: " + predStart.length);
+                    //System.out.println("3b: " + predStart[time]);                    
+                    if (network.capacity(edge, time) == 0 || predStart[time] == null) {
                         continue;
                     }
-                    if (!hasPredecessorNode(edge.end(), time + transitTime)) {
+                    Node[] predEnd = predecessorNodes.get(edge.end());
+                    //System.out.println("  Edge ist available at time " + time);
+                    //if (getPredecessorNode(edge.end(), time + transitTime) == null) {
+                    if (predEnd[time + transitTime] == null) {
                         if (getLabel(edge.end()) > time + transitTime) {
                             setLabel(edge.end(), time + transitTime);
+                           // System.out.println("Label " + getLabel(edge.end()) + "Knoten: " + edge.end()) ;
                         }
-                        // null -> { edge.start() }
-                        setPredecessorNode(edge.end(), time + transitTime, edge.start());
+                        //setPredecessorNode(edge.end(), time + transitTime, edge.start());
+                        predEnd[time + transitTime] = edge.start();
+                        predecessorEdges.get(edge.end())[time + transitTime] = edge;
                         setDepartureTime(edge.end(), time + transitTime, time);
+												
+												if( capacity( edge, time )  <= 0) {
+											throw new IllegalStateException( "EXCEPTION wegen -1" );
+										}
+												
                         candidates.add(edge.end());
                         int newTime = time + transitTime + 1;
-                        while (newTime <= timeHorizon && waitCapacity(edge.end(), newTime - 1) > 0 && !hasPredecessorNode(edge.end(), newTime)) {
-                            // null -> { edge.end() }
-                            setPredecessorNode(edge.end(), newTime, edge.end());
+                        //while (newTime <= timeHorizon && waitCapacity(edge.end(), newTime - 1) > 0 && getPredecessorNode(edge.end(), newTime) == null) {
+                        //System.out.println("WaitCapacities: " + waitCapacity(edge.end(), newTime -1));
+                        
+                        while (newTime < timeHorizon && waitCapacity(edge.end(), newTime - 1) > 0 && predEnd[newTime] == null) {
+                            //setPredecessorNode(edge.end(), newTime, edge.end());
+                            predEnd[newTime] = edge.end();
+                            predecessorEdges.get(edge.end())[newTime] = null;
                             setDepartureTime(edge.end(), newTime, newTime - 1);
                             newTime++;
                         }
                         newTime = time + transitTime - 1;
-                        while (newTime >= 0 && waitCancellingCapacity(edge.end(), newTime + 1) > 0 && !hasPredecessorNode(edge.end(), newTime)) {
+                        //System.out.println("Wait Cancelling Capacity: " + waitCancellingCapacity(edge.end(), newTime+1));
+                        //while (newTime >= 0 && waitCancellingCapacity(edge.end(), newTime + 1) > 0 && getPredecessorNode(edge.end(), newTime) == null) {
+                        while (newTime >= 0 && waitCancellingCapacity(edge.end(), newTime + 1) > 0 && predEnd[newTime] == null) {
                             if (DEBUG) System.out.println(String.format("    waitCancellingCapacity(%1$s,%2$s) = %3$s", edge.end(), newTime+1, waitCancellingCapacity(edge.end(), newTime + 1)));
                             if (getLabel(edge.end()) > newTime) {
                                 setLabel(edge.end(), newTime);
+                                //System.out.println("Neues Label: " + getLabel(edge.end()) + "Knoten: " + edge.end());
                             }
-                            // null -> { edge.start() }
-                            setPredecessorNode(edge.end(), newTime, edge.end());
+                            //setPredecessorNode(edge.end(), newTime, edge.end());
+                            predEnd[newTime] = edge.end();
+                            predecessorEdges.get(edge.end())[newTime] = null;
                             setDepartureTime(edge.end(), newTime, newTime + 1);
                             newTime--;
                         }
@@ -131,35 +160,43 @@ public class DynamicEarliestArrivalAugmentingPathAlgorithm extends Algorithm<Ear
             int time = getLabel(node);
             if (DEBUG) System.out.println("Constructing paths");
             if (DEBUG) System.out.println("Current time/node: " + time + " / " + node);
-            Node pred = getFirstPredecessorNode(node, time);
+            Node pred = getPredecessorNode(node, time);
+            Edge predEdge = predecessorEdges.get(node)[time];
             EarliestArrivalAugmentingPath path = new EarliestArrivalAugmentingPath();
             path.insert(0, node, time, time);
             int capacity = Integer.MAX_VALUE;
             int predecessorDepartureTime, nextTime = 0;
             while (node != SOURCE && pred != SOURCE) {
-                //System.out.println("Processing Node: " + node + " (Predecessor: " + pred + ")");
                 predecessorDepartureTime = getDepartureTime(node, time);
                 if (DEBUG) System.out.println("Current predecessor time/node: " + predecessorDepartureTime + " / " + pred);
                 int cap;
                 if (node != pred) {
-                    //cap = capacity(network.getEdge(pred, node, predecessorDepartureTime, time), predecessorDepartureTime);
+                    /*
                     IdentifiableCollection<Edge> edges = network.getEdges(pred, node);
                     Edge edge = null;
                     if (edges.size() == 1) {
                         edge = edges.first();
                     } else if (edges.size() == 2) {
-                    if (predecessorDepartureTime < time) {
-                        edge = edges.first();
-                    } else {
-                        edge = edges.last();                                
-                    }
-                    }
+                        if (capacity(edges.first(), predecessorDepartureTime) > 0) {
+                        //if (predecessorDepartureTime < time) {
+                            edge = edges.first();
+                        } else {
+                            edge = edges.last();                                
+                        }
+                    }*/
+                    Edge edge = predEdge;
+                            
                     cap = capacity(edge, predecessorDepartureTime);
+                    if (cap == 0) {
+                        //System.out.println("Case 1: " + edges + " " + capacity(edges.first(), predecessorDepartureTime) + " " + capacity(edges.last(), predecessorDepartureTime));
+                        //System.out.println(transitTime(edges.first(), predecessorDepartureTime));
+                    }
                     nextTime = predecessorDepartureTime;
                 } else if (time > predecessorDepartureTime) {
                     cap = waitCapacity(pred, predecessorDepartureTime);
                 } else {
-                    cap = waitCancellingCapacity(pred, predecessorDepartureTime);
+                    cap = waitCancellingCapacity(pred, predecessorDepartureTime);               
+                    //System.out.println("Get: " + pred + " " + predecessorDepartureTime + " " + cap);                    
                 }
                 if (cap < capacity) {
                     capacity = cap;
@@ -167,7 +204,8 @@ public class DynamicEarliestArrivalAugmentingPathAlgorithm extends Algorithm<Ear
                 //System.out.println("Edge capacity is " + cap + ", Path capacity is now " + capacity);
                 Node oldPred = pred;
                 node = pred;
-                pred = getFirstPredecessorNode(node, predecessorDepartureTime);
+                pred = getPredecessorNode(node, predecessorDepartureTime);
+                predEdge = predecessorEdges.get(node)[predecessorDepartureTime];
                 time = predecessorDepartureTime;
                 if (DEBUG) System.out.println("Current time/node: " + time + "/" + node);
                 if (oldPred != pred) {   
@@ -176,6 +214,8 @@ public class DynamicEarliestArrivalAugmentingPathAlgorithm extends Algorithm<Ear
                     if (DEBUG) System.out.println("newDepTime " + newDepTime);
                     int tt;
                     if (pred != SOURCE && node != pred) {
+                        tt = transitTime(predEdge);
+                        /*
                         IdentifiableCollection<Edge> edges = network.getEdges(pred, node);
                         if (edges.size() == 1) {
                             if (DEBUG) System.out.println("Case 1");
@@ -184,7 +224,7 @@ public class DynamicEarliestArrivalAugmentingPathAlgorithm extends Algorithm<Ear
                             if (DEBUG) System.out.println("Case 2");
                             int tt1 = transitTime(edges.first());
                             int tt2 = transitTime(edges.last());
-                            if (newDepTime+tt1 <= predecessorDepartureTime) {
+                            if (newDepTime+tt1 <= predecessorDepartureTime) {                        // TEST!
                                 tt = tt1;
                             } else if (newDepTime+tt2 <= predecessorDepartureTime) {
                                 tt = tt2;
@@ -200,10 +240,10 @@ public class DynamicEarliestArrivalAugmentingPathAlgorithm extends Algorithm<Ear
                                 tt = tt2;
                             } else {
                                 throw new AssertionError("This should not happen.");
-                            }*/
+                            }*//*
                         } else {
                             throw new AssertionError("This should not happen.");
-                        }                    
+                        }*/                    
                     } else {
                         if (DEBUG) System.out.println("Case 3");
                         tt = 0;
@@ -240,21 +280,13 @@ public class DynamicEarliestArrivalAugmentingPathAlgorithm extends Algorithm<Ear
         labels.set(node, value);
     }
 
-    private Node getFirstPredecessorNode(Node node, int time) {
-        return ((List<Node>) predecessorNodes.get(node).get(time)).get(0);
-    }    
-    
-    private List<Node> getPredecessorNodes(Node node, int time) {
-        return (List<Node>) predecessorNodes.get(node).get(time);
-    }
-    
-    private boolean hasPredecessorNode(Node node, int time) {
-        return predecessorNodes.get(node).get(time) != null && !((List<Node>) predecessorNodes.get(node).get(time)).isEmpty();
+    private Node getPredecessorNode(Node node, int time) {
+        return predecessorNodes.get(node)[time];
     }
 
-    private void setPredecessorNode(Node node, int time, Object predecessor) {
+    private void setPredecessorNode(Node node, int time, Node predecessor) {
         if (DEBUG) System.out.println(String.format("    pred(%1$s,%2$s) := %3$s", node, time, predecessor));
-        predecessorNodes.get(node).set(time, predecessor);
+        predecessorNodes.get(node)[time] = predecessor;
     }
 
     private int capacity(Edge edge, int time) {
