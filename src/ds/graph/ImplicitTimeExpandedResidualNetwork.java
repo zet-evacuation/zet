@@ -31,15 +31,40 @@ import ds.graph.flow.EarliestArrivalAugmentingPath.NodeTimePair;
  * @author Martin Groß
  */
 public class ImplicitTimeExpandedResidualNetwork extends Network {
+    
+    /**
+     * Enumeration constants for the different types of edges in this network:
+     * <code>NORMAL</code> for edges of the original network, 
+     * <code>ARTIFICIAL</code> for edges from the super-source,
+     * <code>REVERSE</code> for reverse edges and
+     * <code>ARTIFICIAL_REVERSE</code> for reverse artificial edges.
+     */
+    private enum EdgeType { NORMAL, REVERSE, ARTIFICIAL, ARTIFICIAL_REVERSE; }
 
+    /**
+     * Stores the type of edges.
+     */
+    private IdentifiableObjectMapping<Edge, EdgeType> edgeTypes;
+    /**
+     * Stores the flow over time corresponding to this network.
+     */
+    private IdentifiableObjectMapping<Edge, IntegerIntegerMapping> flow;
     /**
      * References the underlying earliest arrival flow problem.
      */
     private EarliestArrivalFlowProblem problem;
     /**
-     * Stores the flow over time corresponding to this network.
+     * Stores the corresponding reverse edges of edges.
      */
-    private IdentifiableObjectMapping<Edge, IntegerIntegerMapping> flow;
+    private IdentifiableObjectMapping<Edge, Edge> reverseEdges;
+    /**
+     * References the super source of the problem.
+     */
+    private Node superSource;
+    /**
+     * Stores flow leaving the super source at time 0.
+     */
+    private IdentifiableIntegerMapping<Edge> superSourceFlow;
     /**
      * Keeps track of waiting of flow in nodes.
      */
@@ -47,18 +72,39 @@ public class ImplicitTimeExpandedResidualNetwork extends Network {
 
     /**
      * Creates an implicit time-expanded residual network for the specified 
-     * problem.
+     * problem. This means that reverse edges are introduced for all edges of
+     * the network. If the underlying network has multiple sources, this also 
+     * involves adding a super source that is connected to the sources at time 0
+     * by an edge of zero transit time and capacity according to the supply of 
+     * the node.
      * @param problem the problem for which the implicit time-expanded residual 
      * network is to be created.
      */
-    public ImplicitTimeExpandedResidualNetwork(EarliestArrivalFlowProblem problem) {
-        super(problem.getNetwork().numberOfNodes() + 1, 
-                problem.getNetwork().numberOfEdges() * 2 
-                + problem.getSources().size());
+    public ImplicitTimeExpandedResidualNetwork(EarliestArrivalFlowProblem problem) {        
+        super(problem.getNetwork().numberOfNodes() + ((problem.getSources().size() > 1)? 1 : 0), 
+                problem.getNetwork().numberOfEdges() * 2 + ((problem.getSources().size() > 1)? problem.getSources().size() : 0));
+        this.edgeTypes = new IdentifiableObjectMapping<Edge, EdgeType>(getEdgeCapacity(), EdgeType.class);
         this.problem = problem;
+        this.reverseEdges = new IdentifiableObjectMapping<Edge, Edge>(getEdgeCapacity(), Edge.class);
+        this.superSource = getNode(numberOfNodes() - 1);
+        this.superSourceFlow = new IdentifiableIntegerMapping<Edge>(getEdgeCapacity());
         setEdges(problem.getNetwork().edges());
         for (Edge edge : problem.getNetwork().edges()) {
-            createAndSetEdge(edge.end(), edge.start());
+            Edge e = createAndSetEdge(edge.end(), edge.start());
+            edgeTypes.set(edge, EdgeType.NORMAL);
+            edgeTypes.set(e, EdgeType.REVERSE);
+            reverseEdges.set(edge, e);
+            reverseEdges.set(e, edge);
+        }
+        if (problem.getSources().size() > 1) {
+            for (Node source : problem.getSources()) {
+                Edge edge = createAndSetEdge(superSource, source);
+                Edge reverse = createAndSetEdge(source, superSource);
+                edgeTypes.set(edge, EdgeType.ARTIFICIAL);
+                edgeTypes.set(reverse, EdgeType.ARTIFICIAL_REVERSE);
+                reverseEdges.set(edge, reverse);
+                reverseEdges.set(reverse, edge);
+            }
         }
         flow = new IdentifiableObjectMapping<Edge, IntegerIntegerMapping>(problem.getNetwork().edges(), IntegerIntegerMapping.class);
         for (Edge edge : problem.getNetwork().edges()) {
@@ -70,16 +116,42 @@ public class ImplicitTimeExpandedResidualNetwork extends Network {
         }
     }
 
-    private void augmentEdge(NodeTimePair first, NodeTimePair second, int amount) {
+    /**
+     * Utility method for augmenting flow along an edge. Flow augmented on 
+     * normal edges is added to the flow, flow augmented on reverse edges is 
+     * subtracted from the flow.
+     * @param first the node-time pair specifying the start of the edge.
+     * @param second the node-time pair specifying the end of the edge.
+     * @param amount the amount of flow that is to be augmented.
+     */
+    protected void augmentEdge(NodeTimePair first, NodeTimePair second, int amount) {
         Edge edge = findEdge(first.getNode(), second.getNode(), second.getStart() - first.getEnd());
-        if (isReverseEdge(edge)) {
-            flow.get(reverseEdge(edge)).decrease(first.getEnd(), amount);
-        } else {
-            flow.get(edge).increase(first.getEnd(), amount);
+        switch (edgeTypes.get(edge)) {
+            case NORMAL:
+                flow.get(edge).increase(first.getEnd(), amount);
+                return; 
+            case REVERSE:
+                flow.get(reverseEdge(edge)).decrease(first.getEnd(), amount);
+                return; 
+            case ARTIFICIAL:
+                superSourceFlow.increase(edge, amount);
+                return; 
+            case ARTIFICIAL_REVERSE:
+                superSourceFlow.decrease(reverseEdge(edge), amount);
         }
     }
 
-    private void augmentNode(Node node, int start, int end, int amount) {
+    /**
+     * Utility method for augmenting waiting flow in a node. Flow waiting for a
+     * positive amount is added to waiting flow, flow waiting for a negative
+     * amount of time is subtracted from waiting flow.
+     * @param node the node at which waiting occurs.
+     * @param start the time at which waiting starts.
+     * @param end the time at which waiting ends (which can be smaller than
+     * start).
+     * @param amount the amount of flow that is to be augmented.
+     */
+    protected void augmentNode(Node node, int start, int end, int amount) {
         if (start < end) {
             waiting.get(node).increase(start, end, amount);
         } else if (start > end) {
@@ -121,12 +193,27 @@ public class ImplicitTimeExpandedResidualNetwork extends Network {
      * @return the residual capacity of the specified edge at the specified 
      * point in time.
      */
-    public int capacity(Edge edge, int time) {
-        if (isReverseEdge(edge)) {
-            return flow.get(reverseEdge(edge)).get(time);
-        } else {
-            return problem.getEdgeCapacities().get(edge) - flow.get(edge).get(time);
-        }
+    public int capacity(Edge edge, int time) {        
+        switch (edgeTypes.get(edge)) {
+            case NORMAL:
+                return problem.getEdgeCapacities().get(edge) - flow.get(edge).get(time);
+            case REVERSE:
+                return flow.get(reverseEdge(edge)).get(time);
+            case ARTIFICIAL:
+                if (time > 0) {
+                    return 0;
+                } else {
+                    return problem.getSupplies().get(edge.end()) - superSourceFlow.get(edge);
+                }
+            case ARTIFICIAL_REVERSE:
+                if (time > 0) {
+                    return 0;
+                } else {
+                    return superSourceFlow.get(edge);
+                }
+            default:
+                throw new AssertionError("Should not happen.");
+        }        
     }
 
     /**
@@ -217,7 +304,7 @@ public class ImplicitTimeExpandedResidualNetwork extends Network {
      * <code>false</code> otherwise.
      */
     public boolean isReverseEdge(Edge edge) {
-        return edge.id() >= problem.getNetwork().numberOfEdges();
+        return edgeTypes.get(edge) == EdgeType.REVERSE || edgeTypes.get(edge) == EdgeType.ARTIFICIAL_REVERSE;
     }
 
     /**
@@ -227,16 +314,13 @@ public class ImplicitTimeExpandedResidualNetwork extends Network {
      * @return the reverse edge of the specified edge.
      */
     public Edge reverseEdge(Edge edge) {
-        if (edge.id() < problem.getNetwork().numberOfEdges()) {
-            return edges.getEvenIfHidden(edge.id() + problem.getNetwork().numberOfEdges());
-        } else {
-            return edges.getEvenIfHidden(edge.id() - problem.getNetwork().numberOfEdges());
-        }
-    }
+        return reverseEdges.get(edge);
+    }    
     
-    private Node superSource;
     /**
-     * Returns the super source of this network.
+     * Returns the super source of this network. If the underlying problem has
+     * only one source, this source is returned. Otherwise, the super source 
+     * introduced during creation of this network is returned.
      * @return the super source of this network.
      */
     public Node superSource() {
@@ -258,11 +342,14 @@ public class ImplicitTimeExpandedResidualNetwork extends Network {
      * @param edge the edge for which the transit time is to be returned.
      * @return the transit time of the specified edge.
      */
-    public int transitTime(Edge edge) {
-        if (isReverseEdge(edge)) {
-            return -problem.getTransitTimes().get(reverseEdge(edge));
-        } else {
-            return problem.getTransitTimes().get(edge);
+    public int transitTime(Edge edge) {        
+        switch (edgeTypes.get(edge)) {
+            case NORMAL:
+                return problem.getTransitTimes().get(edge);
+            case REVERSE:
+                return -problem.getTransitTimes().get(reverseEdge(edge));
+            default:
+                return 0;
         }
     }
 }
