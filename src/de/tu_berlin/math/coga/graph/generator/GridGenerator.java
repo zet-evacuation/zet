@@ -18,7 +18,7 @@
  *
  */
 
-package algo.graph.util.generator;
+package de.tu_berlin.math.coga.graph.generator;
 
 import ds.graph.Identifiable;
 import ds.graph.IdentifiableIntegerMapping;

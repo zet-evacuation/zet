@@ -24,9 +24,8 @@ import ds.z.BuildingPlan;
 import ds.z.Floor;
 import java.util.ArrayList;
 
-/** A converter that behaves just like a normal converter would do, he only adds
- * the functionality of recreating the changeListeners.
- *
+/**
+ * A converter that behaves just like a normal converter would do,
  * @author Timon Kelter
  */
 public class BuildingPlanConverter extends ReflectionConverter {
@@ -42,12 +41,9 @@ public class BuildingPlanConverter extends ReflectionConverter {
 	}
 
 	@Override
-	public Object unmarshal( final HierarchicalStreamReader reader,
-					final UnmarshallingContext context ) {
+	public Object unmarshal( final HierarchicalStreamReader reader, final UnmarshallingContext context ) {
 		Object created = instantiateNewInstance( reader, context );
 
-		// Early recreation of changeListener List neccessary
-//		reflectionProvider.writeField (created, "changeListeners", new ArrayList<ChangeListener> (), myClass);
 		// Recreate empty implicit lists
 		try {
 			if( reflectionProvider.getField( myClass, "floors" ).get( created ) == null )
@@ -58,12 +54,7 @@ public class BuildingPlanConverter extends ReflectionConverter {
 		}
 
 		created = doUnmarshal( created, reader, context );
-		BuildingPlan result = (BuildingPlan) serializationMethodInvoker.callReadResolve( created );
-
-		// Recreate changeListener list
-		for( Floor t : result.getFloors() ) {
-//			t.addChangeListener (result);
-		}
+		BuildingPlan result = (BuildingPlan)serializationMethodInvoker.callReadResolve( created );
 
 		return result;
 	}
