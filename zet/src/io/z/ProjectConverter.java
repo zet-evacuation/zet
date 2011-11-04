@@ -23,6 +23,7 @@ import com.thoughtworks.xstream.mapper.Mapper;
 
 import ds.z.Project;
 import ds.VisualProperties;
+import ds.z.Assignment;
 import ds.z.Floor;
 import ds.z.Room;
 import ds.z.TeleportArea;
@@ -86,6 +87,15 @@ public class ProjectConverter extends ReflectionConverter {
 		if( teleportArea )
 			System.err.println( "TeleportArea recreated for project." );
 
+		// Check for inconsistencies:
+		for( Assignment a : result.getAssignments() ) {
+			if ( a == null ) {
+				System.err.println( "Assignment null" );
+				while( result.getAssignments().contains( null ) )
+					result.deleteAssignment( null );
+			}
+		}
+		
 		return result;
 	}
 }

@@ -146,6 +146,8 @@ public class Project implements Serializable, ZFormatObject {
 	public void deleteAssignment( Assignment val ) throws IllegalArgumentException {
 		if( !assignments.remove( val ) )
 			throw new IllegalArgumentException( ZLocalization.getSingleton().getString( "ds.AssignmentNotRegisteredException" ) );
+		if( val == null )
+			return;
 		val.delete();
 
 		if( val == currentAssignment )

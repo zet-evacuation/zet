@@ -22,10 +22,6 @@ import com.thoughtworks.xstream.io.HierarchicalStreamReader;
 import com.thoughtworks.xstream.mapper.Mapper;
 
 import ds.z.Assignment;
-import ds.z.AssignmentType;
-
-import java.util.ArrayList;
-import javax.swing.event.ChangeListener;
 
 /** A converter that behaves just like a normal converter would do, he only adds
  * the functionality of recreating the changeListeners.
@@ -34,30 +30,23 @@ import javax.swing.event.ChangeListener;
  */
 public class AssignmentConverter extends ReflectionConverter {
 	private Class myClass = Assignment.class;
-	
-	public AssignmentConverter (Mapper mapper, ReflectionProvider reflectionProvider) {
-		super (mapper, reflectionProvider);
+
+	public AssignmentConverter( Mapper mapper, ReflectionProvider reflectionProvider ) {
+		super( mapper, reflectionProvider );
 	}
-	
-	public boolean canConvert (Class type) {
-		return myClass.isAssignableFrom (type);
+
+	@Override
+	public boolean canConvert( Class type ) {
+		return myClass.isAssignableFrom( type );
 	}
-	
-	public Object unmarshal (final HierarchicalStreamReader reader, 
-			final UnmarshallingContext context) {
-		Object created = instantiateNewInstance(reader, context);
-		
-		// Early recreation of changeListener List neccessary
-//		reflectionProvider.writeField (created, "changeListeners", new ArrayList<ChangeListener> (), myClass);
-		
-        created = doUnmarshal(created, reader, context);
-		Assignment result = (Assignment)serializationMethodInvoker.callReadResolve(created);
-		
-		// Recreate changeListener list
-//		for (AssignmentType t : result.getAssignmentTypes ()) {
-//			t.addChangeListener (result);
-//		}
-		
+
+	@Override
+	public Object unmarshal( final HierarchicalStreamReader reader, final UnmarshallingContext context ) {
+		Object created = instantiateNewInstance( reader, context );
+
+		created = doUnmarshal( created, reader, context );
+		Assignment result = (Assignment)serializationMethodInvoker.callReadResolve( created );
+
 		return result;
 	}
 }
