@@ -17,7 +17,7 @@
  * Class BatchEvacuationCATask
  * Erstellt 22.07.2008, 23:44:41
  */
-package batch.tasks;
+package batch.tasks.CA;
 
 import io.visualization.CAVisualizationResults;
 

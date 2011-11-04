@@ -29,9 +29,14 @@ import de.tu_berlin.math.coga.zet.NetworkFlowModel;
 import ds.graph.flow.FlowOverTime;
 import ds.graph.flow.PathBasedFlowOverTime;
 
-public class SuccessiveEarliestArrivalAugmentingPathAlgorithmTask3 extends Transformation<NetworkFlowModel, EarliestArrivalFlowProblem, FlowOverTime, PathBasedFlowOverTime> {
+/**
+ * Transforms an instance of {@link NetworkFlowModel} to an {@link EarliestArrivalFlowProblem}
+ * in order to solve it. It afterwards creates a path based flow solution.
+ * @author Jan-Philipp Kappmeier
+ */
+public class SuccessiveEarliestArrivalAugmentingPathOptimizedTask extends Transformation<NetworkFlowModel, EarliestArrivalFlowProblem, FlowOverTime, PathBasedFlowOverTime> {
 
-    public SuccessiveEarliestArrivalAugmentingPathAlgorithmTask3() {
+    public SuccessiveEarliestArrivalAugmentingPathOptimizedTask() {
         setAlgorithm(new SEAAPAlgorithm());
         //setAlgorithm(new OldSEAAPAlgorithm());
     }
@@ -58,25 +63,4 @@ public class SuccessiveEarliestArrivalAugmentingPathAlgorithmTask3 extends Trans
         return df;
     }
 
-    //@Override
-    //protected PathBasedFlowOverTime runAlgorithm(NetworkFlowModel model) {
-        /*
-        System.out.println("EAT Task Begins");
-        EarliestArrivalFlowProblem problem = new EarliestArrivalFlowProblem(model.getEdgeCapacities(), model.getNetwork(), model.getNodeCapacities(), model.getSupersink(), model.getSources(), 0, model.getTransitTimes(), model.getCurrentAssignment());
-        LongestShortestPathTimeHorizonEstimator estimator = new LongestShortestPathTimeHorizonEstimator();
-        estimator.setProblem(problem);
-        estimator.run();
-        System.out.println(estimator.getSolution());
-        problem = new EarliestArrivalFlowProblem(model.getEdgeCapacities(), model.getNetwork(), model.getNodeCapacities(), model.getSupersink(), model.getSources(), estimator.getSolution().getUpperBound(), model.getTransitTimes(), model.getCurrentAssignment());
-        //problem = new EarliestArrivalFlowProblem(model.getEdgeCapacities(), model.getNetwork(), model.getNodeCapacities(), model.getSupersink(), model.getSources(), estimator.getSolution().getUpperBound(), model.getTransitTimes(), model.getCurrentAssignment());
-        */
-        // System.out.println("Creating Algorithm Instance");
-        //SEAAPAlgorithm algo = new SEAAPAlgorithm();
-        //algo.addAlgorithmListener(AlgorithmTask.getInstance());
-        //if (listener != null) algo.addAlgorithmListener(listener);
-        //algo.setProblem(problem);
-        //System.out.println("Calling Algorithm Instance");
-        //algo.run();
-
-    //}
 }

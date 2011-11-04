@@ -87,6 +87,7 @@ public class XmlFileReaderWriter {
 		//DynamicNetwork dn = new DynamicNetwork( n );
 		//System.out.println( dn.toString() );
 
+		if (true) return;
 		
 		// now try to write it out
 		XMLWriter writer = new XMLWriter( "./testinstanz/small_graph_out.xml" );

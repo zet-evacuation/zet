@@ -19,9 +19,9 @@ import de.tu_berlin.math.coga.common.algorithm.Algorithm;
 import de.tu_berlin.math.coga.zet.NetworkFlowModel;
 import ds.graph.flow.PathBasedFlowOverTime;
 
-/** The superclass of all tasks who execute graph algorithms. This class is
+/**
+ * The superclass of all tasks who execute graph algorithms. This class is
  * useful to access the graph algorithms in a generic way.
- *
  * @author Martin Groß
  */
 public abstract class NetworkFlowModelAlgorithm extends Algorithm<NetworkFlowModel, PathBasedFlowOverTime> {

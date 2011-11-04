@@ -102,7 +102,9 @@ public class AlgorithmControl implements PropertyChangeListener {
 		if( pcl != null)
 			st.addPropertyChangeListener( pcl );
 		//st.execute();
-		st.run();
+		//st.run();
+		bpc.run();
+		buildingResults = bpc.getSolution();
 	}
 
 	public BuildingResults getBuildingResults() {
@@ -305,7 +307,8 @@ public class AlgorithmControl implements PropertyChangeListener {
 		if( propertyChangeListener != null )
 			st.addPropertyChangeListener( propertyChangeListener );
 		//st.execute();
-		st.run();
+		//st.run();
+		conv.run();
 		networkFlowModel = conv.getSolution();
 	}
 

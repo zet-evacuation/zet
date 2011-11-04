@@ -21,7 +21,7 @@ package batch.tasks;
 
 import batch.BatchResultEntry;
 import batch.GraphAlgorithm;
-import batch.tasks.graph.SuccessiveEarliestArrivalAugmentingPathAlgorithmTask3;
+import batch.tasks.graph.SuccessiveEarliestArrivalAugmentingPathOptimizedTask;
 import old.ZToGraphConverter;
 import de.tu_berlin.math.coga.common.algorithm.Algorithm;
 import de.tu_berlin.math.coga.common.algorithm.AlgorithmListener;
@@ -99,8 +99,8 @@ public class BatchGraphTask implements Runnable {
         Algorithm<NetworkFlowModel, PathBasedFlowOverTime> gt = null;
         gt = graphAlgo.createTask(nfo, maxTime);
         gt.setProblem(nfo);
-        if (gt instanceof SuccessiveEarliestArrivalAugmentingPathAlgorithmTask3 && listener != null) {
-            ((SuccessiveEarliestArrivalAugmentingPathAlgorithmTask3) gt).addAlgorithmListener(listener);
+        if (gt instanceof SuccessiveEarliestArrivalAugmentingPathOptimizedTask && listener != null) {
+            ((SuccessiveEarliestArrivalAugmentingPathOptimizedTask) gt).addAlgorithmListener(listener);
         }
         gt.run();
 

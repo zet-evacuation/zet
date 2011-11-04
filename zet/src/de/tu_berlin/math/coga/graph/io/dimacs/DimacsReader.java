@@ -4,9 +4,13 @@
  */
 package de.tu_berlin.math.coga.graph.io.dimacs;
 
+import algo.graph.staticflow.maxflow.EdmondsKarp;
 import algo.graph.staticflow.maxflow.PushRelabel;
 import algo.graph.staticflow.maxflow.PushRelabelHighestLabelGlobalGapRelabelling;
 import algo.graph.staticflow.maxflow.PushRelabelHighestLabelGlobalRelabelling;
+import de.tu_berlin.math.coga.common.algorithm.AlgorithmEvent;
+import de.tu_berlin.math.coga.common.algorithm.AlgorithmListener;
+import de.tu_berlin.math.coga.common.algorithm.AlgorithmProgressEvent;
 import de.tu_berlin.math.coga.common.util.Formatter;
 import de.tu_berlin.math.coga.common.util.Formatter.BinaryUnits;
 import de.tu_berlin.math.coga.common.util.Formatter.TimeUnits;
@@ -24,12 +28,13 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.StringTokenizer;
+import javax.swing.SwingWorker;
 
 /**
  *
  * @author Jan-Philipp Kappmeier
  */
-public class DimacsReader {
+public class DimacsReader implements AlgorithmListener {
 	BufferedReader reader;
 	BufferedWriter writer;
 	protected Network network;
@@ -362,7 +367,7 @@ public class DimacsReader {
 		RMFGEN gen = new RMFGEN();
 		gen.setDistribution( dist );
 		//gen.generateCompleteGraph( 35,15 );
-		gen.generateCompleteGraph( 30,22); // smallest example where algorithm fails is 4,6
+		gen.generateCompleteGraph( 16,30 ); // smallest example where algorithm fails is 4,6
 		System.out.println( "RMFGEN Knoten: " + gen.getNodeCount() + ", Kanten: " + gen.getEdgeCount() );
 
 		Network network;
@@ -406,20 +411,22 @@ public class DimacsReader {
 //		//System.out.println( mf.toString() );
 
 		int ekf = 0;
-
-//		System.out.println();
-//		System.out.println( "Start edmonds karp" );
-//		EdmondsKarp ek = new EdmondsKarp();
-//		ek.setProblem( mfp );
-//		start = System.nanoTime();
-//		ek.run();
-//		end = System.nanoTime();
-//		mf = ek.getSolution();
-//		System.out.println( "Flow value: " + mf.getFlowValue() );
-//		ekf = mf.getFlowValue();
-//		System.out.println( "Augmentations: " + ek.getAugmentations() );
-//		System.out.println( "Pushes: " + ek.getPushes() );
-//		System.out.println( Formatter.formatTimeNanoseconds( end-start) );
+		System.out.println();
+		System.out.println( "Start edmonds karp" );
+		EdmondsKarp ek = new EdmondsKarp();
+		ek.setAccuracy( 1.0 );
+		ek.addAlgorithmListener( dl );
+		ek.setProblem( mfp );
+		start = System.nanoTime();
+		ek.run();
+		end = System.nanoTime();
+		mf = ek.getSolution();
+		System.out.println( "Flow value: " + mf.getFlowValue() );
+		ekf = mf.getFlowValue();
+		System.out.println( "Augmentations: " + ek.getAugmentations() );
+		System.out.println( "Pushes: " + ek.getPushes() );
+		System.out.println( Formatter.formatTimeUnit( end-start, TimeUnits.NanoSeconds ) );
+		
 
 		long hiprf = 0;
 		// new algorithm
@@ -443,27 +450,36 @@ public class DimacsReader {
 		System.out.println( Formatter.formatTimeUnit( end-start, TimeUnits.NanoSeconds ) );
 
 		System.out.println();
+//
+//			// new algorithm
+//		System.out.println();
+//		System.out.println( "Start HIPR neu" );
+//		//PushRelabel hipr = new PushRelabelHighestLabelGlobalGapRelabelling();
+//		//hipr = new PushRelabelHighestLabelNeu();
+//		hipr = new PushRelabelHighestLabelGlobalGapRelabelling();
+//		hipr.setProblem( mfp );
+//		start = System.nanoTime();
+//		hipr.run();
+//		end = System.nanoTime();
+//		mf = hipr.getSolution();
+//
+//		System.out.println( "Flow value: " + mf.getFlowValue() );
+//		System.out.println( "Sink-Arrival value: " + hipr.getFlowValue() );
+//		hiprf = hipr.getFlowValue();
+//		System.out.println( "Pushes: " + hipr.getPushes() + ", Relabels: " + hipr.getRelabels() );
+//		//System.out.println( "Global relabels: " + hipr.getGlobalRelabels() );
+//		//System.out.println( "Gaps : " + hipr.getGaps() + " Gap nodes: " + hipr.getGapNodes() );
+//		System.out.println( Formatter.formatTimeUnit( end - start, TimeUnits.NanoSeconds ) );
+//
+//		System.out.println();
+		}
 
-			// new algorithm
-		System.out.println();
-		System.out.println( "Start HIPR neu" );
-		//PushRelabel hipr = new PushRelabelHighestLabelGlobalGapRelabelling();
-		//hipr = new PushRelabelHighestLabelNeu();
-		hipr = new PushRelabelHighestLabelGlobalGapRelabelling();
-		hipr.setProblem( mfp );
-		start = System.nanoTime();
-		hipr.run();
-		end = System.nanoTime();
-		mf = hipr.getSolution();
-
-		System.out.println( "Flow value: " + mf.getFlowValue() );
-		System.out.println( "Sink-Arrival value: " + hipr.getFlowValue() );
-		hiprf = hipr.getFlowValue();
-		System.out.println( "Pushes: " + hipr.getPushes() + ", Relabels: " + hipr.getRelabels() );
-		//System.out.println( "Global relabels: " + hipr.getGlobalRelabels() );
-		//System.out.println( "Gaps : " + hipr.getGaps() + " Gap nodes: " + hipr.getGapNodes() );
-		System.out.println( Formatter.formatTimeUnit( end - start, TimeUnits.NanoSeconds ) );
-
-		System.out.println();
+	@Override
+	public void eventOccurred( AlgorithmEvent event ) {
+		if( event instanceof AlgorithmProgressEvent ) {
+			System.out.println( ((AlgorithmProgressEvent)event).getProgress() );
+		} else {
+			System.out.println( event.toString() );
+		}
 	}
 }
