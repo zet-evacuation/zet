@@ -17,7 +17,6 @@ import batch.BatchResult;
 import batch.BatchResultEntry;
 import batch.tasks.AlgorithmTask;
 import batch.tasks.BatchGraphCreateOnlyTask;
-import batch.tasks.RasterizeTask;
 import batch.tasks.VisualizationDataStructureTask;
 import de.tu_berlin.math.coga.common.algorithm.AlgorithmEvent;
 import de.tu_berlin.math.coga.common.algorithm.AlgorithmListener;
@@ -79,6 +78,7 @@ import zet.gui.GUILocalization;
 import zet.gui.main.tabs.base.AbstractFloor.RasterPaintStyle;
 import zet.gui.main.tabs.JEditView;
 import zet.gui.main.toolbar.JStatisticGraphToolBar;
+import zet.tasks.RasterizeTask;
 
 /**
  * This class receives commands and GUI changes from elements like tool bars,

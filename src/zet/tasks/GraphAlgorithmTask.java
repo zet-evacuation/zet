@@ -2,9 +2,8 @@
  * GraphAlgorithmTask.java
  * Created: Jul 29, 2010,5:41:36 PM
  */
-package tasks;
+package zet.tasks;
 
-import batch.GraphAlgorithm;
 import de.tu_berlin.math.coga.zet.converter.graph.GraphAssignmentConverter;
 import de.tu_berlin.math.coga.common.algorithm.Algorithm;
 import de.tu_berlin.math.coga.zet.NetworkFlowModel;
@@ -22,11 +21,11 @@ import ds.z.ConcreteAssignment;
  */
 public class GraphAlgorithmTask extends Algorithm<Project, GraphVisualizationResults> {
 
-	GraphAlgorithm graphAlgorithm;
+	GraphAlgorithmEnumeration graphAlgorithm;
 	NetworkFlowModel networkFlowModel;
 	BaseZToGraphConverter conv = new ZToSpanTreeConverter();
 
-	public GraphAlgorithmTask( GraphAlgorithm graphAlgorithm ) {
+	public GraphAlgorithmTask( GraphAlgorithmEnumeration graphAlgorithm ) {
 		this.graphAlgorithm = graphAlgorithm;
 	}
 

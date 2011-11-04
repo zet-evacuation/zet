@@ -23,7 +23,6 @@ package batch.tasks;
 
 import batch.BatchResultEntry;
 import de.tu_berlin.math.coga.zet.converter.cellularAutomaton.ZToCAConverter;
-import de.tu_berlin.math.coga.zet.converter.cellularAutomaton.ZToCAConverter.ConversionNotSupportedException;
 import ds.z.Project;
 import ds.ca.CellularAutomaton;
 

@@ -5,8 +5,8 @@
 package gui;
 
 import algo.ca.EvacuationCellularAutomatonAlgorithm;
-import batch.CellularAutomatonAlgorithm;
-import batch.GraphAlgorithm;
+import zet.tasks.CellularAutomatonAlgorithmEnumeration;
+import zet.tasks.GraphAlgorithmEnumeration;
 import de.tu_berlin.math.coga.common.algorithm.AlgorithmListener;
 import de.tu_berlin.math.coga.zet.converter.cellularAutomaton.AssignmentApplicationInstance;
 import de.tu_berlin.math.coga.zet.converter.cellularAutomaton.CellularAutomatonAssignmentConverter;
@@ -30,11 +30,11 @@ import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import tasks.CellularAutomatonTask;
-import tasks.CellularAutomatonTaskStepByStep;
-import tasks.CompareTask;
-import tasks.GraphAlgorithmTask;
-import tasks.SerialTask;
+import zet.tasks.CellularAutomatonTask;
+import zet.tasks.CellularAutomatonTaskStepByStep;
+import zet.tasks.CompareTask;
+import zet.tasks.GraphAlgorithmTask;
+import zet.tasks.SerialTask;
 import tasks.conversion.BuildingPlanConverter;
 
 
@@ -165,7 +165,7 @@ public class AlgorithmControl implements PropertyChangeListener {
 
 	void performSimulation( PropertyChangeListener propertyChangeListener ) {
 		//final CellularAutomatonTask cat = new CellularAutomatonTask();
-		cat.setCaAlgo( CellularAutomatonAlgorithm.RandomOrder );
+		cat.setCaAlgo( CellularAutomatonAlgorithmEnumeration.RandomOrder );
 		cat.setProblem( project );
 
 		final SerialTask st = new SerialTask( cat );
@@ -212,7 +212,7 @@ public class AlgorithmControl implements PropertyChangeListener {
 	}
 
 	void setUpSimulationAlgorithm() {
-		CellularAutomatonAlgorithm cellularAutomatonAlgo = CellularAutomatonAlgorithm.RandomOrder;
+		CellularAutomatonAlgorithmEnumeration cellularAutomatonAlgo = CellularAutomatonAlgorithmEnumeration.RandomOrder;
 		caAlgo = cellularAutomatonAlgo.createTask( cellularAutomaton );
 		double caMaxTime = PropertyContainer.getInstance().getAsDouble( "algo.ca.maxTime" );
 		caAlgo.setMaxTimeInSeconds( caMaxTime );
@@ -241,7 +241,7 @@ public class AlgorithmControl implements PropertyChangeListener {
 			} else
 				catsbs = new CellularAutomatonTaskStepByStep();
 				//return; // no auto-create so far
-			catsbs.setCaAlgo( CellularAutomatonAlgorithm.InOrder );
+			catsbs.setCaAlgo( CellularAutomatonAlgorithmEnumeration.InOrder );
 			catsbs.setProblem( project );
 			if( stopMode ) {
 				catsbs.setStopMode( true );
@@ -321,7 +321,7 @@ public class AlgorithmControl implements PropertyChangeListener {
 	}
 
 	public void performOptimization( PropertyChangeListener propertyChangeListener ) {
-		final GraphAlgorithmTask gat = new GraphAlgorithmTask( GraphAlgorithm.SuccessiveEarliestArrivalAugmentingPathOptimized );
+		final GraphAlgorithmTask gat = new GraphAlgorithmTask( GraphAlgorithmEnumeration.SuccessiveEarliestArrivalAugmentingPathOptimized );
 		gat.setProblem( project );
 		
 		gat.setNetworkFlowModel( networkFlowModel );
@@ -344,7 +344,7 @@ public class AlgorithmControl implements PropertyChangeListener {
         
         public void performOptimizationCompare(PropertyChangeListener propertyChangeListener) {
             
-            final CompareTask ct = new CompareTask(GraphAlgorithm.SuccessiveEarliestArrivalAugmentingPathOptimizedCompare);
+            final CompareTask ct = new CompareTask(GraphAlgorithmEnumeration.SuccessiveEarliestArrivalAugmentingPathOptimizedCompare);
             ct.setProblem(project);
             
             //values for original network
@@ -376,9 +376,8 @@ public class AlgorithmControl implements PropertyChangeListener {
 	public GraphVisualizationResults getGraphVisResults() {
 		return graphVisResults;
 	}
-        
-        public CompareVisualizationResults getCompVisResults()
-        {
-            return compVisResults;
-        }
+
+	public CompareVisualizationResults getCompVisResults() {
+		return compVisResults;
+	}
 }

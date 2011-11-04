@@ -2,7 +2,7 @@
  * DisplayFloorTask.java
  * Created: 04.02.2011, 16:47:28
  */
-package tasks;
+package zet.tasks;
 
 import ds.z.Floor;
 import zet.gui.main.tabs.quickVisualization.JRasterFloor;

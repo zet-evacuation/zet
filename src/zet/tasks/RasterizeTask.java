@@ -18,7 +18,7 @@
  * Created on 24.01.2008, 21:02:06
  */
 
-package tasks;
+package zet.tasks;
 
 import ds.z.Project;
 import gui.ZETMain;

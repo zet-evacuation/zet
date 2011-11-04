@@ -26,8 +26,8 @@ import java.util.TreeMap;
 import statistic.ca.CAStatistic;
 import algo.ca.EvacuationSwapCellularAutomatonInOrder;
 import batch.BatchResultEntry;
-import batch.CellularAutomatonAlgorithm;
-import batch.GraphAlgorithm;
+import zet.tasks.CellularAutomatonAlgorithmEnumeration;
+import zet.tasks.GraphAlgorithmEnumeration;
 import old.ZToGraphConverter;
 import de.tu_berlin.math.coga.zet.converter.cellularAutomaton.ZToCAConverter.ConversionNotSupportedException;
 import de.tu_berlin.math.coga.common.algorithm.Algorithm;
@@ -50,9 +50,9 @@ import evacuationplan.FlowBasedCAFactory;
 public class BatchEvacuationCATask implements Runnable {
 
 	/** The cellular automaton algorithm enumeration object. */
-	private CellularAutomatonAlgorithm cellularAutomatonAlgo;
+	private CellularAutomatonAlgorithmEnumeration cellularAutomatonAlgo;
 	/** The graph algorithm enumeration object. */
-	private GraphAlgorithm graphAlgo;
+	private GraphAlgorithmEnumeration graphAlgo;
 	/** The number of the run, used for accessing the result in {@link res} */
 	private int maxTime;
 	/** The concrete assignment. */
@@ -80,7 +80,7 @@ public class BatchEvacuationCATask implements Runnable {
 	 * @param assignment the selected assignment
 	 * @param concreteAssignments the concrete assignments that were already used for the cellular automaton
 	 */
-	public BatchEvacuationCATask (CellularAutomatonAlgorithm cellularAutomatonAlgo, GraphAlgorithm graphAlgo,
+	public BatchEvacuationCATask (CellularAutomatonAlgorithmEnumeration cellularAutomatonAlgo, GraphAlgorithmEnumeration graphAlgo,
 			BatchResultEntry res, int runNumber, int maxTime, TreeMap<Integer, Integer> median,
 			Project project, Assignment assignment, ConcreteAssignment[] concreteAssignments) {
 		this.cellularAutomatonAlgo = cellularAutomatonAlgo;
@@ -96,7 +96,7 @@ public class BatchEvacuationCATask implements Runnable {
 
 	/**
 	 * Runs a cellular automaton. At first, the automaton is created. After that
-	 * the algorithm stored in the submitted {@link CellularAutomatonAlgorithm} is
+	 * the algorithm stored in the submitted {@link CellularAutomatonAlgorithmEnumeration} is
 	 * executed. After execution the results are stored in an
 	 * {@link BatchResultEntry}.
 	 */

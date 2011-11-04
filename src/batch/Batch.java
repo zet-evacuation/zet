@@ -15,6 +15,8 @@
  */
 package batch;
 
+import zet.tasks.CellularAutomatonAlgorithmEnumeration;
+import zet.tasks.GraphAlgorithmEnumeration;
 import ds.z.Project;
 import ds.z.Assignment;
 import gui.batch.EvacuationOptimizationType;
@@ -68,7 +70,7 @@ public class Batch {
      * @param caa the cellular automaton algorithm used for simulation
      * @throws java.lang.IllegalArgumentException if an error occured
      */
-    public void addEntry(String name, Project project, int cycles, GraphAlgorithm ga, CellularAutomatonAlgorithm caa) throws IllegalArgumentException {
+    public void addEntry(String name, Project project, int cycles, GraphAlgorithmEnumeration ga, CellularAutomatonAlgorithmEnumeration caa) throws IllegalArgumentException {
         entries.add(new BatchEntry(name, project, cycles, ga, caa));
     }
 
@@ -90,7 +92,7 @@ public class Batch {
      * @param property the properties loaded befor the batch is executed
      * @throws java.lang.IllegalArgumentException if an error occured
      */
-    public void addEntry(String name, Project project, Assignment assignment, boolean useCA, double caTime, int cycles, GraphAlgorithm ga, CellularAutomatonAlgorithm caa, boolean useGraph, int graphMaxTime, EvacuationOptimizationType eot, int eoRuns, Property property) throws IllegalArgumentException {
+    public void addEntry(String name, Project project, Assignment assignment, boolean useCA, double caTime, int cycles, GraphAlgorithmEnumeration ga, CellularAutomatonAlgorithmEnumeration caa, boolean useGraph, int graphMaxTime, EvacuationOptimizationType eot, int eoRuns, Property property) throws IllegalArgumentException {
         entries.add(new BatchEntry(name, project, assignment, useCA, caTime, cycles, ga, caa, useGraph, graphMaxTime, eot, eoRuns, property));
     }
 

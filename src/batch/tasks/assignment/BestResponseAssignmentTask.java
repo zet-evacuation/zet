@@ -29,7 +29,7 @@ import ds.z.ConcreteAssignment;
 import io.visualization.CAVisualizationResults;
 import java.util.TreeMap;
 import statistic.ca.CAStatistic;
-import batch.CellularAutomatonAlgorithm;
+import zet.tasks.CellularAutomatonAlgorithmEnumeration;
 import batch.tasks.AssignmentTask;
 import evacuationplan.BestResponseDynamics;
 import exitdistributions.ExitCapacityBasedCAFactory;
@@ -48,7 +48,7 @@ public class BestResponseAssignmentTask extends AssignmentTask {
 	private int runNumber;
 	private TreeMap<Integer, Integer> median;
 	private Assignment assignment;
-	private CellularAutomatonAlgorithm cellularAutomatonAlgo;
+	private CellularAutomatonAlgorithmEnumeration cellularAutomatonAlgo;
 
 	/**
 	 * Initializes a new instance of this task.
@@ -58,7 +58,7 @@ public class BestResponseAssignmentTask extends AssignmentTask {
 	 * @param assignment the selected assignment
 	 * @param concreteAssignments the concrete assignments that were already calculated for the cellular automaton. can be null.
 	 */
-	public BestResponseAssignmentTask( Project project, BatchResultEntry res, ConcreteAssignment[] concreteAssignments, int runNumber, TreeMap<Integer, Integer> median, Assignment assignment, CellularAutomatonAlgorithm cellularAutomatonAlgo ) {
+	public BestResponseAssignmentTask( Project project, BatchResultEntry res, ConcreteAssignment[] concreteAssignments, int runNumber, TreeMap<Integer, Integer> median, Assignment assignment, CellularAutomatonAlgorithmEnumeration cellularAutomatonAlgo ) {
 		this.project = project;
 		this.res = res;
 		this.concreteAssignments = concreteAssignments;

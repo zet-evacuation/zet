@@ -16,8 +16,8 @@
 package gui.batch;
 
 import batch.Batch;
-import batch.CellularAutomatonAlgorithm;
-import batch.GraphAlgorithm;
+import zet.tasks.CellularAutomatonAlgorithmEnumeration;
+import zet.tasks.GraphAlgorithmEnumeration;
 import batch.load.BatchProjectEntry;
 import de.tu_berlin.math.coga.common.localization.DefaultLoc;
 import ds.z.Project;
@@ -228,11 +228,11 @@ public class JBatchView extends JPanel {
 		tablemodel = new BatchTableModel();
 		tblEntries = new JTable( tablemodel );
 		JComboBox cbxGraphAlgos = new JComboBox();
-		for( GraphAlgorithm g : GraphAlgorithm.values() )
+		for( GraphAlgorithmEnumeration g : GraphAlgorithmEnumeration.values() )
 			cbxGraphAlgos.addItem( g );
 
 		JComboBox cbxCAAlgos = new JComboBox();
-		for( CellularAutomatonAlgorithm caa : CellularAutomatonAlgorithm.values() )
+		for( CellularAutomatonAlgorithmEnumeration caa : CellularAutomatonAlgorithmEnumeration.values() )
 			cbxCAAlgos.addItem( caa );
 
 		JComboBox cbxEvacuationOptimizationType = new JComboBox();
@@ -355,7 +355,7 @@ public class JBatchView extends JPanel {
 		try {
 			if( tblEntries.isEditing() )
 				tblEntries.getCellEditor().cancelCellEditing();
-			batch.addEntry( "Neuer Eintrag", project, cycles, GraphAlgorithm.SuccessiveEarliestArrivalAugmentingPathOptimized, CellularAutomatonAlgorithm.RandomOrder );
+			batch.addEntry( "Neuer Eintrag", project, cycles, GraphAlgorithmEnumeration.SuccessiveEarliestArrivalAugmentingPathOptimized, CellularAutomatonAlgorithmEnumeration.RandomOrder );
 			tablemodel.fireTableDataChanged();
 		} catch( Exception ex ) {
 			ZETMain.sendError( ex.getLocalizedMessage() );
@@ -415,7 +415,7 @@ public class JBatchView extends JPanel {
 				case COL_ASSIGNMENT:
 					return Assignment.class;
 				case COL_CA_ALGO:
-					return CellularAutomatonAlgorithm.class;
+					return CellularAutomatonAlgorithmEnumeration.class;
 				case COL_SIMULATE:
 					return Boolean.class;
 				case COL_CYCLES:
@@ -427,7 +427,7 @@ public class JBatchView extends JPanel {
 				case COL_OPTIMIZE:
 					return Boolean.class;
 				case COL_GRAPH_ALGO:
-					return GraphAlgorithm.class;
+					return GraphAlgorithmEnumeration.class;
 				case COL_EVACUATION_PLAN_CYCLES:
 					return Integer.class;
 				case COL_EVACUATION_PLAN_TYPE:
@@ -542,7 +542,7 @@ public class JBatchView extends JPanel {
 					batch.getEntries().get( row ).setAssignment( (Assignment)aValue );
 					break;
 				case COL_CA_ALGO:
-					batch.getEntries().get( row ).setCellularAutomatonAlgo( (CellularAutomatonAlgorithm)aValue );
+					batch.getEntries().get( row ).setCellularAutomatonAlgo( (CellularAutomatonAlgorithmEnumeration)aValue );
 					break;
 				case COL_SIMULATE:
 					batch.getEntries().get( row ).setUseCa( ((Boolean)aValue).booleanValue() );
@@ -571,7 +571,7 @@ public class JBatchView extends JPanel {
 					batch.getEntries().get( row ).setUseGraph( ((Boolean)aValue).booleanValue() );
 					break;
 				case COL_GRAPH_ALGO:
-					batch.getEntries().get( row ).setGraphAlgo( (GraphAlgorithm)aValue );
+					batch.getEntries().get( row ).setGraphAlgo( (GraphAlgorithmEnumeration)aValue );
 					break;
 				case COL_EVACUATION_PLAN_CYCLES:
 					try {
