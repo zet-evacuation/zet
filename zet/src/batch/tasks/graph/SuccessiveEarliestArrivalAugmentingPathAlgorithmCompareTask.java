@@ -6,10 +6,8 @@ package batch.tasks.graph;
 
 import algo.graph.dynamicflow.eat.EarliestArrivalFlowProblem;
 import algo.graph.dynamicflow.eat.SEAAPAlgoWithTH;
-import de.tu_berlin.math.coga.common.algorithm.Transformation;
 import de.tu_berlin.math.coga.zet.NetworkFlowModel;
 import ds.NetworkFlowModelAlgorithm;
-import ds.graph.IdentifiableDoubleMapping;
 import ds.graph.flow.FlowOverTime;
 import ds.graph.flow.PathBasedFlowOverTime;
 

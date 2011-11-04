@@ -15,6 +15,8 @@
  */
 package batch;
 
+import zet.tasks.CellularAutomatonAlgorithmEnumeration;
+import zet.tasks.GraphAlgorithmEnumeration;
 import batch.tasks.AssignmentTask;
 import batch.tasks.CA.BatchCA2Task;
 import gui.editor.properties.PropertyFilesSelectionModel.Property;
@@ -61,13 +63,13 @@ public class BatchEntry {
     private String name;
     private Project project;
     private Assignment assignment;
-    private CellularAutomatonAlgorithm cellularAutomatonAlgo;
+    private CellularAutomatonAlgorithmEnumeration cellularAutomatonAlgo;
     private boolean useCa;
     private boolean useGraph;
     private int cycles;
     private double caMaxTime;
     private int graphMaxTime;
-    private GraphAlgorithm graphAlgo;
+    private GraphAlgorithmEnumeration graphAlgo;
     private Property propertyFile;
     private EvacuationOptimizationType evacuationOptimizationType;
     private int optimizedEvacuationPlanCycles;
@@ -82,7 +84,7 @@ public class BatchEntry {
      * @param caa the cellular automaton algorithm that should be called
      * @throws IllegalArgumentException If the project is null or if it doesn't contain at least one assignment.
      */
-    public BatchEntry(String name, Project project, int cycles, GraphAlgorithm ga, CellularAutomatonAlgorithm caa) throws IllegalArgumentException {
+    public BatchEntry(String name, Project project, int cycles, GraphAlgorithmEnumeration ga, CellularAutomatonAlgorithmEnumeration caa) throws IllegalArgumentException {
         check(project);
         setOptimizedEvacuationPlanCycles(0);
         this.project = project;
@@ -121,7 +123,7 @@ public class BatchEntry {
      * @param property the properties used for this batch task
      * @throws IllegalArgumentException If the project is null or if it doesn't contain at least one assignment.
      */
-    public BatchEntry(String name, Project project, Assignment assignment, boolean useCA, double caTime, int cycles, GraphAlgorithm ga, CellularAutomatonAlgorithm caa, boolean useGraph, int graphMaxTime, EvacuationOptimizationType eot, int eoRuns, Property property) throws IllegalArgumentException {
+    public BatchEntry(String name, Project project, Assignment assignment, boolean useCA, double caTime, int cycles, GraphAlgorithmEnumeration ga, CellularAutomatonAlgorithmEnumeration caa, boolean useGraph, int graphMaxTime, EvacuationOptimizationType eot, int eoRuns, Property property) throws IllegalArgumentException {
 //		setOptimizedEvacuationPlanCycles( 0 );
         check(project);
         this.project = project;
@@ -338,7 +340,7 @@ public class BatchEntry {
     }
 
     /** @return the selected cellular automaton algorithm */
-    public CellularAutomatonAlgorithm getCellularAutomatonAlgo() {
+    public CellularAutomatonAlgorithmEnumeration getCellularAutomatonAlgo() {
         return cellularAutomatonAlgo;
     }
 
@@ -346,12 +348,12 @@ public class BatchEntry {
      * Sets the selected cellular automaton algorithm
      * @param cellularAutomatonAlgo the selected algorithm
      */
-    public void setCellularAutomatonAlgo(CellularAutomatonAlgorithm cellularAutomatonAlgo) {
+    public void setCellularAutomatonAlgo(CellularAutomatonAlgorithmEnumeration cellularAutomatonAlgo) {
         this.cellularAutomatonAlgo = cellularAutomatonAlgo;
     }
 
     /** @return Which one of the available graph algos will be used with this batch entry. */
-    public GraphAlgorithm getGraphAlgo() {
+    public GraphAlgorithmEnumeration getGraphAlgo() {
         return graphAlgo;
     }
 
@@ -369,7 +371,7 @@ public class BatchEntry {
         this.name = name;
     }
 
-    public void setGraphAlgo(GraphAlgorithm graphAlgo) {
+    public void setGraphAlgo(GraphAlgorithmEnumeration graphAlgo) {
         this.graphAlgo = graphAlgo;
     }
 

@@ -22,7 +22,7 @@ package batch.tasks.CA;
 
 import algo.ca.EvacuationCellularAutomatonAlgorithm;
 import batch.BatchResultEntry;
-import batch.CellularAutomatonAlgorithm;
+import zet.tasks.CellularAutomatonAlgorithmEnumeration;
 import de.tu_berlin.math.coga.zet.converter.cellularAutomaton.AssignmentApplicationInstance;
 import de.tu_berlin.math.coga.zet.converter.cellularAutomaton.CellularAutomatonAssignmentConverter;
 import de.tu_berlin.math.coga.zet.converter.cellularAutomaton.ConvertedCellularAutomaton;
@@ -45,7 +45,7 @@ import statistic.ca.CAStatistic;
 public class BatchCATask implements Runnable {
 
 	/** The cellular automaton algorithm enumeration object. */
-	private CellularAutomatonAlgorithm cellularAutomatonAlgo;
+	private CellularAutomatonAlgorithmEnumeration cellularAutomatonAlgo;
 	/** The batch object which stores the calculated results. */
 	private BatchResultEntry res;
 	/** The number of the run, used for accessing the result in {@link res} */
@@ -69,7 +69,7 @@ public class BatchCATask implements Runnable {
 	 * @param assignment the selected assignment
 	 * @param concreteAssignments the array with calculated concrete assignments
 	 */
-	public BatchCATask( CellularAutomatonAlgorithm cellularAutomatonAlgo, BatchResultEntry res,
+	public BatchCATask( CellularAutomatonAlgorithmEnumeration cellularAutomatonAlgo, BatchResultEntry res,
 					int runNumber, TreeMap<Integer, Integer> median, Project project, Assignment assignment,
 					ConcreteAssignment[] concreteAssignments ) {
 		this.cellularAutomatonAlgo = cellularAutomatonAlgo;
@@ -83,7 +83,7 @@ public class BatchCATask implements Runnable {
 
 	/**
 	 * Runs a cellular automaton. At first, the automaton is created. After that
-	 * the algorithm stored in the submitted {@link CellularAutomatonAlgorithm} is
+	 * the algorithm stored in the submitted {@link CellularAutomatonAlgorithmEnumeration} is
 	 * executed. After execution the results are stored in an
 	 * {@link BatchResultEntry}.
 	 */

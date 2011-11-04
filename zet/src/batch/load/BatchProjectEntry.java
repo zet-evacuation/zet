@@ -20,8 +20,8 @@
 
 package batch.load;
 
-import batch.CellularAutomatonAlgorithm;
-import batch.GraphAlgorithm;
+import zet.tasks.CellularAutomatonAlgorithmEnumeration;
+import zet.tasks.GraphAlgorithmEnumeration;
 import com.thoughtworks.xstream.annotations.XStreamAlias;
 import gui.batch.EvacuationOptimizationType;
 
@@ -40,7 +40,7 @@ public class BatchProjectEntry {
 	/** An assignment in the project. Only the name of the assignment. */
 	private String assignment;
 	/** The cellular automaton algorithm that is used for simulation. */
-	private CellularAutomatonAlgorithm cellularAutomatonAlgorithm;
+	private CellularAutomatonAlgorithmEnumeration cellularAutomatonAlgorithm;
 	/** Indicates wheather simulation is used, or not. */
 	private boolean useCellularAutomaton;
 	/** The number of simulation runs. */
@@ -50,7 +50,7 @@ public class BatchProjectEntry {
 	/** Indicates wheather a graph optimization is used, or not. */
 	private boolean useGraph;
 	/** The graph algorithm that is used for optimization. */
-	private GraphAlgorithm graphAlgorithm;
+	private GraphAlgorithmEnumeration graphAlgorithm;
 	/** The time horizon used by some graph algorithms. */
 	private int graphTimeHorizon;
 	/** The evacuation optimization type. */
@@ -99,7 +99,7 @@ public class BatchProjectEntry {
 	 * Returns the cellular automaton algorithm used for simulation.
 	 * @return the cellular automaton algorithm used for simulation
 	 */
-	public CellularAutomatonAlgorithm getCellularAutomatonAlgorithm() {
+	public CellularAutomatonAlgorithmEnumeration getCellularAutomatonAlgorithm() {
 		return cellularAutomatonAlgorithm;
 	}
 
@@ -107,7 +107,7 @@ public class BatchProjectEntry {
 	 * Sets the cellular automaton algorithm used for simulation.
 	 * @param cellularAutomatonAlgorithm the algorithm
 	 */
-	public void setCellularAutomatonAlgorithm( CellularAutomatonAlgorithm cellularAutomatonAlgorithm ) {
+	public void setCellularAutomatonAlgorithm( CellularAutomatonAlgorithmEnumeration cellularAutomatonAlgorithm ) {
 		this.cellularAutomatonAlgorithm = cellularAutomatonAlgorithm;
 	}
 
@@ -168,7 +168,7 @@ public class BatchProjectEntry {
 	 * Returns the graph algorithm used for optimization.
 	 * @return the graph algorithm used for optimization
 	 */
-	public GraphAlgorithm getGraphAlgorithm() {
+	public GraphAlgorithmEnumeration getGraphAlgorithm() {
 		return graphAlgorithm;
 	}
 
@@ -176,7 +176,7 @@ public class BatchProjectEntry {
 	 * Sets the graph algorithm used for optimization.
 	 * @param graphAlgorithm the graph algorithm
 	 */
-	public void setGraphAlgorithm( GraphAlgorithm graphAlgorithm ) {
+	public void setGraphAlgorithm( GraphAlgorithmEnumeration graphAlgorithm ) {
 		this.graphAlgorithm = graphAlgorithm;
 	}
 

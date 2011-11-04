@@ -20,7 +20,7 @@
 package batch.tasks;
 
 import batch.BatchResultEntry;
-import batch.GraphAlgorithm;
+import zet.tasks.GraphAlgorithmEnumeration;
 import batch.tasks.graph.SuccessiveEarliestArrivalAugmentingPathOptimizedTask;
 import old.ZToGraphConverter;
 import de.tu_berlin.math.coga.common.algorithm.Algorithm;
@@ -39,7 +39,7 @@ import ds.z.ConcreteAssignment;
 public class BatchGraphTask implements Runnable {
 
     /** The graph algorithm enumeration object. */
-    private GraphAlgorithm graphAlgo;
+    private GraphAlgorithmEnumeration graphAlgo;
     /** The batch object which stores the calculated results. */
     private BatchResultEntry res;
     /** The number of the run, used for accessing the result in {@link res} */
@@ -63,7 +63,7 @@ public class BatchGraphTask implements Runnable {
      * @param assignment the selected assignment
      * @param concreteAssignments the concrete assignments that were already calculated for the cellular automaton. can be null.
      */
-    public BatchGraphTask(GraphAlgorithm graphAlgo, BatchResultEntry res, int runNumber, int maxTime, Project project, Assignment assignment, ConcreteAssignment[] concreteAssignments) {
+    public BatchGraphTask(GraphAlgorithmEnumeration graphAlgo, BatchResultEntry res, int runNumber, int maxTime, Project project, Assignment assignment, ConcreteAssignment[] concreteAssignments) {
         this.graphAlgo = graphAlgo;
         this.res = res;
         this.runNumber = runNumber;
@@ -77,7 +77,7 @@ public class BatchGraphTask implements Runnable {
 	/**
 	 * Runs a graph algorithm. At first the {@link ds.NetworkFlowModel}
 	 * is created. After that the algorithm stored in the submitted
-	 * {@link GraphAlgorithm} is executed. After execution the results are stored in an
+	 * {@link GraphAlgorithmEnumeration} is executed. After execution the results are stored in an
 	 * {@link BatchResultEntry}.
 	 */
 	public void run() {

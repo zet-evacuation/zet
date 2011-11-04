@@ -2,10 +2,9 @@
  * CellularAutomatonTaskStepByStep.java
  * Created: Nov 5, 2010, 4:40:09 PM
  */
-package tasks;
+package zet.tasks;
 
 import algo.ca.EvacuationCellularAutomatonAlgorithm;
-import batch.CellularAutomatonAlgorithm;
 import de.tu_berlin.math.coga.zet.converter.cellularAutomaton.AssignmentApplicationInstance;
 import de.tu_berlin.math.coga.zet.converter.cellularAutomaton.CellularAutomatonAssignmentConverter;
 import de.tu_berlin.math.coga.zet.converter.cellularAutomaton.ConvertedCellularAutomaton;
@@ -24,7 +23,7 @@ import ds.z.ConcreteAssignment;
  * @author Jan-Philipp Kappmeier
  */
 public class CellularAutomatonTaskStepByStep extends Algorithm<Project, Void> {
-	private CellularAutomatonAlgorithm  cellularAutomatonAlgorithm;
+	private CellularAutomatonAlgorithmEnumeration  cellularAutomatonAlgorithm;
 	private boolean performConversion = true;
 	private ConvertedCellularAutomaton cca;// = new ConvertedCellularAutomaton( ca, mapping, container );
 
@@ -40,11 +39,11 @@ public class CellularAutomatonTaskStepByStep extends Algorithm<Project, Void> {
 		performConversion = false;
 	}
 
-	public void setCaAlgo( CellularAutomatonAlgorithm caAlgo ) {
+	public void setCaAlgo( CellularAutomatonAlgorithmEnumeration caAlgo ) {
 		this.cellularAutomatonAlgorithm = caAlgo;
 	}
 
-	public CellularAutomatonAlgorithm getCellularAutomatonAlgorithm() {
+	public CellularAutomatonAlgorithmEnumeration getCellularAutomatonAlgorithm() {
 		return cellularAutomatonAlgorithm;
 	}
 	

@@ -13,7 +13,7 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
-package batch;
+package zet.tasks;
 
 import algo.graph.dynamicflow.QuickestTransshipment;
 import algo.graph.dynamicflow.eat.EATransshipmentMinCost;
@@ -36,7 +36,7 @@ import ds.graph.flow.PathBasedFlowOverTime;
  *
  * @author Timon
  */
-public enum GraphAlgorithm {
+public enum GraphAlgorithmEnumeration {
 	/**
 	 * Calls the {@link EATransshipmentSSSP} algorithm to solve the problem.
 	 */
@@ -95,6 +95,7 @@ public enum GraphAlgorithm {
 		}
 	},
 	SuccessiveEarliestArrivalAugmentingPath( DefaultLoc.getSingleton().getString( "gui.SuccEAAugPath" ) ) {
+		@Override
 		public NetworkFlowModelAlgorithm createTask( NetworkFlowModel model, int timeHorizon ) {
 			return new SuccessiveEarliestArrivalAugmentingPathAlgorithm2Task();
 		}
@@ -143,24 +144,25 @@ public enum GraphAlgorithm {
 					if( !algo.isProblemSolved() || !algo.isPathBasedFlowAvailable() )
 						throw new AssertionError( "Either algorithm has not run or path based flow is not available." );
 					return algo.getResultFlowPathBased();
-
 				}
 			};
 		}
 	},
 	SuccessiveEarliestArrivalAugmentingPathOptimized( DefaultLoc.getSingleton().getString( "gui.SEAAP" ) ) {
+		@Override
 		public Algorithm<NetworkFlowModel, PathBasedFlowOverTime> createTask( NetworkFlowModel model, int timeHorizon ) {
 			return new SuccessiveEarliestArrivalAugmentingPathOptimizedTask();
 		}
 	},
 	SuccessiveEarliestArrivalAugmentingPathOptimizedCompare( DefaultLoc.getSingleton().getString( "gui.SEAAP" ) ) {
+		@Override
 		public Algorithm<NetworkFlowModel, PathBasedFlowOverTime> createTask( NetworkFlowModel model, int timeHorizon ) {
 			return new SuccessiveEarliestArrivalAugmentingPathAlgorithmCompareTask( timeHorizon );
 		}
 	};
 	private String name;
 
-	private GraphAlgorithm( String name ) {
+	private GraphAlgorithmEnumeration( String name ) {
 		this.name = name;
 	}
 

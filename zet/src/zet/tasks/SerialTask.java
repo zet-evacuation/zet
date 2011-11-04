@@ -2,13 +2,12 @@
  * SerialTask.java
  * Created: Jul 28, 2010,5:45:06 PM
  */
-package tasks;
+package zet.tasks;
 
 import de.tu_berlin.math.coga.common.algorithm.Algorithm;
 import de.tu_berlin.math.coga.common.algorithm.AlgorithmEvent;
 import de.tu_berlin.math.coga.common.algorithm.AlgorithmListener;
 import de.tu_berlin.math.coga.common.algorithm.AlgorithmStartedEvent;
-import ds.z.exception.UnknownZModelError;
 import java.util.ArrayList;
 import java.util.List;
 import javax.swing.SwingWorker;

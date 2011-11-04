@@ -45,7 +45,7 @@ import zet.gui.GUILocalization;
 import ds.z.ZControl;
 import gui.components.framework.Button;
 import javax.swing.JButton;
-import tasks.DisplayFloorTask;
+import zet.tasks.DisplayFloorTask;
 
 /**
  *

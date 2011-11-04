@@ -15,10 +15,10 @@
  */
 
 /**
- * Class CellularAutomatonAlgorithm
+ * Class CellularAutomatonAlgorithmEnumeration
  * Created 07.07.2008, 01:29:17
  */
-package batch;
+package zet.tasks;
 
 import algo.ca.CellularAutomatonBackToFrontExecution;
 import algo.ca.CellularAutomatonFrontToBackExecution;
@@ -34,7 +34,7 @@ import ds.ca.CellularAutomaton;
  * and supports displaying in gui elements.
  * @author Jan-Philipp Kappmeier
  */
-public enum CellularAutomatonAlgorithm {
+public enum CellularAutomatonAlgorithmEnumeration {
 	/** A simulation algorithm where all individuals move in the order of decreasing distances. */
 	BackToFront( DefaultLoc.getSingleton().getString( "batch.caOrder.backToFront" ) ) {
 		public EvacuationCellularAutomatonAlgorithm createTask( CellularAutomaton ca ) {
@@ -72,7 +72,7 @@ public enum CellularAutomatonAlgorithm {
 	 * Creates a new cellular automaton algorithm instance.
 	 * @param name
 	 */
-	CellularAutomatonAlgorithm( String name ) {
+	CellularAutomatonAlgorithmEnumeration( String name ) {
 		this.name = name;
 	}
 

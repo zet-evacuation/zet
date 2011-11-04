@@ -2,10 +2,9 @@
  * CellularAutomatonTask.java
  * Created 29.07.2010 12:12:03
  */
-package tasks;
+package zet.tasks;
 
 import algo.ca.EvacuationCellularAutomatonAlgorithm;
-import batch.CellularAutomatonAlgorithm;
 import de.tu_berlin.math.coga.zet.converter.cellularAutomaton.AssignmentApplicationInstance;
 import de.tu_berlin.math.coga.zet.converter.cellularAutomaton.CellularAutomatonAssignmentConverter;
 import de.tu_berlin.math.coga.zet.converter.cellularAutomaton.ConvertedCellularAutomaton;
@@ -27,16 +26,16 @@ import io.visualization.CAVisualizationResults;
  * @author Jan-Philipp Kappmeier
  */
 public class CellularAutomatonTask extends Algorithm<Project, CAVisualizationResults> {
-	CellularAutomatonAlgorithm  cellularAutomatonAlgorithm;
+	CellularAutomatonAlgorithmEnumeration  cellularAutomatonAlgorithm;
 	CellularAutomaton ca;
 	ZToCAMapping mapping;
 	ZToCARasterContainer container;
 
-	public void setCaAlgo( CellularAutomatonAlgorithm caAlgo ) {
+	public void setCaAlgo( CellularAutomatonAlgorithmEnumeration caAlgo ) {
 		this.cellularAutomatonAlgorithm = caAlgo;
 	}
 
-	public CellularAutomatonAlgorithm getCellularAutomatonAlgorithm() {
+	public CellularAutomatonAlgorithmEnumeration getCellularAutomatonAlgorithm() {
 		return cellularAutomatonAlgorithm;
 	}
 

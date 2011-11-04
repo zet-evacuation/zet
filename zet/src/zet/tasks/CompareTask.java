@@ -2,11 +2,10 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package tasks;
+package zet.tasks;
 
 import algo.graph.dynamicflow.eat.EarliestArrivalFlowProblem;
 import algo.graph.dynamicflow.eat.LongestShortestPathTimeHorizonEstimator;
-import batch.GraphAlgorithm;
 import batch.tasks.graph.SuccessiveEarliestArrivalAugmentingPathAlgorithmCompareTask;
 import de.tu_berlin.math.coga.common.algorithm.Algorithm;
 import de.tu_berlin.math.coga.zet.NetworkFlowModel;
@@ -27,12 +26,12 @@ public class CompareTask extends Algorithm<Project, CompareVisualizationResults>
     
     NetworkFlowModel OrigNetwork;
     NetworkFlowModel ThinNetwork;
-    GraphAlgorithm algo;
+    GraphAlgorithmEnumeration algo;
     BaseZToGraphConverter convOrig;
     BaseZToGraphConverter convThinNet;
     int TimeHorizonGlobal;
     
-    public CompareTask (NetworkFlowModel OriginNetwork, NetworkFlowModel ThinNet, GraphAlgorithm graphalgo, BaseZToGraphConverter ConvOrig, BaseZToGraphConverter ConvThin)
+    public CompareTask (NetworkFlowModel OriginNetwork, NetworkFlowModel ThinNet, GraphAlgorithmEnumeration graphalgo, BaseZToGraphConverter ConvOrig, BaseZToGraphConverter ConvThin)
     {
         OrigNetwork = OriginNetwork;
         ThinNetwork = ThinNet;
@@ -40,7 +39,7 @@ public class CompareTask extends Algorithm<Project, CompareVisualizationResults>
         convOrig = ConvOrig;
         convThinNet = ConvThin;
     }
-    public CompareTask(GraphAlgorithm graphalgo)
+    public CompareTask(GraphAlgorithmEnumeration graphalgo)
     {
         algo = graphalgo;
     }
