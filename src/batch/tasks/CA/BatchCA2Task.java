@@ -18,12 +18,13 @@
  * Erstellt 23.11.2008, 23:03:13
  */
 
-package batch.tasks;
+package batch.tasks.CA;
 
 import algo.ca.EvacuationCellularAutomatonAlgorithm;
 import algo.graph.exitassignment.ExitAssignment;
 import batch.BatchResultEntry;
 import batch.CellularAutomatonAlgorithm;
+import batch.tasks.AssignmentTask;
 import de.tu_berlin.math.coga.zet.converter.cellularAutomaton.ZToCAConverter;
 import de.tu_berlin.math.coga.zet.converter.cellularAutomaton.ZToCAConverter.ConversionNotSupportedException;
 import ds.z.Project;

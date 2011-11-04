@@ -70,6 +70,9 @@ public abstract class Algorithm<Problem, Solution> implements Runnable {
 	private long startTime;
 	/** The state of execution of the algorithm. */
 	private State state;
+	/** The change in progress that has at least be done to fire an {@link AlgorithmProgressEvent} */
+	private double accuracy = 0;
+
 
 	/**
 	 * Adds the specified listener to the set of listeners receiving events from
@@ -127,7 +130,7 @@ public abstract class Algorithm<Problem, Solution> implements Runnable {
 	protected final void fireEvent( String formatStr, Object... params ) {
 		fireEvent( String.format( formatStr, params ) );
 	}
-
+	
 	/**
 	 * Updates the progress value to broadcasts the new value to all listeners.
 	 * @param progress the new progress value.
@@ -137,7 +140,7 @@ public abstract class Algorithm<Problem, Solution> implements Runnable {
 	protected final void fireProgressEvent( double progress ) {
 		if( progress < this.progress )
 			throw new IllegalArgumentException( "The progress values must be monotonically increasing." );
-		if( this.progress == progress )
+		if( this.progress == progress || (progress-this.progress < accuracy ) )
 			return;
 		this.progress = progress;
 			fireEvent( new AlgorithmProgressEvent( this, progress ) );
@@ -153,14 +156,12 @@ public abstract class Algorithm<Problem, Solution> implements Runnable {
 	 * previous one.
 	 */
 	protected final void fireProgressEvent( double progress, String message ) {
-                
-		if( progress < this.progress )
-                {
-                    System.out.println("progress: " + progress);
-                System.out.println("this.progress: " + this.progress);
-                throw new IllegalArgumentException( "The progress values must be monotonically increasing." );
-                }
-			
+		if( progress < this.progress ) {
+			System.out.println( "progress: " + progress );
+			System.out.println( "this.progress: " + this.progress );
+			throw new IllegalArgumentException( "The progress values must be monotonically increasing." );
+		}
+
 		this.progress = progress;
 		fireEvent( new AlgorithmDetailedProgressEvent( this, progress, message ) );
 	}
@@ -190,6 +191,35 @@ public abstract class Algorithm<Problem, Solution> implements Runnable {
 	}
 
 	/**
+	 * Returns the current accuracy in progress events. The accuracy equals the
+	 * change in progress that has to be done until an event is actually fired.
+	 * @return  the progress accuracy
+	 */
+	public double getAccuracy() {
+		return accuracy;
+	}
+
+	/**
+	 * Sets a new progress accuracy. The accuracy describes the value by that the
+	 * progress has to be changed until an {@link AlgorithmProgressEvent} is fired.
+	 * @param accuracy the new accuracy value. must be in the interval [0,1]
+	 */
+	public void setAccuracy( double accuracy ) {
+		if( accuracy < 0 || accuracy > 1 )
+			throw new IllegalArgumentException( "Invalid value for accuracy: " + accuracy );
+		this.accuracy = accuracy;
+	}
+	
+	/**
+	 * Determines the accuracy in such a way that at most most {@code possibleChanges}
+	 * many events are fired.
+	 * @param possibleChanges the maximal number of progress events 
+	 */
+	public void setAccuracy( int possibleChanges ) {
+		setAccuracy( 1./possibleChanges );
+	}
+
+	/**
 	 * Returns the time between the start of the algorithm and its termination
 	 * in milliseconds.
 	 * @return the runtime of the algorithm in milliseconds.
@@ -198,8 +228,7 @@ public abstract class Algorithm<Problem, Solution> implements Runnable {
 	public final long getRuntime() {
 		if( state == State.SOLVED || state == State.SOLVING_FAILED )
 			return runtime;
-		else
-			throw new IllegalStateException( "The algorithm has not terminated yet. Please call run() first and wait for its termination." );
+		throw new IllegalStateException( "The algorithm has not terminated yet. Please call run() first and wait for its termination." );
 	}
 
 	/**
@@ -212,8 +241,7 @@ public abstract class Algorithm<Problem, Solution> implements Runnable {
 	public final String getRuntimeAsString() {
 		if( state == State.SOLVED || state == State.SOLVING_FAILED )
 			return Formatter.formatTimeUnit( runtime, Formatter.TimeUnits.MilliSeconds, 2 );
-		else
-			throw new IllegalStateException( "The algorithm has not terminated yet. Please call run() first and wait for its termination." );
+		throw new IllegalStateException( "The algorithm has not terminated yet. Please call run() first and wait for its termination." );
 	}
 
 	/**
@@ -224,8 +252,7 @@ public abstract class Algorithm<Problem, Solution> implements Runnable {
 	public final Solution getSolution() {
 		if( isProblemSolved() )
 			return solution;
-		else
-			throw new IllegalStateException( "The problem has not been solved yet. Please call run() first and wait for its termination." );
+		throw new IllegalStateException( "The problem has not been solved yet. Please call run() first and wait for its termination." );
 	}
 
 	/**
@@ -238,8 +265,7 @@ public abstract class Algorithm<Problem, Solution> implements Runnable {
 	public final long getStartTime() {
 		if( state != State.WAITING )
 			return startTime;
-		else
-			throw new IllegalStateException( "The execution of the algorithm has not started yet. Please call run() first." );
+		throw new IllegalStateException( "The execution of the algorithm has not started yet. Please call run() first." );
 	}
 
 	/**
@@ -340,7 +366,7 @@ public abstract class Algorithm<Problem, Solution> implements Runnable {
 	}
 
 	/**
-	 * Formats the specified message and params using String.format() and logs
+	 * Formats the specified message and parameters using String.format() and logs
 	 * it.
 	 * @param message the format string of the message.
 	 * @param params the parameters for formatting the message.

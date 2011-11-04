@@ -15,17 +15,18 @@
  */
 package batch;
 
+import algo.graph.dynamicflow.QuickestTransshipment;
+import algo.graph.dynamicflow.eat.EATransshipmentMinCost;
+import algo.graph.dynamicflow.eat.EATransshipmentSSSP;
+import algo.graph.dynamicflow.eat.SuccessiveEarliestArrivalAugmentingPathAlgorithmNoTH;
+import algo.graph.dynamicflow.maxflow.MaxFlowOverTime;
+import algo.graph.dynamicflow.maxflow.MaximumFlowOverTimeProblem;
+import algo.graph.dynamicflow.maxflow.TimeExpandedMaximumFlowOverTime;
 import de.tu_berlin.math.coga.zet.NetworkFlowModel;
-import batch.tasks.graph.EATransshipmentMinCostTask;
-import batch.tasks.graph.EATransshipmentSSSPTask;
 import ds.NetworkFlowModelAlgorithm;
-import batch.tasks.graph.MFOTMinCostTask;
-import batch.tasks.graph.MFOTimeExpandedTask;
-import batch.tasks.graph.QuickestTransshipmentTask;
 import batch.tasks.graph.SuccessiveEarliestArrivalAugmentingPathAlgorithm2Task;
 import batch.tasks.graph.SuccessiveEarliestArrivalAugmentingPathAlgorithmCompareTask;
-import batch.tasks.graph.SuccessiveEarliestArrivalAugmentingPathAlgorithmTask;
-import batch.tasks.graph.SuccessiveEarliestArrivalAugmentingPathAlgorithmTask3;
+import batch.tasks.graph.SuccessiveEarliestArrivalAugmentingPathOptimizedTask;
 import de.tu_berlin.math.coga.common.algorithm.Algorithm;
 import de.tu_berlin.math.coga.common.localization.DefaultLoc;
 import ds.graph.flow.PathBasedFlowOverTime;
@@ -36,75 +37,141 @@ import ds.graph.flow.PathBasedFlowOverTime;
  * @author Timon
  */
 public enum GraphAlgorithm {
+	/**
+	 * Calls the {@link EATransshipmentSSSP} algorithm to solve the problem.
+	 */
+	EarliestArrivalTransshipmentSuccessiveShortestPaths( DefaultLoc.getSingleton().getString( "gui.EATransshipmentSSSP" ) ) {
+		@Override
+		public NetworkFlowModelAlgorithm createTask( NetworkFlowModel model, int timeHorizon ) {
+			NetworkFlowModelAlgorithm nfma = new NetworkFlowModelAlgorithm() {
+				@Override
+				protected PathBasedFlowOverTime runAlgorithm( NetworkFlowModel model ) {
+					EATransshipmentSSSP algo = new EATransshipmentSSSP( model.getNetwork(), model.getTransitTimes(), model.getEdgeCapacities(), model.getCurrentAssignment() );
+					algo.run();
+					if( !algo.isProblemSolved() || !algo.isPathBasedFlowAvailable() )
+						throw new AssertionError( "Either algorithm has not run or path based flow is not available." );
+					return algo.getResultFlowPathBased();
+				}
+			};
+			return nfma;
+		}
+	},
+	/**
+	 * Calls the {@link EATransshipmentMinCost} algorithm to solve this.
+	 */
+	EarliestArrivalTransshipmentMinCost( DefaultLoc.getSingleton().getString( "gui.EATransshipmentMinCost" ) ) {
+		@Override
+		public NetworkFlowModelAlgorithm createTask( NetworkFlowModel model, int timeHorizon ) {
+			NetworkFlowModelAlgorithm nfma = new NetworkFlowModelAlgorithm() {
+				@Override
+				protected PathBasedFlowOverTime runAlgorithm( NetworkFlowModel model ) {
+					EATransshipmentMinCost algo = new EATransshipmentMinCost( model.getNetwork(), model.getTransitTimes(), model.getEdgeCapacities(), model.getCurrentAssignment() );
+					algo.run();
+					if( !algo.isProblemSolved() || !algo.isPathBasedFlowAvailable() )
+						throw new AssertionError( "Either algorithm has not run or path based flow is not available." );
+					return algo.getResultFlowPathBased();
+				}
+			};
+			return nfma;
+		}
+	},
+	/**
+	 * Calls the {@link SuccessiveEarliestArrivalAugmentingPathAlgorithmNoTH} algorithm to solve
+	 * an earliest arrival s-t-problem using binary search.
+	 */
+	SuccessiveEarliestArrivalAugmentingPathBinarySearch( DefaultLoc.getSingleton().getString( "gui.SuccEAAugPathBS" ) ) {
+		@Override
+		public NetworkFlowModelAlgorithm createTask( NetworkFlowModel model, int timeHorizon ) {
+			return new NetworkFlowModelAlgorithm() {
+				@Override
+				protected PathBasedFlowOverTime runAlgorithm( NetworkFlowModel model ) {
+					SuccessiveEarliestArrivalAugmentingPathAlgorithmNoTH algo = new SuccessiveEarliestArrivalAugmentingPathAlgorithmNoTH( model.getNetwork(), model.getTransitTimes(), model.getEdgeCapacities(), model.getNodeCapacities(), model.getCurrentAssignment() );
+					algo.run();
+					if( !algo.isProblemSolved() || !algo.isPathBasedFlowAvailable() )
+						throw new AssertionError( "Either algorithm has not run or path based flow is not available." );
+					return algo.getResultFlowPathBased();
+				}
+			};
+		}
+	},
+	SuccessiveEarliestArrivalAugmentingPath( DefaultLoc.getSingleton().getString( "gui.SuccEAAugPath" ) ) {
+		public NetworkFlowModelAlgorithm createTask( NetworkFlowModel model, int timeHorizon ) {
+			return new SuccessiveEarliestArrivalAugmentingPathAlgorithm2Task();
+		}
+	},
+	MaxFlowOverTimeMinCost( DefaultLoc.getSingleton().getString( "gui.MaxFlowMinCost" ) ) {
+		@Override
+		public NetworkFlowModelAlgorithm createTask( NetworkFlowModel model, final int timeHorizon ) {
+			return new NetworkFlowModelAlgorithm() {
+				@Override
+				protected PathBasedFlowOverTime runAlgorithm( NetworkFlowModel model ) {
+					MaxFlowOverTime maxFlowOverTimeAlgo = new MaxFlowOverTime();
+					maxFlowOverTimeAlgo.setProblem( new MaximumFlowOverTimeProblem( model.getNetwork(), model.getEdgeCapacities(), model.getTransitTimes(), model.getSinks(), model.getSources(), timeHorizon ) );
+					maxFlowOverTimeAlgo.run();
+					return maxFlowOverTimeAlgo.getSolution();
+				}
+			};
+		}
+	},
+	/**
+	 * Calls the {@link TimeExpandedMaximumFlowOverTime} algorithm.
+	 */
+	MaxFlowOverTimeTimeExpanded( DefaultLoc.getSingleton().getString( "gui.MaxFlowTimeExtended" ) ) {
+		@Override
+		public NetworkFlowModelAlgorithm createTask( NetworkFlowModel model, final int timeHorizon ) {
+			return new NetworkFlowModelAlgorithm() {
+				@Override
+				protected PathBasedFlowOverTime runAlgorithm( NetworkFlowModel model ) {
+					TimeExpandedMaximumFlowOverTime maxFlowOverTimeAlgo = new TimeExpandedMaximumFlowOverTime();
+					maxFlowOverTimeAlgo.setProblem( new MaximumFlowOverTimeProblem( model.getNetwork(), model.getEdgeCapacities(), model.getTransitTimes(), model.getSources(), model.getSinks(), timeHorizon ) );
+					maxFlowOverTimeAlgo.run();
+					return maxFlowOverTimeAlgo.getSolution();
+				}
+			};
+		}
+	},
+	/**
+	 * Calls the {@link QuickestTransshipment} algorithm to compute a quickest transshipment.
+	 */
+	QuickestTransshipment( DefaultLoc.getSingleton().getString( "gui.QuickestTransshipment" ) ) {
+		public NetworkFlowModelAlgorithm createTask( NetworkFlowModel model, int timeHorizon ) {
+			return new NetworkFlowModelAlgorithm() {
+				@Override
+				protected PathBasedFlowOverTime runAlgorithm( NetworkFlowModel model ) {
+					QuickestTransshipment algo = new QuickestTransshipment( model.getNetwork(), model.getTransitTimes(), model.getEdgeCapacities(), model.getCurrentAssignment() );
+					algo.run();
+					if( !algo.isProblemSolved() || !algo.isPathBasedFlowAvailable() )
+						throw new AssertionError( "Either algorithm has not run or path based flow is not available." );
+					return algo.getResultFlowPathBased();
 
-    EarliestArrivalTransshipmentSuccessiveShortestPaths(DefaultLoc.getSingleton().getString("gui.EATransshipmentSSSP")) {
+				}
+			};
+		}
+	},
+	SuccessiveEarliestArrivalAugmentingPathOptimized( DefaultLoc.getSingleton().getString( "gui.SEAAP" ) ) {
+		public Algorithm<NetworkFlowModel, PathBasedFlowOverTime> createTask( NetworkFlowModel model, int timeHorizon ) {
+			return new SuccessiveEarliestArrivalAugmentingPathOptimizedTask();
+		}
+	},
+	SuccessiveEarliestArrivalAugmentingPathOptimizedCompare( DefaultLoc.getSingleton().getString( "gui.SEAAP" ) ) {
+		public Algorithm<NetworkFlowModel, PathBasedFlowOverTime> createTask( NetworkFlowModel model, int timeHorizon ) {
+			return new SuccessiveEarliestArrivalAugmentingPathAlgorithmCompareTask( timeHorizon );
+		}
+	};
+	private String name;
 
-        public NetworkFlowModelAlgorithm createTask(NetworkFlowModel model, int timeHorizon) {
-            return new EATransshipmentSSSPTask();
-        }
-    },
-    EarliestArrivalTransshipmentMinCost(DefaultLoc.getSingleton().getString("gui.EATransshipmentMinCost")) {
+	private GraphAlgorithm( String name ) {
+		this.name = name;
+	}
 
-        public NetworkFlowModelAlgorithm createTask(NetworkFlowModel model, int timeHorizon) {
-            return new EATransshipmentMinCostTask();
-        }
-    },
-    SuccessiveEarliestArrivalAugmentingPathBinarySearch(DefaultLoc.getSingleton().getString("gui.SuccEAAugPathBS")) {
+	public String getName() {
+		return name;
+	}
 
-        public NetworkFlowModelAlgorithm createTask(NetworkFlowModel model, int timeHorizon) {
-            return new SuccessiveEarliestArrivalAugmentingPathAlgorithmTask();
-        }
-    },
-    SuccessiveEarliestArrivalAugmentingPath(DefaultLoc.getSingleton().getString("gui.SuccEAAugPath")) {
+	@Override
+	public String toString() {
+		return name;
+	}
 
-        public NetworkFlowModelAlgorithm createTask(NetworkFlowModel model, int timeHorizon) {
-            return new SuccessiveEarliestArrivalAugmentingPathAlgorithm2Task();
-        }
-    },
-    MaxFlowOverTimeMinCost(DefaultLoc.getSingleton().getString("gui.MaxFlowMinCost")) {
-
-        public NetworkFlowModelAlgorithm createTask(NetworkFlowModel model, int timeHorizon) {
-            return new MFOTMinCostTask(timeHorizon);
-        }
-    },
-    MaxFlowOverTimeTimeExpanded(DefaultLoc.getSingleton().getString("gui.MaxFlowTimeExtended")) {
-
-        public NetworkFlowModelAlgorithm createTask(NetworkFlowModel model, int timeHorizon) {
-            return new MFOTimeExpandedTask(timeHorizon);
-        }
-    },
-    QuickestTransshipment(DefaultLoc.getSingleton().getString("gui.QuickestTransshipment")) {
-
-        public NetworkFlowModelAlgorithm createTask(NetworkFlowModel model, int timeHorizon) {
-            return new QuickestTransshipmentTask();
-        }
-    },
-    SuccessiveEarliestArrivalAugmentingPathOptimized(DefaultLoc.getSingleton().getString("gui.SEAAP")) {
-
-        public Algorithm<NetworkFlowModel, PathBasedFlowOverTime> createTask(NetworkFlowModel model, int timeHorizon) {
-            return new SuccessiveEarliestArrivalAugmentingPathAlgorithmTask3();
-        }
-    },
-    SuccessiveEarliestArrivalAugmentingPathOptimizedCompare(DefaultLoc.getSingleton().getString("gui.SEAAP")) {
-        public Algorithm<NetworkFlowModel, PathBasedFlowOverTime> createTask(NetworkFlowModel model, int timeHorizon) {
-             return new SuccessiveEarliestArrivalAugmentingPathAlgorithmCompareTask(timeHorizon);
-        }
-       
-    },;
-    private String name;
-
-    private GraphAlgorithm(String name) {
-        this.name = name;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    @Override
-    public String toString() {
-        return name;
-    }
-
-    public abstract Algorithm<NetworkFlowModel, PathBasedFlowOverTime> createTask(NetworkFlowModel model, int timeHorizon);
+	public abstract Algorithm<NetworkFlowModel, PathBasedFlowOverTime> createTask( NetworkFlowModel model, int timeHorizon );
 }

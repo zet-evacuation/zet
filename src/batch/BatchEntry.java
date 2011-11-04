@@ -16,11 +16,11 @@
 package batch;
 
 import batch.tasks.AssignmentTask;
-import batch.tasks.BatchCA2Task;
+import batch.tasks.CA.BatchCA2Task;
 import gui.editor.properties.PropertyFilesSelectionModel.Property;
 import java.util.TreeMap;
-import batch.tasks.BatchCATask;
-import batch.tasks.BatchEvacuationCATask;
+import batch.tasks.CA.BatchCATask;
+import batch.tasks.CA.BatchEvacuationCATask;
 import batch.tasks.BatchGraphTask;
 import batch.tasks.BatchLoadProperties;
 import batch.tasks.assignment.BestResponseAssignmentTask;

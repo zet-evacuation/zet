@@ -22,6 +22,12 @@ import ds.graph.problem.MaximumFlowProblem;
  */
 public class EdmondsKarp extends Algorithm<MaximumFlowProblem, MaximumFlow> {
 		protected ResidualNetwork residualNetwork;
+	long pushes = 0;
+	int flow = 0;
+	int augmentations = 0;
+	Node source;
+	Node sink;
+	boolean verbose = true;
 
 	public EdmondsKarp() {
 		super();
@@ -31,8 +37,19 @@ public class EdmondsKarp extends Algorithm<MaximumFlowProblem, MaximumFlow> {
 	protected MaximumFlow runAlgorithm( MaximumFlowProblem problem ) {
 		initializeDatastructures();
 
+		int maxPossibleFlow = 0;
+		for( Edge e : residualNetwork.outgoingEdges( source ) )
+			maxPossibleFlow += residualNetwork.residualCapacities().get( e );
+		
+		int maxPossibleFlow2 = 0;
+		for( Edge e : residualNetwork.incomingEdges( sink ) )
+			maxPossibleFlow2 += residualNetwork.residualCapacities().get( e );
+		
+		if( maxPossibleFlow2 < maxPossibleFlow )
+			maxPossibleFlow = maxPossibleFlow2;
+		
 		while( augmentFlow() != 0 )
-			;
+				fireProgressEvent( (double)flow/maxPossibleFlow );
 
 		return new MaximumFlow( getProblem(), residualNetwork.flow() );
 	}
@@ -43,74 +60,32 @@ public class EdmondsKarp extends Algorithm<MaximumFlowProblem, MaximumFlow> {
 		sink = getProblem().getSink();
 	}
 
-	long pushes = 0;
-	int flow = 0;
-	int augmentations = 0;
-	Node source;
-	Node sink;
-	boolean verbose = true;
-
 	public int augmentFlow() {
-		int min = Integer.MAX_VALUE;
-		//CapacitatedBFS<V,E> bfs = new CapacitatedBFS<V,E>();
 		BFS bfs = new BFS( residualNetwork );
 		bfs.run( source, sink );
-		//if( verbose )
-		//	System.out.println( "Start Ford & Fulkerson Algorithm");
-		Node current = sink;
-
-		if( augmentations == 471 ) {
-			int k = 0;
-			k++;
-		}
 
 		// Compute min
-		while( !current.equals( source ) ) {
-			Edge e = bfs.predecedingEdge( current );
-			if( e == null ) {
+		int min = Integer.MAX_VALUE;
+		Node current = sink;
+		do {
+			final Edge e = bfs.predecedingEdge( current );
+			if( e == null )
 				return 0;
-			}
-			if( residualNetwork.residualCapacities().get( e ) == 0 ) {
-				int k = 0;
-				k++;
-			} else
-				min = Math.min( min, residualNetwork.residualCapacities().get( e ) );
-
+			min = Math.min( min, residualNetwork.residualCapacities().get( e ) );
 			current = e.start();
-		}
-		if( min == Integer.MAX_VALUE )
-			return 0;
+		} while( !current.equals( source ) );
+
 		// augment
 		current = sink;
-		while( !current.equals( source ) ) {
-			Edge e = bfs.predecedingEdge( current );
-
-
+		do {
+			final Edge e = bfs.predecedingEdge( current );
 			residualNetwork.augmentFlow( e, min );
 			pushes++;
-
-
-
 			current = e.start();
-		}
-		//System.out.println( "Augment flow by " + min + ". Now is: " + flow );
+		} while( !current.equals( source ) );
+
 		flow += min;
-		if( flow == 1077 ) {
-			int k = 0;
-			k++;
-		}
 		augmentations++;
-		//if( augmentations % 100 == 0 )
-		//	System.out.println( "Augmentation: " + augmentations + ", Flow: " + flow + ", Pushes: " + pushes );
-		
-		//while( bfs.findPath( network ) ) {
-		//	augmentations++;
-		//	if( verbose )
-		//		System.out.println( "Path found: " + bfs.getPath().toString() );
-		//	augment( bfs.getPath(), bfs.getPath().getMinLeft() );
-		//	flow += bfs.getPath().getMinLeft();
-		//	bfs.resetNumbers();
-		//}
 		return min;
 	}
 
@@ -125,5 +100,4 @@ public class EdmondsKarp extends Algorithm<MaximumFlowProblem, MaximumFlow> {
 	public long getPushes() {
 		return pushes;
 	}
-
 }

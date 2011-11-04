@@ -18,7 +18,7 @@
  * Class BatchCATask
  * Erstellt 20.07.2008, 23:54:19
  */
-package batch.tasks;
+package batch.tasks.CA;
 
 import algo.ca.EvacuationCellularAutomatonAlgorithm;
 import batch.BatchResultEntry;
