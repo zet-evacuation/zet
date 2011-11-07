@@ -17,6 +17,7 @@ import ds.graph.IdentifiableCollection;
 import ds.graph.NodeRectangle;
 import algo.graph.reduction.GreedyAlgo;
 import algo.graph.shortestpath.APSPAlgo;
+import ds.graph.ListSequence;
 /**
  *
  * @author schwengf
@@ -25,8 +26,8 @@ public class ZToNonGridAPSPGraphConverter extends ZToNonGridGraphConverter{
  
     
     public NetworkFlowModel minspanmodel;
-
     public APSPAlgo apspalgo;
+    int numEdges=0;
 
 
     @Override
@@ -75,14 +76,41 @@ public class ZToNonGridAPSPGraphConverter extends ZToNonGridGraphConverter{
                         newmapping.setNodeDownSpeedFactor(node, mapping.getDownNodeSpeedFactor(node));   
                     }
                 }
-              
                 
                 //using APSP algorithm:
                 apspalgo = new APSPAlgo(model);
-                apspalgo.run();
-              
+                int[][] succ = apspalgo.run();
+                int numNodes = model.getGraph().numberOfNodes() -1;
                 
-                for (Edge neu: model.getGraph().edges())
+                IdentifiableCollection<Edge> solEdges = new ListSequence();
+                int[][] used = new int[numNodes][numNodes];
+                for (int i=0; i<numNodes ; i++)
+                {
+                    for (int j=0; j<numNodes ; j++)
+                    {
+                        used[i][j] = 0;
+                    }
+                }
+                for (int i=0; i<numNodes; i++)
+                {
+                    for (int j=0; j<numNodes; j++)
+                    {
+                        if (i!= j && (used[i][succ[i][j]] != 1) && (used[succ[i][j]][i] !=1))
+                        {
+                            Edge edge = new Edge(numEdges++, model.getGraph().getNode(i+1), model.getGraph().getNode(succ[i][j]+1));
+                            //System.out.println("i:" + i + " j:" + j + "Edge: " + edge) ;
+                            used[i][succ[i][j]] = 1;
+                            used[succ[i][j]][i] = 1;
+                            solEdges.add(edge);
+                        }
+                    }
+                }
+                for (Edge edge : model.getGraph().incidentEdges(model.getSupersink()))
+                {
+                    solEdges.add(edge);
+                }
+                
+                for (Edge neu: solEdges)
                 {
                     newgraph.addEdge(neu);
                     minspanmodel.setEdgeCapacity(neu, model.getEdgeCapacity(neu));
