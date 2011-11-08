@@ -209,13 +209,13 @@ public class APSPAlgo {
              
          }
      }
-     /*for (int i=0; i<numNodes;i++)
+     for (int i=0; i<numNodes;i++)
      {
          for (int j=0; j<numNodes;j++)
          {
              System.out.println("i:" + i + " j:" + j + "Delta: " + Delta[i][j]);
          }
-     }*/
+     }
     System.out.println("Step 4 done");  
   }
   
@@ -315,7 +315,7 @@ public class APSPAlgo {
    }
      
   
-  public int [][] distance_product(int[][] a, int[][] b)
+  /*public int [][] distance_product(int[][] a, int[][] b)
   {     
       int[][] result = new int[a.length][a.length];
       int sum =0 ;
@@ -337,18 +337,51 @@ public class APSPAlgo {
                   }
                   if (sum < Min)
                   {
-                      //result[i][j] = a[i][k] + b[k][j]; 
-                      //result[i][j] = sum;
-                      //System.out.println("i:" + i + " j:" + j + " k:" + k + "a_i_k" + a[i][k] + "b_i_k" + b[k][j] + "result" + result[i][j]);
                       Min = sum;
                   }
                   
               }
               result[i][j] = Min;
           }
-      }
- 
+      } 
       return result;
+  }*/
+     
+  public int[][] distance_product(int[][] a, int[][] b)
+  {
+      int [][] result = new int[a.length][a.length];
+      int [][] a_prime = new int[a.length][a.length];
+      int [][] b_prime = new int[a.length][a.length];
+      int [][] c_prime = new int[a.length][a.length];
+      double omega = 2.376;
+      
+      if (maxdist*Math.pow(numNodes,omega) <= Math.pow(numNodes, 3))
+      {
+          for (int i=0; i<a.length ; i++)
+          {
+              for (int j=0; j<a.length ; j++)
+              {
+                  if (a[i][j] <= maxdist)
+                  { 
+                      a_prime[i][j] = (int) Math.pow((double) a.length +1 ,(double) maxdist - a[i][j]);
+                      b_prime[i][j] = (int) Math.pow((double) a.length +1 ,(double) maxdist - b[i][j]);
+                  }
+                  else
+                  {
+                      a_prime[i][j] = 0;
+                      b_prime[i][j] = 0;
+                  }
+                  c_prime[i][j] = 0;
+                  for (int k=0; k<numNodes; k++)
+                  {
+                      c_prime[i][j] += a_prime[i][k] * b_prime[k][j];  
+                  }
+                  
+              }
+              
+          }
+      }
+      return c_prime;
   }
   
   public int[][] clip(int [][] A, int a, int b)
@@ -508,6 +541,7 @@ public class APSPAlgo {
   
   public int[][]  run()
   {
+      
       Step_one();
       Step_two();
       Step_three();
