@@ -123,6 +123,8 @@ public class ImplicitTimeExpandedResidualNetwork extends Network {
      * @param first the node-time pair specifying the start of the edge.
      * @param second the node-time pair specifying the end of the edge.
      * @param amount the amount of flow that is to be augmented.
+     * @throws AssertionError if augmenting the specified flow along the path
+     * violates edge capacities. Requires assertions to be enabled.
      */
     protected void augmentEdge(NodeTimePair first, NodeTimePair second, int amount) {
         Edge edge = findEdge(first.getNode(), second.getNode(), second.getStart() - first.getEnd());
@@ -168,6 +170,8 @@ public class ImplicitTimeExpandedResidualNetwork extends Network {
     /**
      * Augments the specified path to the flow represented by this network. 
      * @param path the path to be augmented.
+     * @throws AssertionError if augmenting the specified flow along the path
+     * violates edge capacities. Requires assertions to be enabled.
      */
     public void augmentPath(EarliestArrivalAugmentingPath path) {
         if (path.isEmpty()) {
