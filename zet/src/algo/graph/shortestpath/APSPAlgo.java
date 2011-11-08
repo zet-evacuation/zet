@@ -71,10 +71,6 @@ public class APSPAlgo {
             maxdist = (int)Math.pow(2,k);
             break;
         }      
-        else if (Math.pow(2, k) > maxdist)
-        {
-            maxdist = (int) Math.pow(2, k);
-        }
     } 
 
     m = (int) (Math.log(maxdist)/Math.log(2));
@@ -114,13 +110,13 @@ public class APSPAlgo {
             //System.out.println("original weight " + weight[i][j] + " " + i + " " + j);
         }
     }
-    
+    System.out.println("1. case done");
     for (int k=1 ; k < m+2 ; k++)
     {
         int [][] res = distance_product(weight, weight);
         weight = clip(res,0,2*maxdist);
     }
-        
+  System.out.println("Step 1 done");      
   }
   
   public void Step_two()
@@ -141,7 +137,7 @@ public class APSPAlgo {
           int[][] res = distance_product(A_k[k-1],A_k[k-1]);
           A_k[k] = clip(distance_product(A_k[k-1],A_k[k-1]),-maxdist,maxdist);
       }
-      
+  System.out.println("Step 2 done");     
   }
   
   public void Step_three()
@@ -173,7 +169,7 @@ public class APSPAlgo {
          P_l = P_k;
 
      }
-         
+   System.out.println("Step 3 done");       
   }
   
   
@@ -220,7 +216,7 @@ public class APSPAlgo {
              System.out.println("i:" + i + " j:" + j + "Delta: " + Delta[i][j]);
          }
      }*/
-     
+    System.out.println("Step 4 done");  
   }
   
      public int[][] Compute_Matrix_of_Witnesses()
@@ -314,7 +310,7 @@ public class APSPAlgo {
                
            }
        }
-           
+       System.out.println("Step 5 done");     
        return successors;
    }
      
