@@ -70,7 +70,7 @@ public class XmlFileReaderWriter {
 
 		System.out.println( "Time Expansion" );
 
-		TimeExpandedNetwork teg = new TimeExpandedNetwork(n, mcf.getCapacities(), mcf.getCosts(), 27, mcf.getBalances(), true);
+		TimeExpandedNetwork teg = new TimeExpandedNetwork(n, mcf.getCapacities(), mcf.getCosts(), 27, mcf.getBalances(), true, false );
     SuccessiveShortestPath algoTEG = new SuccessiveShortestPath(teg, teg.supplies(), teg.capacities(), teg.costs());
     algoTEG.run();
 		if( algoTEG.getFlow() != null ) {
