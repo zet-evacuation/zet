@@ -30,6 +30,8 @@ public class APSPAlgo {
   int[][][] C;
   int[][] Delta;
   int[][] dist;
+  int[][] A_new;
+  int[][] B_new;
   
   
   public APSPAlgo(NetworkFlowModel model)
@@ -107,13 +109,22 @@ public class APSPAlgo {
             {
                 dist[i][j] = weight[i][j];
             }
-            //System.out.println("original weight " + weight[i][j] + " " + i + " " + j);
+            System.out.println("original weight " + weight[i][j] + " " + i + " " + j);
         }
     }
-    System.out.println("1. case done");
     for (int k=1 ; k < m+2 ; k++)
     {
         int [][] res = distance_product(weight, weight);
+        if (k==1)
+        {
+            for (int i=0; i<numNodes; i++)
+            {
+                for (int j=0 ; j<numNodes ; j++)
+                {
+                    System.out.println("i:" + i + " j:" + j + "distance_product: " + res[i][j]);
+                }
+            }
+        }
         weight = clip(res,0,2*maxdist);
     }
   System.out.println("Step 1 done");      
@@ -315,7 +326,7 @@ public class APSPAlgo {
    }
      
   
-  /*public int [][] distance_product(int[][] a, int[][] b)
+  public int [][] distance_product_naive(int[][] a, int[][] b)
   {     
       int[][] result = new int[a.length][a.length];
       int sum =0 ;
@@ -345,8 +356,9 @@ public class APSPAlgo {
           }
       } 
       return result;
-  }*/
+  }
      
+  //ToDo: mittels Strassen Algorithmus Matrix Multiplikation schneller machen   
   public int[][] distance_product(int[][] a, int[][] b)
   {
       int [][] result = new int[a.length][a.length];
@@ -355,7 +367,7 @@ public class APSPAlgo {
       int [][] c_prime = new int[a.length][a.length];
       double omega = 2.376;
       
-      if (maxdist*Math.pow(numNodes,omega) <= Math.pow(numNodes, 3))
+      if (maxdist*Math.pow(numNodes,omega) > Math.pow(numNodes, 3))
       {
           for (int i=0; i<a.length ; i++)
           {
@@ -363,26 +375,262 @@ public class APSPAlgo {
               {
                   if (a[i][j] <= maxdist)
                   { 
-                      a_prime[i][j] = (int) Math.pow((double) a.length +1 ,(double) maxdist - a[i][j]);
-                      b_prime[i][j] = (int) Math.pow((double) a.length +1 ,(double) maxdist - b[i][j]);
+                      a_prime[i][j] = (int) Math.pow((double) (a.length +1) ,(double) (maxdist - a[i][j]));
+                      b_prime[i][j] = (int) Math.pow((double) (a.length +1) ,(double) (maxdist - b[i][j]));
                   }
                   else
                   {
                       a_prime[i][j] = 0;
                       b_prime[i][j] = 0;
-                  }
-                  c_prime[i][j] = 0;
-                  for (int k=0; k<numNodes; k++)
-                  {
-                      c_prime[i][j] += a_prime[i][k] * b_prime[k][j];  
-                  }
-                  
+                  } 
+              }    
+          }
+          
+        /*for (int i=0; i<a.length; i++)
+        {
+            for (int j=0; j<a.length ; j++)
+            {
+                System.out.println("b' : " + b_prime[i][j]);
+            }
+        }*/  
+        c_prime = Strassen_product_cut(a_prime,b_prime,3);
+        for (int i=0; i<a.length; i++)
+        {
+            for (int j=0; j<a.length; j++)
+            {
+                System.out.println("c_prime: " + c_prime[i][j]);
+            }
+        }
+        
+        for (int i=0; i<a.length; i++)
+        {
+            for (int j=0; j<a.length ; j++)
+            {
+                if (c_prime[i][j] > 0)
+                {
+                    result[i][j] = 2*maxdist - (int) Math.floor(Math.log10(c_prime[i][j])/Math.log10(a.length+1));
+                }
+            }
+        }
+      }
+      else
+      {
+          result = distance_product_naive(a,b);
+      }
+      return result;
+  }
+  
+  public int[][] find_dimension(int[][] A)
+  {
+     int[][] A_changed = new int[1][1];
+     int dimension=0;
+     for (int k=0; k<Integer.MAX_VALUE; k++)
+          {
+              if (A.length == Math.pow(2,k))
+              {
+                  dimension = A.length;
+                  A_changed = new int [dimension][dimension];
+                  A_changed = A;
+                  break;
               }
-              
+              else if (Math.pow(2, k) > A.length)
+              {
+                  dimension = (int) Math.pow(2, k);
+                  A_changed = new int [dimension][dimension];
+                  setMatrix(A_changed, A, 0, 0);
+                  
+                  //fülle Rest mit 0 auf, falls vorhanden
+                  for (int i= A.length; i<dimension ; i++)
+                  {
+                      for (int j=A.length; j<dimension ; j++)
+                      {
+                          A_changed[i][j] = 0;
+                      }
+                  }
+                  for (int i=0; i<dimension; i++)
+                  {
+                      for (int j=0; j<dimension; j++)
+                      {
+                          System.out.println("i:" + i + "j" + j + "A_new: " + A_changed[i][j]);
+                      }
+                  }
+                  break;
+               }
+           }  
+     return A_changed;
+  }
+  
+  public int[][] Strassen_product(int[][] A, int[][] B) {
+    return Strassen_product_cut(A, B, 1);
+  }
+  
+  public int[][] Strassen_product_cut(int [][] A, int[][] B, int cut)
+  {
+      boolean firstrun = true;
+      int dimension=0;
+      //define matrix of size n = 2^k
+      if (firstrun)
+      {
+          A_new = find_dimension(A);
+          B_new = find_dimension(B);
+          firstrun = false;
+      }
+    
+    dimension = A_new.length;
+    
+    if (dimension <= cut) 
+    {
+        System.out.println("done>>>>>>>>>>>>>>>>>>");
+      // normal multiplizieren
+      int[][] C = getMatrix(matmult(A_new, B_new),0,A.length,0,A.length);
+      for (int i=0; i<A.length;i++)
+      {
+          for (int j=0; j<A.length; j++)
+          {
+              System.out.println("C am Ende: " + C[i][j]);
           }
       }
-      return c_prime;
+      return C;
+    }
+    
+    int dim = dimension/2;     // sollte ohne Rest aufgehen, da m Zweierpotenz
+    System.out.println("Dimension: " + dim);
+    int[][] a11 = getMatrix(A, 0, dim-1,   0, dim-1);
+    int[][] a12 = getMatrix(A, 0, dim-1, dim,   dimension-1);
+    int[][] a21 = getMatrix(A, dim,   dimension-1,   0, dim-1);
+    int[][] a22 = getMatrix(A, dim,   dimension-1, dim,   dimension-1);
+    int[][] b11 = getMatrix(B, 0, dim-1,   0, dim-1);
+    int[][] b12 = getMatrix(B, 0, dim-1, dim,   dimension-1);
+    int[][] b21 = getMatrix(B, dim,   dimension-1,   0, dim-1);
+    int[][] b22 = getMatrix(B, dim,   dimension-1, dim,   dimension-1);
+
+    System.out.println("Done first part");
+    // Matrizen m1 .. m7 berechnen
+    // dazu zwei Hilfsmatrizen d1, d2 für Zwischenwerte
+    int[][] d1 = minusMatrix(a12,a22);
+    int[][] d2 = plusMatrix(b21,b22);
+    int[][] m1 = Strassen_product(d1, d2);
+    
+    d1 = plusMatrix(a11,a22);
+    d2 = plusMatrix(b11,b22);
+    int[][] m2 = Strassen_product(d1, d2);
+    
+    d1 = minusMatrix(a11,a21);
+    d2 = plusMatrix(b11,b12);
+    int[][] m3 = Strassen_product(d1, d2);
+    
+    d1 = plusMatrix(a11,a12);
+    int[][] m4 = Strassen_product(d1, b22);
+    
+    d1 = minusMatrix(b12,b22);
+    int[][] m5 = Strassen_product(a11, d1);
+    
+    d1 = minusMatrix(b21,b11);
+    int[][] m6 = Strassen_product(a22, d1);
+    
+    d1 = plusMatrix(a21,a22);
+    int[][] m7 = Strassen_product(d1, b11);
+  
+    int [][] C11 = plusMatrix(m1,m2);
+    C11 = minusMatrix(C11,m4);
+    C11 = plusMatrix(C11,m6);
+    
+    int[][] C12 = plusMatrix(m4,m5);
+    
+    int[][] C21 = plusMatrix(m6,m7);
+    
+    int[][] C22 = minusMatrix(m2,m3);
+    C22 = plusMatrix(C22,m5);
+    C22 = minusMatrix(C22,m7);
+    
+    // Gesamtmatrix zusammensetzen
+    int[][] C = new int[A_new.length][A_new.length];
+    setMatrix(C,C11,0,0);
+    setMatrix(C,C12,0,dim);
+    setMatrix(C,C21,dim,0);
+    setMatrix(C,C22,dim, dim);
+    
+    int[][] result = getMatrix(C,0,A.length,0,A.length);
+    for (int i=0; i<A.length; i++)
+    {
+        for (int j=0; j<A.length; j++)
+        {
+            System.out.println("Result: " + result[i][j]);
+        }
+    }
+    return result;
   }
+  
+  public int[][] getMatrix(int[][] A,int i0, int i1, int j0, int j1) 
+  {
+    // erzeugt eine Teilmatrix A(i0..i1, j0..j1)
+    
+    int m = i1 - i0 + 1;
+    int n = j1 - j0 + 1;
+    
+    int[][] part = new int[m][n];
+    
+    for (int i = 0; i < m; i++) {
+      for (int j = 0; j < n; j++) {
+        part[i][j] = A[i + i0][j + j0];
+      }
+    }
+    return part;
+  }
+  
+  void setMatrix(int[][] A, int[][] part, int i0, int j0) {
+    // belegt die Matrix mit einer Teilmatrix
+    
+    int p = part.length;
+    for (int i = 0; i < p; i++) {
+      for (int j = 0; j < p; j++) {
+        A[i+ i0][j + j0] = part[i][j];
+      }
+    }
+  }
+
+  
+  public int[][] minusMatrix(int[][] A, int[][] B)
+  {
+      int[][] diff = new int[A.length][A.length];
+      for (int i=0; i<A.length; i++)
+      {
+          for (int j=0; j<A.length ; j++)
+          {
+              diff[i][j] = A[i][j] -B[i][j];
+          }
+      }
+      return diff;
+  }
+
+  public int[][] plusMatrix(int[][] A, int[][] B)
+  {
+      int[][] diff = new int[A.length][A.length];
+      for (int i=0; i<A.length; i++)
+      {
+          for (int j=0; j<A.length ; j++)
+          {
+              diff[i][j] = A[i][j] + B[i][j];
+          }
+      }
+      return diff;
+  }
+  
+  public int[][] matmult(int[][] A, int[][] B) {
+    // einfache Matrix-Multiplikation    
+    int[][] C = new int[A.length][A.length];
+    
+    for (int i = 0; i < A.length; i++) {
+      for (int j = 0; j < A.length; j++) {
+        C[i][j] = 0;
+        for (int k = 0; k < A.length; k++) {
+          C[i][j] += A[i][k] * B[k][j];
+        }
+      }
+    }   
+    return C;
+  }
+
   
   public int[][] clip(int [][] A, int a, int b)
   {
