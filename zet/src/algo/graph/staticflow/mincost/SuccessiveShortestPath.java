@@ -169,7 +169,7 @@ public class SuccessiveShortestPath /*extends Algorithm<MinimumCostFlowProblem, 
             LOGGER.finest("Augmentiere " + amount + " Flusseinheiten.");
             balances.decrease(source, amount);
             balances.increase(sink, amount);
-            LOGGER.finest("Es warten " + balances.get(source) + " Flusseinheiten in der Quelle, w�hrend " + balances.get(sink) + " Flusseinheiten in der Senke ben�tigt werden.");
+            LOGGER.finest("Es warten " + balances.get(source) + " Flusseinheiten in der Quelle, während " + balances.get(sink) + " Flusseinheiten in der Senke benötigt werden.");
             for (Edge edge : shortestPath) {
                 residualNetwork.augmentFlow(edge, amount);
             }

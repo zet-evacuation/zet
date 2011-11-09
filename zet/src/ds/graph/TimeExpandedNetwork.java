@@ -290,20 +290,14 @@ public class TimeExpandedNetwork extends Network {
      * @param allowStorageInNodes {@code true} if flow can wait in all nodes, {@code false}
      * otherwise.
      */
-    public TimeExpandedNetwork(Network network,
-			IdentifiableIntegerMapping<Edge> capacities,
-			IdentifiableIntegerMapping<Edge> transitTimes, Node source,
-			Node sink, int timeHorizon, boolean allowStorageInNodes) {
+   public TimeExpandedNetwork(Network network, IdentifiableIntegerMapping<Edge> capacities, IdentifiableIntegerMapping<Edge> transitTimes, Node source, Node sink, int timeHorizon, boolean allowStorageInNodes) {
 		this(allowStorageInNodes, network, timeHorizon);
 		if (source ==null && sink==null)
-			throw new AssertionError(GraphLocalization.getSingleton (
-			).getString ("ds.graph.SinkSourceNullException"));
+			throw new AssertionError(GraphLocalization.getSingleton ( ).getString ("ds.graph.SinkSourceNullException"));
 		if (source ==null)
-			throw new AssertionError(GraphLocalization.getSingleton (
-			).getString ("ds.graph.SourceIsNullException"));
+			throw new AssertionError(GraphLocalization.getSingleton ( ).getString ("ds.graph.SourceIsNullException"));
 		if (sink==null)
-			throw new AssertionError(GraphLocalization.getSingleton (
-			).getString ("ds.graph.SinkIsNullException"));
+			throw new AssertionError(GraphLocalization.getSingleton ( ).getString ("ds.graph.SinkIsNullException"));
 		sources = new ListSequence<Node>();
 		sources.add(source);
 		originalSources = sources;
@@ -372,48 +366,33 @@ public class TimeExpandedNetwork extends Network {
 		
     }
     
-    public TimeExpandedNetwork(Network network,
-    		IdentifiableIntegerMapping<Edge> capacities,
-    		IdentifiableIntegerMapping<Edge> transitTimes,
-    		int timeHorizon,
-    		List<Node> sources,
-    		List<Node> sinks,
-    		boolean allowStorageInNodes){
+    public TimeExpandedNetwork(Network network, IdentifiableIntegerMapping<Edge> capacities, IdentifiableIntegerMapping<Edge> transitTimes, int timeHorizon, List<Node> sources, List<Node> sinks, boolean allowStorageInNodes){
     	this(network, capacities, transitTimes, timeHorizon, sources, sinks, Integer.MAX_VALUE, allowStorageInNodes);
     }
     
-    public TimeExpandedNetwork(Network network,
-    		IdentifiableIntegerMapping<Edge> capacities,
-    		IdentifiableIntegerMapping<Edge> transitTimes,
-    		int timeHorizon,
-    		List<Node> sources,
-    		List<Node> sinks,
-    		int supersouceOutgoingCapacitiy, boolean allowStorageInNodes){
+    public TimeExpandedNetwork(Network network, IdentifiableIntegerMapping<Edge> capacities, IdentifiableIntegerMapping<Edge> transitTimes, int timeHorizon, List<Node> sources, List<Node> sinks, int supersouceOutgoingCapacitiy, boolean allowStorageInNodes ){
     	this(allowStorageInNodes,network,timeHorizon);
     	originalSources = new ListSequence<Node>(sources);
     	this.sources = originalSources;
     	originalSinks = new ListSequence<Node>(sinks);
     	
-		createTimeExpansion(network, capacities, transitTimes, timeHorizon,
-				sources, originalSinks, allowStorageInNodes);
+		createTimeExpansion(network, capacities, transitTimes, timeHorizon, sources, originalSinks, allowStorageInNodes);
 		
 		createSuperSourceAndSink(supersouceOutgoingCapacitiy);
     }
     
-    public TimeExpandedNetwork(Network network,
-			IdentifiableIntegerMapping<Edge> capacities,
-			IdentifiableIntegerMapping<Edge> transitTimes,
-			int timeHorizon,
-			IdentifiableIntegerMapping<Node> supplies,
-			boolean allowStorageInNodes) {
+	public TimeExpandedNetwork(Network network, IdentifiableIntegerMapping<Edge> capacities, IdentifiableIntegerMapping<Edge> transitTimes, int timeHorizon, IdentifiableIntegerMapping<Node> supplies, boolean allowStorageInNodes) {
+		this( network, capacities, transitTimes, timeHorizon, supplies, allowStorageInNodes, true );
+	}
+
+		public TimeExpandedNetwork(Network network, IdentifiableIntegerMapping<Edge> capacities, IdentifiableIntegerMapping<Edge> transitTimes, int timeHorizon, IdentifiableIntegerMapping<Node> supplies, boolean allowStorageInNodes, boolean createSuperSouce ) {
 		this(allowStorageInNodes, network, timeHorizon);
 		sources = new ListSequence<Node>();
 		originalSinks = new ListSequence<Node>();
 		int overallSupply=0;
 		for (Node node : network.nodes()) {
 			if (!supplies.isDefinedFor(node))
-				throw new AssertionError(GraphLocalization.getSingleton (
-				).getString ("ds.graph.NoSupplyNodeException"));
+				throw new AssertionError(GraphLocalization.getSingleton ( ).getString ("ds.graph.NoSupplyNodeException"));
 			else {
 				overallSupply += supplies.get(node);
 				if (supplies.get(node)>0)
@@ -425,15 +404,50 @@ public class TimeExpandedNetwork extends Network {
 		originalSources = sources;
 		
 		if (overallSupply != 0)
-			throw new AssertionError(GraphLocalization.getSingleton (
-			).getString ("ds.graph.SumNotZeroException"));
+			throw new AssertionError(GraphLocalization.getSingleton ( ).getString ("ds.graph.SumNotZeroException"));
 		
-		createTimeExpansion(network, capacities, transitTimes, timeHorizon,
-				sources, originalSinks, allowStorageInNodes);
+		createTimeExpansion(network, capacities, transitTimes, timeHorizon, sources, originalSinks, allowStorageInNodes );
 
-		createSuperSourceAndSink(supplies);
+		if( createSuperSouce )
+			createSuperSourceAndSink(supplies);
+		else {
+			// do not create a super source!
+			// create time expanded supply-vector and copy source supplies
+			
+			sources = new ListSequence<Node>();
+			
+			int negativeSupplies = 0;
+			
+    	this.supplies = new IdentifiableIntegerMapping<Node>(this.nodes().size());
+    	for (Node n : this.nodes()) {
+    		if( supplies.isDefinedFor( n ) ) {
+					if( supplies.get( n ) >= 0 )
+						this.supplies.set( n, supplies.get( n ) );
+					else {
+						negativeSupplies += supplies.get( n );
+						this.supplies.set( n, 0 ); // old sinks are no sinks any more
+					}
+					if( supplies.get( n ) > 0 )
+						sources.add( n );
+				} else
+					this.supplies.set(n, 0);
+    	}
+			
+			
+			// THis only works for one single sink
+			
+    		this.sink = grid[originalSinks.get(0).id()][timeHorizon-1];
+    		sinks = new ListSequence<Node>();
+    		sinks.add(sink);
+			
+		
+		//if (sink.id() >= this.supplies.getDomainSize())
+		//	this.supplies.setDomainSize(sink.id()+1);
+    	this.supplies.set(sink, negativeSupplies );	
+    //}			
+		}
 	}
-
+	
     private void createSuperSource(IdentifiableIntegerMapping<Node> supplies){
 		// Create super source
     	int nodeCount = this.getNodeCapacity();
@@ -509,11 +523,9 @@ public class TimeExpandedNetwork extends Network {
     	}
     	
     	if (originalSources.size() <= 0)
-    		throw new AssertionError(GraphLocalization.getSingleton (
-			).getString ("ds.graph.OriginalSourcesException"));
+    		throw new AssertionError(GraphLocalization.getSingleton ().getString ("ds.graph.OriginalSourcesException"));
     	if (originalSinks.size() <= 0)
-    		throw new AssertionError(GraphLocalization.getSingleton (
-			).getString ("ds.graph.OriginalSinksException"));
+    		throw new AssertionError(GraphLocalization.getSingleton ().getString ("ds.graph.OriginalSinksException"));
     	
     	if (originalSources.size()>1)
     		createSuperSource(supplies);
