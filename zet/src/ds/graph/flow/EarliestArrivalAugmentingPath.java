@@ -58,6 +58,10 @@ public class EarliestArrivalAugmentingPath extends LinkedList<NodeTimePair> {
     public void insert(int index, Node node, int start, int end) {
         add(index, new NodeTimePair(node, start, end));
     }
+    
+    public void insertFirst(Node node, int start, int end) {
+        add(0, new NodeTimePair(node, start, end));
+    }    
 
     @Override
     public String toString() {
