@@ -128,7 +128,7 @@ public class ImplicitTimeExpandedResidualNetwork extends Network {
      */
     protected void augmentEdge(NodeTimePair first, NodeTimePair second, int amount) {
         Edge edge = findEdge(first.getNode(), second.getNode(), first.getEnd(), second.getStart());
-        System.out.println(" Augment edge: " + edge + " @" + first.getEnd() + " by " + amount + " | " + capacity(edge, first.getEnd()));
+//        System.out.println(" Augment edge: " + edge + " @" + first.getEnd() + " by " + amount + " | " + capacity(edge, first.getEnd()));
         assert amount >= 0 : "Edge augmentations are assumed to be non-negative.";        
         assert amount <= capacity(edge, first.getEnd()) : "Edge augmentations are assumed to respect capacities.";
         switch (edgeTypes.get(edge)) {

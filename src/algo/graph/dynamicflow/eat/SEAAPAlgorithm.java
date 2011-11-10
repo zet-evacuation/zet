@@ -20,122 +20,173 @@
  */
 package algo.graph.dynamicflow.eat;
 
-import ds.graph.flow.EarliestArrivalAugmentingPath;
 import algo.graph.shortestpath.Dijkstra;
+import de.tu_berlin.math.coga.common.algorithm.Algorithm;
+import de.tu_berlin.math.coga.common.algorithm.AlgorithmStatusEvent;
 import ds.graph.ImplicitTimeExpandedResidualNetwork;
 import ds.graph.Node;
+import ds.graph.flow.EarliestArrivalAugmentingPath;
 import ds.graph.flow.FlowOverTime;
 import java.util.Arrays;
 import java.util.LinkedList;
-import de.tu_berlin.math.coga.common.algorithm.Algorithm;
-import de.tu_berlin.math.coga.common.algorithm.AlgorithmStatusEvent;
 
 /**
- *
+ * Implements the Successive Earliest Arrival Augmenting Path Algorithm as 
+ * described by Stevanus Tjandra in his Ph.D. thesis.
  * @author Martin Groß
  */
 public class SEAAPAlgorithm extends Algorithm<EarliestArrivalFlowProblem, FlowOverTime> {
 
-    private int arrivalTime;
-    private int[] distances;
-    private int flowUnitsSent;
+    /**
+     * Stores the arrival time of the last flow unit sent (monotonically 
+     * increasing).
+     */
+    private int arrivalTime;    
+    /**
+     * Stores whether the residual paths are automatically converted into a flow
+     * at the end of the algorithm.
+     */
+    private boolean autoConvert;
+    /**
+     * Stores the shortest path distances for each source, sorted ascending.
+     */
+    private int[] distances;    
+    /**
+     * Stores how much flow has already been sent. 
+     */
+    private int flowUnitsSent;        
+    /**
+     * Stores a reference to the underlying time-expanded network in which the
+     * paths are calculated. 
+     */
+    private ImplicitTimeExpandedResidualNetwork network;
+    /**
+     * Stores the original time horizon.
+     */
+    private int originalTimeHorizon;
+    /**
+     * Stores the current earliest arrival augmenting path in an iteration.
+     */
     private EarliestArrivalAugmentingPath path;
+    /**
+     * Stores a reference to the algorithm for computing earliest arrival 
+     * augmenting paths.
+     */
     private EarliestArrivalAugmentingPathAlgorithm pathAlgorithm;
+    /**
+     * Stores a reference to the underlying path problem that is solved in each
+     * iteration.
+     */
     private EarliestArrivalAugmentingPathProblem pathProblem;
-    private boolean autoConvert = true;
-    private int OriginTime;
-    
+    /**
+     * Stores the residual paths computed by the algorithm.
+     */
+    private LinkedList<EarliestArrivalAugmentingPath> paths;
+
+
+    /**
+     * Creates a new instance of the Successive Earliest Arrival Augmenting Path
+     * Algorithm as described by Tjandra. The residual paths are automatically
+     * converted into a flow by uncrossing at the end.
+     */
     public SEAAPAlgorithm() {
-        pathAlgorithm = new EarliestArrivalAugmentingPathAlgorithm();
+        this(true);
     }
 
-    public SEAAPAlgorithm(boolean b) {
+    /**
+     * Creates a new instance of the Successive Earliest Arrival Augmenting Path
+     * Algorithm as described by Tjandra. The residual paths are automatically
+     * converted into a flow by uncrossing at the end.
+     * @param autoConvert whether the paths should be converted into a flow at
+     * the end of the algorithm. Switching this off is only useful for 
+     * benchmarking purposes.
+     */    
+    public SEAAPAlgorithm(boolean autoConvert) {
         pathAlgorithm = new EarliestArrivalAugmentingPathAlgorithm();
-        autoConvert = b;
+        this.autoConvert = autoConvert;
     }
 
+    /**
+     * Implements the actual algorithm.
+     * @param problem the problem that the algorithm is to solve.
+     * @return an earliest arrival flow from the specified problem, or 
+     * <code>null</code>, if automatic conversion of paths into a flow is 
+     * switched off.
+     */
     @Override
     protected FlowOverTime runAlgorithm(EarliestArrivalFlowProblem problem) {
-        if (problem.getTotalSupplies() == 0) {
-            drn = new ImplicitTimeExpandedResidualNetwork(problem);
-            paths = new LinkedList<EarliestArrivalAugmentingPath>();
-            return new FlowOverTime(drn, paths);
-        } 
-        OriginTime = problem.getTimeHorizon();
-        flowUnitsSent = 0;        
-        calculateShortestPathLengths();
-        drn = new ImplicitTimeExpandedResidualNetwork(problem); 
-        if (getNextDistance(0)+1 > OriginTime || true)
-        {
-            pathProblem = new EarliestArrivalAugmentingPathProblem(drn, drn.superSource(), problem.getSink(), OriginTime);
-        }
-        else
-        {    
-            pathProblem = new EarliestArrivalAugmentingPathProblem(drn, drn.superSource(), problem.getSink(), getNextDistance(0) + 1);
-        }
-        pathAlgorithm.setProblem(pathProblem);
-        calculateEarliestArrivalAugmentingPath();
+        // Initialize the data structures
+        calculateShortestPathLengths();       
+        flowUnitsSent = 0;
+        network = new ImplicitTimeExpandedResidualNetwork(problem);
+        originalTimeHorizon = problem.getTimeHorizon();        
+        pathProblem = new EarliestArrivalAugmentingPathProblem(network, network.superSource(), problem.getSink(), Math.min(getNextDistance(0) + 1, problem.getTimeHorizon()));
         paths = new LinkedList<EarliestArrivalAugmentingPath>();
+        // If there are no supplies, we are done
+        if (problem.getTotalSupplies() == 0) {            
+            return new FlowOverTime(network, paths);
+        }        
+         
+        pathAlgorithm.setProblem(pathProblem);        
+        // Compute our first augmenting path
+        calculateEarliestArrivalAugmentingPath();
         while (!path.isEmpty() && path.getCapacity() > 0) {
+            // Add the path
+            paths.add(path);
+            network.augmentPath(path);
+            // Update the amount of flow sent
             flowUnitsSent += path.getCapacity();
             fireProgressEvent(flowUnitsSent * 1.0 / problem.getTotalSupplies(), String.format("%1$s von %2$s Personen evakuiert.", flowUnitsSent, problem.getTotalSupplies()));
-            paths.add(path);
-            drn.augmentPath(path);
+            // Compute the next path
             calculateEarliestArrivalAugmentingPath();
+            System.out.println(String.format("%1$s von %2$s Personen evakuiert.", flowUnitsSent, problem.getTotalSupplies()));
         }
+        // Convert our paths into a flow, if desired
         if (autoConvert) {
             fireEvent(new AlgorithmStatusEvent(this, "INIT_PATH_DECOMPOSITION"));
-            FlowOverTime flow = new FlowOverTime(drn, paths);
+            FlowOverTime flow = new FlowOverTime(network, paths);
             return flow;
-            
         } else {
             return null;
         }
     }
-    public LinkedList<EarliestArrivalAugmentingPath> paths;
-    public ImplicitTimeExpandedResidualNetwork drn;
 
     private void calculateEarliestArrivalAugmentingPath() {
+        // If all flow units have been sent, we are done. 
         if (flowUnitsSent == getProblem().getTotalSupplies()) {
             path = new EarliestArrivalAugmentingPath();
             return;
         }
         boolean pathFound = false;
         while (!pathFound) {
+            // Compute a path with the current time horizon
             pathAlgorithm.run();
             path = pathAlgorithm.getSolution();
-            //System.out.println("Path: " + path);
-            //System.out.println("arrival Time: " + path.getArrivalTime());
-            //System.out.println("Capacity: " + path.getCapacity());
+            // If no suitable path has been found
             if (path.isEmpty() || path.getCapacity() == 0) {
-                if (getNextDistance(arrivalTime) + 1 > OriginTime)
-                {
-                   path = new EarliestArrivalAugmentingPath();
-                   return; 
-                }
-                else
-                {
-                    pathProblem.setTimeHorizon(getNextDistance(arrivalTime) + 1);
+                // Try to increase the time horizon
+                int newTimeHorizon = Math.max(pathProblem.getTimeHorizon() + 1, getNextDistance(arrivalTime) + 1);
+                // If our new time horizon gets to large, we are done, otherwise update the time horizon
+                if (newTimeHorizon > originalTimeHorizon) {
+                    path = new EarliestArrivalAugmentingPath();
+                    return;
+                } else {
+                    pathProblem.setTimeHorizon(newTimeHorizon);
                 }
             } else {
                 pathFound = true;
             }
         }
         if (!path.isEmpty() && path.getCapacity() > 0) {
-             arrivalTime = path.getArrivalTime();
-             //System.out.println("2");
+            arrivalTime = path.getArrivalTime();
         }
-        if (path.getArrivalTime() == pathProblem.getTimeHorizon() - 1) {           
-            pathProblem.setTimeHorizon(pathProblem.getTimeHorizon() + 1);
-             //System.out.println("3");
-            if (pathProblem.getTimeHorizon() > OriginTime)
-            {
-                path = new EarliestArrivalAugmentingPath();
-                 //System.out.println("4");
-                return;
-            }
-           
-        }
+        //if (path.getArrivalTime() == pathProblem.getTimeHorizon() - 1) {
+            //pathProblem.setTimeHorizon(pathProblem.getTimeHorizon() + 1);
+            //if (pathProblem.getTimeHorizon() > originalTimeHorizon) {
+            //    path = new EarliestArrivalAugmentingPath();
+            //    return;
+            //}
+        //}
     }
 
     private void calculateShortestPathLengths() {
@@ -147,10 +198,6 @@ public class SEAAPAlgorithm extends Algorithm<EarliestArrivalFlowProblem, FlowOv
             distances[index++] = dijkstra.getDistance(source);
         }
         Arrays.sort(distances);
-    }
-
-    public int getCurrentArrivalTime() {
-        return arrivalTime;
     }
 
     private int getNextDistance(int currentDistance) {

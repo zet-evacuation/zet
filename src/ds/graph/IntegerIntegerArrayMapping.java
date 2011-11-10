@@ -61,6 +61,21 @@ public class IntegerIntegerArrayMapping {
         Arrays.fill(mapping, value);
     }
     
+    
+    public boolean lessEqual(int start, int end, int value) {
+        for (int i = start; i < end; i++) {
+            if (get(i) > value) return false;
+        }
+        return true;
+    }
+
+    public boolean greaterEqual(int start, int end, int value) {
+        for (int i = start; i < end; i++) {
+            if (get(i) < value) return false;
+        }
+        return true;
+    }        
+    
     /**
      * Returns the integer associated with the specified value. 
      * Runtime O(log (number of steps)).
