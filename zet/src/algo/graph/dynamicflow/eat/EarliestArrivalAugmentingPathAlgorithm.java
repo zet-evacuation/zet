@@ -121,6 +121,7 @@ public class EarliestArrivalAugmentingPathAlgorithm extends Algorithm<EarliestAr
                     if (predecessorNodeOfEdgeEnd[time + network.transitTime(edge)] == null) {
                         // If we can use this edge to arrive earlier then we could previously, update the earliest arrival label for the end node
                         if (labels.get(edge.end()) > time + network.transitTime(edge)) {
+                            if (edge.end().id() == 19) System.out.println("  Reaching 19 from " + edge + " @" + time);
                             labels.set(edge.end(), time + network.transitTime(edge));
                         }
                         // Set the predecessor & corresponding departure time for the end node of our current edge
@@ -141,6 +142,7 @@ public class EarliestArrivalAugmentingPathAlgorithm extends Algorithm<EarliestAr
                         newTime = time + network.transitTime(edge) - 1;
                         while (newTime >= 0 && network.capacity(edge.end(), newTime + 1, true) > 0 && predecessorNodeOfEdgeEnd[newTime] == null) {
                             if (labels.get(edge.end()) > newTime) {
+                                if (edge.end().id() == 19) System.out.println("Reaching 19 from future @" + newTime);
                                 labels.set(edge.end(), newTime);
                             }
                             predecessorNodeOfEdgeEnd[newTime] = edge.end();
