@@ -160,10 +160,12 @@ public class ImplicitTimeExpandedResidualNetwork extends Network {
      * @param amount the amount of flow that is to be augmented.
      */
     protected void augmentNode(Node node, int start, int end, int amount) {
-        if (start < end) {
+        if (start < end) {            
             waiting.get(node).increase(start, end, amount);
+            assert waiting.get(node).lessEqual(start, end, amount) : "Node capacities have been violated.";
         } else if (start > end) {
             waiting.get(node).decrease(end, start, amount);
+            assert waiting.get(node).greaterEqual(start, end, 0) : "Node capacities have been violated.";
         }
     }
 

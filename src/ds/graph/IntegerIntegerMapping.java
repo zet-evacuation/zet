@@ -77,6 +77,20 @@ public class IntegerIntegerMapping implements Cloneable, Iterable<TimeIntegerPai
         set(Integer.MAX_VALUE, 0);
     }
     
+    public boolean lessEqual(int start, int end, int value) {
+        for (int i = start; i < end; i++) {
+            if (get(i) > value) return false;
+        }
+        return true;
+    }
+
+    public boolean greaterEqual(int start, int end, int value) {
+        for (int i = start; i < end; i++) {
+            if (get(i) < value) return false;
+        }
+        return true;
+    }    
+    
     public int getMaximumValue() {
         int maximum = Integer.MIN_VALUE;
         for (TimeIntegerPair tip : mapping) {
