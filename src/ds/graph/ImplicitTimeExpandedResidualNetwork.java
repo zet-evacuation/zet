@@ -127,15 +127,13 @@ public class ImplicitTimeExpandedResidualNetwork extends Network {
      * violates edge capacities. Requires assertions to be enabled.
      */
     protected void augmentEdge(NodeTimePair first, NodeTimePair second, int amount) {
-        Edge edge = findEdge(first.getNode(), second.getNode(), second.getStart() - first.getEnd());
+        Edge edge = findEdge(first.getNode(), second.getNode(), first.getEnd(), second.getStart());
+        System.out.println(" Augment edge: " + edge + " @" + first.getEnd() + " by " + amount + " | " + capacity(edge, first.getEnd()));
         assert amount >= 0 : "Edge augmentations are assumed to be non-negative.";        
         assert amount <= capacity(edge, first.getEnd()) : "Edge augmentations are assumed to respect capacities.";
         switch (edgeTypes.get(edge)) {
             case NORMAL:
                 flow.get(edge).increase(first.getEnd(), amount);
-                if (capacity(edge, first.getEnd()) < 0 || capacity(reverseEdge(edge),second.getStart()) < 0) {
-                    System.out.println("Boo!");
-                }
                 return; 
             case REVERSE:
                 flow.get(reverseEdge(edge)).decrease(first.getEnd(), amount);
@@ -180,7 +178,6 @@ public class ImplicitTimeExpandedResidualNetwork extends Network {
             return;
         }
         NodeTimePair first = path.getFirst();
-        augmentNode(first.getNode(), 0, first.getStart(), path.getCapacity());
         for (NodeTimePair ntp : path) {
             if (ntp.getStart() != ntp.getEnd()) {
                 augmentNode(ntp.getNode(), ntp.getStart(), ntp.getEnd(), path.getCapacity());
@@ -208,26 +205,16 @@ public class ImplicitTimeExpandedResidualNetwork extends Network {
     public int capacity(Edge edge, int time) {        
         switch (edgeTypes.get(edge)) {
             case NORMAL:
-                if (problem.getEdgeCapacities().get(edge) - flow.get(edge).get(time) < 0) {
-                    System.out.println("Edge " + edge + " at " + time + ", Cap = " + problem.getEdgeCapacities().get(edge) + " " + flow.get(edge).get(time));
-                }
                 return problem.getEdgeCapacities().get(edge) - flow.get(edge).get(time);
             case REVERSE:
-                if (flow.get(reverseEdge(edge)).get(time) < 0) {
-                    System.out.println("Edge " + edge + " at " + time + ", Flow = " + flow.get(reverseEdge(edge)).get(time));
-                }
                 return flow.get(reverseEdge(edge)).get(time);
             case ARTIFICIAL:                
                 if (time > 0) {
                     return 0;
                 } else {
-                    if (problem.getSupplies().get(edge.end()) - superSourceFlow.get(edge) < 0) {
-                        System.out.println("Supply");
-                    }
                     return problem.getSupplies().get(edge.end()) - superSourceFlow.get(edge);
                 }
             case ARTIFICIAL_REVERSE:
-                System.out.println("Z");
                 if (time > 0) {
                     return 0;
                 } else {
@@ -291,11 +278,11 @@ public class ImplicitTimeExpandedResidualNetwork extends Network {
      * the network.
      */
     @Deprecated
-    public Edge findEdge(Node start, Node end, int transitTime) {
-        Iterable<Edge> candidates = getEdges(start, end);
+    public Edge findEdge(Node start, Node end, int fromTime, int toTime) {
+        Iterable<Edge> candidates = getEdges(start, end);        
         Edge result = null;
         for (Edge edge : candidates) {
-            if (transitTime(edge) == transitTime) {
+            if (transitTime(edge) == toTime - fromTime && capacity(edge, fromTime) > 0) {
                 result = edge;
                 break;
             }
