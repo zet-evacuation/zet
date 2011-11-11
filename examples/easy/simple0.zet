@@ -30,14 +30,6 @@
           </start>
           <end reference="10"/>
           <size>4</size>
-          <minX__DefiningEdge class="roomEdge" reference="17"/>
-          <minY__DefiningEdge class="roomEdge" reference="17"/>
-          <maxX__DefiningEdge class="roomEdge" reference="17"/>
-          <maxY__DefiningEdge class="roomEdge" reference="15"/>
-          <xOffsetAll>0</xOffsetAll>
-          <yOffsetAll>0</yOffsetAll>
-          <heightAll>0</heightAll>
-          <widthAll>0</widthAll>
           <intersectionPoint id="18" x="1200" y="400"/>
           <associatedFloor reference="7"/>
           <assignmentAreas id="19">
@@ -65,14 +57,6 @@
               </start>
               <end reference="21"/>
               <size>4</size>
-              <minX__DefiningEdge reference="28"/>
-              <minY__DefiningEdge reference="28"/>
-              <maxX__DefiningEdge reference="28"/>
-              <maxY__DefiningEdge reference="26"/>
-              <xOffsetAll>0</xOffsetAll>
-              <yOffsetAll>0</yOffsetAll>
-              <heightAll>0</heightAll>
-              <widthAll>0</widthAll>
               <intersectionPoint id="29" x="400" y="0"/>
               <associatedRoom reference="9"/>
               <assignmentType id="30" name="Standardtyp">
@@ -116,14 +100,6 @@
               </start>
               <end reference="42"/>
               <size>4</size>
-              <minX__DefiningEdge reference="49"/>
-              <minY__DefiningEdge reference="49"/>
-              <maxX__DefiningEdge reference="49"/>
-              <maxY__DefiningEdge reference="47"/>
-              <xOffsetAll>0</xOffsetAll>
-              <yOffsetAll>0</yOffsetAll>
-              <heightAll>0</heightAll>
-              <widthAll>0</widthAll>
               <associatedRoom reference="9"/>
               <attractivity>100</attractivity>
             </evacuationArea>
@@ -169,9 +145,9 @@
     <cameraPositions id="67">
       <ds.CameraPosition id="68">
         <view id="69">
-          <x>0.022447475419740653</x>
-          <y>-0.6689384684813828</y>
-          <z>-0.742978758938008</z>
+          <x>0.02244747541974065</x>
+          <y>-0.6689384684813827</y>
+          <z>-0.7429787589380079</z>
         </view>
         <up id="70">
           <x>0.024918009502625346</x>
