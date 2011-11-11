@@ -60,12 +60,13 @@ public class NewChainDecomposition extends Algorithm<ChainDecompositionProblem, 
         sequencesUsingNode = new IdentifiableObjectMapping<Node, Queue[]>(network.nodes(), Queue[].class);
         transitTimes = problem.getNetwork().getProblem().getTransitTimes();
 
-        for (FlowOverTimeEdgeSequence edgeSequence : problem.getEdgeSequences()) {
+        for (FlowOverTimeEdgeSequence edgeSequence : problem.getEdgeSequences()) {            
             int time = 0;
+            System.out.println(edgeSequence);
             for (FlowOverTimeEdge edge : edgeSequence) {
                 time += edge.getDelay();
                 edge.setTime(time);
-                time += transitTimes.get(edge.getEdge());
+                time += network.transitTime(edge.getEdge());
             }
         }
 
@@ -110,7 +111,7 @@ public class NewChainDecomposition extends Algorithm<ChainDecompositionProblem, 
                     break;
                 }
                 currentEdge = edge;
-                lastArrival = edge.getTime() + transitTimes.get(edge.getEdge());
+                lastArrival = edge.getTime() + network.transitTime(edge.getEdge());
             }
 
             // If we do not find any, then residual path is a normal path
@@ -190,7 +191,7 @@ public class NewChainDecomposition extends Algorithm<ChainDecompositionProblem, 
                 sequencesUsingEdge.get(edge.getEdge())[edge.getTime()] = new LinkedList();
             }
             sequencesUsingEdge.get(edge.getEdge())[edge.getTime()].add(sequence);
-            lastArrival = edge.getTime() + transitTimes.get(edge.getEdge());
+            lastArrival = edge.getTime() + network.transitTime(edge.getEdge());
         }
         if (sequence instanceof FlowOverTimeCycle && sequence.getFirstEdge().getTime() > lastArrival) {
             for (int t = lastArrival; t < sequence.getFirstEdge().getTime(); t++) {
@@ -229,7 +230,7 @@ public class NewChainDecomposition extends Algorithm<ChainDecompositionProblem, 
                 break;
             }
             arrivalTime.set(e.start(), lastArrivalTime);
-            lastArrivalTime = edge.getTime() + transitTimes.get(edge.getEdge());
+            lastArrivalTime = edge.getTime() + network.transitTime(edge.getEdge());
         } // The first node that is visited twice is now stored in node, if there is such a node
         if (node != null) {
             // Split the sequence where the node is visited the first and the second time

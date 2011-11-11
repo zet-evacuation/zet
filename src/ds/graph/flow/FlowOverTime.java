@@ -20,6 +20,7 @@
 package ds.graph.flow;
 
 import algo.graph.dynamicflow.ChainDecompositionProblem;
+import algo.graph.dynamicflow.FlowOverTimePathDecomposition;
 import algo.graph.dynamicflow.NewChainDecomposition;
 import ds.graph.ImplicitTimeExpandedResidualNetwork;
 import java.util.LinkedList;
@@ -40,21 +41,30 @@ public class FlowOverTime {
 
     public FlowOverTime(ImplicitTimeExpandedResidualNetwork network, Queue<EarliestArrivalAugmentingPath> eaaPaths) {
         edgeBased = new EdgeBasedFlowOverTime(network.flow());
-        pathBased = new PathBasedFlowOverTime();
-        LinkedList<FlowOverTimeEdgeSequence> paths = new LinkedList<FlowOverTimeEdgeSequence>();
-        int index = 0;
+        FlowOverTimePathDecomposition decomposition = new FlowOverTimePathDecomposition();
+        decomposition.setProblem(network);
+        decomposition.run();
+        pathBased = decomposition.getSolution();
+        
+        //pathBased = new PathBasedFlowOverTime();
+        //LinkedList<FlowOverTimeEdgeSequence> paths = new LinkedList<FlowOverTimeEdgeSequence>();
+        //int index = 0;
         totalCost = 0;
         for (EarliestArrivalAugmentingPath eaaPath : eaaPaths) {
-            paths.add(eaaPath.getFlowOverTimeEdgeSequence(network));
+            //paths.add(eaaPath.getFlowOverTimeEdgeSequence(network));
             flowAmount += eaaPath.getCapacity();
             timeHorizon = Math.max(timeHorizon, eaaPath.getArrivalTime() + 1);
             totalCost += eaaPath.getCapacity() * eaaPath.getArrivalTime();
         }
+        
+        /*
         ChainDecomposition2 pd = new ChainDecomposition2();
         NewChainDecomposition pd2 = new NewChainDecomposition();
         pd2.setProblem(new ChainDecompositionProblem(paths, network));
         pd2.run();
-        pathBased = pd2.getSolution();
+        pathBased = pd2.getSolution();*/
+        
+        
         //pd.pathBased = pathBased;
         //pd.uncrossPaths(network, paths);
     }

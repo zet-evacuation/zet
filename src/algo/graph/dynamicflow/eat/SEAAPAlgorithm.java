@@ -200,11 +200,13 @@ public class SEAAPAlgorithm extends Algorithm<EarliestArrivalFlowProblem, FlowOv
     }
 
     private int getNextDistance(int currentDistance) {
+        return currentDistance+1;
+        /*
         int index = Arrays.binarySearch(distances, currentDistance + 1);
         if (index >= 0) {
             return currentDistance + 1;
         } else {
             return distances[-index - 1];
-        }
+        }*/
     }
 }
