@@ -373,6 +373,17 @@ public class IntegerIntegerMapping implements Cloneable, Iterable<TimeIntegerPai
             return result;
         }
     }
+
+    public int nextPositiveValue(int time) {
+        TimeIntegerPair tip = mapping.floor(new TimeIntegerPair(time, 0));
+        if (tip.value() > 0) {
+            return time;
+        }
+        while (tip != null && tip.value() <= 0) {
+            tip = mapping.higher(tip);
+        }
+        return (tip != null)? tip.time() : Integer.MAX_VALUE;
+    }
     
     /**
      * A utility class used for the underlying {@code TreeSet}. A mapping

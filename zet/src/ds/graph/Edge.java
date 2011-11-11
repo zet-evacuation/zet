@@ -109,14 +109,14 @@ public class Edge implements Identifiable {
      * @return the opposite node to {@code node}.
      */
     public Node opposite(Node node) {
-        if (node == start && node != end) {
+        if (node.id() == start.id() && node.id() != end.id()) {
             return end;
-        } else if (node != start && node == end) {
+        } else if (node.id() != start.id() && node.id() == end.id()) {
             return start;
-        } else if (node == start && node == end) {
+        } else if (node.id() == start.id() && node.id() == end.id()) {
             return null;
         } else {
-            throw new IllegalArgumentException("node=" + node);
+            throw new IllegalArgumentException("node=" + node + " edge " + this);
         }
     }
 

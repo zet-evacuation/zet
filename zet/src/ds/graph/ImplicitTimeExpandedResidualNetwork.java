@@ -82,11 +82,11 @@ public class ImplicitTimeExpandedResidualNetwork extends Network {
      */
     public ImplicitTimeExpandedResidualNetwork(EarliestArrivalFlowProblem problem) {        
         super(problem.getNetwork().numberOfNodes() + ((problem.getSources().size() > 1)? 1 : 0), 
-                problem.getNetwork().numberOfEdges() * 2 + ((problem.getSources().size() > 1)? problem.getSources().size() : 0));
+                problem.getNetwork().numberOfEdges() * 2 + ((problem.getSources().size() > 1)? problem.getSources().size()*2 : 0));
         this.edgeTypes = new IdentifiableObjectMapping<Edge, EdgeType>(getEdgeCapacity(), EdgeType.class);
         this.problem = problem;
         this.reverseEdges = new IdentifiableObjectMapping<Edge, Edge>(getEdgeCapacity(), Edge.class);
-        this.superSource = getNode(numberOfNodes() - 1);
+        this.superSource = ((problem.getSources().size() > 1)? getNode(numberOfNodes() - 1) : problem.getSources().get(0));
         this.superSourceFlow = new IdentifiableIntegerMapping<Edge>(getEdgeCapacity());
         setEdges(problem.getNetwork().edges());
         for (Edge edge : problem.getNetwork().edges()) {
@@ -159,7 +159,7 @@ public class ImplicitTimeExpandedResidualNetwork extends Network {
     protected void augmentNode(Node node, int start, int end, int amount) {
         if (start < end) {            
             waiting.get(node).increase(start, end, amount);
-            assert waiting.get(node).lessEqual(start, end, amount) : "Node capacities have been violated.";
+            assert waiting.get(node).lessEqual(start, end, problem.getNodeCapacities().get(node)) : "Node capacities have been violated.";
         } else if (start > end) {
             waiting.get(node).decrease(end, start, amount);
             assert waiting.get(node).greaterEqual(start, end, 0) : "Node capacities have been violated.";
@@ -253,6 +253,9 @@ public class ImplicitTimeExpandedResidualNetwork extends Network {
      * at the specified point in time.
      */
     public int capacity(Node node, int time, boolean reverse) {
+        if (node == superSource && hasArtificialSuperSource()) {
+            return 0;
+        }
         if (reverse) {
             return waiting.get(node).get(time - 1);
         } else {
@@ -266,7 +269,7 @@ public class ImplicitTimeExpandedResidualNetwork extends Network {
     
     /**
      * Returns an edge between the specified start and end node with the 
-     * specified transit time and avaiable capacity. If multiple edges
+     * specified transit time and available capacity. If multiple edges
      * fulfilling these criteria exist, the edge found first is returned. The
      * normal <code>getEdge</code> method should be preferred over this one.
      * @param start the start node of desired edge.
@@ -307,11 +310,13 @@ public class ImplicitTimeExpandedResidualNetwork extends Network {
         Iterable<Edge> candidates = getEdges(start, end);        
         Edge result = null;
         for (Edge edge : candidates) {
-            if (transitTime(edge) == toTime - fromTime && flow.get(edge).get(fromTime) >= flowAmount) {
+            System.out.println(edge + " " + fromTime + " " + edgeTypes.get(edge) + " " + timeHorizon());
+            if (transitTime(edge) == toTime - fromTime) {
                 result = edge;
                 break;
             }
         }
+        assert (result != null) : "Failed to find an edge with flow from " + start + " to " + end + " at " + fromTime + " to " + toTime + " with " + flowAmount;
         return result;
     }    
     
@@ -322,6 +327,10 @@ public class ImplicitTimeExpandedResidualNetwork extends Network {
     public IdentifiableObjectMapping<Edge, IntegerIntegerMapping> flow() {
         return flow;
     }
+
+    public IdentifiableIntegerMapping<Edge> superSourceFlow() {
+        return superSourceFlow;
+    }
     
     /**
      * Returns the underlying earliest arrival flow problem.
@@ -331,6 +340,15 @@ public class ImplicitTimeExpandedResidualNetwork extends Network {
         return problem;
     }
 
+    /**
+     * Returns whether the network has an artificial super source. This is the
+     * case if the underlying problem has more than two nodes with supply.
+     * @return whether the network has an artificial super source.
+     */
+    public boolean hasArtificialSuperSource() {
+        return problem.getSources().size() > 1;
+    }
+    
     /**
      * Returns whether the specified edge is an reverse edge.
      * @param edge the edge to be tested for being an reverse edge.

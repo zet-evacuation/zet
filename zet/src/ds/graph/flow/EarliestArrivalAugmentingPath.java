@@ -74,12 +74,13 @@ public class EarliestArrivalAugmentingPath extends LinkedList<NodeTimePair> {
         sequence.setRate(getCapacity());
         NodeTimePair first = getFirst();
         NodeTimePair previous = null;
+        System.out.println(this);
         for (NodeTimePair ntp : this) {
             if (ntp == first) {
                 previous = first;
                 continue;
             } else {
-                if (previous.getNode() == network.superSource()) {
+                if (previous.getNode() == network.superSource() && network.hasArtificialSuperSource()) {
                     previous = ntp;
                     continue;
                 }
