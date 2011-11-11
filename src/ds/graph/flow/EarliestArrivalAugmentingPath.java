@@ -17,7 +17,6 @@
  * EarliestArrivalAugmentingPath.java
  *
  */
-
 package ds.graph.flow;
 
 import ds.graph.Node;
@@ -29,16 +28,16 @@ import ds.graph.ImplicitTimeExpandedResidualNetwork;
  *
  * @author Martin Groß
  */
-@SuppressWarnings( "serial" )
+@SuppressWarnings("serial")
 public class EarliestArrivalAugmentingPath extends LinkedList<NodeTimePair> {
 
     private int capacity;
-    
+
     public EarliestArrivalAugmentingPath() {
         super();
         capacity = 0;
     }
-    
+
     public int getArrivalTime() {
         if (isEmpty()) {
             return 0;
@@ -54,25 +53,27 @@ public class EarliestArrivalAugmentingPath extends LinkedList<NodeTimePair> {
     public void setCapacity(int capacity) {
         this.capacity = capacity;
     }
-    
+
     public void insert(int index, Node node, int start, int end) {
         add(index, new NodeTimePair(node, start, end));
     }
-    
+
     public void insertFirst(Node node, int start, int end) {
         add(0, new NodeTimePair(node, start, end));
-    }    
+    }
 
     @Override
     public String toString() {
         return capacity + ": " + super.toString();
     }
-    
+
     public FlowOverTimeEdgeSequence getFlowOverTimeEdgeSequence(ImplicitTimeExpandedResidualNetwork network) {
-        FlowOverTimeEdgeSequence dpf = new FlowOverTimeEdgeSequence();
-        dpf.setAmount( getCapacity() ); // a path is used once for the capacity.
-				dpf.setRate(getCapacity());			// thus, amount and rate must be equal
-        NodeTimePair first = getFirst(), previous = null;
+        // Create a flow over time edge sequence with as much capacity and flow as this path
+        FlowOverTimeEdgeSequence sequence = new FlowOverTimeEdgeSequence();
+        sequence.setAmount(getCapacity());
+        sequence.setRate(getCapacity());
+        NodeTimePair first = getFirst();
+        NodeTimePair previous = null;
         for (NodeTimePair ntp : this) {
             if (ntp == first) {
                 previous = first;
@@ -83,19 +84,18 @@ public class EarliestArrivalAugmentingPath extends LinkedList<NodeTimePair> {
                     continue;
                 }
                 if (previous == first) {
-                    dpf.addLast(new FlowOverTimeEdge(network.findEdge(previous.getNode(), ntp.getNode(), previous.getEnd(), ntp.getStart()), previous.getEnd(), previous.getEnd()));
+                    sequence.addLast(new FlowOverTimeEdge(network.findEdgeWithFlow(previous.getNode(), ntp.getNode(), previous.getEnd(), ntp.getStart(), getCapacity()), previous.getEnd(), previous.getEnd()));
                 } else {
-                    //System.out.println("Edges: " + network.getEdges(previous.getNode(), ntp.getNode()));
-                    dpf.addLast(new FlowOverTimeEdge(network.findEdge(previous.getNode(), ntp.getNode(), previous.getEnd(), ntp.getStart()), previous.getEnd() - previous.getStart(), previous.getEnd()));
+                    sequence.addLast(new FlowOverTimeEdge(network.findEdgeWithFlow(previous.getNode(), ntp.getNode(), previous.getEnd(), ntp.getStart(), getCapacity()), previous.getEnd() - previous.getStart(), previous.getEnd()));
                 }
-                previous = ntp;                
+                previous = ntp;
             }
-        }        
-        return dpf;
-    }    
-    
+        }
+        return sequence;
+    }
+
     public class NodeTimePair {
-        
+
         private Node node;
         private int start;
         private int end;
@@ -121,6 +121,6 @@ public class EarliestArrivalAugmentingPath extends LinkedList<NodeTimePair> {
         @Override
         public String toString() {
             return node + "(" + start + "," + end + ")";
-        }       
+        }
     }
 }
