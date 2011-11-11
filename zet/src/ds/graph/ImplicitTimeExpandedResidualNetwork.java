@@ -127,8 +127,7 @@ public class ImplicitTimeExpandedResidualNetwork extends Network {
      * violates edge capacities. Requires assertions to be enabled.
      */
     protected void augmentEdge(NodeTimePair first, NodeTimePair second, int amount) {
-        Edge edge = findEdge(first.getNode(), second.getNode(), first.getEnd(), second.getStart());
-//        System.out.println(" Augment edge: " + edge + " @" + first.getEnd() + " by " + amount + " | " + capacity(edge, first.getEnd()));
+        Edge edge = findEdgeWithCapacity(first.getNode(), second.getNode(), first.getEnd(), second.getStart());
         assert amount >= 0 : "Edge augmentations are assumed to be non-negative.";        
         assert amount <= capacity(edge, first.getEnd()) : "Edge augmentations are assumed to respect capacities.";
         switch (edgeTypes.get(edge)) {
@@ -263,13 +262,13 @@ public class ImplicitTimeExpandedResidualNetwork extends Network {
                 return problem.getNodeCapacities().get(node) - waiting.get(node).get(time);
             }
         }
-    }
-
+    }    
+    
     /**
      * Returns an edge between the specified start and end node with the 
-     * specified transit time. If multiple edges fulfilling these criteria 
-     * exist, the edge found first is returned. The normal <code>getEdge</code>
-     * method should be preferred over this one.
+     * specified transit time and avaiable capacity. If multiple edges
+     * fulfilling these criteria exist, the edge found first is returned. The
+     * normal <code>getEdge</code> method should be preferred over this one.
      * @param start the start node of desired edge.
      * @param end the end node of desired edge.
      * @param transitTime the transit time of desired edge.
@@ -278,7 +277,7 @@ public class ImplicitTimeExpandedResidualNetwork extends Network {
      * the network.
      */
     @Deprecated
-    public Edge findEdge(Node start, Node end, int fromTime, int toTime) {
+    public Edge findEdgeWithCapacity(Node start, Node end, int fromTime, int toTime) {
         Iterable<Edge> candidates = getEdges(start, end);        
         Edge result = null;
         for (Edge edge : candidates) {
@@ -290,6 +289,32 @@ public class ImplicitTimeExpandedResidualNetwork extends Network {
         return result;
     }
 
+    /**
+     * Returns an edge between the specified start and end node with the 
+     * specified transit time and at least the specified amount of flow. If 
+     * multiple edges fulfilling these criteria exist, the edge found first is
+     * returned. The normal <code>getEdge</code> method should be preferred over 
+     * this one.
+     * @param start the start node of desired edge.
+     * @param end the end node of desired edge.
+     * @param transitTime the transit time of desired edge.
+     * @return an edge between the specified start and end node with the 
+     * specified transit time, or <code>null</code> if no such edge exists in 
+     * the network.
+     */
+    @Deprecated
+    public Edge findEdgeWithFlow(Node start, Node end, int fromTime, int toTime, int flowAmount) {
+        Iterable<Edge> candidates = getEdges(start, end);        
+        Edge result = null;
+        for (Edge edge : candidates) {
+            if (transitTime(edge) == toTime - fromTime && flow.get(edge).get(fromTime) >= flowAmount) {
+                result = edge;
+                break;
+            }
+        }
+        return result;
+    }    
+    
     /**
      * Returns the flow over time this residual network is corresponding to.
      * @return the flow over time this residual network is corresponding to.

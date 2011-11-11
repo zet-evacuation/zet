@@ -32,7 +32,6 @@ import java.util.Queue;
 public class FlowOverTime {
 
     private static final boolean DEBUG = false;
-    
     private EdgeBasedFlowOverTime edgeBased;
     private PathBasedFlowOverTime pathBased;
     private int flowAmount;
@@ -44,13 +43,12 @@ public class FlowOverTime {
         pathBased = new PathBasedFlowOverTime();
         LinkedList<FlowOverTimeEdgeSequence> paths = new LinkedList<FlowOverTimeEdgeSequence>();
         int index = 0;
-				totalCost = 0;
+        totalCost = 0;
         for (EarliestArrivalAugmentingPath eaaPath : eaaPaths) {
-            if (DEBUG ) System.out.println( (index++) + ":\n " + eaaPath + "\n " + eaaPath.getFlowOverTimeEdgeSequence(network).toText(network.getProblem().getTransitTimes()));
             paths.add(eaaPath.getFlowOverTimeEdgeSequence(network));
             flowAmount += eaaPath.getCapacity();
             timeHorizon = Math.max(timeHorizon, eaaPath.getArrivalTime() + 1);
-						totalCost += eaaPath.getCapacity() * eaaPath.getArrivalTime();
+            totalCost += eaaPath.getCapacity() * eaaPath.getArrivalTime();
         }
         ChainDecomposition2 pd = new ChainDecomposition2();
         NewChainDecomposition pd2 = new NewChainDecomposition();
@@ -60,7 +58,7 @@ public class FlowOverTime {
         //pd.pathBased = pathBased;
         //pd.uncrossPaths(network, paths);
     }
-    
+
     public EdgeBasedFlowOverTime getEdgeBased() {
         return edgeBased;
     }
@@ -77,11 +75,11 @@ public class FlowOverTime {
         return timeHorizon;
     }
 
-		/**
-		 * Returns the total costs for the flow.
-		 * @return
-		 */
-		public int getTotalCost() {
-			return totalCost;
-		}
+    /**
+     * Returns the total costs for the flow.
+     * @return
+     */
+    public int getTotalCost() {
+        return totalCost;
+    }
 }

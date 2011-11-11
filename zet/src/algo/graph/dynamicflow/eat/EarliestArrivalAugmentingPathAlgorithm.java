@@ -91,10 +91,10 @@ public class EarliestArrivalAugmentingPathAlgorithm extends Algorithm<EarliestAr
             predecessorNodes.get(node)[0] = null;
             departureTimes.get(node).set(0, Integer.MAX_VALUE);
         }
-        // Initialize predecessor nodes and departure times for the source
-        predecessorNodes.get(problem.getSource())[0] = EMPTY_NODE;
-        for (int time = 0; time < timeHorizon; time++) {
+        // Initialize predecessor nodes and departure times for the source        
+        for (int time = 0; time < timeHorizon; time++) {            
             departureTimes.get(problem.getSource()).set(time, time);
+            predecessorNodes.get(problem.getSource())[time] = EMPTY_NODE;
         }
         // Initialize the labels (i.e. the earliest arrival times of the nodes)
         labels = new IdentifiableIntegerMapping(network.nodes());
@@ -141,7 +141,6 @@ public class EarliestArrivalAugmentingPathAlgorithm extends Algorithm<EarliestAr
                         newTime = time + network.transitTime(edge) - 1;
                         while (newTime >= 0 && network.capacity(edge.end(), newTime + 1, true) > 0 && predecessorNodeOfEdgeEnd[newTime] == null) {
                             if (labels.get(edge.end()) > newTime) {
-                                if (edge.end().id() == 19) System.out.println("Reaching 19 from future @" + newTime);
                                 labels.set(edge.end(), newTime);
                             }
                             predecessorNodeOfEdgeEnd[newTime] = edge.end();
