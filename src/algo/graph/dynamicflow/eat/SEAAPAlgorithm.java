@@ -179,13 +179,6 @@ public class SEAAPAlgorithm extends Algorithm<EarliestArrivalFlowProblem, FlowOv
         if (!path.isEmpty() && path.getCapacity() > 0) {
             arrivalTime = path.getArrivalTime();
         }
-        //if (path.getArrivalTime() == pathProblem.getTimeHorizon() - 1) {
-            //pathProblem.setTimeHorizon(pathProblem.getTimeHorizon() + 1);
-            //if (pathProblem.getTimeHorizon() > originalTimeHorizon) {
-            //    path = new EarliestArrivalAugmentingPath();
-            //    return;
-            //}
-        //}
     }
 
     private void calculateShortestPathLengths() {
