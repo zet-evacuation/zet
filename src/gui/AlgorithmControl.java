@@ -101,10 +101,9 @@ public class AlgorithmControl implements PropertyChangeListener {
 		});
 		if( pcl != null)
 			st.addPropertyChangeListener( pcl );
-		//st.execute();
-		//st.run();
-		bpc.run();
-		buildingResults = bpc.getSolution();
+		st.execute();
+		//bpc.run();
+		//buildingResults = bpc.getSolution();
 	}
 
 	public BuildingResults getBuildingResults() {
@@ -306,10 +305,9 @@ public class AlgorithmControl implements PropertyChangeListener {
 		} );
 		if( propertyChangeListener != null )
 			st.addPropertyChangeListener( propertyChangeListener );
-		//st.execute();
-		//st.run();
-		conv.run();
-		networkFlowModel = conv.getSolution();
+		st.execute();
+		//conv.run();
+		//networkFlowModel = conv.getSolution();
 	}
 
 	public NetworkFlowModel getNetworkFlowModel() {

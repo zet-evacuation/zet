@@ -21,7 +21,9 @@
 package gui.components.framework;
 
 import java.awt.event.ActionListener;
+import javax.swing.AbstractButton;
 import javax.swing.JButton;
+import javax.swing.JToggleButton;
 
 /**
  * Automatic creation of JButtons.
@@ -47,13 +49,13 @@ public class Button {
 	}
 
 	/**
-	 * Adds Actionlistener to the instance and returns the same instance.
+	 * Adds {@link ActionListener} to the instance and returns the same instance.
 	 * @param b
 	 * @param al
 	 * @param commandString
 	 * @return
 	 */
-	private static JButton addActionListener( JButton b, ActionListener al, String commandString ) {
+	private static AbstractButton addActionListener( AbstractButton b, ActionListener al, String commandString ) {
 		if( al != null )
 			b.addActionListener( al );
 		if( commandString != null )
@@ -65,17 +67,17 @@ public class Button {
 		JButton b = processMnemonic( title );
 		if( toolTip != null )
 			b.setToolTipText( toolTip );
-		return addActionListener( b, al, commandString );
+		return (JButton)addActionListener( b, al, commandString );
 	}
 
 	public static JButton newButton( String title, ActionListener al, String commandString ) {
 		JButton b = processMnemonic( title );
-		return addActionListener( b, al, commandString );
+		return (JButton)addActionListener( b, al, commandString );
 	}
 	
 	public static JButton newButton( String title, ActionListener al ) {
 		JButton b = processMnemonic( title );
-		return addActionListener( b, al, null );
+		return (JButton)addActionListener( b, al, null );
 	}
 	
 	public static JButton newButton( String title, String toolTip ) {
@@ -90,19 +92,26 @@ public class Button {
 
 	public static JButton newButton( javax.swing.Icon i, ActionListener al, String commandString ) {
 		JButton b = new JButton( i );
-		return addActionListener( b, al, commandString );
+		return (JButton)addActionListener( b, al, commandString );
 	}
 
 	public static JButton newButton( IconSet is, ActionListener al, String commandString, String toolTip ) {
 		JButton b = new JButton( Icon.newIcon( is ) );
 		if( toolTip != null )
 			b.setToolTipText( toolTip );
-		return addActionListener( b, al, commandString );
+		return (JButton)addActionListener( b, al, commandString );
+	}
+
+	public static JToggleButton newButton( IconSet is, ActionListener al, String commandString, String toolTip, boolean initialState ) {
+		JToggleButton b = new JToggleButton( Icon.newIcon( is ), initialState );
+		if( toolTip != null )
+			b.setToolTipText( toolTip );
+		return (JToggleButton)addActionListener( b, al, commandString );
 	}
 
 	public static JButton newButton( IconSet is, ActionListener al, String commandString ) {
 		JButton b = new JButton( Icon.newIcon( is ) );
-		return addActionListener( b, al, commandString );
+		return (JButton)addActionListener( b, al, commandString );
 	}
 
 	public static JButton newButton( IconSet is, ActionListener al) {
