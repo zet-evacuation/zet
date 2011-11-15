@@ -113,7 +113,7 @@ public class EarliestArrivalAugmentingPathAlgorithm extends Algorithm<EarliestAr
                 // Look at all possible times
                 for (int time = labels.get(edge.start()); time < timeHorizon - Math.max(network.transitTime(edge), 0); time++) {
                     // Skip time steps where there is no residual capacity or there is no predecessor to reach our current node at that point
-                    if (network.capacity(edge, time) == 0 || predecessorNodes.get(edge.start())[time] == null) {
+                    if (time + network.transitTime(edge) < 0 || network.capacity(edge, time) == 0 || predecessorNodes.get(edge.start())[time] == null) {
                         continue;
                     }
                     Node[] predecessorNodeOfEdgeEnd = predecessorNodes.get(edge.end());
