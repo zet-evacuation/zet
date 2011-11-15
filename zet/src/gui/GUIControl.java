@@ -366,7 +366,7 @@ public class GUIControl implements AlgorithmListener {
 		// repaint once
 		visualization.repaint();
 	}
-	private boolean showWalls = true;
+	private boolean showWalls = PropertyContainer.getInstance().getAsBoolean( "settings.gui.visualization.walls" );
 
 	public void visualizationShowWalls() {
 		showWalls = !showWalls;
@@ -376,7 +376,8 @@ public class GUIControl implements AlgorithmListener {
 		visualization.getControl().showWalls( showWalls );
 		visualization.repaint();
 	}
-	private boolean showGraph = false;
+
+	private boolean showGraph = PropertyContainer.getInstance().getAsBoolean( "settings.gui.visualization.graph" );
 
 	public void visualizationShowGraph() {
 		showGraph = !showGraph;
@@ -386,7 +387,7 @@ public class GUIControl implements AlgorithmListener {
 		visualization.getControl().showGraph( showGraph );
 		visualization.repaint();
 	}
-	public boolean showGraphGrid = false;
+	public boolean showGraphGrid = PropertyContainer.getInstance().getAsBoolean( "settings.gui.visualization.nodeArea" );
 
 	public void visualizationShowGraphGrid() {
 		showGraphGrid = !showGraphGrid;
@@ -397,7 +398,7 @@ public class GUIControl implements AlgorithmListener {
 		visualization.repaint();
 
 	}
-	public boolean showCellularAutomaton = true;
+	public boolean showCellularAutomaton = PropertyContainer.getInstance().getAsBoolean( "settings.gui.visualization.cellularAutomaton" );
 
 	public void visualizationShowCellularAutomaton() {
 		showCellularAutomaton = !showCellularAutomaton;

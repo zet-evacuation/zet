@@ -27,6 +27,7 @@ import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import javax.swing.JList;
+import javax.swing.JToggleButton;
 import javax.swing.JToolBar;
 import zet.gui.GUILocalization;
 
@@ -46,9 +47,9 @@ public class JVisualizationToolbar extends JToolBar implements ActionListener {
 	private JLabel labelBatchRun;
 	private CycleComboBoxModel cycleModel;
 	/** Allows switching between 3d (perspective) view and 2d (orthogonal/isometric) view. */
-	private JButton btn2d3dSwitch;
+	private JToggleButton btn2d3dSwitch;
 	/** Allows switching orthogonal and isometric 2-dimensional view. */
-	private JButton btn2dSwitch;
+	private JToggleButton btn2dSwitch;
 	private JButton btnVideo;
 	private JButton btnPlayStart;
 	private JButton btnPlay;
@@ -57,15 +58,15 @@ public class JVisualizationToolbar extends JToolBar implements ActionListener {
 	private Icon playIcon;
 	private Icon pauseIcon;
 	//private JButton btnPlayEnd;
-	private JButton btnShowWalls;
-	private JButton btnShowGraph;
-	private JButton btnShowGraphGrid;
-	private JButton btnShowCellularAutomaton;
-	private JButton btnShowAllFloors;
-	private JButton btnShowPotential;
-	private JButton btnShowDynamicPotential;
-	private JButton btnShowUtilization;
-	private JButton btnShowWaiting;
+	private JToggleButton btnShowWalls;
+	private JToggleButton btnShowGraph;
+	private JToggleButton btnShowGraphGrid;
+	private JToggleButton btnShowCellularAutomaton;
+	private JToggleButton btnShowAllFloors;
+	private JToggleButton btnShowPotential;
+	private JToggleButton btnShowDynamicPotential;
+	private JToggleButton btnShowUtilization;
+	private JToggleButton btnShowWaiting;
 
 	public JVisualizationToolbar( GUIControl control ) {
 		this.control = control;
@@ -109,11 +110,9 @@ public class JVisualizationToolbar extends JToolBar implements ActionListener {
 		addSeparator();
 		add( new JLabel( " " ) );
 
-		btn2d3dSwitch = Button.newButton( IconSet.Toggle2D3D, this, "2d3dSwitch", loc.getString( "Visualization.Switch2d3d" ) );
-		btn2d3dSwitch.setSelected( !PropertyContainer.getInstance().getAsBoolean( "settings.gui.visualization.2d" ) );
+		btn2d3dSwitch = Button.newButton( IconSet.Toggle2D3D, this, "2d3dSwitch", loc.getString( "Visualization.Switch2d3d" ), !PropertyContainer.getInstance().getAsBoolean( "settings.gui.visualization.2d" ) );
 		add( btn2d3dSwitch );
-		btn2dSwitch = Button.newButton( IconSet.ToggleOrthogonalIsometric, this, "2dSwitch", loc.getString( "Visualization.SwitchIso" ) );
-		btn2dSwitch.setSelected( PropertyContainer.getInstance().getAsBoolean( "settings.gui.visualization.isometric" ) );
+		btn2dSwitch = Button.newButton( IconSet.ToggleOrthogonalIsometric, this, "2dSwitch", loc.getString( "Visualization.SwitchIso" ), PropertyContainer.getInstance().getAsBoolean( "settings.gui.visualization.isometric" ) );
 		btn2dSwitch.setEnabled( PropertyContainer.getInstance().getAsBoolean( "settings.gui.visualization.2d" ) );
 		add( btn2dSwitch );
 		addSeparator();
@@ -133,35 +132,26 @@ public class JVisualizationToolbar extends JToolBar implements ActionListener {
 		//btnPlayEnd = Button.newButton( IconSet.PlayEnd, this, "end", loc.getString( "playToEnd" ) );
 		//add( btnPlayEnd );
 		addSeparator();
-		btnShowWalls = Button.newButton( IconSet.ShowWalls, this, "walls", loc.getString( "Visualization.ShowWalls" ) );
-		btnShowWalls.setSelected( PropertyContainer.getInstance().getAsBoolean( "settings.gui.visualization.walls" ) );
+		btnShowWalls = Button.newButton( IconSet.ShowWalls, this, "walls", loc.getString( "Visualization.ShowWalls" ), PropertyContainer.getInstance().getAsBoolean( "settings.gui.visualization.walls" ) );
 		add( btnShowWalls );
-		btnShowGraph = Button.newButton( IconSet.ShowGraph, this, "graph", loc.getString( "Visualization.ShowGraph" ) );
-		btnShowGraph.setSelected( PropertyContainer.getInstance().getAsBoolean( "settings.gui.visualization.graph" ) );
+		btnShowGraph = Button.newButton( IconSet.ShowGraph, this, "graph", loc.getString( "Visualization.ShowGraph" ), PropertyContainer.getInstance().getAsBoolean( "settings.gui.visualization.graph" ) );
 		add( btnShowGraph );
-		btnShowGraphGrid = Button.newButton( IconSet.ShowGraphGrid, this, "graphgrid", loc.getString( "Visualization.ShowGridRectangles" ) );
-		btnShowGraphGrid.setSelected( PropertyContainer.getInstance().getAsBoolean( "settings.gui.visualization.nodeArea" ) );
+		btnShowGraphGrid = Button.newButton( IconSet.ShowGraphGrid, this, "graphgrid", loc.getString( "Visualization.ShowGridRectangles" ), PropertyContainer.getInstance().getAsBoolean( "settings.gui.visualization.nodeArea" ) );
 		add( btnShowGraphGrid );
-		btnShowCellularAutomaton = Button.newButton( IconSet.ShowCellularAutomaton, this, "ca", loc.getString( "Visualization.ShowCellularAutomaton" ) );
-		btnShowCellularAutomaton.setSelected( PropertyContainer.getInstance().getAsBoolean( "settings.gui.visualization.cellularAutomaton" ) );
+		btnShowCellularAutomaton = Button.newButton( IconSet.ShowCellularAutomaton, this, "ca", loc.getString( "Visualization.ShowCellularAutomaton" ), PropertyContainer.getInstance().getAsBoolean( "settings.gui.visualization.cellularAutomaton" ) );
 		add( btnShowCellularAutomaton );
 		addSeparator();
-		btnShowAllFloors = Button.newButton( IconSet.ShowAllFloors, this, "floors", loc.getString( "Visualization.ShowAllFloors" ) );
+		btnShowAllFloors = Button.newButton( IconSet.ShowAllFloors, this, "floors", loc.getString( "Visualization.ShowAllFloors" ), PropertyContainer.getInstance().getAsBoolean( "settings.gui.visualization.floors" ) );
 		add( btnShowAllFloors );
-		btnShowAllFloors.setSelected( PropertyContainer.getInstance().getAsBoolean( "settings.gui.visualization.floors" ) );
 		addSeparator();
 
-		btnShowPotential = Button.newButton( IconSet.ShowPotential, this, "potential", loc.getString( "Visualization.ShowPotential" ) );
-		btnShowPotential.setSelected( PropertyContainer.getInstance().getAsInt( "settings.gui.visualization.floorInformation" ) == 1 );
+		btnShowPotential = Button.newButton( IconSet.ShowPotential, this, "potential", loc.getString( "Visualization.ShowPotential" ), PropertyContainer.getInstance().getAsInt( "settings.gui.visualization.floorInformation" ) == 1 );
 		add( btnShowPotential );
-		btnShowDynamicPotential = Button.newButton( IconSet.ShowDynamicPotential, this, "dynamic", loc.getString( "Visualization.ShowDynamicPotential" ) );
-		btnShowDynamicPotential.setSelected( PropertyContainer.getInstance().getAsInt( "settings.gui.visualization.floorInformation" ) == 2 );
+		btnShowDynamicPotential = Button.newButton( IconSet.ShowDynamicPotential, this, "dynamic", loc.getString( "Visualization.ShowDynamicPotential" ), PropertyContainer.getInstance().getAsInt( "settings.gui.visualization.floorInformation" ) == 2 );
 		add( btnShowDynamicPotential );
-		btnShowUtilization = Button.newButton( IconSet.ShowUsage, this, "utilization", loc.getString( "Visualization.ShowUtilization" ) );
-		btnShowUtilization.setSelected( PropertyContainer.getInstance().getAsInt( "settings.gui.visualization.floorInformation" ) == 3 );
+		btnShowUtilization = Button.newButton( IconSet.ShowUsage, this, "utilization", loc.getString( "Visualization.ShowUtilization" ), PropertyContainer.getInstance().getAsInt( "settings.gui.visualization.floorInformation" ) == 3 );
 		add( btnShowUtilization );
-		btnShowWaiting = Button.newButton( IconSet.ShowWaiting, this, "waiting", loc.getString( "Visualization.ShowWaitingTime" ) );
-		btnShowWaiting.setSelected( PropertyContainer.getInstance().getAsInt( "settings.gui.visualization.floorInformation" ) == 4 );
+		btnShowWaiting = Button.newButton( IconSet.ShowWaiting, this, "waiting", loc.getString( "Visualization.ShowWaitingTime" ), PropertyContainer.getInstance().getAsInt( "settings.gui.visualization.floorInformation" ) == 4 );
 		add( btnShowWaiting );
 		addSeparator();
 
