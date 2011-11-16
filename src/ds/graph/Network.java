@@ -19,6 +19,7 @@
  */
 package ds.graph;
 
+import algo.graph.shortestpath.Dijkstra;
 import com.thoughtworks.xstream.annotations.XStreamAlias;
 import java.util.Iterator;
 
@@ -655,7 +656,7 @@ public class Network implements Graph, Cloneable, Iterable<Node> {
 
 	/**
 	 * Checks whether a directed path between the specified start and end nodes
-	 * exists by performing a breadth first search. Runtime O(n + m).
+	 * exists.
 	 * @param start the start node of the path to be checked.
 	 * @param end the end node of the path to be checked.
 	 * @return {@code true} if a directed path between the start node and
@@ -663,9 +664,29 @@ public class Network implements Graph, Cloneable, Iterable<Node> {
 	 */
 	@Override
 	public boolean existsPath( Node start, Node end ) {
-		throw new UnsupportedOperationException( "Not supported yet." );
+            Dijkstra dijkstra = new Dijkstra(this, IdentifiableConstantMapping.UNIT_EDGE_MAPPING, start);
+            dijkstra.run();
+            Forest spt = dijkstra.getShortestPathTree();
+            Path path = spt.getPathToRoot(end);
+            if (path.first().start().equals(start)) {
+                return true;
+            } else {
+                return false;
+            }
 	}
 
+	public Path getPath( Node start, Node end ) {
+            Dijkstra dijkstra = new Dijkstra(this, IdentifiableConstantMapping.UNIT_EDGE_MAPPING, start);
+            dijkstra.run();
+            Forest spt = dijkstra.getShortestPathTree();
+            Path path = spt.getPathToRoot(end);
+            if (path.first().start().equals(start)) {
+                return path;
+            } else {
+                return null;
+            }
+	}        
+        
 	/**
 	 * Checks whether at least one edge between the specified start and end nodes
 	 * exists.
