@@ -5,13 +5,16 @@
 package de.tu_berlin.math.coga.batch.gui;
 
 import batch.load.BatchProjectEntry;
+import com.l2fprod.common.propertysheet.Property;
+import com.l2fprod.common.propertysheet.PropertySheet;
+import com.l2fprod.common.propertysheet.PropertySheetPanel;
 import com.l2fprod.common.swing.JTaskPane;
 import com.l2fprod.common.swing.JTaskPaneGroup;
 import de.tu_berlin.math.coga.batch.Computation;
 import de.tu_berlin.math.coga.batch.gui.actions.AddInputFilesAction;
 import de.tu_berlin.math.coga.batch.gui.actions.NewComputationAction;
 import de.tu_berlin.math.coga.batch.gui.actions.AddCurrentProjectAction;
-import de.tu_berlin.math.coga.batch.gui.actions.ChooseAlgorithmAction;
+import de.tu_berlin.math.coga.batch.gui.actions.AddAlgorithmAction;
 import de.tu_berlin.math.coga.batch.gui.actions.RemoveInputFilesAction;
 import de.tu_berlin.math.coga.batch.gui.actions.RunComputationAction;
 import de.tu_berlin.math.coga.batch.gui.actions.StopComputationAction;
@@ -20,10 +23,15 @@ import gui.GUIControl;
 import java.awt.BorderLayout;
 import java.awt.event.ActionEvent;
 import java.beans.PropertyChangeListener;
+import java.util.Iterator;
 import javax.swing.AbstractAction;
 import javax.swing.Action;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
+import org.jdesktop.swingx.JXTreeTable;
+import org.jdesktop.swingx.treetable.DefaultMutableTreeTableNode;
+import org.jdesktop.swingx.treetable.DefaultTreeTableModel;
+import org.jdesktop.swingx.treetable.TreeTableNode;
 
 /**
  *
@@ -46,19 +54,27 @@ public class JBatch extends JPanel {
         inputPane.add(new AddCurrentProjectAction(this));
         inputPane.add(new AddInputFilesAction(this));
         inputPane.add(new RemoveInputFilesAction(this));
-        actionPane.add(inputPane);
+        //actionPane.add(inputPane);
 
         JTaskPaneGroup algorithmPane = new JTaskPaneGroup();
         algorithmPane.setTitle("Algorithm");
         algorithmPane.setSpecial(true);
-        algorithmPane.add(new ChooseAlgorithmAction(this));
-        actionPane.add(algorithmPane);        
+        algorithmPane.add(new AddAlgorithmAction(this));
+        //actionPane.add(algorithmPane);        
         
         actionPane.add(new RunComputationAction(this));
         actionPane.add(new StopComputationAction(this));
 
         taskPaneContainer.add(actionPane);
+        taskPaneContainer.add(inputPane);
+        taskPaneContainer.add(algorithmPane);
         add(new JScrollPane(taskPaneContainer), BorderLayout.WEST);
+        
+        JXTreeTable table = new JXTreeTable(new DefaultTreeTableModel(new DefaultMutableTreeTableNode("Test")));
+        add(new JScrollPane(table), BorderLayout.CENTER);
+        
+        PropertySheetPanel properties = new PropertySheetPanel();
+        add(new JScrollPane(properties), BorderLayout.EAST);
     }
 
     public void addProject(Project project) {

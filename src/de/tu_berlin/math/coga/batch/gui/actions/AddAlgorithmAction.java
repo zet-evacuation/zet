@@ -11,10 +11,10 @@ import java.awt.event.ActionEvent;
  *
  * @author gross
  */
-public class ChooseAlgorithmAction extends BatchAction {
+public class AddAlgorithmAction extends BatchAction {
 
-    public ChooseAlgorithmAction(JBatch batch) {
-        super(batch, "Choose algorithm", "algo_24.png");
+    public AddAlgorithmAction(JBatch batch) {
+        super(batch, "Add algorithm", "algo_24.png");
     }   
     
     @Override
