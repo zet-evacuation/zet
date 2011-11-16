@@ -21,6 +21,7 @@
 package zet.gui.main;
 
 import batch.BatchResult;
+import de.tu_berlin.math.coga.batch.gui.JBatch;
 import de.tu_berlin.math.coga.common.localization.DefaultLoc;
 import ds.PropertyContainer;
 import ds.z.Floor;
@@ -137,7 +138,7 @@ public class JEditor extends JFrame implements Localized, EventListener<Progress
 	/** The editor tab. */
 	private JEditView editView;
 	/** The batch view tab. */
-	private JBatchView batchView;
+	private JBatch batchView;
 	/** The tab for quick CA visualization. */
 	private JQuickVisualizationView caView;
 	/** The tab containing the CA statistic. */
@@ -245,7 +246,7 @@ public class JEditor extends JFrame implements Localized, EventListener<Progress
 		editView = new JEditView( guiControl );
 		EventServer.getInstance().registerListener( editView, OptionsChangedEvent.class );
 		caView = new JQuickVisualizationView(guiControl);
-		batchView = new JBatchView( guiControl );
+		batchView = new JBatch( guiControl );
 		visualizationView = new JVisualizationView( guiControl );
 		caStatisticView = new JStatisticPanel();
 		graphStatisticView = new JGraphStatisticPanel();
@@ -568,7 +569,7 @@ public class JEditor extends JFrame implements Localized, EventListener<Progress
 		return this.disableUpdate;
 	}
 
-	public JBatchView getBatchView() {
+	public JBatch getBatchView() {
 		return batchView;
 	}
 
