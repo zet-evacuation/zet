@@ -16,9 +16,10 @@ import javax.swing.filechooser.FileNameExtensionFilter;
 public class AddFileDialog extends JFileChooser {
 
     private FileFilter[] filters = { 
-        new FileNameExtensionFilter("BMBF Instance", ".dat"), 
+        new FileNameExtensionFilter("ADVEST Instance", ".dat"), 
         new FileNameExtensionFilter("GZipped ZET Project", ".gzet"),
         new FileNameExtensionFilter("DIMACS Maximum Flow Problem", ".max"),
+        new FileNameExtensionFilter("DIMACS Maximum Flow Solution", ".sol"),
         new FileNameExtensionFilter("ZET XML File", ".xml"),
         new FileNameExtensionFilter("ZET Project", ".zet"),
     };
