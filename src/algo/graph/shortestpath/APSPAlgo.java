@@ -110,58 +110,45 @@ public class APSPAlgo {
             {
                 dist[i][j] = weight[i][j];
             }
-            //System.out.println("original weight " + weight[i][j] + " " + i + " " + j);
+            System.out.println("original weight " + weight[i][j] + " " + i + " " + j);
         }
     }
     for (int k=1 ; k < m+2 ; k++)
     {
         int [][] res = distance_product(weight, weight);
-        weight = clip(res,0,2*maxdist);
-        if (k==m+1)
+        if (k==1)
         {
             for (int i=0; i<numNodes; i++)
             {
                 for (int j=0; j<numNodes; j++)
                 {
-                    System.out.println("i:" + i + " j:" + j + "distance product : " + weight[i][j]);
+                    System.out.println("i:" + i + " j:" + j + " res:" + res[i][j]);
                 }
             }
         }
+        weight = clip(res,0,2*maxdist);
     }
+    
   System.out.println("Step 1 done");      
   }
   
   public void Step_two()
   {
       A_k = new int[l+1][numNodes][numNodes];
-      int[][][] A_k_alt = new int[l+1][numNodes][numNodes];
       for (int i=0 ; i< numNodes ; i++)
       {
           for (int j=0 ; j< numNodes ; j++)
           {
               A_k[0][i][j] = weight[i][j] - maxdist;
-              System.out.println("i:" + i + " j:" + j + "A_0: " + A_k[0][i][j]);
+              //System.out.println("i:" + i + " j:" + j + "A_0: " + A_k[0][i][j]);
           }
       }
       
       for (int k=1 ; k< l+1 ; k++)
       {
-          System.out.println("k-te Iteration:" + k);
-          A_k[k] = clip(distance_product(A_k[k-1],A_k[k-1]),-maxdist,maxdist);
-          //A_k_alt[k] = clip(distance_product_naive(A_k[k-1],A_k[k-1]),-maxdist,maxdist);
-          //A_k[k] = distance_product(A_k[k-1],A_k[k-1]);
-          //A_k_alt[k] = distance_product_naive(A_k[k-1],A_k[k-1]);
-              
-         /*for (int i=0; i<A_k.length; i++)
-         {
-             for (int j=0; j<A_k.length ; j++)
-             {
-                 System.out.println("i:" + i + " j:" + j + " A_k:" + A_k[k][i][j] + " A_k_alt:" + A_k_alt[k][i][j]);
-             }
-         }*/
-         
+          //System.out.println("k-te Iteration:" + k);
+          A_k[k] = clip(distance_product(A_k[k-1],A_k[k-1]),-maxdist,maxdist);         
       }
-      
       
   System.out.println("Step 2 done");     
   }
@@ -187,38 +174,13 @@ public class APSPAlgo {
      {     
          System.out.println("k-te Iteration: " + k);
          int[][] first = intersect(clip(distance_product(P_l,A_k[k]), -maxdist, maxdist), C[k+1]);
-         int[][] first2 = intersect(clip(distance_product_naive(P_l,A_k[k]), -maxdist, maxdist), C[k+1]);
          int[][] second = intersect_neg(clip(distance_product(Q_l,A_k[k]),-maxdist,maxdist), C[k+1]);   
-         int[][] second2 = intersect_neg(clip(distance_product_naive(Q_l,A_k[k]),-maxdist,maxdist), C[k+1]); 
                  
-         
          C[k] = union(first, second);
          P_k = union(P_l,Q_l);      
          Q_k = chop(C[k],1-maxdist,maxdist); 
          Q_l = Q_k;
          P_l = P_k;
-         if (k==l-1)
-         {
-          System.out.println("wichtige Ausgaben");
-             for (int i=0; i<numNodes ; i++)
-             {
-                 for (int j=0; j<numNodes; j++)
-                 {
-                     System.out.println("i:" + i + " j:" + j + "A_k: " + A_k[k][i][j]);
-                 }
-             }
-          int[][] res = distance_product(P_l,A_k[k]);
-          int[][] res2 = distance_product_naive(P_l,A_k[k]);   
-         for (int i=0; i<numNodes; i++)
-         {
-             for (int j=0; j<numNodes ; j++)
-             {
-                 
-                 System.out.println("i:" + i + " j:" + j + " res:" + res[i][j] + " res2:" + res2[i][j]);
-                 //System.out.println("i:" + i + " j:" + j + " second:" + second[i][j] + " second2:" + second2[i][j]);
-             }
-         }
-         }
      }
 
      
@@ -433,7 +395,7 @@ public class APSPAlgo {
                       b_prime[i][j] = 0.0;
                   }
                   
-                  System.out.println("i:" + i + " j:" + j + "B_prime: " + b_prime[i][j]);
+                  //System.out.println("i:" + i + " j:" + j + "B_prime: " + b_prime[i][j]);
               }    
           }
           
@@ -483,7 +445,7 @@ public class APSPAlgo {
                   {
                       for (int j=A.length; j<dimension ; j++)
                       {
-                          A_changed[i][j] = 0;
+                          A_changed[i][j] = Integer.MAX_VALUE;
                       }
                   }
                   break;
@@ -498,7 +460,6 @@ public class APSPAlgo {
   
   public double[][] Strassen_product_cut(double[][] A, double[][] B, int cut)
   {
-      //System.out.println("Methode Start..");
       int dimension=0;
       //define matrix of size n = 2^k
       if (firstrun)
@@ -516,16 +477,9 @@ public class APSPAlgo {
       // normal multiplizieren
       System.out.println("Mathmult");
       double [][] mult = matmult(A, B);
-      /*for (int i=0; i< A.length ; i++)
-      {
-          for (int j=0; j<A.length; j++)
-          {
-              System.out.println("i:" + i + " j:" + j + " product:" + C[i][j] );
-          }
-      }*/
       return mult;
     }
-    
+    System.out.println("Nicht Mathmult");
     int dim = dimension/2;     // sollte ohne Rest aufgehen, da m Zweierpotenz
     //System.out.println("Dimension neu: " + dim);
     double[][] a11 = getMatrix(A, 0, dim-1,   0, dim-1);
@@ -651,7 +605,7 @@ public class APSPAlgo {
         C[i][j] = 0;
         for (int k = 0; k < A.length; k++) {
           C[i][j] += (A[i][k] * B[k][j]);  
-          //System.out.println("i:" + i + " j:" + j + "A_ik:" + A[i][k] +"B_kj:" + B[k][j] + "C_ij:" + C[i][j] );
+          System.out.println("i:" + i + " j:" + j + "A_ik:" + A[i][k] +"B_kj:" + B[k][j] + "C_ij:" + C[i][j] );
         }
       }
     }   
