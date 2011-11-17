@@ -51,6 +51,20 @@ public class FileCrawler {
         return !canonical.getCanonicalFile().equals(canonical.getAbsoluteFile());
     }
 
+    public List<File> listFiles(File root) {
+        visited = new HashMap<File, Boolean>();
+        List<File> result = new LinkedList<File>();
+        FileFilter filter = new FileFilter() {
+
+            @Override
+            public boolean accept(File file) {
+                return true;
+            }
+        };
+        listFiles(root, filter, result);
+        return result;
+    }    
+    
     public List<File> listFiles(File root, FileFilter filter) {
         visited = new HashMap<File, Boolean>();
         List<File> result = new LinkedList<File>();
