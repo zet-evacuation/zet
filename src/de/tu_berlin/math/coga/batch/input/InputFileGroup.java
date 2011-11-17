@@ -11,7 +11,7 @@ import java.util.LinkedList;
  *
  * @author Martin Groß
  */
-public class FileGroup extends LinkedList<File> {
+public class InputFileGroup extends LinkedList<File> {
     
     private FileReader reader;
 
