@@ -11,18 +11,19 @@ import com.l2fprod.common.propertysheet.PropertySheetPanel;
 import com.l2fprod.common.swing.JTaskPane;
 import com.l2fprod.common.swing.JTaskPaneGroup;
 import de.tu_berlin.math.coga.batch.Computation;
-import de.tu_berlin.math.coga.batch.gui.actions.AddInputFilesAction;
-import de.tu_berlin.math.coga.batch.gui.actions.NewComputationAction;
-import de.tu_berlin.math.coga.batch.gui.actions.AddCurrentProjectAction;
-import de.tu_berlin.math.coga.batch.gui.actions.AddAlgorithmAction;
-import de.tu_berlin.math.coga.batch.gui.actions.RemoveInputFilesAction;
-import de.tu_berlin.math.coga.batch.gui.actions.RunComputationAction;
-import de.tu_berlin.math.coga.batch.gui.actions.StopComputationAction;
+import de.tu_berlin.math.coga.batch.gui.action.AddInputFilesAction;
+import de.tu_berlin.math.coga.batch.gui.action.NewComputationAction;
+import de.tu_berlin.math.coga.batch.gui.action.AddCurrentProjectAction;
+import de.tu_berlin.math.coga.batch.gui.action.AddAlgorithmAction;
+import de.tu_berlin.math.coga.batch.gui.action.RemoveInputFilesAction;
+import de.tu_berlin.math.coga.batch.gui.action.RunComputationAction;
+import de.tu_berlin.math.coga.batch.gui.action.StopComputationAction;
 import ds.z.Project;
 import gui.GUIControl;
 import java.awt.BorderLayout;
 import java.awt.event.ActionEvent;
 import java.beans.PropertyChangeListener;
+import java.io.File;
 import java.util.Iterator;
 import javax.swing.AbstractAction;
 import javax.swing.Action;
@@ -85,5 +86,9 @@ public class JBatch extends JPanel {
     
     public Computation getSelectedComputation() {
         return null;
+    }
+
+    public void addInputFiles(File[] selectedFiles) {
+        throw new UnsupportedOperationException("Not yet implemented");
     }
 }
