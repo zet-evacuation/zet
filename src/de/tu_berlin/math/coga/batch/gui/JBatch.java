@@ -15,6 +15,7 @@ import de.tu_berlin.math.coga.batch.gui.action.AddInputFilesAction;
 import de.tu_berlin.math.coga.batch.gui.action.NewComputationAction;
 import de.tu_berlin.math.coga.batch.gui.action.AddCurrentProjectAction;
 import de.tu_berlin.math.coga.batch.gui.action.AddAlgorithmAction;
+import de.tu_berlin.math.coga.batch.gui.action.AddInputDirectoryAction;
 import de.tu_berlin.math.coga.batch.gui.action.RemoveInputFilesAction;
 import de.tu_berlin.math.coga.batch.gui.action.RunComputationAction;
 import de.tu_berlin.math.coga.batch.gui.action.StopComputationAction;
@@ -54,7 +55,7 @@ public class JBatch extends JPanel {
         inputPane.setSpecial(true);
         inputPane.add(new AddCurrentProjectAction(this));
         inputPane.add(new AddInputFilesAction(this));
-        inputPane.add(new RemoveInputFilesAction(this));
+        inputPane.add(new AddInputDirectoryAction(this));
         //actionPane.add(inputPane);
 
         JTaskPaneGroup algorithmPane = new JTaskPaneGroup();
