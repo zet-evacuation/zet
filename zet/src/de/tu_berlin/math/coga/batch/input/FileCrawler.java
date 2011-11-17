@@ -4,17 +4,12 @@
  */
 package de.tu_berlin.math.coga.batch.input;
 
-import com.sun.corba.se.pept.transport.Acceptor;
 import java.io.File;
 import java.io.FileFilter;
 import java.io.IOException;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-import javax.swing.plaf.basic.BasicFileChooserUI;
 
 /**
  *
@@ -65,7 +60,6 @@ public class FileCrawler {
 
     protected void listFiles(File root, FileFilter filter, List<File> list) {
         visited.put(root, true);
-        System.out.println("Visiting " + root);
         for (File file : root.listFiles(filter)) {
             boolean isSymlink = true;
             try {
@@ -86,7 +80,7 @@ public class FileCrawler {
                         continue;
                     }
                 }
-            } else if (file.isFile()) {                
+            } else if (file.isFile()) {
                 list.add(file);
             }
         }
