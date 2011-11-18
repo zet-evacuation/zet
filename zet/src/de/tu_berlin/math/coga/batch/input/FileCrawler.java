@@ -17,21 +17,21 @@ import java.util.List;
  */
 public class FileCrawler {
 
-    private boolean followLinks;
+    private boolean followingLinks;
     private boolean recursive;
     private HashMap<File, Boolean> visited;
 
     public FileCrawler(boolean recursive, boolean followLinks) {
         this.recursive = recursive;
-        this.followLinks = followLinks;
+        this.followingLinks = followLinks;
     }
 
-    public boolean isFollowLinks() {
-        return followLinks;
+    public boolean isFollowingLinks() {
+        return followingLinks;
     }
 
-    public void setFollowLinks(boolean followLinks) {
-        this.followLinks = followLinks;
+    public void setFollowingLinks(boolean followLinks) {
+        this.followingLinks = followLinks;
     }
 
     public boolean isRecursive() {
@@ -63,7 +63,21 @@ public class FileCrawler {
         };
         listFiles(root, filter, result);
         return result;
-    }    
+    }  
+    
+    public List<File> listFiles(File root, List<String> extensions) {
+        visited = new HashMap<File, Boolean>();
+        List<File> result = new LinkedList<File>();
+        FileFilter filter = new FileFilter() {
+
+            @Override
+            public boolean accept(File file) {
+                return true;
+            }
+        };
+        listFiles(root, filter, result);
+        return result;
+    }     
     
     public List<File> listFiles(File root, FileFilter filter) {
         visited = new HashMap<File, Boolean>();
@@ -85,8 +99,7 @@ public class FileCrawler {
             if (recursive && file.isDirectory() && file.canRead() && !visited.containsKey(file)) {
                 if (!isSymlink) {
                     listFiles(file, filter, list);
-                } else if (followLinks && isSymlink) {
-                    System.out.println("Following " + file);
+                } else if (followingLinks && isSymlink) {
                     try {
                         listFiles(file.getCanonicalFile(), filter, list);
                     } catch (IOException ex) {

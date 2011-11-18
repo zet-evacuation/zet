@@ -11,9 +11,14 @@ import java.util.LinkedList;
  *
  * @author Martin Groß
  */
-public class InputFileGroup extends LinkedList<File> {
+public class InputGroup extends LinkedList<File> {
     
     private FileReader reader;
+    private InputFileType type;
+
+    public InputGroup(InputFileType inputFileType) {
+        type = inputFileType;
+    }
 
     public FileReader getReader() {
         return reader;
@@ -21,5 +26,13 @@ public class InputFileGroup extends LinkedList<File> {
 
     public void setReader(FileReader reader) {
         this.reader = reader;
-    }    
+    }
+
+    public InputFileType getType() {
+        return type;
+    }
+
+    public void setType(InputFileType type) {
+        this.type = type;
+    }
 }
