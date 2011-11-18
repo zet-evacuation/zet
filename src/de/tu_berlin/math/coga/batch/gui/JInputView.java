@@ -7,8 +7,10 @@ package de.tu_berlin.math.coga.batch.gui;
 
 
 import de.tu_berlin.math.coga.batch.gui.input.FileTreeNode;
+import de.tu_berlin.math.coga.batch.gui.input.InputFileNode;
 import de.tu_berlin.math.coga.batch.gui.input.InputGroupNode;
 import de.tu_berlin.math.coga.batch.gui.input.InputTreeTableModel;
+import de.tu_berlin.math.coga.batch.input.InputFile;
 import de.tu_berlin.math.coga.batch.input.InputFileType;
 import de.tu_berlin.math.coga.batch.input.InputGroup;
 import java.awt.BorderLayout;
@@ -47,7 +49,9 @@ public class JInputView extends JPanel {
         InputTreeTableModel model = new InputTreeTableModel();
         DefaultMutableTreeTableNode root = (DefaultMutableTreeTableNode) model.getRoot();
         InputGroup group = new InputGroup(InputFileType.DIMACS_MAXIMUM_FLOW_PROBLEM);
-        root.add(new InputGroupNode(group));
+        InputGroupNode n;
+        root.add(n = new InputGroupNode(group));
+        //n.add(new InputFileNode(new InputFile(null, null)));
         this.tree = new JXTreeTable(model);//rootTreeNode);
         //this.tree.setCellRenderer(new FileTreeCellRenderer());
         this.tree.setRootVisible(false);
