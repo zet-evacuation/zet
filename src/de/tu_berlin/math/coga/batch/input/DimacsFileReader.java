@@ -49,6 +49,5 @@ public class DimacsFileReader implements FileReader<MaximumFlowProblem> {
         DimacsReader reader = new DimacsReader(file.getAbsolutePath());
         reader.load();
         return reader.getMaximumFlowProblem();
-    }
-    
+    }    
 }

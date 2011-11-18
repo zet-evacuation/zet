@@ -4,7 +4,7 @@
  */
 package de.tu_berlin.math.coga.batch;
 
-import de.tu_berlin.math.coga.batch.input.InputFileGroup;
+import de.tu_berlin.math.coga.batch.input.InputGroup;
 import de.tu_berlin.math.coga.common.algorithm.Algorithm;
 import java.util.List;
 
@@ -15,5 +15,5 @@ import java.util.List;
 public class Computation {
     
     private List<Algorithm<?,?>> algorithms;
-    private InputFileGroup input;   
+    private InputGroup input;
 }
