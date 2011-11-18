@@ -102,6 +102,9 @@ public class JZETMenuBar extends JMenuBar implements ActionListener, Localized {
         private JMenu mCreateAPSPGraph;
         private JMenuItem mnuCreateAPSPGraphNonGrid;
         private JMenuItem mnuCreateAPSPGraphGrid; 
+        private JMenu mCreateShortestPaths;
+        private JMenuItem mnuCreateShortestPathsNonGrid;
+        private JMenuItem mnuCreateShortestPathsGrid;
 	private JMenuItem mnuExecuteApplyAssignment;
 	private JMenu mSimulation;
 	private JMenuItem mnuSimulationQuickVisualization;;
@@ -237,6 +240,9 @@ public class JZETMenuBar extends JMenuBar implements ActionListener, Localized {
                 mCreateAPSPGraph = Menu.addMenu(mCreateGraph, loc.getString("Execute.CreateGraph.APSPGraph"));
                 mnuCreateAPSPGraphNonGrid = Menu.addMenuItem(mCreateAPSPGraph, loc.getString( "Execute.CreateGraph.APSPGraph.NonGrid" ), KeyEvent.VK_9, this, "APSPGraphNonGrid", InputEvent.CTRL_DOWN_MASK);
                 mnuCreateAPSPGraphGrid = Menu.addMenuItem(mCreateAPSPGraph, loc.getString( "Execute.CreateGraph.APSPGraph.Grid" ), KeyEvent.VK_9, this, "APSPGraphGrid", InputEvent.CTRL_DOWN_MASK);
+                mCreateShortestPaths = Menu.addMenu(mCreateGraph,loc.getString("Execute.CreateGraph.ShortestPaths"));
+                mnuCreateShortestPathsGrid = Menu.addMenuItem(mCreateShortestPaths, loc.getString( "Execute.CreateGraph.ShortestPaths.Grid" ), KeyEvent.VK_9, this, "ShortestPathsGrid", InputEvent.CTRL_DOWN_MASK);
+                mnuCreateShortestPathsNonGrid = Menu.addMenuItem(mCreateShortestPaths, loc.getString( "Execute.CreateGraph.ShortestPaths.NonGrid" ), KeyEvent.VK_9, this, "ShortestPathsNonGrid", InputEvent.CTRL_DOWN_MASK);
                 
 		mnuExecuteApplyAssignment = Menu.addMenuItem( mExecute, loc.getString( "Execute.ApplyConcreteAssignment" ), this, "applyConcreteAssignment" );
 		mSimulation = Menu.addMenu( mExecute, loc.getString( "Execute.Simulation" ) );
@@ -453,6 +459,8 @@ public class JZETMenuBar extends JMenuBar implements ActionListener, Localized {
                         control.createGraph(GraphConverterAlgorithms.ShortestPathGraphGrid);
                 else if (e.getActionCommand().equals("APSPGraphNonGrid"))
                         control.createGraph(GraphConverterAlgorithms.APSPGraphNonGrid);
+                else if (e.getActionCommand().equals("ShortestPathsNonGrid"))
+                        control.createGraph(GraphConverterAlgorithms.RepeatedShortestPaths);
 		else if( e.getActionCommand().equals( "applyConcreteAssignment" ) ) {
 		} else if( e.getActionCommand().equals( "quickVisualization" ) ) {
 			control.performQuickVisualization();
@@ -608,6 +616,9 @@ public class JZETMenuBar extends JMenuBar implements ActionListener, Localized {
                 Menu.updateMenu(mCreateShortestPathGraph, loc.getString("Execute.CreateGraph.ClusterGraph"));
                 Menu.updateMenu(mnuCreateShortestPathGraphGrid, loc.getString("Execute.CreateGraph.ShortestPathGraph.Grid"));
                 Menu.updateMenu(mnuCreateShortestPathGraphNonGrid, loc.getString("Execute.CreateGraph.ShortestPathGraph.NonGrid"));
+                Menu.updateMenu(mCreateShortestPaths, loc.getString("Execute.CreateGraph.ShortestPaths"));
+                Menu.updateMenu(mnuCreateShortestPathsGrid, loc.getString("Execute.CreateGraph.ShortestPaths.Grid"));
+                Menu.updateMenu(mnuCreateShortestPathsNonGrid, loc.getString("Execute.CreateGraph.ShortestPaths.NonGrid"));
                 
                 //Menu.updateMenu( mCreateGraph, loc.getString( "Execute.Optimization.CreateGraph" ) );
 		Menu.updateMenu( mnuOptimizationEarliestArrivalTransshipment, loc.getString( "Execute.Optimization.AlgoEATransshipment" ) );

@@ -23,6 +23,7 @@ package algo.graph.dynamicflow.eat;
 import algo.graph.shortestpath.Dijkstra;
 import de.tu_berlin.math.coga.common.algorithm.Algorithm;
 import de.tu_berlin.math.coga.common.algorithm.AlgorithmStatusEvent;
+import ds.graph.Edge;
 import ds.graph.ImplicitTimeExpandedResidualNetwork;
 import ds.graph.Node;
 import ds.graph.flow.EarliestArrivalAugmentingPath;
@@ -116,9 +117,16 @@ public class SEAAPAlgorithm extends Algorithm<EarliestArrivalFlowProblem, FlowOv
     @Override
     protected FlowOverTime runAlgorithm(EarliestArrivalFlowProblem problem) {
         // Initialize the data structures
+        System.out.println("Capacities: " + problem.getEdgeCapacities());
+        System.out.println("Node Capacities: " + problem.getNodeCapacities());
         calculateShortestPathLengths();       
         flowUnitsSent = 0;
         network = new ImplicitTimeExpandedResidualNetwork(problem);
+        for (Edge edge: network.edges())
+        {
+            System.out.println("Kante: " + edge);
+        }
+            
         originalTimeHorizon = problem.getTimeHorizon();        
         pathProblem = new EarliestArrivalAugmentingPathProblem(network, network.superSource(), problem.getSink(), Math.min(getNextDistance(0) + 1, problem.getTimeHorizon()));
         paths = new LinkedList<EarliestArrivalAugmentingPath>();
