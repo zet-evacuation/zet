@@ -113,7 +113,24 @@ public class DimacsMaximumFlowFileReader extends InputFileReader<RawMaximumFlowP
         } catch (IOException ex) {
             System.err.println("Exception during DimacsLoader loaded file from " + file);
         }
-        return new RawMaximumFlowProblem(numberOfNodes, numberOfEdges, caps, ends, starts, sinkIndex, sourceIndex);
+        int[] degrees = new int[numberOfNodes];
+        for (int i = 0; i < numberOfEdges; i++) {
+            ++degrees[starts[i]];
+        }        
+        int[] nodeIndices = new int[numberOfNodes];
+        nodeIndices[0] = 0;
+        for (int i = 1; i < numberOfNodes; i++) {
+            nodeIndices[i] = nodeIndices[i - 1] + degrees[i - 1];
+        }
+        int[] capacities = new int[numberOfEdges];
+        int[] indices = new int[numberOfNodes];
+        int[] edges = new int[numberOfEdges];        
+        for (int i = 0; i < numberOfEdges; i++) {
+            int newIndex = nodeIndices[starts[i]] + indices[starts[i]]++;
+            edges[newIndex] = ends[i];
+            capacities[newIndex] = caps[i];
+        }
+        return new RawMaximumFlowProblem(numberOfNodes, numberOfEdges, nodeIndices, edges, caps, sinkIndex, sourceIndex);
     }
 
     public static void main(String[] args) {
