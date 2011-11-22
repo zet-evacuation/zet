@@ -10,9 +10,9 @@ package ds.graph.problem;
  */
 public class RawMaximumFlowProblem {
     
-    private int[] edgeCapacities;
+    private int[] nodeStartIndices;
     private int[] edgeEndIDs;
-    private int[] edgeStartIDs;
+    private int[] edgeCapacities;
     private int numberOfEdges;
     private int numberOfNodes;
     private int sinkID;
@@ -22,12 +22,12 @@ public class RawMaximumFlowProblem {
         this(numberOfNodes,numberOfEdges,null,null,null,-1,-1);
     }    
     
-    public RawMaximumFlowProblem(int numberOfNodes, int numberOfEdges, int[] edgeCapacities, int[] edgeEndIDs, int[] edgeStartIDs, int sinkID, int sourceID) {
+    public RawMaximumFlowProblem(int numberOfNodes, int numberOfEdges, int[] nodeStartIndices, int[] edgeEndIDs, int[] edgeCapacities, int sinkID, int sourceID) {
         this.numberOfNodes = numberOfNodes;
         this.numberOfEdges = numberOfEdges;
-        this.edgeCapacities = edgeCapacities;
+        this.nodeStartIndices = nodeStartIndices;
         this.edgeEndIDs = edgeEndIDs;
-        this.edgeStartIDs = edgeStartIDs;
+        this.edgeCapacities = edgeCapacities;
         this.sinkID = sinkID;
         this.sourceID = sourceID;
     }
@@ -40,8 +40,8 @@ public class RawMaximumFlowProblem {
         return edgeEndIDs;
     }
 
-    public int[] getEdgeStartIDs() {
-        return edgeStartIDs;
+    public int[] getNodeStartIndices() {
+        return nodeStartIndices;
     }
 
     public int getNumberOfEdges() {
