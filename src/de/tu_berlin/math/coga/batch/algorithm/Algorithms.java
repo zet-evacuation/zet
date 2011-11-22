@@ -4,7 +4,7 @@
  */
 package de.tu_berlin.math.coga.batch.algorithm;
 
-import de.tu_berlin.math.coga.batch.input.FileReader;
+import de.tu_berlin.math.coga.batch.input.InputFileReader;
 import de.tu_berlin.math.coga.common.algorithm.Algorithm;
 import ds.graph.DynamicNetwork;
 import ds.graph.Edge;

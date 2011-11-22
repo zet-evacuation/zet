@@ -22,12 +22,12 @@ public class FileReaders {
         }
         return instance;
     }
-    private List<FileReader> readers;
-    private LinkedHashMap<String, List<FileReader>> readersForExtension;
+    private List<InputFileReader> readers;
+    private LinkedHashMap<String, List<InputFileReader>> readersForExtension;
 
     private FileReaders() {
-        readers = new LinkedList<FileReader>();
-        readersForExtension = new LinkedHashMap<String, List<FileReader>>();
+        readers = new LinkedList<InputFileReader>();
+        readersForExtension = new LinkedHashMap<String, List<InputFileReader>>();
     }
 
     public List getReaders() {
@@ -38,21 +38,21 @@ public class FileReaders {
         return readersForExtension.get(extension);
     }
 
-    public void registerReader(FileReader<?> reader) {
-        registerReader(reader, reader.getSupportedExtensions());
+    public void registerReader(InputFileReader<?> reader) {
+        //registerReader(reader, reader.getSupportedExtensions());
     }
 
-    protected void registerReader(FileReader<?> reader, String[] extensions) {
+    protected void registerReader(InputFileReader<?> reader, String[] extensions) {
         for (String extension : extensions) {
             if (!readersForExtension.containsKey(extension)) {
-                readersForExtension.put(extension, new LinkedList<FileReader>());
+                readersForExtension.put(extension, new LinkedList<InputFileReader>());
             }
             readersForExtension.get(extension).add(reader);
         }
         readers.add(reader);
     }
 
-    public void unregisterReader(FileReader<?> reader) {
+    public void unregisterReader(InputFileReader<?> reader) {
         for (String extension : readersForExtension.keySet()) {
             if (readersForExtension.get(extension) != null) {
                 readersForExtension.get(extension).remove(reader);
