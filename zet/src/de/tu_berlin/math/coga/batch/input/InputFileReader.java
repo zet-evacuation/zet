@@ -12,6 +12,12 @@ import java.io.File;
  * @author Martin Groß
  */
 public abstract class InputFileReader<T> extends Algorithm<File, T> {
+
+    public enum Optimization {
+        SPEED, MEMORY;
+    }
+    
+    private Optimization optimization = Optimization.MEMORY;
     
     public File getFile() {
         return getProblem();
@@ -19,6 +25,14 @@ public abstract class InputFileReader<T> extends Algorithm<File, T> {
     
     public void setFile(File file) {
         setProblem(file);
+    }
+
+    public Optimization getOptimization() {
+        return optimization;
+    }
+
+    public void setOptimization(Optimization optimization) {
+        this.optimization = optimization;
     }
     
     public abstract String[] getProperties();
