@@ -13,18 +13,18 @@ import java.util.LinkedList;
  */
 public class InputGroup extends LinkedList<File> {
     
-    private FileReader reader;
+    private InputFileReader reader;
     private InputFileType type;
 
     public InputGroup(InputFileType inputFileType) {
         type = inputFileType;
     }
 
-    public FileReader getReader() {
+    public InputFileReader getReader() {
         return reader;
     }
 
-    public void setReader(FileReader reader) {
+    public void setReader(InputFileReader reader) {
         this.reader = reader;
     }
 

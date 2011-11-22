@@ -13,9 +13,9 @@ import java.io.File;
 public class InputFile {
     
     private File file;
-    private FileReader reader;
+    private InputFileReader reader;
 
-    public InputFile(File file, FileReader reader) {
+    public InputFile(File file, InputFileReader reader) {
         this.file = file;
         this.reader = reader;
     }
@@ -25,7 +25,8 @@ public class InputFile {
     }
 
     public String[] getProperties() {
-        return new String[] { "1", "2", "3", "4"};
+        reader.setFile(file);         
+        return reader.getProperties();
     }
 
     public Object getName() {

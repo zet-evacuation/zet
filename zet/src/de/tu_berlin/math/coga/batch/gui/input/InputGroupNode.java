@@ -16,7 +16,7 @@ public class InputGroupNode extends DefaultMutableTreeTableNode {
     private String[] properties;
     
     public InputGroupNode(InputGroup group) {
-        super(group, false);
+        super(group, true);
         properties = group.getType().getPropertyNames();
     }
 

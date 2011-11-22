@@ -10,9 +10,11 @@ import de.tu_berlin.math.coga.batch.gui.input.FileTreeNode;
 import de.tu_berlin.math.coga.batch.gui.input.InputFileNode;
 import de.tu_berlin.math.coga.batch.gui.input.InputGroupNode;
 import de.tu_berlin.math.coga.batch.gui.input.InputTreeTableModel;
+import de.tu_berlin.math.coga.batch.input.DimacsMaximumFlowFileReader;
 import de.tu_berlin.math.coga.batch.input.InputFile;
 import de.tu_berlin.math.coga.batch.input.InputFileType;
 import de.tu_berlin.math.coga.batch.input.InputGroup;
+import de.tu_berlin.math.coga.graph.io.dimacs.DimacsReader;
 import java.awt.BorderLayout;
 import java.io.File;
 //import java.util.*;
@@ -37,6 +39,7 @@ public class JInputView extends JPanel {
      * The file tree.
      */
     private JXTreeTable tree;
+    private final InputFileNode fileNode;
 
     /**
      * Creates the file tree panel.
@@ -48,9 +51,12 @@ public class JInputView extends JPanel {
 
         InputTreeTableModel model = new InputTreeTableModel();
         DefaultMutableTreeTableNode root = (DefaultMutableTreeTableNode) model.getRoot();
+        root.setAllowsChildren(true);
         InputGroup group = new InputGroup(InputFileType.DIMACS_MAXIMUM_FLOW_PROBLEM);
         InputGroupNode n;
         root.add(n = new InputGroupNode(group));
+        InputFile file = new InputFile(new File("/homes/combi/gross/sample.max"), new DimacsMaximumFlowFileReader());
+        n.add(fileNode = new InputFileNode(file)); 
         //n.add(new InputFileNode(new InputFile(null, null)));
         this.tree = new JXTreeTable(model);//rootTreeNode);
         //this.tree.setCellRenderer(new FileTreeCellRenderer());
