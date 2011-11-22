@@ -67,9 +67,10 @@ public class DimacsMaximumFlowFileReader extends InputFileReader<RawMaximumFlowP
         int sourceIndex = -1;
         String line = null;
         int lineIndex = 1;
+        String[] tokens;
         try (BufferedReader reader = new BufferedReader(new FileReader(file))) {
             while ((line = reader.readLine()) != null) {
-                String[] tokens = line.split("\\s+");
+                tokens = line.split("\\s+");
                 switch (tokens[0]) {
                     case "c":
                         break;
@@ -158,9 +159,10 @@ public class DimacsMaximumFlowFileReader extends InputFileReader<RawMaximumFlowP
         String line = null;
         int lineIndex = 1;
         int[] degrees = null;
+        String[] tokens;
         try (BufferedReader reader = new BufferedReader(new FileReader(file))) {
             while ((line = reader.readLine()) != null) {
-                String[] tokens = line.split("\\s+");
+                tokens = line.split("\\s+");
                 switch (tokens[0]) {
                     case "c":
                         break;
@@ -221,7 +223,7 @@ public class DimacsMaximumFlowFileReader extends InputFileReader<RawMaximumFlowP
         lineIndex = 1;
         try (BufferedReader reader = new BufferedReader(new FileReader(file))) {
             while ((line = reader.readLine()) != null) {
-                String[] tokens = line.split("\\s+");
+                tokens = line.split("\\s+");
                 switch (tokens[0]) {
                     case "c":
                     case "p":
@@ -257,11 +259,14 @@ public class DimacsMaximumFlowFileReader extends InputFileReader<RawMaximumFlowP
         DimacsMaximumFlowFileReader reader = new DimacsMaximumFlowFileReader();
         reader.setFile(new File("/homes/combi/gross/Desktop/liver.n6c10.max"));
         System.out.println(Runtime.getRuntime().totalMemory() - Runtime.getRuntime().freeMemory());
+        reader.setOptimization(Optimization.SPEED);
         reader.run();
         RawMaximumFlowProblem p = reader.getSolution();
-        //reader = null;
-        //System.gc();
+        reader = null;
+        System.gc();
         System.out.println(Runtime.getRuntime().totalMemory() - Runtime.getRuntime().freeMemory() - p.getNumberOfEdges() * 8 - p.getNumberOfNodes() * 4);
+        System.out.println(Runtime.getRuntime().totalMemory() - Runtime.getRuntime().freeMemory() - p.getNumberOfEdges() * 8 - p.getNumberOfNodes() * 12);
+        System.out.println(Runtime.getRuntime().totalMemory() - Runtime.getRuntime().freeMemory() - p.getNumberOfEdges() * 20 - p.getNumberOfNodes() * 12);
         //System.out.println();
 //        System.out.println("Runtime: " + reader.getRuntimeAsString());
     }
