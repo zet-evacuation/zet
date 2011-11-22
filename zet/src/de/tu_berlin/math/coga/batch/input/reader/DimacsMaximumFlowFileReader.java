@@ -26,10 +26,10 @@ public class DimacsMaximumFlowFileReader extends InputFileReader<RawMaximumFlowP
                 RawMaximumFlowProblem problem = null;
                 switch (getOptimization()) {
                     case SPEED:
-                        problem = runAlgorithm(getProblem(), true);
+                        problem = runAlgorithmSpeed(getProblem(), true);
                         break;
                     case MEMORY:
-                        problem = runAlgorithm2(getProblem(), true);
+                        problem = runAlgorithmMemory(getProblem(), true);
                         break;
                     default:
                         throw new AssertionError("Should not occur.");
@@ -48,15 +48,15 @@ public class DimacsMaximumFlowFileReader extends InputFileReader<RawMaximumFlowP
     protected RawMaximumFlowProblem runAlgorithm(File problem) {
         switch (getOptimization()) {
             case SPEED:
-                return runAlgorithm(problem, false);
+                return runAlgorithmSpeed(problem, false);
             case MEMORY:
-                return runAlgorithm2(problem, false);
+                return runAlgorithmMemory(problem, false);
             default:
                 throw new AssertionError("Should not occur.");
         }
     }
 
-    public RawMaximumFlowProblem runAlgorithm(File file, boolean propertiesOnly) {
+    public RawMaximumFlowProblem runAlgorithmSpeed(File file, boolean propertiesOnly) {
         int[] caps = null;
         int currentEdgeIndex = 0;
         int[] ends = null;
@@ -151,7 +151,7 @@ public class DimacsMaximumFlowFileReader extends InputFileReader<RawMaximumFlowP
         return new RawMaximumFlowProblem(numberOfNodes, numberOfEdges, nodeIndices, edges, capacities, sinkIndex, sourceIndex);
     }
 
-    public RawMaximumFlowProblem runAlgorithm2(File file, boolean propertiesOnly) {
+    public RawMaximumFlowProblem runAlgorithmMemory(File file, boolean propertiesOnly) {
         int numberOfEdges = -1;
         int numberOfNodes = -1;
         int sinkIndex = -1;
