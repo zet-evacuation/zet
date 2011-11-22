@@ -7,6 +7,7 @@ package de.tu_berlin.math.coga.batch.input;
 import java.io.File;
 import java.io.FileFilter;
 import java.io.IOException;
+import java.nio.file.Files;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
@@ -52,8 +53,8 @@ public class FileCrawler {
     }
 
     public List<File> listFiles(File root) {
-        visited = new HashMap<File, Boolean>();
-        List<File> result = new LinkedList<File>();
+        visited = new HashMap<>();
+        List<File> result = new LinkedList<>();
         FileFilter filter = new FileFilter() {
 
             @Override
@@ -63,11 +64,11 @@ public class FileCrawler {
         };
         listFiles(root, filter, result);
         return result;
-    }  
-    
+    }
+
     public List<File> listFiles(File root, List<String> extensions) {
-        visited = new HashMap<File, Boolean>();
-        List<File> result = new LinkedList<File>();
+        visited = new HashMap<>();
+        List<File> result = new LinkedList<>();
         FileFilter filter = new FileFilter() {
 
             @Override
@@ -77,11 +78,11 @@ public class FileCrawler {
         };
         listFiles(root, filter, result);
         return result;
-    }     
-    
+    }
+
     public List<File> listFiles(File root, FileFilter filter) {
-        visited = new HashMap<File, Boolean>();
-        List<File> result = new LinkedList<File>();
+        visited = new HashMap<>();
+        List<File> result = new LinkedList<>();
         listFiles(root, filter, result);
         return result;
     }
@@ -89,22 +90,16 @@ public class FileCrawler {
     protected void listFiles(File root, FileFilter filter, List<File> list) {
         visited.put(root, true);
         for (File file : root.listFiles(filter)) {
-            boolean isSymlink = true;
-            try {
-                isSymlink = isSymlink(file);
-            } catch (IOException ex) {
-                System.err.println("Symlink test for " + file + " failed.");
-                continue;
-            }
             if (recursive && file.isDirectory() && file.canRead() && !visited.containsKey(file)) {
-                if (!isSymlink) {
+                if (!Files.isSymbolicLink(file.toPath())) {
                     listFiles(file, filter, list);
-                } else if (followingLinks && isSymlink) {
-                    try {
-                        listFiles(file.getCanonicalFile(), filter, list);
-                    } catch (IOException ex) {
-                        System.err.println("Symlink could not be resolved: " + file);
-                        continue;
+                } else {
+                    if (followingLinks) {
+                        try {
+                            listFiles(file.getCanonicalFile(), filter, list);
+                        } catch (IOException ex) {
+                            ex.printStackTrace();
+                        }
                     }
                 }
             } else if (file.isFile()) {

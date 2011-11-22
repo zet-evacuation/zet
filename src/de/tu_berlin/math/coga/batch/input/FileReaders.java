@@ -4,6 +4,7 @@
  */
 package de.tu_berlin.math.coga.batch.input;
 
+import de.tu_berlin.math.coga.batch.input.reader.InputFileReader;
 import java.util.LinkedHashMap;
 import java.util.LinkedList;
 import java.util.List;
