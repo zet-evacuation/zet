@@ -102,7 +102,7 @@ public class ZToNonGridShortestPathsConverter  extends ZToNonGridGraphConverter{
                 TransitForEdge = model.getTransitTimes();
                 for (Edge edge: model.getGraph().edges())
                 {
-                    System.out.println("Original Edges: " + edge);
+                    //System.out.println("Original Edges: " + edge);
                     currentEdges.add(edge);
                 }
                 
