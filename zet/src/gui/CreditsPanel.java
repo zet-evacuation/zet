@@ -21,6 +21,11 @@
 package gui;
 
 import de.tu_berlin.math.coga.math.Conversion;
+import java.io.IOException;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import javax.media.opengl.GL;
 import javax.media.opengl.GLAutoDrawable;
 import javax.media.opengl.glu.GLU;
@@ -155,106 +160,14 @@ public class CreditsPanel extends JMovingEyePanel {
 	 */
 	private void initLines() {
 		lines.setXoffset( 10.3 );
-		lines.add( "zet evakuierungs-tool", true );
-		lines.add( "", true );
-		lines.add( "Version " + ZETMain.version, true );
-		lines.add( "", true );
-		lines.add( "(c) 2007-08 Projektgruppe 517, TU-Dortmund", true );
-		lines.add( "(c) 2008-10 zet development team", true );
-		lines.add( "", false );
-		lines.add( "http://www.zet-evakuierung.de", true );
-		lines.add( "", false );
-		lines.add( "", false );
-		lines.add( "Credits:", true );
-		lines.add( "", true );
-		lines.add( "Martin Groß", true );
-		lines.add( "Moukarram Kabbash", true );
-		lines.add( "Jan-Philipp Kappmeier", true );
-		lines.add( "Sophia Kardung", true );
-		lines.add( "Timon Kelter", true );
-		lines.add( "Joscha Kulbatzki", true );
-		lines.add( "Daniel Plümpe", true );
-		lines.add( "Marcel Preuß", true );
-		lines.add( "Gordon Schlechter", true );
-		lines.add( "Melanie Schmidt", true );
-		lines.add( "Sylvie Temme", true );
-		lines.add( "Matthias Woste", true );
-		lines.add( "", true );
-		lines.add( "", true );
-		lines.add( "This program is free software; you can", false );
-		lines.add( "redistribute it and/or modify it under", false );
-		lines.add( "the terms of the GNU General Public Li-", false );
-		lines.add( "cense as published by the Free Software", false );
-		lines.add( "Foundation; either version 2 of the Li-", false );
-		lines.add( "cense, or (at your opinion) any later", false );
-		lines.add( "version.", false );
-		lines.add( "", false );
-		lines.add( "zet is distributed in the hope that it", false );
-		lines.add( "will be useful but WITHOUT ANY WARRANTY;", false );
-		lines.add( "without even the implied warranty of", false );
-		lines.add( "MERCHANTABILITY or FITNESS FOR A PAR-", false );
-		lines.add( "TICULAR PURPOSE. See the GNU General", false );
-		lines.add( "Public License for more details.", false );
-		lines.add( "", false );
-		lines.add( "You should have received a copy of the", false );
-		lines.add( "GNU General Public Licence along with", false );
-		lines.add( "zet; if not, write to the Free Software", false );
-		lines.add( "Foundation, Inc., 51 Franklin Street,", false );
-		lines.add( "Fifth Floor, Boston, MA 02110-131, USA,", false );
-		lines.add( "or have a look at", false );
-		lines.add( "http://www.gnu.org/licenses/", false );
-		lines.add( "", false );
-		lines.add( "", false );
-		lines.add( "Third-party components used by zet:", false );
-		lines.add( "", false );
-		lines.add( "MersenneTwister Version 13", false );
-		lines.add( "Copyright (c) 2003 by Sean Luke.", false );
-		lines.add( "Portions copyright (c) 1993 by Michael", false );
-		lines.add( "Lecuyer.", false );
-		lines.add( "", false );
-		lines.add( "MersenneTwisterFast Version 13", false );
-		lines.add( "Copyright (c) 2003 by Sean Luke.", false );
-		lines.add( "Portions copyright (c) 1993 by Michael", false );
-		lines.add( "Lecuyer.", false );
-		lines.add( "", false );
-		lines.add( "MTRandom", false );
-		lines.add( "Copyright (c) 2005 by David Beaumont.", false );
-		lines.add( "", false );
-		lines.add( "TableLayout JDK 1.5 2007-04-21", false );
-		lines.add( "Copyright (c) 2001 by Daniel Barbalace.", false );
-		lines.add( "https://tablelayout.dev.java.net/", false );
-		lines.add( "", false );
-		lines.add( "JFreeChart 1.0.10", false );
-		lines.add( "Copyright (c) 2000-2009 by Object", false );
-		lines.add( "Refinery and Contributors.", false );
-		lines.add( "http://www.jfree.org/jfreechart/", false );
-		lines.add( "", false );
-		lines.add( "JCommon 1.0.13", false );
-		lines.add( "Copyright (c) 2007-2009 by Object", false );
-		lines.add( "Refinery and Contributors.", false );
-		lines.add( "http://www.jfree.org/jcommon/", false );
-		lines.add( "", false );
-		lines.add( "SSJ 2.1.2", false );
-		lines.add( "Copyright (c) 2008  Pierre L'Ecuyer", false );
-		lines.add( "and Université de Montréal", false );
-		lines.add( "http://www.iro.umontreal.ca/~simardr/ssj/", false );
-		lines.add( "", false );
-		lines.add( "XStream 1.3", false );
-		lines.add( "Copyright (c) 2003-2006, Joe Walnes", false );
-		lines.add( "Copyright (c) 2006-2007, XStream Committers", false );
-		lines.add( "http://xstream.codehaus.org/", false );
-		lines.add( "", false );
-		lines.add( "JOGL 1.1.1-rc6", false );
-		lines.add( "Copyright (c) 2003-2007 Sun Microsystems", false );
-		lines.add( "https://jogl.dev.java.net/", false );
-		lines.add( "", false );
-		lines.add( "JMF 2.1.1e", false );
-		lines.add( "Copyright (c) 1995-2003 Sun Microsystems", false );
-		lines.add( "http://java.sun.com/javase/technologies/", false );
-		lines.add( "desktop/media/jmf/", false );
-		lines.add( "", false );
-		lines.add( "JAMA 1.0.2", false );
-		lines.add( "Copyright (c) 1998-2005 The Jama Team", false );
-		lines.add( "http://math.nist.gov/javanumerics/jama/", false );
+		Path creditsFile = Paths.get( "./credits.txt" );
+		try {
+			for ( String line : Files.readAllLines( creditsFile, StandardCharsets.UTF_8 ) ) {
+				lines.add(line.substring( 0, line.length()-2), line.endsWith( "1" ) );
+			}
+		} catch( IOException ex ) {
+			lines.add( "Error loading credits", true );
+			lines.add( "Plese repair your ZET installation", true );
+		}
 	}
 }
