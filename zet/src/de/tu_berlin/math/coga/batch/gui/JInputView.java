@@ -10,7 +10,7 @@ import de.tu_berlin.math.coga.batch.gui.input.FileTreeNode;
 import de.tu_berlin.math.coga.batch.gui.input.InputFileNode;
 import de.tu_berlin.math.coga.batch.gui.input.InputGroupNode;
 import de.tu_berlin.math.coga.batch.gui.input.InputTreeTableModel;
-import de.tu_berlin.math.coga.batch.input.DimacsMaximumFlowFileReader;
+import de.tu_berlin.math.coga.batch.input.reader.DimacsMaximumFlowFileReader;
 import de.tu_berlin.math.coga.batch.input.InputFile;
 import de.tu_berlin.math.coga.batch.input.InputFileType;
 import de.tu_berlin.math.coga.batch.input.InputGroup;
