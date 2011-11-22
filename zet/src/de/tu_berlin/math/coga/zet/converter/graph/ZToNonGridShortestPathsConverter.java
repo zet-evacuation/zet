@@ -5,7 +5,6 @@
 package de.tu_berlin.math.coga.zet.converter.graph;
 
 import algo.graph.shortestpath.Dijkstra;
-import de.tu_berlin.math.coga.common.util.Level;
 import de.tu_berlin.math.coga.zet.NetworkFlowModel;
 import de.tu_berlin.math.coga.zet.converter.RasterContainerCreator;
 import ds.graph.DynamicNetwork;
@@ -15,6 +14,7 @@ import ds.graph.IdentifiableCollection;
 import ds.graph.IdentifiableIntegerMapping;
 import ds.graph.ListSequence;
 import ds.graph.MinSpanningTree;
+import ds.graph.Network;
 import ds.graph.Node;
 import ds.graph.NodeRectangle;
 import ds.graph.problem.MinSpanningTreeProblem;
@@ -30,13 +30,19 @@ public class ZToNonGridShortestPathsConverter  extends ZToNonGridGraphConverter{
     public MinSpanningTreeProblem minspanprob;
     public MinSpanningTree spantree;
     public IdentifiableIntegerMapping TransitForEdge;
+    public IdentifiableIntegerMapping currentTransitForEdge;
+    IdentifiableIntegerMapping<Edge> currentTransitForEdge2;
     public IdentifiableCollection<Edge> ForestEdges;
     public Forest forest;
     public Edge neu;
     public Edge neureverse;
     public Edge neu2;
     public int NumEdges = 0;
+    public int NumCurrentEdges = 0;
+    public int NumShortestPaths = 5;
     IdentifiableCollection<Edge> solEdges = new ListSequence<Edge>();
+    private ListSequence<Edge> currentEdges = new ListSequence<Edge>();
+    private ListSequence<Edge> res; 
     
     @Override
     protected NetworkFlowModel runAlgorithm( BuildingPlan problem ) {
@@ -57,13 +63,24 @@ public class ZToNonGridShortestPathsConverter  extends ZToNonGridGraphConverter{
 		super.computeTransitTimes();
 		super.multiplyWithUpAndDownSpeedFactors();
 		model.setTransitTimes( exactTransitTimes.round() );
-		
+		/*for (Edge edge: model.getGraph().edges())
+                {
+                    System.out.println("Edge before doubling:" + edge);
+                }*/
 		createReverseEdges( model );
+                /*for (Edge edge: model.getGraph().edges())
+                {
+                    System.out.println("Edge after doubling:" + edge);
+                }*/
         	model.setNetwork( model.getGraph().getAsStaticNetwork() );
                 //nodes are nodes of original graph
                 minspanmodel.setNetwork(newgraph);
                 newgraph.setNodes(model.getGraph().nodes());
        
+                //set up dynamic network for problem to remove edges used in repeated Dijkstra
+                DynamicNetwork net = new DynamicNetwork();
+                net.setNodes(model.getNetwork().nodes());
+          
                 minspanmodel.setSupersink(model.getSupersink());
                 Node Super = minspanmodel.getSupersink();
                 newmapping.setNodeSpeedFactor( Super, 1 );
@@ -83,30 +100,119 @@ public class ZToNonGridShortestPathsConverter  extends ZToNonGridGraphConverter{
                 }
                 
                 TransitForEdge = model.getTransitTimes();
-                Dijkstra dijkstra = new Dijkstra(model.getNetwork(), TransitForEdge, model.getSupersink(), true);
-                for (Edge edge: model.getNetwork().edges())
+                for (Edge edge: model.getGraph().edges())
                 {
-                    System.out.println("Ausgabe: " + edge);
+                    System.out.println("Original Edges: " + edge);
+                    currentEdges.add(edge);
                 }
+                
+                Dijkstra dijkstra = new Dijkstra(model.getNetwork(), TransitForEdge, model.getSupersink(), true);
                 dijkstra.run();
-                System.out.println(dijkstra.getLastEdges());
+                //System.out.println(dijkstra.getLastEdges());
                 for (Node sink: model.getSinks())
                 {
                     for (Node source: model.getSources())
                     {
                         Node currentNode = source;
-                        System.out.println(currentNode);
+                        //System.out.println(currentNode);
                         while (currentNode != sink)
                         {
                             Edge create = dijkstra.getLastEdge(currentNode);
-                            System.out.println("neue Kante: " + create);
+                            if (!create.isIncidentTo(model.getSupersink()))
+                            {
+                                currentEdges.remove(create);
+                            }
+                            System.out.println("Edges in 1. run: " + create);
                             neu = new Edge(NumEdges++, create.start(),create.end());
                             solEdges.add(neu);
                             currentNode = create.opposite(currentNode);
                         }
                     }
                 }
-              
+                
+                currentTransitForEdge = new IdentifiableIntegerMapping(currentEdges.size());
+                for (Edge edge: model.getGraph().edges())
+                    {
+                        if (currentEdges.contains(edge))
+                        {
+                            Edge current = new Edge(NumCurrentEdges++,edge.start(),edge.end());
+                            net.setEdge(current);
+                            currentTransitForEdge.add(current, TransitForEdge.get(edge));
+                        }
+                    }
+                
+                for (int k=0; k<NumShortestPaths - 1 ; k++)
+                { 
+                    ListSequence<Edge> currentEdges2 = new ListSequence<Edge>();
+                    for (Edge edge: net.edges())
+                    {
+                        currentEdges2.add(edge);
+                    }
+                    res = new ListSequence<Edge>();
+                    System.out.println("Looking for " + (k+2) + " th shortest path" );
+                    NumCurrentEdges = 0;
+                    
+                    Network repeat = net.getAsStaticNetwork();
+                    /*for (Edge edge: repeat.edges())
+                    {
+                        System.out.println("neue Kanten: " + edge);
+                    }*/
+                    if (k>0)
+                    {
+                        currentTransitForEdge = currentTransitForEdge2;
+                    }
+            
+                    Dijkstra dijkstra2 = new Dijkstra(repeat,currentTransitForEdge, model.getSupersink(), true);
+                    dijkstra2.run();
+                    //System.out.println(dijkstra2.getLastEdges());
+                    int countwrong = 0;
+                    for (Node sink: model.getSinks())
+                    {
+                           for (Node source: model.getSources())
+                        {
+                            Node currentNode = source;
+                            //System.out.println(currentNode);
+                            while (currentNode != sink)
+                            {
+                                Edge create = dijkstra2.getLastEdge(currentNode);
+                                if (create == null)
+                                {
+                                    countwrong++;
+                                    System.out.println("No " + (k+2) + " th shortest Path for node" + currentNode);
+                                    break;
+                                }
+                                if (!create.isIncidentTo(model.getSupersink()))
+                                {
+                                    res.add(create);
+                                }
+                                System.out.println("Shortest Path Edges: " + create);
+                                neu2 = new Edge(NumEdges++, create.start(),create.end());
+                                solEdges.add(neu2);
+                                currentNode = create.opposite(currentNode);
+                            }
+                        }
+                         if (countwrong == model.getSources().size())
+                         {
+                            k = NumShortestPaths;
+                            System.out.println("No more shortest paths available for given sources!");
+                         }  
+                    }
+                    net.removeAllEdges();
+                    NumCurrentEdges = 0;
+                    currentTransitForEdge2 = new IdentifiableIntegerMapping<Edge>(currentEdges2.size());
+                    for (Edge edge: currentEdges2)
+                    {
+                        if (!res.contains(edge))
+                        {
+                            //System.out.println("Yes");
+                            Edge next = new Edge(NumCurrentEdges++, edge.start(), edge.end());
+                            net.addEdge(next);
+                            currentTransitForEdge2.add(next, currentTransitForEdge.get(edge) );
+                            
+                        } 
+                    }
+                
+                }
                 for (Edge edge: solEdges)
                 {
                     newgraph.addEdge(edge);

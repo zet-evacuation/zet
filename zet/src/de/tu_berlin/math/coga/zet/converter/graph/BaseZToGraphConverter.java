@@ -54,6 +54,10 @@ public abstract class BaseZToGraphConverter extends Algorithm<BuildingPlan, Netw
 
 		model.setNetwork( model.getGraph().getAsStaticNetwork() );
                 
+                for (Edge edge: model.getGraph().edges())
+                {
+                    System.out.println("Kante: " +edge);
+                }
                 
 		return model;
 
