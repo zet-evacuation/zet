@@ -17,7 +17,7 @@ public abstract class InputFileReader<T> extends Algorithm<File, T> {
         SPEED, MEMORY;
     }
     
-    private Optimization optimization = Optimization.MEMORY;
+    private Optimization optimization = Optimization.SPEED;
     
     public File getFile() {
         return getProblem();
