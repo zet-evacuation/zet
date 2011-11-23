@@ -14,19 +14,25 @@ import java.io.File;
 public class InputFile {
     
     private File file;
+    private FileFormat format;
     private InputFileReader reader;
 
-    public InputFile(File file, InputFileReader reader) {
+    public InputFile(File file) {
         this.file = file;
-        this.reader = reader;
+        this.format = FileFormat.determineFileFormat(file);
+        try {
+            this.reader = format.getReader().newInstance();
+            reader.setFile(file);
+        } catch (InstantiationException | IllegalAccessException ex) {
+            ex.printStackTrace();
+        }
     }
     
     public String[] getPropertyNames() {
-        return new String[] { "Nodes", "Edges", "Supply", "Time Horizon" };
+        return format.getProblemType().getPropertyNames();
     }
 
-    public String[] getProperties() {
-        reader.setFile(file);         
+    public String[] getProperties() {            
         return reader.getProperties();
     }
 
