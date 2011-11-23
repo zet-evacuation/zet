@@ -4,6 +4,7 @@
  */
 package de.tu_berlin.math.coga.batch.input;
 
+import de.tu_berlin.math.coga.batch.input.reader.DimacsMinimumCostFlowFileReader;
 import java.io.File;
 import java.io.FileFilter;
 import java.io.IOException;
@@ -35,21 +36,20 @@ public class FileCrawler {
         this.followingLinks = followLinks;
     }
 
+    /**
+     * Returns whether subdirectories are processed as well.
+     * @return 
+     */
     public boolean isRecursive() {
         return recursive;
     }
 
+    /**
+     * Sets whether subdirectories should be processed as well.
+     * @param recursive 
+     */
     public void setRecursive(boolean recursive) {
         this.recursive = recursive;
-    }
-
-    protected boolean isSymlink(File file) throws IOException {
-        if (file == null) {
-            return false;
-        }
-        File canonicalParent = (file.getParentFile() == null) ? null : file.getParentFile().getCanonicalFile();
-        File canonical = (canonicalParent == null) ? file : new File(canonicalParent, file.getName());
-        return !canonical.getCanonicalFile().equals(canonical.getAbsoluteFile());
     }
 
     public List<File> listFiles(File root) {
@@ -66,14 +66,16 @@ public class FileCrawler {
         return result;
     }
 
-    public List<File> listFiles(File root, List<String> extensions) {
+    public List<File> listFiles(File root, final List<String> extensions) {
         visited = new HashMap<>();
         List<File> result = new LinkedList<>();
         FileFilter filter = new FileFilter() {
 
             @Override
             public boolean accept(File file) {
-                return true;
+                int index = file.getName().lastIndexOf(".");
+                String extension = (index >= 0)? file.getName().substring(index+1) : "";                
+                return extensions.contains(extension);
             }
         };
         listFiles(root, filter, result);
@@ -105,6 +107,19 @@ public class FileCrawler {
             } else if (file.isFile()) {
                 list.add(file);
             }
+        }
+    }
+    
+    public static void main(String[] args) {
+        FileCrawler crawler = new FileCrawler(false, false);
+        LinkedList<String> ext = new LinkedList<>();
+        ext.add("net");
+        List<File> files = crawler.listFiles(new File("/homes/combi/gross/"), ext);
+        for (File file : files) {
+            DimacsMinimumCostFlowFileReader reader = new DimacsMinimumCostFlowFileReader();
+            reader.setFile(file);
+            String[] properties = reader.getProperties();
+            System.out.println(file + ": " + properties[0] + " " + properties[1] + " " + properties[2]);
         }
     }
 }

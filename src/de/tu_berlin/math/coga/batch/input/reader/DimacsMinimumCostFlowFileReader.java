@@ -109,8 +109,8 @@ public class DimacsMinimumCostFlowFileReader extends InputFileReader<RawMinimumC
                         numberOfEdges = Integer.parseInt(tokens[3]);
                         assert numberOfNodes >= 0 : "File specifies a negative amount of nodes.";
                         assert numberOfEdges >= 0 : "File specifies a negative amount of edges.";
-                        if (!propertiesOnly) {
-                            supplies = new int[numberOfNodes];
+                        supplies = new int[numberOfNodes];
+                        if (!propertiesOnly) {                            
                             caps = new int[numberOfEdges];
                             costs = new int[numberOfEdges];
                             ends = new int[numberOfEdges];
@@ -208,6 +208,7 @@ public class DimacsMinimumCostFlowFileReader extends InputFileReader<RawMinimumC
                         numberOfEdges = Integer.parseInt(tokens[3]);
                         assert numberOfNodes >= 0 : "File specifies a negative amount of nodes.";
                         assert numberOfEdges >= 0 : "File specifies a negative amount of edges.";
+                        supplies = new int[numberOfNodes];
                         if (!propertiesOnly) {
                             degrees = new int[numberOfNodes];
                         }
