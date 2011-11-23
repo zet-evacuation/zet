@@ -13,7 +13,7 @@ import java.util.LinkedList;
  * @author Martin Groß
  */
 public class InputGroup extends LinkedList<File> {
-    
+    /*
     private InputFileReader reader;
     private InputFileType type;
 
@@ -35,5 +35,5 @@ public class InputGroup extends LinkedList<File> {
 
     public void setType(InputFileType type) {
         this.type = type;
-    }
+    }*/
 }

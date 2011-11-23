@@ -6,28 +6,26 @@ package de.tu_berlin.math.coga.batch.gui;
 
 
 
-import de.tu_berlin.math.coga.batch.gui.input.FileTreeNode;
 import de.tu_berlin.math.coga.batch.gui.input.InputFileNode;
 import de.tu_berlin.math.coga.batch.gui.input.InputGroupNode;
 import de.tu_berlin.math.coga.batch.gui.input.InputTreeTableModel;
+import de.tu_berlin.math.coga.batch.input.FileCrawler;
 import de.tu_berlin.math.coga.batch.input.reader.DimacsMaximumFlowFileReader;
 import de.tu_berlin.math.coga.batch.input.InputFile;
-import de.tu_berlin.math.coga.batch.input.InputFileType;
 import de.tu_berlin.math.coga.batch.input.InputGroup;
-import de.tu_berlin.math.coga.graph.io.dimacs.DimacsReader;
+import de.tu_berlin.math.coga.batch.input.reader.DimacsMinimumCostFlowFileReader;
 import java.awt.BorderLayout;
 import java.io.File;
-//import java.util.*;
-
-//import javax.swing.*;
+import java.util.LinkedList;
+import java.util.List;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.SwingUtilities;
 import javax.swing.border.EmptyBorder;
+import javax.swing.table.TableColumn;
 import org.jdesktop.swingx.JXTreeTable;
 import org.jdesktop.swingx.treetable.DefaultMutableTreeTableNode;
-import org.jdesktop.swingx.treetable.FileSystemModel;
 
 /**
  *
@@ -39,7 +37,7 @@ public class JInputView extends JPanel {
      * The file tree.
      */
     private JXTreeTable tree;
-    private final InputFileNode fileNode;
+
 
     /**
      * Creates the file tree panel.
@@ -52,15 +50,49 @@ public class JInputView extends JPanel {
         InputTreeTableModel model = new InputTreeTableModel();
         DefaultMutableTreeTableNode root = (DefaultMutableTreeTableNode) model.getRoot();
         root.setAllowsChildren(true);
-        InputGroup group = new InputGroup(InputFileType.DIMACS_MAXIMUM_FLOW_PROBLEM);
+        //InputGroup group = new InputGroup(InputFileType.DIMACS_MAXIMUM_FLOW_PROBLEM);
         InputGroupNode n;
-        root.add(n = new InputGroupNode(group));
-        InputFile file = new InputFile(new File("/homes/combi/gross/sample.max"), new DimacsMaximumFlowFileReader());
-        n.add(fileNode = new InputFileNode(file)); 
+        
+        
+        FileCrawler crawler = new FileCrawler(false, false);
+        LinkedList<String> ext = new LinkedList<>();
+        ext.add("net");
+        List<File> files = crawler.listFiles(new File("/homes/combi/gross/"), ext);
+        for (File file : files) {
+            DimacsMinimumCostFlowFileReader reader = new DimacsMinimumCostFlowFileReader();
+            reader.setFile(file);
+            String[] properties = reader.getProperties();
+            //System.out.println(file + ": " + properties[0] + " " + properties[1] + " " + properties[2]);
+            
+            root.add(new InputFileNode(new InputFile(file)));
+        }        
+        
+        
+        //InputFile file = new InputFile(new File("/homes/combi/gross/sample.max"), new DimacsMaximumFlowFileReader());
+        //n.add(fileNode = new InputFileNode(file)); 
         //n.add(new InputFileNode(new InputFile(null, null)));
-        this.tree = new JXTreeTable(model);//rootTreeNode);
+        //rootTreeNode);
+        
+        this.tree = new JXTreeTable(model);/*
+        
+        tree.getColumnModel().getColumn(0).setHeaderValue("Files");
+        
+        TableColumn col = new TableColumn();
+        col.setHeaderValue("Nodes");
+        tree.getColumnModel().addColumn(col);
+        
+        col = new TableColumn();
+        col.setHeaderValue("Edges");
+        tree.getColumnModel().addColumn(col);
+        
+        col = new TableColumn();
+        col.setHeaderValue("Supply");
+        tree.getColumnModel().addColumn(col);*/
+        
+        
+        
         //this.tree.setCellRenderer(new FileTreeCellRenderer());
-        this.tree.setRootVisible(false);
+        this.tree.setRootVisible(true);
         final JScrollPane jsp = new JScrollPane(this.tree);
         jsp.setBorder(new EmptyBorder(0, 0, 0, 0));
         this.add(jsp, BorderLayout.CENTER);

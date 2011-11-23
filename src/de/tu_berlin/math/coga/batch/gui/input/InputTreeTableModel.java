@@ -15,9 +15,10 @@ import org.jdesktop.swingx.treetable.MutableTreeTableNode;
  * @author gross
  */
 public class InputTreeTableModel extends AbstractTreeTableModel {
-
+    
     public InputTreeTableModel() {
         super(new DefaultMutableTreeTableNode("Input"));
+        //((DefaultMutableTreeTableNode) root).setValueAt(root, column);
     }
 
     @Override
@@ -44,8 +45,8 @@ public class InputTreeTableModel extends AbstractTreeTableModel {
         int result = 1;
         while (children.hasMoreElements()) {
             MutableTreeTableNode child = children.nextElement();
-            if (child instanceof InputGroupNode) {
-                result = Math.max(result, ((InputGroupNode) child).getColumnCount());
+            if (child instanceof InputFileNode) {
+                result = Math.max(result, ((InputFileNode) child).getColumnCount());
             }
         }
         return result;

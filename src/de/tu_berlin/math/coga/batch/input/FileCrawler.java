@@ -109,17 +109,4 @@ public class FileCrawler {
             }
         }
     }
-    
-    public static void main(String[] args) {
-        FileCrawler crawler = new FileCrawler(false, false);
-        LinkedList<String> ext = new LinkedList<>();
-        ext.add("net");
-        List<File> files = crawler.listFiles(new File("/homes/combi/gross/"), ext);
-        for (File file : files) {
-            DimacsMinimumCostFlowFileReader reader = new DimacsMinimumCostFlowFileReader();
-            reader.setFile(file);
-            String[] properties = reader.getProperties();
-            System.out.println(file + ": " + properties[0] + " " + properties[1] + " " + properties[2]);
-        }
-    }
 }
