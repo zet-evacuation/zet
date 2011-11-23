@@ -11,13 +11,23 @@ import java.io.FileReader;
 import java.io.IOException;
 
 /**
- *
- * @author gross
+ * A reader for maximum flow problem instances stored in the DIMACS format: 
+ * http://www.avglab.com/andrew/CATS/maxflow_formats.htm.
+ * @author Martin Groß
  */
 public class DimacsMaximumFlowFileReader extends InputFileReader<RawMaximumFlowProblem> {
 
+    /**
+     * Caches the number of nodes and edges.
+     */
     private String[] properties;
 
+    /**
+     * Returns the number of nodes and edges of the maximum flow instance and
+     * reads this information from the header of the file, if necessary.
+     * @return an array containing the number of nodes as its first entry and 
+     * the number of edges as its second.
+     */
     @Override
     public String[] getProperties() {
         if (properties == null) {
@@ -44,19 +54,33 @@ public class DimacsMaximumFlowFileReader extends InputFileReader<RawMaximumFlowP
         return properties;
     }
 
+    /**
+     * Reads the maximum flow problem from the specified file.
+     * @param file the file which contains the maximum flow problem.
+     * @return the maximum flow problem. Requires 4n + 8m + O(1) storage.
+     */
     @Override
-    protected RawMaximumFlowProblem runAlgorithm(File problem) {
+    protected RawMaximumFlowProblem runAlgorithm(File file) {
         switch (getOptimization()) {
             case SPEED:
-                return runAlgorithmSpeed(problem, false);
+                return runAlgorithmSpeed(file, false);
             case MEMORY:
-                return runAlgorithmMemory(problem, false);
+                return runAlgorithmMemory(file, false);
             default:
                 throw new AssertionError("Should not occur.");
         }
     }
 
-    public RawMaximumFlowProblem runAlgorithmSpeed(File file, boolean propertiesOnly) {
+    /**
+     * Reads the problem in a speed-optimized way. 12n + 20m + O(1) Bytes are
+     * required.
+     * @param file the file which contains the maximum flow problem.
+     * @param propertiesOnly whether only the number of nodes and edges should 
+     * be read. Much faster than reading the whole file.
+     * @return the maximum flow problem. 4n + 8m + O(1) Bytes required for 
+     * storage.
+     */
+    protected RawMaximumFlowProblem runAlgorithmSpeed(File file, boolean propertiesOnly) {
         int[] caps = null;
         int currentEdgeIndex = 0;
         int[] ends = null;
@@ -151,7 +175,16 @@ public class DimacsMaximumFlowFileReader extends InputFileReader<RawMaximumFlowP
         return new RawMaximumFlowProblem(numberOfNodes, numberOfEdges, nodeIndices, edges, capacities, sinkIndex, sourceIndex);
     }
 
-    public RawMaximumFlowProblem runAlgorithmMemory(File file, boolean propertiesOnly) {
+    /**
+     * Reads the problem in a speed-optimized way. 12n + 8m + O(1) Bytes are
+     * required.
+     * @param file the file which contains the maximum flow problem.
+     * @param propertiesOnly whether only the number of nodes and edges should 
+     * be read. Much faster than reading the whole file.
+     * @return the maximum flow problem. 4n + 8m + O(1) Bytes required for 
+     * storage.
+     */    
+    protected  RawMaximumFlowProblem runAlgorithmMemory(File file, boolean propertiesOnly) {
         int numberOfEdges = -1;
         int numberOfNodes = -1;
         int sinkIndex = -1;
