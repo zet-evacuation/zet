@@ -23,16 +23,16 @@ package ds;
 import com.thoughtworks.xstream.XStream;
 import com.thoughtworks.xstream.annotations.Annotations;
 import de.tu_berlin.math.coga.common.localization.DefaultLoc;
+import gui.propertysheet.BasicProperty;
 import gui.editor.properties.PropertyLoadException;
-import gui.editor.properties.PropertyTreeModel;
-import gui.editor.properties.types.BooleanProperty;
-import gui.editor.properties.PropertyTreeNode;
-import gui.editor.properties.framework.AbstractPropertyValue;
-import gui.editor.properties.types.IntegerProperty;
-import gui.editor.properties.types.DoubleProperty;
-import gui.editor.properties.types.QualitySettingProperty;
-import gui.editor.properties.types.StringProperty;
-import gui.editor.properties.types.StringListProperty;
+import gui.propertysheet.PropertyTreeModel;
+import gui.propertysheet.types.BooleanProperty;
+import gui.propertysheet.PropertyTreeNode;
+import gui.propertysheet.types.IntegerProperty;
+import gui.propertysheet.types.DoubleProperty;
+import gui.propertysheet.types.QualitySettingProperty;
+import gui.propertysheet.types.StringProperty;
+import gui.propertysheet.types.StringListProperty;
 import gui.visualization.QualityPreset;
 import java.awt.Color;
 import java.awt.Font;
@@ -183,7 +183,7 @@ public class PropertyContainer {
 		Annotations.configureAliases( xstream, PropertyTreeModel.class );
 		Annotations.configureAliases( xstream, PropertyTreeNode.class );
 		PropertyTreeNode root = propertyTreeModel.getRoot();
-		List<AbstractPropertyValue> props = root.getProperties();
+		List<BasicProperty<?>> props = root.getProperties();
 		if( props.size() > 0 ) {
 			StringProperty name = (StringProperty)props.get( 0 );
 			propertyTreeModel.setPropertyName( name.getValue() );
@@ -217,43 +217,43 @@ public class PropertyContainer {
 	/**
 	 * Loads properties stored in an node of an {@link PropertyTreeModel} into the
 	 * {@link PropertyContainer}.
-	 * @param node the node at which recursiv loading starts.
+	 * @param node the node at which recursive loading starts.
 	 */
 	protected void applyParameters( PropertyTreeNode node ) {
 		for( int i = 0; i < node.getChildCount(); i++ )
 			applyParameters( (PropertyTreeNode)node.getChildAt( i ) );
 		PropertyContainer pc = PropertyContainer.getInstance();
-		for( gui.editor.properties.framework.AbstractPropertyValue property : node.getProperties() )
+		for( BasicProperty<?> property : node.getProperties() )
 			if( property instanceof BooleanProperty )
-				if( !pc.isDefined( property.getPropertyName() ) )
-					pc.define( property.getPropertyName(), Boolean.class, (Boolean)property.getValue() );
+				if( !pc.isDefined( property.getName() ) )
+					pc.define( property.getName(), Boolean.class, (Boolean)property.getValue() );
 				else
-					pc.set( property.getPropertyName(), (Boolean)property.getValue() );
+					pc.set( property.getName(), (Boolean)property.getValue() );
 			else if( property instanceof IntegerProperty )
-				if( !pc.isDefined( property.getPropertyName() ) )
-					pc.define( property.getPropertyName(), Integer.class, (Integer)property.getValue() );
+				if( !pc.isDefined( property.getName() ) )
+					pc.define( property.getName(), Integer.class, (Integer)property.getValue() );
 				else
-					pc.set( property.getPropertyName(), (Integer)property.getValue() );
+					pc.set( property.getName(), (Integer)property.getValue() );
 			else if( property instanceof DoubleProperty )
-				if( !pc.isDefined( property.getPropertyName() ) )
-					pc.define( property.getPropertyName(), Double.class, (Double)property.getValue() );
+				if( !pc.isDefined( property.getName() ) )
+					pc.define( property.getName(), Double.class, (Double)property.getValue() );
 				else
-					pc.set( property.getPropertyName(), (Double)property.getValue() );
+					pc.set( property.getName(), (Double)property.getValue() );
 			else if( property instanceof StringProperty )
-				if( !pc.isDefined( property.getPropertyName() ) )
-					pc.define( property.getPropertyName(), String.class, (String)property.getValue() );
+				if( !pc.isDefined( property.getName() ) )
+					pc.define( property.getName(), String.class, (String)property.getValue() );
 				else
-					pc.set( property.getPropertyName(), (String)property.getValue() );
+					pc.set( property.getName(), (String)property.getValue() );
 			else if( property instanceof StringListProperty )
-				if( !pc.isDefined( property.getPropertyName() ) )
-					pc.define( property.getPropertyName(), ArrayList.class, (ArrayList)property.getValue() );
+				if( !pc.isDefined( property.getName() ) )
+					pc.define( property.getName(), ArrayList.class, (ArrayList)property.getValue() );
 				else
-					pc.set( property.getPropertyName(), (ArrayList)property.getValue() );
+					pc.set( property.getName(), (ArrayList)property.getValue() );
 			else if( property instanceof QualitySettingProperty ) {
-				if( !pc.isDefined( property.getPropertyName() ) )
-					pc.define( property.getPropertyName(), QualityPreset.class, (QualityPreset)property.getValue() );
+				if( !pc.isDefined( property.getName() ) )
+					pc.define( property.getName(), QualityPreset.class, (QualityPreset)property.getValue() );
 				else
-					pc.set( property.getPropertyName(), (QualityPreset)property.getValue() );
+					pc.set( property.getName(), (QualityPreset)property.getValue() );
 			}
 	}
 }

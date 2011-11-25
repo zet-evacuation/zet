@@ -21,6 +21,7 @@
 
 package gui.editor.properties;
 
+import gui.propertysheet.PropertyTreeModel;
 import ds.PropertyContainer;
 import java.io.File;
 import java.io.FilenameFilter;

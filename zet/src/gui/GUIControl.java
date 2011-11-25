@@ -39,6 +39,7 @@ import ds.z.Room;
 import ds.z.ZControl;
 import ds.z.exception.RoomEdgeInvalidTargetException;
 import ds.z.exception.TooManyPeopleException;
+import gui.propertysheet.JOptionsDialog;
 import gui.components.progress.JProgressBarDialog;
 import gui.components.progress.JRasterizeProgressBarDialog;
 import gui.editor.Areas;
@@ -47,8 +48,6 @@ import zet.gui.main.tabs.editor.EditMode;
 import zet.gui.assignmentEditor.JAssignment;
 import gui.editor.flooredit.FloorImportDialog;
 import gui.editor.planimage.JPlanImageProperties;
-import gui.editor.properties.JOptionsWindow;
-import gui.editor.properties.JPropertySelectorWindow;
 import zet.gui.main.menu.JZETMenuBar;
 import zet.gui.main.toolbar.JEditToolbar;
 import zet.gui.main.toolbar.JVisualizationToolbar;
@@ -101,7 +100,7 @@ public class GUIControl implements AlgorithmListener {
 	private ZETVisualization visualization;
 	private JEditView editview;
 	private AlgorithmControl algorithmControl;
-	private ArrayList<Areas> mode = new ArrayList<Areas>( Arrays.asList( Areas.values() ) );
+	private ArrayList<Areas> mode = new ArrayList<>( Arrays.asList( Areas.values() ) );
 
 	/**
 	 * Creates a new instance of {@code GUIControl}.
@@ -879,8 +878,9 @@ public class GUIControl implements AlgorithmListener {
 	}
 
 	public void showPropertiesDialog() {
-		JPropertySelectorWindow propertySelector = new JPropertySelectorWindow( editor, GUILocalization.getSingleton().getString( "gui.editor.JPropertySelector.Title" ), 700, 500 );
-		propertySelector.setVisible( true );
+		JOptionsDialog jd = new JOptionsDialog( ZETMain.ptmProps ); 
+		jd.setModal( true );
+		jd.setVisible( true );
 		System.out.println( "Properties saved." ); // TODO loc
 	}
 
@@ -973,8 +973,11 @@ public class GUIControl implements AlgorithmListener {
 
 	public void showOptionsDialog() {
 		ZETMain.ptmOptions.getRoot().reloadFromPropertyContainer();
-		JOptionsWindow propertySelector = new JOptionsWindow( editor, GUILocalization.getSingleton().getString( "gui.editor.JOptions.Title" ), 700, 500, ZETMain.ptmOptions );
-		propertySelector.setVisible( true );
+
+		JOptionsDialog opt = new JOptionsDialog( ZETMain.ptmOptions );
+		opt.setModal( true );
+		opt.setVisible( true );
+		
 		try {	// Save results in options file
 			PropertyContainer.saveConfigFile( ZETMain.ptmOptions, new File( ZETMain.optionFilename ) );
 		} catch( IOException ex ) {
@@ -985,8 +988,11 @@ public class GUIControl implements AlgorithmListener {
 
 	public void showSettingsDialog() {
 		ZETMain.ptmInformation.getRoot().reloadFromPropertyContainer();
-		JOptionsWindow propertySelector = new JOptionsWindow( editor, GUILocalization.getSingleton().getString( "gui.editor.settings.Title" ), 700, 500, ZETMain.ptmInformation );
-		propertySelector.setVisible( true );
+
+		JOptionsDialog opt = new JOptionsDialog( ZETMain.ptmInformation );
+		opt.setModal( true );
+		opt.setVisible( true );
+
 		try {	// Save results in settings file
 			PropertyContainer.saveConfigFile( ZETMain.ptmInformation, new File( ZETMain.informationFilename ) );
 		} catch( IOException ex ) {
@@ -1002,6 +1008,7 @@ public class GUIControl implements AlgorithmListener {
 	public void addBatchEntry( BatchProjectEntry batchProjectEntry ) {
 		editor.getBatchView().add( batchProjectEntry );
 	}
+	
 	/** GUIControl class for projects and editing */
 	private ZControl zcontrol;
 
