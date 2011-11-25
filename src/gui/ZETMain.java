@@ -37,13 +37,11 @@ import de.tu_berlin.math.coga.common.debug.Log;
 import de.tu_berlin.math.coga.common.localization.Localization;
 import de.tu_berlin.math.coga.common.util.IOTools;
 import ds.PropertyContainer;
-import ds.z.ZControl;
 import event.EventServer;
 import event.MessageEvent;
 import event.MessageEvent.MessageType;
-import gui.editor.properties.JPropertySelectorWindow;
 import gui.editor.properties.PropertyLoadException;
-import gui.editor.properties.PropertyTreeModel;
+import gui.propertysheet.PropertyTreeModel;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
@@ -91,6 +89,9 @@ public class ZETMain {
 	public static PropertyTreeModel ptmInformation;
 	/** The properties in the information file. */
 	public static PropertyTreeModel ptmOptions;
+
+	public static PropertyTreeModel ptmProps;
+
 	/** The log of the application. */
 	public static Log log = new Log();
 	/** States if the last loaded file should be loaded at startup. */
@@ -172,10 +173,9 @@ public class ZETMain {
 		JSAPResult config = jsap.parse( args );
 		if( !config.success() ) {
 			System.err.println();
-			for( java.util.Iterator errs = config.getErrorMessageIterator();
-							errs.hasNext();) {
+			for( java.util.Iterator errs = config.getErrorMessageIterator(); errs.hasNext();)
 				System.err.println( loc.getString( "error" ) + errs.next() );
-			}
+
 			System.err.println();
 			System.err.println( loc.getString( "usage" ) + " java zet" + jsap.getUsage() );
 			System.err.println();
@@ -258,6 +258,7 @@ public class ZETMain {
 				} catch( PropertyLoadException ex1 ) {
 					exit( ex1.getMessage() );
 				}
+				
 				try { // Load from default-file if no user-specific is available
 					ptmInformation = PropertyContainer.getInstance().applyParameters( informationFile );
 				} catch( PropertyLoadException ex1 ) {
@@ -279,17 +280,22 @@ public class ZETMain {
 				// Change look and feel to native
 				GUIOptionManager.changeLookAndFeel( UIManager.getSystemLookAndFeelClassName() );
 
+				try {
+					ptmProps = PropertyContainer.getInstance().applyParameters( new File( propertyFilename ) );					
+				} catch( PropertyLoadException ex1 ) {
+					exit( ex1.getMessage() );
+				}
+				
+				
+				
 				// Start our editor in the event-dispatch-thread
-				JPropertySelectorWindow a = new JPropertySelectorWindow( null, "", 100, 100, propertyFilename );
-				a.saveWorking();
-				a = null;
+				//JPropertySelectorWindow a = new JPropertySelectorWindow( null, "", 100, 100, propertyFilename );
+				//a.saveWorking();
+				//a = null; // TODO
 				GUIControl guiControl = new GUIControl();
 				guiControl.createZETWindow();
 
 				// The control object for projects
-				ZControl zcontrol = null;
-
-
 				
 				System.out.println( "ZET-Fenster geladen." );
 				if( bp != null ) {

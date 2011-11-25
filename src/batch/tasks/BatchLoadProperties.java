@@ -21,7 +21,7 @@
 package batch.tasks;
 
 import ds.PropertyContainer;
-import gui.editor.properties.PropertyTreeModel;
+import gui.propertysheet.PropertyTreeModel;
 import java.io.File;
 
 /**

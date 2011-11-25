@@ -13,40 +13,30 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
-/**
- * Class TreeModel.java
- * Erstellt 21.02.2008, 23:36:35
- */
-package gui.editor.properties;
 
-import gui.editor.properties.converter.PropertyTreeConverter;
+/**
+ * Class BoolNode
+ * Created 09.04.2008, 22:05:39
+ */
+package gui.propertysheet.types;
+
 import com.thoughtworks.xstream.annotations.XStreamAlias;
 import com.thoughtworks.xstream.annotations.XStreamConverter;
-import javax.swing.tree.DefaultTreeModel;
+import gui.propertysheet.BasicProperty;
+import gui.propertysheet.types.BooleanPropertyConverter;
 
 /**
  *
- * @author Martin Groß, Jan-Philipp Kappmeier
+ * @author Jan-Philipp Kappmeier
  */
-@XStreamAlias( "zp" )
-@XStreamConverter( PropertyTreeConverter.class )
-public class PropertyTreeModel extends DefaultTreeModel {
-	private String propertyName = "";
+@XStreamAlias( "boolNode" )
+@XStreamConverter( BooleanPropertyConverter.class )
+@SuppressWarnings( "serial" )
+public class BooleanProperty extends BasicProperty<Boolean> {
 
-  public PropertyTreeModel( PropertyTreeNode root ) {
-    super( root );
-  }
-
-	public String getPropertyName() {
-		return propertyName == null ? "" : propertyName;
+	public BooleanProperty() {
+		super();
+		setPropertyValue( false );
+		setType( Boolean.class );
 	}
-
-	public void setPropertyName( String propertyName ) {
-		this.propertyName = propertyName;
-	}
-
-  @Override
-  public PropertyTreeNode getRoot() {
-    return( PropertyTreeNode ) root;
-  }
 }

@@ -18,32 +18,38 @@
  * Class PropertyTreeNode
  * Created 22.02.2008, 01:36:06
  */
-package gui.editor.properties;
+package gui.propertysheet;
 
 import com.thoughtworks.xstream.annotations.XStreamAlias;
 import com.thoughtworks.xstream.annotations.XStreamConverter;
 import de.tu_berlin.math.coga.common.localization.DefaultLoc;
-import gui.editor.properties.framework.PropertyElement;
-import gui.editor.properties.framework.AbstractPropertyValue;
-import gui.editor.properties.converter.DefaultPropertyTreeNodeConverter;
+import de.tu_berlin.math.coga.common.localization.Localization;
+import gui.propertysheet.abs.PropertyElement;
+import gui.propertysheet.abs.DefaultPropertyTreeNodeConverter;
+import gui.propertysheet.BasicProperty;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-import javax.swing.tree.DefaultMutableTreeNode;
-import de.tu_berlin.math.coga.common.localization.Localization;
-import java.util.ArrayList;
 
 /**
- * The user property is overriden with string.
+ * The user property is overridden with string.
  * @author Jan-Philipp Kappmeier
  */
 @XStreamAlias("treeNode")
 @XStreamConverter(DefaultPropertyTreeNodeConverter.class)
-public class PropertyTreeNode extends DefaultMutableTreeNode implements PropertyElement {
+public class PropertyTreeNode  implements PropertyElement {
 	boolean useAsLocString = false;
 	String name;
-	ArrayList<AbstractPropertyValue> properties;
+	ArrayList<BasicProperty<?>> properties;
+	ArrayList<PropertyTreeNode> children;
 
-	public void addProperty( AbstractPropertyValue property ) {
+	public PropertyTreeNode( String name ) {
+		this.name = name;
+		children = new ArrayList<>();
+		properties = new ArrayList<>();
+	}
+
+	public void addProperty( BasicProperty<?> property ) {
 		properties.add( property );
 	}
 
@@ -51,24 +57,18 @@ public class PropertyTreeNode extends DefaultMutableTreeNode implements Property
 		properties.clear();
 	}
 
-	public List<AbstractPropertyValue> getProperties() {
+	public List<BasicProperty<?>> getProperties() {
 		return Collections.unmodifiableList( properties );
 	}
 
 	public void reloadFromPropertyContainer() {
-		for( AbstractPropertyValue apv : properties ) {
-			apv.reloadFromPropertyContainer();
+		for( BasicProperty<?> apv : properties ) {
+			apv.reloadFromPropertyContainer(); // TODO
 		}
 		if( children != null)
 			for( Object ptn : children ) {
 				((PropertyTreeNode)ptn).reloadFromPropertyContainer();
 			}
-	}
-
-	public PropertyTreeNode( String name ) {
-		super( name );
-		this.name = name;
-		properties = new ArrayList<AbstractPropertyValue>();
 	}
 
 	/**
@@ -89,7 +89,6 @@ public class PropertyTreeNode extends DefaultMutableTreeNode implements Property
 	@Override
 	public void useAsLocString( boolean useAsLocString ) {
 		this.useAsLocString = useAsLocString;
-		setUserObject( getName() );
 	}
 
 	/**
@@ -98,8 +97,13 @@ public class PropertyTreeNode extends DefaultMutableTreeNode implements Property
 	 * @return the name of the property stored in this node
 	 */
 	@Override
-	public String getName() {
+	public String getDisplayName() {
 		return isUsedAsLocString() ? DefaultLoc.getSingleton().getString( name ) : name;
+	}
+
+	@Override
+	public String getDisplayNameTag() {
+		return name;
 	}
 
 	/**
@@ -107,31 +111,20 @@ public class PropertyTreeNode extends DefaultMutableTreeNode implements Property
 	 * @param name the new name
 	 */
 	@Override
-	public void setName( String name ) {
+	public void setDisplayName( String name ) {
 		this.name = name;
-		setUserObject( getName() );
 	}
 
-	@Override
-	public void setUserObject( Object userObject ) {
-		if( !(userObject instanceof String) )
-			throw new IllegalArgumentException( DefaultLoc.getSingleton().getString( "gui.propertyselector.DefaultPropertyTreeNodeConverter.noStringException" ) );
-		super.setUserObject( userObject );
+	public int getChildCount() {
+		return children.size();
+	}
+	
+	public PropertyTreeNode getChildAt( int i ) {
+		return children.get( i );
 	}
 
-	@Override
-	public String getUserObject() {
-		return name;
+	public void add( PropertyTreeNode child ) {
+		children.add( child );
 	}
 
-	/**
-	 * Returns the string stored in the XML-file. This can be either a name or
-	 * a tag used for localization.
-	 * @return the name stored in the XML-file
-	 * @see #isUsedAsLocString()
-	 */
-	@Override
-	public String getNameTag() {
-		return name;
-	}
 }
