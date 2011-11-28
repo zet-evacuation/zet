@@ -9,8 +9,12 @@ import com.l2fprod.common.propertysheet.PropertySheetPanel;
 import com.l2fprod.common.propertysheet.PropertySheetTable;
 import com.l2fprod.common.propertysheet.PropertySheetTableModel;
 import com.l2fprod.common.swing.JButtonBar;
+import com.l2fprod.common.swing.plaf.ButtonBarUI;
+import com.l2fprod.common.swing.plaf.blue.BlueishButtonBarUI;
 import de.tu_berlin.math.coga.common.localization.DefaultLoc;
 import gui.components.framework.Button;
+import gui.components.framework.Icon;
+import gui.components.framework.IconSet;
 import info.clearthought.layout.TableLayout;
 import java.awt.BorderLayout;
 import java.awt.Component;
@@ -53,7 +57,9 @@ public class JOptionsDialog extends JDialog {
 		
 		if( useButtonBar ) {
 			jbb = new JButtonBar( 1 );
-			add( jbb, BorderLayout.WEST );			
+			add( jbb, BorderLayout.WEST );		
+			ButtonBarUI b = new BlueishButtonBarUI();
+			jbb.setUI( b );
 		}
 		
 		add( ps, BorderLayout.CENTER );
@@ -96,6 +102,7 @@ public class JOptionsDialog extends JDialog {
 			for( int i = 0; i < node.getChildCount(); i++ ) {
 				PropertyTreeNode n = node.getChildAt( i );
 				JButton newButton = new JPropertyButton( n );
+				newButton.setIcon( Icon.newIcon( IconSet.Open ) );
 				jbb.add( newButton );
 			}
 		} else {
