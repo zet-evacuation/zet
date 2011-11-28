@@ -48,6 +48,7 @@ import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.IOException;
 import java.io.PrintStream;
+import java.nio.file.Paths;
 import java.util.Calendar;
 import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
@@ -69,8 +70,6 @@ public class ZETMain {
 	private static boolean debug;
 	/** The project file that should be loaded (submitted via command line). */
 	static String loadedProject = "";
-	/** The property file that is loaded when the program starts. Can be changed via command line. */
-	static String propertyFilename = "./properties/properties.xml";
 	/** The filename for the file that contains the program options. */
 	public static final String optionFilename = "zetoptions.xml";
 	/** The filename for the file that contains additional options. */
@@ -89,9 +88,6 @@ public class ZETMain {
 	public static PropertyTreeModel ptmInformation;
 	/** The properties in the information file. */
 	public static PropertyTreeModel ptmOptions;
-
-	public static PropertyTreeModel ptmProps;
-
 	/** The log of the application. */
 	public static Log log = new Log();
 	/** States if the last loaded file should be loaded at startup. */
@@ -219,8 +215,13 @@ public class ZETMain {
 		
 		loadLast = config.contains( "loadlast" );
 
-		if( config.contains( "property" ) )
-			propertyFilename = config.getString( "property" );
+		if( config.contains( "property" ) ) {
+			try {
+				ZETProperties.setCurrentProperty( Paths.get( config.getString( "property" ) ) );
+			} catch( PropertyLoadException ex ) {
+				System.out.println( "Property file '" + config.getString( "property" ) + "' cound not be loaded. Continuing with default." );
+			}
+		}
 
 		debug = config.getBoolean( "debug" );
 
@@ -242,15 +243,14 @@ public class ZETMain {
 				// First load base parameters
 				File optionFile = new File( "./basezetoptions.xml" );
 				File informationFile = new File( "./baseoptions.xml" );
-				File propertyFile = new File( propertyFilename );
 				checkFile( informationFile, "Information file" );
 				checkFile( optionFile, "Option file" );
-				checkFile( propertyFile, "Property file" );
 				// Load properties
 				try {
-					PropertyContainer.getInstance().applyParameters( propertyFile );
+					if( ZETProperties.getCurrentPropertyTreeModel() == null )
+						ZETProperties.setCurrentProperty( Paths.get( "./properties/properties.xml" ) );
 				} catch( PropertyLoadException ex ) {
-					exit( ex.getMessage() );
+					exit( "Property file could not be loaded" );
 				}
 				// Load default values
 				try {
@@ -279,24 +279,11 @@ public class ZETMain {
 
 				// Change look and feel to native
 				GUIOptionManager.changeLookAndFeel( UIManager.getSystemLookAndFeelClassName() );
-
-				try {
-					ptmProps = PropertyContainer.getInstance().applyParameters( new File( propertyFilename ) );					
-				} catch( PropertyLoadException ex1 ) {
-					exit( ex1.getMessage() );
-				}
 				
-				
-				
-				// Start our editor in the event-dispatch-thread
-				//JPropertySelectorWindow a = new JPropertySelectorWindow( null, "", 100, 100, propertyFilename );
-				//a.saveWorking();
-				//a = null; // TODO
 				GUIControl guiControl = new GUIControl();
 				guiControl.createZETWindow();
 
 				// The control object for projects
-				
 				System.out.println( "ZET-Fenster geladen." );
 				if( bp != null ) {
 					for( BatchProjectEntry bpe : bp ) {

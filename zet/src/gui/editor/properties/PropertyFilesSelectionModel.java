@@ -16,15 +16,21 @@
 
 /**
  * Class PropertyFilesSelectionModel.java
- * Erstellt 03.07.2008, 19:22:25
+ * Created 03.07.2008, 19:22:25
  */
 
 package gui.editor.properties;
 
 import gui.propertysheet.PropertyTreeModel;
 import ds.PropertyContainer;
+import gui.editor.properties.PropertyFilesSelectionModel.PropertyListEntry;
 import java.io.File;
 import java.io.FilenameFilter;
+import java.io.IOException;
+import java.nio.file.DirectoryStream;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Collections;
 import javax.swing.DefaultComboBoxModel;
@@ -34,11 +40,12 @@ import javax.swing.DefaultComboBoxModel;
  * paths and names.
  * @author Jan-Philipp Kappmeier
  */
-public class PropertyFilesSelectionModel extends DefaultComboBoxModel {
-	public class Property implements Comparable<Property> {
+@SuppressWarnings( "serial" )
+public class PropertyFilesSelectionModel extends DefaultComboBoxModel<PropertyListEntry> {
+	public class PropertyListEntry implements Comparable<PropertyListEntry> {
 		public String name;
-		public String path;
-		Property ( String name, String path ) {
+		public Path path;
+		PropertyListEntry ( String name, Path path ) {
 			this.name = name;
 			this.path = path;
 		}
@@ -47,15 +54,20 @@ public class PropertyFilesSelectionModel extends DefaultComboBoxModel {
 		public String toString() {
 			return name;
 		}
+
+		public Path getPath() {
+			return path;
+		}
 	
+		
 		public File getFile() {
-			return new File( path );
+			return path.toFile();
 		}
 		
 		@Override
 		public boolean equals( Object o ) {
-			if( o instanceof Property ) {
-				Property p = (Property)o;
+			if( o instanceof PropertyListEntry ) {
+				PropertyListEntry p = (PropertyListEntry)o;
 				return p.path.equals( path );// && p.name.equals( name );
 			} else return false;
 		}
@@ -81,46 +93,49 @@ public class PropertyFilesSelectionModel extends DefaultComboBoxModel {
 		 * @param p the property that is compared to this instance.
 		 * @return -1 if this property has a lexicographically smaller name, 0 if they are equal or 1.
 		 */
-		public int compareTo( Property p ) {
+		public int compareTo( PropertyListEntry p ) {
 			return name.compareTo( (p.getName() ) );
 		}
 	}
 	
-	private String path;
+	private Path path;
+		
+	/**
+	 * A constructor using the default path "./properties".
+	 */
+	public PropertyFilesSelectionModel() {
+		this( Paths.get( "./properties" ) );
+	}
 	
-	private static final PropertyFilesSelectionModel instance = new PropertyFilesSelectionModel ("./properties/");
-	public static PropertyFilesSelectionModel getInstance () { return instance; }
-	
-	private PropertyFilesSelectionModel( String path ) {
+	public PropertyFilesSelectionModel( Path path ) {
 		super();
 		this.path = path;
 		loadPath();
 	}
 
 	/**
-	 * Loads all property files in a specified path. Property files are assumed to
+	 * Loads all property files in a specified path. PropertyListEntry files are assumed to
 	 * be all {@code .xml} files. The properties are sorted with respect to their
 	 * name.
 	 */
-	public void loadPath() {
-		File dir = new File( path );
-		File[] propertyFiles = dir.listFiles( new XMLFilenameFilter() );
-
-		ArrayList<Property> properties = new ArrayList<Property>( propertyFiles.length );
-
-		// search all property files
-		for( File file : propertyFiles ) {
-			try {
-				PropertyTreeModel ptm = PropertyContainer.loadConfigFile( file );
-				properties.add( new Property( ptm.getPropertyName(), file.getPath() ) );
-			} catch( PropertyLoadException ex ) {
-				System.err.println( "Illegale Property-Datei" + (ex.getFile() == null ? " " : " '" + ex.getFile().getName() + "' ") + "wird übersprungen." );
+	private void loadPath() {
+		
+		ArrayList<PropertyListEntry> properties = new ArrayList<>();
+		try (DirectoryStream<Path> files = Files.newDirectoryStream( path, "*.xml" )) {
+			for( Path p : files ) {
+				System.out.println( "Property file found: " + p.getFileName() );
+				PropertyTreeModel ptm = PropertyContainer.loadConfigFile( p.toFile() );
+				properties.add( new PropertyListEntry( ptm.getPropertyName(), p ) );
 			}
+		} catch( PropertyLoadException ex ) {
+			System.err.println( "Illegale Property-Datei" + (ex.getFile() == null ? " " : " '" + ex.getFile().getName() + "' ") + "wird übersprungen." );
+		} catch( IOException ex ) {
+			System.err.println( "ERROR: " + ex.toString() );
 		}
 
 		// sort properties and add them to the model
 		Collections.sort( properties );
-		for( Property p : properties )
+		for( PropertyListEntry p : properties )
 			addElement( p );
 	}
 	
@@ -130,13 +145,13 @@ public class PropertyFilesSelectionModel extends DefaultComboBoxModel {
 	 * @return the file in which the property with the given index is stored.
 	 */
 	public File getFile( int index ) {
-		return ((Property)getElementAt( index )).getFile();
+		return getElementAt( index ).getFile();
 	}
 	
-	public Property getProperty ( String filename ) {
+	public PropertyListEntry getProperty ( String filename ) {
 		for (int i = 0; i < getSize (); i++) {
-			Property p = (Property)getElementAt( i );
-			if (p.getFile ().getName ().equals(filename)) {
+			PropertyListEntry p = getElementAt( i );
+			if( p.getFile ().getName ().equals( filename ) ) {
 				return p;
 			}
 		}
@@ -148,19 +163,33 @@ public class PropertyFilesSelectionModel extends DefaultComboBoxModel {
 	 * @param name the name of the property that is searched
 	 * @return a property with the given name
 	 */
-	public Property getPropertyByName( String name ) {
+	public PropertyListEntry getPropertyByName( String name ) {
 		for (int i = 0; i < getSize (); i++) {
-			Property p = (Property)getElementAt( i );
+			PropertyListEntry p = getElementAt( i );
 			if (p.getName().equals( name ) ) {
 				return p;
 			}
 		}
 		return null;
 	}
-	
-	private class XMLFilenameFilter implements FilenameFilter {
-		public boolean accept( File f, String s ) {
-			return new File(f, s).isFile() && s.toLowerCase().endsWith( ".xml" );
-	  }
+
+	/**
+	 * Sets the selected item according to the submitted path. The new property 
+	 * is the one, whose file equals this path.
+	 * @param loadPath 
+	 */
+	public void setSelectedItem( Path loadPath ) {
+		for( int i = 0; i < this.getSize(); ++i ) { // No iterator available!
+			try {
+				if( Files.isSameFile( loadPath, getElementAt( i ).path ) ) {
+					super.setSelectedItem( getElementAt( i ) );
+					break;
+				}
+			} catch( IOException ex ) {
+				ex.printStackTrace( System.err );
+			}
+		}
 	}
+	
+	
 }

@@ -48,6 +48,7 @@ import zet.gui.main.tabs.editor.EditMode;
 import zet.gui.assignmentEditor.JAssignment;
 import gui.editor.flooredit.FloorImportDialog;
 import gui.editor.planimage.JPlanImageProperties;
+import gui.editor.properties.JPropertyDialog;
 import zet.gui.main.menu.JZETMenuBar;
 import zet.gui.main.toolbar.JEditToolbar;
 import zet.gui.main.toolbar.JVisualizationToolbar;
@@ -878,7 +879,9 @@ public class GUIControl implements AlgorithmListener {
 	}
 
 	public void showPropertiesDialog() {
-		JOptionsDialog jd = new JOptionsDialog( ZETMain.ptmProps ); 
+		JPropertyDialog jd = new JPropertyDialog( ZETProperties.getCurrentPropertyTreeModel() );
+		
+		
 		jd.setModal( true );
 		jd.setVisible( true );
 		System.out.println( "Properties saved." ); // TODO loc

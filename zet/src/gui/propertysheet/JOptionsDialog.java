@@ -26,7 +26,7 @@ import javax.swing.JDialog;
 import javax.swing.JPanel;
 
 /**
- *
+ * 
  * @author Jan-Philipp Kappmeier
  */
 public class JOptionsDialog extends JDialog {
@@ -34,7 +34,7 @@ public class JOptionsDialog extends JDialog {
 
 	boolean useButtonBar = true;
 	PropertySheetTableModel pstm = new PropertySheetTableModel();
-	PropertySheetTable pst = new PropertySheetTable(pstm);
+	PropertySheetTable pst = new PropertySheetTable( pstm );
 	PropertySheetPanel ps = new PropertySheetPanel( pst );
 	
 	JOptionsDialog parent;
@@ -56,29 +56,8 @@ public class JOptionsDialog extends JDialog {
 			add( jbb, BorderLayout.WEST );			
 		}
 		
-		System.out.println( "Loading property " + ptm.getPropertyName() );
-		
-		PropertyTreeNode node = ptm.getRoot();
-		
-		// we are at root level
-		if( useButtonBar ) {
-			for( int i = 0; i < node.getChildCount(); i++ ) {
-				PropertyTreeNode n = node.getChildAt( i );
-				JButton newButton = new JPropertyButton( n );
-				jbb.add( newButton );
-			}
-		} else {
-			for( BasicProperty<?> p : node.getProperties() )
-				p.setCategory( "General" );
-			for( int i = 0; i < node.getChildCount(); i++ ) {
-				PropertyTreeNode n = node.getChildAt( i );
-				add( n, pstm, n.getDisplayName() );
-			}
-		}
 		add( ps, BorderLayout.CENTER );
-		
-		if( jbb != null && jbb.getComponents().length > 0 )
-			((JButton)jbb.getComponent( 0 )).doClick();
+		init( ptm );
 		
 		ps.setDescriptionVisible( true );
 		ps.setMode( 1 );
@@ -103,7 +82,36 @@ public class JOptionsDialog extends JDialog {
 		add( buttonPanel, BorderLayout.SOUTH );
 	}
 	
-	ActionListener aclButton = new ActionListener() {
+	final protected void init( PropertyTreeModel ptm ) {
+		System.out.println( "Loading property " + ptm.getPropertyName() );
+		PropertyTreeNode node = ptm.getRoot();
+
+		jbb.removeAll();
+		for( Property p : pstm.getProperties() ) {
+			pstm.removeProperty( p );
+		}
+		
+		// we are at root level
+		if( useButtonBar ) {
+			for( int i = 0; i < node.getChildCount(); i++ ) {
+				PropertyTreeNode n = node.getChildAt( i );
+				JButton newButton = new JPropertyButton( n );
+				jbb.add( newButton );
+			}
+		} else {
+			for( BasicProperty<?> p : node.getProperties() )
+				p.setCategory( "General" );
+			for( int i = 0; i < node.getChildCount(); i++ ) {
+				PropertyTreeNode n = node.getChildAt( i );
+				add( n, pstm, n.getDisplayName() );
+			}
+		}
+		
+		if( jbb != null && jbb.getComponents().length > 0 )
+			((JButton)jbb.getComponent( 0 )).doClick();
+	}
+	
+	private ActionListener aclButton = new ActionListener() {
 		@Override
 		public void actionPerformed( ActionEvent e ) {
 			if( e.getActionCommand().equals( "ok" ) ) {
@@ -121,6 +129,10 @@ public class JOptionsDialog extends JDialog {
 		}
 	};
 
+	protected ActionListener getDefaultButtonsListener() {
+		return aclButton;
+	}
+	
 	
 	private BasicProperty<?> newProperty( PropertyTreeNode n, String category ) {
 		BasicProperty<?> def = new BasicProperty<>( n.getDisplayNameTag(), n.getDisplayName() );

@@ -16,7 +16,7 @@
 
 /**
  * Class JPropertyComboBox
- * Erstellt 03.07.2008, 23:59:56
+ * Created 03.07.2008, 23:59:56
  */
 
 package gui.editor.properties;
@@ -29,11 +29,12 @@ import javax.swing.JComboBox;
  * that is known.
  * @author Jan-Philipp Kappmeier
  */
-public class JPropertyComboBox extends JComboBox {
+@SuppressWarnings( "serial" )
+public class JPropertyComboBox extends JComboBox<PropertyFilesSelectionModel.PropertyListEntry> {
 	PropertyFilesSelectionModel model;
 	
-	public JPropertyComboBox( ) {
-		super( PropertyFilesSelectionModel.getInstance () );
+	public JPropertyComboBox( PropertyFilesSelectionModel pfsm ) {
+		super( pfsm );
 		model = (PropertyFilesSelectionModel)getModel();
 	}
 

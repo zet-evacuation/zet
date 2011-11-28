@@ -6,6 +6,9 @@
 package gui;
 
 import ds.PropertyContainer;
+import gui.editor.properties.PropertyLoadException;
+import gui.propertysheet.PropertyTreeModel;
+import java.nio.file.Path;
 
 /**
  * The class {@codeZETProperties} is a central point to ask for properties used by the program. It hides calls
@@ -13,6 +16,30 @@ import ds.PropertyContainer;
  * @author Jan-Philipp Kappmeier
  */
 public final class ZETProperties {
+	
+	/*****************************************************************************
+	 *                                                                           *
+	 * General properties used everywhere                                        *
+	 *                                                                           *
+	 ****************************************************************************/
+	
+	/** The property file that is loaded when the program starts. Can be changed via command line. */
+	private static Path currentPropertyFile;
+	private static PropertyTreeModel currentPropertyTreeModel;
+
+	public static PropertyTreeModel getCurrentPropertyTreeModel() {
+		return currentPropertyTreeModel;
+	}
+
+	public static Path getCurrentPropertyFile() {
+		return currentPropertyFile;
+	}
+
+	public static void setCurrentProperty( Path path ) throws PropertyLoadException {
+		currentPropertyTreeModel = PropertyContainer.getInstance().applyParameters( path.toFile() );
+		currentPropertyFile = path;
+	}
+	
 
 	/*****************************************************************************
 	 *                                                                           *
