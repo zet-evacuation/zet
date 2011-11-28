@@ -36,7 +36,6 @@ import event.MessageEvent.MessageType;
 import event.ProgressEvent;
 import event.VisualizationEvent;
 import event.OptionsChangedEvent;
-import gui.batch.JBatchView;
 import gui.statistic.JGraphStatisticPanel;
 import gui.statistic.JStatisticPanel;
 import zet.gui.main.tabs.JVisualizationView;

@@ -20,7 +20,7 @@ import zet.tasks.GraphAlgorithmEnumeration;
 import ds.z.Project;
 import ds.z.Assignment;
 import gui.batch.EvacuationOptimizationType;
-import gui.editor.properties.PropertyFilesSelectionModel.Property;
+import gui.editor.properties.PropertyFilesSelectionModel.PropertyListEntry;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -92,7 +92,7 @@ public class Batch {
      * @param property the properties loaded befor the batch is executed
      * @throws java.lang.IllegalArgumentException if an error occured
      */
-    public void addEntry(String name, Project project, Assignment assignment, boolean useCA, double caTime, int cycles, GraphAlgorithmEnumeration ga, CellularAutomatonAlgorithmEnumeration caa, boolean useGraph, int graphMaxTime, EvacuationOptimizationType eot, int eoRuns, Property property) throws IllegalArgumentException {
+    public void addEntry(String name, Project project, Assignment assignment, boolean useCA, double caTime, int cycles, GraphAlgorithmEnumeration ga, CellularAutomatonAlgorithmEnumeration caa, boolean useGraph, int graphMaxTime, EvacuationOptimizationType eot, int eoRuns, PropertyListEntry property) throws IllegalArgumentException {
         entries.add(new BatchEntry(name, project, assignment, useCA, caTime, cycles, ga, caa, useGraph, graphMaxTime, eot, eoRuns, property));
     }
 

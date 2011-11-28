@@ -26,7 +26,7 @@ import ds.z.Assignment;
 import gui.ZETMain;
 import gui.editor.properties.JPropertyComboBox;
 import gui.editor.properties.PropertyFilesSelectionModel;
-import gui.editor.properties.PropertyFilesSelectionModel.Property;
+import gui.editor.properties.PropertyFilesSelectionModel.PropertyListEntry;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Component;
@@ -260,7 +260,7 @@ public class JBatchView extends JPanel {
         tblEntries.getColumnModel().getColumn(COL_CA_MAX_TIME).setCellEditor(selectingEditor);
         tblEntries.getColumnModel().getColumn(COL_GRAPH_MAX_TIME).setCellEditor(selectingEditor);
         tblEntries.getColumnModel().getColumn(COL_GRAPH_ALGO).setCellEditor(new DefaultCellEditor(cbxGraphAlgos));
-        tblEntries.getColumnModel().getColumn(COL_PROPERTIES).setCellEditor(new DefaultCellEditor(new JPropertyComboBox()));
+        tblEntries.getColumnModel().getColumn(COL_PROPERTIES).setCellEditor(new DefaultCellEditor(new JPropertyComboBox(null)));
         tblEntries.getColumnModel().getColumn(COL_EVACUATION_PLAN_CYCLES).setCellEditor(selectingEditor);
         tblEntries.getColumnModel().getColumn(COL_EVACUATION_PLAN_TYPE).setCellEditor(new DefaultCellEditor(cbxEvacuationOptimizationType));
         // Set table column renderers
@@ -408,7 +408,7 @@ public class JBatchView extends JPanel {
             if (assignment == null) {
                 throw new IllegalStateException("Assignment " + batchProjectEntry.getAssignment() + " not found!");
             }
-            Property property = PropertyFilesSelectionModel.getInstance().getPropertyByName(batchProjectEntry.getProperty());
+            PropertyListEntry property = null;//PropertyFilesSelectionModel.getInstance().getPropertyByName(batchProjectEntry.getProperty());
             if (property == null) {
                 throw new IllegalStateException("Property " + batchProjectEntry.getProperty() + " not found!");
             }
@@ -459,7 +459,7 @@ public class JBatchView extends JPanel {
                 case COL_EVACUATION_PLAN_TYPE:
                     return EvacuationOptimizationType.class;
                 case COL_PROPERTIES:
-                    return PropertyFilesSelectionModel.Property.class;
+                    return PropertyFilesSelectionModel.PropertyListEntry.class;
                 default:
                     return null;
             }
@@ -620,7 +620,7 @@ public class JBatchView extends JPanel {
                     }
                     break;
                 case COL_PROPERTIES:
-                    batch.getEntries().get(row).setProperty((PropertyFilesSelectionModel.Property) aValue);
+                    batch.getEntries().get(row).setProperty((PropertyFilesSelectionModel.PropertyListEntry) aValue);
                     break;
                 case COL_GRAPH_MAX_TIME:
                     try {

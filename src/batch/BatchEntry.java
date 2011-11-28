@@ -19,7 +19,7 @@ import zet.tasks.CellularAutomatonAlgorithmEnumeration;
 import zet.tasks.GraphAlgorithmEnumeration;
 import batch.tasks.AssignmentTask;
 import batch.tasks.CA.BatchCA2Task;
-import gui.editor.properties.PropertyFilesSelectionModel.Property;
+import gui.editor.properties.PropertyFilesSelectionModel.PropertyListEntry;
 import java.util.TreeMap;
 import batch.tasks.CA.BatchCATask;
 import batch.tasks.CA.BatchEvacuationCATask;
@@ -70,7 +70,7 @@ public class BatchEntry {
     private double caMaxTime;
     private int graphMaxTime;
     private GraphAlgorithmEnumeration graphAlgo;
-    private Property propertyFile;
+    private PropertyListEntry propertyFile;
     private EvacuationOptimizationType evacuationOptimizationType;
     private int optimizedEvacuationPlanCycles;
 
@@ -100,7 +100,7 @@ public class BatchEntry {
         this.useGraph = false;
         this.useCa = true;
         // Initialize the properties with the default property file: TODO: editable by options //
-        this.setProperty(PropertyFilesSelectionModel.getInstance().getProperty("properties_test_evacuation.xml")); // was: properties.xml
+        this.setProperty(null); // was: properties.xml
         this.setEvacuationOptimizationType(EvacuationOptimizationType.None);
     }
 
@@ -123,7 +123,7 @@ public class BatchEntry {
      * @param property the properties used for this batch task
      * @throws IllegalArgumentException If the project is null or if it doesn't contain at least one assignment.
      */
-    public BatchEntry(String name, Project project, Assignment assignment, boolean useCA, double caTime, int cycles, GraphAlgorithmEnumeration ga, CellularAutomatonAlgorithmEnumeration caa, boolean useGraph, int graphMaxTime, EvacuationOptimizationType eot, int eoRuns, Property property) throws IllegalArgumentException {
+    public BatchEntry(String name, Project project, Assignment assignment, boolean useCA, double caTime, int cycles, GraphAlgorithmEnumeration ga, CellularAutomatonAlgorithmEnumeration caa, boolean useGraph, int graphMaxTime, EvacuationOptimizationType eot, int eoRuns, PropertyListEntry property) throws IllegalArgumentException {
 //		setOptimizedEvacuationPlanCycles( 0 );
         check(project);
         this.project = project;
@@ -358,7 +358,7 @@ public class BatchEntry {
     }
 
     /** @return the selected property. */
-    public PropertyFilesSelectionModel.Property getProperty() {
+    public PropertyFilesSelectionModel.PropertyListEntry getProperty() {
         return propertyFile;
     }
 
@@ -376,7 +376,7 @@ public class BatchEntry {
     }
 
     /** @param propertyFile the selected property */
-    public void setProperty(PropertyFilesSelectionModel.Property propertyFile) {
+    public void setProperty(PropertyFilesSelectionModel.PropertyListEntry propertyFile) {
         this.propertyFile = propertyFile;
     }
 
