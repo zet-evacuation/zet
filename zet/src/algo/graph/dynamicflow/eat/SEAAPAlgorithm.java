@@ -138,11 +138,12 @@ public class SEAAPAlgorithm extends Algorithm<EarliestArrivalFlowProblem, FlowOv
         pathAlgorithm.setProblem(pathProblem);        
         // Compute our first augmenting path
         calculateEarliestArrivalAugmentingPath();
-        while (!path.isEmpty() && path.getCapacity() > 0) {
+        while (!path.isEmpty() && path.getCapacity() > 0 && flowUnitsSent < problem.getTotalSupplies()) {
             // Add the path
             paths.add(path);
             network.augmentPath(path);
             // Update the amount of flow sent
+            path.setCapacity(Math.min(path.getCapacity(), problem.getTotalSupplies() - flowUnitsSent));
             flowUnitsSent += path.getCapacity();
             fireProgressEvent(flowUnitsSent * 1.0 / problem.getTotalSupplies(), String.format("%1$s von %2$s Personen evakuiert.", flowUnitsSent, problem.getTotalSupplies()));
             // Compute the next path

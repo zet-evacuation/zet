@@ -81,9 +81,9 @@ public class EarliestArrivalAugmentingPathAlgorithm extends Algorithm<EarliestAr
         network = problem.getNetwork();
         int timeHorizon = problem.getTimeHorizon();
         // Initialize predecessor and departure time data structures for nodes     
-        departureTimes = new IdentifiableObjectMapping<Node, IntegerIntegerMapping>(network.nodes(), IntegerIntegerMapping.class);
-        predecessorNodes = new IdentifiableObjectMapping<Node, Node[]>(network.nodes(), Node[].class);
-        predecessorEdges = new IdentifiableObjectMapping<Node, Edge[]>(network.nodes(), Edge[].class);
+        departureTimes = new IdentifiableObjectMapping<>(network.nodes(), IntegerIntegerMapping.class);
+        predecessorNodes = new IdentifiableObjectMapping<>(network.nodes(), Node[].class);
+        predecessorEdges = new IdentifiableObjectMapping<>(network.nodes(), Edge[].class);
         for (Node node : network.nodes()) {
             predecessorNodes.set(node, new Node[timeHorizon]);
             predecessorEdges.set(node, new Edge[timeHorizon]);
@@ -103,7 +103,7 @@ public class EarliestArrivalAugmentingPathAlgorithm extends Algorithm<EarliestAr
         }
         labels.set(problem.getSource(), 0);
         // Start finding an earliest arrival augmenting path from the source 
-        Queue<Node> candidates = new LinkedList<Node>();
+        Queue<Node> candidates = new LinkedList<>();
         candidates.add(problem.getSource());
         while (!candidates.isEmpty()) {
             // Choose an unprocessed node
