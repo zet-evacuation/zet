@@ -19,9 +19,17 @@
  */
 package sandbox;
 
+import algo.graph.exitassignment.ExitAssignment;
+import algo.graph.exitassignment.ShortestPathExitAssignment;
 import de.tu_berlin.math.coga.common.algorithm.Algorithm;
+import de.tu_berlin.math.coga.zet.converter.graph.GraphAssignmentConverter;
+import ds.z.Project;
+import ds.PropertyContainer;
+import de.tu_berlin.math.coga.zet.NetworkFlowModel;
+import ds.ProjectLoader;
+import ds.z.Assignment;
+import ds.z.ConcreteAssignment;
 import gui.propertysheet.PropertyTreeModel;
-
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
@@ -29,18 +37,6 @@ import java.io.IOException;
 import java.io.PrintStream;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-
-import algo.graph.exitassignment.ExitAssignment;
-import algo.graph.exitassignment.ShortestPathExitAssignment;
-import de.tu_berlin.math.coga.zet.converter.graph.GraphAssignmentConverter;
-import old.ZToGraphConverter;
-import de.tu_berlin.math.coga.zet.converter.graph.ZToNonGridGraphConverter;
-import ds.z.Project;
-import ds.PropertyContainer;
-import de.tu_berlin.math.coga.zet.NetworkFlowModel;
-import ds.ProjectLoader;
-import ds.z.Assignment;
-import ds.z.ConcreteAssignment;
 
 /**
  *
@@ -187,7 +183,7 @@ public class CommandLineInterpretor {
         start = System.currentTimeMillis();
         NetworkFlowModel model = new NetworkFlowModel();
         try {
-            ZToGraphConverter.convertBuildingPlan(project.getBuildingPlan(), model);
+            //ZToGraphConverter.convertBuildingPlan(project.getBuildingPlan(), model);
         } catch (Exception e) {
             if (log != null) log.write(", exception");
             return; 

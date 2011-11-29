@@ -22,7 +22,6 @@ package batch.tasks;
 import batch.BatchResultEntry;
 import zet.tasks.GraphAlgorithmEnumeration;
 import batch.tasks.graph.SuccessiveEarliestArrivalAugmentingPathOptimizedTask;
-import old.ZToGraphConverter;
 import de.tu_berlin.math.coga.common.algorithm.Algorithm;
 import de.tu_berlin.math.coga.common.algorithm.AlgorithmListener;
 import ds.z.Project;
@@ -84,7 +83,7 @@ public class BatchGraphTask implements Runnable {
 		//Build Graph
 		NetworkFlowModel nfo = new NetworkFlowModel();
 		res.setNetworkFlowModel( nfo );
-		ZToGraphConverter.convertBuildingPlan( project.getBuildingPlan(), nfo );
+		//ZToGraphConverter.convertBuildingPlan( project.getBuildingPlan(), nfo );
         //Run graph algo on the last CA instance if possible
         ConcreteAssignment concreteAssignment;
         if (runNumber < 0) {
@@ -95,7 +94,7 @@ public class BatchGraphTask implements Runnable {
 
             
         }
-        ZToGraphConverter.convertConcreteAssignment(concreteAssignment, nfo);
+      //  ZToGraphConverter.convertConcreteAssignment(concreteAssignment, nfo);
         Algorithm<NetworkFlowModel, PathBasedFlowOverTime> gt = null;
         gt = graphAlgo.createTask(nfo, maxTime);
         gt.setProblem(nfo);

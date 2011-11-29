@@ -5,7 +5,6 @@
 package batch.tasks;
 
 import batch.BatchResultEntry;
-import old.ZToGraphConverter;
 import de.tu_berlin.math.coga.common.algorithm.AlgorithmListener;
 import de.tu_berlin.math.coga.zet.NetworkFlowModel;
 import ds.z.Project;
@@ -58,14 +57,14 @@ public class BatchGraphCreateOnlyTask {
 		//Build Graph
 		NetworkFlowModel nfo = new NetworkFlowModel();
 		res.setNetworkFlowModel( nfo );
-		ZToGraphConverter.convertBuildingPlan( project.getBuildingPlan(), nfo );
+		//ZToGraphConverter.convertBuildingPlan( project.getBuildingPlan(), nfo );
 		//Run graph algo on the last CA instance if possible
 		ConcreteAssignment concreteAssignment;
 		if( runNumber < 0 )
 			concreteAssignment = assignment.createConcreteAssignment( 400 );
 		else
 			concreteAssignment = concreteAssignments[runNumber];
-		ZToGraphConverter.convertConcreteAssignment( concreteAssignment, nfo );
+		//ZToGraphConverter.convertConcreteAssignment( concreteAssignment, nfo );
 		res = null;
 	}
 }

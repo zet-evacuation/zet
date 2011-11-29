@@ -28,6 +28,7 @@ import ds.graph.ImplicitTimeExpandedResidualNetwork;
 import ds.graph.Node;
 import ds.graph.flow.EarliestArrivalAugmentingPath;
 import ds.graph.flow.FlowOverTime;
+import gui.ZETMain;
 import java.util.Arrays;
 import java.util.LinkedList;
 
@@ -117,19 +118,20 @@ public class SEAAPAlgorithm extends Algorithm<EarliestArrivalFlowProblem, FlowOv
     @Override
     protected FlowOverTime runAlgorithm(EarliestArrivalFlowProblem problem) {
         // Initialize the data structures
-        System.out.println("Capacities: " + problem.getEdgeCapacities());
-        System.out.println("Node Capacities: " + problem.getNodeCapacities());
+			if( ZETMain.isDebug() ) {
+				System.out.println("Capacities: " + problem.getEdgeCapacities());
+				System.out.println("Node Capacities: " + problem.getNodeCapacities());
+				System.out.println( "Supplies: " + problem.getSupplies().toString() );
+				System.out.println( "Transit times: " + problem.getTransitTimes().toString() );				
+			}
+				
         calculateShortestPathLengths();       
         flowUnitsSent = 0;
-        network = new ImplicitTimeExpandedResidualNetwork(problem);
-        for (Edge edge: network.edges())
-        {
-            System.out.println("Kante: " + edge);
-        }
+        network = new ImplicitTimeExpandedResidualNetwork( problem );
             
         originalTimeHorizon = problem.getTimeHorizon();        
         pathProblem = new EarliestArrivalAugmentingPathProblem(network, network.superSource(), problem.getSink(), Math.min(getNextDistance(0) + 1, problem.getTimeHorizon()));
-        paths = new LinkedList<EarliestArrivalAugmentingPath>();
+        paths = new LinkedList<>();
         // If there are no supplies, we are done
         if (problem.getTotalSupplies() == 0) {            
             return new FlowOverTime(network, paths);

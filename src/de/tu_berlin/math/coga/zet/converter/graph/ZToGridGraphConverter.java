@@ -27,7 +27,6 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
-import java.util.Hashtable;
 import java.util.LinkedList;
 import java.util.List;
 import de.tu_berlin.math.coga.common.util.Direction;
@@ -53,19 +52,19 @@ public class ZToGridGraphConverter extends BaseZToGraphConverter {
 		DynamicNetwork graph = new DynamicNetwork();
 
 		// speed mapping
-		ZToGraphMapping mapping = model.getZToGraphMapping();
+		ZToGraphMapping mappingLocal = model.getZToGraphMapping();
 
 		// List of sources according to isSource flag of squares
-		LinkedList<Node> sources = new LinkedList<Node>();
+		LinkedList<Node> sources = new LinkedList<>();
 
 		// super sink
 		Node supersink = new Node( 0 );
 		graph.setNode( supersink );
 		model.setSupersink( supersink );
 
-		mapping.setNodeSpeedFactor( supersink, 1 );
-		mapping.setNodeRectangle( supersink, new NodeRectangle( 0, 0, 0, 0 ) );
-		mapping.setFloorForNode( supersink, -1 );
+		mappingLocal.setNodeSpeedFactor( supersink, 1 );
+		mappingLocal.setNodeRectangle( supersink, new NodeRectangle( 0, 0, 0, 0 ) );
+		mappingLocal.setFloorForNode( supersink, -1 );
 
 		// get attribute from property container
 		PropertyContainer propertyContainer = PropertyContainer.getInstance();
@@ -143,16 +142,16 @@ public class ZToGridGraphConverter extends BaseZToGraphConverter {
 						if( square.isSource() )
 							nodeIsSource = true;
 
-						mapping.setNodeSpeedFactor( node, sumOfSpeedFactors / numOfSquares );
-						mapping.setNodeUpSpeedFactor( node, upSpeedFactor );
-						mapping.setNodeDownSpeedFactor( node, downSpeedFactor );
+						mappingLocal.setNodeSpeedFactor( node, sumOfSpeedFactors / numOfSquares );
+						mappingLocal.setNodeUpSpeedFactor( node, upSpeedFactor );
+						mappingLocal.setNodeDownSpeedFactor( node, downSpeedFactor );
 						// calculate the lower Right corner of the node rectangle.
 						int nodeRectangleSE_x = roomOffsetX + room.getRaster() * (maxX + 1);
 						int nodeRectangleSE_y = roomOffsetY + room.getRaster() * (maxY + 1);
 						// save the node rectangle in the mapping
-						mapping.setNodeRectangle( node, new NodeRectangle( nodeRectangleNW_x, -nodeRectangleNW_y, nodeRectangleSE_x, -nodeRectangleSE_y ) );
+						mappingLocal.setNodeRectangle( node, new NodeRectangle( nodeRectangleNW_x, -nodeRectangleNW_y, nodeRectangleSE_x, -nodeRectangleSE_y ) );
 						// save the number of the floor the node belongs to
-						mapping.setFloorForNode( node, raster.getFloors().indexOf( room.getFloor() ) );
+						mappingLocal.setFloorForNode( node, raster.getFloors().indexOf( room.getFloor() ) );
 						if( nodeIsSource )
 							sources.add( node );
 					}
@@ -182,10 +181,10 @@ public class ZToGridGraphConverter extends BaseZToGraphConverter {
 		DynamicNetwork graph = model.getDynamicNetwork();
 
 		//Two mappings to store capacities
-		IdentifiableIntegerMapping<Node> nodesCap = new IdentifiableIntegerMapping<Node>( graph.numberOfNodes() );
+		IdentifiableIntegerMapping<Node> nodesCap = new IdentifiableIntegerMapping<>( graph.numberOfNodes() );
 		model.setNodeCapacities( nodesCap );
 
-		IdentifiableIntegerMapping<Edge> edgesCap = new IdentifiableIntegerMapping<Edge>( graph.numberOfEdges() * graph.numberOfEdges() );
+		IdentifiableIntegerMapping<Edge> edgesCap = new IdentifiableIntegerMapping<>( graph.numberOfEdges() * graph.numberOfEdges() );
 		model.setEdgeCapacities( edgesCap );
 
 		// set node capacity of super sink to max value
@@ -276,11 +275,11 @@ public class ZToGridGraphConverter extends BaseZToGraphConverter {
 	@Override
 	protected void computeTransitTimes() {
 	//protected static void computeTransitTimes( ZToGraphRasterContainer raster, NetworkFlowModel model, Hashtable<Edge, ArrayList<ZToGraphRasterSquare>> doorEdgeToSquare ) {
-		Hashtable<Edge, ArrayList<ZToGraphRasterSquare>> doorEdgeToSquare = connectRooms( raster, model );
+		HashMap<Edge, ArrayList<ZToGraphRasterSquare>> doorEdgeToSquare = connectRooms( raster, model );
 
 		long startTT = System.currentTimeMillis();
 		System.out.println( "BEGINNE TRANSIT-TIMES" );
-		exactTransitTimes = new IdentifiableDoubleMapping<Edge>( 1 );
+		exactTransitTimes = new IdentifiableDoubleMapping<>( 1 );
 
 		List<ZToGraphRoomRaster> roomRasterList = raster.getAllRasteredRooms();
 
@@ -296,14 +295,14 @@ public class ZToGridGraphConverter extends BaseZToGraphConverter {
 		for( ZToGraphRoomRaster room : roomRasterList ) {
 
 			List<ZToGraphRasterSquare> roomSquareList = room.getAccessibleSquares();
-			HashSet<Node> nodeListOfRoom = new HashSet<Node>();
+			HashSet<Node> nodeListOfRoom = new HashSet<>();
 			for( ZToGraphRasterSquare square : roomSquareList )
 				nodeListOfRoom.add( square.getNode() );
 
 			// calculate the Node -> ZToGraphRasterSquare mapping
-			HashMap<Node, LinkedList<ZToGraphRasterSquare>> nodeToSquare = new HashMap<Node, LinkedList<ZToGraphRasterSquare>>();
+			HashMap<Node, LinkedList<ZToGraphRasterSquare>> nodeToSquare = new HashMap<>();
 			for( Node node : nodeListOfRoom ) {//nodes){
-				LinkedList<ZToGraphRasterSquare> nodeSquareList = new LinkedList<ZToGraphRasterSquare>();
+				LinkedList<ZToGraphRasterSquare> nodeSquareList = new LinkedList<>();
 				for( ZToGraphRasterSquare square : roomSquareList )
 					if( square.getNode() != null )
 						if( square.getNode().id() == node.id() )
@@ -344,8 +343,8 @@ public class ZToGridGraphConverter extends BaseZToGraphConverter {
 				// CALCULATE roomNodeMap : ZToGraphRoomRaster -> LinkedList<Node>
 				List<ZToGraphRasterSquare> startRoomSquareList = startRoom.getAccessibleSquares();
 				List<ZToGraphRasterSquare> endRoomSquareList = endRoom.getAccessibleSquares();
-				HashSet<Node> nodeListOfStartRoom = new HashSet<Node>();
-				HashSet<Node> nodeListOfEndRoom = new HashSet<Node>();
+				HashSet<Node> nodeListOfStartRoom = new HashSet<>();
+				HashSet<Node> nodeListOfEndRoom = new HashSet<>();
 				for( ZToGraphRasterSquare square : startRoomSquareList )
 					nodeListOfStartRoom.add( square.getNode() );
 				for( ZToGraphRasterSquare square : endRoomSquareList )
@@ -386,7 +385,7 @@ public class ZToGridGraphConverter extends BaseZToGraphConverter {
 		ZToGraphRasterContainer raster = mapping.getRaster();
 
 		// the new converted node assignment
-		IdentifiableIntegerMapping<Node> nodeAssignment = new IdentifiableIntegerMapping<Node>( 1 );
+		IdentifiableIntegerMapping<Node> nodeAssignment = new IdentifiableIntegerMapping<>( 1 );
 		List<Person> persons = assignment.getPersons();
 
 		// setting the people requirement (negative assignment) to the number of persons in the building
@@ -461,21 +460,18 @@ public class ZToGridGraphConverter extends BaseZToGraphConverter {
 		return container;
 	}
 
-	protected static Hashtable<Edge, ArrayList<ZToGraphRasterSquare>> connectRooms( ZToGraphRasterContainer raster, NetworkFlowModel model ) {
+	protected static HashMap<Edge, ArrayList<ZToGraphRasterSquare>> connectRooms( ZToGraphRasterContainer raster, NetworkFlowModel model ) {
 		System.out.println( "connect Rooms" );
 		ZToGraphMapping mapping = model.getZToGraphMapping();
 
-		Hashtable<Edge, ArrayList<ZToGraphRasterSquare>> table =
-						new Hashtable<Edge, ArrayList<ZToGraphRasterSquare>>();
+		HashMap<Edge, ArrayList<ZToGraphRasterSquare>> table = new HashMap<>();
 
-
-		//Two mappings to store capacities
-		//just temporally.
+		//Two mappings to store capacities just temporally.
 		Collection<ZToGraphRasteredDoor> doors = raster.getDoors();
 		DynamicNetwork graph = model.getDynamicNetwork();
-		IdentifiableIntegerMapping<Edge> edgesCap = model.getEdgeCapacities();// new IdentifiableIntegerMapping<Edge>(graph.numberOfEdges());
+		IdentifiableIntegerMapping<Edge> edgesCap = model.getEdgeCapacities();
 		if( edgesCap == null ) {
-			edgesCap = new IdentifiableIntegerMapping<Edge>( graph.numberOfEdges() );
+			edgesCap = new IdentifiableIntegerMapping<>( graph.numberOfEdges() );
 			model.setEdgeCapacities( edgesCap );
 		}
 
@@ -484,6 +480,9 @@ public class ZToGridGraphConverter extends BaseZToGraphConverter {
 			Node firstNode = door.getFirstDoorPart().getNode();
 			Node secondNode = door.getSecondDoorPart().getNode();
 
+			if( firstNode.id() > secondNode.id() ) // only craeate one of the edges as they are doubled afterwards
+				continue;
+			
 			Edge edge = graph.getEdge( firstNode, secondNode );
 			if( edge == null ) {
 				edge = new Edge( nextEdge++, firstNode, secondNode );
@@ -497,7 +496,7 @@ public class ZToGridGraphConverter extends BaseZToGraphConverter {
 			//store squares in the squares list of the door-edge
 			ArrayList<ZToGraphRasterSquare> list = table.get( edge );
 			if( list == null ) {
-				list = new ArrayList<ZToGraphRasterSquare>();
+				list = new ArrayList<>();
 				table.put( edge, list );
 			}
 
