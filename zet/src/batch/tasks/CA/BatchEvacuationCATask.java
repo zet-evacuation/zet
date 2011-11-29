@@ -28,7 +28,6 @@ import algo.ca.EvacuationSwapCellularAutomatonInOrder;
 import batch.BatchResultEntry;
 import zet.tasks.CellularAutomatonAlgorithmEnumeration;
 import zet.tasks.GraphAlgorithmEnumeration;
-import old.ZToGraphConverter;
 import de.tu_berlin.math.coga.zet.converter.cellularAutomaton.ZToCAConverter.ConversionNotSupportedException;
 import de.tu_berlin.math.coga.common.algorithm.Algorithm;
 import ds.z.Project;
@@ -106,7 +105,7 @@ public class BatchEvacuationCATask implements Runnable {
 		//NetworkFlowModel nfo = res.getNetworkFlowModel ();
 		NetworkFlowModel nfo = new NetworkFlowModel();
 		res.setNetworkFlowModel( nfo );
-		ZToGraphConverter.convertBuildingPlan( project.getBuildingPlan(), nfo );
+		//ZToGraphConverter.convertBuildingPlan( project.getBuildingPlan(), nfo );
 
 		ConcreteAssignment concreteAssignment;
 		if (concreteAssignments == null) {
@@ -115,7 +114,7 @@ public class BatchEvacuationCATask implements Runnable {
 			concreteAssignment = concreteAssignments[runNumber];
 		}
 
-		ZToGraphConverter.convertConcreteAssignment( concreteAssignment, nfo );
+		//ZToGraphConverter.convertConcreteAssignment( concreteAssignment, nfo );
 		Algorithm<NetworkFlowModel, PathBasedFlowOverTime> gt = null;
 		gt = graphAlgo.createTask (nfo, maxTime);
                 gt.setProblem(nfo);

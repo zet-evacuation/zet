@@ -23,7 +23,6 @@ package batch.tasks.assignment;
 import batch.tasks.*;
 import algo.graph.exitassignment.MinimumCostTransshipmentExitAssignment;
 import batch.BatchResultEntry;
-import old.ZToGraphConverter;
 import ds.z.Project;
 import ds.z.Assignment;
 import ds.z.ConcreteAssignment;
@@ -67,7 +66,7 @@ public class MinCostAssignmentTask extends AssignmentTask {
 	public void run() {
 		MinimumCostTransshipmentExitAssignment mcExitAssignment;
 		mcExitAssignment = new MinimumCostTransshipmentExitAssignment();
-		ZToGraphConverter.convertConcreteAssignment( concreteAssignments[runNumber], res.getNetworkFlowModel() );
+		//ZToGraphConverter.convertConcreteAssignment( concreteAssignments[runNumber], res.getNetworkFlowModel() );
 		mcExitAssignment.setProblem( res.getNetworkFlowModel() );
 		mcExitAssignment.run();
 		exitAssignment = mcExitAssignment;

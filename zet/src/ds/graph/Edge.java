@@ -59,9 +59,8 @@ public class Edge implements Identifiable {
      * {@code end} is null.
      */
     public Edge(int id, Node start, Node end) {
-        if (start == null || end == null) {
-            throw new NullPointerException(GraphLocalization.getSingleton().getString("ds.graph.StartEndNodeIsNullException"));
-        }
+        if (start == null || end == null)
+          throw new NullPointerException(GraphLocalization.getSingleton().getString("ds.graph.StartEndNodeIsNullException"));
         this.edgeID = id;
         this.start = start;
         this.end = end;

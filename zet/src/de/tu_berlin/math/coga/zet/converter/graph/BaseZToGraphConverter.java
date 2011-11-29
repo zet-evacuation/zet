@@ -40,8 +40,9 @@ public abstract class BaseZToGraphConverter extends Algorithm<BuildingPlan, Netw
 		// create edges, their capacities and the capacities of the nodes
 		createEdgesAndCapacities();
 		// connect the nodes of different rooms with edges
-		//Hashtable<Edge, ArrayList<ZToGraphRasterSquare>> doorEdgeToSquare = connectRooms(raster, model);
+		//HashMap<Edge, ArrayList<ZToGraphRasterSquare>> doorEdgeToSquare = connectRooms(raster, model); // done in compute transit times now!
 		// calculate the transit times for all edges
+
 		computeTransitTimes();
 		// adjust transit times according to stair speed factors
 		multiplyWithUpAndDownSpeedFactors();
@@ -49,7 +50,7 @@ public abstract class BaseZToGraphConverter extends Algorithm<BuildingPlan, Netw
 		// set this before reverse edges are computed as they modify the model.
 		model.setTransitTimes( exactTransitTimes.round() );
                 
-		// duplicate the edges and their transit times (except those concerning the super sink)
+		// duplicate the edges and their transit times (except those concerning the super sink)		
 		createReverseEdges( model );
 
 		model.setNetwork( model.getGraph().getAsStaticNetwork() );

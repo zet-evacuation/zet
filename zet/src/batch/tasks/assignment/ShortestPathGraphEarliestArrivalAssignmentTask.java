@@ -22,7 +22,7 @@ package batch.tasks.assignment;
 import batch.tasks.*;
 import algo.graph.exitassignment.ShortestPathGraphEarliestArrivalTransshipmentExitAssignment;
 import batch.BatchResultEntry;
-import old.ZToGraphConverter;
+//import old.ZToGraphConverter;
 import ds.z.Project;
 import ds.z.Assignment;
 import ds.z.ConcreteAssignment;
@@ -55,7 +55,7 @@ public class ShortestPathGraphEarliestArrivalAssignmentTask extends AssignmentTa
     public void run() {
         ShortestPathGraphEarliestArrivalTransshipmentExitAssignment eatAssignment;
         eatAssignment = new ShortestPathGraphEarliestArrivalTransshipmentExitAssignment();
-        ZToGraphConverter.convertConcreteAssignment(concreteAssignments[runNumber], res.getNetworkFlowModel());
+        //ZToGraphConverter.convertConcreteAssignment(concreteAssignments[runNumber], res.getNetworkFlowModel());
         eatAssignment.setProblem(res.getNetworkFlowModel());
         eatAssignment.run();
         exitAssignment = eatAssignment;

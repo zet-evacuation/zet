@@ -20,7 +20,6 @@
 package de.tu_berlin.math.coga.zet.converter;
 
 import batch.tasks.AlgorithmTask;
-import old.ZToGraphConverter;
 import de.tu_berlin.math.coga.common.localization.DefaultLoc;
 import de.tu_berlin.math.coga.zet.converter.graph.ZToGraphRoomRaster;
 import de.tu_berlin.math.coga.zet.converter.graph.ZToGraphRasteredDoor;
@@ -743,6 +742,6 @@ public class RasterContainerCreator {
 		propertyContainer.set( "converter.Imbalance", 1 );
 		propertyContainer.set( "converter.GraphPrecision", 1 );
 		propertyContainer.set( "converter.AccurateDelayAreaCreation", true );
-		ZToGraphConverter.convertBuildingPlan( testraum(), new NetworkFlowModel() );
+		//ZToGraphConverter.convertBuildingPlan( testraum(), new NetworkFlowModel() );
 	}
 }

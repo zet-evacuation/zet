@@ -23,7 +23,6 @@ package batch.tasks.assignment;
 import batch.tasks.*;
 import algo.graph.exitassignment.EarliestArrivalTransshipmentExitAssignment;
 import batch.BatchResultEntry;
-import old.ZToGraphConverter;
 import ds.z.Project;
 import ds.z.Assignment;
 import ds.z.ConcreteAssignment;
@@ -67,7 +66,7 @@ public class EarliestArrivalAssignmentTask extends AssignmentTask {
 	public void run() {
 		EarliestArrivalTransshipmentExitAssignment eatAssignment;
 		eatAssignment = new EarliestArrivalTransshipmentExitAssignment();
-		ZToGraphConverter.convertConcreteAssignment( concreteAssignments[runNumber], res.getNetworkFlowModel() );
+		//ZToGraphConverter.convertConcreteAssignment( concreteAssignments[runNumber], res.getNetworkFlowModel() );
 		eatAssignment.setProblem( res.getNetworkFlowModel() );
 		eatAssignment.run();
 		exitAssignment = eatAssignment;

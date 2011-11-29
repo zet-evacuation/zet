@@ -23,7 +23,6 @@ package batch.tasks.assignment;
 import batch.tasks.*;
 import algo.graph.exitassignment.ShortestPathExitAssignment;
 import batch.BatchResultEntry;
-import old.ZToGraphConverter;
 import ds.z.Project;
 import ds.z.Assignment;
 import ds.z.ConcreteAssignment;
@@ -66,7 +65,7 @@ public class ShortestPathAssignmentTask extends AssignmentTask {
 	 */
 	public void run() {
 		ShortestPathExitAssignment spExitAssignment = new ShortestPathExitAssignment ();
-		ZToGraphConverter.convertConcreteAssignment( concreteAssignments[runNumber], res.getNetworkFlowModel() );
+		//ZToGraphConverter.convertConcreteAssignment( concreteAssignments[runNumber], res.getNetworkFlowModel() );
 		spExitAssignment.setProblem( res.getNetworkFlowModel() );
 		spExitAssignment.run();
 		exitAssignment = spExitAssignment;
