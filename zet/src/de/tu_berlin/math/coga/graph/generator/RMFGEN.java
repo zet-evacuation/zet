@@ -40,19 +40,15 @@ public class RMFGEN implements Generator {
 		//network.clear();
 		
 		//network.addSource();
-		System.out.println( "GEnerate with " + frameSize*frameSize*frames + " nodes." );
-		int edges = 4*frames*(frameSize*frameSize-frameSize) + (frames-1)*frameSize*frameSize;
+		System.out.println( "Generate with " + frameSize*frameSize*frames + " nodes." );
+		final int edges = 4*frames*(frameSize*frameSize-frameSize) + (frames-1)*frameSize*frameSize;
 		System.out.println( "Generate with " + edges + " edges." );
 		network = new Network( frameSize*frameSize*frames, edges );
-		capacities = new IdentifiableIntegerMapping<Edge>( edges );
+		capacities = new IdentifiableIntegerMapping<>( edges );
 		source = network.getNode( 0 );
 		sink = network.getNode( network.numberOfNodes()-1 );
-		//for( int i = 2; i < frameSize*frameSize*frames; i++ ) {
-		//	graph.newVertex( Integer.toString( i ) );
-		//}
-		//graph.addSink();
 
-		int fq = frameSize * frameSize;
+		final int fq = frameSize * frameSize;
 
 		// Generiere die Kanten zwischen den Knoten in einem frame
 		for( int i = 1; i <= frames; i++ ) {
@@ -134,18 +130,18 @@ public class RMFGEN implements Generator {
 		}
 
 		// inter-frame-kanten
-		ArrayList<Integer> a = new ArrayList<Integer>( fq );
+		ArrayList<Integer> a = new ArrayList<>( fq );
 		for( int i = 1; i <= fq; ++i )
 			a.add( i );
 		for( int j = 0; j < frames-1; ++j ) {
 			for( int i = 0; i < fq; ++i ) {
 				// get position
-				int position = RandomUtils.getInstance().getRandomGenerator().nextInt( fq - i );
+				final int position = RandomUtils.getInstance().getRandomGenerator().nextInt( fq - i );
 				// swap
-				int element = a.get( position );
+				final int element = a.get( position );
 				a.set( position, a.get( fq-i-1 ) );
 				a.set( fq-i-1, element );
-				Edge e = network.createAndSetEdge( network.getNode( j*fq + i + 1 -1 ), network.getNode( j*fq + fq + 1 + element -1-1) );
+				final Edge e = network.createAndSetEdge( network.getNode( j*fq + i + 1 -1 ), network.getNode( j*fq + fq + 1 + element -1-1) );
 				capacities.add( e, dist.getNextRandom() );
 
 			}

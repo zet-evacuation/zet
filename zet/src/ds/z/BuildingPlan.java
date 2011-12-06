@@ -35,7 +35,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Random;
 import batch.tasks.AlgorithmTask;
-import de.tu_berlin.math.coga.datastructure.Tupel;
+import de.tu_berlin.math.coga.datastructure.Tuple;
 
 /**
  * The {@code BuildingPlan} represents a complete building plan, consisting of
@@ -295,7 +295,7 @@ public class BuildingPlan implements Serializable, Iterable<Floor> , ZFormatObje
 		try {
 			check();
 		} catch( ds.z.exception.RoomIntersectException e ) {
-			Tupel<Room,Room> rooms = e.getIntersectingRooms();
+			Tuple<Room,Room> rooms = e.getIntersectingRooms();
 			System.out.println( "Es schneiden sich die Räume: " + rooms.u.getName() + " - " + rooms.v.getName() );
 		}
 		for( Floor f : floors )

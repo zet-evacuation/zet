@@ -21,24 +21,24 @@
 
 package algo.graph.dynamicflow.maxflow;
 
+import algo.graph.Flags;
+import algo.graph.staticflow.mincost.MinimumMeanCycleCancelling;
+import algo.graph.util.PathDecomposition;
 import de.tu_berlin.math.coga.common.algorithm.Algorithm;
 import ds.graph.flow.PathBasedFlowOverTime;
 import ds.graph.DynamicPath;
 import ds.graph.flow.FlowOverTimePath;
 import ds.graph.Edge;
+import ds.graph.GraphLocalization;
 import ds.graph.IdentifiableIntegerMapping;
 import ds.graph.Network;
 import ds.graph.Node;
 import ds.graph.flow.PathBasedFlow;
 import ds.graph.StaticPath;
 import ds.graph.flow.StaticPathFlow;
+import ds.graph.problem.MinimumCostFlowProblem;
 import java.util.LinkedList;
 import java.util.List;
-import algo.graph.Flags;
-import algo.graph.staticflow.mincost.MinimumMeanCycleCancelling;
-import algo.graph.util.PathDecomposition;
-import ds.graph.GraphLocalization;
-import ds.graph.problem.MinimumCostFlowProblem;
 
 /**
  * The class {@code MaxFlowOverTime} solves the max flow over time 
@@ -65,15 +65,15 @@ public class MaxFlowOverTime extends Algorithm<MaximumFlowOverTimeProblem, PathB
     /** Creates a new instance of MaxFlowOverTime */
     public MaxFlowOverTime() {
 
-        newNodes = new LinkedList<Node>();
-        newEdges = new LinkedList<Edge>();
+        newNodes = new LinkedList<>();
+        newEdges = new LinkedList<>();
     }
 
     /** Creates the supplies for all nodes in the network. The value of the 
      * supplies of each node is 0. */
-    private void CreateZeroSupply() {
+    private void createZeroSupply() {
         int supplies = 0;
-        zeroSupplies = new IdentifiableIntegerMapping<Node>(supplies);
+        zeroSupplies = new IdentifiableIntegerMapping<>(supplies);
 
         for (Node n : network.nodes()) {
             zeroSupplies.set(n, 0);
@@ -370,7 +370,7 @@ public class MaxFlowOverTime extends Algorithm<MaximumFlowOverTimeProblem, PathB
         }
 
         reduction();
-        CreateZeroSupply();
+        createZeroSupply();
 
         if (Flags.GORDON) {
             System.out.print("Network: ");

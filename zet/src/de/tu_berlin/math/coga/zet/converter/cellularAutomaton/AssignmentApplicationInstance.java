@@ -4,7 +4,7 @@
  */
 package de.tu_berlin.math.coga.zet.converter.cellularAutomaton;
 
-import de.tu_berlin.math.coga.datastructure.Tupel;
+import de.tu_berlin.math.coga.datastructure.Tuple;
 import ds.z.ConcreteAssignment;
 
 
@@ -13,7 +13,7 @@ import ds.z.ConcreteAssignment;
  * @author Jan-Philipp Kappmeier
  */
 
-	public class AssignmentApplicationInstance extends Tupel<ConvertedCellularAutomaton, ConcreteAssignment> {
+	public class AssignmentApplicationInstance extends Tuple<ConvertedCellularAutomaton, ConcreteAssignment> {
 
 		public AssignmentApplicationInstance( ConvertedCellularAutomaton u, ConcreteAssignment v ) {
 			super( u, v );

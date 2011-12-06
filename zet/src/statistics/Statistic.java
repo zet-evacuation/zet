@@ -4,7 +4,7 @@
  */
 package statistics;
 
-import de.tu_berlin.math.coga.datastructure.Tupel;
+import de.tu_berlin.math.coga.datastructure.Tuple;
 import statistics.collectors.AgeCollector;
 import statistics.collectors.SpecificFlowCollector;
 import statistics.collectors.SpeedCollector;
@@ -47,7 +47,7 @@ public class Statistic {
 	}
 
 	public void collectAgeSpeed( double age, double speed ) {
-		speedCollector.add( new Tupel( age, speed ) );
+		speedCollector.add( new Tuple( age, speed ) );
 	}
 
 	/**
