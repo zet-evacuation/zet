@@ -4,10 +4,11 @@
  */
 package de.tu_berlin.math.coga.graph.io.dimacs;
 
-import algo.graph.staticflow.maxflow.EdmondsKarp;
 import algo.graph.staticflow.maxflow.PushRelabel;
+import algo.graph.staticflow.maxflow.PushRelabelHighestLabel;
 import algo.graph.staticflow.maxflow.PushRelabelHighestLabelGlobalGapRelabelling;
 import algo.graph.staticflow.maxflow.PushRelabelHighestLabelGlobalRelabelling;
+import algo.graph.staticflow.maxflow.PushRelabelHighestLabelNeu;
 import de.tu_berlin.math.coga.common.algorithm.AlgorithmEvent;
 import de.tu_berlin.math.coga.common.algorithm.AlgorithmListener;
 import de.tu_berlin.math.coga.common.algorithm.AlgorithmProgressEvent;
@@ -28,7 +29,6 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.StringTokenizer;
-import javax.swing.SwingWorker;
 
 /**
  *
@@ -367,7 +367,7 @@ public class DimacsReader implements AlgorithmListener {
 		RMFGEN gen = new RMFGEN();
 		gen.setDistribution( dist );
 		//gen.generateCompleteGraph( 35,15 );
-		gen.generateCompleteGraph( 16,30 ); // smallest example where algorithm fails is 4,6
+		gen.generateCompleteGraph( 3,3 ); // smallest example where algorithm fails is 4,6
 		System.out.println( "RMFGEN Knoten: " + gen.getNodeCount() + ", Kanten: " + gen.getEdgeCount() );
 
 		Network network;
@@ -411,21 +411,21 @@ public class DimacsReader implements AlgorithmListener {
 //		//System.out.println( mf.toString() );
 
 		int ekf = 0;
-		System.out.println();
-		System.out.println( "Start edmonds karp" );
-		EdmondsKarp ek = new EdmondsKarp();
-		ek.setAccuracy( 1.0 );
-		ek.addAlgorithmListener( dl );
-		ek.setProblem( mfp );
-		start = System.nanoTime();
-		ek.run();
-		end = System.nanoTime();
-		mf = ek.getSolution();
-		System.out.println( "Flow value: " + mf.getFlowValue() );
-		ekf = mf.getFlowValue();
-		System.out.println( "Augmentations: " + ek.getAugmentations() );
-		System.out.println( "Pushes: " + ek.getPushes() );
-		System.out.println( Formatter.formatTimeUnit( end-start, TimeUnits.NanoSeconds ) );
+//		System.out.println();
+//		System.out.println( "Start edmonds karp" );
+//		EdmondsKarp ek = new EdmondsKarp();
+//		ek.setAccuracy( 1.0 );
+//		ek.addAlgorithmListener( dl );
+//		ek.setProblem( mfp );
+//		start = System.nanoTime();
+//		ek.run();
+//		end = System.nanoTime();
+//		mf = ek.getSolution();
+//		System.out.println( "Flow value: " + mf.getFlowValue() );
+//		ekf = mf.getFlowValue();
+//		System.out.println( "Augmentations: " + ek.getAugmentations() );
+//		System.out.println( "Pushes: " + ek.getPushes() );
+//		System.out.println( Formatter.formatTimeUnit( end-start, TimeUnits.NanoSeconds ) );
 		
 
 		long hiprf = 0;
@@ -433,8 +433,9 @@ public class DimacsReader implements AlgorithmListener {
 		System.out.println();
 		System.out.println( "Start HIPR" );
 		//PushRelabel hipr = new PushRelabelHighestLabelGlobalGapRelabelling();
-		PushRelabel hipr = new PushRelabelHighestLabelGlobalRelabelling();
-		//PushRelabel hipr = new PushRelabelHighestLabelNeu();
+		//PushRelabel hipr = new PushRelabelHighestLabelGlobalRelabelling();
+		//PushRelabel hipr = new PushRelabelHighestLabel();
+		PushRelabel hipr = new PushRelabelHighestLabelNeu();
 		hipr.setProblem( mfp );
 		start = System.nanoTime();
 		hipr.run();
@@ -448,6 +449,8 @@ public class DimacsReader implements AlgorithmListener {
 		//System.out.println( "Global relabels: " + hipr.getGlobalRelabels() );
 		//System.out.println( "Gaps : " + hipr.getGaps() + " Gap nodes: " + hipr.getGapNodes() );
 		System.out.println( Formatter.formatTimeUnit( end-start, TimeUnits.NanoSeconds ) );
+		System.out.println( "Checking..." );
+		hipr.getSolution().check();
 
 		System.out.println();
 //

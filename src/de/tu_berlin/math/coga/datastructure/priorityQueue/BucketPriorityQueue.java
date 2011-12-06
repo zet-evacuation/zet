@@ -12,6 +12,7 @@ import java.lang.reflect.Array;
 
 /**
  *
+ * @param <E> 
  * @author Jan-Philipp Kappmeier
  */
 public class BucketPriorityQueue<E extends Identifiable> {
@@ -28,7 +29,7 @@ public class BucketPriorityQueue<E extends Identifiable> {
 
 
 	public BucketPriorityQueue( int domainSize, Class<E> rangeType ) {
-		next = new IdentifiableObjectMapping<E, E>( domainSize, rangeType );
+		next = new IdentifiableObjectMapping<>( domainSize, rangeType );
 		this.rangeType = rangeType;
 		this.buckets = (E[]) Array.newInstance( rangeType, domainSize );
 		active = new boolean[domainSize];

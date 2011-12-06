@@ -372,9 +372,9 @@ public class TimeExpandedNetwork extends Network {
     
     public TimeExpandedNetwork(Network network, IdentifiableIntegerMapping<Edge> capacities, IdentifiableIntegerMapping<Edge> transitTimes, int timeHorizon, List<Node> sources, List<Node> sinks, int supersouceOutgoingCapacitiy, boolean allowStorageInNodes ){
     	this(allowStorageInNodes,network,timeHorizon);
-    	originalSources = new ListSequence<Node>(sources);
+    	originalSources = new ListSequence<>(sources);
     	this.sources = originalSources;
-    	originalSinks = new ListSequence<Node>(sinks);
+    	originalSinks = new ListSequence<>(sinks);
     	
 		createTimeExpansion(network, capacities, transitTimes, timeHorizon, sources, originalSinks, allowStorageInNodes);
 		
@@ -387,8 +387,8 @@ public class TimeExpandedNetwork extends Network {
 
 		public TimeExpandedNetwork(Network network, IdentifiableIntegerMapping<Edge> capacities, IdentifiableIntegerMapping<Edge> transitTimes, int timeHorizon, IdentifiableIntegerMapping<Node> supplies, boolean allowStorageInNodes, boolean createSuperSouce ) {
 		this(allowStorageInNodes, network, timeHorizon);
-		sources = new ListSequence<Node>();
-		originalSinks = new ListSequence<Node>();
+		sources = new ListSequence<>();
+		originalSinks = new ListSequence<>();
 		int overallSupply=0;
 		for (Node node : network.nodes()) {
 			if (!supplies.isDefinedFor(node))
@@ -414,11 +414,11 @@ public class TimeExpandedNetwork extends Network {
 			// do not create a super source!
 			// create time expanded supply-vector and copy source supplies
 			
-			sources = new ListSequence<Node>();
+			sources = new ListSequence<>();
 			
 			int negativeSupplies = 0;
 			
-    	this.supplies = new IdentifiableIntegerMapping<Node>(this.nodes().size());
+    	this.supplies = new IdentifiableIntegerMapping<>(this.nodes().size());
     	for (Node n : this.nodes()) {
     		if( supplies.isDefinedFor( n ) ) {
 					if( supplies.get( n ) >= 0 )
@@ -437,7 +437,7 @@ public class TimeExpandedNetwork extends Network {
 			// THis only works for one single sink
 			
     		this.sink = grid[originalSinks.get(0).id()][timeHorizon-1];
-    		sinks = new ListSequence<Node>();
+    		sinks = new ListSequence<>();
     		sinks.add(sink);
 			
 		
@@ -456,7 +456,7 @@ public class TimeExpandedNetwork extends Network {
 		this.setNodeCapacity(nodeCount);
 		this.setNode(supersource);
 		source = supersource;
-		sources = new ListSequence<Node>();
+		sources = new ListSequence<>();
 		sources.add(source);
     	
 		int edgeCount = this.getEdgeCapacity();
@@ -493,7 +493,7 @@ public class TimeExpandedNetwork extends Network {
 		this.setNodeCapacity(nodeCount);
 		this.setNode(supersink);
 		sink = supersink;
-		sinks = new ListSequence<Node>();
+		sinks = new ListSequence<>();
 		sinks.add(sink);
 		
 		int edgeCount = this.getEdgeCapacity();
@@ -515,7 +515,7 @@ public class TimeExpandedNetwork extends Network {
     
     private void createSuperSourceAndSink(IdentifiableIntegerMapping<Node> supplies){
     	
-    	this.supplies = new IdentifiableIntegerMapping<Node>(this.nodes().size());
+    	this.supplies = new IdentifiableIntegerMapping<>(this.nodes().size());
     	for (Node n : this.nodes()){
     		if (n.id() >= this.supplies.getDomainSize())
     			this.supplies.setDomainSize(n.id()+1);
@@ -597,14 +597,11 @@ public class TimeExpandedNetwork extends Network {
     // This method uses that the original network does not include loops!
     private boolean isHoldoverArc(Edge edge){
     	if (edge==null)
-    		throw new AssertionError(GraphLocalization.getSingleton (
-			).getString ("ds.graph.EdgeIsNullException"));
+    		throw new AssertionError(GraphLocalization.getSingleton ().getString ("ds.graph.EdgeIsNullException"));
     	if (edge.start() == null)
-    		throw new AssertionError(GraphLocalization.getSingleton (
-			).getString ("ds.graph.StartNodeIsNullException"));
+    		throw new AssertionError(GraphLocalization.getSingleton ().getString ("ds.graph.StartNodeIsNullException"));
     	if (edge.end() == null)
-    		throw new AssertionError(GraphLocalization.getSingleton (
-			).getString ("ds.graph.EndNodeIsNullException"));
+    		throw new AssertionError(GraphLocalization.getSingleton ().getString ("ds.graph.EndNodeIsNullException"));
     	return (originalID.get(edge.start()) == originalID.get(edge.end()));
     }
 
@@ -709,10 +706,8 @@ public class TimeExpandedNetwork extends Network {
      */
     public Node singleSource(){
     	if (source == null)
-    		throw new AssertionError(GraphLocalization.getSingleton (
-			).getString ("ds.graph.NoSingleSourceException"));
-    	else
-    		return source;
+    		throw new AssertionError(GraphLocalization.getSingleton().getString ("ds.graph.NoSingleSourceException"));
+   		return source;
     }
 
     /**

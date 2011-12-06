@@ -4,8 +4,9 @@
  */
 package algo.graph.staticflow.maxflow;
 
+import algo.graph.staticflow.maxflow.PushRelabelHighestLabel.ResidualEdge;
 import de.tu_berlin.math.coga.datastructure.BucketSet;
-import de.tu_berlin.math.coga.datastructure.Tupel;
+import de.tu_berlin.math.coga.datastructure.Tuple;
 import de.tu_berlin.math.coga.datastructure.priorityQueue.BucketPriorityQueue;
 import ds.graph.Edge;
 import ds.graph.IdentifiableIntegerMapping;
@@ -32,12 +33,12 @@ public class PushRelabelHighestLabelNeu extends PushRelabel {
 	 * for the nodes and edges.
 	 */
 	private void alloc() {
-		distanceLabels = new IdentifiableIntegerMapping<Node>( n );	// distance
-		excess = new IdentifiableIntegerMapping<Node>( n );	// excess
-		current = new IdentifiableIntegerMapping<Node>( n );	// current edge datastructure (index)
-		activeBuckets = new BucketPriorityQueue<Node>( n + 1, Node.class );
+		distanceLabels = new IdentifiableIntegerMapping<>( n );	// distance
+		excess = new IdentifiableIntegerMapping<>( n );	// excess
+		current = new IdentifiableIntegerMapping<>( n );	// current edge datastructure (index)
+		activeBuckets = new BucketPriorityQueue<>( n + 1, Node.class );
 		activeBuckets.setDistanceLabels( distanceLabels );
-		inactiveBuckets = new BucketSet<Node>( n + 1, Node.class );
+		inactiveBuckets = new BucketSet<>( n + 1, Node.class );
 		residualGraph = new ResidualGraph( n, m );
 	}
 
@@ -67,16 +68,19 @@ public class PushRelabelHighestLabelNeu extends PushRelabel {
 			Edge e = residualGraph.getReverseEdge( residualGraph.getEdge( i ) );
 			s += residualGraph.getResidualCapacity( e );
 		}
-		System.out.println( "Fluss: " + s );
+		//System.out.println( "Fluss: " + s );
 
-		IdentifiableIntegerMapping<Edge> flow = new IdentifiableIntegerMapping<Edge>( m );
-// TODO copy results from residual network to maximum flow
-//		for( ResidualEdge e : residualEdges ) {
-//			if( e.original == null )
-//				continue;
-//			flow.set( e.original, e.reverse.residualCapacity );
-//		}
-		return new MaximumFlow( getProblem(), flow );
+		IdentifiableIntegerMapping<Edge> flow = new IdentifiableIntegerMapping<>( m );
+		for( Edge e : residualGraph.edges ) {
+			if( residualGraph.isReverseEdge( e ) )
+				continue;
+			flow.set( residualGraph.originalResidualEdgeMapping.get( e ), residualGraph.getReverseResidualCapacity( e ) );
+		}
+		MaximumFlow f = new MaximumFlow( getProblem(), flow );
+		
+		f.check();
+		
+		return f;
 	}
 
 	/**
@@ -191,7 +195,7 @@ public class PushRelabelHighestLabelNeu extends PushRelabel {
 
 		distanceLabels.set( v, n );
 
-		final Tupel<Integer,Edge> minEdge = searchForMinDistance( v );
+		final Tuple<Integer,Edge> minEdge = searchForMinDistance( v );
 		if( minEdge.getU() < n ) {
 			distanceLabels.set( v, minEdge.getU() );
 			current.set( v, minEdge.getV().id() );
@@ -201,7 +205,7 @@ public class PushRelabelHighestLabelNeu extends PushRelabel {
 		return minEdge.getU();
 	}
 
-	protected Tupel<Integer,Edge> searchForMinDistance( Node v ) {
+	protected Tuple<Integer,Edge> searchForMinDistance( Node v ) {
 		int minDistance = n;
 		Edge minEdge = null;
 		// search for the minimum distance value
@@ -212,7 +216,7 @@ public class PushRelabelHighestLabelNeu extends PushRelabel {
 				minEdge = e;
 			}
 		}
-		return new Tupel( minDistance+1, minEdge );
+		return new Tuple( minDistance+1, minEdge );
 	}
 
 	private static enum FeasibleState {
@@ -227,117 +231,165 @@ public class PushRelabelHighestLabelNeu extends PushRelabel {
 
 	@Override
 	protected void makeFeasible() {
+/*
+   do dsf in the reverse flow graph from nodes with excess
+   cancel cycles if found
+   return excess flow in topological order
+*/
+
+/*
+   i->d is used for dfs labels 
+   i->bNext is used for topological order list
+   buckets[i-nodes]->firstActive is used for DSF tree
+*/
+
+{
+	Node j,tos,bos,restart,r;
+	Edge a;
+  double delta;
+
 		Node[] buckets = new Node[n];
 		Node[] next = new Node[n];
 
-		Node tos, bos;
-		// init
-		tos = bos = null;
-		for( Node i : getProblem().getNetwork() ) {
-			distanceLabels.set( i, FeasibleState.Unused.val );
-			activeBuckets.reset();
-			current.set( i, residualGraph.getFirst( i ) );
-		}
+	/* deal with self-loops */
+//  forAllNodes(i) {
+//    forAllArcs(i,a)
+//      if ( a -> head == i ) {
+//	a -> resCap = cap[a - arcs];
+//      }
+//  }
 
-		/* eliminate flowValue cycles, topologicaly order vertices */
-		for( Node i : getProblem().getNetwork() )
-			if( distanceLabels.get( i ) == FeasibleState.Unused.val && excess.get( i ) > 0 && !i.equals( source ) && !i.equals( sink ) ) {
+  /* initialize */
+  tos = null;
+	bos = null;
+	for( Node i : getProblem().getNetwork() ) {
+		distanceLabels.set( i, FeasibleState.Unused.val);
+		buckets[i.id()] = null;
+		current.set( i, residualGraph.getFirst( i ) );
+  }
 
-				Node r = i;
-				distanceLabels.set( r, FeasibleState.Active.val );
-				do {
-					for( ; current.get( i ) != residualGraph.getLast( i ); current.increase( i, 1 ) ) {
-						Edge a = residualGraph.getEdge( current.get( i ) );
-						if( residualGraph.isReverseEdge( a ) && residualGraph.getResidualCapacity( a )> 0 ) {
-							Node j = a.end();
-							if( distanceLabels.get( j ) == FeasibleState.Unused.val ) {
-								/* start scanning j */
-								distanceLabels.set( j, FeasibleState.Active.val );
-								buckets[j.id()] = i;
-								i = j;
-								break;
-							} else if( distanceLabels.get( j ) == FeasibleState.Active.val ) {
-								/* find minimum flowValue on the cycle */
-								int delta = residualGraph.getResidualCapacity( a );
-								while( !j.equals( i ) )
-									j = residualGraph.getEdge( current.get( j ) ).end();
-								delta = Math.min( delta, residualGraph.getReverseResidualCapacity( current.get( j ) ) );
+  /* eliminate flow cycles, topologicaly order vertices */
+  //forAllNodes(i)
+	for( Node i : getProblem().getNetwork() ) {
+    if (( distanceLabels.get( i ) == FeasibleState.Unused.val ) && ( excess.get( i ) > 0 ) && ( i.id() != source.id() ) && ( i.id() != sink.id() )) {
+      r = i;
+			distanceLabels.set( r, FeasibleState.Active.val );
+			do {
+				for ( ; current.get( i ) != residualGraph.getLast( i ); current.increase(i, 1) ) {
+					a = residualGraph.getEdge( current.get( i ) );
+					if( residualGraph.isReverseEdge( a ) && residualGraph.getResidualCapacity( a ) > 0 ) {
+						j = a.end();
+						if( distanceLabels.get( j ) == FeasibleState.Unused.val ) {
+							/* start scanning j */
+							distanceLabels.set( j, FeasibleState.Active.val );
+							buckets[j.id()] = i;
+				      i = j;
+				      break;
+						}
+						else
+							if( distanceLabels.get( j ) == FeasibleState.Active.val ) {
+								/* find minimum flow on the cycle */
+								delta = residualGraph.getResidualCapacity( a );
+								while ( true ) {
+									delta = Math.min( delta, residualGraph.getResidualCapacity( current.get( j ) ) );
+									if ( j.equals( i ) )
+								    break;
+									else
+										j = residualGraph.getEdge( current.get( j ) ).end();
+								}
 
-								/* remove delta flowValue units */
-								do {
+								/* remove delta flow units */
+								j = i;
+								while ( true ) {
 									a = residualGraph.getEdge( current.get( j ) );
-									residualGraph.augment( a, delta );
+									residualGraph.augment( a, (int)delta );
 									j = a.end();
-								} while( !j.equals( i ) );
-
+									if ( j.equals(i) )
+										break;
+								}
+	  
 								/* backup DFS to the first saturated arc */
-								Node restart = i;
+								restart = i;
 								for( j = residualGraph.getEdge( current.get( i ) ).end(); !j.equals( i ); j = a.end() ) {
 									a = residualGraph.getEdge( current.get( j ) );
-									if( (distanceLabels.get( j ) == FeasibleState.Unused.val) || (residualGraph.getResidualCapacity( a ) == 0) ) {
+									if( distanceLabels.get( j ) == FeasibleState.Unused.val || residualGraph.getResidualCapacity( a ) == 0 ) {
 										distanceLabels.set( residualGraph.getEdge( current.get( j ) ).end(), FeasibleState.Unused.val );
 										if( distanceLabels.get( j ) != FeasibleState.Unused.val )
 											restart = j;
 									}
 								}
-
+	  
 								if( !restart.equals( i ) ) {
 									i = restart;
 									current.increase( i, 1 );
 									break;
 								}
 							}
-						}
 					}
+				}
 
-					if( current.get( i ) == residualGraph.getLast( i ) ) {
-						/* scan of i complete */
-						distanceLabels.set( i, FeasibleState.Finished.val );
-						if( !i.equals( source ) )
-							if( bos == null ) {
-								bos = i;
-								tos = i;
-							} else {
-								next[i.id()] = tos;
-								tos = i;
-							}
-						if( i != r ) {
-							i = buckets[i.id()];
-							current.increase( i, 1 );
-						} else
-							break;
-					}
-				} while( true );
-			}
-
-		/* return excesses */
-		/* note that sink is not on the stack */
-		if( bos != null ) {
-			for( Node i = tos; !i.equals( bos ) ; i = next[i.id()] ) {
-				int pos = residualGraph.getFirst( i );
-				Edge a = residualGraph.getEdge( pos );
-				while( excess.get( i ) > 0 ) {
-					if( (residualGraph.isReverseEdge( a ) ) && (residualGraph.getResidualCapacity( a ) > 0) ) {
-						final int delta = residualGraph.augmentMax( a, excess.get( i ) );
-						excess.decrease( i, delta );
-						excess.increase( a.end(), delta );
-					}
-					a = residualGraph.getEdge( ++pos );
+		if( current.get( i ) == residualGraph.getLast( i ) ) {
+			/* scan of i complete */
+			distanceLabels.set( i, FeasibleState.Finished.val );
+			if ( !i.equals( source ) ) {
+		    if ( bos == null ) {
+		      bos = i;
+		      tos = i;
+		    }
+			  else {
+					next[i.id()] = tos;
+					tos = i;
 				}
 			}
-			/* now do the bottom */
-			final Node i = bos;
-			int pos = residualGraph.getFirst( i );
-			Edge a = residualGraph.getEdge( pos );
-			while( excess.get( i ) > 0 ) {
-				if( (residualGraph.isReverseEdge( a )) && (residualGraph.getResidualCapacity( a ) > 0) ) {
-					final int delta = residualGraph.augmentMax( a, excess.get( i ) );
-					excess.decrease( i, delta );
-					excess.increase( a.end(), delta );
-				}
-				a = residualGraph.getEdge( ++pos );
+
+			if( !i.equals( r ) ) {
+				i = buckets[i.id()];
+				current.increase( i, 1 );
 			}
+			else
+				break;
 		}
+			} while ( true );
+    }
+	}
+
+
+  /* return excesses */
+  /* note that sink is not on the stack */
+	if ( bos != null ) {
+    for ( Node i = tos; !i.equals( bos ) ; i = next[i.id()] ) {
+			a = residualGraph.getEdge( residualGraph.getFirst( i ) );
+      while ( excess.get( i ) > 0 ) {
+				if( residualGraph.isReverseEdge( a ) && residualGraph.getResidualCapacity( a ) > 0 ) {
+					if( residualGraph.getResidualCapacity( a ) < excess.get( i ) )
+						delta = residualGraph.getResidualCapacity( a );
+					else
+						delta = excess.get( i );
+					residualGraph.augment( a, (int)delta );
+					excess.decrease( i, (int)delta );
+					excess.increase( a.end(), (int)delta );
+				}
+				a = residualGraph.getEdge( a.id()+1 );
+      }
+    }
+    /* now do the bottom */
+    Node i = bos;
+		a = residualGraph.getEdge( residualGraph.getFirst( i ) );
+		while( excess.get( i ) > 0 ) {
+			if( residualGraph.isReverseEdge( a ) && residualGraph.getResidualCapacity( a ) > 0 ) {
+					if( residualGraph.getResidualCapacity( a ) < excess.get( i ) )
+						delta = residualGraph.getResidualCapacity( a );
+					else
+						delta = excess.get( i );
+					residualGraph.augment( a, (int)delta );
+					excess.decrease( i, (int)delta );
+					excess.increase( a.end(), (int) delta );
+				}
+				a = residualGraph.getEdge( a.id()+1 );
+    }
+  }
+}
+
 	}
 
 	private boolean isAdmissible( Edge e ) {
@@ -352,7 +404,7 @@ public class PushRelabelHighestLabelNeu extends PushRelabel {
 		network.createAndSetEdge( network.getNode( 1 ), network.getNode( 3 ) );
 		network.createAndSetEdge( network.getNode( 2 ), network.getNode( 3 ) );
 
-		IdentifiableIntegerMapping<Edge> capacities = new IdentifiableIntegerMapping<Edge>( 5 );
+		IdentifiableIntegerMapping<Edge> capacities = new IdentifiableIntegerMapping<>( 5 );
 		capacities.add( network.getEdge( 0 ), 2 );
 		capacities.add( network.getEdge( 1 ), 1 );
 		capacities.add( network.getEdge( 2 ), 1 );
@@ -367,5 +419,7 @@ public class PushRelabelHighestLabelNeu extends PushRelabel {
 
 		//System.out.println( "Flow: " + hipr.getFlow() );
 		System.out.println( "Flow: " + hipr.getSolution().getFlowValue() );
+		System.out.println( hipr.getSolution().toString() );
+		hipr.getSolution().check();
 	}
 }

@@ -4,7 +4,7 @@
  */
 package algo.graph.staticflow.maxflow;
 
-import de.tu_berlin.math.coga.datastructure.Tupel;
+import de.tu_berlin.math.coga.datastructure.Tuple;
 import ds.graph.Edge;
 import ds.graph.Node;
 
@@ -66,7 +66,7 @@ public class PushRelabelHighestLabelGlobalRelabelling extends PushRelabelHighest
 	}
 
 	@Override
-	protected Tupel<Integer,Edge> searchForMinDistance( Node v ) {
+	protected Tuple<Integer,Edge> searchForMinDistance( Node v ) {
 		int minDistance = n;
 		Edge minEdge = null;
 		// search for the minimum distance value
@@ -78,7 +78,7 @@ public class PushRelabelHighestLabelGlobalRelabelling extends PushRelabelHighest
 				minEdge = e;
 			}
 		}
-		return new Tupel( minDistance+1, minEdge );
+		return new Tuple( minDistance+1, minEdge );
 	}
 
 	protected void globalUpdate() {

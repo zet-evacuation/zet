@@ -43,7 +43,11 @@ public class EdmondsKarp extends Algorithm<MaximumFlowProblem, MaximumFlow> {
 		
 		int maxPossibleFlow2 = 0;
 		for( Edge e : residualNetwork.incomingEdges( sink ) )
-			maxPossibleFlow2 += residualNetwork.residualCapacities().get( e );
+			if( residualNetwork.residualCapacities().get( e ) == Integer.MAX_VALUE ) {
+				maxPossibleFlow2= Integer.MAX_VALUE;
+				break;
+			} else
+				maxPossibleFlow2 += residualNetwork.residualCapacities().get( e );
 		
 		if( maxPossibleFlow2 < maxPossibleFlow )
 			maxPossibleFlow = maxPossibleFlow2;

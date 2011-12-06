@@ -10,6 +10,7 @@ import java.lang.reflect.Array;
 
 /**
  *
+ * @param <E> 
  * @author Jan-Philipp Kappmeier
  */
 public class BucketSet<E extends Identifiable> {
@@ -22,8 +23,8 @@ public class BucketSet<E extends Identifiable> {
 	protected int[] distanceLabels;
 
 	public BucketSet( int domainSize, Class<E> rangeType ) {
-		next = new IdentifiableObjectMapping<E, E>( domainSize, rangeType );
-		prev = new IdentifiableObjectMapping<E, E>( domainSize, rangeType );
+		next = new IdentifiableObjectMapping<>( domainSize, rangeType );
+		prev = new IdentifiableObjectMapping<>( domainSize, rangeType );
 		this.rangeType = rangeType;
 		this.buckets = (E[]) Array.newInstance( rangeType, domainSize );
 		inactive = new boolean[domainSize];

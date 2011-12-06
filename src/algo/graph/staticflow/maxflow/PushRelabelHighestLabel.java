@@ -5,7 +5,7 @@
 package algo.graph.staticflow.maxflow;
 
 import de.tu_berlin.math.coga.datastructure.BucketSet;
-import de.tu_berlin.math.coga.datastructure.Tupel;
+import de.tu_berlin.math.coga.datastructure.Tuple;
 import de.tu_berlin.math.coga.datastructure.priorityQueue.BucketPriorityQueue;
 import ds.graph.Edge;
 import ds.graph.IdentifiableIntegerMapping;
@@ -85,13 +85,18 @@ public class PushRelabelHighestLabel extends PushRelabel {
 		end = System.nanoTime();
 		phase2Time = end-start;
 
-		IdentifiableIntegerMapping<Edge> flow = new IdentifiableIntegerMapping<Edge>( m );
+		IdentifiableIntegerMapping<Edge> flow = new IdentifiableIntegerMapping<>( m );
 		for( ResidualEdge e : residualEdges ) {
 			if( e.original == null )
 				continue;
 			flow.set( e.original, e.reverse.residualCapacity );
 		}
-		return new MaximumFlow( getProblem(), flow );
+		
+		MaximumFlow f = new MaximumFlow( getProblem(), flow );
+		
+		f.check();
+		
+		return f;
 	}
 
 	/**
@@ -239,7 +244,7 @@ protected int relabel( Node v ) {
 
 		distanceLabels.set( v, n );
 
-		final Tupel<Integer,ResidualEdge> minEdge = searchForMinDistance( v );
+		final Tuple<Integer,ResidualEdge> minEdge = searchForMinDistance( v );
 		if( minEdge.getU() < n ) {
 			distanceLabels.set( v, minEdge.getU() );
 			current.set( v, minEdge.getV().id() );
@@ -249,7 +254,7 @@ protected int relabel( Node v ) {
 		return minEdge.getU();
 	}
 
-	protected Tupel<Integer,ResidualEdge> searchForMinDistance( Node v ) {
+	protected Tuple<Integer,ResidualEdge> searchForMinDistance( Node v ) {
 		int minDistance = n;
 		ResidualEdge minEdge = null;
 		// search for the minimum distance value
@@ -260,7 +265,7 @@ protected int relabel( Node v ) {
 				minEdge = e;
 			}
 		}
-		return new Tupel( minDistance+1, minEdge );
+		return new Tuple( minDistance+1, minEdge );
 	}
 
 	private static enum FeasibleState {

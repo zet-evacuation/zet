@@ -31,6 +31,8 @@ public class ResidualGraph implements Graph {
 	protected IdentifiableIntegerMapping<Edge> residualCapacity; // gives the residual capacity of a given edge
 	protected IdentifiableObjectMapping<Edge,Edge> reverseEdge; // gives the residual edge for a given edge
 
+	public IdentifiableObjectMapping<Edge,Edge> originalResidualEdgeMapping;
+	
 	/** The index of the first outgoing edge of a node in the edges array. */
 	protected IdentifiableIntegerMapping<Node> first;
 	/** The index of the last outgoing edge of a node in the edges array. */
@@ -42,14 +44,16 @@ public class ResidualGraph implements Graph {
 	 * @param m
 	 */
 	private int m;
+
 	ResidualGraph( int n, int m ) {
-		edges = new ArraySet<Edge>( Edge.class, 2*m );
-		nodes = new ArraySet<Node>( Node.class, n );
-		first = new IdentifiableIntegerMapping<Node>( n ); // first outgoing edge (index)
-		last = new IdentifiableIntegerMapping<Node>( n ); // last outgoing edge (index)
-		isReverseEdge = new IdentifiableBooleanMapping<Edge>( 2*m );
-		residualCapacity = new IdentifiableIntegerMapping( 2*m );
-		reverseEdge = new IdentifiableObjectMapping<Edge, Edge>( 2*m, Edge.class );
+		edges = new ArraySet<>( Edge.class, 2*m );
+		nodes = new ArraySet<>( Node.class, n );
+		first = new IdentifiableIntegerMapping<>( n ); // first outgoing edge (index)
+		last = new IdentifiableIntegerMapping<>( n ); // last outgoing edge (index)
+		isReverseEdge = new IdentifiableBooleanMapping<>( 2*m );
+		residualCapacity = new IdentifiableIntegerMapping<>( 2*m );
+		reverseEdge = new IdentifiableObjectMapping<>( 2*m, Edge.class );
+		originalResidualEdgeMapping = new IdentifiableObjectMapping<>( 2*m, Edge.class );
 		this.m = m;
 	}
 
@@ -57,8 +61,12 @@ public class ResidualGraph implements Graph {
 	 * Sets up the data structures. At first, creates reverse edges and orders the
 	 * edges according to their tail nodes into the array. Thus, the incident
 	 * edges to a vertex can be searched by a run through the array.
+	 * 
+	 * @param network
+	 * @param capacities
+	 * @param current  
 	 */
-	protected void init( Network network, IdentifiableIntegerMapping capacities, IdentifiableIntegerMapping<Node> current ) {
+	protected void init( Network network, IdentifiableIntegerMapping<Edge> capacities, IdentifiableIntegerMapping<Node> current ) {
 		// set up residual edges
 		int edgeCounter = 0;
 		int[] temp = new int[edges.getCapacity()];
@@ -69,6 +77,7 @@ public class ResidualGraph implements Graph {
 			for( Edge e : network.outgoingEdges( v ) ) {
 				//residualEdges[edgeCounter] = new ResidualEdge( edgeCounter, e.start(), e.end(), getProblem().getCapacities().get( e ), false );
 				Edge ne = new Edge(edgeCounter, e.start(), e.end() );
+				originalResidualEdgeMapping.set( ne, e );
 				edges.add( ne );
 				residualCapacity.add( ne, capacities.get( e ) );
 				isReverseEdge.add( ne, false );
@@ -80,6 +89,7 @@ public class ResidualGraph implements Graph {
 			for( Edge e : network.incomingEdges( v ) ) {
 				//residualEdges[edgeCounter] = new ResidualEdge( edgeCounter, e.end(), e.start(), 0, true );
 				Edge ne = new Edge( edgeCounter, e.end(), e.start() );
+								
 				edges.add( ne );
 				residualCapacity.add( ne, 0 );
 				isReverseEdge.add( ne, true );

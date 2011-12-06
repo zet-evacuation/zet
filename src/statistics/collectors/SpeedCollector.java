@@ -4,7 +4,7 @@
  */
 package statistics.collectors;
 
-import de.tu_berlin.math.coga.datastructure.Tupel;
+import de.tu_berlin.math.coga.datastructure.Tuple;
 import java.util.ArrayList;
 import umontreal.iro.lecuyer.stat.TallyStore;
 
@@ -15,7 +15,7 @@ import umontreal.iro.lecuyer.stat.TallyStore;
  */
 public class SpeedCollector {
 	TallyStore completeDataset;
-	ArrayList<Tupel<Double, Double>> data = new ArrayList<Tupel<Double, Double>>();
+	ArrayList<Tuple<Double, Double>> data = new ArrayList<Tuple<Double, Double>>();
 	ArrayList<Double> binBounds;
 	ArrayList<Integer> binSizes;
 	ArrayList<TallyStore> bins;
@@ -50,7 +50,7 @@ public class SpeedCollector {
 			bins.add( new TallyStore() );
 		}
 		binSizes.add( 0 );
-		for( Tupel t : data ) {
+		for( Tuple t : data ) {
 			findBin( t );
 		}
 	}
@@ -59,13 +59,13 @@ public class SpeedCollector {
 		return bins.size();
 	}
 
-	public void add( Tupel<Double, Double> t ) {
+	public void add( Tuple<Double, Double> t ) {
 		data.add( t );
 		completeDataset.add( t.getV() );
 		findBin( t );
 	}
 
-	private void findBin( Tupel<Double, Double> t ) {
+	private void findBin( Tuple<Double, Double> t ) {
 		for( int i = 0; i < binBounds.size(); ++i ) {
 			if( t.getU() < binBounds.get( i ) ) {
 				binSizes.set( i, binSizes.get( i ) + 1 );

@@ -1,5 +1,5 @@
 /**
- * Tupel.java
+ * Tuple.java
  * Created 18.05.2010, 12:51:04
  */
 package de.tu_berlin.math.coga.datastructure;
@@ -11,11 +11,11 @@ package de.tu_berlin.math.coga.datastructure;
  * @param <V>
  * @author Jan-Philipp Kappmeier
  */
-public class Tupel<U,V> {
+public class Tuple<U,V> {
 	public U u;
 	public V v;
 
-	public Tupel( U u, V v ) {
+	public Tuple( U u, V v ) {
 		this.u = u;
 		this.v = v;
 	}

@@ -5,7 +5,7 @@
 package de.tu_berlin.math.coga.common.util;
 
 import de.tu_berlin.math.coga.common.localization.DefaultLoc;
-import de.tu_berlin.math.coga.datastructure.Tupel;
+import de.tu_berlin.math.coga.datastructure.Tuple;
 import java.text.NumberFormat;
 
 /**
@@ -319,13 +319,13 @@ public class Formatter {
 	 * @param unit the unit of the number
 	 * @return the pair containing the transformed value and the fitting unit
 	 */
-	public final static Tupel<Double,TimeUnits> timeUnit( double value, TimeUnits unit ) {
+	public final static Tuple<Double,TimeUnits> timeUnit( double value, TimeUnits unit ) {
 		while( !unit.isOK( value ) ) {
 			final double newValue = unit.getNextBetterValue( value );
 			unit = unit.getNextBetter( value );
 			value = newValue;
 		}
-		return new Tupel( value, unit );
+		return new Tuple( value, unit );
 	}
 
 	/**
@@ -346,7 +346,7 @@ public class Formatter {
 	 * @return the string in the calculated unit with one decimal place and the shortcut for the unit
 	 */
 	public final static String formatTimeUnit( double value, TimeUnits unit, int digits ) {
-		final Tupel<Double,TimeUnits> res = timeUnit( value, unit );
+		final Tuple<Double,TimeUnits> res = timeUnit( value, unit );
 		final NumberFormat n = NumberFormat.getInstance();
 		n.setMaximumFractionDigits( digits );
 		return n.format( res.u ) + " " + res.v.getName() ;

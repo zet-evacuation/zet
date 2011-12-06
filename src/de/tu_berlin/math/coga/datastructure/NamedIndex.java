@@ -19,7 +19,7 @@ package de.tu_berlin.math.coga.datastructure;
  * A string that is connected to an integer.
  * @author Timon
  */
-public class NamedIndex extends Tupel<String,Integer> {
+public class NamedIndex extends Tuple<String,Integer> {
 	
 	public NamedIndex (String name, int index) {
 		super(name, index );

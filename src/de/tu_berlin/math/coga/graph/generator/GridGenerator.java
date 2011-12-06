@@ -120,7 +120,7 @@ public class GridGenerator {
         for (T x : domain) {
             if (largestID < x.id()) largestID = x.id();
         }
-        IdentifiableIntegerMapping<T> mapping = new IdentifiableIntegerMapping<T>(largestID + 1);
+        IdentifiableIntegerMapping<T> mapping = new IdentifiableIntegerMapping<>(largestID + 1);
         Random rng = new Random(seed);
         for (T x : domain) {
             mapping.set(x, rng.nextInt(max - min + 1) + min);
