@@ -8,8 +8,8 @@ import algo.graph.dynamicflow.eat.EarliestArrivalFlowProblem;
 import de.tu_berlin.math.coga.math.vectormath.Vector3;
 import de.tu_berlin.math.coga.zet.viewer.NodePositionMapping;
 import ds.graph.Edge;
-import ds.graph.IdentifiableIntegerMapping;
-import ds.graph.Network;
+import ds.mapping.IdentifiableIntegerMapping;
+import ds.graph.network.AbstractNetwork;
 import ds.graph.Node;
 import java.util.ArrayList;
 import java.util.List;
@@ -21,7 +21,7 @@ import java.util.List;
 public class GraphView {
 
 	/** The graph. */
-	Network network;
+	AbstractNetwork network;
 	/** The positions for the nodes. */
 	NodePositionMapping nodePositionMapping;
 	/** Capacities for all edges. */
@@ -55,7 +55,7 @@ public class GraphView {
 	double maxZ = Double.MIN_VALUE;
 
 
-	public GraphView( Network network, NodePositionMapping nodePositionMapping, IdentifiableIntegerMapping<Edge> edgeCapacities, IdentifiableIntegerMapping<Node> nodeCapacities, IdentifiableIntegerMapping<Edge> transitTimes, IdentifiableIntegerMapping<Node> supplies, List<Node> sources, ArrayList<Node> sinks ) {
+	public GraphView( AbstractNetwork network, NodePositionMapping nodePositionMapping, IdentifiableIntegerMapping<Edge> edgeCapacities, IdentifiableIntegerMapping<Node> nodeCapacities, IdentifiableIntegerMapping<Edge> transitTimes, IdentifiableIntegerMapping<Node> supplies, List<Node> sources, ArrayList<Node> sinks ) {
 		this.network = network;
 		setNodePositionMapping( nodePositionMapping );
 		this.edgeCapacities = edgeCapacities;
@@ -80,11 +80,11 @@ public class GraphView {
 	}
 
 
-	public Network getNetwork() {
+	public AbstractNetwork getNetwork() {
 		return network;
 	}
 
-	public void setNetwork( Network network ) {
+	public void setNetwork( AbstractNetwork network ) {
 		this.network = network;
 	}
 

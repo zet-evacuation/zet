@@ -16,7 +16,7 @@ import de.tu_berlin.math.coga.common.localization.Localization;
 import de.tu_berlin.math.coga.common.util.Formatter;
 import de.tu_berlin.math.coga.common.util.Formatter.TimeUnits;
 import ds.GraphVisualizationResults;
-import ds.graph.IdentifiableIntegerMapping;
+import ds.mapping.IdentifiableIntegerMapping;
 import ds.graph.Node;
 import event.EventListener;
 import event.EventServer;

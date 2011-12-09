@@ -18,11 +18,11 @@
  *
  */
 
-package ds.graph;
+package ds.mapping;
 
 import java.util.Iterator;
 import java.util.TreeSet;
-import ds.graph.IntegerObjectMapping.TimeObjectPair;
+import ds.mapping.IntegerObjectMapping.TimeObjectPair;
 
 /**
  * The {@code IntegerObjectMapping} class represents a mapping from 

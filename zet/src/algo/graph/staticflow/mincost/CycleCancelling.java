@@ -23,9 +23,9 @@ package algo.graph.staticflow.mincost;
 import de.tu_berlin.math.coga.common.algorithm.Algorithm;
 import algo.graph.staticflow.StaticTransshipment;
 import ds.graph.Edge;
-import ds.graph.IdentifiableIntegerMapping;
-import ds.graph.Network;
-import ds.graph.ResidualNetwork;
+import ds.mapping.IdentifiableIntegerMapping;
+import ds.graph.network.AbstractNetwork;
+import ds.graph.network.ResidualNetwork;
 import ds.graph.StaticPath;
 import ds.graph.flow.Flow;
 import ds.graph.problem.MinimumCostFlowProblem;
@@ -72,5 +72,5 @@ public abstract class CycleCancelling extends Algorithm<MinimumCostFlowProblem, 
      * @return a cycle of negative total cost or {@code null} if no such 
      * cycle exists.
      */
-    protected abstract StaticPath findCycle(Network network, IdentifiableIntegerMapping<Edge> costs);
+    protected abstract StaticPath findCycle(AbstractNetwork network, IdentifiableIntegerMapping<Edge> costs);
 }

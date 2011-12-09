@@ -20,8 +20,8 @@ import algo.graph.util.GraphInstanceChecker;
 import de.tu_berlin.math.coga.common.localization.DefaultLoc;
 import ds.graph.flow.PathBasedFlowOverTime;
 import ds.graph.Edge;
-import ds.graph.IdentifiableIntegerMapping;
-import ds.graph.Network;
+import ds.mapping.IdentifiableIntegerMapping;
+import ds.graph.network.AbstractNetwork;
 import ds.graph.Node;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
@@ -42,7 +42,7 @@ public abstract class Transshipment<TT extends TransshipmentWithTimeHorizon> ext
 	/** Node capacities */
 	IdentifiableIntegerMapping<Node> nodeCapacities;
 	
-	public Transshipment(Network network,
+	public Transshipment(AbstractNetwork network,
 			IdentifiableIntegerMapping<Edge> transitTimes,
 			IdentifiableIntegerMapping<Edge> edgeCapacities,
 			IdentifiableIntegerMapping<Node> nodeCapacities,
@@ -60,14 +60,14 @@ public abstract class Transshipment<TT extends TransshipmentWithTimeHorizon> ext
 	 * Private method that calculates the result of the specific transshipment
 	 * algorithm by creating a new instance of it, catching exceptions and 
 	 * running it. 
-	 * @param network Network to use.
+	 * @param network AbstractNetwork to use.
 	 * @param transitTimes Transit times for all edges in the network.
 	 * @param edgeCapacities Edge capacities of all edges in the network.
 	 * @param supplies Supplies for all nodes in the network.
 	 * @param timeHorizon Time horizon that shall be tested.
 	 * @return The result of the specific transshipment algorithm on the given input.
 	 */
-	protected PathBasedFlowOverTime useTransshipmentAlgorithm(Network network,
+	protected PathBasedFlowOverTime useTransshipmentAlgorithm(AbstractNetwork network,
 			IdentifiableIntegerMapping<Edge> transitTimes,
 			IdentifiableIntegerMapping<Edge> edgeCapacities,
 			IdentifiableIntegerMapping<Node> nodeCapacities,

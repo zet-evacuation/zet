@@ -23,7 +23,7 @@ package ds.graph.problem;
 
 import ds.graph.Edge;
 import ds.graph.DoubleMap;
-import ds.graph.DynamicNetwork;
+import ds.graph.network.DynamicNetwork;
 import ds.graph.Node;
 
 

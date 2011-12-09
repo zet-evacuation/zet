@@ -4,9 +4,9 @@
  */
 package ds.graph.problem;
 
-import ds.graph.DynamicNetwork;
+import ds.graph.network.DynamicNetwork;
 import ds.graph.Edge;
-import ds.graph.IdentifiableIntegerMapping;
+import ds.mapping.IdentifiableIntegerMapping;
 
 /**
  *

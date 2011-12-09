@@ -4,9 +4,9 @@
  */
 package de.tu_berlin.math.coga.datastructure.priorityQueue;
 
-import ds.graph.Identifiable;
-import ds.graph.IdentifiableIntegerMapping;
-import ds.graph.IdentifiableObjectMapping;
+import ds.mapping.Identifiable;
+import ds.mapping.IdentifiableIntegerMapping;
+import ds.mapping.IdentifiableObjectMapping;
 import java.lang.reflect.Array;
 
 
@@ -25,7 +25,7 @@ public class BucketPriorityQueue<E extends Identifiable> {
 	int minIndex;
 	int dMax;
 	int domainSize;
-	protected IdentifiableIntegerMapping distanceLabels;
+	protected IdentifiableIntegerMapping <E>distanceLabels;
 
 
 	public BucketPriorityQueue( int domainSize, Class<E> rangeType ) {
@@ -38,7 +38,7 @@ public class BucketPriorityQueue<E extends Identifiable> {
 		minIndex = domainSize-1;
 	}
 
-	public void setDistanceLabels( IdentifiableIntegerMapping distanceLabels ) {
+	public void setDistanceLabels( IdentifiableIntegerMapping<E> distanceLabels ) {
 		this.distanceLabels = distanceLabels;
 	}
 

@@ -16,9 +16,9 @@
 package algo.graph.util;
 
 import ds.graph.Edge;
-import ds.graph.IdentifiableIntegerMapping;
-import ds.graph.IdentifiableObjectMapping;
-import ds.graph.Network;
+import ds.mapping.IdentifiableIntegerMapping;
+import ds.mapping.IdentifiableObjectMapping;
+import ds.graph.network.AbstractNetwork;
 import ds.graph.Node;
 import ds.graph.flow.PathBasedFlow;
 import ds.graph.flow.StaticPathFlow;
@@ -32,7 +32,7 @@ public class PathDecomposition {
 	
 	private static IdentifiableObjectMapping<Node,Boolean> visited;
     
-    private static boolean DFS(Network network, Node x, List<Node> sinks, StaticPathFlow path){             
+    private static boolean DFS(AbstractNetwork network, Node x, List<Node> sinks, StaticPathFlow path){             
     	visited.set(x, true);
         boolean sackgasse = true;
         for (Node y : network.successorNodes(x)){
@@ -55,7 +55,7 @@ public class PathDecomposition {
         return sackgasse;
     }
     
-    private static boolean pathEndsOnSink(Network network, List<Node> sinks, StaticPathFlow path){
+    private static boolean pathEndsOnSink(AbstractNetwork network, List<Node> sinks, StaticPathFlow path){
         if (!path.edges().empty()){
             for (Node t : sinks){
                 Edge last = path.lastEdge();
@@ -88,7 +88,7 @@ public class PathDecomposition {
         return minCapacity;
     }
     
-    private static void updateCapacities(Network network, StaticPathFlow path, IdentifiableIntegerMapping<Edge> flow){
+    private static void updateCapacities(AbstractNetwork network, StaticPathFlow path, IdentifiableIntegerMapping<Edge> flow){
         int minCapacity = getMinPathCapacity(path,flow);        
         for (Edge edge : path.edges()){
             flow.decrease(edge, minCapacity);
@@ -109,11 +109,11 @@ public class PathDecomposition {
         path.setAmount(minCapacity);
     }
     
-    private static void restoreNetwork(Network network){        
+    private static void restoreNetwork(AbstractNetwork network){        
         network.showAllEdges();
     }
     
-/*    private static int getMaxNetworkCapacity(Network network, IdentifiableIntegerMapping<Edge> flow){
+/*    private static int getMaxNetworkCapacity(AbstractNetwork network, IdentifiableIntegerMapping<Edge> flow){
         int maxCapacity = 0;
         for (Edge edge : network.edges()){
             if (flow.get(edge) > maxCapacity) maxCapacity = flow.get(edge);
@@ -121,7 +121,7 @@ public class PathDecomposition {
         return maxCapacity;
     }*/
     
-    private static void capacityScaling(Network network, IdentifiableIntegerMapping<Edge> flow, int minCapacity){
+    private static void capacityScaling(AbstractNetwork network, IdentifiableIntegerMapping<Edge> flow, int minCapacity){
         restoreNetwork(network);
         for (Edge edge : network.edges()){
             if (flow.get(edge) < minCapacity){
@@ -130,7 +130,7 @@ public class PathDecomposition {
         }
     }
     
-/*    public static StaticPathFlow calculateThickesPath(Network network, List<Node> sources, List<Node> sinks, IdentifiableIntegerMapping<Edge> flow){        
+/*    public static StaticPathFlow calculateThickesPath(AbstractNetwork network, List<Node> sources, List<Node> sinks, IdentifiableIntegerMapping<Edge> flow){        
         StaticPathFlow path = new StaticPathFlow();
         for (int i=getMaxNetworkCapacity(network,flow); i>=0; i--){
             capacityScaling(network,flow,i);                        
@@ -147,7 +147,7 @@ public class PathDecomposition {
         return path;
     }*/
             
-    public static PathBasedFlow calculatePathDecomposition(Network network, IdentifiableIntegerMapping<Node> supplies, List<Node> sources, List<Node> sinks, IdentifiableIntegerMapping<Edge> startFlow){
+    public static PathBasedFlow calculatePathDecomposition(AbstractNetwork network, IdentifiableIntegerMapping<Node> supplies, List<Node> sources, List<Node> sinks, IdentifiableIntegerMapping<Edge> startFlow){
     	if (startFlow == null){
     		throw new IllegalArgumentException("The given startflow is null.");
     	}
@@ -184,7 +184,7 @@ public class PathDecomposition {
         return pathDecomposition;
     }
     
-    public static PathBasedFlow calculatePathDecomposition(Network network, List<Node> sources, List<Node> sinks, IdentifiableIntegerMapping<Edge> startFlow){
+    public static PathBasedFlow calculatePathDecomposition(AbstractNetwork network, List<Node> sources, List<Node> sinks, IdentifiableIntegerMapping<Edge> startFlow){
         PathBasedFlow pathDecomposition = new PathBasedFlow();        
         IdentifiableIntegerMapping<Edge> flow = (IdentifiableIntegerMapping<Edge>)startFlow.clone();
         visited = new IdentifiableObjectMapping<Node,Boolean>(network.nodes().size(), Boolean.class);

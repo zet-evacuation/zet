@@ -26,7 +26,7 @@ import com.thoughtworks.xstream.converters.UnmarshallingContext;
 import com.thoughtworks.xstream.io.HierarchicalStreamReader;
 import com.thoughtworks.xstream.io.HierarchicalStreamWriter;
 import ds.graph.Edge;
-import ds.graph.HidingSet;
+import ds.collection.HidingSet;
 import ds.graph.Node;
 
 /**

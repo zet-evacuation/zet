@@ -17,8 +17,9 @@
  * IdentifiableObjectMapping.java
  *
  */
-package ds.graph;
+package ds.mapping;
 
+import ds.graph.GraphLocalization;
 import java.lang.reflect.Array;
 
 /**
@@ -78,10 +79,8 @@ public class IdentifiableObjectMapping<D extends Identifiable, R> implements Clo
      * {@code rangeType} are null.
      */
     protected IdentifiableObjectMapping(R[] mapping, Class<R> rangeType) {
-        if (rangeType == Void.TYPE) throw new IllegalArgumentException(GraphLocalization.getSingleton (
-		).getString ("algo.ca.NotInitializedException"));
-        if (mapping == null || rangeType == null) throw new NullPointerException(GraphLocalization.getSingleton (
-		).getString ("ds.Graph.ParametersNullException"));
+        if (rangeType == Void.TYPE) throw new IllegalArgumentException(GraphLocalization.getSingleton().getString ("algo.ca.NotInitializedException"));
+        if (mapping == null || rangeType == null) throw new NullPointerException(GraphLocalization.getSingleton ().getString ("ds.Graph.ParametersNullException"));
         this.mapping = mapping;
         this.rangeType = rangeType;
     }
@@ -204,7 +203,7 @@ public class IdentifiableObjectMapping<D extends Identifiable, R> implements Clo
     public IdentifiableObjectMapping<D, R> clone() {
         R[] newMapping = (R[]) Array.newInstance(rangeType, mapping.length);
         System.arraycopy(mapping, 0, newMapping, 0, mapping.length);
-        return new IdentifiableObjectMapping<D, R>(newMapping, rangeType);
+        return new IdentifiableObjectMapping<>(newMapping, rangeType);
     }
     
     /**

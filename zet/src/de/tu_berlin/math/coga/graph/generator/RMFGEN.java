@@ -7,9 +7,10 @@ package de.tu_berlin.math.coga.graph.generator;
 import de.tu_berlin.math.coga.rndutils.RandomUtils;
 import de.tu_berlin.math.coga.rndutils.distribution.DiscreteDistribution;
 import ds.graph.Edge;
-import ds.graph.IdentifiableIntegerMapping;
-import ds.graph.Network;
+import ds.mapping.IdentifiableIntegerMapping;
+import ds.graph.network.AbstractNetwork;
 import ds.graph.Node;
+import ds.graph.network.Network;
 import java.util.ArrayList;
 
 
@@ -19,7 +20,7 @@ import java.util.ArrayList;
  */
 public class RMFGEN implements Generator {
 	protected DiscreteDistribution dist;
-	Network network;
+	AbstractNetwork network;
 	private IdentifiableIntegerMapping<Edge> capacities;
 
 	public void setDistribution( DiscreteDistribution dist ) {
@@ -163,7 +164,7 @@ public class RMFGEN implements Generator {
 		//e.setUsed( flow );
 	}
 
-	public Network getGraph() {
+	public AbstractNetwork getGraph() {
 		return network;
 	}
 

@@ -17,9 +17,9 @@
 package ds.graph.problem;
 
 import ds.graph.DoubleMap;
-import ds.graph.DynamicNetwork;
+import ds.graph.network.DynamicNetwork;
 import ds.graph.Edge;
-import ds.graph.IdentifiableDoubleMapping;
+import ds.mapping.IdentifiableDoubleMapping;
 import ds.graph.Node;
 import java.util.HashMap;
 import java.util.List;

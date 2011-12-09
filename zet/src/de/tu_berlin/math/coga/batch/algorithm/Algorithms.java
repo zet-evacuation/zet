@@ -6,10 +6,10 @@ package de.tu_berlin.math.coga.batch.algorithm;
 
 import de.tu_berlin.math.coga.batch.input.reader.InputFileReader;
 import de.tu_berlin.math.coga.common.algorithm.Algorithm;
-import ds.graph.DynamicNetwork;
+import ds.graph.network.DynamicNetwork;
 import ds.graph.Edge;
 import ds.graph.Graph;
-import ds.graph.Network;
+import ds.graph.network.AbstractNetwork;
 import ds.graph.Node;
 import ds.graph.Path;
 import java.util.HashMap;
@@ -32,7 +32,7 @@ public class Algorithms {
         return instance;
     }
 
-    private Network network;
+    private AbstractNetwork network;
     
     private HashMap<Edge, Algorithm> algorithmForEdge;
     private HashMap<Class, Node> nodeForClass;    

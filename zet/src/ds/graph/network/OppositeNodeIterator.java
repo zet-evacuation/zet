@@ -17,8 +17,11 @@
  * OppositeNodeIterator.java
  *
  */
-package ds.graph;
+package ds.graph.network;
 
+import ds.graph.Edge;
+import ds.graph.GraphLocalization;
+import ds.graph.Node;
 import java.util.HashMap;
 import java.util.Iterator;
 

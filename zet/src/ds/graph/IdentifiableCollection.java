@@ -20,6 +20,8 @@
 
 package ds.graph;
 
+import ds.mapping.Identifiable;
+
 /**
  * Represents a datastructure to store {@link Identifiable} objects. 
  * The ID of the objects can be used to provide a faster implementation,

@@ -10,7 +10,7 @@ import de.tu_berlin.math.coga.common.algorithm.Algorithm;
 import de.tu_berlin.math.coga.zet.NetworkFlowModel;
 import ds.graph.Edge;
 import ds.graph.Graph;
-import ds.graph.IdentifiableDoubleMapping;
+import ds.mapping.IdentifiableDoubleMapping;
 import ds.z.BuildingPlan;
 
 /**

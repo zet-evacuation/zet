@@ -13,7 +13,7 @@ import de.tu_berlin.math.coga.graph.io.xml.XMLWriter;
 import de.tu_berlin.math.coga.zet.converter.graph.GraphAssignmentConverter;
 import ds.PropertyContainer;
 import ds.graph.Edge;
-import ds.graph.Network;
+import ds.graph.network.AbstractNetwork;
 import ds.graph.Node;
 import ds.graph.TimeExpandedNetwork;
 import ds.graph.problem.MinimumCostFlowProblem;
@@ -42,7 +42,7 @@ public class XmlFileReaderWriter {
 		System.out.println( "Loading a network." );
 		//XMLReader reader = new XMLReader( "./testinstanz/small_graph.xml" );
 		XMLReader reader = new XMLReader( "./testinstanz/2 rooms demo.xml" );
-		Network n = reader.readGraph();		
+		AbstractNetwork n = reader.readGraph();		
 		System.out.println( n.toString() );
 		
 		

@@ -4,17 +4,16 @@
  */
 package algo.graph.reduction;
 import algo.graph.shortestpath.Dijkstra;
-import java.util.Arrays;
 import de.tu_berlin.math.coga.common.algorithm.Algorithm; 
 import de.tu_berlin.math.coga.zet.NetworkFlowModel;
-import ds.graph.DynamicNetwork;
 import ds.graph.Edge;
 import ds.graph.IdentifiableCollection;
-import ds.graph.IdentifiableIntegerMapping;
-import ds.graph.ListSequence;
+import ds.mapping.IdentifiableIntegerMapping;
+import ds.collection.ListSequence;
 import ds.graph.MinSpanningTree;
-import ds.graph.Network;
+import ds.graph.network.AbstractNetwork;
 import ds.graph.Node;
+import ds.graph.network.Network;
 import ds.graph.problem.MinSpanningTreeProblem;
 
 /**
@@ -32,7 +31,7 @@ public class GreedyAlgo extends Algorithm<MinSpanningTreeProblem,MinSpanningTree
     Edge MinEdge;
     Edge currentEdge;
     NetworkFlowModel OriginNetwork;
-    Network network;
+    AbstractNetwork network;
     IdentifiableIntegerMapping<Edge> TransitForEdge;
     //gives distance of nodes in current graph G'
     IdentifiableIntegerMapping<Edge> currentTransitForEdge;

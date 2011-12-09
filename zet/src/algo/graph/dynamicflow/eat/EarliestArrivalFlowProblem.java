@@ -20,8 +20,8 @@
 package algo.graph.dynamicflow.eat;
 
 import ds.graph.Edge;
-import ds.graph.IdentifiableIntegerMapping;
-import ds.graph.Network;
+import ds.mapping.IdentifiableIntegerMapping;
+import ds.graph.network.AbstractNetwork;
 import ds.graph.Node;
 import java.util.List;
 
@@ -32,7 +32,7 @@ import java.util.List;
 public class EarliestArrivalFlowProblem {
 
     private IdentifiableIntegerMapping<Edge> edgeCapacities;
-    private Network network;
+    private AbstractNetwork network;
     private IdentifiableIntegerMapping<Node> nodeCapacities;
     private Node sink;
     private List<Node> sources;
@@ -41,7 +41,7 @@ public class EarliestArrivalFlowProblem {
     private int totalSupplies;
     private IdentifiableIntegerMapping<Edge> transitTimes;
     
-    public EarliestArrivalFlowProblem(IdentifiableIntegerMapping<Edge> edgeCapacities, Network network, IdentifiableIntegerMapping<Node> nodeCapacities, Node sink, List<Node> sources, int timeHorizon, IdentifiableIntegerMapping<Edge> transitTimes, IdentifiableIntegerMapping<Node> supplies) {
+    public EarliestArrivalFlowProblem(IdentifiableIntegerMapping<Edge> edgeCapacities, AbstractNetwork network, IdentifiableIntegerMapping<Node> nodeCapacities, Node sink, List<Node> sources, int timeHorizon, IdentifiableIntegerMapping<Edge> transitTimes, IdentifiableIntegerMapping<Node> supplies) {
         this.edgeCapacities = edgeCapacities;
         this.network = network;
         this.nodeCapacities = nodeCapacities;
@@ -68,7 +68,7 @@ public class EarliestArrivalFlowProblem {
         return edgeCapacities;
     }
 
-    public Network getNetwork() {
+    public AbstractNetwork getNetwork() {
         return network;
     }
 

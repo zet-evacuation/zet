@@ -17,8 +17,8 @@ package algo.graph.dynamicflow;
 
 import algo.graph.staticflow.StaticTransshipment;
 import ds.graph.Edge;
-import ds.graph.IdentifiableIntegerMapping;
-import ds.graph.Network;
+import ds.mapping.IdentifiableIntegerMapping;
+import ds.graph.network.AbstractNetwork;
 import ds.graph.Node;
 import ds.graph.TimeExpandedNetwork;
 
@@ -46,7 +46,7 @@ public class DynamicTransshipment extends TransshipmentWithTimeHorizon {
 	 * @param supplies The supplies the dynamic transshipment algorithm shall use.
 	 * @param timeHorizon The time horizon for the wanted dynamic transshipment.
 	 */
-	public DynamicTransshipment(Network network, IdentifiableIntegerMapping<Edge> transitTimes, IdentifiableIntegerMapping<Edge> edgeCapacities, IdentifiableIntegerMapping<Node> nodeCapacities, IdentifiableIntegerMapping<Node> supplies, Integer timeHorizon){
+	public DynamicTransshipment(AbstractNetwork network, IdentifiableIntegerMapping<Edge> transitTimes, IdentifiableIntegerMapping<Edge> edgeCapacities, IdentifiableIntegerMapping<Node> nodeCapacities, IdentifiableIntegerMapping<Node> supplies, Integer timeHorizon){
 		super(network, transitTimes, edgeCapacities, nodeCapacities, supplies, timeHorizon, "Dynamic Transshipment");
 	}
 	

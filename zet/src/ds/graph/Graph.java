@@ -19,6 +19,8 @@
  */
 package ds.graph;
 
+import ds.graph.network.AbstractNetwork;
+
 /**
  * The {@code Graph} interface provides a common interface for 
  * implementations of graphs.
@@ -37,7 +39,7 @@ public interface Graph {
 	 * @return an {@link IdentifiableCollection} containing all the edges of
 	 * this graph.
 	 */
-	IdentifiableCollection<Edge> edges();
+	public IdentifiableCollection<Edge> edges();
 
 	/**
 	 * Returns an {@link IdentifiableCollection} containing all the nodes of
@@ -232,8 +234,8 @@ public interface Graph {
 	String deepToString();
 
 	/**
-	 * Returns the network as a {@code Network} object, i.e. as a static graph.
-	 * @return the network as a {@code Network} object.
+	 * Returns the network as a {@code AbstractNetwork} object, i.e. as a static graph.
+	 * @return the network as a {@code AbstractNetwork} object.
 	 */
-	public Network getAsStaticNetwork();
+	public AbstractNetwork getAsStaticNetwork();
 }

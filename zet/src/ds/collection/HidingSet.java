@@ -18,8 +18,12 @@
  * 
  */
 
-package ds.graph;
+package ds.collection;
 
+import ds.graph.ArraySet;
+import ds.graph.GraphLocalization;
+import ds.graph.IdentifiableCollection;
+import ds.mapping.Identifiable;
 import java.util.Iterator;
 
 /**
@@ -29,6 +33,7 @@ import java.util.Iterator;
  * and will also be skipped in methods like {@code first()} or
  * {@code predecessor(E element)}. The iterator of the class will also
  * jump over hidden elements.
+ * @param <E> 
  */
 public class HidingSet<E extends Identifiable> extends ArraySet<E> implements IdentifiableCollection<E> {
 

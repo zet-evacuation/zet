@@ -5,13 +5,13 @@
 package algo.graph.reduction;
 
 import de.tu_berlin.math.coga.common.algorithm.Algorithm;
-import ds.graph.DynamicNetwork;
+import ds.graph.network.DynamicNetwork;
 import ds.graph.Edge;
 import ds.graph.IdentifiableCollection;
-import ds.graph.IdentifiableIntegerMapping;
-import ds.graph.IdentifiableObjectMapping;
-import ds.graph.ListSequence;
-import ds.graph.MinHeap;
+import ds.mapping.IdentifiableIntegerMapping;
+import ds.mapping.IdentifiableObjectMapping;
+import ds.collection.ListSequence;
+import de.tu_berlin.math.coga.datastructure.priorityQueue.MinHeap;
 import ds.graph.NetworkMST;
 import ds.graph.Node;
 import ds.graph.problem.NetworkMSTProblem;

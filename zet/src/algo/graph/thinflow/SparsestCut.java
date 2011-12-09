@@ -23,7 +23,7 @@ import ds.graph.Node;
 import ds.graph.Edge;
 import java.util.HashSet;
 import ds.graph.DoubleMap;
-import ds.graph.DynamicNetwork;
+import ds.graph.network.DynamicNetwork;
 import algo.graph.traverse.BFS;
 
 import ds.graph.ResidualGraph;

@@ -6,10 +6,10 @@ package algo.graph.dynamicflow;
 
 import de.tu_berlin.math.coga.common.algorithm.Algorithm;
 import ds.graph.Edge;
-import ds.graph.IdentifiableIntegerMapping;
-import ds.graph.IdentifiableObjectMapping;
+import ds.mapping.IdentifiableIntegerMapping;
+import ds.mapping.IdentifiableObjectMapping;
 import ds.graph.ImplicitTimeExpandedResidualNetwork;
-import ds.graph.MinHeap;
+import de.tu_berlin.math.coga.datastructure.priorityQueue.MinHeap;
 import ds.graph.Node;
 import ds.graph.flow.EdgeBasedFlowOverTime;
 import ds.graph.flow.FlowOverTimeEdge;

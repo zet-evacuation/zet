@@ -8,11 +8,11 @@ package algo.graph.staticflow.maxflow;
 import ds.graph.ArraySet;
 import ds.graph.Edge;
 import ds.graph.Graph;
-import ds.graph.IdentifiableBooleanMapping;
+import ds.mapping.IdentifiableBooleanMapping;
 import ds.graph.IdentifiableCollection;
-import ds.graph.IdentifiableIntegerMapping;
-import ds.graph.IdentifiableObjectMapping;
-import ds.graph.Network;
+import ds.mapping.IdentifiableIntegerMapping;
+import ds.mapping.IdentifiableObjectMapping;
+import ds.graph.network.AbstractNetwork;
 import ds.graph.Node;
 import java.util.Iterator;
 
@@ -66,7 +66,7 @@ public class ResidualGraph implements Graph {
 	 * @param capacities
 	 * @param current  
 	 */
-	protected void init( Network network, IdentifiableIntegerMapping<Edge> capacities, IdentifiableIntegerMapping<Node> current ) {
+	protected void init( AbstractNetwork network, IdentifiableIntegerMapping<Edge> capacities, IdentifiableIntegerMapping<Node> current ) {
 		// set up residual edges
 		int edgeCounter = 0;
 		int[] temp = new int[edges.getCapacity()];
@@ -255,7 +255,7 @@ public class ResidualGraph implements Graph {
 	}
 
 	@Override
-	public Network getAsStaticNetwork() {
+	public AbstractNetwork getAsStaticNetwork() {
 		throw new UnsupportedOperationException( "Not supported yet." );
 	}
 

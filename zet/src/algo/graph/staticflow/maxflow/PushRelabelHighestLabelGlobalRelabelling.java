@@ -13,7 +13,7 @@ import ds.graph.Node;
  *
  * @author Jan-Philipp Kappmeier
  */
-public class PushRelabelHighestLabelGlobalRelabelling extends PushRelabelHighestLabelNeu {
+public class PushRelabelHighestLabelGlobalRelabelling extends PushRelabelHighestLabel {
 
 	protected boolean useBugHeuristic = true;
 	protected int globalRelabels;

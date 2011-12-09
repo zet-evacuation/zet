@@ -22,10 +22,10 @@ package de.tu_berlin.math.coga.zet.converter.graph;
 
 import de.tu_berlin.math.coga.common.localization.DefaultLoc;
 import ds.PropertyContainer;
-import ds.graph.DynamicNetwork;
+import ds.graph.network.DynamicNetwork;
 import ds.graph.Edge;
 import ds.graph.Graph;
-import ds.graph.IdentifiableIntegerMapping;
+import ds.mapping.IdentifiableIntegerMapping;
 import ds.graph.Node;
 import ds.graph.NodeRectangle;
 import ds.z.PlanPoint;
@@ -39,7 +39,7 @@ import de.tu_berlin.math.coga.common.util.Direction;
 import de.tu_berlin.math.coga.common.util.Level;
 import de.tu_berlin.math.coga.common.util.Formatter;
 import de.tu_berlin.math.coga.common.util.Formatter.TimeUnits;
-import ds.graph.IdentifiableDoubleMapping;
+import ds.mapping.IdentifiableDoubleMapping;
 
 /**
  *

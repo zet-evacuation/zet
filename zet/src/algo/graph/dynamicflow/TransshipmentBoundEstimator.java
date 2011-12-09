@@ -22,8 +22,8 @@ import algo.graph.staticflow.StaticTransshipment;
 import algo.graph.util.PathDecomposition;
 import ds.graph.Edge;
 import ds.graph.IdentifiableCollection;
-import ds.graph.IdentifiableIntegerMapping;
-import ds.graph.Network;
+import ds.mapping.IdentifiableIntegerMapping;
+import ds.graph.network.AbstractNetwork;
 import ds.graph.Node;
 import ds.graph.flow.PathBasedFlow;
 import ds.graph.flow.StaticPathFlow;
@@ -36,7 +36,7 @@ import ds.graph.GraphLocalization;
  */
 public class TransshipmentBoundEstimator {
 
-	public static int calculateBoundByLongestPath(Network network,
+	public static int calculateBoundByLongestPath(AbstractNetwork network,
 			IdentifiableIntegerMapping<Edge> transitTimes,
 			IdentifiableIntegerMapping<Edge> edgeCapacities,
 			IdentifiableIntegerMapping<Node> supplies){
@@ -77,7 +77,7 @@ public class TransshipmentBoundEstimator {
 
 	}
 	
-	public static int calculateBoundByStaticMaxFlows(Network network,
+	public static int calculateBoundByStaticMaxFlows(AbstractNetwork network,
 			IdentifiableIntegerMapping<Edge> transitTimes,
 			IdentifiableIntegerMapping<Edge> edgeCapacities,
 			IdentifiableIntegerMapping<Node> supplies) {
@@ -189,7 +189,7 @@ public class TransshipmentBoundEstimator {
 		return maxLength + sumOfMaxSupplies + 1;
 	}
 	
-	public static int calculateBoundByStaticTransshipmentAndScaleFactorSearch(Network network,
+	public static int calculateBoundByStaticTransshipmentAndScaleFactorSearch(AbstractNetwork network,
 			IdentifiableIntegerMapping<Edge> transitTimes,
 			IdentifiableIntegerMapping<Edge> edgeCapacities,
 			IdentifiableIntegerMapping<Node> supplies) {
@@ -338,7 +338,7 @@ public class TransshipmentBoundEstimator {
 		throw new AssertionError("Binary search found no working testScaleFactor.");
 	}
 	
-	public static int calculateBoundByStaticTransshipment(Network network,
+	public static int calculateBoundByStaticTransshipment(AbstractNetwork network,
 			IdentifiableIntegerMapping<Edge> transitTimes,
 			IdentifiableIntegerMapping<Edge> edgeCapacities,
 			IdentifiableIntegerMapping<Node> supplies) {		
@@ -423,7 +423,7 @@ public class TransshipmentBoundEstimator {
 		return ((maxLength + maxSupply)* sources.size()+1);
 	}
 	
-	public static int calculateBound(Network network,
+	public static int calculateBound(AbstractNetwork network,
 			IdentifiableIntegerMapping<Edge> transitTimes,
 			IdentifiableIntegerMapping<Edge> edgeCapacities,
 			IdentifiableIntegerMapping<Node> supplies){

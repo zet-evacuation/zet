@@ -8,13 +8,13 @@ import algo.graph.reduction.ClusterAlgo;
 import de.tu_berlin.math.coga.common.util.Level;
 import de.tu_berlin.math.coga.zet.NetworkFlowModel;
 import de.tu_berlin.math.coga.zet.converter.RasterContainerCreator;
-import ds.graph.DynamicNetwork;
+import ds.graph.network.DynamicNetwork;
 import ds.graph.Edge;
 import ds.graph.IdentifiableCollection;
-import ds.graph.IdentifiableIntegerMapping;
-import ds.graph.ListSequence;
+import ds.mapping.IdentifiableIntegerMapping;
+import ds.collection.ListSequence;
 import ds.graph.MinSpanningTree;
-import ds.graph.Network;
+import ds.graph.network.AbstractNetwork;
 import ds.graph.Node;
 import ds.graph.NodeRectangle;
 import ds.graph.problem.MinSpanningTreeProblem;
@@ -82,7 +82,7 @@ public class ZToNonGridClusterConverter extends ZToNonGridGraphConverter{
                 IdentifiableCollection<Edge> MinEdges = tree.getEdges();
   
                
-                Network netw = minspanmodel.getNetwork();
+                AbstractNetwork netw = minspanmodel.getNetwork();
                 IdentifiableCollection<Node> NonMinNodes = new ListSequence();
                 int numberhidden = 0;
                 

@@ -17,7 +17,7 @@
  * IdentifiableIntegerMapping.java
  *
  */
-package ds.graph;
+package ds.mapping;
 
 import java.util.Arrays;
 

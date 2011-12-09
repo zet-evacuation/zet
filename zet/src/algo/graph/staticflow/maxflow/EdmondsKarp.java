@@ -8,7 +8,7 @@ import algo.graph.traverse.BFS;
 import de.tu_berlin.math.coga.common.algorithm.Algorithm;
 import ds.graph.Edge;
 import ds.graph.Node;
-import ds.graph.ResidualNetwork;
+import ds.graph.network.ResidualNetwork;
 import ds.graph.flow.MaximumFlow;
 import ds.graph.problem.MaximumFlowProblem;
 

@@ -16,7 +16,7 @@
 package ds.ca;
 
 import algo.ca.rule.PotentialValueTuple;
-import ds.graph.Identifiable;
+import ds.mapping.Identifiable;
 import java.util.UUID;
 
 /**

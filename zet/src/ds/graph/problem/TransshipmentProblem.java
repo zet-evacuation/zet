@@ -21,8 +21,8 @@
 package ds.graph.problem;
 
 import ds.graph.Edge;
-import ds.graph.IdentifiableIntegerMapping;
-import ds.graph.Network;
+import ds.mapping.IdentifiableIntegerMapping;
+import ds.graph.network.AbstractNetwork;
 import ds.graph.Node;
 import java.util.LinkedList;
 import java.util.List;
@@ -34,12 +34,12 @@ import java.util.List;
 public class TransshipmentProblem {
 
     private IdentifiableIntegerMapping<Edge> capacities;
-    private Network network;    
+    private AbstractNetwork network;    
     private IdentifiableIntegerMapping<Node> supplies;
     private transient List<Node> sinks;
     private transient List<Node> sources;
 
-    public TransshipmentProblem(Network network, IdentifiableIntegerMapping<Edge> capacities, IdentifiableIntegerMapping<Node> supplies) {
+    public TransshipmentProblem(AbstractNetwork network, IdentifiableIntegerMapping<Edge> capacities, IdentifiableIntegerMapping<Node> supplies) {
         this.capacities = capacities;
         this.network = network;
         this.supplies = supplies;
@@ -63,11 +63,11 @@ public class TransshipmentProblem {
         this.capacities = capacities;
     }
 
-    public Network getNetwork() {
+    public AbstractNetwork getNetwork() {
         return network;
     }
 
-    public void setNetwork(Network network) {
+    public void setNetwork(AbstractNetwork network) {
         this.network = network;
     }
     

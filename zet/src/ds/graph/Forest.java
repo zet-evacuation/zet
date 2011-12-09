@@ -14,15 +14,17 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 /*
- * Network.java
+ * AbstractNetwork.java
  *
  */
 package ds.graph;
 
+import ds.mapping.IdentifiableObjectMapping;
 import com.thoughtworks.xstream.annotations.XStreamAlias;
+import ds.graph.network.Network;
 
 /**
- * The {@code Network</class> provides an implementation of a directed graph
+ * The {@code AbstractNetwork</class> provides an implementation of a directed graph
  * optimized for use by flow algorithms. Examples of these optimizations 
  * include use of array based data structures for edges and nodes in order to
  * provide fast access, as well as the possiblity to hide edges and nodes (which

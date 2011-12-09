@@ -20,6 +20,7 @@
  */
 package ds.graph;
 
+import ds.mapping.Identifiable;
 import java.lang.reflect.Array;
 import java.util.Iterator;
 

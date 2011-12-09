@@ -23,11 +23,12 @@
  */
 package algo.graph.staticflow.mincost;
 
-import ds.graph.IdentifiableObjectMapping;
-import ds.graph.Network;
-import ds.graph.IdentifiableIntegerMapping;
+import ds.graph.network.Network;
+import ds.mapping.IdentifiableObjectMapping;
+import ds.graph.network.AbstractNetwork;
+import ds.mapping.IdentifiableIntegerMapping;
 import ds.graph.Edge;
-import ds.graph.Mappings;
+import ds.mapping.Mappings;
 import ds.graph.Node;
 import ds.graph.Path;
 import ds.graph.StaticPath;
@@ -48,7 +49,7 @@ public abstract class MinimumMeanCycleDetector {
 	 * @return The mean value value of a minimum mean cost cycle. If no cycle
 	 * is found, 0 is returned.
 	 */
-	public static StaticPath detect (Network g, IdentifiableIntegerMapping<Edge> cost) {
+	public static StaticPath detect (AbstractNetwork g, IdentifiableIntegerMapping<Edge> cost) {
 		// To determine whether such a circuit exists we use the Minmum Mean Cycle Algorithm
 		// from the book "Combinatorial Optimization" by "Bernhard Korte, Jens Vygen"
 		// Chapter 7.3
@@ -80,7 +81,7 @@ public abstract class MinimumMeanCycleDetector {
 		}
 		// Copy the costs / Add the 0 costs for edges leaving node "newNode"
 		IdentifiableIntegerMapping<Edge> res_cost =
-				new IdentifiableIntegerMapping<Edge> (g.numberOfEdges ());
+				new IdentifiableIntegerMapping<> (g.numberOfEdges ());
 		for (Edge e : g.edges ()) {
 			if (e.start () == newNode) {
 				res_cost.set (e, 0);
@@ -93,21 +94,18 @@ public abstract class MinimumMeanCycleDetector {
 		int n = g.numberOfNodes ();
 		// F is the minimum weight of an edge progression of length [k] (first index) from
 		// node s to node [x] (second index)
-		IdentifiableIntegerMapping<Node> F[] =
-				new IdentifiableIntegerMapping[n + 1];
+		IdentifiableIntegerMapping<Node> F[] = new IdentifiableIntegerMapping[n + 1];
 		// In the algorithm F[k][x] can be infinite. As int variables cannot store 
 		// "infinite" values we introduce this bitflag array to remember an infinite value in F
-		IdentifiableObjectMapping<Node, Boolean> isInfinite[] =
-				new IdentifiableObjectMapping[n + 1];
+		IdentifiableObjectMapping<Node, Boolean> isInfinite[] = new IdentifiableObjectMapping[n + 1];
 
 		// Main algorithm works here - dynamic programming where F stores the results
 		if (MARTIN) {
 			System.out.println ("Graph here: " + g);
 		}
 		for (int k = 0; k <= n; k++) {
-			F[k] = new IdentifiableIntegerMapping<Node> (g.numberOfNodes ());
-			isInfinite[k] = new IdentifiableObjectMapping<Node, Boolean> (
-					g.numberOfNodes (), Boolean.class);
+			F[k] = new IdentifiableIntegerMapping<> (g.numberOfNodes ());
+			isInfinite[k] = new IdentifiableObjectMapping<> ( g.numberOfNodes (), Boolean.class);
 
 
 			for (Node x : g.nodes ()) {
@@ -289,24 +287,24 @@ public abstract class MinimumMeanCycleDetector {
 	/** A small testing routine for the algo. */
 	public static void main (String args[]) {
 		// Small network with one circle, and all edges with weight -2
-		Network n1 = new Network (2, 2);
+		AbstractNetwork n1 = new Network (2, 2);
 		n1.createAndSetEdge (n1.nodes ().get (0), n1.nodes ().get (1));
 		n1.createAndSetEdge (n1.nodes ().get (1), n1.nodes ().get (0));
 		IdentifiableIntegerMapping<Edge> cost1 =
-				new IdentifiableIntegerMapping<Edge> (2);
+				new IdentifiableIntegerMapping<> (2);
 		cost1.set (n1.edges ().get (0), -2);
 		cost1.set (n1.edges ().get (1), -2);
 		Path mm_cycle1 = detect (n1, cost1);
 
 		// Small network with one circle, two adjacent edges, and all edges with weight -2
-		Network n2 = new Network (6, 5);
+		AbstractNetwork n2 = new Network (6, 5);
 		n2.createAndSetEdge (n2.nodes ().get (0), n2.nodes ().get (1));
 		n2.createAndSetEdge (n2.nodes ().get (1), n2.nodes ().get (2));
 		n2.createAndSetEdge (n2.nodes ().get (2), n2.nodes ().get (4));
 		n2.createAndSetEdge (n2.nodes ().get (4), n2.nodes ().get (5));
 		n2.createAndSetEdge (n2.nodes ().get (4), n2.nodes ().get (1));
 		IdentifiableIntegerMapping<Edge> cost2 =
-				new IdentifiableIntegerMapping<Edge> (5);
+				new IdentifiableIntegerMapping<> (5);
 		cost2.set (n2.edges ().get (0), -2);
 		cost2.set (n2.edges ().get (1), -2);
 		cost2.set (n2.edges ().get (2), -2);
@@ -316,7 +314,7 @@ public abstract class MinimumMeanCycleDetector {
 
 		// Small network with two intersecting circles and two adjacent edges
 		// One circle has weight -2, the second one -4
-		Network n3 = new Network (6, 7);
+		AbstractNetwork n3 = new Network (6, 7);
 		n3.createAndSetEdge (n3.nodes ().get (0), n3.nodes ().get (1));
 		n3.createAndSetEdge (n3.nodes ().get (1), n3.nodes ().get (2));
 		n3.createAndSetEdge (n3.nodes ().get (1), n3.nodes ().get (3));
@@ -325,7 +323,7 @@ public abstract class MinimumMeanCycleDetector {
 		n3.createAndSetEdge (n3.nodes ().get (4), n3.nodes ().get (5));
 		n3.createAndSetEdge (n3.nodes ().get (4), n3.nodes ().get (1));
 		IdentifiableIntegerMapping<Edge> cost3 =
-				new IdentifiableIntegerMapping<Edge> (7);
+				new IdentifiableIntegerMapping<> (7);
 		cost3.set (n3.edges ().get (0), -2);
 		cost3.set (n3.edges ().get (1), -2);
 		cost3.set (n3.edges ().get (2), -5);
@@ -336,13 +334,13 @@ public abstract class MinimumMeanCycleDetector {
 		Path mm_cycle3 = detect (n3, cost3);
 
 		// Example from "easy_room.xml" with minimum mean circle cost (-14)/3
-		Network n4 = new Network (3, 4);
+		AbstractNetwork n4 = new Network (3, 4) {};
 		n4.createAndSetEdge (n4.nodes ().get (1), n4.nodes ().get (2));
 		n4.createAndSetEdge (n4.nodes ().get (2), n4.nodes ().get (0));
 		n4.createAndSetEdge (n4.nodes ().get (2), n4.nodes ().get (1));
 		n4.createAndSetEdge (n4.nodes ().get (0), n4.nodes ().get (1));
 		IdentifiableIntegerMapping<Edge> cost4 =
-				new IdentifiableIntegerMapping<Edge> (4);
+				new IdentifiableIntegerMapping<> (4);
 		cost4.set (n4.edges ().get (0), 2);
 		cost4.set (n4.edges ().get (1), 0);
 		cost4.set (n4.edges ().get (2), 2);

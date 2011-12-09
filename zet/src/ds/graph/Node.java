@@ -20,6 +20,7 @@
 
 package ds.graph;
 
+import ds.mapping.Identifiable;
 import com.thoughtworks.xstream.annotations.XStreamAlias;
 import com.thoughtworks.xstream.annotations.XStreamAsAttribute;
 

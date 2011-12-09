@@ -9,8 +9,8 @@ import de.tu_berlin.math.coga.common.algorithm.Algorithm;
 import de.tu_berlin.math.coga.common.localization.DefaultLoc;
 import de.tu_berlin.math.coga.zet.NetworkFlowModel;
 import ds.graph.IdentifiableCollection;
-import ds.graph.IdentifiableIntegerMapping;
-import ds.graph.Network;
+import ds.mapping.IdentifiableIntegerMapping;
+import ds.graph.network.AbstractNetwork;
 import ds.graph.Node;
 import ds.z.ConcreteAssignment;
 import ds.z.Person;
@@ -103,7 +103,7 @@ public class GraphAssignmentConverter extends Algorithm<ConcreteAssignment, Netw
 	 * @param model the {@code NetworkFlowModel} object.
 	 */
 	private void checkSupplies( NetworkFlowModel model ) {
-		Network network = model.getNetwork();
+		AbstractNetwork network = model.getNetwork();
 		IdentifiableIntegerMapping<Node> supplies = model.getCurrentAssignment();
 
 		GraphInstanceChecker checker = new GraphInstanceChecker( network, supplies );

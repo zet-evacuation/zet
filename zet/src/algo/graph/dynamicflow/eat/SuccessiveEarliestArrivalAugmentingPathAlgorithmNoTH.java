@@ -17,8 +17,8 @@ package algo.graph.dynamicflow.eat;
 
 import algo.graph.dynamicflow.*;
 import ds.graph.Edge;
-import ds.graph.IdentifiableIntegerMapping;
-import ds.graph.Network;
+import ds.mapping.IdentifiableIntegerMapping;
+import ds.graph.network.AbstractNetwork;
 import ds.graph.Node;
 
 
@@ -30,7 +30,7 @@ import ds.graph.Node;
 public class SuccessiveEarliestArrivalAugmentingPathAlgorithmNoTH extends
 		Transshipment<SuccessiveEarliestArrivalAugmentingPathAlgorithmTH> {
 
-	public SuccessiveEarliestArrivalAugmentingPathAlgorithmNoTH(Network network,
+	public SuccessiveEarliestArrivalAugmentingPathAlgorithmNoTH(AbstractNetwork network,
 			IdentifiableIntegerMapping<Edge> transitTimes,
 			IdentifiableIntegerMapping<Edge> edgeCapacities,
 			IdentifiableIntegerMapping<Node> nodeCapacities,

@@ -2,21 +2,20 @@
  * LimitedMaxFlowOverTime.java
  * Created: 02.12.2011, 14:36:51
  */
-package algo.graph.dynamicflow.maxflow;
+package algo.graph.dynamicflow.eat;
 
-import algo.graph.staticflow.maxflow.EdmondsKarp;
+import algo.graph.dynamicflow.maxflow.MaximumFlowOverTimeProblem;
 import algo.graph.staticflow.maxflow.PushRelabel;
 import algo.graph.staticflow.maxflow.PushRelabelHighestLabel;
-import algo.graph.staticflow.maxflow.PushRelabelHighestLabelGlobalRelabelling;
-import algo.graph.staticflow.maxflow.PushRelabelHighestLabelNeu;
 import de.tu_berlin.math.coga.common.util.Formatter;
 import de.tu_berlin.math.coga.common.util.Formatter.TimeUnits;
 import ds.graph.Edge;
-import ds.graph.IdentifiableIntegerMapping;
-import ds.graph.Network;
+import ds.mapping.IdentifiableIntegerMapping;
+import ds.graph.network.AbstractNetwork;
 import ds.graph.Node;
 import ds.graph.TimeExpandedNetwork;
 import ds.graph.flow.MaximumFlow;
+import ds.graph.network.Network;
 import ds.graph.problem.MaximumFlowProblem;
 import java.util.ArrayList;
 
@@ -49,7 +48,7 @@ public class LimitedMaxFlowOverTime {
 		MaximumFlowProblem maximumFlowProblem = new MaximumFlowProblem( ten, ten.capacities(), ten.singleSource(), ten.singleSink() );
 
 		//PushRelabel hipr = new PushRelabelHighestLabelGlobalRelabelling();
-		PushRelabel hipr = new PushRelabelHighestLabelNeu();
+		PushRelabel hipr = new PushRelabelHighestLabel();
 		//PushRelabel hipr = new PushRelabelHighestLabel();
 		
 //		EdmondsKarp ek = new EdmondsKarp();
@@ -80,7 +79,7 @@ public class LimitedMaxFlowOverTime {
 	
 	public static void main( String[] args ) {
 		
-		Network n = new Network(4, 3);
+		AbstractNetwork n = new Network(4, 3);
 		
 		int timeHorizon = 3;
 		

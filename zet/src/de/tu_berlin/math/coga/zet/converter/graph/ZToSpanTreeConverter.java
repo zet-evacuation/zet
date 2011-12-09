@@ -10,7 +10,7 @@ import ds.z.BuildingPlan;
 import ds.graph.problem.MinSpanningTreeProblem;
 import algo.graph.reduction.PrimsAlgo;
 import de.tu_berlin.math.coga.common.util.Level;
-import ds.graph.DynamicNetwork;
+import ds.graph.network.DynamicNetwork;
 import ds.graph.MinSpanningTree;
 import ds.graph.Edge;
 import ds.graph.Node;

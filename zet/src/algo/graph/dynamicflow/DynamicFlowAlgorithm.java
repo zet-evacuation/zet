@@ -21,8 +21,8 @@ import ds.graph.GraphLocalization;
 import ds.graph.flow.PathBasedFlowOverTime;
 import ds.graph.Edge;
 import ds.graph.flow.EdgeBasedFlowOverTime;
-import ds.graph.IdentifiableIntegerMapping;
-import ds.graph.Network;
+import ds.mapping.IdentifiableIntegerMapping;
+import ds.graph.network.AbstractNetwork;
 
 /**
  * This class represents a dynamic flow algorithm.
@@ -37,7 +37,7 @@ public abstract class DynamicFlowAlgorithm /*extends GraphAlgorithm*/ extends Al
 	/** Edge based result flow. */
 	protected EdgeBasedFlowOverTime resultFlowEdgeBased = null;
 	/** The network used by the flow algorithm. */
-	protected Network network = null;
+	protected AbstractNetwork network = null;
 	/** The transit times in the network. */
 	protected IdentifiableIntegerMapping<Edge> transitTimes;
 	/** The capacities of the edges in the network. */
@@ -50,7 +50,7 @@ public abstract class DynamicFlowAlgorithm /*extends GraphAlgorithm*/ extends Al
 	 * @param transitTimes The transit times the dynamic flow algorithm shall use.
 	 * @param capacities The edge capacities the dynamic flow algorithm shall use.
 	 */
-	public DynamicFlowAlgorithm(Network network, IdentifiableIntegerMapping<Edge> transitTimes, IdentifiableIntegerMapping<Edge> capacities){
+	public DynamicFlowAlgorithm(AbstractNetwork network, IdentifiableIntegerMapping<Edge> transitTimes, IdentifiableIntegerMapping<Edge> capacities){
 		this.network = network;
 		this.transitTimes = transitTimes;
 		this.edgeCapacities = capacities;

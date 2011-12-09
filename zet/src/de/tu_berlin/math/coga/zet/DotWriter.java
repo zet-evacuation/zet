@@ -7,8 +7,8 @@ package de.tu_berlin.math.coga.zet;
 import algo.graph.dynamicflow.eat.EarliestArrivalFlowProblem;
 import ds.graph.Edge;
 import ds.graph.IdentifiableCollection;
-import ds.graph.IdentifiableIntegerMapping;
-import ds.graph.Network;
+import ds.mapping.IdentifiableIntegerMapping;
+import ds.graph.network.AbstractNetwork;
 import ds.graph.Node;
 import java.io.BufferedWriter;
 import java.io.File;
@@ -23,7 +23,7 @@ import java.util.List;
  * @author Jan-Philipp Kappmeier
  */
 public class DotWriter {
-	public static void writeDot( String original, String filename, Network network ) throws FileNotFoundException, IOException {
+	public static void writeDot( String original, String filename, AbstractNetwork network ) throws FileNotFoundException, IOException {
 		BufferedWriter writer = new BufferedWriter( new FileWriter( new File( filename ) ) );
 
 //		digraph G {
@@ -55,7 +55,7 @@ public class DotWriter {
 		writer.close();
 	}
 
-	public static void writeDotWithoutSuperSink( String original, String filename, Network network, Node sink ) throws FileNotFoundException, IOException {
+	public static void writeDotWithoutSuperSink( String original, String filename, AbstractNetwork network, Node sink ) throws FileNotFoundException, IOException {
 		BufferedWriter writer = new BufferedWriter( new FileWriter( new File( filename ) ) );
 
 		writer.write( "/* Written by ZET DotWriter */\n" );

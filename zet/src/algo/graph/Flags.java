@@ -33,7 +33,6 @@ public class Flags {
     public final static boolean MARTIN = false;
     public final static boolean MEL = false;
     public final static boolean MEL_LONG = MEL && false;
-    public final static boolean GORDON = false;   // Switch some more informations as output for maxFlowOverTime on or off.
     public final static boolean TIMON = false;    //****************************************************************************
     // General Debug Flags
     public final static boolean TEMFOT = MARTIN && false;

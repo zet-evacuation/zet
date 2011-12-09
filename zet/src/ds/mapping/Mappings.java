@@ -18,7 +18,11 @@
  *
  */
 
-package ds.graph;
+package ds.mapping;
+
+import ds.mapping.Identifiable;
+import ds.mapping.IdentifiableObjectMapping;
+import ds.mapping.IdentifiableIntegerMapping;
 
 /**
  *
@@ -60,6 +64,9 @@ public class Mappings {
         if (!isEmpty) result.delete(result.length()-2, result.length());
         result.append("]");
         return result.toString();
-    }    
+    }
+
+	/** Private constructor for utility class */
+	private Mappings() {}
 
 }

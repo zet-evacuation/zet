@@ -24,8 +24,8 @@ import algo.graph.util.PathComposition;
 import ds.graph.flow.PathBasedFlowOverTime;
 import ds.graph.flow.FlowOverTimePath;
 import ds.graph.Edge;
-import ds.graph.IdentifiableIntegerMapping;
-import ds.graph.Network;
+import ds.mapping.IdentifiableIntegerMapping;
+import ds.graph.network.AbstractNetwork;
 import de.tu_berlin.math.coga.zet.NetworkFlowModel;
 import ds.graph.Node;
 import ds.graph.flow.FlowOverTimeEdge;
@@ -43,7 +43,7 @@ public class GraphData extends Data{
     private int[][] distances;
     private IdentifiableIntegerMapping<Edge> edgeCapacities;
     private Map<Edge, IntegerDoubleMapping> edgeFlows;
-    private Network network;
+    private AbstractNetwork network;
     private Iterable<Node> sinks;
     private IdentifiableIntegerMapping<Node> nodeCapacities;
     private PathBasedFlowOverTime pathFlows;
@@ -60,7 +60,7 @@ public class GraphData extends Data{
                 pathFlows);
     }
 
-    public GraphData(Network network, IdentifiableIntegerMapping<Edge> edgeCapacities,
+    public GraphData(AbstractNetwork network, IdentifiableIntegerMapping<Edge> edgeCapacities,
             IdentifiableIntegerMapping<Node> nodeCapacities,
             IdentifiableIntegerMapping<Edge> transitTimes,
             IdentifiableIntegerMapping<Node> supplies,
@@ -130,7 +130,7 @@ public class GraphData extends Data{
         return edgeFlows.get(edge);
     }
 
-    public Network getNetwork() {
+    public AbstractNetwork getNetwork() {
         return network;
     }
 

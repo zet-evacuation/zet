@@ -21,7 +21,7 @@ package ds.graph.flow;
 
 import ds.graph.DynamicPath;
 import ds.graph.Edge;
-import ds.graph.IdentifiableIntegerMapping;
+import ds.mapping.IdentifiableIntegerMapping;
 import ds.graph.Path;
 
 /**

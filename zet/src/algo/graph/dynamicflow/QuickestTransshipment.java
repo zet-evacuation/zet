@@ -16,8 +16,8 @@
 package algo.graph.dynamicflow;
 
 import ds.graph.Edge;
-import ds.graph.IdentifiableIntegerMapping;
-import ds.graph.Network;
+import ds.mapping.IdentifiableIntegerMapping;
+import ds.graph.network.AbstractNetwork;
 import ds.graph.Node;
 
 /**
@@ -40,7 +40,7 @@ public class QuickestTransshipment extends Transshipment<DynamicTransshipment> {
 	/** 
 	 * Creates a new quickest transshipment algorithm instance.
 	 */
-	public QuickestTransshipment(Network network, IdentifiableIntegerMapping<Edge> transitTimes, IdentifiableIntegerMapping<Edge> capacities, IdentifiableIntegerMapping<Node> supplies){
+	public QuickestTransshipment(AbstractNetwork network, IdentifiableIntegerMapping<Edge> transitTimes, IdentifiableIntegerMapping<Edge> capacities, IdentifiableIntegerMapping<Node> supplies){
 		super(network, transitTimes, capacities, null, supplies, DynamicTransshipment.class, null);
 	}
 	
@@ -53,7 +53,7 @@ public class QuickestTransshipment extends Transshipment<DynamicTransshipment> {
 	 * @param supplies Supplies and demands of all nodes in the network.
      * @return A quickest transshipment fulfilling all supplies and demands.
      *//*
-	public static DynamicFlow compute(Network network,
+	public static DynamicFlow compute(AbstractNetwork network,
 			IdentifiableIntegerMapping<Edge> transitTimes,
 			IdentifiableIntegerMapping<Edge> edgeCapacities,
 			IdentifiableIntegerMapping<Node> supplies) {
@@ -71,7 +71,7 @@ public class QuickestTransshipment extends Transshipment<DynamicTransshipment> {
 	 * @param supplies Supplies and demands of all nodes in the network.
      * @return A quickest transshipment fulfilling all supplies and demands.
      *//*
-	public DynamicFlow computeNonStatic(Network network,
+	public DynamicFlow computeNonStatic(AbstractNetwork network,
 			IdentifiableIntegerMapping<Edge> transitTimes,
 			IdentifiableIntegerMapping<Edge> edgeCapacities,
 			IdentifiableIntegerMapping<Node> supplies) {

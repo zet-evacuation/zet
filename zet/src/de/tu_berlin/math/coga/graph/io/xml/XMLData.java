@@ -6,9 +6,9 @@ package de.tu_berlin.math.coga.graph.io.xml;
 
 import de.tu_berlin.math.coga.zet.viewer.NodePositionMapping;
 import ds.graph.Edge;
-import ds.graph.IdentifiableDoubleMapping;
-import ds.graph.IdentifiableIntegerMapping;
-import ds.graph.Network;
+import ds.mapping.IdentifiableDoubleMapping;
+import ds.mapping.IdentifiableIntegerMapping;
+import ds.graph.network.AbstractNetwork;
 import ds.graph.Node;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
@@ -33,7 +33,7 @@ public class XMLData {
 	ArrayList<Node> sinks;
 	LinkedHashMap<String, Node> nodes = new LinkedHashMap<String, Node>();
 	LinkedHashMap<String, Edge> edges = new LinkedHashMap<String, Edge>();
-	Network network;
+	AbstractNetwork network;
 	NodePositionMapping nodePositionMapping = new NodePositionMapping();
 	boolean doubleEdges = false;
 	double scaleVal;
@@ -96,7 +96,7 @@ public class XMLData {
 		return transitTimesIntegral;
 	}
 
-	public Network getNetwork() {
+	public AbstractNetwork getNetwork() {
 		return network;
 	}
 

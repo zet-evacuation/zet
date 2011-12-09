@@ -11,13 +11,13 @@ import ds.graph.Node;
 import java.util.Random;
 import ds.graph.Edge;
 import de.tu_berlin.math.coga.zet.NetworkFlowModel;
-import ds.graph.DynamicNetwork;
+import ds.graph.network.DynamicNetwork;
 import ds.graph.Graph;
 import ds.graph.IdentifiableCollection;
-import ds.graph.IdentifiableIntegerMapping;
-import ds.graph.IdentifiableObjectMapping;
-import ds.graph.ListSequence;
-import ds.graph.MinHeap;
+import ds.mapping.IdentifiableIntegerMapping;
+import ds.mapping.IdentifiableObjectMapping;
+import ds.collection.ListSequence;
+import de.tu_berlin.math.coga.datastructure.priorityQueue.MinHeap;
 
 
 /**

@@ -7,6 +7,7 @@ package ds.graph;
 
 
 
+import ds.mapping.Identifiable;
 import java.util.Iterator;
 import java.util.Random;
 import java.util.RandomAccess;

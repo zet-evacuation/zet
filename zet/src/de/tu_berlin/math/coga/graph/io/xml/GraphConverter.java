@@ -10,9 +10,10 @@ import com.thoughtworks.xstream.converters.UnmarshallingContext;
 import com.thoughtworks.xstream.io.HierarchicalStreamReader;
 import com.thoughtworks.xstream.io.HierarchicalStreamWriter;
 import ds.graph.Edge;
-import ds.graph.IdentifiableDoubleMapping;
-import ds.graph.Network;
+import ds.mapping.IdentifiableDoubleMapping;
+import ds.graph.network.AbstractNetwork;
 import ds.graph.Node;
+import ds.graph.network.Network;
 import java.util.Iterator;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -36,16 +37,16 @@ public class GraphConverter implements Converter {
 	/**
 	 * {@inheritDoc }
 	 * @param type the type of the class that is to be converted
-	 * @return {@code true} if the instance is of the type {@link Network}
+	 * @return {@code true} if the instance is of the type {@link AbstractNetwork}
 	 */
 	@Override
 	public boolean canConvert( Class type ) {
-		return type.equals( Network.class );
+		return type.equals( AbstractNetwork.class );
 	}
 
 	@Override
 	public void marshal( Object source, HierarchicalStreamWriter writer, MarshallingContext context ) {
-		Network graph = (Network) source;
+		AbstractNetwork graph = (AbstractNetwork) source;
 		this.writer = writer;
 		// automatically done before. either by xstream or by GraphViewConverter
 		//writer.startNode("graph");
@@ -87,7 +88,7 @@ public class GraphConverter implements Converter {
 
 	@Override
 	public Object unmarshal( HierarchicalStreamReader reader, UnmarshallingContext context ) {
-		Network graph = new Network( 0, 0 );
+		AbstractNetwork graph = new Network( 0, 0 );
 		int nid = 0;
 		int eid = 0;
 		this.reader = reader;
@@ -151,7 +152,7 @@ public class GraphConverter implements Converter {
 		return graph;
 	}
 
-	protected Node readNode( Network graph, int nid ) {
+	protected Node readNode( AbstractNetwork graph, int nid ) {
 		Node node;
 		String id = null;
 		String balance = "0";
@@ -180,7 +181,7 @@ public class GraphConverter implements Converter {
 		return node;
 	}
 
-	protected void readSink( Network graph, int nid ) {
+	protected void readSink( AbstractNetwork graph, int nid ) {
 		Node node = readNode( graph, nid );
 		//if( xmlData.suppliesIntegral.get( node ) > 0 )
 		if( xmlData.supplies.get( node ) > 0 )
@@ -191,7 +192,7 @@ public class GraphConverter implements Converter {
 			xmlData.sinks.add( node );
 	}
 
-	protected void readSource( Network graph, int nid ) {
+	protected void readSource( AbstractNetwork graph, int nid ) {
 		Node node = readNode( graph, nid );
 		//if( xmlData.suppliesIntegral.get( node ) < 0 )
 		if( xmlData.supplies.get( node ) < 0 )
@@ -202,7 +203,7 @@ public class GraphConverter implements Converter {
 			xmlData.sources.add( node );
 	}
 
-	protected void readEdge( Network graph, int eid ) {
+	protected void readEdge( AbstractNetwork graph, int eid ) {
 		String id = null;
 		String source = null;
 		String target = null;

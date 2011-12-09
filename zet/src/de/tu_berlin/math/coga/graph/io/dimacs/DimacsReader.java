@@ -6,9 +6,6 @@ package de.tu_berlin.math.coga.graph.io.dimacs;
 
 import algo.graph.staticflow.maxflow.PushRelabel;
 import algo.graph.staticflow.maxflow.PushRelabelHighestLabel;
-import algo.graph.staticflow.maxflow.PushRelabelHighestLabelGlobalGapRelabelling;
-import algo.graph.staticflow.maxflow.PushRelabelHighestLabelGlobalRelabelling;
-import algo.graph.staticflow.maxflow.PushRelabelHighestLabelNeu;
 import de.tu_berlin.math.coga.common.algorithm.AlgorithmEvent;
 import de.tu_berlin.math.coga.common.algorithm.AlgorithmListener;
 import de.tu_berlin.math.coga.common.algorithm.AlgorithmProgressEvent;
@@ -17,10 +14,11 @@ import de.tu_berlin.math.coga.common.util.Formatter.BinaryUnits;
 import de.tu_berlin.math.coga.common.util.Formatter.TimeUnits;
 import de.tu_berlin.math.coga.graph.generator.RMFGEN;
 import de.tu_berlin.math.coga.rndutils.distribution.discrete.UniformDistribution;
-import ds.graph.Edge;import ds.graph.IdentifiableIntegerMapping;
-import ds.graph.Network;
+import ds.graph.Edge;import ds.mapping.IdentifiableIntegerMapping;
+import ds.graph.network.AbstractNetwork;
 import ds.graph.Node;
 import ds.graph.flow.MaximumFlow;
+import ds.graph.network.Network;
 import ds.graph.problem.MaximumFlowProblem;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
@@ -37,7 +35,7 @@ import java.util.StringTokenizer;
 public class DimacsReader implements AlgorithmListener {
 	BufferedReader reader;
 	BufferedWriter writer;
-	protected Network network;
+	protected AbstractNetwork network;
 	ArrayList<Node> vertices = null;
 	String filename = "network.max";
 	boolean simpleTerminals = false;
@@ -143,7 +141,7 @@ public class DimacsReader implements AlgorithmListener {
 			throw new IllegalArgumentException( "No max flow file" );
 		nodes = Integer.parseInt( st.nextToken() );
 		edges = Integer.parseInt( st.nextToken() );
-		//System.out.print( "Create Network..." );
+		//System.out.print( "Create AbstractNetwork..." );
 
 
 		long memStart = rt.totalMemory() - rt.freeMemory();
@@ -228,7 +226,7 @@ public class DimacsReader implements AlgorithmListener {
 		mfp = new MaximumFlowProblem( network, capacities, network.getNode( source-1 ), network.getNode( sink-1 ) );
 	}
 
-	public Network getNetwork() {
+	public AbstractNetwork getNetwork() {
 		return network;
 	}
 
@@ -370,7 +368,7 @@ public class DimacsReader implements AlgorithmListener {
 		gen.generateCompleteGraph( 3,3 ); // smallest example where algorithm fails is 4,6
 		System.out.println( "RMFGEN Knoten: " + gen.getNodeCount() + ", Kanten: " + gen.getEdgeCount() );
 
-		Network network;
+		AbstractNetwork network;
 		//network = dl.getNetwork();
 		network = gen.getGraph();
 
@@ -435,7 +433,7 @@ public class DimacsReader implements AlgorithmListener {
 		//PushRelabel hipr = new PushRelabelHighestLabelGlobalGapRelabelling();
 		//PushRelabel hipr = new PushRelabelHighestLabelGlobalRelabelling();
 		//PushRelabel hipr = new PushRelabelHighestLabel();
-		PushRelabel hipr = new PushRelabelHighestLabelNeu();
+		PushRelabel hipr = new PushRelabelHighestLabel();
 		hipr.setProblem( mfp );
 		start = System.nanoTime();
 		hipr.run();
@@ -458,7 +456,7 @@ public class DimacsReader implements AlgorithmListener {
 //		System.out.println();
 //		System.out.println( "Start HIPR neu" );
 //		//PushRelabel hipr = new PushRelabelHighestLabelGlobalGapRelabelling();
-//		//hipr = new PushRelabelHighestLabelNeu();
+//		//hipr = new PushRelabelHighestLabel();
 //		hipr = new PushRelabelHighestLabelGlobalGapRelabelling();
 //		hipr.setProblem( mfp );
 //		start = System.nanoTime();

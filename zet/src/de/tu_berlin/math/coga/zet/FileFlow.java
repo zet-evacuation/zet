@@ -17,10 +17,11 @@ import de.tu_berlin.math.coga.common.util.Formatter;
 import de.tu_berlin.math.coga.common.util.Formatter.TimeUnits;
 import ds.graph.Edge;
 import ds.graph.IdentifiableCollection;
-import ds.graph.IdentifiableIntegerMapping;
-import ds.graph.Network;
+import ds.mapping.IdentifiableIntegerMapping;
+import ds.graph.network.AbstractNetwork;
 import ds.graph.Node;
 import ds.graph.flow.PathBasedFlowOverTime;
+import ds.graph.network.Network;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
@@ -129,14 +130,14 @@ public class FileFlow implements AlgorithmListener {
 		System.out.println( "Erzeuge Netzwerk..." );
 
 
-		Network network = new Network( nodeCount, edgeCount );
+		AbstractNetwork network = new Network( nodeCount, edgeCount );
 		for( int i = 0; i < edgeCount; ++i )
 			network.createAndSetEdge( network.getNode( nodeMap.get( edge_start.get( i ) ) ), network.getNode( nodeMap.get( edge_end.get( i ) ) ) );
 		Long t;
-		IdentifiableIntegerMapping<Edge> edgeCapacities = new IdentifiableIntegerMapping<Edge>( network.edges() );
-		IdentifiableIntegerMapping<Node> nodeCapacities = new IdentifiableIntegerMapping<Node>( network.nodes() );
-		IdentifiableIntegerMapping<Edge> transitTimes = new IdentifiableIntegerMapping<Edge>( network.edges() );
-		IdentifiableIntegerMapping<Node> currentAssignment = new IdentifiableIntegerMapping<Node>( network.nodes() );
+		IdentifiableIntegerMapping<Edge> edgeCapacities = new IdentifiableIntegerMapping<>( network.edges() );
+		IdentifiableIntegerMapping<Node> nodeCapacities = new IdentifiableIntegerMapping<>( network.nodes() );
+		IdentifiableIntegerMapping<Edge> transitTimes = new IdentifiableIntegerMapping<>( network.edges() );
+		IdentifiableIntegerMapping<Node> currentAssignment = new IdentifiableIntegerMapping<>( network.nodes() );
 
 		for( int i = 0; i < edgeCount; ++i ) {
 			edgeCapacities.set( network.getEdge( network.getNode( nodeMap.get( edge_start.get( i ) ) ), network.getNode( nodeMap.get( edge_end.get( i ) ) ) ), edge_cap.get( i ) );

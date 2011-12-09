@@ -21,7 +21,7 @@ package ds.graph.flow;
 
 import ds.graph.problem.TransshipmentProblem;
 import ds.graph.Edge;
-import ds.graph.IdentifiableIntegerMapping;
+import ds.mapping.IdentifiableIntegerMapping;
 import ds.graph.Node;
 import java.util.LinkedList;
 import java.util.List;
