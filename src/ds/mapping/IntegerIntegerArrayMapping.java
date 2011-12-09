@@ -18,9 +18,9 @@
  *
  */
 
-package ds.graph;
+package ds.mapping;
 
-import ds.graph.IntegerIntegerArrayMapping.TimeIntegerPair;
+import ds.mapping.IntegerIntegerArrayMapping.TimeIntegerPair;
 import java.util.Arrays;
 
 /**

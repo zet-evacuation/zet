@@ -17,8 +17,8 @@ package algo.graph.dynamicflow.eat;
 
 import algo.graph.dynamicflow.*;
 import ds.graph.Edge;
-import ds.graph.IdentifiableIntegerMapping;
-import ds.graph.Network;
+import ds.mapping.IdentifiableIntegerMapping;
+import ds.graph.network.AbstractNetwork;
 import ds.graph.Node;
 import ds.graph.TimeExpandedNetwork;
 import java.util.LinkedList;
@@ -41,7 +41,7 @@ public class SuccessiveEarliestArrivalAugmentingPathAlgorithmTH extends
 	 * @param supplies The supplies of all nodes in the network.
 	 * @param timeHorizon The time horizon to test.
 	 */
-	public SuccessiveEarliestArrivalAugmentingPathAlgorithmTH(Network network, IdentifiableIntegerMapping<Edge> transitTimes, IdentifiableIntegerMapping<Edge> edgeCapacities, IdentifiableIntegerMapping<Node> nodeCapacities, IdentifiableIntegerMapping<Node> supplies, Integer timeHorizon){
+	public SuccessiveEarliestArrivalAugmentingPathAlgorithmTH(AbstractNetwork network, IdentifiableIntegerMapping<Edge> transitTimes, IdentifiableIntegerMapping<Edge> edgeCapacities, IdentifiableIntegerMapping<Node> nodeCapacities, IdentifiableIntegerMapping<Node> supplies, Integer timeHorizon){
 		super(network, transitTimes, edgeCapacities, nodeCapacities, supplies, timeHorizon,"Successive Earliest Arrival Augmenting Path Algorithm TH");
 	}
 	

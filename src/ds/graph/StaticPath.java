@@ -20,6 +20,7 @@
 
 package ds.graph;
 
+import ds.collection.ListSequence;
 import java.util.Iterator;
 
 /**

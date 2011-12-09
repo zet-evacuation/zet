@@ -18,8 +18,10 @@
  * 
  */
 
-package ds.graph;
+package ds.collection;
 
+import ds.graph.IdentifiableCollection;
+import ds.mapping.Identifiable;
 import java.util.Iterator;
 
 /**

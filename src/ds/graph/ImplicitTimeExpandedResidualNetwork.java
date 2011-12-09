@@ -19,9 +19,13 @@
  */
 package ds.graph;
 
+import ds.mapping.IdentifiableObjectMapping;
+import ds.mapping.IdentifiableIntegerMapping;
+import ds.mapping.IntegerIntegerMapping;
 import algo.graph.dynamicflow.eat.EarliestArrivalFlowProblem;
 import ds.graph.flow.EarliestArrivalAugmentingPath;
 import ds.graph.flow.EarliestArrivalAugmentingPath.NodeTimePair;
+import ds.graph.network.Network;
 
 /**
  * A class representing an implicit time-expanded residual network, i.e. a 

@@ -17,8 +17,14 @@
  * DynamicGraph.java
  *
  */
-package ds.graph;
+package ds.graph.network;
 
+import ds.graph.Edge;
+import ds.graph.Graph;
+import ds.graph.GraphLocalization;
+import ds.graph.IdentifiableCollection;
+import ds.collection.ListSequence;
+import ds.graph.Node;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
@@ -36,10 +42,10 @@ public class DynamicNetwork implements Graph {
 	protected transient Map<Node, ListSequence<Edge>> outgoingEdges;
 
 	public DynamicNetwork() {
-		nodes = new ListSequence<Node>();
-		edges = new ListSequence<Edge>();
-		incomingEdges = new HashMap<Node, ListSequence<Edge>>();
-		outgoingEdges = new HashMap<Node, ListSequence<Edge>>();
+		nodes = new ListSequence<>();
+		edges = new ListSequence<>();
+		incomingEdges = new HashMap<>();
+		outgoingEdges = new HashMap<>();
 	}
 
 	public DynamicNetwork( DynamicNetwork graph ) {
@@ -54,7 +60,7 @@ public class DynamicNetwork implements Graph {
 		setEdges( edges );
 	}
 
-	public DynamicNetwork( Network network ) {
+	public DynamicNetwork( AbstractNetwork network ) {
 		this();
 		setNodes( network.nodes() );
 		setEdges( network.edges() );
@@ -353,7 +359,7 @@ public class DynamicNetwork implements Graph {
 		throw new UnsupportedOperationException( GraphLocalization.getSingleton().getString( "ds.graph.NotSupportedException" ) );
 	}
 
-	public Network getAsStaticNetwork() {
+	public AbstractNetwork getAsStaticNetwork() {
 		Network network = new Network( numberOfNodes(), numberOfEdges() );
 		network.setNodes( nodes );
 		network.setEdges( edges );

@@ -9,7 +9,7 @@ import de.tu_berlin.math.coga.zet.converter.RasterContainerCreator;
 import ds.z.BuildingPlan;
 import ds.graph.problem.MinSpanningTreeProblem;
 import algo.graph.reduction.PrimsAlgo;
-import ds.graph.DynamicNetwork;
+import ds.graph.network.DynamicNetwork;
 import ds.graph.MinSpanningTree;
 import ds.graph.Edge;
 import ds.graph.Node;
@@ -17,7 +17,7 @@ import ds.graph.IdentifiableCollection;
 import ds.graph.NodeRectangle;
 import algo.graph.reduction.GreedyAlgo;
 import algo.graph.shortestpath.APSPAlgo;
-import ds.graph.ListSequence;
+import ds.collection.ListSequence;
 /**
  *
  * @author schwengf

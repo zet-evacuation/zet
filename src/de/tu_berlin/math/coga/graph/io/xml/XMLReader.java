@@ -8,8 +8,8 @@ import algo.graph.dynamicflow.eat.EarliestArrivalFlowProblem;
 import com.thoughtworks.xstream.XStream;
 import com.thoughtworks.xstream.io.xml.DomDriver;
 import ds.graph.Edge;
-import ds.graph.IdentifiableIntegerMapping;
-import ds.graph.Network;
+import ds.mapping.IdentifiableIntegerMapping;
+import ds.graph.network.AbstractNetwork;
 import ds.graph.Node;
 import io.FileTypeException;
 import java.io.BufferedReader;
@@ -89,12 +89,12 @@ public class XMLReader {
 		return result;
 	}
 
-	public Network readGraph() throws FileNotFoundException, IOException {
+	public AbstractNetwork readGraph() throws FileNotFoundException, IOException {
 		BufferedReader reader = null;
-		Network result = null;
+		AbstractNetwork result = null;
 		try {
 			reader = new BufferedReader( new FileReader( file ) );
-			xstream.alias( "graph", Network.class );
+			xstream.alias( "graph", AbstractNetwork.class );
 			xstream.setMode( XStream.NO_REFERENCES );
 			xstream.registerConverter( new ColorConverter() );
 			xstream.registerConverter( new FontConverter() );
@@ -102,7 +102,7 @@ public class XMLReader {
 			xstream.registerConverter( new GraphConverter( xmlData ) );
 			//xstream.registerConverter( new FlowVisualisationConverter() );
 			//xstream.registerConverter(new NodeShapeConverter());
-			result = (Network)xstream.fromXML( reader );
+			result = (AbstractNetwork)xstream.fromXML( reader );
 		} finally {
 			if( reader != null )
 				reader.close();
@@ -136,7 +136,7 @@ public class XMLReader {
 		EarliestArrivalFlowProblem eafp = null;
 		try {
 			reader = new BufferedReader( new FileReader( file ) );
-			xstream.alias( "graph", Network.class );
+			xstream.alias( "graph", AbstractNetwork.class );
 			xstream.alias( "graphLayout", GraphView.class );
 			xstream.setMode( XStream.NO_REFERENCES );
 			xstream.registerConverter( new ColorConverter() );

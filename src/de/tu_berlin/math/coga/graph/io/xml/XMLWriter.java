@@ -8,9 +8,9 @@ import algo.graph.dynamicflow.eat.EarliestArrivalFlowProblem;
 import com.thoughtworks.xstream.XStream;
 //import fv.gui.view.FlowVisualisation;
 import ds.graph.Edge;
-import ds.graph.IdentifiableDoubleMapping;
-import ds.graph.IdentifiableIntegerMapping;
-import ds.graph.Network;
+import ds.mapping.IdentifiableDoubleMapping;
+import ds.mapping.IdentifiableIntegerMapping;
+import ds.graph.network.AbstractNetwork;
 import ds.graph.Node;
 import java.io.BufferedWriter;
 import java.io.File;
@@ -46,12 +46,12 @@ public class XMLWriter {
 	 * @param graph the graph
 	 * @throws IOException if some error reading the file occurs
 	 */
-	public void writeGraph( Network graph ) throws IOException {
+	public void writeGraph( AbstractNetwork graph ) throws IOException {
 		BufferedWriter writer = null;
 		xmlData.network = graph;
 		try {
 			writer = new BufferedWriter( new FileWriter( file ) );
-			xstream.alias( "graph", Network.class );
+			xstream.alias( "graph", AbstractNetwork.class );
 			xstream.setMode( XStream.NO_REFERENCES );
 			//xstream.alias("flowVisualisation",FlowVisualisation.class);
 			xstream.registerConverter( new ColorConverter() );
@@ -68,7 +68,7 @@ public class XMLWriter {
 		}
 	}
 
-		public void writeGraph( Network graph, IdentifiableIntegerMapping<Edge> edgeCapacities, IdentifiableIntegerMapping<Edge> edgeCosts, IdentifiableIntegerMapping<Node> nodeSupplies ) throws IOException {
+		public void writeGraph( AbstractNetwork graph, IdentifiableIntegerMapping<Edge> edgeCapacities, IdentifiableIntegerMapping<Edge> edgeCosts, IdentifiableIntegerMapping<Node> nodeSupplies ) throws IOException {
 		BufferedWriter writer = null;
 		xmlData.network = graph;
 		xmlData.edgeCapacitiesIntegral = edgeCapacities;
@@ -76,7 +76,7 @@ public class XMLWriter {
 		xmlData.suppliesIntegral = nodeSupplies;
 		try {
 			writer = new BufferedWriter( new FileWriter( file ) );
-			xstream.alias( "graph", Network.class );
+			xstream.alias( "graph", AbstractNetwork.class );
 			xstream.setMode( XStream.NO_REFERENCES );
 			//xstream.alias("flowVisualisation",FlowVisualisation.class);
 			xstream.registerConverter( new ColorConverter() );
@@ -108,7 +108,7 @@ public class XMLWriter {
 
 		try {
 			writer = new BufferedWriter( new FileWriter( file ) );
-			xstream.alias( "graph", Network.class );
+			xstream.alias( "graph", AbstractNetwork.class );
 			xstream.setMode( XStream.NO_REFERENCES );
 			//xstream.alias("flowVisualisation",FlowVisualisation.class);
 			xstream.registerConverter( new ColorConverter() );
@@ -141,7 +141,7 @@ public class XMLWriter {
 
 		try {
 			writer = new BufferedWriter( new FileWriter( file ) );
-			xstream.alias( "graph", Network.class );
+			xstream.alias( "graph", AbstractNetwork.class );
 			xstream.alias( "graphLayout", GraphView.class );
 			xstream.setMode( XStream.NO_REFERENCES );
 			//xstream.alias("flowVisualisation",FlowVisualisation.class);

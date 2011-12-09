@@ -29,8 +29,8 @@ import ds.graph.problem.MaximumFlowProblem;
 import ds.graph.Edge;
 import ds.graph.Forest;
 import ds.graph.IdentifiableCollection;
-import ds.graph.IdentifiableIntegerMapping;
-import ds.graph.Network;
+import ds.mapping.IdentifiableIntegerMapping;
+import ds.graph.network.AbstractNetwork;
 import de.tu_berlin.math.coga.zet.NetworkFlowModel;
 import ds.graph.Node;
 import ds.graph.flow.FlowOverTime;
@@ -40,6 +40,7 @@ import ds.graph.flow.PathBasedFlowOverTime;
 import java.util.LinkedList;
 import java.util.List;
 import de.tu_berlin.math.coga.common.algorithm.Algorithm;
+import ds.graph.network.Network;
 
 /**
  *
@@ -51,7 +52,7 @@ public class ReducedEarliestArrivalTransshipmentExitAssignment extends Algorithm
     protected ExitAssignment runAlgorithm(NetworkFlowModel model) {
         ExitAssignment solution = new ExitAssignment(model.getNetwork().nodes());
 
-        Network network = model.getNetwork();
+        AbstractNetwork network = model.getNetwork();
         IdentifiableCollection<Node> sinks = network.predecessorNodes(model.getSupersink());
 
         Dijkstra dijkstra = new Dijkstra(network, model.getTransitTimes(), null, true);
@@ -67,13 +68,13 @@ public class ReducedEarliestArrivalTransshipmentExitAssignment extends Algorithm
             }
         }
 
-        Network reducedNetwork = new Network(sinks.size() + model.getSources().size() + 1, sinks.size() * model.getSources().size() + sinks.size());
-        IdentifiableIntegerMapping<Edge> reducedTransitTimes = new IdentifiableIntegerMapping<Edge>(sinks.size() * model.getSources().size());
-        IdentifiableIntegerMapping<Edge> reducedCapacities = new IdentifiableIntegerMapping<Edge>(sinks.size() * model.getSources().size());
-        IdentifiableIntegerMapping<Node> reducedNodeCapacities = new IdentifiableIntegerMapping<Node>(sinks.size() + model.getSources().size() + 1);
-        IdentifiableIntegerMapping<Node> reducedBalances = new IdentifiableIntegerMapping<Node>(sinks.size() + model.getSources().size());
-        List<Node> reducedSources = new LinkedList<Node>();
-        List<Node> reducedSinks = new LinkedList<Node>();
+        AbstractNetwork reducedNetwork = new Network(sinks.size() + model.getSources().size() + 1, sinks.size() * model.getSources().size() + sinks.size());
+        IdentifiableIntegerMapping<Edge> reducedTransitTimes = new IdentifiableIntegerMapping<>(sinks.size() * model.getSources().size());
+        IdentifiableIntegerMapping<Edge> reducedCapacities = new IdentifiableIntegerMapping<>(sinks.size() * model.getSources().size());
+        IdentifiableIntegerMapping<Node> reducedNodeCapacities = new IdentifiableIntegerMapping<>(sinks.size() + model.getSources().size() + 1);
+        IdentifiableIntegerMapping<Node> reducedBalances = new IdentifiableIntegerMapping<>(sinks.size() + model.getSources().size());
+        List<Node> reducedSources = new LinkedList<>();
+        List<Node> reducedSinks = new LinkedList<>();
         Node supersink = reducedNetwork.getNode(sinks.size() + model.getSources().size());
         reducedSinks.add(supersink);
         int index = 0;

@@ -7,14 +7,14 @@ package de.tu_berlin.math.coga.zet.converter.graph;
 import algo.graph.shortestpath.Dijkstra;
 import de.tu_berlin.math.coga.zet.NetworkFlowModel;
 import de.tu_berlin.math.coga.zet.converter.RasterContainerCreator;
-import ds.graph.DynamicNetwork;
+import ds.graph.network.DynamicNetwork;
 import ds.graph.Edge;
 import ds.graph.Forest;
 import ds.graph.IdentifiableCollection;
-import ds.graph.IdentifiableIntegerMapping;
-import ds.graph.ListSequence;
+import ds.mapping.IdentifiableIntegerMapping;
+import ds.collection.ListSequence;
 import ds.graph.MinSpanningTree;
-import ds.graph.Network;
+import ds.graph.network.AbstractNetwork;
 import ds.graph.Node;
 import ds.graph.NodeRectangle;
 import ds.graph.problem.MinSpanningTreeProblem;
@@ -152,7 +152,7 @@ public class ZToNonGridShortestPathsConverter  extends ZToNonGridGraphConverter{
                     System.out.println("Looking for " + (k+2) + " th shortest path" );
                     NumCurrentEdges = 0;
                     
-                    Network repeat = net.getAsStaticNetwork();
+                    AbstractNetwork repeat = net.getAsStaticNetwork();
                     /*for (Edge edge: repeat.edges())
                     {
                         System.out.println("neue Kanten: " + edge);

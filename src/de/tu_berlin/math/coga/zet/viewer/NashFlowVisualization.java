@@ -7,9 +7,10 @@ package de.tu_berlin.math.coga.zet.viewer;
 import de.tu_berlin.math.coga.math.Conversion;
 import de.tu_berlin.math.coga.math.vectormath.Vector3;
 import ds.graph.Edge;
-import ds.graph.IdentifiableObjectMapping;
-import ds.graph.Network;
+import ds.mapping.IdentifiableObjectMapping;
+import ds.graph.network.AbstractNetwork;
 import ds.graph.Node;
+import ds.graph.network.Network;
 import gui.visualization.Visualization;
 import gui.visualization.control.graph.GLNashGraphControl;
 import gui.visualization.draw.graph.GLEdge;
@@ -30,7 +31,7 @@ public class NashFlowVisualization extends Visualization<GLNashGraphControl> {
 	NashFlowEdgeData flowDatas2 = new NashFlowEdgeData( 1, 1.75 );
 	NashFlowEdgeData flowDatas3 = new NashFlowEdgeData( 2, 9.125 );
 	NashFlowEdgeData flowDatas4 = new NashFlowEdgeData( 1, 1 );
-	ArrayList<GLEdge> edges = new ArrayList<GLEdge>();
+	ArrayList<GLEdge> edges = new ArrayList<>();
 	GLNashGraphControl graphControl;
 	GLColor[] colors = { GLColor.red, GLColor.yellow, GLColor.green, GLColor.magenta, GLColor.blue, GLColor.orange, GLColor.indigo, GLColor.cyan, GLColor.violet };
 
@@ -68,7 +69,7 @@ public class NashFlowVisualization extends Visualization<GLNashGraphControl> {
 		flowDatas4.add( 21.125, 31.175, 1, 6.325, 4, 14.375, 24.375 );
 
 		// set up some edges
-		Network network = new Network( 4, 5 );
+		AbstractNetwork network = new Network( 4, 5 );
 		network.setNode( new Node( 0 ) );
 		network.setNode( new Node( 1 ) );
 		network.setNode( new Node( 2 ) );
@@ -86,7 +87,7 @@ public class NashFlowVisualization extends Visualization<GLNashGraphControl> {
 		nodePositionMapping.set( network.getNode( 3 ), new Vector3( 14, 0, 0 ) );
 
 
-		IdentifiableObjectMapping<Edge, NashFlowEdgeData> mapping = new IdentifiableObjectMapping<Edge,NashFlowEdgeData>( 5, NashFlowEdgeData.class );
+		IdentifiableObjectMapping<Edge, NashFlowEdgeData> mapping = new IdentifiableObjectMapping<>( 5, NashFlowEdgeData.class );
 		mapping.set( e0, flowDatas0 );
 		mapping.set( e1, flowDatas1 );
 		mapping.set( e2, flowDatas2 );
@@ -166,7 +167,7 @@ public class NashFlowVisualization extends Visualization<GLNashGraphControl> {
 //		flowDatas4.add( 21.125, 31.175, 1, 6.325, 4, 14.375, 24.375 );
 //
 //		// set up some edges
-//		Network network = new Network( 5, 9 );
+//		AbstractNetwork network = new AbstractNetwork( 5, 9 );
 //		network.setNode( new Node( 0 ) );
 //		network.setNode( new Node( 1 ) );
 //		network.setNode( new Node( 2 ) );

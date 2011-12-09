@@ -22,9 +22,9 @@ package algo.graph.exitassignment;
 
 import algo.graph.shortestpath.Dijkstra;
 import ds.graph.IdentifiableCollection;
-import ds.graph.IdentifiableObjectMapping;
-import ds.graph.MinHeap;
-import ds.graph.Network;
+import ds.mapping.IdentifiableObjectMapping;
+import de.tu_berlin.math.coga.datastructure.priorityQueue.MinHeap;
+import ds.graph.network.AbstractNetwork;
 import de.tu_berlin.math.coga.zet.NetworkFlowModel;
 import ds.graph.Node;
 import de.tu_berlin.math.coga.common.algorithm.Algorithm;
@@ -38,7 +38,7 @@ public class ShortestPathExitAssignment extends Algorithm<NetworkFlowModel, Exit
     @Override
     protected ExitAssignment runAlgorithm(NetworkFlowModel model) {
         ExitAssignment solution = new ExitAssignment(model.getNetwork().nodes());
-        Network network = model.getNetwork();
+        AbstractNetwork network = model.getNetwork();
         IdentifiableCollection<Node> sinks = network.predecessorNodes(model.getSupersink());
         Dijkstra dijkstra = new Dijkstra(network, model.getTransitTimes(), null, true);
         IdentifiableObjectMapping<Node, MinHeap> exitDistances = new IdentifiableObjectMapping<Node, MinHeap>(network.nodes(), MinHeap.class);

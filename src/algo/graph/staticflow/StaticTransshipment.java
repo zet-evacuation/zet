@@ -13,6 +13,7 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
+
 /*
  * StaticTransshipment.java
  *
@@ -21,10 +22,10 @@ package algo.graph.staticflow;
 
 import ds.graph.problem.MaximumFlowProblem;
 import ds.graph.Edge;
-import ds.graph.IdentifiableIntegerMapping;
-import ds.graph.Network;
+import ds.mapping.IdentifiableIntegerMapping;
+import ds.graph.network.AbstractNetwork;
 import ds.graph.Node;
-import ds.graph.ResidualNetwork;
+import ds.graph.network.ResidualNetwork;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -39,7 +40,7 @@ public class StaticTransshipment implements Runnable {
 
     private IdentifiableIntegerMapping<Node> balances;
     private IdentifiableIntegerMapping<Edge> capacities;
-    private Network network;
+    private AbstractNetwork network;
     private IdentifiableIntegerMapping<Edge> flow;
     private ResidualNetwork residualNetwork;
     private boolean feasible;
@@ -54,7 +55,7 @@ public class StaticTransshipment implements Runnable {
         this.algorithm = algorithm;
     }    
 
-    public StaticTransshipment(Network network, IdentifiableIntegerMapping<Edge> capacities, IdentifiableIntegerMapping<Node> balances) {
+    public StaticTransshipment(AbstractNetwork network, IdentifiableIntegerMapping<Edge> capacities, IdentifiableIntegerMapping<Node> balances) {
         this.balances = balances;
         this.capacities = capacities;
         this.network = network;
@@ -74,8 +75,8 @@ public class StaticTransshipment implements Runnable {
 
     public void run() {
         feasible = false;
-        List<Node> sources = new LinkedList<Node>();
-        List<Node> sinks = new LinkedList<Node>();
+        List<Node> sources = new LinkedList<>();
+        List<Node> sinks = new LinkedList<>();
         for (Node node : network.nodes()) {
             if (balances.get(node) < 0) {
                 sinks.add(node);
@@ -102,7 +103,7 @@ public class StaticTransshipment implements Runnable {
         algorithm.run();
         flow = algorithm.getSolution();
         valueOfFlow = algorithm.getSolution().getFlowValue();
-        residualNetwork = algorithm.getResidualNetwork();
+        //residualNetwork = algorithm.getResidualNetwork();
         network.setNodeCapacity(network.getNodeCapacity() - 2);
         network.setEdgeCapacity(network.getEdgeCapacity() - sources.size() - sinks.size());
         capacities.setDomainSize(network.getEdgeCapacity());
@@ -113,6 +114,7 @@ public class StaticTransshipment implements Runnable {
         }
         feasible = true;
         for (Node node : network.nodes()) {
+					// same: feasible = feasible && balances.get(node) == getBalancesOfNode(node);
             if (balances.get(node) != getBalanceOfNode(node)) {
                 feasible = false;
             }
@@ -120,11 +122,7 @@ public class StaticTransshipment implements Runnable {
     }
 
     public IdentifiableIntegerMapping<Edge> getFlow() {
-        if (feasible) {
-            return flow;
-        } else {
-            return null;
-        }
+			return feasible ? flow : null;
     }
 
     public IdentifiableIntegerMapping<Edge> getFlowEvenIfNotFeasible() {
@@ -136,10 +134,6 @@ public class StaticTransshipment implements Runnable {
     }
 
     public ResidualNetwork getResidualNetwork() {
-        if (feasible) {
-            return residualNetwork;
-        } else {
-            return null;
-        }
+			return feasible ? residualNetwork : null;
     }
 }

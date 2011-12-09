@@ -23,7 +23,7 @@ import algo.graph.staticflow.maxflow.PushRelabelHighestLabelGlobalGapRelabelling
 import ds.graph.problem.MaximumFlowProblem;
 import ds.graph.Edge;
 import ds.graph.IdentifiableCollection;
-import ds.graph.IdentifiableIntegerMapping;
+import ds.mapping.IdentifiableIntegerMapping;
 import de.tu_berlin.math.coga.zet.NetworkFlowModel;
 import ds.graph.Node;
 import ds.graph.flow.MaximumFlow;

@@ -17,14 +17,16 @@
  * ResidualNetwork.java
  *
  */
-package ds.graph;
+package ds.graph.network;
 
-import ds.graph.flow.Flow;
+import ds.graph.Edge;
+import ds.mapping.Mappings;
+import ds.mapping.IdentifiableIntegerMapping;
 
 /**
  * The {@code ResidualNetwork} class provides flow algorithms with the 
  * functionality to create and work with residual networks. The residual 
- * networks implemented by this class are based on the {@link Network} class and
+ * networks implemented by this class are based on the {@link AbstractNetwork} class and
  * make use of the speed of its static implementation as well as its ability to
  * hide nodes and edges.
  */
@@ -33,9 +35,9 @@ public class ResidualNetwork extends Network {
     /**
      * The underlying base network.
      */
-    private Network network;
+    private AbstractNetwork network;
     /** 
-     * The number of edges that the original Network had (without the residual edges)
+     * The number of edges that the original AbstractNetwork had (without the residual edges)
      */
     private int originalNumberOfEdges;
     /**
@@ -53,7 +55,9 @@ public class ResidualNetwork extends Network {
 
     /**
      * A constructor for clone and overriding classes.
-     */
+		 * @param initialNodeCapacity
+		 * @param initialEdgeCapacity  
+		 */
     protected ResidualNetwork(int initialNodeCapacity, int initialEdgeCapacity) {
         super(initialNodeCapacity, initialEdgeCapacity);
 
@@ -66,7 +70,7 @@ public class ResidualNetwork extends Network {
      * @param network the base network for the residual network.
      * @param capacities the base capacities for the residual network.
      */
-    public ResidualNetwork(Network network, IdentifiableIntegerMapping<Edge> capacities) {
+    public ResidualNetwork(AbstractNetwork network, IdentifiableIntegerMapping<Edge> capacities) {
         super(network.numberOfNodes(), network.numberOfEdges() * 2);
         originalNumberOfEdges = network.numberOfEdges();
 
@@ -76,8 +80,8 @@ public class ResidualNetwork extends Network {
             createAndSetEdge(edge.end(), edge.start());
         }
         this.network = network;
-        flow = new IdentifiableIntegerMapping<Edge>(network.numberOfEdges());
-        residualCapacities = new IdentifiableIntegerMapping<Edge>(network.numberOfEdges() * 2);
+        flow = new IdentifiableIntegerMapping<>(network.numberOfEdges());
+        residualCapacities = new IdentifiableIntegerMapping<>(network.numberOfEdges() * 2);
         for (Edge edge : edges) {
             if (isReverseEdge(edge)) {
                 residualCapacities.set(edge, 0);
@@ -96,7 +100,7 @@ public class ResidualNetwork extends Network {
      * @param capacities the base capacities for the residual network.
      * @param transitTimes the base transit times for the residual network.
      */
-    public ResidualNetwork(Network network, IdentifiableIntegerMapping<Edge> capacities, IdentifiableIntegerMapping<Edge> transitTimes) {
+    public ResidualNetwork(AbstractNetwork network, IdentifiableIntegerMapping<Edge> capacities, IdentifiableIntegerMapping<Edge> transitTimes) {
         this(network, capacities);
         residualTransitTimes = expandCostFunction(transitTimes);
         /*
@@ -196,7 +200,7 @@ public class ResidualNetwork extends Network {
      * either the ngated cost of the oposite edge if it exists or 0.
      */
     public IdentifiableIntegerMapping<Edge> expandCostFunction(IdentifiableIntegerMapping<Edge> costs) {
-        IdentifiableIntegerMapping<Edge> result = new IdentifiableIntegerMapping<Edge>(getEdgeCapacity());
+        IdentifiableIntegerMapping<Edge> result = new IdentifiableIntegerMapping<>(getEdgeCapacity());
         for (int id = 0; id < getEdgeCapacity(); id++) {
             Edge edge = edges.getEvenIfHidden(id);
             if (isReverseEdge(edge)) {
@@ -282,11 +286,11 @@ public class ResidualNetwork extends Network {
     @Override
     public String toString() {
         StringBuilder builder = new StringBuilder();
-        builder.append("Base network: " + network.toString() + "\n");
-        builder.append("Residual network: " + super.toString() + "\n");
-        builder.append("Residual capacities: " + Mappings.toString(edges(), residualCapacities) + "\n");
+        builder.append( "Base network: " ).append( network.toString() ).append("\n");
+        builder.append( "Residual network: " ).append( super.toString() ).append("\n");
+        builder.append( "Residual capacities: " ).append( Mappings.toString(edges(), residualCapacities) ).append("\n");
         if (residualTransitTimes != null) {
-            builder.append("Residual transit times: " + residualTransitTimes.toString() + "\n");
+            builder.append( "Residual transit times: " ).append( residualTransitTimes.toString() ).append("\n");
         }
         return builder.toString();
     }

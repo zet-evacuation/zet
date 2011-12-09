@@ -21,8 +21,8 @@
 package ds.graph.problem;
 
 import ds.graph.Edge;
-import ds.graph.IdentifiableIntegerMapping;
-import ds.graph.Network;
+import ds.mapping.IdentifiableIntegerMapping;
+import ds.graph.network.AbstractNetwork;
 import ds.graph.Node;
 
 /**
@@ -30,12 +30,12 @@ import ds.graph.Node;
  * @author Martin Groß
  */
 public class MinimumCostFlowProblem {
-	private Network network;
+	private AbstractNetwork network;
 	private IdentifiableIntegerMapping<Node> balances;
 	private IdentifiableIntegerMapping<Edge> capacities;
 	private IdentifiableIntegerMapping<Edge> costs;
 
-	public MinimumCostFlowProblem( Network network, IdentifiableIntegerMapping<Edge> capacities, IdentifiableIntegerMapping<Edge> costs, IdentifiableIntegerMapping<Node> balances ) {
+	public MinimumCostFlowProblem( AbstractNetwork network, IdentifiableIntegerMapping<Edge> capacities, IdentifiableIntegerMapping<Edge> costs, IdentifiableIntegerMapping<Node> balances ) {
 		this.network = network;
 		this.balances = balances;
 		this.capacities = capacities;
@@ -66,11 +66,11 @@ public class MinimumCostFlowProblem {
 		this.costs = costs;
 	}
 
-	public Network getNetwork() {
+	public AbstractNetwork getNetwork() {
 		return network;
 	}
 
-	public void setNetwork( Network network ) {
+	public void setNetwork( AbstractNetwork network ) {
 		this.network = network;
 	}
 

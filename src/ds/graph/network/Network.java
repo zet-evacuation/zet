@@ -1,37 +1,31 @@
-/* zet evacuation tool copyright (c) 2007-10 zet evacuation team
- *
- * This program is free software; you can redistribute it and/or
- * as published by the Free Software Foundation; either version 2
- * of the License, or (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with this program; if not, write to the Free Software
- * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
- */
-/*
+/**
  * Network.java
- *
+ * Created: 09.12.2011, 16:37:45
  */
-package ds.graph;
+package ds.graph.network;
 
 import algo.graph.shortestpath.Dijkstra;
 import com.thoughtworks.xstream.annotations.XStreamAlias;
+import ds.mapping.IdentifiableObjectMapping;
+import ds.mapping.IdentifiableIntegerMapping;
+import ds.mapping.IdentifiableConstantMapping;
+import ds.collection.DependingListSequence;
+import ds.graph.Edge;
+import ds.graph.Forest;
+import ds.graph.GraphLocalization;
+import ds.collection.HidingSet;
+import ds.graph.IdentifiableCollection;
+import ds.collection.ListSequence;
+import ds.graph.Node;
+import ds.graph.Path;
 import java.util.Iterator;
 
 /**
- * The {@code Network</class> provides an implementation of a directed graph
- * optimized for use by flow algorithms. Examples of these optimizations 
- * include use of array based data structures for edges and nodes in order to
- * provide fast access, as well as the possiblity to hide edges and nodes (which
- * is useful for residual networks, for instance).
+ *
+ * @author Jan-Philipp Kappmeier
  */
 @XStreamAlias( "network" )
-public class Network implements Graph, Cloneable, Iterable<Node> {
+public class Network extends AbstractNetwork {
 	/** The nodes of the network. Must not be null. */
 	protected HidingSet<Node> nodes;
 	/** The edges of the network. Must not be null. */
@@ -68,31 +62,29 @@ public class Network implements Graph, Cloneable, Iterable<Node> {
 	protected IdentifiableIntegerMapping<Node> outdegree;
 
 	/**
-	 * Creates a new Network with the specified capacities for edges and nodes.
+	 * Creates a new AbstractNetwork with the specified capacities for edges and nodes.
 	 * Runtime O(max(initialNodeCapacity, initialEdgeCapacity)).
-	 * @param initialNodeCapacity the number of nodes that can belong to the
-	 * graph.
-	 * @param initialEdgeCapacity the number of edges that can belong to the
-	 * graph.
+	 * @param initialNodeCapacity the number of nodes that can belong to the graph
+	 * @param initialEdgeCapacity the number of edges that can belong to the graph
 	 */
 	public Network( int initialNodeCapacity, int initialEdgeCapacity ) {
-		edges = new HidingSet<Edge>( Edge.class, initialEdgeCapacity );
-		nodes = new HidingSet<Node>( Node.class, initialNodeCapacity );
+		edges = new HidingSet<>( Edge.class, initialEdgeCapacity );
+		nodes = new HidingSet<>( Node.class, initialNodeCapacity );
 		for( int i = 0; i < initialNodeCapacity; i++ )
 			nodes.add( new Node( i ) );
-		incidentEdges = new IdentifiableObjectMapping<Node, DependingListSequence>( initialNodeCapacity, DependingListSequence.class );
+		incidentEdges = new IdentifiableObjectMapping<>( initialNodeCapacity, DependingListSequence.class );
 
-		incomingEdges = new IdentifiableObjectMapping<Node, DependingListSequence>( initialNodeCapacity, DependingListSequence.class );
+		incomingEdges = new IdentifiableObjectMapping<>( initialNodeCapacity, DependingListSequence.class );
 
-		outgoingEdges = new IdentifiableObjectMapping<Node, DependingListSequence>( initialNodeCapacity, DependingListSequence.class );
+		outgoingEdges = new IdentifiableObjectMapping<>( initialNodeCapacity, DependingListSequence.class );
 		for( Node node : nodes ) {
-			incidentEdges.set( node, new DependingListSequence<Edge>( edges ) );
-			incomingEdges.set( node, new DependingListSequence<Edge>( edges ) );
-			outgoingEdges.set( node, new DependingListSequence<Edge>( edges ) );
+			incidentEdges.set( node, new DependingListSequence<>( edges ) );
+			incomingEdges.set( node, new DependingListSequence<>( edges ) );
+			outgoingEdges.set( node, new DependingListSequence<>( edges ) );
 		}
-		degree = new IdentifiableIntegerMapping<Node>( initialNodeCapacity );
-		indegree = new IdentifiableIntegerMapping<Node>( initialNodeCapacity );
-		outdegree = new IdentifiableIntegerMapping<Node>( initialNodeCapacity );
+		degree = new IdentifiableIntegerMapping<>( initialNodeCapacity );
+		indegree = new IdentifiableIntegerMapping<>( initialNodeCapacity );
+		outdegree = new IdentifiableIntegerMapping<>( initialNodeCapacity );
 	}
 
 	/**
@@ -105,10 +97,9 @@ public class Network implements Graph, Cloneable, Iterable<Node> {
 	}
 
 	/**
-	 * Returns an {@link HidingSet} containing all the edges of
-	 * this graph. Runtime O(1).
-	 * @return an {@link HidingSet} containing all the edges of
-	 * this graph.
+	 * Returns an {@link HidingSet} containing all the edges of this graph.
+	 * The Runtime is O(1).
+	 * @return an {@link HidingSet} containing all the edges of this graph.
 	 */
 	@Override
 	public IdentifiableCollection<Edge> edges() {
@@ -118,8 +109,7 @@ public class Network implements Graph, Cloneable, Iterable<Node> {
 	/**
 	 * Returns an {@link HidingSet} containing all the nodes of
 	 * this graph. Runtime O(1).
-	 * @return an {@link HidingSet} containing all the nodes of
-	 * this graph.
+	 * @return an {@link HidingSet} containing all the nodes of this graph.
 	 */
 	@Override
 	public IdentifiableCollection<Node> nodes() {
@@ -314,7 +304,7 @@ public class Network implements Graph, Cloneable, Iterable<Node> {
 	 */
 	@Override
 	public IdentifiableCollection<Edge> getEdges( Node start, Node end ) {
-		ListSequence<Edge> result = new ListSequence<Edge>();
+		ListSequence<Edge> result = new ListSequence<>();
 		for( Edge edge : outgoingEdges( start ) )
 			if( edge.end().equals( end ) )
 				result.add( edge );
@@ -338,6 +328,7 @@ public class Network implements Graph, Cloneable, Iterable<Node> {
 	 * Runtime O(1).
 	 * @return the number of edges that can be contained in the graph.
 	 */
+	@Override
 	public int getEdgeCapacity() {
 		return edges.getCapacity();
 	}
@@ -348,6 +339,7 @@ public class Network implements Graph, Cloneable, Iterable<Node> {
 	 * @param newCapacity the number of edges that can be contained by the
 	 * graph.
 	 */
+	@Override
 	public void setEdgeCapacity( int newCapacity ) {
 		if( getEdgeCapacity() != newCapacity )
 			edges.setCapacity( newCapacity );
@@ -358,6 +350,7 @@ public class Network implements Graph, Cloneable, Iterable<Node> {
 	 * Runtime O(1).
 	 * @return the number of nodes that can be contained in the graph.
 	 */
+	@Override
 	public int getNodeCapacity() {
 		return nodes.getCapacity();
 	}
@@ -368,11 +361,11 @@ public class Network implements Graph, Cloneable, Iterable<Node> {
 	 * @param newCapacity the number of nodes that can be contained by the
 	 * graph.
 	 */
+	@Override
 	public void setNodeCapacity( int newCapacity ) {
 		if( getNodeCapacity() != newCapacity ) {
 			int oldCapacity = getNodeCapacity();
 			nodes.setCapacity( newCapacity );
-
 			incidentEdges.setDomainSize( newCapacity );
 			incomingEdges.setDomainSize( newCapacity );
 			outgoingEdges.setDomainSize( newCapacity );
@@ -391,6 +384,7 @@ public class Network implements Graph, Cloneable, Iterable<Node> {
 	 * @return {@code true} if the specified edge is hidden, {@code false
 	 * } otherwise.
 	 */
+	@Override
 	public boolean isHidden( Edge edge ) {
 		return edges.isHidden( edge );
 	}
@@ -404,6 +398,7 @@ public class Network implements Graph, Cloneable, Iterable<Node> {
 	 * @param edge the edge for which the hidden state is to be set.
 	 * @param value the new value of the edge's hidden state.
 	 */
+	@Override
 	public void setHidden( Edge edge, boolean value ) {
 		if( isHidden( edge ) != value ) {
 			edges.setHidden( edge, value );
@@ -427,6 +422,7 @@ public class Network implements Graph, Cloneable, Iterable<Node> {
 	 * @return {@code true} if the specified node is hidden, {@code false
 	 * } otherwise.
 	 */
+	@Override
 	public boolean isHidden( Node node ) {
 		return nodes.isHidden( node );
 	}
@@ -441,6 +437,7 @@ public class Network implements Graph, Cloneable, Iterable<Node> {
 	 * @param node the node for which the hidden state is to be set.
 	 * @param value the new value of the node's hidden state.
 	 */
+	@Override
 	public void setHidden( Node node, boolean value ) {
 		if( isHidden( node ) != value ) {
 			if( value )
@@ -450,11 +447,12 @@ public class Network implements Graph, Cloneable, Iterable<Node> {
 		}
 	}
         
-        public void setHiddenOnlyNode(Node node, boolean value)
-        {
-                nodes.setHidden(node, value);   
-        }
+	@Override
+	public void setHiddenOnlyNode( Node node, boolean value ) {
+		nodes.setHidden( node, value );
+	}
 
+	@Override
 	public void showAllEdges() {
 		edges.showAll();
 	}
@@ -468,6 +466,7 @@ public class Network implements Graph, Cloneable, Iterable<Node> {
 	 * @param end the end node of the new edge.
 	 * @return the new edge.
 	 */
+	@Override
 	public Edge createAndSetEdge( Node start, Node end ) {
 		int id = idOfLastCreatedEdge + 1;
 		int capacity = getEdgeCapacity();
@@ -511,6 +510,7 @@ public class Network implements Graph, Cloneable, Iterable<Node> {
 	 * each edge. Runtime O(number of edges).
 	 * @param edges the edges to be added to the graph.
 	 */
+	@Override
 	public void setEdges( Iterable<Edge> edges ) {
 		for( Edge edge : edges ) {
 			setEdge( edge );
@@ -529,9 +529,9 @@ public class Network implements Graph, Cloneable, Iterable<Node> {
 	@Override
 	public void setNode( Node node ) {
 		if( nodes.get( node.id() ) == null ) {
-			incidentEdges.set( node, new DependingListSequence<Edge>( edges ) );
-			incomingEdges.set( node, new DependingListSequence<Edge>( edges ) );
-			outgoingEdges.set( node, new DependingListSequence<Edge>( edges ) );
+			incidentEdges.set( node, new DependingListSequence<>( edges ) );
+			incomingEdges.set( node, new DependingListSequence<>( edges ) );
+			outgoingEdges.set( node, new DependingListSequence<>( edges ) );
 			degree.set( node, 0 );
 			indegree.set( node, 0 );
 			outdegree.set( node, 0 );
@@ -544,6 +544,7 @@ public class Network implements Graph, Cloneable, Iterable<Node> {
 	 * each node. Runtime O(number of nodes).
 	 * @param nodes the nodes to be added to the graph.
 	 */
+	@Override
 	public void setNodes( Iterable<Node> nodes ) {
 		for( Node node : nodes ) {
 			setNode( node );
@@ -557,7 +558,7 @@ public class Network implements Graph, Cloneable, Iterable<Node> {
 	 * @return a copy of this network.
 	 */
 	@Override
-	public Network clone() {
+	public AbstractNetwork clone() {
 		Network clone = new Network( numberOfNodes(), numberOfEdges() );
 		clone.setNodes( nodes() );
 		clone.setEdges( edges() );
@@ -675,6 +676,7 @@ public class Network implements Graph, Cloneable, Iterable<Node> {
             }
 	}
 
+	@Override
 	public Path getPath( Node start, Node end ) {
             Dijkstra dijkstra = new Dijkstra(this, IdentifiableConstantMapping.UNIT_EDGE_MAPPING, start);
             dijkstra.run();
@@ -694,6 +696,7 @@ public class Network implements Graph, Cloneable, Iterable<Node> {
 	 * @param end the end node of the path to be checked
 	 * @return {@code true} if the edge between the start node and the end node exists, {@code false} otherwise
 	 */
+	@Override
 	public boolean existsEdge( Node start, Node end ) {
 		return getEdge( start, end ) != null;
 	}
@@ -703,6 +706,7 @@ public class Network implements Graph, Cloneable, Iterable<Node> {
 	 * nodes are reversed.
 	 * @return a reversed copy of the network
 	 */
+	@Override
 	public Network createReverseNetwork() {
 		Network result = new Network( numberOfNodes(), numberOfEdges() );
 		for( Edge edge : edges )
@@ -711,17 +715,17 @@ public class Network implements Graph, Cloneable, Iterable<Node> {
 	}
 
 	/**
-	 * Returns the network as a {@code Network} object.
+	 * Returns the network as a {@code AbstractNetwork} object.
 	 * As this graph is already static, the object itself is returned.
 	 * @return this object
 	 */
 	@Override
-	public Network getAsStaticNetwork() {
+	public AbstractNetwork getAsStaticNetwork() {
 		return this;
 	}
 
 	@Override
 	public Iterator<Node> iterator() {
 		return nodes.iterator();
-	}
+	}	
 }

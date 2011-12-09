@@ -20,6 +20,10 @@
 
 package ds.graph;
 
+import ds.collection.ListSequence;
+import ds.graph.network.AbstractNetwork;
+import ds.graph.network.Network;
+import ds.mapping.IdentifiableIntegerMapping;
 import java.util.LinkedList;
 
 import java.util.List;
@@ -39,7 +43,7 @@ public class TimeExpandedNetwork extends Network {
     /**
      * The underlying base network.
      */
-    protected Network network = null;
+    protected AbstractNetwork network = null;
     
     /**
      * The capacities belonging to the time expanded network.
@@ -145,7 +149,7 @@ public class TimeExpandedNetwork extends Network {
 	 *            whether there are hold-over arcs for all nodes or only for
 	 *            sources and sinks.
 	 */
-	private void createTimeExpansion(Network network,
+	private void createTimeExpansion(AbstractNetwork network,
 			IdentifiableIntegerMapping<Edge> capacities,
 			IdentifiableIntegerMapping<Edge> transitTimes, int timeHorizon,
 			List<Node> sources, List<Node> sinks,
@@ -290,7 +294,7 @@ public class TimeExpandedNetwork extends Network {
      * @param allowStorageInNodes {@code true} if flow can wait in all nodes, {@code false}
      * otherwise.
      */
-   public TimeExpandedNetwork(Network network, IdentifiableIntegerMapping<Edge> capacities, IdentifiableIntegerMapping<Edge> transitTimes, Node source, Node sink, int timeHorizon, boolean allowStorageInNodes) {
+   public TimeExpandedNetwork(AbstractNetwork network, IdentifiableIntegerMapping<Edge> capacities, IdentifiableIntegerMapping<Edge> transitTimes, Node source, Node sink, int timeHorizon, boolean allowStorageInNodes) {
 		this(allowStorageInNodes, network, timeHorizon);
 		if (source ==null && sink==null)
 			throw new AssertionError(GraphLocalization.getSingleton ( ).getString ("ds.graph.SinkSourceNullException"));
@@ -366,11 +370,11 @@ public class TimeExpandedNetwork extends Network {
 		
     }
     
-    public TimeExpandedNetwork(Network network, IdentifiableIntegerMapping<Edge> capacities, IdentifiableIntegerMapping<Edge> transitTimes, int timeHorizon, List<Node> sources, List<Node> sinks, boolean allowStorageInNodes){
+    public TimeExpandedNetwork(AbstractNetwork network, IdentifiableIntegerMapping<Edge> capacities, IdentifiableIntegerMapping<Edge> transitTimes, int timeHorizon, List<Node> sources, List<Node> sinks, boolean allowStorageInNodes){
     	this(network, capacities, transitTimes, timeHorizon, sources, sinks, Integer.MAX_VALUE, allowStorageInNodes);
     }
     
-    public TimeExpandedNetwork(Network network, IdentifiableIntegerMapping<Edge> capacities, IdentifiableIntegerMapping<Edge> transitTimes, int timeHorizon, List<Node> sources, List<Node> sinks, int supersouceOutgoingCapacitiy, boolean allowStorageInNodes ){
+    public TimeExpandedNetwork(AbstractNetwork network, IdentifiableIntegerMapping<Edge> capacities, IdentifiableIntegerMapping<Edge> transitTimes, int timeHorizon, List<Node> sources, List<Node> sinks, int supersouceOutgoingCapacitiy, boolean allowStorageInNodes ){
     	this(allowStorageInNodes,network,timeHorizon);
     	originalSources = new ListSequence<>(sources);
     	this.sources = originalSources;
@@ -381,11 +385,11 @@ public class TimeExpandedNetwork extends Network {
 		createSuperSourceAndSink(supersouceOutgoingCapacitiy);
     }
     
-	public TimeExpandedNetwork(Network network, IdentifiableIntegerMapping<Edge> capacities, IdentifiableIntegerMapping<Edge> transitTimes, int timeHorizon, IdentifiableIntegerMapping<Node> supplies, boolean allowStorageInNodes) {
+	public TimeExpandedNetwork(AbstractNetwork network, IdentifiableIntegerMapping<Edge> capacities, IdentifiableIntegerMapping<Edge> transitTimes, int timeHorizon, IdentifiableIntegerMapping<Node> supplies, boolean allowStorageInNodes) {
 		this( network, capacities, transitTimes, timeHorizon, supplies, allowStorageInNodes, true );
 	}
 
-		public TimeExpandedNetwork(Network network, IdentifiableIntegerMapping<Edge> capacities, IdentifiableIntegerMapping<Edge> transitTimes, int timeHorizon, IdentifiableIntegerMapping<Node> supplies, boolean allowStorageInNodes, boolean createSuperSouce ) {
+		public TimeExpandedNetwork(AbstractNetwork network, IdentifiableIntegerMapping<Edge> capacities, IdentifiableIntegerMapping<Edge> transitTimes, int timeHorizon, IdentifiableIntegerMapping<Node> supplies, boolean allowStorageInNodes, boolean createSuperSouce ) {
 		this(allowStorageInNodes, network, timeHorizon);
 		sources = new ListSequence<>();
 		originalSinks = new ListSequence<>();
@@ -549,7 +553,7 @@ public class TimeExpandedNetwork extends Network {
     	
     }
     
-  /*  public TimeExpandedNetwork(Network network,
+  /*  public TimeExpandedNetwork(AbstractNetwork network,
 			IdentifiableIntegerMapping<Edge> capacities,
 			IdentifiableIntegerMapping<Edge> transitTimes,
 			LinkedList<Node> sources, LinkedList<Node> sinks, 
@@ -562,7 +566,7 @@ public class TimeExpandedNetwork extends Network {
 				sources, sinks, allowStorageInNodes);
 	}*/
 
-    private TimeExpandedNetwork(boolean allowStorageInNodes, Network network, int timeHorizon){
+    private TimeExpandedNetwork(boolean allowStorageInNodes, AbstractNetwork network, int timeHorizon){
     	super(0,0);
         this.allowStorageInNodes = allowStorageInNodes;
         this.network = network;
@@ -654,7 +658,7 @@ public class TimeExpandedNetwork extends Network {
      * Returns the network underlying the time expanded network. Runtime O(1).
      * @return the network underlying the time expanded network.
      */
-    public Network network() {
+    public AbstractNetwork network() {
         return network;
     }
 

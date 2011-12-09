@@ -8,7 +8,7 @@ import algo.graph.reduction.PrimsAlgo;
 import de.tu_berlin.math.coga.common.util.Level;
 import de.tu_berlin.math.coga.zet.NetworkFlowModel;
 import de.tu_berlin.math.coga.zet.converter.RasterContainerCreator;
-import ds.graph.DynamicNetwork;
+import ds.graph.network.DynamicNetwork;
 import ds.graph.Edge;
 import ds.graph.IdentifiableCollection;
 import ds.graph.MinSpanningTree;

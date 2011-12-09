@@ -19,16 +19,16 @@
  */
 package algo.graph.staticflow.mincost;
 
-import de.tu_berlin.math.coga.common.algorithm.Algorithm;
 import algo.graph.shortestpath.MooreBellmanFord;
 import algo.graph.traverse.BFS;
 import ds.graph.Path;
 import ds.graph.Edge;
-import ds.graph.IdentifiableIntegerMapping;
-import ds.graph.Network;
+import ds.mapping.IdentifiableIntegerMapping;
+import ds.graph.network.AbstractNetwork;
 import ds.graph.Node;
-import ds.graph.ResidualNetwork;
+import ds.graph.network.ResidualNetwork;
 import ds.graph.TimeExpandedNetwork;
+import ds.graph.network.Network;
 import ds.graph.problem.MinimumCostFlowProblem;
 import java.util.LinkedList;
 import java.util.List;
@@ -41,7 +41,7 @@ import java.util.logging.Logger;
 public class SuccessiveShortestPath /*extends Algorithm<MinimumCostFlowProblem, IdentifiableIntegerMapping<Edge>>*/ {
 
     private static final Logger LOGGER = Logger.getLogger("fv.model.algorithm.SuccessiveShortestPath");
-    private Network network;
+    private AbstractNetwork network;
     private IdentifiableIntegerMapping<Node> baseBalances;
     private IdentifiableIntegerMapping<Edge> capacities;
     private IdentifiableIntegerMapping<Edge> baseCosts;
@@ -53,14 +53,14 @@ public class SuccessiveShortestPath /*extends Algorithm<MinimumCostFlowProblem, 
     private transient IdentifiableIntegerMapping<Edge> costs;
     private transient ResidualNetwork residualNetwork;
 
-    public SuccessiveShortestPath(Network network, IdentifiableIntegerMapping<Node> balances, IdentifiableIntegerMapping<Edge> capacities, IdentifiableIntegerMapping<Edge> costs) {
+    public SuccessiveShortestPath(AbstractNetwork network, IdentifiableIntegerMapping<Node> balances, IdentifiableIntegerMapping<Edge> capacities, IdentifiableIntegerMapping<Edge> costs) {
         this.network = network;
         this.baseBalances = balances;
         this.baseCosts = costs;
         this.capacities = capacities;
     }
 
-    public SuccessiveShortestPath(Network network, IdentifiableIntegerMapping<Node> balances, IdentifiableIntegerMapping<Edge> capacities, IdentifiableIntegerMapping<Edge> costs, boolean bounds) {
+    public SuccessiveShortestPath(AbstractNetwork network, IdentifiableIntegerMapping<Node> balances, IdentifiableIntegerMapping<Edge> capacities, IdentifiableIntegerMapping<Edge> costs, boolean bounds) {
         this.network = network;
         this.baseBalances = balances;
         this.baseCosts = costs;
@@ -92,7 +92,7 @@ public class SuccessiveShortestPath /*extends Algorithm<MinimumCostFlowProblem, 
         return paths;
     }
 
-    private boolean existsPathBetween(Network network, Node start, Node end) {
+    private boolean existsPathBetween(AbstractNetwork network, Node start, Node end) {
         BFS bfs = new BFS(network);
         bfs.run(start, end);
         return bfs.distance(end) < Integer.MAX_VALUE;
@@ -102,11 +102,11 @@ public class SuccessiveShortestPath /*extends Algorithm<MinimumCostFlowProblem, 
         // Create the residual graph
         residualNetwork = new ResidualNetwork(network, capacities);
         // Create a copy of the balance map since we are going to modify it
-        balances = new IdentifiableIntegerMapping<Node>(baseBalances);
+        balances = new IdentifiableIntegerMapping<>(baseBalances);
         // Extend the costs to the residual graph
-        costs = new IdentifiableIntegerMapping<Edge>(network.edges());
+        costs = new IdentifiableIntegerMapping<>(network.edges());
         // Prepare the path lists
-        paths = new LinkedList<Path>();
+        paths = new LinkedList<>();
         for (Edge edge : network.edges()) {
             costs.set(edge, baseCosts.get(edge));
             costs.set(residualNetwork.reverseEdge(edge), -baseCosts.get(edge));
@@ -177,7 +177,7 @@ public class SuccessiveShortestPath /*extends Algorithm<MinimumCostFlowProblem, 
     }
 
     public static void main(String[] args) {
-        Network network = new Network(4, 5);
+        AbstractNetwork network = new Network(4, 5);
         Node source = network.getNode(0);
         Node a = network.getNode(1);
         Node b = network.getNode(2);
@@ -193,25 +193,24 @@ public class SuccessiveShortestPath /*extends Algorithm<MinimumCostFlowProblem, 
         network.setEdge(e4);
         network.setEdge(e5);
         IdentifiableIntegerMapping<Node> balances;
-        IdentifiableIntegerMapping<Edge> capacities = new IdentifiableIntegerMapping<Edge>(network.edges());
+        IdentifiableIntegerMapping<Edge> capacities = new IdentifiableIntegerMapping<>(network.edges());
         capacities.set(e1, 1);
         capacities.set(e2, 1);
         capacities.set(e3, 1);
         capacities.set(e4, 1);
         capacities.set(e5, 1);
-        IdentifiableIntegerMapping<Edge> costs = new IdentifiableIntegerMapping<Edge>(network.edges());
+        IdentifiableIntegerMapping<Edge> costs = new IdentifiableIntegerMapping<>(network.edges());
         costs.set(e1, 1);
         costs.set(e2, 3);
         costs.set(e3, 1);
         costs.set(e4, 3);
         costs.set(e5, 1);
         TimeExpandedNetwork teg = new TimeExpandedNetwork(network, capacities, costs, source, sink, 8, true);
-        balances = new IdentifiableIntegerMapping<Node>(teg.nodes());
+        balances = new IdentifiableIntegerMapping<>(teg.nodes());
         balances.set(teg.singleSource(), 10);
         balances.set(teg.singleSink(), -10);
         SuccessiveShortestPath algo = new SuccessiveShortestPath(teg, balances, teg.capacities(), teg.costs());
         algo.run();
-        System.out.println(algo.getFlow());
         //System.out.println(algo.getPaths());
         for (Path path : algo.getPaths()) {
             //System.out.println(path.toString());

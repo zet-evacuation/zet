@@ -4,6 +4,7 @@
  */
 package ds.graph;
 
+import ds.mapping.IdentifiableIntegerMapping;
 import ds.graph.problem.MinSpanningTreeProblem;
 
 /**

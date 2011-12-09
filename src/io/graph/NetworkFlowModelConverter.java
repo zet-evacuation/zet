@@ -27,8 +27,8 @@ import com.thoughtworks.xstream.io.HierarchicalStreamReader;
 import com.thoughtworks.xstream.io.HierarchicalStreamWriter;
 import de.tu_berlin.math.coga.zet.converter.graph.ZToGraphMapping;
 import ds.graph.Edge;
-import ds.graph.IdentifiableIntegerMapping;
-import ds.graph.Network;
+import ds.mapping.IdentifiableIntegerMapping;
+import ds.graph.network.AbstractNetwork;
 import de.tu_berlin.math.coga.zet.NetworkFlowModel;
 import ds.graph.Node;
 import java.util.LinkedList;
@@ -99,7 +99,7 @@ public class NetworkFlowModelConverter implements Converter {
 		
         // Read the network
         reader.moveDown();
-        Network network = (Network) context.convertAnother(null, Network.class, networkConverter);
+        AbstractNetwork network = (AbstractNetwork) context.convertAnother(null, AbstractNetwork.class, networkConverter);
         reader.moveUp();
         // Read the edge capacities
         reader.moveDown();

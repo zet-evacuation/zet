@@ -18,13 +18,14 @@
  *
  */
 
-package ds.graph;
+package ds.mapping;
 
+import ds.graph.GraphLocalization;
 import java.util.Iterator;
 import java.util.NavigableSet;
 import java.util.TreeSet;
 
-import ds.graph.IntegerIntegerMapping.TimeIntegerPair;
+import ds.mapping.IntegerIntegerMapping.TimeIntegerPair;
 
 /**
  * The {@code IntegerIntegerMapping} class represents a mapping from 

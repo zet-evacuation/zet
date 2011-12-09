@@ -2,20 +2,19 @@
  * EATApprox.java
  * Created: 02.12.2011, 15:35:02
  */
-package algo.graph.dynamicflow.maxflow;
+package algo.graph.dynamicflow.eat;
 
-import algo.graph.staticflow.maxflow.EdmondsKarp;
+import algo.graph.dynamicflow.maxflow.MaximumFlowOverTimeProblem;
 import algo.graph.staticflow.maxflow.PushRelabel;
 import algo.graph.staticflow.maxflow.PushRelabelHighestLabel;
-import algo.graph.staticflow.maxflow.PushRelabelHighestLabelGlobalRelabelling;
-import algo.graph.staticflow.maxflow.PushRelabelHighestLabelNeu;
 import de.tu_berlin.math.coga.common.util.Formatter;
 import de.tu_berlin.math.coga.common.util.Formatter.TimeUnits;
 import ds.graph.Edge;
-import ds.graph.IdentifiableIntegerMapping;
-import ds.graph.Network;
+import ds.mapping.IdentifiableIntegerMapping;
+import ds.graph.network.AbstractNetwork;
 import ds.graph.Node;
 import ds.graph.flow.MaximumFlow;
+import ds.graph.network.Network;
 import ds.graph.problem.MaximumFlowProblem;
 import java.util.ArrayList;
 
@@ -54,7 +53,7 @@ public class EATApprox {
 		int totalFlow = 0;
 		
 		do {
-			Network n = new Network( problem.getNetwork().numberOfNodes() + 2, problem.getNetwork().numberOfEdges() + sinkCount + sourceCount );
+			AbstractNetwork n = new Network( problem.getNetwork().numberOfNodes() + 2, problem.getNetwork().numberOfEdges() + sinkCount + sourceCount );
 			IdentifiableIntegerMapping<Edge> capacities = new IdentifiableIntegerMapping<>( n.getEdgeCapacity() );
 
 			int superSource = problem.getNetwork().numberOfNodes();
@@ -84,7 +83,7 @@ public class EATApprox {
 			MaximumFlowProblem maximumFlowProblem = new MaximumFlowProblem(n, capacities, n.getNode( superSource ), n.getNode( superSink ) );
 
 			//PushRelabel hipr = new PushRelabelHighestLabelGlobalRelabelling();
-			PushRelabel hipr = new PushRelabelHighestLabelNeu();
+			PushRelabel hipr = new PushRelabelHighestLabel();
 			//PushRelabel hipr = new PushRelabelHighestLabel();
 
 //		EdmondsKarp ek = new EdmondsKarp();
@@ -140,7 +139,7 @@ public class EATApprox {
 	
 	public static void main( String[] args ) {
 		
-		Network n = new Network(4, 3);
+		AbstractNetwork n = new Network(4, 3);
 		
 		int timeHorizon = 2;
 		

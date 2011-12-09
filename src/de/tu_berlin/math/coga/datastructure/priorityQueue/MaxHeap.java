@@ -18,7 +18,7 @@
  *
  */
 
-package ds.graph;
+package de.tu_berlin.math.coga.datastructure.priorityQueue;
 
 import java.util.ArrayList;
 import java.util.HashMap;

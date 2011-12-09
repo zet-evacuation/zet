@@ -18,7 +18,7 @@
  *
  */
 
-package ds.graph;
+package ds.mapping;
 
 /**
  * The {@code Identifiable} interface defines what we mean by

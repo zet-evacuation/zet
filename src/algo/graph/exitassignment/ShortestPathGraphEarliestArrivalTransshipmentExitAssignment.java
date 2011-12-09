@@ -29,9 +29,9 @@ import ds.graph.problem.MaximumFlowProblem;
 import ds.graph.Edge;
 import ds.graph.Forest;
 import ds.graph.IdentifiableCollection;
-import ds.graph.IdentifiableIntegerMapping;
-import ds.graph.IdentifiableObjectMapping;
-import ds.graph.Network;
+import ds.mapping.IdentifiableIntegerMapping;
+import ds.mapping.IdentifiableObjectMapping;
+import ds.graph.network.AbstractNetwork;
 import de.tu_berlin.math.coga.zet.NetworkFlowModel;
 import ds.graph.Node;
 import ds.graph.Path;
@@ -51,7 +51,7 @@ public class ShortestPathGraphEarliestArrivalTransshipmentExitAssignment extends
     protected ExitAssignment runAlgorithm(NetworkFlowModel model) {
         ExitAssignment solution = new ExitAssignment(model.getNetwork().nodes());
 
-        Network network = model.getNetwork();
+        AbstractNetwork network = model.getNetwork();
         IdentifiableCollection<Node> sinks = network.predecessorNodes(model.getSupersink());
 
         Dijkstra dijkstra = new Dijkstra(network, model.getTransitTimes(), null);

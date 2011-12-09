@@ -25,11 +25,12 @@ import de.tu_berlin.math.coga.zet.converter.graph.ZToGraphMapping;
 import de.tu_berlin.math.coga.zet.NetworkFlowModel;
 import de.tu_berlin.math.coga.zet.viewer.NodePositionMapping;
 import ds.graph.Edge;
-import ds.graph.IdentifiableIntegerMapping;
-import ds.graph.IdentifiableObjectMapping;
-import ds.graph.Network;
+import ds.mapping.IdentifiableIntegerMapping;
+import ds.mapping.IdentifiableObjectMapping;
+import ds.graph.network.AbstractNetwork;
 import ds.graph.Node;
 import ds.graph.NodeRectangle;
+import ds.graph.network.Network;
 import gui.visualization.VisualizationOptionManager;
 import opengl.framework.abs.VisualizationResult;
 import java.util.ArrayList;
@@ -43,7 +44,7 @@ import java.util.ArrayList;
 public class GraphVisualizationResults implements VisualizationResult {
 
 	/** The structure of the network the algorithm was applied to. */
-	private Network network;
+	private AbstractNetwork network;
 	/** The capacities of all edges in the network. */
 	private IdentifiableIntegerMapping<Edge> edgeCapacities;
 	/** The capacities of all nodes in the network. */
@@ -260,7 +261,7 @@ public class GraphVisualizationResults implements VisualizationResult {
 	 * Returns the network the saved visualization results are based on.
 	 * @return the network the saved visualization results are based on.
 	 */
-	public Network getNetwork() {
+	public AbstractNetwork getNetwork() {
 		return network;
 	}
 

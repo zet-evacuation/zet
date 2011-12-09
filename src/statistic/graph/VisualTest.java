@@ -20,21 +20,18 @@
 package statistic.graph;
 
 
-import algo.graph.dynamicflow.maxflow.TimeExpandedMaximumFlowOverTime;
-import algo.graph.util.PathComposition;
 import ds.graph.Edge;
-import ds.graph.IdentifiableIntegerMapping;
-import ds.graph.Network;
+import ds.mapping.IdentifiableIntegerMapping;
+import ds.graph.network.AbstractNetwork;
 import de.tu_berlin.math.coga.zet.NetworkFlowModel;
 import ds.graph.Node;
+import ds.graph.network.Network;
 import java.awt.BorderLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.LinkedList;
 import javax.swing.JComboBox;
 import javax.swing.JFrame;
-import static statistic.graph.DynamicEdgeStatistic.*;
-import static statistic.graph.DynamicNodeStatistic.*;
 
 /**
  *
@@ -43,7 +40,7 @@ import static statistic.graph.DynamicNodeStatistic.*;
 public class VisualTest extends JFrame {
 
     public static void main(String[] args) {
-        Network network = new Network(9, 10);
+        AbstractNetwork network = new Network(9, 10);
         Node source1 = network.getNode(0);
         Node source2 = network.getNode(1);
         Node source3 = network.getNode(4);

@@ -23,8 +23,8 @@ import ds.graph.flow.PathBasedFlowOverTime;
 import ds.graph.flow.FlowOverTimePath;
 import ds.graph.Edge;
 import ds.graph.flow.EdgeBasedFlowOverTime;
-import ds.graph.IdentifiableIntegerMapping;
-import ds.graph.Network;
+import ds.mapping.IdentifiableIntegerMapping;
+import ds.graph.network.AbstractNetwork;
 import ds.graph.flow.FlowOverTimeEdge;
 
 /**
@@ -33,13 +33,13 @@ import ds.graph.flow.FlowOverTimeEdge;
  */
 public class PathComposition {
 
-    private Network network;
+    private AbstractNetwork network;
     private EdgeBasedFlowOverTime edgeFlows;
     private PathBasedFlowOverTime pathFlows;
     private IdentifiableIntegerMapping<Edge> transitTimes;
     private int maxFlowRate;
 
-    public PathComposition(Network network, IdentifiableIntegerMapping<Edge> transitTimes, PathBasedFlowOverTime pathFlows) {
+    public PathComposition(AbstractNetwork network, IdentifiableIntegerMapping<Edge> transitTimes, PathBasedFlowOverTime pathFlows) {
         this.network = network;
         this.edgeFlows = new EdgeBasedFlowOverTime(network);
         this.pathFlows = pathFlows;

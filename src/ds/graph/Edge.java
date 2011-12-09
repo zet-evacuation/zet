@@ -19,6 +19,7 @@
  */
 package ds.graph;
 
+import ds.mapping.Identifiable;
 import com.thoughtworks.xstream.annotations.XStreamAsAttribute;
 import de.tu_berlin.math.coga.common.util.Level;
 

@@ -19,7 +19,7 @@
  */
 package statistic.graph;
 
-import ds.graph.IntegerIntegerMapping;
+import ds.mapping.IntegerIntegerMapping;
 import java.util.Iterator;
 import java.util.NavigableSet;
 import java.util.SortedSet;

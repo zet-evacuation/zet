@@ -18,7 +18,7 @@ package gui.visualization.control.graph;
 import ds.graph.Edge;
 import ds.graph.flow.EdgeBasedFlowOverTime;
 import ds.GraphVisualizationResults;
-import ds.graph.IdentifiableIntegerMapping;
+import ds.mapping.IdentifiableIntegerMapping;
 import gui.visualization.draw.graph.GLFlowEdge;
 import java.util.ArrayList;
 

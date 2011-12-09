@@ -21,9 +21,9 @@ package algo.graph.shortestpath;
 
 import ds.graph.GraphLocalization;
 import ds.graph.Edge;
-import ds.graph.IdentifiableIntegerMapping;
-import ds.graph.IdentifiableObjectMapping;
-import ds.graph.Network;
+import ds.mapping.IdentifiableIntegerMapping;
+import ds.mapping.IdentifiableObjectMapping;
+import ds.graph.network.AbstractNetwork;
 import ds.graph.Node;
 import ds.graph.Path;
 import ds.graph.StaticPath;
@@ -35,7 +35,7 @@ import ds.graph.StaticPath;
 public class MooreBellmanFord {
 
     private IdentifiableIntegerMapping<Edge> costs;
-    private Network graph;
+    private AbstractNetwork graph;
     private Node source;
     private IdentifiableIntegerMapping<Node> distances;
     private IdentifiableObjectMapping<Node, Edge> edges;
@@ -44,7 +44,7 @@ public class MooreBellmanFord {
     public MooreBellmanFord() {
     }
 
-    public MooreBellmanFord(Network graph, IdentifiableIntegerMapping<Edge> costs, Node source) {
+    public MooreBellmanFord(AbstractNetwork graph, IdentifiableIntegerMapping<Edge> costs, Node source) {
         this.costs = costs;
         this.graph = graph;
         this.source = source;
@@ -147,11 +147,11 @@ public class MooreBellmanFord {
         }
     }
 
-    public Network getNetwork() {
+    public AbstractNetwork getNetwork() {
         return graph;
     }
 
-    public void setNetwork(Network graph) {
+    public void setNetwork(AbstractNetwork graph) {
         if (graph != this.graph) {
             this.graph = graph;
             distances = null;

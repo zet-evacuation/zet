@@ -18,8 +18,10 @@
  *
  */
 
-package ds.graph;
+package ds.collection;
 
+import ds.graph.IdentifiableCollection;
+import ds.mapping.Identifiable;
 import java.util.Collection;
 import java.util.LinkedList;
 import java.util.Iterator;
@@ -32,6 +34,7 @@ import java.util.Iterator;
  * and thus provides all specified methods. Anyway, the class is best used
  * by only adding and deleting elements without asking for containedness of 
  * elements with specified IDs or removing arbitrary elements.
+ * @param <E> 
  */
 public class ListSequence<E extends Identifiable> extends LinkedList<E> implements IdentifiableCollection<E> {
 
@@ -210,7 +213,7 @@ public class ListSequence<E extends Identifiable> extends LinkedList<E> implemen
      */
     @Override
     public ListSequence<E> clone() {
-        ListSequence<E> copy = new ListSequence<E>();
+        ListSequence<E> copy = new ListSequence<>();
         for (E e : this) {
             copy.add((E) e.clone());
         }

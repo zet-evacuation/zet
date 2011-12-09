@@ -21,8 +21,8 @@ package algo.graph.traverse;
 
 import ds.graph.Edge;
 import ds.graph.Graph;
-import ds.graph.IdentifiableIntegerMapping;
-import ds.graph.IdentifiableObjectMapping;
+import ds.mapping.IdentifiableIntegerMapping;
+import ds.mapping.IdentifiableObjectMapping;
 import ds.graph.Node;
 import java.util.LinkedList;
 import java.util.List;

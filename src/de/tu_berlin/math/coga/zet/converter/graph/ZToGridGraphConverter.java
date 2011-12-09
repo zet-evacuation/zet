@@ -4,14 +4,14 @@
  */
 package de.tu_berlin.math.coga.zet.converter.graph;
 
-import ds.graph.IdentifiableDoubleMapping;
+import ds.mapping.IdentifiableDoubleMapping;
 import de.tu_berlin.math.coga.common.localization.DefaultLoc;
 import algo.graph.util.GraphInstanceChecker;
 import de.tu_berlin.math.coga.zet.converter.RasterContainerCreator;
 import ds.PropertyContainer;
-import ds.graph.DynamicNetwork;
-import ds.graph.IdentifiableIntegerMapping;
-import ds.graph.Network;
+import ds.graph.network.DynamicNetwork;
+import ds.mapping.IdentifiableIntegerMapping;
+import ds.graph.network.AbstractNetwork;
 import de.tu_berlin.math.coga.zet.NetworkFlowModel;
 import ds.graph.Node;
 import ds.graph.Edge;
@@ -437,7 +437,7 @@ public class ZToGridGraphConverter extends BaseZToGraphConverter {
 	 * @param model the {@code NetworkFlowModel} object.
 	 */
 	private static void checkSupplies( NetworkFlowModel model ) {
-		Network network = model.getNetwork();
+		AbstractNetwork network = model.getNetwork();
 		IdentifiableIntegerMapping<Node> supplies = model.getCurrentAssignment();
 
 		GraphInstanceChecker checker = new GraphInstanceChecker( network, supplies );

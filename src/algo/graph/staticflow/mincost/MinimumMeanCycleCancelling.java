@@ -21,8 +21,8 @@
 package algo.graph.staticflow.mincost;
 
 import ds.graph.Edge;
-import ds.graph.IdentifiableIntegerMapping;
-import ds.graph.Network;
+import ds.mapping.IdentifiableIntegerMapping;
+import ds.graph.network.AbstractNetwork;
 import ds.graph.StaticPath;
 
 /**
@@ -31,7 +31,7 @@ import ds.graph.StaticPath;
  * cycle cancelling algorithm. In every cycle cancelling step, a cycle of 
  * minimum mean total cost is calculated and augmengted. In comparison to other
  * cycle cancelling strategies, the selection of cycles with minimum mean total 
- * cost leads to 
+ * cost leads to a polynomial running time.
  * 
  * @author Martin Groß
  */
@@ -53,7 +53,7 @@ public class MinimumMeanCycleCancelling extends CycleCancelling {
      * given network is acyclic.
      */
     @Override
-    protected StaticPath findCycle(Network network, IdentifiableIntegerMapping<Edge> costs) {
+    protected StaticPath findCycle(AbstractNetwork network, IdentifiableIntegerMapping<Edge> costs) {
         StaticPath cycle = MinimumMeanCycleDetector.detect(network, costs);        
         if (cycle == null) {
             return null;

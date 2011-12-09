@@ -6,9 +6,9 @@ package algo.graph.staticflow.maxflow;
 
 import de.tu_berlin.math.coga.common.algorithm.Algorithm;
 import ds.graph.Edge;
-import ds.graph.IdentifiableIntegerMapping;
+import ds.mapping.IdentifiableIntegerMapping;
 import ds.graph.Node;
-import ds.graph.ResidualNetwork;
+import ds.graph.network.ResidualNetwork;
 import ds.graph.flow.MaximumFlow;
 import ds.graph.problem.MaximumFlowProblem;
 
@@ -26,9 +26,9 @@ public abstract class PushRelabel extends Algorithm<MaximumFlowProblem, MaximumF
 	/** The sink node. */
 	protected Node sink;
 	/** The excess mapping for nodes. */
-	protected IdentifiableIntegerMapping excess;
+	protected IdentifiableIntegerMapping<Node> excess;
 	/** The distances for nodes. */
-	protected IdentifiableIntegerMapping distanceLabels;
+	protected IdentifiableIntegerMapping<Node> distanceLabels;
 	/** The maximum flow value. */
 	protected long flowValue;
 	/** The number of pushes performed. */

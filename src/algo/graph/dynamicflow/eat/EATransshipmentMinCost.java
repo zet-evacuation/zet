@@ -17,8 +17,8 @@ package algo.graph.dynamicflow.eat;
 
 import algo.graph.dynamicflow.*;
 import ds.graph.Edge;
-import ds.graph.IdentifiableIntegerMapping;
-import ds.graph.Network;
+import ds.mapping.IdentifiableIntegerMapping;
+import ds.graph.network.AbstractNetwork;
 import ds.graph.Node;
 
 /**
@@ -31,7 +31,7 @@ import ds.graph.Node;
  */
 public class EATransshipmentMinCost extends Transshipment<EATransshipmentWithTHMinCost> {
 
-    public EATransshipmentMinCost(Network network, IdentifiableIntegerMapping<Edge> transitTimes, IdentifiableIntegerMapping<Edge> capacities, IdentifiableIntegerMapping<Node> supplies) {
+    public EATransshipmentMinCost(AbstractNetwork network, IdentifiableIntegerMapping<Edge> transitTimes, IdentifiableIntegerMapping<Edge> capacities, IdentifiableIntegerMapping<Node> supplies) {
         super(network, transitTimes, capacities, null, supplies, DynamicTransshipment.class, EATransshipmentWithTHMinCost.class);
     }
 }

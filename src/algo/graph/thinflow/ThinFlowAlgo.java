@@ -23,8 +23,8 @@ import ds.graph.flow.ThinFlow;
 import ds.graph.DoubleMap;
 import ds.graph.Edge;
 import ds.graph.Node;
-import ds.graph.DynamicNetwork;
-import ds.graph.ListSequence;
+import ds.graph.network.DynamicNetwork;
+import ds.collection.ListSequence;
 import java.util.HashSet;
 import java.util.HashMap;
 

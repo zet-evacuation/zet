@@ -23,10 +23,10 @@ import ds.graph.GraphLocalization;
 import ds.graph.Edge;
 import ds.graph.Forest;
 import ds.graph.IdentifiableCollection;
-import ds.graph.IdentifiableIntegerMapping;
-import ds.graph.IdentifiableObjectMapping;
-import ds.graph.MinHeap;
-import ds.graph.Network;
+import ds.mapping.IdentifiableIntegerMapping;
+import ds.mapping.IdentifiableObjectMapping;
+import de.tu_berlin.math.coga.datastructure.priorityQueue.MinHeap;
+import ds.graph.network.AbstractNetwork;
 import ds.graph.Node;
 /**
  *
@@ -35,21 +35,21 @@ import ds.graph.Node;
 public class Dijkstra {
 
     private IdentifiableIntegerMapping<Edge> costs;
-    private Network graph;
+    private AbstractNetwork graph;
     private Node source;
     private boolean reverse;
     private IdentifiableIntegerMapping<Node> distances;
     private IdentifiableObjectMapping<Node, Edge> edges;
     private IdentifiableObjectMapping<Node, Node> nodes;
 
-    public Dijkstra(Network graph, IdentifiableIntegerMapping<Edge> costs, Node source) {
+    public Dijkstra(AbstractNetwork graph, IdentifiableIntegerMapping<Edge> costs, Node source) {
         this.costs = costs;
         this.graph = graph;
         this.source = source;
         this.reverse = false;
     }
 
-    public Dijkstra(Network graph, IdentifiableIntegerMapping<Edge> costs, Node source, boolean reverse) {
+    public Dijkstra(AbstractNetwork graph, IdentifiableIntegerMapping<Edge> costs, Node source, boolean reverse) {
         this.costs = costs;
         this.graph = graph;
         this.source = source;
@@ -149,11 +149,11 @@ public class Dijkstra {
         }
     }
 
-    public Network getGraph() {
+    public AbstractNetwork getGraph() {
         return graph;
     }
 
-    public void setGraph(Network graph) {
+    public void setGraph(AbstractNetwork graph) {
         if (graph != this.graph) {
             this.graph = graph;
             distances = null;

@@ -20,18 +20,17 @@
 
 package statistic.graph.gui;
 
-import algo.graph.dynamicflow.eat.EATransshipmentSSSP;
-import algo.graph.dynamicflow.maxflow.TimeExpandedMaximumFlowOverTime;
 import algo.graph.util.PathComposition;
 
 import com.thoughtworks.xstream.XStream;
 import com.thoughtworks.xstream.annotations.Annotations;
 import ds.graph.flow.PathBasedFlowOverTime;
 import ds.graph.Edge;
-import ds.graph.IdentifiableIntegerMapping;
-import ds.graph.Network;
+import ds.mapping.IdentifiableIntegerMapping;
+import ds.graph.network.AbstractNetwork;
 import de.tu_berlin.math.coga.zet.NetworkFlowModel;
 import ds.graph.Node;
+import ds.graph.network.Network;
 import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.event.WindowEvent;
@@ -43,7 +42,6 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Random;
@@ -79,7 +77,7 @@ public class Test {
             Controller controller = Controller.getInstance();            
             StatisticsCollection runs = new StatisticsCollection();
             for (int index = 0; index < 5; index++) {
-                Network network = new Network(10, 14);
+                AbstractNetwork network = new Network(10, 14);
                 Node source1 = network.getNode(0);
                 Node source2 = network.getNode(1);
                 Node source3 = network.getNode(4);

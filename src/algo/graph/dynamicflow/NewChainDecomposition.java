@@ -23,16 +23,16 @@ package algo.graph.dynamicflow;
 import de.tu_berlin.math.coga.common.algorithm.Algorithm;
 import ds.graph.ImplicitTimeExpandedResidualNetwork;
 import ds.graph.Edge;
-import ds.graph.IdentifiableConstantMapping;
-import ds.graph.IdentifiableIntegerMapping;
-import ds.graph.IdentifiableObjectMapping;
-import ds.graph.Network;
+import ds.mapping.IdentifiableIntegerMapping;
+import ds.mapping.IdentifiableObjectMapping;
+import ds.graph.network.AbstractNetwork;
 import ds.graph.Node;
 import ds.graph.flow.FlowOverTimeCycle;
 import ds.graph.flow.FlowOverTimeEdge;
 import ds.graph.flow.FlowOverTimeEdgeSequence;
 import ds.graph.flow.FlowOverTimePath;
 import ds.graph.flow.PathBasedFlowOverTime;
+import ds.graph.network.Network;
 import java.util.Arrays;
 import java.util.Deque;
 import java.util.LinkedList;
@@ -54,10 +54,10 @@ public class NewChainDecomposition extends Algorithm<ChainDecompositionProblem, 
 
     @Override
     protected PathBasedFlowOverTime runAlgorithm(ChainDecompositionProblem problem) {
-        complete = new LinkedList<FlowOverTimeEdgeSequence>();
+        complete = new LinkedList<>();
         network = problem.getNetwork();
-        sequencesUsingEdge = new IdentifiableObjectMapping<Edge, Queue[]>(network.edges(), Queue[].class);
-        sequencesUsingNode = new IdentifiableObjectMapping<Node, Queue[]>(network.nodes(), Queue[].class);
+        sequencesUsingEdge = new IdentifiableObjectMapping<>(network.edges(), Queue[].class);
+        sequencesUsingNode = new IdentifiableObjectMapping<>(network.nodes(), Queue[].class);
         transitTimes = problem.getNetwork().getProblem().getTransitTimes();
 
         for (FlowOverTimeEdgeSequence edgeSequence : problem.getEdgeSequences()) {            
@@ -219,7 +219,7 @@ public class NewChainDecomposition extends Algorithm<ChainDecompositionProblem, 
 
     protected FlowOverTimeCycle extractCycle(FlowOverTimeEdgeSequence edgeSequence) {
         // Check whether a node is visited twice
-        IdentifiableIntegerMapping<Node> arrivalTime = new IdentifiableIntegerMapping<Node>(network.nodes());
+        IdentifiableIntegerMapping<Node> arrivalTime = new IdentifiableIntegerMapping<>(network.nodes());
         arrivalTime.initializeWith(-1);
         Node node = null;
         int lastArrivalTime = 0;
@@ -374,7 +374,7 @@ public class NewChainDecomposition extends Algorithm<ChainDecompositionProblem, 
     }
 
     public static void main(String[] args) {
-        Network network = new Network(10, 90);
+        AbstractNetwork network = new Network(10, 90);
         for (Node start : network.nodes()) {
             for (Node end : network.nodes()) {
                 if (start == end) {

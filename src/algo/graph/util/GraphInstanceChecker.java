@@ -20,10 +20,10 @@ import java.util.LinkedList;
 import algo.graph.Flags;
 import algo.graph.traverse.DFS;
 import algo.graph.traverse.DFS.State;
-import ds.graph.IdentifiableIntegerMapping;
-import ds.graph.IdentifiableObjectMapping;
-import ds.graph.ListSequence;
-import ds.graph.Network;
+import ds.mapping.IdentifiableIntegerMapping;
+import ds.mapping.IdentifiableObjectMapping;
+import ds.collection.ListSequence;
+import ds.graph.network.AbstractNetwork;
 import ds.graph.Node;
 
 /**
@@ -39,7 +39,7 @@ public class GraphInstanceChecker {
     private ListSequence<Node> sources, sinks;
     private LinkedList<Node> newSources;
     private LinkedList<Node> deletedSources;
-    private Network network;
+    private AbstractNetwork network;
     private IdentifiableIntegerMapping<Node> supplies;
     private IdentifiableIntegerMapping<Node> newSupplies;
     boolean hasRun = false;
@@ -49,7 +49,7 @@ public class GraphInstanceChecker {
      * @param network the network to be checked.
      * @param supplies the supplies of the network.
      */
-    public GraphInstanceChecker(Network network,
+    public GraphInstanceChecker(AbstractNetwork network,
 			IdentifiableIntegerMapping<Node> supplies){
     	this.network = network;
     	this.supplies = supplies;
@@ -195,7 +195,7 @@ public class GraphInstanceChecker {
      * @param supplies the supply mapping to be checked.
      * @return {@code true} if no demands and supplies are given, {@code false} otherwise
      */
-    public static boolean emptySupplies(Network network, IdentifiableIntegerMapping<Node> supplies){
+    public static boolean emptySupplies(AbstractNetwork network, IdentifiableIntegerMapping<Node> supplies){
     	int sup = 0, dem = 0;
     	for (Node node : network.nodes()){
     		if (supplies.get(node)>0){

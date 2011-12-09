@@ -6,8 +6,8 @@
 package algo.graph.dynamicflow;
 
 import ds.graph.Edge;
-import ds.graph.IdentifiableIntegerMapping;
-import ds.graph.Network;
+import ds.mapping.IdentifiableIntegerMapping;
+import ds.graph.network.AbstractNetwork;
 
 /**
  *
@@ -16,7 +16,7 @@ import ds.graph.Network;
 public class DynamicFlowProblem {
 
     private IdentifiableIntegerMapping<Edge> capacities;
-    private Network network;
+    private AbstractNetwork network;
     private IdentifiableIntegerMapping<Edge> transitTimes;
 
     public IdentifiableIntegerMapping<Edge> getCapacities() {
@@ -27,11 +27,11 @@ public class DynamicFlowProblem {
         this.capacities = capacities;
     }
 
-    public Network getNetwork() {
+    public AbstractNetwork getNetwork() {
         return network;
     }
 
-    public void setNetwork(Network network) {
+    public void setNetwork(AbstractNetwork network) {
         this.network = network;
     }
 

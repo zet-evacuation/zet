@@ -20,18 +20,18 @@
 
 package de.tu_berlin.math.coga.zet;
 
-import java.util.LinkedList;
-
 import com.thoughtworks.xstream.annotations.XStreamAlias;
 import de.tu_berlin.math.coga.common.localization.DefaultLoc;
 import de.tu_berlin.math.coga.zet.converter.graph.ZToGraphMapping;
-import ds.graph.DynamicNetwork;
+import ds.graph.network.DynamicNetwork;
 import ds.graph.Edge;
 import ds.graph.Graph;
-import ds.graph.IdentifiableDoubleMapping;
-import ds.graph.IdentifiableIntegerMapping;
-import ds.graph.Network;
+import ds.mapping.IdentifiableDoubleMapping;
+import ds.mapping.IdentifiableIntegerMapping;
+import ds.graph.network.AbstractNetwork;
 import ds.graph.Node;
+import ds.graph.network.Network;
+import java.util.LinkedList;
 
 /**
  *
@@ -59,10 +59,10 @@ public class NetworkFlowModel {
     
     public NetworkFlowModel(){
         this.network = new Network(0, 0);
-        this.edgeCapacities = new IdentifiableIntegerMapping<Edge>(0);
-        this.nodeCapacities = new IdentifiableIntegerMapping<Node>(0);
-        this.transitTimes = new IdentifiableIntegerMapping<Edge>(0);
-        this.exactTransitTimes = new IdentifiableDoubleMapping<Edge>(0);
+        this.edgeCapacities = new IdentifiableIntegerMapping<>(0);
+        this.nodeCapacities = new IdentifiableIntegerMapping<>(0);
+        this.transitTimes = new IdentifiableIntegerMapping<>(0);
+        this.exactTransitTimes = new IdentifiableDoubleMapping<>(0);
     }
     /*
     public FlowProblemInstance getFlowProblemInstance() {
@@ -143,7 +143,7 @@ public class NetworkFlowModel {
         return network;
     }
     
-    public Network getNetwork(){
+    public AbstractNetwork getNetwork(){
     	return network.getAsStaticNetwork();
     }
     

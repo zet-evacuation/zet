@@ -4,6 +4,7 @@
  */
 package ds.graph;
 
+import ds.graph.network.AbstractNetwork;
 import algo.graph.traverse.BFS;
 
 /**
@@ -43,7 +44,7 @@ public class StaticGraph implements Graph {
 	}
 
 	@Override
-	public Network getAsStaticNetwork() {
+	public AbstractNetwork getAsStaticNetwork() {
 		throw new UnsupportedOperationException( "not implemented yet" );
 	}
 

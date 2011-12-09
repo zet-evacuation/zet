@@ -20,10 +20,11 @@
 
 package de.tu_berlin.math.coga.graph.generator;
 
-import ds.graph.Identifiable;
-import ds.graph.IdentifiableIntegerMapping;
-import ds.graph.Network;
+import ds.mapping.Identifiable;
+import ds.mapping.IdentifiableIntegerMapping;
+import ds.graph.network.AbstractNetwork;
 import ds.graph.Node;
+import ds.graph.network.Network;
 import java.util.Random;
 
 /**
@@ -31,8 +32,8 @@ import java.util.Random;
  */
 public class GridGenerator {
     
-    public static Network generateGridNetwork(int width, int height) {
-        Network network = new Network(width * height, 4 * width * height - 2 * (width + height));
+    public static AbstractNetwork generateGridNetwork(int width, int height) {
+        AbstractNetwork network = new Network(width * height, 4 * width * height - 2 * (width + height));
         for (int row = 0; row < height; row++) {
             for (int column = 1; column < width; column++) {
                 network.createAndSetEdge(network.getNode(row * width + column - 1), network.getNode(row * width + column));
@@ -48,10 +49,10 @@ public class GridGenerator {
         return network;
     }
     
-    public static Network generateDualGridNetwork(int width, int height) {
+    public static AbstractNetwork generateDualGridNetwork(int width, int height) {
         width--;
         height--;
-        Network network = new Network(width * height + 2, 2 * width * height + (width + height));
+        AbstractNetwork network = new Network(width * height + 2, 2 * width * height + (width + height));
         Node source = network.getNode(network.numberOfNodes() - 2);
         Node sink = network.getNode(network.numberOfNodes() - 1);
         for (int row = 0; row < height; row++) {
@@ -79,7 +80,7 @@ public class GridGenerator {
         return network;
     }
     
-    public static <T extends Identifiable> IdentifiableIntegerMapping<T> createCostFunction(int width, int height, Network network, IdentifiableIntegerMapping<T> capacities) {
+    public static <T extends Identifiable> IdentifiableIntegerMapping<T> createCostFunction(int width, int height, AbstractNetwork network, IdentifiableIntegerMapping<T> capacities) {
         IdentifiableIntegerMapping<T> costs = null;
         Node source = network.getNode(network.numberOfNodes() - 2);
         Node sink = network.getNode(network.numberOfNodes() - 1);

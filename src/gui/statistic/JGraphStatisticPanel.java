@@ -19,7 +19,6 @@
  */
 package gui.statistic;
 
-import algo.graph.dynamicflow.eat.EATransshipmentSSSP;
 import algo.graph.util.PathComposition;
 
 import com.thoughtworks.xstream.XStream;
@@ -28,10 +27,11 @@ import com.thoughtworks.xstream.converters.ConversionException;
 import ds.graph.flow.PathBasedFlowOverTime;
 import ds.graph.flow.FlowOverTimePath;
 import ds.graph.Edge;
-import ds.graph.IdentifiableIntegerMapping;
-import ds.graph.Network;
+import ds.mapping.IdentifiableIntegerMapping;
+import ds.graph.network.AbstractNetwork;
 import de.tu_berlin.math.coga.zet.NetworkFlowModel;
 import ds.graph.Node;
+import ds.graph.network.Network;
 import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.io.BufferedReader;
@@ -85,7 +85,7 @@ public class JGraphStatisticPanel extends JPanel {
     private void createTestInstance() {
         runs = new StatisticsCollection();
         for (int index = 0; index < 5; index++) {
-            Network network = new Network(10, 14);
+            AbstractNetwork network = new Network(10, 14) {};
             Node source1 = network.getNode(0);
             Node source2 = network.getNode(1);
             Node source3 = network.getNode(4);
@@ -124,7 +124,7 @@ public class JGraphStatisticPanel extends JPanel {
             network.setEdge(p);
             network.setEdge(q);
             network.setEdge(r);
-            IdentifiableIntegerMapping<Edge> capacities = new IdentifiableIntegerMapping<Edge>(network.numberOfEdges());
+            IdentifiableIntegerMapping<Edge> capacities = new IdentifiableIntegerMapping<>(network.numberOfEdges());
             capacities.set(e, 1);
             capacities.set(f, 1);
             capacities.set(g, 2);

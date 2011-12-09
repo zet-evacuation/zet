@@ -28,7 +28,7 @@ import de.tu_berlin.math.coga.graph.io.xml.XMLReader;
 import de.tu_berlin.math.coga.graph.io.xml.XMLWriter;
 import de.tu_berlin.math.coga.zet.viewer.NodePositionMapping;
 import ds.GraphVisualizationResults;
-import ds.graph.IdentifiableIntegerMapping;
+import ds.mapping.IdentifiableIntegerMapping;
 import ds.graph.Node;
 import ds.graph.flow.PathBasedFlowOverTime;
 import ds.graph.problem.MaximumFlowProblem;

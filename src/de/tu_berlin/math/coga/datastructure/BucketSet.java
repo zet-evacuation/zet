@@ -4,8 +4,8 @@
  */
 package de.tu_berlin.math.coga.datastructure;
 
-import ds.graph.Identifiable;
-import ds.graph.IdentifiableObjectMapping;
+import ds.mapping.Identifiable;
+import ds.mapping.IdentifiableObjectMapping;
 import java.lang.reflect.Array;
 
 /**

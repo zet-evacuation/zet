@@ -17,7 +17,10 @@
  * IdentifiableConstantMapping.java
  *
  */
-package ds.graph;
+package ds.mapping;
+
+import ds.graph.Edge;
+import ds.graph.Node;
 
 /**
  * 

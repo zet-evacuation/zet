@@ -4,6 +4,9 @@
  */
 package ds.graph;
 
+import ds.graph.network.DynamicNetwork;
+import ds.mapping.Identifiable;
+
 /**
  *
  * @param <D> 

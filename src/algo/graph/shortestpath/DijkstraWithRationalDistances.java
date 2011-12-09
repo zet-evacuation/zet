@@ -5,9 +5,9 @@
 
 package algo.graph.shortestpath;
 
-import ds.graph.DynamicNetwork;
+import ds.graph.network.DynamicNetwork;
 import ds.graph.Edge;
-import ds.graph.MinHeap;
+import de.tu_berlin.math.coga.datastructure.priorityQueue.MinHeap;
 import ds.graph.Node;
 import java.util.HashMap;
 import java.util.LinkedList;

@@ -22,9 +22,9 @@ package ds.graph.flow;
 
 import ds.graph.Edge;
 import ds.graph.IdentifiableCollection;
-import ds.graph.IdentifiableObjectMapping;
-import ds.graph.IntegerIntegerMapping;
-import ds.graph.Network;
+import ds.mapping.IdentifiableObjectMapping;
+import ds.mapping.IntegerIntegerMapping;
+import ds.graph.network.AbstractNetwork;
 
 /**
  * The {@code EdgeBasedFlowOverTime} class represents an edge based representation
@@ -48,7 +48,7 @@ public class EdgeBasedFlowOverTime {
      * {@code set(Edge edge, IntegerIntegerMapping flowFunction)}.
      * @param network the network for which the empty flow shall be created.
      */
-    public EdgeBasedFlowOverTime(Network network) {
+    public EdgeBasedFlowOverTime(AbstractNetwork network) {
         map = new IdentifiableObjectMapping<Edge, IntegerIntegerMapping>(network.getEdgeCapacity(), IntegerIntegerMapping.class);
         IdentifiableCollection<Edge> edges = network.edges();
         for (Edge edge : edges){
