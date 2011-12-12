@@ -17,68 +17,60 @@
  * PathBasedFlowOverTime.java
  * 
  */
-
 package ds.graph.flow;
 
+import java.util.ArrayList;
 import java.util.Iterator;
-import java.util.Vector;
 
 /**
  * The {@code PathBasedFlowOverTime} class represents a dynamic flow in a path based representation.
  * The dynamic flow is stored as a {@code Vector} of {@link FlowOverTimePath} objects.
  */
-public class PathBasedFlowOverTime implements Iterable<FlowOverTimePath>{
-    
-	/**
-	 * The path flows belonging to this {@code PathBasedFlowOverTime}.
-	 */
-    Vector<FlowOverTimePath> pathFlows;
-    
-    /**
-     * Creates a new {@code PathBasedFlowOverTime} object without any path flows.
-     */
-    public PathBasedFlowOverTime(){
-        pathFlows = new Vector<FlowOverTimePath>();
-    }
-    
-    /**
-     * Adds a path flow to this dynamic flow.
-     * @param pathFlow the path flow to be add.
-     */
-    public void addPathFlow(FlowOverTimePath pathFlow){
-        if (pathFlow != null)
-            pathFlows.add(pathFlow);
-    }
+public class PathBasedFlowOverTime implements Iterable<FlowOverTimePath> {
+	/** The path flows belonging to this {@code PathBasedFlowOverTime}. */
+	ArrayList<FlowOverTimePath> pathFlows;
 
-    public void remove(FlowOverTimePath pathFlow){
-            pathFlows.remove(pathFlow);
-    }    
-    
-    /**
-     * Returns an iterator to iterate over the {@code DynamicPathFlows} 
-     * contained in this {@code PathBasedFlowOverTime}.
-     * @return an iterator to iterate over the {@code DynamicPathFlows} 
-     * contained in this {@code PathBasedFlowOverTime}.
-     */
-    @Override
-    public Iterator<FlowOverTimePath> iterator(){
-    	return pathFlows.iterator();
-    }
-    
-    /**
-     * Returns a String containing a description of all 
-     * contained {@code DynamicPathFlows}.
-     * @return a String containing a description of all 
-     * contained {@code DynamicPathFlows}.
-     */
-    @Override
-    public String toString(){
-    	String result = "[\n";
-    	for (FlowOverTimePath pathFlow : pathFlows){
-    		result += " " + pathFlow.toString() + "\n";
-    	}
-    	result += "]";
-    	return result;
-    }
-    
+	/** Creates a new {@code PathBasedFlowOverTime} object without any path flows. */
+	public PathBasedFlowOverTime() {
+		pathFlows = new ArrayList<>();
+	}
+
+	/**
+	 * Adds a path flow to this dynamic flow.
+	 * @param pathFlow the path flow to be add.
+	 */
+	public void addPathFlow( FlowOverTimePath pathFlow ) {
+		if( pathFlow != null )
+			pathFlows.add( pathFlow );
+	}
+
+	public boolean remove( FlowOverTimePath pathFlow ) {
+		return pathFlows.remove( pathFlow );
+	}
+
+	/**
+	 * Returns an iterator to iterate over the {@code DynamicPathFlows} 
+	 * contained in this {@code PathBasedFlowOverTime}.
+	 * @return an iterator to iterate over the {@code DynamicPathFlows} 
+	 * contained in this {@code PathBasedFlowOverTime}.
+	 */
+	@Override
+	public Iterator<FlowOverTimePath> iterator() {
+		return pathFlows.iterator();
+	}
+
+	/**
+	 * Returns a String containing a description of all 
+	 * contained {@code DynamicPathFlows}.
+	 * @return a String containing a description of all 
+	 * contained {@code DynamicPathFlows}.
+	 */
+	@Override
+	public String toString() {
+		String result = "[\n";
+		for( FlowOverTimePath pathFlow : pathFlows )
+			result += " " + pathFlow.toString() + "\n";
+		result += "]";
+		return result;
+	}
 }

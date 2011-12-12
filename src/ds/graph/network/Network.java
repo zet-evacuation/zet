@@ -86,6 +86,17 @@ public class Network extends AbstractNetwork {
 		indegree = new IdentifiableIntegerMapping<>( initialNodeCapacity );
 		outdegree = new IdentifiableIntegerMapping<>( initialNodeCapacity );
 	}
+	
+	Network( Network network ) {
+		this.edges = network.edges;
+		this.nodes = network.nodes;
+		incidentEdges = network.incidentEdges;
+		incomingEdges = network.incomingEdges;
+		outgoingEdges = network.outgoingEdges;
+		degree = network.degree;
+		indegree = network.indegree;
+		outdegree = network.outdegree;
+	}
 
 	/**
 	 * Checks whether the graph is directed. Runtime O(1).

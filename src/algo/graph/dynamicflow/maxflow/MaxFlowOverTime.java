@@ -20,239 +20,86 @@
  */
 package algo.graph.dynamicflow.maxflow;
 
-import algo.graph.Flags;
 import algo.graph.staticflow.mincost.MinimumMeanCycleCancelling;
 import algo.graph.util.PathDecomposition;
 import de.tu_berlin.math.coga.common.algorithm.Algorithm;
-import ds.graph.IdentifiableCollection;
-import ds.graph.flow.PathBasedFlowOverTime;
 import ds.graph.DynamicPath;
 import ds.graph.flow.FlowOverTimePath;
 import ds.graph.Edge;
-import ds.graph.Graph;
 import ds.graph.GraphLocalization;
 import ds.mapping.IdentifiableIntegerMapping;
-import ds.graph.network.AbstractNetwork;
 import ds.graph.Node;
 import ds.graph.flow.PathBasedFlow;
 import ds.graph.StaticPath;
 import ds.graph.flow.StaticPathFlow;
+import ds.graph.flow.TimeReapeatedFlow;
+import ds.graph.network.ExtendedNetwork;
+import ds.graph.network.Network;
 import ds.graph.problem.MinimumCostFlowProblem;
-import java.util.Iterator;
-import java.util.LinkedList;
 import java.util.List;
 
 /**
  * The class {@code MaxFlowOverTime} solves the max flow over time 
- * problem.
- * 
- * @author Gordon Schlechter
+ * problem. The flow is computed by a reduction to a minimum cost flow over
+ * time computation. The reduction increases the size of the problem input
+ * and thus needs the double amount of free space in memory.
+ * @author Gordon Schlechter, Jan-Philipp Kappmeier
  */
-public class MaxFlowOverTime extends Algorithm<MaximumFlowOverTimeProblem, PathBasedFlowOverTime> {
-	private AbstractNetwork network;
+public class MaxFlowOverTime extends Algorithm<MaximumFlowOverTimeProblem, TimeReapeatedFlow> {
+	private Network network;
 	private IdentifiableIntegerMapping<Edge> edgeCapacities;
 	private List<Node> sinks;
 	private List<Node> sources;
-	private IdentifiableIntegerMapping<Node> zeroSupplies;
 	private Node superNode;
-	private Node superSink;
-	private Node superSource;
 	private int timeHorizon;
 	private IdentifiableIntegerMapping<Edge> transitTimes;
-	private LinkedList<Node> newNodes;
-	private LinkedList<Edge> newEdges;
-	protected PathBasedFlowOverTime maxFlowOT;
+	private ExtendedNetwork ex;
 
 	/** Creates a new instance of MaxFlowOverTime */
-	public MaxFlowOverTime() {
-		newNodes = new LinkedList<>();
-		newEdges = new LinkedList<>();
-	}
+	public MaxFlowOverTime() {}
 
-	/** Creates the supplies for all nodes in the network. The value of the 
-	 * supplies of each node is 0. */
-	private void createZeroSupply() {
-		int supplies = 0;
-		zeroSupplies = new IdentifiableIntegerMapping<>( supplies );
+	/**
+	 * Reduction for the computation of an maximum flow over time using a
+	 * minimum cost flow computation.
+	 */
+	private void reduction() {
+		ex = new ExtendedNetwork( network, 1, sources.size() + sinks.size() );
+		superNode = ex.getFirstNewNode();
 
-		for( Node n : network.nodes() )
-			zeroSupplies.set( n, 0 );
-	}
-
-	/** Creates a new super source. A super source is connected with all
-	 * sources in the original network. These connecting edges have a transit 
-	 * time of 0 and a capacity of MAX_VALUE for an integer. */
-	private void createSuperSource() {
-		int nodeCount = network.getNodeCapacity();
-		superSource = new Node( nodeCount );
-		nodeCount++;
-		network.setNodeCapacity( nodeCount );
-		network.setNode( superSource );
-		newNodes.add( superSource );
-
-		int edgeCount = network.getEdgeCapacity();
-		network.setEdgeCapacity( edgeCount + sources.size() );
+		edgeCapacities.setDomainSize( ex.getEdgeCapacity() ); // reserve space
+		transitTimes.setDomainSize( ex.getEdgeCapacity() ); // reserve space
 
 		for( Node source : sources ) {
-			Edge newEdge = new Edge( edgeCount, superSource, source );
-			edgeCapacities.set( newEdge, Integer.MAX_VALUE );
-			transitTimes.set( newEdge, 0 );
-			network.setEdge( newEdge );
-			newEdges.add( newEdge );
-			edgeCount++;
-		}
-	}
-
-	/** Creates a new super sink. A super sink is connected with all
-	 * sinks in the original network. These connecting edges have a transit 
-	 * time of 0 and a capacity of MAX_VALUE for an integer. */
-	private void createSuperSink() {
-		int nodeCount = network.getNodeCapacity();
-		superSink = new Node( nodeCount );
-		nodeCount++;
-		network.setNodeCapacity( nodeCount );
-		network.setNode( superSink );
-		newNodes.add( superSink );
-
-		int edgeCount = network.getEdgeCapacity();
-		network.setEdgeCapacity( edgeCount + sinks.size() );
-
-		for( Node sink : sinks ) {
-			Edge newEdge = new Edge( edgeCount, sink, superSink );
-			edgeCapacities.set( newEdge, Integer.MAX_VALUE );
-			transitTimes.set( newEdge, 0 );
-			network.setEdge( newEdge );
-			newEdges.add( newEdge );
-			edgeCount++;
-		}
-	}
-
-	/** Creates an edge between the super sink and the super source.
-	 * This edge has a capacity of MAX_VALUE for an integer. The transit 
-	 * time of this edge is -( the given time horizin + 1). 
-	 */
-	private void createEdgeBetween() {
-
-		int edgeCount = network.getEdgeCapacity();
-		network.setEdgeCapacity( edgeCount + 1 );
-
-		Edge edgeBetween = new Edge( edgeCount, superSink, superSource );
-
-		edgeCapacities.set( edgeBetween, Integer.MAX_VALUE );
-		transitTimes.set( edgeBetween, -(timeHorizon + 1) );
-
-		network.setEdge( edgeBetween );
-
-		newEdges.add( edgeBetween );
-	}
-
-	/** In the first step, a super source is created, if there is more 
-	 * than one source. After that, a super sink is created, if it 
-	 * is necessary. At the end the edge between these two nodes is created.
-	 */
-	private void createSuperNodes() {
-
-		if( sources.size() > 1 )
-			createSuperSource();
-		else
-			superSource = sources.get( 0 );
-
-		if( sinks.size() > 1 )
-			createSuperSink();
-		else
-			superSink = sinks.get( 0 );
-
-		createEdgeBetween();
-	}
-
-	/** andere Reduktion, noch nicht fertig implementiert und getestet.
-	 * Methode zum Entfernen fehlt noch...
-	 */
-	public void reduction() {
-		int nodeCount = network.getNodeCapacity();
-		superNode = new Node( nodeCount );
-		nodeCount++;
-		network.setNodeCapacity( nodeCount );
-		network.setNode( superNode );
-
-		int edgeCount1 = network.getEdgeCapacity();
-		network.setEdgeCapacity( edgeCount1 + sources.size() );
-
-		for( Node source : sources ) {
-			Edge newEdge = new Edge( edgeCount1, superNode, source );
-			edgeCapacities.set( newEdge, Integer.MAX_VALUE );
-			transitTimes.set( newEdge, 0 );
-			network.setEdge( newEdge );
-			newEdges.add( newEdge );
-			edgeCount1++;
-		}
-
-		int edgeCount2 = network.getEdgeCapacity();
-		network.setEdgeCapacity( edgeCount2 + sinks.size() );
-
-		for( Node sink : sinks ) {
-			Edge newEdge = new Edge( edgeCount2, sink, superNode );
+			Edge newEdge = ex.createAndSetEdge( superNode, source );
 			edgeCapacities.set( newEdge, Integer.MAX_VALUE );
 			transitTimes.set( newEdge, -(timeHorizon + 1) );
-			network.setEdge( newEdge );
-			newEdges.add( newEdge );
-			edgeCount2++;
+		}
+
+		for( Node sink : sinks ) {
+			Edge newEdge = ex.createAndSetEdge( sink, superNode );
+			edgeCapacities.set( newEdge, Integer.MAX_VALUE );
+			transitTimes.set( newEdge, 0 );
 		}
 	}
-	
 
-
-	/** Hides the added super node and edges in the network. After this you got 
-	 * back the original network.
+	/**
+	 * Hides the added super node and edges in the network. After this you got 
+	 * back the original network. The added Edges in the flow are also removed.
 	 */
-	private void reconstruction() {
-		int i = network.getNodeCapacity();
-		network.setNodeCapacity( i - 1 );
-
-		int g = network.getEdgeCapacity();
-		network.setEdgeCapacity( g - newEdges.size() );
+	private void reconstruction( IdentifiableIntegerMapping<Edge> flow ) {
+		ex.undo();
+		// the additional edges have the highest numbers, so we can just get rid of them
+		flow.setDomainSize( flow.getDomainSize() - (sources.size() + sinks.size()) );
+		transitTimes.setDomainSize( flow.getDomainSize() );
+		edgeCapacities.setDomainSize( flow.getDomainSize() );
 	}
 
-	/** Hides the added nodes and edges in the network. After this you got 
-	 * back the original network.
-	 */
-	private void hideAddedInNetwork() {
-		/**for (Edge e : newEdges){
-		network.setHidden(e, true);
-		}
-		for (Node n : newNodes) {
-		network.setHidden(n, true);
-		}*/
-		int i = network.getNodeCapacity();
-		network.setNodeCapacity( i - newNodes.size() );
-
-		int g = network.getEdgeCapacity();
-		network.setEdgeCapacity( g - newEdges.size() );
-	}
-
-	/** Hides the added egdes in the flow. After this the flow contains
-	 * only edges from the original network.
-	 */
-	private void hideAddedInFlow( IdentifiableIntegerMapping<Edge> flow ) {
-
-		int i = flow.getDomainSize();
-		flow.setDomainSize( i - newEdges.size() );
-
-	}
-
-	/** Hides the added nodes und edges in the network and also hides
-	 * the added edges in the flow.
-	 */
-	private void hideAdded( IdentifiableIntegerMapping<Edge> flow ) {
-		hideAddedInNetwork();
-		hideAddedInFlow( flow );
-	}
-
-	/** Creates dynamic Flow out of the given static flow. At first static 
-	 * flow is divided in the different pathes and then it is added to the 
-	 * dynamic flow,  if the conditions are met. */
-	private PathBasedFlowOverTime translateIntoMaxFlow( PathBasedFlow minCostFlow ) {
-		PathBasedFlowOverTime mFlow = new PathBasedFlowOverTime();
+	/**
+	 * Creates dynamic flow out of the given static flow. At first static 
+	 * flow is divided in the different paths and then it is added to the 
+	 * dynamic flow, if the conditions are met. */
+	private TimeReapeatedFlow translateIntoMaxFlow( PathBasedFlow minCostFlow ) {
+		TimeReapeatedFlow mFlow = new TimeReapeatedFlow( timeHorizon );
 
 		for( StaticPathFlow staticPathFlow : minCostFlow ) {
 			if( staticPathFlow.getAmount() == 0 )
@@ -274,15 +121,11 @@ public class MaxFlowOverTime extends Algorithm<MaximumFlowOverTimeProblem, PathB
 		return mFlow;
 	}
 
-	public PathBasedFlowOverTime getDynamicFlow() {
-		return maxFlowOT;
-	}
-
 	@Override
-	protected PathBasedFlowOverTime runAlgorithm( MaximumFlowOverTimeProblem problem ) {
+	protected TimeReapeatedFlow runAlgorithm( MaximumFlowOverTimeProblem problem ) {
 		sinks = problem.getSinks();
 		sources = problem.getSources();
-		this.network = problem.getNetwork();
+		network = (Network)problem.getNetwork(); // todo avoid cast here?
 		edgeCapacities = problem.getCapacities();
 		transitTimes = problem.getTransitTimes();
 		timeHorizon = problem.getTimeHorizon();
@@ -290,33 +133,25 @@ public class MaxFlowOverTime extends Algorithm<MaximumFlowOverTimeProblem, PathB
 		if( (sources == null) || (sinks == null) )
 			throw new IllegalArgumentException( GraphLocalization.getSingleton().getString( "algo.graph.MaxFlowOverTime.SpecifySourceSinkFirst" ) );
 
-		if( (sources.isEmpty()) || (sinks.isEmpty()) ) {
-			maxFlowOT = new PathBasedFlowOverTime();
-			return maxFlowOT;
-		}
+		if( (sources.isEmpty()) || (sinks.isEmpty()) )
+			return new TimeReapeatedFlow( timeHorizon );
 
 		reduction();
-		createZeroSupply();
 
-		IdentifiableIntegerMapping<Edge> flow = null;
-
-		MinimumCostFlowProblem p = new MinimumCostFlowProblem( network, edgeCapacities, transitTimes, zeroSupplies );
+		MinimumCostFlowProblem p = new MinimumCostFlowProblem( ex, edgeCapacities, transitTimes, new IdentifiableIntegerMapping<Node>( network.nodes().size() ) );
 		Algorithm<MinimumCostFlowProblem, IdentifiableIntegerMapping<Edge>> algorithm = new MinimumMeanCycleCancelling();
 		algorithm.setProblem( p );
 		algorithm.run();
-		flow = algorithm.getSolution();
+		IdentifiableIntegerMapping<Edge> flow = algorithm.getSolution();
 
 		//SuccessiveShortestPath algo = new SuccessiveShortestPath(network, zeroSupplies, edgeCapacities, transitTimes);
 		//algo.run();
 		//flow = algo.getFlow();
 
-		reconstruction();
-		hideAddedInFlow( flow );
+		reconstruction( flow );
 
-		PathBasedFlow minCostFlow = PathDecomposition.calculatePathDecomposition( network, sources, sinks, flow );
+		PathBasedFlow minCostFlow = PathDecomposition.calculatePathDecomposition( ex, sources, sinks, flow );
 
-		maxFlowOT = translateIntoMaxFlow( minCostFlow );
-
-		return maxFlowOT;
+		return translateIntoMaxFlow( minCostFlow );
 	}
 }
