@@ -29,13 +29,13 @@ import java.util.Iterator;
  * {@link Path} in a network. The delay time in the first node of the path
  * implies the time when the represented flow would start to leave the first node.
  * The flow is send with a constant rate of {@code rate}. It sends a
- * total quantity of {@code amount{@code  units of flow. Together with the rate
+ * total quantity of {@code amount} units of flow. Together with the rate
  * and the starting time this implies the point in time where the flow
  * will stop sending.
  * {@code DynamicPathFlows} are needed to represent dynamic flows path based.
  */
 @SuppressWarnings( "serial" )
-public class FlowOverTimePath extends FlowOverTimeEdgeSequence /*extends StaticPathFlow*/ {
+public class FlowOverTimePath extends FlowOverTimeEdgeSequence {
 	/**
 	 * Creates a {@code FlowOverTimePath} with unit {@code rate}, {@code amount}
 	 * zero and an empty path.
@@ -73,7 +73,7 @@ public class FlowOverTimePath extends FlowOverTimeEdgeSequence /*extends StaticP
 	}
 
 	public Iterable<Edge> edges() {
-		return new Iterable<Edge>() {
+		return new Iterable<>() {
 			public Iterator<Edge> iterator() {
 				return new Iterator<Edge>() {
 					private Iterator<FlowOverTimeEdge> internal = FlowOverTimePath.this.iterator();
