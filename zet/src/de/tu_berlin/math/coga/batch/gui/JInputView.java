@@ -34,6 +34,7 @@ import javax.swing.table.TableCellRenderer;
 import javax.swing.table.TableColumn;
 import org.jdesktop.swingx.JXTableHeader;
 import org.jdesktop.swingx.JXTreeTable;
+import org.jdesktop.swingx.table.TableColumnExt;
 import org.jdesktop.swingx.treetable.DefaultMutableTreeTableNode;
 
 /**
@@ -45,12 +46,12 @@ public class JInputView extends JPanel {
     public class Test extends DefaultTableCellRenderer {
 
         public Test() {
+            setHorizontalAlignment(SwingConstants.RIGHT);
         }
 
         @Override
         public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) {
             Test result = (Test) super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
-            result.setHorizontalAlignment(SwingConstants.RIGHT);
             return result;
         }
     }
@@ -72,9 +73,6 @@ public class JInputView extends JPanel {
      */
     public JInputView() {
         this.setLayout(new BorderLayout());
-
-        File[] roots = File.listRoots();
-
 
         //DefaultMutableTreeTableNode root = (DefaultMutableTreeTableNode) model.getRoot();
         //root.setAllowsChildren(true);
@@ -107,10 +105,13 @@ public class JInputView extends JPanel {
 
         this.tree = new TestTreeTable(model);
         this.tree.setRootVisible(true);
+        //tree.setDefaultRenderer(null, new Test());
+        //((DefaultTableCellRenderer) tree.getDefaultRenderer(TableColumnExt.class)).setHorizontalAlignment(SwingConstants.RIGHT);
         tree.setClosedIcon(new ImageIcon("./icons/" + "folder_16.png"));
         tree.setLeafIcon(new ImageIcon("./icons/" + "graph_16.png"));
         tree.setOpenIcon(new ImageIcon("./icons/" + "folder_16.png"));
         tree.getColumnModel().getColumn(0).setHeaderValue("Files");
+        //System.out.println(tree.getColumnModel().getColumn(1).getClass());
         //System.out.println(tree.getCellRenderer(0,0));
         //tree.getColumnModel().getColumn(1).getCellRenderer().        
         tree.getColumnModel().getColumn(1).setHeaderValue("Nodes");

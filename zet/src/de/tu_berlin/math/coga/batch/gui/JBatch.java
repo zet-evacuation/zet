@@ -5,8 +5,6 @@
 package de.tu_berlin.math.coga.batch.gui;
 
 import batch.load.BatchProjectEntry;
-import com.l2fprod.common.propertysheet.Property;
-import com.l2fprod.common.propertysheet.PropertySheet;
 import com.l2fprod.common.propertysheet.PropertySheetPanel;
 import com.l2fprod.common.swing.JTaskPane;
 import com.l2fprod.common.swing.JTaskPaneGroup;
@@ -16,24 +14,17 @@ import de.tu_berlin.math.coga.batch.gui.action.NewComputationAction;
 import de.tu_berlin.math.coga.batch.gui.action.AddCurrentProjectAction;
 import de.tu_berlin.math.coga.batch.gui.action.AddAlgorithmAction;
 import de.tu_berlin.math.coga.batch.gui.action.AddInputDirectoryAction;
-import de.tu_berlin.math.coga.batch.gui.action.RemoveInputFilesAction;
 import de.tu_berlin.math.coga.batch.gui.action.RunComputationAction;
 import de.tu_berlin.math.coga.batch.gui.action.StopComputationAction;
 import ds.z.Project;
 import gui.GUIControl;
 import java.awt.BorderLayout;
-import java.awt.event.ActionEvent;
-import java.beans.PropertyChangeListener;
 import java.io.File;
-import java.util.Iterator;
-import javax.swing.AbstractAction;
-import javax.swing.Action;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import org.jdesktop.swingx.JXTreeTable;
 import org.jdesktop.swingx.treetable.DefaultMutableTreeTableNode;
 import org.jdesktop.swingx.treetable.DefaultTreeTableModel;
-import org.jdesktop.swingx.treetable.TreeTableNode;
 
 /**
  *
