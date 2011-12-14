@@ -32,11 +32,12 @@ public class GLRoomControl extends AbstractZETVisualizationControl<GLCellControl
 
 	public GLRoomControl( CAVisualizationResults caVisResults, Room room, GLCAFloorControl glCAFloorControl, GLCellularAutomatonControl glControl ) {
 		super( glControl );
+		System.out.println( "Create room " + room.getIdentificationForStatistic() );
 		controlled = room;
 		xPosition = caVisResults.get( room ).x * mainControl.scaling;
 		yPosition = caVisResults.get( room ).y * mainControl.scaling;
 		this.glCAFloorControlObject = glCAFloorControl;
-		cellControls = new HashMap<ds.ca.Cell, GLCellControl>();
+		cellControls = new HashMap<>();
 
 		for( Cell cell : room.getAllCells() ) {
 			GLCellControl cellControl = new GLCellControl( caVisResults, cell, this, glControl );

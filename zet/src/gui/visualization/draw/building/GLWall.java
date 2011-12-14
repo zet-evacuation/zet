@@ -80,8 +80,8 @@ public class GLWall extends AbstractDrawable<GLWall, GLWallControl> {
 		Iterator<GLVector> wallStart = basePoints.iterator();
 		Iterator<GLVector> wallEnd = basePoints.iterator();
 		
-		Vector<Vector3> vectors = new Vector<Vector3>( basePoints.size() );
-		Vector<Double> angles = new Vector<Double>( basePoints.size() );
+		Vector<Vector3> vectors = new Vector<>( basePoints.size() );
+		Vector<Double> angles = new Vector<>( basePoints.size() );
 		if( wallEnd.hasNext() )
 			wallEnd.next();
 		while( wallEnd.hasNext() && wallStart.hasNext() ) {

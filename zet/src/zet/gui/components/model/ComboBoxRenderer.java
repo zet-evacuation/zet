@@ -26,10 +26,12 @@ import javax.swing.JList;
 import javax.swing.ListCellRenderer;
 
 /**
- * A generic ComboBox renderer.
+ * A generic ComboBox renderer using a {@link JLabel}.
+ * @param <E> The type of data that is to be rendered
  * @author Timon Kelter
  */
-public class ComboBoxRenderer extends JLabel implements ListCellRenderer {
+@SuppressWarnings( "serial" )
+public class ComboBoxRenderer<E> extends JLabel implements ListCellRenderer<E> {
 
 	public ComboBoxRenderer() {
 		setOpaque( true );
@@ -43,7 +45,7 @@ public class ComboBoxRenderer extends JLabel implements ListCellRenderer {
 	 * to display the text and image.
 	 */
 	@Override
-	public Component getListCellRendererComponent( JList list, Object value, int index, boolean isSelected, boolean cellHasFocus ) {
+	public Component getListCellRendererComponent( JList<? extends E> list, E value, int index, boolean isSelected, boolean cellHasFocus ) {
 		if( isSelected ) {
 			setBackground( list.getSelectionBackground() );
 			setForeground( list.getSelectionForeground() );

@@ -1952,7 +1952,7 @@ public class PlanPolygon<T extends Edge> implements Iterable<T> {
 	 * @return the newly created polygon
 	 */
 	protected PlanPolygon<T> createPlainCopy() {
-		return new PlanPolygon<T>( edgeClassType );
+		return new PlanPolygon<>( edgeClassType );
 	}
 
 	public void recomputeBounds() {
@@ -2064,7 +2064,7 @@ public class PlanPolygon<T extends Edge> implements Iterable<T> {
 	 */
 	public void rasterize() {
 		try {
-			ArrayList<T> alertDoors = new ArrayList<T>();
+			ArrayList<T> alertDoors = new ArrayList<>();
 
 			// Don't use for(T e: this) here - The edge replacements will screw up our iterator
 			for( T e : getEdges() ) {
@@ -2074,6 +2074,7 @@ public class PlanPolygon<T extends Edge> implements Iterable<T> {
 				if( oldLength - 199 > newLength )
 					alertDoors.add( e );
 			}
+			recomputeBounds( );
 		} finally {
 
 		}
@@ -2138,7 +2139,7 @@ public class PlanPolygon<T extends Edge> implements Iterable<T> {
 			//contains the new created PlanPoints representing the rasterized edge
 			//we chose a linked list here because we will typically only defineByPoints elements
 			//and iterate over all elements at the end, so linked lists are best suited here
-			LinkedList<PlanPoint> newBetweenPlanPoints = new LinkedList<PlanPoint>();
+			LinkedList<PlanPoint> newBetweenPlanPoints = new LinkedList<>();
 			if( flip )
 				newBetweenPlanPoints.add( p2 );
 			else
@@ -2190,7 +2191,7 @@ public class PlanPolygon<T extends Edge> implements Iterable<T> {
 			//check, whether a roll over is necessary
 			if( flip ) {
 				flip = false;
-				LinkedList<PlanPoint> tmpBetweenPlanPoints = new LinkedList<PlanPoint>();
+				LinkedList<PlanPoint> tmpBetweenPlanPoints = new LinkedList<>();
 				for( int i = newBetweenPlanPoints.size() - 1; i >= 0; i-- )
 					tmpBetweenPlanPoints.add( newBetweenPlanPoints.get( i ) );
 				newBetweenPlanPoints = tmpBetweenPlanPoints;

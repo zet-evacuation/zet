@@ -36,6 +36,7 @@ import zet.gui.GUILocalization;
  * The class {@code JEditToolbar} ...
  * @author Jan-Philipp Kappmeier
  */
+@SuppressWarnings( "serial" )
 public class JEditToolbar extends JToolBar implements ActionListener, PopupMenuListener, KeyListener {
 	/** The localization class. */
 	static final GUILocalization loc = GUILocalization.getSingleton();
@@ -46,7 +47,7 @@ public class JEditToolbar extends JToolBar implements ActionListener, PopupMenuL
 	private JButton btnEditPointwise;
 	private JButton btnEditRectangled;
 	private JLabel lblAreaType;
-	private JComboBox cbxEdit;
+	private JComboBox<EditMode> cbxEdit;
 	private JButton btnZoomIn;
 	private JButton btnZoomOut;
 	private JTextField txtZoomFactor;
@@ -95,7 +96,7 @@ public class JEditToolbar extends JToolBar implements ActionListener, PopupMenuL
 		lblAreaType = new JLabel( loc.getString( "Edit.AreaTypeLabel" ) );
 		add( lblAreaType );
 		editSelector = new EditComboBoxModel();
-		cbxEdit = new JComboBox();
+		cbxEdit = new JComboBox<>();
 		cbxEdit.setMaximumRowCount( 25 );
 		cbxEdit.setMaximumSize( new Dimension( 250, cbxEdit.getPreferredSize().height ) );
 		cbxEdit.setPreferredSize( new Dimension( 250, cbxEdit.getPreferredSize().height ) );
@@ -135,45 +136,59 @@ public class JEditToolbar extends JToolBar implements ActionListener, PopupMenuL
 
 	@Override
 	public void actionPerformed( ActionEvent e ) {
-		if( e.getActionCommand().equals( "exit" ) ) {
-			control.exit();
-		} else if( e.getActionCommand().equals( "loadProject" ) ) {
-			control.loadProject();
-		} else if( e.getActionCommand().equals( "saveProject" ) ) {
-			control.saveProject();
-		} else if( e.getActionCommand().equals( "newProject" ) ) {
-			control.newProject();
-		} else if( e.getActionCommand().equals( "editSelect" ) ) {
-			control.setEditMode( EditMode.Selection );
-						//				btnEditSelect.setSelected( true );
-						//				btnEditPointwise.setSelected( false );
-						//				btnEditRectangled.setSelected( false );
-						//				editView.setEditMode( EditMode.Selection );
-						//				sendReady();
-		} else if( e.getActionCommand().equals( "editPointwise" ) ) {
-
-						//				btnEditSelect.setSelected( false );
-						//				btnEditPointwise.setSelected( true );
-						//				btnEditRectangled.setSelected( false );
-										creationType = EditMode.Type.CreationPointwise;
-										editSelector.rebuild();
-										control.setEditMode( (EditMode)editSelector.getSelectedItem() );
-						//				editView.setEditMode( (EditMode)editSelector.getSelectedItem() );
-						//				ZETMain.sendMessage( "Wählen sie die Koordinaten." ); // TODO loc
-		} else if( e.getActionCommand().equals( "editRectangled" ) ) {
-						//				btnEditSelect.setSelected( false );
-						//				btnEditPointwise.setSelected( false );
-						//				btnEditRectangled.setSelected( true );
-										creationType = EditMode.Type.CreationRectangled;
-										editSelector.rebuild();
-										control.setEditMode( (EditMode)editSelector.getSelectedItem() );
-						//				ZETMain.sendMessage( "Wählen sie die Koordinaten." ); // TODO loc
-		} else if( e.getActionCommand().equals( "zoomIn" ) ) {
-			control.setZoomFactor( Math.min( 0.4, CoordinateTools.getZoomFactor() * 2 ) );
-		} else if( e.getActionCommand().equals( "zoomOut" ) ) {
-			control.setZoomFactor( Math.max( 0.00004, CoordinateTools.getZoomFactor() / 2 ) );
-		} else
-			ZETMain.sendError( loc.getString( "gui.UnknownCommand" ) + " '" + e.getActionCommand() + "'. " + loc.getString( "gui.ContactDeveloper" ) );
+		switch( e.getActionCommand() ) {
+			case "exit":
+				control.exit();
+				break;
+			case "loadProject":
+				control.loadProject();
+				break;
+			case "saveProject":
+				control.saveProject();
+				break;
+			case "newProject":
+				control.newProject();
+				break;
+			case "editSelect":
+				control.setEditMode( EditMode.Selection );
+							//				btnEditSelect.setSelected( true );
+							//				btnEditPointwise.setSelected( false );
+							//				btnEditRectangled.setSelected( false );
+							//				editView.setEditMode( EditMode.Selection );
+							//				sendReady();
+				break;
+			case "editPointwise":
+				//				btnEditSelect.setSelected( false );
+				//				btnEditPointwise.setSelected( true );
+				//				btnEditRectangled.setSelected( false );
+				creationType = EditMode.Type.CreationPointwise;
+				editSelector.rebuild();
+				control.setEditMode( (EditMode)editSelector.getSelectedItem() );
+//				editView.setEditMode( (EditMode)editSelector.getSelectedItem() );
+//				ZETMain.sendMessage( "Wählen sie die Koordinaten." ); // TODO loc
+				break;
+			case "editRectangled":
+				//				btnEditSelect.setSelected( false );
+				//				btnEditPointwise.setSelected( false );
+				//				btnEditRectangled.setSelected( true );
+				creationType = EditMode.Type.CreationRectangled;
+				editSelector.rebuild();
+				control.setEditMode( (EditMode)editSelector.getSelectedItem() );
+//				ZETMain.sendMessage( "Wählen sie die Koordinaten." ); // TODO loc
+				break;
+			case "zoomIn":
+				control.setZoomFactor( Math.min( 0.4, CoordinateTools.getZoomFactor() * 2 ) );
+				break;
+			case "zoomOut":
+				control.setZoomFactor( Math.max( 0.00004, CoordinateTools.getZoomFactor() / 2 ) );
+				break;
+			case "rasterize":
+				control.rasterize();
+				break;
+			default:
+				ZETMain.sendError( loc.getString( "gui.UnknownCommand" ) + " '" + e.getActionCommand() + "'. " + loc.getString( "gui.ContactDeveloper" ) );
+				break;
+		}
 	}
 
 
@@ -319,7 +334,8 @@ public class JEditToolbar extends JToolBar implements ActionListener, PopupMenuL
 		/**
 	 * This class serves as a model for the JComboBox that contains the EditModes.
 	 */
-	private class EditComboBoxModel extends DefaultComboBoxModel {
+	@SuppressWarnings( "serial" )
+private class EditComboBoxModel extends DefaultComboBoxModel<EditMode> {
 		/**
 		 * Creates a new combo box model containing edit types that are of a
 		 * specified type.
@@ -360,17 +376,18 @@ public class JEditToolbar extends JToolBar implements ActionListener, PopupMenuL
 	/**
 	 * This class can display EditMode Objects in a JComboBox.
 	 */
-	private class EditComboBoxRenderer extends ComboBoxRenderer {
+	@SuppressWarnings( "serial" )
+private class EditComboBoxRenderer extends ComboBoxRenderer<EditMode> {
+
 		@Override
-		public Component getListCellRendererComponent( JList list, Object value, int index, boolean isSelected, boolean cellHasFocus ) {
+		public Component getListCellRendererComponent( JList<? extends EditMode> list, EditMode value, int index, boolean isSelected, boolean cellHasFocus ) {
 			JLabel me = (JLabel)super.getListCellRendererComponent( list, value, index, isSelected, cellHasFocus );
 			setHorizontalAlignment( LEFT );
 
 			if( value != null ) {
-				EditMode e = (EditMode)value;
-				if( e.getEditorColor() != null && !e.getEditorColor().equals( Color.BLACK ) )
-					setBackground( e.getEditorColor() );
-				setText( e.toString() );
+				if( value.getEditorColor() != null && !value.getEditorColor().equals( Color.BLACK ) )
+					setBackground( value.getEditorColor() );
+				setText( value.toString() );
 			}
 			return this;
 		}
