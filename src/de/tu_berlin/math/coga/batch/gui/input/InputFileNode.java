@@ -5,7 +5,6 @@
 package de.tu_berlin.math.coga.batch.gui.input;
 
 import de.tu_berlin.math.coga.batch.input.InputFile;
-import java.util.Arrays;
 import org.jdesktop.swingx.treetable.DefaultMutableTreeTableNode;
 
 /**

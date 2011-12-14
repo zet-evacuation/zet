@@ -12,7 +12,19 @@ import java.util.LinkedList;
  *
  * @author Martin Groß
  */
-public class InputGroup extends LinkedList<File> {
+public class InputGroup extends LinkedList<InputFile> {
+
+    private String name;
+    
+    public InputGroup(String name) {
+        this.name = name;
+    }
+
+    
+    
+    public String getName() {
+        return name;
+    }
     /*
     private InputFileReader reader;
     private InputFileType type;

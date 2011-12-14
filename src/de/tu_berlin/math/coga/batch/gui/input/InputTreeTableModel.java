@@ -8,17 +8,18 @@ import java.util.Enumeration;
 import javax.swing.tree.TreeNode;
 import org.jdesktop.swingx.treetable.AbstractTreeTableModel;
 import org.jdesktop.swingx.treetable.DefaultMutableTreeTableNode;
+import org.jdesktop.swingx.treetable.DefaultTreeTableModel;
 import org.jdesktop.swingx.treetable.MutableTreeTableNode;
 
 /**
  *
  * @author gross
  */
-public class InputTreeTableModel extends AbstractTreeTableModel {
-    
-    public InputTreeTableModel() {
-        super(new DefaultMutableTreeTableNode("Input"));
-        //((DefaultMutableTreeTableNode) root).setValueAt(root, column);
+public class InputTreeTableModel extends DefaultTreeTableModel {    
+
+
+    public InputTreeTableModel(InputGroupNode inputGroupNode) {
+        super (inputGroupNode);
     }
 
     @Override
