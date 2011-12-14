@@ -206,7 +206,8 @@ public class VisualizationOptionManager {
 	 * @return true if the grid is visible, otherwise false
 	 */
 	public static boolean showSpaceBetweenCells() {
-		return PropertyContainer.getInstance().getAsBoolean( "options.visualization.view.grid" );
+		//return PropertyContainer.getInstance().getAsBoolean( "options.visualization.view.grid" );
+		return false;
 	}
 	
 	/**

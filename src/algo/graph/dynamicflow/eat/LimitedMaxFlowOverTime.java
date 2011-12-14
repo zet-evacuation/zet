@@ -63,13 +63,13 @@ public class LimitedMaxFlowOverTime {
 		MaximumFlow mf = hipr.getSolution();
 
 		//System.out.println( "Flow value: " + mf.getFlowValue() );
-		System.out.println( "Sink-Arrival value: " + hipr.getFlowValue() );
+		//System.out.println( "Sink-Arrival value: " + hipr.getFlowValue() );
 		hiprf = hipr.getFlowValue();
 		
 		//System.out.println( "Pushes: " + hipr.getPushes() + ", Relabels: " + hipr.getRelabels() );
 		//System.out.println( "Global relabels: " + hipr.getGlobalRelabels() );
 		//System.out.println( "Gaps : " + hipr.getGaps() + " Gap nodes: " + hipr.getGapNodes() );
-		System.out.println( Formatter.formatTimeUnit( end-start, TimeUnits.NanoSeconds ) );
+		//System.out.println( Formatter.formatTimeUnit( end-start, TimeUnits.NanoSeconds ) );
 	
 		
 		//System.out.println( "Fluss auf 12: " + mf.get( ten.getEdge( 12 ) ) );

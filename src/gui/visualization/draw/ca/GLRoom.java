@@ -54,6 +54,7 @@ public class GLRoom extends AbstractDrawable<GLCell, GLRoomControl> {
 	@Override
 	public void performDrawing( GL gl ) {
 		super.performDrawing( gl );
+		System.out.println( "Draw room " + control.toString()  );
 		if( VisualizationOptionManager.showSpaceBetweenCells() ) {
 			// draw a floor
 			VisualizationOptionManager.getCellSeperationColor().draw( gl );

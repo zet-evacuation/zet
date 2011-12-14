@@ -5,7 +5,8 @@
 package ds.graph.flow;
 
 /**
- *
+ * A time repeated flow is a special {@link PathBasedFlowOverTime} without
+ * delay in nodes.
  * @author Jan-Philipp Kappmeier
  */
 public class TimeReapeatedFlow extends PathBasedFlowOverTime {
@@ -16,8 +17,14 @@ public class TimeReapeatedFlow extends PathBasedFlowOverTime {
 		this.timeHorizon = timeHorizon;
 	}
 
+	/**
+	 * Adds the {@link FlowOverTimePath} to the path flows. If the path contains
+	 * a delay (or waiting time) different from 0, an exception is throwsn.
+	 * @param pathFlow a path that is added
+	 * @throws IllegalArgumentException if the delays are not 0
+	 */
 	@Override
-	public void addPathFlow( FlowOverTimePath pathFlow ) {
+	public void addPathFlow( FlowOverTimePath pathFlow ) throws IllegalArgumentException {
 		if( pathFlow.getFirst().getDelay() != 0 )
 			throw new IllegalArgumentException( "Time Repeated Flow starts at time 0.");
 		for( FlowOverTimeEdge e : pathFlow )
@@ -36,6 +43,10 @@ public class TimeReapeatedFlow extends PathBasedFlowOverTime {
 		return false;
 	}
 
+	/**
+	 * Returns the value of the time repeated flow over time.
+	 * @return the value of the time repeated flow over time
+	 */
 	public long getValue() {
 		return value;
 	}

@@ -38,7 +38,7 @@ public class GLCAFloorControl extends AbstractZETVisualizationControl<GLRoomCont
 		
 		xPosition = caVisResults.get(floorID).x;
 		yPosition = caVisResults.get(floorID).y;
-		roomControls = new HashMap<ds.ca.Room, GLRoomControl>();
+		roomControls = new HashMap<>();
 	    
 		this.floorNumber = floorID;
 

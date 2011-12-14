@@ -28,8 +28,8 @@ import java.util.List;
  *
  * @author Joscha
  */
-public class PathDecomposition {        
-	
+public class PathDecomposition {
+	// TODO: create algorithm, use dfs
 	private static IdentifiableObjectMapping<Node,Boolean> visited;
     
     private static boolean DFS(AbstractNetwork network, Node x, List<Node> sinks, StaticPathFlow path){             
@@ -186,8 +186,8 @@ public class PathDecomposition {
     
     public static PathBasedFlow calculatePathDecomposition(AbstractNetwork network, List<Node> sources, List<Node> sinks, IdentifiableIntegerMapping<Edge> startFlow){
         PathBasedFlow pathDecomposition = new PathBasedFlow();        
-        IdentifiableIntegerMapping<Edge> flow = (IdentifiableIntegerMapping<Edge>)startFlow.clone();
-        visited = new IdentifiableObjectMapping<Node,Boolean>(network.nodes().size(), Boolean.class);
+        IdentifiableIntegerMapping<Edge> flow = startFlow.clone();
+        visited = new IdentifiableObjectMapping<>(network.nodes().size(), Boolean.class);
     	for (Node n : network.nodes())
     		visited.set(n, false);
         StaticPathFlow path = new StaticPathFlow();

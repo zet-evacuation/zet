@@ -60,10 +60,8 @@ public class PathBasedFlowOverTime implements Iterable<FlowOverTimePath> {
 	}
 
 	/**
-	 * Returns a String containing a description of all 
-	 * contained {@code DynamicPathFlows}.
-	 * @return a String containing a description of all 
-	 * contained {@code DynamicPathFlows}.
+	 * Returns a String containing a description of all contained {@code DynamicPathFlows}.
+	 * @return a String containing a description of all  contained {@code DynamicPathFlows}.
 	 */
 	@Override
 	public String toString() {

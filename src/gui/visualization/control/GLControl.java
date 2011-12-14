@@ -140,8 +140,8 @@ public class GLControl implements DrawableControlable {
 	private boolean hasCellularAutomaton;
 	/** Indicates whether the currently loaded visualization result contains a graph, or not. */
 	private boolean hasGraph;
-        /**Indicates whether a comparison of the flowvalues for 2 different graphs is done*/
-        private boolean iscompared;       
+		/**Indicates whether a comparison of the flowvalues for 2 different graphs is done*/
+		private boolean iscompared;       
 	/** Represents the static structure of the building, e.g. walls. */
 	private BuildingResults buildingResults;
 	/** Represents the statistic  */

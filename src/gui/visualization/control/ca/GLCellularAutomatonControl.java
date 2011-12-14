@@ -94,8 +94,8 @@ public class GLCellularAutomatonControl extends AbstractZETVisualizationControl<
 		recordingCount = containsRecording ? caVisResults.getRecording().length() : 0;
 		recordingDone = 0;
 
-		allFloorsByID = new HashMap<Integer, GLCAFloorControl>();
-		glIndividuals = new ArrayList<GLIndividual>();
+		allFloorsByID = new HashMap<>();
+		glIndividuals = new ArrayList<>();
 		this.visResults = caVisResults;
 
 		for( int floorID : ca.getFloors().keySet() )

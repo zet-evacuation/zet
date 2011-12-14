@@ -102,7 +102,7 @@ public class Visualization<U extends DrawableControlable> extends AbstractVisual
 	/** The number of seconds that each intro page is visible. */
 	double introSec = 8.3;
 	/** The intro pages that are shown. */
-	ArrayList<TextureFontStrings> texts = new ArrayList<TextureFontStrings>();
+	ArrayList<TextureFontStrings> texts = new ArrayList<>();
 	// Status-Variablen die angezeigte Elemente steuern
 	protected boolean showEye = true;
 	protected boolean showFPS = true;
