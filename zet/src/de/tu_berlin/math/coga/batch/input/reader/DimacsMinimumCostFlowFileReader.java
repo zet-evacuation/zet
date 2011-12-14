@@ -284,6 +284,9 @@ public class DimacsMinimumCostFlowFileReader extends InputFileReader<RawMinimumC
     }
 
     public static void main(String[] args) {
+        System.out.println(Double.POSITIVE_INFINITY + Double.NEGATIVE_INFINITY);
+        
+        /*
         DimacsMinimumCostFlowFileReader reader = new DimacsMinimumCostFlowFileReader();
         reader.setFile(new File("/homes/combi/gross/cap39.net"));
         System.out.println(Runtime.getRuntime().totalMemory() - Runtime.getRuntime().freeMemory());
@@ -297,5 +300,7 @@ public class DimacsMinimumCostFlowFileReader extends InputFileReader<RawMinimumC
         System.out.println(Runtime.getRuntime().totalMemory() - Runtime.getRuntime().freeMemory() - p.getNumberOfEdges() * 20 - p.getNumberOfNodes() * 12);
         //System.out.println();
 //        System.out.println("Runtime: " + reader.getRuntimeAsString());
+         * 
+         */
     }
 }
