@@ -39,6 +39,10 @@ public class JInputView extends JPanel {
     private static final Icon ROOT_NODE = new ImageIcon("./icons/" + "folder_16.png");
     private static final Icon FILE_NODE = new ImageIcon("./icons/" + "graph_16.png");
 
+    public JXTreeTable getTree() {
+        return tree;
+    }
+
     public class Test extends DefaultTableCellRenderer {
 
         public Test(int alignment) {
@@ -47,11 +51,7 @@ public class JInputView extends JPanel {
 
         @Override
         public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) {
-            Test result = (Test) super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
-            
-            if (value instanceof InputRootNode) {
-
-            }            
+            Test result = (Test) super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);        
             return result;
         }
     }

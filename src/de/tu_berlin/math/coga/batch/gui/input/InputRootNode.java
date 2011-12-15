@@ -25,6 +25,7 @@ public class InputRootNode extends DefaultMutableTreeTableNode {
         for (InputFile file : input) {
             add(new InputFileNode(file));
         }
+        sort();
     }
 
     @Override
@@ -54,6 +55,11 @@ public class InputRootNode extends DefaultMutableTreeTableNode {
     public void setValueAt(Object aValue, int column) {
         throw new UnsupportedOperationException();
     }
+
+    private void sort() {
+        Comparator<MutableTreeTableNode> comparator = new ComparatorImpl(currentSortIndex, ascending);
+        Collections.sort(children,comparator);        
+    }    
     
     public void sort(int column) {
         if (column == currentSortIndex) {
