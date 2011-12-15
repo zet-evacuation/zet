@@ -31,6 +31,8 @@ import org.jdesktop.swingx.treetable.DefaultTreeTableModel;
  * @author gross
  */
 public class JBatch extends JPanel {
+    
+    private Computation computation;
 
     public JBatch(GUIControl control) {
         super(new BorderLayout());
@@ -63,24 +65,31 @@ public class JBatch extends JPanel {
         taskPaneContainer.add(algorithmPane);
         add(new JScrollPane(taskPaneContainer), BorderLayout.WEST);
         
-        JXTreeTable table = new JXTreeTable(new DefaultTreeTableModel(new DefaultMutableTreeTableNode("Test")));
+        table = new JInputView();
         add(new JScrollPane(table), BorderLayout.CENTER);
         
         PropertySheetPanel properties = new PropertySheetPanel();
         add(new JScrollPane(properties), BorderLayout.EAST);
     }
+    
+    JInputView table;
 
     public void addProject(Project project) {
     }
 
     public void add(BatchProjectEntry entry) {
     }
-    
-    public Computation getSelectedComputation() {
-        return null;
-    }
 
     public void addInputFiles(File[] selectedFiles) {
         throw new UnsupportedOperationException("Not yet implemented");
+    }
+
+    public Computation getComputation() {
+        return computation;
+    }
+
+    public void setComputation(Computation computation) {
+        this.computation = computation;
+        table.setInput(computation.getInput());
     }
 }

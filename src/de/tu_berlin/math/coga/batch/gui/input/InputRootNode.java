@@ -5,7 +5,7 @@
 package de.tu_berlin.math.coga.batch.gui.input;
 
 import de.tu_berlin.math.coga.batch.input.InputFile;
-import de.tu_berlin.math.coga.batch.input.InputGroup;
+import de.tu_berlin.math.coga.batch.input.Input;
 import java.util.Collections;
 import java.util.Comparator;
 import org.jdesktop.swingx.treetable.DefaultMutableTreeTableNode;
@@ -15,33 +15,31 @@ import org.jdesktop.swingx.treetable.MutableTreeTableNode;
  *
  * @author gross
  */
-public class InputGroupNode extends DefaultMutableTreeTableNode {
-
-    //private String[] properties;
+public class InputRootNode extends DefaultMutableTreeTableNode {
 
     private int currentSortIndex = 0; 
     private boolean ascending = true;
     
-    public InputGroupNode(InputGroup group) {
-        super(group, true);
-        for (InputFile file : group) {
+    public InputRootNode(Input input) {
+        super(input, true);
+        for (InputFile file : input) {
             add(new InputFileNode(file));
         }
     }
 
     @Override
     public int getColumnCount() {
-        return 1;//properties.length + 1;
+        return 1 + getInput().getComputation().getType().getPropertyNames().length;
     }
 
-    public InputGroup getInputGroup() {
-        return (InputGroup) getUserObject();
+    public Input getInput() {
+        return (Input) getUserObject();
     }
 
     @Override
     public Object getValueAt(int column) {
         if (column == 0) {
-            return getInputGroup().getName();
+            return getInput().getText();
         } else {
             return "";
         }
@@ -64,6 +62,11 @@ public class InputGroupNode extends DefaultMutableTreeTableNode {
         Comparator<MutableTreeTableNode> comparator = new ComparatorImpl(column, ascending);
         Collections.sort(children,comparator);        
         currentSortIndex = column;
+    }
+
+    @Override
+    public String toString() {
+        return getInput().getText();
     }
 
     private static class ComparatorImpl implements Comparator<MutableTreeTableNode> {

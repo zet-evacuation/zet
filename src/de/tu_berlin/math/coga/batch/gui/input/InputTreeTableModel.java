@@ -17,9 +17,8 @@ import org.jdesktop.swingx.treetable.MutableTreeTableNode;
  */
 public class InputTreeTableModel extends DefaultTreeTableModel {    
 
-
-    public InputTreeTableModel(InputGroupNode inputGroupNode) {
-        super (inputGroupNode);
+    public InputTreeTableModel(InputRootNode inputRootNode) {
+        super(inputRootNode);
     }
 
     @Override
@@ -43,7 +42,7 @@ public class InputTreeTableModel extends DefaultTreeTableModel {
     @Override
     public int getColumnCount() {
         Enumeration<? extends MutableTreeTableNode> children = ((DefaultMutableTreeTableNode) getRoot()).children();
-        int result = 1;
+        int result = getRoot().getColumnCount();
         while (children.hasMoreElements()) {
             MutableTreeTableNode child = children.nextElement();
             if (child instanceof InputFileNode) {

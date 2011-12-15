@@ -26,5 +26,18 @@ public class AddInputDirectoryAction extends BatchAction {
         if (decision == JDirectoryChooser.APPROVE_OPTION) {
             batch.addInputFiles(dialog.getSelectedFiles());
         }
+        
+             /*
+        FileCrawler crawler = new FileCrawler(false, false);
+        LinkedList<String> ext = new LinkedList<>();
+        ext.add("net");
+        List<File> files = crawler.listFiles(new File("/homes/combi/gross/"), ext);
+        Input group = new Input(null);
+        for (File file : files) {
+        DimacsMinimumCostFlowFileReader reader = new DimacsMinimumCostFlowFileReader();
+        reader.setFile(file);
+        InputFile inputFile = new InputFile(file);
+        group.add(inputFile);
+        }*/   
     }        
 }

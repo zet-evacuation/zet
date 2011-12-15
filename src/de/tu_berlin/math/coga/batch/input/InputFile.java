@@ -18,13 +18,16 @@ public class InputFile {
     private InputFileReader reader;
 
     public InputFile(File file) {
+        if (!file.exists() || !file.canRead()) {
+            throw new IllegalArgumentException(file + " cannot be read.");
+        }
         this.file = file;
         this.format = FileFormat.determineFileFormat(file);
         try {
             this.reader = format.getReader().newInstance();
             reader.setFile(file);
         } catch (InstantiationException | IllegalAccessException ex) {
-            ex.printStackTrace();
+            throw new AssertionError("Reader could not be initialized.");
         }
     }
     
