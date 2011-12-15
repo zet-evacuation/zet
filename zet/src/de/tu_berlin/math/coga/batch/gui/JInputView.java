@@ -4,56 +4,76 @@
  */
 package de.tu_berlin.math.coga.batch.gui;
 
-import de.tu_berlin.math.coga.batch.gui.input.FileTreeCellRenderer;
 import de.tu_berlin.math.coga.batch.gui.input.InputFileNode;
-import de.tu_berlin.math.coga.batch.gui.input.InputGroupNode;
+import de.tu_berlin.math.coga.batch.gui.input.InputRootNode;
 import de.tu_berlin.math.coga.batch.gui.input.InputTreeTableModel;
-import de.tu_berlin.math.coga.batch.input.FileCrawler;
-import de.tu_berlin.math.coga.batch.input.InputFile;
-import de.tu_berlin.math.coga.batch.input.InputGroup;
-import de.tu_berlin.math.coga.batch.input.reader.DimacsMinimumCostFlowFileReader;
+import de.tu_berlin.math.coga.batch.input.Input;
 import java.awt.BorderLayout;
 import java.awt.Component;
+import java.awt.Font;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
-import java.io.File;
-import java.util.LinkedList;
-import java.util.List;
-import javax.media.DeallocateEvent;
+import javax.swing.Icon;
 import javax.swing.ImageIcon;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
+import javax.swing.JTree;
 import javax.swing.SwingConstants;
 import javax.swing.SwingUtilities;
 import javax.swing.border.EmptyBorder;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.TableCellRenderer;
 import javax.swing.table.TableColumn;
-import org.jdesktop.swingx.JXTableHeader;
+import javax.swing.tree.DefaultTreeCellRenderer;
 import org.jdesktop.swingx.JXTreeTable;
-import org.jdesktop.swingx.table.TableColumnExt;
-import org.jdesktop.swingx.treetable.DefaultMutableTreeTableNode;
 
 /**
  *
  * @author gross
  */
 public class JInputView extends JPanel {
+    
+    private static final Icon ROOT_NODE = new ImageIcon("./icons/" + "folder_16.png");
+    private static final Icon FILE_NODE = new ImageIcon("./icons/" + "graph_16.png");
 
     public class Test extends DefaultTableCellRenderer {
 
-        public Test() {
-            setHorizontalAlignment(SwingConstants.RIGHT);
+        public Test(int alignment) {
+            setHorizontalAlignment(alignment);
         }
 
         @Override
         public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) {
             Test result = (Test) super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
+            
+            if (value instanceof InputRootNode) {
+
+            }            
             return result;
         }
+    }
+    
+    public class InputTreeCellRenderer extends DefaultTreeCellRenderer {
+
+        @Override
+        public Component getTreeCellRendererComponent(JTree tree, Object value, boolean sel, boolean expanded, boolean leaf, int row, boolean hasFocus) {
+            DefaultTreeCellRenderer renderer = (DefaultTreeCellRenderer) super.getTreeCellRendererComponent(tree, value, sel, expanded, leaf, row, hasFocus);
+            if (value instanceof InputRootNode) { 
+                renderer.setClosedIcon(ROOT_NODE);
+                renderer.setLeafIcon(ROOT_NODE);
+                renderer.setOpenIcon(ROOT_NODE);
+                renderer.setFont(renderer.getFont().deriveFont(Font.BOLD));
+            } else if (value instanceof InputFileNode) {
+                renderer.setClosedIcon(FILE_NODE);
+                renderer.setLeafIcon(FILE_NODE);
+                renderer.setOpenIcon(FILE_NODE);                
+            }
+            return super.getTreeCellRendererComponent(tree, value, sel, expanded, leaf, row, hasFocus);
+        }
+        
     }
 
     public class TestTreeTable extends JXTreeTable {
@@ -66,114 +86,57 @@ public class JInputView extends JPanel {
     /**
      * The file tree.
      */
-    private TestTreeTable tree;
+    private JXTreeTable tree;
+    
+    private Input input;
 
     /**
      * Creates the file tree panel.
      */
     public JInputView() {
-        this.setLayout(new BorderLayout());
-
-        //DefaultMutableTreeTableNode root = (DefaultMutableTreeTableNode) model.getRoot();
-        //root.setAllowsChildren(true);
-        //InputGroup group = new InputGroup(InputFileType.DIMACS_MAXIMUM_FLOW_PROBLEM);
-
-
-        FileCrawler crawler = new FileCrawler(false, false);
-        LinkedList<String> ext = new LinkedList<>();
-        ext.add("net");
-        List<File> files = crawler.listFiles(new File("/homes/combi/gross/"), ext);
-        InputGroup group = new InputGroup("Minimum Cost Flow Problems");
-        for (File file : files) {
-            DimacsMinimumCostFlowFileReader reader = new DimacsMinimumCostFlowFileReader();
-            reader.setFile(file);
-            //String[] properties = reader.getProperties();
-            //System.out.println(file + ": " + properties[0] + " " + properties[1] + " " + properties[2]);
-            InputFile inputFile = new InputFile(file);
-            group.add(inputFile);
-        }
-
-        final InputGroupNode g = new InputGroupNode(group);
-        InputTreeTableModel model = new InputTreeTableModel(g);
-        //g.sort(1);
-
-
-        //InputFile file = new InputFile(new File("/homes/combi/gross/sample.max"), new DimacsMaximumFlowFileReader());
-        //n.add(fileNode = new InputFileNode(file)); 
-        //n.add(new InputFileNode(new InputFile(null, null)));
-        //rootTreeNode);
-
-        this.tree = new TestTreeTable(model);
-        this.tree.setRootVisible(true);
-        //tree.setDefaultRenderer(null, new Test());
-        //((DefaultTableCellRenderer) tree.getDefaultRenderer(TableColumnExt.class)).setHorizontalAlignment(SwingConstants.RIGHT);
-        tree.setClosedIcon(new ImageIcon("./icons/" + "folder_16.png"));
-        tree.setLeafIcon(new ImageIcon("./icons/" + "graph_16.png"));
-        tree.setOpenIcon(new ImageIcon("./icons/" + "folder_16.png"));
-        tree.getColumnModel().getColumn(0).setHeaderValue("Files");
-        //System.out.println(tree.getColumnModel().getColumn(1).getClass());
-        //System.out.println(tree.getCellRenderer(0,0));
-        //tree.getColumnModel().getColumn(1).getCellRenderer().        
-        tree.getColumnModel().getColumn(1).setHeaderValue("Nodes");
-        tree.getColumnModel().getColumn(2).setHeaderValue("Edges");
-        tree.getColumnModel().getColumn(3).setHeaderValue("Total Supply");
-        tree.getColumn(1).setCellRenderer(new Test());
-        tree.getColumn(2).setCellRenderer(new Test());
-        tree.getColumn(3).setCellRenderer(new Test());
-
-        MouseListener l = new MouseAdapter() {
+        setLayout(new BorderLayout());        
+        tree = new JXTreeTable();
+        tree.getTableHeader().addMouseListener(new MouseAdapter() {
 
             @Override
-            public void mouseClicked(MouseEvent e) {
+            public void mouseClicked(MouseEvent e) {                
                 int index = tree.columnAtPoint(e.getPoint());
-                g.sort(index);
-                tree.setTreeTableModel(new InputTreeTableModel(g));
-                tree.setRootVisible(true);
-                //tree.setClosedIcon(new ImageIcon("./icons/" + "folder_16.png"));
-                //tree.setLeafIcon(new ImageIcon("./icons/" + "graph_16.png"));
-                //tree.setOpenIcon(new ImageIcon("./icons/" + "folder_16.png"));
-                tree.getColumnModel().getColumn(0).setHeaderValue("Files");
-                //System.out.println(tree.getCellRenderer(0,0));
-                //tree.getColumnModel().getColumn(1).getCellRenderer().        
-                tree.getColumnModel().getColumn(1).setHeaderValue("Nodes");
-                tree.getColumnModel().getColumn(2).setHeaderValue("Edges");
-                tree.getColumnModel().getColumn(3).setHeaderValue("Total Supply");
-                tree.getColumn(1).setCellRenderer(new Test());
-                tree.getColumn(2).setCellRenderer(new Test());
-                tree.getColumn(3).setCellRenderer(new Test());
-                initColumnSizes(tree);
-                //tree.getTreeTableModel().
+                if (index >= 0) {
+                    InputRootNode inputRootNode = (InputRootNode) tree.getTreeTableModel().getRoot();
+                    inputRootNode.sort(index);
+                    setInput(new InputTreeTableModel(inputRootNode));
+                }
             }
-        };
-        tree.getTableHeader().addMouseListener(l);
-
-        initColumnSizes(tree);
-
-        //tree.setTableHeader(null);
-        //DefaultTableCellRenderer r = (DefaultTableCellRenderer) tree.get.getTableHeader().getDefaultRenderer();
-        //r.setHorizontalAlignment(SwingConstants.RIGHT);
-        //(DefaultTableCellRenderer) getTableHeader().getDefaultRenderer()).setHorizontalAlignment(SwingConstants.LEFT);
-
-
-        //this.tree.setCellRenderer(new FileTreeCellRenderer());
-
-        final JScrollPane jsp = new JScrollPane(this.tree);
-        jsp.setBorder(new EmptyBorder(0, 0, 0, 0));
-        this.add(jsp, BorderLayout.CENTER);
-
-        //tree.getColumn(0).sizeWidthToFit();
-        //tree.getColumn(1).sizeWidthToFit();
-        //tree.getColumn(2).sizeWidthToFit();
-        //tree.getColumn(3).sizeWidthToFit();        
+        });
+        tree.setRootVisible(true);
+        tree.setTreeCellRenderer(new InputTreeCellRenderer());
+        JScrollPane scrollPane = new JScrollPane(tree);
+        scrollPane.setBorder(new EmptyBorder(0, 0, 0, 0));
+        add(scrollPane, BorderLayout.CENTER);
     }
 
-    private void initColumnSizes(TestTreeTable table) {
+    public void setInput(Input input) {
+        this.input = input;
+        InputRootNode inputRootNode = new InputRootNode(input);
+        InputTreeTableModel model = new InputTreeTableModel(inputRootNode);
+        setInput(model);
+    }
+
+    protected void setInput(InputTreeTableModel model) {
+        tree.setTreeTableModel(model);
+        tree.getColumnModel().getColumn(0).setHeaderValue("Files");
+        for (int i = 0; i < input.getComputation().getType().getPropertyNames().length; i++) {
+             tree.getColumnModel().getColumn(1 + i).setHeaderValue(input.getComputation().getType().getPropertyNames()[i]);
+             tree.getColumn(1 + i).setCellRenderer(new Test(SwingConstants.RIGHT));
+        }        
+        initColumnSizes(tree);
+    }    
+    
+    private void initColumnSizes(JXTreeTable table) {
         InputTreeTableModel model = (InputTreeTableModel) table.getTreeTableModel();
 
         TableColumn column = null;
         Component comp = null;
-
-        //Object[] longValues = model.longValues;
 
         TableCellRenderer headerRenderer = table.getTableHeader().getDefaultRenderer();
 
@@ -185,25 +148,17 @@ public class JInputView extends JPanel {
             comp = headerRenderer.getTableCellRendererComponent(null, column.getHeaderValue(), false, false, 0, 0);
             headerWidth = comp.getPreferredSize().width;
 
-            InputGroupNode w = (InputGroupNode) model.getRoot();
+            InputRootNode w = (InputRootNode) model.getRoot();
             comp = table.getDefaultRenderer(model.getColumnClass(i)).getTableCellRendererComponent(table, w.getValueAt(i), false, false, 0, i);
             cellWidth = Math.max(comp.getPreferredSize().width, cellWidth);
-            Object value;
+
             for (int j = 0; j < model.getChildCount(model.getRoot()); j++) {
                 InputFileNode v = (InputFileNode) model.getChild(model.getRoot(), j);
                 if (i < v.getColumnCount()) {
-                    //System.out.println(v.getValueAt(i));
                     comp = table.getDefaultRenderer(model.getColumnClass(i)).getTableCellRendererComponent(table, v.getValueAt(i), false, false, 0, i);
                     cellWidth = Math.max(comp.getPreferredSize().width, cellWidth);
                 }
             }
-            if (false) {
-                System.out.println("Initializing width of column " + i + ". "
-                        + "headerWidth = " + headerWidth + "; cellWidth = "
-                        + cellWidth);
-            }
-
-// XXX: Before Swing 1.1 Beta 2, use setMinWidth instead.
             column.setPreferredWidth(Math.max(headerWidth, cellWidth));
             column.setMinWidth(Math.max(headerWidth, cellWidth));
         }
@@ -220,8 +175,6 @@ public class JInputView extends JPanel {
                 frame.add(v = new JInputView());
                 frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
                 frame.setVisible(true);
-
-                //v.tree.getColumn(0).sizeWidthToFit();
             }
         });
     }
