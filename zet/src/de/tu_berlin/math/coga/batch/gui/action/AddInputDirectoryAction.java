@@ -7,18 +7,25 @@ package de.tu_berlin.math.coga.batch.gui.action;
 import com.l2fprod.common.swing.JDirectoryChooser;
 import de.tu_berlin.math.coga.batch.gui.JBatch;
 import de.tu_berlin.math.coga.batch.gui.dialog.AddDirectoryDialog;
+import de.tu_berlin.math.coga.batch.input.FileCrawler;
+import de.tu_berlin.math.coga.batch.input.Input;
+import de.tu_berlin.math.coga.batch.input.InputFile;
+import de.tu_berlin.math.coga.batch.input.reader.DimacsMinimumCostFlowFileReader;
 import java.awt.event.ActionEvent;
+import java.io.File;
+import java.util.LinkedList;
+import java.util.List;
 
 /**
  *
  * @author gross
  */
 public class AddInputDirectoryAction extends BatchAction {
-    
+
     public AddInputDirectoryAction(JBatch batch) {
         super(batch, "Add input directory", "folder_add_24.png");
-    }   
-    
+    }
+
     @Override
     public void actionPerformed(ActionEvent ae) {
         AddDirectoryDialog dialog = new AddDirectoryDialog();
@@ -26,18 +33,5 @@ public class AddInputDirectoryAction extends BatchAction {
         if (decision == JDirectoryChooser.APPROVE_OPTION) {
             batch.addInputFiles(dialog.getSelectedFiles());
         }
-        
-             /*
-        FileCrawler crawler = new FileCrawler(false, false);
-        LinkedList<String> ext = new LinkedList<>();
-        ext.add("net");
-        List<File> files = crawler.listFiles(new File("/homes/combi/gross/"), ext);
-        Input group = new Input(null);
-        for (File file : files) {
-        DimacsMinimumCostFlowFileReader reader = new DimacsMinimumCostFlowFileReader();
-        reader.setFile(file);
-        InputFile inputFile = new InputFile(file);
-        group.add(inputFile);
-        }*/   
-    }        
+    }
 }

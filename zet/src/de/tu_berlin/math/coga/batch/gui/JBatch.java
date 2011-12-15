@@ -16,15 +16,21 @@ import de.tu_berlin.math.coga.batch.gui.action.AddAlgorithmAction;
 import de.tu_berlin.math.coga.batch.gui.action.AddInputDirectoryAction;
 import de.tu_berlin.math.coga.batch.gui.action.RunComputationAction;
 import de.tu_berlin.math.coga.batch.gui.action.StopComputationAction;
+import de.tu_berlin.math.coga.batch.gui.input.InputRootNode;
+import de.tu_berlin.math.coga.batch.input.FileCrawler;
+import de.tu_berlin.math.coga.batch.input.FileFormat;
+import de.tu_berlin.math.coga.batch.input.Input;
+import de.tu_berlin.math.coga.batch.input.InputFile;
+import de.tu_berlin.math.coga.batch.input.reader.DimacsMinimumCostFlowFileReader;
 import ds.z.Project;
 import gui.GUIControl;
 import java.awt.BorderLayout;
 import java.io.File;
+import java.util.Arrays;
+import java.util.LinkedList;
+import java.util.List;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
-import org.jdesktop.swingx.JXTreeTable;
-import org.jdesktop.swingx.treetable.DefaultMutableTreeTableNode;
-import org.jdesktop.swingx.treetable.DefaultTreeTableModel;
 
 /**
  *
@@ -80,10 +86,6 @@ public class JBatch extends JPanel {
     public void add(BatchProjectEntry entry) {
     }
 
-    public void addInputFiles(File[] selectedFiles) {
-        throw new UnsupportedOperationException("Not yet implemented");
-    }
-
     public Computation getComputation() {
         return computation;
     }
@@ -91,5 +93,32 @@ public class JBatch extends JPanel {
     public void setComputation(Computation computation) {
         this.computation = computation;
         table.setInput(computation.getInput());
+    }
+
+    public void addInputFiles(File[] selectedFiles) {
+        if (computation == null) {
+            throw new IllegalStateException();
+        }
+        FileCrawler crawler = new FileCrawler(false, false);
+        LinkedList<String> extensions = new LinkedList<>();
+        for (FileFormat format : computation.getType().getFileFormats()) {
+            extensions.addAll(Arrays.asList(format.getExtensions()));
+        }
+        List<File> files = new LinkedList<>();        
+        for (File file : selectedFiles) {
+            if (file.isDirectory()) {
+                files.addAll(crawler.listFiles(new File("/homes/combi/gross/"), extensions));
+            } else if (file.isFile()) {
+                files.add(file);
+            }
+        }        
+        Input input = computation.getInput();
+        for (File file : files) {
+            InputFile inputFile = new InputFile(file);
+            if (!input.contains(inputFile)) {
+                input.add(inputFile);
+            }
+        }
+        table.setInput(input);        
     }
 }

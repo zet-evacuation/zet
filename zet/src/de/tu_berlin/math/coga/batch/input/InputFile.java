@@ -30,6 +30,11 @@ public class InputFile {
             throw new AssertionError("Reader could not be initialized.");
         }
     }
+
+    @Override
+    public boolean equals(Object obj) {
+        return (obj instanceof InputFile) && file.equals(((InputFile) obj).file);
+    }
     
     public String[] getPropertyNames() {
         return format.getProblemType().getPropertyNames();
@@ -39,7 +44,7 @@ public class InputFile {
         return reader.getProperties();
     }
 
-    public Object getName() {
+    public String getName() {
         return file.getName();
     }
     

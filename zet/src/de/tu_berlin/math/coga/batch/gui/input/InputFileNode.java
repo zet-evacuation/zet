@@ -46,5 +46,10 @@ public class InputFileNode extends DefaultMutableTreeTableNode {
     @Override
     public void setValueAt(Object aValue, int column) {
         throw new UnsupportedOperationException();
-    }    
+    }
+
+    public String toString() {
+        return getInputFile().getName();
+    }   
+    
 }
