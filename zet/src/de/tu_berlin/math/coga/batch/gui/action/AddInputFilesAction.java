@@ -15,16 +15,24 @@ import javax.swing.JFileChooser;
  */
 public class AddInputFilesAction extends BatchAction {
 
+    private AddFileDialog dialog;
+
     public AddInputFilesAction(JBatch batch) {
         super(batch, "Add input file(s)", "document_add_24.png");
-    }   
-    
+        setEnabled(false);
+    }
+
     @Override
     public void actionPerformed(ActionEvent ae) {
-        AddFileDialog dialog = new AddFileDialog();
+        if (dialog == null) {
+            dialog = new AddFileDialog(batch.getComputation().getType());
+        }
+        if (!dialog.getProblemType().equals(batch.getComputation().getType())) {
+            dialog.setProblemType(batch.getComputation().getType());
+        }
         int decision = dialog.showOpenDialog(batch);
         if (decision == JFileChooser.APPROVE_OPTION) {
             batch.addInputFiles(dialog.getSelectedFiles());
         }
-    }    
+    }
 }
