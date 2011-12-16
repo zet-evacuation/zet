@@ -47,5 +47,9 @@ public class InputFile {
     public String getName() {
         return file.getName();
     }
+
+    public File getFile() {
+        return file;
+    }
     
 }
