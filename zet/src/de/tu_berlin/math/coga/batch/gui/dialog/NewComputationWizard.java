@@ -10,13 +10,8 @@
  */
 package de.tu_berlin.math.coga.batch.gui.dialog;
 
-import be.ugent.caagt.jmathtex.TeXFormula;
-import be.ugent.caagt.jmathtex.TeXIcon;
-import be.ugent.caagt.jmathtex.mathml.MathMLException;
-import be.ugent.caagt.jmathtex.mathml.MathMLParser;
 import de.tu_berlin.math.coga.batch.input.ProblemType;
 import java.awt.Component;
-import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 import javax.swing.DefaultListCellRenderer;
@@ -196,15 +191,6 @@ public class NewComputationWizard extends javax.swing.JFrame {
             Icon icon = icons.get(value);
             label.setFont(label.getFont().deriveFont(16f));
             label.setIcon(icon);
-            try {
-                TeXFormula parse = MathMLParser.parse("\\sum_{a\\in\\delta_t} x_a", false);
-                TeXIcon ico = parse.createTeXIcon(0, 32f);
-                label.setIcon(ico);
-            } catch (MathMLException ex) {
-                ex.printStackTrace();
-            } catch (IOException ex) {
-                ex.printStackTrace();
-            }
             return label;
         }
     }
