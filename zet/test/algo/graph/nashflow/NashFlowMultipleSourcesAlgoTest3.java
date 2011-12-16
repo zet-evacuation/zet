@@ -24,8 +24,8 @@ import ds.graph.flow.NashFlow;
 
 import ds.graph.Edge;
 import ds.graph.Node;
-import ds.graph.DynamicNetwork;
-import ds.graph.IdentifiableDoubleMapping;
+import ds.graph.network.DynamicNetwork;
+import ds.mapping.IdentifiableDoubleMapping;
 
 
 

@@ -6,7 +6,7 @@ package math.coga.common.util;
 
 import de.tu_berlin.math.coga.common.util.Formatter;
 import de.tu_berlin.math.coga.common.util.Formatter.TimeUnits;
-import de.tu_berlin.math.coga.datastructure.Tupel;
+import de.tu_berlin.math.coga.datastructure.Tuple;
 import junit.framework.TestCase;
 
 
@@ -23,7 +23,7 @@ public class FormatterTest extends TestCase {
 	 * Tests the formatting for time units.
 	 */
 	public void testTimeUnits() {
-		Tupel<Double,TimeUnits> ret;
+		Tuple<Double,TimeUnits> ret;
 		final int secs = 31557600;
 		// check if the number of seconds of a year is computed correct (note that it is not the multiple of 365!
 		ret = Formatter.timeUnit( secs, TimeUnits.Seconds );
