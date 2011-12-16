@@ -69,7 +69,8 @@ public class JInputView extends JPanel {
             } else if (value instanceof InputFileNode) {
                 renderer.setClosedIcon(FILE_NODE);
                 renderer.setLeafIcon(FILE_NODE);
-                renderer.setOpenIcon(FILE_NODE);                
+                renderer.setOpenIcon(FILE_NODE);  
+                renderer.setToolTipText(((InputFileNode) value).getInputFile().getFile().getPath());
             }
             return super.getTreeCellRendererComponent(tree, value, sel, expanded, leaf, row, hasFocus);
         }
