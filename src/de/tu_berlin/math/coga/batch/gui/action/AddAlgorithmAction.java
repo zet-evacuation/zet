@@ -15,6 +15,7 @@ public class AddAlgorithmAction extends BatchAction {
 
     public AddAlgorithmAction(JBatch batch) {
         super(batch, "Add algorithm", "algo_24.png");
+        setEnabled(false);
     }   
     
     @Override

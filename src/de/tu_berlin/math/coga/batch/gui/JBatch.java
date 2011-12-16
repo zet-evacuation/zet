@@ -16,12 +16,10 @@ import de.tu_berlin.math.coga.batch.gui.action.AddAlgorithmAction;
 import de.tu_berlin.math.coga.batch.gui.action.AddInputDirectoryAction;
 import de.tu_berlin.math.coga.batch.gui.action.RunComputationAction;
 import de.tu_berlin.math.coga.batch.gui.action.StopComputationAction;
-import de.tu_berlin.math.coga.batch.gui.input.InputRootNode;
 import de.tu_berlin.math.coga.batch.input.FileCrawler;
 import de.tu_berlin.math.coga.batch.input.FileFormat;
 import de.tu_berlin.math.coga.batch.input.Input;
 import de.tu_berlin.math.coga.batch.input.InputFile;
-import de.tu_berlin.math.coga.batch.input.reader.DimacsMinimumCostFlowFileReader;
 import ds.z.Project;
 import gui.GUIControl;
 import java.awt.BorderLayout;
@@ -38,6 +36,8 @@ import javax.swing.JScrollPane;
  */
 public class JBatch extends JPanel {
     
+    private AddInputDirectoryAction addInputDirectoryAction;
+    private AddInputFilesAction addInputFilesAction;
     private Computation computation;
 
     public JBatch(GUIControl control) {
@@ -53,8 +53,8 @@ public class JBatch extends JPanel {
         inputPane.setTitle("Input");
         inputPane.setSpecial(true);
         inputPane.add(new AddCurrentProjectAction(this));
-        inputPane.add(new AddInputFilesAction(this));
-        inputPane.add(new AddInputDirectoryAction(this));
+        inputPane.add(addInputFilesAction = new AddInputFilesAction(this));
+        inputPane.add(addInputDirectoryAction = new AddInputDirectoryAction(this));
         //actionPane.add(inputPane);
 
         JTaskPaneGroup algorithmPane = new JTaskPaneGroup();
@@ -92,7 +92,11 @@ public class JBatch extends JPanel {
 
     public void setComputation(Computation computation) {
         this.computation = computation;
-        table.setInput(computation.getInput());
+        if (computation != null) {
+            table.setInput(computation.getInput());
+            addInputDirectoryAction.setEnabled(true);
+            addInputFilesAction.setEnabled(true);
+        }
     }
 
     public void addInputFiles(File[] selectedFiles) {
@@ -107,7 +111,7 @@ public class JBatch extends JPanel {
         List<File> files = new LinkedList<>();        
         for (File file : selectedFiles) {
             if (file.isDirectory()) {
-                files.addAll(crawler.listFiles(new File("/homes/combi/gross/"), extensions));
+                files.addAll(crawler.listFiles(file, extensions));
             } else if (file.isFile()) {
                 files.add(file);
             }

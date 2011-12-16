@@ -15,6 +15,7 @@ public class RunComputationAction extends BatchAction {
 
     public RunComputationAction(JBatch batch) {
         super(batch, "Run computation", "play_24.png");
+        setEnabled(false);
     }
 
     @Override

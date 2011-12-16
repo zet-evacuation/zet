@@ -4,35 +4,42 @@
  */
 package de.tu_berlin.math.coga.batch.gui.dialog;
 
+import de.tu_berlin.math.coga.batch.input.ProblemType;
 import java.io.File;
 import javax.swing.JFileChooser;
-import javax.swing.filechooser.FileFilter;
-import javax.swing.filechooser.FileNameExtensionFilter;
 
 /**
  *
  * @author gross
  */
 public class AddFileDialog extends JFileChooser {
-
-    private FileFilter[] filters = { 
-        new FileNameExtensionFilter("ADVEST Instance", ".dat"), 
-        new FileNameExtensionFilter("GZipped ZET Project", ".gzet"),
-        new FileNameExtensionFilter("DIMACS Maximum Flow Problem", ".max"),
-        new FileNameExtensionFilter("DIMACS Maximum Flow Solution", ".sol"),
-        new FileNameExtensionFilter("ZET XML File", ".xml"),
-        new FileNameExtensionFilter("ZET Project", ".zet"),
-    };
     
-    public AddFileDialog() {        
-        super(new File(System.getProperty("user.dir")));
-        for (FileFilter filter : filters) {
-            addChoosableFileFilter(filter);
+    private ProblemType problemType;
+    
+    public AddFileDialog(ProblemType problemType) {
+        super();
+        File directory = new File(System.getProperty("user.dir") + "/examples");
+        if (!directory.exists()) {
+            directory = new File(System.getProperty("user.dir"));
+        }
+        setCurrentDirectory(directory);
+        this.problemType = problemType;
+        for (ProblemType type : ProblemType.values()) {
+            addChoosableFileFilter(type.getFileFilter());            
         }
         setAcceptAllFileFilterUsed(true);
         setFileSelectionMode(JFileChooser.FILES_ONLY);
+        setFileFilter(problemType.getFileFilter());
         setDialogTitle("Select input file(s)...");
-        setMultiSelectionEnabled(true);
+        setMultiSelectionEnabled(true);        
     }
-    
+
+    public ProblemType getProblemType() {
+        return problemType;
+    }
+
+    public void setProblemType(ProblemType problemType) {
+        this.problemType = problemType;
+        setFileFilter(problemType.getFileFilter());
+    }
 }

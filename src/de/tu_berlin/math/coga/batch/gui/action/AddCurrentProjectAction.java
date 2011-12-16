@@ -15,6 +15,7 @@ public class AddCurrentProjectAction extends BatchAction {
 
     public AddCurrentProjectAction(JBatch batch) {
         super(batch, "Add current project", "box_24.png");
+        setEnabled(false);
     }   
     
     @Override

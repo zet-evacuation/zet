@@ -15,6 +15,7 @@ public class StopComputationAction extends BatchAction {
 
     public StopComputationAction(JBatch batch) {
         super(batch, "Stop computation", "close_24.png");
+        setEnabled(false);
     }
 
     @Override
