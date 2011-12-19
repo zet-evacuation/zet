@@ -4,75 +4,49 @@
  */
 
 /*
- * NewComputationDialog.java
+ * AddDirectoryWizard.java
  *
- * Created on Dec 15, 2011, 12:23:23 PM
+ * Created on Dec 19, 2011, 2:43:25 PM
  */
 package de.tu_berlin.math.coga.batch.gui.dialog;
 
-import de.tu_berlin.math.coga.batch.input.ProblemType;
+import com.l2fprod.common.swing.JDirectoryChooser;
+import java.awt.BorderLayout;
 import java.awt.Component;
 import java.io.File;
 import java.io.IOException;
-import java.util.HashMap;
-import java.util.Map;
 import javax.imageio.ImageIO;
-import javax.swing.DefaultListCellRenderer;
-import javax.swing.DefaultListModel;
-import javax.swing.Icon;
 import javax.swing.ImageIcon;
+import javax.swing.JButton;
 import javax.swing.JFrame;
-import javax.swing.JLabel;
-import javax.swing.JList;
 
 /**
  *
  * @author gross
  */
-public class NewComputationWizard extends javax.swing.JFrame {
+public class AddDirectoryWizard extends javax.swing.JFrame {
 
+    private JDirectoryChooser chooser;
     private boolean accepted;
-    private boolean closed;
 
-    /** Creates new form NewComputationDialog */
-    public NewComputationWizard(Component parent) {
-        super("Preparing a new computation... ");
+    /** Creates new form AddDirectoryWizard */
+    public AddDirectoryWizard(Component parent) {
+        super("Choose directories with input files...");        
         initComponents();
         final File iconFile = new File("./icon.gif");
         try {
             setIconImage(ImageIO.read(iconFile));
         } catch (IOException ex) {
             ex.printStackTrace();
-        }
+        }        
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-        DefaultListModel model = new DefaultListModel();
-        Map<Object, Icon> icons = new HashMap<>();
-        for (ProblemType type : ProblemType.values()) {
-            model.addElement(type);
-            icons.put(type, new ImageIcon("./icons/max_flow.png"));
-        }
-        jList1.setModel(model);
-        IconListRenderer renderer = new IconListRenderer(icons);
-        jList1.setCellRenderer(renderer);
-        if (jList1.getModel().getSize() == 0) {
-            jButton1.setEnabled(false);
-        } else {
-            jList1.setSelectedIndex(0);
-        }
-        setSize(600, 500);
+        chooser = new JDirectoryChooser(System.getProperty("user.dir"));
+        chooser.setAutoscrolls(true);
+        chooser.setControlButtonsAreShown(false);
+        chooser.setShowingCreateDirectory(false);
+        jPanel1.setLayout(new BorderLayout());
+        jPanel1.add(chooser, BorderLayout.CENTER);
         setLocationRelativeTo(parent);
-    }
-
-    public boolean isAccepted() {
-        return accepted;
-    }
-
-    public boolean isClosed() {
-        return closed;
-    }
-
-    public ProblemType getProblemType() {
-        return (ProblemType) jList1.getSelectedValue();
     }
 
     /** This method is called from within the constructor to
@@ -85,28 +59,26 @@ public class NewComputationWizard extends javax.swing.JFrame {
     private void initComponents() {
 
         jPanel1 = new javax.swing.JPanel();
-        jScrollPane1 = new javax.swing.JScrollPane();
-        jList1 = new javax.swing.JList();
         jButton1 = new javax.swing.JButton();
         jButton2 = new javax.swing.JButton();
+        jCheckBox1 = new javax.swing.JCheckBox();
+        jCheckBox2 = new javax.swing.JCheckBox();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
-        setTitle("Choose the type of computation...");
+        setTitle("Choose directories...");
+        setIconImages(null);
 
-        jPanel1.setBorder(javax.swing.BorderFactory.createTitledBorder("Choose the type of computation you want to perform:"));
-
-        jList1.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
-        jScrollPane1.setViewportView(jList1);
+        jPanel1.setBorder(javax.swing.BorderFactory.createTitledBorder("Choose directories:"));
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 555, Short.MAX_VALUE)
+            .addGap(0, 390, Short.MAX_VALUE)
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 245, Short.MAX_VALUE)
+            .addGap(0, 224, Short.MAX_VALUE)
         );
 
         jButton1.setText("OK");
@@ -123,15 +95,25 @@ public class NewComputationWizard extends javax.swing.JFrame {
             }
         });
 
+        jCheckBox1.setText("Follow links");
+        jCheckBox1.setToolTipText("If this is checked, symbolic links to files and folder are resolved, otherwise they are ignored.");
+
+        jCheckBox2.setText("Recurse");
+        jCheckBox2.setToolTipText("If this is checked, then subdirectories are automatically included.");
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 265, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jButton1, javax.swing.GroupLayout.DEFAULT_SIZE, 264, Short.MAX_VALUE)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jCheckBox2)
+                    .addComponent(jCheckBox1)
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 181, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(jButton1, javax.swing.GroupLayout.DEFAULT_SIZE, 183, Short.MAX_VALUE)))
                 .addContainerGap())
             .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
@@ -139,29 +121,31 @@ public class NewComputationWizard extends javax.swing.JFrame {
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                 .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jCheckBox2)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jCheckBox1)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jButton2)
-                    .addComponent(jButton1))
+                    .addComponent(jButton1)
+                    .addComponent(jButton2))
                 .addContainerGap())
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
-        accepted = false;
-        closed = true;
-        setVisible(false);
-        dispose();
-    }//GEN-LAST:event_jButton2ActionPerformed
-
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         accepted = true;
-        closed = true;
         setVisible(false);
         dispose();
     }//GEN-LAST:event_jButton1ActionPerformed
+
+    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
+        accepted = false;
+        setVisible(false);
+        dispose();
+    }//GEN-LAST:event_jButton2ActionPerformed
 
     /**
      * @param args the command line arguments
@@ -170,38 +154,31 @@ public class NewComputationWizard extends javax.swing.JFrame {
         java.awt.EventQueue.invokeLater(new Runnable() {
 
             public void run() {
-                NewComputationWizard frame = new NewComputationWizard(null);
-                frame.setVisible(true);
+                new AddDirectoryWizard(null).setVisible(true);
             }
         });
     }
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton2;
-    private javax.swing.JList jList1;
+    private javax.swing.JCheckBox jCheckBox1;
+    private javax.swing.JCheckBox jCheckBox2;
     private javax.swing.JPanel jPanel1;
-    private javax.swing.JScrollPane jScrollPane1;
     // End of variables declaration//GEN-END:variables
 
-    public class IconListRenderer extends DefaultListCellRenderer {
+    public File[] getSelectedFiles() {
+        return chooser.getSelectedFiles();
+    }
 
-        private Map<Object, Icon> icons = null;
+    public boolean isAccepted() {
+        return accepted;
+    }
 
-        public IconListRenderer() {
-            this(new HashMap<Object, Icon>());
-        }
+    public boolean isFollowingLinks() {
+        return jCheckBox1.isSelected();
+    }
 
-        public IconListRenderer(Map<Object, Icon> icons) {
-            this.icons = icons;
-        }
-
-        @Override
-        public Component getListCellRendererComponent(JList list, Object value, int index, boolean isSelected, boolean cellHasFocus) {
-            JLabel label = (JLabel) super.getListCellRendererComponent(list, value, index, isSelected, cellHasFocus);
-            Icon icon = icons.get(value);
-            label.setFont(label.getFont().deriveFont(16f));
-            label.setIcon(icon);
-            return label;
-        }
+    public boolean isRecursive() {
+        return jCheckBox2.isSelected();
     }
 }

@@ -100,10 +100,14 @@ public class JBatch extends JPanel {
     }
 
     public void addInputFiles(File[] selectedFiles) {
+        addInputFiles(selectedFiles, false, false);
+    }
+
+    public void addInputFiles(File[] selectedFiles, boolean recursive, boolean followingLinks) {
         if (computation == null) {
             throw new IllegalStateException();
         }
-        FileCrawler crawler = new FileCrawler(false, false);
+        FileCrawler crawler = new FileCrawler(recursive, followingLinks);
         LinkedList<String> extensions = new LinkedList<>();
         for (FileFormat format : computation.getType().getFileFormats()) {
             extensions.addAll(Arrays.asList(format.getExtensions()));
@@ -123,6 +127,6 @@ public class JBatch extends JPanel {
                 input.add(inputFile);
             }
         }
-        table.setInput(input);        
+        table.setInput(input);    
     }
 }
