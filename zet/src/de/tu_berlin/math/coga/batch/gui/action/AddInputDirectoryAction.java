@@ -4,10 +4,11 @@
  */
 package de.tu_berlin.math.coga.batch.gui.action;
 
-import com.l2fprod.common.swing.JDirectoryChooser;
 import de.tu_berlin.math.coga.batch.gui.JBatch;
-import de.tu_berlin.math.coga.batch.gui.dialog.AddDirectoryDialog;
+import de.tu_berlin.math.coga.batch.gui.dialog.AddDirectoryWizard;
 import java.awt.event.ActionEvent;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 
 /**
  *
@@ -22,10 +23,16 @@ public class AddInputDirectoryAction extends BatchAction {
 
     @Override
     public void actionPerformed(ActionEvent ae) {
-        AddDirectoryDialog dialog = new AddDirectoryDialog();
-        int decision = dialog.showOpenDialog(batch);
-        if (decision == JDirectoryChooser.APPROVE_OPTION) {
-            batch.addInputFiles(dialog.getSelectedFiles());
-        }
+        final AddDirectoryWizard wizard = new AddDirectoryWizard(batch);
+        wizard.addWindowListener(new WindowAdapter() {
+
+            @Override
+            public void windowClosed(WindowEvent e) {
+                if (wizard.isAccepted()) {
+                   batch.addInputFiles(wizard.getSelectedFiles(),wizard.isRecursive(),wizard.isFollowingLinks());
+                }
+            }
+        });
+        wizard.setVisible(true);
     }
 }
