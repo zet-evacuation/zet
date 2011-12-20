@@ -7,7 +7,7 @@ package de.tu_berlin.math.coga.batch.gui;
 import de.tu_berlin.math.coga.batch.gui.input.InputFileNode;
 import de.tu_berlin.math.coga.batch.gui.input.InputRootNode;
 import de.tu_berlin.math.coga.batch.gui.input.InputTreeTableModel;
-import de.tu_berlin.math.coga.batch.input.Input;
+import de.tu_berlin.math.coga.batch.input.InputFiles;
 import java.awt.BorderLayout;
 import java.awt.Component;
 import java.awt.Font;
@@ -89,7 +89,7 @@ public class JInputView extends JPanel {
      */
     private JXTreeTable tree;
     
-    private Input input;
+    private InputFiles input;
 
     /**
      * Creates the file tree panel.
@@ -116,7 +116,7 @@ public class JInputView extends JPanel {
         add(scrollPane, BorderLayout.CENTER);
     }
 
-    public void setInput(Input input) {
+    public void setInput(InputFiles input) {
         this.input = input;
         InputRootNode inputRootNode = new InputRootNode(input);
         InputTreeTableModel model = new InputTreeTableModel(inputRootNode);

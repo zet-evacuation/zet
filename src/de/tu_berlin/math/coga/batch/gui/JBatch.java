@@ -18,7 +18,7 @@ import de.tu_berlin.math.coga.batch.gui.action.RunComputationAction;
 import de.tu_berlin.math.coga.batch.gui.action.StopComputationAction;
 import de.tu_berlin.math.coga.batch.input.FileCrawler;
 import de.tu_berlin.math.coga.batch.input.FileFormat;
-import de.tu_berlin.math.coga.batch.input.Input;
+import de.tu_berlin.math.coga.batch.input.InputFiles;
 import de.tu_berlin.math.coga.batch.input.InputFile;
 import ds.z.Project;
 import gui.GUIControl;
@@ -39,9 +39,11 @@ public class JBatch extends JPanel {
     private AddInputDirectoryAction addInputDirectoryAction;
     private AddInputFilesAction addInputFilesAction;
     private Computation computation;
+    private GUIControl control;
 
     public JBatch(GUIControl control) {
         super(new BorderLayout());
+        this.control = control;
         JTaskPane taskPaneContainer = new JTaskPane();
         // add JTaskPaneGroups to the container
         JTaskPaneGroup actionPane = new JTaskPaneGroup();
@@ -76,6 +78,10 @@ public class JBatch extends JPanel {
         
         PropertySheetPanel properties = new PropertySheetPanel();
         add(new JScrollPane(properties), BorderLayout.EAST);
+    }
+
+    public GUIControl getControl() {
+        return control;
     }
     
     JInputView table;
@@ -120,7 +126,7 @@ public class JBatch extends JPanel {
                 files.add(file);
             }
         }        
-        Input input = computation.getInput();
+        InputFiles input = computation.getInput();
         for (File file : files) {
             InputFile inputFile = new InputFile(file);
             if (!input.contains(inputFile)) {
@@ -128,5 +134,9 @@ public class JBatch extends JPanel {
             }
         }
         table.setInput(input);    
+    }
+
+    public void addCurrentProject() {
+        Project project = control.getZControl().getProject();
     }
 }

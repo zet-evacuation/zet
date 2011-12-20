@@ -4,7 +4,7 @@
  */
 package de.tu_berlin.math.coga.batch;
 
-import de.tu_berlin.math.coga.batch.input.Input;
+import de.tu_berlin.math.coga.batch.input.InputFiles;
 import de.tu_berlin.math.coga.batch.input.ProblemType;
 
 /**
@@ -13,15 +13,15 @@ import de.tu_berlin.math.coga.batch.input.ProblemType;
  */
 public class Computation {
     
-    private Input input;
+    private InputFiles input;
     private ProblemType type;
 
     public Computation(ProblemType problemType) {
         this.type = problemType;
-        this.input = new Input(this);
+        this.input = new InputFiles(this);
     }
 
-    public Input getInput() {
+    public InputFiles getInput() {
         return input;
     }
 
