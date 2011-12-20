@@ -16,8 +16,6 @@ import java.awt.Component;
 import java.io.File;
 import java.io.IOException;
 import javax.imageio.ImageIO;
-import javax.swing.ImageIcon;
-import javax.swing.JButton;
 import javax.swing.JFrame;
 
 /**
@@ -43,10 +41,13 @@ public class AddDirectoryWizard extends javax.swing.JFrame {
         chooser = new JDirectoryChooser(System.getProperty("user.dir"));
         chooser.setAutoscrolls(true);
         chooser.setControlButtonsAreShown(false);
-        chooser.setShowingCreateDirectory(false);
+        chooser.setShowingCreateDirectory(false);        
+        chooser.setUI(new WindowsDirectoryChooserUI(chooser));
         jPanel1.setLayout(new BorderLayout());
         jPanel1.add(chooser, BorderLayout.CENTER);
         setLocationRelativeTo(parent);
+        //System.out.println(chooser.getUI().getClass());
+        chooser.ensureFileIsVisible(chooser.getCurrentDirectory());
     }
 
     /** This method is called from within the constructor to
