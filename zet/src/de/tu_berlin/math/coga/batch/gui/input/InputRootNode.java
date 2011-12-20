@@ -5,7 +5,7 @@
 package de.tu_berlin.math.coga.batch.gui.input;
 
 import de.tu_berlin.math.coga.batch.input.InputFile;
-import de.tu_berlin.math.coga.batch.input.Input;
+import de.tu_berlin.math.coga.batch.input.InputFiles;
 import java.util.Collections;
 import java.util.Comparator;
 import org.jdesktop.swingx.treetable.DefaultMutableTreeTableNode;
@@ -20,7 +20,7 @@ public class InputRootNode extends DefaultMutableTreeTableNode {
     private int currentSortIndex = 0; 
     private boolean ascending = true;
     
-    public InputRootNode(Input input) {
+    public InputRootNode(InputFiles input) {
         super(input, true);
         for (InputFile file : input) {
             add(new InputFileNode(file));
@@ -33,8 +33,8 @@ public class InputRootNode extends DefaultMutableTreeTableNode {
         return 1 + getInput().getComputation().getType().getPropertyNames().length;
     }
 
-    public Input getInput() {
-        return (Input) getUserObject();
+    public InputFiles getInput() {
+        return (InputFiles) getUserObject();
     }
 
     @Override
