@@ -4,6 +4,7 @@
  */
 package de.tu_berlin.math.coga.batch.gui;
 
+import de.tu_berlin.math.coga.batch.gui.input.BatchTreeTableNode;
 import de.tu_berlin.math.coga.batch.gui.input.InputFileNode;
 import de.tu_berlin.math.coga.batch.gui.input.InputRootNode;
 import de.tu_berlin.math.coga.batch.gui.input.InputTreeTableModel;
@@ -61,16 +62,13 @@ public class JInputView extends JPanel {
         @Override
         public Component getTreeCellRendererComponent(JTree tree, Object value, boolean sel, boolean expanded, boolean leaf, int row, boolean hasFocus) {
             DefaultTreeCellRenderer renderer = (DefaultTreeCellRenderer) super.getTreeCellRendererComponent(tree, value, sel, expanded, leaf, row, hasFocus);
-            if (value instanceof InputRootNode) { 
-                renderer.setClosedIcon(ROOT_NODE);
-                renderer.setLeafIcon(ROOT_NODE);
-                renderer.setOpenIcon(ROOT_NODE);
-                renderer.setFont(renderer.getFont().deriveFont(Font.BOLD));
-            } else if (value instanceof InputFileNode) {
-                renderer.setClosedIcon(FILE_NODE);
-                renderer.setLeafIcon(FILE_NODE);
-                renderer.setOpenIcon(FILE_NODE);  
-                renderer.setToolTipText(((InputFileNode) value).getInputFile().getFile().getPath());
+            if (value instanceof BatchTreeTableNode) { 
+                BatchTreeTableNode node = (BatchTreeTableNode) value;
+                renderer.setClosedIcon(node.getIcon());
+                renderer.setLeafIcon(node.getIcon());
+                renderer.setOpenIcon(node.getIcon());
+                renderer.setFont(node.deriveFont(renderer.getFont()));
+                renderer.setToolTipText(node.getToolTipText());
             }
             return super.getTreeCellRendererComponent(tree, value, sel, expanded, leaf, row, hasFocus);
         }
