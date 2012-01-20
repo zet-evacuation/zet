@@ -58,12 +58,7 @@ public class ZToThinNetworkConverter extends BaseZToGraphConverter{
     public ListSequence<Node> AssignNodes;
     public int[][] used;
     //stores number of evacuation areas
-    int numEvac1;
-    int numEvac2;
-    //stores number of doors of neighbourrooms
-    int num;
-    int numAssign1;
-    int numAssign2;
+    int numEvac1, numEvac2, num, numAssign1, numAssign2;
     //position Nodes to remember which rooms are connected by the given node
     public HashMap<Point, Node> connection = new HashMap<>(); 
     //stores for each edge the corresponding room

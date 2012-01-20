@@ -73,7 +73,7 @@ public class FlowOverTimePath extends FlowOverTimeEdgeSequence {
 	}
 
 	public Iterable<Edge> edges() {
-		return new Iterable<>() {
+		return new Iterable() {
 			public Iterator<Edge> iterator() {
 				return new Iterator<Edge>() {
 					private Iterator<FlowOverTimeEdge> internal = FlowOverTimePath.this.iterator();

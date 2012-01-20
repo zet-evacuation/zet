@@ -118,13 +118,6 @@ public class SEAAPAlgorithm extends Algorithm<EarliestArrivalFlowProblem, FlowOv
     @Override
     protected FlowOverTime runAlgorithm(EarliestArrivalFlowProblem problem) {
         // Initialize the data structures
-			if( ZETMain.isDebug() ) {
-				System.out.println("Capacities: " + problem.getEdgeCapacities());
-				System.out.println("Node Capacities: " + problem.getNodeCapacities());
-				System.out.println( "Supplies: " + problem.getSupplies().toString() );
-				System.out.println( "Transit times: " + problem.getTransitTimes().toString() );				
-			}
-				
         calculateShortestPathLengths();       
         flowUnitsSent = 0;
         network = new ImplicitTimeExpandedResidualNetwork( problem );

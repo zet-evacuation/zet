@@ -359,6 +359,7 @@
           <objectParameters>
             <double>0.25</double>
           </objectParameters>
+          <runParameters/>
           <statistic class="statistic.graph.StaticEdgeStatistic">TOTAL_LOAD</statistic>
         </statistic>
         <attributes>
