@@ -105,6 +105,7 @@ public class JZETMenuBar extends JMenuBar implements ActionListener, Localized {
         private JMenu mCreateShortestPaths;
         private JMenuItem mnuCreateShortestPathsNonGrid;
         private JMenuItem mnuCreateShortestPathsGrid;
+        private JMenuItem mCreateThinNetwork;
 	private JMenuItem mnuExecuteApplyAssignment;
 	private JMenu mSimulation;
 	private JMenuItem mnuSimulationQuickVisualization;;
@@ -243,6 +244,7 @@ public class JZETMenuBar extends JMenuBar implements ActionListener, Localized {
                 mCreateShortestPaths = Menu.addMenu(mCreateGraph,loc.getString("Execute.CreateGraph.ShortestPaths"));
                 mnuCreateShortestPathsGrid = Menu.addMenuItem(mCreateShortestPaths, loc.getString( "Execute.CreateGraph.ShortestPaths.Grid" ), KeyEvent.VK_9, this, "ShortestPathsGrid", InputEvent.CTRL_DOWN_MASK);
                 mnuCreateShortestPathsNonGrid = Menu.addMenuItem(mCreateShortestPaths, loc.getString( "Execute.CreateGraph.ShortestPaths.NonGrid" ), KeyEvent.VK_9, this, "ShortestPathsNonGrid", InputEvent.CTRL_DOWN_MASK);
+                mCreateThinNetwork = Menu.addMenuItem(mCreateGraph, loc.getString( "Execute.CreateGraph.ThinNetwork" ), KeyEvent.VK_9, this, "ThinNet", InputEvent.CTRL_DOWN_MASK);
                 
 		mnuExecuteApplyAssignment = Menu.addMenuItem( mExecute, loc.getString( "Execute.ApplyConcreteAssignment" ), this, "applyConcreteAssignment" );
 		mSimulation = Menu.addMenu( mExecute, loc.getString( "Execute.Simulation" ) );
@@ -461,6 +463,8 @@ public class JZETMenuBar extends JMenuBar implements ActionListener, Localized {
                         control.createGraph(GraphConverterAlgorithms.APSPGraphNonGrid);
                 else if (e.getActionCommand().equals("ShortestPathsNonGrid"))
                         control.createGraph(GraphConverterAlgorithms.RepeatedShortestPaths);
+                else if (e.getActionCommand().equals("ThinNet"))
+                        control.createGraph(GraphConverterAlgorithms.ThinNetwork);
 		else if( e.getActionCommand().equals( "applyConcreteAssignment" ) ) {
 		} else if( e.getActionCommand().equals( "quickVisualization" ) ) {
 			control.performQuickVisualization();

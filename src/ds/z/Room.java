@@ -23,8 +23,6 @@ package ds.z;
 import com.thoughtworks.xstream.annotations.XStreamAlias;
 import com.thoughtworks.xstream.annotations.XStreamAsAttribute;
 import com.thoughtworks.xstream.annotations.XStreamOmitField;
-import ds.graph.IdentifiableCollection;
-import ds.collection.ListSequence;
 import ds.z.exception.AreaNotInsideException;
 import ds.z.exception.PolygonNotClosedException;
 import ds.z.exception.RoomEdgeInvalidTargetException;
@@ -40,10 +38,8 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
-import java.util.LinkedHashSet;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Set;
 
 /**
  * Represents a room in a {@link BuildingPlan}. Generally a room is nothing else than
@@ -97,14 +93,14 @@ public class Room extends BaseRoom<RoomEdge> implements Cloneable, Comparable<Ro
 		super( RoomEdge.class );
 		this.name = name;
 		associatedFloor = floor;
-		assignmentAreas = new ArrayList<AssignmentArea>();
-		barriers = new ArrayList<Barrier>();
-		delayAreas = new ArrayList<DelayArea>();
-		evacuationAreas = new ArrayList<EvacuationArea>();
-		inaccessibleAreas = new ArrayList<InaccessibleArea>();
-		saveAreas = new ArrayList<SaveArea>();
-		stairAreas = new ArrayList<StairArea>();
-		teleportAreas = new ArrayList<TeleportArea>();
+		assignmentAreas = new ArrayList<>();
+		barriers = new ArrayList<>();
+		delayAreas = new ArrayList<>();
+		evacuationAreas = new ArrayList<>();
+		inaccessibleAreas = new ArrayList<>();
+		saveAreas = new ArrayList<>();
+		stairAreas = new ArrayList<>();
+		teleportAreas = new ArrayList<>();
 		areas = new ArrayList[] {assignmentAreas, barriers, delayAreas, evacuationAreas, inaccessibleAreas, saveAreas, stairAreas, teleportAreas};
 		floor.addRoom( this );
 	}
@@ -133,7 +129,7 @@ public class Room extends BaseRoom<RoomEdge> implements Cloneable, Comparable<Ro
         public HashMap<Point,Integer> getDoors(Room room)
         {
             //Collection<Point> doors = new HashSet<Point>();
-            HashMap<Point,Integer> doors = new HashMap<Point,Integer>();
+            HashMap<Point,Integer> doors = new HashMap<>();
             for (RoomEdge edge: super.getEdges())
             {
                 //System.out.println("betrachte Kante: " + edge);
@@ -175,7 +171,7 @@ public class Room extends BaseRoom<RoomEdge> implements Cloneable, Comparable<Ro
 	 */
         public Collection<Edge> getDoorEdges()
         {
-            Collection<Edge> doorEdges = new HashSet<Edge>();
+            Collection<Edge> doorEdges = new HashSet<>();
             for (RoomEdge edge: super.getEdges())
             {
                 if (edge.isPassable())
@@ -486,7 +482,7 @@ public class Room extends BaseRoom<RoomEdge> implements Cloneable, Comparable<Ro
 					// for TeleportEdges because normal passable edges always are equal to their link target.
 					int xOffset = (partnerSource.x - eSource.x);
 					int yOffset = (partnerSource.y - eSource.y);
-					List<PlanPoint> new_p = new LinkedList<PlanPoint>();
+					List<PlanPoint> new_p = new LinkedList<>();
 					for( PlanPoint point : p ) {
 						new_p.add( new PlanPoint( point.x + xOffset, point.y + yOffset ) );
 					}
@@ -856,7 +852,7 @@ public class Room extends BaseRoom<RoomEdge> implements Cloneable, Comparable<Ro
 		int size = 0;
 		for( ArrayList<Area<?>> areaList : areas )
 			size += areaList.size();
-		ArrayList<Area<?>> allAreas = new ArrayList<Area<?>>( size );
+		ArrayList<Area<?>> allAreas = new ArrayList<>( size );
 		for( ArrayList<Area<?>> areaList : areas )
 			allAreas.addAll( areaList );
 		return allAreas;
@@ -890,14 +886,14 @@ public class Room extends BaseRoom<RoomEdge> implements Cloneable, Comparable<Ro
 	@Override
 	public List<PlanPoint> getPlanPoints() {
 		// Use linked list instaed of computing the right size for an ArrayList
-		LinkedList<PlanPoint> planPoints = new LinkedList<PlanPoint>();
+		LinkedList<PlanPoint> planPoints = new LinkedList<>();
 		getPlanPoints( planPoints );
 		return planPoints;
 	}
 
 	public List<PlanPoint> getBorderPlanPoints() {
 		// Use linked list instaed of computing the right size for an ArrayList
-		LinkedList<PlanPoint> planPoints = new LinkedList<PlanPoint>();
+		LinkedList<PlanPoint> planPoints = new LinkedList<>();
 		getBorderPlanPoints( planPoints );
 		return planPoints;
 	}
