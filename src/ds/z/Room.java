@@ -23,6 +23,8 @@ package ds.z;
 import com.thoughtworks.xstream.annotations.XStreamAlias;
 import com.thoughtworks.xstream.annotations.XStreamAsAttribute;
 import com.thoughtworks.xstream.annotations.XStreamOmitField;
+import ds.graph.IdentifiableCollection;
+import ds.collection.ListSequence;
 import ds.z.exception.AreaNotInsideException;
 import ds.z.exception.PolygonNotClosedException;
 import ds.z.exception.RoomEdgeInvalidTargetException;
@@ -32,10 +34,16 @@ import ds.z.exception.TeleportEdgeTargetLengthException;
 import ds.z.exception.TooManyPeopleException;
 import io.z.RoomConverter;
 import io.z.XMLConverter;
+import java.awt.Point;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Collections;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.LinkedHashSet;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Set;
 
 /**
  * Represents a room in a {@link BuildingPlan}. Generally a room is nothing else than
@@ -100,6 +108,83 @@ public class Room extends BaseRoom<RoomEdge> implements Cloneable, Comparable<Ro
 		areas = new ArrayList[] {assignmentAreas, barriers, delayAreas, evacuationAreas, inaccessibleAreas, saveAreas, stairAreas, teleportAreas};
 		floor.addRoom( this );
 	}
+        
+        /**
+	 * Gives the number of doors for a {@code Room}
+	 * @param room the room for which doors are counted
+	 */
+        /*public int getDoors(Room room)
+        {
+            int numDoors = 0;
+            for (RoomEdge edge: super.getEdges())
+            {
+                if (edge.isPassable())
+                {
+                    numDoors++;
+                }
+            }
+            return numDoors;
+        }*/
+        
+        /**
+	 * Returns the position and the width of all doors for a {@code Room} 
+	 * @param room the room for which position is specified
+	 */
+        public HashMap<Point,Integer> getDoors(Room room)
+        {
+            //Collection<Point> doors = new HashSet<Point>();
+            HashMap<Point,Integer> doors = new HashMap<Point,Integer>();
+            for (RoomEdge edge: super.getEdges())
+            {
+                //System.out.println("betrachte Kante: " + edge);
+                if (edge.isPassable())
+                {
+                    int width = edge.length();
+                    int xpos = (edge.getSource().getXInt() + edge.getTarget().getXInt())/2;
+                    int ypos = (edge.getSource().getYInt() + edge.getTarget().getYInt())/2;
+                    Point p = new Point(xpos,ypos);
+                    doors.put(p,width);
+                } 
+                
+            }
+            return doors;
+        }
+        
+        
+        
+        /**
+	 * Gives the length of a door for a {@code Room} with only one door
+	 * @param room the room for which length is returned
+	 */
+        public int getLengthOfDoor(Room room)
+        {
+            int length = 0;
+            for (RoomEdge edge: super.getEdges())
+            {
+                if (edge.isPassable())
+                {
+                    length = edge.length(); 
+                }
+            }
+            return length;
+        }
+        
+        /**
+	 * Gives a collection of all passable edges as doors in one room
+	 * @param room the room which is considered
+	 */
+        public Collection<Edge> getDoorEdges()
+        {
+            Collection<Edge> doorEdges = new HashSet<Edge>();
+            for (RoomEdge edge: super.getEdges())
+            {
+                if (edge.isPassable())
+                {
+                   doorEdges.add(edge);
+                }
+            }
+            return doorEdges;
+        }
 
 	/**
 	 * {@inheritDoc}
