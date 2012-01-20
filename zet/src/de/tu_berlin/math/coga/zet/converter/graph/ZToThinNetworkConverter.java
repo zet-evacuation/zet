@@ -32,8 +32,6 @@ import java.util.List;
  */
 public class ZToThinNetworkConverter extends BaseZToGraphConverter{
     
-    //maps the number of nodes to the corresponding room 
-    public HashMap<Room,Integer> NumNodesForRoom = new HashMap<>();
     //maps the node representing the door to corresponding room
     public HashMap<Room,Node> DoorNodeForRoom = new HashMap<>();
     
@@ -78,7 +76,6 @@ public class ZToThinNetworkConverter extends BaseZToGraphConverter{
         
         System.out.print( "Create Nodes for thin Network... " );
 	List<ZToGraphRoomRaster> rasteredRooms = raster.getAllRasteredRooms();
-        Collection<Point> usedPos = new HashSet<>();
 
 	// List of sources according to isSource flag of squares
 	LinkedList<Node> sources = new LinkedList<>();
@@ -100,7 +97,6 @@ public class ZToThinNetworkConverter extends BaseZToGraphConverter{
                EvacNodes = new ListSequence<>();
                AssignNodes = new ListSequence<>();
                Room ZRoom = room.getRoom();
-               int NodeForRoom = 0;
                
                //gives the neighbours of the current room
                Collection<Room> neighbRooms = NeighbourRooms.get(ZRoom);
@@ -156,9 +152,7 @@ public class ZToThinNetworkConverter extends BaseZToGraphConverter{
                        model.getZToGraphMapping().setIsDeletedSourceNode( node, false );
                        sources.add(node);
                        AssignNodes.add(node);
-                       nodes.add(node);
                        nodeCount++;
-                       NodeForRoom++;
                        //TODO: map raster squares to the assignment node (relevant for ConvertConcreteAssignment()...)
                        int size = room.getRaster();
                        int startCol = (area.getxOffset()-room.getXOffset())/size;
@@ -196,7 +190,6 @@ public class ZToThinNetworkConverter extends BaseZToGraphConverter{
                         nodes.add(node);
                         EvacNodes.add(node);
                         nodeCount++;
-                        NodeForRoom++;
                     }
                     
                     //create door nodes for rooms with exactly one door first
@@ -230,7 +223,6 @@ public class ZToThinNetworkConverter extends BaseZToGraphConverter{
                                 model.getZToGraphMapping().setIsEvacuationNode( node, false );
                                 model.getZToGraphMapping().setIsSourceNode(node, false);
                                 model.getZToGraphMapping().setIsDeletedSourceNode( node, false );
-                                NodeForRoom++;
                         }
                     }
                     //create door nodes for rooms with more than one door
@@ -250,7 +242,6 @@ public class ZToThinNetworkConverter extends BaseZToGraphConverter{
                                 PositionNode pos = new PositionNode(node,p,doors.get(p)); 
                                 doorNodes.add(pos);
                                 graph.setNode(node);
-                                usedPos.add(p);
                                 //NodeRectangle rec = new NodeRectangle(p.x-1,p.y+1, p.x+1,p.y-1);
                                 NodeRectangle rec = new NodeRectangle(p.x-1,-(p.y+1), p.x+1,-(p.y-1));
                                 mapping.setNodeRectangle(node, rec );
@@ -259,7 +250,6 @@ public class ZToThinNetworkConverter extends BaseZToGraphConverter{
                                 model.getZToGraphMapping().setIsSourceNode(node, false);
                                 model.getZToGraphMapping().setIsDeletedSourceNode( node, false );
                                 nodeCount++;
-                                NodeForRoom++; 
                         }                      
                         
                     //only neighbours with one door
@@ -310,7 +300,6 @@ public class ZToThinNetworkConverter extends BaseZToGraphConverter{
                                 model.getZToGraphMapping().setIsDeletedSourceNode( node, false );
                                 nodes.add(node);
                                 nodeCount++;
-                                NodeForRoom++; 
                              }
                              else
                              {
@@ -403,7 +392,6 @@ public class ZToThinNetworkConverter extends BaseZToGraphConverter{
                             model.getZToGraphMapping().setIsSourceNode(node2, false);
                             model.getZToGraphMapping().setIsDeletedSourceNode( node2, false );
                             nodes.add(node2);
-                            NodeForRoom = NodeForRoom+2; 
                             System.out.println("Rest: " + rest);
                             if (rest < 2*unit)
                             {
@@ -456,7 +444,6 @@ public class ZToThinNetworkConverter extends BaseZToGraphConverter{
                         model.getZToGraphMapping().setIsEvacuationNode( node, false );
                         model.getZToGraphMapping().setIsSourceNode(node, false);
                         model.getZToGraphMapping().setIsDeletedSourceNode( node, false );
-                        NodeForRoom++;
                     }
                 }
                     }
@@ -464,7 +451,6 @@ public class ZToThinNetworkConverter extends BaseZToGraphConverter{
           }        
                 
      
-        NumNodesForRoom.put(ZRoom, NodeForRoom);  
         //stores all the constructed nodes for one room (except door node)
         NodesForRoom.put(ZRoom, nodes); 
         EvacuationNodes.put(ZRoom, EvacNodes);
