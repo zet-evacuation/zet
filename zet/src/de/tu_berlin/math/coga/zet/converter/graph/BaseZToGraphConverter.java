@@ -3,7 +3,7 @@
  * and open the template in the editor.
  */
 package de.tu_berlin.math.coga.zet.converter.graph;
-
+// hallo hallo
 import de.tu_berlin.math.coga.zet.converter.RasterContainerCreator;
 
 import de.tu_berlin.math.coga.common.algorithm.Algorithm;
@@ -12,6 +12,9 @@ import ds.graph.Edge;
 import ds.graph.Graph;
 import ds.mapping.IdentifiableDoubleMapping;
 import ds.z.BuildingPlan;
+import ds.z.Floor;
+import ds.z.Room;
+import java.util.List;
 
 /**
  *
@@ -22,7 +25,8 @@ public abstract class BaseZToGraphConverter extends Algorithm<BuildingPlan, Netw
 	protected IdentifiableDoubleMapping<Edge> exactTransitTimes;
 	protected ZToGraphMapping mapping;
 	protected NetworkFlowModel model;
-	protected BuildingPlan plan;
+	//protected BuildingPlan plan;
+        public BuildingPlan plan;
 	protected ZToGraphRasterContainer raster;
         protected Graph roomGraph;
         protected int Algo;
@@ -35,7 +39,7 @@ public abstract class BaseZToGraphConverter extends Algorithm<BuildingPlan, Netw
 		raster = RasterContainerCreator.getInstance().ZToGraphRasterContainer( plan );
 		mapping.setRaster( raster );
 		model.setZToGraphMapping( mapping );
-
+               
 		createNodes();
 		// create edges, their capacities and the capacities of the nodes
 		createEdgesAndCapacities();

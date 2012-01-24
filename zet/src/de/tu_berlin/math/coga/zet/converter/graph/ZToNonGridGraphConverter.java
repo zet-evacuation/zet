@@ -453,7 +453,7 @@ public class ZToNonGridGraphConverter extends BaseZToGraphConverter {
 							NodeRectangle.NodeRectanglePoint endLowerRight = mapping.getNodeRectangles().get( end ).get_se_point();
 							int endCentreX = (int) Math.round( mapping.getNodeRectangles().get( end ).getCenterX() );
 							int endCentreY = (int) Math.round( mapping.getNodeRectangles().get( end ).getCenterY() );
-							
+							                                                        
 							// describes the relative orientation of the start- and end-node rectangles
 							boolean startAboveEnd = false;
 							boolean startBeneathEnd = false;
@@ -472,23 +472,23 @@ public class ZToNonGridGraphConverter extends BaseZToGraphConverter {
 							// coordinates of the point on the centre of the intersecting edge part
 							int intersectionPointX = 0;
 							int intersectionPointY = 0;
-
+                                                                                                                
 							// calculate the coordinates of the intersection point depending on the relative orientation of the two rectangles
 							if( startAboveEnd ) {
-								intersectionPointX = (int) Math.round( 0.5 * Math.abs( Math.min( startLowerRight.getX(), endLowerRight.getX() ) - Math.max( endUpperLeft.getX(), startUpperLeft.getX() ) ) ) + Math.max( endUpperLeft.getX(), startUpperLeft.getX() );
+								intersectionPointX = (int) Math.round( 0.5 * ( Math.min( startLowerRight.getX(), endLowerRight.getX() ) + Math.max( endUpperLeft.getX(), startUpperLeft.getX() ) ) ); 
 								intersectionPointY = startLowerRight.getY();
 							}
 							if( startBeneathEnd ) {
-								intersectionPointX = (int) Math.round( 0.5 * Math.abs( Math.min( startLowerRight.getX(), endLowerRight.getX() ) - Math.max( endUpperLeft.getX(), startUpperLeft.getX() ) ) ) + Math.max( endUpperLeft.getX(), startUpperLeft.getX() );
+								intersectionPointX = (int) Math.round( 0.5 * ( Math.min( startLowerRight.getX(), endLowerRight.getX() ) + Math.max( endUpperLeft.getX(), startUpperLeft.getX() ) ) );
 								intersectionPointY = startUpperLeft.getY();
 							}
 							if( startLeftOfEnd ) {
 								intersectionPointX = startLowerRight.getX();
-								intersectionPointY = (int) Math.round( 0.5 * Math.abs( Math.min( endLowerRight.getY(), startLowerRight.getY() ) - Math.max( endUpperLeft.getY(), startUpperLeft.getY() ) ) ) + Math.max( endUpperLeft.getY(), startUpperLeft.getY() );
+								intersectionPointY = (int) Math.round( 0.5 * ( Math.min( endLowerRight.getY(), startLowerRight.getY() ) + Math.max( endUpperLeft.getY(), startUpperLeft.getY() ) ) );
 							}
 							if( startRightOfEnd ) {
 								intersectionPointX = startUpperLeft.getY();
-								intersectionPointY = (int) Math.round( 0.5 * Math.abs( Math.min( endLowerRight.getY(), startLowerRight.getY() ) - Math.max( endUpperLeft.getY(), startUpperLeft.getY() ) ) ) + Math.max( endUpperLeft.getY(), startUpperLeft.getY() );
+								intersectionPointY = (int) Math.round( 0.5 * ( Math.min( endLowerRight.getY(), startLowerRight.getY() ) + Math.max( endUpperLeft.getY(), startUpperLeft.getY() ) ) );
 							}
 
 							// speed factor within the node-squares
