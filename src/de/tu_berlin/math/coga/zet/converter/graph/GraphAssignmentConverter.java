@@ -51,7 +51,7 @@ public class GraphAssignmentConverter extends Algorithm<ConcreteAssignment, Netw
 		ZToGraphRasterContainer raster = mapping.getRaster();
 
 		// the new converted node assignment
-		IdentifiableIntegerMapping<Node> nodeAssignment = new IdentifiableIntegerMapping<Node>( 1 );
+		IdentifiableIntegerMapping<Node> nodeAssignment = new IdentifiableIntegerMapping<>( 1 );
 		List<Person> persons = assignment.getPersons();
 
 		// setting the people requirement (negative assignment) to the number of persons in the building

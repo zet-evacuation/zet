@@ -106,23 +106,6 @@ public class Room extends BaseRoom<RoomEdge> implements Cloneable, Comparable<Ro
 	}
         
         /**
-	 * Gives the number of doors for a {@code Room}
-	 * @param room the room for which doors are counted
-	 */
-        /*public int getDoors(Room room)
-        {
-            int numDoors = 0;
-            for (RoomEdge edge: super.getEdges())
-            {
-                if (edge.isPassable())
-                {
-                    numDoors++;
-                }
-            }
-            return numDoors;
-        }*/
-        
-        /**
 	 * Returns the position and the width of all doors for a {@code Room} 
 	 * @param room the room for which position is specified
 	 */
