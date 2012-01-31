@@ -47,6 +47,8 @@ private class JMyComponent extends JComponent {
 		double r2Cor = 0;
 		double pCor = 0;
 		//double pc1 = 0;
+			int[] x = new int[4];
+			int[] y = new int[4];
 		
 		/**
 		 * Is called whenever the window is redrawn on the screen
@@ -80,10 +82,6 @@ private class JMyComponent extends JComponent {
 			g2d.drawLine( 0, 0, (int)(0+width), 0);
 			g2d.drawLine( 0, (int)(0-height), (int)(0+width), (int)(0-height) );
 			g2d.drawLine( 0, 0, 0, (int)(0-height) );
-
-
-			int[] x = new int[4];
-			int[] y = new int[4];
 
 			// fixpunkt
 			x[0] = (int)width;

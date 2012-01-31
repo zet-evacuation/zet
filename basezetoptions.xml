@@ -1,64 +1,64 @@
 <zp name="options.tree.root" useAsLocString="true" propertyName="">
   <treeNode name="options.view.editor" useAsLocString="true">
     <treeNode name="options.view.editor.size" useAsLocString="true">
-      <intNode name="options.view.editor.size.minx" useAsLocString="true" description="desc" information="options.view.editor.size.minx.info" parameter="editor.options.view.size.minx">0</intNode>
-      <intNode name="options.view.editor.size.miny" useAsLocString="true" description="desc" information="options.view.editor.size.miny.info" parameter="editor.options.view.size.miny">0</intNode>
-      <intNode name="options.view.editor.size.maxx" useAsLocString="true" description="desc" information="options.view.editor.size.maxx.info" parameter="editor.options.view.size.maxx">8000</intNode>
-      <intNode name="options.view.editor.size.maxy" useAsLocString="true" description="desc" information="options.view.editor.size.maxy.info" parameter="editor.options.view.size.maxy">6000</intNode>
-      <intNode name="options.view.editor.size.border" useAsLocString="true" description="desc" information="options.view.editor.size.border.info" parameter="editor.options.view.size.border">800</intNode>
+      <intNode name="options.view.editor.size.minx" useAsLocString="true" information="options.view.editor.size.minx.info" parameter="editor.options.view.size.minx">0</intNode>
+      <intNode name="options.view.editor.size.miny" useAsLocString="true" information="options.view.editor.size.miny.info" parameter="editor.options.view.size.miny">0</intNode>
+      <intNode name="options.view.editor.size.maxx" useAsLocString="true" information="options.view.editor.size.maxx.info" parameter="editor.options.view.size.maxx">8000</intNode>
+      <intNode name="options.view.editor.size.maxy" useAsLocString="true" information="options.view.editor.size.maxy.info" parameter="editor.options.view.size.maxy">6000</intNode>
+      <intNode name="options.view.editor.size.border" useAsLocString="true" information="options.view.editor.size.border.info" parameter="editor.options.view.size.border">800</intNode>
     </treeNode>
-    <boolNode name="options.view.editor.hideDefaultFloor" useAsLocString="true" description="desc" information="options.view.editor.hideDefaultFloor.info" parameter="editor.options.view.hideDefaultFloor">true</boolNode>
-    <boolNode name="options.view.editor.rasterizedPaintMode" useAsLocString="true" description="desc" information="options.view.editor.rasterizedPaintMode.info" parameter="editor.options.view.rasterizedPaintMode">true</boolNode>
-    <intNode name="options.view.editor.editRasterSize" useAsLocString="true" description="desc" information="options.view.editor.editRasterSize.info" parameter="editor.options.view.editRasterSize">400</intNode>
-    <intNode name="options.view.editor.editSmallRasterSize" useAsLocString="true" description="desc" information="options.view.editor.editSmallRasterSize.info" parameter="editor.options.view.editSmallRasterSize">400</intNode>
-    <intNode name="options.view.editor.editRasterSizeSnap" useAsLocString="true" description="desc" information="options.view.editor.editRasterSizeSnap.info" parameter="editor.options.view.editRasterSizeSnap">400</intNode>
+    <boolNode name="options.view.editor.hideDefaultFloor" useAsLocString="true" information="options.view.editor.hideDefaultFloor.info" parameter="editor.options.view.hideDefaultFloor">true</boolNode>
+    <boolNode name="options.view.editor.rasterizedPaintMode" useAsLocString="true" information="options.view.editor.rasterizedPaintMode.info" parameter="editor.options.view.rasterizedPaintMode">true</boolNode>
+    <intNode name="options.view.editor.editRasterSize" useAsLocString="true" information="options.view.editor.editRasterSize.info" parameter="editor.options.view.editRasterSize">400</intNode>
+    <intNode name="options.view.editor.editSmallRasterSize" useAsLocString="true" information="options.view.editor.editSmallRasterSize.info" parameter="editor.options.view.editSmallRasterSize">400</intNode>
+    <intNode name="options.view.editor.editRasterSizeSnap" useAsLocString="true" information="options.view.editor.editRasterSizeSnap.info" parameter="editor.options.view.editRasterSizeSnap">400</intNode>
   </treeNode>
   <treeNode name="options.filehandling" useAsLocString="true">
-    <boolNode name="options.filehandling.createBackup" useAsLocString="true" description="" information="options.filehandling.createBackup.info" parameter="options.filehandling.createBackup">true</boolNode>
-    <stringNode name="options.filehandling.moviePath" useAsLocString="true" description="" information="options.filehandling.moviePath.info" parameter="options.filehandling.moviePath">movies</stringNode>
-    <stringNode name="options.filehandling.screenshotPath" useAsLocString="true" description="" information="options.filehandling.screenshotPath.info" parameter="options.filehandling.screenshotPath">screenshots</stringNode>
-    <stringNode name="options.filehandling.movieFrameName" useAsLocString="true" description="" information="options.filehandling.movieFrameName.info" parameter="options.filehandling.movieFrameName">videoFrame</stringNode>
+    <boolNode name="options.filehandling.createBackup" useAsLocString="true" information="options.filehandling.createBackup.info" parameter="options.filehandling.createBackup">true</boolNode>
+    <stringNode name="options.filehandling.moviePath" useAsLocString="true" information="options.filehandling.moviePath.info" parameter="options.filehandling.moviePath">movies</stringNode>
+    <stringNode name="options.filehandling.screenshotPath" useAsLocString="true" information="options.filehandling.screenshotPath.info" parameter="options.filehandling.screenshotPath">screenshots</stringNode>
+    <stringNode name="options.filehandling.movieFrameName" useAsLocString="true" information="options.filehandling.movieFrameName.info" parameter="options.filehandling.movieFrameName">videoFrame</stringNode>
   </treeNode>
   <treeNode name="options.quickvisualization" useAsLocString="true">
     <treeNode name="options.quickvisualization.view" useAsLocString="true">
-      <boolNode name="options.quickvisualization.view.staticPotential" useAsLocString="true" description="desc" information="options.quickvisualization.view.staticPotential.info" parameter="editor.options.cavis.staticPotential">false</boolNode>
-      <boolNode name="options.quickvisualization.view.dynamicPotential" useAsLocString="true" description="desc" information="options.quickvisualization.view.dynamicPotential.info" parameter="editor.options.cavis.dynamicPotential">true</boolNode>
-      <boolNode name="options.quickvisualization.view.potentialValues" useAsLocString="true" description="desc" information="options.quickvisualization.view.potentialValues.info" parameter="editor.options.cavis.showPotentialValue">true</boolNode>
-      <boolNode name="options.quickvisualization.view.personNumbers" useAsLocString="true" description="desc" information="options.quickvisualization.view.personNumbers.info" parameter="editor.options.cavis.showIndividualNames">true</boolNode>
+      <boolNode name="options.quickvisualization.view.staticPotential" useAsLocString="true" information="options.quickvisualization.view.staticPotential.info" parameter="editor.options.cavis.staticPotential">false</boolNode>
+      <boolNode name="options.quickvisualization.view.dynamicPotential" useAsLocString="true" information="options.quickvisualization.view.dynamicPotential.info" parameter="editor.options.cavis.dynamicPotential">true</boolNode>
+      <boolNode name="options.quickvisualization.view.potentialValues" useAsLocString="true" information="options.quickvisualization.view.potentialValues.info" parameter="editor.options.cavis.showPotentialValue">true</boolNode>
+      <boolNode name="options.quickvisualization.view.personNumbers" useAsLocString="true" information="options.quickvisualization.view.personNumbers.info" parameter="editor.options.cavis.showIndividualNames">true</boolNode>
     </treeNode>
-    <boolNode name="options.quickvisualization.onthefly.usegraph" useAsLocString="true" description="desc" information="options.quickvisualization.onthefly.usegraph.info" parameter="editor.options.visualization.useGraph">true</boolNode>
-    <boolNode name="options.quickvisualization.onthefly.useca" useAsLocString="true" description="desc" information="options.quickvisualization.onthefly.useca.info" parameter="editor.options.visualization.useCa">true</boolNode>
+    <boolNode name="options.quickvisualization.onthefly.usegraph" useAsLocString="true" information="options.quickvisualization.onthefly.usegraph.info" parameter="editor.options.visualization.useGraph">true</boolNode>
+    <boolNode name="options.quickvisualization.onthefly.useca" useAsLocString="true" information="options.quickvisualization.onthefly.useca.info" parameter="editor.options.visualization.useCa">true</boolNode>
   </treeNode>
   <treeNode name="options.visualization" useAsLocString="true">
     <treeNode name="options.visualization.handling" useAsLocString="true">
-      <boolNode name="options.visualization.invertMouse" useAsLocString="true" description="desc" information="options.visualization.invertMouse.info" parameter="editor.options.visualization.invertMouse">false</boolNode>
-      <boolNode name="options.visualization.invertScroll" useAsLocString="true" description="desc" information="options.visualization.invertScroll.info" parameter="editor.options.visualization.invertScroll">false</boolNode>
+      <boolNode name="options.visualization.invertMouse" useAsLocString="true" information="options.visualization.invertMouse.info" parameter="editor.options.visualization.invertMouse">false</boolNode>
+      <boolNode name="options.visualization.invertScroll" useAsLocString="true" information="options.visualization.invertScroll.info" parameter="editor.options.visualization.invertScroll">false</boolNode>
     </treeNode>
     <treeNode name="options.visualization.elements" useAsLocString="true">
-      <boolNode name="options.visualization.elements.eye" useAsLocString="true" description="desc" information="options.visualization.elements.eye.info" parameter="options.visualization.elements.eye">false</boolNode>
-      <boolNode name="options.visualization.elements.fps" useAsLocString="true" description="desc" information="options.visualization.elements.fps.info" parameter="options.visualization.elements.fps">false</boolNode>
-      <boolNode name="options.visualization.elements.timestepGraph" useAsLocString="true" description="desc" information="options.visualization.elements.timestepGraph.info" parameter="options.visualization.elements.timestepGraph">false</boolNode>
-      <boolNode name="options.visualization.elements.timestepCA" useAsLocString="true" description="desc" information="options.visualization.elements.timestepCA.info" parameter="options.visualization.elements.timestepCA">false</boolNode>
+      <boolNode name="options.visualization.elements.eye" useAsLocString="true" information="options.visualization.elements.eye.info" parameter="options.visualization.elements.eye">false</boolNode>
+      <boolNode name="options.visualization.elements.fps" useAsLocString="true" information="options.visualization.elements.fps.info" parameter="options.visualization.elements.fps">false</boolNode>
+      <boolNode name="options.visualization.elements.timestepGraph" useAsLocString="true" information="options.visualization.elements.timestepGraph.info" parameter="options.visualization.elements.timestepGraph">false</boolNode>
+      <boolNode name="options.visualization.elements.timestepCA" useAsLocString="true" information="options.visualization.elements.timestepCA.info" parameter="options.visualization.elements.timestepCA">false</boolNode>
     </treeNode>
     <treeNode name="options.visualization.view" useAsLocString="true">
-      <boolNode name="options.visualization.view.smooth" useAsLocString="true" description="desc" information="options.visualization.view.smooth.info" parameter="options.visualization.view.smooth">true</boolNode>
-      <boolNode name="options.visualization.view.grid" useAsLocString="true" description="desc" information="options.visualization.view.grid.info" parameter="options.visualization.view.grid">true</boolNode>
+      <boolNode name="options.visualization.view.smooth" useAsLocString="true" information="options.visualization.view.smooth.info" parameter="options.visualization.view.smooth">true</boolNode>
+      <boolNode name="options.visualization.view.grid" useAsLocString="true" information="options.visualization.view.grid.info" parameter="options.visualization.view.grid">true</boolNode>
     </treeNode>
     <treeNode name="options.visualization.flow" useAsLocString="true">
-      <boolNode name="options.visualization.flow.equalArrival" useAsLocString="true" description="desc" information="options.visualization.flow.equalArrival.info" parameter="options.visualization.flow.equalArrival">true</boolNode>
+      <boolNode name="options.visualization.flow.equalArrival" useAsLocString="true" information="options.visualization.flow.equalArrival.info" parameter="options.visualization.flow.equalArrival">true</boolNode>
     </treeNode>
     <treeNode name="options.visualization.appearance" useAsLocString="true">
-      <doubleNode name="options.visualization.appearance.graphHeight" useAsLocString="true" description="desc" information="options.visualization.appearance.graphHeight.info" parameter="options.visualization.appearance.graphHeight">150.0</doubleNode>
-      <doubleNode name="options.visualization.appearance.floorDistance" useAsLocString="true" description="desc" information="options.visualization.appearance.floorDistance.info" parameter="options.visualization.appearance.floorDistance">250</doubleNode>
-      <doubleNode name="options.visualization.appearance.individualHeight" useAsLocString="true" description="desc" information="options.visualization.appearance.individualHeight.info" parameter="options.visualization.appearance.individualHeight">100</doubleNode>
-      <doubleNode name="options.visualization.appearance.IndividualRadius" useAsLocString="true" description="desc" information="options.visualization.appearance.individualRadius.info" parameter="options.visualization.appearance.individualRadius">15</doubleNode>
-      <doubleNode name="options.visualization.appearance.wallHeight" useAsLocString="true" description="desc" information="options.visualization.appearance.wallHeight.info" parameter="options.visualization.appearance.wallHeight">30</doubleNode>
+      <doubleNode name="options.visualization.appearance.graphHeight" useAsLocString="true" information="options.visualization.appearance.graphHeight.info" parameter="options.visualization.appearance.graphHeight">150.0</doubleNode>
+      <doubleNode name="options.visualization.appearance.floorDistance" useAsLocString="true" information="options.visualization.appearance.floorDistance.info" parameter="options.visualization.appearance.floorDistance">250</doubleNode>
+      <doubleNode name="options.visualization.appearance.individualHeight" useAsLocString="true" information="options.visualization.appearance.individualHeight.info" parameter="options.visualization.appearance.individualHeight">100</doubleNode>
+      <doubleNode name="options.visualization.appearance.IndividualRadius" useAsLocString="true" information="options.visualization.appearance.individualRadius.info" parameter="options.visualization.appearance.individualRadius">15</doubleNode>
+      <doubleNode name="options.visualization.appearance.wallHeight" useAsLocString="true" information="options.visualization.appearance.wallHeight.info" parameter="options.visualization.appearance.wallHeight">30</doubleNode>
     </treeNode>
-    <comboBoxNodeQuality name="options.visualization.qualitySetting" useAsLocString="true" description="desc" information="options.visualization.qualitySetting.info" parameter="options.visualization.qualitySetting">MediumQuality</comboBoxNodeQuality>
-    <boolNode name="options.visualization.allowRotateIn2D" useAsLocString="true" description="desc" information="options.visualization.allowRotateIn2D.info" parameter="editor.options.visualization.allowRotateIn2D">true</boolNode>
+    <comboBoxNodeQuality name="options.visualization.qualitySetting" useAsLocString="true" information="options.visualization.qualitySetting.info" parameter="options.visualization.qualitySetting">MediumQuality</comboBoxNodeQuality>
+    <boolNode name="options.visualization.allowRotateIn2D" useAsLocString="true" information="options.visualization.allowRotateIn2D.info" parameter="editor.options.visualization.allowRotateIn2D">true</boolNode>
   </treeNode>
   <treeNode name="options.statistic" useAsLocString="true">
-    <boolNode name="options.statistic.blackAndWhiteDiagrams" useAsLocString="true" description="desc" information="options.statistic.blackAndWhiteDiagrams.info" parameter="statistic.blackAndWhiteDiagrams">false</boolNode>
-    <boolNode name="options.statistic.showAssignmentNamesInDiagrams" useAsLocString="true" description="desc" information="options.statistic.showAssignmentNamesInDiagrams.info" parameter="statistic.showAssignmentNamesInDiagrams">false</boolNode>
+    <boolNode name="options.statistic.blackAndWhiteDiagrams" useAsLocString="true" information="options.statistic.blackAndWhiteDiagrams.info" parameter="statistic.blackAndWhiteDiagrams">false</boolNode>
+    <boolNode name="options.statistic.showAssignmentNamesInDiagrams" useAsLocString="true" information="options.statistic.showAssignmentNamesInDiagrams.info" parameter="statistic.showAssignmentNamesInDiagrams">false</boolNode>
   </treeNode>
 </zp>

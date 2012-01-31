@@ -1,0 +1,113 @@
+zet evakuierungs-tool;1
+;1
+Version #VERSION;1
+;1
+(c) 2007-08 Projektgruppe 517, TU-Dortmund;1
+(c) 2008-11 zet development team;1
+;0
+http://www.zet-evakuierung.de;1
+;0
+;0
+Credits:;1
+;1
+Original Developer;1
+;1
+Martin Groß;1
+Moukarram Kabbash;1
+Jan-Philipp Kappmeier;1
+Sophia Kardung;1
+Timon Kelter;1
+Joscha Kulbatzki;1
+Daniel Plümpe;1
+Marcel Preuß;1
+Gordon Schlechter;1
+Melanie Schmidt;1
+Sylvie Temme;1
+Matthias Woste;1
+;1
+Other Developer;1
+Sebastian Schenker;1
+Marlen Schwengfelder;1
+;1
+This program is free software; you can;0
+redistribute it and/or modify it under;0
+the terms of the GNU General Public Li-;0
+cense as published by the Free Software;0
+Foundation; either version 2 of the Li-;0
+cense, or (at your opinion) any later;0
+version.;0
+;0
+zet is distributed in the hope that it;0
+will be useful but WITHOUT ANY WARRANTY;;0
+without even the implied warranty of;0
+MERCHANTABILITY or FITNESS FOR A PAR-;0
+TICULAR PURPOSE. See the GNU General;0
+Public License for more details.;0
+;0
+You should have received a copy of the;0
+GNU General Public Licence along with;0
+zet; if not, write to the Free Software;0
+Foundation, Inc., 51 Franklin Street,;0
+Fifth Floor, Boston, MA 02110-131, USA,;0
+or have a look at;0
+http://www.gnu.org/licenses/;0
+;0
+;0
+Third-party components used by zet:;0
+;0
+MersenneTwister Version 13;0
+Copyright (c) 2003 by Sean Luke.;0
+Portions copyright (c) 1993 by Michael;0
+Lecuyer.;0
+;0
+MersenneTwisterFast Version 13;0
+Copyright (c) 2003 by Sean Luke.;0
+Portions copyright (c) 1993 by Michael;0
+Lecuyer.;0
+;0
+MTRandom;0
+Copyright (c) 2005 by David Beaumont.;0
+;0
+TableLayout JDK 1.5 2007-04-21;0
+Copyright (c) 2001 by Daniel Barbalace.;0
+https://tablelayout.dev.java.net/;0
+;0
+JFreeChart 1.0.10;0
+Copyright (c) 2000-2009 by Object;0
+Refinery and Contributors.;0
+http://www.jfree.org/jfreechart/;0
+;0
+JCommon 1.0.13;0
+Copyright (c) 2007-2009 by Object;0
+Refinery and Contributors.;0
+http://www.jfree.org/jcommon/;0
+;0
+SSJ 2.1.2;0
+Copyright (c) 2008  Pierre L'Ecuyer;0
+and Université de Montréal;0
+http://www.iro.umontreal.ca/~simardr/ssj/;0
+;0
+XStream 1.3;0
+Copyright (c) 2003-2006, Joe Walnes;0
+Copyright (c) 2006-2007, XStream Committers;0
+http://xstream.codehaus.org/;0
+;0
+JOGL 1.1.1-rc6;0
+Copyright (c) 2003-2007 Sun Microsystems;0
+https://jogl.dev.java.net/;0
+;0
+JMF 2.1.1e;0
+Copyright (c) 1995-2003 Sun Microsystems;0
+http://java.sun.com/javase/technologies/;0
+desktop/media/jmf/;0
+;0
+JAMA 1.0.2;0
+Copyright (c) 1998-2005 The Jama Team;0
+http://math.nist.gov/javanumerics/jama/;0
+;0
+Free Shimmer Icons by Creative Freedom Ltd;0
+http://www.creativefreedom.co.uk/;0
+Creative Commons Attribution-NoDerivs;0
+3.0 Unported License.;0
+;0
+Icons by Aha Soft. http://www.aha-soft.com/;0

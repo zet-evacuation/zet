@@ -1,23 +1,23 @@
 <zp name="additionalInformation" useAsLocString="false" propertyName="">
   <treeNode name="directories" useAsLocString="false">
-    <stringNode name="lastProjectDirectory" useAsLocString="false" description="" information="" parameter="information.directory.lastProject">./examples</stringNode>
-    <stringNode name="lastPlanDirectory" useAsLocString="false" description="" information="" parameter="information.directory.lastPlan"></stringNode>
-    <stringNode name="lastResultsDirectory" useAsLocString="false" description="" information="" parameter="information.directory.lastResult">./examples</stringNode>
-    <stringNode name="lastImportDirectory" useAsLocString="false" description="" information="" parameter="information.directory.importProject">./examples</stringNode>
+    <stringNode name="lastProjectDirectory" useAsLocString="false" information="" parameter="information.directory.lastProject">./examples</stringNode>
+    <stringNode name="lastPlanDirectory" useAsLocString="false" information="" parameter="information.directory.lastPlan"></stringNode>
+    <stringNode name="lastResultsDirectory" useAsLocString="false" information="" parameter="information.directory.lastResult">./examples</stringNode>
+    <stringNode name="lastImportDirectory" useAsLocString="false" information="" parameter="information.directory.importProject">./examples</stringNode>
   </treeNode>
   <treeNode name="files" useAsLocString="false">
-    <stringNode name="lastFile1" useAsLocString="false" description="" information="" parameter="information.file.lastFile1"></stringNode>
+    <stringNode name="lastFile1" useAsLocString="false" information="" parameter="information.file.lastFile1"></stringNode>
   </treeNode>
   <treeNode name="gui" useAsLocString="false">
     <treeNode name="visualization" useAsLocString="false">
-      <boolNode name="guiSettings.visualization.2d" useAsLocString="false" description="" information="" parameter="settings.gui.visualization.2d">true</boolNode>
-      <boolNode name="guiSettings.visualization.isometric" useAsLocString="false" description="" information="" parameter="settings.gui.visualization.isometric">true</boolNode>
-      <boolNode name="guiSettings.visualization.walls" useAsLocString="false" description="" information="" parameter="settings.gui.visualization.walls">true</boolNode>
-      <boolNode name="guiSettings.visualization.graph" useAsLocString="false" description="" information="" parameter="settings.gui.visualization.graph">true</boolNode>
-      <boolNode name="guiSettings.visualization.nodeArea" useAsLocString="false" description="" information="" parameter="settings.gui.visualization.nodeArea">false</boolNode>
-      <boolNode name="guiSettings.visualization.cellularAutomaton" useAsLocString="false" description="" information="" parameter="settings.gui.visualization.cellularAutomaton">true</boolNode>
-      <boolNode name="guiSettings.visualization.floors" useAsLocString="false" description="" information="" parameter="settings.gui.visualization.floors">true</boolNode>
-      <intNode name="guiSettings.visualization.floorInformation" useAsLocString="false" description="" information="" parameter="settings.gui.visualization.floorInformation">1</intNode>
+      <boolNode name="guiSettings.visualization.2d" useAsLocString="false" information="" parameter="settings.gui.visualization.2d">true</boolNode>
+      <boolNode name="guiSettings.visualization.isometric" useAsLocString="false" information="" parameter="settings.gui.visualization.isometric">true</boolNode>
+      <boolNode name="guiSettings.visualization.walls" useAsLocString="false" information="" parameter="settings.gui.visualization.walls">true</boolNode>
+      <boolNode name="guiSettings.visualization.graph" useAsLocString="false" information="" parameter="settings.gui.visualization.graph">true</boolNode>
+      <boolNode name="guiSettings.visualization.nodeArea" useAsLocString="false" information="" parameter="settings.gui.visualization.nodeArea">false</boolNode>
+      <boolNode name="guiSettings.visualization.cellularAutomaton" useAsLocString="false" information="" parameter="settings.gui.visualization.cellularAutomaton">true</boolNode>
+      <boolNode name="guiSettings.visualization.floors" useAsLocString="false" information="" parameter="settings.gui.visualization.floors">true</boolNode>
+      <intNode name="guiSettings.visualization.floorInformation" useAsLocString="false" information="" parameter="settings.gui.visualization.floorInformation">1</intNode>
     </treeNode>
   </treeNode>
 </zp>
