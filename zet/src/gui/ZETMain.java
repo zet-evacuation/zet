@@ -309,7 +309,7 @@ public class ZETMain {
 						System.out.println( "Projekt " + f.getAbsolutePath() + " geladen." );
 						GUIOptionManager.setLastFile( 1, f.getAbsolutePath() );
 					} else
-						guiControl.newProject();
+						guiControl.newProject( true ); // Project supposed to load does not exist. Create empty
 				} else {
 					//guiControl.newProject();
 					//zcontrol = new ZControl();

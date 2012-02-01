@@ -677,15 +677,20 @@ public class GUIControl implements AlgorithmListener {
 		}
 	}
 
-	// TODO auslagern von save und methoden aufrufen!
 	public void newProject() {
+		newProject( false );
+	}
+	
+	// TODO auslagern von save und methoden aufrufen!
+	public void newProject( boolean overwrite ) {
 		String status = "";
-		switch( JOptionPane.showOptionDialog( editor,
+		int res = overwrite ? 1 : JOptionPane.showOptionDialog( editor,
 						GUILocalization.getSingleton().getString( "gui.editor.JEditor.SaveQuestion" ),
 						GUILocalization.getSingleton().getString( "gui.editor.JEditor.NewProject" ),
 						JOptionPane.YES_NO_CANCEL_OPTION,
 						JOptionPane.QUESTION_MESSAGE,
-						null, null, null ) ) {
+						null, null, null );
+		switch( res ) {
 			case 2:
 			case -1:
 				return;	// exit, do nothing
