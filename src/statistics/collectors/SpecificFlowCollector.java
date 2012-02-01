@@ -17,7 +17,7 @@ import java.util.HashMap;
  */
 public class SpecificFlowCollector {
 
-	HashMap<Integer, ArrayList<PositionCountTriple>> timeMeasure = new HashMap<Integer, ArrayList<PositionCountTriple>>();;
+	HashMap<Integer, ArrayList<PositionCountTriple>> timeMeasure = new HashMap<>();;
 
 	ArrayList<Integer> personCount;
 
@@ -40,71 +40,76 @@ public class SpecificFlowCollector {
 	}
 
 	public SpecificFlowCollector() {
-		personCount = new ArrayList<Integer>();
-		for( int i = 0; i < 77; ++i ) {
+		personCount = new ArrayList<>();
+		for( int i = 0; i < 77; ++i ) { // TODO: hier anstatt 77 die tatsächliche größe des raums einstellen
 			personCount.add( 0 );
 		}
 	}
 
 	public void collect( int timeStep, Cell start, Cell end ) {
-		if( start.equals( end ) ) {
-			return;	// do not count no-movements
-		}
-
-		if( start.getX() == end.getX() + 1 ) {
-			personCount.set( start.getX(), personCount.get( start.getX() ) + 1 );
-		}
-		if( start.getX() == end.getX() - 1 ) {
-			personCount.set( end.getX(), personCount.get( end.getX() ) - 1 );
-		}
-
-		// ignore moves by more than one cell (teleportations)
-		if( Math.abs( start.getX() - end.getX() ) > 1 || Math.abs( start.getY() - end.getY() ) > 1 )  {
-			//System.out.println( "Teleport ignored" );
-			return;
-		}
-
-		int val = 0;
-		if( start.getX() == end.getX() + 1 )
-			val = 1;
-		else if( start.getX() == end.getX() )
-			return;
-		else if( start.getX() == end.getX() - 1 )
-			val = -1;
-
-		// check if some data for the time step is collected
-		Point sp = new Point( start.getX(), start.getY() );
-		Point ep = new Point( end.getX(), end.getY() );
-		minx = Math.min( minx, start.getX() );
-		maxx = Math.max( maxx, start.getX() );
-		if( timeMeasure.containsKey( timeStep ) ) {
-			ArrayList<PositionCountTriple> values = timeMeasure.get( timeStep );
-
-			// search for the given point in the list
-			boolean added = false;
-			for( PositionCountTriple tripel : values ) {
-				if( tripel.u.equals( sp ) && tripel.v.equals( ep ) ) {
-					tripel.inc();
-					added = true;
-					break;
-				}
+		try {
+			
+			if( start.equals( end ) ) {
+				return;	// do not count no-movements
 			}
-			if( !added ) {
+
+			if( start.getX() == end.getX() + 1 ) {
+				personCount.set( start.getX(), personCount.get( start.getX() ) + 1 );
+			}
+			if( start.getX() == end.getX() - 1 ) {
+				personCount.set( end.getX(), personCount.get( end.getX() ) - 1 );
+			}
+
+			// ignore moves by more than one cell (teleportations)
+			if( Math.abs( start.getX() - end.getX() ) > 1 || Math.abs( start.getY() - end.getY() ) > 1 )  {
+				//System.out.println( "Teleport ignored" );
+				return;
+			}
+
+			int val = 0;
+			if( start.getX() == end.getX() + 1 )
+				val = 1;
+			else if( start.getX() == end.getX() )
+				return;
+			else if( start.getX() == end.getX() - 1 )
+				val = -1;
+
+			// check if some data for the time step is collected
+			Point sp = new Point( start.getX(), start.getY() );
+			Point ep = new Point( end.getX(), end.getY() );
+			minx = Math.min( minx, start.getX() );
+			maxx = Math.max( maxx, start.getX() );
+			if( timeMeasure.containsKey( timeStep ) ) {
+				ArrayList<PositionCountTriple> values = timeMeasure.get( timeStep );
+
+				// search for the given point in the list
+				boolean added = false;
+				for( PositionCountTriple tripel : values ) {
+					if( tripel.u.equals( sp ) && tripel.v.equals( ep ) ) {
+						tripel.inc();
+						added = true;
+						break;
+					}
+				}
+				if( !added ) {
+					PositionCountTriple newTripel = new PositionCountTriple( sp, ep, 0 );
+					newTripel.add( val );
+					values.add( newTripel );
+	//				System.out.println( "Triple added. Minx = " + minx + " maxx = " + maxx );
+				}
+			} else {
+				// Nothing for this time step is added yet
+				ArrayList<PositionCountTriple> values = new ArrayList<>();
 				PositionCountTriple newTripel = new PositionCountTriple( sp, ep, 0 );
 				newTripel.add( val );
 				values.add( newTripel );
-//				System.out.println( "Triple added. Minx = " + minx + " maxx = " + maxx );
+	//				System.out.println( "Triple added. Minx = " + minx + " maxx = " + maxx );
+				timeMeasure.put( timeStep, values );
 			}
-		} else {
-			// Nothing for this time step is added yet
-			ArrayList<PositionCountTriple> values = new ArrayList<PositionCountTriple>();
-			PositionCountTriple newTripel = new PositionCountTriple( sp, ep, 0 );
-			newTripel.add( val );
-			values.add( newTripel );
-//				System.out.println( "Triple added. Minx = " + minx + " maxx = " + maxx );
-			timeMeasure.put( timeStep, values );
-		}
 
+		} catch( Exception ex ) {
+			System.err.println( "Error in SpecificFlowCollector" );
+		}
 	}
 
 	public void execute() {
