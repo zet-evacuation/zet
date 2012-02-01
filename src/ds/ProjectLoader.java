@@ -121,7 +121,7 @@ static {
 											"\n" + ex.getLocalizedMessage() );
 						}
 				}
-			} catch( Exception ex ) {
+			} catch( URISyntaxException | IOException ex ) {
 				throw new RuntimeException( ZLocalization.getSingleton().getString( "ds.InitProjectException" + ex.getLocalizedMessage() ) );
 			}
 		else if( url.startsWith( "file:" ) )
@@ -144,8 +144,10 @@ static {
 			else if( f.getName().endsWith( ".class" ) )
 				try {
 					String classname = f.getName().substring( 0, f.getName().lastIndexOf( '.' ) );
-					Class fromFile = Project.class.getClassLoader().loadClass( pack + classname );
+					Class fromFile = Project.class.getClassLoader().loadClass( pack + classname );					
 					processClassObject( fromFile );
+				} catch( NoClassDefFoundError ex ) {
+					System.err.println( "Class belonging to file '" + f.getAbsolutePath() + "' does not exist. Please check your dist directory." );
 				} catch( Exception ex ) {
 					System.out.println( "Problem while scanning classes: Class file" + f.getName() + "\n" + ex.getLocalizedMessage() );
 				}
