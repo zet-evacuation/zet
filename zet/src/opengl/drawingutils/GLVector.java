@@ -82,6 +82,11 @@ public class GLVector extends Vector3 implements Drawable {
 	public final void normal( GL gl ) {
 		gl.glNormal3d( x, y, z );
 	}
+
+	@Override
+	public GLVector add( Vector3 v ) {
+		return new GLVector( x + v.x, y + v.y, z + v.z );
+	}
 	
 	public void update() { }
 

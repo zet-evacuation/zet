@@ -68,8 +68,9 @@ public class GLWall extends AbstractDrawable<GLWall, GLWallControl> {
 	public void performStaticDrawing( GL gl ) {
 		gl.glBegin( GL.GL_POLYGON );
 		VisualizationOptionManager.getCellFloorColor().draw( gl );
+		final Vector3 perturbate = new Vector3(0,0,-0.01); // add a small offset to move the floor under the ca floor-level
 		for( GLVector v : basePoints )
-			v.draw( gl );
+			v.add( perturbate ).draw( gl );
 		gl.glEnd();
 
 		final double pi = Math.PI;
