@@ -214,7 +214,7 @@ public class Vector3 implements Cloneable {
 	 * @param v the vector
 	 * @return the sum of this vector and the other vector
 	 */
-	public final Vector3 add( Vector3 v ) {
+	public Vector3 add( Vector3 v ) {
 		return new Vector3( x + v.x, y + v.y, z + v.z );
 	}
 
