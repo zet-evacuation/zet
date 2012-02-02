@@ -39,7 +39,6 @@ public abstract class BaseZToGraphConverter extends Algorithm<BuildingPlan, Netw
 		raster = RasterContainerCreator.getInstance().ZToGraphRasterContainer( plan );
 		mapping.setRaster( raster );
 		model.setZToGraphMapping( mapping );
-               
 		createNodes();
 		// create edges, their capacities and the capacities of the nodes
 		createEdgesAndCapacities();
@@ -58,7 +57,6 @@ public abstract class BaseZToGraphConverter extends Algorithm<BuildingPlan, Netw
 		createReverseEdges( model );
 
 		model.setNetwork( model.getGraph().getAsStaticNetwork() );
-                
 		return model;
 
 	}
