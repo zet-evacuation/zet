@@ -206,6 +206,8 @@ public class Visualization<U extends DrawableControlable> extends AbstractVisual
 	/**
 	 * Sets the correct animation time. Calculated by the difference
 	 * from the current time and last time.
+	 * If the control class states, that the simulation is over, animation is
+	 * stopped or resetted if looping is activated.
 	 * @see #getDeltaTime()
 	 */
 	@Override
@@ -213,6 +215,11 @@ public class Visualization<U extends DrawableControlable> extends AbstractVisual
 		super.animate();
 		computeFPS();
 		control.addTime( getDeltaTime() );
+		if( control.isFinished() )
+			if( isLoop() )
+				control.resetTime();
+			else
+				stopAnimation();
 	}
 
 	/**
@@ -245,7 +252,7 @@ public class Visualization<U extends DrawableControlable> extends AbstractVisual
 		int orientation = Vector3.orientation( rotation2D, camera.getView() );
 		if( orientation == -1 )
 			eyeRotation = -eyeRotation;
-		eyeRotation = eyeRotation * Conversion.DEG2ANGLE;
+		eyeRotation *= Conversion.DEG2ANGLE;
 
 		gl.glTranslated( camera.getPos().x, camera.getPos().y, camera.getPos().z );
 		GLColor red = new GLColor( Color.red );
@@ -276,7 +283,7 @@ public class Visualization<U extends DrawableControlable> extends AbstractVisual
 		gl.glClear( clearBits );
 		ProjectionHelper.setPrintScreenProjection( gl, viewportWidth, viewportHeight );
 		GLColor.white.draw( gl );
-		gl.glEnable( gl.GL_TEXTURE_2D );
+		gl.glEnable( GL.GL_TEXTURE_2D );
 		fontTex.bind();
 		TextureFontStrings tfs = texts.get( index );
 		for( int i = 0; i < tfs.size(); ++i )
@@ -285,7 +292,7 @@ public class Visualization<U extends DrawableControlable> extends AbstractVisual
 				fontBold.print( 100, this.getHeight() - (int)tfs.getY( i ), tfs.getText( i ) );
 			else
 				font.print( 100, this.getHeight() - (int)tfs.getY( i ), tfs.getText( i ) );
-		gl.glDisable( gl.GL_TEXTURE_2D );
+		gl.glDisable( GL.GL_TEXTURE_2D );
 		ProjectionHelper.resetProjection( gl );
 	}
 
@@ -336,10 +343,10 @@ public class Visualization<U extends DrawableControlable> extends AbstractVisual
 	private void drawOutroText() {
 		ProjectionHelper.setPrintScreenProjection( gl, viewportWidth, viewportHeight );
 		GLColor.white.draw( gl );
-		gl.glEnable( gl.GL_TEXTURE_2D );
+		gl.glEnable( GL.GL_TEXTURE_2D );
 		int row = 1;
 		font.print( 100, this.getHeight() - (7) * fontSize, "dummy text");
-		gl.glDisable( gl.GL_TEXTURE_2D );
+		gl.glDisable( GL.GL_TEXTURE_2D );
 		ProjectionHelper.resetProjection( gl );
 	}
 
@@ -395,7 +402,7 @@ public class Visualization<U extends DrawableControlable> extends AbstractVisual
 		GLColor.white.draw( gl );
 		gl.glEnable( GL.GL_BLEND );
 		gl.glBlendFunc( GL.GL_ONE, GL.GL_ONE );// Copy Image 2 Color To The Screen
-		gl.glEnable( gl.GL_TEXTURE_2D );
+		gl.glEnable( GL.GL_TEXTURE_2D );
 		fontTex.bind();
 		
 		// compute time:
@@ -664,6 +671,4 @@ public class Visualization<U extends DrawableControlable> extends AbstractVisual
 		super.mouseWheelMoved( e );
 		frustum.update( camera.getPos(), camera.getView(), camera.getUp() );
 	}
-
-
 }

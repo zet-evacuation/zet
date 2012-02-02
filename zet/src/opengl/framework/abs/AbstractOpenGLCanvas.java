@@ -58,6 +58,7 @@ abstract public class AbstractOpenGLCanvas extends GLCanvas implements GLEventLi
 	protected long lastTime = 0;
 	protected GL gl;
 	protected GLU glu;
+	private boolean loop = false;
 
 	/**
 	 *
@@ -106,6 +107,14 @@ abstract public class AbstractOpenGLCanvas extends GLCanvas implements GLEventLi
 		return animator.isAnimating();
 	}
 
+	public boolean isLoop() {
+		return loop;
+	}
+
+	public void setLoop( boolean loop ) {
+		this.loop = loop;
+	}
+	
 	/**
 	 * Sets the maximal framerate per second.
 	 * @param maxFPS the framerate
