@@ -105,11 +105,12 @@ public class Room extends BaseRoom<RoomEdge> implements Cloneable, Comparable<Ro
 		floor.addRoom( this );
 	}
         
+        
         /**
 	 * Returns the position and the width of all doors for a {@code Room} 
 	 * @param room the room for which position is specified
 	 */
-        public HashMap<Point,Integer> getDoors(Room room)
+        public HashMap<Point,Integer> getDoors()
         {
             //Collection<Point> doors = new HashSet<Point>();
             HashMap<Point,Integer> doors = new HashMap<>();
