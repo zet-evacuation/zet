@@ -17,7 +17,6 @@ import ds.graph.PositionNode;
 import ds.z.AssignmentArea;
 import ds.z.DelayArea;
 import ds.z.EvacuationArea;
-import ds.z.Floor;
 import ds.z.PlanPoint;
 import ds.z.PlanPolygon;
 import ds.z.Room;
@@ -298,7 +297,6 @@ public class ZToThinNetworkConverter extends BaseZToGraphConverter{
                             } 
                         }
                     }
-                    }
                 }
                 //more than one room with more doors and more than one evacuation area in neighbouring rooms
                 else 
@@ -327,7 +325,7 @@ public class ZToThinNetworkConverter extends BaseZToGraphConverter{
                         model.getZToGraphMapping().setIsDeletedSourceNode( node, false );
                     }
                 }
-                    
+                    }
              
                   
         //stores all the constructed nodes for one room (except door node, evacuation and assignment nodes)
@@ -343,11 +341,11 @@ public class ZToThinNetworkConverter extends BaseZToGraphConverter{
         model.setSources(sources);
         for (Node node: model.getGraph().nodes())
         {
-            System.out.println("erstellte Knoten: " + node + " ; ");
+            System.out.print("erstellte Knoten: " + node + " ; ");
         } 
-    
-
     }
+    
+    
     @Override
     protected void createEdgesAndCapacities()
     { 
@@ -638,7 +636,7 @@ public class ZToThinNetworkConverter extends BaseZToGraphConverter{
                         ConnectWithCertainNode(ZRoom,coll,want); 
                         if (!ZRoom.getAssignmentAreas().isEmpty())
                         {
-                            for (Node n: AssignmentNodes.get(ZRoom))
+                            for (Node n: AssignNodes)
                             {
                                 Edge edge = new Edge(EdgeCount++,n,want);
                                 mapping.setEdgeLevel(edge, Level.Equal);
