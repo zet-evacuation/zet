@@ -93,7 +93,7 @@ public class ZETVisualization extends Visualization<GLControl> implements EventL
 		GLColor.white.draw( gl );
 		gl.glEnable( GL.GL_BLEND );
 		gl.glBlendFunc( GL.GL_ONE, GL.GL_ONE );// Copy Image 2 Color To The Screen
-		gl.glEnable( gl.GL_TEXTURE_2D );
+		gl.glEnable( GL.GL_TEXTURE_2D );
 		fontTex.bind();
 
 		boolean finished = true;

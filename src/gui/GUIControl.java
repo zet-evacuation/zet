@@ -39,6 +39,10 @@ import ds.z.Room;
 import ds.z.ZControl;
 import ds.z.exception.RoomEdgeInvalidTargetException;
 import ds.z.exception.TooManyPeopleException;
+import event.EventListener;
+import event.EventServer;
+import event.ProgressEvent;
+import event.VisualizationEvent;
 import gui.propertysheet.JOptionsDialog;
 import gui.components.progress.JProgressBarDialog;
 import gui.components.progress.JRasterizeProgressBarDialog;
@@ -73,19 +77,22 @@ import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
 import javax.swing.SwingWorker;
 import javax.swing.filechooser.FileFilter;
+import opengl.framework.abs.control;
 import statistic.ca.CAStatistic;
 import zet.gui.GUILocalization;
+import zet.gui.main.JEditor.ZETWindowTabs;
 import zet.gui.main.tabs.base.AbstractFloor.RasterPaintStyle;
 import zet.gui.main.tabs.JEditView;
 import zet.gui.main.toolbar.JStatisticGraphToolBar;
 import zet.tasks.RasterizeTask;
 
-/**
+
+	/**
  * This class receives commands and GUI changes from elements like tool bars,
  * menus etc. and delegates them to other classes.
  * @author Jan-Philipp Kappmeier
  */
-public class GUIControl implements AlgorithmListener {
+public class GUIControl implements AlgorithmListener, EventListener<ProgressEvent> {
 
 	/** The editor. */
 	public JEditor editor;
@@ -106,7 +113,10 @@ public class GUIControl implements AlgorithmListener {
 	/**
 	 * Creates a new instance of {@code GUIControl}.
 	 */
-	public GUIControl() { }
+	public GUIControl() {
+			// register class for progress events
+		EventServer.getInstance().registerListener( this, ProgressEvent.class );
+}
 
 	public void createZETWindow() {
 		zcontrol = new ZControl();
@@ -311,7 +321,8 @@ public class GUIControl implements AlgorithmListener {
 
 	public void visualizationTurnBackToStart() {
 		visualization.getControl().resetTime();
-		//control.resetTime();
+		visualizationToolBar.setPlayButtonEnabled( true );
+		visualizationToolBar.pause();
 		visualization.repaint();
 	}
 
@@ -323,23 +334,14 @@ public class GUIControl implements AlgorithmListener {
 	}
 
 	public void visualizationPlay() {
-		// TODO restartVisualization
-//				if( restartVisualization ) {
-//					visualization.getControl().resetTime();
-//					restartVisualization = false;
-//				}
 		System.out.println( "animation started" );
 		if( visualization.isAnimating() ) {
 			visualizationToolBar.pause();
-			//btnPlay.setIcon( playIcon );
-			//btnPlay.setSelected( false );
 			visualization.stopAnimation();
 			if( visualization.getRecording() == RecordingMode.Recording )
 				visualization.setRecording( RecordingMode.SkipFrame );
 		} else {
 			visualizationToolBar.play();
-			//btnPlay.setIcon( pauseIcon );
-			//btnPlay.setSelected( true );
 			if( visualization.getRecording() == RecordingMode.SkipFrame )
 				visualization.setRecording( RecordingMode.Recording );
 			visualization.startAnimation();
@@ -350,13 +352,13 @@ public class GUIControl implements AlgorithmListener {
 	public void visualizationLoop() {
 		loop = !loop;
 		visualizationToolBar.setSelectedLoop( loop );
+		visualization.setLoop( loop );
 	}
 
 	public void visualizationStop() {
 		visualizationToolBar.pause();
-		//btnPlay.setIcon( playIcon );
-		//btnPlay.setSelected( false );
 		visualization.getControl().resetTime();
+		visualizationToolBar.setPlayButtonEnabled( true );
 		// create a movie, if movie-creation was active.
 		if( visualization.getRecording() != RecordingMode.NotRecording )
 			visualization.createMovie();
@@ -371,7 +373,6 @@ public class GUIControl implements AlgorithmListener {
 	public void visualizationShowWalls() {
 		showWalls = !showWalls;
 		visualizationToolBar.setSelectedShowWalls( showWalls );
-		//btnShowWalls.setSelected( !btnShowWalls.isSelected() );
 		PropertyContainer.getInstance().set( "settings.gui.visualization.walls", showWalls );
 		visualization.getControl().showWalls( showWalls );
 		visualization.repaint();
@@ -382,7 +383,6 @@ public class GUIControl implements AlgorithmListener {
 	public void visualizationShowGraph() {
 		showGraph = !showGraph;
 		visualizationToolBar.setSelectedShowGraph( showGraph );
-		//btnShowGraph.setSelected( !btnShowGraph.isSelected() );
 		PropertyContainer.getInstance().set( "settings.gui.visualization.graph", showGraph );
 		visualization.getControl().showGraph( showGraph );
 		visualization.repaint();
@@ -392,7 +392,6 @@ public class GUIControl implements AlgorithmListener {
 	public void visualizationShowGraphGrid() {
 		showGraphGrid = !showGraphGrid;
 		visualizationToolBar.setSelectedShowGraphGrid( showGraphGrid );
-		//btnShowGraphGrid.setSelected( !btnShowGraphGrid.isSelected() );
 		PropertyContainer.getInstance().set( "settings.gui.visualization.nodeArea", showGraphGrid );
 		visualization.getControl().showNodeRectangles( showGraphGrid );
 		visualization.repaint();
@@ -403,7 +402,6 @@ public class GUIControl implements AlgorithmListener {
 	public void visualizationShowCellularAutomaton() {
 		showCellularAutomaton = !showCellularAutomaton;
 		visualizationToolBar.setSelectedShowCellularAutomaton( showCellularAutomaton );
-		//btnShowCellularAutomaton.setSelected( !btnShowCellularAutomaton.isSelected() );
 		PropertyContainer.getInstance().set( "settings.gui.visualization.cellularAutomaton", showCellularAutomaton );
 		visualization.getControl().showCellularAutomaton( showCellularAutomaton );
 		visualization.repaint();
@@ -413,7 +411,6 @@ public class GUIControl implements AlgorithmListener {
 	public void visualizationShowAllFloors() {
 		final boolean showAllFloors = PropertyContainer.getInstance().toggle( "settings.gui.visualization.floors" );
 		visualizationToolBar.setSelectedAllFloors( !showAllFloors );
-		//btnShowAllFloors.setSelected( !btnShowAllFloors.isSelected() );
 		editor.getVisualizationView().setFloorSelectorEnabled( !showAllFloors );
 		if( showAllFloors )
 			visualization.getControl().showAllFloors();
@@ -1352,8 +1349,35 @@ public class GUIControl implements AlgorithmListener {
 	public void alertError( String message ) {
 		editor.sendError( message );
 	}
+
+	@Override
+	public void handleEvent( ProgressEvent event ) {
+		if( event instanceof VisualizationEvent ) {
+			if( loop )
+//				resetTime();
+				;
+			else
+				//visualizationPause();
+				visualizationToolBar.setPlayButtonEnabled( false );
+				// TODO restartvisualization
+//				this.restartVisualization = true;
+//				btnPlay.setIcon( playIcon );
+//				visualizationView.getGLContainer().stopAnimation();
+//				btnPlay.setSelected( false );
+				
+				ZETMain.sendMessage( "Replaying visualization finished." );
+			return;
+		}
+//		if( currentMode == ZETWindowTabs.QuickView ) {
+//			Floor floor = editView.getCurrentFloor();
+////			//caView.getLeftPanel().getMainComponent().displayFloor( floor );
+//			caView.getLeftPanel().getMainComponent().repaint();
+//		}
+//		ZETMain.sendMessage( event.getProcessMessage().taskName );
+	}
 }
+	/**
+	 * @param event 
+	 */
 
 
-
-// TODO get status out of property container, without creating new class variables!

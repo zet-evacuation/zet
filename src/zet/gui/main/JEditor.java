@@ -87,6 +87,7 @@ import zet.util.ConversionTools;
  * Displays a window with the editor.
  * @author Jan-Philipp Kappmeier, Timon Kelter
  */
+@SuppressWarnings( "serial" )
 public class JEditor extends JFrame implements Localized, EventListener<ProgressEvent> {
 	public enum ZETWindowTabs {
 		EditFloor( true, "Edit" ),
@@ -113,7 +114,7 @@ public class JEditor extends JFrame implements Localized, EventListener<Progress
 			return name;
 		}
 	}
-	private ArrayList<ZETWindowTabs> tabs = new ArrayList<ZETWindowTabs>( ZETWindowTabs.values().length );
+	private ArrayList<ZETWindowTabs> tabs = new ArrayList<>( ZETWindowTabs.values().length );
 	/** The localization class. */
 	static final Localization loc = GUILocalization.getSingleton();
 	/** Stores the last mouse position if a mouse position event is sent. */
@@ -591,6 +592,7 @@ public class JEditor extends JFrame implements Localized, EventListener<Progress
 //				btnPlay.setIcon( playIcon );
 //				visualizationView.getGLContainer().stopAnimation();
 //				btnPlay.setSelected( false );
+				
 				ZETMain.sendMessage( "Replaying visualization finished." );
 			return;
 		}

@@ -626,7 +626,7 @@ public class GLControl implements DrawableControlable {
 	 * @return a map that assigns floor names to their ids
 	 */
 	public Map<Integer, String> getFloorNames() {
-		HashMap<Integer, String> floorNames = new HashMap<Integer, String>( buildingResults.getFloors().size() );
+		HashMap<Integer, String> floorNames = new HashMap<>( buildingResults.getFloors().size() );
 		for( BuildingResults.Floor floor : buildingResults.getFloors() )
 			floorNames.put( floor.id(), floor.name() );
 		return Collections.unmodifiableMap( floorNames );

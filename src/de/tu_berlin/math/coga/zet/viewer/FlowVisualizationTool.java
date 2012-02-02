@@ -75,13 +75,14 @@ import opengl.framework.abs.DrawableControlable;
  *
  * @author Jan-Philipp Kappmeier
  */
+@SuppressWarnings( "serial" )
 public class FlowVisualizationTool extends JFrame implements PropertyChangeListener, EventListener<MessageEvent> {
 	private enum Modes {
 		NashFlow,
 		DynamicFlow
 	}
 	private Modes mode = Modes.DynamicFlow;
-	final Visualization<GLFlowGraphControl> visFlow = new Visualization<GLFlowGraphControl>( new GLCapabilities() );
+	final Visualization<GLFlowGraphControl> visFlow = new Visualization<>( new GLCapabilities() );
 	final Visualization<GLNashGraphControl> visNash = new NashFlowVisualization( new GLCapabilities() );
 	private ArrayList<Visualization<? extends DrawableControlable>> visualizations = new ArrayList<Visualization<? extends DrawableControlable>>() {
 		{

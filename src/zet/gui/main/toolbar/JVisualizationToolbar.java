@@ -51,9 +51,9 @@ public class JVisualizationToolbar extends JToolBar implements ActionListener {
 	/** Allows switching orthogonal and isometric 2-dimensional view. */
 	private JToggleButton btn2dSwitch;
 	private JButton btnVideo;
-	private JButton btnPlayStart;
-	private JButton btnPlay;
-	private JButton btnPlayLoop;
+	private JButton btnPlayBackToStart;
+	private JToggleButton btnPlay;
+	private JToggleButton btnPlayLoop;
 	private JButton btnStop;
 	private Icon playIcon;
 	private Icon pauseIcon;
@@ -118,16 +118,16 @@ public class JVisualizationToolbar extends JToolBar implements ActionListener {
 		addSeparator();
 		btnVideo = Button.newButton( IconSet.Video, this, "video", loc.getString( "Visualization.SaveVideo" ) );
 		add( btnVideo );
-		btnPlayStart = Button.newButton( IconSet.PlayStart, this, "start", loc.getString( "Visualization.PlayBackToStart" ) );
-		add( btnPlayStart );
-		btnPlay = Button.newButton( IconSet.Play, this, "play", loc.getString( "Visualization.PlayPause" ) );
+		btnPlayBackToStart = Button.newButton( IconSet.PlayStart, this, "start", loc.getString( "Visualization.PlayBackToStart" ) );
+		add( btnPlayBackToStart );
+		btnPlay = Button.newButton( IconSet.Play, this, "play", loc.getString( "Visualization.PlayPause" ), false );
 		playIcon = gui.components.framework.Icon.newIcon( IconSet.Play );
 		pauseIcon = gui.components.framework.Icon.newIcon( IconSet.PlayPause );
 		add( btnPlay );
 		btnStop = Button.newButton( IconSet.PlayStop, this, "stop", loc.getString( "Visualization.PlayStop" ) );
 		add( btnStop );
-		btnPlayLoop = Button.newButton( IconSet.PlayLoop, this, "loop", loc.getString( "Visualization.PlayLoop" ) );
-		btnPlayLoop.setSelected( false );
+		btnPlayLoop = Button.newButton( IconSet.PlayLoop, this, "loop", loc.getString( "Visualization.PlayLoop" ), false );
+		//btnPlayLoop.setSelected( false );
 		add( btnPlayLoop );
 		//btnPlayEnd = Button.newButton( IconSet.PlayEnd, this, "end", loc.getString( "playToEnd" ) );
 		//add( btnPlayEnd );
@@ -275,7 +275,7 @@ public class JVisualizationToolbar extends JToolBar implements ActionListener {
 		btnPlay.setEnabled( enabled );
 		//btnPlayEnd.setEnabled( enabled );
 		btnPlayLoop.setEnabled( enabled );
-		btnPlayStart.setEnabled( enabled );
+		btnPlayBackToStart.setEnabled( enabled );
 		btnVideo.setEnabled( enabled );
 		btnStop.setEnabled( enabled );
 	}
@@ -288,7 +288,7 @@ public class JVisualizationToolbar extends JToolBar implements ActionListener {
 		btn2d3dSwitch.setToolTipText( loc.getString( "Visualization.Switch2d3d" ) );
 		btn2dSwitch.setToolTipText( loc.getString( "Visualization.SwitchIso" ) );
 		btnVideo.setToolTipText( loc.getString( "Visualization.SaveVideo" ) );
-		btnPlayStart.setToolTipText( loc.getString( "Visualization.PlayBackToStart" ) );
+		btnPlayBackToStart.setToolTipText( loc.getString( "Visualization.PlayBackToStart" ) );
 		btnPlay.setToolTipText( loc.getString( "Visualization.PlayPause" ) );
 		btnPlayLoop.setToolTipText( loc.getString( "Visualization.PlayLoop" ) );
 		//btnPlayEnd.setToolTipText( loc.getString( "Visualization.PlayToEnd" ) );
@@ -305,6 +305,10 @@ public class JVisualizationToolbar extends JToolBar implements ActionListener {
 
 	public void rebuild( BatchResult result ) {
 		entryModelVis.rebuild( result );
+	}
+
+	public void setPlayButtonEnabled( boolean state ) {
+		btnPlay.setEnabled( state );
 	}
 
 	/**
