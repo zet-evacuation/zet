@@ -8,6 +8,8 @@ import algo.ca.EvacuationCellularAutomatonAlgorithm;
 import zet.tasks.CellularAutomatonAlgorithmEnumeration;
 import zet.tasks.GraphAlgorithmEnumeration;
 import de.tu_berlin.math.coga.common.algorithm.AlgorithmListener;
+import de.tu_berlin.math.coga.common.util.Formatter;
+import de.tu_berlin.math.coga.common.util.Formatter.TimeUnits;
 import de.tu_berlin.math.coga.zet.converter.cellularAutomaton.AssignmentApplicationInstance;
 import de.tu_berlin.math.coga.zet.converter.cellularAutomaton.CellularAutomatonAssignmentConverter;
 import de.tu_berlin.math.coga.zet.converter.cellularAutomaton.ConvertedCellularAutomaton;
@@ -176,6 +178,8 @@ public class AlgorithmControl implements PropertyChangeListener {
 					mapping = cat.getMapping();
 					container = cat.getContainer();
 					caVisResults = cat.getSolution();
+					//EventServer.getInstance().dispatchEvent( new MessageEvent<>( this, MessageType.Status, "Simulation finished" ) );
+					System.out.println( "Egress time: " + Formatter.formatTimeUnit( cellularAutomaton.getTimeStep() * cellularAutomaton.getSecondsPerStep(), TimeUnits.Seconds ) );
 				}
 			}
 		});
@@ -314,13 +318,16 @@ public class AlgorithmControl implements PropertyChangeListener {
 		return networkFlowModel;
 	}
 
-	public void performOptimization() {
-		performOptimization( null );
+	public void performOptimization( GUIControl control) {
+		performOptimization( null, control );
 	}
 
-	public void performOptimization( PropertyChangeListener propertyChangeListener ) {
+	public void performOptimization( PropertyChangeListener propertyChangeListener, GUIControl control ) {
 		final GraphAlgorithmTask gat = new GraphAlgorithmTask( GraphAlgorithmEnumeration.SuccessiveEarliestArrivalAugmentingPathOptimized );
 		gat.setProblem( project );
+		
+		gat.addAlgorithmListener( control );
+		
 		
 		gat.setNetworkFlowModel( networkFlowModel );
 		gat.setConv( last.converter() );

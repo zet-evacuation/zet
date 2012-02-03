@@ -267,6 +267,7 @@ public class ZControl {
 		return addPoint( point, true );
 	}
 
+	// requests a new
 	private boolean addPoint( PlanPoint point, boolean sendEvent ) {
 		if( newPolygon.isClosed() )
 			throw new IllegalStateException( "Polygon is closed." );
@@ -457,7 +458,7 @@ public class ZControl {
 
 	public void insertPoint( Edge onEdge, PlanPoint newPoint ) {
 		// Replace the old edge
-		ArrayList<PlanPoint> pointList = new ArrayList<PlanPoint>( 3 );
+		ArrayList<PlanPoint> pointList = new ArrayList<>( 3 );
 		pointList.add( onEdge.getSource() );
 		pointList.add( newPoint );
 		pointList.add( onEdge.getTarget() );
