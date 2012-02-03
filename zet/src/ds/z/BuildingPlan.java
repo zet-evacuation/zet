@@ -34,7 +34,6 @@ import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Random;
-import batch.tasks.AlgorithmTask;
 import de.tu_berlin.math.coga.datastructure.Tuple;
 
 /**
@@ -300,7 +299,7 @@ public class BuildingPlan implements Serializable, Iterable<Floor> , ZFormatObje
 		}
 		for( Floor f : floors )
 			for( Room r : f.getRooms() ) {
-				AlgorithmTask.getInstance().setProgress( 100 / (Math.max( f.roomCount(), 1 )), ZLocalization.getSingleton().getString( "ds.z.floor" ) + ":" + f.getName(), r.getName() );
+				//AlgorithmTask.getInstance().setProgress( 100 / (Math.max( f.roomCount(), 1 )), ZLocalization.getSingleton().getString( "ds.z.floor" ) + ":" + f.getName(), r.getName() );
 
 				// Checking if r is rasterized before rasterizing it makes no sense??
 				// but it makes sense to ensure that all polygons are closed!!
@@ -309,7 +308,7 @@ public class BuildingPlan implements Serializable, Iterable<Floor> , ZFormatObje
 				r.cleanUpPassableEdgesForRooms();
 
 			}
-		AlgorithmTask.getInstance().setProgress( 100, ZLocalization.getSingleton().getString( "ds.z.RasterizeFinished" ), "" );
+		//AlgorithmTask.getInstance().setProgress( 100, ZLocalization.getSingleton().getString( "ds.z.RasterizeFinished" ), "" );
 		rasterized = true;
 	}
 

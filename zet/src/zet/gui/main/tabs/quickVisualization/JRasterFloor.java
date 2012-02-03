@@ -23,7 +23,6 @@ package zet.gui.main.tabs.quickVisualization;
 
 import algo.ca.PotentialController;
 import algo.ca.SPPotentialController;
-import batch.tasks.AlgorithmTask;
 import de.tu_berlin.math.coga.zet.converter.cellularAutomaton.ZToCAMapping;
 import de.tu_berlin.math.coga.zet.converter.cellularAutomaton.ZToCARasterContainer;
 import de.tu_berlin.math.coga.zet.converter.cellularAutomaton.ZToCARasterSquare;
@@ -48,7 +47,6 @@ import java.awt.Graphics;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import statistic.ca.CAStatistic;
-import zet.gui.main.tabs.base.AbstractPolygon;
 
 /**
  * Represents a rastered floor, all rooms have to be squares of the raster size
@@ -128,7 +126,7 @@ public class JRasterFloor extends AbstractFloor {
 			int count = 0;
 			for( Component c : getComponents() ) {
 				remove( c );
-				AlgorithmTask.getInstance().setProgress( Math.min( 99, (++count*100)/componentCount ), "", "" );
+				//AlgorithmTask.getInstance().setProgress( Math.min( 99, (++count*100)/componentCount ), "", "" );
 			}
 		}
 
@@ -194,7 +192,7 @@ public class JRasterFloor extends AbstractFloor {
 					poly.displayPolygon( square.getSquare() );
 				}
 			}
-			AlgorithmTask.getInstance().setProgress( (++count*100)/roomCount, "", "" );
+			//AlgorithmTask.getInstance().setProgress( (++count*100)/roomCount, "", "" );
 		}
 
 		loaded = true;	//allow painting again as we are finisched

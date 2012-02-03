@@ -20,8 +20,6 @@
  */
 package gui.visualization.control.building;
 
-import batch.tasks.AlgorithmTask;
-import de.tu_berlin.math.coga.common.localization.DefaultLoc;
 import gui.visualization.control.AbstractZETVisualizationControl;
 import gui.visualization.draw.building.GLBuilding;
 import io.visualization.BuildingResults;
@@ -56,7 +54,7 @@ public class GLBuildingControl extends AbstractZETVisualizationControl<GLWallCon
 	
 	public void build() {
 		mainControl = this;
-		AlgorithmTask.getInstance().setProgress( 1, DefaultLoc.getSingleton().getStringWithoutPrefix( "batch.tasks.progress.createBuildingVisualizationDataStructure" ), "" );
+		//AlgorithmTask.getInstance().setProgress( 1, DefaultLoc.getSingleton().getStringWithoutPrefix( "batch.tasks.progress.createBuildingVisualizationDataStructure" ), "" );
 		wallCount = visResult.getWalls().size();
 		wallsDone = 0;
 		allFloorsByID = new HashMap<Integer, ArrayList<GLWallControl>>();
@@ -114,7 +112,7 @@ public class GLBuildingControl extends AbstractZETVisualizationControl<GLWallCon
 	public void wallProgress() {
 		wallsDone++;
 		int progress = Math.max( 0, Math.min( (int) Math.round( ((double) wallsDone / wallCount) * 100 ), 99 ) );
-		AlgorithmTask.getInstance().setProgress( progress, "Erzeuge Gebäude...", "Wand " + wallsDone + " von " + wallCount + " erzeugt." );
+		//AlgorithmTask.getInstance().setProgress( progress, "Erzeuge Gebäude...", "Wand " + wallsDone + " von " + wallCount + " erzeugt." );
 	}
 
 	/**

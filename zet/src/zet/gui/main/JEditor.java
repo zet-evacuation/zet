@@ -34,7 +34,6 @@ import event.EventServer;
 import event.MessageEvent;
 import event.MessageEvent.MessageType;
 import event.ProgressEvent;
-import event.OptionsChangedEvent;
 import gui.statistic.JGraphStatisticPanel;
 import gui.statistic.JStatisticPanel;
 import zet.gui.main.tabs.JVisualizationView;
@@ -242,7 +241,6 @@ public class JEditor extends JFrame implements Localized, EventListener<Progress
 	 */
 	public void addMainComponents() {
 		editView = new JEditView( guiControl );
-		EventServer.getInstance().registerListener( editView, OptionsChangedEvent.class );
 		caView = new JQuickVisualizationView(guiControl);
 		batchView = new JBatch( guiControl );
 		visualizationView = new JVisualizationView( guiControl );

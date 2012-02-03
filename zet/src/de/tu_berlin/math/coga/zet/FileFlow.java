@@ -6,7 +6,6 @@ package de.tu_berlin.math.coga.zet;
 
 import algo.graph.dynamicflow.eat.EarliestArrivalFlowProblem;
 import algo.graph.dynamicflow.eat.SEAAPAlgorithm;
-import batch.tasks.AlgorithmTask;
 import de.tu_berlin.math.coga.common.algorithm.Algorithm;
 import de.tu_berlin.math.coga.common.algorithm.AlgorithmEvent;
 import de.tu_berlin.math.coga.common.algorithm.AlgorithmListener;
@@ -180,7 +179,7 @@ public class FileFlow implements AlgorithmListener {
 		PathBasedFlowOverTime df = algo.getSolution().getPathBased();
 		String result = String.format( "Sent %1$s of %2$s flow units in %3$s time units successfully.", algo.getSolution().getFlowAmount(), eat.getTotalSupplies(), algo.getSolution().getTimeHorizon() );
 		System.out.println( result );
-		AlgorithmTask.getInstance().publish( 100, result, "" );
+		//AlgorithmTask.getInstance().publish( 100, result, "" );
 		long end = System.nanoTime();
 		//System.out.println( String.format( "Sending the flow units required %1$s MilliSeconds.", algo.getRuntime() / 1000000 ) );
 //		System.out.println( df.toString() );

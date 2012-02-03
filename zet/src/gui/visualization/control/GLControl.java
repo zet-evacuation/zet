@@ -39,10 +39,11 @@ import java.util.Map;
 import de.tu_berlin.math.coga.common.localization.Localization;
 import opengl.helper.Frustum;
 import statistic.ca.CAStatistic;
-import batch.tasks.AlgorithmTask;
 import de.tu_berlin.math.coga.common.localization.DefaultLoc;
 import ds.CompareVisualizationResults;
 import gui.visualization.VisualizationOptionManager;
+import gui.visualization.draw.ca.GLCA;
+import gui.visualization.draw.graph.GLGraph;
 import javax.media.opengl.GL;
 import javax.media.opengl.GLAutoDrawable;
 import opengl.framework.abs.DrawableControlable;
@@ -219,7 +220,7 @@ public class GLControl implements DrawableControlable {
 		buildingControl = new GLBuildingControl( buildingResults );
 		buildingControl.setScaling( sizeMultiplicator );
 		buildingControl.build();
-		AlgorithmTask.getInstance().setProgress( 100, loc.getStringWithoutPrefix( "batch.tasks.progress.visualizationDatastructureComplete" ), "" );
+		//AlgorithmTask.getInstance().setProgress( 100, loc.getStringWithoutPrefix( "batch.tasks.progress.visualizationDatastructureComplete" ), "" );
 		initSettings();
 	}
 

@@ -7,7 +7,6 @@ package de.tu_berlin.math.coga.zet;
 import algo.graph.dynamicflow.eat.EarliestArrivalFlowProblem;
 import algo.graph.dynamicflow.eat.LongestShortestPathTimeHorizonEstimator;
 import algo.graph.dynamicflow.eat.SEAAPAlgorithm;
-import batch.tasks.AlgorithmTask;
 import de.tu_berlin.math.coga.zet.converter.graph.ZToGraphMapping;
 import de.tu_berlin.math.coga.common.algorithm.Algorithm;
 import de.tu_berlin.math.coga.common.algorithm.AlgorithmEvent;
@@ -426,7 +425,7 @@ public class DatFileReaderWriter implements AlgorithmListener {
 		PathBasedFlowOverTime df = algo.getSolution().getPathBased();
 		String result = String.format( "Sent %1$s of %2$s flow units in %3$s time units successfully.", algo.getSolution().getFlowAmount(), eafp.getTotalSupplies(), algo.getSolution().getTimeHorizon() );
 		System.out.println( result );
-		AlgorithmTask.getInstance().publish( 100, result, "" );
+		//AlgorithmTask.getInstance().publish( 100, result, "" );
 		long end = System.nanoTime();
 		System.err.println( Formatter.formatTimeUnit( end - start, TimeUnits.NanoSeconds ) );
 		return algo;

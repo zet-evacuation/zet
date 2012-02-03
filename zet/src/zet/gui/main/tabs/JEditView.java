@@ -40,8 +40,6 @@ import ds.z.TeleportArea;
 import ds.z.TeleportEdge;
 import ds.z.ZControl;
 import ds.z.ZLocalization;
-import event.EventListener;
-import event.OptionsChangedEvent;
 import gui.GUIControl;
 import gui.ZETMain;
 import zet.gui.components.model.ComboBoxRenderer;
@@ -110,7 +108,7 @@ import zet.gui.main.tabs.base.JPolygon;
  * @see zet.gui.components.tabs.editor.JFloor
  * @author Jan-Philipp Kappmeier
  */
-public class JEditView extends AbstractSplitPropertyWindow<JFloorScrollPane<JFloor>> implements EventListener<OptionsChangedEvent> {
+public class JEditView extends AbstractSplitPropertyWindow<JFloorScrollPane<JFloor>> {
 	/**
 	 * An enumeration of all possible panels visible in the edit view on the right part.
 	 * @see #setEastPanelType(zet.gui.components.tabs.JEditView.Panels)
@@ -1624,12 +1622,4 @@ public class JEditView extends AbstractSplitPropertyWindow<JFloorScrollPane<JFlo
 	public Point convertPointToFloorCoordinates( Component source, Point toConvert ) {
 		return SwingUtilities.convertPoint( source, toConvert, getFloor() );
 	}
-
-	@Override
-	public void handleEvent( OptionsChangedEvent event ) {
-		getLeftPanel().getMainComponent().reloadValues();
-		repaint();
-	}
-
-
 }

@@ -4,7 +4,6 @@
  */
 package zet.tasks;
 
-import batch.tasks.AlgorithmTask;
 import ds.z.Floor;
 import zet.gui.main.tabs.quickVisualization.JRasterFloor;
 
@@ -25,6 +24,6 @@ public class DisplayFloorTask implements Runnable {
 	public void run() {
 		rasterFloor.displayFloor( floor );
 		System.out.println( "100% for DisplayFloorTask sent" );
-		AlgorithmTask.getInstance().setProgress( 100, "", "" ); // in the end, send 100%
+		//AlgorithmTask.getInstance().setProgress( 100, "", "" ); // in the end, send 100%
 	}
 }

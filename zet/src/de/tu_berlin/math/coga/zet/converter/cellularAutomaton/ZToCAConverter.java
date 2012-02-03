@@ -26,7 +26,6 @@ import ds.z.Project;
 import de.tu_berlin.math.coga.common.algorithm.Algorithm;
 import algo.ca.PotentialController;
 import algo.ca.SPPotentialController;
-import batch.tasks.AlgorithmTask;
 import de.tu_berlin.math.coga.zet.converter.RasterContainerCreator;
 import de.tu_berlin.math.coga.zet.converter.RoomRasterSquare;
 import de.tu_berlin.math.coga.common.util.Direction;
@@ -123,20 +122,20 @@ public class ZToCAConverter extends Algorithm<BuildingPlan,ConvertedCellularAuto
 	 * @throws converter.ZToCAConverter.ConversionNotSupportedException 
 	 */
 	private CellularAutomaton convert( BuildingPlan buildingPlan ) throws ConversionNotSupportedException {
-		AlgorithmTask.getInstance().publish( "Starte Konvertierung", "" );
+		//AlgorithmTask.getInstance().publish( "Starte Konvertierung", "" );
 		CellularAutomaton convertedCA = new CellularAutomaton();
 		lastMapping = new ZToCAMapping();
-		AlgorithmTask.getInstance().publish( "Rastere den Gebäudeplan", "" );
+		//AlgorithmTask.getInstance().publish( "Rastere den Gebäudeplan", "" );
 		lastContainer = RasterContainerCreator.getInstance().ZToCARasterContainer( buildingPlan );
 		exitCells = new ArrayList<ExitCell>();
 		roomRasterRoomMapping = new HashMap<ZToCARoomRaster, ds.ca.Room>();
 
-		AlgorithmTask.getInstance().publish( "Erzeuge Räume", "" );
+		//AlgorithmTask.getInstance().publish( "Erzeuge Räume", "" );
 
 		for( Floor floor : lastContainer.getFloors() )
 			createAllRooms( floor, lastContainer.getAllRasteredRooms( floor ), buildingPlan.getFloorID( floor ) );
 
-		AlgorithmTask.getInstance().publish( "Konvertiere Räume", "" );
+		//AlgorithmTask.getInstance().publish( "Konvertiere Räume", "" );
 
 		for( Floor floor : lastContainer.getFloors() ) {
 			Collection<ZToCARoomRaster> rooms = lastContainer.getAllRasteredRooms( floor );
@@ -153,7 +152,7 @@ public class ZToCAConverter extends Algorithm<BuildingPlan,ConvertedCellularAuto
 		//	convertedCA.addExit( e );
 		//}
 
-		AlgorithmTask.getInstance().publish( "Berechne statische Potenziale", "" );
+		//AlgorithmTask.getInstance().publish( "Berechne statische Potenziale", "" );
 
 		computeAndAddStaticPotentials( convertedCA );
 
