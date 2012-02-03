@@ -19,7 +19,6 @@
  */
 package de.tu_berlin.math.coga.zet.converter;
 
-import batch.tasks.AlgorithmTask;
 import de.tu_berlin.math.coga.common.localization.DefaultLoc;
 import de.tu_berlin.math.coga.zet.converter.graph.ZToGraphRoomRaster;
 import de.tu_berlin.math.coga.zet.converter.graph.ZToGraphRasteredDoor;
@@ -30,7 +29,6 @@ import de.tu_berlin.math.coga.zet.converter.cellularAutomaton.ZToCARasterSquare;
 import de.tu_berlin.math.coga.zet.converter.cellularAutomaton.ZToCARoomRaster;
 import ds.z.Project;
 import ds.PropertyContainer;
-import de.tu_berlin.math.coga.zet.NetworkFlowModel;
 import ds.z.BuildingPlan;
 import ds.z.DelayArea;
 import ds.z.EvacuationArea;
@@ -42,7 +40,6 @@ import ds.z.RoomEdge;
 import ds.z.SaveArea;
 import ds.z.DelayArea.DelayType;
 import ds.z.exception.RoomEdgeInvalidTargetException;
-import ds.z.exception.UnknownZModelError;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -94,7 +91,7 @@ public class RasterContainerCreator {
 		ZToCARasterContainer container = new ZToCARasterContainer();
 		container.setFloors( buildingPlan.getFloors() );
 
-		AlgorithmTask.getInstance().publish( "Konvertiere Räume", "" );
+		//AlgorithmTask.getInstance().publish( "Konvertiere Räume", "" );
 
 		// calculate number of rooms
 		int count = 0;
@@ -108,10 +105,10 @@ public class RasterContainerCreator {
 				raster.rasterize();
 				container.setRoomRaster( room, raster );
 				++i;
-				AlgorithmTask.getInstance().publish( (int) (100 * (i / (double) count)) );
+				//AlgorithmTask.getInstance().publish( (int) (100 * (i / (double) count)) );
 			}
 
-		AlgorithmTask.getInstance().publish( "Konvertiere Türen", "" );
+		//AlgorithmTask.getInstance().publish( "Konvertiere Türen", "" );
 
 		i = 0;
 		for( Floor floor : buildingPlan.getFloors() )
@@ -144,7 +141,7 @@ public class RasterContainerCreator {
 					}
 				}
 				++i;
-				AlgorithmTask.getInstance().publish( (int) (100 * (i / (double) count)) );
+				//AlgorithmTask.getInstance().publish( (int) (100 * (i / (double) count)) );
 			}
 
 

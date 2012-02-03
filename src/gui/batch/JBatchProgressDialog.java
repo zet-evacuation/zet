@@ -152,9 +152,9 @@ public class JBatchProgressDialog extends JDialog implements AlgorithmListener, 
         if (evt.getPropertyName().equals("progress")) {
             int progress = (Integer) evt.getNewValue();
             progressBar.setValue(progress);
-            lblInformation.setText(AlgorithmTask.getInstance().getProgressInformation());
-            lblDetailedInformation.setText(AlgorithmTask.getInstance().getDetailedProgressInformation());
-            lblBatchStatus.setText(AlgorithmTask.getInstance().getName());
+            //lblInformation.setText(AlgorithmTask.getInstance().getProgressInformation());
+            //lblDetailedInformation.setText(AlgorithmTask.getInstance().getDetailedProgressInformation());
+            //lblBatchStatus.setText(AlgorithmTask.getInstance().getName());
         }
         if (mte != null && mte.isDone()) {
             mte.setClosed( true );

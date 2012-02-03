@@ -93,9 +93,9 @@ public class JProgressBarDialog extends javax.swing.JDialog {
 	
 	protected void handleProgressEvent( int progress ) {
 		progressBar.setValue( progress );
-		lblTaskInformation.setText( AlgorithmTask.getInstance().getProgressInformation() );
-		lblTaskDetailedInformation.setText( AlgorithmTask.getInstance().getDetailedProgressInformation() );
-		lblTaskName.setText( AlgorithmTask.getInstance().getName() );
+//		lblTaskInformation.setText( AlgorithmTask.getInstance().getProgressInformation() );
+//		lblTaskDetailedInformation.setText( AlgorithmTask.getInstance().getDetailedProgressInformation() );
+//		lblTaskName.setText( AlgorithmTask.getInstance().getName() );
 		if( AlgorithmTask.getInstance().isDone() ) {
 			btnClose.setText( "Schließen" );
 			if( autoClose )

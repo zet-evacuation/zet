@@ -8,9 +8,6 @@ import de.tu_berlin.math.coga.common.util.Formatter;
 import de.tu_berlin.math.coga.common.util.Formatter.TimeUnits;
 import ds.PropertyContainer;
 import ds.z.ZControl;
-import event.EventListener;
-import event.EventServer;
-import event.OptionsChangedEvent;
 import gui.GUIControl;
 import gui.ZETProperties;
 import gui.visualization.Visualization;
@@ -29,7 +26,7 @@ import zet.gui.GUILocalization;
  *
  * @author Jan-Philipp Kappmeier
  */
-public class ZETVisualization extends Visualization<GLControl> implements EventListener<OptionsChangedEvent>  {
+public class ZETVisualization extends Visualization<GLControl> {
 	/** The GUI localization class. */
 	GUILocalization loc = GUILocalization.getSingleton();
 	/** The minimal number of frames that needs to be captured in movie rendering mode for the cellular automaton */
@@ -48,7 +45,6 @@ public class ZETVisualization extends Visualization<GLControl> implements EventL
 		this.guiControl = guiControl;
 		showEye = ZETProperties.isShowEye();
 		showFPS = ZETProperties.isShowFPS();
-		EventServer.getInstance().registerListener( this, OptionsChangedEvent.class );
 
 		noRotate = !PropertyContainer.getInstance().getAsBoolean( "editor.options.visualization.allowRotateIn2D" );
 		mouseInvert = PropertyContainer.getInstance().getAsBoolean( "editor.options.visualization.invertMouse" ) ? -1 : 1;
@@ -199,20 +195,5 @@ public class ZETVisualization extends Visualization<GLControl> implements EventL
 		zcontrol.getProject().getVisualProperties().getCameraPosition().up = getCamera().getUp();
 		zcontrol.getProject().getVisualProperties().setCurrentWidth( getViewWidth() );
 		zcontrol.getProject().getVisualProperties().setCurrentHeight( getViewHeight() );
-	}
-
-	/**
-	 * Called if an {@link OptionsChangedEvent} is send to the visualization class.
-	 * Updates the variables indicating the visible elements in the visualization.
-	 * @param event the event
-	 */
-	@Override
-	public void handleEvent( OptionsChangedEvent event ) {
-		showEye = ZETProperties.isShowEye();
-		showFPS = ZETProperties.isShowFPS();
-		showTimestepGraph = ZETProperties.isShowTimestepGraph();
-		showTimestepCellularAutomaton = ZETProperties.isShowTimestepCellularAutomaton();
-		repaint();
-		//update();
 	}
 }

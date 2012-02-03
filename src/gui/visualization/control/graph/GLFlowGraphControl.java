@@ -21,8 +21,6 @@
 
 package gui.visualization.control.graph;
 
-import batch.tasks.AlgorithmTask;
-import de.tu_berlin.math.coga.common.localization.DefaultLoc;
 import de.tu_berlin.math.coga.math.Conversion;
 import ds.GraphVisualizationResults;
 import ds.graph.Node;
@@ -66,7 +64,7 @@ public class GLFlowGraphControl extends AbstractZETVisualizationControl<GLGraphF
 	public void build( GraphVisualizationResults graphVisResult ) {
 		mainControl = this;
 
-		AlgorithmTask.getInstance().setProgress( 0, DefaultLoc.getSingleton().getStringWithoutPrefix( "batch.tasks.progress.createGraphVisualizationDataStructure" ), "" );
+		//AlgorithmTask.getInstance().setProgress( 0, DefaultLoc.getSingleton().getStringWithoutPrefix( "batch.tasks.progress.createGraphVisualizationDataStructure" ), "" );
 		nodeCount = graphVisResult.getNetwork().nodes().size();
 		nodesDone = 0;
 		superSinkID = graphVisResult.getSupersink().id();
@@ -87,7 +85,7 @@ public class GLFlowGraphControl extends AbstractZETVisualizationControl<GLGraphF
 	public GLFlowGraphControl( FlowVisualization fv ) {
 		mainControl = this;
 
-		AlgorithmTask.getInstance().setProgress( 0, DefaultLoc.getSingleton().getStringWithoutPrefix( "batch.tasks.progress.createGraphVisualizationDataStructure" ), "" );
+		//AlgorithmTask.getInstance().setProgress( 0, DefaultLoc.getSingleton().getStringWithoutPrefix( "batch.tasks.progress.createGraphVisualizationDataStructure" ), "" );
 		nodeCount = fv.getGv().getNetwork().nodes().size();
 		nodesDone = 0;
 		//superSinkID = graphVisResult.getSupersink().id();
@@ -144,7 +142,7 @@ public class GLFlowGraphControl extends AbstractZETVisualizationControl<GLGraphF
 	public void nodeProgress() {
 		nodesDone++;
 		int progress = Math.max( 0, Math.min( (int) Math.round( ((double) nodesDone / nodeCount) * 100 ), 99 ) );
-		AlgorithmTask.getInstance().setProgress( progress, "Erzeuge Graph...", "Knoten " + nodesDone + " von " + nodeCount + " erzeugt." );
+		//AlgorithmTask.getInstance().setProgress( progress, "Erzeuge Graph...", "Knoten " + nodesDone + " von " + nodeCount + " erzeugt." );
 	}
 
 	/**

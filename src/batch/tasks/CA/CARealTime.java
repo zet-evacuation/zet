@@ -21,7 +21,6 @@
 package batch.tasks.CA;
 
 import algo.ca.CellularAutomatonInOrderExecution;
-import batch.tasks.AlgorithmTask;
 import ds.ca.CellularAutomaton;
 import ds.ca.CellularAutomaton.State;
 import ds.ca.Individual;
@@ -47,7 +46,7 @@ public class CARealTime extends CellularAutomatonInOrderExecution {
 		}
 		if( isStepByStep() ) {
 			super.run();
-			AlgorithmTask.getInstance().publish( 0, ca.evacuatedIndividualsCount() + " Individuen evakuiert", "Führe " + (ca.getTimeStep() + 1) + ". Schritt durch..." );
+			//AlgorithmTask.getInstance().publish( 0, ca.evacuatedIndividualsCount() + " Individuen evakuiert", "Führe " + (ca.getTimeStep() + 1) + ". Schritt durch..." );
 			return;
 		} else {
 			// Realtime simulation
@@ -61,7 +60,7 @@ public class CARealTime extends CellularAutomatonInOrderExecution {
 				end = start;
 			int individuals = ca.getIndividualCount();
 			if( ca.getIndividualCount() > 0 ) {
-				AlgorithmTask.getInstance().publish( 0, ca.evacuatedIndividualsCount() + " Individuen sicher", "Führe " + (ca.getTimeStep() + 1) + ". Schritt durch..." );
+				//AlgorithmTask.getInstance().publish( 0, ca.evacuatedIndividualsCount() + " Individuen sicher", "Führe " + (ca.getTimeStep() + 1) + ". Schritt durch..." );
 			}
 			long wait = stepTime - (end - start);
 			if( wait > 0 ) {
@@ -78,7 +77,7 @@ public class CARealTime extends CellularAutomatonInOrderExecution {
 				start = System.currentTimeMillis();
 				executeStep();
 				end = System.currentTimeMillis();
-				AlgorithmTask.getInstance().publish( 100 - (int) ((ca.getIndividualCount() / (float) individuals) * 100), ca.getInitialIndividualCount() - ca.getNotSafeIndividualsCount() - ca.deadIndividualsCount() + " Individuen sicher, " + ca.deadIndividualsCount() + " Individuen nicht sicher", "Führe " + ca.getTimeStep() + ". Schritt durch..." );
+				//AlgorithmTask.getInstance().publish( 100 - (int) ((ca.getIndividualCount() / (float) individuals) * 100), ca.getInitialIndividualCount() - ca.getNotSafeIndividualsCount() - ca.deadIndividualsCount() + " Individuen sicher, " + ca.deadIndividualsCount() + " Individuen nicht sicher", "Führe " + ca.getTimeStep() + ". Schritt durch..." );
 				wait = stepTime - (end - start);
 				if( wait > 0 ) {
 					try {
@@ -98,7 +97,7 @@ public class CARealTime extends CellularAutomatonInOrderExecution {
 			}
 			setFinished( true );
 			if( !isCancelled() )
-				AlgorithmTask.getInstance().publish( 100, "Ende: " + (ca.getInitialIndividualCount() - ca.getNotSafeIndividualsCount() - ca.deadIndividualsCount()) + " Individuen sicher, " + ca.deadIndividualsCount() + " Individuen nicht sicher", ca.getTimeStep() + " Schritte durchgeführt" );
+				//AlgorithmTask.getInstance().publish( 100, "Ende: " + (ca.getInitialIndividualCount() - ca.getNotSafeIndividualsCount() - ca.deadIndividualsCount()) + " Individuen sicher, " + ca.deadIndividualsCount() + " Individuen nicht sicher", ca.getTimeStep() + " Schritte durchgeführt" );
 			ca.setState( State.finish );
 		}
 	}

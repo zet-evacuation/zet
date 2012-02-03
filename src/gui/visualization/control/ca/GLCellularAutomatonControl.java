@@ -21,8 +21,6 @@
 
 package gui.visualization.control.ca;
 
-import batch.tasks.AlgorithmTask;
-import de.tu_berlin.math.coga.common.localization.DefaultLoc;
 import de.tu_berlin.math.coga.math.Conversion;
 import ds.ca.CellularAutomaton;
 import ds.ca.Individual;
@@ -89,7 +87,7 @@ public class GLCellularAutomatonControl extends AbstractZETVisualizationControl<
 		mainControl = this;
 		cellCount = ca.getCellCount();
 		cellsDone = 0;
-		AlgorithmTask.getInstance().setProgress( 0, DefaultLoc.getSingleton().getStringWithoutPrefix( "batch.tasks.progress.createCellularAutomatonVisualizationDatastructure" ), "" );
+		//AlgorithmTask.getInstance().setProgress( 0, DefaultLoc.getSingleton().getStringWithoutPrefix( "batch.tasks.progress.createCellularAutomatonVisualizationDatastructure" ), "" );
 
 		recordingCount = containsRecording ? caVisResults.getRecording().length() : 0;
 		recordingDone = 0;
@@ -117,7 +115,7 @@ public class GLCellularAutomatonControl extends AbstractZETVisualizationControl<
 			for( GLCAFloorControl floor : this )
 				floor.getView().setIndividuals( getIndividualControls() );
 		} else {
-			individuals = new ArrayList<GLIndividualControl>();
+			individuals = new ArrayList<>();
 		}
 		
 		// set up individual heights
@@ -248,7 +246,7 @@ public class GLCellularAutomatonControl extends AbstractZETVisualizationControl<
 	public void cellProgress() {
 		cellsDone++;
 		int progress = Math.max( 0, Math.min( (int) Math.round( ((double) cellsDone / cellCount) * 100 ), 99 ) );
-		AlgorithmTask.getInstance().setProgress( progress, "Erzeuge Zellen...", "Zelle " + cellsDone + " von " + cellCount + " erzeugt." );
+		//AlgorithmTask.getInstance().setProgress( progress, "Erzeuge Zellen...", "Zelle " + cellsDone + " von " + cellCount + " erzeugt." );
 	}
 
 	/**
@@ -263,7 +261,7 @@ public class GLCellularAutomatonControl extends AbstractZETVisualizationControl<
 	public void recordingProgress() {
 		recordingDone++;
 		int progress = Math.max( 0, Math.min( (int) Math.round( ((double) recordingDone / recordingCount) * 100 ), 99 ) );
-		AlgorithmTask.getInstance().setProgress( progress, "Erzeuge Individuen-Bewegungen...", "Recording-Schritt " + recordingDone + " von " + recordingCount + " abgearbeitet." );
+		//AlgorithmTask.getInstance().setProgress( progress, "Erzeuge Individuen-Bewegungen...", "Recording-Schritt " + recordingDone + " von " + recordingCount + " abgearbeitet." );
 	}
 
 	double speedFactor = 1;

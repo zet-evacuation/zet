@@ -105,70 +105,49 @@ public class AlgorithmTask extends SwingWorker<Integer, ProcessUpdateMessage> im
 		if( chunks.size() > 0 ) {
 			ProcessUpdateMessage pum = chunks.get( chunks.size() - 1 );
 			EventServer.getInstance().dispatchEvent( new ProgressEvent( this, pum ) );
+			
 		}
 	}
 
-	/**
-	 * Returns the name of the currently executed task. The task can set and
-	 * change the name if it wants.
-	 * @return the name
-	 */
-	public String getName() {
-		return taskName;
-	}
-
-	/**
-	 * Returns an information {@code String} describing the current status.
-	 * This message can be updated by the task.
-	 * @return the message
-	 */
-	public String getProgressInformation() {
-		return taskProgressInformation;
-	}
-
-	public String getDetailedProgressInformation() {
-		return taskDetailedProgressInformation;
-	}
-
-	public void publish( String taskProgressInformation, String taskDetailedProgressInformation ) {
-		this.taskProgressInformation = taskProgressInformation;
-		this.taskDetailedProgressInformation = taskDetailedProgressInformation;
-		int progress = getProgress();
-		progress = (progress + 1) % 2;
-		setProgress( progress );
-		publish( new ProcessUpdateMessage( -1, taskName, taskProgressInformation, taskDetailedProgressInformation ) );
-	}
-
-	public void publish( int progress, String taskProgressInformation, String taskDetailedProgressInformation ) {
-		this.taskProgressInformation = taskProgressInformation;
-		this.taskDetailedProgressInformation = taskDetailedProgressInformation;
-		setProgress( progress );
-		publish( new ProcessUpdateMessage( progress, taskName, taskProgressInformation, taskDetailedProgressInformation ) );
-	}
-
+	//	public void publish( String taskProgressInformation, String taskDetailedProgressInformation ) {
+//		this.taskProgressInformation = taskProgressInformation;
+//		this.taskDetailedProgressInformation = taskDetailedProgressInformation;
+//		int progress = getProgress();
+//		progress = (progress + 1) % 2;
+//		setProgress( progress );
+//		publish( new ProcessUpdateMessage( -1, taskName, taskProgressInformation, taskDetailedProgressInformation ) );
+//	}
+//
+//	public void publish( int progress, String taskProgressInformation, String taskDetailedProgressInformation ) {
+//		this.taskProgressInformation = taskProgressInformation;
+//		this.taskDetailedProgressInformation = taskDetailedProgressInformation;
+//		setProgress( progress );
+//		publish( new ProcessUpdateMessage( progress, taskName, taskProgressInformation, taskDetailedProgressInformation ) );
+//	}
+//
 	/**
 	 * This method publishes a new task that is started. It sets the task name
 	 * to the submitted name and resets the progress information and sets the
 	 * progress to 0.
 	 * @param taskName the name of the new task.
 	 */
-	public void publish( String taskName ) {
-		this.taskName = taskName;
-		this.taskProgressInformation = "";
-		this.taskDetailedProgressInformation = "";
-		setProgress( 0 );
-		publish( new ProcessUpdateMessage( 0, taskName, taskProgressInformation, taskDetailedProgressInformation ) );
-	}
+//	public void publish( String taskName ) {
+//		this.taskName = taskName;
+//		this.taskProgressInformation = "";
+//		this.taskDetailedProgressInformation = "";
+//		setProgress( 0 );
+//		publish( new ProcessUpdateMessage( 0, taskName, taskProgressInformation, taskDetailedProgressInformation ) );
+//	}
 
 	/**
 	 * Publishes a new progress without changing either the task name or the
 	 * progress information status.
 	 * @param progress the name of the new task.
 	 */
-	public void publish( int progress ) {
-		setProgress( progress );
-		publish( new ProcessUpdateMessage( progress, taskName, taskProgressInformation, taskDetailedProgressInformation ) );
-	}
+//	public void publish( int progress ) {
+//		setProgress( progress );
+//		publish( new ProcessUpdateMessage( progress, taskName, taskProgressInformation, taskDetailedProgressInformation ) );
+//	}
 
 	/**
 	 * Sets a new progress status and new status information texts.
