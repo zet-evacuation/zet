@@ -34,12 +34,10 @@ import event.EventServer;
 import event.MessageEvent;
 import event.MessageEvent.MessageType;
 import event.ProgressEvent;
-import event.VisualizationEvent;
 import event.OptionsChangedEvent;
 import gui.statistic.JGraphStatisticPanel;
 import gui.statistic.JStatisticPanel;
 import zet.gui.main.tabs.JVisualizationView;
-import gui.visualization.control.GLControl;
 import gui.statistic.JStatisticsPanel;
 import gui.GUIControl;
 import gui.ZETMain;
@@ -134,7 +132,7 @@ public class JEditor extends JFrame implements Localized, EventListener<Progress
 	/** The progress bar. */
 	private JProgressBar progressBar;
 	private JVisualizationView visualizationView;
-	private GLControl control;
+	//private GLControl control;
 	/** The editor tab. */
 	private JEditView editView;
 	/** The batch view tab. */
@@ -583,19 +581,6 @@ public class JEditor extends JFrame implements Localized, EventListener<Progress
 	 */
 	@Override
 	public void handleEvent( ProgressEvent event ) {
-		if( event instanceof VisualizationEvent ) {
-			if( loop )
-				control.resetTime();
-			else
-				// TODO restartvisualization
-//				this.restartVisualization = true;
-//				btnPlay.setIcon( playIcon );
-//				visualizationView.getGLContainer().stopAnimation();
-//				btnPlay.setSelected( false );
-				
-				ZETMain.sendMessage( "Replaying visualization finished." );
-			return;
-		}
 		if( currentMode == ZETWindowTabs.QuickView ) {
 			Floor floor = editView.getCurrentFloor();
 //			//caView.getLeftPanel().getMainComponent().displayFloor( floor );
@@ -604,16 +589,15 @@ public class JEditor extends JFrame implements Localized, EventListener<Progress
 		ZETMain.sendMessage( event.getProcessMessage().taskName );
 	}
 
-	public void setControl( GLControl control ) {
-		this.control = control;
-	}
-
+	boolean progressBarEnabled = false;
+	
 	/**
 	 * Hides the status bar and replaces it with a progress bar.
 	 */
-	public void enableProgressBar() {
+	private void enableProgressBar() {
 		remove( statusBar );
 		add( progressBar, BorderLayout.SOUTH );
+		progressBarEnabled = true;
 		validate();
 		repaint();
 	}
@@ -621,10 +605,11 @@ public class JEditor extends JFrame implements Localized, EventListener<Progress
 	/**
 	 * Disables the progress bar and shows the status bar again.
 	 */
-	public void disableProgressBar() {
+	private void disableProgressBar() {
 		remove( progressBar );
 		add( statusBar, BorderLayout.SOUTH );
 		progressBar.setValue( 0 );
+		progressBarEnabled = false;
 		validate();
 		repaint();
 	}
@@ -634,6 +619,10 @@ public class JEditor extends JFrame implements Localized, EventListener<Progress
 	 * @param progress a progress value from 0 to 100
 	 */
 	public void setProgressValue( int progress ) {
+		if( !progressBarEnabled )
+			enableProgressBar();
 		progressBar.setValue( progress );
+		if( progress == 100 )
+			disableProgressBar();
 	}
 }

@@ -7,6 +7,7 @@ package gui;
 import algo.graph.dynamicflow.eat.EarliestArrivalFlowProblem;
 import batch.load.BatchProjectEntry;
 import de.tu_berlin.math.coga.zet.converter.cellularAutomaton.ZToCAConverter.ConversionNotSupportedException;
+import gui.visualization.control.GLControl;
 import java.beans.PropertyChangeEvent;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -42,7 +43,6 @@ import ds.z.exception.TooManyPeopleException;
 import event.EventListener;
 import event.EventServer;
 import event.ProgressEvent;
-import event.VisualizationEvent;
 import gui.propertysheet.JOptionsDialog;
 import gui.components.progress.JProgressBarDialog;
 import gui.components.progress.JRasterizeProgressBarDialog;
@@ -77,10 +77,8 @@ import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
 import javax.swing.SwingWorker;
 import javax.swing.filechooser.FileFilter;
-import opengl.framework.abs.control;
 import statistic.ca.CAStatistic;
 import zet.gui.GUILocalization;
-import zet.gui.main.JEditor.ZETWindowTabs;
 import zet.gui.main.tabs.base.AbstractFloor.RasterPaintStyle;
 import zet.gui.main.tabs.JEditView;
 import zet.gui.main.toolbar.JStatisticGraphToolBar;
@@ -109,6 +107,7 @@ public class GUIControl implements AlgorithmListener, EventListener<ProgressEven
 	private JEditView editview;
 	private AlgorithmControl algorithmControl;
 	private ArrayList<Areas> mode = new ArrayList<>( Arrays.asList( Areas.values() ) );
+	private GLControl control;
 
 	/**
 	 * Creates a new instance of {@code GUIControl}.
@@ -469,11 +468,9 @@ public class GUIControl implements AlgorithmListener, EventListener<ProgressEven
 		pbd.setVisible( true );
 		ZETMain.sendMessage( GUILocalization.getSingleton().getStringWithoutPrefix( "batch.tasks.progress.visualizationDatastructureComplete" ) );
 
-		editor.setControl( visualizationDataStructure.getControl() );
-
-		//control = visualizationDataStructure.getControl();
-
 		visualization.setControl( visualizationDataStructure.getControl() );
+		// create a copy here:
+		control = visualizationDataStructure.getControl();
 
 		visualizationToolBar.setEnabledVisibleElements( visualizationDataStructure.getControl() );
 
@@ -1021,7 +1018,6 @@ public class GUIControl implements AlgorithmListener, EventListener<ProgressEven
 		return zcontrol;
 	}
 
-
 	/**
 	 * Displays a box displaying an error message.
 	 * @param title the title of the message box
@@ -1060,7 +1056,6 @@ public class GUIControl implements AlgorithmListener, EventListener<ProgressEven
 
 	public void createBuildingDataStructure() {
 		algorithmControl.convertBuildingPlan( new PropertyChangeListener() {
-
 			@Override
 			public void propertyChange( PropertyChangeEvent pce ) {
 				if( isDone( pce ) )
@@ -1078,7 +1073,6 @@ public class GUIControl implements AlgorithmListener, EventListener<ProgressEven
 
 	public void createCellularAutomaton() {
 		algorithmControl.convertCellularAutomaton( new PropertyChangeListener() {
-
 			@Override
 			public void propertyChange( PropertyChangeEvent pce ) {
 				if( isDone( pce ) ) {
@@ -1093,7 +1087,6 @@ public class GUIControl implements AlgorithmListener, EventListener<ProgressEven
 							}
 							System.err.println( ex.getMessage() );
 							JOptionPane.showMessageDialog( null, " Fehler in Raum " + ex.getInvalidEdge().getRoom().getName() + ". \n" + ex.getMessage(), "Fehler", JOptionPane.ERROR_MESSAGE );
-
 							
 							int ret = JOptionPane.showOptionDialog( editor, "Soll die Kante unpassierbar gemacht werden? \n (Dies in den meisten Fällen sinnvoll.)", "Fehler kann behoben werden.", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE, null, null, null );
 							switch( ret ) {
@@ -1135,6 +1128,7 @@ public class GUIControl implements AlgorithmListener, EventListener<ProgressEven
 
 	public void performSimulation() {
 		createBuildingDataStructure(); // kein task
+		//editor.enableProgressBar();
 		algorithmControl.performSimulation( new PropertyChangeListener() {
 			@Override
 			public void propertyChange( PropertyChangeEvent pce ) {
@@ -1145,7 +1139,8 @@ public class GUIControl implements AlgorithmListener, EventListener<ProgressEven
 					visualizationToolBar.setEnabledPlayback( true );
 					editor.getQuickVisualizationView().getLeftPanel().getMainComponent().setSimulationData( algorithmControl.getCellularAutomaton(), algorithmControl.getContainer(), algorithmControl.getMapping() );
 					editor.getQuickVisualizationView().displayFloor( editview.getCurrentFloor() ); // hier startet ein task!
-					System.out.println( "Simulation beendet." );
+					ZETMain.sendMessage( "Simulation beendet" );
+					//EventServer.getInstance().dispatchEvent( new MessageEvent<>( this, MessageType.Status, "Simulation finished" ) );
 				}
 			}
 		} );
@@ -1222,7 +1217,6 @@ public class GUIControl implements AlgorithmListener, EventListener<ProgressEven
 
 	public void performOptimization() {
 		algorithmControl.performOptimization( new PropertyChangeListener() {
-
 			@Override
 			public void propertyChange( PropertyChangeEvent pce ) {
 				if( isDone( pce ) ) {
@@ -1230,7 +1224,7 @@ public class GUIControl implements AlgorithmListener, EventListener<ProgressEven
 					visualization.getControl().setGraphControl( gvr );
 				}
 			}
-		} );
+		}, this );
 	}
         
         public void performOptimizationCompare() {
@@ -1259,12 +1253,13 @@ public class GUIControl implements AlgorithmListener, EventListener<ProgressEven
 	public void eventOccurred( AlgorithmEvent event ) {
 		if( event instanceof AlgorithmProgressEvent ) {
 			AlgorithmProgressEvent ape = (AlgorithmProgressEvent) event;
-			System.out.println( "Progress: " + ape.getProgress() );
+			//System.out.println( "Progress: " + ape.getProgress() );
+			editor.setProgressValue( ((int)(ape.getProgress() * 100)) );
 
 		if( !firstProgress ) {
 			CellularAutomaton ca = algorithmControl.getCellularAutomaton();
 			if( ca != null ) {
-					editor.getQuickVisualizationView().getLeftPanel().getMainComponent().setSimulationData( algorithmControl.getCellularAutomaton(), algorithmControl.getContainer(), algorithmControl.getMapping() );
+				editor.getQuickVisualizationView().getLeftPanel().getMainComponent().setSimulationData( algorithmControl.getCellularAutomaton(), algorithmControl.getContainer(), algorithmControl.getMapping() );
 				editor.getQuickVisualizationView().displayFloor( editview.getCurrentFloor() );
 				editor.getQuickVisualizationView().getLeftPanel().getMainComponent().update();
 				firstProgress = true;
@@ -1309,13 +1304,13 @@ public class GUIControl implements AlgorithmListener, EventListener<ProgressEven
 
 	protected void handleProgressEvent( int progress ) {
 		editor.setProgressValue( progress );
-		if( progress == 100 )
-			editor.disableProgressBar();
+//		if( progress == 100 )
+//			editor.disableProgressBar();
 	}
 
 	public void executeTask( Runnable task ) {
 		// Execute task
-		editor.enableProgressBar();
+		//editor.enableProgressBar();
 		AlgorithmTask worker = AlgorithmTask.getNewInstance();
 		worker.setTask( task );
 		worker.addPropertyChangeListener( pcl );
@@ -1326,7 +1321,7 @@ public class GUIControl implements AlgorithmListener, EventListener<ProgressEven
 			System.out.println( "Fehler trat auf" );
 		} finally { }
 	}
-	
+
 	/**
 	 * 
 	 */
@@ -1352,28 +1347,21 @@ public class GUIControl implements AlgorithmListener, EventListener<ProgressEven
 
 	@Override
 	public void handleEvent( ProgressEvent event ) {
-		if( event instanceof VisualizationEvent ) {
-			if( loop )
-//				resetTime();
-				;
-			else
-				//visualizationPause();
-				visualizationToolBar.setPlayButtonEnabled( false );
-				// TODO restartvisualization
-//				this.restartVisualization = true;
-//				btnPlay.setIcon( playIcon );
-//				visualizationView.getGLContainer().stopAnimation();
-//				btnPlay.setSelected( false );
-				
-				ZETMain.sendMessage( "Replaying visualization finished." );
-			return;
-		}
 //		if( currentMode == ZETWindowTabs.QuickView ) {
 //			Floor floor = editView.getCurrentFloor();
 ////			//caView.getLeftPanel().getMainComponent().displayFloor( floor );
 //			caView.getLeftPanel().getMainComponent().repaint();
 //		}
 //		ZETMain.sendMessage( event.getProcessMessage().taskName );
+	}
+
+	public void animationFinished() {
+			if( loop )
+				control.resetTime();
+			else
+				visualizationToolBar.setPlayButtonEnabled( false );
+				ZETMain.sendMessage( "Replaying visualization finished." );
+			return;
 	}
 }
 	/**

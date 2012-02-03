@@ -429,6 +429,7 @@ public class ZETMain {
 	 * @param msg the message
 	 */
 	public static void sendError( String msg ) {
+		System.err.println( msg );
 		EventServer.getInstance().dispatchEvent( new MessageEvent<JEditor>( null, MessageType.Error, msg ) );
 	}
 
@@ -437,6 +438,7 @@ public class ZETMain {
 	 * @param msg the message
 	 */
 	public static void sendMessage( String msg ) {
+		System.out.println( msg );
 		EventServer.getInstance().dispatchEvent( new MessageEvent<JEditor>( null, MessageType.Status, msg ) );
 	}
 

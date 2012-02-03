@@ -11,7 +11,6 @@ import ds.z.ZControl;
 import event.EventListener;
 import event.EventServer;
 import event.OptionsChangedEvent;
-import event.VisualizationEvent;
 import gui.GUIControl;
 import gui.ZETProperties;
 import gui.visualization.Visualization;
@@ -137,7 +136,7 @@ public class ZETVisualization extends Visualization<GLControl> implements EventL
 		}
 
 		if( finished && isAnimating() )
-			EventServer.getInstance().dispatchEvent( new VisualizationEvent( this ) );
+			guiControl.animationFinished();
 		//font.print( 0, this.getHeight() - (row++)*fontSize, "Zeit: " + secToMin( getTimeSinceStart()/Conversion.secToNanoSeconds ) );
 		gl.glDisable( GL.GL_TEXTURE_2D );
 		gl.glDisable( GL.GL_BLEND );

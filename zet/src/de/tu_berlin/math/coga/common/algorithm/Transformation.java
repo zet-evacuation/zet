@@ -21,7 +21,7 @@ public class Transformation<OriginalProblem,TransformedProblem,TransformedSoluti
     protected OriginalSolution runAlgorithm(OriginalProblem originalProblem) {
         TransformedProblem reducedProblem = transformProblem(originalProblem);
         algorithm.setProblem(reducedProblem);
-        algorithm.addAlgorithmListener(this);
+        algorithm.addAlgorithmListener( (AlgorithmListener)this );
         algorithm.run();
         algorithm.removeAlgorithmListener(this);
         TransformedSolution solutionToTheTransformedProblem = algorithm.getSolution();

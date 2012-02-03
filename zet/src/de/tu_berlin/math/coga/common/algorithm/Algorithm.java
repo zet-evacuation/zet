@@ -87,11 +87,17 @@ public abstract class Algorithm<Problem, Solution> implements Runnable {
             throw new IllegalStateException("The problem has already been solved. There will be no more events that could be listened to anymore.");
         } else {
             if (algorithmListeners == null) {
-                algorithmListeners = new LinkedHashSet<AlgorithmListener>();
+                algorithmListeners = new LinkedHashSet<>();
             }
             algorithmListeners.add(listener);
         }
     }
+		
+		public final void addAlgorithmListener( Algorithm algorithm ) {
+			Set<AlgorithmListener> s = algorithm.algorithmListeners;
+			for( AlgorithmListener listener : s )
+				addAlgorithmListener( listener );
+		}
 
     /**
      * Removes the specified listener from the set of listeners receiving events
@@ -170,6 +176,7 @@ public abstract class Algorithm<Problem, Solution> implements Runnable {
         }
 
         this.progress = progress;
+				System.out.println( "EAT progress: " + progress );
         fireEvent(new AlgorithmDetailedProgressEvent(this, progress, message));
     }
 

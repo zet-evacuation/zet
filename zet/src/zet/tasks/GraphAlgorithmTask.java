@@ -6,6 +6,7 @@ package zet.tasks;
 
 import de.tu_berlin.math.coga.zet.converter.graph.GraphAssignmentConverter;
 import de.tu_berlin.math.coga.common.algorithm.Algorithm;
+import de.tu_berlin.math.coga.common.algorithm.AlgorithmListener;
 import de.tu_berlin.math.coga.zet.NetworkFlowModel;
 import de.tu_berlin.math.coga.zet.converter.graph.BaseZToGraphConverter;
 import de.tu_berlin.math.coga.zet.converter.graph.ZToSpanTreeConverter;
@@ -52,6 +53,7 @@ public class GraphAlgorithmTask extends Algorithm<Project, GraphVisualizationRes
 		Algorithm<NetworkFlowModel, PathBasedFlowOverTime> gt = null;
 		gt = graphAlgorithm.createTask( cav.getSolution(), maxTime );
 		gt.setProblem( cav.getSolution() );
+		gt.addAlgorithmListener( this );
 		gt.run();
 
 		// create graph vis result
