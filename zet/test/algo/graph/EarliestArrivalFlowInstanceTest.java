@@ -174,7 +174,7 @@ public class EarliestArrivalFlowInstanceTest extends TestCase implements Algorit
 		PathBasedFlowOverTime df = algo.getSolution().getPathBased();
 		String result = String.format( "Sent %1$s of %2$s flow units in %3$s time units successfully.", algo.getSolution().getFlowAmount(), eat.getTotalSupplies(), algo.getSolution().getTimeHorizon() );
 		System.out.println( result );
-		AlgorithmTask.getInstance().publish( 100, result, "" );
+		//AlgorithmTask.getInstance().publish( 100, result, "" );
 		long end = System.nanoTime();
 		System.out.println( String.format( "Sending the flow units required %1$s ms.", algo.getRuntime() / 1000000 ) );
 //		System.out.println( df.toString() );
