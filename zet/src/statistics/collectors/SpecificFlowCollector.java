@@ -4,7 +4,7 @@
  */
 package statistics.collectors;
 
-import de.tu_berlin.math.coga.datastructure.Tripel;
+import de.tu_berlin.math.coga.datastructure.Triple;
 import ds.ca.Cell;
 import java.awt.Point;
 import java.util.ArrayList;
@@ -25,7 +25,7 @@ public class SpecificFlowCollector {
 	int minx = Integer.MAX_VALUE;
 	int maxx = Integer.MIN_VALUE;
 
-	private class PositionCountTriple extends Tripel<Point, Point, Integer> {
+	private class PositionCountTriple extends Triple<Point, Point, Integer> {
 		public PositionCountTriple( Point start, Point end, int count ) {
 			super( start, end, count );
 		}
