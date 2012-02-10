@@ -31,7 +31,7 @@ import util.ProgressBooleanFlags;
  * @author Jan-Philipp Kappmeier
  */
 public class EvacuationCellularAutomatonInOrder extends EvacuationCellularAutomatonAlgorithm {
-	protected static final int stepsBetweenProgressOutputs = 25;
+
 	private boolean initRulesPerformed = false;
 
 	/**
@@ -42,8 +42,6 @@ public class EvacuationCellularAutomatonInOrder extends EvacuationCellularAutoma
 
 	@Override
 	protected EvacuationSimulationResult runAlgorithm( EvacuationSimulationProblem problem ) {
-		if( ProgressBooleanFlags.CA_PROGRESS )
-			System.out.println( "Progress: Starting simulation of cellular automaton." );
 		if( isFinished() | isCancelled() ) {
 			getCellularAutomaton().stopRecording();
 			return esr;
@@ -55,9 +53,7 @@ public class EvacuationCellularAutomatonInOrder extends EvacuationCellularAutoma
 				executeInitialization();
 			else {
 				executeStep();
-				int individualProgress = Math.min( 100 - (int)Math.round( ((double)problem.eca.getIndividualCount() / problem.eca.getIndividualCount()) * 100 ), 99 );
-				int timeProgress = Math.min( (int)Math.round( (problem.eca.getTimeStep() / getMaxTimeInSteps()) * 100 ), 99 );
-				//AlgorithmTask.getInstance().publish( Math.max( individualProgress, timeProgress ), (ca.getInitialIndividualCount() - ca.getNotSafeIndividualsCount() - ca.deadIndividualsCount()) + " " + DefaultLoc.getSingleton().getString( "algo.ca.safe" ) + " " + ca.deadIndividualsCount() + " " + DefaultLoc.getSingleton().getString( "algo.ca.notSafe" ), DefaultLoc.getSingleton().getString( "algo.ca.execute" ) + " " + ca.getTimeStep() + ". " + DefaultLoc.getSingleton().getString( "algo.ca.step" ) );
+				progress();
 				if( (problem.eca.getNotSafeIndividualsCount() == 0 && problem.eca.getTimeStep() >= problem.eca.getNeededTime()) || problem.eca.getTimeStep() >= getMaxTimeInSteps() || isCancelled() )
 					setFinished( true );
 			}
@@ -67,20 +63,18 @@ public class EvacuationCellularAutomatonInOrder extends EvacuationCellularAutoma
 
 			// Execute loop rules
 			if( problem.eca.getIndividualCount() > 0 )
-				//AlgorithmTask.getInstance().publish( 0, ca.evacuatedIndividualsCount() + " " + DefaultLoc.getSingleton().getString( "algo.ca.IndividualEvacuated" ), DefaultLoc.getSingleton().getString( "algo.ca.execute" ) + " " + (ca.getTimeStep() + 1) + ". " + DefaultLoc.getSingleton().getString( "algo.ca.step" ) );
-			while( (problem.eca.getNotSafeIndividualsCount() > 0 || problem.eca.getTimeStep() < problem.eca.getNeededTime()) && problem.eca.getTimeStep() < getMaxTimeInSteps() && !isCancelled() ) {
-				if( isPaused() ) {
-					try {
-						Thread.sleep( 500 );
-					} catch( InterruptedException ignore ) {
+				fireProgressEvent( 0, String.format( "0 von %1$s Personen evakuiert.", getProblem().eca.getInitialIndividualCount() ) );
+				while( (problem.eca.getNotSafeIndividualsCount() > 0 || problem.eca.getTimeStep() < problem.eca.getNeededTime()) && problem.eca.getTimeStep() < getMaxTimeInSteps() && !isCancelled() ) {
+					if( isPaused() ) {
+						try {
+							Thread.sleep( 500 );
+						} catch( InterruptedException ignore ) {
+						}
+						continue;
 					}
-					continue;
+					executeStep();
+					progress();
 				}
-				executeStep();
-				int individualProgress = Math.min( 100 - (int)Math.round( ((double)problem.eca.getIndividualCount() / problem.eca.getIndividualCount() ) * 100 ), 99 );
-				int timeProgress = Math.min( (int)Math.round( (problem.eca.getTimeStep() / getMaxTimeInSteps()) * 100 ), 99 );
-				//AlgorithmTask.getInstance().publish( Math.max( individualProgress, timeProgress ), (ca.getInitialIndividualCount() - ca.getNotSafeIndividualsCount() - ca.deadIndividualsCount()) + " " + DefaultLoc.getSingleton().getString( "algo.ca.safe" ) + " " + ca.deadIndividualsCount() + " " + DefaultLoc.getSingleton().getString( "algo.ca.notSafe" ), DefaultLoc.getSingleton().getString( "algo.ca.execute" ) + " " + ca.getTimeStep() + ". " + DefaultLoc.getSingleton().getString( "algo.ca.step" ) );
-			}
 			// let die all individuals which are not already dead and not safe
 			if( problem.eca.getNotSafeIndividualsCount() != 0 ) {
 				Individual[] individualsCopy = problem.eca.getIndividuals().toArray( new Individual[problem.eca.getIndividuals().size()] );
@@ -89,14 +83,9 @@ public class EvacuationCellularAutomatonInOrder extends EvacuationCellularAutoma
 						problem.eca.setIndividualDead( i, Individual.DeathCause.NOT_ENOUGH_TIME );
 			}
 			setFinished( true );
-			if( !isCancelled() ) {
-				String text = (problem.eca.getInitialIndividualCount() - problem.eca.getNotSafeIndividualsCount() - problem.eca.deadIndividualsCount()) + " " + DefaultLoc.getSingleton().getString( "algo.ca.safe" ) + " " + problem.eca.deadIndividualsCount() + " " + DefaultLoc.getSingleton().getString( "algo.ca.notEvacuated" );
-				//AlgorithmTask.getInstance().publish( 100, DefaultLoc.getSingleton().getString( "algo.ca.end" ) + " " + text, ca.getTimeStep() + " " + DefaultLoc.getSingleton().getString( "algo.ca.steps" ) );
-			}
+			fireProgressEvent( 1, isCancelled() ? "Simulation abgebrochen" : "Simulation abgeschlossen" );
 
 			problem.eca.stop();
-			if( ProgressBooleanFlags.CA_PROGRESS )
-				System.out.println( "Progress: Simulation of cellular automaton finished." );
 		}
 		return esr;
 	}
@@ -108,12 +97,9 @@ public class EvacuationCellularAutomatonInOrder extends EvacuationCellularAutoma
 	public void initialize() {
 		if( util.DebugFlags.CA_ALGO )
 			System.out.print( toString() + " wird ausgeführt. " );
-		
-		
+
 		// Calculate maximal step count now, never before! Absolute max speed must be set!
 		calculateMaxTimeInSteps();
-
-		//caController = new CAController( ca, rs, ps, pc, casw );
 
 		setInitialized( true );
 		initRulesPerformed = false;
@@ -128,8 +114,6 @@ public class EvacuationCellularAutomatonInOrder extends EvacuationCellularAutoma
 		getProblem().eca.start();
 		Individual[] individualsCopy = getProblem().eca.getIndividuals().toArray( new Individual[getProblem().eca.getIndividuals().size()] );
 		for( Individual i : individualsCopy ) {
-			
-			//Iterator<Rule> primary = rs.primaryIterator();
 			Iterator<Rule> primary = getProblem().ruleSet.primaryIterator();
 			Cell c = i.getCell();
 			while( primary.hasNext() ) {
@@ -147,12 +131,6 @@ public class EvacuationCellularAutomatonInOrder extends EvacuationCellularAutoma
 	protected void executeStep() {
 		if( !isInitialized() )
 			throw new IllegalArgumentException( DefaultLoc.getSingleton().getString( "algo.ca.NotInitializedException" ) );
-
-		if( ProgressBooleanFlags.CA_PROGRESS ) {
-			int t = getProblem().eca.getTimeStep();
-			if( t % stepsBetweenProgressOutputs == 1 )
-				System.out.println( "Progress: Starting step " + t + "." );
-		}
 
 		// Execute the rules for all individuals
 		for( Individual i : getIndividuals() ) {
@@ -173,4 +151,15 @@ public class EvacuationCellularAutomatonInOrder extends EvacuationCellularAutoma
 		return "CellularAutomatonInOrderExecution";
 	}
 
+	/**
+	 * Sends a progress event. The progress is defined as the maximum of the percentage
+	 * of already evacuated individuals and the fraction of time steps of the 
+	 * maximum amount of time steps already simulated.
+	 */
+	protected void progress() {
+		double individualProgress = 1.0 - ((double)getProblem().eca.getIndividualCount() / getProblem().eca.getInitialIndividualCount());
+		double timeProgress = ((double)getProblem().eca.getTimeStep() / getMaxTimeInSteps());
+		double progress = Math.max( individualProgress, timeProgress );
+		fireProgressEvent( progress, String.format( "%1$s von %2$s Personen evakuiert.", getProblem().eca.getInitialIndividualCount()-getProblem().eca.getIndividualCount(), getProblem().eca.getIndividualCount() ) );
+	}
 }

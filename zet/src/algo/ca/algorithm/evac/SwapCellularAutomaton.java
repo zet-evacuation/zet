@@ -28,7 +28,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
-import util.ProgressBooleanFlags;
 
 /**
  *
@@ -48,19 +47,15 @@ public class SwapCellularAutomaton extends EvacuationCellularAutomatonRandom {
 			throw new IllegalArgumentException( DefaultLoc.getSingleton().getString( "algo.ca.NotInitializedException" ) );
 		}
 		getProblem().eca.nextTimeStep();
-		if( ProgressBooleanFlags.CA_PROGRESS ) {
-			if( getProblem().eca.getTimeStep() % stepsBetweenProgressOutputs == 1 )
-				System.out.println("Progress: Starting step " + getProblem().eca.getTimeStep() + "." );
-		}
 
 		// Suche movement rule und setze auf not direct action
 		setDirectExecute( false );
 
 		AbstractMovementRule movement = null;
 		// erster Lauf: bis zur movement-rule und dann anmelden lassen.
-		ArrayList<Individual> unfinished = new ArrayList<Individual>();
-		HashMap<Individual, ArrayList<Cell>> individualPossibleMapping = new HashMap<Individual, ArrayList<Cell>>();
-		HashSet<Individual> individualSwapped = new HashSet<Individual>();
+		ArrayList<Individual> unfinished = new ArrayList<>();
+		HashMap<Individual, ArrayList<Cell>> individualPossibleMapping = new HashMap<>();
+		HashSet<Individual> individualSwapped = new HashSet<>();
 
 		for( Individual i : getIndividuals() ) {
 			Iterator<Rule> loop = getProblem().ruleSet.loopIterator();
@@ -89,7 +84,7 @@ public class SwapCellularAutomaton extends EvacuationCellularAutomatonRandom {
 
 		setDirectExecute( true );
 
-		ArrayList<Individual> unfinished2 = new ArrayList<Individual>();
+		ArrayList<Individual> unfinished2 = new ArrayList<>();
 
 		// erster Lauf ist beendet. Versuche nun ob welche swappen können
 		for( Individual i : unfinished ) {

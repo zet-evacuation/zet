@@ -20,7 +20,6 @@
 
 package algo.ca.algorithm.evac;
 
-import algo.ca.algorithm.evac.EvacuationCellularAutomatonInOrder;
 import de.tu_berlin.math.coga.rndutils.RandomUtils;
 import ds.ca.evac.Individual;
 import java.util.Arrays;

@@ -66,7 +66,9 @@ public class CellularAutomatonTask extends Algorithm<Project, CAVisualizationRes
 		double caMaxTime = PropertyContainer.getInstance().getAsDouble( "algo.ca.maxTime" );
 		caAlgo.setMaxTimeInSeconds( caMaxTime );
 		caAlgo.getCellularAutomaton().startRecording ();
-
+		
+		caAlgo.addAlgorithmListener( this );
+		
 		caAlgo.run();	// hier wird initialisiert
 		caAlgo.getCellularAutomaton().stopRecording();
 
