@@ -5,7 +5,7 @@
 package statistics.collectors;
 
 import de.tu_berlin.math.coga.datastructure.Triple;
-import ds.ca.Cell;
+import ds.ca.evac.Cell;
 import java.awt.Point;
 import java.util.ArrayList;
 import java.util.HashMap;

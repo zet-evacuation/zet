@@ -19,7 +19,7 @@
  */
 package ds.ca.results;
 
-import ds.ca.CellularAutomaton;
+import ds.ca.evac.EvacuationCellularAutomaton;
 
 /**
  * @author Daniel Pluempe
@@ -28,27 +28,27 @@ import ds.ca.CellularAutomaton;
 public class CAStateChangedAction extends Action {
 
 	/** The new state of the cellular automaton */
-	CellularAutomaton.State newState;
+	EvacuationCellularAutomaton.State newState;
 
-	public CAStateChangedAction( CellularAutomaton.State newState ) {
+	public CAStateChangedAction( EvacuationCellularAutomaton.State newState ) {
 		this.newState = newState;
 	}
 
 	/** {@inheritDoc}
-	 * @see ds.ca.results.Action#adoptToCA(ds.ca.CellularAutomaton)
+	 * @see ds.ca.results.Action#adoptToCA(ds.ca.EvacuationCellularAutomaton)
 	 */
 	@Override
-	Action adoptToCA(  CellularAutomaton targetCA ) throws CADoesNotMatchException {
+	Action adoptToCA(  EvacuationCellularAutomaton targetCA ) throws CADoesNotMatchException {
 		return this;
 	}
 
 	/** {@inheritDoc}
 	 * @param onCA the cellular on which the rule is executed
 	 * @throws InconsistentPlaybackStateException if an error during replay occured
-	 * @see ds.ca.results.Action#execute(ds.ca.CellularAutomaton)
+	 * @see ds.ca.results.Action#execute(ds.ca.EvacuationCellularAutomaton)
 	 */
 	@Override
-	public void execute( CellularAutomaton onCA ) throws InconsistentPlaybackStateException {
+	public void execute( EvacuationCellularAutomaton onCA ) throws InconsistentPlaybackStateException {
 		onCA.setState( newState );
 	}
 

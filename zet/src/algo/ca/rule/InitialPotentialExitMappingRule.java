@@ -21,10 +21,10 @@
 
 package algo.ca.rule;
 
-import ds.ca.Cell;
-import ds.ca.Individual;
-import ds.ca.StaticPotential;
-import ds.ca.TargetCell;
+import ds.ca.evac.Cell;
+import ds.ca.evac.Individual;
+import ds.ca.evac.StaticPotential;
+import ds.ca.evac.TargetCell;
 import java.util.HashMap;
 
 /**
@@ -39,7 +39,7 @@ public class InitialPotentialExitMappingRule extends AbstractInitialRule {
 	private void init() {
 		//private void applyMapping(CellularAutomaton ca, IndividualToExitMapping mapping){
 		potentialMapping = new HashMap<TargetCell, StaticPotential>();
-		for( StaticPotential potential : caController().getCA().getPotentialManager().getStaticPotentials() ) {
+		for( StaticPotential potential : esp.eca.getPotentialManager().getStaticPotentials() ) {
 			for( TargetCell target : potential.getAssociatedExitCells() ) {
 				if( potentialMapping.put( target, potential ) != null ) {
 					throw new IllegalArgumentException( "There were two potentials leading to the same exit. This method can currently not deal with this." );
@@ -72,12 +72,12 @@ public class InitialPotentialExitMappingRule extends AbstractInitialRule {
 
 		//for( Individual individual : getIndividuals() ) {
 		Individual individual = cell.getIndividual();
-		TargetCell target = caController().getCA().getIndividualToExitMapping().getExit( individual );
+		TargetCell target = esp.eca.getIndividualToExitMapping().getExit( individual );
 		if( target == null )
 			// TODO set output for some debug level
 			//if( !individual.isDead() )
 			//	System.out.println( "Individual " + individual.getNumber() + " has no manual exit assigned." );
-			InitialPotentialShortestPathRule.assignShortestPathPotential( cell, this.caController() );
+			InitialPotentialShortestPathRule.assignShortestPathPotential( cell, this.esp );
 		else {
 			StaticPotential potential = potentialMapping.get( target );
 			if( potential == null )

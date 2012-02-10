@@ -19,8 +19,8 @@
  */
 package ds.ca.results;
 
-import ds.ca.Cell;
-import ds.ca.CellularAutomaton;
+import ds.ca.evac.Cell;
+import ds.ca.evac.EvacuationCellularAutomaton;
 
 /**
  * @author Daniel Pluempe
@@ -37,13 +37,13 @@ public class DynamicPotentialChangeAction extends Action {
     }
     
     @Override
-    Action adoptToCA(CellularAutomaton targetCA) throws CADoesNotMatchException {
+    Action adoptToCA(EvacuationCellularAutomaton targetCA) throws CADoesNotMatchException {
         Cell newAffectedCell = adoptCell(affectedCell, targetCA);
         return new DynamicPotentialChangeAction(newAffectedCell, newPotential);
     }
 
     @Override
-    public void execute(CellularAutomaton onCA)
+    public void execute(EvacuationCellularAutomaton onCA)
             throws InconsistentPlaybackStateException {
         onCA.setDynamicPotential(affectedCell, newPotential);        
     }

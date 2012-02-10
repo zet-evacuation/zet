@@ -26,19 +26,19 @@ import java.util.List;
 
 import algo.graph.exitassignment.ExitAssignment;
 
-import ds.ca.Cell;
-import ds.ca.CellularAutomaton;
-import ds.ca.ExitCell;
-import ds.ca.Individual;
-import ds.ca.StaticPotential;
-import ds.ca.TargetCell;
-import ds.ca.Individual.DeathCause;
+import ds.ca.evac.Cell;
+import ds.ca.evac.EvacuationCellularAutomaton;
+import ds.ca.evac.ExitCell;
+import ds.ca.evac.Individual;
+import ds.ca.evac.StaticPotential;
+import ds.ca.evac.TargetCell;
+import ds.ca.evac.Individual.DeathCause;
 import ds.graph.Node;
 import evacuationplan.BidirectionalNodeCellMapping;
 
 /**
  * The mapping is calculated in the following way: 
- * First, we get the individuals and their starting positions from a given {@link ds.ca.CellularAutomaton} object.
+ * First, we get the individuals and their starting positions from a given {@link ds.ca.EvacuationCellularAutomaton} object.
  * Second, we calculate a list of the cells that belong to each
  * node. This can be done using the {@link evacuationplan.BidirectionalNodeCellMapping} that gives
  * the corresponding node for each cell and vice versa. During this we also create a list of all sources.
@@ -68,7 +68,7 @@ public class GraphBasedIndividualToExitMapping extends IndividualToExitMapping{
 	}
 	
 	/** A cellular automaton that includes the individuals at ther start positions. */
-	private CellularAutomaton ca;
+	private EvacuationCellularAutomaton ca;
 
 	/** The bidirectional node cell mapping describes the relation between 
 	 * graph and cellular automaton. It consists of a mapping that gives all cells for a 
@@ -105,7 +105,7 @@ public class GraphBasedIndividualToExitMapping extends IndividualToExitMapping{
 	 * @param nodeCellMapping A bidirectional mapping between nodes and cells.
 	 * @param exitAssignment An exit assignment that tells how many people shall go to which exit (for each source node).
 	 */
-	public GraphBasedIndividualToExitMapping(CellularAutomaton ca, BidirectionalNodeCellMapping nodeCellMapping, ExitAssignment exitAssignment){
+	public GraphBasedIndividualToExitMapping(EvacuationCellularAutomaton ca, BidirectionalNodeCellMapping nodeCellMapping, ExitAssignment exitAssignment){
 		this.isInitialised = false;
 		this.individualToExitMapping = new HashMap<Individual, TargetCell>();
 		

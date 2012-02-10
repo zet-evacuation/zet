@@ -20,14 +20,13 @@
  */
 package zet.tasks;
 
-import algo.ca.CellularAutomatonBackToFrontExecution;
-import algo.ca.CellularAutomatonFrontToBackExecution;
-import algo.ca.CellularAutomatonInOrderExecution;
-import algo.ca.CellularAutomatonRandomOrderExecution;
-import algo.ca.EvacuationCellularAutomatonAlgorithm;
-import algo.ca.SwapCellularAutomaton;
+import algo.ca.algorithm.evac.EvacuationCellularAutomatonBackToFront;
+import algo.ca.algorithm.evac.EvacuationCellularAutomatonFrontToBack;
+import algo.ca.algorithm.evac.EvacuationCellularAutomatonInOrder;
+import algo.ca.algorithm.evac.EvacuationCellularAutomatonRandom;
+import algo.ca.algorithm.evac.EvacuationCellularAutomatonAlgorithm;
+import algo.ca.algorithm.evac.SwapCellularAutomaton;
 import de.tu_berlin.math.coga.common.localization.DefaultLoc;
-import ds.ca.CellularAutomaton;
 
 /**
  * Some cellular automaton simulation algorithms. Creates the algorithm objects
@@ -36,44 +35,24 @@ import ds.ca.CellularAutomaton;
  */
 public enum CellularAutomatonAlgorithmEnumeration {
 	/** A simulation algorithm where all individuals move in the order of decreasing distances. */
-	BackToFront( DefaultLoc.getSingleton().getString( "batch.caOrder.backToFront" ) ) {
-		public EvacuationCellularAutomatonAlgorithm createTask( CellularAutomaton ca ) {
-			return new CellularAutomatonBackToFrontExecution( ca );
-		}
-	},
+	BackToFront( DefaultLoc.getSingleton().getString( "batch.caOrder.backToFront" ), new EvacuationCellularAutomatonBackToFront() ),
 	/** A simulation algorithm where all individuals move in the order of increasing distances. */
-	FrontToBack( DefaultLoc.getSingleton().getString( "batch.caOrder.frontToBack" ) ) {
-		public EvacuationCellularAutomatonAlgorithm createTask( CellularAutomaton ca ) {
-			return new CellularAutomatonFrontToBackExecution( ca );
-		}
-	},
+	FrontToBack( DefaultLoc.getSingleton().getString( "batch.caOrder.frontToBack" ), new EvacuationCellularAutomatonFrontToBack() ),
 	/** A simulation algorithm where all individuals are simulated in a random order in each step. */
-	RandomOrder( DefaultLoc.getSingleton().getString( "batch.caOrder.random" ) ) {
-		public EvacuationCellularAutomatonAlgorithm createTask( CellularAutomaton ca ) {
-			return new CellularAutomatonRandomOrderExecution( ca );
-		}
-	},
+	RandomOrder( DefaultLoc.getSingleton().getString( "batch.caOrder.random" ), new EvacuationCellularAutomatonRandom( ) ),
 	/** A simulation algorithm where all individuals are simulated in a random order and where two individuals can swap position. */
-	Swap( DefaultLoc.getSingleton().getString( "batch.caOrder.swap" ) ) {
-		public EvacuationCellularAutomatonAlgorithm createTask( CellularAutomaton ca ) {
-			return new SwapCellularAutomaton( ca );
-		}
-	},
+	Swap( DefaultLoc.getSingleton().getString( "batch.caOrder.swap" ),new SwapCellularAutomaton( ) ),
 	/** A simulation algorithm where all individuals are simulated in the same order in each step. */
-	InOrder( DefaultLoc.getSingleton().getString( "batch.caOrder.unifom" ) ) {
-		@Override
-		public EvacuationCellularAutomatonAlgorithm createTask( CellularAutomaton ca ) {
-			return new CellularAutomatonInOrderExecution( ca );
-		}
-	};
+	InOrder( DefaultLoc.getSingleton().getString( "batch.caOrder.unifom" ),new EvacuationCellularAutomatonInOrder( ) ) {};
 	private String name;
-
+	private EvacuationCellularAutomatonAlgorithm eca;
 	/**
 	 * Creates a new cellular automaton algorithm instance.
 	 * @param name
 	 */
-	CellularAutomatonAlgorithmEnumeration( String name ) {
+	CellularAutomatonAlgorithmEnumeration( String name, EvacuationCellularAutomatonAlgorithm eca ) {
 		this.name = name;
+		this.eca = eca;
 	}
 
 	/**
@@ -93,10 +72,7 @@ public enum CellularAutomatonAlgorithmEnumeration {
 		return name;
 	}
 
-	/**
-	 * Creates a new instance of an cellular automaton algorithm.
-	 * @param ca the cellular automaton that is used by the simulation algorithm
-	 * @return a new instance of an cellular automaton algorithm
-	 */
-	public abstract EvacuationCellularAutomatonAlgorithm createTask( CellularAutomaton ca );
+	public EvacuationCellularAutomatonAlgorithm getAlgorithm() {
+		return eca;
+	}
 }

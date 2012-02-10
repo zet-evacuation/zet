@@ -24,9 +24,9 @@ package statistic.ca.results;
 
 import java.util.HashMap;
 import java.util.ArrayList;
-import ds.ca.Individual;
-import ds.ca.ExitCell;
-import ds.ca.StaticPotential;
+import ds.ca.evac.Individual;
+import ds.ca.evac.ExitCell;
+import ds.ca.evac.StaticPotential;
 import gui.ZETMain;
 
 /**

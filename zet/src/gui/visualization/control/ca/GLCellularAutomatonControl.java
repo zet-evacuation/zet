@@ -22,8 +22,8 @@
 package gui.visualization.control.ca;
 
 import de.tu_berlin.math.coga.math.Conversion;
-import ds.ca.CellularAutomaton;
-import ds.ca.Individual;
+import ds.ca.evac.EvacuationCellularAutomaton;
+import ds.ca.evac.Individual;
 import ds.ca.results.DieAction;
 import ds.ca.results.MoveAction;
 import ds.ca.results.SwapAction;
@@ -55,7 +55,7 @@ public class GLCellularAutomatonControl extends AbstractZETVisualizationControl<
 	ArrayList<GLIndividual> glIndividuals;
 	ArrayList<GLIndividualControl> individuals;
 	CAVisualizationResults visResults;
-	private CellularAutomaton ca;
+	private EvacuationCellularAutomaton ca;
 	// timing stuff
 	private double realStep;
 	private double secondsPerStep;
@@ -76,7 +76,7 @@ public class GLCellularAutomatonControl extends AbstractZETVisualizationControl<
 
 	private CAVisualizationResults caVisResults;
 	
-	public GLCellularAutomatonControl( CAVisualizationResults caVisResults, CellularAutomaton ca ) {
+	public GLCellularAutomatonControl( CAVisualizationResults caVisResults, EvacuationCellularAutomaton ca ) {
 		super();
 		this.caVisResults = caVisResults;
 		this.ca = ca;
@@ -177,7 +177,7 @@ public class GLCellularAutomatonControl extends AbstractZETVisualizationControl<
 		return this.allFloorsByID.get( floorID );
 	}
 
-	private GLCellControl getCellControl( ds.ca.Cell cell ) {
+	private GLCellControl getCellControl( ds.ca.evac.Cell cell ) {
 		GLCAFloorControl floor = getFloorControl( cell.getRoom().getFloorID() );
 		GLRoomControl room = floor.getRoomControl( cell.getRoom() );
 		return room.getCellControl( cell );
@@ -185,7 +185,7 @@ public class GLCellularAutomatonControl extends AbstractZETVisualizationControl<
 
 	private void convertIndividualMovements() {
 		VisualResultsRecording recording = visResults.getRecording();
-		CellularAutomaton ca = new CellularAutomaton( recording.getInitialConfig() );
+		EvacuationCellularAutomaton ca = new EvacuationCellularAutomaton( recording.getInitialConfig() );
 		individuals = new ArrayList<GLIndividualControl>( ca.getIndividuals().size() );
 		for( int k = 0; k < ca.getIndividuals().size(); k++ )
 			individuals.add( null );

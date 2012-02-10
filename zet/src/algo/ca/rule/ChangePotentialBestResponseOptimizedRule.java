@@ -16,10 +16,10 @@
 package algo.ca.rule;
 
 import java.util.ArrayList;
-import ds.ca.Cell;
-import ds.ca.Individual;
-import ds.ca.StaticPotential;
-import ds.ca.Room;
+import ds.ca.evac.Cell;
+import ds.ca.evac.Individual;
+import ds.ca.evac.StaticPotential;
+import ds.ca.evac.Room;
 import evacuationplan.BestResponseDynamics;
 
 /**
@@ -39,7 +39,7 @@ public class ChangePotentialBestResponseOptimizedRule extends AbstractPotentialC
 	 */
 	@Override
 	public boolean executableOn( Cell cell ) {
-		int timeStep = this.caController().getCA().getTimeStep();
+		int timeStep = esp.eca.getTimeStep();
 		return ((timeStep < TIME_STEP_LIMIT_FOR_NASH_EQUILIBRIUM) & (cell.getIndividual() != null)) ? true : false;
 
 	}
@@ -56,14 +56,14 @@ public class ChangePotentialBestResponseOptimizedRule extends AbstractPotentialC
 			distance = pot.getDistance( cell );
 		double movingTime = distance / speed;
 
-		double exitCapacity = this.caController().getCA().getExitToCapacityMapping().get( pot ).doubleValue();
+		double exitCapacity = esp.eca.getExitToCapacityMapping().get( pot ).doubleValue();
 		//System.out.println("Exit: " + pot.getID() + " : " + exitCapacity);
 
 		// calculate number of individuals that are heading to the same exit and closer to it
 		ArrayList<Individual> otherInds = new ArrayList<Individual>();
 		//cell.getRoom().getIndividuals();
 		ArrayList<Room> rooms = new ArrayList<Room>();
-		rooms.addAll( this.caController().getCA().getRooms() );
+		rooms.addAll( esp.eca.getRooms() );
 		for( Room room : rooms )
 			for( Individual i : room.getIndividuals() )
 				otherInds.add( i );
@@ -97,6 +97,6 @@ public class ChangePotentialBestResponseOptimizedRule extends AbstractPotentialC
 	protected void onExecute( Cell cell ) {
 		// perform initial best response dynamics exit selection
 		BestResponseDynamics brd = new BestResponseDynamics();
-		brd.computePotential( cell, this.caController().getCA() );
+		brd.computePotential( cell, esp.eca );
 	}
 }

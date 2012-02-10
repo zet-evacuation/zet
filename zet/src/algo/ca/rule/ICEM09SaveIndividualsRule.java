@@ -15,7 +15,7 @@
  */
 package algo.ca.rule;
 
-import ds.ca.Cell;
+import ds.ca.evac.Cell;
 
 /* Veränderungen zur normalen SaveIndividualsRule:
 - Panik wird nicht auf 0 gesetzt
@@ -27,20 +27,20 @@ public class ICEM09SaveIndividualsRule extends AbstractSaveRule {
 	}
 
 	@Override
-	protected void onExecute( ds.ca.Cell cell ) {
-		ds.ca.Individual savedIndividual = cell.getIndividual();
+	protected void onExecute( ds.ca.evac.Cell cell ) {
+		ds.ca.evac.Individual savedIndividual = cell.getIndividual();
 		if( !(savedIndividual.isSafe()) ) {
-			caController().getCA().setIndividualSave( savedIndividual );
-                        caController().getCaStatisticWriter().getStoredCAStatisticResults().getStoredCAStatisticResultsForIndividuals().addSafeIndividualToStatistic( savedIndividual );
+			esp.eca.setIndividualSave( savedIndividual );
+                        esp.caStatisticWriter.getStoredCAStatisticResults().getStoredCAStatisticResultsForIndividuals().addSafeIndividualToStatistic( savedIndividual );
 		}
                 // else: nothing!
 	}
 
 	@Override
-	public boolean executableOn( ds.ca.Cell cell ) {
+	public boolean executableOn( ds.ca.evac.Cell cell ) {
 		// Regel NUR anwendbar, wenn auf der Zelle ein Individuum steht
 		// und die Zelle eine Exit- Savecell oder  ist
-		return (cell.getIndividual() != null) && ((cell instanceof ds.ca.ExitCell) || (cell instanceof ds.ca.SaveCell));
+		return (cell.getIndividual() != null) && ((cell instanceof ds.ca.evac.ExitCell) || (cell instanceof ds.ca.evac.SaveCell));
 	}
 }
 

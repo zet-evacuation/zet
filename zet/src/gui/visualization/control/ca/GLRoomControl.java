@@ -15,8 +15,8 @@
  */
 package gui.visualization.control.ca;
 
-import ds.ca.Cell;
-import ds.ca.Room;
+import ds.ca.evac.Cell;
+import ds.ca.evac.Room;
 import gui.visualization.control.AbstractZETVisualizationControl;
 import gui.visualization.control.GLControl.CellInformationDisplay;
 import gui.visualization.draw.ca.GLRoom;
@@ -24,7 +24,7 @@ import io.visualization.CAVisualizationResults;
 import java.util.HashMap;
 
 public class GLRoomControl extends AbstractZETVisualizationControl<GLCellControl, GLRoom, GLCellularAutomatonControl> {
-	private HashMap<ds.ca.Cell, GLCellControl> cellControls;
+	private HashMap<ds.ca.evac.Cell, GLCellControl> cellControls;
 	private GLCAFloorControl glCAFloorControlObject;  // the corresponding GLCAFloorControl of this object
 	private double xPosition;
 	private double yPosition;
@@ -65,7 +65,7 @@ public class GLRoomControl extends AbstractZETVisualizationControl<GLCellControl
 		return -yPosition;
 	}
 
-	GLCellControl getCellControl( ds.ca.Cell cell ) {
+	GLCellControl getCellControl( ds.ca.evac.Cell cell ) {
 		return cellControls.get( cell );
 	}
 

@@ -15,13 +15,13 @@
  */
 package batch.tasks.assignment;
 
-import algo.ca.EvacuationCellularAutomatonAlgorithm;
+import algo.ca.algorithm.evac.EvacuationCellularAutomatonAlgorithm;
+import algo.ca.algorithm.evac.EvacuationSimulationProblem;
 import batch.BatchResultEntry;
-import de.tu_berlin.math.coga.zet.converter.cellularAutomaton.ZToCAConverter;
 import de.tu_berlin.math.coga.zet.converter.cellularAutomaton.ZToCAConverter.ConversionNotSupportedException;
 import ds.z.Project;
 import ds.PropertyContainer;
-import ds.ca.CellularAutomaton;
+import ds.ca.evac.EvacuationCellularAutomaton;
 import ds.ca.results.VisualResultsRecorder;
 import ds.z.Assignment;
 import ds.z.AssignmentType;
@@ -74,7 +74,7 @@ public class BestResponseAssignmentTask extends AssignmentTask {
 	 */
 	public void run() {
 
-		CellularAutomaton ca2;
+		EvacuationCellularAutomaton ca2;
 		try {
 			ca2 = ExitCapacityBasedCAFactory.getInstance().convertAndApplyConcreteAssignment( project.getBuildingPlan(), res.getNetworkFlowModel(), concreteAssignments[runNumber], res.getNetworkFlowModel().getZToGraphMapping().getRaster() );
 			res.setCellularAutomaton( runNumber, ca2 );
@@ -88,7 +88,9 @@ public class BestResponseAssignmentTask extends AssignmentTask {
 			ca2.setAssignmentType( at.getName(), at.getUid() );
 
 		EvacuationCellularAutomatonAlgorithm caAlgo;
-		caAlgo = cellularAutomatonAlgo.createTask( ca2 );
+		//caAlgo = cellularAutomatonAlgo.createTask( ca2 );
+		caAlgo = cellularAutomatonAlgo.getAlgorithm();
+		caAlgo.setProblem( new EvacuationSimulationProblem( ( ca2 ) ) );
 		double caMaxTime = PropertyContainer.getInstance().getAsDouble( "algo.ca.maxTime" );
 		caAlgo.setMaxTimeInSeconds( caMaxTime );
 
@@ -112,7 +114,8 @@ public class BestResponseAssignmentTask extends AssignmentTask {
 		//System.out.println ("Laufzeit CA:" + (end - start) + " ms");
 
 		// Get the results
-		res.setCellularAutomatonStatistic( runNumber, new CAStatistic( caAlgo.getCaController().getCaStatisticWriter().getStoredCAStatisticResults() ) );
+		//res.setCellularAutomatonStatistic( runNumber, new CAStatistic( caAlgo.g .caStatisticWriter.getStoredCAStatisticResults() ) );
+		res.setCellularAutomatonStatistic( runNumber, new CAStatistic( null ) );
 		// TODO RASTER
 		res.setCellularAutomatonVisualization( runNumber, new CAVisualizationResults( VisualResultsRecorder.getInstance().getRecording(), null ) );
 		//res.setCellularAutomatonVisualization( runNumber, new CAVisualizationResults( VisualResultsRecorder.getInstance().getRecording(), ZToCAConverter.getInstance().getLatestMapping() ) );

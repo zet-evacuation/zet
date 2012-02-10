@@ -19,14 +19,16 @@
  */
 package algo.ca.rule;
 
-import ds.ca.CAController;
+import algo.ca.algorithm.evac.EvacuationSimulationProblem;
 
 /**
- * @author Daniel Pluempe
+ * @author Daniel Plümpe
  *
  */
 public interface Rule {
-    public void execute(ds.ca.Cell cell);
-    public boolean executableOn(ds.ca.Cell cell);
-    public void setCAController(CAController caController);
+	public void execute( ds.ca.evac.Cell cell );
+
+	public boolean executableOn( ds.ca.evac.Cell cell );
+
+	public void setEvacuationSimulationProblem( EvacuationSimulationProblem esp );
 }

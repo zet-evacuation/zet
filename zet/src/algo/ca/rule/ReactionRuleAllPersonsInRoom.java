@@ -20,8 +20,8 @@
  */
 package algo.ca.rule;
 
-import ds.ca.Cell;
-import ds.ca.Individual;
+import ds.ca.evac.Cell;
+import ds.ca.evac.Individual;
 
 /**
  * A rule that activates all individuals in a room if the reaction time of all
@@ -46,7 +46,7 @@ public class ReactionRuleAllPersonsInRoom extends AbstractReactionRule {
 	 * @param cell the cell, whose individuals reaction time is reduced
 	 */
 	@Override
-	protected void onExecute( ds.ca.Cell cell ) {
+	protected void onExecute( ds.ca.evac.Cell cell ) {
 		// Reduce reaction time by one
 		Individual i = cell.getIndividual();
 		i.setReactionTime( i.getReactionTime() - 1 );

@@ -40,7 +40,7 @@ import ds.z.Project;
 import ds.PropertyContainer;
 import ds.z.Assignment;
 import ds.z.ConcreteAssignment;
-import ds.ca.CellularAutomaton;
+import ds.ca.evac.EvacuationCellularAutomaton;
 import gui.batch.EvacuationOptimizationType;
 import gui.editor.properties.PropertyFilesSelectionModel;
 import io.visualization.BuildingResults;
@@ -198,7 +198,7 @@ public class BatchEntry {
         //	concreteAssignments = new ConcreteAssignment[1];
 
         if (useCaRes) {
-            ca_res.cas = new CellularAutomaton[cycles];
+            ca_res.cas = new EvacuationCellularAutomaton[cycles];
             ca_res.caStatistics = new CAStatistic[cycles];
             ca_res.caVis = new CAVisualizationResults[cycles];
         } else {
@@ -207,7 +207,7 @@ public class BatchEntry {
             ca_res.caVis = null;
         }
         if (useOptRes) {
-            opt_res.cas = new CellularAutomaton[optimizedEvacuationPlanCycles];
+            opt_res.cas = new EvacuationCellularAutomaton[optimizedEvacuationPlanCycles];
             opt_res.caStatistics = new CAStatistic[optimizedEvacuationPlanCycles];
             opt_res.caVis = new CAVisualizationResults[optimizedEvacuationPlanCycles];
         } else {

@@ -18,9 +18,9 @@
  */
 package ds.ca.results;
 
-import ds.ca.Cell;
-import ds.ca.CellularAutomaton;
-import ds.ca.Individual.DeathCause;
+import ds.ca.evac.Cell;
+import ds.ca.evac.EvacuationCellularAutomaton;
+import ds.ca.evac.Individual.DeathCause;
 import ds.ca.results.Action.CADoesNotMatchException;
 
 /**
@@ -68,10 +68,10 @@ public class DieAction extends Action {
 
 	/**
 	 * {@inheritDoc}
-	 * @see ds.ca.results.Action#adoptToCA(ds.ca.CellularAutomaton)
+	 * @see ds.ca.results.Action#adoptToCA(ds.ca.EvacuationCellularAutomaton)
 	 */
 	@Override
-	Action adoptToCA( CellularAutomaton targetCA ) throws CADoesNotMatchException {
+	Action adoptToCA( EvacuationCellularAutomaton targetCA ) throws CADoesNotMatchException {
 		Cell newCell = adoptCell( placeOfDeath, targetCA );
 		if( newCell == null ) {
 			throw new CADoesNotMatchException(
@@ -86,10 +86,10 @@ public class DieAction extends Action {
 	 * {@inheritDoc}
 	 * @param onCA the cellular automaton on which the action is replayed
 	 * @throws InconsistentPlaybackStateException if the individual that is to die is not on the cell
-	 * @see ds.ca.results.Action#execute(ds.ca.CellularAutomaton)
+	 * @see ds.ca.results.Action#execute(ds.ca.EvacuationCellularAutomaton)
 	 */
 	@Override
-	public void execute( CellularAutomaton onCA ) throws InconsistentPlaybackStateException {
+	public void execute( EvacuationCellularAutomaton onCA ) throws InconsistentPlaybackStateException {
 		if( placeOfDeath.getIndividual() == null ) {
 			throw new InconsistentPlaybackStateException(
 							"I could not mark the individual on cell " +

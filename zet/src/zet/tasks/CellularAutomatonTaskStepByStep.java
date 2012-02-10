@@ -4,7 +4,7 @@
  */
 package zet.tasks;
 
-import algo.ca.EvacuationCellularAutomatonAlgorithm;
+import algo.ca.algorithm.evac.EvacuationCellularAutomatonAlgorithm;
 import de.tu_berlin.math.coga.zet.converter.cellularAutomaton.AssignmentApplicationInstance;
 import de.tu_berlin.math.coga.zet.converter.cellularAutomaton.CellularAutomatonAssignmentConverter;
 import de.tu_berlin.math.coga.zet.converter.cellularAutomaton.ConvertedCellularAutomaton;
@@ -14,7 +14,7 @@ import de.tu_berlin.math.coga.zet.converter.cellularAutomaton.ZToCARasterContain
 import de.tu_berlin.math.coga.common.algorithm.Algorithm;
 import ds.z.Project;
 import ds.PropertyContainer;
-import ds.ca.CellularAutomaton;
+import ds.ca.evac.EvacuationCellularAutomaton;
 import ds.z.AssignmentType;
 import ds.z.ConcreteAssignment;
 
@@ -67,7 +67,8 @@ public class CellularAutomatonTaskStepByStep extends Algorithm<Project, Void> {
 		cac.run();
 
 		// set up simulation algorithm and compute
-		EvacuationCellularAutomatonAlgorithm caAlgo = cellularAutomatonAlgorithm.createTask( cca.getCellularAutomaton() );
+		//EvacuationCellularAutomatonAlgorithm caAlgo = cellularAutomatonAlgorithm.createTask( cca.getCellularAutomaton() );
+		EvacuationCellularAutomatonAlgorithm caAlgo = cellularAutomatonAlgorithm.getAlgorithm();
 		double caMaxTime = PropertyContainer.getInstance().getAsDouble( "algo.ca.maxTime" );
 		caAlgo.setMaxTimeInSeconds( caMaxTime );
 		//caAlgo.getCellularAutomaton().startRecording ();
@@ -97,7 +98,7 @@ public class CellularAutomatonTaskStepByStep extends Algorithm<Project, Void> {
 		return null;
 	}
 
-	public CellularAutomaton getCa() {
+	public EvacuationCellularAutomaton getCa() {
 		return cca == null ? null : cca.getCellularAutomaton();
 	}
 

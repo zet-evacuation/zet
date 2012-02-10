@@ -18,7 +18,7 @@ package statistic.ca;
 import statistic.graph.IntegerDoubleMapping;
 import statistic.graph.Statistic;
 import statistic.graph.Statistics;
-import ds.ca.Cell;
+import ds.ca.evac.Cell;
 
 /**
  * @author Daniel Pluempe

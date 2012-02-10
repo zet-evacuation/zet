@@ -21,9 +21,9 @@
 
 package algo.ca.parameter;
 
-import ds.ca.Cell;
-import ds.ca.Individual;
-import ds.ca.StaticPotential;
+import ds.ca.evac.Cell;
+import ds.ca.evac.Individual;
+import ds.ca.evac.StaticPotential;
 import java.util.Collection;
 
 /**

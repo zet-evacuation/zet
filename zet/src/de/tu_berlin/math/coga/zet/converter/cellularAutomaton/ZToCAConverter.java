@@ -32,11 +32,11 @@ import de.tu_berlin.math.coga.common.util.Direction;
 import de.tu_berlin.math.coga.common.util.Level;
 import ds.z.BuildingPlan;
 import ds.z.Floor;
-import ds.ca.CellularAutomaton;
-import ds.ca.Cell;
-import ds.ca.ExitCell;
-import ds.ca.StaticPotential;
-import ds.ca.SaveCell;
+import ds.ca.evac.EvacuationCellularAutomaton;
+import ds.ca.evac.Cell;
+import ds.ca.evac.ExitCell;
+import ds.ca.evac.StaticPotential;
+import ds.ca.evac.SaveCell;
 import evacuationplan.BidirectionalNodeCellMapping;
 import java.util.ArrayList;
 import java.util.ArrayDeque;
@@ -61,9 +61,9 @@ public class ZToCAConverter extends Algorithm<BuildingPlan,ConvertedCellularAuto
 	/** A list of all exit cells in the cellular automaton. */
 	private static ArrayList<ExitCell> exitCells = null;
 	/** The latest created cellular automaton. */
-	private static CellularAutomaton lastCA = null;
+	private static EvacuationCellularAutomaton lastCA = null;
 	/** A map that maps rastered rooms to rooms in the cellular automaton. */
-	private static HashMap<ZToCARoomRaster, ds.ca.Room> roomRasterRoomMapping = null;
+	private static HashMap<ZToCARoomRaster, ds.ca.evac.Room> roomRasterRoomMapping = null;
 
 	@Override
 	protected ConvertedCellularAutomaton runAlgorithm( BuildingPlan problem ) {
@@ -121,14 +121,14 @@ public class ZToCAConverter extends Algorithm<BuildingPlan,ConvertedCellularAuto
 	 * @return A cellular automaton corresponding to the rastered rooms.
 	 * @throws converter.ZToCAConverter.ConversionNotSupportedException 
 	 */
-	private CellularAutomaton convert( BuildingPlan buildingPlan ) throws ConversionNotSupportedException {
+	private EvacuationCellularAutomaton convert( BuildingPlan buildingPlan ) throws ConversionNotSupportedException {
 		//AlgorithmTask.getInstance().publish( "Starte Konvertierung", "" );
-		CellularAutomaton convertedCA = new CellularAutomaton();
+		EvacuationCellularAutomaton convertedCA = new EvacuationCellularAutomaton();
 		lastMapping = new ZToCAMapping();
 		//AlgorithmTask.getInstance().publish( "Rastere den Gebäudeplan", "" );
 		lastContainer = RasterContainerCreator.getInstance().ZToCARasterContainer( buildingPlan );
 		exitCells = new ArrayList<ExitCell>();
-		roomRasterRoomMapping = new HashMap<ZToCARoomRaster, ds.ca.Room>();
+		roomRasterRoomMapping = new HashMap<ZToCARoomRaster, ds.ca.evac.Room>();
 
 		//AlgorithmTask.getInstance().publish( "Erzeuge Räume", "" );
 
@@ -141,7 +141,7 @@ public class ZToCAConverter extends Algorithm<BuildingPlan,ConvertedCellularAuto
 			Collection<ZToCARoomRaster> rooms = lastContainer.getAllRasteredRooms( floor );
 			if( rooms != null )
 				for( ZToCARoomRaster rasteredRoom : rooms ) {
-					ds.ca.Room convertedRoom = convertRoom( rasteredRoom, floor, buildingPlan.getFloorID( floor ) );
+					ds.ca.evac.Room convertedRoom = convertRoom( rasteredRoom, floor, buildingPlan.getFloorID( floor ) );
 					convertedCA.addRoom( convertedRoom );
 				}
 		}
@@ -165,7 +165,7 @@ public class ZToCAConverter extends Algorithm<BuildingPlan,ConvertedCellularAuto
 	 * converted ca and adds them to a (new) potential controller for the ca.
 	 * @param convertedCA The cellular automaton that needs potentials.
 	 */
-	protected void computeAndAddStaticPotentials( CellularAutomaton convertedCA ) {
+	protected void computeAndAddStaticPotentials( EvacuationCellularAutomaton convertedCA ) {
 		//calculate and defineByPoints staticPotentials to CA
 		PotentialController pc = new SPPotentialController( convertedCA );
 		for( ArrayList<ExitCell> cells : convertedCA.clusterExitCells() ) {
@@ -265,10 +265,10 @@ public class ZToCAConverter extends Algorithm<BuildingPlan,ConvertedCellularAuto
 	}
 
 	/**
-	 * Returns the last {@code CellularAutomaton}that was created.
+	 * Returns the last {@code EvacuationCellularAutomaton}that was created.
 	 * @return the cellular automaton
 	 */
-	public CellularAutomaton getCellularAutomaton() {
+	public EvacuationCellularAutomaton getCellularAutomaton() {
 		return lastCA;
 	}
 
@@ -281,10 +281,10 @@ public class ZToCAConverter extends Algorithm<BuildingPlan,ConvertedCellularAuto
 	 * @return the created {@link ds.ca.Room}
 	 * @throws de.tu_berlin.math.coga.zet.converter.cellularAutomaton.ZToCAConverter.ConversionNotSupportedException if an error occurs
 	 */
-	protected ds.ca.Room convertRoom( ZToCARoomRaster rasteredRoom, Floor onFloor, int floorID ) throws ConversionNotSupportedException {
+	protected ds.ca.evac.Room convertRoom( ZToCARoomRaster rasteredRoom, Floor onFloor, int floorID ) throws ConversionNotSupportedException {
 		final int width = rasteredRoom.getColumnCount();
 		final int height = rasteredRoom.getRowCount();
-		ds.ca.Room convertedRoom = roomRasterRoomMapping.get( rasteredRoom );
+		ds.ca.evac.Room convertedRoom = roomRasterRoomMapping.get( rasteredRoom );
 		int xOffset = rasteredRoom.getRoom().getxOffset() / 400;
 		int yOffset = rasteredRoom.getRoom().getyOffset() / 400;
 		convertedRoom.setXOffset( xOffset );
@@ -294,7 +294,7 @@ public class ZToCAConverter extends Algorithm<BuildingPlan,ConvertedCellularAuto
 
 		for( int x = 0; x < width; x++ ) {
 			for( int y = 0; y < height; y++ ) {
-				ds.ca.Cell aCell = convertCell( rasteredRoom.getSquare( x, y ), x, y, convertedRoom );
+				ds.ca.evac.Cell aCell = convertCell( rasteredRoom.getSquare( x, y ), x, y, convertedRoom );
 				if( aCell != null ) {
 					//convertedRoom.setCell( aCell );
 					copyBounds( rasteredRoom.getSquare( x, y ), aCell );
@@ -323,7 +323,7 @@ public class ZToCAConverter extends Algorithm<BuildingPlan,ConvertedCellularAuto
 			for( ZToCARoomRaster rasteredRoom : rooms ) {
 				final int width = rasteredRoom.getColumnCount();
 				final int height = rasteredRoom.getRowCount();
-				ds.ca.Room room = new ds.ca.Room( width, height, onFloor.getName(), floorID );
+				ds.ca.evac.Room room = new ds.ca.evac.Room( width, height, onFloor.getName(), floorID );
 				roomRasterRoomMapping.put( rasteredRoom, room );
 			}
 		}	
@@ -342,7 +342,7 @@ public class ZToCAConverter extends Algorithm<BuildingPlan,ConvertedCellularAuto
 	 * @return the new (or already existing) cell or null if the square is isInaccessible
 	 * @throws ConversionNotSupportedException if an initialization error occurred.
 	 */
-	protected ds.ca.Cell convertCell( ZToCARasterSquare square, int x, int y, ds.ca.Room convertedRoom ) throws ConversionNotSupportedException {
+	protected ds.ca.evac.Cell convertCell( ZToCARasterSquare square, int x, int y, ds.ca.evac.Room convertedRoom ) throws ConversionNotSupportedException {
 		if( square == null )
 			return null;
 
@@ -361,23 +361,23 @@ public class ZToCAConverter extends Algorithm<BuildingPlan,ConvertedCellularAuto
 			return null;
 
 		if( square.isDoor() ) {
-			ds.ca.DoorCell door = (ds.ca.DoorCell) lastMapping.get( square );
+			ds.ca.evac.DoorCell door = (ds.ca.evac.DoorCell) lastMapping.get( square );
 			if( door == null ) {
-				door = new ds.ca.DoorCell( square.getSpeedFactor(), x, y );
+				door = new ds.ca.evac.DoorCell( square.getSpeedFactor(), x, y );
 				convertedRoom.setCell( door );
 				lastMapping.insertTuple( door, square );
 			}
 
 			for( ZToCARasterSquare partner : square.getPartners() ) {
 
-				ds.ca.DoorCell partnerDoor = (ds.ca.DoorCell) lastMapping.get( partner );
+				ds.ca.evac.DoorCell partnerDoor = (ds.ca.evac.DoorCell) lastMapping.get( partner );
 				if( partnerDoor == null ) {
 					ZToCARoomRaster partnerRoom = getContainer().getRasteredRoom( (ds.z.Room) ( partner.getPolygon()) );
 					int newX = de.tu_berlin.math.coga.zet.converter.RasterTools.polyCoordToRasterCoord( partner.getX(), partnerRoom.getXOffset(), partnerRoom );
 					int newY = de.tu_berlin.math.coga.zet.converter.RasterTools.polyCoordToRasterCoord( partner.getY(), partnerRoom.getYOffset(), partnerRoom );
 
-					partnerDoor = new ds.ca.DoorCell( partner.getSpeedFactor(), newX, newY );
-					ds.ca.Room newRoom = roomRasterRoomMapping.get( partnerRoom );
+					partnerDoor = new ds.ca.evac.DoorCell( partner.getSpeedFactor(), newX, newY );
+					ds.ca.evac.Room newRoom = roomRasterRoomMapping.get( partnerRoom );
 					newRoom.setCell( partnerDoor );
 					lastMapping.insertTuple( partnerDoor, partner );
 				}
@@ -389,7 +389,7 @@ public class ZToCAConverter extends Algorithm<BuildingPlan,ConvertedCellularAuto
 		}
 
 		if( square.isExit() ) {
-			ds.ca.ExitCell newCell = new ds.ca.ExitCell( square.getSpeedFactor(), x, y );
+			ds.ca.evac.ExitCell newCell = new ds.ca.evac.ExitCell( square.getSpeedFactor(), x, y );
 			convertedRoom.setCell( newCell );
 			newCell.setAttractivity( square.getAttractivity() );
 			newCell.setName( square.getName() );
@@ -399,7 +399,7 @@ public class ZToCAConverter extends Algorithm<BuildingPlan,ConvertedCellularAuto
 		}
 
 		if( square.isSave() ) {
-			ds.ca.Cell newCell = new ds.ca.SaveCell( square.getSpeedFactor(), x, y );
+			ds.ca.evac.Cell newCell = new ds.ca.evac.SaveCell( square.getSpeedFactor(), x, y );
 			convertedRoom.setCell( newCell );
 			lastMapping.insertTuple( newCell, square );
 			return newCell;
@@ -408,7 +408,7 @@ public class ZToCAConverter extends Algorithm<BuildingPlan,ConvertedCellularAuto
 		// TODO insertTuple is very inefficient!
 
 		if( square.isStair() ) {
-			ds.ca.Cell newCell = new ds.ca.StairCell( square.getSpeedFactor(), square.getUpSpeedFactor(), square.getDownSpeedFactor(), x, y );
+			ds.ca.evac.Cell newCell = new ds.ca.evac.StairCell( square.getSpeedFactor(), square.getUpSpeedFactor(), square.getDownSpeedFactor(), x, y );
 			convertedRoom.setCell( newCell );
 			lastMapping.insertTuple( newCell, square );
 			return newCell;
@@ -418,10 +418,10 @@ public class ZToCAConverter extends Algorithm<BuildingPlan,ConvertedCellularAuto
 			System.out.println( "this was a teleport cell" );
 
 
-			ds.ca.TeleportCell teleport = (ds.ca.TeleportCell) lastMapping.get( square );
+			ds.ca.evac.TeleportCell teleport = (ds.ca.evac.TeleportCell) lastMapping.get( square );
 			// create only, if not already was created
 			if( teleport == null ) {
-				teleport = new ds.ca.TeleportCell( square.getSpeedFactor(), x, y );
+				teleport = new ds.ca.evac.TeleportCell( square.getSpeedFactor(), x, y );
 				convertedRoom.setCell( teleport );
 				lastMapping.insertTuple( teleport, square );
 			}
@@ -447,13 +447,13 @@ public class ZToCAConverter extends Algorithm<BuildingPlan,ConvertedCellularAuto
 							for( ZToCARasterSquare sq : targetRoomRaster.getAccessibleSquares() ) {
 								if( t.getTargetArea().contains( sq.getSquare() ) ) {
 									// Die zielarea liegt im rastersquare sq
-									ds.ca.TeleportCell targetCell = (ds.ca.TeleportCell) lastMapping.get( sq );
+									ds.ca.evac.TeleportCell targetCell = (ds.ca.evac.TeleportCell) lastMapping.get( sq );
 									if( targetCell == null ) {
 										// zielzelle muss erstellt werden
 					int newX = de.tu_berlin.math.coga.zet.converter.RasterTools.polyCoordToRasterCoord( sq.getX(), targetRoomRaster.getXOffset(), targetRoomRaster );
 					int newY = de.tu_berlin.math.coga.zet.converter.RasterTools.polyCoordToRasterCoord( sq.getY(), targetRoomRaster.getYOffset(), targetRoomRaster );
-					targetCell = new ds.ca.TeleportCell( sq.getSpeedFactor(), newX, newY );
-					ds.ca.Room newRoom = roomRasterRoomMapping.get( targetRoomRaster );
+					targetCell = new ds.ca.evac.TeleportCell( sq.getSpeedFactor(), newX, newY );
+										ds.ca.evac.Room newRoom = roomRasterRoomMapping.get( targetRoomRaster );
 					newRoom.setCell( targetCell );
 					lastMapping.insertTuple( targetCell, sq );
 
@@ -478,7 +478,7 @@ public class ZToCAConverter extends Algorithm<BuildingPlan,ConvertedCellularAuto
 			return teleport;
 		}
 
-		ds.ca.Cell newCell = new ds.ca.RoomCell( square.getSpeedFactor(), x, y );
+		ds.ca.evac.Cell newCell = new ds.ca.evac.RoomCell( square.getSpeedFactor(), x, y );
 		convertedRoom.setCell( newCell );
 		lastMapping.insertTuple( newCell, square );
 		return newCell;
@@ -491,7 +491,7 @@ public class ZToCAConverter extends Algorithm<BuildingPlan,ConvertedCellularAuto
 	 * @param fromSquare the square
 	 * @param toCell the cell
 	 */
-	protected static void copyBounds( RoomRasterSquare fromSquare, ds.ca.Cell toCell ) {
+	protected static void copyBounds( RoomRasterSquare fromSquare, ds.ca.evac.Cell toCell ) {
 		if( toCell == null ) {
 			return;
 		}
@@ -509,7 +509,7 @@ public class ZToCAConverter extends Algorithm<BuildingPlan,ConvertedCellularAuto
 	 * @param fromSquare the square
 	 * @param toCell the cell
 	 */
-	protected static void copyLevels( RoomRasterSquare fromSquare, ds.ca.Cell toCell ) {
+	protected static void copyLevels( RoomRasterSquare fromSquare, ds.ca.evac.Cell toCell ) {
 		if( toCell == null ) {
 			return;
 		}
@@ -529,11 +529,11 @@ public class ZToCAConverter extends Algorithm<BuildingPlan,ConvertedCellularAuto
 	 * is not reachable if the upper or the Left cell is not reachable.</p>
 	 * @param room the room for that the borders are set up
 	 */
-	protected static void connectBounds( ds.ca.Room room ) {
+	protected static void connectBounds( ds.ca.evac.Room room ) {
 		for( int x = 0; x < room.getWidth(); x++ ) {
 			for( int y = 0; y < room.getHeight(); y++ ) {
 				if( room.existsCellAt( x, y ) ) {
-					ds.ca.Cell aCell = room.getCell( x, y );
+					ds.ca.evac.Cell aCell = room.getCell( x, y );
 
 					if( !aCell.isPassable( Left ) ) {
 						if( room.existsCellAt( x, y + 1 ) && !room.getCell( x, y + 1 ).isPassable( Left ) ) {
@@ -617,7 +617,7 @@ public class ZToCAConverter extends Algorithm<BuildingPlan,ConvertedCellularAuto
 	private static boolean isDirectionBlocked( Cell aCell, Direction direction ) {
 		int x = aCell.getX();
 		int y = aCell.getY();
-		ds.ca.Room room = aCell.getRoom();
+		ds.ca.evac.Room room = aCell.getRoom();
 
 		return !aCell.isPassable( direction ) || !room.existsCellAt( x + direction.xOffset(), y + direction.yOffset() );
 	}

@@ -19,12 +19,19 @@ package statistic.ca;
 import java.util.HashMap;
 import java.util.ArrayList;
 import java.util.Collections;
-import ds.ca.Individual;
-import ds.ca.ExitCell;
-import ds.ca.CAController;
-import statistic.ca.exception.*;
+import ds.ca.evac.Individual;
+import ds.ca.evac.ExitCell;
 import statistic.ca.results.StoredCAStatisticResultsForIndividuals;
-import ds.ca.StaticPotential;
+import ds.ca.evac.StaticPotential;
+import statistic.ca.exception.GroupOfIndividualsException;
+import statistic.ca.exception.GroupOfIndsNoPotentialException;
+import statistic.ca.exception.GroupOfIndsNoValueBecauseAlreadySafeException;
+import statistic.ca.exception.GroupOfIndsNotSafeException;
+import statistic.ca.exception.IncorrectTimeException;
+import statistic.ca.exception.MissingStoredValueException;
+import statistic.ca.exception.OneIndNoPotentialException;
+import statistic.ca.exception.OneIndNoValueBecauseAlreadySafeException;
+import statistic.ca.exception.OneIndNotSafeException;
 
 /**
  *
@@ -85,7 +92,7 @@ public class IndividualStatistic {
      */
     public double getCoveredDistance(Individual ind, int t) throws OneIndNoPotentialException, IncorrectTimeException{
      
-        if (ind.getDeathCause() != null && ind.getDeathCause().compareTo(ds.ca.Individual.DeathCause.EXIT_UNREACHABLE)==0) {
+        if (ind.getDeathCause() != null && ind.getDeathCause().compareTo(ds.ca.evac.Individual.DeathCause.EXIT_UNREACHABLE)==0) {
             // ind tot weil eingeschlossen
             throw new OneIndNoPotentialException(ind);
         }
@@ -265,7 +272,7 @@ public ArrayList<Double> calculateAverageCoveredDistanceForGroupInTimeSteps(Arra
             }
         }
         
-        if (ind.getDeathCause() != null && ind.getDeathCause().compareTo(ds.ca.Individual.DeathCause.EXIT_UNREACHABLE)==0) {
+        if (ind.getDeathCause() != null && ind.getDeathCause().compareTo(ds.ca.evac.Individual.DeathCause.EXIT_UNREACHABLE)==0) {
             // ind tot weil eingeschlossen
             throw new OneIndNoPotentialException(ind);
         }
@@ -346,7 +353,7 @@ public ArrayList<Double> calculateAverageCoveredDistanceForGroupInTimeSteps(Arra
             }
         }
         
-        if (ind.getDeathCause() != null && ind.getDeathCause().compareTo(ds.ca.Individual.DeathCause.EXIT_UNREACHABLE)==0) {
+        if (ind.getDeathCause() != null && ind.getDeathCause().compareTo(ds.ca.evac.Individual.DeathCause.EXIT_UNREACHABLE)==0) {
             // ind tot, weil eingeschlossen
             throw new OneIndNoPotentialException(ind);           
         }
@@ -496,7 +503,7 @@ public ArrayList<Double> calculateAverageCoveredDistanceForGroupInTimeSteps(Arra
             }
         }
         
-        if (ind.getDeathCause() != null && ind.getDeathCause().compareTo(ds.ca.Individual.DeathCause.EXIT_UNREACHABLE)==0) {
+        if (ind.getDeathCause() != null && ind.getDeathCause().compareTo(ds.ca.evac.Individual.DeathCause.EXIT_UNREACHABLE)==0) {
             // ind tot, weil eingeschlossen
             
             throw new OneIndNoPotentialException(ind);           
@@ -980,7 +987,7 @@ public double calculateMaxSpeedForGroupInOneTimestep(ArrayList<Individual> indgr
             }
         }
         
-        if (ind.getDeathCause() != null && ind.getDeathCause().compareTo(ds.ca.Individual.DeathCause.EXIT_UNREACHABLE)==0) {
+        if (ind.getDeathCause() != null && ind.getDeathCause().compareTo(ds.ca.evac.Individual.DeathCause.EXIT_UNREACHABLE)==0) {
             // ind tot weil eingeschlossen
             throw new OneIndNoPotentialException(ind);
         }
@@ -1073,7 +1080,7 @@ public double calculateMaxSpeedForGroupInOneTimestep(ArrayList<Individual> indgr
         }
         
         if (from<to) {
-            if (!(ind.getDeathCause() != null && ind.getDeathCause().compareTo(ds.ca.Individual.DeathCause.EXIT_UNREACHABLE)==0)) {
+            if (!(ind.getDeathCause() != null && ind.getDeathCause().compareTo(ds.ca.evac.Individual.DeathCause.EXIT_UNREACHABLE)==0)) {
                 if (exhaustionTimes.containsKey(ind)) {
                     if (from==0) {
                         from=1;
@@ -1160,7 +1167,7 @@ public double calculateMaxSpeedForGroupInOneTimestep(ArrayList<Individual> indgr
      */
     public double calculateMaxExhaustion (Individual ind, int from, int to) throws OneIndNoPotentialException, IncorrectTimeException {
         if (from<to) {
-            if (!(ind.getDeathCause() != null && ind.getDeathCause().compareTo(ds.ca.Individual.DeathCause.EXIT_UNREACHABLE)==0)) {
+            if (!(ind.getDeathCause() != null && ind.getDeathCause().compareTo(ds.ca.evac.Individual.DeathCause.EXIT_UNREACHABLE)==0)) {
                 if (exhaustionTimes.containsKey(ind)) {
                     if (ind.isSafe()) {
                         int safetyTime=ind.getSafetyTime();
@@ -1239,7 +1246,7 @@ public double calculateMaxSpeedForGroupInOneTimestep(ArrayList<Individual> indgr
      */
     public double calculateMinExhaustionExceptingStartExhaustion (Individual ind, int from, int to) throws OneIndNoPotentialException, IncorrectTimeException {
         if (from<to) {
-            if (!(ind.getDeathCause() != null && ind.getDeathCause().compareTo(ds.ca.Individual.DeathCause.EXIT_UNREACHABLE)==0)) {
+            if (!(ind.getDeathCause() != null && ind.getDeathCause().compareTo(ds.ca.evac.Individual.DeathCause.EXIT_UNREACHABLE)==0)) {
                 if (exhaustionTimes.containsKey(ind)) {
                     if (ind.isSafe()) {
                         int safetyTime=ind.getSafetyTime();
@@ -1734,7 +1741,7 @@ public double calculateMaxSpeedForGroupInOneTimestep(ArrayList<Individual> indgr
             }
         }
         
-        if (ind.getDeathCause() != null && ind.getDeathCause().compareTo(ds.ca.Individual.DeathCause.EXIT_UNREACHABLE)==0) {
+        if (ind.getDeathCause() != null && ind.getDeathCause().compareTo(ds.ca.evac.Individual.DeathCause.EXIT_UNREACHABLE)==0) {
             // ind tot weil eingeschlossen
             throw new OneIndNoPotentialException(ind);
         }
@@ -1827,7 +1834,7 @@ public double calculateMaxSpeedForGroupInOneTimestep(ArrayList<Individual> indgr
         }
         
         if (from<to) {
-            if (!(ind.getDeathCause() != null && ind.getDeathCause().compareTo(ds.ca.Individual.DeathCause.EXIT_UNREACHABLE)==0)) {
+            if (!(ind.getDeathCause() != null && ind.getDeathCause().compareTo(ds.ca.evac.Individual.DeathCause.EXIT_UNREACHABLE)==0)) {
                 if (panicTimes.containsKey(ind)) {
                     if (from==0) {
                         from=1;
@@ -1909,7 +1916,7 @@ public double calculateMaxSpeedForGroupInOneTimestep(ArrayList<Individual> indgr
      */
     public double calculateMaxPanic (Individual ind, int from, int to) throws OneIndNoPotentialException, IncorrectTimeException {
         if (from<to) {
-            if (!(ind.getDeathCause() != null && ind.getDeathCause().compareTo(ds.ca.Individual.DeathCause.EXIT_UNREACHABLE)==0)) {
+            if (!(ind.getDeathCause() != null && ind.getDeathCause().compareTo(ds.ca.evac.Individual.DeathCause.EXIT_UNREACHABLE)==0)) {
                 if (panicTimes.containsKey(ind)) {
                     if (ind.isSafe()) {
                         int safetyTime=ind.getSafetyTime();
@@ -1987,7 +1994,7 @@ public double calculateMaxSpeedForGroupInOneTimestep(ArrayList<Individual> indgr
      */
     public double calculateMinPanicExceptingStartPanic (Individual ind, int from, int to) throws OneIndNoPotentialException, IncorrectTimeException {
         if (from<to) {
-            if (!(ind.getDeathCause() != null && ind.getDeathCause().compareTo(ds.ca.Individual.DeathCause.EXIT_UNREACHABLE)==0)) {
+            if (!(ind.getDeathCause() != null && ind.getDeathCause().compareTo(ds.ca.evac.Individual.DeathCause.EXIT_UNREACHABLE)==0)) {
                 if (panicTimes.containsKey(ind)) {
                     if (ind.isSafe()) {
                         int safetyTime=ind.getSafetyTime();
@@ -2816,7 +2823,7 @@ public double calculateMaxSpeedForGroupInOneTimestep(ArrayList<Individual> indgr
      */
     public int getWaitedTime(Individual ind, int t) throws OneIndNoPotentialException, IncorrectTimeException{
      
-        if (ind.getDeathCause() != null && ind.getDeathCause().compareTo(ds.ca.Individual.DeathCause.EXIT_UNREACHABLE)==0) {
+        if (ind.getDeathCause() != null && ind.getDeathCause().compareTo(ds.ca.evac.Individual.DeathCause.EXIT_UNREACHABLE)==0) {
             // ind tot weil eingeschlossen
             throw new OneIndNoPotentialException(ind);
         }

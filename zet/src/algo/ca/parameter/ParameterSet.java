@@ -22,8 +22,8 @@ package algo.ca.parameter;
 
 import java.util.Collection;
 
-import ds.ca.Cell;
-import ds.ca.Individual;
+import ds.ca.evac.Cell;
+import ds.ca.evac.Individual;
 
 /**
  * An abstract class defining all methods that parameter sets have to support.

@@ -23,8 +23,8 @@ import statistic.ca.exception.GroupOfIndsNotSafeException;
 import statistic.ca.exception.IncorrectTimeException;
 import statistic.ca.exception.OneIndNoPotentialException;
 import statistic.ca.exception.OneIndNotSafeException;
-import ds.ca.ExitCell;
-import ds.ca.Individual;
+import ds.ca.evac.ExitCell;
+import ds.ca.evac.Individual;
 
 public interface IndividualStatisticMethods {
 

@@ -15,10 +15,10 @@
  */
 package ds.ca.results;
 
-import ds.ca.Cell;
-import ds.ca.CellularAutomaton;
-import ds.ca.Individual;
-import ds.ca.InitialConfiguration;
+import ds.ca.evac.Cell;
+import ds.ca.evac.EvacuationCellularAutomaton;
+import ds.ca.evac.Individual;
+import ds.ca.evac.InitialConfiguration;
 
 /**
  * This abstract class represents an action on the cellular automaton.
@@ -53,13 +53,13 @@ public abstract class Action implements Cloneable{
      * this action should be adopted. 
      * @return The adopted action
      */    
-    abstract Action adoptToCA(CellularAutomaton targetCA) throws CADoesNotMatchException;
+    abstract Action adoptToCA(EvacuationCellularAutomaton targetCA) throws CADoesNotMatchException;
     
     /**
      * Executes the action with respect to the starting and ending cell
      * of the action. 
      */    
-    public abstract void execute(CellularAutomaton onCA) throws InconsistentPlaybackStateException;
+    public abstract void execute(EvacuationCellularAutomaton onCA) throws InconsistentPlaybackStateException;
     
     /**
      * Every subclass of this class should override the {@code toString()}.
@@ -67,9 +67,9 @@ public abstract class Action implements Cloneable{
     @Override
     public abstract String toString();
     
-    protected Cell adoptCell(Cell cell, CellularAutomaton targetCA){
-        ds.ca.Room newRoom = targetCA.getRoom(cell.getRoom().getID());
-        ds.ca.Cell newCell = newRoom.getCell(cell.getX(), cell.getY());
+    protected Cell adoptCell(Cell cell, EvacuationCellularAutomaton targetCA){
+        ds.ca.evac.Room newRoom = targetCA.getRoom(cell.getRoom().getID());
+        ds.ca.evac.Cell newCell = newRoom.getCell(cell.getX(), cell.getY());
         return newCell;
     }
 }

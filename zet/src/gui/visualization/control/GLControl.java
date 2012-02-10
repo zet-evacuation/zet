@@ -17,9 +17,9 @@ package gui.visualization.control;
 
 import ds.PropertyContainer;
 import ds.GraphVisualizationResults;
-import ds.ca.CellularAutomaton;
-import ds.ca.PotentialManager;
-import ds.ca.StaticPotential;
+import ds.ca.evac.EvacuationCellularAutomaton;
+import ds.ca.evac.PotentialManager;
+import ds.ca.evac.StaticPotential;
 import gui.visualization.control.building.GLBuildingControl;
 import gui.visualization.control.ca.GLCellularAutomatonControl;
 import gui.visualization.control.ca.GLCAFloorControl;
@@ -155,7 +155,7 @@ public class GLControl implements DrawableControlable {
 	private double estimatedTime = 0;
 	private long time;
 	private double speedFactor = 1;
-	private CellularAutomaton ca;
+	private EvacuationCellularAutomaton ca;
 	public final static double sizeMultiplicator = 0.01;
 
 	/**
@@ -188,7 +188,7 @@ public class GLControl implements DrawableControlable {
 		GLCellControl.invalidateMergedPotential();
 		if( caVisResults != null ) {
 			hasCellularAutomaton = true;
-			ca = new CellularAutomaton( caVisResults.getRecording().getInitialConfig() );
+			ca = new EvacuationCellularAutomaton( caVisResults.getRecording().getInitialConfig() );
 			caControl = new GLCellularAutomatonControl( caVisResults, ca );
 			caControl.setScaling( sizeMultiplicator );
 			caControl.setDefaultFloorHeight( VisualizationOptionManager.getFloorDistance() );
@@ -245,7 +245,7 @@ public class GLControl implements DrawableControlable {
 	 * @param caVis
 	 * @param ca
 	 */
-	public void setCellularAutomatonControl( CAVisualizationResults caVis, CellularAutomaton ca ) {
+	public void setCellularAutomatonControl( CAVisualizationResults caVis, EvacuationCellularAutomaton ca ) {
 		hasCellularAutomaton = true;
 		this.ca = ca;
 		caControl = new GLCellularAutomatonControl( caVis, ca );

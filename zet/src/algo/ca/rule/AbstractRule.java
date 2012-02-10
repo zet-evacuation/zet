@@ -15,22 +15,18 @@
  */
 package algo.ca.rule;
 
-import algo.ca.parameter.ParameterSet;
+import algo.ca.algorithm.evac.EvacuationSimulationProblem;
 import de.tu_berlin.math.coga.common.localization.DefaultLoc;
-import ds.ca.CAController;
-import ds.ca.Cell;
-import ds.ca.Individual;
+import ds.ca.evac.Cell;
+import ds.ca.evac.Individual;
 
 /**
  * @author Daniel Plümpe
  */
 public abstract class AbstractRule implements Rule {
-	private CAController caController;
-	protected ParameterSet parameterSet;
-
-	protected CAController caController() {
-		return caController;
-	}
+	//private CAController caController;
+	protected EvacuationSimulationProblem esp;
+	//protected ParameterSet parameterSet;
 
 	/**
 	 * Returns if the rule is executable on the cell. The default behaviour is,
@@ -53,14 +49,24 @@ public abstract class AbstractRule implements Rule {
 
 	abstract protected void onExecute( Cell cell );
 
-	public void setCAController( CAController caController ) {
-		if( this.caController != null )
+	public void setEvacuationSimulationProblem( EvacuationSimulationProblem esp ) {
+		if( this.esp != null )
 			throw new RuntimeException( DefaultLoc.getSingleton().getString( "algo.ca.rule.RuleAlreadyHaveCAControllerException" ) );
 
-		if( caController == null )
+		if( esp == null )
 			throw new RuntimeException( DefaultLoc.getSingleton().getString( "algo.ca.rule.CAControllerIsNullException" ) );
 
-		this.caController = caController;
-		this.parameterSet = caController.getParameterSet();
+		this.esp = esp;
 	}
+	
+//	public void setCAController( CAController caController ) {
+//		if( this.caController != null )
+//			throw new RuntimeException( DefaultLoc.getSingleton().getString( "algo.ca.rule.RuleAlreadyHaveCAControllerException" ) );
+//
+//		if( caController == null )
+//			throw new RuntimeException( DefaultLoc.getSingleton().getString( "algo.ca.rule.CAControllerIsNullException" ) );
+//
+//		this.caController = caController;
+//		this.parameterSet = caController.getParameterSet();
+//	}
 }

@@ -4,7 +4,8 @@
  */
 package gui;
 
-import algo.ca.EvacuationCellularAutomatonAlgorithm;
+import algo.ca.algorithm.evac.EvacuationCellularAutomatonAlgorithm;
+import algo.ca.algorithm.evac.EvacuationSimulationProblem;
 import zet.tasks.CellularAutomatonAlgorithmEnumeration;
 import zet.tasks.GraphAlgorithmEnumeration;
 import de.tu_berlin.math.coga.common.algorithm.AlgorithmListener;
@@ -23,7 +24,7 @@ import ds.CompareVisualizationResults;
 import ds.GraphVisualizationResults;
 import ds.z.Project;
 import ds.PropertyContainer;
-import ds.ca.CellularAutomaton;
+import ds.ca.evac.EvacuationCellularAutomaton;
 import ds.z.AssignmentType;
 import ds.z.ConcreteAssignment;
 import io.visualization.BuildingResults;
@@ -49,7 +50,7 @@ public class AlgorithmControl implements PropertyChangeListener {
 
 	private BuildingResults buildingResults;
 	private Project project;
-	private CellularAutomaton cellularAutomaton;
+	private EvacuationCellularAutomaton cellularAutomaton;
 	private ConcreteAssignment concreteAssignment;
 	private EvacuationCellularAutomatonAlgorithm caAlgo;
 	private ZToCAMapping mapping;
@@ -148,7 +149,7 @@ public class AlgorithmControl implements PropertyChangeListener {
 		caInitialized = false;
 	}
 
-	public CellularAutomaton getCellularAutomaton() {
+	public EvacuationCellularAutomaton getCellularAutomaton() {
 		return cellularAutomaton;
 	}
 
@@ -216,7 +217,9 @@ public class AlgorithmControl implements PropertyChangeListener {
 
 	void setUpSimulationAlgorithm() {
 		CellularAutomatonAlgorithmEnumeration cellularAutomatonAlgo = CellularAutomatonAlgorithmEnumeration.RandomOrder;
-		caAlgo = cellularAutomatonAlgo.createTask( cellularAutomaton );
+		//caAlgo = cellularAutomatonAlgo.createTask( cellularAutomaton );
+		caAlgo = cellularAutomatonAlgo.getAlgorithm();
+		caAlgo.setProblem( new EvacuationSimulationProblem( ( cellularAutomaton) ) );
 		double caMaxTime = PropertyContainer.getInstance().getAsDouble( "algo.ca.maxTime" );
 		caAlgo.setMaxTimeInSeconds( caMaxTime );
 	}

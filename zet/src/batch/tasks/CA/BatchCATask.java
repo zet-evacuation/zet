@@ -20,7 +20,7 @@
  */
 package batch.tasks.CA;
 
-import algo.ca.EvacuationCellularAutomatonAlgorithm;
+import algo.ca.algorithm.evac.EvacuationCellularAutomatonAlgorithm;
 import batch.BatchResultEntry;
 import zet.tasks.CellularAutomatonAlgorithmEnumeration;
 import de.tu_berlin.math.coga.zet.converter.cellularAutomaton.AssignmentApplicationInstance;
@@ -31,15 +31,14 @@ import ds.PropertyContainer;
 import ds.z.Assignment;
 import ds.z.AssignmentType;
 import ds.z.ConcreteAssignment;
-import ds.ca.CellularAutomaton;
+import ds.ca.evac.EvacuationCellularAutomaton;
 import ds.ca.results.VisualResultsRecorder;
 import io.visualization.CAVisualizationResults;
 import java.util.TreeMap;
-import statistic.ca.CAStatistic;
 
 /**
  * A task that is called during the batch execution. It performs one run of a
- * {@link CellularAutomaton}. The automaton is created before.
+ * {@link EvacuationCellularAutomaton}. The automaton is created before.
  * @author Jan-Philipp Kappmeier
  */
 public class BatchCATask implements Runnable {
@@ -89,7 +88,7 @@ public class BatchCATask implements Runnable {
 	 */
 	public void run() {
 		EvacuationCellularAutomatonAlgorithm caAlgo;
-		CellularAutomaton ca = res.getCellularAutomaton( runNumber );
+		EvacuationCellularAutomaton ca = res.getCellularAutomaton( runNumber );
 //		try {
 //			ca = ZToCAConverter.getInstance().convert( project.getPlan() );
 //		} catch( ConversionNotSupportedException e ) {
@@ -113,23 +112,23 @@ public class BatchCATask implements Runnable {
 //			return;
 //		}
 
-		caAlgo = cellularAutomatonAlgo.createTask( ca );
+		//caAlgo = cellularAutomatonAlgo.createTask( ca );
 		double caMaxTime = PropertyContainer.getInstance().getAsDouble( "algo.ca.maxTime" );
-		caAlgo.setMaxTimeInSeconds( caMaxTime );
+		//caAlgo.setMaxTimeInSeconds( caMaxTime );
 
 		long start;
 		long end;
 
 		//Run the CA
 		start = System.currentTimeMillis();
-		caAlgo.getCellularAutomaton().startRecording();
-		caAlgo.run();	// hier wird initialisiert
-		caAlgo.getCellularAutomaton().stopRecording();
+		//caAlgo.getCellularAutomaton().startRecording();
+//		caAlgo.run();	// hier wird initialisiert
+//		caAlgo.getCellularAutomaton().stopRecording();
 		end = System.currentTimeMillis();
 		//System.out.println( "Laufzeit CA:" + (end - start) + " ms" );
 
 		// Get the results
-		res.setCellularAutomatonStatistic( runNumber, new CAStatistic( caAlgo.getCaController().getCaStatisticWriter().getStoredCAStatisticResults() ) );
+		//res.setCellularAutomatonStatistic( runNumber, new CAStatistic( caAlgo.getesp.caStatisticWriter.getStoredCAStatisticResults() ) );
 		
 		// TODO raster
 		res.setCellularAutomatonVisualization( runNumber, new CAVisualizationResults( VisualResultsRecorder.getInstance().getRecording(), null ) );
@@ -145,7 +144,7 @@ public class BatchCATask implements Runnable {
 //   	visres.statistic = statistic;
 
 		// Gather median information
-		median.put( new Integer( caAlgo.getCellularAutomaton().getTimeStep() ), runNumber );
+		//median.put( new Integer( caAlgo.getCellularAutomaton().getTimeStep() ), runNumber );
 
 		// Forget the used batch result entry. This is necessary in case that the batch entries
 		// are stored on disk. Then this reference will inhibit the deletion of the batch result entry

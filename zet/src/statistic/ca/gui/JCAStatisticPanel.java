@@ -61,9 +61,9 @@ import statistic.ca.MultipleCycleCAStatistic;
 import statistic.ca.exception.GroupOfIndsNoPotentialException;
 import statistic.ca.exception.OneIndNoPotentialException;
 import ds.GraphVisualizationResults;
-import ds.ca.CellularAutomaton;
-import ds.ca.Individual;
-import ds.ca.Individual.DeathCause;
+import ds.ca.evac.EvacuationCellularAutomaton;
+import ds.ca.evac.Individual;
+import ds.ca.evac.Individual.DeathCause;
 import gui.ZETMain;
 import de.tu_berlin.math.coga.datastructure.NamedIndex;
 import java.awt.GridBagConstraints;
@@ -134,7 +134,7 @@ public class JCAStatisticPanel extends JPanel {
 	private GraphVisualizationResults gvr;
 	private MultipleCycleCAStatistic mccas;
 	private BatchResultEntry selectedBatchResultEntry;
-	private CellularAutomaton ca;
+	private EvacuationCellularAutomaton ca;
 	private Double currentAverageStepsPerSeconds;
 	/**
 	 * saves a list of lists, where each list consists of those individuals connected to the chosen
@@ -154,7 +154,7 @@ public class JCAStatisticPanel extends JPanel {
 		addComponents();
 	}
 
-	public void setCellularAutomaton( CellularAutomaton ca ) {
+	public void setCellularAutomaton( EvacuationCellularAutomaton ca ) {
 		this.ca = ca;
 	}
 
@@ -346,7 +346,7 @@ public class JCAStatisticPanel extends JPanel {
 
 	private void calculateStatistic( String diagrammName ) {
 		int maxTimeStep = Integer.MIN_VALUE;
-		for( CellularAutomaton ca : selectedBatchResultEntry.getCa() )
+		for( EvacuationCellularAutomaton ca : selectedBatchResultEntry.getCa() )
 			maxTimeStep = Math.max( maxTimeStep, ca.getTimeStep() + 1 );
 		ArrayList<ArrayList<ArrayList<Individual>>> IndividualPerAssignmentIndexToShow = new ArrayList<ArrayList<ArrayList<Individual>>>();
 		ArrayList<ArrayList<Individual>> IndividualsPerCycle;
@@ -696,7 +696,7 @@ public class JCAStatisticPanel extends JPanel {
 
 		if( diagrammName.equals( "Grundinformationen" ) ) {
 			String[] columnNames = {"Bezeichnung", "Wert"};
-			CellularAutomaton tmpCA;
+			EvacuationCellularAutomaton tmpCA;
 			int nrOfInd = 0;
 			double evacSec = 0.0;
 			double evacCAStep = 0;

@@ -15,7 +15,7 @@
  */
 package algo.ca.rule;
 
-import ds.ca.Individual;
+import ds.ca.evac.Individual;
 
 /**
  * A rule that evacuates the individuals.
@@ -27,29 +27,29 @@ public class EvacuateIndividualsRule extends AbstractEvacuationRule {
 	}
 
 	@Override
-	protected void onExecute( ds.ca.Cell cell ) {
-		caController().getCA().markIndividualForRemoval( cell.getIndividual() );
+	protected void onExecute( ds.ca.evac.Cell cell ) {
+		esp.eca.markIndividualForRemoval( cell.getIndividual() );
 		// Potential needed for statistics:
-		ds.ca.StaticPotential exit = caController().getPotentialController().getNearestExitStaticPotential( cell );
-		caController().getCaStatisticWriter().getStoredCAStatisticResults().getStoredCAStatisticResultsForIndividuals().addExitToStatistic( cell.getIndividual(), exit );
+		ds.ca.evac.StaticPotential exit = esp.potentialController.getNearestExitStaticPotential( cell );
+		esp.caStatisticWriter.getStoredCAStatisticResults().getStoredCAStatisticResultsForIndividuals().addExitToStatistic( cell.getIndividual(), exit );
 		// safetyTime etc will be set in the SaveIndividualsRule
 	}
 
 	@Override
-	public boolean executableOn( ds.ca.Cell cell ) {
+	public boolean executableOn( ds.ca.evac.Cell cell ) {
 		// Regel NUR anwendbar, wenn auf der Zelle ein Individuum steht
 		// und die Zelle eine Exitcell ist
 		
 		Individual i = cell.getIndividual();
-		//return (i != null) && (cell instanceof ds.ca.ExitCell) && ( i.getStepEndTime() <= caController().getCA().getTimeStep() );
+		//return (i != null) && (cell instanceof ds.ca.ExitCell) && ( i.getStepEndTime() <= esp.eca.getTimeStep() );
 		boolean testval = false;
-		if( (i != null) && (cell instanceof ds.ca.ExitCell)) {
-			if( i.getStepEndTime() >= caController().getCA().getTimeStep()+1 )
+		if( (i != null) && (cell instanceof ds.ca.evac.ExitCell)) {
+			if( i.getStepEndTime() >= esp.eca.getTimeStep()+1 )
 				testval = false;
 			else
 				testval = true;
 		}
-		return (i != null) && (cell instanceof ds.ca.ExitCell) && testval;
+		return (i != null) && (cell instanceof ds.ca.evac.ExitCell) && testval;
 	}
 }
 

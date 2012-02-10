@@ -19,11 +19,11 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 import statistic.ca.exception.*;
-import ds.ca.Cell;
-import ds.ca.ExitCell;
-import ds.ca.Individual;
-import ds.ca.Room;
-import ds.ca.StaticPotential;
+import ds.ca.evac.Cell;
+import ds.ca.evac.ExitCell;
+import ds.ca.evac.Individual;
+import ds.ca.evac.Room;
+import ds.ca.evac.StaticPotential;
 
 
 /**

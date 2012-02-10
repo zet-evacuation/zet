@@ -19,8 +19,8 @@
  */
 package ds.ca.results;
 
-import ds.ca.Cell;
-import ds.ca.CellularAutomaton;
+import ds.ca.evac.Cell;
+import ds.ca.evac.EvacuationCellularAutomaton;
 
 /**
  *
@@ -117,7 +117,7 @@ public class SwapAction extends Action {
 	}
 
 	@Override
-	public void execute( ds.ca.CellularAutomaton onCA ) throws InconsistentPlaybackStateException {
+	public void execute( ds.ca.evac.EvacuationCellularAutomaton onCA ) throws InconsistentPlaybackStateException {
 		if( cell1.getIndividual() == null )
 			throw new InconsistentPlaybackStateException( onCA.getTimeStep(), this, "There is no Individual on cell 1." );
 		if( cell2.getIndividual() == null )
@@ -142,7 +142,7 @@ public class SwapAction extends Action {
 	}
 
 	@Override
-	public Action adoptToCA( CellularAutomaton targetCA ) throws CADoesNotMatchException {
+	public Action adoptToCA( EvacuationCellularAutomaton targetCA ) throws CADoesNotMatchException {
 		Cell newCell1 = adoptCell( cell1, targetCA );
 		if( newCell1 == null )
 			throw new CADoesNotMatchException( this, "Could not find cell 1 " + cell1 + " in the new CA." );

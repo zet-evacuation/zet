@@ -15,10 +15,10 @@
  */
 package exitdistributions;
 
-import ds.ca.Cell;
-import ds.ca.CellularAutomaton;
-import ds.ca.StaticPotential;
-import ds.ca.TargetCell;
+import ds.ca.evac.Cell;
+import ds.ca.evac.EvacuationCellularAutomaton;
+import ds.ca.evac.StaticPotential;
+import ds.ca.evac.TargetCell;
 import ds.graph.IdentifiableCollection;
 import de.tu_berlin.math.coga.zet.NetworkFlowModel;
 import ds.graph.Node;
@@ -37,9 +37,9 @@ public class GraphBasedExitToCapacityMapping{
     private boolean isInitialized;     
     private NetworkFlowModel model;
     BidirectionalNodeCellMapping nodeCellMapping;    
-    CellularAutomaton ca;
+    EvacuationCellularAutomaton ca;
     
-    public GraphBasedExitToCapacityMapping(CellularAutomaton ca, BidirectionalNodeCellMapping nodeCellMapping, NetworkFlowModel model){
+    public GraphBasedExitToCapacityMapping(EvacuationCellularAutomaton ca, BidirectionalNodeCellMapping nodeCellMapping, NetworkFlowModel model){
         exitToCapacityMapping = new HashMap<StaticPotential, Double>();
         isInitialized = false;
         this.model = model;

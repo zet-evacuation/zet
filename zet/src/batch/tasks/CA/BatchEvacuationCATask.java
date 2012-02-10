@@ -23,8 +23,7 @@ import io.visualization.CAVisualizationResults;
 
 import java.util.TreeMap;
 
-import statistic.ca.CAStatistic;
-import algo.ca.EvacuationSwapCellularAutomatonInOrder;
+import algo.ca.EvacuationPlanSwapCellularAutomatonInOrder;
 import batch.BatchResultEntry;
 import zet.tasks.CellularAutomatonAlgorithmEnumeration;
 import zet.tasks.GraphAlgorithmEnumeration;
@@ -32,7 +31,7 @@ import de.tu_berlin.math.coga.zet.converter.cellularAutomaton.ZToCAConverter.Con
 import de.tu_berlin.math.coga.common.algorithm.Algorithm;
 import ds.z.Project;
 import ds.PropertyContainer;
-import ds.ca.CellularAutomaton;
+import ds.ca.evac.EvacuationCellularAutomaton;
 import ds.ca.results.VisualResultsRecorder;
 import de.tu_berlin.math.coga.zet.NetworkFlowModel;
 import ds.graph.flow.PathBasedFlowOverTime;
@@ -43,7 +42,7 @@ import evacuationplan.FlowBasedCAFactory;
 
 /**
  * A task that is called during the batch execution. It performs one run of a
- * {@link CellularAutomaton}. The automaton is created before.
+ * {@link EvacuationCellularAutomaton}. The automaton is created before.
  * @author Jan-Philipp Kappmeier
  */
 public class BatchEvacuationCATask implements Runnable {
@@ -121,7 +120,7 @@ public class BatchEvacuationCATask implements Runnable {
 		gt.run ();
 
 		
-		CellularAutomaton ca;
+		EvacuationCellularAutomaton ca;
 		try {
 //			ca = FlowBasedCAFactory.getFlowBasedCAFactoryInstance ().convertAndApplyConcreteAssignment (project.getBuildingPlan (), gt.getDynamicFlow (), concreteAssignment, nfo.getZToGraphMapping ().
 			ca = FlowBasedCAFactory.getFlowBasedCAFactoryInstance ().convertAndApplyConcreteAssignment (project.getBuildingPlan (), gt.getSolution (), concreteAssignment, nfo.getZToGraphMapping ().
@@ -136,8 +135,7 @@ public class BatchEvacuationCATask implements Runnable {
 			ca.setAssignmentType (at.getName (), at.getUid ());
 		}
 
-		EvacuationSwapCellularAutomatonInOrder caAlgo = new EvacuationSwapCellularAutomatonInOrder (ca, FlowBasedCAFactory.getFlowBasedCAFactoryInstance ().
-				getLatestCheckerInstance ());
+		EvacuationPlanSwapCellularAutomatonInOrder caAlgo = null;//new EvacuationPlanSwapCellularAutomatonInOrder (ca, FlowBasedCAFactory.getFlowBasedCAFactoryInstance ().getLatestCheckerInstance ());
 
 		//Run the CA
 		long start = System.currentTimeMillis ();
@@ -154,8 +152,7 @@ public class BatchEvacuationCATask implements Runnable {
 		System.out.println ("Laufzeit optimierter CA:" + (end - start) + " ms");
 
 		// Get the results
-		res.setCellularAutomatonStatistic (runNumber, new CAStatistic (caAlgo.getCaController ().getCaStatisticWriter ().
-				getStoredCAStatisticResults ()));
+//		res.setCellularAutomatonStatistic (runNumber, new CAStatistic (caAlgo.getCaController ().getCaStatisticWriter ().			getStoredCAStatisticResults ()));
 		res.setCellularAutomatonVisualization (runNumber, new CAVisualizationResults (VisualResultsRecorder.getInstance ().
 				getRecording (), FlowBasedCAFactory.getFlowBasedCAFactoryInstance ().getMapping ()));
 

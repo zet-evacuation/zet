@@ -15,7 +15,7 @@
  */
 package algo.ca;
 
-import ds.ca.Cell;
+import ds.ca.evac.Cell;
 
 /**
  * The data structure used by the algorithm for calculating the static potentials

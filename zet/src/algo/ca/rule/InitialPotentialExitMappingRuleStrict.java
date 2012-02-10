@@ -20,10 +20,10 @@
  */
 package algo.ca.rule;
 
-import ds.ca.Cell;
-import ds.ca.Individual;
-import ds.ca.StaticPotential;
-import ds.ca.TargetCell;
+import ds.ca.evac.Cell;
+import ds.ca.evac.Individual;
+import ds.ca.evac.StaticPotential;
+import ds.ca.evac.TargetCell;
 import java.util.HashMap;
 
 /**
@@ -39,7 +39,7 @@ public class InitialPotentialExitMappingRuleStrict extends AbstractInitialRule {
 	private void init() {
 		//private void applyMapping(CellularAutomaton ca, IndividualToExitMapping mapping){
 		potentialMapping = new HashMap<TargetCell, StaticPotential>();
-		for( StaticPotential potential : caController().getCA().getPotentialManager().getStaticPotentials() ) {
+		for( StaticPotential potential : esp.eca.getPotentialManager().getStaticPotentials() ) {
 			for( TargetCell target : potential.getAssociatedExitCells() ) {
 				if( potentialMapping.put( target, potential ) != null ) {
 					throw new IllegalArgumentException( "There were two potentials leading to the same exit. This method can currently not deal with this." );
@@ -72,7 +72,7 @@ public class InitialPotentialExitMappingRuleStrict extends AbstractInitialRule {
 			init();
 
 		Individual individual = cell.getIndividual();
-		TargetCell target = caController().getCA().getIndividualToExitMapping().getExit( individual );
+		TargetCell target = esp.eca.getIndividualToExitMapping().getExit( individual );
 		if( target == null ) {
 			if( !individual.isDead() )
 				throw new IllegalArgumentException( "The individual " + individual.getNumber() + " lives, but has not been mapped to an exit." + " Therefore, I cannot map it to a potential." );

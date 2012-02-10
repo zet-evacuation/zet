@@ -15,8 +15,8 @@
  */
 package exitdistributions;
 
-import ds.ca.Individual;
-import ds.ca.TargetCell;
+import ds.ca.evac.Individual;
+import ds.ca.evac.TargetCell;
 
 public abstract class IndividualToExitMapping {
 	

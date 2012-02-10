@@ -20,7 +20,7 @@ import ds.graph.flow.PathBasedFlowOverTime;
 import ds.GraphVisualizationResults;
 import de.tu_berlin.math.coga.zet.NetworkFlowModel;
 import ds.CompareVisualizationResults;
-import ds.ca.CellularAutomaton;
+import ds.ca.evac.EvacuationCellularAutomaton;
 import io.visualization.BuildingResults;
 import io.visualization.CAVisualizationResults;
 import java.io.BufferedInputStream;
@@ -47,7 +47,7 @@ public class BatchResultEntry {
 	// Identifying information
 	protected String name;
 	private BuildingResults buildingResults;
-	protected CellularAutomaton[] cas;
+	protected EvacuationCellularAutomaton[] cas;
 	protected NetworkFlowModel networkFlowModel;
 	
 	// Computed solutions
@@ -70,7 +70,7 @@ public class BatchResultEntry {
 
 	public String getName () { return name; }
 	public BuildingResults getBuildingResults () { return buildingResults; }
-	public CellularAutomaton[] getCa () { return cas; }
+	public EvacuationCellularAutomaton[] getCa () { return cas; }
 	public NetworkFlowModel getGraph () { return networkFlowModel; }
 
 	public PathBasedFlowOverTime getFlow () { return flow; }
@@ -111,7 +111,7 @@ public class BatchResultEntry {
 	 * @param runNumber the cycle number
 	 * @param ca the cellular automaton
 	 */
-	public void setCellularAutomaton( int runNumber, CellularAutomaton ca ) {
+	public void setCellularAutomaton( int runNumber, EvacuationCellularAutomaton ca ) {
 		cas[runNumber] = ca;
 	}
 	
@@ -120,7 +120,7 @@ public class BatchResultEntry {
 	 * @param runNumber the cycle number
 	 * @return the cellular automaton
 	 */
-	public CellularAutomaton getCellularAutomaton( int runNumber ) {
+	public EvacuationCellularAutomaton getCellularAutomaton( int runNumber ) {
 		return cas[runNumber];
 	}
 	

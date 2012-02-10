@@ -17,11 +17,11 @@ package algo.ca.rule;
 
 import java.util.ArrayList;
 
-import ds.ca.Cell;
-import ds.ca.ExitCell;
-import ds.ca.Individual;
-import ds.ca.SaveCell;
-import ds.ca.StaticPotential;
+import ds.ca.evac.Cell;
+import ds.ca.evac.ExitCell;
+import ds.ca.evac.Individual;
+import ds.ca.evac.SaveCell;
+import ds.ca.evac.StaticPotential;
 import de.tu_berlin.math.coga.rndutils.RandomUtils;
 
 /**
@@ -51,7 +51,7 @@ public class ChangePotentialAttractivityOfExitRule extends AbstractPotentialChan
 			return false;
 		else {
 			RandomUtils rnd = RandomUtils.getInstance();
-			double changePotentialThreshold = this.caController().getParameterSet().changePotentialThreshold( cell.getIndividual() );
+			double changePotentialThreshold = esp.parameterSet.changePotentialThreshold( cell.getIndividual() );
 			if( rnd.binaryDecision( changePotentialThreshold ) )
 				return true;
 			else
@@ -62,13 +62,15 @@ public class ChangePotentialAttractivityOfExitRule extends AbstractPotentialChan
 	/**
 	 * The concrete method changing the individuals StaticPotential.
 	 * For a detailed description read the class description above.
+	 * 
+	 * @param cell 
 	 */
 	@Override
 	protected void onExecute( Cell cell ) {
 		Individual individual = cell.getIndividual();
 		if( !individual.isSafe() ) {
-			ArrayList<StaticPotential> staticPotentials = new ArrayList<StaticPotential>();
-			staticPotentials.addAll( this.caController().getCA().getPotentialManager().getStaticPotentials() );
+			ArrayList<StaticPotential> staticPotentials = new ArrayList<>();
+			staticPotentials.addAll( esp.eca.getPotentialManager().getStaticPotentials() );
 			boolean initialPotentialFound = false;
 			StaticPotential mostAttractiveSP = null;
 			// Find any admissible StaticPotential for this Individual
@@ -101,7 +103,7 @@ public class ChangePotentialAttractivityOfExitRule extends AbstractPotentialChan
 
 			if( promisingNeighbours > CHANGE_THRESHOLD ) {
 				individual.setStaticPotential( mostAttractiveSP );
-				caController().getCaStatisticWriter().getStoredCAStatisticResults().getStoredCAStatisticResultsForIndividuals().addChangedPotentialToStatistic( individual, caController().getCA().getTimeStep() );
+				esp.caStatisticWriter.getStoredCAStatisticResults().getStoredCAStatisticResultsForIndividuals().addChangedPotentialToStatistic( individual, esp.eca.getTimeStep() );
 			}
 		}
 	}

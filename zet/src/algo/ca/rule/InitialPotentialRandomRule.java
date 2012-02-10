@@ -15,9 +15,9 @@
  */
 package algo.ca.rule;
 
-import ds.ca.Cell;
-import ds.ca.Individual.DeathCause;
-import ds.ca.StaticPotential;
+import ds.ca.evac.Cell;
+import ds.ca.evac.Individual.DeathCause;
+import ds.ca.evac.StaticPotential;
 import java.util.ArrayList;
 import de.tu_berlin.math.coga.rndutils.RandomUtils;
 
@@ -31,7 +31,7 @@ public class InitialPotentialRandomRule extends AbstractInitialRule {
 	@Override
 	protected void onExecute( Cell cell ) {
 		ArrayList<StaticPotential> exits = new ArrayList<StaticPotential>();
-		exits.addAll( this.caController().getCA().getPotentialManager().getStaticPotentials() );
+		exits.addAll( esp.eca.getPotentialManager().getStaticPotentials() );
 		int numberOfExits = exits.size();
 		RandomUtils random = RandomUtils.getInstance();
 		int randomExitNumber = random.getRandomGenerator().nextInt( numberOfExits );
@@ -45,7 +45,7 @@ public class InitialPotentialRandomRule extends AbstractInitialRule {
 					break;
 				}
 			if( !exitFound )
-				this.caController().getCA().setIndividualDead( cell.getIndividual(), DeathCause.EXIT_UNREACHABLE );
+				esp.eca.setIndividualDead( cell.getIndividual(), DeathCause.EXIT_UNREACHABLE );
 		} else
 			cell.getIndividual().setStaticPotential( exits.get( randomExitNumber ) );
 	}

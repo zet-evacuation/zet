@@ -22,14 +22,14 @@ import java.util.Vector;
 import com.thoughtworks.xstream.annotations.XStreamAlias;
 import com.thoughtworks.xstream.annotations.XStreamOmitField;
 
-import ds.ca.Cell;
-import ds.ca.CellularAutomaton;
-import ds.ca.DoorCell;
-import ds.ca.DynamicPotential;
-import ds.ca.PotentialManager;
-import ds.ca.InitialConfiguration;
-import ds.ca.Room;
-import ds.ca.StaticPotential;
+import ds.ca.evac.Cell;
+import ds.ca.evac.EvacuationCellularAutomaton;
+import ds.ca.evac.DoorCell;
+import ds.ca.evac.DynamicPotential;
+import ds.ca.evac.PotentialManager;
+import ds.ca.evac.InitialConfiguration;
+import ds.ca.evac.Room;
+import ds.ca.evac.StaticPotential;
 import gui.ZETMain;
 
 /**
@@ -72,7 +72,7 @@ public class VisualResultsRecorder {
 	 */
 	@XStreamAlias( "initial_configuration" )
 	private InitialConfiguration clonedInitialConfig;
-	private CellularAutomaton clonedCA;
+	private EvacuationCellularAutomaton clonedCA;
 	/**
 	 * Stores a vector of actions for every time step
 	 * Each vector holds the actions for its time step in the
@@ -135,7 +135,7 @@ public class VisualResultsRecorder {
 	public void setInitialConfiguration( InitialConfiguration initialConfig ) {
 		reset();
 		this.clonedInitialConfig = cloneConfig( initialConfig, cellMap, staticPotentialMap );
-		this.clonedCA = new CellularAutomaton( clonedInitialConfig );
+		this.clonedCA = new EvacuationCellularAutomaton( clonedInitialConfig );
 	}
 
 	public InitialConfiguration getInitialConfiguration() {

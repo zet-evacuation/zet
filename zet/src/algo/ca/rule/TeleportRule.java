@@ -4,9 +4,9 @@
  */
 package algo.ca.rule;
 
-import ds.ca.Cell;
-import ds.ca.Individual;
-import ds.ca.TeleportCell;
+import ds.ca.evac.Cell;
+import ds.ca.evac.Individual;
+import ds.ca.evac.TeleportCell;
 
 
 /**
@@ -35,16 +35,16 @@ public class TeleportRule extends AbstractRule {
 			double targetFreeAt = tc.getTarget( 0 ).getOccupiedUntil();
 
 
-			if( tc.getTarget( 0 ).getIndividual() == null && tc.getTarget( 0 ).getUsedInTimeStep() < caController().getCA().getTimeStep() ) {
+			if( tc.getTarget( 0 ).getIndividual() == null && tc.getTarget( 0 ).getUsedInTimeStep() < esp.eca.getTimeStep() ) {
 				double moveTime = Math.max( targetFreeAt, cell.getIndividual().getStepEndTime() );
 				//cell.getIndividual().setStepStartTime( cell.getIndividual().getStepEndTime() );
 				cell.getIndividual().setStepStartTime( moveTime );
-				caController().getCA().moveIndividual( cell, tc.getTarget( 0 ) );
+				esp.eca.moveIndividual( cell, tc.getTarget( 0 ) );
 				tc.setTeleportFailed( false );
 				counter++;
 				System.out.println( "Teleportiert: " + counter );
-				if( caController().getCA().getTimeStep() > tc.getTarget( 0 ).getUsedInTimeStep() )
-					tc.getTarget( 0 ).setUsedInTimeStep( caController().getCA().getTimeStep() );
+				if( esp.eca.getTimeStep() > tc.getTarget( 0 ).getUsedInTimeStep() )
+					tc.getTarget( 0 ).setUsedInTimeStep( esp.eca.getTimeStep() );
 			} else
 				tc.setTeleportFailed( true );
 		}
@@ -58,7 +58,7 @@ public class TeleportRule extends AbstractRule {
 	 */
 	//gibt true wieder, wenn geschwindigkeit von zelle und individuel (wkeit darueber) bewegung bedeuten
 	protected boolean canMove( Individual i ) {
-		if( this.caController().getCA().getTimeStep() > i.getStepEndTime() ) {
+		if( esp.eca.getTimeStep() > i.getStepEndTime() ) {
 			return true;
 		}
 		return false;

@@ -15,7 +15,7 @@
  */
 package algo.ca.rule;
 
-import ds.ca.StaticPotential;
+import ds.ca.evac.StaticPotential;
 
 /**
  * This class defines a tuple

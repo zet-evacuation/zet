@@ -31,14 +31,14 @@ import de.tu_berlin.math.coga.common.util.Direction;
 import ds.PropertyContainer;
 import ds.z.Floor;
 import ds.z.Room;
-import ds.ca.Cell;
-import ds.ca.CellularAutomaton;
-import ds.ca.DynamicPotential;
-import ds.ca.ExitCell;
-import ds.ca.PotentialManager;
-import ds.ca.SaveCell;
-import ds.ca.StairCell;
-import ds.ca.StaticPotential;
+import ds.ca.evac.Cell;
+import ds.ca.evac.EvacuationCellularAutomaton;
+import ds.ca.evac.DynamicPotential;
+import ds.ca.evac.ExitCell;
+import ds.ca.evac.PotentialManager;
+import ds.ca.evac.SaveCell;
+import ds.ca.evac.StairCell;
+import ds.ca.evac.StaticPotential;
 import ds.z.ZControl;
 import zet.gui.main.tabs.base.AbstractFloor;
 import java.awt.Color;
@@ -57,7 +57,7 @@ public class JRasterFloor extends AbstractFloor {
 	// Main objects
 	/** The displayed floor. */
 	private Floor myFloor;
-	private CellularAutomaton ca;
+	private EvacuationCellularAutomaton ca;
 	private ZToCAMapping mapping;
 	private ZToCARasterContainer container;
 	private CAStatistic cas;
@@ -81,13 +81,13 @@ public class JRasterFloor extends AbstractFloor {
 		this.zcontrol = zcontrol;
 	}
 
-	public void setSimulationData( CellularAutomaton ca, ZToCARasterContainer container, ZToCAMapping mapping ) {
+	public void setSimulationData( EvacuationCellularAutomaton ca, ZToCARasterContainer container, ZToCAMapping mapping ) {
 		this.ca = ca;
 		this.container = container;
 		this.mapping = mapping;
 	}
 
-	public CellularAutomaton getCa() {
+	public EvacuationCellularAutomaton getCa() {
 		return ca;
 	}
 

@@ -19,9 +19,9 @@
  */
 package algo.ca.util;
 
-import ds.ca.Cell;
-import ds.ca.ExitCell;
-import ds.ca.StaticPotential;
+import ds.ca.evac.Cell;
+import ds.ca.evac.ExitCell;
+import ds.ca.evac.StaticPotential;
 import java.util.Collection;
 
 /**
