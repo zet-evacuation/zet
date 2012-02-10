@@ -1141,7 +1141,7 @@ public class GUIControl implements AlgorithmListener {
 					//EventServer.getInstance().dispatchEvent( new MessageEvent<>( this, MessageType.Status, "Simulation finished" ) );
 				}
 			}
-		} );
+		}, this );
 	}
 
 	public void performQuickVisualization() {

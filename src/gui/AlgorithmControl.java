@@ -59,7 +59,7 @@ public class AlgorithmControl implements PropertyChangeListener {
 	private NetworkFlowModel networkFlowModel;
 	private GraphVisualizationResults graphVisResults;
         private CompareVisualizationResults compVisResults;
-	private final CellularAutomatonTask cat = new CellularAutomatonTask();
+	private CellularAutomatonTask cat = new CellularAutomatonTask();
 	//private boolean createdValid = false;
 	private RuntimeException error;
 	private CellularAutomatonTaskStepByStep catsbs;
@@ -162,13 +162,21 @@ public class AlgorithmControl implements PropertyChangeListener {
 	}
 
 	void performSimulation() {
-		performSimulation( null );
+		performSimulation( null, null );
 	}
 
-	void performSimulation( PropertyChangeListener propertyChangeListener ) {
-		//final CellularAutomatonTask cat = new CellularAutomatonTask();
+// AlgorithmListener control ) {
+//		final GraphAlgorithmTask gat = new GraphAlgorithmTask( GraphAlgorithmEnumeration.SuccessiveEarliestArrivalAugmentingPathOptimized );
+//		gat.setProblem( project );
+		
+//		gat.addAlgorithmListener( control );
+			
+	
+	void performSimulation( PropertyChangeListener propertyChangeListener, AlgorithmListener listener ) {
+		cat = new CellularAutomatonTask();
 		cat.setCaAlgo( CellularAutomatonAlgorithmEnumeration.RandomOrder );
 		cat.setProblem( project );
+		cat.addAlgorithmListener( listener );
 
 		final SerialTask st = new SerialTask( cat );
 		st.addPropertyChangeListener( new PropertyChangeListener() {
@@ -325,7 +333,7 @@ public class AlgorithmControl implements PropertyChangeListener {
 		performOptimization( null, control );
 	}
 
-	public void performOptimization( PropertyChangeListener propertyChangeListener, GUIControl control ) {
+	public void performOptimization( PropertyChangeListener propertyChangeListener, AlgorithmListener control ) {
 		final GraphAlgorithmTask gat = new GraphAlgorithmTask( GraphAlgorithmEnumeration.SuccessiveEarliestArrivalAugmentingPathOptimized );
 		gat.setProblem( project );
 		

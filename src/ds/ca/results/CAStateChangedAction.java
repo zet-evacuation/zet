@@ -58,7 +58,7 @@ public class CAStateChangedAction extends Action {
 	@Override
 	public String toString() {
 		switch( this.newState ) {
-			case finish:
+			case finished:
 				return "finished";
 			case ready:
 				return "ready";

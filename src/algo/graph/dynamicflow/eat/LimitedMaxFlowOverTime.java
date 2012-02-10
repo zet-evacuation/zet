@@ -62,8 +62,8 @@ public class LimitedMaxFlowOverTime {
 		long end = System.nanoTime();
 		MaximumFlow mf = hipr.getSolution();
 
-		//System.out.println( "Flow value: " + mf.getFlowValue() );
-		//System.out.println( "Sink-Arrival value: " + hipr.getFlowValue() );
+		System.out.println( "Flow value: " + mf.getFlowValue() );
+		System.out.println( "Sink-Arrival value: " + hipr.getFlowValue() );
 		hiprf = hipr.getFlowValue();
 		
 		//System.out.println( "Pushes: " + hipr.getPushes() + ", Relabels: " + hipr.getRelabels() );

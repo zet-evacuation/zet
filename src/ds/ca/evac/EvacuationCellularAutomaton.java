@@ -53,7 +53,7 @@ public class EvacuationCellularAutomaton extends SquareCellularAutomaton impleme
 		/** if a simulation is running. */
 		running,
 		/** if a simulation is finished. in this case all individuals are removed or in save areas. */
-		finish
+		finished
 	}
 	/** an ArrayList of all Individual objects in the cellular automaton. */
 	private ArrayList<Individual> individuals;
@@ -102,23 +102,23 @@ public class EvacuationCellularAutomaton extends SquareCellularAutomaton impleme
 	 */
 	public EvacuationCellularAutomaton() {
 		timeStep = 0;
-		individuals = new ArrayList<Individual>();
-		individualsByID = new HashMap<Integer, Individual>();
-		evacuatedIndividuals = new ArrayList<Individual>();
-		deadIndividuals = new ArrayList<Individual>();
-		markedForRemoval = new ArrayList<Individual>();
-		exits = new ArrayList<ExitCell>();
-		rooms = new HashMap<Integer, Room>();
-		assignmentTypes = new HashMap<String, UUID>();
+		individuals = new ArrayList<>();
+		individualsByID = new HashMap<>();
+		evacuatedIndividuals = new ArrayList<>();
+		deadIndividuals = new ArrayList<>();
+		markedForRemoval = new ArrayList<>();
+		exits = new ArrayList<>();
+		rooms = new HashMap<>();
+		assignmentTypes = new HashMap<>();
 //		roomIndividualMap = new HashMap<Room, HashSet<Individual>>();
-		typeIndividualMap = new HashMap<UUID, HashSet<Individual>>();
-		roomsByFloor = new HashMap<Integer, ArrayList<Room>>();
+		typeIndividualMap = new HashMap<>();
+		roomsByFloor = new HashMap<>();
 		potentialManager = new PotentialManager();
 		absoluteMaxSpeed = 1;
 		secondsPerStep = 1;
 		stepsPerSecond = 1;
 		state = State.ready;
-		floorNames = new HashMap<Integer, String>();
+		floorNames = new HashMap<>();
 		recordingStarted = false;
 	}
 
@@ -137,11 +137,6 @@ public class EvacuationCellularAutomaton extends SquareCellularAutomaton impleme
 
 		for( Room room : initialConfiguration.getRooms() ) {
 			for( Cell cell : room.getAllCells() ) {
-				// TODO: remove, wird bereits in addRoom gemacht
-				//7if( cell instanceof ExitCell ) {
-				//	addExit( (ExitCell) cell );
-				//7}
-
 				if( cell.getIndividual() != null ) {
 					addIndividual( cell, cell.getIndividual() );
 				}
@@ -348,12 +343,7 @@ public class EvacuationCellularAutomaton extends SquareCellularAutomaton impleme
 				typeIndividualMap.get( i.getUid() ).add( i );
 			}
 		}
-//		try {
 		c.getRoom().addIndividual( c, i );
-//		} catch( Exception ex ) {
-//			int k = 1;
-//			k++;
-//		}
 		
 		// assign shortest path potential to individual, so it is not null.
 		int currentMin = -1;
@@ -400,16 +390,6 @@ public class EvacuationCellularAutomaton extends SquareCellularAutomaton impleme
 		}
 		if( to.getIndividual() != null )
 			throw new IllegalArgumentException( "Another Individual already standing on the ''to''-Cell!" );
-
-		// beobachte 76,5 genauer:
-		if( from.getX() == 76 && from.getY() == 5 ) {
-			System.out.println( "Individual " + from.getIndividual().getNumber() + " verlässt Teleport zur Zeit " + this.getTimeStep() );
-		}
-		if( to.getX() == 76 && to.getY() == 5 ) {
-			System.out.println( "Individual " + from.getIndividual().getNumber() + " betritt Teleport zur Zeit " + this.getTimeStep() );
-		}
-
-
 
 		VisualResultsRecorder.getInstance().recordAction( new MoveAction( from, to, from.getIndividual() ) );
 		if( from.getRoom().equals( to.getRoom() ) ) {
@@ -606,12 +586,12 @@ public class EvacuationCellularAutomaton extends SquareCellularAutomaton impleme
 	 * each Cluster of ExitCells.
 	 */
 	public ArrayList<ArrayList<ExitCell>> clusterExitCells() {
-		HashSet<ExitCell> alreadySeen = new HashSet<ExitCell>();
-		ArrayList<ArrayList<ExitCell>> allClusters = new ArrayList<ArrayList<ExitCell>>();
+		HashSet<ExitCell> alreadySeen = new HashSet<>();
+		ArrayList<ArrayList<ExitCell>> allClusters = new ArrayList<>();
 		List<ExitCell> allExitCells = this.getExits();
 		for( ExitCell e : allExitCells ) {
 			if( !alreadySeen.contains( e ) ) {
-				ArrayList<ExitCell> singleCluster = new ArrayList<ExitCell>();
+				ArrayList<ExitCell> singleCluster = new ArrayList<>();
 				singleCluster = this.findExitCellCluster( e, singleCluster, alreadySeen );
 				allClusters.add( singleCluster );
 			}
@@ -633,7 +613,7 @@ public class EvacuationCellularAutomaton extends SquareCellularAutomaton impleme
 			cluster.add( currentCell );
 			alreadySeen.add( currentCell );
 			ArrayList<Cell> cellNeighbours = currentCell.getAllNeighbours();
-			ArrayList<ExitCell> neighbours = new ArrayList<ExitCell>();
+			ArrayList<ExitCell> neighbours = new ArrayList<>();
 			for( Cell c : cellNeighbours ) {
 				if( c instanceof ExitCell ) {
 					neighbours.add( (ExitCell) c );
@@ -690,7 +670,7 @@ public class EvacuationCellularAutomaton extends SquareCellularAutomaton impleme
 	}
 	
 	public void stop() {
-		setState( State.finish );
+		setState( State.finished );
 	}
 
 	/**
@@ -872,5 +852,4 @@ public class EvacuationCellularAutomaton extends SquareCellularAutomaton impleme
 	public void setNeededTime( int neededTime) {
 		this.neededTime = neededTime;
 	}
-
 }
