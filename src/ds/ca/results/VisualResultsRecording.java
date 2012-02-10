@@ -17,7 +17,7 @@ package ds.ca.results;
 
 import java.util.Iterator;
 import java.util.Vector;
-import ds.ca.InitialConfiguration;
+import ds.ca.evac.InitialConfiguration;
 
 /**
  * This class serves as a container for visualization results of a simulation

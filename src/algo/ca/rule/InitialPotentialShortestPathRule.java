@@ -15,11 +15,11 @@
  */
 package algo.ca.rule;
 
-import ds.ca.CAController;
+import algo.ca.algorithm.evac.EvacuationSimulationProblem;
 import java.util.ArrayList;
-import ds.ca.Cell;
-import ds.ca.StaticPotential;
-import ds.ca.Individual;
+import ds.ca.evac.Cell;
+import ds.ca.evac.StaticPotential;
+import ds.ca.evac.Individual;
 
 /**
  * This rule chooses an Individual's (the one standing on the current cell) initial
@@ -42,13 +42,13 @@ public class InitialPotentialShortestPathRule extends AbstractInitialRule {
 	 */
 	@Override
 	protected void onExecute( Cell cell ) {
-		assignShortestPathPotential( cell, this.caController() );
+		assignShortestPathPotential( cell, this.esp );
 	}
 
-	public static void assignShortestPathPotential( Cell cell, CAController caController ) {
+	public static void assignShortestPathPotential( Cell cell, EvacuationSimulationProblem esp ) {
 		Individual individual = cell.getIndividual();
-		ArrayList<StaticPotential> staticPotentials = new ArrayList<StaticPotential>();
-		staticPotentials.addAll( caController.getCA().getPotentialManager().getStaticPotentials() );
+		ArrayList<StaticPotential> staticPotentials = new ArrayList<>();
+		staticPotentials.addAll( esp.eca.getPotentialManager().getStaticPotentials() );
 		StaticPotential initialPotential = new StaticPotential();
 		double minDistanceToEvacArea = Double.MAX_VALUE;
 		double distanceToEvacArea;
@@ -62,13 +62,13 @@ public class InitialPotentialShortestPathRule extends AbstractInitialRule {
 
 		// Check whether the individual is caged and cannot leave the building -> it has to die
 		if( minDistanceToEvacArea == Double.MAX_VALUE )
-			caController.getCA().setIndividualDead( individual, Individual.DeathCause.EXIT_UNREACHABLE );
+			esp.eca.setIndividualDead( individual, Individual.DeathCause.EXIT_UNREACHABLE );
 
 		individual.setStaticPotential( initialPotential );
-		caController.getCaStatisticWriter().getStoredCAStatisticResults().getStoredCAStatisticResultsForIndividuals().addMinDistancesToStatistic( individual, minDistanceToEvacArea, initialPotential.getDistance( cell ) );
-		caController.getCaStatisticWriter().getStoredCAStatisticResults().getStoredCAStatisticResultsForIndividuals().addChangedPotentialToStatistic( individual, 0 );
-		caController.getCaStatisticWriter().getStoredCAStatisticResults().getStoredCAStatisticResultsForIndividuals().addExhaustionToStatistic( individual, 0, individual.getExhaustion() );
-		caController.getCaStatisticWriter().getStoredCAStatisticResults().getStoredCAStatisticResultsForIndividuals().addPanicToStatistic( individual, 0, individual.getPanic() );
+		esp.caStatisticWriter.getStoredCAStatisticResults().getStoredCAStatisticResultsForIndividuals().addMinDistancesToStatistic( individual, minDistanceToEvacArea, initialPotential.getDistance( cell ) );
+		esp.caStatisticWriter.getStoredCAStatisticResults().getStoredCAStatisticResultsForIndividuals().addChangedPotentialToStatistic( individual, 0 );
+		esp.caStatisticWriter.getStoredCAStatisticResults().getStoredCAStatisticResultsForIndividuals().addExhaustionToStatistic( individual, 0, individual.getExhaustion() );
+		esp.caStatisticWriter.getStoredCAStatisticResults().getStoredCAStatisticResultsForIndividuals().addPanicToStatistic( individual, 0, individual.getPanic() );
 		// ToDo: Potential des Individuums im VisualResultsRecorder speichern	}
 	}
 }

@@ -20,16 +20,15 @@
 
 package batch.tasks.CA;
 
-import algo.ca.EvacuationCellularAutomatonAlgorithm;
+import algo.ca.algorithm.evac.EvacuationCellularAutomatonAlgorithm;
 import algo.graph.exitassignment.ExitAssignment;
 import batch.BatchResultEntry;
 import zet.tasks.CellularAutomatonAlgorithmEnumeration;
 import batch.tasks.AssignmentTask;
-import de.tu_berlin.math.coga.zet.converter.cellularAutomaton.ZToCAConverter;
 import de.tu_berlin.math.coga.zet.converter.cellularAutomaton.ZToCAConverter.ConversionNotSupportedException;
 import ds.z.Project;
 import ds.PropertyContainer;
-import ds.ca.CellularAutomaton;
+import ds.ca.evac.EvacuationCellularAutomaton;
 import ds.ca.results.VisualResultsRecorder;
 import ds.z.Assignment;
 import ds.z.AssignmentType;
@@ -41,7 +40,7 @@ import statistic.ca.CAStatistic;
 
 /**
  * A task that is called during the batch execution. It performs one run of a
- * {@link CellularAutomaton} using an {@link ExitAssignment}. The automaton is
+ * {@link EvacuationCellularAutomaton} using an {@link ExitAssignment}. The automaton is
  * created before.
  * @author Jan-Philipp Kappmeier
  */
@@ -90,7 +89,7 @@ public class BatchCA2Task implements Runnable {
 	 * assignment assigned and the cellular automaton is executed.
 	 */
 	public void run() {
-		CellularAutomaton ca2;
+		EvacuationCellularAutomaton ca2;
 		try {
 			ca2 = ExitDistributionBasedCAFactory.getInstance().convertAndApplyConcreteAssignment( project.getBuildingPlan(), exitAssignmentTask.getExitAssignment(), concreteAssignments[runNumber], res.getNetworkFlowModel().getZToGraphMapping().getRaster() );
 			res.setCellularAutomaton(runNumber, ca2 );
@@ -105,24 +104,23 @@ public class BatchCA2Task implements Runnable {
 		}
 
 		EvacuationCellularAutomatonAlgorithm caAlgo;
-		caAlgo = cellularAutomatonAlgo.createTask( ca2 );
+		//caAlgo = cellularAutomatonAlgo.createTask( ca2 );
 		double caMaxTime = PropertyContainer.getInstance ().getAsDouble ("algo.ca.maxTime");
-		caAlgo.setMaxTimeInSeconds (caMaxTime);
+		//caAlgo.setMaxTimeInSeconds (caMaxTime);
 
 		long start;
 		long end;
 
 		//Run the CA
 		start = System.currentTimeMillis ();
-		caAlgo.getCellularAutomaton ().startRecording ();
-		caAlgo.run ();	// hier wird initialisiert
-		caAlgo.getCellularAutomaton ().stopRecording ();
+		//caAlgo.getCellularAutomaton ().startRecording ();
+		//caAlgo.run ();	// hier wird initialisiert
+		//caAlgo.getCellularAutomaton ().stopRecording ();
 		end = System.currentTimeMillis ();
 		//System.out.println ("Laufzeit CA:" + (end - start) + " ms");
 
 		// Get the results
-		CAStatistic statistic = new CAStatistic (caAlgo.getCaController ().getCaStatisticWriter ().
-				getStoredCAStatisticResults ());
+		CAStatistic statistic = null;//new CAStatistic (caAlgo.getCaController ().getCaStatisticWriter ().getStoredCAStatisticResults ());
 		res.setCellularAutomatonStatistic (runNumber, statistic);
 		// TODO RASTER
 		CAVisualizationResults visres = new CAVisualizationResults ( VisualResultsRecorder.getInstance ().getRecording (), null);
@@ -132,7 +130,7 @@ public class BatchCA2Task implements Runnable {
 		res.setCellularAutomatonVisualization (runNumber, visres );
 
 		// Gather median information
-		median.put (new Integer (caAlgo.getCellularAutomaton ().getTimeStep ()), runNumber);
+		//median.put (new Integer (caAlgo.getCellularAutomaton ().getTimeStep ()), runNumber);
 		
 		// Forget the used batch result entry. This is necessary in case that the batch entries
 		// are stored on disk. Then this reference will inhibit the deletion of the batch result entry

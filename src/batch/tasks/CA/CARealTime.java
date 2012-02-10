@@ -20,27 +20,24 @@
 
 package batch.tasks.CA;
 
-import algo.ca.CellularAutomatonInOrderExecution;
-import ds.ca.CellularAutomaton;
-import ds.ca.CellularAutomaton.State;
-import ds.ca.Individual;
+import algo.ca.algorithm.evac.EvacuationCellularAutomatonInOrder;
+import ds.ca.evac.EvacuationCellularAutomaton;
+import ds.ca.evac.Individual;
 import de.tu_berlin.math.coga.common.util.Helper;
 
 /**
  *
  * @author Jan-Philipp Kappmeier
  */
-public class CARealTime extends CellularAutomatonInOrderExecution {
+public class CARealTime extends EvacuationCellularAutomatonInOrder {
 
 	private int stepTime;
 
-	public CARealTime( CellularAutomaton ca ) {
-		super( ca );
+	public CARealTime( EvacuationCellularAutomaton ca ) {
 		stepTime = 100;
 	}
 
-	@Override
-	public void run() {
+	public void runA() {
 		if( isCancelled() ) {
 			return;
 		}
@@ -58,16 +55,17 @@ public class CARealTime extends CellularAutomatonInOrderExecution {
 				end = System.currentTimeMillis();
 			} else
 				end = start;
-			int individuals = ca.getIndividualCount();
-			if( ca.getIndividualCount() > 0 ) {
+			//int individuals = ca.getIndividualCount();
+//			if( ca.getIndividualCount() > 0 ) {
 				//AlgorithmTask.getInstance().publish( 0, ca.evacuatedIndividualsCount() + " Individuen sicher", "Führe " + (ca.getTimeStep() + 1) + ". Schritt durch..." );
-			}
+//			}
 			long wait = stepTime - (end - start);
 			if( wait > 0 ) {
 				Helper.pause( wait );
 			}
 			// Execute loop rules
-			while( ca.getNotSafeIndividualsCount() > 0 && ca.getTimeStep() < getMaxTimeInSteps() && !isCancelled() ) {
+			//while( ca.getNotSafeIndividualsCount() > 0 && ca.getTimeStep() < getMaxTimeInSteps() && !isCancelled() ) {
+			while( true ){
 				if( isPaused() ) {
 					try {
 						Thread.sleep( 500 );
@@ -86,19 +84,20 @@ public class CARealTime extends CellularAutomatonInOrderExecution {
 				}
 			}
 			// let die all individuals which are not already dead and not safe
-			if( ca.getNotSafeIndividualsCount() != 0 ) {
-				Individual[] individualsCopy = ca.getIndividuals().toArray( new Individual[ca.getIndividuals().size()] );
-				for( Individual i : individualsCopy ) {
-					if( !i.getCell().getIndividual().isSafe() ) {
-						ca.setIndividualDead( i, Individual.DeathCause.NOT_ENOUGH_TIME );
+			//if( ca.getNotSafeIndividualsCount() != 0 ) {
+			//if( 0==1 ) {
+				//Individual[] individualsCopy = ca.getIndividuals().toArray( new Individual[ca.getIndividuals().size()] );
+				//for( Individual i : individualsCopy ) {
+				//	if( !i.getCell().getIndividual().isSafe() ) {
+						//ca.setIndividualDead( i, Individual.DeathCause.NOT_ENOUGH_TIME );
 						//ca.decreaseNrOfLivingAndNotSafeIndividuals();
-					}
-				}
-			}
-			setFinished( true );
-			if( !isCancelled() )
+					//}
+				//}
+			//}
+			//setFinished( true );
+			//if( !isCancelled() )
 				//AlgorithmTask.getInstance().publish( 100, "Ende: " + (ca.getInitialIndividualCount() - ca.getNotSafeIndividualsCount() - ca.deadIndividualsCount()) + " Individuen sicher, " + ca.deadIndividualsCount() + " Individuen nicht sicher", ca.getTimeStep() + " Schritte durchgeführt" );
-			ca.setState( State.finish );
+			//ca.setState( State.finish );
 		}
 	}
 

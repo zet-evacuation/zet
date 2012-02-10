@@ -4,7 +4,8 @@
  */
 package zet.tasks;
 
-import algo.ca.EvacuationCellularAutomatonAlgorithm;
+import algo.ca.algorithm.evac.EvacuationCellularAutomatonAlgorithm;
+import algo.ca.algorithm.evac.EvacuationSimulationProblem;
 import de.tu_berlin.math.coga.zet.converter.cellularAutomaton.AssignmentApplicationInstance;
 import de.tu_berlin.math.coga.zet.converter.cellularAutomaton.CellularAutomatonAssignmentConverter;
 import de.tu_berlin.math.coga.zet.converter.cellularAutomaton.ConvertedCellularAutomaton;
@@ -14,7 +15,7 @@ import de.tu_berlin.math.coga.zet.converter.cellularAutomaton.ZToCARasterContain
 import de.tu_berlin.math.coga.common.algorithm.Algorithm;
 import ds.z.Project;
 import ds.PropertyContainer;
-import ds.ca.CellularAutomaton;
+import ds.ca.evac.EvacuationCellularAutomaton;
 import ds.ca.results.VisualResultsRecorder;
 import ds.z.AssignmentType;
 import ds.z.ConcreteAssignment;
@@ -27,7 +28,7 @@ import io.visualization.CAVisualizationResults;
  */
 public class CellularAutomatonTask extends Algorithm<Project, CAVisualizationResults> {
 	CellularAutomatonAlgorithmEnumeration  cellularAutomatonAlgorithm;
-	CellularAutomaton ca;
+	EvacuationCellularAutomaton ca;
 	ZToCAMapping mapping;
 	ZToCARasterContainer container;
 
@@ -59,7 +60,9 @@ public class CellularAutomatonTask extends Algorithm<Project, CAVisualizationRes
 		cac.run();
 
 		// set up simulation algorithm and compute
-		EvacuationCellularAutomatonAlgorithm caAlgo = cellularAutomatonAlgorithm.createTask( ca );
+		//EvacuationCellularAutomatonAlgorithm caAlgo = cellularAutomatonAlgorithm.createTask( ca );
+		EvacuationCellularAutomatonAlgorithm caAlgo = cellularAutomatonAlgorithm.getAlgorithm();
+		caAlgo.setProblem( new EvacuationSimulationProblem( ( ca ) ) );
 		double caMaxTime = PropertyContainer.getInstance().getAsDouble( "algo.ca.maxTime" );
 		caAlgo.setMaxTimeInSeconds( caMaxTime );
 		caAlgo.getCellularAutomaton().startRecording ();
@@ -75,7 +78,7 @@ public class CellularAutomatonTask extends Algorithm<Project, CAVisualizationRes
 		return visResults;
 	}
 
-	public CellularAutomaton getCa() {
+	public EvacuationCellularAutomaton getCa() {
 		return ca;
 	}
 

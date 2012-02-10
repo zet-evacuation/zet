@@ -21,12 +21,12 @@ import ds.graph.flow.PathBasedFlowOverTime;
 import ds.graph.flow.FlowOverTimePath;
 import ds.mapping.IdentifiableObjectMapping;
 import ds.graph.Node;
-import ds.ca.Cell;
-import ds.ca.CellularAutomaton;
-import ds.ca.ExitCell;
-import ds.ca.Individual;
-import ds.ca.PotentialManager;
-import ds.ca.StaticPotential;
+import ds.ca.evac.Cell;
+import ds.ca.evac.EvacuationCellularAutomaton;
+import ds.ca.evac.ExitCell;
+import ds.ca.evac.Individual;
+import ds.ca.evac.PotentialManager;
+import ds.ca.evac.StaticPotential;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -48,7 +48,7 @@ public class CAPathPassabilityChecker {
 	
 	/** A cellular automaton with start individuals. 
 	 * The checker manages the potentials of the individuals in this ca. */
-	CellularAutomaton ca;
+	EvacuationCellularAutomaton ca;
 	/** The potential manager of the cellular automation {@code ca</code.> */
 	PotentialManager pm;
 	/** The bidirectional node cell mapping describes the relation between 
@@ -70,11 +70,11 @@ public class CAPathPassabilityChecker {
 	/**
 	 * Constructs an CAPathPassabilityChecker instance for a given cellular automaton,
 	 * a bidirectional mapping between nodes and cells and a transshipment.
-	 * @param ca CellularAutomaton instance to work with
+	 * @param ca EvacuationCellularAutomaton instance to work with
 	 * @param transshipment a {@code PathBasedFlowOverTime} object containing a transshipment.
 	 * @param nodeCellMapping an object containing a mapping from nodes to lists of cells and containing a mapping from cells to nodes.
 	 */
-	public CAPathPassabilityChecker(CellularAutomaton ca, BidirectionalNodeCellMapping nodeCellMapping, PathBasedFlowOverTime transshipment){
+	public CAPathPassabilityChecker(EvacuationCellularAutomaton ca, BidirectionalNodeCellMapping nodeCellMapping, PathBasedFlowOverTime transshipment){
 		this.ca = ca;
 		this.pm = ca.getPotentialManager();
 		this.nodeCellMapping = nodeCellMapping;

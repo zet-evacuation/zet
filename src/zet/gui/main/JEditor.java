@@ -85,7 +85,7 @@ import zet.util.ConversionTools;
  * @author Jan-Philipp Kappmeier, Timon Kelter
  */
 @SuppressWarnings( "serial" )
-public class JEditor extends JFrame implements Localized, EventListener<ProgressEvent> {
+public class JEditor extends JFrame implements Localized {
 	public enum ZETWindowTabs {
 		EditFloor( true, "Edit" ),
 		QuickView( ZETMain.isDebug(), "CAView" ),
@@ -204,9 +204,6 @@ public class JEditor extends JFrame implements Localized, EventListener<Progress
 		toolBarLog = new JLogToolBar( guiControl );
 		currentToolbar = toolBarEdit;
 		add( toolBarEdit, BorderLayout.NORTH );
-
-		// register class for progress events
-		EventServer.getInstance().registerListener( this, ProgressEvent.class );
 
 		// window listener
 		this.addWindowListener( new WindowAdapter() {
@@ -577,15 +574,15 @@ public class JEditor extends JFrame implements Localized, EventListener<Progress
 	/**
 	 * @param event 
 	 */
-	@Override
-	public void handleEvent( ProgressEvent event ) {
-		if( currentMode == ZETWindowTabs.QuickView ) {
-			Floor floor = editView.getCurrentFloor();
+//	@Override
+//	public void handleEvent( ProgressEvent event ) {
+//		if( currentMode == ZETWindowTabs.QuickView ) {
+//			Floor floor = editView.getCurrentFloor();
 //			//caView.getLeftPanel().getMainComponent().displayFloor( floor );
-			caView.getLeftPanel().getMainComponent().repaint();
-		}
-		ZETMain.sendMessage( event.getProcessMessage().taskName );
-	}
+//			caView.getLeftPanel().getMainComponent().repaint();
+//		}
+//		ZETMain.sendMessage( event.getProcessMessage().taskName );
+//	}
 
 	boolean progressBarEnabled = false;
 	

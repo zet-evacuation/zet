@@ -21,7 +21,7 @@
 package batch.tasks;
 
 import batch.BatchResultEntry;
-import ds.ca.CellularAutomaton;
+import ds.ca.evac.EvacuationCellularAutomaton;
 
 /**
  *
@@ -40,7 +40,7 @@ public class ComputeAvgStepPerSecondTask implements Runnable {
 		double i = 0;
 		
 		if (res.getCa () != null) {
-			for(CellularAutomaton ca : res.getCa()){
+			for(EvacuationCellularAutomaton ca : res.getCa()){
 				tmpAverageStepsPerSecond += ca.getStepsPerSecond();
 				//AlgorithmTask.getInstance().publish( (int)Math.round( 100*(i++/res.getCa ().length) ) );
 			}

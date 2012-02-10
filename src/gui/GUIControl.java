@@ -29,7 +29,7 @@ import ds.CompareVisualizationResults;
 import ds.GraphVisualizationResults;
 import ds.ProjectLoader;
 import ds.PropertyContainer;
-import ds.ca.CellularAutomaton;
+import ds.ca.evac.EvacuationCellularAutomaton;
 import ds.z.Assignment;
 import ds.z.AssignmentArea;
 import ds.z.ConcreteAssignment;
@@ -90,7 +90,7 @@ import zet.tasks.RasterizeTask;
  * menus etc. and delegates them to other classes.
  * @author Jan-Philipp Kappmeier
  */
-public class GUIControl implements AlgorithmListener, EventListener<ProgressEvent> {
+public class GUIControl implements AlgorithmListener {
 
 	/** The editor. */
 	public JEditor editor;
@@ -113,8 +113,6 @@ public class GUIControl implements AlgorithmListener, EventListener<ProgressEven
 	 * Creates a new instance of {@code GUIControl}.
 	 */
 	public GUIControl() {
-			// register class for progress events
-		EventServer.getInstance().registerListener( this, ProgressEvent.class );
 }
 
 	public void createZETWindow() {
@@ -1257,7 +1255,7 @@ public class GUIControl implements AlgorithmListener, EventListener<ProgressEven
 			editor.setProgressValue( ((int)(ape.getProgress() * 100)) );
 
 		if( !firstProgress ) {
-			CellularAutomaton ca = algorithmControl.getCellularAutomaton();
+			EvacuationCellularAutomaton ca = algorithmControl.getCellularAutomaton();
 			if( ca != null ) {
 				editor.getQuickVisualizationView().getLeftPanel().getMainComponent().setSimulationData( algorithmControl.getCellularAutomaton(), algorithmControl.getContainer(), algorithmControl.getMapping() );
 				editor.getQuickVisualizationView().displayFloor( editview.getCurrentFloor() );
@@ -1345,15 +1343,15 @@ public class GUIControl implements AlgorithmListener, EventListener<ProgressEven
 		editor.sendError( message );
 	}
 
-	@Override
-	public void handleEvent( ProgressEvent event ) {
+//	@Override
+//	public void handleEvent( ProgressEvent event ) {
 //		if( currentMode == ZETWindowTabs.QuickView ) {
 //			Floor floor = editView.getCurrentFloor();
 ////			//caView.getLeftPanel().getMainComponent().displayFloor( floor );
 //			caView.getLeftPanel().getMainComponent().repaint();
 //		}
 //		ZETMain.sendMessage( event.getProcessMessage().taskName );
-	}
+//	}
 
 	public void animationFinished() {
 			if( loop )

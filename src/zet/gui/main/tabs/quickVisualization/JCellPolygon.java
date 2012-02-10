@@ -22,8 +22,8 @@ package zet.gui.main.tabs.quickVisualization;
 import de.tu_berlin.math.coga.common.localization.DefaultLoc;
 import de.tu_berlin.math.coga.common.util.Direction;
 import ds.PropertyContainer;
-import ds.ca.Cell;
-import ds.ca.CellularAutomaton;
+import ds.ca.evac.Cell;
+import ds.ca.evac.EvacuationCellularAutomaton;
 import ds.z.PlanPolygon;
 import gui.editor.CoordinateTools;
 import java.awt.BasicStroke;
@@ -47,7 +47,7 @@ public class JCellPolygon extends AbstractPolygon {
 	private Cell cell;
 	private final boolean showIndividualNames;
 	private static final NumberFormat nfFloat = DefaultLoc.getSingleton().getFloatConverter();// NumberFormat.getNumberInstance( DefaultLoc.getSingleton().getLocale() );
-	private CellularAutomaton ca;
+	private EvacuationCellularAutomaton ca;
 
 	/**
 	 * @param cell
@@ -55,7 +55,7 @@ public class JCellPolygon extends AbstractPolygon {
 	 * @param fillColor the border color
 	 * @param ca
 	 */
-	public JCellPolygon( Cell cell, AbstractFloor myFloor, Color fillColor, CellularAutomaton ca ) {
+	public JCellPolygon( Cell cell, AbstractFloor myFloor, Color fillColor, EvacuationCellularAutomaton ca ) {
 		this( cell, myFloor, fillColor, Color.black, ca );
 	}
 
@@ -66,7 +66,7 @@ public class JCellPolygon extends AbstractPolygon {
 	 * @param lineColor
 	 * @param ca
 	 */
-	public JCellPolygon( Cell cell, AbstractFloor myFloor, Color fillColor, Color lineColor, CellularAutomaton ca ) {
+	public JCellPolygon( Cell cell, AbstractFloor myFloor, Color fillColor, Color lineColor, EvacuationCellularAutomaton ca ) {
 		super( lineColor );
 		this.ca = ca;
 		this.cell = cell;

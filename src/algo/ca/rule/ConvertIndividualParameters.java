@@ -21,8 +21,8 @@
 
 package algo.ca.rule;
 
-import ds.ca.Cell;
-import ds.ca.Individual;
+import ds.ca.evac.Cell;
+import ds.ca.evac.Individual;
 
 /**
  * Converts some values of the individuals just before the execution of the
@@ -45,12 +45,12 @@ public class ConvertIndividualParameters extends AbstractRule {
 		// multiplied with the stepsPerSeconds value of the CA. During individual
 		// creation this value is not available, thus we need to do it here.
 		Individual i = cell.getIndividual();
-		final double sps = caController().getCA().getStepsPerSecond();
+		final double sps = esp.eca.getStepsPerSecond();
 		i.setReactionTime( i.getReactionTime() * sps );
 
 		// Convert the speed. It is given in meter per second but has to be
 		// converted to cells per step
-		final double speed = Math.min( 1, i.getMaxSpeed()/caController().getParameterSet().getAbsoluteMaxSpeed() );
+		final double speed = Math.min( 1, i.getMaxSpeed()/esp.parameterSet.getAbsoluteMaxSpeed() );
 		i.setMaxSpeed( speed );
 		i.setCurrentSpeed( speed );
 	}

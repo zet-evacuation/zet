@@ -24,14 +24,14 @@ import java.io.IOException;
 
 import com.thoughtworks.xstream.XStream;
 
-import ds.ca.Cell;
-import ds.ca.DoorCell;
-import ds.ca.ExitCell;
-import ds.ca.InitialConfiguration;
-import ds.ca.Room;
-import ds.ca.RoomCell;
-import ds.ca.SaveCell;
-import ds.ca.StairCell;
+import ds.ca.evac.Cell;
+import ds.ca.evac.DoorCell;
+import ds.ca.evac.ExitCell;
+import ds.ca.evac.InitialConfiguration;
+import ds.ca.evac.Room;
+import ds.ca.evac.RoomCell;
+import ds.ca.evac.SaveCell;
+import ds.ca.evac.StairCell;
 import ds.ca.results.ExitAction;
 import ds.ca.results.MoveAction;
 import ds.ca.results.VisualResultsRecording;

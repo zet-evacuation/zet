@@ -22,7 +22,7 @@ package algo.ca.rule;
 
 import java.util.ArrayList;
 
-import ds.ca.Cell;
+import ds.ca.evac.Cell;
 
 /**
  *

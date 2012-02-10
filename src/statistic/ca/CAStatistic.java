@@ -16,8 +16,8 @@
 package statistic.ca;
 
 import java.util.HashMap;
-import ds.ca.Room;
-import ds.ca.Individual;
+import ds.ca.evac.Room;
+import ds.ca.evac.Individual;
 import statistic.ca.results.*;
 /**
  * @author Matthias Woste

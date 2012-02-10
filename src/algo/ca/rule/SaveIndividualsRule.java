@@ -25,8 +25,8 @@ public class SaveIndividualsRule extends AbstractSaveRule {
 	}
 
 	@Override
-	protected void onExecute( ds.ca.Cell cell ) {
-		ds.ca.Individual savedIndividual = cell.getIndividual();
+	protected void onExecute( ds.ca.evac.Cell cell ) {
+		ds.ca.evac.Individual savedIndividual = cell.getIndividual();
 		if( !(savedIndividual.isSafe()) ) {
 //		try {
 //			//System.out.println( savedIndividual.getStaticPotential().getName() );
@@ -37,45 +37,45 @@ public class SaveIndividualsRule extends AbstractSaveRule {
 ////			else
 ////				f = new File( "./" + süd + ".txt" );
 ////			FileWriter w = new FileWriter( f, true );
-////			Double d = savedIndividual.getStepEndTime() * caController().getCA().getSecondsPerStep();
-////			Double d2 = caController().getCA().getTimeStep() * caController().getCA().getSecondsPerStep();
+////			Double d = savedIndividual.getStepEndTime() * esp.eca.getSecondsPerStep();
+////			Double d2 = esp.eca.getTimeStep() * esp.eca.getSecondsPerStep();
 ////			w.append( Double.toString(  d  ) + '\n' );
 ////			w.close();
 //		} catch( IOException ex ) {
 //
 //		}
 
-			//caController().getCA().decreaseNrOfLivingAndNotSafeIndividuals();
+			//esp.eca.decreaseNrOfLivingAndNotSafeIndividuals();
 			//savedIndividual.setSafe();
-			caController().getCA().setIndividualSave( savedIndividual );
+			esp.eca.setIndividualSave( savedIndividual );
 			savedIndividual.setPanic( 0 );
-			//savedIndividual.setSafetyTime(caController().getCA().getTimeStep());
+			//savedIndividual.setSafetyTime(esp.eca.getTimeStep());
 
-			if( cell instanceof ds.ca.SaveCell ) {
-				ds.ca.StaticPotential correspondingExitPotential = ((ds.ca.SaveCell) cell).getExitPotential();
+			if( cell instanceof ds.ca.evac.SaveCell ) {
+				ds.ca.evac.StaticPotential correspondingExitPotential = ((ds.ca.evac.SaveCell) cell).getExitPotential();
 				if( correspondingExitPotential == null ) {
-					savedIndividual.setStaticPotential( caController().getCA().getPotentialManager().getSafePotential() );
+					savedIndividual.setStaticPotential( esp.eca.getPotentialManager().getSafePotential() );
 				//throw new IllegalStateException("An individual is in a save area with no exit");
 				} else {
 					if( savedIndividual.getStaticPotential() != correspondingExitPotential ) {
-						caController().getCaStatisticWriter().getStoredCAStatisticResults().getStoredCAStatisticResultsForIndividuals().addChangedPotentialToStatistic( savedIndividual, caController().getCA().getTimeStep() );
+						esp.caStatisticWriter.getStoredCAStatisticResults().getStoredCAStatisticResultsForIndividuals().addChangedPotentialToStatistic( savedIndividual, esp.eca.getTimeStep() );
 						savedIndividual.setStaticPotential( correspondingExitPotential );
 					}
-					caController().getCaStatisticWriter().getStoredCAStatisticResults().getStoredCAStatisticResultsForIndividuals().addExitToStatistic( savedIndividual, correspondingExitPotential );
+					esp.caStatisticWriter.getStoredCAStatisticResults().getStoredCAStatisticResultsForIndividuals().addExitToStatistic( savedIndividual, correspondingExitPotential );
 				}
 			}
 
-			caController().getCaStatisticWriter().getStoredCAStatisticResults().getStoredCAStatisticResultsForIndividuals().addSafeIndividualToStatistic( savedIndividual );
+			esp.caStatisticWriter.getStoredCAStatisticResults().getStoredCAStatisticResultsForIndividuals().addSafeIndividualToStatistic( savedIndividual );
 
 		}
 	// else: nothing!
 	}
 
 	@Override
-	public boolean executableOn( ds.ca.Cell cell ) {
+	public boolean executableOn( ds.ca.evac.Cell cell ) {
 		// Regel NUR anwendbar, wenn auf der Zelle ein Individuum steht
 		// und die Zelle eine Exit- Savecell oder  ist
-		return (cell.getIndividual() != null) && ((cell instanceof ds.ca.ExitCell) || (cell instanceof ds.ca.SaveCell));
+		return (cell.getIndividual() != null) && ((cell instanceof ds.ca.evac.ExitCell) || (cell instanceof ds.ca.evac.SaveCell));
 	}
 }
 

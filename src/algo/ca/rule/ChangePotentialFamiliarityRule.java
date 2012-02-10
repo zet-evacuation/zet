@@ -17,9 +17,9 @@ package algo.ca.rule;
 
 import de.tu_berlin.math.coga.rndutils.RandomUtils;
 import de.tu_berlin.math.coga.rndutils.generators.GeneralRandom;
-import ds.ca.Cell;
-import ds.ca.Individual;
-import ds.ca.StaticPotential;
+import ds.ca.evac.Cell;
+import ds.ca.evac.Individual;
+import ds.ca.evac.StaticPotential;
 import java.util.ArrayList;
 import java.util.Collections;
 
@@ -50,7 +50,7 @@ public class ChangePotentialFamiliarityRule extends AbstractPotentialChangeRule
 	{
 		ChangePotentialAttractivityOfExitRule rule = 
 			new ChangePotentialAttractivityOfExitRule();
-		rule.setCAController(this.caController());
+		rule.setEvacuationSimulationProblem( esp );
 		return rule.executableOn(cell);
 	}
 
@@ -65,7 +65,7 @@ public class ChangePotentialFamiliarityRule extends AbstractPotentialChangeRule
 		if(!individual.isSafe()){
 			ArrayList<PotentialValueTuple> potentialToLengthOfWayMapper = new ArrayList<PotentialValueTuple>();
 			ArrayList<StaticPotential> staticPotentials = new ArrayList<StaticPotential>();
-			staticPotentials.addAll(this.caController().getCA().getPotentialManager().getStaticPotentials());
+			staticPotentials.addAll(esp.eca.getPotentialManager().getStaticPotentials());
 			for (StaticPotential sp : staticPotentials)
 			{
 				int lengthOfWayValue = sp.getPotential(individual.getCell());
@@ -104,7 +104,7 @@ public class ChangePotentialFamiliarityRule extends AbstractPotentialChangeRule
 
 			if(promisingNeighbours > CHANGE_THRESHOLD){
 				individual.setStaticPotential(newPotential);
-				caController().getCaStatisticWriter().getStoredCAStatisticResults().getStoredCAStatisticResultsForIndividuals().addChangedPotentialToStatistic(individual, caController().getCA().getTimeStep());
+				esp.caStatisticWriter.getStoredCAStatisticResults().getStoredCAStatisticResultsForIndividuals().addChangedPotentialToStatistic(individual, esp.eca.getTimeStep());
 			}
 		}
 	}

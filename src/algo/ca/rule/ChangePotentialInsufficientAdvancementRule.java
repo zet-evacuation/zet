@@ -16,9 +16,9 @@
 package algo.ca.rule;
 
 import java.util.ArrayList;
-import ds.ca.Cell;
-import ds.ca.Individual;
-import ds.ca.StaticPotential;
+import ds.ca.evac.Cell;
+import ds.ca.evac.Individual;
+import ds.ca.evac.StaticPotential;
 
 /**
  *
@@ -75,7 +75,7 @@ public class ChangePotentialInsufficientAdvancementRule extends AbstractPotentia
 
 				// Calculate the second best Potential and the associated potential value on the {@code cell}
 				ArrayList<StaticPotential> staticPotentials = new ArrayList<StaticPotential>();
-				staticPotentials.addAll( this.caController().getCA().getPotentialManager().getStaticPotentials() );
+				staticPotentials.addAll( esp.eca.getPotentialManager().getStaticPotentials() );
 				StaticPotential minWayLengthPotential = sp;
 				int lengthOfWayValue = Integer.MAX_VALUE;
 				for( StaticPotential statPot : staticPotentials )
@@ -101,7 +101,7 @@ public class ChangePotentialInsufficientAdvancementRule extends AbstractPotentia
 
 				if( promisingNeighbours > CHANGE_THRESHOLD ) {
 					individual.setStaticPotential( minWayLengthPotential );
-					caController().getCaStatisticWriter().getStoredCAStatisticResults().getStoredCAStatisticResultsForIndividuals().addChangedPotentialToStatistic( individual, caController().getCA().getTimeStep() );
+					esp.caStatisticWriter.getStoredCAStatisticResults().getStoredCAStatisticResultsForIndividuals().addChangedPotentialToStatistic( individual, esp.eca.getTimeStep() );
 				}
 			}
 		}

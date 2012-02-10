@@ -10,10 +10,10 @@ import de.tu_berlin.math.coga.zet.converter.cellularAutomaton.ZToCAConverter.Con
 import de.tu_berlin.math.coga.common.algorithm.Algorithm;
 import de.tu_berlin.math.coga.common.localization.DefaultLoc;
 import ds.PropertyContainer;
-import ds.ca.Cell;
-import ds.ca.ExitCell;
-import ds.ca.Individual;
-import ds.ca.TargetCell;
+import ds.ca.evac.Cell;
+import ds.ca.evac.ExitCell;
+import ds.ca.evac.Individual;
+import ds.ca.evac.TargetCell;
 import ds.z.ConcreteAssignment;
 import ds.z.Person;
 import ds.z.PlanPoint;

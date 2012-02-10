@@ -4,8 +4,8 @@
  */
 package algo.ca.rule;
 
-import ds.ca.Cell;
-import ds.ca.TeleportCell;
+import ds.ca.evac.Cell;
+import ds.ca.evac.TeleportCell;
 import java.util.ArrayList;
 
 
@@ -38,7 +38,7 @@ public class TeleportMovementRule extends WaitingMovementRule {
 
 		ArrayList<Cell> returned = new ArrayList<Cell>();
 		//targets.add( fromCell );
-		double time = caController().getCA().getTimeStep();
+		double time = esp.eca.getTimeStep();
 		for( Cell cell : targets ) {
 			if( !cell.isOccupied( time ) )
 				//targets.remove( cell );

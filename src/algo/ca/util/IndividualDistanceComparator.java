@@ -5,7 +5,7 @@
 
 package algo.ca.util;
 
-import ds.ca.Individual;
+import ds.ca.evac.Individual;
 import java.util.Comparator;
 
 /**

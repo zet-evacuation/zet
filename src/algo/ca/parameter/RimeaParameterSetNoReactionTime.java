@@ -20,7 +20,7 @@
 
 package algo.ca.parameter;
 
-import ds.ca.Individual;
+import ds.ca.evac.Individual;
 
 /**
  * A {@link ParameterSet} that sets the parameter of the simulation to values

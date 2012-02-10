@@ -52,9 +52,9 @@ public abstract class RuleSet implements Iterable<Rule> {
 	 * load all neccessary rules.
 	 */
 	public RuleSet() {
-		allRules = new ArrayList<Rule>();
-		primaryRules = new ArrayList<Rule>();
-		loopRules = new ArrayList<Rule>();
+		allRules = new ArrayList<>();
+		primaryRules = new ArrayList<>();
+		loopRules = new ArrayList<>();
 		selfInit();
 	}
 	

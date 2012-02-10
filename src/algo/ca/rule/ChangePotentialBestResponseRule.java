@@ -16,11 +16,11 @@
 package algo.ca.rule;
 
 import java.util.ArrayList;
-import ds.ca.Cell;
-import ds.ca.ExitCell;
-import ds.ca.Individual;
-import ds.ca.StaticPotential;
-import ds.ca.Room;
+import ds.ca.evac.Cell;
+import ds.ca.evac.ExitCell;
+import ds.ca.evac.Individual;
+import ds.ca.evac.StaticPotential;
+import ds.ca.evac.Room;
 
 /**
  *
@@ -62,7 +62,7 @@ public class ChangePotentialBestResponseRule extends AbstractPotentialChangeRule
             // calculate number of individuals that are heading to the same exit and closer to it            
             ArrayList<Individual> otherInds = new ArrayList<Individual>();            
             ArrayList<Room> rooms = new ArrayList<Room>();
-            rooms.addAll(this.caController().getCA().getRooms());
+            rooms.addAll(esp.eca.getRooms());
             for (Room room : rooms){
                 for (Individual i : room.getIndividuals()){
                     otherInds.add(i);
@@ -117,7 +117,7 @@ public class ChangePotentialBestResponseRule extends AbstractPotentialChangeRule
 	protected void onExecute(Cell cell) {                                   
                         
             ArrayList<StaticPotential> exits = new ArrayList<StaticPotential>();
-            exits.addAll(this.caController().getCA().getPotentialManager().getStaticPotentials());            
+            exits.addAll(esp.eca.getPotentialManager().getStaticPotentials());            
             StaticPotential newPot = cell.getIndividual().getStaticPotential();
             double response = Double.MAX_VALUE;
             for (StaticPotential pot : exits){                

@@ -4,7 +4,7 @@
  */
 package de.tu_berlin.math.coga.zet.converter.cellularAutomaton;
 
-import ds.ca.CellularAutomaton;
+import ds.ca.evac.EvacuationCellularAutomaton;
 
 
 /**
@@ -12,17 +12,17 @@ import ds.ca.CellularAutomaton;
  * @author Jan-Philipp Kappmeier
  */
 public class ConvertedCellularAutomaton {
-	private CellularAutomaton cellularAutomaton;
+	private EvacuationCellularAutomaton cellularAutomaton;
 	private ZToCAMapping mapping;
 	private ZToCARasterContainer container;
 
-	public ConvertedCellularAutomaton( CellularAutomaton cellularAutomaton, ZToCAMapping mapping, ZToCARasterContainer container ) {
+	public ConvertedCellularAutomaton( EvacuationCellularAutomaton cellularAutomaton, ZToCAMapping mapping, ZToCARasterContainer container ) {
 		this.cellularAutomaton = cellularAutomaton;
 		this.mapping = mapping;
 		this.container = container;
 	}
 
-	public CellularAutomaton getCellularAutomaton() {
+	public EvacuationCellularAutomaton getCellularAutomaton() {
 		return cellularAutomaton;
 	}
 

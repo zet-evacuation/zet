@@ -16,7 +16,7 @@
 
 
 package statistic.ca.exception;
-import ds.ca.Individual;
+import ds.ca.evac.Individual;
         
 /**
  *

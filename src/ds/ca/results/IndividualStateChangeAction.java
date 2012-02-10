@@ -19,8 +19,8 @@
  */
 package ds.ca.results;
 
-import ds.ca.CellularAutomaton;
-import ds.ca.Individual;
+import ds.ca.evac.EvacuationCellularAutomaton;
+import ds.ca.evac.Individual;
 
 /**
  * @author Daniel Pluempe
@@ -51,10 +51,10 @@ public class IndividualStateChangeAction extends Action {
 
 	/**
 	 * {@inheritDoc }
-	 * @see ds.ca.results.Action#adoptToCA(ds.ca.CellularAutomaton)
+	 * @see ds.ca.results.Action#adoptToCA(ds.ca.EvacuationCellularAutomaton)
 	 */
 	@Override
-	Action adoptToCA(  CellularAutomaton targetCA ) throws CADoesNotMatchException {
+	Action adoptToCA(  EvacuationCellularAutomaton targetCA ) throws CADoesNotMatchException {
 		Individual adaptedIndividual = targetCA.getIndividual( individual.getNumber() );
 		if( adaptedIndividual == null )
 			throw new CADoesNotMatchException( this, "Could not find the individual with the unique id " + individual.getNumber() );
@@ -65,10 +65,10 @@ public class IndividualStateChangeAction extends Action {
 	 * {@inheritDoc }
 	 * @param onCA 
 	 * @throws InconsistentPlaybackStateException 
-	 * @see ds.ca.results.Action#execute(ds.ca.CellularAutomaton)
+	 * @see ds.ca.results.Action#execute(ds.ca.EvacuationCellularAutomaton)
 	 */
 	@Override
-	public void execute( CellularAutomaton onCA ) throws InconsistentPlaybackStateException {
+	public void execute( EvacuationCellularAutomaton onCA ) throws InconsistentPlaybackStateException {
 		individual.setPanic( panic );
 		individual.setExhaustion( exhaustion );
 		individual.setCurrentSpeed( currentSpeed );

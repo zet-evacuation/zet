@@ -15,7 +15,7 @@
  */
 package algo.ca.rule;
 
-import ds.ca.Individual;
+import ds.ca.evac.Individual;
 
 /**
  * A rule that alarms an individual if its reaction time is over. After that 
@@ -38,7 +38,7 @@ public class ReactionRuleCompleteRoom extends AbstractReactionRule {
 	 * @param cell
 	 */
 	@Override
-	protected void onExecute( ds.ca.Cell cell ) {
+	protected void onExecute( ds.ca.evac.Cell cell ) {
 		Individual i = cell.getIndividual();
 		if( i.getCell().getRoom().getAlarmstatus() )
 			i.setAlarmed( true );

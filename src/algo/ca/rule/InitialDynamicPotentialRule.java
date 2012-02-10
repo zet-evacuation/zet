@@ -21,7 +21,7 @@
 
 package algo.ca.rule;
 
-import ds.ca.Cell;
+import ds.ca.evac.Cell;
 
 /**
  * An initialization rule that assings the dynamic potential to individuals.
@@ -36,6 +36,6 @@ public class InitialDynamicPotentialRule extends AbstractInitialRule {
 	 */
 	@Override
 	protected void onExecute( Cell cell ) {
-		cell.getIndividual().setDynamicPotential(this.caController().getPotentialController().getPm().getDynamicPotential());
+		cell.getIndividual().setDynamicPotential(this.esp.potentialController.getPm().getDynamicPotential());
 	}
 }

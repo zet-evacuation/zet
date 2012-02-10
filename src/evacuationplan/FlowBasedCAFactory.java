@@ -22,8 +22,8 @@ import de.tu_berlin.math.coga.zet.converter.graph.ZToGraphRasterContainer;
 import ds.graph.flow.PathBasedFlowOverTime;
 import ds.z.BuildingPlan;
 import ds.z.ConcreteAssignment;
-import ds.ca.CellularAutomaton;
-import ds.ca.Individual;
+import ds.ca.evac.EvacuationCellularAutomaton;
+import ds.ca.evac.Individual;
 import evacuationplan.BidirectionalNodeCellMapping.CAPartOfMapping;
 
 public class FlowBasedCAFactory extends ZToCAConverter {
@@ -47,7 +47,7 @@ public class FlowBasedCAFactory extends ZToCAConverter {
 	 * @return A cellular automation realizing evacuation plans according to the transshipment.
 	 * @throws ConversionNotSupportedException
 	 */
-	public CellularAutomaton convertAndApplyConcreteAssignment( BuildingPlan buildingPlan, PathBasedFlowOverTime transshipment, ConcreteAssignment concreteAssignment, ZToGraphRasterContainer graphRaster ) throws ConversionNotSupportedException {
+	public EvacuationCellularAutomaton convertAndApplyConcreteAssignment( BuildingPlan buildingPlan, PathBasedFlowOverTime transshipment, ConcreteAssignment concreteAssignment, ZToGraphRasterContainer graphRaster ) throws ConversionNotSupportedException {
 //		//CellularAutomaton ca = super.convert(buildingPlan);
 //		CAPartOfMapping caPartOfMapping = this.getLatestCAPartOfNodeCellMapping();
 //		//applyConcreteAssignment(concreteAssignment);
@@ -61,14 +61,14 @@ public class FlowBasedCAFactory extends ZToCAConverter {
 //			ind.setStaticPotential(ep);
 //		}
 		//return ca;
-		return new CellularAutomaton();
+		return new EvacuationCellularAutomaton();
 	}
 	
 	/**
 	 * The usual convert method may not be used because a transshipment is also needed.
 	 */
 //	@Override
-//	public CellularAutomaton convert( BuildingPlan buildingPlan) throws ConversionNotSupportedException {
+//	public EvacuationCellularAutomaton convert( BuildingPlan buildingPlan) throws ConversionNotSupportedException {
 //		throw new UnsupportedOperationException("Use the convert-method that additionaly takes a transshipment.");
 //	}
 //
@@ -77,7 +77,7 @@ public class FlowBasedCAFactory extends ZToCAConverter {
 	 * Potentials are added separately.
 	 */
 	@Override
-	protected void computeAndAddStaticPotentials(CellularAutomaton convertedCA ){
+	protected void computeAndAddStaticPotentials(EvacuationCellularAutomaton convertedCA ){
 	}
 
 	public static FlowBasedCAFactory getFlowBasedCAFactoryInstance(){

@@ -15,7 +15,7 @@
  */
 package algo.ca.rule;
 
-import ds.ca.Cell;
+import ds.ca.evac.Cell;
 import de.tu_berlin.math.coga.rndutils.RandomUtils;
 
 /**
@@ -42,7 +42,7 @@ public class ChangePotentialFamiliarityOrAttractivityOfExitRule extends Abstract
 	@Override
 	public boolean executableOn( Cell cell ) {
 		ChangePotentialAttractivityOfExitRule rule = new ChangePotentialAttractivityOfExitRule();
-		rule.setCAController( this.caController() );
+		rule.setEvacuationSimulationProblem( esp );
 		return rule.executableOn( cell );
 	}
 
@@ -53,14 +53,14 @@ public class ChangePotentialFamiliarityOrAttractivityOfExitRule extends Abstract
 	 */
 	@Override
 	protected void onExecute( Cell cell ) {
-		double prob = this.caController().getParameterSet().probabilityChangePotentialFamiliarityOrAttractivityOfExitRule();
+		double prob = esp.parameterSet.probabilityChangePotentialFamiliarityOrAttractivityOfExitRule();
 		if( RandomUtils.getInstance().binaryDecision( prob ) ) {
 			ChangePotentialFamiliarityRule rule = new ChangePotentialFamiliarityRule();
-			rule.setCAController( this.caController() );
+			rule.setEvacuationSimulationProblem( esp );
 			rule.onExecute( cell );
 		} else {
 			ChangePotentialAttractivityOfExitRule rule = new ChangePotentialAttractivityOfExitRule();
-			rule.setCAController( this.caController() );
+			rule.setEvacuationSimulationProblem( esp );
 			rule.onExecute( cell );
 		}
 	}

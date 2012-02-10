@@ -22,8 +22,8 @@ package io.visualization;
 
 import de.tu_berlin.math.coga.zet.converter.cellularAutomaton.ZToCAMapping;
 import de.tu_berlin.math.coga.math.vectormath.Vector3;
-import ds.ca.CellularAutomaton;
-import ds.ca.PotentialManager;
+import ds.ca.evac.EvacuationCellularAutomaton;
+import ds.ca.evac.PotentialManager;
 import ds.ca.results.VisualResultsRecording;
 import java.util.HashMap;
 import opengl.framework.abs.VisualizationResult;
@@ -43,12 +43,12 @@ public class CAVisualizationResults implements VisualizationResult {
 	 * A mapping from a cell to its offset relative to the room containing it.
 	 * (The offset of the room is NOT included!). 
 	 */
-	private HashMap<ds.ca.Cell, Vector3> caCellToZOffsetMapping;
+	private HashMap<ds.ca.evac.Cell, Vector3> caCellToZOffsetMapping;
 	/**
 	 * A mapping from a room to its offset relative to the floor containing it.
 	 * (The offset of the floor is NOT included!).
 	 */
-	private HashMap<ds.ca.Room, Vector3> caRoomToZOffsetMapping;
+	private HashMap<ds.ca.evac.Room, Vector3> caRoomToZOffsetMapping;
 	/**
 	 * A mapping from a floor (given by ID) to its offset relative to the
 	 * origin of the z-project.
@@ -67,21 +67,21 @@ public class CAVisualizationResults implements VisualizationResult {
 	 * @param caMapping
 	 */
 	public CAVisualizationResults( VisualResultsRecording visRecording, ZToCAMapping caMapping ) {
-		caCellToZOffsetMapping = new HashMap<ds.ca.Cell, Vector3>();
-		caRoomToZOffsetMapping = new HashMap<ds.ca.Room, Vector3>();
+		caCellToZOffsetMapping = new HashMap<ds.ca.evac.Cell, Vector3>();
+		caRoomToZOffsetMapping = new HashMap<ds.ca.evac.Room, Vector3>();
 		caFloorToZOffsetMapping = new HashMap<Integer, Vector3>();
 
 		this.visRecording = visRecording;
 
-		caMapping = caMapping.adoptToCA( new CellularAutomaton( visRecording.getInitialConfig() ) );
+		caMapping = caMapping.adoptToCA( new EvacuationCellularAutomaton( visRecording.getInitialConfig() ) );
 		pm = visRecording.getInitialConfig().getPotentialManager();
 
 		convertMapping( caMapping );
 	}
 
 	public CAVisualizationResults( ZToCAMapping caMapping, PotentialManager pm ) {
-		caCellToZOffsetMapping = new HashMap<ds.ca.Cell, Vector3>();
-		caRoomToZOffsetMapping = new HashMap<ds.ca.Room, Vector3>();
+		caCellToZOffsetMapping = new HashMap<ds.ca.evac.Cell, Vector3>();
+		caRoomToZOffsetMapping = new HashMap<ds.ca.evac.Room, Vector3>();
 		caFloorToZOffsetMapping = new HashMap<Integer, Vector3>();
 		convertMapping( caMapping );
 		this.pm = pm;
@@ -96,7 +96,7 @@ public class CAVisualizationResults implements VisualizationResult {
 			caFloorToZOffsetMapping.put( floorID, new Vector3( xOffset, yOffset, 0 ) );
 		}
 
-		for( ds.ca.Room room : caMapping.getCARooms() ) {
+		for( ds.ca.evac.Room room : caMapping.getCARooms() ) {
 			ds.z.Room zRoom = caMapping.get( room ).getRoom();
 			double xOffset = zRoom.getxOffset();
 			double yOffset = zRoom.getyOffset();
@@ -104,7 +104,7 @@ public class CAVisualizationResults implements VisualizationResult {
 			caRoomToZOffsetMapping.put( room, new Vector3( xOffset, yOffset, 0 ) );
 		}
 
-		for( ds.ca.Cell cell : caMapping.getCACells() ) {
+		for( ds.ca.evac.Cell cell : caMapping.getCACells() ) {
 			de.tu_berlin.math.coga.zet.converter.cellularAutomaton.ZToCARasterSquare zRasterSquare = caMapping.get( cell );
 
 			double xOffset = zRasterSquare.getRelativeX();
@@ -114,13 +114,13 @@ public class CAVisualizationResults implements VisualizationResult {
 		}
 	}
 
-	public Vector3 get( ds.ca.Cell cell ) {
+	public Vector3 get( ds.ca.evac.Cell cell ) {
 		if( caCellToZOffsetMapping.get( cell ) == null )
 			return new Vector3( 0.0d, 0.0d, 0.0d );
 		return caCellToZOffsetMapping.get( cell );
 	}
 
-	public Vector3 get( ds.ca.Room room ) {
+	public Vector3 get( ds.ca.evac.Room room ) {
 		if( caRoomToZOffsetMapping.get( room ) == null )
 			return new Vector3( 0.0d, 0.0d, 0.0d );
 

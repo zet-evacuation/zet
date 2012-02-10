@@ -21,7 +21,7 @@ import de.tu_berlin.math.coga.zet.converter.cellularAutomaton.ZToCAConverter;
 import de.tu_berlin.math.coga.zet.converter.graph.ZToGraphRasterContainer;
 import ds.z.BuildingPlan;
 import ds.z.ConcreteAssignment;
-import ds.ca.CellularAutomaton;
+import ds.ca.evac.EvacuationCellularAutomaton;
 import evacuationplan.BidirectionalNodeCellMapping;
 import evacuationplan.BidirectionalNodeCellMapping.CAPartOfMapping;
 
@@ -48,8 +48,8 @@ public class ExitDistributionBasedCAFactory extends ZToCAConverter {
 	 * @return A cellular automation that realizes the exit distribution given by {@code exitAssignment}.
 	 * @throws converter.ZToCAConverter.ConversionNotSupportedException
 	 */
-	public CellularAutomaton convertAndApplyConcreteAssignment( BuildingPlan buildingPlan, ExitAssignment exitAssignment, ConcreteAssignment concreteAssignment, ZToGraphRasterContainer graphRaster ) throws de.tu_berlin.math.coga.zet.converter.cellularAutomaton.ZToCAConverter.ConversionNotSupportedException {
-//		CellularAutomaton ca = super.convert(buildingPlan);
+	public EvacuationCellularAutomaton convertAndApplyConcreteAssignment( BuildingPlan buildingPlan, ExitAssignment exitAssignment, ConcreteAssignment concreteAssignment, ZToGraphRasterContainer graphRaster ) throws de.tu_berlin.math.coga.zet.converter.cellularAutomaton.ZToCAConverter.ConversionNotSupportedException {
+//		EvacuationCellularAutomaton ca = super.convert(buildingPlan);
 //		CAPartOfMapping caPartOfMapping = this.getLatestCAPartOfNodeCellMapping();
 //		applyConcreteAssignment(concreteAssignment);
 //		BidirectionalNodeCellMapping nodeCellMapping = new BidirectionalNodeCellMapping(graphRaster, caPartOfMapping);
@@ -57,14 +57,14 @@ public class ExitDistributionBasedCAFactory extends ZToCAConverter {
 //		graphBasedIndividualToExitMaping.calculate();
 //		ca.setIndividualToExitMapping( graphBasedIndividualToExitMaping );
 //		return ca;
-		return new CellularAutomaton();
+		return new EvacuationCellularAutomaton();
 	}
 	
 	/**
 	 * The usual convert method may not be used because an exit assignment is also needed.
 	 */
 //	@Override
-//	public CellularAutomaton convert( BuildingPlan buildingPlan) throws ConversionNotSupportedException {
+//	public EvacuationCellularAutomaton convert( BuildingPlan buildingPlan) throws ConversionNotSupportedException {
 //		throw new UnsupportedOperationException("Use the convert-method that additionaly takes a transshipment.");
 //	}
 	
@@ -73,7 +73,7 @@ public class ExitDistributionBasedCAFactory extends ZToCAConverter {
 	 * Potentials are added separately.
 	 *//*
 	@Override
-	protected void computeAndAddStaticPotentials(CellularAutomaton convertedCA ){
+	protected void computeAndAddStaticPotentials(EvacuationCellularAutomaton convertedCA ){
 	}*/
 
 	/**

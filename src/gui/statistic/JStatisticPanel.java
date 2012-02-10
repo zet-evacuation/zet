@@ -30,7 +30,7 @@ import batch.BatchResult;
 import statistic.ca.MultipleCycleCAStatistic;
 import statistic.ca.gui.JCAStatisticPanel;
 import ds.GraphVisualizationResults;
-import ds.ca.CellularAutomaton;
+import ds.ca.evac.EvacuationCellularAutomaton;
 
 /**
  *
@@ -46,7 +46,7 @@ public class JStatisticPanel extends JPanel {
 		setLayout(new BorderLayout());
 	}
 	
-	public void setCellularAutomaton(CellularAutomaton ca){
+	public void setCellularAutomaton(EvacuationCellularAutomaton ca){
 		jcasp.setCellularAutomaton(ca);
 	}
 	

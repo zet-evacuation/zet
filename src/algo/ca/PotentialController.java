@@ -23,11 +23,11 @@ package algo.ca;
 
 import java.util.ArrayList;
 
-import ds.ca.Cell;
-import ds.ca.CellularAutomaton;
-import ds.ca.ExitCell;
-import ds.ca.PotentialManager;
-import ds.ca.StaticPotential;
+import ds.ca.evac.Cell;
+import ds.ca.evac.EvacuationCellularAutomaton;
+import ds.ca.evac.ExitCell;
+import ds.ca.evac.PotentialManager;
+import ds.ca.evac.StaticPotential;
 
 /**
  * @author Daniel Plümpe
@@ -35,9 +35,9 @@ import ds.ca.StaticPotential;
  */
 public interface PotentialController {
 
-	public CellularAutomaton getCA();
+	public EvacuationCellularAutomaton getCA();
 
-	public void setCA( CellularAutomaton ca );
+	public void setCA( EvacuationCellularAutomaton ca );
 
 	public PotentialManager getPm();
 

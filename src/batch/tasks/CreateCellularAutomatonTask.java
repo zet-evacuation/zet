@@ -24,7 +24,7 @@ package batch.tasks;
 import batch.BatchResultEntry;
 import de.tu_berlin.math.coga.zet.converter.cellularAutomaton.ZToCAConverter;
 import ds.z.Project;
-import ds.ca.CellularAutomaton;
+import ds.ca.evac.EvacuationCellularAutomaton;
 
 /**
  * The class {@code CreateCellularAutomatonTask} transforms the z-model
@@ -55,7 +55,7 @@ public class CreateCellularAutomatonTask implements Runnable {
 	 * automatons at the specified position.
 	 */
 	public void run() {
-		CellularAutomaton ca;
+		EvacuationCellularAutomaton ca;
 		ZToCAConverter conv = new ZToCAConverter();
 		conv.setProblem( project.getBuildingPlan() );
 		conv.run();

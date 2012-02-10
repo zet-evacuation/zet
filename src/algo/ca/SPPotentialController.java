@@ -19,15 +19,15 @@ import algo.ca.util.PotentialUtils;
 import de.tu_berlin.math.coga.common.localization.DefaultLoc;
 import de.tu_berlin.math.coga.rndutils.RandomUtils;
 import de.tu_berlin.math.coga.rndutils.generators.GeneralRandom;
-import ds.ca.Cell;
-import ds.ca.CellularAutomaton;
-import ds.ca.DynamicPotential;
-import ds.ca.ExitCell;
-import ds.ca.PotentialManager;
-import ds.ca.Room;
-import ds.ca.StaticPotential;
-import ds.ca.DoorCell;
-import ds.ca.TargetCell;
+import ds.ca.evac.Cell;
+import ds.ca.evac.EvacuationCellularAutomaton;
+import ds.ca.evac.DynamicPotential;
+import ds.ca.evac.ExitCell;
+import ds.ca.evac.PotentialManager;
+import ds.ca.evac.Room;
+import ds.ca.evac.StaticPotential;
+import ds.ca.evac.DoorCell;
+import ds.ca.evac.TargetCell;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
@@ -42,7 +42,7 @@ public class SPPotentialController implements PotentialController {
 	/**
 	 * reference to the cellular automaton
 	 */
-	private CellularAutomaton ca;
+	private EvacuationCellularAutomaton ca;
 
 	/**
 	 * reference to a PotentialManager
@@ -57,9 +57,9 @@ public class SPPotentialController implements PotentialController {
 	
 	/**
 	 * Constructs an PotentialController instance for a given cellular automaton
-	 * @param ca CellularAutomaton instance to work with
+	 * @param ca EvacuationCellularAutomaton instance to work with
 	 */
-	public SPPotentialController(CellularAutomaton ca){
+	public SPPotentialController(EvacuationCellularAutomaton ca){
 		this.ca = ca;
 		this.pm = ca.getPotentialManager();
 		this.targetToPotentialMapping = null;
@@ -69,15 +69,15 @@ public class SPPotentialController implements PotentialController {
 	 * Returns the associated cellular automaton
 	 * @return associated cellular automaton
 	 */
-	public CellularAutomaton getCA(){
+	public EvacuationCellularAutomaton getCA(){
 		return this.ca;
 	}
 
 	/**
 	 * Sets the reference to a cellular automaton
-	 * @param ca CellularAutomaton object
+	 * @param ca EvacuationCellularAutomaton object
 	 */
-	public void setCA(CellularAutomaton ca){
+	public void setCA(EvacuationCellularAutomaton ca){
 		this.ca = ca;
 	}
 
@@ -323,7 +323,7 @@ public class SPPotentialController implements PotentialController {
 	
 	public String dynamicPotentialToString(){
 	    String graphic = "";
-	    for(ds.ca.Room room : getCA().getRooms()){
+	    for(ds.ca.evac.Room room : getCA().getRooms()){
     	    final int width = room.getWidth();
     	    final int height = room.getHeight();
     	    

@@ -29,7 +29,7 @@ import de.tu_berlin.math.coga.zet.converter.graph.ZToGraphRoomRaster;
 import ds.graph.Node;
 import ds.z.Floor;
 import ds.z.Room;
-import ds.ca.Cell;
+import ds.ca.evac.Cell;
 
 import util.DebugFlags;
 

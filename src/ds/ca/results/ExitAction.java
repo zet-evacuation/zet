@@ -15,10 +15,10 @@
  */
 package ds.ca.results;
 
-import ds.ca.Cell;
-import ds.ca.CellularAutomaton;
-import ds.ca.ExitCell;
-import ds.ca.Individual;
+import ds.ca.evac.Cell;
+import ds.ca.evac.EvacuationCellularAutomaton;
+import ds.ca.evac.ExitCell;
+import ds.ca.evac.Individual;
 import ds.ca.results.Action.CADoesNotMatchException;
 
 /**
@@ -43,7 +43,7 @@ public class ExitAction extends Action {
 	}
 
 	@Override
-	public void execute( ds.ca.CellularAutomaton onCA ) throws InconsistentPlaybackStateException {
+	public void execute( ds.ca.evac.EvacuationCellularAutomaton onCA ) throws InconsistentPlaybackStateException {
 		if( exit.getIndividual() == null )
 			throw new InconsistentPlaybackStateException( "Could not evacuate an individual from cell " + exit + "(" + exit.hashCode() + ") because there was none." );
 		onCA.setIndividualEvacuated( exit.getIndividual() );
@@ -56,7 +56,7 @@ public class ExitAction extends Action {
 	}
 
 	@Override
-	Action adoptToCA(  CellularAutomaton targetCA ) throws CADoesNotMatchException {
+	Action adoptToCA(  EvacuationCellularAutomaton targetCA ) throws CADoesNotMatchException {
 		Cell newExit = adoptCell( exit, targetCA );
 		if( newExit == null )
 			throw new CADoesNotMatchException( this, "Could not find the exit " + exit + " that this action uses in the new CA." );

@@ -22,8 +22,8 @@ package algo.ca.parameter;
 import java.util.Collection;
 
 import ds.PropertyContainer;
-import ds.ca.Cell;
-import ds.ca.Individual;
+import ds.ca.evac.Cell;
+import ds.ca.evac.Individual;
 import java.lang.reflect.InvocationTargetException;
 
 /**

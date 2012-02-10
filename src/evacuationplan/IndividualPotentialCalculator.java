@@ -17,9 +17,9 @@ package evacuationplan;
 
 import java.util.ArrayList;
 
-import ds.ca.Cell;
-import ds.ca.CellularAutomaton;
-import ds.ca.Individual;
+import ds.ca.evac.Cell;
+import ds.ca.evac.EvacuationCellularAutomaton;
+import ds.ca.evac.Individual;
 import algo.ca.SPPotentialController;
 
 /**
@@ -42,7 +42,7 @@ public class IndividualPotentialCalculator extends SPPotentialController {
 	 * @param i A certain individual that is already placed in the cellular automaton.
 	 * @param checker A checker to say which transitions are forbidden for the individual.
 	 */
-	public IndividualPotentialCalculator(CellularAutomaton ca, Individual i, CAPathPassabilityChecker checker){
+	public IndividualPotentialCalculator(EvacuationCellularAutomaton ca, Individual i, CAPathPassabilityChecker checker){
 		super(ca);
 		this.i = i;
 		this.checker = checker;

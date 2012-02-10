@@ -18,7 +18,7 @@ package algo.ca.rule;
 import java.util.ArrayList;
 import java.util.Iterator;
 
-import ds.ca.Cell;
+import ds.ca.evac.Cell;
 import evacuationplan.CAPathPassabilityChecker;
 
 public class EvacuationPlanMovementRule extends WaitingMovementRule {

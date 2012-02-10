@@ -15,9 +15,9 @@
  */
 package ds.ca.results;
 
-import ds.ca.Cell;
-import ds.ca.CellularAutomaton;
-import ds.ca.Individual;
+import ds.ca.evac.Cell;
+import ds.ca.evac.EvacuationCellularAutomaton;
+import ds.ca.evac.Individual;
 
 /**
  * Represents the fact that an individual moves from one cell to another.
@@ -90,7 +90,7 @@ public class MoveAction extends Action {
 	}
 
 	@Override
-	public void execute( ds.ca.CellularAutomaton onCA ) throws InconsistentPlaybackStateException {
+	public void execute( ds.ca.evac.EvacuationCellularAutomaton onCA ) throws InconsistentPlaybackStateException {
 		if( from.getIndividual() == null ) {
 			throw new InconsistentPlaybackStateException(
 							onCA.getTimeStep(),
@@ -121,7 +121,7 @@ public class MoveAction extends Action {
 	}
 
 	@Override
-	public Action adoptToCA( CellularAutomaton targetCA ) throws CADoesNotMatchException {
+	public Action adoptToCA( EvacuationCellularAutomaton targetCA ) throws CADoesNotMatchException {
 		Cell newFrom = adoptCell( from, targetCA );
 		if( newFrom == null ) {
 			throw new CADoesNotMatchException(

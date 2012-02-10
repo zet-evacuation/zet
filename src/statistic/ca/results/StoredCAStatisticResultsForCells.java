@@ -24,8 +24,8 @@ package statistic.ca.results;
 
 import java.util.HashMap;
 import java.util.ArrayList;
-import ds.ca.Cell;
-import ds.ca.Room;
+import ds.ca.evac.Cell;
+import ds.ca.evac.Room;
 import gui.ZETMain;
 
 /**

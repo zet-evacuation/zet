@@ -21,7 +21,7 @@
 
 package gui.visualization.control.ca;
 
-import ds.ca.Individual;
+import ds.ca.evac.Individual;
 import gui.visualization.control.AbstractZETVisualizationControl;
 import gui.visualization.control.StepUpdateListener;
 import gui.visualization.control.VisHistoryTriple;

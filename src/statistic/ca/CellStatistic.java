@@ -18,8 +18,8 @@ package statistic.ca;
 import java.util.HashMap;
 import java.util.ArrayList;
 import java.util.Collections;
-import ds.ca.Cell;
-import ds.ca.Room;
+import ds.ca.evac.Cell;
+import ds.ca.evac.Room;
 import statistic.ca.results.StoredCAStatisticResultsForCells;
 
 /**

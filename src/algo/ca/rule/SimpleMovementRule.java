@@ -21,8 +21,8 @@
 
 package algo.ca.rule;
 
-import ds.ca.Cell;
-import ds.ca.Individual;
+import ds.ca.evac.Cell;
+import ds.ca.evac.Individual;
 import java.util.ArrayList;
 import de.tu_berlin.math.coga.rndutils.RandomUtils;
 
@@ -60,7 +60,7 @@ public class SimpleMovementRule extends AbstractMovementRule {
 
 	public void move( Individual i, Cell targetCell ) {
 //		if( i.getCell().getRoom() != targetCell.getRoom() )
-			caController().getCA().moveIndividual( i.getCell(), targetCell );
+			esp.eca.moveIndividual( i.getCell(), targetCell );
 			//i.getCell().getRoom().moveIndividual( i.getCell(), targetCell );
 //		else
 //			i.getCell().getRoom().moveIndividual( i.getCell(), targetCell );
@@ -73,7 +73,7 @@ public class SimpleMovementRule extends AbstractMovementRule {
 
 		double p[] = new double[targets.size()];
 		for( int i = 0; i < targets.size(); i++ )
-			p[i] = Math.exp( parameterSet.effectivePotential( cell, targets.get( i ) ) );
+			p[i] = Math.exp( esp.parameterSet.effectivePotential( cell, targets.get( i ) ) );
 
 		return targets.get( RandomUtils.getInstance().chooseRandomlyAbsolute( p ) );
 	}
