@@ -42,23 +42,11 @@ import ds.z.ZControl;
 import ds.z.ZLocalization;
 import gui.GUIControl;
 import gui.ZETMain;
-import zet.gui.components.model.ComboBoxRenderer;
 import gui.components.framework.Button;
-import zet.gui.components.model.AssignmentTypeComboBoxModel;
-import zet.gui.components.model.FloorComboBoxModel;
-import zet.gui.main.tabs.base.JFloorScrollPane;
-import zet.gui.main.tabs.base.AbstractSplitPropertyWindow;
-import zet.gui.components.model.RoomComboBoxModel;
 import gui.components.framework.Menu;
 import gui.editor.Areas;
-import zet.gui.main.menu.popup.EdgePopupListener;
-import zet.gui.main.JEditor;
-import zet.gui.main.tabs.editor.EditMode;
 import gui.GUIOptionManager;
 import gui.ZETProperties;
-import zet.gui.main.tabs.editor.JFloor;
-import zet.gui.main.menu.popup.PointPopupListener;
-import zet.gui.main.menu.popup.PolygonPopupListener;
 import info.clearthought.layout.TableLayout;
 import java.awt.CardLayout;
 import java.awt.Component;
@@ -91,7 +79,19 @@ import javax.swing.JPopupMenu;
 import javax.swing.JTextField;
 import javax.swing.SwingUtilities;
 import zet.gui.GUILocalization;
+import zet.gui.components.model.FloorComboBox;
+import zet.gui.components.model.ComboBoxRenderer;
+import zet.gui.components.model.AssignmentTypeComboBoxModel;
+import zet.gui.components.model.RoomComboBoxModel;
+import zet.gui.main.JEditor;
+import zet.gui.main.menu.popup.EdgePopupListener;
+import zet.gui.main.tabs.base.AbstractSplitPropertyWindow;
+import zet.gui.main.tabs.base.JFloorScrollPane;
 import zet.gui.main.tabs.base.JPolygon;
+import zet.gui.main.tabs.editor.EditMode;
+import zet.gui.main.tabs.editor.JFloor;
+import zet.gui.main.menu.popup.PointPopupListener;
+import zet.gui.main.menu.popup.PolygonPopupListener;
 
 /**
  * <p>One of the main components of the ZET software. This is a component
@@ -140,7 +140,7 @@ public class JEditView extends AbstractSplitPropertyWindow<JFloorScrollPane<JFlo
 	/** The currently visible {@link ds.z.Floor} */
 	private Floor currentFloor;
 	/** Model for a floor-selector combo box. */
-	private FloorComboBoxModel floorSelector;
+	private FloorComboBox<Floor> floorSelector;
 	/** Model for a room-selector combo box. */
 	private RoomComboBoxModel roomSelector;
 	/** Model for a assignmentType-selector combo box. */
@@ -165,7 +165,6 @@ public class JEditView extends AbstractSplitPropertyWindow<JFloorScrollPane<JFlo
 	/** All JEdges share the same pop-up menu listeners for pupPoint, which are stored here. */
 	private List<PointPopupListener> pointPopupListeners;
 	// Components for the east bar
-	private JComboBox cbxFloors;
 	/**  The CardLayout object of the east subpanel. */
 	private CardLayout eastSubBarCardLayout;
 	/** The panel representing the variable part of the east bar. */
@@ -398,29 +397,24 @@ public class JEditView extends AbstractSplitPropertyWindow<JFloorScrollPane<JFlo
 		};
 		JPanel eastPanel = new JPanel( new TableLayout( size ) );
 
-		floorSelector = new FloorComboBoxModel();
-		cbxFloors = new JComboBox();
-		cbxFloors.setModel( floorSelector );
-		cbxFloors.addActionListener( new ActionListener() {
+		floorSelector = new FloorComboBox<>();
+		floorSelector.addActionListener( new ActionListener() {
 			@Override
 			public void actionPerformed( ActionEvent e ) {
-				if( cbxFloors.getSelectedItem() != null )
-;//					((Floor)cbxFloors.getSelectedItem()).removeChangeListener( roomSelector );
-				else
+				if( floorSelector.getSelectedItem() == null )
 					return;
 
 				final int add = PropertyContainer.getInstance().getAsBoolean( "editor.options.view.hideDefaultFloor" ) ? 1 : 0;
-				lblFloorNumber.setText( String.format( loc.getStringWithoutPrefix( "gui.EditPanel.Default.OnFloor" ), cbxFloors.getSelectedIndex() + add ) );
-				btnFloorDown.setEnabled( !(cbxFloors.getSelectedIndex() == 0 || cbxFloors.getSelectedIndex() == 1 && add == 0) );
+				lblFloorNumber.setText( String.format( loc.getStringWithoutPrefix( "gui.EditPanel.Default.OnFloor" ), floorSelector.getSelectedIndex() + add ) );
+				btnFloorDown.setEnabled( !(floorSelector.getSelectedIndex() == 0 || floorSelector.getSelectedIndex() == 1 && add == 0) );
 
 				// TODO call the method somehow with the control class...
 				//JEditor.getInstance().enableMenuFloorDown( !(cbxFloors.getSelectedIndex() == 0 || cbxFloors.getSelectedIndex() == 1 && add == 0) );
-				btnFloorUp.setEnabled( !(cbxFloors.getSelectedIndex() == cbxFloors.getItemCount() - 1 || cbxFloors.getSelectedIndex() == 0 && add == 0) );
+				btnFloorUp.setEnabled( !(floorSelector.getSelectedIndex() == floorSelector.getItemCount() - 1 || floorSelector.getSelectedIndex() == 0 && add == 0) );
 				//JEditor.getInstance().enableMenuFloorUp( !(cbxFloors.getSelectedIndex() == cbxFloors.getItemCount() - 1 || cbxFloors.getSelectedIndex() == 0 && add == 0) );
-				Floor dspFloor = (Floor)cbxFloors.getSelectedItem();
+				Floor dspFloor = (Floor)floorSelector.getSelectedItem();
 				currentFloor = dspFloor;
 				updateFloorView();
-//				dspFloor.addChangeListener( roomSelector );
 				getLeftPanel().getTopRuler().setWidth( dspFloor.getWidth() );
 				getLeftPanel().getLeftRuler().setHeight( dspFloor.getHeight() );
 				getLeftPanel().getTopRuler().offset = zet.util.ConversionTools.roundScale3( dspFloor.getxOffset() / 1000.0 - 0.8 );
@@ -432,19 +426,9 @@ public class JEditView extends AbstractSplitPropertyWindow<JFloorScrollPane<JFlo
 				guiControl.setZETWindowTitle( getAdditionalTitleBarText() );
 			}
 		} );
-		cbxFloors.setRenderer( new ComboBoxRenderer() {
-			@Override
-			public Component getListCellRendererComponent( JList list, Object value, int index, boolean isSelected, boolean cellHasFocus ) {
-				super.getListCellRendererComponent( list, value, index, isSelected, cellHasFocus ); // Needed for correct displaying! Forget return
-				if( value != null )
-					setText( ((Floor)value).getName() );
-				return this;
-			}
-		} );
 
-		final JComboBox cbxRooms = new JComboBox();
+		final JComboBox<Room> cbxRooms = new JComboBox<>();
 		roomSelector = new RoomComboBoxModel( projectControl, floorSelector );
-		floorSelector.setRoomSelector( roomSelector );
 		cbxRooms.setModel( roomSelector );
 		cbxRooms.addActionListener( new ActionListener() {
 			@Override
@@ -452,12 +436,12 @@ public class JEditView extends AbstractSplitPropertyWindow<JFloorScrollPane<JFlo
 				getFloor().showPolygon( (PlanPolygon)cbxRooms.getSelectedItem() );
 			}
 		} );
-		cbxRooms.setRenderer( new ComboBoxRenderer() {
+		cbxRooms.setRenderer( new ComboBoxRenderer<Room>() {
 			@Override
-			public Component getListCellRendererComponent( JList list, Object value, int index, boolean isSelected, boolean cellHasFocus ) {
+			public Component getListCellRendererComponent( JList<? extends Room> list, Room value, int index, boolean isSelected, boolean cellHasFocus ) {
 				super.getListCellRendererComponent( list, value, index, isSelected, cellHasFocus );	// Needed for correct displaying! Forget return
 				if( value != null )
-					setText( ((Room)value).getName() );
+					setText( value.getName() );
 				return this;
 			}
 		} );
@@ -468,7 +452,7 @@ public class JEditView extends AbstractSplitPropertyWindow<JFloorScrollPane<JFlo
 		loc.setPrefix( "gui.EditPanel." );
 		lblFloorSelector = new JLabel( loc.getString( "Default.Floors" ) + ":" );
 		eastPanel.add( lblFloorSelector, "1, " + row++ );
-		eastPanel.add( cbxFloors, "1, " + row++ );
+		eastPanel.add( floorSelector, "1, " + row++ );
 		lblFloorNumber = new JLabel( "1" );
 		eastPanel.add( lblFloorNumber, "1, " + row++ );
 		row++;
@@ -1212,7 +1196,7 @@ public class JEditView extends AbstractSplitPropertyWindow<JFloorScrollPane<JFlo
 		loc.setPrefix( "gui.EditPanel." );
 		// Localization of own components
 		lblFloorSelector.setText( loc.getString( "Default.Floors" ) + ":" );
-		lblFloorNumber.setText( String.format( loc.getStringWithoutPrefix( "gui.EditPanel.Default.OnFloor" ), cbxFloors.getSelectedIndex() + (PropertyContainer.getInstance().getAsBoolean( "editor.options.view.hideDefaultFloor" ) ? 1 : 0) ) );
+		lblFloorNumber.setText( String.format( loc.getStringWithoutPrefix( "gui.EditPanel.Default.OnFloor" ), floorSelector.getSelectedIndex() + (PropertyContainer.getInstance().getAsBoolean( "editor.options.view.hideDefaultFloor" ) ? 1 : 0) ) );
 		lblRoomSelector.setText( loc.getString( "Default.Rooms" ) + ":" );
 
 		// Floor properties
@@ -1347,7 +1331,7 @@ public class JEditView extends AbstractSplitPropertyWindow<JFloorScrollPane<JFlo
 	 * @param id the floor id
 	 */
 	public void setFloor( int id ) {
-		cbxFloors.setSelectedIndex( id );
+		floorSelector.setSelectedIndex( id );
 	}
 
 	/**
@@ -1356,7 +1340,7 @@ public class JEditView extends AbstractSplitPropertyWindow<JFloorScrollPane<JFlo
 	 * @return the z format floor that is currently visible
 	 */
 	public int getFloorID() {
-		return cbxFloors.getSelectedIndex();
+		return floorSelector.getSelectedIndex();
 	}
 
 	public ZControl getProjectControl() {
@@ -1395,7 +1379,7 @@ public class JEditView extends AbstractSplitPropertyWindow<JFloorScrollPane<JFlo
 	 */
 	public void updateFloorList() {
 		floorSelector.clear();
-		floorSelector.displayFloors( projectControl.getProject() );
+		floorSelector.displayFloors( projectControl.getProject().getBuildingPlan(), PropertyContainer.getInstance().getAsBoolean( "editor.options.view.hideDefaultFloor" ) );
 	}
 
 	/**

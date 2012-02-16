@@ -23,22 +23,23 @@ package gui.visualization.control.building;
 import gui.visualization.control.AbstractZETVisualizationControl;
 import gui.visualization.draw.building.GLBuilding;
 import io.visualization.BuildingResults;
+import io.visualization.BuildingResults.Floor;
 import io.visualization.BuildingResults.Wall;
 import java.util.ArrayList;
-import java.util.HashMap;
+import java.util.Collection;
+import java.util.List;
 import opengl.framework.abs.Controlable;
 
 /**
  * A control class that allows hiding and showing of walls on different floors.
  * @author Jan-Philipp Kappmeier, Daniel Plümpe
  */
-//public class GLBuildingControl extends AbstractControl<GLBuilding, BuildingResults, BuildingResults, GLWall, GLWallControl, GLControl> {
 public class GLBuildingControl extends AbstractZETVisualizationControl<GLWallControl, GLBuilding, GLBuildingControl> implements Controlable {
 
 	double scaling = 1;
 	private int wallCount;
 	private int wallsDone;
-	private HashMap<Integer, ArrayList<GLWallControl>> allFloorsByID;
+	private List<ArrayList<GLWallControl>> allFloorsByID;
 	private BuildingResults visResult;
 	
 	/**
@@ -57,10 +58,11 @@ public class GLBuildingControl extends AbstractZETVisualizationControl<GLWallCon
 		//AlgorithmTask.getInstance().setProgress( 1, DefaultLoc.getSingleton().getStringWithoutPrefix( "batch.tasks.progress.createBuildingVisualizationDataStructure" ), "" );
 		wallCount = visResult.getWalls().size();
 		wallsDone = 0;
-		allFloorsByID = new HashMap<Integer, ArrayList<GLWallControl>>();
+
+		allFloorsByID = new ArrayList<>( visResult.getFloors().size() );
+		for( int i = 0; i < visResult.getFloors().size(); ++i )
+			allFloorsByID.add( new ArrayList<GLWallControl> () );
 		for( Wall wall : visResult.getWalls() ) {
-			if( !allFloorsByID.containsKey( wall.getFloor().id() ) )
-				allFloorsByID.put( wall.getFloor().id(), new ArrayList<GLWallControl>() );
 			final GLWallControl child = new GLWallControl( wall, mainControl );
 			add( child );
 			allFloorsByID.get( wall.getFloor().id() ).add( child );
@@ -77,8 +79,11 @@ public class GLBuildingControl extends AbstractZETVisualizationControl<GLWallCon
 	public void showOnlyFloor( Integer floorID ) {
 		childControls.clear();
 		ArrayList<GLWallControl> floor = allFloorsByID.get( floorID );
-		if( floor != null )
-			childControls.addAll( floor );
+		childControls.addAll( floor );
+		view.clear();
+		for( GLWallControl wall : this )
+			view.addChild( wall.getView() );
+
 		getView().update();
 	}
 
@@ -87,8 +92,11 @@ public class GLBuildingControl extends AbstractZETVisualizationControl<GLWallCon
 	 */
 	public void showAllFloors() {
 		childControls.clear();
-		for( ArrayList<GLWallControl> floor : allFloorsByID.values() )
+		for( ArrayList<GLWallControl> floor : allFloorsByID )
 			childControls.addAll( floor );
+		view.clear();
+		for( GLWallControl wall : this )
+			view.addChild( wall.getView() );
 		getView().update();
 	}
 
@@ -162,6 +170,8 @@ public class GLBuildingControl extends AbstractZETVisualizationControl<GLWallCon
 	public void setScaling( double scaling ) {
 		this.scaling = scaling;
 	}
-	
-	
+
+	public Collection<Floor> getFloors() {
+		return visResult.getFloors();
+	}
 }

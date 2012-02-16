@@ -127,8 +127,8 @@ public class ZToCAConverter extends Algorithm<BuildingPlan,ConvertedCellularAuto
 		lastMapping = new ZToCAMapping();
 		//AlgorithmTask.getInstance().publish( "Rastere den Gebäudeplan", "" );
 		lastContainer = RasterContainerCreator.getInstance().ZToCARasterContainer( buildingPlan );
-		exitCells = new ArrayList<ExitCell>();
-		roomRasterRoomMapping = new HashMap<ZToCARoomRaster, ds.ca.evac.Room>();
+		exitCells = new ArrayList<>();
+		roomRasterRoomMapping = new HashMap<>();
 
 		//AlgorithmTask.getInstance().publish( "Erzeuge Räume", "" );
 
@@ -138,6 +138,7 @@ public class ZToCAConverter extends Algorithm<BuildingPlan,ConvertedCellularAuto
 		//AlgorithmTask.getInstance().publish( "Konvertiere Räume", "" );
 
 		for( Floor floor : lastContainer.getFloors() ) {
+			convertedCA.addFloor( floor );
 			Collection<ZToCARoomRaster> rooms = lastContainer.getAllRasteredRooms( floor );
 			if( rooms != null )
 				for( ZToCARoomRaster rasteredRoom : rooms ) {
@@ -145,12 +146,6 @@ public class ZToCAConverter extends Algorithm<BuildingPlan,ConvertedCellularAuto
 					convertedCA.addRoom( convertedRoom );
 				}
 		}
-
-		// TODO: delete
-		// Wird bereits von addRoom gemacht
-		//for( ExitCell e : exitCells ) {
-		//	convertedCA.addExit( e );
-		//}
 
 		//AlgorithmTask.getInstance().publish( "Berechne statische Potenziale", "" );
 
@@ -192,8 +187,8 @@ public class ZToCAConverter extends Algorithm<BuildingPlan,ConvertedCellularAuto
 	 * @param sp the potential starting at the exit cells
 	 */
 	private void saveCellSearch( ArrayList<ExitCell> exitCells, StaticPotential sp ) {
-		ArrayDeque<SaveCell> Q = new ArrayDeque<SaveCell>();
-		ArrayList<SaveCell> V = new ArrayList<SaveCell>();
+		ArrayDeque<SaveCell> Q = new ArrayDeque<>();
+		ArrayList<SaveCell> V = new ArrayList<>();
 		for( Cell cell : exitCells ) {
 			for( Cell c : cell.getNeighbours() ) {
 				if( c instanceof SaveCell && !V.contains( (SaveCell)c ) ) {

@@ -96,8 +96,9 @@ public class GLCellularAutomatonControl extends AbstractZETVisualizationControl<
 		glIndividuals = new ArrayList<>();
 		this.visResults = caVisResults;
 
-		for( int floorID : ca.getFloors().keySet() )
-			add( new GLCAFloorControl( caVisResults, ca.getRoomsOnFloor( floorID ), floorID, mainControl ) );
+		List<String> floors = ca.getFloors();
+		for( int i = 0; i < floors.size(); ++i )
+			add( new GLCAFloorControl( caVisResults, ca.getRoomsOnFloor( i ), i, mainControl ) );
 
 		this.setView( new GLCA( this ) );
 		for( GLCAFloorControl floor : this )
@@ -136,18 +137,20 @@ public class GLCellularAutomatonControl extends AbstractZETVisualizationControl<
 	}
 
 	public void showOnlyFloor( Integer floorID ) {
-		System.out.println( "Show only floor " + floorID );
 		childControls.clear();
-		childControls.add( allFloorsByID.get( floorID == 0 && allFloorsByID.get( floorID ) == null ? 1 : floorID ) ); // add the floor if possible, otherwise the first
+		//childControls.add( allFloorsByID.get( floorID == 0 && allFloorsByID.get( floorID ) == null ? 1 : floorID ) ); // add the floor if possible, otherwise the first
+		childControls.add( allFloorsByID.get( floorID ) ); // add the floor if possible, otherwise the first
 		view.clear();
 		for( GLCAFloorControl floor : this )
 			view.addChild( floor.getView() );
-
 	}
 
 	public void showAllFloors() {
 		childControls.clear();
 		childControls.addAll( allFloorsByID.values() );
+		view.clear();
+		for( GLCAFloorControl floor : this )
+			view.addChild( floor.getView() );		
 	}
 
 	@Override

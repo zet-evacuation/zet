@@ -24,7 +24,6 @@ import gui.visualization.control.FlowHistroryTriple;
 import gui.visualization.util.FlowCalculator;
 import java.util.ArrayList;
 import de.tu_berlin.math.coga.graph.io.xml.FlowVisualization;
-import gui.visualization.control.GLControl;
 
 public class GLNodeControl extends AbstractZETVisualizationControl<GLFlowEdgeControl, GLNode, GLFlowGraphControl> {
 	private double xPosition;
@@ -77,7 +76,7 @@ public class GLNodeControl extends AbstractZETVisualizationControl<GLFlowEdgeCon
 		floor = graphVisResult.getNodeToFloorMapping().get( node );
 
 		zPosition = glControl.defaultFloorHeight * 0.1 * glControl.scaling; // set bottom graph 10% above the ground
-		zPosition += (floor - 1) * glControl.defaultFloorHeight * glControl.scaling;
+		zPosition += floor * glControl.defaultFloorHeight * glControl.scaling;
 
 		setView( new GLNode( this ) );
 		for( GLFlowEdgeControl edge : this ) {

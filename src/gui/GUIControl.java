@@ -407,7 +407,7 @@ public class GUIControl implements AlgorithmListener {
 
 	public void visualizationShowAllFloors() {
 		final boolean showAllFloors = PropertyContainer.getInstance().toggle( "settings.gui.visualization.floors" );
-		visualizationToolBar.setSelectedAllFloors( !showAllFloors );
+		visualizationToolBar.setSelectedAllFloors( showAllFloors );
 		editor.getVisualizationView().setFloorSelectorEnabled( !showAllFloors );
 		if( showAllFloors )
 			visualization.getControl().showAllFloors();
@@ -1056,8 +1056,10 @@ public class GUIControl implements AlgorithmListener {
 		algorithmControl.convertBuildingPlan( new PropertyChangeListener() {
 			@Override
 			public void propertyChange( PropertyChangeEvent pce ) {
-				if( isDone( pce ) )
+				if( isDone( pce ) ) {
 					visualization.getControl().setBuildingControl( algorithmControl.getBuildingResults() );
+					editor.getVisualizationView().updateFloorSelector( editor.getEditView().getFloorID());
+				}
 			}
 		});
 	}
@@ -1104,7 +1106,7 @@ public class GUIControl implements AlgorithmListener {
 
 						visualization.getControl().setCellularAutomatonControl( caVis, algorithmControl.getCellularAutomaton() );
 						editor.getVisualizationView().updatePotentialSelector();
-	//					editor.getVisualizationView().updateFloorSelector();
+//						editor.getVisualizationView().updateFloorSelector();
 						editor.getQuickVisualizationView().getLeftPanel().getMainComponent().setSimulationData( algorithmControl.getCellularAutomaton(), algorithmControl.getContainer(), algorithmControl.getMapping() );
 						editor.getQuickVisualizationView().displayFloor( editview.getCurrentFloor() );
 						firstProgress = true;

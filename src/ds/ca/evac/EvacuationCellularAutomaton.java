@@ -29,8 +29,10 @@ import ds.ca.results.ExitAction;
 import ds.ca.results.MoveAction;
 import ds.ca.results.SwapAction;
 import ds.ca.results.VisualResultsRecorder;
+import ds.z.Floor;
 import exitdistributions.IndividualToExitMapping;
 import java.util.Collections;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import statistics.Statistic;
@@ -68,9 +70,9 @@ public class EvacuationCellularAutomaton extends SquareCellularAutomaton impleme
 	/** an HashMap used to map rooms to identification numbers */
 	private HashMap<Integer, Room> rooms;
 	/** A mapping floor-id <-> floor-name */
-	private HashMap<Integer, String> floorNames;
+	private LinkedList<String> floorNames;
 	/** A mapping floor <-> rooms */
-	private HashMap<Integer, ArrayList<Room>> roomsByFloor;
+	private LinkedList<ArrayList<Room>> roomsByFloor;
 	/** HashMap mapping Rooms to Individuals. */
 	//private HashMap<Room, HashSet<Individual>> roomIndividualMap;
 	/** HashMap mapping UUIDs of AssignmentTypes to Individuals. */
@@ -112,13 +114,13 @@ public class EvacuationCellularAutomaton extends SquareCellularAutomaton impleme
 		assignmentTypes = new HashMap<>();
 //		roomIndividualMap = new HashMap<Room, HashSet<Individual>>();
 		typeIndividualMap = new HashMap<>();
-		roomsByFloor = new HashMap<>();
+		roomsByFloor = new LinkedList<>();
 		potentialManager = new PotentialManager();
 		absoluteMaxSpeed = 1;
 		secondsPerStep = 1;
 		stepsPerSecond = 1;
 		state = State.ready;
-		floorNames = new HashMap<>();
+		floorNames = new LinkedList<>();
 		recordingStarted = false;
 	}
 
@@ -534,22 +536,31 @@ public class EvacuationCellularAutomaton extends SquareCellularAutomaton impleme
 		return notSaveIndividualsCount;
 	}
 
+	final public void addFloor( Floor floor ) {
+		floorNames.add( floor.getName() );
+		roomsByFloor.add( new ArrayList<Room>() );
+	}
+	
 	/**
 	 * Adds a room to the List of all rooms of the building
 	 * @param room the Room object to be added
 	 * @throws IllegalArgumentException Is thrown if the the specific room exists already in the list rooms
 	 */
 	final public void addRoom( Room room ) throws IllegalArgumentException {
-		if( rooms.containsKey( room ) ) {
+		if( rooms.containsKey( room.getID() ) ) {
 			throw new IllegalArgumentException( "Specified room exists already in list rooms." );
 		} else {
 			rooms.put( room.getID(), room );
 			Integer floorID = room.getFloorID();
 			if( roomsByFloor.get( floorID ) == null ) {
-				roomsByFloor.put( floorID, new ArrayList<Room>() );
-				floorNames.put( floorID, room.getFloor() );
+			//if( roomsByFloor.get( floorID ) == null ) {
+				throw new IllegalStateException( "Floor with id " + floorID + " has not been added before." );
 			}
+			//roomsByFloor.put( floorID, new ArrayList<Room>() );
+			//	floorNames.put( floorID, room.getFloor() );
+			//}
 			roomsByFloor.get( floorID ).add( room );
+			
 			
 			// try to add exits
 			for( Cell cell : room.getAllCells() ) {
@@ -752,8 +763,8 @@ public class EvacuationCellularAutomaton extends SquareCellularAutomaton impleme
 	 * Returns a collection containing all floor ids.
 	 * @return the collection of floor ids
 	 */
-	public Map<Integer, String> getFloors() {
-		return Collections.unmodifiableMap( floorNames );
+	public List<String> getFloors() {
+		return Collections.unmodifiableList( floorNames );
 	}
 
 	/**

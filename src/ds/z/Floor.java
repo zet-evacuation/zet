@@ -51,7 +51,7 @@ import java.util.List;
  */
 @XStreamAlias( "floor" )
 @XMLConverter( FloorConverter.class )
-public class Floor implements Serializable, Cloneable, Iterable<Room>, ZFormatObject {
+public class Floor implements Serializable, Cloneable, Iterable<Room>, ZFormatObject, AbstractFloor {
 	/** The name of the floor. */
 	@XStreamAsAttribute()
 	private String name;
@@ -97,7 +97,7 @@ public class Floor implements Serializable, Cloneable, Iterable<Room>, ZFormatOb
 	 */
 	public Floor( String name ) {
 		this.name = name;
-		rooms = new ArrayList<Room>();
+		rooms = new ArrayList<>();
 	}
 
 	/**

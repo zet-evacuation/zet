@@ -21,6 +21,7 @@
 
 package gui.visualization.control.graph;
 
+import de.tu_berlin.math.coga.graph.io.xml.FlowVisualization;
 import de.tu_berlin.math.coga.math.Conversion;
 import ds.GraphVisualizationResults;
 import ds.graph.Node;
@@ -31,7 +32,6 @@ import java.util.Iterator;
 import javax.media.opengl.GL;
 import opengl.framework.abs.DrawableControlable;
 import opengl.helper.Frustum;
-import de.tu_berlin.math.coga.graph.io.xml.FlowVisualization;
 
 /**
  *  @author Jan-Philipp Kappmeier
@@ -68,15 +68,14 @@ public class GLFlowGraphControl extends AbstractZETVisualizationControl<GLGraphF
 		nodeCount = graphVisResult.getNetwork().nodes().size();
 		nodesDone = 0;
 		superSinkID = graphVisResult.getSupersink().id();
-		allFloorsByID = new HashMap<Integer, GLGraphFloorControl>();
+		allFloorsByID = new HashMap<>();
 		supportsFloors = true;
 		int floorCount = graphVisResult.getFloorToNodeMapping().size();
-		for( int i = 0; i < floorCount; i++ )
-			if( graphVisResult.getFloorToNodeMapping().get( i ).size() > 0 ) {
+		for( int i = 0; i < floorCount; i++ ) {
 				GLGraphFloorControl floorControl = new GLGraphFloorControl( graphVisResult, graphVisResult.getFloorToNodeMapping().get( i ), i, mainControl );
 				add( floorControl );
 				allFloorsByID.put( i, floorControl );
-			}
+		}
 		this.setView( new GLFlowGraph( this ) );
 		for( GLGraphFloorControl floor : this )
 			view.addChild( floor.getView() );
@@ -97,7 +96,7 @@ public class GLFlowGraphControl extends AbstractZETVisualizationControl<GLGraphF
 		GLGraphFloorControl floorControl = new GLGraphFloorControl( fv, fv.getGv().getNetwork().nodes(), mainControl );
 		add( floorControl );
 
-		allFloorsByID = new HashMap<Integer, GLGraphFloorControl>();
+		allFloorsByID = new HashMap<>();
 		allFloorsByID.put( 0, floorControl );
 
 		this.setView( new GLFlowGraph( this ) );
@@ -123,11 +122,17 @@ public class GLFlowGraphControl extends AbstractZETVisualizationControl<GLGraphF
 	public void showOnlyFloor( Integer floorID ) {
 		childControls.clear();
 		childControls.add( allFloorsByID.get( floorID ) );
+		view.clear();
+		for( GLGraphFloorControl floor : this )
+			view.addChild( floor.getView() );
 	}
 
 	public void showAllFloors() {
 		childControls.clear();
 		childControls.addAll( allFloorsByID.values() );
+		view.clear();
+		for( GLGraphFloorControl floor : this )
+			view.addChild( floor.getView() );
 	}
 
 	/**

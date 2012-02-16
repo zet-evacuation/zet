@@ -13,12 +13,10 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
-
 /**
  * Class RoomComboBoxModel
  * Erstellt 29.04.2008, 21:30:27
  */
-
 package zet.gui.components.model;
 
 import ds.z.Floor;
@@ -30,62 +28,46 @@ import javax.swing.DefaultComboBoxModel;
 
 /**
  *
+ * This class serves as a model for the JComboBox that contains the current rooms.
  * @author Jan-Philipp Kappmeier
  */
-	/**
-	 * This class serves as a model for the JComboBox that contains the current rooms.
-	 */
-	public class RoomComboBoxModel extends DefaultComboBoxModel {
-		private List<Room> entries = new LinkedList<Room>();
-		private boolean initializing;
-		private FloorComboBoxModel floorSelector;
-		private boolean disableUpdate = false;
-		
-		public RoomComboBoxModel( ZControl zcontrol, FloorComboBoxModel floorSelector ) {
-			super();
-			this.floorSelector = floorSelector;
-		}
+@SuppressWarnings( "serial" )
+public class RoomComboBoxModel extends DefaultComboBoxModel<Room> {
+	private List<Room> entries = new LinkedList<>();
+	private boolean initializing;
+	private FloorComboBox<Floor> floorSelector;
+	private boolean disableUpdate = false;
 
-		// TODO-Event
-//		@Override
-//		public void stateChanged( ds.z.event.ChangeEvent e ) {
-//			if( ( (Floor)floorSelector.getSelectedItem() ).getRooms().size() == entries.size() )
-//				// Roomname changed
-//				if( e.getSource() instanceof Room ) {
-//					int index = entries.indexOf( (Room)e.getSource() );
-//					this.fireContentsChanged( this, index, index );
-//				}
-//			else
-//				// Number of rooms changed
-//				displayRoomsForCurrentFloor();
-//		}
+	public RoomComboBoxModel( ZControl zcontrol, FloorComboBox<Floor> floorSelector ) {
+		super();
+		this.floorSelector = floorSelector;
+	}
 
-		public void displayRoomsForCurrentFloor() {
-			if( disableUpdate )
-				return;
-			initializing = true;
-			try {
-				clear();
-				if( floorSelector.getSelectedItem() != null )
-					for( Room r : ( (Floor)floorSelector.getSelectedItem() ).getRooms() ) {
-						addElement( r );
-						entries.add( r );
-					}
-			} finally {
-				initializing = false;
-			}
-		}
-
-		public void clear() {
-			entries.clear();
-
-			removeAllElements();
-		}
-
-		@Override
-		public void setSelectedItem( Object object ) {
-			if( !initializing ) {
-				super.setSelectedItem( object );
-			}
+	public void displayRoomsForCurrentFloor() {
+		if( disableUpdate )
+			return;
+		initializing = true;
+		try {
+			clear();
+			if( floorSelector.getSelectedItem() != null )
+				for( Room r : ((Floor)floorSelector.getSelectedItem()).getRooms() ) {
+					addElement( r );
+					entries.add( r );
+				}
+		} finally {
+			initializing = false;
 		}
 	}
+
+	public void clear() {
+		entries.clear();
+
+		removeAllElements();
+	}
+
+	@Override
+	public void setSelectedItem( Object object ) {
+		if( !initializing )
+			super.setSelectedItem( object );
+	}
+}

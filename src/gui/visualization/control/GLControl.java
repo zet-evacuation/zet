@@ -15,6 +15,9 @@
  */
 package gui.visualization.control;
 
+import de.tu_berlin.math.coga.common.localization.Localization;
+import de.tu_berlin.math.coga.common.localization.DefaultLoc;
+import ds.CompareVisualizationResults;
 import ds.PropertyContainer;
 import ds.GraphVisualizationResults;
 import ds.ca.evac.EvacuationCellularAutomaton;
@@ -30,23 +33,19 @@ import gui.visualization.control.graph.GLFlowGraphControl;
 import gui.visualization.control.graph.GLGraphFloorControl;
 import gui.visualization.control.graph.GLNodeControl;
 import gui.visualization.draw.ca.GLIndividual;
-import io.visualization.BuildingResults;
-import io.visualization.CAVisualizationResults;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import de.tu_berlin.math.coga.common.localization.Localization;
-import opengl.helper.Frustum;
-import statistic.ca.CAStatistic;
-import de.tu_berlin.math.coga.common.localization.DefaultLoc;
-import ds.CompareVisualizationResults;
 import gui.visualization.VisualizationOptionManager;
 import gui.visualization.draw.ca.GLCA;
 import gui.visualization.draw.graph.GLGraph;
+import io.visualization.BuildingResults;
+import io.visualization.CAVisualizationResults;
+import io.visualization.BuildingResults.Floor;
+import java.util.List;
+import java.util.Collection;
 import javax.media.opengl.GL;
 import javax.media.opengl.GLAutoDrawable;
+import opengl.helper.Frustum;
 import opengl.framework.abs.DrawableControlable;
+import statistic.ca.CAStatistic;
 import zet.gui.main.tabs.JVisualizationView;
 
 /**
@@ -185,6 +184,7 @@ public class GLControl implements DrawableControlable {
 	public GLControl( CAVisualizationResults caVisResults, GraphVisualizationResults graphVisResult, BuildingResults buildingResults, CAStatistic caStatistic, CompareVisualizationResults compvisres  ) {
 		this.caStatistic = caStatistic;
 		this.buildingResults = buildingResults;
+		
 		GLCellControl.invalidateMergedPotential();
 		if( caVisResults != null ) {
 			hasCellularAutomaton = true;
@@ -254,6 +254,10 @@ public class GLControl implements DrawableControlable {
 			caControl.build();
 		estimatedTime = 0;
 		showCellularAutomaton( PropertyContainer.getInstance().getAsBoolean( "settings.gui.visualization.cellularAutomaton" ) );
+		if( visibleFloor == -1 )
+			showAllFloors();
+		else
+			showFloor( visibleFloor );
 	}
 
 	public void setGraphControl( GraphVisualizationResults graphVisResult ) {
@@ -286,6 +290,7 @@ public class GLControl implements DrawableControlable {
             
         }
 
+	int visibleFloor = -1;
 
 	/**
 	 * Initializes the visualization settings with the values stored in the
@@ -503,18 +508,20 @@ public class GLControl implements DrawableControlable {
 	 * Activates the visualization of all floors, if a cellular automaton is present.
 	 */
 	public void showAllFloors() {
+		visibleFloor = -1;
 		if( hasCellularAutomaton )
 			caControl.showAllFloors();
 		if( hasGraph )
 			graphControl.showAllFloors();
-		buildingControl.showAllFloors();
+		if( buildingControl != null )
+			buildingControl.showAllFloors();
 	}
 
 	/**
 	 * Shows the first floor, ignoring the default evacuation floor.
 	 */
 	public void showFirstFloor() {
-		showFloor( 0 );
+		showFloor( 1 );
 	}
 
 	/**
@@ -530,11 +537,13 @@ public class GLControl implements DrawableControlable {
 	 * @param id the floor id
 	 */
 	public void showFloor( int id ) {
+		visibleFloor = id;
 		if( hasCellularAutomaton )
 			caControl.showOnlyFloor( id );
 		if( hasGraph )
 			graphControl.showOnlyFloor( id );
-		buildingControl.showOnlyFloor( id );
+		if( buildingControl != null )
+			buildingControl.showOnlyFloor( id );
 	}
 
 	/**
@@ -602,10 +611,10 @@ public class GLControl implements DrawableControlable {
 			caControl.getView().draw( gl );
 		if( showGraph && hasGraph )
 			graphControl.draw( gl );
-		if( showWalls )
+		if( showWalls && buildingControl != null )
 			buildingControl.getView().draw( gl );
-                if (iscompared)
-                        compareControl.getView().draw(gl);
+		if (iscompared)
+						compareControl.getView().draw(gl);
 	}
 
 	/** 
@@ -623,14 +632,19 @@ public class GLControl implements DrawableControlable {
 	}
 
 	/**
-	 * Returns a {@code Map} that assigns floor names to their ids.
+	 * Returns a {@code Map} that assigns floor names to their ids. Floor ids are
+	 * enumerated from 0 to n-1. if there are n floors. Note that the (possibly)
+	 * hidden evacuation floor is also includeded in the n floors.
 	 * @return a map that assigns floor names to their ids
 	 */
-	public Map<Integer, String> getFloorNames() {
-		HashMap<Integer, String> floorNames = new HashMap<>( buildingResults.getFloors().size() );
-		for( BuildingResults.Floor floor : buildingResults.getFloors() )
-			floorNames.put( floor.id(), floor.name() );
-		return Collections.unmodifiableMap( floorNames );
+	public Collection<Floor> getFloorNames() {
+		//List<String> floorNames = new LinkedList<>( );
+		//for( BuildingResults.Floor floor : buildingResults.getFloors() )
+		//	floorNames.add( floor.getName() );
+		return buildingControl.getFloors();
+		//return buildingResults.getFloors();
+		//return Collections.unmodifiableCollection( buildingResults.getFloors() );
+		//return Collections.unmodifiableCollection( floors.values() );
 	}
 
 	public final List<GLIndividual> getIndividuals() {
