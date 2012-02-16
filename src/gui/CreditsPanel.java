@@ -21,6 +21,8 @@
 package gui;
 
 import de.tu_berlin.math.coga.math.Conversion;
+import java.awt.event.KeyEvent;
+import java.awt.event.MouseWheelEvent;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
@@ -55,6 +57,8 @@ public class CreditsPanel extends JMovingEyePanel {
 	private float startPos = -5;
 	/** The array containing the getText. */
 	private TextureFontStrings lines = new TextureFontStrings( false );
+	/** Decides, whether the animation is paused. */
+	private boolean paused = false;
 
 	/**
 	 * Create a new instance of the {@code CreditsPanel}. Initializes the
@@ -65,6 +69,8 @@ public class CreditsPanel extends JMovingEyePanel {
 		super();
 		removeListener();
 		initLines();
+		useMouseWheelListener();
+		useKeyListener();
 	}
 
 	@Override
@@ -131,7 +137,7 @@ public class CreditsPanel extends JMovingEyePanel {
 	public void animate() {
 		super.animate();
 		final double timePerPixel = Conversion.secToNanoSeconds / 1;
-		startPos -= ( this.getDeltaTime() / timePerPixel );
+		startPos -= paused ? 0 : ( this.getDeltaTime() / timePerPixel );
 	}
 
 	/**
@@ -163,11 +169,35 @@ public class CreditsPanel extends JMovingEyePanel {
 		Path creditsFile = Paths.get( "./credits.txt" );
 		try {
 			for ( String line : Files.readAllLines( creditsFile, StandardCharsets.UTF_8 ) ) {
-				lines.add(line.substring( 0, line.length()-2), line.endsWith( "1" ) );
+				lines.add( parse( line.substring( 0, line.length()-2) ), line.endsWith( "1" ));
 			}
 		} catch( IOException ex ) {
 			lines.add( "Error loading credits", true );
 			lines.add( "Plese repair your ZET installation", true );
 		}
 	}
+	
+	private String parse( String input ) {
+		return input.replace( "#VERSION", ZETMain.version );
+	}
+
+	/**
+	 * Changes the current position of the text according to the mouse wheel
+	 * change.
+	 * @param e the mouse wheel event 
+	 */
+	@Override
+	public void mouseWheelMoved( MouseWheelEvent e ) {
+		startPos = Math.min( -5, startPos + e.getWheelRotation() );
+	}
+
+	@Override
+	public void keyPressed( KeyEvent e ) {
+		if( e.getKeyCode() == KeyEvent.VK_SPACE ) {
+			paused = !paused;
+		}
+	}
+	
+	
+	
 }
