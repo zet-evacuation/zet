@@ -36,7 +36,6 @@ import opengl.framework.abs.Controlable;
 /**
  * @author Daniel Plümpe, Jan-Philipp Kappmeier
  */
-//public class GLWallControl extends AbstractControl<GLWall, BuildingResults.Wall, BuildingResults, GLWall, GLWallControl, GLControl> {
 public class GLWallControl extends AbstractZETVisualizationControl<GLWallControl, GLWall, GLBuildingControl> implements Controlable {
 
 	private LinkedList<GLVector> basePoints;
@@ -49,9 +48,9 @@ public class GLWallControl extends AbstractZETVisualizationControl<GLWallControl
 	public GLWallControl( Wall controlled, GLBuildingControl mainControl ) {
 		super( mainControl );
 		this.controlled = controlled;
-		basePoints = new LinkedList<GLVector>();
+		basePoints = new LinkedList<>();
 		final int floor = controlled.getFloor().id();
-		final double height = (floor - 1) * VisualizationOptionManager.getFloorDistance();
+		final double height = floor * VisualizationOptionManager.getFloorDistance();
 
 		for( Point2D.Double point : controlled ) {
 			basePoints.add( new GLVector( point.x * mainControl.scaling, (-1) * point.y * mainControl.scaling, height * mainControl.scaling ) );

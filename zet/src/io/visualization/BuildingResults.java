@@ -15,6 +15,7 @@
  */
 package io.visualization;
 
+import ds.z.AbstractFloor;
 import opengl.framework.abs.VisualizationResult;
 import java.awt.geom.Point2D;
 import java.util.Collection;
@@ -114,10 +115,10 @@ public class BuildingResults implements VisualizationResult {
 		}
 	}
 
-	public static class Floor {
+	public static class Floor implements AbstractFloor {
 		/** The id of the floor. Normally this is the floor number in the z-format.*/
 		private int id;
-		/** The name of the floor. */
+		/** The getName of the floor. */
 		private String name;
 
 		public Floor( int id, String name ) {
@@ -129,7 +130,7 @@ public class BuildingResults implements VisualizationResult {
 			return id;
 		}
 
-		public String name() {
+		public String getName() {
 			return name;
 		}
 	}
@@ -137,13 +138,13 @@ public class BuildingResults implements VisualizationResult {
 	private HashMap<Integer, Floor> floors;
 
 	public BuildingResults( ds.z.BuildingPlan buildingPlan ) {
-		walls = new LinkedList<Wall>();
-		floors = new HashMap<Integer, Floor>();
+		walls = new LinkedList<>();
+		floors = new HashMap<>();
 
 		for( ds.z.Floor zFloor : buildingPlan.getFloors() ) {
 			Floor buildingFloor = new Floor( buildingPlan.getFloorID( zFloor ), zFloor.getName() );
 
-			if( zFloor.getRooms().size() > 0 ) {
+			if( zFloor.getRooms().size() >= 0 ) { // TODO: remove as not necessary
 				if( floors.put( buildingFloor.id(), buildingFloor ) != null )
 					throw new RuntimeException( "Error while building the visualisation data out of the building plan: " + "There were two z-floors with the same id. " );
 

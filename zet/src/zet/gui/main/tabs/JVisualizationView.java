@@ -25,18 +25,16 @@ import de.tu_berlin.math.coga.common.localization.DefaultLoc;
 import ds.PropertyContainer;
 import gui.GUIControl;
 import gui.ZETMain;
-import zet.gui.components.model.ComboBoxRenderer;
-import zet.gui.components.model.FloorComboBoxModel;
 import de.tu_berlin.math.coga.components.JArrayPanel;
 import gui.visualization.AbstractVisualizationView;
 import gui.visualization.VisualizationPanel;
 import zet.gui.main.tabs.visualization.ZETVisualization;
-import zet.gui.main.tabs.visualization.PotentialSelectionModel;
+import zet.gui.components.model.PotentialSelectionModel;
 import gui.visualization.control.GLControl;
 import gui.visualization.control.GLControl.CellInformationDisplay;
 import info.clearthought.layout.TableLayout;
+import io.visualization.BuildingResults;
 import java.awt.BorderLayout;
-import java.awt.Component;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.ItemEvent;
@@ -48,13 +46,13 @@ import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JComponent;
 import javax.swing.JLabel;
-import javax.swing.JList;
 import javax.swing.JPanel;
 import javax.swing.JSlider;
 import javax.swing.JTextField;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 import zet.gui.GUILocalization;
+import zet.gui.components.model.FloorComboBox;
 
 /**
  *
@@ -66,9 +64,7 @@ public class JVisualizationView extends AbstractVisualizationView<ZETVisualizati
 	/** The visualization panel. */
 	private ZETVisualization visualization;
 	/** A combo box that allows selecting the visible floor (if not all are visible) */
-	private JComboBox floorSelector;
-	/** The model for the floor selection combo box */
-	private FloorComboBoxModel floorSelectorModel;
+	private FloorComboBox<BuildingResults.Floor> floorSelector;
 	/** A combo box selecting the currently visible potential */
 	private JComboBox potentialSelector;
 	/** A combo box for selecting the information displayed on the head of the individuals. */
@@ -130,7 +126,7 @@ public class JVisualizationView extends AbstractVisualizationView<ZETVisualizati
 	 * @param guiControl
 	 */
 	public JVisualizationView( GUIControl guiControl ) {
-		super( new VisualizationPanel<ZETVisualization>( new ZETVisualization( new GLCapabilities(), guiControl ) ) );
+		super( new VisualizationPanel<>( new ZETVisualization( new GLCapabilities(), guiControl ) ) );
 		visualization = getGLContainer();
 		this.guiControl = guiControl;
 
@@ -185,10 +181,8 @@ public class JVisualizationView extends AbstractVisualizationView<ZETVisualizati
 		};
 		final JPanel eastPanel = new JPanel( new TableLayout( size ) );
 
-		floorSelector = new JComboBox();
-		floorSelectorModel = new FloorComboBoxModel();
+		floorSelector = new FloorComboBox<>();
 
-		floorSelector.setModel( floorSelectorModel );
 		floorSelector.addActionListener( new ActionListener() {
 			@Override
 			public void actionPerformed( ActionEvent e ) {
@@ -196,25 +190,13 @@ public class JVisualizationView extends AbstractVisualizationView<ZETVisualizati
 					return;
 				if( floorSelector.getSelectedIndex() >= 0 ) {
 					System.out.println( "Ausgewählter Floor:" + floorSelector.getSelectedItem() );
-					selectedFloor = floorSelectorModel.getFloorIDFromIndex( floorSelector.getSelectedIndex() );
+					selectedFloor = floorSelector.getSelectedIndex();
 				} else
 					return;
 				if( visualization.getControl() != null ) {
 					visualization.getControl().showFloor( selectedFloor );
 					getLeftPanel().getGLContainer().repaint();
 				}
-			}
-		} );
-		floorSelector.setRenderer( new ComboBoxRenderer() {
-			@Override
-			public Component getListCellRendererComponent( JList list, Object value,
-							int index, boolean isSelected, boolean cellHasFocus ) {
-				JLabel me = (JLabel)super.getListCellRendererComponent( list, value, index,
-								isSelected, cellHasFocus );
-
-				if( value != null )
-					setText( (String)value );
-				return this;
 			}
 		} );
 		int row = 1;
@@ -347,7 +329,7 @@ public class JVisualizationView extends AbstractVisualizationView<ZETVisualizati
 	 * Enables and disables the floor selector on the right part of the view.
 	 * @param val decides whether the floor selector is enabled or disabled
 	 */
-	public void setFloorSelectorEnabled( boolean val ) {
+	public final void setFloorSelectorEnabled( boolean val ) {
 		floorSelector.setEnabled( val );
 	}
 
@@ -355,11 +337,14 @@ public class JVisualizationView extends AbstractVisualizationView<ZETVisualizati
 	 * Updates the floor selection combo box on the right panel.
 	 */
 	public void updateFloorSelector() {
-		floorSelectorModel.displayFloors( visualization.getControl().getFloorNames() );
-		floorSelector.setModel( floorSelectorModel );
-		if( floorSelector.getItemCount() > 0 )
-			floorSelector.setSelectedIndex( 0 );
-		selectedFloor = floorSelectorModel.getFloorIDFromIndex( floorSelector.getSelectedIndex() );
+		updateFloorSelector( floorSelector.getItemCount() > 0 ? 0 : -1 );
+	}
+	
+	public void updateFloorSelector( int floor ) {
+		floorSelector.displayFloors( visualization.getControl().getFloorNames(), PropertyContainer.getInstance().getAsBoolean( "editor.options.view.hideDefaultFloor" ) );
+		if( floor > -1 )
+			floorSelector.setSelectedIndex( floor );
+		selectedFloor = floorSelector.getSelectedIndex();
 	}
 
 	/**

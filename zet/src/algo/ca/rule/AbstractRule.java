@@ -34,7 +34,6 @@ public abstract class AbstractRule implements Rule {
 	 * @param cell the cell that is checked
 	 * @return {@code true} if an individual is standing on the cell, {@code false} otherwise
 	 */
-	@Override
 	public boolean executableOn( Cell cell ) {
 		return cell.getIndividual() != null;
 	}

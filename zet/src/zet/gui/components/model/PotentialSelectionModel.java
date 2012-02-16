@@ -18,7 +18,7 @@
  * Erstellt 05.07.2008, 01:42:38
  */
 
-package zet.gui.main.tabs.visualization;
+package zet.gui.components.model;
 import ds.ca.evac.PotentialManager;
 import ds.ca.evac.StaticPotential;
 import javax.swing.DefaultComboBoxModel;

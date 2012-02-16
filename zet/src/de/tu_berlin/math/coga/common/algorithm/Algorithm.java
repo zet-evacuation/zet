@@ -174,9 +174,7 @@ public abstract class Algorithm<Problem, Solution> implements Runnable {
             System.out.println("this.progress: " + this.progress);
             throw new IllegalArgumentException("The progress values must be monotonically increasing.");
         }
-
         this.progress = progress;
-				System.out.println( "EAT progress: " + progress );
         fireEvent(new AlgorithmDetailedProgressEvent(this, progress, message));
     }
 

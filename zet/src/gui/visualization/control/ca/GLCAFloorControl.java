@@ -24,7 +24,6 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 
-//public class GLCAFloorControl extends AbstractControl<GLCAFloor, Integer, CAVisualizationResults, GLRoom, GLRoomControl, GLControl> {
 public class GLCAFloorControl extends AbstractZETVisualizationControl<GLRoomControl, GLCAFloor, GLCellularAutomatonControl> {
 	private HashMap<ds.ca.evac.Room, GLRoomControl> roomControls;
     
@@ -92,6 +91,6 @@ public class GLCAFloorControl extends AbstractZETVisualizationControl<GLRoomCont
 	}
 
 	public double getZPosition() {
-		return (getFloorNumber() - 1) * mainControl.defaultFloorHeight * mainControl.scaling;
+		return floorNumber * mainControl.defaultFloorHeight * mainControl.scaling;
 	}
 }

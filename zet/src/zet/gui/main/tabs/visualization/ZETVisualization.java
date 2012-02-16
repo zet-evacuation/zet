@@ -26,6 +26,7 @@ import zet.gui.GUILocalization;
  *
  * @author Jan-Philipp Kappmeier
  */
+@SuppressWarnings( "serial" )
 public class ZETVisualization extends Visualization<GLControl> {
 	/** The GUI localization class. */
 	GUILocalization loc = GUILocalization.getSingleton();

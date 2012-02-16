@@ -46,7 +46,7 @@ import de.tu_berlin.math.coga.datastructure.Tuple;
  */
 @XStreamAlias("buildingPlan")
 @XMLConverter(BuildingPlanConverter.class)
-public class BuildingPlan implements Serializable, Iterable<Floor> , ZFormatObject {
+public class BuildingPlan implements Serializable, Iterable<Floor>, ZFormatObject {
 	/** The change listeners of the plan. */
 //	@XStreamOmitField()
 //	private transient ArrayList<ChangeListener> changeListeners = new ArrayList<ChangeListener>();
@@ -71,7 +71,7 @@ public class BuildingPlan implements Serializable, Iterable<Floor> , ZFormatObje
 	 * by default and contains the {@link ds.z.DefaultEvacuationFloor}.
 	 */
 	public BuildingPlan() {
-		floors = new ArrayList<Floor>( 10 );
+		floors = new ArrayList<>( 10 );
 		rasterized = false;
 		// Add a new default-floor and sets its raster to 400 millimeter
 		DefaultEvacuationFloor def = new DefaultEvacuationFloor();
