@@ -27,7 +27,9 @@ package gui.editor;
  * may want some kinds of areas to be hidden if he is not interested in them for
  * some reason.
  * @author Timon Kelter, Jan-Philipp Kappmeier
+ * @deprecated Should use the ds.z version of areas
  */
+@Deprecated
 public enum Areas {
 	/** Delay areas. */
 	Delay,

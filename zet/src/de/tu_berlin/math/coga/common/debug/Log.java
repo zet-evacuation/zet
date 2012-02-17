@@ -9,6 +9,7 @@ import event.EventListener;
 import event.EventServer;
 import event.MessageEvent;
 import java.util.ArrayList;
+import java.util.Observable;
 
 /**
  * A list of log entries. Entries can have two types (error and normal messages)
@@ -16,7 +17,7 @@ import java.util.ArrayList;
  * have additional html-tags to format them for logging out.
  * @author Jan-Philipp Kappmeier
  */
-public class Log implements EventListener<MessageEvent> {
+public class Log extends Observable implements EventListener<MessageEvent> {
 	/** A list of all logged massages. */
 	ArrayList<String> strings = new ArrayList<String>();
 	/** The complete log as string. */
@@ -69,5 +70,7 @@ public class Log implements EventListener<MessageEvent> {
 		s = s.replace( "\n", "<br>" );
 		strings.add( s );
 		text.append( s );
+    super.setChanged(); // Markierung, daß sich der Text geändert hat
+    super.notifyObservers(text); // ruft für alle Beobachter die update-Methode auf
 	}
 }
