@@ -244,6 +244,7 @@ public class JEditor extends JFrame implements Localized {
 		caStatisticView = new JStatisticPanel();
 		graphStatisticView = new JGraphStatisticPanel();
 		logView = new JLogPane( ZETMain.log );
+		ZETMain.log.addObserver( logView );
 		statisticView = new JStatisticsPanel();
 
 		tabPane = new JTabbedPane();

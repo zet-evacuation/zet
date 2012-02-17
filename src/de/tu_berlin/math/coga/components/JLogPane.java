@@ -22,6 +22,8 @@ package de.tu_berlin.math.coga.components;
 
 import de.tu_berlin.math.coga.common.debug.Log;
 import info.clearthought.layout.TableLayout;
+import java.util.Observable;
+import java.util.Observer;
 import javax.swing.JEditorPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
@@ -30,13 +32,15 @@ import javax.swing.JScrollPane;
  * The class {@code JLogPane} is a panel giving out formatted log messages.
  * @author Jan-Philipp Kappmeier
  */
-public class JLogPane extends JPanel {
+public class JLogPane extends JPanel implements Observer {
 
 	JEditorPane logPane;
 	Log log;
 
 	/**
 	 * Creates a new instance of {@code JLogPane}.
+	 * 
+	 * @param log 
 	 */
 	public JLogPane( Log log ) {
 		double size[][] = // Columns
@@ -61,5 +65,10 @@ public class JLogPane extends JPanel {
 		final String pre = "<html><font face=\"sans-serif\" size=\"-1\">";
 		final String post = "</font></html>";
 		logPane.setText( pre + log.getText() + post );
+	}
+
+	@Override
+	public void update( Observable o, Object arg ) {
+		update();
 	}
 }
