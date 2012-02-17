@@ -49,7 +49,7 @@ public class PlanPolygonConverter extends ReflectionConverter {
 			ex.printStackTrace( System.err );
 		}
 		PlanPolygon<Edge> result = (PlanPolygon<Edge>) serializationMethodInvoker.callReadResolve( created );
-
+		
 		// Recreate transient flag
 		//reflectionProvider.writeField( result, "enableEventGeneration", new Boolean( true ), PlanPolygon.class );
 		

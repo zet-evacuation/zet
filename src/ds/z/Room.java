@@ -101,7 +101,7 @@ public class Room extends BaseRoom<RoomEdge> implements Cloneable, Comparable<Ro
 		saveAreas = new ArrayList<>();
 		stairAreas = new ArrayList<>();
 		teleportAreas = new ArrayList<>();
-		areas = new ArrayList[] {assignmentAreas, barriers, delayAreas, evacuationAreas, inaccessibleAreas, saveAreas, stairAreas, teleportAreas};
+		areas = new ArrayList/*<? extends Area<Edge>>*/[] {assignmentAreas, barriers, delayAreas, evacuationAreas, inaccessibleAreas, saveAreas, stairAreas, teleportAreas};
 		floor.addRoom( this );
 	}
         
@@ -109,6 +109,7 @@ public class Room extends BaseRoom<RoomEdge> implements Cloneable, Comparable<Ro
         /**
 	 * Returns the position and the width of all doors for a {@code Room} 
 	 * @param room the room for which position is specified
+	 * @return the position and width of all doors in the room. 
 	 */
         public HashMap<Point,Integer> getDoors()
         {
@@ -911,8 +912,13 @@ public class Room extends BaseRoom<RoomEdge> implements Cloneable, Comparable<Ro
 			a.getPlanPoints( planPoints );
 		for( Area<?> a : evacuationAreas )
 			a.getPlanPoints( planPoints );
-		for( Area<?> a : inaccessibleAreas )
+if( inaccessibleAreas == null )
+	throw new NullPointerException( "Inacessible Areas null" );
+		for( Area<?> a : inaccessibleAreas ) {
+			if( a == null )
+				throw new NullPointerException( "a is null" );
 			a.getPlanPoints( planPoints );
+		}
 		for( Area<?> a : saveAreas )
 			a.getPlanPoints( planPoints );
 		for( Area<?> a : stairAreas )
@@ -1019,4 +1025,25 @@ public class Room extends BaseRoom<RoomEdge> implements Cloneable, Comparable<Ro
 		return name.compareTo( o.getName() );
 	}
 
+	/**
+	 * <p>Searches for easy to repair errors in the datastructure and fixes them.
+	 * Currently the following is done:</p>
+	 * <p>Some lists may contain null pointers (due to old file versions or illegal
+	 * state of the datastructure before saving). These are removed.</p>
+	 */
+	public void repair() {
+		for( ArrayList<Area<? extends Edge>> testList : areas ) {
+			for( Area<? extends Edge> area : testList )
+				if( area == null ) { // check, if an area is a problem
+					ArrayList<Area<? extends Edge>> workingList = new ArrayList<>();
+					for( int i = 0; i < testList.size(); ++i ) // find problem areas
+						if( testList.get( i ) != null )
+							workingList.add( testList.get( i ) );
+					testList.clear(); // clear the erroreus list
+					testList.addAll( workingList ); // re-add the working areas
+					System.out.println( "Errors fixed in " + testList.toString() );
+					break;
+				}
+		}
+	}
 }

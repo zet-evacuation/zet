@@ -634,6 +634,44 @@ public class ZControl {
 	 * thrown, it is caught and the failure is given out to the debug out.
 	 */
 	public void checkDebugOut() {
+//		
+//		for( Floor f : project.getBuildingPlan().getFloors() ) {
+//			for( Room r : f.getRooms() ) {
+//				List ia = r.getInaccessibleAreas();
+//
+//for( Object a : ia ) {
+//				if( a == null ) {
+//					// repair
+//					int count = 0;
+//					int nullIndex= 0;
+//					int i = ia.size()-1;
+//					while( nullIndex < i) {
+//						while( ia.get( nullIndex ) != null ) {
+//							nullIndex++;
+//						}
+//						
+//						if( nullIndex >= i )
+//							break;
+//						
+//						if( ia.get( i ) != null ) {
+//							//ia.set( nullIndex, ia.get( i ) );
+//							//ia.set( i, null );
+//							count++;
+//						}
+//						i--;
+//					}
+//					if( count == 0 )
+//						ia.clear();
+//				}
+//			}		
+//
+//			}
+//		}
+//		
+//
+//		
+//		if( 1 == 1 )
+//			return;
 		try {
 			project.getBuildingPlan().check();
 			System.out.println( "Everything OK." );

@@ -2,10 +2,6 @@
  * AreaTypes.java
  * Created: 21.01.2011, 14:26:48
  */
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 
 package ds.z;
 
@@ -37,6 +33,4 @@ public enum AreaTypes {
 	public String getTypeString() {
 		return ZLocalization.getSingleton().getString( key );
 	}
-
-
 }
