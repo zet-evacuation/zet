@@ -54,11 +54,8 @@ public class RoomConverter extends PlanPolygonConverter {
 
 	@Override
 	public void marshal( Object original, HierarchicalStreamWriter writer, MarshallingContext context ) {
-		//System.out.println( "Room: " + ((Room)original).getName() );
 		super.marshal( original, writer, context );
 	}
-
-
 
 	/**
 	 * Allows reading an {@link ds.z.Room} class. Due to format extensions,
@@ -72,7 +69,6 @@ public class RoomConverter extends PlanPolygonConverter {
 	@Override
 	public Object unmarshal( final HierarchicalStreamReader reader, final UnmarshallingContext context ) {
 		Room room = (Room) super.unmarshal( reader, context );
-		//System.out.println( "Room: " + room.getName() );
 
 		Class<?> c = room.getClass();
 		java.lang.reflect.Field field;
@@ -97,37 +93,25 @@ public class RoomConverter extends PlanPolygonConverter {
 
 		// Set up the Array for the areas
 		try {
-			field = c.getDeclaredField( "assignmentAreas" );
-			field.setAccessible( true );
-			ArrayList aa = (ArrayList) field.get( room );
-			field = c.getDeclaredField( "barriers" );
-			field.setAccessible( true );
-			ArrayList ba = (ArrayList) field.get( room );
-			field = c.getDeclaredField( "delayAreas" );
-			field.setAccessible( true );
-			ArrayList da = (ArrayList) field.get( room );
-			field = c.getDeclaredField( "evacuationAreas" );
-			field.setAccessible( true );
-			ArrayList ea = (ArrayList) field.get( room );
-			field = c.getDeclaredField( "inaccessibleAreas" );
-			field.setAccessible( true );
-			ArrayList ia = (ArrayList) field.get( room );
-			field = c.getDeclaredField( "saveAreas" );
-			field.setAccessible( true );
-			ArrayList sa = (ArrayList) field.get( room );
-			field = c.getDeclaredField( "stairAreas" );
-			field.setAccessible( true );
-			ArrayList st = (ArrayList) field.get( room );
-			field = c.getDeclaredField( "teleportAreas" );
-			field.setAccessible( true );
-			ArrayList ta = (ArrayList) field.get( room );
-
+			String[] areaNames = new String[]{"assignmentAreas", "barriers", "delayAreas", "evacuationAreas", "inaccessibleAreas", "saveAreas", "stairAreas", "teleportAreas" };
+			ArrayList<?>[] areas = new ArrayList<?>[areaNames.length]; // Note, that all of them are arraylists!
+			for( int i = 0; i < areaNames.length; ++i) {
+				field = c.getDeclaredField( areaNames[i] );
+				field.setAccessible( true );
+				areas[i] = (ArrayList<?>) field.get( room );				
+			}
 			field = c.getDeclaredField( "areas" );
 			field.setAccessible( true );
-
-			// Note, that all of them are arraylists!
-			ArrayList[] areas = new ArrayList[]{aa, ba, da, ea, ia, sa, st, ta};
 			field.set( room, areas );
+
+			// check for errors
+			for( ArrayList<?> al : areas )
+				for( Object a : al ) {
+					if( a == null ) {
+						room.repair();
+						break;
+					}
+			}
 		} catch( NoSuchFieldException ex ) {
 			System.err.println( "NoSuchFieldException in RoomConverter" );
 		} catch( IllegalAccessException ex ) {
