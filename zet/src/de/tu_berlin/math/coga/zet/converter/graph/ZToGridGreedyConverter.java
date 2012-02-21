@@ -9,7 +9,6 @@ import de.tu_berlin.math.coga.zet.converter.RasterContainerCreator;
 import ds.z.BuildingPlan;
 import ds.graph.problem.MinSpanningTreeProblem;
 import algo.graph.reduction.PrimsAlgo;
-import de.tu_berlin.math.coga.common.util.Level;
 import ds.graph.network.DynamicNetwork;
 import ds.graph.MinSpanningTree;
 import ds.graph.Edge;
@@ -34,11 +33,10 @@ public class ZToGridGreedyConverter extends ZToGridGraphConverter{
     protected NetworkFlowModel runAlgorithm( BuildingPlan problem ) {
 		mapping = new ZToGraphMapping();
                 ZToGraphMapping newmapping = new ZToGraphMapping();
-		plan = problem;
 		model = new NetworkFlowModel();
                 minspanmodel = new NetworkFlowModel();
                 
-		raster = RasterContainerCreator.getInstance().ZToGraphRasterContainer( plan );
+		raster = RasterContainerCreator.getInstance().ZToGraphRasterContainer( problem );
 		mapping.setRaster( raster );
 		model.setZToGraphMapping( mapping );
 

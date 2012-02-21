@@ -5,7 +5,6 @@
 package de.tu_berlin.math.coga.zet.converter.graph;
 
 import algo.graph.reduction.PrimsAlgo;
-import de.tu_berlin.math.coga.common.util.Level;
 import de.tu_berlin.math.coga.zet.NetworkFlowModel;
 import de.tu_berlin.math.coga.zet.converter.RasterContainerCreator;
 import ds.graph.network.DynamicNetwork;
@@ -32,11 +31,10 @@ public class ZToGridSpanTreeConverter extends ZToGridGraphConverter{
     protected NetworkFlowModel runAlgorithm( BuildingPlan problem ) {
 		mapping = new ZToGraphMapping();
                 ZToGraphMapping newmapping = new ZToGraphMapping();
-		plan = problem;
 		model = new NetworkFlowModel();
                 minspanmodel = new NetworkFlowModel();
                 
-		raster = RasterContainerCreator.getInstance().ZToGraphRasterContainer( plan );
+		raster = RasterContainerCreator.getInstance().ZToGraphRasterContainer( problem );
 		mapping.setRaster( raster );
 		model.setZToGraphMapping( mapping );
 

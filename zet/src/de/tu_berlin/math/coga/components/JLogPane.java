@@ -61,10 +61,20 @@ public class JLogPane extends JPanel implements Observer {
 		update();
 	}
 
-	public void update() {
+	public synchronized void update() {
 		final String pre = "<html><font face=\"sans-serif\" size=\"-1\">";
 		final String post = "</font></html>";
-		logPane.setText( pre + log.getText() + post );
+		try {
+			//logPane.replaceSelection( log.getText() );
+			logPane.setText( pre + log.getText() + post );
+		} catch( java.lang.NullPointerException ex ) {
+			System.err.println( "NULL POINTER EXCEPTION FOUND" );
+			ex.printStackTrace();			
+		} catch( Exception ex ) {
+			System.err.println( "OTHER EXCEPTION FOUND" );
+			ex.printStackTrace();
+			// ignore!
+		}
 	}
 
 	@Override

@@ -590,24 +590,37 @@ public class JEditor extends JFrame implements Localized {
 	/**
 	 * Hides the status bar and replaces it with a progress bar.
 	 */
-	private void enableProgressBar() {
-		remove( statusBar );
-		add( progressBar, BorderLayout.SOUTH );
-		progressBarEnabled = true;
-		validate();
-		repaint();
+	private synchronized void enableProgressBar() {
+		if( 1 == 1 )
+			return;
+		try {
+			
+			remove( statusBar );
+			add( progressBar, BorderLayout.SOUTH );
+			progressBarEnabled = true;
+			validate();
+			repaint();
+		} catch( java.lang.NullPointerException ex ) {
+			System.err.println( "ERROR NULL POINTER WTF" );
+		}
 	}
 
 	/**
 	 * Disables the progress bar and shows the status bar again.
 	 */
-	private void disableProgressBar() {
-		remove( progressBar );
-		add( statusBar, BorderLayout.SOUTH );
-		progressBar.setValue( 0 );
-		progressBarEnabled = false;
-		validate();
-		repaint();
+	private synchronized void disableProgressBar() {
+		if( 1 == 1 )
+			return;
+		try {
+			remove( progressBar );
+			add( statusBar, BorderLayout.SOUTH );
+			progressBar.setValue( 0 );
+			progressBarEnabled = false;
+			validate();
+			repaint();
+		} catch( java.lang.NullPointerException ex ) {
+			System.err.println( "ERROR NULL POINTER WTF" );
+		}
 	}
 
 	/**
