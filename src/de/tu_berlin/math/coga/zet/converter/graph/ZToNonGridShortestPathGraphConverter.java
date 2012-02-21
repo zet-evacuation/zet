@@ -44,11 +44,10 @@ public class ZToNonGridShortestPathGraphConverter extends ZToNonGridGraphConvert
     protected NetworkFlowModel runAlgorithm( BuildingPlan problem ) {
 		mapping = new ZToGraphMapping();
                 ZToGraphMapping newmapping = new ZToGraphMapping();
-		plan = problem;
 		model = new NetworkFlowModel();
                 minspanmodel = new NetworkFlowModel();
                 
-		raster = RasterContainerCreator.getInstance().ZToGraphRasterContainer( plan );
+		raster = RasterContainerCreator.getInstance().ZToGraphRasterContainer( problem );
 		mapping.setRaster( raster );
 		model.setZToGraphMapping( mapping );
                 

@@ -3,40 +3,31 @@
  * and open the template in the editor.
  */
 package de.tu_berlin.math.coga.zet.converter.graph;
-// hallo hallo
-import de.tu_berlin.math.coga.zet.converter.RasterContainerCreator;
 
 import de.tu_berlin.math.coga.common.algorithm.Algorithm;
+import de.tu_berlin.math.coga.zet.converter.RasterContainerCreator;
 import de.tu_berlin.math.coga.zet.NetworkFlowModel;
 import ds.graph.Edge;
 import ds.graph.Graph;
 import ds.mapping.IdentifiableDoubleMapping;
 import ds.z.BuildingPlan;
-import ds.z.Floor;
-import ds.z.Room;
-import java.util.List;
 
 /**
  *
  * @author Martin Groß, Jan-Philipp Kappmeier
  */
 public abstract class BaseZToGraphConverter extends Algorithm<BuildingPlan, NetworkFlowModel> {
-
 	protected IdentifiableDoubleMapping<Edge> exactTransitTimes;
 	protected ZToGraphMapping mapping;
 	protected NetworkFlowModel model;
-	//protected BuildingPlan plan;
-        public BuildingPlan plan;
 	protected ZToGraphRasterContainer raster;
-        protected Graph roomGraph;
-        protected int Algo;
+	protected Graph roomGraph;
 
 	@Override
 	protected NetworkFlowModel runAlgorithm( BuildingPlan problem ) {
 		mapping = new ZToGraphMapping();
-		plan = problem;
 		model = new NetworkFlowModel();
-		raster = RasterContainerCreator.getInstance().ZToGraphRasterContainer( plan );
+		raster = RasterContainerCreator.getInstance().ZToGraphRasterContainer( problem );
 		mapping.setRaster( raster );
 		model.setZToGraphMapping( mapping );
 		createNodes();
@@ -52,7 +43,7 @@ public abstract class BaseZToGraphConverter extends Algorithm<BuildingPlan, Netw
 
 		// set this before reverse edges are computed as they modify the model.
 		model.setTransitTimes( exactTransitTimes.round() );
-                
+
 		// duplicate the edges and their transit times (except those concerning the super sink)		
 		createReverseEdges( model );
 
@@ -84,7 +75,8 @@ public abstract class BaseZToGraphConverter extends Algorithm<BuildingPlan, Netw
 			}
 		}
 	}
-        protected void createReverseEdgesWithoutSuper( NetworkFlowModel model ) {
+
+	protected void createReverseEdgesWithoutSuper( NetworkFlowModel model ) {
 		int edgeIndex = model.getGraph().numberOfEdges();
 		final int oldEdgeIndex = edgeIndex;
 		model.setNumberOfEdges( edgeIndex * 2 );
@@ -97,10 +89,9 @@ public abstract class BaseZToGraphConverter extends Algorithm<BuildingPlan, Netw
 			model.setEdgeCapacity( newEdge, model.getEdgeCapacity( edge ) );
 			model.setTransitTime( newEdge, model.getTransitTime( edge ) );
 			model.getGraph().setEdge( newEdge );
-			
+
 		}
 	}
-        
 
 	protected void multiplyWithUpAndDownSpeedFactors() {
 		for( Edge edge : model.getGraph().edges() )

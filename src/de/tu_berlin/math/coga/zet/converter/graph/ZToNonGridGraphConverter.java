@@ -115,13 +115,13 @@ public class ZToNonGridGraphConverter extends BaseZToGraphConverter {
 					if( square.isAccessible() && !square.isMarked() ) {
 
 						Node node = new Node( nodeCount );
-						model.getZToGraphMapping().getNodeFloorMapping().set( node, plan.getFloorID( room.getFloor() ) );
+						model.getZToGraphMapping().getNodeFloorMapping().set( node, getProblem().getFloorID( room.getFloor() ) );
 						model.getZToGraphMapping().setIsEvacuationNode( node, square.isExit() );
 						if( square.isExit() )
 							model.getZToGraphMapping().setNameOfExit( node, square.getName() );
 						model.getZToGraphMapping().setIsSourceNode( node, square.isSource() );
 						model.getZToGraphMapping().setIsDeletedSourceNode( node, false );
-						if( plan.getFloorID( room.getFloor() ) == -1 )
+						if( getProblem().getFloorID( room.getFloor() ) == -1 )
 							System.out.println( "\nFehler: Floor beim Konvertieren nicht gefunden." );
 
 						boolean nodeIsSource = false;
