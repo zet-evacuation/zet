@@ -26,7 +26,7 @@ import ds.ca.evac.PotentialManager;
  * include all cells and the initial placing of all individuals), its global 
  * potentials and its initial dynamic potential.   
  * 
- * @author Daniel Pluempe
+ * @author Daniel Plümpe
  *
  */
 public class InitialConfiguration{
@@ -35,7 +35,7 @@ public class InitialConfiguration{
      * The rooms of the cellular automaton, including cells
      */
     private Collection<Room> rooms;
-    
+		private Collection<String> floors;
     /**
      * The global potential of the cellular automaton
      */
@@ -50,8 +50,9 @@ public class InitialConfiguration{
      * @param potentialManager the potential manager
      * @param absoluteMaxSpeed the maximal speed that any individual can have at maximum
      */
-    public InitialConfiguration (Collection<Room> rooms, PotentialManager potentialManager, double absoluteMaxSpeed) {
+    public InitialConfiguration (Collection<String> floors, Collection<Room> rooms, PotentialManager potentialManager, double absoluteMaxSpeed) {
         this.rooms = rooms;
+				this.floors = floors;
         this.potentialManager = potentialManager;
         this.absoluteMaxSpeed = absoluteMaxSpeed;
     }
@@ -74,9 +75,19 @@ public class InitialConfiguration{
      * @return The rooms of the automaton
      */
     public Collection<Room> getRooms () {
-        return rooms;
+			return rooms;
     }
+
+		/**
+		 * Get all floors, including the empty floors. (A list of possible floors,
+		 * not actual used floors)
+		 * @return 
+		 */
+	public Collection<String> getFloors() {
+		return floors;
+	}
     
+		
     /**
      * {@inheritDoc}
      */

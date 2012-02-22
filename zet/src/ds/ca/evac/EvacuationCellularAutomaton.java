@@ -34,7 +34,7 @@ import exitdistributions.IndividualToExitMapping;
 import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Map;
+import java.util.TreeMap;
 import statistics.Statistic;
 import util.DebugFlags;
 
@@ -133,6 +133,14 @@ public class EvacuationCellularAutomaton extends SquareCellularAutomaton impleme
 	public EvacuationCellularAutomaton( InitialConfiguration initialConfiguration ) {
 		this();
 		stopRecording();
+		// set up floors
+		
+		
+		for( String s : initialConfiguration.getFloors() ) {
+			addFloor( s );
+		}
+		
+		
 		for( Room room : initialConfiguration.getRooms() ) {
 			this.addRoom( room );
 		}
@@ -167,7 +175,7 @@ public class EvacuationCellularAutomaton extends SquareCellularAutomaton impleme
 
 	public void startRecording() {
 		recordingStarted = true;
-		VisualResultsRecorder.getInstance().setInitialConfiguration( new InitialConfiguration( rooms.values(), potentialManager, absoluteMaxSpeed ) );
+		VisualResultsRecorder.getInstance().setInitialConfiguration( new InitialConfiguration( floorNames, rooms.values(), potentialManager, absoluteMaxSpeed ) );
 		VisualResultsRecorder.getInstance().startRecording();
 	}
 
@@ -537,7 +545,14 @@ public class EvacuationCellularAutomaton extends SquareCellularAutomaton impleme
 	}
 
 	final public void addFloor( Floor floor ) {
-		floorNames.add( floor.getName() );
+		addFloor( floor.getName() );
+	}
+	
+	/*
+	 * Adds a new floor.
+	 */
+	private void addFloor( String name ) {
+		floorNames.add( name );
 		roomsByFloor.add( new ArrayList<Room>() );
 	}
 	
@@ -552,10 +567,9 @@ public class EvacuationCellularAutomaton extends SquareCellularAutomaton impleme
 		} else {
 			rooms.put( room.getID(), room );
 			Integer floorID = room.getFloorID();
-			if( roomsByFloor.get( floorID ) == null ) {
-			//if( roomsByFloor.get( floorID ) == null ) {
-				throw new IllegalStateException( "Floor with id " + floorID + " has not been added before." );
-			}
+			if( roomsByFloor.size() < floorID+1 )
+				throw new IllegalStateException( "No Floor with id " + floorID + " has been added before." );
+
 			//roomsByFloor.put( floorID, new ArrayList<Room>() );
 			//	floorNames.put( floorID, room.getFloor() );
 			//}

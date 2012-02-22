@@ -31,6 +31,7 @@ import ds.ca.evac.InitialConfiguration;
 import ds.ca.evac.Room;
 import ds.ca.evac.StaticPotential;
 import gui.ZETMain;
+import java.util.LinkedList;
 
 /**
  * This class helps you to store all the parts of a simulation that are
@@ -122,11 +123,11 @@ public class VisualResultsRecorder {
 	}
 
 	public void reset() {
-		this.actions = new Vector<Vector<Action>>();
+		this.actions = new Vector<>();
 		this.actions.add( new Vector<Action>() );
 		this.timeStep = 0;
-		this.cellMap = new HashMap<Cell, Cell>();
-		this.staticPotentialMap = new HashMap<StaticPotential, StaticPotential>();
+		this.cellMap = new HashMap<>();
+		this.staticPotentialMap = new HashMap<>();
 		this.clonedInitialConfig = null;
 		this.clonedCA = null;
 		stopRecording();
@@ -225,17 +226,20 @@ public class VisualResultsRecorder {
 			cellMapping = new HashMap<Cell, Cell>();
 		}
 
-
+		LinkedList<String> clonedFloors = new LinkedList<>();
+		for( String s : orig.getFloors() )
+			clonedFloors.add( s );
+		
 		// First of all, clone all rooms and update the door links
 		// Store cloned rooms in clonedRooms
-		Vector<Room> clonedRooms = new Vector<Room>();
+		Vector<Room> clonedRooms = new Vector<>();
 		// This maps the original rooms to the cloned ones
-		HashMap<Room, Room> roomMap = new HashMap<Room, Room>();
+		HashMap<Room, Room> roomMap = new HashMap<>();
 
 		// Clone the rooms and store the mapping between the
 		// original and the cloned cells
 		for( Room room : orig.getRooms() ) {
-			HashMap<Cell, Cell> addMapping = new HashMap<Cell, Cell>();
+			HashMap<Cell, Cell> addMapping = new HashMap<>();
 			Room clone = cloneRoom( room, addMapping );
 			clonedRooms.add( clone );
 			roomMap.put( room, clone );
@@ -330,7 +334,7 @@ public class VisualResultsRecorder {
 			}
 		}
 
-		return new InitialConfiguration( clonedRooms, clonedGlobals, orig.getAbsoluteMaxSpeed() );
+		return new InitialConfiguration( clonedFloors, clonedRooms, clonedGlobals, orig.getAbsoluteMaxSpeed() );
 	}
 
 	/**
