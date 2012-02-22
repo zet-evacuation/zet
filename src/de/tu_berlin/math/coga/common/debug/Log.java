@@ -69,7 +69,6 @@ public class Log extends Observable implements EventListener<MessageEvent> {
 				s = s.replace( "<", "&lt;" );
 				s = s.replace( ">", "&gt;" );
 				s = "<font color=\"red\">" + s + "</font><br>";
-				//s = event.getMessage() + '\n';
 				break;
 		}
 		s = s.replace( "\n", "<br>" );
