@@ -1250,7 +1250,7 @@ public class GUIControl implements AlgorithmListener {
 	boolean firstProgress = false;
 
 	@Override
-	public void eventOccurred( AlgorithmEvent event ) {
+	public synchronized void eventOccurred( AlgorithmEvent event ) {
 		if( event instanceof AlgorithmProgressEvent ) {
 			AlgorithmProgressEvent ape = (AlgorithmProgressEvent) event;
 			//System.out.println( "Progress: " + ape.getProgress() );
@@ -1302,7 +1302,7 @@ public class GUIControl implements AlgorithmListener {
 		editview.getLeftPanel().getVerticalScrollBar().setValue( value + change*fact );
 	}
 
-	protected void handleProgressEvent( int progress ) {
+	protected synchronized void handleProgressEvent( int progress ) {
 		editor.setProgressValue( progress );
 //		if( progress == 100 )
 //			editor.disableProgressBar();

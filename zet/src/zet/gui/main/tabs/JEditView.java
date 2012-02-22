@@ -243,10 +243,10 @@ public class JEditView extends AbstractSplitPropertyWindow<JFloorScrollPane<JFlo
         private JButton deleteRoom;
         private JButton moveRoom;
         private ArrayList<Room> rooms;
-        private LinkedList<JPolygon> selectedPolygons = new LinkedList<JPolygon>();
+        private LinkedList<JPolygon> selectedPolygons = new LinkedList<>();
 
 	public JEditView( GUIControl guiControl ) {
-		super( new JFloorScrollPane<JFloor>( new JFloor( guiControl ) ) );
+		super( new JFloorScrollPane<>( new JFloor( guiControl ) ) );
 		loc = GUILocalization.getSingleton();
 		this.guiControl = guiControl;
 		final JFloor centerPanel = this.getLeftPanel().getMainComponent();

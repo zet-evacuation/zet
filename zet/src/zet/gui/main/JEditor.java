@@ -24,16 +24,13 @@ import batch.BatchResult;
 import de.tu_berlin.math.coga.batch.gui.JBatch;
 import de.tu_berlin.math.coga.common.localization.DefaultLoc;
 import ds.PropertyContainer;
-import ds.z.Floor;
 import de.tu_berlin.math.coga.common.localization.Localization;
 import de.tu_berlin.math.coga.common.localization.Localized;
 import de.tu_berlin.math.coga.components.JLogPane;
 import ds.z.ZControl;
-import event.EventListener;
 import event.EventServer;
 import event.MessageEvent;
 import event.MessageEvent.MessageType;
-import event.ProgressEvent;
 import gui.statistic.JGraphStatisticPanel;
 import gui.statistic.JStatisticPanel;
 import zet.gui.main.tabs.JVisualizationView;
@@ -41,6 +38,7 @@ import gui.statistic.JStatisticsPanel;
 import gui.GUIControl;
 import gui.ZETMain;
 import java.awt.BorderLayout;
+import java.awt.CardLayout;
 import java.awt.Dimension;
 import java.awt.Point;
 import java.awt.Toolkit;
@@ -64,6 +62,7 @@ import javax.swing.KeyStroke;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 import javax.imageio.ImageIO;
+import javax.swing.JPanel;
 import javax.swing.JProgressBar;
 import zet.gui.GUILocalization;
 import zet.gui.components.JEventStatusBar;
@@ -166,6 +165,8 @@ public class JEditor extends JFrame implements Localized {
 	/** Decides whether visualization runs in loop-mode, that means it automatically starts again. */
 	private boolean loop = false;
 	private GUIControl guiControl;
+		CardLayout statusBarCardLayout;
+		JPanel statusPanel;
 
 	/**
 	 * Creates a new instance of {@code JEditor}. Sets the editor position
@@ -191,9 +192,20 @@ public class JEditor extends JFrame implements Localized {
 		// Create elements: menu, toolbars, status bar
 		setJMenuBar( new JZETMenuBar( guiControl ) );
 		getContentPane().setLayout( new BorderLayout() );
+
+
+		statusBarCardLayout = new CardLayout();
+		statusPanel = new JPanel( statusBarCardLayout );
+		
 		statusBar = new JEventStatusBar();
-		add( statusBar, BorderLayout.SOUTH );
+		
+		statusPanel.add( statusBar, "status" );
+		
+		add( statusPanel, BorderLayout.SOUTH );
 		progressBar = new JProgressBar( 0, 100 );
+		
+		statusPanel.add( progressBar, "progress" );
+		
 		toolBarEdit = new JEditToolbar( guiControl );
 		guiControl.setEditToolbar( toolBarEdit );
 		toolBarBatch = new JBatchToolBar( guiControl );
@@ -591,15 +603,16 @@ public class JEditor extends JFrame implements Localized {
 	 * Hides the status bar and replaces it with a progress bar.
 	 */
 	private synchronized void enableProgressBar() {
-		if( 1 == 1 )
-			return;
+		//if( 1 == 1 )
+		//	return;
 		try {
 			
-			remove( statusBar );
-			add( progressBar, BorderLayout.SOUTH );
+			//remove( statusBar );
+			//add( progressBar, BorderLayout.SOUTH );
+			statusBarCardLayout.show( statusPanel, "progress" );
 			progressBarEnabled = true;
-			validate();
-			repaint();
+			//validate();
+			//repaint();
 		} catch( java.lang.NullPointerException ex ) {
 			System.err.println( "ERROR NULL POINTER WTF" );
 		}
@@ -609,15 +622,17 @@ public class JEditor extends JFrame implements Localized {
 	 * Disables the progress bar and shows the status bar again.
 	 */
 	private synchronized void disableProgressBar() {
-		if( 1 == 1 )
-			return;
+		//if( 1 == 1 )
+		//	return;
 		try {
-			remove( progressBar );
-			add( statusBar, BorderLayout.SOUTH );
+			//remove( progressBar );
+			//add( statusBar, BorderLayout.SOUTH );
 			progressBar.setValue( 0 );
 			progressBarEnabled = false;
-			validate();
-			repaint();
+			statusBarCardLayout.show( statusPanel, "status" );
+
+			//validate();
+			//repaint();
 		} catch( java.lang.NullPointerException ex ) {
 			System.err.println( "ERROR NULL POINTER WTF" );
 		}
@@ -627,7 +642,7 @@ public class JEditor extends JFrame implements Localized {
 	 * Sets a value for the progress bar.
 	 * @param progress a progress value from 0 to 100
 	 */
-	public void setProgressValue( int progress ) {
+	public synchronized void setProgressValue( int progress ) {
 		if( !progressBarEnabled )
 			enableProgressBar();
 		progressBar.setValue( progress );
