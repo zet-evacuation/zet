@@ -19,7 +19,7 @@ import java.util.Observable;
  */
 public class Log extends Observable implements EventListener<MessageEvent> {
 	/** A list of all logged massages. */
-	ArrayList<String> strings = new ArrayList<String>();
+	ArrayList<String> strings = new ArrayList<>();
 	/** The complete log as string. */
 	StringBuilder text = new StringBuilder();
 	// todo: store texts only in array
@@ -60,14 +60,20 @@ public class Log extends Observable implements EventListener<MessageEvent> {
 		String s = "";
 		switch( event.getType() ) {
 			case Log:
-				s = event.getMessage() + "<br>";
+				s = event.getMessage();// + "<br>";
+				s = s.replace( "<", "&lt;" );
+				s = s.replace( ">", "&gt;" ) + "<br>";
 				break;
 			case LogError:
-				s = "<font color=\"red\">" + event.getMessage() + "</font><br>";
+				s = event.getMessage();
+				s = s.replace( "<", "&lt;" );
+				s = s.replace( ">", "&gt;" );
+				s = "<font color=\"red\">" + s + "</font><br>";
 				//s = event.getMessage() + '\n';
 				break;
 		}
 		s = s.replace( "\n", "<br>" );
+		
 		strings.add( s );
 		text.append( s );
     super.setChanged(); // Markierung, daß sich der Text geändert hat
