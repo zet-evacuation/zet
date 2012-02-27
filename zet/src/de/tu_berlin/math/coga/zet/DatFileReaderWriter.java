@@ -51,8 +51,8 @@ public class DatFileReaderWriter implements AlgorithmListener {
 	static boolean verbose = false;
 
 	public static EarliestArrivalFlowProblem read( String filename, IdentifiableObjectMapping<Node, Vector3> nodePositionMapping ) throws FileNotFoundException, IOException {
-		IdentifiableIntegerMapping<Node> xPos = new IdentifiableIntegerMapping<Node>( 0 );
-		IdentifiableIntegerMapping<Node> yPos = new IdentifiableIntegerMapping<Node>( 0 );
+		IdentifiableIntegerMapping<Node> xPos = new IdentifiableIntegerMapping<>( 0 );
+		IdentifiableIntegerMapping<Node> yPos = new IdentifiableIntegerMapping<>( 0 );
 		EarliestArrivalFlowProblem eafp = read( filename, xPos, yPos );
 
 		// convert positions
@@ -74,18 +74,18 @@ public class DatFileReaderWriter implements AlgorithmListener {
 //		ArrayList<Integer> source_sup = new ArrayList<Integer>();
 
 
-		ArrayList<Long> node_id = new ArrayList<Long>();
-		ArrayList<Integer> node_sup = new ArrayList<Integer>();
+		ArrayList<Long> node_id = new ArrayList<>();
+		ArrayList<Integer> node_sup = new ArrayList<>();
 
-		ArrayList<Integer> node_x = new ArrayList<Integer>();
-		ArrayList<Integer> node_y = new ArrayList<Integer>();
+		ArrayList<Integer> node_x = new ArrayList<>();
+		ArrayList<Integer> node_y = new ArrayList<>();
 
-		ArrayList<Long> edge_start = new ArrayList<Long>();
-		ArrayList<Long> edge_end = new ArrayList<Long>();
-		ArrayList<Integer> edge_cap = new ArrayList<Integer>();
-		ArrayList<Integer> edge_len = new ArrayList<Integer>();
+		ArrayList<Long> edge_start = new ArrayList<>();
+		ArrayList<Long> edge_end = new ArrayList<>();
+		ArrayList<Integer> edge_cap = new ArrayList<>();
+		ArrayList<Integer> edge_len = new ArrayList<>();
 
-		HashMap<Long, Integer> nodeMap = new HashMap<Long, Integer>();
+		HashMap<Long, Integer> nodeMap = new HashMap<>();
 
 		int currentNodeID = 0;
 		int xmax = Integer.MIN_VALUE;
@@ -127,6 +127,9 @@ public class DatFileReaderWriter implements AlgorithmListener {
 				final int nodeSupply = Integer.parseInt( split[2] );
 				node_id.add( nodeID );
 				node_sup.add( nodeSupply );
+				
+				
+				
 				if( x != null && y != null ) {
 					final int readX = (int)( factor * Double.parseDouble( split[3] ) );
 					if( readX > xmax )
@@ -254,9 +257,9 @@ public class DatFileReaderWriter implements AlgorithmListener {
 
 		for( int i = 0; i < nodeCount; ++i )
 			if( sources.contains( network.getNode( i ) ) )
-				nodeCapacities.set( network.getNode( i ), currentAssignment.get( network.getNode( i ) ) );
+				nodeCapacities.set( network.getNode( i ), 1200 );
 			else
-				nodeCapacities.set( network.getNode( i ), 0 );
+				nodeCapacities.set( network.getNode( i ), 1 );
 //		for( int i = 0; i < nodeCount; ++i )
 //			if( sources.contains( network.getNode( i ) ) )
 //				nodeCapacities.set( network.getNode( i ), 1000 );
@@ -315,7 +318,9 @@ public class DatFileReaderWriter implements AlgorithmListener {
 			}
 			if( s.startsWith( "HOLDOVER" ) )
 				continue;
-			if( s.charAt( 0 ) == 'S' ) {
+			if( s.startsWith( "SCALE" ) )
+				continue;
+			if( s.charAt( 0 ) == 'S' && !s.startsWith( "SCALE" ) ) {
 				final String[] split = s.split( " " );
 				final long nodeID = Long.parseLong( split[1] );
 				nodeMap.put( nodeID, currentNodeID++ );
@@ -508,7 +513,8 @@ public class DatFileReaderWriter implements AlgorithmListener {
 
 		for( Node node : nodes ) {
 			if( nodePositions == null )
-				writer.write( "V " + node.id() + ' ' + currentAssignment.get( node ) + '\n' );
+				//writer.write( "V " + node.id() + ' ' + currentAssignment.get( node ) + '\n' ); // without coordinates
+				writer.write( "V " + node.id() + ' ' + currentAssignment.get( node ) + ' ' + 0 + ' ' + 0 + '\n'  ); // with temp coordinates
 			else {
 		int nwX = nodePositions.get( node ).get_nw_point().getX();
 		int nwY = nodePositions.get( node ).get_nw_point().getY();
