@@ -23,10 +23,13 @@ package algo.graph.dynamicflow.eat;
 import algo.graph.shortestpath.Dijkstra;
 import de.tu_berlin.math.coga.common.algorithm.Algorithm;
 import de.tu_berlin.math.coga.common.algorithm.AlgorithmStatusEvent;
+import de.tu_berlin.math.coga.zet.DatFileReaderWriter;
 import ds.graph.ImplicitTimeExpandedResidualNetwork;
 import ds.graph.Node;
 import ds.graph.flow.EarliestArrivalAugmentingPath;
 import ds.graph.flow.FlowOverTime;
+import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.util.Arrays;
 import java.util.LinkedList;
 
@@ -115,6 +118,14 @@ public class SEAAPAlgorithm extends Algorithm<EarliestArrivalFlowProblem, FlowOv
      */
     @Override
     protected FlowOverTime runAlgorithm(EarliestArrivalFlowProblem problem) {
+//			System.out.println( problem.toString() );
+//		try {
+//			DatFileReaderWriter.writeFile( "audimax", problem, "audimax-test" );
+//		} catch( FileNotFoundException ex ) {
+//			ex.printStackTrace();
+//		} catch( IOException ex ) {
+//			ex.printStackTrace();
+//		}
         // Initialize the data structures
         calculateShortestPathLengths();       
         flowUnitsSent = 0;
@@ -138,6 +149,7 @@ public class SEAAPAlgorithm extends Algorithm<EarliestArrivalFlowProblem, FlowOv
             // Update the amount of flow sent
             path.setCapacity(Math.min(path.getCapacity(), problem.getTotalSupplies() - flowUnitsSent));
             flowUnitsSent += path.getCapacity();
+						//System.out.println( "Progress: " + (flowUnitsSent * 1.0 / problem.getTotalSupplies()) );
             fireProgressEvent(flowUnitsSent * 1.0 / problem.getTotalSupplies(), String.format("%1$s von %2$s Personen evakuiert.", flowUnitsSent, problem.getTotalSupplies()));
             // Compute the next path
             calculateEarliestArrivalAugmentingPath();

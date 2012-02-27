@@ -298,6 +298,7 @@ public class JZETMenuBar extends JMenuBar implements ActionListener, Localized {
 			Menu.addMenuItem( mnuDebug, "Building status", this, "debugBuildingStatus" );
 			Menu.addMenuItem( mnuDebug, "Door-Check (with auto correction)", this, "debugDoorCheck" );
 			Menu.addMenuItem( mnuDebug, "Check", this, "debugCheck" );
+			Menu.addMenuItem( mnuDebug, "Output graph as .dat", this, "outputGraph" );
 
 
 		}

@@ -25,6 +25,8 @@ import de.tu_berlin.math.coga.common.algorithm.AlgorithmProgressEvent;
 import de.tu_berlin.math.coga.common.util.IOTools;
 import de.tu_berlin.math.coga.zet.DatFileReaderWriter;
 import de.tu_berlin.math.coga.zet.NetworkFlowModel;
+import de.tu_berlin.math.coga.zet.converter.graph.BaseZToGraphConverter;
+import de.tu_berlin.math.coga.zet.converter.graph.GraphAssignmentConverter;
 import ds.CompareVisualizationResults;
 import ds.GraphVisualizationResults;
 import ds.ProjectLoader;
@@ -40,9 +42,6 @@ import ds.z.Room;
 import ds.z.ZControl;
 import ds.z.exception.RoomEdgeInvalidTargetException;
 import ds.z.exception.TooManyPeopleException;
-import event.EventListener;
-import event.EventServer;
-import event.ProgressEvent;
 import gui.propertysheet.JOptionsDialog;
 import gui.components.progress.JProgressBarDialog;
 import gui.components.progress.JRasterizeProgressBarDialog;
@@ -62,7 +61,6 @@ import zet.gui.main.tabs.visualization.ZETVisualization;
 import gui.visualization.control.GLControl.CellInformationDisplay;
 import io.DXFWriter;
 import io.movie.MovieManager;
-import io.visualization.BuildingResults;
 import io.visualization.CAVisualizationResults;
 import java.awt.Rectangle;
 import java.awt.image.BufferedImage;
@@ -533,12 +531,39 @@ public class GUIControl implements AlgorithmListener {
 	}
 
 	public void outputGraph() {
-		BatchResultEntry ca_res = new BatchResultEntry( zcontrol.getProject().getProjectFile().getName(), new BuildingResults( zcontrol.getProject().getBuildingPlan() ) );
-		ConcreteAssignment[] concreteAssignments = new ConcreteAssignment[1];
-		Assignment assignment = zcontrol.getProject().getCurrentAssignment();
-		concreteAssignments[0] = assignment.createConcreteAssignment( 400 );
-		new BatchGraphCreateOnlyTask( ca_res, 0, zcontrol.getProject(), assignment, concreteAssignments ).run();
-		NetworkFlowModel originalProblem = ca_res.getNetworkFlowModel();
+		GraphConverterAlgorithms last = GraphConverterAlgorithms.NonGridGraph;
+		final BaseZToGraphConverter conv = last.converter();
+		
+		conv.setProblem( zcontrol.getProject().getBuildingPlan() );
+		
+		conv.run();
+		//final SerialTask st = new SerialTask( conv );
+		//st.addPropertyChangeListener( new PropertyChangeListener() {
+		//	@Override
+		//	public void propertyChange( PropertyChangeEvent pce ) {
+		//		if( st.isDone() )
+						NetworkFlowModel originalProblem = conv.getSolution();
+		//	}
+		//} );
+		//if( propertyChangeListener != null )
+		//	st.addPropertyChangeListener( propertyChangeListener );
+		//st.execute();
+		
+		ConcreteAssignment concreteAssignment = zcontrol.getProject().getCurrentAssignment().createConcreteAssignment( 400 );
+		
+		GraphAssignmentConverter cav = new GraphAssignmentConverter( originalProblem );
+		
+		cav.setProblem( concreteAssignment );
+		cav.run();
+		originalProblem = cav.getSolution();
+		
+		
+		//BatchResultEntry ca_res = new BatchResultEntry( zcontrol.getProject().getProjectFile().getName(), new BuildingResults( zcontrol.getProject().getBuildingPlan() ) );
+		//ConcreteAssignment[] concreteAssignments = new ConcreteAssignment[1];
+		//Assignment assignment = zcontrol.getProject().getCurrentAssignment();
+		//concreteAssignments[0] = assignment.createConcreteAssignment( 400 );
+		//new BatchGraphCreateOnlyTask( ca_res, 0, zcontrol.getProject(), assignment, concreteAssignments ).run();
+		//NetworkFlowModel originalProblem = ca_res.getNetworkFlowModel();
 		EarliestArrivalFlowProblem problem = new EarliestArrivalFlowProblem( originalProblem.getEdgeCapacities(), originalProblem.getNetwork(), originalProblem.getNodeCapacities(), originalProblem.getSupersink(), originalProblem.getSources(), 0, originalProblem.getTransitTimes(), originalProblem.getCurrentAssignment() );
 		try {
 			DatFileReaderWriter.writeFile( zcontrol.getProject().getName(), problem, zcontrol.getProject().getProjectFile().getName().substring( 0, zcontrol.getProject().getProjectFile().getName().length() - 4 ) + ".dat", originalProblem.getZToGraphMapping() );

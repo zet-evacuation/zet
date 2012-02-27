@@ -267,6 +267,6 @@ public class Project implements Serializable, ZFormatObject {
 	}
 
 	public String getName() {
-		return name;
+		return name == null ? getProjectFile().getName() : name;
 	}
 }

@@ -99,4 +99,8 @@ public class EarliestArrivalFlowProblem {
     public IdentifiableIntegerMapping<Edge> getTransitTimes() {
         return transitTimes;
     }
+
+	public String toString() {
+		return "EarliestArrivalFlowProblem{\n" + "edgeCapacities=" + edgeCapacities + "\n, network=" + network + "\n, nodeCapacities=" + nodeCapacities + "\n, sink=" + sink + "\n, sources=" + sources + "\n, supplies=" + supplies + "\n, timeHorizon=" + timeHorizon + "\n, totalSupplies=" + totalSupplies + "\n, transitTimes=" + transitTimes + '}';
+	}
 }

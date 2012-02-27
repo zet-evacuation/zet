@@ -8,12 +8,14 @@ import algo.graph.dynamicflow.eat.EarliestArrivalFlowProblem;
 import algo.graph.dynamicflow.eat.LongestShortestPathTimeHorizonEstimator;
 import algo.graph.dynamicflow.eat.SEAAPAlgorithm;
 import algo.graph.staticflow.maxflow.PushRelabelHighestLabelGlobalGapRelabelling;
+import batch.tasks.graph.SuccessiveEarliestArrivalAugmentingPathOptimizedTask;
 import com.martiansoftware.jsap.FlaggedOption;
 import com.martiansoftware.jsap.JSAP;
 import com.martiansoftware.jsap.JSAPException;
 import com.martiansoftware.jsap.JSAPResult;
 import com.martiansoftware.jsap.UnflaggedOption;
 import com.thoughtworks.xstream.XStream;
+import de.tu_berlin.math.coga.common.algorithm.Algorithm;
 import de.tu_berlin.math.coga.common.algorithm.AlgorithmEvent;
 import de.tu_berlin.math.coga.common.algorithm.AlgorithmListener;
 import de.tu_berlin.math.coga.common.algorithm.AlgorithmProgressEvent;
@@ -28,6 +30,7 @@ import de.tu_berlin.math.coga.graph.io.xml.XMLReader;
 import de.tu_berlin.math.coga.graph.io.xml.XMLWriter;
 import de.tu_berlin.math.coga.zet.viewer.NodePositionMapping;
 import ds.GraphVisualizationResults;
+import ds.PropertyContainer;
 import ds.mapping.IdentifiableIntegerMapping;
 import ds.graph.Node;
 import ds.graph.flow.PathBasedFlowOverTime;
@@ -36,6 +39,7 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.PrintWriter;
+import zet.tasks.GraphAlgorithmEnumeration;
 
 /**
  *
@@ -119,8 +123,9 @@ public class flow implements AlgorithmListener {
 				theInstance.nodePositionMapping = new NodePositionMapping();
 				theInstance.xPos = new IdentifiableIntegerMapping<Node>( 0 );
 				theInstance.yPos = new IdentifiableIntegerMapping<Node>( 0 );
-				theInstance.eafp = DatFileReaderWriter.read( theInstance.inputFileName, theInstance.nodePositionMapping );
-				theInstance.graphView = new GraphView( theInstance.eafp, theInstance.nodePositionMapping );
+				//theInstance.eafp = DatFileReaderWriter.read( theInstance.inputFileName, theInstance.nodePositionMapping ); // new .dat-format
+				//theInstance.graphView = new GraphView( theInstance.eafp, theInstance.nodePositionMapping );
+				theInstance.eafp = DatFileReaderWriter.readOld( theInstance.inputFileName ); // old .dat-format
 				theInstance.computationMode = ComputationMode.EarliestArrivalFlow;
 				// version without x and Years positions:
 				//				theInstance.eafp = DatFileReaderWriter.read( filename );
@@ -205,13 +210,35 @@ public class flow implements AlgorithmListener {
 			System.out.println( " done.\nEstimated time horizon: " + estimator.getSolution().getUpperBound() );
 		}
 
+		System.out.println( "Evacuees: " + eafp.getTotalSupplies() );
+		
 		// Fluss bestimmen
 		System.out.println( "Compute earliest arrival flow..." );
+
+//		GraphAlgorithmEnumeration graphAlgorithm = GraphAlgorithmEnumeration.SuccessiveEarliestArrivalAugmentingPathOptimized;
+//		
+//		int maxTime = (int) PropertyContainer.getInstance().getAsDouble( "algo.ca.maxTime" );
+//		Algorithm<NetworkFlowModel, PathBasedFlowOverTime> gt = null;
+//		gt = new SuccessiveEarliestArrivalAugmentingPathOptimizedTask();
+//		//gt = graphAlgorithm.createTask( maxTime );
+//		
+//		gt.setProblem( cav.getSolution() );
+//		gt.addAlgorithmListener( this );
+//		gt.run();
+
+			NetworkFlowModel nfm = new NetworkFlowModel();
+			
+		
+		
+		
+		
 		SEAAPAlgorithm algo = new SEAAPAlgorithm();
 		algo.setProblem( eafp );
 		algo.addAlgorithmListener( this );
 		try {
+			System.out.println( "start" );
 			algo.run();
+			System.out.println( "end" );
 		} catch( IllegalStateException e ) {
 			System.err.println( "The illegal state exception occured." );
 		}
@@ -279,10 +306,10 @@ public class flow implements AlgorithmListener {
 				System.out.print( '.' );
 			} if( (int)(((AlgorithmProgressEvent)event).getProgress() * 100) == 100 )
 				System.out.println( "\n100%" );
-		} else if( event instanceof AlgorithmStartedEvent )
-			//System.out.println( "Algorithm starts." );
+		} else if( event instanceof AlgorithmStartedEvent ) {
+			System.out.println( "Algorithm starts." );
 			start = event.getEventTime();
-		else if( event instanceof AlgorithmTerminatedEvent ) {
+		} else if( event instanceof AlgorithmTerminatedEvent ) {
 			System.out.println( "" );
 			final long end = event.getEventTime();
 			System.out.println( "PathDecomposition runtime: " + Formatter.formatTimeUnit( end - pathDecompositionStart, TimeUnits.MilliSeconds ) );
@@ -298,7 +325,7 @@ public class flow implements AlgorithmListener {
 				System.out.println( "\nSEAAP runtime: " + Formatter.formatTimeUnit( pathDecompositionStart - start, TimeUnits.MilliSeconds ) );
 			}
 		} else
-			System.out.println( event.toString() );
+			;//System.out.println( event.toString() );
 	}
 
 

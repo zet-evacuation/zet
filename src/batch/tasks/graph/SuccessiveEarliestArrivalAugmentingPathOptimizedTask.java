@@ -57,6 +57,7 @@ public class SuccessiveEarliestArrivalAugmentingPathOptimizedTask extends Transf
         PathBasedFlowOverTime df = transformedSolution.getPathBased();
         String result = String.format("Sent %1$s of %2$s flow units in %3$s time units successfully.", transformedSolution.getFlowAmount(), getAlgorithm().getProblem().getTotalSupplies(), transformedSolution.getTimeHorizon());
         System.out.println(result);
+				System.out.println( "Total cost: " + transformedSolution.getTotalCost() );
         //AlgorithmTask.getInstance().publish(100, result, "");
         System.out.println( "Sending the flow units required " + Formatter.formatTimeUnit( getAlgorithm().getRuntime(), Formatter.TimeUnits.MilliSeconds ) );
         return df;
