@@ -132,6 +132,7 @@ public class ImplicitTimeExpandedResidualNetwork extends Network {
      */
     protected void augmentEdge(NodeTimePair first, NodeTimePair second, int amount) {
         Edge edge = findEdgeWithCapacity(first.getNode(), second.getNode(), first.getEnd(), second.getStart());
+        assert (edge != null) : "Null edges cannot be augmented: " + first.getNode() + "@" + first.getEnd() + " -> " + second.getNode() + "@" + second.getStart();
         assert amount >= 0 : "Edge augmentations are assumed to be non-negative.";        
         assert amount <= capacity(edge, first.getEnd()) : "Edge augmentations are assumed to respect capacities.";
         switch (edgeTypes.get(edge)) {
@@ -188,6 +189,7 @@ public class ImplicitTimeExpandedResidualNetwork extends Network {
             if (ntp == first) {
                 continue;
             } else {
+                assert !first.getNode().equals(ntp.getNode()) : "Same nodes should not occur: " + first + " " + ntp + " " + path;
                 augmentEdge(first, ntp, path.getCapacity());
                 first = ntp;
             }
@@ -205,7 +207,8 @@ public class ImplicitTimeExpandedResidualNetwork extends Network {
      * @return the residual capacity of the specified edge at the specified 
      * point in time.
      */
-    public int capacity(Edge edge, int time) {        
+    public int capacity(Edge edge, int time) {   
+        assert (edge != null) : "Trying to get the capacity of a null edge.";
         switch (edgeTypes.get(edge)) {
             case NORMAL:
                 return problem.getEdgeCapacities().get(edge) - flow.get(edge).get(time);
@@ -286,6 +289,7 @@ public class ImplicitTimeExpandedResidualNetwork extends Network {
     @Deprecated
     public Edge findEdgeWithCapacity(Node start, Node end, int fromTime, int toTime) {
         Iterable<Edge> candidates = getEdges(start, end);        
+        assert candidates != null && candidates.iterator().hasNext() : "No edge found between " + start + " and " + end + ". " + problem.getNetwork().adjacentNodes(start);
         Edge result = null;
         for (Edge edge : candidates) {
             if (transitTime(edge) == toTime - fromTime && capacity(edge, fromTime) > 0) {
@@ -293,6 +297,7 @@ public class ImplicitTimeExpandedResidualNetwork extends Network {
                 break;
             }
         }
+        assert result != null : "No edge found: " + candidates;
         return result;
     }
 
