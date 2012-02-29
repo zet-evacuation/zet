@@ -198,7 +198,7 @@ public class EarliestArrivalAugmentingPathAlgorithm extends Algorithm<EarliestAr
                 predecessorEdge = predecessorEdges.get(currentNode)[currentTime];
                 predecessorNode = predecessorNodes.get(currentNode)[currentTime];
                 // Create a path segment
-                if (oldPredecessor != predecessorNode) {
+                if (oldPredecessor != predecessorNode && !oldPredecessor.equals(path.getFirst().getNode())) {
                     predecessorDepartureTime = departureTimes.get(currentNode).get(currentTime);
                     int transitTime;
                     if (predecessorNode != EMPTY_NODE && currentNode != predecessorNode) {
@@ -206,6 +206,7 @@ public class EarliestArrivalAugmentingPathAlgorithm extends Algorithm<EarliestAr
                     } else {
                         transitTime = 0;
                     }
+                    assert !oldPredecessor.equals(path.getFirst().getNode()) : "Cycle: " + oldPredecessor + " " + predecessorNode + " " + path.getFirst();
                     path.insertFirst(oldPredecessor, predecessorDepartureTime + transitTime, nextTime);
                 }
             }
