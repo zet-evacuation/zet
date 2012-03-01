@@ -193,13 +193,13 @@ public class ListSequence<E extends Identifiable> extends LinkedList<E> implemen
         String result = "[";
         if (it.hasNext()){
             E e = it.next();
-            result += e.id();
+            result += e.toString();//e.id();
         }
             
         while (it.hasNext()) {
             E e = it.next();
-            result += " ";
-            result += e.id();
+            result += ", ";
+            result += e.toString();//e.id();
         }
         result += "]";
         return result;     
