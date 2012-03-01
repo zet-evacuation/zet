@@ -92,6 +92,7 @@ public class DatFileReaderWriter implements AlgorithmListener {
 		int xmin = Integer.MAX_VALUE;
 		int ymax = Integer.MIN_VALUE;
 		int ymin = Integer.MAX_VALUE;
+		int sinks = 0;
 
 		while((s = read.readLine()) != null) {
 			if( s.length() == 0 )
@@ -127,7 +128,8 @@ public class DatFileReaderWriter implements AlgorithmListener {
 				final int nodeSupply = Integer.parseInt( split[2] );
 				node_id.add( nodeID );
 				node_sup.add( nodeSupply );
-				
+				if( nodeSupply < 0 )
+					sinks++;
 				
 				
 				if( x != null && y != null ) {
@@ -162,6 +164,36 @@ public class DatFileReaderWriter implements AlgorithmListener {
 			}
 			throw new IllegalStateException( "Unbekannte Zeile" );
 		}
+		
+		// create missing nodes
+		for( int i = node_id.size(); i <= nodeCount; ++i ) {
+				//final String[] split = s.split( " " );
+//				final long nodeID = Long.parseLong( split[1] );
+//				nodeMap.put( nodeID, currentNodeID++ );
+//				final int nodeSupply = Integer.parseInt( split[2] );
+//				node_id.add( nodeID );
+//				node_sup.add( nodeSupply );
+//				if( nodeSupply < 0 )
+//					sinks++;
+//				
+//				
+//				if( x != null && y != null ) {
+//					final int readX = (int)( factor * Double.parseDouble( split[3] ) );
+//					if( readX > xmax )
+//						xmax = readX;
+//					if( readX < xmin )
+//						xmin = readX;
+//					final int readY = (int)( factor * Double.parseDouble( split[4] ) );
+//					if( readY > ymax )
+//						ymax = readY;
+//					if( readY < ymin )
+//						ymin = readY;
+//					node_x.add( readX );
+//					node_y.add( readY );			
+		}
+		
+		if( sinks > 1 )
+			nodeCount++;
 
 		int xDiff = xmax - xmin;
 		int yDiff = ymax - ymin;
@@ -207,6 +239,9 @@ public class DatFileReaderWriter implements AlgorithmListener {
 		//int edgeCount = edge_start.size();
 		if( edgeCount < 0 )
 			edgeCount = edge_start.size();
+		
+		if( sinks > 1 )
+			edgeCount += sinks;
 
 		System.out.println( "Node count: " + nodeCount );
 		if( verbose )
@@ -228,7 +263,7 @@ public class DatFileReaderWriter implements AlgorithmListener {
 
 
 		AbstractNetwork network = new Network( nodeCount, edgeCount );
-		for( int i = 0; i < edgeCount; ++i )
+		for( int i = 0; i < (sinks > 1 ? edgeCount - sinks : edgeCount); ++i )
 			network.createAndSetEdge( network.getNode( nodeMap.get( edge_start.get( i ) ) ), network.getNode( nodeMap.get( edge_end.get( i ) ) ) );
 		Long t;
 		IdentifiableIntegerMapping<Edge> edgeCapacities = new IdentifiableIntegerMapping<>( network.edges() );
@@ -236,30 +271,46 @@ public class DatFileReaderWriter implements AlgorithmListener {
 		IdentifiableIntegerMapping<Edge> transitTimes = new IdentifiableIntegerMapping<>( network.edges() );
 		IdentifiableIntegerMapping<Node> currentAssignment = new IdentifiableIntegerMapping<>( network.nodes() );
 
-		for( int i = 0; i < edgeCount; ++i ) {
+		for( int i = 0; i < (sinks > 1 ? edgeCount - sinks : edgeCount); ++i ) {
 			edgeCapacities.set( network.getEdge( network.getNode( nodeMap.get( edge_start.get( i ) ) ), network.getNode( nodeMap.get( edge_end.get( i ) ) ) ), edge_cap.get( i ) );
 			transitTimes.set( network.getEdge( network.getNode( nodeMap.get( edge_start.get( i ) ) ), network.getNode( nodeMap.get( edge_end.get( i ) ) ) ), edge_len.get( i ) );
 		}
 
-		Node sink = null;
+		
+		//ArrayList<Node> sinks = new ArrayList<>();
+		Node sink = sinks > 1 ? network.getNode( nodeCount-1 ) : null;
+		int totalSupply = 0;
 		ArrayList<Node> sources = new ArrayList<>();
 		for( int i = 0; i < node_id.size(); ++i ) {
 			currentAssignment.set( network.getNode( nodeMap.get( node_id.get( i ) ) ), node_sup.get( i ) );
-			if( node_sup.get( i ) < 0 )
-				sink = network.getNode( nodeMap.get( node_id.get( i ) ) );
+			if( node_sup.get( i ) < 0  ) {
+				if( sinks > 1) {
+					// we have several sinks
+					// create the edge
+					Node sinkNode = network.getNode( nodeMap.get( node_id.get( i ) ) );
+					Edge e = network.createAndSetEdge( sinkNode, sink );
+					edgeCapacities.set( e, Integer.MAX_VALUE );
+					transitTimes.set( e, 0 );
+				} else // the one node with negative capacity is the sink
+					sink = network.getNode( nodeMap.get( node_id.get( i ) ) );
+				totalSupply = Math.max( Integer.MAX_VALUE, totalSupply + node_sup.get( i ) );
+			}
 			if( node_sup.get( i ) > 0 )
 				sources.add( network.getNode( nodeMap.get( node_id.get( i ) ) ) );
 			if( x!= null )
 				x.set( network.getNode( nodeMap.get( node_id.get( i ) ) ), node_x.get( i ) + xoffset );
 			if( y != null)
 				y.set( network.getNode( nodeMap.get( node_id.get( i ) ) ), node_y.get( i ) + yoffset );
+			
 		}
 
+		//int totalSupply = -node_sup.get( sink.id() );
 		for( int i = 0; i < nodeCount; ++i )
 			if( sources.contains( network.getNode( i ) ) )
-				nodeCapacities.set( network.getNode( i ), 1200 );
+				nodeCapacities.set( network.getNode( i ), node_sup.get( i ) );
 			else
-				nodeCapacities.set( network.getNode( i ), 1 );
+				nodeCapacities.set( network.getNode( i ), totalSupply ); // sicherheitsalber! 0 funzt nicht
+		nodeCapacities.set( sink, -totalSupply );
 //		for( int i = 0; i < nodeCount; ++i )
 //			if( sources.contains( network.getNode( i ) ) )
 //				nodeCapacities.set( network.getNode( i ), 1000 );

@@ -19,7 +19,8 @@
  */
 package algo.graph.dynamicflow.eat;
 
-import cern.colt.Arrays;
+//import cern.colt.Arrays;
+import de.tu_berlin.math.coga.common.algorithm.Algorithm;
 import ds.graph.flow.EarliestArrivalAugmentingPath;
 import ds.graph.ImplicitTimeExpandedResidualNetwork;
 import ds.graph.Edge;
@@ -29,7 +30,6 @@ import ds.mapping.IntegerIntegerMapping;
 import ds.graph.Node;
 import java.util.LinkedList;
 import java.util.Queue;
-import de.tu_berlin.math.coga.common.algorithm.Algorithm;
 
 /**
  * Implements the Earliest Arrival Augmentation Path Algorithm based on Stevanus
@@ -210,7 +210,7 @@ public class EarliestArrivalAugmentingPathAlgorithm extends Algorithm<EarliestAr
                     }
                     //assert !oldPredecessor.equals(path.getFirst().getNode()) : "Cycle: " + oldPredecessor + " " + predecessorNode + " " + path.getFirst();
                     if (oldPredecessor.equals(path.getFirst().getNode())) {
-                        System.out.println(Arrays.toString(predecessorNodes.get(currentNode)));
+                        //System.out.println(Arrays.toString(predecessorNodes.get(currentNode)));
                     }
                     path.insertFirst(oldPredecessor, predecessorDepartureTime + transitTime, nextTime);
                 }
