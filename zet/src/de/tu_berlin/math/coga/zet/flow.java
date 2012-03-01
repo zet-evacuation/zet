@@ -123,12 +123,11 @@ public class flow implements AlgorithmListener {
 				theInstance.nodePositionMapping = new NodePositionMapping();
 				theInstance.xPos = new IdentifiableIntegerMapping<Node>( 0 );
 				theInstance.yPos = new IdentifiableIntegerMapping<Node>( 0 );
-				//theInstance.eafp = DatFileReaderWriter.read( theInstance.inputFileName, theInstance.nodePositionMapping ); // new .dat-format
-				//theInstance.graphView = new GraphView( theInstance.eafp, theInstance.nodePositionMapping );
-				theInstance.eafp = DatFileReaderWriter.readOld( theInstance.inputFileName ); // old .dat-format
+				theInstance.eafp = DatFileReaderWriter.read( theInstance.inputFileName, theInstance.nodePositionMapping ); // new .dat-format
+				theInstance.graphView = new GraphView( theInstance.eafp, theInstance.nodePositionMapping );
 				theInstance.computationMode = ComputationMode.EarliestArrivalFlow;
 				// version without x and Years positions:
-				//				theInstance.eafp = DatFileReaderWriter.read( filename );
+				//theInstance.eafp = DatFileReaderWriter.readOld( theInstance.inputFileName ); // old .dat-format
 			} catch( FileNotFoundException ex ) {
 				System.err.println( "File '" + theInstance.inputFileName + "' not found." );
 				System.exit( 1 );
