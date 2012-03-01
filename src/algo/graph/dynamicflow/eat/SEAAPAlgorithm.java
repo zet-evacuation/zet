@@ -178,7 +178,7 @@ public class SEAAPAlgorithm extends Algorithm<EarliestArrivalFlowProblem, FlowOv
             // If no suitable path has been found
             if (path.isEmpty() || path.getCapacity() == 0) {
                 // Try to increase the time horizon
-                int newTimeHorizon = Math.max(pathProblem.getTimeHorizon() + 1, getNextDistance(arrivalTime) + 1);
+                int newTimeHorizon = Math.max(pathProblem.getTimeHorizon() + 1, 0);//getNextDistance(arrivalTime) + 1);
                 // If our new time horizon gets to large, we are done, otherwise update the time horizon
                 if (newTimeHorizon > originalTimeHorizon) {
                     path = new EarliestArrivalAugmentingPath();

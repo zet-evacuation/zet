@@ -19,6 +19,7 @@
  */
 package algo.graph.dynamicflow.eat;
 
+import cern.colt.Arrays;
 import ds.graph.flow.EarliestArrivalAugmentingPath;
 import ds.graph.ImplicitTimeExpandedResidualNetwork;
 import ds.graph.Edge;
@@ -138,6 +139,7 @@ public class EarliestArrivalAugmentingPathAlgorithm extends Algorithm<EarliestAr
                             newTime++;
                         }
                         // Check whether we can use wait-cancelling at the end node to reach more node copies
+                        if (edge.end().id() == problem.getSink().id()) continue;
                         newTime = time + network.transitTime(edge) - 1;
                         while (newTime >= 0 && network.capacity(edge.end(), newTime + 1, true) > 0 && predecessorNodeOfEdgeEnd[newTime] == null) {
                             if (labels.get(edge.end()) > newTime) {
@@ -198,7 +200,7 @@ public class EarliestArrivalAugmentingPathAlgorithm extends Algorithm<EarliestAr
                 predecessorEdge = predecessorEdges.get(currentNode)[currentTime];
                 predecessorNode = predecessorNodes.get(currentNode)[currentTime];
                 // Create a path segment
-                if (oldPredecessor != predecessorNode && !oldPredecessor.equals(path.getFirst().getNode())) {
+                if (oldPredecessor != predecessorNode/* && !oldPredecessor.equals(path.getFirst().getNode())*/) {
                     predecessorDepartureTime = departureTimes.get(currentNode).get(currentTime);
                     int transitTime;
                     if (predecessorNode != EMPTY_NODE && currentNode != predecessorNode) {
@@ -206,7 +208,10 @@ public class EarliestArrivalAugmentingPathAlgorithm extends Algorithm<EarliestAr
                     } else {
                         transitTime = 0;
                     }
-                    assert !oldPredecessor.equals(path.getFirst().getNode()) : "Cycle: " + oldPredecessor + " " + predecessorNode + " " + path.getFirst();
+                    //assert !oldPredecessor.equals(path.getFirst().getNode()) : "Cycle: " + oldPredecessor + " " + predecessorNode + " " + path.getFirst();
+                    if (oldPredecessor.equals(path.getFirst().getNode())) {
+                        System.out.println(Arrays.toString(predecessorNodes.get(currentNode)));
+                    }
                     path.insertFirst(oldPredecessor, predecessorDepartureTime + transitTime, nextTime);
                 }
             }

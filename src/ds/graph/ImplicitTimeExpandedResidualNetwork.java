@@ -190,7 +190,12 @@ public class ImplicitTimeExpandedResidualNetwork extends Network {
                 continue;
             } else {
                 assert !first.getNode().equals(ntp.getNode()) : "Same nodes should not occur: " + first + " " + ntp + " " + path;
+                try {
                 augmentEdge(first, ntp, path.getCapacity());
+                } catch (AssertionError e) {
+                    System.out.println(path);
+                    throw e;
+                }
                 first = ntp;
             }
         }
@@ -297,7 +302,7 @@ public class ImplicitTimeExpandedResidualNetwork extends Network {
                 break;
             }
         }
-        assert result != null : "No edge found: " + candidates;
+        assert result != null : "No edge found: " + start + " " + end + " " + fromTime + " " + toTime + " " + candidates;
         return result;
     }
 
