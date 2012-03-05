@@ -47,6 +47,7 @@ public class DatFileReaderWriter implements AlgorithmListener {
 		return read( filename, null, null );
 	}
 
+	static boolean zeroNodeCapacities = false;
 	static int factor = 2;
 	static boolean verbose = false;
 
@@ -309,7 +310,7 @@ public class DatFileReaderWriter implements AlgorithmListener {
 			if( sources.contains( network.getNode( i ) ) )
 				nodeCapacities.set( network.getNode( i ), node_sup.get( i ) );
 			else
-				nodeCapacities.set( network.getNode( i ), totalSupply ); // sicherheitsalber! 0 funzt nicht
+				nodeCapacities.set( network.getNode( i ), zeroNodeCapacities ? 0 : totalSupply );
 		nodeCapacities.set( sink, -totalSupply );
 //		for( int i = 0; i < nodeCount; ++i )
 //			if( sources.contains( network.getNode( i ) ) )
