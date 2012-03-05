@@ -8,14 +8,13 @@ import algo.graph.dynamicflow.eat.EarliestArrivalFlowProblem;
 import algo.graph.dynamicflow.eat.LongestShortestPathTimeHorizonEstimator;
 import algo.graph.dynamicflow.eat.SEAAPAlgorithm;
 import algo.graph.staticflow.maxflow.PushRelabelHighestLabelGlobalGapRelabelling;
-import batch.tasks.graph.SuccessiveEarliestArrivalAugmentingPathOptimizedTask;
 import com.martiansoftware.jsap.FlaggedOption;
 import com.martiansoftware.jsap.JSAP;
 import com.martiansoftware.jsap.JSAPException;
 import com.martiansoftware.jsap.JSAPResult;
+import com.martiansoftware.jsap.Switch;
 import com.martiansoftware.jsap.UnflaggedOption;
 import com.thoughtworks.xstream.XStream;
-import de.tu_berlin.math.coga.common.algorithm.Algorithm;
 import de.tu_berlin.math.coga.common.algorithm.AlgorithmEvent;
 import de.tu_berlin.math.coga.common.algorithm.AlgorithmListener;
 import de.tu_berlin.math.coga.common.algorithm.AlgorithmProgressEvent;
@@ -30,7 +29,6 @@ import de.tu_berlin.math.coga.graph.io.xml.XMLReader;
 import de.tu_berlin.math.coga.graph.io.xml.XMLWriter;
 import de.tu_berlin.math.coga.zet.viewer.NodePositionMapping;
 import ds.GraphVisualizationResults;
-import ds.PropertyContainer;
 import ds.mapping.IdentifiableIntegerMapping;
 import ds.graph.Node;
 import ds.graph.flow.PathBasedFlowOverTime;
@@ -39,7 +37,6 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.PrintWriter;
-import zet.tasks.GraphAlgorithmEnumeration;
 
 /**
  *
@@ -67,7 +64,7 @@ public class flow implements AlgorithmListener {
 	ComputationMode computationMode;
 
 	public static void main ( String[] args ) throws JSAPException, IOException {
-		System.out.println( "flow 0.3.1" );
+		System.out.println( "flow 0.3.2 based on ZET 1.1.0 beta" );
 
 		JSAP jsap = new JSAP();
 
@@ -96,6 +93,11 @@ public class flow implements AlgorithmListener {
 		optMode.setHelp( "The mode. 'compute' computes a flow, 'convert' only reads and maybe converts to a different format." );
 		jsap.registerParameter( optMode );
 
+		Switch switchZeroNodeCapacities = new Switch( "zero" ).setShortFlag( 'z' ).setLongFlag( "zeroNodeCapacities" );
+		switchZeroNodeCapacities.setHelp( "Use zero node capacities." );
+		jsap.registerParameter( switchZeroNodeCapacities );
+		
+		
 		JSAPResult config = jsap.parse( args );
 		if( !config.success() || !(config.getString( "mode").equals( "convert") || config.getString( "mode" ).equals( "compute" ) ) ) {
 			System.err.println();
@@ -113,6 +115,10 @@ public class flow implements AlgorithmListener {
 
 		theInstance = new flow( config.getString( "flowfile" ) );
 
+		if( config.contains( "zero" ) ) {
+			DatFileReaderWriter.zeroNodeCapacities = config.getBoolean( "zero" );
+		}
+		
 		// Scan the input file type by its ending
 		
 		if( theInstance.inputFileName.endsWith( ".dat" ) ) {
@@ -121,8 +127,8 @@ public class flow implements AlgorithmListener {
 			try {
 				// .dat files must contain node positions
 				theInstance.nodePositionMapping = new NodePositionMapping();
-				theInstance.xPos = new IdentifiableIntegerMapping<Node>( 0 );
-				theInstance.yPos = new IdentifiableIntegerMapping<Node>( 0 );
+				theInstance.xPos = new IdentifiableIntegerMapping<>( 0 );
+				theInstance.yPos = new IdentifiableIntegerMapping<>( 0 );
 				theInstance.eafp = DatFileReaderWriter.read( theInstance.inputFileName, theInstance.nodePositionMapping ); // new .dat-format
 				theInstance.graphView = new GraphView( theInstance.eafp, theInstance.nodePositionMapping );
 				theInstance.computationMode = ComputationMode.EarliestArrivalFlow;
@@ -235,9 +241,7 @@ public class flow implements AlgorithmListener {
 		algo.setProblem( eafp );
 		algo.addAlgorithmListener( this );
 		try {
-			System.out.println( "start" );
 			algo.run();
-			System.out.println( "end" );
 		} catch( IllegalStateException e ) {
 			System.err.println( "The illegal state exception occured." );
 		}
