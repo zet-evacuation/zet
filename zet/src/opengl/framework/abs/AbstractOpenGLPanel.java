@@ -185,6 +185,13 @@ abstract public class AbstractOpenGLPanel extends GLJPanel implements GLEventLis
 		this.initGFX( drawable );
 	}
 	
+	@Override
+	public void setBackground( Color c ) {
+		super.setBackground( c );
+		if( gl != null )
+			gl.glClearColor( c.getRed(), c.getGreen(), c.getBlue(), c.getAlpha() );
+	}
+	
 	/**
 	 * This method is called everytime the GL context is resized. Calculates the
 	 * current viewport and aspect ratio of the visible area.

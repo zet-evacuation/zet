@@ -98,10 +98,9 @@ public class VisualizationOptionManager {
 	}
 
 	public static GLColor getNodeColor() {
-//		return new GLColor( 240, 240, 110 );
-		return new GLColor( 250, 250, 100 ); // current
-	//return new GLColor( Color.gray, 1.0 );
-//	return new GLColor( 221, 125, 42 );	// color used for the test evacuation report
+	//return new GLColor( 240, 240, 110 );
+	return new GLColor( 250, 250, 100 ); // current
+	// return new GLColor( 221, 125, 42 );	// color used for the test evacuation report
 	}
 
 	public static GLColor getEdgeColor() {
