@@ -65,7 +65,7 @@ abstract public class AbstractOpenGLCanvas extends GLCanvas implements GLEventLi
 	 */
 	public AbstractOpenGLCanvas() {
 		super( new GLCapabilities() );
-		setBackground( Color.black );
+		super.setBackground( Color.black );
 		addGLEventListener( this );
 		animator = new FPSAnimator( this, maxFPS );
 	}
@@ -76,7 +76,7 @@ abstract public class AbstractOpenGLCanvas extends GLCanvas implements GLEventLi
 	 */
 	public AbstractOpenGLCanvas( GLCapabilities caps ) {
 		super( caps );
-		setBackground( Color.black );
+		super.setBackground( Color.black );
 		addGLEventListener( this );
 		animator = new Animator( this );
 	}
@@ -316,5 +316,12 @@ abstract public class AbstractOpenGLCanvas extends GLCanvas implements GLEventLi
 	 */
 	protected void printErrors( PrintStream stream ) {
 		Util.printErrors( gl, stream );
+	}
+
+	@Override
+	public void setBackground( Color c ) {
+		super.setBackground( c );
+		if( gl != null )
+			gl.glClearColor( c.getRed(), c.getGreen(), c.getBlue(), c.getAlpha() );
 	}
 }

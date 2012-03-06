@@ -12,6 +12,7 @@ import gui.GUIControl;
 import gui.ZETProperties;
 import gui.visualization.Visualization;
 import gui.visualization.control.GLControl;
+import java.awt.Color;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseWheelEvent;
@@ -43,6 +44,9 @@ public class ZETVisualization extends Visualization<GLControl> {
 
 	public ZETVisualization( GLCapabilities capabilities, GUIControl guiControl ) {
 		super( capabilities );
+		
+		setBackground( Color.WHITE );
+		
 		this.guiControl = guiControl;
 		showEye = ZETProperties.isShowEye();
 		showFPS = ZETProperties.isShowFPS();

@@ -144,6 +144,8 @@ public class Visualization<U extends DrawableControlable> extends AbstractVisual
 	int introCount = 0;
 	int screenshotCounter = 0;
 
+	boolean drawLogo = false;
+	
 	/**
 	 * Draws the scene, including text and takes screenshots, if necessary.
 	 * @param drawable the {@code OpenGL} context
@@ -181,7 +183,8 @@ public class Visualization<U extends DrawableControlable> extends AbstractVisual
 			drawScene();
 
 		// Show logo
-		drawLogo();
+		if( drawLogo )
+			drawLogo();
 
 		printErrors();
 		gl.glFlush();
@@ -548,6 +551,7 @@ public class Visualization<U extends DrawableControlable> extends AbstractVisual
 
 		gl.glClearDepth( 1.0f );																				// Initialize depth-buffer precision
 		gl.glDepthFunc( GL.GL_LEQUAL );																	// Quality of depht-testing
+		gl.glClearColor( getBackground().getRed(), getBackground().getGreen(), getBackground().getBlue(), getBackground().getAlpha() );
 		gl.glEnable( GL.GL_DEPTH_TEST );																// Enable depth-buffer. (z-buffer)
 		gl.glShadeModel( GL.GL_SMOOTH );																// Activate smooth-shading (Gauraud)
 		gl.glHint( GL.GL_PERSPECTIVE_CORRECTION_HINT, GL.GL_NICEST );		// Perspective calculations with high precision
