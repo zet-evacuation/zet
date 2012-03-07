@@ -279,4 +279,78 @@ public class EATApproxTest {
 		System.out.println( eata.flowCurve.toString() );
 		System.out.println( "beta = " + computeBeta( flowValues, eata.flowCurve ) );
 	}
+
+
+
+	@Test
+	public void test() {
+		System.out.println( "Linear" );
+		AbstractNetwork n = new Network( 6, 5 );
+		//int M = 75;
+
+		int timeHorizon = 1;
+
+		n.createAndSetEdge( n.getNode( 0 ), n.getNode( 1 ) );
+		n.createAndSetEdge( n.getNode( 1 ), n.getNode( 2 ) );
+		n.createAndSetEdge( n.getNode( 2 ), n.getNode( 3 ) );
+		n.createAndSetEdge( n.getNode( 3 ), n.getNode( 4 ) );
+		n.createAndSetEdge( n.getNode( 4 ), n.getNode( 5 ) );
+
+		IdentifiableIntegerMapping<Edge> capacities = new IdentifiableIntegerMapping<>( 5 );
+		capacities.set( n.getEdge( 0 ), 4 );
+		capacities.set( n.getEdge( 1 ), 4 );
+		capacities.set( n.getEdge( 2 ), 2 );
+		capacities.set( n.getEdge( 3 ), 1 );
+		capacities.set( n.getEdge( 4 ), 2 );
+
+		IdentifiableIntegerMapping<Edge> transitTime = new IdentifiableIntegerMapping<>( 5 );
+		transitTime.set( n.getEdge( 0 ), 0 );
+		transitTime.set( n.getEdge( 1 ), 0 );
+		transitTime.set( n.getEdge( 2 ), 0 );
+		transitTime.set( n.getEdge( 3 ), 0 );
+		transitTime.set( n.getEdge( 4 ), 0 );
+
+		IdentifiableIntegerMapping<Node> supplies = new IdentifiableIntegerMapping<>( 6 );
+		supplies.set( n.getNode( 0 ), 16 );
+		supplies.set( n.getNode( 1 ), -8 );
+		supplies.set( n.getNode( 2 ), 8 );
+		supplies.set( n.getNode( 3 ), -4 );
+		supplies.set( n.getNode( 4 ), 4 );
+		supplies.set( n.getNode( 5 ), -16 );
+
+		ArrayList<Node> sources = new ArrayList<>( 3 );
+		sources.add( n.getNode( 0 ) );
+		sources.add( n.getNode( 2 ) );
+		sources.add( n.getNode( 4 ) );
+	
+		ArrayList<Node> sinks = new ArrayList<>( 3 );
+		sinks.add( n.getNode( 1 ) );
+		sinks.add( n.getNode( 3 ) );
+		sinks.add( n.getNode( 5 ) );
+
+		ArrayList<Integer> flowValues = new ArrayList<>();
+		MaximumFlowOverTimeProblem p;
+
+		LimitedMaxFlowOverTime lmfot;
+		int T = 1;
+		int totalSupply = 28;
+		do {
+			timeHorizon = T++;
+
+			p = new MaximumFlowOverTimeProblem( n, capacities, transitTime, sources, sinks, timeHorizon );
+			lmfot = new LimitedMaxFlowOverTime( p, supplies );
+			lmfot.runAlgorithm();
+			flowValues.add( (int)lmfot.hiprf );
+
+		} while( lmfot.getFlow() != totalSupply );
+
+		p = new MaximumFlowOverTimeProblem( n, capacities, transitTime, sources, sinks, T );
+
+		System.out.println( flowValues.toString() );
+		
+		//Assert.assertEquals( "Optimal solution for time T", flowValues.get( flowValues.size()-1 ).longValue(), 12 );
+		//Assert.assertEquals( "Optimal flow for time 1", flowValues.get( 0 ).longValue(), 4 );
+		//Assert.assertEquals( "Linear increase of arrival curve", flowValues.size(), 4 );
+	}
+
 }
