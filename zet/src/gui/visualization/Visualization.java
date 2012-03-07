@@ -144,7 +144,7 @@ public class Visualization<U extends DrawableControlable> extends AbstractVisual
 	int introCount = 0;
 	int screenshotCounter = 0;
 
-	boolean drawLogo = false;
+	boolean drawLogo = true;
 	
 	/**
 	 * Draws the scene, including text and takes screenshots, if necessary.

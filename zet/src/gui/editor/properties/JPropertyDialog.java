@@ -41,7 +41,7 @@ public class JPropertyDialog extends JOptionsDialog {
 
 			@Override
 			public void actionPerformed( ActionEvent e ) {
-				PropertyFilesSelectionModel.PropertyListEntry entry = (PropertyFilesSelectionModel.PropertyListEntry)jpc.getSelectedItem();
+				PropertyListEntry entry = (PropertyListEntry)jpc.getSelectedItem();
 				try {
 					PropertyTreeModel ptm2 = PropertyContainer.getInstance().applyParameters( entry.getFile() );
 					init( ptm2 );

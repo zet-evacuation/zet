@@ -19,7 +19,7 @@ import zet.tasks.CellularAutomatonAlgorithmEnumeration;
 import zet.tasks.GraphAlgorithmEnumeration;
 import batch.tasks.AssignmentTask;
 import batch.tasks.CA.BatchCA2Task;
-import gui.editor.properties.PropertyFilesSelectionModel.PropertyListEntry;
+import gui.editor.properties.PropertyListEntry;
 import java.util.TreeMap;
 import batch.tasks.CA.BatchCATask;
 import batch.tasks.CA.BatchEvacuationCATask;
@@ -49,6 +49,7 @@ import de.tu_berlin.math.coga.common.util.Formatter;
 import statistic.ca.CAStatistic;
 import statistic.ca.MultipleCycleCAStatistic;
 import gui.batch.JBatchProgressDialog;
+import gui.editor.properties.PropertyListEntry;
 
 /**
  * A wrapper class that represents a single entry in the batch list.
@@ -358,7 +359,7 @@ public class BatchEntry {
     }
 
     /** @return the selected property. */
-    public PropertyFilesSelectionModel.PropertyListEntry getProperty() {
+    public PropertyListEntry getProperty() {
         return propertyFile;
     }
 
@@ -376,7 +377,7 @@ public class BatchEntry {
     }
 
     /** @param propertyFile the selected property */
-    public void setProperty(PropertyFilesSelectionModel.PropertyListEntry propertyFile) {
+    public void setProperty(PropertyListEntry propertyFile) {
         this.propertyFile = propertyFile;
     }
 

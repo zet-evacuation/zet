@@ -45,7 +45,7 @@ public class ZETVisualization extends Visualization<GLControl> {
 	public ZETVisualization( GLCapabilities capabilities, GUIControl guiControl ) {
 		super( capabilities );
 		
-		setBackground( Color.WHITE );
+		//setBackground( Color.WHITE ); // for report
 		
 		this.guiControl = guiControl;
 		showEye = ZETProperties.isShowEye();
