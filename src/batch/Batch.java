@@ -20,7 +20,7 @@ import zet.tasks.GraphAlgorithmEnumeration;
 import ds.z.Project;
 import ds.z.Assignment;
 import gui.batch.EvacuationOptimizationType;
-import gui.editor.properties.PropertyFilesSelectionModel.PropertyListEntry;
+import gui.editor.properties.PropertyListEntry;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;

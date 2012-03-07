@@ -42,7 +42,7 @@ public class TeleportRule extends AbstractRule {
 				esp.eca.moveIndividual( cell, tc.getTarget( 0 ) );
 				tc.setTeleportFailed( false );
 				counter++;
-				System.out.println( "Teleportiert: " + counter );
+				//System.out.println( "Teleportiert: " + counter );
 				if( esp.eca.getTimeStep() > tc.getTarget( 0 ).getUsedInTimeStep() )
 					tc.getTarget( 0 ).setUsedInTimeStep( esp.eca.getTimeStep() );
 			} else

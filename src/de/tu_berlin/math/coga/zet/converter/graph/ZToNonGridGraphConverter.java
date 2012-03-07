@@ -820,7 +820,8 @@ public class ZToNonGridGraphConverter extends BaseZToGraphConverter {
 				for( int col = 0; col < colCount; col++ ) {
 					ZToGraphRasterSquare square = room.getSquare( col, row );
 
-					if( square.isSave() ) {
+					// todo: parameter
+					if( square.isSave() && square.isExit()) {
 						Node node = square.getNode();
 						Edge edge = graph.getEdge( node, supersink );
 						if( edge == null ) {

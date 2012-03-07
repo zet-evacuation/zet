@@ -6,17 +6,21 @@ package zet.gui.main.menu;
 
 import de.tu_berlin.math.coga.common.localization.Localized;
 import ds.PropertyContainer;
-import ds.z.exception.RoomIntersectException;
 import gui.GUIControl;
 import gui.GraphConverterAlgorithms;
 import gui.ZETMain;
 import gui.components.framework.Menu;
 import gui.editor.Areas;
+import gui.editor.properties.PropertyFilesSelectionModel;
+import gui.editor.properties.PropertyListEntry;
+import gui.editor.properties.PropertyLoadException;
 import zet.gui.treeview.JProjectTreeView;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.InputEvent;
 import java.awt.event.KeyEvent;
+import java.nio.file.Paths;
+import java.util.List;
 import java.util.Locale;
 import javax.swing.ButtonGroup;
 import javax.swing.JCheckBoxMenuItem;
@@ -31,6 +35,7 @@ import zet.gui.GUILocalization;
  *
  * @author Jan-Philipp Kappmeier
  */
+@SuppressWarnings( "serial" )
 public class JZETMenuBar extends JMenuBar implements ActionListener, Localized {
 	private final GUIControl control;
 	/** The localization class. */
@@ -120,9 +125,12 @@ public class JZETMenuBar extends JMenuBar implements ActionListener, Localized {
 	//private JMenuItem mnuExecuteQuickestTransshipment;
 	//private JMenuItem mnuExecuteMaxFlowOverTimeMC;
 	//private JMenuItem mnuExecuteMaxFlowOverTimeTEN;
+	private JMenu mProperties;
+	private List<PropertyListEntry> properties;
 	private JMenu mExtras;
 	private JMenu mLanguage;
 	private JRadioButtonMenuItem[] mnuLanguages = new JRadioButtonMenuItem[2];
+	private JRadioButtonMenuItem[] mnuProperties = null;
 	private JMenu mPlanImage;
 	private JMenuItem mnuPlanImageLoad;
 	private JMenuItem mnuPlanImageHide;
@@ -259,7 +267,23 @@ public class JZETMenuBar extends JMenuBar implements ActionListener, Localized {
 		//mnuExecuteQuickestTransshipment = Menu.addMenuItem( mOptimization, loc.getString( "Execute.Optimization.AlgoQuickestTransshipment" ), this, "QT" );
 		//mnuExecuteMaxFlowOverTimeMC = Menu.addMenuItem( mOptimization, loc.getString( "Execute.Optimization.AlgoMaxFlowOverTimeMinCost" ), this, "MFOTMC" );
 		//mnuExecuteMaxFlowOverTimeTEN = Menu.addMenuItem( mOptimization, loc.getString( "Execute.Optimization.AlgoMaxFlowOverTimeTEN" ), this, "MFOTTEN" );
+		
+		Menu.addMenuItem( mExecute, "-" );
 
+		mProperties = Menu.addMenu( mExecute, "Properties" );
+		ButtonGroup grpProperties = new ButtonGroup();
+								
+		properties = PropertyFilesSelectionModel.loadPath( Paths.get( "./properties" ) );
+		
+		mnuProperties = new JRadioButtonMenuItem[properties.size()];
+		int counter = 0;
+		for( PropertyListEntry e : properties ) {
+			boolean marked = e.getName().equals( "Standard-Eigenschaften" ) ? true : false;
+			mnuProperties[counter] = Menu.addRadioButtonMenuItem( mProperties, e.getName(), marked, this, "property" + counter );
+			grpProperties.add( mnuProperties[counter++] );
+		}
+		
+		
 		// Extras-Menu
 		mLanguage = Menu.addMenu( mExtras, loc.getString( "Extras.Languages" ) );
 		ButtonGroup grpLanguage = new ButtonGroup();
@@ -503,6 +527,17 @@ public class JZETMenuBar extends JMenuBar implements ActionListener, Localized {
 			control.outputGraph();
 		} else if( e.getActionCommand().equals( "about" ) ) {
 			control.showAbout(); // show the about screen
+		} else if( e.getActionCommand().startsWith( "property") ) {
+			int p = Integer.parseInt( e.getActionCommand().substring( 8 ) );
+				PropertyListEntry entry = properties.get( p );
+				try {
+					System.out.println( "Loading property " + entry.getName() );
+					PropertyContainer.getInstance().applyParameters( entry.getFile() );
+					//init( ptm2 );
+				} catch( PropertyLoadException ex ) {
+					ex.printStackTrace( System.err );
+				}
+			
 		} else
 			ZETMain.sendError( loc.getString( "gui.UnknownCommand" ) + " '" + e.getActionCommand() + "'. " + loc.getString( "gui.ContactDeveloper" ) );
 	}

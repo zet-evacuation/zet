@@ -30,7 +30,7 @@ import javax.swing.JComboBox;
  * @author Jan-Philipp Kappmeier
  */
 @SuppressWarnings( "serial" )
-public class JPropertyComboBox extends JComboBox<PropertyFilesSelectionModel.PropertyListEntry> {
+public class JPropertyComboBox extends JComboBox<PropertyListEntry> {
 	PropertyFilesSelectionModel model;
 	
 	public JPropertyComboBox( PropertyFilesSelectionModel pfsm ) {
