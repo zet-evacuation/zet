@@ -35,9 +35,6 @@ import de.tu_berlin.math.coga.common.util.Level;
  */
 public class NonWaitingMovementRule extends AbstractMovementRule {
 
-	static double timeCounter = 0;
-	static double distCounter = 0;
-
 	public NonWaitingMovementRule() {
 	}
 
@@ -51,28 +48,27 @@ public class NonWaitingMovementRule extends AbstractMovementRule {
 			if( canMove( actor ) ) {
 				if( slack( actor ) ) {
 					//System.out.println( "SLACK" );
-					this.updateExhaustion( actor, cell );
-					this.setPerformMove( true );
+					updateExhaustion( actor, cell );
+					setMoveRuleCompleted( true );
 					doMove( actor, cell );
 				} else {
-					if( this.isDirectExecute() ) {
-						//Cell targetCell = this.selectTargetCell( cell, selectPossibleTargets( cell, true ) );
+					if( isDirectExecute() ) {
 						Cell targetCell = getTargetCell( cell );
-						setPerformMove( true );
+						setMoveRuleCompleted( true );
 						move( actor, targetCell );
 					} else {
-						this.setPossibleTargets( selectPossibleTargets( cell, false ) );
-						setPerformMove( true );
+						setPossibleTargets( selectPossibleTargets( cell, false ) );
+						setMoveRuleCompleted( true );
 					}
 				}
 				this.updateSpeed( actor );
 			} else {
 				// Individual can't move, it is already moving
-				setPerformMove( false );
+				setMoveRuleCompleted( false );
 			}
 		} else {
 			// Individual is not alarmed, that means it remains standing on the cell
-			setPerformMove( true );
+			setMoveRuleCompleted( true );
 			doMove( actor, cell );
 		}
 		VisualResultsRecorder.getInstance().recordAction( new IndividualStateChangeAction( actor ) );
@@ -105,16 +101,14 @@ public class NonWaitingMovementRule extends AbstractMovementRule {
 		if( i.getCell().equals( targetCell ) ) {
 			i.setStepStartTime( i.getStepEndTime() );
 			setStepEndTime( i, i.getStepEndTime() + 1 );
-			//i.setStepEndTime( i.getStepEndTime() + 1 );
 			esp.eca.moveIndividual( targetCell, targetCell );
-			//i.getCell().getRoom().moveIndividual( targetCell, targetCell );
-			setPerformMove( false );
+			setMoveRuleCompleted( false );
 			esp.caStatisticWriter.getStoredCAStatisticResults().getStoredCAStatisticResultsForIndividuals().addCurrentSpeedToStatistic( i, esp.eca.getTimeStep(), 0 );
 			return;
 		}
 
 		doMoveWithDecision( i, targetCell, true );
-		setPerformMove( false );
+		setMoveRuleCompleted( false );
 	}
 
 	public void move( Individual i, Cell targetCell ) {
@@ -122,25 +116,24 @@ public class NonWaitingMovementRule extends AbstractMovementRule {
 			// Rauslaufen aus sicheren Bereichen ist nicht erlaubt
 			targetCell = i.getCell();
 		} else {
-			this.updatePanic( i, targetCell );
+			updatePanic( i, targetCell );
 		}
-		this.updateExhaustion( i, targetCell );
+		updateExhaustion( i, targetCell );
 
 		if( i.getCell().equals( targetCell ) ) {
 			esp.caStatisticWriter.getStoredCAStatisticResults().getStoredCAStatisticResultsForIndividuals().addWaitedTimeToStatistic( i, esp.eca.getTimeStep() );
 			esp.caStatisticWriter.getStoredCAStatisticResults().getStoredCAStatisticResultsForCells().addCellToWaitingStatistic( targetCell, esp.eca.getTimeStep() );
 		}
 		esp.caStatisticWriter.getStoredCAStatisticResults().getStoredCAStatisticResultsForCells().addCellToUtilizationStatistic( targetCell, esp.eca.getTimeStep() );
-		this.doMove( i, targetCell );
-		setPerformMove( false );
+		doMove( i, targetCell );
+		setMoveRuleCompleted( false );
 	}
 
 	protected void updatePanic( Individual i, Cell targetCell ) {
 		double oldPanic = i.getPanic();
 		esp.parameterSet.updatePanic( i, targetCell, this.neighboursByPriority( i.getCell() ) );
-		if( oldPanic != i.getPanic() ) {
+		if( oldPanic != i.getPanic() )
 			esp.caStatisticWriter.getStoredCAStatisticResults().getStoredCAStatisticResultsForIndividuals().addPanicToStatistic( i, esp.eca.getTimeStep(), i.getPanic() );
-		}
 	}
 
 	protected void updateSpeed( Individual i ) {
@@ -159,10 +152,9 @@ public class NonWaitingMovementRule extends AbstractMovementRule {
 	 */
 	protected ArrayList<Cell> neighboursByPriority( Cell cell ) {
 		class CellPrioritySorter implements Comparator<Cell> {
-
 			final Cell referenceCell;
 
-			public CellPrioritySorter( Cell referenceCell ) {
+			CellPrioritySorter( Cell referenceCell ) {
 				this.referenceCell = referenceCell;
 			}
 
@@ -196,7 +188,7 @@ public class NonWaitingMovementRule extends AbstractMovementRule {
 	 */
 	@Override
 	public Cell selectTargetCell( Cell cell, ArrayList<Cell> targets ) {
-		if( targets.size() == 0 )
+		if( targets.isEmpty() )
 			return cell;
 
 		double p[] = new double[targets.size()];
@@ -306,10 +298,7 @@ public class NonWaitingMovementRule extends AbstractMovementRule {
 	 */
 	//gibt true wieder, wenn geschwindigkeit von zelle und individuel (wkeit darueber) bewegung bedeuten
 	protected boolean canMove( Individual i ) {
-		if( esp.eca.getTimeStep() >= i.getStepEndTime() ) {
-			return true;
-		}
-		return false;
+		return esp.eca.getTimeStep() >= i.getStepEndTime();
 	}
 
 	/**
@@ -395,11 +384,6 @@ public class NonWaitingMovementRule extends AbstractMovementRule {
 			}
 		}
 
-
-		// Perform Movement if the individual changes the room!
-		//if( i.getCell().getRoom() != targetCell.getRoom() )
-		//	i.getCell().getRoom().moveIndividual( i.getCell(), targetCell );
-
 		// update times
 		if( esp.eca.absoluteSpeed( i.getCurrentSpeed() ) >= 0.0001 ) {
 			double speedInMeterPerSecond = esp.eca.absoluteSpeed( i.getCurrentSpeed() );
@@ -407,20 +391,15 @@ public class NonWaitingMovementRule extends AbstractMovementRule {
 			//System.out.println( "Speed ist " + speed );
 			// zu diesem zeitpunkt ist die StepEndtime aktualisiert, falls ein individual vorher geslackt hat
 			// oder sich nicht bewegen konnte.
-			timeCounter += (dist / speedInMeterPerSecond);
-			distCounter += dist;
 
 			double beginTime = Math.max( i.getCell().getOccupiedUntil(), i.getStepEndTime() );
-			//beginTime = Math.ceil( beginTime );
 			i.setStepStartTime( beginTime );
 
 			double endTime = beginTime + (dist / speedInMeterPerSecond) * esp.eca.getStepsPerSecond();
-			//endTime = Math.ceil( endTime );
 			
 			setStepEndTime( i, endTime );
 			if( performMove ) {
 				i.getCell().setOccupiedUntil( i.getStepEndTime()  );
-				//i.getCell().getRoom().moveIndividual( i.getCell(), targetCell );
 				esp.eca.moveIndividual( i.getCell(), targetCell );
 				esp.caStatisticWriter.getStoredCAStatisticResults().getStoredCAStatisticResultsForIndividuals().addCurrentSpeedToStatistic( i, esp.eca.getTimeStep(), speedInMeterPerSecond * esp.eca.getSecondsPerStep() );
 				esp.caStatisticWriter.getStoredCAStatisticResults().getStoredCAStatisticResultsForIndividuals().addCoveredDistanceToStatistic( i, (int) Math.ceil( i.getStepEndTime() ), dist );

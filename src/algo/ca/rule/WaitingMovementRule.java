@@ -20,9 +20,8 @@
  */
 package algo.ca.rule;
 
-import java.util.ArrayList;
-
 import ds.ca.evac.Cell;
+import java.util.ArrayList;
 
 /**
  *

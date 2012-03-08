@@ -69,7 +69,7 @@ public class SwapCellularAutomaton extends EvacuationCellularAutomatonRandom {
 			}
 
 			// hier ist movementrule die aktuelle movement rule.
-			if( movement.performMove() ) {
+			if( movement.isMoveCompleted() ) {
 				unfinished.add( i );
 				individualPossibleMapping.put( i, movement.getPossibleTargets() );
 			//movement.move( i, movement.selectTargetCell( i.getCell(), movement.getPossibleTargets() ) );

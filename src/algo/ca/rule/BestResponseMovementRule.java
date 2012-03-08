@@ -32,8 +32,6 @@ import util.DebugFlags;
  * @author Sylvie
  */
 public class BestResponseMovementRule extends AbstractMovementRule {
-	static double timeCounter = 0;
-	static double distCounter = 0;
 	private static final int TIME_STEP_LIMIT_FOR_NASH_EQUILIBRIUM = 25;
 
 	public BestResponseMovementRule() {
@@ -48,8 +46,6 @@ public class BestResponseMovementRule extends AbstractMovementRule {
 	 */
 	@Override
 	public boolean executableOn( ds.ca.evac.Cell cell ) {
-		// Regel nicht anwendbar, wenn auf der Zelle kein Individuum steht.
-		//return (cell.getIndividual() != null && esp.eca.getTimeStep() >= TIME_STEP_LIMIT_FOR_NASH_EQUILIBRIUM);
 		return cell.getIndividual() != null;
 	}
 
@@ -62,15 +58,15 @@ public class BestResponseMovementRule extends AbstractMovementRule {
 		if( canMove( actor ) )
 			if( this.isDirectExecute() ) {
 				Cell targetCell = this.selectTargetCell( cell, selectPossibleTargets( cell, true ) );
-				setPerformMove( true );
+				setMoveRuleCompleted( true );
 				move( actor, targetCell );
 			} else {
 				this.setPossibleTargets( selectPossibleTargets( cell, false ) );
-				setPerformMove( true );
+				setMoveRuleCompleted( true );
 			}
 		else
 			// Individual can't move, it is already moving
-			setPerformMove( false );
+			setMoveRuleCompleted( false );
 		VisualResultsRecorder.getInstance().recordAction( new IndividualStateChangeAction( actor ) );
 	}
 
@@ -85,7 +81,7 @@ public class BestResponseMovementRule extends AbstractMovementRule {
 		//set statistic for targetCell and timestep
 		esp.caStatisticWriter.getStoredCAStatisticResults().getStoredCAStatisticResultsForCells().addCellToUtilizationStatistic( targetCell, esp.eca.getTimeStep() );
 		this.doMove( i, targetCell );
-		setPerformMove( false );
+		setMoveRuleCompleted( false );
 	}
 
 	private void doMove( Individual i, Cell targetCell ) {
@@ -95,13 +91,13 @@ public class BestResponseMovementRule extends AbstractMovementRule {
 			//i.setStepEndTime( i.getStepEndTime() + 1 );
 			//i.getCell().getRoom().moveIndividual( targetCell, targetCell );
 			esp.eca.moveIndividual( i.getCell(), targetCell );
-			setPerformMove( false );
+			setMoveRuleCompleted( false );
 			esp.caStatisticWriter.getStoredCAStatisticResults().getStoredCAStatisticResultsForIndividuals().addCurrentSpeedToStatistic( i, esp.eca.getTimeStep(), 0 );
 			return;
 		}
 
 		doMoveWithDecision( i, targetCell, true );
-		setPerformMove( false );
+		setMoveRuleCompleted( false );
 	}
 
 	private void doMoveWithDecision( Individual i, Cell targetCell, boolean performMove ) {
@@ -155,8 +151,6 @@ public class BestResponseMovementRule extends AbstractMovementRule {
 			//System.out.println( "Speed ist " + speed );
 			// zu diesem zeitpunkt ist die StepEndtime aktualisiert, falls ein individual vorher geslackt hat
 			// oder sich nicht bewegen konnte.
-			timeCounter += (dist / speed);
-			distCounter += dist;
 			i.setStepStartTime( i.getStepEndTime() );
 			setStepEndTime( i, i.getStepEndTime() + (dist / speed) * esp.eca.getStepsPerSecond() );
 			if( performMove ) {
@@ -187,79 +181,8 @@ public class BestResponseMovementRule extends AbstractMovementRule {
 
 		double p[] = new double[targets.size()];
 
-//		double max = Integer.MIN_VALUE;
-//		int max_index = 0;
-//
 		for( int i = 0; i < targets.size(); i++ )
 			p[i] = Math.exp( esp.parameterSet.effectivePotential( cell, targets.get( i ) ) );
-		/*
-		// raising probablities only makes sense if the cell and all its neighbours are in the same room               
-		boolean inSameRoom = true;
-		for( int i = 0; i < targets.size(); i++ ) {
-		if( !(cell.getRoom().equals( targets.get( i ).getRoom() )) ) {
-		inSameRoom = false;
-		break;
-		}
-		}
-		if( inSameRoom ) {
-		int startX = cell.getX();
-		int startY = cell.getY();
-
-		Cell mostProbableTarget = targets.get( max_index );
-		int targetX = mostProbableTarget.getX();
-		int targetY = mostProbableTarget.getY();
-
-		boolean wayIsntDiagonal = (!(cell.equals( mostProbableTarget ))) && (startX == targetX) || (startY == targetY);
-
-		if( wayIsntDiagonal ) {
-		// raise the probability of the most probable cell:
-		double c = 10.5;
-		p[max_index] = max * c;
-		} else {
-		// find next probable cell (could be two next probable cells!):
-		double max2 = 0;
-		int max_index2 = 0;
-		int nextProbable[] = { -1, -1 };
-		for( int i = 0; i < targets.size(); i++ ) {
-		int X = targets.get( i ).getX();
-		int Y = targets.get( i ).getY();
-		if( ((startX == X) && (targetY == Y)) || ((targetX == X) && (startY == Y)) ) {
-		// if the cell is a (not-diagonal-)neighbour of the actual cell AND of the most probable cell
-		if( p[i] > max2 ) {
-		// if NEW max2 found
-		max2 = p[i];
-		nextProbable[0] = i;
-		nextProbable[1] = -1;
-		} else {
-		if( p[i] == max2 ) {
-		// if SECOND max2 found
-		nextProbable[1] = i;
-		}
-		}
-		}
-		}//end for
-		if( nextProbable[0] != -1 ) {
-		// if at least one nextProbableCell found
-		if( nextProbable[1] != -1 ) {
-		// if exactly two nextProbableCells found
-		// choose one of them randomly:
-		if( util.random.RandomUtils.getInstance().binaryDecision( 0.5 ) ) {
-		max_index2 = nextProbable[0];
-		} else {
-		max_index2 = nextProbable[1];
-		}
-		} else {
-		// if exactly one nextProbableCell found
-		max_index2 = nextProbable[0];
-		}
-
-		// raise the probability of the (chosen) nextProbableCell
-		double c2 = 10.5;
-		p[max_index2] = max2 * c2;
-		}
-
-		}//end else
-		}// end if inSameRoom*/
 
 		int number = RandomUtils.getInstance().chooseRandomlyAbsolute( p );
 		return targets.get( number );

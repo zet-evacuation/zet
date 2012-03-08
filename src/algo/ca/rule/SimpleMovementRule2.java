@@ -31,9 +31,6 @@ import de.tu_berlin.math.coga.common.util.Level;
  */
 public class SimpleMovementRule2 extends AbstractMovementRule {
 
-	static double timeCounter = 0;
-	static double distCounter = 0;
-
 	public SimpleMovementRule2() {
 	}
 
@@ -58,20 +55,19 @@ public class SimpleMovementRule2 extends AbstractMovementRule {
 
 		if( actor.isAlarmed() ) {
 			if( canMove( actor ) )
-				if( this.isDirectExecute() ) {
+				if( isDirectExecute() ) {
 					Cell targetCell = this.selectTargetCell( cell, selectPossibleTargets( cell, true ) );
-					setPerformMove( true );
+					setMoveRuleCompleted( true );
 					move( actor, targetCell );
 				} else {
 					this.setPossibleTargets( selectPossibleTargets( cell, false ) );
-					setPerformMove( true );
+					setMoveRuleCompleted( true );
 				}
 			else
 				// Individual can't move, it is already moving
-				setPerformMove( false );
-		} else {
-			// Individual is not alarmed, that means it remains standing on the cell
-			setPerformMove( true );
+				setMoveRuleCompleted( false ); // TODO why is here false?
+		} else { // Individual is not alarmed, that means it remains standing on the cell			
+			setMoveRuleCompleted( true );
 			doMove( actor, cell );
 		}
 
@@ -80,7 +76,7 @@ public class SimpleMovementRule2 extends AbstractMovementRule {
 
 	public void move( Individual i, Cell targetCell ) {
 		if( i.isSafe() && !((targetCell instanceof ds.ca.evac.SaveCell) || (targetCell instanceof ds.ca.evac.ExitCell)) )
-			// Rauslaufen aus sicheren Bereichen ist nicht erlaubt
+			// Rauslaufen aus sicheren Bereichen ist nicht erlaubt // TODO verschiebe woanders hin. Macht sinn, bei selection evtl.
 			targetCell = i.getCell();
 		if( i.getCell().equals( targetCell ) ) {
 			esp.caStatisticWriter.getStoredCAStatisticResults().getStoredCAStatisticResultsForIndividuals().addWaitedTimeToStatistic( i, esp.eca.getTimeStep() );
@@ -88,24 +84,22 @@ public class SimpleMovementRule2 extends AbstractMovementRule {
 		}
 		//set statistic for targetCell and timestep
 		esp.caStatisticWriter.getStoredCAStatisticResults().getStoredCAStatisticResultsForCells().addCellToUtilizationStatistic( targetCell, esp.eca.getTimeStep() );
-		this.doMove( i, targetCell );
-		setPerformMove( false );
+		doMove( i, targetCell );
+		setMoveRuleCompleted( false );
 	}
 
 	private void doMove( Individual i, Cell targetCell ) {
 		if( i.getCell().equals( targetCell ) ) {
 			i.setStepStartTime( i.getStepEndTime() );
 			setStepEndTime( i, i.getStepEndTime() + 1 );
-			//i.setStepEndTime( i.getStepEndTime() + 1 );
-			//i.getCell().getRoom().moveIndividual( targetCell, targetCell );
 			esp.eca.moveIndividual( i.getCell(), targetCell );
-			setPerformMove( false );
+			setMoveRuleCompleted( false );
 			esp.caStatisticWriter.getStoredCAStatisticResults().getStoredCAStatisticResultsForIndividuals().addCurrentSpeedToStatistic( i, esp.eca.getTimeStep(), 0 );
 			return;
 		}
 
 		doMoveWithDecision( i, targetCell, true );
-		setPerformMove( false );
+		setMoveRuleCompleted( false );
 	}
 
 	private void doMoveWithDecision( Individual i, Cell targetCell, boolean performMove ) {
@@ -147,11 +141,6 @@ public class SimpleMovementRule2 extends AbstractMovementRule {
 			else
 				dist = sqrt2;
 
-
-		// Perform Movement if the individual changes the room!
-		//if( i.getCell().getRoom() != targetCell.getRoom() )
-		//	i.getCell().getRoom().moveIndividual( i.getCell(), targetCell );
-
 		// update times
 		if( esp.eca.absoluteSpeed( i.getCurrentSpeed() ) >= 0.0001 ) {
 			double speed = esp.eca.absoluteSpeed( i.getCurrentSpeed() );
@@ -159,12 +148,9 @@ public class SimpleMovementRule2 extends AbstractMovementRule {
 			//System.out.println( "Speed ist " + speed );
 			// zu diesem zeitpunkt ist die StepEndtime aktualisiert, falls ein individual vorher geslackt hat
 			// oder sich nicht bewegen konnte.
-			timeCounter += (dist / speed);
-			distCounter += dist;
 			i.setStepStartTime( i.getStepEndTime() );
 			setStepEndTime( i, i.getStepEndTime() + (dist / speed) * esp.eca.getStepsPerSecond() );
 			if( performMove ) {
-				//i.getCell().getRoom().moveIndividual( i.getCell(), targetCell );
 				esp.eca.moveIndividual( i.getCell(), targetCell );
 				esp.caStatisticWriter.getStoredCAStatisticResults().getStoredCAStatisticResultsForIndividuals().addCurrentSpeedToStatistic( i, esp.eca.getTimeStep(), speed * esp.eca.getSecondsPerStep() );
 				esp.caStatisticWriter.getStoredCAStatisticResults().getStoredCAStatisticResultsForIndividuals().addCoveredDistanceToStatistic( i, (int) Math.ceil( i.getStepEndTime() ), dist );
@@ -186,7 +172,7 @@ public class SimpleMovementRule2 extends AbstractMovementRule {
 	 */
 	@Override
 	public Cell selectTargetCell( Cell cell, ArrayList<Cell> targets ) {
-		if( targets.size() == 0 )
+		if( targets.isEmpty() )
 			return cell;
 
 		// wähle die target-cell mit dem kleinsten potenzial aus

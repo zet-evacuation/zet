@@ -20,10 +20,9 @@
  */
 package algo.ca.parameter;
 
-import java.util.Collection;
-
 import ds.ca.evac.Cell;
 import ds.ca.evac.Individual;
+import java.util.Collection;
 
 /**
  * An abstract class defining all methods that parameter sets have to support.

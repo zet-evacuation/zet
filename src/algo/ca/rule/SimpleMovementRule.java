@@ -51,24 +51,18 @@ public class SimpleMovementRule extends AbstractMovementRule {
 	@Override
 	protected void onExecute( Cell cell ) {
 		Cell targetCell = selectTargetCell( cell, selectPossibleTargets( cell, true ) );
-		
 		if( cell.equals( targetCell) )
 			return;
-
 		this.move( cell.getIndividual(), targetCell );
 	}
 
 	public void move( Individual i, Cell targetCell ) {
-//		if( i.getCell().getRoom() != targetCell.getRoom() )
-			esp.eca.moveIndividual( i.getCell(), targetCell );
-			//i.getCell().getRoom().moveIndividual( i.getCell(), targetCell );
-//		else
-//			i.getCell().getRoom().moveIndividual( i.getCell(), targetCell );
+		esp.eca.moveIndividual( i.getCell(), targetCell );
 	}
 
 	@Override
 	public Cell selectTargetCell( Cell cell, ArrayList<Cell> targets ) {
-		if( targets.size() == 0 )
+		if( targets.isEmpty() )
 			return cell;
 
 		double p[] = new double[targets.size()];

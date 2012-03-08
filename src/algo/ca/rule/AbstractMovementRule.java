@@ -29,12 +29,12 @@ import java.util.ArrayList;
  */
 public abstract class AbstractMovementRule extends AbstractRule {
 	private boolean directExecute;
-	private boolean performMove;
+	private boolean moveCompleted;
 	private ArrayList<Cell> possibleTargets;
 	
 	public AbstractMovementRule() {
 		directExecute = true;
-		performMove = false;
+		moveCompleted = false;
 	}
 	
 	public boolean isDirectExecute() {
@@ -45,19 +45,16 @@ public abstract class AbstractMovementRule extends AbstractRule {
 		this.directExecute = directExecute;
 	}
 
-	public boolean performMove() {
-		return performMove;
+	public boolean isMoveCompleted() {
+		return moveCompleted;
 	}
 
-	protected void setPerformMove( boolean performMove ) {
-		this.performMove = performMove;
+	protected void setMoveRuleCompleted( boolean moveCompleted ) {
+		this.moveCompleted = moveCompleted;
 	}
 
 	protected ArrayList<Cell> selectPossibleTargets( Cell fromCell, boolean onlyFreeNeighbours ) {
-		if( onlyFreeNeighbours )
-			return fromCell.getFreeNeighbours();
-		else
-			return fromCell.getNeighbours();
+		return onlyFreeNeighbours ? fromCell.getFreeNeighbours() : fromCell.getNeighbours();
 	}
 
 	protected void setPossibleTargets( ArrayList<Cell> possibleTargets ) {
@@ -82,7 +79,7 @@ public abstract class AbstractMovementRule extends AbstractRule {
 	 */
 	public Cell selectTargetCell( Cell cell, ArrayList<Cell> targets ) {
 		System.err.println( "WARNUNG nicht überschriebene target cell selection wird ausgeführt" );
-		return targets.get(0);
+		return targets.get( 0 );
 	}
 	
 	public abstract void move( Individual i, Cell target );

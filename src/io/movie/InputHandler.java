@@ -46,7 +46,7 @@ public class InputHandler extends Thread {
 			InputStreamReader isr = new InputStreamReader(input_);
 			BufferedReader br = new BufferedReader(isr);
 			String line=null;
-			while ( verbose && (line = br.readLine()) != null )
+			while ( (line = br.readLine()) != null )
 					giveOut( getName(), line );
 			//if( close )
 				input_.close(); //br.close();
@@ -62,7 +62,8 @@ public class InputHandler extends Thread {
 	 * @param line the line that was read
 	 */
 	public void giveOut( String stream, String line ) {
-		System.out.println( getName() + "> " + line);
+		if( isVerbose() )
+			System.out.println( getName() + "> " + line);
 	}
 
 	/**
