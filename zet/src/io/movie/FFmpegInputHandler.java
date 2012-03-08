@@ -31,5 +31,8 @@ public class FFmpegInputHandler extends InputHandler {
 			System.out.println( "Converting frame " + line.substring(6, line.indexOf( " fps") ).trim() );
 		else if( line.startsWith( "video" ) )
 			System.out.println( line );
+		else 
+			if( isVerbose() )
+				System.out.println( "------------------" + line );
 	}
 }

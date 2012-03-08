@@ -17,10 +17,7 @@ public class TeleportMovementRule extends WaitingMovementRule {
 
 	@Override
 	public boolean executableOn( Cell cell ) {
-		if( cell instanceof TeleportCell ) {
-			return super.executableOn( cell ) && !((TeleportCell)cell).isTeleportFailed();
-		} else
-			return super.executableOn( cell );
+		return cell instanceof TeleportCell ? super.executableOn( cell ) && !((TeleportCell)cell).isTeleportFailed() : super.executableOn( cell );
 	}
 
 	/**
@@ -33,15 +30,10 @@ public class TeleportMovementRule extends WaitingMovementRule {
 	protected ArrayList<Cell> selectPossibleTargets( Cell fromCell, boolean onlyFreeNeighbours ) {
 		ArrayList<Cell> targets = super.selectPossibleTargets( fromCell, onlyFreeNeighbours );
 
-//		if( true )
-//			return targets;
-
-		ArrayList<Cell> returned = new ArrayList<Cell>();
-		//targets.add( fromCell );
+		ArrayList<Cell> returned = new ArrayList<>(); // create new list to avoid concurrent modification
 		double time = esp.eca.getTimeStep();
 		for( Cell cell : targets ) {
 			if( !cell.isOccupied( time ) )
-				//targets.remove( cell );
 				returned.add( cell );
 		}
 		if( !returned.contains( fromCell) )
