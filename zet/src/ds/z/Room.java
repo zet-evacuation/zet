@@ -105,13 +105,8 @@ public class Room extends BaseRoom<RoomEdge> implements Cloneable, Comparable<Ro
 		floor.addRoom( this );
 	}
         
-        
-        /**
-	 * Returns the position and the width of all doors for a {@code Room} 
-	 * @param room the room for which position is specified
-	 * @return the position and width of all doors in the room. 
-	 */
-        public HashMap<Point,Integer> getDoors()
+                
+        /*public HashMap<Point,Integer> getDoors()
         {
             //Collection<Point> doors = new HashSet<Point>();
             HashMap<Point,Integer> doors = new HashMap<>();
@@ -127,6 +122,81 @@ public class Room extends BaseRoom<RoomEdge> implements Cloneable, Comparable<Ro
                     doors.put(p,width);
                 } 
                 
+            }
+            return doors;
+        }*/
+        
+        /**
+	 * Returns the position and the width of all doors for a {@code Room} 
+	 * @param room the room for which position is specified
+	 * @return the position and width of all doors in the room. 
+	 */
+        public HashMap<Point,Integer> getDoors()
+        {
+            HashMap<Point,Integer> doors = new HashMap<>();
+            LinkedList<RoomEdge> edges = new LinkedList<>();
+
+            for (RoomEdge edge: super.getEdges()){
+                if (edge.isPassable()){
+                    edges.add(edge);
+                }
+            }
+            //System.out.println("edges: " + edges);
+            //create one door for neighbouring edges
+            if (edges.size() >1)
+            {
+                RoomEdge start = edges.peekFirst();
+                int longwidth = start.length();
+                RoomEdge end = start;
+                RoomEdge next;
+                
+                while (edges.size() > 1)
+                {
+                    RoomEdge first = edges.poll();
+                    next = edges.getFirst();
+                    
+                    if (next.isNeighbour(first))
+                    {
+                        longwidth = longwidth + next.length();
+
+                        if (edges.size() == 1)
+                        {
+                            end=next;
+                            int xpos = (start.getSource().getXInt() + end.getTarget().getXInt())/2;
+                            int ypos = (start.getSource().getYInt() + end.getTarget().getYInt())/2;
+                            Point p = new Point(xpos,ypos);
+                            doors.put(p,longwidth);                        
+                        }
+                    }
+                    else
+                    {
+                        end = first;
+                        int xpos = (start.getSource().getXInt() + end.getTarget().getXInt())/2;
+                        int ypos = (start.getSource().getYInt() + end.getTarget().getYInt())/2;
+                        Point p = new Point(xpos,ypos);
+                        doors.put(p,longwidth);                        
+                        if (edges.size()==1)
+                        {
+                            int w = next.length();
+                            int x = (next.getSource().getXInt() + next.getTarget().getXInt())/2;
+                            int y = (next.getSource().getYInt() + next.getTarget().getYInt())/2;
+                            Point po = new Point(x,y);
+                            doors.put(po,w); 
+                        }
+                        start = next;
+                        longwidth = start.length();
+                    }
+                }
+    
+            }
+            else
+            {
+                RoomEdge x = edges.element();
+                int width = x.length();
+                int xpos = (x.getSource().getXInt() + x.getTarget().getXInt())/2;
+                int ypos = (x.getSource().getYInt() + x.getTarget().getYInt())/2;
+                Point p = new Point(xpos,ypos);
+                doors.put(p,width);
             }
             return doors;
         }
