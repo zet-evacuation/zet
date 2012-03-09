@@ -36,7 +36,7 @@ public abstract class BaseZToGraphConverter extends Algorithm<BuildingPlan, Netw
 		// connect the nodes of different rooms with edges
 		//HashMap<Edge, ArrayList<ZToGraphRasterSquare>> doorEdgeToSquare = connectRooms(raster, model); // done in compute transit times now!
 		// calculate the transit times for all edges
-
+                
 		computeTransitTimes();
 		// adjust transit times according to stair speed factors
 		multiplyWithUpAndDownSpeedFactors();
