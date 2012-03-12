@@ -50,14 +50,16 @@ public class SimpleMovementRule extends AbstractMovementRule {
 	 */
 	@Override
 	protected void onExecute( Cell cell ) {
-		Cell targetCell = selectTargetCell( cell, selectPossibleTargets( cell, true ) );
+		Cell targetCell = selectTargetCell( cell, computePossibleTargets( cell, true ) );
+		ind = cell.getIndividual();
 		if( cell.equals( targetCell) )
 			return;
-		this.move( cell.getIndividual(), targetCell );
+		this.move( targetCell );
 	}
 
-	public void move( Individual i, Cell targetCell ) {
-		esp.eca.moveIndividual( i.getCell(), targetCell );
+	@Override
+	public void move( Cell targetCell ) {
+		esp.eca.moveIndividual( ind.getCell(), targetCell );
 	}
 
 	@Override

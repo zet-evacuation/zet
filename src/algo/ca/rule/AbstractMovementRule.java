@@ -13,14 +13,16 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
-/*
+/**
  * Created on 23.01.2008
- *
  */
 package algo.ca.rule;
 
+import de.tu_berlin.math.coga.common.util.Direction;
+import de.tu_berlin.math.coga.common.util.Level;
 import ds.ca.evac.Cell;
 import ds.ca.evac.Individual;
+import ds.ca.evac.StairCell;
 import java.util.ArrayList;
 
 /**
@@ -28,6 +30,9 @@ import java.util.ArrayList;
  *
  */
 public abstract class AbstractMovementRule extends AbstractRule {
+	protected double speed;
+	protected double dist;
+	protected Individual ind;
 	private boolean directExecute;
 	private boolean moveCompleted;
 	private ArrayList<Cell> possibleTargets;
@@ -53,8 +58,36 @@ public abstract class AbstractMovementRule extends AbstractRule {
 		this.moveCompleted = moveCompleted;
 	}
 
-	protected ArrayList<Cell> selectPossibleTargets( Cell fromCell, boolean onlyFreeNeighbours ) {
-		return onlyFreeNeighbours ? fromCell.getFreeNeighbours() : fromCell.getNeighbours();
+	/**
+	 * Computes and returns possible targets and also sets them, such that they
+	 * can be retrieved using {@link #getPossibleTargets() }.
+	 * @param fromCell
+	 * @param onlyFreeNeighbours
+	 * @return 
+	 */
+	protected ArrayList<Cell> computePossibleTargets( Cell fromCell, boolean onlyFreeNeighbours ) {
+		possibleTargets = new ArrayList<>();
+		ArrayList<Cell> neighbors = onlyFreeNeighbours ? fromCell.getFreeNeighbours() : fromCell.getNeighbours();
+		
+		Direction dir = fromCell.getIndividual().getDirection();
+		
+		for( Cell c : neighbors ) {
+			if( ind.isSafe() && !((c instanceof ds.ca.evac.SaveCell) || (c instanceof ds.ca.evac.ExitCell)) )
+				continue; // ignore all moves that would mean walking out of safe areas
+			
+			Direction rel = fromCell.getRelative( c );
+			if( dir == rel )
+				possibleTargets.add( c );
+			else if( dir == rel.getClockwise() )
+				possibleTargets.add( c );
+			else if( dir == rel.getClockwise().getClockwise() )
+				possibleTargets.add( c );
+			else if( dir == rel.getCounterClockwise() )
+				possibleTargets.add( c );
+			else if( dir == rel.getCounterClockwise().getCounterClockwise() )
+				possibleTargets.add( c );
+		}		
+		return possibleTargets;
 	}
 
 	protected void setPossibleTargets( ArrayList<Cell> possibleTargets ) {
@@ -62,7 +95,9 @@ public abstract class AbstractMovementRule extends AbstractRule {
 	}
 	
 	/**
-	 * Returns the possible targets already sorted by priority.
+	 * Returns the possible targets already sorted by priority. The possible
+	 * targets either have been set before using {@link #setPossibleTargets(java.util.ArrayList) }
+	 * ore been computed using {@link #getPossibleTargets(ds.ca.evac.Cell, boolean) }.
 	 * @return a list of possible targets.
 	 */
 	public ArrayList<Cell> getPossibleTargets() {
@@ -82,7 +117,47 @@ public abstract class AbstractMovementRule extends AbstractRule {
 		return targets.get( 0 );
 	}
 	
-	public abstract void move( Individual i, Cell target );
+	protected Direction getMovementDirection( Cell start, Cell target ) {
+		Direction d = start.getRelative( target );
+		return d;
+	}
+
+			// Calculate a factor that is later multiplied with the speed,
+		// this factor is only != 1 for stair cells to 
+		// give different velocities for going a stair up or down.
+	protected double getStairSpeedFactor( Direction direction, StairCell stairCell ) {
+		double stairSpeedFactor = 1;
+			Level lvl = stairCell.getLevel( direction );
+			if( lvl == Level.Higher )
+				stairSpeedFactor = stairCell.getSpeedFactorUp();
+			else if( lvl == Level.Lower )
+				stairSpeedFactor = stairCell.getSpeedFactorDown();
+		return stairSpeedFactor;
+	}
+
+	protected double getSwayDelay( Individual ind, Direction direction ) {
+		if( ind.getDirection() == direction )
+			return 0;
+		else if( ind.getDirection() == direction.getClockwise() || ind.getDirection() == direction.getCounterClockwise() )
+			return 0.5;
+		else if( ind.getDirection() == direction.getClockwise().getClockwise() || ind.getDirection() == direction.getCounterClockwise().getCounterClockwise() )
+			return 1;
+		else
+			throw new IllegalStateException( "Change direction by more than 90 degrees." );
+	}
+
+	/**
+	 * Sets the time when the current movement is over for an individual and
+	 * actualizates the needed time in the cellular automaton.
+	 * @param i the individual
+	 * @param d the (real) time when the movement is over
+	 */
+	protected void setStepEndTime( Individual i, double d ) {
+		i.setStepEndTime( d );
+		esp.eca.setNeededTime( (int) Math.ceil( d ) );
+	}
+
+	public abstract void move( Cell target );
 	
 	public abstract void swap( Cell cell1, Cell cell2 );
 }

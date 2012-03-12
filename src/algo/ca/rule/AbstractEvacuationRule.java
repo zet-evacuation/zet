@@ -20,7 +20,7 @@
 package algo.ca.rule;
 
 /**
- * @author Daniel Pluempe
+ * @author Daniel Plümpe
  *
  */
 public abstract class AbstractEvacuationRule extends AbstractRule{

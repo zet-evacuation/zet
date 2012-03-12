@@ -5,6 +5,7 @@
 package zet.tasks;
 
 import algo.ca.algorithm.evac.EvacuationCellularAutomatonAlgorithm;
+import algo.ca.algorithm.evac.EvacuationSimulationProblem;
 import de.tu_berlin.math.coga.zet.converter.cellularAutomaton.AssignmentApplicationInstance;
 import de.tu_berlin.math.coga.zet.converter.cellularAutomaton.CellularAutomatonAssignmentConverter;
 import de.tu_berlin.math.coga.zet.converter.cellularAutomaton.ConvertedCellularAutomaton;
@@ -34,10 +35,15 @@ public class CellularAutomatonTaskStepByStep extends Algorithm<Project, Void> {
 		super();
 	}
 
-	public CellularAutomatonTaskStepByStep( ConvertedCellularAutomaton cca ) {
+	public void setConvertedCellularAutomaton( ConvertedCellularAutomaton cca ) {
 		this.cca = cca;
 		performConversion = false;
 	}
+
+//	public CellularAutomatonTaskStepByStep( ConvertedCellularAutomaton cca ) {
+//		this.cca = cca;
+//		performConversion = false;
+//	}
 
 	public void setCaAlgo( CellularAutomatonAlgorithmEnumeration caAlgo ) {
 		this.cellularAutomatonAlgorithm = caAlgo;
@@ -56,6 +62,7 @@ public class CellularAutomatonTaskStepByStep extends Algorithm<Project, Void> {
 			conv.run();
 			cca = new ConvertedCellularAutomaton( conv.getCellularAutomaton(), conv.getMapping(), conv.getContainer() );
 			System.out.println( "CCA created" );
+			performConversion = false;
 		}
 
 		// create and convert concrete assignment
@@ -69,6 +76,8 @@ public class CellularAutomatonTaskStepByStep extends Algorithm<Project, Void> {
 		// set up simulation algorithm and compute
 		//EvacuationCellularAutomatonAlgorithm caAlgo = cellularAutomatonAlgorithm.createTask( cca.getCellularAutomaton() );
 		EvacuationCellularAutomatonAlgorithm caAlgo = cellularAutomatonAlgorithm.getAlgorithm();
+		caAlgo.setProblem( new EvacuationSimulationProblem( cca.getCellularAutomaton() ) );
+
 		double caMaxTime = PropertyContainer.getInstance().getAsDouble( "algo.ca.maxTime" );
 		caAlgo.setMaxTimeInSeconds( caMaxTime );
 		//caAlgo.getCellularAutomaton().startRecording ();

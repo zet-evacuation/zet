@@ -15,7 +15,6 @@
  */
 package algo.ca.rule;
 
-import java.util.ArrayList;
 
 import de.tu_berlin.math.coga.common.util.Direction;
 import de.tu_berlin.math.coga.common.util.Level;
@@ -25,6 +24,7 @@ import ds.ca.evac.StairCell;
 import ds.ca.results.VisualResultsRecorder;
 import ds.ca.results.IndividualStateChangeAction;
 import de.tu_berlin.math.coga.rndutils.RandomUtils;
+import java.util.ArrayList;
 import util.DebugFlags;
 
 /**
@@ -53,34 +53,35 @@ public class BestResponseMovementRule extends AbstractMovementRule {
 	protected void onExecute( ds.ca.evac.Cell cell ) {
 		if( DebugFlags.EVAPLANCHECKER )
 			System.out.print( "Move individual " + cell.getIndividual().id() + " " );
-		Individual actor = cell.getIndividual();
+		ind = cell.getIndividual();
 
-		if( canMove( actor ) )
+		if( canMove( ind ) )
 			if( this.isDirectExecute() ) {
-				Cell targetCell = this.selectTargetCell( cell, selectPossibleTargets( cell, true ) );
+				Cell targetCell = this.selectTargetCell( cell, computePossibleTargets( cell, true ) );
 				setMoveRuleCompleted( true );
-				move( actor, targetCell );
+				move( targetCell );
 			} else {
-				this.setPossibleTargets( selectPossibleTargets( cell, false ) );
+				computePossibleTargets( cell, false );
 				setMoveRuleCompleted( true );
 			}
 		else
 			// Individual can't move, it is already moving
 			setMoveRuleCompleted( false );
-		VisualResultsRecorder.getInstance().recordAction( new IndividualStateChangeAction( actor ) );
+		VisualResultsRecorder.getInstance().recordAction( new IndividualStateChangeAction( ind ) );
 	}
 
-	public void move( Individual i, Cell targetCell ) {
-		if( i.isSafe() && !((targetCell instanceof ds.ca.evac.SaveCell) || (targetCell instanceof ds.ca.evac.ExitCell)) )
+	@Override
+	public void move( Cell targetCell ) {
+		if( ind.isSafe() && !((targetCell instanceof ds.ca.evac.SaveCell) || (targetCell instanceof ds.ca.evac.ExitCell)) )
 			// Rauslaufen aus sicheren Bereichen ist nicht erlaubt
-			targetCell = i.getCell();
-		if( i.getCell().equals( targetCell ) ) {
-			esp.caStatisticWriter.getStoredCAStatisticResults().getStoredCAStatisticResultsForIndividuals().addWaitedTimeToStatistic( i, esp.eca.getTimeStep() );
+			targetCell = ind.getCell();
+		if( ind.getCell().equals( targetCell ) ) {
+			esp.caStatisticWriter.getStoredCAStatisticResults().getStoredCAStatisticResultsForIndividuals().addWaitedTimeToStatistic( ind, esp.eca.getTimeStep() );
 			esp.caStatisticWriter.getStoredCAStatisticResults().getStoredCAStatisticResultsForCells().addCellToWaitingStatistic( targetCell, esp.eca.getTimeStep() );
 		}
 		//set statistic for targetCell and timestep
 		esp.caStatisticWriter.getStoredCAStatisticResults().getStoredCAStatisticResultsForCells().addCellToUtilizationStatistic( targetCell, esp.eca.getTimeStep() );
-		this.doMove( i, targetCell );
+		this.doMove( ind, targetCell );
 		setMoveRuleCompleted( false );
 	}
 
@@ -216,25 +217,14 @@ public class BestResponseMovementRule extends AbstractMovementRule {
 	}
 
 	/**
-	 * Sets the time when the current movement is over for an individual and
-	 * actualizates the needed time in the cellular automaton.
-	 * @param i the individual
-	 * @param d the (real) time when the movement is over
-	 */
-	private void setStepEndTime( Individual i, double d ) {
-		i.setStepEndTime( d );
-		esp.eca.setNeededTime( (int)Math.ceil( d ) );
-	}
-
-	/**
 	 * Selects the possible targets including the current cell.
 	 * @param fromCell the current sell
 	 * @param onlyFreeNeighbours indicates whether only free neighbours or all neighbours are included
 	 * @return a list containing all neighbours and the from cell
 	 */
 	@Override
-	protected ArrayList<Cell> selectPossibleTargets( Cell fromCell, boolean onlyFreeNeighbours ) {
-		ArrayList<Cell> targets = super.selectPossibleTargets( fromCell, onlyFreeNeighbours );
+	protected ArrayList<Cell> computePossibleTargets( Cell fromCell, boolean onlyFreeNeighbours ) {
+		ArrayList<Cell> targets = super.computePossibleTargets( fromCell, onlyFreeNeighbours );
 		targets.add( fromCell );
 		return targets;
 	}

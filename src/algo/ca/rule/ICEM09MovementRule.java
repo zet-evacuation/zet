@@ -15,158 +15,41 @@
  */
 package algo.ca.rule;
 
-import java.util.ArrayList;
-
-import de.tu_berlin.math.coga.common.util.Direction;
-import de.tu_berlin.math.coga.common.util.Level;
 import ds.ca.evac.Cell;
-import ds.ca.evac.Individual;
-import ds.ca.evac.StairCell;
 import ds.ca.results.VisualResultsRecorder;
 import ds.ca.results.IndividualStateChangeAction;
 import de.tu_berlin.math.coga.rndutils.RandomUtils;
-import util.DebugFlags;
+import java.util.ArrayList;
 
 /**
  *
- * @author Sylvie
+ * @author Sylvie Temme
  */
-public class ICEM09MovementRule extends AbstractMovementRule{
+public class ICEM09MovementRule extends SimpleMovementRule2 {
 
-	public ICEM09MovementRule() {
-	}
-
+	public ICEM09MovementRule() {}
+        
 	/**
-	 * Decides whether the rule can be applied to the current cell. 
-	 * Returns {@code true} if the cell is occupied by an individual
-	 * or {@code false} otherwise.
-	 * @param cell
-	 * @return true if the rule can be executed
+	 * An easier version of the rule ignoring the alarmed status of individuals.
+	 * For the paper, it is not necessary to alarm people.
+	 * @param cell 
 	 */
 	@Override
-	public boolean executableOn( ds.ca.evac.Cell cell ) {
-		// Regel nicht anwendbar, wenn auf der Zelle kein Individuum steht.
-		return cell.getIndividual() != null;
-	}        
-        
-	@Override
 	protected void onExecute( ds.ca.evac.Cell cell ) {
-		if( DebugFlags.EVAPLANCHECKER ) {
-			System.out.print( "Move individual " + cell.getIndividual().id() + " " );
-		}
-		Individual actor = cell.getIndividual();
+		ind = cell.getIndividual();
 		
-		if( canMove( actor ) )
-			if( this.isDirectExecute() ) {
-				Cell targetCell = this.selectTargetCell( cell, selectPossibleTargets( cell, true ) );
+		if( canMove( ind ) )
+			if( isDirectExecute() ) {
+				Cell targetCell = selectTargetCell( cell, computePossibleTargets( cell, true ) );
 				setMoveRuleCompleted( true );
-				move( actor, targetCell );
+				move( targetCell );
 			} else {
-				this.setPossibleTargets( selectPossibleTargets( cell, false ) );
+				computePossibleTargets( cell, false );
 				setMoveRuleCompleted( true );
 			}
 		else // Individual can't move, it is already moving
 			setMoveRuleCompleted( false );
-		VisualResultsRecorder.getInstance().recordAction( new IndividualStateChangeAction( actor ) );
-	}
-
-
-    public void move( Individual i, Cell targetCell ) {
-		if( i.isSafe() && !((targetCell instanceof ds.ca.evac.SaveCell) || (targetCell instanceof ds.ca.evac.ExitCell)) ) {
-			// Rauslaufen aus sicheren Bereichen ist nicht erlaubt
-			targetCell = i.getCell();
-		}
-		if( i.getCell().equals( targetCell ) ) {
-				esp.caStatisticWriter.getStoredCAStatisticResults().getStoredCAStatisticResultsForIndividuals().addWaitedTimeToStatistic( i, esp.eca.getTimeStep() );
-				esp.caStatisticWriter.getStoredCAStatisticResults().getStoredCAStatisticResultsForCells().addCellToWaitingStatistic( targetCell, esp.eca.getTimeStep() );
-		}
-		//set statistic for targetCell and timestep
-		esp.caStatisticWriter.getStoredCAStatisticResults().getStoredCAStatisticResultsForCells().addCellToUtilizationStatistic( targetCell, esp.eca.getTimeStep() );
-		this.doMove( i, targetCell );
-		setMoveRuleCompleted( false );
-	}
-
-	private void doMove( Individual i, Cell targetCell ) {
-		if( i.getCell().equals( targetCell ) ) {
-			i.setStepStartTime( i.getStepEndTime() );
-			setStepEndTime( i, i.getStepEndTime() + 1 );
-			//i.setStepEndTime( i.getStepEndTime() + 1 );
-			//i.getCell().getRoom().moveIndividual( targetCell, targetCell );
-			esp.eca.moveIndividual( i.getCell(), targetCell );
-			setMoveRuleCompleted( false );
-			esp.caStatisticWriter.getStoredCAStatisticResults().getStoredCAStatisticResultsForIndividuals().addCurrentSpeedToStatistic( i, esp.eca.getTimeStep(), 0 );
-			return;
-		}
-
-		doMoveWithDecision( i, targetCell, true );
-		setMoveRuleCompleted( false );
-	}
-        
-        
-
-	private void doMoveWithDecision( Individual i, Cell targetCell, boolean performMove ) {
-		this.esp.potentialController.increaseDynamicPotential( targetCell );
-		// Calculate a factor that is later multiplied with the speed,
-		// this factor is only != 1 for stair cells to 
-		// give different velocities for going a stair up or down.
-		double stairSpeedFactor = 1;
-		if( targetCell instanceof StairCell ) {
-
-			StairCell stairCell = (StairCell) targetCell;
-			int x = targetCell.getX() - i.getCell().getX();
-			int y = targetCell.getY() - i.getCell().getY();
-			Direction direction = Direction.getDirection( x, y );
-			Level lvl = stairCell.getLevel( direction );
-			if( lvl == Level.Higher ) {
-				stairSpeedFactor = stairCell.getSpeedFactorUp();
-			} else if( lvl == Level.Lower ) {
-				stairSpeedFactor = stairCell.getSpeedFactorDown();			
-			}
-		}
-
-		// TODO check if this big stuff is really necessery! maybe easier!
-		// calculate distance
-		double dist;
-		final double sqrt2 = Math.sqrt( 2 ) * 0.4;
-		if( !targetCell.getRoom().equals( i.getCell().getRoom() ) ) {
-			if( i.getCell().getX() + i.getCell().getRoom().getXOffset() == targetCell.getX() + targetCell.getRoom().getXOffset() && i.getCell().getY() + i.getCell().getRoom().getYOffset() == targetCell.getY() + targetCell.getRoom().getYOffset() ) {
-				System.err.println( "SelfCell reached or Stockwerkwechsel!" );
-				dist = 0.4;
-			} else if( i.getCell().getX() + i.getCell().getRoom().getXOffset() == targetCell.getX() + targetCell.getRoom().getXOffset() | i.getCell().getY() + i.getCell().getRoom().getYOffset() == targetCell.getY() + targetCell.getRoom().getYOffset() ) {
-				dist = 0.4;
-			} else {
-				dist = sqrt2;
-			}
-		} else {
-			if( i.getCell().getX() == targetCell.getX() && i.getCell().getY() == targetCell.getY() ) {
-				dist = 0;
-			} else if( i.getCell().getX() == targetCell.getX() | i.getCell().getY() == targetCell.getY() ) {
-				dist = 0.4;
-			} else {
-				dist = sqrt2;
-			}
-		}
-
-		// update times
-		if( esp.eca.absoluteSpeed( i.getCurrentSpeed() ) >= 0.0001 ) {
-			double speed = esp.eca.absoluteSpeed( i.getCurrentSpeed() );
-			speed *= targetCell.getSpeedFactor() * stairSpeedFactor;
-			//System.out.println( "Speed ist " + speed );
-			// zu diesem zeitpunkt ist die StepEndtime aktualisiert, falls ein individual vorher geslackt hat
-			// oder sich nicht bewegen konnte.
-			i.setStepStartTime( i.getStepEndTime() );
-			setStepEndTime( i, i.getStepEndTime() + (dist / speed) * esp.eca.getStepsPerSecond() );
-			if( performMove ) {
-				esp.eca.moveIndividual( i.getCell(), targetCell );
-				esp.caStatisticWriter.getStoredCAStatisticResults().getStoredCAStatisticResultsForIndividuals().addCurrentSpeedToStatistic( i, esp.eca.getTimeStep(), speed * esp.eca.getSecondsPerStep() );
-				esp.caStatisticWriter.getStoredCAStatisticResults().getStoredCAStatisticResultsForIndividuals().addCoveredDistanceToStatistic( i, (int) Math.ceil( i.getStepEndTime() ), dist );
-			} else {
-				if( util.DebugFlags.CA_SWAP_USED_OUTPUT )
-					System.err.println( "Quetschregel oder Individuum läuft doch nicht!!" );
-			}
-		} else {
-			throw new IllegalStateException( "Individuum has no speed." );
-		}
+		VisualResultsRecorder.getInstance().recordAction( new IndividualStateChangeAction( ind ) );
 	}
 
 	/**
@@ -190,53 +73,5 @@ public class ICEM09MovementRule extends AbstractMovementRule{
 
 		int number = RandomUtils.getInstance().chooseRandomlyAbsolute( p );
 		return targets.get( number );
-	}
-
-	/**
-	 * Decides randomly if an individual moves. (falsch)
-	 * @param i An individual with a given parameters
-	 * @return {@code true} if the individual moves or
-	 * {@code false} otherwise. 
-	 */
-	//gibt true wieder, wenn geschwindigkeit von zelle und individuel (wkeit darueber) bewegung bedeuten
-	protected boolean canMove( Individual i ) {
-		return esp.eca.getTimeStep() >= i.getStepEndTime();
-	}
-
-	@Override
-	public void swap( Cell cell1, Cell cell2 ) {
-		if( cell1.getIndividual() == null )
-			throw new IllegalArgumentException( "No Individual standing on cell #1!" );
-		if( cell2.getIndividual() == null )
-			throw new IllegalArgumentException( "No Individual standing on cell #2!" );
-		if( cell1.equals( cell2 ) )
-			throw new IllegalArgumentException( "The cells are equal. Can't swap on equal cells." );
-		doMoveWithDecision( cell1.getIndividual(), cell2, false );
-		doMoveWithDecision( cell2.getIndividual(), cell1, false );
-		esp.eca.swapIndividuals( cell1, cell2 );
-	}
-
-	/**
-	 * Sets the time when the current movement is over for an individual and
-	 * actualizates the needed time in the cellular automaton.
-	 * @param i the individual
-	 * @param d the (real) time when the movement is over
-	 */
-	private void setStepEndTime( Individual i, double d ) {
-		i.setStepEndTime( d );
-		esp.eca.setNeededTime( (int) Math.ceil( d ) );
-	}
-        
-	/**
-	 * Selects the possible targets including the current cell.
-	 * @param fromCell the current sell
-	 * @param onlyFreeNeighbours indicates whether only free neighbours or all neighbours are included
-	 * @return a list containing all neighbours and the from cell
-	 */
-	@Override
-	protected ArrayList<Cell> selectPossibleTargets( Cell fromCell, boolean onlyFreeNeighbours ) {
-		ArrayList<Cell> targets = super.selectPossibleTargets( fromCell, onlyFreeNeighbours );
-		targets.add( fromCell );
-		return targets;
 	}
 }
