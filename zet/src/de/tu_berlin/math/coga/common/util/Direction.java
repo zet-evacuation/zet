@@ -26,34 +26,33 @@ package de.tu_berlin.math.coga.common.util;
  * direction while the {@code y}-coordinate increases in the <b>downwards</b>
  * direction. Hence, if only positive coordinates are allowed, the point (0,0)
  * lies in the up-most, Left-most corner.
- * @author Daniel Plümpe
+ * @author Daniel Plümpe, Jan-Philipp Kappmeier
  */
 public enum Direction {
-
 	/** The Left direction. */
-	Left( -1, 0 ),
+	Left( -1, 0, 6 ),
 	/** The Right direction. */
-	Right( 1, 0, Left ),
+	Right( 1, 0, 2 ),
 	/** The upper direction. */
-	Top( 0, -1 ),
+	Top( 0, -1, 0 ),
 	/** The lower direction. */
-	Down( 0, 1, Top ),
+	Down( 0, 1, 4 ),
 	/** The upper Left direction. */
-	TopLeft( -1, -1 ),
+	TopLeft( -1, -1, 7 ),
+	/** The lower Right direction. */
+	DownRight( 1, 1, 3 ),
+	/** The lower Left direction. */
+	DownLeft( -1, 1, 5 ),
 	/** The upper Right direction. */
-	TopRight( 1, -1, TopLeft ),
-	/** The lower Left direction. */
-	DownLeft( -1, 1 ),
-	/** The lower Left direction. */
-	DownRight( 1, 1, DownLeft );
+	TopRight( 1, -1, 1);
+	static Direction[] a = {Top,TopRight,Right,DownRight,Down,DownLeft,Left,TopLeft};
 	
 	/** The offset value in {@code x}-direction. */
 	private final int xOffset;
 	/** The offset value in {@code y}-direction. */
 	private final int yOffset;
-	/** The opposite direction of the current direction. */
-	private Direction inverseDirection;
-
+	/** The id of the direction, from 0 to 7. Used to access the array. */
+	private final int id;
 	/**
 	 * The constructor for the direction. It needs to be called with the offsets
 	 * and the opposite direction. It also sets the opposite direction for the
@@ -62,23 +61,10 @@ public enum Direction {
 	 * @param yOffset the offset value in {@code y}-direction
 	 * @param inverseDirection the opposite direction
 	 */
-	private Direction( int xOffset, int yOffset, Direction inverseDirection ) {
+	private Direction( int xOffset, int yOffset, int id ) {
 		this.xOffset = xOffset;
 		this.yOffset = yOffset;
-		this.inverseDirection = inverseDirection;
-		inverseDirection.setInverse( this );
-	}
-
-	/**
-	 * The constructor for the direction. It needs to be called with the offsets
-	 * only. Note that the opposite direction is not set.
-	 * @param xOffset the offset value in {@code x}-direction
-	 * @param yOffset the offset value in {@code y}-direction
-	 * @param inverseDirection the opposite direction
-	 */
-	private Direction( int xOffset, int yOffset ) {
-		this.xOffset = xOffset;
-		this.yOffset = yOffset;
+		this.id = id;
 	}
 
 	/**
@@ -102,18 +88,16 @@ public enum Direction {
 	 * @return the opposite direction
 	 */
 	public final Direction invert() {
-		return inverseDirection;
+		return a[(id+4)%8];
 	}
 
 	/**
 	 * Returns the enumeration item corresponding to the given x- and y-offsets.
-	 * @param xOffset x-offset
-	 * @param yOffset y-offset
+	 * @param x x-offset
+	 * @param y y-offset
 	 * @return the enumeration item corresponding to the given x- and y-offsets.
 	 */
-	public final static Direction getDirection( int xOffset, int yOffset ) {
-		int x = xOffset;
-		int y = yOffset;
+	public static Direction getDirection( final int x, final int y ) {
 		if( x == -1 && y == 0 )
 			return Left;
 		if( x == 1 && y == 0 )
@@ -132,12 +116,23 @@ public enum Direction {
 			return DownRight;
 		throw new AssertionError( "Not a valid direction" );
 	}
+	
+	public Direction getClockwise() {
+		return a[(id+1)%8];
+	}
+	public Direction getCounterClockwise() {
+		return a[(id-1+8)%8];
+	}
 
-	/**
-	 * Sets the opposite direction for the direction.
-	 * @param inverseDirection the opposite direction
-	 */
-	private final void setInverse( Direction inverseDirection ) {
-		this.inverseDirection = inverseDirection;
+	public double distance() {
+		switch( id ) {
+			case 0:
+			case 2:
+			case 4:
+			case 6:
+				return 0.4;
+			default:
+				return Math.sqrt( 2 );
+		}
 	}
 }

@@ -24,9 +24,7 @@ import ds.ca.evac.Individual;
  * @author Daniel Plümpe
  */
 public abstract class AbstractRule implements Rule {
-	//private CAController caController;
 	protected EvacuationSimulationProblem esp;
-	//protected ParameterSet parameterSet;
 
 	/**
 	 * Returns if the rule is executable on the cell. The default behaviour is,

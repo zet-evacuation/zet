@@ -97,7 +97,7 @@ public class SwapCellularAutomaton extends EvacuationCellularAutomatonRandom {
 			Cell target = movement.selectTargetCell( i.getCell(), possibleTargets );
 			if( target.getIndividual() == null ) {
 				// Klappt alles
-				movement.move( i, target );
+				movement.move( target );
 				//individualSwapped.add( i );
 				unfinished2.add( i );
 			} else {

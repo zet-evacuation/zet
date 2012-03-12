@@ -33,7 +33,6 @@ import de.tu_berlin.math.coga.common.util.Level;
  *
  */
 public abstract class Cell implements Comparable<Cell> {
-
 	/** This character is used for graphic-like ASCII-output.  */
 	protected char graphicalRepresentation = ' ';
 	/** Defines the Speed-Factor of the Cell. In other words it defines a value, how fast this cell can be crossed. */
@@ -172,6 +171,14 @@ public abstract class Cell implements Comparable<Cell> {
 	public int getY() {
 		return this.y;
 	}
+	
+	public int getAbsoluteX() {
+		return this.x + room.getXOffset();
+	}
+	
+	public int getAbsoluteY() {
+		return this.y + room.getYOffset();
+	}
 
 	/**
 	 * Returns the room to which the cell belongs
@@ -273,11 +280,7 @@ public abstract class Cell implements Comparable<Cell> {
 	 * @return the level of the square in direction {@code direction} (higher, equal or lower).
 	 */
 	public Level getLevel( Direction direction ) {
-		if( levels.containsKey( direction ) ) {
-			return levels.get( direction );
-		} else {
-			return Level.Equal;
-		}
+		return levels.containsKey( direction ) ? levels.get( direction ) : Level.Equal;
 	}
 
 	@Override
@@ -348,7 +351,7 @@ public abstract class Cell implements Comparable<Cell> {
 
 	@SuppressWarnings("fallthrough")
 	protected ArrayList<Cell> getNeighbours( boolean passableOnly, boolean freeOnly ) {
-		ArrayList<Cell> neighbours = new ArrayList<Cell>();
+		ArrayList<Cell> neighbours = new ArrayList<>();
 		Room cellRoom = this.getRoom();
 		for( Direction direction : Direction.values() ) {
 			int cellx = this.getX() + direction.xOffset();
@@ -474,5 +477,15 @@ public abstract class Cell implements Comparable<Cell> {
 		} else {
 			return -1;
 		}
+	}
+
+	/**
+	 * Returns the direction in which the cell {@code c} lies. This has to be
+	 * a neighbor cell.
+	 * @param c a neighbor cell
+	 * @return  the direction in which {@code c} lies
+	 */
+	final public Direction getRelative( Cell c ) {
+		return Direction.getDirection( c.getAbsoluteX() - getAbsoluteX(), c.getAbsoluteY() - getAbsoluteY() );
 	}
 }

@@ -251,7 +251,8 @@ public class AlgorithmControl implements PropertyChangeListener {
 	private void initStepByStep( PropertyChangeListener propertyChangeListener, AlgorithmListener listener, boolean stopMode ) {
 			if( caInitialized ) {
 				System.out.println( "Do not convert automaton, already exists." );
-				catsbs = new CellularAutomatonTaskStepByStep( new ConvertedCellularAutomaton( cellularAutomaton, mapping, container ) );
+				catsbs = new CellularAutomatonTaskStepByStep();
+				catsbs.setConvertedCellularAutomaton( new ConvertedCellularAutomaton( cellularAutomaton, mapping, container ) );
 			} else
 				catsbs = new CellularAutomatonTaskStepByStep();
 				//return; // no auto-create so far

@@ -15,32 +15,34 @@
  */
 package algo.ca.rule;
 
-import ds.ca.evac.Cell;
-
-/* Veränderungen zur normalen SaveIndividualsRule:
-- Panik wird nicht auf 0 gesetzt
-- kein neues Potential, wenn man eine SaveArea betritt!!!!!
+/**
+ * Sets an individual save. The time is stored in the cellular automaton
+ * statistic. This rule is supposed to be called bevore the
+ * {@link ICEM09EvacuateIndividualsRule}.
 */
 public class ICEM09SaveIndividualsRule extends AbstractSaveRule {
-	// muss VOR der EvacuateIndividualsRule aufgerufen werden!
-	public ICEM09SaveIndividualsRule() {
-	}
+	/**
+	 * Public constructor.
+	 */
+	public ICEM09SaveIndividualsRule() {}
 
 	@Override
 	protected void onExecute( ds.ca.evac.Cell cell ) {
 		ds.ca.evac.Individual savedIndividual = cell.getIndividual();
 		if( !(savedIndividual.isSafe()) ) {
 			esp.eca.setIndividualSave( savedIndividual );
-                        esp.caStatisticWriter.getStoredCAStatisticResults().getStoredCAStatisticResultsForIndividuals().addSafeIndividualToStatistic( savedIndividual );
+			esp.caStatisticWriter.getStoredCAStatisticResults().getStoredCAStatisticResultsForIndividuals().addSafeIndividualToStatistic( savedIndividual );
 		}
-                // else: nothing!
 	}
 
+	/**
+	 * The rule is applicable if it is an exit or save cell and is occupied by
+	 * an individual.
+	 * @param cell the cell that is checked
+	 * @return {@code true} if the rule is applicable to the given cell, {@code false} otherwise
+	 */
 	@Override
 	public boolean executableOn( ds.ca.evac.Cell cell ) {
-		// Regel NUR anwendbar, wenn auf der Zelle ein Individuum steht
-		// und die Zelle eine Exit- Savecell oder  ist
 		return (cell.getIndividual() != null) && ((cell instanceof ds.ca.evac.ExitCell) || (cell instanceof ds.ca.evac.SaveCell));
 	}
 }
-

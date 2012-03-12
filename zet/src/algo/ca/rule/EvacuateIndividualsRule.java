@@ -23,8 +23,7 @@ import ds.ca.evac.Individual;
  */
 public class EvacuateIndividualsRule extends AbstractEvacuationRule {
 
-	public EvacuateIndividualsRule() {
-	}
+	public EvacuateIndividualsRule() {}
 
 	@Override
 	protected void onExecute( ds.ca.evac.Cell cell ) {
@@ -49,7 +48,7 @@ public class EvacuateIndividualsRule extends AbstractEvacuationRule {
 			else
 				testval = true;
 		}
-		return (i != null) && (cell instanceof ds.ca.evac.ExitCell) && testval;
+		return testval;
 	}
 }
 

@@ -29,8 +29,8 @@ public class EvacuationPlanMovementRule extends WaitingMovementRule {
 	}
 
 	@Override
-	protected ArrayList<Cell> selectPossibleTargets( Cell fromCell, boolean onlyFreeNeighbours ) {
-		ArrayList<Cell> targets = super.selectPossibleTargets( fromCell, onlyFreeNeighbours );
+	protected ArrayList<Cell> computePossibleTargets( Cell fromCell, boolean onlyFreeNeighbours ) {
+		ArrayList<Cell> targets = super.computePossibleTargets( fromCell, onlyFreeNeighbours );
 		Iterator<Cell> it = targets.iterator();
 		while( it.hasNext() ) {
 			Cell cell = it.next();

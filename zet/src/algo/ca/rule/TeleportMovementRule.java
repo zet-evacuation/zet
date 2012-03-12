@@ -27,8 +27,8 @@ public class TeleportMovementRule extends WaitingMovementRule {
 	 * @return a list containing all neighbours and the from cell
 	 */
 	@Override
-	protected ArrayList<Cell> selectPossibleTargets( Cell fromCell, boolean onlyFreeNeighbours ) {
-		ArrayList<Cell> targets = super.selectPossibleTargets( fromCell, onlyFreeNeighbours );
+	protected ArrayList<Cell> computePossibleTargets( Cell fromCell, boolean onlyFreeNeighbours ) {
+		ArrayList<Cell> targets = super.computePossibleTargets( fromCell, onlyFreeNeighbours );
 
 		ArrayList<Cell> returned = new ArrayList<>(); // create new list to avoid concurrent modification
 		double time = esp.eca.getTimeStep();

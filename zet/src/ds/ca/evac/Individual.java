@@ -1,7 +1,7 @@
 /* zet evacuation tool copyright (c) 2007-10 zet evacuation team
  *
  * This program is free software; you can redistribute it and/or
- * as published by the Free Software Foundation; either version 2
+ * as published by the Freswe Software Foundation; either version 2
  * of the License, or (at your option) any later version.
  *
  * This program is distributed in the hope that it will be useful,
@@ -16,6 +16,7 @@
 package ds.ca.evac;
 
 import algo.ca.rule.PotentialValueTuple;
+import de.tu_berlin.math.coga.common.util.Direction;
 import ds.mapping.Identifiable;
 import java.util.UUID;
 
@@ -29,11 +30,20 @@ import java.util.UUID;
  */
 public class Individual implements Identifiable {
 
+	public Direction getDirection() {
+		return dir;
+	}
+
+	public void setDirection( Direction dir ) {
+		this.dir = dir;
+	}
+	
+	
+
 	/**
 	 * Describes the cause of death if an individual dies.
 	 */
 	public enum DeathCause {
-
 		/** If no exit is reachable. Happens if a person is surrounded by barriers. */
 		EXIT_UNREACHABLE,
 		/** If the {@code Individual} is inside the building when the maximum evacuation time is over. */
@@ -76,12 +86,12 @@ public class Individual implements Identifiable {
 	private PotentialValueTuple potentialMemoryEnd;
 	private int memoryIndex;
 	int cellCountToChange;
+	Direction dir;
 
 	public Individual() {
 	}
 
-	public Individual( int age, double familiarity, double panicFactor, double slackness, double exhaustionFactor,
-					double maxSpeed, double reactiontime, UUID uid ) {
+	public Individual( int age, double familiarity, double panicFactor, double slackness, double exhaustionFactor, double maxSpeed, double reactiontime, UUID uid ) {
 		this.age = age;
 		this.familiarity = familiarity;
 		this.panicFactor = panicFactor;
@@ -97,6 +107,7 @@ public class Individual implements Identifiable {
 		this.uid = uid;
 		safe = false;
 		safetyTime = -1;
+		this.dir = Direction.Top; // Just use an arbitrary direction
 
 		/**
 		 * Calibratingfactor - 
@@ -530,20 +541,13 @@ public class Individual implements Identifiable {
 	/**
 	 * <p>Two individuals are equal, if they have both the same id.</p>
 	 * @param o the reference object with which to compare.
-	 * @return {@code true} if this object is the same as the obj
-	 *          argument; {@code false} otherwise.
+	 * @return {@code true} if this object is the same as {@code o}; {@code false} otherwise.
 	 * @see     #hashCode()
 	 */
 	@Override
 	public boolean equals( Object o ) {
-		if( o instanceof Individual ) {
-			super.equals( o );
-			return (((Individual) o).id() == id());
-		} else {
-			return false;
-		}
+		return o instanceof Individual ? ((Individual) o).id() == id() : false;
 	}
-	
 
 	//////////////////////////////////////////////////////////////////////////////
 	// alter stuff. todo ändern
@@ -554,14 +558,4 @@ public class Individual implements Identifiable {
 	public void setUid( UUID uid ) {
 		this.uid = uid;
 	}
-	/**
-	 * Decreases the left reaction time of the Individual     
-	 * @param x 
-	 */
-	//public void decreaseReactionstime( int x ) {
-	//	this.reactionTime = this.reactionTime - x;
-	//}
-
-
-
 }
