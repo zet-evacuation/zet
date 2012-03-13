@@ -160,7 +160,7 @@ public class JZETMenuBar extends JMenuBar implements ActionListener, Localized {
 		mFile = Menu.addMenu( this, loc.getString( "File" ) );
 		mEdit = Menu.addMenu( this, loc.getString( "Edit" ) );
 		mView = Menu.addMenu( this, loc.getString( "View" ) );
-		if( ZETMain.isDebug() )
+		//if( ZETMain.isDebug() )
 		mExecute = Menu.addMenu( this, loc.getString( "Execute" ) );
 		mExtras = Menu.addMenu( this, loc.getString( "Extras" ) );
 		mHelp = Menu.addMenu( this, loc.getString( "Help" ) );
@@ -228,31 +228,33 @@ public class JZETMenuBar extends JMenuBar implements ActionListener, Localized {
 		//mnuCreateGraphCompleteGrid = Menu.addMenuItem(mCreateGraphCompleteGraph, loc.getString("Execute.CreateGraph.CompleteGraph.Grid"), KeyEvent.VK_9, this, "completeGrid", InputEvent.CTRL_DOWN_MASK );
 		mnuCreateGraphCompleteGrid = Menu.addMenuItem( mCreateGraphCompleteGraph, loc.getString( "Execute.CreateGraph.CompleteGraph.Grid" ), KeyEvent.VK_6, this, "completeGrid", InputEvent.CTRL_DOWN_MASK );
 		mnuCreateGraphCompleteNonGrid = Menu.addMenuItem( mCreateGraphCompleteGraph, loc.getString( "Execute.CreateGraph.CompleteGraph.NonGrid" ), KeyEvent.VK_4, this, "completeNonGrid", InputEvent.CTRL_DOWN_MASK );
-		mCreateGraphSpannerUsingPrim = Menu.addMenu( mCreateGraph, loc.getString( "Execute.CreateGraph.Prim" ) );
-		mnuCreateGraphSpannerUsingPrimGrid = Menu.addMenuItem( mCreateGraphSpannerUsingPrim, loc.getString( "Execute.CreateGraph.Prim.Grid" ), KeyEvent.VK_7, this, "PrimGrid", InputEvent.CTRL_DOWN_MASK );
-		mnuCreateGraphSpannerUsingPrimNonGrid = Menu.addMenuItem( mCreateGraphSpannerUsingPrim, loc.getString( "Execute.CreateGraph.Prim.NonGrid" ), KeyEvent.VK_5, this, "PrimNonGrid", InputEvent.CTRL_DOWN_MASK );
-		mCreateGraphSpannerUsingGreedy = Menu.addMenu( mCreateGraph, loc.getString( "Execute.CreateGraph.Greedy" ) );
-		mnuCreateGraphSpannerUsingGreedyGrid = Menu.addMenuItem( mCreateGraphSpannerUsingGreedy, loc.getString( "Execute.CreateGraph.Greedy.Grid" ), KeyEvent.VK_2, this, "GreedyGrid", InputEvent.CTRL_DOWN_MASK );
-		mnuCreateGraphSpannerUsingGreedyNonGrid = Menu.addMenuItem( mCreateGraphSpannerUsingGreedy, loc.getString( "Execute.CreateGraph.Greedy.NonGrid" ), KeyEvent.VK_3, this, "GreedyNonGrid", InputEvent.CTRL_DOWN_MASK );
-		mCreateGraphSpannerUsingDijkstra = Menu.addMenu( mCreateGraph, loc.getString( "Execute.CreateGraph.ShortestPathTree" ) );
-		mnuCreateGraphSpannerUsingDijkstraGrid = Menu.addMenuItem( mCreateGraphSpannerUsingDijkstra, loc.getString( "Execute.CreateGraph.ShortestPathTree.Grid" ), KeyEvent.VK_9, this, "DijkstraGrid", InputEvent.CTRL_DOWN_MASK );
-		mnuCreateGraphSpannerUsingDijkstraNonGrid = Menu.addMenuItem( mCreateGraphSpannerUsingDijkstra, loc.getString( "Execute.CreateGraph.ShortestPathTree.NonGrid" ), KeyEvent.VK_6, this, "DijkstraNonGrid", InputEvent.CTRL_DOWN_MASK );
-                mCreateSteinerTree = Menu.addMenu(mCreateGraph, loc.getString("Execute.CreateGraph.Steiner"));
-                mnuCreateSteinerTreeGrid = Menu.addMenuItem( mCreateSteinerTree, loc.getString( "Execute.CreateGraph.Steiner.Grid" ), KeyEvent.VK_9, this, "SteinerGrid", InputEvent.CTRL_DOWN_MASK );
-                mnuCreateSteinerTreeNonGrid = Menu.addMenuItem( mCreateSteinerTree, loc.getString( "Execute.CreateGraph.Steiner.NonGrid" ), KeyEvent.VK_9, this, "SteinerNonGrid", InputEvent.CTRL_DOWN_MASK );
-                mCreateClusterGraph = Menu.addMenu(mCreateGraph, loc.getString("Execute.CreateGraph.ClusterGraph"));
-                mnuCreateClusterGraphNonGrid =  Menu.addMenuItem( mCreateClusterGraph, loc.getString( "Execute.CreateGraph.ClusterGraph.NonGrid" ), KeyEvent.VK_9, this, "ClusterNonGrid", InputEvent.CTRL_DOWN_MASK );    
-                mnuCreateClusterGraphGrid =  Menu.addMenuItem( mCreateClusterGraph, loc.getString( "Execute.CreateGraph.ClusterGraph.Grid" ), KeyEvent.VK_9, this, "ClusterGrid", InputEvent.CTRL_DOWN_MASK );    
-                mCreateShortestPathGraph = Menu.addMenu(mCreateGraph, loc.getString("Execute.CreateGraph.ShortestPathGraph"));
-                mnuCreateShortestPathGraphGrid = Menu.addMenuItem(mCreateShortestPathGraph, loc.getString( "Execute.CreateGraph.ShortestPathGraph.Grid" ), KeyEvent.VK_9, this, "ShortestPathGraphGrid", InputEvent.CTRL_DOWN_MASK);
-                mnuCreateShortestPathGraphNonGrid = Menu.addMenuItem(mCreateShortestPathGraph, loc.getString( "Execute.CreateGraph.ShortestPathGraph.NonGrid" ), KeyEvent.VK_9, this, "ShortestPathGraphNonGrid", InputEvent.CTRL_DOWN_MASK);
-                mCreateAPSPGraph = Menu.addMenu(mCreateGraph, loc.getString("Execute.CreateGraph.APSPGraph"));
-                mnuCreateAPSPGraphNonGrid = Menu.addMenuItem(mCreateAPSPGraph, loc.getString( "Execute.CreateGraph.APSPGraph.NonGrid" ), KeyEvent.VK_9, this, "APSPGraphNonGrid", InputEvent.CTRL_DOWN_MASK);
-                mnuCreateAPSPGraphGrid = Menu.addMenuItem(mCreateAPSPGraph, loc.getString( "Execute.CreateGraph.APSPGraph.Grid" ), KeyEvent.VK_9, this, "APSPGraphGrid", InputEvent.CTRL_DOWN_MASK);
-                mCreateShortestPaths = Menu.addMenu(mCreateGraph,loc.getString("Execute.CreateGraph.ShortestPaths"));
-                mnuCreateShortestPathsGrid = Menu.addMenuItem(mCreateShortestPaths, loc.getString( "Execute.CreateGraph.ShortestPaths.Grid" ), KeyEvent.VK_9, this, "ShortestPathsGrid", InputEvent.CTRL_DOWN_MASK);
-                mnuCreateShortestPathsNonGrid = Menu.addMenuItem(mCreateShortestPaths, loc.getString( "Execute.CreateGraph.ShortestPaths.NonGrid" ), KeyEvent.VK_9, this, "ShortestPathsNonGrid", InputEvent.CTRL_DOWN_MASK);
-                mCreateThinNetwork = Menu.addMenuItem(mCreateGraph, loc.getString( "Execute.CreateGraph.ThinNetwork" ), KeyEvent.VK_9, this, "ThinNet", InputEvent.CTRL_DOWN_MASK);
+		if( ZETMain.isDebug() ) {
+			mCreateGraphSpannerUsingPrim = Menu.addMenu( mCreateGraph, loc.getString( "Execute.CreateGraph.Prim" ) );
+			mnuCreateGraphSpannerUsingPrimGrid = Menu.addMenuItem( mCreateGraphSpannerUsingPrim, loc.getString( "Execute.CreateGraph.Prim.Grid" ), KeyEvent.VK_7, this, "PrimGrid", InputEvent.CTRL_DOWN_MASK );
+			mnuCreateGraphSpannerUsingPrimNonGrid = Menu.addMenuItem( mCreateGraphSpannerUsingPrim, loc.getString( "Execute.CreateGraph.Prim.NonGrid" ), KeyEvent.VK_5, this, "PrimNonGrid", InputEvent.CTRL_DOWN_MASK );
+			mCreateGraphSpannerUsingGreedy = Menu.addMenu( mCreateGraph, loc.getString( "Execute.CreateGraph.Greedy" ) );
+			mnuCreateGraphSpannerUsingGreedyGrid = Menu.addMenuItem( mCreateGraphSpannerUsingGreedy, loc.getString( "Execute.CreateGraph.Greedy.Grid" ), KeyEvent.VK_2, this, "GreedyGrid", InputEvent.CTRL_DOWN_MASK );
+			mnuCreateGraphSpannerUsingGreedyNonGrid = Menu.addMenuItem( mCreateGraphSpannerUsingGreedy, loc.getString( "Execute.CreateGraph.Greedy.NonGrid" ), KeyEvent.VK_3, this, "GreedyNonGrid", InputEvent.CTRL_DOWN_MASK );
+			mCreateGraphSpannerUsingDijkstra = Menu.addMenu( mCreateGraph, loc.getString( "Execute.CreateGraph.ShortestPathTree" ) );
+			mnuCreateGraphSpannerUsingDijkstraGrid = Menu.addMenuItem( mCreateGraphSpannerUsingDijkstra, loc.getString( "Execute.CreateGraph.ShortestPathTree.Grid" ), KeyEvent.VK_9, this, "DijkstraGrid", InputEvent.CTRL_DOWN_MASK );
+			mnuCreateGraphSpannerUsingDijkstraNonGrid = Menu.addMenuItem( mCreateGraphSpannerUsingDijkstra, loc.getString( "Execute.CreateGraph.ShortestPathTree.NonGrid" ), KeyEvent.VK_6, this, "DijkstraNonGrid", InputEvent.CTRL_DOWN_MASK );
+			mCreateSteinerTree = Menu.addMenu( mCreateGraph, loc.getString( "Execute.CreateGraph.Steiner" ) );
+			mnuCreateSteinerTreeGrid = Menu.addMenuItem( mCreateSteinerTree, loc.getString( "Execute.CreateGraph.Steiner.Grid" ), KeyEvent.VK_9, this, "SteinerGrid", InputEvent.CTRL_DOWN_MASK );
+			mnuCreateSteinerTreeNonGrid = Menu.addMenuItem( mCreateSteinerTree, loc.getString( "Execute.CreateGraph.Steiner.NonGrid" ), KeyEvent.VK_9, this, "SteinerNonGrid", InputEvent.CTRL_DOWN_MASK );
+			mCreateClusterGraph = Menu.addMenu( mCreateGraph, loc.getString( "Execute.CreateGraph.ClusterGraph" ) );
+			mnuCreateClusterGraphNonGrid = Menu.addMenuItem( mCreateClusterGraph, loc.getString( "Execute.CreateGraph.ClusterGraph.NonGrid" ), KeyEvent.VK_9, this, "ClusterNonGrid", InputEvent.CTRL_DOWN_MASK );
+			mnuCreateClusterGraphGrid = Menu.addMenuItem( mCreateClusterGraph, loc.getString( "Execute.CreateGraph.ClusterGraph.Grid" ), KeyEvent.VK_9, this, "ClusterGrid", InputEvent.CTRL_DOWN_MASK );
+			mCreateShortestPathGraph = Menu.addMenu( mCreateGraph, loc.getString( "Execute.CreateGraph.ShortestPathGraph" ) );
+			mnuCreateShortestPathGraphGrid = Menu.addMenuItem( mCreateShortestPathGraph, loc.getString( "Execute.CreateGraph.ShortestPathGraph.Grid" ), KeyEvent.VK_9, this, "ShortestPathGraphGrid", InputEvent.CTRL_DOWN_MASK );
+			mnuCreateShortestPathGraphNonGrid = Menu.addMenuItem( mCreateShortestPathGraph, loc.getString( "Execute.CreateGraph.ShortestPathGraph.NonGrid" ), KeyEvent.VK_9, this, "ShortestPathGraphNonGrid", InputEvent.CTRL_DOWN_MASK );
+			mCreateAPSPGraph = Menu.addMenu( mCreateGraph, loc.getString( "Execute.CreateGraph.APSPGraph" ) );
+			mnuCreateAPSPGraphNonGrid = Menu.addMenuItem( mCreateAPSPGraph, loc.getString( "Execute.CreateGraph.APSPGraph.NonGrid" ), KeyEvent.VK_9, this, "APSPGraphNonGrid", InputEvent.CTRL_DOWN_MASK );
+			mnuCreateAPSPGraphGrid = Menu.addMenuItem( mCreateAPSPGraph, loc.getString( "Execute.CreateGraph.APSPGraph.Grid" ), KeyEvent.VK_9, this, "APSPGraphGrid", InputEvent.CTRL_DOWN_MASK );
+			mCreateShortestPaths = Menu.addMenu( mCreateGraph, loc.getString( "Execute.CreateGraph.ShortestPaths" ) );
+			mnuCreateShortestPathsGrid = Menu.addMenuItem( mCreateShortestPaths, loc.getString( "Execute.CreateGraph.ShortestPaths.Grid" ), KeyEvent.VK_9, this, "ShortestPathsGrid", InputEvent.CTRL_DOWN_MASK );
+			mnuCreateShortestPathsNonGrid = Menu.addMenuItem( mCreateShortestPaths, loc.getString( "Execute.CreateGraph.ShortestPaths.NonGrid" ), KeyEvent.VK_9, this, "ShortestPathsNonGrid", InputEvent.CTRL_DOWN_MASK );
+			mCreateThinNetwork = Menu.addMenuItem( mCreateGraph, loc.getString( "Execute.CreateGraph.ThinNetwork" ), KeyEvent.VK_9, this, "ThinNet", InputEvent.CTRL_DOWN_MASK );
+		}
                 
 		mnuExecuteApplyAssignment = Menu.addMenuItem( mExecute, loc.getString( "Execute.ApplyConcreteAssignment" ), this, "applyConcreteAssignment" );
 		mSimulation = Menu.addMenu( mExecute, loc.getString( "Execute.Simulation" ) );
@@ -263,7 +265,8 @@ public class JZETMenuBar extends JMenuBar implements ActionListener, Localized {
 
 		mOptimization = Menu.addMenu( mExecute, loc.getString( "Execute.Optimization" ) );
 		mnuOptimizationEarliestArrivalTransshipment = Menu.addMenuItem( mOptimization, loc.getString( "Execute.Optimization.AlgoEATransshipment" ), KeyEvent.VK_F8, this, "EAT", 0 );
-                mnuOptimizationEATCompare = Menu.addMenuItem( mOptimization, loc.getString( "Execute.Optimization.EATCompare" ), KeyEvent.VK_F9, this, "EATCompare", 0 );
+    if( ZETMain.isDebug() )
+			mnuOptimizationEATCompare = Menu.addMenuItem( mOptimization, loc.getString( "Execute.Optimization.EATCompare" ), KeyEvent.VK_F9, this, "EATCompare", 0 );
 		//mnuExecuteQuickestTransshipment = Menu.addMenuItem( mOptimization, loc.getString( "Execute.Optimization.AlgoQuickestTransshipment" ), this, "QT" );
 		//mnuExecuteMaxFlowOverTimeMC = Menu.addMenuItem( mOptimization, loc.getString( "Execute.Optimization.AlgoMaxFlowOverTimeMinCost" ), this, "MFOTMC" );
 		//mnuExecuteMaxFlowOverTimeTEN = Menu.addMenuItem( mOptimization, loc.getString( "Execute.Optimization.AlgoMaxFlowOverTimeTEN" ), this, "MFOTTEN" );
