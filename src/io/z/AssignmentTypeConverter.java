@@ -23,63 +23,35 @@ import com.thoughtworks.xstream.mapper.Mapper;
 
 import ds.z.AssignmentType;
 import ds.z.ZControl;
-//import ds.z.event.ChangeListener;
 
-
-/** A converter that behaves just like a normal converter would do, he only adds
- * the functionality of recreating the changeListeners.
- *
+/**
+ * A converter that behaves just like a normal converter would do.
  * @author Timon Kelter, Jan-Philipp Kappmeier
  */
 public class AssignmentTypeConverter extends ReflectionConverter {
 	private Class myClass = AssignmentType.class;
-	
-	public AssignmentTypeConverter (Mapper mapper, ReflectionProvider reflectionProvider) {
-		super (mapper, reflectionProvider);
-	}
-	
-	@Override
-	public boolean canConvert (Class type) {
-		return myClass.isAssignableFrom (type);
-	}
-	
-	@Override
-	public Object unmarshal (final HierarchicalStreamReader reader, 
-			final UnmarshallingContext context) {
-		Object created = instantiateNewInstance(reader, context);
-		
-		// Early recreation of changeListener List neccessary
-//		reflectionProvider.writeField (created, "changeListeners",
-//			new ArrayList<ChangeListener> (), myClass);
-		
-        created = doUnmarshal(created, reader, context);
-		AssignmentType result = (AssignmentType)serializationMethodInvoker.callReadResolve(created);
 
-		// Ols projects may not contain a parameter for reaction time. Set it to
+	public AssignmentTypeConverter( Mapper mapper, ReflectionProvider reflectionProvider ) {
+		super( mapper, reflectionProvider );
+	}
+
+	@Override
+	public boolean canConvert( Class type ) {
+		return myClass.isAssignableFrom( type );
+	}
+
+	@Override
+	public Object unmarshal( final HierarchicalStreamReader reader, final UnmarshallingContext context ) {
+		Object created = instantiateNewInstance( reader, context );
+
+		created = doUnmarshal( created, reader, context );
+		AssignmentType result = (AssignmentType) serializationMethodInvoker.callReadResolve( created );
+
+		// Old projects may not contain a parameter for reaction time. Set it to
 		// the default value if it is not present.
 		if( result.getReaction() == null )
 			result.setReaction( ZControl.getDefaultAssignmentTypeDistribution( "reaction" ) );
 
-		// Recreate changeListener list
-//		for (AssignmentArea t : result.getAssignmentAreas ()) {
-//			t.addChangeListener (result);
-//		}
-//		if (result.getAge () != null) {
-//			result.getAge ().addChangeListener (result);
-//		}
-//		if (result.getDecisiveness () != null) {
-//			result.getDecisiveness ().addChangeListener (result);
-//		}
-//		if (result.getDiameter () != null) {
-//			result.getDiameter ().addChangeListener (result);
-//		}
-//		if (result.getFamiliarity () != null) {
-//			result.getFamiliarity ().addChangeListener (result);
-//		}
-//		if (result.getPanic () != null) {
-//			result.getPanic ().addChangeListener (result);
-//		}
-		
 		return result;
 	}
 }

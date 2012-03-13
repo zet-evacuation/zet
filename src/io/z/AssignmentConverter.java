@@ -23,10 +23,9 @@ import com.thoughtworks.xstream.mapper.Mapper;
 
 import ds.z.Assignment;
 
-/** A converter that behaves just like a normal converter would do, he only adds
- * the functionality of recreating the changeListeners.
- *
- * @author Timon Kelter
+/**
+ * A converter that behaves just like a normal converter would do.
+ * @author Timon Kelter, Jan-Philipp Kappmeier
  */
 public class AssignmentConverter extends ReflectionConverter {
 	private Class myClass = Assignment.class;
@@ -43,10 +42,7 @@ public class AssignmentConverter extends ReflectionConverter {
 	@Override
 	public Object unmarshal( final HierarchicalStreamReader reader, final UnmarshallingContext context ) {
 		Object created = instantiateNewInstance( reader, context );
-
 		created = doUnmarshal( created, reader, context );
-		Assignment result = (Assignment)serializationMethodInvoker.callReadResolve( created );
-
-		return result;
+		return serializationMethodInvoker.callReadResolve( created );
 	}
 }

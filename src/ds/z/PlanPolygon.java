@@ -32,7 +32,6 @@ import io.z.XMLConverter;
 import java.awt.Dimension;
 import java.awt.Rectangle;
 import java.awt.geom.Rectangle2D;
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.LinkedList;
@@ -103,7 +102,17 @@ public class PlanPolygon<T extends Edge> implements Iterable<T> {
 	int miny = Integer.MAX_VALUE;
 	@XStreamOmitField
 	int maxy = Integer.MIN_VALUE;
-	
+
+	// For compatibility reasons with old project files
+	@XStreamOmitField
+	private T maxY_DefiningEdge;
+	@XStreamOmitField
+	private T maxX_DefiningEdge;
+	@XStreamOmitField
+	private T minY_DefiningEdge;
+	@XStreamOmitField
+	private T minX_DefiningEdge;
+
 	/**
 	 * three transformation matrixes for flip vertically, horizontally and at the main
 	 * diagonal plus identity matrix

@@ -50,9 +50,6 @@ public class PlanPolygonConverter extends ReflectionConverter {
 		}
 		PlanPolygon<Edge> result = (PlanPolygon<Edge>) serializationMethodInvoker.callReadResolve( created );
 		
-		// Recreate transient flag
-		//reflectionProvider.writeField( result, "enableEventGeneration", new Boolean( true ), PlanPolygon.class );
-		
 		result.recomputeBounds();
 		
 		return result;
