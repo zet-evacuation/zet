@@ -20,9 +20,7 @@ import com.thoughtworks.xstream.converters.reflection.ReflectionConverter;
 import com.thoughtworks.xstream.converters.reflection.ReflectionProvider;
 import com.thoughtworks.xstream.io.HierarchicalStreamReader;
 import com.thoughtworks.xstream.mapper.Mapper;
-
 import ds.z.PlanPoint;
-
 
 /** A converter that behaves just like a normal converter would do, he only adds
  * the functionality of recreating the changeListeners.
@@ -31,27 +29,23 @@ import ds.z.PlanPoint;
  */
 public class PlanPointConverter extends ReflectionConverter {
 	private Class myClass = PlanPoint.class;
-	
-	public PlanPointConverter (Mapper mapper, ReflectionProvider reflectionProvider) {
-		super (mapper, reflectionProvider);
+
+	public PlanPointConverter( Mapper mapper, ReflectionProvider reflectionProvider ) {
+		super( mapper, reflectionProvider );
 	}
-	
+
 	@Override
-	public boolean canConvert (Class type) {
-		return myClass.isAssignableFrom (type);
+	public boolean canConvert( Class type ) {
+		return myClass.isAssignableFrom( type );
 	}
-	
+
 	@Override
-	public Object unmarshal (final HierarchicalStreamReader reader, 
-			final UnmarshallingContext context) {
-		Object created = instantiateNewInstance(reader, context);
-		
-		// Early recreation of changeListener List neccessary
-//		reflectionProvider.writeField (created, "changeListeners", new ArrayList<ChangeListener> (), myClass);
-		
-        created = doUnmarshal(created, reader, context);
-		PlanPoint result = (PlanPoint)serializationMethodInvoker.callReadResolve(created);
-				
+	public Object unmarshal( final HierarchicalStreamReader reader, final UnmarshallingContext context ) {
+		Object created = instantiateNewInstance( reader, context );
+
+		created = doUnmarshal( created, reader, context );
+		PlanPoint result = (PlanPoint) serializationMethodInvoker.callReadResolve( created );
+
 		return result;
 	}
 }

@@ -57,10 +57,10 @@ static {
 			add( "yOffsetAll" );
 			add( "heightAll" );
 			add( "widthAll" );
-			add( "maxY_DefiningEdge" );
-			add( "minX_DefiningEdge" );
-			add( "maxX_DefiningEdge" );
-			add( "minY_DefiningEdge" );
+			//add( "maxY_DefiningEdge" ); // cannot be ignored due to backwards compatibility
+			//add( "minX_DefiningEdge" );
+			//add( "maxX_DefiningEdge" );
+			//add( "minY_DefiningEdge" );
 		}};
 		xml_convert = new XStream() {
 		@Override
