@@ -23,6 +23,13 @@ public class PositionNode {
         this.doorWidth = width;
     }
     
+    public PositionNode(Node nod, Point pos)
+    {
+        this.p = pos;
+        this.n = nod;
+        this.doorWidth = 0;
+    }
+    
     public Point getPositionForNode(PositionNode node)
     {
         return node.p;
