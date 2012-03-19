@@ -127,7 +127,7 @@ public class Room extends BaseRoom<RoomEdge> implements Cloneable, Comparable<Ro
         }*/
         
         /**
-	 * Returns the position and the width of all doors for a {@code Room} 
+	 * Returns the position and the width of all doors for a {@code Room} that connects that room with a room on the same floor
 	 * @param room the room for which position is specified
 	 * @return the position and width of all doors in the room. 
 	 */
@@ -137,7 +137,7 @@ public class Room extends BaseRoom<RoomEdge> implements Cloneable, Comparable<Ro
             LinkedList<RoomEdge> edges = new LinkedList<>();
 
             for (RoomEdge edge: super.getEdges()){
-                if (edge.isPassable()){
+                if (edge.isPassable() && (edge.getLinkTarget().getRoom().getAssociatedFloor().equals(associatedFloor))){
                     edges.add(edge);
                 }
             }

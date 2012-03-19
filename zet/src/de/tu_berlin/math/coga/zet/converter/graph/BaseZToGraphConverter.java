@@ -40,6 +40,7 @@ public abstract class BaseZToGraphConverter extends Algorithm<BuildingPlan, Netw
 		// calculate the transit times for all edges
                 
 		computeTransitTimes();
+                System.out.println("TransitZeiten: " + exactTransitTimes);
 		// adjust transit times according to stair speed factors
 		multiplyWithUpAndDownSpeedFactors();
 
