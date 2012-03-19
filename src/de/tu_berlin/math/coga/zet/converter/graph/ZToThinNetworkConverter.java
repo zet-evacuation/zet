@@ -14,6 +14,7 @@ import ds.collection.ListSequence;
 import ds.graph.Node;
 import ds.graph.NodeRectangle;
 import ds.graph.PositionNode;
+import ds.mapping.IdentifiableObjectMapping;
 import ds.z.*;
 import java.awt.Point;
 import java.util.*;
@@ -34,8 +35,9 @@ public class ZToThinNetworkConverter extends BaseZToGraphConverter{
     public HashMap<Room,Collection<PositionNode>> DoorNodesForRoom = new HashMap<>();
     public Collection<PositionNode> doorNodes;
     //...
-    public HashMap<Room,Collection<Node>> floorNodesForRoom = new HashMap<>();
-    public Collection<Node> floorNodes;
+    public HashMap<Room,Collection<PositionNode>> floorNodesForRoom = new HashMap<>();
+    public Collection<PositionNode> floorNodes;
+    protected IdentifiableObjectMapping<Node, Boolean> isfloorNode = new IdentifiableObjectMapping<>(1,Boolean.class);
     //stores all nodes for the room (except the door node)
     public ListSequence<Node> nodes;
     //maps the names of the neighoured rooms to each room
@@ -112,7 +114,7 @@ public class ZToThinNetworkConverter extends BaseZToGraphConverter{
                EvacNodes = new ListSequence<>();
                AssignNodes = new ListSequence<>();
                nodes = new ListSequence<>();
-               floorNodes = new ListSequence<>();
+               floorNodes = new HashSet<>();
                
                ComputeNeighbourRoomValues(ZRoom);              
 
@@ -268,9 +270,12 @@ public class ZToThinNetworkConverter extends BaseZToGraphConverter{
                         for (Point po: floordoors.keySet())
                         {
                             Node node = new Node(nodeCount++);
+                            isfloorNode.set(node, Boolean.TRUE);
                             System.out.println("Floor Connecting Node: " + node + " for room: " + ZRoom.getName());  
                             graph.setNode(node);
-                            floorNodes.add(node);
+                            PositionNode pos = new PositionNode(node,po,floordoors.get(po));
+                            floorNodes.add(pos);
+                            doorNodes.add(pos);
                             int width = floordoors.get(po)/1000*2;
                             //System.out.println("Knotenkap: " + width);
                             nodesCap.add(node, width);
@@ -452,12 +457,28 @@ public class ZToThinNetworkConverter extends BaseZToGraphConverter{
                   
         //stores all the constructed nodes for one room (except door node, evacuation and assignment nodes)
         NodesForRoom.put(ZRoom, nodes); 
+        for (Node n: nodes)
+        {
+            isfloorNode.set(n, Boolean.FALSE);
+        }
         EvacuationNodes.put(ZRoom, EvacNodes);
+        for (Node n: EvacNodes)
+        {
+            isfloorNode.set(n, Boolean.FALSE);
+        }
         AssignmentNodes.put(ZRoom, AssignNodes);
+        for (Node n: AssignNodes)
+        {
+            isfloorNode.set(n, Boolean.FALSE);
+        }
         DoorNodesForRoom.put(ZRoom, doorNodes);
+        for (PositionNode n: doorNodes)
+        {
+            isfloorNode.set(n.getNode(), Boolean.FALSE);
+        }
         floorNodesForRoom.put(ZRoom, floorNodes);
-        } //end for all rastered rooms
         
+        } //end for all rastered rooms        
         model.setNodeCapacities( nodesCap );
         model.setNetwork(graph);
         model.setSources(sources);
@@ -516,11 +537,11 @@ public class ZToThinNetworkConverter extends BaseZToGraphConverter{
                 System.out.println("Yes: " );
                 Room nextToRoom = FloorConnection.get(ZRoom);
                 System.out.println("nextTo: " + nextToRoom.getName());
-                for (Node n :floorNodesForRoom.get(nextToRoom))
+                for (PositionNode n :floorNodesForRoom.get(nextToRoom))
                 {    
-                    for (Node node: floorNodesForRoom.get(ZRoom))
+                    for (PositionNode node: floorNodesForRoom.get(ZRoom))
                     {
-                        Edge edge = new Edge(EdgeCount++,node,n);
+                        Edge edge = new Edge(EdgeCount++,node.getNode(),n.getNode());
                         mapping.setEdgeLevel(edge, Level.Equal);
                         graph.setEdge(edge);
                         System.out.println("floor connecting edge: " + edge);                   
@@ -594,7 +615,7 @@ public class ZToThinNetworkConverter extends BaseZToGraphConverter{
                     }
                 }*/
                 //connect evacuation and assignment nodes directly
-                if (ZRoom.getEvacuationAreas().size()>1)
+                if (ZRoom.getEvacuationAreas().size()>0)
                 {
                     for (Node n1: AssignmentNodes.get(ZRoom))
                     {
@@ -605,7 +626,7 @@ public class ZToThinNetworkConverter extends BaseZToGraphConverter{
                             graph.addEdge(edge);
                             System.out.println("Edge between assignment area and evacuation area: " + edge);
                             //set the capacity of an edge to the max. number of persons(in this room) divided by number of assignment areas
-                            int cap = ZRoom.getMaxEvacuees()/ZRoom.getAssignmentAreas().size();
+                            int cap = 2;
                             edgesCap.set(edge,cap);
                             RoomEdges.add(edge); 
                         }
@@ -1030,7 +1051,7 @@ public class ZToThinNetworkConverter extends BaseZToGraphConverter{
                 exactTransitTimes.set(edge, 0.0);
             }
         }
-        //System.out.println("TransitTimes without delay or inaccessible areas: " + exactTransitTimes);
+        System.out.println("TransitTimes without delay or inaccessible areas: " + exactTransitTimes);
         
         for (ZToGraphRoomRaster room: rasteredRooms)
         {
@@ -1159,9 +1180,9 @@ public class ZToThinNetworkConverter extends BaseZToGraphConverter{
                                 if (ZRoom.getDoorEdges().size()>=0)
                                 {
                                     double Path1,Path2;
-                                    if(barrier.getxOffset() >= startX && barrEndX <= endX && barrier.getyOffset() <= UpperY && barrEndY >= LowerY)
+                                    if(barrier.getxOffset() >= startX && barrEndX <= endX && barrier.getyOffset() >= UpperY && barrEndY <= LowerY)
                                     { 
-                                            //System.out.println("case 0...");                                         
+                                            System.out.println("case 0...");                                         
                                             if (directionDown){
                                                 Path1 = Math.sqrt(Math.pow(startX-barrier.getxOffset(), 2)+Math.pow(startY-barrEndY,2)) + Math.sqrt(Math.pow(barrier.getxOffset()-endX, 2)+Math.pow(barrEndY-endY,2));
                                                 Path2 = Math.sqrt(Math.pow(startX-barrEndX,2)+Math.pow(startY-barrier.getyOffset(),2)) + Math.sqrt(Math.pow(barrEndX-endX,2)+Math.pow(barrier.getyOffset()-endY,2));
@@ -1176,7 +1197,7 @@ public class ZToThinNetworkConverter extends BaseZToGraphConverter{
                                     {
                                         //does not fit on upper side
                                         if (barrier.getyOffset() <= UpperY && barrEndY <= LowerY){
-                                            //System.out.println("Case 1a....");
+                                            System.out.println("Case 1a....");
                                             Path1 = Math.sqrt(Math.pow(startX-barrier.getxOffset(),2)+Math.pow(startY-barrier.getyOffset(),2))+Math.sqrt(Math.pow(barrier.getxOffset()-barrEndX,2)) + Math.sqrt(Math.pow(barrEndX-endX, 2)+Math.pow(barrEndY-endY,2));
                                             if (directionDown){
                                                 Path2 = Math.sqrt(Math.pow(startX-barrier.getxOffset(),2)+Math.pow(startY-barrEndY,2)) + Math.sqrt(Math.pow(barrier.getxOffset()-endX, 2)+Math.pow(barrEndY-endY,2)) ;
@@ -1188,7 +1209,7 @@ public class ZToThinNetworkConverter extends BaseZToGraphConverter{
                                         //does not fit on lower side
                                         else if (barrier.getyOffset() >= UpperY && barrEndY >= LowerY)
                                         {
-                                            //System.out.println("Case 1b...");
+                                            System.out.println("Case 1b...");
                                             Path1 = Math.sqrt(Math.pow(startX-barrier.getxOffset(),2)+Math.pow(startY-barrEndY,2)) + Math.sqrt(Math.pow(barrier.getWidth(),2)) + Math.sqrt(Math.pow(barrEndX-endX,2)+Math.pow(barrEndY-endY,2));
                                             if (directionDown){
                                                 Path2 = Math.sqrt(Math.pow(startX-barrEndX,2) + Math.pow(startY-barrier.getyOffset(),2))+ Math.sqrt(Math.pow(barrier.getxOffset()-endX,2)+Math.pow(barrier.getyOffset()-endY,2));
@@ -1199,7 +1220,7 @@ public class ZToThinNetworkConverter extends BaseZToGraphConverter{
                                         }  
                                         //does not fit on both sides
                                         else{
-                                            //System.out.println("Case 1c...");
+                                            System.out.println("Case 1c...");
                                             Path1 = Math.sqrt(Math.pow(startX-barrier.getxOffset(),2)+Math.pow(startY-barrier.getyOffset(),2)) + Math.sqrt(Math.pow(barrier.getWidth(),2)) + Math.sqrt(Math.pow(barrEndX-endX,2)+Math.pow(barrier.getyOffset()-endY,2)); 
                                             Path2 = Math.sqrt(Math.pow(startX-barrier.getxOffset(),2)+Math.pow(startY-barrEndY,2)) + Math.sqrt(Math.pow(barrier.getWidth(), 2)) + Math.sqrt(Math.pow(barrEndX-endX,2)+Math.pow(barrEndY-endY,2));
                                         }
@@ -1209,7 +1230,7 @@ public class ZToThinNetworkConverter extends BaseZToGraphConverter{
                                         //does not fit on left side
                                         if (barrier.getxOffset() < startX && barrEndX <= endX)
                                         {
-                                            //System.out.println("Case 2a)... ");
+                                            System.out.println("Case 2a)... ");
                                             if (directionDown){
                                                 Path1 = Math.sqrt(Math.pow(startX-barrier.getxOffset(),2)+Math.pow(startY-barrier.getyOffset(),2)) + Math.sqrt(Math.pow(barrier.getHeight(),2)) + Math.sqrt(Math.pow(barrier.getxOffset()-endX,2)+Math.pow(barrEndY-endY,2));                                  
                                                 Path2 = Math.sqrt(Math.pow(startX-barrEndX,2)+Math.pow(startY-barrier.getyOffset(),2)) + Math.sqrt(Math.pow(barrier.getxOffset()-endX,2)+Math.pow(barrier.getyOffset()-endY,2));
@@ -1222,7 +1243,7 @@ public class ZToThinNetworkConverter extends BaseZToGraphConverter{
                                         //does not fit on right side
                                         else if (barrier.getxOffset() >= startX && barrEndX > endX)
                                         {
-                                            //System.out.println("case 2b)...");
+                                            System.out.println("case 2b)...");
                                             if (directionDown){
                                                 Path1 = Math.sqrt(Math.pow(startX-barrier.getxOffset(),2)+Math.pow(startY-barrEndY,2)) + Math.sqrt(Math.pow(barrier.getxOffset()-endX,2)+Math.pow(barrEndY-endY,2));
                                                 Path2 = Math.sqrt(Math.pow(startX-barrEndX,2)+Math.pow(startY-barrier.getyOffset(),2)) + Math.sqrt(Math.pow(barrier.getHeight(),2)) + Math.sqrt(Math.pow(barrEndX-endX,2)+Math.pow(barrEndY-endY,2));
@@ -1235,7 +1256,7 @@ public class ZToThinNetworkConverter extends BaseZToGraphConverter{
                                         //does not fit on both sides
                                         else 
                                         {
-                                            //System.out.println("Case 2c...");
+                                            System.out.println("Case 2c...");
                                             if (directionDown){
                                                 Path1 = Math.sqrt(Math.pow(startX-barrier.getxOffset(),2)+Math.pow(startY-barrier.getyOffset(),2)) + Math.sqrt(Math.pow(barrier.getHeight(),2)) + Math.sqrt(Math.pow(barrier.getxOffset()-endX,2)+Math.pow(barrEndY-endY,2));
                                                 Path2 = Math.sqrt(Math.pow(startX-barrEndX,2)+Math.pow(startY-barrier.getyOffset(),2)) + Math.sqrt(Math.pow(barrier.getHeight(),2)) + Math.sqrt(Math.pow(barrEndX-endX,2)+Math.pow(barrEndY-endY,2));
@@ -1248,7 +1269,7 @@ public class ZToThinNetworkConverter extends BaseZToGraphConverter{
                                     }
                                     else if (barrier.getxOffset() > startX)
                                     {
-                                        //System.out.println("case 3");
+                                        System.out.println("case 3");
                                         if (directionDown){
                                             Path1 = 2*(Math.sqrt(Math.pow(startX-barrier.getxOffset(),2)+Math.pow(startY-barrEndY,2)) + Math.sqrt(Math.pow(barrier.getxOffset()-endX,2)+Math.pow(barrEndY-endY,2)));
                                             Path2 = 0;
@@ -1260,7 +1281,7 @@ public class ZToThinNetworkConverter extends BaseZToGraphConverter{
                                     }
                                     else if (barrier.getxOffset() < startX)
                                     {
-                                        //System.out.println("case 4");
+                                        System.out.println("case 4");
                                         if (directionDown){
                                             Path1 = 2*(Math.sqrt(Math.pow(startX-barrEndX,2)+Math.pow(startY-barrier.getyOffset(),2)) + Math.sqrt(Math.pow(barrEndX-endX,2)+Math.pow(barrier.getyOffset()-endY,2)));
                                             Path2 = 0;
@@ -1277,7 +1298,7 @@ public class ZToThinNetworkConverter extends BaseZToGraphConverter{
                                     }
                                     PropertyContainer propertyContainer = PropertyContainer.getInstance();
                                     int precision = propertyContainer.getAs( "converter.GraphPrecision", Integer.class );
-                                    //System.out.println("Ergebnis: " + Path1*precision/400.0d + " " + Path2*precision/400.0d);
+                                    System.out.println("Ergebnis: " + Path1*precision/400.0d + " " + Path2*precision/400.0d);
                                     double PathLength = (0.5*Path1+0.5*Path2) * precision / 400.0d;
                                     exactTransitTimes.set(edge, PathLength);  
                                     
@@ -1298,6 +1319,7 @@ public class ZToThinNetworkConverter extends BaseZToGraphConverter{
             LinkedList<RoomEdge> edges = new LinkedList<>();
 
             for (RoomEdge edge: room.getEdges() ){
+                //System.out.println("link target: " + edge.getLinkTarget());
                 if (!(edge.getLinkTarget()==null)){
                     if (!(edge.getLinkTarget().getRoom().getAssociatedFloor().equals(room.getAssociatedFloor())))
                     {
@@ -1352,6 +1374,15 @@ public class ZToThinNetworkConverter extends BaseZToGraphConverter{
                     }
                 }
     
+            }
+            else if (edges.size()==1)
+            {
+                RoomEdge x = edges.element();
+                int width = x.length();
+                int xpos = (x.getSource().getXInt() + x.getTarget().getXInt())/2;
+                int ypos = (x.getSource().getYInt() + x.getTarget().getYInt())/2;
+                Point p = new Point(xpos,ypos);
+                doors.put(p,width);
             }
             return doors;
         }
@@ -1718,7 +1749,7 @@ public class ZToThinNetworkConverter extends BaseZToGraphConverter{
     
     public void ConnectRooms(Room room)
     {
-             Collection<Room> neighbRooms = NeighbourRooms.get(room);
+            Collection<Room> neighbRooms = NeighbourRooms.get(room);
             //door nodes of the current room
             Collection<PositionNode> nodes1 = DoorNodesForRoom.get(room);
             
@@ -1728,8 +1759,12 @@ public class ZToThinNetworkConverter extends BaseZToGraphConverter{
                 //edge between door of current room and all neighbour room doors
                 for (PositionNode node1: nodes1)
                 {
+                   if(!isfloorNode.get(node1.getNode()))            
+                   {
                    for (PositionNode node2: nodes2)
                    {
+                       if (!isfloorNode.get(node2.getNode()))         
+                       {
                        if (node1.getPosition().equals(node2.getPosition()) && used[node1.getNode().id()][node2.getNode().id()]==0)
                        {
                                Edge edge = new Edge(EdgeCount++,node1.getNode(),node2.getNode());
@@ -1746,9 +1781,35 @@ public class ZToThinNetworkConverter extends BaseZToGraphConverter{
                                used[node1.getNode().id()][node2.getNode().id()] = 1;
                                used[node2.getNode().id()][node1.getNode().id()] = 1;
                        }
+                       
+                       }
+                    }  
+            
                    }
-                }  
+                }           
+            } 
+    }
+    
+    
+    public void ConnectFloors(Room room)
+    {
+        Collection<PositionNode> nodes1 = floorNodesForRoom.get(room);
+        Room connect = FloorConnection.get(room);
+        Collection<PositionNode> nodes2 = floorNodesForRoom.get(connect);
+        
+        for (PositionNode n1: nodes1)
+        {
+            for (PositionNode n2: nodes2)
+            {
+                Edge edge = new Edge(EdgeCount++,n1.getNode(),n2.getNode());
+                mapping.setEdgeLevel(edge, Level.Equal);
+                graph.setEdge(edge);                
+                int width = getFloorDoors(room).get(n1.getPosition());  
+                edgesCap.set(edge,width);
+                System.out.println("floor connecting edge: " + edge + " width: " + width);
             }
+            
+        }
     }
     
     public void ConnectWithCertainNode(Room room, Collection<Node> nodes, Node DoorNode )
