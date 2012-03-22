@@ -113,31 +113,20 @@ public class ZToThinNetworkConverter extends BaseZToGraphConverter{
         for( ZToGraphRoomRaster room : rasteredRooms ) 
         {
                System.out.println("Currently considered room: " + room.getRoom().getName() + "on floor: " + room.getRoom().getAssociatedFloor());
-               
                Room ZRoom = room.getRoom();
-               doorNodes = new HashSet<>();
-               EvacNodes = new ListSequence<>();
-               AssignNodes = new ListSequence<>();
-               nodes = new ListSequence<>();
-               floorNodes = new HashSet<>();
-               
-               ComputeNeighbourRoomValues(ZRoom); 
                //........................
                if (iter==1)
-                { 
+               { 
                     SmallestRectangle rec = new SmallestRectangle();
                     List<Vector2> givenPoints = new LinkedList<>();
-                    Polygon poly = ZRoom.getAWTPolygon();
-                   
-                    List<RoomEdge> list = ZRoom.getEdges();
                     
                     int size = room.getRaster()/2;
                     int numCol = room.getColumnCount()*2;
                     int numRow = room.getRowCount()*2; 
                     
-                    for (int i=0; i<numCol+2;i++)
+                    for (int i=0; i<numCol+1;i++)
                     {
-                        for (int j=0;j<numRow+2;j++)
+                        for (int j=0;j<numRow+1;j++)
                         {
                             PlanPoint p = new PlanPoint(room.getXOffset()+(i*size),room.getYOffset()+(j*size));
                             System.out.println("p_x: " + p.x + "p_y: " + p.y);
@@ -157,8 +146,16 @@ public class ZToThinNetworkConverter extends BaseZToGraphConverter{
                     }
                     rec.computeSmallestRectangle(givenPoints.size(), givenPoints);
                     iter++;
-                }
-     
+               }
+               
+               doorNodes = new HashSet<>();
+               EvacNodes = new ListSequence<>();
+               AssignNodes = new ListSequence<>();
+               nodes = new ListSequence<>();
+               floorNodes = new HashSet<>();
+               
+               ComputeNeighbourRoomValues(ZRoom); 
+               
                //create Node for each Assignment Area in these rooms
                for (AssignmentArea area: ZRoom.getAssignmentAreas())
                { 
