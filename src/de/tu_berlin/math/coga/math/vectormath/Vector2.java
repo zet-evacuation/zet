@@ -193,8 +193,8 @@ public class Vector2 implements Cloneable {
 	 * @param scalar the scalar value
 	 * @return the vector multiplicated with a scalar
 	 */
-	public final Vector3 scalarMultiplicate( double scalar ) {
-		return new Vector3( x * scalar, y * scalar );
+	public final Vector2 scalarMultiplicate( double scalar ) {
+		return new Vector2( x * scalar, y * scalar );
 	}
 
 	/**
@@ -211,12 +211,12 @@ public class Vector2 implements Cloneable {
 	 * @param v the vector
 	 * @return the sum of this vector and the other vector
 	 */
-	public final Vector3 add( Vector2 v ) {
-		return new Vector3( x + v.x, y + v.y );
+	public final Vector2 add( Vector2 v ) {
+		return new Vector2( x + v.x, y + v.y );
 	}
 
 	/**
-	 * Adds a {@code Vector3} to this vector.
+	 * Adds a {@code Vector2} to this vector.
 	 * @param v the added vector
 	 */
 	public final void addTo( Vector2 v ) {
@@ -226,7 +226,7 @@ public class Vector2 implements Cloneable {
 
 	/**
 	 * Computes the difference this vector - v and returns the result in a new
-	 * {@code vector3} object.
+	 * {@code vector2} object.
 	 * @param v the vector which is subtracted
 	 * @return the result of the sub
 	 */
@@ -235,7 +235,7 @@ public class Vector2 implements Cloneable {
 	}
 
 	/**
-	 * Subtracts a {@code Vector3} from this vector.
+	 * Subtracts a {@code Vector2} from this vector.
 	 * @param v the subtracted vector
 	 */
 	public void subTo( Vector2 v ) {

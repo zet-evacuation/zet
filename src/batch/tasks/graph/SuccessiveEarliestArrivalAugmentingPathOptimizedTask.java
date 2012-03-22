@@ -44,6 +44,7 @@ public class SuccessiveEarliestArrivalAugmentingPathOptimizedTask extends Transf
     protected EarliestArrivalFlowProblem transformProblem(NetworkFlowModel originalProblem) {
         System.out.println("Earliest arrival transshipment calculation starts");
         EarliestArrivalFlowProblem problem = new EarliestArrivalFlowProblem(originalProblem.getEdgeCapacities(), originalProblem.getNetwork(), originalProblem.getNodeCapacities(), originalProblem.getSupersink(), originalProblem.getSources(), 0, originalProblem.getTransitTimes(), originalProblem.getCurrentAssignment());
+        System.out.println("assign" + originalProblem.getCurrentAssignment());
         LongestShortestPathTimeHorizonEstimator estimator = new LongestShortestPathTimeHorizonEstimator();
         estimator.setProblem(problem);
         estimator.run();
@@ -57,7 +58,7 @@ public class SuccessiveEarliestArrivalAugmentingPathOptimizedTask extends Transf
         PathBasedFlowOverTime df = transformedSolution.getPathBased();
         String result = String.format("Sent %1$s of %2$s flow units in %3$s time units successfully.", transformedSolution.getFlowAmount(), getAlgorithm().getProblem().getTotalSupplies(), transformedSolution.getTimeHorizon());
         System.out.println(result);
-				System.out.println( "Total cost: " + transformedSolution.getTotalCost() );
+	System.out.println( "Total cost: " + transformedSolution.getTotalCost() );
         //AlgorithmTask.getInstance().publish(100, result, "");
         System.out.println( "Sending the flow units required " + Formatter.formatTimeUnit( getAlgorithm().getRuntime(), Formatter.TimeUnits.MilliSeconds ) );
         return df;
