@@ -433,8 +433,15 @@ public class Edge implements Serializable {
 		int ret2 = t1 * t2;
 		if( ret1 < 0 & ret2 < 0 )
 			return LineIntersectionType.Intersects;
-		else if( ret1 * ret2 == 0 )
-			return LineIntersectionType.IntersectsBorder; // Cannot be colinear here!
+		else if( ret1 == 0 && ret2 == 0 )
+			throw new IllegalStateException( "Two line segments are colinear but this should have been returned earlier." );
+//		else if( ret1 == 0 && ret2 == 0 ) // was: ret1 * ret2 == 0, das ist falsch, siehe [(6400,4800),(4000,4800)] and [(6400,5600),(8000,4800)]
+//		else if( ret1 * ret2 == 0 ) // was: ret1 * ret2 == 0, das ist falsch, siehe [(6400,4800),(4000,4800)] and [(6400,5600),(8000,4800)]
+//			return LineIntersectionType.IntersectsBorder; // At least three points are colinear.
+		else if( ret1 == 0 && ret2 == 1 || ret1 == 1 && ret2 == 0 ) // retx == 0 means, three points are on one line (colinear).
+			return LineIntersectionType.NotIntersects;
+		else if( ret1 == 0 && ret2 == -1 || ret1 == -1 && ret2 == 0 )
+			return LineIntersectionType.IntersectsBorder;
 		else
 			return LineIntersectionType.NotIntersects;
 	}
