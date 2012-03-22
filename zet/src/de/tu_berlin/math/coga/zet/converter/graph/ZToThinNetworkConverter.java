@@ -124,14 +124,14 @@ public class ZToThinNetworkConverter extends BaseZToGraphConverter{
                     int numCol = room.getColumnCount()*2;
                     int numRow = room.getRowCount()*2; 
                     
-                    for (int i=0; i<numCol+1;i++)
+                    for (int i=0; i<numCol+2;i++)
                     {
-                        for (int j=0;j<numRow+1;j++)
+                        for (int j=0;j<numRow+2;j++)
                         {
                             PlanPoint p = new PlanPoint(room.getXOffset()+(i*size),room.getYOffset()+(j*size));
                             System.out.println("p_x: " + p.x + "p_y: " + p.y);
                             //only if they are inside the polygon
-                            if (ZRoom.containsStrict(p))
+                            if (ZRoom.contains(p))
                             {
                                 Vector2 v = new Vector2((double)p.x,(double)p.y);
                                 givenPoints.add(v);
