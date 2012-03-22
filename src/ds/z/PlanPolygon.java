@@ -775,14 +775,14 @@ public class PlanPolygon<T extends Edge> implements Iterable<T> {
 			//Edge e = new Edge( p, new PlanPoint( p.getX() + 2 * width, p.getY() ), new PlanPolygon() );
 			PlanPolygon poly = new PlanPolygon<T>( edgeClassType );
 			//poly.addEdge( new Edge( p, new PlanPoint (p.getX () + 2 * width, p.getY ()) ) );
-			Edge e = new Edge( new PlanPoint( p.getXInt(), p.getYInt() ), new PlanPoint( p.getXInt() + 2 * width, p.getYInt() ), poly );
+			Edge testRay = new Edge( new PlanPoint( p.getXInt(), p.getYInt() ), new PlanPoint( p.getXInt() + 2 * width, p.getYInt() ), poly );
 			T current;
 			while( iter.hasNext() ) {
 				current = iter.next();
 				// Check if the point is one of the end-points
 				if( current.fits( p ) )
 					return true;
-				switch( Edge.intersects( e, current ) ) {
+				switch( Edge.intersects( testRay, current ) ) {
 					case Colinear:
 						if( p.getXInt() < current.getMaxX() & p.getXInt() > current.getMinX() )
 							return true;
