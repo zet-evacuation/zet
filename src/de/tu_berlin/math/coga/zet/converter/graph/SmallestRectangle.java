@@ -8,6 +8,7 @@ import de.tu_berlin.math.coga.math.vectormath.Vector2;
 import Jama.EigenvalueDecomposition;
 import Jama.Matrix;
 import java.awt.Point;
+import java.util.LinkedList;
 import java.util.List;
 /**
  *
@@ -18,6 +19,7 @@ public class SmallestRectangle {
    Vector2 center,xAxis,yAxis;
    double x_extent,y_extent;
    Vector2[] axis = new Vector2[2];
+   List<Point> recPoints;
 
    public void initialize()
    {
@@ -28,7 +30,7 @@ public class SmallestRectangle {
        y_extent = 0.0;
    }
    
-   public void computeSmallestRectangle(int numPoints, List<Vector2> points)
+   public List<Point> computeSmallestRectangle(int numPoints, List<Vector2> points)
    {
        initialize();
        
@@ -42,7 +44,7 @@ public class SmallestRectangle {
        }
        double inv = 1.0/((double) numPoints);
        center.scalarMultiplicateTo(inv);
-       System.out.println("Center: " + center.getX() + " " + center.getY());
+       
        //Compute the covariance matrix of the points
        double sumXX = 0.0;
        double sumXY = 0.0;
@@ -50,51 +52,40 @@ public class SmallestRectangle {
        
        for (int i=0;i<numPoints;i++)
        {
-           //System.out.println("Point: " + points.get(i).getX() + "Y:" + points.get(i).getY());
-           //System.out.println("Center: " + center.getX() + "Y:" + center.getY());
            Vector2 diff = points.get(i).sub(center);
            sumXX += (diff.getX()*diff.getX()); 
-           //System.out.println("sumXX: " + sumXX);
            sumXY += (diff.getX()*diff.getY());
-           //System.out.println("sumXY: " + sumXY);
            sumYY += (diff.getY()*diff.getY());
-           //System.out.println("sumXX: " + sumYY);
        }
        sumXX *= inv; sumXY *= inv; sumYY *= inv;
-       System.out.println("XX: " + sumXX + "XY: " + sumXY + "YY: " + sumYY);
        
        //Compute Eigenvectors and values of points       
        Matrix Cov = new Matrix(2,2); 
        Cov.set(0,0,sumXX); Cov.set(0,1,sumXY);Cov.set(1,0,sumXY);Cov.set(1,1,sumYY);
-       //Cov.set(0,0,1); Cov.set(0,1,3);Cov.set(1,0,3);Cov.set(1,1,4);
-       System.out.println("Matrix 1: " + Cov.get(0,0));
-       System.out.println("Matrix 2: " + Cov.get(0,1));
-       System.out.println("Matrix 3: " + Cov.get(1,0));
-       System.out.println("Matrix 4: " + Cov.get(1,1));
+
+       //System.out.println("Matrix 1: " + Cov.get(0,0));
+       //System.out.println("Matrix 2: " + Cov.get(0,1));
+       //System.out.println("Matrix 3: " + Cov.get(1,0));
+       //System.out.println("Matrix 4: " + Cov.get(1,1));
        EigenvalueDecomposition eigen = Cov.eig();
        Matrix eigval = eigen.getD();
        Matrix eigvec = eigen.getV();
             
-       System.out.println("eigenvalues 1: " + eigval.get(0,0));
-       System.out.println("eigenvalues 2: " + eigval.get(0,1));
-       System.out.println("eigenvalues 3: " + eigval.get(1,0));
-       System.out.println("eigenvalues 4: " + eigval.get(1,1));
+       //System.out.println("eigenvalues 1: " + eigval.get(0,0));
+       //System.out.println("eigenvalues 2: " + eigval.get(0,1));
+       //System.out.println("eigenvalues 3: " + eigval.get(1,0));
+       //System.out.println("eigenvalues 4: " + eigval.get(1,1));
        
        x_extent = eigval.get(0,0); y_extent = eigval.get(1,1);
-       System.out.println("x_extent: " + x_extent + "y_extent: " + y_extent);
        xAxis = new Vector2(eigvec.get(0,0),eigvec.get(0,1));
-       System.out.println("xAxis: " + xAxis.getX() + "x_axis: " + xAxis.getY());
        yAxis = new Vector2(eigvec.get(1,0),eigvec.get(1,1));
-       System.out.println("xAxis: " + yAxis.getX() + "x_axis: " + yAxis.getY());
        
        Vector2 diff = points.get(0).sub(center);
-       System.out.println("p0: " + diff.getX() + "p0: "+ diff.getY());
        axis[0] = xAxis; axis[1] = yAxis;
        Vector2 min = new Vector2(diff.dotProduct(xAxis), diff.dotProduct(yAxis));
-       System.out.println("Min1: " + min.getX() + "Min1: " + min.getY());
        Vector2 max = new Vector2();
        max.setX(min.getX());max.setY(min.getY());
-       System.out.println("Max1: " + max.getX() + "Max1: " + max.getY());
+
        for (int i=0;i<numPoints; i++)
        {
            diff = points.get(i).sub(center);
@@ -118,26 +109,31 @@ public class SmallestRectangle {
            }
                
        }
-       System.out.println("Min: " + min.getX() + "Min: " + min.getY());
-       System.out.println("Max: " + max.getX() + "Max: " + max.getY());
        Vector2 vect = axis[0].scalarMultiplicate(0.5*(min.getX()+max.getX())).add(axis[0].scalarMultiplicate(0.5*(min.getY()+max.getY())));
        center.addTo(vect);
-       System.out.println("X: " + center.getX() + "Y:" + center.getY());
        x_extent = 0.5*(max.getX() - min.getX());
        y_extent = 0.5*(max.getY() - min.getY());
-       System.out.println("xextent: " + x_extent + "yextent: " + y_extent);
-       
+       System.out.println("x_extent: " + x_extent + "y_extent: " + y_extent);
        getRectanglePoints();
+       getNodeRectanglePoints();
+       
+       return recPoints;
        
        }
    
        public void getRectanglePoints()
        {
-           Vector2 extxAxis = axis[0].scalarMultiplicate(x_extent);
-           Vector2 extyAxis = axis[1].scalarMultiplicate(y_extent);
+           recPoints = new LinkedList<>();
            
-           Vector2 p1 = center.sub(extxAxis).sub(extyAxis);
+           Vector2 extxAxis = axis[0].scalarMultiplicate(x_extent);
+           //System.out.println("axis[0]: " + axis[0].getX() + " " + axis[0].getY());
+           Vector2 extyAxis = axis[1].scalarMultiplicate(y_extent);
+           //System.out.println("axis[1]: " + axis[1].getX() + " " + axis[1].getY());
+           
+           System.out.println("Center: " + center.getX() + " " + center.getY());
+           Vector2 p1 = center.sub(extxAxis).sub(extyAxis);           
            Point po1 = new Point((int)p1.getX(),(int)p1.getY());
+           
            Vector2 p2 = center.add(extxAxis).sub(extyAxis);
            Point po2 = new Point((int)p2.getX(),(int)p2.getY());
            Vector2 p3 = center.add(extxAxis).add(extyAxis);
@@ -145,7 +141,47 @@ public class SmallestRectangle {
            Vector2 p4 = center.sub(extxAxis).add(extyAxis);
            Point po4 = new Point((int)p4.getX(),(int)p4.getY());
            
-           System.out.println("P1: " + po1 + "P2: " + po2 + "P3: " + po3 + "P4: " + po4);
+           recPoints.add(po1);recPoints.add(po2);recPoints.add(po3);recPoints.add(po4);
+       }
+       
+       public void getNodeRectanglePoints()
+       {
+           double xmax = Double.MIN_VALUE;
+           double ymax = Double.MIN_VALUE;
+           double xmin = Double.MAX_VALUE;
+           double ymin = Double.MAX_VALUE;
+           Point miny = new Point(0,0);
+           Point minx = new Point(0,0);
+           Point maxy = new Point(0,0);
+           Point maxx = new Point(0,0);
+           
+           for (Point p: recPoints)
+           {
+               if (p.getX() < xmin)
+               {
+                   xmin = p.getX();
+                   minx = p;
+               }
+               if (p.getY() < ymin)
+               {
+                   ymin = p.getY();
+                   miny = p;
+               }
+               if (p.getX() > xmax)
+               {
+                   xmax = p.getX();
+                   maxx = p;
+               }
+               if (p.getY() > ymax)
+               {
+                   ymax = p.getY();
+                   maxy = p;
+               }
+               
+           }
+           recPoints = new LinkedList<>();
+           recPoints.add(minx);recPoints.add(miny);recPoints.add(maxy);recPoints.add(maxx);
+           
        }
        
        }
