@@ -19,8 +19,7 @@ import ds.mapping.IdentifiableObjectMapping;
 import ds.z.*;
 import java.awt.Point;
 import java.util.*;
-import de.tu_berlin.math.coga.zet.converter.graph.SmallestRectangle;
-import java.awt.Polygon;
+
 /**
  *
  * @author marlenschwengfelder
@@ -114,40 +113,7 @@ public class ZToThinNetworkConverter extends BaseZToGraphConverter{
         {
                System.out.println("Currently considered room: " + room.getRoom().getName() + "on floor: " + room.getRoom().getAssociatedFloor());
                Room ZRoom = room.getRoom();
-               //........................
-               if (iter==1)
-               { 
-                    SmallestRectangle rec = new SmallestRectangle();
-                    List<Vector2> givenPoints = new LinkedList<>();
-                    
-                    int size = room.getRaster()/2;
-                    int numCol = room.getColumnCount()*2;
-                    int numRow = room.getRowCount()*2; 
-                    
-                    for (int i=0; i<numCol+2;i++)
-                    {
-                        for (int j=0;j<numRow+2;j++)
-                        {
-                            PlanPoint p = new PlanPoint(room.getXOffset()+(i*size),room.getYOffset()+(j*size));
-                            System.out.println("p_x: " + p.x + "p_y: " + p.y);
-                            //only if they are inside the polygon
-                            if (ZRoom.contains(p))
-                            {
-                                Vector2 v = new Vector2((double)p.x,(double)p.y);
-                                givenPoints.add(v);
-                            }
-                        }
-                    }
-                    
-                    System.out.println("Given points size: " + givenPoints.size());
-                    for (int k=0;k<givenPoints.size();k++)
-                    {
-                        System.out.println("given Points: " + givenPoints.get(k));
-                    }
-                    rec.computeSmallestRectangle(givenPoints.size(), givenPoints);
-                    iter++;
-               }
-               
+              
                doorNodes = new HashSet<>();
                EvacNodes = new ListSequence<>();
                AssignNodes = new ListSequence<>();
@@ -302,30 +268,7 @@ public class ZToThinNetworkConverter extends BaseZToGraphConverter{
                         }
                     }
                     
-                    floordoors = getFloorDoors(ZRoom);
-                    /*if (!floordoors.isEmpty())
-                    {
-                        for (Point po: floordoors.keySet())
-                        {
-                            Node node = new Node(nodeCount++);
-                            isfloorNode.set(node, Boolean.TRUE);
-                            System.out.println("Floor Connecting Node: " + node + " for room: " + ZRoom.getName());  
-                            graph.setNode(node);
-                            PositionNode pos = new PositionNode(node,po,floordoors.get(po));
-                            floorNodes.add(pos);
-                            doorNodes.add(pos);
-                            int width = floordoors.get(po)/1000*2;
-                            //System.out.println("Knotenkap: " + width);
-                            nodesCap.add(node, width);
-                            NodeRectangle rec = new NodeRectangle(po.x-1,-(po.y+1), po.x+1,-(po.y-1));
-                            mapping.setNodeRectangle(node, rec );
-                            model.getZToGraphMapping().getNodeFloorMapping().set( node,getProblem().getFloorID(room.getFloor()));
-                            model.getZToGraphMapping().setIsEvacuationNode( node, false );
-                            model.getZToGraphMapping().setIsSourceNode(node, false);
-                            model.getZToGraphMapping().setIsDeletedSourceNode( node, false );
-                        }
-                    }*/
-                    
+                    floordoors = getFloorDoors(ZRoom);                   
                     
                     //create door nodes for rooms with only one neighbour
                     //if there is at least one evacuation or assignment area, create a node representing the doors
@@ -336,13 +279,12 @@ public class ZToThinNetworkConverter extends BaseZToGraphConverter{
                         {                                     
                                 //create node for door                        
                                 Node node = new Node(nodeCount);
-                                System.out.println("Doooooooor Node: " + node + " for room: " + ZRoom.getName());
+                                System.out.println("Door Node: " + node + " for room: " + ZRoom.getName() + "with 1 neighbour");
                                 PositionNode pos = new PositionNode(node,p,doors.get(p));
                                 doorNodes.add(pos);
                                 nodeCount++;
                                 graph.setNode(node);
                                 //DoorNodeForRoom.put(ZRoom, node);
-                                
                                 //length of door is returned in mm
                                 //Observation: 0.5 meter/person
                                 int width = (int) Math.floor(((double) ZRoom.getLengthOfDoor(ZRoom))/1000.0)*2;
@@ -461,33 +403,9 @@ public class ZToThinNetworkConverter extends BaseZToGraphConverter{
                         FindRectangulationNodes(room);
                     }         
                     else
-                    {                        
-                        Node node = new Node(nodeCount++);
-                        System.out.println("Create node in the middle: " + node + "for: " + ZRoom.getName());
-                        graph.setNode(node);
-                        CenterNodeForRoom.put(ZRoom, node);
-                        //TODO: define exact value of node capacity
-                        nodesCap.set(node, Integer.MAX_VALUE);
-                        NodeRectangle rec = new NodeRectangle(ZRoom.getxOffset(),-ZRoom.getyOffset(),ZRoom.getxOffset()+ZRoom.getWidth(),-(ZRoom.getyOffset()+ZRoom.getHeight()));
-                        if (ZRoom.getInaccessibleAreas().size() > 0)
-                        {
-                            PlanPoint p = new PlanPoint(); 
-                            p.setLocation(ZRoom.getxOffset() + (ZRoom.getWidth()/2), ZRoom.getyOffset() + (ZRoom.getHeight()/2));
-                            for (InaccessibleArea area: ZRoom.getInaccessibleAreas())
-                            {
-                                if (area.contains(p))
-                                {
-                                    System.out.println("center lies on inaccessible area... ");
-                                    int areaCenterX = area.getxOffset() + (area.getWidth()/2);
-                                    rec = new NodeRectangle(areaCenterX-1,-(area.getyOffset()-1),areaCenterX+1,-(area.getyOffset()-1));
-                                }                                 
-                            }
-                        }                        
-                        mapping.setNodeRectangle(node, rec );
-                        model.getZToGraphMapping().getNodeFloorMapping().set( node,getProblem().getFloorID(room.getFloor()));
-                        model.getZToGraphMapping().setIsEvacuationNode( node, false );
-                        model.getZToGraphMapping().setIsSourceNode(node, false);
-                        model.getZToGraphMapping().setIsDeletedSourceNode( node, false );
+                    {
+                        //finds principal axis with eigenvalue decomposition...
+                        CreateCenterForRoom(room);
                     }
                 }
                     }
@@ -572,24 +490,9 @@ public class ZToThinNetworkConverter extends BaseZToGraphConverter{
             Collection<Room> neighbRooms = NeighbourRooms.get(ZRoom);
             //connect the room with all of its neighbours
             ConnectRooms(ZRoom);
+            //connects the different floors
             ConnectFloors(ZRoom);
-            /*if (!floorNodesForRoom.get(ZRoom).isEmpty())
-            {
-                System.out.println("Yes: " );
-                Room nextToRoom = FloorConnection.get(ZRoom);
-                System.out.println("nextTo: " + nextToRoom.getName());
-                for (PositionNode n :floorNodesForRoom.get(nextToRoom))
-                {    
-                    for (PositionNode node: floorNodesForRoom.get(ZRoom))
-                    {
-                        Edge edge = new Edge(EdgeCount++,node.getNode(),n.getNode());
-                        mapping.setEdgeLevel(edge, Level.Equal);
-                        graph.setEdge(edge);
-                        System.out.println("floor connecting edge: " + edge);                   
-                        edgesCap.set(edge,Integer.MAX_VALUE);
-                    }
-                }
-            }*/
+            
             //connect nodes of assignment areas
             for (AssignmentArea a: ZRoom.getAssignmentAreas() )
             {
@@ -1673,7 +1576,70 @@ public class ZToThinNetworkConverter extends BaseZToGraphConverter{
               nodes.add(node);
               nodeCount++;                      
     }
-         
+    
+    public void CreateCenterForRoom(ZToGraphRoomRaster room)
+    {
+        Room ZRoom = room.getRoom();
+        Node node = new Node(nodeCount++);
+        System.out.println("Create node in the middle: " + node + "for: " + ZRoom.getName());
+        graph.setNode(node);
+        CenterNodeForRoom.put(ZRoom, node);
+        //TODO: define exact value of node capacity
+        nodesCap.set(node, Integer.MAX_VALUE);
+        //....Compute new Node Rectangle
+        SmallestRectangle rec = new SmallestRectangle();
+        List<Vector2> givenPoints = new LinkedList<>();
+
+        int size = room.getRaster()/2;
+        int numCol = room.getColumnCount()*2;
+        int numRow = room.getRowCount()*2; 
+
+        for (int i=0; i<numCol+2;i++)
+        {
+            for (int j=0;j<numRow+2;j++)
+            {
+                 PlanPoint p = new PlanPoint(room.getXOffset()+(i*size),room.getYOffset()+(j*size));
+                 //System.out.println("p_x: " + p.x + "p_y: " + p.y);
+                 if (ZRoom.contains(p))
+                 {
+                      Vector2 v = new Vector2((double)p.x,(double)p.y);
+                      givenPoints.add(v);
+                 }
+             }
+         }
+         /*for (int k=0;k<givenPoints.size();k++)
+         {
+               System.out.println("given Points: " + givenPoints.get(k));
+         }*/
+         List<Point> given = rec.computeSmallestRectangle(givenPoints.size(), givenPoints);           
+         NodeRectangle n = new NodeRectangle((int)given.get(0).getX(),-(int)given.get(0).getY(),(int)given.get(1).getX(),-(int)given.get(1).getY(),(int)given.get(2).getX(),-(int)given.get(2).getY(),(int)given.get(3).getX(),-(int)given.get(3).getY());
+         System.out.println("values: " + ((int)given.get(0).getX() + " " + -(int)given.get(0).getY() + " " + (int)given.get(1).getX() + " " + -(int)given.get(1).getY() + " " + (int)given.get(2).getX() + " " + -(int)given.get(2).getY() + " " + (int)given.get(3).getX() + " " + -(int)given.get(3).getY()));
+         //end compute new Node Rectangle
+         if (ZRoom.getInaccessibleAreas().size() > 0)
+         {
+               PlanPoint p = new PlanPoint(); 
+               p.setLocation(n.getCenterX(), n.getCenterY());
+               //p.setLocation(ZRoom.getxOffset() + (ZRoom.getWidth()/2), ZRoom.getyOffset() + (ZRoom.getHeight()/2));
+               for (InaccessibleArea area: ZRoom.getInaccessibleAreas())
+               {
+                    if (area.contains(p))
+                    {
+                         System.out.println("center lies on inaccessible area... ");
+                         int areaCenterX = area.getxOffset() + (area.getWidth()/2);
+                                    //rec1 = new NodeRectangle(areaCenterX-1,-(area.getyOffset()-1),areaCenterX+1,-(area.getyOffset()-1));
+                    }                                 
+                }
+          }                        
+          mapping.setNodeRectangle(node, n );
+          System.out.println("Node Rectangle: " + n.get_nw_point().getX()  + " " + n.get_nw_point().getY() + " " + n.get_se_point() + " " +  n.get_sw_point());
+          System.out.println("Center des Node Rectangles: " + n.getCenterX() + " " + n.getCenterY());
+          model.getZToGraphMapping().getNodeFloorMapping().set( node,getProblem().getFloorID(room.getFloor()));
+          model.getZToGraphMapping().setIsEvacuationNode( node, false );
+          model.getZToGraphMapping().setIsSourceNode(node, false);
+          model.getZToGraphMapping().setIsDeletedSourceNode( node, false );
+                    
+    }
+    
     public void FindRectangulationNodes(ZToGraphRoomRaster Zroom)
     {        
          Room room = Zroom.getRoom();
