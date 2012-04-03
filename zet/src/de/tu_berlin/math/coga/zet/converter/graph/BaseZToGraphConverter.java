@@ -13,6 +13,8 @@ import ds.graph.Edge;
 import ds.graph.Graph;
 import ds.mapping.IdentifiableDoubleMapping;
 import ds.z.BuildingPlan;
+import java.util.LinkedList;
+import java.util.List;
 
 /**
  *
@@ -24,6 +26,9 @@ public abstract class BaseZToGraphConverter extends Algorithm<BuildingPlan, Netw
 	protected NetworkFlowModel model;
 	protected ZToGraphRasterContainer raster;
 	protected Graph roomGraph;
+        
+        public int numStairEdges=0;
+        public List<Edge> stairEdges = new LinkedList<>();
 
 	@Override
 	protected NetworkFlowModel runAlgorithm( BuildingPlan problem ) {
@@ -40,7 +45,6 @@ public abstract class BaseZToGraphConverter extends Algorithm<BuildingPlan, Netw
 		// calculate the transit times for all edges
                 
 		computeTransitTimes();
-                System.out.println("TransitZeiten: " + exactTransitTimes);
 		// adjust transit times according to stair speed factors
 		multiplyWithUpAndDownSpeedFactors();
 
@@ -48,8 +52,8 @@ public abstract class BaseZToGraphConverter extends Algorithm<BuildingPlan, Netw
 		model.setTransitTimes( exactTransitTimes.round() );
 
 		// duplicate the edges and their transit times (except those concerning the super sink)		
-		createReverseEdges( model );
-
+		createReverseEdgesWithoutStairEdges( model );
+                
 		model.setNetwork( model.getGraph().getAsStaticNetwork() );
 		return model;
 
@@ -79,20 +83,22 @@ public abstract class BaseZToGraphConverter extends Algorithm<BuildingPlan, Netw
 		}
 	}
 
-	protected void createReverseEdgesWithoutSuper( NetworkFlowModel model ) {
+	protected void createReverseEdgesWithoutStairEdges( NetworkFlowModel model ) {
 		int edgeIndex = model.getGraph().numberOfEdges();
 		final int oldEdgeIndex = edgeIndex;
-		model.setNumberOfEdges( edgeIndex * 2 );
+		model.setNumberOfEdges( ((edgeIndex-numStairEdges) * 2) - model.getGraph().degree( model.getSupersink() ) );
 
 		// don't use an iterator here, as it will result in concurrent modification
 		for( int i = 0; i < oldEdgeIndex; ++i ) {
 			Edge edge = model.getGraph().getEdge( i );
-			Edge newEdge = new Edge( edgeIndex++, edge.end(), edge.start() );
-			mapping.setEdgeLevel( newEdge, mapping.getEdgeLevel( edge ).getInverse() );
-			model.setEdgeCapacity( newEdge, model.getEdgeCapacity( edge ) );
-			model.setTransitTime( newEdge, model.getTransitTime( edge ) );
-			model.getGraph().setEdge( newEdge );
-
+                        if (!stairEdges.contains(edge) && !edge.isIncidentTo(model.getSupersink()))
+                        {
+                            Edge newEdge = new Edge( edgeIndex++, edge.end(), edge.start() );
+                            mapping.setEdgeLevel( newEdge, mapping.getEdgeLevel( edge ).getInverse() );
+                            model.setEdgeCapacity( newEdge, model.getEdgeCapacity( edge ) );
+                            model.setTransitTime( newEdge, model.getTransitTime( edge ) );
+                            model.getGraph().setEdge( newEdge );
+                        }
 		}
 	}
 

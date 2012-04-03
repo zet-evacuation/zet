@@ -63,18 +63,13 @@ public class SmallestRectangle {
        Matrix Cov = new Matrix(2,2); 
        Cov.set(0,0,sumXX); Cov.set(0,1,sumXY);Cov.set(1,0,sumXY);Cov.set(1,1,sumYY);
 
-       //System.out.println("Matrix 1: " + Cov.get(0,0));
-       //System.out.println("Matrix 2: " + Cov.get(0,1));
-       //System.out.println("Matrix 3: " + Cov.get(1,0));
-       //System.out.println("Matrix 4: " + Cov.get(1,1));
+       //System.out.println("Matrix 1: " + Cov.get(0,0) + Cov.get(0,1)+ Cov.get(1,0) + Cov.get(1,1));
+       
        EigenvalueDecomposition eigen = Cov.eig();
        Matrix eigval = eigen.getD();
        Matrix eigvec = eigen.getV();
             
-       //System.out.println("eigenvalues 1: " + eigval.get(0,0));
-       //System.out.println("eigenvalues 2: " + eigval.get(0,1));
-       //System.out.println("eigenvalues 3: " + eigval.get(1,0));
-       //System.out.println("eigenvalues 4: " + eigval.get(1,1));
+       //System.out.println("eigenvalues 1: " + eigval.get(0,0) + eigval.get(0,1) + eigval.get(1,0) + eigval.get(1,1));
        
        x_extent = eigval.get(0,0); y_extent = eigval.get(1,1);
        xAxis = new Vector2(eigvec.get(0,0),eigvec.get(0,1));
@@ -113,7 +108,7 @@ public class SmallestRectangle {
        center.addTo(vect);
        x_extent = 0.5*(max.getX() - min.getX());
        y_extent = 0.5*(max.getY() - min.getY());
-       System.out.println("x_extent: " + x_extent + "y_extent: " + y_extent);
+       //System.out.println("x_extent: " + x_extent + "y_extent: " + y_extent);
        getRectanglePoints();
        getNodeRectanglePoints();
        
@@ -130,7 +125,7 @@ public class SmallestRectangle {
            Vector2 extyAxis = axis[1].scalarMultiplicate(y_extent);
            //System.out.println("axis[1]: " + axis[1].getX() + " " + axis[1].getY());
            
-           System.out.println("Center: " + center.getX() + " " + center.getY());
+           //System.out.println("Center: " + center.getX() + " " + center.getY());
            Vector2 p1 = center.sub(extxAxis).sub(extyAxis);           
            Point po1 = new Point((int)p1.getX(),(int)p1.getY());
            
@@ -142,6 +137,7 @@ public class SmallestRectangle {
            Point po4 = new Point((int)p4.getX(),(int)p4.getY());
            
            recPoints.add(po1);recPoints.add(po2);recPoints.add(po3);recPoints.add(po4);
+           //System.out.println("Points: " + po1 + po2 + po3 + po4 );
        }
        
        public void getNodeRectanglePoints()
@@ -154,36 +150,151 @@ public class SmallestRectangle {
            Point minx = new Point(0,0);
            Point maxy = new Point(0,0);
            Point maxx = new Point(0,0);
+           Point NW = new Point(0,0); Point NE = new Point(0,0);
+           Point SW = new Point(0,0); Point SE = new Point(0,0);
+           int numxval =0; int numyval =0;
+           //saves the different x and y-points 
+           List<Double> xpoints = new LinkedList<>(); List<Double> ypoints = new LinkedList<>() ;
+           List<Point> firstVal = new LinkedList<>(); List<Point> secondVal = new LinkedList<>();
            
            for (Point p: recPoints)
            {
-               if (p.getX() < xmin)
-               {
-                   xmin = p.getX();
-                   minx = p;
+               if (!(xpoints.contains(p.getX()))){
+                   xpoints.add(p.getX());
+                   numxval++;
                }
-               if (p.getY() < ymin)
-               {
-                   ymin = p.getY();
-                   miny = p;
-               }
-               if (p.getX() > xmax)
-               {
-                   xmax = p.getX();
-                   maxx = p;
-               }
-               if (p.getY() > ymax)
-               {
-                   ymax = p.getY();
-                   maxy = p;
-               }
-               
+               if (!(ypoints.contains(p.getY()))){
+                   ypoints.add(p.getY());
+                   numyval++;
+               }             
            }
+           //System.out.println("numxval: " + numxval +  "numyval: " + numyval);
+                
+           for (Point p: recPoints)
+           {
+                    if (p.getX() < xmin){
+                        xmin = p.getX();
+                        minx = p;
+                    }
+                    if (p.getY() < ymin){
+                        ymin = p.getY();
+                        miny = p;
+                    }
+                    if (p.getX() > xmax){
+                        xmax = p.getX();
+                        maxx = p;
+                    }
+                    if (p.getY() > ymax){
+                        ymax = p.getY();
+                        maxy = p;
+                    }   
+           }
+                
            recPoints = new LinkedList<>();
-           recPoints.add(minx);recPoints.add(miny);recPoints.add(maxy);recPoints.add(maxx);
-           
+           //works only well if none of the edges are axis aligned...
+           if (numxval==4 && numyval ==4)
+           {
+              recPoints.add(minx);recPoints.add(miny);recPoints.add(maxy);recPoints.add(maxx);
+           }
+           // rectangle is y-axis aligned
+           else if (numxval==2 && numyval == 4)
+           {
+                  //System.out.println("y-axis aligned");
+                  double y_min1 = Double.MAX_VALUE;
+                  double y_min2 = Double.MAX_VALUE;
+                  for (Point p: recPoints){
+                      if (p.getX() == xmin){
+                          firstVal.add(p);
+                      }
+                      else{
+                          secondVal.add(p);
+                      }
+                  }
+                  for (int i=0;i<2;i++)
+                  {
+                      Point first = firstVal.get(i);
+                      Point second = secondVal.get(i);
+                      
+                      if ( first.getY() < y_min1)
+                      {
+                          NW = first;
+                          if (i==0){
+                              SW = firstVal.get(i+1);
+                          }
+                          else{
+                              SW = firstVal.get(i-1);
+                          }
+                          y_min1 = first.getY();
+                      }
+                      if ( second.getY() < y_min2)
+                      {
+                          NE = second;
+                          if (i==0){
+                              SE = secondVal.get(i+1);
+                          }
+                          else{
+                              SE = secondVal.get(i-1);
+                          }
+                          y_min2 = second.getY();
+                      }
+                  }
+                  recPoints.add(NW);recPoints.add(NE); recPoints.add(SW);recPoints.add(SE); 
+           }
+           //rectangle is x-axis aligned
+           else if (numxval==4 && numyval==2)
+           {
+                  //System.out.println("x-axis aligned");
+                  double x_min1 = Double.MAX_VALUE;
+                  double x_min2 = Double.MAX_VALUE;
+                  for (Point p: recPoints){
+                      if (p.getY() == ymin){
+                          firstVal.add(p);
+                      }
+                      else{
+                          secondVal.add(p);
+                      }
+                  }
+                  for (int i=0;i<2;i++)
+                  {
+                      Point first = firstVal.get(i);
+                      Point second = secondVal.get(i);
+                      
+                      if ( first.getX() < x_min1)
+                      {
+                          NW = first;
+                          if (i==0){
+                              SW = firstVal.get(i+1);
+                          }
+                          else{
+                              SW = firstVal.get(i-1);
+                          }
+                          x_min1 = first.getX();
+                      }
+                      if ( second.getX() < x_min2)
+                      {
+                          NE = second;
+                          if (i==0){
+                              SE = secondVal.get(i+1);
+                          }
+                          else{
+                              SE = secondVal.get(i-1);
+                          }
+                          x_min2 = second.getX();
+                      }
+                  }
+                  recPoints.add(NW);recPoints.add(NE); recPoints.add(SW);recPoints.add(SE); 
+           }
+           else if (numxval==2 && numyval==2 ) 
+           {
+               //System.out.println("axis aligned in both directions");
+               NW = new Point((int)xmin,(int)ymin);
+               NE = new Point((int)xmax,(int)ymin);
+               SW = new Point((int)xmin,(int)ymax);
+               SE = new Point((int)xmax,(int)ymax);
+               recPoints.add(NW); recPoints.add(NE);recPoints.add(SW); recPoints.add(SE);
+           }
+               
        }
-       
        }
    
     
