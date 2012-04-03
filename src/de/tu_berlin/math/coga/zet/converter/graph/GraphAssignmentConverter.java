@@ -70,7 +70,8 @@ public class GraphAssignmentConverter extends Algorithm<ConcreteAssignment, Netw
 			int YPos = pos.getYInt();
 			// get the square the person is located
 			ZToGraphRasterSquare square = roomRaster.getSquareWithGlobalCoordinates( XPos, YPos );
-//            ZToGraphRasterSquare square = roomRaster.getSquare((int)Math.floor(XPos/400), (int)Math.floor(YPos/400));
+                        //System.out.println("Square in Assignment: " + square);
+                        //ZToGraphRasterSquare square = roomRaster.getSquare((int)Math.floor(XPos/400), (int)Math.floor(YPos/400));
 			// get the square's associated node
 			Node node = square.getNode();
 

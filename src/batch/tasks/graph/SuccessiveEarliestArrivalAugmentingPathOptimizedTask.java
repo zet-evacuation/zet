@@ -44,7 +44,6 @@ public class SuccessiveEarliestArrivalAugmentingPathOptimizedTask extends Transf
     protected EarliestArrivalFlowProblem transformProblem(NetworkFlowModel originalProblem) {
         System.out.println("Earliest arrival transshipment calculation starts");
         EarliestArrivalFlowProblem problem = new EarliestArrivalFlowProblem(originalProblem.getEdgeCapacities(), originalProblem.getNetwork(), originalProblem.getNodeCapacities(), originalProblem.getSupersink(), originalProblem.getSources(), 0, originalProblem.getTransitTimes(), originalProblem.getCurrentAssignment());
-        System.out.println("assign" + originalProblem.getCurrentAssignment());
         LongestShortestPathTimeHorizonEstimator estimator = new LongestShortestPathTimeHorizonEstimator();
         estimator.setProblem(problem);
         estimator.run();

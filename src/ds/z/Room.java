@@ -141,9 +141,8 @@ public class Room extends BaseRoom<RoomEdge> implements Cloneable, Comparable<Ro
                     edges.add(edge);
                 }
             }
-            //System.out.println("edges: " + edges);
             //create one door for neighbouring edges
-            if (edges.size() >1)
+            if (edges.size() > 1)
             {
                 RoomEdge start = edges.peekFirst();
                 int longwidth = start.length();
@@ -155,7 +154,7 @@ public class Room extends BaseRoom<RoomEdge> implements Cloneable, Comparable<Ro
                     RoomEdge first = edges.poll();
                     next = edges.getFirst();
                     
-                    if (next.isNeighbour(first))
+                    if (next.isNeighbour(first) && (next.getLinkTarget().getRoom() == first.getLinkTarget().getRoom() ))
                     {
                         longwidth = longwidth + next.length();
 
@@ -200,9 +199,7 @@ public class Room extends BaseRoom<RoomEdge> implements Cloneable, Comparable<Ro
             }
             return doors;
         }
-        
-        
-        
+
         /**
 	 * Gives the length of a door for a {@code Room} with only one door
 	 * @param room the room for which length is returned
@@ -236,7 +233,7 @@ public class Room extends BaseRoom<RoomEdge> implements Cloneable, Comparable<Ro
             }
             return doorEdges;
         }
-
+        
 	/**
 	 * {@inheritDoc}
 	 * The Areas that are contained within this Room are assigned to the new room that contains them.
