@@ -24,6 +24,7 @@ import com.thoughtworks.xstream.annotations.XStreamAlias;
 import com.thoughtworks.xstream.annotations.XStreamAsAttribute;
 import com.thoughtworks.xstream.annotations.XStreamConverter;
 import com.thoughtworks.xstream.annotations.XStreamOmitField;
+import de.tu_berlin.math.coga.math.matrix.Matrix;
 import ds.z.exception.PolygonNotClosedException;
 import ds.z.exception.PolygonNotRasterizedException;
 import io.z.CompactEdgeListConverter;
@@ -55,17 +56,6 @@ import zet.util.ConversionTools;
 @XStreamAlias("planPolygon")
 @XMLConverter(PlanPolygonConverter.class)
 public class PlanPolygon<T extends Edge> implements Iterable<T> {
-	/**
-	 * Enumeration used by the relative position test. Specifies if a 
-	 * polygon is left or right from the border.
-	 * @see #relativePolygonPosition(ds.z.Edge, ds.z.PlanPolygon.RelativePosition)
-	 */
-	public enum RelativePosition {
-		/**Checks wheater the room is on the right side of anedge. */
-		Right,
-		/** Checks wheather the room is on the left side of an edge. */
-		Left;
-	}
 	/** The class-type of the edges. This is setLocation only one single time in the constructor. */
 	private final Class<T> edgeClassType;
 	/** Determines, if the polygon is closed. That means that the {@code end}
@@ -114,14 +104,22 @@ public class PlanPolygon<T extends Edge> implements Iterable<T> {
 	private T minX_DefiningEdge;
 
 	/**
-	 * three transformation matrixes for flip vertically, horizontally and at the main
+	 * three matrix matrixes for flip vertically, horizontally and at the main
 	 * diagonal plus identity matrix
 	 */
-	public static final int[][] flipXAxis = {{1, 0}, {0, -1}};
-	public static final int[][] flipYAxis = {{-1, 0}, {0, 1}};
-	public static final int[][] flipMainDiagonal = {{0, 1}, {1, 0}};
-	public static final int[][] identity = {{1, 0}, {0, 1}};
-
+	private static enum Transformation {
+		flipXAxis ( new int[][] {{1, 0}, {0, -1}} ),
+		flipYAxis( new int[][] {{-1, 0}, {0, 1}} ),
+		flipMainDiagonal( new int[][] {{0, 1}, {1, 0}} ),
+		identity( new int[][] {{1, 0}, {0, 1}} );
+		/** The matrix used for the transformation. */
+		public final int[][] matrix;
+		
+		private Transformation( int[][] trans ) {
+			matrix = trans;
+		}
+	}
+	
 	/**
 	 * Creates an new instance of {@code PlanPolygon} without any assigned
 	 * edges or points. All parameters are initialized with {@code null}.
@@ -166,6 +164,7 @@ public class PlanPolygon<T extends Edge> implements Iterable<T> {
 	 * <p>The runtime of this operation is O(n), where {@code n} is the
 	 * number of edges.</p>
 	 * @param points a list of points defining the shape of the polygon
+	 * @return the number of newly created edges
 	 * @throws java.lang.IllegalStateException if any point in the list closes the
 	 * polygon or the polygon has already edges
 	 * @throws java.lang.IllegalArgumentException if the passed list of points is
@@ -257,7 +256,7 @@ public class PlanPolygon<T extends Edge> implements Iterable<T> {
 	 */
 	// If the inserted edge closes the polygon, it is stored as the last one!
 	// TODO Perform intersection-test
-	void addEdge( T e ) throws IllegalStateException, IllegalArgumentException {
+	final void addEdge( T e ) throws IllegalStateException, IllegalArgumentException {
 		if( start == null ) {
 			// The instance is empty
 
@@ -274,11 +273,6 @@ public class PlanPolygon<T extends Edge> implements Iterable<T> {
 			height = Math.abs( start.y - end.y );
 			xOffset = e.boundLeft();
 			yOffset = e.boundUpper();
-			// This first edge defines all bounds
-			//minX_DefiningEdge = e;
-			//minY_DefiningEdge = e;
-			//maxX_DefiningEdge = e;
-			//maxY_DefiningEdge = e;
 		} else {
 			if( isClosed() )
 				throw new IllegalStateException( ZLocalization.getSingleton().getString( "ds.z.PlanPolygon.AddEdgeToClosedPolygonException" ) );
@@ -306,9 +300,6 @@ public class PlanPolygon<T extends Edge> implements Iterable<T> {
 				end = copyPoint;
 			} else
 				throw new IllegalArgumentException( ZLocalization.getSingleton().getString( "ds.z.PlanPolygon.CoordinateMismatchException" ) );
-
-			// Scan for new boundaries
-			//edgeChangeHandler( e, null );
 		}
 		
 		recomputeBoundsCheckEdge( e );
@@ -705,7 +696,7 @@ public class PlanPolygon<T extends Edge> implements Iterable<T> {
 	 * <p>Note that only edges of the border of the polygon should be used. However, no
 	 * test is made and no exception is throws. But using different edges is quite senseless as the result
 	 * will always be negative.</p>
-	 * <p>The tests checks if a point near to edge (distance 20cm) is in the room. This leeds to the
+	 * <p>The tests checks if a point near to edge (distance 20cm) is in the room. This leads to the
 	 * limitation that very small polygons can not be tested correct.</p>
 	 * <p>This function works with arbitrary edges and polygons, they <b>don't need do
 	 * be rasterized</b>!</p>
@@ -773,7 +764,7 @@ public class PlanPolygon<T extends Edge> implements Iterable<T> {
 			Iterator<T> iter = edgeIterator( false );
 			// Create the edge whose crossings are counted
 			//Edge e = new Edge( p, new PlanPoint( p.getX() + 2 * width, p.getY() ), new PlanPolygon() );
-			PlanPolygon poly = new PlanPolygon<T>( edgeClassType );
+			PlanPolygon<?> poly = new PlanPolygon<>( edgeClassType );
 			//poly.addEdge( new Edge( p, new PlanPoint (p.getX () + 2 * width, p.getY ()) ) );
 			Edge testRay = new Edge( new PlanPoint( p.getXInt(), p.getYInt() ), new PlanPoint( p.getXInt() + 2 * width, p.getYInt() ), poly );
 			T current;
@@ -793,7 +784,7 @@ public class PlanPolygon<T extends Edge> implements Iterable<T> {
 						break;
 					case IntersectsBorder:
 						// Check if p is on the line or the ray goes through the end point of another line
-						Edge inverse_e = new Edge( new PlanPoint( p.getXInt(), p.getYInt() ), new PlanPoint( p.getXInt() - 2 * width, p.getYInt() ), new PlanPolygon<T>( edgeClassType ) );
+						Edge inverse_e = new Edge( new PlanPoint( p.getXInt(), p.getYInt() ), new PlanPoint( p.getXInt() - 2 * width, p.getYInt() ), new PlanPolygon<>( edgeClassType ) );
 						if( Edge.intersects( inverse_e, current ) == Edge.LineIntersectionType.IntersectsBorder )
 							return true;
 						else
@@ -828,7 +819,7 @@ public class PlanPolygon<T extends Edge> implements Iterable<T> {
 			Iterator<T> iter = edgeIterator( false );
 			// Create the edge whose crossings are counted
 			//Edge e = new Edge( p, new PlanPoint( p.getX() + 2 * width, p.getY() ), new PlanPolygon() );
-			PlanPolygon poly = new PlanPolygon<T>( edgeClassType );
+			PlanPolygon<?> poly = new PlanPolygon<>( edgeClassType );
 			//poly.addEdge( new Edge( p, new PlanPoint (p.getX () + 2 * width, p.getY ()) ) );
 			Edge e = new Edge( new PlanPoint( p.getXInt(), p.getYInt() ), new PlanPoint( p.getXInt() + 2 * width, p.getYInt() ), poly );
 			T current;
@@ -848,7 +839,7 @@ public class PlanPolygon<T extends Edge> implements Iterable<T> {
 						break;
 					case IntersectsBorder:
 						// Check if p is on the line or the ray goes through the end point of another line
-						Edge inverse_e = new Edge( new PlanPoint( p.getXInt(), p.getYInt() ), new PlanPoint( p.getXInt() - 2 * width, p.getYInt() ), new PlanPolygon<T>( edgeClassType ) );
+						Edge inverse_e = new Edge( new PlanPoint( p.getXInt(), p.getYInt() ), new PlanPoint( p.getXInt() - 2 * width, p.getYInt() ), new PlanPolygon<>( edgeClassType ) );
 						if( Edge.intersects( inverse_e, current ) == Edge.LineIntersectionType.IntersectsBorder )
 							return false;
 						else
@@ -881,12 +872,12 @@ public class PlanPolygon<T extends Edge> implements Iterable<T> {
 	 * @param poly the polygon
 	 * @return true if the entire polygon is inside this polygon
 	 */
-	public boolean contains( PlanPolygon poly ) {
+	public boolean contains( PlanPolygon<?> poly ) {
 		boolean result = containsI( poly );
 		return result;
 	}
 
-	private boolean containsI( PlanPolygon poly ) {
+	private boolean containsI( PlanPolygon<?> poly ) {
 		// Check for points
 		ListIterator<PlanPoint> pit = poly.pointIterator( false );
 		while( pit.hasNext() ) {
@@ -895,11 +886,11 @@ public class PlanPolygon<T extends Edge> implements Iterable<T> {
 				return false;
 		}
 		// Teste auf kantenschnitt
-		Iterator<T> ei2 = poly.edgeIterator( false );
+		Iterator<? extends Edge> ei2 = poly.edgeIterator( false );
 		while( ei2.hasNext() ) {
-			T current = ei2.next();
+			Edge current = ei2.next();
 			Iterator<T> ei1 = edgeIterator( false );
-			ArrayList<PlanPoint> problemPoints = new ArrayList<PlanPoint>();
+			ArrayList<PlanPoint> problemPoints = new ArrayList<>();
 			//System.out.println( "List cleared " );
 			while( ei1.hasNext() ) {
 				T e = ei1.next();
@@ -985,11 +976,8 @@ public class PlanPolygon<T extends Edge> implements Iterable<T> {
 		}
 	}
 
-	private boolean isBetween( PlanPoint p, T e ) {
-		if( (p.getXInt() > e.getMinX() && p.getXInt() < e.getMaxX()) | (p.getYInt() > e.getMinY() && p.getYInt() < e.getMaxY()) )
-			return true;
-		else
-			return false;
+	private boolean isBetween( PlanPoint p, Edge e ) {
+		return (p.getXInt() > e.getMinX() && p.getXInt() < e.getMaxX()) | (p.getYInt() > e.getMinY() && p.getYInt() < e.getMaxY());
 	}
 
 	/**
@@ -1038,7 +1026,7 @@ public class PlanPolygon<T extends Edge> implements Iterable<T> {
 	 * @see PlanPoint
 	 */
 	// what happens if p has no edges?
-	public boolean equals( PlanPolygon p ) {
+	public boolean equals( PlanPolygon<T> p ) {
 		if( p == this )
 			return true;
 		if( p.getNumberOfEdges() == 0 && this.getNumberOfEdges() == 0 )
@@ -1150,7 +1138,7 @@ public class PlanPolygon<T extends Edge> implements Iterable<T> {
 	 * @param poly the polygon
 	 * @return true if the point is start or end point of the polygon
 	 */
-	public static boolean fits( PlanPoint p, PlanPolygon poly ) {
+	public static boolean fits( PlanPoint p, PlanPolygon<?> poly ) {
 		return p.equals( poly.getStart() ) || p.equals( poly.getEnd() );
 	}
 
@@ -1161,7 +1149,7 @@ public class PlanPolygon<T extends Edge> implements Iterable<T> {
 	 * @param p the polygon
 	 * @return true if the polygons fit together
 	 */
-	public boolean fitsTogether( PlanPolygon p ) {
+	public boolean fitsTogether( PlanPolygon<?> p ) {
 		return fitsTogether( p, this );
 	}
 
@@ -1174,7 +1162,7 @@ public class PlanPolygon<T extends Edge> implements Iterable<T> {
 	 * @param p the polygon that should fit together with the edge
 	 * @return true if the edge fits and will close the polygon
 	 */
-	public static boolean fitsTogether( Edge e, PlanPolygon p ) {
+	public static boolean fitsTogether( Edge e, PlanPolygon<?> p ) {
 		return e.fits( p.getEnd() ) && e.fits( p.getStart() ) && !p.isClosed();
 	}
 
@@ -1188,7 +1176,7 @@ public class PlanPolygon<T extends Edge> implements Iterable<T> {
 	 * @return {@code true} if both points fit to a (not closed) polygon
 	 * @see PlanPolygon#fits(PlanPoint)
 	 */
-	public static boolean fitsTogether( PlanPoint p1, PlanPoint p2, PlanPolygon polygon ) {
+	public static boolean fitsTogether( PlanPoint p1, PlanPoint p2, PlanPolygon<?> polygon ) {
 		return polygon.fits( p1 ) && polygon.fits( p2 ) && !polygon.isClosed();
 	}
 
@@ -1200,7 +1188,7 @@ public class PlanPolygon<T extends Edge> implements Iterable<T> {
 	 * @param p2 the second polygon
 	 * @return true, if the start and end points of the polygons fit together and both polygons are not closed
 	 */
-	public static boolean fitsTogether( PlanPolygon p1, PlanPolygon p2 ) {
+	public static boolean fitsTogether( PlanPolygon<?> p1, PlanPolygon<?> p2 ) {
 		boolean v = p1.getStart().equals( p2.getStart() ) && p1.getEnd().equals( p2.getEnd() );
 		boolean w = p1.getStart().equals( p2.getEnd() ) && p1.getEnd().equals( p2.getStart() );
 		return (v || w) && !(p1.isClosed() || p2.isClosed());
@@ -1269,7 +1257,7 @@ public class PlanPolygon<T extends Edge> implements Iterable<T> {
 	 * @return the list of edges
 	 */
 	public List<T> getEdges() {
-		ArrayList<T> values = new ArrayList<T>( size );
+		ArrayList<T> values = new ArrayList<>( size );
 		for( T e : this )
 			values.add( e );
 		return values;
@@ -1328,7 +1316,7 @@ public class PlanPolygon<T extends Edge> implements Iterable<T> {
 	 * of the polygon
 	 */
 	public List<PlanPoint> getPolygonPoints() {
-		ArrayList<PlanPoint> pointList = new ArrayList<PlanPoint>( size + (isClosed() ? 0 : 1) );
+		ArrayList<PlanPoint> pointList = new ArrayList<>( size + (isClosed() ? 0 : 1) );
 
 		Iterator<PlanPoint> itP = pointIterator( false );
 		while( itP.hasNext() )
@@ -1414,14 +1402,12 @@ public class PlanPolygon<T extends Edge> implements Iterable<T> {
 	public boolean intersects( PlanPolygon<?> poly ) {
 		for( PlanPoint p : this.getPlanPoints() ) {
 			if( poly.contains( p ) ) {
-//				System.out.println( "Intersection: " + p.toString() );
 				intersectionPoint = p.clone();
 				return true;
 			}
 		}
 		for( PlanPoint p : poly.getPlanPoints() ) {
 			if( contains( p ) ) {
-//				System.out.println( "Intersection: " + p.toString() );
 				intersectionPoint = p.clone();
 				return true;
 			}
@@ -1440,14 +1426,12 @@ public class PlanPolygon<T extends Edge> implements Iterable<T> {
 	public boolean intersectsStrict( PlanPolygon<?> poly ) {
 		for( PlanPoint p : this.getPlanPoints() ) {
 			if( poly.containsStrict( p ) ) {
-//				System.out.println( "Intersection: " + p.toString() );
 				intersectionPoint = p.clone();
 				return true;
 			}
 		}
 		for( PlanPoint p : poly.getPlanPoints() ) {
 			if( containsStrict( p ) ) {
-//				System.out.println( "Intersection: " + p.toString() );
 				intersectionPoint = p.clone();
 				return true;
 			}
@@ -1471,7 +1455,7 @@ public class PlanPolygon<T extends Edge> implements Iterable<T> {
 	 * call of a geometric function like {@link #contains(PlanPolygon)},
 	 * {@link #contains(PlanPoint)}, {@link #isClosed()} and
 	 * {@link #intersects( PlanPolygon )}. This can be used to check, if the
-	 * transformation into a point-based-structure is neccessary.
+	 * matrix into a point-based-structure is neccessary.
 	 * @return true, if no change occured.
 	 */
 	public boolean isChanged() {
@@ -1527,19 +1511,13 @@ public class PlanPolygon<T extends Edge> implements Iterable<T> {
 	 * @param poly the associated polygon
 	 * @return the new instance of {@code T}
 	 */
-	private T newEdge( PlanPoint p1, PlanPoint p2, PlanPolygon poly ) {
+	private T newEdge( PlanPoint p1, PlanPoint p2, PlanPolygon<?> poly ) {
 		T edge = null;
 		try {
 			edge = edgeClassType.getDeclaredConstructor( PlanPoint.class, PlanPoint.class ).newInstance( p1, p2 );
 			// This calls addEdge internally
 			edge.setAssociatedPolygon( poly );
-		} catch( java.lang.NoSuchMethodException ex ) {
-			throw new RuntimeException( ZLocalization.getSingleton().getString( "ds.z.PlanPolygon.InternalError" ) );
-		} catch( java.lang.InstantiationException ex ) {
-			throw new RuntimeException( ZLocalization.getSingleton().getString( "ds.z.PlanPolygon.InternalError" ) );
-		} catch( java.lang.IllegalAccessException ex ) {
-			throw new RuntimeException( ZLocalization.getSingleton().getString( "ds.z.PlanPolygon.InternalError" ) );
-		} catch( java.lang.reflect.InvocationTargetException ex ) {
+		} catch( java.lang.NoSuchMethodException | java.lang.InstantiationException | java.lang.IllegalAccessException | java.lang.reflect.InvocationTargetException ex ) {
 			throw new RuntimeException( ZLocalization.getSingleton().getString( "ds.z.PlanPolygon.InternalError" ) );
 		}
 		return edge;
@@ -1562,13 +1540,7 @@ public class PlanPolygon<T extends Edge> implements Iterable<T> {
 			edge = edgeClassType.getDeclaredConstructor( PlanPoint.class, PlanPoint.class ).newInstance( p1, p2 );
 			// This calls addEdge internally
 			edge.setAssociatedPolygon( poly );
-		} catch( java.lang.NoSuchMethodException ex ) {
-			//;
-		} catch( java.lang.InstantiationException ex ) {
-			//;
-		} catch( java.lang.IllegalAccessException ex ) {
-			//;
-		} catch( java.lang.reflect.InvocationTargetException ex ) {
+		} catch( java.lang.NoSuchMethodException | java.lang.InstantiationException | java.lang.IllegalAccessException | java.lang.reflect.InvocationTargetException ex ) {
 			//;
 		}
 		return edge;
@@ -1722,7 +1694,7 @@ public class PlanPolygon<T extends Edge> implements Iterable<T> {
 			lastPoint = currentPoint;
 		}
 
-		ArrayList<T> result = new ArrayList<T>( points.size() - 1 );
+		ArrayList<T> result = new ArrayList<>( points.size() - 1 );
 		try {
 
 			PlanPoint old_start = e.getSource();
@@ -1996,16 +1968,9 @@ public class PlanPolygon<T extends Edge> implements Iterable<T> {
 			throw new IllegalStateException( "Width < 0" );
 	}
 	
-	public int[][] matrixMultiplication( int[][] m1, int[][] m2 ) {
-		int[][] m = new int[2][2];
-		m[0][0] = m1[0][0] * m2[0][0] + m1[0][1] * m2[1][0];
-		m[0][1] = m1[0][0] * m2[0][1] + m1[0][1] * m2[1][1];
-		m[1][0] = m1[1][0] * m2[0][0] + m1[1][1] * m2[1][0];
-		m[1][1] = m1[1][0] * m2[0][1] + m1[1][1] * m2[1][1];
-		return m;
-	}
 
-	public PlanPoint transformPlanPoint( PlanPoint p, int[][] m ) {
+
+	public final PlanPoint transformPlanPoint( PlanPoint p, int[][] m ) {
 		return new PlanPoint( m[0][0] * p.getXInt() + m[0][1] * p.getYInt(), m[1][0] * p.getXInt() + m[1][1] * p.getYInt() );
 	}
 
@@ -2018,52 +1983,45 @@ public class PlanPolygon<T extends Edge> implements Iterable<T> {
 		if( x1 < x2 )
 			if( m >= 0 )
 				if( Math.abs( m ) >= 1.0 )
-					return PlanPolygon.flipMainDiagonal;
+					return Transformation.flipMainDiagonal.matrix;
 				else
-					return PlanPolygon.identity;
+					return Transformation.identity.matrix;
 			else if( Math.abs( m ) >= 1.0 )
-				return matrixMultiplication( PlanPolygon.flipMainDiagonal, PlanPolygon.flipXAxis );
+				return Matrix.matrixMultiplication( Transformation.flipMainDiagonal.matrix, Transformation.flipXAxis.matrix );
 			else
-				return PlanPolygon.flipXAxis;
+				return Transformation.flipXAxis.matrix;
 		else if( m >= 0 )
 			if( Math.abs( m ) >= 1.0 )
-				return matrixMultiplication( matrixMultiplication( PlanPolygon.flipMainDiagonal,
-								PlanPolygon.flipXAxis ), PlanPolygon.flipYAxis );
+				return Matrix.matrixMultiplication( Matrix.matrixMultiplication( Transformation.flipMainDiagonal.matrix, Transformation.flipXAxis.matrix ), Transformation.flipYAxis.matrix );
 			else
-				return matrixMultiplication( PlanPolygon.flipYAxis, PlanPolygon.flipXAxis );
+				return Matrix.matrixMultiplication( Transformation.flipYAxis.matrix, Transformation.flipXAxis.matrix );
 		else if( Math.abs( m ) >= 1.0 )
-			return matrixMultiplication( PlanPolygon.flipMainDiagonal, PlanPolygon.flipYAxis );
+			return Matrix.matrixMultiplication( Transformation.flipMainDiagonal.matrix, Transformation.flipYAxis.matrix );
 		else
-			return PlanPolygon.flipYAxis;
+			return Transformation.flipYAxis.matrix;
 	}
 
 	public int[][] calculateRetransformMatrix( PlanPoint p1, PlanPoint p2 ) {
-		double x1 = p1.getX();
-		double y1 = p1.getY();
-		double x2 = p2.getX();
-		double y2 = p2.getY();
-		double m = ((y2 - y1) / (x2 - x1));
-		if( x1 < x2 )
+		final double m = ((p2.getY() - p1.getY()) / (p2.getX() - p1.getX()));	// the slope
+		if( p1.getX() < p2.getX() )
 			if( m >= 0 )
 				if( Math.abs( m ) >= 1.0 )
-					return PlanPolygon.flipMainDiagonal;
+					return Transformation.flipMainDiagonal.matrix;
 				else
-					return PlanPolygon.identity;
+					return Transformation.identity.matrix;
 			else if( Math.abs( m ) >= 1.0 )
-				return matrixMultiplication( PlanPolygon.flipXAxis, PlanPolygon.flipMainDiagonal );
+				return Matrix.matrixMultiplication( Transformation.flipXAxis.matrix, Transformation.flipMainDiagonal.matrix );
 			else
-				return PlanPolygon.flipXAxis;
+				return Transformation.flipXAxis.matrix;
 		else if( m >= 0 )
 			if( Math.abs( m ) >= 1.0 )
-				return matrixMultiplication( matrixMultiplication(
-								PlanPolygon.flipYAxis, PlanPolygon.flipXAxis ),
-								PlanPolygon.flipMainDiagonal );
+				return Matrix.matrixMultiplication( Matrix.matrixMultiplication( Transformation.flipYAxis.matrix, Transformation.flipXAxis.matrix ), Transformation.flipMainDiagonal.matrix );
 			else
-				return matrixMultiplication( PlanPolygon.flipXAxis, PlanPolygon.flipYAxis );
+				return Matrix.matrixMultiplication( Transformation.flipXAxis.matrix, Transformation.flipYAxis.matrix );
 		else if( Math.abs( m ) >= 1.0 )
-			return matrixMultiplication( PlanPolygon.flipYAxis, PlanPolygon.flipMainDiagonal );
+			return Matrix.matrixMultiplication( Transformation.flipYAxis.matrix, Transformation.flipMainDiagonal.matrix );
 		else
-			return PlanPolygon.flipYAxis;
+			return Transformation.flipYAxis.matrix;
 	}
 
 	/**
@@ -2131,7 +2089,6 @@ public class PlanPolygon<T extends Edge> implements Iterable<T> {
 				work1 = this.transformPlanPoint( p2, transformMatrix );
 				work2 = this.transformPlanPoint( p1, transformMatrix );
 			}
-
 
 			deltaX = work2.getXInt() - work1.getXInt();
 			deltaY = work2.getYInt() - work1.getYInt();
@@ -2256,7 +2213,7 @@ public class PlanPolygon<T extends Edge> implements Iterable<T> {
 				//this.cleanUpAfterRasterization();
 			}
 		} else
-			newLength = newLength + Edge.length( p1, p2 );
+			newLength += Edge.length( p1, p2 );
 
 		return newLength;
 	}

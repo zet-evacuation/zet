@@ -85,7 +85,7 @@ public abstract class Area<T extends Edge> extends PlanPolygon<T> implements ZFo
 	@Override
 	public boolean equals( Object o ) {
 		if( o instanceof Area ) {
-			Area p = (Area)o;
+			Area<?> p = (Area<?>)o;
 			return super.equals( p ) && ( (associatedRoom == null ) ? p.getAssociatedRoom() == null :associatedRoom.equals( p.getAssociatedRoom() ) );
 		} else
 			return false;
