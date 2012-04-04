@@ -25,7 +25,7 @@ import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 import ds.z.PlanPoint;
-import ds.z.PlanPolygon.RelativePosition;
+import ds.z.RelativePosition;
 import java.util.Vector;
 
 /**
