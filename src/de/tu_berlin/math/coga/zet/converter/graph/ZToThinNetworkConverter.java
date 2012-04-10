@@ -221,6 +221,7 @@ public class ZToThinNetworkConverter extends BaseZToGraphConverter{
                                         ZToGraphRasterSquare square = room.getSquare( i, j );
                                         square.mark();
                                         square.setNode(node);
+                                        //System.out.println("Square in ThinNetwork: " + square.toString());
                                    }
                                }
                            }
@@ -282,7 +283,8 @@ public class ZToThinNetworkConverter extends BaseZToGraphConverter{
                     
                     //create door nodes for rooms with only one neighbour
                     //if there is at least one evacuation or assignment area, create a node representing the doors
-                    if (!(ZRoom.getEvacuationAreas().isEmpty() && ZRoom.getAssignmentAreas().isEmpty()) && (numNeighb.get(ZRoom) ==1) ||(numNeighb.get(ZRoom)==1 && (!floorNodesForRoom.isEmpty())) )
+
+                    if ((!(ZRoom.getEvacuationAreas().isEmpty() && ZRoom.getAssignmentAreas().isEmpty()) && (numNeighb.get(ZRoom) ==1)) ||(numNeighb.get(ZRoom)==1 && (floorNodesForRoom.containsKey(ZRoom))) )
                     { 
                         HashMap<Point,Integer> doors = ZRoom.getDoors();
                         for (Point p: doors.keySet())
@@ -1100,7 +1102,7 @@ public class ZToThinNetworkConverter extends BaseZToGraphConverter{
             //room contains inaccessible areas or delay areas --> recompute transittimes
             if ((!ZRoom.getDelayAreas().isEmpty()) || (!ZRoom.getInaccessibleAreas().isEmpty()) || (!ZRoom.getStairAreas().isEmpty()) )
             {
-                System.out.println("Room with delay/inacc/stairs: " + ZRoom.getName() );
+                //System.out.println("Room with delay/inacc/stairs: " + ZRoom.getName() );
                 double startX,startY,endX,endY;
                 ListSequence<Edge> roomEdges = EdgesForRoom.get(room.getRoom());
                 //System.out.println("Room Edges: " + roomEdges.toString());
@@ -1187,7 +1189,9 @@ public class ZToThinNetworkConverter extends BaseZToGraphConverter{
                                      
                                      boolean directionUp;
                                      int start_x = (int)mapping.getNodeRectangles().get(edge.start()).getCenterX();
-                                     int start_y = (int)-mapping.getNodeRectangles().get(edge.start()).getCenterY();
+                                     int start_y = -(int)mapping.getNodeRectangles().get(edge.start()).getCenterY();
+                                     int end_x = (int)mapping.getNodeRectangles().get(edge.end()).getCenterX();
+                                     int end_y = -(int)mapping.getNodeRectangles().get(edge.end()).getCenterY();
                                      Point edgeStart = new Point(start_x,start_y);
                                      Point LowerStair = new Point((stair.getLowerLevelEnd().getXInt() + stair.getLowerLevelStart().getXInt())/2, (stair.getLowerLevelEnd().getYInt() + stair.getLowerLevelStart().getYInt())/2);
                                      Point UpperStair = new Point((stair.getUpperLevelEnd().getXInt() + stair.getUpperLevelStart().getXInt())/2, (stair.getUpperLevelEnd().getYInt() + stair.getUpperLevelStart().getYInt())/2);
@@ -1205,8 +1209,30 @@ public class ZToThinNetworkConverter extends BaseZToGraphConverter{
                                      //System.out.println("stairsize: " + stairsize); 
                                      double UpSpeed = stair.getSpeedFactorUp();
                                      double DownSpeed = stair.getSpeedFactorDown();
-                                     double transitUp = (1.0-stairsize)*exactTransitTimes.get(edge) + stairsize*exactTransitTimes.get(edge)*(1.0/UpSpeed);
-                                     double transitDown = (1.0-stairsize)*exactTransitTimes.get(edge) + stairsize*exactTransitTimes.get(edge)*(1.0/DownSpeed);
+                                     
+                                     Vector2 first = new Vector2();
+                                     first.setX((LowerStair.getX()-UpperStair.getX())/2);
+                                     first.setY((LowerStair.getY()-UpperStair.getY())/2);
+                                     Vector2 second = new Vector2();
+                                     second.setX((start_x-end_x)/2);
+                                     second.setY((start_y-end_y)/2);
+                                     double angle = first.getAngleBetween(first,second);
+                                     //System.out.println("get Angle between: " + angle);
+                                     double factor = -1.0/90.0*angle + 1;
+                                     //System.out.println("factor: " + factor);
+                                     double transitUp,transitDown;
+                                     
+                                     double transitOrig = exactTransitTimes.get(edge);
+                                     //System.out.println("Transit Orig: " + transitOrig);
+                                     double transitUpDelay = (1.0-stairsize)*exactTransitTimes.get(edge) + stairsize*exactTransitTimes.get(edge)*(1.0/UpSpeed);
+                                     //System.out.println("Transit Up Delay: " + transitUpDelay);
+                                     double transitDownDelay = (1.0-stairsize)*exactTransitTimes.get(edge) + stairsize*exactTransitTimes.get(edge)*(1.0/DownSpeed);
+                                     //System.out.println("Transit Down Delay: " + transitDownDelay);
+                                     transitUp = (transitUpDelay - transitOrig)*factor + transitOrig;
+                                     //System.out.println("Transit Up: " + transitUp);
+                                     transitDown = (transitDownDelay - transitOrig)*factor + transitOrig;
+                                     //System.out.println("Transit Down: " + transitDown);
+                                     
                                      if (directionUp){
                                         exactTransitTimes.set(edge, transitUp);
                                         exactTransitTimes.set(back, transitDown);
@@ -2050,8 +2076,8 @@ public class ZToThinNetworkConverter extends BaseZToGraphConverter{
                                    width =1;
                                }
                                //System.out.println("Weite: " + Math.floor(room.getDoors().get(node1.getPosition())));
-                               edgesCap.set(edge,width);
-                               //edgesCap.set(edge,6);
+                               //edgesCap.set(edge,width);
+                               edgesCap.set(edge,10);
                                used[node1.getNode().id()][node2.getNode().id()] = 1;
                                used[node2.getNode().id()][node1.getNode().id()] = 1;
                        }
@@ -2078,12 +2104,13 @@ public class ZToThinNetworkConverter extends BaseZToGraphConverter{
                 if (linktarget.get(n2.getNode()).equals(room))
                 {
                     Edge edge = new Edge(EdgeCount++,n1.getNode(),n2.getNode());
+                    System.out.println("floor connecting edge: " + edge);
                     mapping.setEdgeLevel(edge, Level.Equal);
-                    graph.setEdge(edge);                
-                    //int width = floordoors.get(n2.getPosition());
-                    int width=4;
-                    edgesCap.set(edge,width);
-                    System.out.println("floor connecting edge: " + edge + " width: " + width);
+                    graph.setEdge(edge);  
+                    System.out.println("n1 position: " + n1.getPosition());
+                    System.out.println("floor doors: " + floordoors.toString());
+                    int width = getFloorDoors(room).get(n2.getPosition());                 
+                    edgesCap.set(edge,width);                    
                     System.out.println("for room: " + room.getName() + "on floor: " + room.getAssociatedFloor().getName() + " and: " + connect.getName() + " on floor: " + connect.getAssociatedFloor().getName());
                 }
             }

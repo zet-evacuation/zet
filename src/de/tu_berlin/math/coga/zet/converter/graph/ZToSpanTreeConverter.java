@@ -115,7 +115,7 @@ public class ZToSpanTreeConverter extends ZToNonGridGraphConverter{
                 minspanmodel.setNetwork(newgraph);
                 minspanmodel.setNetwork( minspanmodel.getGraph().getAsStaticNetwork());
                 System.out.println("Edges used in Minimum Spanning Tree: " + minspanmodel.getGraph().numberOfEdges());
-                
+                System.out.println("Edge capacities: " + model.getEdgeCapacities());
 		return minspanmodel;
                
 	}
