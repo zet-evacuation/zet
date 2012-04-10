@@ -6,6 +6,7 @@ package de.tu_berlin.math.coga.math.vectormath;
 
 
 import de.tu_berlin.math.coga.common.localization.DefaultLoc;
+import de.tu_berlin.math.coga.math.Conversion;
 import java.text.NumberFormat;
 import java.text.ParseException;
 
@@ -355,4 +356,28 @@ public class Vector2 implements Cloneable {
 		final Vector2 v = r.sub( q );
 		return (int) Math.signum( v.x * u.y - v.y * u.x ); // return sign of determinancy
 	}
+        
+        /**
+	 * Calculates the smaller angle between to vectors a and b, going from a to b.
+	 * Lies always between 0 and 90 !
+	 * Uses the dot product to calculate the cosine,
+	 * the angle is then calculated with the arcus cosine.
+	 * @param a a vector.
+	 * @param b another vector.
+	 * @return the smaller angle between the two vectors.
+	 */
+        final public double getAngleBetween( Vector2 a, Vector2 b ) {
+		final double cosine = (a.dotProduct( b ) / a.length()) / b.length();
+		final double angle = Math.acos( cosine ) / Conversion.ANGLE2DEG;
+                System.err.println("angle: " + angle);
+                if (angle > 90.0)
+                {
+                    return 180 - angle;
+                }
+                else
+                {
+                    return angle;
+                }
+	}
+        
 }
