@@ -148,11 +148,13 @@ public class NodeRectangle{
 	}
 	
 	public double getCenterX() {
-		return nw.getX() + (ne.getX() - nw.getX()) * 0.5;
+		//return nw.getX() + (ne.getX() - nw.getX()) * 0.5;
+            return ((nw.getX() + ne.getX() + sw.getX() + se.getX())/4);
 	}
 	
 	public double getCenterY() {
-			return nw.getY() + (sw.getY() - nw.getY()) * 0.5;
+               //return nw.getY() + (sw.getY() - nw.getY()) * 0.5;
+            return ((nw.getY() + ne.getY() + sw.getY() + se.getY())/4);   
 	}
 	
 	
