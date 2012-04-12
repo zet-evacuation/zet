@@ -369,13 +369,10 @@ public class Vector2 implements Cloneable {
         final public double getAngleBetween( Vector2 a, Vector2 b ) {
 		final double cosine = (a.dotProduct( b ) / a.length()) / b.length();
 		final double angle = Math.acos( cosine ) / Conversion.ANGLE2DEG;
-                System.err.println("angle: " + angle);
-                if (angle > 90.0)
-                {
+                if (angle > 90.0){
                     return 180 - angle;
                 }
-                else
-                {
+                else{
                     return angle;
                 }
 	}

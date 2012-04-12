@@ -6,6 +6,7 @@ package de.tu_berlin.math.coga.zet.converter.graph;
 
 import de.tu_berlin.math.coga.common.util.Level;
 import de.tu_berlin.math.coga.math.vectormath.Vector2;
+import de.tu_berlin.math.coga.math.vectormath.Vector3;
 import ds.PropertyContainer;
 import ds.graph.network.DynamicNetwork;
 import ds.graph.Edge;
@@ -138,7 +139,7 @@ public class ZToThinNetworkConverter extends BaseZToGraphConverter{
                            int NodePrecisionHeight = (int) Math.floor((int) (area.getHeight()/Math.sqrt(AssignPrecision*room.getRaster()*room.getRaster())));
                            if (NodePrecisionHeight==0)
                            {NodePrecisionHeight=1;}
-                           System.out.println("NodePrecisionWidth: " + NodePrecisionWidth + "NodePrecisionHeight " + NodePrecisionHeight );
+                           //System.out.println("NodePrecisionWidth: " + NodePrecisionWidth + "NodePrecisionHeight " + NodePrecisionHeight );
                            AssignValues.add(NodePrecisionWidth); AssignValues.add(NodePrecisionHeight);
                            int width = area.getWidth()/NodePrecisionWidth;
                            int height = area.getHeight()/NodePrecisionHeight;
@@ -169,7 +170,6 @@ public class ZToThinNetworkConverter extends BaseZToGraphConverter{
                                    PositionNode p = new PositionNode(n,point);
                                    AssignAreaNodes.add(p);
 
-                                   //System.out.println("rastered values: " + startCol + " " + startRow + " "+ numCol + " " + numRow);
                                    for (int k=startCol; k<startCol+numCol; k++)
                                    {
                                        for (int l=startRow; l<startRow+numRow; l++)
@@ -179,7 +179,6 @@ public class ZToThinNetworkConverter extends BaseZToGraphConverter{
                                                 ZToGraphRasterSquare square = room.getSquare( k, l );
                                                 square.mark();
                                                 square.setNode(n);
-                                                //System.out.println("Square in ThinNetwork: " + square.toString());
                                            }
                                        }
                                     }  
@@ -190,14 +189,12 @@ public class ZToThinNetworkConverter extends BaseZToGraphConverter{
                        }
                        else
                        {
-                           //System.out.println("Height: " + area.getHeight() + "Width: " + area.getWidth());
                            Node node = new Node(nodeCount++);
                            System.out.println("One AssignmentNode: " + node + " in Room: " + ZRoom.getName());
                            graph.setNode(node);
                            int value = area.getMaxEvacuees();
                            nodesCap.add(node, Integer.MAX_VALUE); 
                            NodeRectangle rec = new NodeRectangle(area.getxOffset(),-area.getyOffset(), area.getxOffset()+ area.getWidth(), -(area.getyOffset() + area.getHeight()));
-                           //System.out.println("Node rectangle: " + rec);
                            mapping.setNodeRectangle(node, rec );
                            model.getZToGraphMapping().getNodeFloorMapping().set( node,getProblem().getFloorID(room.getFloor()));
                            model.getZToGraphMapping().setIsEvacuationNode( node, false );
@@ -211,7 +208,7 @@ public class ZToThinNetworkConverter extends BaseZToGraphConverter{
                            int startRow = (area.getyOffset()-room.getYOffset())/size;
                            int numCol = (int) Math.ceil(((double)area.getWidth()/size));
                            int numRow = (int) Math.ceil(((double)area.getHeight()/size));                       
-                           //System.out.println("rastered values: " + startCol + " " + startRow + " "+ numCol + " " + numRow);
+
                            for (int i=startCol; i<startCol+numCol; i++)
                            {
                                for (int j=startRow; j<startRow+numRow;j++)
@@ -229,10 +226,10 @@ public class ZToThinNetworkConverter extends BaseZToGraphConverter{
               }
                     //create node for each evacuation area of building
                     for (EvacuationArea Earea : ZRoom.getEvacuationAreas())
-                    { 
+                    {
+                        //if room has only one neighbour, create Evacuation node near to door
                         if (numNeighb.get(ZRoom)==1)
                         {                            
-                            //create Evacuation node near to door
                             for (Point p: ZRoom.getDoors().keySet())
                             {
                                  double mindist = Double.MAX_VALUE;
@@ -297,8 +294,7 @@ public class ZToThinNetworkConverter extends BaseZToGraphConverter{
                                 nodeCount++;
                                 graph.setNode(node);
                                 //DoorNodeForRoom.put(ZRoom, node);
-                                //length of door is returned in mm
-                                //Observation: 0.5 meter/person
+                                //length of door is returned in mm, Observation: 0.5 meter/person
                                 int width = (int) Math.floor(((double) ZRoom.getLengthOfDoor(ZRoom))/1000.0)*2;
                                 //System.out.println("Knotenkap: " + width);
                                 nodesCap.add(node, width);
@@ -323,7 +319,6 @@ public class ZToThinNetworkConverter extends BaseZToGraphConverter{
                             {
                                 Node node = new Node(nodeCount);
                                 connection.put(p,node);
-                                //TODO: get exact node capacity
                                 nodesCap.add(node, ZRoom.getMaxEvacuees());
                                 System.out.println("Door Node: " + node + "at pos: " + p + "for room"  + ZRoom.getName());
                                 PositionNode pos = new PositionNode(node,p,doors.get(p)); 
@@ -342,10 +337,21 @@ public class ZToThinNetworkConverter extends BaseZToGraphConverter{
                     //only neighbours with one neighbour, Case 2b)
                     //one evacuation node inside room and one in neighbourrooms 
                     if (numEvac2 == 1 && num==0 && ZRoom.getEvacuationAreas().size() == 1)
-                    {   
-                        //room nearly quadratic
-                        if (ZRoom.getHeight() < 2*ZRoom.getWidth() && ZRoom.getWidth() < 2*ZRoom.getHeight())
-                        {    
+                    {
+                        SmallestRectangle rectangle = FindSmallestRectangle(room);            
+                        List<PlanPoint> rec = rectangle.getPoints();
+                    
+                        Point nw = rec.get(0); Point ne = rec.get(1); Point sw = rec.get(2); Point se = rec.get(3);
+                        double width = Math.sqrt(Math.pow(nw.getX()-ne.getX(),2) + Math.pow(nw.getY()-ne.getY(),2));
+                        double length = Math.sqrt(Math.pow(nw.getX()-sw.getX(),2) + Math.pow(nw.getY()-sw.getY(),2));
+                        //room is nearly rectangular
+                        if ((width > 2* length) || (length > 2*width))
+                        { 
+                            System.out.println("Case 2b)"); 
+                            FindRectangulationNodes(room,rec);
+                        }         
+                        else
+                        {
                             System.out.println("Create center1 for room: " + ZRoom.getName());
                             //create node between two evacuation areas
                             for (Point p: EvacRoom.getDoors().keySet())
@@ -354,12 +360,6 @@ public class ZToThinNetworkConverter extends BaseZToGraphConverter{
                                 createCenterNode(ZRoom,q,EvacNodes.first());
                             }
                         }
-                        else
-                        {
-                            System.out.println("Case 2b)");
-                            List<Point> recPoints = FindSmallestRectangle(room);
-                            FindRectangulationNodes(room,recPoints);                           
-                        }
                     }
                 //exactly one room with more than one neighbour, no evacuation areas in rooms with one neighbour   
                 else if (num==1 && numEvac2==0 )
@@ -367,11 +367,9 @@ public class ZToThinNetworkConverter extends BaseZToGraphConverter{
                     if (ZRoom.getEvacuationAreas().size()==1)
                     {
                         //node between 2 evacuation areas
-                        System.out.println("Create Center for room: " + ZRoom.getName());
+                        System.out.println("Create node between 2 evacuation areas for room: " + ZRoom.getName());
                         Collection<ds.z.Edge> doors1 = MoreDoorRoom.getDoorEdges();
-                        //System.out.println("doors: " + doors);
                         Collection<ds.z.Edge> doors2 = ZRoom.getDoorEdges();
-                        //System.out.println("doors1: " + doors1);
                         Point p = new Point();
                         for (ds.z.Edge edge: doors1)
                         {
@@ -393,7 +391,6 @@ public class ZToThinNetworkConverter extends BaseZToGraphConverter{
                                 int x = (edge.getMaxX()+ edge.getMinX())/2;
                                 int y = -((edge.getMaxY()+ edge.getMinY())/2);
                                 Point point = new Point(x,y);
-                                //System.out.println("Point: " + point);
                                 p.setLocation(point);
                                 createCenterNode(ZRoom,p,EvacNodes.first());
                             }
@@ -410,11 +407,13 @@ public class ZToThinNetworkConverter extends BaseZToGraphConverter{
                 else 
                 {
                     System.out.println("Trivial Node Creation.." + ZRoom.getName());
-                    List<Point> rec = FindSmallestRectangle(room);
+                    SmallestRectangle rectangle = FindSmallestRectangle(room);            
+                    List<PlanPoint> rec = rectangle.getPoints();
+                    
                     Point nw = rec.get(0); Point ne = rec.get(1); Point sw = rec.get(2); Point se = rec.get(3);
                     double width = Math.sqrt(Math.pow(nw.getX()-ne.getX(),2) + Math.pow(nw.getY()-ne.getY(),2));
                     double length = Math.sqrt(Math.pow(nw.getX()-sw.getX(),2) + Math.pow(nw.getY()-sw.getY(),2));
-                    //System.out.println("width: " + width + "length: " + length);
+                    System.out.println("width: " + width + " length: " + length);
                     //room is nearly rectangular
                     if ((width > 2* length) || (length > 2*width))
                     {                 
@@ -422,11 +421,11 @@ public class ZToThinNetworkConverter extends BaseZToGraphConverter{
                     }         
                     else
                     {
-                        //finds principal axis with eigenvalue decomposition...
-                        CreateCenterForRoom(room,rec);
+                        Point c = new Point((int)rectangle.getCenter().getX(),(int)rectangle.getCenter().getY());
+                        CreateCenterForRoom(room,rec,c);
                     }
-                }
-                    }
+                 }
+        }
              
                   
         //stores all the constructed nodes for one room (except door node, evacuation and assignment nodes)
@@ -909,9 +908,10 @@ public class ZToThinNetworkConverter extends BaseZToGraphConverter{
                 else
                 {
                      System.out.println("Case 5 for Room: " + ZRoom.getName());
-                     List<Point> rec = FindSmallestRectangle(room);
+                     SmallestRectangle rectangle = FindSmallestRectangle(room);
+                     Point center1 = new Point((int)rectangle.getCenter().getX(),(int)rectangle.getCenter().getY());
+                     List<PlanPoint> rec = rectangle.getPoints();   
                      Point nw = rec.get(0); Point ne = rec.get(1); Point sw = rec.get(2); Point se = rec.get(3);
-                     System.out.println("Rechteck: " + rec.get(0)+ rec.get(1) + rec.get(2) + rec.get(3));
                      double width = Math.sqrt(Math.pow(nw.getX()-ne.getX(),2) + Math.pow(nw.getY()-ne.getY(),2));
                      double length = Math.sqrt(Math.pow(nw.getX()-sw.getX(),2) + Math.pow(nw.getY()-sw.getY(),2));
                      System.out.println("width: " + width + "length: " + length);
@@ -1734,7 +1734,7 @@ public class ZToThinNetworkConverter extends BaseZToGraphConverter{
      * creates a central node for a room corresponding to a smallest rectangle with 
      * arbitrary direction that contains all points of that room  
      */
-    public void CreateCenterForRoom(ZToGraphRoomRaster room, List<Point> recPoints)
+    public void CreateCenterForRoom(ZToGraphRoomRaster room, List<PlanPoint> recPoints, Point center)
     {
         Room ZRoom = room.getRoom();
         Node node = new Node(nodeCount++);
@@ -1746,21 +1746,19 @@ public class ZToThinNetworkConverter extends BaseZToGraphConverter{
         NodeRectangle n = new NodeRectangle((int)recPoints.get(0).getX(),-(int)recPoints.get(0).getY(),(int)recPoints.get(1).getX(),-(int)recPoints.get(1).getY(),(int)recPoints.get(2).getX(),-(int)recPoints.get(2).getY(),(int)recPoints.get(3).getX(),-(int)recPoints.get(3).getY());
          if (ZRoom.getInaccessibleAreas().size() > 0)
          {
-               PlanPoint p = new PlanPoint(); 
-               p.setLocation(n.getCenterX(), n.getCenterY());
-               //p.setLocation(ZRoom.getxOffset() + (ZRoom.getWidth()/2), ZRoom.getyOffset() + (ZRoom.getHeight()/2));
+               PlanPoint p = new PlanPoint(center.getX(),center.getY()); 
                for (InaccessibleArea area: ZRoom.getInaccessibleAreas())
                {
                     if (area.contains(p))
                     {
                          System.out.println("center lies on inaccessible area... ");
                          int areaCenterX = area.getxOffset() + (area.getWidth()/2);
-                                    //rec1 = new NodeRectangle(areaCenterX-1,-(area.getyOffset()-1),areaCenterX+1,-(area.getyOffset()-1));
+                         n = new NodeRectangle(areaCenterX-1,-(area.getyOffset()-1),areaCenterX+1,-(area.getyOffset()-1));
                     }                                 
                 }
           }                        
           mapping.setNodeRectangle(node, n );
-          System.out.println("Node Rectangle: " + n.get_nw_point().getX()  + " " + n.get_nw_point().getY() + " " + n.get_ne_point().getX() + " " +  n.get_ne_point().getY() + n.get_sw_point().getX() + " " +  n.get_sw_point().getY() + n.get_se_point().getX() + " " +  n.get_se_point().getY());
+          System.out.println("Node Rectangle for center node: " + recPoints.get(0) + " " + recPoints.get(1) + " " + recPoints.get(2) + " " +  recPoints.get(3)) ;
           //System.out.println("Center des Node Rectangles: " + n.getCenterX() + " " + n.getCenterY());
           model.getZToGraphMapping().getNodeFloorMapping().set( node,getProblem().getFloorID(room.getFloor()));
           model.getZToGraphMapping().setIsEvacuationNode( node, false );
@@ -1769,7 +1767,7 @@ public class ZToThinNetworkConverter extends BaseZToGraphConverter{
                     
     }
     
-    public List<Point> FindSmallestRectangle(ZToGraphRoomRaster room)
+    public SmallestRectangle FindSmallestRectangle(ZToGraphRoomRaster room)
     {
         SmallestRectangle rec = new SmallestRectangle();
         List<Vector2> givenPoints = new LinkedList<>();
@@ -1783,7 +1781,6 @@ public class ZToThinNetworkConverter extends BaseZToGraphConverter{
             for (int j=0;j<numRow+2;j++)
             {
                  PlanPoint p = new PlanPoint(room.getXOffset()+(i*size),room.getYOffset()+(j*size));
-                 //System.out.println("p_x: " + p.x + "p_y: " + p.y);
                  if (room.getRoom().contains(p))
                  {
                       Vector2 v = new Vector2((double)p.x,(double)p.y);
@@ -1791,59 +1788,196 @@ public class ZToThinNetworkConverter extends BaseZToGraphConverter{
                  }
              }
          }
-         List<Point> given = rec.computeSmallestRectangle(givenPoints.size(), givenPoints);                   
-         //System.out.println("values: " + ((int)given.get(0).getX() + " " + -(int)given.get(0).getY() + " " + (int)given.get(1).getX() + " " + -(int)given.get(1).getY() + " " + (int)given.get(2).getX() + " " + -(int)given.get(2).getY() + " " + (int)given.get(3).getX() + " " + -(int)given.get(3).getY()));
-
-         return given;
+         rec.computeSmallestRectangle(givenPoints.size(), givenPoints);
+         return rec;
     }
     
-    public void FindRectangulationNodes(ZToGraphRoomRaster Zroom, List<Point> recPoints)
-    {        
-         Room room = Zroom.getRoom();
+    public List<PlanPoint> rotateRectangle(List<PlanPoint> recPoints, double angle, Point rotation)
+    {
+        List<PlanPoint> rotated = new LinkedList<>();
+        final double cosTheta = Math.cos(angle * Math.PI/180.0);
+	final double sinTheta = Math.sin(angle * Math.PI/180.0);
+
+        for (Point po: recPoints)
+        {
+            PlanPoint rotate = new PlanPoint();            
+            double rotate_x = (po.getX()-rotation.getX())*cosTheta + ((po.getY()-rotation.getY())*(-sinTheta)) + rotation.getX();
+            double rotate_y = (po.getX()-rotation.getX())*sinTheta + ((po.getY()-rotation.getY())*cosTheta) + rotation.getY() ;
+            rotate.setLocation(rotate_x, rotate_y);
+            rotated.add(rotate); 
+        }
+        
+        return rotated;
+    }
+    
+    public void FindRectangulationNodes(ZToGraphRoomRaster Zroom, List<PlanPoint> recPoints)
+    {   
+         System.out.println("Find Rectangulation Nodes started: ");
          //stores the covered area for a certain node, represented as a list of planpoints 
          List<PlanPoint> covered; 
          int unit,rest,xPos,yPos;
          int DirectionRight, DirectionDown; //0 der 1 je nachdem ob Raum höher oder breiter ist...
-         if (room.getHeight() < room.getWidth()){
-             unit = room.getHeight();
-             rest = room.getWidth();
-             DirectionRight = 1;
-             DirectionDown = 0; }
-         else{
-             unit = room.getWidth();
-             rest = room.getHeight();
-             DirectionRight = 0; 
-             DirectionDown = 1;  }
-                            
-             int numIteration=0;
-            xPos = (room.getxOffset() + room.getWidth());
-            yPos = (room.getyOffset() + room.getHeight());                          
-                          
-            while (rest > 2*unit) 
+         
+            //new version of creating rectangulation Nodes for room with arbitrary direction
+            Point nw = recPoints.get(0); Point ne = recPoints.get(1) ; Point sw = recPoints.get(2); Point se = recPoints.get(3); 
+            //compute rotation angle
+            Point origin, lower;
+            if (nw.getX() < sw.getX()){
+                origin = nw;
+                lower = sw;
+            }
+            else{
+                origin = sw;
+                lower = nw;
+            }
+            Vector2 first = new Vector2(0.0,1.0);
+            Vector2 second = new Vector2();
+            second.setX(origin.getX() - lower.getX());
+            second.setY(origin.getY() - lower.getY());
+            double angle = first.getAngleBetween(first,second);
+            //System.out.println("computed angle: " + angle);
+            
+            List<PlanPoint> rotated = rotateRectangle(recPoints,angle,nw);
+            /*for (Point po: rotated){
+                System.out.println("Rotierter Punkt: " + po);
+            }*/
+            
+            nw = rotated.get(0); ne = rotated.get(1); sw = rotated.get(2); se = rotated.get(3); 
+            int width = (int)Math.sqrt(Math.pow(nw.getX()-ne.getX(),2) + Math.pow(nw.getY()-ne.getY(),2));
+            int length = (int)Math.sqrt(Math.pow(nw.getX()-sw.getX(),2) + Math.pow(nw.getY()-sw.getY(),2));
+            
+            if (width < length){
+             unit = width;
+             rest = length;
+             DirectionRight = 0;
+             DirectionDown = 1; }
+            
+            else{
+             unit = length;
+             rest = width;
+             DirectionRight = 1; 
+             DirectionDown = 0;  }
+             
+            int numIteration=0;
+            xPos = (int) se.getX();
+            yPos = (int) se.getY();
+            
+            while (rest > 2*unit)
             {
-                 int upperLeft1_x = room.getxOffset() + (numIteration*DirectionRight*unit); 
-                 int upperLeft1_y = room.getyOffset() + (numIteration*DirectionDown*unit);
-                 int UpperRight1_x = DirectionDown*xPos + DirectionRight*((numIteration+1)*unit+room.getxOffset());
-                 int UpperRight1_y = room.getyOffset() + (numIteration*DirectionDown*unit);
-                 int LowerRight1_x = DirectionDown*xPos + DirectionRight*((numIteration+1)*unit+room.getxOffset());
-                 int LowerRight1_y = DirectionRight*yPos + DirectionDown*((numIteration+1)*unit + room.getyOffset());
-                 int LowerLeft1_x = room.getxOffset() + (numIteration*DirectionRight*unit);
-                 int LowerLeft1_y = DirectionRight*yPos + DirectionDown*((numIteration+1)*unit + room.getyOffset());
+                int UpperLeft1_x = (int)(nw.getX() + (numIteration*DirectionRight*unit));
+                int UpperLeft1_y = (int)(nw.getY() + (numIteration*DirectionDown*unit));
+                int UpperRight1_x = (int)(DirectionDown*xPos + DirectionRight*((numIteration+1)*unit+nw.getX()));
+                int UpperRight1_y = (int)(nw.getY() + (numIteration*DirectionDown*unit));
+                int LowerRight1_x = (int)(DirectionDown*xPos + DirectionRight*((numIteration+1)*unit+nw.getX()));
+                int LowerRight1_y = (int)(DirectionRight*yPos + DirectionDown*((numIteration+1)*unit + nw.getY()));
+                int LowerLeft1_x = (int)(nw.getX() + (numIteration*DirectionRight*unit));
+                int LowerLeft1_y = (int)(DirectionRight*yPos + DirectionDown*((numIteration+1)*unit + nw.getY()));
                  
-                 PlanPoint upperLeft = new PlanPoint(upperLeft1_x,upperLeft1_y);
-                 PlanPoint lowerRight = new PlanPoint(LowerRight1_x,LowerRight1_y);
-                 PlanPoint upperRight = new PlanPoint(UpperRight1_x,UpperRight1_y);
+                 PlanPoint UpperLeft = new PlanPoint(UpperLeft1_x,UpperLeft1_y);
+                 PlanPoint LowerRight = new PlanPoint(LowerRight1_x,LowerRight1_y);
+                 PlanPoint UpperRight = new PlanPoint(UpperRight1_x,UpperRight1_y);
                  PlanPoint LowerLeft = new PlanPoint(LowerLeft1_x,LowerLeft1_y);
                  covered = new LinkedList<>();
-                 covered.add(upperLeft); covered.add(upperRight); covered.add(lowerRight); covered.add(LowerLeft);
+                 //TODO: transformiere Punkte zurueck in urspruengliche Lage                 
+                 covered.add(UpperLeft); covered.add(UpperRight); covered.add(LowerRight); covered.add(LowerLeft);
+                 List<PlanPoint> backrotate = rotateRectangle(covered,-angle,nw);
+                 covered = new LinkedList<>();
+                 for (PlanPoint p : backrotate){
+                     covered.add(p);
+                 }
                  //System.out.println("covered: " + covered.toString());
                  //node at the left/upper end of rectangle
                  Node node1 = new Node(nodeCount++);
                  coveredArea.put(node1, covered);
                  System.out.println("rectanglar room node: " + node1);
                  graph.setNode(node1);
-                 nodesCap.set(node1, 10);                            
-                 NodeRectangle rec1 = new NodeRectangle(upperLeft1_x,-(upperLeft1_y),LowerRight1_x, -(LowerRight1_y));
+                 nodesCap.set(node1, Integer.MAX_VALUE);                            
+                 //NodeRectangle rec1 = new NodeRectangle(UpperLeft1_x,-(UpperLeft1_y),LowerRight1_x, -(LowerRight1_y));
+                 NodeRectangle rec1 = new NodeRectangle(backrotate.get(0).getXInt(),-backrotate.get(0).getYInt(),backrotate.get(1).getXInt(),-backrotate.get(1).getYInt(),backrotate.get(2).getXInt(),-backrotate.get(2).getYInt(),backrotate.get(3).getXInt(),-backrotate.get(3).getYInt());
+                 //System.out. println("NodeRectangle1: " + UpperLeft + " " + UpperRight + " " + LowerRight + " " + LowerLeft);
+                 mapping.setNodeRectangle(node1, rec1);                            
+                 model.getZToGraphMapping().getNodeFloorMapping().set( node1,getProblem().getFloorID(Zroom.getFloor()));
+                 model.getZToGraphMapping().setIsEvacuationNode(node1, false );
+                 model.getZToGraphMapping().setIsSourceNode(node1, false);
+                 model.getZToGraphMapping().setIsDeletedSourceNode(node1, false );
+                 nodes.add(node1);
+                                
+                 int UpperLeft2_x = (int) (DirectionDown*nw.getX() + DirectionRight*(xPos-((numIteration+1)*unit)));
+                 int UpperLeft2_y = (int) (DirectionRight*nw.getY() + DirectionDown*(yPos-((numIteration+1)*unit)));
+                 int UpperRight2_x = (int) (DirectionRight*(xPos-numIteration*unit) + DirectionDown*xPos);
+                 int UpperRight2_y = (int) (DirectionRight*nw.getY() + DirectionDown*(yPos-((numIteration+1)*unit)));
+                 int LowerRight2_x = DirectionRight*(xPos-numIteration*unit) + DirectionDown*xPos;
+                 int LowerRight2_y = DirectionRight*yPos + DirectionDown*(yPos-numIteration*unit);
+                 int LowerLeft2_x = (int) (DirectionDown*nw.getX() + DirectionRight*(xPos-((numIteration+1)*unit)));
+                 int LowerLeft2_y = (int) (DirectionRight*yPos + DirectionDown*(yPos-numIteration*unit));
+                 
+                 PlanPoint upperLeft2 = new PlanPoint(UpperLeft2_x,UpperLeft2_y);
+                 PlanPoint lowerRight2 = new PlanPoint(LowerRight2_x,LowerRight2_y);
+                 PlanPoint upperRight2 = new PlanPoint(UpperRight2_x,UpperRight2_y);
+                 PlanPoint LowerLeft2 = new PlanPoint(LowerLeft2_x,LowerLeft2_y);
+                 covered = new LinkedList<>();
+                 covered.add(upperLeft2); covered.add(upperRight2); covered.add(lowerRight2); covered.add(LowerLeft2);
+                 List<PlanPoint> backrotate2 = rotateRectangle(covered,-angle,nw);
+                 covered = new LinkedList<>();
+                 for (PlanPoint p : backrotate2){
+                     covered.add(p);
+                 }
+                 //System.out.println("covered 2: " + covered.toString());
+                 //System.out. println("NodeRectangle2: " + upperLeft2 + " " + upperRight2 + " " + lowerRight2 + " " + LowerLeft2);
+                 Node node2 = new Node(nodeCount++);
+                 System.out.println("rectanglar room node: " + node2);
+                 coveredArea.put(node2, covered);
+                 graph.setNode(node2);
+                 nodesCap.set(node2,Integer.MAX_VALUE );
+                 NodeRectangle rec2 = new NodeRectangle(backrotate2.get(0).getXInt(),-backrotate2.get(0).getYInt(),backrotate2.get(1).getXInt(),-backrotate2.get(1).getYInt(),backrotate2.get(2).getXInt(),-backrotate2.get(2).getYInt(),backrotate2.get(3).getXInt(),-backrotate2.get(3).getYInt());
+                 //NodeRectangle rec2 = new NodeRectangle(UpperLeft2_x,-(UpperLeft2_y),LowerRight2_x,-(LowerRight2_y));
+                 mapping.setNodeRectangle(node2, rec2);                            
+                 model.getZToGraphMapping().getNodeFloorMapping().set( node2,getProblem().getFloorID(Zroom.getFloor()));
+                 model.getZToGraphMapping().setIsEvacuationNode(node2, false );
+                 model.getZToGraphMapping().setIsSourceNode(node2, false);
+                 model.getZToGraphMapping().setIsDeletedSourceNode(node2, false );
+                 nodes.add(node2);
+                                
+                 rest = rest-2*unit;
+                 numIteration++;
+            }
+            
+            Node middle = new Node(nodeCount++);
+            nodes.add(middle);
+            System.out.println("node in the middle: " + middle);
+            graph.setNode(middle);
+            nodesCap.set(middle, Integer.MAX_VALUE);
+            int midUpperLeft_x = (int) ((DirectionDown*nw.getX()) + DirectionRight*(nw.getX()+(numIteration*unit)));
+            int midUpperLeft_y = (int) (DirectionRight*nw.getY() + DirectionDown*(nw.getY()+(numIteration*unit)));
+            int midUpperRight_x = DirectionRight*(xPos-(numIteration*unit)) + DirectionDown*xPos;
+            int midUpperRight_y = midUpperLeft_y;
+            int midLowerRight_x = DirectionRight*(xPos-(numIteration*unit)) + DirectionDown*xPos;
+            int midLowerRight_y = DirectionDown*(yPos-numIteration*unit) + DirectionRight*yPos; 
+            int midLowerLeft_x = midUpperLeft_x;
+            int midLowerLeft_y = midLowerRight_y;
+            
+            PlanPoint upperLeft3 = new PlanPoint(midUpperLeft_x,midUpperLeft_y);
+            PlanPoint lowerRight3 = new PlanPoint(midLowerRight_x,midLowerRight_y);
+            PlanPoint upperRight3 = new PlanPoint(midUpperRight_x,midUpperRight_y);
+            PlanPoint LowerLeft3 = new PlanPoint(midLowerLeft_x,midLowerLeft_y);
+            covered = new LinkedList<>();
+            covered.add(upperLeft3); covered.add(upperRight3); covered.add(lowerRight3); covered.add(LowerLeft3);
+            List<PlanPoint> backrotate3 = rotateRectangle(covered,-angle,nw);
+            covered = new LinkedList<>();
+            for (PlanPoint p : backrotate3){
+                 covered.add(p);
+            }
+            //System.out.println("covered 3: " + covered.toString());
+            coveredArea.put(middle, covered);
+            //NodeRectangle recmidd = new NodeRectangle(midUpperLeft_x, -(midUpperLeft_y),midLowerRight_x,-midLowerRight_y);
+            NodeRectangle recmidd = new NodeRectangle(backrotate3.get(0).getXInt(),-backrotate3.get(0).getYInt(),backrotate3.get(1).getXInt(),-backrotate3.get(1).getYInt(),backrotate3.get(2).getXInt(),-backrotate3.get(2).getYInt(),backrotate3.get(3).getXInt(),-backrotate3.get(3).getYInt());
+            mapping.setNodeRectangle(middle, recmidd);
+            model.getZToGraphMapping().getNodeFloorMapping().set( middle,getProblem().getFloorID(Zroom.getFloor()));
+            model.getZToGraphMapping().setIsEvacuationNode( middle, false );
+            model.getZToGraphMapping().setIsSourceNode(middle, false);
+            model.getZToGraphMapping().setIsDeletedSourceNode( middle, false );
+            
+             /*
                  if (room.getInaccessibleAreas().size() > 0)
                  {
                     PlanPoint p = new PlanPoint(); 
@@ -1859,98 +1993,9 @@ public class ZToThinNetworkConverter extends BaseZToGraphConverter{
                         }                                 
                     }
                  }         
-                 mapping.setNodeRectangle(node1, rec1);                            
-                 model.getZToGraphMapping().getNodeFloorMapping().set( node1,getProblem().getFloorID(Zroom.getFloor()));
-                 model.getZToGraphMapping().setIsEvacuationNode(node1, false );
-                 model.getZToGraphMapping().setIsSourceNode(node1, false);
-                 model.getZToGraphMapping().setIsDeletedSourceNode(node1, false );
-                 nodes.add(node1);
-                                
-                 int UpperLeft2_x = DirectionDown*room.getxOffset() + DirectionRight*(xPos-((numIteration+1)*unit));
-                 int UpperLeft2_y = DirectionRight*room.getyOffset() + DirectionDown*(yPos-((numIteration+1)*unit));
-                 int UpperRight2_x = DirectionRight*(xPos-numIteration*unit) + DirectionDown*xPos;
-                 int UpperRight2_y = DirectionRight*room.getyOffset() + DirectionDown*(yPos-((numIteration+1)*unit));
-                 int LowerRight2_x = DirectionRight*(xPos-numIteration*unit) + DirectionDown*xPos;
-                 int LowerRight2_y = DirectionRight*yPos + DirectionDown*(yPos-numIteration*unit);
-                 int LowerLeft2_x = DirectionDown*room.getxOffset() + DirectionRight*(xPos-((numIteration+1)*unit));
-                 int LowerLeft2_y = DirectionRight*yPos + DirectionDown*(yPos-numIteration*unit);
-                 
-                 PlanPoint upperLeft2 = new PlanPoint(UpperLeft2_x,UpperLeft2_y);
-                 PlanPoint lowerRight2 = new PlanPoint(LowerRight2_x,LowerRight2_y);
-                 PlanPoint upperRight2 = new PlanPoint(UpperRight2_x,UpperRight2_y);
-                 PlanPoint LowerLeft2 = new PlanPoint(LowerLeft2_x,LowerLeft2_y);
-                 covered = new LinkedList<>();
-                 covered.add(upperLeft2); covered.add(upperRight2); covered.add(lowerRight2); covered.add(LowerLeft2);
-                 Node node2 = new Node(nodeCount++);
-                 System.out.println("rectanglar room node: " + node2);
-                 coveredArea.put(node2, covered);
-                 graph.setNode(node2);
-                 nodesCap.set(node2,Integer.MAX_VALUE );                            
-                 NodeRectangle rec2 = new NodeRectangle(UpperLeft2_x,-(UpperLeft2_y),LowerRight2_x,-(LowerRight2_y));
-                 mapping.setNodeRectangle(node2, rec2);                            
-                 model.getZToGraphMapping().getNodeFloorMapping().set( node2,getProblem().getFloorID(Zroom.getFloor()));
-                 model.getZToGraphMapping().setIsEvacuationNode(node2, false );
-                 model.getZToGraphMapping().setIsSourceNode(node2, false);
-                 model.getZToGraphMapping().setIsDeletedSourceNode(node2, false );
-                 nodes.add(node2);
-                                
-                 rest = rest-2*unit;
-                 numIteration++;
-            }
-            Node middle = new Node(nodeCount++);
-            nodes.add(middle);
-            System.out.println("node in the middle: " + middle);
-            graph.setNode(middle);
-            nodesCap.set(middle, Integer.MAX_VALUE);
-            int midUpperLeft_x = DirectionDown*room.getxOffset() + DirectionRight*(room.getxOffset()+(numIteration*unit));
-            int midUpperLeft_y = DirectionRight*room.getyOffset() + DirectionDown*(room.getyOffset()+(numIteration*unit));
-            int midUpperRight_x = DirectionRight*(xPos-(numIteration*unit)) + DirectionDown*xPos;
-            int midUpperRight_y = midUpperLeft_y;
-            int midLowerRight_x = DirectionRight*(xPos-(numIteration*unit)) + DirectionDown*xPos;
-            int midLowerRight_y = DirectionDown*(yPos-numIteration*unit) + DirectionRight*yPos; 
-            int midLowerLeft_x = midUpperLeft_x;
-            int midLowerLeft_y = midLowerRight_y;
+                
+            */
             
-            PlanPoint upperLeft3 = new PlanPoint(midUpperLeft_x,midUpperLeft_y);
-            PlanPoint lowerRight3 = new PlanPoint(midLowerRight_x,midLowerRight_y);
-            PlanPoint upperRight3 = new PlanPoint(midUpperRight_x,midUpperRight_y);
-            PlanPoint LowerLeft3 = new PlanPoint(midLowerLeft_x,midLowerLeft_y);
-            covered = new LinkedList<>();
-            covered.add(upperLeft3); covered.add(upperRight3); covered.add(lowerRight3); covered.add(LowerLeft3);
-            coveredArea.put(middle, covered);
-            NodeRectangle recmidd = new NodeRectangle(midUpperLeft_x, -(midUpperLeft_y),midLowerRight_x,-midLowerRight_y);
-            mapping.setNodeRectangle(middle, recmidd);
-            model.getZToGraphMapping().getNodeFloorMapping().set( middle,getProblem().getFloorID(Zroom.getFloor()));
-            model.getZToGraphMapping().setIsEvacuationNode( middle, false );
-            model.getZToGraphMapping().setIsSourceNode(middle, false);
-            model.getZToGraphMapping().setIsDeletedSourceNode( middle, false );
-            
-            
-            //new version of creating rectangulation Nodes for room with arbitrary direction
-            List<Point> rec = FindSmallestRectangle(Zroom);
-            Point nw = rec.get(0); Point ne = rec.get(1); Point sw = rec.get(2); Point se = rec.get(3);
-            double width = Math.sqrt(Math.pow(nw.getX()-ne.getX(),2) + Math.pow(nw.getY()-ne.getY(),2));
-            double length = Math.sqrt(Math.pow(nw.getX()-sw.getX(),2) + Math.pow(nw.getY()-sw.getY(),2));
-            double unit1,rest1;
-            
-            if (width < length){
-             unit1 = width;
-             rest1 = length;
-             DirectionRight = 1;
-             DirectionDown = 0; }
-            
-            else{
-             unit1 = length;
-             rest1 = width;
-             DirectionRight = 0; 
-             DirectionDown = 1;  }
-                            
-            xPos = (room.getxOffset() + room.getWidth());
-            yPos = (room.getyOffset() + room.getHeight()); 
-            
-            double nextx = nw.getX() + unit1;
-            double nexty = nw.getY() + unit1;
-            //System.out.println("unit1: " + unit1 + "rest1: " + rest1);
             
     }
     
