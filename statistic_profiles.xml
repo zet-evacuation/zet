@@ -209,7 +209,7 @@
     </statistics>
   </profile>
   <profile>
-    <name>Verteilung �ber Ausg�nge</name>
+    <name>Verteilung über Ausgänge</name>
     <type>NODE</type>
     <diagrams class="linked-list">
       <diagram>
@@ -233,6 +233,10 @@
       <diagram>
         <title>Liniendiagramm 1: Titel</title>
         <type>LINE_CHART</type>
+      </diagram>
+      <diagram>
+        <title>Säulendiagramm 1: Titel</title>
+        <type>BAR_CHART</type>
       </diagram>
     </diagrams>
     <statistics class="linked-list">

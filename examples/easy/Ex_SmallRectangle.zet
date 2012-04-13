@@ -4,25 +4,25 @@
     <evacuationFloor id="3" name="Evacuation Floor" xOffset="0" yOffset="0" width="0" height="0" normalMode="true" rasterSize="400" defaultRoomSize="4000" roomCount="0">
       <rooms id="4"/>
     </evacuationFloor>
-    <floor id="5" name="Floor 1" xOffset="0" yOffset="0" width="9000" height="7800">
+    <floor id="5" name="Floor 1" xOffset="0" yOffset="0" width="8000" height="6400">
       <rooms id="6">
-        <room id="7" closed="true" xOffset="6400" yOffset="3800" width="2600" height="4000" changed="true" name="Room 0">
+        <room id="7" closed="true" xOffset="6400" yOffset="4800" width="2000" height="1600" changed="true" name="Room 0">
           <edgeClassType>ds.z.RoomEdge</edgeClassType>
-          <start id="8" x="6400" y="5400">
+          <start id="8" x="6400" y="5600">
             <edges>
               <planPoint reference="8"/>
               <roomEdge id="9">
                 <associatedPolygon class="room" reference="7"/>
               </roomEdge>
-              <planPoint id="10" x="9000" y="3800"/>
+              <planPoint id="10" x="8000" y="4800"/>
               <roomEdge id="11">
                 <associatedPolygon class="room" reference="7"/>
               </roomEdge>
-              <planPoint id="12" x="9000" y="6200"/>
+              <planPoint id="12" x="8400" y="5600"/>
               <roomEdge id="13">
                 <associatedPolygon class="room" reference="7"/>
               </roomEdge>
-              <planPoint id="14" x="6400" y="7800"/>
+              <planPoint id="14" x="6800" y="6400"/>
               <roomEdge id="15">
                 <associatedPolygon class="room" reference="7"/>
               </roomEdge>
