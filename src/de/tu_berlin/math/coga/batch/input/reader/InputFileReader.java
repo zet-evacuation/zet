@@ -4,14 +4,13 @@
  */
 package de.tu_berlin.math.coga.batch.input.reader;
 
-import de.tu_berlin.math.coga.common.algorithm.Algorithm;
 import java.io.File;
 
 /**
  *
  * @author Martin Groß
  */
-public abstract class InputFileReader<T> extends Algorithm<File, T> {
+public abstract class InputFileReader<T> extends InputReader<File,T> {
 
     public enum Optimization {
         SPEED, MEMORY;
@@ -34,6 +33,4 @@ public abstract class InputFileReader<T> extends Algorithm<File, T> {
     public void setOptimization(Optimization optimization) {
         this.optimization = optimization;
     }
-    
-    public abstract String[] getProperties();
 }

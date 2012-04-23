@@ -16,10 +16,7 @@ import de.tu_berlin.math.coga.batch.gui.action.AddAlgorithmAction;
 import de.tu_berlin.math.coga.batch.gui.action.AddInputDirectoryAction;
 import de.tu_berlin.math.coga.batch.gui.action.RunComputationAction;
 import de.tu_berlin.math.coga.batch.gui.action.StopComputationAction;
-import de.tu_berlin.math.coga.batch.input.FileCrawler;
-import de.tu_berlin.math.coga.batch.input.FileFormat;
-import de.tu_berlin.math.coga.batch.input.InputFiles;
-import de.tu_berlin.math.coga.batch.input.InputFile;
+import de.tu_berlin.math.coga.batch.input.*;
 import ds.z.Project;
 import gui.GUIControl;
 import java.awt.BorderLayout;
@@ -40,6 +37,7 @@ public class JBatch extends JPanel {
     private AddInputFilesAction addInputFilesAction;
     private Computation computation;
     private GUIControl control;
+    private final AddCurrentProjectAction addCurrentProjectAction;
 
     public JBatch(GUIControl control) {
         super(new BorderLayout());
@@ -54,7 +52,7 @@ public class JBatch extends JPanel {
         JTaskPaneGroup inputPane = new JTaskPaneGroup();
         inputPane.setTitle("Input");
         inputPane.setSpecial(true);
-        inputPane.add(new AddCurrentProjectAction(this));
+        inputPane.add(addCurrentProjectAction = new AddCurrentProjectAction(this));
         inputPane.add(addInputFilesAction = new AddInputFilesAction(this));
         inputPane.add(addInputDirectoryAction = new AddInputDirectoryAction(this));
         //actionPane.add(inputPane);
@@ -100,6 +98,7 @@ public class JBatch extends JPanel {
         this.computation = computation;
         if (computation != null) {
             table.setInput(computation.getInput());
+            addCurrentProjectAction.setEnabled(true);
             addInputDirectoryAction.setEnabled(true);
             addInputFilesAction.setEnabled(true);
         }
@@ -126,7 +125,7 @@ public class JBatch extends JPanel {
                 files.add(file);
             }
         }        
-        InputFiles input = computation.getInput();
+        InputList input = computation.getInput();
         for (File file : files) {
             InputFile inputFile = new InputFile(file);
             if (!input.contains(inputFile)) {
@@ -138,5 +137,8 @@ public class JBatch extends JPanel {
 
     public void addCurrentProject() {
         Project project = control.getZControl().getProject();
+        InputList input = computation.getInput();
+        input.add(new InputProject(project));
+        table.setInput(input);
     }
 }

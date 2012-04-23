@@ -59,6 +59,7 @@ public class BatchTreeTableNode<T> extends DefaultMutableTreeTableNode {
         return getValueAt(0);
     }
 
+    @Override
     public T getUserObject() {
         return (T) super.getUserObject();
     }

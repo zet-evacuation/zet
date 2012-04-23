@@ -45,8 +45,8 @@ public class InputTreeTableModel extends DefaultTreeTableModel {
         int result = getRoot().getColumnCount();
         while (children.hasMoreElements()) {
             MutableTreeTableNode child = children.nextElement();
-            if (child instanceof InputFileNode) {
-                result = Math.max(result, ((InputFileNode) child).getColumnCount());
+            if (child instanceof InputNode) {
+                result = Math.max(result, ((InputNode) child).getColumnCount());
             }
         }
         return result;

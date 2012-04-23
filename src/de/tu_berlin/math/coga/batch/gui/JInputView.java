@@ -5,10 +5,10 @@
 package de.tu_berlin.math.coga.batch.gui;
 
 import de.tu_berlin.math.coga.batch.gui.input.BatchTreeTableNode;
-import de.tu_berlin.math.coga.batch.gui.input.InputFileNode;
+import de.tu_berlin.math.coga.batch.gui.input.InputNode;
 import de.tu_berlin.math.coga.batch.gui.input.InputRootNode;
 import de.tu_berlin.math.coga.batch.gui.input.InputTreeTableModel;
-import de.tu_berlin.math.coga.batch.input.InputFiles;
+import de.tu_berlin.math.coga.batch.input.InputList;
 import java.awt.BorderLayout;
 import java.awt.Component;
 import java.awt.Font;
@@ -87,7 +87,7 @@ public class JInputView extends JPanel {
      */
     private JXTreeTable tree;
     
-    private InputFiles input;
+    private InputList input;
 
     /**
      * Creates the file tree panel.
@@ -114,7 +114,7 @@ public class JInputView extends JPanel {
         add(scrollPane, BorderLayout.CENTER);
     }
 
-    public void setInput(InputFiles input) {
+    public void setInput(InputList input) {
         this.input = input;
         InputRootNode inputRootNode = new InputRootNode(input);
         InputTreeTableModel model = new InputTreeTableModel(inputRootNode);
@@ -152,7 +152,7 @@ public class JInputView extends JPanel {
             cellWidth = Math.max(comp.getPreferredSize().width, cellWidth);
 
             for (int j = 0; j < model.getChildCount(model.getRoot()); j++) {
-                InputFileNode v = (InputFileNode) model.getChild(model.getRoot(), j);
+                InputNode v = (InputNode) model.getChild(model.getRoot(), j);
                 if (i < v.getColumnCount()) {
                     comp = table.getDefaultRenderer(model.getColumnClass(i)).getTableCellRendererComponent(table, v.getValueAt(i), false, false, 0, i);
                     cellWidth = Math.max(comp.getPreferredSize().width, cellWidth);
