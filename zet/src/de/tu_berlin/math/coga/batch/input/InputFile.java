@@ -11,7 +11,7 @@ import java.io.File;
  *
  * @author gross
  */
-public class InputFile {
+public class InputFile extends Input<File> {
     
     private File file;
     private FileFormat format;
@@ -35,21 +35,29 @@ public class InputFile {
     public boolean equals(Object obj) {
         return (obj instanceof InputFile) && file.equals(((InputFile) obj).file);
     }
+
+    @Override
+    public File getInput() {
+        return file;
+    }    
     
+    @Override
     public String[] getPropertyNames() {
         return format.getProblemType().getPropertyNames();
     }
 
+    @Override
     public String[] getProperties() {            
         return reader.getProperties();
     }
 
-    public String getName() {
-        return file.getName();
-    }
-
-    public File getFile() {
-        return file;
+    @Override
+    public String getTooltip() {
+        return file.getPath();
     }
     
+    @Override
+    public String toString() {
+        return file.getName();
+    }
 }

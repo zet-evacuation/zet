@@ -103,7 +103,14 @@ public class StaticTransshipment implements Runnable {
         algorithm.run();
         flow = algorithm.getSolution();
         valueOfFlow = algorithm.getSolution().getFlowValue();
+        
         //residualNetwork = algorithm.getResidualNetwork();
+        residualNetwork = new ResidualNetwork(network, capacities);
+        for (Edge edge : network.edges()) {
+            residualNetwork.augmentFlow(edge, flow.get(edge));
+        }        
+        
+
         network.setNodeCapacity(network.getNodeCapacity() - 2);
         network.setEdgeCapacity(network.getEdgeCapacity() - sources.size() - sinks.size());
         capacities.setDomainSize(network.getEdgeCapacity());

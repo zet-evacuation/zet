@@ -5,7 +5,7 @@
 package de.tu_berlin.math.coga.batch.gui.input;
 
 import de.tu_berlin.math.coga.batch.input.InputFile;
-import de.tu_berlin.math.coga.batch.input.InputFiles;
+import de.tu_berlin.math.coga.batch.input.InputList;
 import java.util.Collections;
 import java.util.Comparator;
 import org.jdesktop.swingx.treetable.DefaultMutableTreeTableNode;
@@ -94,9 +94,9 @@ public abstract class InputTreeTableNode<T> extends DefaultMutableTreeTableNode 
 
         @Override
         public int compare(MutableTreeTableNode o1, MutableTreeTableNode o2) {
-            if (o1 instanceof InputFileNode && o2 instanceof InputFileNode) {
-                InputFileNode f1 = (InputFileNode) o1;
-                InputFileNode f2 = (InputFileNode) o2;
+            if (o1 instanceof InputNode && o2 instanceof InputNode) {
+                InputNode f1 = (InputNode) o1;
+                InputNode f2 = (InputNode) o2;
                 String v1 = (String) f1.getValueAt(column);
                 String v2 = (String) f2.getValueAt(column);
                 if (v1.matches("[0-9]*") && v2.matches("[0-9]*")) {

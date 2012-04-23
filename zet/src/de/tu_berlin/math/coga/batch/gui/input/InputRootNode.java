@@ -4,8 +4,10 @@
  */
 package de.tu_berlin.math.coga.batch.gui.input;
 
+import de.tu_berlin.math.coga.batch.input.Input;
 import de.tu_berlin.math.coga.batch.input.InputFile;
-import de.tu_berlin.math.coga.batch.input.InputFiles;
+import de.tu_berlin.math.coga.batch.input.InputList;
+import de.tu_berlin.math.coga.batch.input.InputProject;
 import java.util.Collections;
 import java.util.Comparator;
 import org.jdesktop.swingx.treetable.DefaultMutableTreeTableNode;
@@ -20,10 +22,12 @@ public class InputRootNode extends DefaultMutableTreeTableNode {
     private int currentSortIndex = 0; 
     private boolean ascending = true;
     
-    public InputRootNode(InputFiles input) {
+    public InputRootNode(InputList input) {
         super(input, true);
-        for (InputFile file : input) {
-            add(new InputFileNode(file));
+        for (Input file : input) {
+
+                add(new InputNode(file));
+
         }
         sort();
     }
@@ -33,8 +37,8 @@ public class InputRootNode extends DefaultMutableTreeTableNode {
         return 1 + getInput().getComputation().getType().getPropertyNames().length;
     }
 
-    public InputFiles getInput() {
-        return (InputFiles) getUserObject();
+    public InputList getInput() {
+        return (InputList) getUserObject();
     }
 
     @Override
@@ -90,9 +94,9 @@ public class InputRootNode extends DefaultMutableTreeTableNode {
 
         @Override
         public int compare(MutableTreeTableNode o1, MutableTreeTableNode o2) {
-            if (o1 instanceof InputFileNode && o2 instanceof InputFileNode) {
-                InputFileNode f1 = (InputFileNode) o1;
-                InputFileNode f2 = (InputFileNode) o2;
+            if (o1 instanceof InputNode && o2 instanceof InputNode) {
+                InputNode f1 = (InputNode) o1;
+                InputNode f2 = (InputNode) o2;
                 String v1 = (String) f1.getValueAt(column);
                 String v2 = (String) f2.getValueAt(column);
                 if (v1.matches("[0-9]*") && v2.matches("[0-9]*")) {

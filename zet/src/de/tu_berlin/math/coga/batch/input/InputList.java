@@ -11,11 +11,11 @@ import java.util.LinkedList;
  *
  * @author Martin Groß
  */
-public class InputFiles extends LinkedList<InputFile> {
+public class InputList extends LinkedList<Input> {
 
     private Computation computation;
     
-    public InputFiles(Computation computation) {
+    public InputList(Computation computation) {
         this.computation = computation;
     }
 
