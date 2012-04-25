@@ -94,6 +94,10 @@ public class DimacsMaximumFlowFileReader extends InputFileReader<RawMaximumFlowP
         String[] tokens;
         try (BufferedReader reader = new BufferedReader(new FileReader(file))) {
             while ((line = reader.readLine()) != null) {
+                line = line.trim();
+                if (line.isEmpty()) {
+                    continue;
+                }                
                 tokens = line.split("\\s+");
                 switch (tokens[0]) {
                     case "c":
@@ -147,7 +151,7 @@ public class DimacsMaximumFlowFileReader extends InputFileReader<RawMaximumFlowP
                 }
                 ++lineIndex;
             }
-            assert currentEdgeIndex == numberOfEdges : "Edges not of the specified size-";
+            assert currentEdgeIndex == numberOfEdges : "Edges not of the specified size.";
         } catch (AssertionError error) {
             System.err.println("Error reading " + file);
             System.err.println(error.getMessage());

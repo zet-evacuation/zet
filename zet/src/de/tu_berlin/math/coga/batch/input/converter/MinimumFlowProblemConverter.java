@@ -1,12 +1,15 @@
+package de.tu_berlin.math.coga.batch.input.converter;
+
 
 import de.tu_berlin.math.coga.common.algorithm.Algorithm;
-import de.tu_berlin.math.coga.zet.NetworkFlowModel;
 import ds.graph.Edge;
 //import ds.graph.IdentifiableIntegerMapping;
 //import ds.graph.Network;
 import ds.graph.Node;
+import ds.graph.network.Network;
 import ds.graph.problem.MinimumCostFlowProblem;
 import ds.graph.problem.RawMinimumCostFlowProblem;
+import ds.mapping.IdentifiableIntegerMapping;
 
 /*
  * To change this template, choose Tools | Templates
@@ -17,8 +20,8 @@ import ds.graph.problem.RawMinimumCostFlowProblem;
  *
  * @author gross
  */
-public class Converter /*extends Algorithm<RawMinimumCostFlowProblem, MinimumCostFlowProblem>*/ {
-/*
+public class MinimumFlowProblemConverter extends Algorithm<RawMinimumCostFlowProblem, MinimumCostFlowProblem> {
+
     @Override
     protected MinimumCostFlowProblem runAlgorithm(RawMinimumCostFlowProblem problem) {
         Network network = new Network(problem.getNumberOfNodes(), problem.getNumberOfEdges());
@@ -39,6 +42,6 @@ public class Converter /*extends Algorithm<RawMinimumCostFlowProblem, MinimumCos
             }
         }
         return new MinimumCostFlowProblem(network, capacities, costs, supplies);
-    }*/
+    }
     
 }
