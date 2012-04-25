@@ -23,6 +23,11 @@ public class RMFGENMaximumFlowFileReader extends InputFileReader<RawMaximumFlowP
      * Caches the number of nodes and edges.
      */
     private String[] properties;
+    
+    /**
+     * The scaling factor necessary to make capacities integral.
+     */
+    private transient int scaling = 10000;
 
     /**
      * Returns the number of nodes and edges of the maximum flow instance and
@@ -96,6 +101,10 @@ public class RMFGENMaximumFlowFileReader extends InputFileReader<RawMaximumFlowP
         String[] tokens;
         try (BufferedReader reader = new BufferedReader(new FileReader(file))) {
             while ((line = reader.readLine()) != null) {
+                line = line.trim();
+                if (line.isEmpty()) {
+                    continue;
+                }
                 tokens = line.split("\\s+");
                 switch (lineIndex) {
                     case 1:
@@ -127,7 +136,13 @@ public class RMFGENMaximumFlowFileReader extends InputFileReader<RawMaximumFlowP
                         assert numberOfNodes >= 0 & numberOfEdges >= 0 && sourceIndex >= 0 && sinkIndex >= 0 : "Edges must be defined after sources and sinks.";
                         final int start = Integer.parseInt(tokens[0]) - 1;
                         final int end = Integer.parseInt(tokens[1]) - 1;
-                        final int capacity = (int) Math.round(Double.parseDouble(tokens[2]));// Integer.parseInt(tokens[3]);
+                        double c = Double.parseDouble(tokens[2]);
+                        if (c * scaling < 1 || Math.abs(Math.round(c * scaling) - c*scaling) > 0.00001) {
+                            System.out.println("EEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE");
+                            System.out.println(c * scaling);
+                            //scaling = (int) Math.round(1.0 / c);
+                        }   
+                        final int capacity = (int) Math.round(c * scaling);
                         assert 0 <= start && start < numberOfNodes : "Illegal start node.";
                         assert 0 <= end && end < numberOfNodes : "Illegal end node.";
                         assert capacity >= 0 : "Negative capacities are not allowed.";
@@ -140,7 +155,7 @@ public class RMFGENMaximumFlowFileReader extends InputFileReader<RawMaximumFlowP
                 }
                 ++lineIndex;
             }
-            assert currentEdgeIndex == numberOfEdges : "Edges not of the specified size-";
+            assert currentEdgeIndex == numberOfEdges : "Edges not of the specified size.";
         } catch (AssertionError error) {
             System.err.println("Error reading " + file);
             System.err.println(error.getMessage());
@@ -165,7 +180,7 @@ public class RMFGENMaximumFlowFileReader extends InputFileReader<RawMaximumFlowP
             edges[newIndex] = ends[i];
             capacities[newIndex] = caps[i];
         }
-        return new RawMaximumFlowProblem(numberOfNodes, numberOfEdges, nodeIndices, edges, capacities, sinkIndex, sourceIndex);
+        return new RawMaximumFlowProblem(numberOfNodes, numberOfEdges, nodeIndices, edges, capacities, sinkIndex, sourceIndex, scaling);
     }
 
     /**
@@ -251,7 +266,13 @@ public class RMFGENMaximumFlowFileReader extends InputFileReader<RawMaximumFlowP
                         assert numberOfNodes >= 0 & numberOfEdges >= 0 && sourceIndex >= 0 && sinkIndex >= 0 : "Edges must be defined after sources and sinks.";
                         final int start = Integer.parseInt(tokens[0]) - 1;
                         final int end = Integer.parseInt(tokens[1]) - 1;
-                        final int capacity = (int) Math.round(Double.parseDouble(tokens[2]));
+                        double c = Double.parseDouble(tokens[2]);
+                        if (c * scaling < 1 || Math.abs(Math.round(c * scaling) - c*scaling) > 0.00001) {
+                            System.out.println("EEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE");
+                            System.out.println(c * scaling);
+                            //scaling = (int) Math.round(1.0 / c);
+                        }                        
+                        final int capacity = (int) Math.round(c * scaling);
                         assert 0 <= start && start < numberOfNodes : "Illegal start node.";
                         assert 0 <= end && end < numberOfNodes : "Illegal end node.";
                         assert capacity >= 0 : "Negative capacities are not allowed.";
@@ -270,7 +291,7 @@ public class RMFGENMaximumFlowFileReader extends InputFileReader<RawMaximumFlowP
         } catch (IOException ex) {
             System.err.println("Exception during DimacsLoader loaded file from " + file);
         }
-        return new RawMaximumFlowProblem(numberOfNodes, numberOfEdges, nodeIndices, edges, capacities, sinkIndex, sourceIndex);
+        return new RawMaximumFlowProblem(numberOfNodes, numberOfEdges, nodeIndices, edges, capacities, sinkIndex, sourceIndex, scaling);
     }
 
     public static void main(String[] args) {

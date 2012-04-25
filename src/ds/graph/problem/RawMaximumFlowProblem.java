@@ -15,6 +15,7 @@ public class RawMaximumFlowProblem {
     private int[] edgeCapacities;
     private int numberOfEdges;
     private int numberOfNodes;
+    private int scaling;
     private int sinkID;
     private int sourceID;
 
@@ -32,6 +33,17 @@ public class RawMaximumFlowProblem {
         this.sourceID = sourceID;
     }
 
+    public RawMaximumFlowProblem(int numberOfNodes, int numberOfEdges, int[] nodeStartIndices, int[] edgeEndIDs, int[] edgeCapacities, int sinkID, int sourceID, int scaling) {
+        this.numberOfNodes = numberOfNodes;
+        this.numberOfEdges = numberOfEdges;
+        this.nodeStartIndices = nodeStartIndices;
+        this.edgeEndIDs = edgeEndIDs;
+        this.edgeCapacities = edgeCapacities;
+        this.sinkID = sinkID;
+        this.sourceID = sourceID;
+        this.scaling = scaling;
+    }    
+    
     public int[] getEdgeCapacities() {
         return edgeCapacities;
     }
@@ -52,6 +64,10 @@ public class RawMaximumFlowProblem {
         return numberOfNodes;
     }
 
+    public int getScaling() {
+        return scaling;
+    }
+    
     public int getSinkID() {
         return sinkID;
     }
