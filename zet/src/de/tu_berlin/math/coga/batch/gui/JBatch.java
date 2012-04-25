@@ -17,6 +17,8 @@ import de.tu_berlin.math.coga.batch.gui.action.AddInputDirectoryAction;
 import de.tu_berlin.math.coga.batch.gui.action.RunComputationAction;
 import de.tu_berlin.math.coga.batch.gui.action.StopComputationAction;
 import de.tu_berlin.math.coga.batch.input.*;
+import de.tu_berlin.math.coga.batch.input.reader.InputProjectReader;
+import de.tu_berlin.math.coga.batch.input.reader.NetworkFlowModelProjectReader;
 import ds.z.Project;
 import gui.GUIControl;
 import java.awt.BorderLayout;
@@ -140,5 +142,12 @@ public class JBatch extends JPanel {
         InputList input = computation.getInput();
         input.add(new InputProject(project));
         table.setInput(input);
+        
+        InputProjectReader reader = new NetworkFlowModelProjectReader();
+        reader.setProblem(project);
+        reader.run();
+        System.out.println("Done X");
+        System.out.println(reader.getSolution());        
+        System.out.println("Done Y");
     }
 }

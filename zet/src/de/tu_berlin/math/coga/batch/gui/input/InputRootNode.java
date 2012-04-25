@@ -24,6 +24,7 @@ public class InputRootNode extends DefaultMutableTreeTableNode {
     
     public InputRootNode(InputList input) {
         super(input, true);
+        add(new DefaultMutableTreeTableNode("Projects"));
         for (Input file : input) {
 
                 add(new InputNode(file));
