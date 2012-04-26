@@ -17,7 +17,7 @@ import javax.swing.filechooser.FileNameExtensionFilter;
  */
 public enum ProblemType {
 
-    EVACUATION_PROJECT("Evacuation Project", "Number of Floors, Number of Exits, Maximum Number of Evacuees", ZET_PROJECT),
+    EVACUATION_PROJECT("Evacuation Project", "Number of Floors, Number of Exits, Maximal Number of Evacuees", ZET_PROJECT),
     MAXIMUM_FLOW("Maximum Flow Problem", "Number of Nodes, Number of Edges", DIMACS_MAXIMUM_FLOW, RMFGEN_MAXIMUM_FLOW),
     MINIMUM_COST_FLOW("Minimum Cost Flow Problem", "Number of Nodes, Number of Edges, Total Supply", DIMACS_MINIMUM_COST_FLOW);
     private final String description;

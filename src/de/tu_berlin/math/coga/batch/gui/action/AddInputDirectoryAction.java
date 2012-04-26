@@ -29,6 +29,7 @@ public class AddInputDirectoryAction extends BatchAction {
             @Override
             public void windowClosed(WindowEvent e) {
                 if (wizard.isAccepted()) {
+
                    batch.addInputFiles(wizard.getSelectedFiles(),wizard.isRecursive(),wizard.isFollowingLinks());
                 }
             }
