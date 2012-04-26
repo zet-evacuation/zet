@@ -17,13 +17,17 @@ import de.tu_berlin.math.coga.batch.gui.action.AddInputDirectoryAction;
 import de.tu_berlin.math.coga.batch.gui.action.RunComputationAction;
 import de.tu_berlin.math.coga.batch.gui.action.StopComputationAction;
 import de.tu_berlin.math.coga.batch.input.*;
+import ds.ProjectLoader;
 import ds.z.Project;
 import gui.GUIControl;
 import java.awt.BorderLayout;
 import java.io.File;
+import java.io.IOException;
 import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 
@@ -137,8 +141,16 @@ public class JBatch extends JPanel {
 
     public void addCurrentProject() {
         Project project = control.getZControl().getProject();
+        try {
+            ProjectLoader.save(project);
+        } catch (IOException ex) {
+            Logger.getLogger(JBatch.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        File file = project.getProjectFile();
+        System.out.println(file);
+        System.out.println(FileFormat.determineFileFormat(file));
         InputList input = computation.getInput();
-        //input.add(new InputProject(project));
+        input.add(new InputFile(file));
         table.setInput(input);
         /*
         InputProjectReader reader = new NetworkFlowModelProjectReader();
