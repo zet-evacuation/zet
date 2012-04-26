@@ -17,16 +17,13 @@ import org.jdesktop.swingx.treetable.MutableTreeTableNode;
  */
 public class InputRootNode extends DefaultMutableTreeTableNode {
 
-    private int currentSortIndex = 0; 
+    private int currentSortIndex = 0;
     private boolean ascending = true;
-    
+
     public InputRootNode(InputList input) {
         super(input, true);
-
         for (InputFile file : input) {
-
-                add(new InputNode(file));
-
+            add(new InputNode(file));
         }
         sort();
     }
@@ -61,15 +58,15 @@ public class InputRootNode extends DefaultMutableTreeTableNode {
 
     private void sort() {
         Comparator<MutableTreeTableNode> comparator = new ComparatorImpl(currentSortIndex, ascending);
-        Collections.sort(children,comparator);        
-    }    
-    
+        Collections.sort(children, comparator);
+    }
+
     public void sort(int column) {
         if (column == currentSortIndex) {
             ascending = !ascending;
         }
         Comparator<MutableTreeTableNode> comparator = new ComparatorImpl(column, ascending);
-        Collections.sort(children,comparator);        
+        Collections.sort(children, comparator);
         currentSortIndex = column;
     }
 
@@ -82,7 +79,7 @@ public class InputRootNode extends DefaultMutableTreeTableNode {
 
         private boolean ascending;
         private int column;
-        
+
         public ComparatorImpl() {
         }
 
@@ -99,9 +96,9 @@ public class InputRootNode extends DefaultMutableTreeTableNode {
                 String v1 = (String) f1.getValueAt(column);
                 String v2 = (String) f2.getValueAt(column);
                 if (v1.matches("[0-9]*") && v2.matches("[0-9]*")) {
-                    return ((ascending)? 1 : -1) * (Integer.parseInt(v1) - (Integer.parseInt(v2)));
+                    return ((ascending) ? 1 : -1) * (Integer.parseInt(v1) - (Integer.parseInt(v2)));
                 } else {
-                    return ((ascending)? 1 : -1) * ((Comparable )f1.getValueAt(column)).compareTo(f2.getValueAt(column));
+                    return ((ascending) ? 1 : -1) * ((Comparable) f1.getValueAt(column)).compareTo(f2.getValueAt(column));
                 }
             } else {
                 return 0;
