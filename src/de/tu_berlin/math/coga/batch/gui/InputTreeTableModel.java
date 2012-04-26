@@ -2,8 +2,10 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package de.tu_berlin.math.coga.batch.gui.input;
+package de.tu_berlin.math.coga.batch.gui;
 
+import de.tu_berlin.math.coga.batch.gui.input.InputNode;
+import de.tu_berlin.math.coga.batch.gui.input.InputRootNode;
 import java.util.Enumeration;
 import javax.swing.tree.TreeNode;
 import org.jdesktop.swingx.treetable.DefaultMutableTreeTableNode;

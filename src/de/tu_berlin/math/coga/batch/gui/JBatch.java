@@ -138,7 +138,7 @@ public class JBatch extends JPanel {
     public void addCurrentProject() {
         Project project = control.getZControl().getProject();
         InputList input = computation.getInput();
-        input.add(new InputProject(project));
+        //input.add(new InputProject(project));
         table.setInput(input);
         /*
         InputProjectReader reader = new NetworkFlowModelProjectReader();

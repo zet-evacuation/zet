@@ -7,7 +7,6 @@ package de.tu_berlin.math.coga.batch.gui;
 import de.tu_berlin.math.coga.batch.gui.input.BatchTreeTableNode;
 import de.tu_berlin.math.coga.batch.gui.input.InputNode;
 import de.tu_berlin.math.coga.batch.gui.input.InputRootNode;
-import de.tu_berlin.math.coga.batch.gui.input.InputTreeTableModel;
 import de.tu_berlin.math.coga.batch.input.InputList;
 import java.awt.BorderLayout;
 import java.awt.Component;

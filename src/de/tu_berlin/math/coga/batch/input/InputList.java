@@ -11,7 +11,7 @@ import java.util.LinkedList;
  *
  * @author Martin Groß
  */
-public class InputList extends LinkedList<Input> {
+public class InputList extends LinkedList<InputFile> {
 
     private Computation computation;
     
