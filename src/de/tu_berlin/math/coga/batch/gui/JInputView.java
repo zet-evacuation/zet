@@ -30,6 +30,7 @@ import javax.swing.table.TableCellRenderer;
 import javax.swing.table.TableColumn;
 import javax.swing.tree.DefaultTreeCellRenderer;
 import org.jdesktop.swingx.JXTreeTable;
+import org.jdesktop.swingx.treetable.DefaultMutableTreeTableNode;
 
 /**
  *
@@ -152,7 +153,7 @@ public class JInputView extends JPanel {
             cellWidth = Math.max(comp.getPreferredSize().width, cellWidth);
 
             for (int j = 0; j < model.getChildCount(model.getRoot()); j++) {
-                InputNode v = (InputNode) model.getChild(model.getRoot(), j);
+                DefaultMutableTreeTableNode v = (DefaultMutableTreeTableNode) model.getChild(model.getRoot(), j);
                 if (i < v.getColumnCount()) {
                     comp = table.getDefaultRenderer(model.getColumnClass(i)).getTableCellRendererComponent(table, v.getValueAt(i), false, false, 0, i);
                     cellWidth = Math.max(comp.getPreferredSize().width, cellWidth);

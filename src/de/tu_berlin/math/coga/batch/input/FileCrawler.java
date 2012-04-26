@@ -4,7 +4,6 @@
  */
 package de.tu_berlin.math.coga.batch.input;
 
-import de.tu_berlin.math.coga.batch.input.reader.DimacsMinimumCostFlowFileReader;
 import java.io.File;
 import java.io.FileFilter;
 import java.io.IOException;
