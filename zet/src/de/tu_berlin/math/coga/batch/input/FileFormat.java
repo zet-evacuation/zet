@@ -4,10 +4,7 @@
  */
 package de.tu_berlin.math.coga.batch.input;
 
-import de.tu_berlin.math.coga.batch.input.reader.DimacsMaximumFlowFileReader;
-import de.tu_berlin.math.coga.batch.input.reader.DimacsMinimumCostFlowFileReader;
-import de.tu_berlin.math.coga.batch.input.reader.InputFileReader;
-import de.tu_berlin.math.coga.batch.input.reader.RMFGENMaximumFlowFileReader;
+import de.tu_berlin.math.coga.batch.input.reader.*;
 import java.io.File;
 
 /**
@@ -18,7 +15,8 @@ public enum FileFormat {
 
     DIMACS_MAXIMUM_FLOW(ProblemType.MAXIMUM_FLOW, DimacsMaximumFlowFileReader.class, "DIMACS Maximum Flow Problem", "max"),
     DIMACS_MINIMUM_COST_FLOW(ProblemType.MINIMUM_COST_FLOW, DimacsMinimumCostFlowFileReader.class, "DIMACS Minimum Cost Flow Problem", "min", "net"),
-    RMFGEN_MAXIMUM_FLOW(ProblemType.MAXIMUM_FLOW, RMFGENMaximumFlowFileReader.class, "RMFGEN Maximum Flow Problem", "rmf");
+    RMFGEN_MAXIMUM_FLOW(ProblemType.MAXIMUM_FLOW, RMFGENMaximumFlowFileReader.class, "RMFGEN Maximum Flow Problem", "rmf"),
+    ZET_PROJECT(ProblemType.EVACUATION_PROJECT, ZETProjectFileReader.class, "ZET Evacuation Project", ".zet");
     private final String description;
     private final String[] extensions;
     private final ProblemType problemType;

@@ -4,19 +4,20 @@
  */
 package de.tu_berlin.math.coga.batch.input;
 
-import javax.swing.filechooser.FileFilter;
-import java.util.Arrays;
-import java.util.List;
-import java.util.LinkedList;
-import javax.swing.filechooser.FileNameExtensionFilter;
 import static de.tu_berlin.math.coga.batch.input.FileFormat.*;
+import java.util.Arrays;
+import java.util.LinkedList;
+import java.util.List;
+import javax.swing.filechooser.FileFilter;
+import javax.swing.filechooser.FileNameExtensionFilter;
 
 /**
  *
- * @author gross
+ * @author Martin Gross
  */
 public enum ProblemType {
 
+    EVACUATION_PROJECT("Evacuation Project", "Number of Floors, Number of Exits, Maximum Number of Evacuees", ZET_PROJECT),
     MAXIMUM_FLOW("Maximum Flow Problem", "Number of Nodes, Number of Edges", DIMACS_MAXIMUM_FLOW, RMFGEN_MAXIMUM_FLOW),
     MINIMUM_COST_FLOW("Minimum Cost Flow Problem", "Number of Nodes, Number of Edges, Total Supply", DIMACS_MINIMUM_COST_FLOW);
     private final String description;
@@ -51,6 +52,7 @@ public enum ProblemType {
         return propertyNames;
     }
 
+    @Override
     public String toString() {
         return description;
     }

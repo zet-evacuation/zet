@@ -5,9 +5,7 @@
 package de.tu_berlin.math.coga.batch.gui.input;
 
 import de.tu_berlin.math.coga.batch.input.Input;
-import de.tu_berlin.math.coga.batch.input.InputFile;
 import de.tu_berlin.math.coga.batch.input.InputList;
-import de.tu_berlin.math.coga.batch.input.InputProject;
 import java.util.Collections;
 import java.util.Comparator;
 import org.jdesktop.swingx.treetable.DefaultMutableTreeTableNode;
@@ -24,7 +22,7 @@ public class InputRootNode extends DefaultMutableTreeTableNode {
     
     public InputRootNode(InputList input) {
         super(input, true);
-        add(new DefaultMutableTreeTableNode("Projects"));
+
         for (Input file : input) {
 
                 add(new InputNode(file));
