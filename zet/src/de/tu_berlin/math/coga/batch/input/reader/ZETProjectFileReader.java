@@ -18,17 +18,17 @@ import java.util.logging.Logger;
 public class ZETProjectFileReader extends InputFileReader<Project> {
 
     private String[] properties;
-    
+
     @Override
     public String[] getProperties() {
         if (properties == null) {
-            properties = new String[2];
+            properties = new String[3];
             if (!isProblemSolved()) {
                 run();
-            } else {
-                properties[0] = "" + getSolution().getBuildingPlan().floorCount();
-                properties[1] = "" + getSolution().getBuildingPlan().getEvacuationAreasCount();
             }
+            properties[0] = "" + getSolution().getBuildingPlan().floorCount();
+            properties[1] = "" + getSolution().getBuildingPlan().getEvacuationAreasCount();
+            properties[2] = "" + getSolution().getBuildingPlan().maximalEvacuees();
         }
         return properties;
     }
