@@ -16,7 +16,7 @@ public enum FileFormat {
     DIMACS_MAXIMUM_FLOW(ProblemType.MAXIMUM_FLOW, DimacsMaximumFlowFileReader.class, "DIMACS Maximum Flow Problem", "max"),
     DIMACS_MINIMUM_COST_FLOW(ProblemType.MINIMUM_COST_FLOW, DimacsMinimumCostFlowFileReader.class, "DIMACS Minimum Cost Flow Problem", "min", "net"),
     RMFGEN_MAXIMUM_FLOW(ProblemType.MAXIMUM_FLOW, RMFGENMaximumFlowFileReader.class, "RMFGEN Maximum Flow Problem", "rmf"),
-    ZET_PROJECT(ProblemType.EVACUATION_PROJECT, ZETProjectFileReader.class, "ZET Evacuation Project", ".zet");
+    ZET_PROJECT(ProblemType.EVACUATION_PROJECT, ZETProjectFileReader.class, "ZET Evacuation Project", "zet");
     private final String description;
     private final String[] extensions;
     private final ProblemType problemType;
