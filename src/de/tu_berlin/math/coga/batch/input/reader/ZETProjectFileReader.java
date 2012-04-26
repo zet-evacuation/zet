@@ -4,8 +4,12 @@
  */
 package de.tu_berlin.math.coga.batch.input.reader;
 
+import ds.ProjectLoader;
 import ds.z.Project;
 import java.io.File;
+import java.io.IOException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
@@ -31,6 +35,11 @@ public class ZETProjectFileReader extends InputFileReader<Project> {
 
     @Override
     protected Project runAlgorithm(File problem) {
-        throw new UnsupportedOperationException("Not supported yet.");
+        try {
+            return ProjectLoader.load(problem);
+        } catch (IOException ex) {
+            Logger.getLogger(ZETProjectFileReader.class.getName()).log(Level.SEVERE, null, ex);
+            return null;
+        }
     }
 }
