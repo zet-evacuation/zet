@@ -6,7 +6,6 @@ package de.tu_berlin.math.coga.batch.gui.input;
 
 import java.util.Enumeration;
 import javax.swing.tree.TreeNode;
-import org.jdesktop.swingx.treetable.AbstractTreeTableModel;
 import org.jdesktop.swingx.treetable.DefaultMutableTreeTableNode;
 import org.jdesktop.swingx.treetable.DefaultTreeTableModel;
 import org.jdesktop.swingx.treetable.MutableTreeTableNode;
