@@ -4,22 +4,20 @@
  */
 package de.tu_berlin.math.coga.batch.gui.input;
 
-import de.tu_berlin.math.coga.batch.input.Input;
 import de.tu_berlin.math.coga.batch.input.InputFile;
-import de.tu_berlin.math.coga.batch.input.InputProject;
 import javax.swing.ImageIcon;
 
 /**
  *
  * @author gross
  */
-public class InputNode extends BatchTreeTableNode<Input> {
+public class InputNode extends BatchTreeTableNode<InputFile> {
     
-    public InputNode(Input input) {
+    public InputNode(InputFile input) {
         super(input, input.getProperties());
         if (input instanceof InputFile) {
             setIcon(new ImageIcon("./icons/graph_16.png"));
-        } else if (input instanceof InputProject) {
+        } else if (input instanceof InputFile) {
             setIcon(new ImageIcon("./icons/box_16.png"));
         }
     }
