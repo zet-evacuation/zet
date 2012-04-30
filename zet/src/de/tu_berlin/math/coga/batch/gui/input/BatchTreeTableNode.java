@@ -67,7 +67,7 @@ public class BatchTreeTableNode<T> extends DefaultMutableTreeTableNode {
     @Override
     public String getValueAt(int column) {
         if (column == 0) {
-            return getUserObject().toString();
+            return toString();
         } else {
             return properties[column - 1];
         }
@@ -93,8 +93,13 @@ public class BatchTreeTableNode<T> extends DefaultMutableTreeTableNode {
         }
     }    
     
+    @Override
     public String toString() {
-        return getUserObject().toString();
+        if (getUserObject() != null) {
+            return getUserObject().toString();
+        } else {
+            return "";
+        }
     }
 
     private static class ColumnComparator implements Comparator<MutableTreeTableNode> {
