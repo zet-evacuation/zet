@@ -21,19 +21,15 @@ public enum ProblemType {
     MAXIMUM_FLOW("Maximum Flow Problem", "Number of Nodes, Number of Edges", DIMACS_MAXIMUM_FLOW, RMFGEN_MAXIMUM_FLOW),
     MINIMUM_COST_FLOW("Minimum Cost Flow Problem", "Number of Nodes, Number of Edges, Total Supply", DIMACS_MINIMUM_COST_FLOW);
     private final String description;
-    private final FileFilter fileFilter;
+    private FileFilter fileFilter;
     private final FileFormat[] fileFormats;
     private final String[] propertyNames;
 
     private ProblemType(String description, String properties, FileFormat... formats) {
+        System.out.println("X");
         this.description = description;
         this.propertyNames = properties.split("\\s*,\\s*");
         this.fileFormats = formats;
-        List<String> extensions = new LinkedList<>();
-        for (FileFormat format : formats) {
-            extensions.addAll(Arrays.asList(format.getExtensions()));
-        }
-        this.fileFilter = new FileNameExtensionFilter(description, extensions.toArray(new String[0]));
     }
 
     public String getDescription() {
@@ -41,6 +37,13 @@ public enum ProblemType {
     }
 
     public FileFilter getFileFilter() {
+        if (fileFilter == null) {
+            List<String> extensions = new LinkedList<>();
+            for (FileFormat format : fileFormats) {
+                extensions.addAll(Arrays.asList(format.getExtensions()));
+            }
+            this.fileFilter = new FileNameExtensionFilter(description, extensions.toArray(new String[0]));
+        }
         return fileFilter;
     }
 

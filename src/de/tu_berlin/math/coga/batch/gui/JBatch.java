@@ -9,13 +9,7 @@ import com.l2fprod.common.propertysheet.PropertySheetPanel;
 import com.l2fprod.common.swing.JTaskPane;
 import com.l2fprod.common.swing.JTaskPaneGroup;
 import de.tu_berlin.math.coga.batch.Computation;
-import de.tu_berlin.math.coga.batch.gui.action.AddInputFilesAction;
-import de.tu_berlin.math.coga.batch.gui.action.NewComputationAction;
-import de.tu_berlin.math.coga.batch.gui.action.AddCurrentProjectAction;
-import de.tu_berlin.math.coga.batch.gui.action.AddAlgorithmAction;
-import de.tu_berlin.math.coga.batch.gui.action.AddInputDirectoryAction;
-import de.tu_berlin.math.coga.batch.gui.action.RunComputationAction;
-import de.tu_berlin.math.coga.batch.gui.action.StopComputationAction;
+import de.tu_berlin.math.coga.batch.gui.action.*;
 import de.tu_berlin.math.coga.batch.input.*;
 import ds.ProjectLoader;
 import ds.z.Project;
@@ -36,6 +30,10 @@ import javax.swing.JScrollPane;
  * @author gross
  */
 public class JBatch extends JPanel {
+    
+    //static ProblemType test = ProblemType.EVACUATION_PROJECT;
+    //static ProblemType test2 = ProblemType.MAXIMUM_FLOW;
+    //static ProblemType test3 = ProblemType.MINIMUM_COST_FLOW;
     
     private AddInputDirectoryAction addInputDirectoryAction;
     private AddInputFilesAction addInputFilesAction;

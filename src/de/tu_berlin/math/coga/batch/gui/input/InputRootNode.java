@@ -6,8 +6,11 @@ package de.tu_berlin.math.coga.batch.gui.input;
 
 import de.tu_berlin.math.coga.batch.input.InputFile;
 import de.tu_berlin.math.coga.batch.input.InputList;
+import de.tu_berlin.math.coga.batch.input.ProblemType;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.HashMap;
+import java.util.Map;
 import org.jdesktop.swingx.treetable.DefaultMutableTreeTableNode;
 import org.jdesktop.swingx.treetable.MutableTreeTableNode;
 
@@ -16,14 +19,23 @@ import org.jdesktop.swingx.treetable.MutableTreeTableNode;
  * @author gross
  */
 public class InputRootNode extends DefaultMutableTreeTableNode {
-
+    
     private int currentSortIndex = 0;
     private boolean ascending = true;
+    
+    private Map<ProblemType, InputTypeNode> typeNodes;
 
     public InputRootNode(InputList input) {
         super(input, true);
+        typeNodes = new HashMap<>();
         for (InputFile file : input) {
-            add(new InputNode(file));
+            if (!typeNodes.containsKey(file.getProblemType())) {
+                InputTypeNode node = new InputTypeNode(file.getProblemType(), file.getPropertyNames());
+                add(node);
+                typeNodes.put(file.getProblemType(), node);
+            } 
+            InputTypeNode node = typeNodes.get(file.getProblemType());
+            node.add(new InputNode(file));
         }
         sort();
     }

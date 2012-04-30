@@ -35,18 +35,35 @@ public class InputFile {
         return file;
     }    
     
+    public FileFormat getFormat() {
+        return format;
+    }
+    
+    public ProblemType getProblemType() {
+        return format.getProblemType();
+    }
+    
     public String[] getPropertyNames() {
+        System.out.println(format);
+        System.out.println(format.DIMACS_MAXIMUM_FLOW.getProblemType());
+        System.out.println(format.ZET_PROJECT.getProblemType());
+        System.out.println(format.getProblemType());
         return format.getProblemType().getPropertyNames();
     }
 
     public String[] getProperties() {            
         return reader.getProperties();
     }
+    
+    public InputFileReader<ProblemType> getReader() {
+        return reader;
+    }
 
     public String getTooltip() {
         return file.getPath();
     }
     
+    @Override
     public String toString() {
         return file.getName();
     }

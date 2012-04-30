@@ -23,6 +23,7 @@ public enum FileFormat {
     private final Class<? extends InputFileReader> reader;
 
     private FileFormat(ProblemType problemType, Class<? extends InputFileReader> reader, String description, String... extensions) {
+        System.out.println(problemType);
         this.description = description;
         this.extensions = extensions;
         this.problemType = problemType;
