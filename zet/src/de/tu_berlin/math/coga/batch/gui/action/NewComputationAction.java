@@ -19,7 +19,7 @@ import java.awt.event.WindowListener;
 public class NewComputationAction extends BatchAction {
 
     public NewComputationAction(JBatch batch) {
-        super(batch, "Prepare new computation", "document_24.png");
+        super(batch, "New computation", "document_24.png");
     }
 
     @Override
