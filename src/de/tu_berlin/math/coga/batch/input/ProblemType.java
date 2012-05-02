@@ -17,38 +17,47 @@ import javax.swing.filechooser.FileNameExtensionFilter;
  */
 public enum ProblemType {
 
-    EVACUATION_PROJECT("Evacuation Project", "Number of Floors, Number of Exits, Maximal Number of Evacuees", ZET_PROJECT),
-    MAXIMUM_FLOW("Maximum Flow Problem", "Number of Nodes, Number of Edges", DIMACS_MAXIMUM_FLOW, RMFGEN_MAXIMUM_FLOW),
-    MINIMUM_COST_FLOW("Minimum Cost Flow Problem", "Number of Nodes, Number of Edges, Total Supply", DIMACS_MINIMUM_COST_FLOW);
+    EVACUATION_PROJECT("Evacuation Project", "Number of Floors, Number of Exits, Maximal Number of Evacuees"),
+    MAXIMUM_FLOW("Maximum Flow Problem", "Number of Nodes, Number of Edges"),
+    MINIMUM_COST_FLOW("Minimum Cost Flow Problem", "Number of Nodes, Number of Edges, Total Supply");
     private final String description;
+    private List<String> extensions;
     private FileFilter fileFilter;
-    private final FileFormat[] fileFormats;
     private final String[] propertyNames;
 
-    private ProblemType(String description, String properties, FileFormat... formats) {
-        System.out.println("X");
+    private ProblemType(String description, String properties) {
         this.description = description;
         this.propertyNames = properties.split("\\s*,\\s*");
-        this.fileFormats = formats;
     }
 
     public String getDescription() {
         return description;
     }
 
+    public List<String> getExtensions() {
+        if (extensions == null) {
+            extensions = new LinkedList<>();
+            for (FileFormat format : FileFormat.values()) {
+                if (format.getProblemType() == this) {
+                    extensions.addAll(Arrays.asList(format.getExtensions()));
+                }                
+            }
+            fileFilter = new FileNameExtensionFilter(description, extensions.toArray(new String[0]));
+        }
+        return extensions;
+    }    
+    
     public FileFilter getFileFilter() {
         if (fileFilter == null) {
-            List<String> extensions = new LinkedList<>();
-            for (FileFormat format : fileFormats) {
-                extensions.addAll(Arrays.asList(format.getExtensions()));
+            extensions = new LinkedList<>();
+            for (FileFormat format : FileFormat.values()) {
+                if (format.getProblemType() == this) {
+                    extensions.addAll(Arrays.asList(format.getExtensions()));
+                }                
             }
-            this.fileFilter = new FileNameExtensionFilter(description, extensions.toArray(new String[0]));
+            fileFilter = new FileNameExtensionFilter(description, extensions.toArray(new String[0]));
         }
         return fileFilter;
-    }
-
-    public FileFormat[] getFileFormats() {
-        return fileFormats;
     }
 
     public String[] getPropertyNames() {

@@ -107,11 +107,12 @@ public class JInputView extends JPanel {
                 }
             }
         });
-        tree.setRootVisible(true);
+        tree.setRootVisible(false);
         tree.setTreeCellRenderer(new InputTreeCellRenderer());
         JScrollPane scrollPane = new JScrollPane(tree);
         scrollPane.setBorder(new EmptyBorder(0, 0, 0, 0));
         add(scrollPane, BorderLayout.CENTER);
+        
     }
 
     public void setInput(InputList input) {
@@ -119,6 +120,7 @@ public class JInputView extends JPanel {
         InputRootNode inputRootNode = new InputRootNode(input);
         InputTreeTableModel model = new InputTreeTableModel(inputRootNode);
         setInput(model);
+        tree.expandAll();
     }
 
     protected void setInput(InputTreeTableModel model) {
