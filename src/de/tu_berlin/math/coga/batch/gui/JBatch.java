@@ -40,6 +40,7 @@ public class JBatch extends JPanel {
     private Computation computation;
     private GUIControl control;
     private final AddCurrentProjectAction addCurrentProjectAction;
+    private final AddAlgorithmAction addAlgorithmAction;
 
     public JBatch(GUIControl control) {
         super(new BorderLayout());
@@ -62,7 +63,7 @@ public class JBatch extends JPanel {
         JTaskPaneGroup algorithmPane = new JTaskPaneGroup();
         algorithmPane.setTitle("Algorithm");
         algorithmPane.setSpecial(true);
-        algorithmPane.add(new AddAlgorithmAction(this));
+        algorithmPane.add(addAlgorithmAction = new AddAlgorithmAction(this));
         //actionPane.add(algorithmPane);        
         
         actionPane.add(new RunComputationAction(this));
@@ -101,6 +102,7 @@ public class JBatch extends JPanel {
         this.computation = computation;
         if (computation != null) {
             table.setInput(computation.getInput());
+            addAlgorithmAction.setEnabled(true);
             addCurrentProjectAction.setEnabled(true);
             addInputDirectoryAction.setEnabled(true);
             addInputFilesAction.setEnabled(true);
@@ -143,8 +145,6 @@ public class JBatch extends JPanel {
             Logger.getLogger(JBatch.class.getName()).log(Level.SEVERE, null, ex);
         }
         File file = project.getProjectFile();
-        System.out.println(file);
-        System.out.println(FileFormat.determineFileFormat(file));
         InputList input = computation.getInput();
         input.add(new InputFile(file));
         table.setInput(input);
