@@ -68,8 +68,10 @@ public class BatchTreeTableNode<T> extends DefaultMutableTreeTableNode {
     public String getValueAt(int column) {
         if (column == 0) {
             return toString();
-        } else {
+        } else if (column <= properties.length){
             return properties[column - 1];
+        } else {
+            return "";
         }
     }
 

@@ -44,10 +44,6 @@ public class InputFile {
     }
     
     public String[] getPropertyNames() {
-        System.out.println(format);
-        System.out.println(format.DIMACS_MAXIMUM_FLOW.getProblemType());
-        System.out.println(format.ZET_PROJECT.getProblemType());
-        System.out.println(format.getProblemType());
         return format.getProblemType().getPropertyNames();
     }
 

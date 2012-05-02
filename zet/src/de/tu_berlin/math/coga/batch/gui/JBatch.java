@@ -78,6 +78,7 @@ public class JBatch extends JPanel {
         
         PropertySheetPanel properties = new PropertySheetPanel();
         add(new JScrollPane(properties), BorderLayout.EAST);
+        setComputation(new Computation(ProblemType.EVACUATION_PROJECT));
     }
 
     public GUIControl getControl() {
@@ -115,10 +116,7 @@ public class JBatch extends JPanel {
             throw new IllegalStateException();
         }
         FileCrawler crawler = new FileCrawler(recursive, followingLinks);
-        LinkedList<String> extensions = new LinkedList<>();
-        for (FileFormat format : computation.getType().getFileFormats()) {
-            extensions.addAll(Arrays.asList(format.getExtensions()));
-        }
+        List<String> extensions = computation.getType().getExtensions();
         List<File> files = new LinkedList<>();        
         for (File file : selectedFiles) {
             if (file.isDirectory()) {
