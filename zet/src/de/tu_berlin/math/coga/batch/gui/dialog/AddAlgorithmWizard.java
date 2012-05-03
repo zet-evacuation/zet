@@ -51,14 +51,6 @@ public class AddAlgorithmWizard extends javax.swing.JFrame {
             model.addElement(type);
             icons.put(type, new ImageIcon("./icons/max_flow.png"));
         }
-        jList1.setModel(model);
-        IconListRenderer renderer = new IconListRenderer(icons);
-        jList1.setCellRenderer(renderer);
-        if (jList1.getModel().getSize() == 0) {
-            jButton1.setEnabled(false);
-        } else {
-            jList1.setSelectedIndex(0);
-        }
         setSize(600, 500);
         setLocationRelativeTo(parent);
     }
