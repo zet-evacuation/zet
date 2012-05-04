@@ -20,7 +20,7 @@ import algo.graph.dynamicflow.eat.EATransshipmentMinCost;
 import algo.graph.dynamicflow.eat.EATransshipmentSSSP;
 import algo.graph.dynamicflow.eat.SuccessiveEarliestArrivalAugmentingPathAlgorithmNoTH;
 import algo.graph.dynamicflow.maxflow.MaxFlowOverTime;
-import algo.graph.dynamicflow.maxflow.MaximumFlowOverTimeProblem;
+import de.tu_berlin.math.coga.algorithm.flowovertime.maxflow.MaximumFlowOverTimeProblem;
 import algo.graph.dynamicflow.maxflow.TimeExpandedMaximumFlowOverTime;
 import de.tu_berlin.math.coga.zet.NetworkFlowModel;
 import ds.NetworkFlowModelAlgorithm;

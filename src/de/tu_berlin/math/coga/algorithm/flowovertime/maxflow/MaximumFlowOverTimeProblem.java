@@ -18,7 +18,7 @@
  * MaximumFlowOverTimeProblem.java
  *
  */
-package algo.graph.dynamicflow.maxflow;
+package de.tu_berlin.math.coga.algorithm.flowovertime.maxflow;
 
 import ds.graph.problem.MaximumFlowProblem;
 import ds.graph.Edge;

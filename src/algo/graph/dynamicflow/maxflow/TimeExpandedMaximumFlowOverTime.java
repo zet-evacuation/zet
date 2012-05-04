@@ -20,19 +20,12 @@
  */
 package algo.graph.dynamicflow.maxflow;
 
-import de.tu_berlin.math.coga.common.algorithm.Algorithm;
+import de.tu_berlin.math.coga.algorithm.flowovertime.maxflow.MaximumFlowOverTimeProblem;
 import algo.graph.staticflow.maxflow.PushRelabelHighestLabelGlobalGapRelabelling;
 import algo.graph.util.PathDecomposition;
-import ds.graph.DynamicPath;
-import ds.graph.Edge;
-import ds.graph.Node;
-import ds.graph.StaticPath;
-import ds.graph.TimeExpandedNetwork;
-import ds.graph.flow.FlowOverTimePath;
-import ds.graph.flow.MaximumFlow;
-import ds.graph.flow.PathBasedFlow;
-import ds.graph.flow.PathBasedFlowOverTime;
-import ds.graph.flow.StaticPathFlow;
+import de.tu_berlin.math.coga.common.algorithm.Algorithm;
+import ds.graph.*;
+import ds.graph.flow.*;
 import ds.graph.problem.MaximumFlowProblem;
 
 /**
