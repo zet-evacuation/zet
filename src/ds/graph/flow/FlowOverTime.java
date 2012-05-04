@@ -19,7 +19,7 @@
  */
 package ds.graph.flow;
 
-import de.tu_berlin.math.coga.algorithms.common.FlowOverTimePathDecomposition;
+import de.tu_berlin.math.coga.algorithm.common.FlowOverTimePathDecomposition;
 import ds.graph.ImplicitTimeExpandedResidualNetwork;
 import java.util.Queue;
 
