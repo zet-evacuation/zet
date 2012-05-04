@@ -62,11 +62,7 @@ public class AddAlgorithmWizard extends javax.swing.JFrame {
     public boolean isClosed() {
         return closed;
     }
-
-    public ProblemType getProblemType() {
-        return (ProblemType) jList1.getSelectedValue();
-    }
-
+    
     /** This method is called from within the constructor to
      * initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is
