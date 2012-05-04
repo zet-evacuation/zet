@@ -24,12 +24,12 @@ import algo.graph.dynamicflow.eat.EarliestArrivalFlowProblem;
 import algo.graph.dynamicflow.eat.LongestShortestPathTimeHorizonEstimator;
 import algo.graph.dynamicflow.eat.SEAAPAlgorithm;
 import algo.graph.dynamicflow.eat.TimeHorizonBounds;
+import de.tu_berlin.math.coga.common.algorithm.Algorithm;
 import de.tu_berlin.math.coga.zet.NetworkFlowModel;
 import ds.graph.Node;
 import ds.graph.flow.FlowOverTime;
 import ds.graph.flow.FlowOverTimePath;
 import ds.graph.flow.PathBasedFlowOverTime;
-import de.tu_berlin.math.coga.common.algorithm.Algorithm;
 
 /**
  *
