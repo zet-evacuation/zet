@@ -4,7 +4,7 @@
  */
 package algo.graph.dynamicflow.eat;
 
-import algo.graph.dynamicflow.maxflow.MaximumFlowOverTimeProblem;
+import de.tu_berlin.math.coga.algorithm.flowovertime.maxflow.MaximumFlowOverTimeProblem;
 import algo.graph.staticflow.maxflow.PushRelabel;
 import algo.graph.staticflow.maxflow.PushRelabelHighestLabel;
 import ds.graph.Edge;

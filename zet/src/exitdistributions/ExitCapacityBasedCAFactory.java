@@ -25,8 +25,6 @@ import ds.ca.evac.EvacuationCellularAutomaton;
 import de.tu_berlin.math.coga.zet.NetworkFlowModel;
 import ds.z.BuildingPlan;
 import ds.z.ConcreteAssignment;
-import evacuationplan.BidirectionalNodeCellMapping;
-import evacuationplan.BidirectionalNodeCellMapping.CAPartOfMapping;
 
 /**
  *

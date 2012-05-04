@@ -2,7 +2,7 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package de.tu_berlin.math.coga.algorithm.common;
+package de.tu_berlin.math.coga.algorithm.flowovertime;
 
 import de.tu_berlin.math.coga.common.algorithm.Algorithm;
 import de.tu_berlin.math.coga.datastructure.priorityQueue.MinHeap;
