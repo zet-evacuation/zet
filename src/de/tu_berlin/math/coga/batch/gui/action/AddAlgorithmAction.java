@@ -5,6 +5,7 @@
 package de.tu_berlin.math.coga.batch.gui.action;
 
 import de.tu_berlin.math.coga.batch.gui.JBatch;
+import de.tu_berlin.math.coga.batch.gui.dialog.AddAlgorithmWizard;
 import java.awt.event.ActionEvent;
 
 /**
@@ -20,6 +21,7 @@ public class AddAlgorithmAction extends BatchAction {
     
     @Override
     public void actionPerformed(ActionEvent ae) {
-        throw new UnsupportedOperationException("Not supported yet.");
+        AddAlgorithmWizard wizard = new AddAlgorithmWizard(batch);
+        wizard.setVisible(true);
     }    
 }

@@ -18,12 +18,12 @@ import java.util.HashMap;
 import java.util.Map;
 import javax.imageio.ImageIO;
 import javax.swing.DefaultListCellRenderer;
-import javax.swing.DefaultListModel;
 import javax.swing.Icon;
-import javax.swing.ImageIcon;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JList;
+import javax.swing.tree.DefaultMutableTreeNode;
+import javax.swing.tree.DefaultTreeModel;
 
 /**
  *
@@ -45,12 +45,17 @@ public class AddAlgorithmWizard extends javax.swing.JFrame {
             ex.printStackTrace();
         }
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-        DefaultListModel model = new DefaultListModel();
-        Map<Object, Icon> icons = new HashMap<>();
+        DefaultMutableTreeNode root = new DefaultMutableTreeNode();
+        DefaultTreeModel model = new DefaultTreeModel(root);
+        Map<ProblemType, DefaultMutableTreeNode> nodes = new HashMap<>();
         for (ProblemType type : ProblemType.values()) {
-            model.addElement(type);
-            icons.put(type, new ImageIcon("./icons/max_flow.png"));
+            DefaultMutableTreeNode node = new DefaultMutableTreeNode(type, true);
+            root.add(node);
+            nodes.put(type, node);
+            //icons.put(type, new ImageIcon("./icons/max_flow.png"));
         }
+        jTree1.setModel(model);
+        jTree1.setRootVisible(false);
         setSize(600, 500);
         setLocationRelativeTo(parent);
     }
