@@ -19,11 +19,8 @@
  */
 package ds.graph.flow;
 
-import algo.graph.dynamicflow.ChainDecompositionProblem;
-import algo.graph.dynamicflow.FlowOverTimePathDecomposition;
-import algo.graph.dynamicflow.NewChainDecomposition;
+import de.tu_berlin.math.coga.algorithms.common.FlowOverTimePathDecomposition;
 import ds.graph.ImplicitTimeExpandedResidualNetwork;
-import java.util.LinkedList;
 import java.util.Queue;
 
 /**
