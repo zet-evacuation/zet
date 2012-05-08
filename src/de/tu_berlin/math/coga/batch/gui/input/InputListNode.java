@@ -12,7 +12,6 @@ import java.util.Comparator;
 import java.util.HashMap;
 import java.util.Map;
 import javax.swing.ImageIcon;
-import org.jdesktop.swingx.treetable.DefaultMutableTreeTableNode;
 import org.jdesktop.swingx.treetable.MutableTreeTableNode;
 
 /**
@@ -40,11 +39,17 @@ public class InputListNode extends BatchTreeTableNode<InputList> {
         }
         sort();
     }
-/*
+
     @Override
     public int getColumnCount() {
-        return 1 + getInput().getComputation().getType().getPropertyNames().length;
-    }*/
+        int max = 0;
+        for (ProblemType type : typeNodes.keySet()) {
+            if (max < type.getPropertyNames().length) {
+                max = type.getPropertyNames().length;
+            }
+        }
+        return 1 + max; 
+    }
 
     public InputList getInput() {
         return (InputList) getUserObject();
