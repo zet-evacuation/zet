@@ -29,9 +29,13 @@ public class AddFileDialog extends JFileChooser {
         }
         setAcceptAllFileFilterUsed(true);
         setFileSelectionMode(JFileChooser.FILES_ONLY);
-        setFileFilter(problemType.getFileFilter());
+        //setFileFilter(problemType.getFileFilter());
         setDialogTitle("Select input file(s)...");
         setMultiSelectionEnabled(true);        
+    }
+
+    public AddFileDialog() {
+        this(null);
     }
 
     public ProblemType getProblemType() {
@@ -40,6 +44,8 @@ public class AddFileDialog extends JFileChooser {
 
     public void setProblemType(ProblemType problemType) {
         this.problemType = problemType;
-        setFileFilter(problemType.getFileFilter());
+        if (problemType != null) {
+            setFileFilter(problemType.getFileFilter());
+        }
     }
 }

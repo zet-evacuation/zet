@@ -127,9 +127,9 @@ public class JBatch extends JPanel {
     public void add(BatchProjectEntry entry) {
     }
 
-    public Computation getComputation() {
-        return computationList.get(0);
-    }
+    //public Computation getComputation() {
+    //    return computationList.get(0);
+    //}
     
     public void addComputation(Computation computation) {
         computationList.add(computation);
@@ -145,15 +145,16 @@ public class JBatch extends JPanel {
     }
 
     public void addInputFiles(File[] selectedFiles, boolean recursive, boolean followingLinks) {
-        if (getComputation() == null) {
-            throw new IllegalStateException();
-        }
+        //if (getComputation() == null) {
+        //    throw new IllegalStateException();
+        //}
         FileCrawler crawler = new FileCrawler(recursive, followingLinks);
-        List<String> extensions = getComputation().getType().getExtensions();
+        //List<String> extensions = getComputation().getType().getExtensions();
         List<File> files = new LinkedList<>();        
         for (File file : selectedFiles) {
             if (file.isDirectory()) {
-                files.addAll(crawler.listFiles(file, extensions));
+                files.addAll(crawler.listFiles(file));
+                //files.addAll(crawler.listFiles(file, extensions));
             } else if (file.isFile()) {
                 files.add(file);
             }

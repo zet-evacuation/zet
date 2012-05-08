@@ -23,18 +23,18 @@ public class NewComputationAction extends BatchAction {
 
     @Override
     public void actionPerformed(ActionEvent ae) {
-        final NewComputationWizard wizard = new NewComputationWizard(batch);
+        /*final NewComputationWizard wizard = new NewComputationWizard(batch);
         wizard.addWindowListener(new WindowAdapter() {
 
             @Override
             public void windowClosed(WindowEvent e) {
-                if (wizard.isAccepted() && wizard.getProblemType() != null) {
-                   Computation computation = new Computation(wizard.getProblemType());
+                if (wizard.isAccepted() && wizard.getProblemType() != null) {*/
+                   Computation computation = new Computation();//wizard.getProblemType());
                    batch.addComputation(computation);
-                }
+                /*}
             }
         });
-        wizard.setVisible(true);
+        wizard.setVisible(true);*/
     }   
     
 }

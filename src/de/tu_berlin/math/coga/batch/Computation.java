@@ -26,6 +26,10 @@ public class Computation {
         this.title = "Computation";
     }
 
+    public Computation() {
+        this(null);
+    }
+
     public InputList getInput() {
         return input;
     }
