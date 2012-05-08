@@ -13,6 +13,8 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
+import javax.swing.event.TreeSelectionEvent;
+import javax.swing.event.TreeSelectionListener;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.TableCellRenderer;
 import javax.swing.table.TableColumn;
@@ -32,16 +34,18 @@ public class JInputView extends JPanel {
     public JXTreeTable getTree() {
         return tree;
     }
+    
+    
 
-    public class Test extends DefaultTableCellRenderer {
+    public class AlignedTableCellRenderer extends DefaultTableCellRenderer {
 
-        public Test(int alignment) {
+        public AlignedTableCellRenderer(int alignment) {
             setHorizontalAlignment(alignment);
         }
 
         @Override
         public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) {
-            Test result = (Test) super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);        
+            AlignedTableCellRenderer result = (AlignedTableCellRenderer) super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);        
             return result;
         }
     }
@@ -98,8 +102,7 @@ public class JInputView extends JPanel {
         tree.setTreeCellRenderer(new InputTreeCellRenderer());
         JScrollPane scrollPane = new JScrollPane(tree);
         scrollPane.setBorder(new EmptyBorder(0, 0, 0, 0));
-        add(scrollPane, BorderLayout.CENTER);
-        
+        add(scrollPane, BorderLayout.CENTER);        
     }
 
     public void setInput(ComputationList computations) {

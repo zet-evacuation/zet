@@ -13,7 +13,7 @@ import de.tu_berlin.math.coga.batch.input.ProblemType;
 public class InputTypeNode extends BatchTreeTableNode<ProblemType> {
 
     public InputTypeNode(ProblemType problemType, String[] propertyNames) {
-        super(problemType, propertyNames);
+        super(problemType, propertyNames, problemType.getIcon());
     }
     
 }

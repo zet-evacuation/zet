@@ -185,7 +185,7 @@ public class JEditor extends JFrame implements Localized {
 
 		// Set window position
 		setDefaultCloseOperation( JFrame.EXIT_ON_CLOSE );
-		setSize( 800, 600 );
+		setSize( 800, 600 );                
 		Dimension d = Toolkit.getDefaultToolkit().getScreenSize();
 		setLocation( (d.width - getSize().width) / 2, (d.height - getSize().height) / 2 );
 
@@ -241,7 +241,9 @@ public class JEditor extends JFrame implements Localized {
 			setIconImage( ImageIO.read( iconFile ) );
 		} catch( IOException e ) {
 			ZETMain.exit( "Error loding icon." );
-		}
+		}                
+                
+                setExtendedState(getExtendedState()|JFrame.MAXIMIZED_BOTH);
 	}
 
 	/**
