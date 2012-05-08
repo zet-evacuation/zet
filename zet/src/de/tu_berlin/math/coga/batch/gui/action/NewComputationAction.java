@@ -30,7 +30,7 @@ public class NewComputationAction extends BatchAction {
             public void windowClosed(WindowEvent e) {
                 if (wizard.isAccepted() && wizard.getProblemType() != null) {
                    Computation computation = new Computation(wizard.getProblemType());
-                   batch.setComputation(computation);
+                   batch.addComputation(computation);
                 }
             }
         });
