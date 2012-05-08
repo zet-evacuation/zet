@@ -6,6 +6,7 @@ package de.tu_berlin.math.coga.batch.input;
 
 import de.tu_berlin.math.coga.batch.input.reader.InputFileReader;
 import java.io.File;
+import java.util.Objects;
 
 /**
  *
@@ -29,6 +30,28 @@ public class InputFile {
         } catch (InstantiationException | IllegalAccessException ex) {
             throw new AssertionError("Reader could not be initialized.");
         }
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (obj == null) {
+            return false;
+        }
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        final InputFile other = (InputFile) obj;
+        if (!Objects.equals(this.file, other.file)) {
+            return false;
+        }
+        return true;
+    }
+
+    @Override
+    public int hashCode() {
+        int hash = 3;
+        hash = 43 * hash + Objects.hashCode(this.file);
+        return hash;
     }
 
     public File getFile() {

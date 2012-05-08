@@ -4,25 +4,14 @@
  */
 package de.tu_berlin.math.coga.batch.gui;
 
+import de.tu_berlin.math.coga.batch.ComputationList;
 import de.tu_berlin.math.coga.batch.gui.input.BatchTreeTableNode;
-import de.tu_berlin.math.coga.batch.gui.input.InputNode;
-import de.tu_berlin.math.coga.batch.gui.input.InputRootNode;
-import de.tu_berlin.math.coga.batch.input.InputList;
+import de.tu_berlin.math.coga.batch.gui.input.ComputationListNode;
 import java.awt.BorderLayout;
 import java.awt.Component;
-import java.awt.Font;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
-import javax.swing.Icon;
-import javax.swing.ImageIcon;
-import javax.swing.JFrame;
-import javax.swing.JPanel;
-import javax.swing.JScrollPane;
-import javax.swing.JTable;
-import javax.swing.JTree;
-import javax.swing.SwingConstants;
-import javax.swing.SwingUtilities;
+import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.TableCellRenderer;
@@ -71,15 +60,13 @@ public class JInputView extends JPanel {
                 renderer.setToolTipText(node.getToolTipText());
             }
             return super.getTreeCellRendererComponent(tree, value, sel, expanded, leaf, row, hasFocus);
-        }
-        
+        }        
     }
 
     public class TestTreeTable extends JXTreeTable {
 
         private TestTreeTable(InputTreeTableModel model) {
             super(model);
-
         }
     }
     /**
@@ -87,7 +74,7 @@ public class JInputView extends JPanel {
      */
     private JXTreeTable tree;
     
-    private InputList input;
+    //private InputList input;
 
     /**
      * Creates the file tree panel.
@@ -101,13 +88,13 @@ public class JInputView extends JPanel {
             public void mouseClicked(MouseEvent e) {                
                 int index = tree.columnAtPoint(e.getPoint());
                 if (index >= 0) {
-                    InputRootNode inputRootNode = (InputRootNode) tree.getTreeTableModel().getRoot();
-                    inputRootNode.sort(index);
-                    setInput(new InputTreeTableModel(inputRootNode));
+                    ComputationListNode rootNode = (ComputationListNode) tree.getTreeTableModel().getRoot();
+                    setInput(new InputTreeTableModel(rootNode));
                 }
             }
         });
         tree.setRootVisible(false);
+        tree.setRowHeight(24);
         tree.setTreeCellRenderer(new InputTreeCellRenderer());
         JScrollPane scrollPane = new JScrollPane(tree);
         scrollPane.setBorder(new EmptyBorder(0, 0, 0, 0));
@@ -115,10 +102,10 @@ public class JInputView extends JPanel {
         
     }
 
-    public void setInput(InputList input) {
-        this.input = input;
-        InputRootNode inputRootNode = new InputRootNode(input);
-        InputTreeTableModel model = new InputTreeTableModel(inputRootNode);
+    public void setInput(ComputationList computations) {
+        //this.input = input;
+        ComputationListNode rootNode = new ComputationListNode(computations);
+        InputTreeTableModel model = new InputTreeTableModel(rootNode);
         setInput(model);
         tree.expandAll();
     }
@@ -126,11 +113,12 @@ public class JInputView extends JPanel {
     protected void setInput(InputTreeTableModel model) {
         tree.setTreeTableModel(model);
         tree.getColumnModel().getColumn(0).setHeaderValue("Files");
+        /*
         for (int i = 0; i < input.getComputation().getType().getPropertyNames().length; i++) {
              tree.getColumnModel().getColumn(1 + i).setHeaderValue(input.getComputation().getType().getPropertyNames()[i]);
              tree.getColumn(1 + i).setCellRenderer(new Test(SwingConstants.RIGHT));
-        }        
-        initColumnSizes(tree);
+        } */       
+        //initColumnSizes(tree);
     }    
     
     private void initColumnSizes(JXTreeTable table) {
@@ -149,7 +137,7 @@ public class JInputView extends JPanel {
             comp = headerRenderer.getTableCellRendererComponent(null, column.getHeaderValue(), false, false, 0, 0);
             headerWidth = comp.getPreferredSize().width;
 
-            InputRootNode w = (InputRootNode) model.getRoot();
+            ComputationListNode w = (ComputationListNode) model.getRoot();
             comp = table.getDefaultRenderer(model.getColumnClass(i)).getTableCellRendererComponent(table, w.getValueAt(i), false, false, 0, i);
             cellWidth = Math.max(comp.getPreferredSize().width, cellWidth);
 
@@ -168,6 +156,7 @@ public class JInputView extends JPanel {
     public static void main(String[] args) {
         SwingUtilities.invokeLater(new Runnable() {
 
+            @Override
             public void run() {
                 JFrame frame = new JFrame("File tree");
                 frame.setSize(500, 400);
