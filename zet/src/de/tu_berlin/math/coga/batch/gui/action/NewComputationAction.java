@@ -10,7 +10,6 @@ import de.tu_berlin.math.coga.batch.gui.dialog.NewComputationWizard;
 import java.awt.event.ActionEvent;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
-import java.awt.event.WindowListener;
 
 /**
  *

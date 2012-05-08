@@ -9,15 +9,17 @@ import com.l2fprod.common.propertysheet.PropertySheetPanel;
 import com.l2fprod.common.swing.JTaskPane;
 import com.l2fprod.common.swing.JTaskPaneGroup;
 import de.tu_berlin.math.coga.batch.Computation;
+import de.tu_berlin.math.coga.batch.ComputationList;
 import de.tu_berlin.math.coga.batch.gui.action.*;
-import de.tu_berlin.math.coga.batch.input.*;
+import de.tu_berlin.math.coga.batch.input.FileCrawler;
+import de.tu_berlin.math.coga.batch.input.InputFile;
+import de.tu_berlin.math.coga.batch.input.InputList;
 import ds.ProjectLoader;
 import ds.z.Project;
 import gui.GUIControl;
 import java.awt.BorderLayout;
 import java.io.File;
 import java.io.IOException;
-import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.logging.Level;
@@ -37,7 +39,7 @@ public class JBatch extends JPanel {
     
     private AddInputDirectoryAction addInputDirectoryAction;
     private AddInputFilesAction addInputFilesAction;
-    private Computation computation;
+    private ComputationList computations;
     private GUIControl control;
     private final AddCurrentProjectAction addCurrentProjectAction;
     private final AddAlgorithmAction addAlgorithmAction;
@@ -79,7 +81,6 @@ public class JBatch extends JPanel {
         
         PropertySheetPanel properties = new PropertySheetPanel();
         add(new JScrollPane(properties), BorderLayout.EAST);
-        setComputation(new Computation(ProblemType.EVACUATION_PROJECT));
     }
 
     public GUIControl getControl() {
@@ -95,13 +96,14 @@ public class JBatch extends JPanel {
     }
 
     public Computation getComputation() {
-        return computation;
+        return computations.get(0);
     }
 
     public void setComputation(Computation computation) {
-        this.computation = computation;
+        this.computations = new ComputationList();
+        computations.add(computation);
         if (computation != null) {
-            table.setInput(computation.getInput());
+            table.setInput(computations);
             addAlgorithmAction.setEnabled(true);
             addCurrentProjectAction.setEnabled(true);
             addInputDirectoryAction.setEnabled(true);
@@ -114,11 +116,11 @@ public class JBatch extends JPanel {
     }
 
     public void addInputFiles(File[] selectedFiles, boolean recursive, boolean followingLinks) {
-        if (computation == null) {
+        if (getComputation() == null) {
             throw new IllegalStateException();
         }
         FileCrawler crawler = new FileCrawler(recursive, followingLinks);
-        List<String> extensions = computation.getType().getExtensions();
+        List<String> extensions = getComputation().getType().getExtensions();
         List<File> files = new LinkedList<>();        
         for (File file : selectedFiles) {
             if (file.isDirectory()) {
@@ -127,14 +129,14 @@ public class JBatch extends JPanel {
                 files.add(file);
             }
         }        
-        InputList input = computation.getInput();
+        InputList input = getComputation().getInput();
         for (File file : files) {
             InputFile inputFile = new InputFile(file);
             if (!input.contains(inputFile)) {
                 input.add(inputFile);
             }
         }
-        table.setInput(input);    
+        table.setInput(computations);
     }
 
     public void addCurrentProject() {
@@ -145,15 +147,13 @@ public class JBatch extends JPanel {
             Logger.getLogger(JBatch.class.getName()).log(Level.SEVERE, null, ex);
         }
         File file = project.getProjectFile();
-        InputList input = computation.getInput();
+        InputList input = getComputation().getInput();
         input.add(new InputFile(file));
-        table.setInput(input);
-        /*
-        InputProjectReader reader = new NetworkFlowModelProjectReader();
-        reader.setProblem(project);
-        reader.run();
-        System.out.println("Done X");
-        System.out.println(reader.getSolution());        
-        System.out.println("Done Y");*/
+        table.setInput(computations);
+    }
+
+    public void addComputation(Computation computation) {
+        computations.add(computation);
+        table.setInput(computations);
     }
 }

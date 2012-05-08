@@ -99,6 +99,7 @@ public class AddDirectoryWizard extends javax.swing.JFrame {
         jCheckBox1.setText("Follow links");
         jCheckBox1.setToolTipText("If this is checked, symbolic links to files and folder are resolved, otherwise they are ignored.");
 
+        jCheckBox2.setSelected(true);
         jCheckBox2.setText("Recurse");
         jCheckBox2.setToolTipText("If this is checked, then subdirectories are automatically included.");
 

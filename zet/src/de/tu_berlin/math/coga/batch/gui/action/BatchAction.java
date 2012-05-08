@@ -20,4 +20,8 @@ public abstract class BatchAction extends AbstractAction {
         super(text, new ImageIcon("./icons/"+icon));
         this.batch = batch;
     }
+    
+    public JBatch getBatch() {
+        return batch;
+    }
 }

@@ -11,6 +11,7 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.Map;
+import javax.swing.ImageIcon;
 import org.jdesktop.swingx.treetable.DefaultMutableTreeTableNode;
 import org.jdesktop.swingx.treetable.MutableTreeTableNode;
 
@@ -18,15 +19,15 @@ import org.jdesktop.swingx.treetable.MutableTreeTableNode;
  *
  * @author gross
  */
-public class InputRootNode extends DefaultMutableTreeTableNode {
+public class InputListNode extends BatchTreeTableNode<InputList> {
     
     private int currentSortIndex = 0;
     private boolean ascending = true;
     
     private Map<ProblemType, InputTypeNode> typeNodes;
 
-    public InputRootNode(InputList input) {
-        super(input, true);
+    public InputListNode(InputList input) {
+        super(input, new String[0], new ImageIcon("./icons/folder_24.png"));
         typeNodes = new HashMap<>();
         for (InputFile file : input) {
             if (!typeNodes.containsKey(file.getProblemType())) {
@@ -39,33 +40,14 @@ public class InputRootNode extends DefaultMutableTreeTableNode {
         }
         sort();
     }
-
+/*
     @Override
     public int getColumnCount() {
         return 1 + getInput().getComputation().getType().getPropertyNames().length;
-    }
+    }*/
 
     public InputList getInput() {
         return (InputList) getUserObject();
-    }
-
-    @Override
-    public Object getValueAt(int column) {
-        if (column == 0) {
-            return getInput().getText();
-        } else {
-            return "";
-        }
-    }
-
-    @Override
-    public boolean isEditable(int column) {
-        return false;
-    }
-
-    @Override
-    public void setValueAt(Object aValue, int column) {
-        throw new UnsupportedOperationException();
     }
 
     private void sort() {
@@ -84,8 +66,8 @@ public class InputRootNode extends DefaultMutableTreeTableNode {
 
     @Override
     public String toString() {
-        return getInput().getText();
-    }
+        return "Input";
+    }    
 
     private static class ComparatorImpl implements Comparator<MutableTreeTableNode> {
 

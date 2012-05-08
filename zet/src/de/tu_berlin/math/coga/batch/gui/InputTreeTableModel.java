@@ -4,8 +4,8 @@
  */
 package de.tu_berlin.math.coga.batch.gui;
 
+import de.tu_berlin.math.coga.batch.gui.input.ComputationListNode;
 import de.tu_berlin.math.coga.batch.gui.input.InputNode;
-import de.tu_berlin.math.coga.batch.gui.input.InputRootNode;
 import java.util.Enumeration;
 import javax.swing.tree.TreeNode;
 import org.jdesktop.swingx.treetable.DefaultMutableTreeTableNode;
@@ -18,8 +18,8 @@ import org.jdesktop.swingx.treetable.MutableTreeTableNode;
  */
 public class InputTreeTableModel extends DefaultTreeTableModel {    
 
-    public InputTreeTableModel(InputRootNode inputRootNode) {
-        super(inputRootNode);
+    public InputTreeTableModel(ComputationListNode rootNode) {
+        super(rootNode);
     }
 
     @Override

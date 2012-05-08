@@ -74,7 +74,7 @@ public class FileCrawler {
             public boolean accept(File file) {
                 int index = file.getName().lastIndexOf(".");
                 String extension = (index >= 0)? file.getName().substring(index+1) : "";                
-                return extensions.contains(extension);
+                return extensions.contains(extension) || (file.isDirectory() && isRecursive()) || (Files.isSymbolicLink(file.toPath()) && isFollowingLinks());
             }
         };
         listFiles(root, filter, result);

@@ -5,7 +5,6 @@
 package de.tu_berlin.math.coga.batch.gui.input;
 
 import de.tu_berlin.math.coga.batch.input.InputFile;
-import javax.swing.ImageIcon;
 
 /**
  *
@@ -14,12 +13,7 @@ import javax.swing.ImageIcon;
 public class InputNode extends BatchTreeTableNode<InputFile> {
     
     public InputNode(InputFile input) {
-        super(input, input.getProperties());
-        if (input instanceof InputFile) {
-            setIcon(new ImageIcon("./icons/graph_16.png"));
-        } else if (input instanceof InputFile) {
-            setIcon(new ImageIcon("./icons/box_16.png"));
-        }
+        super(input, input.getProperties(), input.getFormat().getIcon());
     }
     
     @Override

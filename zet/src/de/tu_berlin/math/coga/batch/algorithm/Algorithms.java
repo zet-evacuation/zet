@@ -4,16 +4,12 @@
  */
 package de.tu_berlin.math.coga.batch.algorithm;
 
-import de.tu_berlin.math.coga.batch.input.reader.InputFileReader;
 import de.tu_berlin.math.coga.common.algorithm.Algorithm;
-import ds.graph.network.DynamicNetwork;
 import ds.graph.Edge;
-import ds.graph.Graph;
-import ds.graph.network.AbstractNetwork;
 import ds.graph.Node;
 import ds.graph.Path;
+import ds.graph.network.AbstractNetwork;
 import java.util.HashMap;
-import java.util.LinkedHashMap;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -38,8 +34,8 @@ public class Algorithms {
     private HashMap<Class, Node> nodeForClass;    
     
     private Algorithms() {
-        algorithmForEdge = new HashMap<Edge, Algorithm>();
-        nodeForClass = new HashMap<Class, Node>();        
+        algorithmForEdge = new HashMap<>();
+        nodeForClass = new HashMap<>();        
     }
 
     public List<Algorithm<?,?>> getAlgorithms(Class<?> problem, Class<?> solution) {
@@ -47,7 +43,7 @@ public class Algorithms {
         if (path == null) {
             return null;
         } else {
-            LinkedList<Algorithm<?,?>> result = new LinkedList<Algorithm<?, ?>>();
+            LinkedList<Algorithm<?,?>> result = new LinkedList<>();
             for (Edge edge : path) {
                 result.add(algorithmForEdge.get(edge));
             }
