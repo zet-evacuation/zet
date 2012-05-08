@@ -5,8 +5,8 @@
 package de.tu_berlin.math.coga.batch.gui;
 
 import de.tu_berlin.math.coga.batch.gui.input.ComputationListNode;
-import de.tu_berlin.math.coga.batch.gui.input.InputNode;
 import java.util.Enumeration;
+import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.TreeNode;
 import org.jdesktop.swingx.treetable.DefaultMutableTreeTableNode;
 import org.jdesktop.swingx.treetable.DefaultTreeTableModel;
@@ -42,16 +42,33 @@ public class InputTreeTableModel extends DefaultTreeTableModel {
 
     @Override
     public int getColumnCount() {
+        /*
         Enumeration<? extends MutableTreeTableNode> children = ((DefaultMutableTreeTableNode) getRoot()).children();
         int result = getRoot().getColumnCount();
         while (children.hasMoreElements()) {
             MutableTreeTableNode child = children.nextElement();
-            if (child instanceof InputNode) {
-                result = Math.max(result, ((InputNode) child).getColumnCount());
+            if (child instanceof MutableTreeTableNode) {
+                result = Math.max(result, ((MutableTreeTableNode) child).getColumnCount());
             }
         }
-        return result;
+        return result;*/
+        return getColumnCount((MutableTreeTableNode) getRoot());
     }
+    
+    public int getColumnCount(MutableTreeTableNode node) {
+        Enumeration<? extends MutableTreeTableNode> children = node.children();
+        int result = node.getColumnCount();
+        while (children.hasMoreElements()) {
+            MutableTreeTableNode child = children.nextElement();
+            System.out.println("Processing " + child);
+            if (child instanceof DefaultMutableTreeTableNode) {
+                result = Math.max(result, getColumnCount(child));
+                System.out.println(result);
+            }
+        }
+        System.out.println("Child: " + node.getClass() + " - " + result);
+        return result;
+    }    
 
     @Override
     public int getIndexOfChild(Object parent, Object child) {

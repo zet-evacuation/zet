@@ -112,10 +112,7 @@ public class JBatch extends JPanel {
             }
         }
     }
-    
-    //static ProblemType test = ProblemType.EVACUATION_PROJECT;
-    //static ProblemType test2 = ProblemType.MAXIMUM_FLOW;
-    //static ProblemType test3 = ProblemType.MINIMUM_COST_FLOW;
+
     JInputView table;
     private AddInputDirectoryAction addInputDirectoryAction;
     private AddInputFilesAction addInputFilesAction;
