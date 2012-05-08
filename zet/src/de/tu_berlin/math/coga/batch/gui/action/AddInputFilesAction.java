@@ -25,11 +25,11 @@ public class AddInputFilesAction extends BatchAction {
     @Override
     public void actionPerformed(ActionEvent ae) {
         if (dialog == null) {
-            dialog = new AddFileDialog(batch.getComputation().getType());
+            dialog = new AddFileDialog();//batch.getComputation().getType());
         }
-        if (!dialog.getProblemType().equals(batch.getComputation().getType())) {
-            dialog.setProblemType(batch.getComputation().getType());
-        }
+        //if (!dialog.getProblemType().equals(batch.getComputation().getType())) {
+        //    dialog.setProblemType(batch.getComputation().getType());
+        //}
         int decision = dialog.showOpenDialog(batch);
         if (decision == JFileChooser.APPROVE_OPTION) {
             batch.addInputFiles(dialog.getSelectedFiles());
