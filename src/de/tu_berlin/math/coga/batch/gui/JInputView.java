@@ -7,10 +7,13 @@ package de.tu_berlin.math.coga.batch.gui;
 import de.tu_berlin.math.coga.batch.ComputationList;
 import de.tu_berlin.math.coga.batch.gui.input.BatchTreeTableNode;
 import de.tu_berlin.math.coga.batch.gui.input.ComputationListNode;
+import de.tu_berlin.math.coga.batch.gui.input.ComputationNode;
+import de.tu_berlin.math.coga.batch.gui.input.InputListNode;
 import java.awt.BorderLayout;
 import java.awt.Component;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.util.Enumeration;
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import javax.swing.table.DefaultTableCellRenderer;
@@ -19,6 +22,7 @@ import javax.swing.table.TableColumn;
 import javax.swing.tree.DefaultTreeCellRenderer;
 import org.jdesktop.swingx.JXTreeTable;
 import org.jdesktop.swingx.treetable.DefaultMutableTreeTableNode;
+import org.jdesktop.swingx.treetable.MutableTreeTableNode;
 
 /**
  *
@@ -86,6 +90,12 @@ public class JInputView extends JPanel {
                 int index = tree.columnAtPoint(e.getPoint());
                 if (index >= 0) {
                     ComputationListNode rootNode = (ComputationListNode) tree.getTreeTableModel().getRoot();
+                    Enumeration<? extends MutableTreeTableNode> computationNodes = rootNode.children();
+                    while (computationNodes.hasMoreElements()) {
+                        ComputationNode computationNode = (ComputationNode) computationNodes.nextElement();
+                        InputListNode inputListNode = (InputListNode) computationNode.getChildAt(0);
+                        inputListNode.sort(index);
+                    }
                     setInput(new InputTreeTableModel(rootNode));
                 }
             }
@@ -99,22 +109,20 @@ public class JInputView extends JPanel {
     }
 
     public void setInput(ComputationList computations) {
-        //this.input = input;
         ComputationListNode rootNode = new ComputationListNode(computations);
         InputTreeTableModel model = new InputTreeTableModel(rootNode);
-        setInput(model);
-        tree.expandAll();
+        setInput(model);        
     }
 
     protected void setInput(InputTreeTableModel model) {
         tree.setTreeTableModel(model);
-        tree.getColumnModel().getColumn(0).setHeaderValue("Files");
-        /*
-        for (int i = 0; i < input.getComputation().getType().getPropertyNames().length; i++) {
-             tree.getColumnModel().getColumn(1 + i).setHeaderValue(input.getComputation().getType().getPropertyNames()[i]);
-             tree.getColumn(1 + i).setCellRenderer(new Test(SwingConstants.RIGHT));
-        } */       
-        //initColumnSizes(tree);
+        tree.getColumnModel().getColumn(0).setHeaderValue("Files");        
+        for (int i = 1; i < model.getRoot().getColumnCount(); i++) {
+             tree.getColumnModel().getColumn(i).setHeaderValue("");
+             tree.getColumn(i).setCellRenderer(new AlignedTableCellRenderer(SwingConstants.RIGHT));
+        }
+        initColumnSizes(tree);
+        tree.expandAll();
     }    
     
     private void initColumnSizes(JXTreeTable table) {
