@@ -121,7 +121,7 @@ public class JBatch extends JPanel {
     private  AddAlgorithmAction addAlgorithmAction;
     private InputSelectionListener selectionListener;
     private InputKeyListener keyListener;
-    private final TjandraOptimizedAction tjandraOptimzed;
+    private final AddAlgorithmAction tjandraOptimzed;
 
 
 
@@ -149,7 +149,7 @@ public class JBatch extends JPanel {
         
         JTaskPaneGroup eafPane = new JTaskPaneGroup();
         eafPane.setTitle("Earliest Arrival");
-        eafPane.add(tjandraOptimzed = new TjandraOptimizedAction(this));
+        eafPane.add(tjandraOptimzed = new AddAlgorithmAction(this));
         
         algorithmPane.add(eafPane);//(addAlgorithmAction = new AddAlgorithmAction(this));
         
@@ -196,6 +196,7 @@ public class JBatch extends JPanel {
             InputAlgorithm algorithm = new InputAlgorithm(algorithmClass);
             algorithmList.add(algorithm);
         }           
+        table.setInput(computationList);
     }        
     
     public void addComputation(Computation computation) {
