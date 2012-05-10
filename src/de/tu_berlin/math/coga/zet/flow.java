@@ -144,6 +144,7 @@ public class flow implements AlgorithmListener {
 			XMLReader reader = new XMLReader( theInstance.inputFileName );
 			theInstance.eafp = reader.readFlowInstance();
 			theInstance.graphView = reader.getXmlData().getGraphView();
+			theInstance.computationMode = ComputationMode.EarliestArrivalFlow;
 		} else if(theInstance.inputFileName.endsWith( ".max" ) ) {
 			// use a dimacs challenge max flow
 			theInstance.computationMode = ComputationMode.StaticMaximumFlow;
@@ -234,7 +235,11 @@ public class flow implements AlgorithmListener {
 			NetworkFlowModel nfm = new NetworkFlowModel();
 			
 		
+		System.out.println( "Noides: " + eafp.getNetwork().numberOfNodes() );
+		System.out.println( "Edges: " + eafp.getNetwork().numberOfEdges() );
 		
+		System.out.println( "NFM: " );
+		System.out.println( "EAFP: " + eafp.toString() );
 		
 		
 		SEAAPAlgorithm algo = new SEAAPAlgorithm();
@@ -249,6 +254,8 @@ public class flow implements AlgorithmListener {
 		df = algo.getSolution().getPathBased();
 		neededTimeHorizon = algo.getSolution().getTimeHorizon()-1;
 		System.out.println( "Total cost: " + algo.getSolution().getTotalCost() );
+		System.out.println( "Time horizon:" + neededTimeHorizon );
+		System.out.println( "Flow amount: " + algo.getSolution().getFlowAmount() );
 	}
 
 	private void computeMaximumFlow() {

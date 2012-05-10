@@ -41,7 +41,7 @@ public class GraphConverter implements Converter {
 	 */
 	@Override
 	public boolean canConvert( Class type ) {
-		return type.equals( AbstractNetwork.class );
+		return AbstractNetwork.class.isAssignableFrom( type ); // type.equals( AbstractNetwork.class );
 	}
 
 	@Override
@@ -107,17 +107,17 @@ public class GraphConverter implements Converter {
 				edgeCount = Integer.parseInt( reader.getAttribute( "m" ) );
 		}
 
-		xmlData.edgeCapacities = new IdentifiableDoubleMapping<Edge>( edgeCount > 0 ? edgeCount : 10 );
-		xmlData.nodeCapacities = new IdentifiableDoubleMapping<Node>( nodeCount > 0 ? nodeCount : 10 );
-		xmlData.transitTimes = new IdentifiableDoubleMapping<Edge>( edgeCount > 0 ? edgeCount : 10 );
-		xmlData.supplies = new IdentifiableDoubleMapping<Node>( nodeCount > 0 ? nodeCount : 10 );
+		xmlData.edgeCapacities = new IdentifiableDoubleMapping<>( edgeCount > 0 ? edgeCount : 10 );
+		xmlData.nodeCapacities = new IdentifiableDoubleMapping<>( nodeCount > 0 ? nodeCount : 10 );
+		xmlData.transitTimes = new IdentifiableDoubleMapping<>( edgeCount > 0 ? edgeCount : 10 );
+		xmlData.supplies = new IdentifiableDoubleMapping<>( nodeCount > 0 ? nodeCount : 10 );
 //		xmlData.edgeCapacitiesIntegral = new IdentifiableIntegerMapping<Edge>( edgeCount > 0 ? edgeCount : 10 );
 //		xmlData.nodeCapacitiesIntegral = new IdentifiableIntegerMapping<Node>( nodeCount > 0 ? nodeCount : 10 );
 //		xmlData.transitTimesIntegral = new IdentifiableIntegerMapping<Edge>( edgeCount > 0 ? edgeCount : 10 );
 //		xmlData.suppliesIntegral = new IdentifiableIntegerMapping<Node>( nodeCount > 0 ? nodeCount : 10 );
 
-		xmlData.sources = new ArrayList<Node>();
-		xmlData.sinks = new ArrayList<Node>();
+		xmlData.sources = new ArrayList<>();
+		xmlData.sinks = new ArrayList<>();
 
 		while( reader.hasMoreChildren() ) {
 			reader.moveDown();
@@ -169,10 +169,9 @@ public class GraphConverter implements Converter {
 		node = new Node( nid );
 		xmlData.nodes.put( id, node );
 		double balanceVal = Double.parseDouble( balance );
-		//xmlData.suppliesIntegral.add( node, (int) balanceVal );
 		xmlData.supplies.add( node, balanceVal );
-		//xmlData.nodeCapacitiesIntegral.add( node, (int) Double.parseDouble( capacity ) );
-		xmlData.nodeCapacities.add( node, Double.parseDouble( capacity ) );
+		double minCapacity = Math.abs( balanceVal ); // make sure, the capacity is at least the supply or demand
+		xmlData.nodeCapacities.add( node, Math.max( minCapacity, Double.parseDouble( capacity ) ) );
 
 		if( balanceVal > 0 )
 			xmlData.sources.add( node );
