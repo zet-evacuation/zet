@@ -4,21 +4,21 @@
  */
 package de.tu_berlin.math.coga.batch.gui;
 
+import algo.graph.dynamicflow.eat.SEAAPAlgorithm;
 import batch.load.BatchProjectEntry;
 import com.l2fprod.common.propertysheet.PropertySheetPanel;
 import com.l2fprod.common.swing.JTaskPane;
 import com.l2fprod.common.swing.JTaskPaneGroup;
 import de.tu_berlin.math.coga.batch.Computation;
 import de.tu_berlin.math.coga.batch.ComputationList;
+import de.tu_berlin.math.coga.batch.algorithm.AlgorithmList;
 import de.tu_berlin.math.coga.batch.gui.action.*;
 import de.tu_berlin.math.coga.batch.gui.input.ComputationListNode;
 import de.tu_berlin.math.coga.batch.gui.input.ComputationNode;
 import de.tu_berlin.math.coga.batch.gui.input.InputListNode;
 import de.tu_berlin.math.coga.batch.gui.input.InputNode;
-import de.tu_berlin.math.coga.batch.input.FileCrawler;
-import de.tu_berlin.math.coga.batch.input.FileFormat;
-import de.tu_berlin.math.coga.batch.input.InputFile;
-import de.tu_berlin.math.coga.batch.input.InputList;
+import de.tu_berlin.math.coga.batch.input.*;
+import de.tu_berlin.math.coga.common.algorithm.Algorithm;
 import ds.ProjectLoader;
 import ds.z.Project;
 import gui.GUIControl;
@@ -104,7 +104,8 @@ public class JBatch extends JPanel {
                     }
                 }
             }
-            addAlgorithmAction.setEnabled(!selectedComputations.isEmpty());
+            //addAlgorithmAction.setEnabled(!selectedComputations.isEmpty());
+            tjandraOptimzed.setEnabled(!selectedComputations.isEmpty());
             addCurrentProjectAction.setEnabled(!selectedComputations.isEmpty());
             addInputDirectoryAction.setEnabled(!selectedComputations.isEmpty());
             addInputFilesAction.setEnabled(!selectedComputations.isEmpty());
@@ -117,9 +118,12 @@ public class JBatch extends JPanel {
     private ComputationList computationList;
     private GUIControl control;
     private final AddCurrentProjectAction addCurrentProjectAction;
-    private final AddAlgorithmAction addAlgorithmAction;
+    private  AddAlgorithmAction addAlgorithmAction;
     private InputSelectionListener selectionListener;
     private InputKeyListener keyListener;
+    private final TjandraOptimizedAction tjandraOptimzed;
+
+
 
     public JBatch(GUIControl control) {
         super(new BorderLayout());
@@ -142,7 +146,13 @@ public class JBatch extends JPanel {
         JTaskPaneGroup algorithmPane = new JTaskPaneGroup();
         algorithmPane.setTitle("Algorithm");
         algorithmPane.setSpecial(true);
-        algorithmPane.add(addAlgorithmAction = new AddAlgorithmAction(this));
+        
+        JTaskPaneGroup eafPane = new JTaskPaneGroup();
+        eafPane.setTitle("Earliest Arrival");
+        eafPane.add(tjandraOptimzed = new TjandraOptimizedAction(this));
+        
+        algorithmPane.add(eafPane);//(addAlgorithmAction = new AddAlgorithmAction(this));
+        
         //actionPane.add(algorithmPane);        
         
         actionPane.add(new RunComputationAction(this));
@@ -175,9 +185,18 @@ public class JBatch extends JPanel {
     public GUIControl getControl() {
         return control;
     }
+
     
     public void add(BatchProjectEntry entry) {
-    }
+    }    
+    
+    public void addAlgorithm(Class<? extends Algorithm> algorithmClass) {
+        for (Computation computation : selectionListener.getSelectedComputations()) {
+            AlgorithmList algorithmList = computation.getAlgorithms();
+            InputAlgorithm algorithm = new InputAlgorithm(algorithmClass);
+            algorithmList.add(algorithm);
+        }           
+    }        
     
     public void addComputation(Computation computation) {
         computationList.add(computation);
