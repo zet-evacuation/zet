@@ -4,13 +4,13 @@
  */
 package de.tu_berlin.math.coga.batch.algorithm;
 
-import de.tu_berlin.math.coga.common.algorithm.Algorithm;
+import de.tu_berlin.math.coga.batch.input.InputAlgorithm;
 import java.util.LinkedList;
 
 /**
  *
  * @author gross
  */
-public class AlgorithmList extends LinkedList<Algorithm> {
+public class AlgorithmList extends LinkedList<InputAlgorithm> {
     
 }

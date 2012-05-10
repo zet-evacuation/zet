@@ -5,12 +5,9 @@
 package de.tu_berlin.math.coga.batch.gui;
 
 import de.tu_berlin.math.coga.batch.gui.input.ComputationListNode;
-import java.util.Enumeration;
-import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.TreeNode;
 import org.jdesktop.swingx.treetable.DefaultMutableTreeTableNode;
 import org.jdesktop.swingx.treetable.DefaultTreeTableModel;
-import org.jdesktop.swingx.treetable.MutableTreeTableNode;
 
 /**
  *
