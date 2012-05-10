@@ -124,6 +124,8 @@ public class BatchTreeTableNode<T> extends DefaultMutableTreeTableNode {
             }
             String v1 = (String) o1.getValueAt(column);
             String v2 = (String) o2.getValueAt(column);
+            v1 = v1.toLowerCase();
+            v2 = v2.toLowerCase();
             if (v1.matches("[0-9]*") && v2.matches("[0-9]*")) {
                 return ((ascending) ? 1 : -1) * (Integer.parseInt(v1) - (Integer.parseInt(v2)));
             } else {
