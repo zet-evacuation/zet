@@ -52,15 +52,15 @@ public class InputTreeTableModel extends DefaultTreeTableModel {
             }
         }
         return result;*/
-        return getColumnCount((MutableTreeTableNode) getRoot());
+        return getRoot().getColumnCount();// getColumnCount((MutableTreeTableNode) getRoot());
     }
-    
+    /*
     public int getColumnCount(MutableTreeTableNode node) {
         Enumeration<? extends MutableTreeTableNode> children = node.children();
         int result = node.getColumnCount();
         while (children.hasMoreElements()) {
             MutableTreeTableNode child = children.nextElement();
-            System.out.println("Processing " + child);
+            System.out.println("Processing " + child + " "  + child.children().hasMoreElements());
             if (child instanceof DefaultMutableTreeTableNode) {
                 result = Math.max(result, getColumnCount(child));
                 System.out.println(result);
@@ -68,7 +68,7 @@ public class InputTreeTableModel extends DefaultTreeTableModel {
         }
         System.out.println("Child: " + node.getClass() + " - " + result);
         return result;
-    }    
+    } */   
 
     @Override
     public int getIndexOfChild(Object parent, Object child) {
