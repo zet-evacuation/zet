@@ -6,6 +6,7 @@ package de.tu_berlin.math.coga.batch.gui.action;
 
 import de.tu_berlin.math.coga.batch.gui.JBatch;
 import de.tu_berlin.math.coga.batch.gui.dialog.AddAlgorithmWizard;
+import de.tu_berlin.math.coga.batch.input.InputFile;
 import java.awt.event.ActionEvent;
 
 /**
@@ -21,7 +22,11 @@ public class AddAlgorithmAction extends BatchAction {
     
     @Override
     public void actionPerformed(ActionEvent ae) {
-        AddAlgorithmWizard wizard = new AddAlgorithmWizard(batch);
-        wizard.setVisible(true);
+        System.out.println(batch.getComputationList().get(0).getInput().size());
+        for (InputFile file : batch.getComputationList().get(0).getInput()) {
+            System.out.println(file);
+        }
+        //AddAlgorithmWizard wizard = new AddAlgorithmWizard(batch);
+        //wizard.setVisible(true);
     }    
 }

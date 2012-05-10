@@ -13,7 +13,7 @@ import java.util.Objects;
  * @author gross
  */
 public class InputFile {
-    
+
     private File file;
     private FileFormat format;
     private InputFileReader reader;
@@ -25,6 +25,7 @@ public class InputFile {
         this.file = file;
         this.format = FileFormat.determineFileFormat(file);
         try {
+
             this.reader = format.getReader().newInstance();
             reader.setFile(file);
         } catch (InstantiationException | IllegalAccessException ex) {
@@ -56,24 +57,24 @@ public class InputFile {
 
     public File getFile() {
         return file;
-    }    
-    
+    }
+
     public FileFormat getFormat() {
         return format;
     }
-    
+
     public ProblemType getProblemType() {
         return format.getProblemType();
     }
-    
+
     public String[] getPropertyNames() {
         return format.getProblemType().getPropertyNames();
     }
 
-    public String[] getProperties() {            
+    public String[] getProperties() {
         return reader.getProperties();
     }
-    
+
     public InputFileReader<ProblemType> getReader() {
         return reader;
     }
@@ -81,7 +82,7 @@ public class InputFile {
     public String getTooltip() {
         return file.getPath();
     }
-    
+
     @Override
     public String toString() {
         return file.getName();

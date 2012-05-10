@@ -16,6 +16,7 @@ import de.tu_berlin.math.coga.batch.gui.input.ComputationNode;
 import de.tu_berlin.math.coga.batch.gui.input.InputListNode;
 import de.tu_berlin.math.coga.batch.gui.input.InputNode;
 import de.tu_berlin.math.coga.batch.input.FileCrawler;
+import de.tu_berlin.math.coga.batch.input.FileFormat;
 import de.tu_berlin.math.coga.batch.input.InputFile;
 import de.tu_berlin.math.coga.batch.input.InputList;
 import ds.ProjectLoader;
@@ -28,7 +29,6 @@ import java.io.File;
 import java.io.IOException;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Objects;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JPanel;
@@ -104,12 +104,10 @@ public class JBatch extends JPanel {
                     }
                 }
             }
-            if (!selectedComputations.isEmpty()) {
-                addAlgorithmAction.setEnabled(true);
-                addCurrentProjectAction.setEnabled(true);
-                addInputDirectoryAction.setEnabled(true);
-                addInputFilesAction.setEnabled(true);
-            }
+            addAlgorithmAction.setEnabled(!selectedComputations.isEmpty());
+            addCurrentProjectAction.setEnabled(!selectedComputations.isEmpty());
+            addInputDirectoryAction.setEnabled(!selectedComputations.isEmpty());
+            addInputFilesAction.setEnabled(!selectedComputations.isEmpty());
         }
     }
 
@@ -164,6 +162,14 @@ public class JBatch extends JPanel {
         add(new JScrollPane(properties), BorderLayout.EAST);
         
         computationList = new ComputationList();
+        Computation computation = new Computation();
+        computation.setTitle(computationList.generateGenericComputationTitle());
+        computationList.add(computation);
+        table.setInput(computationList);    
+        Object root = table.getTree().getTreeTableModel().getRoot(); 
+        Object child = table.getTree().getTreeTableModel().getChild(root, 0);
+        TreePath path = new TreePath(new Object[] { root, child });
+        table.getTree().getTreeSelectionModel().setSelectionPath(path);
     }
 
     public GUIControl getControl() {
@@ -172,10 +178,6 @@ public class JBatch extends JPanel {
     
     public void add(BatchProjectEntry entry) {
     }
-
-    //public Computation getComputation() {
-    //    return computationList.get(0);
-    //}
     
     public void addComputation(Computation computation) {
         computationList.add(computation);
@@ -191,21 +193,17 @@ public class JBatch extends JPanel {
     }
 
     public void addInputFiles(File[] selectedFiles, boolean recursive, boolean followingLinks) {
-        //if (getComputation() == null) {
-        //    throw new IllegalStateException();
-        //}
         FileCrawler crawler = new FileCrawler(recursive, followingLinks);
-        //List<String> extensions = getComputation().getType().getExtensions();
+        List<String> extensions = FileFormat.getAllKnownExtensions();
         List<File> files = new LinkedList<>();        
         for (File file : selectedFiles) {
             if (file.isDirectory()) {
-                files.addAll(crawler.listFiles(file));
-                //files.addAll(crawler.listFiles(file, extensions));
+                files.addAll(crawler.listFiles(file, extensions));
             } else if (file.isFile()) {
                 files.add(file);
             }
         }
-        for (Computation computation : selectionListener.selectedComputations) {
+        for (Computation computation : selectionListener.getSelectedComputations()) {
             InputList input = computation.getInput();
             for (File file : files) {
                 InputFile inputFile = new InputFile(file);
@@ -224,16 +222,17 @@ public class JBatch extends JPanel {
             Logger.getLogger(JBatch.class.getName()).log(Level.SEVERE, null, ex);
         }
         File file = project.getProjectFile();
-        for (Computation computation : selectionListener.selectedComputations) {
+        for (Computation computation : selectionListener.getSelectedComputations()) {
             InputList input = computation.getInput();
-            input.add(new InputFile(file));            
+            InputFile inputFile = new InputFile(file);
+            if (!input.contains(inputFile)) {
+                input.add(inputFile);
+            }            
         }
         table.setInput(computationList);
     }
 
     public ComputationList getComputationList() {
         return computationList;
-    }
-    
-    
+    }    
 }

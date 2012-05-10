@@ -454,7 +454,7 @@ public class JEditor extends JFrame implements Localized {
 					break;
 				case Batch:
 				if( firstSwitch ) {
-					batchView.addProject( zcontrol.getProject() );
+					//batchView.addProject( zcontrol.getProject() );
 					firstSwitch = false;
 				}
 				switchTo( i );

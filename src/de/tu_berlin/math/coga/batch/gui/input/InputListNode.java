@@ -54,7 +54,7 @@ public class InputListNode extends BatchTreeTableNode<InputList> {
     public InputList getInput() {
         return (InputList) getUserObject();
     }
-
+    
     private void sort() {
         Comparator<MutableTreeTableNode> comparator = new ComparatorImpl(currentSortIndex, ascending);
         Collections.sort(children, comparator);
@@ -67,7 +67,7 @@ public class InputListNode extends BatchTreeTableNode<InputList> {
         Comparator<MutableTreeTableNode> comparator = new ComparatorImpl(column, ascending);
         Collections.sort(children, comparator);
         currentSortIndex = column;
-    }
+    }    
 
     @Override
     public String toString() {

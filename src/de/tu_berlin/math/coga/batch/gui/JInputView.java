@@ -13,8 +13,6 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
-import javax.swing.event.TreeSelectionEvent;
-import javax.swing.event.TreeSelectionListener;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.TableCellRenderer;
 import javax.swing.table.TableColumn;
@@ -27,15 +25,10 @@ import org.jdesktop.swingx.treetable.DefaultMutableTreeTableNode;
  * @author gross
  */
 public class JInputView extends JPanel {
-    
-    private static final Icon ROOT_NODE = new ImageIcon("./icons/" + "folder_16.png");
-    private static final Icon FILE_NODE = new ImageIcon("./icons/" + "graph_16.png");
 
     public JXTreeTable getTree() {
         return tree;
     }
-    
-    
 
     public class AlignedTableCellRenderer extends DefaultTableCellRenderer {
 
