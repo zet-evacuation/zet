@@ -6,6 +6,9 @@ package de.tu_berlin.math.coga.batch.input;
 
 import de.tu_berlin.math.coga.batch.input.reader.*;
 import java.io.File;
+import java.util.Arrays;
+import java.util.LinkedList;
+import java.util.List;
 import javax.swing.Icon;
 import javax.swing.ImageIcon;
 
@@ -15,6 +18,7 @@ import javax.swing.ImageIcon;
  */
 public enum FileFormat {
 
+    UNKNOWN(ProblemType.UNSPECIFIED, UnknownFileReader.class, "Unknown File Format"),
     DIMACS_MAXIMUM_FLOW(ProblemType.MAXIMUM_FLOW, DimacsMaximumFlowFileReader.class, "DIMACS Maximum Flow Problem", "max"),
     DIMACS_MINIMUM_COST_FLOW(ProblemType.MINIMUM_COST_FLOW, DimacsMinimumCostFlowFileReader.class, "DIMACS Minimum Cost Flow Problem", "min", "net"),
     RMFGEN_MAXIMUM_FLOW(ProblemType.MAXIMUM_FLOW, RMFGENMaximumFlowFileReader.class, "RMFGEN Maximum Flow Problem", "rmf"),
@@ -67,6 +71,18 @@ public enum FileFormat {
                 }
             }
         }
-        return null;
+        return UNKNOWN;
+    }
+    
+    private static List<String> extensionList;
+    
+    public static List<String> getAllKnownExtensions() {
+        if (extensionList == null) {
+            extensionList = new LinkedList<>();
+            for (int i = 1; i < FileFormat.values().length; i++) {
+                extensionList.addAll(Arrays.asList(FileFormat.values()[i].getExtensions()));
+            }
+        }
+        return extensionList;
     }
 }

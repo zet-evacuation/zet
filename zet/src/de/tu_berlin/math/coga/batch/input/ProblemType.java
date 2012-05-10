@@ -4,7 +4,6 @@
  */
 package de.tu_berlin.math.coga.batch.input;
 
-import static de.tu_berlin.math.coga.batch.input.FileFormat.*;
 import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
@@ -19,6 +18,7 @@ import javax.swing.filechooser.FileNameExtensionFilter;
  */
 public enum ProblemType {
 
+    UNSPECIFIED("Unspecified Problem", ""),
     EVACUATION_PROJECT("Evacuation Project", "Number of Floors, Number of Exits, Maximal Number of Evacuees", new ImageIcon("./icons/company_24.png")),
     MAXIMUM_FLOW("Maximum Flow Problem", "Number of Nodes, Number of Edges"),
     MINIMUM_COST_FLOW("Minimum Cost Flow Problem", "Number of Nodes, Number of Edges, Total Supply");

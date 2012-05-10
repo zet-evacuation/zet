@@ -25,6 +25,9 @@ public class AddFileDialog extends JFileChooser {
         setCurrentDirectory(directory);
         this.problemType = problemType;
         for (ProblemType type : ProblemType.values()) {
+            if (type == ProblemType.UNSPECIFIED) {
+                continue;
+            }
             addChoosableFileFilter(type.getFileFilter());            
         }
         setAcceptAllFileFilterUsed(true);
