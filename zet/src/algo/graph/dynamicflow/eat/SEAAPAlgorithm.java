@@ -129,6 +129,9 @@ public class SEAAPAlgorithm extends Algorithm<EarliestArrivalFlowProblem, FlowOv
         network = new ImplicitTimeExpandedResidualNetwork( problem );
             
         originalTimeHorizon = problem.getTimeHorizon();        
+				
+				originalTimeHorizon = 16;
+				
         pathProblem = new EarliestArrivalAugmentingPathProblem(network, network.superSource(), problem.getSink(), Math.min(getNextDistance(0) + 1, problem.getTimeHorizon()));
         paths = new LinkedList<>();
         // If there are no supplies, we are done
@@ -161,6 +164,8 @@ public class SEAAPAlgorithm extends Algorithm<EarliestArrivalFlowProblem, FlowOv
         }
     }
 
+		int total;
+		
     private void calculateEarliestArrivalAugmentingPath() {
         // If all flow units have been sent, we are done. 
         if (flowUnitsSent == getProblem().getTotalSupplies()) {
@@ -189,7 +194,10 @@ public class SEAAPAlgorithm extends Algorithm<EarliestArrivalFlowProblem, FlowOv
         }
         if (!path.isEmpty() && path.getCapacity() > 0) {
             arrivalTime = path.getArrivalTime();
+						total += arrivalTime*path.getCapacity();
         }
+				
+				System.out.println( "TOTALCOST: " + total + " ARRIVAL " + arrivalTime + " AMOUNT " + path.getCapacity() );
     }
 
     private void calculateShortestPathLengths() {
