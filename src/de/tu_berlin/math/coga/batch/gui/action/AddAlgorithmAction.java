@@ -4,8 +4,8 @@
  */
 package de.tu_berlin.math.coga.batch.gui.action;
 
-import algo.graph.dynamicflow.eat.SEAAPAlgorithm;
 import de.tu_berlin.math.coga.batch.gui.JBatch;
+import de.tu_berlin.math.coga.common.algorithm.Algorithm;
 import java.awt.event.ActionEvent;
 
 /**
@@ -14,13 +14,16 @@ import java.awt.event.ActionEvent;
  */
 public class AddAlgorithmAction extends BatchAction {
 
-    public AddAlgorithmAction(JBatch batch) {
+    private Class<? extends Algorithm> algorithm;
+    
+    public AddAlgorithmAction(JBatch batch, Class<? extends Algorithm> algorithm) {
         super(batch, "Tjandra (Optimized)", "algo_24.png");
         setEnabled(false);
+        this.algorithm = algorithm;
     }   
     
     @Override
     public void actionPerformed(ActionEvent ae) {
-        batch.addAlgorithm(SEAAPAlgorithm.class);
+        batch.addAlgorithm(algorithm);
     }    
 }
