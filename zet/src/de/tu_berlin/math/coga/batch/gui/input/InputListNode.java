@@ -7,7 +7,6 @@ package de.tu_berlin.math.coga.batch.gui.input;
 import de.tu_berlin.math.coga.batch.input.InputFile;
 import de.tu_berlin.math.coga.batch.input.InputList;
 import de.tu_berlin.math.coga.batch.input.ProblemType;
-import java.util.Comparator;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;

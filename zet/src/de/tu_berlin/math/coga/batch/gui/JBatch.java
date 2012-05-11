@@ -143,15 +143,19 @@ public class JBatch extends JPanel {
         inputPane.add(addInputDirectoryAction = new AddInputDirectoryAction(this));
         //actionPane.add(inputPane);
 
-        JTaskPaneGroup algorithmPane = new JTaskPaneGroup();
-        algorithmPane.setTitle("Algorithm");
-        algorithmPane.setSpecial(true);
+        JTaskPaneGroup simulationPane = new JTaskPaneGroup();
+        simulationPane.setTitle("Simulation");
+        simulationPane.setSpecial(true);
+        
+        JTaskPaneGroup optimizationPane = new JTaskPaneGroup();
+        optimizationPane.setTitle("Optimization");
+        optimizationPane.setSpecial(true);
         
         JTaskPaneGroup eafPane = new JTaskPaneGroup();
         eafPane.setTitle("Earliest Arrival");
-        eafPane.add(tjandraOptimzed = new AddAlgorithmAction(this));
+        eafPane.add(tjandraOptimzed = new AddAlgorithmAction(this, SEAAPAlgorithm.class));
         
-        algorithmPane.add(eafPane);//(addAlgorithmAction = new AddAlgorithmAction(this));
+        optimizationPane.add(eafPane);//(addAlgorithmAction = new AddAlgorithmAction(this));
         
         //actionPane.add(algorithmPane);        
         
@@ -160,7 +164,8 @@ public class JBatch extends JPanel {
 
         taskPaneContainer.add(actionPane);
         taskPaneContainer.add(inputPane);
-        taskPaneContainer.add(algorithmPane);
+        taskPaneContainer.add(simulationPane);
+        taskPaneContainer.add(optimizationPane);
         add(new JScrollPane(taskPaneContainer), BorderLayout.WEST);
         
         table = new JInputView();
@@ -193,7 +198,7 @@ public class JBatch extends JPanel {
     public void addAlgorithm(Class<? extends Algorithm> algorithmClass) {
         for (Computation computation : selectionListener.getSelectedComputations()) {
             AlgorithmList algorithmList = computation.getAlgorithms();
-            InputAlgorithm algorithm = new InputAlgorithm(algorithmClass);
+            InputAlgorithm algorithm = new InputAlgorithm(algorithmClass, "Tjandra (Optimized)");
             algorithmList.add(algorithm);
         }           
         table.setInput(computationList);
