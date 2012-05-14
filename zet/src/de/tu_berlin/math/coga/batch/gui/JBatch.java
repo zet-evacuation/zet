@@ -43,6 +43,7 @@ import javax.swing.tree.TreePath;
  */
 public class JBatch extends JPanel {
 
+
     private class InputKeyListener implements KeyListener {
 
         public InputKeyListener() {
@@ -104,7 +105,7 @@ public class JBatch extends JPanel {
                     }
                 }
             }
-            //addAlgorithmAction.setEnabled(!selectedComputations.isEmpty());
+            cellularAutomaton.setEnabled(!selectedComputations.isEmpty());
             tjandraOptimzed.setEnabled(!selectedComputations.isEmpty());
             addCurrentProjectAction.setEnabled(!selectedComputations.isEmpty());
             addInputDirectoryAction.setEnabled(!selectedComputations.isEmpty());
@@ -122,7 +123,7 @@ public class JBatch extends JPanel {
     private InputSelectionListener selectionListener;
     private InputKeyListener keyListener;
     private final AddAlgorithmAction tjandraOptimzed;
-
+    private final AddAlgorithmAction cellularAutomaton;
 
 
     public JBatch(GUIControl control) {
@@ -147,13 +148,19 @@ public class JBatch extends JPanel {
         simulationPane.setTitle("Simulation");
         simulationPane.setSpecial(true);
         
+        JTaskPaneGroup caPane = new JTaskPaneGroup();
+        caPane.setTitle("Cellular Automaton");
+        caPane.add(cellularAutomaton = new AddAlgorithmAction(this, SEAAPAlgorithm.class, "Standard"));
+        
+        simulationPane.add(caPane);
+        
         JTaskPaneGroup optimizationPane = new JTaskPaneGroup();
         optimizationPane.setTitle("Optimization");
         optimizationPane.setSpecial(true);
         
         JTaskPaneGroup eafPane = new JTaskPaneGroup();
         eafPane.setTitle("Earliest Arrival");
-        eafPane.add(tjandraOptimzed = new AddAlgorithmAction(this, SEAAPAlgorithm.class));
+        eafPane.add(tjandraOptimzed = new AddAlgorithmAction(this, SEAAPAlgorithm.class, "Tjandra (Optimized)"));
         
         optimizationPane.add(eafPane);//(addAlgorithmAction = new AddAlgorithmAction(this));
         

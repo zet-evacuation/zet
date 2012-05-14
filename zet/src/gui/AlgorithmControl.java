@@ -6,39 +6,28 @@ package gui;
 
 import algo.ca.algorithm.evac.EvacuationCellularAutomatonAlgorithm;
 import algo.ca.algorithm.evac.EvacuationSimulationProblem;
-import zet.tasks.CellularAutomatonAlgorithmEnumeration;
-import zet.tasks.GraphAlgorithmEnumeration;
 import de.tu_berlin.math.coga.common.algorithm.AlgorithmListener;
 import de.tu_berlin.math.coga.common.util.Formatter;
 import de.tu_berlin.math.coga.common.util.Formatter.TimeUnits;
-import de.tu_berlin.math.coga.zet.converter.cellularAutomaton.AssignmentApplicationInstance;
-import de.tu_berlin.math.coga.zet.converter.cellularAutomaton.CellularAutomatonAssignmentConverter;
-import de.tu_berlin.math.coga.zet.converter.cellularAutomaton.ConvertedCellularAutomaton;
-import de.tu_berlin.math.coga.zet.converter.cellularAutomaton.ZToCAConverter;
-import de.tu_berlin.math.coga.zet.converter.cellularAutomaton.ZToCAConverter.ConversionNotSupportedException;
-import de.tu_berlin.math.coga.zet.converter.cellularAutomaton.ZToCAMapping;
-import de.tu_berlin.math.coga.zet.converter.cellularAutomaton.ZToCARasterContainer;
 import de.tu_berlin.math.coga.zet.NetworkFlowModel;
+import de.tu_berlin.math.coga.zet.converter.cellularAutomaton.ZToCAConverter.ConversionNotSupportedException;
+import de.tu_berlin.math.coga.zet.converter.cellularAutomaton.*;
 import de.tu_berlin.math.coga.zet.converter.graph.BaseZToGraphConverter;
 import ds.CompareVisualizationResults;
 import ds.GraphVisualizationResults;
-import ds.z.Project;
 import ds.PropertyContainer;
 import ds.ca.evac.EvacuationCellularAutomaton;
 import ds.z.AssignmentType;
 import ds.z.ConcreteAssignment;
+import ds.z.Project;
 import io.visualization.BuildingResults;
 import io.visualization.CAVisualizationResults;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import zet.tasks.CellularAutomatonTask;
-import zet.tasks.CellularAutomatonTaskStepByStep;
-import zet.tasks.CompareTask;
-import zet.tasks.GraphAlgorithmTask;
-import zet.tasks.SerialTask;
 import tasks.conversion.BuildingPlanConverter;
+import zet.tasks.*;
 
 
 /**
