@@ -16,8 +16,8 @@ public class AddAlgorithmAction extends BatchAction {
 
     private Class<? extends Algorithm> algorithm;
     
-    public AddAlgorithmAction(JBatch batch, Class<? extends Algorithm> algorithm) {
-        super(batch, "Tjandra (Optimized)", "algo_24.png");
+    public AddAlgorithmAction(JBatch batch, Class<? extends Algorithm> algorithm, String title) {
+        super(batch, title, "algo_24.png");
         setEnabled(false);
         this.algorithm = algorithm;
     }   
