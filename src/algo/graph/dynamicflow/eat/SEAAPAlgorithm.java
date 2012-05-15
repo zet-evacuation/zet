@@ -130,8 +130,6 @@ public class SEAAPAlgorithm extends Algorithm<EarliestArrivalFlowProblem, FlowOv
             
         originalTimeHorizon = problem.getTimeHorizon();        
 				
-				originalTimeHorizon = 16;
-				
         pathProblem = new EarliestArrivalAugmentingPathProblem(network, network.superSource(), problem.getSink(), Math.min(getNextDistance(0) + 1, problem.getTimeHorizon()));
         paths = new LinkedList<>();
         // If there are no supplies, we are done
