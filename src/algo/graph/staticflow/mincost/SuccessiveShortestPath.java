@@ -125,6 +125,8 @@ public class SuccessiveShortestPath /*extends Algorithm<MinimumCostFlowProblem, 
                 balances.increase(edge.end(), capacity(edge));
             }
         }
+				int total = 0;
+				int totalcost = 0;
         while (true) {
             // Pick a feasible source-sink pair
             Node source = null;
@@ -167,6 +169,15 @@ public class SuccessiveShortestPath /*extends Algorithm<MinimumCostFlowProblem, 
                 }
             }
             LOGGER.finest("Augmentiere " + amount + " Flusseinheiten.");
+            //System.out.println("Augmentiere " + amount + " Flusseinheiten.");
+						int pathCost = 0;
+						for( Edge edge : shortestPath ) {
+							pathCost += costs.get( edge );
+						}
+						total += amount;
+						totalcost += amount * pathCost;
+						System.out.println( "Sent: " + total + " witch cost: " + totalcost );
+						
             balances.decrease(source, amount);
             balances.increase(sink, amount);
             LOGGER.finest("Es warten " + balances.get(source) + " Flusseinheiten in der Quelle, während " + balances.get(sink) + " Flusseinheiten in der Senke benötigt werden.");
