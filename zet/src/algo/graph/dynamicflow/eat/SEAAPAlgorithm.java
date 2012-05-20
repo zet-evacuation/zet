@@ -128,15 +128,16 @@ public class SEAAPAlgorithm extends Algorithm<EarliestArrivalFlowProblem, FlowOv
         flowUnitsSent = 0;
         network = new ImplicitTimeExpandedResidualNetwork( problem );
             
-        originalTimeHorizon = problem.getTimeHorizon();        
+        originalTimeHorizon = problem.getTimeHorizon();
+        //originalTimeHorizon = 16;
 				
         pathProblem = new EarliestArrivalAugmentingPathProblem(network, network.superSource(), problem.getSink(), Math.min(getNextDistance(0) + 1, problem.getTimeHorizon()));
         paths = new LinkedList<>();
         // If there are no supplies, we are done
         if (problem.getTotalSupplies() == 0) {            
             return new FlowOverTime(network, paths);
-        }        
-         
+        }
+        
         pathAlgorithm.setProblem(pathProblem);        
         // Compute our first augmenting path
         calculateEarliestArrivalAugmentingPath();

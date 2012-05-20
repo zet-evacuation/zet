@@ -4,9 +4,13 @@
  */
 package de.tu_berlin.math.coga.zet;
 
+import algo.graph.dynamicflow.DynamicFlowProblem;
+import algo.graph.dynamicflow.eat.EATransshipmentWithTHSSSP;
 import algo.graph.dynamicflow.eat.EarliestArrivalFlowProblem;
 import algo.graph.dynamicflow.eat.LongestShortestPathTimeHorizonEstimator;
 import algo.graph.dynamicflow.eat.SEAAPAlgorithm;
+import algo.graph.dynamicflow.eat.SuccessiveEarliestArrivalAugmentingPathAlgorithm;
+import algo.graph.dynamicflow.eat.SuccessiveEarliestArrivalAugmentingPathAlgorithmTH;
 import algo.graph.staticflow.maxflow.PushRelabelHighestLabelGlobalGapRelabelling;
 import com.martiansoftware.jsap.FlaggedOption;
 import com.martiansoftware.jsap.JSAP;
@@ -242,20 +246,51 @@ public class flow implements AlgorithmListener {
 		System.out.println( "EAFP: " + eafp.toString() );
 		
 		
-		SEAAPAlgorithm algo = new SEAAPAlgorithm();
-		algo.setProblem( eafp );
-		algo.addAlgorithmListener( this );
-		try {
-			algo.run();
-		} catch( IllegalStateException e ) {
-			System.err.println( "The illegal state exception occured." );
-		}
+		boolean seaapa = false;
 
-		df = algo.getSolution().getPathBased();
-		neededTimeHorizon = algo.getSolution().getTimeHorizon()-1;
-		System.out.println( "Total cost: " + algo.getSolution().getTotalCost() );
-		System.out.println( "Time horizon:" + neededTimeHorizon );
-		System.out.println( "Flow amount: " + algo.getSolution().getFlowAmount() );
+		
+		
+//		if( seaapa ) {
+			SEAAPAlgorithm algo = new SEAAPAlgorithm();
+			algo.setProblem( eafp );
+			algo.addAlgorithmListener( this );
+			try {
+				algo.run();
+			} catch( IllegalStateException e ) {
+				System.err.println( "The illegal state exception occured." );
+			}
+
+			df = algo.getSolution().getPathBased();
+			neededTimeHorizon = algo.getSolution().getTimeHorizon()-1;
+			System.out.println( "Total cost: " + algo.getSolution().getTotalCost() );
+			System.out.println( "Time horizon:" + neededTimeHorizon );
+			System.out.println( "Flow amount: " + algo.getSolution().getFlowAmount() );
+//		} else {
+//			SuccessiveEarliestArrivalAugmentingPathAlgorithmTH algo = new SuccessiveEarliestArrivalAugmentingPathAlgorithmTH( eafp.getNetwork(), eafp.getTransitTimes(), eafp.getEdgeCapacities(), eafp.getNodeCapacities(), eafp.getSupplies(), 16 );
+		
+			
+EATransshipmentWithTHSSSP staticalgo = new EATransshipmentWithTHSSSP( eafp.getNetwork(), eafp.getTransitTimes(), eafp.getEdgeCapacities(), eafp.getNodeCapacities(), eafp.getSupplies(), 27 );
+
+				DynamicFlowProblem dfp = new DynamicFlowProblem();
+				dfp.setCapacities( eafp.getEdgeCapacities() );
+				dfp.setNetwork( eafp.getNetwork() );
+				dfp.setTransitTimes( eafp.getTransitTimes() );
+
+				staticalgo.setProblem( dfp );
+				
+				staticalgo.run();
+
+//      Algorithm with implicit time expanded network
+//			SuccessiveEarliestArrivalAugmentingPathAlgorithm algo = new SuccessiveEarliestArrivalAugmentingPathAlgorithm();
+//			algo.setProblem( eafp );
+//			algo.addAlgorithmListener( this );
+//			try {
+//				algo.run();
+//			} catch( IllegalStateException e ) {
+//				System.err.println( "The illegal state exception occured." );
+//			}
+			
+//		}
 	}
 
 	private void computeMaximumFlow() {
