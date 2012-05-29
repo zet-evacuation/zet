@@ -356,8 +356,17 @@ public class Vector2 implements Cloneable {
 		final Vector2 v = r.sub( q );
 		return (int) Math.signum( v.x * u.y - v.y * u.x ); // return sign of determinancy
 	}
-        
-        /**
+	
+	/**
+	 * Creates a vector orthogonal to the given vector. (By rotating the vector
+	 * 90 degrees counter clockwise)
+	 * @return an orthogonal vector
+	 */
+	public Vector2 orthogonal() {
+		return new Vector2( y, -x );
+	}
+
+	/**
 	 * Calculates the smaller angle between to vectors a and b, going from a to b.
 	 * Lies always between 0 and 90 !
 	 * Uses the dot product to calculate the cosine,
@@ -366,15 +375,9 @@ public class Vector2 implements Cloneable {
 	 * @param b another vector.
 	 * @return the smaller angle between the two vectors.
 	 */
-        final public double getAngleBetween( Vector2 a, Vector2 b ) {
+	final public double getAngleBetween( Vector2 a, Vector2 b ) {
 		final double cosine = (a.dotProduct( b ) / a.length()) / b.length();
 		final double angle = Math.acos( cosine ) / Conversion.ANGLE2DEG;
-                if (angle > 90.0){
-                    return 180 - angle;
-                }
-                else{
-                    return angle;
-                }
+		return angle > 90.0 ? 180 - angle : angle; 
 	}
-        
 }

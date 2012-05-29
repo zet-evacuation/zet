@@ -7,8 +7,7 @@ package zet.gui.main.toolbar;
 import gui.GUIControl;
 import gui.ZETMain;
 import zet.gui.components.model.ComboBoxRenderer;
-import gui.components.framework.Button;
-import gui.components.framework.IconSet;
+import de.tu_berlin.math.coga.components.framework.Button;
 import gui.editor.Areas;
 import gui.editor.CoordinateTools;
 import zet.gui.main.tabs.editor.EditMode;
@@ -74,22 +73,22 @@ public class JEditToolbar extends JToolBar implements ActionListener, PopupMenuL
 	private void createEditToolBar() {
 		loc.setPrefix( "gui.toolbar." );
 
-		btnExit = Button.newButton( IconSet.Exit, this, "exit", loc.getString( "Exit" ) );
+		btnExit = Button.newButton( IconSet.Exit.icon(), this, "exit", loc.getString( "Exit" ) );
 		add( btnExit );
 		addSeparator();
 
-		btnOpen = Button.newButton( IconSet.Open, this, "loadProject", loc.getString( "Open" ) );
+		btnOpen = Button.newButton( IconSet.Open.icon(), this, "loadProject", loc.getString( "Open" ) );
 		add( btnOpen );
-		btnSave = Button.newButton( IconSet.Save, this, "saveProject", loc.getString( "Save" ) );
+		btnSave = Button.newButton( IconSet.Save.icon(), this, "saveProject", loc.getString( "Save" ) );
 		add( btnSave );
 		addSeparator();
 
-		btnEditSelect = Button.newButton( IconSet.EditSelect, this , "editSelect", loc.getString( "Edit.SelectionMode" ) );
+		btnEditSelect = Button.newButton( IconSet.EditSelect.icon(), this , "editSelect", loc.getString( "Edit.SelectionMode" ) );
 		add( btnEditSelect );
 		btnEditSelect.setSelected( true );
-		btnEditPointwise = Button.newButton( IconSet.EditDrawPointwise, this, "editPointwise", loc.getString( "Edit.PointSequence" ) );
+		btnEditPointwise = Button.newButton( IconSet.EditDrawPointwise.icon(), this, "editPointwise", loc.getString( "Edit.PointSequence" ) );
 		add( btnEditPointwise );
-		btnEditRectangled = Button.newButton( IconSet.EditDrawRectangled, this, "editRectangled", loc.getString( "Edit.DragCreate" ) );
+		btnEditRectangled = Button.newButton( IconSet.EditDrawRectangled.icon(), this, "editRectangled", loc.getString( "Edit.DragCreate" ) );
 		add( btnEditRectangled );
 
 		add( new JLabel( " " ) ); //Spacer
@@ -110,9 +109,9 @@ public class JEditToolbar extends JToolBar implements ActionListener, PopupMenuL
 		add( cbxEdit );
 		addSeparator();
 
-		btnZoomIn = Button.newButton( IconSet.ZoomIn, this, "zoomIn", loc.getString( "Edit.ZoomIn" ) );
+		btnZoomIn = Button.newButton( IconSet.ZoomIn.icon(), this, "zoomIn", loc.getString( "Edit.ZoomIn" ) );
 		add( btnZoomIn );
-		btnZoomOut = Button.newButton( IconSet.ZoomOut, this, "zoomOut", loc.getString( "Edit.ZoomOut" ) );
+		btnZoomOut = Button.newButton( IconSet.ZoomOut.icon(), this, "zoomOut", loc.getString( "Edit.ZoomOut" ) );
 		add( btnZoomOut );
 		add( new JLabel( " " ) );
 		txtZoomFactor = new JTextField( nfZoom.format( CoordinateTools.getZoomFactor() ) );
@@ -128,7 +127,7 @@ public class JEditToolbar extends JToolBar implements ActionListener, PopupMenuL
 		add( txtZoomFactor );
 		addSeparator();
 
-		btnRasterize = Button.newButton( IconSet.Rasterize, this, "rasterize", loc.getString( "Edit.Rasterize" ) );
+		btnRasterize = Button.newButton( IconSet.Rasterize.icon(), this, "rasterize", loc.getString( "Edit.Rasterize" ) );
 		add( btnRasterize );
 
 		loc.setPrefix( "" );

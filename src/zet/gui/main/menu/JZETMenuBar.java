@@ -9,7 +9,7 @@ import ds.PropertyContainer;
 import gui.GUIControl;
 import gui.GraphConverterAlgorithms;
 import gui.ZETMain;
-import gui.components.framework.Menu;
+import de.tu_berlin.math.coga.components.framework.Menu;
 import gui.editor.Areas;
 import gui.editor.properties.PropertyFilesSelectionModel;
 import gui.editor.properties.PropertyListEntry;

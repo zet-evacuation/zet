@@ -21,7 +21,7 @@ import ds.graph.Node;
 import event.EventListener;
 import event.EventServer;
 import event.MessageEvent;
-import gui.components.framework.Menu;
+import de.tu_berlin.math.coga.components.framework.Menu;
 import gui.GUIOptionManager;
 import gui.visualization.Visualization;
 import gui.visualization.control.graph.GLFlowGraphControl;

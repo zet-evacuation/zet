@@ -79,7 +79,7 @@ public class JFloor extends AbstractFloor implements EventListener<ZModelChanged
 	/** The displayed floor. */
 	private Floor myFloor;
 	/** The currently selected polygons. */
-	private LinkedList<JPolygon> selectedPolygons = new LinkedList<JPolygon>();
+	private LinkedList<JPolygon> selectedPolygons = new LinkedList<>();
 	/** This field stored where the new PlanPoint would be inserted in raster
 	 * paint mode if the user clicked into the {@link JFloor}. */
 	private Point newRasterizedPoint;
@@ -175,7 +175,7 @@ public class JFloor extends AbstractFloor implements EventListener<ZModelChanged
 	 */
 	public void displayFloor( Floor f ) {
 		boolean showDifferentFloor = (myFloor != f);
-		LinkedList<PlanPolygon> old_selection = new LinkedList<PlanPolygon>();
+		LinkedList<PlanPolygon> old_selection = new LinkedList<>();
 
 		if( myFloor != null ) {
 

@@ -19,7 +19,10 @@
  * Created on 19.12.2007, 00:29:35
  */
 
-package gui.components.framework;
+package zet.gui.main.toolbar;
+
+import javax.swing.Icon;
+import javax.swing.ImageIcon;
 
 /**
  * Stores a list of default Icons with filename.
@@ -55,13 +58,14 @@ public enum IconSet {
 	ZoomIn( "zoom_in.png" ),
 	ZoomOut( "zoom_out.png" );
 	
-	private String name;
+	private final static String path = "./icons/";
+	private Icon icon;
 	
 	IconSet( String name ) {
-		this.name = name;
+		this.icon = new ImageIcon( path + name );
 	}
 	
-	public String getName() {
-		return name;
+	public Icon icon() {
+		return icon;
 	}
 }

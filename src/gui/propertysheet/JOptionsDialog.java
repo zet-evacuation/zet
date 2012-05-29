@@ -12,9 +12,8 @@ import com.l2fprod.common.swing.JButtonBar;
 import com.l2fprod.common.swing.plaf.ButtonBarUI;
 import com.l2fprod.common.swing.plaf.blue.BlueishButtonBarUI;
 import de.tu_berlin.math.coga.common.localization.DefaultLoc;
-import gui.components.framework.Button;
-import gui.components.framework.Icon;
-import gui.components.framework.IconSet;
+import de.tu_berlin.math.coga.components.framework.Button;
+import zet.gui.main.toolbar.IconSet;
 import info.clearthought.layout.TableLayout;
 import java.awt.BorderLayout;
 import java.awt.Component;
@@ -102,7 +101,7 @@ public class JOptionsDialog extends JDialog {
 			for( int i = 0; i < node.getChildCount(); i++ ) {
 				PropertyTreeNode n = node.getChildAt( i );
 				JButton newButton = new JPropertyButton( n );
-				newButton.setIcon( Icon.newIcon( IconSet.Open ) );
+				newButton.setIcon( IconSet.Open.icon() );
 				jbb.add( newButton );
 			}
 		} else {

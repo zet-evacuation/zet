@@ -7,7 +7,7 @@ package gui.editor.properties;
 import de.tu_berlin.math.coga.common.localization.DefaultLoc;
 import ds.PropertyContainer;
 import gui.ZETProperties;
-import gui.components.framework.Button;
+import de.tu_berlin.math.coga.components.framework.Button;
 import gui.propertysheet.JOptionsDialog;
 import gui.propertysheet.PropertyTreeModel;
 import info.clearthought.layout.TableLayout;

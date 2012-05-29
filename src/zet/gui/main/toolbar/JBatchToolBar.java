@@ -7,14 +7,12 @@ package zet.gui.main.toolbar;
 import de.tu_berlin.math.coga.common.localization.Localized;
 import gui.GUIControl;
 import gui.ZETMain;
-import gui.components.framework.Button;
-import gui.components.framework.IconSet;
+import de.tu_berlin.math.coga.components.framework.Button;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import javax.swing.JButton;
 import javax.swing.JToolBar;
 import zet.gui.GUILocalization;
-
 
 /**
  *
@@ -39,13 +37,13 @@ public class JBatchToolBar extends JToolBar implements ActionListener, Localized
 	private void createBatchToolBar() {
 		loc.setPrefix( "gui.toolbar." );
 
-		btnExit = Button.newButton( IconSet.Exit, this, "exit", loc.getString( "Exit" ) );
+		btnExit = Button.newButton( IconSet.Exit.icon(), this, "exit", loc.getString( "Exit" ) );
 		add( btnExit );
 		addSeparator();
 
-		btnOpenResults = Button.newButton( IconSet.Open, this, "loadBatchResult", loc.getString( "Open" ) );
+		btnOpenResults = Button.newButton( IconSet.Open.icon(), this, "loadBatchResult", loc.getString( "Open" ) );
 		add( btnOpenResults );
-		btnSaveResults = Button.newButton( IconSet.Save, this, "saveResultAs", loc.getString( "Save" ) );
+		btnSaveResults = Button.newButton( IconSet.Save.icon(), this, "saveResultAs", loc.getString( "Save" ) );
 		add( btnSaveResults );
 		loc.setPrefix( "" );
 	}

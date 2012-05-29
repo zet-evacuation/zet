@@ -4,6 +4,7 @@
  */
 package gui;
 
+import de.tu_berlin.math.coga.components.JVideoOptionsDialog;
 import algo.graph.dynamicflow.eat.EarliestArrivalFlowProblem;
 import batch.load.BatchProjectEntry;
 import de.tu_berlin.math.coga.zet.converter.cellularAutomaton.ZToCAConverter.ConversionNotSupportedException;
@@ -255,16 +256,18 @@ public class GUIControl implements AlgorithmListener {
 	public void createVideo() {
 		if( visualization.isAnimating() )
 			visualization.stopAnimation();
-		VideoOptions vo = new VideoOptions( editor );
+		String path = PropertyContainer.getInstance().getAsString( "options.filehandling.moviePath" );
+		JVideoOptionsDialog vo = new JVideoOptionsDialog( editor );
 		// Setze die erwartete Laufzeit
 		vo.setEstimatedTime( visualization.getControl().getEstimatedTime() );
 		vo.setResolution( visualization.getSize() );
 		vo.setBitrate( 1000 );
 		vo.setFramerate( 24 );
+		vo.setMoviePath( path );
 		vo.setTextureFontStrings( visualization.getTexts() );
 		vo.setVisible( true );
 		vo.dispose();
-		if( vo.getRetVal() == VideoOptions.OK ) {
+		if( vo.getRetVal() == JOptionPane.OK_OPTION ) {
 			visualization.setTexts( vo.getTextureFontStrings() );
 			zcontrol.getProject().getVisualProperties().setTextureFontStrings( vo.getTextureFontStrings() );
 			String movieFrameName = PropertyContainer.getInstance().getAsString( "options.filehandling.movieFrameName" );
@@ -275,7 +278,8 @@ public class GUIControl implements AlgorithmListener {
 				movieCreator.setFramename( projectName );
 			else
 				movieCreator.setFramename( movieFrameName );
-			String path = PropertyContainer.getInstance().getAsString( "options.filehandling.moviePath" );
+			path = vo.getMoviePath();
+			PropertyContainer.getInstance().set( "options.filehandling.moviePath", path );
 			if( !(path.endsWith( "/" ) || path.endsWith( "\\" )) )
 				path += "/";
 			String movieFileName = IOTools.getNextFreeNumberedFilename( path, projectName, 3 );

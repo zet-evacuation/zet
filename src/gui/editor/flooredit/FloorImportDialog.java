@@ -22,7 +22,7 @@ package gui.editor.flooredit;
 import de.tu_berlin.math.coga.common.localization.DefaultLoc;
 import ds.z.Project;
 import ds.z.Floor;
-import gui.components.framework.Button;
+import de.tu_berlin.math.coga.components.framework.Button;
 import gui.GUIOptionManager;
 import info.clearthought.layout.TableLayout;
 import java.awt.event.ActionEvent;

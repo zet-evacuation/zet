@@ -9,7 +9,7 @@ import ds.z.Area;
 import ds.z.Floor;
 import ds.z.Room;
 import ds.z.ZControl;
-import gui.components.framework.Menu;
+import de.tu_berlin.math.coga.components.framework.Menu;
 import java.awt.BorderLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;

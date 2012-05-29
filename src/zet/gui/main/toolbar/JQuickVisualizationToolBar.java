@@ -6,8 +6,7 @@ package zet.gui.main.toolbar;
 
 import de.tu_berlin.math.coga.common.localization.Localized;
 import gui.GUIControl;
-import gui.components.framework.Button;
-import gui.components.framework.IconSet;
+import de.tu_berlin.math.coga.components.framework.Button;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import javax.swing.JButton;
@@ -35,7 +34,7 @@ public class JQuickVisualizationToolBar extends JToolBar implements ActionListen
 	 */
 	private void createQuickVisualizationToolBar() {
 		loc.setPrefix( "gui.toolbar." );
-		btnExit = Button.newButton( IconSet.Exit, this, "exit", loc.getString( "Exit" ) );
+		btnExit = Button.newButton( IconSet.Exit.icon(), this, "exit", loc.getString( "Exit" ) );
 		add( btnExit );
 		loc.clearPrefix();
 	}
