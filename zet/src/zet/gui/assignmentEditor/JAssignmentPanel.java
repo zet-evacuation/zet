@@ -31,7 +31,7 @@ import ds.z.Project;
 import ds.z.Assignment;
 import ds.z.AssignmentType;
 import ds.z.ZControl;
-import gui.components.framework.Button;
+import de.tu_berlin.math.coga.components.framework.Button;
 import info.clearthought.layout.TableLayout;
 import java.awt.BorderLayout;
 import java.awt.Color;

@@ -10,8 +10,7 @@ import de.tu_berlin.math.coga.common.localization.Localized;
 import gui.GUIControl;
 import gui.ZETMain;
 import de.tu_berlin.math.coga.datastructure.NamedIndex;
-import gui.components.framework.Button;
-import gui.components.framework.IconSet;
+import de.tu_berlin.math.coga.components.framework.Button;
 import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -51,13 +50,13 @@ public class JStatisticGraphToolBar extends JToolBar implements ActionListener, 
 	private void createStatisticsToolBar() {
 		loc.setPrefix( "gui.toolbar." );
 
-		btnExit = Button.newButton( IconSet.Exit, this, "exit", loc.getString( "Exit" ) );
+		btnExit = Button.newButton( IconSet.Exit.icon(), this, "exit", loc.getString( "Exit" ) );
 		add( btnExit );
 		addSeparator();
 
-		btnOpenResults = Button.newButton( IconSet.Open, null, "loadBatchResult", loc.getString( "Open" ) );
+		btnOpenResults = Button.newButton( IconSet.Open.icon(), null, "loadBatchResult", loc.getString( "Open" ) );
 		add( btnOpenResults );
-		btnSaveResults = Button.newButton( IconSet.Save, null, "saveResultAs", loc.getString( "Save" ) );
+		btnSaveResults = Button.newButton( IconSet.Save.icon(), null, "saveResultAs", loc.getString( "Save" ) );
 		add( btnSaveResults );
 		addSeparator();
 

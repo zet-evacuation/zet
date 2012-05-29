@@ -21,7 +21,7 @@
 package gui.editor.planimage;
 
 import de.tu_berlin.math.coga.common.localization.DefaultLoc;
-import gui.components.framework.Button;
+import de.tu_berlin.math.coga.components.framework.Button;
 import info.clearthought.layout.TableLayout;
 import java.awt.Dimension;
 import java.awt.Frame;

@@ -18,7 +18,7 @@
  * Created on 17. Dezember 2007, 02:06:21
  */
 
-package gui.components.framework;
+package de.tu_berlin.math.coga.components.framework;
 
 import de.tu_berlin.math.coga.common.localization.DefaultLoc;
 import java.awt.event.ActionListener;

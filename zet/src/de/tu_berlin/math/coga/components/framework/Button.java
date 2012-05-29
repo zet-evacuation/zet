@@ -13,20 +13,22 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
+
 /*
  * Button.java
  * Created on 19.12.2007, 00:27:51
  */
 
-package gui.components.framework;
+package de.tu_berlin.math.coga.components.framework;
 
 import java.awt.event.ActionListener;
 import javax.swing.AbstractButton;
+import javax.swing.Icon;
 import javax.swing.JButton;
 import javax.swing.JToggleButton;
 
 /**
- * Automatic creation of JButtons.
+ * Automatic creation of {@link JButton}s.
  * @author Jan-Philipp Kappmeier
  */
 public class Button {
@@ -95,34 +97,29 @@ public class Button {
 		return (JButton)addActionListener( b, al, commandString );
 	}
 
-	public static JButton newButton( IconSet is, ActionListener al, String commandString, String toolTip ) {
-		JButton b = new JButton( Icon.newIcon( is ) );
+	public static JButton newButton( Icon ic, ActionListener al, String commandString, String toolTip ) {
+		JButton b = new JButton( ic );
 		if( toolTip != null )
 			b.setToolTipText( toolTip );
 		return (JButton)addActionListener( b, al, commandString );
 	}
 
-	public static JToggleButton newButton( IconSet is, ActionListener al, String commandString, String toolTip, boolean initialState ) {
-		JToggleButton b = new JToggleButton( Icon.newIcon( is ), initialState );
+	public static JToggleButton newButton( Icon ic, ActionListener al, String commandString, String toolTip, boolean initialState ) {
+		JToggleButton b = new JToggleButton( ic, initialState );
 		if( toolTip != null )
 			b.setToolTipText( toolTip );
 		return (JToggleButton)addActionListener( b, al, commandString );
 	}
 
-	public static JButton newButton( IconSet is, ActionListener al, String commandString ) {
-		JButton b = new JButton( Icon.newIcon( is ) );
-		return (JButton)addActionListener( b, al, commandString );
+	public static JButton newButton( Icon ic, ActionListener al) {
+		return newButton( ic, al, null );
 	}
 
-	public static JButton newButton( IconSet is, ActionListener al) {
-		return newButton( is, al, null );
+	public static JButton newButton( Icon ic, String toolTip ) {
+		return newButton( ic, null, null, toolTip );
 	}
 
-	public static JButton newButton( IconSet is, String toolTip ) {
-		return newButton( is, null, null, toolTip );
-	}
-
-	public static JButton newButton( IconSet is ) {
-		return newButton( is, null, null );
+	public static JButton newButton( Icon ic ) {
+		return newButton( ic, null, null );
 	}
 }

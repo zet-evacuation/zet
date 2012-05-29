@@ -73,7 +73,6 @@ abstract public class AbstractPolygon extends JPanel {
 	 * @param g2 the graphics context on which the name is drawn
 	 */
 	public void drawName( String name, Graphics2D g2 ) {
-		//if( 1 == 1 )return;
 		FontMetrics metrics = g2.getFontMetrics();
 		Rectangle nameBounds = metrics.getStringBounds( name, g2 ).getBounds();
 		Rectangle myBounds = getBounds();
