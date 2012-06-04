@@ -218,7 +218,7 @@ public class ImplicitTimeExpandedResidualNetwork extends Network {
             case NORMAL:
                 return problem.getEdgeCapacities().get(edge) - flow.get(edge).get(time);
             case REVERSE:
-                return flow.get(reverseEdge(edge)).get(time);
+                return flow.get(reverseEdge(edge)).get(time - problem.getTransitTimes().get(reverseEdge(edge)));
             case ARTIFICIAL:                
                 if (time > 0) {
                     return 0;
