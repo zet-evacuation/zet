@@ -83,7 +83,6 @@ public class SEAAPAlgorithm extends Algorithm<EarliestArrivalFlowProblem, FlowOv
      */
     private LinkedList<EarliestArrivalAugmentingPath> paths;
 
-
     /**
      * Creates a new instance of the Successive Earliest Arrival Augmenting Path
      * Algorithm as described by Tjandra. The residual paths are automatically

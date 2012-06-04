@@ -28,7 +28,7 @@ public class Algorithms {
         return instance;
     }
 
-    private AbstractNetwork network;
+    private AbstractNetwork network; 
     
     private HashMap<Edge, Algorithm> algorithmForEdge;
     private HashMap<Class, Node> nodeForClass;    
