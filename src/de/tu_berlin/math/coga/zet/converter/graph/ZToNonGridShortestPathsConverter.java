@@ -114,7 +114,7 @@ public class ZToNonGridShortestPathsConverter  extends ZToNonGridGraphConverter{
                 Collection <YenPath> found = new LinkedList<>();
                 for (Node source: model.getSources())
                 {
-                    found.addAll(yen.get_shortest_paths(source, model.getSupersink(),10));
+                    found.addAll(yen.get_shortest_paths(source, model.getSupersink(),8));
                 }
                 for (YenPath y: found)
                 {
@@ -127,6 +127,7 @@ public class ZToNonGridShortestPathsConverter  extends ZToNonGridGraphConverter{
                             //Edge e = new Edge(NumEdges++,y.get_vertices().get(i),y.get_vertices().get(i+1));
                             solEdges.add(n);
                             used[y.get_vertices().get(i).id()][y.get_vertices().get(i+1).id()] =1;
+                            used[y.get_vertices().get(i+1).id()][y.get_vertices().get(i).id()] =1;
                             if (!solNodes.contains(y.get_vertices().get(i))){                                
                             solNodes.add(y.get_vertices().get(i));
                             }
@@ -221,7 +222,7 @@ public class ZToNonGridShortestPathsConverter  extends ZToNonGridGraphConverter{
                 createReverseEdges( minspanmodel );
                 minspanmodel.setNetwork(newgraph);               
                 minspanmodel.setNetwork( minspanmodel.getGraph().getAsStaticNetwork());
-                System.out.println("Number of Created Repeated Shortest Paths Edges: " + minspanmodel.getGraph().numberOfEdges());
+                //System.out.println("Number of Created Repeated Shortest Paths Edges: " + minspanmodel.getGraph().numberOfEdges());
 		return minspanmodel;
                 
                 
