@@ -159,7 +159,7 @@ public class ZToNonGridSteinerTreeConverter extends ZToNonGridGraphConverter{
                 createReverseEdges( minspanmodel );
                 
                 minspanmodel.setNetwork(newgraph);
-                minspanmodel.setNetwork( minspanmodel.getGraph().getAsStaticNetwork());
+                //minspanmodel.setNetwork( minspanmodel.getGraph().getAsStaticNetwork());
                 System.out.println("Number of new Edges: " + minspanmodel.getGraph().numberOfEdges());
                 
                 return minspanmodel;

@@ -55,6 +55,8 @@ public abstract class BaseZToGraphConverter extends Algorithm<BuildingPlan, Netw
 		createReverseEdgesWithoutStairEdges( model );
                 
 		model.setNetwork( model.getGraph().getAsStaticNetwork() );
+                System.out.println("NumNodes: " + model.getGraph().numberOfNodes());
+                System.out.println("NumEdges: " + model.getGraph().numberOfEdges());
 		return model;
 
 	}
@@ -78,6 +80,7 @@ public abstract class BaseZToGraphConverter extends Algorithm<BuildingPlan, Netw
 				mapping.setEdgeLevel( newEdge, mapping.getEdgeLevel( edge ).getInverse() );
 				model.setEdgeCapacity( newEdge, model.getEdgeCapacity( edge ) );
 				model.setTransitTime( newEdge, model.getTransitTime( edge ) );
+                                model.setExactTransitTime(newEdge, model.getExactTransitTime(edge));
 				model.getGraph().setEdge( newEdge );
 			}
 		}

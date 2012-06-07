@@ -4,7 +4,7 @@
  */
 package de.tu_berlin.math.coga.zet.converter.graph;
 
-import algo.graph.shortestpath.Dijkstra;
+import algo.graph.reduction.*;
 import de.tu_berlin.math.coga.zet.NetworkFlowModel;
 import de.tu_berlin.math.coga.zet.converter.RasterContainerCreator;
 import ds.graph.network.DynamicNetwork;
@@ -14,11 +14,11 @@ import ds.graph.IdentifiableCollection;
 import ds.mapping.IdentifiableIntegerMapping;
 import ds.collection.ListSequence;
 import ds.graph.MinSpanningTree;
-import ds.graph.network.AbstractNetwork;
 import ds.graph.Node;
 import ds.graph.NodeRectangle;
 import ds.graph.problem.MinSpanningTreeProblem;
 import ds.z.BuildingPlan;
+import java.util.*;
 
 /**
  *
@@ -38,11 +38,15 @@ public class ZToNonGridShortestPathsConverter  extends ZToNonGridGraphConverter{
     public Edge neureverse;
     public Edge neu2;
     public int NumEdges = 0;
+    public int NumNodes = 0;
     public int NumCurrentEdges = 0;
     public int NumShortestPaths = 5;
-    IdentifiableCollection<Edge> solEdges = new ListSequence<Edge>();
-    private ListSequence<Edge> currentEdges = new ListSequence<Edge>();
+    IdentifiableCollection<Edge> solEdges = new ListSequence<>();
+    IdentifiableCollection<Node> solNodes = new ListSequence<>();
+    private ListSequence<Edge> currentEdges = new ListSequence<>();
     private ListSequence<Edge> res; 
+    
+    public Map<Node,Node> newNodeMap= new HashMap<>();
     
     @Override
     protected NetworkFlowModel runAlgorithm( BuildingPlan problem ) {
@@ -50,6 +54,7 @@ public class ZToNonGridShortestPathsConverter  extends ZToNonGridGraphConverter{
                 ZToGraphMapping newmapping = new ZToGraphMapping();
 		model = new NetworkFlowModel();
                 minspanmodel = new NetworkFlowModel();
+                List<Edge> super_edges = new ListSequence<>();
                 
 		raster = RasterContainerCreator.getInstance().ZToGraphRasterContainer( problem );
 		mapping.setRaster( raster );
@@ -62,181 +67,159 @@ public class ZToNonGridShortestPathsConverter  extends ZToNonGridGraphConverter{
 		super.computeTransitTimes();
 		super.multiplyWithUpAndDownSpeedFactors();
 		model.setTransitTimes( exactTransitTimes.round() );
-		/*for (Edge edge: model.getGraph().edges())
-                {
-                    System.out.println("Edge before doubling:" + edge);
-                }*/
 		createReverseEdges( model );
-                /*for (Edge edge: model.getGraph().edges())
-                {
-                    System.out.println("Edge after doubling:" + edge);
-                }*/
-        	model.setNetwork( model.getGraph().getAsStaticNetwork() );
-                //nodes are nodes of original graph
-                minspanmodel.setNetwork(newgraph);
-                newgraph.setNodes(model.getGraph().nodes());
-       
-                //set up dynamic network for problem to remove edges used in repeated Dijkstra
-                DynamicNetwork net = new DynamicNetwork();
-                net.setNodes(model.getNetwork().nodes());
-          
-                minspanmodel.setSupersink(model.getSupersink());
-                Node Super = minspanmodel.getSupersink();
+                
+                for (Edge e: model.getGraph().edges()){
+                    if (e.isIncidentTo(model.getSupersink())){
+                        super_edges.add(e); 
+                    }
+                }
+        	                
+                Node Super = model.getSupersink();
+                newgraph.addNode(Super);
+                NumNodes++;
+                minspanmodel.setSupersink(Super);
                 newmapping.setNodeSpeedFactor( Super, 1 );
 		newmapping.setNodeRectangle( Super, new NodeRectangle( 0, 0, 0, 0 ) );
 		newmapping.setFloorForNode( Super, -1 );
                 
+                model.setNetwork( model.getGraph().getAsStaticNetwork() );
                 
-                for (Node node: model.getGraph().nodes())
+                YenKShortestPaths yen = new YenKShortestPaths(model);
+                Node exit=null;
+                List<ZToGraphRoomRaster> rasteredRooms = raster.getAllRasteredRooms();
+		for( ZToGraphRoomRaster room : rasteredRooms ) {
+
+			int colCount = room.getColumnCount();
+			int rowCount = room.getRowCount();
+
+			for( int row = 0; row < rowCount; row++ )
+				for( int col = 0; col < colCount; col++ ) {
+					ZToGraphRasterSquare square = room.getSquare( col, row );
+
+					// todo: parameter
+					if( square.isSave() && square.isExit()) {
+						exit = square.getNode();       
+					}// end if safe
+				}
+                }
+                
+                int[][] used = new int[model.getGraph().numberOfNodes()][model.getGraph().numberOfNodes()]; 
+                for (int i=0; i< model.getGraph().numberOfNodes();i++){
+                    for (int j=0; j<model.getGraph().numberOfNodes();j++){
+                        used[i][j] = 0;
+                    }
+                } 
+                
+                Collection <YenPath> found = new LinkedList<>();
+                for (Node source: model.getSources())
                 {
+                    found.addAll(yen.get_shortest_paths(source, model.getSupersink(),10));
+                }
+                for (YenPath y: found)
+                {
+                    //System.out.println("Pfad: " + y.toString());
+                    for (int i=0; i<y.get_vertices().size()-1 ; i++)
+                    { 
+                        if (used[y.get_vertices().get(i).id()][y.get_vertices().get(i+1).id()] ==0 && y.get_vertices().get(i).id()!=0 && y.get_vertices().get(i+1).id()!=0)
+                        {
+                            Edge n = model.getGraph().getEdge(y.get_vertices().get(i),y.get_vertices().get(i+1));
+                            //Edge e = new Edge(NumEdges++,y.get_vertices().get(i),y.get_vertices().get(i+1));
+                            solEdges.add(n);
+                            used[y.get_vertices().get(i).id()][y.get_vertices().get(i+1).id()] =1;
+                            if (!solNodes.contains(y.get_vertices().get(i))){                                
+                            solNodes.add(y.get_vertices().get(i));
+                            }
+                            if (!solNodes.contains(y.get_vertices().get(i+1))){  
+                            solNodes.add(y.get_vertices().get(i+1));
+                            }
+                        }    
+                    }
+                }
+
+                for (Node node: solNodes)
+                { 
+                    Node new_node = new Node(NumNodes++);                   
+                    newgraph.addNode(new_node); 
+                    newNodeMap.put(node,new_node);
+                    //System.out.println("new Node: " + new_node + "for old: " + node);
                     if (node.id()!= 0)
                     {
-                        minspanmodel.setNodeCapacity(node, model.getNodeCapacity(node));
-                        newmapping.setNodeSpeedFactor(node, mapping.getNodeSpeedFactor(node));
-                        newmapping.setNodeUpSpeedFactor(node, mapping.getUpNodeSpeedFactor(node));
-                        newmapping.setNodeDownSpeedFactor(node, mapping.getDownNodeSpeedFactor(node));   
+                        newmapping.setNodeRectangle(new_node, mapping.getNodeRectangles().get(node));
+                        newmapping.setFloorForNode(new_node, model.getZToGraphMapping().getNodeFloorMapping().get(node));
+                        newmapping.setIsEvacuationNode( new_node,model.getZToGraphMapping().getIsEvacuationNode(node));
+                        newmapping.setIsSourceNode(new_node, model.getZToGraphMapping().getIsSourceNode(node));
+                        newmapping.setIsDeletedSourceNode( new_node, model.getZToGraphMapping().getIsDeletedSourceNode(node) );
+                        minspanmodel.setNodeCapacity(new_node, model.getNodeCapacity(node));
+                        newmapping.setNodeSpeedFactor(new_node, mapping.getNodeSpeedFactor(node));
+                        newmapping.setNodeUpSpeedFactor(new_node, mapping.getUpNodeSpeedFactor(node));
+                        newmapping.setNodeDownSpeedFactor(new_node, mapping.getDownNodeSpeedFactor(node));   
                     }
                 }
                 
-                TransitForEdge = model.getTransitTimes();
-                for (Edge edge: model.getGraph().edges())
-                {
-                    //System.out.println("Original Edges: " + edge);
-                    currentEdges.add(edge);
-                }
-                
-                Dijkstra dijkstra = new Dijkstra(model.getNetwork(), TransitForEdge, model.getSupersink(), true);
-                dijkstra.run();
-                //System.out.println(dijkstra.getLastEdges());
-                for (Node sink: model.getSinks())
-                {
-                    for (Node source: model.getSources())
-                    {
-                        Node currentNode = source;
-                        //System.out.println(currentNode);
-                        while (currentNode != sink)
-                        {
-                            Edge create = dijkstra.getLastEdge(currentNode);
-                            if (!create.isIncidentTo(model.getSupersink()))
-                            {
-                                currentEdges.remove(create);
-                            }
-                            System.out.println("Edges in 1. run: " + create);
-                            neu = new Edge(NumEdges++, create.start(),create.end());
-                            solEdges.add(neu);
-                            currentNode = create.opposite(currentNode);
-                        }
-                    }
-                }
-                
-                currentTransitForEdge = new IdentifiableIntegerMapping(currentEdges.size());
-                for (Edge edge: model.getGraph().edges())
-                    {
-                        if (currentEdges.contains(edge))
-                        {
-                            Edge current = new Edge(NumCurrentEdges++,edge.start(),edge.end());
-                            net.setEdge(current);
-                            currentTransitForEdge.add(current, TransitForEdge.get(edge));
-                        }
-                    }
-                
-                for (int k=0; k<NumShortestPaths - 1 ; k++)
-                { 
-                    ListSequence<Edge> currentEdges2 = new ListSequence<Edge>();
-                    for (Edge edge: net.edges())
-                    {
-                        currentEdges2.add(edge);
-                    }
-                    res = new ListSequence<Edge>();
-                    System.out.println("Looking for " + (k+2) + " th shortest path" );
-                    NumCurrentEdges = 0;
-                    
-                    AbstractNetwork repeat = net.getAsStaticNetwork();
-                    /*for (Edge edge: repeat.edges())
-                    {
-                        System.out.println("neue Kanten: " + edge);
-                    }*/
-                    if (k>0)
-                    {
-                        currentTransitForEdge = currentTransitForEdge2;
-                    }
-            
-                    Dijkstra dijkstra2 = new Dijkstra(repeat,currentTransitForEdge, model.getSupersink(), true);
-                    dijkstra2.run();
-                    //System.out.println(dijkstra2.getLastEdges());
-                    int countwrong = 0;
-                    for (Node sink: model.getSinks())
-                    {
-                           for (Node source: model.getSources())
-                        {
-                            Node currentNode = source;
-                            //System.out.println(currentNode);
-                            while (currentNode != sink)
-                            {
-                                Edge create = dijkstra2.getLastEdge(currentNode);
-                                if (create == null)
-                                {
-                                    countwrong++;
-                                    System.out.println("No " + (k+2) + " th shortest Path for node" + currentNode);
-                                    break;
-                                }
-                                if (!create.isIncidentTo(model.getSupersink()))
-                                {
-                                    res.add(create);
-                                }
-                                System.out.println("Shortest Path Edges: " + create);
-                                neu2 = new Edge(NumEdges++, create.start(),create.end());
-                                solEdges.add(neu2);
-                                currentNode = create.opposite(currentNode);
-                            }
-                        }
-                         if (countwrong == model.getSources().size())
-                         {
-                            k = NumShortestPaths;
-                            System.out.println("No more shortest paths available for given sources!");
-                         }  
-                    }
-                    net.removeAllEdges();
-                    NumCurrentEdges = 0;
-                    currentTransitForEdge2 = new IdentifiableIntegerMapping<Edge>(currentEdges2.size());
-                    for (Edge edge: currentEdges2)
-                    {
-                        if (!res.contains(edge))
-                        {
-                            //System.out.println("Yes");
-                            Edge next = new Edge(NumCurrentEdges++, edge.start(), edge.end());
-                            net.addEdge(next);
-                            currentTransitForEdge2.add(next, currentTransitForEdge.get(edge) );
-                            
-                        } 
-                    }
-                
-                }
                 for (Edge edge: solEdges)
-                {
-                    newgraph.addEdge(edge);
-                    minspanmodel.setEdgeCapacity(edge, model.getEdgeCapacity(edge));
-                    minspanmodel.setTransitTime(edge, model.getTransitTime(edge));
-                    newmapping.setEdgeLevel(edge,mapping.getEdgeLevel(edge) );             
-                    minspanmodel.setExactTransitTime(edge, model.getExactTransitTime(edge));
+                {                
+                        Edge orig = model.getGraph().getEdge(edge.start(), edge.end());
+                        Edge new_edge = new Edge(NumEdges++,newNodeMap.get(edge.start()),newNodeMap.get(edge.end()));
+                        //System.out.println("neue Kante: " + new_edge + "for: " + orig);                 
+                        newgraph.addEdge(new_edge);
+                        minspanmodel.setEdgeCapacity(new_edge, model.getEdgeCapacity(orig));
+                        minspanmodel.setTransitTime(new_edge, model.getTransitTime(orig));
+                        newmapping.setEdgeLevel(new_edge,mapping.getEdgeLevel(orig) );             
+                        minspanmodel.setExactTransitTime(new_edge, model.getExactTransitTime(orig));
                 }
                 
-                 minspanmodel.setCurrentAssignment(model.getCurrentAssignment());
-                 minspanmodel.setSources(model.getSources());
-                 
-                 //values from mapping of original graph
-                 newmapping.raster = mapping.getRaster();
-                 newmapping.nodeRectangles = mapping.getNodeRectangles();
-                 newmapping.nodeFloorMapping = mapping.getNodeFloorMapping();
-                 newmapping.isEvacuationNode = mapping.isEvacuationNode;
-                 newmapping.isSourceNode = mapping.isSourceNode;
-                 newmapping.isDeletedSourceNode = mapping.isDeletedSourceNode;
+                for (Edge e: super_edges){
+                    if (newNodeMap.containsKey(e.start()))
+                    {
+                        Edge new_edge = new Edge(NumEdges++,newNodeMap.get(e.start()),minspanmodel.getSupersink());
+                        //System.out.println("superEdge: " + new_edge + "for: " + e);
+                        newgraph.addEdge(new_edge);                   
+                        Edge orig = model.getGraph().getEdge(e.start(), e.end());
+                        minspanmodel.setTransitTime(new_edge, model.getTransitTime(orig));
+                        minspanmodel.setEdgeCapacity(new_edge, Integer.MAX_VALUE);
+                        minspanmodel.setExactTransitTime(new_edge, model.getExactTransitTime(orig));
+                        newmapping.setEdgeLevel(new_edge, mapping.getEdgeLevel(orig));
+                    }
+                }
+                
+                newmapping.raster = mapping.getRaster();
+                for( ZToGraphRoomRaster room : rasteredRooms ) 
+                {
+                    int numCol = room.getColumnCount();
+                    int numRow = room.getRowCount();
+                    for (int i=0; i<numCol; i++)
+                    {
+                        for (int j=0; j<numRow; j++)
+                        {
+                            ZToGraphRasterSquare square = room.getSquare( i, j );
+                            square.mark();
+                            Node old = square.getNode();
+                            square.setNode(newNodeMap.get(old));
+                        }
+                    }
+                }
+                
+                
+                
+                 //minspanmodel.setCurrentAssignment(model.getCurrentAssignment());
+                 //minspanmodel.setSources(model.getSources());
+                 minspanmodel.setNetwork(newgraph);
+                 //values from mapping of original graph                
                  newmapping.exitName = mapping.exitName;
                  
-                 minspanmodel.setZToGraphMapping(newmapping);                
-                 minspanmodel.setSupersink(model.getSupersink());
+                minspanmodel.setZToGraphMapping(newmapping); 
+                
+                /*for (Node n: minspanmodel.getGraph().nodes())
+                {
+                    System.out.println("Nodes: " + n);
+                }
+                for (Edge e: minspanmodel.getGraph().edges())
+                {
+                    System.out.println("Kante: " + e + "Cap: " + minspanmodel.getEdgeCapacity(e) + "Tran: " + minspanmodel.getTransitTime(e));
+                }*/
                 createReverseEdges( minspanmodel );
-                minspanmodel.setNetwork(newgraph);
+                minspanmodel.setNetwork(newgraph);               
                 minspanmodel.setNetwork( minspanmodel.getGraph().getAsStaticNetwork());
                 System.out.println("Number of Created Repeated Shortest Paths Edges: " + minspanmodel.getGraph().numberOfEdges());
 		return minspanmodel;

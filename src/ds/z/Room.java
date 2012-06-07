@@ -120,8 +120,7 @@ public class Room extends BaseRoom<RoomEdge> implements Cloneable, Comparable<Ro
                     int ypos = (edge.getSource().getYInt() + edge.getTarget().getYInt())/2;
                     Point p = new Point(xpos,ypos);
                     doors.put(p,width);
-                } 
-                
+                }        
             }
             return doors;
         }*/

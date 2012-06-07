@@ -16,6 +16,8 @@ import ds.graph.Node;
 import ds.graph.IdentifiableCollection;
 import ds.graph.NodeRectangle;
 import algo.graph.reduction.GreedyAlgo;
+import de.tu_berlin.math.coga.common.util.Level;
+import ds.mapping.IdentifiableIntegerMapping;
 
 /**
  *
@@ -47,8 +49,13 @@ public class ZToGreedySpannerConverter extends ZToNonGridGraphConverter{
 		super.computeTransitTimes();
 		super.multiplyWithUpAndDownSpeedFactors();
 		model.setTransitTimes( exactTransitTimes.round() );
+                model.setExactTransitTimes(exactTransitTimes);
 		createReverseEdges( model );
         	model.setNetwork( model.getGraph().getAsStaticNetwork() );
+                /*for (Edge e: model.getGraph().edges())
+                {
+                    System.out.println("original edge: " + e);
+                }*/
                 System.out.println("number of edges in original graph:" + model.getGraph().numberOfEdges());
                 //Knoten stimmen bei Original und beim MinSpanModel ueberein
                 minspanmodel.setNetwork(newgraph);
@@ -72,7 +79,7 @@ public class ZToGreedySpannerConverter extends ZToNonGridGraphConverter{
                         newmapping.setNodeDownSpeedFactor(node, mapping.getDownNodeSpeedFactor(node));   
                     }
                 }
-              
+
                 //creates a minimum spanning tree problem
                 minspanprob = new MinSpanningTreeProblem(model,model.getTransitTimes());
               
@@ -84,14 +91,27 @@ public class ZToGreedySpannerConverter extends ZToNonGridGraphConverter{
                 System.out.print("Compute t-Spanner using greedy... " );
                 System.out.println("used time: " + greedy.getRuntimeAsString() );
                 IdentifiableCollection<Edge> MinEdges = minspantree.getEdges();
+                IdentifiableIntegerMapping<Edge> transit = minspantree.getTransit();
+                IdentifiableIntegerMapping<Edge> cap = minspantree.getCapac();
                 
                 for (Edge neu: MinEdges)
                 {
-                    newgraph.addEdge(neu);
-                    minspanmodel.setEdgeCapacity(neu, model.getEdgeCapacity(neu));
-                    minspanmodel.setTransitTime(neu, model.getTransitTime(neu));
-                    newmapping.setEdgeLevel(neu, mapping.getEdgeLevel(neu));             
-                    minspanmodel.setExactTransitTime(neu, model.getExactTransitTime(neu));
+                    if (neu.start() != model.getSupersink() && neu.end()!= model.getSupersink())
+                    {
+                        newgraph.addEdge(neu);
+                        minspanmodel.setEdgeCapacity(neu, cap.get(neu));
+                        minspanmodel.setTransitTime(neu, transit.get(neu));
+                        newmapping.setEdgeLevel(neu, mapping.getEdgeLevel(neu));             
+                        minspanmodel.setExactTransitTime(neu, model.getExactTransitTime(neu));
+                    }
+                    else
+                    {
+                        newgraph.addEdge(neu);
+                        minspanmodel.setEdgeCapacity(neu, Integer.MAX_VALUE);
+                        minspanmodel.setTransitTime(neu, 0);
+                        newmapping.setEdgeLevel(neu, Level.Equal);
+                        minspanmodel.setExactTransitTime(neu, 0);
+                    }
                 }
                 
                  minspanmodel.setCurrentAssignment(model.getCurrentAssignment());
@@ -111,6 +131,10 @@ public class ZToGreedySpannerConverter extends ZToNonGridGraphConverter{
                 createReverseEdges( minspanmodel );
                 minspanmodel.setNetwork(newgraph);
                 minspanmodel.setNetwork( minspanmodel.getGraph().getAsStaticNetwork());
+                /*for (Edge e: minspanmodel.getGraph().edges())
+                {
+                    System.out.println("Kante im Spanner: " + e);
+                }*/
                 System.out.println("number of edges in t-spanner: " + minspanmodel.getGraph().numberOfEdges());
 		return minspanmodel;
                
