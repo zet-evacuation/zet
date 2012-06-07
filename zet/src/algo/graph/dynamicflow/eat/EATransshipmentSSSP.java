@@ -15,11 +15,10 @@
  */
 package algo.graph.dynamicflow.eat;
 
-import algo.graph.dynamicflow.*;
-import ds.graph.Edge;
-import ds.mapping.IdentifiableIntegerMapping;
-import ds.graph.network.AbstractNetwork;
-import ds.graph.Node;
+import algo.graph.dynamicflow.DynamicTransshipment;
+import algo.graph.dynamicflow.DynamicTransshipmentProblem;
+import algo.graph.dynamicflow.TransshipmentFramework;
+import ds.graph.flow.FlowOverTime;
 
 /**
  * The class {@code EATransshipment} solves two variants
@@ -29,10 +28,25 @@ import ds.graph.Node;
  * For the variant without a time horizon, binary search
  * is used. 
  */
-public class EATransshipmentSSSP extends Transshipment<EATransshipmentWithTHMinCost>{
-	
-	public EATransshipmentSSSP(AbstractNetwork network, IdentifiableIntegerMapping<Edge> transitTimes, IdentifiableIntegerMapping<Edge> capacities, IdentifiableIntegerMapping<Node> supplies){
-		super(network, transitTimes, capacities, null, supplies, DynamicTransshipment.class, EATransshipmentWithTHSSSP.class);
-	}	
-		
+public class EATransshipmentSSSP extends TransshipmentFramework<DynamicTransshipmentProblem, DynamicTransshipment> {
+	public EATransshipmentSSSP() {
+		super( new DynamicTransshipment()/*, new EATransshipmentWithTHSSSP()*/ );
+	}
+
+	@Override
+	protected FlowOverTime runAlgorithm( DynamicTransshipmentProblem problem ) {
+		FlowOverTime transshipmentWithoutTimeHorizon = super.runAlgorithm( problem );
+
+		if( getFeasibleTimeHorizon() > -1 && transshipmentWithoutTimeHorizon != null ) {
+			EATransshipmentWithTHSSSP eat = new EATransshipmentWithTHSSSP();
+			problem.setTimeHorizon( getFeasibleTimeHorizon() );
+			eat.setProblem( problem );
+
+			eat.run();
+			transshipmentWithoutTimeHorizon = eat.getSolution();
+			System.out.println( "Progress: Additional transshipment algorithm has finished and the new solution was set." );
+			fireProgressEvent( 1, "Run with additional transshipment algorithm has finished. The new solution was set." );
+		}
+		return transshipmentWithoutTimeHorizon;
+	}
 }

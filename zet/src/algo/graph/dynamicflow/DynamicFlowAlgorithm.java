@@ -19,41 +19,28 @@ import de.tu_berlin.math.coga.common.algorithm.Algorithm;
 import algo.graph.util.PathComposition;
 import ds.graph.GraphLocalization;
 import ds.graph.flow.PathBasedFlowOverTime;
-import ds.graph.Edge;
 import ds.graph.flow.EdgeBasedFlowOverTime;
-import ds.mapping.IdentifiableIntegerMapping;
-import ds.graph.network.AbstractNetwork;
+import ds.graph.flow.FlowOverTime;
 
 /**
  * This class represents a dynamic flow algorithm.
  * A dynamic flow algorithm is a special case of a graph algorithm
  * and therefore this class implements the {@code GraphAlgorithm}
  * interface. 
+ * @param <U>
  */
-public abstract class DynamicFlowAlgorithm /*extends GraphAlgorithm*/ extends Algorithm<DynamicFlowProblem, PathBasedFlowOverTime>  {
+public abstract class DynamicFlowAlgorithm<U extends DynamicFlowProblem> extends Algorithm<U, FlowOverTime>  {
 
 	/** Flow based result flow. */
 	protected PathBasedFlowOverTime resultFlowPathBased = null;
 	/** Edge based result flow. */
 	protected EdgeBasedFlowOverTime resultFlowEdgeBased = null;
-	/** The network used by the flow algorithm. */
-	protected AbstractNetwork network = null;
-	/** The transit times in the network. */
-	protected IdentifiableIntegerMapping<Edge> transitTimes;
-	/** The capacities of the edges in the network. */
-	protected IdentifiableIntegerMapping<Edge> edgeCapacities;
 	
 	/**
 	 * Creates a new algorithm object. 
 	 * Can only be called for subclasses.
-	 * @param network The network the dynamic flow algorithm shall work on.
-	 * @param transitTimes The transit times the dynamic flow algorithm shall use.
-	 * @param capacities The edge capacities the dynamic flow algorithm shall use.
 	 */
-	public DynamicFlowAlgorithm(AbstractNetwork network, IdentifiableIntegerMapping<Edge> transitTimes, IdentifiableIntegerMapping<Edge> capacities){
-		this.network = network;
-		this.transitTimes = transitTimes;
-		this.edgeCapacities = capacities;
+	public DynamicFlowAlgorithm() {
 	}
 	
 	/**
@@ -62,7 +49,7 @@ public abstract class DynamicFlowAlgorithm /*extends GraphAlgorithm*/ extends Al
 	 * if it has run and only computed an edge based flow.
 	 * @return the calculated flow as {@code PathBasedFlowOverTime} object.
 	 */
-	public final PathBasedFlowOverTime getResultFlowPathBased(){
+	public final PathBasedFlowOverTime getResultFlowPathBased() {
 		if (resultFlowPathBased != null)
 			return resultFlowPathBased;
 		if (resultFlowEdgeBased != null) {
@@ -92,13 +79,13 @@ public abstract class DynamicFlowAlgorithm /*extends GraphAlgorithm*/ extends Al
 			return resultFlowEdgeBased;
 		}
 		if (resultFlowPathBased != null){
-			if (network == null){
+			if (getProblem().getNetwork() == null){
 				throw new AssertionError("The variable network is null.");
 			}
-			if (transitTimes == null){
+			if (getProblem().getTransitTimes() == null){
 				throw new AssertionError("The variable transitTimes is null.");
 			}
-		    PathComposition pathComposition = new PathComposition(network,transitTimes,resultFlowPathBased);	
+		    PathComposition pathComposition = new PathComposition(getProblem().getNetwork(),getProblem().getTransitTimes(),resultFlowPathBased);	
 		    pathComposition.run(); 
 		    resultFlowEdgeBased = pathComposition.getEdgeFlows();
 		    return resultFlowEdgeBased;

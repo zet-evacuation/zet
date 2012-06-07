@@ -22,7 +22,7 @@ package algo.graph.dynamicflow.eat;
 import ds.graph.flow.EarliestArrivalAugmentingPath;
 import ds.graph.ImplicitTimeExpandedResidualNetwork;
 import ds.graph.Node;
-import ds.graph.flow.FlowOverTime;
+import ds.graph.flow.FlowOverTimeImplicit;
 import java.util.LinkedList;
 import de.tu_berlin.math.coga.common.algorithm.Algorithm;
 
@@ -30,14 +30,13 @@ import de.tu_berlin.math.coga.common.algorithm.Algorithm;
  *
  * @author Martin Groß
  */
-public class SuccessiveEarliestArrivalAugmentingPathAlgorithm extends Algorithm<EarliestArrivalFlowProblem, FlowOverTime> {
+public class SuccessiveEarliestArrivalAugmentingPathAlgorithm extends Algorithm<EarliestArrivalFlowProblem, FlowOverTimeImplicit> {
 
     @Override
-    protected FlowOverTime runAlgorithm(EarliestArrivalFlowProblem problem) {
-        ImplicitTimeExpandedResidualNetwork drn = new ImplicitTimeExpandedResidualNetwork(problem);
+    protected FlowOverTimeImplicit runAlgorithm(EarliestArrivalFlowProblem problem) {
+        ImplicitTimeExpandedResidualNetwork implicitResidualNetwork = new ImplicitTimeExpandedResidualNetwork(problem);
 				System.out.println( "Time horizon: " + problem.getTimeHorizon() );
-				problem.setTimeHorizon( 16 );
-        EarliestArrivalAugmentingPathProblem pathProblem = new EarliestArrivalAugmentingPathProblem(drn, drn.superSource(), problem.getSink(), problem.getTimeHorizon());
+        EarliestArrivalAugmentingPathProblem pathProblem = new EarliestArrivalAugmentingPathProblem(implicitResidualNetwork, implicitResidualNetwork.superSource(), problem.getSink(), problem.getTimeHorizon());
         EarliestArrivalAugmentingPathAlgorithm pathAlgorithm = new EarliestArrivalAugmentingPathAlgorithm();
         pathAlgorithm.setProblem(pathProblem);
         pathAlgorithm.run();
@@ -47,19 +46,24 @@ public class SuccessiveEarliestArrivalAugmentingPathAlgorithm extends Algorithm<
         for (Node source : problem.getSources()) {
             flowUnitsTotal += problem.getSupplies().get(source);
         }
-        LinkedList<EarliestArrivalAugmentingPath> paths = new LinkedList<EarliestArrivalAugmentingPath>();
+        LinkedList<EarliestArrivalAugmentingPath> paths = new LinkedList<>();
         while (!path.isEmpty() && path.getCapacity() > 0) {
             flowUnitsSent += path.getCapacity();
 						System.out.println( flowUnitsSent );
             fireProgressEvent(flowUnitsSent * 1.0 / flowUnitsTotal, String.format("%1$s von %2$s Personen evakuiert.", flowUnitsSent, flowUnitsTotal));
             paths.add(path);
-            drn.augmentPath(path);
+            implicitResidualNetwork.augmentPath(path);
             pathAlgorithm = new EarliestArrivalAugmentingPathAlgorithm();
             pathAlgorithm.setProblem(pathProblem);
             pathAlgorithm.run();
             path = pathAlgorithm.getSolution();
         }
-        FlowOverTime flow = new FlowOverTime(drn, paths);
-        return flow;
+				
+				FlowOverTimeImplicit flow = new FlowOverTimeImplicit(implicitResidualNetwork, paths);
+
+				if( flow.getFlowAmount() != problem.getTotalSupplies() )
+					System.out.println( flow.getFlowAmount() + " vs. " + problem.getTotalSupplies() );
+				
+				return flow;
     }
 }

@@ -32,16 +32,17 @@ import ds.graph.Node;
  * is implemented by using binary search and calling a dynamic transshipment
  * algorithm at each point of the search. Therefore
  * the classes {@link DynamicTransshipment} is used.
- * The class {@code Transshipment} implements the binary search
+ * The class {@code TransshipmentFramework} implements the binary search
  * for an arbitrary dynamic transshipment algorithm which possibly guarantees more properties.
  */
-public class QuickestTransshipment extends Transshipment<DynamicTransshipment> {
+public class QuickestTransshipment extends TransshipmentFramework<DynamicTransshipmentProblem,DynamicTransshipment> {
 
 	/** 
 	 * Creates a new quickest transshipment algorithm instance.
 	 */
-	public QuickestTransshipment(AbstractNetwork network, IdentifiableIntegerMapping<Edge> transitTimes, IdentifiableIntegerMapping<Edge> capacities, IdentifiableIntegerMapping<Node> supplies){
-		super(network, transitTimes, capacities, null, supplies, DynamicTransshipment.class, null);
+	public QuickestTransshipment(){
+		//super(network, transitTimes, capacities, null, supplies, DynamicTransshipment.class, null);
+		super( new DynamicTransshipment() );
 	}
 	
 /*    *//**

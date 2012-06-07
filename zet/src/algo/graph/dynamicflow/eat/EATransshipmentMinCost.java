@@ -15,8 +15,11 @@
  */
 package algo.graph.dynamicflow.eat;
 
-import algo.graph.dynamicflow.*;
+import algo.graph.dynamicflow.DynamicTransshipment;
+import algo.graph.dynamicflow.DynamicTransshipmentProblem;
+import algo.graph.dynamicflow.TransshipmentFramework;
 import ds.graph.Edge;
+import ds.graph.flow.FlowOverTime;
 import ds.mapping.IdentifiableIntegerMapping;
 import ds.graph.network.AbstractNetwork;
 import ds.graph.Node;
@@ -29,9 +32,35 @@ import ds.graph.Node;
  * For the variant without a time horizon, binary search
  * is used. 
  */
-public class EATransshipmentMinCost extends Transshipment<EATransshipmentWithTHMinCost> {
+public class EATransshipmentMinCost extends TransshipmentFramework<DynamicTransshipmentProblem,DynamicTransshipment/*,EATransshipmentWithTHMinCost*/> {
+    public EATransshipmentMinCost() {
+			super( new DynamicTransshipment()/*, new EATransshipmentWithTHMinCost() */);
+			setName( "Earliest Arrival Transshipment TH MinCost" );
+		}
 
-    public EATransshipmentMinCost(AbstractNetwork network, IdentifiableIntegerMapping<Edge> transitTimes, IdentifiableIntegerMapping<Edge> capacities, IdentifiableIntegerMapping<Node> supplies) {
-        super(network, transitTimes, capacities, null, supplies, DynamicTransshipment.class, EATransshipmentWithTHMinCost.class);
-    }
+	@Override
+	protected FlowOverTime runAlgorithm( DynamicTransshipmentProblem problem ) {
+		FlowOverTime transshipmentWithoutTimeHorizon = super.runAlgorithm( problem );
+		
+		/* if an additional algorithm was set, it is applied for the optimal time horizon. 
+		 * The new flow is than the result flow. */
+		if( getFeasibleTimeHorizon() > -1 && transshipmentWithoutTimeHorizon != null ) {
+			EATransshipmentWithTHMinCost eat = new EATransshipmentWithTHMinCost();
+			problem.setTimeHorizon( getFeasibleTimeHorizon() );
+			eat.setProblem( problem );
+
+			eat.run();
+			transshipmentWithoutTimeHorizon = eat.getSolution();
+
+				//transshipmentWithoutTimeHorizon = useTransshipmentAlgorithm( eat );
+					System.out.println( "Progress: Additional transshipment algorithm has finished and the new solution was set." );
+				//AlgorithmTask.getInstance().publish( 100, "Run with additional transshipment algorithm has finished.", "The new solution was set." );
+				fireProgressEvent( 1, "Run with additional transshipment algorithm has finished. The new solution was set." );
+		}
+			//if( additionalTHTAlgorithm != null && additionalTHTAlgorithm != standardTHTAlgorithm ) {
+			//}
+		return transshipmentWithoutTimeHorizon;
+	}
+		
+		
 }

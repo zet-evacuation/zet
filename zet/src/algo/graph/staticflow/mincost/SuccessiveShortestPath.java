@@ -108,14 +108,14 @@ public class SuccessiveShortestPath /*extends Algorithm<MinimumCostFlowProblem, 
         // Prepare the path lists
         paths = new LinkedList<>();
         for (Edge edge : network.edges()) {
-            costs.set(edge, baseCosts.get(edge));
-            costs.set(residualNetwork.reverseEdge(edge), -baseCosts.get(edge));
-            if (baseCosts.get(edge) < 0) {
-                int capacity = capacities.get(edge);
-                residualNetwork.augmentFlow(edge, capacity);
-                balances.decrease(edge.start(), capacity);
-                balances.increase(edge.end(), capacity);
-            }
+					costs.set(edge, baseCosts.get(edge));
+					costs.set(residualNetwork.reverseEdge(edge), -baseCosts.get(edge));
+					if (baseCosts.get(edge) < 0) {
+							int capacity = capacities.get(edge);
+							residualNetwork.augmentFlow(edge, capacity);
+							balances.decrease(edge.start(), capacity);
+							balances.increase(edge.end(), capacity);
+					}
         }
         // Guarantee conservative costs by saturating negative cost edges
         for (Edge edge : residualNetwork.edges()) {

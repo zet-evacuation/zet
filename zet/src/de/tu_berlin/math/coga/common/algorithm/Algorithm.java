@@ -74,6 +74,8 @@ public abstract class Algorithm<Problem, Solution> implements Runnable {
     private State state;
     /** The change in progress that has at least be done to fire an {@link AlgorithmProgressEvent} */
     private double accuracy = 0;
+		/** The name of the algorithm. */
+		private String name = "Algorithm";
 
     /**
      * Adds the specified listener to the set of listeners receiving events from
@@ -178,6 +180,24 @@ public abstract class Algorithm<Problem, Solution> implements Runnable {
         fireEvent(new AlgorithmDetailedProgressEvent(this, progress, message));
     }
 
+		/**
+		 * Returns the name of the algorithm currently running.
+		 * @return the name of the algorithm 
+		 */
+	public String getName() {
+		return name;
+	}
+
+	/**
+	 * Sets the name of the algorithm
+	 * @param name the name of the algorithm
+	 */
+	public void setName( String name ) {
+		this.name = name;
+	}
+		
+		
+
     /**
      * Returns the instance of the problem that is to be solved.
      * @return the instance of the problem that is to be solved.
@@ -190,7 +210,7 @@ public abstract class Algorithm<Problem, Solution> implements Runnable {
      * Specifies the instance of the problem this algorithm is going to solve.
      * @param problem the instance of the problem that is to be solved.
      */
-    public final void setProblem(Problem problem) {
+    public final void setProblem( Problem problem ) {
         if (state == State.SOLVING) {
             throw new IllegalStateException("The algorithm is currently running! Changing the underlying instance could lead to undefined behaviour!");
         }
@@ -410,6 +430,7 @@ public abstract class Algorithm<Problem, Solution> implements Runnable {
             try {
                 startTime = System.currentTimeMillis();
                 state = State.SOLVING;
+								progress = 0;
                 fireEvent(new AlgorithmStartedEvent(this));
                 solution = runAlgorithm(problem);
                 state = State.SOLVED;

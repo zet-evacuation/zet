@@ -15,20 +15,20 @@
  */
 package algo.graph.dynamicflow.eat;
 
+import algo.graph.dynamicflow.DynamicTransshipmentProblem;
 import de.tu_berlin.math.coga.common.algorithm.Algorithm;
 import algo.graph.dynamicflow.TransshipmentWithTimeHorizon;
 import algo.graph.staticflow.mincost.MinimumMeanCycleCancelling;
 import ds.graph.Edge;
 import ds.mapping.IdentifiableIntegerMapping;
-import ds.graph.network.AbstractNetwork;
-import ds.graph.Node;
 import ds.graph.TimeExpandedNetwork;
 import ds.graph.problem.MinimumCostFlowProblem;
 
-public class EATransshipmentWithTHMinCost extends TransshipmentWithTimeHorizon {
+public class EATransshipmentWithTHMinCost extends TransshipmentWithTimeHorizon<DynamicTransshipmentProblem> {
 
-    public EATransshipmentWithTHMinCost(AbstractNetwork network, IdentifiableIntegerMapping<Edge> transitTimes, IdentifiableIntegerMapping<Edge> edgeCapacities, IdentifiableIntegerMapping<Node> nodeCapacities, IdentifiableIntegerMapping<Node> supplies, Integer timeHorizon) {
-        super(network, transitTimes, edgeCapacities, nodeCapacities, supplies, timeHorizon, "Earliest Arrival Transshipment TH MinCost");
+    public EATransshipmentWithTHMinCost() {
+        //super(network, transitTimes, edgeCapacities, nodeCapacities, supplies, timeHorizon, "Earliest Arrival Transshipment TH MinCost");
+			super.setName( "Earliest Arrival Transshipment TH MinCost" );
     }
 
     @Override
