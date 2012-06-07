@@ -256,7 +256,8 @@ public class PlanPolygon<T extends Edge> implements Iterable<T> {
 	 */
 	// If the inserted edge closes the polygon, it is stored as the last one!
 	// TODO Perform intersection-test
-	final void addEdge( T e ) throws IllegalStateException, IllegalArgumentException {
+	//final void addEdge( T e ) throws IllegalStateException, IllegalArgumentException {
+        public void addEdge( T e ) throws IllegalStateException, IllegalArgumentException {
 		if( start == null ) {
 			// The instance is empty
 
@@ -1304,6 +1305,47 @@ public class PlanPolygon<T extends Edge> implements Iterable<T> {
 		T e3 = (T)p2.getOtherEdge( e2 ); // Second neighbour
 		return e3.getOther( p2 ); // Second next point
 	}
+        
+        public int getLengthBetweenPoints(PlanPoint p1,PlanPoint p2)
+        {
+            int length=0,Path1=0,Path2=0, numEdges=0;
+            T currentEdge = null;
+            T otherEdge = null;
+            List<T> edges = this.getEdges();
+            PlanPoint first = p1,next;
+            for (T e: edges)
+            {
+                System.out.println("Kante des Polygons: " + e);
+                if (e.getSource().equals(p1) || e.getTarget().equals(p1)){
+                    currentEdge = e;
+                    System.out.println("Edge found" + e);
+                    break;
+                }
+            }
+            if (currentEdge.getOther(p1).equals(p2)){
+                System.out.println("gleich nebeneinander");
+                Path1= currentEdge.length();
+            }
+            else{               
+                while (!currentEdge.getOther(first).equals(p2)){
+                    next = currentEdge.getOther(first);
+                    Path1+= currentEdge.length();
+                    if (currentEdge.equals(this.getLastEdge())){
+                        
+                    }
+                    currentEdge = (T)next.getOtherEdge(currentEdge);
+                    System.out.println("nächste Kante: " + currentEdge);
+                    first = next;
+                }
+                Path1+=currentEdge.length();
+            }
+            if (this.getLastEdge().equals(currentEdge))
+            otherEdge = (T)p1.getOtherEdge(currentEdge);
+            System.out.println("Andere Kante: " + otherEdge);
+            
+            length = Path1 + Path2;
+            return length;
+        }
 
 	/**
 	 * Returns the points of the {@code PlanPolygon} as view of a

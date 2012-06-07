@@ -40,6 +40,8 @@ public class DynamicNetwork implements Graph {
 	protected ListSequence<Edge> edges;
 	protected transient Map<Node, ListSequence<Edge>> incomingEdges;
 	protected transient Map<Node, ListSequence<Edge>> outgoingEdges;
+        protected ListSequence<Edge> temp_removed_edges = new ListSequence<>();
+        protected ListSequence<Node> temp_removed_nodes = new ListSequence<>();
 
 	public DynamicNetwork() {
 		nodes = new ListSequence<>();
@@ -334,7 +336,7 @@ public class DynamicNetwork implements Graph {
 	public IdentifiableCollection<Node> adjacentNodes( Node node ) {
 		return new OppositeNodeCollection( node, incidentEdges( node ) );
 	}
-
+   
 	public IdentifiableCollection<Node> predecessorNodes( Node node ) {
 		return new OppositeNodeCollection( node, incomingEdges.get( node ) );
 	}
@@ -365,4 +367,75 @@ public class DynamicNetwork implements Graph {
 		network.setEdges( edges );
 		return network;
 	}
+        
+        public void add_edge_temp(Edge e)
+        {
+            temp_removed_edges.remove(e);
+        }
+        
+        public void add_node_temp(Node n)
+        {
+            temp_removed_nodes.remove(n);
+        }
+        
+        public void remove_edge_temp(Edge e)
+        {
+            temp_removed_edges.add(e);
+        }
+        
+        public void remove_node_temp(Node n)
+        {
+            temp_removed_nodes.add(n);
+        }
+        
+        public void recover_temp_removed_edges()
+        {
+            temp_removed_edges.clear();
+        }
+        
+        public void recover_temp_removed_nodes()
+        {
+            temp_removed_nodes.clear();
+        }
+        
+        public IdentifiableCollection<Node> temp_adjacentNodes( Node node ) {
+            
+            IdentifiableCollection<Node> adjacent_nodes = new ListSequence<>();
+            
+                if (!temp_removed_nodes.contains(node))
+                {
+                     IdentifiableCollection<Edge> adj = outgoingEdges(node);
+                     for (Edge e: adj)
+                     {
+                         if (temp_removed_nodes.contains(e.opposite(node)) || temp_removed_edges.contains(e))
+                         {
+                             continue;
+                         }
+                         adjacent_nodes.add(e.opposite(node));
+                     }
+                }
+           
+		return adjacent_nodes;
+	}
+        
+        public IdentifiableCollection<Node> temp_predNodes( Node node ) {
+            
+            IdentifiableCollection<Node> adjacent_nodes = new ListSequence<>();
+            
+                if (!temp_removed_nodes.contains(node))
+                {
+                     IdentifiableCollection<Edge> adj = incomingEdges(node);
+                     for (Edge e: adj)
+                     {
+                         if (temp_removed_nodes.contains(e.opposite(node)) || temp_removed_edges.contains(e))
+                         {
+                             continue;
+                         }
+                         adjacent_nodes.add(e.opposite(node));
+                     }
+                }
+           
+		return adjacent_nodes;
+	}
 }
+

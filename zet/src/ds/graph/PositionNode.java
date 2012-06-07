@@ -36,7 +36,7 @@ public class PositionNode {
     }
     public Point getPosition()
     {
-        return p;
+        return this.p;
     }
     
     public Node getNode()

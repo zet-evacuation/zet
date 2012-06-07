@@ -191,7 +191,7 @@ public class PrimsAlgo extends Algorithm<MinSpanningTreeProblem,MinSpanningTree>
              System.out.println("Fehler in runMinSpan " + e.toString());
          }
         //System.out.println("Overalldistance " + overalldist);
-        return new MinSpanningTree(minspan,solEdges,overalldist);
+        return new MinSpanningTree(minspan,solEdges,null, null,overalldist);
        
  
         

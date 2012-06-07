@@ -221,7 +221,7 @@ public class ClusterAlgo extends Algorithm<MinSpanningTreeProblem, MinSpanningTr
              System.out.println("Fehler in ClusterAlgo " + e.toString() + e.getLocalizedMessage());
          }
         
-         return new MinSpanningTree(minspan,solEdges,overalldist);
+         return new MinSpanningTree(minspan,solEdges,null, null,overalldist);
     }
     
    
