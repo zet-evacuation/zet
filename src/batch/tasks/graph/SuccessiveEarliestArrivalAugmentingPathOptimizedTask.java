@@ -25,7 +25,7 @@ import algo.graph.dynamicflow.eat.EarliestArrivalFlowProblem;
 import algo.graph.dynamicflow.eat.LongestShortestPathTimeHorizonEstimator;
 import algo.graph.dynamicflow.eat.SEAAPAlgorithm;
 import de.tu_berlin.math.coga.zet.NetworkFlowModel;
-import ds.graph.flow.FlowOverTime;
+import ds.graph.flow.FlowOverTimeImplicit;
 import ds.graph.flow.PathBasedFlowOverTime;
 
 /**
@@ -33,7 +33,7 @@ import ds.graph.flow.PathBasedFlowOverTime;
  * in order to solve it. It afterwards creates a path based flow solution.
  * @author Jan-Philipp Kappmeier
  */
-public class SuccessiveEarliestArrivalAugmentingPathOptimizedTask extends Transformation<NetworkFlowModel, EarliestArrivalFlowProblem, FlowOverTime, PathBasedFlowOverTime> {
+public class SuccessiveEarliestArrivalAugmentingPathOptimizedTask extends Transformation<NetworkFlowModel, EarliestArrivalFlowProblem, FlowOverTimeImplicit, PathBasedFlowOverTime> {
 
     public SuccessiveEarliestArrivalAugmentingPathOptimizedTask() {
         setAlgorithm(new SEAAPAlgorithm());
@@ -53,7 +53,7 @@ public class SuccessiveEarliestArrivalAugmentingPathOptimizedTask extends Transf
     }
 
     @Override
-    protected PathBasedFlowOverTime transformSolution(FlowOverTime transformedSolution) {
+    protected PathBasedFlowOverTime transformSolution(FlowOverTimeImplicit transformedSolution) {
         PathBasedFlowOverTime df = transformedSolution.getPathBased();
         String result = String.format("Sent %1$s of %2$s flow units in %3$s time units successfully.", transformedSolution.getFlowAmount(), getAlgorithm().getProblem().getTotalSupplies(), transformedSolution.getTimeHorizon());
         System.out.println(result);

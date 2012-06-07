@@ -26,7 +26,7 @@ import de.tu_berlin.math.coga.common.algorithm.AlgorithmStatusEvent;
 import ds.graph.ImplicitTimeExpandedResidualNetwork;
 import ds.graph.Node;
 import ds.graph.flow.EarliestArrivalAugmentingPath;
-import ds.graph.flow.FlowOverTime;
+import ds.graph.flow.FlowOverTimeImplicit;
 import java.util.Arrays;
 import java.util.LinkedList;
 
@@ -35,7 +35,7 @@ import java.util.LinkedList;
  * described by Stevanus Tjandra in his Ph.D. thesis.
  * @author Martin Groß
  */
-public class SEAAPAlgorithm extends Algorithm<EarliestArrivalFlowProblem, FlowOverTime> {
+public class SEAAPAlgorithm extends Algorithm<EarliestArrivalFlowProblem, FlowOverTimeImplicit> {
 
     /**
      * Stores the arrival time of the last flow unit sent (monotonically 
@@ -59,7 +59,7 @@ public class SEAAPAlgorithm extends Algorithm<EarliestArrivalFlowProblem, FlowOv
      * Stores a reference to the underlying time-expanded network in which the
      * paths are calculated. 
      */
-    private ImplicitTimeExpandedResidualNetwork network;
+    private ImplicitTimeExpandedResidualNetwork implicitTimeExpandedNetwork;
     /**
      * Stores the original time horizon.
      */
@@ -113,7 +113,7 @@ public class SEAAPAlgorithm extends Algorithm<EarliestArrivalFlowProblem, FlowOv
      * switched off.
      */
     @Override
-    protected FlowOverTime runAlgorithm(EarliestArrivalFlowProblem problem) {
+    protected FlowOverTimeImplicit runAlgorithm(EarliestArrivalFlowProblem problem) {
 //			System.out.println( problem.toString() );
 //		try {
 //			DatFileReaderWriter.writeFile( "audimax", problem, "audimax-test" );
@@ -125,16 +125,16 @@ public class SEAAPAlgorithm extends Algorithm<EarliestArrivalFlowProblem, FlowOv
         // Initialize the data structures
         calculateShortestPathLengths();       
         flowUnitsSent = 0;
-        network = new ImplicitTimeExpandedResidualNetwork( problem );
+        implicitTimeExpandedNetwork = new ImplicitTimeExpandedResidualNetwork( problem );
             
         originalTimeHorizon = problem.getTimeHorizon();
         //originalTimeHorizon = 16;
 				
-        pathProblem = new EarliestArrivalAugmentingPathProblem(network, network.superSource(), problem.getSink(), Math.min(getNextDistance(0) + 1, problem.getTimeHorizon()));
+        pathProblem = new EarliestArrivalAugmentingPathProblem(implicitTimeExpandedNetwork, implicitTimeExpandedNetwork.superSource(), problem.getSink(), Math.min(getNextDistance(0) + 1, problem.getTimeHorizon()));
         paths = new LinkedList<>();
         // If there are no supplies, we are done
         if (problem.getTotalSupplies() == 0) {            
-            return new FlowOverTime(network, paths);
+            return new FlowOverTimeImplicit(implicitTimeExpandedNetwork, paths);
         }
         
         pathAlgorithm.setProblem(pathProblem);        
@@ -143,7 +143,7 @@ public class SEAAPAlgorithm extends Algorithm<EarliestArrivalFlowProblem, FlowOv
         while (!path.isEmpty() && path.getCapacity() > 0 && flowUnitsSent < problem.getTotalSupplies()) {
             // Add the path
             paths.add(path);
-            network.augmentPath(path);
+            implicitTimeExpandedNetwork.augmentPath(path);
             // Update the amount of flow sent
             path.setCapacity(Math.min(path.getCapacity(), problem.getTotalSupplies() - flowUnitsSent));
             flowUnitsSent += path.getCapacity();
@@ -155,7 +155,7 @@ public class SEAAPAlgorithm extends Algorithm<EarliestArrivalFlowProblem, FlowOv
         // Convert our paths into a flow, if desired
         if (autoConvert) {
             fireEvent(new AlgorithmStatusEvent(this, "INIT_PATH_DECOMPOSITION"));
-            FlowOverTime flow = new FlowOverTime(network, paths);
+            FlowOverTimeImplicit flow = new FlowOverTimeImplicit(implicitTimeExpandedNetwork, paths);
             return flow;
         } else {
             return null;

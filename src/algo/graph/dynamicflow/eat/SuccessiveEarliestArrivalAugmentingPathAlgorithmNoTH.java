@@ -15,27 +15,18 @@
  */
 package algo.graph.dynamicflow.eat;
 
-import algo.graph.dynamicflow.*;
-import ds.graph.Edge;
-import ds.mapping.IdentifiableIntegerMapping;
-import ds.graph.network.AbstractNetwork;
-import ds.graph.Node;
-
+import algo.graph.dynamicflow.DynamicTransshipmentProblem;
+import algo.graph.dynamicflow.TransshipmentFramework;
 
 /**
  * This class calculates an earliest arrival transshipment
  * by using a successive earliest arrival augmenting path algorithm.
- * The optimal time horizon is found as specified in {@code Transshipment}. 
+ * The optimal time horizon is found as specified in {@code TransshipmentFramework}. 
  */
-public class SuccessiveEarliestArrivalAugmentingPathAlgorithmNoTH extends
-		Transshipment<SuccessiveEarliestArrivalAugmentingPathAlgorithmTH> {
+public class SuccessiveEarliestArrivalAugmentingPathAlgorithmNoTH extends TransshipmentFramework<EarliestArrivalFlowProblem,SuccessiveEarliestArrivalAugmentingPathAlgorithmTH> {
 
-	public SuccessiveEarliestArrivalAugmentingPathAlgorithmNoTH(AbstractNetwork network,
-			IdentifiableIntegerMapping<Edge> transitTimes,
-			IdentifiableIntegerMapping<Edge> edgeCapacities,
-			IdentifiableIntegerMapping<Node> nodeCapacities,
-			IdentifiableIntegerMapping<Node> supplies) {
-		super(network, transitTimes, edgeCapacities, nodeCapacities, supplies, SuccessiveEarliestArrivalAugmentingPathAlgorithmTH.class, null);
+	public SuccessiveEarliestArrivalAugmentingPathAlgorithmNoTH() {
+		super( new SuccessiveEarliestArrivalAugmentingPathAlgorithmTH() );
 	}
 	
 }

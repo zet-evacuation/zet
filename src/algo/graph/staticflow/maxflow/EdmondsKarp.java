@@ -11,6 +11,7 @@ import ds.graph.Node;
 import ds.graph.network.ResidualNetwork;
 import ds.graph.flow.MaximumFlow;
 import ds.graph.problem.MaximumFlowProblem;
+import java.util.Stack;
 
 
 /**
@@ -79,15 +80,24 @@ public class EdmondsKarp extends Algorithm<MaximumFlowProblem, MaximumFlow> {
 			current = e.start();
 		} while( !current.equals( source ) );
 
+		Stack<Edge> s = new Stack<>();
+		
 		// augment
 		current = sink;
 		do {
 			final Edge e = bfs.predecedingEdge( current );
+			s.push( e );
 			residualNetwork.augmentFlow( e, min );
 			pushes++;
 			current = e.start();
 		} while( !current.equals( source ) );
 
+		System.out.println( "Auzgmented on " );
+		while( !s.empty() ) {
+			System.out.print( s.pop() );
+		}
+		System.out.println( " by " + min );
+		
 		flow += min;
 		augmentations++;
 		return min;

@@ -33,7 +33,7 @@ import ds.mapping.IdentifiableIntegerMapping;
 import ds.graph.network.AbstractNetwork;
 import de.tu_berlin.math.coga.zet.NetworkFlowModel;
 import ds.graph.Node;
-import ds.graph.flow.FlowOverTime;
+import ds.graph.flow.FlowOverTimeImplicit;
 import ds.graph.flow.FlowOverTimePath;
 import ds.graph.flow.MaximumFlow;
 import ds.graph.flow.PathBasedFlowOverTime;
@@ -115,7 +115,7 @@ public class ReducedEarliestArrivalTransshipmentExitAssignment extends Algorithm
         estimator.run();
         
         problem = new EarliestArrivalFlowProblem(reducedCapacities, reducedNetwork, reducedNodeCapacities, supersink, reducedSources, estimator.getSolution().getUpperBound(), reducedTransitTimes, reducedBalances);       
-        Algorithm<EarliestArrivalFlowProblem, FlowOverTime> algorithm = new SEAAPAlgorithm();
+        Algorithm<EarliestArrivalFlowProblem, FlowOverTimeImplicit> algorithm = new SEAAPAlgorithm();
         algorithm.setProblem(problem);
         algorithm.run();
         

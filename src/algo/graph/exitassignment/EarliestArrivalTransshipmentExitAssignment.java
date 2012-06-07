@@ -27,7 +27,7 @@ import algo.graph.dynamicflow.eat.TimeHorizonBounds;
 import de.tu_berlin.math.coga.common.algorithm.Algorithm;
 import de.tu_berlin.math.coga.zet.NetworkFlowModel;
 import ds.graph.Node;
-import ds.graph.flow.FlowOverTime;
+import ds.graph.flow.FlowOverTimeImplicit;
 import ds.graph.flow.FlowOverTimePath;
 import ds.graph.flow.PathBasedFlowOverTime;
 
@@ -47,7 +47,7 @@ public class EarliestArrivalTransshipmentExitAssignment extends Algorithm<Networ
         estimator.run();
         
         problem = new EarliestArrivalFlowProblem(model.getEdgeCapacities(), model.getNetwork(), model.getNodeCapacities(), model.getSupersink(), model.getSources(), estimator.getSolution().getUpperBound(), model.getTransitTimes(), model.getCurrentAssignment());       
-        Algorithm<EarliestArrivalFlowProblem, FlowOverTime> algorithm = new SEAAPAlgorithm();
+        Algorithm<EarliestArrivalFlowProblem, FlowOverTimeImplicit> algorithm = new SEAAPAlgorithm();
         algorithm.setProblem(problem);
         algorithm.run();
         

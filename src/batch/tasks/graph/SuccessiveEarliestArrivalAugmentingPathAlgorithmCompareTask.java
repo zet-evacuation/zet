@@ -8,7 +8,7 @@ import algo.graph.dynamicflow.eat.EarliestArrivalFlowProblem;
 import algo.graph.dynamicflow.eat.SEAAPAlgoWithTH;
 import de.tu_berlin.math.coga.zet.NetworkFlowModel;
 import ds.NetworkFlowModelAlgorithm;
-import ds.graph.flow.FlowOverTime;
+import ds.graph.flow.FlowOverTimeImplicit;
 import ds.graph.flow.PathBasedFlowOverTime;
 
 /**
@@ -41,7 +41,7 @@ public class SuccessiveEarliestArrivalAugmentingPathAlgorithmCompareTask extends
                     EarliestArrivalFlowProblem problem = new EarliestArrivalFlowProblem(model.getEdgeCapacities(), model.getNetwork(), model.getNodeCapacities(), model.getSupersink(), model.getSources(), t, model.getTransitTimes(), model.getCurrentAssignment()); 
                     seaap.setProblem(problem);
                     seaap.run();
-                    FlowOverTime flow = seaap.getSolution();
+                    FlowOverTimeImplicit flow = seaap.getSolution();
                     //System.out.println("Calculation done for t= " + t);
                     //System.out.println("Flow Value: " + flow.getFlowAmount());         
                     //System.out.println("Total Supply: " + problem.getTotalSupplies());

@@ -8,7 +8,7 @@ import ds.graph.flow.EarliestArrivalAugmentingPath;
 import algo.graph.shortestpath.Dijkstra;
 import ds.graph.ImplicitTimeExpandedResidualNetwork;
 import ds.graph.Node;
-import ds.graph.flow.FlowOverTime;
+import ds.graph.flow.FlowOverTimeImplicit;
 import java.util.Arrays;
 import java.util.LinkedList;
 import de.tu_berlin.math.coga.common.algorithm.Algorithm;
@@ -17,7 +17,7 @@ import de.tu_berlin.math.coga.common.algorithm.AlgorithmStatusEvent;
  *
  * @author schwengf
  */
-public class SEAAPAlgoWithTH extends Algorithm<EarliestArrivalFlowProblem, FlowOverTime>{
+public class SEAAPAlgoWithTH extends Algorithm<EarliestArrivalFlowProblem, FlowOverTimeImplicit>{
    
     private int arrivalTime;
     private int[] distances;
@@ -38,11 +38,11 @@ public class SEAAPAlgoWithTH extends Algorithm<EarliestArrivalFlowProblem, FlowO
     }
 
     @Override
-    protected FlowOverTime runAlgorithm(EarliestArrivalFlowProblem problem) {
+    protected FlowOverTimeImplicit runAlgorithm(EarliestArrivalFlowProblem problem) {
         if (problem.getTotalSupplies() == 0) {
             drn = new ImplicitTimeExpandedResidualNetwork(problem);
             paths = new LinkedList<EarliestArrivalAugmentingPath>();
-            return new FlowOverTime(drn, paths);
+            return new FlowOverTimeImplicit(drn, paths);
         } 
         OriginTime = problem.getTimeHorizon();
         //System.out.println("TimeHorizon: " + OriginTime);
@@ -62,7 +62,7 @@ public class SEAAPAlgoWithTH extends Algorithm<EarliestArrivalFlowProblem, FlowO
         }
         if (autoConvert) {
             fireEvent(new AlgorithmStatusEvent(this, "INIT_PATH_DECOMPOSITION"));
-            FlowOverTime flow = new FlowOverTime(drn, paths);
+            FlowOverTimeImplicit flow = new FlowOverTimeImplicit(drn, paths);
             return flow;
             
         } else {

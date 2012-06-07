@@ -15,9 +15,11 @@
  */
 package zet.tasks;
 
+import algo.graph.dynamicflow.DynamicTransshipmentProblem;
 import algo.graph.dynamicflow.QuickestTransshipment;
 import algo.graph.dynamicflow.eat.EATransshipmentMinCost;
 import algo.graph.dynamicflow.eat.EATransshipmentSSSP;
+import algo.graph.dynamicflow.eat.EarliestArrivalFlowProblem;
 import algo.graph.dynamicflow.eat.SuccessiveEarliestArrivalAugmentingPathAlgorithmNoTH;
 import algo.graph.dynamicflow.maxflow.MaxFlowOverTime;
 import de.tu_berlin.math.coga.algorithm.flowovertime.maxflow.MaximumFlowOverTimeProblem;
@@ -42,11 +44,14 @@ public enum GraphAlgorithmEnumeration {
 	 */
 	EarliestArrivalTransshipmentSuccessiveShortestPaths( DefaultLoc.getSingleton().getString( "gui.EATransshipmentSSSP" ) ) {
 		@Override
-		public NetworkFlowModelAlgorithm createTask( NetworkFlowModel model, int timeHorizon ) {
+		public NetworkFlowModelAlgorithm createTask( NetworkFlowModel model, final int timeHorizon ) {
 			NetworkFlowModelAlgorithm nfma = new NetworkFlowModelAlgorithm() {
 				@Override
 				protected PathBasedFlowOverTime runAlgorithm( NetworkFlowModel model ) {
-					EATransshipmentSSSP algo = new EATransshipmentSSSP( model.getNetwork(), model.getTransitTimes(), model.getEdgeCapacities(), model.getCurrentAssignment() );
+					EATransshipmentSSSP algo = new EATransshipmentSSSP();
+					
+					DynamicTransshipmentProblem dtp = new DynamicTransshipmentProblem( model.getEdgeCapacities(), model.getNetwork(), null, timeHorizon, model.getTransitTimes(), model.getCurrentAssignment() );
+					algo.setProblem( dtp );
 					algo.run();
 					if( !algo.isProblemSolved() || !algo.isPathBasedFlowAvailable() )
 						throw new AssertionError( "Either algorithm has not run or path based flow is not available." );
@@ -61,11 +66,13 @@ public enum GraphAlgorithmEnumeration {
 	 */
 	EarliestArrivalTransshipmentMinCost( DefaultLoc.getSingleton().getString( "gui.EATransshipmentMinCost" ) ) {
 		@Override
-		public NetworkFlowModelAlgorithm createTask( NetworkFlowModel model, int timeHorizon ) {
+		public NetworkFlowModelAlgorithm createTask( NetworkFlowModel model, final int timeHorizon ) {
 			NetworkFlowModelAlgorithm nfma = new NetworkFlowModelAlgorithm() {
 				@Override
 				protected PathBasedFlowOverTime runAlgorithm( NetworkFlowModel model ) {
-					EATransshipmentMinCost algo = new EATransshipmentMinCost( model.getNetwork(), model.getTransitTimes(), model.getEdgeCapacities(), model.getCurrentAssignment() );
+					EATransshipmentMinCost algo = new EATransshipmentMinCost();
+					DynamicTransshipmentProblem dtp = new DynamicTransshipmentProblem( model.getEdgeCapacities(), model.getNetwork(), null, timeHorizon, model.getTransitTimes(), model.getCurrentAssignment() );
+					algo.setProblem( dtp );
 					algo.run();
 					if( !algo.isProblemSolved() || !algo.isPathBasedFlowAvailable() )
 						throw new AssertionError( "Either algorithm has not run or path based flow is not available." );
@@ -81,11 +88,14 @@ public enum GraphAlgorithmEnumeration {
 	 */
 	SuccessiveEarliestArrivalAugmentingPathBinarySearch( DefaultLoc.getSingleton().getString( "gui.SuccEAAugPathBS" ) ) {
 		@Override
-		public NetworkFlowModelAlgorithm createTask( NetworkFlowModel model, int timeHorizon ) {
+		public NetworkFlowModelAlgorithm createTask( NetworkFlowModel model, final int timeHorizon ) {
 			return new NetworkFlowModelAlgorithm() {
 				@Override
 				protected PathBasedFlowOverTime runAlgorithm( NetworkFlowModel model ) {
-					SuccessiveEarliestArrivalAugmentingPathAlgorithmNoTH algo = new SuccessiveEarliestArrivalAugmentingPathAlgorithmNoTH( model.getNetwork(), model.getTransitTimes(), model.getEdgeCapacities(), model.getNodeCapacities(), model.getCurrentAssignment() );
+					SuccessiveEarliestArrivalAugmentingPathAlgorithmNoTH algo = new SuccessiveEarliestArrivalAugmentingPathAlgorithmNoTH();
+					DynamicTransshipmentProblem dtp = new DynamicTransshipmentProblem( model.getEdgeCapacities(), model.getNetwork(), null, timeHorizon, model.getTransitTimes(), model.getCurrentAssignment() );
+					EarliestArrivalFlowProblem eafp = new EarliestArrivalFlowProblem( dtp );
+					algo.setProblem( eafp );
 					algo.run();
 					if( !algo.isProblemSolved() || !algo.isPathBasedFlowAvailable() )
 						throw new AssertionError( "Either algorithm has not run or path based flow is not available." );
@@ -135,11 +145,13 @@ public enum GraphAlgorithmEnumeration {
 	 * Calls the {@link QuickestTransshipment} algorithm to compute a quickest transshipment.
 	 */
 	QuickestTransshipment( DefaultLoc.getSingleton().getString( "gui.QuickestTransshipment" ) ) {
-		public NetworkFlowModelAlgorithm createTask( NetworkFlowModel model, int timeHorizon ) {
+		public NetworkFlowModelAlgorithm createTask( NetworkFlowModel model, final int timeHorizon ) {
 			return new NetworkFlowModelAlgorithm() {
 				@Override
 				protected PathBasedFlowOverTime runAlgorithm( NetworkFlowModel model ) {
-					QuickestTransshipment algo = new QuickestTransshipment( model.getNetwork(), model.getTransitTimes(), model.getEdgeCapacities(), model.getCurrentAssignment() );
+					QuickestTransshipment algo = new QuickestTransshipment();
+					DynamicTransshipmentProblem dtp = new DynamicTransshipmentProblem( model.getEdgeCapacities(), model.getNetwork(), null, timeHorizon, model.getTransitTimes(), model.getCurrentAssignment() );
+					algo.setProblem( dtp );
 					algo.run();
 					if( !algo.isProblemSolved() || !algo.isPathBasedFlowAvailable() )
 						throw new AssertionError( "Either algorithm has not run or path based flow is not available." );

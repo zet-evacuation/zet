@@ -4,6 +4,7 @@
  */
 package de.tu_berlin.math.coga.graph.io.dimacs;
 
+import algo.graph.staticflow.maxflow.EdmondsKarp;
 import algo.graph.staticflow.maxflow.PushRelabel;
 import algo.graph.staticflow.maxflow.PushRelabelHighestLabel;
 import de.tu_berlin.math.coga.common.algorithm.AlgorithmEvent;
@@ -340,7 +341,7 @@ public class DimacsReader implements AlgorithmListener {
 
 	public static void main( String[] arguments ) {
 		long end;
-		DimacsReader dl = new DimacsReader( "./testinstanz/ahuja5.max" );
+		DimacsReader dl = new DimacsReader( "./testinstanz/blatt08.max" );
 		//DimacsReader dl = new DimacsReader( "./testinstanz/maxflow/BVZ-tsukuba/BVZ-tsukuba0.max" );
 		//DimacsReader dl = new DimacsReader( "./testinstanz/maxflow/BVZ-venus/BVZ-venus12.max" );
 		//DimacsReader dl = new DimacsReader( "./testinstanz/maxflow/KZ2-tsukuba/KZ2-tsukuba12.max" );
@@ -369,13 +370,13 @@ public class DimacsReader implements AlgorithmListener {
 		System.out.println( "RMFGEN Knoten: " + gen.getNodeCount() + ", Kanten: " + gen.getEdgeCount() );
 
 		AbstractNetwork network;
-		//network = dl.getNetwork();
-		network = gen.getGraph();
+		network = dl.getNetwork();
+		//network = gen.getGraph();
 
 		//System.out.println( network.toString() );
 		MaximumFlowProblem mfp;
-		//mfp = dl.getMaximumFlowProblem();
-		mfp = new MaximumFlowProblem( network, gen.getCapacities(), gen.getSource(), gen.getSink() );
+		mfp = dl.getMaximumFlowProblem();
+		//mfp = new MaximumFlowProblem( network, gen.getCapacities(), gen.getSource(), gen.getSink() );
 
 		MaximumFlow mf;
 
@@ -409,21 +410,21 @@ public class DimacsReader implements AlgorithmListener {
 //		//System.out.println( mf.toString() );
 
 		int ekf = 0;
-//		System.out.println();
-//		System.out.println( "Start edmonds karp" );
-//		EdmondsKarp ek = new EdmondsKarp();
-//		ek.setAccuracy( 1.0 );
-//		ek.addAlgorithmListener( dl );
-//		ek.setProblem( mfp );
-//		start = System.nanoTime();
-//		ek.run();
-//		end = System.nanoTime();
-//		mf = ek.getSolution();
-//		System.out.println( "Flow value: " + mf.getFlowValue() );
-//		ekf = mf.getFlowValue();
-//		System.out.println( "Augmentations: " + ek.getAugmentations() );
-//		System.out.println( "Pushes: " + ek.getPushes() );
-//		System.out.println( Formatter.formatTimeUnit( end-start, TimeUnits.NanoSeconds ) );
+		System.out.println();
+		System.out.println( "Start edmonds karp" );
+		EdmondsKarp ek = new EdmondsKarp();
+		ek.setAccuracy( 1.0 );
+		ek.addAlgorithmListener( dl );
+		ek.setProblem( mfp );
+		start = System.nanoTime();
+		ek.run();
+		end = System.nanoTime();
+		mf = ek.getSolution();
+		System.out.println( "Flow value: " + mf.getFlowValue() );
+		ekf = mf.getFlowValue();
+		System.out.println( "Augmentations: " + ek.getAugmentations() );
+		System.out.println( "Pushes: " + ek.getPushes() );
+		System.out.println( Formatter.formatTimeUnit( end-start, TimeUnits.NanoSeconds ) );
 		
 
 		long hiprf = 0;
