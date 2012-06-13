@@ -282,25 +282,4 @@ public class DimacsMinimumCostFlowFileReader extends InputFileReader<RawMinimumC
         }
         return new RawMinimumCostFlowProblem(numberOfNodes, numberOfEdges, numberOfSupply, nodeIndices, edges, capacities, costs, supplies);
     }
-
-    public static void main(String[] args) {
-        System.out.println(Double.POSITIVE_INFINITY + Double.NEGATIVE_INFINITY);
-        
-        /*
-        DimacsMinimumCostFlowFileReader reader = new DimacsMinimumCostFlowFileReader();
-        reader.setFile(new File("/homes/combi/gross/cap39.net"));
-        System.out.println(Runtime.getRuntime().totalMemory() - Runtime.getRuntime().freeMemory());
-        reader.setOptimization(Optimization.SPEED);
-        reader.run();
-        RawMinimumCostFlowProblem p = reader.getSolution();
-        reader = null;
-        System.gc();
-        System.out.println(Runtime.getRuntime().totalMemory() - Runtime.getRuntime().freeMemory() - p.getNumberOfEdges() * 8 - p.getNumberOfNodes() * 4);
-        System.out.println(Runtime.getRuntime().totalMemory() - Runtime.getRuntime().freeMemory() - p.getNumberOfEdges() * 8 - p.getNumberOfNodes() * 12);
-        System.out.println(Runtime.getRuntime().totalMemory() - Runtime.getRuntime().freeMemory() - p.getNumberOfEdges() * 20 - p.getNumberOfNodes() * 12);
-        //System.out.println();
-//        System.out.println("Runtime: " + reader.getRuntimeAsString());
-         * 
-         */
-    }
 }

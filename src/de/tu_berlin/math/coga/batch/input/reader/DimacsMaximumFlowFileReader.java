@@ -291,20 +291,4 @@ public class DimacsMaximumFlowFileReader extends InputFileReader<RawMaximumFlowP
         }
         return new RawMaximumFlowProblem(numberOfNodes, numberOfEdges, nodeIndices, edges, capacities, sinkIndex, sourceIndex);
     }
-
-    public static void main(String[] args) {
-        DimacsMaximumFlowFileReader reader = new DimacsMaximumFlowFileReader();
-        reader.setFile(new File("/homes/combi/gross/Desktop/liver.n6c10.max"));
-        System.out.println(Runtime.getRuntime().totalMemory() - Runtime.getRuntime().freeMemory());
-        reader.setOptimization(Optimization.SPEED);
-        reader.run();
-        RawMaximumFlowProblem p = reader.getSolution();
-        reader = null;
-        System.gc();
-        System.out.println(Runtime.getRuntime().totalMemory() - Runtime.getRuntime().freeMemory() - p.getNumberOfEdges() * 8 - p.getNumberOfNodes() * 4);
-        System.out.println(Runtime.getRuntime().totalMemory() - Runtime.getRuntime().freeMemory() - p.getNumberOfEdges() * 8 - p.getNumberOfNodes() * 12);
-        System.out.println(Runtime.getRuntime().totalMemory() - Runtime.getRuntime().freeMemory() - p.getNumberOfEdges() * 20 - p.getNumberOfNodes() * 12);
-        //System.out.println();
-//        System.out.println("Runtime: " + reader.getRuntimeAsString());
-    }
 }
