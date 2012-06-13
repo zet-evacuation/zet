@@ -18,6 +18,11 @@ public abstract class InputFileReader<T> extends Algorithm<File,T> {
     }
     
     private Optimization optimization = Optimization.SPEED;
+
+    public InputFileReader() {
+        super();
+        getParameterSet().addParameter("Optimization", "Specifies whether the reader should try to conserve runtime or memory", Optimization.SPEED);
+    }
     
     public File getFile() {
         return getProblem();
