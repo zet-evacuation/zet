@@ -109,6 +109,15 @@ public abstract class Algorithm<Problem, Solution> implements Runnable {
     private State state;
 
     /**
+     * Creates a new algorithm.
+     */
+    public Algorithm() {
+        description = "";
+        name = this.getClass().getSimpleName();
+        parameterSet = new ParameterSet();
+    }
+
+    /**
      * Adds the specified listener to the set of listeners receiving events from
      * this algorithm. If the specified listener is already part of this list,
      * nothing happens.
