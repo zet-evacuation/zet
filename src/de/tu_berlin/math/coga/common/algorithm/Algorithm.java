@@ -81,7 +81,7 @@ public abstract class Algorithm<Problem, Solution> implements Runnable {
     /**
      * The parameters of this algorithm. 
      */
-    private ParameterSet parameters;
+    private ParameterSet parameterSet;
     /** 
      * The instance of the problem.
      */
@@ -220,19 +220,58 @@ public abstract class Algorithm<Problem, Solution> implements Runnable {
     }
 
     /**
-     * Returns the name of the algorithm currently running.
-     * @return the name of the algorithm 
+     * Returns a description of the algorithm that can be displayed to a human. 
+     * This should describe what the algorithm expects and what it produces,
+     * as well as providing information on interesting properties like runtime,
+     * etc.
+     * @return the description of the algorithm.
+     */
+    public String getDescription() {
+        return description;
+    }
+
+    /**
+     * Sets the description of the algorithm.
+     * @param description the description of the algorithm.
+     */
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    /**
+     * Returns the name of the algorithm currently running. This name is
+     * intended for a human user.
+     * @return the name of the algorithm.
      */
     public String getName() {
         return name;
     }
 
     /**
-     * Sets the name of the algorithm
-     * @param name the name of the algorithm
+     * Sets the name of the algorithm. The name should be aimed to be read by
+     * a human.
+     * @param name the name of the algorithm.
      */
     public void setName(String name) {
         this.name = name;
+    }
+
+    /**
+     * Returns the parameter set of the algorithm, which stores all parameters 
+     * that are exposed to the UI.
+     * @return the parameter set of the algorithm.
+     */
+    public ParameterSet getParameterSet() {
+        return parameterSet;
+    }
+
+    /**
+     * Sets the parameter set for this algorithm, which stores parameters in a
+     * way accessible to modification by the UI.
+     * @param parameterSet the new parameter set object.
+     */
+    public void setParameterSet(ParameterSet parameterSet) {
+        this.parameterSet = parameterSet;
     }
 
     /**
