@@ -1,6 +1,6 @@
 /*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
+ * RMFGENMaximumFlowFileReader.java
+ * 
  */
 package de.tu_berlin.math.coga.batch.input.reader;
 
@@ -292,21 +292,5 @@ public class RMFGENMaximumFlowFileReader extends InputFileReader<RawMaximumFlowP
             System.err.println("Exception during DimacsLoader loaded file from " + file);
         }
         return new RawMaximumFlowProblem(numberOfNodes, numberOfEdges, nodeIndices, edges, capacities, sinkIndex, sourceIndex, scaling);
-    }
-
-    public static void main(String[] args) {
-        RMFGENMaximumFlowFileReader reader = new RMFGENMaximumFlowFileReader();
-        reader.setFile(new File("/homes/combi/gross/elist1440.rmf"));
-        System.out.println(Runtime.getRuntime().totalMemory() - Runtime.getRuntime().freeMemory());
-        reader.setOptimization(Optimization.SPEED);
-        reader.run();
-        RawMaximumFlowProblem p = reader.getSolution();
-        reader = null;
-        System.gc();
-        System.out.println(Runtime.getRuntime().totalMemory() - Runtime.getRuntime().freeMemory() - p.getNumberOfEdges() * 8 - p.getNumberOfNodes() * 4);
-        System.out.println(Runtime.getRuntime().totalMemory() - Runtime.getRuntime().freeMemory() - p.getNumberOfEdges() * 8 - p.getNumberOfNodes() * 12);
-        System.out.println(Runtime.getRuntime().totalMemory() - Runtime.getRuntime().freeMemory() - p.getNumberOfEdges() * 20 - p.getNumberOfNodes() * 12);
-        //System.out.println();
-//        System.out.println("Runtime: " + reader.getRuntimeAsString());
     }
 }

@@ -1,14 +1,17 @@
 /*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
+ * UnknownFileReader.java
+ * 
  */
 package de.tu_berlin.math.coga.batch.input.reader;
 
 import java.io.File;
 
 /**
- *
- * @author gross
+ * A input file reader for unknown files that does effectively nothing. It is 
+ * used when an input file reader for unknown file types is required but 
+ * a <code>null</code> reader is not desired.
+ * 
+ * @author Martin Groß
  */
 public class UnknownFileReader extends InputFileReader<Void> {
 
