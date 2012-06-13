@@ -20,6 +20,7 @@
  */
 package de.tu_berlin.math.coga.common.algorithm;
 
+import de.tu_berlin.math.coga.common.algorithm.parameter.ParameterSet;
 import de.tu_berlin.math.coga.common.util.Formatter;
 import java.util.LinkedHashSet;
 import java.util.LinkedList;
@@ -77,6 +78,10 @@ public abstract class Algorithm<Problem, Solution> implements Runnable {
      * The name of the algorithm. 
      */
     private String name;
+    /**
+     * The parameters of this algorithm. 
+     */
+    private ParameterSet parameters;
     /** 
      * The instance of the problem.
      */
