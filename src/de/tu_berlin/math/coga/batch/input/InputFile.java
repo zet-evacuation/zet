@@ -10,7 +10,7 @@ import java.util.Objects;
 
 /**
  *
- * @author gross
+ * @author Martin Groß
  */
 public class InputFile {
 
@@ -25,7 +25,6 @@ public class InputFile {
         this.file = file;
         this.format = FileFormat.determineFileFormat(file);
         try {
-
             this.reader = format.getReader().newInstance();
             reader.setFile(file);
         } catch (InstantiationException | IllegalAccessException ex) {
