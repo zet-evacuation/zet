@@ -39,28 +39,28 @@ public class ParameterSet extends LinkedHashSet<Parameter> {
      * @param params additional parameters that the constructors of the specific
      * parameter classes support. See their description for more information.
      */
-    public void addParameter(String name, String description, Object value, Object... params) {
+    public <T> Parameter addParameter(String name, String description, T value, Object... params) {
         Class<?> type = value.getClass();
-        Parameter<?> parameter;
+        Parameter<T> parameter;
         if (type.equals(String.class)) {
             if (params.length == 0 || !(params[0] instanceof String)) {
-                parameter = new StringParameter(this, name, description, (String) value);
+                parameter = (Parameter<T>) new StringParameter(this, name, description, (String) value);
             } else {
-                parameter = new StringParameter(this, name, description, (String) value, (String) params[0]);
+                parameter = (Parameter<T>) new StringParameter(this, name, description, (String) value, (String) params[0]);
             }
         } else if (type.equals(Integer.class)) {
             if (params.length != 2 || !(params[0] instanceof Integer)  || !(params[1] instanceof Integer)) {
-                parameter = new IntegerParameter(this, name, description, (Integer) value);
+                parameter = (Parameter<T>) new IntegerParameter(this, name, description, (Integer) value);
             } else {
-                parameter = new IntegerParameter(this, name, description, (Integer) value, (Integer) params[0], (Integer) params[1]);
+                parameter = (Parameter<T>) new IntegerParameter(this, name, description, (Integer) value, (Integer) params[0], (Integer) params[1]);
             }
         } else if (type.equals(Boolean.class)) {
-            parameter = new BooleanParameter(this, name, description, (Boolean) value);
+            parameter = (Parameter<T>) new BooleanParameter(this, name, description, (Boolean) value);
         } else if (type.equals(Double.class)) {
             if (params.length != 2 || !(params[0] instanceof Double)  || !(params[1] instanceof Double)) {
-                parameter = new DoubleParameter(this, name, description, (Double) value);
+                parameter = (Parameter<T>) new DoubleParameter(this, name, description, (Double) value);
             } else {
-                parameter = new DoubleParameter(this, name, description, (Double) value, (Double) params[0], (Double) params[1]);
+                parameter = (Parameter<T>) new DoubleParameter(this, name, description, (Double) value, (Double) params[0], (Double) params[1]);
             }
         } else if (Enum.class.isAssignableFrom(type)) {
             parameter = new EnumParameter(this, name, description, (Class<? extends Enum>) type, (Enum) value);
@@ -68,6 +68,7 @@ public class ParameterSet extends LinkedHashSet<Parameter> {
             parameter = new Parameter(this, name, description, value);
         }
         add(parameter);
+        return parameter;
     }
 
     /**
@@ -92,7 +93,7 @@ public class ParameterSet extends LinkedHashSet<Parameter> {
             listener.parameterChanged(this, parameter, oldValue, newValue);
         }
     }
-
+    
     /**
      * Removes the specified listener.
      * @param listener the listener to be removed.
