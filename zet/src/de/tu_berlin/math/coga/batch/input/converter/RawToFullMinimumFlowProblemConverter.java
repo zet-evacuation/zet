@@ -1,27 +1,24 @@
 package de.tu_berlin.math.coga.batch.input.converter;
 
-
 import de.tu_berlin.math.coga.common.algorithm.Algorithm;
 import ds.graph.Edge;
-//import ds.graph.IdentifiableIntegerMapping;
-//import ds.graph.Network;
 import ds.graph.Node;
 import ds.graph.network.Network;
 import ds.graph.problem.MinimumCostFlowProblem;
 import ds.graph.problem.RawMinimumCostFlowProblem;
 import ds.mapping.IdentifiableIntegerMapping;
 
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
-
 /**
+ * Converter that transforms memory-efficient raw minimum cost flow problems
+ * into more verbose minimum cost flow problems that are based on full graphs.
  *
- * @author gross
+ * @author Martin Groß
  */
-public class MinimumFlowProblemConverter extends Algorithm<RawMinimumCostFlowProblem, MinimumCostFlowProblem> {
+public class RawToFullMinimumFlowProblemConverter extends Algorithm<RawMinimumCostFlowProblem, MinimumCostFlowProblem> {
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     protected MinimumCostFlowProblem runAlgorithm(RawMinimumCostFlowProblem problem) {
         Network network = new Network(problem.getNumberOfNodes(), problem.getNumberOfEdges());
@@ -35,7 +32,6 @@ public class MinimumFlowProblemConverter extends Algorithm<RawMinimumCostFlowPro
             supplies.set(node, problem.getSupply()[nodeIndex]);
             int nextNodeStartIndex = (nodeIndex == problem.getNumberOfNodes() - 1)? problem.getNumberOfEdges() : nodeStartIndices[nodeIndex+1];
             for (int edgeIndex = nodeStartIndices[nodeIndex]; edgeIndex < nextNodeStartIndex; edgeIndex++) {
-                //if (network.existsEdge(node, network.getNode(edgeEndIDs[edgeIndex]))) parallelEdges;
                 Edge edge = network.createAndSetEdge(node, network.getNode(edgeEndIDs[edgeIndex]));                
                 capacities.set(edge, problem.getEdgeCapacities()[edgeIndex]);
                 costs.set(edge, problem.getEdgeCosts()[edgeIndex]);
