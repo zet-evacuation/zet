@@ -15,15 +15,17 @@ import java.awt.event.ActionEvent;
 public class AddAlgorithmAction extends BatchAction {
 
     private Class<? extends Algorithm> algorithm;
+    private String title;
     
     public AddAlgorithmAction(JBatch batch, Class<? extends Algorithm> algorithm, String title) {
         super(batch, title, "algo_24.png");
         setEnabled(false);
         this.algorithm = algorithm;
+        this.title = title;
     }   
     
     @Override
     public void actionPerformed(ActionEvent ae) {
-        batch.addAlgorithm(algorithm);
+        batch.addAlgorithm(algorithm, title);
     }    
 }
