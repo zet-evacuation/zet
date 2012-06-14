@@ -1,10 +1,9 @@
 /*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
+ * RawToFullMaximumFlowProblemConverter.java
+ * 
  */
 package de.tu_berlin.math.coga.batch.input.converter;
 
-import de.tu_berlin.math.coga.algorithm.flowovertime.maxflow.MaximumFlowOverTimeProblem;
 import de.tu_berlin.math.coga.common.algorithm.Algorithm;
 import ds.graph.Edge;
 import ds.graph.network.Network;
@@ -13,11 +12,16 @@ import ds.graph.problem.RawMaximumFlowProblem;
 import ds.mapping.IdentifiableIntegerMapping;
 
 /**
+ * Converter that transforms memory-efficient raw maximum flow problems into
+ * more verbose maximum flow problems that are based on full graphs.
  *
- * @author Martin
+ * @author Martin Groß
  */
-public class MaximumFlowProblemConverter extends Algorithm<RawMaximumFlowProblem,MaximumFlowProblem> {
+public class RawToFullMaximumFlowProblemConverter extends Algorithm<RawMaximumFlowProblem,MaximumFlowProblem> {
 
+    /**
+     * {@InheritDoc}
+     */
     @Override
     protected MaximumFlowProblem runAlgorithm(RawMaximumFlowProblem problem) {
         Network network = new Network(problem.getNumberOfNodes(), problem.getNumberOfEdges());
