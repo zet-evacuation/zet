@@ -4,6 +4,7 @@
  */
 package algo.graph.reduction;
 
+import de.tu_berlin.math.coga.datastructure.priorityQueue.MinHeap;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -29,7 +30,8 @@ public class YenKShortestPaths
 	// intermediate variables
 	private List<YenPath> _result_list = new Vector<>();
 	private Map<YenPath, Node> _path_derivation_vertex_index = new HashMap<>();
-	private Queue<YenPath> _path_candidates = new LinkedList<>();
+	//private Queue<YenPath> _path_candidates = new LinkedList<>();
+        MinHeap<YenPath, Double> _path_candidates = new MinHeap<>(1);
 	
 	// the ending vertices of the paths
 	private Node _source_vertex = null;
@@ -81,7 +83,7 @@ public class YenKShortestPaths
 			YenPath shortest_path = get_shortest_path(_source_vertex, _target_vertex);  
 			if(!shortest_path.get_vertices().isEmpty())
 			{
-				_path_candidates.add(shortest_path);
+                                _path_candidates.insert(shortest_path, shortest_path.get_weight());
 				_path_derivation_vertex_index.put(shortest_path, _source_vertex);				
 			}
 		}
@@ -92,7 +94,7 @@ public class YenKShortestPaths
 	 */
 	public void clear()
 	{
-		_path_candidates = new LinkedList<>();
+		_path_candidates = new MinHeap<>(1);
 		_path_derivation_vertex_index.clear();
 		_result_list.clear();
 		_generated_path_num = 0;
@@ -130,7 +132,19 @@ public class YenKShortestPaths
 	public YenPath next()
 	{
 		//3.1 prepare for removing vertices and arcs
-		YenPath cur_path = _path_candidates.poll();
+		YenPath cur_path = _path_candidates.extractMin().getObject();
+                double Min = Double.MAX_VALUE;
+                for (int i=0; i<cur_path.get_vertices().size()-1; i++)
+                {
+                    Node n = cur_path.get_vertices().get(i);
+                    Node n2 = cur_path.get_vertices().get(i+1);
+                    double cap = orig_graph.getEdgeCapacity(orig_graph.getGraph().getEdge(n, n2));
+                    if (cap < Min)
+                    {
+                        Min = cap;
+                        cur_path.set_capacity(cap);
+                    }
+                }
 		_result_list.add(cur_path);
 		Node cur_derivation = _path_derivation_vertex_index.get(cur_path);
 		int cur_path_hash = 
@@ -226,7 +240,8 @@ public class YenKShortestPaths
 				//3.4.4.3 put it in the candidate pool if new
 				if(!_path_derivation_vertex_index.containsKey(sub_path))
 				{
-					_path_candidates.add(sub_path);
+					//_path_candidates.add(sub_path);
+                                        _path_candidates.insert(sub_path, sub_path.get_weight());
 					_path_derivation_vertex_index.put(sub_path, cur_recover_vertex);
 				}
 			}

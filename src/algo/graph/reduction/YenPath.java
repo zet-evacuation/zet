@@ -18,13 +18,15 @@ public class YenPath
 {
 	List<Node> _vertex_list = new Vector<>();
 	double _weight = -1;
+        double _capacity = -1;
 	
 	public YenPath(){};
 	
-	public YenPath(List<Node> _vertex_list, double _weight)
+	public YenPath(List<Node> _vertex_list, double _weight, double _cap)
 	{
 		this._vertex_list = _vertex_list;
 		this._weight = _weight;
+                this._capacity = _cap;
 	}
 
 	public double get_weight()
@@ -37,6 +39,16 @@ public class YenPath
 		_weight = weight;
 	}
 	
+        public double get_capacity()
+	{
+		return _capacity;
+	}
+	
+	public void set_capacity(double capac)
+	{
+		_capacity = capac;
+	}
+        
 	public List<Node> get_vertices()
 	{
 		return _vertex_list;
@@ -69,6 +81,6 @@ public class YenPath
 	
 	public String toString()
 	{
-		return _vertex_list.toString()+":"+_weight;
+		return _vertex_list.toString()+":"+_weight + ":" + _capacity;
 	}
 }

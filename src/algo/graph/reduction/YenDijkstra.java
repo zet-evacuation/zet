@@ -179,6 +179,7 @@ public class YenDijkstra
 		determine_shortest_paths(source_vertex, sink_vertex, true);
 		//
 		List<Node> vertex_list = new Vector<>();
+                double Min = Integer.MAX_VALUE;
 		double weight = _start_vertex_distance_index.containsKey(sink_vertex) ?  
 			_start_vertex_distance_index.get(sink_vertex) : Double.MAX_VALUE;
                 //System.out.println("weight: " + weight);
@@ -187,14 +188,19 @@ public class YenDijkstra
 			Node cur_vertex = sink_vertex;
 			do{
 				vertex_list.add(cur_vertex);
+                                Node n = cur_vertex;
 				cur_vertex = _predecessor_index.get(cur_vertex);
+                                if (orig_graph.getEdgeCapacity(orig_graph.getGraph().getEdge(cur_vertex, n)) < Min)
+                                {
+                                    Min = orig_graph.getEdgeCapacity(orig_graph.getGraph().getEdge(n, cur_vertex));
+                                }
 			}while(cur_vertex != null && cur_vertex != source_vertex);
 			//
 			vertex_list.add(source_vertex);
 			Collections.reverse(vertex_list);
 		}
 		//
-		return new YenPath(vertex_list, weight);
+		return new YenPath(vertex_list, weight, Min);
 	}
 	
 	/// for updating the cost
