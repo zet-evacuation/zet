@@ -55,6 +55,10 @@ public class flow implements AlgorithmListener {
 		EarliestArrivalFlow,
 		StaticMaximumFlow;
 	}
+	private static enum ProjectConverter {
+		DefaultConverter,
+		Spanner;
+	}
 	/** The instance of the earliest arrival problem that should be solved. */
 	EarliestArrivalFlowProblem eafp = null;
 	static flow theInstance;
