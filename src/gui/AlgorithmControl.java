@@ -24,6 +24,8 @@ import io.visualization.BuildingResults;
 import io.visualization.CAVisualizationResults;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.RunnableFuture;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import tasks.conversion.BuildingPlanConverter;
@@ -296,7 +298,7 @@ public class AlgorithmControl implements PropertyChangeListener {
 
 	GraphConverterAlgorithms last = GraphConverterAlgorithms.NonGridGraph;
 	
-	public void convertGraph( PropertyChangeListener propertyChangeListener, GraphConverterAlgorithms Algo ) {
+	public RunnableFuture<Void> convertGraph( PropertyChangeListener propertyChangeListener, GraphConverterAlgorithms Algo ) {
 		final BaseZToGraphConverter conv = Algo.converter();
 		last = Algo;
 		conv.setProblem( project.getBuildingPlan() );
@@ -313,9 +315,9 @@ public class AlgorithmControl implements PropertyChangeListener {
 		} );
 		if( propertyChangeListener != null )
 			st.addPropertyChangeListener( propertyChangeListener );
+		System.out.println( "  --- Execution is to be started" );
 		st.execute();
-		//conv.run();
-		//networkFlowModel = conv.getSolution();
+		return st;
 	}
 
 	public NetworkFlowModel getNetworkFlowModel() {

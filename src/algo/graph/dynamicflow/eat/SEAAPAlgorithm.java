@@ -194,8 +194,6 @@ public class SEAAPAlgorithm extends Algorithm<EarliestArrivalFlowProblem, FlowOv
             arrivalTime = path.getArrivalTime();
 						total += arrivalTime*path.getCapacity();
         }
-				
-				System.out.println( "TOTALCOST: " + total + " ARRIVAL " + arrivalTime + " AMOUNT " + path.getCapacity() );
     }
 
     private void calculateShortestPathLengths() {

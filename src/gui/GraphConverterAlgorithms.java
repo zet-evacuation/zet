@@ -53,26 +53,26 @@ public enum GraphConverterAlgorithms {
 				return new ZToDijkstraSpannerConverter();
 			case DijkstraGrid:
 				return new ZToGridDijkstraConverter();
-                        case SteinerTreeNonGrid:
-                            return new ZToNonGridSteinerTreeConverter();
-                        case SteinerTreeGrid:
-                            return new ZToGridSteinerTreeConverter();
-                        case ClusterNonGrid:
-                            return new ZToNonGridClusterConverter();
-                        case ClusterGrid:
-                            return new ZToGridClusterConverter();
-                        case ShortestPathGraphNonGrid:
-                            return new ZToNonGridShortestPathGraphConverter();
-                        case ShortestPathGraphGrid:
-                            return new ZtoGridShortestPathGraphConverter();
-                        case APSPGraphNonGrid:
-                            return new ZToNonGridAPSPGraphConverter();
-                        case RepeatedShortestPaths:
-                            return new ZToNonGridShortestPathsConverter();
-                        case ThinNetwork:
-                            return new ZToThinNetworkConverter();
+			case SteinerTreeNonGrid:
+				return new ZToNonGridSteinerTreeConverter();
+			case SteinerTreeGrid:
+				return new ZToGridSteinerTreeConverter();
+			case ClusterNonGrid:
+				return new ZToNonGridClusterConverter();
+			case ClusterGrid:
+				return new ZToGridClusterConverter();
+			case ShortestPathGraphNonGrid:
+				return new ZToNonGridShortestPathGraphConverter();
+			case ShortestPathGraphGrid:
+				return new ZtoGridShortestPathGraphConverter();
+			case APSPGraphNonGrid:
+				return new ZToNonGridAPSPGraphConverter();
+			case RepeatedShortestPaths:
+				return new ZToNonGridShortestPathsConverter();
+			case ThinNetwork:
+				return new ZToThinNetworkConverter();
 			default:
 				throw new IllegalStateException( "Error! Unsupported Graph converter algorithm in enumeration: " + this.toString() );
 		}
-	}	
+	}
 }
