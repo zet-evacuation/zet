@@ -89,7 +89,7 @@ public class ZToThinNetworkConverter extends BaseZToGraphConverter{
     /*defines precision of created nodes for assignment areas, 
      * gives the max. number of persons that can be assigned to one node*/
     int AssignPrecision = 50;
-    final static boolean debug = false;
+    final static boolean debug = true;
     
     @Override
     protected void createNodes()
@@ -726,13 +726,22 @@ public class ZToThinNetworkConverter extends BaseZToGraphConverter{
                 //connect all doors with the door of evacuation room
                 else if (numEvac2 == 1 && num==0 && ZRoom.getEvacuationAreas().isEmpty())
                 {
-                    if( debug ) {System.out.println("Case 2 for Room: " + ZRoom.getName());}
-                    if (ZRoom.getHeight() >= 2* ZRoom.getWidth() || ZRoom.getWidth() >= 2*ZRoom.getHeight())
-                    {
+                    /*if( debug ) {System.out.println("Case 2 for Room: " + ZRoom.getName());}
+                    SmallestRectangle rectangle = FindSmallestRectangle(room);
+                     Point center1 = new Point((int)rectangle.getCenter().getX(),(int)rectangle.getCenter().getY());
+                     List<PlanPoint> rec = rectangle.getPoints();   
+                     Point nw = rec.get(0); Point ne = rec.get(1); Point sw = rec.get(2); Point se = rec.get(3);
+                     double width = Math.sqrt(Math.pow(nw.getX()-ne.getX(),2) + Math.pow(nw.getY()-ne.getY(),2));
+                     double length = Math.sqrt(Math.pow(nw.getX()-sw.getX(),2) + Math.pow(nw.getY()-sw.getY(),2));
+                     if( debug ) {System.out.println("width: " + width + "length: " + length);}
+                     //room is rectangular        
+                     if ((width > 2*length) || (length > 2*width))
+                     {    
                         FindRectangulationEdges(ZRoom);
-                    }
+                     }
+                    
                     else
-                    {
+                    {*/
                         //connect all door Nodes with door Node of evacuation room
                         for (PositionNode n: DoorNodesForRoom.get(EvacRoom))
                         {
@@ -785,13 +794,26 @@ public class ZToThinNetworkConverter extends BaseZToGraphConverter{
                         }
                        
                     }
-                }
+                //}
                 //one neighbouring evacuation area and one evacuation area inside (Case 2b)
                 else if (numEvac2 == 1 && num==0 && ZRoom.getEvacuationAreas().size() == 1)
                 {
                     if( debug ) {System.out.println("Case 3 for Room: " + ZRoom.getName());}
+                    SmallestRectangle rectangle = FindSmallestRectangle(room);
+                     Point center1 = new Point((int)rectangle.getCenter().getX(),(int)rectangle.getCenter().getY());
+                     List<PlanPoint> rec = rectangle.getPoints();   
+                     Point nw = rec.get(0); Point ne = rec.get(1); Point sw = rec.get(2); Point se = rec.get(3);
+                     double width = Math.sqrt(Math.pow(nw.getX()-ne.getX(),2) + Math.pow(nw.getY()-ne.getY(),2));
+                     double length = Math.sqrt(Math.pow(nw.getX()-sw.getX(),2) + Math.pow(nw.getY()-sw.getY(),2));
+                     if( debug ) {System.out.println("width: " + width + "length: " + length);}
+                     //room is rectangular        
+                     if ((width > 2*length) || (length > 2*width))
+                     {    
+                        FindRectangulationEdges(ZRoom);
+                     }
+                    
                     //room is more quadratic
-                    if ((ZRoom.getHeight() < 2*ZRoom.getWidth()) && (ZRoom.getWidth() < 2*ZRoom.getHeight()))
+                    else
                     {
                         if( debug ) {System.out.println("quadratic room");}
                         Collection<Node> doors = new HashSet<>();
@@ -803,11 +825,6 @@ public class ZToThinNetworkConverter extends BaseZToGraphConverter{
                         Node center = CenterNodeForRoom.get(ZRoom);
                         //connect the center with evacuation area and all neighbour rooms...
                         ConnectWithCertainNode(ZRoom,doors,center);
-                    }
-                    
-                    else 
-                    {
-                        FindRectangulationEdges(ZRoom);
                     }
                     
                 }

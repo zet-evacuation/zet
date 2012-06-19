@@ -56,8 +56,10 @@ public class ZToDijkstraSpannerConverter extends ZToNonGridGraphConverter{
 		super.createEdgesAndCapacities();
 		super.computeTransitTimes();
 		super.multiplyWithUpAndDownSpeedFactors();
-		model.setTransitTimes( exactTransitTimes.round() );				
-                createReverseEdges( model );
+		model.setTransitTimes( exactTransitTimes.round() );
+                model.setExactTransitTimes(exactTransitTimes);
+		createReverseEdges( model );
+        	model.setNetwork( model.getGraph().getAsStaticNetwork() );
                 //nodes are nodes of original graph               
                 
                 minspanmodel.setSupersink(model.getSupersink());
@@ -67,16 +69,16 @@ public class ZToDijkstraSpannerConverter extends ZToNonGridGraphConverter{
 		newmapping.setFloorForNode( Super, -1 );
                 
                
-                Node superSource = new Node(model.getGraph().numberOfNodes());
+                /*Node superSource = new Node(model.getGraph().numberOfNodes());
                 model.setNodeCapacity(superSource, Integer.MAX_VALUE);
                 mapping.setNodeUpSpeedFactor(superSource, 1);
                 mapping.setNodeDownSpeedFactor(superSource, 1);
                 model.getDynamicNetwork().addNode(superSource);
                 mapping.setNodeSpeedFactor( superSource, 1 );
 		mapping.setNodeRectangle( superSource, new NodeRectangle( 0, 0, 0, 0 ) );
-		mapping.setFloorForNode( superSource, -1 );
+		mapping.setFloorForNode( superSource, -1 );*/
                 
-                for (Node s: model.getSources())
+                /*for (Node s: model.getSources())
                 {
                     int k = model.getGraph().numberOfEdges();
                     Edge e = new Edge(k++,s,superSource);  
@@ -92,13 +94,11 @@ public class ZToDijkstraSpannerConverter extends ZToNonGridGraphConverter{
                     model.setTransitTime(e_rev, 0);
                     mapping.setEdgeLevel(e_rev,Level.Equal );             
                     model.setExactTransitTime(e_rev, 0);
-                }
-                model.setNetwork( model.getGraph().getAsStaticNetwork() );
-                for (Edge e: model.getNetwork().edges())
-                {
-                    System.out.println("Kante: " + e);
-                }
+                }*/
+      
                 TransitForEdge = model.getTransitTimes();
+                /*for (Edge e: model.getGraph().edges())
+                {System.out.println("kante: " + e + "transit:" + model.getTransitTime(e));}*/
                 minspanmodel.setNetwork(newgraph);
                 newgraph.setNodes(model.getGraph().nodes());
                 for (Node node: model.getGraph().nodes())
@@ -120,28 +120,38 @@ public class ZToDijkstraSpannerConverter extends ZToNonGridGraphConverter{
                 ForestEdges = forest.edges();
                 for (Edge edge: ForestEdges)
                 {
-                    System.out.println("Forest Edge: " + edge);
+                    //System.out.println("Forest Edge: " + edge);
                     neu = new Edge(NumEdges++, edge.start(), edge.end());
-                    solEdges.add(neu);
                     if (neu.start()== Super || neu.end() == Super)
                     {
                         neureverse = new Edge(NumEdges++, neu.end(), neu.start());
-                        solEdges.add(neureverse);
+                        newgraph.addEdge(neu);
+                        newgraph.addEdge(neureverse);
+                        minspanmodel.setEdgeCapacity(neureverse, Integer.MAX_VALUE);
+                        minspanmodel.setEdgeCapacity(neu, Integer.MAX_VALUE);
+                        minspanmodel.setTransitTime(neureverse, 0);
+                        minspanmodel.setTransitTime(neu, 0);
+                        newmapping.setEdgeLevel(neureverse,mapping.getEdgeLevel(edge) ); 
+                        newmapping.setEdgeLevel(neu,mapping.getEdgeLevel(edge) ); 
+                        minspanmodel.setExactTransitTime(neureverse, 0);
+                         minspanmodel.setExactTransitTime(neu, 0);
                     }
-                }
-                
-                for (Edge create: solEdges)
-                {
-                    if (!create.start().equals(superSource) && !create.end().equals(superSource))
+                    else
                     {
-                        newgraph.addEdge(create);
-                        minspanmodel.setEdgeCapacity(create, model.getEdgeCapacity(create));
-                        minspanmodel.setTransitTime(create, model.getTransitTime(create));
-                        newmapping.setEdgeLevel(create,mapping.getEdgeLevel(create) );             
-                        minspanmodel.setExactTransitTime(create, model.getExactTransitTime(create));
+                        Edge origedge = model.getGraph().getEdge(edge.start(), edge.end());
+                        newgraph.addEdge(neu);
+                        minspanmodel.setEdgeCapacity(neu, model.getEdgeCapacity(origedge));
+                        minspanmodel.setTransitTime(neu, model.getTransitTime(origedge));
+                        newmapping.setEdgeLevel(neu,mapping.getEdgeLevel(origedge) );             
+                        minspanmodel.setExactTransitTime(neu, model.getExactTransitTime(origedge));
                     }
                 }
                 
+                 
+                 /*for (Edge e: minspanmodel.getGraph().edges())
+                 {
+                     System.out.println("Edge:" + e + "Transit neu: " + minspanmodel.getTransitTime(e));
+                 }*/
                  minspanmodel.setCurrentAssignment(model.getCurrentAssignment());
                  minspanmodel.setSources(model.getSources());
                  
@@ -155,8 +165,9 @@ public class ZToDijkstraSpannerConverter extends ZToNonGridGraphConverter{
                  newmapping.exitName = mapping.exitName;
                  
                  minspanmodel.setZToGraphMapping(newmapping);                
-                 minspanmodel.setSupersink(model.getSupersink());
                 createReverseEdges( minspanmodel );
+                /*for (Edge e: minspanmodel.getGraph().edges())
+                {System.out.println("Edge_last: " + e + "tran" + minspanmodel.getTransitTime(e));}*/
                 minspanmodel.setNetwork(newgraph);
                 minspanmodel.setNetwork( minspanmodel.getGraph().getAsStaticNetwork());
                 System.out.println("Number of Created Shortest Path Tree Edges: " + minspanmodel.getGraph().numberOfEdges());
