@@ -132,7 +132,7 @@ public class Room extends BaseRoom<RoomEdge> implements Cloneable, Comparable<Ro
 	 */
         public HashMap<Point,Integer> getDoors()
         {
-            HashMap<Point,Integer> doors = new HashMap<>();
+            HashMap<Point,Integer> doors = new HashMap();
             LinkedList<RoomEdge> edges = new LinkedList<>();
 
             for (RoomEdge edge: super.getEdges()){
@@ -187,7 +187,7 @@ public class Room extends BaseRoom<RoomEdge> implements Cloneable, Comparable<Ro
                 }
     
             }
-            else
+            else if (edges.size()==1)
             {
                 RoomEdge x = edges.element();
                 int width = x.length();
