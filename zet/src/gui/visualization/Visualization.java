@@ -210,7 +210,7 @@ public class Visualization<U extends DrawableControlable> extends AbstractVisual
 	 * Sets the correct animation time. Calculated by the difference
 	 * from the current time and last time.
 	 * If the control class states, that the simulation is over, animation is
-	 * stopped or resetted if looping is activated.
+	 * stopped or reseted if looping is activated.
 	 * @see #getDeltaTime()
 	 */
 	@Override
@@ -599,7 +599,21 @@ public class Visualization<U extends DrawableControlable> extends AbstractVisual
 		maskTex = texMan.newTexture( "logo", "./textures/logomask.png" );
 		logoTex = texMan.newTexture( "logo", "./textures/logo2.png" );
 		fontTex = texMan.newTexture( "font2", "./textures/fontl.png" );
+		
+		System.out.println( "Textur s_1 geladen" );
+		texMan.newTexture( "n_0", "./textures/n_0.png" );
+		texMan.newTexture( "n_1", "./textures/n_1.png" );
+		texMan.newTexture( "n_2", "./textures/n_2.png" );
+		texMan.newTexture( "n_3", "./textures/n_3.png" );
+		texMan.newTexture( "n_4", "./textures/n_4.png" );
+		texMan.newTexture( "n_5", "./textures/n_5.png" );
+		texMan.newTexture( "n_6", "./textures/n_6.png" );
+		texMan.newTexture( "n_7", "./textures/n_7.png" );
+		texMan.newTexture( "n_8", "./textures/n_8.png" );
+		texMan.newTexture( "n_9", "./textures/n_9.png" );
+		texMan.newTexture( "empty", "./textures/empty.png" );
 
+		
 		// load texture font
 		fontBold = new TextureFont( gl, fontTex );
 		fontBold.buildFont( 8, 32, 32, 32, 19 );

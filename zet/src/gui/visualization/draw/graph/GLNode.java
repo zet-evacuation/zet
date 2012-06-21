@@ -19,13 +19,27 @@
  */
 package gui.visualization.draw.graph;
 
+import com.sun.opengl.util.j2d.TextureRenderer;
 import gui.visualization.QualityPreset;
 import gui.visualization.VisualizationOptionManager;
 import gui.visualization.control.graph.GLNodeControl;
+import java.awt.Color;
+import java.awt.Graphics2D;
+import java.awt.Image;
+import java.awt.Rectangle;
+import java.awt.image.*;
+import java.io.File;
+import java.io.IOException;
+import java.util.Vector;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.imageio.ImageIO;
 import javax.media.opengl.GL;
 import javax.media.opengl.glu.GLU;
 import opengl.drawingutils.GLColor;
 import opengl.framework.abs.AbstractDrawable;
+import opengl.helper.Texture;
+import opengl.helper.TextureManager;
 
 public class GLNode extends AbstractDrawable<GLFlowEdge, GLNodeControl> {
 	private double graphHeight = 70.0;
@@ -75,7 +89,7 @@ public class GLNode extends AbstractDrawable<GLFlowEdge, GLNodeControl> {
 	public void performFlowDrawing( GL gl ) {
 		super.performDrawing( gl );
 		glu.gluQuadricDrawStyle( quadObj, flowDisplayMode );
-
+		
 		gl.glColor4d( 1.0, 0.0, 0.0, 1.0 );
 
 		//gl.glEnable( gl.GL_BLEND );
@@ -130,9 +144,101 @@ public class GLNode extends AbstractDrawable<GLFlowEdge, GLNodeControl> {
 				}
 			}
 		}
+		
+		//System.out.println( "Textur s_1 beim Zeichnen benutzt" );
+				boolean enableLight = gl.glIsEnabled(  GL.GL_LIGHTING );
+		TextureManager texMan = TextureManager.getInstance();
+		String texName = "s_" + control.getNumber();
+		
+		if( !texMan.contains( texName ) ) {
+			createTexture( control.getNumber() );
+		}
+		
+		Texture tex = texMan.contains( texName ) ? texMan.get( texName ) : texMan.get( "empty" );
+		//gl.glDisable( GL.GL_LIGHTING );
+		gl.glEnable( GL.GL_TEXTURE_2D );
+		tex.bind();
 
+		//System.out.println( "Textur s_1 beim Zeichnen benutzt" );
+
+		glu.gluQuadricTexture(quadObj, true);
+		glu.gluQuadricNormals(quadObj, GLU.GLU_SMOOTH);
+		
+		glu.gluQuadricOrientation( quadObj, GLU.GLU_INSIDE  );
+
+		gl.glPushMatrix();
+		
+		gl.glRotated( 90+180, 1, 0, 0);
+		//gl.glRotated( 180, 0, 1, 0);
+		
 		glu.gluSphere( quadObj, radius, qualityPreset.nodeSlices, qualityPreset.nodeStacks );
+		gl.glDisable( GL.GL_TEXTURE_2D );
+		//if( enableLight )
+		//	gl.glEnable( GL.GL_LIGHTING );
+		gl.glPopMatrix();
+
+		
 		staticDrawAllChildren( gl );
 		endDraw( gl );
+	}
+	static Image[] n = new Image[10];
+
+	static {
+		try {
+			for( int i = 0; i < 10; ++i )
+				n[i] = ImageIO.read( new File( "./textures/n_" + i + ".png" ) );
+		} catch( IOException ex ) {
+			System.out.println( "Image not found" );
+		}
+
+	}
+
+	private void createTexture( int number ) {
+		try {
+			BufferedImage image = new BufferedImage( 1024, 512, BufferedImage.TYPE_INT_ARGB );
+
+			TextureRenderer renderer = new TextureRenderer( 1024, 512, true );
+			//Graphics2D g2 = renderer.createGraphics();		
+			Graphics2D g2 = (Graphics2D)image.getGraphics();
+			Texture t;
+
+			int width = 1024;
+			int height = 512;
+
+
+			String name = "";
+			if( number < 10 ) {
+				int x = width / 2 - 170 / 2;
+				int y = height / 2 - 240 / 2;
+				
+				g2.fillRect( 0, 0, width, height);
+				
+				g2.drawImage( n[number], x,y, null );
+				name = "s_" + number;
+			} else if( number < 100 ) {
+				int y = height / 2 - 240 / 2;
+				g2.fillRect( 0, 0, width, height);				
+				g2.drawImage( n[number/10], width/2-170,y, null );
+				g2.drawImage( n[number%10], width/2,y, null );
+				name = "s_" + number;
+				
+			}
+			ImageIO.write( image, "png", new File( "./textures/temp.png" ) );
+			System.out.println( "./textures/temp.png" );
+
+			// Now use it as you would any other OpenGL texture
+
+			//Texture tex = new Texture(null, height, x );//  renderer.getTexture();			
+			TextureManager texMan = TextureManager.getInstance();
+
+			if( !name.isEmpty() )
+				texMan.newTexture( name, "./textures/temp.png" );
+
+
+		} catch( IOException ex ) {
+			Logger.getLogger( GLNode.class.getName() ).log( Level.SEVERE, null, ex );
+		}
+
+
 	}
 }

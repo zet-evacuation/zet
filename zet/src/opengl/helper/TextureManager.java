@@ -214,6 +214,10 @@ public class TextureManager {
 	public final Texture get( String texName ) {
 		return textures.get( texName );
 	}
+	
+	public final boolean contains( String texName ) {
+		return textures.containsKey( texName );
+	}
 
 	public final void bind( String texName ) {
 		get( texName ).bind();
