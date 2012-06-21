@@ -180,8 +180,15 @@ public class AssignmentArea extends Area<Edge> {
 	@Override
 	public void delete() throws IllegalArgumentException {
 // TODO: warum das hier und wenn nötig, text schreiben!
+		//if( assignmentType != null )
+		//		assignmentType.deleteAssignmentArea( this );
+		//assignmentType = null;
 		try {
 			assignmentType.deleteAssignmentArea( this );
+		} catch ( NullPointerException ex ) {
+			System.out.println( "null pointer" );
+		} catch( IllegalArgumentException ex ) {
+			System.out.println( "illegal argument" );
 		} finally {
 			assignmentType = null;
 		}
