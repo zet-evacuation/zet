@@ -224,7 +224,7 @@ public class GLNode extends AbstractDrawable<GLFlowEdge, GLNodeControl> {
 				
 			}
 			ImageIO.write( image, "png", new File( "./textures/temp.png" ) );
-			System.out.println( "./textures/temp.png" );
+			System.out.println( "./textures/temp.png" + " for file " + number );
 
 			// Now use it as you would any other OpenGL texture
 
