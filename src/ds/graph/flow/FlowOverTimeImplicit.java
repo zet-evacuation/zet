@@ -48,7 +48,7 @@ public class FlowOverTimeImplicit extends FlowOverTimeInterface {
 		for( EarliestArrivalAugmentingPath eaaPath : eaaPaths ) {
 			//paths.add(eaaPath.getFlowOverTimeEdgeSequence(network));
 			flowAmount += eaaPath.getCapacity();
-			timeHorizon = Math.max( timeHorizon, eaaPath.getArrivalTime() + 1 );
+			timeHorizon = Math.max( timeHorizon, eaaPath.getArrivalTime());
 			totalCost += eaaPath.getCapacity() * eaaPath.getArrivalTime();
 		}
 
