@@ -45,6 +45,7 @@ public class GLNodeControl extends AbstractZETVisualizationControl<GLFlowEdgeCon
 	private int floor;
 	private boolean gridVisible = true;
 	private boolean drawInterFloorEdges = true;
+	private int id = 0;
 
 	public GLNodeControl( GraphVisualizationResults graphVisResult, Node node, GLFlowGraphControl glControl ) {
 		super( glControl );
@@ -69,6 +70,7 @@ public class GLNodeControl extends AbstractZETVisualizationControl<GLFlowEdgeCon
 				else
 					add( new GLFlowEdgeControl( graphVisResult, edge, glControl ) );
 			}
+		id = node.id();
 		isEvacuationNode = graphVisResult.isEvacuationNode( node );
 		isSourceNode = graphVisResult.isSourceNode( node );
 		isDeletedSourceNode = graphVisResult.isDeletedSourceNode( node );
@@ -205,8 +207,8 @@ public class GLNodeControl extends AbstractZETVisualizationControl<GLFlowEdgeCon
 	}
 
 	/**
-	 * Returns {@code true} if the rectangled area belonging to the node is visible.
-	 * @return {@code true} if the rectangled node area is visible, {@code false} otherwise
+	 * Returns {@code true} if the rectangular area belonging to the node is visible.
+	 * @return {@code true} if the rectangular node area is visible, {@code false} otherwise
 	 */
 	public boolean isRectangleVisible() {
 		return gridVisible;
@@ -219,5 +221,9 @@ public class GLNodeControl extends AbstractZETVisualizationControl<GLFlowEdgeCon
 	 */
 	public double getFloorHeight() {
 		return mainControl.defaultFloorHeight*mainControl.scaling*0.1;
+	}
+	
+	public int getNumber() {
+		return id;
 	}
 }

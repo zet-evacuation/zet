@@ -26,6 +26,7 @@ import java.nio.file.FileSystems;
 import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.RunnableFuture;
 import java.util.logging.Level;
@@ -76,6 +77,8 @@ public class CZET {
 				return null;
 		}
 	}
+	
+	HashMap m = new HashMap(30);
 
 	public static enum InputFileType {
 		XML( new ComputationMode[]{ComputationMode.EarliestArrivalFlow} ),

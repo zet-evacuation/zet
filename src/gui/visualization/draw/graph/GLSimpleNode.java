@@ -58,7 +58,7 @@ public class GLSimpleNode extends AbstractDrawable<GLEdge, GLSimpleNodeControl> 
 
 		//}
 		nodeDisplayMode = GLU.GLU_FILL;//GLU.GLU_SILHOUETTE;
-		glu.gluSphere( quadObj, radius, qualityPreset.nodeSlices, qualityPreset.nodeStacks );
+		System.out.println( "Textur s_1 beim Zeichnen benutzt" );glu.gluSphere( quadObj, radius, qualityPreset.nodeSlices, qualityPreset.nodeStacks );
 
 		lineColor.draw( gl );
 
