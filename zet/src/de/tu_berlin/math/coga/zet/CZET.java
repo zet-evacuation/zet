@@ -2,7 +2,6 @@ package de.tu_berlin.math.coga.zet;
 
 import algo.graph.dynamicflow.eat.EarliestArrivalFlowProblem;
 import algo.graph.dynamicflow.eat.SEAAPAlgorithm;
-
 import com.martiansoftware.jsap.FlaggedOption;
 import com.martiansoftware.jsap.JSAP;
 import com.martiansoftware.jsap.JSAPException;
@@ -10,6 +9,7 @@ import com.martiansoftware.jsap.JSAPResult;
 import com.martiansoftware.jsap.Switch;
 import com.martiansoftware.jsap.UnflaggedOption;
 import de.tu_berlin.math.coga.batch.input.reader.ZETProjectFileReader;
+import de.tu_berlin.math.coga.rndutils.RandomUtils;
 import de.tu_berlin.math.coga.zet.converter.graph.GraphAssignmentConverter;
 import ds.PropertyContainer;
 import ds.graph.flow.PathBasedFlowOverTime;
@@ -105,6 +105,8 @@ public class CZET {
 	private InputFileType inputFileType;
 	private ComputationMode computationMode;
 	private GraphConverterAlgorithms projectConverter;
+	private int runs = 0;
+	private long seed = System.nanoTime();
 
 	public static void main( String[] arguments ) throws JSAPException {
 		System.out.println( "Command Line Interface for ZET " + gui.ZETMain.version );
@@ -139,6 +141,14 @@ public class CZET {
 		switchZeroNodeCapacities.setHelp( "Use zero node capacities." );
 		jsap.registerParameter( switchZeroNodeCapacities );
 
+		FlaggedOption optRuns = new FlaggedOption( "runs" ).setStringParser( JSAP.INTEGER_PARSER ).setRequired( false ).setLongFlag( "runs" ).setShortFlag( 'r' );
+		optRuns.setHelp( "The number of runs." );
+		jsap.registerParameter( optRuns );
+
+		FlaggedOption optSeed = new FlaggedOption( "seed" ).setStringParser( JSAP.LONG_PARSER ).setRequired( false ).setLongFlag( "seed" ).setShortFlag( 's' );
+		optSeed.setHelp( "An initial seed. Used to initialize the random generators for different runs." );
+		jsap.registerParameter( optSeed );
+		
 		JSAPResult config = jsap.parse( arguments );
 		if( !config.success() ) {
 			System.err.println();
@@ -208,6 +218,22 @@ public class CZET {
 		} else
 			czet.setBuildingPlanConverter( GraphConverterAlgorithms.NonGridGraph );
 
+		// Try to get seed and runs
+		
+		if( config.contains( "runs" ) ) {
+			int runs = config.getInt( "runs" );
+			System.out.println( "Averaging over " + runs + " runs" );
+			czet.setRuns( runs );
+		}
+		
+		
+		if( config.contains( "seed" ) ) {
+			long seed = config.getLong( "seed" );
+			System.out.println( "Using main seed " + seed );
+			czet.setSeed( seed );
+		}
+		
+		
 		czet.compute();
 	}
 
@@ -250,6 +276,22 @@ public class CZET {
 		this.projectConverter = projectConverter;
 	}
 
+	public int getRuns() {
+		return runs;
+	}
+
+	public void setRuns( int runs ) {
+		this.runs = runs;
+	}
+
+	public long getSeed() {
+		return seed;
+	}
+
+	public void setSeed( long seed ) {
+		this.seed = seed;
+	}	
+
 	public void compute() {
 		switch( inputFileType ) {
 			case ZET:
@@ -265,26 +307,64 @@ public class CZET {
 		} catch( PropertyLoadException ex ) {
 			ZETMain.exit( ex.getMessage() );
 		}
-
-		// Try to load the project
-		ZETProjectFileReader fr = new ZETProjectFileReader();
+		
+		ZETProjectFileReader fr;
+		fr = new ZETProjectFileReader();
 		System.out.println( "ZET " + inputFile.toFile().toString() );
 		fr.setProblem( inputFile.toFile() );
 		fr.run();
 		System.out.println( "LOADED" );
 
+
 		// Now check if simulation or optimization is needed and call the methods
 		assert (computationMode == ComputationMode.EarliestArrivalFlow || computationMode == ComputationMode.EvacuationSimulation);
 		if( computationMode == ComputationMode.EarliestArrivalFlow ) {
 			System.out.println( "Perform EAT" );
-			computeZETEAT( fr.getSolution() );
+			assert( runs >= 0 );
+			if( runs == 0 ) {
+		// Try to load the project
+				computeZETEAT( fr.getSolution(), seed );
+			} else {
+				// Test run
+				System.out.println( "START TEST RUN" );
+				computeZETEAT( fr.getSolution(), seed );
+				// Reset times
+				timeEAT = new ArrayList<>();
+				timeConvert = new ArrayList<>();
+				for( int i = 1; i <= runs; ++i ) {
+					System.out.println( "START REAL RUN " + i );
+					computeZETEAT( fr.getSolution(), seed+i );
+				}
+				
+				// Compute averages
+				System.out.println("\n\n" );
+				System.out.println( "Runtimes for conversion:" );
+				System.out.println( timeConvert );
+				System.out.println( "Runtimes for EAT:" );
+				System.out.println( timeEAT );
+				System.out.println( "Average conversion:" );
+				long total = 0;
+				for( Long r : timeConvert )
+					total += r;
+				System.out.println( total );
+				total = 0;
+				System.out.println( "Average EAT:" );
+				for( Long r : timeEAT )
+					total += r;
+				System.out.println( total );
+				
+			}
 		} else
 			System.out.println( "Perform Simulation" );
 
 	}
 	boolean working = true;
+	ArrayList<Long> timeEAT = new ArrayList<>();
+	ArrayList<Long> timeConvert = new ArrayList<>();
 
-	private void computeZETEAT( Project p ) {
+	private void computeZETEAT( Project p, long seed ) {
+		//System.out.println( "Computation starts" );
+		RandomUtils.getInstance().setSeed( seed );
 		//try {
 		AlgorithmControl a = new AlgorithmControl( p );
 		a.convertBuildingPlan();
@@ -298,7 +378,17 @@ public class CZET {
 		RunnableFuture<Void> thread = a.convertGraph( pr, projectConverter );
 
 		try { // Wait for the thread to end
+			//System.out.println( "Waiting or result" );
 			thread.get();
+			//System.out.println( "Result received." );
+
+			while( a.getNetworkFlowModel() == null ) {
+				//System.out.println( "Waiting a bit" );
+				Thread.sleep( 500 );
+			}
+			
+			
+			timeConvert.add( a.getConversionRuntime() );
 		} catch( InterruptedException | ExecutionException ex ) {
 			Logger.getLogger( CZET.class.getName() ).log( Level.SEVERE, null, ex );
 			System.err.println( "Severe error." );
@@ -307,6 +397,10 @@ public class CZET {
 		}
 
 		assert (a.getNetworkFlowModel() != null);
+		if( a.getNetworkFlowModel() == null )
+			throw new IllegalStateException();
+		
+		//System.out.println( "Computation converted" );
 
 		ConcreteAssignment concreteAssignment = p.getCurrentAssignment().createConcreteAssignment( 400 );
 
@@ -314,6 +408,7 @@ public class CZET {
 
 		cav.setProblem( concreteAssignment );
 		cav.run();
+		//System.out.println( "Computation concrete assignment done" );
 		NetworkFlowModel nfm = cav.getSolution();
 
 		EarliestArrivalFlowProblem eafp = new EarliestArrivalFlowProblem( nfm.edgeCapacities, nfm.getNetwork(), nfm.getNodeCapacities(), nfm.getSupersink(), nfm.getSources(), 254, nfm.getTransitTimes(), nfm.currentAssignment );
@@ -327,7 +422,7 @@ public class CZET {
 		try {
 			algo.run();
 		} catch( IllegalStateException e ) {
-			System.err.println( "The illegal state exception occured." );
+			//System.err.println( "The illegal state exception occured." );
 		}
 
 		PathBasedFlowOverTime df = algo.getSolution().getPathBased();
@@ -336,5 +431,7 @@ public class CZET {
 		System.out.println( "Time horizon:" + neededTimeHorizon );
 		System.out.println( "Flow amount: " + algo.getSolution().getFlowAmount() );
 		System.out.println( "Runtime: " + algo.getRuntimeAsString() );
+		timeEAT.add( algo.getRuntime() );
+		//System.out.println( "Computation over" );
 	}
 }

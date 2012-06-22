@@ -23,14 +23,11 @@ import com.sun.opengl.util.j2d.TextureRenderer;
 import gui.visualization.QualityPreset;
 import gui.visualization.VisualizationOptionManager;
 import gui.visualization.control.graph.GLNodeControl;
-import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.Image;
-import java.awt.Rectangle;
 import java.awt.image.*;
 import java.io.File;
 import java.io.IOException;
-import java.util.Vector;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.imageio.ImageIO;
@@ -146,37 +143,37 @@ public class GLNode extends AbstractDrawable<GLFlowEdge, GLNodeControl> {
 		}
 		
 		//System.out.println( "Textur s_1 beim Zeichnen benutzt" );
-				boolean enableLight = gl.glIsEnabled(  GL.GL_LIGHTING );
-		TextureManager texMan = TextureManager.getInstance();
-		String texName = "s_" + control.getNumber();
-		
-		if( !texMan.contains( texName ) ) {
-			createTexture( control.getNumber() );
-		}
-		
-		Texture tex = texMan.contains( texName ) ? texMan.get( texName ) : texMan.get( "empty" );
-		//gl.glDisable( GL.GL_LIGHTING );
-		gl.glEnable( GL.GL_TEXTURE_2D );
-		tex.bind();
-
-		//System.out.println( "Textur s_1 beim Zeichnen benutzt" );
-
-		glu.gluQuadricTexture(quadObj, true);
-		glu.gluQuadricNormals(quadObj, GLU.GLU_SMOOTH);
-		
-		glu.gluQuadricOrientation( quadObj, GLU.GLU_INSIDE  );
-
-		gl.glPushMatrix();
-		
-		gl.glRotated( 90+180, 1, 0, 0);
-		//gl.glRotated( 180, 0, 1, 0);
+//				boolean enableLight = gl.glIsEnabled(  GL.GL_LIGHTING );
+//		TextureManager texMan = TextureManager.getInstance();
+//		String texName = "s_" + control.getNumber();
+//		
+//		if( !texMan.contains( texName ) ) {
+//			createTexture( control.getNumber() );
+//		}
+//		
+//		Texture tex = texMan.contains( texName ) ? texMan.get( texName ) : texMan.get( "empty" );
+//		//gl.glDisable( GL.GL_LIGHTING );
+//		gl.glEnable( GL.GL_TEXTURE_2D );
+//		tex.bind();
+//
+//		//System.out.println( "Textur s_1 beim Zeichnen benutzt" );
+//
+//		glu.gluQuadricTexture(quadObj, true);
+//		glu.gluQuadricNormals(quadObj, GLU.GLU_SMOOTH);
+//		
+//		glu.gluQuadricOrientation( quadObj, GLU.GLU_INSIDE  );
+//
+//		gl.glPushMatrix();
+//		
+//		gl.glRotated( 90+180, 1, 0, 0);
+//		//gl.glRotated( 180, 0, 1, 0);
 		
 		glu.gluSphere( quadObj, radius, qualityPreset.nodeSlices, qualityPreset.nodeStacks );
-		gl.glDisable( GL.GL_TEXTURE_2D );
-		//if( enableLight )
-		//	gl.glEnable( GL.GL_LIGHTING );
-		gl.glPopMatrix();
-
+//		gl.glDisable( GL.GL_TEXTURE_2D );
+//		//if( enableLight )
+//		//	gl.glEnable( GL.GL_LIGHTING );
+//		gl.glPopMatrix();
+//
 		
 		staticDrawAllChildren( gl );
 		endDraw( gl );

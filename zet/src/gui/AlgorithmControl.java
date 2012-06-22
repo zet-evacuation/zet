@@ -79,7 +79,7 @@ public class AlgorithmControl implements PropertyChangeListener {
 	public void convertBuildingPlan( ) {
 		convertBuildingPlan( null );
 	}
-	
+	long conversionTime = 0;
 	public void convertBuildingPlan( PropertyChangeListener pcl ) {
 		final BuildingPlanConverter bpc = new BuildingPlanConverter();
 		bpc.setProblem( project.getBuildingPlan() );
@@ -89,8 +89,10 @@ public class AlgorithmControl implements PropertyChangeListener {
 		st.addPropertyChangeListener( new PropertyChangeListener() {
 
 			public void propertyChange( PropertyChangeEvent pce ) {
-				if( st.isDone() )
+				if( st.isDone() ) {
 					buildingResults = bpc.getSolution();
+					conversionTime = bpc.getRuntime();					
+				}
 			}
 		});
 		if( pcl != null)
@@ -98,6 +100,10 @@ public class AlgorithmControl implements PropertyChangeListener {
 		st.execute();
 		//bpc.run();
 		//buildingResults = bpc.getSolution();
+	}
+	
+	public long getConversionRuntime() {
+		return conversionTime;
 	}
 
 	public BuildingResults getBuildingResults() {
