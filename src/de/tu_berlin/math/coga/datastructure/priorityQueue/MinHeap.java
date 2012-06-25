@@ -59,6 +59,13 @@ public class MinHeap<O, P extends Number> {
         }
         return minimum;
     }
+    
+    public Element getMin()
+    {
+        Element minimum = elements.get(0);
+        return minimum;
+    }
+    
 
     public Element insert(O object, P priority) {
         return insert(new Element(object, priority));

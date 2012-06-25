@@ -69,6 +69,7 @@ public class ZToNonGridGraphConverter extends BaseZToGraphConverter {
 		mapping.setNodeSpeedFactor( supersink, 1 );
 		mapping.setNodeRectangle( supersink, new NodeRectangle( 0, 0, 0, 0 ) );
 		mapping.setFloorForNode( supersink, -1 );
+                mapping.setRoomForNode(supersink, null);
 
 		// get attribute from property container
 		PropertyContainer propertyContainer = PropertyContainer.getInstance();
@@ -89,7 +90,6 @@ public class ZToNonGridGraphConverter extends BaseZToGraphConverter {
 
 			// unmark all squares because they are not yet processed.
 			room.unmarkAllSquares();
-
 			int roomOffsetX = room.getXOffset();
 			int roomOffsetY = room.getYOffset();
 
@@ -143,7 +143,7 @@ public class ZToNonGridGraphConverter extends BaseZToGraphConverter {
 						square.setNode( node );
 						// If the isSource flag of the square is set,
 						// the node becomes a source.
-						if( square.isSource() )
+						if( square.isSource() )         
 							nodeIsSource = true;
 
 						// First part: Find the highest number n
@@ -277,6 +277,7 @@ public class ZToNonGridGraphConverter extends BaseZToGraphConverter {
 						mapping.setNodeRectangle( node, new NodeRectangle( nodeRectangleNW_x, -nodeRectangleNW_y, nodeRectangleSE_x, -nodeRectangleSE_y ) );
 						// save the number of the floor the node belongs to
 						mapping.setFloorForNode( node, raster.getFloors().indexOf( room.getFloor() ) );
+                                                mapping.setRoomForNode(node, room.getRoom());
 						if( nodeIsSource )
 							sources.add( node );
 					}
@@ -293,7 +294,7 @@ public class ZToNonGridGraphConverter extends BaseZToGraphConverter {
 		// Set graph to model
 		model.setNetwork( graph );
 		model.setSources( sources );
-		System.out.println( " fertig" );
+		System.out.println( " fertig" );  
 	}
 
 	@Override
@@ -593,7 +594,7 @@ public class ZToNonGridGraphConverter extends BaseZToGraphConverter {
 			}
 		// END calculate INTER-Room-Edge-Transit-Times
 		System.out.println( "fertig in " + Formatter.formatTimeUnit( System.currentTimeMillis() - interStart, TimeUnits.MilliSeconds ) );
-
+                
 		//System.out.println( "TRANSIT-TIMES-FERTIG " + (System.currentTimeMillis() - startTT) );
 	}
 

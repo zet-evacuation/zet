@@ -26,7 +26,9 @@ import ds.mapping.IdentifiableIntegerMapping;
 import ds.mapping.IdentifiableObjectMapping;
 import ds.graph.Node;
 import ds.graph.NodeRectangle;
+import ds.z.Room;
 import java.awt.Shape;
+import java.util.HashMap;
 
 /**
  * The {@code ZToGraphMapping} class stores a mapping between an
@@ -45,6 +47,7 @@ public class ZToGraphMapping {
     protected IdentifiableObjectMapping<Node, Double> nodeUpSpeedFactors;
     protected IdentifiableObjectMapping<Node,NodeRectangle> nodeRectangles;
     protected IdentifiableIntegerMapping<Node> nodeFloorMapping;
+    protected HashMap<Node,Room> nodeRoomMapping;
     protected IdentifiableObjectMapping<Edge, Level> edgeLevels;
     protected IdentifiableObjectMapping<Node, Boolean> isEvacuationNode;
     protected IdentifiableObjectMapping<Node, Boolean> isSourceNode;
@@ -74,6 +77,11 @@ public class ZToGraphMapping {
     public IdentifiableIntegerMapping<Node> getNodeFloorMapping(){
     	return nodeFloorMapping;
     }
+    
+    public HashMap<Node,Room> getNodeRoomMapping(){
+    	return nodeRoomMapping;
+    }
+    
 
     public ZToGraphMapping(int numberOfNodes, int numberOfEdges) {
         nodeShapes = new IdentifiableObjectMapping<Node, Shape>(numberOfNodes, Shape.class);
@@ -83,6 +91,7 @@ public class ZToGraphMapping {
         edgeLevels = new IdentifiableObjectMapping<Edge, Level>(numberOfEdges, Level.class);
         nodeRectangles = new IdentifiableObjectMapping<Node,NodeRectangle>(numberOfNodes, NodeRectangle.class);
         nodeFloorMapping = new IdentifiableIntegerMapping<Node>(numberOfNodes);
+        nodeRoomMapping = new HashMap<>(numberOfNodes);
         isEvacuationNode = new IdentifiableObjectMapping<Node, Boolean>(numberOfNodes, Boolean.class);
         isSourceNode = new IdentifiableObjectMapping<Node, Boolean>(numberOfNodes, Boolean.class);
         isDeletedSourceNode = new IdentifiableObjectMapping<Node, Boolean>(numberOfNodes, Boolean.class);
@@ -145,6 +154,10 @@ public class ZToGraphMapping {
     
     public void setFloorForNode(Node node, int floor){
     	nodeFloorMapping.set(node, floor);
+    }
+    
+    public void setRoomForNode(Node node, Room r){
+    	nodeRoomMapping.put(node, r);
     }
 
     public ZToGraphRasterContainer getRaster() {
