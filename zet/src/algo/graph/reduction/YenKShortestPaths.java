@@ -12,8 +12,6 @@ import java.util.Vector;
 import ds.graph.Node;
 import de.tu_berlin.math.coga.zet.NetworkFlowModel;
 import ds.graph.Edge;
-import ds.graph.Path;
-import ds.graph.network.AbstractNetwork;
 import ds.graph.network.DynamicNetwork;
 import java.util.*;
         
@@ -39,6 +37,7 @@ public class YenKShortestPaths
 	
 	// variables for debugging and testing
 	private int _generated_path_num = 0;
+        private int length_bound = 0;
 	
 	/**
 	 * Default constructor.
@@ -68,13 +67,13 @@ public class YenKShortestPaths
                 orig_graph = graph;
 		_source_vertex = source_vt;
 		_target_vertex = target_vt;
-		_init();
+		_init(0);
 	}
 	
 	/**
 	 * Initiate members in the class. 
 	 */
-	private void _init()
+	private void _init(int top_k)
 	{
 		clear();
 		// get the shortest path by default if both source and target exist
@@ -86,7 +85,9 @@ public class YenKShortestPaths
                                 _path_candidates.insert(shortest_path, shortest_path.get_weight());
 				_path_derivation_vertex_index.put(shortest_path, _source_vertex);				
 			}
+                        length_bound = (int)shortest_path.get_weight() + (int)Math.ceil(top_k/shortest_path.get_capacity()) -1;
 		}
+                
 	}
 	
 	/**
@@ -286,11 +287,12 @@ public class YenKShortestPaths
 		_source_vertex = source_vertex;
 		_target_vertex = target_vertex;
 		
-		_init();
+		_init(top_k);
 		int count = 0;
-		while(has_next() && count < top_k)
+                // while count < top_k 
+		while(has_next() && _path_candidates.getMin().getObject().get_weight() <= length_bound)
 		{                    
-			next();
+			next();                  
 			++count;
 		}
 		

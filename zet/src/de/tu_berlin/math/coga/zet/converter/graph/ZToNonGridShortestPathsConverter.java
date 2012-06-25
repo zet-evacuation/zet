@@ -17,7 +17,10 @@ import ds.graph.MinSpanningTree;
 import ds.graph.Node;
 import ds.graph.NodeRectangle;
 import ds.graph.problem.MinSpanningTreeProblem;
+import ds.z.AssignmentArea;
 import ds.z.BuildingPlan;
+import ds.z.PlanPoint;
+import ds.z.Room;
 import java.util.*;
 
 /**
@@ -111,11 +114,50 @@ public class ZToNonGridShortestPathsConverter  extends ZToNonGridGraphConverter{
                     }
                 } 
                 
-                Collection <YenPath> found = new LinkedList<>();
+                List <YenPath> found = new LinkedList<>();
+                //stores the number of created nodes for each assignment area
+                Map<Node,AssignmentArea> NodesForArea = new HashMap<>();
+                Map<AssignmentArea,Integer> numNodesForArea = new HashMap<>(1);
+                
                 for (Node source: model.getSources())
-                {
-                    found.addAll(yen.get_shortest_paths(source, model.getSupersink(),8));
+                { 
+                    Room r = mapping.getNodeRoomMapping().get(source);
+                    PlanPoint pos = new PlanPoint((int)mapping.getNodeRectangles().get(source).getCenterX(),(int)-mapping.getNodeRectangles().get(source).getCenterY());
+                    //System.out.println("found planpoint: " + pos);
+                        
+                    for (AssignmentArea a: r.getAssignmentAreas()){
+                        
+                        if (a.contains(pos))
+                        {
+                           NodesForArea.put(source,a);
+                           if (numNodesForArea.containsKey(a)){
+                                int current = numNodesForArea.get(a);
+                                numNodesForArea.put(a, current+1);
+                           }
+                           else{
+                               numNodesForArea.put(a,1);
+                           }
+                           break;
+                        }
+                    }                  
                 }
+                for (Node source: model.getSources())
+                {         
+                    int supply = NodesForArea.get(source).getEvacuees() / numNodesForArea.get(NodesForArea.get(source));
+                    //System.out.println("Node: " + source + " supply: " + supply);
+                    if (supply > 0)
+                    {
+                       found.addAll(yen.get_shortest_paths(source, model.getSupersink(), supply)); 
+                    }    
+                    else
+                    {
+                        found.addAll(yen.get_shortest_paths(source, model.getSupersink(), 1)); 
+                    }
+                    
+                }
+                
+  
+                
                 for (YenPath y: found)
                 {
                     //System.out.println("Pfad: " + y.toString());
@@ -125,6 +167,7 @@ public class ZToNonGridShortestPathsConverter  extends ZToNonGridGraphConverter{
                         {
                             Edge n = model.getGraph().getEdge(y.get_vertices().get(i),y.get_vertices().get(i+1));
                             //Edge e = new Edge(NumEdges++,y.get_vertices().get(i),y.get_vertices().get(i+1));
+                            //System.out.println("Transit: " + model.getTransitTime(n));
                             solEdges.add(n);
                             used[y.get_vertices().get(i).id()][y.get_vertices().get(i+1).id()] =1;
                             used[y.get_vertices().get(i+1).id()][y.get_vertices().get(i).id()] =1;
