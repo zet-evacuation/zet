@@ -321,7 +321,6 @@ public class AlgorithmControl implements PropertyChangeListener {
 		} );
 		if( propertyChangeListener != null )
 			st.addPropertyChangeListener( propertyChangeListener );
-		System.out.println( "  --- Execution is to be started" );
 		st.execute();
 		return st;
 	}

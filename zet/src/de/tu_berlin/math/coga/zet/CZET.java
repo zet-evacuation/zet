@@ -26,11 +26,13 @@ import java.nio.file.FileSystems;
 import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.HashMap;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.RunnableFuture;
+import java.util.logging.ConsoleHandler;
+import java.util.logging.Handler;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import java.util.logging.SimpleFormatter;
 import javax.swing.SwingWorker;
 
 /**
@@ -39,6 +41,8 @@ import javax.swing.SwingWorker;
  * @author Jan-Philipp Kappmeier
  */
 public class CZET {
+	private static final Logger log = Logger.getLogger( CZET.class.getName() );
+
 	public static enum ComputationMode {
 		EarliestArrivalFlow,
 		StaticMaximumFlow,
@@ -77,8 +81,6 @@ public class CZET {
 				return null;
 		}
 	}
-	
-	HashMap m = new HashMap(30);
 
 	public static enum InputFileType {
 		XML( new ComputationMode[]{ComputationMode.EarliestArrivalFlow} ),
@@ -105,11 +107,32 @@ public class CZET {
 	private InputFileType inputFileType;
 	private ComputationMode computationMode;
 	private GraphConverterAlgorithms projectConverter;
+	private int ignore = 0;
 	private int runs = 0;
 	private long seed = System.nanoTime();
 
 	public static void main( String[] arguments ) throws JSAPException {
-		System.out.println( "Command Line Interface for ZET " + gui.ZETMain.version );
+		Handler handler = new SysoutHandler();
+		
+		//handler.setFormatter( new SimpleFormatter() );
+		handler.setFormatter( new SysoutFormatter() );
+		handler.setLevel( Level.CONFIG );
+
+		log.setLevel( Level.CONFIG );
+		
+		log.addHandler( handler );
+		log.setUseParentHandlers(false);
+
+		
+//		log.log( Level.SEVERE, "severe" );
+//		log.log( Level.WARNING, "warning" );
+//		log.log( Level.INFO, "info" );
+//		log.log( Level.CONFIG, "config" );
+//		log.log( Level.FINE, "fine" );
+//		log.log( Level.FINER, "finer" );
+//		log.log( Level.FINEST, "finest" );
+		
+		log.info( "Command Line Interface for ZET " + gui.ZETMain.version );
 
 		JSAP jsap = new JSAP();
 
@@ -144,6 +167,10 @@ public class CZET {
 		FlaggedOption optRuns = new FlaggedOption( "runs" ).setStringParser( JSAP.INTEGER_PARSER ).setRequired( false ).setLongFlag( "runs" ).setShortFlag( 'r' );
 		optRuns.setHelp( "The number of runs." );
 		jsap.registerParameter( optRuns );
+
+		FlaggedOption optIgnore = new FlaggedOption( "ignore" ).setStringParser( JSAP.INTEGER_PARSER ).setRequired( false ).setLongFlag( "ignore" );
+		optIgnore.setHelp( "The number of runs that are performed and ignored." );
+		jsap.registerParameter( optIgnore );
 
 		FlaggedOption optSeed = new FlaggedOption( "seed" ).setStringParser( JSAP.LONG_PARSER ).setRequired( false ).setLongFlag( "seed" ).setShortFlag( 's' );
 		optSeed.setHelp( "An initial seed. Used to initialize the random generators for different runs." );
@@ -183,7 +210,7 @@ public class CZET {
 					czet.setInputFileType( InputFileType.ZET );
 					break;
 				default:
-					System.out.println( "Unknown file type: " + czet.getFileEnding() );
+					log.warning( "Unknown file type: " + czet.getFileEnding() );
 					printHelp( jsap );
 					System.exit( 1 );
 			}
@@ -192,7 +219,7 @@ public class CZET {
 		if( config.contains( "mode" ) ) {
 			czet.setComputationMode( ComputationMode.parse( config.getString( "mode" ).toLowerCase() ) );
 			if( czet.getComputationMode() == null ) {
-				System.out.println( "Unknown computation mode: " + config.getString( "mode" ) );
+				log.warning( "Unknown computation mode: " + config.getString( "mode" ) );
 				printHelp( jsap );
 				System.exit( 1 );
 			}
@@ -202,7 +229,7 @@ public class CZET {
 					czet.setComputationMode( ComputationMode.EvacuationSimulation );
 			}
 		if( !czet.getInputFileType().isSupported( czet.getComputationMode() ) ) {
-			System.out.println( "Computation mode " + czet.getComputationMode() + " is not supported for input files of type " + czet.getInputFileType() );
+			log.warning( "Computation mode " + czet.getComputationMode() + " is not supported for input files of type " + czet.getInputFileType() );
 			printHelp( jsap );
 			System.exit( 1 );
 		}
@@ -211,7 +238,7 @@ public class CZET {
 		if( config.contains( "buildingPlanConverter" ) ) {
 			czet.setBuildingPlanConverter( parseGraphConverterAlgorithm( config.getString( "buildingPlanConverter" ).toLowerCase() ) );
 			if( czet.getComputationMode() == null ) {
-				System.out.println( "Unknown building converter: " + config.getString( "buildingPlanConverter" ) );
+				log.warning( "Unknown building converter: " + config.getString( "buildingPlanConverter" ) );
 				printHelp( jsap );
 				System.exit( 1 );
 			}
@@ -222,14 +249,19 @@ public class CZET {
 		
 		if( config.contains( "runs" ) ) {
 			int runs = config.getInt( "runs" );
-			System.out.println( "Averaging over " + runs + " runs" );
+			log.config( "Averaging over " + runs + " runs" );
 			czet.setRuns( runs );
+		}
+		if( config.contains( "ignore" ) ) {
+			int ignore = config.getInt( "ignore" );
+			log.config( "Performing " + ignore + " runs that are ignored." );
+			czet.setIgnore( ignore );
 		}
 		
 		
 		if( config.contains( "seed" ) ) {
 			long seed = config.getLong( "seed" );
-			System.out.println( "Using main seed " + seed );
+			log.config( "Using main seed " + seed );
 			czet.setSeed( seed );
 		}
 		
@@ -276,6 +308,14 @@ public class CZET {
 		this.projectConverter = projectConverter;
 	}
 
+	public int getIgnore() {
+		return ignore;
+	}
+
+	private void setIgnore( int ignore ) {
+		this.ignore = ignore;
+	}
+
 	public int getRuns() {
 		return runs;
 	}
@@ -298,6 +338,7 @@ public class CZET {
 				computeZET();
 		}
 	}
+				MedianCalculator<Long> m;
 
 	private void computeZET() {
 		// Try to load some properties
@@ -310,84 +351,101 @@ public class CZET {
 		
 		ZETProjectFileReader fr;
 		fr = new ZETProjectFileReader();
-		System.out.println( "ZET " + inputFile.toFile().toString() );
+		log.fine( "ZET " + inputFile.toFile().toString() );
 		fr.setProblem( inputFile.toFile() );
 		fr.run();
-		System.out.println( "LOADED" );
+		log.finer( "LOADED" );
 
+				m = new MedianCalculator<>( 2 );
 
 		// Now check if simulation or optimization is needed and call the methods
 		assert (computationMode == ComputationMode.EarliestArrivalFlow || computationMode == ComputationMode.EvacuationSimulation);
 		if( computationMode == ComputationMode.EarliestArrivalFlow ) {
-			System.out.println( "Perform EAT" );
+			log.fine( "Perform EAT" );
 			assert( runs >= 0 );
 			if( runs == 0 ) {
 		// Try to load the project
 				computeZETEAT( fr.getSolution(), seed );
 			} else {
 				// Test run
-				System.out.println( "START TEST RUN" );
-				computeZETEAT( fr.getSolution(), seed );
+				log.finer( "START TEST RUNs" );
+				for( int i = 1; i <= ignore; ++i ) {
+					log.finest( "Ignore run " + i );
+					computeZETEAT( fr.getSolution(), seed );
+					
+				}
 				// Reset times
-				timeEAT = new ArrayList<>();
-				timeConvert = new ArrayList<>();
-				Median<Long> m;
 				int count = 1;
-				do {//for( int i = 1; i <= runs; ++i ) {
-					System.out.println( "START REAL RUN " + count );
+				m = new MedianCalculator<>( 2 );
+				do {
+					log.fine( "START REAL RUN " + count );
 					computeZETEAT( fr.getSolution(), seed+count );
 					count++;
-					m = new Median<>( (ArrayList<Long>)timeEAT.clone() );
 					m.run();
-					System.out.println( "Anzahl outlier: " + m.getNumberOfOutlier() + " - Anzahl valid: " + m.valid() );
+					log.finer( "Anzahl outlier: " + m.getNumberOfOutlier() + " - Anzahl valid: " + m.valid() );
 				} while( m.valid() < runs );
 				
 				// Compute averages
-				System.out.println("\n\n" );
-				System.out.println( "Runtimes for conversion:" );
-				//System.out.println( timeConvert );
-				for( long j : timeConvert )
-					System.out.print( j + "\t" );
-				System.out.println();
-				System.out.println( "Runtimes for EAT:" );
-				//System.out.println( timeEAT );
-				for( long l : timeEAT )
-					System.out.print( l + "\t" );
-				System.out.println();
-				System.out.println( "Outliers:" );
-				m = new Median<>( timeEAT );
-				m.run();
-				for( long l : m.getOutlier() )
-					System.out.print( l + "\t" );
-				System.out.println();
-				System.out.println( "Valid Runtimes for EAT:" );
-				//System.out.println( timeEAT );
-				for( long l : m.getValid() )
-					System.out.print( l + "\t" );
-				System.out.println();
+				log.info("\n\n" );
+				log.info( "Runtimes for conversion:" );
+				String out = "";
+				for( long j : m.getValues( 1 ) )
+					out += j + "\t";
+				log.info( out );
+				log.info("");
 				
-				System.out.println( "Average conversion:" );
+				log.fine( "Outliers:" );
+				out = "";
+				for( long l : m.getOutlier( 1 ) )
+					out += l + "\t";
+				log.fine( "" );
+				
+				log.finer( "Valid Runtimes for Conversion:" );
+				out = "";
+				for( long l : m.getValid( 1 ) )
+					out += l + "\t";
+				log.finer( out );
+				log.finer( "" );
+
+				log.info( "Runtimes for EAT:" );
+				out = "";
+				for( long l : m.getValues( 0 ) )
+					out += l + "\t";
+				log.info( out );
+				log.info("");
+				
+				log.fine( "Outliers:" );
+				out = "";
+				for( long l : m.getOutlier( 0 ) )
+					out += l + "\t";
+				log.fine( out );
+				log.fine("");
+				
+				log.finer( "Valid Runtimes for EAT:" );
+				out = "";
+				for( long l : m.getValid( 0 ) )
+					out += l + "\t";
+				log.finer( out );
+				log.finer( "" );
+				
+				log.info( "Average conversion:" );
 				long total = 0;
-				for( Long r : timeConvert )
+				for( Long r : m.getValid( 1 ) )
 					total += r;
-				System.out.println( total );
+				log.info( "" + total/(double)m.valid() );
 				total = 0;
-				System.out.println( "Average EAT:" );
-				for( Long r : m.getValid() )
+				log.info( "Average EAT:" );
+				for( Long r : m.getValid( 0 ) )
 					total += r;
-				System.out.println( total/(double)runs );
-				
+				log.log( Level.INFO, "{0}", total/(double)m.valid());
 			}
 		} else
 			System.out.println( "Perform Simulation" );
 
 	}
 	boolean working = true;
-	ArrayList<Long> timeEAT = new ArrayList<>();
-	ArrayList<Long> timeConvert = new ArrayList<>();
 
 	private void computeZETEAT( Project p, long seed ) {
-		//System.out.println( "Computation starts" );
 		RandomUtils.getInstance().setSeed( seed );
 		//try {
 		AlgorithmControl a = new AlgorithmControl( p );
@@ -401,18 +459,15 @@ public class CZET {
 		};
 		RunnableFuture<Void> thread = a.convertGraph( pr, projectConverter );
 
+		long cr = 0;
 		try { // Wait for the thread to end
-			//System.out.println( "Waiting or result" );
 			thread.get();
-			//System.out.println( "Result received." );
 
 			while( a.getNetworkFlowModel() == null ) {
-				//System.out.println( "Waiting a bit" );
 				Thread.sleep( 500 );
 			}
-			
-			
-			timeConvert.add( a.getConversionRuntime() );
+
+			cr = a.getConversionRuntime();
 		} catch( InterruptedException | ExecutionException ex ) {
 			Logger.getLogger( CZET.class.getName() ).log( Level.SEVERE, null, ex );
 			System.err.println( "Severe error." );
@@ -424,20 +479,17 @@ public class CZET {
 		if( a.getNetworkFlowModel() == null )
 			throw new IllegalStateException();
 		
-		//System.out.println( "Computation converted" );
-
 		ConcreteAssignment concreteAssignment = p.getCurrentAssignment().createConcreteAssignment( 400 );
 
 		GraphAssignmentConverter cav = new GraphAssignmentConverter( a.getNetworkFlowModel() );
 
 		cav.setProblem( concreteAssignment );
 		cav.run();
-		//System.out.println( "Computation concrete assignment done" );
 		NetworkFlowModel nfm = cav.getSolution();
 
 		EarliestArrivalFlowProblem eafp = new EarliestArrivalFlowProblem( nfm.edgeCapacities, nfm.getNetwork(), nfm.getNodeCapacities(), nfm.getSupersink(), nfm.getSources(), 254, nfm.getTransitTimes(), nfm.currentAssignment );
 
-		System.out.println( "Earliest Arrival computation starts..." );
+		log.fine( "Earliest Arrival computation starts..." );
 
 		SEAAPAlgorithm algo = new SEAAPAlgorithm();
 
@@ -451,11 +503,13 @@ public class CZET {
 
 		PathBasedFlowOverTime df = algo.getSolution().getPathBased();
 		int neededTimeHorizon = algo.getSolution().getTimeHorizon() - 1;
-		System.out.println( "Total cost: " + algo.getSolution().getTotalCost() );
-		System.out.println( "Time horizon:" + neededTimeHorizon );
-		System.out.println( "Flow amount: " + algo.getSolution().getFlowAmount() );
-		System.out.println( "Runtime: " + algo.getRuntimeAsString() );
-		timeEAT.add( algo.getRuntime() );
-		//System.out.println( "Computation over" );
+		log.info( "Total cost: " + algo.getSolution().getTotalCost() );
+		log.info( "Time horizon:" + neededTimeHorizon );
+		log.info( "Flow amount: " + algo.getSolution().getFlowAmount() );
+		log.info( "Runtime: " + algo.getRuntimeAsString() );
+		Long[] rt = new Long[2];
+		rt[0] = algo.getRuntime();
+		rt[1] = cr;
+		m.addData( rt );
 	}
 }
