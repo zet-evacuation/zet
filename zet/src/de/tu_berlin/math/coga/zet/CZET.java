@@ -331,17 +331,41 @@ public class CZET {
 				// Reset times
 				timeEAT = new ArrayList<>();
 				timeConvert = new ArrayList<>();
-				for( int i = 1; i <= runs; ++i ) {
-					System.out.println( "START REAL RUN " + i );
-					computeZETEAT( fr.getSolution(), seed+i );
-				}
+				Median<Long> m;
+				int count = 1;
+				do {//for( int i = 1; i <= runs; ++i ) {
+					System.out.println( "START REAL RUN " + count );
+					computeZETEAT( fr.getSolution(), seed+count );
+					count++;
+					m = new Median<>( (ArrayList<Long>)timeEAT.clone() );
+					m.run();
+					System.out.println( "Anzahl outlier: " + m.getNumberOfOutlier() + " - Anzahl valid: " + m.valid() );
+				} while( m.valid() < runs );
 				
 				// Compute averages
 				System.out.println("\n\n" );
 				System.out.println( "Runtimes for conversion:" );
-				System.out.println( timeConvert );
+				//System.out.println( timeConvert );
+				for( long j : timeConvert )
+					System.out.print( j + "\t" );
+				System.out.println();
 				System.out.println( "Runtimes for EAT:" );
-				System.out.println( timeEAT );
+				//System.out.println( timeEAT );
+				for( long l : timeEAT )
+					System.out.print( l + "\t" );
+				System.out.println();
+				System.out.println( "Outliers:" );
+				m = new Median<>( timeEAT );
+				m.run();
+				for( long l : m.getOutlier() )
+					System.out.print( l + "\t" );
+				System.out.println();
+				System.out.println( "Valid Runtimes for EAT:" );
+				//System.out.println( timeEAT );
+				for( long l : m.getValid() )
+					System.out.print( l + "\t" );
+				System.out.println();
+				
 				System.out.println( "Average conversion:" );
 				long total = 0;
 				for( Long r : timeConvert )
@@ -349,9 +373,9 @@ public class CZET {
 				System.out.println( total );
 				total = 0;
 				System.out.println( "Average EAT:" );
-				for( Long r : timeEAT )
+				for( Long r : m.getValid() )
 					total += r;
-				System.out.println( total );
+				System.out.println( total/(double)runs );
 				
 			}
 		} else
