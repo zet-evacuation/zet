@@ -188,7 +188,7 @@ public class RasterContainerCreator {
 
 		// Create Room 1
 		Room r01 = new Room( mainFloor, "Raum 1" );
-		points = new ArrayList<PlanPoint>();
+		points = new ArrayList<>();
 		points.add( new PlanPoint( 0.4d, 0.4d, true ) );
 		points.add( new PlanPoint( 3.2d, 0.4d, true ) );
 		points.add( new PlanPoint( 3.2d, 2.4d, true ) );
@@ -210,7 +210,7 @@ public class RasterContainerCreator {
 		r01.defineByPoints( points );
 
 		Room r02 = new Room( mainFloor, "Raum 2" );
-		points = new ArrayList<PlanPoint>();
+		points = new ArrayList<>();
 		points.add( new PlanPoint( 2d, 3.6d, true ) );
 		points.add( new PlanPoint( 4.4d, 3.6d, true ) );
 		points.add( new PlanPoint( 4.4d, 4d, true ) );
@@ -218,7 +218,7 @@ public class RasterContainerCreator {
 		r02.defineByPoints( points );
 
 		Room r03 = new Room( mainFloor, "Raum 3" );
-		points = new ArrayList<PlanPoint>();
+		points = new ArrayList<>();
 		points.add( new PlanPoint( 2d, 4d, true ) );
 		points.add( new PlanPoint( 4.4d, 4d, true ) );
 		points.add( new PlanPoint( 4.8d, 4d, true ) );
@@ -231,7 +231,7 @@ public class RasterContainerCreator {
 		r03.defineByPoints( points );
 
 		Room r04 = new Room( mainFloor, "Raum 4" );
-		points = new ArrayList<PlanPoint>();
+		points = new ArrayList<>();
 		points.add( new PlanPoint( 4d, 4.8d, true ) );
 		points.add( new PlanPoint( 4.4d, 4.8d, true ) );
 		points.add( new PlanPoint( 4.4d, 6.4d, true ) );
@@ -240,7 +240,7 @@ public class RasterContainerCreator {
 		r04.defineByPoints( points );
 
 		Room r05 = new Room( mainFloor, "Raum 5" );
-		points = new ArrayList<PlanPoint>();
+		points = new ArrayList<>();
 		points.add( new PlanPoint( 2d, 6.4d, true ) );
 		points.add( new PlanPoint( 4d, 6.4d, true ) );
 		points.add( new PlanPoint( 4.4d, 6.4d, true ) );
@@ -273,14 +273,14 @@ public class RasterContainerCreator {
 		EvacuationArea eA;
 		SaveArea saveA;
 
-		points = new ArrayList<PlanPoint>();
+		points = new ArrayList<>();
 		points.add( new PlanPoint( 0.4, 0.4 ) );
 		points.add( new PlanPoint( 4.0, 0.4 ) );
 		points.add( new PlanPoint( 4.0, 4.0 ) );
 		points.add( new PlanPoint( 0.4, 4.0 ) );
 		room.defineByPoints( points );
 
-		points = new ArrayList<PlanPoint>();
+		points = new ArrayList<>();
 		iA = new InaccessibleArea( room );
 		points.add( new PlanPoint( 0.8, 3.6 ) );
 		points.add( new PlanPoint( 3.6, 3.6 ) );
@@ -288,7 +288,7 @@ public class RasterContainerCreator {
 		points.add( new PlanPoint( 0.8, 4.0 ) );
 		iA.defineByPoints( points );
 
-		points = new ArrayList<PlanPoint>();
+		points = new ArrayList<>();
 		dA = new DelayArea( room, DelayType.OBSTACLE );
 		points.add( new PlanPoint( 0.8, 2.4 ) );
 		points.add( new PlanPoint( 1.6, 2.4 ) );
@@ -296,7 +296,7 @@ public class RasterContainerCreator {
 		points.add( new PlanPoint( 0.8, 3.2 ) );
 		dA.defineByPoints( points );
 
-		points = new ArrayList<PlanPoint>();
+		points = new ArrayList<>();
 		eA = new EvacuationArea( room );
 		points.add( new PlanPoint( 3.6, 2.4 ) );
 		points.add( new PlanPoint( 4.0, 2.4 ) );
@@ -304,7 +304,7 @@ public class RasterContainerCreator {
 		points.add( new PlanPoint( 3.6, 3.2 ) );
 		eA.defineByPoints( points );
 
-		points = new ArrayList<PlanPoint>();
+		points = new ArrayList<>();
 		saveA = new SaveArea( room );
 		points.add( new PlanPoint( 3.2, 2.4 ) );
 		points.add( new PlanPoint( 3.6, 2.4 ) );
@@ -321,7 +321,7 @@ public class RasterContainerCreator {
 
 		Room room = new Room( floor );
 
-		ArrayList<PlanPoint> points = new ArrayList<PlanPoint>();
+		ArrayList<PlanPoint> points = new ArrayList<>();
 		points.add( new PlanPoint( 0.4, 0.4 ) );
 		points.add( new PlanPoint( 2.4, 0.4 ) );
 		points.add( new PlanPoint( 2.4, 2.4 ) );
@@ -332,7 +332,7 @@ public class RasterContainerCreator {
 		room.checkRasterized();
 
 		// Inaccessible Areas
-		points = new ArrayList<PlanPoint>();
+		points = new ArrayList<>();
 		points.add( new PlanPoint( 1.2, 0.4 ) );
 		points.add( new PlanPoint( 1.6, 0.4 ) );
 		points.add( new PlanPoint( 1.6, 0.8 ) );
@@ -340,7 +340,7 @@ public class RasterContainerCreator {
 		InaccessibleArea iA = new InaccessibleArea( room );
 		iA.defineByPoints( points );
 
-		points = new ArrayList<PlanPoint>();
+		points = new ArrayList<>();
 		points.add( new PlanPoint( 1.2, 1.2 ) );
 		points.add( new PlanPoint( 1.6, 1.2 ) );
 		points.add( new PlanPoint( 1.6, 1.6 ) );
@@ -351,7 +351,7 @@ public class RasterContainerCreator {
 		iA.defineByPoints( points );
 
 		// DelayArea
-		points = new ArrayList<PlanPoint>();
+		points = new ArrayList<>();
 		points.add( new PlanPoint( 0.8, 0.8 ) );
 		points.add( new PlanPoint( 2.0, 0.8 ) );
 		points.add( new PlanPoint( 2.0, 1.2 ) );
@@ -359,7 +359,7 @@ public class RasterContainerCreator {
 		DelayArea dA = new DelayArea( room, DelayArea.DelayType.OTHER, 1.0 / 3.0 );
 		dA.defineByPoints( points );
 
-		points = new ArrayList<PlanPoint>();
+		points = new ArrayList<>();
 		points.add( new PlanPoint( 1.6, 0.8 ) );
 		points.add( new PlanPoint( 2.4, 0.8 ) );
 		points.add( new PlanPoint( 2.4, 2.0 ) );
@@ -368,14 +368,14 @@ public class RasterContainerCreator {
 		dA.defineByPoints( points );
 
 		Room pg_room = new Room( floor );
-		points = new ArrayList<PlanPoint>();
+		points = new ArrayList<>();
 		points.add( new PlanPoint( 3.0, 3.0 ) );
 		points.add( new PlanPoint( 8.6, 3.0 ) );
 		points.add( new PlanPoint( 8.6, 8.2 ) );
 		points.add( new PlanPoint( 3.0, 8.2 ) );
 		pg_room.defineByPoints( points );
 
-		points = new ArrayList<PlanPoint>();
+		points = new ArrayList<>();
 		points.add( new PlanPoint( 3.4, 3.4 ) );
 		points.add( new PlanPoint( 3.8, 3.4 ) );
 		points.add( new PlanPoint( 3.8, 5.4 ) );
@@ -383,7 +383,7 @@ public class RasterContainerCreator {
 		iA = new InaccessibleArea( pg_room );
 		iA.defineByPoints( points );
 
-		points = new ArrayList<PlanPoint>();
+		points = new ArrayList<>();
 		points.add( new PlanPoint( 3.8, 3.4 ) );
 		points.add( new PlanPoint( 4.6, 3.4 ) );
 		points.add( new PlanPoint( 4.6, 4.6 ) );
@@ -395,7 +395,7 @@ public class RasterContainerCreator {
 		iA = new InaccessibleArea( pg_room );
 		iA.defineByPoints( points );
 
-		points = new ArrayList<PlanPoint>();
+		points = new ArrayList<>();
 		points.add( new PlanPoint( 5.0, 3.4 ) );
 		points.add( new PlanPoint( 6.6, 3.4 ) );
 		points.add( new PlanPoint( 6.6, 3.8 ) );
@@ -411,7 +411,7 @@ public class RasterContainerCreator {
 		iA = new InaccessibleArea( pg_room );
 		iA.defineByPoints( points );
 
-		points = new ArrayList<PlanPoint>();
+		points = new ArrayList<>();
 		points.add( new PlanPoint( 3.4, 5.8 ) );
 		points.add( new PlanPoint( 4.6, 5.8 ) );
 		points.add( new PlanPoint( 4.6, 6.2 ) );
@@ -427,7 +427,7 @@ public class RasterContainerCreator {
 		iA = new InaccessibleArea( pg_room );
 		iA.defineByPoints( points );
 
-		points = new ArrayList<PlanPoint>();
+		points = new ArrayList<>();
 		points.add( new PlanPoint( 5.0, 6.6 ) );
 		points.add( new PlanPoint( 5.4, 6.6 ) );
 		points.add( new PlanPoint( 5.4, 7.0 ) );
@@ -435,7 +435,7 @@ public class RasterContainerCreator {
 		iA = new InaccessibleArea( pg_room );
 		iA.defineByPoints( points );
 
-		points = new ArrayList<PlanPoint>();
+		points = new ArrayList<>();
 		points.add( new PlanPoint( 5.4, 6.2 ) );
 		points.add( new PlanPoint( 5.8, 6.2 ) );
 		points.add( new PlanPoint( 5.8, 6.6 ) );
@@ -443,7 +443,7 @@ public class RasterContainerCreator {
 		iA = new InaccessibleArea( pg_room );
 		iA.defineByPoints( points );
 
-		points = new ArrayList<PlanPoint>();
+		points = new ArrayList<>();
 		points.add( new PlanPoint( 5.8, 5.8 ) );
 		points.add( new PlanPoint( 6.2, 5.8 ) );
 		points.add( new PlanPoint( 6.2, 7.8 ) );
@@ -451,7 +451,7 @@ public class RasterContainerCreator {
 		iA = new InaccessibleArea( pg_room );
 		iA.defineByPoints( points );
 
-		points = new ArrayList<PlanPoint>();
+		points = new ArrayList<>();
 		points.add( new PlanPoint( 6.6, 5.8 ) );
 		points.add( new PlanPoint( 8.2, 5.8 ) );
 		points.add( new PlanPoint( 8.2, 6.2 ) );
@@ -463,7 +463,7 @@ public class RasterContainerCreator {
 		iA = new InaccessibleArea( pg_room );
 		iA.defineByPoints( points );
 
-		points = new ArrayList<PlanPoint>();
+		points = new ArrayList<>();
 		points.add( new PlanPoint( 6.6, 6.6 ) );
 		points.add( new PlanPoint( 8.2, 6.6 ) );
 		points.add( new PlanPoint( 8.2, 7.0 ) );
@@ -475,7 +475,7 @@ public class RasterContainerCreator {
 		iA = new InaccessibleArea( pg_room );
 		iA.defineByPoints( points );
 
-		points = new ArrayList<PlanPoint>();
+		points = new ArrayList<>();
 		points.add( new PlanPoint( 6.6, 7.4 ) );
 		points.add( new PlanPoint( 7.0, 7.4 ) );
 		points.add( new PlanPoint( 7.0, 7.8 ) );
@@ -494,7 +494,7 @@ public class RasterContainerCreator {
 		bp.addFloor( floor );
 
 		Room room = new Room( floor, "Testraum" );
-		ArrayList<PlanPoint> points = new ArrayList<PlanPoint>();
+		ArrayList<PlanPoint> points = new ArrayList<>();
 		points.add( new PlanPoint( 0.4, 0.4 ) );
 		points.add( new PlanPoint( 2.4, 0.4 ) );
 		points.add( new PlanPoint( 2.4, 2.4 ) );
@@ -504,7 +504,7 @@ public class RasterContainerCreator {
 		room.defineByPoints( points );
 
 		Room room2 = new Room( floor, "Anderer Raum" );
-		points = new ArrayList<PlanPoint>();
+		points = new ArrayList<>();
 		points.add( new PlanPoint( 2.4, 2.4 ) );
 		points.add( new PlanPoint( 2.0, 2.4 ) );
 		points.add( new PlanPoint( 1.2, 2.4 ) );
@@ -519,7 +519,7 @@ public class RasterContainerCreator {
 		room.checkRasterized();
 
 		// Inaccessible Areas
-		points = new ArrayList<PlanPoint>();
+		points = new ArrayList<>();
 		points.add( new PlanPoint( 1.2, 0.4 ) );
 		points.add( new PlanPoint( 1.6, 0.4 ) );
 		points.add( new PlanPoint( 1.6, 0.8 ) );
@@ -527,7 +527,7 @@ public class RasterContainerCreator {
 		InaccessibleArea iA = new InaccessibleArea( room );
 		iA.defineByPoints( points );
 
-		points = new ArrayList<PlanPoint>();
+		points = new ArrayList<>();
 		points.add( new PlanPoint( 1.2, 1.2 ) );
 		points.add( new PlanPoint( 1.6, 1.2 ) );
 		points.add( new PlanPoint( 1.6, 1.6 ) );
@@ -538,7 +538,7 @@ public class RasterContainerCreator {
 		iA.defineByPoints( points );
 
 		// DelayArea
-		points = new ArrayList<PlanPoint>();
+		points = new ArrayList<>();
 		points.add( new PlanPoint( 0.8, 0.8 ) );
 		points.add( new PlanPoint( 2.0, 0.8 ) );
 		points.add( new PlanPoint( 2.0, 1.2 ) );
@@ -546,7 +546,7 @@ public class RasterContainerCreator {
 		DelayArea dA = new DelayArea( room, DelayArea.DelayType.OTHER, 1.0 / 3.0 );
 		dA.defineByPoints( points );
 
-		points = new ArrayList<PlanPoint>();
+		points = new ArrayList<>();
 		points.add( new PlanPoint( 1.6, 0.8 ) );
 		points.add( new PlanPoint( 2.4, 0.8 ) );
 		points.add( new PlanPoint( 2.4, 2.0 ) );
@@ -565,7 +565,7 @@ public class RasterContainerCreator {
 
 		Room room = new Room( floor );
 
-		ArrayList<PlanPoint> points = new ArrayList<PlanPoint>();
+		ArrayList<PlanPoint> points = new ArrayList<>();
 		points.add( new PlanPoint( 0.4, 0.4 ) );
 		points.add( new PlanPoint( 2.4, 0.4 ) );
 		points.add( new PlanPoint( 2.4, 2.4 ) );
@@ -576,7 +576,7 @@ public class RasterContainerCreator {
 		room.checkRasterized();
 
 		// Inaccessible Areas
-		points = new ArrayList<PlanPoint>();
+		points = new ArrayList<>();
 		points.add( new PlanPoint( 1.2, 0.4 ) );
 		points.add( new PlanPoint( 1.6, 0.4 ) );
 		points.add( new PlanPoint( 1.6, 0.8 ) );
@@ -584,7 +584,7 @@ public class RasterContainerCreator {
 		InaccessibleArea iA = new InaccessibleArea( room );
 		iA.defineByPoints( points );
 
-		points = new ArrayList<PlanPoint>();
+		points = new ArrayList<>();
 		points.add( new PlanPoint( 1.2, 1.2 ) );
 		points.add( new PlanPoint( 1.6, 1.2 ) );
 		points.add( new PlanPoint( 1.6, 1.6 ) );
@@ -595,7 +595,7 @@ public class RasterContainerCreator {
 		iA.defineByPoints( points );
 
 		// DelayArea
-		points = new ArrayList<PlanPoint>();
+		points = new ArrayList<>();
 		points.add( new PlanPoint( 0.8, 0.8 ) );
 		points.add( new PlanPoint( 2.0, 0.8 ) );
 		points.add( new PlanPoint( 2.0, 1.2 ) );
@@ -603,7 +603,7 @@ public class RasterContainerCreator {
 		DelayArea dA = new DelayArea( room, DelayArea.DelayType.OTHER, 1.0 / 3.0 );
 		dA.defineByPoints( points );
 
-		points = new ArrayList<PlanPoint>();
+		points = new ArrayList<>();
 		points.add( new PlanPoint( 1.6, 0.8 ) );
 		points.add( new PlanPoint( 2.4, 0.8 ) );
 		points.add( new PlanPoint( 2.4, 2.0 ) );
@@ -612,14 +612,14 @@ public class RasterContainerCreator {
 		dA.defineByPoints( points );
 
 		Room pg_room = new Room( floor );
-		points = new ArrayList<PlanPoint>();
+		points = new ArrayList<>();
 		points.add( new PlanPoint( 3.0, 3.0 ) );
 		points.add( new PlanPoint( 8.6, 3.0 ) );
 		points.add( new PlanPoint( 8.6, 8.2 ) );
 		points.add( new PlanPoint( 3.0, 8.2 ) );
 		pg_room.defineByPoints( points );
 
-		points = new ArrayList<PlanPoint>();
+		points = new ArrayList<>();
 		points.add( new PlanPoint( 3.4, 3.4 ) );
 		points.add( new PlanPoint( 3.8, 3.4 ) );
 		points.add( new PlanPoint( 3.8, 5.4 ) );
@@ -627,7 +627,7 @@ public class RasterContainerCreator {
 		iA = new InaccessibleArea( pg_room );
 		iA.defineByPoints( points );
 
-		points = new ArrayList<PlanPoint>();
+		points = new ArrayList<>();
 		points.add( new PlanPoint( 3.8, 3.4 ) );
 		points.add( new PlanPoint( 4.6, 3.4 ) );
 		points.add( new PlanPoint( 4.6, 4.6 ) );
@@ -639,7 +639,7 @@ public class RasterContainerCreator {
 		iA = new InaccessibleArea( pg_room );
 		iA.defineByPoints( points );
 
-		points = new ArrayList<PlanPoint>();
+		points = new ArrayList<>();
 		points.add( new PlanPoint( 5.0, 3.4 ) );
 		points.add( new PlanPoint( 6.6, 3.4 ) );
 		points.add( new PlanPoint( 6.6, 3.8 ) );
@@ -655,7 +655,7 @@ public class RasterContainerCreator {
 		iA = new InaccessibleArea( pg_room );
 		iA.defineByPoints( points );
 
-		points = new ArrayList<PlanPoint>();
+		points = new ArrayList<>();
 		points.add( new PlanPoint( 3.4, 5.8 ) );
 		points.add( new PlanPoint( 4.6, 5.8 ) );
 		points.add( new PlanPoint( 4.6, 6.2 ) );
@@ -671,7 +671,7 @@ public class RasterContainerCreator {
 		dA = new DelayArea( pg_room, DelayType.OBSTACLE );
 		dA.defineByPoints( points );
 
-		points = new ArrayList<PlanPoint>();
+		points = new ArrayList<>();
 		points.add( new PlanPoint( 5.0, 6.6 ) );
 		points.add( new PlanPoint( 5.4, 6.6 ) );
 		points.add( new PlanPoint( 5.4, 7.0 ) );
@@ -679,7 +679,7 @@ public class RasterContainerCreator {
 		dA = new DelayArea( pg_room, DelayType.OBSTACLE );
 		dA.defineByPoints( points );
 
-		points = new ArrayList<PlanPoint>();
+		points = new ArrayList<>();
 		points.add( new PlanPoint( 5.4, 6.2 ) );
 		points.add( new PlanPoint( 5.8, 6.2 ) );
 		points.add( new PlanPoint( 5.8, 6.6 ) );
@@ -687,7 +687,7 @@ public class RasterContainerCreator {
 		SaveArea sA = new SaveArea( pg_room );
 		sA.defineByPoints( points );
 
-		points = new ArrayList<PlanPoint>();
+		points = new ArrayList<>();
 		points.add( new PlanPoint( 5.8, 5.8 ) );
 		points.add( new PlanPoint( 6.2, 5.8 ) );
 		points.add( new PlanPoint( 6.2, 7.8 ) );
@@ -695,7 +695,7 @@ public class RasterContainerCreator {
 		dA = new DelayArea( pg_room, DelayType.OBSTACLE );
 		dA.defineByPoints( points );
 
-		points = new ArrayList<PlanPoint>();
+		points = new ArrayList<>();
 		points.add( new PlanPoint( 6.6, 5.8 ) );
 		points.add( new PlanPoint( 8.2, 5.8 ) );
 		points.add( new PlanPoint( 8.2, 6.2 ) );
@@ -707,7 +707,7 @@ public class RasterContainerCreator {
 		EvacuationArea eA = new EvacuationArea( pg_room );
 		eA.defineByPoints( points );
 
-		points = new ArrayList<PlanPoint>();
+		points = new ArrayList<>();
 		points.add( new PlanPoint( 6.6, 6.6 ) );
 		points.add( new PlanPoint( 8.2, 6.6 ) );
 		points.add( new PlanPoint( 8.2, 7.0 ) );
@@ -719,7 +719,7 @@ public class RasterContainerCreator {
 		eA = new EvacuationArea( pg_room );
 		eA.defineByPoints( points );
 
-		points = new ArrayList<PlanPoint>();
+		points = new ArrayList<>();
 		points.add( new PlanPoint( 6.6, 7.4 ) );
 		points.add( new PlanPoint( 7.0, 7.4 ) );
 		points.add( new PlanPoint( 7.0, 7.8 ) );
