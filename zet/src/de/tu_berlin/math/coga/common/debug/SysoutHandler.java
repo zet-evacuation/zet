@@ -2,7 +2,7 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package de.tu_berlin.math.coga.zet;
+package de.tu_berlin.math.coga.common.debug;
 
 import java.io.OutputStreamWriter;
 import java.io.PrintStream;

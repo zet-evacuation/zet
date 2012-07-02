@@ -10,6 +10,7 @@ import de.tu_berlin.math.coga.common.algorithm.AlgorithmListener;
 import de.tu_berlin.math.coga.common.algorithm.AlgorithmStartedEvent;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Logger;
 import javax.swing.SwingWorker;
 
 /**
@@ -17,11 +18,12 @@ import javax.swing.SwingWorker;
  * @author Jan-Philipp Kappmeier
  */
 public class SerialTask extends SwingWorker<Void, AlgorithmEvent> implements AlgorithmListener {
-
-	ArrayList<Algorithm> algorithms;
+	private static Logger log = Logger.getGlobal();
+	
+	ArrayList<Algorithm<?,?>> algorithms;
 
 	public SerialTask() {
-		algorithms = new ArrayList<Algorithm>();
+		algorithms = new ArrayList<>();
 	}
 	private RuntimeException error = null;
 
@@ -37,19 +39,19 @@ public class SerialTask extends SwingWorker<Void, AlgorithmEvent> implements Alg
 		return error != null;
 	}
 
-	public SerialTask( Algorithm algorithm ) {
-		algorithms = new ArrayList<Algorithm>();
+	public SerialTask( Algorithm<?,?> algorithm ) {
+		algorithms = new ArrayList<>();
 		algorithms.add( algorithm );
 	}
 
-	public void add( Algorithm algorithm ) {
+	public void add( Algorithm<?,?> algorithm ) {
 		algorithms.add( algorithm );
 	}
 
 	@Override
 	protected Void doInBackground() throws Exception {
 		try {			
-			for( Algorithm algorithm : algorithms ) {
+			for( Algorithm<?,?> algorithm : algorithms ) {
 				algorithm.addAlgorithmListener( this );
 				algorithm.run();
 			}
@@ -74,7 +76,7 @@ public class SerialTask extends SwingWorker<Void, AlgorithmEvent> implements Alg
 	protected void process( List<AlgorithmEvent> chunks ) {
 		for( AlgorithmEvent event : chunks ) {
 			if( event instanceof AlgorithmStartedEvent ) {
-				System.out.println( "Gestartet: " + ((AlgorithmStartedEvent)event).getAlgorithm() );
+				Logger.getGlobal().fine( "Gestartet: " + ((AlgorithmStartedEvent)event).getAlgorithm().getName() );
 			}
 		}
 	}

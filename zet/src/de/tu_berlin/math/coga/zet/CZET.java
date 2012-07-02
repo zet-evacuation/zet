@@ -9,6 +9,7 @@ import com.martiansoftware.jsap.JSAPResult;
 import com.martiansoftware.jsap.Switch;
 import com.martiansoftware.jsap.UnflaggedOption;
 import de.tu_berlin.math.coga.batch.input.reader.ZETProjectFileReader;
+import de.tu_berlin.math.coga.common.debug.Debug;
 import de.tu_berlin.math.coga.rndutils.RandomUtils;
 import de.tu_berlin.math.coga.zet.converter.graph.GraphAssignmentConverter;
 import ds.PropertyContainer;
@@ -26,14 +27,13 @@ import java.nio.file.FileSystems;
 import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Iterator;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.RunnableFuture;
-import java.util.logging.ConsoleHandler;
-import java.util.logging.Handler;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import java.util.logging.SimpleFormatter;
 import javax.swing.SwingWorker;
+
 
 /**
  * A command line interface to ZET
@@ -41,9 +41,9 @@ import javax.swing.SwingWorker;
  * @author Jan-Philipp Kappmeier
  */
 public class CZET {
-	private static final Logger log = Logger.getLogger( CZET.class.getName() );
+	private static final Logger log = Logger.getGlobal();
 
-	public static enum ComputationMode {
+	private static enum ComputationMode {
 		EarliestArrivalFlow,
 		StaticMaximumFlow,
 		StaticMinCostFlow,
@@ -65,7 +65,7 @@ public class CZET {
 		}
 	}
 
-	static GraphConverterAlgorithms parseGraphConverterAlgorithm( String string ) {
+	private static GraphConverterAlgorithms parseGraphConverterAlgorithm( String string ) {
 		switch( string ) {
 			case "rect":
 				return GraphConverterAlgorithms.NonGridGraph;
@@ -82,7 +82,7 @@ public class CZET {
 		}
 	}
 
-	public static enum InputFileType {
+	private static enum InputFileType {
 		XML( new ComputationMode[]{ComputationMode.EarliestArrivalFlow} ),
 		DimacsMaxFlow( new ComputationMode[]{ComputationMode.StaticMaximumFlow} ),
 		ZET( new ComputationMode[]{ComputationMode.EarliestArrivalFlow, ComputationMode.EvacuationSimulation} );
@@ -110,28 +110,11 @@ public class CZET {
 	private int ignore = 0;
 	private int runs = 0;
 	private long seed = System.nanoTime();
+	private boolean median = false;
 
 	public static void main( String[] arguments ) throws JSAPException {
-		Handler handler = new SysoutHandler();
-		
-		//handler.setFormatter( new SimpleFormatter() );
-		handler.setFormatter( new SysoutFormatter() );
-		handler.setLevel( Level.CONFIG );
+		Debug.setUpLogging();
 
-		log.setLevel( Level.CONFIG );
-		
-		log.addHandler( handler );
-		log.setUseParentHandlers(false);
-
-		
-//		log.log( Level.SEVERE, "severe" );
-//		log.log( Level.WARNING, "warning" );
-//		log.log( Level.INFO, "info" );
-//		log.log( Level.CONFIG, "config" );
-//		log.log( Level.FINE, "fine" );
-//		log.log( Level.FINER, "finer" );
-//		log.log( Level.FINEST, "finest" );
-		
 		log.info( "Command Line Interface for ZET " + gui.ZETMain.version );
 
 		JSAP jsap = new JSAP();
@@ -165,12 +148,16 @@ public class CZET {
 		jsap.registerParameter( switchZeroNodeCapacities );
 
 		FlaggedOption optRuns = new FlaggedOption( "runs" ).setStringParser( JSAP.INTEGER_PARSER ).setRequired( false ).setLongFlag( "runs" ).setShortFlag( 'r' );
-		optRuns.setHelp( "The number of runs." );
+		optRuns.setHelp( "The number of valid runs (excluding outliers in median mode)." );
 		jsap.registerParameter( optRuns );
 
 		FlaggedOption optIgnore = new FlaggedOption( "ignore" ).setStringParser( JSAP.INTEGER_PARSER ).setRequired( false ).setLongFlag( "ignore" );
 		optIgnore.setHelp( "The number of runs that are performed and ignored." );
 		jsap.registerParameter( optIgnore );
+
+		Switch optMedian = new Switch( "median" ).setLongFlag( "median" );
+		optMedian.setHelp( "Computes a median and ignores outlieer." );
+		jsap.registerParameter( optMedian );
 
 		FlaggedOption optSeed = new FlaggedOption( "seed" ).setStringParser( JSAP.LONG_PARSER ).setRequired( false ).setLongFlag( "seed" ).setShortFlag( 's' );
 		optSeed.setHelp( "An initial seed. Used to initialize the random generators for different runs." );
@@ -178,11 +165,10 @@ public class CZET {
 		
 		JSAPResult config = jsap.parse( arguments );
 		if( !config.success() ) {
-			System.err.println();
-			for( java.util.Iterator errs = config.getErrorMessageIterator();
-							errs.hasNext(); )
-				System.err.println( "Error: " + errs.next() );
-			System.err.println();
+			log.severe( "" );
+			for( Iterator<?> errs = config.getErrorMessageIterator(); errs.hasNext(); )
+				log.severe( "Error: " + errs.next() );
+			log.severe( "" );
 			printHelp( jsap );
 			System.exit( 1 );
 		}
@@ -257,7 +243,10 @@ public class CZET {
 			log.config( "Performing " + ignore + " runs that are ignored." );
 			czet.setIgnore( ignore );
 		}
-		
+		if( config.contains( "median" ) && config.getBoolean( "median" ) ) {
+			czet.setMedian( true );
+			log.config( "Use median mode." );
+		}
 		
 		if( config.contains( "seed" ) ) {
 			long seed = config.getLong( "seed" );
@@ -270,10 +259,8 @@ public class CZET {
 	}
 
 	private static void printHelp( JSAP jsap ) {
-		System.err.println( "Usage: " + " java flow " + jsap.getUsage() );
-		System.err.println();
-		System.err.println( jsap.getHelp() );
-		System.err.println();
+		log.info( "Usage: " + " java CZET " + jsap.getUsage() + "\n" );
+		log.info( jsap.getHelp() + "\n" );
 	}
 
 	public void setFile( String file ) {
@@ -284,19 +271,19 @@ public class CZET {
 		return inputFile.toString().substring( inputFile.toString().lastIndexOf( '.' ) + 1 );
 	}
 
-	public InputFileType getInputFileType() {
+	private InputFileType getInputFileType() {
 		return inputFileType;
 	}
 
-	public void setInputFileType( InputFileType ift ) {
+	private void setInputFileType( InputFileType ift ) {
 		this.inputFileType = ift;
 	}
 
-	public ComputationMode getComputationMode() {
+	private ComputationMode getComputationMode() {
 		return computationMode;
 	}
 
-	public void setComputationMode( ComputationMode computationMode ) {
+	private void setComputationMode( ComputationMode computationMode ) {
 		this.computationMode = computationMode;
 	}
 
@@ -324,6 +311,14 @@ public class CZET {
 		this.runs = runs;
 	}
 
+	public boolean isMedian() {
+		return median;
+	}
+
+	public void setMedian( boolean median ) {
+		this.median = median;
+	}
+	
 	public long getSeed() {
 		return seed;
 	}
@@ -375,15 +370,15 @@ public class CZET {
 					
 				}
 				// Reset times
-				int count = 1;
+				int validCount = 0;
 				m = new MedianCalculator<>( 2 );
 				do {
-					log.fine( "START REAL RUN " + count );
-					computeZETEAT( fr.getSolution(), seed+count );
-					count++;
+					log.fine( "START REAL RUN " + validCount );
+					computeZETEAT( fr.getSolution(), seed+validCount );
 					m.run();
 					log.finer( "Anzahl outlier: " + m.getNumberOfOutlier() + " - Anzahl valid: " + m.valid() );
-				} while( m.valid() < runs );
+					validCount = median ? m.valid() : validCount + 1;
+				} while( validCount < runs );
 				
 				// Compute averages
 				log.info("\n\n" );
@@ -398,6 +393,7 @@ public class CZET {
 				out = "";
 				for( long l : m.getOutlier( 1 ) )
 					out += l + "\t";
+				log.fine( out );
 				log.fine( "" );
 				
 				log.finer( "Valid Runtimes for Conversion:" );
@@ -432,15 +428,15 @@ public class CZET {
 				long total = 0;
 				for( Long r : m.getValid( 1 ) )
 					total += r;
-				log.info( "" + total/(double)m.valid() );
+				log.info( "" + total/(double)validCount );
 				total = 0;
 				log.info( "Average EAT:" );
 				for( Long r : m.getValid( 0 ) )
 					total += r;
-				log.log( Level.INFO, "{0}", total/(double)m.valid());
+				log.log( Level.INFO, "{0}", total/(double)validCount );
 			}
 		} else
-			System.out.println( "Perform Simulation" );
+			log.info( "Perform Simulation" );
 
 	}
 	boolean working = true;
@@ -470,8 +466,7 @@ public class CZET {
 			cr = a.getConversionRuntime();
 		} catch( InterruptedException | ExecutionException ex ) {
 			Logger.getLogger( CZET.class.getName() ).log( Level.SEVERE, null, ex );
-			System.err.println( "Severe error." );
-			ex.printStackTrace( System.err );
+			log.log( Level.SEVERE, "Severe error.", ex );
 			System.exit( 1 );
 		}
 
