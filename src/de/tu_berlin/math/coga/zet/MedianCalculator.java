@@ -17,7 +17,7 @@ public class MedianCalculator<T extends Comparable<T>> {
 	int dimension = 1;
 	private ArrayList<T>[] values;
 	private ArrayList<T>[] sorted;
-	private ArrayList<Boolean> inRange;
+	private ArrayList<ArrayList<Integer>> inRange;
 	T[] median;
 	T[] upper;
 	T[] lowerQuartile;
@@ -52,7 +52,7 @@ public class MedianCalculator<T extends Comparable<T>> {
 			values[i].add( data[i] );
 			sorted[i].add( data[i] );
 		}
-		inRange.add( true );
+		inRange.add( new ArrayList<Integer>() );
 	}
 
 	public void run() {
@@ -67,7 +67,7 @@ public class MedianCalculator<T extends Comparable<T>> {
 	public List<T> getOutlier( int d ) {
 		outlier = new ArrayList<>( invalid );
 		for( int i = 0; i < values[d].size(); ++i )
-			if( !inRange.get( i ) )
+			if( inRange.get( i ).contains( d ) )
 				outlier.add( values[d].get( i ) );
 		return Collections.unmodifiableList( outlier );
 	}
@@ -79,7 +79,7 @@ public class MedianCalculator<T extends Comparable<T>> {
 	public List<T> getValid( int d ) {
 		valid = new ArrayList<>( values[d].size() - invalid );
 		for( int i = 0; i < values[d].size(); ++i )
-			if( inRange.get( i ) )
+			if( inRange.get( i ).isEmpty() )
 				valid.add( values[d].get( i ) );
 		return Collections.unmodifiableList( valid );
 	}
@@ -90,7 +90,8 @@ public class MedianCalculator<T extends Comparable<T>> {
 
 	public T computeMedian() {
 		for( int j = 0; j < inRange.size(); ++j )
-			inRange.set( j, Boolean.TRUE );
+			//inRange.set( j, -1 );
+			inRange.get( j ).clear();
 		invalid = 0;
 
 		for( int i = 0; i < dimension; ++i )
@@ -122,15 +123,17 @@ public class MedianCalculator<T extends Comparable<T>> {
 					l = 20;
 				if( l < (Long) median[i] - 1.5 * (Long) iqr[i] ) {
 
-					if( inRange.get( j ) == Boolean.TRUE ) {
-						inRange.set( j, Boolean.FALSE );
-						invalid++;
+					if( !inRange.get( j ).contains( i )) {
+						if( inRange.get( j ).isEmpty() )
+							invalid++;
+						inRange.get( j ).add( i );
 					}
 				} else if( l > (Long) median[i] + 1.5 * (Long) iqr[i] ) {
-
-					if( inRange.get( j ) == Boolean.TRUE ) {
-						inRange.set( j, Boolean.FALSE );
-						invalid++;
+					if( !inRange.get( j ).contains( i )) {
+						if( inRange.get( j ).isEmpty() )
+							invalid++;
+						//inRange.set( j, i );
+						inRange.get( j ).add( i );
 					}
 				} else {
 

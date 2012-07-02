@@ -21,13 +21,18 @@
 package de.tu_berlin.math.coga.zet.converter.graph;
 
 import de.tu_berlin.math.coga.common.localization.DefaultLoc;
+import de.tu_berlin.math.coga.common.util.Direction;
+import de.tu_berlin.math.coga.common.util.Formatter;
+import de.tu_berlin.math.coga.common.util.Formatter.TimeUnits;
+import de.tu_berlin.math.coga.common.util.Level;
 import ds.PropertyContainer;
-import ds.graph.network.DynamicNetwork;
 import ds.graph.Edge;
 import ds.graph.Graph;
-import ds.mapping.IdentifiableIntegerMapping;
 import ds.graph.Node;
 import ds.graph.NodeRectangle;
+import ds.graph.network.DynamicNetwork;
+import ds.mapping.IdentifiableDoubleMapping;
+import ds.mapping.IdentifiableIntegerMapping;
 import ds.z.PlanPoint;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -35,24 +40,18 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
-import de.tu_berlin.math.coga.common.util.Direction;
-import de.tu_berlin.math.coga.common.util.Level;
-import de.tu_berlin.math.coga.common.util.Formatter;
-import de.tu_berlin.math.coga.common.util.Formatter.TimeUnits;
-import ds.mapping.IdentifiableDoubleMapping;
+import java.util.logging.Logger;
 
 /**
  *
  */
 public class ZToNonGridGraphConverter extends BaseZToGraphConverter {
-
 	final static boolean progress = false;
-	final static boolean debug = false;
 	final static int FACTOR = 1;
 
 	@Override
 	protected void createNodes() {
-		System.out.print( "Create Nodes... " );
+		Logger.getGlobal().fine( "Create Nodes... " );
 		List<ZToGraphRoomRaster> rasteredRooms = raster.getAllRasteredRooms();
 
 		// New graph
@@ -75,13 +74,10 @@ public class ZToNonGridGraphConverter extends BaseZToGraphConverter {
 		PropertyContainer propertyContainer = PropertyContainer.getInstance();
 		boolean accurateDelayAreaCreation = propertyContainer.getAsBoolean( "converter.AccurateDelayAreaCreation" );
 		boolean accurateAssignmentAreaCration = propertyContainer.getAsBoolean( "converter.accurateAssignmentAreaCreation" );
-		if( debug ) {
-			if( accurateDelayAreaCreation )
-				System.out.println( "\nDelay areas are taken into account." );
-			else
-				System.out.println( "\nDelay areas are not taken into account." );
-			System.out.println();
-		}
+		if( accurateDelayAreaCreation )
+			Logger.getGlobal().finest( "\nDelay areas are taken into account." );
+		else
+			Logger.getGlobal().finest( "\nDelay areas are not taken into account." );
 
 		int nodeCount = 1;
 
@@ -122,7 +118,7 @@ public class ZToNonGridGraphConverter extends BaseZToGraphConverter {
 						model.getZToGraphMapping().setIsSourceNode( node, square.isSource() );
 						model.getZToGraphMapping().setIsDeletedSourceNode( node, false );
 						if( getProblem().getFloorID( room.getFloor() ) == -1 )
-							System.out.println( "\nFehler: Floor beim Konvertieren nicht gefunden." );
+							Logger.getGlobal().warning( "\nFehler: Floor beim Konvertieren nicht gefunden." );
 
 						boolean nodeIsSource = false;
 
@@ -282,24 +278,20 @@ public class ZToNonGridGraphConverter extends BaseZToGraphConverter {
 							sources.add( node );
 					}
 				}
-			if( progress )
-				System.out.println( ": A rastered room was processed and subdivided into nodes." );
-			if( debug ) {
-				System.out.println( "A rastered room was processed and got subdevided like this:" );
-				System.out.print( room );
-			}
-			if( debug )
-				System.out.println( "A rastered room was processed and got subdevided, nodecount is now " + nodeCount + "." );
+				Logger.getGlobal().fine( ": A rastered room was processed and subdivided into nodes." );
+				Logger.getGlobal().finest( "A rastered room was processed and got subdevided like this:" );
+				Logger.getGlobal().finest( room.toString() );
+				Logger.getGlobal().finest( "A rastered room was processed and got subdevided, nodecount is now " + nodeCount + "." );
 		}
 		// Set graph to model
 		model.setNetwork( graph );
 		model.setSources( sources );
-		System.out.println( " fertig" );  
+		Logger.getGlobal().fine( " fertig" );  
 	}
 
 	@Override
 	protected void createEdgesAndCapacities() {
-		System.out.print( "Set up edges and compute capacities... " );
+		Logger.getGlobal().fine( "Set up edges and compute capacities... " );
 		ZToGraphMapping mappingLocal = model.getZToGraphMapping();
 
 		List<ZToGraphRoomRaster> rasteredRooms = raster.getAllRasteredRooms();
@@ -373,7 +365,6 @@ public class ZToNonGridGraphConverter extends BaseZToGraphConverter {
 						Edge edge = graph.getEdge( lastNode, node );
 						if( edge == null ) {
 							edge = new Edge( nextEdge++, lastNode, node );
-//							System.out.println( "CREATE new Edge from " + lastNode.toString() + " to " + node.toString() );
 							graph.addEdge( edge );
 							edgesCap.set( edge, 0 );
 							ZToGraphRasterSquare lastSquare = null;
@@ -392,7 +383,7 @@ public class ZToNonGridGraphConverter extends BaseZToGraphConverter {
 		}//end for each room
 		model.setNodeCapacities( nodesCap );
 		model.setEdgeCapacities( edgesCap );
-		System.out.println( "fertig" );
+		Logger.getGlobal().fine( "fertig" );
 	}
 
 	@Override
@@ -408,7 +399,7 @@ public class ZToNonGridGraphConverter extends BaseZToGraphConverter {
 
 		// calculate INTRA-Room-Edge-Transit-Times
 		long intraStart = System.currentTimeMillis();
-		System.out.print( "Compute intra room edge transit times... " );
+		Logger.getGlobal().fine( "Compute intra room edge transit times... " );
 
 		// do for all rooms of the roomRasterList
 		for( ZToGraphRoomRaster room : roomRasterList ) {
@@ -520,11 +511,11 @@ public class ZToNonGridGraphConverter extends BaseZToGraphConverter {
 				} // END of for(start)
 		} // END of for(roomRaster)
 		// END calculate INTRA-Room-Edge-Transit-Times
-		System.out.println( "fertig in " + Formatter.formatTimeUnit( System.currentTimeMillis() - intraStart, TimeUnits.MilliSeconds ) );
+		Logger.getGlobal().fine( "fertig in " + Formatter.formatTimeUnit( System.currentTimeMillis() - intraStart, TimeUnits.MilliSeconds ) );
 
 		// calculate INTER-Room-Edge-Transit-Times
 		long interStart = System.currentTimeMillis();
-		System.out.print( "Compute inter room transit times... " );
+		Logger.getGlobal().fine( "Compute inter room transit times... " );
 		for( ZToGraphRoomRaster startRoom : roomRasterList )
 			for( ZToGraphRoomRaster endRoom : roomRasterList ) {
 
@@ -593,9 +584,9 @@ public class ZToNonGridGraphConverter extends BaseZToGraphConverter {
 					}
 			}
 		// END calculate INTER-Room-Edge-Transit-Times
-		System.out.println( "fertig in " + Formatter.formatTimeUnit( System.currentTimeMillis() - interStart, TimeUnits.MilliSeconds ) );
+		Logger.getGlobal().fine( "fertig in " + Formatter.formatTimeUnit( System.currentTimeMillis() - interStart, TimeUnits.MilliSeconds ) );
                 
-		//System.out.println( "TRANSIT-TIMES-FERTIG " + (System.currentTimeMillis() - startTT) );
+		Logger.getGlobal().finest( "TRANSIT-TIMES-FERTIG " + (System.currentTimeMillis() - startTT) );
 	}
 
 	// i,j stehen fuer das eigentliche square, nicht fuer den nachbarn!
@@ -754,7 +745,7 @@ public class ZToNonGridGraphConverter extends BaseZToGraphConverter {
 	}
 
 	private HashMap<Edge, ArrayList<ZToGraphRasterSquare>> connectRooms() {
-		System.out.print( "Connect rooms... " );
+		Logger.getGlobal().fine( "Connect rooms... " );
 		ZToGraphMapping mappingLocal = model.getZToGraphMapping();
 
 		HashMap<Edge, ArrayList<ZToGraphRasterSquare>> table = new HashMap<>();
@@ -834,7 +825,7 @@ public class ZToNonGridGraphConverter extends BaseZToGraphConverter {
 					}// end if safe
 				}//end outer loop
 		}
-		System.out.println( "fertig" );
+		Logger.getGlobal().fine( "fertig" );
 		return table;
 	}
 }
