@@ -15,6 +15,7 @@ import de.tu_berlin.math.coga.rndutils.distribution.continuous.UniformDistributi
 import ds.ProjectLoader;
 import ds.z.exception.AreaNotInsideException;
 import ds.z.exception.InvalidRoomZModelError;
+import ds.z.exception.PolygonNotClosedException;
 import ds.z.exception.RoomIntersectException;
 import ds.z.exception.UnknownZModelError;
 import event.EventServer;
@@ -683,6 +684,21 @@ public class ZControl {
 			System.out.println( "Im Raum " + ex.getSource().getName() + " liegt eine Area vom Typ " + ex.getArea().getAreaType().name() + " außerhalb." );
 			System.out.println( ex.getSource() );
 			System.out.println( ex.getArea() );
+		} catch ( PolygonNotClosedException ex ) {
+			PlanPolygon<?> p = ex.getSource();
+			if( p instanceof Room ) {
+				Room r = (Room)p;
+				System.out.println( "Raum " + r.getName() + " ist nicht geschlossen." );
+				System.out.println( ex.getSource() );
+			} else if( p instanceof Area ) {
+				Area<?> a = (Area)p;
+				Room r = a.getAssociatedRoom();
+				System.out.println( "In raum " + r + " ist eine offene Area." );
+				System.out.println( a.toString() );
+			} else {
+				System.out.println( "Fehler in polygon" );
+			}
 		}
+
 	}
 }

@@ -162,7 +162,8 @@ public class Floor implements Serializable, Cloneable, Iterable<Room>, ZFormatOb
 			for( int i = 0; i < rooms.size(); i++ )
 				for( int j = i + 1; j < rooms.size(); j++ ) {
 
-					PlanPoint intersection = rooms.get( i ).intersection( rooms.get( j ) );
+					//PlanPoint intersection = rooms.get( i ).intersection( rooms.get( j ) );
+					PlanPoint intersection = rooms.get( i ).intersectionStrict( rooms.get( j ) );
 					if( intersection != null )
 						throw new RoomIntersectException( rooms.get( i ), rooms.get( j ), intersection );
 				}

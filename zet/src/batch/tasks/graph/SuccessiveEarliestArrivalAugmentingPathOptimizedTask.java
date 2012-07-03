@@ -37,7 +37,6 @@ public class SuccessiveEarliestArrivalAugmentingPathOptimizedTask extends Transf
 
     public SuccessiveEarliestArrivalAugmentingPathOptimizedTask() {
         setAlgorithm(new SEAAPAlgorithm());
-        //setAlgorithm(new OldSEAAPAlgorithm());
     }
 
     @Override
