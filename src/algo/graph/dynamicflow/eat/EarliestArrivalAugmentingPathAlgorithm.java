@@ -21,13 +21,13 @@ package algo.graph.dynamicflow.eat;
 
 //import cern.colt.Arrays;
 import de.tu_berlin.math.coga.common.algorithm.Algorithm;
-import ds.graph.flow.EarliestArrivalAugmentingPath;
-import ds.graph.ImplicitTimeExpandedResidualNetwork;
 import ds.graph.Edge;
+import ds.graph.ImplicitTimeExpandedResidualNetwork;
+import ds.graph.Node;
+import ds.graph.flow.EarliestArrivalAugmentingPath;
 import ds.mapping.IdentifiableIntegerMapping;
 import ds.mapping.IdentifiableObjectMapping;
 import ds.mapping.IntegerIntegerMapping;
-import ds.graph.Node;
 import java.util.LinkedList;
 import java.util.Queue;
 
