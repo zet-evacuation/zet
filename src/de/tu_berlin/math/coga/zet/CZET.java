@@ -36,7 +36,7 @@ import javax.swing.SwingWorker;
 
 
 /**
- * A command line interface to ZET
+ * A command line interface to ZET. Allows to call all important algorithms.
  *
  * @author Jan-Philipp Kappmeier
  */
@@ -363,9 +363,9 @@ public class CZET {
 				computeZETEAT( fr.getSolution(), seed );
 			} else {
 				// Test run
-				log.finer( "START TEST RUNs" );
+				log.fine( "Start test runs" );
 				for( int i = 1; i <= ignore; ++i ) {
-					log.finest( "Ignore run " + i );
+					log.finer( "Ignore run " + i );
 					computeZETEAT( fr.getSolution(), seed );
 					
 				}

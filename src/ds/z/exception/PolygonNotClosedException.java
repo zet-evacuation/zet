@@ -55,6 +55,13 @@ public class PolygonNotClosedException extends ValidationException {
 	 * @return the instance of {@link PlanPolygon} that was the cause for this exception.
 	 */
 	public PlanPolygon<Edge> getPolygon () {
-		return (PlanPolygon)getSource ();
+		return getSource();
+	}
+	/**
+	 * @return the room which contains an area that is not inside.
+	 */
+	@Override
+	public PlanPolygon<Edge> getSource() {
+		return (PlanPolygon<Edge>)source;
 	}
 }
