@@ -10,8 +10,13 @@ import de.tu_berlin.math.coga.common.algorithm.AlgorithmListener;
 import de.tu_berlin.math.coga.common.util.Formatter;
 import de.tu_berlin.math.coga.common.util.Formatter.TimeUnits;
 import de.tu_berlin.math.coga.zet.NetworkFlowModel;
+import de.tu_berlin.math.coga.zet.converter.cellularAutomaton.AssignmentApplicationInstance;
+import de.tu_berlin.math.coga.zet.converter.cellularAutomaton.CellularAutomatonAssignmentConverter;
+import de.tu_berlin.math.coga.zet.converter.cellularAutomaton.ConvertedCellularAutomaton;
+import de.tu_berlin.math.coga.zet.converter.cellularAutomaton.ZToCAConverter;
 import de.tu_berlin.math.coga.zet.converter.cellularAutomaton.ZToCAConverter.ConversionNotSupportedException;
-import de.tu_berlin.math.coga.zet.converter.cellularAutomaton.*;
+import de.tu_berlin.math.coga.zet.converter.cellularAutomaton.ZToCAMapping;
+import de.tu_berlin.math.coga.zet.converter.cellularAutomaton.ZToCARasterContainer;
 import de.tu_berlin.math.coga.zet.converter.graph.BaseZToGraphConverter;
 import ds.CompareVisualizationResults;
 import ds.GraphVisualizationResults;
@@ -24,12 +29,17 @@ import io.visualization.BuildingResults;
 import io.visualization.CAVisualizationResults;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
-import java.util.concurrent.ExecutionException;
 import java.util.concurrent.RunnableFuture;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import tasks.conversion.BuildingPlanConverter;
-import zet.tasks.*;
+import zet.tasks.CellularAutomatonAlgorithmEnumeration;
+import zet.tasks.CellularAutomatonTask;
+import zet.tasks.CellularAutomatonTaskStepByStep;
+import zet.tasks.CompareTask;
+import zet.tasks.GraphAlgorithmEnumeration;
+import zet.tasks.GraphAlgorithmTask;
+import zet.tasks.SerialTask;
 
 
 /**
@@ -305,6 +315,11 @@ public class AlgorithmControl implements PropertyChangeListener {
 	GraphConverterAlgorithms last = GraphConverterAlgorithms.NonGridGraph;
 	
 	public RunnableFuture<Void> convertGraph( PropertyChangeListener propertyChangeListener, GraphConverterAlgorithms Algo ) {
+		if( project.getBuildingPlan().isRastered() == false ) {
+			System.out.print( "Building is not rasterized. Rastering... " );
+			project.getBuildingPlan().rasterize();
+			System.out.println( " done." );
+		}
 		final BaseZToGraphConverter conv = Algo.converter();
 		last = Algo;
 		conv.setProblem( project.getBuildingPlan() );
@@ -334,6 +349,12 @@ public class AlgorithmControl implements PropertyChangeListener {
 	}
 
 	public void performOptimization( PropertyChangeListener propertyChangeListener, AlgorithmListener control ) {
+		if( !project.getBuildingPlan().isRastered() ) {
+			System.out.print( "Building is not rasterized. Rastering... " );
+			project.getBuildingPlan().rasterize();
+			System.out.println( " done." );
+		}
+			
 		final GraphAlgorithmTask gat = new GraphAlgorithmTask( GraphAlgorithmEnumeration.SuccessiveEarliestArrivalAugmentingPathOptimized );
 		gat.setProblem( project );
 		
@@ -359,6 +380,11 @@ public class AlgorithmControl implements PropertyChangeListener {
 	}
         
         public void performOptimizationCompare(PropertyChangeListener propertyChangeListener) {
+		if( !project.getBuildingPlan().isRastered() ) {
+			System.out.print( "Building is not rasterized. Rastering... " );
+			project.getBuildingPlan().rasterize();
+			System.out.println( " done." );
+		}
             
             final CompareTask ct = new CompareTask(GraphAlgorithmEnumeration.SuccessiveEarliestArrivalAugmentingPathOptimizedCompare);
             ct.setProblem(project);

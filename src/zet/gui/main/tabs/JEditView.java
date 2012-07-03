@@ -316,7 +316,7 @@ public class JEditView extends AbstractSplitPropertyWindow<JFloorScrollPane<JFlo
 				eastSubBarCardLayout.show( eastSubBar, "assignmentArea" );
 				double area = Math.round( selectedPolygon.areaMeter() * 100 ) / 100.0;
 				lblAreaSize.setText( nfFloat.format( area ) + " m²" );
-				if( projectControl.getProject().getBuildingPlan().getRasterized() ) {
+				if( projectControl.getProject().getBuildingPlan().isRastered() ) {
 					lblMaxPersons.setText( nfInteger.format( ((AssignmentArea)selectedPolygon).getMaxEvacuees() ) );
 					lblMaxPersonsWarning.setText( "" );
 				} else {

@@ -176,7 +176,7 @@ public class BuildingPlan implements Serializable, Iterable<Floor>, ZFormatObjec
 	 * Returns, if the Flag rastered is set to {@code true}.
 	 * @return {@code true}, if the flag rastered is set to {@code true}, {@code false} otherwise
 	 */
-	public boolean getRasterized() {
+	public boolean isRastered() {
 		return rasterized;
 	}
 
@@ -237,7 +237,7 @@ public class BuildingPlan implements Serializable, Iterable<Floor>, ZFormatObjec
 	 */
 	public void check() throws PolygonNotClosedException, AreaNotInsideException, RoomIntersectException {
 		for( Floor f : floors )
-			f.check( getRasterized() );
+			f.check( isRastered() );
 	}
 
 	@Override
