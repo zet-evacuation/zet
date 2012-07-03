@@ -137,7 +137,7 @@ public class ImplicitTimeExpandedResidualNetwork extends Network {
         assert amount <= capacity(edge, first.getEnd()) : "Edge augmentations are assumed to respect capacities.";
         switch (edgeTypes.get(edge)) {
             case NORMAL:
-                assert flow.get(reverseEdge(edge)).get(first.getEnd()) + amount <= capacity(edge, first.getEnd());
+                assert flow.get(edge).get(first.getEnd()) + amount <= capacity(edge, first.getEnd());
                 flow.get(edge).increase(first.getEnd(), amount);
                 return; 
             case REVERSE:
