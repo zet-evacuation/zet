@@ -113,8 +113,10 @@ public class CZET {
 	private boolean median = false;
 
 	public static void main( String[] arguments ) throws JSAPException {
+		//Debug.setDefaultLogLevel( Level.FINER );
 		Debug.setUpLogging();
 
+		
 		log.info( "Command Line Interface for ZET " + gui.ZETMain.version );
 
 		JSAP jsap = new JSAP();
@@ -375,7 +377,8 @@ public class CZET {
 				do {
 					log.fine( "START REAL RUN " + validCount );
 					computeZETEAT( fr.getSolution(), seed+validCount );
-					m.run();
+					if( median )
+						m.run();
 					log.finer( "Anzahl outlier: " + m.getNumberOfOutlier() + " - Anzahl valid: " + m.valid() );
 					validCount = median ? m.valid() : validCount + 1;
 				} while( validCount < runs );
@@ -430,6 +433,7 @@ public class CZET {
 					total += r;
 				log.info( "" + total/(double)validCount );
 				total = 0;
+				assert validCount == m.getValid( 1 ).size();
 				log.info( "Average EAT:" );
 				for( Long r : m.getValid( 0 ) )
 					total += r;

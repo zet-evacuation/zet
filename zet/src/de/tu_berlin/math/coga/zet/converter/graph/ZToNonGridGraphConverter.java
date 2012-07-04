@@ -274,6 +274,12 @@ public class ZToNonGridGraphConverter extends BaseZToGraphConverter {
 						// save the number of the floor the node belongs to
 						mapping.setFloorForNode( node, raster.getFloors().indexOf( room.getFloor() ) );
                                                 mapping.setRoomForNode(node, room.getRoom());
+																								
+						
+						//System.out.print( "Node "+ node.id() );
+						int nodex = (nodeRectangleNW_x + nodeRectangleSE_x)/2;
+						int nodey = (nodeRectangleNW_y + nodeRectangleSE_y)/2;
+						//System.out.println( " at (" + nodex + "," + nodey + ") on floor " + raster.getFloors().indexOf( room.getFloor() ) );
 						if( nodeIsSource )
 							sources.add( node );
 					}
