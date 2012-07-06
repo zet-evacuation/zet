@@ -21,6 +21,7 @@ public class Debug {
 	private static Handler handler = new SysoutHandler();
 	public final static Logger globalLogger = Logger.getGlobal();
 	static {
+		setUpLogging();
 		handler.setFormatter( new SysoutFormatter() );
 	}
 	/**
@@ -31,8 +32,8 @@ public class Debug {
 	 * {@link #getDefaultLogLevel() }.
 	 */
 	public static void setUpLogging() {
-		handler.setLevel( Debug.getDefaultLogLevel());
-		globalLogger.setLevel( getDefaultLogLevel());
+		handler.setLevel( Debug.getDefaultLogLevel() );
+		globalLogger.setLevel( getDefaultLogLevel() );
 		
 		for( Handler h : globalLogger.getParent().getHandlers() )
 			globalLogger.getParent().removeHandler( h );
