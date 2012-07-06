@@ -384,7 +384,7 @@ public class DimacsReader implements AlgorithmListener {
 //		System.out.println( "Start algorithm 1" );
 //		PreflowPushAlgorithm ppa = new PreflowPushAlgorithm();
 //		ppa.setProblem( mfp );
-//		//ppa.setLogging( true );
+//		//ppa.setLogLevel( true );
 //		start = System.nanoTime();
 //		ppa.run();
 //		end = System.nanoTime();
@@ -399,7 +399,7 @@ public class DimacsReader implements AlgorithmListener {
 //		System.out.println( "Start algorithm 2" );
 //		GenericPushRelabelAlgorithm gpra = new GenericPushRelabelAlgorithm();
 //		gpra.setProblem( mfp );
-//		gpra.setLogging( false );
+//		gpra.setLogLevel( false );
 //		start = System.nanoTime();
 //		gpra.run();
 //		end = System.nanoTime();

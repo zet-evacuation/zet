@@ -21,6 +21,7 @@
 package de.tu_berlin.math.coga.common.algorithm;
 
 import de.tu_berlin.math.coga.common.algorithm.parameter.ParameterSet;
+import de.tu_berlin.math.coga.common.debug.Debug;
 import de.tu_berlin.math.coga.common.util.Formatter;
 import java.util.LinkedHashSet;
 import java.util.LinkedList;
@@ -80,7 +81,8 @@ public abstract class Algorithm<Problem, Solution> implements Runnable {
 	/** The state of execution of the algorithm. */
 	private State state;
 	/** The logger object of this algorithm. It is initialized with the global logger, but every {@code Algorithm} may have its own logger. */
-	protected Logger log;
+	protected Logger log = Debug.globalLogger;
+;
 
 	/**
 	 * Creates a new algorithm.
