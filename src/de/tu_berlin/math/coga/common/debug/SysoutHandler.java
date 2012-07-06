@@ -100,7 +100,9 @@ public class SysoutHandler extends StreamHandler {
 		super( out, formatter );
 	}
 
-	/** Constructor forwarding */
+	/** Constructor forwarding
+	 * @throws SecurityException 
+	 */
 	public SysoutHandler() throws SecurityException {
 		super();
 		setOutputStream( System.err );
