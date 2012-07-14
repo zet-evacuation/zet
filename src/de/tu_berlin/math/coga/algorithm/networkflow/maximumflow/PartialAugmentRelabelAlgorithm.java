@@ -2,7 +2,7 @@
  * PartialAugmentRelabelAlgorithm.java
  * Created: Oct 5, 2010,5:17:40 PM
  */
-package algo.graph.staticflow.maxflow;
+package de.tu_berlin.math.coga.algorithm.networkflow.maximumflow;
 
 import ds.graph.Edge;
 import ds.graph.Node;

@@ -2,7 +2,7 @@
  * PushRelabel.java
  * Created: Oct 21, 2010, 6:03:08 PM
  */
-package algo.graph.staticflow.maxflow;
+package de.tu_berlin.math.coga.algorithm.networkflow.maximumflow;
 
 import de.tu_berlin.math.coga.common.algorithm.Algorithm;
 import ds.graph.Edge;

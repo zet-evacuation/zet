@@ -1,42 +1,36 @@
-/**
- * EdmondsKarp.java
- * Created: Oct 8, 2010, 11:39:11 AM
+/*
+ * To change this template, choose Tools | Templates
+ * and open the template in the editor.
  */
-package algo.graph.staticflow.maxflow;
+package de.tu_berlin.math.coga.algorithm.networkflow.maximumflow;
 
 import algo.graph.traverse.BFS;
 import de.tu_berlin.math.coga.common.algorithm.Algorithm;
 import ds.graph.Edge;
 import ds.graph.Node;
-import ds.graph.network.ResidualNetwork;
+import ds.graph.StaticPath;
 import ds.graph.flow.MaximumFlow;
+import ds.graph.network.ResidualNetwork;
 import ds.graph.problem.MaximumFlowProblem;
 import java.util.Stack;
 
-
 /**
- * An implementation of the algorithm of Edmonds and Karp. Successively flow is
- * augmented along shortest s-t-paths.
  *
- * Warning: there is a bug in here, on some instances, the result is not correct.
  * @author Jan-Philipp Kappmeier
  */
-public class EdmondsKarp extends Algorithm<MaximumFlowProblem, MaximumFlow> {
-		protected ResidualNetwork residualNetwork;
-	long pushes = 0;
-	int flow = 0;
-	int augmentations = 0;
-	Node source;
-	Node sink;
+public class FordFulkerson extends Algorithm<MaximumFlowProblem, MaximumFlow> {
+	protected ResidualNetwork residualNetwork;
+	protected long pushes = 0;
+	protected int flow = 0;
+	protected int augmentations = 0;
+	protected Node source;
+	protected Node sink;
 	boolean verbose = true;
-
-	public EdmondsKarp() {
-		super();
-	}
 
 	@Override
 	protected MaximumFlow runAlgorithm( MaximumFlowProblem problem ) {
-		initializeDatastructures();
+		if( residualNetwork == null ) // only initialize in the first run!
+			initializeDatastructures();
 
 		int maxPossibleFlow = 0;
 		for( Edge e : residualNetwork.outgoingEdges( source ) )
@@ -53,8 +47,13 @@ public class EdmondsKarp extends Algorithm<MaximumFlowProblem, MaximumFlow> {
 		if( maxPossibleFlow2 < maxPossibleFlow )
 			maxPossibleFlow = maxPossibleFlow2;
 		
-		while( augmentFlow() != 0 )
-				fireProgressEvent( (double)flow/maxPossibleFlow );
+		int value = 0;
+		do {
+			StaticPath p = findPath();
+			value = residualCapacity( p );
+			augmentFlow( p, value );
+			fireProgressEvent( (double)flow/maxPossibleFlow );
+		} while( value > 0 ); //while( augmentFlow() != 0 )
 
 		return new MaximumFlow( getProblem(), residualNetwork.flow() );
 	}
@@ -65,44 +64,51 @@ public class EdmondsKarp extends Algorithm<MaximumFlowProblem, MaximumFlow> {
 		sink = getProblem().getSink();
 	}
 
-	public int augmentFlow() {
+	protected StaticPath findPath() {
 		BFS bfs = new BFS( residualNetwork );
 		bfs.run( source, sink );
 
-		// Compute min
-		int min = Integer.MAX_VALUE;
+		StaticPath path = new StaticPath();
+		
 		Node current = sink;
 		do {
 			final Edge e = bfs.predecedingEdge( current );
 			if( e == null )
-				return 0;
+				return path;
+			path.addFirstEdge( e );
+			current = e.start();
+		} while( !current.equals( source ) );
+		return path;
+	}
+
+	private int residualCapacity( StaticPath path ) {
+		if( path.length() == 0 )
+			return 0;
+		int min = Integer.MAX_VALUE;
+		for( Edge e : path )
 			min = Math.min( min, residualNetwork.residualCapacities().get( e ) );
-			current = e.start();
-		} while( !current.equals( source ) );
-
+		return min;
+	}
+	
+	public void augmentFlow( StaticPath path, int value ) {
 		Stack<Edge> s = new Stack<>();
-		
-		// augment
-		current = sink;
-		do {
-			final Edge e = bfs.predecedingEdge( current );
-			s.push( e );
-			residualNetwork.augmentFlow( e, min );
-			pushes++;
-			current = e.start();
-		} while( !current.equals( source ) );
 
+		for( Edge e : path ) {
+			residualNetwork.augmentFlow( e, value );
+			pushes++;
+			s.push( e );
+		}
+		
 		System.out.println( "Auzgmented on " );
 		while( !s.empty() ) {
 			System.out.print( s.pop() );
 		}
-		System.out.println( " by " + min );
+		System.out.println( " by " + value );
 		
-		flow += min;
+		flow += value;
 		augmentations++;
-		return min;
 	}
-
+	
 	public int getFlow() {
 		return flow;
 	}

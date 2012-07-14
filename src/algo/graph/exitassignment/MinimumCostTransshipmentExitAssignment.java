@@ -20,9 +20,9 @@
 package algo.graph.exitassignment;
 
 import algo.graph.shortestpath.Dijkstra;
-import algo.graph.staticflow.maxflow.PushRelabelHighestLabelGlobalGapRelabelling;
+import de.tu_berlin.math.coga.algorithm.networkflow.maximumflow.PushRelabelHighestLabelGlobalGapRelabelling;
 import ds.graph.problem.MaximumFlowProblem;
-import algo.graph.staticflow.mincost.SuccessiveShortestPath;
+import de.tu_berlin.math.coga.algorithm.networkflow.mincostflow.SuccessiveShortestPath;
 import algo.graph.util.PathDecomposition;
 import ds.graph.Edge;
 import ds.graph.IdentifiableCollection;

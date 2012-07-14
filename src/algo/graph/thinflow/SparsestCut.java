@@ -28,7 +28,7 @@ import algo.graph.traverse.BFS;
 
 import ds.graph.ResidualGraph;
 
-import algo.graph.staticflow.maxflow.Fujishige;
+import de.tu_berlin.math.coga.algorithm.networkflow.maximumflow.Fujishige;
 import ds.graph.problem.RationalMaxFlowProblem;
 
 

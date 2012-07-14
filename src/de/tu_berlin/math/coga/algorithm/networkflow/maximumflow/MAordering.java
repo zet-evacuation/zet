@@ -3,7 +3,7 @@
  * and open the template in the editor.
  */
 
-package algo.graph.staticflow.maxflow;
+package de.tu_berlin.math.coga.algorithm.networkflow.maximumflow;
 
 
 import ds.graph.Node;

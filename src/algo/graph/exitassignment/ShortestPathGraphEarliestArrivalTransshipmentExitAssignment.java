@@ -24,7 +24,7 @@ import algo.graph.dynamicflow.eat.LongestShortestPathTimeHorizonEstimator;
 import algo.graph.dynamicflow.eat.SEAAPAlgorithm;
 import algo.graph.dynamicflow.eat.TimeHorizonBounds;
 import algo.graph.shortestpath.Dijkstra;
-import algo.graph.staticflow.maxflow.PushRelabelHighestLabelGlobalGapRelabelling;
+import de.tu_berlin.math.coga.algorithm.networkflow.maximumflow.PushRelabelHighestLabelGlobalGapRelabelling;
 import ds.graph.problem.MaximumFlowProblem;
 import ds.graph.Edge;
 import ds.graph.Forest;

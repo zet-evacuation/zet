@@ -21,7 +21,7 @@
  * To change this template, choose Tools | Template Manager
  * and open the template in the editor.
  */
-package algo.graph.staticflow.mincost;
+package de.tu_berlin.math.coga.algorithm.networkflow.mincostflow;
 
 import ds.graph.network.Network;
 import ds.mapping.IdentifiableObjectMapping;

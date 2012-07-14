@@ -21,7 +21,7 @@
 package algo.graph.dynamicflow.maxflow;
 
 import de.tu_berlin.math.coga.algorithm.flowovertime.maxflow.MaximumFlowOverTimeProblem;
-import algo.graph.staticflow.maxflow.PushRelabelHighestLabelGlobalGapRelabelling;
+import de.tu_berlin.math.coga.algorithm.networkflow.maximumflow.PushRelabelHighestLabelGlobalGapRelabelling;
 import algo.graph.util.PathDecomposition;
 import de.tu_berlin.math.coga.common.algorithm.Algorithm;
 import ds.graph.*;

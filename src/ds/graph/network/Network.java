@@ -16,6 +16,7 @@ import ds.graph.GraphLocalization;
 import ds.collection.HidingSet;
 import ds.graph.IdentifiableCollection;
 import ds.collection.ListSequence;
+import ds.graph.ArraySet;
 import ds.graph.Node;
 import ds.graph.Path;
 import java.util.Iterator;
@@ -116,6 +117,10 @@ public class Network extends AbstractNetwork {
 	public IdentifiableCollection<Edge> edges() {
 		return edges;
 	}
+	
+	public IdentifiableCollection<Edge> allEdges() {
+		return edges.getAll();
+	}
 
 	/**
 	 * Returns an {@link HidingSet} containing all the nodes of
@@ -125,6 +130,10 @@ public class Network extends AbstractNetwork {
 	@Override
 	public IdentifiableCollection<Node> nodes() {
 		return nodes;
+	}
+
+	public IdentifiableCollection<Node> allNodes() {
+		return nodes.getAll();
 	}
 
 	/**
@@ -302,6 +311,18 @@ public class Network extends AbstractNetwork {
 				return edge;
 		return null;
 	}
+	
+	public Edge allGetEdge( Node start, Node end ) {
+
+		Iterator<Edge> iter = outgoingEdges.get( start ).iteratorAll();
+		while( iter.hasNext() ) {
+			Edge edge = iter.next();
+			if( edge.end().equals( end ) )
+				return edge;
+		}
+		return null;
+	}
+					
 
 	/**
 	 * Returns an {@link ListSequence} containing all edges starting at
@@ -738,5 +759,26 @@ public class Network extends AbstractNetwork {
 	@Override
 	public Iterator<Node> iterator() {
 		return nodes.iterator();
-	}	
+	}
+	
+	public Iterator<Edge> allEdgesIterator() {
+		return edges.iteratorAll();
+	}
+	
+	/**
+	 * Returns the number of edges in this graph. Runtime O(1).
+	 * @return the number of edges in this graph.
+	 */
+	public int allNumberOfEdges() {
+		return edges.numberOfAllElements();
+	}
+
+	/**
+	 * Returns the number of nodes in this graph. Runtime O(1).
+	 * @return the number of nodes in this graph.
+	 */
+	public int allNumberOfNodes() {
+		return nodes.numberOfAllElements();
+	}
+
 }

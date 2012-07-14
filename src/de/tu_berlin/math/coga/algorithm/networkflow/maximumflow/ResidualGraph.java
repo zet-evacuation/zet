@@ -3,7 +3,7 @@
  * ResGraph.java
  * Created: 25.02.2011, 18:33:02
  */
-package algo.graph.staticflow.maxflow;
+package de.tu_berlin.math.coga.algorithm.networkflow.maximumflow;
 
 import ds.graph.ArraySet;
 import ds.graph.Edge;
