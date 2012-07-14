@@ -4,7 +4,7 @@
  */
 package algo.graph.dynamicflow.eat;
 
-import algo.graph.dynamicflow.maxflow.MaximumFlowOverTimeProblem;
+import de.tu_berlin.math.coga.algorithm.flowovertime.maxflow.MaximumFlowOverTimeProblem;
 import de.tu_berlin.math.coga.graph.generator.RMFGEN;
 import de.tu_berlin.math.coga.rndutils.distribution.discrete.UniformDistribution;
 import ds.graph.Edge;
