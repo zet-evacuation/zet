@@ -73,6 +73,12 @@ public class ArraySet<E extends Identifiable> implements IdentifiableCollection<
 	public ArraySet( Class<E> elementType ) {
 		this( elementType, 0 );
 	}
+	
+	public ArraySet( ArraySet<E> s ) {
+		this.elementType = s.elementType;
+		this.elements = s.elements;
+		this.size = s.size;
+	}
 
 	/**
 	 * Constructs an {@code ArraySet} containing no elements, but typed
@@ -276,7 +282,7 @@ public class ArraySet<E extends Identifiable> implements IdentifiableCollection<
 	 * @return an iterator for the elements of this {@code ArraySet}.
 	 */
 	public Iterator<E> iterator() {
-		return new ArrayIterator<E>( elements );
+		return new ArrayIterator<>( elements );
 	}
 
 	/**

@@ -29,8 +29,8 @@ import ds.graph.network.ResidualNetwork;
 import java.util.LinkedList;
 import java.util.List;
 
-import algo.graph.staticflow.maxflow.PushRelabel;
-import algo.graph.staticflow.maxflow.PushRelabelHighestLabelGlobalGapRelabelling;
+import de.tu_berlin.math.coga.algorithm.networkflow.maximumflow.PushRelabel;
+import de.tu_berlin.math.coga.algorithm.networkflow.maximumflow.PushRelabelHighestLabelGlobalGapRelabelling;
 
 /**
  *

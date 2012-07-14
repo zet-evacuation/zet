@@ -2,7 +2,7 @@
  * PushRelabelHighestLabel.java
  * Created: Oct 21, 2010, 6:03:17 PM
  */
-package algo.graph.staticflow.maxflow;
+package de.tu_berlin.math.coga.algorithm.networkflow.maximumflow;
 
 import de.tu_berlin.math.coga.datastructure.BucketSet;
 import de.tu_berlin.math.coga.datastructure.Tuple;
@@ -406,32 +406,5 @@ public class PushRelabelHighestLabel extends PushRelabel {
 
 	private boolean isAdmissible( Edge e ) {
 		return residualGraph.getResidualCapacity( e ) > 0 && distanceLabels.get( e.start() ) == distanceLabels.get( e.end() ) + 1;
-	}
-
-	public static void main( String[] arguments ) {
-		AbstractNetwork network = new Network( 4, 5 );
-		network.createAndSetEdge( network.getNode( 0 ), network.getNode( 1 ) );
-		network.createAndSetEdge( network.getNode( 0 ), network.getNode( 2 ) );
-		network.createAndSetEdge( network.getNode( 1 ), network.getNode( 2 ) );
-		network.createAndSetEdge( network.getNode( 1 ), network.getNode( 3 ) );
-		network.createAndSetEdge( network.getNode( 2 ), network.getNode( 3 ) );
-
-		IdentifiableIntegerMapping<Edge> capacities = new IdentifiableIntegerMapping<>( 5 );
-		capacities.add( network.getEdge( 0 ), 2 );
-		capacities.add( network.getEdge( 1 ), 1 );
-		capacities.add( network.getEdge( 2 ), 1 );
-		capacities.add( network.getEdge( 3 ), 1 );
-		capacities.add( network.getEdge( 4 ), 2 );
-
-		MaximumFlowProblem mfp = new MaximumFlowProblem( network, capacities, network.getNode( 0 ), network.getNode( 3 ) );
-
-		PushRelabelHighestLabel hipr = new PushRelabelHighestLabel();
-		hipr.setProblem( mfp );
-		hipr.run();
-
-		//System.out.println( "Flow: " + hipr.getFlow() );
-		System.out.println( "Flow: " + hipr.getSolution().getFlowValue() );
-		System.out.println( hipr.getSolution().toString() );
-		hipr.getSolution().check();
 	}
 }

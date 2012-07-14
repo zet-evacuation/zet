@@ -13,6 +13,7 @@ import algo.ca.parameter.ParameterSet;
 import algo.ca.rule.Rule;
 import ds.PropertyContainer;
 import ds.ca.evac.EvacuationCellularAutomaton;
+import ds.z.Project;
 import statistic.ca.CAStatisticWriter;
 
 /**
@@ -25,6 +26,7 @@ public class EvacuationSimulationProblem extends CellularAutomatonSimulationProb
 	public ParameterSet parameterSet;
 	public PotentialController potentialController;
 	public CAStatisticWriter caStatisticWriter;
+	private Project project;
 
 	public EvacuationSimulationProblem( EvacuationCellularAutomaton ca ) {
 		super( ca );
@@ -46,7 +48,13 @@ public class EvacuationSimulationProblem extends CellularAutomatonSimulationProb
 		ca.setAbsoluteMaxSpeed( parameterSet.getAbsoluteMaxSpeed() );
 
 	}
+
+	public void setProject( Project project ) {
+		this.project = project;
+	}
 	
-	
+	public Project getProject() {
+		return project;
+	}
 	
 }

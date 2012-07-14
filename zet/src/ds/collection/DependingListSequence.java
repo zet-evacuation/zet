@@ -34,7 +34,7 @@ import java.util.Iterator;
  */
 public class DependingListSequence<E extends Identifiable> extends ListSequence<E> {
     
-    private IdentifiableCollection<E> baseSet;
+    public IdentifiableCollection<E> baseSet;
 
     /**
      * Creates a new {@code DependingHidingList} that depends on the
@@ -44,9 +44,9 @@ public class DependingListSequence<E extends Identifiable> extends ListSequence<
      */
     public DependingListSequence(IdentifiableCollection<E> baseSet) {
         this.baseSet = baseSet;
-    }    
-
-    /**
+    }
+		
+	  /**
      * Returns whether the element is contained in this {@code DependingHidingList}.
      * An element is considered as contained in the {@code DependingHidingList}
      * if it is stored in the list itsself and in the underlying 
@@ -227,20 +227,20 @@ public class DependingListSequence<E extends Identifiable> extends ListSequence<
      * @return an iterator for the elements of this {@code ArraySet}.
      */   
     @Override
-    public Iterator<E> iterator(){
-       return new DependingHidingListIterator();
-   }    
-
-    /**
-     * An iterator to comfortably iterate through the elements of a
-     * {@code DependingHidingList}. The elements in an {@code DependingHidingList}
-     * are ordered by their IDs.      
-     * Elements that are stored but not contained in the underlying 
-     * {@code IntenfiableCollection} are skipped.
-     */
-    public class DependingHidingListIterator implements Iterator<E> {
+    public Iterator<E> iterator() {
+       return new DependingListIterator();
+   }
+		
+		public Iterator<E> iteratorAll() {
+			if( baseSet instanceof HidingSet )
+				return new DependingHidingListIterator( (HidingSet)baseSet );
+			else
+				return iterator();
+		} 
+		
+public class DependingListIterator implements Iterator<E> {
         
-        private Iterator<E> collectionIterator;        
+        private Iterator<E> collectionIterator;
         
         /**
          * The element that will be returned next by the iterator,
@@ -252,9 +252,86 @@ public class DependingListSequence<E extends Identifiable> extends ListSequence<
         /**
          * Creates a new {@code DependingHidingListIterator}.
          */
-        public DependingHidingListIterator() {
+        public DependingListIterator() {
             collectionIterator = DependingListSequence.super.iterator();
         }
+				
+        /**
+         * Checks whether there still elements not returned but contained in this
+         * {@code DependingHidingList}.
+         * @return {@code true} if there are elements not yet returned but contained,
+         *         {@code false} else.
+         */
+        public boolean hasNext() {
+            if (next != null)
+                return true;
+            while (collectionIterator.hasNext()) {
+                E e = collectionIterator.next();
+									if (baseSet.contains(e)) {
+		                  next = e;
+			                return true;
+				          }
+            }
+            return false;
+        }
+
+        /**
+         * Returns the next element not returned but contained in this
+         * {@code DependingHidingList}. If there are no more elements,
+         * {@code null} is returned.
+         * @return the next element if there are more, {@code null} else.
+         */
+        public E next() {
+            if (next == null) {
+                hasNext();
+            }
+            E current = next;
+            next = null;
+            return current;
+        }
+
+        /**
+         * Removes the element from this {@code DependingHidingList} that was
+         * last returned. 
+         */
+        public void remove() {
+            collectionIterator.remove();
+        }
+    }		
+		
+    /**
+     * An iterator to comfortably iterate through the elements of a
+     * {@code DependingHidingList}. The elements in an {@code DependingHidingList}
+     * are ordered by their IDs.      
+     * Elements that are stored but not contained in the underlying 
+     * {@code IntenfiableCollection} are skipped.
+     */
+    public class DependingHidingListIterator implements Iterator<E> {
+        
+        private Iterator<E> collectionIterator;
+				private HidingSet<E> baseSet;
+				private boolean ignoreHidden = true;
+        
+        /**
+         * The element that will be returned next by the iterator,
+         * {@code null} at the start and after the last element
+         * was returned.
+         */
+        private E next;
+        
+        /**
+         * Creates a new {@code DependingHidingListIterator}.
+         */
+        public DependingHidingListIterator( HidingSet baseSet ) {
+            collectionIterator = DependingListSequence.super.iterator();
+						this.baseSet = baseSet;
+        }
+				
+        public DependingHidingListIterator( boolean ignoreHidden ) {
+            collectionIterator = DependingListSequence.super.iterator();
+						this.ignoreHidden = ignoreHidden;
+        }
+				
         
         /**
          * Checks whether there still elements not returned but contained in this
@@ -267,10 +344,17 @@ public class DependingListSequence<E extends Identifiable> extends ListSequence<
                 return true;
             while (collectionIterator.hasNext()) {
                 E e = collectionIterator.next();
-                if (baseSet.contains(e)) {
-                    next = e;
-                    return true;
-                }
+//                if( ignoreHidden )
+									if (baseSet.containsEvenIfHidden( e ) ) {
+		                  next = e;
+			                return true;
+				          }
+//								else
+//									if (baseSet.containsEven( e)) {
+//		                  next = e;
+//			                return true;
+//				          }
+									
             }
             return false;
         }

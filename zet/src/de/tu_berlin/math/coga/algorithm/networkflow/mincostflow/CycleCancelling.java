@@ -18,7 +18,7 @@
  * CycleCancelling.java
  *
  */
-package algo.graph.staticflow.mincost;
+package de.tu_berlin.math.coga.algorithm.networkflow.mincostflow;
 
 import de.tu_berlin.math.coga.common.algorithm.Algorithm;
 import algo.graph.staticflow.StaticTransshipment;

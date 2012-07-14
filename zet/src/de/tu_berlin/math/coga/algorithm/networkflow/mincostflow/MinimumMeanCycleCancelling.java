@@ -18,7 +18,7 @@
  * MinimumMeanCycleCancelling.java
  * 
  */
-package algo.graph.staticflow.mincost;
+package de.tu_berlin.math.coga.algorithm.networkflow.mincostflow;
 
 import ds.graph.Edge;
 import ds.mapping.IdentifiableIntegerMapping;

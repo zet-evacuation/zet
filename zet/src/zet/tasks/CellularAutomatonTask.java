@@ -6,6 +6,7 @@ package zet.tasks;
 
 import algo.ca.algorithm.evac.EvacuationCellularAutomatonAlgorithm;
 import algo.ca.algorithm.evac.EvacuationSimulationProblem;
+import de.tu_berlin.math.coga.common.algorithm.AlgorithmEvent;
 import de.tu_berlin.math.coga.zet.converter.cellularAutomaton.AssignmentApplicationInstance;
 import de.tu_berlin.math.coga.zet.converter.cellularAutomaton.CellularAutomatonAssignmentConverter;
 import de.tu_berlin.math.coga.zet.converter.cellularAutomaton.ConvertedCellularAutomaton;
@@ -13,6 +14,7 @@ import de.tu_berlin.math.coga.zet.converter.cellularAutomaton.ZToCAConverter;
 import de.tu_berlin.math.coga.zet.converter.cellularAutomaton.ZToCAMapping;
 import de.tu_berlin.math.coga.zet.converter.cellularAutomaton.ZToCARasterContainer;
 import de.tu_berlin.math.coga.common.algorithm.Algorithm;
+import de.tu_berlin.math.coga.common.algorithm.AlgorithmListener;
 import ds.z.Project;
 import ds.PropertyContainer;
 import ds.ca.evac.EvacuationCellularAutomaton;
@@ -26,7 +28,7 @@ import io.visualization.CAVisualizationResults;
  *
  * @author Jan-Philipp Kappmeier
  */
-public class CellularAutomatonTask extends Algorithm<Project, CAVisualizationResults> {
+public class CellularAutomatonTask extends Algorithm<Project, CAVisualizationResults> implements AlgorithmListener {
 	CellularAutomatonAlgorithmEnumeration  cellularAutomatonAlgorithm;
 	EvacuationCellularAutomaton ca;
 	ZToCAMapping mapping;
@@ -90,5 +92,10 @@ public class CellularAutomatonTask extends Algorithm<Project, CAVisualizationRes
 
 	public ZToCAMapping getMapping() {
 		return mapping;
+	}
+
+	@Override
+	public void eventOccurred( AlgorithmEvent event ) {
+		throw new UnsupportedOperationException( "Not supported yet." );
 	}
 }

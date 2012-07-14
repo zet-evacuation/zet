@@ -4,9 +4,9 @@
  */
 package de.tu_berlin.math.coga.graph.io.dimacs;
 
-import algo.graph.staticflow.maxflow.EdmondsKarp;
-import algo.graph.staticflow.maxflow.PushRelabel;
-import algo.graph.staticflow.maxflow.PushRelabelHighestLabel;
+import de.tu_berlin.math.coga.algorithm.networkflow.maximumflow.EdmondsKarp;
+import de.tu_berlin.math.coga.algorithm.networkflow.maximumflow.PushRelabel;
+import de.tu_berlin.math.coga.algorithm.networkflow.maximumflow.PushRelabelHighestLabel;
 import de.tu_berlin.math.coga.common.algorithm.AlgorithmEvent;
 import de.tu_berlin.math.coga.common.algorithm.AlgorithmListener;
 import de.tu_berlin.math.coga.common.algorithm.AlgorithmProgressEvent;

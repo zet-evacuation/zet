@@ -32,17 +32,13 @@ import java.util.Iterator;
  */
 public class StaticPath implements Path, Iterable<Edge> {
     
-    /**
-     * The sequence of edges of this path.
-     */
+    /** The sequence of edges of this path. */
     protected ListSequence<Edge> edges;    
     
     /**
-     * Constructs a new path without edges. 
-     * Edges can be added with the corresponding methods.
-     */
+     * Constructs a new path without edges.  Edges can be added with the corresponding methods. */
     public StaticPath() {
-        edges = new ListSequence<Edge>();
+        edges = new ListSequence<>();
     }
     
     /**

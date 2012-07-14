@@ -37,19 +37,13 @@ import java.util.Iterator;
  */
 public class HidingSet<E extends Identifiable> extends ArraySet<E> implements IdentifiableCollection<E> {
 
-    /**
-     * The array to store which elements are currently hidden.
-     */
+    /** The array to store which elements are currently hidden. */
     private boolean[] hidden;
     
-    /**
-     * Number of currently hidden elements.
-     */
+    /** Number of currently hidden elements. */
     private int numberOfHiddenElements;
     
-    /**
-     * The type of the elements stored in the {@code HidingSet}.
-     */
+    /** The type of the elements stored in the {@code HidingSet}. */
     private Class<? extends Identifiable> elementType;
     
     /**
@@ -62,7 +56,7 @@ public class HidingSet<E extends Identifiable> extends ArraySet<E> implements Id
      * @param capacity the highest possible ID for elements plus one.
      */
     public HidingSet(Class<E> elementType, int capacity){
-        super(elementType, capacity);
+			super(elementType, capacity);
         this.elementType = elementType;
         hidden = new boolean[capacity];
         numberOfHiddenElements = 0;
@@ -112,6 +106,11 @@ public class HidingSet<E extends Identifiable> extends ArraySet<E> implements Id
     public boolean contains(E element) {
         return super.contains(element) && !hidden[element.id()];
     }
+		
+		public boolean containsEvenIfHidden( E element ) {
+        return super.contains( element );
+		}
+						
 
     /**
      * Returns whether this {@code ArraySet} contains no non hidden
@@ -341,11 +340,7 @@ public class HidingSet<E extends Identifiable> extends ArraySet<E> implements Id
      *         and hidden, {@code false} else.
      */
     public boolean isHidden(E element) {
-        if (!super.contains(element)) {
-            return false;
-        } else {
-            return hidden[element.id()];
-        }
+			return !super.contains(element) ? false : hidden[element.id()];
     }
     
     /**
@@ -360,10 +355,8 @@ public class HidingSet<E extends Identifiable> extends ArraySet<E> implements Id
      *         and hidden, {@code false} else.
      */
     public boolean isHidden(int id){
-    	E element = super.get(id);
-    	if (element==null)
-    		return false;
-    	else return isHidden(element);
+    	final E element = super.get(id);
+			return element == null ? false : isHidden(element);
     }
     
     /**
@@ -392,10 +385,9 @@ public class HidingSet<E extends Identifiable> extends ArraySet<E> implements Id
      * Marks all contained elements as visible.
      */
     public void showAll(){
-    	for (int i = 0; i < hidden.length; i++){
+    	for (int i = 0; i < hidden.length; i++)
     		hidden[i] = false;
-    	}
-        numberOfHiddenElements = 0;
+      numberOfHiddenElements = 0;
     }
     
     /**
@@ -451,7 +443,17 @@ public class HidingSet<E extends Identifiable> extends ArraySet<E> implements Id
                 result.add(get(i));
         return result;
     }
-
+	  
+		
+		public ArraySet<E> getAll() {
+			return new ArraySet<>( this );
+		}
+						
+    public Iterator<E> iteratorAll() {
+        return super.iterator();
+    }
+    
+		
     /**
      * An iterator to comfortably iterate through the elements of a
      * {@code HidingSet}. The elements in an {@code HidingSet}

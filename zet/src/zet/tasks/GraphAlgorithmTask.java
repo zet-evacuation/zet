@@ -4,6 +4,7 @@
  */
 package zet.tasks;
 
+import de.tu_berlin.math.coga.common.algorithm.AlgorithmEvent;
 import de.tu_berlin.math.coga.zet.converter.graph.GraphAssignmentConverter;
 import de.tu_berlin.math.coga.common.algorithm.Algorithm;
 import de.tu_berlin.math.coga.common.algorithm.AlgorithmListener;
@@ -20,7 +21,7 @@ import ds.z.ConcreteAssignment;
  *
  * @author Jan-Philipp Kappmeier
  */
-public class GraphAlgorithmTask extends Algorithm<Project, GraphVisualizationResults> {
+public class GraphAlgorithmTask extends Algorithm<Project, GraphVisualizationResults> implements AlgorithmListener {
 
 	GraphAlgorithmEnumeration graphAlgorithm;
 	NetworkFlowModel networkFlowModel;
@@ -71,6 +72,11 @@ public class GraphAlgorithmTask extends Algorithm<Project, GraphVisualizationRes
 	
 	public void setNetworkFlowModel( NetworkFlowModel networkFlowModel) {
 		this.networkFlowModel = networkFlowModel;
+	}
+
+	@Override
+	public void eventOccurred( AlgorithmEvent event ) {
+		throw new UnsupportedOperationException( "Not supported yet." );
 	}
 	
 	

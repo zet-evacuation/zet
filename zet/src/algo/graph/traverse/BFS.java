@@ -42,9 +42,9 @@ public class BFS {
 
     public BFS(Graph graph) {
         this.graph = graph;
-        distances = new IdentifiableIntegerMapping<Node>(graph.numberOfNodes());
-        predecedingEdges = new IdentifiableObjectMapping<Node, Edge>(graph.numberOfNodes(), Edge.class);
-        visited = new IdentifiableObjectMapping<Node, Boolean>(graph.numberOfNodes(), Boolean.class);
+        distances = new IdentifiableIntegerMapping<>(graph.numberOfNodes());
+        predecedingEdges = new IdentifiableObjectMapping<>(graph.numberOfNodes(), Edge.class);
+        visited = new IdentifiableObjectMapping<>(graph.numberOfNodes(), Boolean.class);
         for (Node node : graph.nodes()) {
             distances.set(node, Integer.MAX_VALUE);
             predecedingEdges.set(node, null);
@@ -69,15 +69,15 @@ public class BFS {
     }
 
     public void run(Node start, Node end, boolean longest, boolean reverse) {
-        List<Node> sources = new LinkedList<Node>();
+        List<Node> sources = new LinkedList<>();
         sources.add(start);
-        List<Node> sinks = new LinkedList<Node>();
+        List<Node> sinks = new LinkedList<>();
         sinks.add(end);
         run(sources, sinks, false, false);
     }    
     
     public void run(Iterable<Node> sources, List<Node> sinks, boolean longest, boolean reverse) {
-        Queue<Node> queue = new LinkedList<Node>();
+        Queue<Node> queue = new LinkedList<>();
         for (Node source : sources) {
             queue.offer(source);
             distances.set(source, 0);

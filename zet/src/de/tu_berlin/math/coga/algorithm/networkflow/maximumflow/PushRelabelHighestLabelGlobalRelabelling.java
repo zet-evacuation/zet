@@ -2,7 +2,7 @@
  * PushRelabelHighestLabelGlobalRelabelling.java
  * Created: Oct 21, 2010, 6:03:29 PM
  */
-package algo.graph.staticflow.maxflow;
+package de.tu_berlin.math.coga.algorithm.networkflow.maximumflow;
 
 import de.tu_berlin.math.coga.datastructure.Tuple;
 import ds.graph.Edge;

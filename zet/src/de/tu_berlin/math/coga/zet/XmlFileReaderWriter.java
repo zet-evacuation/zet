@@ -5,7 +5,7 @@
 package de.tu_berlin.math.coga.zet;
 
 import algo.graph.dynamicflow.eat.EarliestArrivalFlowProblem;
-import algo.graph.staticflow.mincost.SuccessiveShortestPath;
+import de.tu_berlin.math.coga.algorithm.networkflow.mincostflow.SuccessiveShortestPath;
 import de.tu_berlin.math.coga.graph.io.xml.GraphView;
 import java.io.IOException;
 import de.tu_berlin.math.coga.graph.io.xml.XMLReader;
