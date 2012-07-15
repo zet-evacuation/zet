@@ -436,13 +436,22 @@ public class HidingSet<E extends Identifiable> extends ArraySet<E> implements Id
      * @return an {@code ArraySet} without hidden elements. 
      */
     @SuppressWarnings("unchecked")
-    public ArraySet<E> getSetWithoutHiddenElements(){
+    public ArraySet<E> getSetWithoutHiddenElements() {
         ArraySet<E> result = new ArraySet(elementType,getCapacity());        
         for (int i = 0; i < this.getCapacity();i++)
             if (!hidden[i])
                 result.add(get(i));
         return result;
     }
+		
+		public ArraySet<E> getHiddenElements() {
+			ArraySet<E> result = new ArraySet(elementType, getCapacity() );
+			for( int i = 0; i < this.getCapacity(); ++i ) {
+				if( hidden[i])
+					result.add( super.get(i) );
+			}
+			return result;
+		}
 	  
 		
 		public ArraySet<E> getAll() {

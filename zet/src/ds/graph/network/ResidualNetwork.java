@@ -34,13 +34,13 @@ import ds.mapping.IdentifiableIntegerMapping;
 public class ResidualNetwork extends Network {
 
 	/** The underlying base network. */
-	private AbstractNetwork network;
+	protected AbstractNetwork network;
 	/**  The number of edges that the original AbstractNetwork had (without the residual edges). */
 	private int originalNumberOfEdges;
 	/** The flow associated with this residual network. */
-	private IdentifiableIntegerMapping<Edge> flow;
+	protected IdentifiableIntegerMapping<Edge> flow;
 	/** The residual capacities of this residual network. */
-	private IdentifiableIntegerMapping<Edge> residualCapacities;
+	protected IdentifiableIntegerMapping<Edge> residualCapacities;
 	/** The residual transit times of this residual network. */
 	private IdentifiableIntegerMapping<Edge> residualTransitTimes;
 
@@ -88,8 +88,6 @@ public class ResidualNetwork extends Network {
 				setHidden( rev, true );
 			}
 		}
-		
-		
 		
 		this.network = network;
 		flow = new IdentifiableIntegerMapping<>( network.allNumberOfEdges() );
@@ -188,10 +186,13 @@ public class ResidualNetwork extends Network {
 	 */
 	public void augmentFlow( Edge edge, int amount ) {
 		Edge reverseEdge = reverseEdge( edge );
-		if( isReverseEdge( edge ) )
+		if( isReverseEdge( edge ) ) {
 			flow.decrease( reverseEdge, amount );
-		else
+			//System.out.println( "FLOW on EDGE " + reverseEdge + " set to " + flow.get( reverseEdge ) );
+		} else { 
 			flow.increase( edge, amount );
+			//System.out.println( "FLOW on EDGE " + edge + " set to " + flow.get( edge ) );
+		}
 		residualCapacities.decrease( edge, amount );
 		residualCapacities.increase( reverseEdge, amount );
 		if( 0 == residualCapacities.get( edge ) )
