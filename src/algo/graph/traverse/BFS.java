@@ -112,10 +112,10 @@ public class BFS {
     
     public HashSet<Node> getReachableNodes(Node start) {
         
-        Queue<Node> queue = new LinkedList<Node>();
+        Queue<Node> queue = new LinkedList<>();
         queue.offer(start);
         
-        HashSet<Node> reachableNodes = new HashSet<Node>();
+        HashSet<Node> reachableNodes = new HashSet<>();
         reachableNodes.add(start);
         visited.set(start,true);
        

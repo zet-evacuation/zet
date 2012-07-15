@@ -11,7 +11,14 @@ import ds.graph.Node;
 import ds.graph.StaticPath;
 import ds.graph.flow.MaximumFlow;
 import ds.graph.network.ResidualNetwork;
+import ds.graph.network.ResidualNetworkExtended;
 import ds.graph.problem.MaximumFlowProblem;
+import ds.mapping.IdentifiableBooleanMapping;
+import ds.mapping.IdentifiableIntegerMapping;
+import java.util.Collections;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Set;
 import java.util.Stack;
 
 /**
@@ -26,11 +33,17 @@ public class FordFulkerson extends Algorithm<MaximumFlowProblem, MaximumFlow> {
 	protected Node source;
 	protected Node sink;
 	boolean verbose = true;
+	boolean useLower = true;
+	private IdentifiableIntegerMapping<Edge> lowerCapacities;
 
 	@Override
 	protected MaximumFlow runAlgorithm( MaximumFlowProblem problem ) {
 		if( residualNetwork == null ) // only initialize in the first run!
 			initializeDatastructures();
+		else {
+			residualNetwork.update(); // second round
+			cut = null;
+		}
 
 		int maxPossibleFlow = 0;
 		for( Edge e : residualNetwork.outgoingEdges( source ) )
@@ -52,14 +65,18 @@ public class FordFulkerson extends Algorithm<MaximumFlowProblem, MaximumFlow> {
 			StaticPath p = findPath();
 			value = residualCapacity( p );
 			augmentFlow( p, value );
-			fireProgressEvent( (double)flow/maxPossibleFlow );
-		} while( value > 0 ); //while( augmentFlow() != 0 )
+			fireProgressEvent( value < Integer.MAX_VALUE ? (double)flow/maxPossibleFlow : 1 );
+		} while( value > 0 && value < Integer.MAX_VALUE ); //while( augmentFlow() != 0 )
 
 		return new MaximumFlow( getProblem(), residualNetwork.flow() );
 	}
 
 	private void initializeDatastructures() {
-		residualNetwork = new ResidualNetwork( getProblem().getNetwork(), getProblem().getCapacities() );
+		if( useLower ) {
+			residualNetwork = new ResidualNetworkExtended( getProblem().getNetwork(), getProblem().getCapacities() );
+			((ResidualNetworkExtended)residualNetwork).setLower( lowerCapacities );
+		} else
+			residualNetwork = new ResidualNetwork( getProblem().getNetwork(), getProblem().getCapacities() );
 		source = getProblem().getSource();
 		sink = getProblem().getSink();
 	}
@@ -119,5 +136,67 @@ public class FordFulkerson extends Algorithm<MaximumFlowProblem, MaximumFlow> {
 
 	public long getPushes() {
 		return pushes;
+	}
+	
+	IdentifiableBooleanMapping<Node> contained;
+	Set<Node> cut;
+	public Set<Node> computeCutNodes() {
+		if( contained == null )
+			contained = new IdentifiableBooleanMapping<>( residualNetwork.numberOfNodes() );
+		for( Node n : getProblem().getNetwork() ) {
+			contained.set( n, false );
+		}
+		BFS bfs = new BFS( residualNetwork );
+		Set<Node> reachable = bfs.getReachableNodes( source );
+		for( Node n : reachable ) {
+			contained.set( n, true );
+		}
+		cut = reachable;
+		return reachable;
+	}
+	
+	LinkedList<Edge> cutOutgoing = new LinkedList<>();
+	LinkedList<Edge> cutIncoming = new LinkedList<>();
+		
+	public void computeCutEdges() {
+		if( cut == null ) {
+			cut = computeCutNodes();
+			cutOutgoing.clear();
+			cutIncoming.clear();
+		}
+		
+		for( Node n : cut ) {
+			//for( Edge e : getProblem().getNetwork().outgoingEdges( n ) ) {
+			for( Edge e : getProblem().getNetwork().outgoingEdges( n ) ) {
+				// find outgoing edges
+				if( !contained.get( e.end() ) && !cutOutgoing.contains( e ) )
+					cutOutgoing.add( e );
+			}
+			for( Edge e : getProblem().getNetwork().incomingEdges( n ) ) {
+				if( !contained.get( e.start() ) && !cutIncoming.contains( e ) ) {
+					cutIncoming.add( e );
+				}
+			}
+		}
+	}
+	
+	public boolean isInCut( Node n ) {
+		return contained.get( n );
+	}
+	
+	public Set<Node> getCut() {
+		return Collections.unmodifiableSet( cut );
+	}
+
+	public List<Edge> getOutgoingCut() {
+		return Collections.unmodifiableList( cutOutgoing );
+	}
+
+	public List<Edge> getIncomingCut() {
+		return Collections.unmodifiableList( cutIncoming );
+	}
+
+	public void setLowerCapacities( IdentifiableIntegerMapping<Edge> lowerCapacities ) {
+		this.lowerCapacities = lowerCapacities;
 	}
 }

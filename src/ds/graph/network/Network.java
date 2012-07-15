@@ -189,6 +189,11 @@ public class Network extends AbstractNetwork {
 	public IdentifiableCollection<Edge> outgoingEdges( Node node ) {
 		return outgoingEdges.get( node );
 	}
+	
+	public Iterator<Edge> allOutgoingEdges( Node node ) {
+		return outgoingEdges.get( node ).iteratorAll();
+	}
+					
 
 	/**
 	 * Returns an {@link IdentifiableCollection} containing all the nodes adjacent to
@@ -322,6 +327,8 @@ public class Network extends AbstractNetwork {
 		}
 		return null;
 	}
+	
+	
 					
 
 	/**
@@ -779,6 +786,10 @@ public class Network extends AbstractNetwork {
 	 */
 	public int allNumberOfNodes() {
 		return nodes.numberOfAllElements();
+	}
+
+	public IdentifiableCollection<Edge> getHidden() {
+		return edges.getHiddenElements();
 	}
 
 }
