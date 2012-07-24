@@ -10,6 +10,7 @@ import com.martiansoftware.jsap.Switch;
 import com.martiansoftware.jsap.UnflaggedOption;
 import de.tu_berlin.math.coga.batch.input.reader.ZETProjectFileReader;
 import de.tu_berlin.math.coga.common.debug.Debug;
+import de.tu_berlin.math.coga.graph.io.xml.XMLWriter;
 import de.tu_berlin.math.coga.rndutils.RandomUtils;
 import de.tu_berlin.math.coga.zet.converter.graph.GraphAssignmentConverter;
 import ds.PropertyContainer;
@@ -23,6 +24,7 @@ import gui.editor.properties.PropertyLoadException;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.io.File;
+import java.io.IOException;
 import java.nio.file.FileSystems;
 import java.nio.file.Path;
 import java.util.ArrayList;
@@ -44,11 +46,17 @@ public class CZET {
 	private static final Logger log = Logger.getGlobal();
 
 	private static enum ComputationMode {
-		EarliestArrivalFlow,
-		StaticMaximumFlow,
-		StaticMinCostFlow,
-		EvacuationSimulation;
+		EarliestArrivalFlow( OutputFileType.flow ),
+		StaticMaximumFlow( OutputFileType.txt ),
+		StaticMinCostFlow( OutputFileType.txt ),
+		EvacuationSimulation( OutputFileType.txt ),
+		Conversion( OutputFileType.XML );
+		final OutputFileType defaultOutputFileType;
 
+		private ComputationMode( OutputFileType defaultOutputFileType ) {
+			this.defaultOutputFileType = defaultOutputFileType;
+		}
+		
 		static ComputationMode parse( String string ) {
 			switch( string ) {
 				case "evac":
@@ -59,6 +67,8 @@ public class CZET {
 					return ComputationMode.StaticMinCostFlow;
 				case "eat":
 					return ComputationMode.EarliestArrivalFlow;
+				case "conv":
+					return ComputationMode.Conversion;
 				default:
 					return null;
 			}
@@ -85,7 +95,7 @@ public class CZET {
 	private static enum InputFileType {
 		XML( new ComputationMode[]{ComputationMode.EarliestArrivalFlow} ),
 		DimacsMaxFlow( new ComputationMode[]{ComputationMode.StaticMaximumFlow} ),
-		ZET( new ComputationMode[]{ComputationMode.EarliestArrivalFlow, ComputationMode.EvacuationSimulation} );
+		ZET( new ComputationMode[]{ComputationMode.EarliestArrivalFlow, ComputationMode.EvacuationSimulation, ComputationMode.Conversion} );
 		ArrayList<ComputationMode> supportedModes = new ArrayList<>();
 
 		private InputFileType( ComputationMode[] supportedModes ) {
@@ -98,13 +108,21 @@ public class CZET {
 	}
 
 	private static enum OutputFileType {
-		XML,
-		flow,
-		dot;
+		XML( "xml" ),
+		flow( "flow" ),
+		dot( "dot" ),
+		txt ( "txt" );
+		String ending;
+
+		private OutputFileType( String ending ) {
+			this.ending = ending;
+		}
+		
 	}
 	private Path inputFile;
 	private Path outputFile;
 	private InputFileType inputFileType;
+	private OutputFileType outputFileType;
 	private ComputationMode computationMode;
 	private GraphConverterAlgorithms projectConverter;
 	private int ignore = 0;
@@ -112,7 +130,7 @@ public class CZET {
 	private long seed = System.nanoTime();
 	private boolean median = false;
 
-	public static void main( String[] arguments ) throws JSAPException {
+	public static void main( String[] arguments ) throws JSAPException, IOException {
 		//Debug.setDefaultLogLevel( Level.FINER );
 		Debug.setUpLogging();
 
@@ -178,6 +196,8 @@ public class CZET {
 		CZET czet = new CZET();
 		czet.setFile( config.getString( "inputFile" ) );
 		// Try to load input file
+		
+		czet.setOutputFile( config.getString( "outputFile" ) );
 
 
 		// Here, we can be sure that arguments have been read correctly
@@ -256,6 +276,7 @@ public class CZET {
 			czet.setSeed( seed );
 		}
 		
+		czet.directoryToFile();
 		
 		czet.compute();
 	}
@@ -273,6 +294,24 @@ public class CZET {
 		return inputFile.toString().substring( inputFile.toString().lastIndexOf( '.' ) + 1 );
 	}
 
+	private void setOutputFile( String file ) {
+		if( file == null ) {
+			String f = "./";
+			outputFile = FileSystems.getDefault().getPath( f );
+		} else {
+			outputFile = FileSystems.getDefault().getPath( file );
+		}
+	}
+	
+	private void directoryToFile() {
+		if( !outputFile.toFile().isDirectory() )
+			return;
+		Path fileName = inputFile.getFileName();
+		String ending = getFileEnding();
+		String file = fileName.toString().substring( 0, fileName.toString().length()-ending.length() );
+		outputFile = outputFile.resolve( file + outputFileType.ending );
+	}
+
 	private InputFileType getInputFileType() {
 		return inputFileType;
 	}
@@ -287,6 +326,7 @@ public class CZET {
 
 	private void setComputationMode( ComputationMode computationMode ) {
 		this.computationMode = computationMode;
+		outputFileType = computationMode.defaultOutputFileType;
 	}
 
 	public GraphConverterAlgorithms getProjectConverter() {
@@ -329,7 +369,7 @@ public class CZET {
 		this.seed = seed;
 	}	
 
-	public void compute() {
+	public void compute() throws IOException {
 		switch( inputFileType ) {
 			case ZET:
 				computeZET();
@@ -337,7 +377,7 @@ public class CZET {
 	}
 				MedianCalculator<Long> m;
 
-	private void computeZET() {
+	private void computeZET() throws IOException {
 		// Try to load some properties
 		File propertyFile = new File( "./properties/properties.xml" );
 		try {
@@ -352,95 +392,161 @@ public class CZET {
 		fr.setProblem( inputFile.toFile() );
 		fr.run();
 		log.finer( "LOADED" );
+		
+		if( fr.isRunning() )
+			throw new AssertionError( "Is running!" );
+		
+		if( fr.getSolution() == null )
+			throw new AssertionError( "Solution null. Das sollte nicht passieren." );
 
-				m = new MedianCalculator<>( 2 );
+		m = new MedianCalculator<>( 2 );
 
 		// Now check if simulation or optimization is needed and call the methods
-		assert (computationMode == ComputationMode.EarliestArrivalFlow || computationMode == ComputationMode.EvacuationSimulation);
-		if( computationMode == ComputationMode.EarliestArrivalFlow ) {
-			log.fine( "Perform EAT" );
-			assert( runs >= 0 );
-			if( runs == 0 ) {
-		// Try to load the project
-				computeZETEAT( fr.getSolution(), seed );
-			} else {
-				// Test run
-				log.fine( "Start test runs" );
-				for( int i = 1; i <= ignore; ++i ) {
-					log.finer( "Ignore run " + i );
+		assert (computationMode == ComputationMode.EarliestArrivalFlow || computationMode == ComputationMode.EvacuationSimulation || computationMode == ComputationMode.Conversion );
+		switch( computationMode ) {
+			case EarliestArrivalFlow:
+				log.fine( "Perform EAT" );
+				assert (runs >= 0);
+				if( runs == 0 )
+					// Try to load the project
 					computeZETEAT( fr.getSolution(), seed );
-					
-				}
-				// Reset times
-				int validCount = 0;
-				m = new MedianCalculator<>( 2 );
-				do {
-					log.fine( "START REAL RUN " + validCount );
-					computeZETEAT( fr.getSolution(), seed+validCount );
-					if( median )
-						m.run();
-					log.finer( "Anzahl outlier: " + m.getNumberOfOutlier() + " - Anzahl valid: " + m.valid() );
-					validCount = median ? m.valid() : validCount + 1;
-				} while( validCount < runs );
-				
-				// Compute averages
-				log.info("\n\n" );
-				log.info( "Runtimes for conversion:" );
-				String out = "";
-				for( long j : m.getValues( 1 ) )
-					out += j + "\t";
-				log.info( out );
-				log.info("");
-				
-				log.fine( "Outliers:" );
-				out = "";
-				for( long l : m.getOutlier( 1 ) )
-					out += l + "\t";
-				log.fine( out );
-				log.fine( "" );
-				
-				log.finer( "Valid Runtimes for Conversion:" );
-				out = "";
-				for( long l : m.getValid( 1 ) )
-					out += l + "\t";
-				log.finer( out );
-				log.finer( "" );
+				else {
+					// Test run
+					log.fine( "Start test runs" );
+					for( int i = 1; i <= ignore; ++i ) {
+						log.finer( "Ignore run " + i );
+						computeZETEAT( fr.getSolution(), seed );
 
-				log.info( "Runtimes for EAT:" );
-				out = "";
-				for( long l : m.getValues( 0 ) )
-					out += l + "\t";
-				log.info( out );
-				log.info("");
+					}
+					// Reset times
+					int validCount = 0;
+					m = new MedianCalculator<>( 2 );
+					do {
+						log.fine( "START REAL RUN " + validCount );
+						computeZETEAT( fr.getSolution(), seed + validCount );
+						if( median )
+							m.run();
+						log.finer( "Anzahl outlier: " + m.getNumberOfOutlier() + " - Anzahl valid: " + m.valid() );
+						validCount = median ? m.valid() : validCount + 1;
+					} while( validCount < runs );
+
+					// Compute averages
+					log.info( "\n\n" );
+					log.info( "Runtimes for conversion:" );
+					String out = "";
+					for( long j : m.getValues( 1 ) )
+						out += j + "\t";
+					log.info( out );
+					log.info( "" );
+
+					log.fine( "Outliers:" );
+					out = "";
+					for( long l : m.getOutlier( 1 ) )
+						out += l + "\t";
+					log.fine( out );
+					log.fine( "" );
+
+					log.finer( "Valid Runtimes for Conversion:" );
+					out = "";
+					for( long l : m.getValid( 1 ) )
+						out += l + "\t";
+					log.finer( out );
+					log.finer( "" );
+
+					log.info( "Runtimes for EAT:" );
+					out = "";
+					for( long l : m.getValues( 0 ) )
+						out += l + "\t";
+					log.info( out );
+					log.info( "" );
+
+					log.fine( "Outliers:" );
+					out = "";
+					for( long l : m.getOutlier( 0 ) )
+						out += l + "\t";
+					log.fine( out );
+					log.fine( "" );
+
+					log.finer( "Valid Runtimes for EAT:" );
+					out = "";
+					for( long l : m.getValid( 0 ) )
+						out += l + "\t";
+					log.finer( out );
+					log.finer( "" );
+
+					log.info( "Average conversion:" );
+					long total = 0;
+					for( Long r : m.getValid( 1 ) )
+						total += r;
+					log.info( "" + total / (double)validCount );
+					total = 0;
+					assert validCount == m.getValid( 1 ).size();
+					log.info( "Average EAT:" );
+					for( Long r : m.getValid( 0 ) )
+						total += r;
+					log.log( Level.INFO, "{0}", total / (double)validCount );
+				}
+				break;
+			case EvacuationSimulation:
+				log.info( "Perform Simulation" );
+				break;
+			case Conversion:
+				log.info( "Perform conversion" );
 				
-				log.fine( "Outliers:" );
-				out = "";
-				for( long l : m.getOutlier( 0 ) )
-					out += l + "\t";
-				log.fine( out );
-				log.fine("");
+				log.info( "Writing to " + outputFile.toString() );
+
+				// TODO: doubled code. move to method or something like that
 				
-				log.finer( "Valid Runtimes for EAT:" );
-				out = "";
-				for( long l : m.getValid( 0 ) )
-					out += l + "\t";
-				log.finer( out );
-				log.finer( "" );
+				log.config( "Using seed: " + seed );
 				
-				log.info( "Average conversion:" );
-				long total = 0;
-				for( Long r : m.getValid( 1 ) )
-					total += r;
-				log.info( "" + total/(double)validCount );
-				total = 0;
-				assert validCount == m.getValid( 1 ).size();
-				log.info( "Average EAT:" );
-				for( Long r : m.getValid( 0 ) )
-					total += r;
-				log.log( Level.INFO, "{0}", total/(double)validCount );
-			}
-		} else
-			log.info( "Perform Simulation" );
+				RandomUtils.getInstance().setSeed( seed );
+				//try {
+				AlgorithmControl a = new AlgorithmControl( fr.getSolution() );
+				
+				assert( fr.getSolution() != null );
+				
+				a.convertBuildingPlan();
+				PropertyChangeListener pr = new PropertyChangeListener() {
+					@Override
+					public void propertyChange( PropertyChangeEvent evt ) {
+						if( evt.getNewValue() == SwingWorker.StateValue.DONE )
+							working = false;
+					}
+				};
+				RunnableFuture<Void> thread = a.convertGraph( pr, projectConverter );
+
+				long cr = 0;
+				try { // Wait for the thread to end
+					thread.get();
+
+					while( a.getNetworkFlowModel() == null )
+						Thread.sleep( 500 );
+
+					cr = a.getConversionRuntime();
+				} catch( InterruptedException | ExecutionException ex ) {
+					Logger.getLogger( CZET.class.getName() ).log( Level.SEVERE, null, ex );
+					log.log( Level.SEVERE, "Severe error.", ex );
+					System.exit( 1 );
+				}
+
+				assert (a.getNetworkFlowModel() != null);
+				if( a.getNetworkFlowModel() == null )
+					throw new IllegalStateException();
+
+				ConcreteAssignment concreteAssignment = fr.getSolution().getCurrentAssignment().createConcreteAssignment( 400 );
+
+				NetworkFlowModel nfm = a.getNetworkFlowModel();
+
+				GraphAssignmentConverter cav = new GraphAssignmentConverter( nfm );
+
+				cav.setProblem( concreteAssignment );
+				cav.run();
+
+				nfm = cav.getSolution();
+
+				XMLWriter writer = new XMLWriter( outputFile.toFile() );
+				writer.writeGraph( nfm.getNetwork(), nfm.edgeCapacities, nfm.transitTimes, nfm.currentAssignment );
+		}
 
 	}
 	boolean working = true;
