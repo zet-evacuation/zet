@@ -8,10 +8,10 @@ import de.tu_berlin.math.coga.algorithm.flowovertime.maxflow.MaximumFlowOverTime
 import de.tu_berlin.math.coga.graph.generator.RMFGEN;
 import de.tu_berlin.math.coga.rndutils.distribution.discrete.UniformDistribution;
 import ds.graph.Edge;
-import ds.mapping.IdentifiableIntegerMapping;
-import ds.graph.network.AbstractNetwork;
 import ds.graph.Node;
+import ds.graph.network.AbstractNetwork;
 import ds.graph.network.Network;
+import ds.mapping.IdentifiableIntegerMapping;
 import java.util.ArrayList;
 import org.junit.Assert;
 import org.junit.Before;
