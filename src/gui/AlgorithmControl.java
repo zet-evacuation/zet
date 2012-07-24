@@ -367,6 +367,7 @@ public class AlgorithmControl implements PropertyChangeListener {
 		final SerialTask st = new SerialTask( gat );
 		st.addPropertyChangeListener( new PropertyChangeListener() {
 
+			@Override
 			public void propertyChange( PropertyChangeEvent pce ) {
 				if( st.isDone() ) {
 					networkFlowModel = gat.getNetworkFlowModel();

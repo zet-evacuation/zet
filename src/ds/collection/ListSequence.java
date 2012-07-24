@@ -23,8 +23,8 @@ package ds.collection;
 import ds.graph.IdentifiableCollection;
 import ds.mapping.Identifiable;
 import java.util.Collection;
-import java.util.LinkedList;
 import java.util.Iterator;
+import java.util.LinkedList;
 
 /**
  * The {@code ListSequence} class represents a sequence of 

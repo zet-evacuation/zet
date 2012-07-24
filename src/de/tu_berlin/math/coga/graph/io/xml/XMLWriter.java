@@ -6,12 +6,11 @@ package de.tu_berlin.math.coga.graph.io.xml;
 
 import algo.graph.dynamicflow.eat.EarliestArrivalFlowProblem;
 import com.thoughtworks.xstream.XStream;
-//import fv.gui.view.FlowVisualisation;
 import ds.graph.Edge;
-import ds.mapping.IdentifiableDoubleMapping;
-import ds.mapping.IdentifiableIntegerMapping;
-import ds.graph.network.AbstractNetwork;
 import ds.graph.Node;
+import ds.graph.network.AbstractNetwork;
+import ds.graph.network.Network;
+import ds.mapping.IdentifiableIntegerMapping;
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
@@ -52,6 +51,7 @@ public class XMLWriter {
 		try {
 			writer = new BufferedWriter( new FileWriter( file ) );
 			xstream.alias( "graph", AbstractNetwork.class );
+			xstream.alias( "network", Network.class );
 			xstream.setMode( XStream.NO_REFERENCES );
 			//xstream.alias("flowVisualisation",FlowVisualisation.class);
 			xstream.registerConverter( new ColorConverter() );
@@ -77,6 +77,7 @@ public class XMLWriter {
 		try {
 			writer = new BufferedWriter( new FileWriter( file ) );
 			xstream.alias( "graph", AbstractNetwork.class );
+			xstream.alias( "graph", Network.class );
 			xstream.setMode( XStream.NO_REFERENCES );
 			//xstream.alias("flowVisualisation",FlowVisualisation.class);
 			xstream.registerConverter( new ColorConverter() );
@@ -97,7 +98,7 @@ public class XMLWriter {
 		BufferedWriter writer = null;
 		xmlData.network = eafp.getNetwork();
 
-		final ArrayList<Node> sinks = new ArrayList<Node>( 1 );
+		final ArrayList<Node> sinks = new ArrayList<>( 1 );
 		sinks.add( eafp.getSink() );
 		xmlData.sinks = sinks;	// not needed during conversation in normal mode
 		xmlData.sources = eafp.getSources(); // not needed during conversation in normal mode

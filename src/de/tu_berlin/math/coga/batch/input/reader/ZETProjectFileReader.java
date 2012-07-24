@@ -57,7 +57,8 @@ public class ZETProjectFileReader extends InputFileReader<Project> {
         try {
             return ProjectLoader.load(problem);
         } catch (IOException ex) {
-            Logger.getLogger(ZETProjectFileReader.class.getName()).log(Level.SEVERE, null, ex);
+					// TODO: global logger benutzen oder dem default logger einen output anghängen...
+	          Logger.getLogger(ZETProjectFileReader.class.getName()).log(Level.SEVERE, null, ex);
             return null;
         }
     }
