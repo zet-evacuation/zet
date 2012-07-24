@@ -6,10 +6,10 @@ package algo.graph.dynamicflow.maxflow;
 
 import de.tu_berlin.math.coga.algorithm.flowovertime.maxflow.MaximumFlowOverTimeProblem;
 import ds.graph.Edge;
-import ds.mapping.IdentifiableIntegerMapping;
-import ds.graph.network.AbstractNetwork;
 import ds.graph.Node;
+import ds.graph.network.AbstractNetwork;
 import ds.graph.network.Network;
+import ds.mapping.IdentifiableIntegerMapping;
 import java.util.LinkedList;
 import java.util.List;
 import org.junit.Test;
