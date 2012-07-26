@@ -355,7 +355,7 @@ public class FlowVisualizationTool extends JFrame implements PropertyChangeListe
 							eafp = null;
 							return;
 						}
-						GraphVisualizationResults graphVisResult = new GraphVisualizationResults( eafp, xPos, yPos );
+						GraphVisualizationResults graphVisResult = new GraphVisualizationResults( eafp, xPos, yPos, null );
 						sb.setStatusText( 0, "Baue Visualisierung" );
 						control = new GLFlowGraphControl( graphVisResult );
 					}
@@ -516,7 +516,7 @@ public class FlowVisualizationTool extends JFrame implements PropertyChangeListe
 	 */
 	private void loadGraphVisResults() {
 		sb.setStatusText( 0, "Baue Visualisierung" );
-		slider.setMaximum( (graphVisResult.getNeededTimeHorizon() + 1) * sliderAccuracy );
+		slider.setMaximum( (graphVisResult.getTimeHorizon() + 1) * sliderAccuracy );
 		GLFlowGraphControl control = new GLFlowGraphControl( graphVisResult );
 		visFlow.setControl( control );
 		vis.update();
@@ -533,7 +533,7 @@ public class FlowVisualizationTool extends JFrame implements PropertyChangeListe
 
 			sb.setStatusText( 0, "Erzeuge Kantenbasierte Variante..." );
 			graphVisResult = new GraphVisualizationResults( sw.getEarliestArrivalFlowProblem(), xPos, yPos, sw.getFlowOverTime() );
-			graphVisResult.setNeededTimeHorizon( sw.getNeededTimeHorizon() );
+			graphVisResult.setTimeHorizon( sw.getNeededTimeHorizon() );
 			loadGraphVisResults();
 		}
 	}
