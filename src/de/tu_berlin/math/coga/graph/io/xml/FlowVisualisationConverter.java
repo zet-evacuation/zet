@@ -4,6 +4,8 @@
  */
 package de.tu_berlin.math.coga.graph.io.xml;
 
+import de.tu_berlin.math.coga.graph.io.xml.visualization.GraphVisualization;
+import de.tu_berlin.math.coga.graph.io.xml.visualization.FlowVisualization;
 import algo.graph.util.PathComposition;
 import com.thoughtworks.xstream.converters.Converter;
 import com.thoughtworks.xstream.converters.MarshallingContext;
@@ -96,7 +98,8 @@ public class FlowVisualisationConverter implements Converter {
 		// TODO the scale and subersink things are moved to GraphViewConverter (as they should!)
 		
 		GraphViewConverter gvc = new GraphViewConverter( xmlData );
-		GraphView graphView = (GraphView) gvc.unmarshal( reader, context );
+		GraphVisualization graphView2 = (GraphVisualization) gvc.unmarshal( reader, context );
+		FlowVisualization graphView = new FlowVisualization( graphView2 );
 		reader.moveUp();	// close graphLayout reading
 
 		System.out.println( "converted network: " );
@@ -235,22 +238,22 @@ public class FlowVisualisationConverter implements Converter {
 //        for (String key : this.flows.keySet()) {
 //            flowViews.add(new FlowView(graphView,this.flows.get(key),flowAttributes.get(key)));
 //        }
-		FlowVisualization fv = new FlowVisualization( graphView );
+		//FlowVisualization fv = new FlowVisualization( graphView );
 
-		fv.setEdgesDoubled( xmlData.doubleEdges );
+		graphView.setEdgesDoubled( xmlData.doubleEdges );
 		
 
-		PathComposition pathComposition = new PathComposition( fv.getGv().network, fv.getGv().transitTimes, dynamicFlow );
+		PathComposition pathComposition = new PathComposition( graphView.getNetwork() , graphView.getTransitTimes(), dynamicFlow );
 		pathComposition.run();
 
-		fv.setFlow( pathComposition.getEdgeFlows() );
+		graphView.setFlow( pathComposition.getEdgeFlows() );
 
 		int maxTimeHorizon = 0;
 		for( Edge edge : xmlData.getEdges().values() )
 			maxTimeHorizon = Math.max( maxTimeHorizon, pathComposition.getEdgeFlows().get( edge ).getLastTimeWithNonZeroValue() + xmlData.getTransitTimesIntegral().get( edge ) );
 
-		fv.setTimeHorizon( maxTimeHorizon );
-		fv.setMaxFlowRate( maxFlowRate );
-		return fv;
+		graphView.setTimeHorizon( maxTimeHorizon );
+		graphView.setMaxFlowRate( maxFlowRate );
+		return graphView;
 	}
 }

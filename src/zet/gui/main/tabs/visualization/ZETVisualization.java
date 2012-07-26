@@ -11,8 +11,7 @@ import ds.z.ZControl;
 import gui.GUIControl;
 import gui.ZETProperties;
 import gui.visualization.Visualization;
-import gui.visualization.control.GLControl;
-import java.awt.Color;
+import gui.visualization.control.ZETGLControl;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseWheelEvent;
@@ -28,7 +27,7 @@ import zet.gui.GUILocalization;
  * @author Jan-Philipp Kappmeier
  */
 @SuppressWarnings( "serial" )
-public class ZETVisualization extends Visualization<GLControl> {
+public class ZETVisualization extends Visualization<ZETGLControl> {
 	/** The GUI localization class. */
 	GUILocalization loc = GUILocalization.getSingleton();
 	/** The minimal number of frames that needs to be captured in movie rendering mode for the cellular automaton */
@@ -64,7 +63,7 @@ public class ZETVisualization extends Visualization<GLControl> {
 //			this.setParallelViewMode( ParallelViewMode.Isometric );
 //		else
 //			this.setParallelViewMode( ParallelViewMode.Orthogonal );
-		setControl( new GLControl() );
+		setControl( new ZETGLControl() );
 	}
 	
 	public void setZcontrol( ZControl zcontrol ) {

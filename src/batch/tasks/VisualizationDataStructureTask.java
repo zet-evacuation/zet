@@ -22,7 +22,7 @@ package batch.tasks;
 
 import ds.CompareVisualizationResults;
 import ds.GraphVisualizationResults;
-import gui.visualization.control.GLControl;
+import gui.visualization.control.ZETGLControl;
 import io.visualization.BuildingResults;
 import io.visualization.CAVisualizationResults;
 import statistic.ca.CAStatistic;
@@ -36,7 +36,7 @@ public class VisualizationDataStructureTask implements Runnable {
 	private CAVisualizationResults caRes;
 	private GraphVisualizationResults graphRes;
 	private BuildingResults buildingRes;
-	private GLControl control;
+	private ZETGLControl control;
 	private CAStatistic caStatistic;
         private CompareVisualizationResults compVisRes;
 
@@ -61,18 +61,18 @@ public class VisualizationDataStructureTask implements Runnable {
 	}
 	
 	/**
-	 * Creates the GLControl object
+	 * Creates the ZETGLControl object
 	 */
 
 	public void run() {
-		control = new GLControl( caRes, graphRes, buildingRes, caStatistic, compVisRes );
+		control = new ZETGLControl( caRes, graphRes, buildingRes, caStatistic, compVisRes );
 	}
 
 	/**
 	 * Returns the created control object
 	 * @return the control object
 	 */
-	public GLControl getControl() {
+	public ZETGLControl getControl() {
 		return control;
 	}
 }

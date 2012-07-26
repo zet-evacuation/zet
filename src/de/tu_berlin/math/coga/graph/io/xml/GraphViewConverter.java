@@ -4,6 +4,7 @@
  */
 package de.tu_berlin.math.coga.graph.io.xml;
 
+import de.tu_berlin.math.coga.graph.io.xml.visualization.GraphVisualization;
 import com.thoughtworks.xstream.converters.Converter;
 import com.thoughtworks.xstream.converters.MarshallingContext;
 import com.thoughtworks.xstream.converters.UnmarshallingContext;
@@ -24,7 +25,7 @@ public class GraphViewConverter implements Converter {
 
 	private HierarchicalStreamReader reader;
 	private XMLData xmlData;
-	private GraphView graphView;
+	private GraphVisualization graphView;
 	private GraphConverter graphConverter;
 	private HierarchicalStreamWriter writer;
 
@@ -34,13 +35,13 @@ public class GraphViewConverter implements Converter {
 
 	@Override
 	public boolean canConvert( Class type ) {
-		return type.equals( GraphView.class );
+		return type.equals( GraphVisualization.class );
 	}
 
 	@Override
 	public void marshal( Object source, HierarchicalStreamWriter writer, MarshallingContext context ) {
 		this.writer = writer;
-		graphView = (GraphView) source;
+		graphView = (GraphVisualization) source;
 
 		// write parameter for the graph view element
 		if( xmlData.scaleVal != 1 )
@@ -193,7 +194,7 @@ public class GraphViewConverter implements Converter {
 
 		graphView = xmlData.generateGraphView();
 		xmlData.graphView = graphView;
-//		graphView = new GraphView( xmlData.network, xmlData.nodePositionMapping, xmlData.getEdgeCapacitiesIntegral(), xmlData.getNodeCapacitiesIntegral(), xmlData.getTransitTimesIntegral(), xmlData.getSuppliesIntegral(), xmlData.getSources(), xmlData.getSinks() );
+//		graphView = new GraphVisualization( xmlData.network, xmlData.nodePositionMapping, xmlData.getEdgeCapacitiesIntegral(), xmlData.getNodeCapacitiesIntegral(), xmlData.getTransitTimesIntegral(), xmlData.getSuppliesIntegral(), xmlData.getSources(), xmlData.getSinks() );
 //		graphView.setScale( scaleVal );
 //		graphView.setContainsSuperSink( containsSuperSink );
 

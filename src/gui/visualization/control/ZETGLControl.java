@@ -54,7 +54,7 @@ import zet.gui.main.tabs.JVisualizationView;
  * structure.
  * @author Jan-Philipp Kappmeier
  */
-public class GLControl implements DrawableControlable {
+public class ZETGLControl implements DrawableControlable {
 
 	Frustum frustum;
 
@@ -163,7 +163,7 @@ public class GLControl implements DrawableControlable {
 	 * any graph, building or cellular automaton data, its
 	 * {@link #draw( GLAutoDrawable )} method does nothing.
 	 */
-	public GLControl() {
+	public ZETGLControl() {
 		showCA = false;
 		hasCellularAutomaton = false;
 		showGraph = false;
@@ -181,7 +181,7 @@ public class GLControl implements DrawableControlable {
 	 * @param caStatistic the calculated statistic for cellular automaton
          * @param compvisres the visual information to compare 2 different networks
 	 */
-	public GLControl( CAVisualizationResults caVisResults, GraphVisualizationResults graphVisResult, BuildingResults buildingResults, CAStatistic caStatistic, CompareVisualizationResults compvisres  ) {
+	public ZETGLControl( CAVisualizationResults caVisResults, GraphVisualizationResults graphVisResult, BuildingResults buildingResults, CAStatistic caStatistic, CompareVisualizationResults compvisres  ) {
 		this.caStatistic = caStatistic;
 		this.buildingResults = buildingResults;
 		

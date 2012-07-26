@@ -15,25 +15,25 @@
  */
 package ds;
 
-import ds.graph.flow.PathBasedFlowOverTime;
-import ds.graph.flow.EdgeBasedFlowOverTime;
 import algo.graph.Flags;
 import algo.graph.dynamicflow.eat.EarliestArrivalFlowProblem;
 import algo.graph.util.PathComposition;
 import de.tu_berlin.math.coga.math.vectormath.Vector3;
-import de.tu_berlin.math.coga.zet.converter.graph.ZToGraphMapping;
 import de.tu_berlin.math.coga.zet.NetworkFlowModel;
+import de.tu_berlin.math.coga.zet.converter.graph.ZToGraphMapping;
 import de.tu_berlin.math.coga.zet.viewer.NodePositionMapping;
 import ds.graph.Edge;
-import ds.mapping.IdentifiableIntegerMapping;
-import ds.mapping.IdentifiableObjectMapping;
-import ds.graph.network.AbstractNetwork;
 import ds.graph.Node;
 import ds.graph.NodeRectangle;
+import ds.graph.flow.EdgeBasedFlowOverTime;
+import ds.graph.flow.PathBasedFlowOverTime;
+import ds.graph.network.AbstractNetwork;
 import ds.graph.network.Network;
+import ds.mapping.IdentifiableIntegerMapping;
+import ds.mapping.IdentifiableObjectMapping;
 import gui.visualization.VisualizationOptionManager;
-import opengl.framework.abs.VisualizationResult;
 import java.util.ArrayList;
+import opengl.framework.abs.VisualizationResult;
 
 /**
  * The class {@code GraphVisualizationResults} contains all information necessary to visualize the result of a dynamic flow algorithm.
@@ -158,10 +158,10 @@ public class GraphVisualizationResults implements VisualizationResult {
 
 		supersink = eatf.getSink();
 
-		nodeToFloorMapping = new IdentifiableIntegerMapping<Node>( nodeCount );
-		isSourceNode = new IdentifiableObjectMapping<Node, Boolean>( nodeCount, Boolean.class );
-		isEvacuationNode = new IdentifiableObjectMapping<Node, Boolean>( nodeCount, Boolean.class );
-		isDeletedSourceNode = new IdentifiableObjectMapping<Node, Boolean>( nodeCount, Boolean.class );
+		nodeToFloorMapping = new IdentifiableIntegerMapping<>( nodeCount );
+		isSourceNode = new IdentifiableObjectMapping<>( nodeCount, Boolean.class );
+		isEvacuationNode = new IdentifiableObjectMapping<>( nodeCount, Boolean.class );
+		isDeletedSourceNode = new IdentifiableObjectMapping<>( nodeCount, Boolean.class );
 		for( Node node : eatf.getNetwork().nodes() ) {
 			nodeToFloorMapping.set( node, 1 );
 			isDeletedSourceNode.set( node, false );
@@ -181,7 +181,7 @@ public class GraphVisualizationResults implements VisualizationResult {
 		this.transitTimes = eatf.getTransitTimes();
 		this.supplies = eatf.getSupplies();
 
-		this.floorToNodeMapping = new ArrayList<ArrayList<Node>>();
+		this.floorToNodeMapping = new ArrayList<>();
 		for( Node node : network.nodes() ) {
 			int floor = this.nodeToFloorMapping.get( node );
 
@@ -224,13 +224,13 @@ public class GraphVisualizationResults implements VisualizationResult {
 	public GraphVisualizationResults() {
 		this.network = new Network( 0, 0 );
 		//this.dynamicFlow = new PathBasedFlowOverTime();
-		this.nodeRectangles = new IdentifiableObjectMapping<Node, NodeRectangle>( 0, NodeRectangle.class );
-		this.nodeToFloorMapping = new IdentifiableIntegerMapping<Node>( 0 );
-		this.nodeCapacities = new IdentifiableIntegerMapping<Node>( 0 );
-		this.edgeCapacities = new IdentifiableIntegerMapping<Edge>( 0 );
-		this.transitTimes = new IdentifiableIntegerMapping<Edge>( 0 );
-		this.supplies = new IdentifiableIntegerMapping<Node>( 0 );
-		this.floorToNodeMapping = new ArrayList<ArrayList<Node>>();
+		this.nodeRectangles = new IdentifiableObjectMapping<>( 0, NodeRectangle.class );
+		this.nodeToFloorMapping = new IdentifiableIntegerMapping<>( 0 );
+		this.nodeCapacities = new IdentifiableIntegerMapping<>( 0 );
+		this.edgeCapacities = new IdentifiableIntegerMapping<>( 0 );
+		this.transitTimes = new IdentifiableIntegerMapping<>( 0 );
+		this.supplies = new IdentifiableIntegerMapping<>( 0 );
+		this.floorToNodeMapping = new ArrayList<>();
 		this.supersink = new Node( 0 );
 		setUpNodeCoordinates();
 	}
@@ -350,6 +350,8 @@ public class GraphVisualizationResults implements VisualizationResult {
 
 	/**
 	 * Returns the composed flow over time.
+	 * 
+	 * @return 
 	 */
 	public EdgeBasedFlowOverTime getFlowOverTime() {
 		return flowOverTime;
@@ -357,6 +359,8 @@ public class GraphVisualizationResults implements VisualizationResult {
 
 	/**
 	 * Returns the maximal flow rate in the computed flow.
+	 * 
+	 * @return 
 	 */
 	public int getMaxFlowRate() {
 		return maxFlowRate;

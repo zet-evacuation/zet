@@ -25,7 +25,7 @@ import ds.z.Floor;
 import ds.PropertyContainer;
 import ds.z.ZControl;
 import gui.GUIControl;
-import gui.visualization.control.GLControl;
+import gui.visualization.control.ZETGLControl;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.Collections;
@@ -50,7 +50,7 @@ public class JQuickVisualizationView extends AbstractSplitPropertyWindow<JFloorS
 	private final GUIControl guiControl;
 	private Floor currentFloor;
 	private Collections ProjectFloors;
-	public GLControl control;
+	public ZETGLControl control;
 	private JLabel lblFloorSelector;
 	private int row;
 	private JLabel lblFloorNumber;
@@ -98,7 +98,7 @@ public class JQuickVisualizationView extends AbstractSplitPropertyWindow<JFloorS
 	@Override
 	protected JPanel createEastBar() {
 		JPanel panel = new JPanel();
-		control = new GLControl();
+		control = new ZETGLControl();
 		quickfloorSelector = new FloorComboBox<>();
 		//quickfloorSelector.setModel( quickfloorSelectorModel );
 

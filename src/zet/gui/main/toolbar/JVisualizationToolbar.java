@@ -12,8 +12,8 @@ import gui.ZETMain;
 import zet.gui.components.model.ComboBoxRenderer;
 import de.tu_berlin.math.coga.datastructure.NamedIndex;
 import de.tu_berlin.math.coga.components.framework.Button;
-import gui.visualization.control.GLControl;
-import gui.visualization.control.GLControl.CellInformationDisplay;
+import gui.visualization.control.ZETGLControl;
+import gui.visualization.control.ZETGLControl.CellInformationDisplay;
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.Dimension;
@@ -259,7 +259,7 @@ public class JVisualizationToolbar extends JToolBar implements ActionListener {
 		btnShowWaiting.setSelected( cid == CellInformationDisplay.Waiting );
 	}
 
-	public void setEnabledVisibleElements( GLControl control ) {
+	public void setEnabledVisibleElements( ZETGLControl control ) {
 		btnShowCellularAutomaton.setEnabled( control.hasCellularAutomaton() );
 		btnShowGraph.setEnabled( control.hasGraph() );
 		btnShowGraphGrid.setEnabled( control.hasGraph() );

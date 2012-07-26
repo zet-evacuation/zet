@@ -21,13 +21,13 @@
 
 package gui.visualization.control.graph;
 
+import de.tu_berlin.math.coga.graph.io.xml.visualization.FlowVisualization;
 import ds.GraphVisualizationResults;
 import ds.graph.IdentifiableCollection;
 import ds.graph.Node;
 import gui.visualization.control.AbstractZETVisualizationControl;
 import gui.visualization.draw.graph.GLGraphFloor;
 import java.util.Iterator;
-import de.tu_berlin.math.coga.graph.io.xml.FlowVisualization;
 
 /**
  * The {@code GLGraphFloorControl} class represents an floor of the
@@ -63,7 +63,7 @@ public class GLGraphFloorControl extends AbstractZETVisualizationControl<GLNodeC
 	GLGraphFloorControl( FlowVisualization fv, IdentifiableCollection<Node> nodes, GLFlowGraphControl mainControl ) {
 		super( mainControl );
 		Iterator<Node> it = nodes.iterator();
-		Node supersink = fv.getGv().getSinks().get( 0 );
+		Node supersink = fv.getSinks().get( 0 );
 		while( it.hasNext() ) {
 			Node n = it.next();
 			//if( !n.equals(supersink) )

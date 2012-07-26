@@ -31,7 +31,7 @@ import ds.ca.results.VisualResultsRecording;
 import gui.visualization.VisualizationOptionManager;
 import gui.visualization.control.AbstractZETVisualizationControl;
 import gui.visualization.draw.ca.GLCA;
-import static gui.visualization.control.GLControl.CellInformationDisplay;
+import static gui.visualization.control.ZETGLControl.CellInformationDisplay;
 import gui.visualization.draw.ca.GLIndividual;
 import io.visualization.CAVisualizationResults;
 import java.util.ArrayList;

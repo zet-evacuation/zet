@@ -8,7 +8,7 @@ import de.tu_berlin.math.coga.components.JVideoOptionsDialog;
 import algo.graph.dynamicflow.eat.EarliestArrivalFlowProblem;
 import batch.load.BatchProjectEntry;
 import de.tu_berlin.math.coga.zet.converter.cellularAutomaton.ZToCAConverter.ConversionNotSupportedException;
-import gui.visualization.control.GLControl;
+import gui.visualization.control.ZETGLControl;
 import java.beans.PropertyChangeEvent;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -59,7 +59,7 @@ import zet.gui.main.toolbar.JVisualizationToolbar;
 import gui.visualization.AbstractVisualization.ParallelViewMode;
 import gui.visualization.Visualization.RecordingMode;
 import zet.gui.main.tabs.visualization.ZETVisualization;
-import gui.visualization.control.GLControl.CellInformationDisplay;
+import gui.visualization.control.ZETGLControl.CellInformationDisplay;
 import io.DXFWriter;
 import io.movie.MovieManager;
 import io.visualization.CAVisualizationResults;
@@ -106,7 +106,7 @@ public class GUIControl implements AlgorithmListener {
 	private JEditView editview;
 	private AlgorithmControl algorithmControl;
 	private ArrayList<Areas> mode = new ArrayList<>( Arrays.asList( Areas.values() ) );
-	private GLControl control;
+	private ZETGLControl control;
 
 	/**
 	 * Creates a new instance of {@code GUIControl}.

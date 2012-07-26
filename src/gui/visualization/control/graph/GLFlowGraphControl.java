@@ -21,7 +21,7 @@
 
 package gui.visualization.control.graph;
 
-import de.tu_berlin.math.coga.graph.io.xml.FlowVisualization;
+import de.tu_berlin.math.coga.graph.io.xml.visualization.FlowVisualization;
 import de.tu_berlin.math.coga.math.Conversion;
 import ds.GraphVisualizationResults;
 import ds.graph.Node;
@@ -59,6 +59,7 @@ public class GLFlowGraphControl extends AbstractZETVisualizationControl<GLGraphF
 
 	public GLFlowGraphControl( GraphVisualizationResults graphVisResult ) {
 		super();
+		build( graphVisResult );
 	}
 	
 	public void build( GraphVisualizationResults graphVisResult ) {
@@ -85,15 +86,15 @@ public class GLFlowGraphControl extends AbstractZETVisualizationControl<GLGraphF
 		mainControl = this;
 
 		//AlgorithmTask.getInstance().setProgress( 0, DefaultLoc.getSingleton().getStringWithoutPrefix( "batch.tasks.progress.createGraphVisualizationDataStructure" ), "" );
-		nodeCount = fv.getGv().getNetwork().nodes().size();
+		nodeCount = fv.getNetwork().nodes().size();
 		nodesDone = 0;
 		//superSinkID = graphVisResult.getSupersink().id();
-		superSinkID = fv.getGv().getSinks().get( 0 ).id(); // graphVisResult.getSupersink().id();
+		superSinkID = fv.getSinks().get( 0 ).id(); // graphVisResult.getSupersink().id();
 
-		Iterator<Node> it = fv.getGv().getNetwork().nodes().iterator();
-		Node supersink = fv.getGv().getSinks().get( 0 );  // graphVisResult.getSupersink();
+		Iterator<Node> it = fv.getNetwork().nodes().iterator();
+		Node supersink = fv.getSinks().get( 0 );  // graphVisResult.getSupersink();
 
-		GLGraphFloorControl floorControl = new GLGraphFloorControl( fv, fv.getGv().getNetwork().nodes(), mainControl );
+		GLGraphFloorControl floorControl = new GLGraphFloorControl( fv, fv.getNetwork().nodes(), mainControl );
 		add( floorControl );
 
 		allFloorsByID = new HashMap<>();
@@ -174,6 +175,7 @@ public class GLFlowGraphControl extends AbstractZETVisualizationControl<GLGraphF
 			finished = true;
 	}
 
+	@Override
 	public void setTime( long time ) {
 		this.time = time;
 		realStep = time == 0 ? 0 : ((double) time / (double) nanoSecondsPerStep);
@@ -188,6 +190,7 @@ public class GLFlowGraphControl extends AbstractZETVisualizationControl<GLGraphF
 		finished = step > stepCount;
 	}
 
+	@Override
 	public void resetTime() {
 		setTime( 0 );
 	}
@@ -251,10 +254,12 @@ public class GLFlowGraphControl extends AbstractZETVisualizationControl<GLGraphF
 		return stepCount;
 	}
 
+	@Override
 	public void draw( GL gl ) {
 		getView().draw( gl );
 	}
 
+	@Override
 	public void update() {
 		throw new UnsupportedOperationException( "Not supported yet." );
 	}
@@ -263,16 +268,27 @@ public class GLFlowGraphControl extends AbstractZETVisualizationControl<GLGraphF
 		return superSinkID;
 	}
 
+	/**
+	 * 
+	 * @param frustum
+	 */
+	@Override
 	public void setFrustum( Frustum frustum ) {
 		this.frustum = frustum;
 	}
 
 	Frustum frustum;
 
+	/**
+	 * 
+	 * @return
+	 */
+	@Override
 	public Frustum getFrustum() {
 		return frustum;
 	}
 
+	@Override
 	public void delete() {
 		view.delete();
 	}

@@ -6,16 +6,15 @@ package de.tu_berlin.math.coga.zet;
 
 import algo.graph.dynamicflow.eat.EarliestArrivalFlowProblem;
 import de.tu_berlin.math.coga.algorithm.networkflow.mincostflow.SuccessiveShortestPath;
-import de.tu_berlin.math.coga.graph.io.xml.GraphView;
-import java.io.IOException;
+import de.tu_berlin.math.coga.graph.io.xml.visualization.GraphVisualization;
 import de.tu_berlin.math.coga.graph.io.xml.XMLReader;
 import de.tu_berlin.math.coga.graph.io.xml.XMLWriter;
 import de.tu_berlin.math.coga.zet.converter.graph.GraphAssignmentConverter;
 import ds.PropertyContainer;
 import ds.graph.Edge;
-import ds.graph.network.AbstractNetwork;
 import ds.graph.Node;
 import ds.graph.TimeExpandedNetwork;
+import ds.graph.network.AbstractNetwork;
 import ds.graph.problem.MinimumCostFlowProblem;
 import ds.z.ConcreteAssignment;
 import ds.z.Project;
@@ -25,6 +24,7 @@ import gui.GraphConverterAlgorithms;
 import gui.ZETMain;
 import gui.editor.properties.PropertyLoadException;
 import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 
 
@@ -149,7 +149,7 @@ public class XmlFileReaderWriter {
 		final ArrayList<Node> sinks = new ArrayList<Node>(1);
 		sinks.add( eafp.getSink() );
 
-		GraphView graphView = reader.getXmlData().generateGraphView();
+		GraphVisualization graphView = reader.getXmlData().generateGraphView();
 		writer.writeLayoutedNetwork( graphView );// .writeNetwork( eafp );
 	}
 }

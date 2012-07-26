@@ -30,8 +30,8 @@ import gui.visualization.AbstractVisualizationView;
 import gui.visualization.VisualizationPanel;
 import zet.gui.main.tabs.visualization.ZETVisualization;
 import zet.gui.components.model.PotentialSelectionModel;
-import gui.visualization.control.GLControl;
-import gui.visualization.control.GLControl.CellInformationDisplay;
+import gui.visualization.control.ZETGLControl;
+import gui.visualization.control.ZETGLControl.CellInformationDisplay;
 import info.clearthought.layout.TableLayout;
 import io.visualization.BuildingResults;
 import java.awt.BorderLayout;
@@ -141,7 +141,7 @@ public class JVisualizationView extends AbstractVisualizationView<ZETVisualizati
 		slider.addChangeListener( new ChangeListener() {
 			@Override
 			public void stateChanged( ChangeEvent e ) {
-				GLControl control = visualization.getControl();
+				ZETGLControl control = visualization.getControl();
 				if( control == null )
 					return;
 				if( slider.getValue() == 0 )

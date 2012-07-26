@@ -4,6 +4,8 @@
  */
 package de.tu_berlin.math.coga.graph.io.xml;
 
+import de.tu_berlin.math.coga.graph.io.xml.visualization.GraphVisualization;
+import de.tu_berlin.math.coga.graph.io.xml.visualization.FlowVisualization;
 import algo.graph.dynamicflow.eat.EarliestArrivalFlowProblem;
 import com.thoughtworks.xstream.XStream;
 import com.thoughtworks.xstream.io.xml.DomDriver;
@@ -110,12 +112,12 @@ public class XMLReader {
 		return result;
 	}
 
-	public GraphView readGraphView() throws FileNotFoundException, IOException {
+	public GraphVisualization readGraphView() throws FileNotFoundException, IOException {
 		BufferedReader reader = null;
-		GraphView result = null;
+		GraphVisualization result = null;
 		try {
 			reader = new BufferedReader( new FileReader( file ) );
-			xstream.alias( "graphLayout", GraphView.class );
+			xstream.alias( "graphLayout", GraphVisualization.class );
 			xstream.setMode( XStream.NO_REFERENCES );
 			xstream.registerConverter( new ColorConverter() );
 			xstream.registerConverter( new FontConverter() );
@@ -123,7 +125,7 @@ public class XMLReader {
 			//xstream.registerConverter( new GraphConverter( xmlData ) );
 			//xstream.registerConverter( new FlowVisualisationConverter() );
 			//xstream.registerConverter(new NodeShapeConverter());
-			result = (GraphView)xstream.fromXML( reader );
+			result = (GraphVisualization)xstream.fromXML( reader );
 		} finally {
 			if( reader != null )
 				reader.close();
@@ -137,7 +139,7 @@ public class XMLReader {
 		try {
 			reader = new BufferedReader( new FileReader( file ) );
 			xstream.alias( "graph", AbstractNetwork.class );
-			xstream.alias( "graphLayout", GraphView.class );
+			xstream.alias( "graphLayout", GraphVisualization.class );
 			xstream.setMode( XStream.NO_REFERENCES );
 			xstream.registerConverter( new ColorConverter() );
 			xstream.registerConverter( new FontConverter() );

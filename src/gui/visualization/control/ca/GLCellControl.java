@@ -26,7 +26,7 @@ import ds.ca.evac.SaveCell;
 import ds.ca.evac.StairCell;
 import ds.ca.evac.StaticPotential;
 import io.visualization.CAVisualizationResults;
-import gui.visualization.control.GLControl.CellInformationDisplay;
+import gui.visualization.control.ZETGLControl.CellInformationDisplay;
 import gui.visualization.control.StepUpdateListener;
 import gui.visualization.draw.ca.GLCell;
 import gui.visualization.draw.ca.GLDelayCell;

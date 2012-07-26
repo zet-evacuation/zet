@@ -32,11 +32,11 @@ import java.util.Arrays;
  * the objects' IDs are from the set {@code {0,...,#objects-1}} to ensure
  * the best performance. For mappings of objects to arbitrary values see
  * {@link IdentifiableObjectMapping}.
- * @param D the type of this mapping's domain, i.e. the type of the objects that
+ * @param <D> the type of this mapping's domain, i.e. the type of the objects that
  * are to be mapped to integers. {@code D} must implement 
  * {@link Identifiable}.
  */
-public class IdentifiableDoubleMapping<D extends Identifiable> implements Cloneable {
+public class IdentifiableDoubleMapping<D extends Identifiable> implements Cloneable, Mapping {
 
     /**
      * The array storing all associations. Must not be {@code null}.
@@ -125,6 +125,11 @@ public class IdentifiableDoubleMapping<D extends Identifiable> implements Clonea
     public double get(D identifiableObject) {
         return mapping[identifiableObject.id()];
     }
+		
+	@Override
+	public Object getObject( Identifiable identifiableObject ) {
+		return new Double( mapping [identifiableObject.id()] );
+	}
 
     /**
      * Associates {@code identifiableObject} with {@code value} in 

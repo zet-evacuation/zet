@@ -4,11 +4,9 @@
  */
 package de.tu_berlin.math.coga.zet.converter.graph;
 
-import de.tu_berlin.math.coga.zet.converter.RasterContainerCreator;
-
 import de.tu_berlin.math.coga.common.algorithm.Algorithm;
-import de.tu_berlin.math.coga.zet.converter.RasterContainerCreator;
 import de.tu_berlin.math.coga.zet.NetworkFlowModel;
+import de.tu_berlin.math.coga.zet.converter.RasterContainerCreator;
 import ds.graph.Edge;
 import ds.graph.Graph;
 import ds.mapping.IdentifiableDoubleMapping;

@@ -22,7 +22,7 @@
 package gui.visualization;
 
 import ds.PropertyContainer;
-import gui.visualization.control.GLControl;
+import gui.visualization.control.ZETGLControl;
 import java.awt.Color;
 import opengl.drawingutils.GLColor;
 
@@ -154,7 +154,7 @@ public class VisualizationOptionManager {
 	 * @param cid the status type
 	 * @return the low color for the given status
 	 */
-	public static GLColor getCellInformationLowColor( GLControl.CellInformationDisplay cid ) {
+	public static GLColor getCellInformationLowColor( ZETGLControl.CellInformationDisplay cid ) {
 		switch( cid ) {
 			case DynamicPotential:
 				return getCellFloorColor();
@@ -175,7 +175,7 @@ public class VisualizationOptionManager {
 	 * @param cid the status type
 	 * @return the low color for the given status
 	 */
-	public static GLColor getCellInformationHighColor( GLControl.CellInformationDisplay cid ) {
+	public static GLColor getCellInformationHighColor( ZETGLControl.CellInformationDisplay cid ) {
 		switch( cid ) {
 			case DynamicPotential:
 				return new GLColor( Color.red );

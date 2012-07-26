@@ -1,16 +1,16 @@
 /**
- * GraphView.java
+ * GraphVisualization.java
  * Created: 18.3.2010, 12:02:46
  */
-package de.tu_berlin.math.coga.graph.io.xml;
+package de.tu_berlin.math.coga.graph.io.xml.visualization;
 
 import algo.graph.dynamicflow.eat.EarliestArrivalFlowProblem;
 import de.tu_berlin.math.coga.math.vectormath.Vector3;
 import de.tu_berlin.math.coga.zet.viewer.NodePositionMapping;
 import ds.graph.Edge;
-import ds.mapping.IdentifiableIntegerMapping;
-import ds.graph.network.AbstractNetwork;
 import ds.graph.Node;
+import ds.graph.network.AbstractNetwork;
+import ds.mapping.IdentifiableIntegerMapping;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -18,8 +18,7 @@ import java.util.List;
  *
  * @author Jan-Philipp Kappmeier
  */
-public class GraphView {
-
+public class GraphVisualization {
 	/** The graph. */
 	AbstractNetwork network;
 	/** The positions for the nodes. */
@@ -55,7 +54,7 @@ public class GraphView {
 	double maxZ = Double.MIN_VALUE;
 
 
-	public GraphView( AbstractNetwork network, NodePositionMapping nodePositionMapping, IdentifiableIntegerMapping<Edge> edgeCapacities, IdentifiableIntegerMapping<Node> nodeCapacities, IdentifiableIntegerMapping<Edge> transitTimes, IdentifiableIntegerMapping<Node> supplies, List<Node> sources, ArrayList<Node> sinks ) {
+	public GraphVisualization( AbstractNetwork network, NodePositionMapping nodePositionMapping, IdentifiableIntegerMapping<Edge> edgeCapacities, IdentifiableIntegerMapping<Node> nodeCapacities, IdentifiableIntegerMapping<Edge> transitTimes, IdentifiableIntegerMapping<Node> supplies, List<Node> sources, ArrayList<Node> sinks ) {
 		this.network = network;
 		setNodePositionMapping( nodePositionMapping );
 		this.edgeCapacities = edgeCapacities;
@@ -66,18 +65,41 @@ public class GraphView {
 		this.sinks = sinks;
 	}
 
-	public GraphView( EarliestArrivalFlowProblem eafp, NodePositionMapping nodePositionMapping ) {
+	public GraphVisualization( EarliestArrivalFlowProblem eafp, NodePositionMapping nodePositionMapping ) {
 		this.network = eafp.getNetwork();
 		this.edgeCapacities = eafp.getEdgeCapacities();
 		this.nodeCapacities = eafp.getNodeCapacities();
 		this.transitTimes = eafp.getTransitTimes();
 		this.supplies = eafp.getSupplies();
 		this.sources = eafp.getSources();
-		final ArrayList<Node> sink = new ArrayList<Node>( 1 );
+		final ArrayList<Node> sink = new ArrayList<>( 1 );
 		sink.add( eafp.getSink() );
 		this.sinks = sink;
 		setNodePositionMapping( nodePositionMapping );
 	}
+	
+	protected GraphVisualization( GraphVisualization gv ) {
+	network = gv.network;
+	nodePositionMapping = gv.nodePositionMapping;
+	edgeCapacities = gv.edgeCapacities;
+	nodeCapacities = gv.nodeCapacities;
+	transitTimes = gv.transitTimes;
+	supplies = gv.supplies;
+	sources = gv.sources;
+	sinks = gv.sinks;
+	scale = gv.scale;
+	effectiveOffset = gv.effectiveOffset;
+	containsSuperSink = gv.containsSuperSink;
+	xOffset = gv.xOffset;
+	yOffset = gv.yOffset;
+	zOffset = gv.zOffset;
+	minX = gv.minX;
+	maxX = gv.maxX;
+	minY = gv.minY;
+	maxY = gv.maxY;
+	minZ = gv.minZ;
+	maxZ = gv.maxZ;
+}
 
 
 	public AbstractNetwork getNetwork() {
@@ -211,7 +233,7 @@ public class GraphView {
 		return scale;
 	}
 
-	void setScale( double scale ) {
+	public void setScale( double scale ) {
 		this.scale = scale;
 	}
 
