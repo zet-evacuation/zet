@@ -21,7 +21,7 @@
 package gui.visualization.draw.ca;
 
 import gui.visualization.control.ca.GLCellControl;
-import gui.visualization.control.GLControl.CellInformationDisplay;
+import gui.visualization.control.ZETGLControl.CellInformationDisplay;
 import gui.visualization.VisualizationOptionManager;
 import javax.media.opengl.GL;
 import opengl.drawingutils.GLColor;

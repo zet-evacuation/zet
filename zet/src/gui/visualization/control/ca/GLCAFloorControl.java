@@ -17,7 +17,7 @@ package gui.visualization.control.ca;
 
 import ds.ca.evac.Room;
 import gui.visualization.control.AbstractZETVisualizationControl;
-import gui.visualization.control.GLControl.CellInformationDisplay;
+import gui.visualization.control.ZETGLControl.CellInformationDisplay;
 import gui.visualization.draw.ca.GLCAFloor;
 import io.visualization.CAVisualizationResults;
 import java.util.Collection;

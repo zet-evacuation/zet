@@ -58,8 +58,8 @@ import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 import javax.swing.filechooser.FileFilter;
 import de.tu_berlin.math.coga.zet.DatFileReaderWriter;
-import de.tu_berlin.math.coga.graph.io.xml.FlowVisualization;
-import de.tu_berlin.math.coga.graph.io.xml.GraphView;
+import de.tu_berlin.math.coga.graph.io.xml.visualization.FlowVisualization;
+import de.tu_berlin.math.coga.graph.io.xml.visualization.GraphVisualization;
 import de.tu_berlin.math.coga.graph.io.xml.XMLReader;
 import de.tu_berlin.math.coga.graph.io.xml.XMLReader.XMLFileData;
 import gui.visualization.control.graph.GLNashGraphControl;
@@ -324,7 +324,7 @@ public class FlowVisualizationTool extends JFrame implements PropertyChangeListe
 								try {
 									reader = new XMLReader( file );
 									//Network n = reader.readGraph();
-									final GraphView gv = reader.readGraphView();
+									final GraphVisualization gv = reader.readGraphView();
 									fv = new FlowVisualization( gv );
 									sb.setStatusText( 0, "Baue Visualisierung" );
 									control = new GLFlowGraphControl( fv );
@@ -339,8 +339,8 @@ public class FlowVisualizationTool extends JFrame implements PropertyChangeListe
 
 					} else {
 						try {
-							xPos = new IdentifiableIntegerMapping<Node>( 0 );
-							yPos = new IdentifiableIntegerMapping<Node>( 0 );
+							xPos = new IdentifiableIntegerMapping<>( 0 );
+							yPos = new IdentifiableIntegerMapping<>( 0 );
 							eafp = DatFileReaderWriter.read( path, xPos, yPos );
 
 						} catch( FileNotFoundException ex ) {
@@ -382,6 +382,10 @@ public class FlowVisualizationTool extends JFrame implements PropertyChangeListe
 					try {
 						XStream xml_convert = new XStream();
 						FileReader input = new FileReader( jfc.getSelectedFile() );
+						
+						XMLReader reader = new XMLReader( jfc.getSelectedFile() );
+						
+						
 						graphVisResult = (GraphVisualizationResults) xml_convert.fromXML( input );
 						loadGraphVisResults();
 					} catch( IOException e ) {

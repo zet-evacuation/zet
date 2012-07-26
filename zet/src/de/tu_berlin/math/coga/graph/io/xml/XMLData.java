@@ -4,12 +4,13 @@
  */
 package de.tu_berlin.math.coga.graph.io.xml;
 
+import de.tu_berlin.math.coga.graph.io.xml.visualization.GraphVisualization;
 import de.tu_berlin.math.coga.zet.viewer.NodePositionMapping;
 import ds.graph.Edge;
+import ds.graph.Node;
+import ds.graph.network.AbstractNetwork;
 import ds.mapping.IdentifiableDoubleMapping;
 import ds.mapping.IdentifiableIntegerMapping;
-import ds.graph.network.AbstractNetwork;
-import ds.graph.Node;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -31,14 +32,14 @@ public class XMLData {
 	IdentifiableDoubleMapping<Node> supplies;
 	List<Node> sources;
 	ArrayList<Node> sinks;
-	LinkedHashMap<String, Node> nodes = new LinkedHashMap<String, Node>();
-	LinkedHashMap<String, Edge> edges = new LinkedHashMap<String, Edge>();
+	LinkedHashMap<String, Node> nodes = new LinkedHashMap<>();
+	LinkedHashMap<String, Edge> edges = new LinkedHashMap<>();
 	AbstractNetwork network;
 	NodePositionMapping nodePositionMapping = new NodePositionMapping();
 	boolean doubleEdges = false;
 	double scaleVal;
 	boolean containsSuperSink;
-	GraphView graphView;
+	GraphVisualization graphView;
 
 	public IdentifiableDoubleMapping<Edge> getEdgeCapacities() {
 		return edgeCapacities;
@@ -46,7 +47,7 @@ public class XMLData {
 
 	public IdentifiableIntegerMapping<Edge> getEdgeCapacitiesIntegral() {
 		if( edgeCapacitiesIntegral == null )
-			edgeCapacitiesIntegral = new IdentifiableIntegerMapping<Edge>( edgeCapacities );
+			edgeCapacitiesIntegral = new IdentifiableIntegerMapping<>( edgeCapacities );
 		return edgeCapacitiesIntegral;
 	}
 
@@ -132,14 +133,14 @@ public class XMLData {
 		return scaleVal;
 	}
 
-	public GraphView generateGraphView() {
-		GraphView createdGraphView = new GraphView( getNetwork(), getNodePositionMapping(), getEdgeCapacitiesIntegral(), getNodeCapacitiesIntegral(), getTransitTimesIntegral(), getSuppliesIntegral(), getSources(), sinks );
+	public GraphVisualization generateGraphView() {
+		GraphVisualization createdGraphView = new GraphVisualization( getNetwork(), getNodePositionMapping(), getEdgeCapacitiesIntegral(), getNodeCapacitiesIntegral(), getTransitTimesIntegral(), getSuppliesIntegral(), getSources(), sinks );
 		createdGraphView.setScale( scaleVal );
-		createdGraphView.containsSuperSink = containsSuperSink;
+		createdGraphView.setContainsSuperSink( containsSuperSink );
 		return createdGraphView;
 	}
 
-	public GraphView getGraphView() {
+	public GraphVisualization getGraphView() {
 		return graphView;
 	}
 }

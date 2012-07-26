@@ -15,15 +15,15 @@
  */
 package gui.visualization.control.graph;
 
+import de.tu_berlin.math.coga.graph.io.xml.visualization.FlowVisualization;
 import ds.GraphVisualizationResults;
-import ds.graph.Node;
 import ds.graph.Edge;
+import ds.graph.Node;
 import gui.visualization.control.AbstractZETVisualizationControl;
-import gui.visualization.draw.graph.GLNode;
 import gui.visualization.control.FlowHistroryTriple;
+import gui.visualization.draw.graph.GLNode;
 import gui.visualization.util.FlowCalculator;
 import java.util.ArrayList;
-import de.tu_berlin.math.coga.graph.io.xml.FlowVisualization;
 
 public class GLNodeControl extends AbstractZETVisualizationControl<GLFlowEdgeControl, GLNode, GLFlowGraphControl> {
 	private double xPosition;
@@ -93,34 +93,34 @@ public class GLNodeControl extends AbstractZETVisualizationControl<GLFlowEdgeCon
 	GLNodeControl( FlowVisualization fv, Node node, GLFlowGraphControl mainControl ) {
 		super( mainControl );
 
-		nwX = fv.getGv().getNodePositionMapping().get( node ).x * fv.getGv().getScale() * mainControl.scaling;
-		nwY = fv.getGv().getNodePositionMapping().get( node ).y * fv.getGv().getScale() * mainControl.scaling;
-		seX = fv.getGv().getNodePositionMapping().get( node ).x * fv.getGv().getScale() * mainControl.scaling;
-		seY = fv.getGv().getNodePositionMapping().get( node ).y * fv.getGv().getScale() * mainControl.scaling;
+		nwX = fv.getNodePositionMapping().get( node ).x * fv.getScale() * mainControl.scaling;
+		nwY = fv.getNodePositionMapping().get( node ).y * fv.getScale() * mainControl.scaling;
+		seX = fv.getNodePositionMapping().get( node ).x * fv.getScale() * mainControl.scaling;
+		seY = fv.getNodePositionMapping().get( node ).y * fv.getScale() * mainControl.scaling;
 
 		xPosition = (nwX + 0.5 * (seX - nwX)) * mainControl.scaling;
 		yPosition = (nwY + 0.5 * (seY - nwY)) * mainControl.scaling;
 
-		xPosition = (fv.getGv().getNodePositionMapping().get( node ).x + fv.getGv().getEffectiveOffset().x) * fv.getGv().getScale() * mainControl.scaling;
-		yPosition = (fv.getGv().getNodePositionMapping().get( node ).y + fv.getGv().getEffectiveOffset().y) * fv.getGv().getScale() * mainControl.scaling;
-		capacity = fv.getGv().getNodeCapacities().get( node );
+		xPosition = (fv.getNodePositionMapping().get( node ).x + fv.getEffectiveOffset().x) * fv.getScale() * mainControl.scaling;
+		yPosition = (fv.getNodePositionMapping().get( node ).y + fv.getEffectiveOffset().y) * fv.getScale() * mainControl.scaling;
+		capacity = fv.getNodeCapacities().get( node );
 
 		//final boolean showEdgesBetweenFloors = true;
 
-		for( Edge edge : fv.getGv().getNetwork().outgoingEdges( node ) )
-			if( !fv.getGv().isContainsSuperSink() )
+		for( Edge edge : fv.getNetwork().outgoingEdges( node ) )
+			if( !fv.isContainsSuperSink() )
 				add( new GLFlowEdgeControl( fv, edge, mainControl ) );
 			else if( edge.start().id() != mainControl.superSinkID() && edge.end().id() != mainControl.superSinkID() ) {
 				// edit ignore floors
 				add( new GLFlowEdgeControl( fv, edge, mainControl ) );
 			}
-		isEvacuationNode = fv.getGv().isEvacuationNode( node );
-		isSourceNode = fv.getGv().isSourceNode( node );
+		isEvacuationNode = fv.isEvacuationNode( node );
+		isSourceNode = fv.isSourceNode( node );
 		//isDeletedSourceNode = graphVisResult.isDeletedSourceNode( node );
 
 		floor = 0; // ignore floors at the moment
 
-		zPosition = fv.getGv().getNodePositionMapping().get( node ).z * fv.getGv().getScale() * mainControl.scaling;
+		zPosition = fv.getNodePositionMapping().get( node ).z * fv.getScale() * mainControl.scaling;
 
 		setView( new GLNode( this ) );
 		for( GLFlowEdgeControl edge : this ) {

@@ -261,6 +261,34 @@ public class BinaryTree implements Graph, Iterable<Node> {
 		} else
 			throw new IllegalStateException( GraphLocalization.getSingleton().getString( "ds.Graph.NoCapacityException" ) );
 	}
+	
+	public Edge setLeft( Node start, Node end ) {
+		int id = idOfLastCreatedEdge + 1;
+		while( id < size-1 && edges.get( id % (size-1) ) != null )
+			id++;
+		if( edges.get( id % (size-1) ) == null ) {
+			Edge edge = new Edge( id % (size-1), start, end );
+			setLeft( edge );
+			idOfLastCreatedEdge = id % (size-1);
+			return edge;
+		} else
+			throw new IllegalStateException( GraphLocalization.getSingleton().getString( "ds.Graph.NoCapacityException" ) );
+	}
+	
+	public Edge setRight( Node start, Node end ) {
+		int id = idOfLastCreatedEdge + 1;
+		while( id < size-1 && edges.get( id % (size-1) ) != null )
+			id++;
+		if( edges.get( id % (size-1) ) == null ) {
+			Edge edge = new Edge( id % (size-1), start, end );
+			setRight( edge );
+			idOfLastCreatedEdge = id % (size-1);
+			return edge;
+		} else
+			throw new IllegalStateException( GraphLocalization.getSingleton().getString( "ds.Graph.NoCapacityException" ) );
+	}
+
+	
 	/**
 	 * Adds the specified edge to the graph by setting it to it ID's correct
 	 * position in the internal data structures. The correct position must be
@@ -302,6 +330,57 @@ public class BinaryTree implements Graph, Iterable<Node> {
 			throw new IllegalArgumentException( "Edge position is already occupied" );
 	}
 
+
+		private void setLeft( Edge edge ) {
+		if( edges.get( edge.id() ) == null ) {
+			// check out, if left or right edge
+			Edge leftEdge = left.get( edge.start() );
+			
+			if( leftEdge != null && leftEdge.end().equals( edge.end() ) )
+				throw new IllegalArgumentException( "Edge between the nodes exists already as left edge!" );
+			if( incoming.get( edge.end() ) != null &&  incoming.get( edge.end() ) != null )
+				throw new IllegalArgumentException( "End node " + edge.end() + " has already incoming edge!" );
+			
+			if( leftEdge != null )
+				throw new IllegalArgumentException( "Left edge is already occupied." );
+
+			edges.add( edge );
+		
+			incoming.set( edge.end(), edge );
+			
+			left.set( edge.start(), edge );
+
+			outdegree.increase( edge.start(), 1 );
+		} else if( edges.get( edge.id() ).equals( edge ) ) {
+			
+		} else
+			throw new IllegalArgumentException( "Edge position is already occupied" );
+	}
+	private void setRight( Edge edge ) {
+		if( edges.get( edge.id() ) == null ) {
+			Edge rightEdge = right.get( edge.start() );
+			
+			if( rightEdge != null && rightEdge.end().equals( edge.end() ) )
+				throw new IllegalArgumentException( "Edge between the nodes exists already as right edge!" );
+			if( incoming.get( edge.end() ) != null &&  incoming.get( edge.end() ) != null )
+				throw new IllegalArgumentException( "End node " + edge.end() + " has already incoming edge!" );
+			
+			if( rightEdge != null )
+				throw new IllegalArgumentException( "Right edge is already occupied." );
+
+			edges.add( edge );
+		
+			incoming.set( edge.end(), edge );
+			
+			right.set( edge.start(), edge );
+
+			outdegree.increase( edge.start(), 1 );
+		} else if( edges.get( edge.id() ).equals( edge ) ) {
+			
+		} else
+			throw new IllegalArgumentException( "Edge position is already occupied" );
+	}
+	
 	/**
 	 * Returns an {@link ListSequence} containing all edges starting at
 	 * {@code start} and ending at
@@ -428,4 +507,66 @@ public class BinaryTree implements Graph, Iterable<Node> {
 	public int numOfChildren( Node node ) {
 		return outdegree( node );
 	}
+	
+	/**
+	 * Recursively traverses the tree, appends output of level
+	 * to given StringBuffer
+	 * @param strbuf StringBuffer to append to
+	 * @param level  current level in tree (for indentation)
+	 * @param node   current tree node
+	 */
+	private void _tree2string( StringBuffer strbuf, int level, Node node ) {
+		if( getRight( node ) != null )
+			_tree2string( strbuf, level + 1, getRight( node ) );
+
+		for( int i = 0; i < level; ++i )
+			strbuf.append( "    " );
+		if( !getRoot().equals( node ) )
+			strbuf.append( isLeftChild( node ) ? "\\" : "/" );
+		strbuf.append( node + "\n" );
+
+		if( getLeft( node ) != null )
+			_tree2string( strbuf, level + 1, getLeft( node ) );
+	}
+	
+	public String toString2() {
+		StringBuffer strbuf = new StringBuffer( this.getClass() + ": " );
+
+		if( root == null )
+			strbuf.append( "EMPTY\n" );
+		else {
+			strbuf.append( "\n" );
+			_tree2string( strbuf, 0, getRoot() );
+		}
+
+		return strbuf.toString();
+	}
+	
+	boolean isLeftChild( Node node ) {
+		if( node.equals( root ) )
+			return false;
+		return getLeft( getParent( node ) ).equals( node );
+	}
+
+	boolean isEmpty() {
+		return root == null;
+	}
+
+	public int getHeight() {
+		if( isEmpty() )
+			return -1;
+		else
+			return getHeight( root );
+	}
+	
+	private int getHeight( Node node ) {
+		if( node == null )
+			return -1;
+		return 1 + Math.max( getHeight( getLeft( node ) ), getHeight( getRight( node ) ) );		
+	}
+
+	void setRoot( int i ) {
+		root = getNode( i );
+	}
+
 }

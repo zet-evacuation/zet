@@ -6,6 +6,7 @@ package de.tu_berlin.math.coga.graph.io.xml;
 
 import algo.graph.dynamicflow.eat.EarliestArrivalFlowProblem;
 import com.thoughtworks.xstream.XStream;
+import de.tu_berlin.math.coga.graph.io.xml.visualization.GraphVisualization;
 import ds.graph.Edge;
 import ds.graph.Node;
 import ds.graph.network.AbstractNetwork;
@@ -126,11 +127,11 @@ public class XMLWriter {
 		}
 	}
 
-	public void writeLayoutedNetwork( GraphView graphView ) throws IOException {
+	public void writeLayoutedNetwork( GraphVisualization graphView ) throws IOException {
 		BufferedWriter writer = null;
 		xmlData.network = graphView.getNetwork();
 
-		xmlData.sinks = graphView.sinks;	// not needed during conversation in normal mode
+		xmlData.sinks = graphView.getSinks();	// not needed during conversation in normal mode
 		xmlData.sources = graphView.getSources(); // not needed during conversation in normal mode
 		xmlData.edgeCapacitiesIntegral = graphView.getEdgeCapacities();
 		xmlData.nodeCapacitiesIntegral = graphView.getNodeCapacities();
@@ -143,7 +144,7 @@ public class XMLWriter {
 		try {
 			writer = new BufferedWriter( new FileWriter( file ) );
 			xstream.alias( "graph", AbstractNetwork.class );
-			xstream.alias( "graphLayout", GraphView.class );
+			xstream.alias( "graphLayout", GraphVisualization.class );
 			xstream.setMode( XStream.NO_REFERENCES );
 			//xstream.alias("flowVisualisation",FlowVisualisation.class);
 			xstream.registerConverter( new ColorConverter() );

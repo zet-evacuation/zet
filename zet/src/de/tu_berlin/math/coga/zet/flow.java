@@ -31,7 +31,7 @@ import de.tu_berlin.math.coga.common.algorithm.AlgorithmTerminatedEvent;
 import de.tu_berlin.math.coga.common.util.Formatter;
 import de.tu_berlin.math.coga.common.util.Formatter.TimeUnits;
 import de.tu_berlin.math.coga.graph.io.dimacs.DimacsReader;
-import de.tu_berlin.math.coga.graph.io.xml.GraphView;
+import de.tu_berlin.math.coga.graph.io.xml.visualization.GraphVisualization;
 import de.tu_berlin.math.coga.graph.io.xml.XMLReader;
 import de.tu_berlin.math.coga.graph.io.xml.XMLWriter;
 import de.tu_berlin.math.coga.zet.viewer.NodePositionMapping;
@@ -69,7 +69,7 @@ public class flow implements AlgorithmListener {
 	PathBasedFlowOverTime df;
 	int neededTimeHorizon;
 	int percentInterval = 100;
-	GraphView graphView = null;
+	GraphVisualization graphView = null;
 
 	// General stuff
 	String inputFileName;
@@ -142,7 +142,7 @@ public class flow implements AlgorithmListener {
 				theInstance.xPos = new IdentifiableIntegerMapping<>( 0 );
 				theInstance.yPos = new IdentifiableIntegerMapping<>( 0 );
 				theInstance.eafp = DatFileReaderWriter.read( theInstance.inputFileName, theInstance.nodePositionMapping ); // new .dat-format
-				theInstance.graphView = new GraphView( theInstance.eafp, theInstance.nodePositionMapping );
+				theInstance.graphView = new GraphVisualization( theInstance.eafp, theInstance.nodePositionMapping );
 				theInstance.computationMode = ComputationMode.EarliestArrivalFlow;
 				// version without x and Years positions:
 				//theInstance.eafp = DatFileReaderWriter.readOld( theInstance.inputFileName ); // old .dat-format

@@ -15,14 +15,13 @@
  */
 package gui.visualization.control.graph;
 
+import de.tu_berlin.math.coga.graph.io.xml.visualization.FlowVisualization;
+import ds.GraphVisualizationResults;
 import ds.graph.Edge;
 import ds.graph.flow.EdgeBasedFlowOverTime;
-import ds.GraphVisualizationResults;
 import ds.mapping.IdentifiableIntegerMapping;
 import gui.visualization.draw.graph.GLFlowEdge;
 import java.util.ArrayList;
-
-import de.tu_berlin.math.coga.graph.io.xml.FlowVisualization;
 
 /**
  * The control class for edges in an MVC-design. This class controls the visualization of such an edge represented
@@ -69,7 +68,7 @@ public class GLFlowEdgeControl extends GLEdgeControl {
 		if( maxT > 0 )
 			glControl.setMaxTime( maxT + transit );
 		if( maxT > 0 ) {
-			flowOnEdge = new ArrayList<Integer>( maxT + transit + transit );
+			flowOnEdge = new ArrayList<>( maxT + transit + transit );
 			for( int i = 0; i < transit; i++ )
 				flowOnEdge.add( new Integer( 0 ) );
 			for( int i = 0; i <= maxT; i++ )
@@ -77,11 +76,11 @@ public class GLFlowEdgeControl extends GLEdgeControl {
 			for( int i = 0; i < transit; i++ )
 				flowOnEdge.add( new Integer( 0 ) );
 		} else
-			flowOnEdge = new ArrayList<Integer>();
+			flowOnEdge = new ArrayList<>();
 	}
 
 	GLFlowEdgeControl( FlowVisualization fv, Edge edge, GLFlowGraphControl mainControl ) {
-		super( fv.getGv().getNodePositionMapping(), edge );
+		super( fv.getNodePositionMapping(), edge );
 		this.mainControl = mainControl;
 
 		// todo: usage of isFirst by flag...
@@ -90,12 +89,12 @@ public class GLFlowEdgeControl extends GLEdgeControl {
 		// store general edge attributes
 		maxFlowRate = fv.getMaxFlowRate();
 		mainControl.setMaxTime( fv.getTimeHorizon() + 1 );
-		transitTime = fv.getGv().getTransitTimes().get( edge );
-		capacity = fv.getGv().getEdgeCapacities().get( edge );
+		transitTime = fv.getTransitTimes().get( edge );
+		capacity = fv.getEdgeCapacities().get( edge );
 
 
 		// compute flow visualization data structure
-		IdentifiableIntegerMapping<Edge> transitTimes = fv.getGv().getTransitTimes();
+		IdentifiableIntegerMapping<Edge> transitTimes = fv.getTransitTimes();
 
 		EdgeBasedFlowOverTime flowOverTime = fv.getFlow();
 		if( flowOverTime != null ) {
@@ -105,7 +104,7 @@ public class GLFlowEdgeControl extends GLEdgeControl {
 		int transit = transitTimes.get( edge );
 
 		if( maxT > 0 ) {
-			flowOnEdge = new ArrayList<Integer>( maxT + transit + transit );
+			flowOnEdge = new ArrayList<>( maxT + transit + transit );
 			for( int i = 0; i < transit; i++ )
 				flowOnEdge.add( new Integer( 0 ) );
 			for( int i = 0; i <= maxT; i++ )
@@ -113,7 +112,7 @@ public class GLFlowEdgeControl extends GLEdgeControl {
 			for( int i = 0; i < transit; i++ )
 				flowOnEdge.add( new Integer( 0 ) );
 		} else
-			flowOnEdge = new ArrayList<Integer>();
+			flowOnEdge = new ArrayList<>();
 	}
 
 	@Override
