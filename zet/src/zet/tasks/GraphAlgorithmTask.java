@@ -4,18 +4,18 @@
  */
 package zet.tasks;
 
-import de.tu_berlin.math.coga.common.algorithm.AlgorithmEvent;
-import de.tu_berlin.math.coga.zet.converter.graph.GraphAssignmentConverter;
 import de.tu_berlin.math.coga.common.algorithm.Algorithm;
+import de.tu_berlin.math.coga.common.algorithm.AlgorithmEvent;
 import de.tu_berlin.math.coga.common.algorithm.AlgorithmListener;
 import de.tu_berlin.math.coga.zet.NetworkFlowModel;
 import de.tu_berlin.math.coga.zet.converter.graph.BaseZToGraphConverter;
+import de.tu_berlin.math.coga.zet.converter.graph.GraphAssignmentConverter;
 import de.tu_berlin.math.coga.zet.converter.graph.ZToSpanTreeConverter;
 import ds.GraphVisualizationResults;
-import ds.z.Project;
 import ds.PropertyContainer;
 import ds.graph.flow.PathBasedFlowOverTime;
 import ds.z.ConcreteAssignment;
+import ds.z.Project;
 
 /**
  *
@@ -51,7 +51,7 @@ public class GraphAlgorithmTask extends Algorithm<Project, GraphVisualizationRes
 
 		// call the graph algorithm
 		int maxTime = (int) PropertyContainer.getInstance().getAsDouble( "algo.ca.maxTime" );
-		Algorithm<NetworkFlowModel, PathBasedFlowOverTime> gt = null;
+		Algorithm<NetworkFlowModel, PathBasedFlowOverTime> gt;
 		gt = graphAlgorithm.createTask( cav.getSolution(), maxTime );
 		gt.setProblem( cav.getSolution() );
 		gt.addAlgorithmListener( this );
