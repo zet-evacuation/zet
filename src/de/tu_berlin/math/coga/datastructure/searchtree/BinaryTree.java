@@ -2,7 +2,7 @@
  * BinaryTree.java
  * Created: 23.07.2012, 10:50:17
  */
-package de.tu_berlin.math.coga.datastructure;
+package de.tu_berlin.math.coga.datastructure.searchtree;
 
 import ds.collection.ListSequence;
 import ds.graph.ArraySet;
@@ -548,7 +548,7 @@ public class BinaryTree implements Graph, Iterable<Node> {
 		return getLeft( getParent( node ) ).equals( node );
 	}
 
-	boolean isEmpty() {
+	public boolean isEmpty() {
 		return root == null;
 	}
 
