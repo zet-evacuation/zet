@@ -175,7 +175,7 @@ public class flow implements AlgorithmListener {
 				outFilename = config.getString( "outputfile" );
 			if( format.equals( "flow" ) ) {
 				theInstance.graphVisResult = new GraphVisualizationResults( theInstance.eafp, theInstance.xPos, theInstance.yPos, theInstance.df );
-				theInstance.graphVisResult.setNeededTimeHorizon( theInstance.neededTimeHorizon );
+				theInstance.graphVisResult.setTimeHorizon( theInstance.neededTimeHorizon );
 				try {
 //					if( !outFilename.endsWith( ".flow" ) )
 //						outFilename += ".flow";

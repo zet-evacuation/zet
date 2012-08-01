@@ -34,7 +34,7 @@ public class GraphVisualization {
 	/** A list of the nodes that are sources. */
 	List<Node> sources;
 	/** A list of the nodes that are sinks. */
-	ArrayList<Node> sinks;
+	List<Node> sinks;
 	/** A scale value that should be used for displaying the graph. */
 	private double scale = 1;
 	/** The offset that has to be added to a point to center the graph.  */
@@ -54,7 +54,7 @@ public class GraphVisualization {
 	double maxZ = Double.MIN_VALUE;
 
 
-	public GraphVisualization( AbstractNetwork network, NodePositionMapping nodePositionMapping, IdentifiableIntegerMapping<Edge> edgeCapacities, IdentifiableIntegerMapping<Node> nodeCapacities, IdentifiableIntegerMapping<Edge> transitTimes, IdentifiableIntegerMapping<Node> supplies, List<Node> sources, ArrayList<Node> sinks ) {
+	public GraphVisualization( AbstractNetwork network, NodePositionMapping nodePositionMapping, IdentifiableIntegerMapping<Edge> edgeCapacities, IdentifiableIntegerMapping<Node> nodeCapacities, IdentifiableIntegerMapping<Edge> transitTimes, IdentifiableIntegerMapping<Node> supplies, List<Node> sources, List<Node> sinks ) {
 		this.network = network;
 		setNodePositionMapping( nodePositionMapping );
 		this.edgeCapacities = edgeCapacities;
@@ -182,7 +182,7 @@ public class GraphVisualization {
 		this.nodeCapacities = nodeCapacities;
 	}
 
-	public ArrayList<Node> getSinks() {
+	public List<Node> getSinks() {
 		return sinks;
 	}
 

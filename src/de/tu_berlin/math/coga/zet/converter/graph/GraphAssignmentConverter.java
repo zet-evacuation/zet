@@ -4,13 +4,8 @@
  */
 package de.tu_berlin.math.coga.zet.converter.graph;
 
-import algo.graph.util.GraphInstanceChecker;
 import de.tu_berlin.math.coga.common.algorithm.Algorithm;
-import de.tu_berlin.math.coga.common.localization.DefaultLoc;
 import de.tu_berlin.math.coga.zet.NetworkFlowModel;
-import ds.graph.IdentifiableCollection;
-import ds.mapping.IdentifiableIntegerMapping;
-import ds.graph.network.AbstractNetwork;
 import ds.graph.Node;
 import ds.z.ConcreteAssignment;
 import ds.z.Person;
@@ -50,13 +45,16 @@ public class GraphAssignmentConverter extends Algorithm<ConcreteAssignment, Netw
 		ZToGraphMapping mapping = model.getZToGraphMapping();
 		ZToGraphRasterContainer raster = mapping.getRaster();
 
+		model.resetAssignment();
+		
 		// the new converted node assignment
-		IdentifiableIntegerMapping<Node> nodeAssignment = new IdentifiableIntegerMapping<>( 1 );
+		//IdentifiableIntegerMapping<Node> nodeAssignment = new IdentifiableIntegerMapping<>( 1 );
 		List<Person> persons = assignment.getPersons();
 
 		// setting the people requirement (negative assignment) to the number of persons in the building
-		Node superSink = model.getSupersink();
-		nodeAssignment.set( superSink, -persons.size() );
+		//Node superSink = model.getSupersink();
+		model.setNodeAssignment( model.getSupersink(), -persons.size() );
+		//nodeAssignment.set( superSink, -persons.size() );
 
 		// for every person do
 		for( int i = 0; i < persons.size(); i++ ) {
@@ -76,48 +74,27 @@ public class GraphAssignmentConverter extends Algorithm<ConcreteAssignment, Netw
 			Node node = square.getNode();
 
 			// increase the nodes assignment if already defined or set it's assignment to 1
-			if( nodeAssignment.isDefinedFor( node ) )
-				nodeAssignment.increase( node, 1 );
-			else
-				nodeAssignment.set( node, 1 );
+			//if( nodeAssignment.isDefinedFor( node ) )
+			//	nodeAssignment.increase( node, 1 );
+			//else
+			//	nodeAssignment.set( node, 1 );
+			model.increaseNodeAssignment( node );
 		}
 
 		// set node assignment to 0 for every node the assignment has not already defined for
-		IdentifiableCollection<Node> nodes = model.getGraph().nodes();
-		for( int i = 0; i < nodes.size(); i++ )
-			if( !nodeAssignment.isDefinedFor( nodes.get( i ) ) )
-				nodeAssignment.set( nodes.get( i ), 0 );
+//		IdentifiableCollection<Node> nodes = model.getGraph().nodes();
+//		for( int i = 0; i < nodes.size(); i++ )
+//			if( !nodeAssignment.isDefinedFor( nodes.get( i ) ) )
+//				nodeAssignment.set( nodes.get( i ), 0 );
 
 		// set the network flow model's assignment to the calculated node assignment
-		model.setCurrentAssignment( nodeAssignment );
+//		model.setCurrentAssignment( nodeAssignment );
 
-		checkSupplies( model );
-
+		model.checkSupplies();
+		
 //		if( progress )
 //			System.out.println( ": A concrete assignment has been converted into supplies and demands for the graph." );
 
 	}
 
-	/**
-	 * Deletes sources that cannot reach a sink. These nodes are marked as deleted sources.
-	 * @param model the {@code NetworkFlowModel} object.
-	 */
-	private void checkSupplies( NetworkFlowModel model ) {
-		AbstractNetwork network = model.getNetwork();
-		IdentifiableIntegerMapping<Node> supplies = model.getCurrentAssignment();
-
-		GraphInstanceChecker checker = new GraphInstanceChecker( network, supplies );
-		checker.supplyChecker();
-
-		if( checker.hasRun() ) {
-			model.setCurrentAssignment( checker.getNewSupplies() );
-			model.setSources( checker.getNewSources() );
-			ZToGraphMapping mapping = model.getZToGraphMapping();
-			for( Node oldSource : checker.getDeletedSources() ) {
-				mapping.setIsSourceNode( oldSource, false );
-				mapping.setIsDeletedSourceNode( oldSource, true );
-			}
-		} else
-			throw new AssertionError( DefaultLoc.getSingleton().getString( "converter.NoCheckException" ) );
-	}
 }

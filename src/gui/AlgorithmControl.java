@@ -329,8 +329,8 @@ public class AlgorithmControl implements PropertyChangeListener {
 			public void propertyChange( PropertyChangeEvent pce ) {
 				if( st.isDone() ) {
 					networkFlowModel = conv.getSolution();
-					System.out.println( "Nodes: " + networkFlowModel.getNetwork().getNodeCapacity() );
-					System.out.println( "Edges: " + networkFlowModel.getNetwork().getEdgeCapacity() );
+					System.out.println( "Nodes: " + networkFlowModel.numberOfNodes() );
+					System.out.println( "Edges: " + networkFlowModel.numberOfEdges() );
 				}
 			}
 		} );
@@ -370,8 +370,13 @@ public class AlgorithmControl implements PropertyChangeListener {
 			@Override
 			public void propertyChange( PropertyChangeEvent pce ) {
 				if( st.isDone() ) {
-					networkFlowModel = gat.getNetworkFlowModel();
-					graphVisResults = gat.getSolution();
+					if( st.isError() ) {
+						System.err.print( "Error occured." );
+						st.getError().printStackTrace( System.err );
+					} else {
+						networkFlowModel = gat.getNetworkFlowModel();
+						graphVisResults = gat.getSolution();
+					}
 				}
 			}
 		});

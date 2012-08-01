@@ -18,21 +18,21 @@ package batch.tasks.assignment;
 import algo.ca.algorithm.evac.EvacuationCellularAutomatonAlgorithm;
 import algo.ca.algorithm.evac.EvacuationSimulationProblem;
 import batch.BatchResultEntry;
+import batch.tasks.AssignmentTask;
 import de.tu_berlin.math.coga.zet.converter.cellularAutomaton.ZToCAConverter.ConversionNotSupportedException;
-import ds.z.Project;
 import ds.PropertyContainer;
 import ds.ca.evac.EvacuationCellularAutomaton;
 import ds.ca.results.VisualResultsRecorder;
 import ds.z.Assignment;
 import ds.z.AssignmentType;
 import ds.z.ConcreteAssignment;
+import ds.z.Project;
+import evacuationplan.BestResponseDynamics;
+import exitdistributions.ExitCapacityBasedCAFactory;
 import io.visualization.CAVisualizationResults;
 import java.util.TreeMap;
 import statistic.ca.CAStatistic;
 import zet.tasks.CellularAutomatonAlgorithmEnumeration;
-import batch.tasks.AssignmentTask;
-import evacuationplan.BestResponseDynamics;
-import exitdistributions.ExitCapacityBasedCAFactory;
 
 /**
  *  

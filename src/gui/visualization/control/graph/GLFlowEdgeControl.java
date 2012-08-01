@@ -61,7 +61,7 @@ public class GLFlowEdgeControl extends GLEdgeControl {
 		// calculate flow on the edge
 		IdentifiableIntegerMapping<Edge> transitTimes = graphVisResult.getTransitTimes();
 
-		EdgeBasedFlowOverTime flowOverTime = graphVisResult.getFlowOverTime();
+		EdgeBasedFlowOverTime flowOverTime = graphVisResult.getFlow();
 
 		int maxT = flowOverTime.get( edge ).getLastTimeWithNonZeroValue(); // maximaler Zeithorizont
 		int transit = transitTimes.get( edge );

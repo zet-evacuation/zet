@@ -19,10 +19,10 @@
  */
 package batch.tasks.graph;
 
-import de.tu_berlin.math.coga.zet.NetworkFlowModel;
 import algo.graph.dynamicflow.eat.EarliestArrivalFlowProblem;
 import algo.graph.dynamicflow.eat.LongestShortestPathTimeHorizonEstimator;
 import algo.graph.dynamicflow.eat.SuccessiveEarliestArrivalAugmentingPathAlgorithm;
+import de.tu_berlin.math.coga.zet.NetworkFlowModel;
 import ds.NetworkFlowModelAlgorithm;
 import ds.graph.flow.PathBasedFlowOverTime;
 
@@ -30,23 +30,22 @@ import ds.graph.flow.PathBasedFlowOverTime;
  *
  */
 public class SuccessiveEarliestArrivalAugmentingPathAlgorithm2Task extends NetworkFlowModelAlgorithm {
-
-    @Override
-    protected PathBasedFlowOverTime runAlgorithm(NetworkFlowModel model) {
-        EarliestArrivalFlowProblem problem = new EarliestArrivalFlowProblem(model.getEdgeCapacities(), model.getNetwork(), model.getNodeCapacities(), model.getSupersink(), model.getSources(), 0, model.getTransitTimes(), model.getCurrentAssignment());
-        LongestShortestPathTimeHorizonEstimator estimator = new LongestShortestPathTimeHorizonEstimator();
-        estimator.setProblem(problem);
-        estimator.run();
-        System.out.println(estimator.getSolution());
-        problem = new EarliestArrivalFlowProblem(model.getEdgeCapacities(), model.getNetwork(), model.getNodeCapacities(), model.getSupersink(), model.getSources(), estimator.getSolution().getUpperBound(), model.getTransitTimes(), model.getCurrentAssignment());
-        SuccessiveEarliestArrivalAugmentingPathAlgorithm algo = new SuccessiveEarliestArrivalAugmentingPathAlgorithm();
-        algo.setProblem(problem);
-        algo.run();
-        PathBasedFlowOverTime df = algo.getSolution().getPathBased();
-        String result = String.format("Sent %1$s of %2$s flow units in %3$s time units successfully.", algo.getSolution().getFlowAmount(), problem.getTotalSupplies(), algo.getSolution().getTimeHorizon());
-        System.out.println(result);
-        //AlgorithmTask.getInstance().publish(100, result, "");
-        System.out.println(String.format("Sending the flow units required %1$s ms.", algo.getRuntime() / 1000000));
-        return df;
-    }
+	@Override
+	protected PathBasedFlowOverTime runAlgorithm( NetworkFlowModel model ) {
+		EarliestArrivalFlowProblem problem = model.getEAFP();
+		LongestShortestPathTimeHorizonEstimator estimator = new LongestShortestPathTimeHorizonEstimator();
+		estimator.setProblem( problem );
+		estimator.run();
+		System.out.println( estimator.getSolution() );
+		problem = model.getEAFP( estimator.getSolution().getUpperBound() );
+		SuccessiveEarliestArrivalAugmentingPathAlgorithm algo = new SuccessiveEarliestArrivalAugmentingPathAlgorithm();
+		algo.setProblem( problem );
+		algo.run();
+		PathBasedFlowOverTime df = algo.getSolution().getPathBased();
+		String result = String.format( "Sent %1$s of %2$s flow units in %3$s time units successfully.", algo.getSolution().getFlowAmount(), problem.getTotalSupplies(), algo.getSolution().getTimeHorizon() );
+		System.out.println( result );
+		//AlgorithmTask.getInstance().publish(100, result, "");
+		System.out.println( String.format( "Sending the flow units required %1$s ms.", algo.getRuntime() / 1000000 ) );
+		return df;
+	}
 }

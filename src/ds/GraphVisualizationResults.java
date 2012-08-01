@@ -15,25 +15,20 @@
  */
 package ds;
 
-import algo.graph.Flags;
 import algo.graph.dynamicflow.eat.EarliestArrivalFlowProblem;
 import algo.graph.util.PathComposition;
 import de.tu_berlin.math.coga.graph.io.xml.visualization.FlowVisualization;
-import de.tu_berlin.math.coga.graph.io.xml.visualization.GraphVisualization;
 import de.tu_berlin.math.coga.math.vectormath.Vector3;
 import de.tu_berlin.math.coga.zet.NetworkFlowModel;
 import de.tu_berlin.math.coga.zet.converter.graph.ZToGraphMapping;
 import de.tu_berlin.math.coga.zet.viewer.NodePositionMapping;
-import ds.graph.Edge;
 import ds.graph.Node;
 import ds.graph.NodeRectangle;
 import ds.graph.flow.EdgeBasedFlowOverTime;
 import ds.graph.flow.PathBasedFlowOverTime;
 import ds.graph.network.AbstractNetwork;
-import ds.graph.network.Network;
 import ds.mapping.IdentifiableIntegerMapping;
 import ds.mapping.IdentifiableObjectMapping;
-import gui.visualization.VisualizationOptionManager;
 import java.util.ArrayList;
 import opengl.framework.abs.VisualizationResult;
 
@@ -46,6 +41,14 @@ import opengl.framework.abs.VisualizationResult;
 public class GraphVisualizationResults extends FlowVisualization implements VisualizationResult {
 	/** A mapping saving a rectangle in the real world for each node. */
 	private IdentifiableObjectMapping<Node, NodeRectangle> nodeRectangles;
+	/** The node position mapping. */
+	private NodePositionMapping nodePositionMapping = null;
+	/** */
+	private ArrayList<ArrayList<Node>> floorToNodeMapping;
+	/** A mapping giving the number of the floor (this node lies in) in the list in the z-format. */
+	private IdentifiableIntegerMapping<Node> nodeToFloorMapping;
+	/** A mapping telling whether each node has been a source node that has been deleted. */
+	private IdentifiableObjectMapping<Node, Boolean> isDeletedSourceNode;
 
 	public GraphVisualizationResults( double d ) {
 		super( null );
@@ -65,15 +68,54 @@ public class GraphVisualizationResults extends FlowVisualization implements Visu
 			nodeRectangles.set( node, nodeRectangle );
 		}
 
-		if( flowOverTime != null ) {
-			PathComposition pathComposition = new PathComposition( getNetwork(), getTransitTimes(), flowOverTime );
-			pathComposition.run();
-			this.setFlow( pathComposition.getEdgeFlows() );
-		} else {
-			//maxFlowRate = 0;
-			setFlow( new EdgeBasedFlowOverTime( getNetwork() ) );
-		}
+		setFlowOverTime( flowOverTime );
+	}
+	
+	public GraphVisualizationResults( NetworkFlowModel networkFlowModel, NodePositionMapping nodePositionMapping ) {
+		//super( networkFlowModel.getNetwork(), new NodePositionMapping( networkFlowModel.getNetwork().numberOfNodes() ), networkFlowModel.getEdgeCapacities(), networkFlowModel.getNodeCapacities(), networkFlowModel.getTransitTimes(), networkFlowModel.getCurrentAssignment(), networkFlowModel.getSources(), networkFlowModel.getSinks());
+		super( networkFlowModel.getEAFP(), networkFlowModel.getNodeCoordinates() );
 
+	
+		
+		
+		ZToGraphMapping mapping = networkFlowModel.getZToGraphMapping();
+		this.nodeRectangles = mapping.getNodeRectangles();
+		this.nodeToFloorMapping = mapping.getNodeFloorMapping();
+//		this.isEvacuationNode = mapping.getIsEvacuationNode();
+//		this.isSourceNode = mapping.getIsSourceNode();
+		this.isDeletedSourceNode = mapping.getIsDeletedSourceNode();
+//		this.supersink = networkFlowModel.getSupersink();
+//
+		this.floorToNodeMapping = new ArrayList<>();
+		
+		AbstractNetwork network = networkFlowModel.getEAFP().getNetwork();
+		
+		for( Node node : network.nodes() ) {
+			int floor = this.nodeToFloorMapping.get( node );
+
+			if( floor != -1 ) {
+				while(this.floorToNodeMapping.size() < floor)
+					this.floorToNodeMapping.add( new ArrayList<Node>() );
+				if( this.floorToNodeMapping.size() <= floor )
+					this.floorToNodeMapping.add( floor, new ArrayList<Node>() );
+				this.floorToNodeMapping.get( floor ).add( node );
+			}
+		}
+			setMaxFlowRate( 0 );
+			setFlow( new EdgeBasedFlowOverTime( getNetwork() ) );
+//		setUpNodeCoordinates();
+	}
+	
+	public GraphVisualizationResults( NetworkFlowModel nfm, PathBasedFlowOverTime dynamicFlow ) {
+		this( nfm, nfm.getNodeCoordinates() );
+		this.setFlowOverTime( dynamicFlow );
+//		if( Flags.FLOWWRONG ) {
+//			System.out.println( "Eingabe in die PathComposition:" );
+//			System.out.println( "Netzwerk:\n" + network + "\n" + "Fahrzeiten:\n" + transitTimes + "\n" + "Fluss:\n" + dynamicFlow );
+//			System.out.println( "Ausgabe der PathComposition:" );
+//			System.out.println( flowOverTime );
+//		}
+//		this.dynamicFlow = null;
 	}
 	
 	
@@ -90,16 +132,10 @@ public class GraphVisualizationResults extends FlowVisualization implements Visu
 //	private IdentifiableIntegerMapping<Node> supplies;
 //	/** The resulting flow. */
 //	private PathBasedFlowOverTime dynamicFlow = null;
-//	/** A mapping giving the number of the floor (this node lies in) in the list in the z-format. */
-//	private IdentifiableIntegerMapping<Node> nodeToFloorMapping;
 //	/** A mapping telling whether each node is an evacuation node. */
 //	private IdentifiableObjectMapping<Node, Boolean> isEvacuationNode;
 //	/** A mapping telling whether each node is a source node. */
 //	private IdentifiableObjectMapping<Node, Boolean> isSourceNode;
-//	/** A mapping telling whether each node has been a source node that has been deleted. */
-//	private IdentifiableObjectMapping<Node, Boolean> isDeletedSourceNode;
-//	/** */
-//	private ArrayList<ArrayList<Node>> floorToNodeMapping;
 //	/** The composed flow over time */
 //	private EdgeBasedFlowOverTime flowOverTime;
 //	/** The maximal flow rate in the calculated flow. */
@@ -108,8 +144,6 @@ public class GraphVisualizationResults extends FlowVisualization implements Visu
 //	private Node supersink;
 //	/** An lower bound to the time horizon. If negative, no value is known yet. */
 //	private int neededTimeHorizon = -1;
-//	/** The node position mapping. */
-//	private NodePositionMapping nodePositionMapping = null;
 //
 //	/**
 //	 * Create a new {@code GraphVisualization} object from a network flow model and a dynamic flow.
@@ -268,15 +302,17 @@ public class GraphVisualizationResults extends FlowVisualization implements Visu
 //		setUpNodeCoordinates();
 //	}
 //
-//	private void setUpNodeCoordinates() {
-//		nodePositionMapping = new NodePositionMapping( network.numberOfNodes() );
+	private void setUpNodeCoordinates( IdentifiableObjectMapping<Node, NodeRectangle> nodeRectangles ) {
+		nodePositionMapping = new NodePositionMapping( nodeRectangles.getDomainSize() );
+//		for( int i = 0; i < nodePositionMapping.getDomainSize(); ++i ) {
 //		for( Node n : network ) {
 //			NodeRectangle rect = getNodeRectangles().get( n );
+//			NodeRectangle rect = nodeRectangles.get( null )
 //			final double zs = getNodeToFloorMapping().get( n ) * VisualizationOptionManager.getFloorDistance();
 //			final Vector3 v = new Vector3( rect.getCenterX(), rect.getCenterY(), zs );
 //			nodePositionMapping.set( n, v );
 //		}
-//	}
+	}
 //
 //	/**
 //	 * Returns the mapping of nodes to coordinates in the 3 dimensional space.
@@ -297,30 +333,30 @@ public class GraphVisualizationResults extends FlowVisualization implements Visu
 //	public AbstractNetwork getNetwork() {
 //		return network;
 //	}
-//
-//	/**
-//	 * Returns a mapping that assigns nodes to rectangles in the real world.
-//	 * @return a mapping that assigns nodes to rectangles in the real world.
-//	 */
-//	public IdentifiableObjectMapping<Node, NodeRectangle> getNodeRectangles() {
-//		return nodeRectangles;
-//	}
-//
-//	/**
-//	 * Returns a mapping that assigns a flor number to each node.
-//	 * @return a mapping that assigns a flor number to each node.
-//	 */
-//	public IdentifiableIntegerMapping<Node> getNodeToFloorMapping() {
-//		return nodeToFloorMapping;
-//	}
-//
-//	/**
-//	 * Returns a mapping that contains all nodes connected to a floor.
-//	 * @return a mapping that contains all nodes connected to a floor.
-//	 */
-//	public ArrayList<ArrayList<Node>> getFloorToNodeMapping() {
-//		return floorToNodeMapping;
-//	}
+
+	/**
+	 * Returns a mapping that assigns nodes to rectangles in the real world.
+	 * @return a mapping that assigns nodes to rectangles in the real world.
+	 */
+	public IdentifiableObjectMapping<Node, NodeRectangle> getNodeRectangles() {
+		return nodeRectangles;
+	}
+
+	/**
+	 * Returns a mapping that assigns a flor number to each node.
+	 * @return a mapping that assigns a flor number to each node.
+	 */
+	public IdentifiableIntegerMapping<Node> getNodeToFloorMapping() {
+		return nodeToFloorMapping;
+	}
+
+	/**
+	 * Returns a mapping that contains all nodes connected to a floor.
+	 * @return a mapping that contains all nodes connected to a floor.
+	 */
+	public ArrayList<ArrayList<Node>> getFloorToNodeMapping() {
+		return floorToNodeMapping;
+	}
 //
 //	/**
 //	 * Returns whether {@code node} is an evacuation node.
@@ -339,15 +375,15 @@ public class GraphVisualizationResults extends FlowVisualization implements Visu
 //	public boolean isSourceNode( Node node ) {
 //		return isSourceNode.get( node );
 //	}
-//
-//	/**
-//	 * Returns whether {@code node} has been a source node that was deleted.
-//	 * @param node a node
-//	 * @return whether {@code node} has been a source node that was deleted.
-//	 */
-//	public boolean isDeletedSourceNode( Node node ) {
-//		return isDeletedSourceNode.get( node );
-//	}
+
+	/**
+	 * Returns whether {@code node} has been a source node that was deleted.
+	 * @param node a node
+	 * @return whether {@code node} has been a source node that was deleted.
+	 */
+	public boolean isDeletedSourceNode( Node node ) {
+		return isDeletedSourceNode.get( node );
+	}
 //
 //	/**
 //	 * Returns a mapping that assigns capacities to all edges of the network.
@@ -423,5 +459,17 @@ public class GraphVisualizationResults extends FlowVisualization implements Visu
 //	}
 //
 //	
+
+	private void setFlowOverTime( PathBasedFlowOverTime flowOverTime ) {
+		if( flowOverTime != null ) {
+			PathComposition pathComposition = new PathComposition( getNetwork(), getTransitTimes(), flowOverTime );
+			pathComposition.run();
+			this.setFlow( pathComposition.getEdgeFlows() );
+			setMaxFlowRate( pathComposition.getMaxFlowRate() );
+		} else {
+			setFlow( new EdgeBasedFlowOverTime( getNetwork() ) );
+			setMaxFlowRate( 0 );
+		}
+	}
 
 }

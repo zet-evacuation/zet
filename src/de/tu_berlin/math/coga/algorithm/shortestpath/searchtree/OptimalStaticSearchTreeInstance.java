@@ -4,7 +4,6 @@
  */
 package de.tu_berlin.math.coga.algorithm.shortestpath.searchtree;
 
-import de.tu_berlin.math.coga.batch.algorithm.Algorithms;
 import de.tu_berlin.math.coga.datastructure.ArrayList;
 import de.tu_berlin.math.coga.datastructure.KeyValuePair;
 import java.util.Collections;

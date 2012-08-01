@@ -56,13 +56,14 @@ public class GLFlowGraphControl extends AbstractZETVisualizationControl<GLGraphF
 	private boolean supportsFloors = false;
 	double scaling = 1;
 	double defaultFloorHeight = 25;
+	private GraphVisualizationResults graphVisResult;
 
 	public GLFlowGraphControl( GraphVisualizationResults graphVisResult ) {
 		super();
-		build( graphVisResult );
+		this.graphVisResult = graphVisResult;
 	}
 	
-	public void build( GraphVisualizationResults graphVisResult ) {
+	public void build( ) {
 		mainControl = this;
 
 		//AlgorithmTask.getInstance().setProgress( 0, DefaultLoc.getSingleton().getStringWithoutPrefix( "batch.tasks.progress.createGraphVisualizationDataStructure" ), "" );
@@ -72,6 +73,7 @@ public class GLFlowGraphControl extends AbstractZETVisualizationControl<GLGraphF
 		allFloorsByID = new HashMap<>();
 		supportsFloors = true;
 		int floorCount = graphVisResult.getFloorToNodeMapping().size();
+		clear();
 		for( int i = 0; i < floorCount; i++ ) {
 				GLGraphFloorControl floorControl = new GLGraphFloorControl( graphVisResult, graphVisResult.getFloorToNodeMapping().get( i ), i, mainControl );
 				add( floorControl );

@@ -246,14 +246,13 @@ public class FlowVisualisationConverter implements Converter {
 		PathComposition pathComposition = new PathComposition( graphView.getNetwork() , graphView.getTransitTimes(), dynamicFlow );
 		pathComposition.run();
 
-		graphView.setFlow( pathComposition.getEdgeFlows() );
+		graphView.setFlow( pathComposition.getEdgeFlows(), maxFlowRate );
 
 		int maxTimeHorizon = 0;
 		for( Edge edge : xmlData.getEdges().values() )
 			maxTimeHorizon = Math.max( maxTimeHorizon, pathComposition.getEdgeFlows().get( edge ).getLastTimeWithNonZeroValue() + xmlData.getTransitTimesIntegral().get( edge ) );
 
 		graphView.setTimeHorizon( maxTimeHorizon );
-		graphView.setMaxFlowRate( maxFlowRate );
 		return graphView;
 	}
 }

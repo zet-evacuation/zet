@@ -38,8 +38,8 @@ public class EarliestArrivalFlowProblem extends DynamicTransshipmentProblem {
 //    private IdentifiableIntegerMapping<Edge> transitTimes;
 
 //    private IdentifiableIntegerMapping<Node> nodeCapacities;
-    private Node sink;
-    private List<Node> sources;
+    protected Node supersink;
+    protected List<Node> sources;
 //    private IdentifiableIntegerMapping<Node> supplies;
 //    private int timeHorizon;
     private int totalSupplies;
@@ -49,7 +49,7 @@ public class EarliestArrivalFlowProblem extends DynamicTransshipmentProblem {
 			//this.edgeCapacities = edgeCapacities;
       //  this.network = network;
  //       this.nodeCapacities = nodeCapacities;
-        this.sink = sink;
+        this.supersink = sink;
         this.sources = sources;
  //       this.supplies = supplies;
  //       this.timeHorizon = timeHorizon;
@@ -71,7 +71,7 @@ public class EarliestArrivalFlowProblem extends DynamicTransshipmentProblem {
                 }
                 if (getSupplies().get(node) < 0) supersink = node;
             }
-						this.sink = supersink;
+						this.supersink = supersink;
 	}
 		
 		
@@ -98,7 +98,7 @@ public class EarliestArrivalFlowProblem extends DynamicTransshipmentProblem {
 //    }
 
     public Node getSink() {
-        return sink;
+        return supersink;
     }
 
     public List<Node> getSources() {
@@ -122,6 +122,6 @@ public class EarliestArrivalFlowProblem extends DynamicTransshipmentProblem {
 //    }
 
 	public String toString() {
-		return "EarliestArrivalFlowProblem{\n" + "edgeCapacities=" + getEdgeCapacities() + "\n, network=" + getNetwork() + "\n, nodeCapacities=" + getNodeCapacities() + "\n, sink=" + sink + "\n, sources=" + sources + "\n, supplies=" + getSupplies() + "\n, timeHorizon=" + getTimeHorizon() + "\n, totalSupplies=" + totalSupplies + "\n, transitTimes=" + getTransitTimes() + '}';
+		return "EarliestArrivalFlowProblem{\n" + "edgeCapacities=" + getEdgeCapacities() + "\n, network=" + getNetwork() + "\n, nodeCapacities=" + getNodeCapacities() + "\n, sink=" + supersink + "\n, sources=" + sources + "\n, supplies=" + getSupplies() + "\n, timeHorizon=" + getTimeHorizon() + "\n, totalSupplies=" + totalSupplies + "\n, transitTimes=" + getTransitTimes() + '}';
 	}
 }

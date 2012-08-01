@@ -202,7 +202,7 @@ public class ZETGLControl implements DrawableControlable {
 			graphControl = new GLFlowGraphControl( graphVisResult );
 			graphControl.setScaling( sizeMultiplicator );
 			graphControl.setDefaultFloorHeight( VisualizationOptionManager.getFloorDistance() );
-			graphControl.build( graphVisResult );
+			graphControl.build();
 
 			this.secondsPerStepGraph();
 			
@@ -266,7 +266,7 @@ public class ZETGLControl implements DrawableControlable {
 			graphControl = new GLFlowGraphControl( graphVisResult );
 			graphControl.setScaling( sizeMultiplicator );
 			graphControl.setDefaultFloorHeight( VisualizationOptionManager.getFloorDistance() );
-			graphControl.build( graphVisResult );
+			graphControl.build();
 
 			this.secondsPerStepGraph();
 

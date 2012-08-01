@@ -19,11 +19,11 @@
  */
 package batch.tasks.graph;
 
-import de.tu_berlin.math.coga.common.algorithm.Transformation;
-import de.tu_berlin.math.coga.common.util.Formatter;
 import algo.graph.dynamicflow.eat.EarliestArrivalFlowProblem;
 import algo.graph.dynamicflow.eat.LongestShortestPathTimeHorizonEstimator;
 import algo.graph.dynamicflow.eat.SEAAPAlgorithm;
+import de.tu_berlin.math.coga.common.algorithm.Transformation;
+import de.tu_berlin.math.coga.common.util.Formatter;
 import de.tu_berlin.math.coga.zet.NetworkFlowModel;
 import ds.graph.flow.FlowOverTimeImplicit;
 import ds.graph.flow.PathBasedFlowOverTime;
@@ -34,32 +34,30 @@ import ds.graph.flow.PathBasedFlowOverTime;
  * @author Jan-Philipp Kappmeier
  */
 public class SuccessiveEarliestArrivalAugmentingPathOptimizedTask extends Transformation<NetworkFlowModel, EarliestArrivalFlowProblem, FlowOverTimeImplicit, PathBasedFlowOverTime> {
+	public SuccessiveEarliestArrivalAugmentingPathOptimizedTask() {
+		setAlgorithm( new SEAAPAlgorithm() );
+	}
 
-    public SuccessiveEarliestArrivalAugmentingPathOptimizedTask() {
-        setAlgorithm(new SEAAPAlgorithm());
-    }
+	@Override
+	protected EarliestArrivalFlowProblem transformProblem( NetworkFlowModel originalProblem ) {
+		System.out.println( "Earliest arrival transshipment calculation starts" );
+		EarliestArrivalFlowProblem problem = originalProblem.getEAFP();
+		LongestShortestPathTimeHorizonEstimator estimator = new LongestShortestPathTimeHorizonEstimator();
+		estimator.setProblem( problem );
+		estimator.run();
+		System.out.println( "Geschätzte Lösung:" + estimator.getSolution() );
+		problem = originalProblem.getEAFP( estimator.getSolution().getUpperBound() );
+		return problem;
+	}
 
-    @Override
-    protected EarliestArrivalFlowProblem transformProblem(NetworkFlowModel originalProblem) {
-        System.out.println("Earliest arrival transshipment calculation starts");
-        EarliestArrivalFlowProblem problem = new EarliestArrivalFlowProblem(originalProblem.getEdgeCapacities(), originalProblem.getNetwork(), originalProblem.getNodeCapacities(), originalProblem.getSupersink(), originalProblem.getSources(), 0, originalProblem.getTransitTimes(), originalProblem.getCurrentAssignment());
-        LongestShortestPathTimeHorizonEstimator estimator = new LongestShortestPathTimeHorizonEstimator();
-        estimator.setProblem(problem);
-        estimator.run();
-        System.out.println("Geschätzte Lösung:" + estimator.getSolution());
-        problem = new EarliestArrivalFlowProblem(originalProblem.getEdgeCapacities(), originalProblem.getNetwork(), originalProblem.getNodeCapacities(), originalProblem.getSupersink(), originalProblem.getSources(), estimator.getSolution().getUpperBound(), originalProblem.getTransitTimes(), originalProblem.getCurrentAssignment());
-        return problem;
-    }
-
-    @Override
-    protected PathBasedFlowOverTime transformSolution(FlowOverTimeImplicit transformedSolution) {
-        PathBasedFlowOverTime df = transformedSolution.getPathBased();
-        String result = String.format("Sent %1$s of %2$s flow units in %3$s time units successfully.", transformedSolution.getFlowAmount(), getAlgorithm().getProblem().getTotalSupplies(), transformedSolution.getTimeHorizon());
-        System.out.println(result);
-	System.out.println( "Total cost: " + transformedSolution.getTotalCost() );
-        //AlgorithmTask.getInstance().publish(100, result, "");
-        System.out.println( "Sending the flow units required " + Formatter.formatTimeUnit( getAlgorithm().getRuntime(), Formatter.TimeUnits.MilliSeconds ) );
-        return df;
-    }
-
+	@Override
+	protected PathBasedFlowOverTime transformSolution( FlowOverTimeImplicit transformedSolution ) {
+		PathBasedFlowOverTime df = transformedSolution.getPathBased();
+		String result = String.format( "Sent %1$s of %2$s flow units in %3$s time units successfully.", transformedSolution.getFlowAmount(), getAlgorithm().getProblem().getTotalSupplies(), transformedSolution.getTimeHorizon() );
+		System.out.println( result );
+		System.out.println( "Total cost: " + transformedSolution.getTotalCost() );
+		//AlgorithmTask.getInstance().publish(100, result, "");
+		System.out.println( "Sending the flow units required " + Formatter.formatTimeUnit( getAlgorithm().getRuntime(), Formatter.TimeUnits.MilliSeconds ) );
+		return df;
+	}
 }

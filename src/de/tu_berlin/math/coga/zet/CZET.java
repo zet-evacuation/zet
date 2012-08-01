@@ -545,7 +545,7 @@ public class CZET {
 				nfm = cav.getSolution();
 
 				XMLWriter writer = new XMLWriter( outputFile.toFile() );
-				writer.writeGraph( nfm.getNetwork(), nfm.edgeCapacities, nfm.transitTimes, nfm.currentAssignment );
+				writer.writeGraph( nfm.network.getAsStaticNetwork(), nfm.edgeCapacities, nfm.transitTimes, nfm.currentAssignment );
 		}
 
 	}
@@ -592,8 +592,9 @@ public class CZET {
 		cav.run();
 		NetworkFlowModel nfm = cav.getSolution();
 
-		EarliestArrivalFlowProblem eafp = new EarliestArrivalFlowProblem( nfm.edgeCapacities, nfm.getNetwork(), nfm.getNodeCapacities(), nfm.getSupersink(), nfm.getSources(), 254, nfm.getTransitTimes(), nfm.currentAssignment );
-
+		EarliestArrivalFlowProblem eafp = nfm.getEAFP();
+		eafp.setTimeHorizon( 254 );
+		
 		log.fine( "Earliest Arrival computation starts..." );
 
 		SEAAPAlgorithm algo = new SEAAPAlgorithm();
