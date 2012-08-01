@@ -14,8 +14,8 @@ import ds.mapping.IdentifiableIntegerMapping;
  * @author Jan-Philipp Kappmeier
  */
 public class DynamicTransshipmentProblem extends DynamicFlowProblem {
-	private IdentifiableIntegerMapping<Node> nodeCapacities;
-	private IdentifiableIntegerMapping<Node> supplies;
+	protected IdentifiableIntegerMapping<Node> nodeCapacities;
+	protected IdentifiableIntegerMapping<Node> supplies;
 	private int timeHorizon;
 
 	public DynamicTransshipmentProblem( IdentifiableIntegerMapping<Edge> edgeCapacities, AbstractNetwork network, IdentifiableIntegerMapping<Node> nodeCapacities, int timeHorizon, IdentifiableIntegerMapping<Edge> transitTimes, IdentifiableIntegerMapping<Node> supplies ) {

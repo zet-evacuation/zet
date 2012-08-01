@@ -38,7 +38,7 @@ public class APSPAlgo {
   public APSPAlgo(NetworkFlowModel model)
   {
      this.model = model;
-     this.numNodes = model.getGraph().numberOfNodes() - 1; 
+     this.numNodes = model.numberOfNodes() - 1; 
      System.out.println("NumNodes: " + numNodes);
      used = new int[numNodes][numNodes];
      for (int i=0; i< numNodes ; i++)
@@ -48,8 +48,10 @@ public class APSPAlgo {
              used[i][j] = 0;
          }
      }
-     for (Edge edge: model.getGraph().edges())
+		 for( int i = 0; i < model.numberOfEdges(); ++i )
+     //for (Edge edge: model.getGraph().edges())
      {
+			 Edge edge = model.getEdge( i );
          //System.out.println("Kante: " + edge + "Transitzeit: " + model.getTransitTime(edge));
          if (model.getTransitTime(edge) > this.maxdist)
          {
@@ -81,8 +83,10 @@ public class APSPAlgo {
     System.out.println("Maxdist: " + maxdist);
     weight = new int[numNodes][numNodes]; // matrix D
     dist = new int[numNodes][numNodes];
-    for (Edge edge: model.getGraph().edges())
+		for( int i = 0; i < model.numberOfEdges(); ++i )
+    //for (Edge edge: model.getGraph().edges())
     {
+			Edge edge = model.getEdge( i );
       if (!edge.isIncidentTo(model.getSupersink()))
       {
         weight[edge.start().id()-1][edge.end().id()-1] = model.getTransitTime(edge);

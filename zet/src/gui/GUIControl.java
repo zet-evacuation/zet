@@ -18,7 +18,6 @@ import zet.gui.main.JEditor;
 import batch.BatchResult;
 import batch.BatchResultEntry;
 import batch.tasks.AlgorithmTask;
-import batch.tasks.BatchGraphCreateOnlyTask;
 import batch.tasks.VisualizationDataStructureTask;
 import de.tu_berlin.math.coga.common.algorithm.AlgorithmEvent;
 import de.tu_berlin.math.coga.common.algorithm.AlgorithmListener;
@@ -33,7 +32,6 @@ import ds.GraphVisualizationResults;
 import ds.ProjectLoader;
 import ds.PropertyContainer;
 import ds.ca.evac.EvacuationCellularAutomaton;
-import ds.z.Assignment;
 import ds.z.AssignmentArea;
 import ds.z.ConcreteAssignment;
 import ds.z.EvacuationArea;
@@ -568,9 +566,13 @@ public class GUIControl implements AlgorithmListener {
 		//concreteAssignments[0] = assignment.createConcreteAssignment( 400 );
 		//new BatchGraphCreateOnlyTask( ca_res, 0, zcontrol.getProject(), assignment, concreteAssignments ).run();
 		//NetworkFlowModel originalProblem = ca_res.getNetworkFlowModel();
-		EarliestArrivalFlowProblem problem = new EarliestArrivalFlowProblem( originalProblem.getEdgeCapacities(), originalProblem.getNetwork(), originalProblem.getNodeCapacities(), originalProblem.getSupersink(), originalProblem.getSources(), 0, originalProblem.getTransitTimes(), originalProblem.getCurrentAssignment() );
+		
+		EarliestArrivalFlowProblem problem = originalProblem.getEAFP();
 		try {
-			DatFileReaderWriter.writeFile( zcontrol.getProject().getName(), problem, zcontrol.getProject().getProjectFile().getName().substring( 0, zcontrol.getProject().getProjectFile().getName().length() - 4 ) + ".dat", originalProblem.getZToGraphMapping() );
+			if( true )
+				throw new UnsupportedOperationException( "Mapping is not in NFM any more." );
+			//DatFileReaderWriter.writeFile( zcontrol.getProject().getName(), problem, zcontrol.getProject().getProjectFile().getName().substring( 0, zcontrol.getProject().getProjectFile().getName().length() - 4 ) + ".dat", originalProblem.getZToGraphMapping() );
+			throw new FileNotFoundException();
 		} catch( FileNotFoundException ex ) {
 			ZETMain.sendError( "FileNotFoundException" );
 			ex.printStackTrace( System.err );
@@ -1236,7 +1238,7 @@ public class GUIControl implements AlgorithmListener {
 			@Override
 			public void propertyChange( PropertyChangeEvent pce ) {
 				if( isDone( pce ) ) {
-					GraphVisualizationResults gvr = new GraphVisualizationResults( algorithmControl.getNetworkFlowModel() );
+					GraphVisualizationResults gvr = new GraphVisualizationResults( algorithmControl.getNetworkFlowModel(), algorithmControl.getNetworkFlowModel().getNodeCoordinates() );
 					visualization.getControl().setGraphControl( gvr );
                                         
 				}

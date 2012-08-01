@@ -58,9 +58,10 @@ public class ZToGridGraphConverter extends BaseZToGraphConverter {
 		LinkedList<Node> sources = new LinkedList<>();
 
 		// super sink
-		Node supersink = new Node( 0 );
-		graph.setNode( supersink );
-		model.setSupersink( supersink );
+		//Node supersink = new Node( 0 );
+		Node supersink = model.getSupersink();
+		//graph.setNode( supersink );
+		//model.setSupersink( supersink );
 
 		mappingLocal.setNodeSpeedFactor( supersink, 1 );
 		mappingLocal.setNodeRectangle( supersink, new NodeRectangle( 0, 0, 0, 0 ) );
@@ -164,8 +165,8 @@ public class ZToGridGraphConverter extends BaseZToGraphConverter {
 			}
 		}
 		// Set graph to model
-		model.setNetwork( graph );
-		model.setSources( sources );
+		//model.setNetwork( graph );
+		//model.setSources( sources );
 		System.out.println( "create Nodes FERTIG" );
 	}
 	
@@ -178,17 +179,18 @@ public class ZToGridGraphConverter extends BaseZToGraphConverter {
 		List<ZToGraphRoomRaster> rasteredRooms = raster.getAllRasteredRooms();
 		int nextEdge = 0;
 
-		DynamicNetwork graph = model.getDynamicNetwork();
+		//DynamicNetwork graph = model.getDynamicNetwork();
 
 		//Two mappings to store capacities
-		IdentifiableIntegerMapping<Node> nodesCap = new IdentifiableIntegerMapping<>( graph.numberOfNodes() );
-		model.setNodeCapacities( nodesCap );
+		//IdentifiableIntegerMapping<Node> nodesCap = new IdentifiableIntegerMapping<>( graph.numberOfNodes() );
+		//model.setNodeCapacities( nodesCap );
 
-		IdentifiableIntegerMapping<Edge> edgesCap = new IdentifiableIntegerMapping<>( graph.numberOfEdges() * graph.numberOfEdges() );
-		model.setEdgeCapacities( edgesCap );
+		//IdentifiableIntegerMapping<Edge> edgesCap = new IdentifiableIntegerMapping<>( graph.numberOfEdges() * graph.numberOfEdges() );
+		//model.setEdgeCapacities( edgesCap );
 
 		// set node capacity of super sink to max value
-		nodesCap.set( model.getSupersink(), Integer.MAX_VALUE );
+		//nodesCap.set( model.getSupersink(), Integer.MAX_VALUE );
+		model.setNodeCapacity( model.getSupersink(), Integer.MAX_VALUE );
 
 		for( ZToGraphRoomRaster room : rasteredRooms ) {
 
@@ -204,17 +206,19 @@ public class ZToGridGraphConverter extends BaseZToGraphConverter {
 					Node node = square.getNode();
 					//increase node capacity
 					if( node != null )
-						nodesCap.increase( node, 1 * FACTOR );
+						//nodesCap.increase( node, 1 * FACTOR );
+						model.increaseNodeCapacity( node, 1 * FACTOR );
 
 					boolean nodesConnectable = (node != null) && (lastNode != null) && !lastNode.equals( node );
 					boolean connectionPassable = (col != 0) && (!square.isBlocked( Left ));
 
 					if( nodesConnectable && connectionPassable ) {
-						Edge edge = graph.getEdge( lastNode, node );
+						//Edge edge = graph.getEdge( lastNode, node );
+						Edge edge = model.getEdge( lastNode, node );
 						if( edge == null ) {
-							edge = new Edge( nextEdge++, lastNode, node );
-							graph.addEdge( edge );
-							edgesCap.set( edge, 0 );
+							edge = model.newEdge( lastNode, node );
+							//graph.addEdge( edge );
+							//edgesCap.set( edge, 0 );
 							ZToGraphRasterSquare lastSquare = null;
 							if( col > 0 )
 								lastSquare = room.getSquare( col - 1, row );
@@ -222,7 +226,8 @@ public class ZToGridGraphConverter extends BaseZToGraphConverter {
 								throw new AssertionError( "Col should not be zero at this point." );
 							mapping.setEdgeLevel( edge, lastSquare.getLevel( Direction.getDirection( 1, 0 ) ) );
 						}
-						edgesCap.increase( edge, 1 * FACTOR );
+						//edgesCap.increase( edge, 1 * FACTOR );
+						model.increaseEdgeCapacity( edge, 1 * FACTOR );
 					}
 					lastNode = node;
 				}// end of the outer for each loop
@@ -242,11 +247,11 @@ public class ZToGridGraphConverter extends BaseZToGraphConverter {
 					boolean connectionPassable = (row != 0) && (!square.isBlocked( Top ));
 
 					if( nodesConnectable && connectionPassable ) {
-						Edge edge = graph.getEdge( lastNode, node );
+						Edge edge = model.getEdge( lastNode, node );
 						if( edge == null ) {
-							edge = new Edge( nextEdge++, lastNode, node );
-							graph.addEdge( edge );
-							edgesCap.set( edge, 0 );
+							edge = model.newEdge( lastNode, node );
+							//graph.addEdge( edge );
+							//edgesCap.set( edge, 0 );
 							ZToGraphRasterSquare lastSquare = null;
 							if( row > 0 )
 								lastSquare = room.getSquare( col, row - 1 );
@@ -254,15 +259,16 @@ public class ZToGridGraphConverter extends BaseZToGraphConverter {
 								throw new AssertionError( DefaultLoc.getSingleton().getString( "converter.RowIsZeroException" ) );
 							mapping.setEdgeLevel( edge, lastSquare.getLevel( Direction.getDirection( 0, 1 ) ) );
 						}
-						edgesCap.increase( edge, 1 * FACTOR );
+						//edgesCap.increase( edge, 1 * FACTOR );
+						model.increaseEdgeCapacity( edge, 1 * FACTOR );
 					}
 					lastNode = node;
 				}// end of the inner for each loop
 				lastNode = null;
 			}// end of the outer for each loop
 		}//end for each room
-		model.setNodeCapacities( nodesCap );
-		model.setEdgeCapacities( edgesCap );
+		//model.setNodeCapacities( nodesCap );
+		//model.setEdgeCapacities( edgesCap );
 		System.out.println( "calculate Edges & Capacities FERTIG" );
 	}//end of function
 	
@@ -283,9 +289,9 @@ public class ZToGridGraphConverter extends BaseZToGraphConverter {
 
 		List<ZToGraphRoomRaster> roomRasterList = raster.getAllRasteredRooms();
 
-		Graph graph = model.getGraph();
+		//Graph graph = model.getGraph();
 
-		IdentifiableCollection<Node> nodes = graph.nodes();
+		//IdentifiableCollection<Node> nodes = graph.nodes();
 
 		// calculate INTRA-Room-Edge-Transit-Times
 		long intraStart = System.currentTimeMillis();
@@ -315,7 +321,7 @@ public class ZToGridGraphConverter extends BaseZToGraphConverter {
 			for( Node start : nodeListOfRoom )//nodes){
 				for( Node end : nodeListOfRoom ) {//nodes){
 					// do only, if there is an edge between start and end & if start does not equal end
-					Edge edge = graph.getEdge( start, end );
+					Edge edge = model.getEdge( start, end );
 					if( edge != null && edge.id() == 400 )
 						System.out.println( "debug" );
 					if( edge != null && start != end ) {
@@ -352,8 +358,8 @@ public class ZToGridGraphConverter extends BaseZToGraphConverter {
 
 				for( Node nodeA : nodeListOfStartRoom )
 					for( Node nodeB : nodeListOfEndRoom ) {
-						Edge edge = graph.getEdge( nodeA, nodeB );
-						if( edge != null && graph.contains( edge ) && doorEdgeToSquare.get( edge ) != null && !doorEdgeToSquare.get( edge ).isEmpty() )
+						Edge edge = model.getEdge( nodeA, nodeB );
+						if( edge != null && model.contains( edge ) && doorEdgeToSquare.get( edge ) != null && !doorEdgeToSquare.get( edge ).isEmpty() )
 							exactTransitTimes.set( edge, 1 );
 					}
 			}
@@ -417,15 +423,18 @@ public class ZToGridGraphConverter extends BaseZToGraphConverter {
 		}
 
 		// set node assignment to 0 for every node the assignment has not already defined for
-		IdentifiableCollection<Node> nodes = model.getGraph().nodes();
-		for( int i = 0; i < nodes.size(); i++ )
-			if( !nodeAssignment.isDefinedFor( nodes.get( i ) ) )
-				nodeAssignment.set( nodes.get( i ), 0 );
+		//IdentifiableCollection<Node> nodes = model.getGraph().nodes();
+		
+		for( int i = 0; i < model.numberOfNodes(); i++ ) // TODO remove this
+			if( !nodeAssignment.isDefinedFor( model.getNode( i ) ) )
+				//nodeAssignment.set( nodes.get( i ), 0 );
+				model.setNodeAssignment( model.getNode( i ), 0 );
 
 		// set the network flow model's assignment to the calculated node assignment
-		model.setCurrentAssignment( nodeAssignment );
+		//model.setCurrentAssignment( nodeAssignment );
 
-		checkSupplies( model );
+		//checkSupplies( model );
+		model.checkSupplies();
 
 		if( progress )
 			System.out.println( "Progress: A concrete assignment has been converted into supplies and demands for the graph." );
@@ -436,24 +445,24 @@ public class ZToGridGraphConverter extends BaseZToGraphConverter {
 	 * Deletes sources that cannot reach a sink. These nodes are marked as deleted sources.
 	 * @param model the {@code NetworkFlowModel} object.
 	 */
-	private static void checkSupplies( NetworkFlowModel model ) {
-		AbstractNetwork network = model.getNetwork();
-		IdentifiableIntegerMapping<Node> supplies = model.getCurrentAssignment();
-
-		GraphInstanceChecker checker = new GraphInstanceChecker( network, supplies );
-		checker.supplyChecker();
-
-		if( checker.hasRun() ) {
-			model.setCurrentAssignment( checker.getNewSupplies() );
-			model.setSources( checker.getNewSources() );
-			ZToGraphMapping mapping = model.getZToGraphMapping();
-			for( Node oldSource : checker.getDeletedSources() ) {
-				mapping.setIsSourceNode( oldSource, false );
-				mapping.setIsDeletedSourceNode( oldSource, true );
-			}
-		} else
-			throw new AssertionError( DefaultLoc.getSingleton().getString( "converter.NoCheckException" ) );
-	}
+//	private static void checkSupplies( NetworkFlowModel model ) {
+//		AbstractNetwork network = model.getNetwork();
+//		IdentifiableIntegerMapping<Node> supplies = model.getCurrentAssignment();
+//
+//		GraphInstanceChecker checker = new GraphInstanceChecker( network, supplies );
+//		checker.supplyChecker();
+//
+//		if( checker.hasRun() ) {
+//			model.setCurrentAssignment( checker.getNewSupplies() );
+//			model.setSources( checker.getNewSources() );
+//			ZToGraphMapping mapping = model.getZToGraphMapping();
+//			for( Node oldSource : checker.getDeletedSources() ) {
+//				mapping.setIsSourceNode( oldSource, false );
+//				mapping.setIsDeletedSourceNode( oldSource, true );
+//			}
+//		} else
+//			throw new AssertionError( DefaultLoc.getSingleton().getString( "converter.NoCheckException" ) );
+//	}
 
 	protected static ZToGraphRasterContainer createRaster( BuildingPlan plan ) {
 		ZToGraphRasterContainer container = RasterContainerCreator.getInstance().ZToGraphRasterContainer( plan );
@@ -468,14 +477,14 @@ public class ZToGridGraphConverter extends BaseZToGraphConverter {
 
 		//Two mappings to store capacities just temporally.
 		Collection<ZToGraphRasteredDoor> doors = raster.getDoors();
-		DynamicNetwork graph = model.getDynamicNetwork();
-		IdentifiableIntegerMapping<Edge> edgesCap = model.getEdgeCapacities();
-		if( edgesCap == null ) {
-			edgesCap = new IdentifiableIntegerMapping<>( graph.numberOfEdges() );
-			model.setEdgeCapacities( edgesCap );
-		}
+		//DynamicNetwork graph = model.getDynamicNetwork();
+		//IdentifiableIntegerMapping<Edge> edgesCap = model.getEdgeCapacities();
+		//if( edgesCap == null ) {
+		//	edgesCap = new IdentifiableIntegerMapping<>( graph.numberOfEdges() );
+		//	model.setEdgeCapacities( edgesCap );
+		//}
 
-		int nextEdge = graph.numberOfEdges();
+		//int nextEdge = graph.numberOfEdges();
 		for( ZToGraphRasteredDoor door : doors ) {
 			Node firstNode = door.getFirstDoorPart().getNode();
 			Node secondNode = door.getSecondDoorPart().getNode();
@@ -483,16 +492,17 @@ public class ZToGridGraphConverter extends BaseZToGraphConverter {
 			if( firstNode.id() > secondNode.id() ) // only craeate one of the edges as they are doubled afterwards
 				continue;
 			
-			Edge edge = graph.getEdge( firstNode, secondNode );
+			Edge edge = model.getEdge( firstNode, secondNode );
 			if( edge == null ) {
-				edge = new Edge( nextEdge++, firstNode, secondNode );
-				graph.addEdge( edge );
-				edgesCap.setDomainSize( edgesCap.getDomainSize() + 1 );
-				edgesCap.set( edge, 0 );
+				edge = model.newEdge( firstNode, secondNode );
+				//graph.addEdge( edge );
+				//edgesCap.setDomainSize( edgesCap.getDomainSize() + 1 );
+				//edgesCap.set( edge, 0 );
 				mapping.setEdgeLevel( edge, Equal );
 
 			}
-			edgesCap.increase( edge, 1 * FACTOR );
+			//edgesCap.increase( edge, 1 * FACTOR );
+			model.increaseEdgeCapacity( edge, 1 * FACTOR );
 			//store squares in the squares list of the door-edge
 			ArrayList<ZToGraphRasterSquare> list = table.get( edge );
 			if( list == null ) {
@@ -530,13 +540,14 @@ public class ZToGridGraphConverter extends BaseZToGraphConverter {
 
 					if( square.isSave() ) {
 						Node node = square.getNode();
-						Edge edge = graph.getEdge( node, supersink );
+						Edge edge = model.getEdge( node, supersink );
 						if( edge == null ) {
-							edge = new Edge( nextEdge++, node, supersink );
-							graph.addEdge( edge );
+							edge = model.newEdge( node, supersink );
+							//graph.addEdge( edge );
 							mapping.setEdgeLevel( edge, Equal );
 						}
-						edgesCap.set( edge, Integer.MAX_VALUE );
+						//edgesCap.set( edge, Integer.MAX_VALUE );
+						model.setEdgeCapacity( edge, Integer.MAX_VALUE );
 					}// end if safe
 				}//end outer loop
 		}

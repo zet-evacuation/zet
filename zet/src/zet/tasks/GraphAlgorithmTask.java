@@ -76,8 +76,6 @@ public class GraphAlgorithmTask extends Algorithm<Project, GraphVisualizationRes
 
 	@Override
 	public void eventOccurred( AlgorithmEvent event ) {
-		throw new UnsupportedOperationException( "Not supported yet." );
+
 	}
-	
-	
 }

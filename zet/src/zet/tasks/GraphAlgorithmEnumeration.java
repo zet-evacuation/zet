@@ -22,15 +22,15 @@ import algo.graph.dynamicflow.eat.EATransshipmentSSSP;
 import algo.graph.dynamicflow.eat.EarliestArrivalFlowProblem;
 import algo.graph.dynamicflow.eat.SuccessiveEarliestArrivalAugmentingPathAlgorithmNoTH;
 import algo.graph.dynamicflow.maxflow.MaxFlowOverTime;
-import de.tu_berlin.math.coga.algorithm.flowovertime.maxflow.MaximumFlowOverTimeProblem;
 import algo.graph.dynamicflow.maxflow.TimeExpandedMaximumFlowOverTime;
-import de.tu_berlin.math.coga.zet.NetworkFlowModel;
-import ds.NetworkFlowModelAlgorithm;
 import batch.tasks.graph.SuccessiveEarliestArrivalAugmentingPathAlgorithm2Task;
 import batch.tasks.graph.SuccessiveEarliestArrivalAugmentingPathAlgorithmCompareTask;
 import batch.tasks.graph.SuccessiveEarliestArrivalAugmentingPathOptimizedTask;
+import de.tu_berlin.math.coga.algorithm.flowovertime.maxflow.MaximumFlowOverTimeProblem;
 import de.tu_berlin.math.coga.common.algorithm.Algorithm;
 import de.tu_berlin.math.coga.common.localization.DefaultLoc;
+import de.tu_berlin.math.coga.zet.NetworkFlowModel;
+import ds.NetworkFlowModelAlgorithm;
 import ds.graph.flow.PathBasedFlowOverTime;
 
 /** Enumerates the types of graph algorithms and assigns each of them a way

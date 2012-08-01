@@ -11,7 +11,6 @@ import ds.graph.Node;
 import ds.graph.network.AbstractNetwork;
 import ds.mapping.IdentifiableDoubleMapping;
 import ds.mapping.IdentifiableIntegerMapping;
-import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
 
@@ -31,7 +30,7 @@ public class XMLData {
 	IdentifiableDoubleMapping<Edge> transitTimes;
 	IdentifiableDoubleMapping<Node> supplies;
 	List<Node> sources;
-	ArrayList<Node> sinks;
+	List<Node> sinks;
 	LinkedHashMap<String, Node> nodes = new LinkedHashMap<>();
 	LinkedHashMap<String, Edge> edges = new LinkedHashMap<>();
 	AbstractNetwork network;
@@ -69,7 +68,7 @@ public class XMLData {
 		return nodes;
 	}
 
-	public ArrayList<Node> getSinks() {
+	public List<Node> getSinks() {
 		return sinks;
 	}
 

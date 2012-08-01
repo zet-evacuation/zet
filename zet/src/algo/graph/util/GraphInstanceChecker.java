@@ -15,16 +15,14 @@
  */
 package algo.graph.util;
 
-import java.util.LinkedList;
-
 import algo.graph.Flags;
 import algo.graph.traverse.DFS;
-import algo.graph.traverse.DFS.State;
+import ds.collection.ListSequence;
+import ds.graph.Node;
+import ds.graph.network.AbstractNetwork;
 import ds.mapping.IdentifiableIntegerMapping;
 import ds.mapping.IdentifiableObjectMapping;
-import ds.collection.ListSequence;
-import ds.graph.network.AbstractNetwork;
-import ds.graph.Node;
+import java.util.LinkedList;
 
 /**
  * This class provides a method to check a supplies mapping for a given network.

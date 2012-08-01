@@ -20,17 +20,22 @@
 
 package de.tu_berlin.math.coga.zet;
 
+import algo.graph.dynamicflow.eat.EarliestArrivalFlowProblem;
+import algo.graph.util.GraphInstanceChecker;
 import com.thoughtworks.xstream.annotations.XStreamAlias;
 import de.tu_berlin.math.coga.common.localization.DefaultLoc;
+import de.tu_berlin.math.coga.math.vectormath.Vector3;
 import de.tu_berlin.math.coga.zet.converter.graph.ZToGraphMapping;
-import ds.graph.network.DynamicNetwork;
+import de.tu_berlin.math.coga.zet.viewer.NodePositionMapping;
 import ds.graph.Edge;
-import ds.graph.Graph;
+import ds.graph.Node;
+import ds.graph.NodeRectangle;
+import ds.graph.network.AbstractNetwork;
+import ds.graph.network.DynamicNetwork;
+import ds.graph.network.Network;
 import ds.mapping.IdentifiableDoubleMapping;
 import ds.mapping.IdentifiableIntegerMapping;
-import ds.graph.network.AbstractNetwork;
-import ds.graph.Node;
-import ds.graph.network.Network;
+import gui.visualization.VisualizationOptionManager;
 import java.util.LinkedList;
 
 /**
@@ -39,7 +44,9 @@ import java.util.LinkedList;
 @XStreamAlias("networkFlowModel")
 public class NetworkFlowModel {
         
-    protected Graph network;
+	protected Network netw;
+	
+    protected DynamicNetwork network;
     
     protected IdentifiableIntegerMapping<Edge> edgeCapacities;
     
@@ -53,35 +60,56 @@ public class NetworkFlowModel {
     
     protected LinkedList<Node> sources;
         
-    protected ZToGraphMapping mapping;
-    
+	  protected ZToGraphMapping mapping;
+	 
     protected Node supersink;
     
-    public NetworkFlowModel(){
-        this.network = new Network(0, 0);
-        this.edgeCapacities = new IdentifiableIntegerMapping<>(0);
-        this.nodeCapacities = new IdentifiableIntegerMapping<>(0);
-        this.transitTimes = new IdentifiableIntegerMapping<>(0);
-        this.exactTransitTimes = new IdentifiableDoubleMapping<>(0);
+		int edgeIndex = 0;
+		int nodeCount = 1;
+				
+		public NetworkFlowModel() {
+			//super( new IdentifiableIntegerMapping<Edge>(0), new Network(0,0), new IdentifiableIntegerMapping<Node>(0), new Node( 0 ), new ArrayList<Node>(), 0, new IdentifiableIntegerMapping<Edge>(0), new IdentifiableIntegerMapping<Node>(0) );
+			this.network = new DynamicNetwork();
+			this.edgeCapacities = new IdentifiableIntegerMapping<>( 0 );
+			this.nodeCapacities = new IdentifiableIntegerMapping<>( 0 );
+			this.transitTimes = new IdentifiableIntegerMapping<>( 0 );
+			this.exactTransitTimes = new IdentifiableDoubleMapping<>( 0 );
+			this.currentAssignment = new IdentifiableIntegerMapping<>( 0 );
+			this.sources = new LinkedList<>();
+			supersink = new Node( 0 );
+			network.setNode( supersink );
+			
+			
+			//super( new IdentifiableIntegerMapping<Edge>(0), new Network(0,0), , new Node(0), new ArrayList<Node>, 0, new IdentifiableIntegerMapping<Edge>(0), new IdentifiableIntegerMapping<Node>(0) );
     }
     /*
     public FlowProblemInstance getFlowProblemInstance() {
         return new FlowProblemInstance(network.getAsStaticNetwork(), edgeCapacities, nodeCapacities, transitTimes, currentAssignment);
     }*/
 
+	public NetworkFlowModel( NetworkFlowModel model ) {
+		// a constructor that copies the nodes
+		this();
+		network.setNodes( model.network.nodes() );
+		supersink = model.supersink;
+		sources = model.sources;
+		nodeCapacities = model.nodeCapacities;
+		currentAssignment = model.currentAssignment;
+	}
+
     public void setNumberOfEdges(int numberOfEdges) {
-       edgeCapacities.setDomainSize(numberOfEdges);
-       transitTimes.setDomainSize(numberOfEdges);
-       exactTransitTimes.setDomainSize(numberOfEdges);
+			edgeCapacities.setDomainSize( numberOfEdges );
+			transitTimes.setDomainSize( numberOfEdges );
+			exactTransitTimes.setDomainSize( numberOfEdges );
     }
 
-    public IdentifiableIntegerMapping<Node> getCurrentAssignment() {
-        return currentAssignment;
-    }
+//    public IdentifiableIntegerMapping<Node> getCurrentAssignment() {
+//        return super.getSupplies();
+//    }
 
-    public void setCurrentAssignment(IdentifiableIntegerMapping<Node> currentAssignment) {
-        this.currentAssignment = currentAssignment;
-    }
+//    public void setCurrentAssignment(IdentifiableIntegerMapping<Node> currentAssignment) {
+//        this.currentAssignment = currentAssignment;
+//    }
 
     public int getEdgeCapacity(Edge edge) {
         if (edgeCapacities.isDefinedFor(edge)) {
@@ -96,40 +124,40 @@ public class NetworkFlowModel {
         edgeCapacities.set(edge, value);
     }    
     
-    public IdentifiableIntegerMapping<Edge> getEdgeCapacities() {
-        return edgeCapacities;
-    }
+//    public IdentifiableIntegerMapping<Edge> getEdgeCapacities() {
+//        return edgeCapacities;
+//    }
 
-    public void setEdgeCapacities(IdentifiableIntegerMapping<Edge> edgeCapacities) {
-        this.edgeCapacities = edgeCapacities;
-    }
+//    public void setEdgeCapacities(IdentifiableIntegerMapping<Edge> edgeCapacities) {
+//        this.edgeCapacities = edgeCapacities;
+//    }
 
     /**
      * Sets a linked list of nodes as sources of the network.
      * @param sources a linked list of nodes as sources of the network.
      */
-    public void setSources(LinkedList<Node> sources){
-    	this.sources = sources;
-    }
+//    public void setSources(LinkedList<Node> sources){
+//    	this.sources = sources;
+//    }
     
     /**
      * Returns a linked list containing the sources.
      * May be consistent with the current assignment or not.
      * @return a linked list containing the sources.
      */
-    public LinkedList<Node> getSources(){
-    	return sources;
-    }
+//    public List<Node> getSources(){
+//    	return sources;
+//    }
     
     /**
      * Returns a linked list containing the super sink.
-     * @return a linked list containing the super sink
+		 * @return a linked list containing the super sink
      */
-    public LinkedList<Node> getSinks(){
-    	LinkedList<Node> sinks = new LinkedList<Node>();
-    	sinks.add(supersink);
-    	return sinks;
-    }
+//    public LinkedList<Node> getSinks(){
+//    	LinkedList<Node> sinks = new LinkedList<>();
+//    	sinks.add(supersink);
+//    	return sinks;
+//    }
 
     public ZToGraphMapping getZToGraphMapping() {
         return mapping;
@@ -139,25 +167,25 @@ public class NetworkFlowModel {
         this.mapping = mapping;
     }
 
-    public Graph getGraph() {
-        return network;
-    }
+//    public Graph getGraph() {
+//        return network;
+//    }
     
-    public AbstractNetwork getNetwork(){
-    	return network.getAsStaticNetwork();
-    }
-    
-    public DynamicNetwork getDynamicNetwork(){
-    	if (network instanceof DynamicNetwork)
-    		return (DynamicNetwork)network;
-    	else throw new RuntimeException(DefaultLoc.getSingleton (
-		).getString ("ds.Graph.NoDynamicGraphException"));
+//    public AbstractNetwork getNetwork(){
+//    	return network.getAsStaticNetwork();
+//    }
 
-    }
+//    public DynamicNetwork getDynamicNetwork(){
+//    	if (network instanceof DynamicNetwork)
+//    		return (DynamicNetwork)network;
+//    	else throw new RuntimeException(DefaultLoc.getSingleton (
+//		).getString ("ds.Graph.NoDynamicGraphException"));
+//
+//    }
 
-    public void setNetwork(Graph network) {
-        this.network = network;
-    }
+//    public void setNetwork(Graph network) {
+//        this.network = network;
+//    }
     
     public int getNodeCapacity(Node node) {
         if (nodeCapacities.isDefinedFor(node)) {
@@ -172,13 +200,13 @@ public class NetworkFlowModel {
         nodeCapacities.set(node, value);
     }
 
-    public IdentifiableIntegerMapping<Node> getNodeCapacities() {
-        return nodeCapacities;
-    }
+//    public IdentifiableIntegerMapping<Node> getNodeCapacities() {
+//        return nodeCapacities;
+//    }
 
-    public void setNodeCapacities(IdentifiableIntegerMapping<Node> nodeCapacities) {
-        this.nodeCapacities = nodeCapacities;
-    }
+//    public void setNodeCapacities(IdentifiableIntegerMapping<Node> nodeCapacities) {
+//        this.nodeCapacities = nodeCapacities;
+//    }
     
     public int getTransitTime(Edge edge) {
         if (transitTimes.isDefinedFor(edge)) {
@@ -205,31 +233,187 @@ public class NetworkFlowModel {
 			).getString ("ds.Graph.NoExactTransitTimeException" + edge + "."));
         }
     }
-    public IdentifiableIntegerMapping<Edge> getTransitTimes() {
-        return transitTimes;
-    }
+//    public IdentifiableIntegerMapping<Edge> getTransitTimes() {
+//        return transitTimes;
+//    }
 
-    public void setTransitTimes(IdentifiableIntegerMapping<Edge> transitTimes) {
-        this.transitTimes = transitTimes;
-    }
+//    public void setTransitTimes(IdentifiableIntegerMapping<Edge> transitTimes) {
+//        this.transitTimes = transitTimes;
+//    }
     
     public Node getSupersink() {
         return supersink;
     }
 
-    public void setSupersink(Node supersink) {
-        this.supersink = supersink;
-    }
+//    public void setSupersink(Node supersink) {
+//        this.supersink = supersink;
+//    }
 
-    public void setExactTransitTimes(IdentifiableDoubleMapping<Edge> exactTransitTimes) {
-        this.exactTransitTimes = exactTransitTimes;
-    }
+//    public void setExactTransitTimes(IdentifiableDoubleMapping<Edge> exactTransitTimes) {
+//        this.exactTransitTimes = exactTransitTimes;
+//    }
 
 	@Override
 	public String toString() {
-		return "NetworkFlowModel{" + "network=" + network + ", edgeCapacities=" + edgeCapacities + ", nodeCapacities=" + nodeCapacities + ", transitTimes=" + transitTimes + ", sources=" + sources + ", mapping=" + mapping + ", supersink=" + supersink + '}';
+		//return "NetworkFlowModel{" + "network=" + network + ", edgeCapacities=" + edgeCapacities + ", nodeCapacities=" + nodeCapacities + ", transitTimes=" + transitTimes + ", sources=" + sources + ", mapping=" + mapping + ", supersink=" + supersink + '}';
+		return "NetworkFlowModel{" + "network=" + network + ", edgeCapacities=" + edgeCapacities + ", nodeCapacities=" + nodeCapacities + ", transitTimes=" + transitTimes + ", sources=" + sources + ", supersink=" + supersink + '}';
 	}
 		
+	public EarliestArrivalFlowProblem getEAFP() {
+		return getEAFP( 0 );
+	}
+
+	public void roundTransitTimes() {
+		transitTimes = exactTransitTimes.round();
+	}
+
+	public int numberOfNodes() {
+		return network.numberOfNodes();
+	}
+
+	public int numberOfEdges() {
+		return network.numberOfEdges();
+	}
 		
 
+
+	public Iterable<Edge> edges() {
+		return network.edges();
+	}
+
+	public int numberOfSinks() {
+		return network.degree( getSupersink() );
+	}
+
+	public Edge getEdge( int i ) {
+		return network.getEdge( i );
+	}
+
+	public Edge createReverseEdge( Edge edge ) {
+		Edge newEdge = new Edge( edgeIndex++, edge.end(), edge.start() );
+		mapping.setEdgeLevel( newEdge, mapping.getEdgeLevel( edge ).getInverse() );
+		setEdgeCapacity( newEdge, getEdgeCapacity( edge ) );
+		setTransitTime( newEdge, getTransitTime( edge ) );
+		network.setEdge( newEdge );
+		return newEdge;
+	}
+
+	public void resetAssignment() {
+		currentAssignment = new IdentifiableIntegerMapping<>( network.numberOfNodes() );
+		//IdentifiableCollection<Node> nodes = model.getGraph().nodes();
+		for( int i = 0; i < network.nodes().size(); i++ )
+			//if( !nodeAssignment.isDefinedFor( nodes.get( i ) ) )
+				currentAssignment.set( network.nodes().get( i ), 0 );
+		
+	}
+
+	public void setNodeAssignment( Node node, int i ) {
+		currentAssignment.set( node, i );
+	}
+
+	public void increaseNodeAssignment( Node node ) {
+		currentAssignment.increase( node, 1 );
+	}
+
+	public void checkSupplies() {
+		AbstractNetwork network = this.network.getAsStaticNetwork();
+		IdentifiableIntegerMapping<Node> supplies = currentAssignment;
+
+		GraphInstanceChecker checker = new GraphInstanceChecker( network, supplies );
+		checker.supplyChecker();
+
+		if( checker.hasRun() ) {
+			//model.setCurrentAssignment( checker.getNewSupplies() );
+			currentAssignment = checker.getNewSupplies();
+			//model.setSources( checker.getNewSources() );
+			sources = checker.getNewSources();
+			//ZToGraphMapping mapping = model.getZToGraphMapping();
+			for( Node oldSource : checker.getDeletedSources() ) {
+				mapping.setIsSourceNode( oldSource, false );
+				mapping.setIsDeletedSourceNode( oldSource, true );
+			}
+		} else
+			throw new AssertionError( DefaultLoc.getSingleton().getString( "converter.NoCheckException" ) );
+	}
+
+	public Node newNode() {
+		Node node = new Node( nodeCount );
+		nodeCount++;
+		network.setNode( node );
+		return node;
+	}
+
+	public void addSource( Node node ) {
+		sources.add( node );
+	}
+
+	public void ensureCapacities() {
+		//IdentifiableIntegerMapping<Node> nodesCap = new IdentifiableIntegerMapping<>( graph.numberOfNodes() );
+		nodeCapacities.setDomainSize( network.numberOfNodes() );
+		
+
+		//IdentifiableIntegerMapping<Edge> edgesCap = new IdentifiableIntegerMapping<>( graph.numberOfEdges() * graph.numberOfEdges() );
+		//model.setEdgeCapacities( edgesCap );
+		edgeCapacities.setDomainSize( network.numberOfEdges() * network.numberOfEdges() ); // TODO weird???
+
+	}
+
+	public void increaseNodeCapacity( Node node, int i ) {
+		nodeCapacities.increase( node, i );
+	}
+
+	public Edge getEdge( Node lastNode, Node node ) {
+		return network.getEdge( lastNode, node );
+	}
+
+	public Edge newEdge( Node lastNode, Node node ) {
+		Edge edge = new Edge( edgeIndex++, lastNode, node );
+//	System.out.println( "CREATE new Edge from " + lastNode.toString() + " to " + node.toString() );
+		network.setEdge( edge );
+		edgeCapacities.set( edge, 0 );
+		return edge;
+	}
+
+	public void increaseEdgeCapacity( Edge edge, int i ) {
+		edgeCapacities.increase( edge, i );
+	}
+
+	public boolean contains( Edge edge ) {
+		return network.contains( edge );
+	}
+
+	public Node getNode( int i ) {
+		return network.getNode( i );
+	}
+
+	public IdentifiableIntegerMapping<Edge> transitTimes() {
+		return transitTimes;
+	}
+
+	public void addEdge( Edge neu, int edgeCapacity, int transitTime, double exactTransitTime ) {
+		network.addEdge( neu );
+		edgeCapacities.set( neu, edgeCapacity );
+		transitTimes.set( neu, transitTime );
+		exactTransitTimes.set( neu, exactTransitTime );
+	}
+
+	public NodePositionMapping getNodeCoordinates() {
+		NodePositionMapping nodePositionMapping = new NodePositionMapping( network.numberOfNodes() );
+		//for( int i = 0; i < nodePositionMapping.getDomainSize(); ++i ) {
+		for( Node n : network.nodes() ) {
+//			NodeRectangle rect = getNodeRectangles().get( n );
+			NodeRectangle rect = mapping.getNodeRectangles().get( n );
+			final double zs = mapping.getNodeFloorMapping().get( n ) * VisualizationOptionManager.getFloorDistance();
+			final Vector3 v = new Vector3( rect.getCenterX(), rect.getCenterY(), zs );
+
+			nodePositionMapping.set( n, v );
+
+		}
+		return nodePositionMapping;
+
+	}
+
+	public EarliestArrivalFlowProblem getEAFP( int upperBound ) {
+		return new EarliestArrivalFlowProblem( edgeCapacities, network.getAsStaticNetwork(), nodeCapacities, supersink, sources, upperBound, transitTimes, currentAssignment );
+	}
 }

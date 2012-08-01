@@ -51,7 +51,7 @@ public class ZToGreedySpannerConverter extends ZToNonGridGraphConverter{
 		model.setTransitTimes( exactTransitTimes.round() );
                 model.setExactTransitTimes(exactTransitTimes);
 		createReverseEdges( model );
-        	model.setNetwork( model.getGraph().getAsStaticNetwork() );
+        	zzmodel.setNetwork( model.getGraph().getAsStaticNetwork() );
                 /*for (Edge e: model.getGraph().edges())
                 {
                     System.out.println("original edge: " + e);

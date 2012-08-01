@@ -24,7 +24,7 @@ public class FlowVisualization extends GraphVisualization {
 	int maxFlowRate;
 	boolean edgesDoubled = false;
 
-	public FlowVisualization( AbstractNetwork network, NodePositionMapping nodePositionMapping, IdentifiableIntegerMapping<Edge> edgeCapacities, IdentifiableIntegerMapping<Node> nodeCapacities, IdentifiableIntegerMapping<Edge> transitTimes, IdentifiableIntegerMapping<Node> supplies, List<Node> sources, ArrayList<Node> sinks ) {
+	public FlowVisualization( AbstractNetwork network, NodePositionMapping nodePositionMapping, IdentifiableIntegerMapping<Edge> edgeCapacities, IdentifiableIntegerMapping<Node> nodeCapacities, IdentifiableIntegerMapping<Edge> transitTimes, IdentifiableIntegerMapping<Node> supplies, List<Node> sources, List<Node> sinks ) {
 		super( network, nodePositionMapping, edgeCapacities, nodeCapacities, transitTimes, supplies, sources, sinks );
 		flow = new EdgeBasedFlowOverTime( getNetwork() );
 	}
@@ -47,6 +47,11 @@ public class FlowVisualization extends GraphVisualization {
 		this.flow = flow;
 	}
 
+	public void setFlow( EdgeBasedFlowOverTime flow, int maxFlowRate ) {
+		setFlow( flow );
+		setMaxFlowRate( maxFlowRate );
+	}
+
 	public int getTimeHorizon() {
 		return timeHorizon;
 	}
@@ -59,7 +64,7 @@ public class FlowVisualization extends GraphVisualization {
 		return maxFlowRate;
 	}
 
-	public void setMaxFlowRate( int maxFlowRate ) {
+	protected void setMaxFlowRate( int maxFlowRate ) {
 		this.maxFlowRate = maxFlowRate;
 	}
 

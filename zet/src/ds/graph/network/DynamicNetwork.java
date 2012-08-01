@@ -19,11 +19,11 @@
  */
 package ds.graph.network;
 
+import ds.collection.ListSequence;
 import ds.graph.Edge;
 import ds.graph.Graph;
 import ds.graph.GraphLocalization;
 import ds.graph.IdentifiableCollection;
-import ds.collection.ListSequence;
 import ds.graph.Node;
 import java.util.ArrayList;
 import java.util.Collection;

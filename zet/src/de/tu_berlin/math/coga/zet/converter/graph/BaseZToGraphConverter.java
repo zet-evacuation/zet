@@ -24,9 +24,8 @@ public abstract class BaseZToGraphConverter extends Algorithm<BuildingPlan, Netw
 	protected NetworkFlowModel model;
 	protected ZToGraphRasterContainer raster;
 	protected Graph roomGraph;
-        
-        public int numStairEdges=0;
-        public List<Edge> stairEdges = new LinkedList<>();
+	public int numStairEdges = 0;
+	public List<Edge> stairEdges = new LinkedList<>();
 
 	@Override
 	protected NetworkFlowModel runAlgorithm( BuildingPlan problem ) {
@@ -41,20 +40,23 @@ public abstract class BaseZToGraphConverter extends Algorithm<BuildingPlan, Netw
 		// connect the nodes of different rooms with edges
 		//HashMap<Edge, ArrayList<ZToGraphRasterSquare>> doorEdgeToSquare = connectRooms(raster, model); // done in compute transit times now!
 		// calculate the transit times for all edges
-                
+
 		computeTransitTimes();
 		// adjust transit times according to stair speed factors
 		multiplyWithUpAndDownSpeedFactors();
 
 		// set this before reverse edges are computed as they modify the model.
-		model.setTransitTimes( exactTransitTimes.round() );
+		//model.setTransitTimes( exactTransitTimes.round() );
+		model.roundTransitTimes();
 
 		// duplicate the edges and their transit times (except those concerning the super sink)		
 		createReverseEdgesWithoutStairEdges( model );
-                
-		model.setNetwork( model.getGraph().getAsStaticNetwork() );
-                System.out.println("NumNodes: " + model.getGraph().numberOfNodes());
-                System.out.println("NumEdges: " + model.getGraph().numberOfEdges());
+
+		model.resetAssignment();
+		
+		//model.setNetwork( model.getGraph().getAsStaticNetwork() );
+		System.out.println( "NumNodes: " + model.numberOfNodes() );
+		System.out.println( "NumEdges: " + model.numberOfEdges() );
 		return model;
 
 	}
@@ -65,46 +67,40 @@ public abstract class BaseZToGraphConverter extends Algorithm<BuildingPlan, Netw
 
 	protected abstract void computeTransitTimes();
 
-	protected void createReverseEdges( NetworkFlowModel model ) {
-		int edgeIndex = model.getGraph().numberOfEdges();
-		final int oldEdgeIndex = edgeIndex;
-		model.setNumberOfEdges( edgeIndex * 2 - model.getGraph().degree( model.getSupersink() ) );
+	protected void createReverseEdges() {
+		createReverseEdges( model );
+	}
+
+	protected void createReverseEdges(NetworkFlowModel model ) {
+		//int edgeIndex = numberOfEdges();
+		final int oldEdgeIndex = model.numberOfEdges();
+		model.setNumberOfEdges( model.numberOfEdges() * 2 - model.numberOfSinks() );
 
 		// don't use an iterator here, as it will result in concurrent modification
 		for( int i = 0; i < oldEdgeIndex; ++i ) {
-			Edge edge = model.getGraph().getEdge( i );
+			Edge edge = model.getEdge( i );
 			if( !edge.isIncidentTo( model.getSupersink() ) ) {
-				Edge newEdge = new Edge( edgeIndex++, edge.end(), edge.start() );
-				mapping.setEdgeLevel( newEdge, mapping.getEdgeLevel( edge ).getInverse() );
-				model.setEdgeCapacity( newEdge, model.getEdgeCapacity( edge ) );
-				model.setTransitTime( newEdge, model.getTransitTime( edge ) );
-                                model.setExactTransitTime(newEdge, model.getExactTransitTime(edge));
-				model.getGraph().setEdge( newEdge );
+				Edge newEdge = model.createReverseEdge( edge );//new Edge( edgeIndex++, edge.end(), edge.start() );
 			}
 		}
 	}
 
 	protected void createReverseEdgesWithoutStairEdges( NetworkFlowModel model ) {
-		int edgeIndex = model.getGraph().numberOfEdges();
+		int edgeIndex = model.numberOfEdges();
 		final int oldEdgeIndex = edgeIndex;
-		model.setNumberOfEdges( ((edgeIndex-numStairEdges) * 2) - model.getGraph().degree( model.getSupersink() ) );
+		model.setNumberOfEdges( ((edgeIndex - numStairEdges) * 2) - model.numberOfSinks() );
 
 		// don't use an iterator here, as it will result in concurrent modification
 		for( int i = 0; i < oldEdgeIndex; ++i ) {
-			Edge edge = model.getGraph().getEdge( i );
-                        if (!stairEdges.contains(edge) && !edge.isIncidentTo(model.getSupersink()))
-                        {
-                            Edge newEdge = new Edge( edgeIndex++, edge.end(), edge.start() );
-                            mapping.setEdgeLevel( newEdge, mapping.getEdgeLevel( edge ).getInverse() );
-                            model.setEdgeCapacity( newEdge, model.getEdgeCapacity( edge ) );
-                            model.setTransitTime( newEdge, model.getTransitTime( edge ) );
-                            model.getGraph().setEdge( newEdge );
-                        }
+			Edge edge = model.getEdge( i );
+			if( !stairEdges.contains( edge ) && !edge.isIncidentTo( model.getSupersink() ) ) {
+				Edge newEdge = model.createReverseEdge( edge );
+			}
 		}
 	}
 
 	protected void multiplyWithUpAndDownSpeedFactors() {
-		for( Edge edge : model.getGraph().edges() )
+		for( Edge edge : model.edges() )
 			if( !edge.isIncidentTo( model.getSupersink() ) )
 				switch( mapping.getEdgeLevel( edge ) ) {
 					case Higher:

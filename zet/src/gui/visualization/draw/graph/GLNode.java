@@ -56,10 +56,14 @@ public class GLNode extends AbstractDrawable<GLFlowEdge, GLNodeControl> {
 	public GLNode( GLNodeControl control ) {
 		super( control );
 
+
+		
 		this.control = control;
 		position.x = control.getXPosition();
 		position.y = control.getYPosition();
 		position.z = control.getZPosition();
+
+		
 		radius = nodeRadius;
 		// not neccesary here!
 		//glu = new GLU();
@@ -107,9 +111,11 @@ public class GLNode extends AbstractDrawable<GLFlowEdge, GLNodeControl> {
 //		}
 		glu.gluQuadricDrawStyle( quadObj, nodeDisplayMode );
 
+		
 		nodeBorderColor.draw( gl );
 		double xOffset = -this.getControl().getXPosition();
 		double yOffset = -this.getControl().getYPosition();
+		System.out.println( "Drawing a node at positions " + xOffset + " , " + yOffset );
 		if( control.isRectangleVisible() ) {
 			gl.glBegin( GL.GL_LINES );
 			gl.glVertex3d( this.getControl().getNwX() + xOffset, this.getControl().getNwY() + yOffset, -control.getFloorHeight() + 0.1 );
