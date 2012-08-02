@@ -176,11 +176,11 @@ public class JGraphStatisticPanel extends JPanel {
             PathBasedFlowOverTime flow = new PathBasedFlowOverTime(); //ea.compute(network, transitTimes, capacities, supplies);            
             PathComposition fc = new PathComposition(network, transitTimes, flow);
             fc.run();
-            NetworkFlowModel nfm = new NetworkFlowModel();
-            nfm.setNetwork(network);
-            nfm.setEdgeCapacities(capacities);
-            nfm.setTransitTimes(transitTimes);
-            nfm.setCurrentAssignment(supplies);
+//            NetworkFlowModel nfm = new NetworkFlowModel();
+//            nfm.setNetwork(network);
+//            nfm.setEdgeCapacities(capacities);
+//            nfm.setTransitTimes(transitTimes);
+//            nfm.setCurrentAssignment(supplies);
             GraphData data = new GraphData(network, capacities, supplies, transitTimes, supplies, sinks, flow);
             final Statistics stats = new Statistics(data);
             runs.add(stats);

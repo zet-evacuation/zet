@@ -8,12 +8,9 @@ import algo.graph.reduction.GreedyAlgo;
 import algo.graph.reduction.PrimsAlgo;
 import de.tu_berlin.math.coga.common.algorithm.Algorithm;
 import de.tu_berlin.math.coga.zet.NetworkFlowModel;
-import ds.graph.Edge;
-import ds.graph.IdentifiableCollection;
-import ds.graph.MinSpanningTree;
-import ds.graph.Node;
-import ds.graph.NodeRectangle;
+import ds.graph.*;
 import ds.graph.problem.MinSpanningTreeProblem;
+
 /**
  *
  * @author schwengf

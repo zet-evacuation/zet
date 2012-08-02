@@ -11,20 +11,17 @@ package gui;
 
 import de.tu_berlin.math.coga.common.algorithm.Algorithm;
 import de.tu_berlin.math.coga.zet.NetworkFlowModel;
+import de.tu_berlin.math.coga.zet.converter.graph.APSPGraphShrinker;
+import de.tu_berlin.math.coga.zet.converter.graph.ClusterShrinker;
+import de.tu_berlin.math.coga.zet.converter.graph.DijkstraSpannerShrinker;
 import de.tu_berlin.math.coga.zet.converter.graph.GraphShrinker;
 import de.tu_berlin.math.coga.zet.converter.graph.GreedySpannerShrinker;
+import de.tu_berlin.math.coga.zet.converter.graph.RepeatedShortestPathsShrinker;
+import de.tu_berlin.math.coga.zet.converter.graph.ShortestPathGraphShrinker;
 import de.tu_berlin.math.coga.zet.converter.graph.SpanningTreeShrinker;
 import de.tu_berlin.math.coga.zet.converter.graph.SteinerTreeShrinker;
-import de.tu_berlin.math.coga.zet.converter.graph.ZToDijkstraSpannerConverter;
-import de.tu_berlin.math.coga.zet.converter.graph.ZToGridClusterConverter;
-import de.tu_berlin.math.coga.zet.converter.graph.ZToGridDijkstraConverter;
 import de.tu_berlin.math.coga.zet.converter.graph.ZToGridGraphConverter;
-import de.tu_berlin.math.coga.zet.converter.graph.ZToGridShortestPathGraphConverter;
-import de.tu_berlin.math.coga.zet.converter.graph.ZToNonGridAPSPGraphConverter;
-import de.tu_berlin.math.coga.zet.converter.graph.ZToNonGridClusterConverter;
 import de.tu_berlin.math.coga.zet.converter.graph.ZToNonGridGraphConverter;
-import de.tu_berlin.math.coga.zet.converter.graph.ZToNonGridShortestPathGraphConverter;
-import de.tu_berlin.math.coga.zet.converter.graph.ZToNonGridShortestPathsConverter;
 import de.tu_berlin.math.coga.zet.converter.graph.ZToThinNetworkConverter;
 import ds.z.BuildingPlan;
 /**
@@ -41,36 +38,34 @@ public enum GraphConverterAlgorithms {
 				return new ZToGridGraphConverter();
 			case NonGridGraph:
 				return new ZToNonGridGraphConverter();
-			case MinSpanningTreeNonGrid:
-				return new GraphShrinker( new ZToNonGridGraphConverter(), new SpanningTreeShrinker() );
 			case MinSpanningTreeGrid:
 				return new GraphShrinker( new ZToGridGraphConverter(), new SpanningTreeShrinker() );
-			case GreedyTSpannerNonGrid:
-				return new GraphShrinker( new ZToNonGridGraphConverter(), new GreedySpannerShrinker() );
+			case MinSpanningTreeNonGrid:
+				return new GraphShrinker( new ZToNonGridGraphConverter(), new SpanningTreeShrinker() );
 			case GreedyTSpannerGrid:
 				return new GraphShrinker( new ZToGridGraphConverter(), new GreedySpannerShrinker() );
-			case DijkstraNonGrid:
-				return new ZToDijkstraSpannerConverter();
+			case GreedyTSpannerNonGrid:
+				return new GraphShrinker( new ZToNonGridGraphConverter(), new GreedySpannerShrinker() );
 			case DijkstraGrid:
-				return new ZToGridDijkstraConverter();
-			case SteinerTreeNonGrid:
-				return new GraphShrinker( new ZToNonGridGraphConverter(), new SteinerTreeShrinker() );
-				//return new SteinerTreeShrinker();
+				return new GraphShrinker( new ZToGridGraphConverter(), new DijkstraSpannerShrinker() );
+			case DijkstraNonGrid:
+				return new GraphShrinker( new ZToNonGridGraphConverter(), new DijkstraSpannerShrinker() );
 			case SteinerTreeGrid:
 				return new GraphShrinker( new ZToGridGraphConverter(), new SteinerTreeShrinker() );
-//				return new ZToGridSteinerTreeConverter();
-			case ClusterNonGrid:
-				return new ZToNonGridClusterConverter();
+			case SteinerTreeNonGrid:
+				return new GraphShrinker( new ZToNonGridGraphConverter(), new SteinerTreeShrinker() );
 			case ClusterGrid:
-				return new ZToGridClusterConverter();
-			case ShortestPathGraphNonGrid:
-				return new ZToNonGridShortestPathGraphConverter();
+				return new GraphShrinker( new ZToGridGraphConverter(), new ClusterShrinker() );
+			case ClusterNonGrid:
+				return new GraphShrinker( new ZToNonGridGraphConverter(), new ClusterShrinker() );
 			case ShortestPathGraphGrid:
-				return new ZToGridShortestPathGraphConverter();
+				return new GraphShrinker( new ZToGridGraphConverter(), new ShortestPathGraphShrinker() );
+			case ShortestPathGraphNonGrid:
+				return new GraphShrinker( new ZToNonGridGraphConverter(), new ShortestPathGraphShrinker() );
 			case APSPGraphNonGrid:
-				return new ZToNonGridAPSPGraphConverter();
+				return new GraphShrinker( new ZToNonGridGraphConverter(), new APSPGraphShrinker() );
 			case RepeatedShortestPaths:
-				return new ZToNonGridShortestPathsConverter();
+				return new GraphShrinker( new ZToNonGridGraphConverter(), new RepeatedShortestPathsShrinker() );
 			case ThinNetwork:
 				return new ZToThinNetworkConverter();
 			default:
