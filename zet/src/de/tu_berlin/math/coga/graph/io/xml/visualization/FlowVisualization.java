@@ -11,7 +11,6 @@ import ds.graph.Node;
 import ds.graph.flow.EdgeBasedFlowOverTime;
 import ds.graph.network.AbstractNetwork;
 import ds.mapping.IdentifiableIntegerMapping;
-import java.util.ArrayList;
 import java.util.List;
 
 /**

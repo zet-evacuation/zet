@@ -143,7 +143,7 @@ public class FlowVisualizationTool extends JFrame implements PropertyChangeListe
 				}
 			} );
 		}
-		visFlow.setControl( new GLFlowGraphControl( new GraphVisualizationResults() ) );
+		visFlow.setControl( new GLFlowGraphControl( new GraphVisualizationResults( 3 ) ) );
 		//visNash.setControl( null ); currently automatically initialized
 
 		EventServer.getInstance().registerListener( this, MessageEvent.class );

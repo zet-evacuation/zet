@@ -25,7 +25,7 @@ import gui.visualization.VisualizationOptionManager;
 import gui.visualization.control.graph.GLNodeControl;
 import java.awt.Graphics2D;
 import java.awt.Image;
-import java.awt.image.*;
+import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import java.util.logging.Level;
@@ -115,7 +115,7 @@ public class GLNode extends AbstractDrawable<GLFlowEdge, GLNodeControl> {
 		nodeBorderColor.draw( gl );
 		double xOffset = -this.getControl().getXPosition();
 		double yOffset = -this.getControl().getYPosition();
-		System.out.println( "Drawing a node at positions " + xOffset + " , " + yOffset );
+
 		if( control.isRectangleVisible() ) {
 			gl.glBegin( GL.GL_LINES );
 			gl.glVertex3d( this.getControl().getNwX() + xOffset, this.getControl().getNwY() + yOffset, -control.getFloorHeight() + 0.1 );

@@ -28,6 +28,7 @@ import de.tu_berlin.math.coga.math.vectormath.Vector3;
 import de.tu_berlin.math.coga.zet.converter.graph.ZToGraphMapping;
 import de.tu_berlin.math.coga.zet.viewer.NodePositionMapping;
 import ds.graph.Edge;
+import ds.graph.Graph;
 import ds.graph.Node;
 import ds.graph.NodeRectangle;
 import ds.graph.network.AbstractNetwork;
@@ -36,13 +37,14 @@ import ds.graph.network.Network;
 import ds.mapping.IdentifiableDoubleMapping;
 import ds.mapping.IdentifiableIntegerMapping;
 import gui.visualization.VisualizationOptionManager;
+import java.util.Iterator;
 import java.util.LinkedList;
 
 /**
  *
  */
 @XStreamAlias("networkFlowModel")
-public class NetworkFlowModel {
+public class NetworkFlowModel implements Iterable<Node> {
         
 	protected Network netw;
 	
@@ -154,7 +156,7 @@ public class NetworkFlowModel {
 		 * @return a linked list containing the super sink
      */
 //    public LinkedList<Node> getSinks(){
-//    	LinkedList<Node> sinks = new LinkedList<>();
+//	  	LinkedList<Node> sinks = new LinkedList<>();
 //    	sinks.add(supersink);
 //    	return sinks;
 //    }
@@ -167,9 +169,9 @@ public class NetworkFlowModel {
         this.mapping = mapping;
     }
 
-//    public Graph getGraph() {
-//        return network;
-//    }
+    public Graph graph() {
+        return network;
+    }
     
 //    public AbstractNetwork getNetwork(){
 //    	return network.getAsStaticNetwork();
@@ -415,5 +417,10 @@ public class NetworkFlowModel {
 
 	public EarliestArrivalFlowProblem getEAFP( int upperBound ) {
 		return new EarliestArrivalFlowProblem( edgeCapacities, network.getAsStaticNetwork(), nodeCapacities, supersink, sources, upperBound, transitTimes, currentAssignment );
+	}
+
+	@Override
+	public Iterator<Node> iterator() {
+		return network.nodes().iterator();
 	}
 }

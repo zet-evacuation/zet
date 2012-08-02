@@ -186,7 +186,7 @@ public class GraphVisualization {
 		return sinks;
 	}
 
-	public void setSinks( ArrayList<Node> sinks ) {
+	public void setSinks( List<Node> sinks ) {
 		this.sinks = sinks;
 	}
 

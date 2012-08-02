@@ -41,12 +41,13 @@ public class ClusterAlgo extends Algorithm<MinSpanningTreeProblem, MinSpanningTr
     Edge MinEdge;
     int NumCluster;
     
+	@Override
     public MinSpanningTree runAlgorithm(MinSpanningTreeProblem minspan)
     {
         try{
-            NetworkFlowModel OriginNetwork = minspan.getGraph(); 
-            Graph OriginGraph = minspan.getGraph().getGraph();
-            NumNodes = minspan.getGraph().getGraph().numberOfNodes();
+            NetworkFlowModel OriginNetwork = minspan.getNetworkFlowModel(); 
+            Graph OriginGraph = minspan.getNetworkFlowModel().graph();
+            NumNodes = minspan.getNetworkFlowModel().numberOfNodes();
             //initial edges
             currentEdges = OriginGraph.edges();
             prob = 1/Math.sqrt(NumNodes);
@@ -104,7 +105,7 @@ public class ClusterAlgo extends Algorithm<MinSpanningTreeProblem, MinSpanningTr
             for (Node v: noncenterNodes)
             {
                 int transitMin = 100000;
-                TransitForCenterEdges = new IdentifiableIntegerMapping<Edge>(OriginGraph.numberOfEdges());
+                TransitForCenterEdges = new IdentifiableIntegerMapping<>(OriginGraph.numberOfEdges());
                 incidentEdges = OriginGraph.incidentEdges(v);
                 int count = 0;
                 for (Edge edge: incidentEdges)
@@ -209,7 +210,7 @@ public class ClusterAlgo extends Algorithm<MinSpanningTreeProblem, MinSpanningTr
         }
             
         //ads the edges adjacent to supersink    
-        IdentifiableCollection<Edge> addEdges = OriginNetwork.getGraph().incidentEdges(OriginNetwork.getSupersink());
+        IdentifiableCollection<Edge> addEdges = OriginNetwork.graph().incidentEdges(OriginNetwork.getSupersink());
         for (Edge edge: addEdges)
         {
             Edge supersinkedge = new Edge(NumEdges++, edge.start(), edge.end());

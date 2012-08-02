@@ -61,11 +61,11 @@ public class ZToGridSteinerTreeConverter extends ZToGridGraphConverter{
 		model.roundTransitTimes();
 		//createReverseEdges( model );
 
-		//model.setNetwork( model.getGraph().getAsStaticNetwork() );
+		//model.setNetwork( model.getNetworkFlowModel().getAsStaticNetwork() );
                 System.out.println("number of edges of original graph:" + model.numberOfEdges());
                
                 //minspanmodel.setNetwork(newgraph);
-                //newgraph.setNodes(model.getGraph().nodes());
+                //newgraph.setNodes(model.getNetworkFlowModel().nodes());
 
 								minspanmodel = new NetworkFlowModel( model );
 								
@@ -102,7 +102,7 @@ public class ZToGridSteinerTreeConverter extends ZToGridGraphConverter{
                 IdentifiableCollection<Node> NonMinNodes = new ListSequence();
                 int numberhidden = 0;
                 
-								//for (Node node: model.getGraph().nodes())
+								//for (Node node: model.getNetworkFlowModel().nodes())
                 for ( int i = 0; i < model.numberOfNodes(); ++i )
                 {
 									Node node = model.getNode( i );
@@ -166,7 +166,7 @@ public class ZToGridSteinerTreeConverter extends ZToGridGraphConverter{
 								createReverseEdges( minspanmodel );
                 
                 //minspanmodel.setNetwork(newgraph);
-                //minspanmodel.setNetwork( minspanmodel.getGraph().getAsStaticNetwork());
+                //minspanmodel.setNetwork( minspanmodel.getNetworkFlowModel().getAsStaticNetwork());
                 System.out.println("Number of new Edges: " + minspanmodel.numberOfEdges());
                 
                 return minspanmodel;

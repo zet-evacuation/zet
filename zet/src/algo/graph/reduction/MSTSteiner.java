@@ -8,20 +8,19 @@ import algo.graph.shortestpath.Dijkstra;
 import de.tu_berlin.math.coga.common.algorithm.Algorithm;
 import de.tu_berlin.math.coga.zet.NetworkFlowModel;
 import de.tu_berlin.math.coga.zet.converter.graph.ZToGraphMapping;
-import ds.graph.network.DynamicNetwork;
+import ds.collection.ListSequence;
 import ds.graph.Edge;
 import ds.graph.Forest;
 import ds.graph.Graph;
 import ds.graph.IdentifiableCollection;
-import ds.mapping.IdentifiableIntegerMapping;
-import ds.collection.ListSequence;
-import ds.graph.MinSpanningTree;
 import ds.graph.MinSteinerTree;
 import ds.graph.NetworkMST;
 import ds.graph.Node;
 import ds.graph.Path;
+import ds.graph.network.DynamicNetwork;
 import ds.graph.problem.MinSpanningTreeProblem;
 import ds.graph.problem.NetworkMSTProblem;
+import ds.mapping.IdentifiableIntegerMapping;
 
 
 /**
@@ -59,12 +58,12 @@ public class MSTSteiner extends Algorithm<MinSpanningTreeProblem,MinSteinerTree>
     public MinSteinerTree runAlgorithm(MinSpanningTreeProblem minspan){
     
     try{    
-        OriginNetwork = minspan.getGraph(); 
-        Node supersink = minspan.getGraph().getSupersink();
-        OriginGraph = OriginNetwork.getGraph();
+        OriginNetwork = minspan.getNetworkFlowModel(); 
+        Node supersink = minspan.getNetworkFlowModel().getSupersink();
+        OriginGraph = OriginNetwork.graph();
         int numNodes = OriginGraph.numberOfNodes();
         ZToGraphMapping mapping = OriginNetwork.getZToGraphMapping();
-        IdentifiableIntegerMapping<Edge> TransitForEdge = OriginNetwork.getTransitTimes();
+        IdentifiableIntegerMapping<Edge> TransitForEdge = OriginNetwork.transitTimes();
         //saves the current considered network for different iterations
         DynamicNetwork firstnet = new DynamicNetwork();
         
@@ -81,15 +80,15 @@ public class MSTSteiner extends Algorithm<MinSpanningTreeProblem,MinSteinerTree>
             }
         }
         System.out.println("Number of steinernodes: " + SteinerNodes.size());    
-        TransitForEdge = OriginNetwork.getTransitTimes();
+        TransitForEdge = OriginNetwork.transitTimes();
         ShortestPaths = new Path[numNodes][numNodes];
-        shortestpathdist = new IdentifiableIntegerMapping<Edge>(OriginNetwork.getGraph().numberOfEdges());
+        shortestpathdist = new IdentifiableIntegerMapping<Edge>(OriginNetwork.numberOfEdges());
         
         //gives a network connecting the source and evacutaion nodes with shortest path edges...
         while (!SteinerNodes.empty())
         {
             Node node = SteinerNodes.first();
-            dijkstra = new Dijkstra(OriginNetwork.getNetwork(), TransitForEdge, node, true);
+            dijkstra = new Dijkstra(OriginNetwork.graph().getAsStaticNetwork(), TransitForEdge, node, true);
             dijkstra.run();
            
             SteinerNodes.remove(SteinerNodes.first());
@@ -198,7 +197,7 @@ public class MSTSteiner extends Algorithm<MinSpanningTreeProblem,MinSteinerTree>
             
         }
         
-        IdentifiableCollection<Edge> addEdges = OriginNetwork.getGraph().incidentEdges(supersink);
+        IdentifiableCollection<Edge> addEdges = OriginNetwork.graph().incidentEdges(supersink);
         for (Edge sinkedge: addEdges)
         {
             supersinkedge = new Edge(Num++, sinkedge.start(), sinkedge.end());

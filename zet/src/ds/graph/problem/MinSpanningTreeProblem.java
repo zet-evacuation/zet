@@ -23,7 +23,7 @@ public class MinSpanningTreeProblem {
         this.distances = distances;
     }
     
-    public NetworkFlowModel getGraph()
+    public NetworkFlowModel getNetworkFlowModel()
     {
         return graph;
     }
