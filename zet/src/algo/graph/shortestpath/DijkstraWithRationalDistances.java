@@ -8,6 +8,7 @@ package algo.graph.shortestpath;
 import ds.graph.network.DynamicNetwork;
 import ds.graph.Edge;
 import de.tu_berlin.math.coga.datastructure.priorityQueue.MinHeap;
+import ds.graph.Graph;
 import ds.graph.Node;
 import java.util.HashMap;
 import java.util.LinkedList;
@@ -31,7 +32,7 @@ public class DijkstraWithRationalDistances {
     public DijkstraWithRationalDistances() {
     }
 
-    public DijkstraWithRationalDistances(DynamicNetwork graph, Map<Edge,Double> costs, Node source) {
+    public DijkstraWithRationalDistances(DynamicNetwork graph, Map<Edge,Double> costs, Node source) { // TODO genral graph class here
         this.costs = costs;
         this.graph = graph;
         this.source = source;

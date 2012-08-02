@@ -4,24 +4,27 @@
  */
 package de.tu_berlin.math.coga.zet.converter.graph;
 
-import algo.graph.reduction.*;
+import algo.graph.reduction.YenKShortestPaths;
+import algo.graph.reduction.YenPath;
 import de.tu_berlin.math.coga.zet.NetworkFlowModel;
 import de.tu_berlin.math.coga.zet.converter.RasterContainerCreator;
-import ds.graph.network.DynamicNetwork;
+import ds.collection.ListSequence;
 import ds.graph.Edge;
 import ds.graph.Forest;
 import ds.graph.IdentifiableCollection;
-import ds.mapping.IdentifiableIntegerMapping;
-import ds.collection.ListSequence;
 import ds.graph.MinSpanningTree;
 import ds.graph.Node;
 import ds.graph.NodeRectangle;
 import ds.graph.problem.MinSpanningTreeProblem;
+import ds.mapping.IdentifiableIntegerMapping;
 import ds.z.AssignmentArea;
 import ds.z.BuildingPlan;
 import ds.z.PlanPoint;
 import ds.z.Room;
-import java.util.*;
+import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
 
 /**
  *
@@ -40,8 +43,8 @@ public class ZToNonGridShortestPathsConverter  extends ZToNonGridGraphConverter{
     public Edge neu;
     public Edge neureverse;
     public Edge neu2;
-    public int NumEdges = 0;
-    public int NumNodes = 0;
+    //public int NumEdges = 0;
+    //public int NumNodes = 0;
     public int NumCurrentEdges = 0;
     public int NumShortestPaths = 5;
     IdentifiableCollection<Edge> solEdges = new ListSequence<>();
@@ -56,37 +59,38 @@ public class ZToNonGridShortestPathsConverter  extends ZToNonGridGraphConverter{
 		mapping = new ZToGraphMapping();
                 ZToGraphMapping newmapping = new ZToGraphMapping();
 		model = new NetworkFlowModel();
-                minspanmodel = new NetworkFlowModel();
                 List<Edge> super_edges = new ListSequence<>();
                 
 		raster = RasterContainerCreator.getInstance().ZToGraphRasterContainer( problem );
 		mapping.setRaster( raster );
 		model.setZToGraphMapping( mapping );
 
-                DynamicNetwork newgraph = new DynamicNetwork();
+                //DynamicNetwork newgraph = new DynamicNetwork();
                 
 		super.createNodes();
 		super.createEdgesAndCapacities();
 		super.computeTransitTimes();
 		super.multiplyWithUpAndDownSpeedFactors();
-		model.setTransitTimes( exactTransitTimes.round() );
+		//model.setTransitTimes( exactTransitTimes.round() );
+		model.roundTransitTimes();
 		createReverseEdges( model );
                 
-                for (Edge e: model.getGraph().edges()){
+                for (Edge e: model.graph().edges()){
                     if (e.isIncidentTo(model.getSupersink())){
                         super_edges.add(e); 
                     }
                 }
         	                
+                minspanmodel = new NetworkFlowModel();
                 Node Super = model.getSupersink();
-                newgraph.addNode(Super);
-                NumNodes++;
-                minspanmodel.setSupersink(Super);
+                //newgraph.addNode(Super);
+                //NumNodes++;
+                //minspanmodel.setSupersink(Super);
                 newmapping.setNodeSpeedFactor( Super, 1 );
 		newmapping.setNodeRectangle( Super, new NodeRectangle( 0, 0, 0, 0 ) );
 		newmapping.setFloorForNode( Super, -1 );
                 
-                model.setNetwork( model.getGraph().getAsStaticNetwork() );
+                //model.setNetwork( model.getGraph().getAsStaticNetwork() );
                 
                 YenKShortestPaths yen = new YenKShortestPaths(model);
                 Node exit=null;
@@ -107,9 +111,9 @@ public class ZToNonGridShortestPathsConverter  extends ZToNonGridGraphConverter{
 				}
                 }
                 
-                int[][] used = new int[model.getGraph().numberOfNodes()][model.getGraph().numberOfNodes()]; 
-                for (int i=0; i< model.getGraph().numberOfNodes();i++){
-                    for (int j=0; j<model.getGraph().numberOfNodes();j++){
+                int[][] used = new int[model.numberOfNodes()][model.numberOfNodes()]; 
+                for (int i=0; i< model.numberOfNodes();i++){
+                    for (int j=0; j<model.numberOfNodes();j++){
                         used[i][j] = 0;
                     }
                 } 
@@ -165,7 +169,7 @@ public class ZToNonGridShortestPathsConverter  extends ZToNonGridGraphConverter{
                     { 
                         if (used[y.get_vertices().get(i).id()][y.get_vertices().get(i+1).id()] ==0 && y.get_vertices().get(i).id()!=0 && y.get_vertices().get(i+1).id()!=0)
                         {
-                            Edge n = model.getGraph().getEdge(y.get_vertices().get(i),y.get_vertices().get(i+1));
+                            Edge n = model.graph().getEdge(y.get_vertices().get(i),y.get_vertices().get(i+1));
                             //Edge e = new Edge(NumEdges++,y.get_vertices().get(i),y.get_vertices().get(i+1));
                             //System.out.println("Transit: " + model.getTransitTime(n));
                             solEdges.add(n);
@@ -183,8 +187,10 @@ public class ZToNonGridShortestPathsConverter  extends ZToNonGridGraphConverter{
 
                 for (Node node: solNodes)
                 { 
-                    Node new_node = new Node(NumNodes++);                   
-                    newgraph.addNode(new_node); 
+                    //Node new_node = new Node(NumNodes++);     
+									
+										Node new_node = minspanmodel.newNode();
+                    //newgraph.addNode(new_node); 
                     newNodeMap.put(node,new_node);
                     //System.out.println("new Node: " + new_node + "for old: " + node);
                     if (node.id()!= 0)
@@ -203,10 +209,12 @@ public class ZToNonGridShortestPathsConverter  extends ZToNonGridGraphConverter{
                 
                 for (Edge edge: solEdges)
                 {                
-                        Edge orig = model.getGraph().getEdge(edge.start(), edge.end());
-                        Edge new_edge = new Edge(NumEdges++,newNodeMap.get(edge.start()),newNodeMap.get(edge.end()));
+                        Edge orig = model.getEdge(edge.start(), edge.end());
+                        //Edge new_edge = new Edge(NumEdges++,newNodeMap.get(edge.start()),newNodeMap.get(edge.end()));
                         //System.out.println("neue Kante: " + new_edge + "for: " + orig);                 
-                        newgraph.addEdge(new_edge);
+                        Edge new_edge = minspanmodel.newEdge( newNodeMap.get(edge.start()), newNodeMap.get( edge.end()) );
+												
+												//newgraph.addEdge(new_edge);
                         minspanmodel.setEdgeCapacity(new_edge, model.getEdgeCapacity(orig));
                         minspanmodel.setTransitTime(new_edge, model.getTransitTime(orig));
                         newmapping.setEdgeLevel(new_edge,mapping.getEdgeLevel(orig) );             
@@ -216,10 +224,13 @@ public class ZToNonGridShortestPathsConverter  extends ZToNonGridGraphConverter{
                 for (Edge e: super_edges){
                     if (newNodeMap.containsKey(e.start()))
                     {
-                        Edge new_edge = new Edge(NumEdges++,newNodeMap.get(e.start()),minspanmodel.getSupersink());
+                        //Edge new_edge = new Edge(NumEdges++,newNodeMap.get(e.start()),minspanmodel.getSupersink());
                         //System.out.println("superEdge: " + new_edge + "for: " + e);
-                        newgraph.addEdge(new_edge);                   
-                        Edge orig = model.getGraph().getEdge(e.start(), e.end());
+                        //newgraph.addEdge(new_edge);                   
+                        Edge new_edge = minspanmodel.newEdge( newNodeMap.get(e.start()), minspanmodel.getSupersink() );
+
+												
+												Edge orig = model.getEdge(e.start(), e.end());
                         minspanmodel.setTransitTime(new_edge, model.getTransitTime(orig));
                         minspanmodel.setEdgeCapacity(new_edge, Integer.MAX_VALUE);
                         minspanmodel.setExactTransitTime(new_edge, model.getExactTransitTime(orig));
@@ -248,7 +259,7 @@ public class ZToNonGridShortestPathsConverter  extends ZToNonGridGraphConverter{
                 
                  //minspanmodel.setCurrentAssignment(model.getCurrentAssignment());
                  //minspanmodel.setSources(model.getSources());
-                 minspanmodel.setNetwork(newgraph);
+                 //minspanmodel.setNetwork(newgraph);
                  //values from mapping of original graph                
                  newmapping.exitName = mapping.exitName;
                  
@@ -263,9 +274,10 @@ public class ZToNonGridShortestPathsConverter  extends ZToNonGridGraphConverter{
                     System.out.println("Kante: " + e + "Cap: " + minspanmodel.getEdgeCapacity(e) + "Tran: " + minspanmodel.getTransitTime(e));
                 }*/
                 createReverseEdges( minspanmodel );
-                minspanmodel.setNetwork(newgraph);               
-                minspanmodel.setNetwork( minspanmodel.getGraph().getAsStaticNetwork());
+                //minspanmodel.setNetwork(newgraph);               
+                //minspanmodel.setNetwork( minspanmodel.getGraph().getAsStaticNetwork());
                 //System.out.println("Number of Created Repeated Shortest Paths Edges: " + minspanmodel.getGraph().numberOfEdges());
+								minspanmodel.resetAssignment();
 		return minspanmodel;
                 
                 

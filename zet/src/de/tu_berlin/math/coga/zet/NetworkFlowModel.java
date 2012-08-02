@@ -37,8 +37,10 @@ import ds.graph.network.Network;
 import ds.mapping.IdentifiableDoubleMapping;
 import ds.mapping.IdentifiableIntegerMapping;
 import gui.visualization.VisualizationOptionManager;
+import java.util.Collections;
 import java.util.Iterator;
 import java.util.LinkedList;
+import java.util.List;
 
 /**
  *
@@ -147,9 +149,9 @@ public class NetworkFlowModel implements Iterable<Node> {
      * May be consistent with the current assignment or not.
      * @return a linked list containing the sources.
      */
-//    public List<Node> getSources(){
-//    	return sources;
-//    }
+    public List<Node> getSources(){
+    	return Collections.unmodifiableList( sources );
+    }
     
     /**
      * Returns a linked list containing the super sink.
@@ -292,7 +294,17 @@ public class NetworkFlowModel implements Iterable<Node> {
 	}
 
 	public Edge createReverseEdge( Edge edge ) {
+		//while( network.edges().get( edgeIndex ) != null )
+		//	edgeIndex++;
+		
+		//network.getEdge( edgeIndex );
+		
 		Edge newEdge = new Edge( edgeIndex++, edge.end(), edge.start() );
+		
+		while( network.edges().contains( newEdge ) ) {
+			newEdge = new Edge( edgeIndex++, edge.end(), edge.start() );
+		}
+		
 		mapping.setEdgeLevel( newEdge, mapping.getEdgeLevel( edge ).getInverse() );
 		setEdgeCapacity( newEdge, getEdgeCapacity( edge ) );
 		setTransitTime( newEdge, getTransitTime( edge ) );
@@ -422,5 +434,9 @@ public class NetworkFlowModel implements Iterable<Node> {
 	@Override
 	public Iterator<Node> iterator() {
 		return network.nodes().iterator();
+	}
+
+	public IdentifiableIntegerMapping<Edge> edgeCapacities() {
+        return edgeCapacities;
 	}
 }

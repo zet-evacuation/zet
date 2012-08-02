@@ -25,7 +25,7 @@ import java.util.Map;
  *
  * @author schwengf
  */
-public class ZtoGridShortestPathGraphConverter extends ZToGridGraphConverter{
+public class ZToGridShortestPathGraphConverter extends ZToGridGraphConverter{
     
     public NetworkFlowModel minspanmodel;
     public MinSpanningTreeProblem minspanprob;

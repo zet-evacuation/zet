@@ -63,7 +63,7 @@ public class YenKShortestPaths
 		if(graph == null){
 			throw new IllegalArgumentException("A NULL graph object occurs!");
 		}
-		_graph = new DynamicNetwork(graph.getNetwork());
+		_graph = new DynamicNetwork((DynamicNetwork)graph.graph());
                 orig_graph = graph;
 		_source_vertex = source_vt;
 		_target_vertex = target_vt;
@@ -111,7 +111,7 @@ public class YenKShortestPaths
 	 */
 	public YenPath get_shortest_path(Node source_vt, Node target_vt)
 	{
-		YenDijkstra dijkstra_alg = new YenDijkstra(_graph,orig_graph,orig_graph.getTransitTimes());
+		YenDijkstra dijkstra_alg = new YenDijkstra(_graph,orig_graph,orig_graph.transitTimes());
 		return dijkstra_alg.get_shortest_path(source_vt, target_vt);
 	}
 	
@@ -139,7 +139,7 @@ public class YenKShortestPaths
                 {
                     Node n = cur_path.get_vertices().get(i);
                     Node n2 = cur_path.get_vertices().get(i+1);
-                    double cap = orig_graph.getEdgeCapacity(orig_graph.getGraph().getEdge(n, n2));
+                    double cap = orig_graph.getEdgeCapacity(orig_graph.getEdge(n, n2));
                     if (cap < Min)
                     {
                         Min = cap;
@@ -171,7 +171,7 @@ public class YenKShortestPaths
 			Node cur_succ_vertex = cur_result_path.get_vertices().get(cur_dev_vertex_id+1);
                         
 			
-                        Edge e = orig_graph.getGraph().getEdge(cur_derivation, cur_succ_vertex);
+                        Edge e = orig_graph.getEdge(cur_derivation, cur_succ_vertex);
                         _graph.remove_edge_temp(e);
 			//_graph.remove_edge(new Pair<Integer,Integer>(
 			//		cur_derivation.id(), cur_succ_vertex.id()));
@@ -182,12 +182,12 @@ public class YenKShortestPaths
 		for(int i=0; i<path_length-1; ++i)
 		{
 			_graph.remove_node_temp(cur_path_vertex_list.get(i));
-                        Edge e = orig_graph.getGraph().getEdge(cur_path_vertex_list.get(i), cur_path_vertex_list.get(i+1));
+                        Edge e = orig_graph.getEdge(cur_path_vertex_list.get(i), cur_path_vertex_list.get(i+1));
 			_graph.remove_edge_temp(e);
 		}
 		
 		//3.3 calculate the shortest tree rooted at target vertex in the graph
-		YenDijkstra reverse_tree = new YenDijkstra(_graph,orig_graph,orig_graph.getTransitTimes());
+		YenDijkstra reverse_tree = new YenDijkstra(_graph,orig_graph,orig_graph.transitTimes());
 		reverse_tree.get_shortest_path_flower(_target_vertex);
 
 		//3.4 recover the deleted vertices and update the cost and identify the new candidate results
@@ -225,7 +225,7 @@ public class YenKShortestPaths
 						j=path_length;
 					}else
 					{
-                                                Edge e = orig_graph.getGraph().getEdge(cur_path_vertex_list.get(j), cur_path_vertex_list.get(j+1));
+                                                Edge e = orig_graph.getEdge(cur_path_vertex_list.get(j), cur_path_vertex_list.get(j+1));
                                                 double trans = orig_graph.getTransitTime(e);
 						cost += trans;
 						pre_path_list.add(cur_vertex);
@@ -249,7 +249,7 @@ public class YenKShortestPaths
 			
 			//3.4.5 restore the edge
 			Node succ_vertex = cur_path_vertex_list.get(i+1); 
-                        Edge e = orig_graph.getGraph().getEdge(cur_recover_vertex, succ_vertex);
+                        Edge e = orig_graph.getEdge(cur_recover_vertex, succ_vertex);
                         _graph.add_edge_temp(e);	
 			
 			//3.4.6 update cost if necessary

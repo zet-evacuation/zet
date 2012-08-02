@@ -9,14 +9,14 @@ import algo.graph.shortestpath.DijkstraWithRationalDistances;
 import de.tu_berlin.math.coga.common.util.Level;
 import de.tu_berlin.math.coga.zet.NetworkFlowModel;
 import de.tu_berlin.math.coga.zet.converter.RasterContainerCreator;
-import ds.graph.network.DynamicNetwork;
+import ds.collection.ListSequence;
 import ds.graph.Edge;
 import ds.graph.Forest;
 import ds.graph.IdentifiableCollection;
-import ds.collection.ListSequence;
 import ds.graph.MinSpanningTree;
 import ds.graph.Node;
 import ds.graph.NodeRectangle;
+import ds.graph.network.DynamicNetwork;
 import ds.graph.problem.MinSpanningTreeProblem;
 import ds.z.BuildingPlan;
 import java.util.HashMap;
@@ -45,7 +45,6 @@ public class ZToNonGridShortestPathGraphConverter extends ZToNonGridGraphConvert
 		mapping = new ZToGraphMapping();
                 ZToGraphMapping newmapping = new ZToGraphMapping();
 		model = new NetworkFlowModel();
-                minspanmodel = new NetworkFlowModel();
                 
 		raster = RasterContainerCreator.getInstance().ZToGraphRasterContainer( problem );
 		mapping.setRaster( raster );
@@ -55,24 +54,26 @@ public class ZToNonGridShortestPathGraphConverter extends ZToNonGridGraphConvert
 		super.createEdgesAndCapacities();
 		super.computeTransitTimes();
 		super.multiplyWithUpAndDownSpeedFactors();
-		model.setTransitTimes( exactTransitTimes.round() );
+		//model.setTransitTimes( exactTransitTimes.round() );
+		model.roundTransitTimes();
 		
 		createReverseEdges( model );
         	//model.setNetwork( model.getGraph().getAsStaticNetwork() );
      
                 //nodes are nodes of original graph
-                DynamicNetwork newgraph = new DynamicNetwork();
-                newgraph.setNodes(model.getGraph().nodes());
-                minspanmodel.setNetwork(newgraph);
-                
-                
-                minspanmodel.setSupersink(model.getSupersink());
-                Node Super = minspanmodel.getSupersink();
+                //DynamicNetwork newgraph = new DynamicNetwork();
+                //newgraph.setNodes(model.getGraph().nodes());
+                //minspanmodel.setNetwork(newgraph);
+                minspanmodel = new NetworkFlowModel( model );
+                //minspanmodel.setSupersink(model.getSupersink());
+
+								
+								Node Super = minspanmodel.getSupersink();
                 newmapping.setNodeSpeedFactor( Super, 1 );
 		newmapping.setNodeRectangle( Super, new NodeRectangle( 0, 0, 0, 0 ) );
 		newmapping.setFloorForNode( Super, -1 );
                  
-                for (Node node: model.getGraph().nodes())
+                for (Node node: model )
                 {
                     if (node.id()!= 0)
                     {
@@ -83,17 +84,17 @@ public class ZToNonGridShortestPathGraphConverter extends ZToNonGridGraphConvert
                     }
                 }
                 
-                costs = new HashMap<Edge,Double>(model.getGraph().numberOfEdges());
-                for (Edge edge: model.getGraph().edges())
+                costs = new HashMap<Edge,Double>(model.numberOfEdges());
+                for (Edge edge: model.graph().edges())
                 {
                     costs.put(edge, (double)model.getTransitTime(edge));                   
                 }
-                DynamicNetwork net =  model.getDynamicNetwork();
-                DijkstraWithRationalDistances dijkstra = new DijkstraWithRationalDistances(net, costs, model.getSupersink());
+                //DynamicNetwork net =  model.getDynamicNetwork();
+                DijkstraWithRationalDistances dijkstra = new DijkstraWithRationalDistances((DynamicNetwork)model.graph(), costs, model.getSupersink());
                 dijkstra.run();
                 DynamicNetwork netw = dijkstra.getShortestPathGraph();
                 
-                System.out.println("Number of Original Edges: " + model.getGraph().numberOfEdges());
+                System.out.println("Number of Original Edges: " + model.numberOfEdges());
                 
                 for (Edge edge: netw.edges() )
                 {
@@ -101,7 +102,7 @@ public class ZToNonGridShortestPathGraphConverter extends ZToNonGridGraphConvert
                     solEdges.add(create);
                 }
 
-                for (Edge sinkedge: model.getGraph().incidentEdges(model.getSupersink()))
+                for (Edge sinkedge: model.graph().incidentEdges(model.getSupersink()))
                 {
                     if (sinkedge.start() == model.getSupersink())
                     {
@@ -121,27 +122,29 @@ public class ZToNonGridShortestPathGraphConverter extends ZToNonGridGraphConvert
                 
                 for (Edge create: solEdges)
                 {
-                    newgraph.addEdge(create);
+                    //newgraph.addEdge(create);
                     if (create.start() == Super || create.end() == Super)
                     {
-                        minspanmodel.setEdgeCapacity(create, Integer.MAX_VALUE);
-                        minspanmodel.setTransitTime(create, 0);
-                        minspanmodel.setExactTransitTime(create, 0);
+											minspanmodel.addEdge( create, Integer.MAX_VALUE, 0, 0 );
+//                        minspanmodel.setEdgeCapacity(create, Integer.MAX_VALUE);
+//                        minspanmodel.setTransitTime(create, 0);
+//                        minspanmodel.setExactTransitTime(create, 0);
                         newmapping.setEdgeLevel(create,Level.Higher);  
                     }
                     else
                     {    
-                        minspanmodel.setEdgeCapacity(create, model.getEdgeCapacity(create));
-                        minspanmodel.setTransitTime(create, model.getTransitTime(create));
-                        minspanmodel.setExactTransitTime(create, model.getExactTransitTime(create));
+											minspanmodel.addEdge( create, model.getEdgeCapacity( create), model.getTransitTime( create), model.getExactTransitTime( create) );
+//                        minspanmodel.setEdgeCapacity(create, model.getEdgeCapacity(create));
+//                        minspanmodel.setTransitTime(create, model.getTransitTime(create));
+//                        minspanmodel.setExactTransitTime(create, model.getExactTransitTime(create));
                         newmapping.setEdgeLevel(create,mapping.getEdgeLevel(create) );  
                     }
                                
                 }
                 
-                model.setNetwork( model.getGraph().getAsStaticNetwork() );
-                minspanmodel.setCurrentAssignment(model.getCurrentAssignment());
-                minspanmodel.setSources(model.getSources());
+                //model.setNetwork( model.getGraph().getAsStaticNetwork() );
+                //minspanmodel.setCurrentAssignment(model.getCurrentAssignment());
+                //minspanmodel.setSources(model.getSources());
                  
                  //values from mapping of original graph
                  newmapping.raster = mapping.getRaster();
@@ -153,12 +156,14 @@ public class ZToNonGridShortestPathGraphConverter extends ZToNonGridGraphConvert
                  newmapping.exitName = mapping.exitName;
                  
                  minspanmodel.setZToGraphMapping(newmapping);                
-                 minspanmodel.setSupersink(model.getSupersink());
+                 //minspanmodel.setSupersink(model.getSupersink());
                 //createReverseEdges( minspanmodel );
-                minspanmodel.setNetwork(newgraph);
-                minspanmodel.setNetwork( minspanmodel.getGraph().getAsStaticNetwork());
-                System.out.println("Number of Created Shortest Path Graph Edges: " + minspanmodel.getGraph().numberOfEdges());
-		return minspanmodel;
+                //minspanmodel.setNetwork(newgraph);
+                //minspanmodel.setNetwork( minspanmodel.getAsStaticNetwork());
+                System.out.println("Number of Created Shortest Path Graph Edges: " + minspanmodel.numberOfEdges());
+		
+								minspanmodel.resetAssignment();
+								return minspanmodel;
                 
                 
     }
