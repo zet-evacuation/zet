@@ -328,9 +328,14 @@ public class AlgorithmControl implements PropertyChangeListener {
 			@Override
 			public void propertyChange( PropertyChangeEvent pce ) {
 				if( st.isDone() ) {
-					networkFlowModel = conv.getSolution();
-					System.out.println( "Nodes: " + networkFlowModel.numberOfNodes() );
-					System.out.println( "Edges: " + networkFlowModel.numberOfEdges() );
+					if( st.isError() ) {
+						System.err.println( "An error occured:" );
+						st.getError().printStackTrace( System.out );
+					} else {
+						networkFlowModel = conv.getSolution();
+						System.out.println( "Nodes: " + networkFlowModel.numberOfNodes() );
+						System.out.println( "Edges: " + networkFlowModel.numberOfEdges() );						
+					}
 				}
 			}
 		} );

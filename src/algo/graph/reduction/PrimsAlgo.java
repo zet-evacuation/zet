@@ -54,8 +54,8 @@ public class PrimsAlgo extends Algorithm<MinSpanningTreeProblem,MinSpanningTree>
     {
         
         try{
-        OriginNetwork = minspan.getGraph(); 
-        Node supersink = minspan.getGraph().getSupersink();
+        OriginNetwork = minspan.getNetworkFlowModel(); 
+        Node supersink = minspan.getNetworkFlowModel().getSupersink();
         OriginGraph = OriginNetwork.getGraph();
         int numNodes = OriginGraph.numberOfNodes();
         IdentifiableIntegerMapping<Edge> TransitForEdge = OriginNetwork.getTransitTimes();
@@ -148,7 +148,7 @@ public class PrimsAlgo extends Algorithm<MinSpanningTreeProblem,MinSpanningTree>
                //2. langsamere Implementation
        
         /*currentNode = startNode;
-        currentEdges = OriginNetwork.getGraph().incidentEdges(startNode);
+        currentEdges = OriginNetwork.getNetworkFlowModel().incidentEdges(startNode);
         
         while (solNodes.size() < OriginGraph.numberOfNodes()+1)
         {
@@ -169,7 +169,7 @@ public class PrimsAlgo extends Algorithm<MinSpanningTreeProblem,MinSpanningTree>
             {
                solNodes.add(MinEdge.end()); 
                //currentNode = MinEdge.end();
-               for (Edge neu: OriginNetwork.getGraph().incidentEdges(MinEdge.end()))
+               for (Edge neu: OriginNetwork.getNetworkFlowModel().incidentEdges(MinEdge.end()))
                {
                     currentEdges.add(neu);
                }
@@ -178,7 +178,7 @@ public class PrimsAlgo extends Algorithm<MinSpanningTreeProblem,MinSpanningTree>
             {
                 solNodes.add(MinEdge.start());
                 //currentNode = MinEdge.start();
-                for (Edge neu: OriginNetwork.getGraph().incidentEdges(MinEdge.start()))
+                for (Edge neu: OriginNetwork.getNetworkFlowModel().incidentEdges(MinEdge.start()))
                {
                     currentEdges.add(neu);
                }

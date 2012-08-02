@@ -4,20 +4,19 @@
  */
 package de.tu_berlin.math.coga.zet.converter.graph;
 
-import ds.mapping.IdentifiableDoubleMapping;
 import de.tu_berlin.math.coga.common.localization.DefaultLoc;
-import algo.graph.util.GraphInstanceChecker;
+import de.tu_berlin.math.coga.common.util.Direction;
+import static de.tu_berlin.math.coga.common.util.Direction.*;
+import static de.tu_berlin.math.coga.common.util.Level.*;
+import de.tu_berlin.math.coga.zet.NetworkFlowModel;
 import de.tu_berlin.math.coga.zet.converter.RasterContainerCreator;
 import ds.PropertyContainer;
-import ds.graph.network.DynamicNetwork;
-import ds.mapping.IdentifiableIntegerMapping;
-import ds.graph.network.AbstractNetwork;
-import de.tu_berlin.math.coga.zet.NetworkFlowModel;
-import ds.graph.Node;
 import ds.graph.Edge;
-import ds.graph.Graph;
-import ds.graph.IdentifiableCollection;
+import ds.graph.Node;
 import ds.graph.NodeRectangle;
+import ds.graph.network.DynamicNetwork;
+import ds.mapping.IdentifiableDoubleMapping;
+import ds.mapping.IdentifiableIntegerMapping;
 import ds.z.BuildingPlan;
 import ds.z.ConcreteAssignment;
 import ds.z.Person;
@@ -29,9 +28,6 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
-import de.tu_berlin.math.coga.common.util.Direction;
-import static de.tu_berlin.math.coga.common.util.Direction.*;
-import static de.tu_berlin.math.coga.common.util.Level.*;
 
 /**
  *

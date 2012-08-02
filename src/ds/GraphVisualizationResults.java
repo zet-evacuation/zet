@@ -30,6 +30,7 @@ import ds.graph.network.AbstractNetwork;
 import ds.mapping.IdentifiableIntegerMapping;
 import ds.mapping.IdentifiableObjectMapping;
 import java.util.ArrayList;
+import java.util.List;
 import opengl.framework.abs.VisualizationResult;
 
 /**
@@ -51,7 +52,7 @@ public class GraphVisualizationResults extends FlowVisualization implements Visu
 	private IdentifiableObjectMapping<Node, Boolean> isDeletedSourceNode;
 
 	public GraphVisualizationResults( double d ) {
-		super( null );
+		super( null ); // TODO
 	}
 	
 	public GraphVisualizationResults( EarliestArrivalFlowProblem earliestArrivalFlowProblem, IdentifiableIntegerMapping<Node> xPos, IdentifiableIntegerMapping<Node> yPos, PathBasedFlowOverTime flowOverTime ) {
@@ -85,6 +86,10 @@ public class GraphVisualizationResults extends FlowVisualization implements Visu
 //		this.isSourceNode = mapping.getIsSourceNode();
 		this.isDeletedSourceNode = mapping.getIsDeletedSourceNode();
 //		this.supersink = networkFlowModel.getSupersink();
+		
+		//List<Node> sinks = networkFlowModel.getSinks();
+		//this.setSinks( sinks );
+		this.setContainsSuperSink( true );
 //
 		this.floorToNodeMapping = new ArrayList<>();
 		

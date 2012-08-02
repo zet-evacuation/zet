@@ -53,7 +53,7 @@ public class GreedyAlgo extends Algorithm<MinSpanningTreeProblem,MinSpanningTree
     public MinSpanningTree runAlgorithm(MinSpanningTreeProblem minspan)
     {
         try{
-            OriginNetwork = minspan.getGraph();
+            OriginNetwork = minspan.getNetworkFlowModel();
             supersink = OriginNetwork.getSupersink();
             int numNodes = OriginNetwork.getGraph().numberOfNodes();
             TransitForEdge = OriginNetwork.getTransitTimes();
@@ -164,8 +164,8 @@ public class GreedyAlgo extends Algorithm<MinSpanningTreeProblem,MinSpanningTree
                     {
                         Edge edge = new Edge(NumEdges++,currentEdge.start(),currentEdge.end());
                         solEdges.add(edge);
-                        trans.add(edge, minspan.getGraph().getTransitTime(currentEdge) );
-                        cap.add(edge, minspan.getGraph().getEdgeCapacity(currentEdge));
+                        trans.add(edge, minspan.getNetworkFlowModel().getTransitTime(currentEdge) );
+                        cap.add(edge, minspan.getNetworkFlowModel().getEdgeCapacity(currentEdge));
                         used[edge.start().id()][edge.end().id()] = 1;
                         used[edge.end().id()][edge.start().id()] = 1;
                         count++;

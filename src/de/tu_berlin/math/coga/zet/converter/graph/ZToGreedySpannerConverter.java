@@ -52,7 +52,7 @@ public class ZToGreedySpannerConverter extends ZToNonGridGraphConverter{
                 model.setExactTransitTimes(exactTransitTimes);
 		createReverseEdges( model );
         	zzmodel.setNetwork( model.getGraph().getAsStaticNetwork() );
-                /*for (Edge e: model.getGraph().edges())
+                /*for (Edge e: model.getNetworkFlowModel().edges())
                 {
                     System.out.println("original edge: " + e);
                 }*/
@@ -131,7 +131,7 @@ public class ZToGreedySpannerConverter extends ZToNonGridGraphConverter{
                 createReverseEdges( minspanmodel );
                 minspanmodel.setNetwork(newgraph);
                 minspanmodel.setNetwork( minspanmodel.getGraph().getAsStaticNetwork());
-                /*for (Edge e: minspanmodel.getGraph().edges())
+                /*for (Edge e: minspanmodel.getNetworkFlowModel().edges())
                 {
                     System.out.println("Kante im Spanner: " + e);
                 }*/
