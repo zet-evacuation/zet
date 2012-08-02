@@ -4,9 +4,9 @@
  */
 package de.tu_berlin.math.coga.zet.converter.graph;
 
-import de.tu_berlin.math.coga.math.vectormath.Vector2;
 import Jama.EigenvalueDecomposition;
 import Jama.Matrix;
+import de.tu_berlin.math.coga.math.vectormath.Vector2;
 import ds.z.PlanPoint;
 import java.util.LinkedList;
 import java.util.List;

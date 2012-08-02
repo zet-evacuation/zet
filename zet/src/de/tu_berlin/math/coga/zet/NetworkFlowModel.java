@@ -119,8 +119,7 @@ public class NetworkFlowModel implements Iterable<Node> {
         if (edgeCapacities.isDefinedFor(edge)) {
             return edgeCapacities.get(edge);
         } else {
-            throw new IllegalArgumentException(DefaultLoc.getSingleton (
-			).getString ("ds.Graph.NoEdgeCapacityException"+edge+"."));
+            throw new IllegalArgumentException(DefaultLoc.getSingleton().getString ("ds.Graph.NoEdgeCapacityException"+edge+"."));
         }        
     }
     

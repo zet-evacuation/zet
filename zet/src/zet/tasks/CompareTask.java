@@ -12,9 +12,7 @@ import de.tu_berlin.math.coga.zet.NetworkFlowModel;
 import de.tu_berlin.math.coga.zet.converter.graph.BaseZToGraphConverter;
 import de.tu_berlin.math.coga.zet.converter.graph.GraphAssignmentConverter;
 import ds.CompareVisualizationResults;
-import ds.GraphVisualizationResults;
-import ds.PropertyContainer;
-import ds.graph.flow.PathBasedFlowOverTime;
+import ds.z.BuildingPlan;
 import ds.z.ConcreteAssignment;
 import ds.z.Project;
 
@@ -27,8 +25,8 @@ public class CompareTask extends Algorithm<Project, CompareVisualizationResults>
     NetworkFlowModel OrigNetwork;
     NetworkFlowModel ThinNetwork;
     GraphAlgorithmEnumeration algo;
-    BaseZToGraphConverter convOrig;
-    BaseZToGraphConverter convThinNet;
+    Algorithm<BuildingPlan,NetworkFlowModel> convOrig;
+    Algorithm<BuildingPlan,NetworkFlowModel> convThinNet;
     int TimeHorizonGlobal;
     
     public CompareTask (NetworkFlowModel OriginNetwork, NetworkFlowModel ThinNet, GraphAlgorithmEnumeration graphalgo, BaseZToGraphConverter ConvOrig, BaseZToGraphConverter ConvThin)
@@ -71,7 +69,7 @@ public class CompareTask extends Algorithm<Project, CompareVisualizationResults>
         
         //gets TimeHorizon for the Original Network
         LongestShortestPathTimeHorizonEstimator estimator = new LongestShortestPathTimeHorizonEstimator();
-        EarliestArrivalFlowProblem problem = new EarliestArrivalFlowProblem(OrigNetwork.getEdgeCapacities(), OrigNetwork.getNetwork(), OrigNetwork.getNodeCapacities() , OrigNetwork.getSupersink(), OrigNetwork.getSources(), 100, OrigNetwork.getTransitTimes(), OrigNetwork.getCurrentAssignment());
+        EarliestArrivalFlowProblem problem = new EarliestArrivalFlowProblem(OrigNetwork.edgeCapacities(), OrigNetwork.getNetwork(), OrigNetwork.getNodeCapacities() , OrigNetwork.getSupersink(), OrigNetwork.getSources(), 100, OrigNetwork.getTransitTimes(), OrigNetwork.getCurrentAssignment());
         estimator.setProblem(problem);
         estimator.run();
         System.out.println("Geschaetzte Loesung Original: " + estimator.getSolution());
@@ -131,11 +129,11 @@ public class CompareTask extends Algorithm<Project, CompareVisualizationResults>
     {
         this.ThinNetwork = Thin;
     }
-    public void setConvOriginal(BaseZToGraphConverter Orig)
+    public void setConvOriginal(Algorithm<BuildingPlan,NetworkFlowModel> Orig)
     {
         this.convOrig = Orig;
     }
-    public void setConvThinNet(BaseZToGraphConverter Thin)
+    public void setConvThinNet(Algorithm<BuildingPlan,NetworkFlowModel> Thin)
     {
         this.convThinNet = Thin;
     }

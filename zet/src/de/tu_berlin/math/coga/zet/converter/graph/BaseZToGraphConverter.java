@@ -71,7 +71,7 @@ public abstract class BaseZToGraphConverter extends Algorithm<BuildingPlan, Netw
 		createReverseEdges( model );
 	}
 
-	protected void createReverseEdges(NetworkFlowModel model ) {
+	public static void createReverseEdges(NetworkFlowModel model ) {
 		//int edgeIndex = numberOfEdges();
 		final int oldEdgeIndex = model.numberOfEdges();
 		model.setNumberOfEdges( model.numberOfEdges() * 2 - model.numberOfSinks() );
@@ -85,6 +85,7 @@ public abstract class BaseZToGraphConverter extends Algorithm<BuildingPlan, Netw
 		}
 	}
 
+	// TODO
 	protected void createReverseEdgesWithoutStairEdges( NetworkFlowModel model ) {
 		int edgeIndex = model.numberOfEdges();
 		final int oldEdgeIndex = edgeIndex;

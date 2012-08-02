@@ -51,7 +51,7 @@ public class ZToGridGraphConverter extends BaseZToGraphConverter {
 		ZToGraphMapping mappingLocal = model.getZToGraphMapping();
 
 		// List of sources according to isSource flag of squares
-		LinkedList<Node> sources = new LinkedList<>();
+		//LinkedList<Node> sources = new LinkedList<>();
 
 		// super sink
 		//Node supersink = new Node( 0 );
@@ -75,7 +75,7 @@ public class ZToGridGraphConverter extends BaseZToGraphConverter {
 			System.out.println();
 		}
 
-		int nodeCount = 1;
+		//int nodeCount = 1;
 
 		// iterate through all rooms and create a graph for each room
 		for( ZToGraphRoomRaster room : rasteredRooms ) {
@@ -109,7 +109,8 @@ public class ZToGridGraphConverter extends BaseZToGraphConverter {
 
 					if( square.isAccessible() && !square.isMarked() ) {
 
-						Node node = new Node( nodeCount );
+						//Node node = new Node( nodeCount );
+						Node node = model.newNode();
 						model.getZToGraphMapping().getNodeFloorMapping().set( node, getProblem().getFloorID( room.getFloor() ) );
 						model.getZToGraphMapping().setIsEvacuationNode( node, square.isExit() );
 						model.getZToGraphMapping().setIsSourceNode( node, square.isSource() );
@@ -128,7 +129,6 @@ public class ZToGridGraphConverter extends BaseZToGraphConverter {
 						int numOfSquares = 1;
 
 						graph.setNode( node );
-						nodeCount++;
 
 						// set the node of the current square to the new node
 						// and mark it as processed.
@@ -150,7 +150,8 @@ public class ZToGridGraphConverter extends BaseZToGraphConverter {
 						// save the number of the floor the node belongs to
 						mappingLocal.setFloorForNode( node, raster.getFloors().indexOf( room.getFloor() ) );
 						if( nodeIsSource )
-							sources.add( node );
+							//sources.add( node );
+							model.addSource( node );
 					}
 				}
 			if( progress )
@@ -209,7 +210,6 @@ public class ZToGridGraphConverter extends BaseZToGraphConverter {
 					boolean connectionPassable = (col != 0) && (!square.isBlocked( Left ));
 
 					if( nodesConnectable && connectionPassable ) {
-						//Edge edge = graph.getEdge( lastNode, node );
 						Edge edge = model.getEdge( lastNode, node );
 						if( edge == null ) {
 							edge = model.newEdge( lastNode, node );

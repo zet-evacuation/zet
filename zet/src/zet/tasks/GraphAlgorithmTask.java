@@ -8,12 +8,12 @@ import de.tu_berlin.math.coga.common.algorithm.Algorithm;
 import de.tu_berlin.math.coga.common.algorithm.AlgorithmEvent;
 import de.tu_berlin.math.coga.common.algorithm.AlgorithmListener;
 import de.tu_berlin.math.coga.zet.NetworkFlowModel;
-import de.tu_berlin.math.coga.zet.converter.graph.BaseZToGraphConverter;
 import de.tu_berlin.math.coga.zet.converter.graph.GraphAssignmentConverter;
-import de.tu_berlin.math.coga.zet.converter.graph.ZToSpanTreeConverter;
+import de.tu_berlin.math.coga.zet.converter.graph.ZToNonGridGraphConverter;
 import ds.GraphVisualizationResults;
 import ds.PropertyContainer;
 import ds.graph.flow.PathBasedFlowOverTime;
+import ds.z.BuildingPlan;
 import ds.z.ConcreteAssignment;
 import ds.z.Project;
 
@@ -25,7 +25,7 @@ public class GraphAlgorithmTask extends Algorithm<Project, GraphVisualizationRes
 
 	GraphAlgorithmEnumeration graphAlgorithm;
 	NetworkFlowModel networkFlowModel;
-	BaseZToGraphConverter conv = new ZToSpanTreeConverter();
+	Algorithm<BuildingPlan,NetworkFlowModel> conv = new ZToNonGridGraphConverter();
 
 	public GraphAlgorithmTask( GraphAlgorithmEnumeration graphAlgorithm ) {
 		this.graphAlgorithm = graphAlgorithm;
@@ -66,7 +66,7 @@ public class GraphAlgorithmTask extends Algorithm<Project, GraphVisualizationRes
 		return networkFlowModel;
 	}
 
-	public void setConv( BaseZToGraphConverter conv ) {
+	public void setConv( Algorithm<BuildingPlan,NetworkFlowModel> conv ) {
 		this.conv = conv;
 	}
 	

@@ -6,26 +6,23 @@ package de.tu_berlin.math.coga.zet.converter.graph;
 
 import algo.graph.reduction.MSTSteiner;
 import algo.graph.reduction.PrimsAlgo;
+import de.tu_berlin.math.coga.common.algorithm.Algorithm;
 import de.tu_berlin.math.coga.zet.NetworkFlowModel;
-import de.tu_berlin.math.coga.zet.converter.RasterContainerCreator;
-import ds.graph.network.DynamicNetwork;
+import ds.collection.ListSequence;
 import ds.graph.Edge;
 import ds.graph.IdentifiableCollection;
-import ds.mapping.IdentifiableIntegerMapping;
-import ds.collection.ListSequence;
 import ds.graph.MinSpanningTree;
 import ds.graph.MinSteinerTree;
-import ds.graph.network.AbstractNetwork;
 import ds.graph.Node;
 import ds.graph.NodeRectangle;
 import ds.graph.problem.MinSpanningTreeProblem;
-import ds.z.BuildingPlan;
+import ds.mapping.IdentifiableIntegerMapping;
 
 /**
  *
  * @author schwengf
  */
-public class ZToNonGridSteinerTreeConverter extends ZToNonGridGraphConverter{
+public class SteinerTreeShrinker extends Algorithm<NetworkFlowModel,NetworkFlowModel> {
     
     private NetworkFlowModel minspanmodel;
     public IdentifiableCollection<Node> SteinerNodes = new ListSequence<Node>();
@@ -41,39 +38,43 @@ public class ZToNonGridSteinerTreeConverter extends ZToNonGridGraphConverter{
    
     
     @Override
-    protected NetworkFlowModel runAlgorithm( BuildingPlan problem ) {
-		mapping = new ZToGraphMapping();
-                ZToGraphMapping newmapping = new ZToGraphMapping();
-		model = new NetworkFlowModel();
+    protected NetworkFlowModel runAlgorithm( NetworkFlowModel problem ) {
+			ZToGraphMapping originalMapping = problem.getZToGraphMapping();
+			ZToGraphMapping newMapping = new ZToGraphMapping();
                 
-		raster = RasterContainerCreator.getInstance().ZToGraphRasterContainer( problem );
-		mapping.setRaster( raster );
-		model.setZToGraphMapping( mapping );
-
-                //DynamicNetwork newgraph = new DynamicNetwork();
-                
-		super.createNodes();
-		super.createEdgesAndCapacities();
-		super.computeTransitTimes();
-		super.multiplyWithUpAndDownSpeedFactors();
-		//model.setTransitTimes( exactTransitTimes.round() );
-		model.roundTransitTimes();
-		createReverseEdges( model );
+		newMapping.setRaster( problem.getZToGraphMapping().getRaster() );
+//		mapping = new ZToGraphMapping();
+//                ZToGraphMapping newmapping = new ZToGraphMapping();
+//		model = new NetworkFlowModel();
+//                
+//		raster = RasterContainerCreator.getInstance().ZToGraphRasterContainer( problem );
+//		mapping.setRaster( raster );
+//		model.setZToGraphMapping( mapping );
+//
+//                //DynamicNetwork newgraph = new DynamicNetwork();
+//                
+//		super.createNodes();
+//		super.createEdgesAndCapacities();
+//		super.computeTransitTimes();
+//		super.multiplyWithUpAndDownSpeedFactors();
+//		//model.setTransitTimes( exactTransitTimes.round() );
+//		model.roundTransitTimes();
+//		createReverseEdges( model );
         	//model.setNetwork( model.getGraph().getAsStaticNetwork() );
-                System.out.println("number of edges of original graph:" + model.numberOfEdges());
+                System.out.println("number of edges of original graph:" + problem.numberOfEdges());
                
-                minspanmodel = new NetworkFlowModel( model );
+                minspanmodel = new NetworkFlowModel( problem );
                 //minspanmodel.setNetwork(newgraph);
                 //newgraph.setNodes(model.getGraph().nodes());
        
                 //minspanmodel.setSupersink(model.getSupersink());
                 Node Super = minspanmodel.getSupersink();
-                newmapping.setNodeSpeedFactor( Super, 1 );
-		newmapping.setNodeRectangle( Super, new NodeRectangle( 0, 0, 0, 0 ) );
-		newmapping.setFloorForNode( Super, -1 );
+                newMapping.setNodeSpeedFactor( Super, 1 );
+		newMapping.setNodeRectangle( Super, new NodeRectangle( 0, 0, 0, 0 ) );
+		newMapping.setFloorForNode( Super, -1 );
  
                 
-                minspanprob = new MinSpanningTreeProblem(model,model.transitTimes());
+                minspanprob = new MinSpanningTreeProblem(problem,problem.transitTimes());
               
                 
                 //using 
@@ -96,16 +97,16 @@ public class ZToNonGridSteinerTreeConverter extends ZToNonGridGraphConverter{
                 IdentifiableCollection<Node> NonMinNodes = new ListSequence();
                 int numberhidden = 0;
                 
-                for (Node node: model )
+                for (Node node: problem )
                 {
                     if (node.id()!= 0)
                     {
                         
-                        minspanmodel.setNodeCapacity(node, model.getNodeCapacity(node));
+                        minspanmodel.setNodeCapacity(node, problem.getNodeCapacity(node));
                         //newmapping.setNodeShape(node, mapping.getNodeShape(node));
-                        newmapping.setNodeSpeedFactor(node, mapping.getNodeSpeedFactor(node));
-                        newmapping.setNodeUpSpeedFactor(node, mapping.getUpNodeSpeedFactor(node));
-                        newmapping.setNodeDownSpeedFactor(node, mapping.getDownNodeSpeedFactor(node));  
+                        newMapping.setNodeSpeedFactor(node, originalMapping.getNodeSpeedFactor(node));
+                        newMapping.setNodeUpSpeedFactor(node, originalMapping.getUpNodeSpeedFactor(node));
+                        newMapping.setNodeDownSpeedFactor(node, originalMapping.getDownNodeSpeedFactor(node));  
                         if (MinNodes.contains(node))
                     {
                         //netw.setHiddenOnlyNode(node, false);
@@ -134,11 +135,11 @@ public class ZToNonGridSteinerTreeConverter extends ZToNonGridGraphConverter{
                 //creates edges of new graph
                  for (Edge neu: MinEdges)
                 {
-									minspanmodel.addEdge( neu, model.getEdgeCapacity( neu ), model.getTransitTime( neu ), model.getExactTransitTime( neu ) );
+									minspanmodel.addEdge( neu, problem.getEdgeCapacity( neu ), problem.getTransitTime( neu ), problem.getExactTransitTime( neu ) );
 //                    newgraph.addEdge(neu);
 //                    minspanmodel.setEdgeCapacity(neu, model.getEdgeCapacity(neu));                   
 //                    minspanmodel.setTransitTime(neu, model.getTransitTime(neu));
-                    newmapping.setEdgeLevel(neu, mapping.getEdgeLevel(neu));                 
+                    newMapping.setEdgeLevel(neu, originalMapping.getEdgeLevel(neu));                 
 //                    minspanmodel.setExactTransitTime(neu, model.getExactTransitTime(neu));
                 }
                    
@@ -148,17 +149,17 @@ public class ZToNonGridSteinerTreeConverter extends ZToNonGridGraphConverter{
                 //minspanmodel.setSources(model.getSources());
                  
                  //values from mapping of original network 
-                 newmapping.raster = mapping.getRaster();
-                 newmapping.nodeRectangles = mapping.getNodeRectangles();
-                 newmapping.nodeFloorMapping = mapping.getNodeFloorMapping();
-                 newmapping.isEvacuationNode = mapping.isEvacuationNode;
-                 newmapping.isSourceNode = mapping.isSourceNode;
-                 newmapping.isDeletedSourceNode = mapping.isDeletedSourceNode;
-                 newmapping.exitName = mapping.exitName;
+                 newMapping.raster = originalMapping.getRaster();
+                 newMapping.nodeRectangles = originalMapping.getNodeRectangles();
+                 newMapping.nodeFloorMapping = originalMapping.getNodeFloorMapping();
+                 newMapping.isEvacuationNode = originalMapping.isEvacuationNode;
+                 newMapping.isSourceNode = originalMapping.isSourceNode;
+                 newMapping.isDeletedSourceNode = originalMapping.isDeletedSourceNode;
+                 newMapping.exitName = originalMapping.exitName;
                  
-                minspanmodel.setZToGraphMapping(newmapping);   
+                minspanmodel.setZToGraphMapping(newMapping);   
                 //minspanmodel.setSupersink(model.getSupersink());
-                createReverseEdges( minspanmodel );
+                BaseZToGraphConverter.createReverseEdges( minspanmodel );
                 
                 //minspanmodel.setNetwork(newgraph);
                 //minspanmodel.setNetwork( minspanmodel.getNetworkFlowModel().getAsStaticNetwork());
