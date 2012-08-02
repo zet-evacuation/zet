@@ -190,9 +190,9 @@ public class YenDijkstra
 				vertex_list.add(cur_vertex);
                                 Node n = cur_vertex;
 				cur_vertex = _predecessor_index.get(cur_vertex);
-                                if (orig_graph.getEdgeCapacity(orig_graph.getGraph().getEdge(cur_vertex, n)) < Min)
+                                if (orig_graph.getEdgeCapacity(orig_graph.getEdge(cur_vertex, n)) < Min)
                                 {
-                                    Min = orig_graph.getEdgeCapacity(orig_graph.getGraph().getEdge(n, cur_vertex));
+                                    Min = orig_graph.getEdgeCapacity(orig_graph.getEdge(n, cur_vertex));
                                 }
 			}while(cur_vertex != null && cur_vertex != source_vertex);
 			//
@@ -232,7 +232,7 @@ public class YenDijkstra
 					_start_vertex_distance_index.get(cur_vertex) : Double.MAX_VALUE;
 	
 			// 3.2 calculate the distance from the root to the input vertex
-			distance += costs.get(orig_graph.getGraph().getEdge(vertex, cur_vertex));
+			distance += costs.get(orig_graph.getEdge(vertex, cur_vertex));
 			//distance += ((VariableGraph)_graph).get_edge_weight_of_graph(vertex, cur_vertex);
 			
 			// 3.3 update the distance if necessary 

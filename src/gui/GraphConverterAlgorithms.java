@@ -24,7 +24,7 @@ import de.tu_berlin.math.coga.zet.converter.graph.ZToNonGridGraphConverter;
 import de.tu_berlin.math.coga.zet.converter.graph.ZToNonGridShortestPathGraphConverter;
 import de.tu_berlin.math.coga.zet.converter.graph.ZToNonGridSteinerTreeConverter;
 import de.tu_berlin.math.coga.zet.converter.graph.ZToSpanTreeConverter;
-import de.tu_berlin.math.coga.zet.converter.graph.ZtoGridShortestPathGraphConverter;
+import de.tu_berlin.math.coga.zet.converter.graph.ZToGridShortestPathGraphConverter;
 import de.tu_berlin.math.coga.zet.converter.graph.ZToNonGridShortestPathsConverter;
 import de.tu_berlin.math.coga.zet.converter.graph.ZToThinNetworkConverter;
 /**
@@ -64,7 +64,7 @@ public enum GraphConverterAlgorithms {
 			case ShortestPathGraphNonGrid:
 				return new ZToNonGridShortestPathGraphConverter();
 			case ShortestPathGraphGrid:
-				return new ZtoGridShortestPathGraphConverter();
+				return new ZToGridShortestPathGraphConverter();
 			case APSPGraphNonGrid:
 				return new ZToNonGridAPSPGraphConverter();
 			case RepeatedShortestPaths:
