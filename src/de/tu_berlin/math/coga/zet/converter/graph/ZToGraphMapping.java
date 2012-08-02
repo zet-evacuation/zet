@@ -185,8 +185,7 @@ public class ZToGraphMapping {
         if (nodeSpeedFactors.isDefinedFor(node)) {
             return nodeSpeedFactors.get(node);
         } else {
-            throw new IllegalArgumentException(DefaultLoc.getSingleton (
-			).getString ("converter.NodeSpeedNotDefinedException"+" ("+node+")"));
+            throw new IllegalArgumentException(DefaultLoc.getSingleton ().getString ("converter.NodeSpeedNotDefinedException"+" ("+node+")") );
         }
     }    
     

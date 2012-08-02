@@ -6,6 +6,7 @@ package gui;
 
 import algo.ca.algorithm.evac.EvacuationCellularAutomatonAlgorithm;
 import algo.ca.algorithm.evac.EvacuationSimulationProblem;
+import de.tu_berlin.math.coga.common.algorithm.Algorithm;
 import de.tu_berlin.math.coga.common.algorithm.AlgorithmListener;
 import de.tu_berlin.math.coga.common.util.Formatter;
 import de.tu_berlin.math.coga.common.util.Formatter.TimeUnits;
@@ -17,12 +18,12 @@ import de.tu_berlin.math.coga.zet.converter.cellularAutomaton.ZToCAConverter;
 import de.tu_berlin.math.coga.zet.converter.cellularAutomaton.ZToCAConverter.ConversionNotSupportedException;
 import de.tu_berlin.math.coga.zet.converter.cellularAutomaton.ZToCAMapping;
 import de.tu_berlin.math.coga.zet.converter.cellularAutomaton.ZToCARasterContainer;
-import de.tu_berlin.math.coga.zet.converter.graph.BaseZToGraphConverter;
 import ds.CompareVisualizationResults;
 import ds.GraphVisualizationResults;
 import ds.PropertyContainer;
 import ds.ca.evac.EvacuationCellularAutomaton;
 import ds.z.AssignmentType;
+import ds.z.BuildingPlan;
 import ds.z.ConcreteAssignment;
 import ds.z.Project;
 import io.visualization.BuildingResults;
@@ -309,7 +310,7 @@ public class AlgorithmControl implements PropertyChangeListener {
 	}
 
 	public void convertGraph() {
-		convertGraph( null, GraphConverterAlgorithms.GreedyTSpannerNonGrid );
+		convertGraph( null, GraphConverterAlgorithms.NonGridGraph );
 	}
 
 	GraphConverterAlgorithms last = GraphConverterAlgorithms.NonGridGraph;
@@ -320,7 +321,7 @@ public class AlgorithmControl implements PropertyChangeListener {
 			project.getBuildingPlan().rasterize();
 			System.out.println( " done." );
 		}
-		final BaseZToGraphConverter conv = Algo.converter();
+		final Algorithm<BuildingPlan,NetworkFlowModel> conv = Algo.converter();
 		last = Algo;
 		conv.setProblem( project.getBuildingPlan() );
 		final SerialTask st = new SerialTask( conv );

@@ -84,6 +84,7 @@ public class MSTSteiner extends Algorithm<MinSpanningTreeProblem,MinSteinerTree>
         ShortestPaths = new Path[numNodes][numNodes];
         shortestpathdist = new IdentifiableIntegerMapping<Edge>(OriginNetwork.numberOfEdges());
         
+
         //gives a network connecting the source and evacutaion nodes with shortest path edges...
         while (!SteinerNodes.empty())
         {
@@ -95,7 +96,8 @@ public class MSTSteiner extends Algorithm<MinSpanningTreeProblem,MinSteinerTree>
             for (Node restnode: SteinerNodes)
             {    
                 int dist = dijkstra.getDistance(restnode);
-                edge = new Edge(NumEdges++, node, restnode); 
+                
+								edge = new Edge(NumEdges++, node, restnode); 
                 firstnet.addEdge(edge); 
                 //weight of edge is shortest distance (using Dijkstra)
                 shortestpathdist.set(edge, dist);
@@ -107,7 +109,6 @@ public class MSTSteiner extends Algorithm<MinSpanningTreeProblem,MinSteinerTree>
             
          }
         System.out.println("Dijkstra done");
-        
         
         /*for (Node node: firstnet.nodes())
         {
@@ -126,7 +127,7 @@ public class MSTSteiner extends Algorithm<MinSpanningTreeProblem,MinSteinerTree>
         prim.run();
         NetworkMST solv = prim.getSolution();
         IdentifiableCollection<Edge> MSTEdges = solv.getEdges();
-        
+				
         for (Edge mst: MSTEdges)
         {
             count = 0;
@@ -161,6 +162,7 @@ public class MSTSteiner extends Algorithm<MinSpanningTreeProblem,MinSteinerTree>
                 for (Edge sptedge : PathEdges)
                 {
                     Edge insert = new Edge(Num++, sptedge.start(), sptedge.end());
+										
                     solutionEdges.add(insert);
                     //solutionEdges.add(sptedge);
                     if (!solNodes.contains(sptedge.start()))
@@ -178,17 +180,25 @@ public class MSTSteiner extends Algorithm<MinSpanningTreeProblem,MinSteinerTree>
                 for (Edge sptedge : PathEdges)
                 {
                     if (!solutionEdges.contains(edge))
-                    {
-                        Edge insert = new Edge(Num++, sptedge.start(), sptedge.end());
-                        solutionEdges.add(insert);
-                        if (!solNodes.contains(sptedge.start()))
-                        {
-                            solNodes.add(sptedge.start());                                                    
-                        }
-                        if (!solNodes.contains(sptedge.end()))
-                        {
-                            solNodes.add(sptedge.start());
-                        }  
+										{
+									for( Edge e : solutionEdges ) {
+										if( e.start().equals( sptedge.start() ) && e.end().equals( sptedge.end() ) ) {
+											//System.out.println( "We are to insert an edge twice (in the second loop)" );
+										} else {
+											Edge insert = new Edge(Num++, sptedge.start(), sptedge.end());
+														solutionEdges.add(insert);
+														if (!solNodes.contains(sptedge.start()))
+														{
+																solNodes.add(sptedge.start());                                                    
+														}
+														if (!solNodes.contains(sptedge.end()))
+														{
+																solNodes.add(sptedge.start());
+														}  
+											
+										}
+									}
+
                           
                     }
                 }

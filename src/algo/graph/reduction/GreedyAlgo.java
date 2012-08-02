@@ -4,18 +4,23 @@
  */
 package algo.graph.reduction;
 import algo.graph.shortestpath.Dijkstra;
-import de.tu_berlin.math.coga.common.algorithm.Algorithm; 
+import de.tu_berlin.math.coga.common.algorithm.Algorithm;
 import de.tu_berlin.math.coga.zet.NetworkFlowModel;
+import ds.collection.ListSequence;
 import ds.graph.Edge;
 import ds.graph.IdentifiableCollection;
-import ds.mapping.IdentifiableIntegerMapping;
-import ds.collection.ListSequence;
 import ds.graph.MinSpanningTree;
-import ds.graph.network.AbstractNetwork;
 import ds.graph.Node;
+import ds.graph.network.AbstractNetwork;
 import ds.graph.network.Network;
 import ds.graph.problem.MinSpanningTreeProblem;
-import java.util.*;
+import ds.mapping.IdentifiableIntegerMapping;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.List;
+
 
 /**
  *
@@ -55,13 +60,13 @@ public class GreedyAlgo extends Algorithm<MinSpanningTreeProblem,MinSpanningTree
         try{
             OriginNetwork = minspan.getNetworkFlowModel();
             supersink = OriginNetwork.getSupersink();
-            int numNodes = OriginNetwork.getGraph().numberOfNodes();
-            TransitForEdge = OriginNetwork.getTransitTimes();
-            capForEdge = OriginNetwork.getEdgeCapacities();
-            currentTransitForEdge = new IdentifiableIntegerMapping<>(OriginNetwork.getGraph().numberOfEdges());
-            currentCapForEdge = new IdentifiableIntegerMapping<>(OriginNetwork.getGraph().numberOfEdges());
+            int numNodes = OriginNetwork.numberOfNodes();
+            TransitForEdge = OriginNetwork.transitTimes();
+            capForEdge = OriginNetwork.edgeCapacities();
+            currentTransitForEdge = new IdentifiableIntegerMapping<>(OriginNetwork.numberOfEdges());
+            currentCapForEdge = new IdentifiableIntegerMapping<>(OriginNetwork.numberOfEdges());
 
-            for (Edge edge: OriginNetwork.getGraph().edges())
+            for (Edge edge: OriginNetwork.graph().edges())
             {
                 if ((edge.start() != supersink) && (edge.end()!= supersink) )
                 {
@@ -103,12 +108,12 @@ public class GreedyAlgo extends Algorithm<MinSpanningTreeProblem,MinSpanningTree
                 System.out.println("Kante: " + sortededges.get(k) + "für Transitzeit: " + OriginNetwork.getExactTransitTime(sortededges.get(k)));               
             }*/
             
-            network = new Network(OriginNetwork.getGraph().numberOfNodes(), OriginNetwork.getGraph().numberOfEdges());
-            for (Node node: OriginNetwork.getGraph().nodes())
+            network = new Network(OriginNetwork.numberOfNodes(), OriginNetwork.numberOfEdges());
+            for (Node node: OriginNetwork )
             {
                 network.setNode(node);
             }
-            network.setEdges(OriginNetwork.getGraph().edges());
+            network.setEdges(OriginNetwork.graph().edges());
             //Array stores if nodes in a certain combination are already used as an edge
             used = new int[numNodes][numNodes];
             for (int i=0; i< numNodes; i++)
@@ -177,7 +182,7 @@ public class GreedyAlgo extends Algorithm<MinSpanningTreeProblem,MinSpanningTree
                   
             }
             
-        IdentifiableCollection<Edge> addEdges = OriginNetwork.getGraph().incidentEdges(supersink);
+        IdentifiableCollection<Edge> addEdges = OriginNetwork.graph().incidentEdges(supersink);
         for (Edge edge: addEdges)
         {
             supersinkedge = new Edge(NumEdges++, edge.start(), edge.end());

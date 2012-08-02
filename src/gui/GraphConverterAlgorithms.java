@@ -9,24 +9,24 @@
  */
 package gui;
 
-import de.tu_berlin.math.coga.zet.converter.graph.BaseZToGraphConverter;
+import de.tu_berlin.math.coga.common.algorithm.Algorithm;
+import de.tu_berlin.math.coga.zet.NetworkFlowModel;
+import de.tu_berlin.math.coga.zet.converter.graph.GraphShrinker;
+import de.tu_berlin.math.coga.zet.converter.graph.GreedySpannerShrinker;
+import de.tu_berlin.math.coga.zet.converter.graph.SpanningTreeShrinker;
+import de.tu_berlin.math.coga.zet.converter.graph.SteinerTreeShrinker;
 import de.tu_berlin.math.coga.zet.converter.graph.ZToDijkstraSpannerConverter;
-import de.tu_berlin.math.coga.zet.converter.graph.ZToGreedySpannerConverter;
 import de.tu_berlin.math.coga.zet.converter.graph.ZToGridClusterConverter;
 import de.tu_berlin.math.coga.zet.converter.graph.ZToGridDijkstraConverter;
 import de.tu_berlin.math.coga.zet.converter.graph.ZToGridGraphConverter;
-import de.tu_berlin.math.coga.zet.converter.graph.ZToGridGreedyConverter;
-import de.tu_berlin.math.coga.zet.converter.graph.ZToGridSpanTreeConverter;
-import de.tu_berlin.math.coga.zet.converter.graph.ZToGridSteinerTreeConverter;
+import de.tu_berlin.math.coga.zet.converter.graph.ZToGridShortestPathGraphConverter;
 import de.tu_berlin.math.coga.zet.converter.graph.ZToNonGridAPSPGraphConverter;
 import de.tu_berlin.math.coga.zet.converter.graph.ZToNonGridClusterConverter;
 import de.tu_berlin.math.coga.zet.converter.graph.ZToNonGridGraphConverter;
 import de.tu_berlin.math.coga.zet.converter.graph.ZToNonGridShortestPathGraphConverter;
-import de.tu_berlin.math.coga.zet.converter.graph.ZToNonGridSteinerTreeConverter;
-import de.tu_berlin.math.coga.zet.converter.graph.ZToSpanTreeConverter;
-import de.tu_berlin.math.coga.zet.converter.graph.ZToGridShortestPathGraphConverter;
 import de.tu_berlin.math.coga.zet.converter.graph.ZToNonGridShortestPathsConverter;
 import de.tu_berlin.math.coga.zet.converter.graph.ZToThinNetworkConverter;
+import ds.z.BuildingPlan;
 /**
  * An enumeration of the different converter algorithms for graphs. They provide
  * methods to retrieve the converting algorithm objects.
@@ -35,28 +35,30 @@ import de.tu_berlin.math.coga.zet.converter.graph.ZToThinNetworkConverter;
 public enum GraphConverterAlgorithms {
 	GridGraph, NonGridGraph, MinSpanningTreeGrid, MinSpanningTreeNonGrid, GreedyTSpannerGrid, GreedyTSpannerNonGrid, DijkstraNonGrid, DijkstraGrid, SteinerTreeNonGrid, SteinerTreeGrid, ClusterGrid, ClusterNonGrid, ShortestPathGraphNonGrid, ShortestPathGraphGrid, APSPGraphNonGrid, RepeatedShortestPaths, ThinNetwork;
 
-	public BaseZToGraphConverter converter() {
+	public Algorithm<BuildingPlan,NetworkFlowModel> converter() {
 		switch( this ) {
 			case GridGraph:
 				return new ZToGridGraphConverter();
 			case NonGridGraph:
 				return new ZToNonGridGraphConverter();
-			case MinSpanningTreeGrid:
-				return new ZToGridSpanTreeConverter();
 			case MinSpanningTreeNonGrid:
-				return new ZToSpanTreeConverter();
+				return new GraphShrinker( new ZToNonGridGraphConverter(), new SpanningTreeShrinker() );
+			case MinSpanningTreeGrid:
+				return new GraphShrinker( new ZToGridGraphConverter(), new SpanningTreeShrinker() );
 			case GreedyTSpannerNonGrid:
-				return new ZToGreedySpannerConverter();
+				return new GraphShrinker( new ZToNonGridGraphConverter(), new GreedySpannerShrinker() );
 			case GreedyTSpannerGrid:
-				return new ZToGridGreedyConverter();
+				return new GraphShrinker( new ZToGridGraphConverter(), new GreedySpannerShrinker() );
 			case DijkstraNonGrid:
 				return new ZToDijkstraSpannerConverter();
 			case DijkstraGrid:
 				return new ZToGridDijkstraConverter();
 			case SteinerTreeNonGrid:
-				return new ZToNonGridSteinerTreeConverter();
+				return new GraphShrinker( new ZToNonGridGraphConverter(), new SteinerTreeShrinker() );
+				//return new SteinerTreeShrinker();
 			case SteinerTreeGrid:
-				return new ZToGridSteinerTreeConverter();
+				return new GraphShrinker( new ZToGridGraphConverter(), new SteinerTreeShrinker() );
+//				return new ZToGridSteinerTreeConverter();
 			case ClusterNonGrid:
 				return new ZToNonGridClusterConverter();
 			case ClusterGrid:
