@@ -31,9 +31,10 @@ import com.martiansoftware.jsap.Switch;
 import com.martiansoftware.jsap.UnflaggedOption;
 import com.thoughtworks.xstream.XStream;
 import com.thoughtworks.xstream.annotations.Annotations;
-import de.tu_berlin.math.coga.common.debug.DebugStream;
-import de.tu_berlin.math.coga.common.debug.DebugStreamVerbose;
+import de.tu_berlin.math.coga.common.debug.Debug;
 import de.tu_berlin.math.coga.common.debug.Log;
+import de.tu_berlin.math.coga.common.debug.SimpleFileHandler;
+import de.tu_berlin.math.coga.common.debug.SimpleLogFormatter;
 import de.tu_berlin.math.coga.common.localization.Localization;
 import de.tu_berlin.math.coga.common.util.IOTools;
 import ds.PropertyContainer;
@@ -44,12 +45,12 @@ import gui.editor.properties.PropertyLoadException;
 import gui.propertysheet.PropertyTreeModel;
 import java.io.File;
 import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.IOException;
-import java.io.PrintStream;
 import java.nio.file.Paths;
 import java.util.Calendar;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
 import zet.gui.GUILocalization;
@@ -388,40 +389,66 @@ public class ZETMain {
 	 * @param verbose indicates whether the default output is also used, or not
 	 */
 	public static void setUpLog( boolean log, boolean err, boolean auto, boolean verbose ) {
-		log = true;
-		err = true;
-		PrintStream errStream = System.err;
-		PrintStream logStream = System.out;
-		Calendar cal = Calendar.getInstance();
-		if( auto ) {
-			logFile = "zet_";
-			errFile = "zet_";
-			logFile += cal.get( Calendar.YEAR ) + "-" + IOTools.fillLeadingZeros( cal.get( Calendar.MONTH )+1, 2 ) + "-" + IOTools.fillLeadingZeros( cal.get( Calendar.DAY_OF_MONTH ), 2 ) + "_" + IOTools.fillLeadingZeros( cal.get( Calendar.HOUR_OF_DAY ), 2 ) + "-" + IOTools.fillLeadingZeros( cal.get( Calendar.MINUTE ), 2 ) + "-" + IOTools.fillLeadingZeros( cal.get( Calendar.SECOND ), 2 ) + ".log";
-			errFile += cal.get( Calendar.YEAR ) + "-" + IOTools.fillLeadingZeros( cal.get( Calendar.MONTH )+1, 2 ) + "-" + IOTools.fillLeadingZeros( cal.get( Calendar.DAY_OF_MONTH ), 2 ) + "_" + IOTools.fillLeadingZeros( cal.get( Calendar.HOUR_OF_DAY ), 2 ) + "-" + IOTools.fillLeadingZeros( cal.get( Calendar.MINUTE ), 2 ) + "-" + IOTools.fillLeadingZeros( cal.get( Calendar.SECOND ), 2 ) + "_err.log";
+		try {
+			Debug.setUpLogging();
+			
+			Logger l = Debug.globalLogger;
+
+			SimpleFileHandler logFileHandler = null;
+			
 			log = true;
 			err = true;
-		}
-		if( log )
-			try {
-				logStream = verbose ? new DebugStreamVerbose( new FileOutputStream( logFile ), System.out ) : new DebugStream( new FileOutputStream( logFile ) );
-			} catch( FileNotFoundException ex ) {
-				System.err.println( "Error creating debug out." );
+	//		PrintStream errStream = System.err;
+	//		PrintStream logStream = System.out;
+			Calendar cal = Calendar.getInstance();
+			if( auto ) {
+				logFile = "zet_";
+				errFile = "zet_";
+				logFile += cal.get( Calendar.YEAR ) + "-" + IOTools.fillLeadingZeros( cal.get( Calendar.MONTH )+1, 2 ) + "-" + IOTools.fillLeadingZeros( cal.get( Calendar.DAY_OF_MONTH ), 2 ) + "_" + IOTools.fillLeadingZeros( cal.get( Calendar.HOUR_OF_DAY ), 2 ) + "-" + IOTools.fillLeadingZeros( cal.get( Calendar.MINUTE ), 2 ) + "-" + IOTools.fillLeadingZeros( cal.get( Calendar.SECOND ), 2 ) + ".log";
+				errFile += cal.get( Calendar.YEAR ) + "-" + IOTools.fillLeadingZeros( cal.get( Calendar.MONTH )+1, 2 ) + "-" + IOTools.fillLeadingZeros( cal.get( Calendar.DAY_OF_MONTH ), 2 ) + "_" + IOTools.fillLeadingZeros( cal.get( Calendar.HOUR_OF_DAY ), 2 ) + "-" + IOTools.fillLeadingZeros( cal.get( Calendar.MINUTE ), 2 ) + "-" + IOTools.fillLeadingZeros( cal.get( Calendar.SECOND ), 2 ) + "_err.log";
+				log = true;
+				err = true;
 			}
-		if( err )
-			if( log && logFile.equals( errFile ) )
-				errStream = logStream;
-			else
+			if( log )
 				try {
-					errStream = verbose ? new DebugStreamVerbose( new FileOutputStream( errFile ), System.err, MessageType.LogError ): new DebugStream( new FileOutputStream( errFile ), MessageType.LogError );
-				} catch( FileNotFoundException ex ) {
-					System.err.println( "Error creating debug error out." );
+					//logStream = verbose ? new DebugStreamVerbose( new FileOutputStream( logFile ), System.out ) : new DebugStream( new FileOutputStream( logFile ) );
+					logFileHandler = new SimpleFileHandler( logFile );
+					logFileHandler.setFormatter( new SimpleLogFormatter() );
+					l.addHandler( logFileHandler );
+
+					logFileHandler.setMinLevel( Level.ALL );
+					logFileHandler.setErrLevel( Level.INFO );
+
+				} catch( Exception ex ) {
+					System.err.println( "Error creating debug out." );
 				}
-		System.setOut( logStream );
-		System.setErr( errStream );
-		if( log )
-			System.out.println( "Log of " + cal.get( Calendar.YEAR ) + "-" + IOTools.fillLeadingZeros( cal.get( Calendar.MONTH )+1, 2 ) + "-" + IOTools.fillLeadingZeros( cal.get( Calendar.DAY_OF_MONTH ), 2 ) + " " + IOTools.fillLeadingZeros( cal.get( Calendar.HOUR_OF_DAY ), 2 ) + "-" + IOTools.fillLeadingZeros( cal.get( Calendar.MINUTE ), 2 ) + "-" + IOTools.fillLeadingZeros( cal.get( Calendar.SECOND ), 2 ) );
-		if( log && !logFile.equals( errFile ) )
-			System.err.println( "Error log of " + cal.get( Calendar.YEAR ) + "-" + IOTools.fillLeadingZeros( cal.get( Calendar.MONTH )+1, 2 ) + "-" + IOTools.fillLeadingZeros( cal.get( Calendar.DAY_OF_MONTH ), 2 ) + " " + IOTools.fillLeadingZeros( cal.get( Calendar.HOUR_OF_DAY ), 2 ) + "-" + IOTools.fillLeadingZeros( cal.get( Calendar.MINUTE ), 2 ) + "-" + IOTools.fillLeadingZeros( cal.get( Calendar.SECOND ), 2 ) );
+			if( err )
+				if( log && logFile.equals( errFile ) )
+					//errStream = logStream;
+					logFileHandler.setErrLevel( Level.SEVERE );
+				else
+					try {
+						//errStream = verbose ? new DebugStreamVerbose( new FileOutputStream( errFile ), System.err, MessageType.LogError ): new DebugStream( new FileOutputStream( errFile ), MessageType.LogError );
+						SimpleFileHandler errFileHandler = new SimpleFileHandler( errFile );
+						errFileHandler.setFormatter( new SimpleLogFormatter() );
+						l.addHandler( errFileHandler );
+
+						errFileHandler.setMinLevel( Level.WARNING );
+						errFileHandler.setErrLevel( Level.SEVERE );
+					} catch( FileNotFoundException ex ) {
+						System.err.println( "Error creating debug error out." );
+					}
+	//		System.setOut( logStream );
+	//		System.setErr( errStream );
+			if( log )
+				l.info( "Log of " + cal.get( Calendar.YEAR ) + "-" + IOTools.fillLeadingZeros( cal.get( Calendar.MONTH )+1, 2 ) + "-" + IOTools.fillLeadingZeros( cal.get( Calendar.DAY_OF_MONTH ), 2 ) + " " + IOTools.fillLeadingZeros( cal.get( Calendar.HOUR_OF_DAY ), 2 ) + "-" + IOTools.fillLeadingZeros( cal.get( Calendar.MINUTE ), 2 ) + "-" + IOTools.fillLeadingZeros( cal.get( Calendar.SECOND ), 2 ) );
+			if( log && !logFile.equals( errFile ) )
+				l.severe( "Error log of " + cal.get( Calendar.YEAR ) + "-" + IOTools.fillLeadingZeros( cal.get( Calendar.MONTH )+1, 2 ) + "-" + IOTools.fillLeadingZeros( cal.get( Calendar.DAY_OF_MONTH ), 2 ) + " " + IOTools.fillLeadingZeros( cal.get( Calendar.HOUR_OF_DAY ), 2 ) + "-" + IOTools.fillLeadingZeros( cal.get( Calendar.MINUTE ), 2 ) + "-" + IOTools.fillLeadingZeros( cal.get( Calendar.SECOND ), 2 ) );
+		} catch( IOException ex ) {
+			Logger.getLogger( ZETMain.class.getName() ).log( Level.SEVERE, null, ex );
+		} catch( SecurityException ex ) {
+			Logger.getLogger( ZETMain.class.getName() ).log( Level.SEVERE, null, ex );
+		}
 	}
 
 	/**

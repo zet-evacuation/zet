@@ -14,6 +14,7 @@ import de.tu_berlin.math.coga.common.algorithm.Algorithm;
 import de.tu_berlin.math.coga.common.algorithm.AlgorithmEvent;
 import de.tu_berlin.math.coga.common.algorithm.AlgorithmListener;
 import de.tu_berlin.math.coga.common.algorithm.AlgorithmProgressEvent;
+import de.tu_berlin.math.coga.common.debug.Debug;
 import de.tu_berlin.math.coga.common.util.IOTools;
 import de.tu_berlin.math.coga.components.JVideoOptionsDialog;
 import de.tu_berlin.math.coga.zet.NetworkFlowModel;
@@ -1164,14 +1165,20 @@ public class GUIControl implements AlgorithmListener {
 			@Override
 			public void propertyChange( PropertyChangeEvent pce ) {
 				if( isDone( pce ) ) {
-					System.out.println( "Left individuals: " + algorithmControl.getCellularAutomaton().getIndividualCount() );
-					visualization.getControl().setCellularAutomatonControl( algorithmControl.getCaVisResults(), algorithmControl.getCellularAutomaton() );
-					editor.getVisualizationView().updatePotentialSelector();
-					visualizationToolBar.setEnabledPlayback( true );
-					editor.getQuickVisualizationView().getLeftPanel().getMainComponent().setSimulationData( algorithmControl.getCellularAutomaton(), algorithmControl.getContainer(), algorithmControl.getMapping() );
-					editor.getQuickVisualizationView().displayFloor( editview.getCurrentFloor() ); // hier startet ein task!
-					ZETMain.sendMessage( "Simulation beendet" );
-					//EventServer.getInstance().dispatchEvent( new MessageEvent<>( this, MessageType.Status, "Simulation finished" ) );
+					if( algorithmControl.isError() ) {
+						Debug.globalLogger.log( Level.SEVERE, "Exception in execution", algorithmControl.getError() );
+						//Debug.printException( algorithmControl.getError() );
+						algorithmControl.getError().printStackTrace();
+					} else {
+						System.out.println( "Left individuals: " + algorithmControl.getCellularAutomaton().getIndividualCount() );
+						visualization.getControl().setCellularAutomatonControl( algorithmControl.getCaVisResults(), algorithmControl.getCellularAutomaton() );
+						editor.getVisualizationView().updatePotentialSelector();
+						visualizationToolBar.setEnabledPlayback( true );
+						editor.getQuickVisualizationView().getLeftPanel().getMainComponent().setSimulationData( algorithmControl.getCellularAutomaton(), algorithmControl.getContainer(), algorithmControl.getMapping() );
+						editor.getQuickVisualizationView().displayFloor( editview.getCurrentFloor() ); // hier startet ein task!
+						ZETMain.sendMessage( "Simulation beendet" );
+						//EventServer.getInstance().dispatchEvent( new MessageEvent<>( this, MessageType.Status, "Simulation finished" ) );
+					}
 				}
 			}
 		}, this );

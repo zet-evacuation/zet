@@ -18,15 +18,15 @@ import javax.swing.JOptionPane;
 public class Debug {
 
 	private static Level defaultLogLevel = Level.CONFIG;
-	private static Handler handler = new SysoutHandler();
+	private static Handler handler = new SimpleSysoutHandler();
 	public final static Logger globalLogger = Logger.getGlobal();
 	static {
 		setUpLogging();
-		handler.setFormatter( new SysoutFormatter() );
+		handler.setFormatter( new SimpleLogFormatter() );
 	}
 	/**
 	 * Sets up the logging system in the following way: all loggers of the
-	 * RootLogger and the global logger are removed. Then, a {@link SysoutHandler}
+	 * RootLogger and the global logger are removed. Then, a {@link SimpleSysoutHandler}
 	 * is added as handler to the default logger. The levels of both, the logger
 	 * and handler, are set to the default log level that is returned by
 	 * {@link #getDefaultLogLevel() }.
