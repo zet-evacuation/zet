@@ -181,6 +181,8 @@ public class AlgorithmControl implements PropertyChangeListener {
 			
 	
 	void performSimulation( PropertyChangeListener propertyChangeListener, AlgorithmListener listener ) {
+		error = null;
+		
 		cat = new CellularAutomatonTask();
 		cat.setCaAlgo( CellularAutomatonAlgorithmEnumeration.RandomOrder );
 		cat.setProblem( project );
@@ -191,12 +193,16 @@ public class AlgorithmControl implements PropertyChangeListener {
 			@Override
 			public void propertyChange( PropertyChangeEvent pce ) {
 				if( st.isDone() ) {
-					cellularAutomaton = cat.getCa();
-					mapping = cat.getMapping();
-					container = cat.getContainer();
-					caVisResults = cat.getSolution();
-					//EventServer.getInstance().dispatchEvent( new MessageEvent<>( this, MessageType.Status, "Simulation finished" ) );
-					System.out.println( "Egress time: " + Formatter.formatTimeUnit( cellularAutomaton.getTimeStep() * cellularAutomaton.getSecondsPerStep(), TimeUnits.Seconds ) );
+					if( st.isError() ) {
+						error = st.getError();
+					} else {
+						cellularAutomaton = cat.getCa();
+						mapping = cat.getMapping();
+						container = cat.getContainer();
+						caVisResults = cat.getSolution();
+						//EventServer.getInstance().dispatchEvent( new MessageEvent<>( this, MessageType.Status, "Simulation finished" ) );
+						System.out.println( "Egress time: " + Formatter.formatTimeUnit( cellularAutomaton.getTimeStep() * cellularAutomaton.getSecondsPerStep(), TimeUnits.Seconds ) );
+					}
 				}
 			}
 		});

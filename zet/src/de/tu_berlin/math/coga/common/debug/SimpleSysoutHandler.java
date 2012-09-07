@@ -18,12 +18,13 @@ import java.util.logging.StreamHandler;
  *
  * @author Jan-Philipp Kappmeier
  */
-public class SysoutHandler extends StreamHandler {
+public class SimpleSysoutHandler extends StreamHandler {
 	private Level minLevel = Level.FINEST;  // by default, put out everything
 	private Level errLevel = Level.WARNING;  // 
 	private boolean doneHeader;
 	private Writer writer;
 
+	
 	/**
 	 * The only method we really change to check whether the message
 	 * is smaller than maxlevel.
@@ -69,7 +70,6 @@ public class SysoutHandler extends StreamHandler {
 				doneHeader = true;
 			}
 			writer.write( msg );
-			//System.out.println( "---" + msg );
 		} catch( Exception ex ) {
 			// We don't want to throw an exception here, but we
 			// report the exception to any registered ErrorManager.
@@ -96,14 +96,14 @@ public class SysoutHandler extends StreamHandler {
 	}
 
 	/** Constructor forwarding */
-	public SysoutHandler( PrintStream out, Formatter formatter ) {
+	public SimpleSysoutHandler( PrintStream out, Formatter formatter ) {
 		super( out, formatter );
 	}
 
 	/** Constructor forwarding
 	 * @throws SecurityException 
 	 */
-	public SysoutHandler() throws SecurityException {
+	public SimpleSysoutHandler() throws SecurityException {
 		super();
 		setOutputStream( System.err );
 		if( getEncoding() == null )

@@ -25,12 +25,12 @@ import com.thoughtworks.xstream.converters.MarshallingContext;
 import com.thoughtworks.xstream.converters.UnmarshallingContext;
 import com.thoughtworks.xstream.io.HierarchicalStreamReader;
 import com.thoughtworks.xstream.io.HierarchicalStreamWriter;
+import de.tu_berlin.math.coga.zet.NetworkFlowModel;
 import de.tu_berlin.math.coga.zet.converter.graph.ZToGraphMapping;
 import ds.graph.Edge;
-import ds.mapping.IdentifiableIntegerMapping;
-import ds.graph.network.AbstractNetwork;
-import de.tu_berlin.math.coga.zet.NetworkFlowModel;
 import ds.graph.Node;
+import ds.graph.network.AbstractNetwork;
+import ds.mapping.IdentifiableIntegerMapping;
 import java.util.LinkedList;
 
 /**
@@ -48,10 +48,12 @@ public class NetworkFlowModelConverter implements Converter {
         //flowProblemInstanceConverter = new FlowProblemInstanceConverter();
     }
     
+	@Override
     public boolean canConvert(Class type) {
         return type.equals(NetworkFlowModel.class);
     }
 
+	@Override
     public void marshal(Object source, HierarchicalStreamWriter writer, MarshallingContext context) {
         NetworkFlowModel problem = (NetworkFlowModel) source;
 				

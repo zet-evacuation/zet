@@ -14,7 +14,7 @@ import java.util.logging.LogRecord;
  *
  * @author Jan-Philipp Kappmeier
  */
-public class SysoutFormatter extends Formatter {
+public class SimpleLogFormatter extends Formatter {
 	@Override
 	public synchronized String format( LogRecord record ) {
 		String message = formatMessage( record ) + "\n";
