@@ -15,6 +15,7 @@
  */
 package zet.gui.main.tabs.base;
 
+import ds.PropertyContainer;
 import ds.z.Area;
 import ds.z.Barrier;
 import ds.z.Edge;
@@ -58,27 +59,33 @@ import zet.gui.main.tabs.editor.JFloor;
  * @author Timon Kelter
  */
 public class JPolygon extends AbstractPolygon {
+	
+	PropertyContainer p = PropertyContainer.getInstance();
+	
 	protected static Point lastPosition = new Point();
 	protected static boolean selectedUsed = false;
-	/** The amount of space (in pixels) that is added on each side of all edges'
-	 * bounding boxes, to enable them to paint themselves thicker when they are
-	 * marked as selected. */
-	public static final int EDGE_WIDTH_ADDITION = 3;
-	/** The width of the edge when selected, in pixels. The inequality
-	 * 1 + 2 * EDGE_WIDTH_ADDITION >= EDGE_PAINT_WIDTH must hold. */
-	public static final float EDGE_PAINT_WIDTH = 2.2f;
 	/** The radius of the nodes on screen. This should be less than or equal to
 	 * EDGE_WIDTH_ADDITION + 1 */
-	public static final int NODE_PAINT_RADIUS = 4;
+	public static final int NODE_PAINT_RADIUS = PropertyContainer.getInstance().getAsInt( "editor.options.view.pointSize" );
 	/** The radius around the nodes of the edge in which a click on the edge is 
 	 * also counted as a click on the node. This should be less than or equal to
 	 * EDGE_WIDTH_ADDITION + 1 */
-	public static final int NODE_SELECTION_RADIUS = 4;
+	public static final int NODE_SELECTION_RADIUS = (int)(NODE_PAINT_RADIUS*1.5);
 	private final static float dash1[] = {10.0f};
-	private final static BasicStroke stroke_standard = new BasicStroke( 1.0f, BasicStroke.CAP_BUTT, BasicStroke.JOIN_MITER );
+	
+	// TODO property change listener
+	static int lineWidth = PropertyContainer.getInstance().getAsInt( "editor.options.view.wallWidth" );	
+	/** The amount of space (in pixels) that is added on each side of all edges'
+	 * bounding boxes, to enable them to paint themselves thicker when they are
+	 * marked as selected. */
+	/** The width of the edge when selected, in pixels. The inequality
+	 * 1 + 2 * EDGE_WIDTH_ADDITION >= EDGE_PAINT_WIDTH must hold. */
+	public static final float EDGE_PAINT_WIDTH = 1.5f*lineWidth;
+	public static final int EDGE_WIDTH_ADDITION = (int)Math.floor( Math.max( EDGE_PAINT_WIDTH,2*NODE_PAINT_RADIUS)/2)+1;
+	private final static BasicStroke stroke_standard = new BasicStroke( lineWidth, BasicStroke.CAP_BUTT, BasicStroke.JOIN_MITER );
 	private final static BasicStroke stroke_dashed_slim = new BasicStroke( 1.0f, BasicStroke.CAP_BUTT, BasicStroke.JOIN_MITER, 10.0f, dash1, 0.0f );
 	private final static BasicStroke stroke_dashed_thick = new BasicStroke( EDGE_PAINT_WIDTH, BasicStroke.CAP_BUTT, BasicStroke.JOIN_MITER, 10.0f, dash1, 0.0f );
-	private final static BasicStroke stroke_thick = new BasicStroke( EDGE_PAINT_WIDTH );
+	public final static BasicStroke stroke_thick = new BasicStroke( EDGE_PAINT_WIDTH );
 	private final GUIControl guiControl;
 
 	//############## EDGE RELATED FIELDS ###################
@@ -155,10 +162,7 @@ public class JPolygon extends AbstractPolygon {
 		for( EdgeData ed : edgeData )
 			if( ed.selectionPolygon.contains( p ) ) {
 				PlanPoint point_hit = clickHitsPlanPoint( ed, p );
-				if( point_hit != null )
-					return point_hit;
-				else
-					return ed.myEdge;
+				return point_hit != null ? point_hit : ed.myEdge;
 			}
 		// Check if click is in own drawing area (most general option)
 		return (drawingPolygon.contains( p )) ? this.myPolygon : null;

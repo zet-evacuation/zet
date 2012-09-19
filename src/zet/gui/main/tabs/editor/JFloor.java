@@ -16,24 +16,30 @@
 package zet.gui.main.tabs.editor;
 
 import de.tu_berlin.math.coga.common.localization.DefaultLoc;
-import zet.gui.main.tabs.base.AbstractFloor;
 import ds.z.Area;
 import ds.z.AssignmentArea;
 import ds.z.Barrier;
 import ds.z.DelayArea;
-import ds.z.PlanPoint;
-import ds.z.PlanPolygon;
 import ds.z.Edge;
 import ds.z.EvacuationArea;
 import ds.z.Floor;
 import ds.z.InaccessibleArea;
+import ds.z.PlanPoint;
+import ds.z.PlanPolygon;
 import ds.z.Room;
 import ds.z.SaveArea;
 import ds.z.StairArea;
+import ds.z.TeleportArea;
 import ds.z.ZControl;
 import ds.z.exception.AssignmentException;
-import zet.gui.main.JEditor;
+import event.EventListener;
+import event.EventServer;
+import event.ZModelChangedEvent;
+import gui.GUIControl;
+import gui.GUIOptionManager;
 import gui.ZETMain;
+import gui.ZETProperties;
+import gui.editor.CoordinateTools;
 import gui.editor.planimage.PlanImage;
 import java.awt.AWTEvent;
 import java.awt.BasicStroke;
@@ -59,14 +65,8 @@ import java.util.List;
 import java.util.ListIterator;
 import javax.swing.JComponent;
 import javax.swing.SwingUtilities;
-import ds.z.TeleportArea;
-import event.EventListener;
-import event.EventServer;
-import event.ZModelChangedEvent;
-import gui.GUIControl;
-import gui.editor.CoordinateTools;
-import gui.GUIOptionManager;
-import gui.ZETProperties;
+import zet.gui.main.JEditor;
+import zet.gui.main.tabs.base.AbstractFloor;
 import zet.gui.main.tabs.base.JPolygon;
 
 /**
@@ -74,6 +74,7 @@ import zet.gui.main.tabs.base.JPolygon;
  * for editing the displayed floor.
  * @author Timon Kelter, Jan-Philipp Kappmeier
  */
+@SuppressWarnings( "serial" )
 public class JFloor extends AbstractFloor implements EventListener<ZModelChangedEvent> {
 	// Main objects
 	/** The displayed floor. */
@@ -113,7 +114,7 @@ public class JFloor extends AbstractFloor implements EventListener<ZModelChanged
 	/** The PlanPoints that are currently dragged. */
 	private List<PlanPoint> draggedPlanPoints = null;
 	/** The new polygon, if the user is in PolygonCreation EditMode .*/
-	private PlanPolygon newPolygon = null;
+	private PlanPolygon<?> newPolygon = null;
 	// Paint Styles
 	/** The background image */
 	private PlanImage planImage;
@@ -328,6 +329,7 @@ public class JFloor extends AbstractFloor implements EventListener<ZModelChanged
 				g2.setPaint( lastColor );
 
 				// Now draw the single line or the rectangle (depending on the edit mode)
+				g2.setStroke( JPolygon.stroke_thick );
 				if( GUIOptionManager.getEditMode().getType() == EditMode.Type.CreationPointwise )
 					g2.drawLine( p1.x, p1.y, p2.x, p2.y );
 				else if( GUIOptionManager.getEditMode().getType() == EditMode.Type.CreationRectangled )
