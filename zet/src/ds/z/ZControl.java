@@ -7,8 +7,8 @@ package ds.z;
 import ds.z.exception.AssignmentException;
 import java.util.List;
 import de.tu_berlin.math.coga.common.localization.Localization;
+import de.tu_berlin.math.coga.common.util.Formatter;
 import de.tu_berlin.math.coga.common.util.Helper;
-import de.tu_berlin.math.coga.common.util.IOTools;
 import de.tu_berlin.math.coga.rndutils.distribution.Distribution;
 import de.tu_berlin.math.coga.rndutils.distribution.continuous.NormalDistribution;
 import de.tu_berlin.math.coga.rndutils.distribution.continuous.UniformDistribution;
@@ -439,7 +439,7 @@ public class ZControl {
 			newName = f.getName().substring( 0, f.getName().length()-2 );
 		}
 		do {
-			fc.setName( newName + IOTools.fillLeadingZeros( number++, 2 ) );
+			fc.setName( newName + Formatter.fillLeadingZeros( number++, 2 ) );
 		} while( !project.getBuildingPlan().addFloor( fc ) && number <= 99 );
 	}
 

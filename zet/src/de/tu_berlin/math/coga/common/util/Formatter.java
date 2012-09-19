@@ -277,7 +277,7 @@ public class Formatter {
 	 * @param unit the unit of the number
 	 * @return the string in the calculated unit with one decimal place and the shortcut for the unit
 	 */
-	public final static String fileSizeUnit( double value, BinaryUnits unit ) {
+	public static String fileSizeUnit( double value, BinaryUnits unit ) {
 		return fileSizeUnit( value, unit, 1 );
 	}
 
@@ -288,7 +288,7 @@ public class Formatter {
 	 * @param digits the number of digits after the comma in the representation
 	 * @return the string in the calculated unit with one decimal place and the shortcut for the unit
 	 */
-	public final static String fileSizeUnit( double value, BinaryUnits unit, int digits ) {
+	public static String fileSizeUnit( double value, BinaryUnits unit, int digits ) {
 		while( !unit.isOK( value ) ) {
 			final double newValue = unit.getNextBetterValue( value );
 			unit = unit.getNextBetter( value );
@@ -305,7 +305,7 @@ public class Formatter {
 	 * @param value the decimal value
 	 * @return a string containing the decimal value
 	 */
-	public final static String formatPercent( double value ) {
+	public static String formatPercent( double value ) {
 		NumberFormat nfPercent = DefaultLoc.getSingleton().getPercentConverter();
 		nfPercent.setMaximumFractionDigits( 2 );
 		nfPercent.setMinimumFractionDigits( 2 );
@@ -319,7 +319,7 @@ public class Formatter {
 	 * @param unit the unit of the number
 	 * @return the pair containing the transformed value and the fitting unit
 	 */
-	public final static Tuple<Double,TimeUnits> timeUnit( double value, TimeUnits unit ) {
+	public static Tuple<Double,TimeUnits> timeUnit( double value, TimeUnits unit ) {
 		while( !unit.isOK( value ) ) {
 			final double newValue = unit.getNextBetterValue( value );
 			unit = unit.getNextBetter( value );
@@ -334,7 +334,7 @@ public class Formatter {
 	 * @param unit the unit of the number
 	 * @return the string in the calculated unit with one decimal place and the shortcut for the unit
 	 */
-	public final static String formatTimeUnit( double value, TimeUnits unit ) {
+	public static String formatTimeUnit( double value, TimeUnits unit ) {
 		return formatTimeUnit( value, unit, 2 );
 	}
 
@@ -345,10 +345,26 @@ public class Formatter {
 	 * @param digits the number of digits after the comma in the representation
 	 * @return the string in the calculated unit with one decimal place and the shortcut for the unit
 	 */
-	public final static String formatTimeUnit( double value, TimeUnits unit, int digits ) {
+	public static String formatTimeUnit( double value, TimeUnits unit, int digits ) {
 		final Tuple<Double,TimeUnits> res = timeUnit( value, unit );
 		final NumberFormat n = NumberFormat.getInstance();
 		n.setMaximumFractionDigits( digits );
 		return n.format( res.u ) + " " + res.v.getName() ;
 	}
-}
+	
+	/**
+	 * Creates a {@code String} containing an integer number with leading
+	 * zeros.
+	 * @param number the number that is converted to string representation
+	 * @param digits the digits of the number
+	 * @return the number with leading zeros
+	 * @throws java.lang.IllegalArgumentException if the number has to many digits
+	 */
+	public static String fillLeadingZeros( int number, int digits ) throws IllegalArgumentException {
+		String ret = Integer.toString( number );
+		if( ret.length() > digits )
+			throw new java.lang.IllegalArgumentException( "Number " + number + " is too long. Only " + digits + " digits are allowed." );
+		while( ret.length() < digits )
+			ret = "0" + ret;
+		return ret;
+	}}
