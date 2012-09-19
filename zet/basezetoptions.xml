@@ -7,6 +7,8 @@
       <intNode name="options.view.editor.size.maxy" useAsLocString="true" information="options.view.editor.size.maxy.info" parameter="editor.options.view.size.maxy">6000</intNode>
       <intNode name="options.view.editor.size.border" useAsLocString="true" information="options.view.editor.size.border.info" parameter="editor.options.view.size.border">800</intNode>
     </treeNode>
+    <intNode name="options.view.editor.wallWidth" useAsLocString="true" information="options.view.editor.wallWidth.info" parameter="editor.options.view.wallWidth">3</intNode>
+    <intNode name="options.view.editor.pointSize" useAsLocString="true" information="options.view.editor.pointSize.info" parameter="editor.options.view.pointSize">5</intNode>
     <boolNode name="options.view.editor.hideDefaultFloor" useAsLocString="true" information="options.view.editor.hideDefaultFloor.info" parameter="editor.options.view.hideDefaultFloor">true</boolNode>
     <boolNode name="options.view.editor.rasterizedPaintMode" useAsLocString="true" information="options.view.editor.rasterizedPaintMode.info" parameter="editor.options.view.rasterizedPaintMode">true</boolNode>
     <intNode name="options.view.editor.editRasterSize" useAsLocString="true" information="options.view.editor.editRasterSize.info" parameter="editor.options.view.editRasterSize">400</intNode>

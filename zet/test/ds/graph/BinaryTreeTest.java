@@ -4,7 +4,8 @@
  */
 package ds.graph;
 
-import de.tu_berlin.math.coga.datastructure.BinaryTree;
+import de.tu_berlin.math.coga.datastructure.searchtree.BinaryTree;
+import de.tu_berlin.math.coga.common.util.BinaryTreeToString;
 import junit.framework.TestCase;
 import org.junit.Test;
 
@@ -22,7 +23,9 @@ public class BinaryTreeTest extends TestCase {
 //		assertEquals( "Testbedingung", 2, 1 );
 		
 		BinaryTree bt = new BinaryTree( 7 );
-		
+
+		assertEquals( "Height of empty Tree (contains a root automatically)", 0, bt.getHeight() );
+
 		Node root = bt.getRoot();
 		
 		assertEquals( "Root id is 0", root.id(), 0 );
@@ -49,8 +52,17 @@ public class BinaryTreeTest extends TestCase {
 		assertEquals( "Children of F", 0, bt.numOfChildren( F ) );
 
 		Edge e1 = bt.createAndSetEdge( A, B );
+
+		assertEquals( "Height after A-B inserted", 1, bt.getHeight() );
+
 		Edge e2 = bt.createAndSetEdge( A, C );
+
+		assertEquals( "Height after A-C inserted", 1, bt.getHeight() );
+		
 		Edge e3 = bt.createAndSetEdge( B, D );
+
+		assertEquals( "Height after B-D inserted", 2, bt.getHeight() );
+
 		Edge e4 = bt.createAndSetEdge( B, E );
 		Edge e5 = bt.createAndSetEdge( C, F );
 		
@@ -104,6 +116,12 @@ public class BinaryTreeTest extends TestCase {
 		}
 		
 		bt.createAndSetEdge( C, G );
+		
+		assertEquals( "Height of complete Tree", 2, bt.getHeight() );
+
+		System.out.println( bt.toString2() );
+
+		System.out.println( BinaryTreeToString.format( bt ) );
 		
 		System.out.println( "Done.");
 	}
