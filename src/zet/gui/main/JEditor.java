@@ -23,20 +23,19 @@ package zet.gui.main;
 import batch.BatchResult;
 import de.tu_berlin.math.coga.batch.gui.JBatch;
 import de.tu_berlin.math.coga.common.localization.DefaultLoc;
-import ds.PropertyContainer;
 import de.tu_berlin.math.coga.common.localization.Localization;
 import de.tu_berlin.math.coga.common.localization.Localized;
 import de.tu_berlin.math.coga.components.JLogPane;
+import ds.PropertyContainer;
 import ds.z.ZControl;
 import event.EventServer;
 import event.MessageEvent;
 import event.MessageEvent.MessageType;
-import gui.statistic.JGraphStatisticPanel;
-import gui.statistic.JStatisticPanel;
-import zet.gui.main.tabs.JVisualizationView;
-import gui.statistic.JStatisticsPanel;
 import gui.GUIControl;
 import gui.ZETMain;
+import gui.statistic.JGraphStatisticPanel;
+import gui.statistic.JStatisticPanel;
+import gui.statistic.JStatisticsPanel;
 import java.awt.BorderLayout;
 import java.awt.CardLayout;
 import java.awt.Dimension;
@@ -46,30 +45,31 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.InputEvent;
 import java.awt.event.KeyEvent;
+import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.io.File;
 import java.io.IOException;
 import java.text.NumberFormat;
-import java.util.Locale;
-import java.awt.event.WindowAdapter;
 import java.util.ArrayList;
+import java.util.Locale;
+import javax.imageio.ImageIO;
 import javax.swing.JComponent;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
+import javax.swing.JPanel;
+import javax.swing.JProgressBar;
 import javax.swing.JTabbedPane;
 import javax.swing.JToolBar;
 import javax.swing.KeyStroke;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
-import javax.imageio.ImageIO;
-import javax.swing.JPanel;
-import javax.swing.JProgressBar;
 import zet.gui.GUILocalization;
 import zet.gui.components.JEventStatusBar;
 import zet.gui.main.menu.JZETMenuBar;
-import zet.gui.main.tabs.editor.EditMode;
-import zet.gui.main.tabs.JQuickVisualizationView;
 import zet.gui.main.tabs.JEditView;
+import zet.gui.main.tabs.JQuickVisualizationView;
+import zet.gui.main.tabs.JVisualizationView;
+import zet.gui.main.tabs.editor.EditMode;
 import zet.gui.main.toolbar.JBatchToolBar;
 import zet.gui.main.toolbar.JEditToolbar;
 import zet.gui.main.toolbar.JLogToolBar;
@@ -257,8 +257,7 @@ public class JEditor extends JFrame implements Localized {
 		visualizationView = new JVisualizationView( guiControl );
 		caStatisticView = new JStatisticPanel();
 		graphStatisticView = new JGraphStatisticPanel();
-		logView = new JLogPane( ZETMain.log );
-		ZETMain.log.addObserver( logView );
+		logView = new JLogPane( ZETMain.gl );
 		statisticView = new JStatisticsPanel();
 
 		tabPane = new JTabbedPane();
@@ -278,8 +277,8 @@ public class JEditor extends JFrame implements Localized {
 		tabPane.addChangeListener( new ChangeListener() {
 			@Override
 			public void stateChanged( ChangeEvent e ) {
-				if( tabs.get( tabPane.getSelectedIndex() ) == ZETWindowTabs.Log )
-					logView.update();
+			//	if( tabs.get( tabPane.getSelectedIndex() ) == ZETWindowTabs.Log )
+			//		logView.update();
 			}
 		} );
 

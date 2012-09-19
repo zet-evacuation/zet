@@ -83,7 +83,7 @@ public class JPolygon extends AbstractPolygon {
 	public static final float EDGE_PAINT_WIDTH = 1.5f*lineWidth;
 	public static final int EDGE_WIDTH_ADDITION = (int)Math.floor( Math.max( EDGE_PAINT_WIDTH,2*NODE_PAINT_RADIUS)/2)+1;
 	private final static BasicStroke stroke_standard = new BasicStroke( lineWidth, BasicStroke.CAP_BUTT, BasicStroke.JOIN_MITER );
-	private final static BasicStroke stroke_dashed_slim = new BasicStroke( 1.0f, BasicStroke.CAP_BUTT, BasicStroke.JOIN_MITER, 10.0f, dash1, 0.0f );
+	private final static BasicStroke stroke_dashed_slim = new BasicStroke( lineWidth, BasicStroke.CAP_BUTT, BasicStroke.JOIN_MITER, 10.0f, dash1, 0.0f );
 	private final static BasicStroke stroke_dashed_thick = new BasicStroke( EDGE_PAINT_WIDTH, BasicStroke.CAP_BUTT, BasicStroke.JOIN_MITER, 10.0f, dash1, 0.0f );
 	public final static BasicStroke stroke_thick = new BasicStroke( EDGE_PAINT_WIDTH );
 	private final GUIControl guiControl;
