@@ -21,6 +21,7 @@
 
 package io.movie;
 
+import de.tu_berlin.math.coga.common.util.Formatter;
 import info.clearthought.layout.TableLayout;
 import de.tu_berlin.math.coga.common.util.IOTools;
 import java.awt.event.ActionEvent;
@@ -235,7 +236,7 @@ public class FFmpegWrapper extends MovieWriter {
 	 * and a number. Existing files are overwritten without any request.</p>
 	 */
 	public String getFilename( int number ) {
-		return path + framename + IOTools.fillLeadingZeros( number, FRAMEDIGITS ) + "." + frameFormat.getEnding();
+		return path + framename + Formatter.fillLeadingZeros( number, FRAMEDIGITS ) + "." + frameFormat.getEnding();
 	}
 
 	/**

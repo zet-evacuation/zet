@@ -44,13 +44,14 @@ public class HTMLLoggerHandler extends StreamHandler {
 		Formatter f = new Formatter() {
 			@Override
 			public String format( LogRecord record ) {
-				String s = "";
+				String s = formatMessage( record );
+				
 				if( record.getLevel().intValue() < errLevel.intValue() ) {
-					s = record.getMessage();
+					//s = record.getMessage();
 					s = s.replace( "<", "&lt;" );
 					s = s.replace( ">", "&gt;" ) + "<br>";
 				} else {
-					s = record.getMessage();
+					//s = record.getMessage();
 					s = s.replace( "<", "&lt;" );
 					s = s.replace( ">", "&gt;" );
 					s = "<font color=\"red\">" + s + "</font><br>";

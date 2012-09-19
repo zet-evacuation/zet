@@ -16,7 +16,7 @@
 
 /*
  * ZETMain.java
- * Created on 4. Dezember 40007, 17:08
+ * Created on 4. Dezember 2007, 17:08
  */
 
 package gui;
@@ -36,7 +36,7 @@ import de.tu_berlin.math.coga.common.debug.HTMLLoggerHandler;
 import de.tu_berlin.math.coga.common.debug.SimpleFileHandler;
 import de.tu_berlin.math.coga.common.debug.SimpleLogFormatter;
 import de.tu_berlin.math.coga.common.localization.Localization;
-import de.tu_berlin.math.coga.common.util.IOTools;
+import de.tu_berlin.math.coga.common.util.Formatter;
 import ds.PropertyContainer;
 import event.EventServer;
 import event.MessageEvent;
@@ -93,6 +93,8 @@ public class ZETMain {
 	public static HTMLLoggerHandler gl = new HTMLLoggerHandler();
 	/** States if the last loaded file should be loaded at startup. */
 	private static boolean loadLast = false;
+	/** The logger of the main class. */
+	private static final Logger log = Logger.getGlobal();
 	
 	/**
 	 * Creates a new instance of {@code ZETMain}
@@ -145,13 +147,11 @@ public class ZETMain {
 		optAutoLog.setHelp( loc.getString( "autoLog" ) );
 		jsap.registerParameter( optAutoLog );
 
-		Switch optVerbose = new Switch( "verbose" ).setLongFlag( "verbose" )
-						.setShortFlag( 'v' );
+		Switch optVerbose = new Switch( "verbose" ).setLongFlag( "verbose" ).setShortFlag( 'v' );
 		optVerbose.setHelp( loc.getString( "verbose" ) );
 		jsap.registerParameter( optVerbose );
 
-		Switch optDebug = new Switch( "debug" ).setLongFlag( "debug" )
-						.setShortFlag( 'd' );
+		Switch optDebug = new Switch( "debug" ).setLongFlag( "debug" ).setShortFlag( 'd' );
 		optDebug.setHelp( loc.getString( "debug" ) );
 		jsap.registerParameter( optDebug );
 
@@ -204,7 +204,7 @@ public class ZETMain {
 		}
 
 		if( config.getBoolean( "noStat" ) ) {
-			System.err.println( loc.getString( "log.disableStatistic" ) );
+			log.severe( loc.getString( "log.disableStatistic" ) );
 			useStatistic = false;
 		}
 
@@ -220,7 +220,7 @@ public class ZETMain {
 			try {
 				ZETProperties.setCurrentProperty( Paths.get( config.getString( "property" ) ) );
 			} catch( PropertyLoadException ex ) {
-				System.out.println( "Property file '" + config.getString( "property" ) + "' cound not be loaded. Continuing with default." );
+				log.log( Level.SEVERE, "Property file ''{0}'' cound not be loaded. Continuing with default.", config.getString( "property" ));
 			}
 		}
 
@@ -307,7 +307,7 @@ public class ZETMain {
 					}
 					if( f != null) {
 						guiControl.loadProject( f );
-						System.out.println( "Projekt " + f.getAbsolutePath() + " geladen." );
+						log.log( Level.INFO, "Projekt {0} geladen.", f.getAbsolutePath());
 						GUIOptionManager.setLastFile( 1, f.getAbsolutePath() );
 					} else
 						guiControl.newProject( true ); // Project supposed to load does not exist. Create empty
@@ -315,8 +315,6 @@ public class ZETMain {
 					//guiControl.newProject();
 					//zcontrol = new ZControl();
 				}
-				//guiControl.setZControl( zcontrol );
-
 				guiControl.showZETWindow();
 			}
 		} );
@@ -383,77 +381,62 @@ public class ZETMain {
 
 	/**
 	 * Sets up the standard output and the error output to some logging files.
-	 * @param log indicates whether standard out is redirected to a file
+	 * @param logging indicates whether standard out is redirected to a file
 	 * @param err indicates whether error out is redirected to a file
 	 * @param auto indicates whether the filenames are automatically created
 	 * @param verbose indicates whether the default output is also used, or not
 	 */
-	public static void setUpLog( boolean log, boolean err, boolean auto, boolean verbose ) {
+	public static void setUpLog( boolean logging, boolean err, boolean auto, boolean verbose ) {
 		try {
 			Debug.setUpLogging();
 			
-			Logger l = Debug.globalLogger;
-
 			SimpleFileHandler logFileHandler = null;
 			
-			log = true;
+			logging = true;
 			err = true;
-	//		PrintStream errStream = System.err;
-	//		PrintStream logStream = System.out;
 			Calendar cal = Calendar.getInstance();
 			if( auto ) {
 				logFile = "zet_";
 				errFile = "zet_";
-				logFile += cal.get( Calendar.YEAR ) + "-" + IOTools.fillLeadingZeros( cal.get( Calendar.MONTH )+1, 2 ) + "-" + IOTools.fillLeadingZeros( cal.get( Calendar.DAY_OF_MONTH ), 2 ) + "_" + IOTools.fillLeadingZeros( cal.get( Calendar.HOUR_OF_DAY ), 2 ) + "-" + IOTools.fillLeadingZeros( cal.get( Calendar.MINUTE ), 2 ) + "-" + IOTools.fillLeadingZeros( cal.get( Calendar.SECOND ), 2 ) + ".log";
-				errFile += cal.get( Calendar.YEAR ) + "-" + IOTools.fillLeadingZeros( cal.get( Calendar.MONTH )+1, 2 ) + "-" + IOTools.fillLeadingZeros( cal.get( Calendar.DAY_OF_MONTH ), 2 ) + "_" + IOTools.fillLeadingZeros( cal.get( Calendar.HOUR_OF_DAY ), 2 ) + "-" + IOTools.fillLeadingZeros( cal.get( Calendar.MINUTE ), 2 ) + "-" + IOTools.fillLeadingZeros( cal.get( Calendar.SECOND ), 2 ) + "_err.log";
-				log = true;
+				logFile += cal.get( Calendar.YEAR ) + "-" + Formatter.fillLeadingZeros( cal.get( Calendar.MONTH )+1, 2 ) + "-" + Formatter.fillLeadingZeros( cal.get( Calendar.DAY_OF_MONTH ), 2 ) + "_" + Formatter.fillLeadingZeros( cal.get( Calendar.HOUR_OF_DAY ), 2 ) + "-" + Formatter.fillLeadingZeros( cal.get( Calendar.MINUTE ), 2 ) + "-" + Formatter.fillLeadingZeros( cal.get( Calendar.SECOND ), 2 ) + ".log";
+				errFile += cal.get( Calendar.YEAR ) + "-" + Formatter.fillLeadingZeros( cal.get( Calendar.MONTH )+1, 2 ) + "-" + Formatter.fillLeadingZeros( cal.get( Calendar.DAY_OF_MONTH ), 2 ) + "_" + Formatter.fillLeadingZeros( cal.get( Calendar.HOUR_OF_DAY ), 2 ) + "-" + Formatter.fillLeadingZeros( cal.get( Calendar.MINUTE ), 2 ) + "-" + Formatter.fillLeadingZeros( cal.get( Calendar.SECOND ), 2 ) + "_err.log";
+				logging = true;
 				err = true;
 			}
-			if( log )
+			if( logging )
 				try {
-					//logStream = verbose ? new DebugStreamVerbose( new FileOutputStream( logFile ), System.out ) : new DebugStream( new FileOutputStream( logFile ) );
 					logFileHandler = new SimpleFileHandler( logFile );
 					logFileHandler.setFormatter( new SimpleLogFormatter() );
-					l.addHandler( logFileHandler );
+					log.addHandler( logFileHandler );
 
 					logFileHandler.setMinLevel( Level.ALL );
 					logFileHandler.setErrLevel( Level.INFO );
-
-				} catch( Exception ex ) {
-					System.err.println( "Error creating debug out." );
+				} catch( IOException | SecurityException ex ) {
+					log.severe( "Error creating debug out." );
 				}
 			if( err )
-				if( log && logFile.equals( errFile ) )
-					//errStream = logStream;
+				if( logging && logFile.equals( errFile ) )
 					logFileHandler.setErrLevel( Level.SEVERE );
 				else
 					try {
-						//errStream = verbose ? new DebugStreamVerbose( new FileOutputStream( errFile ), System.err, MessageType.LogError ): new DebugStream( new FileOutputStream( errFile ), MessageType.LogError );
 						SimpleFileHandler errFileHandler = new SimpleFileHandler( errFile );
 						errFileHandler.setFormatter( new SimpleLogFormatter() );
-						l.addHandler( errFileHandler );
+						log.addHandler( errFileHandler );
 
 						errFileHandler.setMinLevel( Level.WARNING );
 						errFileHandler.setErrLevel( Level.SEVERE );
 					} catch( FileNotFoundException ex ) {
-						System.err.println( "Error creating debug error out." );
+						log.severe( "Error creating debug error out." );
 					}
 			
 			gl = new HTMLLoggerHandler();
-			
-			l.addHandler( gl );
-			
-			
-	//		System.setOut( logStream );
-	//		System.setErr( errStream );
-			if( log )
-				l.info( "Log of " + cal.get( Calendar.YEAR ) + "-" + IOTools.fillLeadingZeros( cal.get( Calendar.MONTH )+1, 2 ) + "-" + IOTools.fillLeadingZeros( cal.get( Calendar.DAY_OF_MONTH ), 2 ) + " " + IOTools.fillLeadingZeros( cal.get( Calendar.HOUR_OF_DAY ), 2 ) + "-" + IOTools.fillLeadingZeros( cal.get( Calendar.MINUTE ), 2 ) + "-" + IOTools.fillLeadingZeros( cal.get( Calendar.SECOND ), 2 ) );
-			if( log && !logFile.equals( errFile ) )
-				l.severe( "Error log of " + cal.get( Calendar.YEAR ) + "-" + IOTools.fillLeadingZeros( cal.get( Calendar.MONTH )+1, 2 ) + "-" + IOTools.fillLeadingZeros( cal.get( Calendar.DAY_OF_MONTH ), 2 ) + " " + IOTools.fillLeadingZeros( cal.get( Calendar.HOUR_OF_DAY ), 2 ) + "-" + IOTools.fillLeadingZeros( cal.get( Calendar.MINUTE ), 2 ) + "-" + IOTools.fillLeadingZeros( cal.get( Calendar.SECOND ), 2 ) );
-		} catch( IOException ex ) {
-			Logger.getLogger( ZETMain.class.getName() ).log( Level.SEVERE, null, ex );
-		} catch( SecurityException ex ) {
-			Logger.getLogger( ZETMain.class.getName() ).log( Level.SEVERE, null, ex );
+			log.addHandler( gl );
+			if( logging )
+				log.log( Level.INFO, "Log of " + cal.get( Calendar.YEAR ) + "-{0}-{1} {2}-{3}-{4}", new Object[]{Formatter.fillLeadingZeros( cal.get( Calendar.MONTH )+1, 2 ), Formatter.fillLeadingZeros( cal.get( Calendar.DAY_OF_MONTH ), 2 ), Formatter.fillLeadingZeros( cal.get( Calendar.HOUR_OF_DAY ), 2 ), Formatter.fillLeadingZeros( cal.get( Calendar.MINUTE ), 2 ), Formatter.fillLeadingZeros( cal.get( Calendar.SECOND ), 2 )});
+			if( logging && !logFile.equals( errFile ) )
+				log.log( Level.SEVERE, "Error log of " + cal.get( Calendar.YEAR ) + "-{0}-{1} {2}-{3}-{4}", new Object[]{Formatter.fillLeadingZeros( cal.get( Calendar.MONTH )+1, 2 ), Formatter.fillLeadingZeros( cal.get( Calendar.DAY_OF_MONTH ), 2 ), Formatter.fillLeadingZeros( cal.get( Calendar.HOUR_OF_DAY ), 2 ), Formatter.fillLeadingZeros( cal.get( Calendar.MINUTE ), 2 ), Formatter.fillLeadingZeros( cal.get( Calendar.SECOND ), 2 )});
+		} catch( IOException | SecurityException ex ) {
+			log.log( Level.SEVERE, null, ex );
 		}
 	}
 

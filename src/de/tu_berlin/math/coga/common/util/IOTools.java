@@ -23,12 +23,12 @@ package de.tu_berlin.math.coga.common.util;
 
 import de.tu_berlin.math.coga.common.localization.DefaultLoc;
 import java.io.File;
-import java.text.ParseException;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.text.ParseException;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -90,28 +90,12 @@ public class IOTools {
 			}
 		}
 		try {
-			return filePrefix + fillLeadingZeros( lastIndex, digits );
+			return filePrefix + Formatter.fillLeadingZeros( lastIndex, digits );
 		} catch( IllegalArgumentException ex ) {
 			throw new java.lang.IllegalStateException( "Too many files with number length " + digits );
 		}
 	}
-	
-	/**
-	 * Creates a {@code String} containing an integer number with leading
-	 * zeros.
-	 * @param number the number that is converted to string representation
-	 * @param digits the digits of the number
-	 * @return the number with leading zeros
-	 * @throws java.lang.IllegalArgumentException if the number has to many digits
-	 */
-	public static String fillLeadingZeros( int number, int digits ) throws IllegalArgumentException {
-		String ret = Integer.toString( number );
-		if( ret.length() > digits )
-			throw new java.lang.IllegalArgumentException( "Number " + number + " is too long. Only " + digits + " digits are allowed." );
-		while( ret.length() < digits )
-			ret = "0" + ret;
-		return ret;
-	}
+
 
 	/**
 	 * Splits a string up at spaces but ignores spaces that are in parts between
@@ -120,7 +104,7 @@ public class IOTools {
 	 * @return a {@link List} containing all parts of the command
 	 */
 	public static List<String> parseCommandString( String command ) {
-		LinkedList<String> ret = new LinkedList<String>();
+		LinkedList<String> ret = new LinkedList<>();
 		int i = -1;
 		String s = "";
 		boolean quotes = false;
@@ -163,14 +147,13 @@ public class IOTools {
 			else
 				throw new IOException( "Cannot overwrite existing file: " + dest.getName() );
 		byte[] buffer = new byte[bufSize];
-		int read = 0;
 		InputStream in = null;
 		OutputStream out = null;
 		try {
 			in = new FileInputStream( src );
 			out = new FileOutputStream( dest );
 			while( true ) {
-				read = in.read( buffer );
+				int read = in.read( buffer );
 				if( read == -1 )
 					//-1 bedeutet EOF
 					break;
@@ -192,4 +175,5 @@ public class IOTools {
 		}
 	}
 
+	private IOTools() {}
 }
