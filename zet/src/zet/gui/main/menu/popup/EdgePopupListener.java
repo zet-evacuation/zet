@@ -20,8 +20,6 @@
  */
 package zet.gui.main.menu.popup;
 
-import gui.GUIOptionManager;
-import zet.gui.main.tabs.editor.EditMode;
 import ds.z.Edge;
 import ds.z.PlanPoint;
 import ds.z.Room;
@@ -31,11 +29,13 @@ import ds.z.ZControl;
 import event.EventServer;
 import event.MessageEvent;
 import gui.GUIControl;
+import gui.GUIOptionManager;
 import gui.ZETProperties;
 import gui.editor.CoordinateTools;
 import java.awt.Point;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import zet.gui.main.tabs.editor.EditMode;
 
 /**
  * This pop-up listener is responsible for handling menu events
@@ -143,6 +143,28 @@ public class EdgePopupListener implements ActionListener {
 				guiControl.showPolygon( partnerRoom );
 			} else if( e.getActionCommand().equals( "revertPassage" ) )
 				projectControl.disconnectAtEdge( (RoomEdge)myEdge);
+			else if( e.getActionCommand().equals( "createDoor" ) ) {
+				if( !(myEdge instanceof RoomEdge ) )
+					throw new IllegalStateException( "Doors can only be created in rooms!" );
+				System.out.println( "Try to create a door" );
+
+				Room myRoom = ((RoomEdge)myEdge).getRoom();				
+				
+				PlanPoint newPoint = new PlanPoint( CoordinateTools.translateToModel( mousePosition ) );
+				newPoint = myEdge.getPointOnEdge( newPoint );
+				final double rasterSnap = ZETProperties.getRasterSizeSnap();
+				if( rasterizedPaintMode ) {
+					newPoint.x = (int)Math.round( (double)newPoint.x / rasterSnap ) * (int)rasterSnap;
+					newPoint.y = (int)Math.round( (double)newPoint.y / rasterSnap ) * (int)rasterSnap;
+				}
+
+				
+				//PlanPoint newPoint = new PlanPoint( CoordinateTools.translateToModel( mousePosition ) );
+				
+				
+				
+				projectControl.createDoor( (RoomEdge)myEdge, newPoint );
+			}
 		} catch( RuntimeException ex ) {
 			EventServer.getInstance().dispatchEvent( new MessageEvent( this, MessageEvent.MessageType.Error, ex.getLocalizedMessage() ) );
 		}

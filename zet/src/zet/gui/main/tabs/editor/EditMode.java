@@ -15,9 +15,9 @@
  */
 package zet.gui.main.tabs.editor;
 
+import gui.GUIOptionManager;
 import java.awt.Color;
 import java.util.LinkedList;
-import gui.GUIOptionManager;
 import zet.gui.GUILocalization;
 
 /**
@@ -49,7 +49,7 @@ public enum EditMode {
 	TeleportAreaCreation( "CreateTeleportAreaPointwise", Type.CreationRectangled, GUIOptionManager.getTeleportAreaColor(), true );
 
 	static {
-		// Here the partnerModes set. This cannot be done in the constructor because it would need
+		// Here the partnerModes are set. This cannot be done in the constructor because it would need
 		// illegal forward references
 		setPartners( RoomCreation, RoomCreationPointwise );
 		setPartners( InaccessibleAreaCreation, InaccessibleAreaCreationPointwise );

@@ -181,4 +181,5 @@ public class RoomEdge extends Edge {
 		getLinkTarget().setLinkTarget( null );
 		setLinkTarget( null );
 	}
+
 }
