@@ -1248,6 +1248,30 @@ public class PlanPolygon<T extends Edge> implements Iterable<T> {
 				return e;
 		throw new IllegalArgumentException( ZLocalization.getSingleton().getString( "ds.z.PlanPolygon.EdgeNotFoundException" ) );
 	}
+	
+	/**
+	 * Tries to find an edge of the room, that contains the given point.
+	 * @param p the point
+	 * @return an edge containing the point, or {@code null} otherwise
+	 */
+	public T getEdge( PlanPoint p ) {
+		double eps = 0.01;
+		
+		for( T e : this ) {
+			if( isOnEdge( e, p, eps ) )
+				return e;
+		}
+		return null;
+	}
+	
+	public boolean isOnEdge( Edge e, PlanPoint p, double eps ) {
+		double det = PlanPoint.orientationE( e.getTarget(), e.getSource(), p );
+		if( det <= eps ) {
+			if( Edge.length( e.getTarget(), p ) < e.length() && Edge.length( e.getSource(), p ) < e.length() )
+				return true;
+		}
+		return false;
+	}
 
 	/** Returns a view of the {@link java.util.List} of edges of the polygon. The view
 	 * is obtained by running through the whole polygon and adding up the edges, so the

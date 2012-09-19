@@ -21,6 +21,7 @@
 package ds.z;
 
 import com.thoughtworks.xstream.annotations.XStreamOmitField;
+import de.tu_berlin.math.coga.math.vectormath.Vector2;
 import ds.z.exception.PointsAlreadyConnectedException;
 import io.z.EdgeConverter;
 import io.z.XMLConverter;
@@ -355,6 +356,34 @@ public class Edge implements Serializable {
 	}
 
 	/**
+	 * Returns a new point that approximately lies on the edge in the given
+	 * distance from the reference point. The reference point should lie on the
+	 * edge itself.
+	 * @param newPoint
+	 * @param d
+	 * @return 
+	 */
+	PlanPoint getPoint( PlanPoint newPoint, double d ) {
+		double slope = getSlope();
+		
+		Vector2 a = new Vector2( target.x, target.y);
+		Vector2 b = new Vector2( source.x, source.y);
+		Vector2 v = b.sub( a );
+		v.normalize();
+		v.scalarMultiplicateTo( d );
+		
+		Vector2 p = new Vector2( newPoint.x, newPoint.y );
+		
+		Vector2 res = p.add( v );
+		
+		return new PlanPoint( (int)res.x, (int)res.y );
+	}
+
+	public double getSlope() {
+		return (target.x-source.x)/(double)(target.y-source.y);
+	}
+	
+	/**
 	 * Returns one of the bounding points of this edge.
 	 * @return one bounding point as {@link PlanPoint}
 	 */
@@ -508,8 +537,7 @@ public class Edge implements Serializable {
 	 * edges and overwrite is 'false'
 	 * @throws IllegalArgumentException If p is not on the edge
 	 */
-	protected void setPoint( PlanPoint p, PlanPoint newPoint, boolean overwrite )
-					throws PointsAlreadyConnectedException {
+	protected void setPoint( PlanPoint p, PlanPoint newPoint, boolean overwrite ) throws PointsAlreadyConnectedException {
 		if( source.equals( p ) )
 			setSource( newPoint, overwrite );
 		else if( target.equals( p ) )
@@ -528,8 +556,7 @@ public class Edge implements Serializable {
 	 * @throws PointsAlreadyConnectedException if the points are already connected to other 
 	 * edges and overwrite is 'false'
 	 */
-	protected void setSource( PlanPoint newSource, boolean overwrite )
-					throws PointsAlreadyConnectedException {
+	protected void setSource( PlanPoint newSource, boolean overwrite ) throws PointsAlreadyConnectedException {
 		/* Do not switch this test back on - it preempts exchanging the two end points
 		if( newSource == target || newSource.equals ( target  ) ) {
 		throw new IllegalArgumentException ( "Points have the same coordinates" );

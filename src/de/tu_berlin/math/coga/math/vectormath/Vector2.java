@@ -357,6 +357,12 @@ public class Vector2 implements Cloneable {
 		return (int) Math.signum( v.x * u.y - v.y * u.x ); // return sign of determinancy
 	}
 	
+	public static double orientationE( Vector2 p, Vector2 q, Vector2 r ) {
+		final Vector2 u = p.sub( q );
+		final Vector2 v = r.sub( q );
+		return v.x * u.y - v.y * u.x; // return determinancy
+	}
+	
 	/**
 	 * Creates a vector orthogonal to the given vector. (By rotating the vector
 	 * 90 degrees counter clockwise)

@@ -1447,6 +1447,7 @@ public class JEditView extends AbstractSplitPropertyWindow<JFloorScrollPane<JFlo
 		return pupPolygon;
 	}
 
+	// TODO popups in own class
 	/**
 	 * This method is called internally to recreate an up-to-date JPopupMenu
 	 * for the JEdge objects. It also recreates the EdgePopupListeners. 
@@ -1469,6 +1470,7 @@ public class JEditView extends AbstractSplitPropertyWindow<JFloorScrollPane<JFlo
 			Menu.addMenuItem( pupEdge, loc.getString( "popupCreateEvacuationPassage" ), edgePopupListeners.get( 0 ), "makeEvacEdge" );
 			Menu.addMenuItem( pupEdge, loc.getString( "popupShowPassageTarget" ), edgePopupListeners.get( 0 ), "showPassageTarget" );
 			Menu.addMenuItem( pupEdge, loc.getString( "popupRevertPassage" ), edgePopupListeners.get( 0 ), "revertPassage" );
+			Menu.addMenuItem( pupEdge, "Tür erzeugen", edgePopupListeners.get( 0 ), "createDoor" );
 			loc.setPrefix( "" );
 		}
 	}

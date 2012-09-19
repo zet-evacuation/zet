@@ -271,6 +271,14 @@ public class PlanPoint extends Point {
 		return (int) Math.signum( det );
 	}
 
+	public static double orientationE( PlanPoint p, PlanPoint q, PlanPoint r ) {
+		double u1 = p.getX() - q.getX();
+		double u2 = p.getY() - q.getY();
+		double v1 = r.getX() - q.getX();
+		double v2 = r.getY() - q.getY();
+		double det = v1 * u2 - v2 * u1;
+		return det;
+	}
 	/**
 	 * Sets the new location of this point. The coordinates are (even if they are double values)
 	 * assumed to be integers refering to millimeter positions. Thus the real parts of the
