@@ -32,7 +32,7 @@ import com.martiansoftware.jsap.UnflaggedOption;
 import com.thoughtworks.xstream.XStream;
 import com.thoughtworks.xstream.annotations.Annotations;
 import de.tu_berlin.math.coga.common.debug.Debug;
-import de.tu_berlin.math.coga.common.debug.Log;
+import de.tu_berlin.math.coga.common.debug.HTMLLoggerHandler;
 import de.tu_berlin.math.coga.common.debug.SimpleFileHandler;
 import de.tu_berlin.math.coga.common.debug.SimpleLogFormatter;
 import de.tu_berlin.math.coga.common.localization.Localization;
@@ -90,7 +90,7 @@ public class ZETMain {
 	/** The properties in the information file. */
 	public static PropertyTreeModel ptmOptions;
 	/** The log of the application. */
-	public static Log log = new Log();
+	public static HTMLLoggerHandler gl = new HTMLLoggerHandler();
 	/** States if the last loaded file should be loaded at startup. */
 	private static boolean loadLast = false;
 	
@@ -438,6 +438,12 @@ public class ZETMain {
 					} catch( FileNotFoundException ex ) {
 						System.err.println( "Error creating debug error out." );
 					}
+			
+			gl = new HTMLLoggerHandler();
+			
+			l.addHandler( gl );
+			
+			
 	//		System.setOut( logStream );
 	//		System.setErr( errStream );
 			if( log )

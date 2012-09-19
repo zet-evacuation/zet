@@ -23,7 +23,6 @@ public class SimpleSysoutHandler extends StreamHandler {
 	private Level errLevel = Level.WARNING;  // 
 	private boolean doneHeader;
 	private Writer writer;
-
 	
 	/**
 	 * The only method we really change to check whether the message
