@@ -1,0 +1,5 @@
+<tmpl type="door">
+  <entry name="Hauptdurchgang" priority="0.33" size="2400"/>
+  <entry name="Nebendurchgang" priority="0.33" size="1200"/>
+  <entry name="Fluchttür" priority="0.33" size="800"/>
+</tmpl>
