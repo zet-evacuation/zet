@@ -160,9 +160,9 @@ public abstract class GUIOptionManager {
 		propertyContainer.set( "gui.optionManager.StairAreaVisibility", av.contains( Areas.Stair ) );
 	}
 
-	public static EditMode getEditMode() {
-		return editMode;
-	}
+	//public static EditMode getEditMode() {
+	//	return editMode;
+	//}
 
 	public static EditMode getPreviousEditMode() {
 		return previousEditMode;

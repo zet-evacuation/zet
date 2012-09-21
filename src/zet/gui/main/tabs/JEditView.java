@@ -1394,7 +1394,8 @@ public class JEditView extends AbstractSplitPropertyWindow<JFloorScrollPane<JFlo
 		if( getLeftPanel().getMainComponent() == null )
 			return;
 		getLeftPanel().getMainComponent().resetEdit();
-		GUIOptionManager.setEditMode( em );
+		//GUIOptionManager.setEditMode( em );
+		getLeftPanel().getMainComponent().setEditMode( em );
 	}
 
 	public void setFloorNameFocus() {

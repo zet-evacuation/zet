@@ -87,7 +87,17 @@ public class JPolygon extends AbstractPolygon {
 	private final static BasicStroke stroke_dashed_thick = new BasicStroke( EDGE_PAINT_WIDTH, BasicStroke.CAP_BUTT, BasicStroke.JOIN_MITER, 10.0f, dash1, 0.0f );
 	public final static BasicStroke stroke_thick = new BasicStroke( EDGE_PAINT_WIDTH );
 	private final GUIControl guiControl;
+	
+	private Edge selectedEdge;
+	private Point selectedPoint;
 
+	public void setSelectedEdge( Edge edge ) {
+		this.selectedEdge = edge;
+	}
+	public void setSelectedPoint( PlanPoint point ) {
+		this.selectedPoint = point;
+	}
+	
 	//############## EDGE RELATED FIELDS ###################
 	private class EdgeData {
 		/** The ds.z.Edges that eauch graphical edge representation is connected to. */
@@ -371,11 +381,11 @@ public class JPolygon extends AbstractPolygon {
 			g2.setPaint( (myEdge instanceof TeleportEdge) ? GUIOptionManager.getTeleportEdgeColor() : getForeground() );
 			if( myEdge instanceof RoomEdge && ((RoomEdge)myEdge).isPassable() )
 				// Paint dashed line to indicate passability
-				if( selected )
+				if( selected || myEdge.equals( selectedEdge ) )
 					g2.setStroke( stroke_dashed_thick );
 				else
 					g2.setStroke( stroke_dashed_slim );
-			else if( selected ) {
+			else if( selected || myEdge.equals( selectedEdge ) ) {
 				g2.setPaint( selectedColor );
 				g2.setStroke( stroke_thick );
 			} else
@@ -422,6 +432,9 @@ public class JPolygon extends AbstractPolygon {
 			// because otherwise the line segments of the dashed lines will
 			// overlap and form a solid line. Therefore we introduced the 
 			// field startAtNode1
+//			if( myEdge.equals( selectedEdge ) ) {
+//				System.out.println( "AN EDGE IS NOT PAINTED BECAUSE IT IS HIGHLIGHTED" );
+//			} else
 			if( ed.startDrawingAtNode1 )
 				g2.drawLine( ed.node1.x, ed.node1.y, ed.node2.x, ed.node2.y );
 			else
@@ -471,6 +484,8 @@ public class JPolygon extends AbstractPolygon {
 	 */
 	public void setSelected( boolean selected ) {
 		this.selected = selected;
+		this.selectedEdge = null;
+		this.selectedPoint = null;
 		repaint();
 	}
 
