@@ -105,10 +105,11 @@ public class EdgePopupListener implements ActionListener {
 				projectControl.insertPoint( myEdge, newPoint );
 			} else if( e.getActionCommand().equals( "makeTeleport" ) )
 				if( myEdge instanceof RoomEdge )
-					if( GUIOptionManager.getEditMode() != EditMode.TeleportEdgeCreation ) {
+//					if( GUIOptionManager.getEditMode() != EditMode.TeleportEdgeCreation ) {
+					if( null != EditMode.TeleportEdgeCreation ) {
 						// Start teleport connection creation
-						GUIOptionManager.setEditMode( EditMode.TeleportEdgeCreation );
-						GUIOptionManager.getEditMode().getPayload().add( myEdge );
+//						GUIOptionManager.setEditMode( EditMode.TeleportEdgeCreation );
+//						GUIOptionManager.getEditMode().getPayload().add( myEdge );
 
 						EventServer.getInstance().dispatchEvent( new MessageEvent( this, MessageEvent.MessageType.Status, "Wählen Sie jetzt die Gegenseite aus (Rechtsklick+Menu)!" ) );
 					} else {
@@ -123,13 +124,15 @@ public class EdgePopupListener implements ActionListener {
 				else
 					EventServer.getInstance().dispatchEvent( new MessageEvent( this, MessageEvent.MessageType.Error, "Nur Raumbegrenzungen können zu Evakuierungsausgängen gemacht werden!" ) );
 			else if( e.getActionCommand().equals( "createPassageRoom" ) ) {
-				if( GUIOptionManager.getEditMode() == EditMode.TeleportEdgeCreation ) {
+//				if( GUIOptionManager.getEditMode() == EditMode.TeleportEdgeCreation ) {
+				if( null == EditMode.TeleportEdgeCreation ) {
 					EventServer.getInstance().dispatchEvent( new MessageEvent( this, MessageEvent.MessageType.Status, "Erzeugen sie erst die Teleport-Kante!" ) );
 					return;
 				}
-				if( GUIOptionManager.getEditMode() != EditMode.PassableRoomCreation ) {
-					GUIOptionManager.setEditMode( EditMode.PassableRoomCreation );
-					GUIOptionManager.getEditMode().getPayload().add( myEdge );
+//				if( GUIOptionManager.getEditMode() != EditMode.PassableRoomCreation ) {
+				if( null != EditMode.PassableRoomCreation ) {
+//					GUIOptionManager.setEditMode( EditMode.PassableRoomCreation );
+//					GUIOptionManager.getEditMode().getPayload().add( myEdge );
 					EventServer.getInstance().dispatchEvent( new MessageEvent( this, MessageEvent.MessageType.Status, "Wählen Sie jetzt die Gegenseite aus (Rechtsklick+Menu)!" ) );
 				} else {
 					projectControl.connectRooms( (RoomEdge)EditMode.PassableRoomCreation.getPayload().getFirst(), (RoomEdge)myEdge );
