@@ -23,27 +23,27 @@ import com.thoughtworks.xstream.annotations.XStreamAlias;
 import com.thoughtworks.xstream.annotations.XStreamOmitField;
 
 /**
- * Implements a special type of {@link Edge} that has to be associated with a
+ * <p>Implements a special type of {@link Edge} that has to be associated with a
  * room, but cannot be associated to a general object of {@link PlanPolygon}-type.
  * With this distinction a differentiation between rooms and areas in a
- * building plan can be realized.
- * A room edge has the special ability to can be associated to two rooms at
+ * building plan can be realized.</p>
+ * <p>A room edge has the special ability to can be associated to two rooms at
  * the same time. As an {@code Edge} has to be in the border of a simple
  * polygon (at least, if it is valid), all instances of {@code RoomEdge}
  * which are associated to two rooms realize an inner edge in a polygonial net.
  * These are considered as intersections between the rooms.
- * The order of the rooms is not important.
+ * The order of the rooms is not important.</p>
  * 
- * In a scenario with a passable RoomEdge, this single edge is represented by two
+ * <p>In a scenario with a passable RoomEdge, this single edge is represented by two
  * room edges, because each RoomEdge is a PlanPolygon, and can thus only belong to 
  * one Room. But to indicate that the RoomEdges are passable one can use the
  * setLinkTarget method. So in our scenario with 2 RoomEdges which are positioned
  * on the same points, each of these edges would set its linkTarget to point to the
- * other one. --> A Room Edge is passable if you set the linkTarget property.
+ * other one. --> A Room Edge is passable if you set the linkTarget property.</p>
  * 
- * If the linkTarget is set, both edges are using different planpoint objects, but changes
- * that are made to one of the RoomEdges are automatically applied to the linkTarget
- * edge, too, by using the event handling mechanism.
+ * <p>If the linkTarget is set, both edges are using different planpoint objects,
+ * thus changes to one of the {@code RoomEdge}s have to be forwarded to the other
+ * object bythe control class.</p>
  * 
  * @author Jan-Philipp Kappmeier, Timon Kelter
  */

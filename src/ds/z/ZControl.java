@@ -345,6 +345,19 @@ public class ZControl {
 		//return true;
 	}
 
+	private void translatePoint( Edge edge, PlanPoint planPoint, int x, int y ) {
+		if( edge instanceof RoomEdge ) {
+			RoomEdge e = (RoomEdge)edge;
+			if( e.isPassable() ) {
+				if( e.getLinkTarget().getSource().equals( planPoint ) ) {
+					e.getLinkTarget().getSource().translate( x, y );
+				} else if( e.getLinkTarget().getTarget().equals( planPoint ) )
+					e.getLinkTarget().getTarget().translate( x, y );
+				e.getLinkTarget().getAssociatedPolygon().recomputeBounds();
+			}
+		}
+	}
+	
 	public void movePoints( List<PlanPoint> points, int x, int y ) {
 		Iterator<PlanPoint> itPP = points.iterator();
 
@@ -358,6 +371,10 @@ public class ZControl {
 			//if( !trueDrag && !newLocation.equals( planPoint.getLocation() ) )
 				// Check for !trueDrag to update "trueDrag" only once
 			//	trueDrag = true;
+
+			
+			translatePoint( planPoint.getNextEdge(), planPoint, x, y );
+			translatePoint( planPoint.getPreviousEdge(), planPoint, x, y );
 
 			planPoint.translate( x, y );
 
