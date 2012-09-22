@@ -222,7 +222,7 @@ public class JZETMenuBar extends JMenuBar implements ActionListener, Localized {
 		// execute menu
 		mnuExecuteCreateCellularAutomaton = Menu.addMenuItem( mExecute, loc.getString( "Execute.CreateCellularAutomaton" ), this, "createCellularAutomaton" );
 		//mnuExecuteCreateGraph = Menu.addMenuItem( mExecute, loc.getString( "Execute.CreateGraph" ), this, "createGraph" );
-                mCreateGraph = Menu.addMenu( mExecute, loc.getString( "Execute.CreateGraph" ) );
+		mCreateGraph = Menu.addMenu( mExecute, loc.getString( "Execute.CreateGraph" ) );
 		//mnuCreateGraphCompleteGraph = Menu.addMenuItem( mCreateGraph, loc.getString( "Execute.CreateGraph.CompleteGraph" ), this, "completeGraph" );
 		mCreateGraphCompleteGraph = Menu.addMenu( mCreateGraph, loc.getString( "Execute.CreateGraph.CompleteGraph" ) );
 		//mnuCreateGraphCompleteGrid = Menu.addMenuItem(mCreateGraphCompleteGraph, loc.getString("Execute.CreateGraph.CompleteGraph.Grid"), KeyEvent.VK_9, this, "completeGrid", InputEvent.CTRL_DOWN_MASK );

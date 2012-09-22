@@ -720,12 +720,10 @@ public class ZControl {
 
 	}
 
-	public void createDoor( RoomEdge edge, PlanPoint newPoint ) {
+	public void createDoor( RoomEdge edge, PlanPoint newPoint, double doorSize ) {
 		Room anchorRoom = edge.getRoom(); // store here, the edge will be destroyed and the room will be invalid afterwards
 		
 		System.out.println( "Zeichne Tür um " + newPoint + " herum." );
-		
-		double doorSize = 800;
 		
 		PlanPoint p1 = edge.getPoint( newPoint, doorSize/2 );
 		

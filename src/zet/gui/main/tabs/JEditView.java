@@ -44,6 +44,8 @@ import gui.GUIControl;
 import gui.ZETMain;
 import de.tu_berlin.math.coga.components.framework.Button;
 import de.tu_berlin.math.coga.components.framework.Menu;
+import ds.z.template.Door;
+import ds.z.template.Templates;
 import gui.editor.Areas;
 import gui.GUIOptionManager;
 import gui.ZETProperties;
@@ -1471,7 +1473,14 @@ public class JEditView extends AbstractSplitPropertyWindow<JFloorScrollPane<JFlo
 			Menu.addMenuItem( pupEdge, loc.getString( "popupCreateEvacuationPassage" ), edgePopupListeners.get( 0 ), "makeEvacEdge" );
 			Menu.addMenuItem( pupEdge, loc.getString( "popupShowPassageTarget" ), edgePopupListeners.get( 0 ), "showPassageTarget" );
 			Menu.addMenuItem( pupEdge, loc.getString( "popupRevertPassage" ), edgePopupListeners.get( 0 ), "revertPassage" );
-			Menu.addMenuItem( pupEdge, "Tür erzeugen", edgePopupListeners.get( 0 ), "createDoor" );
+			JMenu mCreateDoors = Menu.addMenu( pupEdge, "Tür erzeugen" );
+			Templates<Door> doors = guiControl.getDoorTemplates();
+			int i = 0;
+			for( Door d : doors ) {
+				Menu.addMenuItem( mCreateDoors, d.getName() + " (" + d.getSize() + ")", edgePopupListeners.get( 0 ), "createDoor" + i++ );
+			}
+			
+			//Menu.addMenuItem( pupEdge, "Tür erzeugen", edgePopupListeners.get( 0 ), "createDoor" );
 			loc.setPrefix( "" );
 		}
 	}

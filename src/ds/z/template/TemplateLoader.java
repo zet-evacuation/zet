@@ -1,12 +1,9 @@
 /**
  * TemplateLoader.java Created: 20.09.2012, 16:59:15
  */
-package de.tu_berlin.math.coga.zet;
+package ds.z.template;
 
 import de.tu_berlin.math.coga.common.debug.Debug;
-import de.tu_berlin.math.coga.zet.template.Door;
-import de.tu_berlin.math.coga.zet.template.TemplateTypes;
-import de.tu_berlin.math.coga.zet.template.Templates;
 import java.io.File;
 import java.io.IOException;
 import java.util.logging.Level;

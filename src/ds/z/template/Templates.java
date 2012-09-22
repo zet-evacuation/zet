@@ -2,7 +2,7 @@
  * Templates.java
  * Created: 20.09.2012, 17:08:14
  */
-package de.tu_berlin.math.coga.zet.template;
+package ds.z.template;
 
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -36,5 +36,9 @@ public class Templates<T> implements Iterable<T> {
 
 	public String getName() {
 		return name;
+	}
+
+	public T getDoor( int index ) {
+		return templates.get( index );
 	}
 }

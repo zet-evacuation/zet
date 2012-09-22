@@ -53,6 +53,8 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
+import javax.xml.parsers.ParserConfigurationException;
+import org.xml.sax.SAXException;
 import zet.gui.GUILocalization;
 import zet.gui.main.JEditor;
 
@@ -283,6 +285,12 @@ public class ZETMain {
 				
 				GUIControl guiControl = new GUIControl();
 				guiControl.createZETWindow();
+				try {
+					guiControl.loadTemplates();
+					log.config( "Templates loaded." );
+				} catch( ParserConfigurationException | SAXException | IOException ex ) {
+					log.log( Level.SEVERE, "Error loading templates!", ex );
+				}
 
 				// The control object for projects
 				System.out.println( "ZET-Fenster geladen." );
