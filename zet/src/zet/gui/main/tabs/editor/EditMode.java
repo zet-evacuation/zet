@@ -15,6 +15,15 @@
  */
 package zet.gui.main.tabs.editor;
 
+import ds.z.AssignmentArea;
+import ds.z.Barrier;
+import ds.z.DelayArea;
+import ds.z.EvacuationArea;
+import ds.z.InaccessibleArea;
+import ds.z.Room;
+import ds.z.SaveArea;
+import ds.z.StairArea;
+import ds.z.TeleportArea;
 import gui.GUIOptionManager;
 import java.awt.Color;
 import java.util.LinkedList;
@@ -25,28 +34,28 @@ import zet.gui.GUILocalization;
  * @author Jan-Philipp Kappmeier, Timon Kelter
  */
 public enum EditMode {
-	Selection( "Selection", Type.Selection, null, false ),
-	RoomCreation( "RoomCreation", Type.CreationRectangled, GUIOptionManager.getRoomEdgeColor(), false ),
-	InaccessibleAreaCreation( "InaccessibleAreaCreation", Type.CreationRectangled, GUIOptionManager.getInaccessibleAreaColor(), true ),
-	AssignmentAreaCreation( "AssignmentAreaCreation", Type.CreationRectangled, GUIOptionManager.getAssignmentAreaColor(), true ),
-	DelayAreaCreation( "DelayAreaCreation", Type.CreationRectangled, GUIOptionManager.getDelayAreaColor(), true ),
-	StairAreaCreation( "CreateStairArea", Type.CreationRectangled, GUIOptionManager.getStairAreaColor(), true ),
-	StairAreaMarkLowerLevel( "StairAreaMarkLowerLevel", Type.EditExisting, GUIOptionManager.getStairAreaColor(), true ),
-	StairAreaMarkUpperLevel( "StairAreaMarkUpperLevel", Type.EditExisting, GUIOptionManager.getStairAreaColor(), true ),
-	SaveAreaCreation( "SaveAreaCreation", Type.CreationRectangled, GUIOptionManager.getSaveAreaColor(), true ),
-	EvacuationAreaCreation( "EvacuationAreaAreaCreation", Type.CreationRectangled, GUIOptionManager.getEvacuationAreaColor(), true ),
-	RoomCreationPointwise( "RoomCreationPointwise", Type.CreationPointwise, GUIOptionManager.getRoomEdgeColor(), false ),
-	BarrierCreationPointwise( "BarrierCreationPointwise", Type.CreationPointwise, GUIOptionManager.getRoomEdgeColor(), true ),
-	InaccessibleAreaCreationPointwise( "InaccessibleAreaCreationPointwise", Type.CreationPointwise, GUIOptionManager.getInaccessibleAreaColor(), true ),
-	AssignmentAreaCreationPointwise( "AssignmentAreaCreationPointwise", Type.CreationPointwise, GUIOptionManager.getAssignmentAreaColor(), true ),
-	DelayAreaCreationPointwise( "DelayAreaCreationPointwise", Type.CreationPointwise, GUIOptionManager.getDelayAreaColor(), true ),
-	StairAreaCreationPointwise( "CreateStairAreaPointwise", Type.CreationPointwise, GUIOptionManager.getStairAreaColor(), true ),
-	SaveAreaCreationPointwise( "SaveAreaCreationPointwise", Type.CreationPointwise, GUIOptionManager.getSaveAreaColor(), true ),
-	EvacuationAreaCreationPointwise( "EvacuationAreaCreationPointwise", Type.CreationPointwise, GUIOptionManager.getEvacuationAreaColor(), true ),
-	TeleportEdgeCreation( "TeleportEdgeCreation", Type.EditExisting, GUIOptionManager.getRoomEdgeColor(), false ),
-	PassableRoomCreation( "CreatePassageRoom", Type.EditExisting, GUIOptionManager.getRoomEdgeColor(), false ),
-	TeleportAreaCreationPointwise( "CreateTeleportArea", Type.CreationPointwise, GUIOptionManager.getTeleportAreaColor(), true ),
-	TeleportAreaCreation( "CreateTeleportAreaPointwise", Type.CreationRectangled, GUIOptionManager.getTeleportAreaColor(), true );
+	Selection( "Selection", Type.Selection, null, false, null ),
+	RoomCreation( "RoomCreation", Type.CreationRectangled, GUIOptionManager.getRoomEdgeColor(), false, Room.class ),
+	InaccessibleAreaCreation( "InaccessibleAreaCreation", Type.CreationRectangled, GUIOptionManager.getInaccessibleAreaColor(), true, InaccessibleArea.class ),
+	AssignmentAreaCreation( "AssignmentAreaCreation", Type.CreationRectangled, GUIOptionManager.getAssignmentAreaColor(), true, AssignmentArea.class ),
+	DelayAreaCreation( "DelayAreaCreation", Type.CreationRectangled, GUIOptionManager.getDelayAreaColor(), true, DelayArea.class ),
+	StairAreaCreation( "CreateStairArea", Type.CreationRectangled, GUIOptionManager.getStairAreaColor(), true, StairArea.class ),
+	StairAreaMarkLowerLevel( "StairAreaMarkLowerLevel", Type.EditExisting, GUIOptionManager.getStairAreaColor(), true, null ),
+	StairAreaMarkUpperLevel( "StairAreaMarkUpperLevel", Type.EditExisting, GUIOptionManager.getStairAreaColor(), true, null ),
+	SaveAreaCreation( "SaveAreaCreation", Type.CreationRectangled, GUIOptionManager.getSaveAreaColor(), true, SaveArea.class ),
+	EvacuationAreaCreation( "EvacuationAreaAreaCreation", Type.CreationRectangled, GUIOptionManager.getEvacuationAreaColor(), true, EvacuationArea.class ),
+	RoomCreationPointwise( "RoomCreationPointwise", Type.CreationPointwise, GUIOptionManager.getRoomEdgeColor(), false, Room.class ),
+	BarrierCreationPointwise( "BarrierCreationPointwise", Type.CreationPointwise, GUIOptionManager.getRoomEdgeColor(), true, Barrier.class ),
+	InaccessibleAreaCreationPointwise( "InaccessibleAreaCreationPointwise", Type.CreationPointwise, GUIOptionManager.getInaccessibleAreaColor(), true, InaccessibleArea.class ),
+	AssignmentAreaCreationPointwise( "AssignmentAreaCreationPointwise", Type.CreationPointwise, GUIOptionManager.getAssignmentAreaColor(), true, AssignmentArea.class ),
+	DelayAreaCreationPointwise( "DelayAreaCreationPointwise", Type.CreationPointwise, GUIOptionManager.getDelayAreaColor(), true, DelayArea.class ),
+	StairAreaCreationPointwise( "CreateStairAreaPointwise", Type.CreationPointwise, GUIOptionManager.getStairAreaColor(), true, StairArea.class ),
+	SaveAreaCreationPointwise( "SaveAreaCreationPointwise", Type.CreationPointwise, GUIOptionManager.getSaveAreaColor(), true, SaveArea.class ),
+	EvacuationAreaCreationPointwise( "EvacuationAreaCreationPointwise", Type.CreationPointwise, GUIOptionManager.getEvacuationAreaColor(), true, EvacuationArea.class ),
+	TeleportEdgeCreation( "TeleportEdgeCreation", Type.EditExisting, GUIOptionManager.getRoomEdgeColor(), false, null ),
+	PassableRoomCreation( "CreatePassageRoom", Type.EditExisting, GUIOptionManager.getRoomEdgeColor(), false, null ),
+	TeleportAreaCreationPointwise( "CreateTeleportArea", Type.CreationPointwise, GUIOptionManager.getTeleportAreaColor(), true, TeleportArea.class ),
+	TeleportAreaCreation( "CreateTeleportAreaPointwise", Type.CreationRectangled, GUIOptionManager.getTeleportAreaColor(), true, TeleportArea.class );
 
 	static {
 		// Here the partnerModes are set. This cannot be done in the constructor because it would need
@@ -73,8 +82,9 @@ public enum EditMode {
 	private boolean createSubpolygons;
 	private LinkedList payload;
 	private EditMode partnerMode;
+	private Class c;
 
-	EditMode( String key, Type editType, Color editorColor, boolean createSubpolygons ) {
+	EditMode( String key, Type editType, Color editorColor, boolean createSubpolygons, Class c ) {
 		this.key = "gui.editor.EditMode." + key;
 //		this.ID = ID;
 		this.editType = editType;
@@ -82,6 +92,7 @@ public enum EditMode {
 		this.createSubpolygons = createSubpolygons;
 		this.payload = new LinkedList();
 		this.partnerMode = null;
+		this.c = c;
 	}
 
 	/**
@@ -146,6 +157,10 @@ public enum EditMode {
 	 * that are not of type CreationPointwise or CreationRectangled */
 	public boolean doesCreateSubpolygons() {
 		return createSubpolygons;
+	}
+
+	public Class getC() {
+		return c;
 	}
 
 	/**
