@@ -2,7 +2,7 @@
  * TemplateTypes.java
  * Created: 21.09.2012, 10:48:18
  */
-package de.tu_berlin.math.coga.zet.template;
+package ds.z.template;
 
 
 /**

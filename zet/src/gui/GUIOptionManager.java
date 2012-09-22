@@ -219,4 +219,8 @@ public abstract class GUIOptionManager {
 	public static String getLastFile( int i ) {
 		return PropertyContainer.getInstance().getAsString( "information.file.lastFile" + Integer.toString( i ) );
 	}
+	
+	public static String getDoorTemplateFile() {
+		return "./templates/door_default.xml";
+	}
 }

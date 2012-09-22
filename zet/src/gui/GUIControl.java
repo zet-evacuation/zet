@@ -35,6 +35,9 @@ import ds.z.Room;
 import ds.z.ZControl;
 import ds.z.exception.RoomEdgeInvalidTargetException;
 import ds.z.exception.TooManyPeopleException;
+import ds.z.template.Door;
+import ds.z.template.TemplateLoader;
+import ds.z.template.Templates;
 import gui.components.progress.JProgressBarDialog;
 import gui.components.progress.JRasterizeProgressBarDialog;
 import gui.editor.Areas;
@@ -68,6 +71,8 @@ import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
 import javax.swing.SwingWorker;
 import javax.swing.filechooser.FileFilter;
+import javax.xml.parsers.ParserConfigurationException;
+import org.xml.sax.SAXException;
 import statistic.ca.CAStatistic;
 import zet.gui.GUILocalization;
 import zet.gui.assignmentEditor.JAssignment;
@@ -106,6 +111,7 @@ public class GUIControl implements AlgorithmListener {
 	private AlgorithmControl algorithmControl;
 	private ArrayList<Areas> mode = new ArrayList<>( Arrays.asList( Areas.values() ) );
 	private ZETGLControl control;
+	private Templates<Door> doorTemplates;
 
 	/**
 	 * Creates a new instance of {@code GUIControl}.
@@ -122,6 +128,12 @@ public class GUIControl implements AlgorithmListener {
 		editview = editor.getEditView();
 		algorithmControl = new AlgorithmControl( zcontrol.getProject() );
 		visualization.setZcontrol( zcontrol );
+	}
+	
+	public void loadTemplates() throws ParserConfigurationException, SAXException, IOException {
+		TemplateLoader tl = new TemplateLoader();
+		tl.parse( new File( GUIOptionManager.getDoorTemplateFile() ) );
+		doorTemplates = tl.getDoors();
 	}
 
 	public void showZETWindow() {
@@ -1400,6 +1412,10 @@ public class GUIControl implements AlgorithmListener {
 				visualizationToolBar.setPlayButtonEnabled( false );
 				ZETMain.sendMessage( "Replaying visualization finished." );
 			return;
+	}
+
+	public Templates<Door> getDoorTemplates() {
+		return doorTemplates;
 	}
 }
 	/**

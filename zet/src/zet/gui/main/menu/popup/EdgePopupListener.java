@@ -26,6 +26,7 @@ import ds.z.Room;
 import ds.z.RoomEdge;
 import ds.z.TeleportEdge;
 import ds.z.ZControl;
+import ds.z.template.Door;
 import event.EventServer;
 import event.MessageEvent;
 import gui.GUIControl;
@@ -146,11 +147,16 @@ public class EdgePopupListener implements ActionListener {
 				guiControl.showPolygon( partnerRoom );
 			} else if( e.getActionCommand().equals( "revertPassage" ) )
 				projectControl.disconnectAtEdge( (RoomEdge)myEdge);
-			else if( e.getActionCommand().equals( "createDoor" ) ) {
+			else if( e.getActionCommand().startsWith( "createDoor" ) ) {
 				if( !(myEdge instanceof RoomEdge ) )
 					throw new IllegalStateException( "Doors can only be created in rooms!" );
 				System.out.println( "Try to create a door" );
 
+				int index = Integer.parseInt( e.getActionCommand().substring( 10 ) );
+				System.out.println( "Load index " + index );
+				
+				Door d = guiControl.getDoorTemplates().getDoor( index );
+				
 				Room myRoom = ((RoomEdge)myEdge).getRoom();				
 				
 				PlanPoint newPoint = new PlanPoint( CoordinateTools.translateToModel( mousePosition ) );
@@ -160,13 +166,8 @@ public class EdgePopupListener implements ActionListener {
 					newPoint.x = (int)Math.round( (double)newPoint.x / rasterSnap ) * (int)rasterSnap;
 					newPoint.y = (int)Math.round( (double)newPoint.y / rasterSnap ) * (int)rasterSnap;
 				}
-
-				
 				//PlanPoint newPoint = new PlanPoint( CoordinateTools.translateToModel( mousePosition ) );
-				
-				
-				
-				projectControl.createDoor( (RoomEdge)myEdge, newPoint );
+				projectControl.createDoor( (RoomEdge)myEdge, newPoint, d.getSize() );
 			}
 		} catch( RuntimeException ex ) {
 			EventServer.getInstance().dispatchEvent( new MessageEvent( this, MessageEvent.MessageType.Error, ex.getLocalizedMessage() ) );

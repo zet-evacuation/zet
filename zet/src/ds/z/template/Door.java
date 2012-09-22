@@ -2,7 +2,7 @@
  * Door.java
  * Created: 20.09.2012, 17:06:55
  */
-package de.tu_berlin.math.coga.zet.template;
+package ds.z.template;
 
 import java.util.Objects;
 
@@ -11,7 +11,7 @@ import java.util.Objects;
  *
  * @author Jan-Philipp Kappmeier
  */
-public class Door implements TT {
+public class Door {
 	String name;
 	int size;
 	double priority;
@@ -46,6 +46,20 @@ public class Door implements TT {
 			return false;
 		return true;
 	}
+
+	public String getName() {
+		return name;
+	}
+
+	public int getSize() {
+		return size;
+	}
+
+	public double getPriority() {
+		return priority;
+	}
+	
+	
 	
 	
 }

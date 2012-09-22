@@ -96,6 +96,6 @@ public class CellularAutomatonTask extends Algorithm<Project, CAVisualizationRes
 
 	@Override
 	public void eventOccurred( AlgorithmEvent event ) {
-		throw new UnsupportedOperationException( "Not supported yet." );
+		//throw new UnsupportedOperationException( "Not supported yet." );
 	}
 }
