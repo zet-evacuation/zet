@@ -704,7 +704,7 @@ public class JFloor extends AbstractFloor implements EventListener<ZModelChanged
 			case SaveAreaCreation:
 			case StairAreaCreation:
 			case TeleportAreaCreation:
-				floorMode = FloorMode.RectangleStart;
+				setFloorMode( FloorMode.RectangleStart );
 				break;
 			case AssignmentAreaCreationPointwise:
 			case DelayAreaCreationPointwise:
@@ -714,8 +714,20 @@ public class JFloor extends AbstractFloor implements EventListener<ZModelChanged
 			case SaveAreaCreationPointwise:
 			case StairAreaCreationPointwise:
 			case TeleportAreaCreationPointwise:
-				floorMode = FloorMode.PointWiseStart;
+				setFloorMode( FloorMode.PointWiseStart );
 				break;
+		}
+	}
+
+	private void setFloorMode( FloorMode floorMode ) {
+		this.floorMode = floorMode;
+		switch( floorMode ) {
+			case PointWiseActive:
+			case RectangleStart:
+				JPolygon.disablePopups = true;
+				break;
+			default:
+				JPolygon.disablePopups = false;
 		}
 	}
 	
@@ -852,7 +864,7 @@ public class JFloor extends AbstractFloor implements EventListener<ZModelChanged
 			startNewPolygon( parent );
 			zcontrol.addPoint( p2 );
 			lastClick = point;
-			floorMode = FloorMode.PointWiseActive;
+			setFloorMode( FloorMode.PointWiseActive );
 		} else if( floorMode == FloorMode.PointWiseActive ) {
 			PlanPoint p2 = new PlanPoint( CoordinateTools.translateToModel( rasterizedPaintMode ? getNextRasterPoint( point ) : point ) );
 			Room parent = null;
@@ -881,7 +893,7 @@ public class JFloor extends AbstractFloor implements EventListener<ZModelChanged
 
 			if( zcontrol.addPoint( p2 ) ) {
 				polygonFinishedHandler();
-				floorMode = FloorMode.PointWiseStart;
+				setFloorMode( FloorMode.PointWiseStart );
 				lastClick = null;
 			}
 
@@ -906,7 +918,7 @@ public class JFloor extends AbstractFloor implements EventListener<ZModelChanged
 			}
 			startNewPolygon( parent );
 			lastClick = point;
-			floorMode = FloorMode.RectangleActive;
+			setFloorMode( FloorMode.RectangleActive );
 		} else if( floorMode == FloorMode.RectangleActive ) {
 			// Get the model points which we clicked on
 			PlanPoint p1 = new PlanPoint( CoordinateTools.translateToModel( rasterizedPaintMode ? getNextRasterPoint( lastClick ) : lastClick ) );
@@ -923,7 +935,7 @@ public class JFloor extends AbstractFloor implements EventListener<ZModelChanged
 			points.add( new PlanPoint( p1.x, p1.y ) );
 			if( zcontrol.addPoints( points ) ) {
 				polygonFinishedHandler();
-				floorMode = FloorMode.RectangleStart;
+				setFloorMode( FloorMode.RectangleStart );
 				lastClick = null;
 			}
 		}
@@ -1029,9 +1041,11 @@ public class JFloor extends AbstractFloor implements EventListener<ZModelChanged
 	}
 
 	private void processRightClick( Point point ) {
+		System.out.println( "PROCESS A RIGHT CLICK" );
 		if( floorMode == FloorMode.PointWiseActive ) { // Create last Edge and close the polygon
 			try {
 				zcontrol.closePolygon();
+				setFloorMode( FloorMode.PointWiseStart );
 			} catch( IllegalStateException ex ) {
 				if( ex.getMessage().equals( "No edges" ) )
 					ZETMain.sendError( DefaultLoc.getSingleton().getString( "gui.error.CreateAtLeastThreeEdges" ) );

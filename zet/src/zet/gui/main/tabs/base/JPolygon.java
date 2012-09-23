@@ -88,6 +88,8 @@ public class JPolygon extends AbstractPolygon {
 	public final static BasicStroke stroke_thick = new BasicStroke( EDGE_PAINT_WIDTH );
 	private final GUIControl guiControl;
 	
+	public static boolean disablePopups = false;
+	
 	private Edge selectedEdge;
 	private Point selectedPoint;
 
@@ -503,7 +505,7 @@ public class JPolygon extends AbstractPolygon {
 		// 4. Else forward the event to parent object
 
 		// Do not use e.isPopupTrigger() here - Won't work under linux
-		if( e.getID() == MouseEvent.MOUSE_RELEASED && e.getButton() == MouseEvent.BUTTON3 ) {
+		if( e.getID() == MouseEvent.MOUSE_RELEASED && e.getButton() == MouseEvent.BUTTON3 && disablePopups == false ) {
 			if( !lastPosition.equals( e.getLocationOnScreen() ) ) {
 				lastPosition = e.getLocationOnScreen();
 				selectedUsed = false;
@@ -522,24 +524,24 @@ public class JPolygon extends AbstractPolygon {
 				if( hitPoint == null ) {
 					// Show edge popup
 					if( selectedUsed == false ) {
-						guiControl.editor.getEditView().setPopupEdge( hitEdge.myEdge, guiControl.editor.getEditView().convertPointToFloorCoordinates( (Component)e.getSource(), e.getPoint() ) );
-						guiControl.editor.getEditView().getEdgePopup().show( this, e.getX(), e.getY() );
+						guiControl.getEdgePopup().setPopupEdge( hitEdge.myEdge, guiControl.editor.getEditView().convertPointToFloorCoordinates( (Component)e.getSource(), e.getPoint() ) );
+						guiControl.getEdgePopup().show( this, e.getX(), e.getY() );
 					}
 					selectedUsed = isSelected();
 				} else {
 					// Show point popup
 					if( selectedUsed == false ) {
-						guiControl.editor.getEditView().setPopupPoint( hitEdge.myEdge, hitPoint );
-						guiControl.editor.getEditView().getPointPopup().show( this, e.getX(), e.getY() );
+						guiControl.getPointPopup().setPopupPoint( hitEdge.myEdge, hitPoint );
+						guiControl.getPointPopup().show( this, e.getX(), e.getY() );
 					}
 					selectedUsed = isSelected();
 				}
 			} else if( Room.class.isInstance( myPolygon ) && drawingPolygon.contains( e.getPoint() ) ) {
 				if( selectedUsed == false ) {
-					guiControl.editor.getEditView().setPopupPolygon( myPolygon );
-					guiControl.editor.getEditView().getPolygonPopup().show( this, e.getX(), e.getY() );
+					guiControl.getPolygonPopup().setPopupPolygon( myPolygon );
+					guiControl.getPolygonPopup().show( this, e.getX(), e.getY() );
 				}
-					selectedUsed = isSelected();
+				selectedUsed = isSelected();
 			}
 		}
 

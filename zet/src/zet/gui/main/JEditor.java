@@ -65,7 +65,10 @@ import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 import zet.gui.GUILocalization;
 import zet.gui.components.JEventStatusBar;
+import zet.gui.main.menu.EdgePopup;
 import zet.gui.main.menu.JZETMenuBar;
+import zet.gui.main.menu.PointPopup;
+import zet.gui.main.menu.PolygonPopup;
 import zet.gui.main.tabs.JEditView;
 import zet.gui.main.tabs.JQuickVisualizationView;
 import zet.gui.main.tabs.JVisualizationView;
@@ -159,11 +162,8 @@ public class JEditor extends JFrame implements Localized {
 	private JTabbedPane tabPane;
 	// Additional GUI stuff
 	private boolean disableUpdate = false;
-	private ZETWindowTabs currentMode = ZETWindowTabs.EditFloor;
 	/** Decides whether the visualization should be restarted if 'play' is pressed. */
 	//private boolean restartVisualization = false;
-	/** Decides whether visualization runs in loop-mode, that means it automatically starts again. */
-	private boolean loop = false;
 	private GUIControl guiControl;
 		CardLayout statusBarCardLayout;
 		JPanel statusPanel;
@@ -192,6 +192,10 @@ public class JEditor extends JFrame implements Localized {
 		// Create elements: menu, toolbars, status bar
 		setJMenuBar( new JZETMenuBar( guiControl ) );
 		getContentPane().setLayout( new BorderLayout() );
+		PolygonPopup polygonPopup = new PolygonPopup( guiControl );
+		EdgePopup edgePopup = new EdgePopup( guiControl );
+		PointPopup pointPopup = new PointPopup( );
+		guiControl.setPopups( polygonPopup, edgePopup, pointPopup );
 
 
 		statusBarCardLayout = new CardLayout();
@@ -534,7 +538,6 @@ public class JEditor extends JFrame implements Localized {
 	 */
 	private void switchTo( int tabIndex ) {
 		ZETWindowTabs tab = tabs.get( tabIndex );
-		currentMode = tab;
 		// code using the switch-bar is disabled!
 		guiControl.visualizationPause();
 		switch( tab ) {
@@ -588,16 +591,6 @@ public class JEditor extends JFrame implements Localized {
 	/**
 	 * @param event 
 	 */
-//	@Override
-//	public void handleEvent( ProgressEvent event ) {
-//		if( currentMode == ZETWindowTabs.QuickView ) {
-//			Floor floor = editView.getCurrentFloor();
-//			//caView.getLeftPanel().getMainComponent().displayFloor( floor );
-//			caView.getLeftPanel().getMainComponent().repaint();
-//		}
-//		ZETMain.sendMessage( event.getProcessMessage().taskName );
-//	}
-
 	boolean progressBarEnabled = false;
 	
 	/**

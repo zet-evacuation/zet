@@ -22,33 +22,25 @@ package zet.gui.main.tabs;
 
 import de.tu_berlin.math.coga.common.localization.DefaultLoc;
 import de.tu_berlin.math.coga.components.JRuler;
+import de.tu_berlin.math.coga.components.framework.Button;
 import ds.PropertyContainer;
-import ds.z.Assignment;
 import ds.z.AssignmentArea;
 import ds.z.AssignmentType;
 import ds.z.DelayArea;
-import ds.z.Edge;
 import ds.z.EvacuationArea;
 import ds.z.Floor;
-import ds.z.PlanPoint;
 import ds.z.PlanPolygon;
 import ds.z.Room;
-import ds.z.RoomEdge;
 import ds.z.StairArea;
 import ds.z.StairPreset;
 import ds.z.TeleportArea;
-import ds.z.TeleportEdge;
 import ds.z.ZControl;
 import ds.z.ZLocalization;
 import gui.GUIControl;
-import gui.ZETMain;
-import de.tu_berlin.math.coga.components.framework.Button;
-import de.tu_berlin.math.coga.components.framework.Menu;
-import ds.z.template.Door;
-import ds.z.template.Templates;
-import gui.editor.Areas;
 import gui.GUIOptionManager;
+import gui.ZETMain;
 import gui.ZETProperties;
+import gui.editor.Areas;
 import info.clearthought.layout.TableLayout;
 import java.awt.CardLayout;
 import java.awt.Component;
@@ -67,33 +59,24 @@ import java.text.NumberFormat;
 import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.EnumSet;
-import java.util.LinkedList;
-import java.util.List;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import javax.swing.JList;
-import javax.swing.JMenu;
-import javax.swing.JMenuItem;
 import javax.swing.JPanel;
-import javax.swing.JPopupMenu;
 import javax.swing.JTextField;
 import javax.swing.SwingUtilities;
 import zet.gui.GUILocalization;
-import zet.gui.components.model.FloorComboBox;
-import zet.gui.components.model.ComboBoxRenderer;
 import zet.gui.components.model.AssignmentTypeComboBoxModel;
+import zet.gui.components.model.ComboBoxRenderer;
+import zet.gui.components.model.FloorComboBox;
 import zet.gui.components.model.RoomComboBoxModel;
 import zet.gui.main.JEditor;
-import zet.gui.main.menu.popup.EdgePopupListener;
 import zet.gui.main.tabs.base.AbstractSplitPropertyWindow;
 import zet.gui.main.tabs.base.JFloorScrollPane;
-import zet.gui.main.tabs.base.JPolygon;
 import zet.gui.main.tabs.editor.EditMode;
 import zet.gui.main.tabs.editor.JFloor;
-import zet.gui.main.menu.popup.PointPopupListener;
-import zet.gui.main.menu.popup.PolygonPopupListener;
 
 /**
  * <p>One of the main components of the ZET software. This is a component
@@ -153,19 +136,6 @@ public class JEditView extends AbstractSplitPropertyWindow<JFloorScrollPane<JFlo
 	private JLabel lblFloorNumber;
 	/** A label that shows a string explaining the room selection combo box. */
 	private JLabel lblRoomSelector;
-	// Graphics components that are not directly displayed on this JEditorPanel
-	/** All JPolygons share the same pop-up menu, which is stored here. */
-	private JPopupMenu pupPolygon;
-	/** All JPolygons share the same pop-up menu listeners, which are stored here. */
-	private List<PolygonPopupListener> polygonPopupListeners;
-	/** All JEdges share the same pop-up menu, which is stored here. */
-	private JPopupMenu pupEdge;
-	/** All JEdges share the same pop-up menu listeners, which are stored here. */
-	private List<EdgePopupListener> edgePopupListeners;
-	/** All JEdges share a second pop-up menu which is only displayed on edge points. */
-	private JPopupMenu pupPoint;
-	/** All JEdges share the same pop-up menu listeners for pupPoint, which are stored here. */
-	private List<PointPopupListener> pointPopupListeners;
 	// Components for the east bar
 	/**  The CardLayout object of the east subpanel. */
 	private CardLayout eastSubBarCardLayout;
@@ -241,11 +211,8 @@ public class JEditView extends AbstractSplitPropertyWindow<JFloorScrollPane<JFlo
 
 	final NumberFormat nfFloat = DefaultLoc.getSingleton().getFloatConverter();
 	final NumberFormat nfInteger = DefaultLoc.getSingleton().getIntegerConverter();
-
-        private JButton deleteRoom;
-        private JButton moveRoom;
-        private ArrayList<Room> rooms;
-        private LinkedList<JPolygon> selectedPolygons = new LinkedList<>();
+	private JButton deleteRoom;
+	private JButton moveRoom;
 
 	public JEditView( GUIControl guiControl ) {
 		super( new JFloorScrollPane<>( new JFloor( guiControl ) ) );
@@ -559,7 +526,7 @@ public class JEditView extends AbstractSplitPropertyWindow<JFloorScrollPane<JFlo
 					try {
 						int persons = Math.min( nfInteger.parse( txtNumberOfPersons.getText() ).intValue(), ((AssignmentArea)getLeftPanel().getMainComponent().getSelectedPolygons().get( 0 ).getPlanPolygon()).getMaxEvacuees() );
 						((AssignmentArea)getLeftPanel().getMainComponent().getSelectedPolygons().get( 0 ).getPlanPolygon()).setEvacuees( persons );
-					} catch( Exception ex ) {
+					} catch( ParseException | IllegalArgumentException ex ) {
 						ZETMain.sendError( ex.getLocalizedMessage() );
 					}
 			}
@@ -950,13 +917,17 @@ public class JEditView extends AbstractSplitPropertyWindow<JFloorScrollPane<JFlo
 		ActionListener aclFloor = new ActionListener() {
 			@Override
 			public void actionPerformed( ActionEvent e ) {
-				if( e.getActionCommand().equals( "down" ) ) {
-					guiControl.moveFloorDown();
-				} else if( e.getActionCommand().equals( "up" ) ) {
-					guiControl.moveFloorUp();
-				} else
-					ZETMain.sendError( loc.getString( "gui.UnknownCommand" ) + " '" + e.getActionCommand() + "'. " +
-									loc.getString( "gui.ContactDeveloper" ) );
+				switch( e.getActionCommand() ) {
+					case "down":
+						guiControl.moveFloorDown();
+						break;
+					case "up":
+						guiControl.moveFloorUp();
+						break;
+					default:
+						ZETMain.sendError( loc.getString( "gui.UnknownCommand" ) + " '" + e.getActionCommand() + "'. " + loc.getString( "gui.ContactDeveloper" ) );
+						break;
+				}
 			}
 		};
 		btnFloorUp = Button.newButton( loc.getString( "Floor.Up" ), aclFloor, "up", loc.getString( "Floor.Up.ToolTip" ) );
@@ -1293,9 +1264,9 @@ public class JEditView extends AbstractSplitPropertyWindow<JFloorScrollPane<JFlo
 		this.projectControl = projectControl;
 
 		if( projectControl != null ) {
-			recreatePolygonPopupMenu( projectControl.getProject().getCurrentAssignment() );
-			recreateEdgePopupMenu();
-			recreatePointPopupMenu();
+			guiControl.getPolygonPopup().recreate( projectControl.getProject().getCurrentAssignment() );
+			guiControl.getEdgePopup().recreate();
+			guiControl.getPointPopup().recreate();
 		}
 
 		//This is independent of the rest of the displaying work
@@ -1421,159 +1392,6 @@ public class JEditView extends AbstractSplitPropertyWindow<JFloorScrollPane<JFlo
 		updateFloorView();
 	}
 
-	/*****************************************************************************
-	 *                                                                           *
-	 * Pop-up methods                                                             *
-	 *                                                                           *
-	 ****************************************************************************/
-	/**
-	 * Returns the up-to-date pop-up menu that is shown on all edges.
-	 * @return the up-to-date pop-up menu that is shown on all edges
-	 */
-	public JPopupMenu getEdgePopup() {
-		return pupEdge;
-	}
-
-	/**
-	 * Returns the up-to-date pop-up menu that is shown on all edges end points.
-	 * @return the up-to-date pop-up menu that is shown on all edges and end points
-	 */
-	public JPopupMenu getPointPopup() {
-		return pupPoint;
-	}
-
-	/**
-	 * Returns the up-to-date pop-up menu that is shown on all {@link JPolygon}s.
-	 * @return the up-to-date pop-up menu that is shown on all polygons
-	 */
-	public JPopupMenu getPolygonPopup() {
-		return pupPolygon;
-	}
-
-	// TODO popups in own class
-	/**
-	 * This method is called internally to recreate an up-to-date JPopupMenu
-	 * for the JEdge objects. It also recreates the EdgePopupListeners. 
-	 *
-	 * This whole method is superfluous until now, because the JEdges' PopupMenu
-	 * does not include any dynamic elements till now. To keep up the consistency 
-	 * with the JPolygon PopupMenu we nevertheless created this method.
-	 */
-	private void recreateEdgePopupMenu() {
-		if( pupEdge == null ) {
-			edgePopupListeners = new LinkedList<EdgePopupListener>();
-			edgePopupListeners.add( new EdgePopupListener( guiControl, projectControl ) );
-
-			pupEdge = new JPopupMenu();
-			loc.setPrefix( "gui.editor.JEditorPanel." );
-			Menu.addMenuItem( pupEdge, loc.getString( "popupInsertNewPoint" ), edgePopupListeners.get( 0 ), "insertPoint" );
-			Menu.addMenuItem( pupEdge, loc.getString( "popupCreatePassage" ), edgePopupListeners.get( 0 ), "makePassable" );
-			Menu.addMenuItem( pupEdge, loc.getString( "popupCreatePassageRoom" ), edgePopupListeners.get( 0 ), "createPassageRoom" );
-			Menu.addMenuItem( pupEdge, loc.getString( "popupCreateFloorPassage" ), edgePopupListeners.get( 0 ), "makeTeleport" );
-			Menu.addMenuItem( pupEdge, loc.getString( "popupCreateEvacuationPassage" ), edgePopupListeners.get( 0 ), "makeEvacEdge" );
-			Menu.addMenuItem( pupEdge, loc.getString( "popupShowPassageTarget" ), edgePopupListeners.get( 0 ), "showPassageTarget" );
-			Menu.addMenuItem( pupEdge, loc.getString( "popupRevertPassage" ), edgePopupListeners.get( 0 ), "revertPassage" );
-			JMenu mCreateDoors = Menu.addMenu( pupEdge, "Tür erzeugen" );
-			Templates<Door> doors = guiControl.getDoorTemplates();
-			int i = 0;
-			for( Door d : doors ) {
-				Menu.addMenuItem( mCreateDoors, d.getName() + " (" + d.getSize() + ")", edgePopupListeners.get( 0 ), "createDoor" + i++ );
-			}
-			
-			//Menu.addMenuItem( pupEdge, "Tür erzeugen", edgePopupListeners.get( 0 ), "createDoor" );
-			loc.setPrefix( "" );
-		}
-	}
-
-	/**
-	 * This method is called internally to recreate an up-to-date JPopupMenu
-	 * for the JEdge (Point) objects. It also recreates the JEdgePopupListeners. 
-	 *
-	 * This whole method is superfluous until now, because the JEdges' point PopupMenu
-	 * does not include any dynamic elements till now. To keep up the consistency
-	 * with the JPolygon PopupMenu we nevertheless created this method.
-	 */
-	private void recreatePointPopupMenu() {
-		if( pupPoint == null ) {
-			pointPopupListeners = new LinkedList<PointPopupListener>();
-			pointPopupListeners.add( new PointPopupListener( projectControl ) );
-
-			pupPoint = new JPopupMenu();
-
-			Menu.addMenuItem( pupPoint, loc.getString( "gui.editor.JEditorPanel.popupDeletePoint" ), pointPopupListeners.get( 0 ), "deletePoint" );
-		}
-	}
-
-	/**
-	 * This method is called internally to recreate an up-to-date JPopupMenu
-	 * for the JPolygon objects. It also recreates the PolygonPopupListeners.
-	 */
-	private void recreatePolygonPopupMenu( Assignment currentAssignment ) {
-		polygonPopupListeners = new LinkedList<PolygonPopupListener>();
-
-		pupPolygon = new JPopupMenu();
-		JMenu jmnCreateAssArea = Menu.addMenu( pupPolygon, loc.getString( "gui.editor.JEditorPanel.popupDefaultAssignmentArea" ) );
-		jmnCreateAssArea.setEnabled( currentAssignment != null );
-		if( currentAssignment != null ) {
-			PolygonPopupListener listener;
-			for( AssignmentType t : currentAssignment.getAssignmentTypes() ) {
-				listener = new PolygonPopupListener( t , guiControl );
-				polygonPopupListeners.add( listener );
-				Menu.addMenuItem( jmnCreateAssArea, t.getName(), listener );
-			}
-		}
-	}
-
-	/** This method should be called every time before the JEdge popup menu
-	 * is shown.
-	 * @param currentEdge The Edge that is displayed by the JEdge
-	 * on which the PopupMenu shall be shown. 
-	 * @param mousePosition the position at which the popup menu is shown with
-	 * coordinates that must be relative to the whole Floor
-	 */
-	// TODO maybe protected???
-	public void setPopupEdge( Edge currentEdge, Point mousePosition ) {
-		boolean passable = (currentEdge instanceof RoomEdge) && ((RoomEdge)currentEdge).isPassable();
-		// passage-Creation
-		((JMenuItem)pupEdge.getComponent( 1 )).setVisible( !passable );
-		// passage-room creation
-		((JMenuItem)pupEdge.getComponent( 2 )).setVisible( !passable );
-		// Teleportation-Creation
-		((JMenuItem)pupEdge.getComponent( 3 )).setVisible( !passable );
-		// EvacuationEdge-Creation
-		((JMenuItem)pupEdge.getComponent( 4 )).setVisible( !passable );
-		// Show Partner edge
-		((JMenuItem)pupEdge.getComponent( 5 )).setVisible( currentEdge instanceof TeleportEdge );
-		// revert passage
-		((JMenuItem)pupEdge.getComponent( 6 )).setVisible( passable );
-
-		for( EdgePopupListener p : edgePopupListeners )
-			p.setEdge( currentEdge, mousePosition, PropertyContainer.getInstance().getAsBoolean( "editor.options.view.rasterizedPaintMode" ) );
-	}
-
-	/** This method should be called every time before the JEdge point pop-up menu
-	 * is shown.
-	 * @param currentEdge The Edge on which the PointPopupMenu 
-	 * shall be shown. 
-	 * @param currentPoint The PlanPoint on which the PointPopupMenu 
-	 * shall be shown. */
-	// todo maybe protected
-	public void setPopupPoint( Edge currentEdge, PlanPoint currentPoint ) {
-		for( PointPopupListener p : pointPopupListeners )
-			p.setPoint( currentEdge, currentPoint );
-	}
-
-	/** This method should be called every time before the JPolygon pop-up menu
-	 * is shown.
-	 * @param currentPolygon The PlanPolygon that is displayed by the JPolygon
-	 * on which the PopupMenu shall be shown. */
-	// todo protected???
-	public void setPopupPolygon( PlanPolygon<?> currentPolygon ) {
-		System.out.println( "Popup now belongs to " + currentPolygon.toString() );
-		for( PolygonPopupListener p : polygonPopupListeners )
-			p.setPolygon( currentPolygon );
-	}
-
 // TODO-Event werfe wirklich events
 	public void stateChanged( /*ChangeEvent e*/ ) {
 		// Show possibly new floor list (floors added/removed or names changed)
@@ -1599,11 +1417,6 @@ public class JEditView extends AbstractSplitPropertyWindow<JFloorScrollPane<JFlo
 		leftRuler.repaint();
 	}
 
-	/*****************************************************************************
-	 *                                                                           *
-	 * Helper methods                                                            *
-	 *                                                                           *
-	 ****************************************************************************/
 	/**
 	 * This is a helper method for other GUI objects who need to transform 
 	 * points that are given in their own coordinate space into the coordinate
