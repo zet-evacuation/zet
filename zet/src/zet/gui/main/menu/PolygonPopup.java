@@ -24,12 +24,11 @@ public class PolygonPopup extends JPopupMenu {
 	/** The localization class. */
 	private GUILocalization loc = GUILocalization.getSingleton();;
 	/** All JPolygons share the same pop-up menu listeners, which are stored here. */
-	private List<PolygonPopupListener> polygonPopupListeners;
+	private List<PolygonPopupListener> polygonPopupListeners = new LinkedList<>();
 	private GUIControl guiControl;
 
 	public PolygonPopup( GUIControl control) {
 		super();
-		this.polygonPopupListeners = new LinkedList<>();
 		this.guiControl = control;
 	}
 	

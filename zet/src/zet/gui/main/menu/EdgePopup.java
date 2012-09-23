@@ -29,22 +29,17 @@ public class EdgePopup extends JPopupMenu {
 		/** The localization class. */
 	private GUILocalization loc = GUILocalization.getSingleton();;
 	/** All JPolygons share the same pop-up menu listeners, which are stored here. */
-	private List<EdgePopupListener> edgePopupListeners;
+	private List<EdgePopupListener> edgePopupListeners = new LinkedList<>();
 	private GUIControl guiControl;
 
 	public EdgePopup( GUIControl control) {
 		super();
-		this.edgePopupListeners = new LinkedList<>();
 		this.guiControl = control;
 	}
 
 	/**
 	 * This method is called internally to recreate an up-to-date JPopupMenu
 	 * for the JEdge objects. It also recreates the EdgePopupListeners. 
-	 *
-	 * This whole method is superfluous until now, because the JEdges' PopupMenu
-	 * does not include any dynamic elements till now. To keep up the consistency 
-	 * with the JPolygon PopupMenu we nevertheless created this method.
 	 */
 	public void recreate() {
 		edgePopupListeners.clear();

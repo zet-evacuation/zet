@@ -194,7 +194,7 @@ public class JEditor extends JFrame implements Localized {
 		getContentPane().setLayout( new BorderLayout() );
 		PolygonPopup polygonPopup = new PolygonPopup( guiControl );
 		EdgePopup edgePopup = new EdgePopup( guiControl );
-		PointPopup pointPopup = new PointPopup( );
+		PointPopup pointPopup = new PointPopup( guiControl );
 		guiControl.setPopups( polygonPopup, edgePopup, pointPopup );
 
 

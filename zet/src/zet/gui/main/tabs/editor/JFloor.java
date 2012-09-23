@@ -89,11 +89,6 @@ public class JFloor extends AbstractFloor implements EventListener<ZModelChanged
 	 * would slow down the paint method, which must be fast. So we included this variable
 	 * for a better efficiency, despite it's redundancy. */
 	private Point lastClick = null;
-	/** The last point that was clicked in model coordinate space. This is used during
-	 * the creation of new polygons, to let the event handler know where the next edge
-	 * that he creates must start (pointwise creation) or where the starting point of
-	 * the polygon is (rectangle creation). */
-	//private PlanPoint lastPlanClick = null;
 	/** The current position of the mouse.  This is used during the creation of new 
 	 * polygons to paint the preview of the next edge (pointwise creation) or the
 	 * preview of the whole polygon (rectangle creation). */
@@ -358,6 +353,15 @@ public class JFloor extends AbstractFloor implements EventListener<ZModelChanged
 	 */
 	public List<JPolygon> getSelectedPolygons() {
 		return Collections.unmodifiableList( selectedPolygons );
+	}
+	
+	/**
+	 * Returns the selected edge, if any is selected. Note, that this will always
+	 * be {@code null}, if any polygon is selected.
+	 * @return the selected edge
+	 */
+	public Edge getSelectedEdge() {
+		return selectedEdge;
 	}
 
 	/**
@@ -694,7 +698,7 @@ public class JFloor extends AbstractFloor implements EventListener<ZModelChanged
 		this.editMode = editMode;
 		switch( editMode ) {
 			case Selection:
-				floorMode = FloorMode.Select;
+				setFloorMode( FloorMode.Select );
 				break;
 			case AssignmentAreaCreation:
 			case DelayAreaCreation:
@@ -784,6 +788,7 @@ public class JFloor extends AbstractFloor implements EventListener<ZModelChanged
 							selectedEdge = edge;
 							selectedElementPolygon = toSelect;
 							selectedElementPolygon.setSelectedEdge( edge );
+							fireActionEvent();
 						} else if( clickedOn instanceof PlanPolygon )
 							// Clear old selection & Select new
 							setSelectedPolygon( toSelect );
@@ -834,6 +839,7 @@ public class JFloor extends AbstractFloor implements EventListener<ZModelChanged
 						selectedEdge = edge;
 						selectedElementPolygon = toSelect;
 						selectedElementPolygon.setSelectedEdge( edge );
+						fireActionEvent();
 					} else if( clickedOn instanceof PlanPolygon )
 						// Clear old selection & Select new
 						setSelectedPolygon( toSelect );
@@ -1041,7 +1047,7 @@ public class JFloor extends AbstractFloor implements EventListener<ZModelChanged
 	}
 
 	private void processRightClick( Point point ) {
-		System.out.println( "PROCESS A RIGHT CLICK" );
+		System.out.println( "PROCESS A RIGHT CLICK. Polygon handling is " + JPolygon.disablePopups );
 		if( floorMode == FloorMode.PointWiseActive ) { // Create last Edge and close the polygon
 			try {
 				zcontrol.closePolygon();
