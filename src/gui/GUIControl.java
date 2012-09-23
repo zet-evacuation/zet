@@ -619,9 +619,6 @@ public class GUIControl implements AlgorithmListener {
 		} catch( FileNotFoundException ex ) {
 			ZETMain.sendError( "FileNotFoundException" );
 			ex.printStackTrace( System.err );
-		} catch( IOException ex ) {
-			ZETMain.sendError( "IOException" );
-			ex.printStackTrace( System.err );
 		}
 
 	}
