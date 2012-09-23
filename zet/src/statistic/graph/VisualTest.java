@@ -114,10 +114,10 @@ public class VisualTest extends JFrame {
         //PathComposition fc = new PathComposition(network, transitTimes, algo.getSolution());
         //fc.run();
         NetworkFlowModel nfm = new NetworkFlowModel();
-        nfm.setNetwork(network);
-        nfm.setEdgeCapacities(capacities);
-        nfm.setTransitTimes(transitTimes);
-        nfm.setCurrentAssignment(supplies);
+        //nfm.setNetwork(network);
+        //nfm.setEdgeCapacities(capacities);
+        //nfm.setTransitTimes(transitTimes);
+        //nfm.setCurrentAssignment(supplies);
         //GraphData data = new GraphData(network, capacities, supplies, transitTimes, supplies, sinks, algo.getSolution());
         //final Statistics<GraphData> stats = new Statistics<GraphData>(data);
         //final FlowStatisticsCalculator fs = new FlowStatisticsCalculator(nfm, algo.getDynamicFlow());

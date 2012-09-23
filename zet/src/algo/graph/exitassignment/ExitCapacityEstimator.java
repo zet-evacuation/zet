@@ -20,14 +20,15 @@
 package algo.graph.exitassignment;
 
 import de.tu_berlin.math.coga.algorithm.networkflow.maximumflow.PushRelabelHighestLabelGlobalGapRelabelling;
-import ds.graph.problem.MaximumFlowProblem;
+import de.tu_berlin.math.coga.common.algorithm.Algorithm;
+import de.tu_berlin.math.coga.zet.NetworkFlowModel;
 import ds.graph.Edge;
 import ds.graph.IdentifiableCollection;
-import ds.mapping.IdentifiableIntegerMapping;
-import de.tu_berlin.math.coga.zet.NetworkFlowModel;
 import ds.graph.Node;
 import ds.graph.flow.MaximumFlow;
-import de.tu_berlin.math.coga.common.algorithm.Algorithm;
+import ds.graph.network.AbstractNetwork;
+import ds.graph.problem.MaximumFlowProblem;
+import ds.mapping.IdentifiableIntegerMapping;
 
 /**
  *
@@ -39,13 +40,13 @@ public class ExitCapacityEstimator {
 	}
 
 	public int estimateCapacityByMaximumFlow( NetworkFlowModel model, Node sink ) {
-		IdentifiableCollection<Node> sinks = model.getNetwork().predecessorNodes( model.getSupersink() );
-		IdentifiableIntegerMapping<Edge> newCapacities = new IdentifiableIntegerMapping<Edge>( model.getEdgeCapacities() );
+		IdentifiableCollection<Node> sinks = model.graph().predecessorNodes( model.getSupersink() );
+		IdentifiableIntegerMapping<Edge> newCapacities = new IdentifiableIntegerMapping<Edge>( model.edgeCapacities() );
 		for( Node s : sinks )
-			for( Edge edge : model.getNetwork().outgoingEdges( s ) )
+			for( Edge edge : model.graph().outgoingEdges( s ) )
 				//if (sinks.contains(edge.start())) {
 				newCapacities.set( edge, 0 );
-		MaximumFlowProblem problem = new MaximumFlowProblem( model.getNetwork(), newCapacities, model.getSources(), sink );
+		MaximumFlowProblem problem = new MaximumFlowProblem( (AbstractNetwork)model.graph(), newCapacities, model.getSources(), sink );
 		Algorithm<MaximumFlowProblem, MaximumFlow> algorithm = new PushRelabelHighestLabelGlobalGapRelabelling();
 		algorithm.setProblem( problem );
 		algorithm.run();
@@ -53,9 +54,9 @@ public class ExitCapacityEstimator {
 	}
 
 	public int estimateCapacityByIncomingEdges( NetworkFlowModel model, Node sink ) {
-		IdentifiableCollection<Node> sinks = model.getNetwork().predecessorNodes( model.getSupersink() );
+		IdentifiableCollection<Node> sinks = model.graph().predecessorNodes( model.getSupersink() );
 		int result = 0;
-		for( Edge edge : model.getNetwork().incomingEdges( sink ) ) {
+		for( Edge edge : model.graph().incomingEdges( sink ) ) {
 			if( sinks.contains( edge.start() ) )
 				continue;
 			result += model.getEdgeCapacity( edge );

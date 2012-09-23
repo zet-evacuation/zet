@@ -50,12 +50,12 @@ public class ReducedEarliestArrivalTransshipmentExitAssignment extends Algorithm
 
     @Override
     protected ExitAssignment runAlgorithm(NetworkFlowModel model) {
-        ExitAssignment solution = new ExitAssignment(model.getNetwork().nodes());
+        ExitAssignment solution = new ExitAssignment(model.graph().nodes());
 
-        AbstractNetwork network = model.getNetwork();
+        AbstractNetwork network = (AbstractNetwork)model.graph();
         IdentifiableCollection<Node> sinks = network.predecessorNodes(model.getSupersink());
 
-        Dijkstra dijkstra = new Dijkstra(network, model.getTransitTimes(), null, true);
+        Dijkstra dijkstra = new Dijkstra(network, model.transitTimes(), null, true);
         int[][] distances = new int[network.numberOfNodes()][network.numberOfNodes()];
         int[][] caps = new int[network.numberOfNodes()][network.numberOfNodes()];
         for (Node sink : sinks) {
@@ -64,7 +64,7 @@ public class ReducedEarliestArrivalTransshipmentExitAssignment extends Algorithm
             Forest shortestPathTree = dijkstra.getShortestPathTree();
             for (Node source : model.getSources()) {
                 distances[source.id()][sink.id()] = dijkstra.getDistance(source);
-                caps[source.id()][sink.id()] = model.getEdgeCapacities().minimum(shortestPathTree.getPathToRoot(source)); 
+                caps[source.id()][sink.id()] = model.edgeCapacities().minimum(shortestPathTree.getPathToRoot(source)); 
             }
         }
 
@@ -89,7 +89,7 @@ public class ReducedEarliestArrivalTransshipmentExitAssignment extends Algorithm
                 reducedCapacities.set(edge, caps[source.id()][sink.id()]);
                 sinkIndex++;
             }
-            reducedBalances.set(reducedNetwork.getNode(index), model.getCurrentAssignment().get(source));
+            reducedBalances.set(reducedNetwork.getNode(index), model.currentAssignment().get(source));
             reducedSources.add(reducedNetwork.getNode(index));
             index++;
         }
@@ -102,7 +102,7 @@ public class ReducedEarliestArrivalTransshipmentExitAssignment extends Algorithm
         }
         int totalSupplies = 0;
         for (Node source : model.getSources()) {
-            totalSupplies += model.getCurrentAssignment().get(source);
+            totalSupplies += model.currentAssignment().get(source);
         }
         for (Node node : reducedNetwork.nodes()) {
             reducedNodeCapacities.set(node, Integer.MAX_VALUE);
@@ -136,9 +136,9 @@ public class ReducedEarliestArrivalTransshipmentExitAssignment extends Algorithm
     }
 
     protected int estimateCapacityByIncomingEdges(NetworkFlowModel model, Node sink) {
-        IdentifiableCollection<Node> sinks = model.getNetwork().predecessorNodes(model.getSupersink());
+        IdentifiableCollection<Node> sinks = model.graph().predecessorNodes(model.getSupersink());
         int result = 0;
-        for (Edge edge : model.getNetwork().incomingEdges(sink)) {
+        for (Edge edge : model.graph().incomingEdges(sink)) {
             if (sinks.contains(edge.start())) {
                 continue;
             }
@@ -148,16 +148,16 @@ public class ReducedEarliestArrivalTransshipmentExitAssignment extends Algorithm
     }
 
     protected int estimateCapacityByMaximumFlow(NetworkFlowModel model, Node sink) {
-        IdentifiableCollection<Node> sinks = model.getNetwork().predecessorNodes(model.getSupersink());
-        IdentifiableIntegerMapping<Edge> newCapacities = new IdentifiableIntegerMapping<Edge>(model.getEdgeCapacities());
+        IdentifiableCollection<Node> sinks = model.graph().predecessorNodes(model.getSupersink());
+        IdentifiableIntegerMapping<Edge> newCapacities = new IdentifiableIntegerMapping<Edge>(model.edgeCapacities());
         for (Node s : sinks) {
-            for (Edge edge : model.getNetwork().outgoingEdges(s)) {
+            for (Edge edge : model.graph().outgoingEdges(s)) {
                 //if (sinks.contains(edge.start())) {
                 newCapacities.set(edge, 0);
             //}
             }
         }
-        MaximumFlowProblem problem = new MaximumFlowProblem(model.getNetwork(), newCapacities, model.getSources(), sink);
+        MaximumFlowProblem problem = new MaximumFlowProblem((AbstractNetwork)model.graph(), newCapacities, model.getSources(), sink);
         Algorithm<MaximumFlowProblem, MaximumFlow> algorithm = new PushRelabelHighestLabelGlobalGapRelabelling();
         algorithm.setProblem(problem);
         algorithm.run();

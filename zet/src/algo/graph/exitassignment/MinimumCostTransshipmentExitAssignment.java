@@ -20,23 +20,23 @@
 package algo.graph.exitassignment;
 
 import algo.graph.shortestpath.Dijkstra;
-import de.tu_berlin.math.coga.algorithm.networkflow.maximumflow.PushRelabelHighestLabelGlobalGapRelabelling;
-import ds.graph.problem.MaximumFlowProblem;
-import de.tu_berlin.math.coga.algorithm.networkflow.mincostflow.SuccessiveShortestPath;
 import algo.graph.util.PathDecomposition;
+import de.tu_berlin.math.coga.algorithm.networkflow.maximumflow.PushRelabelHighestLabelGlobalGapRelabelling;
+import de.tu_berlin.math.coga.algorithm.networkflow.mincostflow.SuccessiveShortestPath;
+import de.tu_berlin.math.coga.common.algorithm.Algorithm;
+import de.tu_berlin.math.coga.zet.NetworkFlowModel;
 import ds.graph.Edge;
 import ds.graph.IdentifiableCollection;
-import ds.mapping.IdentifiableIntegerMapping;
-import ds.graph.network.AbstractNetwork;
-import de.tu_berlin.math.coga.zet.NetworkFlowModel;
 import ds.graph.Node;
 import ds.graph.flow.MaximumFlow;
 import ds.graph.flow.PathBasedFlow;
 import ds.graph.flow.StaticPathFlow;
+import ds.graph.network.AbstractNetwork;
+import ds.graph.network.Network;
+import ds.graph.problem.MaximumFlowProblem;
+import ds.mapping.IdentifiableIntegerMapping;
 import java.util.LinkedList;
 import java.util.List;
-import de.tu_berlin.math.coga.common.algorithm.Algorithm;
-import ds.graph.network.Network;
 
 /**
  *
@@ -46,12 +46,12 @@ public class MinimumCostTransshipmentExitAssignment extends Algorithm<NetworkFlo
 
     @Override
     protected ExitAssignment runAlgorithm(NetworkFlowModel model) {
-        ExitAssignment solution = new ExitAssignment(model.getNetwork().nodes());
+        ExitAssignment solution = new ExitAssignment(model.graph().nodes());
 
-        AbstractNetwork network = model.getNetwork();
+        AbstractNetwork network =(AbstractNetwork) model.graph();
         IdentifiableCollection<Node> sinks = network.predecessorNodes(model.getSupersink());
 
-        Dijkstra dijkstra = new Dijkstra(network, model.getTransitTimes(), null, true);
+        Dijkstra dijkstra = new Dijkstra(network, model.transitTimes(), null, true);
         int[][] distances = new int[network.numberOfNodes()][network.numberOfNodes()];
         for (Node sink : sinks) {
             dijkstra.setSource(sink);
@@ -79,19 +79,19 @@ public class MinimumCostTransshipmentExitAssignment extends Algorithm<NetworkFlo
                 reducedCapacities.set(edge, Integer.MAX_VALUE);
                 sinkIndex++;
             }
-            reducedBalances.set(reducedNetwork.getNode(index), model.getCurrentAssignment().get(source));
+            reducedBalances.set(reducedNetwork.getNode(index), model.currentAssignment().get(source));
             reducedSources.add(reducedNetwork.getNode(index));
             index++;
         }
         int totalCapacities = 0;
-        IdentifiableIntegerMapping<Node> estimatedCapacities = new IdentifiableIntegerMapping<Node>(model.getNetwork().nodes());
+        IdentifiableIntegerMapping<Node> estimatedCapacities = new IdentifiableIntegerMapping<>(model.graph().nodes());
         for (Node sink : sinks) {
             estimatedCapacities.set(sink, estimateCapacityByMaximumFlow(model, sink));
             totalCapacities += estimatedCapacities.get(sink);
         }
         int totalSupplies = 0;
         for (Node source : model.getSources()) {
-            totalSupplies += model.getCurrentAssignment().get(source);
+            totalSupplies += model.currentAssignment().get(source);
         }
         int sinkIndex = 0;
         for (Node sink : sinks) {
@@ -119,9 +119,9 @@ public class MinimumCostTransshipmentExitAssignment extends Algorithm<NetworkFlo
     }
 
     protected int estimateCapacityByIncomingEdges(NetworkFlowModel model, Node sink) {
-        IdentifiableCollection<Node> sinks = model.getNetwork().predecessorNodes(model.getSupersink());
+        IdentifiableCollection<Node> sinks = model.graph().predecessorNodes(model.getSupersink());
         int result = 0;
-        for (Edge edge : model.getNetwork().incomingEdges(sink)) {
+        for (Edge edge : model.graph().incomingEdges(sink)) {
             if (sinks.contains(edge.start())) {
                 continue;
             }
@@ -131,16 +131,16 @@ public class MinimumCostTransshipmentExitAssignment extends Algorithm<NetworkFlo
     }
 
     protected int estimateCapacityByMaximumFlow(NetworkFlowModel model, Node sink) {
-        IdentifiableCollection<Node> sinks = model.getNetwork().predecessorNodes(model.getSupersink());
-        IdentifiableIntegerMapping<Edge> newCapacities = new IdentifiableIntegerMapping<Edge>(model.getEdgeCapacities());
+        IdentifiableCollection<Node> sinks = model.graph().predecessorNodes(model.getSupersink());
+        IdentifiableIntegerMapping<Edge> newCapacities = new IdentifiableIntegerMapping<>(model.edgeCapacities());
         for (Node s : sinks) {
-            for (Edge edge : model.getNetwork().outgoingEdges(s)) {
+            for (Edge edge : model.graph().outgoingEdges(s)) {
                 //if (sinks.contains(edge.start())) {
                 newCapacities.set(edge, 0);
             //}
             }
         }
-        MaximumFlowProblem problem = new MaximumFlowProblem(model.getNetwork(), newCapacities, model.getSources(), sink);
+        MaximumFlowProblem problem = new MaximumFlowProblem((AbstractNetwork)model.graph(), newCapacities, model.getSources(), sink);
         Algorithm<MaximumFlowProblem, MaximumFlow> algorithm = new PushRelabelHighestLabelGlobalGapRelabelling();
         algorithm.setProblem(problem);
         algorithm.run();
