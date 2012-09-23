@@ -15,12 +15,11 @@
  */
 package ds.ca.evac;
 
+import de.tu_berlin.math.coga.common.util.Direction;
+import de.tu_berlin.math.coga.common.util.Level;
 import java.util.ArrayList;
 import java.util.EnumMap;
 import java.util.EnumSet;
-
-import de.tu_berlin.math.coga.common.util.Direction;
-import de.tu_berlin.math.coga.common.util.Level;
 
 /**
  * The Cellular Automaton devides a room into quadratic cells.
@@ -357,7 +356,7 @@ public abstract class Cell implements Comparable<Cell> {
 			int cellx = this.getX() + direction.xOffset();
 			int celly = this.getY() + direction.yOffset();
 			if( cellRoom.existsCellAt( cellx, celly ) && (!passableOnly || !bounds.contains( direction )) && (!freeOnly || cellRoom.getCell( cellx, celly ).individual == null) ) {
-				// Test again for the diagonal directions. if next tu the position an individual stands. than this direction is removed!
+				// Test again for the diagonal directions. if next to the position an individual stands. than this direction is removed!
 				boolean add = true;
 				switch( direction ) {
 					case DownLeft:
@@ -461,6 +460,7 @@ public abstract class Cell implements Comparable<Cell> {
 	 * @param c the cell that is compared to
 	 * @return -1, 0 or 1
 	 */
+	@Override
 	public int compareTo( Cell c ) {
 		if( c.x == x && c.y == y ) {
 			if( c.hashCode() == hashCode() ) {

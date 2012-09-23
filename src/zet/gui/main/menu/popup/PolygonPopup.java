@@ -2,7 +2,7 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package zet.gui.main.menu;
+package zet.gui.main.menu.popup;
 
 import de.tu_berlin.math.coga.components.framework.Menu;
 import ds.z.Assignment;

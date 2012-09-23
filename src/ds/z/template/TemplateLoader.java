@@ -26,6 +26,7 @@ public class TemplateLoader extends DefaultHandler {
 	private TemplateTypes type = null;
 	private boolean start = false;
 	private Templates<Door> doors = new Templates<>( "doors" );
+	private Templates<ExitDoor> exitDoors = new Templates<>( "exitDoors" );
 //	private Templates<Delay> delays;
 //	private Templates<Stair> stairs;
 //	private Templates<Properties> properties;
@@ -52,6 +53,9 @@ public class TemplateLoader extends DefaultHandler {
 							switch( t ) {
 								case Door:
 									doors = new Templates<>( name == null ? "doors" : name );
+									break;
+								case ExitDoor:
+									exitDoors = new Templates<>( name == null ? "exitDoors" : name );
 							}
 							break;
 						}
@@ -66,7 +70,15 @@ public class TemplateLoader extends DefaultHandler {
 				double priority = Double.parseDouble( atts.getValue( "priority" ) == null ? "1" : atts.getValue( "priority" ) );
 				int size = Integer.parseInt( atts.getValue( "size" ) == null ? "800" : atts.getValue( "size" ) );
 				doors.add( new Door( name == null ? "door" : name, size, priority ) );
-				log.fine( "Door '" + name + "' found with priority '" + priority + "' and size '" + size + "'" );
+				log.log( Level.FINE, "Door ''{0}'' found with priority ''{1}'' and size ''{2}''", new Object[]{name, priority, size});
+				break;
+			case ExitDoor:
+				name = atts.getValue( "name") == null ? "door" : atts.getValue( "name" );
+				priority = Double.parseDouble( atts.getValue( "priority" ) == null ? "1" : atts.getValue( "priority" ) );
+				size = Integer.parseInt( atts.getValue( "size" ) == null ? "800" : atts.getValue( "size" ) );
+				exitDoors.add( new ExitDoor( name == null ? "door" : name, size, priority ) );
+				log.log( Level.FINE, "Door ''{0}'' found with priority ''{1}'' and size ''{2}''", new Object[]{name, priority, size});
+				break;
 		}
 	}
 
@@ -76,11 +88,23 @@ public class TemplateLoader extends DefaultHandler {
 			start = false;
 			switch( type ) {
 				case Door:
-					log.config( "Door templates '" + doors.getName() + "' loaded." );
+					log.log( Level.CONFIG, "Door templates ''{0}'' loaded.", doors.getName());
+					break;
+				case ExitDoor:
+					log.log( Level.CONFIG, "Exit door templates ''{0}'' loaded.", exitDoors.getName());
+					break;
 			}
 		}
 	}
 
+	@Override
+	public void endDocument() throws SAXException {
+		super.endDocument();
+		saxParser.reset();
+	}
+
+	
+	
 	/**
 	 * <p>Returns a list of {@link Door} templates. If no doors have been read so
 	 * far, an empty list is returned. If several template files containing
@@ -93,6 +117,10 @@ public class TemplateLoader extends DefaultHandler {
 	 */
 	public Templates<Door> getDoors() {
 		return doors;
+	}
+	
+	public Templates<ExitDoor> getExitDoors() {
+		return exitDoors;
 	}
 	
 	public static void main( String args[] ) throws ParserConfigurationException, SAXException, IOException {

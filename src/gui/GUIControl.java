@@ -36,6 +36,7 @@ import ds.z.ZControl;
 import ds.z.exception.RoomEdgeInvalidTargetException;
 import ds.z.exception.TooManyPeopleException;
 import ds.z.template.Door;
+import ds.z.template.ExitDoor;
 import ds.z.template.TemplateLoader;
 import ds.z.template.Templates;
 import gui.components.progress.JProgressBarDialog;
@@ -77,10 +78,10 @@ import statistic.ca.CAStatistic;
 import zet.gui.GUILocalization;
 import zet.gui.assignmentEditor.JAssignment;
 import zet.gui.main.JEditor;
-import zet.gui.main.menu.EdgePopup;
+import zet.gui.main.menu.popup.EdgePopup;
 import zet.gui.main.menu.JZETMenuBar;
-import zet.gui.main.menu.PointPopup;
-import zet.gui.main.menu.PolygonPopup;
+import zet.gui.main.menu.popup.PointPopup;
+import zet.gui.main.menu.popup.PolygonPopup;
 import zet.gui.main.tabs.JEditView;
 import zet.gui.main.tabs.base.AbstractFloor.RasterPaintStyle;
 import zet.gui.main.tabs.editor.EditMode;
@@ -115,6 +116,7 @@ public class GUIControl implements AlgorithmListener {
 	private ArrayList<Areas> mode = new ArrayList<>( Arrays.asList( Areas.values() ) );
 	private ZETGLControl control;
 	private Templates<Door> doorTemplates;
+	private Templates<ExitDoor> exitDoorTemplates;
 	private PolygonPopup polygonPopup;
 	private EdgePopup edgePopup;
 	private PointPopup pointPopup;
@@ -140,6 +142,8 @@ public class GUIControl implements AlgorithmListener {
 		TemplateLoader tl = new TemplateLoader();
 		tl.parse( new File( GUIOptionManager.getDoorTemplateFile() ) );
 		doorTemplates = tl.getDoors();
+		tl.parse( new File( GUIOptionManager.getExitDoorTemplateFile() ) );
+		exitDoorTemplates = tl.getExitDoors();
 	}
 
 	public void showZETWindow() {
@@ -1189,9 +1193,7 @@ public class GUIControl implements AlgorithmListener {
 	public void createConcreteAssignment() {
 		try {
 			algorithmControl.createConcreteAssignment();
-		} catch( IllegalArgumentException ex ) {
-			Logger.getLogger( GUIControl.class.getName() ).log( Level.SEVERE, null, ex );
-		} catch( ConversionNotSupportedException ex ) {
+		} catch( IllegalArgumentException | ConversionNotSupportedException ex ) {
 			Logger.getLogger( GUIControl.class.getName() ).log( Level.SEVERE, null, ex );
 		}
 	}
@@ -1434,18 +1436,17 @@ public class GUIControl implements AlgorithmListener {
 	public void animationFinished() {
 			if( loop )
 				control.resetTime();
-			else
+			else {
 				visualizationToolBar.setPlayButtonEnabled( false );
 				ZETMain.sendMessage( "Replaying visualization finished." );
-			return;
+			}
 	}
 
 	public Templates<Door> getDoorTemplates() {
 		return doorTemplates;
 	}
+
+	public Templates<ExitDoor> getExitDoorTemplates() {
+		return exitDoorTemplates;
+	}
 }
-	/**
-	 * @param event 
-	 */
-
-

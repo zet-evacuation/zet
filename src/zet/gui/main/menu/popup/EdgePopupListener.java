@@ -27,6 +27,7 @@ import ds.z.RoomEdge;
 import ds.z.TeleportEdge;
 import ds.z.ZControl;
 import ds.z.template.Door;
+import ds.z.template.ExitDoor;
 import event.EventServer;
 import event.MessageEvent;
 import gui.GUIControl;
@@ -168,6 +169,24 @@ public class EdgePopupListener implements ActionListener {
 				}
 				//PlanPoint newPoint = new PlanPoint( CoordinateTools.translateToModel( mousePosition ) );
 				projectControl.createDoor( (RoomEdge)myEdge, newPoint, d.getSize() );
+			} else if( e.getActionCommand().startsWith( "createExitDoor" ) ) {
+				if( !(myEdge instanceof RoomEdge ) )
+					throw new IllegalStateException( "Doors can only be created in rooms!" );
+				System.out.println( "Try to create a door" );
+				int index = Integer.parseInt( e.getActionCommand().substring( 14 ) );
+				System.out.println( "Load index " + index );
+				
+				ExitDoor d = guiControl.getExitDoorTemplates().getDoor( index );
+				Room myRoom = ((RoomEdge)myEdge).getRoom();
+				
+				PlanPoint newPoint = new PlanPoint( CoordinateTools.translateToModel( mousePosition ) );
+				newPoint = myEdge.getPointOnEdge( newPoint );
+				final double rasterSnap = ZETProperties.getRasterSizeSnap();
+				if( rasterizedPaintMode ) {
+					newPoint.x = (int)Math.round( (double)newPoint.x / rasterSnap ) * (int)rasterSnap;
+					newPoint.y = (int)Math.round( (double)newPoint.y / rasterSnap ) * (int)rasterSnap;
+				}
+				projectControl.createExitDoor( (RoomEdge)myEdge, newPoint, d.getSize() );
 			}
 		} catch( RuntimeException ex ) {
 			EventServer.getInstance().dispatchEvent( new MessageEvent( this, MessageEvent.MessageType.Error, ex.getLocalizedMessage() ) );

@@ -2,7 +2,7 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package zet.gui.main.menu;
+package zet.gui.main.menu.popup;
 
 import de.tu_berlin.math.coga.components.framework.Menu;
 import ds.PropertyContainer;
@@ -10,6 +10,7 @@ import ds.z.Edge;
 import ds.z.RoomEdge;
 import ds.z.TeleportEdge;
 import ds.z.template.Door;
+import ds.z.template.ExitDoor;
 import ds.z.template.Templates;
 import gui.GUIControl;
 import java.awt.Point;
@@ -19,7 +20,6 @@ import javax.swing.JMenu;
 import javax.swing.JMenuItem;
 import javax.swing.JPopupMenu;
 import zet.gui.GUILocalization;
-import zet.gui.main.menu.popup.EdgePopupListener;
 
 /**
  *
@@ -59,7 +59,13 @@ public class EdgePopup extends JPopupMenu {
 		int i = 0;
 		for( Door d : doors )
 			Menu.addMenuItem( mCreateDoors, d.getName() + " (" + d.getSize() + ")", edgePopupListeners.get( 0 ), "createDoor" + i++ );
-
+		
+		JMenu mCreateExitDoors = Menu.addMenu( this, "Ausgang erzeugen" );
+		Templates<ExitDoor> exitDoors = guiControl.getExitDoorTemplates();
+		i = 0;
+		for( ExitDoor d : exitDoors )
+			Menu.addMenuItem( mCreateExitDoors, d.getName() + " (" + d.getSize() + ")", edgePopupListeners.get( 0 ), "createExitDoor" + i++ );
+	
 		loc.setPrefix( "" );
 	}
 	/** This method should be called every time before the JEdge popup menu
@@ -84,7 +90,9 @@ public class EdgePopup extends JPopupMenu {
 		// revert passage
 		((JMenuItem)this.getComponent( 6 )).setVisible( passable );
 		// create door 
-		((JMenuItem)this.getComponent( 6 )).setVisible( !passable );
+		((JMenuItem)this.getComponent( 7 )).setVisible( !passable );
+		// create exit door 
+		((JMenuItem)this.getComponent( 7 )).setVisible( !passable );
 
 		for( EdgePopupListener p : edgePopupListeners )
 			p.setEdge( currentEdge, mousePosition, PropertyContainer.getInstance().getAsBoolean( "editor.options.view.rasterizedPaintMode" ) );
