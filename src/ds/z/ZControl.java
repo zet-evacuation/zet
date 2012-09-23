@@ -367,12 +367,7 @@ public class ZControl {
 		while( itPP.hasNext() && itPP.hasNext() ) {
 			// The drag targets are already rasterized, if neccessary
 			planPoint = itPP.next();
-			//newLocation = itDT.next();
-			//if( !trueDrag && !newLocation.equals( planPoint.getLocation() ) )
-				// Check for !trueDrag to update "trueDrag" only once
-			//	trueDrag = true;
 
-			
 			translatePoint( planPoint.getNextEdge(), planPoint, x, y );
 			translatePoint( planPoint.getPreviousEdge(), planPoint, x, y );
 

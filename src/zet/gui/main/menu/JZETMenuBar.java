@@ -5,16 +5,15 @@
 package zet.gui.main.menu;
 
 import de.tu_berlin.math.coga.common.localization.Localized;
+import de.tu_berlin.math.coga.components.framework.Menu;
 import ds.PropertyContainer;
 import gui.GUIControl;
 import gui.GraphConverterAlgorithms;
 import gui.ZETMain;
-import de.tu_berlin.math.coga.components.framework.Menu;
 import gui.editor.Areas;
 import gui.editor.properties.PropertyFilesSelectionModel;
 import gui.editor.properties.PropertyListEntry;
 import gui.editor.properties.PropertyLoadException;
-import zet.gui.treeview.JProjectTreeView;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.InputEvent;
@@ -28,8 +27,9 @@ import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.JRadioButtonMenuItem;
-import zet.gui.main.tabs.base.AbstractFloor.RasterPaintStyle;
 import zet.gui.GUILocalization;
+import zet.gui.main.tabs.base.AbstractFloor.RasterPaintStyle;
+import zet.gui.treeview.JProjectTreeView;
 
 /**
  *
