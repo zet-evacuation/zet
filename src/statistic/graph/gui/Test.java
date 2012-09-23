@@ -176,13 +176,13 @@ public class Test {
                 PathComposition fc = new PathComposition(network, transitTimes, flow);
                 fc.run();
                 NetworkFlowModel nfm = new NetworkFlowModel();
-                nfm.setNetwork(network);
-                nfm.setEdgeCapacities(capacities);
-                nfm.setTransitTimes(transitTimes);
-                nfm.setCurrentAssignment(supplies);
+                //nfm.setNetwork(network);
+                //nfm.setEdgeCapacities(capacities);
+                //nfm.setTransitTimes(transitTimes);
+                //nfm.setCurrentAssignment(supplies);
                 //Data data = new Data(network, capacities, supplies, transitTimes, supplies, sinks, algo.getDynamicFlow());
                 GraphData data = new GraphData(network, capacities, supplies, transitTimes, supplies, sinks, flow);
-                final Statistics<GraphData> stats = new Statistics<GraphData>(data);            
+                final Statistics<GraphData> stats = new Statistics<>(data);            
                 runs.add(stats);     
                 controller.setEdges(edges);
                 controller.setNodes(sinks);

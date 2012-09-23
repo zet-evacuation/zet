@@ -122,15 +122,15 @@ public class Controller implements DiagramListener, ProfileListener, StatisticLi
             GraphData data = new GraphData(model, flow);
             Statistics run = new Statistics(data);
             runs.add(run);
-            for (Node node : model.getGraph().predecessorNodes(model.getSupersink())) {
+            for (Node node : model.graph().predecessorNodes(model.getSupersink())) {
                 nodes.add(node);
             }
-			if (model.getGraph().numberOfEdges() > 0) {
+			if (model.graph().numberOfEdges() > 0) {
 				for (int i = 0; i < 3; i++) {
 					Random rng = new Random();
-					int r = rng.nextInt(model.getGraph().numberOfEdges());
-					if (model.getGraph().getEdge(r) != null) {
-						edges.add(model.getGraph().getEdge(r));
+					int r = rng.nextInt(model.graph().numberOfEdges());
+					if (model.graph().getEdge(r) != null) {
+						edges.add(model.graph().getEdge(r));
 					}
 				}
 			}

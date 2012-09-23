@@ -53,10 +53,10 @@ public class GraphData extends Data{
 
     @Deprecated
     public GraphData(NetworkFlowModel networkFlowModel, PathBasedFlowOverTime pathFlows) {
-        this(networkFlowModel.getNetwork(), networkFlowModel.getEdgeCapacities(),
-                networkFlowModel.getNodeCapacities(), networkFlowModel.getTransitTimes(),
-                networkFlowModel.getCurrentAssignment(),
-                networkFlowModel.getNetwork().predecessorNodes(networkFlowModel.getSupersink()),
+        this((AbstractNetwork)networkFlowModel.graph(), networkFlowModel.edgeCapacities(),
+                networkFlowModel.nodeCapacities(), networkFlowModel.transitTimes(),
+                networkFlowModel.currentAssignment(),
+                networkFlowModel.graph().predecessorNodes(networkFlowModel.getSupersink()),
                 pathFlows);
     }
 

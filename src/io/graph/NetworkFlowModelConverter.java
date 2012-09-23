@@ -57,29 +57,29 @@ public class NetworkFlowModelConverter implements Converter {
     public void marshal(Object source, HierarchicalStreamWriter writer, MarshallingContext context) {
         NetworkFlowModel problem = (NetworkFlowModel) source;
 				
-		writer.startNode("network");
-        context.convertAnother(problem.getNetwork(), networkConverter);
-        writer.endNode();
-        writer.startNode("edgecapacities");
-        mappingConverter.setDefaultValue(1);
-        mappingConverter.setDomain(problem.getNetwork().edges());
-        context.convertAnother(problem.getEdgeCapacities(), mappingConverter);
-        writer.endNode();
-        writer.startNode("nodecapacities");
-        mappingConverter.setDefaultValue(Integer.MAX_VALUE);
-        mappingConverter.setDomain(problem.getNetwork().nodes());
-        context.convertAnother(problem.getNodeCapacities(), mappingConverter);
-        writer.endNode();
-        writer.startNode("transitTimes");
-        mappingConverter.setDefaultValue(1);
-        mappingConverter.setDomain(problem.getNetwork().edges());
-        context.convertAnother(problem.getTransitTimes(), mappingConverter);
-        writer.endNode();
-        writer.startNode("assignment");
-        mappingConverter.setDefaultValue(0);
-        mappingConverter.setDomain(problem.getNetwork().nodes());
-        context.convertAnother(problem.getCurrentAssignment(), mappingConverter);
-        writer.endNode();
+//		writer.startNode("network");
+//        context.convertAnother(problem.getNetwork(), networkConverter);
+//        writer.endNode();
+//        writer.startNode("edgecapacities");
+//        mappingConverter.setDefaultValue(1);
+//        mappingConverter.setDomain(problem.getNetwork().edges());
+//        context.convertAnother(problem.getEdgeCapacities(), mappingConverter);
+//        writer.endNode();
+//        writer.startNode("nodecapacities");
+//        mappingConverter.setDefaultValue(Integer.MAX_VALUE);
+//        mappingConverter.setDomain(problem.getNetwork().nodes());
+//        context.convertAnother(problem.getNodeCapacities(), mappingConverter);
+//        writer.endNode();
+//        writer.startNode("transitTimes");
+//        mappingConverter.setDefaultValue(1);
+//        mappingConverter.setDomain(problem.getNetwork().edges());
+//        context.convertAnother(problem.getTransitTimes(), mappingConverter);
+//        writer.endNode();
+//        writer.startNode("assignment");
+//        mappingConverter.setDefaultValue(0);
+//        mappingConverter.setDomain(problem.getNetwork().nodes());
+//        context.convertAnother(problem.getCurrentAssignment(), mappingConverter);
+//        writer.endNode();
 		
 		writer.startNode("sources");
 		for (Node n : problem.getSources ()) {
@@ -163,14 +163,14 @@ public class NetworkFlowModelConverter implements Converter {
         Node supersink = (Node) context.convertAnother(null, Node.class);
         reader.moveUp();
 		
-		nf.setNetwork( network );
-		nf.setEdgeCapacities(edgeCapacities);
-		nf.setNodeCapacities(nodeCapacities);
-		nf.setTransitTimes(transitTimes);
-		nf.setCurrentAssignment(assignment);
-		nf.setSources(sources);
-		nf.setZToGraphMapping(zmapping);
-		nf.setSupersink(supersink);
+//		nf.setNetwork( network );
+//		nf.setEdgeCapacities(edgeCapacities);
+//		nf.setNodeCapacities(nodeCapacities);
+//		nf.setTransitTimes(transitTimes);
+//		nf.setCurrentAssignment(assignment);
+//		nf.setSources(sources);
+//		nf.setZToGraphMapping(zmapping);
+//		nf.setSupersink(supersink);
 		return nf;	
 	}
 }

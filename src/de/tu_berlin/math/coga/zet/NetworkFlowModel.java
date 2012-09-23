@@ -156,11 +156,11 @@ public class NetworkFlowModel implements Iterable<Node> {
      * Returns a linked list containing the super sink.
 		 * @return a linked list containing the super sink
      */
-//    public LinkedList<Node> getSinks(){
-//	  	LinkedList<Node> sinks = new LinkedList<>();
-//    	sinks.add(supersink);
-//    	return sinks;
-//    }
+    public LinkedList<Node> getSinks(){
+	  	LinkedList<Node> sinks = new LinkedList<>();
+    	sinks.add(supersink);
+    	return sinks;
+    }
 
     public ZToGraphMapping getZToGraphMapping() {
         return mapping;
@@ -203,9 +203,9 @@ public class NetworkFlowModel implements Iterable<Node> {
         nodeCapacities.set(node, value);
     }
 
-//    public IdentifiableIntegerMapping<Node> getNodeCapacities() {
-//        return nodeCapacities;
-//    }
+    public IdentifiableIntegerMapping<Node> nodeCapacities() {
+        return nodeCapacities;
+    }
 
 //    public void setNodeCapacities(IdentifiableIntegerMapping<Node> nodeCapacities) {
 //        this.nodeCapacities = nodeCapacities;
@@ -402,6 +402,10 @@ public class NetworkFlowModel implements Iterable<Node> {
 	public IdentifiableIntegerMapping<Edge> transitTimes() {
 		return transitTimes;
 	}
+	
+	public IdentifiableIntegerMapping<Node> currentAssignment() {
+		return currentAssignment;
+	}
 
 	public void addEdge( Edge neu, int edgeCapacity, int transitTime, double exactTransitTime ) {
 		network.addEdge( neu );
@@ -420,7 +424,6 @@ public class NetworkFlowModel implements Iterable<Node> {
 			final Vector3 v = new Vector3( rect.getCenterX(), rect.getCenterY(), zs );
 
 			nodePositionMapping.set( n, v );
-
 		}
 		return nodePositionMapping;
 
