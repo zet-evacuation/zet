@@ -1,0 +1,5 @@
+﻿<tmpl type="exitDoor" name="Ausgänge">
+  <entry name="Haupteingang" priority="0.33" size="2400"/>
+  <entry name="Nebeneingang" priority="0.33" size="1200"/>
+  <entry name="Fluchtausgang" priority="0.33" size="800"/>
+</tmpl>
