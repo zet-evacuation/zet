@@ -77,7 +77,10 @@ import statistic.ca.CAStatistic;
 import zet.gui.GUILocalization;
 import zet.gui.assignmentEditor.JAssignment;
 import zet.gui.main.JEditor;
+import zet.gui.main.menu.EdgePopup;
 import zet.gui.main.menu.JZETMenuBar;
+import zet.gui.main.menu.PointPopup;
+import zet.gui.main.menu.PolygonPopup;
 import zet.gui.main.tabs.JEditView;
 import zet.gui.main.tabs.base.AbstractFloor.RasterPaintStyle;
 import zet.gui.main.tabs.editor.EditMode;
@@ -112,6 +115,9 @@ public class GUIControl implements AlgorithmListener {
 	private ArrayList<Areas> mode = new ArrayList<>( Arrays.asList( Areas.values() ) );
 	private ZETGLControl control;
 	private Templates<Door> doorTemplates;
+	private PolygonPopup polygonPopup;
+	private EdgePopup edgePopup;
+	private PointPopup pointPopup;
 
 	/**
 	 * Creates a new instance of {@code GUIControl}.
@@ -501,6 +507,26 @@ public class GUIControl implements AlgorithmListener {
 	public void setMenuBar( JZETMenuBar aThis ) {
 		menuBar = aThis;
 	}
+	
+	public void setPopups( PolygonPopup polygonPopup, EdgePopup edgePopup, PointPopup pointPopup ) {
+		this.polygonPopup = polygonPopup;
+		this.edgePopup = edgePopup;
+		this.pointPopup = pointPopup;
+	}
+
+	public PolygonPopup getPolygonPopup() {
+		return polygonPopup;
+	}
+
+	public EdgePopup getEdgePopup() {
+		return edgePopup;
+	}
+
+	public PointPopup getPointPopup() {
+		return pointPopup;
+	}
+	
+	
 
 	public void showAbout() {
 		CreditsDialog credits = new CreditsDialog( editor );
