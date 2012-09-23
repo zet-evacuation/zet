@@ -15,14 +15,15 @@
  */
 package algo.ca.rule;
 
-import java.util.ArrayList;
+import de.tu_berlin.math.coga.common.util.Direction;
 import ds.ca.evac.Cell;
+import ds.ca.evac.DoorCell;
+import ds.ca.evac.ExitCell;
 import ds.ca.evac.Individual;
 import ds.ca.evac.StairCell;
-import ds.ca.results.VisualResultsRecorder;
 import ds.ca.results.IndividualStateChangeAction;
-import de.tu_berlin.math.coga.common.util.Direction;
-import ds.ca.evac.ExitCell;
+import ds.ca.results.VisualResultsRecorder;
+import java.util.ArrayList;
 
 /**
  *
@@ -109,20 +110,34 @@ public class SimpleMovementRule2 extends AbstractMovementRule {
 	private void initializeMove( Cell targetCell  ) {
 		this.esp.potentialController.increaseDynamicPotential( targetCell );
 
-		Direction direction = getMovementDirection( ind.getCell(), targetCell );
+		if( ind.getCell() instanceof DoorCell && targetCell instanceof DoorCell ) {
+			if( esp.eca.absoluteSpeed( ind.getCurrentSpeed() ) >= 0.0001 ) { // if individual moves, update times
+				speed = esp.eca.absoluteSpeed( ind.getCurrentSpeed() );
+				speed *= targetCell.getSpeedFactor() * 1;
+				ind.setStepStartTime( Math.max( ind.getCell().getOccupiedUntil(), ind.getStepEndTime() ) );
+				setStepEndTime( ind, ind.getStepEndTime() + (dist / speed) * esp.eca.getStepsPerSecond() + 0 );
+				ind.setDirection( ind.getDirection() );			
+			} else
+				throw new IllegalStateException( "Individuum has no speed." );
+			
+		} else {
+			Direction direction = getMovementDirection( ind.getCell(), targetCell );
 
-		double stairSpeedFactor = targetCell instanceof StairCell ? stairSpeedFactor = getStairSpeedFactor( direction, (StairCell) targetCell ) : 1;
-		dist = direction.distance() * 0.4; // calculate distance
-		double add = getSwayDelay( ind, direction ); // add a delay if the person is changing direction
+			double stairSpeedFactor = targetCell instanceof StairCell ? stairSpeedFactor = getStairSpeedFactor( direction, (StairCell) targetCell ) : 1;
+			dist = direction.distance() * 0.4; // calculate distance
+			double add = getSwayDelay( ind, direction ); // add a delay if the person is changing direction
 
-		if( esp.eca.absoluteSpeed( ind.getCurrentSpeed() ) >= 0.0001 ) { // if individual moves, update times
-			speed = esp.eca.absoluteSpeed( ind.getCurrentSpeed() );
-			speed *= targetCell.getSpeedFactor() * stairSpeedFactor;
-			ind.setStepStartTime( Math.max( ind.getCell().getOccupiedUntil(), ind.getStepEndTime() ) );
-			setStepEndTime( ind, ind.getStepEndTime() + (dist / speed) * esp.eca.getStepsPerSecond() + add );
-			ind.setDirection( direction );			
-		} else
-			throw new IllegalStateException( "Individuum has no speed." );
+			if( esp.eca.absoluteSpeed( ind.getCurrentSpeed() ) >= 0.0001 ) { // if individual moves, update times
+				speed = esp.eca.absoluteSpeed( ind.getCurrentSpeed() );
+				speed *= targetCell.getSpeedFactor() * stairSpeedFactor;
+				ind.setStepStartTime( Math.max( ind.getCell().getOccupiedUntil(), ind.getStepEndTime() ) );
+				setStepEndTime( ind, ind.getStepEndTime() + (dist / speed) * esp.eca.getStepsPerSecond() + add );
+				ind.setDirection( direction );			
+			} else
+				throw new IllegalStateException( "Individuum has no speed." );
+		}
+		
+
 	}
 	
 	/**

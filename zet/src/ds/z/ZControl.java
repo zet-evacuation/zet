@@ -717,79 +717,83 @@ public class ZControl {
 
 	public void createDoor( RoomEdge edge, PlanPoint newPoint, double doorSize ) {
 		Room anchorRoom = edge.getRoom(); // store here, the edge will be destroyed and the room will be invalid afterwards
-		
+
 		System.out.println( "Zeichne Tür um " + newPoint + " herum." );
-		
-		PlanPoint p1 = edge.getPoint( newPoint, doorSize/2 );
-		
-		PlanPoint p2 = edge.getPoint( newPoint, -doorSize/2 );
-		
+
+		PlanPoint p1 = edge.getPoint( newPoint, doorSize / 2 );
+
+		PlanPoint p2 = edge.getPoint( newPoint, -doorSize / 2 );
+
 		System.out.println( "Center: " + newPoint );
 		System.out.println( "P1: " + p1 );
 		System.out.println( "P2: " + p2 );
-		
+
 		ArrayList<Edge> newEdges = insertPoint( edge, p1 );
-		
+
 		insertPoint( newEdges.get( 1 ), p2 ); // has to be point 1, due to internal implementation of replaceEdges in PlanPolygon.java
-		
-		
+
+
 		// Door points on the original edge have been created. Now search for a possible partner edge in adjacent rooms
 		RoomEdge partner = null;
-		
+
 		Room target = null;
 		for( Room r : anchorRoom.getAssociatedFloor().getRooms() ) {
-			if( !r.equals( anchorRoom ) ) {
+			if( !r.equals( anchorRoom ) )
 				partner = r.getEdge( newPoint );
-			}
 			if( partner != null ) {
 				target = r;
 				break;
 			}
 		}
-		
-		if( partner == null ) {
+
+		if( partner == null )
 			throw new IllegalStateException( "Door can only be created between two rooms sharing an edge!" );
-		} else {
-			
-			p1 = partner.getPoint( newPoint, doorSize/2 );
-		
-			p2 = partner.getPoint( newPoint, -doorSize/2 );
-		
+		else {
+
+			p1 = partner.getPoint( newPoint, doorSize / 2 );
+
+			p2 = partner.getPoint( newPoint, -doorSize / 2 );
+
 			System.out.println( "Center: " + newPoint );
 			System.out.println( "P1: " + p1 );
 			System.out.println( "P2: " + p2 );
-		
+
 			newEdges = insertPoint( partner, p1 );
-		
+
 			insertPoint( newEdges.get( 1 ), p2 ); // has to be point 1, due to internal implementation of replaceEdges in PlanPolygon.java
-			
-			
+
+
 		}
-		
+
 		RoomEdge door1 = anchorRoom.getEdge( p1, p2 );
 		RoomEdge door2 = target.getEdge( p1, p2 );
+
+
+		if( door1 != null ) {
+			((RoomEdge) door2).setLinkTarget( door1 );
+			door1.setLinkTarget( (RoomEdge) door2 );
+		} else
+			throw new IllegalStateException( "something went wrong" );
+	}
+
+	public void createExitDoor( RoomEdge edge, PlanPoint newPoint, int doorSize ) {
+		Room anchorRoom = edge.getRoom(); // store here, the edge will be destroyed and the room will be invalid afterwards
+
+		System.out.println( "Zeichne Tür um " + newPoint + " herum." );
+
+		PlanPoint p1 = edge.getPoint( newPoint, doorSize / 2 );
+
+		PlanPoint p2 = edge.getPoint( newPoint, -doorSize / 2 );
+
+		System.out.println( "Center: " + newPoint );
+		System.out.println( "P1: " + p1 );
+		System.out.println( "P2: " + p2 );
+
+		ArrayList<Edge> newEdges = insertPoint( edge, p1 );
+
+		insertPoint( newEdges.get( 1 ), p2 ); // has to be point 1, due to internal implementation of replaceEdges in PlanPolygon.java
+		RoomEdge door1 = anchorRoom.getEdge( p1, p2 );
 		
-		
-					if( door1 != null ) {
-						((RoomEdge)door2).setLinkTarget( door1 );
-						door1.setLinkTarget( (RoomEdge)door2 );
-					} else
-						throw new IllegalStateException( "something went wrong" );
-		
-//					Room myRoom = ((RoomEdge)myEdge).getRoom();
-//					RoomEdge partner = null;
-//
-//					for( Room r : myRoom.getAssociatedFloor().getRooms() )
-//						if( r != myRoom )
-//							try {
-//								partner = r.getEdge( (RoomEdge)myEdge );
-//								break; // Break when successful
-//							} catch( IllegalArgumentException ex ) { }
-//					if( partner != null ) {
-//						((RoomEdge)myEdge).setLinkTarget( partner );
-//						partner.setLinkTarget( (RoomEdge)myEdge );
-//					}
-		
-		
+		getProject().getBuildingPlan().getDefaultFloor().addEvacuationRoom( (RoomEdge)door1 );
 	}
 }

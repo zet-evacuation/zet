@@ -58,8 +58,4 @@ public class Door {
 	public double getPriority() {
 		return priority;
 	}
-	
-	
-	
-	
 }

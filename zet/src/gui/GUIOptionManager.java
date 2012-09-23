@@ -223,4 +223,7 @@ public abstract class GUIOptionManager {
 	public static String getDoorTemplateFile() {
 		return "./templates/door_default.xml";
 	}
+	public static String getExitDoorTemplateFile() {
+		return "./templates/exitdoor_default.xml";
+	}
 }

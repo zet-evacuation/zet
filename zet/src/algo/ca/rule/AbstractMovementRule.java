@@ -21,6 +21,7 @@ package algo.ca.rule;
 import de.tu_berlin.math.coga.common.util.Direction;
 import de.tu_berlin.math.coga.common.util.Level;
 import ds.ca.evac.Cell;
+import ds.ca.evac.DoorCell;
 import ds.ca.evac.Individual;
 import ds.ca.evac.StairCell;
 import java.util.ArrayList;
@@ -75,6 +76,10 @@ public abstract class AbstractMovementRule extends AbstractRule {
 			if( ind.isSafe() && !((c instanceof ds.ca.evac.SaveCell) || (c instanceof ds.ca.evac.ExitCell)) )
 				continue; // ignore all moves that would mean walking out of safe areas
 			
+			if( fromCell instanceof DoorCell && c instanceof DoorCell ) {
+				possibleTargets.add( c );
+				continue;
+			}
 			Direction rel = fromCell.getRelative( c );
 			if( dir == rel )
 				possibleTargets.add( c );

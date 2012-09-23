@@ -11,6 +11,7 @@ package ds.z.template;
  */
 public enum TemplateTypes {
 	Door( "door" ),
+	ExitDoor( "exitDoor" ),
 	Delay( "delay" ),
 	Stair( "stair" ),
 	Properties( "properties" );
