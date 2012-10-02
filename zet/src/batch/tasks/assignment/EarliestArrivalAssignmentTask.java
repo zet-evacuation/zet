@@ -20,12 +20,12 @@
 
 package batch.tasks.assignment;
 
-import batch.tasks.*;
 import algo.graph.exitassignment.EarliestArrivalTransshipmentExitAssignment;
 import batch.BatchResultEntry;
-import ds.z.Project;
+import batch.tasks.*;
 import ds.z.Assignment;
 import ds.z.ConcreteAssignment;
+import ds.z.Project;
 
 /**
  * A task that calculates an exit assignment using earliest arrival dynamic flows.

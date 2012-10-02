@@ -144,8 +144,9 @@ public class GUIControl implements AlgorithmListener {
 		TemplateLoader tl = new TemplateLoader();
 		tl.parse( new File( GUIOptionManager.getDoorTemplateFile() ) );
 		doorTemplates = tl.getDoors();
-		tl.parse( new File( GUIOptionManager.getExitDoorTemplateFile() ) );
-		exitDoorTemplates = tl.getExitDoors();
+//		tl.parse( new File( GUIOptionManager.getExitDoorTemplateFile() ) );
+//		exitDoorTemplates = tl.getExitDoors();
+		exitDoorTemplates = new Templates<>("empty");
 	}
 
 	public void showZETWindow() {
@@ -1310,7 +1311,7 @@ public class GUIControl implements AlgorithmListener {
 				if( isDone( pce ) ) {
 					//GraphVisualizationResults gvr = algorithmControl.getGraphVisResults();
 					//visualization.getControl().setGraphControl( gvr );
-					
+					log.info( "ExitAssignmentEAT is done." );
 				}
 			}
 		}, this );

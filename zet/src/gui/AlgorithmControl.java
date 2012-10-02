@@ -6,6 +6,9 @@ package gui;
 
 import algo.ca.algorithm.evac.EvacuationCellularAutomatonAlgorithm;
 import algo.ca.algorithm.evac.EvacuationSimulationProblem;
+import algo.graph.exitassignment.Assignable;
+import algo.graph.exitassignment.EarliestArrivalTransshipmentExitAssignment;
+import algo.graph.exitassignment.ExitAssignment;
 import de.tu_berlin.math.coga.common.algorithm.Algorithm;
 import de.tu_berlin.math.coga.common.algorithm.AlgorithmListener;
 import de.tu_berlin.math.coga.common.util.Formatter;
@@ -18,6 +21,7 @@ import de.tu_berlin.math.coga.zet.converter.cellularAutomaton.ZToCAConverter;
 import de.tu_berlin.math.coga.zet.converter.cellularAutomaton.ZToCAConverter.ConversionNotSupportedException;
 import de.tu_berlin.math.coga.zet.converter.cellularAutomaton.ZToCAMapping;
 import de.tu_berlin.math.coga.zet.converter.cellularAutomaton.ZToCARasterContainer;
+import de.tu_berlin.math.coga.zet.converter.graph.GraphAssignmentConverter;
 import ds.CompareVisualizationResults;
 import ds.GraphVisualizationResults;
 import ds.PropertyContainer;
@@ -49,6 +53,8 @@ import zet.tasks.SerialTask;
  * @author Jan-Philipp Kappmeier
  */
 public class AlgorithmControl implements PropertyChangeListener {
+	/** The logger of the main class. */
+	private static final Logger log = Logger.getGlobal();
 
 	private BuildingResults buildingResults;
 	private Project project;
@@ -398,6 +404,38 @@ public class AlgorithmControl implements PropertyChangeListener {
 	}
 
 	public void performExitAssignmentEAT( PropertyChangeListener propertyChangeListener, AlgorithmListener control ) {
+		
+		if( networkFlowModel == null ) {
+			log.severe( "No model created." );
+			return;
+		}
+
+		EarliestArrivalTransshipmentExitAssignment eatAssignment;
+		eatAssignment = new EarliestArrivalTransshipmentExitAssignment();
+		//ZToGraphConverter.convertConcreteAssignment( concreteAssignments[runNumber], res.getNetworkFlowModel() );
+		
+		log.info( "Compute concrete assignment..." );
+		concreteAssignment = project.getCurrentAssignment().createConcreteAssignment( 400 );
+		GraphAssignmentConverter cav = new GraphAssignmentConverter( networkFlowModel );
+		cav.setProblem( concreteAssignment );
+		cav.run();
+		networkFlowModel = cav.getSolution();
+		log.info( "Persons: " + concreteAssignment.getPersons().size() );
+		log.info( "done." );
+		
+		eatAssignment.setProblem( networkFlowModel );
+		log.info( "Compute exit assignment..." );
+		eatAssignment.run();
+		log.info( "done." );
+		Assignable exitAssignmenta = eatAssignment;
+		
+		ExitAssignment exitAssignment = eatAssignment.getExitAssignment();
+		
+		log.info( "Computed ExitAssignment: " );
+		log.info( exitAssignment.toString() );
+		
+		
+		
 		
 	}
    
