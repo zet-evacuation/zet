@@ -35,7 +35,7 @@ import zet.gui.treeview.JProjectTreeView;
  *
  * @author Jan-Philipp Kappmeier
  */
-@SuppressWarnings( "serial" )
+@SuppressWarnings( "serial")
 public class JZETMenuBar extends JMenuBar implements ActionListener, Localized {
 	private final GUIControl control;
 	/** The localization class. */
@@ -82,49 +82,51 @@ public class JZETMenuBar extends JMenuBar implements ActionListener, Localized {
 	private JMenu mExecute;
 	private JMenuItem mnuExecuteCreateCellularAutomaton;
 	//private JMenuItem mnuExecuteCreateGraph;
-        private JMenu mCreateGraph;
-        private JMenu mCreateGraphCompleteGraph;
-        private JMenuItem mnuCreateGraphCompleteGrid;
-        private JMenuItem mnuCreateGraphCompleteNonGrid;
-        private JMenu mCreateGraphSpannerUsingPrim;
-        private JMenuItem mnuCreateGraphSpannerUsingPrimGrid;
-        private JMenuItem mnuCreateGraphSpannerUsingPrimNonGrid;
-        private JMenu mCreateGraphSpannerUsingGreedy;
-        private JMenuItem mnuCreateGraphSpannerUsingGreedyGrid;
-        private JMenuItem mnuCreateGraphSpannerUsingGreedyNonGrid;
-        private JMenu mCreateGraphSpannerUsingDijkstra;
-        private JMenuItem mnuCreateGraphSpannerUsingDijkstraGrid;
-        private JMenuItem mnuCreateGraphSpannerUsingDijkstraNonGrid;
-        private JMenu mCreateSteinerTree;
-        private JMenuItem mnuCreateSteinerTreeGrid;
-        private JMenuItem mnuCreateSteinerTreeNonGrid;
-        private JMenu mCreateClusterGraph;
-        private JMenuItem mnuCreateClusterGraphGrid;
-        private JMenuItem mnuCreateClusterGraphNonGrid;
-        private JMenu mCreateShortestPathGraph;
-        private JMenuItem mnuCreateShortestPathGraphGrid;
-        private JMenuItem mnuCreateShortestPathGraphNonGrid;
-        private JMenu mCreateAPSPGraph;
-        private JMenuItem mnuCreateAPSPGraphNonGrid;
-        private JMenuItem mnuCreateAPSPGraphGrid; 
-        private JMenu mCreateShortestPaths;
-        private JMenuItem mnuCreateShortestPathsNonGrid;
-        private JMenuItem mnuCreateShortestPathsGrid;
-        private JMenuItem mCreateThinNetwork;
+	private JMenu mCreateGraph;
+	private JMenu mCreateGraphCompleteGraph;
+	private JMenuItem mnuCreateGraphCompleteGrid;
+	private JMenuItem mnuCreateGraphCompleteNonGrid;
+	private JMenu mCreateGraphSpannerUsingPrim;
+	private JMenuItem mnuCreateGraphSpannerUsingPrimGrid;
+	private JMenuItem mnuCreateGraphSpannerUsingPrimNonGrid;
+	private JMenu mCreateGraphSpannerUsingGreedy;
+	private JMenuItem mnuCreateGraphSpannerUsingGreedyGrid;
+	private JMenuItem mnuCreateGraphSpannerUsingGreedyNonGrid;
+	private JMenu mCreateGraphSpannerUsingDijkstra;
+	private JMenuItem mnuCreateGraphSpannerUsingDijkstraGrid;
+	private JMenuItem mnuCreateGraphSpannerUsingDijkstraNonGrid;
+	private JMenu mCreateSteinerTree;
+	private JMenuItem mnuCreateSteinerTreeGrid;
+	private JMenuItem mnuCreateSteinerTreeNonGrid;
+	private JMenu mCreateClusterGraph;
+	private JMenuItem mnuCreateClusterGraphGrid;
+	private JMenuItem mnuCreateClusterGraphNonGrid;
+	private JMenu mCreateShortestPathGraph;
+	private JMenuItem mnuCreateShortestPathGraphGrid;
+	private JMenuItem mnuCreateShortestPathGraphNonGrid;
+	private JMenu mCreateAPSPGraph;
+	private JMenuItem mnuCreateAPSPGraphNonGrid;
+	private JMenuItem mnuCreateAPSPGraphGrid;
+	private JMenu mCreateShortestPaths;
+	private JMenuItem mnuCreateShortestPathsNonGrid;
+	private JMenuItem mnuCreateShortestPathsGrid;
+	private JMenuItem mCreateThinNetwork;
 	private JMenuItem mnuExecuteApplyAssignment;
 	private JMenu mSimulation;
-	private JMenuItem mnuSimulationQuickVisualization;;
+	private JMenuItem mnuSimulationQuickVisualization;
+	;
 	private JMenuItem mnuSimulationStart;
 	private JMenuItem mnuSimulationPauseQuickVisualization;
 	private JMenuItem mnuStepByStepSimulation;
-
 	//private JMenuItem mnuExecutePauseSimulation;
 	private JMenu mOptimization;
 	private JMenuItem mnuOptimizationEarliestArrivalTransshipment;
-        private JMenuItem mnuOptimizationEATCompare;
+	private JMenuItem mnuOptimizationEATCompare;
 	//private JMenuItem mnuExecuteQuickestTransshipment;
 	//private JMenuItem mnuExecuteMaxFlowOverTimeMC;
 	//private JMenuItem mnuExecuteMaxFlowOverTimeTEN;
+	private JMenu mExitAssignment;
+	private JMenuItem mnuExitAssignmentEAT;
 	private JMenu mProperties;
 	private List<PropertyListEntry> properties;
 	private JMenu mExtras;
@@ -270,6 +272,8 @@ public class JZETMenuBar extends JMenuBar implements ActionListener, Localized {
 		//mnuExecuteQuickestTransshipment = Menu.addMenuItem( mOptimization, loc.getString( "Execute.Optimization.AlgoQuickestTransshipment" ), this, "QT" );
 		//mnuExecuteMaxFlowOverTimeMC = Menu.addMenuItem( mOptimization, loc.getString( "Execute.Optimization.AlgoMaxFlowOverTimeMinCost" ), this, "MFOTMC" );
 		//mnuExecuteMaxFlowOverTimeTEN = Menu.addMenuItem( mOptimization, loc.getString( "Execute.Optimization.AlgoMaxFlowOverTimeTEN" ), this, "MFOTTEN" );
+		mExitAssignment = Menu.addMenu( mExecute, loc.getString( "Execute.ExitAssignment" ) );
+		mnuExitAssignmentEAT = Menu.addMenuItem( mExitAssignment, loc.getString( "Execute.ExitAssignment.EAT" ), this, "ExitAssignmentEAT" );
 		
 		Menu.addMenuItem( mExecute, "-" );
 
@@ -475,24 +479,24 @@ public class JZETMenuBar extends JMenuBar implements ActionListener, Localized {
 			control.createGraph( GraphConverterAlgorithms.DijkstraNonGrid );
 		else if( e.getActionCommand().equals( "DijkstraGrid" ) )
 			control.createGraph( GraphConverterAlgorithms.DijkstraGrid );
-                else if (e.getActionCommand().equals("SteinerNonGrid"))
-                        control.createGraph(GraphConverterAlgorithms.SteinerTreeNonGrid);
-                else if (e.getActionCommand().equals("SteinerGrid"))
-                    control.createGraph(GraphConverterAlgorithms.SteinerTreeGrid);
-                else if (e.getActionCommand().equals("ClusterNonGrid"))
-                       control.createGraph(GraphConverterAlgorithms.ClusterNonGrid);
-                else if (e.getActionCommand().equals("ClusterGrid"))
-                       control.createGraph(GraphConverterAlgorithms.ClusterGrid); 
-                else if (e.getActionCommand().equals("ShortestPathGraphNonGrid"))
-                        control.createGraph(GraphConverterAlgorithms.ShortestPathGraphNonGrid);
-                else if (e.getActionCommand().equals("ShortestPathGraphGrid"))
-                        control.createGraph(GraphConverterAlgorithms.ShortestPathGraphGrid);
-                else if (e.getActionCommand().equals("APSPGraphNonGrid"))
-                        control.createGraph(GraphConverterAlgorithms.APSPGraphNonGrid);
-                else if (e.getActionCommand().equals("ShortestPathsNonGrid"))
-                        control.createGraph(GraphConverterAlgorithms.RepeatedShortestPaths);
-                else if (e.getActionCommand().equals("ThinNet"))
-                        control.createGraph(GraphConverterAlgorithms.ThinNetwork);
+		else if( e.getActionCommand().equals( "SteinerNonGrid" ) )
+			control.createGraph( GraphConverterAlgorithms.SteinerTreeNonGrid );
+		else if( e.getActionCommand().equals( "SteinerGrid" ) )
+			control.createGraph( GraphConverterAlgorithms.SteinerTreeGrid );
+		else if( e.getActionCommand().equals( "ClusterNonGrid" ) )
+			control.createGraph( GraphConverterAlgorithms.ClusterNonGrid );
+		else if( e.getActionCommand().equals( "ClusterGrid" ) )
+			control.createGraph( GraphConverterAlgorithms.ClusterGrid );
+		else if( e.getActionCommand().equals( "ShortestPathGraphNonGrid" ) )
+			control.createGraph( GraphConverterAlgorithms.ShortestPathGraphNonGrid );
+		else if( e.getActionCommand().equals( "ShortestPathGraphGrid" ) )
+			control.createGraph( GraphConverterAlgorithms.ShortestPathGraphGrid );
+		else if( e.getActionCommand().equals( "APSPGraphNonGrid" ) )
+			control.createGraph( GraphConverterAlgorithms.APSPGraphNonGrid );
+		else if( e.getActionCommand().equals( "ShortestPathsNonGrid" ) )
+			control.createGraph( GraphConverterAlgorithms.RepeatedShortestPaths );
+		else if( e.getActionCommand().equals( "ThinNet" ) )
+			control.createGraph( GraphConverterAlgorithms.ThinNetwork );
 		else if( e.getActionCommand().equals( "applyConcreteAssignment" ) ) {
 		} else if( e.getActionCommand().equals( "quickVisualization" ) ) {
 			control.performQuickVisualization();
@@ -503,12 +507,14 @@ public class JZETMenuBar extends JMenuBar implements ActionListener, Localized {
 		} else if( e.getActionCommand().equals( "stepByStepSimulation" ) ) {
 			control.performOneStep();
 		} else if( e.getActionCommand().equals( "EAT" ) ) {
-			control.performOptimization();       
-		} else if (e.getActionCommand().equals("EATCompare")){
-                        control.performOptimizationCompare();
-                } else if( e.getActionCommand().equals( "options" ) ) {
+			control.performOptimization();
+		} else if( e.getActionCommand().equals( "EATCompare" ) )
+			control.performOptimizationCompare();
+		else if( e.getActionCommand().equals( "ExitAssignmentEAT" ) ) {
+			control.performExitAssignmentEAT();
+		} else if( e.getActionCommand().equals( "options" ) )
 			control.showOptionsDialog();
-		} else if( e.getActionCommand().equals( "settings" ) ) {
+		else if( e.getActionCommand().equals( "settings" ) ) {
 			control.showSettingsDialog();
 		} else if ( e.getActionCommand().equals( "debugBuildingStatus" ) ) {
 			System.out.println( control.getZControl().getProject().getBuildingPlan().summary() );

@@ -396,42 +396,47 @@ public class AlgorithmControl implements PropertyChangeListener {
 			st.addPropertyChangeListener( propertyChangeListener );
 		st.execute();
 	}
-        
-        public void performOptimizationCompare(PropertyChangeListener propertyChangeListener) {
+
+	public void performExitAssignmentEAT( PropertyChangeListener propertyChangeListener, AlgorithmListener control ) {
+		
+	}
+   
+	
+	
+	public void performOptimizationCompare( PropertyChangeListener propertyChangeListener ) {
 		if( !project.getBuildingPlan().isRastered() ) {
 			System.out.print( "Building is not rasterized. Rastering... " );
 			project.getBuildingPlan().rasterize();
 			System.out.println( " done." );
 		}
-            
-            final CompareTask ct = new CompareTask(GraphAlgorithmEnumeration.SuccessiveEarliestArrivalAugmentingPathOptimizedCompare);
-            ct.setProblem(project);
-            
-            //values for original network
-            GraphConverterAlgorithms ConvOrig = GraphConverterAlgorithms.NonGridGraph; 
-            ct.setConvOriginal(ConvOrig.converter());
-            
-            //values for thin network
-            ct.setConvThinNet(last.converter());
-            ct.setThinNetwork(networkFlowModel);
-            
-            
-            final SerialTask st = new SerialTask( ct );
-            st.addPropertyChangeListener( new PropertyChangeListener() {
 
+		final CompareTask ct = new CompareTask( GraphAlgorithmEnumeration.SuccessiveEarliestArrivalAugmentingPathOptimizedCompare );
+		ct.setProblem( project );
+
+		//values for original network
+		GraphConverterAlgorithms ConvOrig = GraphConverterAlgorithms.NonGridGraph;
+		ct.setConvOriginal( ConvOrig.converter() );
+
+		//values for thin network
+		ct.setConvThinNet( last.converter() );
+		ct.setThinNetwork( networkFlowModel );
+
+
+		final SerialTask st = new SerialTask( ct );
+		st.addPropertyChangeListener( new PropertyChangeListener() {
 			public void propertyChange( PropertyChangeEvent pce ) {
 				if( st.isDone() ) {
 					networkFlowModel = ct.getOriginal();
 					compVisResults = ct.getSolution();
 				}
 			}
-		});
+		} );
 		if( propertyChangeListener != null )
 			st.addPropertyChangeListener( propertyChangeListener );
-                System.out.println("done");
+		System.out.println( "done" );
 		st.execute();
-                System.out.println("done");
-        }
+		System.out.println( "done" );
+	}
 
 	public GraphVisualizationResults getGraphVisResults() {
 		return graphVisResults;
