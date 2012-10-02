@@ -78,8 +78,8 @@ import statistic.ca.CAStatistic;
 import zet.gui.GUILocalization;
 import zet.gui.assignmentEditor.JAssignment;
 import zet.gui.main.JEditor;
-import zet.gui.main.menu.popup.EdgePopup;
 import zet.gui.main.menu.JZETMenuBar;
+import zet.gui.main.menu.popup.EdgePopup;
 import zet.gui.main.menu.popup.PointPopup;
 import zet.gui.main.menu.popup.PolygonPopup;
 import zet.gui.main.tabs.JEditView;
@@ -98,6 +98,8 @@ import zet.tasks.RasterizeTask;
  * @author Jan-Philipp Kappmeier
  */
 public class GUIControl implements AlgorithmListener {
+	/** The logger of the main class. */
+	private static final Logger log = Logger.getGlobal();
 
 	/** The editor. */
 	public JEditor editor;
@@ -354,7 +356,6 @@ public class GUIControl implements AlgorithmListener {
 	}
 
 	public void visualizationPlay() {
-		System.out.println( "animation started" );
 		if( visualization.isAnimating() ) {
 			visualizationToolBar.pause();
 			visualization.stopAnimation();
@@ -540,26 +541,26 @@ public class GUIControl implements AlgorithmListener {
 	public void outputInformation() {
 		// TODO move to another class
 		// Pro Stockwerk:
-		System.out.println( "Personenverteilung im Gebäude: " );
+		log.info( "Personenverteilung im Gebäude: " );
 		int overall = 0;
 		for( Floor f : zcontrol.getProject().getBuildingPlan() ) {
 			int counter = 0;
 			for( Room r : f )
 				for( AssignmentArea a : r.getAssignmentAreas() )
 					counter += a.getEvacuees();
-			System.out.println( f.getName() + ": " + counter + " Personen" );
+			log.info( f.getName() + ": " + counter + " Personen" );
 			overall += counter;
 		}
-		System.out.println( "Insgesamt: " + overall );
+		log.info( "Insgesamt: " + overall );
 
 		// Pro Ausgang:
-		System.out.println( "Personenverteilung pro Ausgang: " );
+		log.info( "Personenverteilung pro Ausgang: " );
 		for( Floor f : zcontrol.getProject().getBuildingPlan() )
 			for( Room r : f )
 				for( EvacuationArea ea : r.getEvacuationAreas() ) {
 					overall = 0;
-					System.out.println( "" );
-					System.out.println( ea.getName() );
+					log.info( "" );
+					log.info( ea.getName() );
 					// Suche nach evakuierten pro etage für dieses teil
 					for( Floor f2 : zcontrol.getProject().getBuildingPlan() ) {
 						int counter = 0;
@@ -567,10 +568,10 @@ public class GUIControl implements AlgorithmListener {
 							for( AssignmentArea a : r2.getAssignmentAreas() )
 								if( a.getExitArea().equals( ea ) )
 									counter += a.getEvacuees();
-						System.out.println( f2.getName() + ": " + counter + " Personen" );
+						log.info( f2.getName() + ": " + counter + " Personen" );
 						overall += counter;
 					}
-					System.out.println( ea.getName() + " insgesamt: " + overall );
+					log.info( ea.getName() + " insgesamt: " + overall );
 				}
 
 	}
@@ -952,7 +953,7 @@ public class GUIControl implements AlgorithmListener {
 		
 		jd.setModal( true );
 		jd.setVisible( true );
-		System.out.println( "Properties saved." ); // TODO loc
+		log.info( "Properties saved." ); // TODO loc
 	}
 
 	public void setRasterizedPaintMode( boolean selected ) {
@@ -1152,21 +1153,21 @@ public class GUIControl implements AlgorithmListener {
 							algorithmControl.throwError();
 						} catch( RoomEdgeInvalidTargetException ex ) {
 							if( ZETMain.isDebug() ) {
-								System.err.println( "DEBUG-out:" );
-								System.err.println( "Error during conversion in Room " + ex.getInvalidEdge().getRoom().getName() + ". " + ex.getMessage() );
-								System.err.println();
+								log.warning( "DEBUG-out:" );
+								log.warning( "Error during conversion in Room " + ex.getInvalidEdge().getRoom().getName() + ". " + ex.getMessage() );
+								log.warning( "" );
 							}
-							System.err.println( ex.getMessage() );
+							log.severe( ex.getMessage() );
 							JOptionPane.showMessageDialog( null, " Fehler in Raum " + ex.getInvalidEdge().getRoom().getName() + ". \n" + ex.getMessage(), "Fehler", JOptionPane.ERROR_MESSAGE );
 							
 							int ret = JOptionPane.showOptionDialog( editor, "Soll die Kante unpassierbar gemacht werden? \n (Dies in den meisten Fällen sinnvoll.)", "Fehler kann behoben werden.", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE, null, null, null );
 							switch( ret ) {
 								case JOptionPane.YES_OPTION:
-									System.out.println( "YES" );
+									log.info( "YES" );
 									zcontrol.disconnectAtEdge( ex.getInvalidEdge() );
 									break;
 								case JOptionPane.NO_OPTION:
-									System.out.println( "NO" );
+									log.info( "NO" );
 									break;
 								default:
 									throw new IllegalStateException( "A selection that is not supported has been made." );
@@ -1207,7 +1208,7 @@ public class GUIControl implements AlgorithmListener {
 						//Debug.printException( algorithmControl.getError() );
 						algorithmControl.getError().printStackTrace();
 					} else {
-						System.out.println( "Left individuals: " + algorithmControl.getCellularAutomaton().getIndividualCount() );
+						log.info( "Left individuals: " + algorithmControl.getCellularAutomaton().getIndividualCount() );
 						visualization.getControl().setCellularAutomatonControl( algorithmControl.getCaVisResults(), algorithmControl.getCellularAutomaton() );
 						editor.getVisualizationView().updatePotentialSelector();
 						visualizationToolBar.setEnabledPlayback( true );
@@ -1223,11 +1224,11 @@ public class GUIControl implements AlgorithmListener {
 
 	public void performQuickVisualization() {
 		//createBuildingDataStructure();
-		System.out.println( "QUICK" );
+		log.info( "QUICK" );
 		algorithmControl.performSimulationQuick( new PropertyChangeListener() {
 			@Override
 			public void propertyChange( PropertyChangeEvent pce ) {
-				System.out.println( "Property Change Event" );
+				log.info( "Property Change Event" );
 			}
 
 		}, this );
@@ -1301,26 +1302,36 @@ public class GUIControl implements AlgorithmListener {
 			}
 		}, this );
 	}
+	
+	public void performExitAssignmentEAT() {
+		algorithmControl.performExitAssignmentEAT( new PropertyChangeListener() {
+			@Override
+			public void propertyChange( PropertyChangeEvent pce ) {
+				if( isDone( pce ) ) {
+					//GraphVisualizationResults gvr = algorithmControl.getGraphVisResults();
+					//visualization.getControl().setGraphControl( gvr );
+					
+				}
+			}
+		}, this );
+	}
+	
         
-        public void performOptimizationCompare() {
-                algorithmControl.performOptimizationCompare(new PropertyChangeListener(){
-                
-                @Override
+	public void performOptimizationCompare() {
+		algorithmControl.performOptimizationCompare( new PropertyChangeListener() {
+			@Override
 			public void propertyChange( PropertyChangeEvent pce ) {
 				if( isDone( pce ) ) {
 					GraphVisualizationResults gvr = algorithmControl.getGraphVisResults();
-                                        CompareVisualizationResults cvr = algorithmControl.getCompVisResults();
+					CompareVisualizationResults cvr = algorithmControl.getCompVisResults();
 					//visualization.getControl().setGraphControl( gvr );
-                                        visualization = editor.getVisualizationView().getGLContainer();
-                                        /*visualization.getControl().setCompControl(cvr);
-                                        visualization.repaint();*/
-                                        
-                                        
+					visualization = editor.getVisualizationView().getGLContainer();
+					/*visualization.getControl().setCompControl(cvr);
+					 visualization.repaint();*/
 				}
 			}
-            
-            });
-        }
+		} );
+	}
 
 	boolean firstProgress = false;
 
@@ -1328,7 +1339,7 @@ public class GUIControl implements AlgorithmListener {
 	public synchronized void eventOccurred( AlgorithmEvent event ) {
 		if( event instanceof AlgorithmProgressEvent ) {
 			AlgorithmProgressEvent ape = (AlgorithmProgressEvent) event;
-			//System.out.println( "Progress: " + ape.getProgress() );
+			//log.info( "Progress: " + ape.getProgress() );
 			editor.setProgressValue( ((int)(ape.getProgress() * 100)) );
 
 		if( !firstProgress ) {
@@ -1338,7 +1349,7 @@ public class GUIControl implements AlgorithmListener {
 				editor.getQuickVisualizationView().displayFloor( editview.getCurrentFloor() );
 				editor.getQuickVisualizationView().getLeftPanel().getMainComponent().update();
 				firstProgress = true;
-				System.out.println( "First time floor drawn." );
+				log.info( "First time floor drawn." );
 			}
 		} else
 			editor.getQuickVisualizationView().getLeftPanel().getMainComponent().update();
@@ -1393,7 +1404,7 @@ public class GUIControl implements AlgorithmListener {
 			worker.executeAlgorithm( true );
 			//AlgorithmTask.getInstance().setProgress( 100, "", "" );
 		} catch( Exception ex ) {
-			System.out.println( "Fehler trat auf" );
+			log.info( "Fehler trat auf" );
 		} finally { }
 	}
 
@@ -1420,16 +1431,6 @@ public class GUIControl implements AlgorithmListener {
 		editor.sendError( message );
 	}
 
-//	@Override
-//	public void handleEvent( ProgressEvent event ) {
-//		if( currentMode == ZETWindowTabs.QuickView ) {
-//			Floor floor = editView.getCurrentFloor();
-////			//caView.getLeftPanel().getMainComponent().displayFloor( floor );
-//			caView.getLeftPanel().getMainComponent().repaint();
-//		}
-//		ZETMain.sendMessage( event.getProcessMessage().taskName );
-//	}
-
 	public void animationFinished() {
 			if( loop )
 				control.resetTime();
@@ -1446,4 +1447,5 @@ public class GUIControl implements AlgorithmListener {
 	public Templates<ExitDoor> getExitDoorTemplates() {
 		return exitDoorTemplates;
 	}
+
 }
