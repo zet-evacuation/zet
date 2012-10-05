@@ -1315,6 +1315,16 @@ public class GUIControl implements AlgorithmListener {
 				}
 			}
 		}, this );
+
+						log.info( "Left individuals: " + algorithmControl.getCellularAutomaton().getIndividualCount() );
+						visualization.getControl().setCellularAutomatonControl( algorithmControl.getCaVisResults(), algorithmControl.getCellularAutomaton() );
+						editor.getVisualizationView().updatePotentialSelector();
+						visualizationToolBar.setEnabledPlayback( true );
+						editor.getQuickVisualizationView().getLeftPanel().getMainComponent().setSimulationData( algorithmControl.getCellularAutomaton(), algorithmControl.getContainer(), algorithmControl.getMapping() );
+						editor.getQuickVisualizationView().displayFloor( editview.getCurrentFloor() ); // hier startet ein task!
+						ZETMain.sendMessage( "Simulation beendet" );
+
+	
 	}
 	
         

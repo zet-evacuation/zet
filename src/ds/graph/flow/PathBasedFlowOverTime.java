@@ -58,6 +58,19 @@ public class PathBasedFlowOverTime implements Iterable<FlowOverTimePath> {
 	public Iterator<FlowOverTimePath> iterator() {
 		return pathFlows.iterator();
 	}
+	
+	/**
+	 * Calculates the total value (the number of sent flow units) of this flow
+	 * over time. The running time is in O(#paths)
+	 * @return the total value of this flow
+	 */
+	public long getValue() {
+		int val = 0;
+		for( FlowOverTimePath p : this ) {
+			val += p.getAmount();
+		}
+		return val;
+	}
 
 	/**
 	 * Returns a String containing a description of all contained {@code DynamicPathFlows}.

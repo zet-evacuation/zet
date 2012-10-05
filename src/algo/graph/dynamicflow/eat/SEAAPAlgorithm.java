@@ -29,6 +29,7 @@ import ds.graph.flow.EarliestArrivalAugmentingPath;
 import ds.graph.flow.FlowOverTimeImplicit;
 import java.util.Arrays;
 import java.util.LinkedList;
+import java.util.logging.Logger;
 
 /**
  * Implements the Successive Earliest Arrival Augmenting Path Algorithm as 
@@ -36,10 +37,11 @@ import java.util.LinkedList;
  * @author Martin Groß
  */
 public class SEAAPAlgorithm extends Algorithm<EarliestArrivalFlowProblem, FlowOverTimeImplicit> {
+	/** The logger of the main class. */
+	private static final Logger log = Logger.getGlobal();
 
     /**
-     * Stores the arrival time of the last flow unit sent (monotonically 
-     * increasing).
+     * Stores the arrival time of the last flow unit sent (monotonically increasing).
      */
     private int arrivalTime;    
     /**
@@ -147,6 +149,7 @@ public class SEAAPAlgorithm extends Algorithm<EarliestArrivalFlowProblem, FlowOv
             // Update the amount of flow sent
             path.setCapacity(Math.min(path.getCapacity(), problem.getTotalSupplies() - flowUnitsSent));
             flowUnitsSent += path.getCapacity();
+						log.finest( "Found path " + path.toString() + " with capacity " + path.getCapacity() );
 						//System.out.println( "Progress: " + (flowUnitsSent * 1.0 / problem.getTotalSupplies()) );
             fireProgressEvent(flowUnitsSent * 1.0 / problem.getTotalSupplies(), String.format("%1$s von %2$s Personen evakuiert.", flowUnitsSent, problem.getTotalSupplies()));
             // Compute the next path

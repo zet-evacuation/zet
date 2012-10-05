@@ -21,9 +21,9 @@ package ds.graph.flow;
 
 import ds.graph.DynamicPath;
 import ds.graph.Edge;
-import ds.mapping.IdentifiableIntegerMapping;
 import ds.graph.Node;
 import ds.graph.Path;
+import ds.mapping.IdentifiableIntegerMapping;
 import java.util.LinkedList;
 
 /**
@@ -176,7 +176,9 @@ public class FlowOverTimeEdgeSequence extends LinkedList<FlowOverTimeEdge> {
     }
 
     /**
-     * Returns the amount of flow that is sent through this edge sequence.
+     * Returns the amount of flow that is sent through this edge sequence in
+		 * total. The amount should be a strictly positive integral multiple of the
+		 * rate.
      * @return the amount of flow that is sent through this edge sequence
      */
     public int getAmount() {
@@ -184,7 +186,11 @@ public class FlowOverTimeEdgeSequence extends LinkedList<FlowOverTimeEdge> {
     }
 
     /**
-     * Sets the amount of flow that should be sent through the edge sequence.
+     * Sets the total amount of flow that should be sent through the edge
+		 * sequence. If the amount is larger than the rate, the path must be used
+		 * for several time steps. The time can be computed as amount/rate. The
+		 * {@code amount} shoud be a strictly positive integral multiple of the
+		 * {@code rate}.
      * @param amount the amount of flow
      */
     public void setAmount(int amount) {

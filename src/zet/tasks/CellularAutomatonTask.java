@@ -62,7 +62,6 @@ public class CellularAutomatonTask extends Algorithm<Project, CAVisualizationRes
 		cac.run();
 
 		// set up simulation algorithm and compute
-		//EvacuationCellularAutomatonAlgorithm caAlgo = cellularAutomatonAlgorithm.createTask( ca );
 		EvacuationCellularAutomatonAlgorithm caAlgo = cellularAutomatonAlgorithm.getAlgorithm();
 		caAlgo.setProblem( new EvacuationSimulationProblem( ( ca ) ) );
 		double caMaxTime = PropertyContainer.getInstance().getAsDouble( "algo.ca.maxTime" );

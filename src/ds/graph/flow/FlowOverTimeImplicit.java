@@ -22,12 +22,15 @@ package ds.graph.flow;
 import de.tu_berlin.math.coga.algorithm.flowovertime.FlowOverTimePathDecomposition;
 import ds.graph.ImplicitTimeExpandedResidualNetwork;
 import java.util.Queue;
+import java.util.logging.Logger;
 
 /**
  *
  * @author Martin Groß
  */
 public class FlowOverTimeImplicit extends FlowOverTimeInterface {
+	/** The logger of the main class. */
+	private static final Logger log = Logger.getGlobal();
 	private EdgeBasedFlowOverTime edgeBased;
 	private PathBasedFlowOverTime pathBased;
 	private int flowAmount;
@@ -41,6 +44,13 @@ public class FlowOverTimeImplicit extends FlowOverTimeInterface {
 		decomposition.run();
 		pathBased = decomposition.getSolution();
 
+		log.fine( "Value of the flow:" );
+		int sum = 0;
+		for( FlowOverTimePath p : pathBased ) {
+			sum += p.getRate();
+		}
+		log.fine( Integer.toString( sum ) );
+		
 		//pathBased = new PathBasedFlowOverTime();
 		//LinkedList<FlowOverTimeEdgeSequence> paths = new LinkedList<FlowOverTimeEdgeSequence>();
 		//int index = 0;

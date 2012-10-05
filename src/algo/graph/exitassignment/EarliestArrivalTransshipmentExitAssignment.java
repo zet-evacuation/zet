@@ -68,6 +68,7 @@ public class EarliestArrivalTransshipmentExitAssignment extends Algorithm<Networ
 	 * Returns the calculated exit assignment.
 	 * @return the calculated exit assignment.
 	 */
+	@Override
 	public ExitAssignment getExitAssignment() {
 		return getSolution();
 	}

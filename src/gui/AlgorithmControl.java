@@ -22,14 +22,20 @@ import de.tu_berlin.math.coga.zet.converter.cellularAutomaton.ZToCAConverter.Con
 import de.tu_berlin.math.coga.zet.converter.cellularAutomaton.ZToCAMapping;
 import de.tu_berlin.math.coga.zet.converter.cellularAutomaton.ZToCARasterContainer;
 import de.tu_berlin.math.coga.zet.converter.graph.GraphAssignmentConverter;
+import de.tu_berlin.math.coga.zet.converter.graph.ZToGraphRasterContainer;
 import ds.CompareVisualizationResults;
 import ds.GraphVisualizationResults;
 import ds.PropertyContainer;
 import ds.ca.evac.EvacuationCellularAutomaton;
+import ds.ca.results.VisualResultsRecorder;
 import ds.z.AssignmentType;
 import ds.z.BuildingPlan;
 import ds.z.ConcreteAssignment;
 import ds.z.Project;
+import evacuationplan.BidirectionalNodeCellMapping;
+import evacuationplan.BidirectionalNodeCellMapping.CAPartOfMapping;
+import exitdistributions.GraphBasedExitToCapacityMapping;
+import exitdistributions.GraphBasedIndividualToExitMapping;
 import io.visualization.BuildingResults;
 import io.visualization.CAVisualizationResults;
 import java.beans.PropertyChangeEvent;
@@ -229,9 +235,10 @@ public class AlgorithmControl implements PropertyChangeListener {
 	}
 
 	public CAVisualizationResults getCaVisResults() {
-		if( cat.isProblemSolved() )
-			return cat.getSolution();
-		else return null;
+	//	if( cat.isProblemSolved() ) // temporary! (for testing exit assignments)
+	//		return cat.getSolution();
+	//	else return null;
+		return caVisResults;
 	}
 
 	void createConcreteAssignment() throws IllegalArgumentException, ConversionNotSupportedException {
@@ -434,7 +441,73 @@ public class AlgorithmControl implements PropertyChangeListener {
 		log.info( "Computed ExitAssignment: " );
 		log.info( exitAssignment.toString() );
 		
+		log.info( "Create Cellular Automaton according to the exit assignment..." );
+
+		// convert
+		final ZToCAConverter conv = new ZToCAConverter();
+		conv.setProblem( project.getBuildingPlan() );
+		conv.run();
+		EvacuationCellularAutomaton ca = conv.getCellularAutomaton();
+		mapping = conv.getMapping();
+		container = conv.getContainer();
+		final ConvertedCellularAutomaton cca = new ConvertedCellularAutomaton( ca, mapping, container );
+
+		CAPartOfMapping caPartOfMapping = conv.getLatestCAPartOfNodeCellMapping();//this.getLatestCAPartOfNodeCellMapping();
 		
+		final CellularAutomatonAssignmentConverter cac = new CellularAutomatonAssignmentConverter();
+		
+		cac.setProblem( new AssignmentApplicationInstance( cca, concreteAssignment ) );
+		cac.run();
+		ZToGraphRasterContainer graphRaster = getNetworkFlowModel().getZToGraphMapping().getRaster();
+		BidirectionalNodeCellMapping nodeCellMapping = new BidirectionalNodeCellMapping( graphRaster, caPartOfMapping );
+		//GraphBasedExitToCapacityMapping graphBasedExitToCapacityMapping = null;
+		GraphBasedIndividualToExitMapping graphBasedIndividualToExitMapping;
+		graphBasedIndividualToExitMapping = new GraphBasedIndividualToExitMapping(ca, nodeCellMapping, exitAssignment);
+		graphBasedIndividualToExitMapping.calculate();
+		ca.setIndividualToExitMapping( graphBasedIndividualToExitMapping );
+		
+		// Now, we have a CA
+		
+		//		EvacuationCellularAutomaton ca = super.convert(buildingPlan);
+//		CAPartOfMapping caPartOfMapping = this.getLatestCAPartOfNodeCellMapping();
+//		applyConcreteAssignment(concreteAssignment);
+//		BidirectionalNodeCellMapping nodeCellMapping = new BidirectionalNodeCellMapping(graphRaster, caPartOfMapping);
+//		graphBasedIndividualToExitMaping = new GraphBasedIndividualToExitMapping(ca, nodeCellMapping, exitAssignment);
+//		graphBasedIndividualToExitMaping.calculate();
+//		ca.setIndividualToExitMapping( graphBasedIndividualToExitMaping );
+//		return ca;
+		log.info( "done." );
+		
+		// Perform CA simulation
+		log.info( "Performing Simulation..." );
+		
+		EvacuationCellularAutomatonAlgorithm caAlgo = CellularAutomatonAlgorithmEnumeration.InOrder.getAlgorithm();
+		caAlgo.setProblem( new EvacuationSimulationProblem( ( ca ) ) );
+		double caMaxTime = PropertyContainer.getInstance().getAsDouble( "algo.ca.maxTime" );
+		caAlgo.setMaxTimeInSeconds( caMaxTime );
+		caAlgo.getCellularAutomaton().startRecording ();
+		
+		//caAlgo.addAlgorithmListener( this );
+		
+		caAlgo.run();	// hier wird initialisiert
+		caAlgo.getCellularAutomaton().stopRecording();
+
+		// create results
+		//CAVisualizationResults visResults = new CAVisualizationResults( mapping, ca.getPotentialManager() );
+		// TODO visualResultsRecorder normal class, no singleton.
+		CAVisualizationResults visResults = new CAVisualizationResults( VisualResultsRecorder.getInstance().getRecording(), mapping );
+
+						cellularAutomaton = ca;
+						//mapping = mapping;
+						//container = cca;
+						container = conv.getContainer();
+						caVisResults = visResults;
+						//EventServer.getInstance().dispatchEvent( new MessageEvent<>( this, MessageType.Status, "Simulation finished" ) );
+						System.out.println( "Egress time: " + Formatter.formatTimeUnit( cellularAutomaton.getTimeStep() * cellularAutomaton.getSecondsPerStep(), TimeUnits.Seconds ) );
+		
+		
+		
+		log.info( "done." );
 		
 		
 	}
