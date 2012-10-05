@@ -99,6 +99,6 @@ public class FlowOverTimePath extends FlowOverTimeEdgeSequence {
 	}
 
 	public Edge lastEdge() {
-		return getFirstEdge().getEdge();
+		return getLastEdge().getEdge();
 	}
 }

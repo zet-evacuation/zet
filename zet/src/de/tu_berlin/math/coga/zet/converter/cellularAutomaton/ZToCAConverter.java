@@ -21,30 +21,30 @@
 
 package de.tu_berlin.math.coga.zet.converter.cellularAutomaton;
 
-import de.tu_berlin.math.coga.common.localization.DefaultLoc;
-import ds.z.Project;
-import de.tu_berlin.math.coga.common.algorithm.Algorithm;
 import algo.ca.PotentialController;
 import algo.ca.SPPotentialController;
+import de.tu_berlin.math.coga.common.algorithm.Algorithm;
+import de.tu_berlin.math.coga.common.localization.DefaultLoc;
+import de.tu_berlin.math.coga.common.util.Direction;
+import static de.tu_berlin.math.coga.common.util.Direction.*;
+import de.tu_berlin.math.coga.common.util.Level;
 import de.tu_berlin.math.coga.zet.converter.RasterContainerCreator;
 import de.tu_berlin.math.coga.zet.converter.RoomRasterSquare;
-import de.tu_berlin.math.coga.common.util.Direction;
-import de.tu_berlin.math.coga.common.util.Level;
+import ds.ca.evac.Cell;
+import ds.ca.evac.EvacuationCellularAutomaton;
+import ds.ca.evac.ExitCell;
+import ds.ca.evac.SaveCell;
+import ds.ca.evac.StaticPotential;
 import ds.z.BuildingPlan;
 import ds.z.Floor;
-import ds.ca.evac.EvacuationCellularAutomaton;
-import ds.ca.evac.Cell;
-import ds.ca.evac.ExitCell;
-import ds.ca.evac.StaticPotential;
-import ds.ca.evac.SaveCell;
+import ds.z.Project;
+import ds.z.TeleportArea;
 import evacuationplan.BidirectionalNodeCellMapping;
-import java.util.ArrayList;
 import java.util.ArrayDeque;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
-import ds.z.TeleportArea;
 import java.util.logging.Logger;
-import static de.tu_berlin.math.coga.common.util.Direction.*;
 
 /**
  * This singleton class converts a rasterized z-Project to a cellular automaton.

@@ -6,9 +6,9 @@ package de.tu_berlin.math.coga.zet.converter.cellularAutomaton;
 
 import algo.ca.parameter.AbstractDefaultParameterSet;
 import algo.ca.parameter.ParameterSet;
-import de.tu_berlin.math.coga.zet.converter.cellularAutomaton.ZToCAConverter.ConversionNotSupportedException;
 import de.tu_berlin.math.coga.common.algorithm.Algorithm;
 import de.tu_berlin.math.coga.common.localization.DefaultLoc;
+import de.tu_berlin.math.coga.zet.converter.cellularAutomaton.ZToCAConverter.ConversionNotSupportedException;
 import ds.PropertyContainer;
 import ds.ca.evac.Cell;
 import ds.ca.evac.ExitCell;
@@ -34,9 +34,7 @@ public class CellularAutomatonAssignmentConverter extends Algorithm<AssignmentAp
 	protected ConvertedCellularAutomaton runAlgorithm( AssignmentApplicationInstance problem ) {
 		try {
 			applyConcreteAssignment( problem.getV(), problem.getU() );
-		} catch( IllegalArgumentException ex ) {
-			Logger.getLogger( CellularAutomatonAssignmentConverter.class.getName() ).log( Level.SEVERE, null, ex );
-		} catch( ConversionNotSupportedException ex ) {
+		} catch( IllegalArgumentException | ConversionNotSupportedException ex ) {
 			Logger.getLogger( CellularAutomatonAssignmentConverter.class.getName() ).log( Level.SEVERE, null, ex );
 		}
 		return problem.getU();
@@ -54,7 +52,7 @@ public class CellularAutomatonAssignmentConverter extends Algorithm<AssignmentAp
 	private static void applyConcreteAssignment( ConcreteAssignment concreteAssignment, ConvertedCellularAutomaton cca ) throws IllegalArgumentException, ConversionNotSupportedException {
 		ZToCARoomRaster room;
 		// Create ZToExitMapping
-		HashMap<Individual, TargetCell> individualExitMapping = new HashMap<Individual, TargetCell>();
+		HashMap<Individual, TargetCell> individualExitMapping = new HashMap<>();
 		Cell c;
 		int x, y;
 		int individualCounter = 1;

@@ -227,6 +227,8 @@ public class ZETMain {
 		}
 
 		debug = config.getBoolean( "debug" );
+		if( debug )
+			Debug.setDefaultLogLevel( Level.ALL );
 
 		createEditor();
 	}
