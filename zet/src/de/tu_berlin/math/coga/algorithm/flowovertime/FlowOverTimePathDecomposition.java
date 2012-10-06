@@ -15,6 +15,7 @@ import ds.graph.flow.FlowOverTimePath;
 import ds.graph.flow.PathBasedFlowOverTime;
 import ds.mapping.IdentifiableIntegerMapping;
 import ds.mapping.IdentifiableObjectMapping;
+import java.util.ListIterator;
 import java.util.logging.Logger;
 
 /**
@@ -32,6 +33,11 @@ public class FlowOverTimePathDecomposition extends Algorithm<ImplicitTimeExpande
     @Override
     protected PathBasedFlowOverTime runAlgorithm(ImplicitTimeExpandedResidualNetwork network) {
 			this.network = network;
+			
+			// check feasibility
+//			if( !network.isFeasible() )
+//				throw new IllegalStateException( "Infeasible network!" );
+			
 			flow = new EdgeBasedFlowOverTime(network.flow().clone());
 			superSourceFlow = network.superSourceFlow().clone();
 			PathBasedFlowOverTime result = new PathBasedFlowOverTime();
@@ -45,42 +51,7 @@ public class FlowOverTimePathDecomposition extends Algorithm<ImplicitTimeExpande
     }
 
 	public FlowOverTimePath calculateShortestPath() {
-	int sink = 0;
-		for( Edge e : network.incomingEdges( network.getProblem().getSink() ) ) {
-			for( int i = 0; i <= flow.get( e ).getLastTimeWithNonZeroValue(); ++i ) {
-				sink += flow.get( e ).get( i );
-			}
-		}
-		log.finer( "Sink input value:" + sink );
 
-		
-		Node tempNode = network.getNode( 12 );
-		sink = 0;
-		for( Edge e : network.incomingEdges( tempNode ) ) {
-			if( network.isReverseEdge( e ) )
-				continue;
-			if( flow.get( e ) != null )
-				for( int i = 0; i <= flow.get( e ).getLastTimeWithNonZeroValue(); ++i ) {
-					sink += flow.get( e ).get( i );
-				}
-			else
-					sink += superSourceFlow.get( e );
-		}
-		log.finer( "Incoming in 12: " + sink );
-		sink = 0;
-		for( Edge e : network.outgoingEdges( tempNode ) ) {
-			if( network.isReverseEdge( e ) )
-				continue;
-			if( flow.get( e ) != null )
-				for( int i = 0; i <= flow.get( e ).getLastTimeWithNonZeroValue(); ++i ) {
-					sink += flow.get( e ).get( i );
-				}
-			else
-					sink += superSourceFlow.get( e );
-		}
-		log.finer( "Outgoing in 12: " + sink );
-		
-		
 		IdentifiableIntegerMapping distances = new IdentifiableIntegerMapping<>(network.numberOfNodes());
 		IdentifiableObjectMapping<Node, Edge> preceedingEdges = new IdentifiableObjectMapping<>(network.numberOfEdges(), Edge.class);
 		MinHeap<Node, Integer> queue = new MinHeap<>(network.numberOfNodes());
@@ -89,6 +60,10 @@ public class FlowOverTimePathDecomposition extends Algorithm<ImplicitTimeExpande
 		}
 		distances.set(network.superSource(), 0);
 		queue.decreasePriority(network.superSource(), 0);
+		
+		network.getOutflow( 4 );		
+		network.getInflow( 21 );
+		
 		while (!queue.isEmpty()) {
 				MinHeap<Node, Integer>.Element min = queue.extractMin();
 				Node node = min.getObject();
@@ -97,7 +72,7 @@ public class FlowOverTimePathDecomposition extends Algorithm<ImplicitTimeExpande
 				if (distance == Integer.MAX_VALUE) {
 						continue;
 				}
-				for (Edge edge : network.outgoingEdges(node)) {                
+				for (Edge edge : network.outgoingEdges(node)) {
 						if (network.isReverseEdge(edge)) {
 								continue;
 						}
@@ -112,8 +87,11 @@ public class FlowOverTimePathDecomposition extends Algorithm<ImplicitTimeExpande
 						}                
 						Node w = edge.opposite(node);
 						if (queue.contains(w) && (long) queue.priority(w) > (long) time + (long) network.transitTime(edge)) {
-								queue.decreasePriority(w, time + network.transitTime(edge));
-								preceedingEdges.set(w, edge);
+							// check here if something may get wrong!
+							
+							
+							queue.decreasePriority(w, time + network.transitTime(edge));
+							preceedingEdges.set(w, edge);
 						}
 				}
 		}
@@ -139,30 +117,40 @@ public class FlowOverTimePathDecomposition extends Algorithm<ImplicitTimeExpande
 						capacity = Math.min(flow.get(edge.getEdge()).get(edge.getTime()), capacity);
 				}
 		}
-		log.finer( "Capacity: " + capacity );
-	
 		
-		for( Edge e : network.allEdges() ) {
-			flow.get( e );
-		}
+
+		// new method
+//		int previousTime = Integer.MIN_VALUE;
+//		ListIterator<FlowOverTimeEdge> backIter = path.listIterator( path.size() );
+//		while( backIter.hasPrevious() ) {
+//			FlowOverTimeEdge edge = backIter.previous();
+//			if (edge.getEdge().start() == network.superSource() && network.hasArtificialSuperSource()) {
+//					superSourceFlow.decrease(edge.getEdge(), capacity);
+//			} else {
+//				// we try to decrease at edge.getTime().
+//					if( previousTime == Integer.MIN_VALUE ) {
+//						flow.get(edge.getEdge()).decrease(edge.getTime(), capacity);
+//						previousTime = edge.getTime();
+//					} else {
+//						// the flow is sended by the next element on the path at time edge.getTime().
+//						// maybe, we can send our flow a little bit later than edge.getTime(). Let's check that.
+//						int possibleDelay = previousTime - edge.getTime();
+//						for( int i = possibleDelay; i >= 0; --i ) {
+//							// try to send at time edge.getTime() + i
+//							if( flow.get( edge.getEdge()).get( edge.getTime() + i ) >= capacity ) { // this will be definitely true for i=0
+//								if( i != 0 ) {
+//									System.out.println( "Sending flow on " + edge.toString() + " " + i + " time steps later." );
+//								}
+//								flow.get(edge.getEdge()).decrease(edge.getTime() + i, capacity);
+//								previousTime = edge.getTime()+i;
+//								break;
+//							}
+//						}
+//					}
+//			}
+//		}
 		
-		sink = 0;
-		for( Edge e : network.incomingEdges( network.getProblem().getSink() ) ) {
-			for( int i = 0; i <= flow.get( e ).getLastTimeWithNonZeroValue(); ++i ) {
-				sink += flow.get( e ).get( i );
-			}
-			
-		}
-		log.finer( "Sink input value:" + sink );
-		
-		int cap;
-		cap = 0;
-		for( Edge e : network.incidentEdges( network.superSource() ) )
-			cap += superSourceFlow.get( e );
-		log.finer( "Flow out of super-source before: " + cap );
-		
-		
-		
+		// old method
 		for (FlowOverTimeEdge edge : path) {
 				if (edge.getEdge().start() == network.superSource() && network.hasArtificialSuperSource()) {
 						superSourceFlow.decrease(edge.getEdge(), capacity);
@@ -170,14 +158,17 @@ public class FlowOverTimePathDecomposition extends Algorithm<ImplicitTimeExpande
 						flow.get(edge.getEdge()).decrease(edge.getTime(), capacity);
 				}
 		}
-		cap = 0;
-		for( Edge e : network.incidentEdges( network.superSource() ) )
-			cap += superSourceFlow.get( e );
-		log.finer( "Flow out of super-source before: " + cap );
 		
 		if (network.hasArtificialSuperSource()) {
 				path.removeFirst();
 		}
+		
+			// check feasibility
+			//if( !network.isFeasible() )
+			//	throw new IllegalStateException( "Infeasible network!" );
+		
+		
+		
 		// Set amount and rate
 		path.setAmount( capacity );
 		path.setRate( capacity );

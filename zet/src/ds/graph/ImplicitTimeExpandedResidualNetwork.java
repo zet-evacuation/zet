@@ -87,11 +87,11 @@ public class ImplicitTimeExpandedResidualNetwork extends Network {
     public ImplicitTimeExpandedResidualNetwork(EarliestArrivalFlowProblem problem) {        
         super(problem.getNetwork().numberOfNodes() + ((problem.getSources().size() > 1)? 1 : 0), 
                 problem.getNetwork().numberOfEdges() * 2 + ((problem.getSources().size() > 1)? problem.getSources().size()*2 : 0));
-        this.edgeTypes = new IdentifiableObjectMapping<Edge, EdgeType>(getEdgeCapacity(), EdgeType.class);
+        this.edgeTypes = new IdentifiableObjectMapping<>(getEdgeCapacity(), EdgeType.class);
         this.problem = problem;
-        this.reverseEdges = new IdentifiableObjectMapping<Edge, Edge>(getEdgeCapacity(), Edge.class);
+        this.reverseEdges = new IdentifiableObjectMapping<>(getEdgeCapacity(), Edge.class);
         this.superSource = ((problem.getSources().size() > 1)? getNode(numberOfNodes() - 1) : problem.getSources().get(0));
-        this.superSourceFlow = new IdentifiableIntegerMapping<Edge>(getEdgeCapacity());
+        this.superSourceFlow = new IdentifiableIntegerMapping<>(getEdgeCapacity());
         setEdges(problem.getNetwork().edges());
         for (Edge edge : problem.getNetwork().edges()) {
             Edge e = createAndSetEdge(edge.end(), edge.start());
@@ -420,4 +420,71 @@ public class ImplicitTimeExpandedResidualNetwork extends Network {
                 return 0;
         }
     }
+		
+	public int getInflow( int node ) {
+		return getInflow( node, -1 );
+	}
+
+	public int getInflow( int node, int t ) {
+		Node tempNode = getNode( node );
+		int inflow = 0;
+		for( Edge e : incomingEdges( tempNode ) ) {
+			if( isReverseEdge( e ) || edgeTypes.get( e ) == EdgeType.ARTIFICIAL )
+				continue;
+			if( flow.get( e ) != null )
+				for( int i = 0; i <= (t < 0 ? flow.get( e ).getLastTimeWithNonZeroValue() : t-transitTime( e ) ); ++i )
+					inflow += flow.get( e ).get( i );
+			else
+				inflow += superSourceFlow.get( e );
+		}
+		return inflow;
+	}
+
+	public int getOutflow( int node ) {
+		return getOutflow( node, -1 );
+	}
+
+	public int getOutflow( int node, int t ) {
+		Node tempNode = getNode( node );
+		int inflow = 0;
+		for( Edge e : outgoingEdges( tempNode ) ) {
+			if( isReverseEdge( e ) || edgeTypes.get( e ) == EdgeType.ARTIFICIAL )
+				continue;
+			if( flow.get( e ) != null )
+				for( int i = 0; i <= (t < 0 ? flow.get( e ).getLastTimeWithNonZeroValue() : t); ++i )
+					inflow += flow.get( e ).get( i );
+			else
+				inflow += superSourceFlow.get( e );
+		}
+		return inflow;
+	}
+	
+	public boolean isFeasible() {
+		// check, if for all time steps, for all nodes incoming > outgoing
+		int max = 0;
+		for( Edge e : this.edges ) {
+			if( isReverseEdge( e ) || edgeTypes.get( e ) == EdgeType.ARTIFICIAL  )
+				continue;
+			try {
+			max = Math.max( max, flow.get( e ).getLastTimeWithNonZeroValue() + transitTime( e ) );
+			} catch( ArrayIndexOutOfBoundsException ex ) {
+				max = 0;
+			}
+		}
+		
+		System.out.println( "Checking feasibility up to time " + max );
+		
+		for( Node node : this.nodes ) {
+			for( int i = 0; i <= max; ++i ) {
+				if( node.equals( superSource ) )
+					continue;
+				if( getInflow( node.id(), i ) < getOutflow( node.id(), i ) ) {
+					System.out.println( "Less inflow than outflow for node " + node.toString() + " at time " + i );
+					return false;
+				}
+			}
+		}
+		return true;
+	}
+		
 }
