@@ -151,7 +151,7 @@ public class NetworkFlowModel implements Iterable<Node> {
 			throw new IllegalArgumentException( DefaultLoc.getSingleton().getString( "ds.Graph.NoNodeCapacityException" + node + "." ) );
 	}
 
-	public void setNodeCapacity( Node node, int value ) {
+	void setNodeCapacity( Node node, int value ) {
 		nodeCapacities.set( node, value );
 	}
 
@@ -166,11 +166,11 @@ public class NetworkFlowModel implements Iterable<Node> {
 			throw new IllegalArgumentException( DefaultLoc.getSingleton().getString( "ds.Graph.NoTransitTimeException" + edge + "." ) );
 	}
 
-	public void setTransitTime( Edge edge, int value ) {
+	void setTransitTime( Edge edge, int value ) {
 		transitTimes.set( edge, value );
 	}
 
-	public void setExactTransitTime( Edge edge, double value ) {
+	void setExactTransitTime( Edge edge, double value ) {
 		exactTransitTimes.set( edge, value );
 	}
 
@@ -194,7 +194,7 @@ public class NetworkFlowModel implements Iterable<Node> {
 		return getEAFP( 0 );
 	}
 
-	public void roundTransitTimes() {
+	void roundTransitTimes() {
 		transitTimes = exactTransitTimes.round();
 	}
 
@@ -218,7 +218,7 @@ public class NetworkFlowModel implements Iterable<Node> {
 		return network.getEdge( i );
 	}
 
-	public Edge createReverseEdge( Edge edge ) {
+	Edge createReverseEdge( Edge edge ) {
 		Edge newEdge = new Edge( edgeIndex++, edge.end(), edge.start() );
 
 		while( network.edges().contains( newEdge ) )
@@ -231,7 +231,7 @@ public class NetworkFlowModel implements Iterable<Node> {
 		return newEdge;
 	}
 
-	public void resetAssignment() {
+	void resetAssignment() {
 		currentAssignment = new IdentifiableIntegerMapping<>( network.numberOfNodes() );
 		//IdentifiableCollection<Node> nodes = model.getGraph().nodes();
 		for( int i = 0; i < network.nodes().size(); i++ )
@@ -240,11 +240,11 @@ public class NetworkFlowModel implements Iterable<Node> {
 
 	}
 
-	public void setNodeAssignment( Node node, int i ) {
+	void setNodeAssignment( Node node, int i ) {
 		currentAssignment.set( node, i );
 	}
 
-	public void increaseNodeAssignment( Node node ) {
+	void increaseNodeAssignment( Node node ) {
 		currentAssignment.increase( node, 1 );
 	}
 
@@ -266,24 +266,24 @@ public class NetworkFlowModel implements Iterable<Node> {
 			throw new AssertionError( DefaultLoc.getSingleton().getString( "converter.NoCheckException" ) );
 	}
 
-	public Node newNode() {
+	Node newNode() {
 		Node node = new Node( nodeCount );
 		nodeCount++;
 		network.setNode( node );
 		return node;
 	}
 
-	public void addSource( Node node ) {
+	void addSource( Node node ) {
 		sources.add( node );
 	}
 
-	public void ensureCapacities() {
+	void ensureCapacities() {
 		nodeCapacities.setDomainSize( network.numberOfNodes() );
 
 		edgeCapacities.setDomainSize( network.numberOfEdges() * network.numberOfEdges() ); // TODO weird???
 	}
 
-	public void increaseNodeCapacity( Node node, int i ) {
+	void increaseNodeCapacity( Node node, int i ) {
 		nodeCapacities.increase( node, i );
 	}
 
@@ -291,14 +291,14 @@ public class NetworkFlowModel implements Iterable<Node> {
 		return network.getEdge( lastNode, node );
 	}
 
-	public Edge newEdge( Node lastNode, Node node ) {
+	Edge newEdge( Node lastNode, Node node ) {
 		Edge edge = new Edge( edgeIndex++, lastNode, node );
 		network.setEdge( edge );
 		edgeCapacities.set( edge, 0 );
 		return edge;
 	}
 
-	public void increaseEdgeCapacity( Edge edge, int i ) {
+	void increaseEdgeCapacity( Edge edge, int i ) {
 		edgeCapacities.increase( edge, i );
 	}
 
@@ -318,13 +318,14 @@ public class NetworkFlowModel implements Iterable<Node> {
 		return currentAssignment;
 	}
 
-	public void addEdge( Edge neu, int edgeCapacity, int transitTime, double exactTransitTime ) {
+	void addEdge( Edge neu, int edgeCapacity, int transitTime, double exactTransitTime ) {
 		network.addEdge( neu );
 		edgeCapacities.set( neu, edgeCapacity );
 		transitTimes.set( neu, transitTime );
 		exactTransitTimes.set( neu, exactTransitTime );
 	}
 
+	//T ODO transfer to mapping
 	public NodePositionMapping getNodeCoordinates() {
 		NodePositionMapping nodePositionMapping = new NodePositionMapping( network.numberOfNodes() );
 		for( Node n : network.nodes() ) {
@@ -350,7 +351,7 @@ public class NetworkFlowModel implements Iterable<Node> {
 		return edgeCapacities;
 	}
 
-	public void divide( Edge edge, double factor ) {
+	void divide( Edge edge, double factor ) {
 		exactTransitTimes.divide( edge, factor );
 	}
 }
