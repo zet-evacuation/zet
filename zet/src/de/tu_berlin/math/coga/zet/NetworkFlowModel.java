@@ -258,7 +258,7 @@ public class NetworkFlowModel implements Iterable<Node> {
 			sources = checker.getNewSources();
 			for( Node oldSource : checker.getDeletedSources() ) {
 				//mapping.setIsSourceNode( oldSource, false );
-				mapping.setIsDeletedSourceNode( oldSource, true );
+				mapping.setDeletedSourceNode( oldSource, true );
 			}
 		} else
 			throw new AssertionError( DefaultLoc.getSingleton().getString( "converter.NoCheckException" ) );
