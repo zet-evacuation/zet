@@ -4,7 +4,7 @@
  */
 package ds.graph;
 
-import de.tu_berlin.math.coga.zet.NetworkFlowModel;
+import de.tu_berlin.math.coga.zet.converter.graph.NetworkFlowModel;
 import ds.graph.IdentifiableCollection;
 import ds.graph.problem.MinSpanningTreeProblem;
 import ds.mapping.IdentifiableIntegerMapping;

@@ -8,7 +8,6 @@ import de.tu_berlin.math.coga.common.localization.DefaultLoc;
 import de.tu_berlin.math.coga.common.util.Direction;
 import static de.tu_berlin.math.coga.common.util.Direction.*;
 import static de.tu_berlin.math.coga.common.util.Level.*;
-import de.tu_berlin.math.coga.zet.NetworkFlowModel;
 import de.tu_berlin.math.coga.zet.converter.RasterContainerCreator;
 import ds.PropertyContainer;
 import ds.graph.Edge;

@@ -5,7 +5,7 @@
 package algo.graph.reduction;
 import algo.graph.shortestpath.Dijkstra;
 import de.tu_berlin.math.coga.common.algorithm.Algorithm;
-import de.tu_berlin.math.coga.zet.NetworkFlowModel;
+import de.tu_berlin.math.coga.zet.converter.graph.NetworkFlowModel;
 import ds.collection.ListSequence;
 import ds.graph.Edge;
 import ds.graph.IdentifiableCollection;

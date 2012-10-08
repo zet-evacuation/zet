@@ -6,7 +6,6 @@ package de.tu_berlin.math.coga.zet.converter.graph;
 
 import algo.graph.reduction.ClusterAlgo;
 import de.tu_berlin.math.coga.common.algorithm.Algorithm;
-import de.tu_berlin.math.coga.zet.NetworkFlowModel;
 import ds.collection.ListSequence;
 import ds.graph.*;
 import ds.graph.problem.MinSpanningTreeProblem;
@@ -32,9 +31,6 @@ public class ClusterShrinker extends Algorithm<NetworkFlowModel,NetworkFlowModel
     @Override
     protected NetworkFlowModel runAlgorithm( NetworkFlowModel problem ) {
 			ZToGraphMapping originalMapping = problem.getZToGraphMapping();
-			ZToGraphMapping newMapping = new ZToGraphMapping();
-                
-		newMapping.setRaster( problem.getZToGraphMapping().getRaster() );
 
 //                mapping = new ZToGraphMapping();
 //                ZToGraphMapping newmapping = new ZToGraphMapping();
@@ -62,7 +58,9 @@ public class ClusterShrinker extends Algorithm<NetworkFlowModel,NetworkFlowModel
                 //minspanmodel.setSupersink(model.getSupersink());
        
                 Node Super = minspanmodel.getSupersink();
-                newMapping.setNodeSpeedFactor( Super, 1 );
+			ZToGraphMapping newMapping = minspanmodel.getZToGraphMapping();
+
+			newMapping.setNodeSpeedFactor( Super, 1 );
 		newMapping.setNodeRectangle( Super, new NodeRectangle( 0, 0, 0, 0 ) );
 		newMapping.setFloorForNode( Super, -1 );
  
@@ -124,7 +122,7 @@ public class ClusterShrinker extends Algorithm<NetworkFlowModel,NetworkFlowModel
                  newMapping.isDeletedSourceNode = originalMapping.isDeletedSourceNode;
                  newMapping.exitName = originalMapping.exitName;
                  
-                minspanmodel.setZToGraphMapping(newMapping);   
+                //minspanmodel.setZToGraphMapping(newMapping);   
                 //minspanmodel.setSupersink(model.getSupersink());
                 BaseZToGraphConverter.createReverseEdges( minspanmodel );
                 

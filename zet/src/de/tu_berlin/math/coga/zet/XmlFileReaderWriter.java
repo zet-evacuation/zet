@@ -4,6 +4,7 @@
  */
 package de.tu_berlin.math.coga.zet;
 
+import de.tu_berlin.math.coga.zet.converter.graph.NetworkFlowModel;
 import algo.graph.dynamicflow.eat.EarliestArrivalFlowProblem;
 import de.tu_berlin.math.coga.algorithm.networkflow.mincostflow.SuccessiveShortestPath;
 import de.tu_berlin.math.coga.graph.io.xml.XMLReader;
@@ -135,7 +136,7 @@ public class XmlFileReaderWriter {
 		
 		
 		writer = new XMLWriter( "./testinstanz/2 rooms demo.xml" );
-		writer.writeGraph( nfm.graph().getAsStaticNetwork(), nfm.edgeCapacities, nfm.transitTimes, nfm.currentAssignment );
+		//writer.writeGraph( nfm.graph().getAsStaticNetwork(), nfm.edgeCapacities, nfm.transitTimes, nfm.currentAssignment );
 		
 		if( true )
 			return;

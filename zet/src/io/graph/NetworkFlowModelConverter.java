@@ -25,8 +25,9 @@ import com.thoughtworks.xstream.converters.MarshallingContext;
 import com.thoughtworks.xstream.converters.UnmarshallingContext;
 import com.thoughtworks.xstream.io.HierarchicalStreamReader;
 import com.thoughtworks.xstream.io.HierarchicalStreamWriter;
-import de.tu_berlin.math.coga.zet.NetworkFlowModel;
+import de.tu_berlin.math.coga.zet.converter.graph.NetworkFlowModel;
 import de.tu_berlin.math.coga.zet.converter.graph.ZToGraphMapping;
+import de.tu_berlin.math.coga.zet.converter.graph.ZToGraphRasterContainer;
 import ds.graph.Edge;
 import ds.graph.Node;
 import ds.graph.network.AbstractNetwork;
@@ -97,7 +98,7 @@ public class NetworkFlowModelConverter implements Converter {
     }
 
     public Object unmarshal(HierarchicalStreamReader reader, UnmarshallingContext context) {
-		NetworkFlowModel nf = new NetworkFlowModel();
+		NetworkFlowModel nf = new NetworkFlowModel( (ZToGraphRasterContainer)null );
 		
         // Read the network
         reader.moveDown();

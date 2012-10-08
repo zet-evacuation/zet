@@ -25,7 +25,8 @@ import de.tu_berlin.math.coga.common.algorithm.Algorithm;
 import de.tu_berlin.math.coga.zet.converter.graph.GraphAssignmentConverter;
 import ds.z.Project;
 import ds.PropertyContainer;
-import de.tu_berlin.math.coga.zet.NetworkFlowModel;
+import de.tu_berlin.math.coga.zet.converter.graph.NetworkFlowModel;
+import de.tu_berlin.math.coga.zet.converter.graph.ZToGraphRasterContainer;
 import ds.ProjectLoader;
 import ds.z.Assignment;
 import ds.z.ConcreteAssignment;
@@ -181,7 +182,7 @@ public class CommandLineInterpretor {
             System.out.println("Rastering took " + (System.currentTimeMillis() - start) + " ms.");
         }
         start = System.currentTimeMillis();
-        NetworkFlowModel model = new NetworkFlowModel();
+        NetworkFlowModel model = new NetworkFlowModel( (ZToGraphRasterContainer)null );
         try {
             //ZToGraphConverter.convertBuildingPlan(project.getBuildingPlan(), model);
         } catch (Exception e) {

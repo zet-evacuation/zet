@@ -7,7 +7,6 @@ package de.tu_berlin.math.coga.zet.converter.graph;
 import algo.graph.reduction.YenKShortestPaths;
 import algo.graph.reduction.YenPath;
 import de.tu_berlin.math.coga.common.algorithm.Algorithm;
-import de.tu_berlin.math.coga.zet.NetworkFlowModel;
 import ds.collection.ListSequence;
 import ds.graph.Edge;
 import ds.graph.Forest;
@@ -56,9 +55,6 @@ public class RepeatedShortestPathsShrinker  extends Algorithm<NetworkFlowModel,N
     @Override
     protected NetworkFlowModel runAlgorithm( NetworkFlowModel problem ) {
 			ZToGraphMapping originalMapping = problem.getZToGraphMapping();
-			ZToGraphMapping newMapping = new ZToGraphMapping();
-                
-			newMapping.setRaster( problem.getZToGraphMapping().getRaster() );
 
 //		mapping = new ZToGraphMapping();
 //                ZToGraphMapping newmapping = new ZToGraphMapping();
@@ -85,7 +81,9 @@ public class RepeatedShortestPathsShrinker  extends Algorithm<NetworkFlowModel,N
                     }
                 }
         	                
-                minspanmodel = new NetworkFlowModel();
+                minspanmodel = new NetworkFlowModel( problem.getZToGraphMapping().getRaster() );
+			ZToGraphMapping newMapping = minspanmodel.getZToGraphMapping();
+                
                 Node Super = problem.getSupersink();
                 //newgraph.addNode(Super);
                 //NumNodes++;
@@ -129,7 +127,8 @@ public class RepeatedShortestPathsShrinker  extends Algorithm<NetworkFlowModel,N
                 
                 for (Node source: problem.getSources())
                 { 
-                    Room r = originalMapping.getNodeRoomMapping().get(source);
+                    //Room r = originalMapping.getNodeRoomMapping().get(source);
+										Room r = originalMapping.getRoom( source );
                     PlanPoint pos = new PlanPoint((int)originalMapping.getNodeRectangles().get(source).getCenterX(),(int)-originalMapping.getNodeRectangles().get(source).getCenterY());
                     //System.out.println("found planpoint: " + pos);
                         
@@ -266,9 +265,7 @@ public class RepeatedShortestPathsShrinker  extends Algorithm<NetworkFlowModel,N
                  //minspanmodel.setNetwork(newgraph);
                  //values from mapping of original graph                
                  newMapping.exitName = originalMapping.exitName;
-                 
-                minspanmodel.setZToGraphMapping(newMapping); 
-                
+                                 
                 /*for (Node n: minspanmodel.getGraph().nodes())
                 {
                     System.out.println("Nodes: " + n);

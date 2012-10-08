@@ -24,7 +24,7 @@ import algo.graph.dynamicflow.eat.LongestShortestPathTimeHorizonEstimator;
 import algo.graph.dynamicflow.eat.SEAAPAlgorithm;
 import de.tu_berlin.math.coga.common.algorithm.Transformation;
 import de.tu_berlin.math.coga.common.util.Formatter;
-import de.tu_berlin.math.coga.zet.NetworkFlowModel;
+import de.tu_berlin.math.coga.zet.converter.graph.NetworkFlowModel;
 import ds.graph.flow.FlowOverTimeImplicit;
 import ds.graph.flow.PathBasedFlowOverTime;
 

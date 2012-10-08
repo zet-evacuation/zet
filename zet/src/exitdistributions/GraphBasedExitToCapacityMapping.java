@@ -16,7 +16,7 @@
 package exitdistributions;
 
 import algo.graph.exitassignment.ExitCapacityEstimator;
-import de.tu_berlin.math.coga.zet.NetworkFlowModel;
+import de.tu_berlin.math.coga.zet.converter.graph.NetworkFlowModel;
 import ds.ca.evac.Cell;
 import ds.ca.evac.EvacuationCellularAutomaton;
 import ds.ca.evac.StaticPotential;

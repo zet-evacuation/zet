@@ -7,7 +7,7 @@ package zet.tasks;
 import de.tu_berlin.math.coga.common.algorithm.Algorithm;
 import de.tu_berlin.math.coga.common.algorithm.AlgorithmEvent;
 import de.tu_berlin.math.coga.common.algorithm.AlgorithmListener;
-import de.tu_berlin.math.coga.zet.NetworkFlowModel;
+import de.tu_berlin.math.coga.zet.converter.graph.NetworkFlowModel;
 import de.tu_berlin.math.coga.zet.converter.graph.GraphAssignmentConverter;
 import de.tu_berlin.math.coga.zet.converter.graph.ZToNonGridGraphConverter;
 import ds.GraphVisualizationResults;

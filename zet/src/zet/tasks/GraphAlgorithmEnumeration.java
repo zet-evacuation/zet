@@ -29,7 +29,7 @@ import batch.tasks.graph.SuccessiveEarliestArrivalAugmentingPathOptimizedTask;
 import de.tu_berlin.math.coga.algorithm.flowovertime.maxflow.MaximumFlowOverTimeProblem;
 import de.tu_berlin.math.coga.common.algorithm.Algorithm;
 import de.tu_berlin.math.coga.common.localization.DefaultLoc;
-import de.tu_berlin.math.coga.zet.NetworkFlowModel;
+import de.tu_berlin.math.coga.zet.converter.graph.NetworkFlowModel;
 import ds.NetworkFlowModelAlgorithm;
 import ds.graph.flow.PathBasedFlowOverTime;
 import ds.graph.network.AbstractNetwork;

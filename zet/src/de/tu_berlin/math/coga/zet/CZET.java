@@ -1,5 +1,6 @@
 package de.tu_berlin.math.coga.zet;
 
+import de.tu_berlin.math.coga.zet.converter.graph.NetworkFlowModel;
 import algo.graph.dynamicflow.eat.EarliestArrivalFlowProblem;
 import algo.graph.dynamicflow.eat.SEAAPAlgorithm;
 import com.martiansoftware.jsap.FlaggedOption;
@@ -545,7 +546,8 @@ public class CZET {
 				nfm = cav.getSolution();
 
 				XMLWriter writer = new XMLWriter( outputFile.toFile() );
-				writer.writeGraph( nfm.network.getAsStaticNetwork(), nfm.edgeCapacities, nfm.transitTimes, nfm.currentAssignment );
+				throw new UnsupportedOperationException( "Not implemented yet" );
+				//writer.writeGraph( nfm.network.getAsStaticNetwork(), nfm.edgeCapacities, nfm.transitTimes, nfm.currentAssignment );
 		}
 
 	}
