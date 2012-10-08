@@ -202,7 +202,7 @@ public class RepeatedShortestPathsShrinker  extends Algorithm<NetworkFlowModel,N
                         newMapping.setNodeRectangle(new_node, originalMapping.getNodeRectangles().get(node));
                         newMapping.setFloorForNode(new_node, problem.getZToGraphMapping().getNodeFloorMapping().get(node));
                         newMapping.setIsEvacuationNode( new_node,problem.getZToGraphMapping().getIsEvacuationNode(node));
-                        newMapping.setIsSourceNode(new_node, problem.getZToGraphMapping().getIsSourceNode(node));
+                        //newMapping.setIsSourceNode(new_node, problem.getZToGraphMapping().getIsSourceNode(node));
                         newMapping.setIsDeletedSourceNode( new_node, problem.getZToGraphMapping().getIsDeletedSourceNode(node) );
                         minspanmodel.setNodeCapacity(new_node, problem.getNodeCapacity(node));
                         newMapping.setNodeSpeedFactor(new_node, originalMapping.getNodeSpeedFactor(node));

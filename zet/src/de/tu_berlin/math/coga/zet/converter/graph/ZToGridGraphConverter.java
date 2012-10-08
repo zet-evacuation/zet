@@ -15,7 +15,6 @@ import ds.graph.Edge;
 import ds.graph.Node;
 import ds.graph.NodeRectangle;
 import ds.graph.network.DynamicNetwork;
-import ds.mapping.IdentifiableDoubleMapping;
 import ds.mapping.IdentifiableIntegerMapping;
 import ds.z.BuildingPlan;
 import ds.z.ConcreteAssignment;
@@ -113,7 +112,7 @@ public class ZToGridGraphConverter extends BaseZToGraphConverter {
 						Node node = model.newNode();
 						model.getZToGraphMapping().getNodeFloorMapping().set( node, getProblem().getFloorID( room.getFloor() ) );
 						model.getZToGraphMapping().setIsEvacuationNode( node, square.isExit() );
-						model.getZToGraphMapping().setIsSourceNode( node, square.isSource() );
+						//model.getZToGraphMapping().setIsSourceNode( node, square.isSource() );
 						model.getZToGraphMapping().setIsDeletedSourceNode( node, false );
 						if( getProblem().getFloorID( room.getFloor() ) == -1 )
 							System.out.println( "Fehler: Floor beim Konvertieren nicht gefunden." );
@@ -281,7 +280,7 @@ public class ZToGridGraphConverter extends BaseZToGraphConverter {
 
 		long startTT = System.currentTimeMillis();
 		System.out.println( "BEGINNE TRANSIT-TIMES" );
-		exactTransitTimes = new IdentifiableDoubleMapping<>( 1 );
+		//exactTransitTimes = new IdentifiableDoubleMapping<>( 1 );
 
 		List<ZToGraphRoomRaster> roomRasterList = raster.getAllRasteredRooms();
 
@@ -322,14 +321,14 @@ public class ZToGridGraphConverter extends BaseZToGraphConverter {
 						System.out.println( "debug" );
 					if( edge != null && start != end ) {
 						if( end.equals( supersink ) ) {
-							exactTransitTimes.set( edge, 0 );
+							model.setExactTransitTime( edge, 0 );
 							continue;
 						}
 						// add a transitTime-0-entry to the IIMapping for the current edge if there is not yet such an entry
-						if( !exactTransitTimes.isDefinedFor( edge ) || exactTransitTimes.get( edge ) <= 0 )
-							exactTransitTimes.set( edge, 0 );
+						if( /*!exactTransitTimes.isDefinedFor( edge ) || */ model.getExactTransitTime( edge ) <= 0 )
+							model.setExactTransitTime( edge, 0 );
 						// write the new transitTime into the IIMapping
-						exactTransitTimes.set( edge, 1 );
+						model.setExactTransitTime( edge, 1 );
 					}
 				} // END of for(start)
 		} // END of for(roomRaster)
@@ -356,7 +355,7 @@ public class ZToGridGraphConverter extends BaseZToGraphConverter {
 					for( Node nodeB : nodeListOfEndRoom ) {
 						Edge edge = model.getEdge( nodeA, nodeB );
 						if( edge != null && model.contains( edge ) && doorEdgeToSquare.get( edge ) != null && !doorEdgeToSquare.get( edge ).isEmpty() )
-							exactTransitTimes.set( edge, 1 );
+							model.setExactTransitTime( edge, 1 );
 					}
 			}
 		// END calculate INTER-Room-Edge-Transit-Times
