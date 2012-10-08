@@ -71,8 +71,9 @@ public class MSTSteiner extends Algorithm<MinSpanningTreeProblem,MinSteinerTree>
         {
             if (node.id() != 0)
             {
-                if (mapping.getIsEvacuationNode(node)== true || mapping.getIsSourceNode(node) == true)
+                if (mapping.getIsEvacuationNode(node)== true /*|| mapping.getIsSourceNode(node) == true */ )
                 {
+									OriginNetwork.getSources().contains( node );
                     firstnet.addNode(node);
                     SteinerNodes.add(node);
                    

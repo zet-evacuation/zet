@@ -113,7 +113,7 @@ public class APSPGraphShrinker extends Algorithm<NetworkFlowModel,NetworkFlowMod
                 
                 for (Edge neu: solEdges)
                 {
-									minspanmodel.addEdge( neu, problem .getEdgeCapacity(neu), problem .getTransitTime(neu), problem .getExactTransitTime(neu));
+									minspanmodel.addEdge( neu, problem .getEdgeCapacity(neu), problem .getTransitTime(neu), problem.getExactTransitTime(neu));
                     //newgraph.addEdge(neu);
                     //minspanmodel.setEdgeCapacity(neu, model.getEdgeCapacity(neu));
                     //minspanmodel.setTransitTime(neu, model.getTransitTime(neu));
@@ -129,7 +129,7 @@ public class APSPGraphShrinker extends Algorithm<NetworkFlowModel,NetworkFlowMod
                  newMapping.nodeRectangles = originalMapping.getNodeRectangles();
                  newMapping.nodeFloorMapping = originalMapping.getNodeFloorMapping();
                  newMapping.isEvacuationNode = originalMapping.isEvacuationNode;
-                 newMapping.isSourceNode = originalMapping.isSourceNode;
+                 //newMapping.isSourceNode = originalMapping.isSourceNode;
                  newMapping.isDeletedSourceNode = originalMapping.isDeletedSourceNode;
                  newMapping.exitName = originalMapping.exitName;
                  

@@ -67,7 +67,7 @@ public class ZToNonGridGraphConverter extends BaseZToGraphConverter {
 		mapping.setNodeSpeedFactor( supersink, 1 );
 		mapping.setNodeRectangle( supersink, new NodeRectangle( 0, 0, 0, 0 ) );
 		mapping.setFloorForNode( supersink, -1 );
-                mapping.setRoomForNode(supersink, null);
+    mapping.setRoomForNode(supersink, null);
 
 		// get attribute from property container
 		PropertyContainer propertyContainer = PropertyContainer.getInstance();
@@ -115,7 +115,7 @@ public class ZToNonGridGraphConverter extends BaseZToGraphConverter {
 						model.getZToGraphMapping().setIsEvacuationNode( node, square.isExit() );
 						if( square.isExit() )
 							model.getZToGraphMapping().setNameOfExit( node, square.getName() );
-						model.getZToGraphMapping().setIsSourceNode( node, square.isSource() );
+						//model.getZToGraphMapping().setIsSourceNode( node, square.isSource() );
 						model.getZToGraphMapping().setIsDeletedSourceNode( node, false );
 						if( getProblem().getFloorID( room.getFloor() ) == -1 )
 							Logger.getGlobal().warning( "\nFehler: Floor beim Konvertieren nicht gefunden." );
@@ -407,7 +407,7 @@ public class ZToNonGridGraphConverter extends BaseZToGraphConverter {
 		//System.out.print( "Compute transit times... " );
 
 		//protected IdentifiableDoubleMapping<Edge> exactTransitTimes;
-		exactTransitTimes = new IdentifiableDoubleMapping<>( 1 );
+		//exactTransitTimes = new IdentifiableDoubleMapping<>( 1 );
 		List<ZToGraphRoomRaster> roomRasterList = raster.getAllRasteredRooms();
 		//Graph graph = model.getGraph();
 
@@ -443,14 +443,14 @@ public class ZToNonGridGraphConverter extends BaseZToGraphConverter {
 					Edge edge = model.getEdge( start, end );
 					if( edge != null && start != end ) {
 						if( end.equals( supersink ) ) {
-							exactTransitTimes.set( edge, 0 );
+							model.setExactTransitTime( edge, 0 );
 							continue;
 						}
 						// add a transitTime-0-entry to the IIMapping for the current edge if there is not yet such an entry
-						if( !exactTransitTimes.isDefinedFor( edge ) || exactTransitTimes.get( edge ) <= 0 )
-							exactTransitTimes.set( edge, 0 );
+						if( /*! model.getExactTransitTime( edge )       xactTransitTimes.isDefinedFor( edge ) ||*/ model.getExactTransitTime( edge ) <= 0 )
+							model.setExactTransitTime( edge, 0 );
 						// if the transitTime for the current edge is not already modified
-						if( exactTransitTimes.get( edge ) <= 0 ) {
+						if( model.getExactTransitTime( edge ) <= 0 ) {
 							NodeRectangle.NodeRectanglePoint startUpperLeft = mapping.getNodeRectangles().get( start ).get_nw_point();
 							NodeRectangle.NodeRectanglePoint startLowerRight = mapping.getNodeRectangles().get( start ).get_se_point();
 							int startCentreX = (int) Math.round( mapping.getNodeRectangles().get( start ).getCenterX() );
@@ -520,7 +520,7 @@ public class ZToNonGridGraphConverter extends BaseZToGraphConverter {
 							transitTimeStartEnd = transitTimeStartEnd * precision / 400.0d;
 
 							// write the new transitTime into the IIMapping
-							exactTransitTimes.set( edge, transitTimeStartEnd );
+							model.setExactTransitTime( edge, transitTimeStartEnd );
 						}
 					}
 				} // END of for(start)
@@ -595,7 +595,7 @@ public class ZToNonGridGraphConverter extends BaseZToGraphConverter {
 							// adjusting the transit time according to the graph precision value
 							transitTimeAB = transitTimeAB * precision / 400.0d;
 
-							exactTransitTimes.set( edge, transitTimeAB );
+							model.setExactTransitTime( edge, transitTimeAB );
 						}
 					}
 			}

@@ -19,7 +19,7 @@ import java.util.List;
  * @author Martin Groß, Jan-Philipp Kappmeier
  */
 public abstract class BaseZToGraphConverter extends Algorithm<BuildingPlan, NetworkFlowModel> {
-	protected IdentifiableDoubleMapping<Edge> exactTransitTimes;
+	//protected IdentifiableDoubleMapping<Edge> exactTransitTimes;
 	protected ZToGraphMapping mapping;
 	protected NetworkFlowModel model;
 	protected ZToGraphRasterContainer raster;
@@ -105,10 +105,12 @@ public abstract class BaseZToGraphConverter extends Algorithm<BuildingPlan, Netw
 			if( !edge.isIncidentTo( model.getSupersink() ) )
 				switch( mapping.getEdgeLevel( edge ) ) {
 					case Higher:
-						exactTransitTimes.divide( edge, mapping.getUpNodeSpeedFactor( edge.start() ) );
+						model.divide( edge, mapping.getUpNodeSpeedFactor( edge.start() ) );
+						//exactTransitTimes.divide( edge, mapping.getUpNodeSpeedFactor( edge.start() ) );
 						break;
 					case Lower:
-						exactTransitTimes.divide( edge, mapping.getDownNodeSpeedFactor( edge.start() ) );
+						model.divide( edge, mapping.getDownNodeSpeedFactor( edge.start() ) );
+						//exactTransitTimes.divide( edge, mapping.getDownNodeSpeedFactor( edge.start() ) );
 						break;
 				}
 	}
