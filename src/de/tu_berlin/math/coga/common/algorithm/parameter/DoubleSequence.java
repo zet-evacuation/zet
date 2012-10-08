@@ -68,7 +68,7 @@ public class DoubleSequence implements Sequence<Double> {
      */
     @Override
     public Iterator<Double> iterator() {
-        return new Iterator<>() {
+        return new Iterator<Double>() {
 
             /**
              * Stores the current value of this iterator.
