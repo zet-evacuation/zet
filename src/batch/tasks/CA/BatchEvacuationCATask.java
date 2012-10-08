@@ -33,7 +33,7 @@ import ds.z.Project;
 import ds.PropertyContainer;
 import ds.ca.evac.EvacuationCellularAutomaton;
 import ds.ca.results.VisualResultsRecorder;
-import de.tu_berlin.math.coga.zet.NetworkFlowModel;
+import de.tu_berlin.math.coga.zet.converter.graph.NetworkFlowModel;
 import ds.graph.flow.PathBasedFlowOverTime;
 import ds.z.Assignment;
 import ds.z.AssignmentType;
@@ -102,8 +102,8 @@ public class BatchEvacuationCATask implements Runnable {
 		// Create CA with evacuation plans according to calculated transshipment
 
 		//NetworkFlowModel nfo = res.getNetworkFlowModel ();
-		NetworkFlowModel nfo = new NetworkFlowModel();
-		res.setNetworkFlowModel( nfo );
+		//NetworkFlowModel nfo = new NetworkFlowModel();
+		//res.setNetworkFlowModel( nfo );
 		//ZToGraphConverter.convertBuildingPlan( project.getBuildingPlan(), nfo );
 
 		ConcreteAssignment concreteAssignment;
@@ -115,20 +115,20 @@ public class BatchEvacuationCATask implements Runnable {
 
 		//ZToGraphConverter.convertConcreteAssignment( concreteAssignment, nfo );
 		Algorithm<NetworkFlowModel, PathBasedFlowOverTime> gt = null;
-		gt = graphAlgo.createTask (nfo, maxTime);
-                gt.setProblem(nfo);
+		//gt = graphAlgo.createTask (nfo, maxTime);
+    //            gt.setProblem(nfo);
 		gt.run ();
 
 		
-		EvacuationCellularAutomaton ca;
-		try {
+		EvacuationCellularAutomaton ca = null;
+//		try {
 //			ca = FlowBasedCAFactory.getFlowBasedCAFactoryInstance ().convertAndApplyConcreteAssignment (project.getBuildingPlan (), gt.getDynamicFlow (), concreteAssignment, nfo.getZToGraphMapping ().
-			ca = FlowBasedCAFactory.getFlowBasedCAFactoryInstance ().convertAndApplyConcreteAssignment (project.getBuildingPlan (), gt.getSolution (), concreteAssignment, nfo.getZToGraphMapping ().
-					getRaster ());
-		} catch (ConversionNotSupportedException ex) {
-			ex.printStackTrace ();
-			return;
-		}
+			//ca = FlowBasedCAFactory.getFlowBasedCAFactoryInstance ().convertAndApplyConcreteAssignment (project.getBuildingPlan (), gt.getSolution (), concreteAssignment, nfo.getZToGraphMapping ().
+//					getRaster ());
+//		} catch (ConversionNotSupportedException ex) {
+//			ex.printStackTrace ();
+//			return;
+//		}
 
 		res.setCellularAutomaton (runNumber, ca);
 		for (AssignmentType at : assignment.getAssignmentTypes ()) {

@@ -8,7 +8,6 @@ package de.tu_berlin.math.coga.zet.converter.graph;
 import algo.graph.shortestpath.DijkstraWithRationalDistances;
 import de.tu_berlin.math.coga.common.algorithm.Algorithm;
 import de.tu_berlin.math.coga.common.util.Level;
-import de.tu_berlin.math.coga.zet.NetworkFlowModel;
 import ds.collection.ListSequence;
 import ds.graph.Edge;
 import ds.graph.Forest;
@@ -40,9 +39,6 @@ public class ShortestPathGraphShrinker extends Algorithm<NetworkFlowModel,Networ
     @Override
     protected NetworkFlowModel runAlgorithm( NetworkFlowModel problem ) {
 			ZToGraphMapping originalMapping = problem.getZToGraphMapping();
-			ZToGraphMapping newMapping = new ZToGraphMapping();
-                
-		newMapping.setRaster( problem.getZToGraphMapping().getRaster() );
 
 //		mapping = new ZToGraphMapping();
 //                ZToGraphMapping newmapping = new ZToGraphMapping();
@@ -67,7 +63,9 @@ public class ShortestPathGraphShrinker extends Algorithm<NetworkFlowModel,Networ
                 //newgraph.setNodes(model.getGraph().nodes());
                 //minspanmodel.setNetwork(newgraph);
                 minspanmodel = new NetworkFlowModel( problem );
-                //minspanmodel.setSupersink(model.getSupersink());
+			ZToGraphMapping newMapping = minspanmodel.getZToGraphMapping();
+
+			//minspanmodel.setSupersink(model.getSupersink());
 
 								
 								Node Super = minspanmodel.getSupersink();
@@ -156,9 +154,8 @@ public class ShortestPathGraphShrinker extends Algorithm<NetworkFlowModel,Networ
                  //newMapping.isSourceNode = originalMapping.isSourceNode;
                  newMapping.isDeletedSourceNode = originalMapping.isDeletedSourceNode;
                  newMapping.exitName = originalMapping.exitName;
-                 
-                 minspanmodel.setZToGraphMapping(newMapping);                
-                 //minspanmodel.setSupersink(model.getSupersink());
+ 
+								 //minspanmodel.setSupersink(model.getSupersink());
                 //createReverseEdges( minspanmodel );
                 //minspanmodel.setNetwork(newgraph);
                 //minspanmodel.setNetwork( minspanmodel.getAsStaticNetwork());

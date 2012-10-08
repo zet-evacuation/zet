@@ -5,7 +5,7 @@
 package algo.graph.shortestpath;
 
 
-import de.tu_berlin.math.coga.zet.NetworkFlowModel;
+import de.tu_berlin.math.coga.zet.converter.graph.NetworkFlowModel;
 import ds.graph.Edge;
 import ds.graph.IdentifiableCollection;
 import ds.collection.ListSequence;

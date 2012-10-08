@@ -6,7 +6,6 @@ package de.tu_berlin.math.coga.zet.converter.graph;
 
 import algo.graph.shortestpath.Dijkstra;
 import de.tu_berlin.math.coga.common.algorithm.Algorithm;
-import de.tu_berlin.math.coga.zet.NetworkFlowModel;
 import ds.collection.ListSequence;
 import ds.graph.Edge;
 import ds.graph.Forest;
@@ -39,9 +38,6 @@ public class DijkstraSpannerShrinker extends Algorithm<NetworkFlowModel,NetworkF
     @Override
     protected NetworkFlowModel runAlgorithm( NetworkFlowModel problem ) {
 			ZToGraphMapping originalMapping = problem.getZToGraphMapping();
-			ZToGraphMapping newMapping = new ZToGraphMapping();
-                
-		newMapping.setRaster( problem.getZToGraphMapping().getRaster() );
 				
 //		mapping = new ZToGraphMapping();
 //                ZToGraphMapping newmapping = new ZToGraphMapping();
@@ -67,7 +63,9 @@ public class DijkstraSpannerShrinker extends Algorithm<NetworkFlowModel,NetworkF
            //     minspanmodel.setSupersink(model.getSupersink());
                 minspanmodel = new NetworkFlowModel( problem );
                 Node Super = minspanmodel.getSupersink();
-                newMapping.setNodeSpeedFactor( Super, 1 );
+			ZToGraphMapping newMapping = minspanmodel.getZToGraphMapping();
+
+			newMapping.setNodeSpeedFactor( Super, 1 );
 		newMapping.setNodeRectangle( Super, new NodeRectangle( 0, 0, 0, 0 ) );
 		newMapping.setFloorForNode( Super, -1 );
                 
@@ -137,7 +135,7 @@ public class DijkstraSpannerShrinker extends Algorithm<NetworkFlowModel,NetworkF
                  newMapping.isDeletedSourceNode = originalMapping.isDeletedSourceNode;
                  newMapping.exitName = originalMapping.exitName;
                  
-                 minspanmodel.setZToGraphMapping(newMapping);                
+                 //minspanmodel.setZToGraphMapping(newMapping);
                 BaseZToGraphConverter.createReverseEdges( minspanmodel );
                 //minspanmodel.setNetwork(newgraph);
                 //minspanmodel.setNetwork( minspanmodel.getGraph().getAsStaticNetwork());

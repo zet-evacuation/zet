@@ -47,13 +47,13 @@ public class ZToGraphMapping {
 	protected IdentifiableIntegerMapping<Node> nodeFloorMapping;
 	protected HashMap<Node, Room> nodeRoomMapping;
 	protected IdentifiableObjectMapping<Edge, Level> edgeLevels;
-	//protected IdentifiableObjectMapping<Node, Boolean> isEvacuationNode;
-	//protected IdentifiableObjectMapping<Node, Boolean> isSourceNode;
 	protected IdentifiableObjectMapping<Node, Boolean> isDeletedSourceNode;
-	protected IdentifiableObjectMapping<Node, String> exitName;
+	//protected IdentifiableObjectMapping<Node, String> exitName;
+	protected HashMap<Node,String> exitName;
 
-	public ZToGraphMapping() {
+	public ZToGraphMapping( ZToGraphRasterContainer raster ) {
 		this( 0, 0 );
+		this.raster = raster;
 	}
 
 	public ZToGraphMapping( int numberOfNodes, int numberOfEdges ) {
@@ -65,24 +65,14 @@ public class ZToGraphMapping {
 		nodeRectangles = new IdentifiableObjectMapping<Node, NodeRectangle>( numberOfNodes, NodeRectangle.class );
 		nodeFloorMapping = new IdentifiableIntegerMapping<Node>( numberOfNodes );
 		nodeRoomMapping = new HashMap<>( numberOfNodes );
-		//isEvacuationNode = new IdentifiableObjectMapping<Node, Boolean>( numberOfNodes, Boolean.class );
-		//isSourceNode = new IdentifiableObjectMapping<Node, Boolean>( numberOfNodes, Boolean.class );
 		isDeletedSourceNode = new IdentifiableObjectMapping<Node, Boolean>( numberOfNodes, Boolean.class );
-		exitName = new IdentifiableObjectMapping<Node, String>( numberOfNodes, String.class );
+		exitName = new HashMap<>();
 		raster = null;
 	}
 
 	public IdentifiableObjectMapping<Node, NodeRectangle> getNodeRectangles() {
 		return nodeRectangles;
 	}
-
-//	public IdentifiableObjectMapping<Node, Boolean> getIsEvacuationNode() {
-//		return isEvacuationNode;
-//	}
-
-//	public IdentifiableObjectMapping<Node, Boolean> getIsSourceNode() {
-//		return isSourceNode;
-//	}
 
 	public IdentifiableObjectMapping<Node, Boolean> getIsDeletedSourceNode() {
 		return isDeletedSourceNode;
@@ -92,8 +82,8 @@ public class ZToGraphMapping {
 		return nodeFloorMapping;
 	}
 
-	public HashMap<Node, Room> getNodeRoomMapping() {
-		return nodeRoomMapping;
+	public Room getRoom( Node node ) {
+		return nodeRoomMapping.get( node );
 	}
 
 	/**
@@ -127,7 +117,8 @@ public class ZToGraphMapping {
 	 * @param nameOfExit The name of the exit the node belongs to.
 	 */
 	void setNameOfExit( Node node, String nameOfExit ) {
-		exitName.set( node, nameOfExit );
+		//exitName.set( node, nameOfExit );
+		exitName.put( node, nameOfExit );
 	}
 
 	/**
@@ -136,10 +127,7 @@ public class ZToGraphMapping {
 	 * @return the name of the exit the node belongs to if it belongs to any exit.
 	 */
 	public String getNameOfExit( Node node ) {
-		if( exitName.isDefinedFor( node ) )
-			return exitName.get( node );
-		else
-			throw new IllegalArgumentException( "The node " + node + " is not an exit node." );
+		return exitName.get( node );
 	}
 
 	void setNodeRectangle( Node node, NodeRectangle nodeRectangle ) {
@@ -158,9 +146,9 @@ public class ZToGraphMapping {
 		return raster;
 	}
 
-	void setRaster( ZToGraphRasterContainer raster ) {
-		this.raster = raster;
-	}
+	//void setRaster( ZToGraphRasterContainer raster ) {
+	//	this.raster = raster;
+	//}
 
 	public Shape getNodeShape( Node node ) {
 		if( nodeShapes.isDefinedFor( node ) )
@@ -194,20 +182,6 @@ public class ZToGraphMapping {
 			throw new IllegalArgumentException( DefaultLoc.getSingleton().getString( "converter.NodeSpeedNotDefinedException" + " (" + node + ")" ) );
 	}
 
-//	public boolean getIsEvacuationNode( Node node ) {
-//		if( isEvacuationNode.isDefinedFor( node ) )
-//			return isEvacuationNode.get( node );
-//		else
-//			throw new IllegalArgumentException( DefaultLoc.getSingleton().getString( "converter.NodeStatusNotDefinedException" + " (" + node + ")" ) );
-//	}
-
-//	public boolean getIsSourceNode( Node node ) {
-//		if( isSourceNode.isDefinedFor( node ) )
-//			return isSourceNode.get( node );
-//		else
-//			throw new IllegalArgumentException( DefaultLoc.getSingleton().getString( "converter.NodeSourceNotDefinedException" + " (" + node + ")" ) );
-//	}
-
 	public boolean getIsDeletedSourceNode( Node node ) {
 		if( isDeletedSourceNode.isDefinedFor( node ) )
 			return isDeletedSourceNode.get( node );
@@ -226,10 +200,6 @@ public class ZToGraphMapping {
 	void setNodeDownSpeedFactor( Node node, double value ) {
 		nodeDownSpeedFactors.set( node, value );
 	}
-
-//	void setIsEvacuationNode( Node node, Boolean isEvacuationNode ) {
-//		this.isEvacuationNode.set( node, isEvacuationNode );
-//	}
 
 	/* TODO package */ public void setDeletedSourceNode( Node node, Boolean isSourceNode ) {
 		this.isDeletedSourceNode.set( node, isSourceNode );

@@ -19,7 +19,7 @@ import algo.graph.dynamicflow.eat.EarliestArrivalFlowProblem;
 import algo.graph.util.PathComposition;
 import de.tu_berlin.math.coga.graph.io.xml.visualization.FlowVisualization;
 import de.tu_berlin.math.coga.math.vectormath.Vector3;
-import de.tu_berlin.math.coga.zet.NetworkFlowModel;
+import de.tu_berlin.math.coga.zet.converter.graph.NetworkFlowModel;
 import de.tu_berlin.math.coga.zet.converter.graph.ZToGraphMapping;
 import de.tu_berlin.math.coga.zet.viewer.NodePositionMapping;
 import ds.graph.Node;

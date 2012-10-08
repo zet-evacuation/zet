@@ -10,7 +10,7 @@ import de.tu_berlin.math.coga.common.algorithm.Algorithm;
 import ds.graph.Node;
 import java.util.Random;
 import ds.graph.Edge;
-import de.tu_berlin.math.coga.zet.NetworkFlowModel;
+import de.tu_berlin.math.coga.zet.converter.graph.NetworkFlowModel;
 import ds.graph.network.DynamicNetwork;
 import ds.graph.Graph;
 import ds.graph.IdentifiableCollection;

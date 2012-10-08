@@ -23,7 +23,7 @@ package statistic.graph;
 import ds.graph.Edge;
 import ds.mapping.IdentifiableIntegerMapping;
 import ds.graph.network.AbstractNetwork;
-import de.tu_berlin.math.coga.zet.NetworkFlowModel;
+import de.tu_berlin.math.coga.zet.converter.graph.NetworkFlowModel;
 import ds.graph.Node;
 import ds.graph.network.Network;
 import java.awt.BorderLayout;
@@ -113,7 +113,7 @@ public class VisualTest extends JFrame {
         //algo2.run();
         //PathComposition fc = new PathComposition(network, transitTimes, algo.getSolution());
         //fc.run();
-        NetworkFlowModel nfm = new NetworkFlowModel();
+        //NetworkFlowModel nfm = new NetworkFlowModel();
         //nfm.setNetwork(network);
         //nfm.setEdgeCapacities(capacities);
         //nfm.setTransitTimes(transitTimes);

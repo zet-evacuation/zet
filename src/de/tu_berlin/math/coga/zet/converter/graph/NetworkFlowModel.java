@@ -17,7 +17,7 @@
  * NetworkFlowModel.java
  *
  */
-package de.tu_berlin.math.coga.zet;
+package de.tu_berlin.math.coga.zet.converter.graph;
 
 import algo.graph.dynamicflow.eat.EarliestArrivalFlowProblem;
 import algo.graph.util.GraphInstanceChecker;
@@ -59,7 +59,7 @@ public class NetworkFlowModel implements Iterable<Node> {
 	int edgeIndex = 0;
 	int nodeCount = 1;
 
-	public NetworkFlowModel() {
+	public NetworkFlowModel( ZToGraphRasterContainer raster ) {
 		this.network = new DynamicNetwork();
 		this.edgeCapacities = new IdentifiableIntegerMapping<>( 0 );
 		this.nodeCapacities = new IdentifiableIntegerMapping<>( 0 );
@@ -69,19 +69,21 @@ public class NetworkFlowModel implements Iterable<Node> {
 		this.sources = new LinkedList<>();
 		supersink = new Node( 0 );
 		network.setNode( supersink );
+		mapping = new ZToGraphMapping( raster ); // start with an empty mapping in case we have an empty model
 	}
 
 	public NetworkFlowModel( NetworkFlowModel model ) {
-		// a constructor that copies the nodes
-		this();
+		// a constructor that copies the nodes. TODO: as static method
+		this( model.mapping.getRaster() );
 		network.setNodes( model.network.nodes() );
 		supersink = model.supersink;
 		sources = model.sources;
 		nodeCapacities = model.nodeCapacities;
 		currentAssignment = model.currentAssignment;
+		// create a new mapping!
 	}
 
-	public void setNumberOfEdges( int numberOfEdges ) {
+	void setNumberOfEdges( int numberOfEdges ) {
 		edgeCapacities.setDomainSize( numberOfEdges );
 		transitTimes.setDomainSize( numberOfEdges );
 		exactTransitTimes.setDomainSize( numberOfEdges );
@@ -94,7 +96,7 @@ public class NetworkFlowModel implements Iterable<Node> {
 			throw new IllegalArgumentException( DefaultLoc.getSingleton().getString( "ds.Graph.NoEdgeCapacityException" + edge + "." ) );
 	}
 
-	public void setEdgeCapacity( Edge edge, int value ) {
+	void setEdgeCapacity( Edge edge, int value ) {
 		edgeCapacities.set( edge, value );
 	}
 
@@ -121,9 +123,9 @@ public class NetworkFlowModel implements Iterable<Node> {
 		return mapping;
 	}
 
-	public void setZToGraphMapping( ZToGraphMapping mapping ) {
-		this.mapping = mapping;
-	}
+	//public void setZToGraphMapping( ZToGraphMapping mapping ) {
+	//	this.mapping = mapping;
+	//}
 
 	public Graph graph() {
 		return network;

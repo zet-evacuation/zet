@@ -7,7 +7,6 @@ package de.tu_berlin.math.coga.zet.converter.graph;
 import algo.graph.reduction.GreedyAlgo;
 import algo.graph.reduction.PrimsAlgo;
 import de.tu_berlin.math.coga.common.algorithm.Algorithm;
-import de.tu_berlin.math.coga.zet.NetworkFlowModel;
 import ds.graph.*;
 import ds.graph.problem.MinSpanningTreeProblem;
 
@@ -27,9 +26,6 @@ public class SpanningTreeShrinker extends Algorithm<NetworkFlowModel,NetworkFlow
     @Override
     protected NetworkFlowModel runAlgorithm( NetworkFlowModel problem ) {
 			ZToGraphMapping originalMapping = problem.getZToGraphMapping();
-			ZToGraphMapping newMapping = new ZToGraphMapping();
-                
-		newMapping.setRaster( problem.getZToGraphMapping().getRaster() );
 		//model.setZToGraphMapping( originalMapping );
 
                 
@@ -53,7 +49,9 @@ public class SpanningTreeShrinker extends Algorithm<NetworkFlowModel,NetworkFlow
        
                 //minspanmodel.setSupersink(model.getSupersink());
                 Node Super = minspanmodel.getSupersink();
-                newMapping.setNodeSpeedFactor( Super, 1 );
+			ZToGraphMapping newMapping = minspanmodel.getZToGraphMapping();
+
+			newMapping.setNodeSpeedFactor( Super, 1 );
 		newMapping.setNodeRectangle( Super, new NodeRectangle( 0, 0, 0, 0 ) );
 		newMapping.setFloorForNode( Super, -1 );
                 
@@ -106,7 +104,6 @@ public class SpanningTreeShrinker extends Algorithm<NetworkFlowModel,NetworkFlow
                  newMapping.isDeletedSourceNode = originalMapping.isDeletedSourceNode;
                  newMapping.exitName = originalMapping.exitName;
                  
-                minspanmodel.setZToGraphMapping(newMapping);                
                 //minspanmodel.setSupersink(model.getSupersink());
                 BaseZToGraphConverter.createReverseEdges( minspanmodel );
                 //minspanmodel.setNetwork(newgraph);

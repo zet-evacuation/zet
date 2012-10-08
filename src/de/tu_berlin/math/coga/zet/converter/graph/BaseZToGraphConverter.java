@@ -5,11 +5,9 @@
 package de.tu_berlin.math.coga.zet.converter.graph;
 
 import de.tu_berlin.math.coga.common.algorithm.Algorithm;
-import de.tu_berlin.math.coga.zet.NetworkFlowModel;
 import de.tu_berlin.math.coga.zet.converter.RasterContainerCreator;
 import ds.graph.Edge;
 import ds.graph.Graph;
-import ds.mapping.IdentifiableDoubleMapping;
 import ds.z.BuildingPlan;
 import java.util.LinkedList;
 import java.util.List;
@@ -29,11 +27,11 @@ public abstract class BaseZToGraphConverter extends Algorithm<BuildingPlan, Netw
 
 	@Override
 	protected NetworkFlowModel runAlgorithm( BuildingPlan problem ) {
-		mapping = new ZToGraphMapping();
-		model = new NetworkFlowModel();
+		//mapping = new ZToGraphMapping();
 		raster = RasterContainerCreator.getInstance().ZToGraphRasterContainer( problem );
-		mapping.setRaster( raster );
-		model.setZToGraphMapping( mapping );
+		model = new NetworkFlowModel( raster );
+		mapping = model.getZToGraphMapping();
+		
 		createNodes();
 		// create edges, their capacities and the capacities of the nodes
 		createEdgesAndCapacities();
@@ -80,7 +78,7 @@ public abstract class BaseZToGraphConverter extends Algorithm<BuildingPlan, Netw
 		for( int i = 0; i < oldEdgeIndex; ++i ) {
 			Edge edge = model.getEdge( i );
 			if( !edge.isIncidentTo( model.getSupersink() ) ) {
-				Edge newEdge = model.createReverseEdge( edge );//new Edge( edgeIndex++, edge.end(), edge.start() );
+				Edge newEdge = model.createReverseEdge( edge );
 			}
 		}
 	}

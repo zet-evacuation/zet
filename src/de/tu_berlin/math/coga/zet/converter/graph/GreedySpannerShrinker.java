@@ -4,7 +4,6 @@
  */
 package de.tu_berlin.math.coga.zet.converter.graph;
 
-import de.tu_berlin.math.coga.zet.NetworkFlowModel;
 import de.tu_berlin.math.coga.zet.converter.RasterContainerCreator;
 import ds.z.BuildingPlan;
 import ds.graph.problem.MinSpanningTreeProblem;
@@ -34,9 +33,6 @@ public class GreedySpannerShrinker extends Algorithm<NetworkFlowModel,NetworkFlo
     @Override
     protected NetworkFlowModel runAlgorithm( NetworkFlowModel problem ) {
 			ZToGraphMapping originalMapping = problem.getZToGraphMapping();
-			ZToGraphMapping newMapping = new ZToGraphMapping();
-                
-		newMapping.setRaster( problem.getZToGraphMapping().getRaster() );
 //		mapping = new ZToGraphMapping();
 //                ZToGraphMapping newmapping = new ZToGraphMapping();
 //		model = new NetworkFlowModel();
@@ -68,6 +64,8 @@ public class GreedySpannerShrinker extends Algorithm<NetworkFlowModel,NetworkFlo
                 
                 //minspanmodel.setSupersink(model.getSupersink());
                 Node Super = minspanmodel.getSupersink();
+			ZToGraphMapping newMapping = minspanmodel.getZToGraphMapping();
+                
                 newMapping.setNodeSpeedFactor( Super, 1 );
 		newMapping.setNodeRectangle( Super, new NodeRectangle( 0, 0, 0, 0 ) );
 		newMapping.setFloorForNode( Super, -1 );
@@ -133,7 +131,7 @@ public class GreedySpannerShrinker extends Algorithm<NetworkFlowModel,NetworkFlo
                  newMapping.isDeletedSourceNode = originalMapping.isDeletedSourceNode;
                  newMapping.exitName = originalMapping.exitName;
                  
-                 minspanmodel.setZToGraphMapping(newMapping);                
+
                  //minspanmodel.setSupersink(model.getSupersink());
                 BaseZToGraphConverter.createReverseEdges( minspanmodel );
                 //minspanmodel.setNetwork(newgraph);

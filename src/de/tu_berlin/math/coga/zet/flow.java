@@ -4,6 +4,7 @@
  */
 package de.tu_berlin.math.coga.zet;
 
+import de.tu_berlin.math.coga.zet.converter.graph.NetworkFlowModel;
 import algo.graph.dynamicflow.DynamicFlowProblem;
 import algo.graph.dynamicflow.DynamicTransshipmentProblem;
 import algo.graph.dynamicflow.QuickestTransshipment;
@@ -268,7 +269,7 @@ public class flow implements AlgorithmListener {
 //		gt.addAlgorithmListener( this );
 //		gt.run();
 
-			NetworkFlowModel nfm = new NetworkFlowModel();
+			//NetworkFlowModel nfm = new NetworkFlowModel();
 			
 		
 		System.out.println( "Noides: " + eafp.getNetwork().numberOfNodes() );
