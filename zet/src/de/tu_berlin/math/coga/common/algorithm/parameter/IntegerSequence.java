@@ -68,7 +68,7 @@ public class IntegerSequence implements Sequence<Integer> {
      */
     @Override
     public Iterator<Integer> iterator() {
-        return new Iterator<>() {
+        return new Iterator<Integer>() {
 
             /**
              * Stores the current value of this iterator.
