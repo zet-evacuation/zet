@@ -128,7 +128,7 @@ public class GreedySpannerShrinker extends Algorithm<NetworkFlowModel,NetworkFlo
                  newMapping.raster = originalMapping.getRaster();
                  newMapping.nodeRectangles = originalMapping.getNodeRectangles();
                  newMapping.nodeFloorMapping = originalMapping.getNodeFloorMapping();
-                 newMapping.isEvacuationNode = originalMapping.isEvacuationNode;
+                 //newMapping.isEvacuationNode = originalMapping.isEvacuationNode;
                  //newMapping.isSourceNode = originalMapping.isSourceNode;
                  newMapping.isDeletedSourceNode = originalMapping.isDeletedSourceNode;
                  newMapping.exitName = originalMapping.exitName;

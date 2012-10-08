@@ -165,9 +165,9 @@ public class ZToThinNetworkConverter extends BaseZToGraphConverter{
                                    //model.setNodeCapacity(n, Integer.MAX_VALUE); 
 																	 model.setNodeCapacity( n, Integer.MAX_VALUE );
                                    model.getZToGraphMapping().getNodeFloorMapping().set( n,getProblem().getFloorID(room.getFloor()));
-                                   model.getZToGraphMapping().setIsEvacuationNode( n, false );
+                                   //model.getZToGraphMapping().setIsEvacuationNode( n, false );
                                    //model.getZToGraphMapping().setIsSourceNode(n, true);
-                                   model.getZToGraphMapping().setIsDeletedSourceNode( n, false );
+                                   model.getZToGraphMapping().setDeletedSourceNode( n, false );
 																	 model.addSource( n );
                                    model.addSource(n);
                                    NodeRectangle r = new NodeRectangle(area.getxOffset()+i*width,-(area.getyOffset()+j*height),area.getxOffset()+((i+1)*width),-(area.getyOffset()+((j+1)*height)));
@@ -205,9 +205,9 @@ public class ZToThinNetworkConverter extends BaseZToGraphConverter{
                            NodeRectangle rec = new NodeRectangle(area.getxOffset(),-area.getyOffset(), area.getxOffset()+ area.getWidth(), -(area.getyOffset() + area.getHeight()));
                            mapping.setNodeRectangle(node, rec );
                            model.getZToGraphMapping().getNodeFloorMapping().set( node,getProblem().getFloorID(room.getFloor()));
-                           model.getZToGraphMapping().setIsEvacuationNode( node, false );
+                           //model.getZToGraphMapping().setIsEvacuationNode( node, false );
                            //model.getZToGraphMapping().setIsSourceNode(node, true);
-                           model.getZToGraphMapping().setIsDeletedSourceNode( node, false );
+                           model.getZToGraphMapping().setDeletedSourceNode( node, false );
                            //model.addSource(node);
                            AssignNodes.add(node);
                            //map raster squares to assignment node (for ConvertConcreteAssignment()...)
@@ -267,9 +267,9 @@ public class ZToThinNetworkConverter extends BaseZToGraphConverter{
                             NodeRectangle rec = new NodeRectangle(min.x-1,-(min.y-1),min.x+1, -(min.y+1));
                             mapping.setNodeRectangle(node, rec );
                             model.getZToGraphMapping().getNodeFloorMapping().set( node,getProblem().getFloorID(room.getFloor()));
-                            model.getZToGraphMapping().setIsEvacuationNode( node, true );
+                            //model.getZToGraphMapping().setIsEvacuationNode( node, true );
                             //model.getZToGraphMapping().setIsSourceNode(node, false);
-                            model.getZToGraphMapping().setIsDeletedSourceNode( node, false );
+                            model.getZToGraphMapping().setDeletedSourceNode( node, false );
                             EvacNodes.add(node);
                             //nodeCount++;
                             }
@@ -286,9 +286,9 @@ public class ZToThinNetworkConverter extends BaseZToGraphConverter{
                             NodeRectangle rec = new NodeRectangle(Earea.getxOffset(),-Earea.getyOffset(), Earea.getxOffset()+ Earea.getWidth(), -(Earea.getyOffset() + Earea.getHeight()));
                             mapping.setNodeRectangle(node, rec );
                             model.getZToGraphMapping().getNodeFloorMapping().set( node,getProblem().getFloorID(room.getFloor()));
-                            model.getZToGraphMapping().setIsEvacuationNode( node, true );
+                            //model.getZToGraphMapping().setIsEvacuationNode( node, true );
                             //model.getZToGraphMapping().setIsSourceNode(node, false);
-                            model.getZToGraphMapping().setIsDeletedSourceNode( node, false );
+                            model.getZToGraphMapping().setDeletedSourceNode( node, false );
                             EvacNodes.add(node);
                             //nodeCount++;
                         }
@@ -321,9 +321,9 @@ public class ZToThinNetworkConverter extends BaseZToGraphConverter{
                                     NodeRectangle rec = new NodeRectangle(p.x-1,-(p.y+1), p.x+1,-(p.y-1));
                                     mapping.setNodeRectangle(node, rec );
                                     model.getZToGraphMapping().getNodeFloorMapping().set( node,getProblem().getFloorID(room.getFloor()));
-                                    model.getZToGraphMapping().setIsEvacuationNode( node, false );
+                                    //model.getZToGraphMapping().setIsEvacuationNode( node, false );
                                     //model.getZToGraphMapping().setIsSourceNode(node, false);
-                                    model.getZToGraphMapping().setIsDeletedSourceNode( node, false );
+                                    model.getZToGraphMapping().setDeletedSourceNode( node, false );
                             }
                         }
                     }
@@ -351,9 +351,9 @@ public class ZToThinNetworkConverter extends BaseZToGraphConverter{
                                     NodeRectangle rec = new NodeRectangle(p.x-1,-(p.y+1), p.x+1,-(p.y-1));
                                     mapping.setNodeRectangle(node, rec );
                                     model.getZToGraphMapping().getNodeFloorMapping().set( node,getProblem().getFloorID(room.getFloor()));
-                                    model.getZToGraphMapping().setIsEvacuationNode( node, false );
+                                    //model.getZToGraphMapping().setIsEvacuationNode( node, false );
                                     //model.getZToGraphMapping().setIsSourceNode(node, false);
-                                    model.getZToGraphMapping().setIsDeletedSourceNode( node, false );
+                                    model.getZToGraphMapping().setDeletedSourceNode( node, false );
                                     //nodeCount++;
                                 }
                             }
@@ -370,9 +370,9 @@ public class ZToThinNetworkConverter extends BaseZToGraphConverter{
                                     NodeRectangle rec = new NodeRectangle(p.x-1,-(p.y+1), p.x+1,-(p.y-1));
                                     mapping.setNodeRectangle(node, rec );
                                     model.getZToGraphMapping().getNodeFloorMapping().set( node,getProblem().getFloorID(room.getFloor()));
-                                    model.getZToGraphMapping().setIsEvacuationNode( node, false );
+                                    //model.getZToGraphMapping().setIsEvacuationNode( node, false );
                                     //model.getZToGraphMapping().setIsSourceNode(node, false);
-                                    model.getZToGraphMapping().setIsDeletedSourceNode( node, false );
+                                    model.getZToGraphMapping().setDeletedSourceNode( node, false );
                                     //nodeCount++;
                             }
                         }                      
@@ -1561,9 +1561,9 @@ public class ZToThinNetworkConverter extends BaseZToGraphConverter{
                             NodeRectangle rec = new NodeRectangle(p.x-1,-(p.y+1), p.x+1,-(p.y-1));
                             mapping.setNodeRectangle(node, rec );
                             model.getZToGraphMapping().getNodeFloorMapping().set( node,getProblem().getFloorID(room.getAssociatedFloor()));
-                            model.getZToGraphMapping().setIsEvacuationNode( node, false );
+                            //model.getZToGraphMapping().setIsEvacuationNode( node, false );
                             //model.getZToGraphMapping().setIsSourceNode(node, false);
-                            model.getZToGraphMapping().setIsDeletedSourceNode( node, false );
+                            model.getZToGraphMapping().setDeletedSourceNode( node, false );
                         }
                     }
                     else
@@ -1586,9 +1586,9 @@ public class ZToThinNetworkConverter extends BaseZToGraphConverter{
                         NodeRectangle rec1 = new NodeRectangle(p.x-1,-(p.y+1), p.x+1,-(p.y-1));
                         mapping.setNodeRectangle(node1, rec1 );
                         model.getZToGraphMapping().getNodeFloorMapping().set( node1,getProblem().getFloorID(room.getAssociatedFloor()));
-                        model.getZToGraphMapping().setIsEvacuationNode( node1, false );
+                        //model.getZToGraphMapping().setIsEvacuationNode( node1, false );
                         //model.getZToGraphMapping().setIsSourceNode(node1, false);
-                        model.getZToGraphMapping().setIsDeletedSourceNode( node1, false );
+                        model.getZToGraphMapping().setDeletedSourceNode( node1, false );
                         if (edges.size()==1)
                         {
                             int w = next.length();
@@ -1609,9 +1609,9 @@ public class ZToThinNetworkConverter extends BaseZToGraphConverter{
                             NodeRectangle rec = new NodeRectangle(p.x-1,-(p.y+1), p.x+1,-(p.y-1));
                             mapping.setNodeRectangle(node, rec );
                             model.getZToGraphMapping().getNodeFloorMapping().set( node,getProblem().getFloorID(room.getAssociatedFloor()));
-                            model.getZToGraphMapping().setIsEvacuationNode( node, false );
+                            //model.getZToGraphMapping().setIsEvacuationNode( node, false );
                             //model.getZToGraphMapping().setIsSourceNode(node, false);
-                            model.getZToGraphMapping().setIsDeletedSourceNode( node, false );
+                            model.getZToGraphMapping().setDeletedSourceNode( node, false );
                         }
                         start = next;
                         longwidth = start.length();
@@ -1641,9 +1641,9 @@ public class ZToThinNetworkConverter extends BaseZToGraphConverter{
                 NodeRectangle rec = new NodeRectangle(p.x-1,-(p.y+1), p.x+1,-(p.y-1));
                 mapping.setNodeRectangle(node, rec );
                 model.getZToGraphMapping().getNodeFloorMapping().set( node,getProblem().getFloorID(room.getAssociatedFloor()));
-                model.getZToGraphMapping().setIsEvacuationNode( node, false );
+                //model.getZToGraphMapping().setIsEvacuationNode( node, false );
                 //model.getZToGraphMapping().setIsSourceNode(node, false);
-                model.getZToGraphMapping().setIsDeletedSourceNode( node, false );
+                model.getZToGraphMapping().setDeletedSourceNode( node, false );
             }
             return doors;
         }
@@ -1798,9 +1798,9 @@ public class ZToThinNetworkConverter extends BaseZToGraphConverter{
               }         
               mapping.setNodeRectangle(node, rec );
               model.getZToGraphMapping().getNodeFloorMapping().set( node,getProblem().getFloorID(r.getAssociatedFloor()));
-              model.getZToGraphMapping().setIsEvacuationNode( node, false );
+              //model.getZToGraphMapping().setIsEvacuationNode( node, false );
               //model.getZToGraphMapping().setIsSourceNode(node, false);
-              model.getZToGraphMapping().setIsDeletedSourceNode( node, false );
+              model.getZToGraphMapping().setDeletedSourceNode( node, false );
               nodes.add(node);
               //nodeCount++;                      
     }
@@ -1837,9 +1837,9 @@ public class ZToThinNetworkConverter extends BaseZToGraphConverter{
           if( debug ) {System.out.println("Node Rectangle for center node: " + recPoints.get(0) + " " + recPoints.get(1) + " " + recPoints.get(2) + " " +  recPoints.get(3)) ;}
           //System.out.println("Center des Node Rectangles: " + n.getCenterX() + " " + n.getCenterY());
           model.getZToGraphMapping().getNodeFloorMapping().set( node,getProblem().getFloorID(room.getFloor()));
-          model.getZToGraphMapping().setIsEvacuationNode( node, false );
+          //model.getZToGraphMapping().setIsEvacuationNode( node, false );
           //model.getZToGraphMapping().setIsSourceNode(node, false);
-          model.getZToGraphMapping().setIsDeletedSourceNode( node, false );
+          model.getZToGraphMapping().setDeletedSourceNode( node, false );
                     
     }
     
@@ -1973,9 +1973,9 @@ public class ZToThinNetworkConverter extends BaseZToGraphConverter{
                  //System.out. println("NodeRectangle1: " + UpperLeft + " " + UpperRight + " " + LowerRight + " " + LowerLeft);
                  mapping.setNodeRectangle(node1, rec1);                            
                  model.getZToGraphMapping().getNodeFloorMapping().set( node1,getProblem().getFloorID(Zroom.getFloor()));
-                 model.getZToGraphMapping().setIsEvacuationNode(node1, false );
+                 //model.getZToGraphMapping().setIsEvacuationNode(node1, false );
                  //model.getZToGraphMapping().setIsSourceNode(node1, false);
-                 model.getZToGraphMapping().setIsDeletedSourceNode(node1, false );
+                 model.getZToGraphMapping().setDeletedSourceNode(node1, false );
                  nodes.add(node1);
                                 
                  int UpperLeft2_x = (int) (DirectionDown*nw.getX() + DirectionRight*(xPos-((numIteration+1)*unit)));
@@ -2009,9 +2009,9 @@ public class ZToThinNetworkConverter extends BaseZToGraphConverter{
                  //NodeRectangle rec2 = new NodeRectangle(UpperLeft2_x,-(UpperLeft2_y),LowerRight2_x,-(LowerRight2_y));
                  mapping.setNodeRectangle(node2, rec2);                            
                  model.getZToGraphMapping().getNodeFloorMapping().set( node2,getProblem().getFloorID(Zroom.getFloor()));
-                 model.getZToGraphMapping().setIsEvacuationNode(node2, false );
+                 //model.getZToGraphMapping().setIsEvacuationNode(node2, false );
                  //model.getZToGraphMapping().setIsSourceNode(node2, false);
-                 model.getZToGraphMapping().setIsDeletedSourceNode(node2, false );
+                 model.getZToGraphMapping().setDeletedSourceNode(node2, false );
                  nodes.add(node2);
                                 
                  rest = rest-2*unit;
@@ -2049,9 +2049,9 @@ public class ZToThinNetworkConverter extends BaseZToGraphConverter{
             NodeRectangle recmidd = new NodeRectangle(backrotate3.get(0).getXInt(),-backrotate3.get(0).getYInt(),backrotate3.get(1).getXInt(),-backrotate3.get(1).getYInt(),backrotate3.get(2).getXInt(),-backrotate3.get(2).getYInt(),backrotate3.get(3).getXInt(),-backrotate3.get(3).getYInt());
             mapping.setNodeRectangle(middle, recmidd);
             model.getZToGraphMapping().getNodeFloorMapping().set( middle,getProblem().getFloorID(Zroom.getFloor()));
-            model.getZToGraphMapping().setIsEvacuationNode( middle, false );
+            //model.getZToGraphMapping().setIsEvacuationNode( middle, false );
             //model.getZToGraphMapping().setIsSourceNode(middle, false);
-            model.getZToGraphMapping().setIsDeletedSourceNode( middle, false );
+            model.getZToGraphMapping().setDeletedSourceNode( middle, false );
             
              /*
                  if (room.getInaccessibleAreas().size() > 0)

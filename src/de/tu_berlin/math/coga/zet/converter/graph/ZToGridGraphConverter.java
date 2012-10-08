@@ -111,9 +111,9 @@ public class ZToGridGraphConverter extends BaseZToGraphConverter {
 						//Node node = new Node( nodeCount );
 						Node node = model.newNode();
 						model.getZToGraphMapping().getNodeFloorMapping().set( node, getProblem().getFloorID( room.getFloor() ) );
-						model.getZToGraphMapping().setIsEvacuationNode( node, square.isExit() );
+						//model.getZToGraphMapping().setIsEvacuationNode( node, square.isExit() );
 						//model.getZToGraphMapping().setIsSourceNode( node, square.isSource() );
-						model.getZToGraphMapping().setIsDeletedSourceNode( node, false );
+						model.getZToGraphMapping().setDeletedSourceNode( node, false );
 						if( getProblem().getFloorID( room.getFloor() ) == -1 )
 							System.out.println( "Fehler: Floor beim Konvertieren nicht gefunden." );
 
@@ -453,7 +453,7 @@ public class ZToGridGraphConverter extends BaseZToGraphConverter {
 //			ZToGraphMapping mapping = model.getZToGraphMapping();
 //			for( Node oldSource : checker.getDeletedSources() ) {
 //				mapping.setIsSourceNode( oldSource, false );
-//				mapping.setIsDeletedSourceNode( oldSource, true );
+//				mapping.setDeletedSourceNode( oldSource, true );
 //			}
 //		} else
 //			throw new AssertionError( DefaultLoc.getSingleton().getString( "converter.NoCheckException" ) );

@@ -47,7 +47,7 @@ public class ZToGraphMapping {
 	protected IdentifiableIntegerMapping<Node> nodeFloorMapping;
 	protected HashMap<Node, Room> nodeRoomMapping;
 	protected IdentifiableObjectMapping<Edge, Level> edgeLevels;
-	protected IdentifiableObjectMapping<Node, Boolean> isEvacuationNode;
+	//protected IdentifiableObjectMapping<Node, Boolean> isEvacuationNode;
 	//protected IdentifiableObjectMapping<Node, Boolean> isSourceNode;
 	protected IdentifiableObjectMapping<Node, Boolean> isDeletedSourceNode;
 	protected IdentifiableObjectMapping<Node, String> exitName;
@@ -65,7 +65,7 @@ public class ZToGraphMapping {
 		nodeRectangles = new IdentifiableObjectMapping<Node, NodeRectangle>( numberOfNodes, NodeRectangle.class );
 		nodeFloorMapping = new IdentifiableIntegerMapping<Node>( numberOfNodes );
 		nodeRoomMapping = new HashMap<>( numberOfNodes );
-		isEvacuationNode = new IdentifiableObjectMapping<Node, Boolean>( numberOfNodes, Boolean.class );
+		//isEvacuationNode = new IdentifiableObjectMapping<Node, Boolean>( numberOfNodes, Boolean.class );
 		//isSourceNode = new IdentifiableObjectMapping<Node, Boolean>( numberOfNodes, Boolean.class );
 		isDeletedSourceNode = new IdentifiableObjectMapping<Node, Boolean>( numberOfNodes, Boolean.class );
 		exitName = new IdentifiableObjectMapping<Node, String>( numberOfNodes, String.class );
@@ -76,9 +76,9 @@ public class ZToGraphMapping {
 		return nodeRectangles;
 	}
 
-	public IdentifiableObjectMapping<Node, Boolean> getIsEvacuationNode() {
-		return isEvacuationNode;
-	}
+//	public IdentifiableObjectMapping<Node, Boolean> getIsEvacuationNode() {
+//		return isEvacuationNode;
+//	}
 
 //	public IdentifiableObjectMapping<Node, Boolean> getIsSourceNode() {
 //		return isSourceNode;
@@ -194,12 +194,12 @@ public class ZToGraphMapping {
 			throw new IllegalArgumentException( DefaultLoc.getSingleton().getString( "converter.NodeSpeedNotDefinedException" + " (" + node + ")" ) );
 	}
 
-	public boolean getIsEvacuationNode( Node node ) {
-		if( isEvacuationNode.isDefinedFor( node ) )
-			return isEvacuationNode.get( node );
-		else
-			throw new IllegalArgumentException( DefaultLoc.getSingleton().getString( "converter.NodeStatusNotDefinedException" + " (" + node + ")" ) );
-	}
+//	public boolean getIsEvacuationNode( Node node ) {
+//		if( isEvacuationNode.isDefinedFor( node ) )
+//			return isEvacuationNode.get( node );
+//		else
+//			throw new IllegalArgumentException( DefaultLoc.getSingleton().getString( "converter.NodeStatusNotDefinedException" + " (" + node + ")" ) );
+//	}
 
 //	public boolean getIsSourceNode( Node node ) {
 //		if( isSourceNode.isDefinedFor( node ) )
@@ -227,15 +227,11 @@ public class ZToGraphMapping {
 		nodeDownSpeedFactors.set( node, value );
 	}
 
-	void setIsEvacuationNode( Node node, Boolean isEvacuationNode ) {
-		this.isEvacuationNode.set( node, isEvacuationNode );
-	}
-
-//	/* TODO package */ public void setIsSourceNode( Node node, Boolean isSourceNode ) {
-//		this.isSourceNode.set( node, isSourceNode );
+//	void setIsEvacuationNode( Node node, Boolean isEvacuationNode ) {
+//		this.isEvacuationNode.set( node, isEvacuationNode );
 //	}
 
-	/* TODO package */ public void setIsDeletedSourceNode( Node node, Boolean isSourceNode ) {
+	/* TODO package */ public void setDeletedSourceNode( Node node, Boolean isSourceNode ) {
 		this.isDeletedSourceNode.set( node, isSourceNode );
 	}
 }
