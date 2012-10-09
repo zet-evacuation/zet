@@ -6,12 +6,11 @@ package de.tu_berlin.math.coga.datastructure.searchtree;
 
 import ds.collection.ListSequence;
 import ds.graph.ArraySet;
+import ds.graph.DirectedGraph;
 import ds.graph.Edge;
-import ds.graph.Graph;
 import ds.graph.GraphLocalization;
 import ds.graph.IdentifiableCollection;
 import ds.graph.Node;
-import ds.graph.network.AbstractNetwork;
 import ds.mapping.IdentifiableIntegerMapping;
 import ds.mapping.IdentifiableObjectMapping;
 import java.util.Iterator;
@@ -21,17 +20,12 @@ import java.util.Iterator;
  *
  * @author Jan-Philipp Kappmeier
  */
-public class BinaryTree implements Graph, Iterable<Node> {
+public class BinaryTree implements DirectedGraph {
 	/** The nodes of the network. Must not be null. */
 	protected ArraySet<Node> nodes;
 	/** The edges of the network. Must not be null. */
 	protected ArraySet<Edge> edges;
 	int size = -1;
-	/**
-	 * Caches the edges incident to a node for all nodes in the graph.
-	 * Must not be null.
-	 */
-//	protected IdentifiableObjectMapping<Node,Edge> incidentEdges;
 	/**
 	 * Caches the edges ending at a node for all nodes in the graph.
 	 * Must not be null.
@@ -43,16 +37,6 @@ public class BinaryTree implements Graph, Iterable<Node> {
 	 */
 	protected IdentifiableObjectMapping<Node, Edge> right;
 	protected IdentifiableObjectMapping<Node, Edge> left;
-	/**
-	 * Caches the number of edges incident to a node for all nodes in the graph.
-	 * Must not be null.
-	 */
-//	protected IdentifiableIntegerMapping<Node> degree;
-	/**
-	 * Caches the number of edges ending at a node for all nodes in the graph.
-	 * Must not be null.
-	 */
-//	protected IdentifiableIntegerMapping<Node> indegree;
 	/**
 	 * Caches the number of edges starting at a node for all nodes in the graph.
 	 * Must not be null.
@@ -79,19 +63,11 @@ public class BinaryTree implements Graph, Iterable<Node> {
 		nodes = new ArraySet<>( Node.class, initialNodeCapacity );
 		for( int i = 0; i < initialNodeCapacity; i++ )
 			nodes.add( new Node( i ) );
-		//incidentEdges = new IdentifiableObjectMapping<>( initialNodeCapacity, DependingListSequence.class );
 
 		incoming = new IdentifiableObjectMapping<>( initialNodeCapacity, Edge.class );
 
 		left = new IdentifiableObjectMapping<>( initialNodeCapacity, Edge.class );
 		right = new IdentifiableObjectMapping<>( initialNodeCapacity, Edge.class );
-		//for( Node node : nodes ) {
-			//incidentEdges.set( node, new DependingListSequence<>( edges ) );
-			//incomingEdges.set( node, new DependingListSequence<>( edges ) );
-			//outgoingEdges.set( node, new DependingListSequence<>( edges ) );
-		//}
-		//degree = new IdentifiableIntegerMapping<>( initialNodeCapacity );
-		//indegree = new IdentifiableIntegerMapping<>( initialNodeCapacity );
 		outdegree = new IdentifiableIntegerMapping<>( initialNodeCapacity );
 		this.root = nodes.get( root );
 	}
@@ -161,11 +137,11 @@ public class BinaryTree implements Graph, Iterable<Node> {
 
 	@Override
 	public int degree( Node node ) {
-		return indegree( node ) + outdegree( node );
+		return inDegree( node ) + outDegree( node );
 	}
 
 	@Override
-	public int indegree( Node node ) {
+	public int inDegree( Node node ) {
 		if( node.equals( root ) )
 			return 0;
 		else
@@ -173,7 +149,7 @@ public class BinaryTree implements Graph, Iterable<Node> {
 	}
 
 	@Override
-	public int outdegree( Node node ) {
+	public int outDegree( Node node ) {
 		return left.get( node ) != null ? 1 + (right.get( node ) == null ? 0 : 1) : right.get( node ) == null ? 0 : 1;
 	}
 
@@ -446,8 +422,6 @@ public class BinaryTree implements Graph, Iterable<Node> {
 		return buffer.toString();
 	}
 	
-	
-	@Override
 	public String deepToString() {
 		StringBuilder buffer = new StringBuilder();
 		buffer.append( "V = {" );
@@ -475,10 +449,6 @@ public class BinaryTree implements Graph, Iterable<Node> {
 	}
 	
 	@Override
-	public AbstractNetwork getAsStaticNetwork() {
-		throw new UnsupportedOperationException( "Not supported yet." );
-	}
-	@Override
 	public boolean existsPath( Node start, Node end ) {
 		throw new UnsupportedOperationException( "Not supported yet." );
 	}
@@ -505,7 +475,7 @@ public class BinaryTree implements Graph, Iterable<Node> {
 	}
 	
 	public int numOfChildren( Node node ) {
-		return outdegree( node );
+		return outDegree( node );
 	}
 	
 	/**

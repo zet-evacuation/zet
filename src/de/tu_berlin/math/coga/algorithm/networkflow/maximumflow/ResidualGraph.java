@@ -6,22 +6,21 @@
 package de.tu_berlin.math.coga.algorithm.networkflow.maximumflow;
 
 import ds.graph.ArraySet;
+import ds.graph.DirectedGraph;
 import ds.graph.Edge;
-import ds.graph.Graph;
-import ds.mapping.IdentifiableBooleanMapping;
 import ds.graph.IdentifiableCollection;
+import ds.graph.Node;
+import ds.graph.network.AbstractNetwork;
+import ds.mapping.IdentifiableBooleanMapping;
 import ds.mapping.IdentifiableIntegerMapping;
 import ds.mapping.IdentifiableObjectMapping;
-import ds.graph.network.AbstractNetwork;
-import ds.graph.Node;
 import java.util.Iterator;
-
 
 /**
  *
  * @author Jan-Philipp Kappmeier
  */
-public class ResidualGraph implements Graph {
+public class ResidualGraph implements DirectedGraph {
 
 	protected ArraySet<Node> nodes;
 	protected ArraySet<Edge> edges;
@@ -195,12 +194,12 @@ public class ResidualGraph implements Graph {
 	}
 
 	@Override
-	public int indegree( Node node ) {
+	public int inDegree( Node node ) {
 		throw new UnsupportedOperationException( "Not supported yet." );
 	}
 
 	@Override
-	public int outdegree( Node node ) {
+	public int outDegree( Node node ) {
 		throw new UnsupportedOperationException( "Not supported yet." );
 	}
 
@@ -225,16 +224,6 @@ public class ResidualGraph implements Graph {
 	}
 
 	@Override
-	public void setNode( Node node ) {
-		throw new UnsupportedOperationException( "Not supported yet." );
-	}
-
-	@Override
-	public void setEdge( Edge edge ) {
-		throw new UnsupportedOperationException( "Not supported yet." );
-	}
-
-	@Override
 	public IdentifiableCollection<Edge> getEdges( Node start, Node end ) {
 		throw new UnsupportedOperationException( "Not supported yet." );
 	}
@@ -246,16 +235,6 @@ public class ResidualGraph implements Graph {
 
 	@Override
 	public boolean existsPath( Node start, Node end ) {
-		throw new UnsupportedOperationException( "Not supported yet." );
-	}
-
-	@Override
-	public String deepToString() {
-		throw new UnsupportedOperationException( "Not supported yet." );
-	}
-
-	@Override
-	public AbstractNetwork getAsStaticNetwork() {
 		throw new UnsupportedOperationException( "Not supported yet." );
 	}
 
@@ -302,5 +281,10 @@ public class ResidualGraph implements Graph {
 		residualCapacity.decrease( e, delta );
 		residualCapacity.increase( reverseEdge.get( e ), delta );
 		return delta;
+	}
+
+	@Override
+	public Iterator<Node> iterator() {
+		return nodes.iterator();
 	}
 }

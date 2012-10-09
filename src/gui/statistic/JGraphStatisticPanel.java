@@ -85,7 +85,7 @@ public class JGraphStatisticPanel extends JPanel {
     private void createTestInstance() {
         runs = new StatisticsCollection();
         for (int index = 0; index < 5; index++) {
-            AbstractNetwork network = new Network(10, 14) {};
+            Network network = new Network(10, 14) {};
             Node source1 = network.getNode(0);
             Node source2 = network.getNode(1);
             Node source3 = network.getNode(4);

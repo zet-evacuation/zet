@@ -20,7 +20,6 @@
 package ds.graph.network;
 
 import ds.graph.Edge;
-import ds.graph.Graph;
 import ds.graph.Node;
 import ds.graph.Path;
 
@@ -31,7 +30,7 @@ import ds.graph.Path;
  * provide fast access, as well as the possiblity to hide edges and nodes (which
  * is useful for residual networks, for instance).
  */
-public abstract class AbstractNetwork implements Graph, Cloneable, Iterable<Node> {
+public abstract class AbstractNetwork implements NetworkInterface, Cloneable {
 
 
 
@@ -132,9 +131,6 @@ public abstract class AbstractNetwork implements Graph, Cloneable, Iterable<Node
 	 */
 	public abstract void setNodes( Iterable<Node> nodes );
 
-
-
-
 	public abstract Path getPath( Node start, Node end );
         
 	/**
@@ -155,4 +151,11 @@ public abstract class AbstractNetwork implements Graph, Cloneable, Iterable<Node
 
 	@Override
 	public abstract AbstractNetwork clone();
+
+	/**
+	 * Returns the network as a {@code AbstractNetwork} object, i.e. as a static graph.
+	 * @return the network as a {@code AbstractNetwork} object.
+	 */
+	public abstract AbstractNetwork getAsStaticNetwork();
+
 }

@@ -13,12 +13,13 @@ import ds.graph.IdentifiableCollection;
 import ds.graph.MinSpanningTree;
 import ds.graph.Node;
 import ds.graph.NodeRectangle;
+import ds.graph.network.AbstractNetwork;
 import ds.graph.problem.MinSpanningTreeProblem;
 import ds.mapping.IdentifiableIntegerMapping;
 
 /**
  *
- * @author schwengf
+ * @author Marlen Schwengfelder
  */
 //Creates a Shortest Path Tree for Non Grid graphs
 public class DijkstraSpannerShrinker extends Algorithm<NetworkFlowModel,NetworkFlowModel>{
@@ -88,7 +89,7 @@ public class DijkstraSpannerShrinker extends Algorithm<NetworkFlowModel,NetworkF
                 
                 
                 //System.out.println("Transitzeiten: " + TransitForEdge);
-                Dijkstra dijkstra = new Dijkstra(problem.graph().getAsStaticNetwork(), TransitForEdge, problem.getSupersink(), true);
+                Dijkstra dijkstra = new Dijkstra(((AbstractNetwork)problem.graph()).getAsStaticNetwork(), TransitForEdge, problem.getSupersink(), true);
                 dijkstra.run();
                 forest = dijkstra.getShortestPathTree();
                 ForestEdges = forest.edges();

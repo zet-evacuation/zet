@@ -188,7 +188,7 @@ public class SuccessiveShortestPath /*extends Algorithm<MinimumCostFlowProblem, 
     }
 
     public static void main(String[] args) {
-        AbstractNetwork network = new Network(4, 5);
+        Network network = new Network(4, 5);
         Node source = network.getNode(0);
         Node a = network.getNode(1);
         Node b = network.getNode(2);

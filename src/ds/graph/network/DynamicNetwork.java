@@ -20,28 +20,29 @@
 package ds.graph.network;
 
 import ds.collection.ListSequence;
+import ds.graph.DirectedGraph;
 import ds.graph.Edge;
-import ds.graph.Graph;
 import ds.graph.GraphLocalization;
 import ds.graph.IdentifiableCollection;
 import ds.graph.Node;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
 /**
  *
  */
-public class DynamicNetwork implements Graph {
+public class DynamicNetwork implements DirectedGraph {
 
 	protected ListSequence<Node> nodes;
 	protected ListSequence<Edge> edges;
 	protected transient Map<Node, ListSequence<Edge>> incomingEdges;
 	protected transient Map<Node, ListSequence<Edge>> outgoingEdges;
-        protected ListSequence<Edge> temp_removed_edges = new ListSequence<>();
-        protected ListSequence<Node> temp_removed_nodes = new ListSequence<>();
+  protected ListSequence<Edge> temp_removed_edges = new ListSequence<>();
+  protected ListSequence<Node> temp_removed_nodes = new ListSequence<>();
 
 	public DynamicNetwork() {
 		nodes = new ListSequence<>();
@@ -152,14 +153,14 @@ public class DynamicNetwork implements Graph {
 	}
 
 	public int degree( Node node ) {
-		return indegree( node ) + outdegree( node );
+		return inDegree( node ) + outDegree( node );
 	}
 
-	public int indegree( Node node ) {
+	public int inDegree( Node node ) {
 		return incomingEdges( node ).size();
 	}
 
-	public int outdegree( Node node ) {
+	public int outDegree( Node node ) {
 		return outgoingEdges( node ).size();
 	}
 
@@ -333,14 +334,17 @@ public class DynamicNetwork implements Graph {
 		return true;
 	}
 
+	@Override
 	public IdentifiableCollection<Node> adjacentNodes( Node node ) {
 		return new OppositeNodeCollection( node, incidentEdges( node ) );
 	}
    
+	@Override
 	public IdentifiableCollection<Node> predecessorNodes( Node node ) {
 		return new OppositeNodeCollection( node, incomingEdges.get( node ) );
 	}
 
+	@Override
 	public IdentifiableCollection<Node> successorNodes( Node node ) {
 		return new OppositeNodeCollection( node, outgoingEdges.get( node ) );
 	}
@@ -418,24 +422,24 @@ public class DynamicNetwork implements Graph {
 		return adjacent_nodes;
 	}
         
-        public IdentifiableCollection<Node> temp_predNodes( Node node ) {
-            
-            IdentifiableCollection<Node> adjacent_nodes = new ListSequence<>();
-            
-                if (!temp_removed_nodes.contains(node))
-                {
-                     IdentifiableCollection<Edge> adj = incomingEdges(node);
-                     for (Edge e: adj)
-                     {
-                         if (temp_removed_nodes.contains(e.opposite(node)) || temp_removed_edges.contains(e))
-                         {
-                             continue;
-                         }
-                         adjacent_nodes.add(e.opposite(node));
-                     }
-                }
-           
+	public IdentifiableCollection<Node> temp_predNodes( Node node ) {
+		IdentifiableCollection<Node> adjacent_nodes = new ListSequence<>();
+
+		if( !temp_removed_nodes.contains( node ) ) {
+			IdentifiableCollection<Edge> adj = incomingEdges( node );
+			for( Edge e : adj ) {
+				if( temp_removed_nodes.contains( e.opposite( node ) ) || temp_removed_edges.contains( e ) )
+					continue;
+				adjacent_nodes.add( e.opposite( node ) );
+			}
+		}
+
 		return adjacent_nodes;
+	}
+
+	@Override
+	public Iterator<Node> iterator() {
+		return nodes.iterator();
 	}
 }
 
