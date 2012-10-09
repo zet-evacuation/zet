@@ -435,29 +435,6 @@ public class ZToGridGraphConverter extends BaseZToGraphConverter {
 
 	}
 
-	/**
-	 * Deletes sources that cannot reach a sink. These nodes are marked as deleted sources.
-	 * @param model the {@code NetworkFlowModel} object.
-	 */
-//	private static void checkSupplies( NetworkFlowModel model ) {
-//		AbstractNetwork network = model.getNetwork();
-//		IdentifiableIntegerMapping<Node> supplies = model.getCurrentAssignment();
-//
-//		GraphInstanceChecker checker = new GraphInstanceChecker( network, supplies );
-//		checker.supplyChecker();
-//
-//		if( checker.hasRun() ) {
-//			model.setCurrentAssignment( checker.getNewSupplies() );
-//			model.setSources( checker.getNewSources() );
-//			ZToGraphMapping mapping = model.getZToGraphMapping();
-//			for( Node oldSource : checker.getDeletedSources() ) {
-//				mapping.setIsSourceNode( oldSource, false );
-//				mapping.setDeletedSourceNode( oldSource, true );
-//			}
-//		} else
-//			throw new AssertionError( DefaultLoc.getSingleton().getString( "converter.NoCheckException" ) );
-//	}
-
 	protected static ZToGraphRasterContainer createRaster( BuildingPlan plan ) {
 		ZToGraphRasterContainer container = RasterContainerCreator.getInstance().ZToGraphRasterContainer( plan );
 		return container;
