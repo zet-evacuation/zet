@@ -21,12 +21,15 @@ package de.tu_berlin.math.coga.zet.converter.graph;
 
 import de.tu_berlin.math.coga.common.localization.DefaultLoc;
 import de.tu_berlin.math.coga.common.util.Level;
+import de.tu_berlin.math.coga.math.vectormath.Vector3;
+import de.tu_berlin.math.coga.zet.viewer.NodePositionMapping;
 import ds.graph.Edge;
 import ds.graph.Node;
 import ds.graph.NodeRectangle;
 import ds.mapping.IdentifiableIntegerMapping;
 import ds.mapping.IdentifiableObjectMapping;
 import ds.z.Room;
+import gui.visualization.VisualizationOptionManager;
 import java.awt.Shape;
 import java.util.HashMap;
 
@@ -50,7 +53,9 @@ public class ZToGraphMapping {
 	protected IdentifiableObjectMapping<Node, Boolean> isDeletedSourceNode;
 	//protected IdentifiableObjectMapping<Node, String> exitName;
 	protected HashMap<Node,String> exitName;
+	//T ODO transfer to mapping
 
+	
 	public ZToGraphMapping( ZToGraphRasterContainer raster ) {
 		this( 0, 0 );
 		this.raster = raster;
@@ -117,7 +122,6 @@ public class ZToGraphMapping {
 	 * @param nameOfExit The name of the exit the node belongs to.
 	 */
 	void setNameOfExit( Node node, String nameOfExit ) {
-		//exitName.set( node, nameOfExit );
 		exitName.put( node, nameOfExit );
 	}
 
@@ -145,10 +149,6 @@ public class ZToGraphMapping {
 	public ZToGraphRasterContainer getRaster() {
 		return raster;
 	}
-
-	//void setRaster( ZToGraphRasterContainer raster ) {
-	//	this.raster = raster;
-	//}
 
 	public Shape getNodeShape( Node node ) {
 		if( nodeShapes.isDefinedFor( node ) )
