@@ -4,14 +4,14 @@
  */
 package ds.graph;
 
-import ds.graph.network.AbstractNetwork;
 import algo.graph.traverse.BFS;
+import java.util.Iterator;
 
 /**
  * //TODO: adjNodes, inNodes, outNodes
  * @author Martin Groß / Sebastian Schenker
  */
-public class StaticGraph implements Graph {
+public class StaticGraph implements Graph, DirectedGraph {
 	private int currentmaxnodeid;
 	private int currentmaxedgeid;
 	protected boolean directed;
@@ -41,11 +41,6 @@ public class StaticGraph implements Graph {
 			incomingEdges = new HidingAdjacencySetForThinFlow[initialNodeCapacity];
 			outgoingEdges = new HidingAdjacencySetForThinFlow[initialNodeCapacity];
 		}
-	}
-
-	@Override
-	public AbstractNetwork getAsStaticNetwork() {
-		throw new UnsupportedOperationException( "not implemented yet" );
 	}
 
 	@Override
@@ -242,7 +237,7 @@ public class StaticGraph implements Graph {
 	 * @return die Anzahl der sichtbaren eingehenden Kanten.
 	 */
 	@Override
-	public int indegree( Node node ) {
+	public int inDegree( Node node ) {
 		if( !directed )
 			throw new UnsupportedOperationException( "GraphNotDirected" );
 		return incomingEdges[node.id()].size();
@@ -255,13 +250,12 @@ public class StaticGraph implements Graph {
 	 * @return die Anzahl der sichtbaren ausgehenden Kanten.
 	 */
 	@Override
-	public int outdegree( Node node ) {
+	public int outDegree( Node node ) {
 		if( !directed )
 			throw new UnsupportedOperationException( "GraphNotDirected" );
 		return outgoingEdges[node.id()].size();
 	}
 
-	@Override
 	public String deepToString() {
 		StringBuilder buffer = new StringBuilder();
 		buffer.append( "({" );
@@ -281,14 +275,13 @@ public class StaticGraph implements Graph {
 	}
 
 	/**
-	 * F�gt den angebenen Knoten dem Graphen hinzu, sofern dies m�glich ist. Da dies ein statischer Graph ist, h�ngt
+	 * Fügt den angebenen Knoten dem Graphen hinzu, sofern dies m�glich ist. Da dies ein statischer Graph ist, h�ngt
 	 * letzteres zum einen davon ab, dass noch Kapazit�t f�r einen neuen Knoten vorhanden ist
 	 * ({@link getCapacity}, {@link setCapacity}). Zum anderen muss die ID des neuen Knotens um eins gr��er als die ID des
 	 * zuletzt eingef�gten Knoten sein (bzw. 0, wenn vorher noch kein Knoten eingef�gt wurde). Ist dies nicht der Fall, wird
 	 * eine {@link IllegalStateException} geworfen. Laufzeit O(1).
 	 * @param node der Knoten, der dem Graph hinzugef�gt werden soll.
 	 */
-	@Override
 	public void setNode( Node node ) {
 		/*if (node.id() != nodes.size()) {  //changed by Seba
 		throw new IllegalStateException("");
@@ -370,7 +363,6 @@ public class StaticGraph implements Graph {
 	 * eine {@link IllegalStateException} geworfen. Laufzeit O(1).
 	 * @param edge die Kanten, die dem Graph hinzugef�gt werden soll.
 	 */
-	@Override
 	public void setEdge( Edge edge ) {
 		/*if (edge.id() != edges.size()) {    //changed by Seba
 		throw new IllegalStateException();
@@ -534,5 +526,10 @@ public class StaticGraph implements Graph {
 		BFS bfs = new BFS( this );
 		bfs.run( start, end );
 		return bfs.distance( end ) < Integer.MAX_VALUE;
+	}
+
+	@Override
+	public Iterator<Node> iterator() {
+		return nodes.iterator();
 	}
 }

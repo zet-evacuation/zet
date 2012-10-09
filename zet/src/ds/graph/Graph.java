@@ -19,13 +19,11 @@
  */
 package ds.graph;
 
-import ds.graph.network.AbstractNetwork;
-
 /**
  * The {@code Graph} interface provides a common interface for 
  * implementations of graphs.
  */
-public interface Graph {
+public interface Graph extends Iterable<Node>{
 	/**
 	 * Checks whether the graph is directed.
 	 * @return {@code true} if the graph is directed, {@code false}
@@ -130,24 +128,6 @@ public interface Graph {
 	int degree( Node node );
 
 	/**
-	 * Returns the indegree of the specified node, i.e. the number of edges
-	 * ending at it. The indegree is not defined for undirected graphs.
-	 * @param node the node for which the indegree is to be returned.
-	 * @return the indegree of the specified node.
-	 * @throws UnsupportedOperationException if the graph is not directed.
-	 */
-	int indegree( Node node );
-
-	/**
-	 * Returns the outdegree of the specified node, i.e. the number of edges
-	 * starting at it. The outdegree is not defined for undirected graphs.
-	 * @param node the node for which the outdegree is to be returned.
-	 * @return the outdegree of the specified node.
-	 * @throws UnsupportedOperationException if the graph is not directed.
-	 */
-	int outdegree( Node node );
-
-	/**
 	 * Checks whether the specified edge is contained in this graph.
 	 * @param edge the edge to be checked.
 	 * @return {@code true} if the edge is contained in this graph,
@@ -185,17 +165,7 @@ public interface Graph {
 	 */
 	Edge getEdge( Node start, Node end );
 
-	/**
-	 * Adds the specified node to the graph.
-	 * @param node the node to be added to the graph.
-	 */
-	public void setNode( Node node );
 
-	/**
-	 * Adds the specified edge to the graph.
-	 * @param edge the edge to be added to the graph.
-	 */
-	public void setEdge( Edge edge );
 
 	/**
 	 * Returns an {@link IdentifiableCollection} containing all edges starting at
@@ -231,11 +201,15 @@ public interface Graph {
 	 */
 	boolean existsPath( Node start, Node end );
 
-	String deepToString();
+	/**
+	 * Adds the specified node to the graph.
+	 * @param node the node to be added to the graph.
+	 */
+	//void setNode( Node node );
 
 	/**
-	 * Returns the network as a {@code AbstractNetwork} object, i.e. as a static graph.
-	 * @return the network as a {@code AbstractNetwork} object.
+	 * Adds the specified edge to the graph.
+	 * @param edge the edge to be added to the graph.
 	 */
-	public AbstractNetwork getAsStaticNetwork();
+	//void setEdge( Edge edge );
 }

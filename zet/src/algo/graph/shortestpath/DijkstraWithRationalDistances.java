@@ -5,11 +5,10 @@
 
 package algo.graph.shortestpath;
 
-import ds.graph.network.DynamicNetwork;
-import ds.graph.Edge;
 import de.tu_berlin.math.coga.datastructure.priorityQueue.MinHeap;
-import ds.graph.Graph;
+import ds.graph.Edge;
 import ds.graph.Node;
+import ds.graph.network.DynamicNetwork;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
@@ -17,7 +16,7 @@ import java.util.Map;
 
 /**
  *
- * @author Martin Gro�
+ * @author Martin Groß
  */
 public class DijkstraWithRationalDistances {
     

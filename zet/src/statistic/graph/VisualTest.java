@@ -40,7 +40,7 @@ import javax.swing.JFrame;
 public class VisualTest extends JFrame {
 
     public static void main(String[] args) {
-        AbstractNetwork network = new Network(9, 10);
+        Network network = new Network(9, 10);
         Node source1 = network.getNode(0);
         Node source2 = network.getNode(1);
         Node source3 = network.getNode(4);

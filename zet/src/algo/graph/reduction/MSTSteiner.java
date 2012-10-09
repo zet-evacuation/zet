@@ -17,6 +17,7 @@ import ds.graph.MinSteinerTree;
 import ds.graph.NetworkMST;
 import ds.graph.Node;
 import ds.graph.Path;
+import ds.graph.network.AbstractNetwork;
 import ds.graph.network.DynamicNetwork;
 import ds.graph.problem.MinSpanningTreeProblem;
 import ds.graph.problem.NetworkMSTProblem;
@@ -93,7 +94,7 @@ public class MSTSteiner extends Algorithm<MinSpanningTreeProblem,MinSteinerTree>
         while (!SteinerNodes.empty())
         {
             Node node = SteinerNodes.first();
-            dijkstra = new Dijkstra(OriginNetwork.graph().getAsStaticNetwork(), TransitForEdge, node, true);
+            dijkstra = new Dijkstra(((AbstractNetwork)OriginNetwork.graph()).getAsStaticNetwork(), TransitForEdge, node, true);
             dijkstra.run();
            
             SteinerNodes.remove(SteinerNodes.first());

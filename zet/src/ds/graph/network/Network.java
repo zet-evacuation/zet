@@ -248,7 +248,7 @@ public class Network extends AbstractNetwork {
 	 * @return the indegree of the specified node.
 	 */
 	@Override
-	public int indegree( Node node ) {
+	public int inDegree( Node node ) {
 		return indegree.get( node );
 	}
 
@@ -259,7 +259,7 @@ public class Network extends AbstractNetwork {
 	 * @return the outdegree of the specified node.
 	 */
 	@Override
-	public int outdegree( Node node ) {
+	public int outDegree( Node node ) {
 		return outdegree.get( node );
 	}
 
@@ -666,7 +666,6 @@ public class Network extends AbstractNetwork {
 		return buffer.toString();
 	}
 
-	@Override
 	public String deepToString() {
 		StringBuilder buffer = new StringBuilder();
 		buffer.append( "V = {" );

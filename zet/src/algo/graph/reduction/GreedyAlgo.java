@@ -37,7 +37,7 @@ public class GreedyAlgo extends Algorithm<MinSpanningTreeProblem,MinSpanningTree
     Edge MinEdge;
     Edge currentEdge;
     NetworkFlowModel OriginNetwork;
-    AbstractNetwork network;
+    Network network;
     IdentifiableIntegerMapping<Edge> TransitForEdge;
     IdentifiableIntegerMapping<Edge> capForEdge;
     //gives distance of nodes in current graph G'
