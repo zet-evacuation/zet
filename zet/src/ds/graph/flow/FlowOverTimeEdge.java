@@ -64,6 +64,10 @@ public class FlowOverTimeEdge implements Cloneable {
         this.edge = edge;
     }
 
+    /**
+     * Returns the time at which flow is flowing into the edge.
+     * @return the time at which flow is flowing into the edge.
+     */
     public int getTime() {
         return time;
     }
