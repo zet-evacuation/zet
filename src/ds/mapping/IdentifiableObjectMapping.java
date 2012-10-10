@@ -23,18 +23,19 @@ import ds.graph.GraphLocalization;
 import java.lang.reflect.Array;
 
 /**
- * The {@code IdentifiableObjectMapping} class represents a mapping from a
- * set of identifiable objects to arbitrary values. An object is considered 
+ * The {@code IdentifiableObjectMapping} class represents a mapping from a set
+ * of identifiable objects to arbitrary values. An object is considered
  * identifiable if and only if it implements the interface {@link Identifiable}.
- * An array is used for
- * storing the mapping internally. The ID of an identifiable object determines 
- * the position in the array where the object's value is stored. This approach 
- * allows a very efficient implementation of mappings. It is recommended that 
- * the objects' IDs are from the set {@code {0,...,#objects-1}} to ensure
- * the best performance. For mappings of objects to integers the use of the
- * specialized class {@link IdentifiableIntegerMapping} is advised.
- * @param <D> the type of this mapping's domain, i.e. the type of the objects that
- * are to be mapped to values. {@code D} must implement 
+ * An array is used for storing the mapping internally. The ID of an
+ * identifiable object determines the position in the array where the object's
+ * value is stored. This approach allows a very efficient implementation of
+ * mappings. It is recommended that the objects' IDs are from the set
+ * {@code {0,...,#objects-1}} to ensure the best performance. For mappings of
+ * objects to integers the use of the specialized class
+ * {@link IdentifiableIntegerMapping} is advised.
+ *
+ * @param <D> the type of this mapping's domain, i.e. the type of the objects
+ * that are to be mapped to values. {@code D} must implement
  * {@link Identifiable}.
  * @param <R> the type of this mapping's range, i.e. the type of the values the
  * objects can be mapped to.
@@ -44,56 +45,60 @@ public class IdentifiableObjectMapping<D extends Identifiable, R> implements Clo
     /**
      * The type of the elements stored in the {@code mapping} array. Since
      * generics are compile-time only, we need to store its type explicitly in
-     * order to be able to increase the length of {@code mapping} array
-     * later on.
+     * order to be able to increase the length of {@code mapping} array later
+     * on.
      */
     protected Class<R> rangeType;
-    
     /**
      * The array storing all associations. Must not be {@code null}.
      */
     protected R[] mapping;
-    
-    protected IdentifiableObjectMapping() {        
+
+    protected IdentifiableObjectMapping() {
     }
 
     public IdentifiableObjectMapping(Iterable<D> domain, Class<R> rangeType) {
         int maxId = -1;
         for (D x : domain) {
-            if (maxId < x.id()) maxId = x.id();
+            if (maxId < x.id()) {
+                maxId = x.id();
+            }
         }
-        this.mapping = (R[]) Array.newInstance(rangeType, maxId+1);
-        this.rangeType = rangeType;
-    }
-    
-    /**
-     * Constructs a new {@code IdentifiableObjectMapping} object with a
-     * specified initial mapping and the specified type for values. The
-     * default association for an object is as specified by 
-     * {@code mapping}. Runtime O(1).
-     * @param mapping the array defining the initial mapping.
-     * @param rangeType the type of the values.
-     * @exception IllegalArgumentException if rangeType is 
-     * {@code Void.TYPE}.
-     * @exception NullPointerException if {@code mapping} or 
-     * {@code rangeType} are null.
-     */
-    protected IdentifiableObjectMapping(R[] mapping, Class<R> rangeType) {
-        if (rangeType == Void.TYPE) throw new IllegalArgumentException(GraphLocalization.getSingleton().getString ("algo.ca.NotInitializedException"));
-        if (mapping == null || rangeType == null) throw new NullPointerException(GraphLocalization.getSingleton ().getString ("ds.Graph.ParametersNullException"));
-        this.mapping = mapping;
+        this.mapping = (R[]) Array.newInstance(rangeType, maxId + 1);
         this.rangeType = rangeType;
     }
 
     /**
      * Constructs a new {@code IdentifiableObjectMapping} object with a
-     * domain of the specified size and the specified type for values. The
-     * default association for an object is {@code null}. Runtime 
-     * O(domainSize).
+     * specified initial mapping and the specified type for values. The default
+     * association for an object is as specified by {@code mapping}. Runtime
+     * O(1).
+     *
+     * @param mapping the array defining the initial mapping.
+     * @param rangeType the type of the values.
+     * @exception IllegalArgumentException if rangeType is {@code Void.TYPE}.
+     * @exception NullPointerException if {@code mapping} or {@code rangeType}
+     * are null.
+     */
+    protected IdentifiableObjectMapping(R[] mapping, Class<R> rangeType) {
+        if (rangeType == Void.TYPE) {
+            throw new IllegalArgumentException(GraphLocalization.getSingleton().getString("algo.ca.NotInitializedException"));
+        }
+        if (mapping == null || rangeType == null) {
+            throw new NullPointerException(GraphLocalization.getSingleton().getString("ds.Graph.ParametersNullException"));
+        }
+        this.mapping = mapping;
+        this.rangeType = rangeType;
+    }
+
+    /**
+     * Constructs a new {@code IdentifiableObjectMapping} object with a domain
+     * of the specified size and the specified type for values. The default
+     * association for an object is {@code null}. Runtime O(domainSize).
+     *
      * @param domainSize the initial size of the domain.
      * @param rangeType the type of the values.
-     * @exception IllegalArgumentException if rangeType is 
-     * {@code Void.TYPE}.
+     * @exception IllegalArgumentException if rangeType is {@code Void.TYPE}.
      * @exception NegativeArraySizeException if {@code value} is negative.
      * @exception NullPointerException if {@code rangeType} is null.
      */
@@ -106,15 +111,14 @@ public class IdentifiableObjectMapping<D extends Identifiable, R> implements Clo
     /**
      * Returns the value associated with {@code identifiableObject} in this
      * mapping. Runtime O(1).
+     *
      * @param identifiableObject the object for which the associated value is to
      * be returned.
      * @return the value associated with {@code identifiableObject} in this
      * mapping.
-     * @exception ArrayIndexOutOfBoundsException if 
-     * {@code identifiableObject}'s ID is less then 0 or greater equal than 
-     * the size of the domain.
-     * @exception NullPointerException if {@code identifiableObject} is 
-     * null.
+     * @exception ArrayIndexOutOfBoundsException if {@code identifiableObject}'s
+     * ID is less then 0 or greater equal than the size of the domain.
+     * @exception NullPointerException if {@code identifiableObject} is null.
      * @see #getDomainSize
      * @see #setDomainSize
      * @see Identifiable
@@ -124,21 +128,19 @@ public class IdentifiableObjectMapping<D extends Identifiable, R> implements Clo
     }
 
     /**
-     * Associates {@code identifiableObject} with {@code value} in 
-     * this mapping. Any previously made association for 
-     * {@code identifiableObject} is lost in the process. Calling 
-     * {@code set} with an {@code identifiableObject} whose ID is 
-     * greater equal than the current size of the domain will automatically 
-     * increase the size of the domain to accommodate 
+     * Associates {@code identifiableObject} with {@code value} in this mapping.
+     * Any previously made association for {@code identifiableObject} is lost in
+     * the process. Calling {@code set} with an {@code identifiableObject} whose
+     * ID is greater equal than the current size of the domain will
+     * automatically increase the size of the domain to accommodate
      * {@code identifiableObject}'s ID. Runtime O(1).
-     * @param identifiableObject the object for which an association is to be 
+     *
+     * @param identifiableObject the object for which an association is to be
      * made.
-     * @param value the value to be associated with 
-     * {@code identifiableObject}.
-     * @exception ArrayIndexOutOfBoundsException if 
-     * {@code identifiableObject}'s ID is less then 0.
-     * @exception NullPointerException if {@code identifiableObject} is 
-     * null.
+     * @param value the value to be associated with {@code identifiableObject}.
+     * @exception ArrayIndexOutOfBoundsException if {@code identifiableObject}'s
+     * ID is less then 0.
+     * @exception NullPointerException if {@code identifiableObject} is null.
      * @see #getDomainSize
      * @see #setDomainSize
      * @see Identifiable
@@ -151,9 +153,10 @@ public class IdentifiableObjectMapping<D extends Identifiable, R> implements Clo
     }
 
     /**
-     * Returns the size of this mapping's domain. Associations of objects and 
+     * Returns the size of this mapping's domain. Associations of objects and
      * values can only be made for objects with an ID between {@code 0} and
      * {@code getDomainSize()-1}. Runtime O(1).
+     *
      * @return the size of this mapping's domain.
      */
     public int getDomainSize() {
@@ -161,8 +164,9 @@ public class IdentifiableObjectMapping<D extends Identifiable, R> implements Clo
     }
 
     /**
-     * Sets the size of this mapping's domain to {@code value}.
-     * Runtime O(value).
+     * Sets the size of this mapping's domain to {@code value}. Runtime
+     * O(value).
+     *
      * @param value the new size of this mapping's domain.
      * @exception NegativeArraySizeException if {@code value} is negative.
      */
@@ -179,14 +183,13 @@ public class IdentifiableObjectMapping<D extends Identifiable, R> implements Clo
     /**
      * Checks whether {@code identifiableObject} has been defined in this
      * mapping, i.e. whether its ID fits the size of the domain and whether the
-     * it is associated with an object other than {@code null}. Runtime 
-     * O(1).
+     * it is associated with an object other than {@code null}. Runtime O(1).
+     *
      * @param identifiableObject the object to check for whether it is defined
      * in this mapping.
      * @return true if {@code get(identifiableObject)} would return a
      * non-{@code null} value and false otherwise.
-     * @exception NullPointerException if {@code identifiableObject} is 
-     * null.
+     * @exception NullPointerException if {@code identifiableObject} is null.
      */
     public boolean isDefinedFor(D identifiableObject) {
         return 0 <= identifiableObject.id()
@@ -196,6 +199,7 @@ public class IdentifiableObjectMapping<D extends Identifiable, R> implements Clo
 
     /**
      * Creates a copy of this mapping. Runtime O(number of values).
+     *
      * @return a copy of this mapping.
      */
     @Override
@@ -205,16 +209,17 @@ public class IdentifiableObjectMapping<D extends Identifiable, R> implements Clo
         System.arraycopy(mapping, 0, newMapping, 0, mapping.length);
         return new IdentifiableObjectMapping<>(newMapping, rangeType);
     }
-    
+
     /**
      * Compares this mapping to the specified object. The result is true if and
-     * only if the argument is not null and is an 
-     * {@code IdentifiableObjectMapping} object which has an domain of 
-     * equal type and size and makes exactly the same object - value 
-     * associations. Runtime O(size of the domain).
+     * only if the argument is not null and is an
+     * {@code IdentifiableObjectMapping} object which has an domain of equal
+     * type and size and makes exactly the same object - value associations.
+     * Runtime O(size of the domain).
+     *
      * @param o the object this mapping is to be compared with.
-     * @return {@code true} if the given object represents an 
-     * {@code IdentifiableObjectMapping} equivalent to this mapping, 
+     * @return {@code true} if the given object represents an
+     * {@code IdentifiableObjectMapping} equivalent to this mapping,
      * {@code false} otherwise.
      */
     @Override
@@ -239,9 +244,10 @@ public class IdentifiableObjectMapping<D extends Identifiable, R> implements Clo
     }
 
     /**
-     * Returns a hash code for this {@code IdentifiableObjectMapping}.
-     * Runtime O(size of the domain).
-     * @return the sum of the hash codes of the values associated with objects 
+     * Returns a hash code for this {@code IdentifiableObjectMapping}. Runtime
+     * O(size of the domain).
+     *
+     * @return the sum of the hash codes of the values associated with objects
      * in this mapping.
      */
     @Override
@@ -257,10 +263,11 @@ public class IdentifiableObjectMapping<D extends Identifiable, R> implements Clo
     }
 
     /**
-     * Return a {@code String} object representing this mapping. The 
-     * returned {@code String} will consist of a list of all object - value
-     * associations made in this mapping. Note that object - null associations
-     * will be omitted in this representation. Runtime O(size of the domain).
+     * Return a {@code String} object representing this mapping. The returned
+     * {@code String} will consist of a list of all object - value associations
+     * made in this mapping. Note that object - null associations will be
+     * omitted in this representation. Runtime O(size of the domain).
+     *
      * @return a string representation of this mapping.
      */
     @Override
@@ -275,7 +282,7 @@ public class IdentifiableObjectMapping<D extends Identifiable, R> implements Clo
             if (counter == 10) {
                 counter = 0;
                 builder.append("\n");
-            }            
+            }
             builder.append(i);
             builder.append(" = ");
             builder.append(mapping[i]);
