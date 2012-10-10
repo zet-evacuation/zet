@@ -110,11 +110,11 @@ public class ImplicitTimeExpandedResidualNetwork extends Network {
                 reverseEdges.set(reverse, edge);
             }
         }
-        flow = new IdentifiableObjectMapping<Edge, IntegerIntegerMapping>(problem.getNetwork().edges(), IntegerIntegerMapping.class);
+        flow = new IdentifiableObjectMapping<>(problem.getNetwork().edges(), IntegerIntegerMapping.class);
         for (Edge edge : problem.getNetwork().edges()) {
             flow.set(edge, new IntegerIntegerMapping());
         }
-        waiting = new IdentifiableObjectMapping<Node, IntegerIntegerMapping>(problem.getNetwork().nodes(), IntegerIntegerMapping.class);
+        waiting = new IdentifiableObjectMapping<>(problem.getNetwork().nodes(), IntegerIntegerMapping.class);
         for (Node node : problem.getNetwork().nodes()) {
             waiting.set(node, new IntegerIntegerMapping());
         }
@@ -149,7 +149,6 @@ public class ImplicitTimeExpandedResidualNetwork extends Network {
                 return; 
             case ARTIFICIAL_REVERSE:
                 superSourceFlow.decrease(reverseEdge(edge), amount);
-                return; 
         }
     }
 
@@ -344,8 +343,20 @@ public class ImplicitTimeExpandedResidualNetwork extends Network {
         return flow;
     }
 
+    /**
+     * Returns the (static) flow out of the super source.
+     * @return the flow out of the super source.
+     */
     public IdentifiableIntegerMapping<Edge> superSourceFlow() {
         return superSourceFlow;
+    }
+
+    /**
+     * Returns the (static) flow out of the super source.
+     * @return the flow out of the super source.
+     */
+    public IdentifiableObjectMapping<Node, IntegerIntegerMapping> waitingFlow() {
+        return waiting;
     }
     
     /**
