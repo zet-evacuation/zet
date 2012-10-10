@@ -19,19 +19,19 @@ import ds.mapping.IntegerIntegerMapping;
 import ds.mapping.IntegerObjectMapping;
 
 /**
+ * This class decomposes a flow over time given by an
+ * {@code ImplicitTimeExpandedResidualNetwork} and decomposes it into a
+ * {@code PathBasedFlowOverTime}.
  *
  * @author Martin Groß
  */
 public class FlowOverTimePathDecomposition extends Algorithm<ImplicitTimeExpandedResidualNetwork, PathBasedFlowOverTime> {
 
-    protected ImplicitTimeExpandedResidualNetwork network;
-    protected EdgeBasedFlowOverTime flow;
-    protected IdentifiableIntegerMapping<Edge> superSourceFlow;
-    protected IdentifiableObjectMapping<Node, IntegerIntegerMapping> waitingFlow;
+    protected transient EdgeBasedFlowOverTime flow;
+    protected transient ImplicitTimeExpandedResidualNetwork network;
+    protected transient IdentifiableIntegerMapping<Edge> superSourceFlow;
+    protected transient IdentifiableObjectMapping<Node, IntegerIntegerMapping> waitingFlow;
 
-    /**
-     * {@InheritDocs}
-     */
     @Override
     protected PathBasedFlowOverTime runAlgorithm(ImplicitTimeExpandedResidualNetwork network) {
         this.network = network;
@@ -137,6 +137,7 @@ public class FlowOverTimePathDecomposition extends Algorithm<ImplicitTimeExpande
         FlowOverTimeEdge last = null;
         for (FlowOverTimeEdge edge : path) {
             if (last == null) {
+                //capacity = Math.min(waitingFlow.get(edge.getEdge().start()).minimum(0, edge.getTime());
             }
             if (edge.getEdge().start() == network.superSource() && network.hasArtificialSuperSource()) {
                 capacity = Math.min(superSourceFlow.get(edge.getEdge()), capacity);
@@ -153,78 +154,5 @@ public class FlowOverTimePathDecomposition extends Algorithm<ImplicitTimeExpande
                 flow.get(edge.getEdge()).decrease(edge.getTime(), capacity);
             }
         }
-    }
-
-    protected FlowOverTimePath calculateShortestPath() {
-        IdentifiableIntegerMapping distances = new IdentifiableIntegerMapping<>(network.numberOfNodes());
-        IdentifiableObjectMapping<Node, Edge> preceedingEdges = new IdentifiableObjectMapping<>(network.numberOfEdges(), Edge.class);
-        MinHeap<Node, Integer> queue = new MinHeap<>(network.numberOfNodes());
-        for (int v = 0; v < network.numberOfNodes(); v++) {
-            queue.insert(network.getNode(v), Integer.MAX_VALUE);
-        }
-        distances.set(network.superSource(), 0);
-        queue.decreasePriority(network.superSource(), 0);
-        while (!queue.isEmpty()) {
-            MinHeap<Node, Integer>.Element min = queue.extractMin();
-            Node node = min.getObject();
-            Integer distance = min.getPriority();
-            distances.set(node, distance);
-            if (distance == Integer.MAX_VALUE) {
-                continue;
-            }
-            for (Edge edge : network.outgoingEdges(node)) {
-                if (network.isReverseEdge(edge)) {
-                    continue;
-                }
-                int time;
-                // I
-                if (node == network.superSource() && network.hasArtificialSuperSource()) {
-                    time = (superSourceFlow.get(edge) > 0) ? 0 : Integer.MAX_VALUE;
-                } else {
-                    time = flow.get(edge).nextPositiveValue(distance);
-                }
-                if (time == Integer.MAX_VALUE) {
-                    continue;
-                }
-                Node w = edge.opposite(node);
-                if (queue.contains(w) && (long) queue.priority(w) > (long) time + (long) network.transitTime(edge)) {
-                    queue.decreasePriority(w, time + network.transitTime(edge));
-                    preceedingEdges.set(w, edge);
-                }
-            }
-        }
-        if (preceedingEdges.get(network.getProblem().getSink()) == null) {
-            return null;
-        }
-        FlowOverTimePath path = new FlowOverTimePath();
-        Node node = network.getProblem().getSink();
-        int lastDistance = distances.get(node);
-        while (node != network.superSource()) {
-            Edge edge = preceedingEdges.get(node);
-            Node start = edge.opposite(node);
-            int delay = lastDistance - network.transitTime(edge) - distances.get(start);
-            path.addFirst(new FlowOverTimeEdge(edge, delay, distances.get(start) + delay));
-            lastDistance = distances.get(start);
-            node = start;
-        }
-        int capacity = Integer.MAX_VALUE;
-        for (FlowOverTimeEdge edge : path) {
-            if (edge.getEdge().start() == network.superSource() && network.hasArtificialSuperSource()) {
-                capacity = Math.min(superSourceFlow.get(edge.getEdge()), capacity);
-            } else {
-                capacity = Math.min(flow.get(edge.getEdge()).get(edge.getTime()), capacity);
-            }
-        }
-        for (FlowOverTimeEdge edge : path) {
-            if (edge.getEdge().start() == network.superSource() && network.hasArtificialSuperSource()) {
-                superSourceFlow.decrease(edge.getEdge(), capacity);
-            } else {
-                flow.get(edge.getEdge()).decrease(edge.getTime(), capacity);
-            }
-        }
-        if (network.hasArtificialSuperSource()) {
-            path.removeFirst();
-        }
-        return path;
     }
 }
