@@ -24,7 +24,7 @@ import ds.graph.Edge;
 import ds.mapping.IdentifiableIntegerMapping;
 
 /**
- *
+ * This class represents an edge in a flow over time setting. 
  * @author Martin Groß
  */
 public class FlowOverTimeEdge implements Cloneable {
