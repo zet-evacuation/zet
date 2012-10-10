@@ -19,9 +19,8 @@
  */
 package statistic.graph;
 
-import ds.graph.flow.FlowOverTimePath;
-import ds.graph.Edge;
 import ds.graph.flow.FlowOverTimeEdge;
+import ds.graph.flow.FlowOverTimePath;
 
 /**
  *
@@ -31,6 +30,7 @@ public enum DynamicFlowStatistic implements Statistic<FlowOverTimePath, IntegerD
 
     MOVED_TIME("Gesamtfahrzeit") {
 
+        @Override
         public IntegerDoubleMapping calculate(Statistics<GraphData> statistics, FlowOverTimePath flow) {
             IntegerDoubleMapping result = new IntegerDoubleMapping(true);
             int time = 0;
