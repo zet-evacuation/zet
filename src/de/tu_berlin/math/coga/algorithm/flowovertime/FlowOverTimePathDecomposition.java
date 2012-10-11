@@ -26,9 +26,25 @@ import ds.mapping.IdentifiableIntegerMapping;
  */
 public class FlowOverTimePathDecomposition extends Algorithm<ImplicitTimeExpandedResidualNetwork, PathBasedFlowOverTime> {
 
+    /**
+     * Stores the flow this algorithm works on. Only used internally during the 
+     * computation.
+     */
     protected transient EdgeBasedFlowOverTime flow;
+    /**
+     * The input for algorithm. Only used internally during the 
+     * computation.
+     */
     protected transient ImplicitTimeExpandedResidualNetwork network;
+    /**
+     * Stores the flow this algorithm works on. Only used internally during the 
+     * computation.
+     */
     protected transient IdentifiableIntegerMapping<Edge> superSourceFlow;
+    /**
+     * Stores the flow this algorithm works on. Only used internally during the 
+     * computation.
+     */
     protected transient IdentifiableIntegerIntegerMapping<Node> waitingFlow;
 
     @Override
@@ -69,8 +85,8 @@ public class FlowOverTimePathDecomposition extends Algorithm<ImplicitTimeExpande
     /**
      * Computes a shortest super-source to sink path and stores the preceeding
      * edges and arrival times in the supplied data structures.
-     * @param preceedingEdges
-     * @param arrivalTimes 
+     * @param preceedingEdges data structure to store the results.
+     * @param arrivalTimes data structure to store the results. 
      */
     protected void initialize(IdentifiableIntegerObjectMapping<Node, Edge> preceedingEdges, IdentifiableIntegerMapping<Node> arrivalTimes) {
         MinHeap<Node, Integer> queue = new MinHeap<>(network.numberOfNodes());
