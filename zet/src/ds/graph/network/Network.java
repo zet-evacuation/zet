@@ -526,7 +526,6 @@ public class Network extends AbstractNetwork {
 	 * @param edge the edge to be added to the graph.
 	 * @exception IllegalArgumentException if the specified position is not empty.
 	 */
-	@Override
 	public void setEdge( Edge edge ) {
 		if( edges.get( edge.id() ) == null ) {
 			edges.add( edge );
@@ -564,7 +563,6 @@ public class Network extends AbstractNetwork {
 	 * outgoing edges of any replaced node will be valid for the new one.
 	 * @param node the node to be added to the graph.
 	 */
-	@Override
 	public void setNode( Node node ) {
 		if( nodes.get( node.id() ) == null ) {
 			incidentEdges.set( node, new DependingListSequence<>( edges ) );

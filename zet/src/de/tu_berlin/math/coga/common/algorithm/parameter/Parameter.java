@@ -261,12 +261,16 @@ public class Parameter<T> {
      * @return a <code>ValidationResult</code> specifying whether the operation
      * was a success or a failure.
      */
-    public ValidationResult setValues(Iterable<T> values)  {
+    public ValidationResult setValues(Iterable<T> values) {
         Iterable<T> oldValues = values;
         this.values = values;
         ValidationResult result = setToFirstValue();
         if (!result.isSuccessful()) {
             this.values = oldValues;
+        } else {
+            if (parent != null) {
+                parent.valuesChanged(this, oldValues, this.values);
+            }
         }
         return result;
     }
@@ -286,7 +290,6 @@ public class Parameter<T> {
          * A constant representing a failed validation.
          */
         public static final ValidationResult FAILURE = new ValidationResult(false, "");
-
         /**
          * The error message of the validation.
          */

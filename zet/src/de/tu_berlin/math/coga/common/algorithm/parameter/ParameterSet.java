@@ -119,9 +119,9 @@ public class ParameterSet extends LinkedHashSet<Parameter> {
 
     /**
      * This method is called, when one of the parameters in this set has been
-     * successfully changed. This is done only after it has passed the
-     * validation done by the call for validate. By default, this method
-     * notifies listeners of this change.
+     * successfully changed to a new value. This is done only after it has
+     * passed the validation done by the call for validate. By default, this 
+     * method notifies listeners of this change.
      * @param <T> the type of the parameter's value.
      * @param parameter the parameter that was changed.
      * @param oldValue the old value of the parameter.
@@ -130,4 +130,18 @@ public class ParameterSet extends LinkedHashSet<Parameter> {
     protected <T> void valueChanged(Parameter<T> parameter, T oldValue, T newValue) {
         fireParameterChanged(parameter, oldValue, newValue);
     }
+    
+    /**
+     * This method is called, when one of the parameters in this set has been
+     * successfully changed. This is done only after it has passed the
+     * validation done by the call for validate. By default, this method does 
+     * update the framework foe iterating all valid parameter configurations in
+     * this set.
+     * @param <T> the type of the parameter's value.
+     * @param parameter the parameter that was changed.
+     * @param oldValues the old values of the parameter.
+     * @param newValues the new values of the parameter.
+     */
+    protected <T> void valuesChanged(Parameter<T> parameter, Iterable<T> oldValues, Iterable<T> newValues) {        
+    }    
 }

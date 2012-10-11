@@ -213,7 +213,6 @@ public class BinaryTree implements DirectedGraph {
 	 * outgoing edges of any replaced node will be valid for the new one.
 	 * @param node the node to be added to the graph.
 	 */
-	@Override
 	public void setNode( Node node ) {
 		if( nodes.get( node.id() ) == null ) {
 			left.set( node, null ); // not necessary
@@ -272,7 +271,6 @@ public class BinaryTree implements DirectedGraph {
 	 * @param edge the edge to be added to the graph.
 	 * @exception IllegalArgumentException if the specified position is not empty.
 	 */
-	@Override
 	public void setEdge( Edge edge ) {
 		if( edges.get( edge.id() ) == null ) {
 			

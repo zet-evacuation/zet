@@ -5,6 +5,8 @@
 package de.tu_berlin.math.coga.algorithm.flowovertime;
 
 import de.tu_berlin.math.coga.common.algorithm.Algorithm;
+import de.tu_berlin.math.coga.datastructure.mapping.IdentifiableIntegerIntegerMapping;
+import de.tu_berlin.math.coga.datastructure.mapping.IdentifiableIntegerObjectMapping;
 import de.tu_berlin.math.coga.datastructure.priorityQueue.MinHeap;
 import ds.graph.Edge;
 import ds.graph.ImplicitTimeExpandedResidualNetwork;
@@ -14,9 +16,6 @@ import ds.graph.flow.FlowOverTimeEdge;
 import ds.graph.flow.FlowOverTimePath;
 import ds.graph.flow.PathBasedFlowOverTime;
 import ds.mapping.IdentifiableIntegerMapping;
-import ds.mapping.IdentifiableObjectMapping;
-import ds.mapping.IntegerIntegerMapping;
-import ds.mapping.IntegerObjectMapping;
 
 /**
  * This class decomposes a flow over time given by an
@@ -30,22 +29,21 @@ public class FlowOverTimePathDecomposition extends Algorithm<ImplicitTimeExpande
     protected transient EdgeBasedFlowOverTime flow;
     protected transient ImplicitTimeExpandedResidualNetwork network;
     protected transient IdentifiableIntegerMapping<Edge> superSourceFlow;
-    protected transient IdentifiableObjectMapping<Node, IntegerIntegerMapping> waitingFlow;
+    protected transient IdentifiableIntegerIntegerMapping<Node> waitingFlow;
 
     @Override
     protected PathBasedFlowOverTime runAlgorithm(ImplicitTimeExpandedResidualNetwork network) {
         this.network = network;
         flow = new EdgeBasedFlowOverTime(network.flow().clone());
         superSourceFlow = network.superSourceFlow().clone();
-        waitingFlow = network.waitingFlow().clone();
+        waitingFlow = new IdentifiableIntegerIntegerMapping<>(network.waitingFlow());
 
         PathBasedFlowOverTime result = new PathBasedFlowOverTime();
         FlowOverTimePath path = null;
         do {
             // Find a source-sink-path
             IdentifiableIntegerMapping<Node> arrivalTimes = new IdentifiableIntegerMapping<>(network.numberOfNodes());
-            IdentifiableObjectMapping<Node, IntegerObjectMapping> preceedingEdges;
-            preceedingEdges = new IdentifiableObjectMapping<>(network.numberOfNodes(), IntegerObjectMapping.class);
+            IdentifiableIntegerObjectMapping<Node, Edge> preceedingEdges = new IdentifiableIntegerObjectMapping<>(network.numberOfNodes(), Edge.class);
             MinHeap<Node, Integer> queue = new MinHeap<>(network.numberOfNodes());
             for (int v = 0; v < network.numberOfNodes(); v++) {
                 queue.insert(network.getNode(v), Integer.MAX_VALUE);
@@ -81,9 +79,8 @@ public class FlowOverTimePathDecomposition extends Algorithm<ImplicitTimeExpande
                     }
                 }
             }
-
             // Trace back a path from the sink to the super source
-            //path = constructPath((IdentifiableObjectMapping<Node, IntegerObjectMapping<Edge>>) preceedingEdges, arrivalTimes);
+            path = constructPath(preceedingEdges, arrivalTimes);
             // If a path has been found...
             if (path != null) {
                 // Subtract as much flow as possible from the path
@@ -107,12 +104,12 @@ public class FlowOverTimePathDecomposition extends Algorithm<ImplicitTimeExpande
      * @param arrivalTimes
      * @return a flow over time path from super source to sink.
      */
-    protected FlowOverTimePath constructPath(IdentifiableObjectMapping<Node, IntegerObjectMapping<Edge>> preceedingEdges, IdentifiableIntegerMapping<Node> arrivalTimes) {
+    protected FlowOverTimePath constructPath(IdentifiableIntegerObjectMapping<Node, Edge> preceedingEdges, IdentifiableIntegerMapping<Node> arrivalTimes) {
         FlowOverTimePath path = new FlowOverTimePath();
         Node node = network.getProblem().getSink();
         int time = arrivalTimes.get(node);
         while (node != network.superSource()) {
-            Edge edge = preceedingEdges.get(node).get(time);
+            Edge edge = preceedingEdges.get(node, time);
             if (edge == null) {
                 return null;
             }
@@ -134,25 +131,26 @@ public class FlowOverTimePathDecomposition extends Algorithm<ImplicitTimeExpande
     protected void subtractPath(FlowOverTimePath path) {
         // Determine the bottleneack capacity
         int capacity = Integer.MAX_VALUE;
-        FlowOverTimeEdge last = null;
+        int lastArrival = 0;
         for (FlowOverTimeEdge edge : path) {
-            if (last == null) {
-                //capacity = Math.min(waitingFlow.get(edge.getEdge().start()).minimum(0, edge.getTime());
-            }
+            capacity = Math.min(waitingFlow.minimum(edge.getEdge().start(), lastArrival, edge.getTime()), capacity);
             if (edge.getEdge().start() == network.superSource() && network.hasArtificialSuperSource()) {
                 capacity = Math.min(superSourceFlow.get(edge.getEdge()), capacity);
             } else {
                 capacity = Math.min(flow.get(edge.getEdge()).get(edge.getTime()), capacity);
             }
-            last = edge;
+            lastArrival = edge.getTime() + network.transitTime(edge.getEdge());
         }
         // Subtract the bottleneck flow value from the path
+        lastArrival = 0;
         for (FlowOverTimeEdge edge : path) {
+            waitingFlow.decrease(edge.getEdge().start(), lastArrival, edge.getTime());
             if (edge.getEdge().start() == network.superSource() && network.hasArtificialSuperSource()) {
                 superSourceFlow.decrease(edge.getEdge(), capacity);
             } else {
                 flow.get(edge.getEdge()).decrease(edge.getTime(), capacity);
             }
+            lastArrival = edge.getTime(); 
         }
     }
 }
