@@ -20,6 +20,7 @@
 package ds.mapping;
 
 import ds.graph.GraphLocalization;
+import ds.graph.flow.FlowOverTimeEdge;
 import java.lang.reflect.Array;
 
 /**
