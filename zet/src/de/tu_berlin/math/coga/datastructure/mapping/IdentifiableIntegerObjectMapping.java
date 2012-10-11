@@ -20,4 +20,8 @@ public class IdentifiableIntegerObjectMapping<D,R> {
         throw new UnsupportedOperationException("Not yet implemented");
     }
 
+    public void set(D w, int i, R edge) {
+        throw new UnsupportedOperationException("Not yet implemented");
+    }
+
 }
