@@ -63,7 +63,7 @@ public class FlowOverTimePathDecomposition extends Algorithm<ImplicitTimeExpande
         do {
             // Find a source-sink-path
             IdentifiableIntegerMapping<Node> arrivalTimes = new IdentifiableIntegerMapping<>(network.numberOfNodes());
-            IdentifiableIntegerObjectMapping<Node, Edge> preceedingEdges = new IdentifiableIntegerObjectMapping<>(network.numberOfNodes(), Edge.class);
+            IdentifiableIntegerObjectMapping<Node, FlowOverTimeEdge> preceedingEdges = new IdentifiableIntegerObjectMapping<>(network.numberOfNodes(), FlowOverTimeEdge.class);
             initialize(preceedingEdges, arrivalTimes);
             // Trace back a path from the sink to the super source
             path = constructPath(preceedingEdges, arrivalTimes);
@@ -90,7 +90,7 @@ public class FlowOverTimePathDecomposition extends Algorithm<ImplicitTimeExpande
      * @param preceedingEdges data structure to store the results.
      * @param arrivalTimes data structure to store the results. 
      */
-    protected void initialize(IdentifiableIntegerObjectMapping<Node, Edge> preceedingEdges, IdentifiableIntegerMapping<Node> arrivalTimes) {
+    protected void initialize(IdentifiableIntegerObjectMapping<Node, FlowOverTimeEdge> preceedingEdges, IdentifiableIntegerMapping<Node> arrivalTimes) {
         MinHeap<Node, Integer> queue = new MinHeap<>(network.numberOfNodes());
         for (int v = 0; v < network.numberOfNodes(); v++) {
             queue.insert(network.getNode(v), Integer.MAX_VALUE);
@@ -121,10 +121,13 @@ public class FlowOverTimePathDecomposition extends Algorithm<ImplicitTimeExpande
                 if (waitingFlow.minimum(node, distance, time) == 0) {
                     continue;
                 }
+                if (time > distance) {
+                    preceedingEdges.set(node, time, new FlowOverTimeEdge(new Edge(-1,node,node), time-distance, distance));
+                }
                 Node w = edge.opposite(node);
                 if (queue.contains(w) && (long) queue.priority(w) > (long) time + (long) network.transitTime(edge)) {
                     queue.decreasePriority(w, time + network.transitTime(edge));
-                    preceedingEdges.set(w, time + network.transitTime(edge), edge);
+                    preceedingEdges.set(w, time + network.transitTime(edge), new FlowOverTimeEdge(edge,0,time));
                 }
             }
         }
@@ -138,18 +141,18 @@ public class FlowOverTimePathDecomposition extends Algorithm<ImplicitTimeExpande
      * @param arrivalTimes
      * @return a flow over time path from super source to sink.
      */
-    protected FlowOverTimePath constructPath(IdentifiableIntegerObjectMapping<Node, Edge> preceedingEdges, IdentifiableIntegerMapping<Node> arrivalTimes) {
+    protected FlowOverTimePath constructPath(IdentifiableIntegerObjectMapping<Node, FlowOverTimeEdge> preceedingEdges, IdentifiableIntegerMapping<Node> arrivalTimes) {
         FlowOverTimePath path = new FlowOverTimePath();
         Node node = network.getProblem().getSink();
         int time = arrivalTimes.get(node);
         while (node != network.superSource()) {
-            Edge edge = preceedingEdges.get(node, time);
+            FlowOverTimeEdge edge = preceedingEdges.get(node, time);
             if (edge == null) {
                 return null;
             }
-            Node start = edge.opposite(node);
-            int delay = time - network.transitTime(edge) - arrivalTimes.get(start);
-            path.addFirst(new FlowOverTimeEdge(edge, delay, arrivalTimes.get(start) + delay));
+            Node start = edge.getEdge().opposite(node);
+            int delay = time - network.transitTime(edge.getEdge()) - arrivalTimes.get(start);
+            path.addFirst(new FlowOverTimeEdge(edge.getEdge(), delay, arrivalTimes.get(start) + delay));
             time = arrivalTimes.get(start);
             node = start;
         }
