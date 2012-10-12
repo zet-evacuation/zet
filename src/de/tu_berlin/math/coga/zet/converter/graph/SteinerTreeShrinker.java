@@ -5,7 +5,7 @@
 package de.tu_berlin.math.coga.zet.converter.graph;
 
 import algo.graph.reduction.MSTSteiner;
-import algo.graph.reduction.PrimsAlgo;
+import algo.graph.reduction.Prim;
 import de.tu_berlin.math.coga.common.algorithm.Algorithm;
 import ds.collection.ListSequence;
 import ds.graph.Edge;
@@ -31,10 +31,9 @@ public class SteinerTreeShrinker extends Algorithm<NetworkFlowModel,NetworkFlowM
     public IdentifiableIntegerMapping<Edge> TransitForEdge;
     public MSTSteiner steineralgo;
     public MinSteinerTree steinertree;
-    public PrimsAlgo prim;
+    public Prim prim;
     public MinSpanningTreeProblem minspan;
     public MinSpanningTree tree;
-   
     
     @Override
     protected NetworkFlowModel runAlgorithm( NetworkFlowModel problem ) {
@@ -131,38 +130,21 @@ public class SteinerTreeShrinker extends Algorithm<NetworkFlowModel,NetworkFlowM
                //dynnet.removeNodes(NonMinNodes);
          
                 //creates edges of new graph
-                 for (Edge neu: MinEdges)
+                for (Edge neu: MinEdges)
                 {
 									minspanmodel.addEdge( neu, problem.getEdgeCapacity( neu ), problem.getTransitTime( neu ), problem.getExactTransitTime( neu ) );
-//                    newgraph.addEdge(neu);
-//                    minspanmodel.setEdgeCapacity(neu, model.getEdgeCapacity(neu));                   
-//                    minspanmodel.setTransitTime(neu, model.getTransitTime(neu));
-                    newMapping.setEdgeLevel(neu, originalMapping.getEdgeLevel(neu));                 
-//                    minspanmodel.setExactTransitTime(neu, model.getExactTransitTime(neu));
+                  newMapping.setEdgeLevel(neu, originalMapping.getEdgeLevel(neu));                 
                 }
-                   
-                    
-                
-                //minspanmodel.setCurrentAssignment(model.getCurrentAssignment());
-                //minspanmodel.setSources(model.getSources());
-                 
-                 //values from mapping of original network 
+
+								 //values from mapping of original network 
                  newMapping.raster = originalMapping.getRaster();
                  newMapping.nodeRectangles = originalMapping.getNodeRectangles();
                  newMapping.nodeFloorMapping = originalMapping.getNodeFloorMapping();
-                 //newMapping.isEvacuationNode = originalMapping.isEvacuationNode;
-                 //newMapping.isSourceNode = originalMapping.isSourceNode;
                  newMapping.isDeletedSourceNode = originalMapping.isDeletedSourceNode;
                  newMapping.exitName = originalMapping.exitName;
                  
-                //minspanmodel.setSupersink(model.getSupersink());
                 BaseZToGraphConverter.createReverseEdges( minspanmodel );
                 
-                //minspanmodel.setNetwork(newgraph);
-                //minspanmodel.setNetwork( minspanmodel.getNetworkFlowModel().getAsStaticNetwork());
-                System.out.println("Number of new Edges: " + minspanmodel.numberOfEdges());
-                
-								
 								minspanmodel.resetAssignment();
                 return minspanmodel;
                     
