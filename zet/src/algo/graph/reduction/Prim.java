@@ -24,7 +24,7 @@ import de.tu_berlin.math.coga.datastructure.priorityQueue.MinHeap;
  *
  * @author schwengf
  */
-public class PrimsAlgo extends Algorithm<MinSpanningTreeProblem,MinSpanningTree> {
+public class Prim extends Algorithm<MinSpanningTreeProblem,MinSpanningTree> {
     
     
     IdentifiableIntegerMapping<Edge> currentEdgesTransit;

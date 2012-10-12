@@ -547,7 +547,6 @@ public class Network extends AbstractNetwork {
 	 * each edge. Runtime O(number of edges).
 	 * @param edges the edges to be added to the graph.
 	 */
-	@Override
 	public void setEdges( Iterable<Edge> edges ) {
 		for( Edge edge : edges ) {
 			setEdge( edge );

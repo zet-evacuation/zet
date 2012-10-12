@@ -144,7 +144,7 @@ static {
 			else if( f.getName().endsWith( ".class" ) )
 				try {
 					String classname = f.getName().substring( 0, f.getName().lastIndexOf( '.' ) );
-					Class fromFile = Project.class.getClassLoader().loadClass( pack + classname );					
+					Class<?> fromFile = Project.class.getClassLoader().loadClass( pack + classname );					
 					processClassObject( fromFile );
 				} catch( NoClassDefFoundError ex ) {
 					System.err.println( "Class belonging to file '" + f.getAbsolutePath() + "' does not exist. Please check your dist directory." );

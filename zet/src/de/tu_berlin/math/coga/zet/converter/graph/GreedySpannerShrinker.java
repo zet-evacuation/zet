@@ -7,7 +7,7 @@ package de.tu_berlin.math.coga.zet.converter.graph;
 import de.tu_berlin.math.coga.zet.converter.RasterContainerCreator;
 import ds.z.BuildingPlan;
 import ds.graph.problem.MinSpanningTreeProblem;
-import algo.graph.reduction.PrimsAlgo;
+import algo.graph.reduction.Prim;
 import ds.graph.MinSpanningTree;
 import ds.graph.Edge;
 import ds.graph.Node;
@@ -26,7 +26,7 @@ import ds.mapping.IdentifiableIntegerMapping;
 public class GreedySpannerShrinker extends Algorithm<NetworkFlowModel,NetworkFlowModel> {
     public NetworkFlowModel minspanmodel;
     public MinSpanningTreeProblem minspanprob;
-    public PrimsAlgo primalgo;
+    public Prim primalgo;
     public GreedyAlgo greedy;
     public MinSpanningTree minspantree;
     
