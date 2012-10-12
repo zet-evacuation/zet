@@ -1,6 +1,6 @@
 /*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
+ * FlowOverTimePathDecomposition.java
+ * 
  */
 package de.tu_berlin.math.coga.algorithm.flowovertime;
 
@@ -16,6 +16,7 @@ import ds.graph.flow.FlowOverTimeEdge;
 import ds.graph.flow.FlowOverTimePath;
 import ds.graph.flow.PathBasedFlowOverTime;
 import ds.mapping.IdentifiableIntegerMapping;
+import java.util.Iterator;
 
 /**
  * This class decomposes a flow over time given by an
@@ -58,7 +59,7 @@ public class FlowOverTimePathDecomposition extends Algorithm<ImplicitTimeExpande
         // Initialize the data structure for the result
         PathBasedFlowOverTime result = new PathBasedFlowOverTime();
         // Iteratively extract source-sink paths from the flow
-        FlowOverTimePath path = null;
+        FlowOverTimePath path;
         do {
             // Find a source-sink-path
             IdentifiableIntegerMapping<Node> arrivalTimes = new IdentifiableIntegerMapping<>(network.numberOfNodes());
@@ -75,6 +76,7 @@ public class FlowOverTimePathDecomposition extends Algorithm<ImplicitTimeExpande
                 if (network.hasArtificialSuperSource()) {
                     path.removeFirst();
                 }
+                removeLoops(path);
                 result.addPathFlow(path);
             }
         } while (path != null);
@@ -108,13 +110,15 @@ public class FlowOverTimePathDecomposition extends Algorithm<ImplicitTimeExpande
                     continue;
                 }
                 int time;
-                // I
                 if (node == network.superSource() && network.hasArtificialSuperSource()) {
                     time = (superSourceFlow.get(edge) > 0) ? 0 : Integer.MAX_VALUE;
                 } else {
                     time = flow.get(edge).nextPositiveValue(distance);
                 }
                 if (time == Integer.MAX_VALUE) {
+                    continue;
+                }
+                if (waitingFlow.minimum(node, distance, time) == 0) {
                     continue;
                 }
                 Node w = edge.opposite(node);
@@ -159,13 +163,14 @@ public class FlowOverTimePathDecomposition extends Algorithm<ImplicitTimeExpande
      * @param path the path from which flow is subtracted.
      */
     protected void subtractPath(FlowOverTimePath path) {
-        // Determine the bottleneack capacity
+        // Determine the bottleneck capacity
         int capacity = Integer.MAX_VALUE;
         int lastArrival = 0;
         for (FlowOverTimeEdge edge : path) {
             capacity = Math.min(waitingFlow.minimum(edge.getEdge().start(), lastArrival, edge.getTime()), capacity);
             if (edge.getEdge().start() == network.superSource() && network.hasArtificialSuperSource()) {
                 capacity = Math.min(superSourceFlow.get(edge.getEdge()), capacity);
+            } else if (edge.getEdge().isLoop()) {                
             } else {
                 capacity = Math.min(flow.get(edge.getEdge()).get(edge.getTime()), capacity);
             }
@@ -174,13 +179,27 @@ public class FlowOverTimePathDecomposition extends Algorithm<ImplicitTimeExpande
         // Subtract the bottleneck flow value from the path
         lastArrival = 0;
         for (FlowOverTimeEdge edge : path) {
-            waitingFlow.decrease(edge.getEdge().start(), lastArrival, edge.getTime());
+            waitingFlow.decrease(edge.getEdge().start(), lastArrival, edge.getTime(), capacity);
             if (edge.getEdge().start() == network.superSource() && network.hasArtificialSuperSource()) {
                 superSourceFlow.decrease(edge.getEdge(), capacity);
+            } else if (edge.getEdge().isLoop()) {                
             } else {
                 flow.get(edge.getEdge()).decrease(edge.getTime(), capacity);
             }
             lastArrival = edge.getTime();
+        }
+    }
+
+    /**
+     * Removes loops from the flow over time path.
+     * @param path the path from which the loops are to be removed.
+     */
+    protected void removeLoops(FlowOverTimePath path) {
+        for (Iterator<FlowOverTimeEdge> iterator = path.iterator(); iterator.hasNext();) {
+            FlowOverTimeEdge edge = iterator.next();
+            if (edge.getEdge().isLoop()) {
+                iterator.remove();
+            }
         }
     }
 }
