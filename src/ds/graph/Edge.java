@@ -19,9 +19,8 @@
  */
 package ds.graph;
 
-import ds.mapping.Identifiable;
 import com.thoughtworks.xstream.annotations.XStreamAsAttribute;
-import de.tu_berlin.math.coga.common.util.Level;
+import ds.mapping.Identifiable;
 
 /**
  * The {@code Edge} class represents a edge in a graph.
@@ -48,7 +47,6 @@ public class Edge implements Identifiable {
     private Node start;
     /** The end node of this edge. */
     private Node end;
-    public Level Lower;
 
     /**
      * Constructs a new {@code Edge} object with a given given start-
@@ -60,42 +58,17 @@ public class Edge implements Identifiable {
      * {@code end} is null.
      */
     public Edge(int id, Node start, Node end) {
-        if (start == null || end == null)
-          throw new NullPointerException(GraphLocalization.getSingleton().getString("ds.graph.StartEndNodeIsNullException"));
+        if (start == null || end == null) {
+            throw new NullPointerException(GraphLocalization.getSingleton().getString("ds.graph.StartEndNodeIsNullException"));
+        }
         this.edgeID = id;
         this.start = start;
         this.end = end;
     }
 
-		public void setP( int id, Node start, Node end ) {
-			this.edgeID = id;
-			this.start = start;
-			this.end = end;
-		}
-
-
     /**
-     * Returns the ID of this edge. Runtime O(1).
-     * @return the ID of this edge.
-     */
-    public int id() {
-        return edgeID;
-    }
-
-    public boolean isIncidentTo(Node node) {
-        return start.equals(node) || end.equals(node);
-    }
-
-    /**
-     * Returns the start node of this edge. Runtime O(1).
-     * @return the start node of this edge.
-     */
-    public Node start() {
-        return start;
-    }
-
-    /**
-     * Returns the end node of this edge. Runtime O(1).
+     * Returns the end node of this edge. Guaranteed to be non-null.
+     * Runtime O(1).
      * @return the end node of this edge.
      */
     public Node end() {
@@ -103,8 +76,37 @@ public class Edge implements Identifiable {
     }
 
     /**
+     * Returns the ID of this edge. Runtime O(1).
+     * @return the ID of this edge.
+     */
+    @Override
+    public int id() {
+        return edgeID;
+    }
+
+    /**
+     * Checks whether this edge is incident to the specified the node.
+     * @param node the node for which incidence is tested. Runtime O(1).
+     * @return {@code true} if the node is incident to this edge, {@code false}
+     * otherwise.
+     */
+    public boolean isIncidentTo(Node node) {
+        return start.equals(node) || end.equals(node);
+    }
+
+    /**
+     * Checks whether this edge is a loop (i.e. if start and end node are the
+     * same).  Runtime O(1).
+     * @return {@code true} if this edge is a loop, {@code false} otherwise.
+     */
+    public boolean isLoop() {
+        return start.equals(end);
+    }
+
+    /**
      * Given a node {@code node}, this method returns the other node
-     * (the node that is not {@code node}).
+     * (the node that is not {@code node}). If this edge is a loop, the single
+     * node the loop is adjacent to is returned.
      * @param node the node this method shall give the opposite of.
      * @return the opposite node to {@code node}.
      */
@@ -114,10 +116,29 @@ public class Edge implements Identifiable {
         } else if (node.id() != start.id() && node.id() == end.id()) {
             return start;
         } else if (node.id() == start.id() && node.id() == end.id()) {
-            return null;
+            return start;
         } else {
             throw new IllegalArgumentException("node=" + node + " edge " + this);
         }
+    }
+
+    /**
+     * Checks whether this edge is parallel to the specified one (i.e. if the
+     * start and end points are the same).
+     * @param edge the edge to be tested to be parallel.
+     * @return
+     */
+    public boolean isParallel(Edge edge) {
+        return edge.start().equals(start) && edge.end().equals(end);
+    }
+
+    /**
+     * Returns the start node of this edge. Guaranteed to be non-null.
+     * Runtime O(1).
+     * @return the start node of this edge.
+     */
+    public Node start() {
+        return start;
     }
 
     /**
