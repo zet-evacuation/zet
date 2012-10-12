@@ -10,7 +10,7 @@ import ds.mapping.IntegerIntegerMapping;
 
 /**
  *
- * @author gross
+ * @author Martin Groß
  */
 public class IdentifiableIntegerIntegerMapping<T extends Identifiable> {
     
@@ -20,12 +20,12 @@ public class IdentifiableIntegerIntegerMapping<T extends Identifiable> {
         this.mapping = mapping;
     }
 
-    public int minimum(T edge, int firstlastArrival, int last) {
-        throw new UnsupportedOperationException("Not yet implemented");
+    public int minimum(T edge, int first, int last) {
+        return mapping.get(edge).minimum(first, last);
     }    
     
-    public void decrease(T edge, int lastArrival, int time) {
-        throw new UnsupportedOperationException("Not yet implemented");
+    public void decrease(T edge, int first, int last, int amount) {
+        mapping.get(edge).decrease(first, last, amount);
     }
 
 }
