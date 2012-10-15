@@ -21,10 +21,16 @@ public class IdentifiableIntegerIntegerMapping<T extends Identifiable> {
     }
 
     public int minimum(T identifiableObject, int first, int last) {
+        if (first == last) {
+            return Integer.MAX_VALUE;
+        }
         return mapping.isDefinedFor(identifiableObject)? mapping.get(identifiableObject).minimum(first, last) : 0;
     }    
     
     public void decrease(T identifiableObject, int first, int last, int amount) {
+        if (first == last) {
+            return;
+        }
         mapping.get(identifiableObject).decrease(first, last, amount);
     }
 

@@ -61,9 +61,9 @@ public class FlowOverTimeImplicit extends FlowOverTimeInterface {
 			timeHorizon = Math.max( timeHorizon, eaaPath.getArrivalTime());
 			totalCost += eaaPath.getCapacity() * eaaPath.getArrivalTime();
 		}
-
-//		if( flowAmount != sum )
-//			throw new IllegalStateException( "Flow value in Edge based and Path based differ!\nEdge-Based: " + flowAmount + "\nPath-Based: " + sum );
+            System.out.println(sum);
+		if( flowAmount != sum )
+			throw new IllegalStateException( "Flow value in Edge based and Path based differ!\nEdge-Based: " + flowAmount + "\nPath-Based: " + sum );
 		
 		/*
 		ChainDecomposition2 pd = new ChainDecomposition2();
