@@ -14,18 +14,22 @@ import ds.mapping.IntegerObjectMapping;
  */
 public class IdentifiableIntegerObjectMapping<D extends Identifiable, R> {
 
-    private IdentifiableObjectMapping<D, IntegerObjectMapping<R>> mapping;
+    private IdentifiableObjectMapping<D, IntegerObjectMapping> mapping;
     private Class<R> type;
 
     public IdentifiableIntegerObjectMapping(int domainSize, Class<R> type) {
+        this.mapping = new IdentifiableObjectMapping<>(domainSize, IntegerObjectMapping.class);
         this.type = type;
     }
 
-    public R get(D node, int time) {
-        throw new UnsupportedOperationException("Not yet implemented");
+    public R get(D identifiableObject, int time) {
+        return mapping.isDefinedFor(identifiableObject)? type.cast(mapping.get(identifiableObject).get(time)) : null;
     }
 
-    public void set(D w, int i, R edge) {
-        throw new UnsupportedOperationException("Not yet implemented");
+    public void set(D identifiableObject, int time, R value) {
+        if (!mapping.isDefinedFor(identifiableObject)) {
+            mapping.set(identifiableObject, new IntegerObjectMapping());
+        }
+        mapping.get(identifiableObject).set(time, value);
     }
 }
