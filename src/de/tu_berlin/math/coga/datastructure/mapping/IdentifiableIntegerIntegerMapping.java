@@ -20,12 +20,12 @@ public class IdentifiableIntegerIntegerMapping<T extends Identifiable> {
         this.mapping = mapping;
     }
 
-    public int minimum(T edge, int first, int last) {
-        return mapping.isDefinedFor(edge)? 0 : mapping.get(edge).minimum(first, last);
+    public int minimum(T identifiableObject, int first, int last) {
+        return mapping.isDefinedFor(identifiableObject)? mapping.get(identifiableObject).minimum(first, last) : 0;
     }    
     
-    public void decrease(T edge, int first, int last, int amount) {
-        mapping.get(edge).decrease(first, last, amount);
+    public void decrease(T identifiableObject, int first, int last, int amount) {
+        mapping.get(identifiableObject).decrease(first, last, amount);
     }
 
 }
