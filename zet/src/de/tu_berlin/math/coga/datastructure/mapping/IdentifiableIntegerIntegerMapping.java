@@ -21,7 +21,7 @@ public class IdentifiableIntegerIntegerMapping<T extends Identifiable> {
     }
 
     public int minimum(T edge, int first, int last) {
-        return mapping.get(edge).minimum(first, last);
+        return mapping.isDefinedFor(edge)? 0 : mapping.get(edge).minimum(first, last);
     }    
     
     public void decrease(T edge, int first, int last, int amount) {
