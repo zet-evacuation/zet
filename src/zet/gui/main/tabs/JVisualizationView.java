@@ -26,6 +26,7 @@ import ds.PropertyContainer;
 import gui.GUIControl;
 import gui.ZETMain;
 import de.tu_berlin.math.coga.components.JArrayPanel;
+import gui.ZETLoader;
 import gui.visualization.AbstractVisualizationView;
 import gui.visualization.VisualizationPanel;
 import zet.gui.main.tabs.visualization.ZETVisualization;
@@ -272,7 +273,7 @@ public class JVisualizationView extends AbstractVisualizationView<ZETVisualizati
 					visualization.getCamera().getUp().parse( txtCameraUp.getText() );
 					visualization.repaint();
 				} catch( ParseException ex ) {
-					ZETMain.sendError( loc.getStringWithoutPrefix( "gui.error.CameraParseError" ) );
+					ZETLoader.sendError( loc.getStringWithoutPrefix( "gui.error.CameraParseError" ) );
 				}
 			}
 		});
@@ -285,7 +286,7 @@ public class JVisualizationView extends AbstractVisualizationView<ZETVisualizati
 		resetCameraPosition.addActionListener( new ActionListener() {
 			@Override
 			public void actionPerformed( ActionEvent ae ) {
-				ZETMain.sendError( "Not supported yet." );
+				ZETLoader.sendError( "Not supported yet." );
 			}
 		});
 		cameraPanel.set( resetCameraPosition, 0, 9 );

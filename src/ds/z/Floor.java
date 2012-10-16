@@ -29,7 +29,6 @@ import ds.z.exception.PolygonNotClosedException;
 import ds.z.exception.RoomIntersectException;
 import ds.z.exception.TeleportEdgeInvalidTargetException;
 import ds.z.exception.UnknownZModelError;
-import gui.ZETMain;
 import io.z.FloorConverter;
 import io.z.XMLConverter;
 import java.awt.Rectangle;
@@ -540,10 +539,8 @@ public class Floor implements Serializable, Cloneable, Iterable<Room>, ZFormatOb
 				}
 			}
 		} catch( InvalidRoomZModelError ex ) {
-			ZETMain.sendError( ex.getMessage() );
 			throw ex;
 		} catch ( Exception ex ) {
-			ZETMain.sendError( ex.getMessage() );
 			throw new UnknownZModelError( "Unexpected error during copying. Try to check the model. \n The failure occured copying the room '" + roomName + "'", ex );
 		}
 		return deepCopy;

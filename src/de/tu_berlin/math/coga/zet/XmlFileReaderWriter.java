@@ -20,8 +20,10 @@ import ds.graph.problem.MinimumCostFlowProblem;
 import ds.z.ConcreteAssignment;
 import ds.z.Project;
 import ds.z.ZControl;
+import ds.z.ZLocalization;
 import gui.AlgorithmControl;
 import gui.GraphConverterAlgorithms;
+import gui.ZETLoader;
 import gui.ZETMain;
 import gui.editor.properties.PropertyLoadException;
 import java.io.File;
@@ -107,7 +109,7 @@ public class XmlFileReaderWriter {
 		try {
 			PropertyContainer.getInstance().applyParameters( propertyFile );
 		} catch( PropertyLoadException ex ) {
-			ZETMain.exit( ex.getMessage() );
+			ZETLoader.exit( ex.getMessage() );
 		}
 		
 		

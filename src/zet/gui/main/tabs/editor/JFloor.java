@@ -30,7 +30,7 @@ import event.EventServer;
 import event.ZModelChangedEvent;
 import gui.GUIControl;
 import gui.GUIOptionManager;
-import gui.ZETMain;
+import gui.ZETLoader;
 import gui.ZETProperties;
 import gui.editor.CoordinateTools;
 import gui.editor.planimage.PlanImage;
@@ -227,7 +227,7 @@ public class JFloor extends AbstractFloor implements EventListener<ZModelChanged
 			planImage.setOffsetY( -floorMin_y );
 
 			if( showDifferentFloor )
-				ZETMain.sendMessage( DefaultLoc.getSingleton().getString( "gui.message.FloorSuccessfullyLoaded" ) );
+				ZETLoader.sendMessage( DefaultLoc.getSingleton().getString( "gui.message.FloorSuccessfullyLoaded" ) );
 		}
 
 		revalidate();
@@ -566,7 +566,7 @@ public class JFloor extends AbstractFloor implements EventListener<ZModelChanged
 		}
 		if( e.getID() == MouseEvent.MOUSE_PRESSED ) {
 			// Clear status bar
-			ZETMain.sendError( "" );
+			ZETLoader.sendError( "" );
 			JEditor.sendReady();
 
 			if( e.getButton() == MouseEvent.BUTTON1 )
@@ -598,7 +598,7 @@ public class JFloor extends AbstractFloor implements EventListener<ZModelChanged
 						final int yNew = dragTargets.get( 0 ).y;
 						zcontrol.movePoints( draggedPlanPoints, xNew - xOld, yNew - yOld );
 					} catch( Exception ex ) {
-						ZETMain.sendError( DefaultLoc.getSingleton().getString( "gui.message.ExceptionDuringDrag" ) );
+						ZETLoader.sendError( DefaultLoc.getSingleton().getString( "gui.message.ExceptionDuringDrag" ) );
 						ex.printStackTrace( System.err );
 					}
 
@@ -863,7 +863,7 @@ public class JFloor extends AbstractFloor implements EventListener<ZModelChanged
 				//parent = findParent (findComponentAt (e.getPoint ()));
 				parent = findParent( findRoomAt( point ) );
 				if( parent == null ) {
-					ZETMain.sendError( DefaultLoc.getSingleton().getString( "gui.error.SelectARoom" ) );
+					ZETLoader.sendError( DefaultLoc.getSingleton().getString( "gui.error.SelectARoom" ) );
 					return;
 				}
 			}
@@ -878,13 +878,13 @@ public class JFloor extends AbstractFloor implements EventListener<ZModelChanged
 				//parent = findParent (findComponentAt (e.getPoint ()));
 				parent = findParent( findRoomAt( point ) );
 				if( parent == null ) {
-					ZETMain.sendError( DefaultLoc.getSingleton().getString( "gui.error.SelectARoom" ) );
+					ZETLoader.sendError( DefaultLoc.getSingleton().getString( "gui.error.SelectARoom" ) );
 					return;
 				}
 
 				// Check whether we clicked into the same room as before
 				if( !parent.equals( ((Area) zcontrol.latestPolygon()).getAssociatedRoom() ) ) {
-					ZETMain.sendError( DefaultLoc.getSingleton().getString( "gui.error.SelectCoordinatesInSameRoom" ) );
+					ZETLoader.sendError( DefaultLoc.getSingleton().getString( "gui.error.SelectCoordinatesInSameRoom" ) );
 					return;
 				}
 			}
@@ -892,7 +892,7 @@ public class JFloor extends AbstractFloor implements EventListener<ZModelChanged
 
 			// check if the new point will close the polygon or the area will be zero
 			if( zcontrol.latestPolygon().willClose( p1, p2 ) && zcontrol.latestPolygon().area() == 0 && !(zcontrol.latestPolygon() instanceof Barrier) ) {
-				ZETMain.sendError( DefaultLoc.getSingleton().getString( "gui.error.RectangleCreationZeroArea" ) );
+				ZETLoader.sendError( DefaultLoc.getSingleton().getString( "gui.error.RectangleCreationZeroArea" ) );
 				return;
 			}
 			lastClick = point;
@@ -918,7 +918,7 @@ public class JFloor extends AbstractFloor implements EventListener<ZModelChanged
 				//parent = findParent (findComponentAt (e.getPoint ()));
 				parent = findParent( findRoomAt( point ) );
 				if( parent == null ) {
-					ZETMain.sendError( DefaultLoc.getSingleton().getString( "gui.error.SelectARoom" ) );
+					ZETLoader.sendError( DefaultLoc.getSingleton().getString( "gui.error.SelectARoom" ) );
 					return;
 				}
 			}
@@ -930,7 +930,7 @@ public class JFloor extends AbstractFloor implements EventListener<ZModelChanged
 			PlanPoint p1 = new PlanPoint( CoordinateTools.translateToModel( rasterizedPaintMode ? getNextRasterPoint( lastClick ) : lastClick ) );
 			PlanPoint p2 = new PlanPoint( CoordinateTools.translateToModel( rasterizedPaintMode ? getNextRasterPoint( point ) : point ) );
 			if( lastClick.getX() == p2.getX() || lastClick.getY() == p2.getY() ) {
-				ZETMain.sendError( DefaultLoc.getSingleton().getString( "gui.error.RectangleCreationZeroArea" ) );
+				ZETLoader.sendError( DefaultLoc.getSingleton().getString( "gui.error.RectangleCreationZeroArea" ) );
 				return;
 			}
 			LinkedList<PlanPoint> points = new LinkedList<>();
@@ -984,22 +984,22 @@ public class JFloor extends AbstractFloor implements EventListener<ZModelChanged
 //					else if( ne.getTarget() == a.getLowerLevelStart() )
 //						a.setLowerLevel( ne.getSource(), a.getLowerLevelEnd() );
 //					else
-//						ZETMain.sendError( DefaultLoc.getSingleton().getString( "gui.error.ConnectedEdgeTrailsOnly" ) );
+//						ZETLoader.sendError( DefaultLoc.getSingleton().getString( "gui.error.ConnectedEdgeTrailsOnly" ) );
 //// TODO enable this again
 ////					if( !e.isControlDown() ) {
 ////						// Workaround to keep the previous edit mode setting
 ////						GUIOptionManager.setEditMode( GUIOptionManager.getPreviousEditMode() );
 ////
 ////						GUIOptionManager.setEditMode( EditMode.StairAreaMarkUpperLevel );
-////						ZETMain.sendMessage( DefaultLoc.getSingleton().getString( "gui.message.SelectUpperStairLevel" ) );
+////						ZETLoader.sendMessage( DefaultLoc.getSingleton().getString( "gui.message.SelectUpperStairLevel" ) );
 ////					} else
 ////						// Refresh our select lower level message
-////						ZETMain.sendMessage( DefaultLoc.getSingleton().getString( "gui.message.SelectLowerStairLevel" ) );
+////						ZETLoader.sendMessage( DefaultLoc.getSingleton().getString( "gui.message.SelectLowerStairLevel" ) );
 //				} catch( IllegalArgumentException ex ) {
-//					ZETMain.sendError( ex.getLocalizedMessage() );
+//					ZETLoader.sendError( ex.getLocalizedMessage() );
 //				}
 //			} else
-//				ZETMain.sendError( DefaultLoc.getSingleton().getString( "gui.error.ClickOnStairEdge" ) );
+//				ZETLoader.sendError( DefaultLoc.getSingleton().getString( "gui.error.ClickOnStairEdge" ) );
 //		} else if( editMode. == EditMode.StairAreaMarkUpperLevel ) {
 //			// The stair must be selected when we enter this code
 //			JPolygon stair = selectedPolygons.getFirst();
@@ -1018,19 +1018,19 @@ public class JFloor extends AbstractFloor implements EventListener<ZModelChanged
 //					else if( ne.getTarget() == a.getUpperLevelStart() )
 //						a.setUpperLevel( ne.getSource(), a.getUpperLevelEnd() );
 //					else
-//						ZETMain.sendError( DefaultLoc.getSingleton().getString( "gui.error.ConnectedEdgeTrailsOnly" ) );
+//						ZETLoader.sendError( DefaultLoc.getSingleton().getString( "gui.error.ConnectedEdgeTrailsOnly" ) );
 //// TODO enable this again
 ////					if( !e.isControlDown() ) {
 ////						GUIOptionManager.setEditMode( GUIOptionManager.getPreviousEditMode() );
-////						ZETMain.sendMessage( DefaultLoc.getSingleton().getString( "gui.message.StairSuccessfullyCreated" ) );
+////						ZETLoader.sendMessage( DefaultLoc.getSingleton().getString( "gui.message.StairSuccessfullyCreated" ) );
 ////					} else
 ////						// Refresh our select upper level message
-////						ZETMain.sendMessage( DefaultLoc.getSingleton().getString( "gui.message.SelectUpperStairLevel" ) );
+////						ZETLoader.sendMessage( DefaultLoc.getSingleton().getString( "gui.message.SelectUpperStairLevel" ) );
 //				} catch( IllegalArgumentException ex ) {
-//					ZETMain.sendError( ex.getLocalizedMessage() );
+//					ZETLoader.sendError( ex.getLocalizedMessage() );
 //				}
 //			} else
-//				ZETMain.sendError( DefaultLoc.getSingleton().getString( "gui.error.ClickOnStairEdge" ) );
+//				ZETLoader.sendError( DefaultLoc.getSingleton().getString( "gui.error.ClickOnStairEdge" ) );
 //		} else {
 
 //			} else {
@@ -1054,11 +1054,11 @@ public class JFloor extends AbstractFloor implements EventListener<ZModelChanged
 				setFloorMode( FloorMode.PointWiseStart );
 			} catch( IllegalStateException ex ) {
 				if( ex.getMessage().equals( "No edges" ) )
-					ZETMain.sendError( DefaultLoc.getSingleton().getString( "gui.error.CreateAtLeastThreeEdges" ) );
+					ZETLoader.sendError( DefaultLoc.getSingleton().getString( "gui.error.CreateAtLeastThreeEdges" ) );
 				else if( ex.getMessage().equals( "Area zero" ) )
-					ZETMain.sendError( DefaultLoc.getSingleton().getString( "gui.error.RectangleCreationZeroArea" ) );
+					ZETLoader.sendError( DefaultLoc.getSingleton().getString( "gui.error.RectangleCreationZeroArea" ) );
 				else if( ex.getMessage().equals( "Three edges" ) )
-					ZETMain.sendError( DefaultLoc.getSingleton().getString( "gui.error.CreateAtLeastThreeEdges" ) );
+					ZETLoader.sendError( DefaultLoc.getSingleton().getString( "gui.error.CreateAtLeastThreeEdges" ) );
 				return;
 			}
 			polygonFinishedHandler();
@@ -1074,11 +1074,11 @@ public class JFloor extends AbstractFloor implements EventListener<ZModelChanged
 				zcontrol.createNewPolygon( editMode.getC(), parent );
 		} catch( AssignmentException ex ) {
 			if( ex.getState() == AssignmentException.State.NoAssignmentCreated )
-				ZETMain.sendError( DefaultLoc.getSingleton().getString( "gui.error.CreateAnAssignmentFirst" ) );
+				ZETLoader.sendError( DefaultLoc.getSingleton().getString( "gui.error.CreateAnAssignmentFirst" ) );
 			else if( ex.getState() == AssignmentException.State.NoAssignmentSelected )
-				ZETMain.sendError( DefaultLoc.getSingleton().getString( "gui.error.SetCurrentAssignmentFirst" ) );
+				ZETLoader.sendError( DefaultLoc.getSingleton().getString( "gui.error.SetCurrentAssignmentFirst" ) );
 			else
-				ZETMain.sendError( "Unknown Error during polygon creation." );
+				ZETLoader.sendError( "Unknown Error during polygon creation." );
 		}
 	}
 					
@@ -1112,7 +1112,7 @@ public class JFloor extends AbstractFloor implements EventListener<ZModelChanged
 		//lastPlanClick = null;
 		if( editMode == EditMode.StairAreaCreationPointwise || editMode == EditMode.StairAreaCreation ) {
 			GUIOptionManager.setEditMode( EditMode.StairAreaMarkLowerLevel );
-			ZETMain.sendMessage( DefaultLoc.getSingleton().getString( "gui.message.SelectLowerStairLevel" ) );
+			ZETLoader.sendMessage( DefaultLoc.getSingleton().getString( "gui.message.SelectLowerStairLevel" ) );
 		}
 	}
 
@@ -1285,7 +1285,7 @@ public class JFloor extends AbstractFloor implements EventListener<ZModelChanged
 						newPolygon = null;
 						lastClick = null;
 						//lastPlanClick = null;
-						ZETMain.sendMessage( DefaultLoc.getSingleton().getString( "gui.message.PolgonCreationAborted" ) );
+						ZETLoader.sendMessage( DefaultLoc.getSingleton().getString( "gui.message.PolgonCreationAborted" ) );
 					}
 					break;
 				case KeyEvent.VK_DELETE:

@@ -489,7 +489,7 @@ public class GUIControl implements AlgorithmListener {
 		JProgressBarDialog pbd = new JProgressBarDialog( editor, GUILocalization.getSingleton().getStringWithoutPrefix( "batch.tasks.buildVisualizationDatastructure" ), true, visualizationDataStructure );
 		pbd.executeTask();
 		pbd.setVisible( true );
-		ZETMain.sendMessage( GUILocalization.getSingleton().getStringWithoutPrefix( "batch.tasks.progress.visualizationDatastructureComplete" ) );
+		ZETLoader.sendMessage( GUILocalization.getSingleton().getStringWithoutPrefix( "batch.tasks.progress.visualizationDatastructureComplete" ) );
 
 		visualization.setControl( visualizationDataStructure.getControl() );
 		// create a copy here:
@@ -619,7 +619,7 @@ public class GUIControl implements AlgorithmListener {
 			//DatFileReaderWriter.writeFile( zcontrol.getProject().getName(), problem, zcontrol.getProject().getProjectFile().getName().substring( 0, zcontrol.getProject().getProjectFile().getName().length() - 4 ) + ".dat", originalProblem.getZToGraphMapping() );
 			throw new FileNotFoundException();
 		} catch( FileNotFoundException ex ) {
-			ZETMain.sendError( "FileNotFoundException" );
+			ZETLoader.sendError( "FileNotFoundException" );
 			ex.printStackTrace( System.err );
 		}
 
@@ -717,7 +717,7 @@ public class GUIControl implements AlgorithmListener {
 				showErrorMessage( GUILocalization.getSingleton().getString( "gui.editor.JEditor.error.SaveTitle" ), GUILocalization.getSingleton().getString( "gui.editor.JEditor.error.Save" ) );
 			}
 			editview.displayProject( zcontrol );
-			ZETMain.sendMessage( GUILocalization.getSingleton().getString( "gui.editor.JEditor.message.saved" ) );
+			ZETLoader.sendMessage( GUILocalization.getSingleton().getString( "gui.editor.JEditor.message.saved" ) );
 		}
 
 	}
@@ -738,7 +738,7 @@ public class GUIControl implements AlgorithmListener {
 				ex.printStackTrace( System.err );
 				return;
 			}
-			ZETMain.sendMessage( GUILocalization.getSingleton().getString( "gui.editor.JEditor.message.saved" ) );
+			ZETLoader.sendMessage( GUILocalization.getSingleton().getString( "gui.editor.JEditor.message.saved" ) );
 		}
 	}
 
@@ -802,7 +802,7 @@ public class GUIControl implements AlgorithmListener {
 		zcontrol.newProject();
 		editor.loadProject();	// Load the currently loaded project by the control file
 		algorithmControl.setProject( zcontrol.getProject() );
-		ZETMain.sendMessage( status );
+		ZETLoader.sendMessage( status );
 	}
 
 	public void saveAsDXF() {
@@ -814,7 +814,7 @@ public class GUIControl implements AlgorithmListener {
 			ex.printStackTrace( System.err );
 			return;
 		}
-		ZETMain.sendMessage( GUILocalization.getSingleton().getString( "gui.editor.JEditor.message.dxfComplete" ) );
+		ZETLoader.sendMessage( GUILocalization.getSingleton().getString( "gui.editor.JEditor.message.dxfComplete" ) );
 	}
 
 	/**
@@ -835,7 +835,7 @@ public class GUIControl implements AlgorithmListener {
 	public void newFloor() {
 		Floor f = zcontrol.createNewFloor();
 		f.setMinimumSize( ZETProperties.getDefaultFloorSizeMinX(), ZETProperties.getDefaultFloorSizeMinY(), ZETProperties.getDefaultFloorSizeMaxX()-ZETProperties.getDefaultFloorSizeMinX(), ZETProperties.getDefaultFloorSizeMaxY()-ZETProperties.getDefaultFloorSizeMinY() );
-		ZETMain.sendMessage( "Neue Etage angelegt." ); // TODO loc
+		ZETLoader.sendMessage( "Neue Etage angelegt." ); // TODO loc
 		editor.getEditView().updateFloorList(); // update the floor-boxes in the GUI
 		editor.getEditView().changeFloor( f );
 		editor.getQuickVisualizationView().updateQuickFloorlist();
@@ -887,9 +887,9 @@ public class GUIControl implements AlgorithmListener {
 			JProgressBarDialog pbd = new JRasterizeProgressBarDialog( editor, "Rastern", true, rasterize );
 			pbd.executeTask();
 			pbd.setVisible( true );
-			ZETMain.sendMessage( GUILocalization.getSingleton().getString( "gui.message.RasterizationComplete" ) );
+			ZETLoader.sendMessage( GUILocalization.getSingleton().getString( "gui.message.RasterizationComplete" ) );
 		} catch( Exception ex ) {
-			ZETMain.sendError( ex.getLocalizedMessage() );
+			ZETLoader.sendError( ex.getLocalizedMessage() );
 		}
 	}
 
@@ -902,12 +902,12 @@ public class GUIControl implements AlgorithmListener {
 
 			if( res != null ) {
 				zcontrol.getProject().getBuildingPlan().distributeEvacuees( Integer.parseInt( res ) );
-				ZETMain.sendMessage( GUILocalization.getSingleton().getString( "gui.message.RasterizationComplete" ) );
+				ZETLoader.sendMessage( GUILocalization.getSingleton().getString( "gui.message.RasterizationComplete" ) );
 			}
 		} catch( NumberFormatException ex ) {
-			ZETMain.sendError( GUILocalization.getSingleton().getString( "gui.error.NonParsableNumber" ) );
+			ZETLoader.sendError( GUILocalization.getSingleton().getString( "gui.error.NonParsableNumber" ) );
 		} catch( TooManyPeopleException ex ) {
-			ZETMain.sendError( ex.getLocalizedMessage() );
+			ZETLoader.sendError( ex.getLocalizedMessage() );
 		}
 	}
 
@@ -1006,7 +1006,7 @@ public class GUIControl implements AlgorithmListener {
 				CoordinateTools.setPictureZoomFactor( (double) ip.getMillimeterCount() / (double) ip.getPixelCount() );
 				editview.getFloor().getPlanImage().setImage( image );
 				menuBar.setEnabledBuildingPlan( true );
-				ZETMain.sendMessage( "Plan für Hintergrunddarstellung geladen." );
+				ZETLoader.sendMessage( "Plan für Hintergrunddarstellung geladen." );
 			}
 		}
 	}
@@ -1045,31 +1045,31 @@ public class GUIControl implements AlgorithmListener {
 	}
 
 	public void showOptionsDialog() {
-		ZETMain.ptmOptions.getRoot().reloadFromPropertyContainer();
+		ZETLoader.ptmOptions.getRoot().reloadFromPropertyContainer();
 
-		JOptionsDialog opt = new JOptionsDialog( ZETMain.ptmOptions );
+		JOptionsDialog opt = new JOptionsDialog( ZETLoader.ptmOptions );
 		opt.setModal( true );
 		opt.setVisible( true );
 		
 		try {	// Save results in options file
-			PropertyContainer.saveConfigFile( ZETMain.ptmOptions, new File( ZETMain.optionFilename ) );
+			PropertyContainer.saveConfigFile( ZETLoader.ptmOptions, new File( ZETLoader.optionFilename ) );
 		} catch( IOException ex ) {
-			ZETMain.sendError( "Error saving config file!" ); // TODO loc
+			ZETLoader.sendError( "Error saving config file!" ); // TODO loc
 		}
 
 	}
 
 	public void showSettingsDialog() {
-		ZETMain.ptmInformation.getRoot().reloadFromPropertyContainer();
+		ZETLoader.ptmInformation.getRoot().reloadFromPropertyContainer();
 
-		JOptionsDialog opt = new JOptionsDialog( ZETMain.ptmInformation );
+		JOptionsDialog opt = new JOptionsDialog( ZETLoader.ptmInformation );
 		opt.setModal( true );
 		opt.setVisible( true );
 
 		try {	// Save results in settings file
-			PropertyContainer.saveConfigFile( ZETMain.ptmInformation, new File( ZETMain.informationFilename ) );
+			PropertyContainer.saveConfigFile( ZETLoader.ptmInformation, new File( ZETLoader.informationFilename ) );
 		} catch( IOException ex ) {
-			ZETMain.sendError( "Error saving settings file!" ); // TODO loc
+			ZETLoader.sendError( "Error saving settings file!" ); // TODO loc
 		}
 	}
 
@@ -1153,7 +1153,7 @@ public class GUIControl implements AlgorithmListener {
 						try {
 							algorithmControl.throwError();
 						} catch( RoomEdgeInvalidTargetException ex ) {
-							if( ZETMain.isDebug() ) {
+							if( ZETLoader.isDebug() ) {
 								log.warning( "DEBUG-out:" );
 								log.warning( "Error during conversion in Room " + ex.getInvalidEdge().getRoom().getName() + ". " + ex.getMessage() );
 								log.warning( "" );
@@ -1215,7 +1215,7 @@ public class GUIControl implements AlgorithmListener {
 						visualizationToolBar.setEnabledPlayback( true );
 						editor.getQuickVisualizationView().getLeftPanel().getMainComponent().setSimulationData( algorithmControl.getCellularAutomaton(), algorithmControl.getContainer(), algorithmControl.getMapping() );
 						editor.getQuickVisualizationView().displayFloor( editview.getCurrentFloor() ); // hier startet ein task!
-						ZETMain.sendMessage( "Simulation beendet" );
+						ZETLoader.sendMessage( "Simulation beendet" );
 						//EventServer.getInstance().dispatchEvent( new MessageEvent<>( this, MessageType.Status, "Simulation finished" ) );
 					}
 				}
@@ -1322,7 +1322,7 @@ public class GUIControl implements AlgorithmListener {
 						visualizationToolBar.setEnabledPlayback( true );
 						editor.getQuickVisualizationView().getLeftPanel().getMainComponent().setSimulationData( algorithmControl.getCellularAutomaton(), algorithmControl.getContainer(), algorithmControl.getMapping() );
 						editor.getQuickVisualizationView().displayFloor( editview.getCurrentFloor() ); // hier startet ein task!
-						ZETMain.sendMessage( "Simulation beendet" );
+						ZETLoader.sendMessage( "Simulation beendet" );
 
 	
 	}
@@ -1447,7 +1447,7 @@ public class GUIControl implements AlgorithmListener {
 				control.resetTime();
 			else {
 				visualizationToolBar.setPlayButtonEnabled( false );
-				ZETMain.sendMessage( "Replaying visualization finished." );
+				ZETLoader.sendMessage( "Replaying visualization finished." );
 			}
 	}
 

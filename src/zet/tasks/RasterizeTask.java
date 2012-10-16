@@ -21,7 +21,6 @@
 package zet.tasks;
 
 import ds.z.Project;
-import gui.ZETMain;
 
 /**
  * Performs the rasterization of a {@link ds.z.BuildingPlan}.
@@ -46,7 +45,7 @@ public class RasterizeTask implements Runnable {
 		try {
 			project.getBuildingPlan().rasterize();
 		} catch( Exception ex ) {
-			ZETMain.sendError( ex.getLocalizedMessage () );
+			//ZETMain.sendError( ex.getLocalizedMessage () );
 		}
 	}	
 }

@@ -30,6 +30,7 @@ import ds.ca.evac.PotentialManager;
 import ds.ca.evac.InitialConfiguration;
 import ds.ca.evac.Room;
 import ds.ca.evac.StaticPotential;
+import gui.ZETLoader;
 import gui.ZETMain;
 import java.util.LinkedList;
 
@@ -156,7 +157,7 @@ public class VisualResultsRecorder {
 	 * the action should refer to the original configuration.
 	 */
 	public void recordAction( Action action ) throws Action.CADoesNotMatchException {
-		if( !ZETMain.useVisualization )
+		if( !ZETLoader.useVisualization )
 			return;
 		if( doRecord ) {
 			Action adoptedAction = action.adoptToCA( this.clonedCA );

@@ -8,6 +8,7 @@ import gui.GUIControl;
 import gui.ZETMain;
 import zet.gui.components.model.ComboBoxRenderer;
 import de.tu_berlin.math.coga.components.framework.Button;
+import gui.ZETLoader;
 import gui.editor.Areas;
 import gui.editor.CoordinateTools;
 import zet.gui.main.tabs.editor.EditMode;
@@ -185,7 +186,7 @@ public class JEditToolbar extends JToolBar implements ActionListener, PopupMenuL
 				control.rasterize();
 				break;
 			default:
-				ZETMain.sendError( loc.getString( "gui.UnknownCommand" ) + " '" + e.getActionCommand() + "'. " + loc.getString( "gui.ContactDeveloper" ) );
+				ZETLoader.sendError( loc.getString( "gui.UnknownCommand" ) + " '" + e.getActionCommand() + "'. " + loc.getString( "gui.ContactDeveloper" ) );
 				break;
 		}
 	}
@@ -286,9 +287,9 @@ public class JEditToolbar extends JToolBar implements ActionListener, PopupMenuL
 			val = val / 2.5d;
 			control.setZoomFactor( val / 100 );
 		} catch( ParseException ex2 ) {
-			ZETMain.sendError( loc.getString( "gui.error.NonParsableNumber" ) );
+			ZETLoader.sendError( loc.getString( "gui.error.NonParsableNumber" ) );
 		} catch( IllegalArgumentException ex ) {
-			ZETMain.sendError( loc.getString( ex.getLocalizedMessage() ) );
+			ZETLoader.sendError( loc.getString( ex.getLocalizedMessage() ) );
 		}
 	}
 

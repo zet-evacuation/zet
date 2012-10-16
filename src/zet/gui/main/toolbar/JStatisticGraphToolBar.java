@@ -11,6 +11,7 @@ import gui.GUIControl;
 import gui.ZETMain;
 import de.tu_berlin.math.coga.datastructure.NamedIndex;
 import de.tu_berlin.math.coga.components.framework.Button;
+import gui.ZETLoader;
 import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -81,7 +82,7 @@ public class JStatisticGraphToolBar extends JToolBar implements ActionListener, 
 		} else if( e.getActionCommand().equals( "saveResultsAs" ) ) {
 			// nothing. see source code in JZETMenuBar
 		} else
-			ZETMain.sendError( loc.getString( "gui.UnknownCommand" ) + " '" + e.getActionCommand() + "'. " + loc.getString( "gui.ContactDeveloper" ) );
+			ZETLoader.sendError( loc.getString( "gui.UnknownCommand" ) + " '" + e.getActionCommand() + "'. " + loc.getString( "gui.ContactDeveloper" ) );
 	}
 
 	public void localize() {
@@ -130,7 +131,7 @@ public class JStatisticGraphToolBar extends JToolBar implements ActionListener, 
 				else
 					return null;
 			} catch( IOException ex ) {
-				ZETMain.sendError( "Error while loading temp file: " + ex.getLocalizedMessage() );
+				ZETLoader.sendError( "Error while loading temp file: " + ex.getLocalizedMessage() );
 				return null;
 			}
 		}

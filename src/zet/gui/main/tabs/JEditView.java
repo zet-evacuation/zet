@@ -42,6 +42,7 @@ import ds.z.ZControl;
 import ds.z.ZLocalization;
 import gui.GUIControl;
 import gui.GUIOptionManager;
+import gui.ZETLoader;
 import gui.ZETMain;
 import gui.ZETProperties;
 import gui.editor.Areas;
@@ -577,7 +578,7 @@ public class JEditView extends AbstractSplitPropertyWindow<JFloorScrollPane<JFlo
 						int persons = Math.min( nfInteger.parse( txtNumberOfPersons.getText() ).intValue(), ((AssignmentArea)getLeftPanel().getMainComponent().getSelectedPolygons().get( 0 ).getPlanPolygon()).getMaxEvacuees() );
 						((AssignmentArea)getLeftPanel().getMainComponent().getSelectedPolygons().get( 0 ).getPlanPolygon()).setEvacuees( persons );
 					} catch( ParseException | IllegalArgumentException ex ) {
-						ZETMain.sendError( ex.getLocalizedMessage() );
+						ZETLoader.sendError( ex.getLocalizedMessage() );
 					}
 			}
 		} );
@@ -716,9 +717,9 @@ public class JEditView extends AbstractSplitPropertyWindow<JFloorScrollPane<JFlo
 					try {
 						((DelayArea)getLeftPanel().getMainComponent().getSelectedPolygons().get( 0 ).getPlanPolygon()).setSpeedFactor( nfFloat.parse( txtDelayFactor.getText() ).doubleValue() );
 					} catch( ParseException ex ) {
-						ZETMain.sendError( loc.getString( "gui.error.NonParsableFloatString" ) );
+						ZETLoader.sendError( loc.getString( "gui.error.NonParsableFloatString" ) );
 					} catch( IllegalArgumentException ex ) {
-						ZETMain.sendError( ex.getLocalizedMessage() );
+						ZETLoader.sendError( ex.getLocalizedMessage() );
 					}
 			}
 		} );
@@ -776,9 +777,9 @@ public class JEditView extends AbstractSplitPropertyWindow<JFloorScrollPane<JFlo
 					try {
 						((StairArea)getLeftPanel().getMainComponent().getSelectedPolygons().get( 0 ).getPlanPolygon()).setSpeedFactorUp( nfFloat.parse( txtStairFactorUp.getText() ).doubleValue() );
 					} catch( ParseException ex ) {
-						ZETMain.sendError( loc.getString( "gui.error.NonParsableFloatString" ) );
+						ZETLoader.sendError( loc.getString( "gui.error.NonParsableFloatString" ) );
 					} catch( IllegalArgumentException ex ) {
-						ZETMain.sendError( ex.getLocalizedMessage() );
+						ZETLoader.sendError( ex.getLocalizedMessage() );
 					}
 			}
 		} );
@@ -807,9 +808,9 @@ public class JEditView extends AbstractSplitPropertyWindow<JFloorScrollPane<JFlo
 					try {
 						((StairArea)getLeftPanel().getMainComponent().getSelectedPolygons().get( 0 ).getPlanPolygon()).setSpeedFactorDown( nfFloat.parse( txtStairFactorDown.getText() ).doubleValue() );
 					} catch( ParseException ex ) {
-						ZETMain.sendError( loc.getString( "gui.error.NonParsableFloatString" ) );
+						ZETLoader.sendError( loc.getString( "gui.error.NonParsableFloatString" ) );
 					} catch( IllegalArgumentException ex ) {
-						ZETMain.sendError( ex.getLocalizedMessage() );
+						ZETLoader.sendError( ex.getLocalizedMessage() );
 					}
 			}
 		} );
@@ -900,9 +901,9 @@ public class JEditView extends AbstractSplitPropertyWindow<JFloorScrollPane<JFlo
 					((EvacuationArea)getLeftPanel().getMainComponent().getSelectedPolygons().get( 0 ).getPlanPolygon()).setAttractivity( nfInteger.parse(
 									txtEvacuationAttractivity.getText() ).intValue() );
 				} catch( ParseException ex ) {
-					ZETMain.sendError( loc.getString( "gui.error.NonParsableNumberString" ) );
+					ZETLoader.sendError( loc.getString( "gui.error.NonParsableNumberString" ) );
 				} catch( IllegalArgumentException ex ) {
-					ZETMain.sendError( ex.getLocalizedMessage() );
+					ZETLoader.sendError( ex.getLocalizedMessage() );
 				}
 			}
 		} );
@@ -975,7 +976,7 @@ public class JEditView extends AbstractSplitPropertyWindow<JFloorScrollPane<JFlo
 						guiControl.moveFloorUp();
 						break;
 					default:
-						ZETMain.sendError( loc.getString( "gui.UnknownCommand" ) + " '" + e.getActionCommand() + "'. " + loc.getString( "gui.ContactDeveloper" ) );
+						ZETLoader.sendError( loc.getString( "gui.UnknownCommand" ) + " '" + e.getActionCommand() + "'. " + loc.getString( "gui.ContactDeveloper" ) );
 						break;
 				}
 			}
@@ -1014,10 +1015,10 @@ public class JEditView extends AbstractSplitPropertyWindow<JFloorScrollPane<JFlo
 					currentFloor.setMinimumSize( xOffset, yOffset, width, height );
 					getLeftPanel().getMainComponent().displayFloor();
 				} catch( ParseException ex ) {
-					ZETMain.sendError( "Parsing nicht möglich." ); // TODO loc
+					ZETLoader.sendError( "Parsing nicht möglich." ); // TODO loc
 					return;
 				}
-				ZETMain.sendMessage( "Floor-Size geändert." ); // TODO loc
+				ZETLoader.sendMessage( "Floor-Size geändert." ); // TODO loc
 			}
 		};
 		txtFloorxOffset.addActionListener( aclFloorSize );
@@ -1291,9 +1292,9 @@ public class JEditView extends AbstractSplitPropertyWindow<JFloorScrollPane<JFlo
 					((EvacuationArea)getLeftPanel().getMainComponent().getSelectedPolygons().get( 0 ).getPlanPolygon()).setAttractivity( nfInteger.parse(
 									txtEvacuationAttractivity.getText() ).intValue() );
 				} catch( ParseException ex ) {
-					ZETMain.sendError( loc.getString( "gui.error.NonParsableNumberString" ) );
+					ZETLoader.sendError( loc.getString( "gui.error.NonParsableNumberString" ) );
 				} catch( IllegalArgumentException ex ) {
-					ZETMain.sendError( ex.getLocalizedMessage() );
+					ZETLoader.sendError( ex.getLocalizedMessage() );
 				}
 			}
 		} );
