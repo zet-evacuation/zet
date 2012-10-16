@@ -20,6 +20,7 @@ import ds.z.exception.RoomIntersectException;
 import ds.z.exception.UnknownZModelError;
 import event.EventServer;
 import event.ZModelChangedEvent;
+import gui.ZETLoader;
 import gui.ZETMain;
 import java.io.File;
 import java.util.ArrayList;
@@ -94,12 +95,12 @@ public class ZControl {
 			project = ProjectLoader.load( projectFile );
 			project.setProjectFile( projectFile );
 			// Update the graphical user interface
-			ZETMain.sendMessage( loc.getString( "gui.editor.JEditor.message.loaded" ) );	// TODO output changed, use listener
+			//ZETMain.sendMessage( loc.getString( "gui.editor.JEditor.message.loaded" ) );	// TODO output changed, use listener
 		} catch( Exception ex ) {
 			System.err.println( loc.getString( "gui.editor.JEditor.error.loadErrorTitle" ) + ":" );
 			System.err.println( " - " + loc.getString( "gui.editor.JEditor.error.loadError" ) );
 			ex.printStackTrace( System.err );
-			ZETMain.sendMessage( loc.getString( "gui.editor.JEditor.message.loadError" ) );
+			//ZETMain.sendMessage( loc.getString( "gui.editor.JEditor.message.loadError" ) );
 			return false;
 		}
 		return true;
@@ -432,7 +433,7 @@ public class ZControl {
 			JOptionPane.showMessageDialog( null, ex.getMessage(), "Fehler", JOptionPane.ERROR_MESSAGE );
 			return;
 		} catch( UnknownZModelError ex ) {
-			if( ZETMain.isDebug() ) {
+			if( ZETLoader.isDebug() ) {
 				System.err.println( "DEBUG-out:" );
 				ex.printOriginalStackTrace();
 				System.out.println();

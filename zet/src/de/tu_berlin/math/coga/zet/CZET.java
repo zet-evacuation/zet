@@ -20,6 +20,7 @@ import ds.z.ConcreteAssignment;
 import ds.z.Project;
 import gui.AlgorithmControl;
 import gui.GraphConverterAlgorithms;
+import gui.ZETLoader;
 import gui.ZETMain;
 import gui.editor.properties.PropertyLoadException;
 import java.beans.PropertyChangeEvent;
@@ -384,7 +385,7 @@ public class CZET {
 		try {
 			PropertyContainer.getInstance().applyParameters( propertyFile );
 		} catch( PropertyLoadException ex ) {
-			ZETMain.exit( ex.getMessage() );
+			ZETLoader.exit( ex.getMessage() );
 		}
 		
 		ZETProjectFileReader fr;

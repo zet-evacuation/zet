@@ -9,6 +9,7 @@ import de.tu_berlin.math.coga.components.framework.Menu;
 import ds.PropertyContainer;
 import gui.GUIControl;
 import gui.GraphConverterAlgorithms;
+import gui.ZETLoader;
 import gui.ZETMain;
 import gui.editor.Areas;
 import gui.editor.properties.PropertyFilesSelectionModel;
@@ -230,7 +231,7 @@ public class JZETMenuBar extends JMenuBar implements ActionListener, Localized {
 		//mnuCreateGraphCompleteGrid = Menu.addMenuItem(mCreateGraphCompleteGraph, loc.getString("Execute.CreateGraph.CompleteGraph.Grid"), KeyEvent.VK_9, this, "completeGrid", InputEvent.CTRL_DOWN_MASK );
 		mnuCreateGraphCompleteGrid = Menu.addMenuItem( mCreateGraphCompleteGraph, loc.getString( "Execute.CreateGraph.CompleteGraph.Grid" ), KeyEvent.VK_6, this, "completeGrid", InputEvent.CTRL_DOWN_MASK );
 		mnuCreateGraphCompleteNonGrid = Menu.addMenuItem( mCreateGraphCompleteGraph, loc.getString( "Execute.CreateGraph.CompleteGraph.NonGrid" ), KeyEvent.VK_4, this, "completeNonGrid", InputEvent.CTRL_DOWN_MASK );
-		if( ZETMain.isDebug() ) {
+		if( ZETLoader.isDebug() ) {
 			mCreateGraphSpannerUsingPrim = Menu.addMenu( mCreateGraph, loc.getString( "Execute.CreateGraph.Prim" ) );
 			mnuCreateGraphSpannerUsingPrimGrid = Menu.addMenuItem( mCreateGraphSpannerUsingPrim, loc.getString( "Execute.CreateGraph.Prim.Grid" ), KeyEvent.VK_7, this, "PrimGrid", InputEvent.CTRL_DOWN_MASK );
 			mnuCreateGraphSpannerUsingPrimNonGrid = Menu.addMenuItem( mCreateGraphSpannerUsingPrim, loc.getString( "Execute.CreateGraph.Prim.NonGrid" ), KeyEvent.VK_5, this, "PrimNonGrid", InputEvent.CTRL_DOWN_MASK );
@@ -267,7 +268,7 @@ public class JZETMenuBar extends JMenuBar implements ActionListener, Localized {
 
 		mOptimization = Menu.addMenu( mExecute, loc.getString( "Execute.Optimization" ) );
 		mnuOptimizationEarliestArrivalTransshipment = Menu.addMenuItem( mOptimization, loc.getString( "Execute.Optimization.AlgoEATransshipment" ), KeyEvent.VK_F8, this, "EAT", 0 );
-    if( ZETMain.isDebug() )
+    if( ZETLoader.isDebug() )
 			mnuOptimizationEATCompare = Menu.addMenuItem( mOptimization, loc.getString( "Execute.Optimization.EATCompare" ), KeyEvent.VK_F9, this, "EATCompare", 0 );
 		//mnuExecuteQuickestTransshipment = Menu.addMenuItem( mOptimization, loc.getString( "Execute.Optimization.AlgoQuickestTransshipment" ), this, "QT" );
 		//mnuExecuteMaxFlowOverTimeMC = Menu.addMenuItem( mOptimization, loc.getString( "Execute.Optimization.AlgoMaxFlowOverTimeMinCost" ), this, "MFOTMC" );
@@ -322,7 +323,7 @@ public class JZETMenuBar extends JMenuBar implements ActionListener, Localized {
 		mnuPlanImageTransparency.setEnabled( false );
 		Menu.addMenuItem( mExtras, "-" );
 		mnuOptions = Menu.addMenuItem( mExtras, loc.getString( "Extras.Options" ), 'T', this, "options" );
-		if( ZETMain.isDebug() ) {
+		if( ZETLoader.isDebug() ) {
 			mnuSettings = Menu.addMenuItem( mExtras, loc.getString( "Extras.Settings" ), this, "settings" );
 			mnuDebug = Menu.addMenu( mExtras, loc.getString( "Extras.Debug" ) );
 
@@ -548,7 +549,7 @@ public class JZETMenuBar extends JMenuBar implements ActionListener, Localized {
 				}
 			
 		} else
-			ZETMain.sendError( loc.getString( "gui.UnknownCommand" ) + " '" + e.getActionCommand() + "'. " + loc.getString( "gui.ContactDeveloper" ) );
+			ZETLoader.sendError( loc.getString( "gui.UnknownCommand" ) + " '" + e.getActionCommand() + "'. " + loc.getString( "gui.ContactDeveloper" ) );
 	}
 
 	public void setEnabledShowAllAreas( boolean b ) {
@@ -682,7 +683,7 @@ public class JZETMenuBar extends JMenuBar implements ActionListener, Localized {
 		Menu.updateMenu( mnuPlanImageTransparency, loc.getString( "Extras.SetPlanTransparency" ) );
 		Menu.updateMenu( mnuOptions, loc.getString( "Extras.Options" ) );
 
-		if( ZETMain.isDebug() ) {
+		if( ZETLoader.isDebug() ) {
 			Menu.updateMenu( mnuSettings, loc.getString( "Extras.Settings" ) );
 			Menu.updateMenu( mnuDebug, loc.getString( "Extras.Debug" ) );
 		}

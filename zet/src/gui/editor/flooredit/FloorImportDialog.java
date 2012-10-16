@@ -38,6 +38,7 @@ import javax.swing.JOptionPane;
 import de.tu_berlin.math.coga.common.localization.Localization;
 import ds.ProjectLoader;
 import gui.GUIControl;
+import gui.ZETLoader;
 import gui.ZETMain;
 
 /**
@@ -139,7 +140,7 @@ public class FloorImportDialog extends JDialog {
 									loc.getString( "gui.editor.JEditor.error.loadErrorTitle" ),
 									JOptionPane.ERROR_MESSAGE );
 					ex.printStackTrace( System.err );
-					ZETMain.sendMessage( loc.getString( "gui.editor.JEditor.message.loadError" ) );
+					ZETLoader.sendMessage( loc.getString( "gui.editor.JEditor.message.loadError" ) );
 				}
 			} else if( e.getActionCommand().equals( "import" ) ) {
 				final Floor f = (Floor) list.getSelectedValue();

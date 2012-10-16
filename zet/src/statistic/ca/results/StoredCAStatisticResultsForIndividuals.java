@@ -27,6 +27,7 @@ import java.util.ArrayList;
 import ds.ca.evac.Individual;
 import ds.ca.evac.ExitCell;
 import ds.ca.evac.StaticPotential;
+import gui.ZETLoader;
 import gui.ZETMain;
 
 /**
@@ -57,7 +58,7 @@ public class StoredCAStatisticResultsForIndividuals {
     
     
     public StoredCAStatisticResultsForIndividuals(){
-	safetyTimes = new HashMap<Individual,Integer>();
+	safetyTimes = new HashMap<>();
         changePotentialTimes= new HashMap<Individual,ArrayList<Integer>>();
         potentials= new HashMap<Individual,ArrayList<ArrayList<ExitCell>>>();
         coveredDistanceTimes = new HashMap<Individual,ArrayList<Integer>>();
@@ -86,7 +87,7 @@ public class StoredCAStatisticResultsForIndividuals {
     
     
     public void addChangedPotentialToStatistic(Individual ind, int t){
-			if( !ZETMain.useStatistic )
+			if( !ZETLoader.useStatistic )
 				return;
 			
         if(!(changePotentialTimes.containsKey(ind))){
@@ -99,7 +100,7 @@ public class StoredCAStatisticResultsForIndividuals {
     
     
     public void addCoveredDistanceToStatistic(Individual ind, int t, double distance){
-			if( !ZETMain.useStatistic )
+			if( !ZETLoader.useStatistic )
 				return;
 			
         double lastCoveredDistance=0;
@@ -116,7 +117,7 @@ public class StoredCAStatisticResultsForIndividuals {
         
     
     public void addWaitedTimeToStatistic(Individual ind, int t) {
-			if( !ZETMain.useStatistic )
+			if( !ZETLoader.useStatistic )
 				return;
 			
         int lastWaitedTime=0;
@@ -134,7 +135,7 @@ public class StoredCAStatisticResultsForIndividuals {
  
     
     public void addMinDistancesToStatistic(Individual ind, double distNearest, double distPlanned) {
-			if( !ZETMain.useStatistic )
+			if( !ZETLoader.useStatistic )
 				return;
 			
         if(!(minDistanceToNearestExit.containsKey(ind))){
@@ -151,7 +152,7 @@ public class StoredCAStatisticResultsForIndividuals {
     
     
     public void addExhaustionToStatistic(Individual ind, int t, double actualExhaustion){
-			if( !ZETMain.useStatistic )
+			if( !ZETLoader.useStatistic )
 				return;
 			
         if(!(exhaustionTimes.containsKey(ind))){
@@ -164,7 +165,7 @@ public class StoredCAStatisticResultsForIndividuals {
     }
     
     public void addPanicToStatistic(Individual ind, int t, double actualPanic){
-			if( !ZETMain.useStatistic )
+			if( !ZETLoader.useStatistic )
 				return;
 			
         if(!(panicTimes.containsKey(ind))){
@@ -177,7 +178,7 @@ public class StoredCAStatisticResultsForIndividuals {
     
     
     public void addCurrentSpeedToStatistic(Individual ind, int t, double speed){
-			if( !ZETMain.useStatistic )
+			if( !ZETLoader.useStatistic )
 				return;
 			
         if(!(currentSpeedTimes.containsKey(ind))){

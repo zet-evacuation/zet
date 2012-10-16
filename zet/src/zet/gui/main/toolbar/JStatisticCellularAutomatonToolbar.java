@@ -8,6 +8,7 @@ import de.tu_berlin.math.coga.common.localization.Localized;
 import gui.GUIControl;
 import gui.ZETMain;
 import de.tu_berlin.math.coga.components.framework.Button;
+import gui.ZETLoader;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import javax.swing.JButton;
@@ -55,7 +56,7 @@ public class JStatisticCellularAutomatonToolbar extends JToolBar implements Acti
 		} else if( e.getActionCommand().equals( "saveResultsAs" ) ) {
 			// nothing. see source code in JZETMenuBar
 		} else
-			ZETMain.sendError( loc.getString( "gui.UnknownCommand" ) + " '" + e.getActionCommand() + "'. " + loc.getString( "gui.ContactDeveloper" ) );
+			ZETLoader.sendError( loc.getString( "gui.UnknownCommand" ) + " '" + e.getActionCommand() + "'. " + loc.getString( "gui.ContactDeveloper" ) );
 	}
 
 	public void localize() {

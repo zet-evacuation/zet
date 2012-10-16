@@ -66,6 +66,7 @@ import ds.ca.evac.Individual;
 import ds.ca.evac.Individual.DeathCause;
 import gui.ZETMain;
 import de.tu_berlin.math.coga.datastructure.NamedIndex;
+import gui.ZETLoader;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
@@ -244,7 +245,7 @@ public class JCAStatisticPanel extends JPanel {
 				setCellularAutomaton( selectedBatchResultEntry.getCa()[0] );
 				currentAverageStepsPerSeconds = selectedBatchResultEntry.getAverageCAStepsPerSecond();
 			} else
-				ZETMain.sendMessage( "This entry bears no cellular automaton results!" );
+				ZETLoader.sendMessage( "This entry bears no cellular automaton results!" );
 		}
 
 		@Override
@@ -255,7 +256,7 @@ public class JCAStatisticPanel extends JPanel {
 				else
 					return null;
 			} catch( IOException ex ) {
-				ZETMain.sendError( "Error while loading temp file: " + ex.getLocalizedMessage() );
+				ZETLoader.sendError( "Error while loading temp file: " + ex.getLocalizedMessage() );
 				return null;
 			}
 		}
@@ -264,7 +265,7 @@ public class JCAStatisticPanel extends JPanel {
 	private class AddToDiagramPerformed implements ActionListener {
 		public void actionPerformed( ActionEvent e ) {
 			if( assignmentIndexToShow.isEmpty() ) {
-				ZETMain.sendError( "Bitte wählen Sie zuerst eine Belegung aus!" );
+				ZETLoader.sendError( "Bitte wählen Sie zuerst eine Belegung aus!" );
 				return;
 			}
 

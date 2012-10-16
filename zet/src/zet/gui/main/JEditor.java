@@ -32,6 +32,7 @@ import event.EventServer;
 import event.MessageEvent;
 import event.MessageEvent.MessageType;
 import gui.GUIControl;
+import gui.ZETLoader;
 import gui.ZETMain;
 import gui.statistic.JGraphStatisticPanel;
 import gui.statistic.JStatisticPanel;
@@ -90,7 +91,7 @@ import zet.util.ConversionTools;
 public class JEditor extends JFrame implements Localized {
 	public enum ZETWindowTabs {
 		EditFloor( true, "Edit" ),
-		QuickView( ZETMain.isDebug(), "CAView" ),
+		QuickView( ZETLoader.isDebug(), "CAView" ),
 		Batch( true, "Batch" ),
 		Visualization( true, "Visualization" ),
 		CellularAutomatonStatistic( true, "Statistic" ),
@@ -228,10 +229,10 @@ public class JEditor extends JFrame implements Localized {
 				if( graphStatisticView != null )
 					graphStatisticView.saveSettings();
 				try {
-					ZETMain.ptmInformation.getRoot().reloadFromPropertyContainer();
-					ZETMain.ptmOptions.getRoot().reloadFromPropertyContainer();
-					PropertyContainer.saveConfigFile( ZETMain.ptmInformation, new File( ZETMain.informationFilename ) );
-					PropertyContainer.saveConfigFile( ZETMain.ptmOptions, new File( ZETMain.optionFilename ) );
+					ZETLoader.ptmInformation.getRoot().reloadFromPropertyContainer();
+					ZETLoader.ptmOptions.getRoot().reloadFromPropertyContainer();
+					PropertyContainer.saveConfigFile( ZETLoader.ptmInformation, new File( ZETLoader.informationFilename ) );
+					PropertyContainer.saveConfigFile( ZETLoader.ptmOptions, new File( ZETLoader.optionFilename ) );
 				} catch( IOException ex ) {
 					System.err.println( "Error saving information file." );
 				}
@@ -240,11 +241,11 @@ public class JEditor extends JFrame implements Localized {
 
 		// set up the icon
 		final File iconFile = new File( "./icon.gif" );
-		ZETMain.checkFile( iconFile );
+		ZETLoader.checkFile( iconFile );
 		try {
 			setIconImage( ImageIO.read( iconFile ) );
 		} catch( IOException e ) {
-			ZETMain.exit( "Error loding icon." );
+			ZETLoader.exit( "Error loding icon." );
 		}                
                 
                 setExtendedState(getExtendedState()|JFrame.MAXIMIZED_BOTH);
@@ -286,7 +287,7 @@ public class JEditor extends JFrame implements Localized {
 			}
 		} );
 
-		ZETMain.sendMessage( loc.getString( "gui.status.EditorInitialized" ) );
+		ZETLoader.sendMessage( loc.getString( "gui.status.EditorInitialized" ) );
 	}
 
 	private JComponent getComponent( ZETWindowTabs tab ) {
@@ -365,8 +366,8 @@ public class JEditor extends JFrame implements Localized {
 		loc.setPrefix( "" );
 
 		sendMouse( lastMouse );
-		ZETMain.sendError( "" );
-		ZETMain.sendMessage( loc.getStringWithoutPrefix( "gui.status.LanguageChangedTo" ) );
+		ZETLoader.sendError( "" );
+		ZETLoader.sendMessage( loc.getStringWithoutPrefix( "gui.status.LanguageChangedTo" ) );
 	}
 
 	/**
@@ -437,7 +438,7 @@ public class JEditor extends JFrame implements Localized {
 	 * Sends a ready-message using {@link ZETMain#sendMessage(java.lang.String) }.
 	 */
 	public static void sendReady() {
-		ZETMain.sendMessage( loc.getString( "gui.message.ready" ) );
+		ZETLoader.sendMessage( loc.getString( "gui.message.ready" ) );
 	}
 
 	/*****************************************************************************
