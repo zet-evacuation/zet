@@ -5,9 +5,9 @@
 package gui;
 
 import de.tu_berlin.math.coga.common.algorithm.AlgorithmListener;
-import de.tu_berlin.math.coga.zet.NetworkFlowModel;
 import de.tu_berlin.math.coga.zet.converter.cellularAutomaton.ZToCAMapping;
 import de.tu_berlin.math.coga.zet.converter.cellularAutomaton.ZToCARasterContainer;
+import de.tu_berlin.math.coga.zet.converter.graph.NetworkFlowModel;
 import ds.CompareVisualizationResults;
 import ds.GraphVisualizationResults;
 import ds.ca.evac.EvacuationCellularAutomaton;
