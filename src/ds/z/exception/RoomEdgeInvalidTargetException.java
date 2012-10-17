@@ -16,10 +16,12 @@
 package ds.z.exception;
 
 import ds.z.RoomEdge;
+import java.io.IOException;
 
 /**
  * This Exception has to be thrown, if a room edge is connected to another room edge on a different floor.
  */
+@SuppressWarnings( "serial" )
 public class RoomEdgeInvalidTargetException extends ValidationException {
 	public RoomEdgeInvalidTargetException( RoomEdge invalidEdge ) {
 		super( invalidEdge );
@@ -31,5 +33,10 @@ public class RoomEdgeInvalidTargetException extends ValidationException {
 
 	public RoomEdge getInvalidEdge() {
 		return (RoomEdge) getSource();
+	}
+	
+	/** Prohibits serialization. */
+	private synchronized void writeObject( java.io.ObjectOutputStream s ) throws IOException {
+		throw new UnsupportedOperationException( "Serialization not supported" );
 	}
 }

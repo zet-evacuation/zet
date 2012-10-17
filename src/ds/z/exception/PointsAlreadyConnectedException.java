@@ -16,11 +16,13 @@
 package ds.z.exception;
 
 import ds.z.PlanPoint;
+import java.io.IOException;
 
 /**
  * This Exception has to be thrown, if the points of an edge are set via setPoints(), but the
  * points already have edges registered to them, that cannot be overwritten.
  */
+@SuppressWarnings( "serial" )
 public class PointsAlreadyConnectedException extends ValidationException {
 	public PointsAlreadyConnectedException( PlanPoint connectedPoint ) {
 		super( connectedPoint );
@@ -37,5 +39,10 @@ public class PointsAlreadyConnectedException extends ValidationException {
 	 */
 	public PlanPoint getConnectedPoint() {
 		return (PlanPoint) getSource();
+	}
+	
+	/** Prohibits serialization. */
+	private synchronized void writeObject( java.io.ObjectOutputStream s ) throws IOException {
+		throw new UnsupportedOperationException( "Serialization not supported" );
 	}
 }

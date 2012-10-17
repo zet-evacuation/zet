@@ -9,6 +9,7 @@ import ds.graph.Edge;
 import ds.graph.IdentifiableCollection;
 import ds.graph.MinSpanningTree;
 import ds.graph.problem.MinSpanningTreeProblem;
+import java.util.logging.Level;
 
 /**
  *
@@ -24,7 +25,7 @@ public class SpanningTreeShrinker extends GraphShrinker {
 	}
 
 	/**
-	 * Shrinkes the graph in the {@link NetworkFlowModel} by creating a spanning
+	 * Shrinks the graph in the {@link NetworkFlowModel} by creating a spanning
 	 * tree. The returned edges are exactly the edges in the minimum spanning
 	 * tree on the nodes of the graph. The transit times on the arcs are used
 	 * as spanning tree weights.
@@ -40,7 +41,7 @@ public class SpanningTreeShrinker extends GraphShrinker {
 		primalgo.setProblem( minimumSpanningTreeProblem );
 		log.info( "Compute minimum spanning tree using Prim... " );
 		primalgo.run();
-		log.info( "done in " + primalgo.getRuntimeAsString() );
+		log.log( Level.INFO, "done in {0}", primalgo.getRuntimeAsString());
 		MinSpanningTree minspantree = primalgo.getSolution();
 		return minspantree.getEdges();
 	}

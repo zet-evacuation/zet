@@ -17,10 +17,13 @@ package ds.z.exception;
 
 import ds.z.Area;
 import ds.z.Room;
+import java.io.IOException;
 
-/** Is thrown when an area is not located inside the room which is is associated to.
+/** Is thrown when an area is not located inside the room which is is associated
+ * to.
  * @author Joscha Kulbatzki, Jan-Philipp Kappmeier
  */
+@SuppressWarnings( "serial" )
 public class AreaNotInsideException extends ValidationException {
 	Area<?> area;
 
@@ -43,5 +46,10 @@ public class AreaNotInsideException extends ValidationException {
 	@Override
 	public Room getSource() {
 		return (Room)source;
+	}
+
+	/** Prohibits serialization. */
+	private synchronized void writeObject( java.io.ObjectOutputStream s ) throws IOException {
+		throw new UnsupportedOperationException( "Serialization not supported" );
 	}
 }

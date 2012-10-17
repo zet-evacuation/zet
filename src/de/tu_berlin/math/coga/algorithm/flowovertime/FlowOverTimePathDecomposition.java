@@ -145,7 +145,7 @@ public class FlowOverTimePathDecomposition extends Algorithm<ImplicitTimeExpande
      * it.
      *
      * @param preceedingEdges an in-forest specified by entering edges.
-     * @param arrivalTimes
+     * @param arrivalTime
      * @return a flow over time path from super source to sink.
      */
     protected FlowOverTimePath constructPath(IdentifiableIntegerObjectMapping<Node, FlowOverTimeEdge> preceedingEdges, int arrivalTime) {

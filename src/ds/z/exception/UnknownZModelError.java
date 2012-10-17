@@ -4,11 +4,14 @@
  */
 package ds.z.exception;
 
+import java.io.IOException;
+
 
 /**
  *
  * @author Jan-Philipp Kappmeier
  */
+@SuppressWarnings( "serial" )
 public class UnknownZModelError extends ZModelErrorException {
 	private Exception exception;
 	private StackTraceElement[] stack;
@@ -25,8 +28,14 @@ public class UnknownZModelError extends ZModelErrorException {
 	public Exception getException() {
 		return exception;
 	}
+	
 	public void printOriginalStackTrace() {
 		for( StackTraceElement element : stack )
 			System.err.println( element );
+	}
+	
+	/** Prohibits serialization. */
+	private synchronized void writeObject( java.io.ObjectOutputStream s ) throws IOException {
+		throw new UnsupportedOperationException( "Serialization not supported" );
 	}
 }

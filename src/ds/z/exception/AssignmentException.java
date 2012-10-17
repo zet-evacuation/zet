@@ -5,12 +5,15 @@
 
 package ds.z.exception;
 
+import java.io.IOException;
+
 /**
  * The class {@code AssignmentException} ...
  * @author Jan-Philipp Kappmeier
  */
+@SuppressWarnings( "serial" )
 public class AssignmentException extends RuntimeException {
-	public enum State {
+	public static enum State {
 		GeneralAssignmentError,
 		NoAssignmentCreated,
 		NoAssignmentSelected
@@ -56,5 +59,10 @@ public class AssignmentException extends RuntimeException {
 	@Override
 	public String toString() {
 		return "AssignmentException: " + super.getMessage();
+	}
+	
+	/** Prohibits serialization. */
+	private synchronized void writeObject( java.io.ObjectOutputStream s ) throws IOException {
+		throw new UnsupportedOperationException( "Serialization not supported" );
 	}
 }

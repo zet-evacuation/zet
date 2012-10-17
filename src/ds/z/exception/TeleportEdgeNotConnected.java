@@ -21,7 +21,9 @@
 
 package ds.z.exception;
 
-import ds.z.*;
+import ds.z.TeleportEdge;
+import java.io.IOException;
+
 
 /**
  * The exception {@code TeleportEdgeNotconnected} indicates that a
@@ -30,6 +32,7 @@ import ds.z.*;
  * to the original one.
  * @author Jan-Philipp Kappmeier
  */
+@SuppressWarnings( "serial" )
 public class TeleportEdgeNotConnected extends ValidationException {
 	
 	public TeleportEdgeNotConnected (TeleportEdge invalidEdge) {
@@ -42,5 +45,10 @@ public class TeleportEdgeNotConnected extends ValidationException {
 	
 	public TeleportEdge getInvalidEdge () {
 		return (TeleportEdge)getSource ();
+	}
+	
+	/** Prohibits serialization. */
+	private synchronized void writeObject( java.io.ObjectOutputStream s ) throws IOException {
+		throw new UnsupportedOperationException( "Serialization not supported" );
 	}
 }

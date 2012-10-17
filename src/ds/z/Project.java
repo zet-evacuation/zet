@@ -40,6 +40,7 @@ import java.util.List;
 @XStreamAlias( "project" )
 @XMLConverter( ProjectConverter.class )
 public class Project implements Serializable, ZFormatObject {
+	private static final long serialVersionUID = 1L;
 	@XStreamOmitField()
 	private transient File projectFile;
 	/** The name of the project. */
@@ -220,7 +221,7 @@ public class Project implements Serializable, ZFormatObject {
 
 			//Here comes the real comparison - Iteratively compare all subobjects
 			//The order in the lists subobjects_me/p MUST be the same
-			LinkedList subobjects_me = new LinkedList();
+			LinkedList<Object>subobjects_me = new LinkedList<>();
 			subobjects_me.add( currentAssignment );
 			subobjects_me.add( currentEvacuationPlan );
 			subobjects_me.add( plan );
@@ -229,7 +230,7 @@ public class Project implements Serializable, ZFormatObject {
 			subobjects_me.add( evacuationPlans );
 			subobjects_me.add( vp );
 
-			LinkedList subobjects_p = new LinkedList();
+			LinkedList<Object> subobjects_p = new LinkedList<>();
 			subobjects_p.add( p.currentAssignment );
 			subobjects_p.add( p.currentEvacuationPlan );
 			subobjects_p.add( p.plan );

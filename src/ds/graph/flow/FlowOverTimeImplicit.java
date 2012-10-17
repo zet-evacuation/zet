@@ -64,17 +64,6 @@ public class FlowOverTimeImplicit extends FlowOverTimeInterface {
 
 		if( flowAmount != sum )
 			throw new IllegalStateException( "Flow value in Edge based and Path based differ!\nEdge-Based: " + flowAmount + "\nPath-Based: " + sum );
-		
-		/*
-		ChainDecomposition2 pd = new ChainDecomposition2();
-		NewChainDecomposition pd2 = new NewChainDecomposition();
-		pd2.setProblem(new ChainDecompositionProblem(paths, network));
-		pd2.run();
-		pathBased = pd2.getSolution();*/
-
-
-		//pd.pathBased = pathBased;
-		//pd.uncrossPaths(network, paths);
 	}
 
 	@Override
