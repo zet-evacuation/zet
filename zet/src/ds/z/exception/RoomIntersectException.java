@@ -18,12 +18,14 @@ package ds.z.exception;
 import de.tu_berlin.math.coga.datastructure.Tuple;
 import ds.z.PlanPoint;
 import ds.z.Room;
+import java.io.IOException;
 
 /**
  * The {@code RoomInterstException} indicates that two rooms in one {@link ds.z.Floor} intersect
  * each other, what is not allowed.
  * @author Joscha Kulbatzki
  */
+@SuppressWarnings( "serial" )
 public class RoomIntersectException extends ValidationException {
 	PlanPoint point = null;
 	/**
@@ -33,11 +35,11 @@ public class RoomIntersectException extends ValidationException {
 	 * @param room2 the second room
 	 */
 	public RoomIntersectException( Room room1, Room room2 ) {
-		super( new Tuple<Room, Room>( room1, room2 ) );
+		super( new Tuple<>( room1, room2 ) );
 	}
 
 	public RoomIntersectException( Room room1, Room room2, PlanPoint point ) {
-		super( new Tuple<Room, Room>( room1, room2 ) );
+		super( new Tuple<>( room1, room2 ) );
 		this.point = point;
 	}
 
@@ -49,7 +51,7 @@ public class RoomIntersectException extends ValidationException {
 	 * @param s a message further describing the exception
 	 */
 	public RoomIntersectException( Room room1, Room room2, String s ) {
-		super( new Tuple<Room, Room>( room1, room2 ), s );
+		super( new Tuple<>( room1, room2 ), s );
 	}
 
 	/**
@@ -67,5 +69,10 @@ public class RoomIntersectException extends ValidationException {
 	 */
 	public PlanPoint getIntersectionPoiont() {
 		return point;
+	}
+
+	/** Prohibits serialization. */
+	private synchronized void writeObject( java.io.ObjectOutputStream s ) throws IOException {
+		throw new UnsupportedOperationException( "Serialization not supported" );
 	}
 }

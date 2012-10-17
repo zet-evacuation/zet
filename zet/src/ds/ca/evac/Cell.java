@@ -78,7 +78,7 @@ public abstract class Cell implements Comparable<Cell> {
 		setRoom (room);
 		
 		this.bounds = EnumSet.noneOf( Direction.class );
-		this.levels = new EnumMap( Direction.class );
+		this.levels = new EnumMap<>( Direction.class );
 	}
 
 	/**

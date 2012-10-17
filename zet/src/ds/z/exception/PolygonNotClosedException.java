@@ -20,8 +20,8 @@
 
 package ds.z.exception;
 
-import ds.z.Edge;
 import ds.z.PlanPolygon;
+import java.io.IOException;
 
 /**
  * The exception {@code PolygonNotClosedException} indicates that a
@@ -30,6 +30,7 @@ import ds.z.PlanPolygon;
  * This exception is especially used by {@link ds.z.Room} and {@link ds.z.Area}.
  * @author Jan-Philipp Kappmeier
  */
+@SuppressWarnings( "serial" )
 public class PolygonNotClosedException extends ValidationException {
 	
 	/**
@@ -37,31 +38,38 @@ public class PolygonNotClosedException extends ValidationException {
 	 * to be passed.
 	 * @param polygon the polygon that caused this exception
 	 */
-	public PolygonNotClosedException ( PlanPolygon polygon ) {
-		super (polygon);
+	public PolygonNotClosedException( PlanPolygon<?> polygon ) {
+		super( polygon );
 	}
-	
+
 	/**
-	 * Creates a new instance of {@code PolygonNotClosedException} that contains the errorous {@link PlanPolygon}.
+	 * Creates a new instance of {@code PolygonNotClosedException} that contains
+	 * the errorous {@link PlanPolygon}.
 	 * @param polygon the polygon that caused this exception
 	 * @param s an additional information string
 	 */
-	public PolygonNotClosedException ( PlanPolygon polygon, String s ) {
-		super (polygon,  s );
+	public PolygonNotClosedException( PlanPolygon<?> polygon, String s ) {
+		super( polygon, s );
 	}
 	
 	/**
 	 * Returns the not closed polygon.
 	 * @return the instance of {@link PlanPolygon} that was the cause for this exception.
 	 */
-	public PlanPolygon<Edge> getPolygon () {
+	public PlanPolygon<?> getPolygon () {
 		return getSource();
 	}
+	
 	/**
 	 * @return the room which contains an area that is not inside.
 	 */
 	@Override
-	public PlanPolygon<Edge> getSource() {
-		return (PlanPolygon<Edge>)source;
+	public PlanPolygon<?> getSource() {
+		return (PlanPolygon<?>)source;
+	}
+
+	/** Prohibits serialization. */
+	private synchronized void writeObject( java.io.ObjectOutputStream s ) throws IOException {
+		throw new UnsupportedOperationException( "Serialization not supported" );
 	}
 }

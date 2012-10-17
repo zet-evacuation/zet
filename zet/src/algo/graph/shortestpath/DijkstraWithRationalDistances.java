@@ -83,11 +83,19 @@ public class DijkstraWithRationalDistances {
         return new DynamicNetwork(graph.nodes(),edges.values());
     }
     
+		/**
+		 * Returns a graph that consists of the nodes of the original graph and edges
+		 * on shortest paths. The edges are mainly the edges on the shortest path tree.
+		 * Other edges that respect shortest path distances are also added, thus
+		 * resulting in a graph and not a tree. Note, that still all of the edges
+		 * lie on shortest paths.
+		 * @return a shortest path network in the original graph (not necessarily a tree)
+		 */
     public DynamicNetwork getShortestPathGraph() {
         DynamicNetwork g = new DynamicNetwork();
         g.setNodes(graph.nodes());
-        List<Edge> e = new LinkedList<Edge>(edges.values());
-        Map<Edge,Boolean> chosen = new HashMap<Edge,Boolean>();
+        List<Edge> e = new LinkedList<>(edges.values());
+        Map<Edge,Boolean> chosen = new HashMap<>();
         for (Edge edge : edges.values()) {
             chosen.put(edge,true);
         }        
@@ -110,10 +118,10 @@ public class DijkstraWithRationalDistances {
         if (graph == null) { throw new IllegalStateException("graph is null"); }
         if (source == null) { throw new IllegalStateException("source is null"); }
         if (distances != null) return;
-        distances = new HashMap<Node,Double>(graph.numberOfNodes());
-        edges = new HashMap<Node,Edge>(graph.numberOfNodes());
-        nodes = new HashMap<Node,Node>(graph.numberOfNodes());
-        MinHeap<Node,Double> queue = new MinHeap<Node,Double>(graph.numberOfNodes());
+        distances = new HashMap<>(graph.numberOfNodes());
+        edges = new HashMap<>(graph.numberOfNodes());
+        nodes = new HashMap<>(graph.numberOfNodes());
+        MinHeap<Node,Double> queue = new MinHeap<>(graph.numberOfNodes());
         for (int v=0; v<graph.numberOfNodes(); v++) {
             distances.put(graph.getNode(v),Double.POSITIVE_INFINITY);
             queue.insert(graph.getNode(v),Double.POSITIVE_INFINITY);

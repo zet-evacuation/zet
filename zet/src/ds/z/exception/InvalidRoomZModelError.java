@@ -5,6 +5,7 @@
 package ds.z.exception;
 
 import ds.z.Room;
+import java.io.IOException;
 
 
 /**
@@ -12,6 +13,7 @@ import ds.z.Room;
  * invalid polygon shape, e. g. if it only contains points at one coordinate.
  * @author Jan-Philipp Kappmeier
  */
+@SuppressWarnings( "serial" )
 public class InvalidRoomZModelError extends ZModelErrorException {
 	private Room room;
 	private StackTraceElement[] stack;
@@ -19,7 +21,7 @@ public class InvalidRoomZModelError extends ZModelErrorException {
 
 	public InvalidRoomZModelError( String message, Room room ) {
 		super( message );
-		room = room;
+		this.room = room;
 	}
 
 	/**
@@ -28,5 +30,10 @@ public class InvalidRoomZModelError extends ZModelErrorException {
 	 */
 	public Room getRoom() {
 		return room;
+	}
+	
+	/** Prohibits serialization. */
+	private synchronized void writeObject( java.io.ObjectOutputStream s ) throws IOException {
+		throw new UnsupportedOperationException( "Serialization not supported" );
 	}
 }

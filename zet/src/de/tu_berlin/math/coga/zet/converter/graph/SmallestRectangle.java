@@ -10,11 +10,12 @@ import de.tu_berlin.math.coga.math.vectormath.Vector2;
 import ds.z.PlanPoint;
 import java.util.LinkedList;
 import java.util.List;
+
 /**
  * A class that represents the smallest rectangle containing a certain room
  * axis of the smallest rectangle are directions found by a principal component analysis (PCA),
  * thereby directions are eigenvectors of the covariance matrix of all points representing the room
- * @author schwengf
+ * @author Marlen Schwengfelder
  */
 public class SmallestRectangle {
     
@@ -23,8 +24,7 @@ public class SmallestRectangle {
    Vector2[] axis = new Vector2[2];
    List<PlanPoint> recPoints;
 
-   public void initialize()
-   {
+   public void initialize() {
        center = new Vector2(0,0);
        xAxis = new Vector2(0,0);
        yAxis = new Vector2(0,0);
@@ -37,9 +37,7 @@ public class SmallestRectangle {
        
    }
    
-   public SmallestRectangle(Vector2 cent, List<PlanPoint> recPoi)
-   {
-       
+   public SmallestRectangle(Vector2 cent, List<PlanPoint> recPoi) {
        this.center = cent;
        this.recPoints = recPoi;
    }
@@ -49,8 +47,7 @@ public class SmallestRectangle {
     * @param numPoints the number of given points 
     * @param points all points representing a given room, each point is stored as a {@code Vector2}
     */
-   public List<PlanPoint> computeSmallestRectangle(int numPoints, List<Vector2> points)
-   {
+   public List<PlanPoint> computeSmallestRectangle(int numPoints, List<Vector2> points) {
        initialize();
        
        //compute mean of points
@@ -58,9 +55,7 @@ public class SmallestRectangle {
        center.setY(points.get(0).getY());
 
        for (int i=1; i<points.size(); i++)
-       {
            center.addTo(points.get(i));
-       }
        double inv = 1.0/((double) numPoints);
        center.scalarMultiplicateTo(inv);
        
@@ -69,8 +64,7 @@ public class SmallestRectangle {
        double sumXY = 0.0;
        double sumYY = 0.0;
        
-       for (int i=0;i<numPoints;i++)
-       {
+       for (int i=0;i<numPoints;i++) {
            Vector2 diff = points.get(i).sub(center);
            sumXX += (diff.getX()*diff.getX()); 
            sumXY += (diff.getX()*diff.getY());
@@ -100,24 +94,21 @@ public class SmallestRectangle {
        Vector2 max = new Vector2();
        max.setX(min.getX());max.setY(min.getY());
 
-       for (int i=0;i<numPoints; i++)
-       {
+       for (int i=0;i<numPoints; i++) {
            diff = points.get(i).sub(center);
-           for (int j=0; j<2; j++)
-           {
+           for (int j=0; j<2; j++) {
                double d = diff.dotProduct(axis[j]);
                if (j==0){
                    if (d < min.getX() ){
                        min.setX(d); 
-                   }
-                   else if (d > max.getX()){
+                   } else if (d > max.getX()){
                        max.setX(d);
                    }
                }
                else {
                    if (d < min.getY() ){
-                       min.setY(d); }
-                   else if (d > max.getY()){
+                       min.setY(d);
+									 } else if (d > max.getY()) {
                        max.setY(d);}
                }
            }
@@ -135,21 +126,18 @@ public class SmallestRectangle {
        
        }
    
-       public Vector2 getCenter()
-       {
+       public Vector2 getCenter() {
            return this.center; 
        }
        
-       public List<PlanPoint> getPoints()
-       {
+       public List<PlanPoint> getPoints() {
            return this.recPoints;
        }
        
        /*
         * Given a center and the axis of a rectangle, method computes the 4 corners of that 
         */
-       public void getRectanglePoints()
-       {
+       public void getRectanglePoints() {
            recPoints = new LinkedList<>();
            
            Vector2 extxAxis = axis[0].scalarMultiplicate(x_extent);
@@ -182,14 +170,12 @@ public class SmallestRectangle {
            PlanPoint minx = new PlanPoint(0,0);
            PlanPoint maxy = new PlanPoint(0,0);
            PlanPoint maxx = new PlanPoint(0,0);
-           PlanPoint NW = new PlanPoint(0,0); PlanPoint NE = new PlanPoint(0,0);
-           PlanPoint SW = new PlanPoint(0,0); PlanPoint SE = new PlanPoint(0,0);
            int numxval =0; int numyval =0;
            //saves the different x and y-points 
-           List<Double> xpoints = new LinkedList<>(); List<Double> ypoints = new LinkedList<>() ;
+           List<Double> xpoints = new LinkedList<>();
+					 List<Double> ypoints = new LinkedList<>() ;
            
-           for (PlanPoint p: recPoints)
-           {
+           for (PlanPoint p: recPoints) {
                if (!(xpoints.contains(p.getX()))){
                    xpoints.add(p.getX());
                    numxval++;
@@ -217,23 +203,18 @@ public class SmallestRectangle {
            }
                 
            recPoints = new LinkedList<>();
-           //no rectangle edge is axis aligned
-           if (numxval==4 && numyval ==4)
-           {
-              recPoints.add(minx);recPoints.add(miny);recPoints.add(maxy);recPoints.add(maxx);
-           }           
-           //rectangle edges are axis aligned
-           else
-           {
-               NW = new PlanPoint((int)xmin,(int)ymin);
-               NE = new PlanPoint((int)xmax,(int)ymin);
-               SW = new PlanPoint((int)xmin,(int)ymax);
-               SE = new PlanPoint((int)xmax,(int)ymax);
-               recPoints.add(NW); recPoints.add(NE);recPoints.add(SW); recPoints.add(SE);
+           
+           if (numxval==4 && numyval ==4) { //no rectangle edge is axis aligned
+              recPoints.add(minx);
+							recPoints.add(miny);
+							recPoints.add(maxy);
+							recPoints.add(maxx);
+           }  else { //rectangle edges are axis aligned
+						 recPoints.add( new PlanPoint( (int)xmin, (int)ymin ) );
+						 recPoints.add( new PlanPoint( (int)xmax, (int)ymin ) );
+						 recPoints.add( new PlanPoint( (int)xmin, (int)ymax ) );
+						 recPoints.add( new PlanPoint( (int)xmax, (int)ymax ) );
            }
                           
        }
-       }
-   
-    
-
+   }

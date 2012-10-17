@@ -8,14 +8,16 @@ import ds.graph.Edge;
 import ds.graph.IdentifiableCollection;
 import ds.graph.Node;
 import ds.graph.NodeRectangle;
+import java.util.LinkedList;
+import java.util.logging.Level;
 
 /**
  *
  * @author Jan-Philipp Kappmeier
  */
 public abstract class GraphShrinker extends Algorithm<NetworkFlowModel, NetworkFlowModel> {
-  NetworkFlowModel newModel;
-	private ZToGraphMapping newMapping;
+  protected NetworkFlowModel newModel;
+	protected ZToGraphMapping newMapping;
 	private IdentifiableCollection<Edge> shrinkedEdges;
 	private boolean createReverseEdgesManually;
 
@@ -25,7 +27,8 @@ public abstract class GraphShrinker extends Algorithm<NetworkFlowModel, NetworkF
 	
 	@Override
 	protected NetworkFlowModel runAlgorithm( NetworkFlowModel problem ) {
-		log.info( "Number of edges of original graph: " + problem.numberOfEdges() );
+		log.log( Level.INFO, "Number of Nodes: {0}", problem.numberOfNodes() );
+		log.log( Level.INFO, "Number of edges of original graph: {0}", problem.numberOfEdges() );
 
 		// create a new model
 		newModel = new NetworkFlowModel( problem );
@@ -49,6 +52,11 @@ public abstract class GraphShrinker extends Algorithm<NetworkFlowModel, NetworkF
 		// copy the remaining information into the new mapping
 		copyMappingInformation();
 
+		log.log( Level.INFO, "Edges used in shrinked graph: {0}", newModel.numberOfEdges());
+		
+		checkPlausibility();
+		
+		
 		return newModel;
 	}
 
@@ -83,25 +91,58 @@ public abstract class GraphShrinker extends Algorithm<NetworkFlowModel, NetworkF
 	 * @param edges the edges remaining in the shrinked level. subset of the original edges
 	 */
 	protected void addEdges( IdentifiableCollection<Edge> edges ) {
-		for( Edge edge : edges )
-			newModel.addEdge( edge, getProblem().getEdgeCapacity( edge ), getProblem().getTransitTime( edge ), getProblem().getExactTransitTime( edge ) );
+		NetworkFlowModel oldModel = getProblem();
+		
+		LinkedList<Edge> reverseEdges = new LinkedList<>();
+		for( Edge newEdge : edges ) {
+			Edge oldEdge = getProblem().getEdge( newEdge.start(), newEdge.end() );
+			newModel.addEdge( newEdge, getProblem().getEdgeCapacity( oldEdge ), getProblem().getTransitTime( oldEdge ), getProblem().getExactTransitTime( oldEdge ) );
+			newMapping.setEdgeLevel( newEdge, getProblem().getZToGraphMapping().getEdgeLevel( oldEdge ) );
+		
+			// add reverse edges
+			if( !newEdge.isIncidentTo( newModel.getSupersink() ) )
+				reverseEdges.add( oldModel.getEdge( newEdge.end(), newEdge.start() ) );
+		}
+		int edgeNumber = newModel.numberOfEdges();
+		for( Edge oldReverse : reverseEdges ) {
+				Edge newReverse = new Edge( edgeNumber++, oldReverse.start(), oldReverse.end() );
+				newModel.addEdge( newReverse, getProblem().getEdgeCapacity( oldReverse ), getProblem().getTransitTime( oldReverse ), getProblem().getExactTransitTime( oldReverse ) );
+				newMapping.setEdgeLevel( newReverse, getProblem().getZToGraphMapping().getEdgeLevel( oldReverse ) );			
+		}
 	}
 
 	/**
 	 * Copies the information in the old mapping to the new mapping.
 	 */
 	private void copyMappingInformation() {
-		for( Edge edge : shrinkedEdges )
-			newMapping.setEdgeLevel( edge, getProblem().getZToGraphMapping().getEdgeLevel( edge ) );
-
 		//values from mapping of original network 
 		newMapping.raster = getProblem().getZToGraphMapping().getRaster();
 		newMapping.nodeRectangles = getProblem().getZToGraphMapping().getNodeRectangles();
 		newMapping.nodeFloorMapping = getProblem().getZToGraphMapping().getNodeFloorMapping();
 		newMapping.isDeletedSourceNode = getProblem().getZToGraphMapping().isDeletedSourceNode;
 		newMapping.exitName = getProblem().getZToGraphMapping().exitName;
-		if( createReverseEdgesManually )
-			BaseZToGraphConverter.createReverseEdges( newModel );
+		//if( createReverseEdgesManually )
+		//	BaseZToGraphConverter.createReverseEdges( newModel );
 		newModel.resetAssignment();
+	}
+
+	private void checkPlausibility() {
+		log.info( "Check plausibility" );
+		
+		NetworkFlowModel oldModel = getProblem();
+		
+		for( Edge newEdge :  newModel.edges() ) {
+			// get the same edges in the old model
+			Edge oldEdge = oldModel.getEdge( newEdge.start(), newEdge.end() );
+			
+			int newTransit = newModel.getTransitTime( newEdge );
+			int oldTransit = oldModel.getTransitTime( oldEdge );
+			
+			log.log( Level.INFO, "newTransit = {0} = {1} = {2}", new Object[]{newTransit, oldTransit, oldTransit});
+			
+			assert newTransit == oldTransit;
+			
+		}
+		
 	}
 }

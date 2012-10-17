@@ -15,6 +15,8 @@
  */
 package ds.z.exception;
 
+import java.io.IOException;
+
 /**
  * An exception that is thrown during the execution of the check-methods in
  * Floor and Room. It indicates that something is wrong with the current
@@ -22,6 +24,7 @@ package ds.z.exception;
  * message.
  * @author Timon Kelter
  */
+@SuppressWarnings( "serial" )
 public class ValidationException extends ZModelErrorException {
 	protected Object source;
 
@@ -57,5 +60,10 @@ public class ValidationException extends ZModelErrorException {
 	 */
 	public Object getSource() {
 		return source;
+	}
+
+	/** Prohibits serialization. */
+	private synchronized void writeObject( java.io.ObjectOutputStream s ) throws IOException {
+		throw new UnsupportedOperationException( "Serialization not supported" );
 	}
 }

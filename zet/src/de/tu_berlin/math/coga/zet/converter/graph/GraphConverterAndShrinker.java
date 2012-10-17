@@ -29,6 +29,4 @@ public class GraphConverterAndShrinker extends Algorithm<BuildingPlan, NetworkFl
 		shrinker.run();
 		return shrinker.getSolution();
 	}
-
-	
 }

@@ -15,11 +15,14 @@
  */
 package ds.z.exception;
 
-import ds.z.*;
+import ds.z.TeleportEdge;
+import java.io.IOException;
+
 
 /**
  * This Exception has to be thrown, if a teleport edge is connected to another teleport edge on the same floor.
  */
+@SuppressWarnings( "serial" )
 public class TeleportEdgeInvalidTargetException extends ValidationException {
 	
 	public TeleportEdgeInvalidTargetException (TeleportEdge invalidEdge) {
@@ -32,5 +35,10 @@ public class TeleportEdgeInvalidTargetException extends ValidationException {
 	
 	public TeleportEdge getInvalidEdge () {
 		return (TeleportEdge)getSource ();
+	}
+	
+	/** Prohibits serialization. */
+	private synchronized void writeObject( java.io.ObjectOutputStream s ) throws IOException {
+		throw new UnsupportedOperationException( "Serialization not supported" );
 	}
 }
