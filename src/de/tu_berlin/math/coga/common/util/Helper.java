@@ -20,17 +20,20 @@
  */
 package de.tu_berlin.math.coga.common.util;
 
+import de.tu_berlin.math.coga.common.util.units.UnitScale;
+
 /**
  * Some helper methods that are needed every now and then.
  * @author jan-Philipp Kappmeier
  */
 public final class Helper {
+	private Helper() {}
 
 	/**
 	 * Pauses the program for fileSizes specified time
 	 * @param wait the pause time in milliseconds
 	 */
-	public static final void pause( long wait ) {
+	public static void pause( long wait ) {
 		try {
 			Thread.sleep( wait );
 		} catch( InterruptedException ignore ) {
@@ -45,32 +48,24 @@ public final class Helper {
 	 * @param upper the upper bound
 	 * @return {@code false} if the value is outside of the bounds, {@code true} if it is inside
 	 */
-	public final static boolean isBetween( char value, char lower, char upper ) {
+	public static boolean isBetween( char value, char lower, char upper ) {
 		return value >= lower && value <= upper;
 	}
 
-	/**
-	 * Gives out a string representation of an array.
-	 */
-	public final static String arrayToString( Object[] array ) {
-		StringBuilder sb = new StringBuilder( "[" );
-		for( int i = 0; i < array.length-1; ++i )
-			sb.append( array[i].toString() + ", " );
-		sb.append( array[array.length-1] + "]" );
-		return sb.toString();
+	public static <E extends UnitScale<E>> E getNextBetter( E unit, double value ) {
+		if( value < 1 && unit.getSmaller() != null )
+			return unit.getSmaller();
+		else if( value >= unit.getRange() )
+			return unit.getLarger();
+		else
+			return unit;
 	}
-
-	/**
-	 * Gives out a string representation of an array.
-	 */
-	public final static String arrayToString( double[] array ) {
-		StringBuilder sb = new StringBuilder( "[" );
-		for( int i = 0; i < array.length-1; ++i )
-			sb.append( array[i] + ", " );
-		sb.append( array[array.length-1] + "]" );
-		return sb.toString();
+	
+		public static <E extends UnitScale<E>> double getNextBetterValue( E unit, double value ) {
+		if( value < 1 && unit.getSmaller() != null )
+			return value * unit.getSmaller().getRange();
+		else if( value >= unit.getRange() )
+			return value / unit.getRange();
+		else return value;
 	}
 }
-
-
-

@@ -691,9 +691,9 @@ public class ZControl {
 			project.getBuildingPlan().check();
 			System.out.println( "Everything OK." );
 		} catch( RoomIntersectException ex ) {
-			System.out.println( "Räume " + ex.getIntersectingRooms().u.getName() + " und " + ex.getIntersectingRooms().v.getName() + " schneiden sich in " + ex.getIntersectionPoiont().toString() );
-			System.out.println( ex.getIntersectingRooms().u );
-			System.out.println( ex.getIntersectingRooms().v );
+			System.out.println( "Räume " + ex.getIntersectingRooms().getU().getName() + " und " + ex.getIntersectingRooms().getV().getName() + " schneiden sich in " + ex.getIntersectionPoiont().toString() );
+			System.out.println( ex.getIntersectingRooms().getU() );
+			System.out.println( ex.getIntersectingRooms().getV() );
 		} catch( AreaNotInsideException ex ) {
 			System.out.println( "Im Raum " + ex.getSource().getName() + " liegt eine Area vom Typ " + ex.getArea().getAreaType().name() + " außerhalb." );
 			System.out.println( ex.getSource() );

@@ -12,7 +12,7 @@ import algo.graph.exitassignment.ExitAssignment;
 import de.tu_berlin.math.coga.common.algorithm.Algorithm;
 import de.tu_berlin.math.coga.common.algorithm.AlgorithmListener;
 import de.tu_berlin.math.coga.common.util.Formatter;
-import de.tu_berlin.math.coga.common.util.Formatter.TimeUnits;
+import de.tu_berlin.math.coga.common.util.units.TimeUnits;
 import de.tu_berlin.math.coga.zet.converter.graph.NetworkFlowModel;
 import de.tu_berlin.math.coga.zet.converter.cellularAutomaton.AssignmentApplicationInstance;
 import de.tu_berlin.math.coga.zet.converter.cellularAutomaton.CellularAutomatonAssignmentConverter;
@@ -34,7 +34,6 @@ import ds.z.ConcreteAssignment;
 import ds.z.Project;
 import evacuationplan.BidirectionalNodeCellMapping;
 import evacuationplan.BidirectionalNodeCellMapping.CAPartOfMapping;
-import exitdistributions.GraphBasedExitToCapacityMapping;
 import exitdistributions.GraphBasedIndividualToExitMapping;
 import io.visualization.BuildingResults;
 import io.visualization.CAVisualizationResults;
@@ -213,7 +212,7 @@ public class AlgorithmControl implements PropertyChangeListener {
 						container = cat.getContainer();
 						caVisResults = cat.getSolution();
 						//EventServer.getInstance().dispatchEvent( new MessageEvent<>( this, MessageType.Status, "Simulation finished" ) );
-						System.out.println( "Egress time: " + Formatter.formatTimeUnit( cellularAutomaton.getTimeStep() * cellularAutomaton.getSecondsPerStep(), TimeUnits.Seconds ) );
+						log.log( Level.INFO, "Egress time: {0}", Formatter.formatUnit( cellularAutomaton.getTimeStep() * cellularAutomaton.getSecondsPerStep(), TimeUnits.Seconds ));
 					}
 				}
 			}
@@ -503,8 +502,7 @@ public class AlgorithmControl implements PropertyChangeListener {
 						container = conv.getContainer();
 						caVisResults = visResults;
 						//EventServer.getInstance().dispatchEvent( new MessageEvent<>( this, MessageType.Status, "Simulation finished" ) );
-						System.out.println( "Egress time: " + Formatter.formatTimeUnit( cellularAutomaton.getTimeStep() * cellularAutomaton.getSecondsPerStep(), TimeUnits.Seconds ) );
-		
+		log.log(Level.INFO, "Egress time: {0}", Formatter.formatUnit( cellularAutomaton.getTimeStep() * cellularAutomaton.getSecondsPerStep(), TimeUnits.Seconds ));
 		
 		
 		log.info( "done." );

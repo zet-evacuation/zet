@@ -17,7 +17,7 @@ package de.tu_berlin.math.coga.datastructure;
 
 /**
  * A string that is connected to an integer.
- * @author Timon
+ * @author Timon Kelter
  */
 public class NamedIndex extends Tuple<String,Integer> {
 	
@@ -26,15 +26,15 @@ public class NamedIndex extends Tuple<String,Integer> {
 	}
 
 	public String getName () {
-		return super.u;
+		return super.getU();
 	}
 
 	public int getIndex () {
-		return super.v;
+		return super.getV();
 	}
 	
 	@Override
 	public String toString () {
-		return super.u;
+		return super.getU();
 	}
 }

@@ -21,6 +21,7 @@
 package de.tu_berlin.math.coga.components;
 
 import de.tu_berlin.math.coga.common.localization.Localization;
+import de.tu_berlin.math.coga.common.util.units.BinaryUnits;
 import de.tu_berlin.math.coga.common.util.Formatter;
 import de.tu_berlin.math.coga.components.framework.Button;
 import info.clearthought.layout.TableLayout;
@@ -300,7 +301,7 @@ public class JVideoOptionsDialog extends javax.swing.JDialog {
 		txtBitrate.addActionListener( new ActionListener() {
 			@Override
 			public void actionPerformed( ActionEvent e ) {
-				lblEstimatedFilesize.setText( " (" + Formatter.fileSizeUnit( estimatedTime * 1000 * getBitrate(), Formatter.BinaryUnits.Bit ) + ")" );
+				lblEstimatedFilesize.setText( " (" + Formatter.formatUnit( estimatedTime * 1000 * getBitrate(), BinaryUnits.Bit ) + ")" );
 			}
 		} );
 		txtBitrate.addFocusListener( new FocusListener() {
@@ -309,7 +310,7 @@ public class JVideoOptionsDialog extends javax.swing.JDialog {
 
 			@Override
 			public void focusLost( FocusEvent e ) {
-				lblEstimatedFilesize.setText( " (" + Formatter.fileSizeUnit( estimatedTime * 1000 * getBitrate(), Formatter.BinaryUnits.Bit ) + ")" );
+				lblEstimatedFilesize.setText( " (" + Formatter.formatUnit( estimatedTime * 1000 * getBitrate(), BinaryUnits.Bit ) + ")" );
 			}
 		} );
 
@@ -468,7 +469,7 @@ public class JVideoOptionsDialog extends javax.swing.JDialog {
 	 */
 	public void setBitrate( int bitrate ) {
 		txtBitrate.setText( Integer.toString( bitrate ) );
-		lblEstimatedFilesize.setText( " (" + Formatter.fileSizeUnit( estimatedTime * 1000 * getBitrate(), Formatter.BinaryUnits.Bit ) + ")" );
+		lblEstimatedFilesize.setText( " (" + Formatter.formatUnit( estimatedTime * 1000 * getBitrate(), BinaryUnits.Bit ) + ")" );
 	}
 
 	/**

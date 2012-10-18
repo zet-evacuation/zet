@@ -95,10 +95,12 @@ public class DynamicNetwork implements DirectedGraph {
 			addNode( node );
 	}
 
+	@Override
 	public boolean contains( Node node ) {
 		return incomingEdges.containsKey( node );
 	}
 
+	@Override
 	public boolean contains( Edge edge ) {
 		return edges.contains( edge );
 	}
@@ -109,10 +111,12 @@ public class DynamicNetwork implements DirectedGraph {
 		return edgesCopy;
 	}
 
+	@Override
 	public Edge getEdge( int index ) {
 		return edges.get( index );
 	}
 
+	@Override
 	public Edge getEdge( Node source, Node target ) {
 		for( Edge edge : outgoingEdges.get( source ) )
 			if( edge.start() == source && edge.end() == target )
@@ -120,25 +124,23 @@ public class DynamicNetwork implements DirectedGraph {
 		return null;
 	}
 
+	@Override
 	public Node getNode( int index ) {
 		return nodes.get( index );
 	}
 
-	/*
-	public ListSequence<Edge> adjEdges(Node node) {
-	return outgoingEdges(node);
-	}
-	 */
+	@Override
 	public ListSequence<Edge> edges() {
 		return edges;
 	}
 
+	@Override
 	public ListSequence<Edge> incomingEdges( Node node ) {
 		return incomingEdges.get( node );
 	}
 
 	public ListSequence<Edge> incidentEdges( Node node ) {
-		ListSequence<Edge> incidentEdges = new ListSequence<Edge>();
+		ListSequence<Edge> incidentEdges = new ListSequence<>();
 		incidentEdges.addAll( incomingEdges( node ) );
 		incidentEdges.addAll( outgoingEdges( node ) );
 		return incidentEdges;
@@ -184,25 +186,6 @@ public class DynamicNetwork implements DirectedGraph {
 	public Node opposite( Node node, Edge edge ) {
 		return opposite( edge, node );
 	}
-	/*
-	public ListSequence<Edge> reachableFromEdges(Node node) {
-	ListSequence<Edge> result = new ListSequence<Edge>();
-	for (Node n : reachableFromNodes(node)) {
-	result.addAll(incomingEdges.get(n));
-	}
-	return result;
-	}
-
-	public ListSequence<Node> reachableFromNodes(Node node) {
-	DFS dfs = new DFS(this);
-	dfs.run(node,true);
-	ListSequence<Node> reachableNodes = new ListSequence<Node>();
-	for (Node n : nodes) {
-	if (dfs.state(n) == DFS.State.DONE) reachableNodes.add(n);
-	}
-	return reachableNodes;
-	}
-	 */
 
 	public void removeAllEdges() {
 		for( Node node : nodes ) {
@@ -218,13 +201,6 @@ public class DynamicNetwork implements DirectedGraph {
 		incomingEdges.clear();
 		outgoingEdges.clear();
 	}
-	/*
-	public void removeCycles(Node startingFrom) {
-	DFS dfs = new DFS(this);
-	dfs.run(startingFrom,false);
-	removeEdges(dfs.getBackEdges());
-	}
-	 */
 
 	public void removeEdge( Edge edge ) {
 		edges.remove( edge );
@@ -238,7 +214,7 @@ public class DynamicNetwork implements DirectedGraph {
 	}
 
 	public void removeLoops() {
-		ListSequence<Edge> loops = new ListSequence<Edge>();
+		ListSequence<Edge> loops = new ListSequence<>();
 		for( Edge edge : edges )
 			if( edge.start() == edge.end() )
 				loops.add( edge );
@@ -330,6 +306,7 @@ public class DynamicNetwork implements DirectedGraph {
 		return builder.toString();
 	}
 
+	@Override
 	public boolean isDirected() {
 		return true;
 	}
@@ -357,10 +334,12 @@ public class DynamicNetwork implements DirectedGraph {
 		addEdge( edge );
 	}
 
+	@Override
 	public IdentifiableCollection<Edge> getEdges( Node start, Node end ) {
 		throw new UnsupportedOperationException( GraphLocalization.getSingleton().getString( "ds.graph.NotSupportedException" ) );
 	}
 
+	@Override
 	public boolean existsPath( Node start, Node end ) {
 		throw new UnsupportedOperationException( GraphLocalization.getSingleton().getString( "ds.graph.NotSupportedException" ) );
 	}

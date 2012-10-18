@@ -24,6 +24,7 @@ import algo.graph.dynamicflow.eat.LongestShortestPathTimeHorizonEstimator;
 import algo.graph.dynamicflow.eat.SEAAPAlgorithm;
 import de.tu_berlin.math.coga.common.algorithm.Transformation;
 import de.tu_berlin.math.coga.common.util.Formatter;
+import de.tu_berlin.math.coga.common.util.units.TimeUnits;
 import de.tu_berlin.math.coga.zet.converter.graph.NetworkFlowModel;
 import ds.graph.flow.FlowOverTimeImplicit;
 import ds.graph.flow.PathBasedFlowOverTime;
@@ -57,7 +58,7 @@ public class SuccessiveEarliestArrivalAugmentingPathOptimizedTask extends Transf
 		System.out.println( result );
 		System.out.println( "Total cost: " + transformedSolution.getTotalCost() );
 		//AlgorithmTask.getInstance().publish(100, result, "");
-		System.out.println( "Sending the flow units required " + Formatter.formatTimeUnit( getAlgorithm().getRuntime(), Formatter.TimeUnits.MilliSeconds ) );
+		System.out.println( "Sending the flow units required " + Formatter.formatUnit( getAlgorithm().getRuntime(), TimeUnits.MilliSeconds ) );
 		return df;
 	}
 }

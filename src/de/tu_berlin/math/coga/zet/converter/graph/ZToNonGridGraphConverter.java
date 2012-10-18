@@ -23,13 +23,12 @@ package de.tu_berlin.math.coga.zet.converter.graph;
 import de.tu_berlin.math.coga.common.localization.DefaultLoc;
 import de.tu_berlin.math.coga.common.util.Direction;
 import de.tu_berlin.math.coga.common.util.Formatter;
-import de.tu_berlin.math.coga.common.util.Formatter.TimeUnits;
+import de.tu_berlin.math.coga.common.util.units.TimeUnits;
 import de.tu_berlin.math.coga.common.util.Level;
 import ds.PropertyContainer;
 import ds.graph.Edge;
 import ds.graph.Node;
 import ds.graph.NodeRectangle;
-import ds.mapping.IdentifiableDoubleMapping;
 import ds.z.PlanPoint;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -526,7 +525,7 @@ public class ZToNonGridGraphConverter extends BaseZToGraphConverter {
 				} // END of for(start)
 		} // END of for(roomRaster)
 		// END calculate INTRA-Room-Edge-Transit-Times
-		Logger.getGlobal().fine( "fertig in " + Formatter.formatTimeUnit( System.currentTimeMillis() - intraStart, TimeUnits.MilliSeconds ) );
+		Logger.getGlobal().log( java.util.logging.Level.FINE, "fertig in {0}", Formatter.formatUnit( System.currentTimeMillis() - intraStart, TimeUnits.MilliSeconds ));
 
 		// calculate INTER-Room-Edge-Transit-Times
 		long interStart = System.currentTimeMillis();
@@ -600,9 +599,9 @@ public class ZToNonGridGraphConverter extends BaseZToGraphConverter {
 					}
 			}
 		// END calculate INTER-Room-Edge-Transit-Times
-		Logger.getGlobal().fine( "fertig in " + Formatter.formatTimeUnit( System.currentTimeMillis() - interStart, TimeUnits.MilliSeconds ) );
+		Logger.getGlobal().log( java.util.logging.Level.FINE, "fertig in {0}", Formatter.formatUnit( System.currentTimeMillis() - interStart, TimeUnits.MilliSeconds ));
                 
-		Logger.getGlobal().finest( "TRANSIT-TIMES-FERTIG " + (System.currentTimeMillis() - startTT) );
+		Logger.getGlobal().log( java.util.logging.Level.FINEST, "TRANSIT-TIMES-FERTIG {0}", (System.currentTimeMillis() - startTT));
 	}
 
 	// i,j stehen fuer das eigentliche square, nicht fuer den nachbarn!

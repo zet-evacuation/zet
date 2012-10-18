@@ -14,7 +14,7 @@ import de.tu_berlin.math.coga.common.algorithm.AlgorithmTerminatedEvent;
 import de.tu_berlin.math.coga.common.localization.DefaultLoc;
 import de.tu_berlin.math.coga.common.localization.Localization;
 import de.tu_berlin.math.coga.common.util.Formatter;
-import de.tu_berlin.math.coga.common.util.Formatter.TimeUnits;
+import de.tu_berlin.math.coga.common.util.units.TimeUnits;
 import ds.GraphVisualizationResults;
 import ds.mapping.IdentifiableIntegerMapping;
 import ds.graph.Node;
@@ -240,7 +240,7 @@ public class FlowVisualizationTool extends JFrame implements PropertyChangeListe
 		else if( event instanceof AlgorithmStartedEvent )
 			System.out.println( "Algorithmus startet." );
 		else if( event instanceof AlgorithmTerminatedEvent )
-			System.out.println( "Laufzeit Flussalgorithmus: " + Formatter.formatTimeUnit( event.getAlgorithm().getRuntime(), TimeUnits.MilliSeconds ) );
+			System.out.println( "Laufzeit Flussalgorithmus: " + Formatter.formatUnit( event.getAlgorithm().getRuntime(), TimeUnits.MilliSeconds ) );
 		else
 			System.out.println( event.toString() );
 	}
