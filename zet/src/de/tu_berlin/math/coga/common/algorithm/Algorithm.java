@@ -23,6 +23,7 @@ package de.tu_berlin.math.coga.common.algorithm;
 import de.tu_berlin.math.coga.common.algorithm.parameter.ParameterSet;
 import de.tu_berlin.math.coga.common.debug.Debug;
 import de.tu_berlin.math.coga.common.util.Formatter;
+import de.tu_berlin.math.coga.common.util.units.TimeUnits;
 import java.util.LinkedHashSet;
 import java.util.LinkedList;
 import java.util.List;
@@ -351,7 +352,7 @@ public abstract class Algorithm<Problem, Solution> implements Runnable {
 		*/
 	public final String getRuntimeAsString() throws IllegalStateException {
 			if (state == State.SOLVED || state == State.SOLVING_FAILED) {
-					return Formatter.formatTimeUnit(runtime, Formatter.TimeUnits.MilliSeconds, 2);
+				return Formatter.formatUnit(runtime, TimeUnits.MilliSeconds, 2);
 			}
 			throw new IllegalStateException("The algorithm has not terminated yet. "
 							+ "Please call run() first and wait for its termination.");

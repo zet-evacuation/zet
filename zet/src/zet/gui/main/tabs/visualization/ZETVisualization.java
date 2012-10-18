@@ -5,7 +5,7 @@
 package zet.gui.main.tabs.visualization;
 
 import de.tu_berlin.math.coga.common.util.Formatter;
-import de.tu_berlin.math.coga.common.util.Formatter.TimeUnits;
+import de.tu_berlin.math.coga.common.util.units.TimeUnits;
 import ds.PropertyContainer;
 import ds.z.ZControl;
 import gui.GUIControl;
@@ -105,14 +105,14 @@ public class ZETVisualization extends Visualization<ZETGLControl> {
 				if( showTimestepCellularAutomaton ) {
 					// TODO updateinformationen anzeigen
 					font.print( 0, this.getHeight() - (row++) * fontSize, loc.getString( "gui.VisualizationPanel.FPS.Simulation.Finished" ) );
-					font.print( 0, this.getHeight() - (row++) * fontSize, loc.getString( "gui.VisualizationPanel.FPS.Simulation.Needed" ) + " " + Formatter.formatTimeUnit( control.getCaStep() * control.getCaSecondsPerStep(), TimeUnits.Seconds ) );
+					font.print( 0, this.getHeight() - (row++) * fontSize, loc.getString( "gui.VisualizationPanel.FPS.Simulation.Needed" ) + " " + Formatter.formatUnit( control.getCaStep() * control.getCaSecondsPerStep(), TimeUnits.Seconds ) );
 				}
 			} else {
 				finished = false;
 				minimalFrameCountCellularAutomaton = 2;
 				if( showTimestepCellularAutomaton ) {
 					font.print( 0, this.getHeight() - (row++) * fontSize, loc.getString( "gui.VisualizationPanel.FPS.Simulation.Step" ) + " " + loc.getFloatConverter().format( control.getCaStep() ) );
-					font.print( 0, this.getHeight() - (row++) * fontSize, loc.getString( "gui.VisualizationPanel.FPS.Simulation.Time" ) + " " + Formatter.formatTimeUnit( control.getCaStep() * control.getCaSecondsPerStep(), TimeUnits.Seconds ) );
+					font.print( 0, this.getHeight() - (row++) * fontSize, loc.getString( "gui.VisualizationPanel.FPS.Simulation.Time" ) + " " + Formatter.formatUnit( control.getCaStep() * control.getCaSecondsPerStep(), TimeUnits.Seconds ) );
 				}
 			}
 			row++;
@@ -122,14 +122,14 @@ public class ZETVisualization extends Visualization<ZETGLControl> {
 				minimalFrameCountGraph--;
 				if( showTimestepGraph ) {
 					font.print( 0, this.getHeight() - (row++) * fontSize, loc.getString( "gui.VisualizationPanel.FPS.Graph.Finished" ) );
-					font.print( 0, this.getHeight() - (row++) * fontSize, loc.getString( "gui.VisualizationPanel.FPS.Graph.Needed" ) + " " + Formatter.formatTimeUnit( control.getGraphStep() * control.getGraphSecondsPerStep(), TimeUnits.Seconds ) );
+					font.print( 0, this.getHeight() - (row++) * fontSize, loc.getString( "gui.VisualizationPanel.FPS.Graph.Needed" ) + " " + Formatter.formatUnit( control.getGraphStep() * control.getGraphSecondsPerStep(), TimeUnits.Seconds ) );
 				}
 			} else {
 				finished = false;
 				minimalFrameCountGraph = 2;
 				if( showTimestepGraph ) {
 					font.print( 0, this.getHeight() - (row++) * fontSize, loc.getString( "gui.VisualizationPanel.FPS.Graph.Step" ) + " " + loc.getFloatConverter().format( control.getGraphStep() ) );
-					font.print( 0, this.getHeight() - (row++) * fontSize, loc.getString( "gui.VisualizationPanel.FPS.Graph.Time" ) + " " + Formatter.formatTimeUnit( control.getGraphStep() * control.getGraphSecondsPerStep(), TimeUnits.Seconds ) );
+					font.print( 0, this.getHeight() - (row++) * fontSize, loc.getString( "gui.VisualizationPanel.FPS.Graph.Time" ) + " " + Formatter.formatUnit( control.getGraphStep() * control.getGraphSecondsPerStep(), TimeUnits.Seconds ) );
 				}
 			}
 			row++;

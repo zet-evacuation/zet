@@ -4,7 +4,6 @@
  */
 package de.tu_berlin.math.coga.zet;
 
-import de.tu_berlin.math.coga.zet.converter.graph.NetworkFlowModel;
 import algo.graph.dynamicflow.DynamicFlowProblem;
 import algo.graph.dynamicflow.DynamicTransshipmentProblem;
 import algo.graph.dynamicflow.QuickestTransshipment;
@@ -30,7 +29,7 @@ import de.tu_berlin.math.coga.common.algorithm.AlgorithmStartedEvent;
 import de.tu_berlin.math.coga.common.algorithm.AlgorithmStatusEvent;
 import de.tu_berlin.math.coga.common.algorithm.AlgorithmTerminatedEvent;
 import de.tu_berlin.math.coga.common.util.Formatter;
-import de.tu_berlin.math.coga.common.util.Formatter.TimeUnits;
+import de.tu_berlin.math.coga.common.util.units.TimeUnits;
 import de.tu_berlin.math.coga.graph.io.dimacs.DimacsReader;
 import de.tu_berlin.math.coga.graph.io.xml.visualization.GraphVisualization;
 import de.tu_berlin.math.coga.graph.io.xml.XMLReader;
@@ -360,7 +359,7 @@ public class flow implements AlgorithmListener {
 
 		dl.load();
 		end = System.nanoTime();
-		System.out.println( "Loading: " + Formatter.formatTimeUnit( end-start, TimeUnits.NanoSeconds ) );
+		System.out.println( "Loading: " + Formatter.formatUnit( end-start, TimeUnits.NanoSeconds ) );
 
 		MaximumFlowProblem mfp = dl.getMaximumFlowProblem();
 		PushRelabelHighestLabelGlobalGapRelabelling hipr = new PushRelabelHighestLabelGlobalGapRelabelling();
@@ -368,11 +367,11 @@ public class flow implements AlgorithmListener {
 		start = System.nanoTime();
 		hipr.run();
 		end = System.nanoTime();
-		System.out.println( "Init: " + Formatter.formatTimeUnit( hipr.getInitTime(), TimeUnits.NanoSeconds ) );
-		System.out.println( "MaxFlow: " + Formatter.formatTimeUnit( hipr.getPhase1Time(), TimeUnits.NanoSeconds ) );
-		System.out.println( "Cut: " + Formatter.formatTimeUnit( hipr.getPhase2Time(), TimeUnits.NanoSeconds ) );
+		System.out.println( "Init: " + Formatter.formatUnit( hipr.getInitTime(), TimeUnits.NanoSeconds ) );
+		System.out.println( "MaxFlow: " + Formatter.formatUnit( hipr.getPhase1Time(), TimeUnits.NanoSeconds ) );
+		System.out.println( "Cut: " + Formatter.formatUnit( hipr.getPhase2Time(), TimeUnits.NanoSeconds ) );
 		System.out.println( "" );
-		System.out.println( "Overall: " + Formatter.formatTimeUnit( end-start, TimeUnits.NanoSeconds ) );
+		System.out.println( "Overall: " + Formatter.formatUnit( end-start, TimeUnits.NanoSeconds ) );
 		System.out.println();
 		System.out.println( "Flow value: " + hipr.getFlowValue() );
 		System.out.println();
@@ -417,9 +416,9 @@ public class flow implements AlgorithmListener {
 		} else if( event instanceof AlgorithmTerminatedEvent ) {
 			System.out.println( "" );
 			final long end = event.getEventTime();
-			System.out.println( "PathDecomposition runtime: " + Formatter.formatTimeUnit( end - pathDecompositionStart, TimeUnits.MilliSeconds ) );
+			System.out.println( "PathDecomposition runtime: " + Formatter.formatUnit( end - pathDecompositionStart, TimeUnits.MilliSeconds ) );
 			try {
-				System.out.println( "Overall runtime flow computation: " + Formatter.formatTimeUnit( event.getAlgorithm().getRuntime(), TimeUnits.MilliSeconds ) );
+				System.out.println( "Overall runtime flow computation: " + Formatter.formatUnit( event.getAlgorithm().getRuntime(), TimeUnits.MilliSeconds ) );
 			} catch( IllegalStateException ex ) {
 				System.out.println( "The illegal state exception occured once again." );
 			}
@@ -427,7 +426,7 @@ public class flow implements AlgorithmListener {
 		} else if( event instanceof AlgorithmStatusEvent ) {
 			if( ((AlgorithmStatusEvent)event).getMessage().equals( "INIT_PATH_DECOMPOSITION" ) ) {
 				pathDecompositionStart = event.getEventTime();
-				System.out.println( "\nSEAAP runtime: " + Formatter.formatTimeUnit( pathDecompositionStart - start, TimeUnits.MilliSeconds ) );
+				System.out.println( "\nSEAAP runtime: " + Formatter.formatUnit( pathDecompositionStart - start, TimeUnits.MilliSeconds ) );
 			}
 		} else
 			;//System.out.println( event.toString() );

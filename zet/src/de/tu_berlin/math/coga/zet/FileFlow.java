@@ -13,7 +13,7 @@ import de.tu_berlin.math.coga.common.algorithm.AlgorithmStartedEvent;
 import de.tu_berlin.math.coga.common.algorithm.AlgorithmTerminatedEvent;
 import de.tu_berlin.math.coga.common.algorithm.AlgorithmProgressEvent;
 import de.tu_berlin.math.coga.common.util.Formatter;
-import de.tu_berlin.math.coga.common.util.Formatter.TimeUnits;
+import de.tu_berlin.math.coga.common.util.units.TimeUnits;
 import ds.graph.Edge;
 import ds.graph.IdentifiableCollection;
 import ds.mapping.IdentifiableIntegerMapping;
@@ -155,7 +155,7 @@ public class FileFlow implements AlgorithmListener {
 
 
 		Node sink = network.getNode( nodeMap.get( sink_id.get( 0 ) ) );
-		ArrayList<Node> sources = new ArrayList<Node>();
+		ArrayList<Node> sources = new ArrayList<>();
 		for( int i = 0; i < source_id.size(); ++i )
 			sources.add( network.getNode( nodeMap.get( source_id.get( i ) ) ) );
 
@@ -174,7 +174,7 @@ public class FileFlow implements AlgorithmListener {
 
 
 
-    System.out.println( Formatter.formatTimeUnit( algo.getRuntime(), TimeUnits.MilliSeconds ) );
+    System.out.println( Formatter.formatUnit( algo.getRuntime(), TimeUnits.MilliSeconds ) );
 		long start = System.nanoTime();
 		PathBasedFlowOverTime df = algo.getSolution().getPathBased();
 		String result = String.format( "Sent %1$s of %2$s flow units in %3$s time units successfully.", algo.getSolution().getFlowAmount(), eat.getTotalSupplies(), algo.getSolution().getTimeHorizon() );
@@ -183,7 +183,7 @@ public class FileFlow implements AlgorithmListener {
 		long end = System.nanoTime();
 		//System.out.println( String.format( "Sending the flow units required %1$s MilliSeconds.", algo.getRuntime() / 1000000 ) );
 //		System.out.println( df.toString() );
-		System.err.println( Formatter.formatTimeUnit( end - start, TimeUnits.NanoSeconds ) );
+		System.err.println( Formatter.formatUnit( end - start, TimeUnits.NanoSeconds ) );
 		//return algo;
                 return null;
 	}
@@ -195,7 +195,7 @@ public class FileFlow implements AlgorithmListener {
 		else if( event instanceof AlgorithmStartedEvent )
 			System.out.println( "Algorithmus startet." );
 		else if( event instanceof AlgorithmTerminatedEvent )
-			System.out.println( "Laufzeit Flussalgorithmus: " + Formatter.formatTimeUnit( event.getAlgorithm().getRuntime(), TimeUnits.MilliSeconds ) );
+			System.out.println( "Laufzeit Flussalgorithmus: " + Formatter.formatUnit( event.getAlgorithm().getRuntime(), TimeUnits.MilliSeconds ) );
 		else
 			System.out.println( event.toString() );
 	}

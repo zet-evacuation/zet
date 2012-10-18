@@ -11,8 +11,8 @@ import de.tu_berlin.math.coga.common.algorithm.AlgorithmEvent;
 import de.tu_berlin.math.coga.common.algorithm.AlgorithmListener;
 import de.tu_berlin.math.coga.common.algorithm.AlgorithmProgressEvent;
 import de.tu_berlin.math.coga.common.util.Formatter;
-import de.tu_berlin.math.coga.common.util.Formatter.BinaryUnits;
-import de.tu_berlin.math.coga.common.util.Formatter.TimeUnits;
+import de.tu_berlin.math.coga.common.util.units.BinaryUnits;
+import de.tu_berlin.math.coga.common.util.units.TimeUnits;
 import de.tu_berlin.math.coga.graph.generator.RMFGEN;
 import de.tu_berlin.math.coga.rndutils.distribution.discrete.UniformDistribution;
 import ds.graph.Edge;import ds.mapping.IdentifiableIntegerMapping;
@@ -106,8 +106,8 @@ public class DimacsReader implements AlgorithmListener {
 		long memEnd = rt.totalMemory() - rt.freeMemory();
 
 		if( verbose ) {
-			System.out.println( "Memory for edges: " + Formatter.fileSizeUnit( memEnd-memStart, BinaryUnits.Byte ) ) ;
-			System.out.println( "Estimated: " + Formatter.fileSizeUnit( edges*(40+40), BinaryUnits.Byte ) );
+			System.out.println( "Memory for edges: " + Formatter.formatUnit( memEnd-memStart, BinaryUnits.Byte ) ) ;
+			System.out.println( "Estimated: " + Formatter.formatUnit( edges*(40+40), BinaryUnits.Byte ) );
 			System.out.println( "Space per edge: " + (memEnd-memStart) / edges );
 		}
 
@@ -149,14 +149,14 @@ public class DimacsReader implements AlgorithmListener {
 		network = new Network( nodes, edges );
 		long memEnd = rt.totalMemory() - rt.freeMemory();
 		if( verbose )
-			System.out.println( "Memory for network: " + Formatter.fileSizeUnit( memEnd-memStart, BinaryUnits.Byte ) ) ;
+			System.out.println( "Memory for network: " + Formatter.formatUnit( memEnd-memStart, BinaryUnits.Byte ) ) ;
 
 
 		memStart = rt.totalMemory() - rt.freeMemory();
-		capacities = new IdentifiableIntegerMapping<Edge>( edges );
+		capacities = new IdentifiableIntegerMapping<>( edges );
 		memEnd = rt.totalMemory() - rt.freeMemory();
 		if( verbose )
-			System.out.println( "Memory for capacities: " + Formatter.fileSizeUnit( memEnd-memStart, BinaryUnits.Byte ) ) ;
+			System.out.println( "Memory for capacities: " + Formatter.formatUnit( memEnd-memStart, BinaryUnits.Byte ) ) ;
 
 		memStart = rt.totalMemory() - rt.freeMemory();
 		caps = new int[edges];
@@ -164,8 +164,8 @@ public class DimacsReader implements AlgorithmListener {
 		ends = new int[edges];
 		memEnd = rt.totalMemory() - rt.freeMemory();
 		if( verbose ) {
-			System.out.println( "Memory for arrays: " + Formatter.fileSizeUnit( memEnd-memStart, BinaryUnits.Byte ) ) ;
-			System.out.println( "Estimated for arrays: " + Formatter.fileSizeUnit( 8*edges , BinaryUnits.Byte) );
+			System.out.println( "Memory for arrays: " + Formatter.formatUnit( memEnd-memStart, BinaryUnits.Byte ) ) ;
+			System.out.println( "Estimated for arrays: " + Formatter.formatUnit( 8*edges , BinaryUnits.Byte) );
 		}
 
 
@@ -347,7 +347,7 @@ public class DimacsReader implements AlgorithmListener {
 		//DimacsReader dl = new DimacsReader( "./testinstanz/maxflow/KZ2-tsukuba/KZ2-tsukuba12.max" );
 		//DimacsReader dl = new DimacsReader( "./testinstanz/maxflow/BL06-gargoyle-sml/BL06-gargoyle-sml.max" );
 		long memStart = rt.totalMemory() - rt.freeMemory();
-		System.out.println( "Free Memory: " + Formatter.fileSizeUnit( rt.freeMemory(), BinaryUnits.Byte ) );
+		System.out.println( "Free Memory: " + Formatter.formatUnit( rt.freeMemory(), BinaryUnits.Byte ) );
 		long start = System.nanoTime();
 
 		dl.verbose = true;
@@ -355,10 +355,10 @@ public class DimacsReader implements AlgorithmListener {
 		rt.gc();
 		end = System.nanoTime();
 		long memEnd = rt.totalMemory() - rt.freeMemory();
-		System.out.println( Formatter.formatTimeUnit( end-start, TimeUnits.NanoSeconds ) );
-		System.out.println( "Memory: " + Formatter.fileSizeUnit(memEnd - memStart, BinaryUnits.Byte ) );
+		System.out.println( Formatter.formatUnit( end-start, TimeUnits.NanoSeconds ) );
+		System.out.println( "Memory: " + Formatter.formatUnit(memEnd - memStart, BinaryUnits.Byte ) );
 		System.out.println( "Loading complete" );
-		System.out.println( "Free Memory: " + Formatter.fileSizeUnit( rt.freeMemory(), BinaryUnits.Byte ) );
+		System.out.println( "Free Memory: " + Formatter.formatUnit( rt.freeMemory(), BinaryUnits.Byte ) );
 
 		UniformDistribution dist = new UniformDistribution( 1, 20);
 		//BinomialDistribution dist = new BinomialDistribution( 10, 50, 0.1 );
@@ -424,7 +424,7 @@ public class DimacsReader implements AlgorithmListener {
 		ekf = mf.getFlowValue();
 		System.out.println( "Augmentations: " + ek.getAugmentations() );
 		System.out.println( "Pushes: " + ek.getPushes() );
-		System.out.println( Formatter.formatTimeUnit( end-start, TimeUnits.NanoSeconds ) );
+		System.out.println( Formatter.formatUnit( end-start, TimeUnits.NanoSeconds ) );
 		
 
 		long hiprf = 0;
@@ -447,7 +447,7 @@ public class DimacsReader implements AlgorithmListener {
 		System.out.println( "Pushes: " + hipr.getPushes() + ", Relabels: " + hipr.getRelabels() );
 		//System.out.println( "Global relabels: " + hipr.getGlobalRelabels() );
 		//System.out.println( "Gaps : " + hipr.getGaps() + " Gap nodes: " + hipr.getGapNodes() );
-		System.out.println( Formatter.formatTimeUnit( end-start, TimeUnits.NanoSeconds ) );
+		System.out.println( Formatter.formatUnit( end-start, TimeUnits.NanoSeconds ) );
 		System.out.println( "Checking..." );
 		hipr.getSolution().check();
 

@@ -5,6 +5,7 @@
 package de.tu_berlin.math.coga.math;
 
 import de.tu_berlin.math.coga.common.util.Formatter;
+import de.tu_berlin.math.coga.common.util.units.TimeUnits;
 import java.util.Arrays;
 
 /**
@@ -430,7 +431,7 @@ public class PrimeSieve {
 			p.compute();
 			end = System.nanoTime();
 			//System.out.print( ";" + (end - start) );
-			System.out.print( "; " + Formatter.formatTimeUnit( (end - start), Formatter.TimeUnits.NanoSeconds) );
+			System.out.print( "; " + Formatter.formatUnit( (end - start), TimeUnits.NanoSeconds) );
 			if( i > 2 )
 				total += (end-start);
 
@@ -509,7 +510,7 @@ public class PrimeSieve {
 //
 			System.out.println();
 		}
-		System.out.println( "Total: "+ Formatter.formatTimeUnit( (total/count), Formatter.TimeUnits.NanoSeconds) );
+		System.out.println( "Total: "+ Formatter.formatUnit( (total/count), TimeUnits.NanoSeconds) );
 		System.out.println( p.getPrimeCount() );
 		System.out.println( p.getPrimes()[1] );
 		System.out.println( p.getPrimes()[10001] );

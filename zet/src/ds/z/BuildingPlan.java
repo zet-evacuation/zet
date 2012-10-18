@@ -295,7 +295,7 @@ public class BuildingPlan implements Serializable, Iterable<Floor>, ZFormatObjec
 			check();
 		} catch( ds.z.exception.RoomIntersectException e ) {
 			Tuple<Room,Room> rooms = e.getIntersectingRooms();
-			System.out.println( "Es schneiden sich die Räume: " + rooms.u.getName() + " - " + rooms.v.getName() );
+			System.out.println( "Es schneiden sich die Räume: " + rooms.getU().getName() + " - " + rooms.getV().getName() );
 		}
 		for( Floor f : floors )
 			for( Room r : f.getRooms() ) {
