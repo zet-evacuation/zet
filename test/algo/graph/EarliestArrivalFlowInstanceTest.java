@@ -10,7 +10,7 @@ import de.tu_berlin.math.coga.common.algorithm.AlgorithmEvent;
 import de.tu_berlin.math.coga.common.algorithm.AlgorithmProgressEvent;
 import de.tu_berlin.math.coga.common.algorithm.AlgorithmListener;
 import de.tu_berlin.math.coga.common.util.Formatter;
-import de.tu_berlin.math.coga.common.util.Formatter.TimeUnits;
+import de.tu_berlin.math.coga.common.util.units.TimeUnits;
 import ds.graph.Edge;
 import ds.mapping.IdentifiableIntegerMapping;
 import ds.graph.network.AbstractNetwork;
@@ -168,7 +168,7 @@ public class EarliestArrivalFlowInstanceTest extends TestCase implements Algorit
 		algo.setProblem( eat );
 		algo.addAlgorithmListener( this );
 		algo.run();
-		System.err.println( Formatter.formatTimeUnit( algo.getRuntime(), TimeUnits.MilliSeconds ) );
+		System.err.println( Formatter.formatUnit( algo.getRuntime(), TimeUnits.MilliSeconds ) );
 		long start = System.nanoTime();
 		PathBasedFlowOverTime df = algo.getSolution().getPathBased();
 		String result = String.format( "Sent %1$s of %2$s flow units in %3$s time units successfully.", algo.getSolution().getFlowAmount(), eat.getTotalSupplies(), algo.getSolution().getTimeHorizon() );
@@ -177,7 +177,7 @@ public class EarliestArrivalFlowInstanceTest extends TestCase implements Algorit
 		long end = System.nanoTime();
 		System.out.println( String.format( "Sending the flow units required %1$s ms.", algo.getRuntime() / 1000000 ) );
 //		System.out.println( df.toString() );
-		System.err.println( Formatter.formatTimeUnit( end - start, TimeUnits.NanoSeconds ) );
+		System.err.println( Formatter.formatUnit( end - start, TimeUnits.NanoSeconds ) );
 
 	}
 

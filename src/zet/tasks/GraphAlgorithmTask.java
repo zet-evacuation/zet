@@ -9,7 +9,7 @@ import de.tu_berlin.math.coga.common.algorithm.AlgorithmEvent;
 import de.tu_berlin.math.coga.common.algorithm.AlgorithmListener;
 import de.tu_berlin.math.coga.zet.converter.graph.NetworkFlowModel;
 import de.tu_berlin.math.coga.zet.converter.graph.GraphAssignmentConverter;
-import de.tu_berlin.math.coga.zet.converter.graph.ZToNonGridGraphConverter;
+import de.tu_berlin.math.coga.zet.converter.graph.RectangleConverter;
 import ds.GraphVisualizationResults;
 import ds.PropertyContainer;
 import ds.graph.flow.PathBasedFlowOverTime;
@@ -25,7 +25,7 @@ public class GraphAlgorithmTask extends Algorithm<Project, GraphVisualizationRes
 
 	GraphAlgorithmEnumeration graphAlgorithm;
 	NetworkFlowModel networkFlowModel;
-	Algorithm<BuildingPlan,NetworkFlowModel> conv = new ZToNonGridGraphConverter();
+	Algorithm<BuildingPlan,NetworkFlowModel> conv = new RectangleConverter();
 
 	public GraphAlgorithmTask( GraphAlgorithmEnumeration graphAlgorithm ) {
 		this.graphAlgorithm = graphAlgorithm;

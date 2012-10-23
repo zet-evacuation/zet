@@ -4,17 +4,20 @@
  */
 package ds.graph;
 
-import de.tu_berlin.math.coga.datastructure.searchtree.BinaryTree;
 import de.tu_berlin.math.coga.common.util.BinaryTreeToString;
-import junit.framework.TestCase;
+import de.tu_berlin.math.coga.datastructure.searchtree.BinaryTree;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
 import org.junit.Test;
-
 
 /**
  *
  * @author Jan-Philipp Kappmeier
  */
-public class BinaryTreeTest extends TestCase {
+public class BinaryTreeTest {
 
 	@Test
 	public void testBinaryTree() {

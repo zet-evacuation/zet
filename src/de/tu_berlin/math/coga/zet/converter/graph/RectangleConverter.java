@@ -15,7 +15,7 @@
  */
 
 /**
- * ZToNonGridGraphConverter.java
+ * RectangleConverter.java
  *
  */
 package de.tu_berlin.math.coga.zet.converter.graph;
@@ -23,8 +23,8 @@ package de.tu_berlin.math.coga.zet.converter.graph;
 import de.tu_berlin.math.coga.common.localization.DefaultLoc;
 import de.tu_berlin.math.coga.common.util.Direction;
 import de.tu_berlin.math.coga.common.util.Formatter;
-import de.tu_berlin.math.coga.common.util.units.TimeUnits;
 import de.tu_berlin.math.coga.common.util.Level;
+import de.tu_berlin.math.coga.common.util.units.TimeUnits;
 import ds.PropertyContainer;
 import ds.graph.Edge;
 import ds.graph.Node;
@@ -41,9 +41,20 @@ import java.util.logging.Logger;
 /**
  *
  */
-public class ZToNonGridGraphConverter extends BaseZToGraphConverter {
+public class RectangleConverter extends BaseZToGraphConverter {
 	final static boolean progress = false;
 	final static int FACTOR = 1;
+
+	static {
+		if( !PropertyContainer.getInstance().isDefined( "converter.AccurateDelayAreaCreation" ) )
+			PropertyContainer.getInstance().define( "converter.AccurateDelayAreaCreation", Boolean.class, true );
+		if( !PropertyContainer.getInstance().isDefined( "converter.accurateAssignmentAreaCreation" ) )
+			PropertyContainer.getInstance().define( "converter.accurateAssignmentAreaCreation", Boolean.class, true );
+		if( !PropertyContainer.getInstance().isDefined( "converter.Imbalance" ) )
+			PropertyContainer.getInstance().define( "converter.Imbalance", Integer.class, 1 );
+		if( !PropertyContainer.getInstance().isDefined( "converter.GraphPrecision" ) )
+			PropertyContainer.getInstance().define( "converter.GraphPrecision", Integer.class, 1 );
+	}
 
 	@Override
 	protected void createNodes() {
@@ -396,14 +407,14 @@ public class ZToNonGridGraphConverter extends BaseZToGraphConverter {
 		}//end for each room
 		//model.setNodeCapacities( nodesCap );
 		//model.setEdgeCapacities( edgesCap );
-		Logger.getGlobal().fine( "fertig" );
+		Logger.getGlobal().fine( "done." );
 	}
 
 	@Override
 	protected void computeTransitTimes() {
 		HashMap<Edge, ArrayList<ZToGraphRasterSquare>> doorEdgeToSquare = connectRooms();
-		long startTT = System.currentTimeMillis();
-		//System.out.print( "Compute transit times... " );
+		final long startTT = System.currentTimeMillis();
+		log.log( java.util.logging.Level.FINE, "Computing transit times..." );
 
 		//protected IdentifiableDoubleMapping<Edge> exactTransitTimes;
 		//exactTransitTimes = new IdentifiableDoubleMapping<>( 1 );
@@ -411,8 +422,8 @@ public class ZToNonGridGraphConverter extends BaseZToGraphConverter {
 		//Graph graph = model.getGraph();
 
 		// calculate INTRA-Room-Edge-Transit-Times
-		long intraStart = System.currentTimeMillis();
-		Logger.getGlobal().fine( "Compute intra room edge transit times... " );
+		final long intraStart = System.currentTimeMillis();
+		Logger.getGlobal().finest( " -Compute intra room edge transit times... " );
 
 		// do for all rooms of the roomRasterList
 		for( ZToGraphRoomRaster room : roomRasterList ) {
@@ -525,11 +536,11 @@ public class ZToNonGridGraphConverter extends BaseZToGraphConverter {
 				} // END of for(start)
 		} // END of for(roomRaster)
 		// END calculate INTRA-Room-Edge-Transit-Times
-		Logger.getGlobal().log( java.util.logging.Level.FINE, "fertig in {0}", Formatter.formatUnit( System.currentTimeMillis() - intraStart, TimeUnits.MilliSeconds ));
+		Logger.getGlobal().log( java.util.logging.Level.FINEST, "  done in {0}.", Formatter.formatUnit( System.currentTimeMillis() - intraStart, TimeUnits.MilliSeconds ));
 
 		// calculate INTER-Room-Edge-Transit-Times
 		long interStart = System.currentTimeMillis();
-		Logger.getGlobal().fine( "Compute inter room transit times... " );
+		Logger.getGlobal().finest( " -Compute inter room transit times... " );
 		for( ZToGraphRoomRaster startRoom : roomRasterList )
 			for( ZToGraphRoomRaster endRoom : roomRasterList ) {
 
@@ -599,9 +610,9 @@ public class ZToNonGridGraphConverter extends BaseZToGraphConverter {
 					}
 			}
 		// END calculate INTER-Room-Edge-Transit-Times
-		Logger.getGlobal().log( java.util.logging.Level.FINE, "fertig in {0}", Formatter.formatUnit( System.currentTimeMillis() - interStart, TimeUnits.MilliSeconds ));
+		Logger.getGlobal().log( java.util.logging.Level.FINEST, "  done in {0}.", Formatter.formatUnit( System.currentTimeMillis() - interStart, TimeUnits.MilliSeconds ) );
                 
-		Logger.getGlobal().log( java.util.logging.Level.FINEST, "TRANSIT-TIMES-FERTIG {0}", (System.currentTimeMillis() - startTT));
+		Logger.getGlobal().log( java.util.logging.Level.FINE, "done in {0}.", Formatter.formatUnit( (System.currentTimeMillis() - startTT), TimeUnits.MilliSeconds ) );
 	}
 
 	// i,j stehen fuer das eigentliche square, nicht fuer den nachbarn!
@@ -846,7 +857,7 @@ public class ZToNonGridGraphConverter extends BaseZToGraphConverter {
 					}// end if safe
 				}//end outer loop
 		}
-		Logger.getGlobal().fine( "fertig" );
+		Logger.getGlobal().fine( "done." );
 		return table;
 	}
 }

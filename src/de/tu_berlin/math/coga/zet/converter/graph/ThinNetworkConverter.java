@@ -6,26 +6,38 @@ package de.tu_berlin.math.coga.zet.converter.graph;
 
 import de.tu_berlin.math.coga.common.util.Level;
 import de.tu_berlin.math.coga.math.vectormath.Vector2;
-import de.tu_berlin.math.coga.math.vectormath.Vector3;
 import ds.PropertyContainer;
-import ds.graph.network.DynamicNetwork;
-import ds.graph.Edge;
-import ds.mapping.IdentifiableDoubleMapping;
-import ds.mapping.IdentifiableIntegerMapping;
 import ds.collection.ListSequence;
+import ds.graph.Edge;
 import ds.graph.Node;
 import ds.graph.NodeRectangle;
 import ds.graph.PositionNode;
 import ds.mapping.IdentifiableObjectMapping;
-import ds.z.*;
+import ds.z.Area;
+import ds.z.AssignmentArea;
+import ds.z.DelayArea;
+import ds.z.EvacuationArea;
+import ds.z.Floor;
+import ds.z.InaccessibleArea;
+import ds.z.PlanPoint;
+import ds.z.PlanPolygon;
+import ds.z.Room;
+import ds.z.RoomEdge;
+import ds.z.StairArea;
 import java.awt.Point;
-import java.util.*;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 /**
  *
  * @author marlenschwengfelder
  */
-public class ZToThinNetworkConverter extends BaseZToGraphConverter{
+public class ThinNetworkConverter extends BaseZToGraphConverter{
     
     //maps the node representing the door to corresponding room
     public HashMap<Room,Node> DoorNodeForRoom = new HashMap<>();
