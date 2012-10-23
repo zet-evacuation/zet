@@ -1,5 +1,5 @@
 /**
- * ZToGridGraphConverter.java
+ * GridGraphConverter.java
  * Created: 26.07.2011, 15:43:27
  */
 package de.tu_berlin.math.coga.zet.converter.graph;
@@ -31,7 +31,7 @@ import java.util.List;
  *
  * @author Jan-Philipp Kappmeier
  */
-public class ZToGridGraphConverter extends BaseZToGraphConverter {
+public class GridGraphConverter extends BaseZToGraphConverter {
 
 	/**
 	 * Finds rectangles in the rastered rooms to define nodes in the graph.

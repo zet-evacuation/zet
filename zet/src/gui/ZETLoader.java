@@ -265,7 +265,8 @@ public class ZETLoader {
 					guiControl.createZETWindow();
 				} catch( UnsatisfiedLinkError ex ) {
 					// jogl naitive libraries do not seem to be present
-					exit( "Could not load main window. \nPossibly native OpenGL libraries are not present." );
+					ex.printStackTrace( System.err );
+					exit( "Could not load main window. \nPossibly native OpenGL libraries are not present.\n\nError:\n" + ex.getLocalizedMessage() );
 				}
 				try {
 					guiControl.loadTemplates();

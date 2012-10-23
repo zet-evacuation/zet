@@ -34,7 +34,7 @@ public class Formatter {
 
 	/**
 	 * Computes the correct value and fitting time unit for a given pair of value
-	 * and time unit. The result is stored as a tuple.
+	 * and time unit. The result is stored as a {@link Tuple}.
 	 * @param <E> the type of time unit that is returned
 	 * @param value the value of the number to be formatted
 	 * @param unit the unit of the number
@@ -76,8 +76,7 @@ public class Formatter {
 	}
 
 	/**
-	 * Creates a {@code String} containing an integer number with leading
-	 * zeros.
+	 * Creates a {@code String} containing an integer number with leading zeros.
 	 * @param number the number that is converted to string representation
 	 * @param digits the digits of the number
 	 * @return the number with leading zeros

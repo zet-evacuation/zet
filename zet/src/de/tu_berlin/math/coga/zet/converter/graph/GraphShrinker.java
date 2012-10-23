@@ -27,8 +27,7 @@ public abstract class GraphShrinker extends Algorithm<NetworkFlowModel, NetworkF
 	
 	@Override
 	protected NetworkFlowModel runAlgorithm( NetworkFlowModel problem ) {
-		log.log( Level.INFO, "Number of Nodes: {0}", problem.numberOfNodes() );
-		log.log( Level.INFO, "Number of edges of original graph: {0}", problem.numberOfEdges() );
+		log.log( Level.INFO, "Shrinking a Graph with {0} nodes and {1} edges.", new Object[]{problem.numberOfNodes(), problem.numberOfEdges()} );
 
 		// create a new model
 		newModel = new NetworkFlowModel( problem );
@@ -55,11 +54,10 @@ public abstract class GraphShrinker extends Algorithm<NetworkFlowModel, NetworkF
 		log.log( Level.INFO, "Edges used in shrinked graph: {0}", newModel.numberOfEdges());
 		
 		checkPlausibility();
-		
-		
+
 		return newModel;
 	}
-
+	
 	/**
 	 * The actual algorithm that shrinks the {@code Graph} in the
 	 * {@code NetworkFlowModel} in the problem instance. This method has to be
@@ -138,10 +136,10 @@ public abstract class GraphShrinker extends Algorithm<NetworkFlowModel, NetworkF
 			int newTransit = newModel.getTransitTime( newEdge );
 			int oldTransit = oldModel.getTransitTime( oldEdge );
 			
-			log.log( Level.INFO, "newTransit = {0} = {1} = {2}", new Object[]{newTransit, oldTransit, oldTransit});
+			if( newTransit != oldTransit )
+				log.log( Level.WARNING, "newTransit = {0} = {1} = {2}", new Object[]{ newTransit, oldTransit, oldTransit });
 			
 			assert newTransit == oldTransit;
-			
 		}
 		
 	}

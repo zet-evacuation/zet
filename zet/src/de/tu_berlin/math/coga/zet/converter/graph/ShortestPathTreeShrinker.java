@@ -13,11 +13,12 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- *
+ * Shrinks a given network to a shortest path tree rooted at the super source.
+ * As edge length for shortest path computation, the transit times are used.
  * @author Marlen Schwengfelder
  */
-public class DijkstraSpannerShrinker extends GraphShrinker {
-	public DijkstraSpannerShrinker() {
+public class ShortestPathTreeShrinker extends GraphShrinker {
+	public ShortestPathTreeShrinker() {
 		super( true );
 	}
 

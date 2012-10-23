@@ -5,12 +5,17 @@
 package de.tu_berlin.math.coga.zet.converter.graph;
 
 import de.tu_berlin.math.coga.common.algorithm.Algorithm;
+import de.tu_berlin.math.coga.datastructure.Tuple;
 import de.tu_berlin.math.coga.zet.converter.RasterContainerCreator;
+import ds.PropertyContainer;
 import ds.graph.Edge;
 import ds.graph.Graph;
+import ds.graph.Node;
 import ds.z.BuildingPlan;
+import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.logging.Level;
 
 /**
  *
@@ -24,6 +29,12 @@ public abstract class BaseZToGraphConverter extends Algorithm<BuildingPlan, Netw
 	protected Graph roomGraph;
 	public int numStairEdges = 0;
 	public List<Edge> stairEdges = new LinkedList<>();
+	
+	public BaseZToGraphConverter() {
+		// set up the needed properties
+	}
+	
+	
 
 	@Override
 	protected NetworkFlowModel runAlgorithm( BuildingPlan problem ) {
@@ -51,10 +62,12 @@ public abstract class BaseZToGraphConverter extends Algorithm<BuildingPlan, Netw
 		createReverseEdgesWithoutStairEdges( model );
 
 		model.resetAssignment();
+
+		assert checkParallelEdges();
 		
 		//model.setNetwork( model.getGraph().getAsStaticNetwork() );
-		System.out.println( "NumNodes: " + model.numberOfNodes() );
-		System.out.println( "NumEdges: " + model.numberOfEdges() );
+		log.log( Level.INFO, "Number of nodes: {0}", model.numberOfNodes() );
+		log.log( Level.INFO, "Number of edges: {0}", model.numberOfEdges() );
 		return model;
 
 	}
@@ -111,5 +124,27 @@ public abstract class BaseZToGraphConverter extends Algorithm<BuildingPlan, Netw
 						//exactTransitTimes.divide( edge, mapping.getDownNodeSpeedFactor( edge.start() ) );
 						break;
 				}
+	}
+
+	/**
+	 * Checks if the generated network flow model contains at most one edge between
+	 * any pair of nodes.
+	 * @return {@code true} if the network does not contain parallel arcs. Otherwise, an {@link AssertionError} is thrown
+	 */
+	boolean checkParallelEdges() {
+		log.info( "Check for parallel edges..." );
+		
+		HashMap<Tuple<Node,Node>,Edge> usedEdges = new HashMap<>( (int)(model.numberOfEdges()/0.75)+1, 0.75f );
+		
+		for( Edge edge :  model.edges() ) {
+			final Tuple<Node,Node> nodePair = new Tuple<>( edge.start(), edge.end() );
+			if( usedEdges.containsKey( nodePair ) ) {
+				log.log( Level.WARNING, "Two edges between nodes {0}: {1} and {2}", new Object[]{nodePair, usedEdges.get( nodePair ), edge});
+				return false;
+			}
+			usedEdges.put( nodePair, edge );
+		}
+		log.log( Level.INFO, "No parallel edges found." );
+		return true;
 	}
 }

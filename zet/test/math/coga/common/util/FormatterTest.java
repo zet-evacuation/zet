@@ -5,60 +5,62 @@
 package math.coga.common.util;
 
 import de.tu_berlin.math.coga.common.util.Formatter;
-import de.tu_berlin.math.coga.common.util.Formatter.TimeUnits;
+import de.tu_berlin.math.coga.common.util.units.TimeUnits;
 import de.tu_berlin.math.coga.datastructure.Tuple;
-import junit.framework.TestCase;
-
+import static org.junit.Assert.assertEquals;
+import org.junit.Test;
 
 /**
  *
  * @author Jan-Philipp Kappmeier
  */
-public class FormatterTest extends TestCase {
+public class FormatterTest {
 
+	private final static double eps = 0.000000000000001;
+	
 	/** Creates a new instance of {@code FormatterTest}. */	
 	public FormatterTest() { }
 	
 	/**
 	 * Tests the formatting for time units.
 	 */
-	public void testTimeUnits() {
+	@Test
+	public void testUnits() {
 		Tuple<Double,TimeUnits> ret;
-		final int secs = 31557600;
+		final int secondsOfYear = 31557600;
 		// check if the number of seconds of a year is computed correct (note that it is not the multiple of 365!
-		ret = Formatter.timeUnit( secs, TimeUnits.Seconds );
-		assertEquals( 1.0, ret.u );
-		assertEquals( ret.v, TimeUnits.Years );
-		System.out.println( Formatter.formatTimeUnit( secs, TimeUnits.Seconds, 2 ) );
+		ret = Formatter.unit( secondsOfYear, TimeUnits.Seconds );
+		assertEquals( 1.0, ret.getU(), eps );
+		assertEquals( TimeUnits.Years, ret.getV() );
 		
 		// what if, if they are minutes?
-		ret = Formatter.timeUnit( secs, TimeUnits.Minutes );
-		assertEquals( 60.0, ret.u );
-		assertEquals( ret.v, TimeUnits.Years );
-		System.out.println( Formatter.formatTimeUnit( secs, TimeUnits.Minutes, 2 ) );
+		ret = Formatter.unit( secondsOfYear, TimeUnits.Minutes );
+		assertEquals( 60.0, ret.getU(), eps );
+		assertEquals( TimeUnits.Years, ret.getV() );
+
 		
 		//1 micro second = 1000 nano seconds = 0,000 001 seconds
-		ret = Formatter.timeUnit( 1000, TimeUnits.NanoSeconds );
-		assertEquals( 1.0, ret.u );
-		assertEquals( ret.v, TimeUnits.Microsecond );
-		System.out.println( Formatter.formatTimeUnit( 1000, TimeUnits.NanoSeconds, 4 ) );
-		ret = Formatter.timeUnit( 0.000001, TimeUnits.Seconds );
-		assertEquals( 1.0, ret.u );
-		assertEquals( ret.v, TimeUnits.Microsecond );
-		System.out.println( Formatter.formatTimeUnit( 0.000001, TimeUnits.Seconds, 4 ) );
+		ret = Formatter.unit( 1000, TimeUnits.NanoSeconds );
+		assertEquals(  1.0, ret.getU(), eps );
+		assertEquals( TimeUnits.Microsecond, ret.getV() );
 
+		ret = Formatter.unit( 0.000001, TimeUnits.Seconds );
+		assertEquals( 1.0, ret.getU(), eps );
+		assertEquals( TimeUnits.Microsecond, ret.getV() );
+
+		
 		//1 pico second = 0,000 000 000 001 seconds
-		ret = Formatter.timeUnit( 1001, TimeUnits.PicoSeconds );
-		assertEquals( 1.001, ret.u );
-		assertEquals( ret.v, TimeUnits.NanoSeconds );
-		System.out.println( Formatter.formatTimeUnit( 1001, TimeUnits.PicoSeconds, 4 ) );
-		ret = Formatter.timeUnit( 0.000000000001, TimeUnits.Seconds );
-		assertTrue( Math.abs(1.0-ret.u) < 0.0000000001 );	// caution! here we run into inaccuracy problems
-		assertEquals( ret.v, TimeUnits.PicoSeconds );
-		System.out.println( Formatter.formatTimeUnit( 0.000000000001, TimeUnits.Seconds, 4 ) );
-		ret = Formatter.timeUnit( 0.999, TimeUnits.PicoSeconds );
-		assertEquals( 0.999, ret.u );
-		assertEquals( ret.v, TimeUnits.PicoSeconds );
-		System.out.println( Formatter.formatTimeUnit( 0.999, TimeUnits.PicoSeconds, 4 ) );
+		ret = Formatter.unit( 1001, TimeUnits.PicoSeconds );
+		assertEquals( 1.001, ret.getU(), eps );
+		assertEquals( ret.getV(), TimeUnits.NanoSeconds );
+
+		ret = Formatter.unit( 0.000000000001, TimeUnits.Seconds );
+		assertEquals( "Converting seconds to pico seconds", 1.0, ret.getU(), eps );
+		assertEquals( TimeUnits.PicoSeconds, ret.getV() );
+
+		ret = Formatter.unit( 0.999, TimeUnits.PicoSeconds );
+		assertEquals( 0.999, ret.getU(), eps );
+		assertEquals( TimeUnits.PicoSeconds, ret.getV() );
+
 	}
 }
