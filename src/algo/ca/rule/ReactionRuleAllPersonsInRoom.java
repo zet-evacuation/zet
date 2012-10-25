@@ -20,7 +20,7 @@
  */
 package algo.ca.rule;
 
-import ds.ca.evac.Cell;
+import ds.ca.evac.EvacCell;
 import ds.ca.evac.Individual;
 
 /**
@@ -31,7 +31,7 @@ import ds.ca.evac.Individual;
 public class ReactionRuleAllPersonsInRoom extends AbstractReactionRule {
 
 	@Override
-	public boolean executableOn( Cell cell ) {
+	public boolean executableOn( EvacCell cell ) {
 		return cell.getIndividual() == null ? false : cell.getIndividual().getReactionTime() >= 0;
 	}
 
@@ -46,7 +46,7 @@ public class ReactionRuleAllPersonsInRoom extends AbstractReactionRule {
 	 * @param cell the cell, whose individuals reaction time is reduced
 	 */
 	@Override
-	protected void onExecute( ds.ca.evac.Cell cell ) {
+	protected void onExecute( ds.ca.evac.EvacCell cell ) {
 		// Reduce reaction time by one
 		Individual i = cell.getIndividual();
 		i.setReactionTime( i.getReactionTime() - 1 );

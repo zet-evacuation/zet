@@ -20,9 +20,9 @@
 package zet.gui.main.tabs.quickVisualization;
 
 import de.tu_berlin.math.coga.common.localization.DefaultLoc;
-import de.tu_berlin.math.coga.common.util.Direction;
+import de.tu_berlin.math.coga.common.util.Direction8;
 import ds.PropertyContainer;
-import ds.ca.evac.Cell;
+import ds.ca.evac.EvacCell;
 import ds.ca.evac.EvacuationCellularAutomaton;
 import ds.z.PlanPolygon;
 import gui.editor.CoordinateTools;
@@ -43,8 +43,8 @@ import zet.gui.main.tabs.base.AbstractPolygon;
 public class JCellPolygon extends AbstractPolygon {
 
 	private Color fillColor;
-	EnumSet<Direction> borders = EnumSet.noneOf( Direction.class );
-	private Cell cell;
+	EnumSet<Direction8> borders = EnumSet.noneOf( Direction8.class );
+	private EvacCell cell;
 	private final boolean showIndividualNames;
 	private static final NumberFormat nfFloat = DefaultLoc.getSingleton().getFloatConverter();// NumberFormat.getNumberInstance( DefaultLoc.getSingleton().getLocale() );
 	private EvacuationCellularAutomaton ca;
@@ -55,7 +55,7 @@ public class JCellPolygon extends AbstractPolygon {
 	 * @param fillColor the border color
 	 * @param ca
 	 */
-	public JCellPolygon( Cell cell, AbstractFloor myFloor, Color fillColor, EvacuationCellularAutomaton ca ) {
+	public JCellPolygon( EvacCell cell, AbstractFloor myFloor, Color fillColor, EvacuationCellularAutomaton ca ) {
 		this( cell, myFloor, fillColor, Color.black, ca );
 	}
 
@@ -66,7 +66,7 @@ public class JCellPolygon extends AbstractPolygon {
 	 * @param lineColor
 	 * @param ca
 	 */
-	public JCellPolygon( Cell cell, AbstractFloor myFloor, Color fillColor, Color lineColor, EvacuationCellularAutomaton ca ) {
+	public JCellPolygon( EvacCell cell, AbstractFloor myFloor, Color fillColor, Color lineColor, EvacuationCellularAutomaton ca ) {
 		super( lineColor );
 		this.ca = ca;
 		this.cell = cell;
@@ -136,17 +136,17 @@ public class JCellPolygon extends AbstractPolygon {
 		Rectangle bounds = drawingPolygon.getBounds();
 		BasicStroke thick = new BasicStroke ( 5 );
 		g2.setStroke( thick );
-		if( borders.contains( Direction.Top ) )
+		if( borders.contains( Direction8.Top ) )
 			g2.drawLine( bounds.x, bounds.y, bounds.x + bounds.width, bounds.y );
-		if( borders.contains( Direction.Down ) )
+		if( borders.contains( Direction8.Down ) )
 			g2.drawLine( bounds.x, bounds.y + bounds.height, bounds.x + bounds.width, bounds.y + bounds.height );
-		if( borders.contains( Direction.Left ) )
+		if( borders.contains( Direction8.Left ) )
 			g2.drawLine( bounds.x, bounds.y, bounds.x, bounds.y + bounds.height );
-		if( borders.contains( Direction.Right ) )
+		if( borders.contains( Direction8.Right ) )
 			g2.drawLine( bounds.x + bounds.width, bounds.y, bounds.x + bounds.width, bounds.y + bounds.height );
 	}
 
-	public void addWall( Direction direction ) {
+	public void addWall( Direction8 direction ) {
    borders.add( direction );
 	}
 	

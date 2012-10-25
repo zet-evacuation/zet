@@ -27,11 +27,11 @@ import de.tu_berlin.math.coga.zet.converter.cellularAutomaton.ZToCAMapping;
 import de.tu_berlin.math.coga.zet.converter.cellularAutomaton.ZToCARasterContainer;
 import de.tu_berlin.math.coga.zet.converter.cellularAutomaton.ZToCARasterSquare;
 import de.tu_berlin.math.coga.zet.converter.cellularAutomaton.ZToCARoomRaster;
-import de.tu_berlin.math.coga.common.util.Direction;
+import de.tu_berlin.math.coga.common.util.Direction8;
 import ds.PropertyContainer;
 import ds.z.Floor;
 import ds.z.Room;
-import ds.ca.evac.Cell;
+import ds.ca.evac.EvacCell;
 import ds.ca.evac.EvacuationCellularAutomaton;
 import ds.ca.evac.DynamicPotential;
 import ds.ca.evac.ExitCell;
@@ -153,7 +153,7 @@ public class JRasterFloor extends AbstractFloor {
 				LinkedList<ZToCARasterSquare> squares = roomRaster.getAccessibleSquares();
 				for( ZToCARasterSquare square : squares ) {
 					// Color depending of the cell type
-					Cell cell = mapping.get( square );
+					EvacCell cell = mapping.get( square );
 					JCellPolygon poly = null;
 					if( cell instanceof ExitCell )
 						poly = new JCellPolygon( cell, this, Color.white, Color.black, ca );
@@ -179,14 +179,14 @@ public class JRasterFloor extends AbstractFloor {
 						} else
 							poly = new JCellPolygon( cell, this, Color.lightGray, Color.black, ca );
 					}
-					if( !cell.isPassable( Direction.Left) )
-						poly.addWall( Direction.Left );
-					if( !cell.isPassable( Direction.Right) )
-						poly.addWall( Direction.Right );
-					if( !cell.isPassable( Direction.Top) )
-						poly.addWall( Direction.Top );
-					if( !cell.isPassable( Direction.Down ) )
-						poly.addWall( Direction.Down );
+					if( !cell.isPassable( Direction8.Left) )
+						poly.addWall( Direction8.Left );
+					if( !cell.isPassable( Direction8.Right) )
+						poly.addWall( Direction8.Right );
+					if( !cell.isPassable( Direction8.Top) )
+						poly.addWall( Direction8.Top );
+					if( !cell.isPassable( Direction8.Down ) )
+						poly.addWall( Direction8.Down );
 					//nicht zeichnen
 					add( poly );
 					poly.displayPolygon( square.getSquare() );

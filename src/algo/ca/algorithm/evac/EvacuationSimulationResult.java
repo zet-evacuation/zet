@@ -4,12 +4,12 @@
  */
 package algo.ca.algorithm.evac;
 
-import algo.ca.algorithm.CellularAutomatonSimulationResult;
+import de.tu_berlin.math.coga.algorithm.simulation.cellularautomaton.CellularAutomatonSimulationResult;
 
 /**
  *
  * @author Jan-Philipp Kappmeier
  */
 public class EvacuationSimulationResult extends CellularAutomatonSimulationResult {
-	
+
 }

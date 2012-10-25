@@ -15,10 +15,10 @@
  */
 package algo.ca.rule;
 
-import de.tu_berlin.math.coga.common.util.Direction;
+import de.tu_berlin.math.coga.common.util.Direction8;
 import de.tu_berlin.math.coga.rndutils.RandomUtils;
 import de.tu_berlin.math.coga.rndutils.generators.GeneralRandom;
-import ds.ca.evac.Cell;
+import ds.ca.evac.EvacCell;
 import ds.ca.evac.DoorCell;
 import ds.ca.evac.ExitCell;
 import ds.ca.evac.Individual;
@@ -48,17 +48,17 @@ public class SimpleMovementRule2 extends AbstractMovementRule {
 	 * @return true if the rule can be executed
 	 */
 	@Override
-	public boolean executableOn( ds.ca.evac.Cell cell ) {
+	public boolean executableOn( ds.ca.evac.EvacCell cell ) {
 		return !(cell instanceof ExitCell) && cell.getIndividual() != null;
 	}
 
 	@Override
-	protected void onExecute( ds.ca.evac.Cell cell ) {
+	protected void onExecute( ds.ca.evac.EvacCell cell ) {
 		ind = cell.getIndividual();
 		if( ind.isAlarmed() ) {
 			if( canMove( ind ) )
 				if( isDirectExecute() ) { // we are in a "normal" simulation
-					Cell targetCell = selectTargetCell( cell, computePossibleTargets( cell, true ) );
+					EvacCell targetCell = selectTargetCell( cell, computePossibleTargets( cell, true ) );
 					setMoveRuleCompleted( true );
 					move( targetCell );
 				} else { // only calculate possible movements, used for swap cellular automaton
@@ -77,7 +77,7 @@ public class SimpleMovementRule2 extends AbstractMovementRule {
 	}
 
 	@Override
-	public void move( Cell targetCell ) {
+	public void move( EvacCell targetCell ) {
 		if( ind.getCell().equals( targetCell ) ) {
 			esp.caStatisticWriter.getStoredCAStatisticResults().getStoredCAStatisticResultsForIndividuals().addWaitedTimeToStatistic( ind, esp.eca.getTimeStep() );
 			esp.caStatisticWriter.getStoredCAStatisticResults().getStoredCAStatisticResultsForCells().addCellToWaitingStatistic( targetCell, esp.eca.getTimeStep() );
@@ -111,20 +111,20 @@ public class SimpleMovementRule2 extends AbstractMovementRule {
 	 * Computes a new viewing direction if the individual is not moving.
 	 * @return 
 	 */
-	protected Direction getDirection() {
-		Direction current = ind.getDirection();
-		Direction[] possible = {current.getClockwise().getClockwise(),
+	protected Direction8 getDirection() {
+		Direction8 current = ind.getDirection();
+		Direction8[] possible = {current.getClockwise().getClockwise(),
 			current.getClockwise(),
 			current,
 			current.getCounterClockwise(),
 			current.getCounterClockwise().getCounterClockwise()};
 		GeneralRandom rnd = (RandomUtils.getInstance()).getRandomGenerator();
 		int randomDirection = rnd.nextInt( 5 );
-		Direction ret = possible[randomDirection];
+		Direction8 ret = possible[randomDirection];
 		int minDistance = Integer.MAX_VALUE;
-		Cell cell = ind.getCell();
-		for( Direction dir : possible ) {
-			Cell target = cell.getNeighbour( dir );
+		EvacCell cell = ind.getCell();
+		for( Direction8 dir : possible ) {
+			EvacCell target = cell.getNeighbor( dir );
 			if( target != null && !target.isOccupied() ) {
 				StaticPotential staticPotential = ind.getStaticPotential();
 				int cellDistance = staticPotential.getPotential( cell );
@@ -148,7 +148,7 @@ public class SimpleMovementRule2 extends AbstractMovementRule {
 	 * @param targetCell
 	 * @param performMove decides if the move is actually performed. If swapping is active, only values have to be updated.
 	 */
-	private void initializeMove( Cell targetCell  ) {
+	private void initializeMove( EvacCell targetCell  ) {
 		this.esp.potentialController.increaseDynamicPotential( targetCell );
 
 		if( ind.getCell() instanceof DoorCell && targetCell instanceof DoorCell ) {
@@ -162,7 +162,7 @@ public class SimpleMovementRule2 extends AbstractMovementRule {
 				throw new IllegalStateException( "Individuum has no speed." );
 			
 		} else {
-			Direction direction = getMovementDirection( ind.getCell(), targetCell );
+			Direction8 direction = getMovementDirection( ind.getCell(), targetCell );
 
 			double stairSpeedFactor = targetCell instanceof StairCell ? getStairSpeedFactor( direction, (StairCell) targetCell ) : 1;
 			dist = direction.distance() * 0.4; // calculate distance
@@ -184,10 +184,10 @@ public class SimpleMovementRule2 extends AbstractMovementRule {
 	
 	/**
 	 * Performs a move after the parameters ({@code speed} and {@code dist}) have
-	 * alredy been set by {@link #initializeMove(ds.ca.evac.Individual, ds.ca.evac.Cell) }
+	 * alredy been set by {@link #initializeMove(ds.ca.evac.Individual, ds.ca.evac.EvacCell) }
 	 * @param targetCell 
 	 */
-	protected void performMove( Cell targetCell ) {
+	protected void performMove( EvacCell targetCell ) {
 		ind.getCell().setOccupiedUntil( ind.getStepEndTime()  );
 		esp.eca.moveIndividual( ind.getCell(), targetCell );
 		esp.caStatisticWriter.getStoredCAStatisticResults().getStoredCAStatisticResultsForIndividuals().addCurrentSpeedToStatistic( ind, esp.eca.getTimeStep(), speed * esp.eca.getSecondsPerStep() );
@@ -200,10 +200,10 @@ public class SimpleMovementRule2 extends AbstractMovementRule {
 	 * @return A neighbour of {@code cell} chosen at random.
 	 */
 	@Override
-	public Cell selectTargetCell( Cell cell, List<Cell> targets ) {
-		Cell target = cell;
+	public EvacCell selectTargetCell( EvacCell cell, List<EvacCell> targets ) {
+		EvacCell target = cell;
 		double minPot = esp.parameterSet.effectivePotential( cell, cell );
-		for( Cell c : targets ) {
+		for( EvacCell c : targets ) {
 			double pot = esp.parameterSet.effectivePotential( cell, c );
 			if( pot > minPot ) {
 				target = c;
@@ -225,7 +225,7 @@ public class SimpleMovementRule2 extends AbstractMovementRule {
 	}
 
 	@Override
-	public void swap( Cell cell1, Cell cell2 ) {
+	public void swap( EvacCell cell1, EvacCell cell2 ) {
 		if( cell1.getIndividual() == null )
 			throw new IllegalArgumentException( "No Individual standing on cell #1!" );
 		if( cell2.getIndividual() == null )
@@ -246,8 +246,8 @@ public class SimpleMovementRule2 extends AbstractMovementRule {
 	 * @return a list containing all neighbors and the from cell
 	 */
 	@Override
-	protected List<Cell> computePossibleTargets( Cell fromCell, boolean onlyFreeNeighbours ) {
-		List<Cell> targets = super.computePossibleTargets( fromCell, onlyFreeNeighbours );
+	protected List<EvacCell> computePossibleTargets( EvacCell fromCell, boolean onlyFreeNeighbours ) {
+		List<EvacCell> targets = super.computePossibleTargets( fromCell, onlyFreeNeighbours );
 		targets.add( fromCell );
 		return Collections.unmodifiableList( targets );
 	}

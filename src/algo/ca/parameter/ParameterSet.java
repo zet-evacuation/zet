@@ -20,7 +20,7 @@
  */
 package algo.ca.parameter;
 
-import ds.ca.evac.Cell;
+import ds.ca.evac.EvacCell;
 import ds.ca.evac.Individual;
 import java.util.Collection;
 
@@ -31,11 +31,11 @@ import java.util.Collection;
 public interface ParameterSet {
 	/* Updating of dynamic parameters */
 
-	public double updateExhaustion( Individual individual, Cell targetCell );
+	public double updateExhaustion( Individual individual, EvacCell targetCell );
 
 	public double updatePreferredSpeed( Individual individual );
 
-	public double updatePanic( Individual individual, Cell targetCell, Collection<Cell> preferedCells );
+	public double updatePanic( Individual individual, EvacCell targetCell, Collection<EvacCell> preferedCells );
 
 	/* Threshold values for various decisions */
 	public double changePotentialThreshold( Individual individual );
@@ -45,7 +45,7 @@ public interface ParameterSet {
 	public double movementThreshold( Individual individual );
 
 	/* Other dynamic parameters */
-	public double effectivePotential( Cell referenceCell, Cell targetCell );
+	public double effectivePotential( EvacCell referenceCell, EvacCell targetCell );
 
 	/* Some constants*/
 	public double dynamicPotentialWeight();

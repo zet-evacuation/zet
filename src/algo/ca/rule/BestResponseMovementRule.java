@@ -16,9 +16,9 @@
 package algo.ca.rule;
 
 
-import de.tu_berlin.math.coga.common.util.Direction;
+import de.tu_berlin.math.coga.common.util.Direction8;
 import de.tu_berlin.math.coga.common.util.Level;
-import ds.ca.evac.Cell;
+import ds.ca.evac.EvacCell;
 import ds.ca.evac.Individual;
 import ds.ca.evac.StairCell;
 import ds.ca.results.VisualResultsRecorder;
@@ -46,19 +46,19 @@ public class BestResponseMovementRule extends AbstractMovementRule {
 	 * @return true if the rule can be executed
 	 */
 	@Override
-	public boolean executableOn( ds.ca.evac.Cell cell ) {
+	public boolean executableOn( ds.ca.evac.EvacCell cell ) {
 		return cell.getIndividual() != null;
 	}
 
 	@Override
-	protected void onExecute( ds.ca.evac.Cell cell ) {
+	protected void onExecute( ds.ca.evac.EvacCell cell ) {
 		if( DebugFlags.EVAPLANCHECKER )
 			System.out.print( "Move individual " + cell.getIndividual().id() + " " );
 		ind = cell.getIndividual();
 
 		if( canMove( ind ) )
 			if( this.isDirectExecute() ) {
-				Cell targetCell = this.selectTargetCell( cell, computePossibleTargets( cell, true ) );
+				EvacCell targetCell = this.selectTargetCell( cell, computePossibleTargets( cell, true ) );
 				setMoveRuleCompleted( true );
 				move( targetCell );
 			} else {
@@ -72,7 +72,7 @@ public class BestResponseMovementRule extends AbstractMovementRule {
 	}
 
 	@Override
-	public void move( Cell targetCell ) {
+	public void move( EvacCell targetCell ) {
 		if( ind.isSafe() && !((targetCell instanceof ds.ca.evac.SaveCell) || (targetCell instanceof ds.ca.evac.ExitCell)) )
 			// Rauslaufen aus sicheren Bereichen ist nicht erlaubt
 			targetCell = ind.getCell();
@@ -86,7 +86,7 @@ public class BestResponseMovementRule extends AbstractMovementRule {
 		setMoveRuleCompleted( false );
 	}
 
-	private void doMove( Individual i, Cell targetCell ) {
+	private void doMove( Individual i, EvacCell targetCell ) {
 		if( i.getCell().equals( targetCell ) ) {
 			i.setStepStartTime( i.getStepEndTime() );
 			setStepEndTime( i, i.getStepEndTime() + 1 );
@@ -102,7 +102,7 @@ public class BestResponseMovementRule extends AbstractMovementRule {
 		setMoveRuleCompleted( false );
 	}
 
-	private void doMoveWithDecision( Individual i, Cell targetCell, boolean performMove ) {
+	private void doMoveWithDecision( Individual i, EvacCell targetCell, boolean performMove ) {
 		esp.potentialController.increaseDynamicPotential( targetCell );
 		// Calculate a factor that is later multiplied with the speed,
 		// this factor is only != 1 for stair cells to 
@@ -113,7 +113,7 @@ public class BestResponseMovementRule extends AbstractMovementRule {
 			StairCell stairCell = (StairCell)targetCell;
 			int x = targetCell.getX() - i.getCell().getX();
 			int y = targetCell.getY() - i.getCell().getY();
-			Direction direction = Direction.getDirection( x, y );
+			Direction8 direction = Direction8.getDirection( x, y );
 			Level lvl = stairCell.getLevel( direction );
 			if( lvl == Level.Higher )
 				stairSpeedFactor = stairCell.getSpeedFactorUp();
@@ -177,7 +177,7 @@ public class BestResponseMovementRule extends AbstractMovementRule {
 	 * @return A neighbour of {@code cell} chosen at random.
 	 */
 	@Override
-	public Cell selectTargetCell( Cell cell, List<Cell> targets ) {
+	public EvacCell selectTargetCell( EvacCell cell, List<EvacCell> targets ) {
 		if( targets.size() == 0 )
 			return cell;
 
@@ -204,7 +204,7 @@ public class BestResponseMovementRule extends AbstractMovementRule {
 	}
 
 	@Override
-	public void swap( Cell cell1, Cell cell2 ) {
+	public void swap( EvacCell cell1, EvacCell cell2 ) {
 		if( cell1.getIndividual() == null )
 			throw new IllegalArgumentException( "No Individual standing on cell #1!" );
 		if( cell2.getIndividual() == null )
@@ -224,8 +224,8 @@ public class BestResponseMovementRule extends AbstractMovementRule {
 	 * @return a list containing all neighbours and the from cell
 	 */
 	@Override
-	protected List<Cell> computePossibleTargets( Cell fromCell, boolean onlyFreeNeighbours ) {
-		List<Cell> targets = super.computePossibleTargets( fromCell, onlyFreeNeighbours );
+	protected List<EvacCell> computePossibleTargets( EvacCell fromCell, boolean onlyFreeNeighbours ) {
+		List<EvacCell> targets = super.computePossibleTargets( fromCell, onlyFreeNeighbours );
 		targets.add( fromCell );
 		return targets;
 	}

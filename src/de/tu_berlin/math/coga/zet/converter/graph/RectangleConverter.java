@@ -21,7 +21,7 @@
 package de.tu_berlin.math.coga.zet.converter.graph;
 
 import de.tu_berlin.math.coga.common.localization.DefaultLoc;
-import de.tu_berlin.math.coga.common.util.Direction;
+import de.tu_berlin.math.coga.common.util.Direction8;
 import de.tu_berlin.math.coga.common.util.Formatter;
 import de.tu_berlin.math.coga.common.util.Level;
 import de.tu_berlin.math.coga.common.util.units.TimeUnits;
@@ -347,7 +347,7 @@ public class RectangleConverter extends BaseZToGraphConverter {
 						model.increaseNodeCapacity( node, 1 * FACTOR );
 
 					boolean nodesConnectable = (node != null) && (lastNode != null) && !lastNode.equals( node );
-					boolean connectionPassable = (col != 0) && (!square.isBlocked( Direction.Left ));
+					boolean connectionPassable = (col != 0) && (!square.isBlocked( Direction8.Left ));
 
 					if( nodesConnectable && connectionPassable ) {
 						Edge edge = model.getEdge( lastNode, node );
@@ -360,7 +360,7 @@ public class RectangleConverter extends BaseZToGraphConverter {
 								lastSquare = room.getSquare( col - 1, row );
 							else
 								throw new AssertionError( "Col should not be zero at this point." );
-							mappingLocal.setEdgeLevel( edge, lastSquare.getLevel( Direction.getDirection( 1, 0 ) ) );
+							mappingLocal.setEdgeLevel( edge, lastSquare.getLevel( Direction8.getDirection( 1, 0 ) ) );
 						}
 						model.increaseEdgeCapacity( edge, 1 * FACTOR );
 						//edgesCap.increase( edge, 1 * FACTOR );
@@ -380,7 +380,7 @@ public class RectangleConverter extends BaseZToGraphConverter {
 					//No need to increase the capacity since the square has already been taken in consideration
 
 					boolean nodesConnectable = (node != null) && (lastNode != null) && !lastNode.equals( node );
-					boolean connectionPassable = (row != 0) && (!square.isBlocked( Direction.Top ));
+					boolean connectionPassable = (row != 0) && (!square.isBlocked( Direction8.Top ));
 
 					if( nodesConnectable && connectionPassable ) {
 						Edge edge = model.getEdge( lastNode, node );
@@ -395,7 +395,7 @@ public class RectangleConverter extends BaseZToGraphConverter {
 								lastSquare = room.getSquare( col, row - 1 );
 							else
 								throw new AssertionError( DefaultLoc.getSingleton().getString( "converter.RowIsZeroException" ) );
-							mappingLocal.setEdgeLevel( edge, lastSquare.getLevel( Direction.getDirection( 0, 1 ) ) );
+							mappingLocal.setEdgeLevel( edge, lastSquare.getLevel( Direction8.getDirection( 0, 1 ) ) );
 						}
 						//edgesCap.increase( edge, 1 * FACTOR );
 						model.increaseEdgeCapacity( edge, 1 * FACTOR );
@@ -626,7 +626,7 @@ public class RectangleConverter extends BaseZToGraphConverter {
 			return true;
 
 		ZToGraphRasterSquare square = room.getSquare( i, j );
-		if( square.isBlocked( Direction.Right ) )
+		if( square.isBlocked( Direction8.Right ) )
 			return true;
 
 		ZToGraphRasterSquare right = room.getSquare( i + 1, j );
@@ -668,7 +668,7 @@ public class RectangleConverter extends BaseZToGraphConverter {
 			return true;
 
 		ZToGraphRasterSquare square = room.getSquare( i, j );
-		if( square.isBlocked( Direction.Down ) )
+		if( square.isBlocked( Direction8.Down ) )
 			return true;
 
 		ZToGraphRasterSquare down = room.getSquare( i, j + 1 );

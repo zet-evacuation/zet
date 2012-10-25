@@ -4,14 +4,17 @@
  */
 package algo.ca.algorithm.evac;
 
+import de.tu_berlin.math.coga.datastructure.simulation.cellularautomaton.MooreNeighborhoodSquare;
+import algo.ca.framework.EvacuationCellState;
 import algo.ca.PotentialController;
 import algo.ca.RuleSet;
 import algo.ca.SPPotentialController;
-import algo.ca.algorithm.CellularAutomatonSimulationProblem;
+import de.tu_berlin.math.coga.algorithm.simulation.cellularautomaton.CellularAutomatonSimulationProblem;
 import algo.ca.parameter.AbstractDefaultParameterSet;
 import algo.ca.parameter.ParameterSet;
 import algo.ca.rule.Rule;
 import ds.PropertyContainer;
+import ds.ca.evac.EvacCell;
 import ds.ca.evac.EvacuationCellularAutomaton;
 import ds.z.Project;
 import statistic.ca.CAStatisticWriter;
@@ -20,7 +23,7 @@ import statistic.ca.CAStatisticWriter;
  *
  * @author Jan-Philipp Kappmeier
  */
-public class EvacuationSimulationProblem extends CellularAutomatonSimulationProblem {
+public class EvacuationSimulationProblem extends CellularAutomatonSimulationProblem<EvacCell,EvacuationCellState,MooreNeighborhoodSquare<EvacCell>> {
 	public EvacuationCellularAutomaton eca;
 	public RuleSet ruleSet;
 	public ParameterSet parameterSet;
@@ -52,9 +55,9 @@ public class EvacuationSimulationProblem extends CellularAutomatonSimulationProb
 	public void setProject( Project project ) {
 		this.project = project;
 	}
-	
+
 	public Project getProject() {
 		return project;
 	}
-	
+
 }

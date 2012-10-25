@@ -180,7 +180,7 @@ public class GLCellularAutomatonControl extends AbstractZETVisualizationControl<
 		return this.allFloorsByID.get( floorID );
 	}
 
-	private GLCellControl getCellControl( ds.ca.evac.Cell cell ) {
+	private GLCellControl getCellControl( ds.ca.evac.EvacCell cell ) {
 		GLCAFloorControl floor = getFloorControl( cell.getRoom().getFloorID() );
 		GLRoomControl room = floor.getRoomControl( cell.getRoom() );
 		return room.getCellControl( cell );

@@ -18,7 +18,7 @@ package statistic.ca;
 import java.util.HashMap;
 import java.util.ArrayList;
 import java.util.Collections;
-import ds.ca.evac.Cell;
+import ds.ca.evac.EvacCell;
 import ds.ca.evac.Room;
 import statistic.ca.results.StoredCAStatisticResultsForCells;
 
@@ -41,13 +41,13 @@ public class CellStatistic implements CellStatisticMethods {
 	/**
 	 * associate each cell with an ArrayList which contains all timesteps the cell is occupied 
 	 */
-	private HashMap<Cell, ArrayList<Integer>> cellUtilization;
+	private HashMap<EvacCell, ArrayList<Integer>> cellUtilization;
 	
 	/**
 	 * associate each cell with an ArrayList which contains all timesteps at which an individual
 	 * standing at the cell is waiting
 	 */
-	private HashMap<Cell, ArrayList<Integer>> waitingTime;
+	private HashMap<EvacCell, ArrayList<Integer>> waitingTime;
 	
 	/** stores utilization for each room */
 	private HashMap<Room, Double> overallRoomUtilization;
@@ -73,11 +73,11 @@ public class CellStatistic implements CellStatisticMethods {
 	
 	/**
 	 * Returns the ArrayList containing the timesteps at which on the cell stands an waiting individual
-	 * @param c the (@link Cell)
+	 * @param c the (@link EvacCell)
 	 * @return ArrayList of timesteps, null if cell c is not mapped in this statistic
 	 * @throws IllegalArgumentException 
 	 */
-	public ArrayList<Integer> getCellUtilizationStatistic(Cell c) throws IllegalArgumentException{
+	public ArrayList<Integer> getCellUtilizationStatistic(EvacCell c) throws IllegalArgumentException{
 		if(cellUtilization.containsKey(c)){
 			return cellUtilization.get(c);
 		}
@@ -86,11 +86,11 @@ public class CellStatistic implements CellStatisticMethods {
 	
 	/**
 	 * Returns the ArrayList containing the timesteps at which the cell is occupied
-	 * @param c the (@link Cell)
+	 * @param c the (@link EvacCell)
 	 * @return ArrayList of timesteps, null if cell c is not mapped in this statistic
 	 * @throws IllegalArgumentException 
 	 */
-	public ArrayList<Integer> getCellWaitingStatistic(Cell c) throws IllegalArgumentException{
+	public ArrayList<Integer> getCellWaitingStatistic(EvacCell c) throws IllegalArgumentException{
 		if(cellUtilization.containsKey(c)){
 			return cellUtilization.get(c);
 		}
@@ -98,9 +98,9 @@ public class CellStatistic implements CellStatisticMethods {
 	}
 	
 	/* (non-Javadoc)
-	 * @see statistic.ca.CellStatisticMethods#getCellUtilization(ds.ca.Cell, int)
+	 * @see statistic.ca.CellStatisticMethods#getCellUtilization(ds.ca.EvacCell, int)
 	 */
-	public int getCellUtilization(Cell c, int t) throws IllegalArgumentException{
+	public int getCellUtilization(EvacCell c, int t) throws IllegalArgumentException{
 		if(cellUtilization.containsKey(c)) {
                     int index= (Collections.binarySearch(cellUtilization.get(c),t));
                     if (index<0) {
@@ -130,9 +130,9 @@ public class CellStatistic implements CellStatisticMethods {
 	}
 
 	/* (non-Javadoc)
-	 * @see statistic.ca.CellStatisticMethods#getCellWaitingTime(ds.ca.Cell, int)
+	 * @see statistic.ca.CellStatisticMethods#getCellWaitingTime(ds.ca.EvacCell, int)
 	 */
-	public int getCellWaitingTime(Cell c, int t) throws IllegalArgumentException{
+	public int getCellWaitingTime(EvacCell c, int t) throws IllegalArgumentException{
 		if(waitingTime.containsKey(c)){
                     int index= (Collections.binarySearch(waitingTime.get(c),t));
                     if (index<0) {
@@ -147,11 +147,11 @@ public class CellStatistic implements CellStatisticMethods {
 	
 	/**
 	 * Checks whether a given cell is occupied at a given timestep.
-	 * @param c the (@link Cell)
+	 * @param c the (@link EvacCell)
 	 * @param t timestep
 	 * @return true, if the given cell is occupied at the given timestep. Otherwise false is returned.
 	 */
-	public boolean isCellOccupied(Cell c, int t){
+	public boolean isCellOccupied(EvacCell c, int t){
 		if(cellUtilization.containsKey(c)){
 			return cellUtilization.get(c).contains(new Integer(t));
 		}
@@ -159,9 +159,9 @@ public class CellStatistic implements CellStatisticMethods {
 	}
 	
 	/* (non-Javadoc)
-	 * @see statistic.ca.CellStatisticMethods#getOverallCellUtilization(ds.ca.Cell, int)
+	 * @see statistic.ca.CellStatisticMethods#getOverallCellUtilization(ds.ca.EvacCell, int)
 	 */
-	public double getOverallCellUtilization(Cell c, int o){
+	public double getOverallCellUtilization(EvacCell c, int o){
 		if(cellUtilization.containsKey(c)){
 			return cellUtilization.get(c).get(cellUtilization.get(c).size())/o;
 		}
@@ -169,9 +169,9 @@ public class CellStatistic implements CellStatisticMethods {
 	}
 	
 	/* (non-Javadoc)
-	 * @see statistic.ca.CellStatisticMethods#getOverallWaitingTime(ds.ca.Cell, int)
+	 * @see statistic.ca.CellStatisticMethods#getOverallWaitingTime(ds.ca.EvacCell, int)
 	 */
-	public double getOverallWaitingTime(Cell c, int o){
+	public double getOverallWaitingTime(EvacCell c, int o){
 		if(waitingTime.containsKey(c)){
 			return waitingTime.get(c).get(waitingTime.get(c).size())/o;
 		}
@@ -190,7 +190,7 @@ public class CellStatistic implements CellStatisticMethods {
 	 */
 	public double calculatedSingleRoomUtilization(Room r, int t){
 		double averageRoomUtilization = 0.0;
-		for(Cell c : r.getAllCells()){
+		for(EvacCell c : r.getAllCells()){
 			averageRoomUtilization += getCellUtilization(c, t);
 		}
 		return (averageRoomUtilization / r.getAllCells().size());
@@ -220,7 +220,7 @@ public class CellStatistic implements CellStatisticMethods {
 	 */
 	public double calculatedSingleRoomWaitingTime(Room r, int t){
 		double averageRoomWaitingTime = 0.0;
-		for(Cell c : r.getAllCells()){
+		for(EvacCell c : r.getAllCells()){
 			averageRoomWaitingTime += getCellWaitingTime(c, t);
 		}
 		return (averageRoomWaitingTime / r.getAllCells().size());

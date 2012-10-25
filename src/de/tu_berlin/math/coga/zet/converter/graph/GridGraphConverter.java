@@ -5,8 +5,8 @@
 package de.tu_berlin.math.coga.zet.converter.graph;
 
 import de.tu_berlin.math.coga.common.localization.DefaultLoc;
-import de.tu_berlin.math.coga.common.util.Direction;
-import static de.tu_berlin.math.coga.common.util.Direction.*;
+import de.tu_berlin.math.coga.common.util.Direction8;
+import static de.tu_berlin.math.coga.common.util.Direction8.*;
 import static de.tu_berlin.math.coga.common.util.Level.*;
 import de.tu_berlin.math.coga.zet.converter.RasterContainerCreator;
 import ds.PropertyContainer;
@@ -218,7 +218,7 @@ public class GridGraphConverter extends BaseZToGraphConverter {
 								lastSquare = room.getSquare( col - 1, row );
 							else
 								throw new AssertionError( "Col should not be zero at this point." );
-							mapping.setEdgeLevel( edge, lastSquare.getLevel( Direction.getDirection( 1, 0 ) ) );
+							mapping.setEdgeLevel( edge, lastSquare.getLevel( Direction8.getDirection( 1, 0 ) ) );
 						}
 						//edgesCap.increase( edge, 1 * FACTOR );
 						model.increaseEdgeCapacity( edge, 1 * FACTOR );
@@ -251,7 +251,7 @@ public class GridGraphConverter extends BaseZToGraphConverter {
 								lastSquare = room.getSquare( col, row - 1 );
 							else
 								throw new AssertionError( DefaultLoc.getSingleton().getString( "converter.RowIsZeroException" ) );
-							mapping.setEdgeLevel( edge, lastSquare.getLevel( Direction.getDirection( 0, 1 ) ) );
+							mapping.setEdgeLevel( edge, lastSquare.getLevel( Direction8.getDirection( 0, 1 ) ) );
 						}
 						//edgesCap.increase( edge, 1 * FACTOR );
 						model.increaseEdgeCapacity( edge, 1 * FACTOR );

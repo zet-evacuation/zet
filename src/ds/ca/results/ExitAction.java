@@ -15,7 +15,7 @@
  */
 package ds.ca.results;
 
-import ds.ca.evac.Cell;
+import ds.ca.evac.EvacCell;
 import ds.ca.evac.EvacuationCellularAutomaton;
 import ds.ca.evac.ExitCell;
 import ds.ca.evac.Individual;
@@ -57,7 +57,7 @@ public class ExitAction extends Action {
 
 	@Override
 	Action adoptToCA(  EvacuationCellularAutomaton targetCA ) throws CADoesNotMatchException {
-		Cell newExit = adoptCell( exit, targetCA );
+		EvacCell newExit = adoptCell( exit, targetCA );
 		if( newExit == null )
 			throw new CADoesNotMatchException( this, "Could not find the exit " + exit + " that this action uses in the new CA." );
 		return new ExitAction( (ExitCell) newExit );

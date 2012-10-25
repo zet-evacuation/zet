@@ -4,7 +4,7 @@
  */
 package algo.ca.rule;
 
-import ds.ca.evac.Cell;
+import ds.ca.evac.EvacCell;
 import ds.ca.evac.TeleportCell;
 import java.util.ArrayList;
 import java.util.List;
@@ -17,7 +17,7 @@ import java.util.List;
 public class TeleportMovementRule extends WaitingMovementRule {
 
 	@Override
-	public boolean executableOn( Cell cell ) {
+	public boolean executableOn( EvacCell cell ) {
 		return cell instanceof TeleportCell ? super.executableOn( cell ) && !((TeleportCell)cell).isTeleportFailed() : super.executableOn( cell );
 	}
 
@@ -28,12 +28,12 @@ public class TeleportMovementRule extends WaitingMovementRule {
 	 * @return a list containing all neighbours and the from cell
 	 */
 	@Override
-	protected List<Cell> computePossibleTargets( Cell fromCell, boolean onlyFreeNeighbours ) {
-		List<Cell> targets = super.computePossibleTargets( fromCell, onlyFreeNeighbours );
+	protected List<EvacCell> computePossibleTargets( EvacCell fromCell, boolean onlyFreeNeighbours ) {
+		List<EvacCell> targets = super.computePossibleTargets( fromCell, onlyFreeNeighbours );
 
-		ArrayList<Cell> returned = new ArrayList<>(); // create new list to avoid concurrent modification
+		ArrayList<EvacCell> returned = new ArrayList<>(); // create new list to avoid concurrent modification
 		double time = esp.eca.getTimeStep();
-		for( Cell cell : targets ) {
+		for( EvacCell cell : targets ) {
 			if( !cell.isOccupied( time ) )
 				returned.add( cell );
 		}

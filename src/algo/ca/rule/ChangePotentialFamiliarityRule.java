@@ -17,7 +17,7 @@ package algo.ca.rule;
 
 import de.tu_berlin.math.coga.rndutils.RandomUtils;
 import de.tu_berlin.math.coga.rndutils.generators.GeneralRandom;
-import ds.ca.evac.Cell;
+import ds.ca.evac.EvacCell;
 import ds.ca.evac.Individual;
 import ds.ca.evac.StaticPotential;
 import java.util.ArrayList;
@@ -46,7 +46,7 @@ public class ChangePotentialFamiliarityRule extends AbstractPotentialChangeRule
 	 * its StaticPotential.
 	 */
 	@Override
-	public boolean executableOn(Cell cell) 
+	public boolean executableOn(EvacCell cell) 
 	{
 		ChangePotentialAttractivityOfExitRule rule = 
 			new ChangePotentialAttractivityOfExitRule();
@@ -59,7 +59,7 @@ public class ChangePotentialFamiliarityRule extends AbstractPotentialChangeRule
 	 * For a detailed description read the class description above.
 	 */
 	@Override
-	protected void onExecute(Cell cell) 
+	protected void onExecute(EvacCell cell) 
 	{
 		Individual individual = cell.getIndividual();
 		if(!individual.isSafe()){
@@ -91,7 +91,7 @@ public class ChangePotentialFamiliarityRule extends AbstractPotentialChangeRule
 			// the free neighbors have a lower potential (with respect
 			// to the new static potential) than the current cell
 
-			ArrayList<Cell> freeNeighbours = cell.getFreeNeighbours();
+			ArrayList<EvacCell> freeNeighbours = cell.getFreeNeighbours();
 			int i = 0; 
 			int promisingNeighbours = 0;
 			int curPotential = newPotential.getPotential(cell);

@@ -29,7 +29,7 @@ import java.util.EnumMap;
 import java.util.EnumSet;
 import java.util.Locale;
 import java.util.Set;
-import de.tu_berlin.math.coga.common.util.Direction;
+import de.tu_berlin.math.coga.common.util.Direction8;
 import de.tu_berlin.math.coga.common.util.Level;
 import ds.z.TeleportArea;
 
@@ -54,9 +54,9 @@ public class RoomRasterSquare extends RasterSquare {
 	/** Contains all properties of the square */
 	private EnumSet<RoomRasterProperty> properties;
 	/** Contains whether the square can reach the neighbor squares in the matrix. */
-	private EnumSet<Direction> passable;
+	private EnumSet<Direction8> passable;
 	/** Contains whether the neighbor squares in the matrix lie higher, equal or lower. */
-	private EnumMap<Direction, Level> levels;
+	private EnumMap<Direction8, Level> levels;
 
 	/**
 	 * Creates a new instance of RoomRasterSquare
@@ -68,9 +68,9 @@ public class RoomRasterSquare extends RasterSquare {
 	public RoomRasterSquare( Room r, int column, int row, int raster ) {
 		super( r, column, row, raster );
 
-		passable = EnumSet.allOf( Direction.class );
-		levels = new EnumMap<Direction, Level>( Direction.class );
-		for( Direction direction : Direction.values() )
+		passable = EnumSet.allOf( Direction8.class );
+		levels = new EnumMap<Direction8, Level>( Direction8.class );
+		for( Direction8 direction : Direction8.values() )
 			levels.put( direction, Level.Equal );
 		if( properties != null )
 			throw new IllegalStateException( "wie kann das sein properties!=null RoomRasterSquare" );
@@ -267,7 +267,7 @@ public class RoomRasterSquare extends RasterSquare {
 	 * @return whether the square in direction {@code direction} lies
 	 * higher, equal or lower than this square.
 	 */
-	public Level getLevel( Direction direction ) {
+	public Level getLevel( Direction8 direction ) {
 		return levels.containsKey( direction ) ? levels.get( direction ) : Level.Equal;
 	}
 
@@ -277,11 +277,11 @@ public class RoomRasterSquare extends RasterSquare {
 	 * @param direction The square in this direction is considered.
 	 * @param level Gives the level of the other square according to this square.
 	 */
-	void setLevel( Direction direction, Level level ) {
+	void setLevel( Direction8 direction, Level level ) {
 		this.levels.put( direction, level );
 	}
 
-	public Set<Direction> getPassableDirections() {
+	public Set<Direction8> getPassableDirections() {
 		return Collections.unmodifiableSet( passable );
 	}
 
@@ -292,7 +292,7 @@ public class RoomRasterSquare extends RasterSquare {
 	 * @return whether the square is connected to the neighbor in the
 	 * direction {@code direction}.
 	 */
-	public boolean isBlocked( Direction direction ) {
+	public boolean isBlocked( Direction8 direction ) {
 		return !passable.contains( direction );
 	}
 
@@ -301,7 +301,7 @@ public class RoomRasterSquare extends RasterSquare {
 	 * direction {@code direction}.
 	 * @param direction the direction of the partner square that shall be disconnected
 	 */
-	void blockDirection( Direction direction ) {
+	void blockDirection( Direction8 direction ) {
 		passable.remove( direction );
 	}
 
@@ -310,7 +310,7 @@ public class RoomRasterSquare extends RasterSquare {
 	 * direction {@code direction}.
 	 * @param direction the direction of the partner square that shall be connected
 	 */
-	void openDirection( Direction direction ) {
+	void openDirection( Direction8 direction ) {
 		passable.add( direction );
 	}
 

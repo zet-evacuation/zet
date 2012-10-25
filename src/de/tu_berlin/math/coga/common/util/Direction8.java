@@ -15,9 +15,11 @@
  */
 
 /*
- * Direction.java
+ * Direction8.java
  */
 package de.tu_berlin.math.coga.common.util;
+
+import de.tu_berlin.math.coga.datastructure.simulation.cellularautomaton.Direction;
 
 /**
  * This enumerates directions on an integral 2 dimensional room such as a
@@ -28,7 +30,7 @@ package de.tu_berlin.math.coga.common.util;
  * lies in the up-most, Left-most corner.
  * @author Daniel Plümpe, Jan-Philipp Kappmeier
  */
-public enum Direction {
+public enum Direction8 implements Direction {
 	/** The Left direction. */
 	Left( -1, 0, 6 ),
 	/** The Right direction. */
@@ -45,8 +47,8 @@ public enum Direction {
 	DownLeft( -1, 1, 5 ),
 	/** The upper Right direction. */
 	TopRight( 1, -1, 1);
-	static Direction[] a = {Top,TopRight,Right,DownRight,Down,DownLeft,Left,TopLeft};
-	
+	static Direction8[] a = {Top,TopRight,Right,DownRight,Down,DownLeft,Left,TopLeft};
+
 	/** The offset value in {@code x}-direction. */
 	private final int xOffset;
 	/** The offset value in {@code y}-direction. */
@@ -61,7 +63,7 @@ public enum Direction {
 	 * @param yOffset the offset value in {@code y}-direction
 	 * @param inverseDirection the opposite direction
 	 */
-	private Direction( int xOffset, int yOffset, int id ) {
+	private Direction8( int xOffset, int yOffset, int id ) {
 		this.xOffset = xOffset;
 		this.yOffset = yOffset;
 		this.id = id;
@@ -87,7 +89,7 @@ public enum Direction {
 	 * Gives the opposite direction.
 	 * @return the opposite direction
 	 */
-	public final Direction invert() {
+	public final Direction8 invert() {
 		return a[(id+4)%8];
 	}
 
@@ -97,7 +99,7 @@ public enum Direction {
 	 * @param y y-offset
 	 * @return the enumeration item corresponding to the given x- and y-offsets.
 	 */
-	public static Direction getDirection( final int x, final int y ) {
+	public static Direction8 getDirection( final int x, final int y ) {
 		if( x == -1 && y == 0 )
 			return Left;
 		if( x == 1 && y == 0 )
@@ -116,11 +118,11 @@ public enum Direction {
 			return DownRight;
 		throw new AssertionError( "Not a valid direction" );
 	}
-	
-	public Direction getClockwise() {
+
+	public Direction8 getClockwise() {
 		return a[(id+1)%8];
 	}
-	public Direction getCounterClockwise() {
+	public Direction8 getCounterClockwise() {
 		return a[(id-1+8)%8];
 	}
 

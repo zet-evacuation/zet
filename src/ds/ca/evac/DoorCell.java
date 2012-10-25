@@ -15,19 +15,20 @@
  */
 package ds.ca.evac;
 
+import algo.ca.framework.EvacuationCellState;
 import java.util.ArrayList;
 
 /**
- * A Door-Cell is special type of cell and therefore inherits properties and methods
- * from the abstract class Cell. Door-Cells are portals to move between two roomes.
- * Because of that they keep a reference to another Door-Cell, which belongs to the
- * room you can enter by using this Door-Cell of the current room.
+ * A Door-EvacCell is special type of cell and therefore inherits properties and methods
+ * from the abstract class EvacCell. Door-Cells are portals to move between two roomes.
+ * Because of that they keep a reference to another Door-EvacCell, which belongs to the
+ * room you can enter by using this Door-EvacCell of the current room.
  * @author Marcel Preuß, Jan-Philipp Kappmeier
  *
  */
 public class DoorCell extends BaseTeleportCell<DoorCell> {
 
-	/** Constant defining the standard Speed-Factor of a Door-Cell, which may be < 1 */
+	/** Constant defining the standard Speed-Factor of a Door-EvacCell, which may be < 1 */
 	public static final double STANDARD_DOORCELL_SPEEDFACTOR = 0.8d;
 
 	/**
@@ -37,7 +38,7 @@ public class DoorCell extends BaseTeleportCell<DoorCell> {
 	 * @param y y-coordinate of the cell in the room, 0 <= y <= height-1
 	 */
 	public DoorCell( int x, int y ) {
-		this( null, DoorCell.STANDARD_DOORCELL_SPEEDFACTOR, x, y );
+		this( new EvacuationCellState( null ), DoorCell.STANDARD_DOORCELL_SPEEDFACTOR, x, y );
 	}
 
 	/**
@@ -60,20 +61,20 @@ public class DoorCell extends BaseTeleportCell<DoorCell> {
 	 * @param individual Defines the individual that occupies the cell. If the cell
 	 * is not occupied, the value is set to "null".
 	 * @param speedFactor Defines how fast the cell can be crossed. The value should
-	 * be a rational number greater than or equal to 0 and smaller or equal to 1. 
+	 * be a rational number greater than or equal to 0 and smaller or equal to 1.
 	 * Otherwise the standard value "STANDARD_DOORCELL_SPEEDFACTOR" is set.
 	 * @param x x-coordinate of the cell in the room, 0 <= x <= width-1
 	 * @param y y-coordinate of the cell in the room, 0 <= y <= height-1
 	 */
-	public DoorCell( Individual individual, double speedFactor, int x, int y ) {
+	public DoorCell( EvacuationCellState individual, double speedFactor, int x, int y ) {
 		super( individual, speedFactor, x, y );
 	}
 
 	/**
 	 * Adds a DoorCell which is connected to this DoorCell and registers itself
 	 * as a connected DoorCell in "door".
-	 * @param door Defines the reference to the Door-Cell of the room you can
-	 * enter by using this Door-Cell of the current room.
+	 * @param door Defines the reference to the Door-EvacCell of the room you can
+	 * enter by using this Door-EvacCell of the current room.
 	 * @throws IllegalArgumentException if the parameter "Door" is null
 	 * or if "Door" has already been added to the list of doors.
 	 */
@@ -129,10 +130,10 @@ public class DoorCell extends BaseTeleportCell<DoorCell> {
 	}
 
 	@Override
-	protected ArrayList<Cell> getNeighbours( boolean passableOnly, boolean freeOnly ) {
-		ArrayList<Cell> neighbours = super.getNeighbours( passableOnly, freeOnly );
+	protected ArrayList<EvacCell> getNeighbours( boolean passableOnly, boolean freeOnly ) {
+		ArrayList<EvacCell> neighbours = super.getNeighbours( passableOnly, freeOnly );
 		for( DoorCell door : this.teleportTargets )
-			if( !freeOnly || door.individual == null )
+			if( !freeOnly || door.getStatus().getIndividual() == null )
 				neighbours.add( door );
 
 		return neighbours;
@@ -164,7 +165,7 @@ public class DoorCell extends BaseTeleportCell<DoorCell> {
 	}
 
 	/**
-	 * Changes the Speed-Factor of the Door-Cell to the specified value.
+	 * Changes the Speed-Factor of the Door-EvacCell to the specified value.
 	 * @param speedFactor Defines how fast the cell can be crossed. The value should
 	 * be a rational number greater than or equal to 0 and smaller or equal to 1.
 	 * Otherwise the standard value "STANDARD_DOORCELL_SPEEDFACTOR" is set.

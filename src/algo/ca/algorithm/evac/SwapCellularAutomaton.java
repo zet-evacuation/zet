@@ -22,7 +22,7 @@ package algo.ca.algorithm.evac;
 import algo.ca.rule.AbstractMovementRule;
 import algo.ca.rule.Rule;
 import de.tu_berlin.math.coga.common.localization.DefaultLoc;
-import ds.ca.evac.Cell;
+import ds.ca.evac.EvacCell;
 import ds.ca.evac.Individual;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -55,7 +55,7 @@ public class SwapCellularAutomaton extends EvacuationCellularAutomatonRandom {
 		AbstractMovementRule movement = null;
 		// erster Lauf: bis zur movement-rule und dann anmelden lassen.
 		ArrayList<Individual> unfinished = new ArrayList<>();
-		HashMap<Individual, List<Cell>> individualPossibleMapping = new HashMap<>();
+		HashMap<Individual, List<EvacCell>> individualPossibleMapping = new HashMap<>();
 		HashSet<Individual> individualSwapped = new HashSet<>();
 
 		for( Individual i : getIndividuals() ) {
@@ -94,8 +94,8 @@ public class SwapCellularAutomaton extends EvacuationCellularAutomatonRandom {
 					System.out.println( "Individuum " + i.id() + " hat schon geswappt." );
 				continue;
 			}
-			List<Cell> possibleTargets = individualPossibleMapping.get( i );
-			Cell target = movement.selectTargetCell( i.getCell(), possibleTargets );
+			List<EvacCell> possibleTargets = individualPossibleMapping.get( i );
+			EvacCell target = movement.selectTargetCell( i.getCell(), possibleTargets );
 			if( target.getIndividual() == null ) {
 				// Klappt alles
 				movement.move( target );
@@ -112,12 +112,12 @@ public class SwapCellularAutomaton extends EvacuationCellularAutomatonRandom {
 							System.out.println( "Individuum " + i2.id() + " hat schon geswappt." );
 						unfinished2.add( i );
 					} else {
-						List<Cell> possibleTargets2 = individualPossibleMapping.get( i2 );
+						List<EvacCell> possibleTargets2 = individualPossibleMapping.get( i2 );
 						if( possibleTargets2 == null ) {
 							// das andere individual hat wohl seinen weg ausgeführt!
 							unfinished2.add( i );
 						} else {
-							Cell target2 = movement.selectTargetCell( i2.getCell(), possibleTargets2 );
+							EvacCell target2 = movement.selectTargetCell( i2.getCell(), possibleTargets2 );
 							if( i.getCell().equals( target2 ) && i2.getCell().equals( target ) ) {
 								if( util.DebugFlags.CA_SWAP )
 									System.out.println( "SWAP Individual " + i.id() + " und Individual " + i2.id() );

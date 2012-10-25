@@ -27,7 +27,7 @@ import javax.media.opengl.GL;
 import opengl.drawingutils.GLColor;
 import opengl.drawingutils.GLVector;
 import opengl.framework.abs.AbstractDrawable;
-import de.tu_berlin.math.coga.common.util.Direction;
+import de.tu_berlin.math.coga.common.util.Direction8;
 
 public class GLCell extends AbstractDrawable<GLCell, GLCellControl> {
 	private static GLVector ul = null;	// upper Left
@@ -62,13 +62,13 @@ public class GLCell extends AbstractDrawable<GLCell, GLCellControl> {
 			boolean lighting = gl.glIsEnabled( GL.GL_LIGHTING );
 			gl.glBegin( GL.GL_QUADS );
 			gl.glNormal3d( 0, 0, 1 );
-		 	getControl().mixColorWithNeighbours( Direction.TopLeft ).draw( gl, lighting );
+		 	getControl().mixColorWithNeighbours( Direction8.TopLeft ).draw( gl, lighting );
 			ul.draw( gl );
-			getControl().mixColorWithNeighbours( Direction.TopRight ).draw( gl, lighting );
+			getControl().mixColorWithNeighbours( Direction8.TopRight ).draw( gl, lighting );
 			ur.draw( gl );
-			getControl().mixColorWithNeighbours( Direction.DownLeft ).draw( gl, lighting );
+			getControl().mixColorWithNeighbours( Direction8.DownLeft ).draw( gl, lighting );
 			lr.draw( gl );
-			getControl().mixColorWithNeighbours( Direction.DownRight ).draw( gl, lighting );
+			getControl().mixColorWithNeighbours( Direction8.DownRight ).draw( gl, lighting );
 			ll.draw( gl );
 			gl.glEnd();
 		} else {

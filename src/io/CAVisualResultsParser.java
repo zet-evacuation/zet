@@ -24,7 +24,7 @@ import java.io.IOException;
 
 import com.thoughtworks.xstream.XStream;
 
-import ds.ca.evac.Cell;
+import ds.ca.evac.EvacCell;
 import ds.ca.evac.DoorCell;
 import ds.ca.evac.ExitCell;
 import ds.ca.evac.InitialConfiguration;
@@ -77,10 +77,10 @@ public class CAVisualResultsParser {
         xstream.addImplicitCollection(Room.class, "cells");
         
         xstream.useAttributeFor(DoorCell.class, "nextDoor");
-        xstream.useAttributeFor(Cell.class, "speedFactor");
-        xstream.useAttributeFor(Cell.class, "x");
-        xstream.useAttributeFor(Cell.class, "y");
-        xstream.useAttributeFor(Cell.class, "room");
+        xstream.useAttributeFor(EvacCell.class, "speedFactor");
+        xstream.useAttributeFor(EvacCell.class, "x");
+        xstream.useAttributeFor(EvacCell.class, "y");
+        xstream.useAttributeFor(EvacCell.class, "room");
         
         xstream.omitField(VisualResultsRecording.class, "curTime");
     }

@@ -15,7 +15,7 @@
  */
 package ds.ca.results;
 
-import ds.ca.evac.Cell;
+import ds.ca.evac.EvacCell;
 import ds.ca.evac.EvacuationCellularAutomaton;
 import ds.ca.evac.Individual;
 
@@ -27,9 +27,9 @@ import ds.ca.evac.Individual;
 public class MoveAction extends Action {
 
 	/** The cell from where the individual moves */
-	protected Cell from;
+	protected EvacCell from;
 	/** The cell to where the individual moves */
-	protected Cell to;
+	protected EvacCell to;
 	/** The (exact) time, when the individual will arrive at the 
 	 *  target cell
 	 */
@@ -50,7 +50,7 @@ public class MoveAction extends Action {
 	 * @param to The cell where the individual arrives
 	 * @param individual the individual that is moved
 	 */
-	public MoveAction( Cell from, Cell to, Individual individual ) {
+	public MoveAction( EvacCell from, EvacCell to, Individual individual ) {
 		this( from, to, individual.getStepEndTime(), individual.getStepStartTime(), individual.getNumber() );
 		if( from.getIndividual() == null ) {
 			throw new IllegalArgumentException( "The starting cell must not be empty!" );
@@ -61,7 +61,7 @@ public class MoveAction extends Action {
 		}
 	}
 
-	protected MoveAction( Cell from, Cell to, double arrivalTime, double startTime, int individualNumber ) {
+	protected MoveAction( EvacCell from, EvacCell to, double arrivalTime, double startTime, int individualNumber ) {
 		this.from = from;
 		this.to = to;
 		this.arrivalTime = arrivalTime;
@@ -69,7 +69,7 @@ public class MoveAction extends Action {
 		this.individualNumber = individualNumber;
 	}
 
-	public Cell from() {
+	public EvacCell from() {
 		return from;
 	}
 
@@ -77,7 +77,7 @@ public class MoveAction extends Action {
 		return individualNumber;
 	}
 
-	public Cell to() {
+	public EvacCell to() {
 		return to;
 	}
 
@@ -122,7 +122,7 @@ public class MoveAction extends Action {
 
 	@Override
 	public Action adoptToCA( EvacuationCellularAutomaton targetCA ) throws CADoesNotMatchException {
-		Cell newFrom = adoptCell( from, targetCA );
+		EvacCell newFrom = adoptCell( from, targetCA );
 		if( newFrom == null ) {
 			throw new CADoesNotMatchException(
 							this,
@@ -130,7 +130,7 @@ public class MoveAction extends Action {
 		}
 
 
-		Cell newTo = adoptCell( to, targetCA );
+		EvacCell newTo = adoptCell( to, targetCA );
 		if( to == null ) {
 			throw new CADoesNotMatchException(
 							this,

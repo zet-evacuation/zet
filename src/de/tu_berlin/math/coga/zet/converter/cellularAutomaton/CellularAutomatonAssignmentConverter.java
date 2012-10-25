@@ -10,7 +10,7 @@ import de.tu_berlin.math.coga.common.algorithm.Algorithm;
 import de.tu_berlin.math.coga.common.localization.DefaultLoc;
 import de.tu_berlin.math.coga.zet.converter.cellularAutomaton.ZToCAConverter.ConversionNotSupportedException;
 import ds.PropertyContainer;
-import ds.ca.evac.Cell;
+import ds.ca.evac.EvacCell;
 import ds.ca.evac.ExitCell;
 import ds.ca.evac.Individual;
 import ds.ca.evac.TargetCell;
@@ -53,7 +53,7 @@ public class CellularAutomatonAssignmentConverter extends Algorithm<AssignmentAp
 		ZToCARoomRaster room;
 		// Create ZToExitMapping
 		HashMap<Individual, TargetCell> individualExitMapping = new HashMap<>();
-		Cell c;
+		EvacCell c;
 		int x, y;
 		int individualCounter = 1;
 		for( Person p : concreteAssignment.getPersons() ) {

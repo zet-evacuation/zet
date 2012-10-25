@@ -16,7 +16,7 @@
 package algo.ca.rule;
 
 import java.util.ArrayList;
-import ds.ca.evac.Cell;
+import ds.ca.evac.EvacCell;
 import ds.ca.evac.Individual;
 import ds.ca.evac.StaticPotential;
 
@@ -34,7 +34,7 @@ public class ChangePotentialInsufficientAdvancementRule extends AbstractPotentia
 	 * @return true, if the cange potential rule can be used
 	 */
 	@Override
-	public boolean executableOn( Cell cell ) {
+	public boolean executableOn( EvacCell cell ) {
 		if( cell.getIndividual() != null && !cell.getIndividual().isSafe() )
 			return true;
 		else
@@ -46,7 +46,7 @@ public class ChangePotentialInsufficientAdvancementRule extends AbstractPotentia
 	 * @param cell
 	 */
 	@Override
-	protected void onExecute( Cell cell ) {
+	protected void onExecute( EvacCell cell ) {
 
 		// Get the potential of the individual on the {@code cell} as well as some other concerning constants of the individual
 		Individual individual = cell.getIndividual();
@@ -89,7 +89,7 @@ public class ChangePotentialInsufficientAdvancementRule extends AbstractPotentia
 				// the free neighbors have a lower potential (with respect
 				// to the new static potential) than the current cell
 
-				ArrayList<Cell> freeNeighbours = cell.getFreeNeighbours();
+				ArrayList<EvacCell> freeNeighbours = cell.getFreeNeighbours();
 				int i = 0;
 				int promisingNeighbours = 0;
 				int curPotential = minWayLengthPotential.getPotential( cell );

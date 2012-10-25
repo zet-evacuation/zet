@@ -17,14 +17,14 @@
 package de.tu_berlin.math.coga.zet.converter.cellularAutomaton;
 
 import de.tu_berlin.math.coga.common.localization.DefaultLoc;
-import ds.ca.evac.Cell;
+import ds.ca.evac.EvacCell;
 import ds.ca.evac.EvacuationCellularAutomaton;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 
 /**
- * This class maps bidirectionally between "Cell"-Objects and "ZToCARasterSquare"-Objects, 
+ * This class maps bidirectionally between "EvacCell"-Objects and "ZToCARasterSquare"-Objects, 
  * and moreover maps bidirectionally between Rooms of the Z-data structure and Rooms of
  * the EvacuationCellularAutomaton-Datastructure.
  * @author marcel
@@ -33,14 +33,14 @@ import java.util.Set;
 public class ZToCAMapping 
 {
 	/**
-	 * A Map that maps Cell-Objects to ZToCARasterSquare-Objects
+	 * A Map that maps EvacCell-Objects to ZToCARasterSquare-Objects
 	 */
-	private Map<Cell, ZToCARasterSquare> cellToRasterSquare;
+	private Map<EvacCell, ZToCARasterSquare> cellToRasterSquare;
 	
 	/**
-	 * A Map that maps ZToCARasterSquare-Objects to Cell-Objects
+	 * A Map that maps ZToCARasterSquare-Objects to EvacCell-Objects
 	 */
-	private Map<ZToCARasterSquare, Cell> rasterSquareToCell;
+	private Map<ZToCARasterSquare, EvacCell> rasterSquareToCell;
 	
 	/**
 	 * A Map that maps Room-Objects of the Z-Datastructure to
@@ -60,14 +60,14 @@ public class ZToCAMapping
 	
 	/**
 	 * Constructs a new empty ZToCAMapping-Object, which is able to map
-	 * bidirectionally between Cell-Objects and ZToCARasterSquare-Objects and
+	 * bidirectionally between EvacCell-Objects and ZToCARasterSquare-Objects and
 	 * moreover is able to map bidirectionally between Rooms of the 
 	 * Z-Datastructure and the ZA-Datastructure.
 	 */
 	public ZToCAMapping()
 	{
-		this.cellToRasterSquare = new HashMap<Cell, ZToCARasterSquare>();
-		this.rasterSquareToCell = new HashMap<ZToCARasterSquare, Cell>();
+		this.cellToRasterSquare = new HashMap<EvacCell, ZToCARasterSquare>();
+		this.rasterSquareToCell = new HashMap<ZToCARasterSquare, EvacCell>();
 		this.zRoomToZARoom = new HashMap<ZToCARoomRaster, ds.ca.evac.Room>();
 		this.zARoomToZRoom = new HashMap<ds.ca.evac.Room, ZToCARoomRaster>();
 		this.zaFloorToZFloor = new HashMap<Integer, ds.z.Floor>();
@@ -75,20 +75,20 @@ public class ZToCAMapping
 	}
 	
 	/**
-	 * Inserts a new tuple (Cell, ZToCARasterSquare). This means that "Cell" and
+	 * Inserts a new tuple (EvacCell, ZToCARasterSquare). This means that "EvacCell" and
 	 * "ZToCARasterSquare" are associated to each other from now on bidirectionally.
-	 * If at least one of the two parameter-values Cell or ZToCARasterSquare already
+	 * If at least one of the two parameter-values EvacCell or ZToCARasterSquare already
 	 * exists in another tuple, this old tuple is removed and the new tuple will
 	 * be inserted. In this case "true" is returned by this method.
-	 * @param cell The Cell which shall be associated with the RasterSquare.
-	 * @param rasterSquare The RasterSquare which shall be associated with the Cell.
+	 * @param cell The EvacCell which shall be associated with the RasterSquare.
+	 * @param rasterSquare The RasterSquare which shall be associated with the EvacCell.
 	 * @return Returns "true", if another tuple has been removed from the list of
 	 * tuples, because at least one the two parameter-values had already been inserted
 	 * before, and "false" if not.
 	 * @throws IllegalArgumentException Throws an "IllegalArgumentException" if at
 	 * least one of the two parameter-values is a null-pointer. 
 	 */
-	public boolean insertTuple(Cell cell, ZToCARasterSquare rasterSquare) throws IllegalArgumentException {
+	public boolean insertTuple(EvacCell cell, ZToCARasterSquare rasterSquare) throws IllegalArgumentException {
 		if (cell == null)
 			throw new IllegalArgumentException(DefaultLoc.getSingleton (
 			).getString ("converter.CellIsNullException"));
@@ -100,7 +100,7 @@ public class ZToCAMapping
 		if(this.cellToRasterSquare.containsKey(cell) || this.rasterSquareToCell.containsKey(rasterSquare)){
 		    overwrite = true;
 		    ZToCARasterSquare oldSquare = this.cellToRasterSquare.get(cell);
-		    ds.ca.evac.Cell oldCell = this.rasterSquareToCell.get(rasterSquare);
+		    ds.ca.evac.EvacCell oldCell = this.rasterSquareToCell.get(rasterSquare);
 		    
 		    cellToRasterSquare.remove(oldCell);
 		    rasterSquareToCell.remove(oldSquare);		    
@@ -175,13 +175,13 @@ public class ZToCAMapping
 	}
 	
 	/**
-	 * Returns the ZToCARasterSquare which corresponds to the parameter "Cell".
+	 * Returns the ZToCARasterSquare which corresponds to the parameter "EvacCell".
 	 * @param cell The cell, whose corresponding "ZToCARasterSquare" is requested.
-	 * @return The ZToCARasterSquare which corresponds to parameter "Cell".
+	 * @return The ZToCARasterSquare which corresponds to parameter "EvacCell".
 	 * @throws IllegalArgumentException Throws an "IllegalArgumentException", if
-	 * the parameter "Cell" is a null-pointer.
+	 * the parameter "EvacCell" is a null-pointer.
 	 */
-	public ZToCARasterSquare get(Cell cell) throws IllegalArgumentException {
+	public ZToCARasterSquare get(EvacCell cell) throws IllegalArgumentException {
 		if (cell == null)
 			throw new IllegalArgumentException(DefaultLoc.getSingleton (
 			).getString ("converter.CellIsNullException"));
@@ -190,13 +190,13 @@ public class ZToCAMapping
 	}
 	
 	/**
-	 * Returns the Cell which corresponds to the parameter "rasterSquare".
-	 * @param rasterSquare The rasterSquare, whose corresponding Cell is requested.
-	 * @return The Cell which corresponds to the parameter "rasterSquare".
+	 * Returns the EvacCell which corresponds to the parameter "rasterSquare".
+	 * @param rasterSquare The rasterSquare, whose corresponding EvacCell is requested.
+	 * @return The EvacCell which corresponds to the parameter "rasterSquare".
 	 * @throws IllegalArgumentException Throws an "IllegalArgumentException", if
 	 * the parameter "rasterSquare" is a null-pointer.
 	 */
-	public Cell get(ZToCARasterSquare rasterSquare) throws IllegalArgumentException {
+	public EvacCell get(ZToCARasterSquare rasterSquare) throws IllegalArgumentException {
 		if (rasterSquare == null)
 			throw new IllegalArgumentException(DefaultLoc.getSingleton (
 			).getString ("converter.RasterSquareIsNullException"));
@@ -246,9 +246,9 @@ public class ZToCAMapping
 	}
 	
 	/**
-	 * Returns the number of (Cell,ZToCARasterSquare)-tuples existing
+	 * Returns the number of (EvacCell,ZToCARasterSquare)-tuples existing
 	 * in this ZToCAMapping-Object.
-	 * @return The number of (Cell,ZToCARasterSquare)-tuples existing
+	 * @return The number of (EvacCell,ZToCARasterSquare)-tuples existing
 	 * in this ZToCAMapping-Object.
 	 */
 	public int nrOfCellRasterSquareTupels() {
@@ -266,16 +266,16 @@ public class ZToCAMapping
 	 * @return Returns "true", if there exists a tuple mapping from "cell" 
 	 * to an arbitrary rasterSquare, "false" if not.
 	 */
-	public boolean contains(Cell cell) {
+	public boolean contains(EvacCell cell) {
 		return this.cellToRasterSquare.containsKey(cell);
 	}
 	
 	/**
 	 * Checks, whether there exists a tuple mapping from "rasterSquare" to an
-	 * arbitrary Cell.
+	 * arbitrary EvacCell.
 	 * @param rasterSquare The rasterSquare to be checked (whether it exists or not).
 	 * @return Returns "true", if there exists a tuple mapping from "rasterSquare" 
-	 * to an arbitrary Cell, "false" if not.
+	 * to an arbitrary EvacCell, "false" if not.
 	 */
 	public boolean contains(ZToCARasterSquare rasterSquare) {
 		return this.rasterSquareToCell.containsKey(rasterSquare);
@@ -324,7 +324,7 @@ public class ZToCAMapping
 	    return this.zaFloorToZFloor.keySet();
 	}
 	
-	public Set<ds.ca.evac.Cell> getCACells(){
+	public Set<ds.ca.evac.EvacCell> getCACells(){
 	    return this.cellToRasterSquare.keySet();
 	}
 	
@@ -339,9 +339,9 @@ public class ZToCAMapping
 	        adoptedMapping.insertTuple(zARoomToZRoom.get(room), ca.getRoom(room.getID()));
 	    }
 	    
-	    for(ds.ca.evac.Cell cell : getCACells()){
+	    for(ds.ca.evac.EvacCell cell : getCACells()){
 	        ds.ca.evac.Room newRoom = ca.getRoom(cell.getRoom().getID());
-	        ds.ca.evac.Cell adoptedCell = newRoom.getCell(cell.getX(), cell.getY());	        
+	        ds.ca.evac.EvacCell adoptedCell = newRoom.getCell(cell.getX(), cell.getY());	        
 	        
 	        adoptedMapping.insertTuple(adoptedCell, cellToRasterSquare.get(cell));
 	    }

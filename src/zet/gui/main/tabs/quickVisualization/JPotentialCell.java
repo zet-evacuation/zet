@@ -21,7 +21,7 @@
 package zet.gui.main.tabs.quickVisualization;
 
 import ds.PropertyContainer;
-import ds.ca.evac.Cell;
+import ds.ca.evac.EvacCell;
 import ds.ca.evac.EvacuationCellularAutomaton;
 import zet.gui.main.tabs.base.AbstractFloor;
 import java.awt.Color;
@@ -37,7 +37,7 @@ public class JPotentialCell extends JCellPolygon {
 	private float colorValue = 0f;
 	private boolean showPotentialValue;
 
-	public JPotentialCell( Cell cell, AbstractFloor floor, int potential, int maxPotential, EvacuationCellularAutomaton ca  ) {
+	public JPotentialCell( EvacCell cell, AbstractFloor floor, int potential, int maxPotential, EvacuationCellularAutomaton ca  ) {
 		super( cell, floor, potential > 0 ? new Color( 1-(float)potential/maxPotential, 1-(float)potential/maxPotential, 1.0f ) : Color.white, ca );
 		this.potential = potential;
 		this.maxPotential = maxPotential;
@@ -51,7 +51,7 @@ public class JPotentialCell extends JCellPolygon {
 	 * @param potential
 	 * @param maxPotential
 	 */
-	public JPotentialCell( Cell cell, AbstractFloor floor, Color lineColor, int potential, int maxPotential, EvacuationCellularAutomaton ca ) {
+	public JPotentialCell( EvacCell cell, AbstractFloor floor, Color lineColor, int potential, int maxPotential, EvacuationCellularAutomaton ca ) {
 		super( cell, floor, potential > 0 ? new Color( 1-(float)potential/maxPotential, 1-(float)potential/maxPotential, 1.0f ) : Color.white, lineColor, ca );
 		colorValue = 1-(float)potential/maxPotential;
 		this.potential = potential;

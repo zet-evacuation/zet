@@ -26,9 +26,9 @@ import algo.ca.algorithm.evac.EvacuationSimulationProblem;
  *
  */
 public interface Rule {
-	public void execute( ds.ca.evac.Cell cell );
+	public void execute( ds.ca.evac.EvacCell cell );
 
-	public boolean executableOn( ds.ca.evac.Cell cell );
+	public boolean executableOn( ds.ca.evac.EvacCell cell );
 
 	public void setEvacuationSimulationProblem( EvacuationSimulationProblem esp );
 }

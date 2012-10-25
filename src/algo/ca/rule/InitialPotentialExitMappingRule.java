@@ -21,7 +21,7 @@
 
 package algo.ca.rule;
 
-import ds.ca.evac.Cell;
+import ds.ca.evac.EvacCell;
 import ds.ca.evac.Individual;
 import ds.ca.evac.StaticPotential;
 import ds.ca.evac.TargetCell;
@@ -57,7 +57,7 @@ public class InitialPotentialExitMappingRule extends AbstractInitialRule {
 	 * not already have a StaticPotential.
 	 */
 	@Override
-	public boolean executableOn( Cell cell ) {
+	public boolean executableOn( EvacCell cell ) {
 		return cell.getIndividual() != null;
 	}
 
@@ -66,7 +66,7 @@ public class InitialPotentialExitMappingRule extends AbstractInitialRule {
 	 * @param cell the cell on which the individual stands
 	 */
 	@Override
-	protected void onExecute( Cell cell ) {
+	protected void onExecute( EvacCell cell ) {
 		if( !initialized )
 			init();
 

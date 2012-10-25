@@ -15,21 +15,22 @@
  */
 package ds.ca.evac;
 
+import de.tu_berlin.math.coga.datastructure.simulation.cellularautomaton.CellMatrix;
 import java.util.ArrayList;
 
 /**
  * This class represents a room, which is a collection of Cells.
  * Individuals can stay in a room:
- * Each individual beeing in a room is standing on one Cell. 
+ * Each individual beeing in a room is standing on one EvacCell.
  * @author marcel
  *
  */
-public class Room {
+public class Room implements CellMatrix<EvacCell> {
 
 	/** The id of the room (to calculate the hashCode). */
 	private int id;
 	/**
-	 * Counts the number of existing Rooms. 
+	 * Counts the number of existing Rooms.
 	 * Every new Room gets automatically a unique ID.
 	 */
 	private static int idCount = 0;
@@ -38,16 +39,16 @@ public class Room {
 	/** Manages the individuals existing in this room. */
 	private ArrayList<Individual> individuals;
 	/** Manages the Cells into which the room is divided. */
-	private Cell[][] cells;
+	private EvacCell[][] cells;
 	/** Number of Cells on the x-axis. */
 	private int width;
 	/** Description of Floor containing this room. */
 	private String floor;
 	/** Number of Cells on the y-axis. */
 	private int height;
-	
+
 	private int floorID;
-	
+
 	private boolean isAlarmed;
 	private int xOffset;
 	private int yOffset;
@@ -63,9 +64,9 @@ public class Room {
 		this.height = height;
 		this.floor = floor;
 		this.floorID = floorID;
-		doors = new ArrayList<DoorCell>();
-		individuals = new ArrayList<Individual>();
-		cells = new Cell[this.width][this.height];
+		doors = new ArrayList<>();
+		individuals = new ArrayList<>();
+		cells = new EvacCell[this.width][this.height];
 		for( int i = 0; i < this.width; i++ ) {
 			for( int j = 0; j < this.height; j++ ) {
 				cells[i][j] = null;
@@ -96,17 +97,17 @@ public class Room {
 	}
 
 	/**
-	 * Places the defined cell at Cell-Position (x,y) of the room.
+	 * Places the defined cell at EvacCell-Position (x,y) of the room.
 	 * If parameter "cell" is a "DoorCell", it is added to the
-	 * lists of Door-Cells. If a new Cell overwrites an old cell,
-	 * it is checked whether the old cell was a DoorCell. In this 
+	 * lists of Door-Cells. If a new EvacCell overwrites an old cell,
+	 * it is checked whether the old cell was a DoorCell. In this
 	 * case the DoorCell will be removed from the list of DoorCells.
 	 * @param cell The cell, which should be referenced at position (x,y).
 	 * If position (x,y) shall be empty, set parameter cell = null.
 	 * @throws IllegalArgumentException if the x- or the y-value of
 	 * the parameter "cell" is out of bounds.
 	 */
-	public void setCell( Cell cell ) throws IllegalArgumentException {
+	public void setCell( EvacCell cell ) throws IllegalArgumentException {
 		if( (cell.getX() < 0) || (cell.getX() > this.width - 1) ) {
 			throw new IllegalArgumentException( "Invalid x-value in cell!" );
 		}
@@ -133,7 +134,8 @@ public class Room {
 	 * @throws IllegalArgumentException if the x- or the y-parameter
 	 * is out of bounds.
 	 */
-	public Cell getCell( int x, int y ) throws IllegalArgumentException {
+	@Override
+	public EvacCell getCell( int x, int y ) throws IllegalArgumentException {
 		if( (x < 0) || (x > this.width - 1) ) {
 			throw new IllegalArgumentException( "Invalid x-value!" );
 		}
@@ -147,17 +149,18 @@ public class Room {
 	 * Returns a list of all cells in the room.
 	 * @return a list of all cells
 	 */
-	public ArrayList<Cell> getAllCells() {
-		ArrayList<Cell> cells = new ArrayList<Cell>();
+	@Override
+	public ArrayList<EvacCell> getAllCells() {
+		ArrayList<EvacCell> cells = new ArrayList<EvacCell>();
 		for( int i = 0; i < getWidth(); i++)
 			for( int j = 0; j < getHeight(); j++ ) {
-				Cell t = getCell( i, j );
+				EvacCell t = getCell( i, j );
 				if( t != null )
 					cells.add( t );
 			}
-		return cells;	
+		return cells;
 	}
-	
+
 	/**
 	 * Returns the setAlarmed status of this room.
 	 * @return true if the setAlarmed status is true.
@@ -210,7 +213,7 @@ public class Room {
 	public int getXOffset() {
 		return xOffset;
 	}
-	
+
 	public void setXOffset( int xOffset ) {
 		this.xOffset = xOffset;
 	}
@@ -218,7 +221,7 @@ public class Room {
 	public int getYOffset() {
 		return yOffset;
 	}
-	
+
 	public void setYOffset( int yOffset ) {
 		this.yOffset = yOffset;
 	}
@@ -228,9 +231,9 @@ public class Room {
 	 * The entering individual is registered in the list of individuals staying in
 	 * the room.
 	 * @throws The method throws an {@code IllegalArgumentException} if you
-	 * try to enter this Room with a Individual not standing on a DoorCell, if the 
-	 * DoorCell does not belong to this Room, or if the current DoorCell of the 
-	 * individual does not have a reference to the the defined "nextDoor"-Cell.
+	 * try to enter this Room with a Individual not standing on a DoorCell, if the
+	 * DoorCell does not belong to this Room, or if the current DoorCell of the
+	 * individual does not have a reference to the the defined "nextDoor"-EvacCell.
 	 * @param who The individual entering the room.
 	 */
 //	 void enter( Individual who, DoorCell nextDoor ) throws IllegalArgumentException {
@@ -253,14 +256,14 @@ public class Room {
 	 * is removed from the list of individuals staying in the room and it is also
 	 * removed from the DoorCell "exit" and then returned by this method.
 	 * @throws The method throws an {@code IllegalArgumentException}
-	 * if you try to call "leave()" with a 
+	 * if you try to call "leave()" with a
 	 * DoorCell which is not occupied by an Individual.
 	 * @throws Throws an {@code IllegalArgumentException}, if the cell, from
 	 * which the individual should leave the room, is not of type "ExitCell" or "DoorCell".
 	 * @param exit The DoorCell the individual uses for leaving the room.
 	 * @return The individual leaving the room by using the DoorCell "exit".
 	 */
-//	Individual leave( Cell exit ) throws IllegalArgumentException {
+//	Individual leave( EvacCell exit ) throws IllegalArgumentException {
 //		if( exit.getIndividual() == null ) {
 //			throw new IllegalArgumentException( "No Individual standing on this DoorCell!" );
 //		}
@@ -289,11 +292,11 @@ public class Room {
 //	}
 
 	/**
-	 * 
+	 *
 	 * @param c
 	 * @param i
 	 */
-	public void addIndividual( Cell c, Individual i ) {
+	public void addIndividual( EvacCell c, Individual i ) {
 		if( !c.getRoom().equals(  this ) ) {
 			throw new IllegalStateException( "The cell does not belong to this room." );
 		}
@@ -302,13 +305,13 @@ public class Room {
 		individuals.add( i );
 	}
 
-	
+
 	private void checkIndividual( Individual i ) throws IllegalStateException {
 		if( !individuals.contains( i ) ) {
 			throw new IllegalStateException( "Individual " + i.id() + " is not in the room." );
-		}		
+		}
 	}
-	
+
 	public void removeIndividual( Individual i ) {
 		checkIndividual( i );
 		if( i.getCell() == null ) {
@@ -317,20 +320,20 @@ public class Room {
 				throw new IllegalStateException( "Individual is in the room, but the cell is in another room." );
 			}
 			i.getCell().removeIndividual();
-			i.setCell( null );		
+			i.setCell( null );
 		}
 		individuals.remove( i );
 	}
-	
-	void moveIndividual( Cell from, Cell to ) throws IllegalStateException {
+
+	void moveIndividual( EvacCell from, EvacCell to ) throws IllegalStateException {
 		Individual i = from.getIndividual();
 		checkIndividual( i );
 		to.setIndividual( from.getIndividual() ); // removeIndividual is implicitly called
 		i.setCell( to );
 		from.removeIndividual();
 	}
-	
-	void swapIndividuals( Cell cell1, Cell cell2 ) throws IllegalStateException {
+
+	void swapIndividuals( EvacCell cell1, EvacCell cell2 ) throws IllegalStateException {
 		Individual c1i = cell1.getIndividual();
 		Individual c2i = cell2.getIndividual();
 		checkIndividual( c1i );
@@ -342,7 +345,7 @@ public class Room {
 		c1i.setCell( cell2 );
 		c2i.setCell( cell1 );
 	}
-	
+
 	/**
 	 * Removes the individual from the room`s list of individuals.
 	 * Is used when an individual is taken out of the simulation
@@ -356,6 +359,7 @@ public class Room {
 	 * Returns the number of cells on the x-axis of the room.
 	 * @return The number of cells on the x-axis of the room.
 	 */
+	@Override
 	public int getWidth() {
 		return width;
 	}
@@ -364,12 +368,13 @@ public class Room {
 	 * Returns the number of cells on the y-axis of the room.
 	 * @return The number of cells on the y-axis of the room.
 	 */
+	@Override
 	public int getHeight() {
 		return height;
 	}
 
 	/**
-	 * Checks whether the cell at position (x,y) of the room 
+	 * Checks whether the cell at position (x,y) of the room
 	 * exists or not
 	 * @param x x-coordinate of the cell to be checked
 	 * @param y y-coordinate of the cell to be checked
@@ -389,17 +394,17 @@ public class Room {
 	}
 
 //  HashCode und Equals auskommentiert: Wenn zwei Räume gleich sind,
-//  wenn sie die gleiche ID haben verlieren wird die Moeglichkeit, 
-//	Raeume unter Erhaltung der ID zu Klonen und in einer HashMap Klone 
-//	auf ihre Originale abzubilden. Dies wird an mehreren Stellen 
+//  wenn sie die gleiche ID haben verlieren wird die Moeglichkeit,
+//	Raeume unter Erhaltung der ID zu Klonen und in einer HashMap Klone
+//	auf ihre Originale abzubilden. Dies wird an mehreren Stellen
 //  benoetigt. Die oben beschriebene Gleichheit wird nirgendwo benutzt und
-//  war fuer mehrere Bugs verantwortlich.      
+//  war fuer mehrere Bugs verantwortlich.
 
 	@Override
 	public int hashCode() {
 		return id;
 	}
-	
+
 	@Override
 	public boolean equals(Object obj){
 	    Room room = (Room)obj;
@@ -409,7 +414,7 @@ public class Room {
 	public int getID() {
 		return id;
 	}
-	
+
 	public int getFloorID(){
 	    return floorID;
 	}
@@ -486,7 +491,7 @@ public class Room {
 
 		return clone;
 	}
-        
+
         public String getIdentificationForStatistic() {
             return("in floor "+getFloor()+", width=" + width + ";height=" + height);
         }

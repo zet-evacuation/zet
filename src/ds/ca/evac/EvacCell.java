@@ -15,39 +15,39 @@
  */
 package ds.ca.evac;
 
-import de.tu_berlin.math.coga.common.util.Direction;
+import de.tu_berlin.math.coga.datastructure.simulation.cellularautomaton.SquareCell;
+import algo.ca.framework.EvacuationCellState;
+import de.tu_berlin.math.coga.common.util.Direction8;
 import de.tu_berlin.math.coga.common.util.Level;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.EnumMap;
 import java.util.EnumSet;
+import java.util.Iterator;
 
 /**
  * The Cellular Automaton devides a room into quadratic cells.
- * This abstract class "Cell" describes such a cell, which is a part of the room.
- * It is kept abstract, because there are several special kinds of cells, such as 
+ * This abstract class "EvacCell" describes such a cell, which is a part of the room.
+ * It is kept abstract, because there are several special kinds of cells, such as
  * door cells, stair cells and exit cells.
  * Generally each cell can be occupied by an individual and can be crossed with a
  * certain speed.
  * @author Marcel Preuß, Jan-Philipp Kappmeier
  *
  */
-public abstract class Cell implements Comparable<Cell> {
+public abstract class EvacCell extends SquareCell<EvacCell,EvacuationCellState> implements Comparable<EvacCell> {
 	/** This character is used for graphic-like ASCII-output.  */
 	protected char graphicalRepresentation = ' ';
-	/** Defines the Speed-Factor of the Cell. In other words it defines a value, how fast this cell can be crossed. */
+	/** Defines the Speed-Factor of the EvacCell. In other words it defines a value, how fast this cell can be crossed. */
 	protected double speedFactor;
 	/** Manages the individual that occupies the cell. */
-	protected Individual individual;
-	/** x-coordinate of the cell in the room. */
-	protected int x;
-	/** y-coordinate of the cell in the room. */
-	protected int y;
+	//protected Individual individual;
 	/** The room to which the cell belongs. */
 	protected Room room;
 	/** The bounds of the  cell. */
-	protected EnumSet<Direction> bounds;
+	protected EnumSet<Direction8> bounds;
 	/** Tells whether the surrounding squares are higher, equal or lower. */
-	protected EnumMap<Direction, Level> levels;
+	protected EnumMap<Direction8, Level> levels;
 	/** Stores the hashCode of this cell.  */
 	protected int hash;
 	/** The time up to which the cell is blocked by an individuum (even if it is no longer set to the cell). */
@@ -55,30 +55,28 @@ public abstract class Cell implements Comparable<Cell> {
 
 	/**
 	 * Constructor defining the values of individual and speedFactor.
-	 * @param individual Defines the individual that occupies the cell. If the cell
-	 * is not occupied, the value is to be set to "null".
+	 * @param state the state of the ca.
 	 * @param speedFactor Defines how fast the cell can be crossed. The value should
-	 * be a rational number greater than or equal to 0 and smaller or equal to 1. 
-	 * Otherwise the standard value of the specific class which inherits from Cell 
+	 * be a rational number greater than or equal to 0 and smaller or equal to 1.
+	 * Otherwise the standard value of the specific class which inherits from EvacCell
 	 * is set.
 	 * @param x x-coordinate of the cell in the room
 	 * @param y y-coordinate of the cell in the room
 	 */
-	public Cell( Individual individual, double speedFactor, int x, int y ) {
-		this( individual, speedFactor, x, y, null );
+	public EvacCell( EvacuationCellState state, double speedFactor, int x, int y ) {
+		this( state, speedFactor, x, y, null );
 	}
 
-	public Cell( Individual individual, double speedFactor, int x, int y, Room room ) {
-		this.individual = individual;
-		this.setSpeedFactor( speedFactor );
-		
+	public EvacCell( EvacuationCellState state, double speedFactor, int x, int y, Room room ) {
+		super( state, x, y, room );
+		//this.individual = individual;
+		this.setSpeedFactor( speedFactor ); // TODO
+
 		// Must be in this order
-		this.x = x;
-		this.y = y;
 		setRoom (room);
-		
-		this.bounds = EnumSet.noneOf( Direction.class );
-		this.levels = new EnumMap<>( Direction.class );
+
+		this.bounds = EnumSet.noneOf( Direction8.class );
+		this.levels = new EnumMap<>( Direction8.class );
 	}
 
 	/**
@@ -86,28 +84,29 @@ public abstract class Cell implements Comparable<Cell> {
 	 * @return The individual that occupies the cell.
 	 */
 	public Individual getIndividual() {
-		return individual;
+		return getStatus().getIndividual();
 	}
-//     * Sets a new individual onto the cell and calls the Individual.setCell()-Method
+
+	//     * Sets a new individual onto the cell and calls the Individual.setCell()-Method
 //     * to register itself as the current cell of the individual.
 	/**
 	 * Sets an individual on the cell. It is <b>not</b> automatically removed
 	 * from its source cell nor are rooms or any lists updated.
-	 * @param individual The individual occupying the cell from now on. Set this 
+	 * @param individual The individual occupying the cell from now on. Set this
 	 * value to "null" in order to mark this cell as not occupied.
 	 */
 	void setIndividual( Individual i ) {
-		if( individual != null && !i.equals( individual ) )
+		if( getIndividual() != null && !i.equals( getIndividual() ) )
 			throw new java.lang.IllegalStateException( "Individual was already set!" );
 		if( i == null ) {
 			throw new java.lang.NullPointerException( "Individual is null." );
 		//Cell old = individual.getCell();
 		}
-		this.individual = i;
+		getStatus().setIndividual( i );
 	}
 
 	void removeIndividual() {
-		individual = null;
+		getStatus().setIndividual( null );
 	}
 
 	/**
@@ -119,22 +118,22 @@ public abstract class Cell implements Comparable<Cell> {
 	}
 
 	/**
-	 * Changes the Speed-Factor of the Cell to the specified value. This method is 
+	 * Changes the Speed-Factor of the EvacCell to the specified value. This method is
 	 * kept abstract because the standard values
-	 * may differ in the specific classes which inherit from Cell.
+	 * may differ in the specific classes which inherit from EvacCell.
 	 * @param speedFactor Defines how fast the cell can be crossed. The value should
-	 * be a rational number greater than or equal to 0 and smaller or equal to 1. 
-	 * Otherwise the standard value of the specific class which inherits 
-	 * from Cell is set.
+	 * be a rational number greater than or equal to 0 and smaller or equal to 1.
+	 * Otherwise the standard value of the specific class which inherits
+	 * from EvacCell is set.
 	 */
 	public abstract void setSpeedFactor( double speedFactor );
 
 	/**
-	 * Returns all existing direct-neighbour-cells that are reachable of 
+	 * Returns all existing direct-neighbour-cells that are reachable of
 	 * this cell
 	 * @return ArrayList of direct-neighbour-cells of "cell"
 	 */
-	public ArrayList<Cell> getNeighbours() {
+	public ArrayList<EvacCell> getNeighbours() {
 		return getNeighbours( true, false );
 	}
 
@@ -143,7 +142,8 @@ public abstract class Cell implements Comparable<Cell> {
 	 * are not reachable).
 	 * @return ArrayList of direct-neighbour-cells of "cell"
 	 */
-	public ArrayList<Cell> getAllNeighbours() {
+	@Override
+	public Collection<EvacCell> getDirectNeighbors() {
 		return getNeighbours( false, false );
 	}
 
@@ -151,7 +151,7 @@ public abstract class Cell implements Comparable<Cell> {
 	 * Returns a list of all free neighbour cells.
 	 * @return a list of all free neighbour cells
 	 */
-	public ArrayList<Cell> getFreeNeighbours() {
+	public ArrayList<EvacCell> getFreeNeighbours() {
 		return getNeighbours( true, true );
 	}
 
@@ -170,11 +170,11 @@ public abstract class Cell implements Comparable<Cell> {
 	public int getY() {
 		return this.y;
 	}
-	
+
 	public int getAbsoluteX() {
 		return this.x + room.getXOffset();
 	}
-	
+
 	public int getAbsoluteY() {
 		return this.y + room.getYOffset();
 	}
@@ -188,15 +188,15 @@ public abstract class Cell implements Comparable<Cell> {
 	}
 
 	/**
-	 * Manages the room to which the cell belongs. This method can only be called 
+	 * Manages the room to which the cell belongs. This method can only be called
 	 * by classes belonging to the same package in order to prevent misuse.
 	 * It should only be called by Room.add(cell) in order so set the room
 	 * corresponding to the cell automatically.
 	 * @param room The room to which the cell belongs
 	 */
-	void setRoom( Room room ) {
+	final void setRoom( Room room ) {
 		this.room = room;
-		
+
 		// Recompute the hash code
 		String s = ((room != null) ? room.getID() : "") + "-" + y + "-" + x;
 		hash = s.hashCode ();
@@ -208,7 +208,7 @@ public abstract class Cell implements Comparable<Cell> {
 	 * @param relPosition The relative position of the wished neighbour cell.
 	 * @param level The level of the other cell according to this cell, can be higher, equal or lower.
 	 */
-	public void setLevel( Direction relPosition, Level level ) {
+	public void setLevel( Direction8 relPosition, Level level ) {
 		if( this.room.existsCellAt( x + relPosition.xOffset(), y + relPosition.yOffset() ) ) {
 			this.room.getCell( x + relPosition.xOffset(), y + relPosition.yOffset() ).internalSetLevel( relPosition.invert(), level.getInverse() );
 		}
@@ -217,19 +217,19 @@ public abstract class Cell implements Comparable<Cell> {
 
 	}
 
-	public void internalSetLevel( Direction relPosition, Level level ) {
+	public void internalSetLevel( Direction8 relPosition, Level level ) {
 		levels.put( relPosition, level );
 	}
 
 	/**
 	 * Specifies that this cell is separated from one of its
 	 * neighbour cells by an unpenetrable bound and that thus
-	 * this neighbour cell cannot be directly reached from 
+	 * this neighbour cell cannot be directly reached from
 	 * this cell.
-	 * @param relPosition The relative position  of the 
-	 * unreachable neighbour.  
+	 * @param relPosition The relative position  of the
+	 * unreachable neighbour.
 	 */
-	public void setUnPassable( Direction relPosition ) {
+	public void setUnPassable( Direction8 relPosition ) {
 		if( this.room.existsCellAt( x + relPosition.xOffset(), y + relPosition.yOffset() ) ) {
 			this.room.getCell( x + relPosition.xOffset(), y + relPosition.yOffset() ).internalSetUnPassable( relPosition.invert() );
 		}
@@ -237,24 +237,24 @@ public abstract class Cell implements Comparable<Cell> {
 		internalSetUnPassable( relPosition );
 	}
 
-	private void internalSetUnPassable( Direction relPosition ) {
+	private void internalSetUnPassable( Direction8 relPosition ) {
 		bounds.add( relPosition );
 	}
 
 	/**
 	 * Specifies that the way from this cell to one
 	 * of its neighbour cells is clear.
-	 * @param relPosition The relative position of 
+	 * @param relPosition The relative position of
 	 * the neighbour cell.
 	 */
-	public void setPassable( Direction relPosition ) {
+	public void setPassable( Direction8 relPosition ) {
 		if( this.room.existsCellAt( x + relPosition.xOffset(), y + relPosition.yOffset() ) ) {
 			this.room.getCell( x + relPosition.xOffset(), y + relPosition.yOffset() ).internalSetPassable( relPosition.invert() );
 		}
 		internalSetPassable( relPosition );
 	}
 
-	private void internalSetPassable( Direction relPosition ) {
+	private void internalSetPassable( Direction8 relPosition ) {
 		bounds.remove( relPosition );
 	}
 
@@ -267,18 +267,18 @@ public abstract class Cell implements Comparable<Cell> {
 	 * clear or {@code false} if the way
 	 * is blocked.
 	 */
-	public boolean isPassable( Direction relPosition ) {
+	public boolean isPassable( Direction8 relPosition ) {
 		return !bounds.contains( relPosition );
 	}
 
 	/**
-	 * Returns the level difference between this cell and the cell 
+	 * Returns the level difference between this cell and the cell
 	 * at the relative position {@code relPosition}.
 	 * If the level has never been set explicitly, Equal is returned.
 	 * @param direction The square in this direction is considered.
 	 * @return the level of the square in direction {@code direction} (higher, equal or lower).
 	 */
-	public Level getLevel( Direction direction ) {
+	public Level getLevel( Direction8 direction ) {
 		return levels.containsKey( direction ) ? levels.get( direction ) : Level.Equal;
 	}
 
@@ -286,27 +286,27 @@ public abstract class Cell implements Comparable<Cell> {
 	/**
 	 * Returns a copy of itself as a new Object.
 	 */
-	public abstract Cell clone();
+	public abstract EvacCell clone();
 
-	public Cell clone( boolean cloneIndividual ) {
+	public EvacCell clone( boolean cloneIndividual ) {
 		return clone();
 	}
 	// TODO?
 //  HashCode und Equals auskommentiert: Wenn zwei Zellen schon gleich sind,
-//  wenn sie im gleichen Raum liegen und die gleichen Koordinaten haben, 
+//  wenn sie im gleichen Raum liegen und die gleichen Koordinaten haben,
 //  verlieren wir die MÃ¶glichkeit, Zellen zu Klonen und in einer HashMap
-//  Klone auf ihre Originale abzubilden. Dies wird an mehreren Stellen 
+//  Klone auf ihre Originale abzubilden. Dies wird an mehreren Stellen
 //  benoetigt. Die oben beschriebene Gleichheit wird nirgendwo benutzt und
-//  war fuer mehrere Bugs verantwortlich.      
-//    
-//    
+//  war fuer mehrere Bugs verantwortlich.
+//
+//
 	@Override
 	public boolean equals( Object obj ) {
-		if( !(obj instanceof Cell) ) {
+		if( !(obj instanceof EvacCell) ) {
 			return false;
 		}
 
-		Cell c = (Cell) obj;
+		EvacCell c = (EvacCell) obj;
 
 		if( c.getRoom() == null && this.getRoom() == null ) {
 			return (c == this);
@@ -337,7 +337,7 @@ public abstract class Cell implements Comparable<Cell> {
 	 * Returns the type of the cell (D for door-, E for exit-, R for room-, S for save-, T for stair-cell), coordinates of the cell, the speedfactor, if it's occupied and its room
 	 */
 	public String toString() {
-		return "(" + x + "," + y + "),speedfactor=" + speedFactor + ";is occupied=" + (individual == null ? "false;" : "true;") + "id=" + hashCode() + " R: " + room + ";";
+		return "(" + x + "," + y + "),speedfactor=" + speedFactor + ";is occupied=" + (getStatus().getIndividual() == null ? "false;" : "true;") + "id=" + hashCode() + " R: " + room + ";";
 	}
 
 	/**
@@ -349,13 +349,13 @@ public abstract class Cell implements Comparable<Cell> {
 	}
 
 	@SuppressWarnings("fallthrough")
-	protected ArrayList<Cell> getNeighbours( boolean passableOnly, boolean freeOnly ) {
-		ArrayList<Cell> neighbours = new ArrayList<>();
+	protected ArrayList<EvacCell> getNeighbours( boolean passableOnly, boolean freeOnly ) {
+		ArrayList<EvacCell> neighbours = new ArrayList<>();
 		Room cellRoom = this.getRoom();
-		for( Direction direction : Direction.values() ) {
+		for( Direction8 direction : Direction8.values() ) {
 			int cellx = this.getX() + direction.xOffset();
 			int celly = this.getY() + direction.yOffset();
-			if( cellRoom.existsCellAt( cellx, celly ) && (!passableOnly || !bounds.contains( direction )) && (!freeOnly || cellRoom.getCell( cellx, celly ).individual == null) ) {
+			if( cellRoom.existsCellAt( cellx, celly ) && (!passableOnly || !bounds.contains( direction )) && (!freeOnly || cellRoom.getCell( cellx, celly ).getStatus().getIndividual() == null) ) {
 				// Test again for the diagonal directions. if next to the position an individual stands. than this direction is removed!
 				boolean add = true;
 				switch( direction ) {
@@ -365,10 +365,10 @@ public abstract class Cell implements Comparable<Cell> {
 					case TopRight:
 						boolean f1 = false;
 						boolean f2 = false;
-						if( cellRoom.existsCellAt( this.getX() + direction.xOffset(), this.getY() ) && cellRoom.getCell( this.getX() + direction.xOffset(), this.getY() ).individual != null )
+						if( cellRoom.existsCellAt( this.getX() + direction.xOffset(), this.getY() ) && cellRoom.getCell( this.getX() + direction.xOffset(), this.getY() ).getStatus().getIndividual() != null )
 							//add = false;
 							f1 = true;
-						else if( cellRoom.existsCellAt( this.getX() + direction.xOffset(), this.getY() ) && cellRoom.getCell( this.getX() + direction.xOffset(), this.getY() ).individual != null )
+						else if( cellRoom.existsCellAt( this.getX() + direction.xOffset(), this.getY() ) && cellRoom.getCell( this.getX() + direction.xOffset(), this.getY() ).getStatus().getIndividual() != null )
 							//add = false;
 							f2 = true;
 						if( f1 && f2 )
@@ -390,7 +390,8 @@ public abstract class Cell implements Comparable<Cell> {
 	 * @param dir the direction.
 	 * @return the neighbour, if exists. null else.
 	 */
-	public Cell getNeighbour( Direction dir ) {
+	@Override
+	public EvacCell getNeighbor( Direction8 dir ) {
 		int cellx = getX() + dir.xOffset();
 		int celly = getY() + dir.yOffset();
 		if( getRoom().existsCellAt( cellx, celly ) ) {
@@ -401,11 +402,11 @@ public abstract class Cell implements Comparable<Cell> {
 	}
 
 	public boolean isOccupied() {
-		return individual != null;
+		return getStatus().getIndividual() != null;
 	}
 
 	public boolean isOccupied( double time ) {
-		return individual != null || time < occupiedUntil;
+		return getStatus().getIndividual() != null || time < occupiedUntil;
 	}
 
 	public double getOccupiedUntil() {
@@ -421,7 +422,7 @@ public abstract class Cell implements Comparable<Cell> {
 	 * @return a string representing this room.
 	 */
 	public String graphicalToString() {
-		return individual == null ? graphicalRepresentation + " " + graphicalRepresentation : graphicalRepresentation + "I" + graphicalRepresentation;
+		return getStatus().getIndividual() == null ? graphicalRepresentation + " " + graphicalRepresentation : graphicalRepresentation + "I" + graphicalRepresentation;
 	}
 
 	/**
@@ -433,23 +434,24 @@ public abstract class Cell implements Comparable<Cell> {
 	//setIndividual(null);
 //	}
 
-	public boolean equals( Cell c ) {
+	public boolean equals( EvacCell c ) {
 		return (this.getX() == c.getX() && this.getY() == c.getY() && this.hashCode() == c.hashCode());
 	}
 
-	protected <T extends Cell> T basicClone( T aClone, boolean cloneIndividual ) {
+	protected <T extends EvacCell> T basicClone( T aClone, boolean cloneIndividual ) {
 		aClone.setSpeedFactor( this.getSpeedFactor() );
 
 		if( cloneIndividual && this.getIndividual() != null ) {
-			aClone.individual = this.getIndividual().clone();
-			aClone.individual.setCell( aClone );
+			aClone.getStatus().setIndividual( this.getIndividual().clone() );
+			aClone.getStatus().getIndividual().setCell( aClone );
 		} else {
-			aClone.individual = this.getIndividual();
+			//aClone.setIndividual( this.getIndividual() );
+			aClone.getStatus().setIndividual( this.getIndividual() );
 		}
 
 		aClone.room = this.room;
 
-		for( Direction bound : this.bounds ) {
+		for( Direction8 bound : this.bounds ) {
 			aClone.bounds.add( bound );
 		}
 
@@ -461,7 +463,7 @@ public abstract class Cell implements Comparable<Cell> {
 	 * @return -1, 0 or 1
 	 */
 	@Override
-	public int compareTo( Cell c ) {
+	public int compareTo( EvacCell c ) {
 		if( c.x == x && c.y == y ) {
 			if( c.hashCode() == hashCode() ) {
 				return 0;
@@ -485,7 +487,14 @@ public abstract class Cell implements Comparable<Cell> {
 	 * @param c a neighbor cell
 	 * @return  the direction in which {@code c} lies
 	 */
-	final public Direction getRelative( Cell c ) {
-		return Direction.getDirection( c.getAbsoluteX() - getAbsoluteX(), c.getAbsoluteY() - getAbsoluteY() );
+	final public Direction8 getRelative( EvacCell c ) {
+		return Direction8.getDirection( c.getAbsoluteX() - getAbsoluteX(), c.getAbsoluteY() - getAbsoluteY() );
 	}
+
+	@Override
+	public Iterator<EvacCell> iterator() {
+		throw new UnsupportedOperationException( "Not supported yet." );
+	}
+
+
 }

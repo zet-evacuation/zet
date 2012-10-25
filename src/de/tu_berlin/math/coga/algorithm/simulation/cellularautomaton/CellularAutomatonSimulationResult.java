@@ -2,7 +2,7 @@
  * CellularAutomatonSimulationResult.java
  * Created: 10.02.2012, 17:38:28
  */
-package algo.ca.algorithm;
+package de.tu_berlin.math.coga.algorithm.simulation.cellularautomaton;
 
 /**
  *

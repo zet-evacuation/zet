@@ -25,7 +25,7 @@ import de.tu_berlin.math.coga.common.localization.DefaultLoc;
 import de.tu_berlin.math.coga.rndutils.RandomUtils;
 import de.tu_berlin.math.coga.rndutils.distribution.continuous.NormalDistribution;
 import ds.PropertyContainer;
-import ds.ca.evac.Cell;
+import ds.ca.evac.EvacCell;
 import ds.ca.evac.DynamicPotential;
 import ds.ca.evac.Individual;
 import ds.ca.evac.StaticPotential;
@@ -89,7 +89,7 @@ public class DefaultParameterSet extends AbstractDefaultParameterSet {
 	 * @return The potential between {@code referenceCell} and  {@code targetCell} with respect to the static and the  dynamic potential.
 	 */
 	@Override
-	public double effectivePotential( Cell referenceCell, Cell targetCell ) {
+	public double effectivePotential( EvacCell referenceCell, EvacCell targetCell ) {
 		if( referenceCell.getIndividual() == null ) {
 			throw new IllegalArgumentException( DefaultLoc.getSingleton().getString( "algo.ca.parameter.NoIndividualOnReferenceCellException" ) );
 		}
@@ -138,7 +138,7 @@ public class DefaultParameterSet extends AbstractDefaultParameterSet {
 	 * @see algo.ca.parameter.AbstractDefaultParameterSet#updateExhaustion(ds.ca.Individual)
 	 */
 	@Override
-	public double updateExhaustion( Individual individual, Cell targetCell ) {
+	public double updateExhaustion( Individual individual, EvacCell targetCell ) {
 		// ExhaustionFactor depends from the age. currently it is always initialized with 1, so all individuals exhauste with the same
 		// speed.
 		// i hope the formular is right: it does the following
@@ -168,12 +168,12 @@ public class DefaultParameterSet extends AbstractDefaultParameterSet {
 		return newExhaustion;
 	}
 
-	public double updatePanic( Individual individual, Cell targetCell, Collection<Cell> preferedCells ) {
-		List<Cell> possibleNeighbours = individual.getCell().getNeighbours();
+	public double updatePanic( Individual individual, EvacCell targetCell, Collection<EvacCell> preferedCells ) {
+		List<EvacCell> possibleNeighbours = individual.getCell().getNeighbours();
 
 		double[] potentials = new double[possibleNeighbours.size()];
 		int idx = 0;
-		for( Cell cell : possibleNeighbours ) {
+		for( EvacCell cell : possibleNeighbours ) {
 			double potentialDifference = individual.getStaticPotential().getPotential( individual.getCell() ) - individual.getStaticPotential().getPotential( cell );
 			potentials[idx] = Math.exp( potentialDifference );
 			idx++;
@@ -212,7 +212,7 @@ public class DefaultParameterSet extends AbstractDefaultParameterSet {
 //					return panic;
 //			
 //				Iterator<Cell> it = preferedCells.iterator();
-//				Cell neighbour = it.next();
+//				EvacCell neighbour = it.next();
 //				double panicFactor = individual.getPanicFactor();
 //				if(individual.getCell() != targetCell){
 //					individual.setPanic(Math.max(panic - getPanicDecrease()*0.17, MINIMUM_PANIC));

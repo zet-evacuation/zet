@@ -15,13 +15,8 @@
  */
 package ds.ca.evac;
 
-import ds.ca.SquareCellularAutomaton;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.UUID;
+import algo.ca.framework.EvacuationCellState;
+import de.tu_berlin.math.coga.datastructure.simulation.cellularautomaton.SquareCellularAutomaton;
 import ds.ca.evac.Individual.DeathCause;
 import ds.ca.results.CAStateChangedAction;
 import ds.ca.results.DieAction;
@@ -31,22 +26,32 @@ import ds.ca.results.SwapAction;
 import ds.ca.results.VisualResultsRecorder;
 import ds.z.Floor;
 import exitdistributions.IndividualToExitMapping;
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Collections;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.TreeMap;
+import java.util.UUID;
 import statistics.Statistic;
 import util.DebugFlags;
 
 /**
  * This class represents the structure of the cellular automaton. It holds the individuals, the rooms and the floor fields which are
  * important for the behavior of individuals. It also contains an object of the IndividualCreator which is responsible for
- * creating individuals with random attributes based upon the choices made by the user.  
+ * creating individuals with random attributes based upon the choices made by the user.
  * @author Matthias Woste, Jan-Philipp Kappmeier
  */
-public class EvacuationCellularAutomaton extends SquareCellularAutomaton implements Iterable<Individual> {
+public class EvacuationCellularAutomaton extends SquareCellularAutomaton<EvacCell,EvacuationCellState> implements Iterable<Individual> {
 
 	private boolean recordingStarted;
+
+	@Override
+	public int getDimension() {
+		return 2;
+	}
 
 	/** the state of the cellular automaton. */
 	public enum State {
@@ -134,19 +139,19 @@ public class EvacuationCellularAutomaton extends SquareCellularAutomaton impleme
 		this();
 		stopRecording();
 		// set up floors
-		
-		
+
+
 		for( String s : initialConfiguration.getFloors() ) {
 			addFloor( s );
 		}
-		
-		
+
+
 		for( Room room : initialConfiguration.getRooms() ) {
 			this.addRoom( room );
 		}
 
 		for( Room room : initialConfiguration.getRooms() ) {
-			for( Cell cell : room.getAllCells() ) {
+			for( EvacCell cell : room.getAllCells() ) {
 				if( cell.getIndividual() != null ) {
 					addIndividual( cell, cell.getIndividual() );
 				}
@@ -255,7 +260,7 @@ public class EvacuationCellularAutomaton extends SquareCellularAutomaton impleme
 	public double absoluteSpeed( double relativeSpeed ) {
 		return absoluteMaxSpeed * relativeSpeed;
 	}
-	
+
 	/**
 	 * Increases the actual timeStep of the EvacuationCellularAutomaton about one.
 	 */
@@ -333,12 +338,12 @@ public class EvacuationCellularAutomaton extends SquareCellularAutomaton impleme
 	 * Adds an Individual object to the List of all individuals of the cellular
 	 * automaton and puts this individual into the two mappings of rooms and
 	 * assignment types.
-	 * @param c the Cell on which the individual stands
+	 * @param c the EvacCell on which the individual stands
 	 * @param i the Individual object
 	 * @throws IllegalArgumentException if the the specific individual exits already in the list individuals
 	 * @throws IllegalStateException if an individual is added after the simulation has been startet.
 	 */
-	public final void addIndividual( Cell c, Individual i ) throws IllegalArgumentException {
+	public final void addIndividual( EvacCell c, Individual i ) throws IllegalArgumentException {
 		if( this.state != State.ready )
 			throw new IllegalStateException( "Individual added after simulation has started." );
 		if( individuals.contains( i ) ) {
@@ -354,7 +359,7 @@ public class EvacuationCellularAutomaton extends SquareCellularAutomaton impleme
 			}
 		}
 		c.getRoom().addIndividual( c, i );
-		
+
 		// assign shortest path potential to individual, so it is not null.
 		int currentMin = -1;
 		for( StaticPotential sp : potentialManager.getStaticPotentials() ) {
@@ -382,16 +387,16 @@ public class EvacuationCellularAutomaton extends SquareCellularAutomaton impleme
 	}
 
 	/**
-	 * Move the individual standing on the "from"-Cell to the "to"-Cell.
+	 * Move the individual standing on the "from"-EvacCell to the "to"-EvacCell.
 	 * @param from The cell on which the individual, which shall be moved, stays.
 	 * @param to The destination-cell for the moving individual.
 	 * @throws java.lang.IllegalArgumentException if the individual should be moved
-	 * from an empty Cell, which is not occupied by an Individual, or if the
-	 * ''to''-Cell is already occupied by another individual.
+	 * from an empty EvacCell, which is not occupied by an Individual, or if the
+	 * ''to''-EvacCell is already occupied by another individual.
 	 */
-	public void moveIndividual( Cell from, Cell to ) throws java.lang.IllegalArgumentException {
+	public void moveIndividual( EvacCell from, EvacCell to ) throws java.lang.IllegalArgumentException {
 		if (DebugFlags.EVAPLANCHECKER)
-			System.out.println( "Individual " + from.getIndividual().id() + " moving from cell (" + from.x + "," + from.y + ") to cell (" + to.x + "," + to.y + ")" );
+			System.out.println( "Individual " + from.getIndividual().id() + " moving from cell (" + from.getX() + "," + from.getX() + ") to cell (" + to.getX() + "," + to.getX() + ")" );
 		if( from.getIndividual() == null )
 			throw new IllegalArgumentException( "No Individual standing on the ''from''-Cell!" );
 		if( from.equals( to ) ) {
@@ -412,10 +417,10 @@ public class EvacuationCellularAutomaton extends SquareCellularAutomaton impleme
 
 		Statistic.instance.getSpecificFlowCollector().collect( timeStep, from, to );
 	}
-	
-	public void swapIndividuals( Cell cell1, Cell cell2 ) {
+
+	public void swapIndividuals( EvacCell cell1, EvacCell cell2 ) {
 		if( DebugFlags.EVAPLANCHECKER )
-			System.out.println( "Individual " + cell1.getIndividual().id() + "from cell (" + cell1.x + "," + cell1.y + ")" + "and Individual " + cell2.getIndividual().id() + "from cell (" + cell2.x + "," + cell2.y + ") swap position.");
+			System.out.println( "Individual " + cell1.getIndividual().id() + "from cell (" + cell1.getX() + "," + cell1.getX() + ")" + "and Individual " + cell2.getIndividual().id() + "from cell (" + cell2.getX() + "," + cell2.getX() + ") swap position.");
 		if( cell1.getIndividual() == null )
 			throw new IllegalArgumentException( "No Individual standing on cell #1!" );
 		if( cell2.getIndividual() == null )
@@ -454,8 +459,8 @@ public class EvacuationCellularAutomaton extends SquareCellularAutomaton impleme
 		if( !individuals.remove( i ) )
 			throw new IllegalArgumentException( "Specified individual is not in list individuals." );
 		VisualResultsRecorder.getInstance().recordAction( new ExitAction( (ExitCell) i.getCell() ) );
-		Cell evacCell = i.getCell();
-		
+		EvacCell evacCell = i.getCell();
+
 		//i.getCell().takeIndividualOut();
 		//i.getCell().removeIndividual();
 		//i.getCell().getRoom().takeIndividualOut( i );
@@ -474,12 +479,12 @@ public class EvacuationCellularAutomaton extends SquareCellularAutomaton impleme
 			//if( i.getStepEndTime() <= getTimeStep() ) {
 				setIndividualEvacuated( i );
 			//	markedForRemoval.remove( i );
-		
+
 		markedForRemoval.clear();
 	}
 
 	/**
-	 * Sets the specified individual to the status safe and sets the correct 
+	 * Sets the specified individual to the status safe and sets the correct
 	 * safety time.
 	 * @param i
 	 */
@@ -488,7 +493,7 @@ public class EvacuationCellularAutomaton extends SquareCellularAutomaton impleme
 		i.setSafe( true );
 		i.setSafetyTime( (int)Math.ceil(i.getStepEndTime()) );
 	}
-	
+
 	/**
 	 * Removes an individual from the list of all individuals of the building
 	 * and adds it to the list of individuals, which are "dead".
@@ -502,7 +507,7 @@ public class EvacuationCellularAutomaton extends SquareCellularAutomaton impleme
 		//i.getCell().takeIndividualOut();
 		//i.getCell().getRoom().takeIndividualOut( i );
 		VisualResultsRecorder.getInstance().recordAction( new DieAction( i.getCell(), cause, i.getNumber() ) );
-		Cell c = i.getCell();
+		EvacCell c = i.getCell();
 		c.getRoom().removeIndividual( i );
 		i.setCell( c );
 		deadIndividuals.add( i );
@@ -547,7 +552,7 @@ public class EvacuationCellularAutomaton extends SquareCellularAutomaton impleme
 	final public void addFloor( Floor floor ) {
 		addFloor( floor.getName() );
 	}
-	
+
 	/*
 	 * Adds a new floor.
 	 */
@@ -555,7 +560,7 @@ public class EvacuationCellularAutomaton extends SquareCellularAutomaton impleme
 		floorNames.add( name );
 		roomsByFloor.add( new ArrayList<Room>() );
 	}
-	
+
 	/**
 	 * Adds a room to the List of all rooms of the building
 	 * @param room the Room object to be added
@@ -574,10 +579,10 @@ public class EvacuationCellularAutomaton extends SquareCellularAutomaton impleme
 			//	floorNames.put( floorID, room.getFloor() );
 			//}
 			roomsByFloor.get( floorID ).add( room );
-			
-			
+
+
 			// try to add exits
-			for( Cell cell : room.getAllCells() ) {
+			for( EvacCell cell : room.getAllCells() ) {
 				if( cell instanceof ExitCell ) {
 
 			if( exits.contains( cell ) ) {
@@ -587,7 +592,7 @@ public class EvacuationCellularAutomaton extends SquareCellularAutomaton impleme
 			}
 				}
 			}
-			
+
 		}
 	}
 
@@ -604,10 +609,10 @@ public class EvacuationCellularAutomaton extends SquareCellularAutomaton impleme
 	}
 
 	/**
-	 * This method recognizes clusters of neighbouring ExitCells (that means ExitCells 
+	 * This method recognizes clusters of neighbouring ExitCells (that means ExitCells
 	 * lying next to another ExitCell) and returns an ArrayList, which contains one
-	 * ArrayList of ExitCells for each Cluster of ExitCells. 
-	 * @return An ArrayList, which contains one ArrayList of ExitCells for 
+	 * ArrayList of ExitCells for each Cluster of ExitCells.
+	 * @return An ArrayList, which contains one ArrayList of ExitCells for
 	 * each Cluster of ExitCells.
 	 */
 	public ArrayList<ArrayList<ExitCell>> clusterExitCells() {
@@ -626,7 +631,7 @@ public class EvacuationCellularAutomaton extends SquareCellularAutomaton impleme
 
 	/**
 	 * Private sub-method for finding a Cluster of neighboring ExitCells recursively.
-	 * @param currentCell The cell from which the algorithm starts searching 
+	 * @param currentCell The cell from which the algorithm starts searching
 	 * neighboring ExitCells.
 	 * @param cluster An empty ArrayList, in which the cluster will be created.
 	 * @param alreadySeen A HashSet storing all already clustered ExitCells to prevent
@@ -637,9 +642,9 @@ public class EvacuationCellularAutomaton extends SquareCellularAutomaton impleme
 		if( !alreadySeen.contains( currentCell ) ) {
 			cluster.add( currentCell );
 			alreadySeen.add( currentCell );
-			ArrayList<Cell> cellNeighbours = currentCell.getAllNeighbours();
+			Collection<EvacCell> cellNeighbours = currentCell.getDirectNeighbors();
 			ArrayList<ExitCell> neighbours = new ArrayList<>();
-			for( Cell c : cellNeighbours ) {
+			for( EvacCell c : cellNeighbours ) {
 				if( c instanceof ExitCell ) {
 					neighbours.add( (ExitCell) c );
 				}
@@ -659,15 +664,15 @@ public class EvacuationCellularAutomaton extends SquareCellularAutomaton impleme
 		return result;
 	}
 
-	public double getStaticPotential( Cell cell, int id ) {
+	public double getStaticPotential( EvacCell cell, int id ) {
 		return potentialManager.getStaticPotential( id ).getPotential( cell );
 	}
 
-	public int getDynamicPotential( Cell cell ) {
+	public int getDynamicPotential( EvacCell cell ) {
 		return potentialManager.getDynamicPotential().getPotential( cell );
 	}
 
-	public void setDynamicPotential( Cell cell, double value ) {
+	public void setDynamicPotential( EvacCell cell, double value ) {
 		potentialManager.getDynamicPotential().setPotential( cell, value );
 	}
 
@@ -687,13 +692,13 @@ public class EvacuationCellularAutomaton extends SquareCellularAutomaton impleme
 		this.state = state;
 		VisualResultsRecorder.getInstance().recordAction( new CAStateChangedAction( state ) );
 	}
-	
+
 	public void start() {
 		setState( State.running );
 		notSaveIndividualsCount = individuals.size();
 		initialIndividualCount = individuals.size();
 	}
-	
+
 	public void stop() {
 		setState( State.finished );
 	}
@@ -732,11 +737,11 @@ public class EvacuationCellularAutomaton extends SquareCellularAutomaton impleme
 	public List<Individual> getIndividuals() {
 		return Collections.unmodifiableList( individuals );
 	}
-	
+
 	public List<Individual> getRemainingIndividuals() {
 		ArrayList<Individual> remaining = new ArrayList<>( individuals.size()-evacuatedIndividuals.size() );
 
-		for( Individual i : individuals ) 
+		for( Individual i : individuals )
 			if( !i.isEvacuated() || i.isDead() )
 				remaining.add( i );
 
@@ -812,7 +817,7 @@ public class EvacuationCellularAutomaton extends SquareCellularAutomaton impleme
 	}
 
 	// TODO: alter stuff
-	
+
 //	public void applyIndividuals( Individual[] individuals ) {
 //		for( int i = 0; i < individuals.length; i++ ) {
 //			individuals[i].getCell().setIndividual( individuals[i] );
@@ -847,7 +852,7 @@ public class EvacuationCellularAutomaton extends SquareCellularAutomaton impleme
 	//}
 	/**
 	 * Adds an ExitCell to the List of all exits of the building
-	 * @param exit the Cell object which has to be of type ExitCell
+	 * @param exit the EvacCell object which has to be of type ExitCell
 	 * @throws IllegalArgumentException Is thrown if the the specific exit is already in the list exits
 	 */
 //	public void addExit( ExitCell exit ) throws IllegalArgumentException {

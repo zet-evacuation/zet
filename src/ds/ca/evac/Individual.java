@@ -16,7 +16,7 @@
 package ds.ca.evac;
 
 import algo.ca.rule.PotentialValueTuple;
-import de.tu_berlin.math.coga.common.util.Direction;
+import de.tu_berlin.math.coga.common.util.Direction8;
 import ds.mapping.Identifiable;
 import java.util.UUID;
 
@@ -24,17 +24,17 @@ import java.util.UUID;
  * A Individual represets a Person in the evacuationtool with the following
  * characteristics: familiarity, panic, slackness, maxSpeed. Also an
  * exhaustion factor exists, which simulates exhaustion after walking a long
- * way. An Individual is located in a {@link Cell} of the building and each
+ * way. An Individual is located in a {@link EvacCell} of the building and each
  * {@code Individual} has a {@link StaticPotential}, which guides the
  * person to an exit.
  */
 public class Individual implements Identifiable {
 
-	public Direction getDirection() {
+	public Direction8 getDirection() {
 		return dir;
 	}
 
-	public void setDirection( Direction dir ) {
+	public void setDirection( Direction8 dir ) {
 		this.dir = dir;
 	}
 	
@@ -61,7 +61,7 @@ public class Individual implements Identifiable {
 	private double absoluteMaxSpeed;
 	private boolean alarmed;
 	private double reactionTime;
-	private Cell cell;
+	private EvacCell cell;
 	private StaticPotential staticPotential;
 	private DynamicPotential dynamicPotential;
 	private DeathCause deathCause;
@@ -86,7 +86,7 @@ public class Individual implements Identifiable {
 	private PotentialValueTuple potentialMemoryEnd;
 	private int memoryIndex;
 	int cellCountToChange;
-	Direction dir;
+	Direction8 dir;
 
 	public Individual() {
 	}
@@ -107,7 +107,7 @@ public class Individual implements Identifiable {
 		this.uid = uid;
 		safe = false;
 		safetyTime = -1;
-		this.dir = Direction.Top; // Just use an arbitrary direction
+		this.dir = Direction8.Top; // Just use an arbitrary direction
 
 		/**
 		 * Calibratingfactor - 
@@ -416,18 +416,18 @@ public class Individual implements Identifiable {
 	}
 
 	/**
-	 * Set the {@link ds.ca.Cell} on which the {@code Individual} stands.
+	 * Set the {@link ds.ca.EvacCell} on which the {@code Individual} stands.
 	 * @param c the cell
 	 */
-	public void setCell( Cell c ) {
+	public void setCell( EvacCell c ) {
 		this.cell = c;
 	}
 
 	/**
-	 * Returns the {@link ds.ca.Cell} on which the {@code Individual} stands.
-	 * @return The Cell 
+	 * Returns the {@link ds.ca.EvacCell} on which the {@code Individual} stands.
+	 * @return The EvacCell 
 	 */
-	public Cell getCell() {
+	public EvacCell getCell() {
 		return cell;
 	}
 

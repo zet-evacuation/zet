@@ -21,7 +21,7 @@ package algo.ca.algorithm.evac;
 
 import algo.ca.rule.Rule;
 import de.tu_berlin.math.coga.common.localization.DefaultLoc;
-import ds.ca.evac.Cell;
+import ds.ca.evac.EvacCell;
 import ds.ca.evac.Individual;
 import java.util.Iterator;
 
@@ -115,7 +115,7 @@ public class EvacuationCellularAutomatonInOrder extends EvacuationCellularAutoma
 		Individual[] individualsCopy = getProblem().eca.getIndividuals().toArray( new Individual[getProblem().eca.getIndividuals().size()] );
 		for( Individual i : individualsCopy ) {
 			Iterator<Rule> primary = getProblem().ruleSet.primaryIterator();
-			Cell c = i.getCell();
+			EvacCell c = i.getCell();
 			while( primary.hasNext() ) {
 				Rule r = primary.next();
 				r.execute( c );

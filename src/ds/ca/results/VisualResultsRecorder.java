@@ -22,7 +22,7 @@ import java.util.Vector;
 import com.thoughtworks.xstream.annotations.XStreamAlias;
 import com.thoughtworks.xstream.annotations.XStreamOmitField;
 
-import ds.ca.evac.Cell;
+import ds.ca.evac.EvacCell;
 import ds.ca.evac.EvacuationCellularAutomaton;
 import ds.ca.evac.DoorCell;
 import ds.ca.evac.DynamicPotential;
@@ -89,7 +89,7 @@ public class VisualResultsRecorder {
 	 * on the cloned configuration). 
 	 */
 	@XStreamOmitField
-	private HashMap<Cell, Cell> cellMap;
+	private HashMap<EvacCell, EvacCell> cellMap;
 	@XStreamOmitField
 	private HashMap<StaticPotential, StaticPotential> staticPotentialMap;
 	private boolean doRecord;
@@ -221,10 +221,10 @@ public class VisualResultsRecorder {
 	 * @return A deep copy of {@code orig}.
 	 */
 	private static InitialConfiguration cloneConfig( InitialConfiguration orig,
-					HashMap<Cell, Cell> cellMapping, HashMap<StaticPotential, StaticPotential> potentialMapping ) {
+					HashMap<EvacCell, EvacCell> cellMapping, HashMap<StaticPotential, StaticPotential> potentialMapping ) {
 
 		if( cellMapping == null ) {
-			cellMapping = new HashMap<Cell, Cell>();
+			cellMapping = new HashMap<EvacCell, EvacCell>();
 		}
 
 		LinkedList<String> clonedFloors = new LinkedList<>();
@@ -240,7 +240,7 @@ public class VisualResultsRecorder {
 		// Clone the rooms and store the mapping between the
 		// original and the cloned cells
 		for( Room room : orig.getRooms() ) {
-			HashMap<Cell, Cell> addMapping = new HashMap<>();
+			HashMap<EvacCell, EvacCell> addMapping = new HashMap<>();
 			Room clone = cloneRoom( room, addMapping );
 			clonedRooms.add( clone );
 			roomMap.put( room, clone );
@@ -289,7 +289,7 @@ public class VisualResultsRecorder {
 					for( int x = 0; x < room.getWidth(); x++ ) {
 						for( int y = 0; y < room.getHeight(); y++ ) {
 							// For every cell in the room do:
-							Cell cell = room.getCell( x, y );
+							EvacCell cell = room.getCell( x, y );
 							if( cell != null && pot.contains( cell ) ) {
 								clone.setPotential( cellMapping.get( cell ), pot.getPotentialDouble( cell ) );
 							}
@@ -309,7 +309,7 @@ public class VisualResultsRecorder {
 				for( int x = 0; x < room.getWidth(); x++ ) {
 					for( int y = 0; y < room.getHeight(); y++ ) {
 						// For every cell in the room do:
-						Cell cell = room.getCell( x, y );
+						EvacCell cell = room.getCell( x, y );
 						if( cell != null && dynOrig.contains( cell ) ) {
 							dynClone.setPotential( cellMapping.get( cell ), dynOrig.getPotential( cell ) );
 						}
@@ -325,9 +325,9 @@ public class VisualResultsRecorder {
 		for( Room room : orig.getRooms() ) {
 			for( int x = 0; x < room.getWidth(); x++ ) {
 				for( int y = 0; y < room.getHeight(); y++ ) {
-					Cell cell = room.getCell( x, y );
+					EvacCell cell = room.getCell( x, y );
 					if( cell != null && cell.getIndividual() != null ) {
-						Cell clonedCell = cellMapping.get( cell );
+						EvacCell clonedCell = cellMapping.get( cell );
 						StaticPotential origPot = cell.getIndividual().getStaticPotential();
 						clonedCell.getIndividual().setStaticPotential( potentialMapping.get( origPot ) );
 					}
@@ -346,18 +346,18 @@ public class VisualResultsRecorder {
 	 * created. Else, existing entries may be overwritten.
 	 * @return A deep copy of {@code room}
 	 */
-	private static Room cloneRoom( Room room, HashMap<Cell, Cell> cellMapping ) {
+	private static Room cloneRoom( Room room, HashMap<EvacCell, EvacCell> cellMapping ) {
 		if( cellMapping == null ) {
-			cellMapping = new HashMap<Cell, Cell>();
+			cellMapping = new HashMap<EvacCell, EvacCell>();
 		}
 
 		Room rClone = room.clone();
 		rClone.clear();
 		for( int x = 0; x < room.getWidth(); x++ ) {
 			for( int y = 0; y < room.getHeight(); y++ ) {
-				Cell orig = room.getCell( x, y );
+				EvacCell orig = room.getCell( x, y );
 				if( orig != null ) {
-					Cell cClone = cloneCell( orig );
+					EvacCell cClone = cloneCell( orig );
 					rClone.setCell( cClone );
 					cellMapping.put( orig, cClone );
 				}
@@ -373,8 +373,8 @@ public class VisualResultsRecorder {
 	 * @param orig The original cell
 	 * @return A cloned cell with a cloned individual
 	 */
-	private static Cell cloneCell( Cell orig ) {
-		Cell clone = orig.clone( true );
+	private static EvacCell cloneCell( EvacCell orig ) {
+		EvacCell clone = orig.clone( true );
 		return clone;
 	}
 }

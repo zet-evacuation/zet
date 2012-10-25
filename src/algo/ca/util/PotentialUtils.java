@@ -19,7 +19,7 @@
  */
 package algo.ca.util;
 
-import ds.ca.evac.Cell;
+import ds.ca.evac.EvacCell;
 import ds.ca.evac.ExitCell;
 import ds.ca.evac.StaticPotential;
 import java.util.Collection;
@@ -48,7 +48,7 @@ public class PotentialUtils {
         // iterate over all mapped cells
         for(StaticPotential sp : potentialsToMerge) {
             totalAttractivity += sp.getAttractivity();
-            for(Cell c : sp.getMappedCells()) {
+            for(EvacCell c : sp.getMappedCells()) {
                 //for each cell get the minimum of all potentials in potentialsToMerge and put in into newSP
                 minPot = Integer.MAX_VALUE;
                 for(StaticPotential localSP : potentialsToMerge){    

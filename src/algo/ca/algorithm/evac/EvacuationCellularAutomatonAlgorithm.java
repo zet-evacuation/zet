@@ -29,10 +29,7 @@ import java.util.List;
  * @author Jan-Philipp Kappmeier
  */
 public abstract class EvacuationCellularAutomatonAlgorithm extends CellularAutomatonAlgorithm<EvacuationSimulationProblem, EvacuationSimulationResult> {
-//	protected CAController caController;
 	EvacuationSimulationResult esr = new EvacuationSimulationResult();
-	//protected EvacuationCellularAutomaton ca;
-	//protected RuleSet rs;
 	private boolean initialized;
 	private boolean stepByStep = false;
 	private boolean finished = false;
@@ -80,10 +77,6 @@ public abstract class EvacuationCellularAutomatonAlgorithm extends CellularAutom
 	public void setFinished( boolean finished ) {
 		this.finished = finished;
 	}
-
-//	public CAController getCaController() {
-//		return caController;
-//	}
 
 	public void setStepByStep( boolean b ) {
 		stepByStep = b;

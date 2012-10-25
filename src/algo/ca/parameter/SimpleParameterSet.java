@@ -21,7 +21,7 @@
 
 package algo.ca.parameter;
 
-import ds.ca.evac.Cell;
+import ds.ca.evac.EvacCell;
 import ds.ca.evac.Individual;
 import ds.ca.evac.StaticPotential;
 import java.util.Collection;
@@ -43,7 +43,7 @@ public class SimpleParameterSet extends AbstractDefaultParameterSet {
 	 * @return the potential difference between the two cells
 	 */
 	@Override
-	public double effectivePotential( Cell referenceCell, Cell targetCell ) {
+	public double effectivePotential( EvacCell referenceCell, EvacCell targetCell ) {
 		StaticPotential staticPotential = referenceCell.getIndividual().getStaticPotential();
 		final double statPotlDiff = staticPotential.getPotential( referenceCell ) - staticPotential.getPotential( targetCell );
 		return statPotlDiff;
@@ -62,12 +62,12 @@ public class SimpleParameterSet extends AbstractDefaultParameterSet {
 	}
 
 	@Override
-	public double updateExhaustion( Individual individual, Cell targetCell ) {
+	public double updateExhaustion( Individual individual, EvacCell targetCell ) {
 		return 0;
 	}
 
 	@Override
-	public double updatePanic( Individual individual, Cell targetCell, Collection<Cell> preferedCells ) {
+	public double updatePanic( Individual individual, EvacCell targetCell, Collection<EvacCell> preferedCells ) {
 		return 0;
 	}
 
