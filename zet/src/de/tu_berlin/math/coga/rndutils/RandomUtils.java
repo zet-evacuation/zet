@@ -12,9 +12,9 @@ import java.util.ArrayList;
  */
 public class RandomUtils {
 	/** List of seeds for the random generators. */
-	private ArrayList<Long> seeds = new ArrayList<Long>(1);
+	private ArrayList<Long> seeds = new ArrayList<>(1);
 	/** List of random generators for the threads. */
-	private ArrayList<GeneralRandom> randomGenerator = new ArrayList<GeneralRandom>(1);
+	private ArrayList<GeneralRandom> randomGenerator = new ArrayList<>(1);
 	/** Contains the RandomUtils object. */
 	private static RandomUtils instance;
 
@@ -57,7 +57,7 @@ public class RandomUtils {
 
 	/**
 	 * Sets a specific seed and resets the random generator belonging to that seed.
-	 * @param pos the thread/generator number (starting with zero)
+	 * @param threadID the thread/generator number (starting with zero)
 	 * @param seed the seed
 	 * @throws IllegalArgumentException if the thread id is higher than the current number of threads
 	 */
@@ -103,8 +103,8 @@ public class RandomUtils {
 			throw new IllegalArgumentException( "At least one thread!" );
 		seeds.clear();
 		randomGenerator.clear();
-		seeds = new ArrayList<Long>( threadCount );
-		randomGenerator = new ArrayList<GeneralRandom>( threadCount );
+		seeds = new ArrayList<>( threadCount );
+		randomGenerator = new ArrayList<>( threadCount );
 		for( int i = 0; i < threadCount; ++i ) {
 			seeds.add( System.nanoTime() );
 			randomGenerator.add( new MersenneTwister( seeds.get( i ) ) );
@@ -122,8 +122,8 @@ public class RandomUtils {
 			throw new IllegalArgumentException( "At least one thread!" );
 		this.seeds.clear();
 		randomGenerator.clear();
-		this.seeds = new ArrayList<Long>( seeds.length );
-		randomGenerator = new ArrayList<GeneralRandom>( seeds.length );
+		this.seeds = new ArrayList<>( seeds.length );
+		randomGenerator = new ArrayList<>( seeds.length );
 		for( int i = 0; i < seeds.length; ++i ) {
 			this.seeds.add( seeds[i] );
 			randomGenerator.add( new MersenneTwister( seeds[i] ) );

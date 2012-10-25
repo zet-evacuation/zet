@@ -27,11 +27,12 @@ public abstract class AbstractRule implements Rule {
 	protected EvacuationSimulationProblem esp;
 
 	/**
-	 * Returns if the rule is executable on the cell. The default behaviour is,
+	 * Returns if the rule is executable on the cell. The default behavior is,
 	 * that a rule is executable if an {@link Individual} is standing on it.
 	 * @param cell the cell that is checked
 	 * @return {@code true} if an individual is standing on the cell, {@code false} otherwise
 	 */
+	@Override
 	public boolean executableOn( Cell cell ) {
 		return cell.getIndividual() != null;
 	}
@@ -46,6 +47,7 @@ public abstract class AbstractRule implements Rule {
 
 	abstract protected void onExecute( Cell cell );
 
+	@Override
 	public void setEvacuationSimulationProblem( EvacuationSimulationProblem esp ) {
 		if( this.esp != null )
 			throw new RuntimeException( DefaultLoc.getSingleton().getString( "algo.ca.rule.RuleAlreadyHaveCAControllerException" ) );

@@ -25,6 +25,7 @@ import ds.ca.results.VisualResultsRecorder;
 import ds.ca.results.IndividualStateChangeAction;
 import de.tu_berlin.math.coga.rndutils.RandomUtils;
 import java.util.ArrayList;
+import java.util.List;
 import util.DebugFlags;
 
 /**
@@ -176,7 +177,7 @@ public class BestResponseMovementRule extends AbstractMovementRule {
 	 * @return A neighbour of {@code cell} chosen at random.
 	 */
 	@Override
-	public Cell selectTargetCell( Cell cell, ArrayList<Cell> targets ) {
+	public Cell selectTargetCell( Cell cell, List<Cell> targets ) {
 		if( targets.size() == 0 )
 			return cell;
 
@@ -223,8 +224,8 @@ public class BestResponseMovementRule extends AbstractMovementRule {
 	 * @return a list containing all neighbours and the from cell
 	 */
 	@Override
-	protected ArrayList<Cell> computePossibleTargets( Cell fromCell, boolean onlyFreeNeighbours ) {
-		ArrayList<Cell> targets = super.computePossibleTargets( fromCell, onlyFreeNeighbours );
+	protected List<Cell> computePossibleTargets( Cell fromCell, boolean onlyFreeNeighbours ) {
+		List<Cell> targets = super.computePossibleTargets( fromCell, onlyFreeNeighbours );
 		targets.add( fromCell );
 		return targets;
 	}

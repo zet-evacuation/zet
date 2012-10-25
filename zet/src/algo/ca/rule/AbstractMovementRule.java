@@ -25,6 +25,7 @@ import ds.ca.evac.DoorCell;
 import ds.ca.evac.Individual;
 import ds.ca.evac.StairCell;
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * @author Jan-Philipp Kappmeier
@@ -66,7 +67,7 @@ public abstract class AbstractMovementRule extends AbstractRule {
 	 * @param onlyFreeNeighbours
 	 * @return 
 	 */
-	protected ArrayList<Cell> computePossibleTargets( Cell fromCell, boolean onlyFreeNeighbours ) {
+	protected List<Cell> computePossibleTargets( Cell fromCell, boolean onlyFreeNeighbours ) {
 		possibleTargets = new ArrayList<>();
 		ArrayList<Cell> neighbors = onlyFreeNeighbours ? fromCell.getFreeNeighbours() : fromCell.getNeighbours();
 		
@@ -105,7 +106,7 @@ public abstract class AbstractMovementRule extends AbstractRule {
 	 * ore been computed using {@link #getPossibleTargets(ds.ca.evac.Cell, boolean) }.
 	 * @return a list of possible targets.
 	 */
-	public ArrayList<Cell> getPossibleTargets() {
+	public List<Cell> getPossibleTargets() {
 		return possibleTargets;
 	}
 	
@@ -117,7 +118,7 @@ public abstract class AbstractMovementRule extends AbstractRule {
 	 * @param targets possible targets (only the first one is used)
 	 * @return the first cell of the possible targets
 	 */
-	public Cell selectTargetCell( Cell cell, ArrayList<Cell> targets ) {
+	public Cell selectTargetCell( Cell cell, List<Cell> targets ) {
 		System.err.println( "WARNUNG nicht überschriebene target cell selection wird ausgeführt" );
 		return targets.get( 0 );
 	}

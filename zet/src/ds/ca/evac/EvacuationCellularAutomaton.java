@@ -83,8 +83,8 @@ public class EvacuationCellularAutomaton extends SquareCellularAutomaton impleme
 	private HashMap<Integer, Individual> individualsByID;
 	/** A mapping that maps individuals to exits. */
 	private IndividualToExitMapping individualToExitMapping;
-        /** A mapping that maps exits to their capacity */
-        private HashMap<StaticPotential, Double> exitToCapacityMapping;
+	/** A mapping that maps exits to their capacity */
+	private HashMap<StaticPotential, Double> exitToCapacityMapping;
 	/** Reference to all Floor Fields */
 	private PotentialManager potentialManager;
 	/** The current time step */
@@ -480,7 +480,7 @@ public class EvacuationCellularAutomaton extends SquareCellularAutomaton impleme
 
 	/**
 	 * Sets the specified individual to the status safe and sets the correct 
-	 * sefety time.
+	 * safety time.
 	 * @param i
 	 */
 	public void setIndividualSave( Individual i ) {
@@ -625,13 +625,13 @@ public class EvacuationCellularAutomaton extends SquareCellularAutomaton impleme
 	}
 
 	/**
-	 * Private sub-method for finding a Cluster of neighbouring ExitCells recursively.
+	 * Private sub-method for finding a Cluster of neighboring ExitCells recursively.
 	 * @param currentCell The cell from which the algorithm starts searching 
-	 * neighbouring ExitCells.
+	 * neighboring ExitCells.
 	 * @param cluster An empty ArrayList, in which the cluster will be created.
 	 * @param alreadySeen A HashSet storing all already clustered ExitCells to prevent
 	 * them of being clustered a second time.
-	 * @return Returns one Cluster of neighbouring ExitCells as an ArrayList.
+	 * @return Returns one Cluster of neighboring ExitCells as an ArrayList.
 	 */
 	private ArrayList<ExitCell> findExitCellCluster( ExitCell currentCell, ArrayList<ExitCell> cluster, HashSet<ExitCell> alreadySeen ) {
 		if( !alreadySeen.contains( currentCell ) ) {
@@ -700,9 +700,9 @@ public class EvacuationCellularAutomaton extends SquareCellularAutomaton impleme
 
 	/**
 	 * Resets the cellular automaton in order to let it run again. All individuals
-	 * are deleted, timestamp and lists are resettet and the status is set to
+	 * are deleted, timestamp and lists are reseted and the status is set to
 	 * ready. The recording of actions is stopped; Call {@code startRecording()}
-	 * after you placed individuals in the ca to start recording again.
+	 * after you placed individuals in the cellular automaton to start recording again.
 	 */
 	public void reset() {
 		VisualResultsRecorder.getInstance().stopRecording();
@@ -731,6 +731,16 @@ public class EvacuationCellularAutomaton extends SquareCellularAutomaton impleme
 	 */
 	public List<Individual> getIndividuals() {
 		return Collections.unmodifiableList( individuals );
+	}
+	
+	public List<Individual> getRemainingIndividuals() {
+		ArrayList<Individual> remaining = new ArrayList<>( individuals.size()-evacuatedIndividuals.size() );
+
+		for( Individual i : individuals ) 
+			if( !i.isEvacuated() || i.isDead() )
+				remaining.add( i );
+
+		return Collections.unmodifiableList( remaining );
 	}
 
 	public List<Individual> getNotDeadIndividuals() {
@@ -765,6 +775,7 @@ public class EvacuationCellularAutomaton extends SquareCellularAutomaton impleme
 		return deadIndividuals.size();
 	}
 
+	@Override
 	public Iterator<Individual> iterator() {
 		return individuals.iterator();
 	}
@@ -861,8 +872,8 @@ public class EvacuationCellularAutomaton extends SquareCellularAutomaton impleme
 
 	// TODO: move to the ca controller. (it is a dynamic simulation feature)
 	/**
-	 * Gets the minimal number of time steps that are neccessary to finish all
-	 * (virually not discrete) movements.
+	 * Gets the minimal number of time steps that are necessary to finish all
+	 * (virtually not discrete) movements.
 	 * @return the time
 	 */
 	public int getNeededTime() {
@@ -870,9 +881,9 @@ public class EvacuationCellularAutomaton extends SquareCellularAutomaton impleme
 	}
 
 	/**
-	 * Sets a new minimal number of time steps that are neccessary to finish all
-	 * (virually non discrete) movements.
-	 * @param neededTime the timestep
+	 * Sets a new minimal number of time steps that are necessary to finish all
+	 * (virtually non discrete) movements.
+	 * @param neededTime the time step
 	 */
 	public void setNeededTime( int neededTime) {
 		this.neededTime = neededTime;

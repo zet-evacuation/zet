@@ -16,7 +16,7 @@
 package algo.ca.rule;
 
 import ds.ca.evac.Cell;
-import java.util.ArrayList;
+import java.util.List;
 
 /**
  * A movement rule with which the individuals try to move, if possible.
@@ -31,8 +31,8 @@ public class NonWaitingMovementRule extends WaitingMovementRule {
 	 * @return a list containing all neighbours and the from cell
 	 */
 	@Override
-	protected ArrayList<Cell> computePossibleTargets( Cell fromCell, boolean onlyFreeNeighbours ) {
-		ArrayList<Cell> targets = super.computePossibleTargets( fromCell, onlyFreeNeighbours );
+	protected List<Cell> computePossibleTargets( Cell fromCell, boolean onlyFreeNeighbours ) {
+		List<Cell> targets = super.computePossibleTargets( fromCell, onlyFreeNeighbours );
 		targets.remove( fromCell );
 		return targets;
 	}

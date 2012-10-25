@@ -22,6 +22,8 @@
 package algo.ca.parameter;
 
 import de.tu_berlin.math.coga.common.localization.DefaultLoc;
+import de.tu_berlin.math.coga.rndutils.RandomUtils;
+import de.tu_berlin.math.coga.rndutils.distribution.continuous.NormalDistribution;
 import ds.PropertyContainer;
 import ds.ca.evac.Cell;
 import ds.ca.evac.DynamicPotential;
@@ -29,8 +31,6 @@ import ds.ca.evac.Individual;
 import ds.ca.evac.StaticPotential;
 import java.util.Collection;
 import java.util.List;
-import de.tu_berlin.math.coga.rndutils.RandomUtils;
-import de.tu_berlin.math.coga.rndutils.distribution.continuous.NormalDistribution;
 
 /**
  * @author Daniel Plümpe, Jan-Philipp Kappmeier

@@ -28,6 +28,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
+import java.util.List;
 
 /**
  *
@@ -54,7 +55,7 @@ public class SwapCellularAutomaton extends EvacuationCellularAutomatonRandom {
 		AbstractMovementRule movement = null;
 		// erster Lauf: bis zur movement-rule und dann anmelden lassen.
 		ArrayList<Individual> unfinished = new ArrayList<>();
-		HashMap<Individual, ArrayList<Cell>> individualPossibleMapping = new HashMap<>();
+		HashMap<Individual, List<Cell>> individualPossibleMapping = new HashMap<>();
 		HashSet<Individual> individualSwapped = new HashSet<>();
 
 		for( Individual i : getIndividuals() ) {
@@ -93,7 +94,7 @@ public class SwapCellularAutomaton extends EvacuationCellularAutomatonRandom {
 					System.out.println( "Individuum " + i.id() + " hat schon geswappt." );
 				continue;
 			}
-			ArrayList<Cell> possibleTargets = individualPossibleMapping.get( i );
+			List<Cell> possibleTargets = individualPossibleMapping.get( i );
 			Cell target = movement.selectTargetCell( i.getCell(), possibleTargets );
 			if( target.getIndividual() == null ) {
 				// Klappt alles
@@ -111,7 +112,7 @@ public class SwapCellularAutomaton extends EvacuationCellularAutomatonRandom {
 							System.out.println( "Individuum " + i2.id() + " hat schon geswappt." );
 						unfinished2.add( i );
 					} else {
-						ArrayList<Cell> possibleTargets2 = individualPossibleMapping.get( i2 );
+						List<Cell> possibleTargets2 = individualPossibleMapping.get( i2 );
 						if( possibleTargets2 == null ) {
 							// das andere individual hat wohl seinen weg ausgeführt!
 							unfinished2.add( i );

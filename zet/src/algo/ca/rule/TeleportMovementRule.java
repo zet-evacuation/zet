@@ -7,6 +7,7 @@ package algo.ca.rule;
 import ds.ca.evac.Cell;
 import ds.ca.evac.TeleportCell;
 import java.util.ArrayList;
+import java.util.List;
 
 
 /**
@@ -27,8 +28,8 @@ public class TeleportMovementRule extends WaitingMovementRule {
 	 * @return a list containing all neighbours and the from cell
 	 */
 	@Override
-	protected ArrayList<Cell> computePossibleTargets( Cell fromCell, boolean onlyFreeNeighbours ) {
-		ArrayList<Cell> targets = super.computePossibleTargets( fromCell, onlyFreeNeighbours );
+	protected List<Cell> computePossibleTargets( Cell fromCell, boolean onlyFreeNeighbours ) {
+		List<Cell> targets = super.computePossibleTargets( fromCell, onlyFreeNeighbours );
 
 		ArrayList<Cell> returned = new ArrayList<>(); // create new list to avoid concurrent modification
 		double time = esp.eca.getTimeStep();

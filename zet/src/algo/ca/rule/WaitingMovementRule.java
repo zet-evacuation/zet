@@ -28,6 +28,7 @@ import ds.ca.results.VisualResultsRecorder;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.List;
 
 /**
  *
@@ -122,15 +123,15 @@ public class WaitingMovementRule extends SimpleMovementRule2 {
 
 	/**
 	 * Given a starting cell, this method picks one 
-	 * of its reachable neighbours at random. The i-th neighbour is 
+	 * of its reachable neighbors at random. The i-th neighbor is 
 	 * chosen with probability {@code p(i) := N * exp[mergePotentials(i, cell)]}
-	 * where N is a constant used for normalisation. 
+	 * where N is a constant used for normalization. 
 	 * 
 	 * @param cell The starting cell
-	 * @return A neighbour of {@code cell} chosen at random.
+	 * @return A neighbor of {@code cell} chosen at random.
 	 */
 	@Override
-	public Cell selectTargetCell( Cell cell, ArrayList<Cell> targets ) {
+	public Cell selectTargetCell( Cell cell, List<Cell> targets ) {
 		if( targets.isEmpty() )
 			return cell;
 
@@ -225,7 +226,6 @@ public class WaitingMovementRule extends SimpleMovementRule2 {
 	 * @param targetCell
 	 */
 	protected void updateExhaustion( Individual i, Cell targetCell ) {
-		//throw new java.lang.IllegalStateException( "update exhaustion aufgerufen" );
 		double oldExhaustion = i.getExhaustion();
 		esp.parameterSet.updateExhaustion( i, targetCell );
 		if( oldExhaustion != i.getExhaustion() ) {
