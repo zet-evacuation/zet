@@ -15,12 +15,11 @@
  */
 package ds.ca.evac;
 
+import evacuationplan.CAPathPassabilityChecker;
+import evacuationplan.EvacPotential;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Set;
-
-import evacuationplan.CAPathPassabilityChecker;
-import evacuationplan.EvacPotential;
 
 /**
  * A StaticPotential is special type of PotentialMap, of that exists several in one PotentialManager.
@@ -67,8 +66,8 @@ public class StaticPotential extends PotentialMap {
         super();
         this.id = idCount;
         idCount++;
-        cellToDistance = new HashMap<Cell, Double>();
-        associatedExitCells = new ArrayList<ExitCell>();
+        cellToDistance = new HashMap<>();
+        associatedExitCells = new ArrayList<>();
     }
 
     /**

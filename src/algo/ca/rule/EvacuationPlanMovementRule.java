@@ -15,11 +15,10 @@
  */
 package algo.ca.rule;
 
-import java.util.ArrayList;
-import java.util.Iterator;
-
 import ds.ca.evac.Cell;
 import evacuationplan.CAPathPassabilityChecker;
+import java.util.Iterator;
+import java.util.List;
 
 public class EvacuationPlanMovementRule extends WaitingMovementRule {
 	CAPathPassabilityChecker checker;
@@ -29,8 +28,8 @@ public class EvacuationPlanMovementRule extends WaitingMovementRule {
 	}
 
 	@Override
-	protected ArrayList<Cell> computePossibleTargets( Cell fromCell, boolean onlyFreeNeighbours ) {
-		ArrayList<Cell> targets = super.computePossibleTargets( fromCell, onlyFreeNeighbours );
+	protected List<Cell> computePossibleTargets( Cell fromCell, boolean onlyFreeNeighbours ) {
+		List<Cell> targets = super.computePossibleTargets( fromCell, onlyFreeNeighbours );
 		Iterator<Cell> it = targets.iterator();
 		while( it.hasNext() ) {
 			Cell cell = it.next();

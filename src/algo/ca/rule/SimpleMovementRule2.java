@@ -16,14 +16,18 @@
 package algo.ca.rule;
 
 import de.tu_berlin.math.coga.common.util.Direction;
+import de.tu_berlin.math.coga.rndutils.RandomUtils;
+import de.tu_berlin.math.coga.rndutils.generators.GeneralRandom;
 import ds.ca.evac.Cell;
 import ds.ca.evac.DoorCell;
 import ds.ca.evac.ExitCell;
 import ds.ca.evac.Individual;
 import ds.ca.evac.StairCell;
+import ds.ca.evac.StaticPotential;
 import ds.ca.results.IndividualStateChangeAction;
 import ds.ca.results.VisualResultsRecorder;
-import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 
 /**
  *
@@ -88,16 +92,53 @@ public class SimpleMovementRule2 extends AbstractMovementRule {
 	}
 
 	/**
-	 * A function called if the individual is not moving.
-	 * @param ind the individual that is not moving
+	 * A function called if the individual is not moving. The individual will stand
+	 * on the cell for exactly one time step bevore it can move again. But, even
+	 * if the individual does not move, the view direction may be changed.
 	 */
 	protected void noMove() {
 		ind.setStepStartTime( ind.getStepEndTime() );
 		setStepEndTime( ind, ind.getStepEndTime() + 1 );
 		esp.eca.moveIndividual( ind.getCell(), ind.getCell() );
+		
+		ind.setDirection( getDirection() );
+		System.out.println( "Individual " + ind.id() + " moves " + ind.getDirection() + " by rotating." );
 		setMoveRuleCompleted( false );
 		esp.caStatisticWriter.getStoredCAStatisticResults().getStoredCAStatisticResultsForIndividuals().addCurrentSpeedToStatistic( ind, esp.eca.getTimeStep(), 0 );
-		return;
+	}
+	
+	/**
+	 * Computes a new viewing direction if the individual is not moving.
+	 * @return 
+	 */
+	protected Direction getDirection() {
+		Direction current = ind.getDirection();
+		Direction[] possible = {current.getClockwise().getClockwise(),
+			current.getClockwise(),
+			current,
+			current.getCounterClockwise(),
+			current.getCounterClockwise().getCounterClockwise()};
+		GeneralRandom rnd = (RandomUtils.getInstance()).getRandomGenerator();
+		int randomDirection = rnd.nextInt( 5 );
+		Direction ret = possible[randomDirection];
+		int minDistance = Integer.MAX_VALUE;
+		Cell cell = ind.getCell();
+		for( Direction dir : possible ) {
+			Cell target = cell.getNeighbour( dir );
+			if( target != null && !target.isOccupied() ) {
+				StaticPotential staticPotential = ind.getStaticPotential();
+				int cellDistance = staticPotential.getPotential( cell );
+				if( cellDistance < minDistance ) {
+					minDistance = cellDistance;
+					ret = dir;
+				}
+			}
+		}
+
+		if( ret != current )
+			return ret;
+		
+		return possible[randomDirection];
 	}
 		
 	/**
@@ -123,7 +164,7 @@ public class SimpleMovementRule2 extends AbstractMovementRule {
 		} else {
 			Direction direction = getMovementDirection( ind.getCell(), targetCell );
 
-			double stairSpeedFactor = targetCell instanceof StairCell ? stairSpeedFactor = getStairSpeedFactor( direction, (StairCell) targetCell ) : 1;
+			double stairSpeedFactor = targetCell instanceof StairCell ? getStairSpeedFactor( direction, (StairCell) targetCell ) : 1;
 			dist = direction.distance() * 0.4; // calculate distance
 			double add = getSwayDelay( ind, direction ); // add a delay if the person is changing direction
 
@@ -132,7 +173,8 @@ public class SimpleMovementRule2 extends AbstractMovementRule {
 				speed *= targetCell.getSpeedFactor() * stairSpeedFactor;
 				ind.setStepStartTime( Math.max( ind.getCell().getOccupiedUntil(), ind.getStepEndTime() ) );
 				setStepEndTime( ind, ind.getStepEndTime() + (dist / speed) * esp.eca.getStepsPerSecond() + add );
-				ind.setDirection( direction );			
+				ind.setDirection( direction );
+				System.out.println( "Individual " + ind.id() + " moves " + direction.name() );
 			} else
 				throw new IllegalStateException( "Individuum has no speed." );
 		}
@@ -143,7 +185,6 @@ public class SimpleMovementRule2 extends AbstractMovementRule {
 	/**
 	 * Performs a move after the parameters ({@code speed} and {@code dist}) have
 	 * alredy been set by {@link #initializeMove(ds.ca.evac.Individual, ds.ca.evac.Cell) }
-	 * @param ind
 	 * @param targetCell 
 	 */
 	protected void performMove( Cell targetCell ) {
@@ -159,7 +200,7 @@ public class SimpleMovementRule2 extends AbstractMovementRule {
 	 * @return A neighbour of {@code cell} chosen at random.
 	 */
 	@Override
-	public Cell selectTargetCell( Cell cell, ArrayList<Cell> targets ) {
+	public Cell selectTargetCell( Cell cell, List<Cell> targets ) {
 		Cell target = cell;
 		double minPot = esp.parameterSet.effectivePotential( cell, cell );
 		for( Cell c : targets ) {
@@ -201,13 +242,13 @@ public class SimpleMovementRule2 extends AbstractMovementRule {
 	/**
 	 * Selects the possible targets including the current cell.
 	 * @param fromCell the current sell
-	 * @param onlyFreeNeighbours indicates whether only free neighbours or all neighbours are included
-	 * @return a list containing all neighbours and the from cell
+	 * @param onlyFreeNeighbours indicates whether only free neighbors or all neighbors are included
+	 * @return a list containing all neighbors and the from cell
 	 */
 	@Override
-	protected ArrayList<Cell> computePossibleTargets( Cell fromCell, boolean onlyFreeNeighbours ) {
-		ArrayList<Cell> targets = super.computePossibleTargets( fromCell, onlyFreeNeighbours );
+	protected List<Cell> computePossibleTargets( Cell fromCell, boolean onlyFreeNeighbours ) {
+		List<Cell> targets = super.computePossibleTargets( fromCell, onlyFreeNeighbours );
 		targets.add( fromCell );
-		return targets;
+		return Collections.unmodifiableList( targets );
 	}
 }

@@ -24,7 +24,6 @@ import de.tu_berlin.math.coga.common.localization.DefaultLoc;
 import ds.ca.evac.Cell;
 import ds.ca.evac.Individual;
 import java.util.Iterator;
-import util.ProgressBooleanFlags;
 
 /**
  * Executes the cellular automaton. Can be called by a worker thread.
@@ -110,6 +109,7 @@ public class EvacuationCellularAutomatonInOrder extends EvacuationCellularAutoma
 	/**
 	 * 
 	 */
+	@Override
 	protected void executeInitialization() {
 		getProblem().eca.start();
 		Individual[] individualsCopy = getProblem().eca.getIndividuals().toArray( new Individual[getProblem().eca.getIndividuals().size()] );
@@ -128,6 +128,7 @@ public class EvacuationCellularAutomatonInOrder extends EvacuationCellularAutoma
 	/**
 	 * 
 	 */
+	@Override
 	protected void executeStep() {
 		if( !isInitialized() )
 			throw new IllegalArgumentException( DefaultLoc.getSingleton().getString( "algo.ca.NotInitializedException" ) );

@@ -15,7 +15,7 @@
  */
 /**
  * Class EvacuationCellularAutomatonRandom
- * Erstellt 04.07.2008, 14:50:49
+ * Created 04.07.2008, 14:50:49
  */
 
 package algo.ca.algorithm.evac;
@@ -34,7 +34,6 @@ public class EvacuationCellularAutomatonRandom extends EvacuationCellularAutomat
 
 	/**
 	 *
-	 * @param ca the cellular automaton that is executed
 	 */
 	public EvacuationCellularAutomatonRandom( ) {
 	}

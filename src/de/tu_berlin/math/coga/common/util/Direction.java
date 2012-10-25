@@ -125,14 +125,8 @@ public enum Direction {
 	}
 
 	public double distance() {
-		switch( id ) {
-			case 0:
-			case 2:
-			case 4:
-			case 6:
-				return 1;
-			default:
-				return Math.sqrt( 2 );
-		}
+		if( xOffset == 0 || yOffset == 0 )
+			return 1;
+		else return Math.sqrt( 2 );
 	}
 }

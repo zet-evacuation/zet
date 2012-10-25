@@ -21,10 +21,9 @@
 
 package algo.ca.rule;
 
-import ds.ca.evac.Cell;
-import ds.ca.evac.Individual;
-import java.util.ArrayList;
 import de.tu_berlin.math.coga.rndutils.RandomUtils;
+import ds.ca.evac.Cell;
+import java.util.List;
 
 /**
  * A simple movement rule that does not care about anything like slack, speed,
@@ -63,7 +62,7 @@ public class SimpleMovementRule extends AbstractMovementRule {
 	}
 
 	@Override
-	public Cell selectTargetCell( Cell cell, ArrayList<Cell> targets ) {
+	public Cell selectTargetCell( Cell cell, List<Cell> targets ) {
 		if( targets.isEmpty() )
 			return cell;
 

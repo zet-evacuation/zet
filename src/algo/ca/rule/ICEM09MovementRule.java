@@ -19,7 +19,7 @@ import ds.ca.evac.Cell;
 import ds.ca.results.VisualResultsRecorder;
 import ds.ca.results.IndividualStateChangeAction;
 import de.tu_berlin.math.coga.rndutils.RandomUtils;
-import java.util.ArrayList;
+import java.util.List;
 
 /**
  *
@@ -62,7 +62,7 @@ public class ICEM09MovementRule extends SimpleMovementRule2 {
 	 * @return A neighbour of {@code cell} chosen at random.
 	 */
 	@Override
-	public Cell selectTargetCell( Cell cell, ArrayList<Cell> targets ) {
+	public Cell selectTargetCell( Cell cell, List<Cell> targets ) {
 		if( targets.isEmpty() )
 			return cell;
 

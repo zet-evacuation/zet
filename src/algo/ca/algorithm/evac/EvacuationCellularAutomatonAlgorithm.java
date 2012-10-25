@@ -15,11 +15,10 @@
  */
 /**
  * Class EvacuationCellularAutomatonAlgorithm
- * Erstellt 04.07.2008, 14:07:15
+ * Created 04.07.2008, 14:07:15
  */
 package algo.ca.algorithm.evac;
 
-import algo.ca.RuleSet;
 import algo.ca.algorithm.CellularAutomatonAlgorithm;
 import ds.ca.evac.EvacuationCellularAutomaton;
 import ds.ca.evac.Individual;

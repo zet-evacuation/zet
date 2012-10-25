@@ -23,14 +23,14 @@ import ds.ca.evac.StaticPotential;
  * to which the StaticPotentials refers. This class/tuple implements the
  * interface Comparable in order to sort a collection of tuples by their
  * distance to the ExitCell, to which the StaticPotential refers.
- * @author marcel
+ * @author Marcel Preuß
  *
  */
 public class PotentialValueTuple implements Comparable<PotentialValueTuple>
 {
 	/**
 	 * the Individuals distance from that ExitCell, 
-	 * to which the StaticPotentials refers
+	 * to which the StaticPotentials refers.
 	 */
 	private int lengthOfWay;
 	
@@ -47,7 +47,7 @@ public class PotentialValueTuple implements Comparable<PotentialValueTuple>
 	
 	/**
 	 * Returns the lenthOfWay attribute.
-	 * @return The lenthOfWay attribute.
+	 * @return The lenthOfWay attribute
 	 */
 	public int getLengthOfWay()
 	{
@@ -56,13 +56,14 @@ public class PotentialValueTuple implements Comparable<PotentialValueTuple>
 	
 	/**
 	 * Returns the StaticPotential attribute.
-	 * @return The StaticPotential attribute.
+	 * @return The StaticPotential attribute
 	 */
 	public StaticPotential getStaticPotential()
 	{
 		return this.staticPotential;
 	}
 	
+	@Override
 	public int compareTo(PotentialValueTuple t)
 	{
 		if (t.getLengthOfWay() == this.getLengthOfWay())
