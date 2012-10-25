@@ -23,7 +23,7 @@ package algo.ca;
 
 import java.util.ArrayList;
 
-import ds.ca.evac.Cell;
+import ds.ca.evac.EvacCell;
 import ds.ca.evac.EvacuationCellularAutomaton;
 import ds.ca.evac.ExitCell;
 import ds.ca.evac.PotentialManager;
@@ -47,15 +47,15 @@ public interface PotentialController {
 
 	public StaticPotential mergePotentials( ArrayList<StaticPotential> potentialsToMerge );
 
-	public void increaseDynamicPotential( Cell cell );
+	public void increaseDynamicPotential( EvacCell cell );
 
-	public void decreaseDynamicPotential( Cell cell );
+	public void decreaseDynamicPotential( EvacCell cell );
 
 	public StaticPotential createStaticPotential( ArrayList<ExitCell> exitBlock );
 
 	public StaticPotential getRandomStaticPotential();
 
-	public StaticPotential getNearestExitStaticPotential( Cell c );
+	public StaticPotential getNearestExitStaticPotential( EvacCell c );
 
 	public String dynamicPotentialToString();
 

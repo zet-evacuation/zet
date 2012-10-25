@@ -15,7 +15,7 @@
  */
 package algo.ca.rule;
 
-import ds.ca.evac.Cell;
+import ds.ca.evac.EvacCell;
 import ds.ca.evac.Individual.DeathCause;
 import ds.ca.evac.StaticPotential;
 import java.util.ArrayList;
@@ -29,7 +29,7 @@ public class InitialPotentialRandomRule extends AbstractInitialRule {
 	 * @param cell the cell
 	 */
 	@Override
-	protected void onExecute( Cell cell ) {
+	protected void onExecute( EvacCell cell ) {
 		ArrayList<StaticPotential> exits = new ArrayList<StaticPotential>();
 		exits.addAll( esp.eca.getPotentialManager().getStaticPotentials() );
 		int numberOfExits = exits.size();

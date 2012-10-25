@@ -21,7 +21,7 @@
 
 package algo.ca.rule;
 
-import ds.ca.evac.Cell;
+import ds.ca.evac.EvacCell;
 import ds.ca.evac.Individual;
 
 /**
@@ -40,7 +40,7 @@ public class ConvertIndividualParameters extends AbstractRule {
 	 * @param cell the cell for that this rule is executed
 	 */
 	@Override
-	protected void onExecute( Cell cell ) {
+	protected void onExecute( EvacCell cell ) {
 		// Convert the reaction time. Is set in seconds and therefore must be
 		// multiplied with the stepsPerSeconds value of the CA. During individual
 		// creation this value is not available, thus we need to do it here.

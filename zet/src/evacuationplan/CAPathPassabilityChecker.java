@@ -21,7 +21,7 @@ import ds.graph.flow.PathBasedFlowOverTime;
 import ds.graph.flow.FlowOverTimePath;
 import ds.mapping.IdentifiableObjectMapping;
 import ds.graph.Node;
-import ds.ca.evac.Cell;
+import ds.ca.evac.EvacCell;
 import ds.ca.evac.EvacuationCellularAutomaton;
 import ds.ca.evac.ExitCell;
 import ds.ca.evac.Individual;
@@ -90,7 +90,7 @@ public class CAPathPassabilityChecker {
      * @return whether it is possible for the individual to pass from the cell "from" to the cell "to" without leaving its evacuationPlan.
      * @throws java.lang.IllegalArgumentException if there is no path defined for the individual
      */
-	public boolean canPass(Individual i, Cell from, Cell to) throws IllegalArgumentException {
+	public boolean canPass(Individual i, EvacCell from, EvacCell to) throws IllegalArgumentException {
 		if (DebugFlags.EVAPLANCHECKER){
 			System.out.print("Pass check for individual "+i.id()+" ");
 		}
@@ -194,9 +194,9 @@ public class CAPathPassabilityChecker {
 	 */
 	private EvacPotential calculateIndividualPotential(Individual i, Node exitNode){
 		IndividualPotentialCalculator indPotCal = new IndividualPotentialCalculator(ca, i, this);	
-		ArrayList<Cell> cellList = nodeCellMapping.getCells(exitNode);
+		ArrayList<EvacCell> cellList = nodeCellMapping.getCells(exitNode);
 		ArrayList<ExitCell> exitCellList = new ArrayList<ExitCell>(cellList.size());
-		for (Cell cell : cellList){
+		for (EvacCell cell : cellList){
 			if (!(cell instanceof ExitCell)){
 				if (DebugFlags.EVAPLANCHECKER){
 				    System.out.println("Found a cell that lies in an exit node but is not an exit cell.");

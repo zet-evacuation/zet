@@ -17,7 +17,7 @@ package algo.ca.rule;
 
 import java.util.ArrayList;
 
-import ds.ca.evac.Cell;
+import ds.ca.evac.EvacCell;
 import ds.ca.evac.ExitCell;
 import ds.ca.evac.Individual;
 import ds.ca.evac.SaveCell;
@@ -44,7 +44,7 @@ public class ChangePotentialAttractivityOfExitRule extends AbstractPotentialChan
 	 * its StaticPotential.
 	 */
 	@Override
-	public boolean executableOn( Cell cell ) {
+	public boolean executableOn( EvacCell cell ) {
 		if( cell.getIndividual() == null )
 			return false;
 		else if( (cell instanceof ExitCell) || (cell instanceof SaveCell) )
@@ -66,7 +66,7 @@ public class ChangePotentialAttractivityOfExitRule extends AbstractPotentialChan
 	 * @param cell 
 	 */
 	@Override
-	protected void onExecute( Cell cell ) {
+	protected void onExecute( EvacCell cell ) {
 		Individual individual = cell.getIndividual();
 		if( !individual.isSafe() ) {
 			ArrayList<StaticPotential> staticPotentials = new ArrayList<>();
@@ -91,7 +91,7 @@ public class ChangePotentialAttractivityOfExitRule extends AbstractPotentialChan
 			// the free neighbors have a lower potential (with respect
 			// to the new static potential) than the current cell
 
-			ArrayList<Cell> freeNeighbours = cell.getFreeNeighbours();
+			ArrayList<EvacCell> freeNeighbours = cell.getFreeNeighbours();
 			int i = 0;
 			int promisingNeighbours = 0;
 			int curPotential = mostAttractiveSP.getPotential( cell );

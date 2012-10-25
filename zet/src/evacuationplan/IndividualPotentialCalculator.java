@@ -17,7 +17,7 @@ package evacuationplan;
 
 import java.util.ArrayList;
 
-import ds.ca.evac.Cell;
+import ds.ca.evac.EvacCell;
 import ds.ca.evac.EvacuationCellularAutomaton;
 import ds.ca.evac.Individual;
 import algo.ca.SPPotentialController;
@@ -25,7 +25,7 @@ import algo.ca.SPPotentialController;
 /**
  * This class provides the possibility to calculate a individual specific potential.
  * It extends the {@code SPPotentialController} and only changes
- * the {@code getNeighbour()} method to forbid transitions that
+ * the {@code getNeighbor()} method to forbid transitions that
  * the individual may not do according to the {@code checker}. 
  */
 public class IndividualPotentialCalculator extends SPPotentialController {
@@ -55,9 +55,9 @@ public class IndividualPotentialCalculator extends SPPotentialController {
 	 * because the transition is forbidden for the individual (according
 	 * to the {@code checker} object).
 	 */
-	public ArrayList<Cell> getNeighbours(Cell cell){
-            ArrayList<Cell> evacPlanNeighbours = new ArrayList<Cell>();
-            for (Cell target: cell.getNeighbours()) {
+	public ArrayList<EvacCell> getNeighbours(EvacCell cell){
+            ArrayList<EvacCell> evacPlanNeighbours = new ArrayList<EvacCell>();
+            for (EvacCell target: cell.getNeighbours()) {
                 if (checker.canPass(i, cell, target)) {
                     evacPlanNeighbours.add(target);
                 }

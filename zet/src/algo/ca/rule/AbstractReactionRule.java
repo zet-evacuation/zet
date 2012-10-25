@@ -25,7 +25,7 @@ package algo.ca.rule;
  */
 public abstract class AbstractReactionRule extends AbstractRule {
 	@Override
-	public boolean executableOn( ds.ca.evac.Cell cell ) {
+	public boolean executableOn( ds.ca.evac.EvacCell cell ) {
 		return cell.getIndividual() == null ? false : !cell.getIndividual().isAlarmed();
 	}
 }

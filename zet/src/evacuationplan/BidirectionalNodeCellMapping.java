@@ -29,7 +29,7 @@ import de.tu_berlin.math.coga.zet.converter.graph.ZToGraphRoomRaster;
 import ds.graph.Node;
 import ds.z.Floor;
 import ds.z.Room;
-import ds.ca.evac.Cell;
+import ds.ca.evac.EvacCell;
 
 import util.DebugFlags;
 
@@ -38,8 +38,8 @@ import util.DebugFlags;
  */
 public class BidirectionalNodeCellMapping {
 	
-	HashMap<Node,ArrayList<Cell>> nodeCellMapping;
-	HashMap<Cell,Node> cellNodeMapping;
+	HashMap<Node,ArrayList<EvacCell>> nodeCellMapping;
+	HashMap<EvacCell,Node> cellNodeMapping;
 	
 	public static class CAPartOfMapping{
 		
@@ -86,14 +86,14 @@ public class BidirectionalNodeCellMapping {
 			}
 		}
 		
-		nodeCellMapping = new HashMap<Node,ArrayList<Cell>>();
-		cellNodeMapping = new HashMap<Cell,Node>();
+		nodeCellMapping = new HashMap<Node,ArrayList<EvacCell>>();
+		cellNodeMapping = new HashMap<EvacCell,Node>();
 		for (Node node : nodeToGraphSquareMapping.keySet()){
-			ArrayList<Cell> cellsOfThisNode = new ArrayList<Cell>();
+			ArrayList<EvacCell> cellsOfThisNode = new ArrayList<EvacCell>();
 			ArrayList<ZToGraphRasterSquare> squaresOfThisNode = nodeToGraphSquareMapping.get(node);
 			for (ZToGraphRasterSquare graphSquare : squaresOfThisNode){
 				ZToCARasterSquare caSquare = graphToCARasterSquare.get( graphSquare );
-				Cell cell = caSquaresToCells.get(caSquare);
+				EvacCell cell = caSquaresToCells.get(caSquare);
 				cellsOfThisNode.add( cell );
 				cellNodeMapping.put( cell, node );
 				if (DebugFlags.EVAPLANCHECKER){
@@ -103,7 +103,7 @@ public class BidirectionalNodeCellMapping {
 			nodeCellMapping.put( node, cellsOfThisNode );
 			if (DebugFlags.EVAPLANCHECKER){
 				System.out.println("Mapped "+node+" to ");
-				for (Cell cell:cellsOfThisNode){
+				for (EvacCell cell:cellsOfThisNode){
 					System.out.print(cell.coordToString()+" ");
 				}
 				System.out.println();
@@ -111,11 +111,11 @@ public class BidirectionalNodeCellMapping {
 		}
 	}
 	
-	public ArrayList<Cell> getCells(Node node){
+	public ArrayList<EvacCell> getCells(Node node){
 		return nodeCellMapping.get(node);
 	}
 	
-	public Node getNode(Cell cell){
+	public Node getNode(EvacCell cell){
 		return cellNodeMapping.get(cell);
 	}
 

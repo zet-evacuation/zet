@@ -55,9 +55,9 @@ public class StaticPotential extends PotentialMap {
     protected ArrayList<ExitCell> associatedExitCells;
     
     /**
-     * A HashMap that assign each Cell a Int value which represents the real distance).
+     * A HashMap that assign each EvacCell a Int value which represents the real distance).
      */
-    protected HashMap<Cell, Double> cellToDistance;
+    protected HashMap<EvacCell, Double> cellToDistance;
 
     /**
      * Creates a StaticPotential with a automatic generated unique ID, that can not be changed.
@@ -87,13 +87,13 @@ public class StaticPotential extends PotentialMap {
 	}
 	
 	/**
-     * Associates the specified distance with the specified Cell in this StaticPotential.
-     * If a Cell is specified that exists already in this StaticPotential the value will be overwritten. Otherwise
+     * Associates the specified distance with the specified EvacCell in this StaticPotential.
+     * If a EvacCell is specified that exists already in this StaticPotential the value will be overwritten. Otherwise
      * a new mapping is created.
      * @param cell cell which has to be updated or mapped 
      * @param i distance of the cell
      */
-    public void setDistance (Cell cell, double i) throws IllegalArgumentException{
+    public void setDistance (EvacCell cell, double i) throws IllegalArgumentException{
     	Double distance = new Double(i);
         if(!cellToDistance.containsKey(cell)){
         	cellToDistance.put(cell,distance);
@@ -104,13 +104,13 @@ public class StaticPotential extends PotentialMap {
     }    
     
     /**
-     * Gets the distance of a specified Cell.
+     * Gets the distance of a specified EvacCell.
      * The method returns -1 if you
      * try to get the distance of a cell that does not exists.
      * @param cell A cell which distance you want to know.
      * @return distance of the specified cell or -1 if the cell is not mapped by this potential
      */
-    public double getDistance (Cell cell) throws IllegalArgumentException{
+    public double getDistance (EvacCell cell) throws IllegalArgumentException{
     	Double distance = cellToDistance.get(cell);
     	if(distance== null){
     		return -1.0;
@@ -121,8 +121,8 @@ public class StaticPotential extends PotentialMap {
 		
 	public double getMaxDistance() {
 		double max = 0;
-		Set<Cell> cells = getMappedDistanceCells();
-		for( Cell cell : cells ) {
+		Set<EvacCell> cells = getMappedDistanceCells();
+		for( EvacCell cell : cells ) {
 			if( getDistance( cell ) > max )
 				max = getDistance( cell );
 		}
@@ -130,12 +130,12 @@ public class StaticPotential extends PotentialMap {
 	}
     
     /**
-     * Removes the mapping for the specified Cell.
+     * Removes the mapping for the specified EvacCell.
      * The method throws {@code IllegalArgumentExceptions} if you
-     * try to remove the mapping of a Cell that does not exists.
-     * @param cell A Cell that mapping you want to remove.
+     * try to remove the mapping of a EvacCell that does not exists.
+     * @param cell A EvacCell that mapping you want to remove.
      */
-    public void deleteDistanceCell(Cell cell) throws IllegalArgumentException{
+    public void deleteDistanceCell(EvacCell cell) throws IllegalArgumentException{
         if(!(cellToDistance.containsKey(cell))){
             throw new IllegalArgumentException("The Cell must be insert previously!");
         }
@@ -143,10 +143,10 @@ public class StaticPotential extends PotentialMap {
     }
     
     /**
-     * Returns true if the mapping for the specified Cell exists.
-     * @param cell A Cell of that you want to know if it exists.
+     * Returns true if the mapping for the specified EvacCell exists.
+     * @param cell A EvacCell of that you want to know if it exists.
      */
-    public boolean containsDistance(Cell cell){
+    public boolean containsDistance(EvacCell cell){
         return cellToDistance.containsKey(cell); 	
     }
     
@@ -154,7 +154,7 @@ public class StaticPotential extends PotentialMap {
      * Returns a set of all cell which are mapped by this distance
      * @return set of mapped cells
      */
-    public Set<Cell> getMappedDistanceCells(){
+    public Set<EvacCell> getMappedDistanceCells(){
     	return cellToDistance.keySet();
     }
 
@@ -175,7 +175,7 @@ public class StaticPotential extends PotentialMap {
         this.name = name;
     }
     
-    public int getTruePotential(Cell cell){
+    public int getTruePotential(EvacCell cell){
         return getPotential(cell);
     }
     

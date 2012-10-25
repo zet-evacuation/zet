@@ -15,7 +15,7 @@
  */
 package algo.ca.rule;
 
-import ds.ca.evac.Cell;
+import ds.ca.evac.EvacCell;
 import ds.ca.results.VisualResultsRecorder;
 import ds.ca.results.IndividualStateChangeAction;
 import de.tu_berlin.math.coga.rndutils.RandomUtils;
@@ -35,12 +35,12 @@ public class ICEM09MovementRule extends SimpleMovementRule2 {
 	 * @param cell 
 	 */
 	@Override
-	protected void onExecute( ds.ca.evac.Cell cell ) {
+	protected void onExecute( ds.ca.evac.EvacCell cell ) {
 		ind = cell.getIndividual();
 		
 		if( canMove( ind ) )
 			if( isDirectExecute() ) {
-				Cell targetCell = selectTargetCell( cell, computePossibleTargets( cell, true ) );
+				EvacCell targetCell = selectTargetCell( cell, computePossibleTargets( cell, true ) );
 				setMoveRuleCompleted( true );
 				move( targetCell );
 			} else {
@@ -62,7 +62,7 @@ public class ICEM09MovementRule extends SimpleMovementRule2 {
 	 * @return A neighbour of {@code cell} chosen at random.
 	 */
 	@Override
-	public Cell selectTargetCell( Cell cell, List<Cell> targets ) {
+	public EvacCell selectTargetCell( EvacCell cell, List<EvacCell> targets ) {
 		if( targets.isEmpty() )
 			return cell;
 

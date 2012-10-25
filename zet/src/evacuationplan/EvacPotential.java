@@ -15,7 +15,7 @@
  */
 package evacuationplan;
 
-import ds.ca.evac.Cell;
+import ds.ca.evac.EvacCell;
 import ds.ca.evac.Individual;
 import ds.ca.evac.StaticPotential;
 
@@ -30,7 +30,7 @@ public class EvacPotential extends StaticPotential {
 	}
 	
 	@Override
-	public int getPotential (Cell cell) throws IllegalArgumentException{
+	public int getPotential (EvacCell cell) throws IllegalArgumentException{
 		if(cell != null){
 			Double potential = cellToPotential.get(cell);
 			if(potential != null){
@@ -50,7 +50,7 @@ public class EvacPotential extends StaticPotential {
     }
 	
 	@Override
-	public int getTruePotential(Cell cell){
+	public int getTruePotential(EvacCell cell){
 	    return super.getPotential(cell);
 	}
 	

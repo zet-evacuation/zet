@@ -18,7 +18,7 @@ package statistic.ca;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-import ds.ca.evac.Cell;
+import ds.ca.evac.EvacCell;
 import ds.ca.evac.Room;
 
 public interface CellStatisticMethods {
@@ -26,11 +26,11 @@ public interface CellStatisticMethods {
 	
 	/**
 	 * Returns the utilization of the given cell at the given timestep
-	 * @param c the (@link Cell)
+	 * @param c the (@link EvacCell)
 	 * @param t timestep
 	 * @return utilization up to the timestep, 0 if no utilization at all
 	 */
-	public abstract int getCellUtilization(Cell c, int t)
+	public abstract int getCellUtilization(EvacCell c, int t)
 			throws IllegalArgumentException;
 	
 	/**
@@ -47,28 +47,28 @@ public interface CellStatisticMethods {
 	
 	/**
 	 * Returns the waiting time of the given cell at the given timestep
-	 * @param c the (@link Cell)
+	 * @param c the (@link EvacCell)
 	 * @param t timestep
 	 * @return utilization up to the timestep, 0 if no utilization at all
 	 */
-	public abstract int getCellWaitingTime(Cell c, int t)
+	public abstract int getCellWaitingTime(EvacCell c, int t)
 			throws IllegalArgumentException;
 
 	/**
 	 * Returns the overall utilization of a given cell. 
-	 * @param c the Cell
+	 * @param c the EvacCell
 	 * @param o the total amount of timesteps
 	 * @return the overall utilization
 	 */
-	public abstract double getOverallCellUtilization(Cell c, int o);
+	public abstract double getOverallCellUtilization(EvacCell c, int o);
 
 	/**
 	 * Returns the overall waiting time of a given cell. 
-	 * @param c the Cell
+	 * @param c the EvacCell
 	 * @param o the total amount of timesteps
 	 * @return the overall waiting time
 	 */
-	public abstract double getOverallWaitingTime(Cell c, int o);
+	public abstract double getOverallWaitingTime(EvacCell c, int o);
 
 	public abstract double calculatedOverallSingleRoomUtilization(Room r, int o);
 

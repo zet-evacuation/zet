@@ -22,7 +22,7 @@ package statistic.ca;
 import statistic.graph.IntegerDoubleMapping;
 import statistic.graph.Statistic;
 import statistic.graph.Statistics;
-import ds.ca.evac.Cell;
+import ds.ca.evac.EvacCell;
 import ds.ca.evac.Individual;
 
 /**

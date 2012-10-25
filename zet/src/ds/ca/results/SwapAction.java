@@ -19,7 +19,7 @@
  */
 package ds.ca.results;
 
-import ds.ca.evac.Cell;
+import ds.ca.evac.EvacCell;
 import ds.ca.evac.EvacuationCellularAutomaton;
 
 /**
@@ -29,9 +29,9 @@ import ds.ca.evac.EvacuationCellularAutomaton;
 public class SwapAction extends Action {
 
 	/** The cell from where individual 1 moves */
-	protected Cell cell1;
+	protected EvacCell cell1;
 	/** The cell from where individual 2 moves */
-	protected Cell cell2;
+	protected EvacCell cell2;
 	/** The (exact) time, when individual 1 will arrive at cell 2*/
 	protected double arrivalTime1;
 	/** The (exact) time, when individual 2 will arrive at cell 1*/
@@ -53,7 +53,7 @@ public class SwapAction extends Action {
 	 * @param cell1 The cell from where one individual starts to move
 	 * @param cell2 The cell from where the other individual starts to move
 	 */
-	public SwapAction( Cell cell1, Cell cell2 ) {
+	public SwapAction( EvacCell cell1, EvacCell cell2 ) {
 		this( cell1, cell2, cell1.getIndividual().getStepEndTime(), cell1.getIndividual().getStepStartTime(),
 						cell1.getIndividual().getNumber(),
 						cell2.getIndividual().getStepEndTime(),
@@ -66,8 +66,8 @@ public class SwapAction extends Action {
 	}
 	
 	private SwapAction(
-					Cell cell1,
-					Cell cell2,
+					EvacCell cell1,
+					EvacCell cell2,
 					double getStepEndTime1,
 					double getStepStartTime1,
 					int getNumber1,
@@ -84,11 +84,11 @@ public class SwapAction extends Action {
 		this.individualNumber2 = getNumber2;
 	}
 
-	public Cell cell1() {
+	public EvacCell cell1() {
 		return cell1;
 	}
 
-	public Cell cell2() {
+	public EvacCell cell2() {
 		return cell2;
 	}
 
@@ -143,10 +143,10 @@ public class SwapAction extends Action {
 
 	@Override
 	public Action adoptToCA( EvacuationCellularAutomaton targetCA ) throws CADoesNotMatchException {
-		Cell newCell1 = adoptCell( cell1, targetCA );
+		EvacCell newCell1 = adoptCell( cell1, targetCA );
 		if( newCell1 == null )
 			throw new CADoesNotMatchException( this, "Could not find cell 1 " + cell1 + " in the new CA." );
-		Cell newCell2 = adoptCell( cell2, targetCA );
+		EvacCell newCell2 = adoptCell( cell2, targetCA );
 		if( cell2 == null )
 			throw new CADoesNotMatchException( this, "Could not find cell 2 " + cell2 + " in the new CA." );
 

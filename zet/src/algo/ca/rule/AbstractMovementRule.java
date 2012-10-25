@@ -18,9 +18,9 @@
  */
 package algo.ca.rule;
 
-import de.tu_berlin.math.coga.common.util.Direction;
+import de.tu_berlin.math.coga.common.util.Direction8;
 import de.tu_berlin.math.coga.common.util.Level;
-import ds.ca.evac.Cell;
+import ds.ca.evac.EvacCell;
 import ds.ca.evac.DoorCell;
 import ds.ca.evac.Individual;
 import ds.ca.evac.StairCell;
@@ -37,7 +37,7 @@ public abstract class AbstractMovementRule extends AbstractRule {
 	protected Individual ind;
 	private boolean directExecute;
 	private boolean moveCompleted;
-	private ArrayList<Cell> possibleTargets;
+	private ArrayList<EvacCell> possibleTargets;
 	
 	public AbstractMovementRule() {
 		directExecute = true;
@@ -67,13 +67,13 @@ public abstract class AbstractMovementRule extends AbstractRule {
 	 * @param onlyFreeNeighbours
 	 * @return 
 	 */
-	protected List<Cell> computePossibleTargets( Cell fromCell, boolean onlyFreeNeighbours ) {
+	protected List<EvacCell> computePossibleTargets( EvacCell fromCell, boolean onlyFreeNeighbours ) {
 		possibleTargets = new ArrayList<>();
-		ArrayList<Cell> neighbors = onlyFreeNeighbours ? fromCell.getFreeNeighbours() : fromCell.getNeighbours();
+		ArrayList<EvacCell> neighbors = onlyFreeNeighbours ? fromCell.getFreeNeighbours() : fromCell.getNeighbours();
 		
-		Direction dir = fromCell.getIndividual().getDirection();
+		Direction8 dir = fromCell.getIndividual().getDirection();
 		
-		for( Cell c : neighbors ) {
+		for( EvacCell c : neighbors ) {
 			if( ind.isSafe() && !((c instanceof ds.ca.evac.SaveCell) || (c instanceof ds.ca.evac.ExitCell)) )
 				continue; // ignore all moves that would mean walking out of safe areas
 			
@@ -81,7 +81,7 @@ public abstract class AbstractMovementRule extends AbstractRule {
 				possibleTargets.add( c );
 				continue;
 			}
-			Direction rel = fromCell.getRelative( c );
+			Direction8 rel = fromCell.getRelative( c );
 			if( dir == rel )
 				possibleTargets.add( c );
 			else if( dir == rel.getClockwise() )
@@ -96,17 +96,17 @@ public abstract class AbstractMovementRule extends AbstractRule {
 		return possibleTargets;
 	}
 
-	protected void setPossibleTargets( ArrayList<Cell> possibleTargets ) {
+	protected void setPossibleTargets( ArrayList<EvacCell> possibleTargets ) {
 		this.possibleTargets = possibleTargets;
 	}
 	
 	/**
 	 * Returns the possible targets already sorted by priority. The possible
 	 * targets either have been set before using {@link #setPossibleTargets(java.util.ArrayList) }
-	 * ore been computed using {@link #getPossibleTargets(ds.ca.evac.Cell, boolean) }.
+	 * ore been computed using {@link #getPossibleTargets(ds.ca.evac.EvacCell, boolean) }.
 	 * @return a list of possible targets.
 	 */
-	public List<Cell> getPossibleTargets() {
+	public List<EvacCell> getPossibleTargets() {
 		return possibleTargets;
 	}
 	
@@ -118,20 +118,20 @@ public abstract class AbstractMovementRule extends AbstractRule {
 	 * @param targets possible targets (only the first one is used)
 	 * @return the first cell of the possible targets
 	 */
-	public Cell selectTargetCell( Cell cell, List<Cell> targets ) {
+	public EvacCell selectTargetCell( EvacCell cell, List<EvacCell> targets ) {
 		System.err.println( "WARNUNG nicht überschriebene target cell selection wird ausgeführt" );
 		return targets.get( 0 );
 	}
 	
-	protected Direction getMovementDirection( Cell start, Cell target ) {
-		Direction d = start.getRelative( target );
+	protected Direction8 getMovementDirection( EvacCell start, EvacCell target ) {
+		Direction8 d = start.getRelative( target );
 		return d;
 	}
 
 			// Calculate a factor that is later multiplied with the speed,
 		// this factor is only != 1 for stair cells to 
 		// give different velocities for going a stair up or down.
-	protected double getStairSpeedFactor( Direction direction, StairCell stairCell ) {
+	protected double getStairSpeedFactor( Direction8 direction, StairCell stairCell ) {
 		double stairSpeedFactor = 1;
 			Level lvl = stairCell.getLevel( direction );
 			if( lvl == Level.Higher )
@@ -141,7 +141,7 @@ public abstract class AbstractMovementRule extends AbstractRule {
 		return stairSpeedFactor;
 	}
 
-	protected double getSwayDelay( Individual ind, Direction direction ) {
+	protected double getSwayDelay( Individual ind, Direction8 direction ) {
 		if( ind.getDirection() == direction )
 			return 0;
 		else if( ind.getDirection() == direction.getClockwise() || ind.getDirection() == direction.getCounterClockwise() )
@@ -163,7 +163,7 @@ public abstract class AbstractMovementRule extends AbstractRule {
 		esp.eca.setNeededTime( (int) Math.ceil( d ) );
 	}
 
-	public abstract void move( Cell target );
+	public abstract void move( EvacCell target );
 	
-	public abstract void swap( Cell cell1, Cell cell2 );
+	public abstract void swap( EvacCell cell1, EvacCell cell2 );
 }

@@ -15,7 +15,7 @@
  */
 package algo.ca.rule;
 
-import ds.ca.evac.Cell;
+import ds.ca.evac.EvacCell;
 import java.util.List;
 
 /**
@@ -31,8 +31,8 @@ public class NonWaitingMovementRule extends WaitingMovementRule {
 	 * @return a list containing all neighbours and the from cell
 	 */
 	@Override
-	protected List<Cell> computePossibleTargets( Cell fromCell, boolean onlyFreeNeighbours ) {
-		List<Cell> targets = super.computePossibleTargets( fromCell, onlyFreeNeighbours );
+	protected List<EvacCell> computePossibleTargets( EvacCell fromCell, boolean onlyFreeNeighbours ) {
+		List<EvacCell> targets = super.computePossibleTargets( fromCell, onlyFreeNeighbours );
 		targets.remove( fromCell );
 		return targets;
 	}

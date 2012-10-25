@@ -22,7 +22,7 @@ package algo.ca.parameter;
 import java.util.Collection;
 
 import ds.PropertyContainer;
-import ds.ca.evac.Cell;
+import ds.ca.evac.EvacCell;
 import ds.ca.evac.Individual;
 import java.lang.reflect.InvocationTargetException;
 
@@ -89,7 +89,7 @@ public abstract class AbstractDefaultParameterSet implements ParameterSet {
 	public abstract double changePotentialThreshold( Individual individual );
 
 	@Override
-	public abstract double effectivePotential( Cell referenceCell, Cell targetCell );
+	public abstract double effectivePotential( EvacCell referenceCell, EvacCell targetCell );
 
 	@Override
 	public abstract double idleThreshold( Individual individual );
@@ -98,10 +98,10 @@ public abstract class AbstractDefaultParameterSet implements ParameterSet {
 	public abstract double movementThreshold( Individual individual );
 
 	@Override
-	public abstract double updateExhaustion( Individual individual, Cell targetCell );
+	public abstract double updateExhaustion( Individual individual, EvacCell targetCell );
 
 	@Override
-	public abstract double updatePanic( Individual individual, Cell targetCell, Collection<Cell> preferedCells );
+	public abstract double updatePanic( Individual individual, EvacCell targetCell, Collection<EvacCell> preferedCells );
 
 	@Override
 	public abstract double updatePreferredSpeed( Individual individual );

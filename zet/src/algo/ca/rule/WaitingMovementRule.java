@@ -21,7 +21,7 @@
 package algo.ca.rule;
 
 import de.tu_berlin.math.coga.rndutils.RandomUtils;
-import ds.ca.evac.Cell;
+import ds.ca.evac.EvacCell;
 import ds.ca.evac.Individual;
 import ds.ca.results.IndividualStateChangeAction;
 import ds.ca.results.VisualResultsRecorder;
@@ -37,7 +37,7 @@ import java.util.List;
 public class WaitingMovementRule extends SimpleMovementRule2 {
 
 	@Override
-	protected void onExecute( ds.ca.evac.Cell cell ) {
+	protected void onExecute( ds.ca.evac.EvacCell cell ) {
 		ind = cell.getIndividual();
 		if( ind.isAlarmed() == true ) {
 			if( canMove( ind ) ) {
@@ -47,7 +47,7 @@ public class WaitingMovementRule extends SimpleMovementRule2 {
 					noMove();
 				} else {
 					if( isDirectExecute() ) {
-						Cell targetCell = selectTargetCell( cell, computePossibleTargets( cell, true ) );
+						EvacCell targetCell = selectTargetCell( cell, computePossibleTargets( cell, true ) );
 						setMoveRuleCompleted( true );
 						move( targetCell );
 					} else {
@@ -68,13 +68,13 @@ public class WaitingMovementRule extends SimpleMovementRule2 {
 	}
 
 	@Override
-	public void move( Cell targetCell ) {
+	public void move( EvacCell targetCell ) {
 		updatePanic( ind, targetCell );
 		updateExhaustion( ind, targetCell );
 		super.move( targetCell );
 	}
 
-	protected void updatePanic( Individual i, Cell targetCell ) {
+	protected void updatePanic( Individual i, EvacCell targetCell ) {
 		double oldPanic = i.getPanic();
 		esp.parameterSet.updatePanic( i, targetCell, this.neighboursByPriority( i.getCell() ) );
 		if( oldPanic != i.getPanic() )
@@ -94,16 +94,16 @@ public class WaitingMovementRule extends SimpleMovementRule2 {
 	 * in an increasing fashion according to their potential computed by 
 	 * {@code mergePotential}.
 	 */
-	protected ArrayList<Cell> neighboursByPriority( Cell cell ) {
-		class CellPrioritySorter implements Comparator<Cell> {
-			final Cell referenceCell;
+	protected ArrayList<EvacCell> neighboursByPriority( EvacCell cell ) {
+		class CellPrioritySorter implements Comparator<EvacCell> {
+			final EvacCell referenceCell;
 
-			CellPrioritySorter( Cell referenceCell ) {
+			CellPrioritySorter( EvacCell referenceCell ) {
 				this.referenceCell = referenceCell;
 			}
 
 			@Override
-			public int compare( Cell cell1, Cell cell2 ) {
+			public int compare( EvacCell cell1, EvacCell cell2 ) {
 				final double potential1 = esp.parameterSet.effectivePotential( referenceCell, cell1 );
 				final double potential2 = esp.parameterSet.effectivePotential( referenceCell, cell2 );
 				if( potential1 < potential2 ) {
@@ -116,7 +116,7 @@ public class WaitingMovementRule extends SimpleMovementRule2 {
 			}
 		}
 
-		ArrayList<Cell> result = new ArrayList<>( cell.getNeighbours() );
+		ArrayList<EvacCell> result = new ArrayList<>( cell.getNeighbours() );
 		Collections.sort( result, new CellPrioritySorter( cell ) );
 		return result;
 	}
@@ -131,7 +131,7 @@ public class WaitingMovementRule extends SimpleMovementRule2 {
 	 * @return A neighbor of {@code cell} chosen at random.
 	 */
 	@Override
-	public Cell selectTargetCell( Cell cell, List<Cell> targets ) {
+	public EvacCell selectTargetCell( EvacCell cell, List<EvacCell> targets ) {
 		if( targets.isEmpty() )
 			return cell;
 
@@ -160,7 +160,7 @@ public class WaitingMovementRule extends SimpleMovementRule2 {
 			int startX = cell.getX();
 			int startY = cell.getY();
 
-			Cell mostProbableTarget = targets.get( max_index );
+			EvacCell mostProbableTarget = targets.get( max_index );
 			int targetX = mostProbableTarget.getX();
 			int targetY = mostProbableTarget.getY();
 
@@ -225,7 +225,7 @@ public class WaitingMovementRule extends SimpleMovementRule2 {
 	 * @param i
 	 * @param targetCell
 	 */
-	protected void updateExhaustion( Individual i, Cell targetCell ) {
+	protected void updateExhaustion( Individual i, EvacCell targetCell ) {
 		double oldExhaustion = i.getExhaustion();
 		esp.parameterSet.updateExhaustion( i, targetCell );
 		if( oldExhaustion != i.getExhaustion() ) {

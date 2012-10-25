@@ -19,7 +19,7 @@ import algo.ca.util.PotentialUtils;
 import de.tu_berlin.math.coga.common.localization.DefaultLoc;
 import de.tu_berlin.math.coga.rndutils.RandomUtils;
 import de.tu_berlin.math.coga.rndutils.generators.GeneralRandom;
-import ds.ca.evac.Cell;
+import ds.ca.evac.EvacCell;
 import ds.ca.evac.EvacuationCellularAutomaton;
 import ds.ca.evac.DynamicPotential;
 import ds.ca.evac.ExitCell;
@@ -101,8 +101,8 @@ public class SPPotentialController implements PotentialController {
 		StaticPotential safePotential = new StaticPotential();
 		Collection<Room> rooms = ca.getRooms();
 		for(Room r : rooms){
-			ArrayList<Cell>cells = r.getAllCells();
-			for(Cell c : cells){
+			ArrayList<EvacCell>cells = r.getAllCells();
+			for(EvacCell c : cells){
 				safePotential.setPotential(c, 1);
 			}
 		}
@@ -122,16 +122,16 @@ public class SPPotentialController implements PotentialController {
 		GeneralRandom rnd = RandomUtils.getInstance().getRandomGenerator();
 		DynamicPotential dynPot = pm.getDynamicPotential();
 		//ArrayList<Cell> diffusionCells = new ArrayList<Cell>();		
-		Cell[] cellsCopy = dynPot.getMappedCells().toArray( new Cell[dynPot.getMappedCells().size()]);
+		EvacCell[] cellsCopy = dynPot.getMappedCells().toArray( new EvacCell[dynPot.getMappedCells().size()]);
 		/* NEW CODE */
-		for( Cell c : cellsCopy ) {
+		for( EvacCell c : cellsCopy ) {
 			//System.out.println( "DynPot: "+ dynPot.getPotential(c));
 			double randomNumber = rnd.nextDouble();
 //			System.out.println( "Randomnumber " + randomNumber + " in updateDynamicPotential" );
 			if( /*dynPot.getPotential(c) > 0 && */diffusion > randomNumber ) {
 				// Potential diffuses to a a neighbour cell. It should not increase, so
 				// reduce it afterwards on this cell!
-				Cell randomNeighbour = null;
+				EvacCell randomNeighbour = null;
 				while(randomNeighbour == null) {
 							final int randomInt = rnd.nextInt((getNeighbours(c)).size());
 							randomNeighbour = (getNeighbours(c)).get(randomInt);
@@ -162,11 +162,11 @@ public class SPPotentialController implements PotentialController {
 	}
 
 	/**
-	 * Increases the potential of the specified Cell about one.
-	 * Associates the specified potential with the specified Cell in this PotentialMap.	
+	 * Increases the potential of the specified EvacCell about one.
+	 * Associates the specified potential with the specified EvacCell in this PotentialMap.	
 	 * @param cell A cell which potential you want to increase.  
 	 */
-	public void increaseDynamicPotential (Cell cell){
+	public void increaseDynamicPotential (EvacCell cell){
 		int potential;
 		DynamicPotential dynPot = pm.getDynamicPotential();
 		if(dynPot.contains(cell)){
@@ -180,13 +180,13 @@ public class SPPotentialController implements PotentialController {
 	}
 
 	/**
-	 * Decreases the potential of the specified Cell about one if its dynamic potential is greater than zero.
-	 * Associates the specified potential with the specified Cell in this PotentialMap.
+	 * Decreases the potential of the specified EvacCell about one if its dynamic potential is greater than zero.
+	 * Associates the specified potential with the specified EvacCell in this PotentialMap.
 	 * The method throws {@code IllegalArgumentExceptions} if you
-	 * try to decrease the potential of a Cell that not exists in this PotentialMap.
+	 * try to decrease the potential of a EvacCell that not exists in this PotentialMap.
 	 * @param cell A cell which potential you want to decrease.  
 	 */
-	public void decreaseDynamicPotential (Cell cell) throws IllegalArgumentException{
+	public void decreaseDynamicPotential (EvacCell cell) throws IllegalArgumentException{
 		DynamicPotential dynPot = pm.getDynamicPotential();
 		if(!(dynPot.contains(cell))){
 			throw new IllegalArgumentException (DefaultLoc.getSingleton (
@@ -223,9 +223,9 @@ public class SPPotentialController implements PotentialController {
 		StaticPotential newSP = new StaticPotential();
 		newSP.setAssociatedExitCells( exitBlock );
 		newSP.setAttractivity( exitBlock.get( 0 ).getAttractivity() );
-		ArrayList<? extends Cell> parentList;
-		ArrayList<Cell> childList = new ArrayList<Cell>();
-		HashMap<Cell, SmoothingTupel> childTupel = new HashMap<Cell, SmoothingTupel>();
+		ArrayList<? extends EvacCell> parentList;
+		ArrayList<EvacCell> childList = new ArrayList<EvacCell>();
+		HashMap<EvacCell, SmoothingTupel> childTupel = new HashMap<EvacCell, SmoothingTupel>();
 
 		for( ExitCell c : exitBlock ) {
 			newSP.setPotential( c, 0 );
@@ -234,10 +234,10 @@ public class SPPotentialController implements PotentialController {
 
 		parentList = exitBlock;
 		while( !parentList.isEmpty() ) {
-			childList = new ArrayList<Cell>();
-			childTupel = new HashMap<Cell, SmoothingTupel>();
-			for(Cell p : parentList ) {
-				for( Cell c : getNeighbours( p ) ) {
+			childList = new ArrayList<EvacCell>();
+			childTupel = new HashMap<EvacCell, SmoothingTupel>();
+			for(EvacCell p : parentList ) {
+				for( EvacCell c : getNeighbours( p ) ) {
 					if( !(c instanceof ExitCell) && !(newSP.contains( c )) ) {
 						//check if there already exists a tuple for this cell
 						if( childTupel.containsKey( c ) ) {
@@ -267,7 +267,7 @@ public class SPPotentialController implements PotentialController {
 	 * @param n the other neighbour
 	 * @return 10 if the two cells are horizontal or vertical neighbours, 14 else
 	 */
-	public int calculateDistance(Cell c, Cell n){
+	public int calculateDistance(EvacCell c, EvacCell n){
 		if( (c.getX() == n.getX()) || (c.getY() == n.getY()) || (c instanceof DoorCell && n instanceof DoorCell) ) {
 			return 10;
 		} else {
@@ -281,7 +281,7 @@ public class SPPotentialController implements PotentialController {
 	 * @param n the other neighbour
 	 * @return 10 if the two cells are horizontal or vertical neighbours, 14 else
 	 */
-	public double calculateRealDistance(Cell c, Cell n){
+	public double calculateRealDistance(EvacCell c, EvacCell n){
 		if( (c.getX() == n.getX()) || (c.getY() == n.getY()) || (c instanceof DoorCell && n instanceof DoorCell) ) {
 			return 0.4;
 		} else {
@@ -301,10 +301,10 @@ public class SPPotentialController implements PotentialController {
 	/**
 	 * Returns a StaticPotential which contains the lowest potential for the specified cell. If this cell is not in any staticPotetial
 	 * null is returned.
-	 * @param c Cell for which the lowest potential is searched
+	 * @param c EvacCell for which the lowest potential is searched
 	 * @return StaticPotential that provides the fastest way out or null, if this cell is not mapped to any static potential
 	 */
-	public StaticPotential getNearestExitStaticPotential(Cell c){
+	public StaticPotential getNearestExitStaticPotential(EvacCell c){
 		StaticPotential nearestPot = new StaticPotential();
 		int distance = Integer.MAX_VALUE;
 		int numberOfDisjunctStaticPotentials = 0;
@@ -364,11 +364,11 @@ public class SPPotentialController implements PotentialController {
     }
 
 	/**
-	 * Returns the neighbors of the cell. Uses the method of {@code Cell}.
+	 * Returns the neighbors of the cell. Uses the method of {@code EvacCell}.
 	 * @param cell A cell in the cellular automaton.
 	 * @return The neighbor cells of this cell.
 	 */
-	public ArrayList<Cell> getNeighbours( Cell cell ) {
+	public ArrayList<EvacCell> getNeighbours( EvacCell cell ) {
 		return cell.getNeighbours();
 	}
 }

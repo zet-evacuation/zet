@@ -27,7 +27,7 @@ public class ICEM09SaveIndividualsRule extends AbstractSaveRule {
 	public ICEM09SaveIndividualsRule() {}
 
 	@Override
-	protected void onExecute( ds.ca.evac.Cell cell ) {
+	protected void onExecute( ds.ca.evac.EvacCell cell ) {
 		ds.ca.evac.Individual savedIndividual = cell.getIndividual();
 		if( !(savedIndividual.isSafe()) ) {
 			esp.eca.setIndividualSave( savedIndividual );
@@ -42,7 +42,7 @@ public class ICEM09SaveIndividualsRule extends AbstractSaveRule {
 	 * @return {@code true} if the rule is applicable to the given cell, {@code false} otherwise
 	 */
 	@Override
-	public boolean executableOn( ds.ca.evac.Cell cell ) {
+	public boolean executableOn( ds.ca.evac.EvacCell cell ) {
 		return (cell.getIndividual() != null) && ((cell instanceof ds.ca.evac.ExitCell) || (cell instanceof ds.ca.evac.SaveCell));
 	}
 }

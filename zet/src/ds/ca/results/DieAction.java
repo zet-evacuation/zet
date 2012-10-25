@@ -18,7 +18,7 @@
  */
 package ds.ca.results;
 
-import ds.ca.evac.Cell;
+import ds.ca.evac.EvacCell;
 import ds.ca.evac.EvacuationCellularAutomaton;
 import ds.ca.evac.Individual.DeathCause;
 import ds.ca.results.Action.CADoesNotMatchException;
@@ -30,7 +30,7 @@ import ds.ca.results.Action.CADoesNotMatchException;
 public class DieAction extends Action {
 
 	/** The cell on which the individual stood when it died. */
-	private Cell placeOfDeath;
+	private EvacCell placeOfDeath;
 	/** The cause which caused the individuals dead */
 	private DeathCause cause;
 	/** The number of the individual. Is needed for visualization. */
@@ -43,7 +43,7 @@ public class DieAction extends Action {
 	 * @param cause the cause of the death
 	 * @param individualNumber the individuals number
 	 */
-	public DieAction( Cell placeOfDeath, DeathCause cause, int individualNumber ) {
+	public DieAction( EvacCell placeOfDeath, DeathCause cause, int individualNumber ) {
 		this.placeOfDeath = placeOfDeath;
 		this.cause = cause;
 		this.individualNumber = individualNumber;
@@ -53,7 +53,7 @@ public class DieAction extends Action {
 	 * Returns the cell on which the individual stood
 	 * @return the cell on which the individual stood
 	 */
-	public Cell placeOfDeath() {
+	public EvacCell placeOfDeath() {
 		return placeOfDeath;
 	}
 
@@ -72,7 +72,7 @@ public class DieAction extends Action {
 	 */
 	@Override
 	Action adoptToCA( EvacuationCellularAutomaton targetCA ) throws CADoesNotMatchException {
-		Cell newCell = adoptCell( placeOfDeath, targetCA );
+		EvacCell newCell = adoptCell( placeOfDeath, targetCA );
 		if( newCell == null ) {
 			throw new CADoesNotMatchException(
 							this,

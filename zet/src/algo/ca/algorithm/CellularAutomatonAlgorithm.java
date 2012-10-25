@@ -20,12 +20,14 @@
 
 package algo.ca.algorithm;
 
+import de.tu_berlin.math.coga.algorithm.simulation.cellularautomaton.CellularAutomatonSimulationProblem;
+import de.tu_berlin.math.coga.algorithm.simulation.cellularautomaton.CellularAutomatonSimulationResult;
 import de.tu_berlin.math.coga.common.algorithm.Algorithm;
 
 /**
  *
- * @param <U> 
- * @param <V> 
+ * @param <U>
+ * @param <V>
  * @author Jan-Philipp Kappmeier
  */
 public abstract class CellularAutomatonAlgorithm<U extends CellularAutomatonSimulationProblem, V extends CellularAutomatonSimulationResult> extends Algorithm<U, V> {

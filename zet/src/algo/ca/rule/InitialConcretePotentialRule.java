@@ -17,7 +17,7 @@ package algo.ca.rule;
 
 import java.util.ArrayList;
 import java.util.Collections;
-import ds.ca.evac.Cell;
+import ds.ca.evac.EvacCell;
 import ds.ca.evac.StaticPotential;
 import ds.ca.evac.Individual;
 
@@ -41,7 +41,7 @@ public class InitialConcretePotentialRule extends AbstractInitialRule {
 	 * not already have a StaticPotential.
 	 */
 	@Override
-	public boolean executableOn( Cell cell ) {
+	public boolean executableOn( EvacCell cell ) {
 		return cell.getIndividual() == null || cell.getIndividual().getStaticPotential() != null ? false : true;
 	}
 
@@ -56,7 +56,7 @@ public class InitialConcretePotentialRule extends AbstractInitialRule {
 	 * @param cell the cell
 	 */
 	@Override
-	protected void onExecute( Cell cell ) {
+	protected void onExecute( EvacCell cell ) {
 		Individual individual = cell.getIndividual();
 		ArrayList<PotentialValueTuple> potentialToLengthOfWayMapper = new ArrayList<PotentialValueTuple>();
 		ArrayList<StaticPotential> staticPotentials = new ArrayList<StaticPotential>();

@@ -6,7 +6,7 @@
 
 package evacuationplan;
 
-import ds.ca.evac.Cell;
+import ds.ca.evac.EvacCell;
 import ds.ca.evac.EvacuationCellularAutomaton;
 import ds.ca.evac.Individual;
 import ds.ca.evac.Room;
@@ -46,7 +46,7 @@ public class BestResponseDynamics {
 		System.out.println( "Best Response Rounds: " + c );
 	}
 
-	public int computePotential( Cell cell, EvacuationCellularAutomaton ca ) {
+	public int computePotential( EvacCell cell, EvacuationCellularAutomaton ca ) {
 		ArrayList<StaticPotential> exits = new ArrayList<StaticPotential>();
 		exits.addAll( ca.getPotentialManager().getStaticPotentials() );
 		StaticPotential newPot = cell.getIndividual().getStaticPotential();
@@ -65,7 +65,7 @@ public class BestResponseDynamics {
 			return 0;
 	}
 
-	private double getResponse( EvacuationCellularAutomaton ca, Cell cell, StaticPotential pot ) {
+	private double getResponse( EvacuationCellularAutomaton ca, EvacCell cell, StaticPotential pot ) {
 
 		// Constants
 		Individual ind = cell.getIndividual();

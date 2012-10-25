@@ -16,7 +16,7 @@
 package algo.ca.rule;
 
 import java.util.ArrayList;
-import ds.ca.evac.Cell;
+import ds.ca.evac.EvacCell;
 import ds.ca.evac.Individual;
 import ds.ca.evac.StaticPotential;
 import ds.ca.evac.Room;
@@ -38,13 +38,13 @@ public class ChangePotentialBestResponseOptimizedRule extends AbstractPotentialC
 	 * @return true if the potential change rule can be used
 	 */
 	@Override
-	public boolean executableOn( Cell cell ) {
+	public boolean executableOn( EvacCell cell ) {
 		int timeStep = esp.eca.getTimeStep();
 		return ((timeStep < TIME_STEP_LIMIT_FOR_NASH_EQUILIBRIUM) & (cell.getIndividual() != null)) ? true : false;
 
 	}
 
-	private double getResponse( Cell cell, StaticPotential pot ) {
+	private double getResponse( EvacCell cell, StaticPotential pot ) {
 
 		// Constants
 		Individual ind = cell.getIndividual();
@@ -94,7 +94,7 @@ public class ChangePotentialBestResponseOptimizedRule extends AbstractPotentialC
 	 * @param cell
 	 */
 	@Override
-	protected void onExecute( Cell cell ) {
+	protected void onExecute( EvacCell cell ) {
 		// perform initial best response dynamics exit selection
 		BestResponseDynamics brd = new BestResponseDynamics();
 		brd.computePotential( cell, esp.eca );

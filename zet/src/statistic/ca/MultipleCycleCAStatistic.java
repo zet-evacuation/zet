@@ -19,7 +19,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 import statistic.ca.exception.*;
-import ds.ca.evac.Cell;
+import ds.ca.evac.EvacCell;
 import ds.ca.evac.ExitCell;
 import ds.ca.evac.Individual;
 import ds.ca.evac.Room;
@@ -166,7 +166,7 @@ public class MultipleCycleCAStatistic implements CellStatisticMethods {
 	}
 
 	@Override
-	public int getCellUtilization(Cell c, int t)
+	public int getCellUtilization(EvacCell c, int t)
 			throws IllegalArgumentException {
 		int accumulatedValue = 0;
 		for(CAStatistic cas : cycles){
@@ -176,7 +176,7 @@ public class MultipleCycleCAStatistic implements CellStatisticMethods {
 	}
 
 	@Override
-	public int getCellWaitingTime(Cell c, int t)
+	public int getCellWaitingTime(EvacCell c, int t)
 			throws IllegalArgumentException {
 		int accumulatedValue = 0;
 		for(CAStatistic cas : cycles){
@@ -186,7 +186,7 @@ public class MultipleCycleCAStatistic implements CellStatisticMethods {
 	}
 
 	@Override
-	public double getOverallCellUtilization(Cell c, int o) {
+	public double getOverallCellUtilization(EvacCell c, int o) {
 		double accumulatedValue = 0.0;
 		for(CAStatistic cas : cycles){
 			accumulatedValue += cas.getCellStatistic().getOverallCellUtilization(c, o);
@@ -195,7 +195,7 @@ public class MultipleCycleCAStatistic implements CellStatisticMethods {
 	}
 
 	@Override
-	public double getOverallWaitingTime(Cell c, int o) {
+	public double getOverallWaitingTime(EvacCell c, int o) {
 		double accumulatedValue = 0.0;
 		for(CAStatistic cas : cycles){
 			accumulatedValue += cas.getCellStatistic().getOverallWaitingTime(c, o);

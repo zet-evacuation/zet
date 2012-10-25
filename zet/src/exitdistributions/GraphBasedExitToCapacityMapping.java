@@ -17,7 +17,7 @@ package exitdistributions;
 
 import algo.graph.exitassignment.ExitCapacityEstimator;
 import de.tu_berlin.math.coga.zet.converter.graph.NetworkFlowModel;
-import ds.ca.evac.Cell;
+import ds.ca.evac.EvacCell;
 import ds.ca.evac.EvacuationCellularAutomaton;
 import ds.ca.evac.StaticPotential;
 import ds.ca.evac.TargetCell;
@@ -68,7 +68,7 @@ public class GraphBasedExitToCapacityMapping {
 		potentials.addAll( ca.getPotentialManager().getStaticPotentials() );
 		ExitCapacityEstimator estimator = new ExitCapacityEstimator();
 		for( Node sink : sinks ) {
-			ArrayList<Cell> sinkCells = nodeCellMapping.getCells( sink );
+			ArrayList<EvacCell> sinkCells = nodeCellMapping.getCells( sink );
 			TargetCell cell = findATargetCell( sinkCells );
 			for( StaticPotential potential : potentials )
 				if( potential.getAssociatedExitCells().contains( cell ) ) {
@@ -82,12 +82,12 @@ public class GraphBasedExitToCapacityMapping {
 		}
 	}
 
-	private TargetCell findATargetCell( Iterable<Cell> cellList ) {
-		Cell targetCell = null;
+	private TargetCell findATargetCell( Iterable<EvacCell> cellList ) {
+		EvacCell targetCell = null;
 		boolean targetCellFound = false;
-		Iterator<Cell> it = cellList.iterator();
+		Iterator<EvacCell> it = cellList.iterator();
 		while( !targetCellFound && it.hasNext() ) {
-			Cell possibleTargetCell = it.next();
+			EvacCell possibleTargetCell = it.next();
 			if( possibleTargetCell instanceof TargetCell ) {
 				targetCellFound = true;
 				targetCell = possibleTargetCell;

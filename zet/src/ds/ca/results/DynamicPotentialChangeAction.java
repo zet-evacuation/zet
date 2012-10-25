@@ -19,7 +19,7 @@
  */
 package ds.ca.results;
 
-import ds.ca.evac.Cell;
+import ds.ca.evac.EvacCell;
 import ds.ca.evac.EvacuationCellularAutomaton;
 
 /**
@@ -29,16 +29,16 @@ import ds.ca.evac.EvacuationCellularAutomaton;
 public class DynamicPotentialChangeAction extends Action {
 
     protected double newPotential;
-    protected Cell affectedCell;
+    protected EvacCell affectedCell;
     
-    public DynamicPotentialChangeAction(Cell affectedCell, double newPotential){
+    public DynamicPotentialChangeAction(EvacCell affectedCell, double newPotential){
         this.affectedCell = affectedCell;
         this.newPotential = newPotential;        
     }
     
     @Override
     Action adoptToCA(EvacuationCellularAutomaton targetCA) throws CADoesNotMatchException {
-        Cell newAffectedCell = adoptCell(affectedCell, targetCA);
+        EvacCell newAffectedCell = adoptCell(affectedCell, targetCA);
         return new DynamicPotentialChangeAction(newAffectedCell, newPotential);
     }
 

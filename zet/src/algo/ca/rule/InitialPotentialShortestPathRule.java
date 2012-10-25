@@ -17,7 +17,7 @@ package algo.ca.rule;
 
 import algo.ca.algorithm.evac.EvacuationSimulationProblem;
 import java.util.ArrayList;
-import ds.ca.evac.Cell;
+import ds.ca.evac.EvacCell;
 import ds.ca.evac.StaticPotential;
 import ds.ca.evac.Individual;
 
@@ -41,11 +41,11 @@ public class InitialPotentialShortestPathRule extends AbstractInitialRule {
 	 * @param cell the cell
 	 */
 	@Override
-	protected void onExecute( Cell cell ) {
+	protected void onExecute( EvacCell cell ) {
 		assignShortestPathPotential( cell, this.esp );
 	}
 
-	public static void assignShortestPathPotential( Cell cell, EvacuationSimulationProblem esp ) {
+	public static void assignShortestPathPotential( EvacCell cell, EvacuationSimulationProblem esp ) {
 		Individual individual = cell.getIndividual();
 		ArrayList<StaticPotential> staticPotentials = new ArrayList<>();
 		staticPotentials.addAll( esp.eca.getPotentialManager().getStaticPotentials() );

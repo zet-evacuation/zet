@@ -17,7 +17,7 @@ package algo.ca.rule;
 
 import algo.ca.algorithm.evac.EvacuationSimulationProblem;
 import de.tu_berlin.math.coga.common.localization.DefaultLoc;
-import ds.ca.evac.Cell;
+import ds.ca.evac.EvacCell;
 import ds.ca.evac.Individual;
 
 /**
@@ -33,19 +33,19 @@ public abstract class AbstractRule implements Rule {
 	 * @return {@code true} if an individual is standing on the cell, {@code false} otherwise
 	 */
 	@Override
-	public boolean executableOn( Cell cell ) {
+	public boolean executableOn( EvacCell cell ) {
 		return cell.getIndividual() != null;
 	}
 
 	@Override
-	final public void execute( Cell cell ) {
+	final public void execute( EvacCell cell ) {
 		if( !executableOn( cell ) )
 			return;
 
 		onExecute( cell );
 	}
 
-	abstract protected void onExecute( Cell cell );
+	abstract protected void onExecute( EvacCell cell );
 
 	@Override
 	public void setEvacuationSimulationProblem( EvacuationSimulationProblem esp ) {

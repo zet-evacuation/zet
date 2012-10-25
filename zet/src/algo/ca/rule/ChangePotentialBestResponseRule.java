@@ -16,7 +16,7 @@
 package algo.ca.rule;
 
 import java.util.ArrayList;
-import ds.ca.evac.Cell;
+import ds.ca.evac.EvacCell;
 import ds.ca.evac.ExitCell;
 import ds.ca.evac.Individual;
 import ds.ca.evac.StaticPotential;
@@ -38,13 +38,13 @@ public class ChangePotentialBestResponseRule extends AbstractPotentialChangeRule
 	 * @return true, if the change potential rule can be used
 	 */
 	@Override
-	public boolean executableOn(Cell cell) {
+	public boolean executableOn(EvacCell cell) {
             
             return (cell.getIndividual() != null) ? true : false;
             
 	}
         
-        private double getResponse(Cell cell, StaticPotential pot){
+        private double getResponse(EvacCell cell, StaticPotential pot){
             
             // Constants
             Individual ind = cell.getIndividual();
@@ -82,7 +82,7 @@ public class ChangePotentialBestResponseRule extends AbstractPotentialChangeRule
                 }           
             
             int wrongDirectedNeighbours = 0;            
-            for (Cell neighbour : cell.getAllNeighbours()){
+            for (EvacCell neighbour : cell.getDirectNeighbors()){
                 if (neighbour.getIndividual() != null){
                     if (neighbour.getIndividual().getStaticPotential() != pot){
                         wrongDirectedNeighbours++;
@@ -114,7 +114,7 @@ public class ChangePotentialBestResponseRule extends AbstractPotentialChangeRule
 	 * @param cell
 	 */
 	@Override
-	protected void onExecute(Cell cell) {                                   
+	protected void onExecute(EvacCell cell) {                                   
                         
             ArrayList<StaticPotential> exits = new ArrayList<StaticPotential>();
             exits.addAll(esp.eca.getPotentialManager().getStaticPotentials());            

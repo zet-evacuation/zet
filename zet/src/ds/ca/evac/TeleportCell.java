@@ -20,6 +20,8 @@
  */
 package ds.ca.evac;
 
+import algo.ca.framework.EvacuationCellState;
+
 
 /**
  *
@@ -36,7 +38,7 @@ public class TeleportCell extends BaseTeleportCell<TeleportCell> {
 	public void setTeleportFailed( boolean teleportFailed ) {
 		this.teleportFailed = teleportFailed;
 	}
-	
+
 
 	/**
 	 * Constructs an empty DoorCell which is NOT connected with any other DoorCell
@@ -86,7 +88,7 @@ public class TeleportCell extends BaseTeleportCell<TeleportCell> {
 	 * @param x x-coordinate of the cell in the room, 0 <= x <= width-1
 	 * @param y y-coordinate of the cell in the room, 0 <= y <= height-1
 	 */
-	public TeleportCell( Individual individual, double speedFactor, int x, int y ) {
+	public TeleportCell( EvacuationCellState individual, double speedFactor, int x, int y ) {
 		super( individual, speedFactor, x, y );
 		graphicalRepresentation = '?';
 	}
@@ -141,7 +143,7 @@ public class TeleportCell extends BaseTeleportCell<TeleportCell> {
 	public int getUsedInTimeStep() {
 		return usedInTimeStep;
 	}
-	
+
 
 
 

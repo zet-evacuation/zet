@@ -4,21 +4,23 @@
  */
 package ds.ca.evac;
 
+import algo.ca.framework.EvacuationCellState;
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  *
  * @author Jan-Philipp Kappmeier
  */
-public abstract class BaseTeleportCell<T> extends Cell implements Cloneable {
+public abstract class BaseTeleportCell<T> extends EvacCell implements Cloneable {
 
 	/** Keeps a list of all possible targets which are of a specified type T. */
-	protected ArrayList<T> teleportTargets;
+	protected List<T> teleportTargets;
 
 	public BaseTeleportCell( double speedFactor, int x, int y, Room room ) {
-		super( null, speedFactor, x, y, room );
+		super( new EvacuationCellState( null ), speedFactor, x, y, room );
 		graphicalRepresentation = '!';
-		teleportTargets = new ArrayList<T>();
+		teleportTargets = new ArrayList<>();
 	}
 
 	/**
@@ -31,9 +33,9 @@ public abstract class BaseTeleportCell<T> extends Cell implements Cloneable {
 	 * @param x x-coordinate of the cell in the room, 0 <= x <= width-1
 	 * @param y y-coordinate of the cell in the room, 0 <= y <= height-1
 	 */
-	public BaseTeleportCell( Individual individual, double speedFactor, int x, int y ) {
+	public BaseTeleportCell( EvacuationCellState individual, double speedFactor, int x, int y ) {
 		super( individual, speedFactor, x, y );
-		teleportTargets = new ArrayList<T>();
+		teleportTargets = new ArrayList<>();
 		graphicalRepresentation = '!';
 	}
 
@@ -49,8 +51,8 @@ public abstract class BaseTeleportCell<T> extends Cell implements Cloneable {
 	/**
 	 * Adds a DoorCell which is connected to this DoorCell and registers itself
 	 * as a connected DoorCell in "door".
-	 * @param target defines the reference to the Door-Cell of the room you can
-	 * enter by using this Door-Cell of the current room.
+	 * @param target defines the reference to the Door-EvacCell of the room you can
+	 * enter by using this Door-EvacCell of the current room.
 	 * @throws IllegalArgumentException if the parameter "Door" is null
 	 * or if "Door" has already been added to the list of doors.
 	 */
@@ -58,7 +60,7 @@ public abstract class BaseTeleportCell<T> extends Cell implements Cloneable {
 
 	/**
 	 * Removes the specified door.
-	 * @param door The door which shall be removed.
+	 * @param T The door which shall be removed.
 	 */
 	public abstract void removeTarget( T target );
 

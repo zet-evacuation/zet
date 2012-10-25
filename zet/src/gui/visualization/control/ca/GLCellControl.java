@@ -18,7 +18,7 @@ package gui.visualization.control.ca;
 import algo.ca.util.PotentialUtils;
 import ds.ca.evac.PotentialManager;
 import ds.ca.evac.Room;
-import ds.ca.evac.Cell;
+import ds.ca.evac.EvacCell;
 import ds.ca.evac.DoorCell;
 import ds.ca.evac.ExitCell;
 import ds.ca.evac.RoomCell;
@@ -36,7 +36,7 @@ import gui.visualization.draw.ca.GLSaveCell;
 import gui.visualization.draw.ca.GLStairCell;
 import gui.visualization.util.Tuple;
 import opengl.drawingutils.GLColor;
-import de.tu_berlin.math.coga.common.util.Direction;
+import de.tu_berlin.math.coga.common.util.Direction8;
 import ds.ca.evac.TeleportCell;
 import gui.visualization.VisualizationOptionManager;
 import gui.visualization.control.AbstractZETVisualizationControl;
@@ -53,7 +53,7 @@ public class GLCellControl extends AbstractZETVisualizationControl<GLCellControl
 	private static StaticPotential activePotential = null;
 	private static long MAX_DYNAMIC_POTENTIAL = -1;
 	private CellInformationDisplay displayMode = CellInformationDisplay.StaticPotential;
-	private Cell controlled;
+	private EvacCell controlled;
 
 	public static void invalidateMergedPotential() {
 		mergedPotential = null;
@@ -61,7 +61,7 @@ public class GLCellControl extends AbstractZETVisualizationControl<GLCellControl
 
 	CAStatistic statistic;
 
-	public GLCellControl( CAVisualizationResults caVisResults, Cell cell, GLRoomControl glRoomControl, GLCellularAutomatonControl glControl ) {
+	public GLCellControl( CAVisualizationResults caVisResults, EvacCell cell, GLRoomControl glRoomControl, GLCellularAutomatonControl glControl ) {
 		super( glControl );
 		this.statistic = caVisResults.statistic;
 		this.controlled = cell;
@@ -238,8 +238,8 @@ public class GLCellControl extends AbstractZETVisualizationControl<GLCellControl
 	 * @param direction the edge of the cell
 	 * @return the mixed color for that edge
 	 */
-	public GLColor mixColorWithNeighbours( Direction direction ) {
-		Cell[] c = new Cell[3];
+	public GLColor mixColorWithNeighbours( Direction8 direction ) {
+		EvacCell[] c = new EvacCell[3];
 		GLCellControl cc;
 		double r = getView().getColor().getRed();
 		double g = getView().getColor().getGreen();
@@ -248,24 +248,24 @@ public class GLCellControl extends AbstractZETVisualizationControl<GLCellControl
 
 		switch( direction ) {
 			case TopLeft:
-				c[0] = controlled.getNeighbour( Direction.Top );
-				c[1] = controlled.getNeighbour( Direction.TopLeft );
-				c[2] = controlled.getNeighbour( Direction.Left );
+				c[0] = controlled.getNeighbor( Direction8.Top );
+				c[1] = controlled.getNeighbor( Direction8.TopLeft );
+				c[2] = controlled.getNeighbor( Direction8.Left );
 				break;
 			case TopRight:
-				c[0] = controlled.getNeighbour( Direction.Top );
-				c[1] = controlled.getNeighbour( Direction.TopRight );
-				c[2] = controlled.getNeighbour( Direction.Right );
+				c[0] = controlled.getNeighbor( Direction8.Top );
+				c[1] = controlled.getNeighbor( Direction8.TopRight );
+				c[2] = controlled.getNeighbor( Direction8.Right );
 				break;
 			case DownRight:
-				c[0] = controlled.getNeighbour( Direction.Down );
-				c[1] = controlled.getNeighbour( Direction.DownLeft );
-				c[2] = controlled.getNeighbour( Direction.Left );
+				c[0] = controlled.getNeighbor( Direction8.Down );
+				c[1] = controlled.getNeighbor( Direction8.DownLeft );
+				c[2] = controlled.getNeighbor( Direction8.Left );
 				break;
 			case DownLeft:
-				c[0] = controlled.getNeighbour( Direction.Down );
-				c[1] = controlled.getNeighbour( Direction.DownRight );
-				c[2] = controlled.getNeighbour( Direction.Right );
+				c[0] = controlled.getNeighbor( Direction8.Down );
+				c[1] = controlled.getNeighbor( Direction8.DownRight );
+				c[2] = controlled.getNeighbor( Direction8.Right );
 				break;
 			default:
 				return new GLColor( 1, 1, 1 );

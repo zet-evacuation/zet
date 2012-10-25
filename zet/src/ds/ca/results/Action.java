@@ -15,7 +15,7 @@
  */
 package ds.ca.results;
 
-import ds.ca.evac.Cell;
+import ds.ca.evac.EvacCell;
 import ds.ca.evac.EvacuationCellularAutomaton;
 import ds.ca.evac.Individual;
 import ds.ca.evac.InitialConfiguration;
@@ -67,9 +67,9 @@ public abstract class Action implements Cloneable{
     @Override
     public abstract String toString();
     
-    protected Cell adoptCell(Cell cell, EvacuationCellularAutomaton targetCA){
+    protected EvacCell adoptCell(EvacCell cell, EvacuationCellularAutomaton targetCA){
         ds.ca.evac.Room newRoom = targetCA.getRoom(cell.getRoom().getID());
-        ds.ca.evac.Cell newCell = newRoom.getCell(cell.getX(), cell.getY());
+        ds.ca.evac.EvacCell newCell = newRoom.getCell(cell.getX(), cell.getY());
         return newCell;
     }
 }

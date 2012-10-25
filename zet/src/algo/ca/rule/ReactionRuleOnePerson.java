@@ -41,7 +41,7 @@ public class ReactionRuleOnePerson extends AbstractReactionRule {
 	 * @param cell the cell on which the rule is executed
 	 */
 	@Override
-	protected void onExecute( ds.ca.evac.Cell cell ) {
+	protected void onExecute( ds.ca.evac.EvacCell cell ) {
 		Individual i = cell.getIndividual();
 		if( i.getReactionTime()-1 <= 0 )
 			i.setAlarmed( true );

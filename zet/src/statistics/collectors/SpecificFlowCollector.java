@@ -5,7 +5,7 @@
 package statistics.collectors;
 
 import de.tu_berlin.math.coga.datastructure.Triple;
-import ds.ca.evac.Cell;
+import ds.ca.evac.EvacCell;
 import java.awt.Point;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -46,7 +46,7 @@ public class SpecificFlowCollector {
 		}
 	}
 
-	public void collect( int timeStep, Cell start, Cell end ) {
+	public void collect( int timeStep, EvacCell start, EvacCell end ) {
 		try {
 			
 			if( start.equals( end ) ) {

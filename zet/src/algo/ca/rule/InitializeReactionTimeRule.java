@@ -21,7 +21,7 @@
 
 package algo.ca.rule;
 
-import ds.ca.evac.Cell;
+import ds.ca.evac.EvacCell;
 import ds.ca.evac.Individual;
 
 
@@ -33,7 +33,7 @@ import ds.ca.evac.Individual;
 public class InitializeReactionTimeRule extends AbstractInitialRule {
 
 	@Override
-	protected void onExecute( Cell cell ) {
+	protected void onExecute( EvacCell cell ) {
 		Individual i = cell.getIndividual();
 		i.setReactionTime( (int) esp.parameterSet.getReactionTime());
 	}

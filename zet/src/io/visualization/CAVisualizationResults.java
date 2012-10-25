@@ -43,7 +43,7 @@ public class CAVisualizationResults implements VisualizationResult {
 	 * A mapping from a cell to its offset relative to the room containing it.
 	 * (The offset of the room is NOT included!). 
 	 */
-	private HashMap<ds.ca.evac.Cell, Vector3> caCellToZOffsetMapping;
+	private HashMap<ds.ca.evac.EvacCell, Vector3> caCellToZOffsetMapping;
 	/**
 	 * A mapping from a room to its offset relative to the floor containing it.
 	 * (The offset of the floor is NOT included!).
@@ -67,7 +67,7 @@ public class CAVisualizationResults implements VisualizationResult {
 	 * @param caMapping
 	 */
 	public CAVisualizationResults( VisualResultsRecording visRecording, ZToCAMapping caMapping ) {
-		caCellToZOffsetMapping = new HashMap<ds.ca.evac.Cell, Vector3>();
+		caCellToZOffsetMapping = new HashMap<ds.ca.evac.EvacCell, Vector3>();
 		caRoomToZOffsetMapping = new HashMap<ds.ca.evac.Room, Vector3>();
 		caFloorToZOffsetMapping = new HashMap<Integer, Vector3>();
 
@@ -80,7 +80,7 @@ public class CAVisualizationResults implements VisualizationResult {
 	}
 
 	public CAVisualizationResults( ZToCAMapping caMapping, PotentialManager pm ) {
-		caCellToZOffsetMapping = new HashMap<ds.ca.evac.Cell, Vector3>();
+		caCellToZOffsetMapping = new HashMap<ds.ca.evac.EvacCell, Vector3>();
 		caRoomToZOffsetMapping = new HashMap<ds.ca.evac.Room, Vector3>();
 		caFloorToZOffsetMapping = new HashMap<Integer, Vector3>();
 		convertMapping( caMapping );
@@ -104,7 +104,7 @@ public class CAVisualizationResults implements VisualizationResult {
 			caRoomToZOffsetMapping.put( room, new Vector3( xOffset, yOffset, 0 ) );
 		}
 
-		for( ds.ca.evac.Cell cell : caMapping.getCACells() ) {
+		for( ds.ca.evac.EvacCell cell : caMapping.getCACells() ) {
 			de.tu_berlin.math.coga.zet.converter.cellularAutomaton.ZToCARasterSquare zRasterSquare = caMapping.get( cell );
 
 			double xOffset = zRasterSquare.getRelativeX();
@@ -114,7 +114,7 @@ public class CAVisualizationResults implements VisualizationResult {
 		}
 	}
 
-	public Vector3 get( ds.ca.evac.Cell cell ) {
+	public Vector3 get( ds.ca.evac.EvacCell cell ) {
 		if( caCellToZOffsetMapping.get( cell ) == null )
 			return new Vector3( 0.0d, 0.0d, 0.0d );
 		return caCellToZOffsetMapping.get( cell );

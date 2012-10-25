@@ -17,7 +17,7 @@ package algo.ca.parameter;
 
 import de.tu_berlin.math.coga.common.localization.DefaultLoc;
 import ds.PropertyContainer;
-import ds.ca.evac.Cell;
+import ds.ca.evac.EvacCell;
 import ds.ca.evac.Individual;
 import ds.ca.evac.StaticPotential;
 import java.util.Collection;
@@ -119,7 +119,7 @@ public class ICEM09ParameterSet extends AbstractDefaultParameterSet {
 	}
 
 	@Override
-	public double effectivePotential( Cell referenceCell, Cell targetCell ) {
+	public double effectivePotential( EvacCell referenceCell, EvacCell targetCell ) {
 		if( referenceCell.getIndividual() == null )
 			throw new IllegalArgumentException( DefaultLoc.getSingleton().getString( "algo.ca.parameter.NoIndividualOnReferenceCellException" ) );
 		StaticPotential staticPotential = referenceCell.getIndividual().getStaticPotential();
@@ -152,7 +152,7 @@ public class ICEM09ParameterSet extends AbstractDefaultParameterSet {
 	//////////////////////////////////ab hier: nicht benutzt////////////////////////////////////////////////////////
 	////* Updating of dynamic parameters *////
 	@Override
-	public double updateExhaustion( Individual individual, Cell targetCell ) {
+	public double updateExhaustion( Individual individual, EvacCell targetCell ) {
 		throw new IllegalStateException( "Methode aus PaperParameterSet wurde aufgerufen!" );
 		//return 0;
 	}
@@ -164,7 +164,7 @@ public class ICEM09ParameterSet extends AbstractDefaultParameterSet {
 	}
 
 	@Override
-	public double updatePanic( Individual individual, Cell targetCell, Collection<Cell> preferedCells ) {
+	public double updatePanic( Individual individual, EvacCell targetCell, Collection<EvacCell> preferedCells ) {
 		throw new IllegalStateException( "Methode aus PaperParameterSet wurde aufgerufen!" );
 		//return 0;
 	}

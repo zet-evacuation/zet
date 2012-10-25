@@ -21,7 +21,7 @@
 
 package algo.ca.parameter;
 
-import ds.ca.evac.Cell;
+import ds.ca.evac.EvacCell;
 import ds.ca.evac.Individual;
 import java.util.Collection;
 
@@ -43,7 +43,7 @@ public class RimeaParameterSet extends DefaultParameterSet {
 	 * @return
 	 */
 	@Override
-	public double updateExhaustion( Individual individual, Cell targetCell ) {
+	public double updateExhaustion( Individual individual, EvacCell targetCell ) {
 		individual.setExhaustion( 0 );
 		return 0;
 	}
@@ -56,7 +56,7 @@ public class RimeaParameterSet extends DefaultParameterSet {
 	 * @return
 	 */
 	@Override
-	public double updatePanic( Individual individual, Cell targetCell, Collection<Cell> preferedCells ) {
+	public double updatePanic( Individual individual, EvacCell targetCell, Collection<EvacCell> preferedCells ) {
 		individual.setPanic( 0 );
 		return 0;
 	}

@@ -28,6 +28,7 @@ import java.util.LinkedHashSet;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
+import java.util.concurrent.Callable;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -47,7 +48,7 @@ import java.util.logging.Logger;
  * @param <Solution> the type of output the algorithm produces.
  * @author Martin Groß
  */
-public abstract class Algorithm<Problem, Solution> implements Runnable {
+public abstract class Algorithm<Problem, Solution> implements Runnable, Callable<Solution> {
 	/* An enumeration type that specifies the current state of the algorithm. */
 	public enum State {
 		WAITING,
@@ -520,9 +521,11 @@ public abstract class Algorithm<Problem, Solution> implements Runnable {
 	}
 
 	/**
-		* The framework method for executing the algorithm. It is responsible for
+		* <p>The framework method for executing the algorithm. It is responsible for
 		* recording the runtime of the actual algorithm in addition to handling
-		* exceptions and recording the solution to the problem instance.
+		* exceptions and recording the solution to the problem instance.</p>
+		* <p>Calling the method solves the problem, afterwords it can be accessed
+		* using {@link #getSolution() }.</p>
 		* @throws IllegalStateException if the instance of the problem has not been
 		* specified yet.
 		*/
@@ -554,6 +557,18 @@ public abstract class Algorithm<Problem, Solution> implements Runnable {
 					fireEvent(ev);
 			}
 		}
+	}
+	
+	/**
+	 * A framework method for executing the algorithm and returns the result. 
+	 * <p>Calling the method solves the problem and returns the solution. The
+	 * solution is stored and can be accessed again using {@link #getSolution() }.</p>
+ 	 * @return the solution to the algorithm.
+	 */
+	@Override
+	public final Solution call() {
+		run();
+		return getSolution();
 	}
 
 	/**

@@ -20,7 +20,7 @@
 
 package zet.gui.main.tabs.quickVisualization;
 
-import ds.ca.evac.Cell;
+import ds.ca.evac.EvacCell;
 import ds.ca.evac.EvacuationCellularAutomaton;
 import zet.gui.main.tabs.base.AbstractFloor;
 import java.awt.Color;
@@ -31,13 +31,13 @@ import java.awt.Color;
  */
 public class JDynamicPotentialCell extends JPotentialCell {
 
-	public JDynamicPotentialCell( Cell cell, AbstractFloor floor, int potential, int maxPotential, EvacuationCellularAutomaton ca ) {
+	public JDynamicPotentialCell( EvacCell cell, AbstractFloor floor, int potential, int maxPotential, EvacuationCellularAutomaton ca ) {
 		super( cell, floor, potential, maxPotential, ca );
 		Color fillColor = potential > 0 ? new Color( 1.0f, 1-(float)potential/maxPotential, 1-(float)potential/maxPotential ) : Color.white;
 		this.setFillColor( fillColor );
 	}
 	
-	public JDynamicPotentialCell( Cell cell, AbstractFloor floor, Color lineColor, int potential, int maxPotential, EvacuationCellularAutomaton ca ) {
+	public JDynamicPotentialCell( EvacCell cell, AbstractFloor floor, Color lineColor, int potential, int maxPotential, EvacuationCellularAutomaton ca ) {
 		super( cell, floor, lineColor, potential, maxPotential, ca );
 		Color fillColor = potential > 0 ? new Color( 1.0f, 1-(float)potential/maxPotential, 1-(float)potential/maxPotential ) : Color.white;
 		this.setFillColor( fillColor );

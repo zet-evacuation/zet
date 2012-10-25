@@ -15,14 +15,16 @@
  */
 package ds.ca.evac;
 
-public abstract class TargetCell extends Cell {
+import algo.ca.framework.EvacuationCellState;
 
-	public TargetCell( Individual individual, double speedFactor, int x, int y ) {
-		super( individual, speedFactor, x, y );
+public abstract class TargetCell extends EvacCell {
+
+	public TargetCell( EvacuationCellState state, double speedFactor, int x, int y ) {
+		super( state, speedFactor, x, y );
 	}
 
-	public TargetCell( Individual individual, double speedFactor, int x, int y, Room room ) {
-		super( individual, speedFactor, x, y, room );
+	public TargetCell( EvacuationCellState state, double speedFactor, int x, int y, Room room ) {
+		super( state, speedFactor, x, y, room );
 	}
 
 	public abstract String getName();

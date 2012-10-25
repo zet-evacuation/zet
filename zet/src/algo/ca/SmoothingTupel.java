@@ -15,7 +15,7 @@
  */
 package algo.ca;
 
-import ds.ca.evac.Cell;
+import ds.ca.evac.EvacCell;
 
 /**
  * The data structure used by the algorithm for calculating the static potentials
@@ -24,7 +24,7 @@ import ds.ca.evac.Cell;
  */
 public class SmoothingTupel {
 	/** Reference to the cell. */
-	Cell cell;
+	EvacCell cell;
 	/** potential value. */
 	double value;
 	/** Real distance. */
@@ -41,7 +41,7 @@ public class SmoothingTupel {
 	 * @param n initial 1
 	 * @param s initial the potential of the first parent cell
 	 */
-	public SmoothingTupel(Cell c, double v, double d, int n, double s){
+	public SmoothingTupel(EvacCell c, double v, double d, int n, double s){
 		cell = c;
 		value = v;
 		distanceValue = d;
@@ -65,15 +65,15 @@ public class SmoothingTupel {
 	}
 	
 	/**
-	 * Returns the Cell of the SmoothingTupel
-	 * @return the Cell
+	 * Returns the EvacCell of the SmoothingTupel
+	 * @return the EvacCell
 	 */
-	public Cell getCell(){
+	public EvacCell getCell(){
 		return cell;
 	}
 	
 	/**
-	 * Returns the Potential of the Cell specified by this SmoothingTupel
+	 * Returns the Potential of the EvacCell specified by this SmoothingTupel
 	 * @return the potential
 	 */
 	public double getValue(){
@@ -81,7 +81,7 @@ public class SmoothingTupel {
 	}
 	
 	/**
-	 * Returns the distance of the Cell specified by this SmoothingTupel
+	 * Returns the distance of the EvacCell specified by this SmoothingTupel
 	 * @return the distance
 	 */
 	public double getDistanceValue(){

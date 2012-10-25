@@ -25,7 +25,7 @@ public class SaveIndividualsRule extends AbstractSaveRule {
 	}
 
 	@Override
-	protected void onExecute( ds.ca.evac.Cell cell ) {
+	protected void onExecute( ds.ca.evac.EvacCell cell ) {
 		ds.ca.evac.Individual savedIndividual = cell.getIndividual();
 		if( !(savedIndividual.isSafe()) ) {
 //		try {
@@ -72,7 +72,7 @@ public class SaveIndividualsRule extends AbstractSaveRule {
 	}
 
 	@Override
-	public boolean executableOn( ds.ca.evac.Cell cell ) {
+	public boolean executableOn( ds.ca.evac.EvacCell cell ) {
 		// Regel NUR anwendbar, wenn auf der Zelle ein Individuum steht
 		// und die Zelle eine Exit- Savecell oder  ist
 		return (cell.getIndividual() != null) && ((cell instanceof ds.ca.evac.ExitCell) || (cell instanceof ds.ca.evac.SaveCell));

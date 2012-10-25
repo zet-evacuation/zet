@@ -26,7 +26,7 @@ public class EvacuateIndividualsRule extends AbstractEvacuationRule {
 	public EvacuateIndividualsRule() {}
 
 	@Override
-	protected void onExecute( ds.ca.evac.Cell cell ) {
+	protected void onExecute( ds.ca.evac.EvacCell cell ) {
 		esp.eca.markIndividualForRemoval( cell.getIndividual() );
 		// Potential needed for statistics:
 		ds.ca.evac.StaticPotential exit = esp.potentialController.getNearestExitStaticPotential( cell );
@@ -35,7 +35,7 @@ public class EvacuateIndividualsRule extends AbstractEvacuationRule {
 	}
 
 	@Override
-	public boolean executableOn( ds.ca.evac.Cell cell ) {
+	public boolean executableOn( ds.ca.evac.EvacCell cell ) {
 		// Regel NUR anwendbar, wenn auf der Zelle ein Individuum steht
 		// und die Zelle eine Exitcell ist
 		

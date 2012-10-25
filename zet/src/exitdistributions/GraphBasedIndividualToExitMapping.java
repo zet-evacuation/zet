@@ -26,7 +26,7 @@ import java.util.List;
 
 import algo.graph.exitassignment.ExitAssignment;
 
-import ds.ca.evac.Cell;
+import ds.ca.evac.EvacCell;
 import ds.ca.evac.EvacuationCellularAutomaton;
 import ds.ca.evac.ExitCell;
 import ds.ca.evac.Individual;
@@ -280,12 +280,12 @@ public class GraphBasedIndividualToExitMapping extends IndividualToExitMapping{
 		}
 	}
 
-	private TargetCell findATargetCell(Iterable<Cell> cellList){
-		Cell targetCell = null;
+	private TargetCell findATargetCell(Iterable<EvacCell> cellList){
+		EvacCell targetCell = null;
 		boolean targetCellFound = false;
-		Iterator<Cell> it = cellList.iterator();
+		Iterator<EvacCell> it = cellList.iterator();
 		while(!targetCellFound && it.hasNext()){
-			Cell possibleTargetCell = it.next();
+			EvacCell possibleTargetCell = it.next();
 			if(possibleTargetCell instanceof TargetCell){
 				targetCellFound = true;
 				targetCell = possibleTargetCell;

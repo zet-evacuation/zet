@@ -15,9 +15,11 @@
  */
 package ds.ca.evac;
 
+import algo.ca.framework.EvacuationCellState;
+
 /**
  * An Exit-Cell is special type of cell and therefore inherits properties and methods
- * from the abstract class Cell. When an individual enters this special cell, 
+ * from the abstract class Cell. When an individual enters this special cell,
  * it is evacuated.
  * @author marcel
  *
@@ -54,10 +56,10 @@ public class ExitCell extends TargetCell implements Cloneable {
 	 * Otherwise the standard value "STANDARD_EXITCELL_SPEEDFACTOR" is set.
 	 * @param x x-coordinate of the cell in the room, 0 <= x <= width-1
 	 * @param y y-coordinate of the cell in the room, 0 <= y <= height-1
-	 * @param room  
+	 * @param room
 	 */
 	public ExitCell( double speedFactor, int x, int y, Room room ) {
-		super( null, speedFactor, x, y, room );
+		super( new EvacuationCellState( null ), speedFactor, x, y, room );
 		graphicalRepresentation = '#';
 	}
 

@@ -15,7 +15,7 @@
  */
 package algo.ca.rule;
 
-import ds.ca.evac.Cell;
+import ds.ca.evac.EvacCell;
 import de.tu_berlin.math.coga.rndutils.RandomUtils;
 
 /**
@@ -40,7 +40,7 @@ public class ChangePotentialFamiliarityOrAttractivityOfExitRule extends Abstract
 	 * its StaticPotential.
 	 */
 	@Override
-	public boolean executableOn( Cell cell ) {
+	public boolean executableOn( EvacCell cell ) {
 		ChangePotentialAttractivityOfExitRule rule = new ChangePotentialAttractivityOfExitRule();
 		rule.setEvacuationSimulationProblem( esp );
 		return rule.executableOn( cell );
@@ -52,7 +52,7 @@ public class ChangePotentialFamiliarityOrAttractivityOfExitRule extends Abstract
 	 * @param cell the cell on which the rule is executed
 	 */
 	@Override
-	protected void onExecute( Cell cell ) {
+	protected void onExecute( EvacCell cell ) {
 		double prob = esp.parameterSet.probabilityChangePotentialFamiliarityOrAttractivityOfExitRule();
 		if( RandomUtils.getInstance().binaryDecision( prob ) ) {
 			ChangePotentialFamiliarityRule rule = new ChangePotentialFamiliarityRule();

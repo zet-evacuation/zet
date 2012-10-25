@@ -4,7 +4,7 @@
  */
 package algo.ca.rule;
 
-import ds.ca.evac.Cell;
+import ds.ca.evac.EvacCell;
 import ds.ca.evac.Individual;
 import ds.ca.evac.TeleportCell;
 
@@ -16,7 +16,7 @@ import ds.ca.evac.TeleportCell;
 public class TeleportRule extends AbstractRule {
 
 	@Override
-	public boolean executableOn( Cell cell ) {
+	public boolean executableOn( EvacCell cell ) {
 		boolean res = cell instanceof TeleportCell && super.executableOn( cell );
 		if( res )
 			res = res && canMove( cell.getIndividual() );
@@ -26,7 +26,7 @@ public class TeleportRule extends AbstractRule {
 	static int counter = 0;
 
 	@Override
-	protected void onExecute( Cell cell ) {
+	protected void onExecute( EvacCell cell ) {
 		final TeleportCell tc = (TeleportCell)cell;
 
 		if( tc.targetCount() > 0 && tc.getTarget( 0 ) != null ) {
