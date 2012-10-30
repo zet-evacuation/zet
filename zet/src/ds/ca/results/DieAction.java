@@ -20,7 +20,7 @@ package ds.ca.results;
 
 import ds.ca.evac.EvacCell;
 import ds.ca.evac.EvacuationCellularAutomaton;
-import ds.ca.evac.Individual.DeathCause;
+import ds.ca.evac.DeathCause;
 import ds.ca.results.Action.CADoesNotMatchException;
 
 /**
@@ -82,7 +82,7 @@ public class DieAction extends Action {
 		return new DieAction( newCell, cause, individualNumber );
 	}
 
-	/** 
+	/**
 	 * {@inheritDoc}
 	 * @param onCA the cellular automaton on which the action is replayed
 	 * @throws InconsistentPlaybackStateException if the individual that is to die is not on the cell

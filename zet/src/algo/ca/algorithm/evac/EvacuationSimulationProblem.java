@@ -23,7 +23,7 @@ import statistic.ca.CAStatisticWriter;
  *
  * @author Jan-Philipp Kappmeier
  */
-public class EvacuationSimulationProblem extends CellularAutomatonSimulationProblem<EvacCell,EvacuationCellState,MooreNeighborhoodSquare<EvacCell>> {
+public class EvacuationSimulationProblem extends CellularAutomatonSimulationProblem<EvacCell,EvacuationCellState> {
 	public EvacuationCellularAutomaton eca;
 	public RuleSet ruleSet;
 	public ParameterSet parameterSet;

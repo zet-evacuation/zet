@@ -13,16 +13,12 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 
 package algo.ca.algorithm;
 
+import de.tu_berlin.math.coga.algorithm.simulation.SimulationAlgorithm;
 import de.tu_berlin.math.coga.algorithm.simulation.cellularautomaton.CellularAutomatonSimulationProblem;
 import de.tu_berlin.math.coga.algorithm.simulation.cellularautomaton.CellularAutomatonSimulationResult;
-import de.tu_berlin.math.coga.common.algorithm.Algorithm;
 
 /**
  *
@@ -30,6 +26,6 @@ import de.tu_berlin.math.coga.common.algorithm.Algorithm;
  * @param <V>
  * @author Jan-Philipp Kappmeier
  */
-public abstract class CellularAutomatonAlgorithm<U extends CellularAutomatonSimulationProblem, V extends CellularAutomatonSimulationResult> extends Algorithm<U, V> {
+public abstract class CellularAutomatonAlgorithm<U extends CellularAutomatonSimulationProblem, V extends CellularAutomatonSimulationResult> extends SimulationAlgorithm<U, V> {
 	public abstract void initialize();
 }

@@ -18,8 +18,8 @@ package algo.ca.rule;
 import de.tu_berlin.math.coga.common.util.Direction8;
 import de.tu_berlin.math.coga.rndutils.RandomUtils;
 import de.tu_berlin.math.coga.rndutils.generators.GeneralRandom;
-import ds.ca.evac.EvacCell;
 import ds.ca.evac.DoorCell;
+import ds.ca.evac.EvacCell;
 import ds.ca.evac.ExitCell;
 import ds.ca.evac.Individual;
 import ds.ca.evac.StairCell;
@@ -36,7 +36,7 @@ import java.util.List;
 public class SimpleMovementRule2 extends AbstractMovementRule {
 
 	/**
-	 * Decides whether the rule can be applied to the current cell. 
+	 * Decides whether the rule can be applied to the current cell.
 	 * Returns {@code true} if the cell is occupied by an individual
 	 * or {@code false} otherwise. Individuals standing on an exit cell
 	 * do not move any more. This is necessary, as the rule can take out
@@ -68,7 +68,7 @@ public class SimpleMovementRule2 extends AbstractMovementRule {
 			else
 				// Individual can't move, it is already moving
 				setMoveRuleCompleted( false ); // TODO why is here false?
-		} else { // Individual is not alarmed, that means it remains standing on the cell			
+		} else { // Individual is not alarmed, that means it remains standing on the cell
 			setMoveRuleCompleted( true );
 			noMove();
 		}
@@ -87,7 +87,7 @@ public class SimpleMovementRule2 extends AbstractMovementRule {
 			esp.caStatisticWriter.getStoredCAStatisticResults().getStoredCAStatisticResultsForCells().addCellToUtilizationStatistic( targetCell, esp.eca.getTimeStep() );
 			initializeMove( targetCell );
 			performMove( targetCell );
-			setMoveRuleCompleted( false );		
+			setMoveRuleCompleted( false );
 		}
 	}
 
@@ -100,16 +100,15 @@ public class SimpleMovementRule2 extends AbstractMovementRule {
 		ind.setStepStartTime( ind.getStepEndTime() );
 		setStepEndTime( ind, ind.getStepEndTime() + 1 );
 		esp.eca.moveIndividual( ind.getCell(), ind.getCell() );
-		
+
 		ind.setDirection( getDirection() );
-		System.out.println( "Individual " + ind.id() + " moves " + ind.getDirection() + " by rotating." );
 		setMoveRuleCompleted( false );
 		esp.caStatisticWriter.getStoredCAStatisticResults().getStoredCAStatisticResultsForIndividuals().addCurrentSpeedToStatistic( ind, esp.eca.getTimeStep(), 0 );
 	}
-	
+
 	/**
 	 * Computes a new viewing direction if the individual is not moving.
-	 * @return 
+	 * @return
 	 */
 	protected Direction8 getDirection() {
 		Direction8 current = ind.getDirection();
@@ -137,10 +136,10 @@ public class SimpleMovementRule2 extends AbstractMovementRule {
 
 		if( ret != current )
 			return ret;
-		
+
 		return possible[randomDirection];
 	}
-		
+
 	/**
 	 * Performs an actual move of an individual (from its cell to another, different
 	 * cell).
@@ -157,10 +156,10 @@ public class SimpleMovementRule2 extends AbstractMovementRule {
 				speed *= targetCell.getSpeedFactor() * 1;
 				ind.setStepStartTime( Math.max( ind.getCell().getOccupiedUntil(), ind.getStepEndTime() ) );
 				setStepEndTime( ind, ind.getStepEndTime() + (dist / speed) * esp.eca.getStepsPerSecond() + 0 );
-				ind.setDirection( ind.getDirection() );			
+				ind.setDirection( ind.getDirection() );
 			} else
 				throw new IllegalStateException( "Individuum has no speed." );
-			
+
 		} else {
 			Direction8 direction = getMovementDirection( ind.getCell(), targetCell );
 
@@ -174,18 +173,15 @@ public class SimpleMovementRule2 extends AbstractMovementRule {
 				ind.setStepStartTime( Math.max( ind.getCell().getOccupiedUntil(), ind.getStepEndTime() ) );
 				setStepEndTime( ind, ind.getStepEndTime() + (dist / speed) * esp.eca.getStepsPerSecond() + add );
 				ind.setDirection( direction );
-				System.out.println( "Individual " + ind.id() + " moves " + direction.name() );
 			} else
 				throw new IllegalStateException( "Individuum has no speed." );
 		}
-		
-
 	}
-	
+
 	/**
 	 * Performs a move after the parameters ({@code speed} and {@code dist}) have
 	 * alredy been set by {@link #initializeMove(ds.ca.evac.Individual, ds.ca.evac.EvacCell) }
-	 * @param targetCell 
+	 * @param targetCell
 	 */
 	protected void performMove( EvacCell targetCell ) {
 		ind.getCell().setOccupiedUntil( ind.getStepEndTime()  );
@@ -218,7 +214,7 @@ public class SimpleMovementRule2 extends AbstractMovementRule {
 	 * last move was already finished at a time earlier than this time step.
 	 * @param i An individual with a given parameterSet
 	 * @return {@code true} if the individual moves or
-	 * {@code false} otherwise. 
+	 * {@code false} otherwise.
 	 */
 	protected boolean canMove( Individual i ) {
 		return esp.eca.getTimeStep() >= i.getStepEndTime();

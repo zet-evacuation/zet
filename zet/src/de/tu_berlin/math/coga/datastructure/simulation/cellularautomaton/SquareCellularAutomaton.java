@@ -14,7 +14,7 @@ import de.tu_berlin.math.coga.datastructure.simulation.cellularautomaton.SquareC
  * @param <St> status type
  * @author Jan-Philipp Kappmeier
  */
-public abstract class SquareCellularAutomaton<Ce extends SquareCell<Ce,St>,St> implements CellularAutomaton<Ce, St, MooreNeighborhoodSquare<Ce>> {
+public abstract class SquareCellularAutomaton<Ce extends SquareCell<Ce,St>,St> implements CellularAutomaton<Ce, St> {
 	protected MooreNeighborhoodSquare<Ce> neighborhood;
 
 	public SquareCellularAutomaton() {

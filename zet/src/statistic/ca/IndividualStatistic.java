@@ -39,7 +39,7 @@ import statistic.ca.exception.OneIndNotSafeException;
  */
 public class IndividualStatistic {
 
-    
+
     HashMap<Individual,Integer> safetyTimes;
     HashMap<Individual,ArrayList<Integer>> changePotentialTimes;
     private HashMap<Individual,ArrayList<ArrayList<ExitCell>>> potentials;
@@ -55,8 +55,8 @@ public class IndividualStatistic {
     HashMap<Individual,ArrayList<Integer>> exhaustionTimes;
     private HashMap<Individual,ArrayList<Double>> exhaustion;
     HashMap<Individual,ArrayList<Integer>> currentSpeedTimes;
-    private HashMap<Individual,ArrayList<Double>> currentSpeed;    
-    
+    private HashMap<Individual,ArrayList<Double>> currentSpeed;
+
     public IndividualStatistic(StoredCAStatisticResultsForIndividuals stored){
 	safetyTimes = stored.getHashMapSafetyTimes();
         changePotentialTimes= stored.getHashMapChangePotentialTimes();
@@ -64,24 +64,24 @@ public class IndividualStatistic {
         coveredDistanceTimes = stored.getHashMapCoveredDistanceTimes();
         coveredDistance= stored.getHashMapCoveredDistance();
         waitedTimeTimes = stored.getHashMapWaitedTimeTimes();
-        waitedTime= stored.getHashMapWaitedTime();        
+        waitedTime= stored.getHashMapWaitedTime();
         minDistanceToNearestExit= stored.getHashMapMinDistanceToNearestExit();
         minDistanceToPlannedExit= stored.getHashMapMinDistanceToPlannedExit();
         takenExit= stored.getHashMapTakenExit();
         panicTimes = stored.getHashMapPanicTimes();
         panic= stored.getHashMapPanic();
         exhaustionTimes = stored.getHashMapExhaustionTimes();
-        exhaustion= stored.getHashMapExhaustion();    
+        exhaustion= stored.getHashMapExhaustion();
         currentSpeedTimes=stored.getHashMapCurrentSpeedTimes();
         currentSpeed=stored.getHashMapCurrentSpeed();
     }
-   
-    
-    
+
+
+
 //coveredDistance
-    
+
     /**
-     * 
+     *
      * @param ind an individual
      * @param t a TimeStep
      * @return the distance which the individual has covered from the beginning of the simulation to TimeStep "t"
@@ -91,8 +91,8 @@ public class IndividualStatistic {
      * if "t" is less than 0
      */
     public double getCoveredDistance(Individual ind, int t) throws OneIndNoPotentialException, IncorrectTimeException{
-     
-        if (ind.getDeathCause() != null && ind.getDeathCause().compareTo(ds.ca.evac.Individual.DeathCause.EXIT_UNREACHABLE)==0) {
+
+        if (ind.getDeathCause() != null && ind.getDeathCause().compareTo(ds.ca.evac.DeathCause.ExitUnreachable)==0) {
             // ind tot weil eingeschlossen
             throw new OneIndNoPotentialException(ind);
         }
@@ -101,39 +101,39 @@ public class IndividualStatistic {
             // ind hat sich nie bewegt und ist nie stehengeblieben--> ind ist eingeschlossen
             throw new OneIndNoPotentialException(ind);
         }
-        
+
         if (t<0) {
             // Zeit ist falsch
             throw new IncorrectTimeException();
         }
-        
+
         if (t==0) {
             return 0;
-        }      
-            
+        }
+
 
         int index = Collections.binarySearch(coveredDistanceTimes.get(ind),t);
         if (index< 0) {
             index = -index-2;
         }
-        
+
         if (index <0) {
             // ind hat sich zum Zeitpunkt t noch nicht bewegt
-            return 0; 
+            return 0;
         }
-        
+
 
         return coveredDistance.get(ind).get(index);
 
-   
+
     }
 
-    
-    
-    
-        
+
+
+
+
     /**
-     * 
+     *
      * @param ind an individual
      * @param from a TimeStep
      * @param to a TimeStep
@@ -150,10 +150,10 @@ public class IndividualStatistic {
         }
         return getCoveredDistance(ind, to)-getCoveredDistance(ind, from);
     }
-    
-        
+
+
     /**
-     * 
+     *
      * @param indgroup a list of individuals
      * @param time a TimeStep
      * @return the average of the individuals` covered distances from the beginning of the simulation to TimeStep "time"
@@ -162,17 +162,17 @@ public class IndividualStatistic {
     * @throws statistic.ca.exception.GroupOfIndsNoPotentialException
      * if all individuals have no potential
     * @throws statistic.ca.exception.IncorrectTimeException
-    * if "time" is less than 0 
+    * if "time" is less than 0
     */
     public double calculateAverageCoveredDistanceForGroup(ArrayList<Individual> indgroup, int time) throws GroupOfIndsNoPotentialException, IncorrectTimeException{
         return calculateAverageCoveredDistanceForGroup(indgroup, 0, time);
-        
+
     }
 
-    
-    
+
+
    /**
-    * 
+    *
     * @param indgroup a list of individuals
     * @param from a TimeStep
     * @param to a TimeStep
@@ -182,7 +182,7 @@ public class IndividualStatistic {
     * @throws statistic.ca.exception.GroupOfIndsNoPotentialException
 * if all individuals have no potential
     * @throws statistic.ca.exception.IncorrectTimeException
-    * if "from" is bigger than "to" OR "from" is less than 0 OR "to" is less than 0 
+    * if "from" is bigger than "to" OR "from" is less than 0 OR "to" is less than 0
     */
 public double calculateAverageCoveredDistanceForGroup(ArrayList<Individual> indgroup, int from, int to) throws GroupOfIndsNoPotentialException, IncorrectTimeException{
         double averageCoveredDistanceSum=0;
@@ -199,11 +199,11 @@ public double calculateAverageCoveredDistanceForGroup(ArrayList<Individual> indg
         if (numberOfInds!=0) {
             return averageCoveredDistanceSum/numberOfInds;
         }
-        throw new GroupOfIndsNoPotentialException(indgroup); 
-    }    
+        throw new GroupOfIndsNoPotentialException(indgroup);
+    }
 
    /**
-    * 
+    *
     * @param indgroup a list of individuals
     * @param from a TimeStep
     * @param to a TimeStep
@@ -214,27 +214,27 @@ public double calculateAverageCoveredDistanceForGroup(ArrayList<Individual> indg
     * @throws statistic.ca.exception.GroupOfIndsNoPotentialException
 * if all individuals have no potential
     * @throws statistic.ca.exception.IncorrectTimeException
-    * if "from" is bigger than "to" OR "from" is less than 0 OR "to" is less than 0 
+    * if "from" is bigger than "to" OR "from" is less than 0 OR "to" is less than 0
     */
 public ArrayList<Double> calculateAverageCoveredDistanceForGroupInTimeSteps(ArrayList<Individual> indgroup, int from, int to) throws GroupOfIndsNoPotentialException, IncorrectTimeException{
     if (from>to) {
         throw new IncorrectTimeException();
     }
-    
+
     ArrayList<Double> result = new ArrayList<Double>();
-    
+
     double averageTotalCoveredDistance = calculateAverageCoveredDistanceForGroup(indgroup, from);
     result.add(averageTotalCoveredDistance);
-    
+
     double averageCoveredDistanceInTimeStep = 0;
-    
+
     for (int timeStep=from+1; timeStep<= to; timeStep++) {
         averageCoveredDistanceInTimeStep=calculateAverageCoveredDistanceForGroup(indgroup, timeStep-1, timeStep);
         averageTotalCoveredDistance +=averageCoveredDistanceInTimeStep;
         result.add(averageTotalCoveredDistance);
     }
     return result;
-}    
+}
 
 
 
@@ -246,13 +246,13 @@ public ArrayList<Double> calculateAverageCoveredDistanceForGroupInTimeSteps(Arra
 
 
 
-    
+
     // speed
-    
-    
-    
+
+
+
      /**
-     * 
+     *
      * @param ind an individual
      * @param t a TimeStep
      * @return the current speed the individual has in timestep t
@@ -271,8 +271,8 @@ public ArrayList<Double> calculateAverageCoveredDistanceForGroupInTimeSteps(Arra
                 throw new OneIndNoValueBecauseAlreadySafeException(ind);
             }
         }
-        
-        if (ind.getDeathCause() != null && ind.getDeathCause().compareTo(ds.ca.evac.Individual.DeathCause.EXIT_UNREACHABLE)==0) {
+
+        if (ind.getDeathCause() != null && ind.getDeathCause().compareTo(ds.ca.evac.DeathCause.ExitUnreachable)==0) {
             // ind tot weil eingeschlossen
             throw new OneIndNoPotentialException(ind);
         }
@@ -281,37 +281,37 @@ public ArrayList<Double> calculateAverageCoveredDistanceForGroupInTimeSteps(Arra
             // ind hat sich nie bewegt und ist nie stehengeblieben--> ind ist eingeschlossen
             throw new OneIndNoPotentialException(ind);
         }
-        
+
         if (t<0) {
             // Zeit ist falsch
             throw new IncorrectTimeException();
         }
-        
+
         if (t==0) {
             return 0;
-        }      
-            
+        }
+
 
         int index = Collections.binarySearch(currentSpeedTimes.get(ind),t);
         if (index< 0) {
             index = -index-2;
         }
-        
+
         if (index <0) {
             // Fall sollte nicht eintreten
             throw new MissingStoredValueException("Individual hat zum Zeitpunkt 1 keinen Speed-Eintrag!");
         }
-        
+
 
         return currentSpeed.get(ind).get(index);
 
-   
+
     }
-    
-    
-    
+
+
+
     /**
-     * 
+     *
      * @param ind an individual
      * @param time a TimeStep
      * @return the average speed of the individual from the beginning of the simulation to TimeStep "time"
@@ -326,11 +326,11 @@ public ArrayList<Double> calculateAverageCoveredDistanceForGroupInTimeSteps(Arra
 * if the individual had no speedvalue in timestep 1
 */
     public double calculateAverageSpeed(Individual ind, int time) throws OneIndNoValueBecauseAlreadySafeException, OneIndNoPotentialException, IncorrectTimeException {
-        return calculateAverageSpeed(ind, 1, time);       
+        return calculateAverageSpeed(ind, 1, time);
     }
-    
+
 /**
-* 
+*
 * @param ind an individual
 * @param from a TimeStep
 * @param to a TimeStep
@@ -352,36 +352,36 @@ public ArrayList<Double> calculateAverageCoveredDistanceForGroupInTimeSteps(Arra
                 throw new OneIndNoValueBecauseAlreadySafeException(ind);
             }
         }
-        
-        if (ind.getDeathCause() != null && ind.getDeathCause().compareTo(ds.ca.evac.Individual.DeathCause.EXIT_UNREACHABLE)==0) {
+
+        if (ind.getDeathCause() != null && ind.getDeathCause().compareTo(ds.ca.evac.DeathCause.ExitUnreachable)==0) {
             // ind tot, weil eingeschlossen
-            throw new OneIndNoPotentialException(ind);           
+            throw new OneIndNoPotentialException(ind);
         }
-        
+
         if(!currentSpeedTimes.containsKey(ind)){
             // ind hat sich nie bewegt und ist nie stehengeblieben--> ind ist eingeschlossen
             throw new OneIndNoPotentialException(ind);
         }
-        
+
         if (from <= 0 || to <= 0) {
             throw new IncorrectTimeException();
-        }  
+        }
 
         if (ind.isSafe()) {
             int safetyTime=ind.getSafetyTime();
             if (to>safetyTime) {
                 to=safetyTime;
-            } 
+            }
         }
         if (from>to) {
             throw new IncorrectTimeException();
         }
-        
+
         if (from==to) {
             return getCurrentSpeed(ind, from);
         }
-        
-        
+
+
         int indexOfFrom = (Collections.binarySearch(currentSpeedTimes.get(ind),from));
         if (indexOfFrom< 0) {
             indexOfFrom = -indexOfFrom-2;
@@ -398,7 +398,7 @@ public ArrayList<Double> calculateAverageCoveredDistanceForGroupInTimeSteps(Arra
             // Fall sollte nicht eintreten
             throw new MissingStoredValueException("Individual hat zum Zeitpunkt 1 keinen Speed-Eintrag!");
         }
-        
+
         if (indexOfFrom==indexOfTo){
             return currentSpeed.get(ind).get(indexOfFrom);
         }
@@ -409,24 +409,24 @@ public ArrayList<Double> calculateAverageCoveredDistanceForGroupInTimeSteps(Arra
         int stepFrom=from;
 
 
-       
+
         for (int i=indexOfFrom+1; i<indexOfTo; i++ )  {
             stepTo=currentSpeedTimes.get(ind).get(i);
             weightedSpeedSum+=lastSpeed*(stepTo-stepFrom);
             lastSpeed=currentSpeed.get(ind).get(i);
             stepFrom=stepTo;
         }
-        //last step:        
+        //last step:
         stepTo=to;
         weightedSpeedSum+=lastSpeed*(stepTo-stepFrom);
 
 
         return weightedSpeedSum/(to-from);
     }
-    
-    
-        
-      /** alter Code:  
+
+
+
+      /** alter Code:
         if (ind.isSafe()) {
             int safetyTime=ind.getSafetyTime();
             if (to>safetyTime) {
@@ -434,7 +434,7 @@ public ArrayList<Double> calculateAverageCoveredDistanceForGroupInTimeSteps(Arra
             }
         }
         int time=to-from;
-        if (!( (ind.getDeathCause() != null)  && ind.getDeathCause().compareTo(ds.ca.Individual.DeathCause.EXIT_UNREACHABLE)==0) ) {
+        if (!( (ind.getDeathCause() != null)  && ind.getDeathCause().compareTo(ds.ca.Individual.DeathCause.ExitUnreachable)==0) ) {
             if (time>0) {
                 double startCoveredDistance = getCoveredDistance(ind, from);
                 double endCoveredDistance = getCoveredDistance(ind, to);
@@ -451,13 +451,13 @@ public ArrayList<Double> calculateAverageCoveredDistanceForGroupInTimeSteps(Arra
         // Ind tot weil eingeschlossen
         throw new OneIndNoPotentialException(ind);
        **/
-     
-  
-    
-    
-           
+
+
+
+
+
     /**
-     * 
+     *
      * @param ind an individual
      * @param time a TimeStep
      * @return the maximum speed of the individual from the beginning of the simulation to TimeStep "time"
@@ -474,13 +474,13 @@ public ArrayList<Double> calculateAverageCoveredDistanceForGroupInTimeSteps(Arra
     public double calculateMaxSpeed (Individual ind, int time) throws MissingStoredValueException, OneIndNoValueBecauseAlreadySafeException, OneIndNoPotentialException, IncorrectTimeException {
         return calculateMaxSpeed(ind,1,time);
     }
-    
-     
-    
-    
-    
+
+
+
+
+
     /**
-     * 
+     *
      * @param ind an individual
      * @param from a TimeStep
      * @param to a TimeStep
@@ -502,37 +502,37 @@ public ArrayList<Double> calculateAverageCoveredDistanceForGroupInTimeSteps(Arra
                 throw new OneIndNoValueBecauseAlreadySafeException(ind);
             }
         }
-        
-        if (ind.getDeathCause() != null && ind.getDeathCause().compareTo(ds.ca.evac.Individual.DeathCause.EXIT_UNREACHABLE)==0) {
+
+        if (ind.getDeathCause() != null && ind.getDeathCause().compareTo(ds.ca.evac.DeathCause.ExitUnreachable)==0) {
             // ind tot, weil eingeschlossen
-            
-            throw new OneIndNoPotentialException(ind);           
+
+            throw new OneIndNoPotentialException(ind);
         }
-        
+
         if(!currentSpeedTimes.containsKey(ind)){
             // ind hat sich nie bewegt und ist nie stehengeblieben--> ind ist eingeschlossen
             throw new OneIndNoPotentialException(ind);
         }
-        
+
         if (from <= 0 || to <= 0) {
             throw new IncorrectTimeException();
-        }  
+        }
 
         if (ind.isSafe()) {
             int safetyTime=ind.getSafetyTime();
             if (to>safetyTime) {
                 to=safetyTime;
-            } 
+            }
         }
         if (from>to) {
             throw new IncorrectTimeException();
         }
-        
+
         if (from==to) {
             return getCurrentSpeed(ind, from);
         }
-        
-        
+
+
         int indexOfFrom = (Collections.binarySearch(currentSpeedTimes.get(ind),from));
         if (indexOfFrom< 0) {
             indexOfFrom = -indexOfFrom-2;
@@ -541,7 +541,7 @@ public ArrayList<Double> calculateAverageCoveredDistanceForGroupInTimeSteps(Arra
             // Fall sollte nicht eintreten
             throw new MissingStoredValueException("Individual hat zum Zeitpunkt 1 keinen Speed-Eintrag!");
         }
-        
+
         int indexOfTo = (Collections.binarySearch(currentSpeedTimes.get(ind),to));
         if (indexOfTo< 0) {
             indexOfTo = -indexOfTo-2;
@@ -558,22 +558,22 @@ public ArrayList<Double> calculateAverageCoveredDistanceForGroupInTimeSteps(Arra
         double speed;
 
         for (int i=indexOfFrom; i<indexOfTo; i++ )  {
-            speed=currentSpeed.get(ind).get(i); 
+            speed=currentSpeed.get(ind).get(i);
             if (speed>maxSpeed) {
                 maxSpeed=speed;
             }
         }
-        
+
         return maxSpeed;
     }
 
-    
-       
-    
-    
- 
+
+
+
+
+
     /**
-     * 
+     *
      * @param indgroup a list of individuals
      * @param time a TimeStep
      * @return the average of the individuals` average-speeds from the beginning of the simulation to TimeStep "time"
@@ -587,15 +587,15 @@ public ArrayList<Double> calculateAverageCoveredDistanceForGroupInTimeSteps(Arra
 * if at least one individual had no speedvalue in timestep 1
 * @throws statistic.ca.exception.GroupOfIndsNoValueBecauseAlreadySafeException
 * if at least one individual is already safe in timestep 1 AND all other individuals have no static potential or are already safe in timestep 1
-*/ 
- 
+*/
+
     public double calculateAverageAverageSpeedForGroup(ArrayList<Individual> indgroup, int time) throws MissingStoredValueException, GroupOfIndsNoValueBecauseAlreadySafeException, IncorrectTimeException{
         return calculateAverageAverageSpeedForGroup(indgroup, 1, time);
     }
-    
-    
+
+
     /**
-     * 
+     *
      * @param indgroup a list of individuals
      * @param from a TimeStep
      * @param to a TimeStep
@@ -610,11 +610,11 @@ public ArrayList<Double> calculateAverageCoveredDistanceForGroupInTimeSteps(Arra
 * if at least one individual had no speedvalue in timestep 1
 * @throws statistic.ca.exception.GroupOfIndsNoValueBecauseAlreadySafeException
 * if at least one individual is already safe in timestep "from" AND all other individuals have no static potential or are already safe in timestep from
-*/    
-  
-    
+*/
+
+
     public double calculateAverageAverageSpeedForGroup(ArrayList<Individual> indgroup, int from, int to) throws MissingStoredValueException, GroupOfIndsNoValueBecauseAlreadySafeException, IncorrectTimeException{
-        
+
         int noOfNoPotExc=0;
         double averageSpeedSum=0;
         double averageSpeedOfInd;
@@ -628,7 +628,7 @@ public ArrayList<Double> calculateAverageCoveredDistanceForGroupInTimeSteps(Arra
             catch (OneIndNoPotentialException ex) {noOfNoPotExc++;}
             catch (OneIndNoValueBecauseAlreadySafeException e) {}
         }
-        
+
         if (numberOfInds!=0) {
             return averageSpeedSum/numberOfInds;
         }
@@ -642,11 +642,11 @@ public ArrayList<Double> calculateAverageCoveredDistanceForGroupInTimeSteps(Arra
                 throw new GroupOfIndsNoValueBecauseAlreadySafeException(indgroup);
             }
         }
-            
-    }  
-    
+
+    }
+
     /**
-     * 
+     *
      * @param indgroup a list of individuals
      * @param timestep a TimeStep
      * @return the average of the individuals` speeds in timeStep "timestep"
@@ -655,12 +655,12 @@ public ArrayList<Double> calculateAverageCoveredDistanceForGroupInTimeSteps(Arra
 * if all individuals have no static potential (there`s no exit reachable from the individuals` positions)
      * @see #getCurrentSpeed
 * @throws statistic.ca.exception.IncorrectTimeException
-* if "timestep" is less than 0 
+* if "timestep" is less than 0
 * @throws statistic.ca.exception.MissingStoredValueException
 * if at least one individual had no speedvalue in timestep 1
 * @throws statistic.ca.exception.GroupOfIndsNoValueBecauseAlreadySafeException
 * if at least one individual is already safe in timestep "timestep" AND all other individuals have no static potential or are already safe in timestep "timestep"
-*/        
+*/
 public double calculateAverageSpeedForGroupInOneTimestep(ArrayList<Individual> indgroup, int timestep) throws MissingStoredValueException, GroupOfIndsNoValueBecauseAlreadySafeException, IncorrectTimeException{
         int noOfNoPotExc=0;
         double averageSpeedSum=0;
@@ -675,7 +675,7 @@ public double calculateAverageSpeedForGroupInOneTimestep(ArrayList<Individual> i
             catch (OneIndNoPotentialException ex) {noOfNoPotExc++;}
             catch (OneIndNoValueBecauseAlreadySafeException e) {}
         }
-        
+
         if (numberOfInds!=0) {
             return averageSpeedSum/numberOfInds;
         }
@@ -689,12 +689,12 @@ public double calculateAverageSpeedForGroupInOneTimestep(ArrayList<Individual> i
                 throw new GroupOfIndsNoValueBecauseAlreadySafeException(indgroup);
             }
         }
-            
-    }    
-        
-    
+
+    }
+
+
     /**
-     * 
+     *
      * @param indgroup a list of individuals
      * @param time a TimeStep
      * @return the average of the individuals` maximum-speeds from the beginning of the simulation to TimeStep "time"
@@ -712,10 +712,10 @@ public double calculateAverageSpeedForGroupInOneTimestep(ArrayList<Individual> i
     public double calculateAverageMaxSpeedForGroup(ArrayList<Individual> indgroup, int time)  throws IncorrectTimeException, MissingStoredValueException, GroupOfIndsNoValueBecauseAlreadySafeException{
         return calculateAverageMaxSpeedForGroup(indgroup, 1, time);
     }
-    
-  
+
+
     /**
-     * 
+     *
      * @param indgroup a list of individuals
      * @param from a TimeStep
      * @param to a TimeStep
@@ -730,14 +730,14 @@ public double calculateAverageSpeedForGroupInOneTimestep(ArrayList<Individual> i
 * if at least one individual had no speedvalue in timestep 1
 * @throws statistic.ca.exception.GroupOfIndsNoValueBecauseAlreadySafeException
 * if at least one individual is already safe in timestep "from" AND all other individuals have no static potential or are already safe in timestep from
-*/  
+*/
     public double calculateAverageMaxSpeedForGroup(ArrayList<Individual> indgroup, int from, int to)  throws IncorrectTimeException, MissingStoredValueException, GroupOfIndsNoValueBecauseAlreadySafeException{
         int noOfNoPotExc=0;
         double maxSpeedSum=0;
         double maxSpeedOfInd;
         double numberOfInds=0;
         for (Individual ind : indgroup) {
-            try {               
+            try {
                 maxSpeedOfInd=calculateMaxSpeed(ind, from,to);
                 maxSpeedSum += maxSpeedOfInd;
                 numberOfInds += 1;
@@ -758,12 +758,12 @@ public double calculateAverageSpeedForGroupInOneTimestep(ArrayList<Individual> i
                 throw new GroupOfIndsNoValueBecauseAlreadySafeException(indgroup);
             }
         }
-             
-    }      
-    
-     
+
+    }
+
+
     /**
-     * 
+     *
      * @param indgroup a list of individuals
      * @param timestep a TimeStep
      * @return the maximum of the individuals` speeds in timeStep "timestep"
@@ -772,12 +772,12 @@ public double calculateAverageSpeedForGroupInOneTimestep(ArrayList<Individual> i
 * if all individuals have no static potential (there`s no exit reachable from the individuals` positions)
      * @see #getCurrentSpeed
 * @throws statistic.ca.exception.IncorrectTimeException
-* if "timestep" is less than 0 
+* if "timestep" is less than 0
 * @throws statistic.ca.exception.MissingStoredValueException
 * if at least one individual had no speedvalue in timestep 1
 * @throws statistic.ca.exception.GroupOfIndsNoValueBecauseAlreadySafeException
 * if at least one individual is already safe in timestep "timestep" AND all other individuals have no static potential or are already safe in timestep "timestep"
-*/        
+*/
 public double calculateMaxSpeedForGroupInOneTimestep(ArrayList<Individual> indgroup, int timestep) throws MissingStoredValueException, GroupOfIndsNoValueBecauseAlreadySafeException, IncorrectTimeException{
         int noOfNoPotExc=0;
         double maxSpeed=0;
@@ -794,7 +794,7 @@ public double calculateMaxSpeedForGroupInOneTimestep(ArrayList<Individual> indgr
             catch (OneIndNoPotentialException ex) {noOfNoPotExc++;}
             catch (OneIndNoValueBecauseAlreadySafeException e) {}
         }
-        
+
         if (numberOfInds!=0) {
             return maxSpeed;
         }
@@ -808,12 +808,12 @@ public double calculateMaxSpeedForGroupInOneTimestep(ArrayList<Individual> indgr
                 throw new GroupOfIndsNoValueBecauseAlreadySafeException(indgroup);
             }
         }
-            
-    }        
-    
-    
+
+    }
+
+
     /**
-     * 
+     *
      * @param indgroup a list of individuals
      * @param time a TimeStep
      * @return the maximum of the individuals` maximum-speeds from the beginning of the simulation to TimeStep "time"
@@ -825,9 +825,9 @@ public double calculateMaxSpeedForGroupInOneTimestep(ArrayList<Individual> indgr
     public double calculateMaxMaxSpeedForGroup(ArrayList<Individual> indgroup, int time) throws GroupOfIndsNoPotentialException, IncorrectTimeException{
         return calculateMaxMaxSpeedForGroup(indgroup, 0, time);
     }
-    
+
     /**
-     * 
+     *
      * @param indgroup a list of individuals
      * @param from a TimeStep
      * @param to a TimeStep
@@ -847,19 +847,19 @@ public double calculateMaxSpeedForGroupInOneTimestep(ArrayList<Individual> indgr
                 nrOfInds++;
                 if (maxSpeedOfInd > maxSpeed) {
                     maxSpeed=maxSpeedOfInd;
-                }     
+                }
             }
             catch (OneIndNoPotentialException ex) {}
         }
         if (nrOfInds!=0) {
             return maxSpeed;
         }
-        throw new GroupOfIndsNoPotentialException(indgroup); 
-    }    
-    
-    
+        throw new GroupOfIndsNoPotentialException(indgroup);
+    }
+
+
     /**
-     * 
+     *
      * @param indgroup a list of individuals
      * @param time a TimeStep
      * @return the maximum of the individuals` average-speeds from the beginning of the simulation to TimeStep "time"
@@ -871,9 +871,9 @@ public double calculateMaxSpeedForGroupInOneTimestep(ArrayList<Individual> indgr
     public double calculateMaxAverageSpeedForGroup(ArrayList<Individual> indgroup, int time)  throws GroupOfIndsNoPotentialException, IncorrectTimeException{
         return calculateMaxAverageSpeedForGroup(indgroup, 0, time);
     }
-    
+
     /**
-     * 
+     *
      * @param indgroup a list of individuals
      * @param from a TimeStep
      * @param to a TimeStep
@@ -902,11 +902,11 @@ public double calculateMaxSpeedForGroupInOneTimestep(ArrayList<Individual> indgr
             }
             throw new GroupOfIndsNoPotentialException(indgroup);
     }
-    
-    
-    
+
+
+
     /**
-     * 
+     *
      * @param indgroup a list of individuals
      * @param time a TimeStep
      * @return the minimum of the individuals` average-speeds from the beginning of the simulation to TimeStep "time"
@@ -918,9 +918,9 @@ public double calculateMaxSpeedForGroupInOneTimestep(ArrayList<Individual> indgr
     public double calculateMinAverageSpeedForGroup(ArrayList<Individual> indgroup, int time)  throws GroupOfIndsNoPotentialException, IncorrectTimeException{
         return calculateMinAverageSpeedForGroup(indgroup, 0, time);
     }
-    
+
     /**
-     * 
+     *
      * @param indgroup a list of individuals
      * @param from a TimeStep
      * @param to a TimeStep
@@ -942,32 +942,32 @@ public double calculateMaxSpeedForGroupInOneTimestep(ArrayList<Individual> indgr
                     minSpeed=averageSpeedOfInd;
                 }
             }
-            catch (OneIndNoPotentialException ex ) {} 
+            catch (OneIndNoPotentialException ex ) {}
         }
         if (nrOfInds!=0) {
             return minSpeed;
         }
         throw new GroupOfIndsNoPotentialException(indgroup);
-    }         
+    }
 
- 
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    //exhaustion    
-    
-    
+
+
+
+
+
+
+
+
+
+
+
+
+
+    //exhaustion
+
+
   /**
-     * 
+     *
      * @param ind an individual
      * @param t a TimeStep
      * @return the individuals exhaustion in TimeStep "t"
@@ -986,8 +986,8 @@ public double calculateMaxSpeedForGroupInOneTimestep(ArrayList<Individual> indgr
                 throw new OneIndNoValueBecauseAlreadySafeException(ind);
             }
         }
-        
-        if (ind.getDeathCause() != null && ind.getDeathCause().compareTo(ds.ca.evac.Individual.DeathCause.EXIT_UNREACHABLE)==0) {
+
+        if (ind.getDeathCause() != null && ind.getDeathCause().compareTo(ds.ca.evac.DeathCause.ExitUnreachable)==0) {
             // ind tot weil eingeschlossen
             throw new OneIndNoPotentialException(ind);
         }
@@ -996,37 +996,37 @@ public double calculateMaxSpeedForGroupInOneTimestep(ArrayList<Individual> indgr
             // ind hat sich nie bewegt und ist nie stehengeblieben--> ind ist eingeschlossen
             throw new OneIndNoPotentialException(ind);
         }
-        
+
         if (t<0) {
             // Zeit ist falsch
             throw new IncorrectTimeException();
         }
-        
+
         if (t==0) {
             return 0;
-        }      
-            
+        }
+
 
         int index = Collections.binarySearch(exhaustionTimes.get(ind),t);
         if (index< 0) {
             index = -index-2;
         }
-        
+
         if (index <0) {
             return 0;
         }
-        
+
 
         return exhaustion.get(ind).get(index);
 
-   
+
     }
-    
-            
-    
-    
+
+
+
+
     /**
-     * 
+     *
      * @param ind an individual
      * @param from a TimeStep
      * @param to a TimeStep
@@ -1042,10 +1042,10 @@ public double calculateMaxSpeedForGroupInOneTimestep(ArrayList<Individual> indgr
         // Zeiten falschrum
         throw new IncorrectTimeException();
     }
-    
-    
+
+
     /**
-     * 
+     *
      * @param ind an individual
      * @param time a TimeStep
      * @return the average exhaustion of the individual from the beginning of the simulation to TimeStep "time"
@@ -1054,12 +1054,12 @@ public double calculateMaxSpeedForGroupInOneTimestep(ArrayList<Individual> indgr
      * @throws statistic.ca.exception.IncorrectTimeException if the given TimeStep(s) is/are less than 0 or are in wrong order
      */
     public double calculateAverageExhaustion(Individual ind, int time) throws OneIndNoPotentialException, IncorrectTimeException {
-        return calculateAverageExhaustion(ind, 1, time);       
+        return calculateAverageExhaustion(ind, 1, time);
     }
-    
-    
+
+
     /**
-     * 
+     *
      * @param ind an individual
      * @param from a TimeStep
      * @param to a TimeStep
@@ -1076,15 +1076,15 @@ public double calculateMaxSpeedForGroupInOneTimestep(ArrayList<Individual> indgr
             }
             if (from>safetyTime) {
                 throw new IncorrectTimeException();
-            }   
+            }
         }
-        
+
         if (from<to) {
-            if (!(ind.getDeathCause() != null && ind.getDeathCause().compareTo(ds.ca.evac.Individual.DeathCause.EXIT_UNREACHABLE)==0)) {
+            if (!(ind.getDeathCause() != null && ind.getDeathCause().compareTo(ds.ca.evac.DeathCause.ExitUnreachable)==0)) {
                 if (exhaustionTimes.containsKey(ind)) {
                     if (from==0) {
                         from=1;
-                    }                    
+                    }
                     int indexOfFrom = (Collections.binarySearch(exhaustionTimes.get(ind),from));
                     if (indexOfFrom< 0) {
                         indexOfFrom = -indexOfFrom-2;
@@ -1092,7 +1092,7 @@ public double calculateMaxSpeedForGroupInOneTimestep(ArrayList<Individual> indgr
                     if (indexOfFrom < 0) {
                         throw new IncorrectTimeException();
                     }
-                    
+
                     int indexOfTo = (Collections.binarySearch(exhaustionTimes.get(ind),to));
                     if (indexOfTo< 0) {
                         indexOfTo = -indexOfTo-2;
@@ -1100,16 +1100,16 @@ public double calculateMaxSpeedForGroupInOneTimestep(ArrayList<Individual> indgr
                     if (indexOfTo < 0) {
                         throw new IncorrectTimeException();
                     }
-                                        
+
                     double lastExhaustion=exhaustion.get(ind).get(indexOfFrom);
                     double weightedExhaustionSum=0;
                     int stepTo;
                     int stepFrom=from;
-                    
+
                     if (indexOfFrom==indexOfTo){
                         return currentSpeed.get(ind).get(indexOfFrom);
-                    }                    
-                    
+                    }
+
                     for (int i=indexOfFrom+1; i<indexOfTo; i++ )  {
                         stepTo=exhaustionTimes.get(ind).get(i);
                         weightedExhaustionSum+=lastExhaustion*(stepTo-stepFrom);
@@ -1119,11 +1119,11 @@ public double calculateMaxSpeedForGroupInOneTimestep(ArrayList<Individual> indgr
                     //last step:
                     stepTo=to;
                     weightedExhaustionSum+=lastExhaustion*(stepTo-stepFrom);
-                    
+
                     return weightedExhaustionSum/(to-from);
                 }
                 //duerfte nicht vorkommen
-                throw new IllegalArgumentException();                
+                throw new IllegalArgumentException();
             }
             // ind tot, weil eingeschlossen
             throw new OneIndNoPotentialException(ind);
@@ -1133,16 +1133,16 @@ public double calculateMaxSpeedForGroupInOneTimestep(ArrayList<Individual> indgr
         }
         else
         // Zeiten falsch
-        throw new IncorrectTimeException();        
-    }           
-        
+        throw new IncorrectTimeException();
+    }
 
-    
-    
-         
-  
+
+
+
+
+
     /**
-     * 
+     *
      * @param ind an individual
      * @param time a TimeStep
      * @return the maximum exhaustion of the individual from the beginning of the simulation to TimeStep "time"
@@ -1151,12 +1151,12 @@ public double calculateMaxSpeedForGroupInOneTimestep(ArrayList<Individual> indgr
      * @throws statistic.ca.exception.IncorrectTimeException if the given TimeStep(s) is/are less than 0 or are in wrong order
      */
     public double calculateMaxExhaustion(Individual ind, int time) throws OneIndNoPotentialException, IncorrectTimeException {
-        return calculateMaxExhaustion(ind, 0, time);       
+        return calculateMaxExhaustion(ind, 0, time);
     }
-    
-    
+
+
     /**
-     * 
+     *
      * @param ind an individual
      * @param from a TimeStep
      * @param to a TimeStep
@@ -1167,14 +1167,14 @@ public double calculateMaxSpeedForGroupInOneTimestep(ArrayList<Individual> indgr
      */
     public double calculateMaxExhaustion (Individual ind, int from, int to) throws OneIndNoPotentialException, IncorrectTimeException {
         if (from<to) {
-            if (!(ind.getDeathCause() != null && ind.getDeathCause().compareTo(ds.ca.evac.Individual.DeathCause.EXIT_UNREACHABLE)==0)) {
+            if (!(ind.getDeathCause() != null && ind.getDeathCause().compareTo(ds.ca.evac.DeathCause.ExitUnreachable)==0)) {
                 if (exhaustionTimes.containsKey(ind)) {
                     if (ind.isSafe()) {
                         int safetyTime=ind.getSafetyTime();
                         if (to>safetyTime) {
                             to=safetyTime;
                         }
-                    }                
+                    }
                     int indexOfFrom = (Collections.binarySearch(exhaustionTimes.get(ind),from));
                     if (indexOfFrom< 0) {
                         indexOfFrom = -indexOfFrom-2;
@@ -1182,7 +1182,7 @@ public double calculateMaxSpeedForGroupInOneTimestep(ArrayList<Individual> indgr
                     if (indexOfFrom < 0) {
                         throw new IllegalArgumentException();
                     }
-                    
+
                     int indexOfTo = (Collections.binarySearch(exhaustionTimes.get(ind),to));
                     if (indexOfTo< 0) {
                         indexOfTo = -indexOfTo-2;
@@ -1190,10 +1190,10 @@ public double calculateMaxSpeedForGroupInOneTimestep(ArrayList<Individual> indgr
                     if (indexOfTo < 0) {
                         throw new IllegalArgumentException();
                     }
-                                        
+
                     double actualExhaustion;
                     double maxExhaustion=0;
-                    
+
                     for (int i=indexOfFrom; i<=indexOfTo; i++ )  {
                         actualExhaustion=exhaustion.get(ind).get(i);
                         if (actualExhaustion > maxExhaustion) {
@@ -1203,7 +1203,7 @@ public double calculateMaxSpeedForGroupInOneTimestep(ArrayList<Individual> indgr
                     return maxExhaustion;
                 }
                 //duerfte nicht vorkommen
-                throw new IllegalArgumentException();                
+                throw new IllegalArgumentException();
             }
             // ind tot, weil eingeschlossen
             throw new OneIndNoPotentialException(ind);
@@ -1213,13 +1213,13 @@ public double calculateMaxSpeedForGroupInOneTimestep(ArrayList<Individual> indgr
         }
         else
         // Zeiten falsch
-        throw new IncorrectTimeException();        
-    }    
-    
-     
-    
+        throw new IncorrectTimeException();
+    }
+
+
+
     /**
-     * 
+     *
      * @param ind an individual
      * @param time a TimeStep
      * @return the minimum exhaustion the individual had from the beginning of the simulation to TimeStep "time" except for the exhaustion at the beginning of the simulation
@@ -1229,12 +1229,12 @@ public double calculateMaxSpeedForGroupInOneTimestep(ArrayList<Individual> indgr
      * @throws statistic.ca.exception.IncorrectTimeException if the given TimeStep(s) is/are less than 0 or are in wrong order
      */
     public double calculateMinExhaustionExceptingStartExhaustion(Individual ind, int time) throws OneIndNoPotentialException, IncorrectTimeException {
-        return calculateMinExhaustionExceptingStartExhaustion(ind, 0, time);       
+        return calculateMinExhaustionExceptingStartExhaustion(ind, 0, time);
     }
-    
-    
+
+
     /**
-     * 
+     *
      * @param ind an individual
      * @param from a TimeStep
      * @param to a TimeStep
@@ -1246,7 +1246,7 @@ public double calculateMaxSpeedForGroupInOneTimestep(ArrayList<Individual> indgr
      */
     public double calculateMinExhaustionExceptingStartExhaustion (Individual ind, int from, int to) throws OneIndNoPotentialException, IncorrectTimeException {
         if (from<to) {
-            if (!(ind.getDeathCause() != null && ind.getDeathCause().compareTo(ds.ca.evac.Individual.DeathCause.EXIT_UNREACHABLE)==0)) {
+            if (!(ind.getDeathCause() != null && ind.getDeathCause().compareTo(ds.ca.evac.DeathCause.ExitUnreachable)==0)) {
                 if (exhaustionTimes.containsKey(ind)) {
                     if (ind.isSafe()) {
                         int safetyTime=ind.getSafetyTime();
@@ -1272,7 +1272,7 @@ public double calculateMaxSpeedForGroupInOneTimestep(ArrayList<Individual> indgr
                     if (indexOfFrom < 0) {
                         throw new IllegalArgumentException();
                     }
-                    
+
                     int indexOfTo = (Collections.binarySearch(exhaustionTimes.get(ind),to));
                     if (indexOfTo< 0) {
                         indexOfTo = -indexOfTo-2;
@@ -1280,10 +1280,10 @@ public double calculateMaxSpeedForGroupInOneTimestep(ArrayList<Individual> indgr
                     if (indexOfTo < 0) {
                         throw new IllegalArgumentException();
                     }
-                                        
+
                     double actualExhaustion;
                     double minExhaustion=Double.MAX_VALUE;
-                    
+
                     for (int i=indexOfFrom; i<=indexOfTo; i++ )  {
                         actualExhaustion=exhaustion.get(ind).get(i);
                         if (actualExhaustion < minExhaustion) {
@@ -1293,7 +1293,7 @@ public double calculateMaxSpeedForGroupInOneTimestep(ArrayList<Individual> indgr
                     return minExhaustion;
                 }
                 //duerfte nicht vorkommen
-                throw new IllegalArgumentException();                
+                throw new IllegalArgumentException();
             }
             // ind tot, weil eingeschlossen
             throw new OneIndNoPotentialException(ind);
@@ -1303,14 +1303,14 @@ public double calculateMaxSpeedForGroupInOneTimestep(ArrayList<Individual> indgr
         }
         else
         // Zeiten falsch
-        throw new IncorrectTimeException();        
-    }    
-    
-     
-         
-    
+        throw new IncorrectTimeException();
+    }
+
+
+
+
     /**
-     * 
+     *
      * @param indgroup a list of individuals
      * @param t a TimeStep
      * @return the average of the individuals` exhasutionvalues in TimeStep "t"
@@ -1320,12 +1320,12 @@ public double calculateMaxSpeedForGroupInOneTimestep(ArrayList<Individual> indgr
      * OR if all individuals` first stored values lie after the timestep "t"
      * @see #getExhaustion
 * @throws statistic.ca.exception.IncorrectTimeException
-* if "timestep" is less than 0 
+* if "timestep" is less than 0
 * @throws statistic.ca.exception.MissingStoredValueException
 * if at least one individual had no speedvalue in timestep 1
 * @throws statistic.ca.exception.GroupOfIndsNoValueBecauseAlreadySafeException
 * if at least one individual is already safe in timestep "timestep" AND all other individuals have no static potential or are already safe in timestep "timestep"
-*/          
+*/
     public double getExhaustionForGroup(ArrayList<Individual> indgroup, int t)throws GroupOfIndsNoPotentialException, IncorrectTimeException, IllegalArgumentException{
         int noOfNoPotExc=0;
         double exhaustionSum=0;
@@ -1339,7 +1339,7 @@ public double calculateMaxSpeedForGroupInOneTimestep(ArrayList<Individual> indgr
             catch (OneIndNoPotentialException ex) {noOfNoPotExc++;}
             catch (OneIndNoValueBecauseAlreadySafeException e) {}
         }
-        
+
         if (numberOfInds!=0) {
             return exhaustionSum/numberOfInds;
         }
@@ -1353,19 +1353,19 @@ public double calculateMaxSpeedForGroupInOneTimestep(ArrayList<Individual> indgr
                 throw new GroupOfIndsNoValueBecauseAlreadySafeException(indgroup);
             }
         }
-            
-    }    
-        
-            
-    
+
+    }
 
 
-    
-    
-    
-    
+
+
+
+
+
+
+
     /**
-     * 
+     *
      * @param indgroup a list of individuals
      * @param time a TimeStep
      * @return the average of the individuals` average-exhaustions from the beginning of the simulation to TimeStep "time"
@@ -1377,10 +1377,10 @@ public double calculateMaxSpeedForGroupInOneTimestep(ArrayList<Individual> indgr
     public double calculateAverageAverageExhaustionForGroup(ArrayList<Individual> indgroup, int time) throws GroupOfIndsNoPotentialException, IncorrectTimeException{
         return calculateAverageAverageExhaustionForGroup(indgroup, 0, time);
     }
-    
-    
+
+
     /**
-     * 
+     *
      * @param indgroup a list of individuals
      * @param from a TimeStep
      * @param to a TimeStep
@@ -1400,7 +1400,7 @@ public double calculateMaxSpeedForGroupInOneTimestep(ArrayList<Individual> indgr
                 averageExhaustionSum += averageExhaustionOfInd;
                 numberOfInds += 1;
             }
-            catch (OneIndNoPotentialException ex) {}        
+            catch (OneIndNoPotentialException ex) {}
         }
         if (numberOfInds!=0) {
             return averageExhaustionSum/numberOfInds;
@@ -1408,11 +1408,11 @@ public double calculateMaxSpeedForGroupInOneTimestep(ArrayList<Individual> indgr
         else
             // alle ind tot weil eingeschlossen
             throw new GroupOfIndsNoPotentialException(indgroup);
-    }    
-    
-     
+    }
+
+
     /**
-     * 
+     *
      * @param indgroup a list of individuals
      * @param time a TimeStep
      * @return the average of the individuals` maximum-exhaustions from the beginning of the simulation to TimeStep "time"
@@ -1424,9 +1424,9 @@ public double calculateMaxSpeedForGroupInOneTimestep(ArrayList<Individual> indgr
     public double calculateAverageMaxExhaustionForGroup(ArrayList<Individual> indgroup, int time)  throws GroupOfIndsNoPotentialException, IncorrectTimeException{
         return calculateAverageMaxExhaustionForGroup(indgroup, 0, time);
     }
-    
+
     /**
-     * 
+     *
      * @param indgroup a list of individuals
      * @param from a TimeStep
      * @param to a TimeStep
@@ -1441,7 +1441,7 @@ public double calculateMaxSpeedForGroupInOneTimestep(ArrayList<Individual> indgr
         double maxExhaustionOfInd;
         int numberOfInds=0;
         for (Individual ind : indgroup) {
-            try {               
+            try {
                 maxExhaustionOfInd=calculateMaxExhaustion(ind, from,to);
                 maxExhaustionSum += maxExhaustionOfInd;
                 numberOfInds += 1;
@@ -1451,12 +1451,12 @@ public double calculateMaxSpeedForGroupInOneTimestep(ArrayList<Individual> indgr
         if (numberOfInds!=0) {
             return maxExhaustionSum/numberOfInds;
         }
-        else throw new GroupOfIndsNoPotentialException(indgroup); 
-    }      
-    
-     
+        else throw new GroupOfIndsNoPotentialException(indgroup);
+    }
+
+
     /**
-     * 
+     *
      * @param indgroup a list of individuals
      * @param time a TimeStep
      * @return the average of the individuals` minimum-exhaustions from the beginning of the simulation to TimeStep "time"
@@ -1468,9 +1468,9 @@ public double calculateMaxSpeedForGroupInOneTimestep(ArrayList<Individual> indgr
     public double calculateAverageMinExhaustionForGroup(ArrayList<Individual> indgroup, int time)  throws GroupOfIndsNoPotentialException, IncorrectTimeException{
         return calculateAverageMinExhaustionForGroup(indgroup, 0, time);
     }
-    
+
     /**
-     * 
+     *
      * @param indgroup a list of individuals
      * @param from a TimeStep
      * @param to a TimeStep
@@ -1485,7 +1485,7 @@ public double calculateMaxSpeedForGroupInOneTimestep(ArrayList<Individual> indgr
         double minExhaustionOfInd;
         int numberOfInds=0;
         for (Individual ind : indgroup) {
-            try {               
+            try {
                 minExhaustionOfInd=calculateMinExhaustionExceptingStartExhaustion(ind, from,to);
                 minExhaustionSum += minExhaustionOfInd;
                 numberOfInds += 1;
@@ -1495,12 +1495,12 @@ public double calculateMaxSpeedForGroupInOneTimestep(ArrayList<Individual> indgr
         if (numberOfInds!=0) {
             return minExhaustionSum/numberOfInds;
         }
-        else throw new GroupOfIndsNoPotentialException(indgroup); 
-    }      
-    
-     
+        else throw new GroupOfIndsNoPotentialException(indgroup);
+    }
+
+
     /**
-     * 
+     *
      * @param indgroup a list of individuals
      * @param time a TimeStep
      * @return the maximum of the individuals` average-exhaustions from the beginning of the simulation to TimeStep "time"
@@ -1512,9 +1512,9 @@ public double calculateMaxSpeedForGroupInOneTimestep(ArrayList<Individual> indgr
     public double calculateMaxAverageExhaustionForGroup(ArrayList<Individual> indgroup, int time)  throws GroupOfIndsNoPotentialException, IncorrectTimeException{
         return calculateMaxAverageExhaustionForGroup(indgroup, 0, time);
     }
-    
+
     /**
-     * 
+     *
      * @param indgroup list of individuals
      * @param from a TimeStep
      * @param to a TimeStep
@@ -1543,11 +1543,11 @@ public double calculateMaxSpeedForGroupInOneTimestep(ArrayList<Individual> indgr
             }
             throw new GroupOfIndsNoPotentialException(indgroup);
     }
-    
-    
-      
+
+
+
     /**
-     * 
+     *
      * @param indgroup a list of individuals
      * @param time a TimeStep
      * @return the maximum of the individuals` maximum-exhaustions from the beginning of the simulation to TimeStep "time"
@@ -1559,9 +1559,9 @@ public double calculateMaxSpeedForGroupInOneTimestep(ArrayList<Individual> indgr
     public double calculateMaxMaxExhaustionForGroup(ArrayList<Individual> indgroup, int time) throws GroupOfIndsNoPotentialException, IncorrectTimeException{
         return calculateMaxMaxExhaustionForGroup(indgroup, 0, time);
     }
-    
+
     /**
-     * 
+     *
      * @param indgroup a list of individuals
      * @param from a TimeStep
      * @param to a TimeStep
@@ -1581,21 +1581,21 @@ public double calculateMaxSpeedForGroupInOneTimestep(ArrayList<Individual> indgr
                 nrOfInds++;
                 if (maxExhaustionOfInd > maxExhaustion) {
                     maxExhaustion=maxExhaustionOfInd;
-                }     
+                }
             }
             catch (OneIndNoPotentialException ex) {}
         }
         if (nrOfInds!=0) {
             return maxExhaustion;
         }
-        throw new GroupOfIndsNoPotentialException(indgroup); 
-    }    
-    
-    
-    
-     
+        throw new GroupOfIndsNoPotentialException(indgroup);
+    }
+
+
+
+
     /**
-     * 
+     *
      * @param indgroup a list of individuals
      * @param time a TimeStep
      * @return the minimum of the individuals` average-exhaustions from the beginning of the simulation to TimeStep "time"
@@ -1607,9 +1607,9 @@ public double calculateMaxSpeedForGroupInOneTimestep(ArrayList<Individual> indgr
     public double calculateMinAverageExhaustionForGroup(ArrayList<Individual> indgroup, int time)  throws GroupOfIndsNoPotentialException, IncorrectTimeException{
         return calculateMinAverageExhaustionForGroup(indgroup, 0, time);
     }
-    
+
     /**
-     * 
+     *
      * @param indgroup a list of individuals
      * @param from a TimeStep
      * @param to a TimeStep
@@ -1631,17 +1631,17 @@ public double calculateMaxSpeedForGroupInOneTimestep(ArrayList<Individual> indgr
                     minExhaustion=averageExhaustionOfInd;
                 }
             }
-            catch (OneIndNoPotentialException ex ) {} 
+            catch (OneIndNoPotentialException ex ) {}
         }
         if (nrOfInds!=0) {
             return minExhaustion;
         }
         throw new GroupOfIndsNoPotentialException(indgroup);
-    }   
-    
-   
+    }
+
+
     /**
-     * 
+     *
      * @param indgroup a list of individuals
      * @param time a TimeStep
      * @return the minimum of the individuals` minimum-exhaustions from the beginning of the simulation to TimeStep "time"
@@ -1653,9 +1653,9 @@ public double calculateMaxSpeedForGroupInOneTimestep(ArrayList<Individual> indgr
     public double calculateMinMinExhaustionForGroup(ArrayList<Individual> indgroup, int time) throws GroupOfIndsNoPotentialException, IncorrectTimeException{
         return calculateMinMinExhaustionForGroup(indgroup, 0, time);
     }
-    
+
     /**
-     * 
+     *
      * @param indgroup a list of individuals
      * @param from a TimeStep
      * @param to a TimeStep
@@ -1675,53 +1675,53 @@ public double calculateMaxSpeedForGroupInOneTimestep(ArrayList<Individual> indgr
                 nrOfInds++;
                 if (minExhaustionOfInd > minExhaustion) {
                     minExhaustion=minExhaustionOfInd;
-                }     
+                }
             }
             catch (OneIndNoPotentialException ex) {}
         }
         if (nrOfInds!=0) {
             return minExhaustion;
         }
-        throw new GroupOfIndsNoPotentialException(indgroup); 
-    }   
-     
-    
-    
-    
-    
-    
-    
-    
-   
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
+        throw new GroupOfIndsNoPotentialException(indgroup);
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
     //panic
-    
-   
+
+
     /**
-     * 
+     *
      * @param ind an individual
      * @param t a TimeStep
      * @return the individuals panic in TimeStep "t"
@@ -1740,8 +1740,8 @@ public double calculateMaxSpeedForGroupInOneTimestep(ArrayList<Individual> indgr
                 throw new OneIndNoValueBecauseAlreadySafeException(ind);
             }
         }
-        
-        if (ind.getDeathCause() != null && ind.getDeathCause().compareTo(ds.ca.evac.Individual.DeathCause.EXIT_UNREACHABLE)==0) {
+
+        if (ind.getDeathCause() != null && ind.getDeathCause().compareTo(ds.ca.evac.DeathCause.ExitUnreachable)==0) {
             // ind tot weil eingeschlossen
             throw new OneIndNoPotentialException(ind);
         }
@@ -1750,37 +1750,37 @@ public double calculateMaxSpeedForGroupInOneTimestep(ArrayList<Individual> indgr
             // ind hat sich nie bewegt und ist nie stehengeblieben--> ind ist eingeschlossen
             throw new OneIndNoPotentialException(ind);
         }
-        
+
         if (t<0) {
             // Zeit ist falsch
             throw new IncorrectTimeException();
         }
-        
+
         if (t==0) {
             return 0;
-        }      
-            
+        }
+
 
         int index = Collections.binarySearch(panicTimes.get(ind),t);
         if (index< 0) {
             index = -index-2;
         }
-        
+
         if (index <0) {
             return 0;
         }
-        
+
 
         return panic.get(ind).get(index);
 
-   
+
     }
-    
-            
-    
-    
+
+
+
+
     /**
-     * 
+     *
      * @param ind an individual
      * @param from a TimeStep
      * @param to a TimeStep
@@ -1795,11 +1795,11 @@ public double calculateMaxSpeedForGroupInOneTimestep(ArrayList<Individual> indgr
         }
         // Zeiten falschrum
         throw new IncorrectTimeException();
-    }  
-    
-    
+    }
+
+
     /**
-     * 
+     *
      * @param ind an individual
      * @param time a TimeStep
      * @return the average panic of the individual from the beginning of the simulation to TimeStep "time"
@@ -1808,12 +1808,12 @@ public double calculateMaxSpeedForGroupInOneTimestep(ArrayList<Individual> indgr
      * @throws statistic.ca.exception.IncorrectTimeException if the given TimeStep(s) is/are less than 0 or are in wrong order
      */
     public double calculateAveragePanic(Individual ind, int time) throws OneIndNoPotentialException, IncorrectTimeException {
-        return calculateAveragePanic(ind, 1, time);       
+        return calculateAveragePanic(ind, 1, time);
     }
-    
-    
+
+
     /**
-     * 
+     *
      * @param ind an individual
      * @param from a TimeStep
      * @param to a TimeStep
@@ -1830,15 +1830,15 @@ public double calculateMaxSpeedForGroupInOneTimestep(ArrayList<Individual> indgr
             }
             if (from>safetyTime) {
                 throw new IncorrectTimeException();
-            }   
+            }
         }
-        
+
         if (from<to) {
-            if (!(ind.getDeathCause() != null && ind.getDeathCause().compareTo(ds.ca.evac.Individual.DeathCause.EXIT_UNREACHABLE)==0)) {
+            if (!(ind.getDeathCause() != null && ind.getDeathCause().compareTo(ds.ca.evac.DeathCause.ExitUnreachable)==0)) {
                 if (panicTimes.containsKey(ind)) {
                     if (from==0) {
                         from=1;
-                    }                    
+                    }
                     int indexOfFrom = (Collections.binarySearch(panicTimes.get(ind),from));
                     if (indexOfFrom< 0) {
                         indexOfFrom = -indexOfFrom-2;
@@ -1846,7 +1846,7 @@ public double calculateMaxSpeedForGroupInOneTimestep(ArrayList<Individual> indgr
                     if (indexOfFrom < 0) {
                         throw new IncorrectTimeException();
                     }
-                    
+
                     int indexOfTo = (Collections.binarySearch(panicTimes.get(ind),to));
                     if (indexOfTo< 0) {
                         indexOfTo = -indexOfTo-2;
@@ -1854,16 +1854,16 @@ public double calculateMaxSpeedForGroupInOneTimestep(ArrayList<Individual> indgr
                     if (indexOfTo < 0) {
                         throw new IncorrectTimeException();
                     }
-                                        
+
                     double lastPanic=panic.get(ind).get(indexOfFrom);
                     double weightedPanicSum=0;
                     int stepTo;
                     int stepFrom=from;
-                    
+
                     if (indexOfFrom==indexOfTo){
                         return currentSpeed.get(ind).get(indexOfFrom);
-                    }                    
-                    
+                    }
+
                     for (int i=indexOfFrom+1; i<indexOfTo; i++ )  {
                         stepTo=panicTimes.get(ind).get(i);
                         weightedPanicSum+=lastPanic*(stepTo-stepFrom);
@@ -1873,11 +1873,11 @@ public double calculateMaxSpeedForGroupInOneTimestep(ArrayList<Individual> indgr
                     //last step:
                     stepTo=to;
                     weightedPanicSum+=lastPanic*(stepTo-stepFrom);
-                    
+
                     return weightedPanicSum/(to-from);
                 }
                 //duerfte nicht vorkommen
-                throw new IllegalArgumentException();                
+                throw new IllegalArgumentException();
             }
             // ind tot, weil eingeschlossen
             throw new OneIndNoPotentialException(ind);
@@ -1887,11 +1887,11 @@ public double calculateMaxSpeedForGroupInOneTimestep(ArrayList<Individual> indgr
         }
         else
         // Zeiten falsch
-        throw new IncorrectTimeException();        
-    }  
-  
+        throw new IncorrectTimeException();
+    }
+
     /**
-     * 
+     *
      * @param ind an individual
      * @param time a TimeStep
      * @return the maximum panic of the individual from the beginning of the simulation to TimeStep "time"
@@ -1900,12 +1900,12 @@ public double calculateMaxSpeedForGroupInOneTimestep(ArrayList<Individual> indgr
      * @throws statistic.ca.exception.IncorrectTimeException if the given TimeStep(s) is/are less than 0 or are in wrong order
      */
     public double calculateMaxPanic(Individual ind, int time) throws OneIndNoPotentialException, IncorrectTimeException {
-        return calculateMaxPanic(ind, 0, time);       
+        return calculateMaxPanic(ind, 0, time);
     }
-    
-    
+
+
     /**
-     * 
+     *
      * @param ind an individual
      * @param from a TimeStep
      * @param to a TimeStep
@@ -1916,14 +1916,14 @@ public double calculateMaxSpeedForGroupInOneTimestep(ArrayList<Individual> indgr
      */
     public double calculateMaxPanic (Individual ind, int from, int to) throws OneIndNoPotentialException, IncorrectTimeException {
         if (from<to) {
-            if (!(ind.getDeathCause() != null && ind.getDeathCause().compareTo(ds.ca.evac.Individual.DeathCause.EXIT_UNREACHABLE)==0)) {
+            if (!(ind.getDeathCause() != null && ind.getDeathCause().compareTo(ds.ca.evac.DeathCause.ExitUnreachable)==0)) {
                 if (panicTimes.containsKey(ind)) {
                     if (ind.isSafe()) {
                         int safetyTime=ind.getSafetyTime();
                         if (to>safetyTime) {
                             to=safetyTime;
                         }
-                    }                
+                    }
                     int indexOfFrom = (Collections.binarySearch(panicTimes.get(ind),from));
                     if (indexOfFrom< 0) {
                         indexOfFrom = -indexOfFrom-2;
@@ -1931,7 +1931,7 @@ public double calculateMaxSpeedForGroupInOneTimestep(ArrayList<Individual> indgr
                     if (indexOfFrom < 0) {
                         throw new IllegalArgumentException();
                     }
-                    
+
                     int indexOfTo = (Collections.binarySearch(panicTimes.get(ind),to));
                     if (indexOfTo< 0) {
                         indexOfTo = -indexOfTo-2;
@@ -1939,10 +1939,10 @@ public double calculateMaxSpeedForGroupInOneTimestep(ArrayList<Individual> indgr
                     if (indexOfTo < 0) {
                         throw new IllegalArgumentException();
                     }
-                                        
+
                     double actualPanic;
                     double maxPanic=0;
-                    
+
                     for (int i=indexOfFrom; i<=indexOfTo; i++ )  {
                         actualPanic=panic.get(ind).get(i);
                         if (actualPanic > maxPanic) {
@@ -1952,7 +1952,7 @@ public double calculateMaxSpeedForGroupInOneTimestep(ArrayList<Individual> indgr
                     return maxPanic;
                 }
                 //duerfte nicht vorkommen
-                throw new IllegalArgumentException();                
+                throw new IllegalArgumentException();
             }
             // ind tot, weil eingeschlossen
             throw new OneIndNoPotentialException(ind);
@@ -1962,12 +1962,12 @@ public double calculateMaxSpeedForGroupInOneTimestep(ArrayList<Individual> indgr
         }
         else
         // Zeiten falsch
-        throw new IncorrectTimeException();        
-    }    
-       
-  
+        throw new IncorrectTimeException();
+    }
+
+
     /**
-     * 
+     *
      * @param ind an individual
      * @param time a TimeStep
      * @return the minimum panic the individual had from the beginning of the simulation to TimeStep "time" except for the panic at the beginning of the simulation
@@ -1977,12 +1977,12 @@ public double calculateMaxSpeedForGroupInOneTimestep(ArrayList<Individual> indgr
      * @throws statistic.ca.exception.IncorrectTimeException if the given TimeStep(s) is/are less than 0 or are in wrong order
      */
     public double calculateMinPanicExceptingStartPanic(Individual ind, int time) throws OneIndNoPotentialException, IncorrectTimeException {
-        return calculateMinPanicExceptingStartPanic(ind, 0, time);       
+        return calculateMinPanicExceptingStartPanic(ind, 0, time);
     }
-    
-    
+
+
     /**
-     * 
+     *
      * @param ind an individual
      * @param from a TimeStep
      * @param to a TimeStep
@@ -1994,7 +1994,7 @@ public double calculateMaxSpeedForGroupInOneTimestep(ArrayList<Individual> indgr
      */
     public double calculateMinPanicExceptingStartPanic (Individual ind, int from, int to) throws OneIndNoPotentialException, IncorrectTimeException {
         if (from<to) {
-            if (!(ind.getDeathCause() != null && ind.getDeathCause().compareTo(ds.ca.evac.Individual.DeathCause.EXIT_UNREACHABLE)==0)) {
+            if (!(ind.getDeathCause() != null && ind.getDeathCause().compareTo(ds.ca.evac.DeathCause.ExitUnreachable)==0)) {
                 if (panicTimes.containsKey(ind)) {
                     if (ind.isSafe()) {
                         int safetyTime=ind.getSafetyTime();
@@ -2011,7 +2011,7 @@ public double calculateMaxSpeedForGroupInOneTimestep(ArrayList<Individual> indgr
                         }
                         if (to<from) {
                             return panic.get(ind).get(0);
-                        }                        
+                        }
                     }
                     int indexOfFrom = (Collections.binarySearch(panicTimes.get(ind),from));
                     if (indexOfFrom< 0) {
@@ -2020,7 +2020,7 @@ public double calculateMaxSpeedForGroupInOneTimestep(ArrayList<Individual> indgr
                     if (indexOfFrom < 0) {
                         throw new IllegalArgumentException();
                     }
-                    
+
                     int indexOfTo = (Collections.binarySearch(panicTimes.get(ind),to));
                     if (indexOfTo< 0) {
                         indexOfTo = -indexOfTo-2;
@@ -2028,20 +2028,20 @@ public double calculateMaxSpeedForGroupInOneTimestep(ArrayList<Individual> indgr
                     if (indexOfTo < 0) {
                         throw new IllegalArgumentException();
                     }
-                                        
+
                     double actualPanic;
                     double minPanic=Double.MAX_VALUE;
-                    
+
                     for (int i=indexOfFrom; i<=indexOfTo; i++ )  {
                         actualPanic=panic.get(ind).get(i);
                         if (actualPanic < minPanic) {
                             minPanic=actualPanic;
                         }
-                    }                    
+                    }
                     return minPanic;
                 }
                 //duerfte nicht vorkommen
-                throw new IllegalArgumentException();                
+                throw new IllegalArgumentException();
             }
             // ind tot, weil eingeschlossen
             throw new OneIndNoPotentialException(ind);
@@ -2051,14 +2051,14 @@ public double calculateMaxSpeedForGroupInOneTimestep(ArrayList<Individual> indgr
         }
         else
         // Zeiten falsch
-        throw new IncorrectTimeException();        
-    }    
-       
-    
-    
- 
+        throw new IncorrectTimeException();
+    }
+
+
+
+
     /**
-     * 
+     *
      * @param indgroup a list of individuals
      * @param t a TimeStep
      * @return the average of the individuals` panicvalues in TimeStep "t"
@@ -2068,12 +2068,12 @@ public double calculateMaxSpeedForGroupInOneTimestep(ArrayList<Individual> indgr
      * OR if all individuals` first stored values lie after the timestep "t"
      * @see #getPanic
 * @throws statistic.ca.exception.IncorrectTimeException
-* if "timestep" is less than 0 
+* if "timestep" is less than 0
 * @throws statistic.ca.exception.MissingStoredValueException
 * if at least one individual had no speedvalue in timestep 1
 * @throws statistic.ca.exception.GroupOfIndsNoValueBecauseAlreadySafeException
 * if at least one individual is already safe in timestep "timestep" AND all other individuals have no static potential or are already safe in timestep "timestep"
-*/    
+*/
     public double getPanicForGroup(ArrayList<Individual> indgroup, int t) throws GroupOfIndsNoPotentialException, IncorrectTimeException, IllegalArgumentException{
         int noOfNoPotExc=0;
         double panicSum=0;
@@ -2087,7 +2087,7 @@ public double calculateMaxSpeedForGroupInOneTimestep(ArrayList<Individual> indgr
             catch (OneIndNoPotentialException ex) {noOfNoPotExc++;}
             catch (OneIndNoValueBecauseAlreadySafeException e) {}
         }
-        
+
         if (numberOfInds!=0) {
             return panicSum/numberOfInds;
         }
@@ -2101,16 +2101,16 @@ public double calculateMaxSpeedForGroupInOneTimestep(ArrayList<Individual> indgr
                 throw new GroupOfIndsNoValueBecauseAlreadySafeException(indgroup);
             }
         }
-            
-    }    
-        
-    
-    
-    
-    
-   
+
+    }
+
+
+
+
+
+
     /**
-     * 
+     *
      * @param indgroup a list of individuals
      * @param time a TimeStep
      * @return the average of the individuals` average-panics from the beginning of the simulation to TimeStep "time"
@@ -2122,10 +2122,10 @@ public double calculateMaxSpeedForGroupInOneTimestep(ArrayList<Individual> indgr
     public double calculateAverageAveragePanicForGroup(ArrayList<Individual> indgroup, int time) throws GroupOfIndsNoPotentialException, IncorrectTimeException{
         return calculateAverageAveragePanicForGroup(indgroup, 0, time);
     }
-    
-    
+
+
     /**
-     * 
+     *
      * @param indgroup a list of individuals
      * @param from a TimeStep
      * @param to a TimeStep
@@ -2145,7 +2145,7 @@ public double calculateMaxSpeedForGroupInOneTimestep(ArrayList<Individual> indgr
                 averagePanicSum += averagePanicOfInd;
                 numberOfInds += 1;
             }
-            catch (OneIndNoPotentialException ex) {}        
+            catch (OneIndNoPotentialException ex) {}
         }
         if (numberOfInds!=0) {
             return averagePanicSum/numberOfInds;
@@ -2153,11 +2153,11 @@ public double calculateMaxSpeedForGroupInOneTimestep(ArrayList<Individual> indgr
         else
             // alle ind tot weil eingeschlossen
             throw new GroupOfIndsNoPotentialException(indgroup);
-    }    
-    
-    
+    }
+
+
     /**
-     * 
+     *
      * @param indgroup a list of individuals
      * @param time a TimeStep
      * @return the average of the individuals` maximum-panics from the beginning of the simulation to TimeStep "time"
@@ -2169,9 +2169,9 @@ public double calculateMaxSpeedForGroupInOneTimestep(ArrayList<Individual> indgr
     public double calculateAverageMaxPanicForGroup(ArrayList<Individual> indgroup, int time)  throws GroupOfIndsNoPotentialException, IncorrectTimeException{
         return calculateAverageMaxPanicForGroup(indgroup, 0, time);
     }
-    
+
     /**
-     * 
+     *
      * @param indgroup a list of individuals
      * @param from a TimeStep
      * @param to a TimeStep
@@ -2186,7 +2186,7 @@ public double calculateMaxSpeedForGroupInOneTimestep(ArrayList<Individual> indgr
         double maxPanicOfInd;
         int numberOfInds=0;
         for (Individual ind : indgroup) {
-            try {               
+            try {
                 maxPanicOfInd=calculateMaxPanic(ind, from,to);
                 maxPanicSum += maxPanicOfInd;
                 numberOfInds += 1;
@@ -2196,12 +2196,12 @@ public double calculateMaxSpeedForGroupInOneTimestep(ArrayList<Individual> indgr
         if (numberOfInds!=0) {
             return maxPanicSum/numberOfInds;
         }
-        else throw new GroupOfIndsNoPotentialException(indgroup); 
-    }      
-    
-    
+        else throw new GroupOfIndsNoPotentialException(indgroup);
+    }
+
+
     /**
-     * 
+     *
      * @param indgroup a list of individuals
      * @param time a TimeStep
      * @return the average of the individuals` minimum-panics from the beginning of the simulation to TimeStep "time"
@@ -2213,9 +2213,9 @@ public double calculateMaxSpeedForGroupInOneTimestep(ArrayList<Individual> indgr
     public double calculateAverageMinPanicForGroup(ArrayList<Individual> indgroup, int time)  throws GroupOfIndsNoPotentialException, IncorrectTimeException{
         return calculateAverageMinPanicForGroup(indgroup, 0, time);
     }
-    
+
     /**
-     * 
+     *
      * @param indgroup a list of individuals
      * @param from a TimeStep
      * @param to a TimeStep
@@ -2230,7 +2230,7 @@ public double calculateMaxSpeedForGroupInOneTimestep(ArrayList<Individual> indgr
         double minPanicOfInd;
         int numberOfInds=0;
         for (Individual ind : indgroup) {
-            try {               
+            try {
                 minPanicOfInd=calculateMinPanicExceptingStartPanic(ind, from,to);
                 minPanicSum += minPanicOfInd;
                 numberOfInds += 1;
@@ -2240,12 +2240,12 @@ public double calculateMaxSpeedForGroupInOneTimestep(ArrayList<Individual> indgr
         if (numberOfInds!=0) {
             return minPanicSum/numberOfInds;
         }
-        else throw new GroupOfIndsNoPotentialException(indgroup); 
-    }      
-    
-    
+        else throw new GroupOfIndsNoPotentialException(indgroup);
+    }
+
+
     /**
-     * 
+     *
      * @param indgroup a list of individuals
      * @param time a TimeStep
      * @return the maximum of the individuals` average-panics from the beginning of the simulation to TimeStep "time"
@@ -2257,9 +2257,9 @@ public double calculateMaxSpeedForGroupInOneTimestep(ArrayList<Individual> indgr
     public double calculateMaxAveragePanicForGroup(ArrayList<Individual> indgroup, int time)  throws GroupOfIndsNoPotentialException, IncorrectTimeException{
         return calculateMaxAveragePanicForGroup(indgroup, 0, time);
     }
-    
+
     /**
-     * 
+     *
      * @param indgroup a list of individuals
      * @param from a TimeStep
      * @param to a TimeStep
@@ -2288,11 +2288,11 @@ public double calculateMaxSpeedForGroupInOneTimestep(ArrayList<Individual> indgr
             }
             throw new GroupOfIndsNoPotentialException(indgroup);
     }
-    
-    
-    
+
+
+
     /**
-     * 
+     *
      * @param indgroup a list of individuals
      * @param time a TimeStep
      * @return the maximum of the individuals` maximum-panics from the beginning of the simulation to TimeStep "time"
@@ -2304,9 +2304,9 @@ public double calculateMaxSpeedForGroupInOneTimestep(ArrayList<Individual> indgr
     public double calculateMaxMaxPanicForGroup(ArrayList<Individual> indgroup, int time) throws GroupOfIndsNoPotentialException, IncorrectTimeException{
         return calculateMaxMaxPanicForGroup(indgroup, 0, time);
     }
-    
+
     /**
-     * 
+     *
      * @param indgroup a list of individuals
      * @param from a TimeStep
      * @param to a TimeStep
@@ -2326,20 +2326,20 @@ public double calculateMaxSpeedForGroupInOneTimestep(ArrayList<Individual> indgr
                 nrOfInds++;
                 if (maxPanicOfInd > maxPanic) {
                     maxPanic=maxPanicOfInd;
-                }     
+                }
             }
             catch (OneIndNoPotentialException ex) {}
         }
         if (nrOfInds!=0) {
             return maxPanic;
         }
-        throw new GroupOfIndsNoPotentialException(indgroup); 
-    }    
-    
-    
-    
+        throw new GroupOfIndsNoPotentialException(indgroup);
+    }
+
+
+
     /**
-     * 
+     *
      * @param indgroup a list of individuals
      * @param time a TimeStep
      * @return the minimum of the individuals` average-panics from the beginning of the simulation to TimeStep "time"
@@ -2351,9 +2351,9 @@ public double calculateMaxSpeedForGroupInOneTimestep(ArrayList<Individual> indgr
     public double calculateMinAveragePanicForGroup(ArrayList<Individual> indgroup, int time)  throws GroupOfIndsNoPotentialException, IncorrectTimeException{
         return calculateMinAveragePanicForGroup(indgroup, 0, time);
     }
-    
+
     /**
-     * 
+     *
      * @param indgroup a list of individuals
      * @param from a TimeStep
      * @param to a TimeStep
@@ -2375,18 +2375,18 @@ public double calculateMaxSpeedForGroupInOneTimestep(ArrayList<Individual> indgr
                     minPanic=averagePanicOfInd;
                 }
             }
-            catch (OneIndNoPotentialException ex ) {} 
+            catch (OneIndNoPotentialException ex ) {}
         }
         if (nrOfInds!=0) {
             return minPanic;
         }
         throw new GroupOfIndsNoPotentialException(indgroup);
-    }   
-    
-    
-    
+    }
+
+
+
     /**
-     * 
+     *
      * @param indgroup a list of individuals
      * @param time a TimeStep
      * @return the minimum of the individuals` minimum-panics from the beginning of the simulation to TimeStep "time"
@@ -2398,9 +2398,9 @@ public double calculateMaxSpeedForGroupInOneTimestep(ArrayList<Individual> indgr
     public double calculateMinMinPanicForGroup(ArrayList<Individual> indgroup, int time) throws GroupOfIndsNoPotentialException, IncorrectTimeException{
         return calculateMinMinPanicForGroup(indgroup, 0, time);
     }
-    
+
     /**
-     * 
+     *
      * @param indgroup a list of individuals
      * @param from a TimeStep
      * @param to a TimeStep
@@ -2420,30 +2420,30 @@ public double calculateMaxSpeedForGroupInOneTimestep(ArrayList<Individual> indgr
                 nrOfInds++;
                 if (minPanicOfInd > minPanic) {
                     minPanic=minPanicOfInd;
-                }     
+                }
             }
             catch (OneIndNoPotentialException ex) {}
         }
         if (nrOfInds!=0) {
             return minPanic;
         }
-        throw new GroupOfIndsNoPotentialException(indgroup); 
-    }         
-        
-    
-       
-       
-    
-    
-    
-    
-    
-    
+        throw new GroupOfIndsNoPotentialException(indgroup);
+    }
+
+
+
+
+
+
+
+
+
+
 
    // exits and distances to exits
-    
+
     /**
-     * 
+     *
      * @param ind an individual; an individual
      * @param t a TimeStep
      * @return the list of exitcells, over which the individual actually (in TimeStep t) plannes to leave the building
@@ -2463,15 +2463,15 @@ public double calculateMaxSpeedForGroupInOneTimestep(ArrayList<Individual> indgr
                     else
                         // ind hat zum Zeitpunkt t noch kein Potential
                         throw new OneIndNoPotentialException(ind);
-                    
+
                 }
                 //ind hat überhaupt nie ein Potential gehabt
 		throw new OneIndNoPotentialException(ind);
 	}
- 
-         
+
+
    /**
-     * 
+     *
      * @param ind an individual
      * @return the StaticPotential to which`s exit the individual has left the building
      * @throws statistic.ca.exception.OneIndNoPotentialException
@@ -2485,10 +2485,10 @@ public double calculateMaxSpeedForGroupInOneTimestep(ArrayList<Individual> indgr
                 return takenExit.get(ind);
     }
 
-    
-      
+
+
     /**
-     * 
+     *
      * @param ind an individual
      * @return the minimal distance from the starting position of the individual to the nearest exit
      * @throws statistic.ca.exception.OneIndNoPotentialException
@@ -2500,10 +2500,10 @@ public double calculateMaxSpeedForGroupInOneTimestep(ArrayList<Individual> indgr
             throw new OneIndNoPotentialException(ind);
         }
             return minDistanceToNearestExit.get(ind);
-    } 
-    
+    }
+
         /**
-     * 
+     *
      * @param ind an individual
      * @return the minimal distance from the starting position of the individual to the FIRST planned exit
      * @throws statistic.ca.exception.OneIndNoPotentialException
@@ -2515,12 +2515,12 @@ public double calculateMaxSpeedForGroupInOneTimestep(ArrayList<Individual> indgr
             throw new OneIndNoPotentialException(ind);
         }
             return minDistanceToPlannedExit.get(ind);
-    } 
+    }
 
-    
- 
+
+
     /**
-     * 
+     *
      * @param indgroup a list of individuals
      * @return the average of the individuals` minDistanceToNearestExit
      * (this value is calculated only over those individuals which have a potential)
@@ -2536,25 +2536,25 @@ public double calculateMaxSpeedForGroupInOneTimestep(ArrayList<Individual> indgr
                 distanceSum += minDistanceToNearestExit(i);
                 noOfIndividuals++;
             }
-            catch (OneIndNoPotentialException e) { }	
+            catch (OneIndNoPotentialException e) { }
     	}
         if (noOfIndividuals==0) {
             throw new GroupOfIndsNoPotentialException(indgroup);
         }
         return distanceSum/noOfIndividuals;
     }
-    
 
-    
+
+
     /**
-     * 
+     *
      * @param indgroup a list of individuals
      * @return the average of the individuals` minDistanceToPlannedExit
      * (this value is calculated only over those individuals which have a potential)
      * @see #minDistanceToPlannedExit
      * @throws statistic.ca.exception.GroupOfIndsNoPotentialException if all individuals have no static potential (there`s no exit reachable from the individuals` positions)
      * @throws java.lang.IllegalArgumentException
-     */  
+     */
     public double minDistanceToPlannedExitForGroup(ArrayList<Individual> indgroup) throws GroupOfIndsNoPotentialException, IllegalArgumentException{
     	double distanceSum = 0.0;
         int noOfIndividuals=0;
@@ -2563,19 +2563,19 @@ public double calculateMaxSpeedForGroupInOneTimestep(ArrayList<Individual> indgr
                 distanceSum += minDistanceToPlannedExit(i);
                 noOfIndividuals++;
             }
-            catch (OneIndNoPotentialException e) { }	
+            catch (OneIndNoPotentialException e) { }
     	}
         if (noOfIndividuals==0) {
             throw new GroupOfIndsNoPotentialException(indgroup);
         }
         return distanceSum/noOfIndividuals;
     }
-    
-    
-    
-   
+
+
+
+
     /**
-     * 
+     *
      * @param ind an individual
      * @param time a TimeStep
      * @return the difference between the individual`s minDistanceToPlannedExit and the distance which the individual had covered until TimeStep "time"
@@ -2587,13 +2587,13 @@ public double calculateMaxSpeedForGroupInOneTimestep(ArrayList<Individual> indgr
     public double calculateDifferenceMinAndRealDistanceToPlannedExit(Individual ind, int time) throws OneIndNoPotentialException, IncorrectTimeException {
         double toNearestExit=minDistanceToNearestExit(ind);
         return getCoveredDistance(ind,time)-toNearestExit;
-    }    
-    
- 
-  
+    }
+
+
+
 
     /**
-     * 
+     *
      * @param ind an individual
      * @return the difference between the individual`s minDistanceToPlannedExit and minDistanceToNearestExit
      * @see  #minDistanceToPlannedExit
@@ -2604,25 +2604,25 @@ public double calculateMaxSpeedForGroupInOneTimestep(ArrayList<Individual> indgr
         double toPlannedExit=minDistanceToPlannedExit(ind);
         return toPlannedExit-minDistanceToNearestExit(ind);
     }
-    
 
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
+
+
+
+
+
+
+
+
+
+
+
+
+
     // safetyTime and savedIndividuals
-    
-        
+
+
    /**
-    * 
+    *
     * @param ind an individual; an individual
     * @return the TimeStep, in which the individual has first entered a save- or exitcell
     * @throws statistic.ca.exception.OneIndNotSafeException if the individual has never entered a save- or exitcell
@@ -2634,10 +2634,10 @@ public double calculateMaxSpeedForGroupInOneTimestep(ArrayList<Individual> indgr
         // ind nicht safe
         throw new OneIndNotSafeException(ind);
     }
-    
-    
+
+
         /**
-     * 
+     *
      * @param ind an individual
      * @param time a TimeStep
      * @return true, if the individual is already safe in TimeStep "time"; false otherwise
@@ -2654,10 +2654,10 @@ public double calculateMaxSpeedForGroupInOneTimestep(ArrayList<Individual> indgr
         }
         else return false;
     }
-        
-  
+
+
      /**
-     * 
+     *
      * @param indgroup a list of individuals
      * @return the average of the numbers of TimeSteps in which the individuals first entered a save- or exitcell
      * (this value is calculated only over those individuals which are safe at the end of the simulation)
@@ -2675,18 +2675,18 @@ public double calculateMaxSpeedForGroupInOneTimestep(ArrayList<Individual> indgr
                 safetyTimeSum += safetyTimeOfInd;
                 numberOfInds += 1;
             }
-            catch (OneIndNotSafeException ex ) {} 
+            catch (OneIndNotSafeException ex ) {}
         }
         if (numberOfInds!=0) {
             return safetyTimeSum/numberOfInds;
         }
-        throw new GroupOfIndsNotSafeException(indgroup); 
-    } 
-  
-    
-      
+        throw new GroupOfIndsNotSafeException(indgroup);
+    }
+
+
+
     /**
-     * 
+     *
      * @param indgroup a list of individuals
      * @return the maximum of the individuals` SafetyTimes
      * @see #getSafetyTime
@@ -2705,18 +2705,18 @@ public double calculateMaxSpeedForGroupInOneTimestep(ArrayList<Individual> indgr
                     maxSafetyTime=safetyTimeOfInd;
                 }
             }
-            catch (OneIndNotSafeException ex ) {} 
+            catch (OneIndNotSafeException ex ) {}
         }
         if (nrOfInds!=0) {
             return maxSafetyTime;
         }
-        throw new GroupOfIndsNotSafeException(indgroup); 
+        throw new GroupOfIndsNotSafeException(indgroup);
     }
-    
-    
-    
+
+
+
     /**
-     * 
+     *
      * @param indgroup a list of individuals
      * @return the minimum of the individuals` SafetyTimes
      * @see #getSafetyTime
@@ -2735,24 +2735,24 @@ public double calculateMaxSpeedForGroupInOneTimestep(ArrayList<Individual> indgr
                     minSafetyTime=safetyTimeOfInd;
                 }
             }
-            catch (OneIndNotSafeException ex ) {} 
+            catch (OneIndNotSafeException ex ) {}
         }
         if (nrOfInds!=0) {
             return minSafetyTime;
         }
-        throw new GroupOfIndsNotSafeException(indgroup); 
-    } 
-    
-    
-  
-    
+        throw new GroupOfIndsNotSafeException(indgroup);
+    }
+
+
+
+
     /**
-     * 
+     *
      * @param indgroup a list of individuals
      * @param time a TimeStep
      * @return the number of individuals which are already safe in TimeStep "time"
      * @see #isIndividualSafe
-     * @throws statistic.ca.exception.IncorrectTimeException 
+     * @throws statistic.ca.exception.IncorrectTimeException
               * if "time" is less than 0
      */
     public int getNumberOfSafeIndividualForGroup(ArrayList<Individual> indgroup, int time) throws IncorrectTimeException{
@@ -2764,12 +2764,12 @@ public double calculateMaxSpeedForGroupInOneTimestep(ArrayList<Individual> indgr
         }
     	return result;
     }
-    
-    
-     
-    
+
+
+
+
     /**
-     * 
+     *
      * @param indgroup a list of individuals
      * @return the percentage of individuals which are safe at the end of the simulation from the given individuals
      */
@@ -2788,31 +2788,31 @@ public double calculateMaxSpeedForGroupInOneTimestep(ArrayList<Individual> indgr
         else {
             throw new IllegalArgumentException("Indgroup with no individuals");
         }
-    }      
-    
-    
+    }
 
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
     // waitedTime
-      
+
     /**
-     * 
+     *
      * @param ind an individual
      * @param t a TimeStep
      * @return the number of TimeSteps in which the individual waited (=all neighbourcells were occupied by other individuals) from the beginning of the simulation to TimeStep "time"
@@ -2822,8 +2822,8 @@ public double calculateMaxSpeedForGroupInOneTimestep(ArrayList<Individual> indgr
      * if "t" is less than 0
      */
     public int getWaitedTime(Individual ind, int t) throws OneIndNoPotentialException, IncorrectTimeException{
-     
-        if (ind.getDeathCause() != null && ind.getDeathCause().compareTo(ds.ca.evac.Individual.DeathCause.EXIT_UNREACHABLE)==0) {
+
+        if (ind.getDeathCause() != null && ind.getDeathCause().compareTo(ds.ca.evac.DeathCause.ExitUnreachable)==0) {
             // ind tot weil eingeschlossen
             throw new OneIndNoPotentialException(ind);
         }
@@ -2832,43 +2832,43 @@ public double calculateMaxSpeedForGroupInOneTimestep(ArrayList<Individual> indgr
             //ind hat nie gewartet
             return 0;
         }
-        
+
         if (t<0) {
             // Zeit ist falsch
             throw new IncorrectTimeException();
         }
-        
+
         if (t==0) {
             return 0;
-        }      
-            
+        }
+
 
         int index = Collections.binarySearch(waitedTimeTimes.get(ind),t);
         if (index< 0) {
             index = -index-2;
         }
-        
+
         if (index <0) {
             // ind hat zum Zeitpunkt t noch nicht gewartet
-            return 0; 
+            return 0;
         }
-        
+
 
         return waitedTime.get(ind).get(index);
 
-   
+
     }
 
-    
-     
+
+
 
      /**
-     * 
+     *
      * @param ind an individual
      * @param from a TimeStep
      * @param to a TimeStep
      * @return the number of TimeSteps in which the individual waited (=all neighbourcells were occupied by other individuals) from the TimeStep "from" to the TimeStep "to"
-      * 
+      *
            * @throws statistic.ca.exception.OneIndNoPotentialException
      * if the individual has no static potential (there`s no exit reachable from the individual`s position)
      * @throws statistic.ca.exception.IncorrectTimeException
@@ -2882,10 +2882,10 @@ public double calculateMaxSpeedForGroupInOneTimestep(ArrayList<Individual> indgr
         return getWaitedTime(ind, to)-getWaitedTime(ind, from);
     }
 
-  
-     
+
+
     /**
-     * 
+     *
      * @param indgroup a list of individuals
      * @param time a TimeStep
      * @return the average of the numbers of TimeSteps in which the individuals waited from the beginning of the simulation to TimeStep "time"
@@ -2894,14 +2894,14 @@ public double calculateMaxSpeedForGroupInOneTimestep(ArrayList<Individual> indgr
    * @throws statistic.ca.exception.GroupOfIndsNoPotentialException
      * if all individuals have no potential
     * @throws statistic.ca.exception.IncorrectTimeException
-    * if "time" is less than 0 
+    * if "time" is less than 0
     */
     public double  calculateAverageWaitedTimeForGroup(ArrayList<Individual> indgroup, int time) throws GroupOfIndividualsException, IncorrectTimeException{
     	return calculateAverageWaitedTimeForGroup(indgroup, 0, time);
     }
-    
+
     /**
-     * 
+     *
      * @param indgroup a list of individuals
      * @param from a TimeStep
      * @param to a TimeStep
@@ -2911,7 +2911,7 @@ public double calculateMaxSpeedForGroupInOneTimestep(ArrayList<Individual> indgr
     * @throws statistic.ca.exception.GroupOfIndsNoPotentialException
 * if all individuals have no potential
     * @throws statistic.ca.exception.IncorrectTimeException
-    * if "from" is bigger than "to" OR "from" is less than 0 OR "to" is less than 0 
+    * if "from" is bigger than "to" OR "from" is less than 0 OR "to" is less than 0
     */
     public double  calculateAverageWaitedTimeForGroup(ArrayList<Individual> indgroup, int from, int to) throws GroupOfIndividualsException, IncorrectTimeException{
         double waitedTimeSum=0;
@@ -2923,17 +2923,17 @@ public double calculateMaxSpeedForGroupInOneTimestep(ArrayList<Individual> indgr
                 waitedTimeSum += waitedTimeOfInd;
                 numberOfInds += 1;
             }
-            catch (OneIndNoPotentialException ex ) {} 
+            catch (OneIndNoPotentialException ex ) {}
         }
         if (numberOfInds!=0) {
             return waitedTimeSum/numberOfInds;
         }
-        throw new GroupOfIndsNoPotentialException(indgroup); 
+        throw new GroupOfIndsNoPotentialException(indgroup);
     }
-    
-     
+
+
     /**
-     * 
+     *
      * @param indgroup a list of individuals
      * @param time a TimeStep
      * @return the maximum of the numbers of TimeSteps in which the individuals waited from the beginning of the simulation to TimeStep "time"
@@ -2942,20 +2942,20 @@ public double calculateMaxSpeedForGroupInOneTimestep(ArrayList<Individual> indgr
    * @throws statistic.ca.exception.GroupOfIndsNoPotentialException
      * if all individuals have no potential
     * @throws statistic.ca.exception.IncorrectTimeException
-    * if "time" is less than 0 
+    * if "time" is less than 0
     */
     public int calculateMaxWaitedTimeForGroup(ArrayList<Individual> indgroup, int time) throws GroupOfIndividualsException, IncorrectTimeException{
         return calculateMaxWaitedTimeForGroup(indgroup, 0, time);
-    } 
-   
-   
-   
-    
-    
-    
-    
+    }
+
+
+
+
+
+
+
     /**
-     * 
+     *
      * @param indgroup a list of individuals
      * @param from a TimeStep
      * @param to a TimeStep
@@ -2965,7 +2965,7 @@ public double calculateMaxSpeedForGroupInOneTimestep(ArrayList<Individual> indgr
     * @throws statistic.ca.exception.GroupOfIndsNoPotentialException
 * if all individuals have no potential
     * @throws statistic.ca.exception.IncorrectTimeException
-    * if "from" is bigger than "to" OR "from" is less than 0 OR "to" is less than 0 
+    * if "from" is bigger than "to" OR "from" is less than 0 OR "to" is less than 0
     */
     public int calculateMaxWaitedTimeForGroup(ArrayList<Individual> indgroup, int from, int to) throws GroupOfIndividualsException, IncorrectTimeException{
         int maxWaitedTime=0;
@@ -2979,17 +2979,17 @@ public double calculateMaxSpeedForGroupInOneTimestep(ArrayList<Individual> indgr
                     maxWaitedTime=waitedTimeOfInd;
                 }
             }
-            catch (OneIndNoPotentialException ex ) {} 
+            catch (OneIndNoPotentialException ex ) {}
         }
         if (nrOfInds!=0) {
             return maxWaitedTime;
         }
-        throw new GroupOfIndsNoPotentialException(indgroup); 
+        throw new GroupOfIndsNoPotentialException(indgroup);
     }
-    
-  
+
+
       /**
-     * 
+     *
      * @param indgroup a list of individuals
      * @param time a TimeStep
      * @return the minimum of the numbers of TimeSteps in which the individuals waited from the beginning of the simulation to TimeStep "time"
@@ -2998,17 +2998,17 @@ public double calculateMaxSpeedForGroupInOneTimestep(ArrayList<Individual> indgr
    * @throws statistic.ca.exception.GroupOfIndsNoPotentialException
      * if all individuals have no potential
     * @throws statistic.ca.exception.IncorrectTimeException
-    * if "time" is less than 0 
+    * if "time" is less than 0
     */
     public int calculateMinWaitedTimeForGroup(ArrayList<Individual> indgroup, int time) throws GroupOfIndsNoPotentialException, IncorrectTimeException{
         return calculateMinWaitedTimeForGroup(indgroup, 0, time);
-    }         
-    
-    
+    }
 
-    
+
+
+
     /**
-     * 
+     *
      * @param indgroup a list of individuals
      * @param from a TimeStep
      * @param to a TimeStep
@@ -3018,7 +3018,7 @@ public double calculateMaxSpeedForGroupInOneTimestep(ArrayList<Individual> indgr
     * @throws statistic.ca.exception.GroupOfIndsNoPotentialException
 * if all individuals have no potential
     * @throws statistic.ca.exception.IncorrectTimeException
-    * if "from" is bigger than "to" OR "from" is less than 0 OR "to" is less than 0 
+    * if "from" is bigger than "to" OR "from" is less than 0 OR "to" is less than 0
     */
     public int calculateMinWaitedTimeForGroup(ArrayList<Individual> indgroup, int from, int to) throws GroupOfIndsNoPotentialException, IncorrectTimeException{
         int minWaitedTime=Integer.MAX_VALUE;
@@ -3032,26 +3032,26 @@ public double calculateMaxSpeedForGroupInOneTimestep(ArrayList<Individual> indgr
                     minWaitedTime=waitedTimeOfInd;
                 }
             }
-            catch (OneIndNoPotentialException ex ) {} 
+            catch (OneIndNoPotentialException ex ) {}
         }
         if (nrOfInds!=0) {
             return minWaitedTime;
         }
-        throw new GroupOfIndsNoPotentialException(indgroup); 
+        throw new GroupOfIndsNoPotentialException(indgroup);
     }
-    
-  
-   
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 }//end class

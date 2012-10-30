@@ -14,8 +14,7 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 package batch.tasks.assignment;
-
-import algo.ca.algorithm.evac.EvacuationCellularAutomatonAlgorithm;
+import algo.ca.framework.EvacuationCellularAutomatonAlgorithm;
 import algo.ca.algorithm.evac.EvacuationSimulationProblem;
 import batch.BatchResultEntry;
 import batch.tasks.AssignmentTask;
@@ -35,7 +34,7 @@ import statistic.ca.CAStatistic;
 import zet.tasks.CellularAutomatonAlgorithmEnumeration;
 
 /**
- *  
+ *
  */
 public class BestResponseAssignmentTask extends AssignmentTask {
 	/** The {@link ds.z.Project} */
@@ -99,7 +98,7 @@ public class BestResponseAssignmentTask extends AssignmentTask {
 
 		//Run the CA
 		start = System.currentTimeMillis();
-		caAlgo.getCellularAutomaton().startRecording();
+		ca2.startRecording();
 
 		caAlgo.initialize();
 
@@ -109,7 +108,7 @@ public class BestResponseAssignmentTask extends AssignmentTask {
 
 
 		caAlgo.run();	// hier wird initialisiert
-		caAlgo.getCellularAutomaton().stopRecording();
+		ca2.stopRecording();
 		end = System.currentTimeMillis();
 		//System.out.println ("Laufzeit CA:" + (end - start) + " ms");
 

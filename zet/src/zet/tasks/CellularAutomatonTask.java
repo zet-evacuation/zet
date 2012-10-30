@@ -4,8 +4,8 @@
  */
 package zet.tasks;
 
-import algo.ca.algorithm.evac.EvacuationCellularAutomatonAlgorithm;
 import algo.ca.algorithm.evac.EvacuationSimulationProblem;
+import algo.ca.framework.EvacuationCellularAutomatonAlgorithm;
 import de.tu_berlin.math.coga.common.algorithm.Algorithm;
 import de.tu_berlin.math.coga.common.algorithm.AlgorithmEvent;
 import de.tu_berlin.math.coga.common.algorithm.AlgorithmListener;
@@ -66,12 +66,12 @@ public class CellularAutomatonTask extends Algorithm<Project, CAVisualizationRes
 		caAlgo.setProblem( new EvacuationSimulationProblem( ( ca ) ) );
 		double caMaxTime = PropertyContainer.getInstance().getAsDouble( "algo.ca.maxTime" );
 		caAlgo.setMaxTimeInSeconds( caMaxTime );
-		caAlgo.getCellularAutomaton().startRecording ();
-		
+		ca.startRecording ();
+
 		caAlgo.addAlgorithmListener( this );
-		
+
 		caAlgo.run();	// hier wird initialisiert
-		caAlgo.getCellularAutomaton().stopRecording();
+		ca.stopRecording();
 
 		// create results
 		//CAVisualizationResults visResults = new CAVisualizationResults( mapping, ca.getPotentialManager() );

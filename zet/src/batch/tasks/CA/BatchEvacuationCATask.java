@@ -119,7 +119,7 @@ public class BatchEvacuationCATask implements Runnable {
     //            gt.setProblem(nfo);
 		gt.run ();
 
-		
+
 		EvacuationCellularAutomaton ca = null;
 //		try {
 //			ca = FlowBasedCAFactory.getFlowBasedCAFactoryInstance ().convertAndApplyConcreteAssignment (project.getBuildingPlan (), gt.getDynamicFlow (), concreteAssignment, nfo.getZToGraphMapping ().
@@ -144,9 +144,9 @@ public class BatchEvacuationCATask implements Runnable {
 		double caMaxTime = PropertyContainer.getInstance ().getAsDouble ("algo.ca.maxTime");
 		caAlgo.setMaxTimeInSeconds (caMaxTime);
 
-		caAlgo.getCellularAutomaton ().startRecording ();
+		ca.startRecording ();
 		caAlgo.run ();
-		caAlgo.getCellularAutomaton ().stopRecording ();
+		ca.stopRecording ();
 		// THREAD end
 		long end = System.currentTimeMillis ();
 		System.out.println ("Laufzeit optimierter CA:" + (end - start) + " ms");
@@ -157,8 +157,8 @@ public class BatchEvacuationCATask implements Runnable {
 				getRecording (), FlowBasedCAFactory.getFlowBasedCAFactoryInstance ().getMapping ()));
 
 		// Gather median information
-		median.put (new Integer (caAlgo.getCellularAutomaton ().getTimeStep ()), runNumber);
-		
+		median.put (new Integer (ca.getTimeStep ()), runNumber);
+
 		// Forget the used batch result entry. This is necessary in case that the batch entries
 		// are stored on disk. Then this reference will inhibit the deletion of the batch result entry
 		res = null;

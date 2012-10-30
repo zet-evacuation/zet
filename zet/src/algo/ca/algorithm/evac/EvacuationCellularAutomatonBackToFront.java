@@ -5,7 +5,6 @@
 
 package algo.ca.algorithm.evac;
 
-import algo.ca.algorithm.evac.EvacuationCellularAutomatonInOrder;
 import algo.ca.util.IndividualDistanceComparator;
 import ds.ca.evac.Individual;
 import java.util.ArrayList;
@@ -19,14 +18,7 @@ import java.util.List;
  * their distance (by means of their currently selected potential field).
  * @author Jan-Philipp Kappmeier
  */
-public class EvacuationCellularAutomatonBackToFront extends EvacuationCellularAutomatonInOrder {
-
-	/**
-	 * Creates a new instance of {@code EvacuationCellularAutomatonBackToFront}.
-	 * @param ca the cellular automaton that is executed
-	 */
-	public EvacuationCellularAutomatonBackToFront( ) {
-	}
+public class EvacuationCellularAutomatonBackToFront extends algo.ca.framework.EvacuationCellularAutomatonAlgorithm {
 
 	/**
 	 * Sorts the (living and not save) individuals within the cellular automaton
@@ -35,7 +27,7 @@ public class EvacuationCellularAutomatonBackToFront extends EvacuationCellularAu
 	 */
 	@Override
 	public List<Individual> getIndividuals() {
-		List<Individual> copy = new ArrayList<>( super.getIndividuals() );
+		List<Individual> copy = new ArrayList<>( getProblem().eca.getIndividuals() );
 		IndividualDistanceComparator<Individual> idc = new IndividualDistanceComparator<>();
 		Collections.sort( copy, idc );
 		Collections.reverse( copy );
@@ -48,6 +40,6 @@ public class EvacuationCellularAutomatonBackToFront extends EvacuationCellularAu
 	 */
 	@Override
 	public String toString() {
-		return "CellularAutomatonBackToFrontExecution";
+		return "EvacuationCellularAutomatonBackToFront";
 	}
 }
