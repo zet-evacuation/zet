@@ -29,26 +29,6 @@ import java.util.UUID;
  * person to an exit.
  */
 public class Individual implements Identifiable {
-
-	public Direction8 getDirection() {
-		return dir;
-	}
-
-	public void setDirection( Direction8 dir ) {
-		this.dir = dir;
-	}
-	
-	
-
-	/**
-	 * Describes the cause of death if an individual dies.
-	 */
-	public enum DeathCause {
-		/** If no exit is reachable. Happens if a person is surrounded by barriers. */
-		EXIT_UNREACHABLE,
-		/** If the {@code Individual} is inside the building when the maximum evacuation time is over. */
-		NOT_ENOUGH_TIME
-	}
 	private int age;
 	private double familiarity;
 	private double panic = 0.0001;
@@ -110,7 +90,7 @@ public class Individual implements Identifiable {
 		this.dir = Direction8.Top; // Just use an arbitrary direction
 
 		/**
-		 * Calibratingfactor - 
+		 * Calibratingfactor -
 		 * The bigger {@code cellCountToChange}, the longer an individual moves before a possible potential change
 		 */
 		cellCountToChange = (int) Math.round( currentSpeed * 15 / 0.4 );
@@ -255,7 +235,7 @@ public class Individual implements Identifiable {
 	}
 
 	/**
-	 * Alarms the Individual and also alarms the room of the cell of the individual.     
+	 * Alarms the Individual and also alarms the room of the cell of the individual.
 	 * @param alarmed decides wheather the individual is alarmed, or if it is stopped being alarmed
 	 */
 	public void setAlarmed( boolean alarmed ) {
@@ -273,7 +253,7 @@ public class Individual implements Identifiable {
 
 	/**
 	 * Get the exhaustion of the Individual
-	 * @return The exhaustion 
+	 * @return The exhaustion
 	 */
 	public double getExhaustion() {
 		return exhaustion;
@@ -305,7 +285,7 @@ public class Individual implements Identifiable {
 
 	/**
 	 * Get the familiarity of the Individual
-	 * @return The familiarity 
+	 * @return The familiarity
 	 */
 	public double getFamiliarity() {
 		return familiarity;
@@ -313,7 +293,7 @@ public class Individual implements Identifiable {
 
 	/**
 	 * Set the familiarity of the Individual
-	 * @param val 
+	 * @param val
 	 */
 	public void setFamiliarity( double val ) {
 		this.familiarity = val;
@@ -327,7 +307,7 @@ public class Individual implements Identifiable {
 		return individualNumber;
 	}
 
-	/** 
+	/**
 	 * Sets the identification Number of the {@code Individual}.
 	 * @param i the number
 	 */
@@ -339,8 +319,17 @@ public class Individual implements Identifiable {
 	 * Returns the identifier of this individual.
 	 * @return the number
 	 */
+	@Override
 	public int id() {
 		return individualNumber;
+	}
+
+	public Direction8 getDirection() {
+		return dir;
+	}
+
+	public void setDirection( Direction8 dir ) {
+		this.dir = dir;
 	}
 
 	/**
@@ -361,7 +350,7 @@ public class Individual implements Identifiable {
 
 	/**
 	 * Set the panic-factor of the Individual
-	 * @param val 
+	 * @param val
 	 */
 	public void setPanicFactor( double val ) {
 		this.panicFactor = val;
@@ -369,7 +358,7 @@ public class Individual implements Identifiable {
 
 	/**
 	 * Get the slackness of the Individual
-	 * @return The slackness 
+	 * @return The slackness
 	 */
 	public double getSlackness() {
 		return slackness;
@@ -377,7 +366,7 @@ public class Individual implements Identifiable {
 
 	/**
 	 * Set the slackness of the Individual
-	 * @param val 
+	 * @param val
 	 */
 	public void setSlackness( double val ) {
 		this.slackness = val;
@@ -393,7 +382,7 @@ public class Individual implements Identifiable {
 
 	/**
 	 * Get the maxSpeed of the Individual
-	 * @return The maxSpeed 
+	 * @return The maxSpeed
 	 */
 	public double getMaxSpeed() {
 		return maxSpeed;
@@ -401,7 +390,7 @@ public class Individual implements Identifiable {
 
 	/**
 	 * Set the currentSpeed of the Individual
-	 * @param currentSpeed 
+	 * @param currentSpeed
 	 */
 	public void setCurrentSpeed( double currentSpeed ) {
 		this.currentSpeed = currentSpeed;
@@ -409,7 +398,7 @@ public class Individual implements Identifiable {
 
 	/**
 	 * Get the currentSpeed of the Individual
-	 * @return The currentSpeed 
+	 * @return The currentSpeed
 	 */
 	public double getCurrentSpeed() {
 		return currentSpeed;
@@ -425,7 +414,7 @@ public class Individual implements Identifiable {
 
 	/**
 	 * Returns the {@link ds.ca.EvacCell} on which the {@code Individual} stands.
-	 * @return The EvacCell 
+	 * @return The EvacCell
 	 */
 	public EvacCell getCell() {
 		return cell;
@@ -433,7 +422,7 @@ public class Individual implements Identifiable {
 
 	/**
 	 * Set the dynamicPotential of the Individual
-	 * @param dp 
+	 * @param dp
 	 */
 	public void setDynamicPotential( DynamicPotential dp ) {
 		this.dynamicPotential = dp;
@@ -441,7 +430,7 @@ public class Individual implements Identifiable {
 
 	/**
 	 * Get the dynamicPotential of the Individual
-	 * @return The dynamicPotential 
+	 * @return The dynamicPotential
 	 */
 	public DynamicPotential getDynamicPotential() {
 		return dynamicPotential;
@@ -449,7 +438,7 @@ public class Individual implements Identifiable {
 
 	/**
 	 * Set the staticPotential of the Individual
-	 * @param sp 
+	 * @param sp
 	 */
 	public void setStaticPotential( StaticPotential sp ) {
 		this.staticPotential = sp;
@@ -457,7 +446,7 @@ public class Individual implements Identifiable {
 
 	/**
 	 * Get the staticPotential of the Individual
-	 * @return The staticPotential 
+	 * @return The staticPotential
 	 */
 	public StaticPotential getStaticPotential() {
 		return staticPotential;

@@ -4,20 +4,20 @@
  */
 package zet.tasks;
 
-import algo.ca.algorithm.evac.EvacuationCellularAutomatonAlgorithm;
 import algo.ca.algorithm.evac.EvacuationSimulationProblem;
+import algo.ca.framework.EvacuationCellularAutomatonAlgorithm;
+import de.tu_berlin.math.coga.common.algorithm.Algorithm;
 import de.tu_berlin.math.coga.zet.converter.cellularAutomaton.AssignmentApplicationInstance;
 import de.tu_berlin.math.coga.zet.converter.cellularAutomaton.CellularAutomatonAssignmentConverter;
 import de.tu_berlin.math.coga.zet.converter.cellularAutomaton.ConvertedCellularAutomaton;
 import de.tu_berlin.math.coga.zet.converter.cellularAutomaton.ZToCAConverter;
 import de.tu_berlin.math.coga.zet.converter.cellularAutomaton.ZToCAMapping;
 import de.tu_berlin.math.coga.zet.converter.cellularAutomaton.ZToCARasterContainer;
-import de.tu_berlin.math.coga.common.algorithm.Algorithm;
-import ds.z.Project;
 import ds.PropertyContainer;
 import ds.ca.evac.EvacuationCellularAutomaton;
 import ds.z.AssignmentType;
 import ds.z.ConcreteAssignment;
+import ds.z.Project;
 
 /**
  *
@@ -30,7 +30,7 @@ public class CellularAutomatonTaskStepByStep extends Algorithm<Project, Void> {
 
 	private boolean performOneStep;
 	private boolean stopMode = false;
-	
+
 	public CellularAutomatonTaskStepByStep() {
 		super();
 	}
@@ -52,7 +52,7 @@ public class CellularAutomatonTaskStepByStep extends Algorithm<Project, Void> {
 	public CellularAutomatonAlgorithmEnumeration getCellularAutomatonAlgorithm() {
 		return cellularAutomatonAlgorithm;
 	}
-	
+
 	@Override
 	protected Void runAlgorithm( Project project ) {
 		// convert cellular automaton, if not provided already

@@ -16,6 +16,7 @@
 package algo.ca.rule;
 
 import algo.ca.algorithm.evac.EvacuationSimulationProblem;
+import ds.ca.evac.DeathCause;
 import java.util.ArrayList;
 import ds.ca.evac.EvacCell;
 import ds.ca.evac.StaticPotential;
@@ -24,7 +25,7 @@ import ds.ca.evac.Individual;
 /**
  * This rule chooses an Individual's (the one standing on the current cell) initial
  * StaticPotential according to the distances to the exits.
- * If the Individual standing on "cell" is caged (it cannot leave the building, 
+ * If the Individual standing on "cell" is caged (it cannot leave the building,
  * because there is now passable way to an exit), this Individual has to die
  * because it cannot be evacuated.
  * @author Marcel Preuß, Sylvie Temme
@@ -35,7 +36,7 @@ public class InitialPotentialShortestPathRule extends AbstractInitialRule {
 	/**
 	 * This rule chooses an Individual's (the one standing on "cell") initial
 	 * StaticPotential. This Potential leads to the nearest exit.
-	 * If the Individual standing on "cell" is caged (it cannot leave the building, 
+	 * If the Individual standing on "cell" is caged (it cannot leave the building,
 	 * because there is now passable way to an ExitCell), this Individual has to die
 	 * because it cannot be evacuated.
 	 * @param cell the cell
@@ -62,7 +63,7 @@ public class InitialPotentialShortestPathRule extends AbstractInitialRule {
 
 		// Check whether the individual is caged and cannot leave the building -> it has to die
 		if( minDistanceToEvacArea == Double.MAX_VALUE )
-			esp.eca.setIndividualDead( individual, Individual.DeathCause.EXIT_UNREACHABLE );
+			esp.eca.setIndividualDead( individual, DeathCause.ExitUnreachable );
 
 		individual.setStaticPotential( initialPotential );
 		esp.caStatisticWriter.getStoredCAStatisticResults().getStoredCAStatisticResultsForIndividuals().addMinDistancesToStatistic( individual, minDistanceToEvacArea, initialPotential.getDistance( cell ) );

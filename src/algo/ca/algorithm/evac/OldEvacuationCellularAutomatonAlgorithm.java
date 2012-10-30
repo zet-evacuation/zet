@@ -28,7 +28,7 @@ import java.util.List;
  *
  * @author Jan-Philipp Kappmeier
  */
-public abstract class EvacuationCellularAutomatonAlgorithm extends CellularAutomatonAlgorithm<EvacuationSimulationProblem, EvacuationSimulationResult> {
+public abstract class OldEvacuationCellularAutomatonAlgorithm extends CellularAutomatonAlgorithm<EvacuationSimulationProblem, EvacuationSimulationResult> {
 	EvacuationSimulationResult esr = new EvacuationSimulationResult();
 	private boolean initialized;
 	private boolean stepByStep = false;
@@ -38,7 +38,7 @@ public abstract class EvacuationCellularAutomatonAlgorithm extends CellularAutom
 	private double maxTimeInSteps = 1;
 	private double maxTimeInSeconds = 300;
 
-	public EvacuationCellularAutomatonAlgorithm() {
+	public OldEvacuationCellularAutomatonAlgorithm() {
 		//this.ca = ca;
 		this.initialized = false;
 	}
@@ -92,10 +92,6 @@ public abstract class EvacuationCellularAutomatonAlgorithm extends CellularAutom
 
 	protected void setInitialized( boolean initialized ) {
 		this.initialized = initialized;
-	}
-
-	public void pause( boolean pause ) {
-		this.pause = pause;
 	}
 
 	public boolean isPaused() {

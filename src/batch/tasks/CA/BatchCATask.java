@@ -20,7 +20,7 @@
  */
 package batch.tasks.CA;
 
-import algo.ca.algorithm.evac.EvacuationCellularAutomatonAlgorithm;
+import algo.ca.framework.EvacuationCellularAutomatonAlgorithm;
 import batch.BatchResultEntry;
 import zet.tasks.CellularAutomatonAlgorithmEnumeration;
 import de.tu_berlin.math.coga.zet.converter.cellularAutomaton.AssignmentApplicationInstance;
@@ -129,7 +129,7 @@ public class BatchCATask implements Runnable {
 
 		// Get the results
 		//res.setCellularAutomatonStatistic( runNumber, new CAStatistic( caAlgo.getesp.caStatisticWriter.getStoredCAStatisticResults() ) );
-		
+
 		// TODO raster
 		res.setCellularAutomatonVisualization( runNumber, new CAVisualizationResults( VisualResultsRecorder.getInstance().getRecording(), null ) );
 		//res.setCellularAutomatonVisualization( runNumber, new CAVisualizationResults( VisualResultsRecorder.getInstance().getRecording(), ZToCAConverter.getInstance().getLatestMapping() ) );

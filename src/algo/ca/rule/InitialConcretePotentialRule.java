@@ -15,6 +15,7 @@
  */
 package algo.ca.rule;
 
+import ds.ca.evac.DeathCause;
 import java.util.ArrayList;
 import java.util.Collections;
 import ds.ca.evac.EvacCell;
@@ -37,7 +38,7 @@ public class InitialConcretePotentialRule extends AbstractInitialRule {
 	 * Checks, whether the rule is executable or not.
 	 * @param cell the cell on which the rule should be executed
 	 * @return Returns true, if an Individual is standing
-	 * on this cell, and moreover this Individual does 
+	 * on this cell, and moreover this Individual does
 	 * not already have a StaticPotential.
 	 */
 	@Override
@@ -48,9 +49,9 @@ public class InitialConcretePotentialRule extends AbstractInitialRule {
 	/**
 	 * This rule chooses an Individual's (the one standing on "cell") initial
 	 * StaticPotential according to the attractivity value of those Exit-Cells, whose
-	 * distances to the Individual are acceptable according to the Individual's 
+	 * distances to the Individual are acceptable according to the Individual's
 	 * familarity value.
-	 * If the Individual standing on "cell" is caged (it cannot leave the building, 
+	 * If the Individual standing on "cell" is caged (it cannot leave the building,
 	 * because there is now passable way to an ExitCell), this Individual has to die
 	 * because it cannot be evacuated.
 	 * @param cell the cell
@@ -77,7 +78,7 @@ public class InitialConcretePotentialRule extends AbstractInitialRule {
 		Collections.sort( potentialToLengthOfWayMapper );
 		// Check whether the individual is caged and cannot leave the building -> it has to die
 		if( potentialToLengthOfWayMapper.size() == 0 ) {
-			esp.eca.setIndividualDead( individual, Individual.DeathCause.EXIT_UNREACHABLE );
+			esp.eca.setIndividualDead( individual, DeathCause.ExitUnreachable );
 		//esp.eca.decreaseNrOfLivingAndNotSafeIndividuals();
 		} else {
 			int nrOfPossiblePotentials = (int) (Math.round( (1 - individual.getFamiliarity()) * potentialToLengthOfWayMapper.size() ));

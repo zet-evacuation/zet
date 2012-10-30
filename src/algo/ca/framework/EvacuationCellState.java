@@ -6,7 +6,6 @@ package algo.ca.framework;
 
 import ds.ca.evac.Individual;
 
-
 /**
  *
  * @author Jan-Philipp Kappmeier

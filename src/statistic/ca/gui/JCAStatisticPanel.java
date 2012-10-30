@@ -63,7 +63,7 @@ import statistic.ca.exception.OneIndNoPotentialException;
 import ds.GraphVisualizationResults;
 import ds.ca.evac.EvacuationCellularAutomaton;
 import ds.ca.evac.Individual;
-import ds.ca.evac.Individual.DeathCause;
+import ds.ca.evac.DeathCause;
 import gui.ZETMain;
 import de.tu_berlin.math.coga.datastructure.NamedIndex;
 import gui.ZETLoader;
@@ -76,9 +76,9 @@ import statistic.ca.exception.AllCyclesNoValueBecauseAlreadySafeException;
 import statistic.ca.exception.AllCyclesNoValueBecauseNotSafeException;
 
 /**
- * 
+ *
  * @author Matthias Woste, Timon Kelter
- * 
+ *
  */
 public class JCAStatisticPanel extends JPanel {
 	private JSplitPane pane;
@@ -204,9 +204,9 @@ public class JCAStatisticPanel extends JPanel {
 	/**
 	 * Wird aufgerufen, falls die in der ComboBox ein neuer Diagrammtyp
 	 * ausgewählt wurde.
-	 * 
+	 *
 	 * @author matthias
-	 * 
+	 *
 	 */
 	private class TypePerformed implements ActionListener {
 		public void actionPerformed( ActionEvent e ) {
@@ -217,7 +217,7 @@ public class JCAStatisticPanel extends JPanel {
 		}
 	}
 
-	/** This class serves as a model for the JComboBox that contains the 
+	/** This class serves as a model for the JComboBox that contains the
 	 * BatchResultEntries. */
 	private class BatchResultEntryComboBoxModel extends DefaultComboBoxModel {
 		BatchResult result;
@@ -716,8 +716,8 @@ public class JCAStatisticPanel extends JPanel {
 				evacCAStep += tmpCA.getTimeStep();
 				evac += tmpCA.getInitialIndividualCount() - tmpCA.deadIndividualsCount();
 				notEvac += tmpCA.deadIndividualsCount();
-				notEvacNoExit += tmpCA.getDeadIndividualCount( DeathCause.EXIT_UNREACHABLE );// getNrOfExitUnreachableDeadIndividuals();
-				notEvacNoTime += tmpCA.getDeadIndividualCount( DeathCause.NOT_ENOUGH_TIME );// getNrOfNotEnoughTimeDeadIndividuals();
+				notEvacNoExit += tmpCA.getDeadIndividualCount( DeathCause.ExitUnreachable );// getNrOfExitUnreachableDeadIndividuals();
+				notEvacNoTime += tmpCA.getDeadIndividualCount( DeathCause.NotEnoughTime );// getNrOfNotEnoughTimeDeadIndividuals();
 				findMedian.put( tmpCA.getTimeStep() * tmpCA.getSecondsPerStep(), i );
 			}
 			bestEvacIndex = findMedian.firstEntry().getValue();

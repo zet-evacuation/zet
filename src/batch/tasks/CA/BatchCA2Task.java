@@ -20,7 +20,7 @@
 
 package batch.tasks.CA;
 
-import algo.ca.algorithm.evac.EvacuationCellularAutomatonAlgorithm;
+import algo.ca.framework.EvacuationCellularAutomatonAlgorithm;
 import algo.graph.exitassignment.ExitAssignment;
 import batch.BatchResultEntry;
 import zet.tasks.CellularAutomatonAlgorithmEnumeration;
@@ -96,9 +96,9 @@ public class BatchCA2Task implements Runnable {
 		} catch( ConversionNotSupportedException ex ) {
 			System.err.println( "ConversionNotSupportedException ist aufgetreten. Dies sollte eigentlich nicht passieren..." );
 			return;
-		}	
+		}
 
-	
+
 		for (AssignmentType at : assignment.getAssignmentTypes ()) {
 			ca2.setAssignmentType (at.getName (), at.getUid ());
 		}
@@ -131,7 +131,7 @@ public class BatchCA2Task implements Runnable {
 
 		// Gather median information
 		//median.put (new Integer (caAlgo.getCellularAutomaton ().getTimeStep ()), runNumber);
-		
+
 		// Forget the used batch result entry. This is necessary in case that the batch entries
 		// are stored on disk. Then this reference will inhibit the deletion of the batch result entry
 		res = null;

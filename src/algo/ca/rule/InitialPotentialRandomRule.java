@@ -16,7 +16,7 @@
 package algo.ca.rule;
 
 import ds.ca.evac.EvacCell;
-import ds.ca.evac.Individual.DeathCause;
+import ds.ca.evac.DeathCause;
 import ds.ca.evac.StaticPotential;
 import java.util.ArrayList;
 import de.tu_berlin.math.coga.rndutils.RandomUtils;
@@ -25,7 +25,7 @@ import de.tu_berlin.math.coga.rndutils.RandomUtils;
  * Sets a random exit to an individual.
  */
 public class InitialPotentialRandomRule extends AbstractInitialRule {
-	/**	 
+	/**
 	 * @param cell the cell
 	 */
 	@Override
@@ -45,7 +45,7 @@ public class InitialPotentialRandomRule extends AbstractInitialRule {
 					break;
 				}
 			if( !exitFound )
-				esp.eca.setIndividualDead( cell.getIndividual(), DeathCause.EXIT_UNREACHABLE );
+				esp.eca.setIndividualDead( cell.getIndividual(), DeathCause.ExitUnreachable );
 		} else
 			cell.getIndividual().setStaticPotential( exits.get( randomExitNumber ) );
 	}

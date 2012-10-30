@@ -30,18 +30,12 @@ import java.util.List;
  *
  * @author Jan-Philipp Kappmeier
  */
-public class EvacuationCellularAutomatonRandom extends EvacuationCellularAutomatonInOrder {
+public class EvacuationCellularAutomatonRandom extends algo.ca.framework.EvacuationCellularAutomatonAlgorithm {
 
-	/**
-	 *
-	 */
-	public EvacuationCellularAutomatonRandom( ) {
-	}
-	
 	@Override
 	public List<Individual> getIndividuals() {
-		Individual[] indArray = super.getIndividuals().toArray( new Individual[0] );
-		// Permutieren
+		Individual[] indArray = getProblem().eca.getIndividuals().toArray( new Individual[0] );
+		// permute
 		for( int i = indArray.length-1; i >= 0; i-- ) {
 			int randomNumber = (RandomUtils.getInstance()).getRandomGenerator().nextInt( i+1 );
 			Individual t = indArray[i];	// Save position i
@@ -53,7 +47,7 @@ public class EvacuationCellularAutomatonRandom extends EvacuationCellularAutomat
 
 	@Override
 	public String toString() {
-		return "CellularAutomatonRandomOrderExecution";
+		return "EvacuationCellularAutomatonRandom";
 	}
 
 }

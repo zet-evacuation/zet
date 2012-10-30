@@ -5,7 +5,6 @@
 
 package algo.ca.algorithm.evac;
 
-import algo.ca.algorithm.evac.EvacuationCellularAutomatonInOrder;
 import algo.ca.util.IndividualDistanceComparator;
 import ds.ca.evac.Individual;
 import java.util.ArrayList;
@@ -16,14 +15,7 @@ import java.util.List;
  * The class {@code EvacuationCellularAutomatonFrontToBack} ...
  * @author Jan-Philipp Kappmeier
  */
-public class EvacuationCellularAutomatonFrontToBack extends EvacuationCellularAutomatonInOrder {
-
-	/**
-	 * Creates a new instance of {@code EvacuationCellularAutomatonFrontToBack}.
-	 * @param ca the cellular automaton that is executed
-	 */
-	public EvacuationCellularAutomatonFrontToBack( ) {
-	}
+public class EvacuationCellularAutomatonFrontToBack extends algo.ca.framework.EvacuationCellularAutomatonAlgorithm {
 
 	/**
 	 * Sorts the (living and not save) individuals within the cellular automaton
@@ -32,7 +24,7 @@ public class EvacuationCellularAutomatonFrontToBack extends EvacuationCellularAu
 	 */
 	@Override
 	public List<Individual> getIndividuals() {
-		List<Individual> copy = new ArrayList<>( super.getIndividuals() );
+		List<Individual> copy = new ArrayList<>( getProblem().eca.getIndividuals() );
 		IndividualDistanceComparator<Individual> idc = new IndividualDistanceComparator<>();
 		Collections.sort( copy, idc );
 		return Collections.unmodifiableList( copy );
@@ -44,6 +36,6 @@ public class EvacuationCellularAutomatonFrontToBack extends EvacuationCellularAu
 	 */
 	@Override
 	public String toString() {
-		return "CellularAutomatonFrontToBackExecution";
+		return "EvacuationCellularAutomatonFrontToBack";
 	}
 }

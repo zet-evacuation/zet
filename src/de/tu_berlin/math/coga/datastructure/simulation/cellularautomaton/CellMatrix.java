@@ -14,9 +14,10 @@ import java.util.Collection;
 
 /**
  * <E> the cell type
+ * @param <E>
  * @author Jan-Philipp Kappmeier
  */
-public interface CellMatrix<E extends Cell<?,?,?>> {
+public interface CellMatrix<E extends Cell<?,?>> {
 
 	public int getWidth();
 

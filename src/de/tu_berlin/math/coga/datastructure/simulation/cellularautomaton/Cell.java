@@ -15,11 +15,10 @@ import java.util.Iterator;
 /**
  * @param <E>
  * @param <S> state of the cell (probably an enum)
- * @param <D> direction
  * @author Jan-Philipp Kappmeier
  */
 //public interface Cell<S,D> extends Iterable<Cell<S,D>> {
-public interface Cell<E extends Cell<E,S,D>,S,D> extends Iterable<E> {
+public interface Cell<E extends Cell<E,S>,S> extends Iterable<E> {
 	/**
 	 * Returns the neighbors of the cell.
 	 * @return the neighbor cells
@@ -33,6 +32,6 @@ public interface Cell<E extends Cell<E,S,D>,S,D> extends Iterable<E> {
 	 */
 	public int getSides();
 
-	public E getNeighbor( D dir );
+	//public E getNeighbor( D dir );
 
 }

@@ -17,7 +17,7 @@ package ds.ca.evac;
 
 import algo.ca.framework.EvacuationCellState;
 import de.tu_berlin.math.coga.datastructure.simulation.cellularautomaton.SquareCellularAutomaton;
-import ds.ca.evac.Individual.DeathCause;
+import ds.ca.evac.DeathCause;
 import ds.ca.results.CAStateChangedAction;
 import ds.ca.results.DieAction;
 import ds.ca.results.ExitAction;

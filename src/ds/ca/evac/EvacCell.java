@@ -15,10 +15,10 @@
  */
 package ds.ca.evac;
 
-import de.tu_berlin.math.coga.datastructure.simulation.cellularautomaton.SquareCell;
 import algo.ca.framework.EvacuationCellState;
 import de.tu_berlin.math.coga.common.util.Direction8;
 import de.tu_berlin.math.coga.common.util.Level;
+import de.tu_berlin.math.coga.datastructure.simulation.cellularautomaton.SquareCell;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.EnumMap;
@@ -390,7 +390,7 @@ public abstract class EvacCell extends SquareCell<EvacCell,EvacuationCellState> 
 	 * @param dir the direction.
 	 * @return the neighbour, if exists. null else.
 	 */
-	@Override
+	//@Override
 	public EvacCell getNeighbor( Direction8 dir ) {
 		int cellx = getX() + dir.xOffset();
 		int celly = getY() + dir.yOffset();

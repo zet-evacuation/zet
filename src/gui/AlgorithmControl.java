@@ -4,8 +4,8 @@
  */
 package gui;
 
-import algo.ca.algorithm.evac.EvacuationCellularAutomatonAlgorithm;
 import algo.ca.algorithm.evac.EvacuationSimulationProblem;
+import algo.ca.framework.EvacuationCellularAutomatonAlgorithm;
 import algo.graph.exitassignment.Assignable;
 import algo.graph.exitassignment.EarliestArrivalTransshipmentExitAssignment;
 import algo.graph.exitassignment.ExitAssignment;
@@ -13,7 +13,6 @@ import de.tu_berlin.math.coga.common.algorithm.Algorithm;
 import de.tu_berlin.math.coga.common.algorithm.AlgorithmListener;
 import de.tu_berlin.math.coga.common.util.Formatter;
 import de.tu_berlin.math.coga.common.util.units.TimeUnits;
-import de.tu_berlin.math.coga.zet.converter.graph.NetworkFlowModel;
 import de.tu_berlin.math.coga.zet.converter.cellularAutomaton.AssignmentApplicationInstance;
 import de.tu_berlin.math.coga.zet.converter.cellularAutomaton.CellularAutomatonAssignmentConverter;
 import de.tu_berlin.math.coga.zet.converter.cellularAutomaton.ConvertedCellularAutomaton;
@@ -22,6 +21,7 @@ import de.tu_berlin.math.coga.zet.converter.cellularAutomaton.ZToCAConverter.Con
 import de.tu_berlin.math.coga.zet.converter.cellularAutomaton.ZToCAMapping;
 import de.tu_berlin.math.coga.zet.converter.cellularAutomaton.ZToCARasterContainer;
 import de.tu_berlin.math.coga.zet.converter.graph.GraphAssignmentConverter;
+import de.tu_berlin.math.coga.zet.converter.graph.NetworkFlowModel;
 import de.tu_berlin.math.coga.zet.converter.graph.ZToGraphRasterContainer;
 import ds.CompareVisualizationResults;
 import ds.GraphVisualizationResults;
@@ -113,7 +113,7 @@ public class AlgorithmControl implements PropertyChangeListener {
 			public void propertyChange( PropertyChangeEvent pce ) {
 				if( st.isDone() ) {
 					buildingResults = bpc.getSolution();
-					conversionTime = bpc.getRuntime();					
+					conversionTime = bpc.getRuntime();
 				}
 			}
 		});
@@ -123,7 +123,7 @@ public class AlgorithmControl implements PropertyChangeListener {
 		//bpc.run();
 		//buildingResults = bpc.getSolution();
 	}
-	
+
 	public long getConversionRuntime() {
 		return conversionTime;
 	}
@@ -187,13 +187,13 @@ public class AlgorithmControl implements PropertyChangeListener {
 // AlgorithmListener control ) {
 //		final GraphAlgorithmTask gat = new GraphAlgorithmTask( GraphAlgorithmEnumeration.SuccessiveEarliestArrivalAugmentingPathOptimized );
 //		gat.setProblem( project );
-		
+
 //		gat.addAlgorithmListener( control );
-			
-	
+
+
 	void performSimulation( PropertyChangeListener propertyChangeListener, AlgorithmListener listener ) {
 		error = null;
-		
+
 		cat = new CellularAutomatonTask();
 		cat.setCaAlgo( CellularAutomatonAlgorithmEnumeration.RandomOrder );
 		cat.setProblem( project );
@@ -224,7 +224,7 @@ public class AlgorithmControl implements PropertyChangeListener {
 
 	void performSimulationQuick( PropertyChangeListener propertyChangeListener, AlgorithmListener listener ) {
 		//final CellularAutomatonTask cat = new CellularAutomatonTask();
-		
+
 		if( catsbs == null ) {
 			initStepByStep( propertyChangeListener, listener, false );
 			System.out.println( "Start slow execution..." );
@@ -264,16 +264,16 @@ public class AlgorithmControl implements PropertyChangeListener {
 		if( catsbs != null )
 			catsbs.setStopMode( true );
 	}
-	
+
 	void performOneStep( PropertyChangeListener propertyChangeListener, AlgorithmListener listener ) throws ConversionNotSupportedException {
-		if( catsbs == null ) {			
+		if( catsbs == null ) {
 			initStepByStep( propertyChangeListener, listener, true );
 		} else {
 			catsbs.setStopMode( true );
 			catsbs.setPerformOneStep( true );
 		}
 	}
-	
+
 	private void initStepByStep( PropertyChangeListener propertyChangeListener, AlgorithmListener listener, boolean stopMode ) {
 			if( caInitialized ) {
 				System.out.println( "Do not convert automaton, already exists." );
@@ -332,7 +332,7 @@ public class AlgorithmControl implements PropertyChangeListener {
 	}
 
 	GraphConverterAlgorithms last = GraphConverterAlgorithms.NonGridGraph;
-	
+
 	public RunnableFuture<Void> convertGraph( PropertyChangeListener propertyChangeListener, GraphConverterAlgorithms Algo ) {
 		if( project.getBuildingPlan().isRastered() == false ) {
 			System.out.print( "Building is not rasterized. Rastering... " );
@@ -353,7 +353,7 @@ public class AlgorithmControl implements PropertyChangeListener {
 					} else {
 						networkFlowModel = conv.getSolution();
 						System.out.println( "Nodes: " + networkFlowModel.numberOfNodes() );
-						System.out.println( "Edges: " + networkFlowModel.numberOfEdges() );						
+						System.out.println( "Edges: " + networkFlowModel.numberOfEdges() );
 					}
 				}
 			}
@@ -378,13 +378,13 @@ public class AlgorithmControl implements PropertyChangeListener {
 			project.getBuildingPlan().rasterize();
 			System.out.println( " done." );
 		}
-			
+
 		final GraphAlgorithmTask gat = new GraphAlgorithmTask( GraphAlgorithmEnumeration.SuccessiveEarliestArrivalAugmentingPathOptimized );
 		gat.setProblem( project );
-		
+
 		gat.addAlgorithmListener( control );
-		
-		
+
+
 		gat.setNetworkFlowModel( networkFlowModel );
 		gat.setConv( last.converter() );
 
@@ -410,7 +410,7 @@ public class AlgorithmControl implements PropertyChangeListener {
 	}
 
 	public void performExitAssignmentEAT( PropertyChangeListener propertyChangeListener, AlgorithmListener control ) {
-		
+
 		if( networkFlowModel == null ) {
 			log.severe( "No model created." );
 			return;
@@ -419,7 +419,7 @@ public class AlgorithmControl implements PropertyChangeListener {
 		EarliestArrivalTransshipmentExitAssignment eatAssignment;
 		eatAssignment = new EarliestArrivalTransshipmentExitAssignment();
 		//ZToGraphConverter.convertConcreteAssignment( concreteAssignments[runNumber], res.getNetworkFlowModel() );
-		
+
 		log.info( "Compute concrete assignment..." );
 		concreteAssignment = project.getCurrentAssignment().createConcreteAssignment( 400 );
 		GraphAssignmentConverter cav = new GraphAssignmentConverter( networkFlowModel );
@@ -428,18 +428,18 @@ public class AlgorithmControl implements PropertyChangeListener {
 		networkFlowModel = cav.getSolution();
 		log.info( "Persons: " + concreteAssignment.getPersons().size() );
 		log.info( "done." );
-		
+
 		eatAssignment.setProblem( networkFlowModel );
 		log.info( "Compute exit assignment..." );
 		eatAssignment.run();
 		log.info( "done." );
 		Assignable exitAssignmenta = eatAssignment;
-		
+
 		ExitAssignment exitAssignment = eatAssignment.getExitAssignment();
-		
+
 		log.info( "Computed ExitAssignment: " );
 		log.info( exitAssignment.toString() );
-		
+
 		log.info( "Create Cellular Automaton according to the exit assignment..." );
 
 		// convert
@@ -452,9 +452,9 @@ public class AlgorithmControl implements PropertyChangeListener {
 		final ConvertedCellularAutomaton cca = new ConvertedCellularAutomaton( ca, mapping, container );
 
 		CAPartOfMapping caPartOfMapping = conv.getLatestCAPartOfNodeCellMapping();//this.getLatestCAPartOfNodeCellMapping();
-		
+
 		final CellularAutomatonAssignmentConverter cac = new CellularAutomatonAssignmentConverter();
-		
+
 		cac.setProblem( new AssignmentApplicationInstance( cca, concreteAssignment ) );
 		cac.run();
 		ZToGraphRasterContainer graphRaster = getNetworkFlowModel().getZToGraphMapping().getRaster();
@@ -464,9 +464,9 @@ public class AlgorithmControl implements PropertyChangeListener {
 		graphBasedIndividualToExitMapping = new GraphBasedIndividualToExitMapping(ca, nodeCellMapping, exitAssignment);
 		graphBasedIndividualToExitMapping.calculate();
 		ca.setIndividualToExitMapping( graphBasedIndividualToExitMapping );
-		
+
 		// Now, we have a CA
-		
+
 		//		EvacuationCellularAutomaton ca = super.convert(buildingPlan);
 //		CAPartOfMapping caPartOfMapping = this.getLatestCAPartOfNodeCellMapping();
 //		applyConcreteAssignment(concreteAssignment);
@@ -476,20 +476,20 @@ public class AlgorithmControl implements PropertyChangeListener {
 //		ca.setIndividualToExitMapping( graphBasedIndividualToExitMaping );
 //		return ca;
 		log.info( "done." );
-		
+
 		// Perform CA simulation
 		log.info( "Performing Simulation..." );
-		
+
 		EvacuationCellularAutomatonAlgorithm caAlgo = CellularAutomatonAlgorithmEnumeration.InOrder.getAlgorithm();
 		caAlgo.setProblem( new EvacuationSimulationProblem( ( ca ) ) );
 		double caMaxTime = PropertyContainer.getInstance().getAsDouble( "algo.ca.maxTime" );
 		caAlgo.setMaxTimeInSeconds( caMaxTime );
-		caAlgo.getCellularAutomaton().startRecording ();
-		
+		ca.startRecording ();
+
 		//caAlgo.addAlgorithmListener( this );
-		
+
 		caAlgo.run();	// hier wird initialisiert
-		caAlgo.getCellularAutomaton().stopRecording();
+		ca.stopRecording();
 
 		// create results
 		//CAVisualizationResults visResults = new CAVisualizationResults( mapping, ca.getPotentialManager() );
@@ -503,15 +503,15 @@ public class AlgorithmControl implements PropertyChangeListener {
 						caVisResults = visResults;
 						//EventServer.getInstance().dispatchEvent( new MessageEvent<>( this, MessageType.Status, "Simulation finished" ) );
 		log.log(Level.INFO, "Egress time: {0}", Formatter.formatUnit( cellularAutomaton.getTimeStep() * cellularAutomaton.getSecondsPerStep(), TimeUnits.Seconds ));
-		
-		
+
+
 		log.info( "done." );
-		
-		
+
+
 	}
-   
-	
-	
+
+
+
 	public void performOptimizationCompare( PropertyChangeListener propertyChangeListener ) {
 		if( !project.getBuildingPlan().isRastered() ) {
 			System.out.print( "Building is not rasterized. Rastering... " );

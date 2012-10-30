@@ -24,8 +24,8 @@ import algo.ca.algorithm.evac.EvacuationCellularAutomatonBackToFront;
 import algo.ca.algorithm.evac.EvacuationCellularAutomatonFrontToBack;
 import algo.ca.algorithm.evac.EvacuationCellularAutomatonInOrder;
 import algo.ca.algorithm.evac.EvacuationCellularAutomatonRandom;
-import algo.ca.algorithm.evac.EvacuationCellularAutomatonAlgorithm;
 import algo.ca.algorithm.evac.SwapCellularAutomaton;
+import algo.ca.framework.EvacuationCellularAutomatonAlgorithm;
 import de.tu_berlin.math.coga.common.localization.DefaultLoc;
 
 /**

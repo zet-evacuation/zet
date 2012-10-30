@@ -31,11 +31,11 @@ import evacuationplan.CAPathPassabilityChecker;
  */
 public class EvacuationPlanSwapCellularAutomatonInOrder extends SwapCellularAutomaton {
 	CAPathPassabilityChecker checker;
-					
+
 	public EvacuationPlanSwapCellularAutomatonInOrder( CAPathPassabilityChecker checker ) {
 		this.checker = checker;
 	}
-	
+
 	@Override
 	public void initialize() {
 		super.initialize();
@@ -45,7 +45,7 @@ public class EvacuationPlanSwapCellularAutomatonInOrder extends SwapCellularAuto
 			}
 		}
 	}
-	
+
 	@Override
 	public String toString() {
 		return "EvacuationCellularAutomatonInOrder";

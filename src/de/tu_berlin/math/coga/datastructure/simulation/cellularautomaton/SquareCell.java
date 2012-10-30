@@ -13,7 +13,7 @@ import java.util.Objects;
  * @param <St> the status
  * @author Jan-Philipp Kappmeier
  */
-public abstract class SquareCell<E extends SquareCell<E,St>,St> implements Cell<E,St,Direction8> {
+public abstract class SquareCell<E extends SquareCell<E,St>,St> implements Cell<E,St> {
 	/** x-coordinate of the cell in the room. */
 	protected int x;
 	/** y-coordinate of the cell in the room. */
