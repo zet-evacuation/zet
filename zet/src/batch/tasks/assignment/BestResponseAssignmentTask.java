@@ -31,7 +31,7 @@ import exitdistributions.ExitCapacityBasedCAFactory;
 import io.visualization.CAVisualizationResults;
 import java.util.TreeMap;
 import statistic.ca.CAStatistic;
-import zet.tasks.CellularAutomatonAlgorithmEnumeration;
+import zet.tasks.CellularAutomatonAlgorithms;
 
 /**
  *
@@ -47,7 +47,7 @@ public class BestResponseAssignmentTask extends AssignmentTask {
 	private int runNumber;
 	private TreeMap<Integer, Integer> median;
 	private Assignment assignment;
-	private CellularAutomatonAlgorithmEnumeration cellularAutomatonAlgo;
+	private CellularAutomatonAlgorithms cellularAutomatonAlgo;
 
 	/**
 	 * Initializes a new instance of this task.
@@ -57,7 +57,7 @@ public class BestResponseAssignmentTask extends AssignmentTask {
 	 * @param assignment the selected assignment
 	 * @param concreteAssignments the concrete assignments that were already calculated for the cellular automaton. can be null.
 	 */
-	public BestResponseAssignmentTask( Project project, BatchResultEntry res, ConcreteAssignment[] concreteAssignments, int runNumber, TreeMap<Integer, Integer> median, Assignment assignment, CellularAutomatonAlgorithmEnumeration cellularAutomatonAlgo ) {
+	public BestResponseAssignmentTask( Project project, BatchResultEntry res, ConcreteAssignment[] concreteAssignments, int runNumber, TreeMap<Integer, Integer> median, Assignment assignment, CellularAutomatonAlgorithms cellularAutomatonAlgo ) {
 		this.project = project;
 		this.res = res;
 		this.concreteAssignments = concreteAssignments;

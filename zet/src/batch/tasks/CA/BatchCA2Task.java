@@ -23,7 +23,7 @@ package batch.tasks.CA;
 import algo.ca.framework.EvacuationCellularAutomatonAlgorithm;
 import algo.graph.exitassignment.ExitAssignment;
 import batch.BatchResultEntry;
-import zet.tasks.CellularAutomatonAlgorithmEnumeration;
+import zet.tasks.CellularAutomatonAlgorithms;
 import batch.tasks.AssignmentTask;
 import de.tu_berlin.math.coga.zet.converter.cellularAutomaton.ZToCAConverter.ConversionNotSupportedException;
 import ds.z.Project;
@@ -56,7 +56,7 @@ public class BatchCA2Task implements Runnable {
 	/** The number of the run, used for accessing the result in {@link res} */
 	private int runNumber;
 	/** The cellular automaton algorithm enumeration object. */
-	private CellularAutomatonAlgorithmEnumeration cellularAutomatonAlgo;
+	private CellularAutomatonAlgorithms cellularAutomatonAlgo;
 	/** A map storing statistics with run number as key. */
 	private TreeMap<Integer, Integer> median;
 	/** The array with concrete assignments. */
@@ -73,7 +73,7 @@ public class BatchCA2Task implements Runnable {
 	 * @param assignment the selected assignment
 	 * @param concreteAssignments the array with calculated concrete assignments
 	 */
-	public BatchCA2Task( Project project, Assignment assignment, BatchResultEntry res, AssignmentTask exitAssignmentTask, ConcreteAssignment[] concreteAssignments, int runNumber, CellularAutomatonAlgorithmEnumeration cellularAutomatonAlgo, TreeMap<Integer, Integer> median ) {
+	public BatchCA2Task( Project project, Assignment assignment, BatchResultEntry res, AssignmentTask exitAssignmentTask, ConcreteAssignment[] concreteAssignments, int runNumber, CellularAutomatonAlgorithms cellularAutomatonAlgo, TreeMap<Integer, Integer> median ) {
 		this.project = project;
 		this.assignment = assignment;
 		this.res = res;

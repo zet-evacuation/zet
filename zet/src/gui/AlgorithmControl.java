@@ -41,7 +41,7 @@ import java.util.concurrent.RunnableFuture;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import tasks.conversion.BuildingPlanConverter;
-import zet.tasks.CellularAutomatonAlgorithmEnumeration;
+import zet.tasks.CellularAutomatonAlgorithms;
 import zet.tasks.CompareTask;
 import zet.tasks.GraphAlgorithmEnumeration;
 import zet.tasks.GraphAlgorithmTask;
@@ -287,7 +287,7 @@ public class AlgorithmControl implements PropertyChangeListener {
 		// Perform CA simulation
 		log.info( "Performing Simulation..." );
 
-		EvacuationCellularAutomatonAlgorithm caAlgo = CellularAutomatonAlgorithmEnumeration.InOrder.getAlgorithm();
+		EvacuationCellularAutomatonAlgorithm caAlgo = CellularAutomatonAlgorithms.InOrder.getAlgorithm();
 		caAlgo.setProblem( new EvacuationSimulationProblem( ( ca ) ) );
 		double caMaxTime = PropertyContainer.getInstance().getAsDouble( "algo.ca.maxTime" );
 		caAlgo.setMaxTimeInSeconds( caMaxTime );
@@ -394,6 +394,14 @@ public class AlgorithmControl implements PropertyChangeListener {
 
 	CAVisualizationResults getCaVisResults() {
 		return caControl.getCaVisResults();
+	}
+
+	void setSimulationAlgorithm( CellularAutomatonAlgorithms cellularAutomaton ) {
+		caControl.setSimulationAlgorithm( cellularAutomaton );
+	}
+
+	CellularAutomatonAlgorithms getSimulationAlgorithm() {
+		return caControl.getSimulationAlgorithm();
 	}
 
 

@@ -4,13 +4,14 @@
  */
 package zet.gui.main.menu;
 
+import de.tu_berlin.math.coga.algorithm.simulation.SimulationAlgorithm;
 import de.tu_berlin.math.coga.common.localization.Localized;
 import de.tu_berlin.math.coga.components.framework.Menu;
 import ds.PropertyContainer;
+import gui.AlgorithmControl;
 import gui.GUIControl;
 import gui.GraphConverterAlgorithms;
 import gui.ZETLoader;
-import gui.ZETMain;
 import gui.editor.Areas;
 import gui.editor.properties.PropertyFilesSelectionModel;
 import gui.editor.properties.PropertyListEntry;
@@ -31,6 +32,7 @@ import javax.swing.JRadioButtonMenuItem;
 import zet.gui.GUILocalization;
 import zet.gui.main.tabs.base.AbstractFloor.RasterPaintStyle;
 import zet.gui.treeview.JProjectTreeView;
+import zet.tasks.CellularAutomatonAlgorithms;
 
 /**
  *
@@ -119,6 +121,7 @@ public class JZETMenuBar extends JMenuBar implements ActionListener, Localized {
 	private JMenuItem mnuSimulationStart;
 	private JMenuItem mnuSimulationPauseQuickVisualization;
 	private JMenuItem mnuStepByStepSimulation;
+	private JMenu mSimulationAlgorithm;
 	//private JMenuItem mnuExecutePauseSimulation;
 	private JMenu mOptimization;
 	private JMenuItem mnuOptimizationEarliestArrivalTransshipment;
@@ -258,13 +261,22 @@ public class JZETMenuBar extends JMenuBar implements ActionListener, Localized {
 			mnuCreateShortestPathsNonGrid = Menu.addMenuItem( mCreateShortestPaths, loc.getString( "Execute.CreateGraph.ShortestPaths.NonGrid" ), KeyEvent.VK_9, this, "ShortestPathsNonGrid", InputEvent.CTRL_DOWN_MASK );
 			mCreateThinNetwork = Menu.addMenuItem( mCreateGraph, loc.getString( "Execute.CreateGraph.ThinNetwork" ), KeyEvent.VK_9, this, "ThinNet", InputEvent.CTRL_DOWN_MASK );
 		}
-                
+
 		mnuExecuteApplyAssignment = Menu.addMenuItem( mExecute, loc.getString( "Execute.ApplyConcreteAssignment" ), this, "applyConcreteAssignment" );
 		mSimulation = Menu.addMenu( mExecute, loc.getString( "Execute.Simulation" ) );
 		mnuSimulationQuickVisualization = Menu.addMenuItem( mSimulation, loc.getString( "Execute.Simulation.QuickVisualization" ), KeyEvent.VK_F5, this, "quickVisualization", 0 );
 		mnuSimulationStart = Menu.addMenuItem( mSimulation, loc.getString( "Execute.Simulation.Start" ), KeyEvent.VK_F5, this, "startSimulation", InputEvent.CTRL_DOWN_MASK );
 		mnuSimulationPauseQuickVisualization = Menu.addMenuItem( mSimulation, loc.getString( "Execute.Simulation.PauseQuickVisualization" ), KeyEvent.VK_F6, this, "visualizationPause", 0 );
 		mnuStepByStepSimulation = Menu.addMenuItem( mSimulation, loc.getString( "Execute.Simulation.StepByStep" ), KeyEvent.VK_F7, this, "stepByStepSimulation", 0 );
+		Menu.addMenuItem( mSimulation, "-" );
+		mSimulationAlgorithm = Menu.addMenu( mSimulation, loc.getString("Execute.Simulation.Algorithms" ) );
+		ButtonGroup grpCellularAutomatonAlgorithms = new ButtonGroup();
+		CellularAutomatonAlgorithms active = control.getSimulationAlgorithm();
+		for( CellularAutomatonAlgorithms algorithm : CellularAutomatonAlgorithms.values() ) {
+			JRadioButtonMenuItem mnuCellularAutomatonAlgorithm = Menu.addRadioButtonMenuItem( mSimulationAlgorithm, algorithm.getName(), algorithm == active, simulationAlgorithmListener, algorithm.toString() );
+			grpCellularAutomatonAlgorithms.add( mnuCellularAutomatonAlgorithm );
+		}
+
 
 		mOptimization = Menu.addMenu( mExecute, loc.getString( "Execute.Optimization" ) );
 		mnuOptimizationEarliestArrivalTransshipment = Menu.addMenuItem( mOptimization, loc.getString( "Execute.Optimization.AlgoEATransshipment" ), KeyEvent.VK_F8, this, "EAT", 0 );
@@ -275,14 +287,14 @@ public class JZETMenuBar extends JMenuBar implements ActionListener, Localized {
 		//mnuExecuteMaxFlowOverTimeTEN = Menu.addMenuItem( mOptimization, loc.getString( "Execute.Optimization.AlgoMaxFlowOverTimeTEN" ), this, "MFOTTEN" );
 		mExitAssignment = Menu.addMenu( mExecute, loc.getString( "Execute.ExitAssignment" ) );
 		mnuExitAssignmentEAT = Menu.addMenuItem( mExitAssignment, loc.getString( "Execute.ExitAssignment.EAT" ), this, "ExitAssignmentEAT" );
-		
+
 		Menu.addMenuItem( mExecute, "-" );
 
 		mProperties = Menu.addMenu( mExecute, "Properties" );
 		ButtonGroup grpProperties = new ButtonGroup();
-								
+
 		properties = PropertyFilesSelectionModel.loadPath( Paths.get( "./properties" ) );
-		
+
 		mnuProperties = new JRadioButtonMenuItem[properties.size()];
 		int counter = 0;
 		for( PropertyListEntry e : properties ) {
@@ -290,8 +302,8 @@ public class JZETMenuBar extends JMenuBar implements ActionListener, Localized {
 			mnuProperties[counter] = Menu.addRadioButtonMenuItem( mProperties, e.getName(), marked, this, "property" + counter );
 			grpProperties.add( mnuProperties[counter++] );
 		}
-		
-		
+
+
 		// Extras-Menu
 		mLanguage = Menu.addMenu( mExtras, loc.getString( "Extras.Languages" ) );
 		ButtonGroup grpLanguage = new ButtonGroup();
@@ -368,6 +380,16 @@ public class JZETMenuBar extends JMenuBar implements ActionListener, Localized {
 //					ZETMain.sendMessage( loc.getString( "gui.editor.JEditor.message.saved" ) );
 //				}
 
+	ActionListener simulationAlgorithmListener = new ActionListener() {
+		@Override
+		public void actionPerformed( ActionEvent e ) {
+			final CellularAutomatonAlgorithms cellularAutomaton = CellularAutomatonAlgorithms.valueOf( e.getActionCommand() );
+			if( cellularAutomaton != null )
+				control.setSimulationAlgorithm( cellularAutomaton );
+			else
+				throw new AssertionError();
+		}
+	};
 
 	@Override
 	public void actionPerformed( ActionEvent e ) {
@@ -547,7 +569,7 @@ public class JZETMenuBar extends JMenuBar implements ActionListener, Localized {
 				} catch( PropertyLoadException ex ) {
 					ex.printStackTrace( System.err );
 				}
-			
+
 		} else
 			ZETLoader.sendError( loc.getString( "gui.UnknownCommand" ) + " '" + e.getActionCommand() + "'. " + loc.getString( "gui.ContactDeveloper" ) );
 	}
@@ -661,15 +683,15 @@ public class JZETMenuBar extends JMenuBar implements ActionListener, Localized {
                 Menu.updateMenu(mnuCreateSteinerTreeGrid, loc.getString("Execute.CreateGraph.Steiner.Grid"));
                 Menu.updateMenu(mnuCreateSteinerTreeNonGrid, loc.getString("Execute.CreateGraph.Steiner.NonGrid"));
                 Menu.updateMenu(mCreateClusterGraph, loc.getString("Execute.CreateGraph.ClusterGraph"));
-                Menu.updateMenu(mnuCreateClusterGraphGrid, loc.getString("Execute.CreateGraph.ClusterGraph.Grid"));                
-                Menu.updateMenu(mnuCreateClusterGraphNonGrid, loc.getString("Execute.CreateGraph.ClusterGraph.NonGrid"));                  
+                Menu.updateMenu(mnuCreateClusterGraphGrid, loc.getString("Execute.CreateGraph.ClusterGraph.Grid"));
+                Menu.updateMenu(mnuCreateClusterGraphNonGrid, loc.getString("Execute.CreateGraph.ClusterGraph.NonGrid"));
                 Menu.updateMenu(mCreateShortestPathGraph, loc.getString("Execute.CreateGraph.ClusterGraph"));
                 Menu.updateMenu(mnuCreateShortestPathGraphGrid, loc.getString("Execute.CreateGraph.ShortestPathGraph.Grid"));
                 Menu.updateMenu(mnuCreateShortestPathGraphNonGrid, loc.getString("Execute.CreateGraph.ShortestPathGraph.NonGrid"));
                 Menu.updateMenu(mCreateShortestPaths, loc.getString("Execute.CreateGraph.ShortestPaths"));
                 Menu.updateMenu(mnuCreateShortestPathsGrid, loc.getString("Execute.CreateGraph.ShortestPaths.Grid"));
                 Menu.updateMenu(mnuCreateShortestPathsNonGrid, loc.getString("Execute.CreateGraph.ShortestPaths.NonGrid"));
-                
+
                 //Menu.updateMenu( mCreateGraph, loc.getString( "Execute.Optimization.CreateGraph" ) );
 		Menu.updateMenu( mnuOptimizationEarliestArrivalTransshipment, loc.getString( "Execute.Optimization.AlgoEATransshipment" ) );
                 Menu.updateMenu(mnuOptimizationEATCompare, loc.getString("Execute.Optimization.EATCompare"));

@@ -20,8 +20,8 @@
  */
 package io.visualization;
 
-import de.tu_berlin.math.coga.zet.converter.cellularAutomaton.ZToCAMapping;
 import de.tu_berlin.math.coga.math.vectormath.Vector3;
+import de.tu_berlin.math.coga.zet.converter.cellularAutomaton.ZToCAMapping;
 import ds.ca.evac.EvacuationCellularAutomaton;
 import ds.ca.evac.PotentialManager;
 import ds.ca.results.VisualResultsRecording;
@@ -41,7 +41,7 @@ public class CAVisualizationResults implements VisualizationResult {
 	private VisualResultsRecording visRecording;
 	/**
 	 * A mapping from a cell to its offset relative to the room containing it.
-	 * (The offset of the room is NOT included!). 
+	 * (The offset of the room is NOT included!).
 	 */
 	private HashMap<ds.ca.evac.EvacCell, Vector3> caCellToZOffsetMapping;
 	/**
@@ -63,7 +63,7 @@ public class CAVisualizationResults implements VisualizationResult {
 	/**
 	 * Creates the visualization results. Takes a ca data structure, a
 	 * visual recording object, a ZToCAMapping and creates all necessary objects.
-	 * @param visRecording 
+	 * @param visRecording
 	 * @param caMapping
 	 */
 	public CAVisualizationResults( VisualResultsRecording visRecording, ZToCAMapping caMapping ) {

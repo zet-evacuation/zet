@@ -20,7 +20,7 @@
 
 package batch.load;
 
-import zet.tasks.CellularAutomatonAlgorithmEnumeration;
+import zet.tasks.CellularAutomatonAlgorithms;
 import zet.tasks.GraphAlgorithmEnumeration;
 import com.thoughtworks.xstream.annotations.XStreamAlias;
 import gui.batch.EvacuationOptimizationType;
@@ -40,7 +40,7 @@ public class BatchProjectEntry {
 	/** An assignment in the project. Only the name of the assignment. */
 	private String assignment;
 	/** The cellular automaton algorithm that is used for simulation. */
-	private CellularAutomatonAlgorithmEnumeration cellularAutomatonAlgorithm;
+	private CellularAutomatonAlgorithms cellularAutomatonAlgorithm;
 	/** Indicates wheather simulation is used, or not. */
 	private boolean useCellularAutomaton;
 	/** The number of simulation runs. */
@@ -99,7 +99,7 @@ public class BatchProjectEntry {
 	 * Returns the cellular automaton algorithm used for simulation.
 	 * @return the cellular automaton algorithm used for simulation
 	 */
-	public CellularAutomatonAlgorithmEnumeration getCellularAutomatonAlgorithm() {
+	public CellularAutomatonAlgorithms getCellularAutomatonAlgorithm() {
 		return cellularAutomatonAlgorithm;
 	}
 
@@ -107,7 +107,7 @@ public class BatchProjectEntry {
 	 * Sets the cellular automaton algorithm used for simulation.
 	 * @param cellularAutomatonAlgorithm the algorithm
 	 */
-	public void setCellularAutomatonAlgorithm( CellularAutomatonAlgorithmEnumeration cellularAutomatonAlgorithm ) {
+	public void setCellularAutomatonAlgorithm( CellularAutomatonAlgorithms cellularAutomatonAlgorithm ) {
 		this.cellularAutomatonAlgorithm = cellularAutomatonAlgorithm;
 	}
 
@@ -127,7 +127,7 @@ public class BatchProjectEntry {
 		this.cellularAutomatonRuns = cellularAutomatonRuns;
 	}
 
-	
+
 	/**
 	 * Returns the number of runs for the evacuation optimization. Only used
 	 * if evacuation optimization type is not set to {@link EvacuationOptimizationType#None}
