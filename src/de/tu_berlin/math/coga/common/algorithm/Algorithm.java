@@ -49,6 +49,7 @@ import java.util.logging.Logger;
  * @author Martin Groß
  */
 public abstract class Algorithm<Problem, Solution> implements Runnable, Callable<Solution> {
+
 	/* An enumeration type that specifies the current state of the algorithm. */
 	public enum State {
 		WAITING,
@@ -127,7 +128,7 @@ public abstract class Algorithm<Problem, Solution> implements Runnable, Callable
 	}
 
 	/**
-		* Adds all algorithm listeners of the specified algorithm to this 
+		* Adds all algorithm listeners of the specified algorithm to this
 		* algorithm.
 		* @param algorithm the algorithm whose listeners are added.
 		*/
@@ -215,7 +216,7 @@ public abstract class Algorithm<Problem, Solution> implements Runnable, Callable
 	}
 
 	/**
-		* Returns a description of the algorithm that can be displayed to a human. 
+		* Returns a description of the algorithm that can be displayed to a human.
 		* This should describe what the algorithm expects and what it produces,
 		* as well as providing information on interesting properties like runtime,
 		* etc.
@@ -252,7 +253,7 @@ public abstract class Algorithm<Problem, Solution> implements Runnable, Callable
 	}
 
 	/**
-		* Returns the parameter set of the algorithm, which stores all parameters 
+		* Returns the parameter set of the algorithm, which stores all parameters
 		* that are exposed to the UI.
 		* @return the parameter set of the algorithm.
 		*/
@@ -280,7 +281,7 @@ public abstract class Algorithm<Problem, Solution> implements Runnable, Callable
 	/**
 		* Specifies the instance of the problem this algorithm is going to solve.
 		* @param problem the instance of the problem that is to be solved.
-		* @throws IllegalStateException if the algorithm is running 
+		* @throws IllegalStateException if the algorithm is running
 		*/
 	public final void setProblem(Problem problem) throws IllegalStateException {
 			if (state == State.SOLVING) {
@@ -307,11 +308,11 @@ public abstract class Algorithm<Problem, Solution> implements Runnable, Callable
 	}
 
 	/**
-		* Sets a new progress accuracy. The accuracy describes the value by that 
-		* the progress has to be changed until an {@link AlgorithmProgressEvent} is 
+		* Sets a new progress accuracy. The accuracy describes the value by that
+		* the progress has to be changed until an {@link AlgorithmProgressEvent} is
 		* fired.
 		* @param accuracy the new accuracy value. must be in the interval [0,1]
-		* @throws IllegalArgumentException if arrucarcy is not within the allowed range 
+		* @throws IllegalArgumentException if arrucarcy is not within the allowed range
 		*/
 	public void setAccuracy(double accuracy) throws IllegalArgumentException {
 			if (accuracy < 0 || accuracy > 1) {
@@ -322,9 +323,9 @@ public abstract class Algorithm<Problem, Solution> implements Runnable, Callable
 	}
 
 	/**
-		* Determines the accuracy in such a way that at most most 
+		* Determines the accuracy in such a way that at most most
 		* {@code possibleChanges} many events are fired.
-		* @param possibleChanges the maximal number of progress events 
+		* @param possibleChanges the maximal number of progress events
 		*/
 	public void setAccuracy(int possibleChanges) {
 			setAccuracy(1. / possibleChanges);
@@ -415,7 +416,7 @@ public abstract class Algorithm<Problem, Solution> implements Runnable, Callable
 	public final void setLogLevel( Level level ) {
 		log.setLevel( level );
 	}
-	
+
 	/**
 	 * Returns the logger currently used by the {@code Algorithm}.
 	 * @return the logger currently used by the {@code Algorithm}
@@ -423,7 +424,7 @@ public abstract class Algorithm<Problem, Solution> implements Runnable, Callable
 	public Logger getLogger() {
 		return log;
 	}
-	
+
 	/**
 	 * Sets the logger to a default logger using the class name as name.
 	 */
@@ -438,7 +439,7 @@ public abstract class Algorithm<Problem, Solution> implements Runnable, Callable
 	public void setLogger( Logger log ) {
 		this.log = log;
 	}
-	
+
 	/**
 		* Returns whether events are also treated as log messages or not.
 		* @return {@code true}, if events are also treated as log messages,
@@ -482,7 +483,7 @@ public abstract class Algorithm<Problem, Solution> implements Runnable, Callable
 	/**
 		* Returns whether this algorithm has successfully run and solved the
 		* instance of the problem given to it. If this is {@code true}, then
-		* the solution to the instance of the problem can be obtained by {@code 
+		* the solution to the instance of the problem can be obtained by {@code
 		* getSolution}.
 		* @return {@code true} if the algorithm'Seconds instance of the problem has
 		* been solved successfully and {@code false} otherwise.
@@ -511,7 +512,7 @@ public abstract class Algorithm<Problem, Solution> implements Runnable, Callable
 	}
 
 	/**
-		* Formats the specified message and parameters using String.format() and 
+		* Formats the specified message and parameters using String.format() and
 		* logs it.
 		* @param message the format string of the message.
 		* @param params the parameters for formatting the message.
@@ -558,9 +559,9 @@ public abstract class Algorithm<Problem, Solution> implements Runnable, Callable
 			}
 		}
 	}
-	
+
 	/**
-	 * A framework method for executing the algorithm and returns the result. 
+	 * A framework method for executing the algorithm and returns the result.
 	 * <p>Calling the method solves the problem and returns the solution. The
 	 * solution is stored and can be accessed again using {@link #getSolution() }.</p>
  	 * @return the solution to the algorithm.
@@ -618,4 +619,15 @@ public abstract class Algorithm<Problem, Solution> implements Runnable, Callable
 			}
 		}
 	}
+
+
+		private boolean paused;
+		public final boolean isPaused() {
+			return paused;
+		}
+
+		public final void setPaused( boolean paused ) {
+			this.paused = paused;
+		}
+
 }

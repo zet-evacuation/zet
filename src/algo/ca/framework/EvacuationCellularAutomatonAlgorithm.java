@@ -20,7 +20,7 @@ import java.util.logging.Level;
  *
  * @author Jan-Philipp Kappmeier
  */
-public abstract class EvacuationCellularAutomatonAlgorithm extends AbstractCellularAutomatonSimulationAlgorithm<EvacCell, EvacuationCellState, EvacuationSimulationProblem, EvacuationSimulationResult> {
+public abstract class EvacuationCellularAutomatonAlgorithm extends AbstractCellularAutomatonSimulationAlgorithm<EvacCell, EvacuationSimulationProblem, EvacuationSimulationResult> {
 	EvacuationSimulationResult evacuationSimulationResult;
 
 	public final void setMaxTimeInSeconds( double time ) {
@@ -62,7 +62,9 @@ public abstract class EvacuationCellularAutomatonAlgorithm extends AbstractCellu
 
 	@Override
 	protected final void execute( EvacCell cell ) {
+
 		Individual i = Objects.requireNonNull( cell.getIndividual(), "Execute called on EvacCell that does not contain an individual!" );
+		System.out.println( "Executing rules for individual " + i );
 		Iterator<Rule> loop = getProblem().ruleSet.loopIterator();
 		while( loop.hasNext() ) { // Execute all rules
 			Rule r = loop.next();
@@ -71,7 +73,7 @@ public abstract class EvacuationCellularAutomatonAlgorithm extends AbstractCellu
 	}
 
 	@Override
-	protected final EvacuationSimulationResult terminate() {
+	protected EvacuationSimulationResult terminate() {
 			// let die all individuals which are not already dead and not safe
 		if( getProblem().eca.getNotSafeIndividualsCount() != 0 ) {
 			Individual[] individualsCopy = getProblem().eca.getIndividuals().toArray( new Individual[getProblem().eca.getIndividuals().size()] );
@@ -86,7 +88,7 @@ public abstract class EvacuationCellularAutomatonAlgorithm extends AbstractCellu
 	}
 
 	@Override
-	protected final boolean isFinished() {
+	protected boolean isFinished() {
 		boolean continueCondition = ( (getProblem().eca.getNotSafeIndividualsCount() > 0 || getProblem().eca.getTimeStep() < getProblem().eca.getNeededTime()) /*&& !isCancelled()*/ );
 		return super.isFinished() || !continueCondition;
 	}

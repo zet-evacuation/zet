@@ -29,16 +29,16 @@ import io.visualization.CAVisualizationResults;
  * @author Jan-Philipp Kappmeier
  */
 public class CellularAutomatonTask extends Algorithm<Project, CAVisualizationResults> implements AlgorithmListener {
-	CellularAutomatonAlgorithmEnumeration  cellularAutomatonAlgorithm;
+	EvacuationCellularAutomatonAlgorithm  cellularAutomatonAlgorithm;
 	EvacuationCellularAutomaton ca;
 	ZToCAMapping mapping;
 	ZToCARasterContainer container;
 
-	public void setCaAlgo( CellularAutomatonAlgorithmEnumeration caAlgo ) {
+	public void setCaAlgo( EvacuationCellularAutomatonAlgorithm caAlgo ) {
 		this.cellularAutomatonAlgorithm = caAlgo;
 	}
 
-	public CellularAutomatonAlgorithmEnumeration getCellularAutomatonAlgorithm() {
+	public EvacuationCellularAutomatonAlgorithm getCellularAutomatonAlgorithm() {
 		return cellularAutomatonAlgorithm;
 	}
 
@@ -62,7 +62,7 @@ public class CellularAutomatonTask extends Algorithm<Project, CAVisualizationRes
 		cac.run();
 
 		// set up simulation algorithm and compute
-		EvacuationCellularAutomatonAlgorithm caAlgo = cellularAutomatonAlgorithm.getAlgorithm();
+		EvacuationCellularAutomatonAlgorithm caAlgo = cellularAutomatonAlgorithm;
 		caAlgo.setProblem( new EvacuationSimulationProblem( ( ca ) ) );
 		double caMaxTime = PropertyContainer.getInstance().getAsDouble( "algo.ca.maxTime" );
 		caAlgo.setMaxTimeInSeconds( caMaxTime );

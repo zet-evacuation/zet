@@ -19,7 +19,7 @@ import javax.swing.SwingWorker;
  */
 public class SerialTask extends SwingWorker<Void, AlgorithmEvent> implements AlgorithmListener {
 	private static Logger log = Logger.getGlobal();
-	
+
 	ArrayList<Algorithm<?,?>> algorithms;
 
 	public SerialTask() {
@@ -50,7 +50,7 @@ public class SerialTask extends SwingWorker<Void, AlgorithmEvent> implements Alg
 
 	@Override
 	protected Void doInBackground() throws Exception {
-		try {			
+		try {
 			for( Algorithm<?,?> algorithm : algorithms ) {
 				algorithm.addAlgorithmListener( this );
 				algorithm.run();
@@ -60,6 +60,10 @@ public class SerialTask extends SwingWorker<Void, AlgorithmEvent> implements Alg
 		}
 
 		return null;
+	}
+
+	public void test() throws Exception {
+		doInBackground();
 	}
 
 	/**

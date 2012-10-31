@@ -1,0 +1,236 @@
+/**
+ * AlgorithmControlCellularAutomaton.java
+ * Created: 31.10.2012, 15:12:29
+ */
+package gui;
+
+import algo.ca.algorithm.evac.EvacuationSimulationProblem;
+import algo.ca.framework.EvacuationCellularAutomatonAlgorithm;
+import algo.ca.framework.StepByStepAutomaton;
+import de.tu_berlin.math.coga.common.algorithm.Algorithm;
+import de.tu_berlin.math.coga.common.algorithm.AlgorithmEvent;
+import de.tu_berlin.math.coga.common.algorithm.AlgorithmListener;
+import de.tu_berlin.math.coga.common.algorithm.AlgorithmStartedEvent;
+import de.tu_berlin.math.coga.common.util.Formatter;
+import de.tu_berlin.math.coga.common.util.units.TimeUnits;
+import de.tu_berlin.math.coga.zet.converter.cellularAutomaton.AssignmentApplicationInstance;
+import de.tu_berlin.math.coga.zet.converter.cellularAutomaton.CellularAutomatonAssignmentConverter;
+import de.tu_berlin.math.coga.zet.converter.cellularAutomaton.ConvertedCellularAutomaton;
+import de.tu_berlin.math.coga.zet.converter.cellularAutomaton.ZToCAConverter;
+import de.tu_berlin.math.coga.zet.converter.cellularAutomaton.ZToCAMapping;
+import de.tu_berlin.math.coga.zet.converter.cellularAutomaton.ZToCARasterContainer;
+import ds.PropertyContainer;
+import ds.ca.evac.EvacuationCellularAutomaton;
+import ds.z.AssignmentType;
+import ds.z.BuildingPlan;
+import ds.z.ConcreteAssignment;
+import ds.z.Project;
+import io.visualization.CAVisualizationResults;
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.swing.SwingWorker;
+import zet.tasks.CellularAutomatonAlgorithmEnumeration;
+import zet.tasks.CellularAutomatonTask;
+import zet.tasks.SerialTask;
+
+
+/**
+ *
+ * @author Jan-Philipp Kappmeier
+ */
+public class AlgorithmControlCellularAutomaton {
+	/** The logger of the main class. */
+	private static final Logger log = Logger.getGlobal();
+	private EvacuationCellularAutomatonAlgorithm caAlgo;
+	private ZToCAMapping mapping;
+	private ZToCARasterContainer container;
+	private CAVisualizationResults caVisResults;
+	private EvacuationCellularAutomaton cellularAutomaton;
+	private CellularAutomatonTask cat = new CellularAutomatonTask();
+	private ConcreteAssignment concreteAssignment;
+
+	//public void convertCellularAutomaton( ) {
+	//	convertCellularAutomaton( null );
+	//}
+
+	void convertCellularAutomaton( BuildingPlan buildingPlan, PropertyChangeListener propertyChangeListener ) {
+		final ZToCAConverter conv = new ZToCAConverter();
+
+		conv.setProblem( buildingPlan );
+
+		final SerialTask st = new SerialTask( conv );
+		st.addPropertyChangeListener( new PropertyChangeListener() {
+			@Override
+			public void propertyChange( PropertyChangeEvent pce ) {
+				if( st.isDone() ) {
+					if( st.isError() ) {
+						//error = st.getError();
+					} else {
+						cellularAutomaton = conv.getCellularAutomaton();
+						mapping = conv.getMapping();
+						container = conv.getContainer();
+						//caInitialized = true;
+					}
+				}
+			}
+		});
+		if( propertyChangeListener != null )
+			st.addPropertyChangeListener( propertyChangeListener );
+
+		st.execute();
+	}
+
+	public void invalidateConvertedCellularAutomaton() {
+		//caInitialized = false;
+	}
+
+	public EvacuationCellularAutomaton getCellularAutomaton() {
+		return cellularAutomaton;
+	}
+
+	public ZToCARasterContainer getContainer() {
+		return container;
+	}
+
+	public ZToCAMapping getMapping() {
+		return mapping;
+	}
+
+//	void performSimulation() {
+//		performSimulation( null, null );
+//	}
+
+	void performSimulation( Project project, PropertyChangeListener propertyChangeListener, AlgorithmListener listener ) {
+//		error = null;
+
+		cat = new CellularAutomatonTask();
+		cat.setCaAlgo( CellularAutomatonAlgorithmEnumeration.RandomOrder.getAlgorithm() );
+		cat.setProblem( project );
+		cat.addAlgorithmListener( listener );
+
+		final SerialTask st = new SerialTask( cat );
+		st.addPropertyChangeListener( new PropertyChangeListener() {
+			@Override
+			public void propertyChange( PropertyChangeEvent pce ) {
+				if( st.isDone() ) {
+					if( st.isError() ) {
+						//error = st.getError();
+					} else {
+						cellularAutomaton = cat.getCa();
+						mapping = cat.getMapping();
+						container = cat.getContainer();
+						caVisResults = cat.getSolution();
+						//EventServer.getInstance().dispatchEvent( new MessageEvent<>( this, MessageType.Status, "Simulation finished" ) );
+						log.log( Level.INFO, "Egress time: {0}", Formatter.formatUnit( cellularAutomaton.getTimeStep() * cellularAutomaton.getSecondsPerStep(), TimeUnits.Seconds ));
+					}
+				}
+			}
+		});
+		if( propertyChangeListener != null )
+			st.addPropertyChangeListener( propertyChangeListener );
+		st.execute();
+	}
+
+	void performSimulationQuick( Project project, AlgorithmListener listener ) {
+		initStepByStep( project, listener, false );
+	}
+
+	public CAVisualizationResults getCaVisResults() {
+	//	if( cat.isProblemSolved() ) // temporary! (for testing exit assignments)
+	//		return cat.getSolution();
+	//	else return null;
+		return caVisResults;
+	}
+
+	void createConcreteAssignment( Project project ) throws IllegalArgumentException, ZToCAConverter.ConversionNotSupportedException {
+		for( AssignmentType at : project.getCurrentAssignment().getAssignmentTypes() )
+			cellularAutomaton.setAssignmentType( at.getName(), at.getUid() );
+		concreteAssignment = project.getCurrentAssignment().createConcreteAssignment( 400 );
+		final CellularAutomatonAssignmentConverter cac = new CellularAutomatonAssignmentConverter();
+		cac.setProblem( new AssignmentApplicationInstance( new ConvertedCellularAutomaton( cellularAutomaton, mapping, container ), concreteAssignment ) );
+		cac.run();
+	}
+
+	void setUpSimulationAlgorithm() {
+		CellularAutomatonAlgorithmEnumeration cellularAutomatonAlgo = CellularAutomatonAlgorithmEnumeration.RandomOrder;
+		//caAlgo = cellularAutomatonAlgo.createTask( cellularAutomaton );
+		caAlgo = cellularAutomatonAlgo.getAlgorithm();
+		caAlgo.setProblem( new EvacuationSimulationProblem( ( cellularAutomaton) ) );
+		double caMaxTime = PropertyContainer.getInstance().getAsDouble( "algo.ca.maxTime" );
+		caAlgo.setMaxTimeInSeconds( caMaxTime );
+	}
+
+	void pauseStepByStep() {
+		if( ecasbs != null && ecasbs.isRunning() )
+			ecasbs.setPaused( true );
+	}
+
+	void performOneStep( Project project, AlgorithmListener listener ) {
+		initStepByStep( project, listener, true );
+	}
+
+	EvacuationCellularAutomatonAlgorithm eca = null;
+	EvacuationCellularAutomatonAlgorithm ecasbs = null;
+	class BackgroundTask<S> extends SwingWorker<S, AlgorithmEvent> {
+		Algorithm<?,S> algo;
+		private BackgroundTask( Algorithm<?,S> algorithm ) {
+			this.algo = algorithm;
+		}
+
+
+		@Override
+		protected S doInBackground() throws Exception {
+			algo.run();
+			S result = algo.getSolution();
+			return result;
+		}
+	}
+
+	private void initStepByStep( Project project, AlgorithmListener listener, boolean stopMode ) {
+		if( ecasbs == null || !ecasbs.isRunning() ) {
+			cat = new CellularAutomatonTask();
+			eca = CellularAutomatonAlgorithmEnumeration.RandomOrder.getAlgorithm();
+			if( stopMode ) {
+				log.info( "Initializing the algorithm for step-by-step execution..." ) ;
+				ecasbs = StepByStepAutomaton.getStepByStepAlgorithm( eca );
+			} else {
+				log.info( "Initializing the algorithm for slow execution..." ) ;
+				ecasbs = StepByStepAutomaton.getSlowAlgorithm( eca );
+			}
+
+			cat.setCaAlgo( ecasbs );
+			cat.setProblem( project );
+
+			/**
+			 * Listens to the actual simulation algorithm and sets the data structures
+			 * for the view accordingly. These datastructures are the cellular automaton,
+			 * the container and the mapping. They can afterwards be accessed from
+			 * the GUI to visualize the temporal simulation status.
+			 */
+			final AlgorithmListener al = new AlgorithmListener() {
+				@Override
+				public void eventOccurred( AlgorithmEvent event ) {
+					if( event instanceof AlgorithmStartedEvent ) {
+						cellularAutomaton = cat.getCa();
+						mapping = cat.getMapping();
+						container = cat.getContainer();
+						assert cellularAutomaton != null;
+					}
+				}
+			};
+
+			ecasbs.addAlgorithmListener( al );
+			ecasbs.addAlgorithmListener( listener );
+
+			new BackgroundTask<>( cat ).execute(); // execute the algorithm in a new thread
+		} else {
+			if( ecasbs.isRunning() ) {
+				log.info( "Continuing the algorithm..." );
+				ecasbs.setPaused( false );
+			} else
+				log.info( "Ignoring, algorithm has finished." );
+		}
+	}
+}

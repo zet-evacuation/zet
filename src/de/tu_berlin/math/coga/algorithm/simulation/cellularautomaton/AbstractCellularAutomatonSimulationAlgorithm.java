@@ -21,7 +21,7 @@ public abstract class AbstractCellularAutomatonSimulationAlgorithm<Ce extends Ce
 		return maxSteps;
 	}
 
-	protected void setMaxSteps( int maxSteps ) {
+	public void setMaxSteps( int maxSteps ) {
 		this.maxSteps = maxSteps;
 	}
 

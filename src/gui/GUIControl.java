@@ -14,12 +14,12 @@ import de.tu_berlin.math.coga.common.algorithm.Algorithm;
 import de.tu_berlin.math.coga.common.algorithm.AlgorithmEvent;
 import de.tu_berlin.math.coga.common.algorithm.AlgorithmListener;
 import de.tu_berlin.math.coga.common.algorithm.AlgorithmProgressEvent;
+import de.tu_berlin.math.coga.common.algorithm.AlgorithmStartedEvent;
 import de.tu_berlin.math.coga.common.debug.Debug;
 import de.tu_berlin.math.coga.common.util.IOTools;
 import de.tu_berlin.math.coga.components.JVideoOptionsDialog;
-import de.tu_berlin.math.coga.zet.converter.graph.NetworkFlowModel;
-import de.tu_berlin.math.coga.zet.converter.cellularAutomaton.ZToCAConverter.ConversionNotSupportedException;
 import de.tu_berlin.math.coga.zet.converter.graph.GraphAssignmentConverter;
+import de.tu_berlin.math.coga.zet.converter.graph.NetworkFlowModel;
 import ds.CompareVisualizationResults;
 import ds.GraphVisualizationResults;
 import ds.ProjectLoader;
@@ -139,7 +139,7 @@ public class GUIControl implements AlgorithmListener {
 		algorithmControl = new AlgorithmControl( zcontrol.getProject() );
 		visualization.setZcontrol( zcontrol );
 	}
-	
+
 	public void loadTemplates() throws ParserConfigurationException, SAXException, IOException {
 		TemplateLoader tl = new TemplateLoader();
 		tl.parse( new File( GUIOptionManager.getDoorTemplateFile() ) );
@@ -513,7 +513,7 @@ public class GUIControl implements AlgorithmListener {
 	public void setMenuBar( JZETMenuBar aThis ) {
 		menuBar = aThis;
 	}
-	
+
 	public void setPopups( PolygonPopup polygonPopup, EdgePopup edgePopup, PointPopup pointPopup ) {
 		this.polygonPopup = polygonPopup;
 		this.edgePopup = edgePopup;
@@ -531,8 +531,8 @@ public class GUIControl implements AlgorithmListener {
 	public PointPopup getPointPopup() {
 		return pointPopup;
 	}
-	
-	
+
+
 
 	public void showAbout() {
 		CreditsDialog credits = new CreditsDialog( editor );
@@ -549,10 +549,10 @@ public class GUIControl implements AlgorithmListener {
 			for( Room r : f )
 				for( AssignmentArea a : r.getAssignmentAreas() )
 					counter += a.getEvacuees();
-			log.info( f.getName() + ": " + counter + " Personen" );
+			log.log( Level.INFO, "{0}: {1} Personen", new Object[]{f.getName(), counter});
 			overall += counter;
 		}
-		log.info( "Insgesamt: " + overall );
+		log.log( Level.INFO, "Insgesamt: {0}", overall);
 
 		// Pro Ausgang:
 		log.info( "Personenverteilung pro Ausgang: " );
@@ -580,9 +580,9 @@ public class GUIControl implements AlgorithmListener {
 	public void outputGraph() {
 		GraphConverterAlgorithms last = GraphConverterAlgorithms.NonGridGraph;
 		final Algorithm<BuildingPlan,NetworkFlowModel> conv = last.converter();
-		
+
 		conv.setProblem( zcontrol.getProject().getBuildingPlan() );
-		
+
 		conv.run();
 		//final SerialTask st = new SerialTask( conv );
 		//st.addPropertyChangeListener( new PropertyChangeListener() {
@@ -595,23 +595,23 @@ public class GUIControl implements AlgorithmListener {
 		//if( propertyChangeListener != null )
 		//	st.addPropertyChangeListener( propertyChangeListener );
 		//st.execute();
-		
+
 		ConcreteAssignment concreteAssignment = zcontrol.getProject().getCurrentAssignment().createConcreteAssignment( 400 );
-		
+
 		GraphAssignmentConverter cav = new GraphAssignmentConverter( originalProblem );
-		
+
 		cav.setProblem( concreteAssignment );
 		cav.run();
 		originalProblem = cav.getSolution();
-		
-		
+
+
 		//BatchResultEntry ca_res = new BatchResultEntry( zcontrol.getProject().getProjectFile().getName(), new BuildingResults( zcontrol.getProject().getBuildingPlan() ) );
 		//ConcreteAssignment[] concreteAssignments = new ConcreteAssignment[1];
 		//Assignment assignment = zcontrol.getProject().getCurrentAssignment();
 		//concreteAssignments[0] = assignment.createConcreteAssignment( 400 );
 		//new BatchGraphCreateOnlyTask( ca_res, 0, zcontrol.getProject(), assignment, concreteAssignments ).run();
 		//NetworkFlowModel originalProblem = ca_res.getNetworkFlowModel();
-		
+
 		EarliestArrivalFlowProblem problem = originalProblem.getEAFP();
 		try {
 			if( true )
@@ -745,7 +745,7 @@ public class GUIControl implements AlgorithmListener {
 	public void newProject() {
 		newProject( false );
 	}
-	
+
 	// TODO auslagern von save und methoden aufrufen!
 	public void newProject( boolean overwrite ) {
 		String status = "";
@@ -950,8 +950,8 @@ public class GUIControl implements AlgorithmListener {
 
 	public void showPropertiesDialog() {
 		JPropertyDialog jd = new JPropertyDialog( ZETProperties.getCurrentPropertyTreeModel() );
-		
-		
+
+
 		jd.setModal( true );
 		jd.setVisible( true );
 		log.info( "Properties saved." ); // TODO loc
@@ -1050,7 +1050,7 @@ public class GUIControl implements AlgorithmListener {
 		JOptionsDialog opt = new JOptionsDialog( ZETLoader.ptmOptions );
 		opt.setModal( true );
 		opt.setVisible( true );
-		
+
 		try {	// Save results in options file
 			PropertyContainer.saveConfigFile( ZETLoader.ptmOptions, new File( ZETLoader.optionFilename ) );
 		} catch( IOException ex ) {
@@ -1081,7 +1081,7 @@ public class GUIControl implements AlgorithmListener {
 	public void addBatchEntry( BatchProjectEntry batchProjectEntry ) {
 		editor.getBatchView().add( batchProjectEntry );
 	}
-	
+
 	/** GUIControl class for projects and editing */
 	private ZControl zcontrol;
 
@@ -1136,7 +1136,7 @@ public class GUIControl implements AlgorithmListener {
 			}
 		});
 	}
-	
+
 	private boolean isDone( PropertyChangeEvent pce ) {
 		if( pce.getPropertyName().equals( "state" ) )
 			if( pce.getNewValue().equals( SwingWorker.StateValue.DONE ) )
@@ -1160,7 +1160,7 @@ public class GUIControl implements AlgorithmListener {
 							}
 							log.severe( ex.getMessage() );
 							JOptionPane.showMessageDialog( null, " Fehler in Raum " + ex.getInvalidEdge().getRoom().getName() + ". \n" + ex.getMessage(), "Fehler", JOptionPane.ERROR_MESSAGE );
-							
+
 							int ret = JOptionPane.showOptionDialog( editor, "Soll die Kante unpassierbar gemacht werden? \n (Dies in den meisten Fällen sinnvoll.)", "Fehler kann behoben werden.", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE, null, null, null );
 							switch( ret ) {
 								case JOptionPane.YES_OPTION:
@@ -1190,11 +1190,12 @@ public class GUIControl implements AlgorithmListener {
 	}
 
 	public void createConcreteAssignment() {
-		try {
-			algorithmControl.createConcreteAssignment();
-		} catch( IllegalArgumentException | ConversionNotSupportedException ex ) {
-			Logger.getLogger( GUIControl.class.getName() ).log( Level.SEVERE, null, ex );
-		}
+		throw new UnsupportedOperationException( "Cannot create concrete assignments for fun." );
+//		try {
+//			algorithmControl.createConcreteAssignment();
+//		} catch( IllegalArgumentException | ConversionNotSupportedException ex ) {
+//			Logger.getLogger( GUIControl.class.getName() ).log( Level.SEVERE, null, ex );
+//		}
 	}
 
 	public void performSimulation() {
@@ -1207,9 +1208,9 @@ public class GUIControl implements AlgorithmListener {
 					if( algorithmControl.isError() ) {
 						Debug.globalLogger.log( Level.SEVERE, "Exception in execution", algorithmControl.getError() );
 						//Debug.printException( algorithmControl.getError() );
-						algorithmControl.getError().printStackTrace();
+						algorithmControl.getError().printStackTrace( System.err );
 					} else {
-						log.info( "Left individuals: " + algorithmControl.getCellularAutomaton().getIndividualCount() );
+						log.log( Level.INFO, "Left individuals: {0}", algorithmControl.getCellularAutomaton().getIndividualCount());
 						visualization.getControl().setCellularAutomatonControl( algorithmControl.getCaVisResults(), algorithmControl.getCellularAutomaton() );
 						editor.getVisualizationView().updatePotentialSelector();
 						visualizationToolBar.setEnabledPlayback( true );
@@ -1224,58 +1225,21 @@ public class GUIControl implements AlgorithmListener {
 	}
 
 	public void performQuickVisualization() {
-		//createBuildingDataStructure();
-		log.info( "QUICK" );
-		algorithmControl.performSimulationQuick( new PropertyChangeListener() {
-			@Override
-			public void propertyChange( PropertyChangeEvent pce ) {
-				log.info( "Property Change Event" );
-			}
-
-		}, this );
-	}
-
-	public void setUpSimulationAlgorithm() {
-		algorithmControl.setUpSimulationAlgorithm();
+		algorithmControl.performSimulationQuick( stepByStepListener );
 	}
 
 	boolean init = false;
 
 	public void pauseSimulation() {
-		algorithmControl.pauseStepByStep();
+		algorithmControl.pauseSimulation();
 	}
-	
-	public void performOneStep() {
-		final AlgorithmListener listener = this;
-		try {
-			algorithmControl.performOneStep( new PropertyChangeListener() {
-				private boolean first = true;
-				@Override
-				public void propertyChange( PropertyChangeEvent pce ) {
-					if( first ) {
-						while( algorithmControl.getCellularAutomaton() == null ) {
-							try {
-								Thread.sleep( 100 );
-							} catch( InterruptedException ex ) {
-								Logger.getLogger( AlgorithmControl.class.getName() ).log( Level.SEVERE, null, ex );
-							}
-						}
-						editor.getQuickVisualizationView().getLeftPanel().getMainComponent().setSimulationData( algorithmControl.getCellularAutomaton(), algorithmControl.getContainer(), algorithmControl.getMapping() );
-						editor.getQuickVisualizationView().displayFloor( editview.getCurrentFloor() );
-						editor.getQuickVisualizationView().getLeftPanel().getMainComponent().update();
-					} else {
-						editor.getQuickVisualizationView().getLeftPanel().getMainComponent().update();
-					}
-				}
 
-		}, listener );
-		} catch( ConversionNotSupportedException ex ) {
-			ex.printStackTrace( System.err );
-		}
+	public void performOneStep() {
+		algorithmControl.performOneStep( stepByStepListener );
 	}
 
 	/**
-	 * 
+	 *
 	 * @param algo
 	 */
 	public void createGraph( GraphConverterAlgorithms algo ) {
@@ -1286,7 +1250,7 @@ public class GUIControl implements AlgorithmListener {
 				if( isDone( pce ) ) {
 					GraphVisualizationResults gvr = new GraphVisualizationResults( algorithmControl.getNetworkFlowModel(), algorithmControl.getNetworkFlowModel().getNodeCoordinates() );
 					visualization.getControl().setGraphControl( gvr );
-                                        
+
 				}
 			}
 		}, algo);
@@ -1303,7 +1267,7 @@ public class GUIControl implements AlgorithmListener {
 			}
 		}, this );
 	}
-	
+
 	public void performExitAssignmentEAT() {
 		algorithmControl.performExitAssignmentEAT( new PropertyChangeListener() {
 			@Override
@@ -1323,11 +1287,8 @@ public class GUIControl implements AlgorithmListener {
 						editor.getQuickVisualizationView().getLeftPanel().getMainComponent().setSimulationData( algorithmControl.getCellularAutomaton(), algorithmControl.getContainer(), algorithmControl.getMapping() );
 						editor.getQuickVisualizationView().displayFloor( editview.getCurrentFloor() ); // hier startet ein task!
 						ZETLoader.sendMessage( "Simulation beendet" );
-
-	
 	}
-	
-        
+
 	public void performOptimizationCompare() {
 		algorithmControl.performOptimizationCompare( new PropertyChangeListener() {
 			@Override
@@ -1345,25 +1306,41 @@ public class GUIControl implements AlgorithmListener {
 	}
 
 	boolean firstProgress = false;
+	AlgorithmListener stepByStepListener = new AlgorithmListener() {
+		@Override
+		public synchronized void eventOccurred( AlgorithmEvent event ) {
+			if( event instanceof AlgorithmStartedEvent ) {
+				while( algorithmControl.getCellularAutomaton() == null ) // the algorithm was started. we have to wait, until the
+					try {																										 // computed data, as the CA and so on are available, if
+						Thread.sleep( 100 );																		 // this event is dispatched earlier.
+						System.out.println( "We are waiting here..." );
+					} catch( InterruptedException ex ) {
+						Logger.getLogger( AlgorithmControl.class.getName() ).log( Level.SEVERE, null, ex );
+					}
+				EvacuationCellularAutomaton ca = algorithmControl.getCellularAutomaton();
+				if( ca != null ) {
+					editor.getQuickVisualizationView().getLeftPanel().getMainComponent().setSimulationData( algorithmControl.getCellularAutomaton(), algorithmControl.getContainer(), algorithmControl.getMapping() );
+					editor.getQuickVisualizationView().displayFloor( editview.getCurrentFloor() );
+					editor.getQuickVisualizationView().getLeftPanel().getMainComponent().update();
+					firstProgress = true;
+					log.info( "First time floor drawn." );
+				}
+			} else if( event instanceof AlgorithmProgressEvent ) {
+				AlgorithmProgressEvent ape = (AlgorithmProgressEvent)event;
+				log.log( Level.INFO, "Progress: {0}", ape.getProgress() );
+				editor.setProgressValue( ((int)(ape.getProgress() * 100)) );
+				editor.getQuickVisualizationView().getLeftPanel().getMainComponent().update();
+				editor.getQuickVisualizationView().repaint();
+			}
+		}
+	};
 
 	@Override
 	public synchronized void eventOccurred( AlgorithmEvent event ) {
 		if( event instanceof AlgorithmProgressEvent ) {
 			AlgorithmProgressEvent ape = (AlgorithmProgressEvent) event;
-			//log.info( "Progress: " + ape.getProgress() );
+			log.log( Level.INFO, "Progress: {0}", ape.getProgress());
 			editor.setProgressValue( ((int)(ape.getProgress() * 100)) );
-
-		if( !firstProgress ) {
-			EvacuationCellularAutomaton ca = algorithmControl.getCellularAutomaton();
-			if( ca != null ) {
-				editor.getQuickVisualizationView().getLeftPanel().getMainComponent().setSimulationData( algorithmControl.getCellularAutomaton(), algorithmControl.getContainer(), algorithmControl.getMapping() );
-				editor.getQuickVisualizationView().displayFloor( editview.getCurrentFloor() );
-				editor.getQuickVisualizationView().getLeftPanel().getMainComponent().update();
-				firstProgress = true;
-				log.info( "First time floor drawn." );
-			}
-		} else
-			editor.getQuickVisualizationView().getLeftPanel().getMainComponent().update();
 		}
 	}
 
@@ -1420,7 +1397,7 @@ public class GUIControl implements AlgorithmListener {
 	}
 
 	/**
-	 * 
+	 *
 	 */
 	protected PropertyChangeListener pcl = new PropertyChangeListener() {
 		@Override

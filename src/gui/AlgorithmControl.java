@@ -17,7 +17,6 @@ import de.tu_berlin.math.coga.zet.converter.cellularAutomaton.AssignmentApplicat
 import de.tu_berlin.math.coga.zet.converter.cellularAutomaton.CellularAutomatonAssignmentConverter;
 import de.tu_berlin.math.coga.zet.converter.cellularAutomaton.ConvertedCellularAutomaton;
 import de.tu_berlin.math.coga.zet.converter.cellularAutomaton.ZToCAConverter;
-import de.tu_berlin.math.coga.zet.converter.cellularAutomaton.ZToCAConverter.ConversionNotSupportedException;
 import de.tu_berlin.math.coga.zet.converter.cellularAutomaton.ZToCAMapping;
 import de.tu_berlin.math.coga.zet.converter.cellularAutomaton.ZToCARasterContainer;
 import de.tu_berlin.math.coga.zet.converter.graph.GraphAssignmentConverter;
@@ -28,7 +27,6 @@ import ds.GraphVisualizationResults;
 import ds.PropertyContainer;
 import ds.ca.evac.EvacuationCellularAutomaton;
 import ds.ca.results.VisualResultsRecorder;
-import ds.z.AssignmentType;
 import ds.z.BuildingPlan;
 import ds.z.ConcreteAssignment;
 import ds.z.Project;
@@ -44,8 +42,6 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import tasks.conversion.BuildingPlanConverter;
 import zet.tasks.CellularAutomatonAlgorithmEnumeration;
-import zet.tasks.CellularAutomatonTask;
-import zet.tasks.CellularAutomatonTaskStepByStep;
 import zet.tasks.CompareTask;
 import zet.tasks.GraphAlgorithmEnumeration;
 import zet.tasks.GraphAlgorithmTask;
@@ -61,21 +57,15 @@ public class AlgorithmControl implements PropertyChangeListener {
 	/** The logger of the main class. */
 	private static final Logger log = Logger.getGlobal();
 
+	private AlgorithmControlCellularAutomaton caControl = new AlgorithmControlCellularAutomaton();
+
 	private BuildingResults buildingResults;
 	private Project project;
-	private EvacuationCellularAutomaton cellularAutomaton;
-	private ConcreteAssignment concreteAssignment;
-	private EvacuationCellularAutomatonAlgorithm caAlgo;
-	private ZToCAMapping mapping;
-	private ZToCARasterContainer container;
-	private CAVisualizationResults caVisResults;
 	private NetworkFlowModel networkFlowModel;
 	private GraphVisualizationResults graphVisResults;
         private CompareVisualizationResults compVisResults;
-	private CellularAutomatonTask cat = new CellularAutomatonTask();
 	//private boolean createdValid = false;
 	private RuntimeException error;
-	private CellularAutomatonTaskStepByStep catsbs;
 
 
 	public AlgorithmControl( Project project ) {
@@ -132,195 +122,7 @@ public class AlgorithmControl implements PropertyChangeListener {
 		return buildingResults;
 	}
 
-	public void convertCellularAutomaton( ) {
-		convertCellularAutomaton( null );
-	}
 
-	void convertCellularAutomaton( PropertyChangeListener propertyChangeListener ) {
-		error = null;
-		final ZToCAConverter conv = new ZToCAConverter();
-
-		conv.setProblem( project.getBuildingPlan() );
-
-		final SerialTask st = new SerialTask( conv );
-		st.addPropertyChangeListener( new PropertyChangeListener() {
-			@Override
-			public void propertyChange( PropertyChangeEvent pce ) {
-				if( st.isDone() ) {
-					if( st.isError() ) {
-						error = st.getError();
-					} else {
-						cellularAutomaton = conv.getCellularAutomaton();
-						mapping = conv.getMapping();
-						container = conv.getContainer();
-						caInitialized = true;
-					}
-				}
-			}
-		});
-		if( propertyChangeListener != null )
-			st.addPropertyChangeListener( propertyChangeListener );
-
-		st.execute();
-	}
-
-	public void invalidateConvertedCellularAutomaton() {
-		caInitialized = false;
-	}
-
-	public EvacuationCellularAutomaton getCellularAutomaton() {
-		return cellularAutomaton;
-	}
-
-	public ZToCARasterContainer getContainer() {
-		return container;
-	}
-
-	public ZToCAMapping getMapping() {
-		return mapping;
-	}
-
-	void performSimulation() {
-		performSimulation( null, null );
-	}
-
-// AlgorithmListener control ) {
-//		final GraphAlgorithmTask gat = new GraphAlgorithmTask( GraphAlgorithmEnumeration.SuccessiveEarliestArrivalAugmentingPathOptimized );
-//		gat.setProblem( project );
-
-//		gat.addAlgorithmListener( control );
-
-
-	void performSimulation( PropertyChangeListener propertyChangeListener, AlgorithmListener listener ) {
-		error = null;
-
-		cat = new CellularAutomatonTask();
-		cat.setCaAlgo( CellularAutomatonAlgorithmEnumeration.RandomOrder );
-		cat.setProblem( project );
-		cat.addAlgorithmListener( listener );
-
-		final SerialTask st = new SerialTask( cat );
-		st.addPropertyChangeListener( new PropertyChangeListener() {
-			@Override
-			public void propertyChange( PropertyChangeEvent pce ) {
-				if( st.isDone() ) {
-					if( st.isError() ) {
-						error = st.getError();
-					} else {
-						cellularAutomaton = cat.getCa();
-						mapping = cat.getMapping();
-						container = cat.getContainer();
-						caVisResults = cat.getSolution();
-						//EventServer.getInstance().dispatchEvent( new MessageEvent<>( this, MessageType.Status, "Simulation finished" ) );
-						log.log( Level.INFO, "Egress time: {0}", Formatter.formatUnit( cellularAutomaton.getTimeStep() * cellularAutomaton.getSecondsPerStep(), TimeUnits.Seconds ));
-					}
-				}
-			}
-		});
-		if( propertyChangeListener != null )
-			st.addPropertyChangeListener( propertyChangeListener );
-		st.execute();
-	}
-
-	void performSimulationQuick( PropertyChangeListener propertyChangeListener, AlgorithmListener listener ) {
-		//final CellularAutomatonTask cat = new CellularAutomatonTask();
-
-		if( catsbs == null ) {
-			initStepByStep( propertyChangeListener, listener, false );
-			System.out.println( "Start slow execution..." );
-		} else {
-			catsbs.setStopMode( false );
-		}
-	}
-
-	public CAVisualizationResults getCaVisResults() {
-	//	if( cat.isProblemSolved() ) // temporary! (for testing exit assignments)
-	//		return cat.getSolution();
-	//	else return null;
-		return caVisResults;
-	}
-
-	void createConcreteAssignment() throws IllegalArgumentException, ConversionNotSupportedException {
-		for( AssignmentType at : project.getCurrentAssignment().getAssignmentTypes() )
-			cellularAutomaton.setAssignmentType( at.getName(), at.getUid() );
-		concreteAssignment = project.getCurrentAssignment().createConcreteAssignment( 400 );
-		final CellularAutomatonAssignmentConverter cac = new CellularAutomatonAssignmentConverter();
-		cac.setProblem( new AssignmentApplicationInstance( new ConvertedCellularAutomaton( cellularAutomaton, mapping, container ), concreteAssignment ) );
-		cac.run();
-	}
-
-	void setUpSimulationAlgorithm() {
-		CellularAutomatonAlgorithmEnumeration cellularAutomatonAlgo = CellularAutomatonAlgorithmEnumeration.RandomOrder;
-		//caAlgo = cellularAutomatonAlgo.createTask( cellularAutomaton );
-		caAlgo = cellularAutomatonAlgo.getAlgorithm();
-		caAlgo.setProblem( new EvacuationSimulationProblem( ( cellularAutomaton) ) );
-		double caMaxTime = PropertyContainer.getInstance().getAsDouble( "algo.ca.maxTime" );
-		caAlgo.setMaxTimeInSeconds( caMaxTime );
-	}
-
-	private boolean caInitialized = false;
-
-	void pauseStepByStep() {
-		if( catsbs != null )
-			catsbs.setStopMode( true );
-	}
-
-	void performOneStep( PropertyChangeListener propertyChangeListener, AlgorithmListener listener ) throws ConversionNotSupportedException {
-		if( catsbs == null ) {
-			initStepByStep( propertyChangeListener, listener, true );
-		} else {
-			catsbs.setStopMode( true );
-			catsbs.setPerformOneStep( true );
-		}
-	}
-
-	private void initStepByStep( PropertyChangeListener propertyChangeListener, AlgorithmListener listener, boolean stopMode ) {
-			if( caInitialized ) {
-				System.out.println( "Do not convert automaton, already exists." );
-				catsbs = new CellularAutomatonTaskStepByStep();
-				catsbs.setConvertedCellularAutomaton( new ConvertedCellularAutomaton( cellularAutomaton, mapping, container ) );
-			} else
-				catsbs = new CellularAutomatonTaskStepByStep();
-				//return; // no auto-create so far
-			catsbs.setCaAlgo( CellularAutomatonAlgorithmEnumeration.InOrder );
-			catsbs.setProblem( project );
-			if( stopMode ) {
-				catsbs.setStopMode( true );
-				catsbs.setPerformOneStep( true );
-			}
-			catsbs.addAlgorithmListener( listener );
-			final SerialTask st = new SerialTask( catsbs );
-			st.addPropertyChangeListener( new PropertyChangeListener() {
-				private boolean first = true;
-				@Override
-				public void propertyChange( PropertyChangeEvent pce ) {
-					if( first ) {
-						System.out.println( "Received event:" + pce.getPropertyName() );
-						while( catsbs.getCa() == null ) {
-							try {
-								Thread.sleep( 100 );
-							} catch( InterruptedException ex ) {
-								Logger.getLogger( AlgorithmControl.class.getName() ).log( Level.SEVERE, null, ex );
-							}
-						}
-						cellularAutomaton = catsbs.getCa();
-						mapping = catsbs.getMapping();
-						container = catsbs.getContainer();
-						caVisResults = null;
-						first = false;
-						// todo: invalidate
-						// invalidateConvertedCellularAutomaton();
-					}
-					if( st.isDone() ) {
-						catsbs = null;
-						//caInitialized = false;
-					}
-				}
-			});
-			if( propertyChangeListener != null )
-				st.addPropertyChangeListener( propertyChangeListener );
-			st.execute();
-	}
 
 	@Override
 	public void propertyChange( PropertyChangeEvent pce ) {
@@ -421,6 +223,8 @@ public class AlgorithmControl implements PropertyChangeListener {
 		//ZToGraphConverter.convertConcreteAssignment( concreteAssignments[runNumber], res.getNetworkFlowModel() );
 
 		log.info( "Compute concrete assignment..." );
+		ConcreteAssignment concreteAssignment;
+
 		concreteAssignment = project.getCurrentAssignment().createConcreteAssignment( 400 );
 		GraphAssignmentConverter cav = new GraphAssignmentConverter( networkFlowModel );
 		cav.setProblem( concreteAssignment );
@@ -447,6 +251,9 @@ public class AlgorithmControl implements PropertyChangeListener {
 		conv.setProblem( project.getBuildingPlan() );
 		conv.run();
 		EvacuationCellularAutomaton ca = conv.getCellularAutomaton();
+						ZToCARasterContainer container;
+						CAVisualizationResults caVisResults;
+						ZToCAMapping mapping;
 		mapping = conv.getMapping();
 		container = conv.getContainer();
 		final ConvertedCellularAutomaton cca = new ConvertedCellularAutomaton( ca, mapping, container );
@@ -496,7 +303,7 @@ public class AlgorithmControl implements PropertyChangeListener {
 		// TODO visualResultsRecorder normal class, no singleton.
 		CAVisualizationResults visResults = new CAVisualizationResults( VisualResultsRecorder.getInstance().getRecording(), mapping );
 
-						cellularAutomaton = ca;
+						EvacuationCellularAutomaton cellularAutomaton = ca;
 						//mapping = mapping;
 						//container = cca;
 						container = conv.getContainer();
@@ -504,11 +311,9 @@ public class AlgorithmControl implements PropertyChangeListener {
 						//EventServer.getInstance().dispatchEvent( new MessageEvent<>( this, MessageType.Status, "Simulation finished" ) );
 		log.log(Level.INFO, "Egress time: {0}", Formatter.formatUnit( cellularAutomaton.getTimeStep() * cellularAutomaton.getSecondsPerStep(), TimeUnits.Seconds ));
 
-
 		log.info( "done." );
-
-
 	}
+
 
 
 
@@ -554,4 +359,42 @@ public class AlgorithmControl implements PropertyChangeListener {
 	public CompareVisualizationResults getCompVisResults() {
 		return compVisResults;
 	}
+
+	void performSimulation( PropertyChangeListener propertyChangeListener, AlgorithmListener listener ) {
+		caControl.performSimulation( project, propertyChangeListener, listener );
+	}
+
+	void pauseSimulation() {
+		caControl.pauseStepByStep();
+	}
+
+	void performOneStep( AlgorithmListener listener ) {
+		caControl.performOneStep( project, listener );
+	}
+
+	void performSimulationQuick( AlgorithmListener listener ) {
+		caControl.performSimulationQuick( project, listener );
+	}
+
+	public EvacuationCellularAutomaton getCellularAutomaton() {
+		return caControl.getCellularAutomaton();
+	}
+
+	public ZToCARasterContainer getContainer() {
+		return caControl.getContainer();
+	}
+
+	public ZToCAMapping getMapping() {
+		return caControl.getMapping();
+	}
+
+	void convertCellularAutomaton( PropertyChangeListener propertyChangeListener ) {
+		caControl.convertCellularAutomaton( project.getBuildingPlan(), propertyChangeListener );
+	}
+
+	CAVisualizationResults getCaVisResults() {
+		return caControl.getCaVisResults();
+	}
+
+
 }
