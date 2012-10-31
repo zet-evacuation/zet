@@ -14,7 +14,7 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 /**
- * Class CellularAutomatonAlgorithmEnumeration Created 07.07.2008, 01:29:17
+ * Class CellularAutomatonAlgorithms Created 07.07.2008, 01:29:17
  */
 package zet.tasks;
 
@@ -31,7 +31,7 @@ import de.tu_berlin.math.coga.common.localization.DefaultLoc;
  * and supports displaying in gui elements.
  * @author Jan-Philipp Kappmeier
  */
-public enum CellularAutomatonAlgorithmEnumeration {
+public enum CellularAutomatonAlgorithms {
 	/**
 	 * A simulation algorithm where all individuals move in the order of
 	 * decreasing distances.
@@ -88,7 +88,7 @@ public enum CellularAutomatonAlgorithmEnumeration {
 	 * Creates a new cellular automaton algorithm instance.
 	 * @param name
 	 */
-	CellularAutomatonAlgorithmEnumeration( String name ) {
+	CellularAutomatonAlgorithms( String name ) {
 		this.name = name;
 	}
 
@@ -105,10 +105,10 @@ public enum CellularAutomatonAlgorithmEnumeration {
 	 * The string representation of the algorithms. This is the same as the name.
 	 * @return the string representation of the algorithm.
 	 */
-	@Override
-	public String toString() {
-		return name;
-	}
+//	@Override
+//	public String toString() {
+//		return name;
+//	}
 
 	public abstract EvacuationCellularAutomatonAlgorithm getAlgorithm();
 }

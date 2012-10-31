@@ -25,7 +25,7 @@ import java.util.TreeMap;
 
 import algo.ca.EvacuationPlanSwapCellularAutomatonInOrder;
 import batch.BatchResultEntry;
-import zet.tasks.CellularAutomatonAlgorithmEnumeration;
+import zet.tasks.CellularAutomatonAlgorithms;
 import zet.tasks.GraphAlgorithmEnumeration;
 import de.tu_berlin.math.coga.zet.converter.cellularAutomaton.ZToCAConverter.ConversionNotSupportedException;
 import de.tu_berlin.math.coga.common.algorithm.Algorithm;
@@ -48,7 +48,7 @@ import evacuationplan.FlowBasedCAFactory;
 public class BatchEvacuationCATask implements Runnable {
 
 	/** The cellular automaton algorithm enumeration object. */
-	private CellularAutomatonAlgorithmEnumeration cellularAutomatonAlgo;
+	private CellularAutomatonAlgorithms cellularAutomatonAlgo;
 	/** The graph algorithm enumeration object. */
 	private GraphAlgorithmEnumeration graphAlgo;
 	/** The number of the run, used for accessing the result in {@link res} */
@@ -78,7 +78,7 @@ public class BatchEvacuationCATask implements Runnable {
 	 * @param assignment the selected assignment
 	 * @param concreteAssignments the concrete assignments that were already used for the cellular automaton
 	 */
-	public BatchEvacuationCATask (CellularAutomatonAlgorithmEnumeration cellularAutomatonAlgo, GraphAlgorithmEnumeration graphAlgo,
+	public BatchEvacuationCATask (CellularAutomatonAlgorithms cellularAutomatonAlgo, GraphAlgorithmEnumeration graphAlgo,
 			BatchResultEntry res, int runNumber, int maxTime, TreeMap<Integer, Integer> median,
 			Project project, Assignment assignment, ConcreteAssignment[] concreteAssignments) {
 		this.cellularAutomatonAlgo = cellularAutomatonAlgo;
@@ -94,7 +94,7 @@ public class BatchEvacuationCATask implements Runnable {
 
 	/**
 	 * Runs a cellular automaton. At first, the automaton is created. After that
-	 * the algorithm stored in the submitted {@link CellularAutomatonAlgorithmEnumeration} is
+	 * the algorithm stored in the submitted {@link CellularAutomatonAlgorithms} is
 	 * executed. After execution the results are stored in an
 	 * {@link BatchResultEntry}.
 	 */

@@ -7,8 +7,6 @@ package zet.tasks;
 import algo.ca.algorithm.evac.EvacuationSimulationProblem;
 import algo.ca.framework.EvacuationCellularAutomatonAlgorithm;
 import de.tu_berlin.math.coga.common.algorithm.Algorithm;
-import de.tu_berlin.math.coga.common.algorithm.AlgorithmEvent;
-import de.tu_berlin.math.coga.common.algorithm.AlgorithmListener;
 import de.tu_berlin.math.coga.zet.converter.cellularAutomaton.AssignmentApplicationInstance;
 import de.tu_berlin.math.coga.zet.converter.cellularAutomaton.CellularAutomatonAssignmentConverter;
 import de.tu_berlin.math.coga.zet.converter.cellularAutomaton.ConvertedCellularAutomaton;
@@ -28,8 +26,8 @@ import io.visualization.CAVisualizationResults;
  *
  * @author Jan-Philipp Kappmeier
  */
-public class CellularAutomatonTask extends Algorithm<Project, CAVisualizationResults> implements AlgorithmListener {
-	EvacuationCellularAutomatonAlgorithm  cellularAutomatonAlgorithm;
+public class CellularAutomatonTask extends Algorithm<Project, CAVisualizationResults> {
+	EvacuationCellularAutomatonAlgorithm cellularAutomatonAlgorithm;
 	EvacuationCellularAutomaton ca;
 	ZToCAMapping mapping;
 	ZToCARasterContainer container;
@@ -68,16 +66,10 @@ public class CellularAutomatonTask extends Algorithm<Project, CAVisualizationRes
 		caAlgo.setMaxTimeInSeconds( caMaxTime );
 		ca.startRecording ();
 
-		caAlgo.addAlgorithmListener( this );
-
-		caAlgo.run();	// hier wird initialisiert
+		caAlgo.run();
 		ca.stopRecording();
 
-		// create results
-		//CAVisualizationResults visResults = new CAVisualizationResults( mapping, ca.getPotentialManager() );
-		// TODO visualResultsRecorder normal class, no singleton.
 		CAVisualizationResults visResults = new CAVisualizationResults( VisualResultsRecorder.getInstance().getRecording(), mapping );
-
 		return visResults;
 	}
 
@@ -91,10 +83,5 @@ public class CellularAutomatonTask extends Algorithm<Project, CAVisualizationRes
 
 	public ZToCAMapping getMapping() {
 		return mapping;
-	}
-
-	@Override
-	public void eventOccurred( AlgorithmEvent event ) {
-		//throw new UnsupportedOperationException( "Not supported yet." );
 	}
 }

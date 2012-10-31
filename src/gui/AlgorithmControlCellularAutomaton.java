@@ -31,7 +31,7 @@ import java.beans.PropertyChangeListener;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.SwingWorker;
-import zet.tasks.CellularAutomatonAlgorithmEnumeration;
+import zet.tasks.CellularAutomatonAlgorithms;
 import zet.tasks.CellularAutomatonTask;
 import zet.tasks.SerialTask;
 
@@ -43,7 +43,8 @@ import zet.tasks.SerialTask;
 public class AlgorithmControlCellularAutomaton {
 	/** The logger of the main class. */
 	private static final Logger log = Logger.getGlobal();
-	private EvacuationCellularAutomatonAlgorithm caAlgo;
+	//private EvacuationCellularAutomatonAlgorithm simulationAlgorithm;
+	private CellularAutomatonAlgorithms simulationAlgorithm = CellularAutomatonAlgorithms.RandomOrder;
 	private ZToCAMapping mapping;
 	private ZToCARasterContainer container;
 	private CAVisualizationResults caVisResults;
@@ -54,6 +55,18 @@ public class AlgorithmControlCellularAutomaton {
 	//public void convertCellularAutomaton( ) {
 	//	convertCellularAutomaton( null );
 	//}
+
+	public CellularAutomatonAlgorithms getSimulationAlgorithm() {
+		return simulationAlgorithm;
+	}
+
+	/**
+	 * Sets the simulation algorithm that will be used for the next simulation runs.
+	 * @param simulationAlgorithm
+	 */
+	public void setSimulationAlgorithm( CellularAutomatonAlgorithms simulationAlgorithm ) {
+		this.simulationAlgorithm = simulationAlgorithm;
+	}
 
 	void convertCellularAutomaton( BuildingPlan buildingPlan, PropertyChangeListener propertyChangeListener ) {
 		final ZToCAConverter conv = new ZToCAConverter();
@@ -106,7 +119,7 @@ public class AlgorithmControlCellularAutomaton {
 //		error = null;
 
 		cat = new CellularAutomatonTask();
-		cat.setCaAlgo( CellularAutomatonAlgorithmEnumeration.RandomOrder.getAlgorithm() );
+		cat.setCaAlgo( CellularAutomatonAlgorithms.RandomOrder.getAlgorithm() );
 		cat.setProblem( project );
 		cat.addAlgorithmListener( listener );
 
@@ -154,12 +167,10 @@ public class AlgorithmControlCellularAutomaton {
 	}
 
 	void setUpSimulationAlgorithm() {
-		CellularAutomatonAlgorithmEnumeration cellularAutomatonAlgo = CellularAutomatonAlgorithmEnumeration.RandomOrder;
-		//caAlgo = cellularAutomatonAlgo.createTask( cellularAutomaton );
-		caAlgo = cellularAutomatonAlgo.getAlgorithm();
-		caAlgo.setProblem( new EvacuationSimulationProblem( ( cellularAutomaton) ) );
+		EvacuationCellularAutomatonAlgorithm cellularAutomatonAlgorithm = simulationAlgorithm.getAlgorithm();
+		cellularAutomatonAlgorithm.setProblem( new EvacuationSimulationProblem( ( cellularAutomaton) ) );
 		double caMaxTime = PropertyContainer.getInstance().getAsDouble( "algo.ca.maxTime" );
-		caAlgo.setMaxTimeInSeconds( caMaxTime );
+		cellularAutomatonAlgorithm.setMaxTimeInSeconds( caMaxTime );
 	}
 
 	void pauseStepByStep() {
@@ -191,7 +202,7 @@ public class AlgorithmControlCellularAutomaton {
 	private void initStepByStep( Project project, AlgorithmListener listener, boolean stopMode ) {
 		if( ecasbs == null || !ecasbs.isRunning() ) {
 			cat = new CellularAutomatonTask();
-			eca = CellularAutomatonAlgorithmEnumeration.RandomOrder.getAlgorithm();
+			eca = CellularAutomatonAlgorithms.RandomOrder.getAlgorithm();
 			if( stopMode ) {
 				log.info( "Initializing the algorithm for step-by-step execution..." ) ;
 				ecasbs = StepByStepAutomaton.getStepByStepAlgorithm( eca );

@@ -89,10 +89,10 @@ import zet.gui.main.tabs.visualization.ZETVisualization;
 import zet.gui.main.toolbar.JEditToolbar;
 import zet.gui.main.toolbar.JStatisticGraphToolBar;
 import zet.gui.main.toolbar.JVisualizationToolbar;
+import zet.tasks.CellularAutomatonAlgorithms;
 import zet.tasks.RasterizeTask;
 
-
-	/**
+/**
  * This class receives commands and GUI changes from elements like tool bars,
  * menus etc. and delegates them to other classes.
  * @author Jan-Philipp Kappmeier
@@ -131,12 +131,12 @@ public class GUIControl implements AlgorithmListener {
 
 	public void createZETWindow() {
 		zcontrol = new ZControl();
+		algorithmControl = new AlgorithmControl( zcontrol.getProject() );
 		editor = new JEditor( this, zcontrol );
 		editor.addMainComponents();
 		visualization = editor.getVisualizationView().getGLContainer();
 		updateVisualizationElements();
 		editview = editor.getEditView();
-		algorithmControl = new AlgorithmControl( zcontrol.getProject() );
 		visualization.setZcontrol( zcontrol );
 	}
 
@@ -1280,7 +1280,7 @@ public class GUIControl implements AlgorithmListener {
 			}
 		}, this );
 
-						log.info( "Left individuals: " + algorithmControl.getCellularAutomaton().getIndividualCount() );
+						log.log( Level.INFO, "Left individuals: {0}", algorithmControl.getCellularAutomaton().getIndividualCount());
 						visualization.getControl().setCellularAutomatonControl( algorithmControl.getCaVisResults(), algorithmControl.getCellularAutomaton() );
 						editor.getVisualizationView().updatePotentialSelector();
 						visualizationToolBar.setEnabledPlayback( true );
@@ -1434,6 +1434,14 @@ public class GUIControl implements AlgorithmListener {
 
 	public Templates<ExitDoor> getExitDoorTemplates() {
 		return exitDoorTemplates;
+	}
+
+	public void setSimulationAlgorithm( CellularAutomatonAlgorithms cellularAutomaton ) {
+		algorithmControl.setSimulationAlgorithm( cellularAutomaton );
+	}
+
+	public CellularAutomatonAlgorithms getSimulationAlgorithm() {
+		return algorithmControl.getSimulationAlgorithm();
 	}
 
 }
