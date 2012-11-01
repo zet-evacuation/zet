@@ -114,12 +114,12 @@ public class PlanPolygon<T extends Edge> implements Iterable<T> {
 		identity( new int[][] {{1, 0}, {0, 1}} );
 		/** The matrix used for the transformation. */
 		public final int[][] matrix;
-		
+
 		private Transformation( int[][] trans ) {
 			matrix = trans;
 		}
 	}
-	
+
 	/**
 	 * Creates an new instance of {@code PlanPolygon} without any assigned
 	 * edges or points. All parameters are initialized with {@code null}.
@@ -235,7 +235,7 @@ public class PlanPolygon<T extends Edge> implements Iterable<T> {
 
 		}
 		if( !closed && close && !end.equals( points.get(0) ) )
-			newEdge( end, points.get( 0 ) );		
+			newEdge( end, points.get( 0 ) );
 	}
 
 	/**
@@ -257,7 +257,7 @@ public class PlanPolygon<T extends Edge> implements Iterable<T> {
 	// If the inserted edge closes the polygon, it is stored as the last one!
 	// TODO Perform intersection-test
 	//final void addEdge( T e ) throws IllegalStateException, IllegalArgumentException {
-        public void addEdge( T e ) throws IllegalStateException, IllegalArgumentException {
+  public final void addEdge( T e ) throws IllegalStateException, IllegalArgumentException {
 		if( start == null ) {
 			// The instance is empty
 
@@ -302,7 +302,7 @@ public class PlanPolygon<T extends Edge> implements Iterable<T> {
 			} else
 				throw new IllegalArgumentException( ZLocalization.getSingleton().getString( "ds.z.PlanPolygon.CoordinateMismatchException" ) );
 		}
-		
+
 		recomputeBoundsCheckEdge( e );
 		recomputeBoundsUpdate();
 
@@ -332,7 +332,7 @@ public class PlanPolygon<T extends Edge> implements Iterable<T> {
 	 * added at the end of the polygon. That means, an edge from {@code end}
 	 * to the new point is added to the polygon.
 	 * @param p the point that is added
-	 * @throws java.lang.IllegalStateException if the polygon is closed. 
+	 * @throws java.lang.IllegalStateException if the polygon is closed.
 	 * It is not possible to defineByPoints further points to a closed polygon
 	 * @throws java.lang.IllegalArgumentException if the new point is the end point
 	 */
@@ -422,8 +422,8 @@ public class PlanPolygon<T extends Edge> implements Iterable<T> {
 	 * by the default-value of the rastersize (in millimeters) and for all edges
 	 * one of the following constraints holds:
 	 * <ul>
-	 * <li>the x-coordinates of the edge`s start- and endpoint are the same</li>
-	 * <li>the y-coordinates of the edge`s start- and endpoint are the same</li>
+	 * <li>the x-coordinates of the edge's start -and endpoint are the same</li>
+	 * <li>the y-coordinates of the edge's start -and endpoint are the same</li>
 	 * </ul>
 	 * <p>The runtime of this operation is O(n), where {@code n} is the
 	 * number of edges.</p>
@@ -451,13 +451,9 @@ public class PlanPolygon<T extends Edge> implements Iterable<T> {
 								ZLocalization.getSingleton().getString( "ds.z.PlanPolygon.PointNotOnRasterException" ) );
 			// falls die x-Koordinaten der beiden Punkte der Kante nicht gleich sind
 			// UND die y-Koordinaten der beiden Punkte der Kante nicht gleich sind-->nicht gerastert
-			//if( !( edge.getSource().getXInt() == edge.getTarget().getXInt() ) ) {
-			//	if( !( edge.getSource().getYInt() == edge.getTarget().getYInt() ) ) {
 			if( !edge.isHorizontal() && !edge.isVertical() )
 				throw new PolygonNotRasterizedException( this,
 								ZLocalization.getSingleton().getString( "ds.z.PlanPolygon.PointNotOnRasterException" ) );
-		//	}
-		//}
 		}
 	}
 
@@ -543,10 +539,6 @@ public class PlanPolygon<T extends Edge> implements Iterable<T> {
 
 					// Update edge count
 					size -= 2;
-
-					// Call edge delete handlers
-					//edgeDeleteHandler( e1 );
-					//edgeDeleteHandler( e2 );
 				} else
 					// e1 and e2 have no neighbours
 					// --> Either they are alone in the polygon, but in this case
@@ -570,7 +562,7 @@ public class PlanPolygon<T extends Edge> implements Iterable<T> {
 
 				// Mind the case that we deleted start or end point of our polygon
 				// This must be done prior to the deletion of the points because the
-				// event handlers that are triggered by the setting of the point below 
+				// event handlers that are triggered by the setting of the point below
 				// will try to iterate over the polygon which will fail or lead to
 				// infinite loops when start or end have invalid values.
 				if( common == start )
@@ -581,29 +573,17 @@ public class PlanPolygon<T extends Edge> implements Iterable<T> {
 				// really delete the one edge
 				if( deleteE1 ) {
 					e2.setPoint( common, e1_other, true );
-//					e1.removeChangeListener( this );
 				} else {
 					e1.setPoint( common, e2_other, true );
-	//				e2.removeChangeListener( this );
 				}
 
 				size--;
-
-				if( deleteE1 ) {
-				//	edgeDeleteHandler( e1 );
-				//	edgeChangeHandler( e2, null );
-				} else {
-				//	edgeDeleteHandler( e2 );
-				//	edgeChangeHandler( e1, null );
-				}
 
 				result = deleteE1 ? e2 : e1;
 			}
 		} finally {
 
 		}
-
-//		throwChangeEvent( new ChangeEvent( this ) );
 		return result;
 	}
 
@@ -633,7 +613,7 @@ public class PlanPolygon<T extends Edge> implements Iterable<T> {
 	 * @param points The points that are to be combined. Every pair of two consecutive
 	 * points in this list must be the ending points of an edge within this polygon.
 	 * @param keepMinSize If this is true, the polygon will throw an exception when
-	 * you try to combine edges in a polygon with (3 + points.size() - 2) edges or less. 
+	 * you try to combine edges in a polygon with (3 + points.size() - 2) edges or less.
 	 * If it is false you can combine the edges independently of the polygon size.
 	 * @return the new combined edge
 	 * @see #combineEdges(ds.z.Edge, ds.z.Edge, boolean)
@@ -667,7 +647,7 @@ public class PlanPolygon<T extends Edge> implements Iterable<T> {
 					}
 			}
 
-			// This is NO else case!
+			// This is *not* an else case!
 			if( itPoints != null )
 				while( reversed ? itPoints.hasPrevious() : itPoints.hasNext() ) {
 					PlanPoint nextPoint = reversed ? itPoints.previous() : itPoints.next();
@@ -867,7 +847,7 @@ public class PlanPolygon<T extends Edge> implements Iterable<T> {
 
 	/**
 	 * <p>Checks whether a {@code PlanPolygon} is inside this polygon, or not.</p>
-	 * <p>The current implementation only works on the bounding boxes of the polygons, 
+	 * <p>The current implementation only works on the bounding boxes of the polygons,
 	 * which means the the results will only be correct for rectangular shapes.
 	 * </p>
 	 * @param poly the polygon
@@ -895,16 +875,11 @@ public class PlanPolygon<T extends Edge> implements Iterable<T> {
 			//System.out.println( "List cleared " );
 			while( ei1.hasNext() ) {
 				T e = ei1.next();
-				Edge.LineIntersectionType lastType = null;
 				switch( Edge.intersects( e, current ) ) {
 					case Intersects:
-						//System.out.println( "Intersects" );
 						return false;
 					case Colinear:
-						//System.out.println( "Colinear: " + e.toString() + " und " + current.toString() );
-						//if( current.getMinX() >= e.getMinX() & current.getMaxX() <= e.getMaxX() & current.getMinY() >= e.getMinY() & current.getMaxY() <= e.getMaxY() ) // no problem
-						//	;
-						if( !( current.getMinX() >= e.getMinX() & current.getMaxX() <= e.getMaxX() & current.getMinY() >= e.getMinY() & current.getMaxY() <= e.getMaxY() ) ) { // no problem 
+						if( !( current.getMinX() >= e.getMinX() & current.getMaxX() <= e.getMaxX() & current.getMinY() >= e.getMinY() & current.getMaxY() <= e.getMaxY() ) ) { // no problem
 							// Points may create a problem
 							if( isBetween( current.getSource(), e ) && !problemPoints.contains( current.getSource() ) )
 								problemPoints.add( current.getSource() );
@@ -915,26 +890,21 @@ public class PlanPolygon<T extends Edge> implements Iterable<T> {
 							if( isBetween( e.getTarget(), current ) && !problemPoints.contains( e.getTarget() ) )
 								problemPoints.add( e.getTarget() );
 						}
-						lastType = Edge.LineIntersectionType.Colinear;
 						break;
 					case IntersectsBorder:
-						//System.out.println( "IntersectsBorder: " + e.toString() + " und " + current.toString() );
 						PlanPoint p = getIntersection( e, current );
 						if( !problemPoints.contains( p ) )
 							problemPoints.add( p );
 						break;
 					case Connected:
-						//System.out.println( "Connected: " + e.toString() + " und " + current.toString() );
 						if( current.fits( e.getSource() ) && !problemPoints.contains( e.getSource() ) )
 							problemPoints.add( e.getSource() );
 						else if( current.fits( e.getTarget() ) && !problemPoints.contains( e.getTarget() ) )
 							problemPoints.add( e.getTarget() );
 						break;
 					case NotIntersects:
-						//System.out.println( "NotIntersects" );
 						break;
 					case Superposed:
-						//System.out.println( "Superposed: " + e.toString() + " und " + current.toString() );
 						if( !problemPoints.contains( e.getSource() ) )
 							problemPoints.add( e.getSource() );
 						if( !problemPoints.contains( e.getTarget() ) )
@@ -946,13 +916,10 @@ public class PlanPolygon<T extends Edge> implements Iterable<T> {
 			for( int i = 0; i < problemPoints.size() - 1; i++ ) {
 				PlanPoint middle = new PlanPoint( (problemPoints.get( i ).getXMeter() + problemPoints.get( i + 1 ).getXMeter()) * 0.5,
 								(problemPoints.get( i ).getYMeter() + problemPoints.get( i + 1 ).getYMeter()) * 0.5 );
-				//System.out.println( "Teste Mittelpunkt: " + middle.toString() );
 				if( !this.contains( middle ) )
-					//System.out.println( "Mittelpunkt liegt außerhalb!" );
 					return false;
 			}
 		}
-		//System.out.println( "The Area is inside!" );
 		return true;
 	}
 
@@ -966,7 +933,6 @@ public class PlanPolygon<T extends Edge> implements Iterable<T> {
 		double C2 = A2 * e2.getTarget().x + B2 * e2.getSource().y;
 
 		double det = A1 * B2 - A2 * B1;
-		//if( det == 0 ){
 		if( Math.abs( det ) <= 0.00000001 )
 			//Lines are parallel
 			throw new java.lang.IllegalArgumentException( ZLocalization.getSingleton().getString( "ds.z.PlanPolygon.ParallelLinesException" ) );
@@ -991,7 +957,7 @@ public class PlanPolygon<T extends Edge> implements Iterable<T> {
 	 * @throws java.lang.IllegalStateException
 	 */
 	void delete() throws IllegalArgumentException, IllegalStateException {
-		// Do not use the polygon iterator here - he will fail because you 
+		// Do not use the polygon iterator here - he will fail because you
 		// delete his cursor when deleting the current edge
 		List<T> edges = getEdges();
 		for( Edge e : edges )
@@ -1065,7 +1031,7 @@ public class PlanPolygon<T extends Edge> implements Iterable<T> {
 		ListIterator<T> iter1;
 		ListIterator<T> iter2;
 		T current1 = getFirstEdge();
-		T current2 = (T)p.getFirstEdge();
+		T current2 = p.getFirstEdge();
 		// TODO the polygons may have an arbitrary shift of their starting
 		// points, but can still be equal
 		if( current1.equals( current2 ) ) {
@@ -1196,24 +1162,6 @@ public class PlanPolygon<T extends Edge> implements Iterable<T> {
 	}
 
 	/**
-	 * Returns the node points of this polygon as {@link java.awt.Polygon}. The
-	 * resulting polygon's coordinates have the accuracy of millimeters, given by
-	 * the underlying plan points.
-	 * <p>The runtime of this operation is O(n), where {@code n} is the
-	 * number of edges.</p>
-	 * @return the {@code java.awt.Polygon}-object with discretized coordinates
-	 */
-	public java.awt.Polygon getAWTPolygon() {
-		java.awt.Polygon drawPolygon = new java.awt.Polygon();
-		Iterator<PlanPoint> itP = pointIterator( false );
-		while( itP.hasNext() ) {
-			PlanPoint point = itP.next();
-			drawPolygon.addPoint( point.getXInt(), point.getYInt() );
-		}
-		return drawPolygon;
-	}
-
-	/**
 	 * Get the instance of an edge that is in the polygon. This is needed due to
 	 * two edges are considered equal if the two end points are equal. But to connect
 	 * rooms it is neccessary to have the same instance in both polygons.
@@ -1236,7 +1184,7 @@ public class PlanPolygon<T extends Edge> implements Iterable<T> {
 	 * number of edges.</p>
 	 * @param p1 one point
 	 * @param p2 the other point
-	 * @throws java.lang.IllegalArgumentException if the points do not form an 
+	 * @throws java.lang.IllegalArgumentException if the points do not form an
 	 * edge in the polygon or if they are equal
 	 * @return the {@link Edge} instance contained in the polygon
 	 */
@@ -1248,7 +1196,7 @@ public class PlanPolygon<T extends Edge> implements Iterable<T> {
 				return e;
 		throw new IllegalArgumentException( ZLocalization.getSingleton().getString( "ds.z.PlanPolygon.EdgeNotFoundException" ) );
 	}
-	
+
 	/**
 	 * Tries to find an edge of the room, that contains the given point.
 	 * @param p the point
@@ -1256,14 +1204,14 @@ public class PlanPolygon<T extends Edge> implements Iterable<T> {
 	 */
 	public T getEdge( PlanPoint p ) {
 		double eps = 0.01;
-		
+
 		for( T e : this ) {
 			if( isOnEdge( e, p, eps ) )
 				return e;
 		}
 		return null;
 	}
-	
+
 	public boolean isOnEdge( Edge e, PlanPoint p, double eps ) {
 		double det = PlanPoint.orientationE( e.getTarget(), e.getSource(), p );
 		if( det <= eps ) {
@@ -1276,7 +1224,7 @@ public class PlanPolygon<T extends Edge> implements Iterable<T> {
 	/** Returns a view of the {@link java.util.List} of edges of the polygon. The view
 	 * is obtained by running through the whole polygon and adding up the edges, so the
 	 * running time of this operation is O(n). The returned list is editable, but the
-	 * changes that are done to it will in no way be reflected in the polygon, that is, 
+	 * changes that are done to it will in no way be reflected in the polygon, that is,
 	 * the list is fully independent from the polygon.
 	 *
 	 * @return the list of edges
@@ -1329,56 +1277,15 @@ public class PlanPolygon<T extends Edge> implements Iterable<T> {
 		T e3 = (T)p2.getOtherEdge( e2 ); // Second neighbour
 		return e3.getOther( p2 ); // Second next point
 	}
-        
-        public int getLengthBetweenPoints(PlanPoint p1,PlanPoint p2)
-        {
-            int length=0,Path1=0,Path2=0, numEdges=0;
-            T currentEdge = null;
-            T otherEdge = null;
-            List<T> edges = this.getEdges();
-            PlanPoint first = p1,next;
-            for (T e: edges)
-            {
-                System.out.println("Kante des Polygons: " + e);
-                if (e.getSource().equals(p1) || e.getTarget().equals(p1)){
-                    currentEdge = e;
-                    System.out.println("Edge found" + e);
-                    break;
-                }
-            }
-            if (currentEdge.getOther(p1).equals(p2)){
-                System.out.println("gleich nebeneinander");
-                Path1= currentEdge.length();
-            }
-            else{               
-                while (!currentEdge.getOther(first).equals(p2)){
-                    next = currentEdge.getOther(first);
-                    Path1+= currentEdge.length();
-                    if (currentEdge.equals(this.getLastEdge())){
-                        
-                    }
-                    currentEdge = (T)next.getOtherEdge(currentEdge);
-                    System.out.println("nächste Kante: " + currentEdge);
-                    first = next;
-                }
-                Path1+=currentEdge.length();
-            }
-            if (this.getLastEdge().equals(currentEdge))
-            otherEdge = (T)p1.getOtherEdge(currentEdge);
-            System.out.println("Andere Kante: " + otherEdge);
-            
-            length = Path1 + Path2;
-            return length;
-        }
 
 	/**
 	 * Returns the points of the {@code PlanPolygon} as view of a
 	 * {@code List}. The view
 	 * is obtained by running through the whole polygon and adding up the edges, so the
 	 * running time of this operation is O(n). The returned list is editable, but the
-	 * changes that are done to it will in no way be reflected in the polygon, that is, 
+	 * changes that are done to it will in no way be reflected in the polygon, that is,
 	 * the list is fully independent from the polygon.
-	 * @return {@code List} with {@link PlanPoint}-objects discribing the edges 
+	 * @return {@code List} with {@link PlanPoint}-objects discribing the edges
 	 * of the polygon
 	 */
 	public List<PlanPoint> getPolygonPoints() {
@@ -1505,7 +1412,7 @@ public class PlanPolygon<T extends Edge> implements Iterable<T> {
 		intersectionPoint = null;
 		return false;
 	}
-	
+
 	public PlanPoint intersection( PlanPolygon<?> poly ) {
 		intersects( poly );
 		return intersectionPoint;
@@ -1648,7 +1555,7 @@ public class PlanPolygon<T extends Edge> implements Iterable<T> {
 	 * number of edges.</p>
 	 * @param e the edge to remove. Has to be an end edge.
 	 * @throws java.lang.IllegalArgumentException sent from super-class, not supposed to occur
-	 * @throws java.lang.IllegalStateException if the edge is not the first or last 
+	 * @throws java.lang.IllegalStateException if the edge is not the first or last
 	 * edge in the polygon. first and last edges also occur in closed polygons.
 	 */
 	void removeEdge( T e ) throws IllegalArgumentException, IllegalStateException {
@@ -1692,9 +1599,6 @@ public class PlanPolygon<T extends Edge> implements Iterable<T> {
 
 		changed = true;
 		size--;
-
-//		edgeDeleteHandler( e );
-
 	}
 
 	/**
@@ -1733,7 +1637,7 @@ public class PlanPolygon<T extends Edge> implements Iterable<T> {
 	 * @param points the list of new points. These first and last point must be equal
 	 * to e.getSource() and e.getTarget() but need not be the same instance.
 	 * @return The inserted edges as an ArrayList.
-	 * 
+	 *
 	 * @exception IllegalArgumentException If "e" is not in the polygon or if
 	 * an edge would be inserted, that would have equal end points or if points
 	 * contains less than 3 items.
@@ -1781,8 +1685,6 @@ public class PlanPolygon<T extends Edge> implements Iterable<T> {
 		} finally {
 
 		}
-
-//		throwChangeEvent( new ChangeEvent( this ) );
 		return result;
 	}
 
@@ -1813,7 +1715,7 @@ public class PlanPolygon<T extends Edge> implements Iterable<T> {
 	public List<PlanPoint> getPlanPoints() {
 		// The edges use common PlanPoint instances, so we don't
 		// have to defineByPoints (edges.size () * 2) points.
-		ArrayList planPoints = new ArrayList<PlanPoint>( size + (isClosed() ? 0 : 1) );
+		ArrayList<PlanPoint> planPoints = new ArrayList<>( size + (isClosed() ? 0 : 1) );
 		getPlanPoints( planPoints );
 		return planPoints;
 	}
@@ -1854,7 +1756,7 @@ public class PlanPolygon<T extends Edge> implements Iterable<T> {
 	 * Returns a string representation of the {@code PlanPolygon} containing the
 	 * coordinates.
 	 * @return a string representation
-	 * @see #toString() 
+	 * @see #toString()
 	 */
 	public String getCoordinateString() {
 		String ret = "";
@@ -1867,19 +1769,6 @@ public class PlanPolygon<T extends Edge> implements Iterable<T> {
 	}
 
 	/**
-	 * Returns the total length of the given connected edges (in millimeters).
-	 * These edges are given by an List of {@link PlanPoint}s.
-	 * @param points an List of {@link PlanPoint}s, that is interpreted as a list of connected edges.
-	 * @return the total length of the given edges (in millimeters).
-	 */
-	static private int totalLengthOfEdges( List<PlanPoint> points ) {
-		int length = 0;
-		for( int i = 0; i < points.size() - 1; i++ )
-			length += Edge.length( points.get( i ), points.get( i + 1 ) );
-		return length;
-	}
-
-	/**
 	 * <p>This method splits up a closed poylgon into two parts. It deletes the
 	 * two given edges from the polygon and adds two edges to the resulting parts
 	 * of the original polygon so that at the end all resulting poylgons are
@@ -1889,11 +1778,11 @@ public class PlanPolygon<T extends Edge> implements Iterable<T> {
 	 * In this case the one of the resulting polygons will be degenerated.</p>
 	 * <p>The running time is O(n) because every edge that now is part of the
 	 * newly created poylgon must be associated to the new polygon.</p>
-	 * @param edge1 The first edge at which the polygon should be split up. 
+	 * @param edge1 The first edge at which the polygon should be split up.
 	 * (Will be removed fom the polygon)
-	 * @param edge2 The second edge at which the polygon should be split up. 
+	 * @param edge2 The second edge at which the polygon should be split up.
 	 * (Will be removed fom the polygon)
-	 * @return One of the two resulting slip-up polygons will be made the current (this) polygon and 
+	 * @return One of the two resulting slip-up polygons will be made the current (this) polygon and
 	 * the other one will be returned here.
 	 * @throws IllegalArgumentException If the one of the given edges is not part of the polygon of if
 	 * they are adjacent.
@@ -1907,7 +1796,7 @@ public class PlanPolygon<T extends Edge> implements Iterable<T> {
 		if( edge1.isNeighbour( edge2 ) )
 			throw new IllegalArgumentException( ZLocalization.getSingleton().getString( "ds.z.PlanPolygon.AdjacentEdges" ) );
 
-		// Save the edges' end points		
+		// Save the edges' end points
 		PlanPoint e1_start = edge1.getSource();
 		PlanPoint e1_target = edge1.getTarget();
 		PlanPoint e2_start = edge2.getSource();
@@ -1961,7 +1850,7 @@ public class PlanPolygon<T extends Edge> implements Iterable<T> {
 	 * newly created poylgon must be associated to the new polygon.</p>
 	 * @param splitEdge The edge at which the polygon should be split up.
 	 * (Will be removed fom the polygon)
-	 * @return One of the two resulting slip-up polygons will be made the current (this) polygon and 
+	 * @return One of the two resulting slip-up polygons will be made the current (this) polygon and
 	 * the other one will be returned here.
 	 * @throws IllegalArgumentException If the given edge is not part of the polygon
 	 * @throws IllegalStateException If the polygon is closed
@@ -1972,7 +1861,7 @@ public class PlanPolygon<T extends Edge> implements Iterable<T> {
 		if( splitEdge.getAssociatedPolygon() != this )
 			throw new IllegalArgumentException( ZLocalization.getSingleton().getString( "ds.z.PlanPolygon.EdgeNotContained" ) );
 
-		// Save the edges' end points		
+		// Save the edges' end points
 		PlanPoint e_start = splitEdge.getSource();
 		PlanPoint e_target = splitEdge.getTarget();
 
@@ -2011,7 +1900,7 @@ public class PlanPolygon<T extends Edge> implements Iterable<T> {
 			recomputeBoundsCheckEdge( e );
 		recomputeBoundsUpdate();
 	}
-	
+
 	private void recomputeBoundsCheckEdge( T e ) {
 		if( e.boundLeft() < minx )
 			minx = e.boundLeft();
@@ -2022,7 +1911,7 @@ public class PlanPolygon<T extends Edge> implements Iterable<T> {
 		if( e.boundLower() > maxy )
 			maxy = e.boundLower();
 	}
-	
+
 	private void recomputeBoundsUpdate() {
 		xOffset = minx;
 		yOffset = miny;
@@ -2033,8 +1922,6 @@ public class PlanPolygon<T extends Edge> implements Iterable<T> {
 		if( width < 0 )
 			throw new IllegalStateException( "Width < 0" );
 	}
-	
-
 
 	public final PlanPoint transformPlanPoint( PlanPoint p, int[][] m ) {
 		return new PlanPoint( m[0][0] * p.getXInt() + m[0][1] * p.getYInt(), m[1][0] * p.getXInt() + m[1][1] * p.getYInt() );
@@ -2315,7 +2202,7 @@ public class PlanPolygon<T extends Edge> implements Iterable<T> {
 	 * Returns a new iterator that the caller can use to iterate over the PlanPolygon's
 	 * edges. The iterator will be sensitive to changes that are made during it's
 	 * iteration, which means that f.e. edges which are inserted during the iteration
-	 * will be returned by calls to next() in case they were inserted before the 
+	 * will be returned by calls to next() in case they were inserted before the
 	 * iterator's cursor.
 	 * @return a new iterator over all edges
 	 */
@@ -2337,8 +2224,8 @@ public class PlanPolygon<T extends Edge> implements Iterable<T> {
 	/**
 	 * Returns a new iterator that the caller can use to iterate over the PlanPolygon's
 	 * PlanPoints. The iterator will be sensitive to changes that are made during it's
-	 * iteration, which means that f.e. PlanPoints of edges which are inserted during the 
-	 * iteration will be returned by calls to next() in case they were inserted before 
+	 * iteration, which means that f.e. PlanPoints of edges which are inserted during the
+	 * iteration will be returned by calls to next() in case they were inserted before
 	 * the iterator's cursor.
 	 * @param start The starting point of the iterator.
 	 * @param end The end point of the iterator.
@@ -2360,7 +2247,7 @@ public class PlanPolygon<T extends Edge> implements Iterable<T> {
 		/** Iterates over the given part of the polygon.
 		 * @param start The starting point of the iterator.
 		 * @param end The end point of the iterator.
-		 * @param startAtEnd Whether the iteration should start at the 
+		 * @param startAtEnd Whether the iteration should start at the
 		 * given end point (true) or at the start point (false). */
 		public EdgeIterator( PlanPoint start, PlanPoint end, boolean startAtEnd ) {
 			this.start = start;
@@ -2451,7 +2338,7 @@ public class PlanPolygon<T extends Edge> implements Iterable<T> {
 		/** Iterates over the given part of the polygon.
 		 * @param start The starting point of the iterator.
 		 * @param end The end point of the iterator.
-		 * @param startAtEnd Whether the iteration should start at the 
+		 * @param startAtEnd Whether the iteration should start at the
 		 * given end point (true) or at the start point (false). */
 		public PointIterator( PlanPoint start, PlanPoint end, boolean startAtEnd ) {
 			this.start = start;

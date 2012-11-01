@@ -4,14 +4,12 @@
  */
 package zet.gui.main.toolbar;
 
-import gui.GUIControl;
-import gui.ZETMain;
-import zet.gui.components.model.ComboBoxRenderer;
+import de.tu_berlin.math.coga.common.localization.Localized;
 import de.tu_berlin.math.coga.components.framework.Button;
+import gui.GUIControl;
 import gui.ZETLoader;
 import gui.editor.Areas;
 import gui.editor.CoordinateTools;
-import zet.gui.main.tabs.editor.EditMode;
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.Dimension;
@@ -31,13 +29,15 @@ import javax.swing.JToolBar;
 import javax.swing.event.PopupMenuEvent;
 import javax.swing.event.PopupMenuListener;
 import zet.gui.GUILocalization;
+import zet.gui.components.model.ComboBoxRenderer;
+import zet.gui.main.tabs.editor.EditMode;
 
 /**
  * The class {@code JEditToolbar} ...
  * @author Jan-Philipp Kappmeier
  */
 @SuppressWarnings( "serial" )
-public class JEditToolbar extends JToolBar implements ActionListener, PopupMenuListener, KeyListener {
+public class JEditToolbar extends JToolBar implements ActionListener, PopupMenuListener, KeyListener, Localized {
 	/** The localization class. */
 	static final GUILocalization loc = GUILocalization.getSingleton();
 	private JButton btnExit;
@@ -315,6 +315,7 @@ public class JEditToolbar extends JToolBar implements ActionListener, PopupMenuL
 	 * Changes the appearance of the GUI to the selected language.
 	 * @see de.tu_berlin.math.coga.common.localization.Localization
 	 */
+	@Override
 	public void localize() {
 		loc.setPrefix( "gui.toolbar." );
 		btnExit.setToolTipText( loc.getString( "Exit" ) );

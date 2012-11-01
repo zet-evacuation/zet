@@ -13,6 +13,7 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
+
 /**
  * Interface Localized
  * Erstellt 30.04.2008, 09:03:00
@@ -27,7 +28,10 @@ package de.tu_berlin.math.coga.common.localization;
  */
 public interface Localized {
 	/**
-	 * This method localizes the object that implements {@code Localized}. 
+	 * This method localizes the object that implements {@code Localized}. The
+	 * method must set the localization prefix for itself. Afte the class, the
+	 * localization prefix must be resetted. It is generally assumed, that the
+	 * prefix is empty, when localize() is called.
 	 */
 	public void localize();
 }

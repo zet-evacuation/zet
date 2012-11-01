@@ -22,7 +22,7 @@ package zet.gui.main.tabs.base;
 
 import ds.PropertyContainer;
 import ds.z.Floor;
-import zet.gui.main.JEditor;
+import zet.gui.main.JZetWindow;
 import gui.editor.CoordinateTools;
 import gui.GUIOptionManager;
 import gui.ZETProperties;
@@ -43,7 +43,7 @@ public class AbstractFloor extends JPanel {
 	private int rasterSnap;
 	private int bigRaster;
 	private int smallRaster;
-	
+
 	/**
 	 * An enumeration describing all possible styles for painting a raster on the
 	 * editor background.
@@ -76,7 +76,7 @@ public class AbstractFloor extends JPanel {
 	/**
 	 * Updates the floor offset values. The size is, if
 	 * necessary, enlarged by the value given by getBorderWidth().</p>
-	 * 
+	 *
 	 * @param floor The Floor that should be displayed
 	 */
 	public void updateOffsets( Floor floor ) {
@@ -112,7 +112,7 @@ public class AbstractFloor extends JPanel {
 	}
 
 	/** Sets the style in which the raster shall be painted.
-	 * @param rasterPaintType 
+	 * @param rasterPaintType
 	 */
 	public void setRasterPaintStyle( RasterPaintStyle rasterPaintType ) {
 		this.rasterPaintType = rasterPaintType;
@@ -225,7 +225,7 @@ public class AbstractFloor extends JPanel {
 	@Override
 	protected void processMouseMotionEvent( MouseEvent e ) {
 		final Point real = CoordinateTools.translateToModel( new Point( e.getX(), e.getY() ) );
-		JEditor.sendMouse( real );
+		JZetWindow.sendMouse( real );
 	}
 
 	/**

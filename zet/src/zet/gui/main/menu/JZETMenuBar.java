@@ -4,11 +4,9 @@
  */
 package zet.gui.main.menu;
 
-import de.tu_berlin.math.coga.algorithm.simulation.SimulationAlgorithm;
 import de.tu_berlin.math.coga.common.localization.Localized;
 import de.tu_berlin.math.coga.components.framework.Menu;
 import ds.PropertyContainer;
-import gui.AlgorithmControl;
 import gui.GUIControl;
 import gui.GraphConverterAlgorithms;
 import gui.ZETLoader;
@@ -357,9 +355,9 @@ public class JZETMenuBar extends JMenuBar implements ActionListener, Localized {
 //					GUIOptionManager.setSavePathResults( jfcProject.getCurrentDirectory().getPath() );
 //					try {
 //						setBatchResult( BatchResult.load( (jfcResults.getSelectedFile()) ) );
-//						ZETMain.sendMessage( loc.getString( "gui.editor.JEditor.message.loaded" ) );
+//						ZETMain.sendMessage( loc.getString( "gui.editor.JZetWindow.message.loaded" ) );
 //					} catch( Exception ex ) {
-//						showErrorMessage( loc.getString( "gui.editor.JEditor.error.SaveTitle" ), loc.getString( "gui.editor.JEditor.error.Save" ) );
+//						showErrorMessage( loc.getString( "gui.editor.JZetWindow.error.SaveTitle" ), loc.getString( "gui.editor.JZetWindow.error.Save" ) );
 //						ex.printStackTrace();
 //					}
 //				}
@@ -372,12 +370,12 @@ public class JZETMenuBar extends JMenuBar implements ActionListener, Localized {
 //							target = new File( target.getAbsolutePath() + ".ers" );
 //						result.save( target );
 //					} catch( java.lang.StackOverflowError soe ) {
-//						showErrorMessage( loc.getString( "gui.editor.JEditor.error.stackOverflowTitle" ), loc.getString( "gui.editor.JEditor.error.stackOverflow" ) );
+//						showErrorMessage( loc.getString( "gui.editor.JZetWindow.error.stackOverflowTitle" ), loc.getString( "gui.editor.JZetWindow.error.stackOverflow" ) );
 //					} catch( Exception ex ) {
-//						showErrorMessage( loc.getString( "gui.editor.JEditor.error.SaveTitle" ), loc.getString( "gui.editor.JEditor.error.Save" ) );
+//						showErrorMessage( loc.getString( "gui.editor.JZetWindow.error.SaveTitle" ), loc.getString( "gui.editor.JZetWindow.error.Save" ) );
 //						ex.printStackTrace();
 //					}
-//					ZETMain.sendMessage( loc.getString( "gui.editor.JEditor.message.saved" ) );
+//					ZETMain.sendMessage( loc.getString( "gui.editor.JZetWindow.message.saved" ) );
 //				}
 
 	ActionListener simulationAlgorithmListener = new ActionListener() {
