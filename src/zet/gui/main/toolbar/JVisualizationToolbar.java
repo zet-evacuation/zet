@@ -6,12 +6,11 @@ package zet.gui.main.toolbar;
 
 import batch.BatchResult;
 import batch.BatchResultEntry;
+import de.tu_berlin.math.coga.common.localization.Localized;
+import de.tu_berlin.math.coga.components.framework.Button;
+import de.tu_berlin.math.coga.datastructure.NamedIndex;
 import ds.PropertyContainer;
 import gui.GUIControl;
-import gui.ZETMain;
-import zet.gui.components.model.ComboBoxRenderer;
-import de.tu_berlin.math.coga.datastructure.NamedIndex;
-import de.tu_berlin.math.coga.components.framework.Button;
 import gui.ZETLoader;
 import gui.visualization.control.ZETGLControl;
 import gui.visualization.control.ZETGLControl.CellInformationDisplay;
@@ -30,6 +29,7 @@ import javax.swing.JList;
 import javax.swing.JToggleButton;
 import javax.swing.JToolBar;
 import zet.gui.GUILocalization;
+import zet.gui.components.model.ComboBoxRenderer;
 
 
 /**
@@ -37,7 +37,7 @@ import zet.gui.GUILocalization;
  * @author Jan-Philipp Kappmeier
  */
 @SuppressWarnings( "serial" )
-public class JVisualizationToolbar extends JToolBar implements ActionListener {
+public class JVisualizationToolbar extends JToolBar implements ActionListener, Localized {
 	private final GUIControl control;
 	/** The localization class. */
 	static final GUILocalization loc = GUILocalization.getSingleton();
@@ -280,6 +280,7 @@ public class JVisualizationToolbar extends JToolBar implements ActionListener {
 		btnStop.setEnabled( enabled );
 	}
 
+	@Override
 	public void localize() {
 		loc.setPrefix( "gui.toolbar." );
 		btnExit.setToolTipText( loc.getString( "Exit" ) );

@@ -27,7 +27,7 @@ import ds.z.PlanPolygon;
 import ds.z.Room;
 import gui.GUIControl;
 import gui.editor.Areas;
-import zet.gui.main.JEditor;
+import zet.gui.main.JZetWindow;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
@@ -48,7 +48,7 @@ public class PolygonPopupListener implements ActionListener {
 		this.myType = myType;
 	}
 
-	/** This method should be called every time before the popup is shown. 
+	/** This method should be called every time before the popup is shown.
 	 * @param currentPolygon The PlanPolygon on which the popup is shown.
 	 */
 	public void setPolygon( PlanPolygon currentPolygon ) {

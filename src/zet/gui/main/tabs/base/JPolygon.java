@@ -59,22 +59,22 @@ import zet.gui.main.tabs.editor.JFloor;
  * @author Timon Kelter
  */
 public class JPolygon extends AbstractPolygon {
-	
+
 	PropertyContainer p = PropertyContainer.getInstance();
-	
+
 	protected static Point lastPosition = new Point();
 	protected static boolean selectedUsed = false;
 	/** The radius of the nodes on screen. This should be less than or equal to
 	 * EDGE_WIDTH_ADDITION + 1 */
 	public static final int NODE_PAINT_RADIUS = PropertyContainer.getInstance().getAsInt( "editor.options.view.pointSize" );
-	/** The radius around the nodes of the edge in which a click on the edge is 
+	/** The radius around the nodes of the edge in which a click on the edge is
 	 * also counted as a click on the node. This should be less than or equal to
 	 * EDGE_WIDTH_ADDITION + 1 */
 	public static final int NODE_SELECTION_RADIUS = (int)(NODE_PAINT_RADIUS*1.5);
 	private final static float dash1[] = {10.0f};
-	
+
 	// TODO property change listener
-	static int lineWidth = PropertyContainer.getInstance().getAsInt( "editor.options.view.wallWidth" );	
+	static int lineWidth = PropertyContainer.getInstance().getAsInt( "editor.options.view.wallWidth" );
 	/** The amount of space (in pixels) that is added on each side of all edges'
 	 * bounding boxes, to enable them to paint themselves thicker when they are
 	 * marked as selected. */
@@ -87,9 +87,9 @@ public class JPolygon extends AbstractPolygon {
 	private final static BasicStroke stroke_dashed_thick = new BasicStroke( EDGE_PAINT_WIDTH, BasicStroke.CAP_BUTT, BasicStroke.JOIN_MITER, 10.0f, dash1, 0.0f );
 	public final static BasicStroke stroke_thick = new BasicStroke( EDGE_PAINT_WIDTH );
 	private final GUIControl guiControl;
-	
+
 	public static boolean disablePopups = false;
-	
+
 	private Edge selectedEdge;
 	private Point selectedPoint;
 
@@ -99,7 +99,8 @@ public class JPolygon extends AbstractPolygon {
 	public void setSelectedPoint( PlanPoint point ) {
 		this.selectedPoint = point;
 	}
-	
+
+
 	//############## EDGE RELATED FIELDS ###################
 	private class EdgeData {
 		/** The ds.z.Edges that eauch graphical edge representation is connected to. */
@@ -108,19 +109,19 @@ public class JPolygon extends AbstractPolygon {
 		public Point node1;
 		/** The location of PlanPoint2 of any edge in the <u>coordinate space of the JPolygon.</u> */
 		public Point node2;
-		/** Indicates the direction in which each edge is drawn. See the internal 
+		/** Indicates the direction in which each edge is drawn. See the internal
 		 * comments in the {@link #paintComponent(Graphics)} method for further details. */
 		public boolean startDrawingAtNode1;
 		/** The selectionPolygons of the edges. */
 		private Polygon selectionPolygon;
 	}
-	/** A list of Edge Data that stores the Edge information in the order that the edges are 
+	/** A list of Edge Data that stores the Edge information in the order that the edges are
 	 * iterated through by the PlanPolygon iterator. */
 	private LinkedList<EdgeData> edgeData = new LinkedList<EdgeData>();
 	//############## POLYGON RELATED FIELDS ###################
 	private Color transparentForeground;
 	/** A helper variable that is used to prevent an event from being handled a second time.
-	 *  This is made possible through the event pass-back code from 
+	 *  This is made possible through the event pass-back code from
 	 * {@link JFloor#processMouseEvent(MouseEvent)} */
 	private MouseEvent lastMouseEventToPassToFloor = null;
 	private boolean selected = false;
@@ -148,12 +149,12 @@ public class JPolygon extends AbstractPolygon {
 	}
 
 	/**
-	 * This method returns the ds.z object at the given point. In contrast to 
+	 * This method returns the ds.z object at the given point. In contrast to
 	 * findComponentAt it not just checks whether the point is inside the
 	 * bounding box of the Component, but also whether the point is inside
 	 * the shape of the {@code Component}
 	 * (only works for edges / {@link JPolygon}).
-	 * @param p 
+	 * @param p
 	 * @return The topmost plan component that was clicked on, e.g. a PlanPoint,
 	 * a Edge/RoomEdge or a PlanPolygon. If no such component can be found null is returned.
 	 */
@@ -163,7 +164,7 @@ public class JPolygon extends AbstractPolygon {
 			Point transPoint = SwingUtilities.convertPoint( this, p, c );
 
 			if( c.contains( transPoint ) )
-				//if( c instanceof JPolygon ) {		
+				//if( c instanceof JPolygon ) {
 				if( c instanceof JPolygon ) {
 					if( ((JPolygon)c).getDrawingPolygon().contains( transPoint ) )
 						return ((JPolygon)c).findClickTargetAt( transPoint );
@@ -215,8 +216,8 @@ public class JPolygon extends AbstractPolygon {
 			setBounds( bounds );
 
 			// This already copies the polygon
-			drawingPolygon = CoordinateTools.translateToScreen( myPolygon.getAWTPolygon() );
-			// We only want to paint the space within the area polygon. The 
+			drawingPolygon = CoordinateTools.translateToScreen( getAWTPolygon( myPolygon ) );
+			// We only want to paint the space within the area polygon. The
 			// drawingpolygon already contains the appropriate size to do that,
 			// because it comes from the model and has no idea of EDGE_WIDTH_ADDITION
 			// But we have to shift the polygon (1) into the coordinate space of the
@@ -327,8 +328,8 @@ public class JPolygon extends AbstractPolygon {
 					ed.selectionPolygon.addPoint( pLeft.x - EDGE_WIDTH_ADDITION, pLeft.y + EDGE_WIDTH_ADDITION );
 				}
 
-				// Always start at the leftmost or, if that is not applicable, at 
-				// the topmost node. Either the topmost or the leftmost node must 
+				// Always start at the leftmost or, if that is not applicable, at
+				// the topmost node. Either the topmost or the leftmost node must
 				// exist, because both nodes may not have the same coodinates.
 				if( ed.node1.x != ed.node2.x )
 					ed.startDrawingAtNode1 = ed.node1.x < ed.node2.x;
@@ -373,7 +374,7 @@ public class JPolygon extends AbstractPolygon {
 		boolean lowerPart = false;
 		boolean upperPart = false;
 
-		// ### Paint the Edges ### 
+		// ### Paint the Edges ###
 		Iterator<EdgeData> itEdgeData = edgeData.iterator();
 		for( Edge myEdge : myPolygon ) {
 			assert ( itEdgeData.hasNext() );
@@ -432,7 +433,7 @@ public class JPolygon extends AbstractPolygon {
 			// legal since we are using undirected edges). In this case we have
 			// to make sure that the edge is always drawn in the same direction
 			// because otherwise the line segments of the dashed lines will
-			// overlap and form a solid line. Therefore we introduced the 
+			// overlap and form a solid line. Therefore we introduced the
 			// field startAtNode1
 //			if( myEdge.equals( selectedEdge ) ) {
 //				System.out.println( "AN EDGE IS NOT PAINTED BECAUSE IT IS HIGHLIGHTED" );
@@ -461,7 +462,7 @@ public class JPolygon extends AbstractPolygon {
 				g2.fillPolygon( drawingPolygon );
 		}
 
-		// Redraw the polygon if it is selected. This will give better 
+		// Redraw the polygon if it is selected. This will give better
 		// if many polygons are visible at the same time.
 		if( isSelected() && !(myPolygon instanceof Barrier) ) {
 			g2.setPaint( transparentForeground );
@@ -493,7 +494,7 @@ public class JPolygon extends AbstractPolygon {
 
 	/**
 	 * MouseEvents occur on this component are forwarded to the parent
-	 * component, if the click does not trigger the PopupMenu of the component. 
+	 * component, if the click does not trigger the PopupMenu of the component.
 	 * @param e the {@code MouseEvent}
 	 */
 	@Override
@@ -524,7 +525,7 @@ public class JPolygon extends AbstractPolygon {
 				if( hitPoint == null ) {
 					// Show edge popup
 					if( selectedUsed == false ) {
-						guiControl.getEdgePopup().setPopupEdge( hitEdge.myEdge, guiControl.editor.getEditView().convertPointToFloorCoordinates( (Component)e.getSource(), e.getPoint() ) );
+						guiControl.getEdgePopup().setPopupEdge( hitEdge.myEdge, guiControl.getEditView().convertPointToFloorCoordinates( (Component)e.getSource(), e.getPoint() ) );
 						guiControl.getEdgePopup().show( this, e.getX(), e.getY() );
 					}
 					selectedUsed = isSelected();

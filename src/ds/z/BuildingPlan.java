@@ -22,6 +22,7 @@ package ds.z;
 
 import com.thoughtworks.xstream.annotations.XStreamAlias;
 import com.thoughtworks.xstream.annotations.XStreamImplicit;
+import de.tu_berlin.math.coga.datastructure.Tuple;
 import ds.z.exception.AreaNotInsideException;
 import ds.z.exception.PolygonNotClosedException;
 import ds.z.exception.RoomIntersectException;
@@ -34,7 +35,6 @@ import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Random;
-import de.tu_berlin.math.coga.datastructure.Tuple;
 
 /**
  * The {@code BuildingPlan} represents a complete building plan, consisting of
@@ -47,9 +47,6 @@ import de.tu_berlin.math.coga.datastructure.Tuple;
 @XStreamAlias("buildingPlan")
 @XMLConverter(BuildingPlanConverter.class)
 public class BuildingPlan implements Serializable, Iterable<Floor>, ZFormatObject {
-	/** The change listeners of the plan. */
-//	@XStreamOmitField()
-//	private transient ArrayList<ChangeListener> changeListeners = new ArrayList<ChangeListener>();
 	/** A list of all floors of the plan. */
 	@XStreamImplicit()
 	private ArrayList<Floor> floors;
@@ -94,7 +91,7 @@ public class BuildingPlan implements Serializable, Iterable<Floor>, ZFormatObjec
 	 * @param f the new floor
 	 * @return {@code true} if the floor was added, {@code false} otherwise
 	 */
-	public boolean addFloor( Floor f ) {
+	public final boolean addFloor( Floor f ) {
 		if( !floors.contains( f ) ) {
 			floors.add( f );
 			return true;
@@ -121,7 +118,7 @@ public class BuildingPlan implements Serializable, Iterable<Floor>, ZFormatObjec
 	 * Moves the given floor one position further towards the beginning of the floor list. Only changes
 	 * the order of the floors.
 	 * @param level the index of the floor to move
-	 * @throws IllegalArgumentException If the given floor is not in the list or if you try to move the 
+	 * @throws IllegalArgumentException If the given floor is not in the list or if you try to move the
 	 * default evacuation floor
 	 */
 	public void moveFloorUp( int level ) {
@@ -226,7 +223,7 @@ public class BuildingPlan implements Serializable, Iterable<Floor>, ZFormatObjec
 	}
 
 	/**
-	 * This method checks whether the current BuildingPlan is valid. It 
+	 * This method checks whether the current BuildingPlan is valid. It
 	 * essentially just delegates this task to the single floors, by calling
 	 * their validation routines.
 	 * @throws ds.z.exception.PolygonNotClosedException if the validation reveals
@@ -267,10 +264,7 @@ public class BuildingPlan implements Serializable, Iterable<Floor>, ZFormatObjec
 	 * @return the number of floors
 	 */
 	public int floorCount( boolean defaultFloor ) {
-		if( defaultFloor )
-			return floors.size();
-		else
-			return floors.size() - 1;
+		return defaultFloor ? floors.size() : floors.size() - 1;
 	}
 
 	/**
@@ -281,8 +275,9 @@ public class BuildingPlan implements Serializable, Iterable<Floor>, ZFormatObjec
 		int count = 0;
 		for( Floor floor : floors )
 			for( Room room : floor.getRooms() )
-				for( EvacuationArea evac : room.getEvacuationAreas() )
-					count++;
+				//for( EvacuationArea evac : room.getEvacuationAreas() )
+				//	count++;
+				count += room.getEvacuationAreas().size();
 		return count;
 	}
 
@@ -313,11 +308,11 @@ public class BuildingPlan implements Serializable, Iterable<Floor>, ZFormatObjec
 	}
 
 	/** A convenience method that automatically distributes the given number of evcauees
-	 * among all assignment areas that were created in the building. Each area gets a 
+	 * among all assignment areas that were created in the building. Each area gets a
 	 * share of the total number of evacuees which is proportional to it's share of the
 	 * total surface area of all assignment areas. All preexisting evacuee numbers
 	 * are overwritten.
-	 * 
+	 *
 	 * @param nrOfEvacuees
 	 * @throws TooManyPeopleException If you specify a number of evacuees that
 	 * exceeds the total space in all assignment areas.
@@ -386,7 +381,7 @@ public class BuildingPlan implements Serializable, Iterable<Floor>, ZFormatObjec
 
 	StringBuilder summaryBuilder() {
 		StringBuilder sb = new StringBuilder( 10000 );
-		
+
 		sb.append( "Gebäude: " ).append( floors.size() ).append( " Stockwerke\n");
 		for( Floor f : floors ) {
 			sb.append( f.summaryBuilder() );
@@ -403,8 +398,7 @@ public class BuildingPlan implements Serializable, Iterable<Floor>, ZFormatObjec
 				r.recomputeBounds();
 			}
 		}
-		
-		
+
 		return summaryBuilder().toString();
 	}
 }

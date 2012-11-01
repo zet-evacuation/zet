@@ -80,7 +80,7 @@ public class JCellPolygon extends AbstractPolygon {
 	protected void setFillColor( Color fillColor ) {
 		this.fillColor = fillColor;
 	}
-	
+
 	/**
 	 * Only call this after the component has been added to a container. Otherwise
 	 * operations like setBounds, which are called herein, will fail.
@@ -96,7 +96,7 @@ public class JCellPolygon extends AbstractPolygon {
 			setBounds( areabounds );
 
 			// This already copies the polygon
-			drawingPolygon = CoordinateTools.translateToScreen( myPolygon.getAWTPolygon() );
+			drawingPolygon = CoordinateTools.translateToScreen( getAWTPolygon( myPolygon ) );
 			drawingPolygon.translate( -areabounds.x, -areabounds.y);
 		}
 		if( drawingPolygon == null )
@@ -149,7 +149,7 @@ public class JCellPolygon extends AbstractPolygon {
 	public void addWall( Direction8 direction ) {
    borders.add( direction );
 	}
-	
+
 	/**
 	 * This function does nothing. Overwrite this function in derived components
 	 * to automatically set an appropriate tool tip.

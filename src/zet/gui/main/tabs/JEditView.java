@@ -77,7 +77,7 @@ import zet.gui.components.model.AssignmentTypeComboBoxModel;
 import zet.gui.components.model.ComboBoxRenderer;
 import zet.gui.components.model.FloorComboBox;
 import zet.gui.components.model.RoomComboBoxModel;
-import zet.gui.main.JEditor;
+import zet.gui.main.JZetWindow;
 import zet.gui.main.tabs.base.AbstractSplitPropertyWindow;
 import zet.gui.main.tabs.base.JFloorScrollPane;
 import zet.gui.main.tabs.editor.EditMode;
@@ -383,9 +383,9 @@ public class JEditView extends AbstractSplitPropertyWindow<JFloorScrollPane<JFlo
 					// easy peasy, this is an area boundry
 					lblEdgeType.setText( "Area-Begrenzung" );
 				}
-				
+
 				lblEdgeLength.setText( "Breite: " + (e.length())*0.001  + "m" );
-				
+
 				eastSubBarCardLayout.show( eastSubBar, "edge" );
 				break;
 			default:
@@ -505,7 +505,7 @@ public class JEditView extends AbstractSplitPropertyWindow<JFloorScrollPane<JFlo
 
 		card = getEastTeleportAreaPanel();
 		eastSubBar.add( card, "teleport" );
-		
+
 		card = getEastEdgePanel();
 		eastSubBar.add( card, "edge" );
 
@@ -562,12 +562,12 @@ public class JEditView extends AbstractSplitPropertyWindow<JFloorScrollPane<JFlo
 		txtNumberOfPersons.addFocusListener( new FocusListener() {
 			@Override
 			public void focusGained( FocusEvent e ) {
-				JEditor.setEditing( true );
+				JZetWindow.setEditing( true );
 			}
 
 			@Override
 			public void focusLost( FocusEvent e ) {
-				JEditor.setEditing( false );
+				JZetWindow.setEditing( false );
 			}
 		} );
 		txtNumberOfPersons.addKeyListener( new KeyAdapter() {
@@ -685,7 +685,7 @@ public class JEditView extends AbstractSplitPropertyWindow<JFloorScrollPane<JFlo
 		cbxDelayType.setRenderer( new ComboBoxRenderer() {
 			@Override
 			public Component getListCellRendererComponent( JList list, Object value, int index, boolean isSelected, boolean cellHasFocus ) {
-				//JLabel me = (JLabel) 
+				//JLabel me = (JLabel)
 				super.getListCellRendererComponent( list, value, index, isSelected, cellHasFocus );
 				if( value != null )
 					setText( ((DelayArea.DelayType)value).description );
@@ -702,12 +702,12 @@ public class JEditView extends AbstractSplitPropertyWindow<JFloorScrollPane<JFlo
 		txtDelayFactor.addFocusListener( new FocusListener() {
 			@Override
 			public void focusGained( FocusEvent e ) {
-				JEditor.setEditing( true );
+				JZetWindow.setEditing( true );
 			}
 
 			@Override
 			public void focusLost( FocusEvent e ) {
-				JEditor.setEditing( false );
+				JZetWindow.setEditing( false );
 			}
 		} );
 		txtDelayFactor.addKeyListener( new KeyAdapter() {
@@ -762,12 +762,12 @@ public class JEditView extends AbstractSplitPropertyWindow<JFloorScrollPane<JFlo
 		txtStairFactorUp.addFocusListener( new FocusListener() {
 			@Override
 			public void focusGained( FocusEvent e ) {
-				JEditor.setEditing( true );
+				JZetWindow.setEditing( true );
 			}
 
 			@Override
 			public void focusLost( FocusEvent e ) {
-				JEditor.setEditing( false );
+				JZetWindow.setEditing( false );
 			}
 		} );
 		txtStairFactorUp.addKeyListener( new KeyAdapter() {
@@ -793,12 +793,12 @@ public class JEditView extends AbstractSplitPropertyWindow<JFloorScrollPane<JFlo
 		txtStairFactorDown.addFocusListener( new FocusListener() {
 			@Override
 			public void focusGained( FocusEvent e ) {
-				JEditor.setEditing( true );
+				JZetWindow.setEditing( true );
 			}
 
 			@Override
 			public void focusLost( FocusEvent e ) {
-				JEditor.setEditing( false );
+				JZetWindow.setEditing( false );
 			}
 		} );
 		txtStairFactorDown.addKeyListener( new KeyAdapter() {
@@ -860,12 +860,12 @@ public class JEditView extends AbstractSplitPropertyWindow<JFloorScrollPane<JFlo
 		txtEvacuationAreaName.addFocusListener( new FocusListener() {
 			@Override
 			public void focusGained( FocusEvent e ) {
-				JEditor.setEditing( true );
+				JZetWindow.setEditing( true );
 			}
 
 			@Override
 			public void focusLost( FocusEvent e ) {
-				JEditor.setEditing( false );
+				JZetWindow.setEditing( false );
 			}
 		} );
 		txtEvacuationAreaName.addKeyListener( new KeyAdapter() {
@@ -886,12 +886,12 @@ public class JEditView extends AbstractSplitPropertyWindow<JFloorScrollPane<JFlo
 		txtEvacuationAttractivity.addFocusListener( new FocusListener() {
 			@Override
 			public void focusGained( FocusEvent e ) {
-				JEditor.setEditing( true );
+				JZetWindow.setEditing( true );
 			}
 
 			@Override
 			public void focusLost( FocusEvent e ) {
-				JEditor.setEditing( false );
+				JZetWindow.setEditing( false );
 			}
 		} );
 		txtEvacuationAttractivity.addKeyListener( new KeyAdapter() {
@@ -943,12 +943,12 @@ public class JEditView extends AbstractSplitPropertyWindow<JFloorScrollPane<JFlo
 		txtFloorName.addFocusListener( new FocusListener() {
 			@Override
 			public void focusGained( FocusEvent e ) {
-				JEditor.setEditing( true );
+				JZetWindow.setEditing( true );
 			}
 
 			@Override
 			public void focusLost( FocusEvent e ) {
-				JEditor.setEditing( false );
+				JZetWindow.setEditing( false );
 			}
 		} );
 		txtFloorName.addKeyListener( new KeyAdapter() {
@@ -1058,12 +1058,12 @@ public class JEditView extends AbstractSplitPropertyWindow<JFloorScrollPane<JFlo
 		txtRoomName.addFocusListener( new FocusListener() {
 			@Override
 			public void focusGained( FocusEvent e ) {
-				JEditor.setEditing( true );
+				JZetWindow.setEditing( true );
 			}
 
 			@Override
 			public void focusLost( FocusEvent e ) {
-				JEditor.setEditing( false );
+				JZetWindow.setEditing( false );
 			}
 		} );
 		txtRoomName.addKeyListener( new KeyAdapter() {
@@ -1111,7 +1111,7 @@ public class JEditView extends AbstractSplitPropertyWindow<JFloorScrollPane<JFlo
 		} );
 		eastPanel.add( moveRoom, "0, " + ++row );
 		row++;
-		
+
 		return eastPanel;
 	}
 
@@ -1137,12 +1137,12 @@ public class JEditView extends AbstractSplitPropertyWindow<JFloorScrollPane<JFlo
 		txtTeleportAreaName.addFocusListener( new FocusListener() {
 			@Override
 			public void focusGained( FocusEvent e ) {
-				JEditor.setEditing( true );
+				JZetWindow.setEditing( true );
 			}
 
 			@Override
 			public void focusLost( FocusEvent e ) {
-				JEditor.setEditing( false );
+				JZetWindow.setEditing( false );
 			}
 		} );
 		txtTeleportAreaName.addKeyListener( new KeyAdapter() {
@@ -1225,27 +1225,27 @@ public class JEditView extends AbstractSplitPropertyWindow<JFloorScrollPane<JFlo
 		JPanel eastPanel = new JPanel( new TableLayout( size ) );
 
 		int row = 0;
-		
+
 		lblEdgeType = new JLabel( "Edge type" );
 		eastPanel.add( lblEdgeType, "0, " + row++ );
 		row++;
-		
+
 		lblEdgeLength = new JLabel( "Länge:" );
 		eastPanel.add( lblEdgeLength, "0, " + row++ );
 		row++;
-		
+
 		lblEdgeExitName = new JLabel( loc.getString( "Evacuation.Name" ) );
 		eastPanel.add( lblEdgeExitName, "0, " + row++ );
 		txtEdgeExitName = new JTextField();
 		txtEdgeExitName.addFocusListener( new FocusListener() {
 			@Override
 			public void focusGained( FocusEvent e ) {
-				JEditor.setEditing( true );
+				JZetWindow.setEditing( true );
 			}
 
 			@Override
 			public void focusLost( FocusEvent e ) {
-				JEditor.setEditing( false );
+				JZetWindow.setEditing( false );
 			}
 		} );
 		txtEdgeExitName.addKeyListener( new KeyAdapter() {
@@ -1277,12 +1277,12 @@ public class JEditView extends AbstractSplitPropertyWindow<JFloorScrollPane<JFlo
 		txtEvacuationAttractivity.addFocusListener( new FocusListener() {
 			@Override
 			public void focusGained( FocusEvent e ) {
-				JEditor.setEditing( true );
+				JZetWindow.setEditing( true );
 			}
 
 			@Override
 			public void focusLost( FocusEvent e ) {
-				JEditor.setEditing( false );
+				JZetWindow.setEditing( false );
 			}
 		} );
 		txtEvacuationAttractivity.addKeyListener( new KeyAdapter() {
@@ -1302,7 +1302,7 @@ public class JEditView extends AbstractSplitPropertyWindow<JFloorScrollPane<JFlo
 		row++;
 
 
-		
+
 		// The area name
 //		lblTeleportAreaName = new JLabel( loc.getString( "Teleportation.Name") );
 //		eastPanel.add( lblTeleportAreaName, "0, " + row++ );
@@ -1362,7 +1362,7 @@ public class JEditView extends AbstractSplitPropertyWindow<JFloorScrollPane<JFlo
 
 		return eastPanel;
 	}
-	
+
 	@Override
 	public void localize() {
 		// Title of the window
@@ -1586,7 +1586,7 @@ public class JEditView extends AbstractSplitPropertyWindow<JFloorScrollPane<JFlo
 		txtRoomName.setSelectionEnd( txtRoomName.getText().length() );
 	}
 	/**
-	 * 
+	 *
 	 * @param mode
 	 */
 	public void changeAreaView( ArrayList<Areas> mode ) {
@@ -1621,7 +1621,7 @@ public class JEditView extends AbstractSplitPropertyWindow<JFloorScrollPane<JFlo
 	}
 
 	/**
-	 * This is a helper method for other GUI objects who need to transform 
+	 * This is a helper method for other GUI objects who need to transform
 	 * points that are given in their own coordinate space into the coordinate
 	 * space of the Floor.
 	 * @param source The Component in whose coordinate space the Point "toConvert"

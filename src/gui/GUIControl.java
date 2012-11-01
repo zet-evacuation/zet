@@ -7,16 +7,18 @@ package gui;
 import algo.graph.dynamicflow.eat.EarliestArrivalFlowProblem;
 import batch.BatchResult;
 import batch.BatchResultEntry;
-import batch.load.BatchProjectEntry;
 import batch.tasks.AlgorithmTask;
 import batch.tasks.VisualizationDataStructureTask;
+import de.tu_berlin.math.coga.batch.gui.JBatch;
 import de.tu_berlin.math.coga.common.algorithm.Algorithm;
 import de.tu_berlin.math.coga.common.algorithm.AlgorithmEvent;
 import de.tu_berlin.math.coga.common.algorithm.AlgorithmListener;
 import de.tu_berlin.math.coga.common.algorithm.AlgorithmProgressEvent;
 import de.tu_berlin.math.coga.common.algorithm.AlgorithmStartedEvent;
 import de.tu_berlin.math.coga.common.debug.Debug;
+import de.tu_berlin.math.coga.common.localization.Localized;
 import de.tu_berlin.math.coga.common.util.IOTools;
+import de.tu_berlin.math.coga.components.JLogPane;
 import de.tu_berlin.math.coga.components.JVideoOptionsDialog;
 import de.tu_berlin.math.coga.zet.converter.graph.GraphAssignmentConverter;
 import de.tu_berlin.math.coga.zet.converter.graph.NetworkFlowModel;
@@ -47,6 +49,9 @@ import gui.editor.flooredit.FloorImportDialog;
 import gui.editor.planimage.JPlanImageProperties;
 import gui.editor.properties.JPropertyDialog;
 import gui.propertysheet.JOptionsDialog;
+import gui.statistic.JGraphStatisticPanel;
+import gui.statistic.JStatisticPanel;
+import gui.statistic.JStatisticsPanel;
 import gui.visualization.AbstractVisualization.ParallelViewMode;
 import gui.visualization.Visualization.RecordingMode;
 import gui.visualization.control.ZETGLControl;
@@ -68,6 +73,7 @@ import java.util.Locale;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.imageio.ImageIO;
+import javax.swing.JComponent;
 import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
 import javax.swing.SwingWorker;
@@ -77,32 +83,43 @@ import org.xml.sax.SAXException;
 import statistic.ca.CAStatistic;
 import zet.gui.GUILocalization;
 import zet.gui.assignmentEditor.JAssignment;
-import zet.gui.main.JEditor;
+import zet.gui.main.JZetWindow;
 import zet.gui.main.menu.JZETMenuBar;
 import zet.gui.main.menu.popup.EdgePopup;
 import zet.gui.main.menu.popup.PointPopup;
 import zet.gui.main.menu.popup.PolygonPopup;
 import zet.gui.main.tabs.JEditView;
+import zet.gui.main.tabs.JQuickVisualizationView;
+import zet.gui.main.tabs.JVisualizationView;
 import zet.gui.main.tabs.base.AbstractFloor.RasterPaintStyle;
 import zet.gui.main.tabs.editor.EditMode;
 import zet.gui.main.tabs.visualization.ZETVisualization;
+import zet.gui.main.toolbar.JBatchToolBar;
 import zet.gui.main.toolbar.JEditToolbar;
+import zet.gui.main.toolbar.JLogToolBar;
+import zet.gui.main.toolbar.JQuickVisualizationToolBar;
+import zet.gui.main.toolbar.JStatisticCellularAutomatonToolbar;
 import zet.gui.main.toolbar.JStatisticGraphToolBar;
 import zet.gui.main.toolbar.JVisualizationToolbar;
 import zet.tasks.CellularAutomatonAlgorithms;
 import zet.tasks.RasterizeTask;
 
 /**
+ * The {@code GUIControl} class sets up and controls the main graphical user
+ * interface of the ZET application.
  * This class receives commands and GUI changes from elements like tool bars,
  * menus etc. and delegates them to other classes.
  * @author Jan-Philipp Kappmeier
  */
 public class GUIControl implements AlgorithmListener {
+	private ArrayList<Localized> localized = new ArrayList<>();
+
+
 	/** The logger of the main class. */
 	private static final Logger log = Logger.getGlobal();
 
 	/** The editor. */
-	public JEditor editor;
+	public JZetWindow editor;
 
 	/** The edit tool bar. */
 	private JEditToolbar editToolBar;
@@ -113,7 +130,11 @@ public class GUIControl implements AlgorithmListener {
 	/** The menu bar. */
 	private JZETMenuBar menuBar;
 	private ZETVisualization visualization;
+
 	private JEditView editview;
+	private JQuickVisualizationView caView;
+	private JVisualizationView visualizationView;
+
 	private AlgorithmControl algorithmControl;
 	private ArrayList<Areas> mode = new ArrayList<>( Arrays.asList( Areas.values() ) );
 	private ZETGLControl control;
@@ -124,20 +145,64 @@ public class GUIControl implements AlgorithmListener {
 	private PointPopup pointPopup;
 
 	/**
-	 * Creates a new instance of {@code GUIControl}.
+	 *
 	 */
-	public GUIControl() {
-}
+	public GUIControl() { }
 
 	public void createZETWindow() {
 		zcontrol = new ZControl();
 		algorithmControl = new AlgorithmControl( zcontrol.getProject() );
-		editor = new JEditor( this, zcontrol );
-		editor.addMainComponents();
-		visualization = editor.getVisualizationView().getGLContainer();
+
+		// Main window
+		editor = registerNewComponent( new JZetWindow( this, zcontrol ) );
+
+		// Menu bar
+		menuBar = registerNewComponent( new JZETMenuBar( this ) );
+		editor.setJMenuBar( menuBar );
+
+		// Popups
+		polygonPopup = new PolygonPopup( this );
+		edgePopup = new EdgePopup( this );
+		pointPopup = new PointPopup( this );
+
+		// Tool bars
+		editToolBar = registerNewComponent( new JEditToolbar( this ) );
+		//guiControl.setEditToolbar( toolBarEdit );
+		JBatchToolBar toolBarBatch = registerNewComponent( new JBatchToolBar( this ) );
+		JQuickVisualizationToolBar toolBarCellularAutomatonQuickVisualization = registerNewComponent( new JQuickVisualizationToolBar( this ) );
+		JVisualizationToolbar toolBarVisualization = registerNewComponent( new JVisualizationToolbar( this ) );
+		JStatisticCellularAutomatonToolbar toolBarCAStats = registerNewComponent( new JStatisticCellularAutomatonToolbar( this ) );
+		JStatisticGraphToolBar toolBarGraphStats = registerNewComponent( new JStatisticGraphToolBar( this ) );
+		JLogToolBar toolBarLog = registerNewComponent( new JLogToolBar( this ) );
+
+		// Components in tabs
+		editview = registerNewComponent( new JEditView( this ) );
+		caView = registerNewComponent( new JQuickVisualizationView( this ) );
+		JComponent batchView = new JBatch( this );
+		visualizationView = registerNewComponent( new JVisualizationView( this ) );
+		JComponent caStatisticView = new JStatisticPanel();
+		JComponent graphStatisticView = new JGraphStatisticPanel();
+		JComponent logView = new JLogPane( ZETMain.gl );
+		JComponent statisticView = new JStatisticsPanel();
+
+		// add toolbars and components to window
+		editor.addMode( "gui.tabs.Edit", "gui.tabs.EditToolTip", null, editview, editToolBar );
+		editor.addMode( "gui.tabs.CAView", "gui.tabs.CAViewToolTip", null, caView, toolBarCellularAutomatonQuickVisualization);
+		editor.addMode( "gui.tabs.Batch", "gui.tabs.BatchToolTip", null, batchView, toolBarBatch );
+		editor.addMode( "gui.tabs.Visualization", "gui.tabs.VisualizationToolTip", null, visualizationView, toolBarVisualization );
+		editor.addMode( "gui.tabs.Statistic", "gui.tabs.StatisticToolTip", null, caStatisticView, toolBarCAStats );
+		editor.addMode( "gui.tabs.GraphStatistic", "gui.tabs.GraphStatisticToolTip", null, graphStatisticView, toolBarGraphStats );
+		editor.addMode( "gui.tabs.LogWindow", "gui.tabs.LogWindowToolTip", null, logView, toolBarLog );
+		editor.addMode( "gui.tabs.Statistics", "gui.tabs.StatisticsToolTip", null, statisticView, toolBarLog );
+
+		visualization = visualizationView.getGLContainer();
 		updateVisualizationElements();
-		editview = editor.getEditView();
 		visualization.setZcontrol( zcontrol );
+	}
+
+	private <T extends Localized> T registerNewComponent( T t ) {
+		localized.add( t );
+		return t;
 	}
 
 	public void loadTemplates() throws ParserConfigurationException, SAXException, IOException {
@@ -222,7 +287,7 @@ public class GUIControl implements AlgorithmListener {
 //				// TODO
 //				break;
 //			default:
-//				JEditor.showErrorMessage("Error", "Dieser Area-Typ wird nicht unterstützt.");
+//				JZetWindow.showErrorMessage("Error", "Dieser Area-Typ wird nicht unterstützt.");
 //		}
 		//editor.updateAreaVisiblity();
 	}
@@ -241,10 +306,6 @@ public class GUIControl implements AlgorithmListener {
 	 */
 	public void exit() {
 		System.exit( 0 );
-	}
-
-	public void setEditToolbar( JEditToolbar toolbar ) {
-		editToolBar = toolbar;
 	}
 
 	public void setVisualizationToolbar( JVisualizationToolbar toolbar ) {
@@ -433,11 +494,11 @@ public class GUIControl implements AlgorithmListener {
 	public void visualizationShowAllFloors() {
 		final boolean showAllFloors = PropertyContainer.getInstance().toggle( "settings.gui.visualization.floors" );
 		visualizationToolBar.setSelectedAllFloors( showAllFloors );
-		editor.getVisualizationView().setFloorSelectorEnabled( !showAllFloors );
+		visualizationView.setFloorSelectorEnabled( !showAllFloors );
 		if( showAllFloors )
 			visualization.getControl().showAllFloors();
 		else
-			visualization.getControl().showFloor( editor.getVisualizationView().getSelectedFloorID() );
+			visualization.getControl().showFloor( visualizationView.getSelectedFloorID() );
 		visualization.repaint();
 	}
 
@@ -470,7 +531,7 @@ public class GUIControl implements AlgorithmListener {
 		} else {
 			visualizationToolBar.setSelectedCellInformationDisplay( cid );
 			PropertyContainer.getInstance().set( "settings.gui.visualization.floorInformation", cid.id() );
-			editor.getVisualizationView().unselectPotentialSelector();
+			visualizationView.unselectPotentialSelector();
 			if( cid == CellInformationDisplay.StaticPotential )
 				visualization.getControl().activateMergedPotential();
 			visualization.getControl().showPotential( cid );
@@ -501,8 +562,8 @@ public class GUIControl implements AlgorithmListener {
 		//control.showCellularAutomaton( btnShowCellularAutomaton.isSelected() );
 		//control.showGraph( btnShowGraph.isSelected() );
 //		control.showFloor( visualizationView.getSelectedFloorID() );
-		editor.getVisualizationView().updateFloorSelector();
-		editor.getVisualizationView().updatePotentialSelector();
+		visualizationView.updateFloorSelector();
+		visualizationView.updatePotentialSelector();
 	}
 
 	public void rebuild( BatchResult result ) {
@@ -512,12 +573,6 @@ public class GUIControl implements AlgorithmListener {
 
 	public void setMenuBar( JZETMenuBar aThis ) {
 		menuBar = aThis;
-	}
-
-	public void setPopups( PolygonPopup polygonPopup, EdgePopup edgePopup, PointPopup pointPopup ) {
-		this.polygonPopup = polygonPopup;
-		this.edgePopup = edgePopup;
-		this.pointPopup = pointPopup;
 	}
 
 	public PolygonPopup getPolygonPopup() {
@@ -627,7 +682,8 @@ public class GUIControl implements AlgorithmListener {
 
 	public void switchToLanguage( Locale locale ) {
 		GUILocalization.getSingleton().setLocale( locale );
-		editor.localize();
+		for( Localized l : localized )
+			l.localize();
 		menuBar.localize();
 	}
 
@@ -647,17 +703,46 @@ public class GUIControl implements AlgorithmListener {
 	// TODO move loading/storing stuff to own class...
 	public void loadProject() {
 		if( jfcProject.showOpenDialog( editor ) == JFileChooser.APPROVE_OPTION ) {
-			zcontrol.loadProject( jfcProject.getSelectedFile() );
-			editor.loadProject();	// Load the currently loaded project by the control file
-			algorithmControl.setProject( zcontrol.getProject() );
+			loadProject( jfcProject.getSelectedFile() );
+			//zcontrol.loadProject( jfcProject.getSelectedFile() );
+			//editor.loadProject();	// Load the currently loaded project by the control file
+			//algorithmControl.setProject( zcontrol.getProject() );
 			GUIOptionManager.setSavePath( jfcProject.getCurrentDirectory().getPath() );
 			GUIOptionManager.setLastFile( 1, jfcProject.getSelectedFile().getAbsolutePath() );
 		}
 	}
 
 	public void loadProject( File f ) {
-		zcontrol.loadProject( f );
-		editor.loadProject();
+		if( f == null )
+			zcontrol.newProject( );
+		else
+			zcontrol.loadProject( f );
+
+		// Reset GUI components
+		//if( tabPane.getSelectedIndex() > 1 )
+		//	tabPane.setSelectedIndex( 0 );
+		editview.displayProject( zcontrol );
+		caView.displayProject( zcontrol );
+		// Löschen eingestellter parameter
+//		ZToCAConverter.getInstance().clear();
+		//firstSwitch = true;
+		if( !PropertyContainer.getInstance().getAsBoolean( "editor.options.view.hideDefaultFloor" ) )
+			editview.setFloor( 1 );
+		// Updaten der gui
+		editview.update();
+		caView.update();
+
+		editview.setEditMode( EditMode.Selection );
+		setZoomFactor( 0.04d );
+
+		// Set up the last camera position
+		visualization.getCamera().setPos( zcontrol.getProject().getVisualProperties().getCameraPosition().pos );
+		visualization.getCamera().setView( zcontrol.getProject().getVisualProperties().getCameraPosition().view );
+		visualization.getCamera().setUp( zcontrol.getProject().getVisualProperties().getCameraPosition().up );
+		visualization.setTexts( zcontrol.getProject().getVisualProperties().getTextureFontStrings() );
+		visualization.setView( zcontrol.getProject().getVisualProperties().getCurrentWidth(), zcontrol.getProject().getVisualProperties().getCurrentHeight() );
+		visualizationView.updateCameraInformation();
+
 		algorithmControl.setProject( zcontrol.getProject() );
 	}
 
@@ -799,9 +884,10 @@ public class GUIControl implements AlgorithmListener {
 			case 1:
 				status = GUILocalization.getSingleton().getString( "gui.editor.JEditor.status.newProjectDiscard" );
 		}
-		zcontrol.newProject();
-		editor.loadProject();	// Load the currently loaded project by the control file
-		algorithmControl.setProject( zcontrol.getProject() );
+		loadProject( null );
+		//zcontrol.newProject();
+		//editor.loadProject();	// Load the currently loaded project by the control file
+		//algorithmControl.setProject( zcontrol.getProject() );
 		ZETLoader.sendMessage( status );
 	}
 
@@ -836,10 +922,10 @@ public class GUIControl implements AlgorithmListener {
 		Floor f = zcontrol.createNewFloor();
 		f.setMinimumSize( ZETProperties.getDefaultFloorSizeMinX(), ZETProperties.getDefaultFloorSizeMinY(), ZETProperties.getDefaultFloorSizeMaxX()-ZETProperties.getDefaultFloorSizeMinX(), ZETProperties.getDefaultFloorSizeMaxY()-ZETProperties.getDefaultFloorSizeMinY() );
 		ZETLoader.sendMessage( "Neue Etage angelegt." ); // TODO loc
-		editor.getEditView().updateFloorList(); // update the floor-boxes in the GUI
-		editor.getEditView().changeFloor( f );
-		editor.getQuickVisualizationView().updateQuickFloorlist();
-		editor.getQuickVisualizationView().changeQuickFloor( f );
+		editview.updateFloorList(); // update the floor-boxes in the GUI
+		editview.changeFloor( f );
+		caView.updateQuickFloorlist();
+		caView.changeQuickFloor( f );
 
 	}
 
@@ -1073,15 +1159,6 @@ public class GUIControl implements AlgorithmListener {
 		}
 	}
 
-	/**
-	 * Adds a {@link BatchProjectEntry} that can be loaded from a batch task file
-	 * into the batch view.
-	 * @param batchProjectEntry
-	 */
-	public void addBatchEntry( BatchProjectEntry batchProjectEntry ) {
-		editor.getBatchView().add( batchProjectEntry );
-	}
-
 	/** GUIControl class for projects and editing */
 	private ZControl zcontrol;
 
@@ -1099,7 +1176,7 @@ public class GUIControl implements AlgorithmListener {
 	}
 
 	public void updateCameraInformation() {
-		editor.getVisualizationView().updateCameraInformation();
+		visualizationView.updateCameraInformation();
 	}
 
 	public void setZETWindowTitle( String additionalTitleBarText ) {
@@ -1131,7 +1208,7 @@ public class GUIControl implements AlgorithmListener {
 			public void propertyChange( PropertyChangeEvent pce ) {
 				if( isDone( pce ) ) {
 					visualization.getControl().setBuildingControl( algorithmControl.getBuildingResults() );
-					editor.getVisualizationView().updateFloorSelector( editor.getEditView().getFloorID());
+					visualizationView.updateFloorSelector( editview.getFloorID() );
 				}
 			}
 		});
@@ -1178,10 +1255,10 @@ public class GUIControl implements AlgorithmListener {
 						CAVisualizationResults caVis = new CAVisualizationResults( algorithmControl.getMapping(), algorithmControl.getCellularAutomaton().getPotentialManager() );
 
 						visualization.getControl().setCellularAutomatonControl( caVis, algorithmControl.getCellularAutomaton() );
-						editor.getVisualizationView().updatePotentialSelector();
-//						editor.getVisualizationView().updateFloorSelector();
-						editor.getQuickVisualizationView().getLeftPanel().getMainComponent().setSimulationData( algorithmControl.getCellularAutomaton(), algorithmControl.getContainer(), algorithmControl.getMapping() );
-						editor.getQuickVisualizationView().displayFloor( editview.getCurrentFloor() );
+						visualizationView.updatePotentialSelector();
+//						visualizationView.updateFloorSelector();
+						caView.getLeftPanel().getMainComponent().setSimulationData( algorithmControl.getCellularAutomaton(), algorithmControl.getContainer(), algorithmControl.getMapping() );
+						caView.displayFloor( editview.getCurrentFloor() );
 						firstProgress = true;
 					}
 				}
@@ -1212,10 +1289,10 @@ public class GUIControl implements AlgorithmListener {
 					} else {
 						log.log( Level.INFO, "Left individuals: {0}", algorithmControl.getCellularAutomaton().getIndividualCount());
 						visualization.getControl().setCellularAutomatonControl( algorithmControl.getCaVisResults(), algorithmControl.getCellularAutomaton() );
-						editor.getVisualizationView().updatePotentialSelector();
+						visualizationView.updatePotentialSelector();
 						visualizationToolBar.setEnabledPlayback( true );
-						editor.getQuickVisualizationView().getLeftPanel().getMainComponent().setSimulationData( algorithmControl.getCellularAutomaton(), algorithmControl.getContainer(), algorithmControl.getMapping() );
-						editor.getQuickVisualizationView().displayFloor( editview.getCurrentFloor() ); // hier startet ein task!
+						caView.getLeftPanel().getMainComponent().setSimulationData( algorithmControl.getCellularAutomaton(), algorithmControl.getContainer(), algorithmControl.getMapping() );
+						caView.displayFloor( editview.getCurrentFloor() ); // hier startet ein task!
 						ZETLoader.sendMessage( "Simulation beendet" );
 						//EventServer.getInstance().dispatchEvent( new MessageEvent<>( this, MessageType.Status, "Simulation finished" ) );
 					}
@@ -1282,10 +1359,10 @@ public class GUIControl implements AlgorithmListener {
 
 						log.log( Level.INFO, "Left individuals: {0}", algorithmControl.getCellularAutomaton().getIndividualCount());
 						visualization.getControl().setCellularAutomatonControl( algorithmControl.getCaVisResults(), algorithmControl.getCellularAutomaton() );
-						editor.getVisualizationView().updatePotentialSelector();
+						visualizationView.updatePotentialSelector();
 						visualizationToolBar.setEnabledPlayback( true );
-						editor.getQuickVisualizationView().getLeftPanel().getMainComponent().setSimulationData( algorithmControl.getCellularAutomaton(), algorithmControl.getContainer(), algorithmControl.getMapping() );
-						editor.getQuickVisualizationView().displayFloor( editview.getCurrentFloor() ); // hier startet ein task!
+						caView.getLeftPanel().getMainComponent().setSimulationData( algorithmControl.getCellularAutomaton(), algorithmControl.getContainer(), algorithmControl.getMapping() );
+						caView.displayFloor( editview.getCurrentFloor() ); // hier startet ein task!
 						ZETLoader.sendMessage( "Simulation beendet" );
 	}
 
@@ -1297,7 +1374,7 @@ public class GUIControl implements AlgorithmListener {
 					GraphVisualizationResults gvr = algorithmControl.getGraphVisResults();
 					CompareVisualizationResults cvr = algorithmControl.getCompVisResults();
 					//visualization.getControl().setGraphControl( gvr );
-					visualization = editor.getVisualizationView().getGLContainer();
+					visualization = visualizationView.getGLContainer();
 					/*visualization.getControl().setCompControl(cvr);
 					 visualization.repaint();*/
 				}
@@ -1319,9 +1396,9 @@ public class GUIControl implements AlgorithmListener {
 					}
 				EvacuationCellularAutomaton ca = algorithmControl.getCellularAutomaton();
 				if( ca != null ) {
-					editor.getQuickVisualizationView().getLeftPanel().getMainComponent().setSimulationData( algorithmControl.getCellularAutomaton(), algorithmControl.getContainer(), algorithmControl.getMapping() );
-					editor.getQuickVisualizationView().displayFloor( editview.getCurrentFloor() );
-					editor.getQuickVisualizationView().getLeftPanel().getMainComponent().update();
+					caView.getLeftPanel().getMainComponent().setSimulationData( algorithmControl.getCellularAutomaton(), algorithmControl.getContainer(), algorithmControl.getMapping() );
+					caView.displayFloor( editview.getCurrentFloor() );
+					caView.getLeftPanel().getMainComponent().update();
 					firstProgress = true;
 					log.info( "First time floor drawn." );
 				}
@@ -1329,8 +1406,8 @@ public class GUIControl implements AlgorithmListener {
 				AlgorithmProgressEvent ape = (AlgorithmProgressEvent)event;
 				log.log( Level.INFO, "Progress: {0}", ape.getProgress() );
 				editor.setProgressValue( ((int)(ape.getProgress() * 100)) );
-				editor.getQuickVisualizationView().getLeftPanel().getMainComponent().update();
-				editor.getQuickVisualizationView().repaint();
+				caView.getLeftPanel().getMainComponent().update();
+				caView.repaint();
 			}
 		}
 	};
@@ -1444,4 +1521,7 @@ public class GUIControl implements AlgorithmListener {
 		return algorithmControl.getSimulationAlgorithm();
 	}
 
+	public JEditView getEditView() {
+		return editview;
+	}
 }

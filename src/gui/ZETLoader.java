@@ -35,14 +35,14 @@ import javax.swing.UIManager;
 import javax.xml.parsers.ParserConfigurationException;
 import org.xml.sax.SAXException;
 import zet.gui.GUILocalization;
-import zet.gui.main.JEditor;
+import zet.gui.main.JZetWindow;
 
 /**
  *
  * @author Jan-Philipp Kappmeier
  */
 public class ZETLoader {
-	
+
 	/** The localization class. */
 	private static Localization loc = GUILocalization.getSingleton();
 	/** Indicates whether debug mode is active, or not. */
@@ -53,8 +53,6 @@ public class ZETLoader {
 	public static final String optionFilename = "zetoptions.xml";
 	/** The filename for the file that contains additional options. */
 	public static final String informationFilename = "options.xml";
-	/** The batch project which is loaded if -batch command option is used. */
-	static BatchProject bp = null;
 	/** States if visualization is used, or not. Can be changed via command line. */
 	public static boolean useVisualization = true;
 	/** States if statistic is used, or not. Can be changed via command line. */
@@ -75,7 +73,7 @@ public class ZETLoader {
 
 	static void load( String[] args ) {
 		try {
-			
+
 		JSAP jsap = new JSAP();
 		loc.setPrefix( "help." );
 
@@ -109,7 +107,7 @@ public class ZETLoader {
 						.setLongFlag( "log" );
 		optLogFile.setHelp( loc.getString( "logFile" ) );
 		jsap.registerParameter( optLogFile );
-		
+
 		FlaggedOption optErrFile = new FlaggedOption( "err" ).setStringParser( JSAP.STRING_PARSER )
 						.setRequired( false )
 						.setShortFlag( 'e' )
@@ -165,7 +163,7 @@ public class ZETLoader {
 			}
 		}
 		loc.setPrefix( "" );
-		
+
 		if( config.contains( "log" ) )
 			ZETMain.logFile = config.getString( "log" );
 		if( config.contains( "err" ) )
@@ -187,7 +185,7 @@ public class ZETLoader {
 
 		if( config.contains( "project" ) )
 			loadedProject = config.getString( "project" );
-		
+
 		loadLast = config.contains( "loadlast" );
 
 		if( config.contains( "property" ) ) {
@@ -204,7 +202,7 @@ public class ZETLoader {
 
 		createEditor();
 		} catch (JSAPException ex ) {
-			
+
 		}
 	}
 
@@ -238,7 +236,7 @@ public class ZETLoader {
 				} catch( PropertyLoadException ex1 ) {
 					exit( ex1.getMessage() );
 				}
-				
+
 				try { // Load from default-file if no user-specific is available
 					ptmInformation = PropertyContainer.getInstance().applyParameters( informationFile );
 				} catch( PropertyLoadException ex1 ) {
@@ -259,7 +257,7 @@ public class ZETLoader {
 
 				// Change look and feel to native
 				GUIOptionManager.changeLookAndFeel( UIManager.getSystemLookAndFeelClassName() );
-				
+
 				GUIControl guiControl = new GUIControl();
 				try {
 					guiControl.createZETWindow();
@@ -277,11 +275,6 @@ public class ZETLoader {
 
 				// The control object for projects
 				System.out.println( "ZET-Fenster geladen." );
-				if( bp != null ) {
-					for( BatchProjectEntry bpe : bp ) {
-						guiControl.addBatchEntry( bpe );
-					}
-				}
 
 				// load last used file, if necessary
 				if( loadLast ) {
@@ -325,11 +318,9 @@ public class ZETLoader {
 			XStream xstream = new XStream();
 			Annotations.configureAliases( xstream, BatchProject.class );
 			Annotations.configureAliases( xstream, BatchProjectEntry.class );
-			loadedBatchProject = (BatchProject) xstream.fromXML( new FileReader( batchFile ) );
 		} catch( Exception ex ) {
 			exit( "Error loading batch task file." );
 		}
-		bp = loadedBatchProject;
 	}
 
 	/**
@@ -377,7 +368,7 @@ public class ZETLoader {
 	 */
 	public static void sendError( String msg ) {
 		System.err.println( msg );
-		EventServer.getInstance().dispatchEvent( new MessageEvent<JEditor>( null, MessageType.Error, msg ) );
+		EventServer.getInstance().dispatchEvent( new MessageEvent<JZetWindow>( null, MessageType.Error, msg ) );
 	}
 
 	/**
@@ -386,7 +377,7 @@ public class ZETLoader {
 	 */
 	public static void sendMessage( String msg ) {
 		System.out.println( msg );
-		EventServer.getInstance().dispatchEvent( new MessageEvent<JEditor>( null, MessageType.Status, msg ) );
+		EventServer.getInstance().dispatchEvent( new MessageEvent<JZetWindow>( null, MessageType.Status, msg ) );
 	}
 
 	/**

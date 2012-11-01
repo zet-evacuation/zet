@@ -22,16 +22,18 @@
 package zet.gui.main.tabs.base;
 
 import ds.z.Edge;
+import ds.z.PlanPoint;
 import ds.z.PlanPolygon;
 import java.awt.Color;
 import java.awt.FontMetrics;
 import java.awt.Graphics2D;
 import java.awt.Polygon;
 import java.awt.Rectangle;
+import java.util.Iterator;
 import javax.swing.JPanel;
 
 /**
- * 
+ *
  * @author Jan-Philipp Kappmeier
  */
 abstract public class AbstractPolygon extends JPanel {
@@ -46,25 +48,46 @@ abstract public class AbstractPolygon extends JPanel {
 		setForeground( foreground );
 	}
 
+
+
+	/**
+	 * Returns the node points of this polygon as {@link java.awt.Polygon}. The
+	 * resulting polygon's coordinates have the accuracy of millimeters, given by
+	 * the underlying plan points.
+	 * <p>The runtime of this operation is O(n), where {@code n} is the
+	 * number of edges.</p>
+	 * @return the {@code java.awt.Polygon}-object with discretized coordinates
+	 */
+	protected java.awt.Polygon getAWTPolygon( PlanPolygon<?> polygon ) {
+		java.awt.Polygon drawPolygon = new java.awt.Polygon();
+		Iterator<PlanPoint> itP = polygon.pointIterator( false );
+		while( itP.hasNext() ) {
+			PlanPoint point = itP.next();
+			drawPolygon.addPoint( point.getXInt(), point.getYInt() );
+		}
+		return drawPolygon;
+	}
+
+
 	/**
 	 * Returns the {@link ds.z.PlanPolygon} represented by this instance.
 	 * @return the polygon
 	 */
 	public final PlanPolygon getPlanPolygon () { return myPolygon; }
-	
+
 	/**
 	 * Returns the real polygon area within the coordinate space of the bounding
 	 * box of this {@code AbstractPolygon}.
 	 * @return the real polygon area of this polygon
 	 */
 	public final Polygon getDrawingPolygon () { return drawingPolygon; }
-	
+
 	/**
-	 * 
+	 *
 	 * @param p
 	 */
 	public abstract void displayPolygon( PlanPolygon p );
-	
+
 	/**
 	 * Draws the specified text in the polygon. The position is the middle of the
 	 * bounding box. The text is not displayed if it is to large to fit into the
@@ -84,7 +107,7 @@ abstract public class AbstractPolygon extends JPanel {
 		if( normalizedBounds.contains( stringBounds ) )
 			g2.drawString( name, stringBounds.x, stringBounds.y -nameBounds.y);
 	}
-	
+
 	/**
 	 * Draws the specified text with a specified color in the polygon. The
 	 * position is the middle of the bounding box. The text is not displayed if it

@@ -50,7 +50,7 @@ import java.util.List;
  */
 @XStreamAlias( "room" )
 @XMLConverter( RoomConverter.class )
-public class Room extends BaseRoom<RoomEdge> implements Cloneable, Comparable<Room> {
+public class Room extends PlanPolygon<RoomEdge> implements Cloneable, Comparable<Room> {
 	@XStreamAsAttribute()
 	/** The name of the {@code Room}. */
 	private String name;
@@ -104,33 +104,13 @@ public class Room extends BaseRoom<RoomEdge> implements Cloneable, Comparable<Ro
 		areas = new ArrayList/*<? extends Area<Edge>>*/[] {assignmentAreas, barriers, delayAreas, evacuationAreas, inaccessibleAreas, saveAreas, stairAreas, teleportAreas};
 		floor.addRoom( this );
 	}
-        
-                
-        /*public HashMap<Point,Integer> getDoors()
-        {
-            //Collection<Point> doors = new HashSet<Point>();
-            HashMap<Point,Integer> doors = new HashMap<>();
-            for (RoomEdge edge: super.getEdges())
-            {
-                //System.out.println("betrachte Kante: " + edge);
-                if (edge.isPassable())
-                {
-                    int width = edge.length();
-                    int xpos = (edge.getSource().getXInt() + edge.getTarget().getXInt())/2;
-                    int ypos = (edge.getSource().getYInt() + edge.getTarget().getYInt())/2;
-                    Point p = new Point(xpos,ypos);
-                    doors.put(p,width);
-                }        
-            }
-            return doors;
-        }*/
-        
-        /**
+
+	/**
 	 * Returns the position and the width of all doors for a {@code Room} that connects that room with a room on the same floor
 	 * @param room the room for which position is specified
-	 * @return the position and width of all doors in the room. 
+	 * @return the position and width of all doors in the room.
 	 */
-        public HashMap<Point,Integer> getDoors()
+    public HashMap<Point,Integer> getDoors()
         {
             HashMap<Point,Integer> doors = new HashMap();
             LinkedList<RoomEdge> edges = new LinkedList<>();
@@ -147,12 +127,12 @@ public class Room extends BaseRoom<RoomEdge> implements Cloneable, Comparable<Ro
                 int longwidth = start.length();
                 RoomEdge end = start;
                 RoomEdge next;
-                
+
                 while (edges.size() > 1)
                 {
                     RoomEdge first = edges.poll();
                     next = edges.getFirst();
-                    
+
                     if (next.isNeighbour(first) && (next.getLinkTarget().getRoom() == first.getLinkTarget().getRoom() ))
                     {
                         longwidth = longwidth + next.length();
@@ -163,7 +143,7 @@ public class Room extends BaseRoom<RoomEdge> implements Cloneable, Comparable<Ro
                             int xpos = (start.getSource().getXInt() + end.getTarget().getXInt())/2;
                             int ypos = (start.getSource().getYInt() + end.getTarget().getYInt())/2;
                             Point p = new Point(xpos,ypos);
-                            doors.put(p,longwidth);                        
+                            doors.put(p,longwidth);
                         }
                     }
                     else
@@ -172,20 +152,20 @@ public class Room extends BaseRoom<RoomEdge> implements Cloneable, Comparable<Ro
                         int xpos = (start.getSource().getXInt() + end.getTarget().getXInt())/2;
                         int ypos = (start.getSource().getYInt() + end.getTarget().getYInt())/2;
                         Point p = new Point(xpos,ypos);
-                        doors.put(p,longwidth);                        
+                        doors.put(p,longwidth);
                         if (edges.size()==1)
                         {
                             int w = next.length();
                             int x = (next.getSource().getXInt() + next.getTarget().getXInt())/2;
                             int y = (next.getSource().getYInt() + next.getTarget().getYInt())/2;
                             Point po = new Point(x,y);
-                            doors.put(po,w); 
+                            doors.put(po,w);
                         }
                         start = next;
                         longwidth = start.length();
                     }
                 }
-    
+
             }
             else if (edges.size()==1)
             {
@@ -210,12 +190,12 @@ public class Room extends BaseRoom<RoomEdge> implements Cloneable, Comparable<Ro
             {
                 if (edge.isPassable())
                 {
-                    length = edge.length(); 
+                    length = edge.length();
                 }
             }
             return length;
         }
-        
+
         /**
 	 * Gives a collection of all passable edges as doors in one room
 	 * @param room the room which is considered
@@ -232,13 +212,13 @@ public class Room extends BaseRoom<RoomEdge> implements Cloneable, Comparable<Ro
             }
             return doorEdges;
         }
-        
+
 	/**
 	 * {@inheritDoc}
 	 * The Areas that are contained within this Room are assigned to the new room that contains them.
 	 * If any area intersects with both rooms, then the area will not be contained in any of the rooms.
-	 * 
-	 * @throws IllegalArgumentException 
+	 *
+	 * @throws IllegalArgumentException
 	 */
 	//TODO: Split up areas that intersect with both rooms
 	@Override
@@ -392,9 +372,6 @@ public class Room extends BaseRoom<RoomEdge> implements Cloneable, Comparable<Ro
 				teleportAreas.add( (TeleportArea)area );
 			}
 		}
-
-//		area.addChangeListener( this );
-//		throwChangeEvent( new ChangeEvent( this ) );
 	}
 
 	/**
@@ -409,7 +386,6 @@ public class Room extends BaseRoom<RoomEdge> implements Cloneable, Comparable<Ro
 	@Override
 	public void check( boolean rasterized ) throws PolygonNotClosedException, AreaNotInsideException, TeleportEdgeInvalidTargetException, TooManyPeopleException {
 		super.check( rasterized );
-		//if (!(isClosed())) throw new PolygonNotClosedException( this, "This room is not a closed polygon"); // done by super.check()
 		for( RoomEdge e : getEdges() ) {
 			if( e instanceof TeleportEdge ) {
 				TeleportEdge e2 = ((TeleportEdge) e).getLinkTarget();
@@ -496,7 +472,7 @@ public class Room extends BaseRoom<RoomEdge> implements Cloneable, Comparable<Ro
 	}
 
 	/** {@inheritDoc}
-	 * 
+	 *
 	 *  In case of a Room, this method has to consider passable edges as a special case:
 	 *  If you replace a passable edge, the linkTarget edge, to which this edge is linked, will
 	 *  also be replaced by the same list of points, and then these two new polygon parts
@@ -529,7 +505,7 @@ public class Room extends BaseRoom<RoomEdge> implements Cloneable, Comparable<Ro
 				ArrayList<RoomEdge> result = this.replaceEdgeInternal( e, p );
 				// Do the real replacement in the partner room.
 				if( e instanceof TeleportEdge ) {
-					// Move the parameter points so that they are on the link-target edge. This is only neccessary 
+					// Move the parameter points so that they are on the link-target edge. This is only neccessary
 					// for TeleportEdges because normal passable edges always are equal to their link target.
 					int xOffset = (partnerSource.x - eSource.x);
 					int yOffset = (partnerSource.y - eSource.y);
@@ -571,7 +547,7 @@ public class Room extends BaseRoom<RoomEdge> implements Cloneable, Comparable<Ro
 	}
 
 	/** {@inheritDoc}
-	 *  
+	 *
 	 * Just as the replaceEdge method for Rooms, this method must mind the case that two edges
 	 * are combined where at least one of them is passable. There are the following cases:
 	 * <table>
@@ -581,7 +557,7 @@ public class Room extends BaseRoom<RoomEdge> implements Cloneable, Comparable<Ro
 	 * these two linkTarget edges will also be combined and the be the new linkTarget. In every other case an
 	 * IllegalArgumentException is thrown.</td></tr>
 	 * </table>
-	 * 
+	 *
 	 * @throws IllegalArgumentException See superclass + If two edges are combined who have targets
 	 * which are not neighbors (only possible for TeleportEdges) or if two RoomEdges shall be combined
 	 * who point to different rooms with their link targets.
@@ -684,7 +660,7 @@ public class Room extends BaseRoom<RoomEdge> implements Cloneable, Comparable<Ro
 	}
 
 	/**
-	 * Connects this room with another room at a specified {@link RoomEdge}. 
+	 * Connects this room with another room at a specified {@link RoomEdge}.
 	 * This edge must be contained in both rooms. That means, the
 	 * underlying polygons must intersect themselves at this edge.
 	 * <p>The {@code RoomEdge} is associated to both rooms and is setLocation as passable.
@@ -725,13 +701,13 @@ public class Room extends BaseRoom<RoomEdge> implements Cloneable, Comparable<Ro
 
 	/**
 	 * This method replaces sourceEdge and targetEdge with two TeleportEdges.
-	 * The old edges are deleted and the new TeleportEdges are connected to each 
+	 * The old edges are deleted and the new TeleportEdges are connected to each
 	 * other. This method is only guaranteed to work on closed polygons.
 	 * @param sourceEdge An edge within a room
 	 * @param targetEdge An edge within another room on a different floor
-	 * @exception IllegalArgumentException If both edges are in the same room or 
-	 * the same floor or if one of the room edges is already passable. If the 
-	 * polygon is not closed, an IllegalArgumentException may be thrown because 
+	 * @exception IllegalArgumentException If both edges are in the same room or
+	 * the same floor or if one of the room edges is already passable. If the
+	 * polygon is not closed, an IllegalArgumentException may be thrown because
 	 * the deletion of a RoomEdge (source/linkTarget) may fail.
 	 */
 	public static void connectToWithTeleportEdge( RoomEdge sourceEdge, RoomEdge targetEdge ) throws IllegalArgumentException {
@@ -801,9 +777,6 @@ public class Room extends BaseRoom<RoomEdge> implements Cloneable, Comparable<Ro
 	@Override
 	public void delete() throws IllegalArgumentException, IllegalStateException {
 		try {
-// TODO wenn ein raum gelöscht wird, werden nicht alle areas gelöscht???
-			
-			//ChangeEvent is thrown by Floor
 			associatedFloor.deleteRoom( this );
 			associatedFloor = null;
 
@@ -811,17 +784,14 @@ public class Room extends BaseRoom<RoomEdge> implements Cloneable, Comparable<Ro
 			AssignmentArea[] areas = getAssignmentAreas().toArray( new AssignmentArea[getAssignmentAreas().size()] );
 
 			for( AssignmentArea area : areas ) {
-				//deleteArea( area );
 				area.delete();
 			}
 
 
-			// Call this at the END of this method, it destroys structures that 
+			// Call this at the END of this method, it destroys structures that
 			// are neccessary for associatedFloor.deleteRoom (this) to work
 			super.delete();
-		} catch( IllegalArgumentException ex ) {
-			throw ex;
-		} catch( IllegalStateException ex ) {
+		} catch( IllegalArgumentException | IllegalStateException ex ) {
 			throw ex;
 		}
 	}
@@ -931,7 +901,7 @@ public class Room extends BaseRoom<RoomEdge> implements Cloneable, Comparable<Ro
 
 	/**
 	 * This is a convenience method that returns all PlanPoints of all
-	 * Edges of this polygon and all PlanPoints of all Areas that are 
+	 * Edges of this polygon and all PlanPoints of all Areas that are
 	 * registered at this Room.
 	 */
 	@Override
@@ -954,7 +924,7 @@ public class Room extends BaseRoom<RoomEdge> implements Cloneable, Comparable<Ro
 	 * Edges of this polygon to the given list. The Room implementation
 	 * also adds all PlanPoints of all Areas that are registered at this Room.
 	 *
-	 * @param planPoints 
+	 * @param planPoints
 	 */
 	public void getBorderPlanPoints( List<PlanPoint> planPoints ) {
 		super.getPlanPoints( planPoints );
@@ -963,13 +933,13 @@ public class Room extends BaseRoom<RoomEdge> implements Cloneable, Comparable<Ro
 
 	/**
 	 * This is a convenience method that adds all PlanPoints of all
-	 * Edges of this polygon to the given list. The Room implementation 
+	 * Edges of this polygon to the given list. The Room implementation
 	 * also adds all PlanPoints of all Areas that are registered at this Room.
 	 */
 	@Override
 	public void getPlanPoints( List<PlanPoint> planPoints ) {
 		super.getPlanPoints( planPoints );
-		
+
 		for( Area<?> a : assignmentAreas )
 			a.getPlanPoints( planPoints );
 		for( Area<?> a : barriers )
@@ -1074,7 +1044,7 @@ if( inaccessibleAreas == null )
 			}
 			if( error ) {
 				while ( areaList.contains( null ) )
-					areaList.remove( null );					
+					areaList.remove( null );
 			}
 
 		}

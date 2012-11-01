@@ -58,7 +58,7 @@ import java.util.List;
 import java.util.ListIterator;
 import javax.swing.JComponent;
 import javax.swing.SwingUtilities;
-import zet.gui.main.JEditor;
+import zet.gui.main.JZetWindow;
 import zet.gui.main.tabs.base.AbstractFloor;
 import zet.gui.main.tabs.base.JPolygon;
 
@@ -85,11 +85,11 @@ public class JFloor extends AbstractFloor implements EventListener<ZModelChanged
 	private Point newRasterizedPoint;
 	/** The last point that was clicked in GUI coordinate space. This is used during
 	 * the creation of new polygons. It is redundant, because it's information could be
-	 * gathered by using CoordinateTools.translateToScreen (lastPlanClick), but this 
+	 * gathered by using CoordinateTools.translateToScreen (lastPlanClick), but this
 	 * would slow down the paint method, which must be fast. So we included this variable
 	 * for a better efficiency, despite it's redundancy. */
 	private Point lastClick = null;
-	/** The current position of the mouse.  This is used during the creation of new 
+	/** The current position of the mouse.  This is used during the creation of new
 	 * polygons to paint the preview of the next edge (pointwise creation) or the
 	 * preview of the whole polygon (rectangle creation). */
 	private Point mousePos = null;
@@ -137,7 +137,7 @@ public class JFloor extends AbstractFloor implements EventListener<ZModelChanged
 	@Override
 	public void handleEvent( ZModelChangedEvent e ) {
 		// TODO handle updates
-		//if( !JEditor.getInstance().isUpdateDisabled() )
+		//if( !JZetWindow.getInstance().isUpdateDisabled() )
 			displayFloor( myFloor );
 	}
 
@@ -191,7 +191,7 @@ public class JFloor extends AbstractFloor implements EventListener<ZModelChanged
 		if( f != null ) {
 			updateOffsets( f );
 
-			// TODO: Provide better implementation - Do not recreate everything each time			
+			// TODO: Provide better implementation - Do not recreate everything each time
 			for( Room r : f.getRooms() ) {
 				JPolygon roomPolygon = new JPolygon( this, GUIOptionManager.getRoomEdgeColor(), guiControl );
 				add( roomPolygon );
@@ -250,7 +250,7 @@ public class JFloor extends AbstractFloor implements EventListener<ZModelChanged
 
 	/**
 	 * Resets all temporary data concerning dragging processes, selection
-	 * and click values and deletes polygons which are in creation. 
+	 * and click values and deletes polygons which are in creation.
 	 */
 	// TODO: remove/change and combine with setEditMode
 	public void resetEdit() {
@@ -346,7 +346,7 @@ public class JFloor extends AbstractFloor implements EventListener<ZModelChanged
 	}
 
 	/**
-	 * Returns the currently selected polygons on the floor. These are 
+	 * Returns the currently selected polygons on the floor. These are
 	 * {@code JPolygon}s which can contain any polygon, such as rooms, areas
 	 * or any general {@link PlanPolygon}.
 	 * @return the selected polygons
@@ -354,7 +354,7 @@ public class JFloor extends AbstractFloor implements EventListener<ZModelChanged
 	public List<JPolygon> getSelectedPolygons() {
 		return Collections.unmodifiableList( selectedPolygons );
 	}
-	
+
 	/**
 	 * Returns the selected edge, if any is selected. Note, that this will always
 	 * be {@code null}, if any polygon is selected.
@@ -373,7 +373,7 @@ public class JFloor extends AbstractFloor implements EventListener<ZModelChanged
 	}
 
 	/** Searches for a JPolygon on screen that shows the given PlanPolygon
-	 * 
+	 *
 	 * @param poly the polygon
 	 * @return The matching JPolygon or null if PlanPolygon is not shown by any JPolygon on this floor.
 	 */
@@ -491,11 +491,11 @@ public class JFloor extends AbstractFloor implements EventListener<ZModelChanged
 	}
 
 	/** This method returns <b>all</b> JPolygons which are contained in "c"
-	 * and contain the specified point. In contrast to that, the API method 
+	 * and contain the specified point. In contrast to that, the API method
 	 * findComponentAt only returns <b>1</b> component which contains the given point.
 	 *
 	 * @param c The container in which the search should be performed
-	 * @param p The point, which the sought-after components must contain. The 
+	 * @param p The point, which the sought-after components must contain. The
 	 * coordinates must be relative to container c
 	 * @return A list of JPolygons which contain point p. This list will be
 	 * empty in the case that such JPolygons do not exist.
@@ -507,7 +507,7 @@ public class JFloor extends AbstractFloor implements EventListener<ZModelChanged
 		return result;
 	}
 
-	/** This is an internal helper method. Never call it. 
+	/** This is an internal helper method. Never call it.
 	 * Call findAllComponentsAt (Container c, Point p) instead. */
 	private static void findAllPolygonsAtImpl( Container c, Point p, List<JPolygon> polygonList ) {
 		for( Component comp : c.getComponents() ) {
@@ -522,11 +522,11 @@ public class JFloor extends AbstractFloor implements EventListener<ZModelChanged
 				} else if( poly.getDrawingPolygon().contains( relative_point ) )
 					polygonList.add( poly );
 
-				// Recursively search the JPolygon. We can restrict ourselves to 
+				// Recursively search the JPolygon. We can restrict ourselves to
 				// searching recursively in all JPolygons, because Polygons can
 				// only be placed upon the Floor (then we find them in the first
-				// recursion level) or upon Rooms (then we find them in recursion 
-				// level 2). So, we don't have to check every instance of 
+				// recursion level) or upon Rooms (then we find them in recursion
+				// level 2). So, we don't have to check every instance of
 				// java.awt.Container for new JPolygons. This also is a benefit
 				// for the performance.
 
@@ -548,7 +548,7 @@ public class JFloor extends AbstractFloor implements EventListener<ZModelChanged
 		if( e.getID() == MouseEvent.MOUSE_CLICKED ) {
 			//if( e.getClickCount() == 1 )
 			//	System.out.println( "A single mouse klick occured" );
-			//else 
+			//else
 			//	System.out.println( "Multi-click occured: " + e.getClickCount() );
 			System.out.println( "Mouse click" );
 			if( e.getButton() == MouseEvent.BUTTON1 ) {
@@ -567,7 +567,6 @@ public class JFloor extends AbstractFloor implements EventListener<ZModelChanged
 		if( e.getID() == MouseEvent.MOUSE_PRESSED ) {
 			// Clear status bar
 			ZETLoader.sendError( "" );
-			JEditor.sendReady();
 
 			if( e.getButton() == MouseEvent.BUTTON1 )
 				;
@@ -603,7 +602,7 @@ public class JFloor extends AbstractFloor implements EventListener<ZModelChanged
 					}
 
 					// The event that is thrown by setLocation triggers an automatic
-					// redisplay of the JFloor and the drag mode is switched off during 
+					// redisplay of the JFloor and the drag mode is switched off during
 					// this repaint redisplay (@see #displayFloor(Floor))
 
 					// Unfortunately this event is only thrown in case that at least one
@@ -630,7 +629,7 @@ public class JFloor extends AbstractFloor implements EventListener<ZModelChanged
 							selectPolygon( (JPolygon)room );
 						else if( selectionArea.intersects( room_bounds ) )
 							// If the room as a whole is not contained, then at
-							// least some areas within it may be inside the selection 
+							// least some areas within it may be inside the selection
 							// area
 							// Note that we do not explicitly select the areas
 							// when the full room is selected, because areas always
@@ -647,7 +646,7 @@ public class JFloor extends AbstractFloor implements EventListener<ZModelChanged
 				repaint(); // Clear selection shape
 			}
 
-		// Enable all JPolygons which contain the given point to process this 
+		// Enable all JPolygons which contain the given point to process this
 		// event (Swing normally only informs the first JPolygon that it finds)
 
 		// Do not use e.isPopupTrigger() here - Won't work under linux
@@ -687,12 +686,12 @@ public class JFloor extends AbstractFloor implements EventListener<ZModelChanged
 	}
 
 	EditMode editMode = EditMode.Selection;
-	
+
 	/**
 	 * Sets the edit mode of the floor to a specific value, if the edit mode is
 	 * forced to be set by the GUI. This will stop any active editing that is
 	 * going on right now.
-	 * @param editMode 
+	 * @param editMode
 	 */
 	public void setEditMode( EditMode editMode ) {
 		this.editMode = editMode;
@@ -734,7 +733,7 @@ public class JFloor extends AbstractFloor implements EventListener<ZModelChanged
 				JPolygon.disablePopups = false;
 		}
 	}
-	
+
 	private enum FloorMode {
 		Select,
 		PointWiseStart,
@@ -743,7 +742,7 @@ public class JFloor extends AbstractFloor implements EventListener<ZModelChanged
 		RectangleActive;
 	}
 	private FloorMode floorMode  = FloorMode.Select;
-					
+
 	private void processPotentialDragStart( Point point ) {
 		if( floorMode == FloorMode.Select ) {
 			// Single click in selection mode. Select the object under the mouse pointer
@@ -757,7 +756,7 @@ public class JFloor extends AbstractFloor implements EventListener<ZModelChanged
 
 			// If none of the polygons that we clicked on is selected,
 			// then just select the top-level one. If a JPolygon is selected
-			// then switch the selection over to the next JPolygon in 
+			// then switch the selection over to the next JPolygon in
 			// the given order of polygons
 			while( itPoly.hasNext() ) {
 				toSelect = itPoly.next();
@@ -796,7 +795,7 @@ public class JFloor extends AbstractFloor implements EventListener<ZModelChanged
 			}
 		}
 	}
-	
+
 	private void processLeftClick( Point point ) {
 		if( floorMode == FloorMode.Select ) {
 			// Single click in selection mode. Select the object under the mouse pointer
@@ -810,7 +809,7 @@ public class JFloor extends AbstractFloor implements EventListener<ZModelChanged
 
 			// If none of the polygons that we clicked on is selected,
 			// then just select the top-level one. If a JPolygon is selected
-			// then switch the selection over to the next JPolygon in 
+			// then switch the selection over to the next JPolygon in
 			// the given order of polygons
 			while( itPoly.hasNext() ) {
 				toSelect = itPoly.next();
@@ -850,13 +849,13 @@ public class JFloor extends AbstractFloor implements EventListener<ZModelChanged
 				clearSelection();
 		} else if( floorMode == FloorMode.PointWiseStart ) {
 			// the click starts a new polygon.
-			// Click in non-selection mode: Start creating a polygon or 
+			// Click in non-selection mode: Start creating a polygon or
 			// continue creating one if newPolygon is already != null
 
 			// Get the model points which we clicked on
 			PlanPoint p2 = new PlanPoint( CoordinateTools.translateToModel( rasterizedPaintMode ? getNextRasterPoint( point ) : point ) );
 
-			// In case we are editing an area, check whether the clicks are valid 
+			// In case we are editing an area, check whether the clicks are valid
 			// (within the containing polygon)
 			Room parent = null;
 			if( editMode.doesCreateSubpolygons() ) {
@@ -905,13 +904,13 @@ public class JFloor extends AbstractFloor implements EventListener<ZModelChanged
 
 		} else if( floorMode == FloorMode.RectangleStart ) {
 			// the click starts a new polygon.
-			// Click in non-selection mode: Start creating a polygon or 
+			// Click in non-selection mode: Start creating a polygon or
 			// continue creating one if newPolygon is already != null
 
 			// Get the model points which we clicked on
 			PlanPoint p2 = new PlanPoint( CoordinateTools.translateToModel( rasterizedPaintMode ? getNextRasterPoint( point ) : point ) );
 
-			// In case we are editing an area, check whether the clicks are valid 
+			// In case we are editing an area, check whether the clicks are valid
 			// (within the containing polygon)
 			Room parent = null;
 			if( editMode.doesCreateSubpolygons() ) {
@@ -948,7 +947,7 @@ public class JFloor extends AbstractFloor implements EventListener<ZModelChanged
 //			// Double clicks select polygons
 //			// Single clicks start dragging when a polygon was selected
 //			if( e.getClickCount() == 1 ) {
-//				// Single click in Selection Mode: 
+//				// Single click in Selection Mode:
 //				Object clickedOn = null;
 //				for( JPolygon sel : selectedPolygons ) {
 //					clickedOn = sel.findClickTargetAt(
@@ -959,7 +958,7 @@ public class JFloor extends AbstractFloor implements EventListener<ZModelChanged
 //				}
 //
 
-//				} else //b) Start to select multiple polygons by dragging 
+//				} else //b) Start to select multiple polygons by dragging
 //					//	  a rectangle around them
 //					dragStart = point;
 //			} else {
@@ -1064,7 +1063,7 @@ public class JFloor extends AbstractFloor implements EventListener<ZModelChanged
 			polygonFinishedHandler();
 		}
 	}
-	
+
 	private void startNewPolygon( PlanPolygon parent ) {
 		// First create a new room / area
 		try {
@@ -1081,7 +1080,7 @@ public class JFloor extends AbstractFloor implements EventListener<ZModelChanged
 				ZETLoader.sendError( "Unknown Error during polygon creation." );
 		}
 	}
-					
+
 	/**
 	 * <p>Tries to find the {@code ds.z.Room} that lies at a given point p.
 	 * The point is assumed to be in the coordinate system of the floor and thus
@@ -1123,7 +1122,7 @@ public class JFloor extends AbstractFloor implements EventListener<ZModelChanged
 			// Dragging only allowed in selection mode
 			if( floorMode == FloorMode.Select ) {
 				if( draggedPlanPoints == null ) {
-					
+
 					if( selectedPoint != null ) {
 						// we try to drag a point
 					} else if( selectedEdge != null ) {
@@ -1148,7 +1147,7 @@ public class JFloor extends AbstractFloor implements EventListener<ZModelChanged
 						for( JPolygon sel : selectedPolygons )
 							draggedPlanPoints.addAll( ((PlanPolygon)sel.getPlanPolygon()).getPlanPoints() );
 					}
-					if( draggedPlanPoints != null ) {						
+					if( draggedPlanPoints != null ) {
 						// Initialize DragTargets & Starts (on-screen coordinates)
 						dragStarts = new ArrayList<>( draggedPlanPoints.size() );
 						dragTargets = new ArrayList<>( draggedPlanPoints.size() );
@@ -1159,7 +1158,7 @@ public class JFloor extends AbstractFloor implements EventListener<ZModelChanged
 							dragTargets.add( new Point( translated ) );
 						}
 					}
-					
+
 					// create the dragged plan points
 //				// a) Start dragging, if a polygon was already selected
 //				if( clickedOn != null ) {
@@ -1197,8 +1196,8 @@ public class JFloor extends AbstractFloor implements EventListener<ZModelChanged
 			}
 		}
 
-		
-		if( JEditor.isEditing() )
+
+		if( JZetWindow.isEditing() )
 			return;
 		if( e.getID() == MouseEvent.MOUSE_DRAGGED || e.getID() == MouseEvent.MOUSE_MOVED ) {
 			// Grab focus to deliver new key events to this JFloor
@@ -1213,7 +1212,7 @@ public class JFloor extends AbstractFloor implements EventListener<ZModelChanged
 				real = CoordinateTools.translateToModel( newRasterizedPoint );
 			} else
 				real = CoordinateTools.translateToModel( new Point( e.getX(), e.getY() ) );
-			JEditor.sendMouse( real );
+			JZetWindow.sendMouse( real );
 		}
 		if( e.getID() == MouseEvent.MOUSE_DRAGGED )
 			if( dragStart != null )
@@ -1221,7 +1220,7 @@ public class JFloor extends AbstractFloor implements EventListener<ZModelChanged
 				if( dragTargets != null ) {
 					// Mouse drags must update the displayed drag target icons but only if
 					// there is really a dragging process going on (click on draggable object
-					// must precede this method and initialize dragStart to != null) 
+					// must precede this method and initialize dragStart to != null)
 					int x_offset = e.getX() - dragStart.x;
 					int y_offset = e.getY() - dragStart.y;
 
@@ -1331,8 +1330,8 @@ public class JFloor extends AbstractFloor implements EventListener<ZModelChanged
 	}
 
 	// ACTION LISTENER STUFF
-	/** 
-	 * Adds an {@code ActionListener}. 
+	/**
+	 * Adds an {@code ActionListener}.
 	 * <p>
 	 * The {@code ActionListener} will receive an {@code ActionEvent}
 	 * when a selection has been made. If the combo box is editable, then
@@ -1400,7 +1399,7 @@ public class JFloor extends AbstractFloor implements EventListener<ZModelChanged
 		}
 	}
 
-	/** 
+	/**
 	 * Returns the action command that is included in the event sent to
 	 * action listeners.
 	 * @return  the string containing the "command" that is sent to action listeners
@@ -1408,6 +1407,6 @@ public class JFloor extends AbstractFloor implements EventListener<ZModelChanged
 	public String getActionCommand() {
 		return actionCommand;
 	}
-	
+
 	protected String actionCommand = "roomSelected";
 }
