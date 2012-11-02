@@ -77,17 +77,17 @@ public class AssignmentTypeComboBoxModel extends DefaultComboBoxModel {
 	public void setSelectedItem( Object object ) {
 		super.setSelectedItem( object );
 
-		if( floorPanel != null && floorPanel.getSelectedPolygons() != null ) {
-			itemChange = true;
-			//AssignmentType old = ( (AssignmentArea)floorPanel.getSelectedPolygon().getPlanPolygon() ).getAssignmentType();
-			for( JPolygon poly : floorPanel.getSelectedPolygons() ) {
-				if( poly.getPlanPolygon() instanceof AssignmentArea ) {
-					((AssignmentArea) poly.getPlanPolygon()).setAssignmentType( (AssignmentType) object );
-				}
-			}
-			//AssignmentType mewA = ( (AssignmentArea)floorPanel.getSelectedPolygon().getPlanPolygon() ).getAssignmentType();
-			itemChange = false;
-		}
+//		if( floorPanel != null && floorPanel.getSelectedPolygons() != null ) {
+//			itemChange = true;
+//			//AssignmentType old = ( (AssignmentArea)floorPanel.getSelectedPolygon().getPlanPolygon() ).getAssignmentType();
+//			for( JPolygon poly : floorPanel.getSelectedPolygons() ) {
+//				if( poly.getPlanPolygon() instanceof AssignmentArea ) {
+//					((AssignmentArea) poly.getPlanPolygon()).setAssignmentType( (AssignmentType) object );
+//				}
+//			}
+//			//AssignmentType mewA = ( (AssignmentArea)floorPanel.getSelectedPolygon().getPlanPolygon() ).getAssignmentType();
+//			itemChange = false;
+//		}
 	}
 
 	public void setControl( ZControl zcontrol ) {

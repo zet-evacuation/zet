@@ -15,7 +15,7 @@
  */
 package gui;
 
-import zet.gui.main.tabs.editor.EditMode;
+import zet.gui.main.tabs.editor.EditModeOld;
 import ds.PropertyContainer;
 import event.EventServer;
 import event.MessageEvent;
@@ -37,9 +37,9 @@ public abstract class GUIOptionManager {
 	/** The instance of the PropertyContainer. */
 	private static final PropertyContainer propertyContainer = PropertyContainer.getInstance();
 	/** The previously selected edit mode. */
-	private static EditMode previousEditMode;
+	private static EditModeOld previousEditMode;
 	/** The selected edit mode. */
-	private static EditMode editMode;
+	private static EditModeOld editMode;
 	/** Global initialization of the GUIOptionManager. */
 
 	static {
@@ -65,8 +65,8 @@ public abstract class GUIOptionManager {
 		propertyContainer.define( "gui.optionManager.InaccessibleAreaVisibility", Boolean.class, true );
 		propertyContainer.define( "gui.optionManager.SaveAreaVisibility", Boolean.class, true );
 		propertyContainer.define( "gui.optionManager.SavePath", String.class, "" );
-		previousEditMode = EditMode.Selection;
-		editMode = EditMode.Selection;
+		previousEditMode = EditModeOld.Selection;
+		editMode = EditModeOld.Selection;
 	}
 
 	/** Not instantiable class.  */
@@ -160,15 +160,15 @@ public abstract class GUIOptionManager {
 		propertyContainer.set( "gui.optionManager.StairAreaVisibility", av.contains( Areas.Stair ) );
 	}
 
-	//public static EditMode getEditMode() {
+	//public static EditModeOld getEditMode() {
 	//	return editMode;
 	//}
 
-	public static EditMode getPreviousEditMode() {
+	public static EditModeOld getPreviousEditMode() {
 		return previousEditMode;
 	}
 
-	public static void setEditMode( EditMode em ) {
+	public static void setEditMode( EditModeOld em ) {
 		// Update previous edit mode
 		previousEditMode = editMode;
 		// Clear payload of new editmode
@@ -176,7 +176,7 @@ public abstract class GUIOptionManager {
 		// Set new edit mode
 		editMode = em;
 
-		// Announce new EditMode
+		// Announce new EditModeOld
 		EventServer.getInstance().dispatchEvent( new MessageEvent( em, MessageEvent.MessageType.EditMode, em.getName() ) );
 	}
 
@@ -219,7 +219,7 @@ public abstract class GUIOptionManager {
 	public static String getLastFile( int i ) {
 		return PropertyContainer.getInstance().getAsString( "information.file.lastFile" + Integer.toString( i ) );
 	}
-	
+
 	public static String getDoorTemplateFile() {
 		return "./templates/door_default.xml";
 	}

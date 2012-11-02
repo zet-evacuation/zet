@@ -20,10 +20,10 @@ import java.awt.Polygon;
 import java.awt.Rectangle;
 
 /** Computes screen coordinates from the model values and vice versa.
- * 
- * There are two types of methods that this class offers. The zoom- and 
- * zoomInverse-methods <i>scale</i> the object that is given to them to screen 
- * size, whereas the translateToScreen / translateToModel methods first 
+ *
+ * There are two types of methods that this class offers. The zoom- and
+ * zoomInverse-methods <i>scale</i> the object that is given to them to screen
+ * size, whereas the translateToScreen / translateToModel methods first
  * <i>copy</i> the given parameter object, <i>translate</i> it to the screen
  * coordinate origin and then apply the appropriate zoom-method.
  *
@@ -43,7 +43,7 @@ public class CoordinateTools {
 	}
 
 	/** Sets the offsets that will be used in all following conversion operations
-	 * 
+	 *
 	 * @param x X Offset (in the model coordinate space - THIS IS NO GUI OFFSET)
 	 * @param y Y Offset (in the model coordinate space - THIS IS NO GUI OFFSET)
 	 */
@@ -175,11 +175,11 @@ public class CoordinateTools {
 		return val * zoomFactor;
 	}
 
-	/** Inverse method for {@link CoordinateTools#zoom(double)}. Except for 
+	/** Inverse method for {@link CoordinateTools#zoom(double)}. Except for
 	 * rounding faults {@code zoomInverse (zoom (x)) == x} should hold true.
 	 *
 	 * @param val
-	 * @return 
+	 * @return
 	 */
 	public static int zoomInverse( double val ) {
 		return (int) Math.round( val / zoomFactor );

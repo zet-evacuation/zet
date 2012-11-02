@@ -28,7 +28,7 @@ import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.JRadioButtonMenuItem;
 import zet.gui.GUILocalization;
-import zet.gui.main.tabs.base.AbstractFloor.RasterPaintStyle;
+import zet.gui.main.tabs.base.RasterPaintStyle;
 import zet.gui.treeview.JProjectTreeView;
 import zet.tasks.CellularAutomatonAlgorithms;
 

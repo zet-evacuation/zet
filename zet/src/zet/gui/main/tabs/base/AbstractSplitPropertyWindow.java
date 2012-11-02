@@ -21,16 +21,16 @@
 
 package zet.gui.main.tabs.base;
 
+import de.tu_berlin.math.coga.common.localization.Localized;
 import java.awt.BorderLayout;
 import java.awt.Dimension;
 import javax.swing.JComponent;
 import javax.swing.JPanel;
 import javax.swing.JSplitPane;
-import de.tu_berlin.math.coga.common.localization.Localized;
 
 /**
  *
- * @param <T> 
+ * @param <T>
  * @author Jan-Philipp Kappmeier
  */
 public abstract class AbstractSplitPropertyWindow<T extends JComponent> extends JPanel implements Localized {
@@ -55,12 +55,12 @@ public abstract class AbstractSplitPropertyWindow<T extends JComponent> extends 
 		splitPane.setOneTouchExpandable( false );
 		add( splitPane, BorderLayout.CENTER );
 	}
-	
+
 	abstract protected JPanel createEastBar();
-	
+
 	public T getLeftPanel() {
 		return leftPanel;
 	}
-	
+
 	abstract protected String getAdditionalTitleBarText();
 }
