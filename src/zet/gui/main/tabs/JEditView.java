@@ -24,26 +24,19 @@ import de.tu_berlin.math.coga.common.localization.DefaultLoc;
 import de.tu_berlin.math.coga.components.JRuler;
 import de.tu_berlin.math.coga.components.framework.Button;
 import ds.PropertyContainer;
-import ds.z.AssignmentArea;
 import ds.z.AssignmentType;
-import ds.z.DefaultEvacuationFloor;
 import ds.z.DelayArea;
-import ds.z.Edge;
 import ds.z.EvacuationArea;
 import ds.z.Floor;
 import ds.z.PlanPolygon;
 import ds.z.Room;
-import ds.z.RoomEdge;
-import ds.z.StairArea;
 import ds.z.StairPreset;
 import ds.z.TeleportArea;
-import ds.z.TeleportEdge;
 import ds.z.ZControl;
 import ds.z.ZLocalization;
 import gui.GUIControl;
 import gui.GUIOptionManager;
 import gui.ZETLoader;
-import gui.ZETMain;
 import gui.ZETProperties;
 import gui.editor.Areas;
 import info.clearthought.layout.TableLayout;
@@ -64,6 +57,7 @@ import java.text.NumberFormat;
 import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.EnumSet;
+import java.util.Objects;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
@@ -80,7 +74,8 @@ import zet.gui.components.model.RoomComboBoxModel;
 import zet.gui.main.JZetWindow;
 import zet.gui.main.tabs.base.AbstractSplitPropertyWindow;
 import zet.gui.main.tabs.base.JFloorScrollPane;
-import zet.gui.main.tabs.editor.EditMode;
+import zet.gui.main.tabs.editor.EditModeOld;
+import zet.gui.main.tabs.editor.EditStatus;
 import zet.gui.main.tabs.editor.JFloor;
 
 /**
@@ -103,6 +98,14 @@ public class JEditView extends AbstractSplitPropertyWindow<JFloorScrollPane<JFlo
 	private JLabel lblEdgeLength;
 	private JLabel lblEdgeExitName;
 	private JTextField txtEdgeExitName;
+	private final EditStatus editStatus;
+
+	public void setZoomFactor( double zoomFactor ) {
+		getLeftPanel().setZoomFactor( zoomFactor );
+		getFloor().redisplay();
+		//updateFloorView();
+	}
+
 	/**
 	 * An enumeration of all possible panels visible in the edit view on the right part.
 	 * @see #setEastPanelType(zet.gui.components.tabs.JEditView.Panels)
@@ -225,46 +228,47 @@ public class JEditView extends AbstractSplitPropertyWindow<JFloorScrollPane<JFlo
 	private JButton deleteRoom;
 	private JButton moveRoom;
 
-	public JEditView( GUIControl guiControl ) {
-		super( new JFloorScrollPane<>( new JFloor( guiControl ) ) );
+	public JEditView( EditStatus editStatus, GUIControl guiControl ) {
+		super( new JFloorScrollPane<>( new JFloor( editStatus, guiControl ) ) );
 		loc = GUILocalization.getSingleton();
-		this.guiControl = guiControl;
+		this.guiControl = Objects.requireNonNull( guiControl, "GUI control class cannot be null." );
+		this.editStatus = Objects.requireNonNull( editStatus, "Edit status object cannot be null." );
 		final JFloor centerPanel = this.getLeftPanel().getMainComponent();
-		centerPanel.addActionListener( new ActionListener() {
-			@Override
-			public void actionPerformed( ActionEvent e ) {
-				if( centerPanel.getSelectedPolygons().size() != 1 ) {
-					if( centerPanel.getSelectedEdge() != null ) {
-						setEastPanelType( Panels.Edge );
-					} else
-						setEastPanelType( Panels.Floor );
-				} else {
-					final PlanPolygon p = centerPanel.getSelectedPolygons().get( 0 ).getPlanPolygon();
-					if( p instanceof Room )
-						setEastPanelType( Panels.Room );
-					else if( p instanceof DelayArea )
-						setEastPanelType( Panels.DelayArea );
-					else if( p instanceof EvacuationArea )
-						setEastPanelType( Panels.EvacuationArea );
-					else if( p instanceof AssignmentArea )
-						setEastPanelType( Panels.AssignmentArea );
-					else if( p instanceof StairArea )
-						setEastPanelType( Panels.StairArea );
-					else if( p instanceof TeleportArea )
-						setEastPanelType( Panels.TeleportArea );
-					else
-						setEastPanelType( Panels.Default );
-				}
-			}
-		} );
+//		centerPanel.addActionListener( new ActionListener() {
+//			@Override
+//			public void actionPerformed( ActionEvent e ) {
+//				if( centerPanel.getSelectedPolygons().size() != 1 ) {
+//					if( centerPanel.getSelectedEdge() != null ) {
+//						setEastPanelType( Panels.Edge );
+//					} else
+//						setEastPanelType( Panels.Floor );
+//				} else {
+//					final PlanPolygon p = centerPanel.getSelectedPolygons().get( 0 ).getPlanPolygon();
+//					if( p instanceof Room )
+//						setEastPanelType( Panels.Room );
+//					else if( p instanceof DelayArea )
+//						setEastPanelType( Panels.DelayArea );
+//					else if( p instanceof EvacuationArea )
+//						setEastPanelType( Panels.EvacuationArea );
+//					else if( p instanceof AssignmentArea )
+//						setEastPanelType( Panels.AssignmentArea );
+//					else if( p instanceof StairArea )
+//						setEastPanelType( Panels.StairArea );
+//					else if( p instanceof TeleportArea )
+//						setEastPanelType( Panels.TeleportArea );
+//					else
+//						setEastPanelType( Panels.Default );
+//				}
+//			}
+//		} );
 		this.getLeftPanel().getHorizontalScrollBar().addAdjustmentListener( adlPlanImage );
 		this.getLeftPanel().getVerticalScrollBar().addAdjustmentListener( adlPlanImage );
 	}
 	private AdjustmentListener adlPlanImage = new AdjustmentListener() {
 		@Override
 		public void adjustmentValueChanged( AdjustmentEvent e ) {
-			getLeftPanel().getMainComponent().getPlanImage().setVisibleRect( getLeftPanel().getMainComponent().getVisibleRect() );
-			getLeftPanel().getMainComponent().getPlanImage().update();
+//			getLeftPanel().getMainComponent().getPlanImage().setVisibleRect( getLeftPanel().getMainComponent().getVisibleRect() );
+//			getLeftPanel().getMainComponent().getPlanImage().update();
 		}
 	};
 
@@ -281,118 +285,118 @@ public class JEditView extends AbstractSplitPropertyWindow<JFloorScrollPane<JFlo
 	 * @param panel the panel
 	 */
 	private void setEastPanelType( Panels panel ) {
-		selectedPolygon = (panel == Panels.Default || panel == Panels.Floor || panel == Panels.Edge ) ? null : getLeftPanel().getMainComponent().getSelectedPolygons().get( 0 ).getPlanPolygon();
-		switch( panel ) {
-			case DelayArea:
-				txtDelayFactor.setText( nfFloat.format( ((DelayArea)selectedPolygon).getSpeedFactor() ) );
-				cbxDelayType.setSelectedItem( ((DelayArea)selectedPolygon).getDelayType() );
-				eastSubBarCardLayout.show( eastSubBar, "delayArea" );
-				break;
-			case StairArea:
-				txtStairFactorUp.setText( nfFloat.format( ((StairArea)selectedPolygon).getSpeedFactorUp() ) );
-				txtStairFactorDown.setText( nfFloat.format( ((StairArea)selectedPolygon).getSpeedFactorDown() ) );
-				eastSubBarCardLayout.show( eastSubBar, "stairArea" );
-				break;
-			case AssignmentArea:
-				txtNumberOfPersons.setText( nfInteger.format( ((AssignmentArea)selectedPolygon).getEvacuees() ) );
-				assignmentTypeSelector.setSelectedItem( ((AssignmentArea)selectedPolygon).getAssignmentType() );
-				eastSubBarCardLayout.show( eastSubBar, "assignmentArea" );
-				double area = Math.round( selectedPolygon.areaMeter() * 100 ) / 100.0;
-				lblAreaSize.setText( nfFloat.format( area ) + " m²" );
-				if( projectControl.getProject().getBuildingPlan().isRastered() ) {
-					lblMaxPersons.setText( nfInteger.format( ((AssignmentArea)selectedPolygon).getMaxEvacuees() ) );
-					lblMaxPersonsWarning.setText( "" );
-				} else {
-					double persons = Math.round( (area / (0.4 * 0.4)) * 100 ) / 100.0;
-					lblMaxPersons.setText( nfFloat.format( persons ) );
-					lblMaxPersonsWarning.setText( loc.getString( "gui.EditPanel.Assignment.AreaWarning" ) );
-				}
-				if( ((AssignmentArea)selectedPolygon).getExitArea() == null )
-					cbxPreferredExit.setSelectedIndex( -1 );
-				else
-					cbxPreferredExit.setSelectedItem( ((AssignmentArea)selectedPolygon).getExitArea() );
-				break;
-			case Room:
-				txtRoomName.setText( ((Room)selectedPolygon).getName() );
-				eastSubBarCardLayout.show( eastSubBar, "room" );
-				double areaRoom = Math.round( selectedPolygon.areaMeter() * 100 ) / 100.0;
-				lblRoomSize.setText( nfFloat.format( areaRoom ) + " m²" );
-				break;
-			case Default:
-				eastSubBarCardLayout.show( eastSubBar, "default" );
-				break;
-			case Floor:
-				txtFloorName.setText( this.currentFloor.getName() );
-				txtFloorxOffset.setText( Integer.toString( currentFloor.getxOffset() ) );
-				txtFlooryOffset.setText( Integer.toString( currentFloor.getyOffset() ) );
-				txtFloorWidth.setText( Integer.toString( currentFloor.getWidth() ) );
-				txtFloorHeight.setText( Integer.toString( currentFloor.getHeight() ) );
-
-				double areaFloor = 0;
-				for( PlanPolygon<?> p : currentFloor )
-					areaFloor += p.areaMeter();
-
-				lblFloorSize.setText( nfFloat.format( areaFloor ) + " m²" );
-
-				eastSubBarCardLayout.show( eastSubBar, "floor" );
-				break;
-			case EvacuationArea:
-				txtEvacuationAreaName.setText( ((EvacuationArea)selectedPolygon).getName() );
-				txtEvacuationAttractivity.setText( nfInteger.format( ((EvacuationArea)selectedPolygon).getAttractivity() ) );
-				eastSubBarCardLayout.show( eastSubBar, "evacuation" );
-				break;
-			case TeleportArea:
-				txtTeleportAreaName.setText( ((TeleportArea)selectedPolygon).getName() );
-				if( ((TeleportArea)selectedPolygon).getExitArea() == null )
-					cbxTargetExit.setSelectedIndex( -1 );
-				else
-					cbxTargetExit.setSelectedItem( ((TeleportArea)selectedPolygon).getExitArea() );
-
-				if( ((TeleportArea)selectedPolygon).getTargetArea() == null )
-					cbxTargetArea.setSelectedIndex( -1 );
-				else
-					cbxTargetArea.setSelectedItem( ((TeleportArea)selectedPolygon).getTargetArea() );
-				eastSubBarCardLayout.show( eastSubBar, "teleport" );
-				break;
-			case Edge:
-				Edge e = getLeftPanel().getMainComponent().getSelectedEdge();
-				txtEdgeExitName.setEnabled( false );
-				lblEdgeExitName.setText( "" );
-				if( e instanceof RoomEdge ) {
-					if( e instanceof TeleportEdge ) {
-						TeleportEdge te = (TeleportEdge)e;
-						if( ((Room)te.getLinkTarget().getAssociatedPolygon()).getAssociatedFloor() instanceof DefaultEvacuationFloor ) {
-							lblEdgeType.setText( "Ausgang" );
-							txtEdgeExitName.setEnabled( true );
-							// we have an evacuation exit
-							Room r = (Room)te.getLinkTarget().getAssociatedPolygon();
-							EvacuationArea ea = r.getEvacuationAreas().get( 0 );
-							lblEdgeExitName.setText( "Ausgang" );
-							txtEdgeExitName.setText( ea.getName() );
-						}
-						else
-							lblEdgeType.setText( "Stockwerkübergang" );
-					} else {
-						if( ((RoomEdge)e).isPassable() ) {
-							lblEdgeType.setText( "Durchgang" );
-						} else {
-							lblEdgeType.setText( "Wand" );
-						}
-					}
-				} else {
-					// easy peasy, this is an area boundry
-					lblEdgeType.setText( "Area-Begrenzung" );
-				}
-
-				lblEdgeLength.setText( "Breite: " + (e.length())*0.001  + "m" );
-
-				eastSubBarCardLayout.show( eastSubBar, "edge" );
-				break;
-			default:
-				guiControl.showErrorMessage( loc.getString( "gui.editor.JEditorPanel.WrongPanelID" ), loc.getString( "gui.NotGraveError" ) );
-				return;
-		}
-		eastPanelType = panel;
+//		selectedPolygon = (panel == Panels.Default || panel == Panels.Floor || panel == Panels.Edge ) ? null : getLeftPanel().getMainComponent().getSelectedPolygons().get( 0 ).getPlanPolygon();
+//		switch( panel ) {
+//			case DelayArea:
+//				txtDelayFactor.setText( nfFloat.format( ((DelayArea)selectedPolygon).getSpeedFactor() ) );
+//				cbxDelayType.setSelectedItem( ((DelayArea)selectedPolygon).getDelayType() );
+//				eastSubBarCardLayout.show( eastSubBar, "delayArea" );
+//				break;
+//			case StairArea:
+//				txtStairFactorUp.setText( nfFloat.format( ((StairArea)selectedPolygon).getSpeedFactorUp() ) );
+//				txtStairFactorDown.setText( nfFloat.format( ((StairArea)selectedPolygon).getSpeedFactorDown() ) );
+//				eastSubBarCardLayout.show( eastSubBar, "stairArea" );
+//				break;
+//			case AssignmentArea:
+//				txtNumberOfPersons.setText( nfInteger.format( ((AssignmentArea)selectedPolygon).getEvacuees() ) );
+//				assignmentTypeSelector.setSelectedItem( ((AssignmentArea)selectedPolygon).getAssignmentType() );
+//				eastSubBarCardLayout.show( eastSubBar, "assignmentArea" );
+//				double area = Math.round( selectedPolygon.areaMeter() * 100 ) / 100.0;
+//				lblAreaSize.setText( nfFloat.format( area ) + " m²" );
+//				if( projectControl.getProject().getBuildingPlan().isRastered() ) {
+//					lblMaxPersons.setText( nfInteger.format( ((AssignmentArea)selectedPolygon).getMaxEvacuees() ) );
+//					lblMaxPersonsWarning.setText( "" );
+//				} else {
+//					double persons = Math.round( (area / (0.4 * 0.4)) * 100 ) / 100.0;
+//					lblMaxPersons.setText( nfFloat.format( persons ) );
+//					lblMaxPersonsWarning.setText( loc.getString( "gui.EditPanel.Assignment.AreaWarning" ) );
+//				}
+//				if( ((AssignmentArea)selectedPolygon).getExitArea() == null )
+//					cbxPreferredExit.setSelectedIndex( -1 );
+//				else
+//					cbxPreferredExit.setSelectedItem( ((AssignmentArea)selectedPolygon).getExitArea() );
+//				break;
+//			case Room:
+//				txtRoomName.setText( ((Room)selectedPolygon).getName() );
+//				eastSubBarCardLayout.show( eastSubBar, "room" );
+//				double areaRoom = Math.round( selectedPolygon.areaMeter() * 100 ) / 100.0;
+//				lblRoomSize.setText( nfFloat.format( areaRoom ) + " m²" );
+//				break;
+//			case Default:
+//				eastSubBarCardLayout.show( eastSubBar, "default" );
+//				break;
+//			case Floor:
+//				txtFloorName.setText( this.currentFloor.getName() );
+//				txtFloorxOffset.setText( Integer.toString( currentFloor.getxOffset() ) );
+//				txtFlooryOffset.setText( Integer.toString( currentFloor.getyOffset() ) );
+//				txtFloorWidth.setText( Integer.toString( currentFloor.getWidth() ) );
+//				txtFloorHeight.setText( Integer.toString( currentFloor.getHeight() ) );
+//
+//				double areaFloor = 0;
+//				for( PlanPolygon<?> p : currentFloor )
+//					areaFloor += p.areaMeter();
+//
+//				lblFloorSize.setText( nfFloat.format( areaFloor ) + " m²" );
+//
+//				eastSubBarCardLayout.show( eastSubBar, "floor" );
+//				break;
+//			case EvacuationArea:
+//				txtEvacuationAreaName.setText( ((EvacuationArea)selectedPolygon).getName() );
+//				txtEvacuationAttractivity.setText( nfInteger.format( ((EvacuationArea)selectedPolygon).getAttractivity() ) );
+//				eastSubBarCardLayout.show( eastSubBar, "evacuation" );
+//				break;
+//			case TeleportArea:
+//				txtTeleportAreaName.setText( ((TeleportArea)selectedPolygon).getName() );
+//				if( ((TeleportArea)selectedPolygon).getExitArea() == null )
+//					cbxTargetExit.setSelectedIndex( -1 );
+//				else
+//					cbxTargetExit.setSelectedItem( ((TeleportArea)selectedPolygon).getExitArea() );
+//
+//				if( ((TeleportArea)selectedPolygon).getTargetArea() == null )
+//					cbxTargetArea.setSelectedIndex( -1 );
+//				else
+//					cbxTargetArea.setSelectedItem( ((TeleportArea)selectedPolygon).getTargetArea() );
+//				eastSubBarCardLayout.show( eastSubBar, "teleport" );
+//				break;
+//			case Edge:
+//				Edge e = getLeftPanel().getMainComponent().getSelectedEdge();
+//				txtEdgeExitName.setEnabled( false );
+//				lblEdgeExitName.setText( "" );
+//				if( e instanceof RoomEdge ) {
+//					if( e instanceof TeleportEdge ) {
+//						TeleportEdge te = (TeleportEdge)e;
+//						if( ((Room)te.getLinkTarget().getAssociatedPolygon()).getAssociatedFloor() instanceof DefaultEvacuationFloor ) {
+//							lblEdgeType.setText( "Ausgang" );
+//							txtEdgeExitName.setEnabled( true );
+//							// we have an evacuation exit
+//							Room r = (Room)te.getLinkTarget().getAssociatedPolygon();
+//							EvacuationArea ea = r.getEvacuationAreas().get( 0 );
+//							lblEdgeExitName.setText( "Ausgang" );
+//							txtEdgeExitName.setText( ea.getName() );
+//						}
+//						else
+//							lblEdgeType.setText( "Stockwerkübergang" );
+//					} else {
+//						if( ((RoomEdge)e).isPassable() ) {
+//							lblEdgeType.setText( "Durchgang" );
+//						} else {
+//							lblEdgeType.setText( "Wand" );
+//						}
+//					}
+//				} else {
+//					// easy peasy, this is an area boundry
+//					lblEdgeType.setText( "Area-Begrenzung" );
+//				}
+//
+//				lblEdgeLength.setText( "Breite: " + (e.length())*0.001  + "m" );
+//
+//				eastSubBarCardLayout.show( eastSubBar, "edge" );
+//				break;
+//			default:
+//				guiControl.showErrorMessage( loc.getString( "gui.editor.JEditorPanel.WrongPanelID" ), loc.getString( "gui.NotGraveError" ) );
+//				return;
+//		}
+//		eastPanelType = panel;
 	}
 
 	/**
@@ -450,7 +454,7 @@ public class JEditView extends AbstractSplitPropertyWindow<JFloorScrollPane<JFlo
 		cbxRooms.addActionListener( new ActionListener() {
 			@Override
 			public void actionPerformed( ActionEvent e ) {
-				getFloor().showPolygon( (PlanPolygon)cbxRooms.getSelectedItem() );
+				getFloor().showPolygon( (Room)cbxRooms.getSelectedItem() );
 			}
 		} );
 		cbxRooms.setRenderer( new ComboBoxRenderer<Room>() {
@@ -574,12 +578,13 @@ public class JEditView extends AbstractSplitPropertyWindow<JFloorScrollPane<JFlo
 			@Override
 			public void keyPressed( KeyEvent e ) {
 				if( e.getKeyCode() == KeyEvent.VK_ENTER )
-					try {
-						int persons = Math.min( nfInteger.parse( txtNumberOfPersons.getText() ).intValue(), ((AssignmentArea)getLeftPanel().getMainComponent().getSelectedPolygons().get( 0 ).getPlanPolygon()).getMaxEvacuees() );
-						((AssignmentArea)getLeftPanel().getMainComponent().getSelectedPolygons().get( 0 ).getPlanPolygon()).setEvacuees( persons );
-					} catch( ParseException | IllegalArgumentException ex ) {
-						ZETLoader.sendError( ex.getLocalizedMessage() );
-					}
+					;
+//					try {
+//						int persons = Math.min( nfInteger.parse( txtNumberOfPersons.getText() ).intValue(), ((AssignmentArea)getLeftPanel().getMainComponent().getSelectedPolygons().get( 0 ).getPlanPolygon()).getMaxEvacuees() );
+//						((AssignmentArea)getLeftPanel().getMainComponent().getSelectedPolygons().get( 0 ).getPlanPolygon()).setEvacuees( persons );
+//					} catch( ParseException | IllegalArgumentException ex ) {
+//						ZETLoader.sendError( ex.getLocalizedMessage() );
+//					}
 			}
 		} );
 		eastPanel.add( txtNumberOfPersons, "0, " + row++ );
@@ -588,10 +593,10 @@ public class JEditView extends AbstractSplitPropertyWindow<JFloorScrollPane<JFlo
 		btnAssignmentSetDefaultEvacuees.addActionListener( new ActionListener() {
 			@Override
 			public void actionPerformed( ActionEvent e ) {
-				AssignmentArea a = (AssignmentArea)getLeftPanel().getMainComponent().getSelectedPolygons().get( 0 ).getPlanPolygon();
-				int persons = Math.min( a.getAssignmentType().getDefaultEvacuees(), a.getMaxEvacuees() );
-				a.setEvacuees( persons );
-				txtNumberOfPersons.setText( nfInteger.format( a.getEvacuees() ) );
+				//AssignmentArea a = (AssignmentArea)getLeftPanel().getMainComponent().getSelectedPolygons().get( 0 ).getPlanPolygon();
+				//int persons = Math.min( a.getAssignmentType().getDefaultEvacuees(), a.getMaxEvacuees() );
+				//a.setEvacuees( persons );
+				//txtNumberOfPersons.setText( nfInteger.format( a.getEvacuees() ) );
 			}
 		} );
 		eastPanel.add( btnAssignmentSetDefaultEvacuees, "0, " + row++ );
@@ -604,14 +609,12 @@ public class JEditView extends AbstractSplitPropertyWindow<JFloorScrollPane<JFlo
 		cbxPreferredExit.addItemListener( new ItemListener() {
 			@Override
 			public void itemStateChanged( ItemEvent e ) {
-				//if( e.getStateChange() == ItemEvent.SELECTED ) {
 				if( cbxPreferredExit.getSelectedIndex() == -1 )
 					return;
-				if( getLeftPanel().getMainComponent().getSelectedPolygons().size() > 0 ) {
-					AssignmentArea a = (AssignmentArea)getLeftPanel().getMainComponent().getSelectedPolygons().get( 0 ).getPlanPolygon();
-					a.setExitArea( (EvacuationArea)cbxPreferredExit.getSelectedItem() );
-				}
-			//}
+//				if( getLeftPanel().getMainComponent().getSelectedPolygons().size() > 0 ) {
+//					AssignmentArea a = (AssignmentArea)getLeftPanel().getMainComponent().getSelectedPolygons().get( 0 ).getPlanPolygon();
+//					a.setExitArea( (EvacuationArea)cbxPreferredExit.getSelectedItem() );
+//				}
 			}
 		} );
 		cbxPreferredExit.setRenderer( new ComboBoxRenderer() {
@@ -679,7 +682,8 @@ public class JEditView extends AbstractSplitPropertyWindow<JFloorScrollPane<JFlo
 			@Override
 			public void itemStateChanged( ItemEvent e ) {
 				if( e.getStateChange() == ItemEvent.SELECTED )
-					((DelayArea)getLeftPanel().getMainComponent().getSelectedPolygons().get( 0 ).getPlanPolygon()).setDelayType( (DelayArea.DelayType)e.getItem() );
+					;
+//					((DelayArea)getLeftPanel().getMainComponent().getSelectedPolygons().get( 0 ).getPlanPolygon()).setDelayType( (DelayArea.DelayType)e.getItem() );
 			}
 		} );
 		cbxDelayType.setRenderer( new ComboBoxRenderer() {
@@ -714,13 +718,14 @@ public class JEditView extends AbstractSplitPropertyWindow<JFloorScrollPane<JFlo
 			@Override
 			public void keyPressed( KeyEvent e ) {
 				if( e.getKeyCode() == KeyEvent.VK_ENTER )
-					try {
-						((DelayArea)getLeftPanel().getMainComponent().getSelectedPolygons().get( 0 ).getPlanPolygon()).setSpeedFactor( nfFloat.parse( txtDelayFactor.getText() ).doubleValue() );
-					} catch( ParseException ex ) {
-						ZETLoader.sendError( loc.getString( "gui.error.NonParsableFloatString" ) );
-					} catch( IllegalArgumentException ex ) {
-						ZETLoader.sendError( ex.getLocalizedMessage() );
-					}
+;
+//					try {
+//						((DelayArea)getLeftPanel().getMainComponent().getSelectedPolygons().get( 0 ).getPlanPolygon()).setSpeedFactor( nfFloat.parse( txtDelayFactor.getText() ).doubleValue() );
+//					} catch( ParseException ex ) {
+//						ZETLoader.sendError( loc.getString( "gui.error.NonParsableFloatString" ) );
+//					} catch( IllegalArgumentException ex ) {
+//						ZETLoader.sendError( ex.getLocalizedMessage() );
+//					}
 			}
 		} );
 		eastPanel.add( txtDelayFactor, "0, " + row++ );
@@ -730,9 +735,9 @@ public class JEditView extends AbstractSplitPropertyWindow<JFloorScrollPane<JFlo
 		btnDelaySetDefault.addActionListener( new ActionListener() {
 			@Override
 			public void actionPerformed( ActionEvent e ) {
-				DelayArea a = (DelayArea)getLeftPanel().getMainComponent().getSelectedPolygons().get( 0 ).getPlanPolygon();
-				a.setSpeedFactor( a.getDelayType().defaultSpeedFactor );
-				txtDelayFactor.setText( nfFloat.format( a.getSpeedFactor() ) );
+//				DelayArea a = (DelayArea)getLeftPanel().getMainComponent().getSelectedPolygons().get( 0 ).getPlanPolygon();
+//				a.setSpeedFactor( a.getDelayType().defaultSpeedFactor );
+//				txtDelayFactor.setText( nfFloat.format( a.getSpeedFactor() ) );
 			}
 		} );
 		eastPanel.add( btnDelaySetDefault, "0, " + row++ );
@@ -774,13 +779,14 @@ public class JEditView extends AbstractSplitPropertyWindow<JFloorScrollPane<JFlo
 			@Override
 			public void keyPressed( KeyEvent e ) {
 				if( e.getKeyCode() == KeyEvent.VK_ENTER )
-					try {
-						((StairArea)getLeftPanel().getMainComponent().getSelectedPolygons().get( 0 ).getPlanPolygon()).setSpeedFactorUp( nfFloat.parse( txtStairFactorUp.getText() ).doubleValue() );
-					} catch( ParseException ex ) {
-						ZETLoader.sendError( loc.getString( "gui.error.NonParsableFloatString" ) );
-					} catch( IllegalArgumentException ex ) {
-						ZETLoader.sendError( ex.getLocalizedMessage() );
-					}
+					;
+//					try {
+//						((StairArea)getLeftPanel().getMainComponent().getSelectedPolygons().get( 0 ).getPlanPolygon()).setSpeedFactorUp( nfFloat.parse( txtStairFactorUp.getText() ).doubleValue() );
+//					} catch( ParseException ex ) {
+//						ZETLoader.sendError( loc.getString( "gui.error.NonParsableFloatString" ) );
+//					} catch( IllegalArgumentException ex ) {
+//						ZETLoader.sendError( ex.getLocalizedMessage() );
+//					}
 			}
 		} );
 		eastPanel.add( txtStairFactorUp, "0, " + row++ );
@@ -805,13 +811,14 @@ public class JEditView extends AbstractSplitPropertyWindow<JFloorScrollPane<JFlo
 			@Override
 			public void keyPressed( KeyEvent e ) {
 				if( e.getKeyCode() == KeyEvent.VK_ENTER )
-					try {
-						((StairArea)getLeftPanel().getMainComponent().getSelectedPolygons().get( 0 ).getPlanPolygon()).setSpeedFactorDown( nfFloat.parse( txtStairFactorDown.getText() ).doubleValue() );
-					} catch( ParseException ex ) {
-						ZETLoader.sendError( loc.getString( "gui.error.NonParsableFloatString" ) );
-					} catch( IllegalArgumentException ex ) {
-						ZETLoader.sendError( ex.getLocalizedMessage() );
-					}
+					;
+//					try {
+//						((StairArea)getLeftPanel().getMainComponent().getSelectedPolygons().get( 0 ).getPlanPolygon()).setSpeedFactorDown( nfFloat.parse( txtStairFactorDown.getText() ).doubleValue() );
+//					} catch( ParseException ex ) {
+//						ZETLoader.sendError( loc.getString( "gui.error.NonParsableFloatString" ) );
+//					} catch( IllegalArgumentException ex ) {
+//						ZETLoader.sendError( ex.getLocalizedMessage() );
+//					}
 			}
 		} );
 		eastPanel.add( txtStairFactorDown, "0, " + row++ );
@@ -872,7 +879,8 @@ public class JEditView extends AbstractSplitPropertyWindow<JFloorScrollPane<JFlo
 			@Override
 			public void keyPressed( KeyEvent e ) {
 				if( e.getKeyCode() == KeyEvent.VK_ENTER )
-					((EvacuationArea)getLeftPanel().getMainComponent().getSelectedPolygons().get( 0 ).getPlanPolygon()).setName( txtEvacuationAreaName.getText() );
+;
+//					((EvacuationArea)getLeftPanel().getMainComponent().getSelectedPolygons().get( 0 ).getPlanPolygon()).setName( txtEvacuationAreaName.getText() );
 			}
 		} );
 		eastPanel.add( txtEvacuationAreaName, "0, " + row++ );
@@ -897,14 +905,14 @@ public class JEditView extends AbstractSplitPropertyWindow<JFloorScrollPane<JFlo
 		txtEvacuationAttractivity.addKeyListener( new KeyAdapter() {
 			@Override
 			public void keyReleased( KeyEvent e ) {
-				try {
-					((EvacuationArea)getLeftPanel().getMainComponent().getSelectedPolygons().get( 0 ).getPlanPolygon()).setAttractivity( nfInteger.parse(
-									txtEvacuationAttractivity.getText() ).intValue() );
-				} catch( ParseException ex ) {
-					ZETLoader.sendError( loc.getString( "gui.error.NonParsableNumberString" ) );
-				} catch( IllegalArgumentException ex ) {
-					ZETLoader.sendError( ex.getLocalizedMessage() );
-				}
+//				try {
+//					((EvacuationArea)getLeftPanel().getMainComponent().getSelectedPolygons().get( 0 ).getPlanPolygon()).setAttractivity( nfInteger.parse(
+//									txtEvacuationAttractivity.getText() ).intValue() );
+//				} catch( ParseException ex ) {
+//					ZETLoader.sendError( loc.getString( "gui.error.NonParsableNumberString" ) );
+//				} catch( IllegalArgumentException ex ) {
+//					ZETLoader.sendError( ex.getLocalizedMessage() );
+//				}
 			}
 		} );
 		eastPanel.add( txtEvacuationAttractivity, "0, " + row++ );
@@ -1070,11 +1078,11 @@ public class JEditView extends AbstractSplitPropertyWindow<JFloorScrollPane<JFlo
 			@Override
 			public void keyPressed( KeyEvent e ) {
 				if( e.getKeyCode() == KeyEvent.VK_ENTER ) {
-					boolean success = projectControl.renameRoom( (Room)getLeftPanel().getMainComponent().getSelectedPolygons().get( 0 ).getPlanPolygon(), txtRoomName.getText() );
-					if( !success )
-						guiControl.alertError( "Floor with that name already exists" );
-					else
-						updateFloorView();
+//					boolean success = projectControl.renameRoom( (Room)getLeftPanel().getMainComponent().getSelectedPolygons().get( 0 ).getPlanPolygon(), txtRoomName.getText() );
+//					if( !success )
+//						guiControl.alertError( "Floor with that name already exists" );
+//					else
+//						updateFloorView();
 				}
 			}
 		} );
@@ -1149,7 +1157,7 @@ public class JEditView extends AbstractSplitPropertyWindow<JFloorScrollPane<JFlo
 			@Override
 			public void keyPressed( KeyEvent e ) {
 				if( e.getKeyCode() == KeyEvent.VK_ENTER )
-					((TeleportArea)getLeftPanel().getMainComponent().getSelectedPolygons().get( 0 ).getPlanPolygon()).setName( txtTeleportAreaName.getText() );
+;//					((TeleportArea)getLeftPanel().getMainComponent().getSelectedPolygons().get( 0 ).getPlanPolygon()).setName( txtTeleportAreaName.getText() );
 			}
 		} );
 		eastPanel.add( txtTeleportAreaName, "0, " + row++ );
@@ -1164,10 +1172,10 @@ public class JEditView extends AbstractSplitPropertyWindow<JFloorScrollPane<JFlo
 			public void itemStateChanged( ItemEvent e ) {
 				if( cbxTargetArea.getSelectedIndex() == -1 )
 					return;
-				if( getLeftPanel().getMainComponent().getSelectedPolygons().size() > 0 ) {
-					final TeleportArea a = (TeleportArea)getLeftPanel().getMainComponent().getSelectedPolygons().get( 0 ).getPlanPolygon();
-					a.setTargetArea( (TeleportArea)cbxTargetArea.getSelectedItem() );
-				}
+//				if( getLeftPanel().getMainComponent().getSelectedPolygons().size() > 0 ) {
+//					final TeleportArea a = (TeleportArea)getLeftPanel().getMainComponent().getSelectedPolygons().get( 0 ).getPlanPolygon();
+//					a.setTargetArea( (TeleportArea)cbxTargetArea.getSelectedItem() );
+//				}
 			}
 		} );
 		cbxTargetArea.setRenderer( new ComboBoxRenderer() {
@@ -1191,10 +1199,10 @@ public class JEditView extends AbstractSplitPropertyWindow<JFloorScrollPane<JFlo
 			public void itemStateChanged( ItemEvent e ) {
 				if( cbxTargetExit.getSelectedIndex() == -1 )
 					return;
-				if( getLeftPanel().getMainComponent().getSelectedPolygons().size() > 0 ) {
-					final TeleportArea a = (TeleportArea)getLeftPanel().getMainComponent().getSelectedPolygons().get( 0 ).getPlanPolygon();
-					a.setExitArea( (EvacuationArea)cbxTargetExit.getSelectedItem() );
-				}
+//				if( getLeftPanel().getMainComponent().getSelectedPolygons().size() > 0 ) {
+//					final TeleportArea a = (TeleportArea)getLeftPanel().getMainComponent().getSelectedPolygons().get( 0 ).getPlanPolygon();
+//					a.setExitArea( (EvacuationArea)cbxTargetExit.getSelectedItem() );
+//				}
 			}
 		} );
 		cbxTargetExit.setRenderer( new ComboBoxRenderer() {
@@ -1253,15 +1261,15 @@ public class JEditView extends AbstractSplitPropertyWindow<JFloorScrollPane<JFlo
 			public void keyPressed( KeyEvent e ) {
 				if( e.getKeyCode() == KeyEvent.VK_ENTER ) {
 					// Find the attached exit and set the name
-					if( getLeftPanel().getMainComponent().getSelectedEdge() instanceof TeleportEdge ) {
-						TeleportEdge te = (TeleportEdge)getLeftPanel().getMainComponent().getSelectedEdge();
-						if( ((Room)te.getLinkTarget().getAssociatedPolygon()).getAssociatedFloor() instanceof DefaultEvacuationFloor ) {
-							// we have an evacuation exit
-							Room r = (Room)te.getLinkTarget().getAssociatedPolygon();
-							EvacuationArea ea = r.getEvacuationAreas().get( 0 );
-							ea.setName( txtEdgeExitName.getText() );
-						}
-					}
+//					if( getLeftPanel().getMainComponent().getSelectedEdge() instanceof TeleportEdge ) {
+//						TeleportEdge te = (TeleportEdge)getLeftPanel().getMainComponent().getSelectedEdge();
+//						if( ((Room)te.getLinkTarget().getAssociatedPolygon()).getAssociatedFloor() instanceof DefaultEvacuationFloor ) {
+//							// we have an evacuation exit
+//							Room r = (Room)te.getLinkTarget().getAssociatedPolygon();
+//							EvacuationArea ea = r.getEvacuationAreas().get( 0 );
+//							ea.setName( txtEdgeExitName.getText() );
+//						}
+//					}
 				}
 					//((EvacuationArea)getLeftPanel().getMainComponent().getSelectedPolygons().get( 0 ).getPlanPolygon()).setName( txtEdgeExitName.getText() );
 			}
@@ -1288,14 +1296,14 @@ public class JEditView extends AbstractSplitPropertyWindow<JFloorScrollPane<JFlo
 		txtEvacuationAttractivity.addKeyListener( new KeyAdapter() {
 			@Override
 			public void keyReleased( KeyEvent e ) {
-				try {
-					((EvacuationArea)getLeftPanel().getMainComponent().getSelectedPolygons().get( 0 ).getPlanPolygon()).setAttractivity( nfInteger.parse(
-									txtEvacuationAttractivity.getText() ).intValue() );
-				} catch( ParseException ex ) {
-					ZETLoader.sendError( loc.getString( "gui.error.NonParsableNumberString" ) );
-				} catch( IllegalArgumentException ex ) {
-					ZETLoader.sendError( ex.getLocalizedMessage() );
-				}
+//				try {
+//					((EvacuationArea)getLeftPanel().getMainComponent().getSelectedPolygons().get( 0 ).getPlanPolygon()).setAttractivity( nfInteger.parse(
+//									txtEvacuationAttractivity.getText() ).intValue() );
+//				} catch( ParseException ex ) {
+//					ZETLoader.sendError( loc.getString( "gui.error.NonParsableNumberString" ) );
+//				} catch( IllegalArgumentException ex ) {
+//					ZETLoader.sendError( ex.getLocalizedMessage() );
+//				}
 			}
 		} );
 		eastPanel.add( txtEvacuationAttractivity, "0, " + row++ );
@@ -1450,19 +1458,22 @@ public class JEditView extends AbstractSplitPropertyWindow<JFloorScrollPane<JFlo
 		displayProject( projectControl );
 	}
 
+	/**
+	 * Sets the z {@link ds.z.Project} that is displayed in the edit view.
+	 * @param projectControl
+	 */
 	final public void displayProject( ZControl projectControl ) {
-		//boolean show_different_project = (this.projectControl.getZControl() != projectControl.getZControl());
 		if( projectControl != null ) {
 
-			// Clearing is done in the set-methods called later
+			// Clearing is done in the set-methods called later ?
 			//floorSelector.clear();
 			roomSelector.clear();
 			assignmentTypeSelector.clear();
-
-
-			getLeftPanel().getMainComponent().setZcontrol( projectControl );
-			getLeftPanel().getMainComponent().displayFloor( null );
 		}
+
+		JFloor floor = new JFloor( editStatus, guiControl, projectControl.getProject().getBuildingPlan().getFloors().get( 1 ) );
+		editStatus.controlFloor( floor );
+		getLeftPanel().setMainComponent( floor );
 
 		this.projectControl = projectControl;
 
@@ -1490,7 +1501,7 @@ public class JEditView extends AbstractSplitPropertyWindow<JFloorScrollPane<JFlo
 	 * Returns the GUI component of the floor.
 	 * @return the GUI component of the floor
 	 */
-	public JFloor getFloor() {
+	final public JFloor getFloor() {
 		return getLeftPanel().getMainComponent();
 	}
 
@@ -1546,7 +1557,7 @@ public class JEditView extends AbstractSplitPropertyWindow<JFloorScrollPane<JFlo
 		if( this.disableUpdate )
 			return;
 		currentFloor = (Floor)floorSelector.getSelectedItem();
-		getLeftPanel().getMainComponent().displayFloor( currentFloor );
+//		getLeftPanel().getMainComponent().displayFloor( currentFloor );
 		updateRoomList();
 	}
 
@@ -1566,12 +1577,11 @@ public class JEditView extends AbstractSplitPropertyWindow<JFloorScrollPane<JFlo
 		roomSelector.displayRoomsForCurrentFloor();
 	}
 
-	public void setEditMode( EditMode em ) {
+	public void setEditMode( EditModeOld em ) {
 		if( getLeftPanel().getMainComponent() == null )
 			return;
-		getLeftPanel().getMainComponent().resetEdit();
-		//GUIOptionManager.setEditMode( em );
-		getLeftPanel().getMainComponent().setEditMode( em );
+//		getLeftPanel().getMainComponent().resetEdit();
+//		getLeftPanel().getMainComponent().setEditMode( em );
 	}
 
 	public void setFloorNameFocus() {
@@ -1595,7 +1605,6 @@ public class JEditView extends AbstractSplitPropertyWindow<JFloorScrollPane<JFlo
 		updateFloorView();
 	}
 
-// TODO-Event werfe wirklich events
 	public void stateChanged( /*ChangeEvent e*/ ) {
 		// Show possibly new floor list (floors added/removed or names changed)
 //		if( (e.getSource() instanceof BuildingPlan) || (e.getSource() instanceof Floor && e.getField() != null ? e.getField().equals( "name" ) : false) )

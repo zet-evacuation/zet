@@ -21,7 +21,9 @@
 
 package zet.gui.main.tabs.base;
 
-import zet.gui.components.JZoomableRuler;
+import de.tu_berlin.math.coga.common.localization.Localized;
+import de.tu_berlin.math.coga.components.JCorner;
+import de.tu_berlin.math.coga.components.JRuler;
 import gui.editor.CoordinateTools;
 import java.awt.Color;
 import java.awt.Font;
@@ -31,14 +33,12 @@ import java.awt.event.ActionListener;
 import javax.swing.JButton;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
-import de.tu_berlin.math.coga.common.localization.Localized;
-import de.tu_berlin.math.coga.components.JCorner;
-import de.tu_berlin.math.coga.components.JRuler;
 import zet.gui.GUILocalization;
+import zet.gui.components.JZoomableRuler;
 
 /**
  *
- * @param <T> 
+ * @param <T>
  * @author Jan-Philipp Kappmeier
  */
 public class JFloorScrollPane<T extends AbstractFloor> extends JScrollPane implements Localized {
@@ -141,8 +141,13 @@ public class JFloorScrollPane<T extends AbstractFloor> extends JScrollPane imple
 		setCorner( JScrollPane.LOWER_RIGHT_CORNER, new JCorner() );
 		setCorner( JScrollPane.LOWER_RIGHT_CORNER, new JCorner() );
 	}
-	
-	public T getMainComponent() {
+
+	public final void setMainComponent( T floorPanel) {
+		setViewportView( floorPanel );
+		this.floorPanel = floorPanel;
+	}
+
+	public final T getMainComponent() {
 		return floorPanel;
 	}
 
@@ -158,7 +163,7 @@ public class JFloorScrollPane<T extends AbstractFloor> extends JScrollPane imple
 	public void localize() {
 		unitButton.setToolTipText( GUILocalization.getSingleton().getStringWithoutPrefix( locString ) );
 	}
-	
+
 	/**
 	 * @param zoomFactor A double in the range [0;1]
 	 */
@@ -168,5 +173,5 @@ public class JFloorScrollPane<T extends AbstractFloor> extends JScrollPane imple
 		topRuler.repaint();
 		leftRuler.setZoomFactor( zoomFactor );
 		leftRuler.repaint();
-	}	
+	}
 }

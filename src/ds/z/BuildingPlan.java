@@ -162,7 +162,7 @@ public class BuildingPlan implements Serializable, Iterable<Floor>, ZFormatObjec
 	}
 
 	/**
-	 * Returns view of all {@code Floors} that this {@code BuildingPlan{@code  contains.
+	 * Returns view of all {@code Floors} that this {@code BuildingPlan} contains.
 	 * @return the list of {@link Floor} objects (including the default floor)
 	 */
 	public List<Floor> getFloors() {

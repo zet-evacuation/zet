@@ -22,10 +22,9 @@ package zet.gui.main.tabs.base;
 
 import ds.PropertyContainer;
 import ds.z.Floor;
-import zet.gui.main.JZetWindow;
-import gui.editor.CoordinateTools;
 import gui.GUIOptionManager;
 import gui.ZETProperties;
+import gui.editor.CoordinateTools;
 import java.awt.AWTEvent;
 import java.awt.Dimension;
 import java.awt.Graphics;
@@ -34,28 +33,17 @@ import java.awt.Point;
 import java.awt.RenderingHints;
 import java.awt.event.MouseEvent;
 import javax.swing.JPanel;
+import zet.gui.main.JZetWindow;
 
 /**
  *
  * @author Jan-Philipp Kappmeier
  */
+@SuppressWarnings( "serial" )
 public class AbstractFloor extends JPanel {
 	private int rasterSnap;
 	private int bigRaster;
 	private int smallRaster;
-
-	/**
-	 * An enumeration describing all possible styles for painting a raster on the
-	 * editor background.
-	 */
-	public enum RasterPaintStyle {
-		/** Draw a grid. */
-		Lines,
-		/** Draw points at the nodes of the grid. */
-		Points,
-		/** Do not draw anything. */
-		Nothing;
-	}
 
 	// Variables for floor viewing
 	protected int min_x,  min_y,  max_x,  max_y;
@@ -99,16 +87,6 @@ public class AbstractFloor extends JPanel {
 	 */
 	public RasterPaintStyle getRasterPaintType() {
 		return rasterPaintType;
-	}
-
-	/**
-	 * Returns a raster point that is closest to the given point.
-	 * @param p the point
-	 * @return a raster point that is closest to the given point
-	 */
-	public Point getNextRasterPoint( Point p ) {
-		int rasterWidth = CoordinateTools.translateToScreen( rasterSnap );
-		return new Point( (int)Math.round( p.getX() / (double)rasterWidth ) * rasterWidth, (int)Math.round( p.getY() / (double)rasterWidth ) * rasterWidth );
 	}
 
 	/** Sets the style in which the raster shall be painted.
@@ -155,7 +133,7 @@ public class AbstractFloor extends JPanel {
 		} else if( getRasterPaintType() == RasterPaintStyle.Points ) {
 			g2.setPaint( GUIOptionManager.getEditorRasterColor() );
 			final int rasterWidth = CoordinateTools.translateToScreen( bigRaster );
-			for( int i = starty; i < getHeight(); i = i + rasterWidth )
+			for( int i = starty; i < getHeight(); i += rasterWidth )
 				for( int j = startx; j < getWidth(); j += rasterWidth )
 					g2.fillRect( j-1, i-1, 3, 3 );
 			g2.drawRect( 1, 2, 3, 4 );
@@ -164,60 +142,60 @@ public class AbstractFloor extends JPanel {
 		if( getRasterPaintType() != RasterPaintStyle.Nothing && bigRaster % smallRaster == 0 && smallRaster < bigRaster ) {
 			g2.setPaint( GUIOptionManager.getEditorRasterColor() );
 			final int rasterWidth = CoordinateTools.translateToScreen( smallRaster );
-			for( int i = starty; i < getHeight(); i = i + rasterWidth )
+			for( int i = starty; i < getHeight(); i += rasterWidth )
 				for( int j = startx; j < getWidth(); j += rasterWidth )
 					g2.drawRect( j, i, 0, 0 );
 			g2.drawRect( 1, 2, 3, 4 );
 		}
 	}
+//
+//	/**
+//	 * Returns the size of one raster square.
+//	 * @return the size of one raster square
+//	 */
+//	public int getBigRaster() {
+//		return bigRaster;
+//	}
+//
+//	/**
+//	 * Sets the size of one raster square.
+//	 * @param bigRaster the size of one raster (in millimeter)
+//	 */
+//	public void setBigRaster( int bigRaster ) {
+//		this.bigRaster = bigRaster;
+//	}
+//
+//	/**
+//	 * Returns the size of the coordinate raster, to which the cursor is snapped to
+//	 * @return the size of the raster in millimeter
+//	 */
+//	public int getRasterSnap() {
+//		return rasterSnap;
+//	}
+//
+//	/**
+//	 * Returns the size of the coordinate raster.
+//	 * @param rasterSnap the raster size in millimeter
+//	 */
+//	public void setRasterSnap( int rasterSnap ) {
+//		this.rasterSnap = rasterSnap;
+//	}
 
-	/**
-	 * Returns the size of one raster square.
-	 * @return the size of one raster square
-	 */
-	public int getBigRaster() {
-		return bigRaster;
-	}
-
-	/**
-	 * Sets the size of one raster square.
-	 * @param bigRaster the size of one raster (in millimeter)
-	 */
-	public void setBigRaster( int bigRaster ) {
-		this.bigRaster = bigRaster;
-	}
-
-	/**
-	 * Returns the size of the coordinate raster, to which the cursor is snapped to
-	 * @return the size of the raster in millimeter
-	 */
-	public int getRasterSnap() {
-		return rasterSnap;
-	}
-
-	/**
-	 * Returns the size of the coordinate raster.
-	 * @param rasterSnap the raster size in millimeter
-	 */
-	public void setRasterSnap( int rasterSnap ) {
-		this.rasterSnap = rasterSnap;
-	}
-
-	/**
-	 * Returns the size of a small helping raster.
-	 * @return the size of a small helping raster
-	 */
-	public int getSmallRaster() {
-		return smallRaster;
-	}
-
-	/**
-	 * Sets the size of a smaller helping raster.
-	 * @param smallRaster the size of a smaller helping raster
-	 */
-	public void setSmallRaster( int smallRaster ) {
-		this.smallRaster = smallRaster;
-	}
+//	/**
+//	 * Returns the size of a small helping raster.
+//	 * @return the size of a small helping raster
+//	 */
+//	public int getSmallRaster() {
+//		return smallRaster;
+//	}
+//
+//	/**
+//	 * Sets the size of a smaller helping raster.
+//	 * @param smallRaster the size of a smaller helping raster
+//	 */
+//	public void setSmallRaster( int smallRaster ) {
+//		this.smallRaster = smallRaster;
+//	}
 
 	/** Mouse Motion Event Handler
 	 * @param e
@@ -243,4 +221,8 @@ public class AbstractFloor extends JPanel {
 		smallRaster = ZETProperties.getRasterSizeSmall();
 	}
 
+	/** Prohibits serialization. */
+	private synchronized void writeObject( java.io.ObjectOutputStream s ) {
+		throw new UnsupportedOperationException( "Serialization not supported" );
+	}
 }

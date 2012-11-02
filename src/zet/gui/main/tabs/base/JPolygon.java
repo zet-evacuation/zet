@@ -20,34 +20,34 @@ import ds.z.Area;
 import ds.z.Barrier;
 import ds.z.Edge;
 import ds.z.EvacuationArea;
+import ds.z.PlanPoint;
 import ds.z.PlanPolygon;
 import ds.z.Room;
-import ds.z.TeleportEdge;
-import ds.z.PlanPoint;
 import ds.z.RoomEdge;
 import ds.z.StairArea;
+import ds.z.TeleportEdge;
 import gui.GUIControl;
+import gui.GUIOptionManager;
 import gui.editor.Areas;
 import gui.editor.CoordinateTools;
-import gui.GUIOptionManager;
 import java.awt.AWTEvent;
+import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.Font;
+import java.awt.FontMetrics;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
+import java.awt.Paint;
 import java.awt.Point;
+import java.awt.Polygon;
 import java.awt.Rectangle;
+import java.awt.RenderingHints;
 import java.awt.event.MouseEvent;
 import java.util.EnumSet;
-import javax.swing.SwingUtilities;
-import java.awt.BasicStroke;
-import java.awt.FontMetrics;
-import java.awt.Paint;
-import java.awt.Polygon;
-import java.awt.RenderingHints;
 import java.util.Iterator;
 import java.util.LinkedList;
+import javax.swing.SwingUtilities;
 import zet.gui.main.tabs.editor.JFloor;
 
 /**
@@ -117,7 +117,7 @@ public class JPolygon extends AbstractPolygon {
 	}
 	/** A list of Edge Data that stores the Edge information in the order that the edges are
 	 * iterated through by the PlanPolygon iterator. */
-	private LinkedList<EdgeData> edgeData = new LinkedList<EdgeData>();
+	private LinkedList<EdgeData> edgeData = new LinkedList<>();
 	//############## POLYGON RELATED FIELDS ###################
 	private Color transparentForeground;
 	/** A helper variable that is used to prevent an event from being handled a second time.

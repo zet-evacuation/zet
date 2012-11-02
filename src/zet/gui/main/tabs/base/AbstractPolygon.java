@@ -30,13 +30,13 @@ import java.awt.Graphics2D;
 import java.awt.Polygon;
 import java.awt.Rectangle;
 import java.util.Iterator;
-import javax.swing.JPanel;
+import javax.swing.JComponent;
 
 /**
  *
  * @author Jan-Philipp Kappmeier
  */
-abstract public class AbstractPolygon extends JPanel {
+abstract public class AbstractPolygon extends JComponent {
 	protected Polygon drawingPolygon;
 	/** Most global super type of PlanPolygon. */
 	protected PlanPolygon<Edge> myPolygon;
@@ -44,7 +44,7 @@ abstract public class AbstractPolygon extends JPanel {
 	protected AbstractFloor myFloor;
 
 	public AbstractPolygon( Color foreground ) {
-		super( null );
+		//super( null );
 		setForeground( foreground );
 	}
 

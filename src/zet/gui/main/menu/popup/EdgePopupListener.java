@@ -37,7 +37,7 @@ import gui.editor.CoordinateTools;
 import java.awt.Point;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import zet.gui.main.tabs.editor.EditMode;
+import zet.gui.main.tabs.editor.EditModeOld;
 
 /**
  * This pop-up listener is responsible for handling menu events
@@ -70,7 +70,7 @@ public class EdgePopupListener implements ActionListener {
 	/**
 	 * This method contains the event code that is executed when certain
 	 * action commands (defined at the menu creation) are invoked.
-	 * @param e 
+	 * @param e
 	 */
 	@Override
 	public void actionPerformed( ActionEvent e ) {
@@ -107,15 +107,15 @@ public class EdgePopupListener implements ActionListener {
 				projectControl.insertPoint( myEdge, newPoint );
 			} else if( e.getActionCommand().equals( "makeTeleport" ) )
 				if( myEdge instanceof RoomEdge )
-//					if( GUIOptionManager.getEditMode() != EditMode.TeleportEdgeCreation ) {
-					if( null != EditMode.TeleportEdgeCreation ) {
+//					if( GUIOptionManager.getEditMode() != EditModeOld.TeleportEdgeCreation ) {
+					if( null != EditModeOld.TeleportEdgeCreation ) {
 						// Start teleport connection creation
-//						GUIOptionManager.setEditMode( EditMode.TeleportEdgeCreation );
+//						GUIOptionManager.setEditMode( EditModeOld.TeleportEdgeCreation );
 //						GUIOptionManager.getEditMode().getPayload().add( myEdge );
 
 						EventServer.getInstance().dispatchEvent( new MessageEvent( this, MessageEvent.MessageType.Status, "Wählen Sie jetzt die Gegenseite aus (Rechtsklick+Menu)!" ) );
 					} else {
-						Room.connectToWithTeleportEdge( (RoomEdge)EditMode.TeleportEdgeCreation.getPayload().getFirst(), (RoomEdge)myEdge );
+						Room.connectToWithTeleportEdge( (RoomEdge)EditModeOld.TeleportEdgeCreation.getPayload().getFirst(), (RoomEdge)myEdge );
 						GUIOptionManager.setEditMode( GUIOptionManager.getPreviousEditMode() );
 					}
 				else
@@ -126,18 +126,18 @@ public class EdgePopupListener implements ActionListener {
 				else
 					EventServer.getInstance().dispatchEvent( new MessageEvent( this, MessageEvent.MessageType.Error, "Nur Raumbegrenzungen können zu Evakuierungsausgängen gemacht werden!" ) );
 			else if( e.getActionCommand().equals( "createPassageRoom" ) ) {
-//				if( GUIOptionManager.getEditMode() == EditMode.TeleportEdgeCreation ) {
-				if( null == EditMode.TeleportEdgeCreation ) {
+//				if( GUIOptionManager.getEditMode() == EditModeOld.TeleportEdgeCreation ) {
+				if( null == EditModeOld.TeleportEdgeCreation ) {
 					EventServer.getInstance().dispatchEvent( new MessageEvent( this, MessageEvent.MessageType.Status, "Erzeugen sie erst die Teleport-Kante!" ) );
 					return;
 				}
-//				if( GUIOptionManager.getEditMode() != EditMode.PassableRoomCreation ) {
-				if( null != EditMode.PassableRoomCreation ) {
-//					GUIOptionManager.setEditMode( EditMode.PassableRoomCreation );
+//				if( GUIOptionManager.getEditMode() != EditModeOld.PassableRoomCreation ) {
+				if( null != EditModeOld.PassableRoomCreation ) {
+//					GUIOptionManager.setEditMode( EditModeOld.PassableRoomCreation );
 //					GUIOptionManager.getEditMode().getPayload().add( myEdge );
 					EventServer.getInstance().dispatchEvent( new MessageEvent( this, MessageEvent.MessageType.Status, "Wählen Sie jetzt die Gegenseite aus (Rechtsklick+Menu)!" ) );
 				} else {
-					projectControl.connectRooms( (RoomEdge)EditMode.PassableRoomCreation.getPayload().getFirst(), (RoomEdge)myEdge );
+					projectControl.connectRooms( (RoomEdge)EditModeOld.PassableRoomCreation.getPayload().getFirst(), (RoomEdge)myEdge );
 					GUIOptionManager.setEditMode( GUIOptionManager.getPreviousEditMode() );
 				}
 			} else if( e.getActionCommand().equals( "showPassageTarget" ) ) {
@@ -155,11 +155,11 @@ public class EdgePopupListener implements ActionListener {
 
 				int index = Integer.parseInt( e.getActionCommand().substring( 10 ) );
 				System.out.println( "Load index " + index );
-				
+
 				Door d = guiControl.getDoorTemplates().getDoor( index );
-				
-				Room myRoom = ((RoomEdge)myEdge).getRoom();				
-				
+
+				Room myRoom = ((RoomEdge)myEdge).getRoom();
+
 				PlanPoint newPoint = new PlanPoint( CoordinateTools.translateToModel( mousePosition ) );
 				newPoint = myEdge.getPointOnEdge( newPoint );
 				final double rasterSnap = ZETProperties.getRasterSizeSnap();
@@ -175,10 +175,10 @@ public class EdgePopupListener implements ActionListener {
 				System.out.println( "Try to create a door" );
 				int index = Integer.parseInt( e.getActionCommand().substring( 14 ) );
 				System.out.println( "Load index " + index );
-				
+
 				ExitDoor d = guiControl.getExitDoorTemplates().getDoor( index );
 				Room myRoom = ((RoomEdge)myEdge).getRoom();
-				
+
 				PlanPoint newPoint = new PlanPoint( CoordinateTools.translateToModel( mousePosition ) );
 				newPoint = myEdge.getPointOnEdge( newPoint );
 				final double rasterSnap = ZETProperties.getRasterSizeSnap();

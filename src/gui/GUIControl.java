@@ -91,8 +91,9 @@ import zet.gui.main.menu.popup.PolygonPopup;
 import zet.gui.main.tabs.JEditView;
 import zet.gui.main.tabs.JQuickVisualizationView;
 import zet.gui.main.tabs.JVisualizationView;
-import zet.gui.main.tabs.base.AbstractFloor.RasterPaintStyle;
-import zet.gui.main.tabs.editor.EditMode;
+import zet.gui.main.tabs.base.RasterPaintStyle;
+import zet.gui.main.tabs.editor.EditModeOld;
+import zet.gui.main.tabs.editor.EditStatus;
 import zet.gui.main.tabs.visualization.ZETVisualization;
 import zet.gui.main.toolbar.JBatchToolBar;
 import zet.gui.main.toolbar.JEditToolbar;
@@ -165,8 +166,10 @@ public class GUIControl implements AlgorithmListener {
 		edgePopup = new EdgePopup( this );
 		pointPopup = new PointPopup( this );
 
+		EditStatus editStatus = new EditStatus();
+
 		// Tool bars
-		editToolBar = registerNewComponent( new JEditToolbar( this ) );
+		editToolBar = registerNewComponent( new JEditToolbar( this, editStatus ) );
 		//guiControl.setEditToolbar( toolBarEdit );
 		JBatchToolBar toolBarBatch = registerNewComponent( new JBatchToolBar( this ) );
 		JQuickVisualizationToolBar toolBarCellularAutomatonQuickVisualization = registerNewComponent( new JQuickVisualizationToolBar( this ) );
@@ -176,7 +179,7 @@ public class GUIControl implements AlgorithmListener {
 		JLogToolBar toolBarLog = registerNewComponent( new JLogToolBar( this ) );
 
 		// Components in tabs
-		editview = registerNewComponent( new JEditView( this ) );
+		editview = registerNewComponent( new JEditView( editStatus, this ) );
 		caView = registerNewComponent( new JQuickVisualizationView( this ) );
 		JComponent batchView = new JBatch( this );
 		visualizationView = registerNewComponent( new JVisualizationView( this ) );
@@ -239,10 +242,10 @@ public class GUIControl implements AlgorithmListener {
 		}
 
 		// TODO give direct access to the left edit panel
-		//CoordinateTools.setZoomFactor( zoomFactor );
-		editview.getLeftPanel().setZoomFactor( zoomFactor );
-		editview.getFloor().getPlanImage().update();
-		editview.updateFloorView();
+		CoordinateTools.setZoomFactor( zoomFactor );
+		editview.setZoomFactor( zoomFactor );
+		//editview.getFloor().getPlanImage().update();
+		//editview.updateFloorView();
 //		if( worker != null ) {
 //			 caView.getLeftPanel().setZoomFactor( zoomFactor );
 //			caView.updateFloorView();
@@ -292,12 +295,12 @@ public class GUIControl implements AlgorithmListener {
 		//editor.updateAreaVisiblity();
 	}
 
-	public void setEditMode( EditMode editMode ) {
+	public void setEditMode( EditModeOld editMode ) {
 		if( editview != null ) {
 			editview.setEditMode( editMode );
 			editToolBar.setEditSelectionSelected( false );
-			editToolBar.setEditPointwiseSelected( editMode.getType() == EditMode.Type.CreationPointwise );
-			editToolBar.setEditRectangledSelected( editMode.getType() == EditMode.Type.CreationRectangled );
+			editToolBar.setEditPointwiseSelected( editMode.getType() == EditModeOld.Type.CreationPointwise );
+			editToolBar.setEditRectangledSelected( editMode.getType() == EditModeOld.Type.CreationRectangled );
 		}
 	}
 
@@ -732,7 +735,7 @@ public class GUIControl implements AlgorithmListener {
 		editview.update();
 		caView.update();
 
-		editview.setEditMode( EditMode.Selection );
+		editview.setEditMode( EditModeOld.Selection );
 		setZoomFactor( 0.04d );
 
 		// Set up the last camera position
@@ -1044,7 +1047,7 @@ public class GUIControl implements AlgorithmListener {
 	}
 
 	public void setRasterizedPaintMode( boolean selected ) {
-		editview.getFloor().setRasterizedPaintMode( selected );
+//		editview.getFloor().setRasterizedPaintMode( selected );
 	}
 
 	public void setRasterPaintStyle( RasterPaintStyle rasterPaintStyle ) {
@@ -1189,7 +1192,7 @@ public class GUIControl implements AlgorithmListener {
 		editview.changeFloor( floor );
 	}
 
-	public void showPolygon( PlanPolygon<?> room ) {
+	public void showPolygon( Room room ) {
 		editview.getFloor().showPolygon( room );
 	}
 
@@ -1198,7 +1201,7 @@ public class GUIControl implements AlgorithmListener {
 	}
 
 	public void setSelectedPolygon( PlanPolygon<?> poly ) {
-		editview.getFloor().setSelectedPolygon( poly );
+//		editview.getFloor().setSelectedPolygon( poly );
 	}
 
 
