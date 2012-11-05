@@ -59,6 +59,14 @@ import zet.gui.main.tabs.editor.JFloor;
  * @author Timon Kelter
  */
 public class JPolygon extends AbstractPolygon {
+	private boolean dragged = false;
+	public final void setDragged( boolean b ) {
+		dragged = b;
+	}
+
+	public final boolean isDragged() {
+		return dragged;
+	}
 
 	PropertyContainer p = PropertyContainer.getInstance();
 
@@ -92,12 +100,21 @@ public class JPolygon extends AbstractPolygon {
 
 	private Edge selectedEdge;
 	private Point selectedPoint;
+	private Point dragOffset;
 
 	public void setSelectedEdge( Edge edge ) {
 		this.selectedEdge = edge;
 	}
 	public void setSelectedPoint( PlanPoint point ) {
 		this.selectedPoint = point;
+	}
+
+	public void setDragOffset( Point dragOffset ) {
+		this.dragOffset = dragOffset;
+	}
+
+	public Point getDragOffset() {
+		return dragOffset;
 	}
 
 
@@ -370,9 +387,38 @@ public class JPolygon extends AbstractPolygon {
 		Graphics2D g2 = (Graphics2D)g;
 		g2.setRenderingHint( RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON );
 
+		paint( g2, false );
+	}
+
+	final static Point noOffset = new Point( 0, 0 );
+
+	public void paint( Graphics2D g2, boolean drag ) {
+		paint( g2, noOffset, drag );
+	}
+
+	/**
+	 * <p>Draws the polygon on a given graphics context. The exact position of the
+	 * polygon on the graphics context is controlled using an offset variable. The
+	 * offset has to be zero, if the {@code JPolygon} is drawn in its own graphics
+	 * context, because the size of its own context is only the size of the
+	 * polygon itself.</p>
+	 * <p>If the polygon is dragged, the original and the dragged copy may be
+	 * drawn. This is indicated by a variable. If it is dragged and the original
+	 * copy is drawn, the polygon will be faded according to a static fade
+	 * parameter. The dragged copy is drawn normally. The drag offset is added to
+	 * the submitted offset, if the dragged copy is drawn. To be visible, the
+	 * dragged component has to be drawn in a containing components graphics
+	 * context. </p>
+	 * @param g2 the graphics context
+	 * @param offset the offset by which all points are moved
+	 * @param draggedCopy decides, whether the original or a dragged copy is drawn
+	 */
+	public void paint( Graphics2D g2, Point offset, boolean draggedCopy ) {
+		final Point totalOffset = draggedCopy ? new Point( offset.x + dragOffset.x, offset.y + dragOffset.y) : offset;
 		// Option flags for Stairs
 		boolean lowerPart = false;
 		boolean upperPart = false;
+
 
 		// ### Paint the Edges ###
 		Iterator<EdgeData> itEdgeData = edgeData.iterator();
@@ -381,15 +427,20 @@ public class JPolygon extends AbstractPolygon {
 			EdgeData ed = itEdgeData.next();
 
 			// Set various paint options
-			g2.setPaint( (myEdge instanceof TeleportEdge) ? GUIOptionManager.getTeleportEdgeColor() : getForeground() );
+			Color edgeColor = ( (myEdge instanceof TeleportEdge) ? GUIOptionManager.getTeleportEdgeColor() : getForeground() );
+			if( !isDragged() || draggedCopy )
+				g2.setPaint( edgeColor );
+			else
+				g2.setPaint( new Color( edgeColor.getRed(), edgeColor.getGreen(), edgeColor.getBlue(), (int)(0.3 * edgeColor.getAlpha()) ) );
+			//g2.setPaint( (myEdge instanceof TeleportEdge) ? GUIOptionManager.getTeleportEdgeColor() : getForeground() );
 			if( myEdge instanceof RoomEdge && ((RoomEdge)myEdge).isPassable() )
 				// Paint dashed line to indicate passability
-				if( selected || myEdge.equals( selectedEdge ) )
+				if( (selected || myEdge.equals( selectedEdge )) && !draggedCopy )
 					g2.setStroke( stroke_dashed_thick );
 				else
 					g2.setStroke( stroke_dashed_slim );
-			else if( selected || myEdge.equals( selectedEdge ) ) {
-				g2.setPaint( selectedColor );
+			else if( (selected || myEdge.equals( selectedEdge )) && !draggedCopy ) {
+					g2.setPaint( selectedColor );
 				g2.setStroke( stroke_thick );
 			} else
 				g2.setStroke( stroke_standard );
@@ -424,9 +475,11 @@ public class JPolygon extends AbstractPolygon {
 				}
 			}
 
-			// Drawing coordinates for nodes are node1 / node 2
-			g2.fillRect( ed.node1.x - NODE_PAINT_RADIUS, ed.node1.y - NODE_PAINT_RADIUS, 2 * NODE_PAINT_RADIUS, 2 * NODE_PAINT_RADIUS );
-			g2.fillRect( ed.node2.x - NODE_PAINT_RADIUS, ed.node2.y - NODE_PAINT_RADIUS, 2 * NODE_PAINT_RADIUS, 2 * NODE_PAINT_RADIUS );
+				// Drawing coordinates for nodes are node1 / node 2
+			if( !isDragged() || draggedCopy ) {
+				g2.fillRect( ed.node1.x + totalOffset.x - NODE_PAINT_RADIUS, ed.node1.y + totalOffset.y - NODE_PAINT_RADIUS, 2 * NODE_PAINT_RADIUS, 2 * NODE_PAINT_RADIUS );
+				g2.fillRect( ed.node2.x + totalOffset.x - NODE_PAINT_RADIUS, ed.node2.y + totalOffset.y - NODE_PAINT_RADIUS, 2 * NODE_PAINT_RADIUS, 2 * NODE_PAINT_RADIUS );
+			}
 
 			// Consider the case, that there is a passable edge whose target
 			// has node1 and node2 in the reversed order (this is absolutely
@@ -435,17 +488,14 @@ public class JPolygon extends AbstractPolygon {
 			// because otherwise the line segments of the dashed lines will
 			// overlap and form a solid line. Therefore we introduced the
 			// field startAtNode1
-//			if( myEdge.equals( selectedEdge ) ) {
-//				System.out.println( "AN EDGE IS NOT PAINTED BECAUSE IT IS HIGHLIGHTED" );
-//			} else
 			if( ed.startDrawingAtNode1 )
-				g2.drawLine( ed.node1.x, ed.node1.y, ed.node2.x, ed.node2.y );
+				g2.drawLine( ed.node1.x + totalOffset.x, ed.node1.y + totalOffset.y, ed.node2.x + totalOffset.x, ed.node2.y + totalOffset.y );
 			else
-				g2.drawLine( ed.node2.x, ed.node2.y, ed.node1.x, ed.node1.y );
+				g2.drawLine( ed.node2.x + totalOffset.x, ed.node2.y + totalOffset.y, ed.node1.x + totalOffset.x, ed.node1.y + totalOffset.y );
 		}
 
 		// ### Paint Polygon-specific stuff like the room name or the area filling ###
-		if( Room.class.isInstance( myPolygon ) ) {
+		if( Room.class.isInstance( myPolygon ) && (!isDragged() || !draggedCopy) ) {
 			// Paint the name of the room
 			Font originalFont = g2.getFont();
 			g2.setFont( GUIOptionManager.getRoomNameFont() );
@@ -455,7 +505,7 @@ public class JPolygon extends AbstractPolygon {
 
 		// If the polygons are of the type area, fill them. This won't work for
 		// barriers as they only represent lines.
-		if( (myPolygon instanceof Area) && !(myPolygon instanceof Barrier) ) {
+		if( (myPolygon instanceof Area) && !(myPolygon instanceof Barrier) && (!isDragged() || !draggedCopy) ) {
 			// Paint the background with the area color
 			g2.setPaint( transparentForeground );
 			if( drawingPolygon.npoints > 0 )
@@ -465,10 +515,11 @@ public class JPolygon extends AbstractPolygon {
 		// Redraw the polygon if it is selected. This will give better
 		// if many polygons are visible at the same time.
 		if( isSelected() && !(myPolygon instanceof Barrier) ) {
-			g2.setPaint( transparentForeground );
-			g2.fillPolygon( drawingPolygon );
+			if( !isDragged() || !draggedCopy ) {
+				g2.setPaint( transparentForeground );
+				g2.fillPolygon( drawingPolygon );
+			}
 		}
-
 	}
 
 	/**

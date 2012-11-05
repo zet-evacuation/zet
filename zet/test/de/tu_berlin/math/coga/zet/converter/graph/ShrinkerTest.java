@@ -7,8 +7,8 @@ package de.tu_berlin.math.coga.zet.converter.graph;
 import de.tu_berlin.math.coga.common.algorithm.Algorithm;
 import de.tu_berlin.math.coga.common.debug.Debug;
 import ds.graph.flow.PathBasedFlowOverTime;
-import ds.z.BuildingPlan;
-import ds.z.ConcreteAssignment;
+import zet.ds.z.BuildingPlan;
+import zet.ds.z.ConcreteAssignment;
 import java.util.logging.Level;
 import static org.junit.Assert.*;
 import org.junit.Test;
@@ -29,8 +29,8 @@ public class ShrinkerTest {
 		int nodes = 10;
 		performTest( new RectangleConverter(), nodes, 35 );
 	}
-	
-	
+
+
 	@Test
 	public void dijkstraTest() {
 		Debug.setUpLogging();
@@ -46,17 +46,17 @@ public class ShrinkerTest {
 		Debug.setDefaultLogLevel( Level.FINEST );
 		// convert
 		int nodes = 10;
-		
+
 		performTest( new GraphConverterAndShrinker( new RectangleConverter(), new SpanningTreeShrinker() ), nodes, (nodes - 2) * 2 + 1 );
 	}
-	
+
 	@Test
 	public void greedySpannerTest() {
 		Debug.setUpLogging();
 		Debug.setDefaultLogLevel( Level.FINEST );
 		// convert
 		int nodes = 10;
-		
+
 		performTest( new GraphConverterAndShrinker( new RectangleConverter(), new GreedySpannerShrinker() ), nodes, 33 );
 	}
 
@@ -66,7 +66,7 @@ public class ShrinkerTest {
 		Debug.setDefaultLogLevel( Level.FINEST );
 		// convert
 		int nodes = 10;
-		
+
 		performTest( new GraphConverterAndShrinker( new RectangleConverter(), new SteinerTreeShrinker() ), nodes, (nodes - 2) * 2 + 1 );
 	}
 
@@ -76,7 +76,7 @@ public class ShrinkerTest {
 		Debug.setDefaultLogLevel( Level.FINEST );
 		// convert
 		int nodes = 10;
-		
+
 		// here we have non-determinism? number of edges varies from run to run...
 		performTest( new GraphConverterAndShrinker( new RectangleConverter(), new ClusterShrinker() ), nodes, 21 );
 	}
@@ -87,7 +87,7 @@ public class ShrinkerTest {
 		Debug.setDefaultLogLevel( Level.FINEST );
 		// convert
 		int nodes = 10;
-		
+
 		performTest( new GraphConverterAndShrinker( new RectangleConverter(), new ShortestPathGraphShrinker() ), nodes, 35 );
 	}
 
@@ -97,7 +97,7 @@ public class ShrinkerTest {
 //		Debug.setDefaultLogLevel( Level.FINEST );
 //		// convert
 //		int nodes = 10;
-//		
+//
 //		performTest( new GraphConverterAndShrinker( new RectangleConverter(), new APSPGraphShrinker() ), nodes, (nodes - 2) * 2 + 1 );
 //	}
 
@@ -108,9 +108,9 @@ public class ShrinkerTest {
 		// convert
 		int nodes = 10;
 		performTest( new GraphConverterAndShrinker( new RectangleConverter(), new RepeatedShortestPathsShrinker() ), nodes, 35 );
-		
+
 	}
-	
+
 	private void performTest( Algorithm<BuildingPlan, NetworkFlowModel> conv, int targetNodes, int targetEdges ) {
 		InstanceGenerator ig = new InstanceGenerator();
 		ig.setUpInstance();
@@ -119,7 +119,7 @@ public class ShrinkerTest {
 		conv.run();
 		assertEquals( "Number of nodes", targetNodes, conv.getSolution().numberOfNodes() );
 		assertEquals( "Number of edges", targetEdges, conv.getSolution().numberOfEdges() );
-		
+
 		// concrete assignment
 		ConcreteAssignment concreteAssignment = ig.zControl.getProject().getCurrentAssignment().createConcreteAssignment( 400 );
 		GraphAssignmentConverter cav = new GraphAssignmentConverter( conv.getSolution() );

@@ -24,45 +24,29 @@ import ds.z.PlanPoint;
 import ds.z.PlanPolygon;
 import ds.z.Room;
 import ds.z.ZControl;
-import ds.z.exception.AssignmentException;
 import event.EventListener;
-import event.EventServer;
 import event.ZModelChangedEvent;
 import gui.GUIControl;
 import gui.GUIOptionManager;
 import gui.ZETLoader;
-import gui.ZETProperties;
-import gui.editor.CoordinateTools;
 import gui.editor.planimage.PlanImage;
 import java.awt.AWTEvent;
 import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.Container;
-import java.awt.EventQueue;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Point;
-import java.awt.Rectangle;
 import java.awt.RenderingHints;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.InputEvent;
-import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
-import java.awt.event.MouseWheelEvent;
-import java.util.ArrayList;
-import java.util.Collections;
+import java.util.Arrays;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.ListIterator;
 import java.util.Map.Entry;
 import java.util.Objects;
-import javax.swing.JComponent;
 import javax.swing.SwingUtilities;
-import zet.gui.main.JZetWindow;
 import zet.gui.main.tabs.base.AbstractFloor;
 import zet.gui.main.tabs.base.JPolygon;
 
@@ -267,6 +251,14 @@ public class JFloor extends AbstractFloor implements EventListener<ZModelChanged
 			g2.setStroke( stroke_standard );
 		}
 
+		for( JPolygon poly : editStatus.getSelectedPolygons() ) {
+			if( poly.isDragged() )
+				if( poly.getParent() == this )
+					poly.paint( g2, poly.getLocation(), true );
+				else
+					poly.paint( g2, new Point( poly.getLocation().x + poly.getParent().getLocation().x, poly.getLocation().y + poly.getParent().getLocation().y ), true );
+		}
+
 		// Draw drag point and helping point in rasterizedPaintMode
 		//if( dragStart == null ) {
 		//	// Paint new Raster Point when in normal edit mode
@@ -320,6 +312,10 @@ public class JFloor extends AbstractFloor implements EventListener<ZModelChanged
 			System.out.println( "CLICKED" );
 
 			if( e.getButton() == MouseEvent.BUTTON1 ) {
+				if( e.getClickCount() == 2 ) {
+					List<JPolygon> clickedPolygons = findAllPolygonsAt( JFloor.this, e.getPoint() );
+					editStatus.getCurrentHandler().doubleClick( e.getPoint(), clickedPolygons );
+				}
 				// left button
 				//this.processLeftClick( e.getPoint() );
 			} else if(e.getButton() == MouseEvent.BUTTON3 ) {
@@ -334,7 +330,7 @@ public class JFloor extends AbstractFloor implements EventListener<ZModelChanged
 			}
 		} else if( e.getID() == MouseEvent.MOUSE_RELEASED ) {
 			System.out.println( "RELEASED" );
-			editStatus.getCurrentHandler().mouseUp();
+			editStatus.getCurrentHandler().mouseUp( e.getPoint(), Arrays.asList( getComponents() ) );
 		} else if( e.getID() == MouseEvent.MOUSE_DRAGGED ) {
 			System.out.println( "DRAGGED" );
 		}

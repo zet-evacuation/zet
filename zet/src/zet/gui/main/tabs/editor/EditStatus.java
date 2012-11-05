@@ -4,8 +4,10 @@
  */
 package zet.gui.main.tabs.editor;
 
+import ds.z.ZControl;
 import gui.editor.CoordinateTools;
 import java.awt.Point;
+import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 import zet.gui.main.JZetWindow;
@@ -18,6 +20,7 @@ import zet.gui.main.tabs.base.JPolygon;
  */
 public class EditStatus {
 	JFloor controlled;
+	ZControl zcontrol;
 	ZetObjectTypes nextZetObject = ZetObjectTypes.Room;
 	int rasterSnap = 400;
 
@@ -35,6 +38,9 @@ public class EditStatus {
 	List<JPolygon> selectedPolygons = new LinkedList<>();
 	private boolean mouseSelecting;
 
+	public EditStatus( ZControl zcontrol ) {
+		this.zcontrol = zcontrol;
+	}
 
 	public EditMode getEditMode() {
 		return editMode;
@@ -49,7 +55,7 @@ public class EditStatus {
 	}
 
 	public FloorClickHandler getCurrentHandler() {
-		return current == null ? current = new FloorClickSelectionHandler( this ) : current;
+		return current == null ? current = new FloorClickSelectionHandler( this, zcontrol ) : current;
 	}
 
 	/** Efficiently De-selects all selected polygons on the screen
@@ -68,7 +74,6 @@ public class EditStatus {
 	}
 
 	void selectPolygon( JPolygon toSelect ) {
-		clearSelection();
 		toSelect.setSelected( true );
 		selectedPolygons.add( toSelect );
 	}
@@ -82,6 +87,10 @@ public class EditStatus {
 		real = CoordinateTools.translateToModel( point );
 		highlightedPosition = point;
 		JZetWindow.sendMouse( real );
+	}
+
+	List<JPolygon> getSelectedPolygons() {
+		return Collections.unmodifiableList( selectedPolygons );
 	}
 
 	/**

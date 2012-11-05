@@ -166,7 +166,7 @@ public class GUIControl implements AlgorithmListener {
 		edgePopup = new EdgePopup( this );
 		pointPopup = new PointPopup( this );
 
-		EditStatus editStatus = new EditStatus();
+		EditStatus editStatus = new EditStatus( zcontrol );
 
 		// Tool bars
 		editToolBar = registerNewComponent( new JEditToolbar( this, editStatus ) );
