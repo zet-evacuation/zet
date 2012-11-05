@@ -1712,7 +1712,7 @@ public class PlanPolygon<T extends Edge> implements Iterable<T> {
 	 * @return a list of all points of the polygon
 	 * @see Room#getPlanPoints()
 	 */
-	public List<PlanPoint> getPlanPoints() {
+	public List<? extends PlanPoint> getPlanPoints() {
 		// The edges use common PlanPoint instances, so we don't
 		// have to defineByPoints (edges.size () * 2) points.
 		ArrayList<PlanPoint> planPoints = new ArrayList<>( size + (isClosed() ? 0 : 1) );

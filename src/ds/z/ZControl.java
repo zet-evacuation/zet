@@ -70,7 +70,7 @@ public class ZControl {
 
 	/**
 	 * Creates a new instance of {@code ZControl}.
-	 * @param p 
+	 * @param p
 	 */
 	ZControl( Project p ) {
 		this.project = p;
@@ -194,7 +194,7 @@ public class ZControl {
 
 	PlanPolygon latestPolygon = null;
 
-	
+
 	public PlanPolygon latestPolygon() {
 		return latestPolygon;
 	}
@@ -327,7 +327,7 @@ public class ZControl {
 	public Floor createNewFloor() {
 		return createFloor( ZLocalization.getSingleton().getString( "ds.z.DefaultName.Floor" ) + " " + project.getBuildingPlan().floorCount() );
 	}
-	
+
 	/**
 	 * <p>Creates a new floor in the hierarchy. A floor does not have a parent and
 	 * is immediately created. It has no explicit bounds that have to be specified
@@ -342,7 +342,7 @@ public class ZControl {
 	}
 
 	public void movePolygon( PlanPolygon polygon, int x, int y ) {
-		
+
 		//return true;
 	}
 
@@ -358,11 +358,11 @@ public class ZControl {
 			}
 		}
 	}
-	
-	public void movePoints( List<PlanPoint> points, int x, int y ) {
-		Iterator<PlanPoint> itPP = points.iterator();
 
-		HashSet<Area<?>> affected_areas = new HashSet<Area<?>>();
+	public void movePoints( List<? extends PlanPoint> points, int x, int y ) {
+		Iterator<? extends PlanPoint> itPP = points.iterator();
+
+		HashSet<Area<?>> affected_areas = new HashSet<>();
 		PlanPolygon<?> lastPolygon = null;
 		PlanPoint planPoint;
 		while( itPP.hasNext() && itPP.hasNext() ) {
@@ -649,7 +649,7 @@ public class ZControl {
 	 * thrown, it is caught and the failure is given out to the debug out.
 	 */
 	public void checkDebugOut() {
-//		
+//
 //		for( Floor f : project.getBuildingPlan().getFloors() ) {
 //			for( Room r : f.getRooms() ) {
 //				List ia = r.getInaccessibleAreas();
@@ -664,10 +664,10 @@ public class ZControl {
 //						while( ia.get( nullIndex ) != null ) {
 //							nullIndex++;
 //						}
-//						
+//
 //						if( nullIndex >= i )
 //							break;
-//						
+//
 //						if( ia.get( i ) != null ) {
 //							//ia.set( nullIndex, ia.get( i ) );
 //							//ia.set( i, null );
@@ -678,13 +678,13 @@ public class ZControl {
 //					if( count == 0 )
 //						ia.clear();
 //				}
-//			}		
+//			}
 //
 //			}
 //		}
-//		
 //
-//		
+//
+//
 //		if( 1 == 1 )
 //			return;
 		try {
@@ -794,7 +794,7 @@ public class ZControl {
 
 		insertPoint( newEdges.get( 1 ), p2 ); // has to be point 1, due to internal implementation of replaceEdges in PlanPolygon.java
 		RoomEdge door1 = anchorRoom.getEdge( p1, p2 );
-		
+
 		getProject().getBuildingPlan().getDefaultFloor().addEvacuationRoom( (RoomEdge)door1 );
 	}
 }

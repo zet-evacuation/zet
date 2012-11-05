@@ -11,7 +11,7 @@ import de.tu_berlin.math.coga.zet.converter.graph.NetworkFlowModel;
 import ds.CompareVisualizationResults;
 import ds.GraphVisualizationResults;
 import ds.ca.evac.EvacuationCellularAutomaton;
-import ds.z.Project;
+import zet.ds.z.Project;
 import io.visualization.BuildingResults;
 import io.visualization.CAVisualizationResults;
 import java.beans.PropertyChangeEvent;
@@ -29,7 +29,7 @@ import static org.junit.Assert.*;
  * @author Kapman
  */
 public class AlgorithmControlTest {
-	
+
 	public AlgorithmControlTest() {
 	}
 
@@ -40,11 +40,11 @@ public class AlgorithmControlTest {
 	@AfterClass
 	public static void tearDownClass() throws Exception {
 	}
-	
+
 	@Before
 	public void setUp() {
 	}
-	
+
 	@After
 	public void tearDown() {
 	}

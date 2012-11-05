@@ -73,7 +73,7 @@ abstract public class AbstractPolygon extends JComponent {
 	 * Returns the {@link ds.z.PlanPolygon} represented by this instance.
 	 * @return the polygon
 	 */
-	public final PlanPolygon getPlanPolygon () { return myPolygon; }
+	public final PlanPolygon<?> getPlanPolygon () { return myPolygon; }
 
 	/**
 	 * Returns the real polygon area within the coordinate space of the bounding
