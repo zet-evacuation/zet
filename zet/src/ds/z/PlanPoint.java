@@ -115,44 +115,6 @@ public class PlanPoint extends Point {
 			setLocation( x, y );
 		}
 	}
-//
-//	void resetListener() {
-//		changeListeners = new ArrayList<ChangeListener>();
-//	}
-//
-//	/** {@inheritDoc}
-//	 * @param e the event
-//	 */
-//	@Override
-//	public void throwChangeEvent( ChangeEvent e ) {
-//		// Workaround: Notify only the listeners who are registered at the time when this method starts
-//		// This point may be thrown away when the resulting edge must be rastered, and then the list
-//		// "changeListeners" will be altered during "c.stateChanged (e)", which produces exceptions.
-//		ChangeListener[] listenerCopy = changeListeners.toArray( new ChangeListener[changeListeners.size()] );
-//
-//
-//		for( ChangeListener c : listenerCopy ) {
-//			c.stateChanged( e );
-//		}
-//	}
-//
-//	/** {@inheritDoc}
-//	 * @param c the listener
-//	 */
-//	@Override
-//	public void addChangeListener( ChangeListener c ) {
-//		if( !changeListeners.contains( c ) ) {
-//			changeListeners.add( c );
-//		}
-//	}
-//
-//	/** {@inheritDoc}
-//	 * @param c the listener
-//	 */
-//	@Override
-//	public void removeChangeListener( ChangeListener c ) {
-//		changeListeners.remove( c );
-//	}
 
 	/**
 	 * Checks if an object is equal to this instance of {@code PlanPoint}. A point
@@ -166,10 +128,15 @@ public class PlanPoint extends Point {
 	public boolean equals( Object obj ) {
 		if( obj instanceof PlanPoint ) {
 			PlanPoint point = (PlanPoint) obj;
-			return point.getX() == this.getX() && point.getY() == this.getY();
+			//return point.getX() == this.getX() && point.getY() == this.getY();
+			return point == this;
 		} else {
 			return false;
 		}
+	}
+
+	public boolean matches( PlanPoint point ) {
+		return point.getX() == this.getX() && point.getY() == this.getY();
 	}
 
 	@Override
@@ -179,11 +146,9 @@ public class PlanPoint extends Point {
 		return p;
 	}
 
-
-
 	/** This should ONLY be called from Edge.setPoints (). Unfortunately Java
 	 * does not provide a mechanism to ensure this, so just don't use this method.
-	 * 
+	 *
 	 * @param nextEdge the next incident (= outgoing) edge of this point. */
 	protected void setNextEdge( Edge nextEdge ) {
 		this.nextEdge = nextEdge;
@@ -191,7 +156,7 @@ public class PlanPoint extends Point {
 
 	/** This should ONLY be called from Edge.setPoints (). Unfortunately Java
 	 * does not provide a mechanism to ensure this, so just don't use this method.
-	 * 
+	 *
 	 * @param previousEdge the previous incident (= incoming) edge of this point. */
 	protected void setPreviousEdge( Edge previousEdge ) {
 		this.previousEdge = previousEdge;
@@ -210,12 +175,12 @@ public class PlanPoint extends Point {
 	/**
 	 * Returns the second edge that is incident to this point
 	 * @param e An edge that must be incident to this point
-	 * @return The second edge that is incident to this point. 
+	 * @return The second edge that is incident to this point.
 	 * @throws IllegalArgumentException Is thrown when {@code e} is not
 	 * incident to the plan point.
 	 */
 	public Edge getOtherEdge( Edge e ) throws IllegalArgumentException {
-		// Do not use Edge.equals here. The orientation of the edge is not taken into 
+		// Do not use Edge.equals here. The orientation of the edge is not taken into
 		// account in Edge.equals, but here is plays an important role, especially when
 		// we have a point p1 who has incident edges of the form (p2,p1),(p1,p2).
 		if( absoluteEqual( nextEdge, e ) ) {
@@ -244,7 +209,7 @@ public class PlanPoint extends Point {
 	}
 
 	public int getXInt() {
-		return (int)x;
+		return x;
 	}
 
 	/**
@@ -258,7 +223,7 @@ public class PlanPoint extends Point {
 	}
 
 	public int getYInt() {
-		return (int)y;
+		return y;
 	}
 
 	// q is the point in common with both edges
@@ -287,14 +252,13 @@ public class PlanPoint extends Point {
 	 * @param y the {@code y}-coordinate of the point
 	 */
 	@Override
-	public void setLocation( double x, double y ) {
+	public final void setLocation( double x, double y ) {
 		// Do not remove this query for a "real" change, it saves running time
 		// and is needed in RoomEdge.stateChanged () (indirectly)
 		if( this.x != x || this.y != y ) {
 			// Values are already rounded in superimplementation of setLocation
 			// -> No need to round them here
 			super.setLocation( x, y );
-//			throwChangeEvent( new ChangeEvent( this ) );
 		}
 	}
 
@@ -312,7 +276,7 @@ public class PlanPoint extends Point {
 	 * @param x the {@code x}-coordinate of the point
 	 * @param y the {@code y}-coordinate of the point
 	 */
-	public void setLocationMeter( double x, double y ) {
+	public final void setLocationMeter( double x, double y ) {
 		setLocation( ConversionTools.floatToInt( x ), ConversionTools.floatToInt( y ) );
 	}
 
@@ -321,21 +285,13 @@ public class PlanPoint extends Point {
 	}
 
 	@Override
-	public void setLocation( Point point ) {
+	public final void setLocation( Point point ) {
 		setLocation( point.x, point.y );
 	}
 
 	@Override
-	public void setLocation( int x, int y ) {
+	public final void setLocation( int x, int y ) {
 		setLocation( (double) x, (double) y );
-	}
-
-	@Override
-	/** {@inheritDoc}
-	 */
-	public void translate( int x, int y ) {
-		super.translate( x, y );
-//		throwChangeEvent( new ChangeEvent( this ) );
 	}
 
 	/**
@@ -345,7 +301,7 @@ public class PlanPoint extends Point {
 	 * @return the new list containing the copies
 	 */
 	public static List<PlanPoint> pointCopy( List<PlanPoint> original ) {
-		final List<PlanPoint> points = new ArrayList<PlanPoint>();
+		final List<PlanPoint> points = new ArrayList<>();
 		for( PlanPoint p : original )
 			points.add( new PlanPoint( p ) );
 		return points;

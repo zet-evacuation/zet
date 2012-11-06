@@ -56,7 +56,7 @@ public class Floor implements Serializable, Cloneable, Iterable<Room>, ZFormatOb
 	private String name;
 	/** A list of all rooms contained in the floor. */
 	private ArrayList<Room> rooms;
-	/** In the past this was intended to be a list of all single edges contained in the floor. 
+	/** In the past this was intended to be a list of all single edges contained in the floor.
 	 * This concept was never used and now this field is only still here because every example file
 	 * has this field. */
 	// TODO Delete this field and adjust all example files
@@ -106,7 +106,7 @@ public class Floor implements Serializable, Cloneable, Iterable<Room>, ZFormatOb
 		while( !rooms.isEmpty() )
 			rooms.get( 0 ).delete();
 	}
-	
+
 	/**
 	 * Adds a room to the floor and sets this floor as the associated floor of the room to be added.
 	 * @param room the room to be added
@@ -379,10 +379,10 @@ public class Floor implements Serializable, Cloneable, Iterable<Room>, ZFormatOb
 			}
 		}
 	}
-	
+
 	/** Recomputes all bounds from scratch.
-	 * 
-	 * This method is not intended to be used by any other class except 
+	 *
+	 * This method is not intended to be used by any other class except
 	 * for io.z.FloorConverter for legacy support of old example files.
 	 *
 	 * @param holdLastSize does not decrease the size of the floor, if the new bounds are smaller, than the old ones, if set to {@code true}
@@ -392,12 +392,12 @@ public class Floor implements Serializable, Cloneable, Iterable<Room>, ZFormatOb
 		minY_DefiningRoom = null;
 		maxX_DefiningRoom = null;
 		maxY_DefiningRoom = null;
-		
+
 		int minX = 0;
 		int minY = 0;
 		int maxX = 0;
 		int maxY = 0;
-		
+
 		for (Room r : rooms) {
 			if (r.boundLeft () < minX) {
 				minX = r.boundLeft ();
@@ -416,7 +416,7 @@ public class Floor implements Serializable, Cloneable, Iterable<Room>, ZFormatOb
 				maxY_DefiningRoom = r;
 			}
 		}
-		
+
 		xOffset = holdLastSize ? Math.min( minX, xOffset ) : minX;
 		yOffset = holdLastSize ? Math.min( minY, yOffset ) : minY;
 		width = holdLastSize ? Math.max( maxX - minX, width ) + Math.max( minX - xOffset , 0 ): maxX - minX;
@@ -437,7 +437,7 @@ public class Floor implements Serializable, Cloneable, Iterable<Room>, ZFormatOb
 		this.height = height;
 		recomputeBounds( true );
 	}
-	
+
 	/**
 	 * Indicates whether this is a {@code Floor} that was loaded from a legacy file.
 	 * @return {@code true} if the squared bounding box is known, {@code false} otherwise

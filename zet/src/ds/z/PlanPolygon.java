@@ -774,6 +774,10 @@ public class PlanPolygon<T extends Edge> implements Iterable<T> {
 							if( current.boundLower() != p.getYInt() )
 								inside = !inside;
 						break;
+					case IntersectsPoint:
+						if( p.matches( current.getSource() ) || p.matches( current.getTarget() ) )
+							return true;
+						break;
 					case Connected:
 						// Only count point one time. That is done as follows:
 						// An edge is only counted if the point is _not_ the lower one of the edge
@@ -1712,7 +1716,7 @@ public class PlanPolygon<T extends Edge> implements Iterable<T> {
 	 * @return a list of all points of the polygon
 	 * @see Room#getPlanPoints()
 	 */
-	public List<? extends PlanPoint> getPlanPoints() {
+	public List<PlanPoint> getPlanPoints() {
 		// The edges use common PlanPoint instances, so we don't
 		// have to defineByPoints (edges.size () * 2) points.
 		ArrayList<PlanPoint> planPoints = new ArrayList<>( size + (isClosed() ? 0 : 1) );

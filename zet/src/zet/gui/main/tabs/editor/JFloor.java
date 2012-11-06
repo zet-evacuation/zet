@@ -25,7 +25,9 @@ import ds.z.PlanPolygon;
 import ds.z.Room;
 import ds.z.ZControl;
 import event.EventListener;
-import event.ZModelChangedEvent;
+import ds.z.ZModelChangedEvent;
+import ds.z.ZModelRoomEvent;
+import event.EventServer;
 import gui.GUIControl;
 import gui.GUIOptionManager;
 import gui.ZETLoader;
@@ -55,7 +57,7 @@ import zet.gui.main.tabs.base.JPolygon;
  * @author Timon Kelter, Jan-Philipp Kappmeier
  */
 @SuppressWarnings( "serial" )
-public class JFloor extends AbstractFloor implements EventListener<ZModelChangedEvent> {
+public class JFloor extends AbstractFloor implements EventListener<ZModelRoomEvent> {
 	// Draw-Related stuff
 	/** The background image */
 	private PlanImage planImage;
@@ -139,7 +141,6 @@ public class JFloor extends AbstractFloor implements EventListener<ZModelChanged
 		enableEvents( AWTEvent.MOUSE_EVENT_MASK );
 		enableEvents( AWTEvent.KEY_EVENT_MASK );
 		enableEvents( AWTEvent.MOUSE_WHEEL_EVENT_MASK );
-//		EventServer.getInstance().registerListener( this, ZModelChangedEvent.class );
 	}
 
 	/**
@@ -202,6 +203,15 @@ public class JFloor extends AbstractFloor implements EventListener<ZModelChanged
 
 		revalidate();
 		repaint();
+	}
+
+	@Override
+	public void handleEvent( ZModelRoomEvent e ) {
+		for( Room room : e.getAffectedRooms() ) {
+			JPolygon poly = roomToPolygonMapping.get( room );
+			poly.displayPolygon( room );
+		}
+		redisplay();
 	}
 
 	/**
@@ -657,11 +667,6 @@ public class JFloor extends AbstractFloor implements EventListener<ZModelChanged
 
 
 
-
-	@Override
-	public void handleEvent( ZModelChangedEvent e ) {
-		//	displayFloor( myFloor );
-	}
 
 
 

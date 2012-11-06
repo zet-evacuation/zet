@@ -14,15 +14,19 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 /*
- * ZModelChangedEvent.java
- *
+ * BaseRoom.java
+ * Created on 18.12.2007, 11:37:51
  */
 
-package event;
+package ds.z;
 
 /**
  *
+ * @param <T> The type of the edges (walls) of this room.
+ * @author Jan-Philipp Kappmeier
  */
-public interface ZModelChangedEvent extends Event {
-
+public class BaseRoom<T extends RoomEdge> extends PlanPolygon<T> implements ZFormatObject {
+	BaseRoom( Class<T> edgeClassType ) {
+		super( edgeClassType );
+	}
 }
