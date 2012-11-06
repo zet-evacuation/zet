@@ -34,6 +34,8 @@ import ds.z.StairPreset;
 import ds.z.TeleportArea;
 import ds.z.ZControl;
 import ds.z.ZLocalization;
+import ds.z.ZModelRoomEvent;
+import event.EventServer;
 import gui.GUIControl;
 import gui.GUIOptionManager;
 import gui.ZETLoader;
@@ -230,6 +232,7 @@ public class JEditView extends AbstractSplitPropertyWindow<JFloorScrollPane<JFlo
 
 	public JEditView( EditStatus editStatus, GUIControl guiControl ) {
 		super( new JFloorScrollPane<>( new JFloor( editStatus, guiControl ) ) );
+		EventServer.getInstance().registerListener( getFloor(), ZModelRoomEvent.class );
 		loc = GUILocalization.getSingleton();
 		this.guiControl = Objects.requireNonNull( guiControl, "GUI control class cannot be null." );
 		this.editStatus = Objects.requireNonNull( editStatus, "Edit status object cannot be null." );
@@ -1471,9 +1474,12 @@ public class JEditView extends AbstractSplitPropertyWindow<JFloorScrollPane<JFlo
 			assignmentTypeSelector.clear();
 		}
 
+		// derregister old floor
+		EventServer.getInstance().unregisterListener( getFloor(), ZModelRoomEvent.class );
 		JFloor floor = new JFloor( editStatus, guiControl, projectControl.getProject().getBuildingPlan().getFloors().get( 1 ) );
 		editStatus.controlFloor( floor );
 		getLeftPanel().setMainComponent( floor );
+		EventServer.getInstance().registerListener( getFloor(), ZModelRoomEvent.class );
 
 		this.projectControl = projectControl;
 

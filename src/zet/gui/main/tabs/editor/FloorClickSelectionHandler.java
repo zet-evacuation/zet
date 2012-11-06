@@ -4,9 +4,11 @@
  */
 package zet.gui.main.tabs.editor;
 
+import ds.z.Area;
 import ds.z.Edge;
 import ds.z.PlanPoint;
 import ds.z.PlanPolygon;
+import ds.z.Room;
 import ds.z.ZControl;
 import gui.editor.CoordinateTools;
 import java.awt.Component;
@@ -136,7 +138,7 @@ public class FloorClickSelectionHandler extends FloorClickHandler {
 				System.out.println( "We have been dragging..." );
 				// we try to drag some polygons
 				// Drag whole selection (>= 1 polygon)
-				dragFinished( p );
+				dragFinished( p, components );
 			}
 		}
 		potentialDragStart = false;
@@ -162,7 +164,12 @@ public class FloorClickSelectionHandler extends FloorClickHandler {
 	}
 
 	private Point dragOffset( Point currentMouse ) {
-		return new Point( currentMouse.x - getEditStatus().getLastClick().x, currentMouse.y - getEditStatus().getLastClick().y );
+		if( getEditStatus().isRasterizedPaintMode() ) {
+			Point start = getEditStatus().getNextRasterPoint( getEditStatus().getLastClick() );
+			Point end = getEditStatus().getNextRasterPoint( currentMouse );
+			return new Point( end.x - start.x, end.y - start.y );
+		} else
+			return new Point( currentMouse.x - getEditStatus().getLastClick().x, currentMouse.y - getEditStatus().getLastClick().y );
 	}
 
 	ArrayList<Point> dragStarts;
@@ -170,6 +177,7 @@ public class FloorClickSelectionHandler extends FloorClickHandler {
 
 	private void dragOngoing( Point currentMouse ) {
 		Point dragOffset = dragOffset( currentMouse );
+
 		if( getEditStatus().getSelectedPolygons().size() > 0 )
 			// we try to drag some polygons
 			for( JPolygon sel : getEditStatus().getSelectedPolygons() ) {
@@ -260,20 +268,56 @@ public class FloorClickSelectionHandler extends FloorClickHandler {
 //	}
 	}
 
-	private void dragFinished( Point currentMouse ) {
-		Point dragStart = CoordinateTools.translateToModel( getEditStatus().getLastClick() );
-		Point dragEnd = CoordinateTools.translateToModel( currentMouse );
+	private void dragFinished( Point currentMouse, List<Component> components ) {
+		Point dragStart = CoordinateTools.translateToModel( getEditStatus().isRasterizedPaintMode() ? getEditStatus().getNextRasterPoint( getEditStatus().getLastClick() ) : getEditStatus().getLastClick() );
+		Point dragEnd = CoordinateTools.translateToModel( getEditStatus().isRasterizedPaintMode() ? getEditStatus().getNextRasterPoint( currentMouse ) : currentMouse );
 		Point translated = new Point( dragEnd.x - dragStart.x, dragEnd.y - dragStart.y );
+
+		// Check, if all selected polygons are areas:
+		List<Area<?>> areas = new LinkedList<>();
+		for( JPolygon sel : getEditStatus().getSelectedPolygons() ) {
+			if( sel.getPlanPolygon() instanceof Area<?> )
+				areas.add( (Area<?>) sel.getPlanPolygon() );
+			else {
+				areas = null;
+				break;
+			}
+		}
+		if( areas != null ) {
+			Room r = getRoomUnderMouse( currentMouse, components );
+			if( r != null )
+				System.out.println( "New room will be " + r );
+			if( r != null ) {
+				getZControl().moveAreas( areas, translated.x, translated.y, r );
+				for( JPolygon sel : getEditStatus().getSelectedPolygons() )
+					sel.setDragged( false );
+				return;
+			}
+		}
 
 		List<PlanPoint> draggedPlanPoints = new LinkedList<>();
 		for( JPolygon sel : getEditStatus().getSelectedPolygons() ) {
 			draggedPlanPoints.addAll( ((PlanPolygon)sel.getPlanPolygon()).getPlanPoints() );
 		}
 
-		System.out.println( "Call ZControl and change in Model. Tranlate by + " + translated );
 		getZControl().movePoints( draggedPlanPoints, translated.x, translated.y );
 
 		for( JPolygon sel : getEditStatus().getSelectedPolygons() )
 			sel.setDragged( false );
+	}
+
+	private Room getRoomUnderMouse( Point currentMouse, List<Component> components  ) {
+		for( Component c : components ) {
+			if( c instanceof JPolygon ) {
+				JPolygon poly = (JPolygon)c;
+				if( poly.getPlanPolygon() instanceof Room ) {
+					Room r = (Room)poly.getPlanPolygon();
+					Point mousePosition = CoordinateTools.translateToModel( currentMouse );
+					if( r.contains( new PlanPoint( mousePosition ) ) )
+						return r;
+				}
+			}
+		}
+		return null;
 	}
 }

@@ -59,12 +59,11 @@ public class Edge implements Serializable {
 		Intersects,
 		/** The end point of one line segment lies on the other line segment. */
 		IntersectsBorder,
+		/** The end point of one line segment lies on the end point of the other line segment. */
+		IntersectsPoint,
 		/** Two line segments do not intersect themselves in any manner. */
 		NotIntersects;
 	}
-	/** The listeners which should be informed if anything changes */
-//	@XStreamOmitField()
-//	private transient ArrayList<ChangeListener> changeListeners = new ArrayList<ChangeListener>();
 	/** The associated polygon of this edge */
 	private PlanPolygon associatedPolygon;
 	/** The start point of this edge */
@@ -75,7 +74,7 @@ public class Edge implements Serializable {
 	private PlanPoint source;
 
 	/**
-	 * Creates a new instance of {@code Edge} with two different ending points 
+	 * Creates a new instance of {@code Edge} with two different ending points
 	 * and no associated polygon. The edge will try to defineByPoints itself to the ending
 	 * points' list of incident edges.
 	 *
@@ -84,8 +83,8 @@ public class Edge implements Serializable {
 	 */
 	Edge( PlanPoint newSource, PlanPoint newTarget ) {
 		// We do explicitly NOT use setPoints here, because setPoints registers the Edge
-		// at the PlanPoints. This must not happen here, but when the edge is added to the 
-		// polygon, because it will possibly be turned around to fit into the polygon 
+		// at the PlanPoints. This must not happen here, but when the edge is added to the
+		// polygon, because it will possibly be turned around to fit into the polygon
 		// iteration order. So, do NOT register with the PlanPoints here!
 		source = newSource;
 		target = newTarget;
@@ -103,55 +102,6 @@ public class Edge implements Serializable {
 		this( newSource, newTarget );
 		setAssociatedPolygon( p );
 	}
-
-//	void resetListener() {
-//		changeListeners = new ArrayList<ChangeListener>();
-//		source.resetListener();
-//		target.resetListener();
-//	}
-//
-//	/** {@inheritDoc}
-//	 * @param e the event
-//	 */
-//	@Override
-//	public void throwChangeEvent( ChangeEvent e ) {
-//		// Workaround: Notify only the listeners who are registered at the time when this method starts
-//		// This edge may be thrown away when it must be rastered, and then the list
-//		// "changeListeners" will be altered during "c.stateChanged (e)", which produces exceptions.
-//		ChangeListener[] listenerCopy = changeListeners.toArray( new ChangeListener[changeListeners.size()] );
-//
-//		for( ChangeListener c : listenerCopy )
-//			c.stateChanged( e );
-//	}
-//
-//	/** {@inheritDoc}
-//	 * @param c the listener
-//	 */
-//	@Override
-//	public void addChangeListener( ChangeListener c ) {
-//		if( !changeListeners.contains( c ) )
-//			changeListeners.defineByPoints( c );
-//	}
-//
-//	/** {@inheritDoc}
-//	 * @param c the listener
-//	 */
-//	@Override
-//	public void removeChangeListener( ChangeListener c ) {
-//		changeListeners.remove( c );
-//	}
-//
-//	/** {@inheritDoc}
-//	 * @param e the event
-//	 */
-//	@Override
-//	public void stateChanged( ChangeEvent e ) {
-//		// Create an EdgeChangedEvent from the ChangeEvent that comes from the PlanPoints
-//		if( e.getSource() instanceof PlanPoint )
-//			throwChangeEvent( new EdgeChangeEvent( this, (PlanPoint)e.getSource() ) );
-//		else
-//			throwChangeEvent( e );
-//	}
 
 	/** @param e An arbitrary edge
 	 * @return Whether the given edge e is a neighbour of this edge in this edge's polygon. The method
@@ -242,7 +192,7 @@ public class Edge implements Serializable {
 	 * the list of edges in the associated polygon. After that all used references are
 	 * setLocation to {@code null}.
 	 * @throws java.lang.IllegalArgumentException sent from super-class, not supposed to occur
-	 * @throws java.lang.IllegalStateException if the edge is not the first or last 
+	 * @throws java.lang.IllegalStateException if the edge is not the first or last
 	 * edge in the polygon. first and last edges also occur in closed polygons.
 	 */
 	public void delete() throws IllegalArgumentException, IllegalStateException {
@@ -361,28 +311,28 @@ public class Edge implements Serializable {
 	 * edge itself.
 	 * @param newPoint
 	 * @param d
-	 * @return 
+	 * @return
 	 */
 	PlanPoint getPoint( PlanPoint newPoint, double d ) {
 		double slope = getSlope();
-		
+
 		Vector2 a = new Vector2( target.x, target.y);
 		Vector2 b = new Vector2( source.x, source.y);
 		Vector2 v = b.sub( a );
 		v.normalize();
 		v.scalarMultiplicateTo( d );
-		
+
 		Vector2 p = new Vector2( newPoint.x, newPoint.y );
-		
+
 		Vector2 res = p.add( v );
-		
+
 		return new PlanPoint( (int)res.x, (int)res.y );
 	}
 
 	public double getSlope() {
 		return (target.x-source.x)/(double)(target.y-source.y);
 	}
-	
+
 	/**
 	 * Returns one of the bounding points of this edge.
 	 * @return one bounding point as {@link PlanPoint}
@@ -450,6 +400,8 @@ public class Edge implements Serializable {
 			return LineIntersectionType.NotIntersects;
 		//if(  )
 
+		/* If one of the t1 or t2 is zero, this means, that three points are on a line.
+		 * This reduces the cases to the following: Colinear, IntersectsBorder, IntersectsPoint. */
 		int t1 = PlanPoint.orientation( e1.getSource(), e1.getTarget(), e2.getSource() );
 		int t2 = PlanPoint.orientation( e1.getSource(), e1.getTarget(), e2.getTarget() );
 		if( t1 == 0 & t2 == 0 )
@@ -463,7 +415,8 @@ public class Edge implements Serializable {
 		if( ret1 < 0 & ret2 < 0 )
 			return LineIntersectionType.Intersects;
 		else if( ret1 == 0 && ret2 == 0 )
-			throw new IllegalStateException( "Two line segments are colinear but this should have been returned earlier." );
+			//throw new IllegalStateException( "Two line segments are colinear but this should have been returned earlier." );
+			return LineIntersectionType.IntersectsPoint;
 //		else if( ret1 == 0 && ret2 == 0 ) // was: ret1 * ret2 == 0, das ist falsch, siehe [(6400,4800),(4000,4800)] and [(6400,5600),(8000,4800)]
 //		else if( ret1 * ret2 == 0 ) // was: ret1 * ret2 == 0, das ist falsch, siehe [(6400,4800),(4000,4800)] and [(6400,5600),(8000,4800)]
 //			return LineIntersectionType.IntersectsBorder; // At least three points are colinear.
@@ -504,7 +457,7 @@ public class Edge implements Serializable {
 	 * lifetime.
 	 *
 	 * @throws java.lang.NullPointerException if the passed {@code PlanPolygon} is null.
-	 * @throws IllegalArgumentException if this edge cannot be added to the new polygon 
+	 * @throws IllegalArgumentException if this edge cannot be added to the new polygon
 	 * because it does not fit to its start- and end points.
 	 * @throws IllegalStateException if the edge is part of a polygon with more than one
 	 * @param polygon the new polygon
@@ -533,7 +486,7 @@ public class Edge implements Serializable {
 	 * @param overwrite Specify 'true' when you want the method to ignore the
 	 * case that newSource/newTarget already have next/previous edges. If you specify 'false'
 	 * an exception is thrown when the above desrcibed case happens.
-	 * @throws PointsAlreadyConnectedException if the points are already connected to other 
+	 * @throws PointsAlreadyConnectedException if the points are already connected to other
 	 * edges and overwrite is 'false'
 	 * @throws IllegalArgumentException If p is not on the edge
 	 */
@@ -553,26 +506,19 @@ public class Edge implements Serializable {
 	 * @param overwrite Specify 'true' when you want the method to ignore the
 	 * case that newSource already has a next edge. If you specify 'false'
 	 * an exception is thrown when the above desrcibed case happens.
-	 * @throws PointsAlreadyConnectedException if the points are already connected to other 
+	 * @throws PointsAlreadyConnectedException if the points are already connected to other
 	 * edges and overwrite is 'false'
 	 */
 	protected void setSource( PlanPoint newSource, boolean overwrite ) throws PointsAlreadyConnectedException {
-		/* Do not switch this test back on - it preempts exchanging the two end points
-		if( newSource == target || newSource.equals ( target  ) ) {
-		throw new IllegalArgumentException ( "Points have the same coordinates" );
-		}*/
 		if( !overwrite && newSource != source && newSource.getNextEdge() != null )
 			throw new PointsAlreadyConnectedException( newSource,
 							ZLocalization.getSingleton().getString( "ds.z.SourceAlreadyConnectedException" ) );
 
 		if( source != null ) {
-//			source.removeChangeListener( this );
 			source.setNextEdge( null );
 		}
 		source = newSource;
-//		newSource.addChangeListener( this );
 		newSource.setNextEdge( this );
-//		throwChangeEvent( new ChangeEvent( this ) );
 	}
 
 	/**
@@ -584,7 +530,7 @@ public class Edge implements Serializable {
 	 * @param overwrite Specify 'true' when you want the method to ignore the
 	 * case that newTarget already has a previous edge. If you specify 'false'
 	 * an exception is thrown when the above desrcibed case happens.
-	 * @throws PointsAlreadyConnectedException if the points are already connected to other 
+	 * @throws PointsAlreadyConnectedException if the points are already connected to other
 	 * edges and overwrite is 'false'
 	 */
 	protected void setTarget( PlanPoint newTarget, boolean overwrite ) throws PointsAlreadyConnectedException {
@@ -597,13 +543,10 @@ public class Edge implements Serializable {
 							ZLocalization.getSingleton().getString( "ds.z.TargetAlreadyConnectedException" ) );
 
 		if( target != null ) {
-//			target.removeChangeListener( this );
 			target.setPreviousEdge( null );
 		}
 		target = newTarget;
-//		newTarget.addChangeListener( this );
 		newTarget.setPreviousEdge( this );
-//		throwChangeEvent( new ChangeEvent( this ) );
 	}
 
 	/**
@@ -616,7 +559,8 @@ public class Edge implements Serializable {
 	 * @param overwrite Specify 'true' when you want the method to ignore the
 	 * case that newSource/newTarget already have next/previous edges. If you specify 'false'
 	 * an exception is thrown when the above desrcibed case happens.
-	 * @throws PointsAlreadyConnectedException if the points are already connected to other 
+	 * @throws IllegalArgumentException
+	 * @throws PointsAlreadyConnectedException if the points are already connected to other
 	 * edges and overwrite is 'false'
 	 */
 	protected void setPoints( PlanPoint newSource, PlanPoint newTarget, boolean overwrite )

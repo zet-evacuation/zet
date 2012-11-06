@@ -4,8 +4,6 @@
  */
 package ds.z;
 
-import ds.z.exception.AssignmentException;
-import java.util.List;
 import de.tu_berlin.math.coga.common.localization.Localization;
 import de.tu_berlin.math.coga.common.util.Formatter;
 import de.tu_berlin.math.coga.common.util.Helper;
@@ -14,19 +12,21 @@ import de.tu_berlin.math.coga.rndutils.distribution.continuous.NormalDistributio
 import de.tu_berlin.math.coga.rndutils.distribution.continuous.UniformDistribution;
 import ds.ProjectLoader;
 import ds.z.exception.AreaNotInsideException;
+import ds.z.exception.AssignmentException;
 import ds.z.exception.InvalidRoomZModelError;
 import ds.z.exception.PolygonNotClosedException;
 import ds.z.exception.RoomIntersectException;
 import ds.z.exception.UnknownZModelError;
 import event.EventServer;
-import event.ZModelChangedEvent;
 import gui.ZETLoader;
-import gui.ZETMain;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Iterator;
+import java.util.LinkedList;
+import java.util.List;
 import javax.swing.JOptionPane;
+import zet.gui.main.tabs.base.JPolygon;
 
 /**
  * The class {@code ZControl} represents a front end class to the Z-model.
@@ -341,29 +341,84 @@ public class ZControl {
 		return f;
 	}
 
-	public void movePolygon( PlanPolygon polygon, int x, int y ) {
-
-		//return true;
-	}
-
 	private void translatePoint( Edge edge, PlanPoint planPoint, int x, int y ) {
 		if( edge instanceof RoomEdge ) {
 			RoomEdge e = (RoomEdge)edge;
 			if( e.isPassable() ) {
-				if( e.getLinkTarget().getSource().equals( planPoint ) ) {
-					e.getLinkTarget().getSource().translate( x, y );
-				} else if( e.getLinkTarget().getTarget().equals( planPoint ) )
-					e.getLinkTarget().getTarget().translate( x, y );
+				if( e.getLinkTarget().getSource().matches( planPoint ) ) {
+					translateAndHash( e.getLinkTarget().getSource() , x, y );
+				} else if( e.getLinkTarget().getTarget().matches( planPoint ) )
+					translateAndHash( e.getLinkTarget().getTarget(), x, y );
+				else
+					throw new AssertionError( "Two passable edges have no matching points!" );
 				e.getLinkTarget().getAssociatedPolygon().recomputeBounds();
 			}
 		}
 	}
 
+	private HashSet<PlanPoint> moved = new HashSet<>();
+
+	/**
+	 * <p>Translates a point only, if it has not been trnslated before. This method
+	 * takes care about {@link PlanPoint}s that have been translated and only
+	 * translates them, when they haven't been translated before. This can be used
+	 * if a series of operations is to be performed on the Z model, but the
+	 * operations may be performed twice, if an edge is passable and the operation
+	 * is therefore also operated on attached points.</p>
+	 * <p>To work correctly, at the end of every operation, the {@link HashSet}
+	 * {@link #moved} has to be cleared or otherwise resetted to an empty
+	 * hash set.</p>
+	 * @param p
+	 * @param x
+	 * @param y
+	 */
+	private void translateAndHash( PlanPoint p, int x, int y ) {
+		if( !moved.contains( p ) ) {
+			p.translate( x, y );
+			moved.add( p );
+		}
+	}
+
+	/**
+	 * Tries to move the submitted areas by the specified distance into the
+	 * given room. If the areas do not fit into the room (that means, all the
+	 * border points of the area must be contained into the next room), nothing
+	 * will happen.
+	 * @param areas
+	 * @param x
+	 * @param y
+	 * @param target
+	 */
+	public void moveAreas( List<Area<?>> areas, int x, int y, Room target ) {
+		// check first,
+		for( Area<?> a : areas ) {
+			for( PlanPoint p : a.getPlanPoints() ) {
+				PlanPoint check = new PlanPoint( p.x + x, p.y + y );
+				if( !target.contains( check ) )
+					return; // illegal!
+			}
+		}
+
+		// then call the move points method
+		List<PlanPoint> draggedPlanPoints = new LinkedList<>();
+		for( Area<?> a : areas)
+			draggedPlanPoints.addAll( a.getPlanPoints() );
+
+		movePoints( draggedPlanPoints, x, y );
+		for( Area<?> a : areas)
+			a.setAssociatedRoom( target );
+
+		HashSet<Room> affectedRooms = new HashSet<>();
+		affectedRooms.add( target );
+
+		ZModelRoomEvent zmr = new ZModelRoomEvent( affectedRooms );
+		EventServer.getInstance().dispatchEvent( zmr );
+	}
+
 	public void movePoints( List<? extends PlanPoint> points, int x, int y ) {
 		Iterator<? extends PlanPoint> itPP = points.iterator();
 
-		HashSet<Area<?>> affected_areas = new HashSet<>();
-		PlanPolygon<?> lastPolygon = null;
+		HashSet<Room> affectedRooms = new HashSet<>();
 		PlanPoint planPoint;
 		while( itPP.hasNext() && itPP.hasNext() ) {
 			// The drag targets are already rasterized, if neccessary
@@ -372,47 +427,24 @@ public class ZControl {
 			translatePoint( planPoint.getNextEdge(), planPoint, x, y );
 			translatePoint( planPoint.getPreviousEdge(), planPoint, x, y );
 
-			planPoint.translate( x, y );
+			translateAndHash( planPoint, x, y);
 
 			// Keep track of the areas that we move
 			PlanPolygon<?> currentPolygon = planPoint.getNextEdge() != null ? planPoint.getNextEdge().getAssociatedPolygon() : planPoint.getPreviousEdge() != null ? planPoint.getPreviousEdge().getAssociatedPolygon() : null;
-			//currentPolygon.edgeChangeHandler( planPoint.getNextEdge(), planPoint );
 			currentPolygon.recomputeBounds();
 
-			// At the moment disabled area handling...
-			// TODO reenable. not so important right now
-			// Add the last polygon (whose modification should be complete
-			// by now to avoid duplicate entries in the area hashset)
-//			if( currentPolygon != lastPolygon ) {
-//				if( lastPolygon != null && lastPolygon instanceof Area )
-//					affected_areas.add( (Area)lastPolygon );
-//				lastPolygon = currentPolygon;
-//			}
-						// If the user dragged areas into a different room, then we
-						// must assign the affected areas to their new rooms
-//						for( Area a : affected_areas )
-//							// If the area has left its room:
-//							if( !a.getAssociatedRoom().contains( a ) ) {
-//								// 1) Search for the new room
-//								Room newRoom = null;
-//
-//								for( Component c : getComponents() )
-//									if( ((JPolygon)c).getPlanPolygon().contains( a ) ) {
-//										newRoom = (Room)((JPolygon)c).getPlanPolygon();
-//										break;
-//									}
-//
-//								if( newRoom != null ) {
-//									// Assign new room if we found one
-//									a.setAssociatedRoom( newRoom );
-//									selectPolygon( a );
-//								} else
-//									// Delete the area if it was dragged out of
-//									// its old room and not into any new one
-//									a.deletePolygon();
-//							}
-			EventServer.getInstance().dispatchEvent( new ZModelChangedEvent() {} );
+			// save the affected rooms for the update
+			if( currentPolygon instanceof Room ) {
+				affectedRooms.add( (Room)currentPolygon );
+			} else if( currentPolygon instanceof Area<?> ) {
+				affectedRooms.add( ((Area<?>)currentPolygon).getAssociatedRoom() );
+			} else
+				throw new AssertionError( "Not supported type of PlanPolygon. Only 'Room' and 'Area<?>' are supported. Was: " + currentPolygon.getClass() );
 		}
+
+		moved.clear();
+		ZModelRoomEvent zmr = new ZModelRoomEvent( affectedRooms );
+		EventServer.getInstance().dispatchEvent( zmr );
 	}
 
 	/**
@@ -559,7 +591,7 @@ public class ZControl {
 				roomEdge.setLinkTarget( null );
 				break;
 			default:
-				throw new IllegalStateException( "Error code not implemented" );
+				throw new AssertionError( "Error code not implemented" );
 		}
 	}
 
@@ -578,7 +610,6 @@ public class ZControl {
 					}
 				}
 			}
-
 	}
 
 	private int coordinate( int position, int raster ) {
