@@ -247,7 +247,7 @@ public class Edge implements Serializable {
 	 * @return true if the point is one of the end points of the edge
 	 */
 	public static boolean fits( PlanPoint p, Edge e ) {
-		return p.equals( e.getSource() ) | p.equals( e.getTarget() );
+		return p.matches( e.getSource() ) | p.matches( e.getTarget() );
 	}
 
 	/**

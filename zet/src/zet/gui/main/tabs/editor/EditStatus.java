@@ -4,6 +4,7 @@
  */
 package zet.gui.main.tabs.editor;
 
+import ds.z.Floor;
 import ds.z.ZControl;
 import gui.editor.CoordinateTools;
 import java.awt.Point;
@@ -37,6 +38,8 @@ public class EditStatus {
 
 	List<JPolygon> selectedPolygons = new LinkedList<>();
 	private boolean mouseSelecting;
+	private ZetObjectTypes zetObjectType;
+	private Floor floor;
 
 	public EditStatus( ZControl zcontrol ) {
 		this.zcontrol = zcontrol;
@@ -46,12 +49,34 @@ public class EditStatus {
 		return editMode;
 	}
 
-	public void controlFloor( JFloor floor ) {
-		this.controlled = floor;
+	public void setEditMode( EditMode editMode ) {
+		this.editMode = editMode;
+		switch( editMode ) {
+			case Selection:
+				current = new FloorClickSelectionHandler( this, zcontrol );
+				break;
+			case CreationRectangle:
+				current = new FloorClickCreateRectangleHandler( this, zcontrol );
+				break;
+			case CreationPointWise:
+				current = new FloorClickCreatePointwiseHandler( this, zcontrol );
+				break;
+			default:
+				throw new AssertionError( "Unsupported edit mode: " + editMode );
+		}
+	}
+
+	public void controlFloor( JFloor jfloor, Floor floor ) {
+		this.controlled = jfloor;
+		this.floor = floor;
 	}
 
 	public JFloor getControlled() {
 		return controlled;
+	}
+
+	public Floor getView() {
+		return floor;
 	}
 
 	public FloorClickHandler getCurrentHandler() {
@@ -127,6 +152,11 @@ public class EditStatus {
 		this.lastClick = p;
 	}
 
+	public ZetObjectTypes getZetObjectType() {
+		return zetObjectType;
+	}
 
-
+	public void setZetObjectType( ZetObjectTypes zetObjectType ) {
+		this.zetObjectType = zetObjectType;
+	}
 }

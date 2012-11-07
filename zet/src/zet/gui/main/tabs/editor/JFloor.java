@@ -18,16 +18,10 @@ package zet.gui.main.tabs.editor;
 import de.tu_berlin.math.coga.common.localization.DefaultLoc;
 import ds.z.Area;
 import ds.z.Barrier;
-import ds.z.Edge;
 import ds.z.Floor;
-import ds.z.PlanPoint;
-import ds.z.PlanPolygon;
 import ds.z.Room;
-import ds.z.ZControl;
-import event.EventListener;
-import ds.z.ZModelChangedEvent;
 import ds.z.ZModelRoomEvent;
-import event.EventServer;
+import event.EventListener;
 import gui.GUIControl;
 import gui.GUIOptionManager;
 import gui.ZETLoader;
@@ -58,14 +52,9 @@ import zet.gui.main.tabs.base.JPolygon;
  */
 @SuppressWarnings( "serial" )
 public class JFloor extends AbstractFloor implements EventListener<ZModelRoomEvent> {
-	// Draw-Related stuff
 	/** The background image */
 	private PlanImage planImage;
-	/** Whether we are painting new mode in raster mode. */
-	private boolean rasterizedPaintMode = true;
 	// Helper methods and vars.
-	/** The last color used for painting helping lines. */
-	private Color lastColor = GUIOptionManager.getRoomEdgeColor();
 	/** The standard stroke. */
 	private final static BasicStroke stroke_standard = new BasicStroke( 1.0f, BasicStroke.CAP_BUTT, BasicStroke.JOIN_MITER );
 	/** The stroke used for painting the selection rectangle. */
@@ -73,57 +62,8 @@ public class JFloor extends AbstractFloor implements EventListener<ZModelRoomEve
 	private final GUIControl guiControl;
 	private final EditStatus editStatus;
 
-
-	// Other stuff, such as handling of clicks etc.
-
-
-
 	/** The displayed floor. */
 	private Floor myFloor;
-
-	/** The currently selected polygons. */
-	private LinkedList<JPolygon> selectedPolygons = new LinkedList<>();
-	/** The currently selected edge. */
-	private Edge selectedEdge;
-	/** The currently selected point. */
-	private PlanPoint selectedPoint;
-	private JPolygon selectedElementPolygon;
-
-	/** This field stored where the new PlanPoint would be inserted in raster
-	 * paint mode if the user clicked into the {@link JFloor}. */
-	private Point newRasterizedPoint;
-	/** The last point that was clicked in GUI coordinate space. This is used during
-	 * the creation of new polygons. It is redundant, because it's information could be
-	 * gathered by using CoordinateTools.translateToScreen (lastPlanClick), but this
-	 * would slow down the paint method, which must be fast. So we included this variable
-	 * for a better efficiency, despite it's redundancy. */
-	private Point lastClick = null;
-	/** The current position of the mouse.  This is used during the creation of new
-	 * polygons to paint the preview of the next edge (pointwise creation) or the
-	 * preview of the whole polygon (rectangle creation). */
-	private Point mousePos = null;
-	/** The point of the mouse click with which the user started dragging something. */
-	private Point dragStart = null;
-	/** The points were the objects that are to be dragged are located. This is
-	 * approximately equal to dragStart when dragging a single PlanPoint, but when
-	 * dragging a PlanPolygon f.e. the dragStarts are the screen locations of the
-	 * PlanPoints of the PlanPolygon, and the dragStart variable in contrast to that
-	 * is the position of the mouse when the drag started. So these are different
-	 * variables in general. */
-	private List<Point> dragStarts = null;
-	/** This field stores where the dragged {@link PlanPoint}s will be located if the user
-	 * releases the mouse button immediately. */
-	private List<Point> dragTargets;
-	/** The PlanPoints that are currently dragged. */
-	private List<PlanPoint> draggedPlanPoints = null;
-	/** The new polygon, if the user is in PolygonCreation EditModeOld .*/
-	private PlanPolygon<?> newPolygon = null;
-
-	/** Helper variable for redirecting events to all JPolygons on screen. */
-	private boolean eventRedirectionGoingOn = false;
-
-	private ZControl zcontrol;
-
 	/**
 	 * Creates a new instance of {@code JFloor} with an empty floor.
 	 *
@@ -166,40 +106,19 @@ public class JFloor extends AbstractFloor implements EventListener<ZModelRoomEve
 
 		Floor f = myFloor;
 
-			updateOffsets( f );
+		updateOffsets( f );
 
-			for( Room r : f.getRooms() ) {
-				JPolygon roomPolygon = new JPolygon( this, GUIOptionManager.getRoomEdgeColor(), guiControl );
-				add( roomPolygon );
-				roomPolygon.displayPolygon( r );
-				roomToPolygonMapping.put( r, roomPolygon );
-			}
+		for( Room r : f.getRooms() ) {
+			JPolygon roomPolygon = new JPolygon( this, GUIOptionManager.getRoomEdgeColor(), guiControl );
+			add( roomPolygon );
+			roomPolygon.displayPolygon( r );
+			roomToPolygonMapping.put( r, roomPolygon );
+		}
 
-			// Recreate/Clear the click values and other temporary variables
-			{
-				// Recreate the selection
-//				if( !old_selection.isEmpty() )
-//					recreateSelection( this, old_selection );
+		planImage.setOffsetX( -floorMin_x );
+		planImage.setOffsetY( -floorMin_y );
 
-				// mind a possibly new zoom factor when still creating a polygon
-				//if( lastPlanClick != null )
-				//	lastClick = CoordinateTools.translateToScreen( lastPlanClick );
-
-				// abort temporary painting helper variables
-				//newRasterizedPoint = null;
-				//mousePos = null;
-
-				// Abort drag processes
-				//dragStart = null;
-				//dragTargets = null;
-				//dragStarts = null;
-				//draggedPlanPoints = null;
-			}
-
-			planImage.setOffsetX( -floorMin_x );
-			planImage.setOffsetY( -floorMin_y );
-
-			ZETLoader.sendMessage( DefaultLoc.getSingleton().getString( "gui.message.FloorSuccessfullyLoaded" ) );
+		ZETLoader.sendMessage( DefaultLoc.getSingleton().getString( "gui.message.FloorSuccessfullyLoaded" ) );
 
 		revalidate();
 		repaint();
@@ -209,7 +128,14 @@ public class JFloor extends AbstractFloor implements EventListener<ZModelRoomEve
 	public void handleEvent( ZModelRoomEvent e ) {
 		for( Room room : e.getAffectedRooms() ) {
 			JPolygon poly = roomToPolygonMapping.get( room );
-			poly.displayPolygon( room );
+			if( poly != null )
+				poly.displayPolygon( room );
+			else { // we have a new room
+				JPolygon roomPolygon = new JPolygon( this, GUIOptionManager.getRoomEdgeColor(), guiControl );
+				add( roomPolygon );
+				roomPolygon.displayPolygon( room );
+				roomToPolygonMapping.put( room, roomPolygon );
+			}
 		}
 		redisplay();
 	}
@@ -247,7 +173,6 @@ public class JFloor extends AbstractFloor implements EventListener<ZModelRoomEve
 		// Draw background image
 		planImage.paintComponent( g2 );
 
-
 		// draw a highlighted node at the mouse pointer
 		if( editStatus.getHighlightedPosition() != null && !editStatus.isMouseSelecting() )
 				g2.drawRect( editStatus.getHighlightedPosition().x - JPolygon.NODE_PAINT_RADIUS, editStatus.getHighlightedPosition().y - JPolygon.NODE_PAINT_RADIUS, 2 * JPolygon.NODE_PAINT_RADIUS, 2 * JPolygon.NODE_PAINT_RADIUS );
@@ -269,202 +194,39 @@ public class JFloor extends AbstractFloor implements EventListener<ZModelRoomEve
 					poly.paint( g2, new Point( poly.getLocation().x + poly.getParent().getLocation().x, poly.getLocation().y + poly.getParent().getLocation().y ), true );
 		}
 
-		// Draw drag point and helping point in rasterizedPaintMode
-		//if( dragStart == null ) {
-		//	// Paint new Raster Point when in normal edit mode
-		//	if( rasterizedPaintMode && newRasterizedPoint != null )
-		//		g2.drawRect( newRasterizedPoint.x - JPolygon.NODE_PAINT_RADIUS, newRasterizedPoint.y - JPolygon.NODE_PAINT_RADIUS, 2 * JPolygon.NODE_PAINT_RADIUS, 2 * JPolygon.NODE_PAINT_RADIUS );
-		//} else // a) Paint drag Targets when dragging real objects
-		//if( dragTargets != null ) {
-		//	g2.setPaint( GUIOptionManager.getDragNodeColor() );
-		//	for( Point p : dragTargets )
-		//		g2.drawRect( p.x - JPolygon.NODE_PAINT_RADIUS,
-		//						p.y - JPolygon.NODE_PAINT_RADIUS,
-		//						2 * JPolygon.NODE_PAINT_RADIUS, 2 * JPolygon.NODE_PAINT_RADIUS );
-		//	// b) Paint selection rectangle when dragging in selection mode
-		//} else {
-		//	g2.setPaint( GUIOptionManager.getDragNodeColor() );
-		//	g2.setStroke( selection_stroke );
-		//	// No negative width/height allowed here, so work around it with Math
-		//	g2.drawRect( Math.min( dragStart.x, mousePos.x ), Math.min( dragStart.y, mousePos.y ), Math.abs( mousePos.x - dragStart.x ), Math.abs( mousePos.y - dragStart.y ) );
-		//	g2.setStroke( stroke_standard );
-		//}
-
 		// If in PolygonCreationMode, draw help-line
-//		if( editMode.getType() == EditModeOld.Type.CreationPointwise || editMode.getType() == EditModeOld.Type.CreationRectangled )
-//			if( lastClick != null & mousePos != null ) {
-//				Point p1;
-//				Point p2;
-//				if( rasterizedPaintMode ) {
-//					p1 = getNextRasterPoint( lastClick );
-//					p2 = getNextRasterPoint( mousePos );
-//				} else {
-//					p1 = lastClick;
-//					p2 = mousePos;
-//				}
-//				Color t = editMode.getEditorColor();
-//				if( t != null )
-//					lastColor = t;
-//				g2.setPaint( lastColor );
-//
-//				// Now draw the single line or the rectangle (depending on the edit mode)
-//				g2.setStroke( JPolygon.stroke_thick );
-//				if( editMode.getType() == EditModeOld.Type.CreationPointwise )
-//					g2.drawLine( p1.x, p1.y, p2.x, p2.y );
-//				else if( editMode.getType() == EditModeOld.Type.CreationRectangled )
-//					g2.drawRect( Math.min( p1.x, p2.x ), Math.min( p1.y, p2.y ), Math.abs( p1.x - p2.x ), Math.abs( p1.y - p2.y ) );
-//			}
+		if( editStatus.getEditMode() == EditMode.CreationPointWise && editStatus.getLastClick() != null ) {
+			Point p1 = editStatus.getLastClick();
+			Point p2 = editStatus.getHighlightedPosition();
+			Color t = editStatus.getZetObjectType().getEditorColor();
+			g2.setPaint( t );;
+			g2.setStroke( JPolygon.stroke_thick );
+			g2.drawLine( p1.x, p1.y, p2.x, p2.y );
+		}
 	}
 
 	@Override
 	protected void processMouseEvent( MouseEvent e ) {
-		if( e.getID() == MouseEvent.MOUSE_CLICKED ) {
-			System.out.println( "CLICKED" );
-
-			if( e.getButton() == MouseEvent.BUTTON1 ) {
-				if( e.getClickCount() == 2 ) {
+		if( e.getButton() == MouseEvent.BUTTON1 ) {
+			if( e.getID() == MouseEvent.MOUSE_CLICKED ) {
+				System.out.println( "CLICKED" );
+				if(e.getClickCount() == 2 ) {
 					List<JPolygon> clickedPolygons = findAllPolygonsAt( JFloor.this, e.getPoint() );
 					editStatus.getCurrentHandler().doubleClick( e.getPoint(), clickedPolygons );
 				}
-				// left button
-				//this.processLeftClick( e.getPoint() );
-			} else if(e.getButton() == MouseEvent.BUTTON3 ) {
-				// right button
-				//this.processRightClick( e.getPoint() );
+			} else if( e.getID() == MouseEvent.MOUSE_PRESSED ) {
+				System.out.println( "PRESSED" );
+					List<JPolygon> clickedPolygons = findAllPolygonsAt( JFloor.this, e.getPoint() );
+					editStatus.getCurrentHandler().mouseDown( e.getPoint(), clickedPolygons );
+			} else if( e.getID() == MouseEvent.MOUSE_RELEASED ) {
+				System.out.println( "RELEASED" );
+				editStatus.getCurrentHandler().mouseUp( e.getPoint(), Arrays.asList( getComponents() ) );
 			}
-		} else if( e.getID() == MouseEvent.MOUSE_PRESSED ) {
-			System.out.println( "PRESSED" );
-			if( e.getButton() == MouseEvent.BUTTON1 ) {
-				List<JPolygon> clickedPolygons = findAllPolygonsAt( JFloor.this, e.getPoint() );
-				editStatus.getCurrentHandler().mouseDown( e.getPoint(), clickedPolygons );
-			}
-		} else if( e.getID() == MouseEvent.MOUSE_RELEASED ) {
-			System.out.println( "RELEASED" );
-			editStatus.getCurrentHandler().mouseUp( e.getPoint(), Arrays.asList( getComponents() ) );
-		} else if( e.getID() == MouseEvent.MOUSE_DRAGGED ) {
-			System.out.println( "DRAGGED" );
+		} else if( e.getButton() == MouseEvent.BUTTON3 ) {
+			if( e.getID() == MouseEvent.MOUSE_CLICKED )
+				editStatus.getCurrentHandler().rightClick();
 		}
 		repaint();
-
-//		if( e.getID() == MouseEvent.MOUSE_PRESSED ) {
-//			// Clear status bar
-//			ZETLoader.sendError( "" );
-//
-//			if( e.getButton() == MouseEvent.BUTTON1 )
-//				;
-//			else if( e.getButton() == MouseEvent.BUTTON3 )
-//				;
-//				// This method already contains the EditModeOld analysis
-//
-//		} else if( e.getID() == MouseEvent.MOUSE_RELEASED )
-//			// Complete the drag if you've begun one
-//			if( dragStart != null ) {
-//				// a) Dragged some polygons
-//				if( dragTargets != null ) {
-//					boolean trueDrag = false;
-//
-//					try {
-//						// Translate the drag targets into model coordinates
-//						// this must be done beforehand, because the GUI coords are
-//						// worthless if the floor offsets change while
-//						// setting the single points to their new locations
-//						// (which is almost guaranteed at the first drawn polygons)
-//						for( Point p : dragTargets )
-//							p.setLocation( CoordinateTools.translateToModel( p ) );
-//
-//						// compute the difference
-//						final int xOld = draggedPlanPoints.get( 0 ).x;
-//						final int yOld = draggedPlanPoints.get( 0 ).y;
-//						final int xNew = dragTargets.get( 0 ).x;
-//						final int yNew = dragTargets.get( 0 ).y;
-//						zcontrol.movePoints( draggedPlanPoints, xNew - xOld, yNew - yOld );
-//					} catch( Exception ex ) {
-//						ZETLoader.sendError( DefaultLoc.getSingleton().getString( "gui.message.ExceptionDuringDrag" ) );
-//						ex.printStackTrace( System.err );
-//					}
-//
-//					// The event that is thrown by setLocation triggers an automatic
-//					// redisplay of the JFloor and the drag mode is switched off during
-//					// this repaint redisplay (@see #displayFloor(Floor))
-//
-//					// Unfortunately this event is only thrown in case that at least one
-//					// point really changed it's position which might be false. In this case
-//					// we repaint manually to erase the dragTarget painting on screen
-//					if( !trueDrag ) {
-//						dragStart = null;
-//						dragTargets = null;
-//						dragStarts = null;
-//						draggedPlanPoints = null;
-//						repaint();
-//					}
-//
-//					// b) Dragged a selection rectangle
-//				} else if( !dragStart.equals( e.getPoint() ) ) {
-//					// No negative width/height allowed here, so work around it with Math
-//					Rectangle selectionArea = new Rectangle( Math.min( dragStart.x, mousePos.x ), Math.min( dragStart.y, mousePos.y ), Math.abs( mousePos.x - dragStart.x ), Math.abs( mousePos.y - dragStart.y ) );
-//					clearSelection();
-//
-//					for( Component room : getComponents() ) {
-//						// Search for contained rooms
-//						Rectangle room_bounds = ((JPolygon)room).getBounds();
-//						if( selectionArea.contains( room_bounds ) )
-//							selectPolygon( (JPolygon)room );
-//						else if( selectionArea.intersects( room_bounds ) )
-//							// If the room as a whole is not contained, then at
-//							// least some areas within it may be inside the selection
-//							// area
-//							// Note that we do not explicitly select the areas
-//							// when the full room is selected, because areas always
-//							// follow the movement of the room automatically.
-//							for( Component area : ((JPolygon)room).getComponents() ) {
-//								Rectangle area_bounds = ((JPolygon)area).getBounds();
-//								area_bounds.translate( room.getX(), room.getY() );
-//								if( selectionArea.contains( area_bounds ) )
-//									selectPolygon( (JPolygon)area );
-//							}
-//					}
-//				}
-//				dragStart = null;
-//				repaint(); // Clear selection shape
-//			}
-//
-//		// Enable all JPolygons which contain the given point to process this
-//		// event (Swing normally only informs the first JPolygon that it finds)
-//
-//		// Do not use e.isPopupTrigger() here - Won't work under linux
-//		if( e.getButton() == MouseEvent.BUTTON3 && !eventRedirectionGoingOn )
-//			try {
-//				eventRedirectionGoingOn = true;
-//				Room clickedOn = findParent( (Component) e.getSource() );
-//
-//				if( clickedOn != null ) {
-//					Component c = (Component)e.getSource();
-//					//for( Component c : getComponents() )
-//						if( (c instanceof JPolygon) && c.getBounds().contains( e.getPoint() ) ) {
-//							// Dispatch only to an area or to a room
-//							boolean area_popup = false;
-//
-//							Point translated = SwingUtilities.convertPoint( this, e.getPoint(), c );
-//							for( Component component : ((JPolygon) c).getComponents() ) {
-//								Point tempTrans = SwingUtilities.convertPoint( c, translated, component );
-//								MouseEvent areaEvent = new MouseEvent( component, e.getID(), e.getWhen(), e.getModifiers(), tempTrans.x, tempTrans.y, e.getClickCount(), e.isPopupTrigger() );
-//								if( component.contains( tempTrans ) && component instanceof JPolygon && ((JPolygon) component).isPopupTrigger( areaEvent ) ) {
-//									// Dispatch to the area
-//									component.dispatchEvent( areaEvent );
-//									area_popup = true;
-//									break;
-//								}
-//							}
-//
-//							// Dispatch to the room
-//							MouseEvent roomEvent = new MouseEvent( c, e.getID(), e.getWhen(), e.getModifiers(), translated.x, translated.y, e.getClickCount(), e.isPopupTrigger() );
-//							if( !area_popup && ((JPolygon) c).isPopupTrigger( roomEvent ) )
-//								c.dispatchEvent( roomEvent );
-//						}
-//				}
-//			} finally {
-//				eventRedirectionGoingOn = false;
-//			}
 	}
 
 	/** Mouse Motion Event Handler */
@@ -472,137 +234,7 @@ public class JFloor extends AbstractFloor implements EventListener<ZModelRoomEve
 	protected void processMouseMotionEvent( MouseEvent e ) {
 		editStatus.getCurrentHandler().mouseMove( e.getPoint() );
 		repaint();
-
-
-//		if( e.getID() == MouseEvent.MOUSE_DRAGGED ) {
-//			// Dragging only allowed in selection mode
-//			if( floorMode == FloorMode.Select ) {
-//				if( draggedPlanPoints == null ) {
-//
-//					if( selectedPoint != null ) {
-//						// we try to drag a point
-//					} else if( selectedEdge != null ) {
-//						// we try to drag an edge
-//						//Edge edge = (Edge)clickedOn;
-//						Edge edge = selectedEdge;
-//						// Drag whole edge
-//						draggedPlanPoints = edge.getPlanPoints();
-//
-//						// Get the affected barrier (if there is one)
-//						Barrier barrier = (edge.getAssociatedPolygon() instanceof Barrier) ? (Barrier)edge.getAssociatedPolygon() : null;
-//						if( barrier != null )
-//							for( Edge be : barrier )
-//								if( be != edge && be.equals( edge ) ) {
-//									draggedPlanPoints.addAll( be.getPlanPoints() );
-//									break;
-//								}
-//					} else if( selectedPolygons.size() > 0 ) {
-//						// we try to drag some polygons
-//						// Drag whole selection (>= 1 polygon)
-//						draggedPlanPoints = new LinkedList<>();
-//						for( JPolygon sel : selectedPolygons )
-//							draggedPlanPoints.addAll( ((PlanPolygon)sel.getPlanPolygon()).getPlanPoints() );
-//					}
-//					if( draggedPlanPoints != null ) {
-//						// Initialize DragTargets & Starts (on-screen coordinates)
-//						dragStarts = new ArrayList<>( draggedPlanPoints.size() );
-//						dragTargets = new ArrayList<>( draggedPlanPoints.size() );
-//						Point translated;
-//						for( PlanPoint p : draggedPlanPoints ) {
-//							translated = CoordinateTools.translateToScreen( p );
-//							dragStarts.add( translated );
-//							dragTargets.add( new Point( translated ) );
-//						}
-//					}
-//
-//					// create the dragged plan points
-////				// a) Start dragging, if a polygon was already selected
-////				if( clickedOn != null ) {
-////					dragStart = point;
-////
-////					if( clickedOn instanceof PlanPoint ) {
-////						PlanPoint dp = (PlanPoint)clickedOn;
-////
-////						// Drag single Point
-////						draggedPlanPoints = new ArrayList<>( 1 );
-////						draggedPlanPoints.add( dp );
-////
-////						// Get the affected barrier (if there is one)
-////						Barrier barrier = null;
-////						if( dp.getNextEdge() != null &&
-////										dp.getNextEdge().getAssociatedPolygon() instanceof Barrier )
-////							barrier = (Barrier)dp.getNextEdge().getAssociatedPolygon();
-////						else if( dp.getPreviousEdge() != null &&
-////										dp.getPreviousEdge().getAssociatedPolygon() instanceof Barrier )
-////							barrier = (Barrier)dp.getPreviousEdge().getAssociatedPolygon();
-////						if( barrier != null ) {
-////							Iterator<PlanPoint> iP = barrier.pointIterator( false );
-////							while( iP.hasNext() ) {
-////								PlanPoint p = iP.next();
-////								if( dp != p && p.equals( dp ) ) {
-////									draggedPlanPoints.add( p );
-////									break;
-////								}
-////							}
-////						}
-////					} else if( clickedOn instanceof Edge ) {
-////					} else if( clickedOn instanceof PlanPolygon ) {
-////
-//				}
-//			}
-//		}
-//
-//
-//		if( JZetWindow.isEditing() )
-//			return;
-//		if( e.getID() == MouseEvent.MOUSE_DRAGGED || e.getID() == MouseEvent.MOUSE_MOVED ) {
-//			// Grab focus to deliver new key events to this JFloor
-//			requestFocusInWindow();
-//
-//			// Mouse movements are reflected on the status bar (coordinates). In case
-//			// of painting rasterized, we must first find the next raster point.
-//			mousePos = e.getPoint();
-//			Point real;
-//			if( rasterizedPaintMode ) {
-//				newRasterizedPoint = getNextRasterPoint( mousePos );
-//				real = CoordinateTools.translateToModel( newRasterizedPoint );
-//			} else
-//				real = CoordinateTools.translateToModel( new Point( e.getX(), e.getY() ) );
-//			JZetWindow.sendMouse( real );
-//		}
-//		if( e.getID() == MouseEvent.MOUSE_DRAGGED )
-//			if( dragStart != null )
-//				// a) Drag a selected object
-//				if( dragTargets != null ) {
-//					// Mouse drags must update the displayed drag target icons but only if
-//					// there is really a dragging process going on (click on draggable object
-//					// must precede this method and initialize dragStart to != null)
-//					int x_offset = e.getX() - dragStart.x;
-//					int y_offset = e.getY() - dragStart.y;
-//
-//					Iterator<Point> itDS = dragStarts.iterator();
-//					Iterator<Point> itDT = dragTargets.iterator();
-//					Point p;
-//
-//					if( rasterizedPaintMode ) {
-//						int rasterWidth = CoordinateTools.translateToScreen( ZETProperties.getRasterSizeSnap() );
-//
-//						while( itDS.hasNext() && itDT.hasNext() ) {
-//							p = itDS.next();
-//							itDT.next().setLocation(
-//											(int)Math.round( (p.getX() + x_offset) / (double)rasterWidth ) * rasterWidth,
-//											(int)Math.round( (p.getY() + y_offset) / (double)rasterWidth ) * rasterWidth );
-//						}
-//					} else
-//						while( itDS.hasNext() && itDT.hasNext() ) {
-//							p = itDS.next();
-//							itDT.next().setLocation( p.getX() + x_offset, p.getY() + y_offset );
-//						}
-//				}
-//		repaint();
 	}
-
-
 
 	/** This method returns <b>all</b> JPolygons which are contained in "c"
 	 * and contain the specified point. In contrast to that, the API method
@@ -786,135 +418,6 @@ public class JFloor extends AbstractFloor implements EventListener<ZModelRoomEve
 		return planImage;
 	}
 
-//	/**
-//	 * Returns the currently selected polygons on the floor. These are
-//	 * {@code JPolygon}s which can contain any polygon, such as rooms, areas
-//	 * or any general {@link PlanPolygon}.
-//	 * @return the selected polygons
-//	 */
-//	public List<JPolygon> getSelectedPolygons() {
-//		return Collections.unmodifiableList( selectedPolygons );
-//	}
-//
-//	/**
-//	 * Returns the selected edge, if any is selected. Note, that this will always
-//	 * be {@code null}, if any polygon is selected.
-//	 * @return the selected edge
-//	 */
-//	public Edge getSelectedEdge() {
-//		return selectedEdge;
-//	}
-//
-//	/**
-//	 * Sets the raster mode active or inactive.
-//	 * @param rasterizedPaintMode indicates the status
-//	 */
-//	public void setRasterizedPaintMode( boolean rasterizedPaintMode ) {
-//		this.rasterizedPaintMode = rasterizedPaintMode;
-//	}
-//
-//	/** Searches for a JPolygon on screen that shows the given PlanPolygon
-//	 *
-//	 * @param poly the polygon
-//	 * @return The matching JPolygon or null if PlanPolygon is not shown by any JPolygon on this floor.
-//	 */
-//	public JPolygon getJPolygon( PlanPolygon<?> poly ) {
-//		for( Component c : getComponents() )
-//			// Room level
-//			if( c instanceof JPolygon ) {
-//				if( ((JPolygon)c).getPlanPolygon() == poly )
-//					return (JPolygon)c;
-//
-//				for( Component cx : ((JPolygon)c).getComponents() )
-//					// Area level
-//					if( cx instanceof JPolygon && ((JPolygon)cx).getPlanPolygon() == poly )
-//						return (JPolygon)cx;
-//			}
-//		return null;
-//	}
-//
-//	/**
-//	 * Sets the given Polygon to be the one and only
-//	 * selected polygon on the JFloor
-//	 * @param p the polygon
-//	 */
-//	public void setSelectedPolygon( JPolygon p ) {
-//		clearSelection();
-//		selectPolygon( p );
-//	}
-//
-//	/**
-//	 * Sets the given Polygon to be the one and only selected polygon on the
-//	 * {@code JFloor} if it is shown on this {@code JFloor} at all.
-//	 * @param p the polygon
-//	 */
-//	public void setSelectedPolygon( PlanPolygon<?> p ) {
-//		JPolygon jp = getJPolygon( p );
-//		if( jp != null )
-//			setSelectedPolygon( jp );
-//	}
-//
-//	/**
-//	 * Selects the given polygon on the screen
-//	 * @param p The polygon to be selected. May be null.
-//	 */
-//	public void selectPolygon( JPolygon p ) {
-//		if( p != null && !selectedPolygons.contains( p ) ) {
-//			selectedPolygons.add( p );
-//			p.setSelected( true );
-//			p.getParent().setComponentZOrder( p, 0 );
-//			fireActionEvent();
-//		}
-//	}
-//
-//	/** Selects the given polygon on the screen if it's on this JFloor
-//	 * @param p The polygon to be selected. May be null.
-//	 */
-//	public void selectPolygon( PlanPolygon<?> p ) {
-//		if( p != null ) {
-//			JPolygon jp = getJPolygon( p );
-//			if( jp != null )
-//				selectPolygon( jp );
-//		}
-//	}
-//
-//	/** De-selects the given polygon on the screen
-//	 * @param p The polygon to be unselected. May be null.
-//	 */
-//	public void unselectPolygon( JPolygon p ) {
-//		if( p != null ) {
-//			selectedPolygons.remove( p );
-//			p.setSelected( false );
-//			fireActionEvent();
-//		}
-//	}
-//
-//	/** De-selects the given polygon on the screen if it's on this JFloor
-//	 * @param p The polygon to be unselected. May be null.
-//	 */
-//	public void unselectPolygon( PlanPolygon<?> p ) {
-//		if( p != null ) {
-//			JPolygon jp = getJPolygon( p );
-//			if( jp != null )
-//				unselectPolygon( jp );
-//		}
-//	}
-//
-//	/** Efficiently De-selects all selected polygons on the screen
-//	 */
-//	public void clearSelection() {
-//		for( JPolygon p : selectedPolygons )
-//			p.setSelected( false );
-//		selectedPolygons.clear();
-//		if( selectedElementPolygon != null ) {
-//			selectedEdge = null;
-//			selectedPoint = null;
-//			selectedElementPolygon.setSelected( false );
-//			selectedElementPolygon = null;
-//		}
-//		fireActionEvent();
-//	}
-//
 	/** Show the given polygon to the user by scrolling until it is visible and
 	 * setting it as the selected polygon (clears the previous selection). If the
 	 * given polygon is not shown on this JFloor nothing will happen.
@@ -1080,438 +583,8 @@ public class JFloor extends AbstractFloor implements EventListener<ZModelRoomEve
 //				eventRedirectionGoingOn = false;
 //			}
 //	}
-//
-//	EditModeOld editMode = EditModeOld.Selection;
-//
-//	/**
-//	 * Sets the edit mode of the floor to a specific value, if the edit mode is
-//	 * forced to be set by the GUI. This will stop any active editing that is
-//	 * going on right now.
-//	 * @param editMode
-//	 */
-//	public void setEditMode( EditModeOld editMode ) {
-//		this.editMode = editMode;
-//		switch( editMode ) {
-//			case Selection:
-//				setFloorMode( FloorMode.Select );
-//				break;
-//			case AssignmentAreaCreation:
-//			case DelayAreaCreation:
-//			case EvacuationAreaCreation:
-//			case InaccessibleAreaCreation:
-//			case RoomCreation:
-//			case SaveAreaCreation:
-//			case StairAreaCreation:
-//			case TeleportAreaCreation:
-//				setFloorMode( FloorMode.RectangleStart );
-//				break;
-//			case AssignmentAreaCreationPointwise:
-//			case DelayAreaCreationPointwise:
-//			case EvacuationAreaCreationPointwise:
-//			case InaccessibleAreaCreationPointwise:
-//			case RoomCreationPointwise:
-//			case SaveAreaCreationPointwise:
-//			case StairAreaCreationPointwise:
-//			case TeleportAreaCreationPointwise:
-//				setFloorMode( FloorMode.PointWiseStart );
-//				break;
-//		}
-//	}
-//
-//	private void setFloorMode( FloorMode floorMode ) {
-//		this.floorMode = floorMode;
-//		switch( floorMode ) {
-//			case PointWiseActive:
-//			case RectangleStart:
-//				JPolygon.disablePopups = true;
-//				break;
-//			default:
-//				JPolygon.disablePopups = false;
-//		}
-//	}
-//
-//	private enum FloorMode {
-//		Select,
-//		PointWiseStart,
-//		PointWiseActive,
-//		RectangleStart,
-//		RectangleActive;
-//	}
-//	private FloorMode floorMode  = FloorMode.Select;
-//
-//	private void processPotentialDragStart( Point point ) {
-//		if( floorMode == FloorMode.Select ) {
-//			// Single click in selection mode. Select the object under the mouse pointer
-//			// This may be a polygon, an edge or even a point.
-//
-//			List<JPolygon> clickedPolygons = findAllPolygonsAt( JFloor.this, point );
-//
-//			// Get the new selection
-//			ListIterator<JPolygon> itPoly = clickedPolygons.listIterator();
-//			JPolygon toSelect = null;
-//
-//			// If none of the polygons that we clicked on is selected,
-//			// then just select the top-level one. If a JPolygon is selected
-//			// then switch the selection over to the next JPolygon in
-//			// the given order of polygons
-//			while( itPoly.hasNext() ) {
-//				toSelect = itPoly.next();
-//				if( toSelect.isSelected() )
-//					break; // stop as we found a marked polygon
-//			}
-//
-//			// We have clicked on an object, now find out if it was a polygon, edge or point and select it
-//			if( toSelect != null ) {
-//				// We are gonna select the polygon "toSelect"
-//				Object clickedOn = null;
-//				for( JPolygon sel : selectedPolygons ) {
-//					clickedOn = sel.findClickTargetAt( SwingUtilities.convertPoint( JFloor.this, point, sel ) );
-//					if( clickedOn != null )
-//						break;
-//				}
-//
-//				if( clickedOn == null ) {
-//					JPolygon sel = toSelect;
-//					clickedOn = sel.findClickTargetAt( SwingUtilities.convertPoint( JFloor.this, point, sel ) );
-//					if( clickedOn != null )
-//						if( clickedOn instanceof PlanPoint ) {
-//							PlanPoint dp = (PlanPoint) clickedOn;
-//
-//						} else if( clickedOn instanceof Edge ) {
-//							Edge edge = (Edge) clickedOn;
-//							clearSelection();
-//							selectedEdge = edge;
-//							selectedElementPolygon = toSelect;
-//							selectedElementPolygon.setSelectedEdge( edge );
-//							fireActionEvent();
-//						} else if( clickedOn instanceof PlanPolygon )
-//							// Clear old selection & Select new
-//							setSelectedPolygon( toSelect );
-//				}
-//			}
-//		}
-//	}
-//
-//	private void processLeftClick( Point point ) {
-//		if( floorMode == FloorMode.Select ) {
-//			// Single click in selection mode. Select the object under the mouse pointer
-//			// This may be a polygon, an edge or even a point.
-//
-//			List<JPolygon> clickedPolygons = findAllPolygonsAt( JFloor.this, point );
-//
-//			// Get the new selection
-//			ListIterator<JPolygon> itPoly = clickedPolygons.listIterator();
-//			JPolygon toSelect = null;
-//
-//			// If none of the polygons that we clicked on is selected,
-//			// then just select the top-level one. If a JPolygon is selected
-//			// then switch the selection over to the next JPolygon in
-//			// the given order of polygons
-//			while( itPoly.hasNext() ) {
-//				toSelect = itPoly.next();
-//
-//				if( toSelect.isSelected() ) {
-//					toSelect = itPoly.hasNext() ? itPoly.next() : clickedPolygons.get( 0 );
-//					break;
-//				}
-//			}
-//
-//			// We have clicked on an object, now find out if it was a polygon, edge or point and select it
-//			if( toSelect != null ) {
-//				// We are gonna select the polygon "toSelect"
-//				Object clickedOn = null;
-//				JPolygon sel = toSelect;
-//				clickedOn = sel.findClickTargetAt( SwingUtilities.convertPoint( JFloor.this, point, sel ) );
-//
-//
-//				if( clickedOn != null )
-//					if( clickedOn instanceof PlanPoint ) {
-//						PlanPoint dp = (PlanPoint) clickedOn;
-//
-//					} else if( clickedOn instanceof Edge ) {
-//						Edge edge = (Edge) clickedOn;
-//						clearSelection();
-//						selectedEdge = edge;
-//						selectedElementPolygon = toSelect;
-//						selectedElementPolygon.setSelectedEdge( edge );
-//						fireActionEvent();
-//					} else if( clickedOn instanceof PlanPolygon )
-//						// Clear old selection & Select new
-//						setSelectedPolygon( toSelect );
-//					else
-//						clearSelection();
-//
-//			} else
-//				clearSelection();
-//		} else if( floorMode == FloorMode.PointWiseStart ) {
-//			// the click starts a new polygon.
-//			// Click in non-selection mode: Start creating a polygon or
-//			// continue creating one if newPolygon is already != null
-//
-//			// Get the model points which we clicked on
-//			PlanPoint p2 = new PlanPoint( CoordinateTools.translateToModel( rasterizedPaintMode ? getNextRasterPoint( point ) : point ) );
-//
-//			// In case we are editing an area, check whether the clicks are valid
-//			// (within the containing polygon)
-//			Room parent = null;
-//			if( editMode.doesCreateSubpolygons() ) {
-//				//parent = findParent (findComponentAt (e.getPoint ()));
-//				parent = findParent( findRoomAt( point ) );
-//				if( parent == null ) {
-//					ZETLoader.sendError( DefaultLoc.getSingleton().getString( "gui.error.SelectARoom" ) );
-//					return;
-//				}
-//			}
-//			startNewPolygon( parent );
-//			zcontrol.addPoint( p2 );
-//			lastClick = point;
-//			setFloorMode( FloorMode.PointWiseActive );
-//		} else if( floorMode == FloorMode.PointWiseActive ) {
-//			PlanPoint p2 = new PlanPoint( CoordinateTools.translateToModel( rasterizedPaintMode ? getNextRasterPoint( point ) : point ) );
-//			Room parent = null;
-//			if( editMode.doesCreateSubpolygons() ) {
-//				//parent = findParent (findComponentAt (e.getPoint ()));
-//				parent = findParent( findRoomAt( point ) );
-//				if( parent == null ) {
-//					ZETLoader.sendError( DefaultLoc.getSingleton().getString( "gui.error.SelectARoom" ) );
-//					return;
-//				}
-//
-//				// Check whether we clicked into the same room as before
-//				if( !parent.equals( ((Area) zcontrol.latestPolygon()).getAssociatedRoom() ) ) {
-//					ZETLoader.sendError( DefaultLoc.getSingleton().getString( "gui.error.SelectCoordinatesInSameRoom" ) );
-//					return;
-//				}
-//			}
-//			PlanPoint p1 = new PlanPoint( CoordinateTools.translateToModel( rasterizedPaintMode ? getNextRasterPoint( lastClick ) : lastClick ) );
-//
-//			// check if the new point will close the polygon or the area will be zero
-//			if( zcontrol.latestPolygon().willClose( p1, p2 ) && zcontrol.latestPolygon().area() == 0 && !(zcontrol.latestPolygon() instanceof Barrier) ) {
-//				ZETLoader.sendError( DefaultLoc.getSingleton().getString( "gui.error.RectangleCreationZeroArea" ) );
-//				return;
-//			}
-//			lastClick = point;
-//
-//			if( zcontrol.addPoint( p2 ) ) {
-//				polygonFinishedHandler();
-//				setFloorMode( FloorMode.PointWiseStart );
-//				lastClick = null;
-//			}
-//
-//		} else if( floorMode == FloorMode.RectangleStart ) {
-//			// the click starts a new polygon.
-//			// Click in non-selection mode: Start creating a polygon or
-//			// continue creating one if newPolygon is already != null
-//
-//			// Get the model points which we clicked on
-//			PlanPoint p2 = new PlanPoint( CoordinateTools.translateToModel( rasterizedPaintMode ? getNextRasterPoint( point ) : point ) );
-//
-//			// In case we are editing an area, check whether the clicks are valid
-//			// (within the containing polygon)
-//			Room parent = null;
-//			if( editMode.doesCreateSubpolygons() ) {
-//				//parent = findParent (findComponentAt (e.getPoint ()));
-//				parent = findParent( findRoomAt( point ) );
-//				if( parent == null ) {
-//					ZETLoader.sendError( DefaultLoc.getSingleton().getString( "gui.error.SelectARoom" ) );
-//					return;
-//				}
-//			}
-//			startNewPolygon( parent );
-//			lastClick = point;
-//			setFloorMode( FloorMode.RectangleActive );
-//		} else if( floorMode == FloorMode.RectangleActive ) {
-//			// Get the model points which we clicked on
-//			PlanPoint p1 = new PlanPoint( CoordinateTools.translateToModel( rasterizedPaintMode ? getNextRasterPoint( lastClick ) : lastClick ) );
-//			PlanPoint p2 = new PlanPoint( CoordinateTools.translateToModel( rasterizedPaintMode ? getNextRasterPoint( point ) : point ) );
-//			if( lastClick.getX() == p2.getX() || lastClick.getY() == p2.getY() ) {
-//				ZETLoader.sendError( DefaultLoc.getSingleton().getString( "gui.error.RectangleCreationZeroArea" ) );
-//				return;
-//			}
-//			LinkedList<PlanPoint> points = new LinkedList<>();
-//			points.add( new PlanPoint( p1.x, p1.y ) );
-//			points.add( new PlanPoint( p1.x, p2.y ) );
-//			points.add( new PlanPoint( p2.x, p2.y ) );
-//			points.add( new PlanPoint( p2.x, p1.y ) );
-//			points.add( new PlanPoint( p1.x, p1.y ) );
-//			if( zcontrol.addPoints( points ) ) {
-//				polygonFinishedHandler();
-//				setFloorMode( FloorMode.RectangleStart );
-//				lastClick = null;
-//			}
-//		}
-////			// Double clicks select polygons
-////			// Single clicks start dragging when a polygon was selected
-////			if( e.getClickCount() == 1 ) {
-////				// Single click in Selection Mode:
-////				Object clickedOn = null;
-////				for( JPolygon sel : selectedPolygons ) {
-////					clickedOn = sel.findClickTargetAt(
-////									SwingUtilities.convertPoint( JFloor.this,
-////									point, sel ) );
-////					if( clickedOn != null )
-////						break;
-////				}
-////
-//
-////				} else //b) Start to select multiple polygons by dragging
-////					//	  a rectangle around them
-////					dragStart = point;
-////			} else {
-//		// Double click in SelectionMode: Select a polygon
-//
-//		//			}
-////		else if( editMode. == EditModeOld.StairAreaMarkLowerLevel ) {
-////			// The stair must be selected when we enter this code
-////			JPolygon stair = selectedPolygons.getFirst();
-////
-////			Object clickedOn = stair.findClickTargetAt( SwingUtilities.convertPoint( JFloor.this, point, stair ) );
-////			if( clickedOn instanceof Edge && ((Edge)clickedOn).getAssociatedPolygon() == stair.getPlanPolygon() ) {
-////				StairArea a = (StairArea)stair.getPlanPolygon();
-////				Edge ne = (Edge)clickedOn;
-////				try {
-////					if( a.getLowerLevelStart() == null )
-////						// Initial edge
-////						a.setLowerLevel( ne.getSource(), ne.getTarget() );
-////					else // Further edges
-////					if( ne.getSource() == a.getLowerLevelEnd() )
-////						a.setLowerLevel( a.getLowerLevelStart(), ne.getTarget() );
-////					else if( ne.getTarget() == a.getLowerLevelStart() )
-////						a.setLowerLevel( ne.getSource(), a.getLowerLevelEnd() );
-////					else
-////						ZETLoader.sendError( DefaultLoc.getSingleton().getString( "gui.error.ConnectedEdgeTrailsOnly" ) );
-////// TODO enable this again
-//////					if( !e.isControlDown() ) {
-//////						// Workaround to keep the previous edit mode setting
-//////						GUIOptionManager.setEditMode( GUIOptionManager.getPreviousEditMode() );
-//////
-//////						GUIOptionManager.setEditMode( EditModeOld.StairAreaMarkUpperLevel );
-//////						ZETLoader.sendMessage( DefaultLoc.getSingleton().getString( "gui.message.SelectUpperStairLevel" ) );
-//////					} else
-//////						// Refresh our select lower level message
-//////						ZETLoader.sendMessage( DefaultLoc.getSingleton().getString( "gui.message.SelectLowerStairLevel" ) );
-////				} catch( IllegalArgumentException ex ) {
-////					ZETLoader.sendError( ex.getLocalizedMessage() );
-////				}
-////			} else
-////				ZETLoader.sendError( DefaultLoc.getSingleton().getString( "gui.error.ClickOnStairEdge" ) );
-////		} else if( editMode. == EditModeOld.StairAreaMarkUpperLevel ) {
-////			// The stair must be selected when we enter this code
-////			JPolygon stair = selectedPolygons.getFirst();
-////
-////			Object clickedOn = stair.findClickTargetAt( SwingUtilities.convertPoint( JFloor.this, point, stair ) );
-////			if( clickedOn instanceof Edge && ((Edge)clickedOn).getAssociatedPolygon() == stair.getPlanPolygon() ) {
-////				StairArea a = (StairArea)stair.getPlanPolygon();
-////				Edge ne = (Edge)clickedOn;
-////				try {
-////					if( a.getUpperLevelStart() == null )
-////						// Initial edge
-////						a.setUpperLevel( ne.getSource(), ne.getTarget() );
-////					else // Further edges
-////					if( ne.getSource() == a.getUpperLevelEnd() )
-////						a.setUpperLevel( a.getUpperLevelStart(), ne.getTarget() );
-////					else if( ne.getTarget() == a.getUpperLevelStart() )
-////						a.setUpperLevel( ne.getSource(), a.getUpperLevelEnd() );
-////					else
-////						ZETLoader.sendError( DefaultLoc.getSingleton().getString( "gui.error.ConnectedEdgeTrailsOnly" ) );
-////// TODO enable this again
-//////					if( !e.isControlDown() ) {
-//////						GUIOptionManager.setEditMode( GUIOptionManager.getPreviousEditMode() );
-//////						ZETLoader.sendMessage( DefaultLoc.getSingleton().getString( "gui.message.StairSuccessfullyCreated" ) );
-//////					} else
-//////						// Refresh our select upper level message
-//////						ZETLoader.sendMessage( DefaultLoc.getSingleton().getString( "gui.message.SelectUpperStairLevel" ) );
-////				} catch( IllegalArgumentException ex ) {
-////					ZETLoader.sendError( ex.getLocalizedMessage() );
-////				}
-////			} else
-////				ZETLoader.sendError( DefaultLoc.getSingleton().getString( "gui.error.ClickOnStairEdge" ) );
-////		} else {
-//
-////			} else {
-////				if( editMode.getType() == EditModeOld.Type.CreationRectangled ) {
-//
-////			if( newPolygonClosed )
-////				polygonFinishedHandler();
-////			else {
-////				// Polygon not closed - prepare next point
-////				lastClick = point;
-////				lastPlanClick = p2;
-////			}
-////		}
-//	}
-//
-//	private void processRightClick( Point point ) {
-//		System.out.println( "PROCESS A RIGHT CLICK. Polygon handling is " + JPolygon.disablePopups );
-//		if( floorMode == FloorMode.PointWiseActive ) { // Create last Edge and close the polygon
-//			try {
-//				zcontrol.closePolygon();
-//				setFloorMode( FloorMode.PointWiseStart );
-//			} catch( IllegalStateException ex ) {
-//				if( ex.getMessage().equals( "No edges" ) )
-//					ZETLoader.sendError( DefaultLoc.getSingleton().getString( "gui.error.CreateAtLeastThreeEdges" ) );
-//				else if( ex.getMessage().equals( "Area zero" ) )
-//					ZETLoader.sendError( DefaultLoc.getSingleton().getString( "gui.error.RectangleCreationZeroArea" ) );
-//				else if( ex.getMessage().equals( "Three edges" ) )
-//					ZETLoader.sendError( DefaultLoc.getSingleton().getString( "gui.error.CreateAtLeastThreeEdges" ) );
-//				return;
-//			}
-//			polygonFinishedHandler();
-//		}
-//	}
-//
-//	private void startNewPolygon( PlanPolygon parent ) {
-//		// First create a new room / area
-//		try {
-//			if( editMode == EditModeOld.RoomCreation || editMode == EditModeOld.RoomCreationPointwise )
-//				zcontrol.createNewPolygon( editMode.getC(), myFloor );
-//			else if( editMode.getC() != null )
-//				zcontrol.createNewPolygon( editMode.getC(), parent );
-//		} catch( AssignmentException ex ) {
-//			if( ex.getState() == AssignmentException.State.NoAssignmentCreated )
-//				ZETLoader.sendError( DefaultLoc.getSingleton().getString( "gui.error.CreateAnAssignmentFirst" ) );
-//			else if( ex.getState() == AssignmentException.State.NoAssignmentSelected )
-//				ZETLoader.sendError( DefaultLoc.getSingleton().getString( "gui.error.SetCurrentAssignmentFirst" ) );
-//			else
-//				ZETLoader.sendError( "Unknown Error during polygon creation." );
-//		}
-//	}
-//
-//	/**
-//	 * <p>Tries to find the {@code ds.z.Room} that lies at a given point p.
-//	 * The point is assumed to be in the coordinate system of the floor and thus
-//	 * transformed to model coordinates first.</p>
-//	 * <p>The first room in which the point is contained is returned. </p>
-//	 * @param p the point
-//	 * @return the room containing the point or null
-//	 */
-//	private Component findRoomAt( Point p ) {
-//		Point model = CoordinateTools.translateToModel( p );
-//		Component found = null;
-//		for( Component c : this.getComponents() )
-//			if( c instanceof JPolygon ) {
-//				PlanPolygon poly = ((JPolygon)c).getPlanPolygon();
-//				if( poly.contains( new PlanPoint( model ) ) )
-//					found = c;
-//			}
-//		return found;
-//	}
-//
-//	/** Only internal: To be called after a polygon was created to clean up our data structures. */
-//	private void polygonFinishedHandler() {
-//		// Select the newly created polygon
-//		setSelectedPolygon( zcontrol.latestPolygon() );
-//
-//		newPolygon = null;
-//		lastClick = null;
-//		//lastPlanClick = null;
-//		if( editMode == EditModeOld.StairAreaCreationPointwise || editMode == EditModeOld.StairAreaCreation ) {
-//			GUIOptionManager.setEditMode( EditModeOld.StairAreaMarkLowerLevel );
-//			ZETLoader.sendMessage( DefaultLoc.getSingleton().getString( "gui.message.SelectLowerStairLevel" ) );
-//		}
-//	}
-//
-//	/** Mouse Motion Event Handler */
+
+	//	/** Mouse Motion Event Handler */
 //	@Override
 //	protected void processMouseMotionEvent( MouseEvent e ) {
 //		if( e.getID() == MouseEvent.MOUSE_DRAGGED ) {

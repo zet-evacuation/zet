@@ -294,16 +294,6 @@ public class GUIControl implements AlgorithmListener {
 //		}
 		//editor.updateAreaVisiblity();
 	}
-
-	public void setEditMode( EditModeOld editMode ) {
-		if( editview != null ) {
-			editview.setEditMode( editMode );
-			editToolBar.setEditSelectionSelected( false );
-			editToolBar.setEditPointwiseSelected( editMode.getType() == EditModeOld.Type.CreationPointwise );
-			editToolBar.setEditRectangledSelected( editMode.getType() == EditModeOld.Type.CreationRectangled );
-		}
-	}
-
 	/**
 	 * Exits the program.
 	 */
