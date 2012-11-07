@@ -32,15 +32,25 @@ public enum ZetObjectTypes {
 	Evacuation( EvacuationArea.class, GUIOptionManager.getEvacuationAreaColor() ),
 	Teleport( TeleportArea.class, GUIOptionManager.getTeleportAreaColor() );
 
-	private Class<?>c;
+	private Class<?>objectClass;
 	private Color editColor;
 
 	private ZetObjectTypes( Class<?> c, Color color ) {
-		this.c = c;
+		this.objectClass = c;
 		this.editColor = color;
 	}
 
 	public Color getEditorColor() {
 		return editColor;
 	}
+
+	public boolean isArea() {
+		return this == Room ? false : true;
+	}
+
+	public Class<?> getObjectClass() {
+		return objectClass;
+	}
+
+
 }

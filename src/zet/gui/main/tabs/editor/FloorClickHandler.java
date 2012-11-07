@@ -4,7 +4,10 @@
  */
 package zet.gui.main.tabs.editor;
 
+import ds.z.PlanPoint;
+import ds.z.Room;
 import ds.z.ZControl;
+import gui.editor.CoordinateTools;
 import java.awt.Component;
 import java.awt.Point;
 import java.util.Collections;
@@ -44,7 +47,12 @@ public abstract class FloorClickHandler {
 
 	}
 
-	public abstract void mouseMove( Point p );
+	public void mouseMove( Point p ) {
+		if( editStatus.isRasterizedPaintMode() )
+			editStatus.setPointerPosition( editStatus.getNextRasterPoint( p ) );
+		else
+			editStatus.setPointerPosition( p );
+	}
 
 	public EditStatus getEditStatus() {
 		return editStatus;
@@ -54,4 +62,36 @@ public abstract class FloorClickHandler {
 		return zcontrol;
 	}
 
+	protected Room getRoomUnderMouse( Point currentMouse, List<Component> components  ) {
+		for( Component c : components ) {
+			if( c instanceof JPolygon ) {
+				JPolygon poly = (JPolygon)c;
+				if( poly.getPlanPolygon() instanceof Room ) {
+					Room r = (Room)poly.getPlanPolygon();
+					Point mousePosition = CoordinateTools.translateToModel( currentMouse );
+					if( r.contains( new PlanPoint( mousePosition ) ) )
+						return r;
+				}
+			}
+		}
+		return null;
+	}
+
+	protected List<Room> getRoomsUnderMouse( Point currentMouse, List<Component> components  ) {
+		List<Room> ret = new LinkedList<>();
+		for( Component c : components ) {
+			if( c instanceof JPolygon ) {
+				JPolygon poly = (JPolygon)c;
+				if( poly.getPlanPolygon() instanceof Room ) {
+					Room r = (Room)poly.getPlanPolygon();
+					Point mousePosition = CoordinateTools.translateToModel( currentMouse );
+					if( r.contains( new PlanPoint( mousePosition ) ) )
+						ret.add( r );
+				}
+			}
+		}
+		return ret;
+	}
+
+	public void rightClick() { }
 }

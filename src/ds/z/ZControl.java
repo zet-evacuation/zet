@@ -21,10 +21,12 @@ import event.EventServer;
 import gui.ZETLoader;
 import java.io.File;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.ListIterator;
 import javax.swing.JOptionPane;
 import zet.gui.main.tabs.base.JPolygon;
 
@@ -210,7 +212,7 @@ public class ZControl {
 	 * @throws AssignmentException if an assignment area is to be created without any valid assignment
 	 * @throws IllegalArgumentException if object creation is already started or an invalid class was submitted
 	 */
-	public void createNewPolygon( Class polygonClass, Object parent ) throws AssignmentException, IllegalArgumentException {
+	public void createNewPolygon( Class<?> polygonClass, Object parent ) throws AssignmentException, IllegalArgumentException {
 		if( newPolygon != null )
 			throw new IllegalArgumentException( "Creation already started." );
 
@@ -281,18 +283,29 @@ public class ZControl {
 				newPolygon.newEdge( temp, point );
 		} else
 			newPolygon.addPointLast( point );
+
 		if( newPolygon.isClosed() ) {
 			if( newPolygon instanceof AssignmentArea )
 				((AssignmentArea)newPolygon).setEvacuees( Math.min( newPolygon.getMaxEvacuees(), ((AssignmentArea)newPolygon).getAssignmentType().getDefaultEvacuees() ) );
+			if( sendEvent )
+				throwEvent();
 			newPolygon = null;
 			temp = null;
-			if( sendEvent )
-				EventServer.getInstance().dispatchEvent( new ZModelChangedEvent() {} );
 			return true;
 		}
 		if( sendEvent )
-			EventServer.getInstance().dispatchEvent( new ZModelChangedEvent() {} );
+			throwEvent();
 		return false;
+	}
+
+	private void throwEvent() {
+		List<Room> affectedRooms = new LinkedList<>();
+		if( newPolygon instanceof Area<?> ) {
+			affectedRooms.add( ((Area<?>)newPolygon).getAssociatedRoom() );
+		} else
+			affectedRooms.add( (Room)newPolygon );
+		System.out.println( "New Event thrown" );
+		EventServer.getInstance().dispatchEvent( new ZModelRoomEvent( affectedRooms) );
 	}
 
 	public PlanPolygon closePolygon() {
@@ -311,8 +324,7 @@ public class ZControl {
 			} else
 				throw new IllegalStateException( "Three edges" );
 		}
-		// todo remove event server
-		EventServer.getInstance().dispatchEvent( new ZModelChangedEvent() {} );
+		throwEvent();
 		return latestPolygon;
 	}
 

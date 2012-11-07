@@ -1477,7 +1477,7 @@ public class JEditView extends AbstractSplitPropertyWindow<JFloorScrollPane<JFlo
 		// derregister old floor
 		EventServer.getInstance().unregisterListener( getFloor(), ZModelRoomEvent.class );
 		JFloor floor = new JFloor( editStatus, guiControl, projectControl.getProject().getBuildingPlan().getFloors().get( 1 ) );
-		editStatus.controlFloor( floor );
+		editStatus.controlFloor( floor, projectControl.getProject().getBuildingPlan().getFloors().get( 1 ) );
 		getLeftPanel().setMainComponent( floor );
 		EventServer.getInstance().registerListener( getFloor(), ZModelRoomEvent.class );
 

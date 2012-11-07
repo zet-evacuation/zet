@@ -14,7 +14,6 @@ import gui.editor.CoordinateTools;
 import java.awt.Component;
 import java.awt.Point;
 import java.awt.Rectangle;
-import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.ListIterator;
@@ -135,7 +134,6 @@ public class FloorClickSelectionHandler extends FloorClickHandler {
 			getEditStatus().setMouseSelecting( false );
 		} else if( dragStarted ) {
 			if( getEditStatus().getSelectedPolygons().size() > 0 ) {
-				System.out.println( "We have been dragging..." );
 				// we try to drag some polygons
 				// Drag whole selection (>= 1 polygon)
 				dragFinished( p, components );
@@ -155,12 +153,8 @@ public class FloorClickSelectionHandler extends FloorClickHandler {
 				getEditStatus().setMouseSelecting( true );
 				getEditStatus().setPointerPosition( p );
 			}
-		} else {
-			if( getEditStatus().isRasterizedPaintMode() )
-				getEditStatus().setPointerPosition( getEditStatus().getNextRasterPoint( p ) );
-			else
-				getEditStatus().setPointerPosition( p );
-		}
+		} else
+			super.mouseMove( p );
 	}
 
 	private Point dragOffset( Point currentMouse ) {
@@ -172,9 +166,6 @@ public class FloorClickSelectionHandler extends FloorClickHandler {
 			return new Point( currentMouse.x - getEditStatus().getLastClick().x, currentMouse.y - getEditStatus().getLastClick().y );
 	}
 
-	ArrayList<Point> dragStarts;
-	ArrayList<Point> dragTargets;
-
 	private void dragOngoing( Point currentMouse ) {
 		Point dragOffset = dragOffset( currentMouse );
 
@@ -184,88 +175,6 @@ public class FloorClickSelectionHandler extends FloorClickHandler {
 				sel.setDragged( true );
 				sel.setDragOffset( dragOffset );
 			}
-
-		// set temp-drag-points to editStatus
-//				if( draggedPlanPoints == null ) {
-//
-////					if( selectedPoint != null ) {
-////						// we try to drag a point
-////					} else if( selectedEdge != null ) {
-////						// we try to drag an edge
-////						//Edge edge = (Edge)clickedOn;
-////						Edge edge = selectedEdge;
-////						// Drag whole edge
-////						draggedPlanPoints = edge.getPlanPoints();
-////
-////						// Get the affected barrier (if there is one)
-////						Barrier barrier = (edge.getAssociatedPolygon() instanceof Barrier) ? (Barrier)edge.getAssociatedPolygon() : null;
-////						if( barrier != null )
-////							for( Edge be : barrier )
-////								if( be != edge && be.equals( edge ) ) {
-////									draggedPlanPoints.addAll( be.getPlanPoints() );
-////									break;
-////								}
-////					} else
-//
-//					//	if( selectedPolygons.size() > 0 ) {
-//					if( getEditStatus().getSelectedPolygons().size() > 0 ) {
-//						// we try to drag some polygons
-//						// Drag whole selection (>= 1 polygon)
-//						draggedPlanPoints = new LinkedList<>();
-//						for( JPolygon sel : getEditStatus().getSelectedPolygons() ) {
-//							sel.setDragged( true );
-//							draggedPlanPoints.addAll( ((PlanPolygon)sel.getPlanPolygon()).getPlanPoints() );
-//						}
-//					}
-//					if( draggedPlanPoints != null ) {
-//						// Initialize DragTargets & Starts (on-screen coordinates)
-//						dragStarts = new ArrayList<>( draggedPlanPoints.size() );
-//						dragTargets = new ArrayList<>( draggedPlanPoints.size() );
-//						Point translated;
-//						for( PlanPoint p : draggedPlanPoints ) {
-//							translated = CoordinateTools.translateToScreen( p );
-//							dragStarts.add( translated );
-//							dragTargets.add( new Point( translated ) );
-//						}
-//
-//					}
-//
-//					// create the dragged plan points
-////				// a) Start dragging, if a polygon was already selected
-////				if( clickedOn != null ) {
-////					dragStart = point;
-////
-////					if( clickedOn instanceof PlanPoint ) {
-////						PlanPoint dp = (PlanPoint)clickedOn;
-////
-////						// Drag single Point
-////						draggedPlanPoints = new ArrayList<>( 1 );
-////						draggedPlanPoints.add( dp );
-////
-////						// Get the affected barrier (if there is one)
-////						Barrier barrier = null;
-////						if( dp.getNextEdge() != null &&
-////										dp.getNextEdge().getAssociatedPolygon() instanceof Barrier )
-////							barrier = (Barrier)dp.getNextEdge().getAssociatedPolygon();
-////						else if( dp.getPreviousEdge() != null &&
-////										dp.getPreviousEdge().getAssociatedPolygon() instanceof Barrier )
-////							barrier = (Barrier)dp.getPreviousEdge().getAssociatedPolygon();
-////						if( barrier != null ) {
-////							Iterator<PlanPoint> iP = barrier.pointIterator( false );
-////							while( iP.hasNext() ) {
-////								PlanPoint p = iP.next();
-////								if( dp != p && p.equals( dp ) ) {
-////									draggedPlanPoints.add( p );
-////									break;
-////								}
-////							}
-////						}
-////					} else if( clickedOn instanceof Edge ) {
-////					} else if( clickedOn instanceof PlanPolygon ) {
-////
-//				}
-////			}
-//	}
 	}
 
 	private void dragFinished( Point currentMouse, List<Component> components ) {
@@ -285,8 +194,6 @@ public class FloorClickSelectionHandler extends FloorClickHandler {
 		}
 		if( areas != null ) {
 			Room r = getRoomUnderMouse( currentMouse, components );
-			if( r != null )
-				System.out.println( "New room will be " + r );
 			if( r != null ) {
 				getZControl().moveAreas( areas, translated.x, translated.y, r );
 				for( JPolygon sel : getEditStatus().getSelectedPolygons() )
@@ -304,20 +211,5 @@ public class FloorClickSelectionHandler extends FloorClickHandler {
 
 		for( JPolygon sel : getEditStatus().getSelectedPolygons() )
 			sel.setDragged( false );
-	}
-
-	private Room getRoomUnderMouse( Point currentMouse, List<Component> components  ) {
-		for( Component c : components ) {
-			if( c instanceof JPolygon ) {
-				JPolygon poly = (JPolygon)c;
-				if( poly.getPlanPolygon() instanceof Room ) {
-					Room r = (Room)poly.getPlanPolygon();
-					Point mousePosition = CoordinateTools.translateToModel( currentMouse );
-					if( r.contains( new PlanPoint( mousePosition ) ) )
-						return r;
-				}
-			}
-		}
-		return null;
 	}
 }
