@@ -19,8 +19,6 @@
  */
 package de.tu_berlin.math.coga.common.util;
 
-import de.tu_berlin.math.coga.datastructure.simulation.cellularautomaton.Direction;
-
 /**
  * This enumerates directions on an integral 2 dimensional room such as a
  * raster. Each direction has offsets for the {@code x} and {@code y}-direction
@@ -30,7 +28,7 @@ import de.tu_berlin.math.coga.datastructure.simulation.cellularautomaton.Directi
  * lies in the up-most, Left-most corner.
  * @author Daniel Plümpe, Jan-Philipp Kappmeier
  */
-public enum Direction8 implements Direction {
+public enum Direction8 {
 	/** The Left direction. */
 	Left( -1, 0, 6 ),
 	/** The Right direction. */
@@ -127,8 +125,14 @@ public enum Direction8 implements Direction {
 	}
 
 	public double distance() {
-		if( xOffset == 0 || yOffset == 0 )
-			return 1;
-		else return Math.sqrt( 2 );
+		switch( id ) {
+			case 0:
+			case 2:
+			case 4:
+			case 6:
+				return 1;
+			default:
+				return Math.sqrt( 2 );
+		}
 	}
 }

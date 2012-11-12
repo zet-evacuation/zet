@@ -100,11 +100,11 @@ public class BestResponseAssignmentTask extends AssignmentTask {
 		start = System.currentTimeMillis();
 		ca2.startRecording();
 
-		caAlgo.initialize();
+		//caAlgo.initialize();
 
 		// perform initial best response dynamics exit selection
 		BestResponseDynamics brd = new BestResponseDynamics();
-		brd.computeAssignmentBasedOnBestResponseDynamics( caAlgo.getCellularAutomaton(), caAlgo.getIndividuals() );
+		//brd.computeAssignmentBasedOnBestResponseDynamics( caAlgo.getCellularAutomaton(), caAlgo.getIndividuals() );
 
 
 		caAlgo.run();	// hier wird initialisiert
@@ -120,7 +120,7 @@ public class BestResponseAssignmentTask extends AssignmentTask {
 		//res.setCellularAutomatonVisualization( runNumber, new CAVisualizationResults( VisualResultsRecorder.getInstance().getRecording(), ZToCAConverter.getInstance().getLatestMapping() ) );
 
 		// Gather median information
-		median.put( new Integer( caAlgo.getCellularAutomaton().getTimeStep() ), runNumber );
+		//median.put( new Integer( caAlgo. .getCellularAutomaton().getTimeStep() ), runNumber );
 
 		// Forget the used batch result entry. This is necessary in case that the batch entries
 		// are stored on disk. Then this reference will inhibit the deletion of the batch result entry
