@@ -83,13 +83,13 @@ public class RasterSquare {
 		this.raster = raster;
 		this.p = p;
 
-		ArrayList<PlanPoint> squareList = new ArrayList<PlanPoint>();
+		ArrayList<PlanPoint> squareList = new ArrayList<>();
 		squareList.add( new PlanPoint( x, y ) );
 		squareList.add( new PlanPoint( x + raster, y ) );
 		squareList.add( new PlanPoint( x + raster, y + raster ) );
 		squareList.add( new PlanPoint( x, y + raster ) );
 
-		square = new PlanPolygon<Edge>( Edge.class );
+		square = new PlanPolygon<>( Edge.class );
 		square.defineByPoints( squareList );
 
 		stairPotential = -1;

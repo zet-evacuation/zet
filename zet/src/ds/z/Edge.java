@@ -290,9 +290,9 @@ public class Edge implements Serializable {
 	 * @throws java.lang.IllegalArgumentException
 	 */
 	public PlanPoint getOther( PlanPoint p ) throws IllegalArgumentException {
-		if( p == source || p.equals( source ) )
+		if( p == source || p.matches( source ) )
 			return getTarget();
-		if( p == target || p.equals( target ) )
+		if( p == target || p.matches( target ) )
 			return getSource();
 		throw new IllegalArgumentException( ZLocalization.getSingleton().getString( "ds.z.NoCoindidesException" ) );
 	}
