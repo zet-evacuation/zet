@@ -94,6 +94,7 @@ import zet.gui.main.tabs.JVisualizationView;
 import zet.gui.main.tabs.base.RasterPaintStyle;
 import zet.gui.main.tabs.editor.EditModeOld;
 import zet.gui.main.tabs.editor.EditStatus;
+import zet.gui.main.tabs.editor.SelectedElements;
 import zet.gui.main.tabs.visualization.ZETVisualization;
 import zet.gui.main.toolbar.JBatchToolBar;
 import zet.gui.main.toolbar.JEditToolbar;
@@ -144,6 +145,7 @@ public class GUIControl implements AlgorithmListener {
 	private PolygonPopup polygonPopup;
 	private EdgePopup edgePopup;
 	private PointPopup pointPopup;
+	SelectedElements selection = new SelectedElements();
 
 	/**
 	 *
@@ -166,7 +168,8 @@ public class GUIControl implements AlgorithmListener {
 		edgePopup = new EdgePopup( this );
 		pointPopup = new PointPopup( this );
 
-		EditStatus editStatus = new EditStatus( zcontrol );
+
+		EditStatus editStatus = new EditStatus( zcontrol, selection );
 
 		// Tool bars
 		editToolBar = registerNewComponent( new JEditToolbar( this, editStatus ) );
@@ -179,7 +182,8 @@ public class GUIControl implements AlgorithmListener {
 		JLogToolBar toolBarLog = registerNewComponent( new JLogToolBar( this ) );
 
 		// Components in tabs
-		editview = registerNewComponent( new JEditView( editStatus, this ) );
+		editview = registerNewComponent( new JEditView( editStatus, this, selection ) );
+		selection.addObserver( editview );
 		caView = registerNewComponent( new JQuickVisualizationView( this ) );
 		JComponent batchView = new JBatch( this );
 		visualizationView = registerNewComponent( new JVisualizationView( this ) );
@@ -725,7 +729,6 @@ public class GUIControl implements AlgorithmListener {
 		editview.update();
 		caView.update();
 
-		editview.setEditMode( EditModeOld.Selection );
 		setZoomFactor( 0.04d );
 
 		// Set up the last camera position
@@ -1037,7 +1040,7 @@ public class GUIControl implements AlgorithmListener {
 	}
 
 	public void setRasterizedPaintMode( boolean selected ) {
-//		editview.getFloor().setRasterizedPaintMode( selected );
+//		editview.getFloor().setRasterizedPaintMode( select );
 	}
 
 	public void setRasterPaintStyle( RasterPaintStyle rasterPaintStyle ) {

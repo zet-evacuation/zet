@@ -25,6 +25,8 @@ public class EditStatus {
 	ZetObjectTypes nextZetObject = ZetObjectTypes.Room;
 	int rasterSnap = 400;
 
+	final SelectedElements selection;
+
 	EditMode editMode = EditMode.Selection;
 	/** Decides, whether the creation of an zet object has been started and not finished yet. */
 	boolean creationStarted;
@@ -36,13 +38,13 @@ public class EditStatus {
 	FloorClickHandler current;
 	private Point lastClick;
 
-	List<JPolygon> selectedPolygons = new LinkedList<>();
 	private boolean mouseSelecting;
 	private ZetObjectTypes zetObjectType;
 	private Floor floor;
 
-	public EditStatus( ZControl zcontrol ) {
+	public EditStatus( ZControl zcontrol, SelectedElements selection ) {
 		this.zcontrol = zcontrol;
+		this.selection = selection;
 	}
 
 	public EditMode getEditMode() {
@@ -83,24 +85,14 @@ public class EditStatus {
 		return current == null ? current = new FloorClickSelectionHandler( this, zcontrol ) : current;
 	}
 
-	/** Efficiently De-selects all selected polygons on the screen
+	/** Efficiently De-selects all select polygons on the screen
 	 */
 	void clearSelection() {
-		for( JPolygon p : selectedPolygons )
-			p.setSelected( false );
-		selectedPolygons.clear();
-		//if( selectedElementPolygon != null ) {
-		//	selectedEdge = null;
-		//	selectedPoint = null;
-		//	selectedElementPolygon.setSelected( false );
-		//	selectedElementPolygon = null;
-		//}
-		//fireActionEvent();
+		selection.clear();
 	}
 
 	void selectPolygon( JPolygon toSelect ) {
-		toSelect.setSelected( true );
-		selectedPolygons.add( toSelect );
+		selection.select( toSelect );
 	}
 
 	void setPointerPosition( Point point ) {
@@ -115,7 +107,7 @@ public class EditStatus {
 	}
 
 	List<JPolygon> getSelectedPolygons() {
-		return Collections.unmodifiableList( selectedPolygons );
+		return selection.getSelectedList();
 	}
 
 	/**
@@ -158,5 +150,13 @@ public class EditStatus {
 
 	public void setZetObjectType( ZetObjectTypes zetObjectType ) {
 		this.zetObjectType = zetObjectType;
+	}
+
+	void addPolygon( JPolygon jPolygon ) {
+		selection.add( jPolygon );
+	}
+
+	void addPolygon( List<JPolygon> toAdd ) {
+		selection.add( toAdd );
 	}
 }
