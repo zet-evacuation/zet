@@ -188,7 +188,7 @@ public class PlanPolygon<T extends Edge> implements Iterable<T> {
 		for( int i = 1; i < points.size(); i++ ) {
 			PlanPoint secondPoint = points.get( i );
 			// Don't create zero-length edges
-			if( secondPoint.equals( firstPoint ) )
+			if( secondPoint.matches( firstPoint ) )
 				continue;
 
 			createdEdges++;
@@ -1110,7 +1110,7 @@ public class PlanPolygon<T extends Edge> implements Iterable<T> {
 	 * @return true if the point is start or end point of the polygon
 	 */
 	public static boolean fits( PlanPoint p, PlanPolygon<?> poly ) {
-		return p.equals( poly.getStart() ) || p.equals( poly.getEnd() );
+		return p.equals( poly.getStart() ) || p.matches( poly.getEnd() );
 	}
 
 	/**

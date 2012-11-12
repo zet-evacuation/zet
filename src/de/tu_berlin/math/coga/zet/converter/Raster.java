@@ -23,6 +23,7 @@ package de.tu_berlin.math.coga.zet.converter;
 import de.tu_berlin.math.coga.common.localization.DefaultLoc;
 import ds.z.PlanPolygon;
 import java.lang.reflect.Array;
+import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -153,7 +154,7 @@ public class Raster<T extends RasterSquare, P extends PlanPolygon> {
 	public int getRowCount() {
 		return height;
 	}
-	
+
 	/**
 	 * Returns whether (x,y) is a valid position in the raster,
 	 * i.e. whether the square at row x and column y exists.
@@ -195,9 +196,9 @@ public class Raster<T extends RasterSquare, P extends PlanPolygon> {
 		// Calculate Array width and height (TODO better calculation to avoid +1 in some cases)
 		//width = (int) Math.floor( p.getWidth() / raster ) + 1;
 		//height = (int) Math.floor( p.getHeight() / raster ) + 1;
-		
+
 		//p.recomputeBounds();
-		
+
 		width = (int) Math.ceil( p.getWidth() / raster );
 		height = (int) Math.ceil(p.getHeight() / raster) ;
 
@@ -222,7 +223,7 @@ public class Raster<T extends RasterSquare, P extends PlanPolygon> {
 					System.err.println("InvocationTargetException in Raster.java at creation of squares in rasterize().");
 				}
 				rasterSquares[i][j] = square;
-				
+
 				if( square.getIntersectType() != RasterSquare.FieldIntersectType.Outside ) {
 					insideSquares.add( square );
 				}
@@ -270,7 +271,7 @@ public class Raster<T extends RasterSquare, P extends PlanPolygon> {
 	}
 
 	/**
-	 * Returns the {@code x}-coordinate of the upper left corner of this raster in the global coordinate system. 
+	 * Returns the {@code x}-coordinate of the upper left corner of this raster in the global coordinate system.
 	 * @return the {@code x}-coordinate of the upper left corner of this raster in the global coordinate system.
 	 */
 	public int getXOffset() {
@@ -278,7 +279,7 @@ public class Raster<T extends RasterSquare, P extends PlanPolygon> {
 	}
 
 	/**
-	 * Returns the {@code y}-coordinate of the upper left corner of this raster in the global coordinate system. 
+	 * Returns the {@code y}-coordinate of the upper left corner of this raster in the global coordinate system.
 	 * @return the {@code y}-coordinate of the upper left corner of this raster in the global coordinate system.
 	 */
 	public int getYOffset() {
