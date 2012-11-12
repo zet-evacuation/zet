@@ -32,4 +32,11 @@ public class IdentifiableIntegerObjectMapping<D extends Identifiable, R> {
         }
         mapping.get(identifiableObject).set(time, value);
     }
+
+    @Override
+    public String toString() {
+        StringBuilder builder = new StringBuilder();
+        builder.append(mapping.toString());
+        return builder.toString();
+    }
 }

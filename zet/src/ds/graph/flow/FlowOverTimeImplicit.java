@@ -47,6 +47,7 @@ public class FlowOverTimeImplicit extends FlowOverTimeInterface {
 		log.fine( "Value of the flow:" );
 		int sum = 0;
 		for( FlowOverTimePath p : pathBased ) {
+                        System.out.println(p.getRate() + ": " + p);
 			sum += p.getRate();
 		}
 		log.fine( Integer.toString( sum ) );
