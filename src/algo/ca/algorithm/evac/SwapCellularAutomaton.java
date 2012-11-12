@@ -40,13 +40,13 @@ public class SwapCellularAutomaton extends EvacuationCellularAutomatonRandom {
 	}
 
 	/**
-	 * 
+	 *
 	 */
-	@Override
+	//@Override
 	protected void executeStep() {
-		if( !isInitialized() ) {
-			throw new IllegalArgumentException( DefaultLoc.getSingleton().getString( "algo.ca.NotInitializedException" ) );
-		}
+		//if( !isInitialized() ) {
+		//	throw new IllegalArgumentException( DefaultLoc.getSingleton().getString( "algo.ca.NotInitializedException" ) );
+		//}
 		getProblem().eca.nextTimeStep();
 
 		// Suche movement rule und setze auf not direct action
