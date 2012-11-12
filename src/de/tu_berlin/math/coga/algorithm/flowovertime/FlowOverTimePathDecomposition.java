@@ -67,6 +67,10 @@ public class FlowOverTimePathDecomposition extends Algorithm<ImplicitTimeExpande
             // Trace back a path from the sink to the super source
             path = constructPath(preceedingEdges, arrivalTimes.get(network.getProblem().getSink()));
             // If a path has been found...
+            //System.out.println("Supersource: " + superSourceFlow);
+            //System.out.println("Flow: " + flow);
+            //System.out.println(preceedingEdges);
+            //System.out.println(arrivalTimes);
             if (path != null) {
                 // Subtract as much flow as possible from the path
                 subtractPath(path);
@@ -107,7 +111,7 @@ public class FlowOverTimePathDecomposition extends Algorithm<ImplicitTimeExpande
                 continue;
             }
             // Iterate over its outgoing edges
-            for (Edge edge : network.outgoingEdges(node)) {
+            for (Edge edge : network.outgoingEdges(node)) {                
                 // We are only interested in flow carrying edges
                 if (network.isReverseEdge(edge)) {
                     continue;
@@ -127,7 +131,7 @@ public class FlowOverTimePathDecomposition extends Algorithm<ImplicitTimeExpande
                 }
                 // If need to wait to able to use this edge, there must be flow
                 // waiting in this edge.
-                if (time > distance && waitingFlow.minimum(node, distance, time) == 0) {
+                if (time > distance && waitingFlow.minimum(node, distance, time) == 0 && !isSource(node)) {
                     continue;
                 }
                 // We update the distances in the queue and the bookkeeping.
@@ -138,6 +142,10 @@ public class FlowOverTimePathDecomposition extends Algorithm<ImplicitTimeExpande
                 }
             }
         }
+    }
+
+    protected boolean isSource(Node node) {
+        return (network.superSource().equals(node));
     }
 
     /**
@@ -178,8 +186,13 @@ public class FlowOverTimePathDecomposition extends Algorithm<ImplicitTimeExpande
     protected void subtractPath(FlowOverTimePath path) {
         // Determine the bottleneck capacity
         int capacity = Integer.MAX_VALUE;
+        boolean first = true;
         for (FlowOverTimeEdge edge : path) {
-            capacity = Math.min(waitingFlow.minimum(edge.getEdge().start(), edge.getTime() - edge.getDelay(), edge.getTime()), capacity);
+            if (!first) {
+                capacity = Math.min(waitingFlow.minimum(edge.getEdge().start(), edge.getTime() - edge.getDelay(), edge.getTime()), capacity);
+            } else {
+                first = false;
+            }
             if (edge.getEdge().start() == network.superSource() && network.hasArtificialSuperSource()) {
                 capacity = Math.min(superSourceFlow.get(edge.getEdge()), capacity);
             } else if (edge.getEdge().isLoop()) {                
@@ -188,8 +201,13 @@ public class FlowOverTimePathDecomposition extends Algorithm<ImplicitTimeExpande
             }
         }
         // Subtract the bottleneck flow value from the path
+        first = true;
         for (FlowOverTimeEdge edge : path) {
-            waitingFlow.decrease(edge.getEdge().start(), edge.getTime() - edge.getDelay(), edge.getTime(), capacity);
+            if (!first) {
+                waitingFlow.decrease(edge.getEdge().start(), edge.getTime() - edge.getDelay(), edge.getTime(), capacity);
+            } else {
+                first = false;
+            }
             if (edge.getEdge().start() == network.superSource() && network.hasArtificialSuperSource()) {
                 superSourceFlow.decrease(edge.getEdge(), capacity);
             } else if (edge.getEdge().isLoop()) {                
