@@ -93,7 +93,6 @@ public class FloorClickSelectionHandler extends FloorClickHandler {
 					} else if( clickedOn instanceof PlanPolygon ) {
 						// Clear old selection & Select new
 						//setSelectedPolygon( toSelect );
-						getEditStatus().clearSelection();
 						getEditStatus().selectPolygon( toSelect );
 					} else
 						getEditStatus().clearSelection();
@@ -112,11 +111,13 @@ public class FloorClickSelectionHandler extends FloorClickHandler {
 					Rectangle selectionArea = new Rectangle( Math.min( getEditStatus().getLastClick().x, getEditStatus().getHighlightedPosition().x ), Math.min( getEditStatus().getLastClick().y, getEditStatus().getHighlightedPosition().y ), Math.abs( getEditStatus().getHighlightedPosition().x - getEditStatus().getLastClick().x ), Math.abs( getEditStatus().getHighlightedPosition().y - getEditStatus().getLastClick().y ) );
 					getEditStatus().clearSelection();
 
+					List<JPolygon> toAdd = new LinkedList<>();
 					for( Component room : components ) {
 						// Search for contained rooms
 						Rectangle room_bounds = ((JPolygon)room).getBounds();
 						if( selectionArea.contains( room_bounds ) )
-							getEditStatus().selectPolygon( (JPolygon)room );
+							//getEditStatus().addPolygon( (JPolygon)room );
+							toAdd.add( (JPolygon)room );
 						else if( selectionArea.intersects( room_bounds ) )
 							// If the room as a whole is not contained, then at
 							// least some areas within it may be inside the selection
@@ -128,9 +129,11 @@ public class FloorClickSelectionHandler extends FloorClickHandler {
 								Rectangle area_bounds = ((JPolygon)area).getBounds();
 								area_bounds.translate( room.getX(), room.getY() );
 								if( selectionArea.contains( area_bounds ) )
-									getEditStatus().selectPolygon( (JPolygon)area );
+									//getEditStatus().addPolygon( (JPolygon)area );
+									toAdd.add( (JPolygon)area );
 							}
 					}
+					getEditStatus().addPolygon( toAdd );
 			getEditStatus().setMouseSelecting( false );
 		} else if( dragStarted ) {
 			if( getEditStatus().getSelectedPolygons().size() > 0 ) {

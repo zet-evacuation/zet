@@ -21,19 +21,20 @@
 package zet.gui.components.model;
 
 import ds.z.Assignment;
-import ds.z.AssignmentArea;
 import ds.z.AssignmentType;
 import ds.z.ZControl;
-import zet.gui.main.tabs.editor.JFloor;
-import zet.gui.main.tabs.base.JPolygon;
+import java.io.IOException;
 import javax.swing.DefaultComboBoxModel;
+import javax.swing.JComboBox;
+import zet.gui.main.tabs.editor.JFloor;
 
 /**
  * This class serves as a model for the {@link JComboBox} that contains the
  * current assignment types.
  * @author Jan-Philipp Kappmeier
  */
-public class AssignmentTypeComboBoxModel extends DefaultComboBoxModel {
+@SuppressWarnings( "serial" )
+public class AssignmentTypeComboBoxModel extends DefaultComboBoxModel<AssignmentType> {
 	Assignment oldAssignment = null;
 	ZControl zcontrol;
 	boolean itemChange = false;
@@ -99,5 +100,9 @@ public class AssignmentTypeComboBoxModel extends DefaultComboBoxModel {
 
 	public void setFloorPanel( JFloor floorPanel ) {
 		this.floorPanel = floorPanel;
+	}
+	/** Prohibits serialization. */
+	private synchronized void writeObject( java.io.ObjectOutputStream s ) throws IOException {
+		throw new UnsupportedOperationException( "Serialization not supported" );
 	}
 }

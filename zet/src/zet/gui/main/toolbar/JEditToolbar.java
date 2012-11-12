@@ -292,8 +292,8 @@ public class JEditToolbar extends JToolBar implements ActionListener, PopupMenuL
 		try {
 			double val = nf.parse( text ).doubleValue();
 			if( val < 1 && percent == false )
-				val = val * 100;
-			val = val / 2.5d;
+				val *= 100;
+			val /= 2.5d;
 			control.setZoomFactor( val / 100 );
 		} catch( ParseException ex2 ) {
 			ZETLoader.sendError( loc.getString( "gui.error.NonParsableNumber" ) );
