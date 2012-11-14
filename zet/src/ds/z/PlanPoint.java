@@ -136,7 +136,7 @@ public class PlanPoint extends Point {
 	}
 
 	public boolean matches( PlanPoint point ) {
-		return point.getX() == this.getX() && point.getY() == this.getY();
+		return point == null ? false : point.getX() == this.getX() && point.getY() == this.getY();
 	}
 
 	@Override
