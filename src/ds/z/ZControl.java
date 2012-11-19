@@ -305,7 +305,7 @@ public class ZControl {
 		} else
 			affectedRooms.add( (Room)newPolygon );
 		System.out.println( "New Event thrown" );
-		EventServer.getInstance().dispatchEvent( new ZModelRoomEvent( affectedRooms) );
+		EventServer.getInstance().dispatchEvent( new ZModelRoomEvent( affectedRooms ) );
 	}
 
 	public PlanPolygon closePolygon() {
@@ -319,12 +319,12 @@ public class ZControl {
 				throw new IllegalStateException( "Area zero" );
 			else if( newPolygon.getNumberOfEdges() >= ((newPolygon instanceof Barrier) ? 1 : 2) ) { // The new edge would be the third
 				newPolygon.close();
+				throwEvent();
 				newPolygon = null;
 				temp = null;
 			} else
 				throw new IllegalStateException( "Three edges" );
 		}
-		throwEvent();
 		return latestPolygon;
 	}
 

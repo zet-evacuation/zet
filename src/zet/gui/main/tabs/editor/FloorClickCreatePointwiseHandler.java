@@ -100,6 +100,8 @@ public class FloorClickCreatePointwiseHandler extends FloorClickHandler {
 			getEditStatus().setLastClick( null );
 		}
 	}
-
-
+	
+	protected boolean isCreationStarted() {
+		return creationStarted;
+	}
 }

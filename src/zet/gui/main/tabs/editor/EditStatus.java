@@ -58,10 +58,10 @@ public class EditStatus {
 				current = new FloorClickSelectionHandler( this, zcontrol );
 				break;
 			case CreationRectangle:
-				current = new FloorClickCreateRectangleHandler( this, zcontrol );
+				current = zetObjectType == ZetObjectTypes.Stair ? new FloorClickCreateRectangleHandler( this, zcontrol ) : new FloorClickCreateRectangleHandler( this, zcontrol );
 				break;
 			case CreationPointWise:
-				current = new FloorClickCreatePointwiseHandler( this, zcontrol );
+				current = zetObjectType == ZetObjectTypes.Stair ? new FloorClickCreatePointwiseHandlerStair( this, zcontrol ) : new FloorClickCreatePointwiseHandler( this, zcontrol );
 				break;
 			default:
 				throw new AssertionError( "Unsupported edit mode: " + editMode );
