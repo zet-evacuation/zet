@@ -23,6 +23,7 @@ public class EditStatus {
 	ZetObjectTypes nextZetObject = ZetObjectTypes.Room;
 	int rasterSnap = 400;
 	JPolygon currentEditing;
+	boolean popupsEnabled = true;
 
 	final SelectedElements selection;
 
@@ -170,5 +171,13 @@ public class EditStatus {
 
 	public JPolygon getCurrentEditing() {
 		return currentEditing;
+	}
+
+	void setPopupEnabled( boolean value ) {
+		popupsEnabled = value;
+	}
+
+	public boolean isPopupEnabled() {
+		return popupsEnabled;
 	}
 }

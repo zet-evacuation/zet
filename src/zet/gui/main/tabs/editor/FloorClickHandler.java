@@ -17,7 +17,8 @@ import zet.gui.main.tabs.base.JPolygon;
 
 
 /**
- *
+ * A default floor click hander. The handler enables context popup menus for
+ * floor components by default.
  * @author Jan-Philipp Kappmeier
  */
 public abstract class FloorClickHandler {
@@ -31,6 +32,7 @@ public abstract class FloorClickHandler {
 		this.editStatus = editStatus;
 		this.zcontrol = control;
 		elementsUnderMouse = new LinkedList<>();
+		editStatus.setPopupEnabled( true );
 	}
 
 	public void mouseDown( Point p, List<JPolygon> elements ) {
@@ -43,9 +45,7 @@ public abstract class FloorClickHandler {
 		mouseDown = false;
 	}
 
-	public void doubleClick( Point p, List<JPolygon> elements ) {
-
-	}
+	public void doubleClick( Point p, List<JPolygon> elements ) { }
 
 	public void mouseMove( Point p ) {
 		if( editStatus.isRasterizedPaintMode() )
