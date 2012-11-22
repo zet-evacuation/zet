@@ -106,6 +106,4 @@ public class JEvacuationAreaInformationPanel extends JInformationPanel<Evacuatio
 		lblEvacuationAreaName.setText( loc.getString( "Evacuation.Name" ) );
 		lblEvacuationAttractivity.setText( loc.getString( "Evacuation.Attractivity" ) );
 	}
-	
-	
 }

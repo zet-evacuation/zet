@@ -71,8 +71,6 @@ public class FloorClickCreatePointwiseHandlerStair extends FloorClickCreatePoint
 					}
 				} else
 					throw new AssertionError( "In creation mode, illegally to define upper or lower edges!" );
-			} else {
-				throw new AssertionError( "Weird. Clicked on an object of type " + obj.getClass() );
 			}
 		}
 	}
