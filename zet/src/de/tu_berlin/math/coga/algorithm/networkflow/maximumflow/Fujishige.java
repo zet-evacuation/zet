@@ -21,14 +21,14 @@
 package de.tu_berlin.math.coga.algorithm.networkflow.maximumflow;
 
 import de.tu_berlin.math.coga.common.algorithm.Algorithm;
-import ds.graph.problem.RationalMaxFlowProblem;
-import ds.graph.flow.RationalMaxFlow;
 import ds.graph.DoubleMap;
 import ds.graph.Edge;
 import ds.graph.Node;
 import ds.graph.ResidualGraph;
-import java.util.List;
+import ds.graph.flow.RationalMaxFlow;
+import ds.graph.problem.RationalMaxFlowProblem;
 import java.util.Collections;
+import java.util.List;
 
 
 /**
@@ -39,11 +39,11 @@ import java.util.Collections;
 public class Fujishige extends Algorithm<RationalMaxFlowProblem,RationalMaxFlow> {
 
     private final static double EPSILON = 0.00001;
-    
+
     private ResidualGraph resGraph;
-    
+
     private double maxflowvalue;
-    
+
     private void initializeDatastructures() {
         int mnodeid=0,medgeid=0;
         for(Node n: getProblem().getNetwork().nodes())
@@ -54,43 +54,43 @@ public class Fujishige extends Algorithm<RationalMaxFlowProblem,RationalMaxFlow>
                 medgeid = e.id();
         resGraph = new ResidualGraph(getProblem().getNetwork(),getProblem().getCapacities(),mnodeid,medgeid);
     }
-    
+
     @Override
     public RationalMaxFlow runAlgorithm(RationalMaxFlowProblem problem) {
         initializeDatastructures();
         runFujishige();
         return new RationalMaxFlow(getProblem(),getFlow());
     }
-    
-        
-    
-    
+
+
+
+
     public ResidualGraph getResidualGraph() {
         return resGraph;
     }
-    
+
     private void setMaxFlowValue(double val) {
         maxflowvalue = val;
     }
-    
+
     public double getMaxFlowValue() {
         return maxflowvalue;
     }
-    
+
     public DoubleMap<Edge> getFlow() {
         return resGraph.getFlow();
     }
-    
+
     private DoubleMap<Node> setBeta(Double d) {
         DoubleMap<Node> betamap = new DoubleMap<Node>(getProblem().getNetwork().numberOfNodes());
         for(Node n : getProblem().getNetwork().nodes())
-            if(n == getProblem().getSink()) 
+            if(n == getProblem().getSink())
                 betamap.set(n, d);
-            else   
+            else
                 betamap.set(n, 0.0);
         return betamap;
     }
-    
+
     private void runFujishige() {
         double delta;
         DoubleMap<Node> betaMap;
@@ -98,7 +98,7 @@ public class Fujishige extends Algorithm<RationalMaxFlowProblem,RationalMaxFlow>
         while(true) {
             MAordering MAord = new MAordering(getResidualGraph(),getProblem().getSource(),getProblem().getSink(),getResidualGraph().getResidualCapacities());
             MAord.computeMAordering();
-            
+
             delta = Double.MAX_VALUE;
             List<Node> ordering = MAord.getMAordering();
             ordering.remove(0);
@@ -111,7 +111,7 @@ public class Fujishige extends Algorithm<RationalMaxFlowProblem,RationalMaxFlow>
                 break;
             else
                 betaMap = setBeta(delta);
-            
+
             Collections.reverse(ordering);
             for(Node node: ordering) {
                 for(Edge edge : MAord.getEdgeList(node)) {
@@ -123,7 +123,7 @@ public class Fujishige extends Algorithm<RationalMaxFlowProblem,RationalMaxFlow>
                     }
                 }
             }
-            
+
         }
         //System.out.println("FUJIOUT");
         double flowvalue = 0.0;
@@ -134,7 +134,7 @@ public class Fujishige extends Algorithm<RationalMaxFlowProblem,RationalMaxFlow>
             flowvalue -= resGraph.getFlow().get(e);
         }
         setMaxFlowValue(flowvalue);
-        
+
     }
-    
+
 }

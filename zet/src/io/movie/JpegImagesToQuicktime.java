@@ -75,16 +75,16 @@ public class JpegImagesToQuicktime implements ControllerListener, DataSinkListen
         for (int i=startNumber; i<endNumber; i++) {
             inputFiles.add(String.format(fileName,i));
         }
-        String outputURL = "file:/"+fileName.substring(0,fileName.indexOf("%")) + ".mov";                
-        MediaLocator oml;        
+        String outputURL = "file:/"+fileName.substring(0,fileName.indexOf("%")) + ".mov";
+        MediaLocator oml;
         if ((oml = createMediaLocator(outputURL)) == null) {
             System.err.println("Cannot build media locator from: " + outputURL);
-            return; 
-        }        
+            return;
+        }
         JpegImagesToQuicktime imageToMovie = new JpegImagesToQuicktime();
-        imageToMovie.doIt(width, height, frameRate, inputFiles, oml);        
-    }    
-    
+        imageToMovie.doIt(width, height, frameRate, inputFiles, oml);
+    }
+
     public boolean doIt(int width, int height, int frameRate, Vector inFiles, MediaLocator outML) {
 	ImageDataSource ids = new ImageDataSource(width, height, frameRate, inFiles);
 
@@ -108,7 +108,7 @@ public class JpegImagesToQuicktime implements ControllerListener, DataSinkListen
 	    return false;
 	}
 
-	// Set the output content descriptor to QuickTime. 
+	// Set the output content descriptor to QuickTime.
 	p.setContentDescriptor(new ContentDescriptor(FileTypeDescriptor.QUICKTIME));
 
 	// Query for the processor for supported formats.
@@ -220,6 +220,7 @@ public class JpegImagesToQuicktime implements ControllerListener, DataSinkListen
     /**
      * Controller Listener.
      */
+	@Override
     public void controllerUpdate(ControllerEvent evt) {
 
 	if (evt instanceof ConfigureCompleteEvent ||
@@ -246,7 +247,7 @@ public class JpegImagesToQuicktime implements ControllerListener, DataSinkListen
     boolean fileSuccess = true;
 
     /**
-     * Block until file writing is done. 
+     * Block until file writing is done.
      */
     boolean waitForFileDone() {
 	synchronized (waitFileSync) {
@@ -264,6 +265,7 @@ public class JpegImagesToQuicktime implements ControllerListener, DataSinkListen
     /**
      * Event handler for the file writer.
      */
+	@Override
     public void dataSinkUpdate(DataSinkEvent evt) {
 
 	if (evt instanceof EndOfStreamEvent) {
@@ -469,7 +471,7 @@ public class JpegImagesToQuicktime implements ControllerListener, DataSinkListen
 	    this.width = width;
 	    this.height = height;
 	    this.images = images;
-            
+
 	    format = new VideoFormat(VideoFormat.JPEG,
 				new Dimension(width, height),
 				Format.NOT_SPECIFIED,
@@ -506,7 +508,7 @@ public class JpegImagesToQuicktime implements ControllerListener, DataSinkListen
 
 	    System.err.println("  - reading image file: " + imageFile);
 
-	    // Open a random access file for the next image. 
+	    // Open a random access file for the next image.
 	    RandomAccessFile raFile;
 	    raFile = new RandomAccessFile(imageFile, "r");
 

@@ -15,16 +15,26 @@ import de.tu_berlin.math.coga.common.localization.DefaultLoc;
 import de.tu_berlin.math.coga.common.localization.Localization;
 import de.tu_berlin.math.coga.common.util.Formatter;
 import de.tu_berlin.math.coga.common.util.units.TimeUnits;
+import de.tu_berlin.math.coga.components.framework.Menu;
+import de.tu_berlin.math.coga.graph.io.xml.XMLReader;
+import de.tu_berlin.math.coga.graph.io.xml.XMLReader.XMLFileData;
+import de.tu_berlin.math.coga.graph.io.xml.visualization.FlowVisualization;
+import de.tu_berlin.math.coga.graph.io.xml.visualization.GraphVisualization;
+import de.tu_berlin.math.coga.zet.DatFileReaderWriter;
 import ds.GraphVisualizationResults;
-import ds.mapping.IdentifiableIntegerMapping;
 import ds.graph.Node;
+import ds.mapping.IdentifiableIntegerMapping;
 import event.EventListener;
 import event.EventServer;
 import event.MessageEvent;
-import de.tu_berlin.math.coga.components.framework.Menu;
 import gui.GUIOptionManager;
 import gui.visualization.Visualization;
 import gui.visualization.control.graph.GLFlowGraphControl;
+import gui.visualization.control.graph.GLNashGraphControl;
+import io.movie.MovieManager;
+import io.visualization.ImageFormat;
+import io.visualization.MovieFormat;
+import io.visualization.MovieWriters;
 import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.Toolkit;
@@ -41,6 +51,7 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.ArrayList;
 import java.util.Locale;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -50,6 +61,7 @@ import javax.swing.JFrame;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
+import javax.swing.JOptionPane;
 import javax.swing.JSlider;
 import javax.swing.SwingUtilities;
 import javax.swing.SwingWorker;
@@ -57,18 +69,6 @@ import javax.swing.UIManager;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 import javax.swing.filechooser.FileFilter;
-import de.tu_berlin.math.coga.zet.DatFileReaderWriter;
-import de.tu_berlin.math.coga.graph.io.xml.visualization.FlowVisualization;
-import de.tu_berlin.math.coga.graph.io.xml.visualization.GraphVisualization;
-import de.tu_berlin.math.coga.graph.io.xml.XMLReader;
-import de.tu_berlin.math.coga.graph.io.xml.XMLReader.XMLFileData;
-import gui.visualization.control.graph.GLNashGraphControl;
-import io.movie.MovieManager;
-import io.visualization.ImageFormat;
-import io.visualization.MovieFormat;
-import io.visualization.MovieWriters;
-import java.util.ArrayList;
-import javax.swing.JOptionPane;
 import opengl.framework.abs.DrawableControlable;
 
 /**
@@ -382,10 +382,10 @@ public class FlowVisualizationTool extends JFrame implements PropertyChangeListe
 					try {
 						XStream xml_convert = new XStream();
 						FileReader input = new FileReader( jfc.getSelectedFile() );
-						
+
 						XMLReader reader = new XMLReader( jfc.getSelectedFile() );
-						
-						
+
+
 						graphVisResult = (GraphVisualizationResults) xml_convert.fromXML( input );
 						loadGraphVisResults();
 					} catch( IOException e ) {

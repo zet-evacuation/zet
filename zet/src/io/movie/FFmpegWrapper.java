@@ -22,8 +22,8 @@
 package io.movie;
 
 import de.tu_berlin.math.coga.common.util.Formatter;
-import info.clearthought.layout.TableLayout;
 import de.tu_berlin.math.coga.common.util.IOTools;
+import info.clearthought.layout.TableLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.FocusEvent;
@@ -40,7 +40,7 @@ import javax.swing.JTextField;
 import javax.swing.filechooser.FileFilter;
 
 /**
- * A {@link MovieWriter} that works as a wrapper for the open source movie 
+ * A {@link MovieWriter} that works as a wrapper for the open source movie
  * encoder ffmpeg. See <a href=http://ffmpeg.mplayerhq.hu/>http://ffmpeg.mplayerhq.hu/</a> for more information.
  * @author Jan-Philipp Kappmeier
  */
@@ -57,7 +57,7 @@ public class FFmpegWrapper extends MovieWriter {
 	private String codecParameterString = "";
 	private String codecParameterStringPass1 = "";
 	private String codecParameterStringPass2 = "";
-	
+
 
 	/**
 	 * {@inheritDoc}
@@ -138,7 +138,7 @@ public class FFmpegWrapper extends MovieWriter {
 		if( ret == 0 )
 			System.out.println( "Video erstellen erfolgreich!" );
 	}
-	
+
 	/**
 	 * Encodes the movie and saves it with a specified filename. Creates the
 	 * string with the parameters send to ffmpeg encoder depending of the settings.
@@ -175,14 +175,14 @@ public class FFmpegWrapper extends MovieWriter {
 			}
 			// Quality parameter
 			thisCommand += " -b " + bitrate + "k -bt " + bitrate + "k -s " + width + "x" + height;
-			
+
 			// Video codec
 			thisCommand += codecParameterString;
 			if( pass == 1 )
 				thisCommand += codecParameterStringPass1;
 			if( pass == 2 )
 				thisCommand += codecParameterStringPass2;
-			
+
 			// duration (needed to stop, if mp3-file is larger)
 			thisCommand += " -t " + Double.toString( duration );
 			// the 2-pass-encoding
@@ -226,7 +226,7 @@ public class FFmpegWrapper extends MovieWriter {
 		} catch( IOException ex ) {
 			System.err.println( "Exception in FFMPEG-Wrapper!" );
 			return -1;
-		}		
+		}
 	}
 
 	/**
@@ -262,7 +262,7 @@ public class FFmpegWrapper extends MovieWriter {
 				TableLayout.PREFERRED,	// additional output commands
 				space
 			}
-		};	
+		};
 		JPanel panel = new JPanel( new TableLayout( size ) );
 		final JCheckBox chk2PassEncoding = new JCheckBox( "2-pass encoding" );
 		chk2PassEncoding.setSelected( true );
@@ -304,7 +304,7 @@ public class FFmpegWrapper extends MovieWriter {
 			}
 		});
 		panel.add( btnSelectMusicFile, "3,4" );
-		
+
 		panel.add( new JLabel( "Zusätzliche Optionen (eigene Gefahr):"), "1,6,3,6" );
 		final JTextField txtAdvancedCommands = new JTextField();
 		txtAdvancedCommands.addFocusListener( new FocusListener() {
@@ -313,10 +313,10 @@ public class FFmpegWrapper extends MovieWriter {
 			public void focusLost( FocusEvent e ) {
 				advancedParameter = txtAdvancedCommands.getText();
 			}
-			
+
 		});
 		panel.add( txtAdvancedCommands, "1,7,3,7" );
-		
+
 		return panel;
 	}
 

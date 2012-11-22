@@ -28,12 +28,13 @@ public class EdmondsKarp extends FordFulkerson {
 	 * polynomial time.
 	 * @return a shortest path in the residual network
 	 */
+	@Override
 	protected StaticPath findPath() {
 		BFS bfs = new BFS( residualNetwork );
 		bfs.run( source, sink );
 
 		StaticPath path = new StaticPath();
-		
+
 		Node current = sink;
 		do {
 			final Edge e = bfs.predecedingEdge( current );
@@ -44,5 +45,4 @@ public class EdmondsKarp extends FordFulkerson {
 		} while( !current.equals( source ) );
 		return path;
 	}
-
 }

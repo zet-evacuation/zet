@@ -45,6 +45,7 @@ import java.awt.Rectangle;
 import java.awt.RenderingHints;
 import java.awt.event.MouseEvent;
 import java.util.EnumSet;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedList;
 import javax.swing.SwingUtilities;
@@ -203,6 +204,7 @@ public class JPolygon extends AbstractPolygon {
 	 * operations like setBounds, which are called herein, will fail.
 	 * @param p the polygon
 	 */
+	@Override
 	public void displayPolygon( PlanPolygon p ) {
 		if( myPolygon != null ) {
 			removeAll();
