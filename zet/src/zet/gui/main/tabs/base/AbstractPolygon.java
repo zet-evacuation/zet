@@ -34,14 +34,15 @@ import javax.swing.JComponent;
 
 /**
  *
+ * @param <E>
  * @author Jan-Philipp Kappmeier
  */
-abstract public class AbstractPolygon extends JComponent {
+abstract public class AbstractPolygon<E extends AbstractFloor> extends JComponent {
 	protected Polygon drawingPolygon;
 	/** Most global super type of PlanPolygon. */
 	protected PlanPolygon<Edge> myPolygon;
 	//private JFloor myFloor;
-	protected AbstractFloor myFloor;
+	protected E myFloor;
 
 	public AbstractPolygon( Color foreground ) {
 		//super( null );

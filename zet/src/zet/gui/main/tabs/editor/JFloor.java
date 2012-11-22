@@ -277,6 +277,21 @@ public class JFloor extends AbstractFloor implements EventListener<ZModelRoomEve
 		} else if( e.getButton() == MouseEvent.BUTTON3 ) {
 			if( e.getID() == MouseEvent.MOUSE_CLICKED )
 				editStatus.getCurrentHandler().rightClick();
+//			System.out.println( "Consuming" );
+//			e.consume();
+//			switch( e.getID() ) {
+//				case MouseEvent.MOUSE_CLICKED:
+//					System.out.println( "CLICKED" );
+//					break;
+//				case MouseEvent.MOUSE_PRESSED:
+//					System.out.println( "PRESSED" );
+//					break;
+//				case MouseEvent.MOUSE_RELEASED:
+//					System.out.println( "RELEASED" );
+//					break;
+//				default:
+//					System.out.println( "DEFAULT: " + e.getID() );
+//			}
 		}
 		repaint();
 	}
@@ -338,7 +353,9 @@ public class JFloor extends AbstractFloor implements EventListener<ZModelRoomEve
 		}
 	}
 
-
+	public EditStatus getEditStatus() {
+		return editStatus;
+	}
 
 
 

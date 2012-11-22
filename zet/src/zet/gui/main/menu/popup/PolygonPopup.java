@@ -9,17 +9,18 @@ import ds.z.Assignment;
 import ds.z.AssignmentType;
 import ds.z.PlanPolygon;
 import gui.GUIControl;
+import java.io.IOException;
 import java.util.LinkedList;
 import java.util.List;
 import javax.swing.JMenu;
 import javax.swing.JPopupMenu;
 import zet.gui.GUILocalization;
-import zet.gui.main.menu.popup.PolygonPopupListener;
 
 /**
  *
  * @author Jan-Philipp Kappmeier
  */
+@SuppressWarnings( "serial" )
 public class PolygonPopup extends JPopupMenu {
 	/** The localization class. */
 	private GUILocalization loc = GUILocalization.getSingleton();;
@@ -31,11 +32,11 @@ public class PolygonPopup extends JPopupMenu {
 		super();
 		this.guiControl = control;
 	}
-	
+
 	public void recreate( Assignment assignment ) {
 		polygonPopupListeners.clear();
 		removeAll();
-		
+
 		JMenu jmnCreateAssArea = Menu.addMenu( this, loc.getString( "gui.editor.JEditorPanel.popupDefaultAssignmentArea" ) );
 		jmnCreateAssArea.setEnabled( assignment != null );
 		if( assignment != null ) {
@@ -46,7 +47,7 @@ public class PolygonPopup extends JPopupMenu {
 				polygonPopupListeners.add( listener );
 				Menu.addMenuItem( jmnCreateAssArea, t.getName(), listener );
 			}
-		}		
+		}
 	}
 
 	/** This method should be called every time before the JPolygon pop-up menu
@@ -57,5 +58,9 @@ public class PolygonPopup extends JPopupMenu {
 		System.out.println( "Popup now belongs to " + currentPolygon.toString() );
 		for( PolygonPopupListener p : polygonPopupListeners )
 			p.setPolygon( currentPolygon );
+	}
+	/** Prohibits serialization. */
+	private synchronized void writeObject( java.io.ObjectOutputStream s ) throws IOException {
+		throw new UnsupportedOperationException( "Serialization not supported" );
 	}
 }

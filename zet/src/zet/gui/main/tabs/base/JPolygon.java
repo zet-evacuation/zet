@@ -44,8 +44,8 @@ import java.awt.Polygon;
 import java.awt.Rectangle;
 import java.awt.RenderingHints;
 import java.awt.event.MouseEvent;
+import java.io.IOException;
 import java.util.EnumSet;
-import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedList;
 import javax.swing.SwingUtilities;
@@ -59,7 +59,8 @@ import zet.gui.main.tabs.editor.JFloor;
  * event.
  * @author Timon Kelter
  */
-public class JPolygon extends AbstractPolygon {
+@SuppressWarnings( "serial" )
+public class JPolygon extends AbstractPolygon<JFloor> {
 	private boolean dragged = false;
 	public final void setDragged( boolean b ) {
 		dragged = b;
@@ -96,8 +97,6 @@ public class JPolygon extends AbstractPolygon {
 	private final static BasicStroke stroke_dashed_thick = new BasicStroke( EDGE_PAINT_WIDTH, BasicStroke.CAP_BUTT, BasicStroke.JOIN_MITER, 10.0f, dash1, 0.0f );
 	public final static BasicStroke stroke_thick = new BasicStroke( EDGE_PAINT_WIDTH );
 	private final GUIControl guiControl;
-
-	public static boolean disablePopups = false;
 
 	private Edge selectedEdge;
 	private Point selectedPoint;
@@ -150,7 +149,7 @@ public class JPolygon extends AbstractPolygon {
 	 * @param myFloor The {@link JFloor} on which this polygon is displayed
 	 * @param foreground the border color of the polygon
 	 */
-	public JPolygon( AbstractFloor myFloor, Color foreground, GUIControl guiControl ) {
+	public JPolygon( JFloor myFloor, Color foreground, GUIControl guiControl ) {
 		super( foreground );
 		this.guiControl = guiControl;
 
@@ -559,7 +558,7 @@ public class JPolygon extends AbstractPolygon {
 		// 4. Else forward the event to parent object
 
 		// Do not use e.isPopupTrigger() here - Won't work under linux
-		if( e.getID() == MouseEvent.MOUSE_RELEASED && e.getButton() == MouseEvent.BUTTON3 && disablePopups == false ) {
+		if( e.getID() == MouseEvent.MOUSE_RELEASED && e.getButton() == MouseEvent.BUTTON3 && myFloor.getEditStatus().isPopupEnabled() ) {
 			if( !lastPosition.equals( e.getLocationOnScreen() ) ) {
 				lastPosition = e.getLocationOnScreen();
 				selectedUsed = false;
@@ -661,5 +660,9 @@ public class JPolygon extends AbstractPolygon {
 			return ed.myEdge.getTarget();
 		else
 			return null;
+	}
+	/** Prohibits serialization. */
+	private synchronized void writeObject( java.io.ObjectOutputStream s ) throws IOException {
+		throw new UnsupportedOperationException( "Serialization not supported" );
 	}
 }

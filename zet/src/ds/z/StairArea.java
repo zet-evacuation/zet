@@ -17,7 +17,6 @@ package ds.z;
 
 import com.thoughtworks.xstream.annotations.XStreamAlias;
 import com.thoughtworks.xstream.annotations.XStreamAsAttribute;
-//import ds.z.event.ChangeEvent;
 import ds.z.exception.PolygonNotClosedException;
 import ds.z.exception.PolygonNotRasterizedException;
 import ds.z.exception.StairAreaBoundaryException;
@@ -140,7 +139,7 @@ public class StairArea extends Area<Edge> {
 	 * than 0 or bigger than 1.
 	 * @param val The speed factor for going downwards on this stair.
 	 */
-	public void setSpeedFactorDown( double val ) throws IllegalArgumentException {
+	public final void setSpeedFactorDown( double val ) throws IllegalArgumentException {
 		if( val <= 0 )
 			throw new IllegalArgumentException( ZLocalization.getSingleton().getString( "ds.z.DelayArea.SpeedFactorNegativeException" ) );
 		else if( val > 1 )
@@ -160,7 +159,7 @@ public class StairArea extends Area<Edge> {
 	 * than 0 or bigger than 1.
 	 * @param val The speed factor for going upwards on this stair.
 	 */
-	public void setSpeedFactorUp( double val ) throws IllegalArgumentException {
+	public final void setSpeedFactorUp( double val ) throws IllegalArgumentException {
 		if( val <= 0 )
 			throw new IllegalArgumentException( ZLocalization.getSingleton().getString( "ds.z.DelayArea.SpeedFactorNegativeException" ) );
 		else if( val > 1 )
@@ -221,7 +220,7 @@ public class StairArea extends Area<Edge> {
 	 * part intersects with the edge progression for the upper stair part.
 	 * @throws StairAreaBoundaryException if two boundary edges overlap
 	 */
-	public void setLowerLevel( PlanPoint lowerLevelStart, PlanPoint lowerLevelEnd )
+	public final void setLowerLevel( PlanPoint lowerLevelStart, PlanPoint lowerLevelEnd )
 					throws IllegalArgumentException, StairAreaBoundaryException {
 		if( lowerLevelStart != null && lowerLevelEnd != null ) {
 			boolean foundEnd = false;
@@ -256,7 +255,7 @@ public class StairArea extends Area<Edge> {
 	 * part intersects with the edge progression for the lower stair part.
 	 * @throws StairAreaBoundaryException if two boundary edges overlap
 	 */
-	public void setUpperLevel( PlanPoint upperLevelStart, PlanPoint upperLevelEnd )
+	public final void setUpperLevel( PlanPoint upperLevelStart, PlanPoint upperLevelEnd )
 					throws IllegalArgumentException, StairAreaBoundaryException {
 		if( upperLevelStart != null && upperLevelEnd != null ) {
 			boolean foundEnd = false;
@@ -298,6 +297,7 @@ public class StairArea extends Area<Edge> {
 							"ds.z.StairArea.LevelNotMarked" ) );
 	}
 
+	@Override
 	public boolean equals( Object o ) {
 		if( o instanceof StairArea ) {
 			StairArea p = (StairArea)o;

@@ -31,8 +31,9 @@ import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Rectangle;
-import java.util.EnumSet;
+import java.io.IOException;
 import java.text.NumberFormat;
+import java.util.EnumSet;
 import zet.gui.main.tabs.base.AbstractFloor;
 import zet.gui.main.tabs.base.AbstractPolygon;
 
@@ -40,7 +41,8 @@ import zet.gui.main.tabs.base.AbstractPolygon;
  *
  * @author Jan-Philipp Kappmeier
  */
-public class JCellPolygon extends AbstractPolygon {
+@SuppressWarnings( "serial" )
+public class JCellPolygon extends AbstractPolygon<AbstractFloor> {
 
 	private Color fillColor;
 	EnumSet<Direction8> borders = EnumSet.noneOf( Direction8.class );
@@ -170,5 +172,9 @@ public class JCellPolygon extends AbstractPolygon {
 			setToolTipText( s );
 		} else
 			setToolTipText();
+	}
+	/** Prohibits serialization. */
+	private synchronized void writeObject( java.io.ObjectOutputStream s ) throws IOException {
+		throw new UnsupportedOperationException( "Serialization not supported" );
 	}
 }
