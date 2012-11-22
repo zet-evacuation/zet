@@ -8,8 +8,6 @@ import ds.z.Floor;
 import ds.z.ZControl;
 import gui.editor.CoordinateTools;
 import java.awt.Point;
-import java.util.Collections;
-import java.util.LinkedList;
 import java.util.List;
 import zet.gui.main.JZetWindow;
 import zet.gui.main.tabs.base.JPolygon;
@@ -24,6 +22,7 @@ public class EditStatus {
 	ZControl zcontrol;
 	ZetObjectTypes nextZetObject = ZetObjectTypes.Room;
 	int rasterSnap = 400;
+	JPolygon currentEditing;
 
 	final SelectedElements selection;
 
@@ -89,10 +88,12 @@ public class EditStatus {
 	 */
 	void clearSelection() {
 		selection.clear();
+		currentEditing = null;
 	}
 
 	void selectPolygon( JPolygon toSelect ) {
 		selection.select( toSelect );
+		currentEditing = selection.getSelected();
 	}
 
 	void setPointerPosition( Point point ) {
@@ -158,5 +159,16 @@ public class EditStatus {
 
 	void addPolygon( List<JPolygon> toAdd ) {
 		selection.add( toAdd );
+	}
+
+	public void setCurrentEditing( JPolygon currentEditing ) {
+		if( selection.getSelected() != null )
+			if( selection.getSelected() != currentEditing ) // if we want to set current editing the selection, ignore
+				throw new IllegalStateException( "A polygon can only be set current editing, if no polygon is selected." );
+		this.currentEditing = currentEditing;
+	}
+
+	public JPolygon getCurrentEditing() {
+		return currentEditing;
 	}
 }

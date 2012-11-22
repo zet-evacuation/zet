@@ -19,7 +19,9 @@ import de.tu_berlin.math.coga.common.localization.DefaultLoc;
 import ds.z.Area;
 import ds.z.Barrier;
 import ds.z.Floor;
+import ds.z.PlanPolygon;
 import ds.z.Room;
+import ds.z.ZModelAreaEvent;
 import ds.z.ZModelRoomEvent;
 import event.EventListener;
 import gui.GUIControl;
@@ -42,6 +44,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map.Entry;
 import java.util.Objects;
+import javax.swing.JComponent;
 import javax.swing.SwingUtilities;
 import zet.gui.main.tabs.base.AbstractFloor;
 import zet.gui.main.tabs.base.JPolygon;
@@ -126,20 +129,59 @@ public class JFloor extends AbstractFloor implements EventListener<ZModelRoomEve
 
 	@Override
 	public void handleEvent( ZModelRoomEvent e ) {
-		for( Room room : e.getAffectedRooms() ) {
+		if( e instanceof ZModelAreaEvent ) {
+			ZModelAreaEvent e2 = (ZModelAreaEvent)e;
+			Room room = e2.getAffectedRoom();
+			// cannot create a new room here!
 			JPolygon poly = roomToPolygonMapping.get( room );
-			if( poly != null )
-				poly.displayPolygon( room );
-			else { // we have a new room
-				JPolygon roomPolygon = new JPolygon( this, GUIOptionManager.getRoomEdgeColor(), guiControl );
-				add( roomPolygon );
-				roomPolygon.displayPolygon( room );
-				roomToPolygonMapping.put( room, roomPolygon );
+			assert poly != null;
+			poly.displayPolygon( room );
+			JPolygon jp = findPolygonToArea( this, e2.getAffectedArea() );
+			//System.out.println( "Editing set to " + jp );
+			editStatus.setCurrentEditing( jp ); // do not call redisplay in this case, as long as JPolygon.display is not reimplemented
+			// the objects will be recreated and the reference to jp will be false then!
+		} else
+			for( Room room : e.getAffectedRooms() ) {
+				JPolygon poly = roomToPolygonMapping.get( room );
+				if( poly != null )
+					poly.displayPolygon( room );
+				else { // we have a new room
+					JPolygon roomPolygon = new JPolygon( this, GUIOptionManager.getRoomEdgeColor(), guiControl );
+					add( roomPolygon );
+					roomPolygon.displayPolygon( room );
+					roomToPolygonMapping.put( room, roomPolygon );
+					editStatus.setCurrentEditing( roomPolygon );
+				}
 			}
-		}
 		redisplay();
 	}
 
+	private JPolygon findPolygonToArea( JFloor base, PlanPolygon poly ) {
+		for( Component c : base.getComponents() ) {
+			if( c instanceof JPolygon ) {
+				JPolygon jp = (JPolygon) c;
+				JPolygon ret = findPolygonToArea( jp, poly );
+				if( ret != null )
+					return ret;
+			}
+		}
+		throw new AssertionError( "Created area not found!" );
+	}
+
+
+	private JPolygon findPolygonToArea( JPolygon base, PlanPolygon poly ) {
+		if( base.getPlanPolygon() == poly )
+			return base; // if we are assigned to the plan poly, return
+		for( Component c : base.getComponents() ) { // otherwise search in the sub-components
+			if( c instanceof JPolygon ) {
+				JPolygon jp = (JPolygon) c;
+				JPolygon ret = findPolygonToArea( jp, poly );
+				if( ret != null )
+					return ret;
+			}
+		}
+		return null; // not contained, return null
+	}
 	/**
 	 * Recreates the visual representations for the objects on the floor. Should
 	 * be called if the properties of the representation (e. g. color, zoom factor, etc.)
@@ -148,12 +190,22 @@ public class JFloor extends AbstractFloor implements EventListener<ZModelRoomEve
 	 */
 	public void redisplay() {
 		System.out.println( "REDISPLAY" );
+		JPolygon wasEditing = editStatus.getCurrentEditing();
+		PlanPolygon<?> editPoly = null;
+		if( wasEditing != null )
+			editPoly = wasEditing.getPlanPolygon();
+
 		for( Entry<Room,JPolygon> e : roomToPolygonMapping.entrySet() ) {
 			Room r = e.getKey();
 			JPolygon poly = e.getValue();
 			poly.displayPolygon( r );
 		}
 		getPlanImage().update();
+
+		if( editPoly != null ) { // keep track of the editing-polygon. they are lost due to the current implementation of JPolygon. this is slow!
+			JPolygon jp = findPolygonToArea( this, editPoly );
+			editStatus.setCurrentEditing( jp ); // do not call redisplay in this case, as long as JPolygon.display is not reimplemented
+		}
 	}
 
 	/**

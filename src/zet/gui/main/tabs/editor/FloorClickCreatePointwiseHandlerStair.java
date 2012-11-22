@@ -4,10 +4,17 @@
  */
 package zet.gui.main.tabs.editor;
 
+import ds.z.Edge;
+import ds.z.PlanPoint;
+import ds.z.PlanPolygon;
+import ds.z.StairArea;
 import ds.z.ZControl;
+import ds.z.exception.StairAreaBoundaryException;
 import java.awt.Component;
 import java.awt.Point;
 import java.util.List;
+import javax.swing.SwingUtilities;
+import zet.gui.main.tabs.base.JPolygon;
 
 /**
  *
@@ -19,10 +26,10 @@ public class FloorClickCreatePointwiseHandlerStair extends FloorClickCreatePoint
 		Lower,
 		Upper;
 	}
-	
+
 	private StairStates stairState = StairStates.Geometric;
 
-	
+
 	public FloorClickCreatePointwiseHandlerStair( EditStatus editStatus, ZControl control ) {
 		super( editStatus, control );
 		editStatus.setLastClick( null );
@@ -42,7 +49,31 @@ public class FloorClickCreatePointwiseHandlerStair extends FloorClickCreatePoint
 				super.mouseUp( p, components );
 		} else {
 			System.out.println( "Trying to add a lower side" );
-			
+			JPolygon stair = getEditStatus().getCurrentEditing();
+			if( !(stair.getPlanPolygon() instanceof StairArea) )
+				throw new AssertionError( "No stair, but instead it is of type " + stair.getPlanPolygon().getClass() );
+
+			Object obj = stair.findClickTargetAt( SwingUtilities.convertPoint( getEditStatus().getControlled(), p, stair ) );
+			if( obj instanceof Edge ) {
+				Edge e = (Edge)obj;
+				//System.out.println( "FINALLY AN EDGE WAS HIT" );
+				StairArea sa = (StairArea)stair.getPlanPolygon();
+				if( stairState == StairStates.Lower ) {
+					sa.setLowerLevel( e.getSource(), e.getTarget() );
+					stairState = StairStates.Upper;
+				} else if( stairState == StairStates.Upper ) {
+					try {
+						sa.setUpperLevel( e.getSource(), e.getTarget() );
+						stairState = StairStates.Geometric;
+					} catch( StairAreaBoundaryException ex ) {
+						// ignore exception and mouse click. do nothing and wait for correct one.
+						// TODO send an info to the user interface
+					}
+				} else
+					throw new AssertionError( "In creation mode, illegally to define upper or lower edges!" );
+			} else {
+				throw new AssertionError( "Weird. Clicked on an object of type " + obj.getClass() );
+			}
 		}
 	}
 

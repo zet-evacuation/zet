@@ -21,14 +21,11 @@ import event.EventServer;
 import gui.ZETLoader;
 import java.io.File;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.ListIterator;
 import javax.swing.JOptionPane;
-import zet.gui.main.tabs.base.JPolygon;
 
 /**
  * The class {@code ZControl} represents a front end class to the Z-model.
@@ -299,13 +296,11 @@ public class ZControl {
 	}
 
 	private void throwEvent() {
-		List<Room> affectedRooms = new LinkedList<>();
 		if( newPolygon instanceof Area<?> ) {
-			affectedRooms.add( ((Area<?>)newPolygon).getAssociatedRoom() );
-		} else
-			affectedRooms.add( (Room)newPolygon );
-		System.out.println( "New Event thrown" );
-		EventServer.getInstance().dispatchEvent( new ZModelRoomEvent( affectedRooms ) );
+			EventServer.getInstance().dispatchEvent( new ZModelAreaEvent( ((Area<?>)newPolygon).getAssociatedRoom(), (Area<?>)newPolygon ) );
+		} else {
+			EventServer.getInstance().dispatchEvent( new ZModelRoomEvent( new LinkedList<Room>() {{ add((Room)newPolygon); }} ) );
+		}
 	}
 
 	public PlanPolygon closePolygon() {

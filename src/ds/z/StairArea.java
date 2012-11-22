@@ -20,6 +20,7 @@ import com.thoughtworks.xstream.annotations.XStreamAsAttribute;
 //import ds.z.event.ChangeEvent;
 import ds.z.exception.PolygonNotClosedException;
 import ds.z.exception.PolygonNotRasterizedException;
+import ds.z.exception.StairAreaBoundaryException;
 import java.util.ListIterator;
 
 /**
@@ -29,7 +30,7 @@ import java.util.ListIterator;
  * The purpose of this description of stairs is, that we can now specify two
  * different SpeedFactors (like for a DelayArea) for going up and going down.
  * Every StairArea is associated to exactly one {@link Room} at every time.
- * 
+ *
  * @author Timon Kelter
  */
 @XStreamAlias("stairArea")
@@ -44,7 +45,7 @@ public class StairArea extends Area<Edge> {
 	/**
 	 * Constucts a new {@code StairArea} with default {@code speedFactors}
 	 * and without marked levels.
-	 * 
+	 *
 	 * @param room The room to which the area belongs
 	 */
 	public StairArea( Room room ) {
@@ -135,7 +136,7 @@ public class StairArea extends Area<Edge> {
 	 * total halt.
 	 * <p>The speedfactor has to be greater than 0 and smaller than 1 or equal to 1
 	 * </p>
-	 * @throws java.lang.IllegalArgumentException If the speedFactor is smaller 
+	 * @throws java.lang.IllegalArgumentException If the speedFactor is smaller
 	 * than 0 or bigger than 1.
 	 * @param val The speed factor for going downwards on this stair.
 	 */
@@ -155,7 +156,7 @@ public class StairArea extends Area<Edge> {
 	 * total halt.
 	 * <p>The speed factor has to be greater than 0 and smaller than 1 or equal to 1
 	 * </p>
-	 * @throws java.lang.IllegalArgumentException If the speedFactor is smaller 
+	 * @throws java.lang.IllegalArgumentException If the speedFactor is smaller
 	 * than 0 or bigger than 1.
 	 * @param val The speed factor for going upwards on this stair.
 	 */
@@ -173,7 +174,7 @@ public class StairArea extends Area<Edge> {
 	 * the lower part of the stair. This edge progression can be obtained by repeatedly
 	 * calling {@code getLowerLevelStart().getNextEdge().getTarget().getNextEdge()} etc.
 	 * until the PlanPoint 'LowerLevelEnd' is reached.
-	 * @return 
+	 * @return
 	 */
 	public PlanPoint getLowerLevelStart() {
 		return lowerLevel[0];
@@ -182,7 +183,7 @@ public class StairArea extends Area<Edge> {
 	/**
 	 * @return The PlanPoint at which the edge progression ends, which describes
 	 * the lower part of the stair. This edge progression can be obtained by repeatedly
-	 * calling getLowerLevelStart ().getNextEdge ().getTarget().getNextEdge () etc. 
+	 * calling getLowerLevelStart ().getNextEdge ().getTarget().getNextEdge () etc.
 	 * until the PlanPoint 'LowerLevelEnd' is reached.
 	 */
 	public PlanPoint getLowerLevelEnd() {
@@ -192,7 +193,7 @@ public class StairArea extends Area<Edge> {
 	/**
 	 * @return The PlanPoint at which the edge progression begins, which describes
 	 * the upper part of the stair. This edge progression can be obtained by repeatedly
-	 * calling getUpperLevelBegin ().getNextEdge ().getTarget().getNextEdge () etc. 
+	 * calling getUpperLevelBegin ().getNextEdge ().getTarget().getNextEdge () etc.
 	 * until the PlanPoint 'UpperLevelEnd' is reached.
 	 */
 	public PlanPoint getUpperLevelStart() {
@@ -202,7 +203,7 @@ public class StairArea extends Area<Edge> {
 	/**
 	 * @return The PlanPoint at which the edge progression ends, which describes
 	 * the upper part of the stair. This edge progression can be obtained by repeatedly
-	 * calling getUpperLevelBegin ().getNextEdge ().getTarget().getNextEdge () etc. 
+	 * calling getUpperLevelBegin ().getNextEdge ().getTarget().getNextEdge () etc.
 	 * until the PlanPoint 'UpperLevelEnd' is reached.
 	 */
 	public PlanPoint getUpperLevelEnd() {
@@ -218,9 +219,10 @@ public class StairArea extends Area<Edge> {
 	 * @throws IllegalArgumentException If 'lowerLevelStart' and 'lowerLevelEnd'
 	 * do not form an edge progression in the current polygon or if the new lower
 	 * part intersects with the edge progression for the upper stair part.
+	 * @throws StairAreaBoundaryException if two boundary edges overlap
 	 */
 	public void setLowerLevel( PlanPoint lowerLevelStart, PlanPoint lowerLevelEnd )
-					throws IllegalArgumentException {
+					throws IllegalArgumentException, StairAreaBoundaryException {
 		if( lowerLevelStart != null && lowerLevelEnd != null ) {
 			boolean foundEnd = false;
 			ListIterator<PlanPoint> itP = pointIterator( lowerLevelStart, lowerLevelEnd, false );
@@ -228,7 +230,8 @@ public class StairArea extends Area<Edge> {
 				PlanPoint i = itP.next();
 				// First check for invalid points then accept eventually
 				if( i == upperLevel[0] || i == upperLevel[1] )
-					throw new IllegalArgumentException( ZLocalization.getSingleton().getString( "ds.z.StairArea.LevelProgressionsOverlap" ) );
+					throw new StairAreaBoundaryException( ZLocalization.getSingleton().getString(
+									"ds.z.StairArea.LevelProgressionsOverlap" ), this, this.getEdge( lowerLevelStart, lowerLevelEnd ) );
 				else if( i == lowerLevelEnd ) {
 					foundEnd = true;
 					break;
@@ -243,7 +246,7 @@ public class StairArea extends Area<Edge> {
 	}
 
 	/** Sets the upper part of this stair area.
-	 * 
+	 *
 	 * @param upperLevelStart The begin of the edge progression that constitutes the
 	 * upper part of the stair
 	 * @param upperLevelEnd The end of the edge progression that constitutes the
@@ -251,9 +254,10 @@ public class StairArea extends Area<Edge> {
 	 * @throws IllegalArgumentException If 'upperLevelStart' and 'upperLevelEnd'
 	 * do not form an edge progression in the current polygon or if the new upper
 	 * part intersects with the edge progression for the lower stair part.
+	 * @throws StairAreaBoundaryException if two boundary edges overlap
 	 */
 	public void setUpperLevel( PlanPoint upperLevelStart, PlanPoint upperLevelEnd )
-					throws IllegalArgumentException {
+					throws IllegalArgumentException, StairAreaBoundaryException {
 		if( upperLevelStart != null && upperLevelEnd != null ) {
 			boolean foundEnd = false;
 			ListIterator<PlanPoint> itP = pointIterator( upperLevelStart, upperLevelEnd, false );
@@ -261,8 +265,8 @@ public class StairArea extends Area<Edge> {
 				PlanPoint i = itP.next();
 				// First check for invalid points then accept eventually
 				if( i == lowerLevel[0] || i == lowerLevel[1] )
-					throw new IllegalArgumentException( ZLocalization.getSingleton().getString(
-									"ds.z.StairArea.LevelProgressionsOverlap" ) );
+					throw new StairAreaBoundaryException( ZLocalization.getSingleton().getString(
+									"ds.z.StairArea.LevelProgressionsOverlap" ), this, this.getEdge( upperLevelStart, upperLevelEnd ) );
 				else if( i == upperLevelEnd ) {
 					foundEnd = true;
 					break;

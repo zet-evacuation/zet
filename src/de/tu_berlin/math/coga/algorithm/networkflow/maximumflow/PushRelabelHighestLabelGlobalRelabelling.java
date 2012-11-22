@@ -78,7 +78,7 @@ public class PushRelabelHighestLabelGlobalRelabelling extends PushRelabelHighest
 				minEdge = e;
 			}
 		}
-		return new Tuple( minDistance+1, minEdge );
+		return new Tuple<>( minDistance+1, minEdge );
 	}
 
 	protected void globalUpdate() {
@@ -123,7 +123,7 @@ public class PushRelabelHighestLabelGlobalRelabelling extends PushRelabelHighest
 
 				if( node == null )
 					if( nextNodeState == States.inactiveNext ) {
-						nextNodeState = States.activeFirst.activeFirst;
+						nextNodeState = States.activeFirst;
 						continue;
 					} else {
 						assert nextNodeState == States.activeNext : nextNodeState;

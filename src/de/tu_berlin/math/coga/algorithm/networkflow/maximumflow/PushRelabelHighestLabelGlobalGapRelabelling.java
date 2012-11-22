@@ -25,7 +25,7 @@ public class PushRelabelHighestLabelGlobalGapRelabelling extends PushRelabelHigh
 			int i;	// for all outarcs
 			for( i = current.get( v ); i < residualGraph.getLast( v ); ++i ) {
 				final Edge e = residualGraph.getEdge( i );
-				// if is applicable, push. break if no excess is leftover
+				// if is applicable, push. break if no excess is left over
 				if( residualGraph.getResidualCapacity( e ) > 0 && distanceLabels.get( e.end() ) == nodeDistance - 1 && push( e ) == 0 )
 					break;
 			}
@@ -42,7 +42,7 @@ public class PushRelabelHighestLabelGlobalGapRelabelling extends PushRelabelHigh
 					gap( nodeDistance );
 
 				if( distanceLabels.get( v ) == n )
-					throw new IllegalStateException( "here a break should be somehow" );
+					throw new IllegalStateException( "here, somehow should be a break" );
 			} else {
 				// node is no longer active
 				current.set( v, i );

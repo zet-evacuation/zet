@@ -8,12 +8,10 @@ import de.tu_berlin.math.coga.datastructure.BucketSet;
 import de.tu_berlin.math.coga.datastructure.Tuple;
 import de.tu_berlin.math.coga.datastructure.priorityQueue.BucketPriorityQueue;
 import ds.graph.Edge;
-import ds.mapping.IdentifiableIntegerMapping;
-import ds.graph.network.AbstractNetwork;
 import ds.graph.Node;
 import ds.graph.flow.MaximumFlow;
-import ds.graph.network.Network;
 import ds.graph.problem.MaximumFlowProblem;
+import ds.mapping.IdentifiableIntegerMapping;
 
 /**
  *
@@ -89,9 +87,9 @@ public class PushRelabelHighestLabel extends PushRelabel {
 			flow.set( residualGraph.originalResidualEdgeMapping.get( e ), residualGraph.getReverseResidualCapacity( e ) );
 		}
 		MaximumFlow f = new MaximumFlow( getProblem(), flow );
-		
+
 		f.check();
-		
+
 		return f;
 	}
 
@@ -250,7 +248,7 @@ public class PushRelabelHighestLabel extends PushRelabel {
 */
 
 /*
-   i->d is used for dfs labels 
+   i->d is used for dfs labels
    i->bNext is used for topological order list
    buckets[i-nodes]->firstActive is used for DSF tree
 */
@@ -283,11 +281,11 @@ public class PushRelabelHighestLabel extends PushRelabel {
   /* eliminate flow cycles, topologicaly order vertices */
   //forAllNodes(i)
 	for( Node i : getProblem().getNetwork() ) {
-    if (( distanceLabels.get( i ) == FeasibleState.Unused.val ) && ( excess.get( i ) > 0 ) && ( i.id() != source.id() ) && ( i.id() != sink.id() )) {
+    if( ( distanceLabels.get( i ) == FeasibleState.Unused.val ) && ( excess.get( i ) > 0 ) && ( i.id() != source.id() ) && ( i.id() != sink.id() ) ) {
       r = i;
 			distanceLabels.set( r, FeasibleState.Active.val );
 			do {
-				for ( ; current.get( i ) != residualGraph.getLast( i ); current.increase(i, 1) ) {
+				for ( ; current.get( i ) != residualGraph.getLast( i ); current.increase( i, 1 ) ) {
 					a = residualGraph.getEdge( current.get( i ) );
 					if( residualGraph.isReverseEdge( a ) && residualGraph.getResidualCapacity( a ) > 0 ) {
 						j = a.end();
@@ -319,7 +317,7 @@ public class PushRelabelHighestLabel extends PushRelabel {
 									if ( j.equals(i) )
 										break;
 								}
-	  
+
 								/* backup DFS to the first saturated arc */
 								restart = i;
 								for( j = residualGraph.getEdge( current.get( i ) ).end(); !j.equals( i ); j = a.end() ) {
@@ -330,7 +328,7 @@ public class PushRelabelHighestLabel extends PushRelabel {
 											restart = j;
 									}
 								}
-	  
+
 								if( !restart.equals( i ) ) {
 									i = restart;
 									current.increase( i, 1 );
@@ -340,27 +338,24 @@ public class PushRelabelHighestLabel extends PushRelabel {
 					}
 				}
 
-		if( current.get( i ) == residualGraph.getLast( i ) ) {
-			/* scan of i complete */
-			distanceLabels.set( i, FeasibleState.Finished.val );
-			if ( !i.equals( source ) ) {
-		    if ( bos == null ) {
-		      bos = i;
-		      tos = i;
-		    }
-			  else {
-					next[i.id()] = tos;
-					tos = i;
-				}
-			}
+				if( current.get( i ) == residualGraph.getLast( i ) ) {
+					/* scan of i complete */
+					distanceLabels.set( i, FeasibleState.Finished.val );
+					if( !i.equals( source ) )
+						if( bos == null ) {
+							bos = i;
+							tos = i;
+						} else {
+							next[i.id()] = tos;
+							tos = i;
+						}
 
-			if( !i.equals( r ) ) {
-				i = buckets[i.id()];
-				current.increase( i, 1 );
-			}
-			else
-				break;
-		}
+					if( !i.equals( r ) ) {
+						i = buckets[i.id()];
+						current.increase( i, 1 );
+					} else
+						break;
+				}
 			} while ( true );
     }
 	}
