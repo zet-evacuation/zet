@@ -27,6 +27,7 @@ import event.EventListener;
 import gui.GUIControl;
 import gui.GUIOptionManager;
 import gui.ZETLoader;
+import gui.editor.CoordinateTools;
 import gui.editor.planimage.PlanImage;
 import java.awt.AWTEvent;
 import java.awt.BasicStroke;
@@ -38,13 +39,13 @@ import java.awt.Graphics2D;
 import java.awt.Point;
 import java.awt.RenderingHints;
 import java.awt.event.MouseEvent;
+import java.awt.event.MouseWheelEvent;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map.Entry;
 import java.util.Objects;
-import javax.swing.JComponent;
 import javax.swing.SwingUtilities;
 import zet.gui.main.tabs.base.AbstractFloor;
 import zet.gui.main.tabs.base.JPolygon;
@@ -105,8 +106,6 @@ public class JFloor extends AbstractFloor implements EventListener<ZModelRoomEve
 	 * are created.
 	 */
 	private void initialize() {
-		System.out.println( "INITIALIZING THE NEW FLOOR FOR " + myFloor );
-
 		Floor f = myFloor;
 
 		updateOffsets( f );
@@ -261,37 +260,19 @@ public class JFloor extends AbstractFloor implements EventListener<ZModelRoomEve
 	protected void processMouseEvent( MouseEvent e ) {
 		if( e.getButton() == MouseEvent.BUTTON1 ) {
 			if( e.getID() == MouseEvent.MOUSE_CLICKED ) {
-				System.out.println( "CLICKED" );
 				if(e.getClickCount() == 2 ) {
 					List<JPolygon> clickedPolygons = findAllPolygonsAt( JFloor.this, e.getPoint() );
 					editStatus.getCurrentHandler().doubleClick( e.getPoint(), clickedPolygons );
 				}
 			} else if( e.getID() == MouseEvent.MOUSE_PRESSED ) {
-				System.out.println( "PRESSED" );
 					List<JPolygon> clickedPolygons = findAllPolygonsAt( JFloor.this, e.getPoint() );
 					editStatus.getCurrentHandler().mouseDown( e.getPoint(), clickedPolygons );
 			} else if( e.getID() == MouseEvent.MOUSE_RELEASED ) {
-				System.out.println( "RELEASED" );
 				editStatus.getCurrentHandler().mouseUp( e.getPoint(), Arrays.asList( getComponents() ) );
 			}
 		} else if( e.getButton() == MouseEvent.BUTTON3 ) {
 			if( e.getID() == MouseEvent.MOUSE_CLICKED )
 				editStatus.getCurrentHandler().rightClick();
-//			System.out.println( "Consuming" );
-//			e.consume();
-//			switch( e.getID() ) {
-//				case MouseEvent.MOUSE_CLICKED:
-//					System.out.println( "CLICKED" );
-//					break;
-//				case MouseEvent.MOUSE_PRESSED:
-//					System.out.println( "PRESSED" );
-//					break;
-//				case MouseEvent.MOUSE_RELEASED:
-//					System.out.println( "RELEASED" );
-//					break;
-//				default:
-//					System.out.println( "DEFAULT: " + e.getID() );
-//			}
 		}
 		repaint();
 	}
@@ -318,6 +299,30 @@ public class JFloor extends AbstractFloor implements EventListener<ZModelRoomEve
 		LinkedList<JPolygon> result = new LinkedList<>();
 		findAllPolygonsAtImpl( c, p, result );
 		return result;
+	}
+
+
+	boolean strgPressed = false;
+	/** Used for zooming in and out with the mouse wheel.
+	 * @param e the mouse event
+	 */
+	@Override
+	protected void processMouseWheelEvent( MouseWheelEvent e ) {
+		if( !strgPressed ) {
+			// move up/down
+			guiControl.scrollVertical(e.getWheelRotation() );
+		} else {
+			// zoom in and out
+			double oldZoom = CoordinateTools.getZoomFactor();
+			if( e.getScrollType() == MouseWheelEvent.WHEEL_BLOCK_SCROLL )
+				oldZoom = e.getWheelRotation() < 0 ? Math.min( oldZoom * 2, 0.25d ) : Math.max( oldZoom * 2, 0.01d );
+			else {
+				double offset = (e.getScrollAmount() * Math.abs( e.getWheelRotation() )) / 100.0d;
+				offset /= 4; // Make offset smaller, otherwise it's too fast
+				oldZoom = e.getWheelRotation() < 0 ? Math.min( oldZoom + offset, 0.25d ) : Math.max( oldZoom - offset, 0.01d );
+			}
+			guiControl.setZoomFactor( oldZoom );
+		}
 	}
 
 	/** This is an internal helper method. Never call it.
@@ -844,28 +849,8 @@ public class JFloor extends AbstractFloor implements EventListener<ZModelRoomEve
 //			}
 //
 //	}
-//
-//	/** Used for zooming in and out with the mouse wheel.
-//	 * @param e the mouse event
-//	 */
-//	@Override
-//	protected void processMouseWheelEvent( MouseWheelEvent e ) {
-//		if( strgPressed ) {
-//			// move up/down
-//			guiControl.scrollVertical(e.getWheelRotation() );
-//		} else {
-//			// zoom in and out
-//			double oldZoom = CoordinateTools.getZoomFactor();
-//			if( e.getScrollType() == MouseWheelEvent.WHEEL_BLOCK_SCROLL )
-//				oldZoom = e.getWheelRotation() < 0 ? Math.min( oldZoom * 2, 0.25d ) : Math.max( oldZoom * 2, 0.01d );
-//			else {
-//				double offset = (e.getScrollAmount() * Math.abs( e.getWheelRotation() )) / 100.0d;
-//				offset /= 4; // Make offset smaller, otherwise it's too fast
-//				oldZoom = e.getWheelRotation() < 0 ? Math.min( oldZoom + offset, 0.25d ) : Math.max( oldZoom - offset, 0.01d );
-//			}
-//			guiControl.setZoomFactor( oldZoom );
-//		}
-//	}
+
+
 //
 //	// ACTION LISTENER STUFF
 //	/**

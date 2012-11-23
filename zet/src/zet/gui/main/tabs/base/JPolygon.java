@@ -50,6 +50,7 @@ import java.util.Iterator;
 import java.util.LinkedList;
 import javax.swing.SwingUtilities;
 import zet.gui.main.tabs.editor.JFloor;
+import de.tu_berlin.math.coga.common.util.Selectable;
 
 /**
  * Graphical representation of a {@link ds.z.PlanPolygon}. This class has the
@@ -60,7 +61,7 @@ import zet.gui.main.tabs.editor.JFloor;
  * @author Timon Kelter
  */
 @SuppressWarnings( "serial" )
-public class JPolygon extends AbstractPolygon<JFloor> {
+public class JPolygon extends AbstractPolygon<JFloor> implements Selectable {
 	private boolean dragged = false;
 	public final void setDragged( boolean b ) {
 		dragged = b;
@@ -116,6 +117,7 @@ public class JPolygon extends AbstractPolygon<JFloor> {
 	public Point getDragOffset() {
 		return dragOffset;
 	}
+
 
 
 	//############## EDGE RELATED FIELDS ###################

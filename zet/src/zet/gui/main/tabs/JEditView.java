@@ -45,10 +45,6 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.AdjustmentEvent;
 import java.awt.event.AdjustmentListener;
-import java.awt.event.FocusEvent;
-import java.awt.event.FocusListener;
-import java.awt.event.KeyAdapter;
-import java.awt.event.KeyEvent;
 import java.io.IOException;
 import java.text.NumberFormat;
 import java.util.ArrayList;
@@ -60,13 +56,11 @@ import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import javax.swing.JList;
 import javax.swing.JPanel;
-import javax.swing.JTextField;
 import javax.swing.SwingUtilities;
 import zet.gui.GUILocalization;
 import zet.gui.components.model.ComboBoxRenderer;
 import zet.gui.components.model.FloorComboBox;
 import zet.gui.components.model.RoomComboBoxModel;
-import zet.gui.main.JZetWindow;
 import zet.gui.main.tabs.base.AbstractSplitPropertyWindow;
 import zet.gui.main.tabs.base.JFloorScrollPane;
 import zet.gui.main.tabs.base.JPolygon;
@@ -74,6 +68,7 @@ import zet.gui.main.tabs.editor.EditStatus;
 import zet.gui.main.tabs.editor.JAssignmentAreaInformationPanel;
 import zet.gui.main.tabs.editor.JDefaultInformationPanel;
 import zet.gui.main.tabs.editor.JDelayAreaInformationPanel;
+import zet.gui.main.tabs.editor.JEdgeInformationPanel;
 import zet.gui.main.tabs.editor.JEvacuationAreaInformationPanel;
 import zet.gui.main.tabs.editor.JFloor;
 import zet.gui.main.tabs.editor.JFloorInformationPanel;
@@ -81,7 +76,7 @@ import zet.gui.main.tabs.editor.JInformationPanel;
 import zet.gui.main.tabs.editor.JRoomInformationPanel;
 import zet.gui.main.tabs.editor.JStairAreaInformationPanel;
 import zet.gui.main.tabs.editor.JTeleportAreaInformationPanel;
-import zet.gui.main.tabs.editor.SelectedElements;
+import zet.gui.main.tabs.editor.SelectedFloorElements;
 
 /**
  * <p>One of the main components of the ZET software. This is a component
@@ -98,13 +93,10 @@ import zet.gui.main.tabs.editor.SelectedElements;
  * @see zet.gui.components.tabs.editor.JFloor
  * @author Jan-Philipp Kappmeier
  */
+@SuppressWarnings( "serial" )
 public class JEditView extends AbstractSplitPropertyWindow<JFloorScrollPane<JFloor>> implements Observer {
-	private JLabel lblEdgeType;
-	private JLabel lblEdgeLength;
-	private JLabel lblEdgeExitName;
-	private JTextField txtEdgeExitName;
 	private final EditStatus editStatus;
-	private final SelectedElements selection;
+	private final SelectedFloorElements selection;
 
 	public void setZoomFactor( double zoomFactor ) {
 		getLeftPanel().setZoomFactor( zoomFactor );
@@ -120,7 +112,9 @@ public class JEditView extends AbstractSplitPropertyWindow<JFloorScrollPane<JFlo
 					setEastPanelType( Panels.Floor );
 				} else {
 					PlanPolygon<?> p = selected.getPlanPolygon();
-					if( p instanceof Room )
+					if( selection.getSelectedEdge() != null )
+						setEastPanelType( Panels.Edge );
+					else if( p instanceof Room )
 						setEastPanelType( Panels.Room );
 					else if( p instanceof DelayArea )
 						setEastPanelType( Panels.DelayArea );
@@ -162,7 +156,7 @@ public class JEditView extends AbstractSplitPropertyWindow<JFloorScrollPane<JFlo
 		/** Message code indicating that the stair area panel should be displayed. */
 		TeleportArea( new JTeleportAreaInformationPanel() ),
 		/** A single edge is select. No area or polygon. */
-		Edge( new JDefaultInformationPanel() );
+		Edge( new JEdgeInformationPanel() );
 
 		private Panels( JInformationPanel<? extends Object> panel ) {
 			this.panel = Objects.requireNonNull( panel );
@@ -210,7 +204,7 @@ public class JEditView extends AbstractSplitPropertyWindow<JFloorScrollPane<JFlo
 	final NumberFormat nfFloat = DefaultLoc.getSingleton().getFloatConverter();
 	final NumberFormat nfInteger = DefaultLoc.getSingleton().getIntegerConverter();
 
-	public JEditView( EditStatus editStatus, GUIControl guiControl, SelectedElements selection ) {
+	public JEditView( EditStatus editStatus, GUIControl guiControl, SelectedFloorElements selection ) {
 		super( new JFloorScrollPane<>( new JFloor( editStatus, guiControl ) ) );
 		this.selection = selection;
 		//((JRoomInformationPanel)Panels.Room.getPanel()).setSelection( selection );
@@ -242,82 +236,14 @@ public class JEditView extends AbstractSplitPropertyWindow<JFloorScrollPane<JFlo
 	 * @param panel the panel
 	 */
 	private void setEastPanelType( Panels panel ) {
-		//selectedPolygon = (panel == Panels.Default || panel == Panels.Floor || panel == Panels.Edge ) ? null : getLeftPanel().getMainComponent().getSelectedPolygons().get( 0 ).getPlanPolygon();
-		//panel.getPanel().update();
-		switch( panel ) {
-			case InaccessibleArea:
-				Panels.InaccessibleArea.getPanel().update( selection.getSelected().getPlanPolygon() );
-				eastSubBarCardLayout.show( eastSubBar, "inaccessibleArea" );
-				break;
-			case DelayArea:
-				Panels.DelayArea.getPanel().update( selection.getSelected().getPlanPolygon() );
-				eastSubBarCardLayout.show( eastSubBar, "delayArea" );
-				break;
-			case StairArea:
-				Panels.StairArea.getPanel().update( ((StairArea)selection.getSelected().getPlanPolygon()) );
-				eastSubBarCardLayout.show( eastSubBar, "stairArea" );
-				break;
-			case AssignmentArea:
-				Panels.AssignmentArea.getPanel().update( ((AssignmentArea)selection.getSelected().getPlanPolygon()) );
-				eastSubBarCardLayout.show( eastSubBar, "assignmentArea" );
-				break;
-			case Room:
-				Panels.Room.getPanel().update( ((Room)selection.getSelected().getPlanPolygon()) );
-				eastSubBarCardLayout.show( eastSubBar, "room" );
-				break;
-			case Default:
-				eastSubBarCardLayout.show( eastSubBar, "default" );
-				break;
-			case Floor:
-				Panels.Floor.getPanel().update( currentFloor );
-				eastSubBarCardLayout.show( eastSubBar, "floor" );
-				break;
-			case EvacuationArea:
-				Panels.EvacuationArea.getPanel().update( ((EvacuationArea)selection.getSelected().getPlanPolygon()) );
-				eastSubBarCardLayout.show( eastSubBar, "evacuation" );
-				break;
-			case TeleportArea:
-				Panels.TeleportArea.getPanel().update( ((TeleportArea)selection.getSelected().getPlanPolygon()) );
-				eastSubBarCardLayout.show( eastSubBar, "teleport" );
-				break;
-//			case Edge:
-//				Edge e = getLeftPanel().getMainComponent().getSelectedEdge();
-//				txtEdgeExitName.setEnabled( false );
-//				lblEdgeExitName.setText( "" );
-//				if( e instanceof RoomEdge ) {
-//					if( e instanceof TeleportEdge ) {
-//						TeleportEdge te = (TeleportEdge)e;
-//						if( ((Room)te.getLinkTarget().getAssociatedPolygon()).getAssociatedFloor() instanceof DefaultEvacuationFloor ) {
-//							lblEdgeType.setText( "Ausgang" );
-//							txtEdgeExitName.setEnabled( true );
-//							// we have an evacuation exit
-//							Room r = (Room)te.getLinkTarget().getAssociatedPolygon();
-//							EvacuationArea ea = r.getEvacuationAreas().get( 0 );
-//							lblEdgeExitName.setText( "Ausgang" );
-//							txtEdgeExitName.setText( ea.getName() );
-//						}
-//						else
-//							lblEdgeType.setText( "Stockwerkübergang" );
-//					} else {
-//						if( ((RoomEdge)e).isPassable() ) {
-//							lblEdgeType.setText( "Durchgang" );
-//						} else {
-//							lblEdgeType.setText( "Wand" );
-//						}
-//					}
-//				} else {
-//					// easy peasy, this is an area boundry
-//					lblEdgeType.setText( "Area-Begrenzung" );
-//				}
-//
-//				lblEdgeLength.setText( "Breite: " + (e.length())*0.001  + "m" );
-//
-//				eastSubBarCardLayout.show( eastSubBar, "edge" );
-//				break;
-			default:
-				guiControl.showErrorMessage( loc.getString( "gui.NotGraveError" ), loc.getString( "gui.editor.JEditorPanel.WrongPanelID" ) );
-				return;
+		if( panel == Panels.Edge ) {
+			panel.getPanel().update( selection.getSelectedEdge() );
+		} else if( panel == Panels.Floor ) {
+			Panels.Floor.getPanel().update( currentFloor );
+		} else { // selected an area
+			panel.getPanel().update( selection.getSelected().getPlanPolygon() );
 		}
+		eastSubBarCardLayout.show( eastSubBar, panel.toString() );
 		eastPanelType = panel;
 	}
 
@@ -419,97 +345,14 @@ public class JEditView extends AbstractSplitPropertyWindow<JFloorScrollPane<JFlo
 		//JInformationPanel card;
 		JPanel card;
 
-		card = Panels.Floor.getPanel();
-		eastSubBar.add( card, "floor" );
-
-		card = Panels.DelayArea.getPanel();
-		eastSubBar.add( card, "delayArea" );
-
-		card = Panels.StairArea.getPanel();
-		eastSubBar.add( card, "stairArea" );
-
-		card = Panels.AssignmentArea.getPanel();
-		eastSubBar.add( card, "assignmentArea" );
-
-		card = Panels.Room.getPanel();
-		eastSubBar.add( card, "room" );
-
-		card = Panels.Default.getPanel();
-		eastSubBar.add( card, "default" );
-
-		card = Panels.EvacuationArea.getPanel();
-		eastSubBar.add( card, "evacuation" );
-
-		card = Panels.TeleportArea.getPanel();
-		eastSubBar.add( card, "teleport" );
-
-		card = getEastEdgePanel();
-		eastSubBar.add( card, "edge" );
+		for( Panels panel : Panels.values() ) {
+			System.out.println( "Adding " + panel.toString() );
+			eastSubBar.add( panel.getPanel(), panel.toString() );
+		}
 
 		eastPanel.add( eastSubBar, "1, " + row++ );
 
 		loc.clearPrefix();
-		return eastPanel;
-	}
-
-	private JPanel getEastEdgePanel() {
-		double size[][] = // Columns
-						{{TableLayout.FILL},
-			//Rows
-			{TableLayout.PREFERRED, TableLayout.PREFERRED, 20,
-				TableLayout.PREFERRED, TableLayout.PREFERRED, 20,
-				TableLayout.PREFERRED, TableLayout.PREFERRED, 20,
-				TableLayout.PREFERRED, 20, TableLayout.FILL
-			}
-		};
-
-		JPanel eastPanel = new JPanel( new TableLayout( size ) );
-
-		int row = 0;
-
-		lblEdgeType = new JLabel( "Edge type" );
-		eastPanel.add( lblEdgeType, "0, " + row++ );
-		row++;
-
-		lblEdgeLength = new JLabel( "Länge:" );
-		eastPanel.add( lblEdgeLength, "0, " + row++ );
-		row++;
-
-		lblEdgeExitName = new JLabel( loc.getString( "Evacuation.Name" ) );
-		eastPanel.add( lblEdgeExitName, "0, " + row++ );
-		txtEdgeExitName = new JTextField();
-		txtEdgeExitName.addFocusListener( new FocusListener() {
-			@Override
-			public void focusGained( FocusEvent e ) {
-				JZetWindow.setEditing( true );
-			}
-
-			@Override
-			public void focusLost( FocusEvent e ) {
-				JZetWindow.setEditing( false );
-			}
-		} );
-		txtEdgeExitName.addKeyListener( new KeyAdapter() {
-			@Override
-			public void keyPressed( KeyEvent e ) {
-				if( e.getKeyCode() == KeyEvent.VK_ENTER ) {
-					// Find the attached exit and set the name
-//					if( getLeftPanel().getMainComponent().getSelectedEdge() instanceof TeleportEdge ) {
-//						TeleportEdge te = (TeleportEdge)getLeftPanel().getMainComponent().getSelectedEdge();
-//						if( ((Room)te.getLinkTarget().getAssociatedPolygon()).getAssociatedFloor() instanceof DefaultEvacuationFloor ) {
-//							// we have an evacuation exit
-//							Room r = (Room)te.getLinkTarget().getAssociatedPolygon();
-//							EvacuationArea ea = r.getEvacuationAreas().get( 0 );
-//							ea.setName( txtEdgeExitName.getText() );
-//						}
-//					}
-				}
-					//((EvacuationArea)getLeftPanel().getMainComponent().getSelectedPolygons().get( 0 ).getPlanPolygon()).setName( txtEdgeExitName.getText() );
-			}
-		} );
-		eastPanel.add( txtEdgeExitName, "0, " + row++ );
-		row++;
-
 		return eastPanel;
 	}
 
@@ -710,5 +553,9 @@ public class JEditView extends AbstractSplitPropertyWindow<JFloorScrollPane<JFlo
 	 */
 	public Point convertPointToFloorCoordinates( Component source, Point toConvert ) {
 		return SwingUtilities.convertPoint( source, toConvert, getFloor() );
+	}
+	/** Prohibits serialization. */
+	private synchronized void writeObject( java.io.ObjectOutputStream s ) throws IOException {
+		throw new UnsupportedOperationException( "Serialization not supported" );
 	}
 }
