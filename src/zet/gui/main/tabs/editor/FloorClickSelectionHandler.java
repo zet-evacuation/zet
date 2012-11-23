@@ -78,25 +78,19 @@ public class FloorClickSelectionHandler extends FloorClickHandler {
 				Object clickedOn = null;
 				JPolygon sel = toSelect;
 				clickedOn = sel.findClickTargetAt( SwingUtilities.convertPoint( getEditStatus().getControlled(), p, sel ) );
+				System.out.println( "clickedOn: " + clickedOn );
 
 				if( clickedOn != null )
 					if( clickedOn instanceof PlanPoint ) {
 						PlanPoint dp = (PlanPoint) clickedOn;
-
 					} else if( clickedOn instanceof Edge ) {
 						Edge edge = (Edge) clickedOn;
 						getEditStatus().clearSelection();
-						//selectedEdge = edge;
-						//selectedElementPolygon = toSelect;
-						//selectedElementPolygon.setSelectedEdge( edge );
-						//fireActionEvent();
+						getEditStatus().selectEdge( toSelect, edge );
 					} else if( clickedOn instanceof PlanPolygon ) {
-						// Clear old selection & Select new
-						//setSelectedPolygon( toSelect );
 						getEditStatus().selectPolygon( toSelect );
 					} else
 						getEditStatus().clearSelection();
-
 			} else
 				getEditStatus().clearSelection();
 }

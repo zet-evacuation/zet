@@ -4,6 +4,8 @@
  */
 package zet.gui.main.tabs.editor;
 
+import de.tu_berlin.math.coga.common.util.SelectedElements;
+import ds.z.Edge;
 import ds.z.Floor;
 import ds.z.ZControl;
 import gui.editor.CoordinateTools;
@@ -25,7 +27,7 @@ public class EditStatus {
 	JPolygon currentEditing;
 	boolean popupsEnabled = true;
 
-	final SelectedElements selection;
+	final SelectedFloorElements selection;
 
 	EditMode editMode = EditMode.Selection;
 	/** Decides, whether the creation of an zet object has been started and not finished yet. */
@@ -42,7 +44,7 @@ public class EditStatus {
 	private ZetObjectTypes zetObjectType;
 	private Floor floor;
 
-	public EditStatus( ZControl zcontrol, SelectedElements selection ) {
+	public EditStatus( ZControl zcontrol, SelectedFloorElements selection ) {
 		this.zcontrol = zcontrol;
 		this.selection = selection;
 	}
@@ -179,5 +181,14 @@ public class EditStatus {
 
 	public boolean isPopupEnabled() {
 		return popupsEnabled;
+	}
+
+	/**
+	 * Selectes a single edge in a given polygon.
+	 * @param toSelect
+	 * @param edge
+	 */
+	void selectEdge( JPolygon toSelect, Edge edge ) {
+		selection.selectEdge( toSelect, edge );
 	}
 }

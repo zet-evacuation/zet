@@ -22,7 +22,6 @@ import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import javax.swing.JList;
-import javax.swing.JPanel;
 import javax.swing.JTextField;
 import zet.gui.components.model.ComboBoxRenderer;
 import zet.gui.main.JZetWindow;
@@ -32,10 +31,10 @@ import zet.gui.main.JZetWindow;
  * @author Jan-Philipp Kappmeier
  */
 public class JDelayAreaInformationPanel extends JInformationPanel<DelayArea> {
-		private JButton btnDelaySetDefault;
+	private JButton btnDelaySetDefault;
 	private JLabel lblDelayFactor;
 	private JLabel lblDelayType;
-		private JComboBox<DelayArea.DelayType> cbxDelayType;
+	private JComboBox<DelayArea.DelayType> cbxDelayType;
 	private JTextField txtDelayFactor;
 
 		public JDelayAreaInformationPanel() {

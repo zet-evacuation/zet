@@ -92,9 +92,8 @@ import zet.gui.main.tabs.JEditView;
 import zet.gui.main.tabs.JQuickVisualizationView;
 import zet.gui.main.tabs.JVisualizationView;
 import zet.gui.main.tabs.base.RasterPaintStyle;
-import zet.gui.main.tabs.editor.EditModeOld;
 import zet.gui.main.tabs.editor.EditStatus;
-import zet.gui.main.tabs.editor.SelectedElements;
+import zet.gui.main.tabs.editor.SelectedFloorElements;
 import zet.gui.main.tabs.visualization.ZETVisualization;
 import zet.gui.main.toolbar.JBatchToolBar;
 import zet.gui.main.toolbar.JEditToolbar;
@@ -145,7 +144,7 @@ public class GUIControl implements AlgorithmListener {
 	private PolygonPopup polygonPopup;
 	private EdgePopup edgePopup;
 	private PointPopup pointPopup;
-	SelectedElements selection = new SelectedElements();
+	private SelectedFloorElements selection = new SelectedFloorElements();
 
 	/**
 	 *

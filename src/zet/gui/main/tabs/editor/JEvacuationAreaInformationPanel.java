@@ -10,6 +10,7 @@ import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
+import java.io.IOException;
 import javax.swing.JLabel;
 import javax.swing.JTextField;
 import zet.gui.main.JZetWindow;
@@ -18,6 +19,7 @@ import zet.gui.main.JZetWindow;
  *
  * @author Jan-Philipp Kappmeier
  */
+@SuppressWarnings( "serial" )
 public class JEvacuationAreaInformationPanel extends JInformationPanel<EvacuationArea> {
 	private JLabel lblEvacuationAreaName;
 	private JTextField txtEvacuationAreaName;
@@ -105,5 +107,9 @@ public class JEvacuationAreaInformationPanel extends JInformationPanel<Evacuatio
 	public void localize() {
 		lblEvacuationAreaName.setText( loc.getString( "Evacuation.Name" ) );
 		lblEvacuationAttractivity.setText( loc.getString( "Evacuation.Attractivity" ) );
+	}
+	/** Prohibits serialization. */
+	private synchronized void writeObject( java.io.ObjectOutputStream s ) throws IOException {
+		throw new UnsupportedOperationException( "Serialization not supported" );
 	}
 }

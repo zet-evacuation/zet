@@ -5,8 +5,6 @@
 package zet.gui.main.tabs.editor;
 
 import ds.z.Edge;
-import ds.z.PlanPoint;
-import ds.z.PlanPolygon;
 import ds.z.StairArea;
 import ds.z.ZControl;
 import ds.z.exception.StairAreaBoundaryException;
