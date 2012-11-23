@@ -64,6 +64,7 @@ public class FloorClickCreatePointwiseHandler extends FloorClickHandler {
 			getZControl().addPoint( p2 );
 			last = p2;
 			creationStarted = true;
+			getEditStatus().setPopupEnabled( false );
 		} else {
 			// adding a new point
 			PlanPoint p2 = new PlanPoint( CoordinateTools.translateToModel( getEditStatus().isRasterizedPaintMode() ? getEditStatus().getNextRasterPoint( p ) : p ) );
@@ -85,6 +86,7 @@ public class FloorClickCreatePointwiseHandler extends FloorClickHandler {
 				creationStarted = false;
 				System.out.println( "Closed a polygon" );
 				getEditStatus().setLastClick( null );
+				getEditStatus().setPopupEnabled( true );
 			} else
 				last = p2;
 		}
@@ -98,9 +100,10 @@ public class FloorClickCreatePointwiseHandler extends FloorClickHandler {
 			last = null;
 			creationStarted = false;
 			getEditStatus().setLastClick( null );
+			getEditStatus().setPopupEnabled( true );
 		}
 	}
-	
+
 	protected boolean isCreationStarted() {
 		return creationStarted;
 	}
