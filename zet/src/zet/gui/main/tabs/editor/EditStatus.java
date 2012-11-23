@@ -165,6 +165,7 @@ public class EditStatus {
 	}
 
 	public void setCurrentEditing( JPolygon currentEditing ) {
+		System.out.println( "Set current editing was set." );
 		if( selection.getSelected() != null )
 			if( selection.getSelected() != currentEditing ) // if we want to set current editing the selection, ignore
 				throw new IllegalStateException( "A polygon can only be set current editing, if no polygon is selected." );
