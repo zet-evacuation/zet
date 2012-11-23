@@ -306,18 +306,14 @@ public class JFloor extends AbstractFloor implements EventListener<ZModelRoomEve
 		return result;
 	}
 
-
-	boolean strgPressed = false;
 	/** Used for zooming in and out with the mouse wheel.
 	 * @param e the mouse event
 	 */
 	@Override
 	protected void processMouseWheelEvent( MouseWheelEvent e ) {
-		System.out.println( "MOUSE_WHEEL_EVENT" );
-		if( !strgPressed ) {
-			// move up/down
+		if( !e.isControlDown() ) // move up/down
 			guiControl.scrollVertical(e.getWheelRotation() );
-		} else {
+		else {
 			// zoom in and out
 			double oldZoom = CoordinateTools.getZoomFactor();
 			if( e.getScrollType() == MouseWheelEvent.WHEEL_BLOCK_SCROLL )

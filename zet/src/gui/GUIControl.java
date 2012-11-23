@@ -722,8 +722,6 @@ public class GUIControl implements AlgorithmListener {
 		// Löschen eingestellter parameter
 //		ZToCAConverter.getInstance().clear();
 		//firstSwitch = true;
-		if( !PropertyContainer.getInstance().getAsBoolean( "editor.options.view.hideDefaultFloor" ) )
-			editview.setFloor( 1 );
 		// Updaten der gui
 		editview.update();
 		caView.update();

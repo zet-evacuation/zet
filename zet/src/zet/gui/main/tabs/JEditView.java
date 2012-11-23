@@ -20,7 +20,6 @@
  */
 package zet.gui.main.tabs;
 
-import de.tu_berlin.math.coga.common.localization.DefaultLoc;
 import de.tu_berlin.math.coga.components.JRuler;
 import ds.PropertyContainer;
 import ds.z.AssignmentArea;
@@ -46,7 +45,6 @@ import java.awt.event.ActionListener;
 import java.awt.event.AdjustmentEvent;
 import java.awt.event.AdjustmentListener;
 import java.io.IOException;
-import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.EnumSet;
 import java.util.Objects;
@@ -193,16 +191,8 @@ public class JEditView extends AbstractSplitPropertyWindow<JFloorScrollPane<JFlo
 	/** The panel representing the variable part of the east bar. */
 	private JPanel eastSubBar;
 
-
-
 	private boolean disableUpdate = false;
 	private final GUIControl guiControl;
-	//private PlanPolygon<?> selectedPolygon;
-
-
-
-	final NumberFormat nfFloat = DefaultLoc.getSingleton().getFloatConverter();
-	final NumberFormat nfInteger = DefaultLoc.getSingleton().getIntegerConverter();
 
 	public JEditView( EditStatus editStatus, GUIControl guiControl, SelectedFloorElements selection ) {
 		super( new JFloorScrollPane<>( new JFloor( editStatus, guiControl ) ) );
@@ -277,27 +267,23 @@ public class JEditView extends AbstractSplitPropertyWindow<JFloorScrollPane<JFlo
 				lblFloorNumber.setText( String.format( loc.getStringWithoutPrefix( "gui.EditPanel.Default.OnFloor" ), floorSelector.getSelectedIndex() + add ) );
 				//btnFloorDown.setEnabled( !(floorSelector.getSelectedIndex() == 0 || floorSelector.getSelectedIndex() == 1 && add == 0) );
 
-				// TODO call the method somehow with the control class...
-				//JEditor.getInstance().enableMenuFloorDown( !(cbxFloors.getSelectedIndex() == 0 || cbxFloors.getSelectedIndex() == 1 && add == 0) );
-				//btnFloorUp.setEnabled( !(floorSelector.getSelectedIndex() == floorSelector.getItemCount() - 1 || floorSelector.getSelectedIndex() == 0 && add == 0) );
-				//JEditor.getInstance().enableMenuFloorUp( !(cbxFloors.getSelectedIndex() == cbxFloors.getItemCount() - 1 || cbxFloors.getSelectedIndex() == 0 && add == 0) );
-				Floor dspFloor = (Floor)floorSelector.getSelectedItem();
-				currentFloor = dspFloor;
-				Panels.Floor.getPanel().setControl( projectControl, guiControl );
-				Panels.Floor.getPanel().update( currentFloor );
-				//((JFloorInformationPanel)Panels.Floor.getPanel()).setCurrentFloor( currentFloor );
+//				// TODO call the method somehow with the control class...
+					// JEditor.getInstance().enableMenuFloorDown( !(cbxFloors.getSelectedIndex() == 0 || cbxFloors.getSelectedIndex() == 1 && add == 0) );
+//				//btnFloorUp.setEnabled( !(floorSelector.getSelectedIndex() == floorSelector.getItemCount() - 1 || floorSelector.getSelectedIndex() == 0 && add == 0) );
+//				//JEditor.getInstance().enableMenuFloorUp( !(cbxFloors.getSelectedIndex() == cbxFloors.getItemCount() - 1 || cbxFloors.getSelectedIndex() == 0 && add == 0) );
+				setFloor( (Floor)floorSelector.getSelectedItem() );
 
-				updateFloorView();
-				getLeftPanel().getTopRuler().setWidth( dspFloor.getWidth() );
-				getLeftPanel().getLeftRuler().setHeight( dspFloor.getHeight() );
-				getLeftPanel().getTopRuler().offset = zet.util.ConversionTools.roundScale3( dspFloor.getxOffset() / 1000.0 - 0.8 );
-				getLeftPanel().getLeftRuler().offset = zet.util.ConversionTools.roundScale3( dspFloor.getyOffset() / 1000.0 - 0.8 );
+				//updateFloorView();
+				getLeftPanel().getTopRuler().setWidth( currentFloor.getWidth() );
+				getLeftPanel().getLeftRuler().setHeight( currentFloor.getHeight() );
+				getLeftPanel().getTopRuler().offset = zet.util.ConversionTools.roundScale3( currentFloor.getxOffset() / 1000.0 - 0.8 );
+				getLeftPanel().getLeftRuler().offset = zet.util.ConversionTools.roundScale3( currentFloor.getyOffset() / 1000.0 - 0.8 );
 
-				// FloorName
-				//txtFloorName.setText( dspFloor.getName() );
-
-				// Title of the window
+//				// Title of the window
 				guiControl.setZETWindowTitle( getAdditionalTitleBarText() );
+
+				// Finally change the floor
+				changeFloor( currentFloor );
 			}
 		} );
 
@@ -317,6 +303,8 @@ public class JEditView extends AbstractSplitPropertyWindow<JFloorScrollPane<JFlo
 				super.getListCellRendererComponent( list, value, index, isSelected, cellHasFocus );	// Needed for correct displaying! Forget return
 				if( value != null )
 					setText( value.getName() );
+				else
+					setText( "" );
 				return this;
 			}
 			/** Prohibits serialization. */
@@ -342,14 +330,8 @@ public class JEditView extends AbstractSplitPropertyWindow<JFloorScrollPane<JFlo
 
 		eastSubBarCardLayout = new CardLayout();
 		eastSubBar = new JPanel( eastSubBarCardLayout );
-		//JInformationPanel card;
-		JPanel card;
-
-		for( Panels panel : Panels.values() ) {
-			System.out.println( "Adding " + panel.toString() );
+		for( Panels panel : Panels.values() )
 			eastSubBar.add( panel.getPanel(), panel.toString() );
-		}
-
 		eastPanel.add( eastSubBar, "1, " + row++ );
 
 		loc.clearPrefix();
@@ -394,49 +376,45 @@ public class JEditView extends AbstractSplitPropertyWindow<JFloorScrollPane<JFlo
 		displayProject( projectControl );
 	}
 
+	private void setFloor( Floor floor ) {
+		currentFloor = floor;
+		EventServer.getInstance().unregisterListener( getFloor(), ZModelRoomEvent.class );
+		JFloor newFloor = new JFloor( editStatus, guiControl, floor );
+		editStatus.controlFloor( newFloor, floor );
+		getLeftPanel().setMainComponent( newFloor );
+		EventServer.getInstance().registerListener( getFloor(), ZModelRoomEvent.class );
+		roomSelector.displayRoomsForCurrentFloor();
+		Panels.Floor.getPanel().update( floor );
+		eastSubBarCardLayout.show( eastSubBar, Panels.Floor.toString() );
+	}
+
 	/**
 	 * Sets the z {@link ds.z.Project} that is displayed in the edit view.
 	 * @param projectControl
 	 */
 	final public void displayProject( ZControl projectControl ) {
-		if( projectControl != null ) {
-
-			// Clearing is done in the set-methods called later ?
-			//floorSelector.clear();
-			roomSelector.clear();
-			//assignmentTypeSelector.clear();
-		}
-
-		// derregister old floor
-		EventServer.getInstance().unregisterListener( getFloor(), ZModelRoomEvent.class );
-		JFloor floor = new JFloor( editStatus, guiControl, projectControl.getProject().getBuildingPlan().getFloors().get( 1 ) );
-		editStatus.controlFloor( floor, projectControl.getProject().getBuildingPlan().getFloors().get( 1 ) );
-		getLeftPanel().setMainComponent( floor );
-		EventServer.getInstance().registerListener( getFloor(), ZModelRoomEvent.class );
-
 		this.projectControl = projectControl;
 
+		updateFloorList();
+
+		int floorId = 0;
+		if( !PropertyContainer.getInstance().getAsBoolean( "editor.options.view.hideDefaultFloor" ) )
+			if( projectControl.getProject().getBuildingPlan().getFloors().size() >= 2 )
+				floorId = 1;
+
+		// We create a new JFloor object, deregister the old one, and push the new one to the controller
+		setFloor( floorId );
+
+		// Setup the popup menus for the new project
 		if( projectControl != null ) {
 			guiControl.getPolygonPopup().recreate( projectControl.getProject().getCurrentAssignment() );
 			guiControl.getEdgePopup().recreate();
 			guiControl.getPointPopup().recreate();
 		}
 
+		// Give control over the project to the panels
 		for( Panels p : Panels.values() )
 			p.getPanel().setControl( projectControl, guiControl );
-
-		//This is independent of the rest of the displaying work
-		//floorSelector.displayFloors( projectControl.getProject() );
-		updateFloorList();
-		//assignmentTypeSelector.setControl( projectControl );
-		//assignmentTypeSelector.displayAssignmentTypesForCurrentProject();
-		// If more than one floor, display the second.
-		// what happens if a project has no floor?
-		if( PropertyContainer.getInstance().getAsBoolean( "editor.options.view.hideDefaultFloor" ) )
-			if( projectControl.getProject().getBuildingPlan().getFloors().size() >= 2 )
-				changeFloor( projectControl.getProject().getBuildingPlan().getFloors().get( 1 ) );
-			else
-				changeFloor( projectControl.getProject().getBuildingPlan().getFloors().get( 0 ) );
 	}
 
 	/**
@@ -494,7 +472,7 @@ public class JEditView extends AbstractSplitPropertyWindow<JFloorScrollPane<JFlo
 	/**
 	 * Displays the floor with name {@code floorName}
 	 */
-	public void updateFloorList() {
+	public final void updateFloorList() {
 		floorSelector.clear();
 		floorSelector.displayFloors( projectControl.getProject().getBuildingPlan(), PropertyContainer.getInstance().getAsBoolean( "editor.options.view.hideDefaultFloor" ) );
 	}

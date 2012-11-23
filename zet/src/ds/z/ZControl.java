@@ -296,15 +296,10 @@ public class ZControl {
 	}
 
 	private void throwEvent() {
-		//List<Room> affectedRooms = new LinkedList<>();
 		if( newPolygon instanceof Area<?> ) {
 			EventServer.getInstance().dispatchEvent( new ZModelAreaEvent( ((Area<?>)newPolygon).getAssociatedRoom(), (Area<?>)newPolygon ) );
-			//affectedRooms.add( ((Area<?>)newPolygon).getAssociatedRoom() );
 		} else
 			EventServer.getInstance().dispatchEvent( new ZModelRoomEvent( new LinkedList<Room>(){{ add((Room)newPolygon); }} ) );
-		//affectedRooms.add( (Room)newPolygon );
-		//System.out.println( "New Event thrown" );
-		//EventServer.getInstance().dispatchEvent( new ZModelRoomEvent( affectedRooms ) );
 	}
 
 	public PlanPolygon closePolygon() {
