@@ -48,6 +48,8 @@ public class FloorClickCreatePointwiseHandlerStair extends FloorClickCreatePoint
 		} else {
 			System.out.println( "Trying to add a lower side" );
 			JPolygon stair = getEditStatus().getCurrentEditing();
+			if( stair == null )
+				throw new IllegalStateException( "STAIR is null" );
 			if( !(stair.getPlanPolygon() instanceof StairArea) )
 				throw new AssertionError( "No stair, but instead it is of type " + stair.getPlanPolygon().getClass() );
 

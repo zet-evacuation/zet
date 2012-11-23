@@ -136,9 +136,8 @@ public class JFloor extends AbstractFloor implements EventListener<ZModelRoomEve
 			assert poly != null;
 			poly.displayPolygon( room );
 			JPolygon jp = findPolygonToArea( this, e2.getAffectedArea() );
-			//System.out.println( "Editing set to " + jp );
-			editStatus.setCurrentEditing( jp ); // do not call redisplay in this case, as long as JPolygon.display is not reimplemented
-			// the objects will be recreated and the reference to jp will be false then!
+			System.out.println( "Editing set to " + jp );
+			editStatus.setCurrentEditing( jp );
 		} else
 			for( Room room : e.getAffectedRooms() ) {
 				JPolygon poly = roomToPolygonMapping.get( room );
@@ -274,6 +273,12 @@ public class JFloor extends AbstractFloor implements EventListener<ZModelRoomEve
 			if( e.getID() == MouseEvent.MOUSE_CLICKED )
 				editStatus.getCurrentHandler().rightClick();
 		}
+		if( e.getButton() == 4 ) {
+			guiControl.scrollHorizontal( -1 );
+		}
+		if( e.getButton() == 5 ) {
+			guiControl.scrollHorizontal( 1 );
+		}
 		repaint();
 	}
 
@@ -308,6 +313,7 @@ public class JFloor extends AbstractFloor implements EventListener<ZModelRoomEve
 	 */
 	@Override
 	protected void processMouseWheelEvent( MouseWheelEvent e ) {
+		System.out.println( "MOUSE_WHEEL_EVENT" );
 		if( !strgPressed ) {
 			// move up/down
 			guiControl.scrollVertical(e.getWheelRotation() );
