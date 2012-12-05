@@ -38,6 +38,8 @@ import java.awt.Point;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.ComponentAdapter;
+import java.awt.event.ComponentEvent;
 import java.awt.event.InputEvent;
 import java.awt.event.KeyEvent;
 import java.awt.event.WindowAdapter;
@@ -121,9 +123,26 @@ public class JZetWindow extends JFrame implements Localized {
 
 		// Set window position
 		setDefaultCloseOperation( JFrame.EXIT_ON_CLOSE );
-		setSize( 800, 600 );
+
+		// set size and location, move to visible area if otherwise hidden
+		int x = PropertyContainer.getInstance().getAsInt( "settings.editor.window.position.x" );
+		int y = PropertyContainer.getInstance().getAsInt( "settings.editor.window.position.y" );
+		int width = PropertyContainer.getInstance().getAsInt( "settings.editor.window.position.width" );
+		int height = PropertyContainer.getInstance().getAsInt( "settings.editor.window.position.height" );
+		boolean maximized = PropertyContainer.getInstance().getAsBoolean( "settings.editor.window.position.maximized" );
 		Dimension d = Toolkit.getDefaultToolkit().getScreenSize();
-		setLocation( (d.width - getSize().width) / 2, (d.height - getSize().height) / 2 );
+		if( width < 0 || width > d.width )
+			width = d.width/2;
+		if( height < 0 || height > d.height )
+			height = d.height/2;
+		if( x < 0 || x + width > d.width )
+			x = (d.width - width) / 2;
+		if( y < 0 || y + height > d.height )
+			y = (d.height - height)/2;
+		setSize( width, height );
+		setLocation( x, y );
+		if( maximized )
+	    setExtendedState( getExtendedState() | JFrame.MAXIMIZED_BOTH );
 
 		getContentPane().setLayout( new BorderLayout() );
 
@@ -148,7 +167,7 @@ public class JZetWindow extends JFrame implements Localized {
 		getContentPane().add( tabPane, BorderLayout.CENTER );
 		ZETLoader.sendMessage( loc.getString( "gui.status.EditorInitialized" ) );
 
-		// window listener
+		// window listener, saves stuff when closing
 		this.addWindowListener( new WindowAdapter() {
 			@Override
 			public void windowClosing( WindowEvent e ) {
@@ -163,6 +182,23 @@ public class JZetWindow extends JFrame implements Localized {
 			}
 		} );
 
+		// component listener. updates location information when moved/resized.
+		this.addComponentListener( new ComponentAdapter() {
+			@Override
+			public void componentMoved( ComponentEvent e ) {
+				boolean maximized = (getExtendedState() & JFrame.MAXIMIZED_BOTH) != 0;
+				if( maximized ) {
+					PropertyContainer.getInstance().set( "settings.editor.window.position.maximized", true );
+				} else {
+					PropertyContainer.getInstance().set( "settings.editor.window.position.maximized", false );
+					PropertyContainer.getInstance().set( "settings.editor.window.position.x", getX() );
+					PropertyContainer.getInstance().set( "settings.editor.window.position.y", getY() );
+					PropertyContainer.getInstance().set( "settings.editor.window.position.width", getWidth() );
+					PropertyContainer.getInstance().set( "settings.editor.window.position.height", getHeight() );
+				}
+			}
+		} );
+
 		// set up the icon
 		final File iconFile = new File( "./icon.gif" );
 		ZETLoader.checkFile( iconFile );
@@ -172,7 +208,6 @@ public class JZetWindow extends JFrame implements Localized {
 			ZETLoader.exit( "Error loding icon." );
 		}
 
-    setExtendedState(getExtendedState()/*|JFrame.MAXIMIZED_BOTH*/);
 	}
 
 	public void addMode( String title, String toolTip, Icon icon, JComponent component, JToolBar menu ) {

@@ -105,28 +105,28 @@ public class JEditView extends AbstractSplitPropertyWindow<JFloorScrollPane<JFlo
 	@Override
 	public void update( Observable o, Object arg ) {
 		if( o == selection ) {
-				JPolygon selected = arg == null || !(arg instanceof JPolygon) ? selection.getSelected() : (JPolygon)arg;
-				if( selected == null ) {
-					setEastPanelType( Panels.Floor );
-				} else {
-					PlanPolygon<?> p = selected.getPlanPolygon();
-					if( selection.getSelectedEdge() != null )
-						setEastPanelType( Panels.Edge );
-					else if( p instanceof Room )
-						setEastPanelType( Panels.Room );
-					else if( p instanceof DelayArea )
-						setEastPanelType( Panels.DelayArea );
-					else if( p instanceof EvacuationArea )
-						setEastPanelType( Panels.EvacuationArea );
-					else if( p instanceof AssignmentArea )
-						setEastPanelType( Panels.AssignmentArea );
-					else if( p instanceof StairArea )
-						setEastPanelType( Panels.StairArea );
-					else if( p instanceof TeleportArea )
-						setEastPanelType( Panels.TeleportArea );
-					else
-						setEastPanelType( Panels.Default );
-				}
+			JPolygon selected = arg == null || !(arg instanceof JPolygon) ? selection.getSelected() : (JPolygon)arg;
+			if( selected == null ) {
+				setEastPanelType( Panels.Floor );
+			} else {
+				PlanPolygon<?> p = selected.getPlanPolygon();
+				if( selection.getSelectedEdge() != null )
+					setEastPanelType( Panels.Edge );
+				else if( p instanceof Room )
+					setEastPanelType( Panels.Room );
+				else if( p instanceof DelayArea )
+					setEastPanelType( Panels.DelayArea );
+				else if( p instanceof EvacuationArea )
+					setEastPanelType( Panels.EvacuationArea );
+				else if( p instanceof AssignmentArea )
+					setEastPanelType( Panels.AssignmentArea );
+				else if( p instanceof StairArea )
+					setEastPanelType( Panels.StairArea );
+				else if( p instanceof TeleportArea )
+					setEastPanelType( Panels.TeleportArea );
+				else
+					setEastPanelType( Panels.Default );
+			}
 		}
 	}
 
