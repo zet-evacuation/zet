@@ -37,7 +37,7 @@ public class JAssignmentAreaInformationPanel extends JInformationPanel<Assignmen
 
 	/** Model for a assignmentType-selector combo box. */
 	private zet.gui.components.model.AssignmentTypeComboBoxModel assignmentTypeSelector;
-private JLabel lblAssignmentType;
+	private JLabel lblAssignmentType;
 	private JLabel lblAssignmentEvacueeNumber;
 	private JButton btnAssignmentSetDefaultEvacuees;
 	private JLabel lblAreaSizeDesc;
@@ -48,7 +48,7 @@ private JLabel lblAssignmentType;
 	private JTextField txtNumberOfPersons;
 	private JComboBox<EvacuationArea> cbxPreferredExit;
 	private JLabel lblAreaSize;
-	
+
 	public JAssignmentAreaInformationPanel() {
 		super( new double[]{TableLayout.FILL},
 						new double[]{ //Rows
@@ -124,6 +124,7 @@ private JLabel lblAssignmentType;
 		this.add( txtNumberOfPersons, "0, " + row++ );
 		row++;
 		btnAssignmentSetDefaultEvacuees = Button.newButton( loc.getString( "Assignment.SetDefaultEvacuees" ), loc.getString( "Assignment.SetDefaultEvacuees.ToolTip" ) );
+		btnAssignmentSetDefaultEvacuees.setToolTipText( loc.getString( "Assignment.SetDefaultEvacuees.ToolTip" ) );
 		btnAssignmentSetDefaultEvacuees.addActionListener( new ActionListener() {
 			@Override
 			public void actionPerformed( ActionEvent e ) {
@@ -187,30 +188,31 @@ private JLabel lblAssignmentType;
 		row++;
 
 	}
-		
+
 	@Override
 	public void update() {
-				txtNumberOfPersons.setText( nfInteger.format( current.getEvacuees() ) );
-				assignmentTypeSelector.setSelectedItem( current.getAssignmentType() );
-				double area = Math.round( current.areaMeter() * 100 ) / 100.0;
-				lblAreaSize.setText( nfFloat.format( area ) + " m²" );
-				if( projectControl.getProject().getBuildingPlan().isRastered() ) {
-					lblMaxPersons.setText( nfInteger.format( current.getMaxEvacuees() ) );
-					lblMaxPersonsWarning.setText( "" );
-				} else {
-					double persons = Math.round( (area / (0.4 * 0.4)) * 100 ) / 100.0;
-					lblMaxPersons.setText( nfFloat.format( persons ) );
-					lblMaxPersonsWarning.setText( loc.getString( "gui.EditPanel.Assignment.AreaWarning" ) );
-				}
-				if( current.getExitArea() == null )
-					cbxPreferredExit.setSelectedIndex( -1 );
-				else
-					cbxPreferredExit.setSelectedItem( current.getExitArea() );
-		
+		txtNumberOfPersons.setText( nfInteger.format( current.getEvacuees() ) );
+		assignmentTypeSelector.setSelectedItem( current.getAssignmentType() );
+		double area = Math.round( current.areaMeter() * 100 ) / 100.0;
+		lblAreaSize.setText( nfFloat.format( area ) + " m²" );
+		if( projectControl.getProject().getBuildingPlan().isRastered() ) {
+			lblMaxPersons.setText( nfInteger.format( current.getMaxEvacuees() ) );
+			lblMaxPersonsWarning.setText( "" );
+		} else {
+			double persons = Math.round( (area / (0.4 * 0.4)) * 100 ) / 100.0;
+			lblMaxPersons.setText( nfFloat.format( persons ) );
+			lblMaxPersonsWarning.setText( loc.getString( "gui.EditPanel.Assignment.AreaWarning" ) );
+		}
+		if( current.getExitArea() == null )
+			cbxPreferredExit.setSelectedIndex( -1 );
+		else
+			cbxPreferredExit.setSelectedItem( current.getExitArea() );
+
 	}
 
 	@Override
 	public void localize() {
+		loc.setPrefix( "gui.EditPanel." );
 		lblAssignmentType.setText( loc.getString( "Assignment.Type" ) );
 		lblAssignmentEvacueeNumber.setText( loc.getString( "Assignment.Persons" ) );
 		btnAssignmentSetDefaultEvacuees.setText( loc.getString( "Assignment.SetDefaultEvacuees" ) );
@@ -218,6 +220,7 @@ private JLabel lblAssignmentType;
 		lblPreferredExit.setText( loc.getString( "Assignment.PreferredExit" ) );
 		lblMaxPersonsDesc.setText( loc.getString( "Assignment.MaxPersons" ) );
 		lblMaxPersonsWarning.setText( loc.getString( "Assignment.AreaWarning" ) );
-		lblAreaSizeDesc.setText( loc.getString( "Assignment.Area" ) );		
+		lblAreaSizeDesc.setText( loc.getString( "Assignment.Area" ) );
+		loc.clearPrefix();
 	}
 }

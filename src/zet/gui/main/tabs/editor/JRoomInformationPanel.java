@@ -127,7 +127,9 @@ public class JRoomInformationPanel extends JInformationPanel<Room> {
 
 	@Override
 	public void localize() {
+		loc.setPrefix( "gui.EditPanel." );
 		lblRoomName.setText( loc.getString( "Room.Name" ) );
 		lblRoomSizeDesc.setText( loc.getString( "Room.Area" ) );
+		loc.clearPrefix();
 	}
 }

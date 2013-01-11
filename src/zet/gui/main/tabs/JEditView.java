@@ -351,6 +351,8 @@ public class JEditView extends AbstractSplitPropertyWindow<JFloorScrollPane<JFlo
 		lblRoomSelector.setText( loc.getString( "Default.Rooms" ) + ":" );
 
 		loc.clearPrefix();
+		for( Panels p : Panels.values() )
+			p.getPanel().localize();
 	}
 
 	/**

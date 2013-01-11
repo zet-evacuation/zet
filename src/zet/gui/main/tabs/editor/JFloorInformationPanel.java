@@ -19,7 +19,6 @@ import java.text.ParseException;
 import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JTextField;
-import zet.gui.GUILocalization;
 import zet.gui.main.JZetWindow;
 
 /**
@@ -159,7 +158,7 @@ public class JFloorInformationPanel extends JInformationPanel<Floor> {
 		this.add( lblFloorSizeDesc, "0,10,2,10" );
 		this.add( lblFloorSize, "0,11,2,11" );
 	}
-	
+
 
 	@Override
 	public void update() {
@@ -175,10 +174,11 @@ public class JFloorInformationPanel extends JInformationPanel<Floor> {
 
 		lblFloorSize.setText( nfFloat.format( areaFloor ) + " m²" );
 	}
-	
+
 	@Override
 	public void localize() {
 		// Floor properties
+		loc.setPrefix( "gui.EditPanel." );
 		lblFloorName.setText( loc.getString( "Floor.Name" ) );
 		btnFloorUp.setText( loc.getString( "Floor.Up" ) );
 		btnFloorUp.setToolTipText( loc.getString( "Floor.Up.ToolTip" ) );
@@ -188,6 +188,7 @@ public class JFloorInformationPanel extends JInformationPanel<Floor> {
 		lblFlooryOffset.setText( loc.getString( "Floor.yOffset" ) );
 		lblFloorWidth.setText( loc.getString( "Floor.Width" ) );
 		lblFloorHeight.setText( loc.getString( "Floor.Height" ) );
-		lblFloorSizeDesc.setText( loc.getString( "Floor.Area" ) );		
+		lblFloorSizeDesc.setText( loc.getString( "Floor.Area" ) );
+		loc.clearPrefix();
 	}
 }

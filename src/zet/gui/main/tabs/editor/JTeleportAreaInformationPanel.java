@@ -174,9 +174,11 @@ public class JTeleportAreaInformationPanel extends JInformationPanel<TeleportAre
 
 	@Override
 	public void localize() {
-		lblTeleportAreaName.setText( "Teleportation.Name" );
+		loc.setPrefix( "gui.EditPanel." );
+		lblTeleportAreaName.setText( loc.getString( "Teleportation.Name" ) );
 		lblTargetArea.setText( loc.getString( "Teleportation.TargetArea" ) );
 		lblTargetExit.setText( loc.getString( "Teleportation.TargetExit" ) );
+		loc.clearPrefix();
 	}
 	/** Prohibits serialization. */
 	private synchronized void writeObject( java.io.ObjectOutputStream s ) throws IOException {
