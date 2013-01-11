@@ -89,41 +89,42 @@ public class JEdgeInformationPanel extends JInformationPanel<Edge> {
 
 	@Override
 	public void update() {
-				txtEdgeExitName.setEnabled( false );
-				lblEdgeExitName.setText( "" );
-				if( current instanceof RoomEdge ) {
-					if( current instanceof TeleportEdge ) {
-						TeleportEdge te = (TeleportEdge)current;
-						if( ((Room)te.getLinkTarget().getAssociatedPolygon()).getAssociatedFloor() instanceof DefaultEvacuationFloor ) {
-							lblEdgeType.setText( "Ausgang" );
-							txtEdgeExitName.setEnabled( true );
-							// we have an evacuation exit
-							Room r = (Room)te.getLinkTarget().getAssociatedPolygon();
-							EvacuationArea ea = r.getEvacuationAreas().get( 0 );
-							lblEdgeExitName.setText( "Ausgang" );
-							txtEdgeExitName.setText( ea.getName() );
-						}
-						else
-							lblEdgeType.setText( "Stockwerkübergang" );
-					} else {
-						if( ((RoomEdge)current).isPassable() ) {
-							lblEdgeType.setText( "Durchgang" );
-						} else {
-							lblEdgeType.setText( "Wand" );
-						}
-					}
-				} else {
-					// easy peasy, this is an area boundry
-					lblEdgeType.setText( "Area-Begrenzung" );
+		txtEdgeExitName.setEnabled( false );
+		lblEdgeExitName.setText( "" );
+		if( current instanceof RoomEdge ) {
+			if( current instanceof TeleportEdge ) {
+				TeleportEdge te = (TeleportEdge)current;
+				if( ((Room)te.getLinkTarget().getAssociatedPolygon()).getAssociatedFloor() instanceof DefaultEvacuationFloor ) {
+					lblEdgeType.setText( "Ausgang" );
+					txtEdgeExitName.setEnabled( true );
+					// we have an evacuation exit
+					Room r = (Room)te.getLinkTarget().getAssociatedPolygon();
+					EvacuationArea ea = r.getEvacuationAreas().get( 0 );
+					lblEdgeExitName.setText( "Ausgang" );
+					txtEdgeExitName.setText( ea.getName() );
 				}
+				else
+					lblEdgeType.setText( "Stockwerkübergang" );
+			} else {
+				if( ((RoomEdge)current).isPassable() ) {
+					lblEdgeType.setText( "Durchgang" );
+				} else {
+					lblEdgeType.setText( "Wand" );
+				}
+			}
+		} else {
+			// easy peasy, this is an area boundry
+			lblEdgeType.setText( "Area-Begrenzung" );
+		}
 
-				lblEdgeLength.setText( "Breite: " + nfFloat.format(( current.length())*0.001) + "m"  );
-
+		lblEdgeLength.setText( "Breite: " + nfFloat.format(( current.length())*0.001) + "m"  );
 	}
 
 	@Override
 	public void localize() {
+		loc.setPrefix( "gui.EditPanel." );
 
+		loc.clearPrefix();
 	}
 
 }

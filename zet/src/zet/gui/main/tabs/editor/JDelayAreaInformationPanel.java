@@ -112,6 +112,7 @@ public class JDelayAreaInformationPanel extends JInformationPanel<DelayArea> {
 		row++;
 
 		btnDelaySetDefault = Button.newButton( loc.getString( "Delay.TypeDefault" ), loc.getString( "Delay.TypeDefault.ToolTip" ) );
+		btnDelaySetDefault.setToolTipText( loc.getString( "Delay.TypeDefault.ToolTip" ) );
 		btnDelaySetDefault.addActionListener( new ActionListener() {
 			@Override
 			public void actionPerformed( ActionEvent e ) {
@@ -132,9 +133,11 @@ public class JDelayAreaInformationPanel extends JInformationPanel<DelayArea> {
 
 	@Override
 	public void localize() {
+		loc.setPrefix( "gui.EditPanel." );
 		lblDelayType.setText( loc.getString( "Delay.Type" ) + ":" );
 		lblDelayFactor.setText( loc.getString( "Delay.Factor" ) );
 		btnDelaySetDefault.setText( loc.getString( "Delay.TypeDefault" ) );
 		btnDelaySetDefault.setToolTipText( loc.getString( "Delay.TypeDefault.ToolTip" ) );
+		loc.clearPrefix();
 	}
 }

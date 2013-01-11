@@ -66,7 +66,4 @@ public enum StairPreset {
 	public String toString() {
 		return getName();
 	}
-
-
-
 }

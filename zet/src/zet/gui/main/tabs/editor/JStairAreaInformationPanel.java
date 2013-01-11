@@ -8,6 +8,7 @@ import ds.z.StairArea;
 import ds.z.StairPreset;
 import ds.z.ZLocalization;
 import info.clearthought.layout.TableLayout;
+import java.awt.Component;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.FocusEvent;
@@ -15,10 +16,12 @@ import java.awt.event.FocusListener;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.text.NumberFormat;
+import javax.swing.DefaultListCellRenderer;
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
-import javax.swing.JPanel;
+import javax.swing.JList;
 import javax.swing.JTextField;
+import javax.swing.ListCellRenderer;
 import zet.gui.main.JZetWindow;
 
 
@@ -120,6 +123,18 @@ public class JStairAreaInformationPanel extends JInformationPanel<StairArea> {
 		// Add combo box with presets
 		lblStairPreset = new JLabel( loc.getString( "Stair.Preset" ) + ":" );
 		cbxStairPresets = new JComboBox<>();
+
+		cbxStairPresets.setRenderer( new ListCellRenderer<StairPreset>() {
+			protected DefaultListCellRenderer defaultRenderer = new DefaultListCellRenderer();
+			@Override
+			public Component getListCellRendererComponent( JList<? extends StairPreset> list, StairPreset value, int index, boolean isSelected, boolean cellHasFocus ) {
+				JLabel presetLabel = (JLabel)defaultRenderer.getListCellRendererComponent( list, value, index, isSelected, cellHasFocus );
+				presetLabel.setText( ZLocalization.getSingleton().getString( presetLabel.getText() ) );
+				return presetLabel;
+			}
+
+		});
+
 		cbxStairPresets.addItem( StairPreset.Indoor );
 		cbxStairPresets.addItem( StairPreset.Outdoor );
 		this.add( lblStairPreset, "0, " + row++ );
@@ -148,9 +163,11 @@ public class JStairAreaInformationPanel extends JInformationPanel<StairArea> {
 
 	@Override
 	public void localize() {
+		loc.setPrefix( "gui.EditPanel." );
 		lblStairFactorUp.setText( loc.getString( "Stair.FactorUp" ) + ":" );
 		lblStairFactorDown.setText( loc.getString( "Stair.FactorDown" ) + ":" );
 		lblStairPreset.setText( loc.getString( "Stair.Preset" ) + ":" );
 		lblStairPresetDescription.setText( ZLocalization.getSingleton().getString( ((StairPreset)cbxStairPresets.getSelectedItem() ).getText() ) );
+		loc.clearPrefix();
 	}
 }

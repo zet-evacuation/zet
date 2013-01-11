@@ -105,8 +105,10 @@ public class JEvacuationAreaInformationPanel extends JInformationPanel<Evacuatio
 
 	@Override
 	public void localize() {
+		loc.setPrefix( "gui.EditPanel." );
 		lblEvacuationAreaName.setText( loc.getString( "Evacuation.Name" ) );
 		lblEvacuationAttractivity.setText( loc.getString( "Evacuation.Attractivity" ) );
+		loc.clearPrefix();
 	}
 	/** Prohibits serialization. */
 	private synchronized void writeObject( java.io.ObjectOutputStream s ) throws IOException {
