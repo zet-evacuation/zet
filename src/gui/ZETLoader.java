@@ -196,8 +196,44 @@ public class ZETLoader {
 		}
 
 		debug = config.getBoolean( "debug" );
-		if( debug )
+		if( debug ) {
 			Debug.setDefaultLogLevel( Level.ALL );
+			//log.log( Level.INFO, "{0}{1}", new Object[]{String.format( "%-25s", "Java-Version:" ), System.getProperty( "java.version" )});
+
+			log.log(  Level.INFO, "{0}{1}", new Object[]{String.format( "%-25s", "Runtime:" ), System.getProperty( "java.runtime.name" )});
+			log.log(  Level.INFO, "{0}{1}", new Object[]{String.format( "%-25s", "Java-Laufzeit-Version:" ), System.getProperty( "java.runtime.version" )});
+
+
+			log.log(  Level.INFO, "{0}{1}", new Object[]{String.format( "%-25s", "VM:" ), System.getProperty( "java.vm.name" )});
+			log.log(  Level.INFO, "{0}{1}", new Object[]{String.format( "%-25s", "VM-Version:" ), System.getProperty( "java.vm.version" )});
+			log.log(  Level.INFO, "{0}{1}", new Object[]{String.format( "%-25s", "Hersteller:" ), System.getProperty( "java.vm.vendor" )});
+
+			log.log(  Level.INFO, "{0}{1}", new Object[]{String.format( "%-25s", "Betriebssystem:" ), System.getProperty( "os.name" )});
+			log.log(  Level.INFO, "{0}{1}", new Object[]{String.format( "%-25s", "Architektur:" ), System.getProperty( "os.arch" )});
+
+			log.log( Level.INFO, "{0}{1}", new Object[]{String.format( "%-25s", "Encoding:" ), System.getProperty( "sun.jnu.encoding" )});
+
+			boolean first = true;
+			String[] paths = System.getProperty( "java.library.path" ).split( ":" );
+			for( String s : paths ) {
+				if( first ) {
+					log.log(  Level.INFO, "{0}{1}", new Object[]{String.format( "%-25s", "Library Path:" ), s});
+					first = false;
+				} else
+					log.log( Level.INFO, "                         {0}", s);
+			}
+
+			paths = System.getProperty( "java.class.path" ).split( ":" );
+			first = true;
+			for( String s : paths ) {
+				if( first ) {
+					log.log(  Level.INFO, "{0}{1}", new Object[]{String.format( "%-25s", "Class Path:" ), s});
+					first = false;
+				} else
+					log.log( Level.INFO, "                         {0}", s);
+			}
+			log.log( Level.INFO, "{0}{1}", new Object[]{String.format( "%-25s", "Befehlszeile:" ), System.getProperty( "sun.java.command" )});
+		}
 
 		createEditor();
 		} catch (JSAPException ex ) {
