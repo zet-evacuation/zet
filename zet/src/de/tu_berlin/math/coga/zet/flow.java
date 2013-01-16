@@ -6,13 +6,11 @@ package de.tu_berlin.math.coga.zet;
 
 import algo.graph.dynamicflow.DynamicFlowProblem;
 import algo.graph.dynamicflow.DynamicTransshipmentProblem;
-import algo.graph.dynamicflow.QuickestTransshipment;
-import algo.graph.dynamicflow.eat.EATransshipmentMinCost;
-import algo.graph.dynamicflow.eat.EATransshipmentSSSP;
 import algo.graph.dynamicflow.eat.EATransshipmentWithTHSSSP;
 import algo.graph.dynamicflow.eat.EarliestArrivalFlowProblem;
 import algo.graph.dynamicflow.eat.LongestShortestPathTimeHorizonEstimator;
 import algo.graph.dynamicflow.eat.SEAAPAlgorithm;
+import batch.tasks.graph.SuccessiveEarliestArrivalAugmentingPathOptimizedTask;
 import de.tu_berlin.math.coga.algorithm.networkflow.maximumflow.PushRelabelHighestLabelGlobalGapRelabelling;
 import com.martiansoftware.jsap.FlaggedOption;
 import com.martiansoftware.jsap.JSAP;
@@ -34,8 +32,10 @@ import de.tu_berlin.math.coga.graph.io.dimacs.DimacsReader;
 import de.tu_berlin.math.coga.graph.io.xml.visualization.GraphVisualization;
 import de.tu_berlin.math.coga.graph.io.xml.XMLReader;
 import de.tu_berlin.math.coga.graph.io.xml.XMLWriter;
+import de.tu_berlin.math.coga.zet.converter.graph.NetworkFlowModel;
 import de.tu_berlin.math.coga.zet.viewer.NodePositionMapping;
 import ds.GraphVisualizationResults;
+import ds.PropertyContainer;
 import ds.mapping.IdentifiableIntegerMapping;
 import ds.graph.Node;
 import ds.graph.flow.FlowOverTimeInterface;
@@ -45,6 +45,8 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.logging.Logger;
+import zet.tasks.GraphAlgorithmEnumeration;
 
 /**
  *
@@ -108,8 +110,8 @@ public class flow implements AlgorithmListener {
 		Switch switchZeroNodeCapacities = new Switch( "zero" ).setShortFlag( 'z' ).setLongFlag( "zeroNodeCapacities" );
 		switchZeroNodeCapacities.setHelp( "Use zero node capacities." );
 		jsap.registerParameter( switchZeroNodeCapacities );
-		
-		
+
+
 		JSAPResult config = jsap.parse( args );
 		if( !config.success() || !(config.getString( "mode").equals( "convert") || config.getString( "mode" ).equals( "compute" ) ) ) {
 			System.err.println();
@@ -130,9 +132,9 @@ public class flow implements AlgorithmListener {
 		if( config.contains( "zero" ) ) {
 			DatFileReaderWriter.zeroNodeCapacities = config.getBoolean( "zero" );
 		}
-		
+
 		// Scan the input file type by its ending
-		
+
 		if( theInstance.inputFileName.endsWith( ".dat" ) ) {
 			// Use internal dat format
 			System.out.println( "Reading from dat-file." );
@@ -160,7 +162,7 @@ public class flow implements AlgorithmListener {
 		} else if(theInstance.inputFileName.endsWith( ".max" ) ) {
 			// use a dimacs challenge max flow
 			theInstance.computationMode = ComputationMode.StaticMaximumFlow;
-			
+
 		}
 
 		theInstance.performAction( config.getString( "mode" ) );
@@ -219,8 +221,8 @@ public class flow implements AlgorithmListener {
 	}
 
 	private void computeEarliestArrivalFlow() {
-		
-		
+
+
 		if( eafp.getTimeHorizon() <= 0 ) {
 			System.out.print( "Estimating time horizon..." );
 			LongestShortestPathTimeHorizonEstimator estimator = new LongestShortestPathTimeHorizonEstimator();
@@ -232,58 +234,81 @@ public class flow implements AlgorithmListener {
 
 		System.out.println( "Evacuees: " + eafp.getTotalSupplies() );
 
-		// Try to compute a quickest transshipment
+//		// Try to compute a quickest transshipment
+//		QuickestTransshipment qt = new QuickestTransshipment(  );
+//		qt.setProblem( eafp );
+//		qt.run();
+//
+//		System.out.println( "\nMinCost:" );
+//
+//		EATransshipmentMinCost eatMin = new EATransshipmentMinCost( );
+//		eatMin.setProblem( eafp );
+//		eatMin.run();
+//
+//		System.out.println( "\nSSSPCost:" );
+//		EATransshipmentSSSP eatSSSP = new EATransshipmentSSSP( );
+//		eatSSSP.setProblem( eafp );
+//		eatSSSP.run();
+//
+//		if( 1 == 1 )
+//			return;
 
-		QuickestTransshipment qt = new QuickestTransshipment(  );
-		qt.setProblem( eafp );
-		qt.run();
-		
-		System.out.println( "\nMinCost:" );
-		
-		EATransshipmentMinCost eatMin = new EATransshipmentMinCost( );
-		eatMin.setProblem( eafp );
-		eatMin.run();
-		
-		System.out.println( "\nSSSPCost:" );
-		EATransshipmentSSSP eatSSSP = new EATransshipmentSSSP( );
-		eatSSSP.setProblem( eafp );
-		eatSSSP.run();
+		System.out.println( eafp.getNetwork().toString() );
+
+		SEAAPAlgorithm algo = new SEAAPAlgorithm();
+
+		algo.setProblem( eafp );
+		//algo.addAlgorithmListener( this );
+		try {
+			algo.run();
+		} catch( IllegalStateException e ) {
+			//System.err.println( "The illegal state exception occured." );
+		}
+
+		PathBasedFlowOverTime df = algo.getSolution().getPathBased();
+		int neededTimeHorizon = algo.getSolution().getTimeHorizon() - 1;
+		Logger.getGlobal().info( "Total cost: " + algo.getSolution().getTotalCost() );
+		Logger.getGlobal().info( "Time horizon:" + neededTimeHorizon );
+		Logger.getGlobal().info( "Flow amount: " + algo.getSolution().getFlowAmount() );
+		Logger.getGlobal().info( "Runtime: " + algo.getRuntimeAsString() );
+
+		System.out.println( "Path-Decomposition: " );
+		System.out.println( df.toString( eafp.getTransitTimes() ) );
 
 		if( 1 == 1 )
 			return;
-		
-		
-		
+
 		// Fluss bestimmen
 		System.out.println( "Compute earliest arrival flow..." );
 
-//		GraphAlgorithmEnumeration graphAlgorithm = GraphAlgorithmEnumeration.SuccessiveEarliestArrivalAugmentingPathOptimized;
-//		
-//		int maxTime = (int) PropertyContainer.getInstance().getAsDouble( "algo.ca.maxTime" );
-//		Algorithm<NetworkFlowModel, PathBasedFlowOverTime> gt = null;
-//		gt = new SuccessiveEarliestArrivalAugmentingPathOptimizedTask();
-//		//gt = graphAlgorithm.createTask( maxTime );
-//		
-//		gt.setProblem( cav.getSolution() );
-//		gt.addAlgorithmListener( this );
-//		gt.run();
+		GraphAlgorithmEnumeration graphAlgorithm = GraphAlgorithmEnumeration.SuccessiveEarliestArrivalAugmentingPathOptimized;
+
+		//int maxTime = (int) PropertyContainer.getInstance().getAsDouble( "algo.ca.maxTime" );
+		int maxTime = 600;
+		Algorithm<NetworkFlowModel, PathBasedFlowOverTime> gt = null;
+		gt = new SuccessiveEarliestArrivalAugmentingPathOptimizedTask();
+		//gt = graphAlgorithm.createTask( maxTime );
+
+		//gt.setProblem( cav.getSolution() );
+		gt.addAlgorithmListener( this );
+		gt.run();
 
 			//NetworkFlowModel nfm = new NetworkFlowModel();
-			
-		
+
+
 		System.out.println( "Noides: " + eafp.getNetwork().numberOfNodes() );
 		System.out.println( "Edges: " + eafp.getNetwork().numberOfEdges() );
-		
+
 		System.out.println( "NFM: " );
 		System.out.println( "EAFP: " + eafp.toString() );
-		
-		
+
+
 		boolean seaapa = false;
 
-		
-		
+
+
 //		if( seaapa ) {
-			SEAAPAlgorithm algo = new SEAAPAlgorithm();
+			//SEAAPAlgorithm algo = new SEAAPAlgorithm();
 			algo.setProblem( eafp );
 			algo.addAlgorithmListener( this );
 			try {
@@ -298,7 +323,7 @@ public class flow implements AlgorithmListener {
 			System.out.println( "Time horizon:" + neededTimeHorizon );
 			System.out.println( "Flow amount: " + algo.getSolution().getFlowAmount() );
 
-			
+
 //			System.out.println( "\nNext Algorithm:" );
 //			SuccessiveEarliestArrivalAugmentingPathAlgorithm algo2 = new SuccessiveEarliestArrivalAugmentingPathAlgorithm();
 //			algo2.setProblem( eafp );
@@ -314,42 +339,42 @@ public class flow implements AlgorithmListener {
 //			System.out.println( "Total cost: " + algo2.getSolution().getTotalCost() );
 //			System.out.println( "Time horizon:" + neededTimeHorizon );
 //			System.out.println( "Flow amount: " + algo2.getSolution().getFlowAmount() );
-			
+
 			//		} else {
 //			SuccessiveEarliestArrivalAugmentingPathAlgorithmTH algo = new SuccessiveEarliestArrivalAugmentingPathAlgorithmTH( eafp.getNetwork(), eafp.getTransitTimes(), eafp.getEdgeCapacities(), eafp.getNodeCapacities(), eafp.getSupplies(), 16 );
-		
-			
-				EATransshipmentWithTHSSSP staticalgo = new EATransshipmentWithTHSSSP();
 
-				DynamicFlowProblem dfp = new DynamicFlowProblem( eafp.getEdgeCapacities(), eafp.getNetwork(), eafp.getTransitTimes() );
-				//dfp.setCapacities( eafp.getEdgeCapacities() );
-				//dfp.setNetwork( eafp.getNetwork() );
-				//dfp.setTransitTimes( eafp.getTransitTimes() );
-
-				eafp.setTimeHorizon( 43 );
-				
-				staticalgo.setProblem( eafp );
-				
-				//staticalgo.setProblem( dfp );
-				
-				staticalgo.run();
-
-				Algorithm<?extends DynamicTransshipmentProblem,? extends FlowOverTimeInterface> a;
-				a = algo;
-				//a = algo2;
-				a = staticalgo;
-				
-//      Algorithm with implicit time expanded network
-//			SuccessiveEarliestArrivalAugmentingPathAlgorithm algo = new SuccessiveEarliestArrivalAugmentingPathAlgorithm();
-//			algo.setProblem( eafp );
-//			algo.addAlgorithmListener( this );
-//			try {
-//				algo.run();
-//			} catch( IllegalStateException e ) {
-//				System.err.println( "The illegal state exception occured." );
-//			}
-			
-//		}
+//
+//				EATransshipmentWithTHSSSP staticalgo = new EATransshipmentWithTHSSSP();
+//
+//				DynamicFlowProblem dfp = new DynamicFlowProblem( eafp.getEdgeCapacities(), eafp.getNetwork(), eafp.getTransitTimes() );
+//				//dfp.setCapacities( eafp.getEdgeCapacities() );
+//				//dfp.setNetwork( eafp.getNetwork() );
+//				//dfp.setTransitTimes( eafp.getTransitTimes() );
+//
+//				eafp.setTimeHorizon( 43 );
+//
+//				staticalgo.setProblem( eafp );
+//
+//				//staticalgo.setProblem( dfp );
+//
+//				staticalgo.run();
+//
+//				Algorithm<?extends DynamicTransshipmentProblem,? extends FlowOverTimeInterface> a;
+//				a = algo;
+//				//a = algo2;
+//				a = staticalgo;
+//
+////      Algorithm with implicit time expanded network
+////			SuccessiveEarliestArrivalAugmentingPathAlgorithm algo = new SuccessiveEarliestArrivalAugmentingPathAlgorithm();
+////			algo.setProblem( eafp );
+////			algo.addAlgorithmListener( this );
+////			try {
+////				algo.run();
+////			} catch( IllegalStateException e ) {
+////				System.err.println( "The illegal state exception occured." );
+////			}
+//
+////		}
 	}
 
 	private void computeMaximumFlow() {

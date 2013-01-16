@@ -25,7 +25,7 @@ import ds.graph.Path;
 import java.util.Iterator;
 
 /**
- * The {@code @link FlowOverTimePath} class represents the flow on one 
+ * The {@code @link FlowOverTimePath} class represents the flow on one
  * {@link Path} in a network. The delay time in the first node of the path
  * implies the time when the represented flow would start to leave the first node.
  * The flow is send with a constant rate of {@code rate}. It sends a
@@ -73,19 +73,23 @@ public class FlowOverTimePath extends FlowOverTimeEdgeSequence {
 	}
 
 	public Iterable<Edge> edges() {
-		return new Iterable() {
+		return new Iterable<Edge>() {
+			@Override
 			public Iterator<Edge> iterator() {
 				return new Iterator<Edge>() {
 					private Iterator<FlowOverTimeEdge> internal = FlowOverTimePath.this.iterator();
 
+					@Override
 					public boolean hasNext() {
 						return internal.hasNext();
 					}
 
+					@Override
 					public Edge next() {
 						return internal.next().getEdge();
 					}
 
+					@Override
 					public void remove() {
 						throw new UnsupportedOperationException( "Not supported yet." );
 					}
