@@ -225,7 +225,7 @@ public class FlowOverTimeEdgeSequence extends LinkedList<FlowOverTimeEdge> {
     }
 
 		public String toString( IdentifiableIntegerMapping<Edge> transitTimes ) {
-			return toString() + " arrival: " + (getLastEdge().getTime() + transitTimes.get( getLastEdge().getEdge() ));
+			return toString() + " arrival: " + getArrival( transitTimes );
 		}
 
     /**
@@ -249,11 +249,7 @@ public class FlowOverTimeEdgeSequence extends LinkedList<FlowOverTimeEdge> {
         return result.toString();
     }
 
-	private int getArrivalTime( IdentifiableIntegerMapping<Edge> transitTimes ) {
-		int res = 0;
-		for( FlowOverTimeEdge e : this ) {
-			res += e.length( transitTimes );
-		}
-		return res;
+	public int getArrival( IdentifiableIntegerMapping<Edge> transitTimes ) {
+		return getLastEdge().getTime() + transitTimes.get( getLastEdge().getEdge() );
 	}
 }

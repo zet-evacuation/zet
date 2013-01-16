@@ -318,7 +318,7 @@ public class flow implements AlgorithmListener {
 			}
 
 			df = algo.getSolution().getPathBased();
-			neededTimeHorizon = algo.getSolution().getTimeHorizon()-1;
+			neededTimeHorizon = algo.getSolution().getTimeHorizon();
 			System.out.println( "Total cost: " + algo.getSolution().getTotalCost() );
 			System.out.println( "Time horizon:" + neededTimeHorizon );
 			System.out.println( "Flow amount: " + algo.getSolution().getFlowAmount() );
