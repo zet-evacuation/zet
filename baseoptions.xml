@@ -1,4 +1,11 @@
 <zp name="additionalInformation" useAsLocString="false" propertyName="">
+  <treeNode name="editor" useAsLocString="false">
+    <intNode name="settings.editor.position.x" useAsLocString="false" information="" parameter="settings.editor.window.position.x">-1</intNode>
+    <intNode name="settings.editor.position.y" useAsLocString="false" information="" parameter="settings.editor.window.position.y">-1</intNode>
+    <intNode name="settings.editor.position.width" useAsLocString="false" information="" parameter="settings.editor.window.position.width">-1</intNode>
+    <intNode name="settings.editor.position.height" useAsLocString="false" information="" parameter="settings.editor.window.position.height">-1</intNode>
+    <boolNode name="settings.editor.position.maximized" useAsLocString="false" information="" parameter="settings.editor.window.position.maximized">true</boolNode>
+  </treeNode>
   <treeNode name="directories" useAsLocString="false">
     <stringNode name="lastProjectDirectory" useAsLocString="false" information="" parameter="information.directory.lastProject">./examples</stringNode>
     <stringNode name="lastPlanDirectory" useAsLocString="false" information="" parameter="information.directory.lastPlan"></stringNode>

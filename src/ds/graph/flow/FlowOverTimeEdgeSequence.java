@@ -224,6 +224,10 @@ public class FlowOverTimeEdgeSequence extends LinkedList<FlowOverTimeEdge> {
         return String.format("{%1$s, %2$s}", rate, super.toString());
     }
 
+		public String toString( IdentifiableIntegerMapping<Edge> transitTimes ) {
+			return toString() + " arrival: " + (getLastEdge().getTime() + transitTimes.get( getLastEdge().getEdge() ));
+		}
+
     /**
      * Returns a detailed text representation of the flow over time. The output
      * can be generated using all transit time.
@@ -244,4 +248,12 @@ public class FlowOverTimeEdgeSequence extends LinkedList<FlowOverTimeEdge> {
         }
         return result.toString();
     }
+
+	private int getArrivalTime( IdentifiableIntegerMapping<Edge> transitTimes ) {
+		int res = 0;
+		for( FlowOverTimeEdge e : this ) {
+			res += e.length( transitTimes );
+		}
+		return res;
+	}
 }

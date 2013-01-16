@@ -15,10 +15,12 @@
  */
 /*
  * PathBasedFlowOverTime.java
- * 
+ *
  */
 package ds.graph.flow;
 
+import ds.graph.Edge;
+import ds.mapping.IdentifiableIntegerMapping;
 import java.util.ArrayList;
 import java.util.Iterator;
 
@@ -49,16 +51,16 @@ public class PathBasedFlowOverTime implements Iterable<FlowOverTimePath> {
 	}
 
 	/**
-	 * Returns an iterator to iterate over the {@code DynamicPathFlows} 
+	 * Returns an iterator to iterate over the {@code DynamicPathFlows}
 	 * contained in this {@code PathBasedFlowOverTime}.
-	 * @return an iterator to iterate over the {@code DynamicPathFlows} 
+	 * @return an iterator to iterate over the {@code DynamicPathFlows}
 	 * contained in this {@code PathBasedFlowOverTime}.
 	 */
 	@Override
 	public Iterator<FlowOverTimePath> iterator() {
 		return pathFlows.iterator();
 	}
-	
+
 	/**
 	 * Calculates the total value (the number of sent flow units) of this flow
 	 * over time. The running time is in O(#paths)
@@ -81,6 +83,14 @@ public class PathBasedFlowOverTime implements Iterable<FlowOverTimePath> {
 		String result = "[\n";
 		for( FlowOverTimePath pathFlow : pathFlows )
 			result += " " + pathFlow.toString() + "\n";
+		result += "]";
+		return result;
+	}
+
+	public String toString( IdentifiableIntegerMapping<Edge> transitTimes ) {
+		String result = "[\n";
+		for( FlowOverTimePath pathFlow : pathFlows )
+			result += " " + pathFlow.toString( transitTimes ) + "\n";
 		result += "]";
 		return result;
 	}
