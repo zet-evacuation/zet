@@ -77,6 +77,8 @@ public class CZET {
 			switch( string ) {
 				case "evac":
 					return ComputationMode.EvacuationSimulation;
+				case "mincost":
+					throw new UnsupportedOperationException( "MinCostFlow is not available via commandline" );
 				case "max":
 					return ComputationMode.StaticMaximumFlow;
 				case "mc":
