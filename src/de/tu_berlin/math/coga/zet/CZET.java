@@ -1,6 +1,7 @@
 package de.tu_berlin.math.coga.zet;
 
 import algo.graph.dynamicflow.eat.EarliestArrivalFlowProblem;
+import algo.graph.dynamicflow.eat.LongestShortestPathTimeHorizonEstimator;
 import algo.graph.dynamicflow.eat.SEAAPAlgorithm;
 import com.martiansoftware.jsap.FlaggedOption;
 import com.martiansoftware.jsap.JSAP;
@@ -18,10 +19,13 @@ import de.tu_berlin.math.coga.zet.converter.graph.NetworkFlowModel;
 import de.tu_berlin.math.coga.zet.viewer.NodePositionMapping;
 import ds.GraphVisualizationResults;
 import ds.PropertyContainer;
+import ds.graph.Edge;
 import ds.graph.Node;
+import ds.graph.StaticPath;
 import ds.graph.flow.FlowOverTimeImplicit;
 import ds.graph.flow.FlowOverTimePath;
 import ds.graph.flow.PathBasedFlowOverTime;
+import ds.mapping.IdentifiableDoubleMapping;
 import ds.mapping.IdentifiableIntegerMapping;
 import ds.z.ConcreteAssignment;
 import ds.z.Project;
@@ -38,7 +42,10 @@ import java.nio.file.FileSystems;
 import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Iterator;
+import java.util.Set;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.RunnableFuture;
 import java.util.logging.Level;
@@ -613,23 +620,195 @@ public class CZET {
 
 
 				// output
-				log.log( Level.INFO, "Writing to {0}", outputFile.toString());
 
 				PathBasedFlowOverTime pb = fot.getPathBased();
 
 				int[] arrivalPattern = new int[fot.getTimeHorizon()+1];
 
+				int maxArrival = fot.getTimeHorizon();
 				for( FlowOverTimePath a : pb ) {
 					arrivalPattern[a.getArrival( eafp.getTransitTimes() )]++;
 					System.out.println( a.toString( eafp.getTransitTimes() ) );
 				}
 
 				System.out.println( Arrays.toString( arrivalPattern ) );
-				// cumulate
-				for( int i = 1; i < arrivalPattern.length; ++i )
-					arrivalPattern[i] += arrivalPattern[i-1];
-				System.out.println( Arrays.toString( arrivalPattern ) );
 
+				// cumulate
+				int[] cumulatedAarrivalPattern = new int[fot.getTimeHorizon()+1];
+				cumulatedAarrivalPattern[0] = arrivalPattern[0];
+				for( int i = 1; i < arrivalPattern.length; ++i )
+					cumulatedAarrivalPattern[i] += cumulatedAarrivalPattern[i-1];
+				System.out.println( Arrays.toString( cumulatedAarrivalPattern ) );
+
+
+				System.out.println( "Output as LP" );
+				// kanten: ei
+				// pfade: pij, i=pfadnummer, j=zeitpunkt, zu dem der pfad ankommt
+
+				HashSet<StaticPath> staticPaths = new HashSet<>();
+				HashMap<StaticPath,Integer> firstUse = new HashMap<>();
+				HashMap<StaticPath,Integer> pathID = new HashMap<>();
+
+				int id = 0;
+				for( FlowOverTimePath a : pb ) {
+					StaticPath sp = a.asStatic();
+					staticPaths.add( sp );
+					pathID.put( sp, id++ );
+					int min = Integer.MAX_VALUE;
+					if( firstUse.containsKey( sp ) )
+						min = firstUse.get( sp );
+					min = Math.min( min, a.getArrival( eafp.getTransitTimes() ) );
+					firstUse.put( sp, min );
+				}
+
+				System.out.println( "Static paths: " + staticPaths.size() );
+
+				System.out.println( "Maximize" );
+				System.out.println( "matching:" );
+				System.out.println( "z" );
+				System.out.println( "Subject to" );
+
+				for( Edge e : eafp.getNetwork().edges() ) {
+					String s = "e_" + e.id() + ": ";
+					boolean first = true;
+					for( StaticPath p : staticPaths ) {
+						if( p.contains( e ) ) {
+							if( first != true ) {
+								s = s + "+";
+							} else {
+								first = false;
+							}
+							s = s + "p" + pathID.get( p ) + firstUse.get( p );
+						}
+					}
+					s += " <= 1";
+					if( first != true )
+						System.out.println( s );
+				}
+
+				// p_ij , i pfadnummer, j = arrivaltime, beginnt mit min-time + 1
+				for( StaticPath sp : staticPaths ) {
+					for( int j = firstUse.get( sp )+1; j <= fot.getTimeHorizon(); ++j ) {
+						System.out.println( "p_" + pathID.get( sp ) + j + ": " + "p"+pathID.get(sp) + firstUse.get( sp ) + " - " + "p" + pathID.get(sp) + j + " = 0" );
+					}
+				}
+
+				for( int t = 0; t <= fot.getTimeHorizon(); ++t ) {
+					String s = "t_" + t + ": ";
+					boolean first = true;
+					for( StaticPath sp : staticPaths ) {
+						if( firstUse.get( sp ) <= t ) {
+							if( first ) {
+								first = false;
+							} else {
+								s += " + ";
+							}
+							s += "p" + pathID.get( sp ) + t;
+						}
+					}
+					s += " - " + arrivalPattern[t] + "z>=0";
+					System.out.println( s );
+
+				}
+
+				System.out.println( "Bounds" );
+				// variablen-beschränkungen
+				// pfad-variablen >= 0
+				for( StaticPath sp : staticPaths ) {
+					for( int j = firstUse.get( sp ); j <= fot.getTimeHorizon(); ++j ) {
+						System.out.println( "p" + pathID.get( sp ) + j + " >= 0" );
+					}
+				}
+				System.out.println( "End" );
+
+				System.out.println( "Compute Approximation" );
+
+				HashMap<StaticPath,Double> c = new HashMap<>();
+
+				Double eps = 1/3.;
+
+				for( int t = 0; t <= maxArrival; ++t ) {
+					System.out.println( "Computing Value for t=" + t );
+
+					// ignore edge capacities at first glance as no edges share paths of same length
+
+					// get all paths that arrive at this time
+					Set<StaticPath> arrivalSet = new HashSet<>();
+
+					Set<StaticPath> unused = new HashSet<>();
+					Set<StaticPath> used = new HashSet<>();
+
+					double cap = 0;
+					for( FlowOverTimePath a : pb ) {
+						StaticPath temp1 = a.asStatic();
+						StaticPath temp2 = a.asStatic();
+						assert temp1.equals(temp2);
+						assert temp1 != temp2;
+
+						if( a.getArrival( eafp.getTransitTimes() ) > t )
+							continue;
+						//System.out.println( "Path: " + a );
+						if( !c.containsKey( a.asStatic() ) ) {
+							// we may have a new path
+							unused.add( a.asStatic() );
+							if( a.getArrival( eafp.getTransitTimes() ) == t )
+								arrivalSet.add( a.asStatic() );
+						} else {
+							used.add( a.asStatic() );
+							if( a.getArrival( eafp.getTransitTimes() ) <= t ) {
+								cap += ( (t - a.getArrival( eafp.getTransitTimes() ))+1 ) * c.get( a.asStatic() );
+							}
+						}
+					}
+
+					// calculate
+					System.out.println( "Should arrive: " + (eps * arrivalPattern[t] ) );
+					System.out.println( "Arrived: " + cap );
+
+					// try to send remaining amount
+					int numberOfPaths = arrivalSet.size();
+					System.out.println( "Add new Paths. Available: " + numberOfPaths );
+
+					double onPath = ((eps * arrivalPattern[t] ) - cap)/numberOfPaths;
+
+
+					if( onPath < 0.0003 ) {
+						System.out.println( "Do not add new paths, already enough from old ones." );
+						if( numberOfPaths == 0 )
+							System.out.println( " ---- anyway, number of paths is 0" );
+					} else {
+//						if( t == 0 )
+//							onPath = 1/3.;
+//						else
+//							onPath = 1/6.;
+						for( StaticPath a : arrivalSet ) {
+
+							if( c.containsKey( a ) )
+								throw new AssertionError();
+							System.out.println( "ADD " + a + " with capacity " + onPath );
+							c.put( a, onPath );
+						}
+					}
+
+
+					IdentifiableDoubleMapping<Edge> assignedEdgeCapacity = new IdentifiableDoubleMapping<>( eafp.getNetwork().getEdgeCapacity() );
+					for( Edge e : eafp.getNetwork().edges() ) {
+						assignedEdgeCapacity.set( e, 0 );
+					}
+					for( StaticPath sp : c.keySet() ) {
+						for( Edge e : sp ) {
+							double old = assignedEdgeCapacity.get( e );
+							double nc = old + c.get( sp );
+							assignedEdgeCapacity.set( e, nc );
+							if( nc > 1 )
+								System.out.println( nc + " on edge " + e.toString() );
+							assert nc <= 1;
+						}
+					}
+
+
+
+				}
 
 			break;
 		}
@@ -700,6 +879,15 @@ public class CZET {
 	 */
 	private FlowOverTimeImplicit eat( EarliestArrivalFlowProblem eafp, Long[] rt ) {
 		log.fine( "Earliest Arrival computation starts..." );
+
+		if( eafp.getTimeHorizon() <= 0 ) {
+			System.out.println( "Schätze Zeithorizont" );
+			LongestShortestPathTimeHorizonEstimator estimator = new LongestShortestPathTimeHorizonEstimator();
+			estimator.setProblem( eafp );
+			estimator.run();
+			eafp.setTimeHorizon( estimator.getSolution().getUpperBound() );
+			System.out.println( "Geschätzter Zeithorizont: " + estimator.getSolution().getUpperBound() );
+		}
 
 		SEAAPAlgorithm algo = new SEAAPAlgorithm();
 

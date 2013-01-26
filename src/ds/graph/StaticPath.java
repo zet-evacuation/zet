@@ -25,27 +25,27 @@ import java.util.Iterator;
 
 /**
  * The {@code StaticPath} class represents a static path in a {@link Network}.
- * A static path is a sequence of {@code Edge} objects, where the 
+ * A static path is a sequence of {@code Edge} objects, where the
  * end node of an edge must be equal to the start node of the next edge
  * (if there is one).
  * The sequence is internally stored as a {@link ListSequence}.
  */
 public class StaticPath implements Path, Iterable<Edge> {
-    
+
     /** The sequence of edges of this path. */
-    protected ListSequence<Edge> edges;    
-    
+    protected ListSequence<Edge> edges;
+
     /**
      * Constructs a new path without edges.  Edges can be added with the corresponding methods. */
     public StaticPath() {
         edges = new ListSequence<>();
     }
-    
+
     /**
      * Constructs a new path with the given edges. The edges must be consistent,
      * i.e. the endnode of an edge must be equal to the startnode of the next edge
      * (if there follows one more).
-     * If the edges are not consistent, an {@code IllegalArgumentException} 
+     * If the edges are not consistent, an {@code IllegalArgumentException}
      * is thrown.
      * @param edges the edges the path shall be contained of
      */
@@ -59,12 +59,12 @@ public class StaticPath implements Path, Iterable<Edge> {
             throw new IllegalArgumentException(GraphLocalization.getSingleton (
 			).getString ("ds.Graph.NotConsistentException"));
     }
-    
+
     /**
      * Constructs a new path with the given edges. The edges must be consistent,
      * i.e. the endnode of an edge must be equal to the startnode of the next edge
      * (if there follows one more).
-     * If the edges are not consistent, an {@code IllegalArgumentException} 
+     * If the edges are not consistent, an {@code IllegalArgumentException}
      * is thrown.
      * @param edges the edges the path shall be contained of
      */
@@ -86,10 +86,10 @@ public class StaticPath implements Path, Iterable<Edge> {
     public IdentifiableCollection<Edge> getEdges(){
         return edges;
     }
-    
+
     /**
      * Private method to test whether the edge {@code pred<\code> can be followed
-     * by the edge {@code succ}, i.e. the endnode of {@code pred<\code> 
+     * by the edge {@code succ}, i.e. the endnode of {@code pred<\code>
      * is equal to the startnode of {@code succ}.
      * @param pred first node
      * @param succ second node
@@ -99,7 +99,7 @@ public class StaticPath implements Path, Iterable<Edge> {
     private boolean isConsistent(Edge pred, Edge succ){
         return pred.end().equals(succ.start());
     }
-    
+
     /**
      * Extends the path by adding an edge at the end.
      * The edge must be consistent to the current last edge of the path,
@@ -150,7 +150,7 @@ public class StaticPath implements Path, Iterable<Edge> {
         } else
             return false;
     }
-    
+
     /**
      * Shortens the path by removing the first edge.
      * If the path is empty, nothing happens.
@@ -164,7 +164,7 @@ public class StaticPath implements Path, Iterable<Edge> {
         } else
             return false;
     }
-    
+
     /**
      * Returns an iterator for the edges of this path.
      * With the iterator one can iterate comfortable through all the
@@ -174,7 +174,7 @@ public class StaticPath implements Path, Iterable<Edge> {
     public Iterator<Edge> iterator() {
         return edges.iterator();
     }
-    
+
     /**
      * Returns the first edge of the path or null if the path is empty.
      * @return the first edge of the path or null if the path is empty.
@@ -185,7 +185,7 @@ public class StaticPath implements Path, Iterable<Edge> {
         else
             return edges.getFirst();
     }
-    
+
     /**
      * Returns the last edge of the path or null if the path is empty.
      * @return the last edge of the path or null if the path is empty.
@@ -197,7 +197,7 @@ public class StaticPath implements Path, Iterable<Edge> {
             return edges.getLast();
         }
     }
-    
+
     /**
      * Returns the length of this path, i.e. the number of edges.
      * @return the length of this path, i.e. the number of edges.
@@ -205,13 +205,13 @@ public class StaticPath implements Path, Iterable<Edge> {
     public int length() {
         return edges.size();
     }
-    
+
     // to do: martin fragen was stringbuilder für vorteile haben
-    
+
     /**
-     * Returns a String containing all edges, seperated by commata. 
-     * An edge e=(a,b) will be represented by (a,b) in the string. 
-     * @return a String containing all edges, 
+     * Returns a String containing all edges, seperated by commata.
+     * An edge e=(a,b) will be represented by (a,b) in the string.
+     * @return a String containing all edges,
      *         where the edges are identified by their nodes
      */
     public String nodesToString() {
@@ -227,9 +227,9 @@ public class StaticPath implements Path, Iterable<Edge> {
         builder.append("}");
         return builder.toString();
     }
-    
+
     // to do: durch toString von ListSequence ersetzen ? vielleicht ?
-    
+
     /**
      * Returns a String containing the IDs of the edges of this path.
      * @return a String containing the IDs of the edges of this path.
@@ -248,7 +248,7 @@ public class StaticPath implements Path, Iterable<Edge> {
         builder.append(")");
         return builder.toString();
     }
-    
+
     /**
      * Clones this path by cloning the sequence of edges (i.e. all edges are
      * cloned) and creating a new {@code StaticPath} with the clone.
@@ -261,7 +261,7 @@ public class StaticPath implements Path, Iterable<Edge> {
 
     /**
      * Returns whether an object is equal to this static path.
-     * The result is true if and only if the argument is not null and is a 
+     * The result is true if and only if the argument is not null and is a
      * {@code StaticPath} object having a sequence of edges that is
      * equal to this path's sequence of edges (i.e. all edges must have
      * the same IDs).
@@ -278,9 +278,9 @@ public class StaticPath implements Path, Iterable<Edge> {
             return edges.equals(p.getEdges());
         }
     }
-    
+
     /**
-     * Returns the hash code of this static path. 
+     * Returns the hash code of this static path.
      * The hash code is equal to the hash code of the contained
      * {@code ListSequence} object for the edges.
      * @return the hash code of this static path.
@@ -289,5 +289,13 @@ public class StaticPath implements Path, Iterable<Edge> {
     public int hashCode(){
         return edges.hashCode();
     }
-    
+
+	public boolean contains( Edge e ) {
+		for( Edge ed : this ) {
+			if( ed.equals( e ) )
+				return true;
+		}
+		return false;
+	}
+
 }

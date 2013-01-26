@@ -95,7 +95,7 @@ public class DatFileReaderWriter implements AlgorithmListener {
 		int ymin = Integer.MAX_VALUE;
 		int sinks = 0;
 
-		while((s = read.readLine()) != null) {
+		while( (s = read.readLine() ) != null) {
 			if( s.length() == 0 )
 				continue;
 			if( s.startsWith( "SCALE" ) ) {
@@ -131,8 +131,8 @@ public class DatFileReaderWriter implements AlgorithmListener {
 				node_sup.add( nodeSupply );
 				if( nodeSupply < 0 )
 					sinks++;
-				
-				
+
+
 				if( x != null && y != null ) {
 					final int readX = (int)( factor * Double.parseDouble( split[3] ) );
 					if( readX > xmax )
@@ -165,7 +165,7 @@ public class DatFileReaderWriter implements AlgorithmListener {
 			}
 			throw new IllegalStateException( "Unbekannte Zeile" );
 		}
-		
+
 		// create missing nodes
 		for( int i = node_id.size(); i <= nodeCount; ++i ) {
 				//final String[] split = s.split( " " );
@@ -176,8 +176,8 @@ public class DatFileReaderWriter implements AlgorithmListener {
 //				node_sup.add( nodeSupply );
 //				if( nodeSupply < 0 )
 //					sinks++;
-//				
-//				
+//
+//
 //				if( x != null && y != null ) {
 //					final int readX = (int)( factor * Double.parseDouble( split[3] ) );
 //					if( readX > xmax )
@@ -190,9 +190,9 @@ public class DatFileReaderWriter implements AlgorithmListener {
 //					if( readY < ymin )
 //						ymin = readY;
 //					node_x.add( readX );
-//					node_y.add( readY );			
+//					node_y.add( readY );
 		}
-		
+
 		if( sinks > 1 )
 			nodeCount++;
 
@@ -236,11 +236,11 @@ public class DatFileReaderWriter implements AlgorithmListener {
 			x.setDomainSize( nodeCount );
 			y.setDomainSize( nodeCount );
 		}
-		
+
 		//int edgeCount = edge_start.size();
 		if( edgeCount < 0 )
 			edgeCount = edge_start.size();
-		
+
 		if( sinks > 1 )
 			edgeCount += sinks;
 
@@ -277,7 +277,7 @@ public class DatFileReaderWriter implements AlgorithmListener {
 			transitTimes.set( network.getEdge( network.getNode( nodeMap.get( edge_start.get( i ) ) ), network.getNode( nodeMap.get( edge_end.get( i ) ) ) ), edge_len.get( i ) );
 		}
 
-		
+
 		//ArrayList<Node> sinks = new ArrayList<>();
 		Node sink = sinks > 1 ? network.getNode( nodeCount-1 ) : null;
 		int totalSupply = 0;
@@ -302,7 +302,7 @@ public class DatFileReaderWriter implements AlgorithmListener {
 				x.set( network.getNode( nodeMap.get( node_id.get( i ) ) ), node_x.get( i ) + xoffset );
 			if( y != null)
 				y.set( network.getNode( nodeMap.get( node_id.get( i ) ) ), node_y.get( i ) + yoffset );
-			
+
 		}
 
 		//int totalSupply = -node_sup.get( sink.id() );
@@ -564,10 +564,12 @@ public class DatFileReaderWriter implements AlgorithmListener {
 		writer.write( "TIME " + timeHorizon + '\n' );
 
 		for( Node node : nodes ) {
-			if( nodePositions == null )
+			if( nodePositions == null ) {
 				//writer.write( "V " + node.id() + ' ' + currentAssignment.get( node ) + '\n' ); // without coordinates
-				writer.write( "V " + node.id() + ' ' + currentAssignment.get( node ) + ' ' + 0 + ' ' + 0 + '\n'  ); // with temp coordinates
-			else {
+				//writer.write( "V " + node.id() + ' ' + currentAssignment.get( node ) + ' ' + 0 + ' ' + 0 + '\n'  ); // with temp coordinates
+				if( currentAssignment.get( node ) != 0 )
+					writer.write( "V " + node.id() + ' ' + currentAssignment.get( node ) + ' ' + 0 + ' ' + 0 + '\n'  ); // with temp coordinates
+		} else {
 		int nwX = nodePositions.get( node ).get_nw_point().getX();
 		int nwY = nodePositions.get( node ).get_nw_point().getY();
 		int seX = nodePositions.get( node ).get_se_point().getX();

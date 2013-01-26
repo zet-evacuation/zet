@@ -23,6 +23,7 @@ import ds.graph.DynamicPath;
 import ds.graph.Edge;
 import ds.graph.Node;
 import ds.graph.Path;
+import ds.graph.StaticPath;
 import ds.mapping.IdentifiableIntegerMapping;
 import java.util.LinkedList;
 
@@ -251,5 +252,13 @@ public class FlowOverTimeEdgeSequence extends LinkedList<FlowOverTimeEdge> {
 
 	public int getArrival( IdentifiableIntegerMapping<Edge> transitTimes ) {
 		return getLastEdge().getTime() + transitTimes.get( getLastEdge().getEdge() );
+	}
+
+	public StaticPath asStatic() {
+		StaticPath s = new StaticPath();
+		for( FlowOverTimeEdge fote : this ) {
+			s.addLastEdge( fote.getEdge() );
+		}
+		return s;
 	}
 }
