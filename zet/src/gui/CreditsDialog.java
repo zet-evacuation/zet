@@ -38,7 +38,7 @@ public class CreditsDialog extends JDialog {
 	 * @param parent the parent window
 	 */
 	public CreditsDialog( Frame parent ) {
-		super(parent, GUILocalization.getSingleton().getString( "AppTitle" ) + " v" + ZETMain.version, true);
+		super(parent, GUILocalization.getSingleton().getString( "AppTitle" ) + " v" + ZETMain.version + " " + ZETMain.REVISION, true);
 		setSize( 640, 480 );
 		setLocation ( parent.getX () + ((parent.getWidth() - getWidth()) / 2), parent.getY () + ((parent.getHeight() - getHeight()) / 2));
 		CreditsPanel credits = new CreditsPanel();

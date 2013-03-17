@@ -41,7 +41,9 @@ import javax.swing.JOptionPane;
  */
 public class ZETMain {
 	/** The version of zet. */
-	public static String version = "1.1.0 Beta";
+	public final static String version = "1.1.0 Beta";
+	/** SVN version */
+	public final static String REVISION = "$Rev$";
 	/** The file to which the log is written (if specified via command line). */
 	static String logFile = "output.log";
 	/** The file to which the error log is written (if specified via command line). */
