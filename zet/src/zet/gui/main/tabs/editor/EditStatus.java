@@ -4,13 +4,13 @@
  */
 package zet.gui.main.tabs.editor;
 
-import de.tu_berlin.math.coga.common.util.SelectedElements;
 import ds.z.Edge;
 import ds.z.Floor;
 import ds.z.ZControl;
 import gui.editor.CoordinateTools;
 import java.awt.Point;
 import java.util.List;
+import java.util.Objects;
 import zet.gui.main.JZetWindow;
 import zet.gui.main.tabs.base.JPolygon;
 
@@ -45,8 +45,8 @@ public class EditStatus {
 	private Floor floor;
 
 	public EditStatus( ZControl zcontrol, SelectedFloorElements selection ) {
-		this.zcontrol = zcontrol;
-		this.selection = selection;
+		this.zcontrol = Objects.requireNonNull( zcontrol );
+		this.selection = Objects.requireNonNull( selection );
 	}
 
 	public EditMode getEditMode() {
@@ -71,8 +71,8 @@ public class EditStatus {
 	}
 
 	public void controlFloor( JFloor jfloor, Floor floor ) {
-		this.controlled = jfloor;
-		this.floor = floor;
+		this.controlled = Objects.requireNonNull( jfloor );
+		this.floor =  Objects.requireNonNull( floor );
 	}
 
 	public JFloor getControlled() {
@@ -153,7 +153,7 @@ public class EditStatus {
 	}
 
 	public void setZetObjectType( ZetObjectTypes zetObjectType ) {
-		this.zetObjectType = zetObjectType;
+		this.zetObjectType = Objects.requireNonNull( zetObjectType );
 	}
 
 	void addPolygon( JPolygon jPolygon ) {
