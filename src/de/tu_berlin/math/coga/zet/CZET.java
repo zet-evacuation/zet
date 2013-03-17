@@ -32,6 +32,7 @@ import ds.z.Project;
 import gui.AlgorithmControl;
 import gui.GraphConverterAlgorithms;
 import gui.ZETLoader;
+import gui.ZETMain;
 import gui.editor.properties.PropertyLoadException;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
@@ -161,7 +162,7 @@ public class CZET {
 		Debug.setDefaultLogLevel( Level.FINER );
 		Debug.setUpLogging();
 
-		log.log( Level.INFO, "Command Line Interface for ZET {0}", gui.ZETMain.version);
+		log.log( Level.INFO, "Command Line Interface for ZET {0} Revision {1}", new Object[]{ZETMain.version,ZETMain.revision});
 
 		JSAP jsap = new JSAP();
 

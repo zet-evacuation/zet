@@ -168,7 +168,7 @@ public class CreditsPanel extends JMovingEyePanel {
 		lines.setXoffset( 10.3 );
 		Path creditsFile = Paths.get( "./credits.txt" );
 		try {
-			for ( String line : Files.readAllLines( creditsFile, StandardCharsets.UTF_8 ) ) {
+			for( String line : Files.readAllLines( creditsFile, StandardCharsets.UTF_8 ) ) {
 				lines.add( parse( line.substring( 0, line.length()-2) ), line.endsWith( "1" ));
 			}
 		} catch( IOException ex ) {
