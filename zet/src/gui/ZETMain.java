@@ -28,6 +28,10 @@ import de.tu_berlin.math.coga.common.debug.SimpleLogFormatter;
 import de.tu_berlin.math.coga.common.util.Formatter;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.Calendar;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -43,7 +47,7 @@ public class ZETMain {
 	/** The version of zet. */
 	public final static String version = "1.1.0 Beta";
 	/** SVN version */
-	public final static String REVISION = "$Rev$";
+	public final static String revision = getVersion();
 	/** The file to which the log is written (if specified via command line). */
 	static String logFile = "output.log";
 	/** The file to which the error log is written (if specified via command line). */
@@ -166,7 +170,7 @@ public class ZETMain {
 			gl = new HTMLLoggerHandler();
 			log.addHandler( gl );
 			if( logging && !privateLogging )
-				log.log( Level.INFO, "Log of " + cal.get( Calendar.YEAR ) + "-{0}-{1} {2}-{3}-{4}", new Object[]{Formatter.fillLeadingZeros( cal.get( Calendar.MONTH )+1, 2 ), Formatter.fillLeadingZeros( cal.get( Calendar.DAY_OF_MONTH ), 2 ), Formatter.fillLeadingZeros( cal.get( Calendar.HOUR_OF_DAY ), 2 ), Formatter.fillLeadingZeros( cal.get( Calendar.MINUTE ), 2 ), Formatter.fillLeadingZeros( cal.get( Calendar.SECOND ), 2 )});
+				log.log( Level.INFO, "ZET Suite {5} Revision {6}\nLog of " + cal.get( Calendar.YEAR ) + "-{0}-{1} {2}-{3}-{4}", new Object[]{Formatter.fillLeadingZeros( cal.get( Calendar.MONTH )+1, 2 ), Formatter.fillLeadingZeros( cal.get( Calendar.DAY_OF_MONTH ), 2 ), Formatter.fillLeadingZeros( cal.get( Calendar.HOUR_OF_DAY ), 2 ), Formatter.fillLeadingZeros( cal.get( Calendar.MINUTE ), 2 ), Formatter.fillLeadingZeros( cal.get( Calendar.SECOND ), 2 ), ZETMain.version, ZETMain.revision});
 			if( logging && !logFile.equals( errFile ) && !privateLogging )
 				log.log( Level.SEVERE, "Error log of " + cal.get( Calendar.YEAR ) + "-{0}-{1} {2}-{3}-{4}", new Object[]{Formatter.fillLeadingZeros( cal.get( Calendar.MONTH )+1, 2 ), Formatter.fillLeadingZeros( cal.get( Calendar.DAY_OF_MONTH ), 2 ), Formatter.fillLeadingZeros( cal.get( Calendar.HOUR_OF_DAY ), 2 ), Formatter.fillLeadingZeros( cal.get( Calendar.MINUTE ), 2 ), Formatter.fillLeadingZeros( cal.get( Calendar.SECOND ), 2 )});
 		} catch( IOException | SecurityException ex ) {
@@ -179,5 +183,13 @@ public class ZETMain {
 		return err ? 
 						"zet_" + cal.get( Calendar.YEAR ) + "-" + Formatter.fillLeadingZeros( cal.get( Calendar.MONTH )+1, 2 ) + "-" + Formatter.fillLeadingZeros( cal.get( Calendar.DAY_OF_MONTH ), 2 ) + "_" + Formatter.fillLeadingZeros( cal.get( Calendar.HOUR_OF_DAY ), 2 ) + "-" + Formatter.fillLeadingZeros( cal.get( Calendar.MINUTE ), 2 ) + "-" + Formatter.fillLeadingZeros( cal.get( Calendar.SECOND ), 2 ) + "_err.log" :
 						"zet_" + cal.get( Calendar.YEAR ) + "-" + Formatter.fillLeadingZeros( cal.get( Calendar.MONTH )+1, 2 ) + "-" + Formatter.fillLeadingZeros( cal.get( Calendar.DAY_OF_MONTH ), 2 ) + "_" + Formatter.fillLeadingZeros( cal.get( Calendar.HOUR_OF_DAY ), 2 ) + "-" + Formatter.fillLeadingZeros( cal.get( Calendar.MINUTE ), 2 ) + "-" + Formatter.fillLeadingZeros( cal.get( Calendar.SECOND ), 2 ) + ".log";
+	}
+	
+	private static String getVersion() {
+		try {
+			return new String( Files.readAllBytes( Paths.get( "./version.txt" ) ) );
+		} catch( IOException ex ) {
+			return "> $Rev$";
+		}
 	}
 }
