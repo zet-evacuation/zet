@@ -13,6 +13,7 @@ import java.awt.Point;
 import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Objects;
 import zet.gui.main.tabs.base.JPolygon;
 
 
@@ -29,8 +30,8 @@ public abstract class FloorClickHandler {
 	boolean mouseDown = false;
 
 	protected FloorClickHandler( EditStatus editStatus, ZControl control ) {
-		this.editStatus = editStatus;
-		this.zcontrol = control;
+		this.editStatus = Objects.requireNonNull( editStatus );
+		this.zcontrol = Objects.requireNonNull( control );
 		elementsUnderMouse = new LinkedList<>();
 		editStatus.setPopupEnabled( true );
 	}

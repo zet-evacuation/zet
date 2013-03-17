@@ -40,6 +40,7 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Objects;
 
 /**
  * Represents a room in a {@link BuildingPlan}. Generally a room is nothing else than
@@ -81,7 +82,7 @@ public class Room extends PlanPolygon<RoomEdge> implements Cloneable, Comparable
 	 * @param floor the floor containing the room
 	 */
 	public Room( Floor floor ) {
-		this( floor, floor.getNewRoomName() );
+		this( Objects.requireNonNull( floor ), floor.getNewRoomName() );
 	}
 
 	/**

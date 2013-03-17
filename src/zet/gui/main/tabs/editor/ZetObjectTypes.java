@@ -15,6 +15,7 @@ import ds.z.StairArea;
 import ds.z.TeleportArea;
 import gui.GUIOptionManager;
 import java.awt.Color;
+import java.util.Objects;
 
 
 /**
@@ -36,8 +37,8 @@ public enum ZetObjectTypes {
 	private Color editColor;
 
 	private ZetObjectTypes( Class<?> c, Color color ) {
-		this.objectClass = c;
-		this.editColor = color;
+		this.objectClass = Objects.requireNonNull( c );
+		this.editColor = Objects.requireNonNull( color );
 	}
 
 	public Color getEditorColor() {
