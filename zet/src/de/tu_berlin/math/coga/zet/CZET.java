@@ -36,8 +36,10 @@ import gui.ZETMain;
 import gui.editor.properties.PropertyLoadException;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
+import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.nio.file.FileSystems;
 import java.nio.file.Path;
@@ -605,6 +607,9 @@ public class CZET {
 		yPos = new IdentifiableIntegerMapping<>( 0 );
 		long start = System.nanoTime();
 		eafp = DatFileReaderWriter.read( inputFile.toString(), nodePositionMapping ); // new .dat-format
+
+		System.out.println( eafp.getNetwork() );
+
 		graphView = new GraphVisualization( eafp, nodePositionMapping );
 		// version without x and Years positions:
 		//theInstance.eafp = DatFileReaderWriter.readOld( theInstance.inputFileName ); // old .dat-format
@@ -656,7 +661,10 @@ public class CZET {
 				for( FlowOverTimePath a : pb ) {
 					StaticPath sp = a.asStatic();
 					staticPaths.add( sp );
-					pathID.put( sp, id++ );
+					if( pathID.containsKey( sp ) )
+						;//	throw new IllegalStateException();
+					else
+						pathID.put( sp, id++ );
 					int min = Integer.MAX_VALUE;
 					if( firstUse.containsKey( sp ) )
 						min = firstUse.get( sp );
@@ -666,10 +674,14 @@ public class CZET {
 
 				System.out.println( "Static paths: " + staticPaths.size() );
 
-				System.out.println( "Maximize" );
-				System.out.println( "matching:" );
-				System.out.println( "z" );
-				System.out.println( "Subject to" );
+				BufferedWriter writer = new BufferedWriter( new FileWriter( new File( "./../output/lp/diamond.lp" ) ) );
+
+				writer.write( "Maximize\n" );
+				writer.write( "matching:\n" );
+
+
+				writer.write( "z\n" );
+				writer.write( "Subject to\n" );
 
 				for( Edge e : eafp.getNetwork().edges() ) {
 					String s = "e_" + e.id() + ": ";
@@ -681,20 +693,21 @@ public class CZET {
 							} else {
 								first = false;
 							}
-							s = s + "p" + pathID.get( p ) + firstUse.get( p );
+							s = s + "p" + pathID.get( p );
 						}
 					}
-					s += " <= 1";
+					s += " <= 1\n";
 					if( first != true )
-						System.out.println( s );
+						writer.write( s );
 				}
 
-				// p_ij , i pfadnummer, j = arrivaltime, beginnt mit min-time + 1
-				for( StaticPath sp : staticPaths ) {
-					for( int j = firstUse.get( sp )+1; j <= fot.getTimeHorizon(); ++j ) {
-						System.out.println( "p_" + pathID.get( sp ) + j + ": " + "p"+pathID.get(sp) + firstUse.get( sp ) + " - " + "p" + pathID.get(sp) + j + " = 0" );
-					}
-				}
+//				// p_ij , i pfadnummer, j = arrivaltime, beginnt mit min-time + 1
+//				for( StaticPath sp : staticPaths ) {
+//					for( int j = firstUse.get( sp )+1; j <= fot.getTimeHorizon(); ++j ) {
+//						writer.write( "p" + pathID.get( sp ) + ": " + "p"+pathID.get(sp) + "_" + firstUse.get( sp ) + " - " + "p" + pathID.get(sp) + "_" + j + " = 0\n" );
+//					}
+//					System.out.println( "p" + pathID.get(sp) + sp.toString() );
+//				}
 
 				for( int t = 0; t <= fot.getTimeHorizon(); ++t ) {
 					String s = "t_" + t + ": ";
@@ -706,112 +719,114 @@ public class CZET {
 							} else {
 								s += " + ";
 							}
-							s += "p" + pathID.get( sp ) + t;
+							s += "p" + pathID.get( sp );
 						}
 					}
-					s += " - " + arrivalPattern[t] + "z>=0";
-					System.out.println( s );
+					s += " - " + arrivalPattern[t] + "z>=0\n";
+					writer.write( s );
 
 				}
 
-				System.out.println( "Bounds" );
+				writer.write( "Bounds\n" );
 				// variablen-beschränkungen
 				// pfad-variablen >= 0
 				for( StaticPath sp : staticPaths ) {
 					for( int j = firstUse.get( sp ); j <= fot.getTimeHorizon(); ++j ) {
-						System.out.println( "p" + pathID.get( sp ) + j + " >= 0" );
+						writer.write( "p" + pathID.get( sp ) + " >= 0\n" );
 					}
 				}
-				System.out.println( "End" );
-
-				System.out.println( "Compute Approximation" );
-
-				HashMap<StaticPath,Double> c = new HashMap<>();
-
-				Double eps = 1/3.;
-
-				for( int t = 0; t <= maxArrival; ++t ) {
-					System.out.println( "Computing Value for t=" + t );
-
-					// ignore edge capacities at first glance as no edges share paths of same length
-
-					// get all paths that arrive at this time
-					Set<StaticPath> arrivalSet = new HashSet<>();
-
-					Set<StaticPath> unused = new HashSet<>();
-					Set<StaticPath> used = new HashSet<>();
-
-					double cap = 0;
-					for( FlowOverTimePath a : pb ) {
-						StaticPath temp1 = a.asStatic();
-						StaticPath temp2 = a.asStatic();
-						assert temp1.equals(temp2);
-						assert temp1 != temp2;
-
-						if( a.getArrival( eafp.getTransitTimes() ) > t )
-							continue;
-						//System.out.println( "Path: " + a );
-						if( !c.containsKey( a.asStatic() ) ) {
-							// we may have a new path
-							unused.add( a.asStatic() );
-							if( a.getArrival( eafp.getTransitTimes() ) == t )
-								arrivalSet.add( a.asStatic() );
-						} else {
-							used.add( a.asStatic() );
-							if( a.getArrival( eafp.getTransitTimes() ) <= t ) {
-								cap += ( (t - a.getArrival( eafp.getTransitTimes() ))+1 ) * c.get( a.asStatic() );
-							}
-						}
-					}
-
-					// calculate
-					System.out.println( "Should arrive: " + (eps * arrivalPattern[t] ) );
-					System.out.println( "Arrived: " + cap );
-
-					// try to send remaining amount
-					int numberOfPaths = arrivalSet.size();
-					System.out.println( "Add new Paths. Available: " + numberOfPaths );
-
-					double onPath = ((eps * arrivalPattern[t] ) - cap)/numberOfPaths;
+				writer.write( "End\n" );
+				writer.flush();
 
 
-					if( onPath < 0.0003 ) {
-						System.out.println( "Do not add new paths, already enough from old ones." );
-						if( numberOfPaths == 0 )
-							System.out.println( " ---- anyway, number of paths is 0" );
-					} else {
-//						if( t == 0 )
-//							onPath = 1/3.;
-//						else
-//							onPath = 1/6.;
-						for( StaticPath a : arrivalSet ) {
-
-							if( c.containsKey( a ) )
-								throw new AssertionError();
-							System.out.println( "ADD " + a + " with capacity " + onPath );
-							c.put( a, onPath );
-						}
-					}
-
-
-					IdentifiableDoubleMapping<Edge> assignedEdgeCapacity = new IdentifiableDoubleMapping<>( eafp.getNetwork().getEdgeCapacity() );
-					for( Edge e : eafp.getNetwork().edges() ) {
-						assignedEdgeCapacity.set( e, 0 );
-					}
-					for( StaticPath sp : c.keySet() ) {
-						for( Edge e : sp ) {
-							double old = assignedEdgeCapacity.get( e );
-							double nc = old + c.get( sp );
-							assignedEdgeCapacity.set( e, nc );
-							if( nc > 1 )
-								System.out.println( nc + " on edge " + e.toString() );
-							assert nc <= 1;
-						}
-					}
-
-
-
-				}
+//				System.out.println( "Compute Approximation" );
+//
+//				HashMap<StaticPath,Double> c = new HashMap<>();
+//
+//				Double eps = 1/3.;
+//
+//				for( int t = 0; t <= maxArrival; ++t ) {
+//					System.out.println( "Computing Value for t=" + t );
+//
+//					// ignore edge capacities at first glance as no edges share paths of same length
+//
+//					// get all paths that arrive at this time
+//					Set<StaticPath> arrivalSet = new HashSet<>();
+//
+//					Set<StaticPath> unused = new HashSet<>();
+//					Set<StaticPath> used = new HashSet<>();
+//
+//					double cap = 0;
+//					for( FlowOverTimePath a : pb ) {
+//						StaticPath temp1 = a.asStatic();
+//						StaticPath temp2 = a.asStatic();
+//						assert temp1.equals(temp2);
+//						assert temp1 != temp2;
+//
+//						if( a.getArrival( eafp.getTransitTimes() ) > t )
+//							continue;
+//						//System.out.println( "Path: " + a );
+//						if( !c.containsKey( a.asStatic() ) ) {
+//							// we may have a new path
+//							unused.add( a.asStatic() );
+//							if( a.getArrival( eafp.getTransitTimes() ) == t )
+//								arrivalSet.add( a.asStatic() );
+//						} else {
+//							used.add( a.asStatic() );
+//							if( a.getArrival( eafp.getTransitTimes() ) <= t ) {
+//								cap += ( (t - a.getArrival( eafp.getTransitTimes() ))+1 ) * c.get( a.asStatic() );
+//							}
+//						}
+//					}
+//
+//					// calculate
+//					System.out.println( "Should arrive: " + (eps * arrivalPattern[t] ) );
+//					System.out.println( "Arrived: " + cap );
+//
+//					// try to send remaining amount
+//					int numberOfPaths = arrivalSet.size();
+//					System.out.println( "Add new Paths. Available: " + numberOfPaths );
+//
+//					double onPath = ((eps * arrivalPattern[t] ) - cap)/numberOfPaths;
+//
+//
+//					if( onPath < 0.0003 ) {
+//						System.out.println( "Do not add new paths, already enough from old ones." );
+//						if( numberOfPaths == 0 )
+//							System.out.println( " ---- anyway, number of paths is 0" );
+//					} else {
+////						if( t == 0 )
+////							onPath = 1/3.;
+////						else
+////							onPath = 1/6.;
+//						for( StaticPath a : arrivalSet ) {
+//
+//							if( c.containsKey( a ) )
+//								throw new AssertionError();
+//							System.out.println( "ADD " + a + " with capacity " + onPath );
+//							c.put( a, onPath );
+//						}
+//					}
+//
+//
+//					IdentifiableDoubleMapping<Edge> assignedEdgeCapacity = new IdentifiableDoubleMapping<>( eafp.getNetwork().getEdgeCapacity() );
+//					for( Edge e : eafp.getNetwork().edges() ) {
+//						assignedEdgeCapacity.set( e, 0 );
+//					}
+//					for( StaticPath sp : c.keySet() ) {
+//						for( Edge e : sp ) {
+//							double old = assignedEdgeCapacity.get( e );
+//							double nc = old + c.get( sp );
+//							assignedEdgeCapacity.set( e, nc );
+//							if( nc > 1 )
+//								System.out.println( nc + " on edge " + e.toString() );
+//							assert nc <= 1;
+//						}
+//					}
+//
+//
+//
+//				}
 
 			break;
 		}
