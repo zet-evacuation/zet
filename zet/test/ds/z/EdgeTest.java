@@ -4,8 +4,6 @@
  */
 package ds.z;
 
-import zet.ds.z.PlanPoint;
-import zet.ds.z.Edge;
 import junit.framework.TestCase;
 import org.junit.Test;
 
