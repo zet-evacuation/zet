@@ -4,12 +4,12 @@
  */
 package de.tu_berlin.math.coga.zet.converter.graph;
 
-import zet.ds.z.AssignmentArea;
-import zet.ds.z.EvacuationArea;
-import zet.ds.z.Floor;
-import zet.ds.z.PlanPoint;
-import zet.ds.z.Room;
-import zet.ds.z.ZControl;
+import ds.z.AssignmentArea;
+import ds.z.EvacuationArea;
+import ds.z.Floor;
+import ds.z.PlanPoint;
+import ds.z.Room;
+import ds.z.ZControl;
 import static org.junit.Assert.*;
 import org.junit.Test;
 
