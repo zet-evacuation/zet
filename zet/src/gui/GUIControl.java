@@ -139,8 +139,8 @@ public class GUIControl implements AlgorithmListener {
 	private AlgorithmControl algorithmControl;
 	private ArrayList<Areas> mode = new ArrayList<>( Arrays.asList( Areas.values() ) );
 	private ZETGLControl control;
-	private Templates<Door> doorTemplates;
-	private Templates<ExitDoor> exitDoorTemplates;
+	private Templates<Door> doorTemplates = new Templates<>("empty");
+	private Templates<ExitDoor> exitDoorTemplates = new Templates<>("empty");
 	private PolygonPopup polygonPopup;
 	private EdgePopup edgePopup;
 	private PointPopup pointPopup;
@@ -204,6 +204,7 @@ public class GUIControl implements AlgorithmListener {
 		visualization = visualizationView.getGLContainer();
 		updateVisualizationElements();
 		visualization.setZcontrol( zcontrol );
+		loadProjectInternal();
 	}
 
 	private <T extends Localized> T registerNewComponent( T t ) {
@@ -713,7 +714,13 @@ public class GUIControl implements AlgorithmListener {
 			zcontrol.newProject( );
 		else
 			zcontrol.loadProject( f );
-
+		loadProjectInternal();
+	}
+	
+	/**
+	 * Loads the project that is currently stored in zcontrol.
+	 */
+	private void loadProjectInternal() {
 		// Reset GUI components
 		//if( tabPane.getSelectedIndex() > 1 )
 		//	tabPane.setSelectedIndex( 0 );

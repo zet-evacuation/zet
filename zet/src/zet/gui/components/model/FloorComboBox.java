@@ -43,7 +43,8 @@ public class FloorComboBox<U extends AbstractFloor> extends JComboBox<U>{
 				if( !(skipFirst && first) ) {
 					((DefaultComboBoxModel<U>)getModel()).addElement( f );
 					first = false;
-				}
+				} else
+					first = false;
 	}
 
 	private class FloorComboBoxRenderer extends ComboBoxRenderer<U> {
