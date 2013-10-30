@@ -19,11 +19,9 @@ package exitdistributions;
 import algo.graph.exitassignment.ExitAssignment;
 import de.tu_berlin.math.coga.zet.converter.cellularAutomaton.ZToCAConverter;
 import de.tu_berlin.math.coga.zet.converter.graph.ZToGraphRasterContainer;
+import ds.ca.evac.EvacuationCellularAutomaton;
 import ds.z.BuildingPlan;
 import ds.z.ConcreteAssignment;
-import ds.ca.evac.EvacuationCellularAutomaton;
-import evacuationplan.BidirectionalNodeCellMapping;
-import evacuationplan.BidirectionalNodeCellMapping.CAPartOfMapping;
 
 public class ExitDistributionBasedCAFactory extends ZToCAConverter {
 	

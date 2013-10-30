@@ -20,9 +20,9 @@
 package exitdistributions;
 
 import de.tu_berlin.math.coga.zet.converter.cellularAutomaton.ZToCAConverter;
+import de.tu_berlin.math.coga.zet.converter.graph.NetworkFlowModel;
 import de.tu_berlin.math.coga.zet.converter.graph.ZToGraphRasterContainer;
 import ds.ca.evac.EvacuationCellularAutomaton;
-import de.tu_berlin.math.coga.zet.converter.graph.NetworkFlowModel;
 import ds.z.BuildingPlan;
 import ds.z.ConcreteAssignment;
 

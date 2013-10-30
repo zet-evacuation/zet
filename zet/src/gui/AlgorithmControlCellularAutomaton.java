@@ -244,4 +244,9 @@ public class AlgorithmControlCellularAutomaton {
 				log.info( "Ignoring, algorithm has finished." );
 		}
 	}
+	
+	void tempSetParametersFromEx( CAVisualizationResults caVis, EvacuationCellularAutomaton ca ) {
+		this.caVisResults = caVis;
+		this.cellularAutomaton = ca;
+	}
 }

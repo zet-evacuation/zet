@@ -22,7 +22,7 @@ package batch.tasks.assignment;
 
 import algo.graph.exitassignment.EarliestArrivalTransshipmentExitAssignment;
 import batch.BatchResultEntry;
-import batch.tasks.*;
+import batch.tasks.AssignmentTask;
 import ds.z.Assignment;
 import ds.z.ConcreteAssignment;
 import ds.z.Project;

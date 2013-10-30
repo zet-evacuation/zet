@@ -64,7 +64,7 @@ public abstract class EvacuationCellularAutomatonAlgorithm extends AbstractCellu
 	protected final void execute( EvacCell cell ) {
 
 		Individual i = Objects.requireNonNull( cell.getIndividual(), "Execute called on EvacCell that does not contain an individual!" );
-		System.out.println( "Executing rules for individual " + i );
+		//System.out.println( "Executing rules for individual " + i );
 		Iterator<Rule> loop = getProblem().ruleSet.loopIterator();
 		while( loop.hasNext() ) { // Execute all rules
 			Rule r = loop.next();
