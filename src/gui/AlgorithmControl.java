@@ -230,7 +230,7 @@ public class AlgorithmControl implements PropertyChangeListener {
 		cav.setProblem( concreteAssignment );
 		cav.run();
 		networkFlowModel = cav.getSolution();
-		log.info( "Persons: " + concreteAssignment.getPersons().size() );
+		log.log( Level.INFO, "Persons: {0}", concreteAssignment.getPersons().size());
 		log.info( "done." );
 
 		eatAssignment.setProblem( networkFlowModel );
@@ -308,6 +308,9 @@ public class AlgorithmControl implements PropertyChangeListener {
 						//container = cca;
 						container = conv.getContainer();
 						caVisResults = visResults;
+						
+						caControl.tempSetParametersFromEx( caVisResults, ca );
+						
 						//EventServer.getInstance().dispatchEvent( new MessageEvent<>( this, MessageType.Status, "Simulation finished" ) );
 		log.log(Level.INFO, "Egress time: {0}", Formatter.formatUnit( cellularAutomaton.getTimeStep() * cellularAutomaton.getSecondsPerStep(), TimeUnits.Seconds ));
 

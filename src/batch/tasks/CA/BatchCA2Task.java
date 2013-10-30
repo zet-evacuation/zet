@@ -23,20 +23,20 @@ package batch.tasks.CA;
 import algo.ca.framework.EvacuationCellularAutomatonAlgorithm;
 import algo.graph.exitassignment.ExitAssignment;
 import batch.BatchResultEntry;
-import zet.tasks.CellularAutomatonAlgorithms;
 import batch.tasks.AssignmentTask;
 import de.tu_berlin.math.coga.zet.converter.cellularAutomaton.ZToCAConverter.ConversionNotSupportedException;
-import ds.z.Project;
 import ds.PropertyContainer;
 import ds.ca.evac.EvacuationCellularAutomaton;
 import ds.ca.results.VisualResultsRecorder;
 import ds.z.Assignment;
 import ds.z.AssignmentType;
 import ds.z.ConcreteAssignment;
+import ds.z.Project;
 import exitdistributions.ExitDistributionBasedCAFactory;
 import io.visualization.CAVisualizationResults;
 import java.util.TreeMap;
 import statistic.ca.CAStatistic;
+import zet.tasks.CellularAutomatonAlgorithms;
 
 /**
  * A task that is called during the batch execution. It performs one run of a

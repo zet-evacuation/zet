@@ -1357,13 +1357,13 @@ public class GUIControl implements AlgorithmListener {
 			}
 		}, this );
 
-						log.log( Level.INFO, "Left individuals: {0}", algorithmControl.getCellularAutomaton().getIndividualCount());
-						visualization.getControl().setCellularAutomatonControl( algorithmControl.getCaVisResults(), algorithmControl.getCellularAutomaton() );
-						visualizationView.updatePotentialSelector();
-						visualizationToolBar.setEnabledPlayback( true );
-						caView.getLeftPanel().getMainComponent().setSimulationData( algorithmControl.getCellularAutomaton(), algorithmControl.getContainer(), algorithmControl.getMapping() );
-						caView.displayFloor( editview.getCurrentFloor() ); // hier startet ein task!
-						ZETLoader.sendMessage( "Simulation beendet" );
+		log.log( Level.INFO, "Left individuals: {0}", algorithmControl.getCellularAutomaton().getIndividualCount());
+		visualization.getControl().setCellularAutomatonControl( algorithmControl.getCaVisResults(), algorithmControl.getCellularAutomaton() );
+		visualizationView.updatePotentialSelector();
+		visualizationToolBar.setEnabledPlayback( true );
+		caView.getLeftPanel().getMainComponent().setSimulationData( algorithmControl.getCellularAutomaton(), algorithmControl.getContainer(), algorithmControl.getMapping() );
+		caView.displayFloor( editview.getCurrentFloor() ); // hier startet ein task!
+		ZETLoader.sendMessage( "Simulation beendet" );
 	}
 
 	public void performOptimizationCompare() {
