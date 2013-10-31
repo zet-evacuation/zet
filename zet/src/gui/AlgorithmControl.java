@@ -100,6 +100,7 @@ public class AlgorithmControl implements PropertyChangeListener {
 		st.add( bpc );
 		st.addPropertyChangeListener( new PropertyChangeListener() {
 
+			@Override
 			public void propertyChange( PropertyChangeEvent pce ) {
 				if( st.isDone() ) {
 					buildingResults = bpc.getSolution();

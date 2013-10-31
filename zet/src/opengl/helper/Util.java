@@ -27,7 +27,7 @@ public class Util {
 		while( (ret = gl.glGetError()) != GL.GL_NO_ERROR ) {
 			switch( ret ) {
 				case GL.GL_INVALID_ENUM:
-					stream.println( "INVALID ENUM" );
+					//stream.println( "INVALID ENUM" );
 					break;
 				case GL.GL_INVALID_VALUE:
 					stream.println( "INVALID VALUE" );
