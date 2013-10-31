@@ -690,9 +690,13 @@ public class JZETMenuBar extends JMenuBar implements ActionListener, Localized {
                 Menu.updateMenu(mnuCreateShortestPathsGrid, loc.getString("Execute.CreateGraph.ShortestPaths.Grid"));
                 Menu.updateMenu(mnuCreateShortestPathsNonGrid, loc.getString("Execute.CreateGraph.ShortestPaths.NonGrid"));
 
-                //Menu.updateMenu( mCreateGraph, loc.getString( "Execute.Optimization.CreateGraph" ) );
+		//Menu.updateMenu( mCreateGraph, loc.getString( "Execute.Optimization.CreateGraph" ) );
 		Menu.updateMenu( mnuOptimizationEarliestArrivalTransshipment, loc.getString( "Execute.Optimization.AlgoEATransshipment" ) );
-                Menu.updateMenu(mnuOptimizationEATCompare, loc.getString("Execute.Optimization.EATCompare"));
+		Menu.updateMenu( mnuOptimizationEATCompare, loc.getString( "Execute.Optimization.EATCompare" ) );
+
+		Menu.updateMenu( mExitAssignment, loc.getString( "Execute.ExitAssignment" ) );
+		Menu.updateMenu( mnuExitAssignmentEAT, loc.getString( "Execute.ExitAssignment.EAT" ) );
+
 		// Extras menu
 		Menu.updateMenu( mLanguage, loc.getString( "Extras.Languages" ) );
 		Menu.updateMenu( mPlanImage, loc.getString( "Extras.PlanDisplaying" ) );

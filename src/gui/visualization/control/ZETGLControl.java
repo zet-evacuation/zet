@@ -77,7 +77,7 @@ public class ZETGLControl implements DrawableControlable {
 		buildingControl.delete();
 		caControl.delete();
 		graphControl.delete();
-                compareControl.delete();
+    compareControl.delete();
 	}
 
 	/**
@@ -246,6 +246,8 @@ public class ZETGLControl implements DrawableControlable {
 	 * @param ca
 	 */
 	public void setCellularAutomatonControl( CAVisualizationResults caVis, EvacuationCellularAutomaton ca ) {
+		if( caControl != null )
+			caControl.delete();
 		hasCellularAutomaton = true;
 		this.ca = ca;
 		caControl = new GLCellularAutomatonControl( caVis, ca );
@@ -258,9 +260,17 @@ public class ZETGLControl implements DrawableControlable {
 			showAllFloors();
 		else
 			showFloor( visibleFloor );
+		resetTime();
 	}
 
+	/**
+	 * Sets a new set of visualization results for a graph (network) and maybe a
+	 * flow. All current visualization steps are resetted.
+	 * @param graphVisResult the datastructure containing visual information.
+	 */
 	public void setGraphControl( GraphVisualizationResults graphVisResult ) {
+		if( graphControl != null )
+			graphControl.delete();
 		if( graphVisResult != null ) {
 			hasGraph = true;
 			graphControl = new GLFlowGraphControl( graphVisResult );
@@ -277,9 +287,10 @@ public class ZETGLControl implements DrawableControlable {
 		} else {
 			hasGraph = false;
 		}
+		resetTime();		
 	}
-        
-        public void setCompControl(CompareVisualizationResults compVisresult)
+
+	public void setCompControl(CompareVisualizationResults compVisresult)
         {
             compareControl = new CompareControl(compVisresult);
             compareControl.build(compVisresult);

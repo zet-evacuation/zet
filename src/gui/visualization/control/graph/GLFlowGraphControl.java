@@ -105,6 +105,9 @@ public class GLFlowGraphControl extends AbstractZETVisualizationControl<GLGraphF
 		this.setView( new GLFlowGraph( this ) );
 		for( GLGraphFloorControl floor : this )
 			view.addChild( floor.getView() );
+		
+		if( nanoSecondsPerStep == 0 )
+			finished = true;
 	}
 
 	@Override
@@ -189,7 +192,8 @@ public class GLFlowGraphControl extends AbstractZETVisualizationControl<GLGraphF
 					edge.stepUpdate();
 				node.stepUpdate( (int) step );
 			}
-		finished = step > stepCount;
+		System.out.println( "SET TIME AUFGERUFEN" );
+		finished = stepCount == 0 || step > stepCount;
 	}
 
 	@Override
@@ -221,6 +225,10 @@ public class GLFlowGraphControl extends AbstractZETVisualizationControl<GLGraphF
 	 * @see #setSecondsPerStep(double) 
 	 */
 	public void setNanoSecondsPerStep( long nanoSecondsPerStep ) {
+		if( nanoSecondsPerStep < 0 )
+			throw new IllegalArgumentException( "Nano seconds have to be nonnegative!" );
+		if( nanoSecondsPerStep == 0 )
+			finished = true;
 		this.nanoSecondsPerStep = nanoSecondsPerStep;
 		secondsPerStep = nanoSecondsPerStep * Conversion.nanoSecondsToSec;
 
@@ -236,6 +244,10 @@ public class GLFlowGraphControl extends AbstractZETVisualizationControl<GLGraphF
 	public void setSecondsPerStep( double secondsPerStepGraph ) {
 		this.secondsPerStep = secondsPerStepGraph;
 		nanoSecondsPerStep = Math.round( secondsPerStepGraph * Conversion.secToNanoSeconds );
+		if( nanoSecondsPerStep < 0 )
+			throw new IllegalArgumentException( "Nano seconds have to be nonnegative!" );
+		if( nanoSecondsPerStep == 0 )
+			finished = true;
 
 		System.out.println( "Berechnete Graph-Geschwindigkeit: " + nanoSecondsPerStep );
 	}

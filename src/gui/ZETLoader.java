@@ -197,7 +197,8 @@ public class ZETLoader {
 
 		debug = config.getBoolean( "debug" );
 		if( debug ) {
-			Debug.setDefaultLogLevel( Level.ALL );
+			//Debug.setDefaultLogLevel( Level.ALL );
+			Debug.setDefaultLogLevel( Level.FINER );
 			//log.log( Level.INFO, "{0}{1}", new Object[]{String.format( "%-25s", "Java-Version:" ), System.getProperty( "java.version" )});
 
 			log.log(  Level.INFO, "{0}{1}", new Object[]{String.format( "%-25s", "Runtime:" ), System.getProperty( "java.runtime.name" )});
