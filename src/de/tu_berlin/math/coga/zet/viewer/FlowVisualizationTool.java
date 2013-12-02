@@ -11,7 +11,7 @@ import de.tu_berlin.math.coga.common.algorithm.AlgorithmEvent;
 import de.tu_berlin.math.coga.common.algorithm.AlgorithmProgressEvent;
 import de.tu_berlin.math.coga.common.algorithm.AlgorithmStartedEvent;
 import de.tu_berlin.math.coga.common.algorithm.AlgorithmTerminatedEvent;
-import de.tu_berlin.math.coga.common.localization.DefaultLoc;
+import de.tu_berlin.math.coga.zet.ZETLocalization;
 import de.tu_berlin.math.coga.common.localization.Localization;
 import de.tu_berlin.math.coga.common.util.Formatter;
 import de.tu_berlin.math.coga.common.util.units.TimeUnits;
@@ -60,7 +60,6 @@ import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
-import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
 import javax.swing.JSlider;
 import javax.swing.SwingUtilities;
@@ -90,18 +89,8 @@ public class FlowVisualizationTool extends JFrame implements PropertyChangeListe
 			add( visNash );
 		}
 	};
-	Localization loc = DefaultLoc.getSingleton();
+	Localization loc = ZETLocalization.getSingleton();
 	private int sliderAccuracy = 100;
-	private JMenu mFile;
-	private JMenuItem mnuFileOpen;
-	private JMenuItem mnuFileSaveFlow;
-	private JMenuItem mnuFileOpenFlow;
-	private JMenu mFlow;
-	private JMenuItem mnuFlowExecute;
-	private JMenuItem mnuFlowRestart;
-	private JMenuItem mnuFlowPause;
-	private JMenu mView;
-	private JMenuItem mnuScreenshot;
 	Visualization<? extends DrawableControlable> vis = visFlow;
 	JEventStatusBar sb = new JEventStatusBar();
 	JSlider slider = new JSlider( 0, 0 );
@@ -157,28 +146,27 @@ public class FlowVisualizationTool extends JFrame implements PropertyChangeListe
 	 */
 	private void initializeComponents() {
 		loc.setLocale( Locale.GERMAN );
-		loc.setPrefix( "viewer." );
 		sb = new JEventStatusBar();
 		add( sb, BorderLayout.SOUTH );
 
 		JMenuBar bar = new JMenuBar();
-		mFile = Menu.addMenu( bar, loc.getString( "menuFile" ) );
-		mFlow = Menu.addMenu( bar, loc.getString( "menuFlow" ) );
-		mView = Menu.addMenu( bar, loc.getString( "menuView" ) );
+		JMenu mFile = Menu.addMenu( bar, "viewer.menuFile" );
+		JMenu mFlow = Menu.addMenu( bar, "viewer.menuFlow" );
+		JMenu mView = Menu.addMenu( bar, "viewer.menuView" );
 
 		// Dateimenue
-		mnuFileOpen = Menu.addMenuItem( mFile, loc.getString( "menuOpen" ), 'O', aclFile, "open" );
-		mnuFileOpenFlow = Menu.addMenuItem( mFile, loc.getString( "menuOpenFlow" ), 'Q', aclFile, "openFlow" );
-		mnuFileSaveFlow = Menu.addMenuItem( mFile, loc.getString( "menuSaveFlow" ), 'S', aclFile, "saveFlow" );
+		Menu.addMenuItem( mFile, "viewer.menuOpen", 'O', aclFile, "open" );
+		Menu.addMenuItem( mFile, "viewer.menuOpenFlow", 'Q', aclFile, "openFlow" );
+		Menu.addMenuItem( mFile, "viewer.menuSaveFlow", 'S', aclFile, "saveFlow" );
 		Menu.addMenuItem( mFile, "Nash Flow", 'N', aclFile, "nashFlow" );
 
 		// Flow-Menu
-		mnuFlowExecute = Menu.addMenuItem( mFlow, loc.getString( "menuExecute" ), KeyEvent.VK_F5, aclFlow, "execute", 0 );
-		mnuFlowPause = Menu.addMenuItem( mFlow, loc.getString( "menuPause" ), 'T', aclFlow, "pause" );
-		mnuFlowRestart = Menu.addMenuItem( mFlow, loc.getString( "menuRestart" ), KeyEvent.VK_F6, aclFlow, "restart", 0 );
+		Menu.addMenuItem( mFlow, "viewer.menuExecute", KeyEvent.VK_F5, aclFlow, "execute", 0 );
+		Menu.addMenuItem( mFlow, "viewer.menuPause", 'T', aclFlow, "pause" );
+		Menu.addMenuItem( mFlow, "viewer.menuRestart", KeyEvent.VK_F6, aclFlow, "restart", 0 );
 
 		// View menu
-		mnuScreenshot = Menu.addMenuItem( mView, loc.getString( "menuScreenshot" ), KeyEvent.VK_F12, acl, "screenshot", 0 );
+		Menu.addMenuItem( mView, "viewer.menuScreenshot", KeyEvent.VK_F12, acl, "screenshot", 0 );
 
 
 		setJMenuBar( bar );

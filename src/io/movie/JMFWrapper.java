@@ -21,7 +21,7 @@
 
 package io.movie;
 
-import de.tu_berlin.math.coga.common.localization.DefaultLoc;
+import de.tu_berlin.math.coga.zet.ZETLocalization;
 import java.util.Vector;
 import javax.media.MediaLocator;
 import javax.swing.JLabel;
@@ -58,7 +58,7 @@ public class JMFWrapper extends PicturesOnlyWriter {
 	@Override
 	public JPanel getAdvancedConfigurationPanel() {
 		JPanel panel = new JPanel();
-		panel.add( new JLabel( DefaultLoc.getSingleton().getString( "gui.visualization.createMovieDialog.jmf.noSupport" ) ) );
+		panel.add( new JLabel( ZETLocalization.getSingleton().getString( "gui.visualization.createMovieDialog.jmf.noSupport" ) ) );
 		return panel;
 	}
 

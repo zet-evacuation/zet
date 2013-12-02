@@ -34,7 +34,7 @@ public class JQuickVisualizationToolBar extends JToolBar implements ActionListen
 	 */
 	private void createQuickVisualizationToolBar() {
 		loc.setPrefix( "gui.toolbar." );
-		btnExit = Button.newButton( IconSet.Exit.icon(), this, "exit", loc.getString( "Exit" ) );
+		btnExit = Button.newButton( ZETIconSet.Exit.icon(), this, "exit", loc.getString( "Exit" ) );
 		add( btnExit );
 		loc.clearPrefix();
 	}

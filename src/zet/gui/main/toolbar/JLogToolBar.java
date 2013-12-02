@@ -34,7 +34,7 @@ public class JLogToolBar extends JToolBar implements ActionListener, Localized {
 	 */
 	private void createLogToolBar() {
 		loc.setPrefix( "gui.toolbar." );
-		btnExit = Button.newButton( IconSet.Exit.icon(), this, "", loc.getString( "Exit" ) );
+		btnExit = Button.newButton( ZETIconSet.Exit.icon(), this, "", loc.getString( "Exit" ) );
 		add( btnExit );
 
 		loc.setPrefix( "" );

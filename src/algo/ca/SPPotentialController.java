@@ -16,7 +16,7 @@
 package algo.ca;
 
 import algo.ca.util.PotentialUtils;
-import de.tu_berlin.math.coga.common.localization.DefaultLoc;
+import de.tu_berlin.math.coga.zet.ZETLocalization;
 import de.tu_berlin.math.coga.rndutils.RandomUtils;
 import de.tu_berlin.math.coga.rndutils.generators.GeneralRandom;
 import ds.ca.evac.EvacCell;
@@ -189,7 +189,7 @@ public class SPPotentialController implements PotentialController {
 	public void decreaseDynamicPotential (EvacCell cell) throws IllegalArgumentException{
 		DynamicPotential dynPot = pm.getDynamicPotential();
 		if(!(dynPot.contains(cell))){
-			throw new IllegalArgumentException (DefaultLoc.getSingleton (
+			throw new IllegalArgumentException (ZETLocalization.getSingleton (
 			).getString ("algo.ca.InsertCellPreviouslyException"));
 		}
 		

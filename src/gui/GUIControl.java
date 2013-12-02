@@ -17,6 +17,7 @@ import de.tu_berlin.math.coga.common.algorithm.AlgorithmProgressEvent;
 import de.tu_berlin.math.coga.common.algorithm.AlgorithmStartedEvent;
 import de.tu_berlin.math.coga.common.debug.Debug;
 import de.tu_berlin.math.coga.common.localization.Localized;
+import de.tu_berlin.math.coga.common.localization.Localizer;
 import de.tu_berlin.math.coga.common.util.IOTools;
 import de.tu_berlin.math.coga.components.JLogPane;
 import de.tu_berlin.math.coga.components.JVideoOptionsDialog;
@@ -113,7 +114,6 @@ import zet.tasks.RasterizeTask;
  * @author Jan-Philipp Kappmeier
  */
 public class GUIControl implements AlgorithmListener {
-	private ArrayList<Localized> localized = new ArrayList<>();
 
 
 	/** The logger of the main class. */
@@ -156,10 +156,10 @@ public class GUIControl implements AlgorithmListener {
 		algorithmControl = new AlgorithmControl( zcontrol.getProject() );
 
 		// Main window
-		editor = registerNewComponent( new JZetWindow( this, zcontrol ) );
+		editor = Localizer.instance().registerNewComponent( new JZetWindow( this, zcontrol ) );
 
 		// Menu bar
-		menuBar = registerNewComponent( new JZETMenuBar( this ) );
+		menuBar = Localizer.instance().registerNewComponent( new JZETMenuBar( this ) );
 		editor.setJMenuBar( menuBar );
 
 		// Popups
@@ -171,21 +171,21 @@ public class GUIControl implements AlgorithmListener {
 		EditStatus editStatus = new EditStatus( zcontrol, selection );
 
 		// Tool bars
-		editToolBar = registerNewComponent( new JEditToolbar( this, editStatus ) );
+		editToolBar = Localizer.instance().registerNewComponent( new JEditToolbar( this, editStatus ) );
 		//guiControl.setEditToolbar( toolBarEdit );
-		JBatchToolBar toolBarBatch = registerNewComponent( new JBatchToolBar( this ) );
-		JQuickVisualizationToolBar toolBarCellularAutomatonQuickVisualization = registerNewComponent( new JQuickVisualizationToolBar( this ) );
-		JVisualizationToolbar toolBarVisualization = registerNewComponent( new JVisualizationToolbar( this ) );
-		JStatisticCellularAutomatonToolbar toolBarCAStats = registerNewComponent( new JStatisticCellularAutomatonToolbar( this ) );
-		JStatisticGraphToolBar toolBarGraphStats = registerNewComponent( new JStatisticGraphToolBar( this ) );
-		JLogToolBar toolBarLog = registerNewComponent( new JLogToolBar( this ) );
+		JBatchToolBar toolBarBatch = Localizer.instance().registerNewComponent( new JBatchToolBar( this ) );
+		JQuickVisualizationToolBar toolBarCellularAutomatonQuickVisualization = Localizer.instance().registerNewComponent( new JQuickVisualizationToolBar( this ) );
+		JVisualizationToolbar toolBarVisualization = Localizer.instance().registerNewComponent( new JVisualizationToolbar( this ) );
+		JStatisticCellularAutomatonToolbar toolBarCAStats = Localizer.instance().registerNewComponent( new JStatisticCellularAutomatonToolbar( this ) );
+		JStatisticGraphToolBar toolBarGraphStats = Localizer.instance().registerNewComponent( new JStatisticGraphToolBar( this ) );
+		JLogToolBar toolBarLog = Localizer.instance().registerNewComponent( new JLogToolBar( this ) );
 
 		// Components in tabs
-		editview = registerNewComponent( new JEditView( editStatus, this, selection ) );
+		editview = Localizer.instance().registerNewComponent( new JEditView( editStatus, this, selection ) );
 		selection.addObserver( editview );
-		caView = registerNewComponent( new JQuickVisualizationView( this ) );
+		caView = Localizer.instance().registerNewComponent( new JQuickVisualizationView( this ) );
 		JComponent batchView = new JBatch( this );
-		visualizationView = registerNewComponent( new JVisualizationView( this ) );
+		visualizationView = Localizer.instance().registerNewComponent( new JVisualizationView( this ) );
 		JComponent caStatisticView = new JStatisticPanel();
 		JComponent graphStatisticView = new JGraphStatisticPanel();
 		JComponent logView = new JLogPane( ZETMain.gl );
@@ -205,11 +205,6 @@ public class GUIControl implements AlgorithmListener {
 		updateVisualizationElements();
 		visualization.setZcontrol( zcontrol );
 		loadProjectInternal();
-	}
-
-	private <T extends Localized> T registerNewComponent( T t ) {
-		localized.add( t );
-		return t;
 	}
 
 	public void loadTemplates() throws ParserConfigurationException, SAXException, IOException {
@@ -679,9 +674,7 @@ public class GUIControl implements AlgorithmListener {
 
 	public void switchToLanguage( Locale locale ) {
 		GUILocalization.getSingleton().setLocale( locale );
-		for( Localized l : localized )
-			l.localize();
-		menuBar.localize();
+		Localizer.instance().updateLocalization();
 	}
 
 	private JFileChooser jfcProject;

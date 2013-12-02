@@ -19,7 +19,7 @@
  */
 package gui.editor.flooredit;
 
-import de.tu_berlin.math.coga.common.localization.DefaultLoc;
+import de.tu_berlin.math.coga.zet.ZETLocalization;
 import ds.z.Project;
 import ds.z.Floor;
 import de.tu_berlin.math.coga.components.framework.Button;
@@ -48,7 +48,7 @@ import gui.ZETMain;
  */
 public class FloorImportDialog extends JDialog {
 	/** The localization class. */
-	private static final Localization loc = DefaultLoc.getSingleton();
+	private static final Localization loc = ZETLocalization.getSingleton();
 	/** The elements of the floor list. */
 	private Vector<Floor> floors = new Vector<Floor>();
 	/** The list of floors available in the newly loaded project. */

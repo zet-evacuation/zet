@@ -21,7 +21,7 @@
 
 package de.tu_berlin.math.coga.math.vectormath;
 
-import de.tu_berlin.math.coga.common.localization.DefaultLoc;
+import de.tu_berlin.math.coga.zet.ZETLocalization;
 import java.text.NumberFormat;
 import java.text.ParseException;
 
@@ -321,7 +321,7 @@ public class Vector3 implements Cloneable {
 	 */
 	@Override
 	public String toString(){
-		return toString( DefaultLoc.getSingleton().getFloatConverter() );
+		return toString( ZETLocalization.getSingleton().getFloatConverter() );
 	}
 
 	/**
@@ -345,7 +345,7 @@ public class Vector3 implements Cloneable {
 	 * @throws ParseException if an error occurs during parsing
 	 */
 	public void parse( String value ) throws ParseException {
-		parse( value, DefaultLoc.getSingleton().getFloatConverter() );
+		parse( value, ZETLocalization.getSingleton().getFloatConverter() );
 	}
 
 	/**

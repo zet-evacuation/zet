@@ -13,6 +13,7 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
+
 /*
  * MenuFramework.java
  * Created on 17. Dezember 2007, 02:06:21
@@ -20,10 +21,13 @@
 
 package de.tu_berlin.math.coga.components.framework;
 
-import de.tu_berlin.math.coga.common.localization.DefaultLoc;
+import de.tu_berlin.math.coga.common.localization.DefaultLocalization;
+import de.tu_berlin.math.coga.common.localization.Localization;
+import de.tu_berlin.math.coga.common.localization.Localizer;
 import java.awt.event.ActionListener;
 import java.awt.event.InputEvent;
 import java.awt.event.KeyEvent;
+import javax.swing.AbstractButton;
 import javax.swing.JCheckBoxMenuItem;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
@@ -38,24 +42,35 @@ import javax.swing.KeyStroke;
  * @author Jan-Philipp Kappmeier, Christian Ullenboom (Java ist auch eine Insel)
  */
 public class Menu {
+	/** The localization object used to generate localized menu titles. */
+	private static Localization loc = DefaultLocalization.getSingleton();
 	private Menu() { }
-	
-	// Menustuff
-	private static JMenuItem processMnemonic( String s ) {
-		return processMnemonic( new JMenuItem(), s );
+
+	public static Localization getLocalization() {
+		return loc;
 	}
 	
-	private static JMenuItem processMnemonic( JMenuItem menu, String s ) {
+	/**
+	 * Sets a {@code Localization} object that is used to generate localized
+	 * menu entries.
+	 * @param localization the {@code Localization} opbject.
+	 */
+	public static void setLoc( Localization loc ) {
+		Menu.loc = loc;
+	}
+	
+	
+	public static <T extends AbstractButton> T processMnemonic( T guiObject, String s ) {
 		if( s.indexOf( "_" ) > -1 ) {
 			int pos = s.indexOf( "_" );
 			char c = s.charAt( pos + 1 );
 			StringBuffer sb = new StringBuffer( s ).delete( pos, pos + 1 );
-			menu.setText( sb.toString() );
-			menu.setMnemonic( c );
+			guiObject.setText( sb.toString() );
+			guiObject.setMnemonic( c );
 		} else {
-			menu.setText( s );
+			guiObject.setText( s );
 		}
-		return menu;
+		return guiObject;
 	}
 	
 	/**
@@ -88,49 +103,49 @@ public class Menu {
 	
 	/**
 	 * Creates a new menu entry to chreate herarchial menus
-	 * @param m the parent JMenu
-	 * @param s the title
+	 * @param m the parent JLocalizedMenu
+	 * @param localizationString the title
 	 * @return the newly created menu
 	 */
-	public static JMenu addMenu( JMenu m, String s ) {
-		if( s.startsWith( "-" ) ) {
+	public static JMenu addMenu( JMenu m, String localizationString ) {
+		if( localizationString.startsWith( "-" ) ) {
 			m.addSeparator();
 			return null;
 		}
-		JMenu menu = (JMenu)processMnemonic( new JMenu(), s );
+		JMenu menu = processMnemonic( Localizer.instance().registerNewComponent( new JMenu(), localizationString ), loc.getString(localizationString) );
 		m.add( menu );
 		return menu;
 	}
 	
-	public static JMenu addMenu( JMenuBar b, String s ) {
-		JMenu menu = (JMenu)processMnemonic( new JMenu(), s );
+	public static JMenu addMenu( JMenuBar b, String localizationString ) {
+		JMenu menu = processMnemonic( Localizer.instance().registerNewComponent( new JMenu(), localizationString ), loc.getString( localizationString ) );
 		b.add( menu );
 		return menu;
 	}
 	
-	public static JMenu addMenu( JPopupMenu p, String s ) {
-		JMenu menu = new JMenu( s );
+	public static JMenu addMenu( JPopupMenu p, String localizationString ) {
+		JMenu menu = Localizer.instance().registerNewComponent( new JMenu(), loc.getString( localizationString ) );
 		p.add( menu );
 		return menu;
 	}
 	
 	/**
-	 * Insert a JMenuItem to a given JMenu.
-	 * @param m the JMenu
-	 * @param s the menu title
+	 * Insert a JLocalizedMenuItem to a given JLocalizedMenu.
+	 * @param m the JLocalizedMenu
+	 * @param localizedString the localization string for the menu title, if "-" separator
 	 * @param keyChar the shortcut character
 	 * @param al an ActionListener
 	 * @param commandString an action command
 	 * @param inputEvent 
-	 * @return   a JMenuItem
+	 * @return   a JLocalizedMenuItem
 	 */
-	public static JMenuItem addMenuItem( JMenu m, String s, char keyChar, ActionListener al, String commandString, int inputEvent ) { 
-		if( s.startsWith( "-" ) ) {
+	public static JMenuItem addMenuItem( JMenu m, String localizedString, char keyChar, ActionListener al, String commandString, int inputEvent ) { 
+		if( localizedString.startsWith( "-" ) ) {
 			m.addSeparator();
 			return null;
 		}
-
-		JMenuItem menuItem = processMnemonic( s );
+		
+		JMenuItem menuItem =  processMnemonic( Localizer.instance().registerNewComponent( new JMenuItem(), localizedString ), loc.getString( localizedString ) );
 		m.add( menuItem );
 
 		menuItem.setAccelerator( KeyStroke.getKeyStroke( inputEvent, inputEvent ));
@@ -146,22 +161,21 @@ public class Menu {
 	}
 
 	/**
-	 * Insert a JMenuItem to a given JMenu.
-	 * @param m the JMenu
-	 * @param s the menu title
+	 * Insert a JLocalizedMenuItem to a given JLocalizedMenu.
+	 * @param m the JLocalizedMenu
+	 * @param localizationString the menu title
 	 * @param keyEvent the shortcut key code
 	 * @param al an ActionListener
 	 * @param commandString an action command
 	 * @param inputEvent 
-	 * @return   a JMenuItem
+	 * @return   a JLocalizedMenuItem
 	 */
-	public static JMenuItem addMenuItem( JMenu m, String s, int keyEvent, ActionListener al, String commandString, int inputEvent ) {
-		if( s.startsWith( "-" ) ) {
+	public static JMenuItem addMenuItem( JMenu m, String localizationString, int keyEvent, ActionListener al, String commandString, int inputEvent ) {
+		if( localizationString.startsWith( "-" ) ) {
 			m.addSeparator();
 			return null;
 		}
-
-		JMenuItem menuItem = processMnemonic( s );
+		JMenuItem menuItem =  processMnemonic( Localizer.instance().registerNewComponent( new JMenuItem(), localizationString ), loc.getString( localizationString ) );
 		m.add( menuItem );
 
 		if( keyEvent != KeyEvent.VK_UNDEFINED )
@@ -176,71 +190,72 @@ public class Menu {
 	
 	
 	/**
-	 * Insert a JMenuItem to a given JMenu.
-	 * @param m the JMenu
+	 * Insert a JLocalizedMenuItem to a given JLocalizedMenu.
+	 * @param m the JLocalizedMenu
 	 * @param s the menu title
 	 * @param keyChar the shortcut character
 	 * @param al an ActionListener
 	 * @param commandString an action command
-	 * @return   a JMenuItem
+	 * @return   a JLocalizedMenuItem
 	 */
-	public static JMenuItem addMenuItem( JMenu m, String s, char keyChar, ActionListener al, String commandString ) {
-		return addMenuItem( m, s, keyChar, al, commandString, InputEvent.CTRL_DOWN_MASK);
+	public static JMenuItem addMenuItem( JMenu m, String localizedString, char keyChar, ActionListener al, String commandString ) {
+		return addMenuItem( m, localizedString, keyChar, al, commandString, InputEvent.CTRL_DOWN_MASK);
 	}
 
 	/**
-	 * Insert a JMenuItem to a given JMenu.
-	 * @param m the JMenu
+	 * Insert a JLocalizedMenuItem to a given JLocalizedMenu.
+	 * @param m the JLocalizedMenu
 	 * @param s the menu title
 	 * @param keyChar the shortcut character
 	 * @param mask the shortcut mask, such as 'CTRL' or 'SHIFT+CTRL'
 	 * @param al an ActionListener
 	 * @param commandString an action command
-	 * @return   a JMenuItem
+	 * @return   a JLocalizedMenuItem
 	 */
-	public static JMenuItem addMenuItem( JMenu m, String s, char keyChar, int mask, ActionListener al, String commandString ) {
-		return addMenuItem( m, s, keyChar, al, commandString, mask );
+	public static JMenuItem addMenuItem( JMenu m, String localizedString, char keyChar, int mask, ActionListener al, String commandString ) {
+		return addMenuItem( m, localizedString, keyChar, al, commandString, mask );
 	}
 
-	public static JMenuItem addMenuItem( JMenu m, String s, char c, ActionListener al ) {
-		return addMenuItem( m, s, c, al, null, InputEvent.CTRL_DOWN_MASK );
+	public static JMenuItem addMenuItem( JMenu m, String localizedString, char c, ActionListener al ) {
+		return addMenuItem( m, localizedString, c, al, null, InputEvent.CTRL_DOWN_MASK );
 	}
 
-	public static JMenuItem addMenuItem( JMenu m, String s, char c ) {
-		return addMenuItem( m, s, c, null, null, InputEvent.CTRL_DOWN_MASK );
+	public static JMenuItem addMenuItem( JMenu m, String localizedString, char c ) {
+		return addMenuItem( m, localizedString, c, null, null, InputEvent.CTRL_DOWN_MASK );
 	}
 
-	public static JMenuItem addMenuItem( JMenu m, String s ) {
-		return addMenuItem( m, s, (char)0, null, null, 0 );
+	public static JMenuItem addMenuItem( JMenu m, String localizedString ) {
+		return addMenuItem( m, localizedString, (char)0, null, null, 0 );
 	}
 
-	public static JMenuItem addMenuItem( JMenu m, String s, ActionListener al ) {
-		return addMenuItem( m, s, (char)0, al, null, 0 );
+	public static JMenuItem addMenuItem( JMenu m, String localizedString, ActionListener al ) {
+		return addMenuItem( m, localizedString, (char)0, al, null, 0 );
 	}
 
-	public static JMenuItem addMenuItem( JMenu m, String s, ActionListener al, String commandString ) {
-		return addMenuItem( m, s, (char)0, al, commandString, 0 );
+	public static JMenuItem addMenuItem( JMenu m, String localizedString, ActionListener al, String commandString ) {
+		return addMenuItem( m, localizedString, (char)0, al, commandString, 0 );
 	}
 	
 	/**
-	 * Insert a JMenuItem to a given JMenu.
-	 * @param m the JMenu
-	 * @param s the menu title
+	 * Insert a JLocalizedMenuItem to a given JLocalizedMenu.
+	 * @param m the JLocalizedMenu
+	 * @param localizationString the menu title
 	 * @param c the checked status
 	 * @param al an ActionListener
 	 * @param commandString 
-	 * @return   a JMenuItem
+	 * @return   a JLocalizedMenuItem
 	 */
-	public static JCheckBoxMenuItem addCheckMenuItem( JMenu m, String s, boolean c, ActionListener al, String commandString ) {
-		if( s.startsWith( "-" ) ) {
+	public static JCheckBoxMenuItem addCheckMenuItem( JMenu m, String localizationString, boolean c, ActionListener al, String commandString ) {
+		if( localizationString.startsWith( "-" ) ) {
 			m.addSeparator();
 			return null;
 		}
 
+		String s = loc.getString( localizationString );
 		char mn = getMnemonic( s );
 		JCheckBoxMenuItem menuItem;
 		if( mn != 0 ) {
-			menuItem = new JCheckBoxMenuItem( extractMnemonic( s ), c );
+			menuItem = Localizer.instance().registerNewComponent( new JCheckBoxMenuItem( extractMnemonic( s ), c ), localizationString );
 			menuItem.setMnemonic( mn );
 		} else
 			menuItem = new JCheckBoxMenuItem( s, c );
@@ -255,27 +270,28 @@ public class Menu {
 		return menuItem;
 	}
 	
-	public static JCheckBoxMenuItem addCheckMenuItem( JMenu m, String s, boolean c, ActionListener al ) {
-		return addCheckMenuItem( m, s, c, al, null );
+	public static JCheckBoxMenuItem addCheckMenuItem( JMenu m, String localizationString, boolean c, ActionListener al ) {
+		return addCheckMenuItem( m, localizationString, c, al, null );
 	}
 	
-	public static JCheckBoxMenuItem addCheckMenuItem( JMenu m, String s, boolean c ) {
-		return addCheckMenuItem( m, s, c, null, null );
+	public static JCheckBoxMenuItem addCheckMenuItem( JMenu m, String localizationString, boolean c ) {
+		return addCheckMenuItem( m, localizationString, c, null, null );
 	}
 	
-	public static JRadioButtonMenuItem addRadioButtonMenuItem( JMenu m, String s, boolean c, ActionListener al, String commandString ) {
-		if( s.startsWith( "-" ) ) {
+	public static JRadioButtonMenuItem addRadioButtonMenuItem( JMenu m, String localizationString, boolean selected, ActionListener al, String commandString ) {
+		if( localizationString.startsWith( "-" ) ) {
 			m.addSeparator();
 			return null;
 		}
 
-		char mn = getMnemonic( s );
+		String text = loc.getString( localizationString );
+		char mn = getMnemonic( text );
 		JRadioButtonMenuItem menuItem;
-				if( mn != 0 ) {
-			menuItem = new JRadioButtonMenuItem( extractMnemonic( s ), c );
+		if( mn != 0 ) {
+			menuItem = Localizer.instance().registerNewComponent( new JRadioButtonMenuItem( extractMnemonic( text ), selected ), localizationString );
 			menuItem.setMnemonic( mn );
 		} else
-			menuItem = new JRadioButtonMenuItem( s, c );
+			menuItem = new JRadioButtonMenuItem( text, selected );
 		
 		if( al != null ) {
 			menuItem.addActionListener( al );
@@ -290,21 +306,20 @@ public class Menu {
 	// Popups
 
 	/**
-	 * Insert a JMenuItem to a given JPopupMenu.
+	 * Insert a JLocalizedMenuItem to a given JPopupMenu.
 	 * @param m the JPopupMenu
-	 * @param s the menu title
+	 * @param localizationKey the menu title
 	 * @param al an ActionListener
 	 * @param commandString an action command
-	 * @return   a JMenuItem
+	 * @return   a JLocalizedMenuItem
 	 */
-	public static JMenuItem addMenuItem( JPopupMenu m, String s, ActionListener al, String commandString ) {
-		if( s.startsWith( "-" ) ) {
+	public static JMenuItem addMenuItem( JPopupMenu m, String localizationKey, ActionListener al, String commandString ) {
+		if( localizationKey.startsWith( "-" ) ) {
 			m.addSeparator();
 			return null;
 		}
 
-		//JMenuItem menuItem = processMnemonic( s );
-		JMenuItem menuItem = new JMenuItem( s );
+		JMenuItem menuItem = Localizer.instance().registerNewComponent( new JMenuItem(), localizationKey );
 		m.add( menuItem );
 		
 		if( commandString != null )
@@ -314,26 +329,11 @@ public class Menu {
 		return menuItem;
 	}
 
-	public static JMenuItem addMenuItem( JPopupMenu m, String s ) {
-		return addMenuItem( m, s, null, null );
+	public static JMenuItem addMenuItem( JPopupMenu m, String localizationKey ) {
+		return addMenuItem( m, localizationKey, null, null );
 	}
 
-	public static JMenuItem addMenuItem( JPopupMenu m, String s, ActionListener al ) {
-		return addMenuItem( m, s, al, null );
+	public static JMenuItem addMenuItem( JPopupMenu m, String locallizationKey, ActionListener al ) {
+		return addMenuItem( m, locallizationKey, al, null );
 	}
-	
-	//public static void updateMenu( JMenu menu, String text ) {
-	//	menu.setText( extractMnemonic( text ) );
-	//	menu.setMnemonic( getMnemonic( text ) );
-	//}
-
-	public static void updateMenu( JMenuItem menu, String text ) {
-		if( menu == null ) { //throw new IllegalArgumentException( "Menu item '" + text + "' is null." );
-			System.err.println( String.format( DefaultLoc.getSingleton().getStringWithoutPrefix( "menu.updateMenuNullPointer" ), text ) );
-			return;
-		}
-		menu.setText( extractMnemonic( text ) );
-		menu.setMnemonic( getMnemonic( text ) );
-	}
-
 }

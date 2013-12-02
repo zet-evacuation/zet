@@ -11,9 +11,9 @@ import com.l2fprod.common.propertysheet.PropertySheetTableModel;
 import com.l2fprod.common.swing.JButtonBar;
 import com.l2fprod.common.swing.plaf.ButtonBarUI;
 import com.l2fprod.common.swing.plaf.blue.BlueishButtonBarUI;
-import de.tu_berlin.math.coga.common.localization.DefaultLoc;
+import de.tu_berlin.math.coga.zet.ZETLocalization;
 import de.tu_berlin.math.coga.components.framework.Button;
-import zet.gui.main.toolbar.IconSet;
+import zet.gui.main.toolbar.ZETIconSet;
 import info.clearthought.layout.TableLayout;
 import java.awt.BorderLayout;
 import java.awt.Component;
@@ -78,8 +78,8 @@ public class JOptionsDialog extends JDialog {
 
 		int space = 10;
 		JPanel buttonPanel = new JPanel( );
-		JButton btnOK = Button.newButton( DefaultLoc.getSingleton().getString( "gui.OK" ), aclButton, "ok"  );
-		JButton btnCancel = Button.newButton( DefaultLoc.getSingleton().getString( "gui.Cancel" ), aclButton, "cancel" );
+		JButton btnOK = Button.newButton( ZETLocalization.getSingleton().getString( "gui.OK" ), aclButton, "ok"  );
+		JButton btnCancel = Button.newButton( ZETLocalization.getSingleton().getString( "gui.Cancel" ), aclButton, "cancel" );
 		double size2[][] = { {TableLayout.FILL, TableLayout.PREFERRED, space, TableLayout.PREFERRED, space }, {space, TableLayout.PREFERRED, space } };
 		buttonPanel.setLayout( new TableLayout( size2 ) );
 		buttonPanel.add( btnOK, "1,1" );
@@ -101,7 +101,7 @@ public class JOptionsDialog extends JDialog {
 			for( int i = 0; i < node.getChildCount(); i++ ) {
 				PropertyTreeNode n = node.getChildAt( i );
 				JButton newButton = new JPropertyButton( n );
-				newButton.setIcon( IconSet.Open.icon() );
+				newButton.setIcon( ZETIconSet.Open.icon() );
 				jbb.add( newButton );
 			}
 		} else {

@@ -20,7 +20,7 @@
 
 package de.tu_berlin.math.coga.zet.converter;
 
-import de.tu_berlin.math.coga.common.localization.DefaultLoc;
+import de.tu_berlin.math.coga.zet.ZETLocalization;
 import ds.z.PlanPolygon;
 import java.lang.reflect.Array;
 import java.lang.reflect.InvocationTargetException;
@@ -86,7 +86,7 @@ public class Raster<T extends RasterSquare, P extends PlanPolygon> {
 	 */
 	public Raster( Class<T> squareClassType, Class<P> polygonClassType, PlanPolygon p, int raster ) throws java.lang.IllegalArgumentException {
 		if( raster < 1 ) {
-			throw new java.lang.IllegalArgumentException (DefaultLoc.getSingleton (
+			throw new java.lang.IllegalArgumentException (ZETLocalization.getSingleton (
 			).getString ("converter.NegativeRasterException"));
 		}
 		this.squareClassType = squareClassType;
@@ -114,7 +114,7 @@ public class Raster<T extends RasterSquare, P extends PlanPolygon> {
 	 */
 	public Raster( Class<T> squareClassType, Class<P> polygonClassType, PlanPolygon p, double raster ) throws java.lang.IllegalArgumentException {
 		if( zet.util.ConversionTools.floatToInt( raster ) < 1 ) {
-			throw new java.lang.IllegalArgumentException (DefaultLoc.getSingleton (
+			throw new java.lang.IllegalArgumentException (ZETLocalization.getSingleton (
 			).getString ("converter.NegativeRasterException"));
 		}
 		this.squareClassType = squareClassType;

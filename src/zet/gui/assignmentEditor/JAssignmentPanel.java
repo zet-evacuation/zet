@@ -164,6 +164,7 @@ public class JAssignmentPanel extends JPanel {
 		distributionTable.setSelectionMode( ListSelectionModel.MULTIPLE_INTERVAL_SELECTION );
 		distributionTable.getSelectionModel().addListSelectionListener( new ListSelectionListener() {
 
+			@Override
 			public void valueChanged( ListSelectionEvent e ) {
 				drawCharts();
 			}

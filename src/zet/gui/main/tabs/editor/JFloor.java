@@ -15,7 +15,7 @@
  */
 package zet.gui.main.tabs.editor;
 
-import de.tu_berlin.math.coga.common.localization.DefaultLoc;
+import de.tu_berlin.math.coga.zet.ZETLocalization;
 import ds.z.Area;
 import ds.z.Barrier;
 import ds.z.Floor;
@@ -120,7 +120,7 @@ public class JFloor extends AbstractFloor implements EventListener<ZModelRoomEve
 		planImage.setOffsetX( -floorMin_x );
 		planImage.setOffsetY( -floorMin_y );
 
-		ZETLoader.sendMessage( DefaultLoc.getSingleton().getString( "gui.message.FloorSuccessfullyLoaded" ) );
+		ZETLoader.sendMessage( ZETLocalization.getSingleton().getString( "gui.message.FloorSuccessfullyLoaded" ) );
 
 		revalidate();
 		repaint();

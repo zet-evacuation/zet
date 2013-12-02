@@ -20,7 +20,7 @@
 
 package gui.editor.planimage;
 
-import de.tu_berlin.math.coga.common.localization.DefaultLoc;
+import de.tu_berlin.math.coga.zet.ZETLocalization;
 import de.tu_berlin.math.coga.components.framework.Button;
 import info.clearthought.layout.TableLayout;
 import java.awt.Dimension;
@@ -57,9 +57,9 @@ public class JPlanImageProperties extends JComponent {
 	int millimeterCount = 1;
 	double meterCount = 0.001;
 	private static final NumberFormat nfFloat = NumberFormat.getNumberInstance(
-					DefaultLoc.getSingleton().getLocale() );
+					ZETLocalization.getSingleton().getLocale() );
 	private static final NumberFormat nfInteger = NumberFormat.getIntegerInstance(
-					DefaultLoc.getSingleton().getLocale() );
+					ZETLocalization.getSingleton().getLocale() );
 	private JTextField txtPixel;
 	private JTextField txtMillies;
 	private Frame parent;
@@ -334,8 +334,8 @@ public class JPlanImageProperties extends JComponent {
 				}
 			} else {
 				JOptionPane.showMessageDialog( null,
-								DefaultLoc.getSingleton().getString( "gui.ContactDeveloper" ),
-								DefaultLoc.getSingleton().getString( "gui.UnknownCommand" ),
+								ZETLocalization.getSingleton().getString( "gui.ContactDeveloper" ),
+								ZETLocalization.getSingleton().getString( "gui.UnknownCommand" ),
 								JOptionPane.ERROR_MESSAGE );
 				return;
 			}
@@ -354,8 +354,8 @@ public class JPlanImageProperties extends JComponent {
 				optMillies.setSelected( true );
 			} else {
 				JOptionPane.showMessageDialog( null,
-								DefaultLoc.getSingleton().getString( "gui.ContactDeveloper" ),
-								DefaultLoc.getSingleton().getString( "gui.UnknownCommand" ),
+								ZETLocalization.getSingleton().getString( "gui.ContactDeveloper" ),
+								ZETLocalization.getSingleton().getString( "gui.UnknownCommand" ),
 								JOptionPane.ERROR_MESSAGE );
 			}
 		}
@@ -374,8 +374,8 @@ public class JPlanImageProperties extends JComponent {
 		// OK/Cancel buttons
 		int space = 16;
 		JPanel buttonPanel = new JPanel( );
-		JButton btnOK = Button.newButton( DefaultLoc.getSingleton().getString( "gui.OK" ), aclButton, okAction  );
-		JButton btnCancel = Button.newButton( DefaultLoc.getSingleton().getString( "gui.Cancel" ), aclButton, "cancel" );
+		JButton btnOK = Button.newButton( ZETLocalization.getSingleton().getString( "gui.OK" ), aclButton, okAction  );
+		JButton btnCancel = Button.newButton( ZETLocalization.getSingleton().getString( "gui.Cancel" ), aclButton, "cancel" );
 		double size2[][] = { {TableLayout.PREFERRED, space, TableLayout.PREFERRED }, {TableLayout.PREFERRED} };
 		buttonPanel.setLayout( new TableLayout( size2 ) );
 		buttonPanel.add( btnOK, "0,0" );

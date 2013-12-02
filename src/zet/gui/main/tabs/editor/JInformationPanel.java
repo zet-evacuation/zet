@@ -4,7 +4,7 @@
  */
 package zet.gui.main.tabs.editor;
 
-import de.tu_berlin.math.coga.common.localization.DefaultLoc;
+import de.tu_berlin.math.coga.zet.ZETLocalization;
 import de.tu_berlin.math.coga.common.localization.Localized;
 import ds.z.ZControl;
 import gui.GUIControl;
@@ -22,8 +22,8 @@ import zet.gui.GUILocalization;
 public abstract class JInformationPanel<U> extends JPanel implements Localized {
 	/** The localization class. */
 	protected GUILocalization loc;
-	protected static NumberFormat nfFloat = DefaultLoc.getSingleton().getFloatConverter();
-	protected static NumberFormat nfInteger = DefaultLoc.getSingleton().getIntegerConverter();
+	protected static NumberFormat nfFloat = ZETLocalization.getSingleton().getFloatConverter();
+	protected static NumberFormat nfInteger = ZETLocalization.getSingleton().getIntegerConverter();
 	/** The control object for the loaded project. */
 	protected ZControl projectControl;
 	protected GUIControl guiControl;

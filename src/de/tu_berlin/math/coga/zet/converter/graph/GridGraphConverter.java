@@ -4,7 +4,7 @@
  */
 package de.tu_berlin.math.coga.zet.converter.graph;
 
-import de.tu_berlin.math.coga.common.localization.DefaultLoc;
+import de.tu_berlin.math.coga.zet.ZETLocalization;
 import de.tu_berlin.math.coga.common.util.Direction8;
 import static de.tu_berlin.math.coga.common.util.Direction8.*;
 import static de.tu_berlin.math.coga.common.util.Level.*;
@@ -250,7 +250,7 @@ public class GridGraphConverter extends BaseZToGraphConverter {
 							if( row > 0 )
 								lastSquare = room.getSquare( col, row - 1 );
 							else
-								throw new AssertionError( DefaultLoc.getSingleton().getString( "converter.RowIsZeroException" ) );
+								throw new AssertionError( ZETLocalization.getSingleton().getString( "converter.RowIsZeroException" ) );
 							mapping.setEdgeLevel( edge, lastSquare.getLevel( Direction8.getDirection( 0, 1 ) ) );
 						}
 						//edgesCap.increase( edge, 1 * FACTOR );

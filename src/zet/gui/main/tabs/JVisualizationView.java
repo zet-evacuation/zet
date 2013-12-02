@@ -21,7 +21,7 @@
 
 package zet.gui.main.tabs;
 
-import de.tu_berlin.math.coga.common.localization.DefaultLoc;
+import de.tu_berlin.math.coga.zet.ZETLocalization;
 import ds.PropertyContainer;
 import gui.GUIControl;
 import gui.ZETMain;
@@ -156,7 +156,7 @@ public class JVisualizationView extends AbstractVisualizationView<ZETVisualizati
 		@SuppressWarnings( "UseOfObsoleteCollectionType" ) // hashtable has to be used here due to slider
 		Hashtable<Integer, JComponent> table = new Hashtable<>();
 		for( int i = 1; i <= 10; i++ )
-			table.put( new Integer( -i * 10 ), new JLabel( DefaultLoc.getSingleton().getFloatConverter().format( (10 - i) * 0.1 ) ) );
+			table.put( new Integer( -i * 10 ), new JLabel( ZETLocalization.getSingleton().getFloatConverter().format( (10 - i) * 0.1 ) ) );
 		table.put( new Integer( 0 ), new JLabel( "1" ) );
 		for( int i = 1; i < 10; i++ )
 			table.put( new Integer( i * 10 ), new JLabel( "" + (i + 1) ) );
