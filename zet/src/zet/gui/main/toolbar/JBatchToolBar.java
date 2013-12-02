@@ -38,13 +38,13 @@ public class JBatchToolBar extends JToolBar implements ActionListener, Localized
 	private void createBatchToolBar() {
 		loc.setPrefix( "gui.toolbar." );
 
-		btnExit = Button.newButton( IconSet.Exit.icon(), this, "exit", loc.getString( "Exit" ) );
+		btnExit = Button.newButton( ZETIconSet.Exit.icon(), this, "exit", loc.getString( "Exit" ) );
 		add( btnExit );
 		addSeparator();
 
-		btnOpenResults = Button.newButton( IconSet.Open.icon(), this, "loadBatchResult", loc.getString( "Open" ) );
+		btnOpenResults = Button.newButton( ZETIconSet.Open.icon(), this, "loadBatchResult", loc.getString( "Open" ) );
 		add( btnOpenResults );
-		btnSaveResults = Button.newButton( IconSet.Save.icon(), this, "saveResultAs", loc.getString( "Save" ) );
+		btnSaveResults = Button.newButton( ZETIconSet.Save.icon(), this, "saveResultAs", loc.getString( "Save" ) );
 		add( btnSaveResults );
 		loc.setPrefix( "" );
 	}

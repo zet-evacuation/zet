@@ -28,7 +28,7 @@ import javax.swing.ImageIcon;
  * Stores a list of default Icons with filename.
  * @author Jan-Philipp Kappmeier
  */
-public enum IconSet {
+public enum ZETIconSet {
 	EditDrawPointwise( "draw_polygon_pointwise.png" ),
 	EditDrawRectangled( "draw_polygon_rectangled.png" ),
 	EditSelect( "selection.png" ),
@@ -61,7 +61,7 @@ public enum IconSet {
 	private final static String path = "./icons/";
 	private Icon icon;
 	
-	IconSet( String name ) {
+	ZETIconSet( String name ) {
 		this.icon = new ImageIcon( path + name );
 	}
 	

@@ -52,10 +52,6 @@ public class AlgorithmControlCellularAutomaton {
 	private CellularAutomatonTask cat = new CellularAutomatonTask();
 	private ConcreteAssignment concreteAssignment;
 
-	//public void convertCellularAutomaton( ) {
-	//	convertCellularAutomaton( null );
-	//}
-
 	public CellularAutomatonAlgorithms getSimulationAlgorithm() {
 		return simulationAlgorithm;
 	}
@@ -111,13 +107,7 @@ public class AlgorithmControlCellularAutomaton {
 		return mapping;
 	}
 
-//	void performSimulation() {
-//		performSimulation( null, null );
-//	}
-
 	void performSimulation( Project project, PropertyChangeListener propertyChangeListener, AlgorithmListener listener ) {
-//		error = null;
-
 		cat = new CellularAutomatonTask();
 		cat.setCaAlgo( CellularAutomatonAlgorithms.RandomOrder.getAlgorithm() );
 		cat.setProblem( project );
@@ -151,9 +141,6 @@ public class AlgorithmControlCellularAutomaton {
 	}
 
 	public CAVisualizationResults getCaVisResults() {
-	//	if( cat.isProblemSolved() ) // temporary! (for testing exit assignments)
-	//		return cat.getSolution();
-	//	else return null;
 		return caVisResults;
 	}
 

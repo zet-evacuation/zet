@@ -23,6 +23,8 @@ package de.tu_berlin.math.coga.common.localization;
 
 import java.text.NumberFormat;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 import java.util.Locale;
 import java.util.MissingResourceException;
 import java.util.ResourceBundle;
@@ -50,7 +52,17 @@ public abstract class Localization {
 	/** The resource bundle that is used by this localization instance. */
 	private final String bundleName;
 	/** A list of all localization objects. */
-	private static ArrayList<Localization> locs = new ArrayList<Localization>();
+	private static ArrayList<Localization> locs = new ArrayList<>();
+	
+	private ArrayList<Locale> supportedLocales = new ArrayList<>();
+	
+	public void addSupportedLocale( Locale locale ) {
+		supportedLocales.add( locale );
+	}
+	
+	public List<Locale> getSupportedLocales() {
+		return Collections.unmodifiableList( supportedLocales );
+	}
 
 	/**
 	 * Creates a new instance of the singleton and initializes with the default locale of the system.

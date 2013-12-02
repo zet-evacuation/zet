@@ -19,7 +19,7 @@
  */
 package de.tu_berlin.math.coga.zet.converter;
 
-import de.tu_berlin.math.coga.common.localization.DefaultLoc;
+import de.tu_berlin.math.coga.zet.ZETLocalization;
 import ds.z.Floor;
 import ds.z.Room;
 import java.util.ArrayList;
@@ -56,12 +56,12 @@ public class RasterContainer<T extends RoomRaster<?>> {
 	 */
 	public void setRoomRaster( Room room, T rasteredRoom ) {
 		if( room == null )
-			throw new IllegalArgumentException( DefaultLoc.getSingleton().getString( "converter.RoomIsNullException" ) );
+			throw new IllegalArgumentException( ZETLocalization.getSingleton().getString( "converter.RoomIsNullException" ) );
 		Floor floor = room.getAssociatedFloor();
 		if( floor == null )
-			throw new IllegalArgumentException( DefaultLoc.getSingleton().getString( "converter.NoAssociatedRoomException" ) );
+			throw new IllegalArgumentException( ZETLocalization.getSingleton().getString( "converter.NoAssociatedRoomException" ) );
 		if( !floors.contains( floor ) )
-			throw new IllegalArgumentException( DefaultLoc.getSingleton().getString( "converter.FloorNotInListException" ) );
+			throw new IllegalArgumentException( ZETLocalization.getSingleton().getString( "converter.FloorNotInListException" ) );
 		if( !map.containsKey( floor ) ) {
 			HashMap<Room, T> zmap = new HashMap<Room, T>();
 			zmap.put( room, rasteredRoom );
@@ -82,9 +82,9 @@ public class RasterContainer<T extends RoomRaster<?>> {
 	 */
 	public Set<Room> getRooms( Floor floor ) {
 		if( floor == null )
-			throw new IllegalArgumentException( DefaultLoc.getSingleton().getString( "converter.NoAssociatedRoomException" ) );
+			throw new IllegalArgumentException( ZETLocalization.getSingleton().getString( "converter.NoAssociatedRoomException" ) );
 		if( !map.containsKey( floor ) )
-			throw new IllegalArgumentException( DefaultLoc.getSingleton().getString( "converter.FloorNotInMapException" ) );
+			throw new IllegalArgumentException( ZETLocalization.getSingleton().getString( "converter.FloorNotInMapException" ) );
 		return map.get( floor ).keySet();
 	}
 
@@ -96,10 +96,10 @@ public class RasterContainer<T extends RoomRaster<?>> {
 	 */
 	public T getRasteredRoom( Room room ) {
 		if( room == null )
-			throw new IllegalArgumentException( DefaultLoc.getSingleton().getString( "converter.RoomIsNullException" ) );
+			throw new IllegalArgumentException( ZETLocalization.getSingleton().getString( "converter.RoomIsNullException" ) );
 		Floor floor = room.getAssociatedFloor();
 		if( floor == null )
-			throw new IllegalArgumentException( DefaultLoc.getSingleton().getString( "converter.NoAssociatedRoomException" ) );
+			throw new IllegalArgumentException( ZETLocalization.getSingleton().getString( "converter.NoAssociatedRoomException" ) );
 		return map.get( floor ).get( room );
 	}
 

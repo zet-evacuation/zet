@@ -28,7 +28,7 @@ import batch.tasks.graph.SuccessiveEarliestArrivalAugmentingPathAlgorithmCompare
 import batch.tasks.graph.SuccessiveEarliestArrivalAugmentingPathOptimizedTask;
 import de.tu_berlin.math.coga.algorithm.flowovertime.maxflow.MaximumFlowOverTimeProblem;
 import de.tu_berlin.math.coga.common.algorithm.Algorithm;
-import de.tu_berlin.math.coga.common.localization.DefaultLoc;
+import de.tu_berlin.math.coga.zet.ZETLocalization;
 import de.tu_berlin.math.coga.zet.converter.graph.NetworkFlowModel;
 import ds.NetworkFlowModelAlgorithm;
 import ds.graph.flow.PathBasedFlowOverTime;
@@ -44,7 +44,7 @@ public enum GraphAlgorithmEnumeration {
 	/**
 	 * Calls the {@link EATransshipmentSSSP} algorithm to solve the problem.
 	 */
-	EarliestArrivalTransshipmentSuccessiveShortestPaths( DefaultLoc.getSingleton().getString( "gui.EATransshipmentSSSP" ) ) {
+	EarliestArrivalTransshipmentSuccessiveShortestPaths( ZETLocalization.getSingleton().getString( "gui.EATransshipmentSSSP" ) ) {
 		@Override
 		public NetworkFlowModelAlgorithm createTask( NetworkFlowModel model, final int timeHorizon ) {
 			NetworkFlowModelAlgorithm nfma = new NetworkFlowModelAlgorithm() {
@@ -66,7 +66,7 @@ public enum GraphAlgorithmEnumeration {
 	/**
 	 * Calls the {@link EATransshipmentMinCost} algorithm to solve this.
 	 */
-	EarliestArrivalTransshipmentMinCost( DefaultLoc.getSingleton().getString( "gui.EATransshipmentMinCost" ) ) {
+	EarliestArrivalTransshipmentMinCost( ZETLocalization.getSingleton().getString( "gui.EATransshipmentMinCost" ) ) {
 		@Override
 		public NetworkFlowModelAlgorithm createTask( NetworkFlowModel model, final int timeHorizon ) {
 			NetworkFlowModelAlgorithm nfma = new NetworkFlowModelAlgorithm() {
@@ -89,7 +89,7 @@ public enum GraphAlgorithmEnumeration {
 	 * Calls the {@link SuccessiveEarliestArrivalAugmentingPathAlgorithmNoTH} algorithm to solve
 	 * an earliest arrival s-t-problem using binary search.
 	 */
-	SuccessiveEarliestArrivalAugmentingPathBinarySearch( DefaultLoc.getSingleton().getString( "gui.SuccEAAugPathBS" ) ) {
+	SuccessiveEarliestArrivalAugmentingPathBinarySearch( ZETLocalization.getSingleton().getString( "gui.SuccEAAugPathBS" ) ) {
 		@Override
 		public NetworkFlowModelAlgorithm createTask( NetworkFlowModel model, final int timeHorizon ) {
 			return new NetworkFlowModelAlgorithm() {
@@ -109,13 +109,13 @@ public enum GraphAlgorithmEnumeration {
 			};
 		}
 	},
-	SuccessiveEarliestArrivalAugmentingPath( DefaultLoc.getSingleton().getString( "gui.SuccEAAugPath" ) ) {
+	SuccessiveEarliestArrivalAugmentingPath( ZETLocalization.getSingleton().getString( "gui.SuccEAAugPath" ) ) {
 		@Override
 		public NetworkFlowModelAlgorithm createTask( NetworkFlowModel model, int timeHorizon ) {
 			return new SuccessiveEarliestArrivalAugmentingPathAlgorithm2Task();
 		}
 	},
-	MaxFlowOverTimeMinCost( DefaultLoc.getSingleton().getString( "gui.MaxFlowMinCost" ) ) {
+	MaxFlowOverTimeMinCost( ZETLocalization.getSingleton().getString( "gui.MaxFlowMinCost" ) ) {
 		@Override
 		public NetworkFlowModelAlgorithm createTask( NetworkFlowModel model, final int timeHorizon ) {
 			return new NetworkFlowModelAlgorithm() {
@@ -132,7 +132,7 @@ public enum GraphAlgorithmEnumeration {
 	/**
 	 * Calls the {@link TimeExpandedMaximumFlowOverTime} algorithm.
 	 */
-	MaxFlowOverTimeTimeExpanded( DefaultLoc.getSingleton().getString( "gui.MaxFlowTimeExtended" ) ) {
+	MaxFlowOverTimeTimeExpanded( ZETLocalization.getSingleton().getString( "gui.MaxFlowTimeExtended" ) ) {
 		@Override
 		public NetworkFlowModelAlgorithm createTask( NetworkFlowModel model, final int timeHorizon ) {
 			return new NetworkFlowModelAlgorithm() {
@@ -150,7 +150,7 @@ public enum GraphAlgorithmEnumeration {
 	/**
 	 * Calls the {@link QuickestTransshipment} algorithm to compute a quickest transshipment.
 	 */
-	QuickestTransshipment( DefaultLoc.getSingleton().getString( "gui.QuickestTransshipment" ) ) {
+	QuickestTransshipment( ZETLocalization.getSingleton().getString( "gui.QuickestTransshipment" ) ) {
 		public NetworkFlowModelAlgorithm createTask( NetworkFlowModel model, final int timeHorizon ) {
 			return new NetworkFlowModelAlgorithm() {
 				@Override
@@ -167,13 +167,13 @@ public enum GraphAlgorithmEnumeration {
 			};
 		}
 	},
-	SuccessiveEarliestArrivalAugmentingPathOptimized( DefaultLoc.getSingleton().getString( "gui.SEAAP" ) ) {
+	SuccessiveEarliestArrivalAugmentingPathOptimized( ZETLocalization.getSingleton().getString( "gui.SEAAP" ) ) {
 		@Override
 		public Algorithm<NetworkFlowModel, PathBasedFlowOverTime> createTask( NetworkFlowModel model, int timeHorizon ) {
 			return new SuccessiveEarliestArrivalAugmentingPathOptimizedTask();
 		}
 	},
-	SuccessiveEarliestArrivalAugmentingPathOptimizedCompare( DefaultLoc.getSingleton().getString( "gui.SEAAP" ) ) {
+	SuccessiveEarliestArrivalAugmentingPathOptimizedCompare( ZETLocalization.getSingleton().getString( "gui.SEAAP" ) ) {
 		@Override
 		public Algorithm<NetworkFlowModel, PathBasedFlowOverTime> createTask( NetworkFlowModel model, int timeHorizon ) {
 			return new SuccessiveEarliestArrivalAugmentingPathAlgorithmCompareTask( timeHorizon );

@@ -22,7 +22,7 @@ package gui.propertysheet;
 
 import com.thoughtworks.xstream.annotations.XStreamAlias;
 import com.thoughtworks.xstream.annotations.XStreamConverter;
-import de.tu_berlin.math.coga.common.localization.DefaultLoc;
+import de.tu_berlin.math.coga.zet.ZETLocalization;
 import de.tu_berlin.math.coga.common.localization.Localization;
 import gui.propertysheet.abs.PropertyElement;
 import gui.propertysheet.abs.DefaultPropertyTreeNodeConverter;
@@ -98,7 +98,7 @@ public class PropertyTreeNode  implements PropertyElement {
 	 */
 	@Override
 	public String getDisplayName() {
-		return isUsedAsLocString() ? DefaultLoc.getSingleton().getString( name ) : name;
+		return isUsedAsLocString() ? ZETLocalization.getSingleton().getString( name ) : name;
 	}
 
 	@Override

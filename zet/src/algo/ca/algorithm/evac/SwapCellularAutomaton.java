@@ -21,7 +21,7 @@ package algo.ca.algorithm.evac;
 
 import algo.ca.rule.AbstractMovementRule;
 import algo.ca.rule.Rule;
-import de.tu_berlin.math.coga.common.localization.DefaultLoc;
+import de.tu_berlin.math.coga.zet.ZETLocalization;
 import ds.ca.evac.EvacCell;
 import ds.ca.evac.Individual;
 import java.util.ArrayList;

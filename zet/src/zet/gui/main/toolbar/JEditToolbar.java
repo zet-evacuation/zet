@@ -84,24 +84,24 @@ public class JEditToolbar extends JToolBar implements ActionListener, PopupMenuL
 		loc.setPrefix( "gui.toolbar." );
 		ButtonGroup editModeGroup = new ButtonGroup();
 
-		btnExit = Button.newButton( IconSet.Exit.icon(), this, "exit", loc.getString( "Exit" ) );
+		btnExit = Button.newButton( ZETIconSet.Exit.icon(), this, "exit", loc.getString( "Exit" ) );
 		add( btnExit );
 		addSeparator();
 
-		btnOpen = Button.newButton( IconSet.Open.icon(), this, "loadProject", loc.getString( "Open" ) );
+		btnOpen = Button.newButton( ZETIconSet.Open.icon(), this, "loadProject", loc.getString( "Open" ) );
 		add( btnOpen );
-		btnSave = Button.newButton( IconSet.Save.icon(), this, "saveProject", loc.getString( "Save" ) );
+		btnSave = Button.newButton( ZETIconSet.Save.icon(), this, "saveProject", loc.getString( "Save" ) );
 		add( btnSave );
 		addSeparator();
 
-		btnEditSelect = Button.newButton( IconSet.EditSelect.icon(), this , "editSelect", loc.getString( "Edit.SelectionMode" ), editStatus.getEditMode() == EditMode.Selection );
+		btnEditSelect = Button.newButton( ZETIconSet.EditSelect.icon(), this , "editSelect", loc.getString( "Edit.SelectionMode" ), editStatus.getEditMode() == EditMode.Selection );
 		add( btnEditSelect );
 		editModeGroup.add( btnEditSelect );
 		btnEditSelect.setSelected( true );
-		btnEditPointwise = Button.newButton( IconSet.EditDrawPointwise.icon(), this, "editPointwise", loc.getString( "Edit.PointSequence" ), editStatus.getEditMode() == EditMode.CreationPointWise );
+		btnEditPointwise = Button.newButton( ZETIconSet.EditDrawPointwise.icon(), this, "editPointwise", loc.getString( "Edit.PointSequence" ), editStatus.getEditMode() == EditMode.CreationPointWise );
 		add( btnEditPointwise );
 		editModeGroup.add( btnEditPointwise );
-		btnEditRectangled = Button.newButton( IconSet.EditDrawRectangled.icon(), this, "editRectangled", loc.getString( "Edit.DragCreate" ), editStatus.getEditMode() == EditMode.CreationRectangle );
+		btnEditRectangled = Button.newButton( ZETIconSet.EditDrawRectangled.icon(), this, "editRectangled", loc.getString( "Edit.DragCreate" ), editStatus.getEditMode() == EditMode.CreationRectangle );
 		add( btnEditRectangled );
 		editModeGroup.add( btnEditRectangled );
 
@@ -136,9 +136,9 @@ public class JEditToolbar extends JToolBar implements ActionListener, PopupMenuL
 //		add( cbxEdit1 );
 		addSeparator();
 
-		btnZoomIn = Button.newButton( IconSet.ZoomIn.icon(), this, "zoomIn", loc.getString( "Edit.ZoomIn" ) );
+		btnZoomIn = Button.newButton( ZETIconSet.ZoomIn.icon(), this, "zoomIn", loc.getString( "Edit.ZoomIn" ) );
 		add( btnZoomIn );
-		btnZoomOut = Button.newButton( IconSet.ZoomOut.icon(), this, "zoomOut", loc.getString( "Edit.ZoomOut" ) );
+		btnZoomOut = Button.newButton( ZETIconSet.ZoomOut.icon(), this, "zoomOut", loc.getString( "Edit.ZoomOut" ) );
 		add( btnZoomOut );
 		add( new JLabel( " " ) );
 		txtZoomFactor = new JTextField( nfZoom.format( CoordinateTools.getZoomFactor() ) );
@@ -154,7 +154,7 @@ public class JEditToolbar extends JToolBar implements ActionListener, PopupMenuL
 		add( txtZoomFactor );
 		addSeparator();
 
-		btnRasterize = Button.newButton( IconSet.Rasterize.icon(), this, "rasterize", loc.getString( "Edit.Rasterize" ) );
+		btnRasterize = Button.newButton( ZETIconSet.Rasterize.icon(), this, "rasterize", loc.getString( "Edit.Rasterize" ) );
 		add( btnRasterize );
 
 		loc.setPrefix( "" );

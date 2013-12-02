@@ -51,13 +51,13 @@ public class JStatisticGraphToolBar extends JToolBar implements ActionListener, 
 	private void createStatisticsToolBar() {
 		loc.setPrefix( "gui.toolbar." );
 
-		btnExit = Button.newButton( IconSet.Exit.icon(), this, "exit", loc.getString( "Exit" ) );
+		btnExit = Button.newButton( ZETIconSet.Exit.icon(), this, "exit", loc.getString( "Exit" ) );
 		add( btnExit );
 		addSeparator();
 
-		btnOpenResults = Button.newButton( IconSet.Open.icon(), null, "loadBatchResult", loc.getString( "Open" ) );
+		btnOpenResults = Button.newButton( ZETIconSet.Open.icon(), null, "loadBatchResult", loc.getString( "Open" ) );
 		add( btnOpenResults );
-		btnSaveResults = Button.newButton( IconSet.Save.icon(), null, "saveResultAs", loc.getString( "Save" ) );
+		btnSaveResults = Button.newButton( ZETIconSet.Save.icon(), null, "saveResultAs", loc.getString( "Save" ) );
 		add( btnSaveResults );
 		addSeparator();
 

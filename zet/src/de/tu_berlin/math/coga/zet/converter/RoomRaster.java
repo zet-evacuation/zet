@@ -360,8 +360,8 @@ public class RoomRaster<T extends RoomRasterSquare> extends Raster<T, Room> {
 		
 		// Start propagation of potential
 		while (!nextList.isEmpty ()) {
-			aktList = new LinkedList (nextList);
-			nextList = new LinkedList ();
+			aktList = new LinkedList<>(nextList);
+			nextList = new LinkedList<>();
 			potential++;
 			
 			for (RoomRasterSquare c : aktList) {

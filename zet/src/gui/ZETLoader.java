@@ -17,6 +17,7 @@ import com.thoughtworks.xstream.XStream;
 import com.thoughtworks.xstream.annotations.Annotations;
 import de.tu_berlin.math.coga.common.debug.Debug;
 import de.tu_berlin.math.coga.common.localization.Localization;
+import de.tu_berlin.math.coga.components.framework.Menu;
 import ds.PropertyContainer;
 import event.EventServer;
 import event.MessageEvent;
@@ -26,6 +27,7 @@ import gui.propertysheet.PropertyTreeModel;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Paths;
+import java.util.Locale;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JOptionPane;
@@ -68,9 +70,12 @@ public class ZETLoader {
 	/**
 	 * Creates a new instance of {@code ZETMain}
 	 */
-	private ZETLoader() { }
+	private ZETLoader() {	}
 
 	static void load( String[] args ) {
+		loc.addSupportedLocale( Locale.GERMAN );
+		loc.addSupportedLocale( Locale.ENGLISH );
+		Menu.setLoc( loc );
 		try {
 
 		JSAP jsap = new JSAP();

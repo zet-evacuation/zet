@@ -21,7 +21,7 @@
 package zet.gui.main;
 
 import de.tu_berlin.math.coga.common.debug.Debug;
-import de.tu_berlin.math.coga.common.localization.DefaultLoc;
+import de.tu_berlin.math.coga.zet.ZETLocalization;
 import de.tu_berlin.math.coga.common.localization.Localization;
 import de.tu_berlin.math.coga.common.localization.Localized;
 import ds.PropertyContainer;
@@ -77,7 +77,7 @@ public class JZetWindow extends JFrame implements Localized {
 	/** Stores the last mouse position if a mouse position event is sent. */
 	private static Point lastMouse = new Point( 0, 0 );
 	/** The delimiter used if numbers are stored in a tuple. */
-	final static String delimiter = DefaultLoc.getSingleton().getStringWithoutPrefix( "numberSeparator" );
+	final static String delimiter = ZETLocalization.getSingleton().getStringWithoutPrefix( "numberSeparator" );
 	private static boolean editing = false;
 	// Options
 	/** The number format used to display the zoom factor in the text field. */
@@ -261,7 +261,7 @@ public class JZetWindow extends JFrame implements Localized {
 	public static void sendMouse( Point position ) {
 		lastMouse = position;
 		String realCoordsMillimeter = "(" + Integer.toString( position.x ) + delimiter + Integer.toString( position.y ) + ")";
-		String realCoordsMeter = "(" + DefaultLoc.getSingleton().getFloatConverter().format( ConversionTools.toMeter( position.x ) ) + delimiter + DefaultLoc.getSingleton().getFloatConverter().format( ConversionTools.toMeter( position.y ) ) + ")";
+		String realCoordsMeter = "(" + ZETLocalization.getSingleton().getFloatConverter().format( ConversionTools.toMeter( position.x ) ) + delimiter + ZETLocalization.getSingleton().getFloatConverter().format( ConversionTools.toMeter( position.y ) ) + ")";
 		String text = String.format( GUILocalization.getSingleton().getString( "gui.EditPanel.Mouse.PositionMillimeterMeter" ), realCoordsMillimeter, realCoordsMeter );
 		EventServer.getInstance().dispatchEvent( new MessageEvent<JZetWindow>( null, MessageType.MousePosition, text ) );
 	}

@@ -15,7 +15,7 @@
  */
 package algo.ca.parameter;
 
-import de.tu_berlin.math.coga.common.localization.DefaultLoc;
+import de.tu_berlin.math.coga.zet.ZETLocalization;
 import ds.PropertyContainer;
 import ds.ca.evac.EvacCell;
 import ds.ca.evac.Individual;
@@ -121,7 +121,7 @@ public class ICEM09ParameterSet extends AbstractDefaultParameterSet {
 	@Override
 	public double effectivePotential( EvacCell referenceCell, EvacCell targetCell ) {
 		if( referenceCell.getIndividual() == null )
-			throw new IllegalArgumentException( DefaultLoc.getSingleton().getString( "algo.ca.parameter.NoIndividualOnReferenceCellException" ) );
+			throw new IllegalArgumentException( ZETLocalization.getSingleton().getString( "algo.ca.parameter.NoIndividualOnReferenceCellException" ) );
 		StaticPotential staticPotential = referenceCell.getIndividual().getStaticPotential();
 		final double statPotlDiff = staticPotential.getPotential( referenceCell ) - staticPotential.getPotential( targetCell );
 		return statPotlDiff;

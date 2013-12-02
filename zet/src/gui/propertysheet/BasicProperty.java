@@ -5,7 +5,7 @@
 package gui.propertysheet;
 
 import com.l2fprod.common.propertysheet.DefaultProperty;
-import de.tu_berlin.math.coga.common.localization.DefaultLoc;
+import de.tu_berlin.math.coga.zet.ZETLocalization;
 import ds.PropertyContainer;
 import gui.propertysheet.abs.PropertyElement;
 import gui.propertysheet.abs.PropertyValue;
@@ -51,7 +51,7 @@ public class BasicProperty<T> extends DefaultProperty implements PropertyValue<T
 	 */
 	@Override
 	public String getDisplayName() {
-		return isUsedAsLocString() ? DefaultLoc.getSingleton().getString( super.getDisplayName() ) : super.getDisplayName();
+		return isUsedAsLocString() ? ZETLocalization.getSingleton().getString( super.getDisplayName() ) : super.getDisplayName();
 	}
 
 	@Override
@@ -70,7 +70,7 @@ public class BasicProperty<T> extends DefaultProperty implements PropertyValue<T
 
 	@Override
 	public String getShortDescription() {
-		return isUsedAsLocString() ? DefaultLoc.getSingleton().getString( super.getShortDescription() ) : super.getShortDescription();
+		return isUsedAsLocString() ? ZETLocalization.getSingleton().getString( super.getShortDescription() ) : super.getShortDescription();
 	}
 
 	@Override

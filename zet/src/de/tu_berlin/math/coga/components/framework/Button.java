@@ -21,6 +21,9 @@
 
 package de.tu_berlin.math.coga.components.framework;
 
+import de.tu_berlin.math.coga.common.localization.DefaultLocalization;
+import de.tu_berlin.math.coga.common.localization.Localization;
+import de.tu_berlin.math.coga.common.localization.Localizer;
 import java.awt.event.ActionListener;
 import javax.swing.AbstractButton;
 import javax.swing.Icon;
@@ -32,24 +35,12 @@ import javax.swing.JToggleButton;
  * @author Jan-Philipp Kappmeier
  */
 public class Button {
+	/** The localization object used to generate localized menu titles. */
+	private static Localization loc = DefaultLocalization.getSingleton();
 
 	/** Private constructor avoids instantiation. */
 	private Button() {}
 	
-	// Create mnemonic shortcut
-	private static JButton processMnemonic( String s ) {
-		if( s.indexOf( "_" ) > -1 ) {
-			int pos = s.indexOf( "_" );
-			char c = s.charAt( pos + 1 );
-			StringBuffer sb = new StringBuffer( s ).delete( pos, pos + 1 );
-			JButton b = new JButton();
-			b.setMnemonic(c);
-			return b;
-		} else {
-			return new JButton( s );
-		}
-	}
-
 	/**
 	 * Adds {@link ActionListener} to the instance and returns the same instance.
 	 * @param b
@@ -65,31 +56,32 @@ public class Button {
 		return b;
 	}
 	
-	public static JButton newButton( String title, ActionListener al, String commandString, String toolTip ) {
-		JButton b = processMnemonic( title );
+	public static JButton newButton( String localizationString, ActionListener al, String commandString, String toolTip ) {
+		JButton b = Menu.processMnemonic( Localizer.instance().registerNewComponent( new JButton(), localizationString ), loc.getString( localizationString ) );
+
 		if( toolTip != null )
 			b.setToolTipText( toolTip );
 		return (JButton)addActionListener( b, al, commandString );
 	}
 
 	public static JButton newButton( String title, ActionListener al, String commandString ) {
-		JButton b = processMnemonic( title );
+		JButton b = Menu.processMnemonic( new JButton(), title );
 		return (JButton)addActionListener( b, al, commandString );
 	}
 	
 	public static JButton newButton( String title, ActionListener al ) {
-		JButton b = processMnemonic( title );
+		JButton b = Menu.processMnemonic( new JButton(), title );
 		return (JButton)addActionListener( b, al, null );
 	}
 	
 	public static JButton newButton( String title, String toolTip ) {
-		JButton b = processMnemonic( title );
+		JButton b = Menu.processMnemonic( new JButton(), title );
 		b.setToolTipText( toolTip );
 		return b;
 	}
 
 	public static JButton newButton( String title ) {
-		return processMnemonic( title );
+		return Menu.processMnemonic( new JButton(), title );
 	}
 
 	public static JButton newButton( javax.swing.Icon i, ActionListener al, String commandString ) {

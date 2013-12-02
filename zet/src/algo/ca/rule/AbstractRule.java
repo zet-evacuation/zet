@@ -16,7 +16,7 @@
 package algo.ca.rule;
 
 import algo.ca.algorithm.evac.EvacuationSimulationProblem;
-import de.tu_berlin.math.coga.common.localization.DefaultLoc;
+import de.tu_berlin.math.coga.zet.ZETLocalization;
 import ds.ca.evac.EvacCell;
 import ds.ca.evac.Individual;
 
@@ -50,10 +50,10 @@ public abstract class AbstractRule implements Rule {
 	@Override
 	public void setEvacuationSimulationProblem( EvacuationSimulationProblem esp ) {
 		if( this.esp != null )
-			throw new RuntimeException( DefaultLoc.getSingleton().getString( "algo.ca.rule.RuleAlreadyHaveCAControllerException" ) );
+			throw new RuntimeException( ZETLocalization.getSingleton().getString( "algo.ca.rule.RuleAlreadyHaveCAControllerException" ) );
 
 		if( esp == null )
-			throw new RuntimeException( DefaultLoc.getSingleton().getString( "algo.ca.rule.CAControllerIsNullException" ) );
+			throw new RuntimeException( ZETLocalization.getSingleton().getString( "algo.ca.rule.CAControllerIsNullException" ) );
 
 		this.esp = esp;
 	}
