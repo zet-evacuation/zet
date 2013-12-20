@@ -41,16 +41,16 @@ import java.util.ListIterator;
 import zet.util.ConversionTools;
 
 /**
- * The generic {@code PlanPolygon} class implements a polygonal area
+ * The generic {@literal PlanPolygon} class implements a polygonal area
  * bounded by edges extending the general type {@link Edge}. To allow editing it
  * is possible to represent not valid areas. Thus are areas not open or
  * containing self-cutting edges.
  * <p>The class provides all necessary methods to edit a polygon describing
  * rooms. Supported operations are connecting open polygons, breaking up a
  * closed polygon, inserting edges/points, or mor precisely, replacing an
- * existing {@code Edge} by some edges fitting into the gap, and
+ * existing {@literal Edge} by some edges fitting into the gap, and
  * calculating the cut of two polygons.</p>
- * @param <T> the type describing the edges (borders) of the polygon
+ * @param <>> the type describing the edges (borders) of the polygon
  * @author Jan-Philipp Kappmeier, Timon Kelter
  */
 @XStreamAlias("planPolygon")
@@ -58,8 +58,8 @@ import zet.util.ConversionTools;
 public class PlanPolygon<T extends Edge> implements Iterable<T> {
 	/** The class-type of the edges. This is setLocation only one single time in the constructor. */
 	private final Class<T> edgeClassType;
-	/** Determines, if the polygon is closed. That means that the {@code end}
-	 * and {@code start} edges have a common point. */
+	/** Determines, if the polygon is closed. That means that the {@literal end}
+	 * and {@literal start} edges have a common point. */
 	@XStreamAsAttribute()
 	private boolean closed = false;
 	/** The start point of the polygon. At this point new edges or polygons can be added. */
@@ -121,8 +121,8 @@ public class PlanPolygon<T extends Edge> implements Iterable<T> {
 	}
 
 	/**
-	 * Creates an new instance of {@code PlanPolygon} without any assigned
-	 * edges or points. All parameters are initialized with {@code null}.
+	 * Creates an new instance of {@literal PlanPolygon} without any assigned
+	 * edges or points. All parameters are initialized with {@literal null}.
 	 * <p>It is necessary to submit the class type of the generic parameter in
 	 * order to create new edges.</p>
 	 * @param edgeClassType the type of the generic edges
@@ -134,8 +134,8 @@ public class PlanPolygon<T extends Edge> implements Iterable<T> {
 	}
 
 	/**
-	 * Creates an new instance of {@code PlanPolygon} without any assigned
-	 * edges or points. All parameters are initialized with {@code null}.
+	 * Creates an new instance of {@literal PlanPolygon} without any assigned
+	 * edges or points. All parameters are initialized with {@literal null}.
 	 * <p>It is necessary to submit the class type of the generic parameter in
 	 * order to create new edges.</p>
 	 * @param edgeClassType the type of the generic edges
@@ -150,10 +150,10 @@ public class PlanPolygon<T extends Edge> implements Iterable<T> {
 	}
 
 	/**
-	 * Fills an empty instance of {@code PlanPolygon} with a setLocation of
+	 * Fills an empty instance of {@literal PlanPolygon} with a setLocation of
 	 * {@link PlanPoint}. The border of the polygon is defined by the order of
 	 * points, following the points and the necessary edges are created. The last
-	 * edge between the {@code n}-th and {@code 1}st point closes the
+	 * edge between the {@literal n}-th and {@literal 1}st point closes the
 	 * polygon.
 	 * <p>Note that the polygon has to empty to use this method. If you want to
 	 * change the points of an polygon all in one step, see
@@ -161,7 +161,7 @@ public class PlanPolygon<T extends Edge> implements Iterable<T> {
 	 * <p>Some tests during the creation process are performed. If two following
 	 * points are equal, the second point is discarded. The same holds, if two
 	 * consecutive edges that are inserted are equal. </p>
-	 * <p>The runtime of this operation is O(n), where {@code n} is the
+	 * <p>The runtime of this operation is O(n), where {@literal n} is the
 	 * number of edges.</p>
 	 * @param points a list of points defining the shape of the polygon
 	 * @return the number of newly created edges
@@ -169,7 +169,7 @@ public class PlanPolygon<T extends Edge> implements Iterable<T> {
 	 * polygon or the polygon has already edges
 	 * @throws java.lang.IllegalArgumentException if the passed list of points is
 	 * to small or two points define the same edge
-	 * @throws java.lang.NullPointerException if the specified {@code List}
+	 * @throws java.lang.NullPointerException if the specified {@literal List}
 	 * of points is null
 	 */
 	public int defineByPoints( List<PlanPoint> points ) throws IllegalArgumentException, IllegalStateException, NullPointerException {
@@ -244,7 +244,7 @@ public class PlanPolygon<T extends Edge> implements Iterable<T> {
 	 * opened before adding new edges. This method is only called, if a new
 	 * instance of edge is created that should be part of this instance of the
 	 * polygon. It is called from the constructor of {@link Edge} and methods of
-	 * {@code PlanPolygon}.
+	 * {@literal PlanPolygon}.
 	 * <p>During the adding process the necessary status information is updated.
 	 * These are the start and end points, the offset of the entire polygon and
 	 * its width and height.</p>
@@ -311,9 +311,9 @@ public class PlanPolygon<T extends Edge> implements Iterable<T> {
 	}
 
 	/**
-	 * Adds a new {@link PlanPoint} to the {@code PlanPolygon}. The point is
+	 * Adds a new {@link PlanPoint} to the {@literal PlanPolygon}. The point is
 	 * added at the beginning of the polygon. That means, an edge from
-	 * the new point to {@code start} is added to the polygon.
+	 * the new point to {@literal start} is added to the polygon.
 	 * @param p the point that is added
 	 * @throws java.lang.IllegalStateException if the polygon is closed. It is not
 	 * possible to defineByPoints further points to a closed polygon
@@ -328,8 +328,8 @@ public class PlanPolygon<T extends Edge> implements Iterable<T> {
 	}
 
 	/**
-	 * Adds a new {@link PlanPoint} to the {@code PlanPolygon}. The point is
-	 * added at the end of the polygon. That means, an edge from {@code end}
+	 * Adds a new {@link PlanPoint} to the {@literal PlanPolygon}. The point is
+	 * added at the end of the polygon. That means, an edge from {@literal end}
 	 * to the new point is added to the polygon.
 	 * @param p the point that is added
 	 * @throws java.lang.IllegalStateException if the polygon is closed.
@@ -374,7 +374,7 @@ public class PlanPolygon<T extends Edge> implements Iterable<T> {
 	}
 
 	/**
-	 * Returns the bounding box of this {@code PlanPolygon}. The bounding box
+	 * Returns the bounding box of this {@literal PlanPolygon}. The bounding box
 	 * is the smallest {@link java.awt.Rectangle} that completely contains the
 	 * whole polygon. The calculation of this bounding box is accurate in the
 	 * integer coordinates of millimeter positions.
@@ -385,7 +385,7 @@ public class PlanPolygon<T extends Edge> implements Iterable<T> {
 	}
 
 	/**
-	 * Returns the bounding box of this {@code PlanPolygon}. The bounding box
+	 * Returns the bounding box of this {@literal PlanPolygon}. The bounding box
 	 * is the smallest {@link java.awt.geom.Rectangle2D} that completely contains
 	 * the whole polygon. The calculation of this bounding box is accurate in the
 	 * integer coordinates of millimeter positions.
@@ -400,7 +400,7 @@ public class PlanPolygon<T extends Edge> implements Iterable<T> {
 	 * has no self-cuts. If any invalid positions are found, an exception is
 	 * thrown. If the parameter rasterized is true, it also checks if the polygon is
 	 * really rasterized with a call of {@link PlanPolygon#checkRasterized() }).
-	 * <p>The runtime of this operation is O(n), where {@code n} is the
+	 * <p>The runtime of this operation is O(n), where {@literal n} is the
 	 * number of edges.</p>
 	 * @param rasterized indicates that the {@link BuildingPlan} should be
 	 * rasterized
@@ -418,14 +418,14 @@ public class PlanPolygon<T extends Edge> implements Iterable<T> {
 
 	/**
 	 * Checks if this polygon is rasterized. That means, that all the
-	 * {@code x}- and {@code y}-coordinates of the polygon are divisible
+	 * {@literal x}- and {@literal y}-coordinates of the polygon are divisible
 	 * by the default-value of the rastersize (in millimeters) and for all edges
 	 * one of the following constraints holds:
 	 * <ul>
 	 * <li>the x-coordinates of the edge's start -and endpoint are the same</li>
 	 * <li>the y-coordinates of the edge's start -and endpoint are the same</li>
 	 * </ul>
-	 * <p>The runtime of this operation is O(n), where {@code n} is the
+	 * <p>The runtime of this operation is O(n), where {@literal n} is the
 	 * number of edges.</p>
 	 * @throws ds.z.exception.PolygonNotRasterizedException if the polygon is not
 	 * rasterized
@@ -590,7 +590,7 @@ public class PlanPolygon<T extends Edge> implements Iterable<T> {
 	/**
 	 * Combines the two edges specified by three consecutive points to one edge
 	 * defined by the first and third point.
-	 * <p>The runtime of this operation is O(n), where {@code n} is the
+	 * <p>The runtime of this operation is O(n), where {@literal n} is the
 	 * number of edges, because we must first search the edges. Combine (e1,e2)
 	 * is much more efficient.</p>
 	 * @param p1 the first point
@@ -671,7 +671,7 @@ public class PlanPolygon<T extends Edge> implements Iterable<T> {
 	}
 
 	/**
-	 * <p>Checks the relative position of the {@code PlanPolygon} with respect
+	 * <p>Checks the relative position of the {@literal PlanPolygon} with respect
 	 * to an edge. The mode of the test can be setLocation using a {@link RelativePosition} enumeration
 	 * which enables testing if the polygon is on the left or the right side of the polygon.</p>
 	 * <p>Note that only edges of the border of the polygon should be used. However, no
@@ -726,10 +726,10 @@ public class PlanPolygon<T extends Edge> implements Iterable<T> {
 	}
 
 	/**
-	 * Checks whether a {@code PlanPoint} is inside a {@code PlanPolygon}
+	 * Checks whether a {@literal PlanPoint} is inside a {@literal PlanPolygon}
 	 * or not. A point is considered inside if it is inside or on the bordering
 	 * edges.
-	 * <p>The runtime of this operation is O(n), where {@code n} is the
+	 * <p>The runtime of this operation is O(n), where {@literal n} is the
 	 * number of edges.</p>
 	 * @param p the tested point
 	 * @return true, if it is inside
@@ -850,7 +850,7 @@ public class PlanPolygon<T extends Edge> implements Iterable<T> {
 	}
 
 	/**
-	 * <p>Checks whether a {@code PlanPolygon} is inside this polygon, or not.</p>
+	 * <p>Checks whether a {@literal PlanPolygon} is inside this polygon, or not.</p>
 	 * <p>The current implementation only works on the bounding boxes of the polygons,
 	 * which means the the results will only be correct for rectangular shapes.
 	 * </p>
@@ -952,10 +952,10 @@ public class PlanPolygon<T extends Edge> implements Iterable<T> {
 	}
 
 	/**
-	 * Deletes this {@code PlanPolygon}. That means, all edges are removed
-	 * from the list of {@code Edge}. After that all used references are setLocation
-	 * to {@code null}.
-	 * <p>The runtime of this operation is O(n), where {@code n} is the
+	 * Deletes this {@literal PlanPolygon}. That means, all edges are removed
+	 * from the list of {@literal Edge}. After that all used references are setLocation
+	 * to {@literal null}.
+	 * <p>The runtime of this operation is O(n), where {@literal n} is the
 	 * number of edges.</p>
 	 * @throws java.lang.IllegalArgumentException
 	 * @throws java.lang.IllegalStateException
@@ -985,12 +985,12 @@ public class PlanPolygon<T extends Edge> implements Iterable<T> {
 	}
 
 	/**
-	 * <p>Checks the equality of two instances of {@code PlanPolygon}. Two
+	 * <p>Checks the equality of two instances of {@literal PlanPolygon}. Two
 	 * instances are equal if and only if they have the same number of nodes and
 	 * edges respectively and all odes have the same coordinates and order.</p>
 	 * <p>If two instances consists of the same points but the ordering of them is
 	 * reversed the polygons are assumed to be equal.</p>
-	 * <p>The runtime of this operation is O(n), where {@code n} is the
+	 * <p>The runtime of this operation is O(n), where {@literal n} is the
 	 * number of edges.</p>
 	 * @param p the polygon whose equality is to be tested
 	 * @return true if this instance and p are equal
@@ -1063,13 +1063,13 @@ public class PlanPolygon<T extends Edge> implements Iterable<T> {
 	}
 
 	/**
-	 * Checks the equality of this instance of {@code PlanPolygon} and an
+	 * Checks the equality of this instance of {@literal PlanPolygon} and an
 	 * object. They are equal if and only if object is an instance of
-	 * {@code PlanPolygon} and if they have the same number of nodes and
+	 * {@literal PlanPolygon} and if they have the same number of nodes and
 	 * edges respectively and all odes have the same coordinates and order.
 	 * <p>If two instances consists of the same points but the ordering of them is
 	 * reversed the polygons are assumed to be equal.</p>
-	 * <p>The runtime of this operation is O(n), where {@code n} is the
+	 * <p>The runtime of this operation is O(n), where {@literal n} is the
 	 * number of edges.</p>
 	 * @param obj the object whose equality is to be tested
 	 * @return true if this instance and obj are equal
@@ -1103,7 +1103,7 @@ public class PlanPolygon<T extends Edge> implements Iterable<T> {
 
 	/**
 	 * Checks whether a specified {@link PlanPoint} fits to a specified
-	 * {@code PlanPolygon}, that means that it is equal either to the start
+	 * {@literal PlanPolygon}, that means that it is equal either to the start
 	 * point or the end point.
 	 * @param p the point
 	 * @param poly the polygon
@@ -1114,7 +1114,7 @@ public class PlanPolygon<T extends Edge> implements Iterable<T> {
 	}
 
 	/**
-	 * Checks whether a specified {@code PlanPolygon} fits to the polygon.
+	 * Checks whether a specified {@literal PlanPolygon} fits to the polygon.
 	 * That means that they have the start and end point (or vice versa) in
 	 * common.
 	 * @param p the polygon
@@ -1125,9 +1125,9 @@ public class PlanPolygon<T extends Edge> implements Iterable<T> {
 	}
 
 	/**
-	 * Checks whether an {@link Edge} fits into a {@code PlanPolygon}. An
+	 * Checks whether an {@link Edge} fits into a {@literal PlanPolygon}. An
 	 * edge is said to fit, if the coordinates of the edge are the same as the
-	 * {@code start} and {@code end} coordinates of the polygon. That
+	 * {@literal start} and {@literal end} coordinates of the polygon. That
 	 * means an edge fits if it will close the polygon.
 	 * @param e the edge that is to be tested
 	 * @param p the polygon that should fit together with the edge
@@ -1138,13 +1138,13 @@ public class PlanPolygon<T extends Edge> implements Iterable<T> {
 	}
 
 	/**
-	 * Checks wheather two {@link PlanPoint}s fit to a {@code PlanPolygon}. If two
+	 * Checks wheather two {@link PlanPoint}s fit to a {@literal PlanPolygon}. If two
 	 * points, that are not equal, fit an edge with these two end points will
-	 * close the polygon. If the polygon is closed, {@code false} is returned.
+	 * close the polygon. If the polygon is closed, {@literal false} is returned.
 	 * @param p1 one point that is tested
 	 * @param p2 the other point that is tested
 	 * @param polygon the polygon that is tested to fit to the two points
-	 * @return {@code true} if both points fit to a (not closed) polygon
+	 * @return {@literal true} if both points fit to a (not closed) polygon
 	 * @see PlanPolygon#fits(PlanPoint)
 	 */
 	public static boolean fitsTogether( PlanPoint p1, PlanPoint p2, PlanPolygon<?> polygon ) {
@@ -1152,7 +1152,7 @@ public class PlanPolygon<T extends Edge> implements Iterable<T> {
 	}
 
 	/**
-	 * Tests if two instances of {@code PlanPolygon} fit together, that means
+	 * Tests if two instances of {@literal PlanPolygon} fit together, that means
 	 * that they have start and end points in common. In this case, it is possible
 	 * to merge them and a closed polygon is the result.
 	 * @param p1 the first polygon
@@ -1169,7 +1169,7 @@ public class PlanPolygon<T extends Edge> implements Iterable<T> {
 	 * Get the instance of an edge that is in the polygon. This is needed due to
 	 * two edges are considered equal if the two end points are equal. But to connect
 	 * rooms it is neccessary to have the same instance in both polygons.
-	 * <p>The runtime of this operation is O(n), where {@code n} is the
+	 * <p>The runtime of this operation is O(n), where {@literal n} is the
 	 * number of edges.</p>
 	 * <p>In the case that the given edge is already contained in the polygon this
 	 * method just returns it, and does noting.</p>
@@ -1184,7 +1184,7 @@ public class PlanPolygon<T extends Edge> implements Iterable<T> {
 	/**
 	 * Get an edge that is in the polygon. The edge is specified by the two end
 	 * points.
-	 * <p>The runtime of this operation is O(n), where {@code n} is the
+	 * <p>The runtime of this operation is O(n), where {@literal n} is the
 	 * number of edges.</p>
 	 * @param p1 one point
 	 * @param p2 the other point
@@ -1204,7 +1204,7 @@ public class PlanPolygon<T extends Edge> implements Iterable<T> {
 	/**
 	 * Tries to find an edge of the room, that contains the given point.
 	 * @param p the point
-	 * @return an edge containing the point, or {@code null} otherwise
+	 * @return an edge containing the point, or {@literal null} otherwise
 	 */
 	public T getEdge( PlanPoint p ) {
 		double eps = 0.01;
@@ -1250,7 +1250,7 @@ public class PlanPolygon<T extends Edge> implements Iterable<T> {
 	}
 
 	/**
-	 * Returns the height of the {@code PlanPolygon}. That is the difference
+	 * Returns the height of the {@literal PlanPolygon}. That is the difference
 	 * between the uppermost and lowermost y-coordinates of the contained points.
 	 * @return the height
 	 */
@@ -1283,13 +1283,13 @@ public class PlanPolygon<T extends Edge> implements Iterable<T> {
 	}
 
 	/**
-	 * Returns the points of the {@code PlanPolygon} as view of a
-	 * {@code List}. The view
+	 * Returns the points of the {@literal PlanPolygon} as view of a
+	 * {@literal List}. The view
 	 * is obtained by running through the whole polygon and adding up the edges, so the
 	 * running time of this operation is O(n). The returned list is editable, but the
 	 * changes that are done to it will in no way be reflected in the polygon, that is,
 	 * the list is fully independent from the polygon.
-	 * @return {@code List} with {@link PlanPoint}-objects discribing the edges
+	 * @return {@literal List} with {@link PlanPoint}-objects discribing the edges
 	 * of the polygon
 	 */
 	public List<PlanPoint> getPolygonPoints() {
@@ -1312,7 +1312,7 @@ public class PlanPolygon<T extends Edge> implements Iterable<T> {
 	}
 
 	/**
-	 * Returns the width of the {@code PlanPolygon}. That is the difference
+	 * Returns the width of the {@literal PlanPolygon}. That is the difference
 	 * between the leftmost and rightmost x-coordinates of the contained points.
 	 * @return the width
 	 */
@@ -1321,7 +1321,7 @@ public class PlanPolygon<T extends Edge> implements Iterable<T> {
 	}
 
 	/**
-	 * The leftmost point coordinate of the {@code PlanPolygon}.
+	 * The leftmost point coordinate of the {@literal PlanPolygon}.
 	 * @return the leftmost coordinate
 	 */
 	public int getxOffset() {
@@ -1329,7 +1329,7 @@ public class PlanPolygon<T extends Edge> implements Iterable<T> {
 	}
 
 	/**
-	 * The uppermost point coordinate of the {@code PlanPolygon}.
+	 * The uppermost point coordinate of the {@literal PlanPolygon}.
 	 * @return the uppermost coordinate
 	 */
 	public int getyOffset() {
@@ -1337,32 +1337,32 @@ public class PlanPolygon<T extends Edge> implements Iterable<T> {
 	}
 
 	/**
-	 * Returns the leftmost {@code x}-coordinate of the polygon
-	 * @return the leftmost {@code x}-coordinate of the polygon
+	 * Returns the leftmost {@literal x}-coordinate of the polygon
+	 * @return the leftmost {@literal x}-coordinate of the polygon
 	 */
 	public int boundLeft() {
 		return xOffset;
 	}
 
 	/**
-	 * Returns the rightmost {@code x}-coordinate of the polygon.
-	 * @return the rightmost {@code x}-coordinate of the polygon
+	 * Returns the rightmost {@literal x}-coordinate of the polygon.
+	 * @return the rightmost {@literal x}-coordinate of the polygon
 	 */
 	public int boundRight() {
 		return xOffset + width;
 	}
 
 	/**
-	 * Returns the biggest {@code y}-coordinate of the polygon (this is then the lowest coordinate on screen).
-	 * @return the biggest {@code y}-coordinate of the polygon
+	 * Returns the biggest {@literal y}-coordinate of the polygon (this is then the lowest coordinate on screen).
+	 * @return the biggest {@literal y}-coordinate of the polygon
 	 */
 	public int boundLower() {
 		return yOffset + height;
 	}
 
 	/**
-	 * Returns the smallest {@code y}-coordinate of the polygon (this is then the upmost coordinate on screen)
-	 * @return the smallest {@code y}-coordinate of the polygon
+	 * Returns the smallest {@literal y}-coordinate of the polygon (this is then the upmost coordinate on screen)
+	 * @return the smallest {@literal y}-coordinate of the polygon
 	 */
 	public int boundUpper() {
 		return yOffset;
@@ -1452,7 +1452,7 @@ public class PlanPolygon<T extends Edge> implements Iterable<T> {
 	 * Checks wheather an edge between two distinct points will close the polygon.
 	 * @param p1 one point
 	 * @param p2 the other point
-	 * @return {@code true} if the edge will close the polygon, {@code false} otherwise
+	 * @return {@literal true} if the edge will close the polygon, {@literal false} otherwise
 	 */
 	public boolean willClose( PlanPoint p1, PlanPoint p2 ) {
 		return fitsTogether( p1, p2, this );
@@ -1470,10 +1470,10 @@ public class PlanPolygon<T extends Edge> implements Iterable<T> {
 	/**
 	 * Creates a new edge of the generic type out of two points that is associated
 	 * to this instance. The super constuctor that is called needs to accept two
-	 * {@link PlanPoint} objects and one {@code PlanPolygon}.
+	 * {@link PlanPoint} objects and one {@literal PlanPolygon}.
 	 * @param p1 one point of the edge
 	 * @param p2 the other point
-	 * @return the new instance of {@code T}
+	 * @return the new instance of {@literal T}
 	 */
 	protected T newEdge( PlanPoint p1, PlanPoint p2 ) {
 		return newEdge( p1, p2, this );
@@ -1482,11 +1482,11 @@ public class PlanPolygon<T extends Edge> implements Iterable<T> {
 	/**
 	 * Creates a new edge of the generic type out of two points. The super
 	 * constuctor that is called needs to accept two {@link PlanPoint} objects
-	 * and one {@code PlanPolygon}, which will be the associated polygon.
+	 * and one {@literal PlanPolygon}, which will be the associated polygon.
 	 * @param p1 one point of the edge
 	 * @param p2 the other point
 	 * @param poly the associated polygon
-	 * @return the new instance of {@code T}
+	 * @return the new instance of {@literal T}
 	 */
 	private T newEdge( PlanPoint p1, PlanPoint p2, PlanPolygon<?> poly ) {
 		T edge = null;
@@ -1504,11 +1504,11 @@ public class PlanPolygon<T extends Edge> implements Iterable<T> {
 	 * Creates a new edge of the specified generic type out of two points. The
 	 * super
 	 * constuctor that is called needs to accept two {@link PlanPoint} objects
-	 * and one {@code PlanPolygon}, which will be the associated polygon.
+	 * and one {@literal PlanPolygon}, which will be the associated polygon.
 	 * @param p1 one point of the edge
 	 * @param p2 the other point
 	 * @param poly the associated polygon
-	 * @return the new instance of {@code T}
+	 * @return the new instance of {@literal T}
 	 */
 	// TODO exception
 	private Edge newEdge( PlanPoint p1, PlanPoint p2, PlanPolygon poly, Class<T> edgeClassType ) {
@@ -1548,14 +1548,14 @@ public class PlanPolygon<T extends Edge> implements Iterable<T> {
 	 * one Edge, the polygon deletes itself in his owner-floor.</p>
 	 * <p>Closed polygons are splitted up during delting process. Deleting the
 	 * first or last edge needs time O(1). Deleting an edge in the middle of the
-	 * polygon needs time O(n), where {@code n} is the number of edges. This
+	 * polygon needs time O(n), where {@literal n} is the number of edges. This
 	 * is because the internal datastructure containing the edges is built up
 	 * completly new. The new start point is the first point of the first edge
 	 * after the deleted edge, the end point will be the last one of the last
 	 * edge before the edge. </p>
 	 * <p>It is not possible to break up a not closed polygon because the result
 	 * would be two polygons.</p>
-	 * <p>The runtime of this operation is O(n), where {@code n} is the
+	 * <p>The runtime of this operation is O(n), where {@literal n} is the
 	 * number of edges.</p>
 	 * @param e the edge to remove. Has to be an end edge.
 	 * @throws java.lang.IllegalArgumentException sent from super-class, not supposed to occur
@@ -1628,9 +1628,9 @@ public class PlanPolygon<T extends Edge> implements Iterable<T> {
 	 * list. The edge must fit with the points, that means the first and last
 	 * point of the edge and the first and last point element have to be the same.
 	 * However, it does not matter if the start point of the edge equals the last
-	 * point of the list, or vice versa. The {@code List} needs to be
+	 * point of the list, or vice versa. The {@literal List} needs to be
 	 * iterated in reverse order in the latter case.
-	 * <p>The runtime of this operation is O(e), where {@code e} is the
+	 * <p>The runtime of this operation is O(e), where {@literal e} is the
 	 * number of edges that must be inserted.</p>
 	 * <p>The operation will only work on closed polygons!</p>
 	 * @param e the edge that is replaced. The given edge must be part of the polygon.
@@ -1641,11 +1641,10 @@ public class PlanPolygon<T extends Edge> implements Iterable<T> {
 	 * @param points the list of new points. These first and last point must be equal
 	 * to e.getSource() and e.getTarget() but need not be the same instance.
 	 * @return The inserted edges as an ArrayList.
-	 *
-	 * @exception IllegalArgumentException If "e" is not in the polygon or if
-	 * an edge would be inserted, that would have equal end points or if points
-	 * contains less than 3 items.
-	 * @exception IllegalStateException If the polygon is not closed
+	 * @throws IllegalArgumentException If "e" is not in the polygon or if
+ an edge would be inserted, that would have equal end points or if points
+ contains less than 3 items.
+	 * @throws IllegalStateException If the polygon is not closed
 	 */
 	public ArrayList<T> replaceEdge( T e, List<PlanPoint> points ) throws IllegalArgumentException {
 		if( points.size() < 3 )
@@ -1694,8 +1693,8 @@ public class PlanPolygon<T extends Edge> implements Iterable<T> {
 
 	/**
 	 * Replaces an {@link Edge} with some new edges specified as point list. The
-	 * {@code Edge} is also specified by its two end points.
-	 * <p>The runtime of this operation is O(n), where {@code n} is the number
+	 * {@literal Edge} is also specified by its two end points.
+	 * <p>The runtime of this operation is O(n), where {@literal n} is the number
 	 * of edges.</p>
 	 * <p>The operation will only work on closed polygons!</p>
 	 * @param p1 the start point of the replaced edge
@@ -1740,7 +1739,7 @@ public class PlanPolygon<T extends Edge> implements Iterable<T> {
 	}
 
 	/**
-	 * Returns a string representation of the {@code PlanPolygon} that
+	 * Returns a string representation of the {@literal PlanPolygon} that
 	 * textually represents the polygon.
 	 * <p>A polygon is represented by the sequence of edges separated with
 	 * a "-" in between. The result will look like
@@ -1757,7 +1756,7 @@ public class PlanPolygon<T extends Edge> implements Iterable<T> {
 	}
 
 	/**
-	 * Returns a string representation of the {@code PlanPolygon} containing the
+	 * Returns a string representation of the {@literal PlanPolygon} containing the
 	 * coordinates.
 	 * @return a string representation
 	 * @see #toString()

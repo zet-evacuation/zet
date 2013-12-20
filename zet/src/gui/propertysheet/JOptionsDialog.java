@@ -29,7 +29,7 @@ import javax.swing.JDialog;
 import javax.swing.JPanel;
 
 /**
- * 
+ *
  * @author Jan-Philipp Kappmeier
  */
 public class JOptionsDialog extends JDialog {
@@ -39,34 +39,34 @@ public class JOptionsDialog extends JDialog {
 	PropertySheetTableModel pstm = new PropertySheetTableModel();
 	PropertySheetTable pst = new PropertySheetTable( pstm );
 	PropertySheetPanel ps = new PropertySheetPanel( pst );
-	
+
 	JOptionsDialog parent;
 	JButtonBar jbb;
 
 	public JOptionsDialog( PropertyTreeModel ptm ) {
 		super( (Frame)null, "test" );
-		
+
 		parent = this;
-		
+
 		setSize( 650, 450 );
 		Dimension d = Toolkit.getDefaultToolkit().getScreenSize();
 		setLocation( (d.width - getSize().width) / 2, (d.height - getSize().height) / 2 );
-		
+
 		this.setLayout( new BorderLayout() );
-		
+
 		if( useButtonBar ) {
 			jbb = new JButtonBar( 1 );
-			add( jbb, BorderLayout.WEST );		
+			add( jbb, BorderLayout.WEST );
 			ButtonBarUI b = new BlueishButtonBarUI();
 			jbb.setUI( b );
 		}
-		
+
 		add( ps, BorderLayout.CENTER );
 		init( ptm );
-		
+
 		ps.setDescriptionVisible( true );
 		ps.setMode( 1 );
-		
+
 		ps.addPropertySheetChangeListener( new PropertyChangeListener() {
 
 			@Override
@@ -86,7 +86,7 @@ public class JOptionsDialog extends JDialog {
 		buttonPanel.add( btnCancel, "3,1" );
 		add( buttonPanel, BorderLayout.SOUTH );
 	}
-	
+
 	final protected void init( PropertyTreeModel ptm ) {
 		System.out.println( "Loading property " + ptm.getPropertyName() );
 		PropertyTreeNode node = ptm.getRoot();
@@ -95,7 +95,7 @@ public class JOptionsDialog extends JDialog {
 		for( Property p : pstm.getProperties() ) {
 			pstm.removeProperty( p );
 		}
-		
+
 		// we are at root level
 		if( useButtonBar ) {
 			for( int i = 0; i < node.getChildCount(); i++ ) {
@@ -109,14 +109,14 @@ public class JOptionsDialog extends JDialog {
 				p.setCategory( "General" );
 			for( int i = 0; i < node.getChildCount(); i++ ) {
 				PropertyTreeNode n = node.getChildAt( i );
-				add( n, pstm, n.getDisplayName() );
+				addD( n, pstm, n.getDisplayName() );
 			}
 		}
-		
+
 		if( jbb != null && jbb.getComponents().length > 0 )
 			((JButton)jbb.getComponent( 0 )).doClick();
 	}
-	
+
 	private ActionListener aclButton = new ActionListener() {
 		@Override
 		public void actionPerformed( ActionEvent e ) {
@@ -138,22 +138,22 @@ public class JOptionsDialog extends JDialog {
 	protected ActionListener getDefaultButtonsListener() {
 		return aclButton;
 	}
-	
-	
+
+
 	private BasicProperty<?> newProperty( PropertyTreeNode n, String category ) {
 		BasicProperty<?> def = new BasicProperty<>( n.getDisplayNameTag(), n.getDisplayName() );
-		
+
 		if( !category.isEmpty() )
 			def.setCategory( category );
 		return def;
 	}
 
-	private void add( PropertyTreeNode node, PropertySheetTableModel pstm, String category ) {
+	private void addD( PropertyTreeNode node, PropertySheetTableModel pstm, String category ) {
 		for( int i = 0; i < node.getChildCount(); i++ ) {
 			PropertyTreeNode n = node.getChildAt( i );
 			BasicProperty<?> def = newProperty( n, category );
 			pstm.addProperty( def );
-			add( n, def, pstm );
+			addD( n, def, pstm );
 		}
 
 		for( BasicProperty<?> p : node.getProperties() ) {
@@ -161,14 +161,14 @@ public class JOptionsDialog extends JDialog {
 			pstm.addProperty( p );
 		}
 	}
-	
-	private void add( PropertyTreeNode node, BasicProperty<?> property, PropertySheetTableModel pstm ) {
+
+	private void addD( PropertyTreeNode node, BasicProperty<?> property, PropertySheetTableModel pstm ) {
 		for( int i = 0; i < node.getChildCount(); i++ ) {
 			PropertyTreeNode n = node.getChildAt( i );
 			BasicProperty<?> def = newProperty( n, "" );
 			def.setParentProperty( property );
 			property.addSubProperty( def );
-			add( n, def, pstm );
+			addD( n, def, pstm );
 		}
 
 		for( BasicProperty<?> p : node.getProperties() ) {
@@ -176,11 +176,11 @@ public class JOptionsDialog extends JDialog {
 			p.setParentProperty( property );
 		}
 	}
-	
+
 	private class JPropertyButton extends JButton {
 		private static final long serialVersionUID = 1L;
 		final PropertyTreeNode n;
-		
+
 		private PropertySheetTableModel pstm;
 
 		JPropertyButton( final PropertyTreeNode n ) {
@@ -195,7 +195,7 @@ public class JOptionsDialog extends JDialog {
 
 			for( int i = 0; i < n.getChildCount(); i++ ) {
 				PropertyTreeNode node = n.getChildAt( i );
-				add( node, pstm, node.getDisplayName() );
+				addD( node, pstm, node.getDisplayName() );
 			}
 
 			this.addActionListener( new ActionListener() {
