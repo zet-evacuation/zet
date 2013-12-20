@@ -48,7 +48,7 @@ public class SpecificFlowCollector {
 
 	public void collect( int timeStep, EvacCell start, EvacCell end ) {
 		try {
-			
+
 			if( start.equals( end ) ) {
 				return;	// do not count no-movements
 			}
@@ -85,7 +85,7 @@ public class SpecificFlowCollector {
 				// search for the given point in the list
 				boolean added = false;
 				for( PositionCountTriple tripel : values ) {
-					if( tripel.u.equals( sp ) && tripel.v.equals( ep ) ) {
+					if( tripel.u().equals( sp ) && tripel.v().equals( ep ) ) {
 						tripel.inc();
 						added = true;
 						break;
@@ -140,9 +140,9 @@ public class SpecificFlowCollector {
 		// count all individuals leaving a cell on x-index 39
 		for( int timestep : timeMeasure.keySet() ) {
 			for( PositionCountTriple value : timeMeasure.get( timestep ) ) {
-				if( value.u.getX() == index && value.v.getX() == index-1 )
-					count += value.w;
-				if( value.u.getX() ==	index-1 && value.v.getX() == index ) {
+				if( value.u().getX() == index && value.v().getX() == index-1 )
+					count += value.w();
+				if( value.u().getX() ==	index-1 && value.v().getX() == index ) {
 					System.out.println( "RÜCKW'ÄRTS GEHENDE FIGUR AUFGETAUCHT!!!!!!!!!!!!!!" );
 					//count -= value.w;
 				}

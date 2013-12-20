@@ -100,6 +100,16 @@ public class PushRelabelHighestLabel extends PushRelabel {
 	 */
 	protected void init() {
 		residualGraph.init( getProblem().getNetwork(), getProblem().getCapacities(), current );
+
+
+		// set some flow on the residual network
+		residualGraph.augment( residualGraph.getEdge( 0 ), 1 );
+		residualGraph.augment( residualGraph.getEdge( 1 ), 1 );
+		residualGraph.augment( residualGraph.getEdge( 3 ), 1 );
+		residualGraph.augment( residualGraph.getEdge( 5 ), 1 );
+
+		excess.increase( sink, 2 );
+
 		// initialize excesses
 		excess.set( source, 0 );
 

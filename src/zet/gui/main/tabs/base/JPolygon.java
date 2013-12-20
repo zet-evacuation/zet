@@ -15,6 +15,7 @@
  */
 package zet.gui.main.tabs.base;
 
+import de.tu_berlin.math.coga.common.util.Selectable;
 import ds.PropertyContainer;
 import ds.z.Area;
 import ds.z.Barrier;
@@ -50,7 +51,6 @@ import java.util.Iterator;
 import java.util.LinkedList;
 import javax.swing.SwingUtilities;
 import zet.gui.main.tabs.editor.JFloor;
-import de.tu_berlin.math.coga.common.util.Selectable;
 
 /**
  * Graphical representation of a {@link ds.z.PlanPolygon}. This class has the
