@@ -1,6 +1,6 @@
 package de.tu_berlin.math.coga.common.localization;
 
-import de.tu_berlin.math.coga.components.LocalizedAbstractButton;
+import de.tu_berlin.math.coga.components.framework.Menu;
 import java.util.ArrayList;
 import javax.swing.AbstractButton;
 
@@ -41,4 +41,23 @@ public class Localizer {
 		for( Localized l : localized )
 			l.localize();
 	}
+	
+private class LocalizedAbstractButton implements Localized {
+		private final AbstractButton toLocalize;
+		private final String locString;
+
+		private LocalizedAbstractButton( AbstractButton guiObject, String locString ) {
+			this.toLocalize = guiObject;
+			this.locString = locString;
+			//localize();
+		}
+
+		@Override
+		public final void localize() {
+			String text = Menu.getLocalization().getString( locString );
+			toLocalize.setText( Menu.extractMnemonic( text ) );
+			toLocalize.setMnemonic( Menu.getMnemonic( text ) );
+		}
+	}
+
 }

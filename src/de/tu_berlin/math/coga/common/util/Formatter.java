@@ -4,7 +4,7 @@
  */
 package de.tu_berlin.math.coga.common.util;
 
-import de.tu_berlin.math.coga.zet.ZETLocalization;
+import de.tu_berlin.math.coga.common.localization.DefaultLocalization;
 import de.tu_berlin.math.coga.common.util.units.UnitScale;
 import de.tu_berlin.math.coga.datastructure.Tuple;
 import java.text.NumberFormat;
@@ -26,7 +26,7 @@ public class Formatter {
 	 * @return a string containing the decimal value
 	 */
 	public static String formatPercent( double value ) {
-		NumberFormat nfPercent = ZETLocalization.getSingleton().getPercentConverter();
+		NumberFormat nfPercent = DefaultLocalization.getSingleton().getPercentConverter();
 		nfPercent.setMaximumFractionDigits( 2 );
 		nfPercent.setMinimumFractionDigits( 2 );
 		return nfPercent.format( value );
