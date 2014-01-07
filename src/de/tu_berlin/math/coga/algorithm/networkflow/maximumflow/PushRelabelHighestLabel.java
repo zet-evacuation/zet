@@ -18,7 +18,7 @@ import ds.mapping.IdentifiableIntegerMapping;
  * @author Jan-Philipp Kappmeier
  */
 public class PushRelabelHighestLabel extends PushRelabel {
-	ResidualGraph residualGraph;
+	SimpleResidualGraph residualGraph;
 	/** The index of the current edge for a given node in the edges array. */
 	protected IdentifiableIntegerMapping<Node> current;
 	/** The buckets for active nodes. */
@@ -49,7 +49,7 @@ public class PushRelabelHighestLabel extends PushRelabel {
 		activeBuckets = new BucketPriorityQueue<>( n + 1, Node.class );
 		activeBuckets.setDistanceLabels( distanceLabels );
 		inactiveBuckets = new BucketSet<>( n + 1, Node.class );
-		residualGraph = new ResidualGraph( n, m );
+		residualGraph = new SimpleResidualGraph( n, m );
 	}
 
 	@Override
@@ -289,7 +289,6 @@ public class PushRelabelHighestLabel extends PushRelabel {
   }
 
   /* eliminate flow cycles, topologicaly order vertices */
-  //forAllNodes(i)
 	for( Node i : getProblem().getNetwork() ) {
     if( ( distanceLabels.get( i ) == FeasibleState.Unused.val ) && ( excess.get( i ) > 0 ) && ( i.id() != source.id() ) && ( i.id() != sink.id() ) ) {
       r = i;
