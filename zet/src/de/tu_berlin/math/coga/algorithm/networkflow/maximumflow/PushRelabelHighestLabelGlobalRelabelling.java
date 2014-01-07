@@ -70,7 +70,7 @@ public class PushRelabelHighestLabelGlobalRelabelling extends PushRelabelHighest
 		int minDistance = n;
 		Edge minEdge = null;
 		// search for the minimum distance value
-		for( int i = useBugHeuristic ? current.get( v ) :  residualGraph.getFirst( v ); i < residualGraph.getLast( v ); ++i ) {
+		for( int i = useBugHeuristic ? current.get( v ) : residualGraph.getFirst( v ); i < residualGraph.getLast( v ); ++i ) {
 			relabelsSinceLastGlobalRelabel++;
 			final Edge e = residualGraph.getEdge( i );
 			if( residualGraph.getResidualCapacity( e ) > 0 && distanceLabels.get( e.end() ) < minDistance ) {

@@ -5,6 +5,7 @@
  */
 package de.tu_berlin.math.coga.algorithm.networkflow.maximumflow;
 
+import de.tu_berlin.math.coga.datastructure.graph.OutgoingStarGraph;
 import ds.graph.ArraySet;
 import ds.graph.DirectedGraph;
 import ds.graph.Edge;
@@ -20,7 +21,7 @@ import java.util.Iterator;
  *
  * @author Jan-Philipp Kappmeier
  */
-public class ResidualGraph implements DirectedGraph {
+public class SimpleResidualGraph implements DirectedGraph, OutgoingStarGraph {
 
 	protected ArraySet<Node> nodes;
 	protected ArraySet<Edge> edges;
@@ -31,7 +32,7 @@ public class ResidualGraph implements DirectedGraph {
 	protected IdentifiableObjectMapping<Edge,Edge> reverseEdge; // gives the residual edge for a given edge
 
 	public IdentifiableObjectMapping<Edge,Edge> originalResidualEdgeMapping;
-	
+
 	/** The index of the first outgoing edge of a node in the edges array. */
 	protected IdentifiableIntegerMapping<Node> first;
 	/** The index of the last outgoing edge of a node in the edges array. */
@@ -44,7 +45,7 @@ public class ResidualGraph implements DirectedGraph {
 	 */
 	private int m;
 
-	ResidualGraph( int n, int m ) {
+	SimpleResidualGraph( int n, int m ) {
 		edges = new ArraySet<>( Edge.class, 2*m );
 		nodes = new ArraySet<>( Node.class, n );
 		first = new IdentifiableIntegerMapping<>( n ); // first outgoing edge (index)
@@ -60,10 +61,10 @@ public class ResidualGraph implements DirectedGraph {
 	 * Sets up the data structures. At first, creates reverse edges and orders the
 	 * edges according to their tail nodes into the array. Thus, the incident
 	 * edges to a vertex can be searched by a run through the array.
-	 * 
+	 *
 	 * @param network
 	 * @param capacities
-	 * @param current  
+	 * @param current
 	 */
 	protected void init( AbstractNetwork network, IdentifiableIntegerMapping<Edge> capacities, IdentifiableIntegerMapping<Node> current ) {
 		// set up residual edges
@@ -88,7 +89,7 @@ public class ResidualGraph implements DirectedGraph {
 			for( Edge e : network.incomingEdges( v ) ) {
 				//residualEdges[edgeCounter] = new ResidualEdge( edgeCounter, e.end(), e.start(), 0, true );
 				Edge ne = new Edge( edgeCounter, e.end(), e.start() );
-								
+
 				edges.add( ne );
 				residualCapacity.add( ne, 0 );
 				isReverseEdge.add( ne, true );
@@ -264,18 +265,6 @@ public class ResidualGraph implements DirectedGraph {
 		residualCapacity.increase( reverseEdge.get( a ), delta );
 	}
 
-	Edge getReverseEdge( Edge e ) {
-		return reverseEdge.get( e );
-	}
-
-	int getFirst( Node node ) {
-		return first.get( node );
-	}
-
-	int getLast( Node node ) {
-		return last.get( node );
-	}
-
 	int augmentMax( Edge e, int get ) {
 		final int delta = residualCapacity.get( e ) < get ? residualCapacity.get( e ) : get;
 		residualCapacity.decrease( e, delta );
@@ -283,8 +272,26 @@ public class ResidualGraph implements DirectedGraph {
 		return delta;
 	}
 
+	Edge getReverseEdge( Edge e ) {
+		return reverseEdge.get( e );
+	}
+
+	public int getFirst( Node node ) {
+		return first.get( node );
+	}
+
+	public int getLast( Node node ) {
+		return last.get( node );
+	}
+
+	@Override
+	public int next( int current ) {
+		return current+1;
+	}
+
 	@Override
 	public Iterator<Node> iterator() {
 		return nodes.iterator();
 	}
+
 }
