@@ -6,11 +6,13 @@
 package de.tu_berlin.math.coga.algorithm.networkflow.maximumflow;
 
 import de.tu_berlin.math.coga.datastructure.graph.OutgoingStarGraph;
+import de.tu_berlin.math.coga.datastructure.graph.network.ResidualNetwork;
 import ds.graph.ArraySet;
 import ds.graph.DirectedGraph;
 import ds.graph.Edge;
 import ds.graph.IdentifiableCollection;
 import ds.graph.Node;
+import ds.graph.ResidualGraph;
 import ds.graph.network.AbstractNetwork;
 import ds.mapping.IdentifiableBooleanMapping;
 import ds.mapping.IdentifiableIntegerMapping;
@@ -21,10 +23,10 @@ import java.util.Iterator;
  *
  * @author Jan-Philipp Kappmeier
  */
-public class SimpleResidualGraph implements DirectedGraph, OutgoingStarGraph {
+public class SimpleResidualGraph implements DirectedGraph, OutgoingStarGraph, ResidualNetwork {
 
 	protected ArraySet<Node> nodes;
-	protected ArraySet<Edge> edges;
+	public ArraySet<Edge> edges;
 
 	// new mapping replacing the old stuff
 	protected IdentifiableBooleanMapping<Edge> isReverseEdge;	// indicates if a given edge is residual or was contained in the original graph
@@ -45,7 +47,7 @@ public class SimpleResidualGraph implements DirectedGraph, OutgoingStarGraph {
 	 */
 	private int m;
 
-	SimpleResidualGraph( int n, int m ) {
+	public SimpleResidualGraph( int n, int m ) {
 		edges = new ArraySet<>( Edge.class, 2*m );
 		nodes = new ArraySet<>( Node.class, n );
 		first = new IdentifiableIntegerMapping<>( n ); // first outgoing edge (index)
@@ -66,7 +68,7 @@ public class SimpleResidualGraph implements DirectedGraph, OutgoingStarGraph {
 	 * @param capacities
 	 * @param current
 	 */
-	protected void init( AbstractNetwork network, IdentifiableIntegerMapping<Edge> capacities, IdentifiableIntegerMapping<Node> current ) {
+	public void init( AbstractNetwork network, IdentifiableIntegerMapping<Edge> capacities, IdentifiableIntegerMapping<Node> current ) {
 		// set up residual edges
 		int edgeCounter = 0;
 		int[] temp = new int[edges.getCapacity()];
@@ -141,12 +143,12 @@ public class SimpleResidualGraph implements DirectedGraph, OutgoingStarGraph {
 
 	@Override
 	public IdentifiableCollection<Edge> edges() {
-		throw new UnsupportedOperationException( "Not supported yet." );
+		return edges;
 	}
 
 	@Override
 	public IdentifiableCollection<Node> nodes() {
-		throw new UnsupportedOperationException( "Not supported yet." );
+		return nodes;
 	}
 
 	@Override
@@ -239,27 +241,27 @@ public class SimpleResidualGraph implements DirectedGraph, OutgoingStarGraph {
 		throw new UnsupportedOperationException( "Not supported yet." );
 	}
 
-	int getResidualCapacity( int i ) {
+	public int getResidualCapacity( int i ) {
 		return residualCapacity.get( edges.get( i ) );
 	}
 
-	int getResidualCapacity( Edge e ) {
+	public int getResidualCapacity( Edge e ) {
 		return residualCapacity.get( e );
 	}
 
-	boolean isReverseEdge( Edge a ) {
+	public boolean isReverseEdge( Edge a ) {
 		 return isReverseEdge.get( a );
 	}
 
-	int getReverseResidualCapacity( Edge e ) {
+	public int getReverseResidualCapacity( Edge e ) {
 		return residualCapacity.get( reverseEdge.get( e ) );
 	}
 
-	int getReverseResidualCapacity( int i ) {
+	public int getReverseResidualCapacity( int i ) {
 		return residualCapacity.get( reverseEdge.get( edges.get( i ) ) );
 	}
 
-	void augment( Edge a, int delta ) {
+	public void augment( Edge a, int delta ) {
 //		System.out.println( "Augmenting " + a + " by " + delta );
 		residualCapacity.decrease( a, delta );
 		residualCapacity.increase( reverseEdge.get( a ), delta );
@@ -272,7 +274,7 @@ public class SimpleResidualGraph implements DirectedGraph, OutgoingStarGraph {
 		return delta;
 	}
 
-	Edge getReverseEdge( Edge e ) {
+	public Edge getReverseEdge( Edge e ) {
 		return reverseEdge.get( e );
 	}
 
