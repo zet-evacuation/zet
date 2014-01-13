@@ -36,9 +36,9 @@ public class SimpleResidualGraph implements DirectedGraph, OutgoingStarGraph, Re
 	public IdentifiableObjectMapping<Edge,Edge> originalResidualEdgeMapping;
 
 	/** The index of the first outgoing edge of a node in the edges array. */
-	protected IdentifiableIntegerMapping<Node> first;
+	public IdentifiableIntegerMapping<Node> first; // temporarily public for debug reasons
 	/** The index of the last outgoing edge of a node in the edges array. */
-	protected IdentifiableIntegerMapping<Node> last;
+	public IdentifiableIntegerMapping<Node> last;
 
 	/**
 	 * Initializes the graph with a given size
