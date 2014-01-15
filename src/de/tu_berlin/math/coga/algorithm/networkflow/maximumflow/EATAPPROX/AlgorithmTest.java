@@ -6,14 +6,13 @@
 
 package de.tu_berlin.math.coga.algorithm.networkflow.maximumflow.EATAPPROX;
 
-import de.tu_berlin.math.coga.algorithm.networkflow.maximumflow.PushRelabelHighestLabel;
 import ds.graph.Edge;
 import ds.graph.Node;
 import ds.graph.network.AbstractNetwork;
 import ds.graph.network.Network;
-import ds.graph.problem.MaximumFlowProblem;
 import ds.mapping.IdentifiableIntegerMapping;
 import java.util.ArrayList;
+import java.util.Set;
 
 /**
  *
@@ -90,6 +89,44 @@ public class AlgorithmTest {
 		System.out.println( t.g.first );
 		System.out.println( t.g.last );
 
+
+		System.out.println( "\nEdge-Array zum Start:" );
+		printEdgeList( t );
+
+		//
+		FakeMaximumFlowProblem fmfp = new FakeMaximumFlowProblem( t.g, t.g );
+
+		NetworkFlowAlgorithm nf = new NetworkFlowAlgorithm();
+		nf.setProblem( fmfp );
+		nf.run();
+
+		System.out.println( "\nEdge-Array nach dem ersten Lauf von Phase 1:" );
+		printEdgeList( t );
+
+		System.out.println( "\nEdge-Array nach Freischaltung von Layer 1:" );
+		Set<Edge> newEdges = t.g.activateTimeLayer( 1 );
+		for( Edge e : newEdges ) {
+			System.out.println( "New edge visible: " + e );
+		}
+		printEdgeList( t );
+
+
+		nf.updateDistances( newEdges );
+		nf.run2();
+
+		System.out.println( "\nEdge-Array nach dem zweiten Lauf von Phase 1:" );
+		printEdgeList( t );
+
+//		System.out.println( "\nEdge-Array nach Freischaltung von Layer 2:" );
+//		Set<Edge> newEdges = t.g.activateTimeLayer( 2 );
+//		for( Edge e : newEdges ) {
+//			System.out.println( "New edge visible: " + e );
+//		}
+//		printEdgeList( t );
+
+	}
+
+	private static void printEdgeList( AlgorithmTest t ) {
 		for( int i = 0; i < t.g.edges().size(); ++i ) {
 			StringBuilder outLine = new StringBuilder();
 			//System.out.println( t.g.edges().get( i ) );
@@ -101,10 +138,13 @@ public class AlgorithmTest {
 			Node v = e.start();
 			Node w = e.end();
 
-				outLine.append( " Target Layer " ).append( t.g.getLayer( w.id() ));
+			outLine.append( " Target Layer " ).append( t.g.getLayer( w.id() )).append( ". " );
+
+			outLine.append( " Residual capacity: " + t.g.getResidualCapacity( i ) + " - " );
+
 			if( t.g.first.get( v ) == e.id() )
 				outLine.append( " first " );
-			if( t.g.last.get( v ) == e.id() )
+			if( t.g.last.get( v ) == e.id()+1 )
 				outLine.append( " last " );
 
 			System.out.println( outLine );

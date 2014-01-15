@@ -24,6 +24,7 @@ import ds.graph.Edge;
 import ds.mapping.IdentifiableIntegerMapping;
 import ds.graph.network.AbstractNetwork;
 import ds.graph.Node;
+import ds.graph.network.NetworkInterface;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -32,29 +33,29 @@ import java.util.List;
  * @author Martin Groß
  */
 public class MaximumFlowProblem {
-	private AbstractNetwork network;
+	private NetworkInterface network;
 	private IdentifiableIntegerMapping<Edge> capacities;
 	private List<Node> sources;
 	private List<Node> sinks;
 
-	public MaximumFlowProblem( AbstractNetwork network, IdentifiableIntegerMapping<Edge> capacities, List<Node> sources, List<Node> sinks ) {
+	public MaximumFlowProblem( NetworkInterface network, IdentifiableIntegerMapping<Edge> capacities, List<Node> sources, List<Node> sinks ) {
 		this.network = network;
 		this.capacities = capacities;
 		this.sources = sources;
 		this.sinks = sinks;
 	}
 
-	public MaximumFlowProblem( AbstractNetwork network, IdentifiableIntegerMapping<Edge> capacities, Node source, List<Node> sinks ) {
+	public MaximumFlowProblem( NetworkInterface network, IdentifiableIntegerMapping<Edge> capacities, Node source, List<Node> sinks ) {
 		this( network, capacities, new LinkedList<Node>(), sinks );
 		sources.add( source );
 	}
 
-	public MaximumFlowProblem( AbstractNetwork network, IdentifiableIntegerMapping<Edge> capacities, List<Node> sources, Node sink ) {
+	public MaximumFlowProblem( NetworkInterface network, IdentifiableIntegerMapping<Edge> capacities, List<Node> sources, Node sink ) {
 		this( network, capacities, sources, new LinkedList<Node>() );
 		sinks.add( sink );
 	}
 
-	public MaximumFlowProblem( AbstractNetwork network, IdentifiableIntegerMapping<Edge> capacities, Node source, Node sink ) {
+	public MaximumFlowProblem( NetworkInterface network, IdentifiableIntegerMapping<Edge> capacities, Node source, Node sink ) {
 		this( network, capacities, new LinkedList<Node>(), new LinkedList<Node>() );
 		sources.add( source );
 		sinks.add( sink );
@@ -68,7 +69,7 @@ public class MaximumFlowProblem {
 		this.capacities = capacities;
 	}
 
-	public AbstractNetwork getNetwork() {
+	public NetworkInterface getNetwork() {
 		return network;
 	}
 

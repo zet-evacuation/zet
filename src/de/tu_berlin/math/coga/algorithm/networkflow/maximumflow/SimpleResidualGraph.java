@@ -14,6 +14,7 @@ import ds.graph.IdentifiableCollection;
 import ds.graph.Node;
 import ds.graph.ResidualGraph;
 import ds.graph.network.AbstractNetwork;
+import ds.graph.network.NetworkInterface;
 import ds.mapping.IdentifiableBooleanMapping;
 import ds.mapping.IdentifiableIntegerMapping;
 import ds.mapping.IdentifiableObjectMapping;
@@ -68,7 +69,7 @@ public class SimpleResidualGraph implements DirectedGraph, OutgoingStarGraph, Re
 	 * @param capacities
 	 * @param current
 	 */
-	public void init( AbstractNetwork network, IdentifiableIntegerMapping<Edge> capacities, IdentifiableIntegerMapping<Node> current ) {
+	public void init( NetworkInterface network, IdentifiableIntegerMapping<Edge> capacities, IdentifiableIntegerMapping<Node> current ) {
 		// set up residual edges
 		int edgeCounter = 0;
 		int[] temp = new int[edges.getCapacity()];
@@ -153,12 +154,12 @@ public class SimpleResidualGraph implements DirectedGraph, OutgoingStarGraph, Re
 
 	@Override
 	public int numberOfEdges() {
-		throw new UnsupportedOperationException( "Not supported yet." );
+		return edges.size();
 	}
 
 	@Override
 	public int numberOfNodes() {
-		throw new UnsupportedOperationException( "Not supported yet." );
+		return nodes.size();
 	}
 
 	@Override
@@ -233,7 +234,7 @@ public class SimpleResidualGraph implements DirectedGraph, OutgoingStarGraph, Re
 
 	@Override
 	public Node getNode( int id ) {
-		throw new UnsupportedOperationException( "Not supported yet." );
+		return nodes.get( id );
 	}
 
 	@Override

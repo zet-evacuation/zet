@@ -25,8 +25,8 @@ import ds.mapping.Mappings;
 import ds.mapping.IdentifiableIntegerMapping;
 
 /**
- * The {@code ResidualNetwork} class provides flow algorithms with the 
- * functionality to create and work with residual networks. The residual 
+ * The {@code ResidualNetwork} class provides flow algorithms with the
+ * functionality to create and work with residual networks. The residual
  * networks implemented by this class are based on the {@link AbstractNetwork} class and
  * make use of the speed of its static implementation as well as its ability to
  * hide nodes and edges.
@@ -34,7 +34,7 @@ import ds.mapping.IdentifiableIntegerMapping;
 public class ResidualNetwork extends Network {
 
 	/** The underlying base network. */
-	protected AbstractNetwork network;
+	protected NetworkInterface network;
 	/**  The number of edges that the original AbstractNetwork had (without the residual edges). */
 	private int originalNumberOfEdges;
 	/** The flow associated with this residual network. */
@@ -47,7 +47,7 @@ public class ResidualNetwork extends Network {
 	/**
 	 * A constructor for clone and overriding classes.
 	 * @param initialNodeCapacity
-	 * @param initialEdgeCapacity  
+	 * @param initialEdgeCapacity
 	 */
 	protected ResidualNetwork( int initialNodeCapacity, int initialEdgeCapacity ) {
 		super( initialNodeCapacity, initialEdgeCapacity );
@@ -56,28 +56,28 @@ public class ResidualNetwork extends Network {
 	}
 
 	/**
-	 * Creates a new residual network, based on the specified network, the 
+	 * Creates a new residual network, based on the specified network, the
 	 * zero flow and the specidied capacities.
 	 * @param network the base network for the residual network.
 	 * @param capacities the base capacities for the residual network.
 	 */
-	public ResidualNetwork( AbstractNetwork network, IdentifiableIntegerMapping<Edge> capacities ) {
+	public ResidualNetwork( NetworkInterface network, IdentifiableIntegerMapping<Edge> capacities ) {
 		super( 0, 0 );
 		if( network instanceof Network ) {
 			setUp( (Network)network, capacities );
 		} else
 			setUp( network, capacities );
-		
+
 
 	}
-	
+
 	private void setUp( Network network, IdentifiableIntegerMapping<Edge> capacities ) {
 		setNodeCapacity( network.allNumberOfNodes() );
 		setEdgeCapacity( network.allNumberOfEdges() * 2 );
 		originalNumberOfEdges = network.allNumberOfEdges();
 
 		IdentifiableCollection<Edge> ne = network.allEdges();
-		
+
 		setNodes( network.allNodes() );
 		setEdges( network.allEdges() );
 		for( Edge edge : network.allEdges() ) {
@@ -88,7 +88,7 @@ public class ResidualNetwork extends Network {
 				setHidden( rev, true );
 			}
 		}
-		
+
 		this.network = network;
 		flow = new IdentifiableIntegerMapping<>( network.allNumberOfEdges() );
 		residualCapacities = new IdentifiableIntegerMapping<>( network.allNumberOfEdges() * 2 );
@@ -101,7 +101,7 @@ public class ResidualNetwork extends Network {
 				residualCapacities.set( edge, capacities.get( edge ) );
 			}
 	}
-	
+
 	/**
 	 * Updates hidden edges in the residual network. Call this, if the network
 	 * has changed and another iteration of a flow algorithm should be called
@@ -128,11 +128,11 @@ public class ResidualNetwork extends Network {
 					setHidden( rev, true );
 			}
 		}
-			
+
 	}
-					
-	
-	private void setUp( AbstractNetwork network, IdentifiableIntegerMapping<Edge> capacities  ) {
+
+
+	private void setUp( NetworkInterface network, IdentifiableIntegerMapping<Edge> capacities  ) {
 		setNodeCapacity( network.numberOfNodes() );
 		setEdgeCapacity( network.numberOfEdges() * 2 );
 		originalNumberOfEdges = network.numberOfEdges();
@@ -155,13 +155,13 @@ public class ResidualNetwork extends Network {
 	}
 
 	/**
-	 * Creates a new residual network, based on the specified network, the 
+	 * Creates a new residual network, based on the specified network, the
 	 * zero flow and the specidied capacities and transit times.
 	 * @param network the base network for the residual network.
 	 * @param capacities the base capacities for the residual network.
 	 * @param transitTimes the base transit times for the residual network.
 	 */
-	public ResidualNetwork( AbstractNetwork network, IdentifiableIntegerMapping<Edge> capacities, IdentifiableIntegerMapping<Edge> transitTimes ) {
+	public ResidualNetwork( NetworkInterface network, IdentifiableIntegerMapping<Edge> capacities, IdentifiableIntegerMapping<Edge> transitTimes ) {
 		this( network, capacities );
 		residualTransitTimes = expandCostFunction( transitTimes );
 		/*
@@ -177,8 +177,8 @@ public class ResidualNetwork extends Network {
 	}
 
 	/**
-	 * Augments a specified amount of flow along the specified edge. The 
-	 * residual capacities of the edge and its reverse edge are updated 
+	 * Augments a specified amount of flow along the specified edge. The
+	 * residual capacities of the edge and its reverse edge are updated
 	 * automatically. The residual network is updated as well, if neccessary.
 	 * Runtime O(1).
 	 * @param edge the edge along which flow is to be augmented.
@@ -189,7 +189,7 @@ public class ResidualNetwork extends Network {
 		if( isReverseEdge( edge ) ) {
 			flow.decrease( reverseEdge, amount );
 			//System.out.println( "FLOW on EDGE " + reverseEdge + " set to " + flow.get( reverseEdge ) );
-		} else { 
+		} else {
 			flow.increase( edge, amount );
 			//System.out.println( "FLOW on EDGE " + edge + " set to " + flow.get( edge ) );
 		}
@@ -230,7 +230,7 @@ public class ResidualNetwork extends Network {
 
 	/**
 	 * Returns the reverse edge of the specified edge. Runtime O(1).
-	 * @param edge the edge for which the reverse edge is to be returned. 
+	 * @param edge the edge for which the reverse edge is to be returned.
 	 * @return the reverse edge of the specified edge. Runtime O(1).
 	 */
 	public Edge reverseEdge( Edge edge ) {
@@ -252,7 +252,7 @@ public class ResidualNetwork extends Network {
 	}
 
 	/**
-	 * This method expand the given cost function over some network to cover 
+	 * This method expand the given cost function over some network to cover
 	 * also the residual network
 	 * @param costs The old cost function to be expanded
 	 * @return an new costs function that is identical with the old function
@@ -301,7 +301,7 @@ public class ResidualNetwork extends Network {
 	 * is equivalent to this one {@code true} is returned, {@code false
 	 * } otherwise. A object is considered equivalent if and only if it is
 	 * a residual network with equals components (nodes, edges, base network,
-	 * flow, ...). Runtime O(n + m). 
+	 * flow, ...). Runtime O(n + m).
 	 * @param o the object to compare this one to.
 	 * @return {@code true} if the specified object
 	 * is equivalent to this one, {@code false
@@ -322,7 +322,7 @@ public class ResidualNetwork extends Network {
 	/**
 	 * Returns a hash code for this residual network.
 	 * Runtime O(n + m).
-	 * @return a hash code computed by the sum of the hash codes of its 
+	 * @return a hash code computed by the sum of the hash codes of its
 	 * components.
 	 */
 	@Override
@@ -332,9 +332,9 @@ public class ResidualNetwork extends Network {
 	}
 
 	/**
-	 * Returns a string representation of this residual network. The 
+	 * Returns a string representation of this residual network. The
 	 * representation consists of the underlying base network, the nodes and
-	 * edges of this residual network and its residual capacities 
+	 * edges of this residual network and its residual capacities
 	 * (and transit times, if it has them). Runtime O(n + m).
 	 * @return  a string representation of this residual network.
 	 */

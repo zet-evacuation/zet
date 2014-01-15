@@ -10,6 +10,7 @@ import ds.graph.Edge;
 import ds.graph.Node;
 import ds.graph.StaticPath;
 import ds.graph.flow.MaximumFlow;
+import ds.graph.network.NetworkInterface;
 import ds.graph.network.ResidualNetwork;
 import ds.graph.network.ResidualNetworkExtended;
 import ds.graph.problem.MaximumFlowProblem;
@@ -48,7 +49,7 @@ public class FordFulkerson extends Algorithm<MaximumFlowProblem, MaximumFlow> {
 		int maxPossibleFlow = 0;
 		for( Edge e : residualNetwork.outgoingEdges( source ) )
 			maxPossibleFlow += residualNetwork.residualCapacities().get( e );
-		
+
 		int maxPossibleFlow2 = 0;
 		for( Edge e : residualNetwork.incomingEdges( sink ) )
 			if( residualNetwork.residualCapacities().get( e ) == Integer.MAX_VALUE ) {
@@ -56,10 +57,10 @@ public class FordFulkerson extends Algorithm<MaximumFlowProblem, MaximumFlow> {
 				break;
 			} else
 				maxPossibleFlow2 += residualNetwork.residualCapacities().get( e );
-		
+
 		if( maxPossibleFlow2 < maxPossibleFlow )
 			maxPossibleFlow = maxPossibleFlow2;
-		
+
 		int value = 0;
 		do {
 			StaticPath p = findPath();
@@ -86,7 +87,7 @@ public class FordFulkerson extends Algorithm<MaximumFlowProblem, MaximumFlow> {
 		bfs.run( source, sink );
 
 		StaticPath path = new StaticPath();
-		
+
 		Node current = sink;
 		do {
 			final Edge e = bfs.predecedingEdge( current );
@@ -106,7 +107,7 @@ public class FordFulkerson extends Algorithm<MaximumFlowProblem, MaximumFlow> {
 			min = Math.min( min, residualNetwork.residualCapacities().get( e ) );
 		return min;
 	}
-	
+
 	public void augmentFlow( StaticPath path, int value ) {
 		Stack<Edge> s = new Stack<>();
 
@@ -115,17 +116,17 @@ public class FordFulkerson extends Algorithm<MaximumFlowProblem, MaximumFlow> {
 			pushes++;
 			s.push( e );
 		}
-		
+
 		System.out.println( "Auzgmented on " );
 		while( !s.empty() ) {
 			System.out.print( s.pop() );
 		}
 		System.out.println( " by " + value );
-		
+
 		flow += value;
 		augmentations++;
 	}
-	
+
 	public int getFlow() {
 		return flow;
 	}
@@ -137,7 +138,7 @@ public class FordFulkerson extends Algorithm<MaximumFlowProblem, MaximumFlow> {
 	public long getPushes() {
 		return pushes;
 	}
-	
+
 	IdentifiableBooleanMapping<Node> contained;
 	Set<Node> cut;
 	public Set<Node> computeCutNodes() {
@@ -154,17 +155,17 @@ public class FordFulkerson extends Algorithm<MaximumFlowProblem, MaximumFlow> {
 		cut = reachable;
 		return reachable;
 	}
-	
+
 	LinkedList<Edge> cutOutgoing = new LinkedList<>();
 	LinkedList<Edge> cutIncoming = new LinkedList<>();
-		
+
 	public void computeCutEdges() {
 		if( cut == null ) {
 			cut = computeCutNodes();
 			cutOutgoing.clear();
 			cutIncoming.clear();
 		}
-		
+
 		for( Node n : cut ) {
 			//for( Edge e : getProblem().getNetwork().outgoingEdges( n ) ) {
 			for( Edge e : getProblem().getNetwork().outgoingEdges( n ) ) {
@@ -179,11 +180,11 @@ public class FordFulkerson extends Algorithm<MaximumFlowProblem, MaximumFlow> {
 			}
 		}
 	}
-	
+
 	public boolean isInCut( Node n ) {
 		return contained.get( n );
 	}
-	
+
 	public Set<Node> getCut() {
 		return Collections.unmodifiableSet( cut );
 	}
