@@ -10,10 +10,10 @@ import de.tu_berlin.math.coga.algorithm.networkflow.maximumflow.SimpleResidualGr
 import de.tu_berlin.math.coga.datastructure.Tuple;
 import ds.graph.Edge;
 import ds.graph.Node;
-import ds.graph.network.AbstractNetwork;
 import ds.graph.network.NetworkInterface;
 import ds.mapping.IdentifiableIntegerMapping;
 import ds.mapping.IdentifiableObjectMapping;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
@@ -26,7 +26,7 @@ import java.util.Set;
  */
 public class HidingResidualGraph extends SimpleResidualGraph implements NetworkInterface {
 	IdentifiableIntegerMapping<Node> current;
-	AbstractNetwork network;
+	NetworkInterface network;
 	IdentifiableIntegerMapping<Edge> capacities;
 	IdentifiableIntegerMapping<Edge> transitTimes;
 
@@ -45,25 +45,28 @@ public class HidingResidualGraph extends SimpleResidualGraph implements NetworkI
 	final int NODES;
 
 	final int nodeCount;
+	private IdentifiableIntegerMapping<Node> supplies;
 
-	public HidingResidualGraph( AbstractNetwork network, IdentifiableIntegerMapping<Edge> capacities, IdentifiableIntegerMapping<Edge> transitTimes, int timeHorizon,  List<Node> sources, List<Node> sinks ) {
-		super( network.getNodeCapacity() * (timeHorizon+1) + 1 + sources.size() + 1 + sinks.size(), (timeHorizon+1)*(network.getEdgeCapacity() + sources.size() + sinks.size() ) + sources.size() + sinks.size() );
+	public HidingResidualGraph( NetworkInterface network, IdentifiableIntegerMapping<Edge> capacities, IdentifiableIntegerMapping<Edge> transitTimes, int timeHorizon,  List<Node> sources, List<Node> sinks, IdentifiableIntegerMapping<Node> supplies ) {
+		super( network.numberOfNodes()* (timeHorizon+1) + 1 + sources.size() + 1 + sinks.size(), (timeHorizon+1)*(network.numberOfEdges() + sources.size() + sinks.size() ) + sources.size() + sinks.size() );
 		// Formel zur Bestimmung der tatsächlichen Knotenzahl basierend auf n und m:
 		// Knoten: n*(t+1) + 1 + #sources + 1 + #sinks
 		// Kanten: m + (t+1) + #sources + #sinks + (t+1)*#sources + (t+1)*#sinks
+		
 		this.network = network;
 		this.capacities = capacities;
 		this.transitTimes = transitTimes;
 		this.timeHorizon = timeHorizon;
 		this.sources = sources;
 		this.sinks = sinks;
+		this.supplies = supplies;
 
 		knownEdges = new IdentifiableObjectMapping<>( nodes, KnownEdgesList.class );
 
-		current = new IdentifiableIntegerMapping<>( network.getNodeCapacity() * (timeHorizon+1) + 1 + sources.size() + 1 + sinks.size() );
+		current = new IdentifiableIntegerMapping<>( network.numberOfEdges()* (timeHorizon+1) + 1 + sources.size() + 1 + sinks.size() );
 
 		NODES = BASE_SOURCE + sources.size();
-		BASE_SINK = NODES + (timeHorizon+1)*network.getNodeCapacity();
+		BASE_SINK = NODES + (timeHorizon+1)*network.numberOfNodes();
 		SUPER_SINK = BASE_SINK + sinks.size();
 		nodeCount = SUPER_SINK + 1;
 	}
@@ -76,6 +79,8 @@ public class HidingResidualGraph extends SimpleResidualGraph implements NetworkI
 		}
 
 		createEdges();
+		
+		visibleNodeCount = 2 + sources.size() + sinks.size() + network.numberOfNodes();
 	}
 
 	void createNodes() {
@@ -90,7 +95,7 @@ public class HidingResidualGraph extends SimpleResidualGraph implements NetworkI
 		// nodes
 		assert id == NODES;
 		for( int t = 0; t <= timeHorizon; ++t )
-			for( int i = 0; i < network.getNodeCapacity(); ++i )
+			for( int i = 0; i < network.numberOfNodes(); ++i )
 				nodes.add( new Node( id++ ) );
 		// sinks
 		assert id == BASE_SINK;
@@ -113,8 +118,8 @@ public class HidingResidualGraph extends SimpleResidualGraph implements NetworkI
 		current.set( v, edgeCounter );
 		// Generate outgoing arcs from supersource to sources
 		for( int i = 0; i < sources.size(); ++i ) {
-			Node baseSource = nodes.get( BASE_SOURCE + i );
-			createEdge( v, baseSource, 10 );
+			Node baseSource = nodes.get( BASE_SOURCE + i ); // todo better!
+			createEdge( v, baseSource, supplies.get( sources.get( i ) ) );
 		}
 		last.set( v, edgeCounter );
 
@@ -122,6 +127,7 @@ public class HidingResidualGraph extends SimpleResidualGraph implements NetworkI
 		int counter = 0;
 		for( Node source : sources ) {
 			v = nodes.get( BASE_SOURCE + counter++ ); // The base source belonging to the counterth source
+			System.out.println( "Base source " + v + " belongs to original node " + source );
 			first.set( v, edgeCounter );
 			current.set( v, edgeCounter );
 
@@ -141,6 +147,10 @@ public class HidingResidualGraph extends SimpleResidualGraph implements NetworkI
 
 		// outgoing for all the nodes (without holdover)
 		for( int t = 0; t <= timeHorizon; ++t ) {
+			
+			// Stores the gaps for backward arcs that are created later on
+			HashMap<Node,Integer> gaps = new HashMap<>();
+							
 			for( Node node : network ) {
 				v = getCopy( node, t );
 				//System.out.println( "Entering Node o" + node.id() + " at time " + t + " with id=" + v.id() );
@@ -162,24 +172,50 @@ public class HidingResidualGraph extends SimpleResidualGraph implements NetworkI
 				}
 
 				createReverseEdges( v );
+				
+				// leave space for reverse edges coming later on.
+				int gap = 0;
+				if( node.id() == 0 ) {
+					System.out.println( "26" );
+				}
+				for( Edge e : network.incomingEdges( node ) ) {
+					if( transitTimes.get( e ) == 0 && e.start().id() > node.id() ) {
+						gap++;
+					}
+				}
+				gaps.put( node, edgeCounter );
+				edgeCounter += gap;
 
 				PriorityQueue<PriorityEdge> queue = new PriorityQueue<>();
 
 				for( Edge e : network.outgoingEdges( node ) ) {
+					if( node.id() == 25 ) {
+						System.out.println( "24" );
+					}
+					
 					if( t + transitTimes.get( e ) > timeHorizon )
 						continue;
 					Node target = getCopy( e.end(), t + transitTimes.get( e ) );
 					//System.out.println( "Creating an edge from o" + node + " to o" + e.end() + " starting at time layer " + t );
 					//PriorityEdge pe = new PriorityEdge( createEdge( v, target, 1 ), t + transitTimes.get( e ) );
-					PriorityEdge pe = new PriorityEdge( v, target, 1, t + transitTimes.get( e ) );
+					PriorityEdge pe = new PriorityEdge( v, target, 1, t + transitTimes.get( e ), e.start(), e.end(), transitTimes.get( e ) );
 					queue.add( pe );
 				}
 				last.set( v, edgeCounter );
 				while( !queue.isEmpty() ) {
 					PriorityEdge pe = queue.poll();
-					createEdge( pe.from, pe.to, pe.capacity );
-					if( pe.t == 0 ) // we have found an edge that goes to the same time horizon.
+					Edge e = createEdge( pe.from, pe.to, pe.capacity );
+					if( pe.transitTime == 0 ) { // we have found an edge that goes to the same time horizon.
 						last.set( v, edgeCounter );
+						
+						// we have to create the backward edge later on, if the edge goes to
+						// a node with lower id.
+						if( pe.originalTarget.id() < pe.originalFrom.id() ) {
+							int id = gaps.get( pe.originalTarget );
+							createLateReverseEdge( e, id++ );
+							gaps.put( pe.originalTarget, id );
+						}
+					}
 				}
 			}
 		}
@@ -213,6 +249,9 @@ public class HidingResidualGraph extends SimpleResidualGraph implements NetworkI
 	}
 
 	private Edge createEdge( Node from, Node to, int capacity ) {
+		if( edgeCounter == 155 ) {
+			System.out.println( "EDGE COUNTER IS 155" );
+		}
 		Edge newEdge = new Edge( edgeCounter++, from, to );
 		//System.out.println( "Edge from " + from.id() + " to " + to.id() );
 		edges.add( newEdge );
@@ -239,12 +278,24 @@ public class HidingResidualGraph extends SimpleResidualGraph implements NetworkI
 
 			reverseEdge.set( newReverseEdge, original );
 			reverseEdge.set( original, newReverseEdge );
-
 		}
 	}
+	
+	private void createLateReverseEdge( Edge original, int id ) {
+		Edge newReverseEdge = new Edge( id, original.end(), original.start() );
+		System.out.println( "----------------------- LATE REVERSE EDGE " + newReverseEdge );
+		
+		edges.add( newReverseEdge );
+		residualCapacity.add( newReverseEdge, 0 );
+		isReverseEdge.add( newReverseEdge, true );
+						
+		reverseEdge.set( newReverseEdge, original );
+		reverseEdge.set( original, newReverseEdge );
+	}
+	
 
 	public final Node getCopy( Node node, int t ) {
-		return nodes.get( NODES + network.getNodeCapacity() * t + node.id() );
+		return nodes.get( NODES + network.numberOfNodes()* t + node.id() );
 	}
 
 	public final int getLayer( int nodeId ) {
@@ -255,7 +306,7 @@ public class HidingResidualGraph extends SimpleResidualGraph implements NetworkI
 		else if( nodeId > SUPER_SOURCE && nodeId < NODES || nodeId >= BASE_SINK )
 			return -1;
 		else {
-			int tl = (nodeId - NODES)/network.getNodeCapacity();
+			int tl = (nodeId - NODES)/network.numberOfNodes();
 			return tl;
 		}
 	}
@@ -264,7 +315,7 @@ public class HidingResidualGraph extends SimpleResidualGraph implements NetworkI
 		assert getLayer( nodeId ) >= 0;
 
 		int tl = getLayer( nodeId );
-		return nodeId - NODES - tl * network.getNodeCapacity();
+		return nodeId - NODES - tl * network.numberOfNodes();
 	}
 
 	private int lastLayer = 0;
@@ -293,6 +344,10 @@ public class HidingResidualGraph extends SimpleResidualGraph implements NetworkI
 			edgesSet.addAll( activeTimeLayerForNode( time, v ) );
 		}
 
+		visibleNodeCount += network.numberOfNodes();
+		System.out.println( "Now: number of nodes set to " + visibleNodeCount );
+
+		
 		lastLayer = time;
 		return edgesSet;
 	}
@@ -325,6 +380,11 @@ public class HidingResidualGraph extends SimpleResidualGraph implements NetworkI
 		return super.numberOfEdges()/2;
 	}
 
+	int visibleNodeCount;
+	int getCurrentVisibleNodeCount() {
+		return visibleNodeCount;
+	}
+
 
 	private final static class KnownEdgesList extends LinkedList<Tuple<Node, Edge>> {}
 
@@ -333,13 +393,20 @@ public class HidingResidualGraph extends SimpleResidualGraph implements NetworkI
 		private Node to;
 		private int capacity;
 		private int t;
+		private Node originalTarget;
+		private Node originalFrom;
+		private int transitTime;
 
-		private PriorityEdge( Node from, Node to, int capacity, int t ) throws NullPointerException {
+		private PriorityEdge( Node from, Node to, int capacity, int t, Node originalFrom, Node originalTarget, int transitTime ) throws NullPointerException {
 			this.from = from;
 			this.to = to;
 			this.capacity = capacity;
 			this.t = t;
+			this.originalTarget = originalTarget;
+			this.originalFrom = originalFrom;
+			this.transitTime = transitTime;
 		}
+		
 
 		@Override
 		public int compareTo( PriorityEdge o ) {

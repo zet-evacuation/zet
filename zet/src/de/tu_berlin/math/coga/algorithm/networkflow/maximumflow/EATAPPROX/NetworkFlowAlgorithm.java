@@ -30,12 +30,14 @@ public class NetworkFlowAlgorithm extends PushRelabel {
 	protected BucketPriorityQueue<Node> activeBuckets;
 	/** The buckets for inactive nodes. */
 	protected BucketSet<Node> inactiveBuckets;
+	protected HashSet<Node> nonActiveExcessNodes = new HashSet<>();
 
 	/**
 	 * Allocates the memory for the data structures. These contain information
 	 * for the nodes and edges.
 	 */
 	private void alloc() {
+		// nodecount hier muss der tatsächliche nodecount hin!
 		distanceLabels = new IdentifiableIntegerMapping<>( n );	// distance
 		excess = new IdentifiableIntegerMapping<>( n );	// excess
 		current = new IdentifiableIntegerMapping<>( n );	// current edge datastructure (index)
@@ -56,6 +58,7 @@ public class NetworkFlowAlgorithm extends PushRelabel {
 
 		long start = System.nanoTime();
 		alloc();
+		// reset node count!
 		init();
 		long end = System.nanoTime();
 		initTime = end-start;
@@ -97,6 +100,7 @@ public class NetworkFlowAlgorithm extends PushRelabel {
 	 * Run the algorithm again, but now with the new edges available.
 	 */
 	void run2() {
+		current.get( residualGraph.nodes.get( 10 ) );
 		computeMaxFlow();
 	}
 
@@ -111,6 +115,8 @@ public class NetworkFlowAlgorithm extends PushRelabel {
 		//residualGraph.init( getProblem().getNetwork(), getProblem().getCapacities(), current );
 		FakeMaximumFlowProblem p = (FakeMaximumFlowProblem)getProblem();
 		residualGraph = p.getResidualGraph();
+		n = residualGraph.getCurrentVisibleNodeCount(); // update node count to the actual number of visible nodes!
+		current = residualGraph.current;
 
 
 		// initialize excesses
@@ -133,7 +139,7 @@ public class NetworkFlowAlgorithm extends PushRelabel {
 				inactiveBuckets.addInactive( 0, v );
 				continue;
 			}
-			distanceLabels.set( v, id == source.id() ? n : 1 );
+			distanceLabels.set( v, id == source.id() ? n : 1 ); // nodecount hier muss der aktuelle node-count hin.
 			if( excess.get( v ) > 0 )
 				activeBuckets.addActive( 1, v );
 			else if( distanceLabels.get( v ) < n )
@@ -148,7 +154,11 @@ public class NetworkFlowAlgorithm extends PushRelabel {
 			final Node v = activeBuckets.max();
 			if( v != null ) {
 				activeBuckets.removeActive( activeBuckets.getMaxIndex(), v );
+				int pushesBefore = pushes;
 				discharge( v );
+				int pushesAfter = pushes;
+				//if( pushesBefore == pushesAfter )
+					//System.out.println( "NO PUSHES HAVE BEEN PERFORMED" );
 
 				if( activeBuckets.getMaxIndex() < activeBuckets.getMinIndex() )
 					break;
@@ -158,6 +168,7 @@ public class NetworkFlowAlgorithm extends PushRelabel {
 	}
 
 	protected void discharge( Node v ) {
+		System.out.println( "Discharge for node " + v + " with excess " + excess.get( v ) );
 		assert excess.get( v ) > 0;
 		assert v.id() != sink.id();
 		do {
@@ -174,10 +185,14 @@ public class NetworkFlowAlgorithm extends PushRelabel {
 				// relabel, ended due to pointer at the last arc
 				relabel( v );
 
-				if( distanceLabels.get( v ) == n )
+				if( distanceLabels.get( v ) == n ) { // nodecount hier soll der aktuelle-node-count hin
+					assert excess.get( v ) > 0;
+					nonActiveExcessNodes.add( v );
 					break;
+				}
 			} else {
 				// node is no longer active
+				//System.out.println( "Set current for node " + v + " to " + i + " THE ONE LINE ");
 				current.set( v, i );
 				// put the vertex on the inactive list
 				inactiveBuckets.addInactive( nodeDistance, v );
@@ -191,9 +206,11 @@ public class NetworkFlowAlgorithm extends PushRelabel {
 	 * @param e
 	 * @return the rest excess at the start node of the edge
 	 */
+	@Override
 	protected int push( Edge e ) {
 		pushes++;
 		final int delta = residualGraph.getResidualCapacity( e ) < excess.get( e.start() ) ? residualGraph.getResidualCapacity( e ) : excess.get( e.start() );
+		//System.out.println( "Push " + delta + " from " + e.start() + " to " + e.end() );
 		residualGraph.augment( e, delta );
 
 		if( !e.end().equals( sink ) && excess.get( e.end() ) == 0 ) {
@@ -216,11 +233,16 @@ public class NetworkFlowAlgorithm extends PushRelabel {
 
 		relabels++;
 
-		distanceLabels.set( v, n );
+		System.out.println( "Relabel. Old distance for " + v + " was " + distanceLabels.get( v ) );
+		
+		distanceLabels.set( v, n ); // nodecount hier soll der aktuelle nodecount hin
 
 		final Tuple<Integer,Edge> minEdge = searchForMinDistance( v );
 		if( minEdge.getU() < n ) {
 			distanceLabels.set( v, minEdge.getU() );
+
+			//System.out.println( "Set current for node " + v + " to " + minEdge.getV().id() );
+
 			current.set( v, minEdge.getV().id() );
 			if( activeBuckets.getdMax() < minEdge.getU() )
 				activeBuckets.setdMax( minEdge.getU() );
@@ -229,7 +251,11 @@ public class NetworkFlowAlgorithm extends PushRelabel {
 	}
 
 	protected Tuple<Integer,Edge> searchForMinDistance( Node v ) {
-		int minDistance = n;
+		int minDistance = n; // nodecount hier soll der aktuelle nodecount hin
+		if( v.id() == 1 ) {
+			System.out.println( "WAIT" );
+		}
+		
 		Edge minEdge = null;
 		// search for the minimum distance value
 		for( int i = residualGraph.getFirst( v ); i < residualGraph.getLast( v ); ++i ) {
@@ -239,6 +265,14 @@ public class NetworkFlowAlgorithm extends PushRelabel {
 				minEdge = e;
 			}
 		}
+		System.out.println( "searchForMinDistance für " + v );
+
+		if( minEdge == null ) {
+			System.out.println( "No minEdge found" );
+		}
+		
+		System.out.println( "Found edge: " + minEdge );
+		
 		return new Tuple( minDistance+1, minEdge );
 	}
 
@@ -248,27 +282,40 @@ public class NetworkFlowAlgorithm extends PushRelabel {
 	 * @param newEdges
 	 */
 	void updateDistances( Set<Edge> newEdges ) {
-		Set<Node> updatedNodes = new HashSet<>();
+		n = residualGraph.getCurrentVisibleNodeCount();
+		
 		for( Edge e: newEdges ) {
 			Node u = e.start();
 			Node v = e.end(); // a new node
 			int oldDist = distanceLabels.get( v ); // we set to max d(u) - 1
 			int uDist = distanceLabels.get( u ) - 1;
 			if( uDist > oldDist ) {
+				 System.out.println( "Update distance label for node " + v + " from " + oldDist + " to " + uDist );
+				// TODO: evtl. mit breitensuche nur die knoten die erreichbar sind auf inactive setzen!
 				distanceLabels.set( v, uDist );
-				System.out.println( "Update distance label for node " + v + " from " + oldDist + " to " + uDist );
+				inactiveBuckets.deleteInactive( 1, v );
+				inactiveBuckets.addInactive( uDist, v );
 
 			}
 			if( excess.get( u ) > 0 ) {
-				activeBuckets.addActive( uDist, u );
-				System.out.println( "Adding " + u + " with distance to active." );
-
+				if( !nonActiveExcessNodes.contains( u ) ) {
+					
+					throw new IllegalStateException( " a node with positive excess was found that is not in the set!" );
+				}
+			//	activeBuckets.addActive( uDist, u );
+			//	System.out.println( "Adding " + u + " with distance " + uDist + " to active." );
 			}
 		}
-		for( Node n : updatedNodes ) {
-			//inactiveBuckets.addInactive( distanceLabels.get( n ), n );
-			System.out.println( "Add node " + n + " to inactive." );
+		
+		for( Node v : nonActiveExcessNodes ) {
+			activeBuckets.addActive( distanceLabels.get( v ), v );
+			System.out.println( "Adding excess node " + v + " with distance " + distanceLabels.get( v ) + " to active." );
 		}
+		nonActiveExcessNodes.clear();
+		
+		Node v = source;
+		distanceLabels.set( v, n );
+		//inactiveBuckets.addInactive( n, v ); // the source is neither active nor inactive		
 	}
 
 	private static enum FeasibleState {
@@ -301,7 +348,7 @@ public class NetworkFlowAlgorithm extends PushRelabel {
   double delta;
 
 		Node[] buckets = new Node[n];
-		Node[] next = new Node[n];
+		Node[] next = new Node[n]; // nodecount wird nur am ende aufgerufen, hier kann der tatsächliche nodecount hin?
 
 	/* deal with self-loops */
 //  forAllNodes(i) {
@@ -317,6 +364,8 @@ public class NetworkFlowAlgorithm extends PushRelabel {
 	for( Node i : getProblem().getNetwork() ) {
 		distanceLabels.set( i, FeasibleState.Unused.val);
 		buckets[i.id()] = null;
+		if( true )
+			throw new IllegalStateException( "This should not be executed!" );
 		current.set( i, residualGraph.getFirst( i ) );
   }
 

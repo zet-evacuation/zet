@@ -26,9 +26,9 @@ public abstract class PushRelabel extends Algorithm<MaximumFlowProblem, MaximumF
 	/** The sink node. */
 	protected Node sink;
 	/** The excess mapping for nodes. */
-	protected IdentifiableIntegerMapping<Node> excess;
+	public IdentifiableIntegerMapping<Node> excess;
 	/** The distances for nodes. */
-	protected IdentifiableIntegerMapping<Node> distanceLabels;
+	public IdentifiableIntegerMapping<Node> distanceLabels;
 	/** The maximum flow value. */
 	protected long flowValue;
 	/** The number of pushes performed. */
