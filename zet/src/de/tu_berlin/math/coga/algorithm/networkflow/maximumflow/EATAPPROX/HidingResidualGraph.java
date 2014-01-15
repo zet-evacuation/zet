@@ -11,17 +11,20 @@ import de.tu_berlin.math.coga.datastructure.Tuple;
 import ds.graph.Edge;
 import ds.graph.Node;
 import ds.graph.network.AbstractNetwork;
+import ds.graph.network.NetworkInterface;
 import ds.mapping.IdentifiableIntegerMapping;
 import ds.mapping.IdentifiableObjectMapping;
+import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.PriorityQueue;
+import java.util.Set;
 
 /**
  *
  * @author Jan-Philipp Kappmeier
  */
-public class HidingResidualGraph extends SimpleResidualGraph {
+public class HidingResidualGraph extends SimpleResidualGraph implements NetworkInterface {
 	IdentifiableIntegerMapping<Node> current;
 	AbstractNetwork network;
 	IdentifiableIntegerMapping<Edge> capacities;
@@ -118,9 +121,9 @@ public class HidingResidualGraph extends SimpleResidualGraph {
 		// Outgoing for base sources
 		int counter = 0;
 		for( Node source : sources ) {
+			v = nodes.get( BASE_SOURCE + counter++ ); // The base source belonging to the counterth source
 			first.set( v, edgeCounter );
 			current.set( v, edgeCounter );
-			v = nodes.get( BASE_SOURCE + counter++ ); // The base source belonging to the counterth source
 
 			// handle known reverse edges to lower levels
 			assert knownEdges.get( v ).size() == 1;
@@ -131,7 +134,7 @@ public class HidingResidualGraph extends SimpleResidualGraph {
 				Edge e = createEdge( v, getCopy( source, t ), M );
 				//* The edges are automatically ordered in correct order. */
 				if( t == 0 )
-					last.set( source, edgeCounter );
+					last.set( v, edgeCounter );
 			}
 
 		}
@@ -143,6 +146,7 @@ public class HidingResidualGraph extends SimpleResidualGraph {
 				//System.out.println( "Entering Node o" + node.id() + " at time " + t + " with id=" + v.id() );
 
 				first.set( v, edgeCounter );
+				current.set( v, edgeCounter );
 
 				// If the node is a sink, we have to create the outgoing arc to base sink first
 				// the super sink has negative layer, so it will come before all reverse arcs!
@@ -167,14 +171,14 @@ public class HidingResidualGraph extends SimpleResidualGraph {
 					Node target = getCopy( e.end(), t + transitTimes.get( e ) );
 					//System.out.println( "Creating an edge from o" + node + " to o" + e.end() + " starting at time layer " + t );
 					//PriorityEdge pe = new PriorityEdge( createEdge( v, target, 1 ), t + transitTimes.get( e ) );
-					PriorityEdge pe = new PriorityEdge( v, target, 1, t );
+					PriorityEdge pe = new PriorityEdge( v, target, 1, t + transitTimes.get( e ) );
 					queue.add( pe );
 				}
 				last.set( v, edgeCounter );
 				while( !queue.isEmpty() ) {
 					PriorityEdge pe = queue.poll();
 					createEdge( pe.from, pe.to, pe.capacity );
-					if( pe.t == t ) // we have found an edge that goes to the same time horizon.
+					if( pe.t == 0 ) // we have found an edge that goes to the same time horizon.
 						last.set( v, edgeCounter );
 				}
 			}
@@ -194,7 +198,7 @@ public class HidingResidualGraph extends SimpleResidualGraph {
 
 			createReverseEdges( v );
 
-			createEdge( v, nodes.get( SUPER_SINK ), 1 ); // TODO: sink capacity
+			createEdge( v, nodes.get( SUPER_SINK ), 10 ); // TODO: sink capacity
 			last.set( v, edgeCounter );
 		}
 
@@ -226,11 +230,16 @@ public class HidingResidualGraph extends SimpleResidualGraph {
 		KnownEdgesList list = knownEdges.get( v );
 
 		for( Tuple<Node,Edge> tup : list ) {
+			Edge original = tup.getV();
 			Edge newReverseEdge = new Edge( edgeCounter++, v, tup.getU() );
 			//System.out.println( "Reverse Edge from " + v.id() + " to " + tup.getU().id() );
 			edges.add( newReverseEdge );
 			residualCapacity.add( newReverseEdge, 0 );
 			isReverseEdge.add( newReverseEdge, true );
+
+			reverseEdge.set( newReverseEdge, original );
+			reverseEdge.set( original, newReverseEdge );
+
 		}
 	}
 
@@ -257,6 +266,65 @@ public class HidingResidualGraph extends SimpleResidualGraph {
 		int tl = getLayer( nodeId );
 		return nodeId - NODES - tl * network.getNodeCapacity();
 	}
+
+	private int lastLayer = 0;
+
+	/**
+	 *
+	 * @param time
+	 * @return a list of affected nodes.
+	 */
+	public Set<Edge> activateTimeLayer( int time ) {
+		if( time != lastLayer + 1 )
+			throw new IllegalArgumentException( "More than one timestep!" );
+
+		Set<Edge> edgesSet = new HashSet<>();
+
+		// Iterate through all nodes and check, if last can be set forther forward!
+		for( int t = 0; t <= timeHorizon; ++t ) {
+			for( Node node : network ) {
+				Node v = getCopy( node, t );
+				edgesSet.addAll( activeTimeLayerForNode( time, v ) );
+			}
+		}
+
+		for( int i = BASE_SOURCE; i < NODES; ++i ) {
+			Node v = nodes.get( i );
+			edgesSet.addAll( activeTimeLayerForNode( time, v ) );
+		}
+
+		lastLayer = time;
+		return edgesSet;
+	}
+
+	private Set<Edge> activeTimeLayerForNode( int time, Node v ) {
+		int nodeStop = first.get( nodes.get( v.id()+1 ) );
+
+		int newLastIndex = last.get( v );
+
+		HashSet<Edge> set = new HashSet<>();
+
+		do {
+			// zur zeit zeigt lastIndex auf einen gültigen wert.
+			// überprüfe die nächste kante.
+
+			Edge e = edges.get( newLastIndex );
+			if( getLayer( e.end().id() ) == time ) {
+				// we have found a new edge!
+				set.add( e );
+				newLastIndex++;
+			} else
+				break;
+		} while( newLastIndex < nodeStop );
+		last.set( v, newLastIndex );
+		return set;
+	}
+
+	@Override
+	public int numberOfEdges() {
+		return super.numberOfEdges()/2;
+	}
+
 
 	private final static class KnownEdgesList extends LinkedList<Tuple<Node, Edge>> {}
 

@@ -14,23 +14,23 @@ import ds.mapping.IdentifiableIntegerMapping;
 public class ResidualNetworkExtended extends ResidualNetwork {
 	IdentifiableIntegerMapping<Edge> upper;
 	IdentifiableIntegerMapping<Edge> lower;
-				
+
 	/**
 	 * A constructor for clone and overriding classes.
 	 * @param initialNodeCapacity
-	 * @param initialEdgeCapacity  
+	 * @param initialEdgeCapacity
 	 */
 	protected ResidualNetworkExtended( int initialNodeCapacity, int initialEdgeCapacity ) {
 		super( initialNodeCapacity, initialEdgeCapacity );
 	}
 
 	/**
-	 * Creates a new residual network, based on the specified network, the 
+	 * Creates a new residual network, based on the specified network, the
 	 * zero flow and the specidied capacities.
 	 * @param network the base network for the residual network.
 	 * @param capacities the base capacities for the residual network.
 	 */
-	public ResidualNetworkExtended( AbstractNetwork network, IdentifiableIntegerMapping<Edge> capacities ) {
+	public ResidualNetworkExtended( NetworkInterface network, IdentifiableIntegerMapping<Edge> capacities ) {
 		super( network, capacities );
 		this.upper = capacities;
 	}
@@ -84,12 +84,12 @@ public class ResidualNetworkExtended extends ResidualNetwork {
 						//System.out.println( "UPDATE: Hiding edge " + edge );
 					} else
 						setHidden( rev, false );
-					
+
 //				} else {
 //				}
 			}
 		}
-		
+
 //		for( Edge edge : n.allEdges() ) {
 //			Edge rev = allGetEdge( edge.end(), edge.start() );
 //			if( rev == null )
@@ -108,7 +108,7 @@ public class ResidualNetworkExtended extends ResidualNetwork {
 //					setHidden( rev, true );
 //			}
 //		}
-			
+
 	}
 
 }

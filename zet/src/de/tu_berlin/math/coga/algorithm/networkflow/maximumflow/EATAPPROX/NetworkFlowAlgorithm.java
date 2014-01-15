@@ -15,6 +15,8 @@ import ds.graph.Node;
 import ds.graph.flow.MaximumFlow;
 import ds.graph.problem.MaximumFlowProblem;
 import ds.mapping.IdentifiableIntegerMapping;
+import java.util.HashSet;
+import java.util.Set;
 
 /**
  *
@@ -29,18 +31,6 @@ public class NetworkFlowAlgorithm extends PushRelabel {
 	/** The buckets for inactive nodes. */
 	protected BucketSet<Node> inactiveBuckets;
 
-	public class ResidualEdge extends Edge {
-		ResidualEdge reverse;
-		int residualCapacity;
-		boolean reverseEdge;
-		Edge original;
-		ResidualEdge( int id, Node start, Node end, int cap, boolean reverse ) {
-			super( id, start, end );
-			this.residualCapacity = cap;
-			reverseEdge = reverse;
-		}
-
-	}
 	/**
 	 * Allocates the memory for the data structures. These contain information
 	 * for the nodes and edges.
@@ -57,10 +47,13 @@ public class NetworkFlowAlgorithm extends PushRelabel {
 
 	@Override
 	protected MaximumFlow runAlgorithm( MaximumFlowProblem problem ) {
-		source = getProblem().getSource();
-		sink = getProblem().getSink();
-		n = getProblem().getNetwork().numberOfNodes();
-		m = getProblem().getNetwork().numberOfEdges();
+		source = problem.getSource();
+		sink = problem.getSink();
+
+		FakeMaximumFlowProblem myProblem = (FakeMaximumFlowProblem)problem;
+		n = myProblem.getNetwork().numberOfNodes();
+		m = myProblem.getNetwork().numberOfEdges();
+
 		long start = System.nanoTime();
 		alloc();
 		init();
@@ -70,6 +63,10 @@ public class NetworkFlowAlgorithm extends PushRelabel {
 		computeMaxFlow();
 		end = System.nanoTime();
 		phase1Time = end-start;
+
+		if( true )
+			return null;
+
 		start = System.nanoTime();
 		makeFeasible();
 		end = System.nanoTime();
@@ -89,7 +86,7 @@ public class NetworkFlowAlgorithm extends PushRelabel {
 				continue;
 			flow.set( residualGraph.originalResidualEdgeMapping.get( e ), residualGraph.getReverseResidualCapacity( e ) );
 		}
-		MaximumFlow f = new MaximumFlow( getProblem(), flow );
+		MaximumFlow f = new MaximumFlow( problem, flow );
 
 		f.check();
 
@@ -97,21 +94,24 @@ public class NetworkFlowAlgorithm extends PushRelabel {
 	}
 
 	/**
+	 * Run the algorithm again, but now with the new edges available.
+	 */
+	void run2() {
+		computeMaxFlow();
+	}
+
+
+
+	/**
 	 * Sets up the data structures. At first, creates reverse edges and orders the
 	 * edges according to their tail nodes into the array. Thus, the incident
 	 * edges to a vertex can be searched by a run through the array.
 	 */
 	protected void init() {
-		residualGraph.init( getProblem().getNetwork(), getProblem().getCapacities(), current );
+		//residualGraph.init( getProblem().getNetwork(), getProblem().getCapacities(), current );
+		FakeMaximumFlowProblem p = (FakeMaximumFlowProblem)getProblem();
+		residualGraph = p.getResidualGraph();
 
-
-		// set some flow on the residual network
-		residualGraph.augment( residualGraph.getEdge( 0 ), 1 );
-		residualGraph.augment( residualGraph.getEdge( 1 ), 1 );
-		residualGraph.augment( residualGraph.getEdge( 3 ), 1 );
-		residualGraph.augment( residualGraph.getEdge( 5 ), 1 );
-
-		excess.increase( sink, 2 );
 
 		// initialize excesses
 		excess.set( source, 0 );
@@ -240,6 +240,35 @@ public class NetworkFlowAlgorithm extends PushRelabel {
 			}
 		}
 		return new Tuple( minDistance+1, minEdge );
+	}
+
+	/**
+	 * Set new (correct) distance label for the newly reachable nodes via new
+	 * edges.
+	 * @param newEdges
+	 */
+	void updateDistances( Set<Edge> newEdges ) {
+		Set<Node> updatedNodes = new HashSet<>();
+		for( Edge e: newEdges ) {
+			Node u = e.start();
+			Node v = e.end(); // a new node
+			int oldDist = distanceLabels.get( v ); // we set to max d(u) - 1
+			int uDist = distanceLabels.get( u ) - 1;
+			if( uDist > oldDist ) {
+				distanceLabels.set( v, uDist );
+				System.out.println( "Update distance label for node " + v + " from " + oldDist + " to " + uDist );
+
+			}
+			if( excess.get( u ) > 0 ) {
+				activeBuckets.addActive( uDist, u );
+				System.out.println( "Adding " + u + " with distance to active." );
+
+			}
+		}
+		for( Node n : updatedNodes ) {
+			//inactiveBuckets.addInactive( distanceLabels.get( n ), n );
+			System.out.println( "Add node " + n + " to inactive." );
+		}
 	}
 
 	private static enum FeasibleState {
