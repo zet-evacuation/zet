@@ -26,13 +26,13 @@ import java.util.Iterator;
  */
 public class SimpleResidualGraph implements DirectedGraph, OutgoingStarGraph, ResidualNetwork {
 
-	protected ArraySet<Node> nodes;
+	public ArraySet<Node> nodes;
 	public ArraySet<Edge> edges;
 
 	// new mapping replacing the old stuff
 	protected IdentifiableBooleanMapping<Edge> isReverseEdge;	// indicates if a given edge is residual or was contained in the original graph
 	protected IdentifiableIntegerMapping<Edge> residualCapacity; // gives the residual capacity of a given edge
-	protected IdentifiableObjectMapping<Edge,Edge> reverseEdge; // gives the residual edge for a given edge
+	public IdentifiableObjectMapping<Edge,Edge> reverseEdge; // gives the residual edge for a given edge
 
 	public IdentifiableObjectMapping<Edge,Edge> originalResidualEdgeMapping;
 
@@ -263,7 +263,7 @@ public class SimpleResidualGraph implements DirectedGraph, OutgoingStarGraph, Re
 	}
 
 	public void augment( Edge a, int delta ) {
-//		System.out.println( "Augmenting " + a + " by " + delta );
+		System.out.println( "Augmenting " + a + " by " + delta );
 		residualCapacity.decrease( a, delta );
 		residualCapacity.increase( reverseEdge.get( a ), delta );
 	}

@@ -23,8 +23,8 @@ package de.tu_berlin.math.coga.algorithm.flowovertime.maxflow;
 import ds.graph.problem.MaximumFlowProblem;
 import ds.graph.Edge;
 import ds.mapping.IdentifiableIntegerMapping;
-import ds.graph.network.AbstractNetwork;
 import ds.graph.Node;
+import ds.graph.network.NetworkInterface;
 import java.util.List;
 
 /**
@@ -36,25 +36,25 @@ public class MaximumFlowOverTimeProblem extends MaximumFlowProblem {
     private IdentifiableIntegerMapping<Edge> transitTimes;
     private int timeHorizon;
     
-    public MaximumFlowOverTimeProblem(AbstractNetwork network, IdentifiableIntegerMapping<Edge> capacities, IdentifiableIntegerMapping<Edge> transitTimes, Node source, Node sink, int timeHorizon) {
+    public MaximumFlowOverTimeProblem(NetworkInterface network, IdentifiableIntegerMapping<Edge> capacities, IdentifiableIntegerMapping<Edge> transitTimes, Node source, Node sink, int timeHorizon) {
         super(network, capacities, source, sink);
         this.timeHorizon = timeHorizon;
         this.transitTimes = transitTimes;        
     }
 
-    public MaximumFlowOverTimeProblem(AbstractNetwork network, IdentifiableIntegerMapping<Edge> capacities, IdentifiableIntegerMapping<Edge> transitTimes, List<Node> sources, Node sink, int timeHorizon) {
+    public MaximumFlowOverTimeProblem(NetworkInterface network, IdentifiableIntegerMapping<Edge> capacities, IdentifiableIntegerMapping<Edge> transitTimes, List<Node> sources, Node sink, int timeHorizon) {
         super(network, capacities, sources, sink);
         this.timeHorizon = timeHorizon;
         this.transitTimes = transitTimes;
     }
 
-    public MaximumFlowOverTimeProblem(AbstractNetwork network, IdentifiableIntegerMapping<Edge> capacities, IdentifiableIntegerMapping<Edge> transitTimes, Node source, List<Node> sinks, int timeHorizon) {
+    public MaximumFlowOverTimeProblem(NetworkInterface network, IdentifiableIntegerMapping<Edge> capacities, IdentifiableIntegerMapping<Edge> transitTimes, Node source, List<Node> sinks, int timeHorizon) {
         super(network, capacities, source, sinks);
         this.timeHorizon = timeHorizon;
         this.transitTimes = transitTimes;
     }
 
-    public MaximumFlowOverTimeProblem(AbstractNetwork network, IdentifiableIntegerMapping<Edge> capacities, IdentifiableIntegerMapping<Edge> transitTimes, List<Node> sources, List<Node> sinks, int timeHorizon) {
+    public MaximumFlowOverTimeProblem(NetworkInterface network, IdentifiableIntegerMapping<Edge> capacities, IdentifiableIntegerMapping<Edge> transitTimes, List<Node> sources, List<Node> sinks, int timeHorizon) {
         super(network, capacities, sources, sinks);
         this.timeHorizon = timeHorizon;
         this.transitTimes = transitTimes;        
