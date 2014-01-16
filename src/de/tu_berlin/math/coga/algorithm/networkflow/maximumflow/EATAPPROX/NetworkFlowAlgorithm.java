@@ -32,6 +32,8 @@ public class NetworkFlowAlgorithm extends PushRelabel {
 	protected BucketSet<Node> inactiveBuckets;
 	protected HashSet<Node> nonActiveExcessNodes = new HashSet<>();
 
+	private boolean verbose = false;
+
 	/**
 	 * Allocates the memory for the data structures. These contain information
 	 * for the nodes and edges.
@@ -168,7 +170,9 @@ public class NetworkFlowAlgorithm extends PushRelabel {
 	}
 
 	protected void discharge( Node v ) {
-		System.out.println( "Discharge for node " + v + " with excess " + excess.get( v ) );
+		if( verbose )
+			System.out.println( "Discharge for node " + v + " with excess " + excess.get( v ) );
+
 		assert excess.get( v ) > 0;
 		assert v.id() != sink.id();
 		do {
@@ -210,7 +214,8 @@ public class NetworkFlowAlgorithm extends PushRelabel {
 	protected int push( Edge e ) {
 		pushes++;
 		final int delta = residualGraph.getResidualCapacity( e ) < excess.get( e.start() ) ? residualGraph.getResidualCapacity( e ) : excess.get( e.start() );
-		//System.out.println( "Push " + delta + " from " + e.start() + " to " + e.end() );
+		if( verbose )
+			System.out.println( "Push " + delta + " from " + e.start() + " to " + e.end() );
 		residualGraph.augment( e, delta );
 
 		if( !e.end().equals( sink ) && excess.get( e.end() ) == 0 ) {
@@ -232,9 +237,9 @@ public class NetworkFlowAlgorithm extends PushRelabel {
 		assert excess.get( v ) > 0;
 
 		relabels++;
+		if( verbose )
+			System.out.println( "Relabel. Old distance for " + v + " was " + distanceLabels.get( v ) );
 
-		System.out.println( "Relabel. Old distance for " + v + " was " + distanceLabels.get( v ) );
-		
 		distanceLabels.set( v, n ); // nodecount hier soll der aktuelle nodecount hin
 
 		final Tuple<Integer,Edge> minEdge = searchForMinDistance( v );
@@ -252,28 +257,28 @@ public class NetworkFlowAlgorithm extends PushRelabel {
 
 	protected Tuple<Integer,Edge> searchForMinDistance( Node v ) {
 		int minDistance = n; // nodecount hier soll der aktuelle nodecount hin
-		if( v.id() == 1 ) {
-			System.out.println( "WAIT" );
-		}
-		
+
 		Edge minEdge = null;
 		// search for the minimum distance value
 		for( int i = residualGraph.getFirst( v ); i < residualGraph.getLast( v ); ++i ) {
 			final Edge e = residualGraph.getEdge( i );
-			if( residualGraph.getResidualCapacity( e ) > 0 && distanceLabels.get( e.end() ) < minDistance ) {
-				minDistance = distanceLabels.get( e.end() );
-				minEdge = e;
+			if( residualGraph.getResidualCapacity( e ) > 0 ) {
+				if( minEdge == null && distanceLabels.get( e.end() ) <= minDistance ) {
+					minEdge = e;
+					minDistance = distanceLabels.get( e.end() );
+				} else if ( distanceLabels.get( e.end() ) < minDistance ) {
+					minDistance = distanceLabels.get( e.end() );
+					minEdge = e;
+				}
 			}
+//			if( residualGraph.getResidualCapacity( e ) > 0 && distanceLabels.get( e.end() ) < minDistance ) {
+//				minDistance = distanceLabels.get( e.end() );
+//				minEdge = e;
+//			}
 		}
-		System.out.println( "searchForMinDistance für " + v );
+		//System.out.println( "searchForMinDistance für " + v );
 
-		if( minEdge == null ) {
-			System.out.println( "No minEdge found" );
-		}
-		
-		System.out.println( "Found edge: " + minEdge );
-		
-		return new Tuple( minDistance+1, minEdge );
+		return new Tuple<>( minDistance+1, minEdge );
 	}
 
 	/**
@@ -283,39 +288,47 @@ public class NetworkFlowAlgorithm extends PushRelabel {
 	 */
 	void updateDistances( Set<Edge> newEdges ) {
 		n = residualGraph.getCurrentVisibleNodeCount();
-		
+
 		for( Edge e: newEdges ) {
 			Node u = e.start();
 			Node v = e.end(); // a new node
 			int oldDist = distanceLabels.get( v ); // we set to max d(u) - 1
 			int uDist = distanceLabels.get( u ) - 1;
 			if( uDist > oldDist ) {
-				 System.out.println( "Update distance label for node " + v + " from " + oldDist + " to " + uDist );
+				if( verbose )
+					 System.out.println( "Update distance label for node " + v + " from " + oldDist + " to " + uDist );
 				// TODO: evtl. mit breitensuche nur die knoten die erreichbar sind auf inactive setzen!
 				distanceLabels.set( v, uDist );
-				inactiveBuckets.deleteInactive( 1, v );
+				try {
+					inactiveBuckets.deleteInactive( oldDist, v );
+
+				} catch( Exception ex ) {
+					System.out.println( "EXCEPTION" );
+					throw ex;
+				}
 				inactiveBuckets.addInactive( uDist, v );
 
 			}
 			if( excess.get( u ) > 0 ) {
 				if( !nonActiveExcessNodes.contains( u ) ) {
-					
+
 					throw new IllegalStateException( " a node with positive excess was found that is not in the set!" );
 				}
 			//	activeBuckets.addActive( uDist, u );
 			//	System.out.println( "Adding " + u + " with distance " + uDist + " to active." );
 			}
 		}
-		
+
 		for( Node v : nonActiveExcessNodes ) {
 			activeBuckets.addActive( distanceLabels.get( v ), v );
-			System.out.println( "Adding excess node " + v + " with distance " + distanceLabels.get( v ) + " to active." );
+			if( verbose )
+				System.out.println( "Adding excess node " + v + " with distance " + distanceLabels.get( v ) + " to active." );
 		}
 		nonActiveExcessNodes.clear();
-		
+
 		Node v = source;
 		distanceLabels.set( v, n );
-		//inactiveBuckets.addInactive( n, v ); // the source is neither active nor inactive		
+		//inactiveBuckets.addInactive( n, v ); // the source is neither active nor inactive
 	}
 
 	private static enum FeasibleState {

@@ -52,7 +52,7 @@ public class HidingResidualGraph extends SimpleResidualGraph implements NetworkI
 		// Formel zur Bestimmung der tatsächlichen Knotenzahl basierend auf n und m:
 		// Knoten: n*(t+1) + 1 + #sources + 1 + #sinks
 		// Kanten: m + (t+1) + #sources + #sinks + (t+1)*#sources + (t+1)*#sinks
-		
+
 		this.network = network;
 		this.capacities = capacities;
 		this.transitTimes = transitTimes;
@@ -79,7 +79,7 @@ public class HidingResidualGraph extends SimpleResidualGraph implements NetworkI
 		}
 
 		createEdges();
-		
+
 		visibleNodeCount = 2 + sources.size() + sinks.size() + network.numberOfNodes();
 	}
 
@@ -127,7 +127,8 @@ public class HidingResidualGraph extends SimpleResidualGraph implements NetworkI
 		int counter = 0;
 		for( Node source : sources ) {
 			v = nodes.get( BASE_SOURCE + counter++ ); // The base source belonging to the counterth source
-			System.out.println( "Base source " + v + " belongs to original node " + source );
+			//if( verbose )
+			//	System.out.println( "Base source " + v + " belongs to original node " + source );
 			first.set( v, edgeCounter );
 			current.set( v, edgeCounter );
 
@@ -147,10 +148,10 @@ public class HidingResidualGraph extends SimpleResidualGraph implements NetworkI
 
 		// outgoing for all the nodes (without holdover)
 		for( int t = 0; t <= timeHorizon; ++t ) {
-			
+
 			// Stores the gaps for backward arcs that are created later on
 			HashMap<Node,Integer> gaps = new HashMap<>();
-							
+
 			for( Node node : network ) {
 				v = getCopy( node, t );
 				//System.out.println( "Entering Node o" + node.id() + " at time " + t + " with id=" + v.id() );
@@ -167,17 +168,14 @@ public class HidingResidualGraph extends SimpleResidualGraph implements NetworkI
 							break;
 						sinkIndex++;
 					}
-					System.out.println( "Creating an edge to base sink starting from time " + t );
+					//System.out.println( "Creating an edge to base sink starting from time " + t );
 					createEdge( v, nodes.get( BASE_SINK + sinkIndex ), M );
 				}
 
 				createReverseEdges( v );
-				
+
 				// leave space for reverse edges coming later on.
 				int gap = 0;
-				if( node.id() == 0 ) {
-					System.out.println( "26" );
-				}
 				for( Edge e : network.incomingEdges( node ) ) {
 					if( transitTimes.get( e ) == 0 && e.start().id() > node.id() ) {
 						gap++;
@@ -189,16 +187,16 @@ public class HidingResidualGraph extends SimpleResidualGraph implements NetworkI
 				PriorityQueue<PriorityEdge> queue = new PriorityQueue<>();
 
 				for( Edge e : network.outgoingEdges( node ) ) {
-					if( node.id() == 25 ) {
-						System.out.println( "24" );
-					}
-					
+//					if( transitTimes.get( e ) == 0 ) {
+//						System.out.println( "Arc from " + e.start() + " to " + e.end() + " with transit time 0." );
+//					}
+
 					if( t + transitTimes.get( e ) > timeHorizon )
 						continue;
 					Node target = getCopy( e.end(), t + transitTimes.get( e ) );
 					//System.out.println( "Creating an edge from o" + node + " to o" + e.end() + " starting at time layer " + t );
 					//PriorityEdge pe = new PriorityEdge( createEdge( v, target, 1 ), t + transitTimes.get( e ) );
-					PriorityEdge pe = new PriorityEdge( v, target, 1, t + transitTimes.get( e ), e.start(), e.end(), transitTimes.get( e ) );
+					PriorityEdge pe = new PriorityEdge( v, target, capacities.get( e ), t + transitTimes.get( e ), e.start(), e.end(), transitTimes.get( e ) );
 					queue.add( pe );
 				}
 				last.set( v, edgeCounter );
@@ -207,7 +205,7 @@ public class HidingResidualGraph extends SimpleResidualGraph implements NetworkI
 					Edge e = createEdge( pe.from, pe.to, pe.capacity );
 					if( pe.transitTime == 0 ) { // we have found an edge that goes to the same time horizon.
 						last.set( v, edgeCounter );
-						
+
 						// we have to create the backward edge later on, if the edge goes to
 						// a node with lower id.
 						if( pe.originalTarget.id() < pe.originalFrom.id() ) {
@@ -234,7 +232,7 @@ public class HidingResidualGraph extends SimpleResidualGraph implements NetworkI
 
 			createReverseEdges( v );
 
-			createEdge( v, nodes.get( SUPER_SINK ), 10 ); // TODO: sink capacity
+			createEdge( v, nodes.get( SUPER_SINK ), -supplies.get( sink ) ); // TODO: sink capacity
 			last.set( v, edgeCounter );
 		}
 
@@ -249,9 +247,6 @@ public class HidingResidualGraph extends SimpleResidualGraph implements NetworkI
 	}
 
 	private Edge createEdge( Node from, Node to, int capacity ) {
-		if( edgeCounter == 155 ) {
-			System.out.println( "EDGE COUNTER IS 155" );
-		}
 		Edge newEdge = new Edge( edgeCounter++, from, to );
 		//System.out.println( "Edge from " + from.id() + " to " + to.id() );
 		edges.add( newEdge );
@@ -280,19 +275,19 @@ public class HidingResidualGraph extends SimpleResidualGraph implements NetworkI
 			reverseEdge.set( original, newReverseEdge );
 		}
 	}
-	
+
 	private void createLateReverseEdge( Edge original, int id ) {
 		Edge newReverseEdge = new Edge( id, original.end(), original.start() );
-		System.out.println( "----------------------- LATE REVERSE EDGE " + newReverseEdge );
-		
+		//System.out.println( "----------------------- LATE REVERSE EDGE " + newReverseEdge );
+
 		edges.add( newReverseEdge );
 		residualCapacity.add( newReverseEdge, 0 );
 		isReverseEdge.add( newReverseEdge, true );
-						
+
 		reverseEdge.set( newReverseEdge, original );
 		reverseEdge.set( original, newReverseEdge );
 	}
-	
+
 
 	public final Node getCopy( Node node, int t ) {
 		return nodes.get( NODES + network.numberOfNodes()* t + node.id() );
@@ -345,9 +340,9 @@ public class HidingResidualGraph extends SimpleResidualGraph implements NetworkI
 		}
 
 		visibleNodeCount += network.numberOfNodes();
-		System.out.println( "Now: number of nodes set to " + visibleNodeCount );
+		//System.out.println( "Now: number of nodes set to " + visibleNodeCount );
 
-		
+
 		lastLayer = time;
 		return edgesSet;
 	}
@@ -406,7 +401,7 @@ public class HidingResidualGraph extends SimpleResidualGraph implements NetworkI
 			this.originalFrom = originalFrom;
 			this.transitTime = transitTime;
 		}
-		
+
 
 		@Override
 		public int compareTo( PriorityEdge o ) {
