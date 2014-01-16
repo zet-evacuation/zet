@@ -10,7 +10,7 @@ import java.lang.reflect.Array;
 
 /**
  *
- * @param <E> 
+ * @param <E>
  * @author Jan-Philipp Kappmeier
  */
 public class BucketSet<E extends Identifiable> {

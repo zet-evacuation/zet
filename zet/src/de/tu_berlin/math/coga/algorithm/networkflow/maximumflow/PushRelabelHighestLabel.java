@@ -67,6 +67,9 @@ public class PushRelabelHighestLabel extends PushRelabel {
 		computeMaxFlow();
 		end = System.nanoTime();
 		phase1Time = end-start;
+
+		if( true ) return null;
+
 		start = System.nanoTime();
 		makeFeasible();
 		end = System.nanoTime();
@@ -103,12 +106,12 @@ public class PushRelabelHighestLabel extends PushRelabel {
 
 
 		// set some flow on the residual network
-		residualGraph.augment( residualGraph.getEdge( 0 ), 1 );
-		residualGraph.augment( residualGraph.getEdge( 1 ), 1 );
-		residualGraph.augment( residualGraph.getEdge( 3 ), 1 );
-		residualGraph.augment( residualGraph.getEdge( 5 ), 1 );
+		//residualGraph.augment( residualGraph.getEdge( 0 ), 1 );
+		//residualGraph.augment( residualGraph.getEdge( 1 ), 1 );
+		//residualGraph.augment( residualGraph.getEdge( 3 ), 1 );
+		//residualGraph.augment( residualGraph.getEdge( 5 ), 1 );
 
-		excess.increase( sink, 2 );
+		//excess.increase( sink, 2 );
 
 		// initialize excesses
 		excess.set( source, 0 );
@@ -231,12 +234,17 @@ public class PushRelabelHighestLabel extends PushRelabel {
 		// search for the minimum distance value
 		for( int i = residualGraph.getFirst( v ); i < residualGraph.getLast( v ); ++i ) {
 			final Edge e = residualGraph.getEdge( i );
-			if( residualGraph.getResidualCapacity( e ) > 0 && distanceLabels.get( e.end() ) < minDistance ) {
-				minDistance = distanceLabels.get( e.end() );
-				minEdge = e;
+			if( residualGraph.getResidualCapacity( e ) > 0 ) {
+				if( minEdge == null && distanceLabels.get( e.end() ) <= minDistance ) {
+					minEdge = e;
+					minDistance = distanceLabels.get( e.end() );
+				} else if ( distanceLabels.get( e.end() ) < minDistance ) {
+					minDistance = distanceLabels.get( e.end() );
+					minEdge = e;
+				}
 			}
 		}
-		return new Tuple( minDistance+1, minEdge );
+		return new Tuple<>( minDistance+1, minEdge );
 	}
 
 	private static enum FeasibleState {
