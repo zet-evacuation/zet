@@ -72,15 +72,18 @@ public class HidingResidualGraph extends SimpleResidualGraph implements NetworkI
 	}
 
 	void build() {
+		System.out.println( "Create nodes" );
 		createNodes();
 
 		for( int i = 0; i < nodeCount; ++i ) {
 			knownEdges.set( nodes.get( i ), new KnownEdgesList() );
 		}
 
+		System.out.println( "Create edges" );
 		createEdges();
 
 		visibleNodeCount = 2 + sources.size() + sinks.size() + network.numberOfNodes();
+		System.out.println( "Done" );
 	}
 
 	void createNodes() {
