@@ -125,6 +125,7 @@ public class HidingResidualGraph extends SimpleResidualGraph implements NetworkI
 			createEdge( v, baseSource, supplies.get( sources.get( i ) ) );
 		}
 		last.set( v, edgeCounter );
+		visibleEdgeCount += sources.size();
 
 		// Outgoing for base sources
 		int counter = 0;
@@ -148,6 +149,7 @@ public class HidingResidualGraph extends SimpleResidualGraph implements NetworkI
 			}
 
 		}
+		visibleEdgeCount += sources.size(); // The copy from each base source to the 0th copy of the source
 
 		// outgoing for all the nodes (without holdover)
 		for( int t = 0; t <= timeHorizon; ++t ) {
@@ -197,6 +199,9 @@ public class HidingResidualGraph extends SimpleResidualGraph implements NetworkI
 					if( t + transitTimes.get( e ) > timeHorizon )
 						continue;
 					Node target = getCopy( e.end(), t + transitTimes.get( e ) );
+					if( t + transitTimes.get( e ) == 0 )
+						visibleEdgeCount++; // we have an edge going on level 0 that is visible from the beginning on
+					
 					//System.out.println( "Creating an edge from o" + node + " to o" + e.end() + " starting at time layer " + t );
 					//PriorityEdge pe = new PriorityEdge( createEdge( v, target, 1 ), t + transitTimes.get( e ) );
 					PriorityEdge pe = new PriorityEdge( v, target, capacities.get( e ), t + transitTimes.get( e ), e.start(), e.end(), transitTimes.get( e ) );
@@ -238,6 +243,7 @@ public class HidingResidualGraph extends SimpleResidualGraph implements NetworkI
 			createEdge( v, nodes.get( SUPER_SINK ), -supplies.get( sink ) ); // TODO: sink capacity
 			last.set( v, edgeCounter );
 		}
+		visibleEdgeCount += sinks.size(); // the arcs from time layer 0 copies of sinks to base sinks
 
 		// Incoming to super sink
 
@@ -379,8 +385,14 @@ public class HidingResidualGraph extends SimpleResidualGraph implements NetworkI
 	}
 
 	int visibleNodeCount;
+	int visibleEdgeCount;
+	
 	int getCurrentVisibleNodeCount() {
 		return visibleNodeCount;
+	}
+
+	int getCurrentVisibleEdgeCount() {
+		return visibleEdgeCount;
 	}
 
 

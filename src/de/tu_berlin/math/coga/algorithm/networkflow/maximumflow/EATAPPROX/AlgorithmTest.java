@@ -190,7 +190,7 @@ public class AlgorithmTest {
 
 	public void performTest( NetworkInterface network, IdentifiableIntegerMapping<Edge> capacities, IdentifiableIntegerMapping<Edge> transitTimes, int timeHorizon,  List<Node> sources, List<Node> sinks, IdentifiableIntegerMapping<Node> supplies ) {
 		// Create Hiding residual graph
-		timeHorizon = 87;
+		timeHorizon = 12;
 		HidingResidualGraph g = new HidingResidualGraph(network, capacities, transitTimes, timeHorizon, sources, sinks, supplies );
 		g.build();
 		this.g = g;
@@ -203,18 +203,19 @@ public class AlgorithmTest {
 		System.out.println( "Base-Source-Index: " + g.BASE_SOURCE );
 		System.out.println( "Base-Sink-Index: " + g.BASE_SINK );
 		System.out.println( "First-Node-Index: " + g.NODES );
-//		for( int i = 0; i < g.nodes().size(); ++i ) {
-//			if( i >= g.NODES && i < g.BASE_SINK )
-//				System.out.println( "Node with ID " + i + " is on layer " + g.getLayer( i ) + " for original Node " + g.getOriginalNode( i ) );
-//			else
-//				System.out.println( "Node with ID " + i + " is on layer " + g.getLayer( i ) + " and is special node without corresponding original node." );
-//		}
-//		System.out.println( g.first );
-//		System.out.println( g.last );
+		for( int i = 0; i < g.nodes().size(); ++i ) {
+			if( i >= g.NODES && i < g.BASE_SINK )
+				System.out.println( "Node with ID " + i + " is on layer " + g.getLayer( i ) + " for original Node " + g.getOriginalNode( i ) );
+			else
+				System.out.println( "Node with ID " + i + " is on layer " + g.getLayer( i ) + " and is special node without corresponding original node." );
+		}
+		System.out.println( g.first );
+		System.out.println( g.last );
 
 		// Set up instance
 		FakeMaximumFlowProblem fmfp = new FakeMaximumFlowProblem( g, g );
-		NetworkFlowAlgorithm nf = new NetworkFlowAlgorithm();
+		//NetworkFlowAlgorithm nf = new NetworkFlowAlgorithm();
+		NetworkFlowAlgorithm nf = new NetworkFlowAlgorithmGlobalRelabelling();
 		nf.setProblem( fmfp );
 
 //		for( Edge e : g.edges ) {
@@ -235,26 +236,29 @@ public class AlgorithmTest {
 			//printEdgeList( this );
 		}
 
+		//if( true )
+		//	throw new IllegalStateException( "We are here where we have ap roblem" );
+
 		for( int currentTimeLayer = 1; currentTimeLayer <= timeHorizon; ++currentTimeLayer ) {
-			//System.out.println( "\n\n\n-----------------------------------------------" );
-			//System.out.println( "Iteration " + currentTimeLayer );
+			System.out.println( "\n\n\n-----------------------------------------------" );
+			System.out.println( "Iteration " + currentTimeLayer );
 			Set<Edge> newEdges = g.activateTimeLayer( currentTimeLayer );
 			for( Edge e : newEdges ) {
-				//System.out.println( "New edge visible: " + e );
+				System.out.println( "New edge visible: " + e );
 			}
 
 
 			nf.updateDistances( newEdges );
 			nf.run2();
-			//System.out.println( "Flow arrived so far: " + nf.residualGraph.residualCapacity.get( nf.residualGraph.edges.get( nf.residualGraph.edges.size()-1 ) ) );
-			System.out.println( currentTimeLayer + " " + nf.residualGraph.residualCapacity.get( nf.residualGraph.edges.get( nf.residualGraph.edges.size()-1 ) ) );
+			System.out.println( "Flow arrived so far: " + nf.residualGraph.residualCapacity.get( nf.residualGraph.edges.get( nf.residualGraph.edges.size()-1 ) ) );
+			//System.out.println( currentTimeLayer + " " + nf.residualGraph.residualCapacity.get( nf.residualGraph.edges.get( nf.residualGraph.edges.size()-1 ) ) );
 			//System.out.println( "\nThe distnaces are: " );
 			//for( Node n : g.nodes() )
 			//	System.out.println( n.id() + ": " + nf.distanceLabels.get( n ) );
 
 		//printEdgeList( this );
 
-			//System.out.println( "-----------------------------------------------" );
+			System.out.println( "-----------------------------------------------" );
 		}
 
 
@@ -281,10 +285,7 @@ public class AlgorithmTest {
 	public EarliestArrivalFlowProblem readFromDatFile() throws IOException {
 		NodePositionMapping nodePositionMapping = new NodePositionMapping();
 
-		//
-
-		//EarliestArrivalFlowProblem  eafp = DatFileReaderWriter.read( "../../input/flow/siouxfalls_5_10s.dat", nodePositionMapping ); // new .dat-format
-		EarliestArrivalFlowProblem  eafp = DatFileReaderWriter.read( "../../input/flow/swiss_1_10s.dat", nodePositionMapping ); // new .dat-format
+		EarliestArrivalFlowProblem  eafp = DatFileReaderWriter.read( "../../input/flow/siouxfalls_5_10s.dat", nodePositionMapping ); // new .dat-format
 
 
 		//MaximumFlowOverTimeProblem mfot = new MaximumFlowOverTimeProblem( eafp.getNetwork(), eafp.getEdgeCapacities(), eafp.getTransitTimes(), eafp.getSources(), sinks, eafp.getTimeHorizon()  );
