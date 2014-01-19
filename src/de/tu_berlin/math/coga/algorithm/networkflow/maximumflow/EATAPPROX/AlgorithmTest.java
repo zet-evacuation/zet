@@ -280,7 +280,11 @@ public class AlgorithmTest {
 
 	public EarliestArrivalFlowProblem readFromDatFile() throws IOException {
 		NodePositionMapping nodePositionMapping = new NodePositionMapping();
-		EarliestArrivalFlowProblem  eafp = DatFileReaderWriter.read( "../../input/flow/siouxfalls_5_10s.dat", nodePositionMapping ); // new .dat-format
+
+		//
+
+		//EarliestArrivalFlowProblem  eafp = DatFileReaderWriter.read( "../../input/flow/siouxfalls_5_10s.dat", nodePositionMapping ); // new .dat-format
+		EarliestArrivalFlowProblem  eafp = DatFileReaderWriter.read( "../../input/flow/swiss_1_10s.dat", nodePositionMapping ); // new .dat-format
 
 
 		//MaximumFlowOverTimeProblem mfot = new MaximumFlowOverTimeProblem( eafp.getNetwork(), eafp.getEdgeCapacities(), eafp.getTransitTimes(), eafp.getSources(), sinks, eafp.getTimeHorizon()  );
