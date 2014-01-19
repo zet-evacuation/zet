@@ -32,7 +32,7 @@ public class NetworkFlowAlgorithm extends PushRelabel {
 	protected BucketSet<Node> inactiveBuckets;
 	protected HashSet<Node> nonActiveExcessNodes = new HashSet<>();
 
-	private boolean verbose = false;
+	private final boolean verbose = false;
 
 	/**
 	 * Allocates the memory for the data structures. These contain information
@@ -118,6 +118,7 @@ public class NetworkFlowAlgorithm extends PushRelabel {
 		FakeMaximumFlowProblem p = (FakeMaximumFlowProblem)getProblem();
 		residualGraph = p.getResidualGraph();
 		n = residualGraph.getCurrentVisibleNodeCount(); // update node count to the actual number of visible nodes!
+
 		current = residualGraph.current;
 
 
@@ -222,6 +223,7 @@ public class NetworkFlowAlgorithm extends PushRelabel {
 			// excess of a.end will be positive after the push!
 			// remove j from the inactive list and put to the active list
 			final int dist = distanceLabels.get( e.start() )-1;
+
 			inactiveBuckets.deleteInactive( dist, e.end() );
 			activeBuckets.addActive( dist, e.end() );
 		}
@@ -257,7 +259,6 @@ public class NetworkFlowAlgorithm extends PushRelabel {
 
 	protected Tuple<Integer,Edge> searchForMinDistance( Node v ) {
 		int minDistance = n; // nodecount hier soll der aktuelle nodecount hin
-
 		Edge minEdge = null;
 		// search for the minimum distance value
 		for( int i = residualGraph.getFirst( v ); i < residualGraph.getLast( v ); ++i ) {
@@ -295,7 +296,7 @@ public class NetworkFlowAlgorithm extends PushRelabel {
 			int oldDist = distanceLabels.get( v ); // we set to max d(u) - 1
 			int uDist = distanceLabels.get( u ) - 1;
 			if( uDist > oldDist ) {
-				if( verbose )
+				//if( verbose )
 					 System.out.println( "Update distance label for node " + v + " from " + oldDist + " to " + uDist );
 				// TODO: evtl. mit breitensuche nur die knoten die erreichbar sind auf inactive setzen!
 				distanceLabels.set( v, uDist );
@@ -311,11 +312,11 @@ public class NetworkFlowAlgorithm extends PushRelabel {
 			}
 			if( excess.get( u ) > 0 ) {
 				if( !nonActiveExcessNodes.contains( u ) ) {
-
-					throw new IllegalStateException( " a node with positive excess was found that is not in the set!" );
+						System.out.println( "We found a node with positive excess that is not active!" );
+			//		throw new IllegalStateException( " a node with positive excess was found that is not in the set!" );
 				}
-			//	activeBuckets.addActive( uDist, u );
-			//	System.out.println( "Adding " + u + " with distance " + uDist + " to active." );
+				activeBuckets.addActive( uDist, u );
+				System.out.println( "Adding " + u + " with distance " + uDist + " to active." );
 			}
 		}
 
