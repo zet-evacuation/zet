@@ -190,7 +190,7 @@ public class AlgorithmTest {
 
 	public void performTest( NetworkInterface network, IdentifiableIntegerMapping<Edge> capacities, IdentifiableIntegerMapping<Edge> transitTimes, int timeHorizon,  List<Node> sources, List<Node> sinks, IdentifiableIntegerMapping<Node> supplies ) {
 		// Create Hiding residual graph
-		timeHorizon = 12;
+		timeHorizon = 1;
 		HidingResidualGraph g = new HidingResidualGraph(network, capacities, transitTimes, timeHorizon, sources, sinks, supplies );
 		g.build();
 		this.g = g;
@@ -227,7 +227,7 @@ public class AlgorithmTest {
 		// Run first
 		try {
 			System.out.println();
-			//printEdgeList( this );
+			printEdgeList( this );
 			System.out.println();
 			nf.run();
 		} catch( Exception e ) {
@@ -235,6 +235,7 @@ public class AlgorithmTest {
 		} finally {
 			//printEdgeList( this );
 		}
+		System.out.println( "Flow arrived so far: " + nf.residualGraph.residualCapacity.get( nf.residualGraph.edges.get( nf.residualGraph.edges.size()-1 ) ) );
 
 		//if( true )
 		//	throw new IllegalStateException( "We are here where we have ap roblem" );

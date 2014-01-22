@@ -16,7 +16,7 @@ import java.util.Set;
  * @author kapman
  */
 public class NetworkFlowAlgorithmGlobalRelabelling extends NetworkFlowAlgorithm {
-	
+
 
 	protected boolean useBugHeuristic = false;
 	protected int globalRelabels;
@@ -33,7 +33,7 @@ public class NetworkFlowAlgorithmGlobalRelabelling extends NetworkFlowAlgorithm 
 	}
 
 	// nm muss neu gesetzt werden!
-	
+
 	@Override
 	protected void init() {
 		super.init();
@@ -101,7 +101,7 @@ public class NetworkFlowAlgorithmGlobalRelabelling extends NetworkFlowAlgorithm 
 	}
 
 	protected void globalUpdate() {
-		//System.out.println( "Global Update" );
+		System.out.println( "\n\nGlobal Update" );
 		relabelsSinceLastGlobalRelabel = 0;
 		globalRelabels++;
 
@@ -155,16 +155,25 @@ public class NetworkFlowAlgorithmGlobalRelabelling extends NetworkFlowAlgorithm 
 					final Edge a = residualGraph.getEdge( i );
 					if( residualGraph.getResidualCapacity( residualGraph.getReverseEdge( a ) ) > 0 ) {
 						final Node j = a.end();
-						//System.out.println( "Node update for " + j );
+						System.out.println( "Node update for " + j );
 						if( distanceLabels.get( j ) == n ) {
+							if( !canReachSink.get( j ) ) {
+								// let this node to be at max level because it is useless
+								continue;
+							}
+
 							distanceLabels.set( j, curDistPlusOne );
+							System.out.println( "Update Distance for " + j + " to " + curDistPlusOne );
 							current.set( j, residualGraph.getFirst( j ) );
 							if( curDistPlusOne > activeBuckets.getdMax() )
 								activeBuckets.setdMax( curDistPlusOne );
-							if( excess.get( j ) > 0 ) // put into active list
+							if( excess.get( j ) > 0 ) { // put into active list {
+								System.out.println( "Adding " + j + " to active" );
 								activeBuckets.addActive( curDistPlusOne, j );
-							else // put into inactive list
+							} else { // put into inactive list
+								System.out.println( "Adding " + j + " to in_active" );
 								inactiveBuckets.addInactive( curDistPlusOne, j);
+							}
 						}
 					}
 				}
@@ -186,6 +195,6 @@ public class NetworkFlowAlgorithmGlobalRelabelling extends NetworkFlowAlgorithm 
 		// set distances correct!
 		globalUpdate();
 	}
-	
-	
+
+
 }
