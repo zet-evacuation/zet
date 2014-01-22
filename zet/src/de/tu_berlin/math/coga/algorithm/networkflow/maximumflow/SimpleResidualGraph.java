@@ -7,13 +7,12 @@ package de.tu_berlin.math.coga.algorithm.networkflow.maximumflow;
 
 import de.tu_berlin.math.coga.datastructure.graph.OutgoingStarGraph;
 import de.tu_berlin.math.coga.datastructure.graph.network.ResidualNetwork;
+import ds.collection.ListSequence;
 import ds.graph.ArraySet;
 import ds.graph.DirectedGraph;
 import ds.graph.Edge;
 import ds.graph.IdentifiableCollection;
 import ds.graph.Node;
-import ds.graph.ResidualGraph;
-import ds.graph.network.AbstractNetwork;
 import ds.graph.network.NetworkInterface;
 import ds.mapping.IdentifiableBooleanMapping;
 import ds.mapping.IdentifiableIntegerMapping;

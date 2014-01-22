@@ -8,7 +8,9 @@ package de.tu_berlin.math.coga.algorithm.networkflow.maximumflow.EATAPPROX;
 
 import de.tu_berlin.math.coga.algorithm.networkflow.maximumflow.SimpleResidualGraph;
 import de.tu_berlin.math.coga.datastructure.Tuple;
+import ds.collection.ListSequence;
 import ds.graph.Edge;
+import ds.graph.IdentifiableCollection;
 import ds.graph.Node;
 import ds.graph.network.NetworkInterface;
 import ds.mapping.IdentifiableIntegerMapping;
@@ -201,7 +203,7 @@ public class HidingResidualGraph extends SimpleResidualGraph implements NetworkI
 					Node target = getCopy( e.end(), t + transitTimes.get( e ) );
 					if( t + transitTimes.get( e ) == 0 )
 						visibleEdgeCount++; // we have an edge going on level 0 that is visible from the beginning on
-					
+
 					//System.out.println( "Creating an edge from o" + node + " to o" + e.end() + " starting at time layer " + t );
 					//PriorityEdge pe = new PriorityEdge( createEdge( v, target, 1 ), t + transitTimes.get( e ) );
 					PriorityEdge pe = new PriorityEdge( v, target, capacities.get( e ), t + transitTimes.get( e ), e.start(), e.end(), transitTimes.get( e ) );
@@ -211,7 +213,7 @@ public class HidingResidualGraph extends SimpleResidualGraph implements NetworkI
 				while( !queue.isEmpty() ) {
 					PriorityEdge pe = queue.poll();
 					Edge e = createEdge( pe.from, pe.to, pe.capacity );
-					if( pe.transitTime == 0 ) { // we have found an edge that goes to the same time horizon.
+					if( pe.transitTime == 0 && pe.t == 0 ) { // we have found an edge that goes to the same time horizon.
 						last.set( v, edgeCounter );
 
 						// we have to create the backward edge later on, if the edge goes to
@@ -363,7 +365,7 @@ public class HidingResidualGraph extends SimpleResidualGraph implements NetworkI
 
 		HashSet<Edge> set = new HashSet<>();
 
-		do {
+		while( newLastIndex < nodeStop ) {
 			// zur zeit zeigt lastIndex auf einen gültigen wert.
 			// überprüfe die nächste kante.
 
@@ -374,7 +376,7 @@ public class HidingResidualGraph extends SimpleResidualGraph implements NetworkI
 				newLastIndex++;
 			} else
 				break;
-		} while( newLastIndex < nodeStop );
+		}
 		last.set( v, newLastIndex );
 		return set;
 	}
@@ -386,7 +388,7 @@ public class HidingResidualGraph extends SimpleResidualGraph implements NetworkI
 
 	int visibleNodeCount;
 	int visibleEdgeCount;
-	
+
 	int getCurrentVisibleNodeCount() {
 		return visibleNodeCount;
 	}
@@ -394,6 +396,21 @@ public class HidingResidualGraph extends SimpleResidualGraph implements NetworkI
 	int getCurrentVisibleEdgeCount() {
 		return visibleEdgeCount;
 	}
+
+	@Override
+	public IdentifiableCollection<Edge> incomingEdges( Node node ) {
+		ListSequence<Edge> in = new ListSequence<>(); // TODO iterator
+
+		for( int i = first.get( node ); i < last.get( node ); ++i ) {
+			Edge e = edges.get( i );
+			if( isReverseEdge( e ) && (getLayer( e.end().id() ) <= lastLayer || getLayer( e.start().id() ) == -1 ) ) {
+				in.add( reverseEdge.get( e ) );
+			}
+		}
+
+		return in;
+	}
+
 
 
 	private final static class KnownEdgesList extends LinkedList<Tuple<Node, Edge>> {}

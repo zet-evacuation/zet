@@ -11,11 +11,15 @@ import de.tu_berlin.math.coga.datastructure.BucketSet;
 import de.tu_berlin.math.coga.datastructure.Tuple;
 import de.tu_berlin.math.coga.datastructure.priorityQueue.BucketPriorityQueue;
 import ds.graph.Edge;
+import ds.graph.IdentifiableCollection;
 import ds.graph.Node;
 import ds.graph.flow.MaximumFlow;
 import ds.graph.problem.MaximumFlowProblem;
+import ds.mapping.IdentifiableBooleanMapping;
 import ds.mapping.IdentifiableIntegerMapping;
 import java.util.HashSet;
+import java.util.LinkedList;
+import java.util.Queue;
 import java.util.Set;
 
 /**
@@ -32,7 +36,9 @@ public class NetworkFlowAlgorithm extends PushRelabel {
 	protected BucketSet<Node> inactiveBuckets;
 	protected HashSet<Node> nonActiveExcessNodes = new HashSet<>();
 
-	private final boolean verbose = false;
+	protected IdentifiableBooleanMapping<Node> canReachSink;
+
+	private final boolean verbose = true;
 
 	/**
 	 * Allocates the memory for the data structures. These contain information
@@ -102,11 +108,26 @@ public class NetworkFlowAlgorithm extends PushRelabel {
 	 * Run the algorithm again, but now with the new edges available.
 	 */
 	void run2() {
-		current.get( residualGraph.nodes.get( 10 ) );
 		computeMaxFlow();
 	}
 
+	private void searchForNewReachNodes( Node start ) {
+		Queue<Node> queue = new LinkedList<>();
+		queue.add( start );
 
+		while(!queue.isEmpty()){
+			Node node = queue.remove();
+			System.out.println( "Found new reach-node: " + node );
+			// iterate over incoming edges
+			IdentifiableCollection<Edge> in = residualGraph.incomingEdges( node );
+			for( Edge e : in ) {
+				if( !canReachSink.get( e.start() ) ) {
+					queue.add( e.start() );
+					canReachSink.set( e.start(), true );
+				}
+			}
+		}
+	}
 
 	/**
 	 * Sets up the data structures. At first, creates reverse edges and orders the
@@ -117,10 +138,16 @@ public class NetworkFlowAlgorithm extends PushRelabel {
 		//residualGraph.init( getProblem().getNetwork(), getProblem().getCapacities(), current );
 		FakeMaximumFlowProblem p = (FakeMaximumFlowProblem)getProblem();
 		residualGraph = p.getResidualGraph();
+		canReachSink = new IdentifiableBooleanMapping<>( n );
 		n = residualGraph.getCurrentVisibleNodeCount(); // update node count to the actual number of visible nodes!
 
 		current = residualGraph.current;
 
+		// set reachable using only backward real arcs
+		searchForNewReachNodes( sink );
+
+
+		// later: avoid putting unreachable nodes to the active-list, still set excess! (necessary for overriden algorithm, not for "normal")
 
 		// initialize excesses
 		excess.set( source, 0 );
@@ -289,6 +316,13 @@ public class NetworkFlowAlgorithm extends PushRelabel {
 	 */
 	void updateDistances( Set<Edge> newEdges ) {
 		n = residualGraph.getCurrentVisibleNodeCount();
+
+		for( Edge e : newEdges ) {
+			if( canReachSink.get( e.end() ) && !canReachSink.get( e.start() ) ) {
+				searchForNewReachNodes( e.start() );
+			}
+		}
+
 
 		for( Edge e: newEdges ) {
 			Node u = e.start();
