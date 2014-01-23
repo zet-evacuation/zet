@@ -38,7 +38,7 @@ public class NetworkFlowAlgorithm extends PushRelabel {
 
 	protected IdentifiableBooleanMapping<Node> canReachSink;
 
-	private final boolean verbose = true;
+	private final boolean verbose = false;
 
 	/**
 	 * Allocates the memory for the data structures. These contain information
@@ -117,7 +117,8 @@ public class NetworkFlowAlgorithm extends PushRelabel {
 
 		while(!queue.isEmpty()){
 			Node node = queue.remove();
-			System.out.println( "Found new reach-node: " + node );
+			//System.out.println( "Found new reach-node: " + node );
+			canReachSink.set( node, true );
 			// iterate over incoming edges
 			IdentifiableCollection<Edge> in = residualGraph.incomingEdges( node );
 			for( Edge e : in ) {
@@ -330,7 +331,7 @@ public class NetworkFlowAlgorithm extends PushRelabel {
 			int oldDist = distanceLabels.get( v ); // we set to max d(u) - 1
 			int uDist = distanceLabels.get( u ) - 1;
 			if( uDist > oldDist ) {
-				//if( verbose )
+				if( verbose )
 					 System.out.println( "Update distance label for node " + v + " from " + oldDist + " to " + uDist );
 				// TODO: evtl. mit breitensuche nur die knoten die erreichbar sind auf inactive setzen!
 				distanceLabels.set( v, uDist );
@@ -346,11 +347,11 @@ public class NetworkFlowAlgorithm extends PushRelabel {
 			}
 			if( excess.get( u ) > 0 ) {
 				if( !nonActiveExcessNodes.contains( u ) ) {
-						System.out.println( "We found a node with positive excess that is not active!" );
+						//System.out.println( "We found a node with positive excess that is not active!" );
 			//		throw new IllegalStateException( " a node with positive excess was found that is not in the set!" );
 				}
 				activeBuckets.addActive( uDist, u );
-				System.out.println( "Adding " + u + " with distance " + uDist + " to active." );
+				//System.out.println( "Adding " + u + " with distance " + uDist + " to active." );
 			}
 		}
 

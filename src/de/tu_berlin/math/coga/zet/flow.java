@@ -421,6 +421,7 @@ public class flow implements AlgorithmListener {
 	long end;
 	long start = 0;
 	long pathDecompositionStart = 0;
+	@Override
 	public void eventOccurred( AlgorithmEvent event ) {
 		if( event instanceof AlgorithmProgressEvent ) {
 			if( index++ == percentInterval ) {
