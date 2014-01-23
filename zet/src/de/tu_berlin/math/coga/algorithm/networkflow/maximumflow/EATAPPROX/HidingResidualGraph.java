@@ -33,7 +33,8 @@ public class HidingResidualGraph extends SimpleResidualGraph implements NetworkI
 	IdentifiableIntegerMapping<Edge> transitTimes;
 
 	// Stores a list of reverse edges that go from node to another node and an edge object which already has been created.
-	IdentifiableObjectMapping<Node, KnownEdgesList> knownEdges;
+	//IdentifiableObjectMapping<Node, Node> knownEdges;
+	KnownEdgesList[] knownEdges;
 
 	int timeHorizon;
 	List<Node> sources;
@@ -63,7 +64,8 @@ public class HidingResidualGraph extends SimpleResidualGraph implements NetworkI
 		this.sinks = sinks;
 		this.supplies = supplies;
 
-		knownEdges = new IdentifiableObjectMapping<>( nodes, KnownEdgesList.class );
+//		knownEdges = new IdentifiableObjectMapping<>( nodes, KnownEdgesList.class );
+		//knownEdges = new IdentifiableObjectMapping<>( nodes, Node.class );
 
 		current = new IdentifiableIntegerMapping<>( network.numberOfEdges()* (timeHorizon+1) + 1 + sources.size() + 1 + sinks.size() );
 
@@ -71,15 +73,14 @@ public class HidingResidualGraph extends SimpleResidualGraph implements NetworkI
 		BASE_SINK = NODES + (timeHorizon+1)*network.numberOfNodes();
 		SUPER_SINK = BASE_SINK + sinks.size();
 		nodeCount = SUPER_SINK + 1;
+		knownEdges = new KnownEdgesList[nodeCount];
 	}
 
 	void build() {
 		System.out.println( "Create nodes" );
 		createNodes();
 
-		for( int i = 0; i < nodeCount; ++i ) {
-			knownEdges.set( nodes.get( i ), new KnownEdgesList() );
-		}
+		System.out.println( "Create known edges list" );
 
 		System.out.println( "Create edges" );
 		createEdges();
@@ -89,26 +90,57 @@ public class HidingResidualGraph extends SimpleResidualGraph implements NetworkI
 	}
 
 	void createNodes() {
+		//for( int i = 0; i < nodeCount; ++i ) {
+		//	knownEdges.set( nodes.get( i ), new KnownEdgesList() );
+		//}
+
 		int id = 0;
 		// Super-Source
 		assert id == SUPER_SOURCE;
-		nodes.add( new Node( id++ ) );
+		Node n;
+		n = new Node( id++ );
+		nodes.add( n );
+		//knownEdges.set( n, new KnownEdgesList() );
+			knownEdges[n.id()] = new KnownEdgesList();
+		
 		// sources
 		assert id == BASE_SOURCE;
-		for( int i = 0; i < sources.size(); ++i )
-			nodes.add( new Node( id++ ) );
+		for( int i = 0; i < sources.size(); ++i ){
+			n = new Node( id++ );
+			nodes.add( n );
+			//knownEdges.set( n, new KnownEdgesList() );			
+			knownEdges[n.id()] = new KnownEdgesList();
+		}
+			//nodes.add( new Node( id++ ) );
+		
 		// nodes
 		assert id == NODES;
-		for( int t = 0; t <= timeHorizon; ++t )
-			for( int i = 0; i < network.numberOfNodes(); ++i )
-				nodes.add( new Node( id++ ) );
+		for( int t = 0; t <= timeHorizon; ++t ) {
+			System.out.println( "Nodes layer " + t );
+			for( int i = 0; i < network.numberOfNodes(); ++i ) {
+				n = new Node( id++ );
+				nodes.add( n );
+				//knownEdges.set( n, new KnownEdgesList() );				
+			knownEdges[n.id()] = new KnownEdgesList();
+			}
+			//	nodes.add( new Node( id++ ) );
+		}
 		// sinks
 		assert id == BASE_SINK;
-		for( int i = 0; i < sinks.size(); ++i )
-			nodes.add( new Node( id++ ) );
+		for( int i = 0; i < sinks.size(); ++i ) {
+			n = new Node( id++ );
+			nodes.add( n );
+			//knownEdges.set( n, new KnownEdgesList() );
+			knownEdges[n.id()] = new KnownEdgesList();
+		}
+		//	nodes.add( new Node( id++ ) );
 		// Super-Sink
 		assert id == SUPER_SINK;
-		nodes.add( new Node( id++ ) );
+		n = new Node( id++ );
+		nodes.add( n );
+		//knownEdges.set( n, new KnownEdgesList() );
+			knownEdges[n.id()] = new KnownEdgesList();
+		//nodes.add( new Node( id++ ) );
 
 	}
 
@@ -139,7 +171,8 @@ public class HidingResidualGraph extends SimpleResidualGraph implements NetworkI
 			current.set( v, edgeCounter );
 
 			// handle known reverse edges to lower levels
-			assert knownEdges.get( v ).size() == 1;
+//			assert knownEdges.get( v ).size() == 1;
+			assert knownEdges[v.id()].size() == 1;
 			createReverseEdges( v );
 
 			// Create the holdover arcs
@@ -155,6 +188,7 @@ public class HidingResidualGraph extends SimpleResidualGraph implements NetworkI
 
 		// outgoing for all the nodes (without holdover)
 		for( int t = 0; t <= timeHorizon; ++t ) {
+			System.out.println( "Time layer " + t );
 
 			// Stores the gaps for backward arcs that are created later on
 			HashMap<Node,Integer> gaps = new HashMap<>();
@@ -194,6 +228,9 @@ public class HidingResidualGraph extends SimpleResidualGraph implements NetworkI
 				PriorityQueue<PriorityEdge> queue = new PriorityQueue<>();
 
 				for( Edge e : network.outgoingEdges( node ) ) {
+					if( node.id() == 25 ) {
+						//System.out.println( "Node 25" );
+					}
 //					if( transitTimes.get( e ) == 0 ) {
 //						System.out.println( "Arc from " + e.start() + " to " + e.end() + " with transit time 0." );
 //					}
@@ -213,8 +250,9 @@ public class HidingResidualGraph extends SimpleResidualGraph implements NetworkI
 				while( !queue.isEmpty() ) {
 					PriorityEdge pe = queue.poll();
 					Edge e = createEdge( pe.from, pe.to, pe.capacity );
-					if( pe.transitTime == 0 && pe.t == 0 ) { // we have found an edge that goes to the same time horizon.
-						last.set( v, edgeCounter );
+					if( pe.transitTime == 0 ) { // we have found an edge that goes to the same time horizon.
+						if( pe.t == 0 )
+							last.set( v, edgeCounter );
 
 						// we have to create the backward edge later on, if the edge goes to
 						// a node with lower id.
@@ -266,13 +304,15 @@ public class HidingResidualGraph extends SimpleResidualGraph implements NetworkI
 
 		// store the information of the reverse edge in some kind of map
 		Tuple<Node,Edge> tup = new Tuple<>( from, newEdge );
-		knownEdges.get( to ).add( tup );
+//		knownEdges.get( to ).add( tup );
+		knownEdges[to.id()].add( tup );
 		return newEdge;
 	}
 
 
 	private void createReverseEdges( Node v ) {
-		KnownEdgesList list = knownEdges.get( v );
+//		KnownEdgesList list = knownEdges.get( v );
+		KnownEdgesList list = knownEdges[v.id()];
 
 		for( Tuple<Node,Edge> tup : list ) {
 			Edge original = tup.getV();
@@ -415,6 +455,9 @@ public class HidingResidualGraph extends SimpleResidualGraph implements NetworkI
 
 	private final static class KnownEdgesList extends LinkedList<Tuple<Node, Edge>> {}
 
+	//private final static class KnownEdgesList {} // extends LinkedList<Tuple<Node, Edge>> {}
+	
+	
 	private final static class PriorityEdge implements Comparable<PriorityEdge> {
 		private Node from;
 		private Node to;

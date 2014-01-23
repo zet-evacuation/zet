@@ -81,27 +81,27 @@ public class NetworkFlowAlgorithmGlobalRelabelling extends NetworkFlowAlgorithm 
 			relabelsSinceLastGlobalRelabel++;
 			final Edge e = residualGraph.getEdge( i );
 
-//			if( residualGraph.getResidualCapacity( e ) > 0 ) {
-//				if( minEdge == null && distanceLabels.get( e.end() ) <= minDistance ) {
-//					minEdge = e;
-//					minDistance = distanceLabels.get( e.end() );
-//				} else if ( distanceLabels.get( e.end() ) < minDistance ) {
-//					minDistance = distanceLabels.get( e.end() );
-//					minEdge = e;
-//				}
-//			}
-
-			if( residualGraph.getResidualCapacity( e ) > 0 && distanceLabels.get( e.end() ) < minDistance ) {
-				minDistance = distanceLabels.get( e.end() );
-				minEdge = e;
+			if( residualGraph.getResidualCapacity( e ) > 0 ) {
+				if( minEdge == null && distanceLabels.get( e.end() ) <= minDistance ) {
+					minEdge = e;
+					minDistance = distanceLabels.get( e.end() );
+				} else if ( distanceLabels.get( e.end() ) < minDistance ) {
+					minDistance = distanceLabels.get( e.end() );
+					minEdge = e;
+				}
 			}
+
+//			if( residualGraph.getResidualCapacity( e ) > 0 && distanceLabels.get( e.end() ) < minDistance ) {
+//				minDistance = distanceLabels.get( e.end() );
+//				minEdge = e;
+//			}
 
 		}
 		return new Tuple<>( minDistance+1, minEdge );
 	}
 
 	protected void globalUpdate() {
-		System.out.println( "\n\nGlobal Update" );
+		//System.out.println( "\n\nGlobal Update" );
 		relabelsSinceLastGlobalRelabel = 0;
 		globalRelabels++;
 
@@ -155,7 +155,7 @@ public class NetworkFlowAlgorithmGlobalRelabelling extends NetworkFlowAlgorithm 
 					final Edge a = residualGraph.getEdge( i );
 					if( residualGraph.getResidualCapacity( residualGraph.getReverseEdge( a ) ) > 0 ) {
 						final Node j = a.end();
-						System.out.println( "Node update for " + j );
+						//System.out.println( "Node update for " + j );
 						if( distanceLabels.get( j ) == n ) {
 							if( !canReachSink.get( j ) ) {
 								// let this node to be at max level because it is useless
@@ -163,15 +163,15 @@ public class NetworkFlowAlgorithmGlobalRelabelling extends NetworkFlowAlgorithm 
 							}
 
 							distanceLabels.set( j, curDistPlusOne );
-							System.out.println( "Update Distance for " + j + " to " + curDistPlusOne );
+							//System.out.println( "Update Distance for " + j + " to " + curDistPlusOne );
 							current.set( j, residualGraph.getFirst( j ) );
 							if( curDistPlusOne > activeBuckets.getdMax() )
 								activeBuckets.setdMax( curDistPlusOne );
 							if( excess.get( j ) > 0 ) { // put into active list {
-								System.out.println( "Adding " + j + " to active" );
+								//System.out.println( "Adding " + j + " to active" );
 								activeBuckets.addActive( curDistPlusOne, j );
 							} else { // put into inactive list
-								System.out.println( "Adding " + j + " to in_active" );
+								//System.out.println( "Adding " + j + " to in_active" );
 								inactiveBuckets.addInactive( curDistPlusOne, j);
 							}
 						}
