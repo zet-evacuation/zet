@@ -31,22 +31,27 @@ import gui.propertysheet.abs.AbstractPropertyConverter;
  */
 public class BooleanPropertyConverter extends AbstractPropertyConverter<BooleanProperty, Boolean> {
 
+	@Override
 	public boolean canConvert( Class type ) {
 		return type.equals( BooleanProperty.class );
 	}
 
+	@Override
 	public String getNodeName() {
 		return "boolNode";
 	}
-	
+
+	@Override
 	public void createNewProp() {
 		prop = new BooleanProperty();
 	}
-	
+
+	@Override
 	public void writeValue( MarshallingContext context ) {
 		context.convertAnother( prop.getValue());
 	}
 
+	@Override
 	public void readValue( UnmarshallingContext context ) {
 		Boolean bool = (Boolean)context.convertAnother( prop, Boolean.class );
 		prop.setValue( bool );

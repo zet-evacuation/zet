@@ -29,22 +29,22 @@ import com.thoughtworks.xstream.io.HierarchicalStreamWriter;
 import gui.propertysheet.BasicProperty;
 
 /**
- * 
+ *
  * @param <T> the property class
  * @param <U> the class of the property itself
  * @author Jan-Philipp Kappmeier
  */
 public abstract class AbstractPropertyConverter<T extends BasicProperty<U>, U extends Object> implements Converter {
 	protected T prop;
-	
+
 	public abstract String getNodeName();
-	
+
 	public abstract void createNewProp();
 
 	public abstract void writeValue( MarshallingContext context );
 
 	public abstract void readValue( UnmarshallingContext context );
-	
+
 	@Override
 	public void marshal( Object source, HierarchicalStreamWriter writer, MarshallingContext context ) {
     prop = (T)source;
@@ -53,15 +53,15 @@ public abstract class AbstractPropertyConverter<T extends BasicProperty<U>, U ex
 		writeValue( context );
     writer.endNode();
 	}
-	
+
 	public void readAttributes( HierarchicalStreamReader reader ) {
     String name = reader.getAttribute( "name" );
 		prop.setDisplayName( name );
-    prop.useAsLocString( (reader.getAttribute( "useAsLocString" ).equals("true") ? true :false ) );
+    prop.useAsLocString( (reader.getAttribute( "useAsLocString" ).equals("true") ) );
 		prop.setShortDescription( reader.getAttribute( "information" ) );
 		prop.setName( reader.getAttribute( "parameter" ) );
 	}
-	
+
 	public void writeAttributes( HierarchicalStreamWriter writer ) {
     writer.addAttribute( "name", prop.getDisplayNameTag() );
     writer.addAttribute( "useAsLocString", Boolean.toString( prop.isUsedAsLocString() ) );
