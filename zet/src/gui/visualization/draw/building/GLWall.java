@@ -62,13 +62,13 @@ public class GLWall extends AbstractDrawable<GLWall, GLWallControl> {
 	/**
 	 * Draws the walls around rooms. The walls have some thickness and also an upper side.
 	 * {@inheritDoc}
-	 * @param gl 
+	 * @param gl
 	 */
 	@Override
 	public void performStaticDrawing( GL gl ) {
 		gl.glBegin( GL.GL_POLYGON );
 		VisualizationOptionManager.getCellFloorColor().draw( gl );
-		final Vector3 perturbate = new Vector3(0,0,-0.01); // add a small offset to move the floor under the ca floor-level
+		final Vector3 perturbate = new Vector3(0,0,-0.5); // add a small offset to move the floor under the ca floor-level
 		for( GLVector v : basePoints )
 			v.add( perturbate ).draw( gl );
 		gl.glEnd();
@@ -80,7 +80,7 @@ public class GLWall extends AbstractDrawable<GLWall, GLWallControl> {
 		gl.glBegin( GL.GL_QUADS );
 		Iterator<GLVector> wallStart = basePoints.iterator();
 		Iterator<GLVector> wallEnd = basePoints.iterator();
-		
+
 		Vector<Vector3> vectors = new Vector<>( basePoints.size() );
 		Vector<Double> angles = new Vector<>( basePoints.size() );
 		if( wallEnd.hasNext() )
@@ -105,7 +105,7 @@ public class GLWall extends AbstractDrawable<GLWall, GLWallControl> {
 			GLVector outerEnd = new GLVector( innerEnd );
 			GLVector outerStartHigh = new GLVector( innerStartHigh );
 			GLVector outerEndHigh = new GLVector( innerEndHigh );
-			
+
 			if( control.getWallType( i ) != Wall.ElementType.PASSABLE ) {	// Normal wall, no door
 				GLVector normal = control.isRoomLeft() ? new GLVector( Vector3.normal( innerEnd, innerStart, innerStartHigh ) ) : new GLVector( Vector3.normal( innerStart, innerEnd, innerEndHigh ) );
 				normal.normalize();
@@ -309,7 +309,7 @@ public class GLWall extends AbstractDrawable<GLWall, GLWallControl> {
 	@Override
 	public void update() {
 	}
-	
+
 	/**
 	 * Calculates the angle between two normalized vectors. The calculation includes the orientation, thus the
 	 * returned angle is within the interval 0 and 2*PI
@@ -324,7 +324,7 @@ public class GLWall extends AbstractDrawable<GLWall, GLWallControl> {
 			angle = -angle;
 		return angle;
 	}
-	
+
 	// Hilfsmethoden die den startpunkt, endpunkt und höhenpunkte aus der base points-liste berechnen
 	private static int mod( int val, int modulo ) {
 		return val < 0 ? val % modulo + modulo : val % modulo;
@@ -381,7 +381,7 @@ public class GLWall extends AbstractDrawable<GLWall, GLWallControl> {
 				default:
 					throw new IllegalArgumentException( "Vector number must be withing the range from 1 to 4.");
 			}
-		} else { // end 
+		} else { // end
 				doorVector.invert();
 
 				switch( vecNumber ) {
@@ -409,7 +409,7 @@ public class GLWall extends AbstractDrawable<GLWall, GLWallControl> {
 		}
 		return ret;
 	}
-	
+
 	private double getHypothenuseFactor( double angle ) {
 		if( Math.cos( angle ) < 0.000001 )
 			return 0;

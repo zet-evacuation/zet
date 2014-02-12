@@ -32,6 +32,7 @@ import opengl.drawingutils.GLColor;
  */
 public class VisualizationOptionManager {
 
+
 	/**
 	 * Utility class hidden private constructor
 	 */
@@ -59,34 +60,41 @@ public class VisualizationOptionManager {
 		return PropertyContainer.getInstance().getAsDouble( "options.visualization.appearance.wallHeight" )*10;
 	}
 
-	public static GLColor getIndividualColor() {
-		return new GLColor( 0, 108, 255 );
-	//return new GLColor( Color.yellow );
-	}
-
 	public static boolean animateMovements() {
 		return true;
 	}
 
+	public static Color getBackground() {
+		return PropertyContainer.getInstance().getAsColor( "options.visualization.appeareance.colors.backgroundColor" );
+	}
+
+	public static GLColor getIndividualColor() {
+		return new GLColor( PropertyContainer.getInstance().getAsColor( "options.visualization.appeareance.colors.individualColor" ) );
+	}
+
 	public static GLColor getCellFloorColor() {
-		return new GLColor( Color.darkGray );
-	//return new GLColor( 200, 200, 200 );
+		return new GLColor( PropertyContainer.getInstance().getAsColor( "options.visualization.appeareance.colors.floorColor" ) );
 	}
 
 	public static GLColor getSaveCellFloorColor() {
-		return new GLColor( Color.yellow );
+		return new GLColor( PropertyContainer.getInstance().getAsColor( "options.visualization.appeareance.colors.safeAreaColor" ) );
 	}
 
 	public static GLColor getEvacuationCellFloorColor() {
-		return new GLColor( Color.green );
+		return new GLColor( PropertyContainer.getInstance().getAsColor( "options.visualization.appeareance.colors.evacuationColor" ) );
+	}
+
+
+	public static double getNodeRadius() {
+		return PropertyContainer.getInstance().getAsDouble( "options.visualization.appearance.nodeRadius" );
 	}
 
 	public static GLColor getEvacuationNodeColor() {
-		return new GLColor( 10, 170, 80, 255 );
+		return new GLColor( PropertyContainer.getInstance().getAsColor( "options.visualization.appeareance.colors.evacuationColor" ) );
 	}
 
 	public static GLColor getSourceNodeColor() {
-		return new GLColor( 0, 6, 255 );
+		return new GLColor( PropertyContainer.getInstance().getAsColor( "options.visualization.appeareance.colors.sourceColor" ) );
 	}
 
 	public static GLColor getDeletedSourceNodeColor() {
@@ -98,27 +106,23 @@ public class VisualizationOptionManager {
 	}
 
 	public static GLColor getNodeColor() {
-	//return new GLColor( 240, 240, 110 );
-	return new GLColor( 250, 250, 100 ); // current
-	// return new GLColor( 221, 125, 42 );	// color used for the test evacuation report
+		 //return new GLColor( 221, 125, 42 );	// color used for the test evacuation report
+		return new GLColor( PropertyContainer.getInstance().getAsColor( "options.visualization.appeareance.colors.nodeColor" ) );
 	}
 
 	public static GLColor getEdgeColor() {
-//		return new GLColor( 240, 240, 190, 140 );
-//		return new GLColor( 75, 77, 73, 255);
-		return new GLColor( Color.gray );
-	//return new GLColor( Color.yellow, 0.3 );
+		//return new GLColor( 240, 240, 190, 140 ); // original zet-color
+		//return new GLColor( 75, 77, 73, 255);
+		return new GLColor( PropertyContainer.getInstance().getAsColor( "options.visualization.appeareance.colors.edgeColor" ) );
+		//return new GLColor( Color.darkGray );
 	}
 
 	public static GLColor getFlowNodeColor() {
-		return new GLColor( 130, 185, 255 );
-	//return new GLColor( Color.red );
+		return new GLColor( PropertyContainer.getInstance().getAsColor( "options.visualization.appeareance.colors.flowColor" ) );
 	}
 
 	public static GLColor getFlowUnitColor() {
-		GLColor flowColor = getFlowNodeColor();
-		//GLColor flowColor = new GLColor( 45, 113, 255 ); // color used for the test evacuation report?
-		return flowColor;
+		return getFlowNodeColor();
 	}
 
 	/**
@@ -137,17 +141,17 @@ public class VisualizationOptionManager {
 	}
 
 	public static GLColor getStairCellFloorColor() {
-		return new GLColor( Color.pink );
+		return new GLColor( PropertyContainer.getInstance().getAsColor( "options.visualization.appeareance.colors.stairAreaColor" ) );
 	}
 
 	public static GLColor getDelayCellFloorColor() {
-		return new GLColor( Color.red );
+		return new GLColor( PropertyContainer.getInstance().getAsColor( "options.visualization.appeareance.colors.delayAreaColor" ) );
 	}
 
 	public static GLColor getCellWallColor() {
-		return new GLColor( Color.lightGray );
+		return new GLColor( PropertyContainer.getInstance().getAsColor( "options.visualization.appeareance.colors.wallColor" ) );
 	}
-	
+
 	/**
 	 * Sets the color that is used to display a color gradient for some cell status.
 	 * The low color is the color used if the value is zero.
@@ -197,7 +201,7 @@ public class VisualizationOptionManager {
 	public static boolean getAlwaysDisplayCellType() {
 		return true;
 	}
-	
+
 	/**
 	 * Decides wheather a little gap between the cells is visible, or not. The
 	 * gaps form a grid on the cells. Uses the value set in the {@link PropertyContainer}
@@ -208,7 +212,7 @@ public class VisualizationOptionManager {
 		//return PropertyContainer.getInstance().getAsBoolean( "options.visualization.view.grid" );
 		return false;
 	}
-	
+
 	/**
 	 * Decides wheather the cells of the cellular automaton are smoothed, or not.
 	 * If they are smoothed the colors of a cell is a mixture of the neighbour cells.

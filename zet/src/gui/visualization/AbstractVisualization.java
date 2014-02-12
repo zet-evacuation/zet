@@ -115,7 +115,7 @@ public abstract class AbstractVisualization extends AbstractOpenGLCanvas {
 	public AbstractVisualization( GLCapabilities caps ) {
 		super( caps );
 		glu = new GLU();
-		setBackground( Color.black );
+		setBackground( VisualizationOptionManager.getBackground() );
 		// TODO: eventl-listener for OpenGL.
 		addGLEventListener( this );
 		animator = new Animator( this );

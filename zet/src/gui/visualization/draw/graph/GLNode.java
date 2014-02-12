@@ -48,7 +48,7 @@ public class GLNode extends AbstractDrawable<GLFlowEdge, GLNodeControl> {
 	GLColor sourceColor = VisualizationOptionManager.getSourceNodeColor();
 	GLColor deletedSourceColor = VisualizationOptionManager.getDeletedSourceNodeColor();
 	GLColor nodeBorderColor = VisualizationOptionManager.getNodeBorderColor();
-	static double nodeRadius = 1.3 /* 2.2*/; // 13 // factor of 2.2 used for test evacuation report
+	static double nodeRadius = VisualizationOptionManager.getNodeRadius(); //1.3 /* 2.2*/; // 13 // factor of 2.2 used for test evacuation report
 	// TODO read quality preset from VisualizatonOptionManager
 	//private static QualityPreset qualityPreset = VisualizationOptionManager.getQualityPreset();
 	private static QualityPreset qualityPreset = QualityPreset.MediumQuality;
@@ -57,13 +57,13 @@ public class GLNode extends AbstractDrawable<GLFlowEdge, GLNodeControl> {
 		super( control );
 
 
-		
+
 		this.control = control;
 		position.x = control.getXPosition();
 		position.y = control.getYPosition();
 		position.z = control.getZPosition();
 
-		
+
 		radius = nodeRadius;
 		// not neccesary here!
 		//glu = new GLU();
@@ -90,7 +90,7 @@ public class GLNode extends AbstractDrawable<GLFlowEdge, GLNodeControl> {
 	public void performFlowDrawing( GL gl ) {
 		super.performDrawing( gl );
 		glu.gluQuadricDrawStyle( quadObj, flowDisplayMode );
-		
+
 		gl.glColor4d( 1.0, 0.0, 0.0, 1.0 );
 
 		//gl.glEnable( gl.GL_BLEND );
@@ -101,7 +101,7 @@ public class GLNode extends AbstractDrawable<GLFlowEdge, GLNodeControl> {
 
 	@Override
 	public void update() { }
-	
+
 	@Override
 	public void performStaticDrawing( GL gl ) {
 		beginDraw( gl );
@@ -111,7 +111,7 @@ public class GLNode extends AbstractDrawable<GLFlowEdge, GLNodeControl> {
 //		}
 		glu.gluQuadricDrawStyle( quadObj, nodeDisplayMode );
 
-		
+
 		nodeBorderColor.draw( gl );
 		double xOffset = -this.getControl().getXPosition();
 		double yOffset = -this.getControl().getYPosition();
@@ -147,16 +147,16 @@ public class GLNode extends AbstractDrawable<GLFlowEdge, GLNodeControl> {
 				}
 			}
 		}
-		
+
 		//System.out.println( "Textur s_1 beim Zeichnen benutzt" );
 //				boolean enableLight = gl.glIsEnabled(  GL.GL_LIGHTING );
 //		TextureManager texMan = TextureManager.getInstance();
 //		String texName = "s_" + control.getNumber();
-//		
+//
 //		if( !texMan.contains( texName ) ) {
 //			createTexture( control.getNumber() );
 //		}
-//		
+//
 //		Texture tex = texMan.contains( texName ) ? texMan.get( texName ) : texMan.get( "empty" );
 //		//gl.glDisable( GL.GL_LIGHTING );
 //		gl.glEnable( GL.GL_TEXTURE_2D );
@@ -166,21 +166,21 @@ public class GLNode extends AbstractDrawable<GLFlowEdge, GLNodeControl> {
 //
 //		glu.gluQuadricTexture(quadObj, true);
 //		glu.gluQuadricNormals(quadObj, GLU.GLU_SMOOTH);
-//		
+//
 //		glu.gluQuadricOrientation( quadObj, GLU.GLU_INSIDE  );
 //
 //		gl.glPushMatrix();
-//		
+//
 //		gl.glRotated( 90+180, 1, 0, 0);
 //		//gl.glRotated( 180, 0, 1, 0);
-		
+
 		glu.gluSphere( quadObj, radius, qualityPreset.nodeSlices, qualityPreset.nodeStacks );
 //		gl.glDisable( GL.GL_TEXTURE_2D );
 //		//if( enableLight )
 //		//	gl.glEnable( GL.GL_LIGHTING );
 //		gl.glPopMatrix();
 //
-		
+
 		staticDrawAllChildren( gl );
 		endDraw( gl );
 	}
@@ -201,7 +201,7 @@ public class GLNode extends AbstractDrawable<GLFlowEdge, GLNodeControl> {
 			BufferedImage image = new BufferedImage( 1024, 512, BufferedImage.TYPE_INT_ARGB );
 
 			TextureRenderer renderer = new TextureRenderer( 1024, 512, true );
-			//Graphics2D g2 = renderer.createGraphics();		
+			//Graphics2D g2 = renderer.createGraphics();
 			Graphics2D g2 = (Graphics2D)image.getGraphics();
 			Texture t;
 
@@ -213,25 +213,25 @@ public class GLNode extends AbstractDrawable<GLFlowEdge, GLNodeControl> {
 			if( number < 10 ) {
 				int x = width / 2 - 170 / 2;
 				int y = height / 2 - 240 / 2;
-				
+
 				g2.fillRect( 0, 0, width, height);
-				
+
 				g2.drawImage( n[number], x,y, null );
 				name = "s_" + number;
 			} else if( number < 100 ) {
 				int y = height / 2 - 240 / 2;
-				g2.fillRect( 0, 0, width, height);				
+				g2.fillRect( 0, 0, width, height);
 				g2.drawImage( n[number/10], width/2-170,y, null );
 				g2.drawImage( n[number%10], width/2,y, null );
 				name = "s_" + number;
-				
+
 			}
 			ImageIO.write( image, "png", new File( "./textures/temp.png" ) );
 			System.out.println( "./textures/temp.png" + " for file " + number );
 
 			// Now use it as you would any other OpenGL texture
 
-			//Texture tex = new Texture(null, height, x );//  renderer.getTexture();			
+			//Texture tex = new Texture(null, height, x );//  renderer.getTexture();
 			TextureManager texMan = TextureManager.getInstance();
 
 			if( !name.isEmpty() )
