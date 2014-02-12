@@ -15,6 +15,8 @@ import com.martiansoftware.jsap.JSAPResult;
 import com.martiansoftware.jsap.Switch;
 import com.martiansoftware.jsap.UnflaggedOption;
 import com.thoughtworks.xstream.XStream;
+import de.tu_berlin.math.coga.algorithm.networkflow.maximumflow.EATAPPROX.EarliestArrivalFlowPattern;
+import de.tu_berlin.math.coga.algorithm.networkflow.maximumflow.EATAPPROX.EarliestArrivalFlowPatternBuilder;
 import de.tu_berlin.math.coga.algorithm.networkflow.maximumflow.PushRelabelHighestLabelGlobalGapRelabelling;
 import de.tu_berlin.math.coga.common.algorithm.Algorithm;
 import de.tu_berlin.math.coga.common.algorithm.AlgorithmEvent;
@@ -33,6 +35,7 @@ import de.tu_berlin.math.coga.zet.converter.graph.NetworkFlowModel;
 import de.tu_berlin.math.coga.zet.viewer.NodePositionMapping;
 import ds.GraphVisualizationResults;
 import ds.graph.Node;
+import ds.graph.flow.FlowOverTimePath;
 import ds.graph.flow.PathBasedFlowOverTime;
 import ds.graph.problem.MaximumFlowProblem;
 import ds.mapping.IdentifiableIntegerMapping;
@@ -270,6 +273,15 @@ public class flow implements AlgorithmListener {
 		System.out.println( "Path-Decomposition: " );
 		System.out.println( df.toString( eafp.getTransitTimes() ) );
 
+		EarliestArrivalFlowPatternBuilder builder = new EarliestArrivalFlowPatternBuilder( neededTimeHorizon + 2 );
+
+		for( FlowOverTimePath p : df )
+			builder.addFlowValue( p.getArrival( eafp.getTransitTimes() ), p.getAmount() );
+
+		EarliestArrivalFlowPattern pattern = builder.build();
+
+		System.out.println( pattern );
+
 		if( 1 == 1 )
 			return;
 
@@ -291,11 +303,11 @@ public class flow implements AlgorithmListener {
 			//NetworkFlowModel nfm = new NetworkFlowModel();
 
 
-		System.out.println( "Noides: " + eafp.getNetwork().numberOfNodes() );
-		System.out.println( "Edges: " + eafp.getNetwork().numberOfEdges() );
+		//System.out.println( "Noides: " + eafp.getNetwork().numberOfNodes() );
+		//System.out.println( "Edges: " + eafp.getNetwork().numberOfEdges() );
 
 		System.out.println( "NFM: " );
-		System.out.println( "EAFP: " + eafp.toString() );
+		System.out.println( "EAFP: " + pattern.toString() );
 
 
 		boolean seaapa = false;
