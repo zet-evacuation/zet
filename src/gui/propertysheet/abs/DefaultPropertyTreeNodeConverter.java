@@ -36,6 +36,8 @@ import gui.propertysheet.types.StringListProperty;
 import gui.propertysheet.PropertyTreeNode;
 import gui.propertysheet.types.QualitySettingProperty;
 import gui.propertysheet.types.BooleanPropertyConverter;
+import gui.propertysheet.types.ColorProperty;
+import gui.propertysheet.types.ColorPropertyConverter;
 import gui.propertysheet.types.DoublePropertyConverter;
 import gui.propertysheet.types.IntegerPropertyConverter;
 import gui.propertysheet.types.IntegerRangePropertyConverter;
@@ -55,6 +57,7 @@ public class DefaultPropertyTreeNodeConverter implements Converter {
    * @param type
    * @return true, if the given type can be converted.
    */
+	@Override
   public boolean canConvert( Class type ) {
     return type.equals( PropertyTreeNode.class );
   }
@@ -65,6 +68,7 @@ public class DefaultPropertyTreeNodeConverter implements Converter {
    * @param writer
    * @param context
    */
+	@Override
   public void marshal( Object source, HierarchicalStreamWriter writer, MarshallingContext context ) {
     PropertyTreeNode node = (PropertyTreeNode) source;
     writer.startNode( "treeNode" );
@@ -89,6 +93,8 @@ public class DefaultPropertyTreeNodeConverter implements Converter {
 				context.convertAnother( property, new StringListPropertyConverter() );
 			else if( property instanceof QualitySettingProperty )
 				context.convertAnother( property, new QualitySettingPropertyConverter() );
+			else if( property instanceof ColorProperty )
+				context.convertAnother( property, new ColorPropertyConverter() );
 		}
     writer.endNode();
   }
@@ -99,10 +105,11 @@ public class DefaultPropertyTreeNodeConverter implements Converter {
    * @param context
    * @return the converted property tree node
    */
+	@Override
   public Object unmarshal( HierarchicalStreamReader reader, UnmarshallingContext context ) {
     String name = reader.getAttribute( "name" );
     PropertyTreeNode node = new PropertyTreeNode( name ); // this is the displayName
-    node.useAsLocString( (reader.getAttribute( "useAsLocString" ).equals("true") ? true : false ) );
+    node.useAsLocString( (reader.getAttribute( "useAsLocString" ).equals( "true" ) ) );
     while( reader.hasMoreChildren() ) {
       reader.moveDown();
 			String nodeName = reader.getNodeName();
@@ -143,6 +150,12 @@ public class DefaultPropertyTreeNodeConverter implements Converter {
 					QualitySettingProperty qualityP = (QualitySettingProperty)context.convertAnother( node, QualitySettingProperty.class, new QualitySettingPropertyConverter() );
 					node.addProperty( qualityP );
 					break;
+				case "colorNode":
+					ColorProperty colorP = (ColorProperty)context.convertAnother( node, ColorProperty.class, new ColorPropertyConverter() );
+					node.addProperty( colorP );
+					break;
+				default:
+					throw new UnsupportedOperationException( "Unknown type: " + nodeName );
 			}
       reader.moveUp();
     }

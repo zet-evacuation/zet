@@ -36,20 +36,22 @@ import gui.propertysheet.PropertyTreeModel;
 public class PropertyTreeConverter implements Converter {
 
   /**
-   * 
+   *
    * @param type
    * @return {@code true} if the class can be converted, {@code false} otherwise
    */
+	@Override
   public boolean canConvert( Class type ) {
     return type.equals( PropertyTreeModel.class );
   }
 
   /**
-   * 
+   *
    * @param source
    * @param writer
    * @param context
    */
+	@Override
   public void marshal( Object source, HierarchicalStreamWriter writer, MarshallingContext context ) {
     PropertyTreeModel treeModel = (PropertyTreeModel) source;
     // Root node has at most one property!
@@ -64,15 +66,16 @@ public class PropertyTreeConverter implements Converter {
   }
 
   /**
-   * 
+   *
    * @param reader
    * @param context
    * @return the converted property tree node
    */
+	@Override
   public Object unmarshal( HierarchicalStreamReader reader, UnmarshallingContext context ) {
     PropertyTreeNode root = new PropertyTreeNode( "" );
     root.setDisplayName( reader.getAttribute( "name" ) );
-    root.useAsLocString( (reader.getAttribute( "useAsLocString" ).equals("true")?true:false ) );
+    root.useAsLocString( (reader.getAttribute( "useAsLocString" ).equals("true") ) );
 		String propertyName = reader.getAttribute( "propertyName" );
     while( reader.hasMoreChildren() ) {
       reader.moveDown();
@@ -82,7 +85,7 @@ public class PropertyTreeConverter implements Converter {
     }
 		PropertyTreeModel ptm = new PropertyTreeModel( root );
 		ptm.setPropertyName( propertyName );
-		
+
     return ptm;
   }
 }

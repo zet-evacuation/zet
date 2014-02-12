@@ -28,6 +28,7 @@ import gui.editor.properties.PropertyLoadException;
 import gui.propertysheet.PropertyTreeModel;
 import gui.propertysheet.types.BooleanProperty;
 import gui.propertysheet.PropertyTreeNode;
+import gui.propertysheet.types.ColorProperty;
 import gui.propertysheet.types.IntegerProperty;
 import gui.propertysheet.types.DoubleProperty;
 import gui.propertysheet.types.QualitySettingProperty;
@@ -66,31 +67,36 @@ public class PropertyContainer {
 	protected Map<String, Class<?>> propertyTypes;
 
 	private PropertyContainer() {
-		properties = new HashMap<String, Object>();
-		propertyTypes = new HashMap<String, Class<?>>();
+		properties = new HashMap<>();
+		propertyTypes = new HashMap<>();
 	}
 
 	public <T> void define( String key, Class<T> type, T defaultValue ) {
 		if( propertyTypes.containsKey( key ) )
-			throw new IllegalArgumentException( ZETLocalization.getSingleton().getString( "ds.PropertyAlreadyDefinedException" + key ) );
+			throw new IllegalArgumentException( ZETLocalization.getSingleton().getString( "ds.PropertyAlreadyDefinedException: " + key ) );
 		else {
 			properties.put( key, defaultValue );
+			if( key.equals( "abcd" ) ) {
+				System.out.println( "---------------------------------------------- abcd" );
+			}
+			if( key.equals( "abcbool" ) )
+				System.out.println( "---------------------------------------------- abcbool" );
 			propertyTypes.put( key, type );
 		}
 	}
 
 	public Object get( String key ) {
 		if( !propertyTypes.containsKey( key ) )
-			throw new IllegalArgumentException( ZETLocalization.getSingleton().getString( "ds.PropertyNotDefinedException" + key ) );
+			throw new IllegalArgumentException( ZETLocalization.getSingleton().getString( "ds.PropertyNotDefinedException: " + key ) );
 		return properties.get( key );
 	}
 
 	public <T> T getAs( String key, Class<T> type ) {
 		if( !propertyTypes.containsKey( key ) )
-			throw new IllegalArgumentException( ZETLocalization.getSingleton().getString( "ds.PropertyNotDefinedException" + key ) );
+			throw new IllegalArgumentException( ZETLocalization.getSingleton().getString( "ds.PropertyNotDefinedException: " + key ) );
 		else
 			if( !type.isAssignableFrom( propertyTypes.get( key ) ) )
-				throw new IllegalArgumentException( ZETLocalization.getSingleton().getString( "ds.PropertyTypeCastException" + key + ", " + propertyTypes.get( key ) + ", " + type ) );
+				throw new IllegalArgumentException( ZETLocalization.getSingleton().getString( "ds.PropertyTypeCastException: " + key + ", " + propertyTypes.get( key ) + ", " + type ) );
 			else
 				return type.cast( properties.get( key ) );
 	}
@@ -136,10 +142,10 @@ public class PropertyContainer {
 
 	public void set( String key, Object value ) {
 		if( !propertyTypes.containsKey( key ) )
-			throw new IllegalArgumentException( ZETLocalization.getSingleton().getString( "ds.PropertyNotDefinedException" + key ) );
+			throw new IllegalArgumentException( ZETLocalization.getSingleton().getString( "ds.PropertyNotDefinedException: " + key ) );
 		else
 			if( !propertyTypes.get( key ).isInstance( value ) )
-				throw new IllegalArgumentException( ZETLocalization.getSingleton().getString( "ds.PropertyValueException" + key + ", " + propertyTypes.get( key ) + ", " + value ) );
+				throw new IllegalArgumentException( ZETLocalization.getSingleton().getString( "ds.PropertyValueException: " + key + ", " + propertyTypes.get( key ) + ", " + value ) );
 			else
 				properties.put( key, value );
 	}
@@ -221,7 +227,7 @@ public class PropertyContainer {
 	 */
 	protected void applyParameters( PropertyTreeNode node ) {
 		for( int i = 0; i < node.getChildCount(); i++ )
-			applyParameters( (PropertyTreeNode)node.getChildAt( i ) );
+			applyParameters( node.getChildAt( i ));
 		PropertyContainer pc = PropertyContainer.getInstance();
 		for( BasicProperty<?> property : node.getProperties() )
 			if( property instanceof BooleanProperty )
@@ -254,6 +260,12 @@ public class PropertyContainer {
 					pc.define( property.getName(), QualityPreset.class, (QualityPreset)property.getValue() );
 				else
 					pc.set( property.getName(), (QualityPreset)property.getValue() );
-			}
+			} else if( property instanceof ColorProperty ) {
+				if( !pc.isDefined( property.getName() ) )
+					pc.define( property.getName(), Color.class, (Color)property.getValue() );
+				else
+					pc.set( property.getName(), (Color)property.getValue() );
+			} else
+				throw new UnsupportedOperationException( "Type " + property.getName() + " not supported." );
 	}
 }

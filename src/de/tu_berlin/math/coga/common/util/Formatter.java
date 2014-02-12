@@ -7,6 +7,7 @@ package de.tu_berlin.math.coga.common.util;
 import de.tu_berlin.math.coga.common.localization.DefaultLocalization;
 import de.tu_berlin.math.coga.common.util.units.UnitScale;
 import de.tu_berlin.math.coga.datastructure.Tuple;
+import java.awt.Color;
 import java.text.NumberFormat;
 
 /**
@@ -89,5 +90,13 @@ public class Formatter {
 		while( ret.length() < digits )
 			ret = "0" + ret;
 		return ret;
+	}
+
+	public static String rgbToHex( int r, int g, int b ) {
+		return String.format( "#%02x%02x%02x", r, g, b );
+	}
+
+	public static String colorToHex( Color c ) {
+		return "#" + Integer.toHexString( c.getRGB() ).substring( 2 );
 	}
 }
