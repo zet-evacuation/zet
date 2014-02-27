@@ -8,11 +8,12 @@ import ds.mapping.Identifiable;
 import ds.mapping.IdentifiableIntegerMapping;
 import ds.mapping.IdentifiableObjectMapping;
 import java.lang.reflect.Array;
+import java.util.HashSet;
 
 
 /**
  *
- * @param <E> 
+ * @param <E>
  * @author Jan-Philipp Kappmeier
  */
 public class BucketPriorityQueue<E extends Identifiable> {
@@ -20,7 +21,8 @@ public class BucketPriorityQueue<E extends Identifiable> {
 	IdentifiableObjectMapping<E, E> next;
   protected Class<E> rangeType;
 	E[] buckets;
-	boolean[] active;
+	public boolean[] active;
+	public HashSet<E> activeHash;
 	int maxIndex;
 	int minIndex;
 	int dMax;
@@ -28,6 +30,7 @@ public class BucketPriorityQueue<E extends Identifiable> {
 	protected IdentifiableIntegerMapping <E>distanceLabels;
 
 
+	//@SuppressWarnings( "unchecked" )
 	public BucketPriorityQueue( int domainSize, Class<E> rangeType ) {
 		next = new IdentifiableObjectMapping<>( domainSize, rangeType );
 		this.rangeType = rangeType;
@@ -36,6 +39,7 @@ public class BucketPriorityQueue<E extends Identifiable> {
 		this.domainSize = domainSize;
 		maxIndex = 0;
 		minIndex = domainSize-1;
+		activeHash = new HashSet<>( (int)(domainSize * 0.1 ) );
 	}
 
 	public void setDistanceLabels( IdentifiableIntegerMapping<E> distanceLabels ) {
@@ -60,6 +64,20 @@ public class BucketPriorityQueue<E extends Identifiable> {
 
 
 	public final int addActive( int distance, E node ) {
+//		if( node.id() == 3457 && distance == 10899 ) {
+//			int i = 3;
+//			i++;
+//		}
+//		if( node.id() == 3457 ) {
+//			System.out.println( "Activate 3457 with distance " + distance );
+//		}
+		//if( node.id() == 57262 ) {
+		//	System.out.println( "Activate 57262 with distance " + distance );
+		//}
+
+		activeHash.add( node );
+
+
 		if( active[node.id()] == true )
 			return maxIndex;	// was already active
 
@@ -87,6 +105,15 @@ public class BucketPriorityQueue<E extends Identifiable> {
 	 */
 	public final void removeActive( int distance, E node ) {
 		assert active[node.id()];
+		//if( node.id() == 3457 ) {
+		//	System.out.println( "Deactivate 3457 with distance " + distance );
+		//}
+		if( node.id() == 57262 ) {
+		//	System.out.println( "Dectivate 57262 with distance " + distance );
+		}
+
+		activeHash.remove( node );
+
 		active[node.id()] = false;
 		buckets[distance] = next.get( node );
 	}

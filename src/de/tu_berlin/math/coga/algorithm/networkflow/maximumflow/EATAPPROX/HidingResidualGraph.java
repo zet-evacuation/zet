@@ -14,7 +14,6 @@ import ds.graph.IdentifiableCollection;
 import ds.graph.Node;
 import ds.graph.network.NetworkInterface;
 import ds.mapping.IdentifiableIntegerMapping;
-import ds.mapping.IdentifiableObjectMapping;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedList;
@@ -77,16 +76,14 @@ public class HidingResidualGraph extends SimpleResidualGraph implements NetworkI
 	}
 
 	void build() {
-		System.out.println( "Create nodes" );
+		System.out.println( "Create nodes..." );
 		createNodes();
 
-		System.out.println( "Create known edges list" );
-
-		System.out.println( "Create edges" );
+		System.out.println( "Create edges..." );
 		createEdges();
 
 		visibleNodeCount = 2 + sources.size() + sinks.size() + network.numberOfNodes();
-		System.out.println( "Done" );
+		System.out.println( "Done." );
 	}
 
 	void createNodes() {
@@ -102,25 +99,25 @@ public class HidingResidualGraph extends SimpleResidualGraph implements NetworkI
 		nodes.add( n );
 		//knownEdges.set( n, new KnownEdgesList() );
 			knownEdges[n.id()] = new KnownEdgesList();
-		
+
 		// sources
 		assert id == BASE_SOURCE;
 		for( int i = 0; i < sources.size(); ++i ){
 			n = new Node( id++ );
 			nodes.add( n );
-			//knownEdges.set( n, new KnownEdgesList() );			
+			//knownEdges.set( n, new KnownEdgesList() );
 			knownEdges[n.id()] = new KnownEdgesList();
 		}
 			//nodes.add( new Node( id++ ) );
-		
+
 		// nodes
 		assert id == NODES;
 		for( int t = 0; t <= timeHorizon; ++t ) {
-			System.out.println( "Nodes layer " + t );
+			//System.out.println( "Nodes layer " + t );
 			for( int i = 0; i < network.numberOfNodes(); ++i ) {
 				n = new Node( id++ );
 				nodes.add( n );
-				//knownEdges.set( n, new KnownEdgesList() );				
+				//knownEdges.set( n, new KnownEdgesList() );
 			knownEdges[n.id()] = new KnownEdgesList();
 			}
 			//	nodes.add( new Node( id++ ) );
@@ -142,6 +139,7 @@ public class HidingResidualGraph extends SimpleResidualGraph implements NetworkI
 			knownEdges[n.id()] = new KnownEdgesList();
 		//nodes.add( new Node( id++ ) );
 
+			System.out.println( "Nudes akutell: " + getCurrentVisibleNodeCount() );
 	}
 
 
@@ -188,7 +186,7 @@ public class HidingResidualGraph extends SimpleResidualGraph implements NetworkI
 
 		// outgoing for all the nodes (without holdover)
 		for( int t = 0; t <= timeHorizon; ++t ) {
-			System.out.println( "Time layer " + t );
+			//System.out.println( "Time layer " + t );
 
 			// Stores the gaps for backward arcs that are created later on
 			HashMap<Node,Integer> gaps = new HashMap<>();
@@ -364,7 +362,8 @@ public class HidingResidualGraph extends SimpleResidualGraph implements NetworkI
 		return nodeId - NODES - tl * network.numberOfNodes();
 	}
 
-	private int lastLayer = 0;
+	public int lastLayer = 0;
+	private int lastSeenNode;
 
 	/**
 	 *
@@ -377,25 +376,60 @@ public class HidingResidualGraph extends SimpleResidualGraph implements NetworkI
 
 		Set<Edge> edgesSet = new HashSet<>();
 
-		// Iterate through all nodes and check, if last can be set forther forward!
-		for( int t = 0; t <= timeHorizon; ++t ) {
-			for( Node node : network ) {
-				Node v = getCopy( node, t );
-				edgesSet.addAll( activeTimeLayerForNode( time, v ) );
-			}
+		// Iterate through all nodes and check, if last can be set further forward!
+//		for( int t = 0; t <= time; ++t ) {
+//			for( Node node : network ) {
+//				Node v = getCopy( node, t );
+//				edgesSet.addAll( activeTimeLayerForNode( time, v ) );
+//			}
+//		}
+		Set<Edge> edgesSet2 = new HashSet<>();
+		for( Node node : network ) {
+			Node v = getCopy( node, time ); //todo: iterate over node ids directly
+			edgesSet2.addAll( activateTimeLayerForNode2( v ) );
 		}
 
-		for( int i = BASE_SOURCE; i < NODES; ++i ) {
-			Node v = nodes.get( i );
-			edgesSet.addAll( activeTimeLayerForNode( time, v ) );
-		}
+//		System.out.println( "EdgeSet: " + edgesSet.size() );
+//		for( Edge e : edgesSet )
+//			System.out.println( e );
+
+//		System.out.println( "EdgeSet2: " + edgesSet2.size() );
+//		for( Edge e : edgesSet2 )
+//			System.out.println( e );
+
+//		for( int i = BASE_SOURCE; i < NODES; ++i ) {
+//			Node v = nodes.get( i );
+//			edgesSet.addAll( activeTimeLayerForNode( time, v ) );
+//		}
 
 		visibleNodeCount += network.numberOfNodes();
 		//System.out.println( "Now: number of nodes set to " + visibleNodeCount );
 
 
+//		System.out.println( "EdgeSet: " + edgesSet.size() );
+//		for( Edge e : edgesSet )
+//			System.out.println( e );
+
 		lastLayer = time;
-		return edgesSet;
+		return edgesSet2;
+	}
+
+	private Set<Edge> activateTimeLayerForNode2( Node v ) {
+		HashSet<Edge> set = new HashSet<>();
+
+		for( int i = first.get( v ); i < first.get( nodes.get( v.id()+1 ) ); ++i ) {
+			Edge rev = edges.get( i );
+			if( !isReverseEdge( rev ) )
+				continue;
+			Edge e = reverseEdge.get( rev );
+
+			// e is incoming to node v
+			// update last for e.start();
+			last.set( e.start(), Math.max( e.id() + 1, last.get( e.start() ) ) );
+			set.add( e );
+		}
+
+		return set;
 	}
 
 	private Set<Edge> activeTimeLayerForNode( int time, Node v ) {
@@ -456,8 +490,8 @@ public class HidingResidualGraph extends SimpleResidualGraph implements NetworkI
 	private final static class KnownEdgesList extends LinkedList<Tuple<Node, Edge>> {}
 
 	//private final static class KnownEdgesList {} // extends LinkedList<Tuple<Node, Edge>> {}
-	
-	
+
+
 	private final static class PriorityEdge implements Comparable<PriorityEdge> {
 		private Node from;
 		private Node to;

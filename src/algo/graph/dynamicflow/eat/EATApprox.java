@@ -29,14 +29,14 @@ public class EATApprox {
 		this.problem = problem;
 		this.supplies = supplies;
 	}
-	
+
 	protected void runAlgorithm() {
 		if( problem.getSources().isEmpty() || problem.getSinks().isEmpty() ) {
 			System.out.println( "TimeExpandedMaximumFlowOverTime: The problem is invalid - this should not happen!" );
 			//return new PathBasedFlowOverTime();
 			throw new IllegalArgumentException( "empty problem" );
 		}
-		
+
 		// check for zero transit times
 		if( problem.getTransitTimes().maximum() > 0 )
 			throw new IllegalArgumentException( "Not-Zero transit times!" );
@@ -44,12 +44,12 @@ public class EATApprox {
 		// run the algorithm
 		int sinkCount = problem.getSinks().size();
 		int sourceCount = problem.getSources().size();
-		
+
 		int sumOfSupplies = 0;
 
 		int lastFlow = -1;
 		int totalFlow = 0;
-		
+
 		do {
 			AbstractNetwork n = new Network( problem.getNetwork().numberOfNodes() + 2, problem.getNetwork().numberOfEdges() + sinkCount + sourceCount );
 			IdentifiableIntegerMapping<Edge> capacities = new IdentifiableIntegerMapping<>( n.getEdgeCapacity() );
@@ -89,7 +89,7 @@ public class EATApprox {
 //		ek.run();
 //		System.out.println( ek.getSolution().getFlowValue() );
 
-			
+
 			hipr.setProblem( maximumFlowProblem );
 			long start = System.nanoTime();
 			hipr.run();
@@ -128,7 +128,12 @@ public class EATApprox {
 			if( lastFlow != 0 )
 				flowCurve.add( totalFlow );
 		} while( sumOfSupplies != 0 && lastFlow != 0 );
-		
-		
+
+
+	}
+
+	public static void main( String... args ) {
+
+		//EATApprox eata = new EATApprox( p, supplies );
 	}
 }

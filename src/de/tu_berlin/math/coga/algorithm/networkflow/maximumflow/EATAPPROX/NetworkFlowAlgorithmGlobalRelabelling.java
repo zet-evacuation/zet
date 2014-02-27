@@ -9,6 +9,8 @@ package de.tu_berlin.math.coga.algorithm.networkflow.maximumflow.EATAPPROX;
 import de.tu_berlin.math.coga.datastructure.Tuple;
 import ds.graph.Edge;
 import ds.graph.Node;
+import java.util.HashSet;
+import java.util.LinkedList;
 import java.util.Set;
 
 /**
@@ -52,7 +54,16 @@ public class NetworkFlowAlgorithmGlobalRelabelling extends NetworkFlowAlgorithm 
 					globalUpdate();
 			} else {
 				activeBuckets.removeActive( activeBuckets.getMaxIndex(), v );
+				//gotActive.remove( v );
+//				if( v.id() == 3457 ) {
+//					System.out.println( "Deactivate 3457 with distance " + activeBuckets.getMaxIndex() + " with excess " + excess.get( v ) );
+//				}
+
 				discharge( v );
+//				if( v.id() == 3457 ) {
+//					System.out.println( "After discharge left with excess " + excess.get( v ) );
+//				}
+
 
 				if( activeBuckets.getMaxIndex() < activeBuckets.getMinIndex() )
 					break;
@@ -100,20 +111,45 @@ public class NetworkFlowAlgorithmGlobalRelabelling extends NetworkFlowAlgorithm 
 		return new Tuple<>( minDistance+1, minEdge );
 	}
 
-	protected void globalUpdate() {
-		//System.out.println( "\n\nGlobal Update" );
-		relabelsSinceLastGlobalRelabel = 0;
-		globalRelabels++;
 
+	private void initGlobalUpdate() {
 		inactiveBuckets.reset( activeBuckets.getdMax() );
 		activeBuckets.reset();
 
 		// all node distances to n
 		for( Node node : getProblem().getNetwork().nodes() )
 			distanceLabels.set( node, n );
+		// Visible nodes
+		//for( int i = 0; i < residualGraph.getCurrentVisibleNodeCount(); ++i ) {
+		//	distanceLabels.set( residualGraph.nodes.get( i ), n );
+		//}
+		// super sinks:
+		for( int i = residualGraph.BASE_SINK; i < residualGraph.SUPER_SINK; ++i ) {
+			distanceLabels.set( residualGraph.nodes.get( i ), n );
+		}
 		distanceLabels.set( sink, 0 );
 
 		inactiveBuckets.addInactive( 0, sink );
+	}
+
+	//LinkedList<Node> toAdd = new LinkedList<>();
+	//HashSet<Node> toAdd = new HashSet<>();
+
+	protected void globalUpdate() {
+		//System.out.println( "\n\nGlobal Update" );
+		relabelsSinceLastGlobalRelabel = 0;
+		globalRelabels++;
+
+		boolean[] formerActive = new boolean[n];
+		boolean[] newActive = new boolean[n];
+
+		for( int i = 0; i < n; ++i ) {
+			if( activeBuckets.active[i] )
+				formerActive[i] = true;
+		}
+
+		initGlobalUpdate();
+
 		for( int curDist = 0; true; curDist++ ) {
 			final int curDistPlusOne = curDist+1;
 			if( activeBuckets.get( curDist ) == null && inactiveBuckets.get( curDist ) == null )
@@ -159,6 +195,7 @@ public class NetworkFlowAlgorithmGlobalRelabelling extends NetworkFlowAlgorithm 
 						if( distanceLabels.get( j ) == n ) {
 							if( !canReachSink.get( j ) ) {
 								// let this node to be at max level because it is useless
+								inactiveBuckets.addInactive( n, j );
 								continue;
 							}
 
@@ -170,6 +207,8 @@ public class NetworkFlowAlgorithmGlobalRelabelling extends NetworkFlowAlgorithm 
 							if( excess.get( j ) > 0 ) { // put into active list {
 								//System.out.println( "Adding " + j + " to active" );
 								activeBuckets.addActive( curDistPlusOne, j );
+								//gotActive.remove( j );
+								newActive[j.id()] = true;
 							} else { // put into inactive list
 								//System.out.println( "Adding " + j + " to in_active" );
 								inactiveBuckets.addInactive( curDistPlusOne, j);
@@ -179,6 +218,18 @@ public class NetworkFlowAlgorithmGlobalRelabelling extends NetworkFlowAlgorithm 
 				}
 			}
 		}
+		for( int i = 0; i < n; ++i ) {
+			if( formerActive[i] && !newActive[i] ) {
+				//if( i == 3457 )
+				//	System.out.println( "----- Node " + i + " was active but is not any more." );
+				//toAdd.add( residualGraph.nodes.get( i) );
+			}
+		}
+		//for( Node n : gotActive ) {
+			//toAdd.add( n );
+		//}
+		//gotActive.clear();
+
 		int i = 3;
 		i++;
 	}
@@ -193,7 +244,16 @@ public class NetworkFlowAlgorithmGlobalRelabelling extends NetworkFlowAlgorithm 
 		nm = 6 * n + m;
 		globalRelabelThreshold = (int) 0.5 * nm;
 		// set distances correct!
-		globalUpdate();
+		//globalUpdate();
+
+//		for( Node n : toAdd ) {
+//			if( !activeBuckets.active[n.id()] && excess.get( n ) > 0 ) {
+//				activeBuckets.addActive( distanceLabels.get( n ), n );
+//			}
+//		}
+//
+//		toAdd.clear();
+
 	}
 
 

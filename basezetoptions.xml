@@ -50,10 +50,26 @@
       <boolNode name="options.visualization.flow.equalArrival" useAsLocString="true" information="options.visualization.flow.equalArrival.info" parameter="options.visualization.flow.equalArrival">true</boolNode>
     </treeNode>
     <treeNode name="options.visualization.appearance" useAsLocString="true">
+      <treeNode name = "options.visualization.appearance.colors" useAsLocString="true">
+	<colorNode name="options.visualization.appearance.colors.backgroundColor" useAsLocString="true" information="options.visualization.appearance.colors.backgroundColor.info" parameter="options.visualization.appeareance.colors.backgroundColor">#000000</colorNode>
+	<colorNode name="options.visualization.appearance.colors.nodeColor" useAsLocString="true" information="options.visualization.appearance.colors.nodeColor.info" parameter="options.visualization.appeareance.colors.nodeColor">#fafa64</colorNode>
+	<colorNode name="options.visualization.appearance.colors.sourceColor" useAsLocString="true" information="options.visualization.appearance.colors.sourceColor.info" parameter="options.visualization.appeareance.colors.sourceColor">#0006ff</colorNode>
+	<colorNode name="options.visualization.appearance.colors.evacuationColor" useAsLocString="true" information="options.visualization.appearance.colors.evacuationColor.info" parameter="options.visualization.appeareance.colors.evacuationColor">#0aaa50</colorNode>
+	<colorNode name="options.visualization.appearance.colors.flowColor" useAsLocString="true" information="options.visualization.appearance.colors.flowColor.info" parameter="options.visualization.appeareance.colors.flowColor">#82b9ff</colorNode>
+	<colorNode name="options.visualization.appearance.colors.edgeColor" useAsLocString="true" information="options.visualization.appearance.colors.edgeColor.info" parameter="options.visualization.appeareance.colors.edgeColor">#808080</colorNode>
+	<colorNode name="options.visualization.appearance.colors.invalidColor" useAsLocString="true" information="options.visualization.appearance.colors.invalidColor.info" parameter="options.visualization.appeareance.colors.invalidColor">#FFFFFF</colorNode>
+	<colorNode name="options.visualization.appearance.colors.floorColor" useAsLocString="true" information="options.visualization.appearance.colors.floorColor.info" parameter="options.visualization.appeareance.colors.floorColor">#404040</colorNode>
+	<colorNode name="options.visualization.appearance.colors.wallColor" useAsLocString="true" information="options.visualization.appearance.colors.wallColor.info" parameter="options.visualization.appeareance.colors.wallColor">#c0c0c0</colorNode>
+	<colorNode name="options.visualization.appearance.colors.individualColor" useAsLocString="true" information="options.visualization.appearance.colors.individualColor.info" parameter="options.visualization.appeareance.colors.individualColor">#006cff</colorNode>
+	<colorNode name="options.visualization.appearance.colors.delayAreaColor" useAsLocString="true" information="options.visualization.appearance.colors.delayAreaColor.info" parameter="options.visualization.appeareance.colors.delayAreaColor">#ff0000</colorNode>
+	<colorNode name="options.visualization.appearance.colors.safeAreaColor" useAsLocString="true" information="options.visualization.appearance.colors.safeAreaColor.info" parameter="options.visualization.appeareance.colors.safeAreaColor">#ffff00</colorNode>
+	<colorNode name="options.visualization.appearance.colors.stairAreaColor" useAsLocString="true" information="options.visualization.appearance.colors.stairAreaColor.info" parameter="options.visualization.appeareance.colors.stairAreaColorColor">#ffffaf</colorNode>
+      </treeNode>
       <doubleNode name="options.visualization.appearance.graphHeight" useAsLocString="true" information="options.visualization.appearance.graphHeight.info" parameter="options.visualization.appearance.graphHeight">150.0</doubleNode>
       <doubleNode name="options.visualization.appearance.floorDistance" useAsLocString="true" information="options.visualization.appearance.floorDistance.info" parameter="options.visualization.appearance.floorDistance">250</doubleNode>
       <doubleNode name="options.visualization.appearance.individualHeight" useAsLocString="true" information="options.visualization.appearance.individualHeight.info" parameter="options.visualization.appearance.individualHeight">100</doubleNode>
       <doubleNode name="options.visualization.appearance.IndividualRadius" useAsLocString="true" information="options.visualization.appearance.individualRadius.info" parameter="options.visualization.appearance.individualRadius">15</doubleNode>
+      <doubleNode name="options.visualization.appearance.nodeRadius" useAsLocString="true" information="options.visualization.appearance.nodeRadius.info" parameter="options.visualization.appearance.nodeRadius">1.3</doubleNode>
       <doubleNode name="options.visualization.appearance.wallHeight" useAsLocString="true" information="options.visualization.appearance.wallHeight.info" parameter="options.visualization.appearance.wallHeight">30</doubleNode>
     </treeNode>
     <comboBoxNodeQuality name="options.visualization.qualitySetting" useAsLocString="true" information="options.visualization.qualitySetting.info" parameter="options.visualization.qualitySetting">MediumQuality</comboBoxNodeQuality>
