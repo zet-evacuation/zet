@@ -33,38 +33,38 @@ import ds.z.TeleportEdge;
  */
 public class EdgeConverter extends ReflectionConverter {
 	private Class myClass = Edge.class;
-	
+
 	public EdgeConverter (Mapper mapper, ReflectionProvider reflectionProvider) {
 		super (mapper, reflectionProvider);
 	}
-	
+
 	@Override
 	public boolean canConvert (Class type) {
 		return myClass.isAssignableFrom (type);
 	}
-	
+
 	@Override
-	public Object unmarshal (final HierarchicalStreamReader reader, 
+	public Object unmarshal (final HierarchicalStreamReader reader,
 			final UnmarshallingContext context) {
 		Object created = instantiateNewInstance(reader, context);
-		
+
 		// Early recreation of changeListener List neccessary
 ///		reflectionProvider.writeField (created, "changeListeners", new ArrayList<ChangeListener> (), myClass);
-		
+
         created = doUnmarshal(created, reader, context);
 		Edge result = (Edge)serializationMethodInvoker.callReadResolve(created);
-				
+
 		if (result instanceof RoomEdge) {
 			// Recreate transient fields
-			reflectionProvider.writeField (created, "ensureMatchWithLinkTarget", 
-				new Boolean (!(result instanceof TeleportEdge)), RoomEdge.class);
+			reflectionProvider.writeField (created, "ensureMatchWithLinkTarget",
+				Boolean.valueOf(!(result instanceof TeleportEdge)), RoomEdge.class);
 		}
 		if (result instanceof TeleportEdge) {
 			// Recreate transient fields
-			reflectionProvider.writeField (created, "revertLinkTargetOnDelete", 
-				new Boolean (true), TeleportEdge.class);
+			reflectionProvider.writeField (created, "revertLinkTargetOnDelete",
+				Boolean.valueOf( true ), TeleportEdge.class);
 		}
-		
+
 		return result;
 	}
 }

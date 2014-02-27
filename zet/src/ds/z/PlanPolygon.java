@@ -2048,7 +2048,7 @@ public class PlanPolygon<T extends Edge> implements Iterable<T> {
 
 			deltaX = work2.getXInt() - work1.getXInt();
 			deltaY = work2.getYInt() - work1.getYInt();
-			m = new Float( deltaY ).floatValue() / new Float( deltaX ).floatValue();
+			m = deltaY / deltaX;
 
 			//start is the first point of this edge. so it's the beginning PlanPoint of the following created edges
 			PlanPoint start = work1;
@@ -2074,7 +2074,7 @@ public class PlanPolygon<T extends Edge> implements Iterable<T> {
 				//crossingpoint with the next x-coordinate
 				yCord = Math.round( start.getYInt() + (xCord - start.getXInt()) * m );
 				//creates the next PlanPoint which has to be setLocation due to rasterization.
-				nextPlanPoint = new PlanPoint( xCord, Math.round( (new Float( yCord ).floatValue() / 400.0f) ) * 400 );
+				nextPlanPoint = new PlanPoint( xCord, Math.round( ( yCord / 400.0f) ) * 400 );
 
 				//check, if nextPlanPoint has the same y-value as its predecessor and the predecessor of this one in newPlanPoints
 				//if yes then delete the predecessor.

@@ -407,8 +407,10 @@ public class Room implements CellMatrix<EvacCell> {
 
 	@Override
 	public boolean equals(Object obj){
-	    Room room = (Room)obj;
-	    return room.getID() == id;
+		if( !(obj instanceof Room) )
+			return false;
+		Room room = (Room)obj;
+		return room.getID() == id;
 	}
 
 	public int getID() {

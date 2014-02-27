@@ -68,7 +68,7 @@ public class PushRelabelHighestLabel extends PushRelabel {
 		end = System.nanoTime();
 		phase1Time = end-start;
 
-		if( true ) return null;
+		//if( true ) return null;
 
 		start = System.nanoTime();
 		makeFeasible();

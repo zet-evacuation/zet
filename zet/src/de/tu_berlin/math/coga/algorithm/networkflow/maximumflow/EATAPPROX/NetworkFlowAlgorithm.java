@@ -19,6 +19,7 @@ import ds.mapping.IdentifiableBooleanMapping;
 import ds.mapping.IdentifiableIntegerMapping;
 import java.util.HashSet;
 import java.util.LinkedList;
+import java.util.Objects;
 import java.util.Queue;
 import java.util.Set;
 
@@ -117,8 +118,21 @@ public class NetworkFlowAlgorithm extends PushRelabel {
 
 		while(!queue.isEmpty()){
 			Node node = queue.remove();
-			//System.out.println( "Found new reach-node: " + node );
+			if( verbose )
+				System.out.println( "Found new reach-node: " + node );
 			canReachSink.set( node, true );
+			if( excess.get( node ) == 0 ) {
+				if( inactiveBuckets.inactive[node.id()] == false ) {
+					//System.out.println( "Node should be inactive!" );
+					inactiveBuckets.addInactive( distanceLabels.get( node ), node );
+				}
+
+			} else {
+				if( activeBuckets.active[node.id()] == false ) {
+//					System.out.println( "Should be __active!" );
+					//activeBuckets.addActive( distanceLabels.get( node ), node );
+				}
+			}
 			// iterate over incoming edges
 			IdentifiableCollection<Edge> in = residualGraph.incomingEdges( node );
 			for( Edge e : in ) {
@@ -171,8 +185,10 @@ public class NetworkFlowAlgorithm extends PushRelabel {
 				continue;
 			}
 			distanceLabels.set( v, id == source.id() ? n : 1 ); // nodecount hier muss der aktuelle node-count hin.
-			if( excess.get( v ) > 0 )
+			if( excess.get( v ) > 0 ) {
 				activeBuckets.addActive( 1, v );
+				//gotActive.add( v );
+			}
 			else if( distanceLabels.get( v ) < n )
 				inactiveBuckets.addInactive( 1, v );
 		}
@@ -184,7 +200,12 @@ public class NetworkFlowAlgorithm extends PushRelabel {
 		while( activeBuckets.getMaxIndex() >= activeBuckets.getMinIndex() ) {
 			final Node v = activeBuckets.max();
 			if( v != null ) {
+				if( v.id() == 3457 ) {
+					System.out.println( "Deactivate 3457 with distance " + activeBuckets.getMaxIndex() + " with excess " + excess.get( v ) );
+				}
 				activeBuckets.removeActive( activeBuckets.getMaxIndex(), v );
+				//gotActive.remove( v );
+
 				int pushesBefore = pushes;
 				discharge( v );
 				int pushesAfter = pushes;
@@ -204,6 +225,8 @@ public class NetworkFlowAlgorithm extends PushRelabel {
 
 		assert excess.get( v ) > 0;
 		assert v.id() != sink.id();
+		assert inactiveBuckets.inactive[v.id()] == false;
+		//assert activeBuckets.active[v.id()] == true; vor dem aufruf von discharge wird active auf false gesetzt.
 		do {
 			int nodeDistance = distanceLabels.get( v );	// current node distance. -1 is applicable distance
 			int i; // for all outarcs
@@ -252,8 +275,23 @@ public class NetworkFlowAlgorithm extends PushRelabel {
 			// remove j from the inactive list and put to the active list
 			final int dist = distanceLabels.get( e.start() )-1;
 
+			try {
+				Objects.requireNonNull( inactiveBuckets.buckets[dist], "Buckets distance" );
+
+
+			} catch( NullPointerException ex ) {
+				if( inactiveBuckets.inactive[e.end().id()]  == true ) {
+					System.out.println( "Bucket is inactive, but probably has wrong distance." );
+				} else {
+					System.out.println( "Node is not inactive wtf." );
+				}
+				System.out.println( "Push " + delta + " from " + e.start() + " to " + e.end() );
+			}
+
+
 			inactiveBuckets.deleteInactive( dist, e.end() );
 			activeBuckets.addActive( dist, e.end() );
+			//gotActive.add( e.end() );
 		}
 
 		excess.decrease( e.start(), delta );
@@ -310,12 +348,16 @@ public class NetworkFlowAlgorithm extends PushRelabel {
 		return new Tuple<>( minDistance+1, minEdge );
 	}
 
+	//HashSet<Node> gotActive = new HashSet<>();
+
 	/**
 	 * Set new (correct) distance label for the newly reachable nodes via new
 	 * edges.
 	 * @param newEdges
 	 */
 	void updateDistances( Set<Edge> newEdges ) {
+		//gotActive.clear();
+		int oldN = n;
 		n = residualGraph.getCurrentVisibleNodeCount();
 
 		for( Edge e : newEdges ) {
@@ -336,13 +378,25 @@ public class NetworkFlowAlgorithm extends PushRelabel {
 				// TODO: evtl. mit breitensuche nur die knoten die erreichbar sind auf inactive setzen!
 				distanceLabels.set( v, uDist );
 				try {
-					inactiveBuckets.deleteInactive( oldDist, v );
+					if( !inactiveBuckets.inactive[v.id()] ) {
+						//System.out.println( "Try to remove " + v + " from list! --> failed!" );
+					} else {
+						//System.out.println( "Remove inactive " + v + " from list!" );
+						inactiveBuckets.deleteInactive( oldDist, v );
+					}
 
 				} catch( Exception ex ) {
 					System.out.println( "EXCEPTION" );
-					throw ex;
+					//throw ex;
 				}
+				if( excess.get( v ) > 0 )
+					throw new IllegalArgumentException();
 				inactiveBuckets.addInactive( uDist, v );
+
+			} else {
+				if( excess.get( v ) > 0 )
+					throw new IllegalArgumentException();
+				inactiveBuckets.addInactive( oldDist, v );
 
 			}
 			if( excess.get( u ) > 0 ) {
@@ -350,21 +404,152 @@ public class NetworkFlowAlgorithm extends PushRelabel {
 						//System.out.println( "We found a node with positive excess that is not active!" );
 			//		throw new IllegalStateException( " a node with positive excess was found that is not in the set!" );
 				}
-				activeBuckets.addActive( uDist, u );
-				//System.out.println( "Adding " + u + " with distance " + uDist + " to active." );
+				if( inactiveBuckets.inactive[u.id()] ) {
+					//throw new IllegalArgumentException();
+					inactiveBuckets.deleteInactive( uDist+1, u );
+				}
+				activeBuckets.addActive( uDist+1, u ); // udist+1? or at least, update distance!
+				//gotActive.add( v );
+				//System.out.println( "Adding " + u + " with distance " + (uDist+1) + " to active." );
 			}
 		}
 
-		for( Node v : nonActiveExcessNodes ) {
-			activeBuckets.addActive( distanceLabels.get( v ), v );
-			if( verbose )
-				System.out.println( "Adding excess node " + v + " with distance " + distanceLabels.get( v ) + " to active." );
+		Node v = source;
+		distanceLabels.set( v, n );
+
+		for( Node n : activeBuckets.activeHash ) {
+				if( inactiveBuckets.inactive[n.id()] ) {
+					//throw new IllegalArgumentException();
+					inactiveBuckets.deleteInactive( distanceLabels.get( n ), n );
+				}
+			activeBuckets.addActive( distanceLabels.get( n ), n);
+		}
+
+
+		if( 1 == 1 )
+			return;
+
+		for( Node v2 : nonActiveExcessNodes ) {
+			if( v2.id() == 3457 ) {
+				int i = 0;
+				i++;
+			}
+			if( excess.get( v2 ) > 0 ) {
+				activeBuckets.addActive( distanceLabels.get( v2 ), v2 );
+				//gotActive.add( v );
+				if( verbose )
+					System.out.println( "Adding excess node " + v2 + " with distance " + distanceLabels.get( v2 ) + " to active." );
+			} else {
+				//inactiveBuckets.addInactive( distanceLabels.get( v ), v );
+			}
 		}
 		nonActiveExcessNodes.clear();
 
-		Node v = source;
-		distanceLabels.set( v, n );
 		//inactiveBuckets.addInactive( n, v ); // the source is neither active nor inactive
+
+		for( int i = 0; i < residualGraph.getCurrentVisibleNodeCount(); ++i ) {
+			if( distanceLabels.get( residualGraph.nodes.get( i ) ) == oldN && excess.get( residualGraph.nodes.get( i ) ) == 0 )  {
+				//System.out.println( "Add an inactive node: " + i );
+				// todo better? some kind of bfs should be enough...
+				inactiveBuckets.addInactive( oldN, residualGraph.nodes.get( i ) );
+			}
+		}
+
+		// check all nodes, that they are either active or inactive
+		for( int i = 0; i < residualGraph.getCurrentVisibleNodeCount(); ++i ) {
+			int distance= distanceLabels.get( residualGraph.nodes.get( i ) );
+			boolean active = activeBuckets.active[i];
+			boolean inactive = inactiveBuckets.inactive[i];
+
+
+
+			Node node = residualGraph.getNode( i );
+			if( inactive && excess.get( residualGraph.getNode( i ) ) > 0 ) {
+				System.out.println( "insert " + node );
+				//if( inactiveBuckets.inactive[node.id()] ) {
+					//inactiveBuckets.deleteInactive( distance, node );
+				System.out.println( "BFS FAIL: " + node + " was also inactive!" );
+					//activeBuckets.addActive( distance, node );
+				//}
+			}
+
+			if( !(active || inactive ) ) {
+				if( excess.get( node ) > 0 && !inactive ) {
+					//System.out.println( "--- Time Layer: " + residualGraph.lastLayer + " - Node: " + i + " is neither active nor inactive and has excess!!!!." );
+					if( !canReachSink.get( node ) ) {
+
+						//throw new IllegalStateException( "A node with excess " + excess.get( node ) );
+					} else {
+						activeBuckets.addActive( distance, node );
+						if( inactiveBuckets.inactive[node.id()] ) {
+						}
+					}
+
+					activeBuckets.addActive( distance, residualGraph.getNode( i ) );
+				} //else
+					//System.out.println( "--- Time Layer: " + residualGraph.lastLayer + " - Node: " + i + " is neither active nor inactive." );
+			}
+		}
+
+		// perform a BFS, only use nodes that are visible right now. start backwards
+//		// from the super sink
+//		Queue<Node> queue = new LinkedList<>();
+//
+//		queue.add( residualGraph.nodes.get( residualGraph.SUPER_SINK ) );
+//
+//		boolean[] bfs = new boolean[residualGraph.SUPER_SINK+1];
+//		bfs[ residualGraph.SUPER_SINK] = true;
+//
+//		//System.out.println( "Visible nodes: " + residualGraph.getCurrentVisibleNodeCount() );
+//
+//		//System.out.println( "Super sink index: " + residualGraph.SUPER_SINK );
+//		while( !queue.isEmpty() ) {
+//			Node n = queue.poll();
+//			//System.out.println( "BFS " + n );
+//
+//			if( excess.get( residualGraph.getNode( n.id() ) ) > 0 && n.id() != residualGraph.SUPER_SINK ) {
+//				//System.out.println( "Time Layer: " + residualGraph.lastLayer + " - Node: " + n.id() + " is neither active nor inactive and has excess!!!!." );
+//				int distance= distanceLabels.get( n );
+//				activeBuckets.addActive( distance, n );
+//				System.out.println( "BFS insert " + n );
+//				if( inactiveBuckets.inactive[n.id()] ) {
+//					inactiveBuckets.deleteInactive( distance, n );
+//					System.out.println( "BFS FAIL: " + n + " was also inactive!" );
+//				}
+//			} //else
+//				//System.out.println( "Time Layer: " + residualGraph.lastLayer + " - Node: " + n.id() + " is neither active nor inactive." );
+//
+//
+//			for( int i = residualGraph.first.get( n ); i < residualGraph.last.get( n ); ++i ) {
+//				Edge out = residualGraph.getEdge( i );
+//				if( out.end().id() > residualGraph.getCurrentVisibleNodeCount() && out.end().id() < residualGraph.BASE_SINK )
+//					//throw new IllegalStateException( "Something with edge numbers is wrong: " + out.end().id() );
+//					continue;
+//				Edge in = residualGraph.getReverseEdge( out );
+//				if( residualGraph.getResidualCapacity( in ) > 0 && bfs[in.start().id()] != true ) {
+//					//System.out.println( "BFS insert " + in.start() );
+//					queue.add( in.start() );
+//					bfs[in.start().id()] = true;
+//				}
+//			}
+//		}
+
+		//int[] potNodes = new int[]{2530, 3047, 3457, 3515, 4047, 5799, 6834, 14172, 15686, 21381, 25474, 32344, 40656, 40717, 45654, 55909, 57262, 64817, 65985};
+		//int[] potNodes = new int[]{  3457,             57262};
+//		int[] potNodes = new int[]{};
+//
+//		for( int nodeIndex : potNodes ) {
+//			if( excess.get( residualGraph.getNode( nodeIndex ) ) > 0 ) {
+//				activeBuckets.addActive( distanceLabels.get( residualGraph.getNode( nodeIndex ) ), residualGraph.getNode( nodeIndex ) );
+//				if( inactiveBuckets.inactive[nodeIndex]) {
+//					inactiveBuckets.deleteInactive( distanceLabels.get( residualGraph.getNode( nodeIndex ) ), residualGraph.getNode(  nodeIndex ) );
+//				}
+//			}
+//
+//		}
+//
+
+
 	}
 
 	private static enum FeasibleState {

@@ -7,6 +7,7 @@ package de.tu_berlin.math.coga.datastructure;
 import ds.mapping.Identifiable;
 import ds.mapping.IdentifiableObjectMapping;
 import java.lang.reflect.Array;
+import java.util.Objects;
 
 /**
  *
@@ -17,8 +18,8 @@ public class BucketSet<E extends Identifiable> {
 	IdentifiableObjectMapping<E, E> next;
 	IdentifiableObjectMapping<E, E> prev;
 	protected Class<E> rangeType;
-	E[] buckets;
-	boolean[] inactive;
+	public E[] buckets;
+	public boolean[] inactive;
 	int domainSize;
 	protected int[] distanceLabels;
 
@@ -50,6 +51,12 @@ public class BucketSet<E extends Identifiable> {
 	}
 
 	public final void addInactive( int distance, E node ) {
+//		if( node.id() == 665020 ) {
+//			System.out.println( "Try to add " + node + " with distance " + distance );
+//			if( inactive[node.id()] )
+//				System.out.println( "Will FAIL!!!" );
+//
+//		}
 		if( inactive[node.id()] )
 			return;
 		inactive[node.id()] = true;
@@ -65,8 +72,18 @@ public class BucketSet<E extends Identifiable> {
 	}
 
 	public final void deleteInactive( int distance, E node ) {
+//		if( node.id() == 665020 ) {
+//			System.out.println( "Try to remove " + node + " with distance " + distance );
+//		}
+
+		if( !inactive[node.id()])
+			return;
+
 		assert inactive[node.id()];
 		inactive[node.id()] = false;
+
+		Objects.requireNonNull( node, "Node is null" );
+		Objects.requireNonNull( buckets[distance], "Buckets distance" );
 
 		final E next_t = next.get( node );
 		if( buckets[distance].id() == node.id() ) {
