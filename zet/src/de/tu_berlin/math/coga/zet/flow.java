@@ -273,12 +273,7 @@ public class flow implements AlgorithmListener {
 		System.out.println( "Path-Decomposition: " );
 		System.out.println( df.toString( eafp.getTransitTimes() ) );
 
-		EarliestArrivalFlowPatternBuilder builder = new EarliestArrivalFlowPatternBuilder( neededTimeHorizon + 2 );
-
-		for( FlowOverTimePath p : df )
-			builder.addFlowValue( p.getArrival( eafp.getTransitTimes() ), p.getAmount() );
-
-		EarliestArrivalFlowPattern pattern = builder.build();
+		EarliestArrivalFlowPattern pattern = EarliestArrivalFlowPatternBuilder.fromPathBased( df, eafp.getTransitTimes(), neededTimeHorizon );
 
 		System.out.println( pattern );
 

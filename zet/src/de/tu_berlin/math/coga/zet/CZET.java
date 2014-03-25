@@ -9,6 +9,9 @@ import com.martiansoftware.jsap.JSAPException;
 import com.martiansoftware.jsap.JSAPResult;
 import com.martiansoftware.jsap.Switch;
 import com.martiansoftware.jsap.UnflaggedOption;
+import de.tu_berlin.math.coga.algorithm.networkflow.maximumflow.EATAPPROX.EarliestArrivalFlowPattern;
+import de.tu_berlin.math.coga.algorithm.networkflow.maximumflow.EATAPPROX.EarliestArrivalFlowPatternBuilder;
+import de.tu_berlin.math.coga.algorithm.shortestpath.Dijkstra;
 import de.tu_berlin.math.coga.batch.input.reader.ZETProjectFileReader;
 import de.tu_berlin.math.coga.common.debug.Debug;
 import de.tu_berlin.math.coga.graph.io.xml.XMLWriter;
@@ -25,7 +28,8 @@ import ds.graph.StaticPath;
 import ds.graph.flow.FlowOverTimeImplicit;
 import ds.graph.flow.FlowOverTimePath;
 import ds.graph.flow.PathBasedFlowOverTime;
-import ds.mapping.IdentifiableDoubleMapping;
+import ds.graph.network.ExtendedNetwork;
+import ds.graph.network.Network;
 import ds.mapping.IdentifiableIntegerMapping;
 import ds.z.ConcreteAssignment;
 import ds.z.Project;
@@ -48,7 +52,6 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
-import java.util.Set;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.RunnableFuture;
 import java.util.logging.Level;
@@ -439,7 +442,7 @@ public class CZET {
 		m = new MedianCalculator<>( 2 );
 
 		// Now check if simulation or optimization is needed and call the methods
-		assert (computationMode == ComputationMode.EarliestArrivalFlow || computationMode == ComputationMode.EvacuationSimulation || computationMode == ComputationMode.Conversion );
+		assert( computationMode == ComputationMode.EarliestArrivalFlow || computationMode == ComputationMode.EvacuationSimulation || computationMode == ComputationMode.Conversion );
 		switch( computationMode ) {
 			case EarliestArrivalFlow:
 				log.fine( "Perform EAT" );
@@ -451,7 +454,7 @@ public class CZET {
 					// Test run
 					log.fine( "Start test runs" );
 					for( int i = 1; i <= ignore; ++i ) {
-						log.finer( "Ignore run " + i );
+						log.log( Level.FINER, "Ignore run {0}", i);
 						computeZETEAT( fr.getSolution(), seed );
 
 					}
@@ -526,6 +529,7 @@ public class CZET {
 				break;
 			case EvacuationSimulation:
 				log.info( "Perform Simulation" );
+				log.warning( "Not implemented yet!" );
 				break;
 			case Conversion:
 				log.info( "Perform conversion" );
@@ -830,9 +834,6 @@ public class CZET {
 
 			break;
 		}
-
-
-
 	}
 
 	boolean working = true;
@@ -866,7 +867,7 @@ public class CZET {
 			System.exit( 1 );
 		}
 
-		assert (a.getNetworkFlowModel() != null);
+		assert( a.getNetworkFlowModel() != null );
 		if( a.getNetworkFlowModel() == null )
 			throw new IllegalStateException();
 
@@ -923,6 +924,85 @@ public class CZET {
 		log.log( Level.INFO, "Time horizon:{0}", neededTimeHorizon);
 		log.log( Level.INFO, "Flow amount: {0}", algo.getSolution().getFlowAmount());
 		log.log( Level.INFO, "Runtime: {0}", algo.getRuntimeAsString());
+
+		
+		EarliestArrivalFlowPattern pattern = EarliestArrivalFlowPatternBuilder.fromPathBased( df, eafp.getTransitTimes(), neededTimeHorizon );
+		log.log( Level.INFO, "Pattern: {0}", pattern );
+
+		
+		// transform the transit times
+		// compute shortest paths
+		
+		Dijkstra dijkstra;
+		Network n = (Network)eafp.getNetwork();
+		
+
+		IdentifiableIntegerMapping<Edge> transitTimes;
+
+		transitTimes = eafp.getTransitTimes();
+		
+		ExtendedNetwork ex = new ExtendedNetwork( n, 1, eafp.getSources().size() );
+		Node superNode = ex.getFirstNewNode();
+
+		transitTimes.setDomainSize( ex.getEdgeCapacity() ); // reserve space
+
+		for( Node source : eafp.getSources() ) {
+			Edge newEdge = ex.createAndSetEdge( superNode, source );
+			transitTimes.set( newEdge, 0 );
+		}
+
+		
+		
+		dijkstra = new Dijkstra( ex, eafp.getTransitTimes(), superNode );
+		dijkstra.run();
+		
+		dijkstra.getShortestPathTree();
+		log.info( "Solution: " + dijkstra.getShortestPathTree() );
+		
+		
+		
+		transitTimes = eafp.getTransitTimes();
+		IdentifiableIntegerMapping<Edge> newTransitTimes = new IdentifiableIntegerMapping<>( transitTimes );
+		
+		for( Edge e : eafp.getNetwork().edges() ) {
+			int newTransit = transitTimes.get( e ) + dijkstra.getDistance( e.start() )  - dijkstra.getDistance( e.end() );
+			log.log( Level.INFO, "t = {0} + {1} - {2} = {3}", new Object[]{transitTimes.get( e ), dijkstra.getDistance( e.start() ), dijkstra.getDistance( e.end() ), newTransit});
+			newTransitTimes.set( e, newTransit );			
+		}
+		
+		log.log( Level.INFO, "Old transit: {0}", transitTimes);
+		log.log( Level.INFO, "new transit: {0}", newTransitTimes);
+		
+
+		eafp = new EarliestArrivalFlowProblem(eafp.getEdgeCapacities(), eafp.getNetwork(), eafp.getNodeCapacities(), eafp.getSink(), eafp.getSources(), eafp.getTimeHorizon(), newTransitTimes, eafp.getSupplies() );
+		
+		algo = new SEAAPAlgorithm();
+
+		algo.setProblem( eafp );
+		//algo.addAlgorithmListener( this );
+		try {
+			algo.run();
+		} catch( IllegalStateException e ) {
+			//System.err.println( "The illegal state exception occured." );
+		}
+
+		df = algo.getSolution().getPathBased();
+		int oldNeededTimeHorizon = neededTimeHorizon;
+		neededTimeHorizon = algo.getSolution().getTimeHorizon();
+		log.log( Level.INFO, "Total cost: {0}", algo.getSolution().getTotalCost());
+		log.log( Level.INFO, "Time horizon:{0}", neededTimeHorizon);
+		log.log( Level.INFO, "Flow amount: {0}", algo.getSolution().getFlowAmount());
+		log.log( Level.INFO, "Runtime: {0}", algo.getRuntimeAsString());
+
+		
+		pattern = EarliestArrivalFlowPatternBuilder.fromPathBased( df, eafp.getTransitTimes(), neededTimeHorizon );
+		log.log( Level.INFO, "Pattern: {0}", pattern );
+
+		
+		pattern = EarliestArrivalFlowPatternBuilder.fromPathBased( df, transitTimes, oldNeededTimeHorizon );
+		log.log( Level.INFO, "Pattern with original transit times: {0}", pattern );
+		
+		
 		rt[0] = algo.getRuntime();
 		return algo.getSolution();
 	}
