@@ -1,13 +1,5 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 package de.tu_berlin.math.coga.algorithm.shortestpath;
 
-/**
- *
- * @author Martin
- */
 import ds.graph.GraphLocalization;
 import ds.graph.Edge;
 import ds.graph.Forest;
@@ -17,6 +9,7 @@ import ds.mapping.IdentifiableObjectMapping;
 import de.tu_berlin.math.coga.datastructure.priorityQueue.MinHeap;
 import ds.graph.network.AbstractNetwork;
 import ds.graph.Node;
+
 /**
  *
  * @author Martin Groß
