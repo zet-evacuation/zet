@@ -21,11 +21,17 @@
 
 package gui;
 
+import algo.graph.dynamicflow.eat.EarliestArrivalFlowProblem;
+import batch.plugins.AlgorithmicPlugin;
+import de.tu_berlin.math.coga.batch.operations.AtomicOperation;
+import de.tu_berlin.math.coga.common.algorithm.Algorithm;
 import de.tu_berlin.math.coga.common.debug.Debug;
 import de.tu_berlin.math.coga.common.debug.HTMLLoggerHandler;
 import de.tu_berlin.math.coga.common.debug.SimpleFileHandler;
 import de.tu_berlin.math.coga.common.debug.SimpleLogFormatter;
 import de.tu_berlin.math.coga.common.util.Formatter;
+import ds.graph.flow.PathBasedFlowOverTime;
+import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.nio.file.Files;
@@ -34,6 +40,8 @@ import java.util.Calendar;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JOptionPane;
+import net.xeoh.plugins.base.PluginManager;
+import net.xeoh.plugins.base.impl.PluginManagerFactory;
 
 /**
  * The {@code ZETMain} class is the main entry for the graphical user
@@ -55,6 +63,7 @@ public class ZETMain {
 	static SimpleFileHandler errFileHandler = null;
 	static SimpleFileHandler logFileHandler = null;
 	private static boolean privateLogging = true;
+	public final static PluginManager pm = PluginManagerFactory.createPluginManager();
 
 	/** The logger of the main class. */
 	private static final Logger log = Logger.getGlobal();
@@ -62,6 +71,34 @@ public class ZETMain {
 	public static void main( String[] args ) {
 		setUpLog( false, true, false, true );
 		privateLogging = false;
+		pm.addPluginsFrom( new File( "./dist" ).toURI() );
+
+		//AwesomePlugin plugin = pm.getPlugin(AwesomePlugin.class);
+		AlgorithmicPlugin<?,?> plugin = pm.getPlugin(AlgorithmicPlugin.class);
+
+		//System.out.println( plugin.howAreYou() );
+		if( plugin == null )
+			System.err.println( "Plugin is null!" );
+		else
+			System.out.println( plugin );
+
+		AtomicOperation<EarliestArrivalFlowProblem,PathBasedFlowOverTime> ao = new AtomicOperation<>( "EAFP", EarliestArrivalFlowProblem.class, PathBasedFlowOverTime.class );
+
+		AtomicOperation<?,?> atomic = ao;
+
+		if( plugin.canTake( atomic.accepts() ) ) {
+			System.out.println( "The plugin can take the input from the atomic operation" );
+			if( plugin.canGenerate( atomic.generates() ) ) {
+				Algorithm algo = plugin.getAlgorithm();
+				System.out.println( "Algorithm created;" );
+			} else {
+				System.out.println( "The plugin cannot generate the output!" );
+			}
+		} else {
+			System.out.println( "The plugin cannot take the input!" );
+		}
+
+
 		try {
 			ZETLoader.load( args );
 		} catch ( NoClassDefFoundError | java.lang.UnsatisfiedLinkError ex ) {
@@ -122,9 +159,9 @@ public class ZETMain {
 						log.addHandler( logFileHandler );
 
 						logFileHandler.setMinLevel( Level.ALL );
-						logFileHandler.setErrLevel( Level.INFO );						
+						logFileHandler.setErrLevel( Level.INFO );
 					}
-						
+
 				} catch( IOException | SecurityException ex ) {
 					log.severe( "Error creating debug out." );
 				}
@@ -175,14 +212,14 @@ public class ZETMain {
 			log.log( Level.SEVERE, null, ex );
 		}
 	}
-	
+
 	private static String getAutoName( boolean err ) {
 		Calendar cal = Calendar.getInstance();
-		return err ? 
+		return err ?
 						"zet_" + cal.get( Calendar.YEAR ) + "-" + Formatter.fillLeadingZeros( cal.get( Calendar.MONTH )+1, 2 ) + "-" + Formatter.fillLeadingZeros( cal.get( Calendar.DAY_OF_MONTH ), 2 ) + "_" + Formatter.fillLeadingZeros( cal.get( Calendar.HOUR_OF_DAY ), 2 ) + "-" + Formatter.fillLeadingZeros( cal.get( Calendar.MINUTE ), 2 ) + "-" + Formatter.fillLeadingZeros( cal.get( Calendar.SECOND ), 2 ) + "_err.log" :
 						"zet_" + cal.get( Calendar.YEAR ) + "-" + Formatter.fillLeadingZeros( cal.get( Calendar.MONTH )+1, 2 ) + "-" + Formatter.fillLeadingZeros( cal.get( Calendar.DAY_OF_MONTH ), 2 ) + "_" + Formatter.fillLeadingZeros( cal.get( Calendar.HOUR_OF_DAY ), 2 ) + "-" + Formatter.fillLeadingZeros( cal.get( Calendar.MINUTE ), 2 ) + "-" + Formatter.fillLeadingZeros( cal.get( Calendar.SECOND ), 2 ) + ".log";
 	}
-	
+
 	private static String getVersion() {
 		try {
 			return new String( Files.readAllBytes( Paths.get( "./version.txt" ) ) );

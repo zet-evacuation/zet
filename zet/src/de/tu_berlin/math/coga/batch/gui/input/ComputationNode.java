@@ -1,7 +1,3 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 package de.tu_berlin.math.coga.batch.gui.input;
 
 import de.tu_berlin.math.coga.batch.Computation;
@@ -16,7 +12,8 @@ public class ComputationNode extends BatchTreeTableNode<Computation> {
     public ComputationNode(Computation computation) {
         super(computation, new String[0], new ImageIcon("./icons/cube_24.png"));
         add(new InputListNode(computation.getInput()));
-        add(new AlgorithmListNode(computation.getAlgorithms()));
+        //add(new AlgorithmListNode(computation.getAlgorithms()));
+				add(new OperationListNode(computation.getOperations()));
     }
 
     public Computation getComputation() {
@@ -33,10 +30,10 @@ public class ComputationNode extends BatchTreeTableNode<Computation> {
         if (column == 0) {
             getComputation().setTitle(aValue.toString());
         }
-    }   
-    
+    }
+
     @Override
     public String toString() {
         return getComputation().getTitle();
-    }    
+    }
 }
