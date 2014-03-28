@@ -13,6 +13,7 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
+
 /*
  * NetworkFlowModel.java
  *
@@ -132,7 +133,7 @@ public class NetworkFlowModel implements Iterable<Node> {
 		else
 			throw new IllegalArgumentException( ZETLocalization.getSingleton().getString( "ds.Graph.NoTransitTimeException" + edge + "." ) );
 	}
-	
+
 	public double getExactTransitTime( Edge edge ) {
 		if( exactTransitTimes.isDefinedFor( edge ) )
 			return exactTransitTimes.get( edge );
@@ -163,7 +164,7 @@ public class NetworkFlowModel implements Iterable<Node> {
 	public Edge getEdge( int i ) {
 		return network.getEdge( i );
 	}
-	
+
 	public Edge getEdge( Node lastNode, Node node ) {
 		return network.getEdge( lastNode, node );
 	}
@@ -204,7 +205,7 @@ public class NetworkFlowModel implements Iterable<Node> {
 		} else
 			throw new AssertionError( ZETLocalization.getSingleton().getString( "converter.NoCheckException" ) );
 	}
-	
+
 	Node newNode() {
 		Node node = new Node( nodeCount );
 		nodeCount++;
@@ -305,7 +306,7 @@ public class NetworkFlowModel implements Iterable<Node> {
 		return currentAssignment;
 	}
 
-	
+
 	public IdentifiableIntegerMapping<Edge> edgeCapacities() {
 		return edgeCapacities;
 	}
@@ -325,7 +326,7 @@ public class NetworkFlowModel implements Iterable<Node> {
 		}
 		return nodePositionMapping;
 	}
-	// TO be moved into the builder as static 
+	// TO be moved into the builder as static
 	public EarliestArrivalFlowProblem getEAFP() {
 		return getEAFP( 0 );
 	}

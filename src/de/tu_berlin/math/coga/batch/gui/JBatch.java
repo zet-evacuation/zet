@@ -10,6 +10,7 @@ import algo.ca.algorithm.evac.EvacuationCellularAutomatonInOrder;
 import algo.ca.algorithm.evac.EvacuationCellularAutomatonRandom;
 import algo.graph.dynamicflow.eat.SEAAPAlgorithm;
 import batch.load.BatchProjectEntry;
+import batch.plugins.AlgorithmicPlugin;
 import com.l2fprod.common.propertysheet.PropertySheetPanel;
 import com.l2fprod.common.swing.JTaskPane;
 import com.l2fprod.common.swing.JTaskPaneGroup;
@@ -17,11 +18,16 @@ import de.tu_berlin.math.coga.batch.Computation;
 import de.tu_berlin.math.coga.batch.ComputationList;
 import de.tu_berlin.math.coga.batch.algorithm.AlgorithmList;
 import de.tu_berlin.math.coga.batch.gui.action.*;
+import de.tu_berlin.math.coga.batch.gui.input.AlgorithmPluginNode;
 import de.tu_berlin.math.coga.batch.gui.input.ComputationListNode;
 import de.tu_berlin.math.coga.batch.gui.input.ComputationNode;
 import de.tu_berlin.math.coga.batch.gui.input.InputListNode;
 import de.tu_berlin.math.coga.batch.gui.input.InputNode;
+import de.tu_berlin.math.coga.batch.gui.input.OperationAlgorithmSelectNode;
 import de.tu_berlin.math.coga.batch.input.*;
+import de.tu_berlin.math.coga.batch.operations.BasicOptimization;
+import de.tu_berlin.math.coga.batch.operations.Operation;
+import de.tu_berlin.math.coga.batch.operations.OperationList;
 import de.tu_berlin.math.coga.common.algorithm.Algorithm;
 import ds.ProjectLoader;
 import ds.z.Project;
@@ -29,19 +35,21 @@ import gui.GUIControl;
 import java.awt.BorderLayout;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.io.File;
 import java.io.IOException;
-import java.util.Arrays;
+import java.util.Enumeration;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
-import javax.swing.JTree;
 import javax.swing.event.TreeSelectionEvent;
 import javax.swing.event.TreeSelectionListener;
 import javax.swing.tree.TreePath;
+import org.jdesktop.swingx.treetable.MutableTreeTableNode;
 
 /**
  *
@@ -50,13 +58,14 @@ import javax.swing.tree.TreePath;
 public class JBatch extends JPanel {
 
 
+
     private class InputKeyListener implements KeyListener {
 
         public InputKeyListener() {
         }
 
         @Override
-        public void keyTyped(KeyEvent e) {            
+        public void keyTyped(KeyEvent e) {
         }
 
         @Override
@@ -80,14 +89,14 @@ public class JBatch extends JPanel {
         }
 
         @Override
-        public void keyReleased(KeyEvent e) {            
+        public void keyReleased(KeyEvent e) {
         }
     }
 
     private class InputSelectionListener implements TreeSelectionListener {
 
         private ComputationList selectedComputations;
-        
+
         public InputSelectionListener() {
             selectedComputations = new ComputationList();
         }
@@ -98,8 +107,8 @@ public class JBatch extends JPanel {
 
         public TreePath[] getSelectedPaths() {
             return table.getTree().getTreeSelectionModel().getSelectionPaths();
-        }        
-        
+        }
+
         @Override
         public void valueChanged(TreeSelectionEvent e) {
             selectedComputations.clear();
@@ -119,6 +128,8 @@ public class JBatch extends JPanel {
             addCurrentProjectAction.setEnabled(!selectedComputations.isEmpty());
             addInputDirectoryAction.setEnabled(!selectedComputations.isEmpty());
             addInputFilesAction.setEnabled(!selectedComputations.isEmpty());
+
+						basicOptimization.setEnabled(!selectedComputations.isEmpty());
         }
     }
 
@@ -136,6 +147,7 @@ public class JBatch extends JPanel {
     private final AddAlgorithmAction cellularAutomaton2;
     private final AddAlgorithmAction cellularAutomaton3;
     private final AddAlgorithmAction cellularAutomaton4;
+		private final OperationAction basicOptimization;
 
 
     public JBatch(GUIControl control) {
@@ -145,7 +157,7 @@ public class JBatch extends JPanel {
         // add JTaskPaneGroups to the container
         JTaskPaneGroup actionPane = new JTaskPaneGroup();
         actionPane.setTitle("Computation");
-        actionPane.setSpecial(true);         
+        actionPane.setSpecial(true);
         actionPane.add(new NewComputationAction(this));
 
         JTaskPaneGroup inputPane = new JTaskPaneGroup();
@@ -156,52 +168,105 @@ public class JBatch extends JPanel {
         inputPane.add(addInputDirectoryAction = new AddInputDirectoryAction(this));
         //actionPane.add(inputPane);
 
+				JTaskPaneGroup activityPane = new JTaskPaneGroup();
+				activityPane.setTitle( "Use cases" );
+
+				basicOptimization = new OperationAction( this, new BasicOptimization(), "Basic Optimization");
+				//basicOptimization = new OperationAction( this, AbstractOperation.class, "Basic Optimization");
+				activityPane.add( basicOptimization );
+
+
+
+
         JTaskPaneGroup simulationPane = new JTaskPaneGroup();
         simulationPane.setTitle("Simulation");
         simulationPane.setSpecial(true);
-        
+
         JTaskPaneGroup caPane = new JTaskPaneGroup();
         caPane.setTitle("Cellular Automaton");
         caPane.add(cellularAutomaton = new AddAlgorithmAction(this, EvacuationCellularAutomatonInOrder.class, "In Order"));
         caPane.add(cellularAutomaton2 = new AddAlgorithmAction(this, EvacuationCellularAutomatonBackToFront.class, "Back-to-Front"));
         caPane.add(cellularAutomaton3 = new AddAlgorithmAction(this, EvacuationCellularAutomatonFrontToBack.class, "Front-to-Back"));
         caPane.add(cellularAutomaton4 = new AddAlgorithmAction(this, EvacuationCellularAutomatonRandom.class, "Randomized"));
-        
+
         simulationPane.add(caPane);
-        
+
         JTaskPaneGroup optimizationPane = new JTaskPaneGroup();
         optimizationPane.setTitle("Optimization");
         optimizationPane.setSpecial(true);
-        
+
         JTaskPaneGroup eafPane = new JTaskPaneGroup();
         eafPane.setTitle("Earliest Arrival");
         eafPane.add(tjandraOptimized = new AddAlgorithmAction(this, SEAAPAlgorithm.class, "Tjandra (Optimized)"));
-        
-        optimizationPane.add(eafPane);     
-        
+
+        optimizationPane.add(eafPane);
+
         actionPane.add(new RunComputationAction(this));
         actionPane.add(new StopComputationAction(this));
 
         taskPaneContainer.add(actionPane);
         taskPaneContainer.add(inputPane);
+				taskPaneContainer.add( activityPane );
         taskPaneContainer.add(simulationPane);
         taskPaneContainer.add(optimizationPane);
         add(new JScrollPane(taskPaneContainer), BorderLayout.WEST);
-        
+
         table = new JInputView();
         table.getTree().addTreeSelectionListener(selectionListener = new InputSelectionListener());
         table.getTree().addKeyListener(keyListener = new InputKeyListener());
+
+				table.getTree().addMouseListener( new MouseAdapter() {
+
+					@Override
+					public void mouseClicked( MouseEvent e ) {
+						System.out.println( "Mouse klicked on tree." );
+						if( e.getClickCount() == 2 ) {
+							System.out.println( "Double click!!!" );
+							System.out.println( "Column: " + table.getTree().getSelectedColumn() );
+							System.out.println( "Row: " + table.getTree().getSelectedRow() );
+							table.getTree().getTreeSelectionModel().getSelectionPaths();
+
+							TreePath selectedPath = table.getTree().getTreeSelectionModel().getSelectionPath();
+							System.out.println( selectedPath );
+							Object p = selectedPath.getLastPathComponent();
+							if( p instanceof AlgorithmPluginNode ) {
+								AlgorithmPluginNode pluginNode = (AlgorithmPluginNode)p;
+								AlgorithmicPlugin<?,?> selectedPlugin = pluginNode.getUserObject();
+								System.out.println( "Plugin: " + selectedPlugin );
+								// Activate the node and deactivate all other!
+								OperationAlgorithmSelectNode selectNode = (OperationAlgorithmSelectNode)pluginNode.getParent();
+
+
+								int selectedIndex = selectNode.getUserObject().indexOf( selectedPlugin );
+								selectNode.getUserObject().setIndex( selectedIndex );
+
+
+
+								int index = 0;
+								Enumeration<AlgorithmPluginNode> a = selectNode.children();
+								while( a.hasMoreElements() ) {
+									AlgorithmPluginNode otherPlugin = a.nextElement();
+									otherPlugin.setSelected( index == selectedIndex );
+									index++;
+								}
+								repaint();
+							}
+						}
+					}
+
+				} );
+
         add(new JScrollPane(table), BorderLayout.CENTER);
-        
+
         PropertySheetPanel properties = new PropertySheetPanel();
         add(new JScrollPane(properties), BorderLayout.EAST);
-        
+
         computationList = new ComputationList();
         Computation computation = new Computation();
         computation.setTitle(computationList.generateGenericComputationTitle());
         computationList.add(computation);
-        table.setInput(computationList);    
-        Object root = table.getTree().getTreeTableModel().getRoot(); 
+        table.setInput(computationList);
+        Object root = table.getTree().getTreeTableModel().getRoot();
         Object child = table.getTree().getTreeTableModel().getChild(root, 0);
         TreePath path = new TreePath(new Object[] { root, child });
         table.getTree().getTreeSelectionModel().setSelectionPath(path);
@@ -211,27 +276,36 @@ public class JBatch extends JPanel {
         return control;
     }
 
-    
+
     public void add(BatchProjectEntry entry) {
-    }    
-    
+    }
+
     public void addAlgorithm(Class<? extends Algorithm> algorithmClass, String title) {
         for (Computation computation : selectionListener.getSelectedComputations()) {
             AlgorithmList algorithmList = computation.getAlgorithms();
             InputAlgorithm algorithm = new InputAlgorithm(algorithmClass, title);
             algorithmList.add(algorithm);
-        }           
+        }
         updateTreeTable();
-    }        
-    
+    }
+
+		public void addOperation( Operation operation, String title ) {
+			for( Computation computation: selectionListener.getSelectedComputations() ) {
+				OperationList operations = computation.getOperations();
+				operations.add( operation );
+			}
+			updateTreeTable();
+		}
+
+
     public void addComputation(Computation computation) {
         computationList.add(computation);
         updateTreeTable();
-    }    
-    
+    }
+
     public void addCurrentProject() {
         addProject(control.getZControl().getProject());
-    }    
+    }
 
     public void addInputFiles(File[] selectedFiles) {
         addInputFiles(selectedFiles, false, false);
@@ -240,7 +314,7 @@ public class JBatch extends JPanel {
     public void addInputFiles(File[] selectedFiles, boolean recursive, boolean followingLinks) {
         FileCrawler crawler = new FileCrawler(recursive, followingLinks);
         List<String> extensions = FileFormat.getAllKnownExtensions();
-        List<File> files = new LinkedList<>();        
+        List<File> files = new LinkedList<>();
         for (File file : selectedFiles) {
             if (file.isDirectory()) {
                 files.addAll(crawler.listFiles(file, extensions));
@@ -255,8 +329,8 @@ public class JBatch extends JPanel {
                 if (!input.contains(inputFile)) {
                     input.add(inputFile);
                 }
-            }      
-        }    
+            }
+        }
         updateTreeTable();
     }
 
@@ -272,7 +346,7 @@ public class JBatch extends JPanel {
             InputFile inputFile = new InputFile(file);
             if (!input.contains(inputFile)) {
                 input.add(inputFile);
-            }            
+            }
         }
         updateTreeTable();
     }
@@ -282,8 +356,9 @@ public class JBatch extends JPanel {
     }
 
     protected void updateTreeTable() {
+			// the following is not used.
         int[] selected = table.getTree().getSelectedRows();
-        List<TreePath> paths = new LinkedList<>();
+				List<TreePath> paths = new LinkedList<>();
         for (int i = 0; i < selected.length; i++) {
             TreePath path = table.getTree().getPathForRow(selected[i]);
             paths.add(path);

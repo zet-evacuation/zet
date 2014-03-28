@@ -16,16 +16,18 @@ public class AddAlgorithmAction extends BatchAction {
 
     private Class<? extends Algorithm> algorithm;
     private String title;
-    
+
     public AddAlgorithmAction(JBatch batch, Class<? extends Algorithm> algorithm, String title) {
         super(batch, title, "algo_24.png");
+			System.out.println( "Creating algorithm action '" + algorithm + "' with title '" + title + "'" );
         setEnabled(false);
         this.algorithm = algorithm;
         this.title = title;
-    }   
-    
+    }
+
     @Override
     public void actionPerformed(ActionEvent ae) {
+			System.out.println( "Adding algorithm '" + algorithm + "' with title '" + title + "'" );
         batch.addAlgorithm(algorithm, title);
-    }    
+    }
 }
