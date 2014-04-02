@@ -1,19 +1,25 @@
 /*
  * UnknownFileReader.java
- * 
+ *
  */
 package de.tu_berlin.math.coga.batch.input.reader;
 
+import ds.z.Project;
 import java.io.File;
 
 /**
- * A input file reader for unknown files that does effectively nothing. It is 
- * used when an input file reader for unknown file types is required but 
+ * A input file reader for unknown files that does effectively nothing. It is
+ * used when an input file reader for unknown file types is required but
  * a <code>null</code> reader is not desired.
- * 
+ *
  * @author Martin Groß
  */
 public class UnknownFileReader extends InputFileReader<Void> {
+	@Override
+	public Class<Void> getTypeClass() {
+		return Void.class;
+	}
+
 
     @Override
     public String[] getProperties() {
@@ -23,5 +29,5 @@ public class UnknownFileReader extends InputFileReader<Void> {
     @Override
     protected Void runAlgorithm(File problem) {
         return null;
-    }    
+    }
 }

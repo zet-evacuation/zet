@@ -12,7 +12,7 @@ import java.util.LinkedList;
  *
  * @author Jan-Philipp Kappmeier
  */
-public class AbstractOperation implements Operation {
+public abstract class AbstractOperation implements Operation {
 	LinkedList<AtomicOperation<?,?>> operations = new LinkedList<>();
 
 	void addOperation( AtomicOperation<?,?> operation ) {
