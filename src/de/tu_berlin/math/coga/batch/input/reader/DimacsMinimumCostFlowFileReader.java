@@ -1,6 +1,6 @@
 /*
  * DimacsMinimumCostFlowFileReader.java
- * 
+ *
  */
 package de.tu_berlin.math.coga.batch.input.reader;
 
@@ -11,11 +11,15 @@ import java.io.FileReader;
 import java.io.IOException;
 
 /**
- * A reader for minimum cost flow problem instances stored in the DIMACS format: 
+ * A reader for minimum cost flow problem instances stored in the DIMACS format:
  * http://dimacs.rutgers.edu/Challenges/
  * @author Martin Groß
  */
 public class DimacsMinimumCostFlowFileReader extends InputFileReader<RawMinimumCostFlowProblem> {
+	@Override
+	public Class<RawMinimumCostFlowProblem> getTypeClass() {
+		return RawMinimumCostFlowProblem.class;
+	}
 
     /**
      * Caches the number of nodes and edges.
@@ -24,7 +28,7 @@ public class DimacsMinimumCostFlowFileReader extends InputFileReader<RawMinimumC
 
     /**
      * Returns the number of nodes, edges and total supply of the minimum cost
-     * flow instance and reads this information from the header of the file, if 
+     * flow instance and reads this information from the header of the file, if
      * necessary.
      * @return an array containing the number of nodes as its first entry,
      * the number of edges as its second and the total supply as its third.
@@ -80,7 +84,7 @@ public class DimacsMinimumCostFlowFileReader extends InputFileReader<RawMinimumC
      * @param file the file which contains the minimum cost flow problem.
      * @param propertiesOnly whether only the number of nodes, edges and supply
      * should be read. Much faster than reading the whole file.
-     * @return the minimum cost flow problem. 8n + 12m + O(1) Bytes required for 
+     * @return the minimum cost flow problem. 8n + 12m + O(1) Bytes required for
      * storage.
      */
     protected RawMinimumCostFlowProblem runAlgorithmSpeed(File file, boolean propertiesOnly) {
@@ -110,7 +114,7 @@ public class DimacsMinimumCostFlowFileReader extends InputFileReader<RawMinimumC
                         assert numberOfNodes >= 0 : "File specifies a negative amount of nodes.";
                         assert numberOfEdges >= 0 : "File specifies a negative amount of edges.";
                         supplies = new int[numberOfNodes];
-                        if (!propertiesOnly) {                            
+                        if (!propertiesOnly) {
                             caps = new int[numberOfEdges];
                             costs = new int[numberOfEdges];
                             ends = new int[numberOfEdges];
@@ -181,11 +185,11 @@ public class DimacsMinimumCostFlowFileReader extends InputFileReader<RawMinimumC
      * Reads the problem in a speed-optimized way. 12n + 8m + O(1) Bytes are
      * required.
      * @param file the file which contains the minimum cost flow problem.
-     * @param propertiesOnly whether only the number of nodes and edges should 
+     * @param propertiesOnly whether only the number of nodes and edges should
      * be read. Much faster than reading the whole file.
-     * @return the minimum cost flow problem. 4n + 8m + O(1) Bytes required for 
+     * @return the minimum cost flow problem. 4n + 8m + O(1) Bytes required for
      * storage.
-     */    
+     */
     protected  RawMinimumCostFlowProblem runAlgorithmMemory(File file, boolean propertiesOnly) {
         int numberOfEdges = -1;
         int numberOfNodes = -1;
@@ -193,7 +197,7 @@ public class DimacsMinimumCostFlowFileReader extends InputFileReader<RawMinimumC
         int lineIndex = 1;
         int[] degrees = null;
         int numberOfSupply = 0;
-        int[] supplies = null;        
+        int[] supplies = null;
         String[] tokens;
         try (BufferedReader reader = new BufferedReader(new FileReader(file))) {
             while ((line = reader.readLine()) != null) {

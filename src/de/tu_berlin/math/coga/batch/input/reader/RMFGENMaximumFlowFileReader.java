@@ -1,6 +1,6 @@
 /*
  * RMFGENMaximumFlowFileReader.java
- * 
+ *
  */
 package de.tu_berlin.math.coga.batch.input.reader;
 
@@ -13,17 +13,21 @@ import java.io.IOException;
 /**
  * A reader for maximum flow problem instances created by the RMFGEN generator:
  * D. Goldfarb and M.D. Grigoriadis, A computational comparison of the Dinic and
- * Network Simplex methods for maximum flow, Annals of Operations Research 13 
- * (1988), 83-123. 
+ * Network Simplex methods for maximum flow, Annals of Operations Research 13
+ * (1988), 83-123.
  * @author Martin Groß
  */
 public class RMFGENMaximumFlowFileReader extends InputFileReader<RawMaximumFlowProblem> {
+	@Override
+	public Class<RawMaximumFlowProblem> getTypeClass() {
+		return RawMaximumFlowProblem.class;
+	}
 
     /**
      * Caches the number of nodes and edges.
      */
     private String[] properties;
-    
+
     /**
      * The scaling factor necessary to make capacities integral.
      */
@@ -32,7 +36,7 @@ public class RMFGENMaximumFlowFileReader extends InputFileReader<RawMaximumFlowP
     /**
      * Returns the number of nodes and edges of the maximum flow instance and
      * reads this information from the header of the file, if necessary.
-     * @return an array containing the number of nodes as its first entry and 
+     * @return an array containing the number of nodes as its first entry and
      * the number of edges as its second.
      */
     @Override
@@ -82,9 +86,9 @@ public class RMFGENMaximumFlowFileReader extends InputFileReader<RawMaximumFlowP
      * Reads the problem in a speed-optimized way. 12n + 20m + O(1) Bytes are
      * required.
      * @param file the file which contains the maximum flow problem.
-     * @param propertiesOnly whether only the number of nodes and edges should 
+     * @param propertiesOnly whether only the number of nodes and edges should
      * be read. Much faster than reading the whole file.
-     * @return the maximum flow problem. 4n + 8m + O(1) Bytes required for 
+     * @return the maximum flow problem. 4n + 8m + O(1) Bytes required for
      * storage.
      */
     protected RawMaximumFlowProblem runAlgorithmSpeed(File file, boolean propertiesOnly) {
@@ -141,7 +145,7 @@ public class RMFGENMaximumFlowFileReader extends InputFileReader<RawMaximumFlowP
                             System.out.println("EEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE");
                             System.out.println(c * scaling);
                             //scaling = (int) Math.round(1.0 / c);
-                        }   
+                        }
                         final int capacity = (int) Math.round(c * scaling);
                         assert 0 <= start && start < numberOfNodes : "Illegal start node.";
                         assert 0 <= end && end < numberOfNodes : "Illegal end node.";
@@ -187,9 +191,9 @@ public class RMFGENMaximumFlowFileReader extends InputFileReader<RawMaximumFlowP
      * Reads the problem in a speed-optimized way. 12n + 8m + O(1) Bytes are
      * required.
      * @param file the file which contains the maximum flow problem.
-     * @param propertiesOnly whether only the number of nodes and edges should 
+     * @param propertiesOnly whether only the number of nodes and edges should
      * be read. Much faster than reading the whole file.
-     * @return the maximum flow problem. 4n + 8m + O(1) Bytes required for 
+     * @return the maximum flow problem. 4n + 8m + O(1) Bytes required for
      * storage.
      */
     protected RawMaximumFlowProblem runAlgorithmMemory(File file, boolean propertiesOnly) {
@@ -271,7 +275,7 @@ public class RMFGENMaximumFlowFileReader extends InputFileReader<RawMaximumFlowP
                             System.out.println("EEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE");
                             System.out.println(c * scaling);
                             //scaling = (int) Math.round(1.0 / c);
-                        }                        
+                        }
                         final int capacity = (int) Math.round(c * scaling);
                         assert 0 <= start && start < numberOfNodes : "Illegal start node.";
                         assert 0 <= end && end < numberOfNodes : "Illegal end node.";

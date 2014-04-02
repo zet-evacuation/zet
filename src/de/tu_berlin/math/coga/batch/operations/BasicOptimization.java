@@ -5,6 +5,7 @@
 package de.tu_berlin.math.coga.batch.operations;
 
 import algo.graph.dynamicflow.eat.EarliestArrivalFlowProblem;
+import de.tu_berlin.math.coga.batch.input.reader.InputFileReader;
 import de.tu_berlin.math.coga.zet.converter.graph.NetworkFlowModel;
 import ds.graph.flow.PathBasedFlowOverTime;
 import ds.z.Project;
@@ -15,6 +16,7 @@ import ds.z.Project;
  * @author Jan-Philipp Kappmeier
  */
 public class BasicOptimization extends AbstractOperation implements Operation {
+	InputFileReader<Project> input;
 
 	public BasicOptimization() {
 		// First, we go from zet to network flow model
@@ -30,8 +32,30 @@ public class BasicOptimization extends AbstractOperation implements Operation {
 	}
 
 	@Override
+	@SuppressWarnings( "unchecked" )
+	public boolean consume( InputFileReader<?> o ) {
+
+		if( o.getTypeClass() == Project.class ) {
+			input = (InputFileReader<Project>)o;
+			return true;
+		}
+		return false;
+	}
+
+
+
+
+
+	@Override
 	public String toString() {
 		return "Basic Optimization";
+	}
+
+	@Override
+	public void run() {
+		Project p = input.getSolution();
+
+		System.out.println( p );
 	}
 
 

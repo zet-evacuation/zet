@@ -4,7 +4,7 @@
  */
 package de.tu_berlin.math.coga.batch.operations;
 
-import de.tu_berlin.math.coga.batch.algorithm.AlgorithmList;
+import de.tu_berlin.math.coga.batch.input.reader.InputFileReader;
 
 
 /**
@@ -12,8 +12,16 @@ import de.tu_berlin.math.coga.batch.algorithm.AlgorithmList;
  * input to an output via steps in between.
  * @author Jan-Philipp Kappmeier
  */
-public interface Operation {
+public interface Operation extends Runnable {
 
 	public Iterable<AtomicOperation<?, ?>> getAtomicOperations();
+
+	/**
+	 * Returns true, if the object can be consumed. The object is stored as
+	 * input until consume is called again.
+	 * @param o
+	 * @return
+	 */
+	public boolean consume( InputFileReader<?> o );
 
 }

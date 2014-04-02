@@ -44,6 +44,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.JButton;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.event.TreeSelectionEvent;
@@ -147,6 +148,7 @@ public class JBatch extends JPanel {
     private final AddAlgorithmAction cellularAutomaton2;
     private final AddAlgorithmAction cellularAutomaton3;
     private final AddAlgorithmAction cellularAutomaton4;
+		private final NewComputationAction newComputationAction = null;
 		private final OperationAction basicOptimization;
 
 
@@ -157,7 +159,7 @@ public class JBatch extends JPanel {
         // add JTaskPaneGroups to the container
         JTaskPaneGroup actionPane = new JTaskPaneGroup();
         actionPane.setTitle("Computation");
-        actionPane.setSpecial(true);
+        actionPane.setSpecial( true );
         actionPane.add(new NewComputationAction(this));
 
         JTaskPaneGroup inputPane = new JTaskPaneGroup();
@@ -172,11 +174,7 @@ public class JBatch extends JPanel {
 				activityPane.setTitle( "Use cases" );
 
 				basicOptimization = new OperationAction( this, new BasicOptimization(), "Basic Optimization");
-				//basicOptimization = new OperationAction( this, AbstractOperation.class, "Basic Optimization");
 				activityPane.add( basicOptimization );
-
-
-
 
         JTaskPaneGroup simulationPane = new JTaskPaneGroup();
         simulationPane.setTitle("Simulation");

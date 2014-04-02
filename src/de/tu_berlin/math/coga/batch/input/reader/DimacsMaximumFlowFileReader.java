@@ -1,6 +1,6 @@
 /*
  * DimacsMaximumFlowFileReader.java
- * 
+ *
  */
 package de.tu_berlin.math.coga.batch.input.reader;
 
@@ -11,11 +11,15 @@ import java.io.FileReader;
 import java.io.IOException;
 
 /**
- * A reader for maximum flow problem instances stored in the DIMACS format: 
+ * A reader for maximum flow problem instances stored in the DIMACS format:
  * http://www.avglab.com/andrew/CATS/maxflow_formats.htm.
  * @author Martin Groß
  */
 public class DimacsMaximumFlowFileReader extends InputFileReader<RawMaximumFlowProblem> {
+	@Override
+	public Class<RawMaximumFlowProblem> getTypeClass() {
+		return RawMaximumFlowProblem.class;
+	}
 
     /**
      * Caches the number of nodes and edges.
@@ -25,7 +29,7 @@ public class DimacsMaximumFlowFileReader extends InputFileReader<RawMaximumFlowP
     /**
      * Returns the number of nodes and edges of the maximum flow instance and
      * reads this information from the header of the file, if necessary.
-     * @return an array containing the number of nodes as its first entry and 
+     * @return an array containing the number of nodes as its first entry and
      * the number of edges as its second.
      */
     @Override
@@ -75,9 +79,9 @@ public class DimacsMaximumFlowFileReader extends InputFileReader<RawMaximumFlowP
      * Reads the problem in a speed-optimized way. 12n + 20m + O(1) Bytes are
      * required.
      * @param file the file which contains the maximum flow problem.
-     * @param propertiesOnly whether only the number of nodes and edges should 
+     * @param propertiesOnly whether only the number of nodes and edges should
      * be read. Much faster than reading the whole file.
-     * @return the maximum flow problem. 4n + 8m + O(1) Bytes required for 
+     * @return the maximum flow problem. 4n + 8m + O(1) Bytes required for
      * storage.
      */
     protected RawMaximumFlowProblem runAlgorithmSpeed(File file, boolean propertiesOnly) {
@@ -97,7 +101,7 @@ public class DimacsMaximumFlowFileReader extends InputFileReader<RawMaximumFlowP
                 line = line.trim();
                 if (line.isEmpty()) {
                     continue;
-                }                
+                }
                 tokens = line.split("\\s+");
                 switch (tokens[0]) {
                     case "c":
@@ -183,11 +187,11 @@ public class DimacsMaximumFlowFileReader extends InputFileReader<RawMaximumFlowP
      * Reads the problem in a speed-optimized way. 12n + 8m + O(1) Bytes are
      * required.
      * @param file the file which contains the maximum flow problem.
-     * @param propertiesOnly whether only the number of nodes and edges should 
+     * @param propertiesOnly whether only the number of nodes and edges should
      * be read. Much faster than reading the whole file.
-     * @return the maximum flow problem. 4n + 8m + O(1) Bytes required for 
+     * @return the maximum flow problem. 4n + 8m + O(1) Bytes required for
      * storage.
-     */    
+     */
     protected  RawMaximumFlowProblem runAlgorithmMemory(File file, boolean propertiesOnly) {
         int numberOfEdges = -1;
         int numberOfNodes = -1;
