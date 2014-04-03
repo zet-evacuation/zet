@@ -7,7 +7,8 @@ package batch.plugins.impl;
 import batch.plugins.AlgorithmicPlugin;
 import de.tu_berlin.math.coga.common.algorithm.Algorithm;
 import de.tu_berlin.math.coga.zet.converter.graph.NetworkFlowModel;
-import ds.z.Project;
+import de.tu_berlin.math.coga.zet.converter.graph.RectangleConverter;
+import ds.z.BuildingPlan;
 import net.xeoh.plugins.base.annotations.PluginImplementation;
 
 
@@ -16,16 +17,16 @@ import net.xeoh.plugins.base.annotations.PluginImplementation;
  * @author Jan-Philipp Kappmeier
  */
 @PluginImplementation
-public class ConverterPlugin implements AlgorithmicPlugin<Project, NetworkFlowModel> {
+public class RectangleConverterPlugin implements AlgorithmicPlugin<BuildingPlan, NetworkFlowModel> {
 
 	@Override
 	public String getName() {
-		return "Default ZET converter";
+		return "Default ZET Rectangle Converter";
 	}
 
 	@Override
-	public Class<Project> accepts() {
-		return Project.class;
+	public Class<BuildingPlan> accepts() {
+		return BuildingPlan.class;
 	}
 
 	@Override
@@ -34,9 +35,7 @@ public class ConverterPlugin implements AlgorithmicPlugin<Project, NetworkFlowMo
 	}
 
 	@Override
-	public Algorithm<Project, NetworkFlowModel> getAlgorithm() {
-
-		return null;
+	public Algorithm<BuildingPlan, NetworkFlowModel> getAlgorithm() {
+		return new RectangleConverter();
 	}
-
 }

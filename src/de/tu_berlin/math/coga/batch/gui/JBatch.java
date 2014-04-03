@@ -25,6 +25,7 @@ import de.tu_berlin.math.coga.batch.gui.input.InputListNode;
 import de.tu_berlin.math.coga.batch.gui.input.InputNode;
 import de.tu_berlin.math.coga.batch.gui.input.OperationAlgorithmSelectNode;
 import de.tu_berlin.math.coga.batch.input.*;
+import de.tu_berlin.math.coga.batch.operations.AtomicOperation;
 import de.tu_berlin.math.coga.batch.operations.BasicOptimization;
 import de.tu_berlin.math.coga.batch.operations.Operation;
 import de.tu_berlin.math.coga.batch.operations.OperationList;
@@ -44,13 +45,11 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javax.swing.JButton;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.event.TreeSelectionEvent;
 import javax.swing.event.TreeSelectionListener;
 import javax.swing.tree.TreePath;
-import org.jdesktop.swingx.treetable.MutableTreeTableNode;
 
 /**
  *
@@ -244,7 +243,17 @@ public class JBatch extends JPanel {
 								Enumeration<AlgorithmPluginNode> a = selectNode.children();
 								while( a.hasMoreElements() ) {
 									AlgorithmPluginNode otherPlugin = a.nextElement();
-									otherPlugin.setSelected( index == selectedIndex );
+									if( index == selectedIndex ) {
+										AtomicOperation<?,?> ao = selectNode.getUserObject();
+										AlgorithmicPlugin<?,?> plugin = otherPlugin.getUserObject();
+										ao.setSelectedAlgorithm( plugin.getAlgorithm() );
+
+
+
+										otherPlugin.setSelected( true );
+									} else {
+										otherPlugin.setSelected( false );
+									}
 									index++;
 								}
 								repaint();

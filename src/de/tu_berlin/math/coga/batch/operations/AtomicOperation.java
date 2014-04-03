@@ -68,6 +68,7 @@ public class AtomicOperation<U,V> implements Iterable<AlgorithmicPlugin<U,V>> {
 		return index;
 	}
 
+	@Override
 	public Iterator<AlgorithmicPlugin<U,V>> iterator() {
 		return availableAlgorithms.iterator();
 	}
@@ -86,8 +87,8 @@ public class AtomicOperation<U,V> implements Iterable<AlgorithmicPlugin<U,V>> {
 		return selectedAlgorithm;
 	}
 
-	public void setSelectedAlgorithm( Algorithm<U, V> selectedAlgorithm ) {
-		this.selectedAlgorithm = selectedAlgorithm;
+	public void setSelectedAlgorithm( Algorithm<?,?> selectedAlgorithm ) {
+		this.selectedAlgorithm = (Algorithm<U,V>) selectedAlgorithm;
 	}
 
 	public void setInstance( U instance ) {
