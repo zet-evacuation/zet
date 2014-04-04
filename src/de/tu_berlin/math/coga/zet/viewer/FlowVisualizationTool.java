@@ -12,7 +12,7 @@ import de.tu_berlin.math.coga.common.algorithm.AlgorithmProgressEvent;
 import de.tu_berlin.math.coga.common.algorithm.AlgorithmStartedEvent;
 import de.tu_berlin.math.coga.common.algorithm.AlgorithmTerminatedEvent;
 import de.tu_berlin.math.coga.zet.ZETLocalization;
-import de.tu_berlin.math.coga.common.localization.Localization;
+import de.tu_berlin.math.coga.common.localization.AbstractLocalization;
 import de.tu_berlin.math.coga.common.util.Formatter;
 import de.tu_berlin.math.coga.common.util.units.TimeUnits;
 import de.tu_berlin.math.coga.components.framework.Menu;
@@ -89,7 +89,7 @@ public class FlowVisualizationTool extends JFrame implements PropertyChangeListe
 			add( visNash );
 		}
 	};
-	Localization loc = ZETLocalization.getSingleton();
+	AbstractLocalization loc = ZETLocalization.getSingleton();
 	private int sliderAccuracy = 100;
 	Visualization<? extends DrawableControlable> vis = visFlow;
 	JEventStatusBar sb = new JEventStatusBar();

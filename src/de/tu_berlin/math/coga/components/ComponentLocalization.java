@@ -4,7 +4,7 @@
  */
 package de.tu_berlin.math.coga.components;
 
-import de.tu_berlin.math.coga.common.localization.Localization;
+import de.tu_berlin.math.coga.common.localization.AbstractLocalization;
 import java.util.MissingResourceException;
 
 /**
@@ -12,7 +12,7 @@ import java.util.MissingResourceException;
  * {@link de.tu_berlin.math.coga.components}.
  * @author Jan-Philipp Kappmeier
  */
-public class ComponentLocalization extends Localization {
+public class ComponentLocalization extends AbstractLocalization {
 
 	private volatile static ComponentLocalization singleton;
 

@@ -4,14 +4,14 @@
  */
 package ds.z;
 
-import de.tu_berlin.math.coga.common.localization.Localization;
+import de.tu_berlin.math.coga.common.localization.AbstractLocalization;
 import java.util.MissingResourceException;
 
 /**
  *
  * @author Jan-Philipp Kappmeier
  */
-public class ZLocalization extends Localization {
+public class ZLocalization extends AbstractLocalization {
 	private volatile static ZLocalization singleton;
 
 	private ZLocalization() throws MissingResourceException {

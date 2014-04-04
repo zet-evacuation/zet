@@ -22,7 +22,7 @@ package zet.gui.main;
 
 import de.tu_berlin.math.coga.common.debug.Debug;
 import de.tu_berlin.math.coga.zet.ZETLocalization;
-import de.tu_berlin.math.coga.common.localization.Localization;
+import de.tu_berlin.math.coga.common.localization.AbstractLocalization;
 import de.tu_berlin.math.coga.common.localization.Localized;
 import ds.PropertyContainer;
 import ds.z.ZControl;
@@ -73,7 +73,7 @@ import zet.util.ConversionTools;
 public class JZetWindow extends JFrame implements Localized {
 
 	/** The localization class. */
-	static final Localization loc = GUILocalization.getSingleton();
+	static final AbstractLocalization loc = GUILocalization.getSingleton();
 	/** Stores the last mouse position if a mouse position event is sent. */
 	private static Point lastMouse = new Point( 0, 0 );
 	/** The delimiter used if numbers are stored in a tuple. */
@@ -242,7 +242,7 @@ public class JZetWindow extends JFrame implements Localized {
 
 	/**
 	 * Changes the appearance of the GUI to the selected language.
-	 * @see de.tu_berlin.math.coga.common.localization.Localization
+	 * @see de.tu_berlin.math.coga.common.localization.AbstractLocalization
 	 */
 	@Override
 	public void localize() {

@@ -20,7 +20,7 @@
  */
 package de.tu_berlin.math.coga.components;
 
-import de.tu_berlin.math.coga.common.localization.Localization;
+import de.tu_berlin.math.coga.common.localization.AbstractLocalization;
 import de.tu_berlin.math.coga.common.util.units.BinaryUnits;
 import de.tu_berlin.math.coga.common.util.Formatter;
 import de.tu_berlin.math.coga.components.framework.Button;
@@ -75,7 +75,7 @@ public class JVideoOptionsDialog extends javax.swing.JDialog {
 	/** The return value, cancel by default. */
 	private int retVal = JOptionPane.CANCEL_OPTION;
 	/** The localization class. */
-	static final Localization loc = ComponentLocalization.getSingleton();
+	static final AbstractLocalization loc = ComponentLocalization.getSingleton();
 	/** The default cancel button. */
 	private JButton btnCancel;
 	/** The default ok button. */

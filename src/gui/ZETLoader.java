@@ -16,7 +16,7 @@ import com.martiansoftware.jsap.UnflaggedOption;
 import com.thoughtworks.xstream.XStream;
 import com.thoughtworks.xstream.annotations.Annotations;
 import de.tu_berlin.math.coga.common.debug.Debug;
-import de.tu_berlin.math.coga.common.localization.Localization;
+import de.tu_berlin.math.coga.common.localization.AbstractLocalization;
 import de.tu_berlin.math.coga.components.framework.Menu;
 import ds.PropertyContainer;
 import event.EventServer;
@@ -45,7 +45,7 @@ import zet.gui.main.JZetWindow;
 public class ZETLoader {
 
 	/** The localization class. */
-	private static Localization loc = GUILocalization.getSingleton();
+	private static AbstractLocalization loc = GUILocalization.getSingleton();
 	/** Indicates whether debug mode is active, or not. */
 	private static boolean debug;
 	/** The project file that should be loaded (submitted via command line). */

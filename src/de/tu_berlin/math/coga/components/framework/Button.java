@@ -22,7 +22,7 @@
 package de.tu_berlin.math.coga.components.framework;
 
 import de.tu_berlin.math.coga.common.localization.DefaultLocalization;
-import de.tu_berlin.math.coga.common.localization.Localization;
+import de.tu_berlin.math.coga.common.localization.AbstractLocalization;
 import de.tu_berlin.math.coga.components.Localizer;
 import java.awt.event.ActionListener;
 import javax.swing.AbstractButton;
@@ -36,7 +36,7 @@ import javax.swing.JToggleButton;
  */
 public class Button {
 	/** The localization object used to generate localized menu titles. */
-	private static Localization loc = DefaultLocalization.getSingleton();
+	private static AbstractLocalization loc = DefaultLocalization.getSingleton();
 
 	/** Private constructor avoids instantiation. */
 	private Button() {}

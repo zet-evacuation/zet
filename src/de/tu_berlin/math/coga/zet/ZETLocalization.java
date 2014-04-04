@@ -4,14 +4,14 @@
  */
 package de.tu_berlin.math.coga.zet;
 
-import de.tu_berlin.math.coga.common.localization.Localization;
+import de.tu_berlin.math.coga.common.localization.AbstractLocalization;
 import ds.z.ZLocalization;
 
 /**
  *
  * @author Jan-Philipp Kappmeier
  */
-public class ZETLocalization extends Localization {
+public class ZETLocalization extends AbstractLocalization {
 	private volatile static ZETLocalization singleton;
 
 	private ZETLocalization() {
