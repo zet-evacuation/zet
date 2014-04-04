@@ -21,7 +21,7 @@
 
 package de.tu_berlin.math.coga.common.util;
 
-import de.tu_berlin.math.coga.zet.ZETLocalization;
+import de.tu_berlin.math.coga.common.localization.DefaultLocalization;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
@@ -36,7 +36,9 @@ import java.util.List;
  * A set of helper methods for input and output operations.
  * @author Jan-Philipp Kappmeier
  */
-public class IOTools {
+public final class IOTools {
+	/** Default constructor for utility class. */
+	private IOTools() {}
 
 	/**
 	 * Creates a new filename of the type pathPrefix### where ### indicates an
@@ -47,12 +49,15 @@ public class IOTools {
 	 * @param digits the number of digits of the numbering
 	 * @return the new filename including the path, the prefix and the number
 	 * @throws java.lang.IllegalArgumentException if digits is less or equal to zero
-	 * @throws java.lang.IllegalStateException if there are too many files beginning with prefix for the specified number of digits or if an error converting the digits occured.
+	 * @throws java.lang.IllegalStateException if there are too many files
+	 * beginning with prefix for the specified number of digits or if an error
+	 * converting the digits occured.
 	 */
-	public static String getNextFreeNumberedFilepath( String path, String filePrefix, int digits ) throws java.lang.IllegalArgumentException, java.lang.IllegalStateException {
+	public static String getNextFreeNumberedFilepath( String path, String filePrefix, int digits )
+					throws java.lang.IllegalArgumentException, java.lang.IllegalStateException {
 		return path + getNextFreeNumberedFilename( path, filePrefix, digits );
 	}
-	
+
 	/**
 	 * Creates a new filename of the type pathPrefix### where ### indicates an
 	 * increasing number with {@code digits} digits. The new created filename
@@ -62,32 +67,33 @@ public class IOTools {
 	 * @param digits the number of digits of the numbering
 	 * @return the new filename without the path, the prefix and the number
 	 * @throws java.lang.IllegalArgumentException if digits is less or equal to zero
-	 * @throws java.lang.IllegalStateException if there are too many files beginning with prefix for the specified number of digits or if an error converting the digits occured.
+	 * @throws java.lang.IllegalStateException if there are too many files
+	 * beginning with prefix for the specified number of digits or if an error
+	 * converting the digits occured.
 	 */
-	public static String getNextFreeNumberedFilename( String path, String filePrefix, int digits ) throws java.lang.IllegalArgumentException, java.lang.IllegalStateException {
+	public static String getNextFreeNumberedFilename( String path, String filePrefix, int digits )
+			throws java.lang.IllegalArgumentException, java.lang.IllegalStateException {
 		if( digits <= 0 )
 			throw new IllegalArgumentException( "Digits must not be negative." );
 		final int prefixLen = filePrefix.length();
 		File[] files = new File( path ).listFiles();
 		int lastIndex = 1;
-		if (files != null) { // worked to get the list
-			for( int i = 0; i < files.length; i++ ) {
-				if( !files[i].isDirectory() && files[i].getName().length() >= prefixLen+digits ) {
-					String foundPrefix = files[i].getName().substring( 0, prefixLen );
+		if (files != null) { for( File file : files )
+				if( !file.isDirectory() && file.getName().length() >= prefixLen + digits ) {
+					String foundPrefix = file.getName().substring( 0, prefixLen );
 					if( foundPrefix.equals( filePrefix ) ) {
-						String foundNumber = files[i].getName().substring( prefixLen, prefixLen + digits );
+						String foundNumber = file.getName().substring( prefixLen, prefixLen + digits );
 						int number;
 						try {
-							number = ZETLocalization.getSingleton().getIntegerConverter().parse( foundNumber ).intValue();
+							number = DefaultLocalization.getSingleton().getIntegerConverter().parse( foundNumber ).intValue();
 						} catch( ParseException ex ) {
-							System.out.println( "Skipped file with same prefix: " + files[i].getName() );
+							System.out.println( "Skipped file with same prefix: " + file.getName() );
 							number = -1;
 						}
 						if( number >= lastIndex )
 							lastIndex = number + 1;
 					}
 				}
-			}
 		}
 		try {
 			return filePrefix + Formatter.fillLeadingZeros( lastIndex, digits );
@@ -127,13 +133,13 @@ public class IOTools {
 	 * @return the empty string
 	 */
 	private static String addElement( List<String> list, String s ) {
-		if( !s.equals( "" ) )
+		if( !s.isEmpty(  ) )
 			list.add( s );
 		return "";
 	}
 
 	public static void createBackup( File file ) throws IOException {
-		if( file != null && !file.getPath().equals( "" ) ) {
+		if( file != null && !file.getPath().isEmpty(  ) ) {
 			String source = file.getPath();
 			String dest = source.substring( 0, source.length() - 3 ) + "bak";
 				copyFile( file, new File( dest ), 100, true );
@@ -141,11 +147,11 @@ public class IOTools {
 	}
 
 	public static void copyFile( File src, File dest, int bufSize, boolean force ) throws IOException {
-		if( dest.exists() )
-			if( force )
-				dest.delete();
-			else
+		if( dest.exists() ) {
+			if( !force )
 				throw new IOException( "Cannot overwrite existing file: " + dest.getName() );
+			dest.delete();
+		}
 		byte[] buffer = new byte[bufSize];
 		InputStream in = null;
 		OutputStream out = null;
@@ -174,6 +180,4 @@ public class IOTools {
 				}
 		}
 	}
-
-	private IOTools() {}
 }

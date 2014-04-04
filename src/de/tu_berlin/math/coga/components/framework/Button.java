@@ -23,7 +23,7 @@ package de.tu_berlin.math.coga.components.framework;
 
 import de.tu_berlin.math.coga.common.localization.DefaultLocalization;
 import de.tu_berlin.math.coga.common.localization.Localization;
-import de.tu_berlin.math.coga.common.localization.Localizer;
+import de.tu_berlin.math.coga.components.Localizer;
 import java.awt.event.ActionListener;
 import javax.swing.AbstractButton;
 import javax.swing.Icon;

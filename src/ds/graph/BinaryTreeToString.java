@@ -2,7 +2,7 @@
  * BinaryTreeToString.java
  * Created: 24.07.2012, 17:39:12
  */
-package de.tu_berlin.math.coga.common.util;
+package ds.graph;
 
 import de.tu_berlin.math.coga.datastructure.searchtree.BinaryTree;
 import ds.graph.Node;
