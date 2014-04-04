@@ -43,7 +43,7 @@ public class DefaultRuleSet extends RuleSet {
 		// Build RuleSet
 		super();
 	}
-	
+
 	/**
 	 * Inserts the rule to both the primary set and the loop set.
 	 * @param rule the rule that is to be inserted
@@ -59,9 +59,9 @@ public class DefaultRuleSet extends RuleSet {
 		}
 		super.add( rule );
 	}
-	
+
 	/**
-	 * 
+	 *
 	 * @param rule the rule that is to be inserted
 	 * @param useInPrimarySet true if the rule should be added to the primary set
 	 * @param useInLoopSet true if the rule should be added to the loop set
@@ -77,7 +77,7 @@ public class DefaultRuleSet extends RuleSet {
 		}
 		super.add( rule, useInPrimarySet, useInLoopSet );
 	}
-	
+
 	/**
 	 * Returns the {@code MovementRule} of this ruleset, and {@code null}
 	 * if no such rule is set.
@@ -88,7 +88,7 @@ public class DefaultRuleSet extends RuleSet {
 	}
 
 	/**
-	 * 
+	 *
 	 */
 	@Override
 	protected void selfInit() {

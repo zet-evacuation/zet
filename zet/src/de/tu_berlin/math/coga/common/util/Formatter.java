@@ -6,7 +6,6 @@ package de.tu_berlin.math.coga.common.util;
 
 import de.tu_berlin.math.coga.common.localization.DefaultLocalization;
 import de.tu_berlin.math.coga.common.util.units.UnitScale;
-import de.tu_berlin.math.coga.datastructure.Tuple;
 import java.awt.Color;
 import java.text.NumberFormat;
 
@@ -15,7 +14,7 @@ import java.text.NumberFormat;
  * for formatting texts.
  * @author Jan-Philipp Kappmeier
  */
-public class Formatter {
+public final class Formatter {
 
 	/** No instantiating of {@code Formatter} possible. */
 	private Formatter() { }
@@ -41,13 +40,14 @@ public class Formatter {
 	 * @param unit the unit of the number
 	 * @return the pair containing the transformed value and the fitting unit
 	 */
-	public static <E extends UnitScale<E>> Tuple<Double,E> unit( double value, E unit ) {
+	public static <E extends UnitScale<E>> Quantity<E> unit( double value, E unit ) {
+
 		while( !unit.isInRange( value ) ) {
 			final double newValue = unit.getBetterUnitValue( value );
 			unit = unit.getBetterUnit( value );
 			value = newValue;
 		}
-		return new Tuple<>( value, unit );
+		return new Quantity<>( value, unit );
 	}
 
 	/**
@@ -70,10 +70,10 @@ public class Formatter {
 	 * @return the string in the calculated unit with one decimal place and the shortcut for the unit
 	 */
 	public static <E extends UnitScale<E>> String formatUnit( double value, E unit, int digits ) {
-		final Tuple<Double,E> res = unit( value, unit );
+		final Quantity<E> res = unit( value, unit );
 		final NumberFormat n = NumberFormat.getInstance();
 		n.setMaximumFractionDigits( digits );
-		return n.format( res.getU() ) + " " + res.getV().getName() ;
+		return n.format( res.getValue() ) + " " + res.getUnit().getName() ;
 	}
 
 	/**
@@ -81,9 +81,9 @@ public class Formatter {
 	 * @param number the number that is converted to string representation
 	 * @param digits the digits of the number
 	 * @return the number with leading zeros
-	 * @throws java.lang.IllegalArgumentException if the number has to many digits
+	 * @throws IllegalArgumentException if the number has to many digits
 	 */
-	public static String fillLeadingZeros( int number, int digits ) throws IllegalArgumentException {
+	public static String fillLeadingZeros( final int number, final int digits ) throws IllegalArgumentException {
 		String ret = Integer.toString( number );
 		if( ret.length() > digits )
 			throw new java.lang.IllegalArgumentException( "Number " + number + " is too long. Only " + digits + " digits are allowed." );
@@ -92,11 +92,28 @@ public class Formatter {
 		return ret;
 	}
 
-	public static String rgbToHex( int r, int g, int b ) {
+	/**
+	 * Converts an RGB cover specified by the amounts of red, green and blue into
+	 * an hexadecimal representation leading with a hashtag ("#") as used in HTML.
+	 * The values for {@code r}, {@code g}, and {@code b} must be in the interval
+	 * from 0 to 255.
+	 * @param r the red amount
+	 * @param g the green amount
+	 * @param b the blue amount
+	 * @return the hexadecimal HTML representation of the color
+	 */
+	public static String rgbToHex( final int r, final int g, final int b ) {
 		return String.format( "#%02x%02x%02x", r, g, b );
 	}
 
-	public static String colorToHex( Color c ) {
+	/**
+	 * Converts an Java {@link Color} into an hexadecimal representation leading
+	 * with a hashtag ("#") as used in HTML. The conversion ignores opacity or
+	 * alhpa values.
+	 * @param c the java color
+	 * @return the hexadecimal HTML representation of the color
+	 */
+	public static String colorToHex( final Color c ) {
 		return "#" + Integer.toHexString( c.getRGB() ).substring( 2 );
 	}
 }

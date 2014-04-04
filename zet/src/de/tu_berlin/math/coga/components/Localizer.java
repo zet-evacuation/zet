@@ -1,5 +1,6 @@
-package de.tu_berlin.math.coga.common.localization;
+package de.tu_berlin.math.coga.components;
 
+import de.tu_berlin.math.coga.common.localization.Localized;
 import de.tu_berlin.math.coga.components.framework.Menu;
 import java.util.ArrayList;
 import javax.swing.AbstractButton;
