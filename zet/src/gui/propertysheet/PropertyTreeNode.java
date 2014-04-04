@@ -23,7 +23,7 @@ package gui.propertysheet;
 import com.thoughtworks.xstream.annotations.XStreamAlias;
 import com.thoughtworks.xstream.annotations.XStreamConverter;
 import de.tu_berlin.math.coga.zet.ZETLocalization;
-import de.tu_berlin.math.coga.common.localization.Localization;
+import de.tu_berlin.math.coga.common.localization.AbstractLocalization;
 import gui.propertysheet.abs.PropertyElement;
 import gui.propertysheet.abs.DefaultPropertyTreeNodeConverter;
 import gui.propertysheet.BasicProperty;
@@ -75,7 +75,7 @@ public class PropertyTreeNode  implements PropertyElement {
 	 * Returns {@code true} if the strings for the name, information and
 	 * description in the XML-file shall be tags used for localization.
 	 * @return {@code true} if the XML-file contains localization tags, {@code false} otherwise
-	 * @see Localization
+	 * @see AbstractLocalization
 	 */
 	@Override
 	public boolean isUsedAsLocString() {

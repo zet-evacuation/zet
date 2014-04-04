@@ -22,7 +22,7 @@
 package de.tu_berlin.math.coga.components.framework;
 
 import de.tu_berlin.math.coga.common.localization.DefaultLocalization;
-import de.tu_berlin.math.coga.common.localization.Localization;
+import de.tu_berlin.math.coga.common.localization.AbstractLocalization;
 import de.tu_berlin.math.coga.components.Localizer;
 import java.awt.event.ActionListener;
 import java.awt.event.InputEvent;
@@ -43,19 +43,19 @@ import javax.swing.KeyStroke;
  */
 public class Menu {
 	/** The localization object used to generate localized menu titles. */
-	private static Localization loc = DefaultLocalization.getSingleton();
+	private static AbstractLocalization loc = DefaultLocalization.getSingleton();
 	private Menu() { }
 
-	public static Localization getLocalization() {
+	public static AbstractLocalization getLocalization() {
 		return loc;
 	}
 	
 	/**
-	 * Sets a {@code Localization} object that is used to generate localized
+	 * Sets a {@code AbstractLocalization} object that is used to generate localized
 	 * menu entries.
-	 * @param localization the {@code Localization} opbject.
+	 * @param localization the {@code AbstractLocalization} opbject.
 	 */
-	public static void setLoc( Localization loc ) {
+	public static void setLoc( AbstractLocalization loc ) {
 		Menu.loc = loc;
 	}
 	

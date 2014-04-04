@@ -4,7 +4,7 @@
  */
 package ds.graph;
 
-import de.tu_berlin.math.coga.common.localization.Localization;
+import de.tu_berlin.math.coga.common.localization.AbstractLocalization;
 import ds.z.ZLocalization;
 import java.util.MissingResourceException;
 
@@ -13,7 +13,7 @@ import java.util.MissingResourceException;
  *
  * @author Jan-Philipp Kappmeier
  */
-public class GraphLocalization extends Localization {
+public class GraphLocalization extends AbstractLocalization {
 private volatile static GraphLocalization singleton;
 
 	private GraphLocalization() throws MissingResourceException {

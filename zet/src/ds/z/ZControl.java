@@ -4,7 +4,7 @@
  */
 package ds.z;
 
-import de.tu_berlin.math.coga.common.localization.Localization;
+import de.tu_berlin.math.coga.common.localization.AbstractLocalization;
 import de.tu_berlin.math.coga.common.util.Formatter;
 import de.tu_berlin.math.coga.common.util.Helper;
 import de.tu_berlin.math.coga.rndutils.distribution.Distribution;
@@ -38,7 +38,7 @@ import javax.swing.JOptionPane;
  */
 public class ZControl {
 	/** The localization class. */
-	static final Localization loc = ZLocalization.getSingleton();
+	static final AbstractLocalization loc = ZLocalization.getSingleton();
 	/** The project that is root of the controlled model. */
 	private Project project;
 

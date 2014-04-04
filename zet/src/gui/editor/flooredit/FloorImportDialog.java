@@ -35,7 +35,7 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JList;
 import javax.swing.JOptionPane;
-import de.tu_berlin.math.coga.common.localization.Localization;
+import de.tu_berlin.math.coga.common.localization.AbstractLocalization;
 import ds.ProjectLoader;
 import gui.GUIControl;
 import gui.ZETLoader;
@@ -48,7 +48,7 @@ import gui.ZETMain;
  */
 public class FloorImportDialog extends JDialog {
 	/** The localization class. */
-	private static final Localization loc = ZETLocalization.getSingleton();
+	private static final AbstractLocalization loc = ZETLocalization.getSingleton();
 	/** The elements of the floor list. */
 	private Vector<Floor> floors = new Vector<Floor>();
 	/** The list of floors available in the newly loaded project. */

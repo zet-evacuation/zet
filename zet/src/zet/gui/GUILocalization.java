@@ -4,14 +4,14 @@
  */
 package zet.gui;
 
-import de.tu_berlin.math.coga.common.localization.Localization;
+import de.tu_berlin.math.coga.common.localization.AbstractLocalization;
 import java.util.MissingResourceException;
 
 /**
  *
  * @author Jan-Philipp Kappmeier
  */
-public class GUILocalization extends Localization {
+public class GUILocalization extends AbstractLocalization {
 
 	private volatile static GUILocalization singleton;
 
