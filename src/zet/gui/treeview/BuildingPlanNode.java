@@ -4,7 +4,7 @@
  */
 package zet.gui.treeview;
 
-import ds.z.BuildingPlan;
+import de.tu_berlin.coga.zet.model.BuildingPlan;
 
 /**
  *

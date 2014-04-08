@@ -11,7 +11,7 @@ package statistics;
 
 import de.tu_berlin.math.coga.rndutils.distribution.Distribution;
 import de.tu_berlin.math.coga.rndutils.distribution.continuous.NormalDistribution;
-import ds.z.ZControl;
+import de.tu_berlin.coga.zet.model.ZControl;
 import java.awt.Color;
 import java.io.File;
 import java.io.FileWriter;

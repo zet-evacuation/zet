@@ -7,7 +7,7 @@ package zet.gui.main.tabs.visualization;
 import de.tu_berlin.coga.common.util.Formatter;
 import de.tu_berlin.coga.common.util.units.TimeUnits;
 import ds.PropertyContainer;
-import ds.z.ZControl;
+import de.tu_berlin.coga.zet.model.ZControl;
 import gui.GUIControl;
 import gui.ZETProperties;
 import gui.visualization.Visualization;

@@ -4,10 +4,10 @@
  */
 package zet.gui.main.tabs.editor;
 
-import ds.z.Edge;
-import ds.z.StairArea;
-import ds.z.ZControl;
-import ds.z.exception.StairAreaBoundaryException;
+import de.tu_berlin.coga.zet.model.Edge;
+import de.tu_berlin.coga.zet.model.StairArea;
+import de.tu_berlin.coga.zet.model.ZControl;
+import de.tu_berlin.coga.zet.model.exception.StairAreaBoundaryException;
 import java.awt.Component;
 import java.awt.Point;
 import java.util.List;

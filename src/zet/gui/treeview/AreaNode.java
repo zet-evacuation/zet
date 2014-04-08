@@ -4,8 +4,8 @@
  */
 package zet.gui.treeview;
 
-import ds.z.Area;
-import ds.z.ZLocalization;
+import de.tu_berlin.coga.zet.model.Area;
+import de.tu_berlin.coga.zet.model.ZLocalization;
 
 /**
  *

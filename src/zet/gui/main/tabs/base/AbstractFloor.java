@@ -21,7 +21,7 @@
 package zet.gui.main.tabs.base;
 
 import ds.PropertyContainer;
-import ds.z.Floor;
+import de.tu_berlin.coga.zet.model.Floor;
 import gui.GUIOptionManager;
 import gui.ZETProperties;
 import gui.editor.CoordinateTools;

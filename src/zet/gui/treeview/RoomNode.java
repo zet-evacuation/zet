@@ -4,8 +4,8 @@
  */
 package zet.gui.treeview;
 
-import ds.z.Room;
-import ds.z.ZLocalization;
+import de.tu_berlin.coga.zet.model.Room;
+import de.tu_berlin.coga.zet.model.ZLocalization;
 
 /**
  *

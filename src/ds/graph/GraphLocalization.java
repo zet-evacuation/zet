@@ -5,7 +5,7 @@
 package ds.graph;
 
 import de.tu_berlin.coga.common.localization.AbstractLocalization;
-import ds.z.ZLocalization;
+import de.tu_berlin.coga.zet.model.ZLocalization;
 import java.util.MissingResourceException;
 
 

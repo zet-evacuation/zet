@@ -4,7 +4,7 @@
  */
 package zet.gui.treeview;
 
-import ds.z.Project;
+import de.tu_berlin.coga.zet.model.Project;
 
 /**
  *

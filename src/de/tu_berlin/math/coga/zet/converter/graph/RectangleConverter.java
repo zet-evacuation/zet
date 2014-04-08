@@ -29,7 +29,7 @@ import ds.PropertyContainer;
 import ds.graph.Edge;
 import ds.graph.Node;
 import ds.graph.NodeRectangle;
-import ds.z.PlanPoint;
+import de.tu_berlin.coga.zet.model.PlanPoint;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
