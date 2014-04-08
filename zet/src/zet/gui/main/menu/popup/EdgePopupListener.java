@@ -20,14 +20,14 @@
  */
 package zet.gui.main.menu.popup;
 
-import ds.z.Edge;
-import ds.z.PlanPoint;
-import ds.z.Room;
-import ds.z.RoomEdge;
-import ds.z.TeleportEdge;
-import ds.z.ZControl;
-import ds.z.template.Door;
-import ds.z.template.ExitDoor;
+import de.tu_berlin.coga.zet.model.Edge;
+import de.tu_berlin.coga.zet.model.PlanPoint;
+import de.tu_berlin.coga.zet.model.Room;
+import de.tu_berlin.coga.zet.model.RoomEdge;
+import de.tu_berlin.coga.zet.model.TeleportEdge;
+import de.tu_berlin.coga.zet.model.ZControl;
+import de.tu_berlin.coga.zet.template.Door;
+import de.tu_berlin.coga.zet.template.ExitDoor;
 import event.EventServer;
 import event.MessageEvent;
 import gui.GUIControl;

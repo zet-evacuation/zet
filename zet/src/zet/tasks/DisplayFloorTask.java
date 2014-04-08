@@ -4,7 +4,7 @@
  */
 package zet.tasks;
 
-import ds.z.Floor;
+import de.tu_berlin.coga.zet.model.Floor;
 import zet.gui.main.tabs.quickVisualization.JRasterFloor;
 
 

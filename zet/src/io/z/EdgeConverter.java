@@ -21,9 +21,9 @@ import com.thoughtworks.xstream.converters.reflection.ReflectionProvider;
 import com.thoughtworks.xstream.io.HierarchicalStreamReader;
 import com.thoughtworks.xstream.mapper.Mapper;
 
-import ds.z.Edge;
-import ds.z.RoomEdge;
-import ds.z.TeleportEdge;
+import de.tu_berlin.coga.zet.model.Edge;
+import de.tu_berlin.coga.zet.model.RoomEdge;
+import de.tu_berlin.coga.zet.model.TeleportEdge;
 
 
 /** A converter that behaves just like a normal converter would do, he only adds

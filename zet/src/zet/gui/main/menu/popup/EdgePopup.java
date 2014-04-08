@@ -6,12 +6,12 @@ package zet.gui.main.menu.popup;
 
 import de.tu_berlin.math.coga.components.framework.Menu;
 import ds.PropertyContainer;
-import ds.z.Edge;
-import ds.z.RoomEdge;
-import ds.z.TeleportEdge;
-import ds.z.template.Door;
-import ds.z.template.ExitDoor;
-import ds.z.template.Templates;
+import de.tu_berlin.coga.zet.model.Edge;
+import de.tu_berlin.coga.zet.model.RoomEdge;
+import de.tu_berlin.coga.zet.model.TeleportEdge;
+import de.tu_berlin.coga.zet.template.Door;
+import de.tu_berlin.coga.zet.template.ExitDoor;
+import de.tu_berlin.coga.zet.template.Templates;
 import gui.GUIControl;
 import java.awt.Point;
 import java.util.LinkedList;

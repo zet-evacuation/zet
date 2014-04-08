@@ -21,9 +21,9 @@ import com.thoughtworks.xstream.converters.reflection.ReflectionProvider;
 import com.thoughtworks.xstream.io.HierarchicalStreamReader;
 import com.thoughtworks.xstream.io.HierarchicalStreamWriter;
 import com.thoughtworks.xstream.mapper.Mapper;
-import ds.z.Room;
-import ds.z.StairArea;
-import ds.z.TeleportArea;
+import de.tu_berlin.coga.zet.model.Room;
+import de.tu_berlin.coga.zet.model.StairArea;
+import de.tu_berlin.coga.zet.model.TeleportArea;
 import java.util.ArrayList;
 
 /**

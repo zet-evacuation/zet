@@ -19,13 +19,13 @@ import java.io.BufferedWriter;
 import java.io.FileWriter;
 import java.io.IOException;
 
-import ds.z.Barrier;
-import ds.z.BuildingPlan;
-import ds.z.Edge;
-import ds.z.Floor;
-import ds.z.InaccessibleArea;
-import ds.z.Room;
-import ds.z.RoomEdge;
+import de.tu_berlin.coga.zet.model.Barrier;
+import de.tu_berlin.coga.zet.model.BuildingPlan;
+import de.tu_berlin.coga.zet.model.Edge;
+import de.tu_berlin.coga.zet.model.Floor;
+import de.tu_berlin.coga.zet.model.InaccessibleArea;
+import de.tu_berlin.coga.zet.model.Room;
+import de.tu_berlin.coga.zet.model.RoomEdge;
 import util.DebugFlags;
 
 /**

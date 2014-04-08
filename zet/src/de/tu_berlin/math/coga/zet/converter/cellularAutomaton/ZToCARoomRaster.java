@@ -20,7 +20,7 @@
 package de.tu_berlin.math.coga.zet.converter.cellularAutomaton;
 
 import de.tu_berlin.math.coga.zet.converter.RoomRaster;
-import ds.z.Room;
+import de.tu_berlin.coga.zet.model.Room;
 
 /**
  * @author Daniel Pluempe

@@ -5,8 +5,8 @@
 package zet.gui.main.menu.popup;
 
 import de.tu_berlin.math.coga.components.framework.Menu;
-import ds.z.Edge;
-import ds.z.PlanPoint;
+import de.tu_berlin.coga.zet.model.Edge;
+import de.tu_berlin.coga.zet.model.PlanPoint;
 import gui.GUIControl;
 import java.util.LinkedList;
 import java.util.List;
