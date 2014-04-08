@@ -4,7 +4,7 @@
  */
 package zet.gui.main.toolbar;
 
-import de.tu_berlin.math.coga.common.localization.Localized;
+import de.tu_berlin.coga.common.localization.Localized;
 import gui.GUIControl;
 import gui.ZETMain;
 import de.tu_berlin.math.coga.components.framework.Button;

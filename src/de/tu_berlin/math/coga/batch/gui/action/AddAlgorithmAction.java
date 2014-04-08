@@ -5,7 +5,7 @@
 package de.tu_berlin.math.coga.batch.gui.action;
 
 import de.tu_berlin.math.coga.batch.gui.JBatch;
-import de.tu_berlin.math.coga.common.algorithm.Algorithm;
+import de.tu_berlin.coga.common.algorithm.Algorithm;
 import java.awt.event.ActionEvent;
 
 /**

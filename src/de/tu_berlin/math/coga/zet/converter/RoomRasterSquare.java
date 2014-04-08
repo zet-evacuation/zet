@@ -29,8 +29,8 @@ import java.util.EnumMap;
 import java.util.EnumSet;
 import java.util.Locale;
 import java.util.Set;
-import de.tu_berlin.math.coga.common.util.Direction8;
-import de.tu_berlin.math.coga.common.util.Level;
+import de.tu_berlin.coga.common.util.Direction8;
+import de.tu_berlin.coga.common.util.Level;
 import ds.z.TeleportArea;
 
 /**

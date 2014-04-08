@@ -4,7 +4,7 @@
  */
 package ds.graph;
 
-import de.tu_berlin.math.coga.common.localization.AbstractLocalization;
+import de.tu_berlin.coga.common.localization.AbstractLocalization;
 import ds.z.ZLocalization;
 import java.util.MissingResourceException;
 

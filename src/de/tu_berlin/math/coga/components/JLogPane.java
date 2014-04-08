@@ -20,7 +20,7 @@
  */
 package de.tu_berlin.math.coga.components;
 
-import de.tu_berlin.math.coga.common.debug.HTMLLoggerHandler;
+import de.tu_berlin.coga.common.debug.HTMLLoggerHandler;
 import info.clearthought.layout.TableLayout;
 import javax.swing.JEditorPane;
 import javax.swing.JPanel;

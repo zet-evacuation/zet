@@ -3,7 +3,7 @@
  */
 package ds.z.template;
 
-import de.tu_berlin.math.coga.common.debug.Debug;
+import de.tu_berlin.coga.common.debug.Debug;
 import java.io.File;
 import java.io.IOException;
 import java.util.logging.Level;

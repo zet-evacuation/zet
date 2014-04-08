@@ -21,7 +21,7 @@
 
 package zet.gui.main.tabs.base;
 
-import de.tu_berlin.math.coga.common.localization.Localized;
+import de.tu_berlin.coga.common.localization.Localized;
 import de.tu_berlin.math.coga.components.JCorner;
 import de.tu_berlin.math.coga.components.JRuler;
 import gui.editor.CoordinateTools;

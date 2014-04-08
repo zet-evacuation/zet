@@ -4,7 +4,7 @@
  */
 package de.tu_berlin.math.coga.batch.input.converter;
 
-import de.tu_berlin.math.coga.common.algorithm.Algorithm;
+import de.tu_berlin.coga.common.algorithm.Algorithm;
 import ds.graph.Edge;
 import ds.graph.network.Network;
 import ds.graph.problem.MaximumFlowProblem;

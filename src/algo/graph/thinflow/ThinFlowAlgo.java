@@ -16,7 +16,7 @@
 
 package algo.graph.thinflow;
 
-import de.tu_berlin.math.coga.common.algorithm.Algorithm;
+import de.tu_berlin.coga.common.algorithm.Algorithm;
 import ds.graph.problem.ThinFlowProblem;
 import ds.graph.flow.ThinFlow;
 

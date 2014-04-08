@@ -4,7 +4,7 @@
 package algo.ca.framework;
 
 import algo.ca.algorithm.evac.EvacuationSimulationResult;
-import de.tu_berlin.math.coga.common.algorithm.parameter.ParameterSet;
+import de.tu_berlin.coga.common.algorithm.parameter.ParameterSet;
 import ds.ca.evac.Individual;
 import java.util.List;
 import java.util.logging.Logger;

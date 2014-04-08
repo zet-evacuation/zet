@@ -6,7 +6,7 @@ package batch.plugins.impl;
 
 import algo.graph.dynamicflow.eat.EarliestArrivalFlowProblem;
 import batch.plugins.AlgorithmicPlugin;
-import de.tu_berlin.math.coga.common.algorithm.Algorithm;
+import de.tu_berlin.coga.common.algorithm.Algorithm;
 import ds.graph.flow.PathBasedFlowOverTime;
 import net.xeoh.plugins.base.annotations.PluginImplementation;
 

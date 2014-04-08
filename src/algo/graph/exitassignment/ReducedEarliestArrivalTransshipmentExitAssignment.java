@@ -39,7 +39,7 @@ import ds.graph.flow.MaximumFlow;
 import ds.graph.flow.PathBasedFlowOverTime;
 import java.util.LinkedList;
 import java.util.List;
-import de.tu_berlin.math.coga.common.algorithm.Algorithm;
+import de.tu_berlin.coga.common.algorithm.Algorithm;
 import ds.graph.network.Network;
 
 /**

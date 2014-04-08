@@ -4,7 +4,7 @@
  */
 package tasks.conversion;
 
-import de.tu_berlin.math.coga.common.algorithm.Algorithm;
+import de.tu_berlin.coga.common.algorithm.Algorithm;
 import ds.z.BuildingPlan;
 import io.visualization.BuildingResults;
 

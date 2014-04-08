@@ -23,8 +23,8 @@ import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
-import de.tu_berlin.math.coga.common.util.Direction8;
-import de.tu_berlin.math.coga.common.util.Level;
+import de.tu_berlin.coga.common.util.Direction8;
+import de.tu_berlin.coga.common.util.Level;
 import de.tu_berlin.math.coga.zet.converter.RoomRasterProperty;
 import ds.z.Barrier;
 import ds.z.Edge;

@@ -16,8 +16,8 @@
 package ds.ca.evac;
 
 import algo.ca.framework.EvacuationCellState;
-import de.tu_berlin.math.coga.common.util.Direction8;
-import de.tu_berlin.math.coga.common.util.Level;
+import de.tu_berlin.coga.common.util.Direction8;
+import de.tu_berlin.coga.common.util.Level;
 import de.tu_berlin.math.coga.datastructure.simulation.cellularautomaton.SquareCell;
 import java.util.ArrayList;
 import java.util.Collection;

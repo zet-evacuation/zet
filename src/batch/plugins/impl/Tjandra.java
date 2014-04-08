@@ -7,9 +7,9 @@ package batch.plugins.impl;
 import algo.graph.dynamicflow.eat.EarliestArrivalFlowProblem;
 import algo.graph.dynamicflow.eat.SEAAPAlgorithm;
 import batch.plugins.AlgorithmicPlugin;
-import de.tu_berlin.math.coga.common.algorithm.Algorithm;
-import de.tu_berlin.math.coga.common.util.Formatter;
-import de.tu_berlin.math.coga.common.util.units.TimeUnits;
+import de.tu_berlin.coga.common.algorithm.Algorithm;
+import de.tu_berlin.coga.common.util.Formatter;
+import de.tu_berlin.coga.common.util.units.TimeUnits;
 import ds.graph.flow.PathBasedFlowOverTime;
 import net.xeoh.plugins.base.annotations.PluginImplementation;
 

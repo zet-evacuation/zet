@@ -3,7 +3,7 @@
  */
 package de.tu_berlin.math.coga.zet.converter.graph;
 
-import de.tu_berlin.math.coga.common.algorithm.Algorithm;
+import de.tu_berlin.coga.common.algorithm.Algorithm;
 import ds.graph.Edge;
 import ds.graph.IdentifiableCollection;
 import ds.graph.Node;

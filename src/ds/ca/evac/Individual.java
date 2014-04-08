@@ -16,7 +16,7 @@
 package ds.ca.evac;
 
 import algo.ca.rule.PotentialValueTuple;
-import de.tu_berlin.math.coga.common.util.Direction8;
+import de.tu_berlin.coga.common.util.Direction8;
 import ds.mapping.Identifiable;
 import java.util.UUID;
 

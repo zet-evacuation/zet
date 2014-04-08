@@ -20,7 +20,7 @@
 package zet.gui.main.tabs.quickVisualization;
 
 import de.tu_berlin.math.coga.zet.ZETLocalization;
-import de.tu_berlin.math.coga.common.util.Direction8;
+import de.tu_berlin.coga.common.util.Direction8;
 import ds.PropertyContainer;
 import ds.ca.evac.EvacCell;
 import ds.ca.evac.EvacuationCellularAutomaton;

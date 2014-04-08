@@ -21,10 +21,10 @@
 
 package de.tu_berlin.math.coga.zet.viewer;
 
-import de.tu_berlin.math.coga.common.algorithm.AlgorithmEvent;
-import de.tu_berlin.math.coga.common.algorithm.AlgorithmListener;
-import de.tu_berlin.math.coga.common.algorithm.AlgorithmProgressEvent;
-import de.tu_berlin.math.coga.common.util.Formatter;
+import de.tu_berlin.coga.common.algorithm.AlgorithmEvent;
+import de.tu_berlin.coga.common.algorithm.AlgorithmListener;
+import de.tu_berlin.coga.common.algorithm.AlgorithmProgressEvent;
+import de.tu_berlin.coga.common.util.Formatter;
 import de.tu_berlin.math.coga.components.JStatusBar;
 import javax.swing.JProgressBar;
 

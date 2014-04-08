@@ -6,7 +6,7 @@ package de.tu_berlin.math.coga.batch.operations;
 
 import algo.graph.dynamicflow.eat.EarliestArrivalFlowProblem;
 import de.tu_berlin.math.coga.batch.input.reader.InputFileReader;
-import de.tu_berlin.math.coga.common.algorithm.Algorithm;
+import de.tu_berlin.coga.common.algorithm.Algorithm;
 import de.tu_berlin.math.coga.zet.converter.graph.GraphAssignmentConverter;
 import de.tu_berlin.math.coga.zet.converter.graph.NetworkFlowModel;
 import ds.GraphVisualizationResults;

@@ -4,7 +4,7 @@
  */
 package de.tu_berlin.math.coga.datastructure.simulation.cellularautomaton;
 
-import de.tu_berlin.math.coga.common.util.Direction8;
+import de.tu_berlin.coga.common.util.Direction8;
 import java.util.Objects;
 
 

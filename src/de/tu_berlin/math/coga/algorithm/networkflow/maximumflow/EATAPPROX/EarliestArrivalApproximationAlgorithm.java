@@ -5,9 +5,9 @@
 package de.tu_berlin.math.coga.algorithm.networkflow.maximumflow.EATAPPROX;
 
 import algo.graph.dynamicflow.eat.EarliestArrivalFlowProblem;
-import de.tu_berlin.math.coga.common.algorithm.Algorithm;
-import de.tu_berlin.math.coga.common.util.Formatter;
-import de.tu_berlin.math.coga.common.util.units.TimeUnits;
+import de.tu_berlin.coga.common.algorithm.Algorithm;
+import de.tu_berlin.coga.common.util.Formatter;
+import de.tu_berlin.coga.common.util.units.TimeUnits;
 import ds.graph.Edge;
 import ds.graph.Node;
 import ds.graph.network.NetworkInterface;

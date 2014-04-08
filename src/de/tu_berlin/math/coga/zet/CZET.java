@@ -13,7 +13,7 @@ import de.tu_berlin.math.coga.algorithm.networkflow.maximumflow.EATAPPROX.Earlie
 import de.tu_berlin.math.coga.algorithm.networkflow.maximumflow.EATAPPROX.EarliestArrivalFlowPatternBuilder;
 import de.tu_berlin.math.coga.algorithm.shortestpath.Dijkstra;
 import de.tu_berlin.math.coga.batch.input.reader.ZETProjectFileReader;
-import de.tu_berlin.math.coga.common.debug.Debug;
+import de.tu_berlin.coga.common.debug.Debug;
 import de.tu_berlin.math.coga.graph.io.xml.XMLWriter;
 import de.tu_berlin.math.coga.graph.io.xml.visualization.GraphVisualization;
 import de.tu_berlin.math.coga.rndutils.RandomUtils;

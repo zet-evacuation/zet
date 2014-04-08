@@ -4,8 +4,8 @@
  */
 package math.coga.common.util;
 
-import de.tu_berlin.math.coga.common.util.Formatter;
-import de.tu_berlin.math.coga.common.util.units.TimeUnits;
+import de.tu_berlin.coga.common.util.Formatter;
+import de.tu_berlin.coga.common.util.units.TimeUnits;
 import de.tu_berlin.math.coga.datastructure.Tuple;
 import static org.junit.Assert.assertEquals;
 import org.junit.Test;
