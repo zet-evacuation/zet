@@ -16,7 +16,6 @@ import de.tu_berlin.coga.common.algorithm.AlgorithmListener;
 import de.tu_berlin.coga.common.algorithm.AlgorithmProgressEvent;
 import de.tu_berlin.coga.common.algorithm.AlgorithmStartedEvent;
 import de.tu_berlin.coga.common.debug.Debug;
-import de.tu_berlin.coga.common.localization.Localized;
 import de.tu_berlin.math.coga.components.Localizer;
 import de.tu_berlin.coga.common.util.IOTools;
 import de.tu_berlin.math.coga.components.JLogPane;

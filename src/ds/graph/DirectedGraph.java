@@ -26,4 +26,9 @@ public interface DirectedGraph extends Graph {
 	 * @throws UnsupportedOperationException if the graph is not directed.
 	 */
 	int outDegree( Node node );
+	
+	@Override
+	public default boolean isDirected() {
+		return true;
+	}
 }

@@ -83,9 +83,6 @@ public class CompactEdgeListConverter extends ReflectionConverter {
 			final UnmarshallingContext context) {
 		PlanPoint created = (PlanPoint) instantiateNewInstance (reader, context);
 
-		// Early recreation of changeListener List neccessary
-//		reflectionProvider.writeField (created, "changeListeners", new ArrayList<ChangeListener> (), PlanPoint.class);
-
 		created.x = Integer.parseInt (reader.getAttribute ("x"));
 		created.y = Integer.parseInt (reader.getAttribute ("y"));
 		
