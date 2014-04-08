@@ -5,9 +5,9 @@
 package de.tu_berlin.math.coga.zet.converter.graph;
 
 import de.tu_berlin.math.coga.zet.ZETLocalization;
-import de.tu_berlin.math.coga.common.util.Direction8;
-import static de.tu_berlin.math.coga.common.util.Direction8.*;
-import static de.tu_berlin.math.coga.common.util.Level.*;
+import de.tu_berlin.coga.common.util.Direction8;
+import static de.tu_berlin.coga.common.util.Direction8.*;
+import static de.tu_berlin.coga.common.util.Level.*;
 import de.tu_berlin.math.coga.zet.converter.RasterContainerCreator;
 import ds.PropertyContainer;
 import ds.graph.Edge;

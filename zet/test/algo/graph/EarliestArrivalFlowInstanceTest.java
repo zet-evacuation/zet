@@ -6,11 +6,11 @@ package algo.graph;
 
 import algo.graph.dynamicflow.eat.EarliestArrivalFlowProblem;
 import algo.graph.dynamicflow.eat.SEAAPAlgorithm;
-import de.tu_berlin.math.coga.common.algorithm.AlgorithmEvent;
-import de.tu_berlin.math.coga.common.algorithm.AlgorithmProgressEvent;
-import de.tu_berlin.math.coga.common.algorithm.AlgorithmListener;
-import de.tu_berlin.math.coga.common.util.Formatter;
-import de.tu_berlin.math.coga.common.util.units.TimeUnits;
+import de.tu_berlin.coga.common.algorithm.AlgorithmEvent;
+import de.tu_berlin.coga.common.algorithm.AlgorithmProgressEvent;
+import de.tu_berlin.coga.common.algorithm.AlgorithmListener;
+import de.tu_berlin.coga.common.util.Formatter;
+import de.tu_berlin.coga.common.util.units.TimeUnits;
 import ds.graph.Edge;
 import ds.mapping.IdentifiableIntegerMapping;
 import ds.graph.network.AbstractNetwork;

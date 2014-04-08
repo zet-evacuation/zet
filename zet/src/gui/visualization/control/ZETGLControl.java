@@ -15,7 +15,7 @@
  */
 package gui.visualization.control;
 
-import de.tu_berlin.math.coga.common.localization.AbstractLocalization;
+import de.tu_berlin.coga.common.localization.AbstractLocalization;
 import de.tu_berlin.math.coga.zet.ZETLocalization;
 import ds.CompareVisualizationResults;
 import ds.PropertyContainer;

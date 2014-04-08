@@ -20,9 +20,9 @@
  */
 package de.tu_berlin.math.coga.components;
 
-import de.tu_berlin.math.coga.common.localization.AbstractLocalization;
-import de.tu_berlin.math.coga.common.util.units.BinaryUnits;
-import de.tu_berlin.math.coga.common.util.Formatter;
+import de.tu_berlin.coga.common.localization.AbstractLocalization;
+import de.tu_berlin.coga.common.util.units.BinaryUnits;
+import de.tu_berlin.coga.common.util.Formatter;
 import de.tu_berlin.math.coga.components.framework.Button;
 import info.clearthought.layout.TableLayout;
 import io.movie.MovieWriter;

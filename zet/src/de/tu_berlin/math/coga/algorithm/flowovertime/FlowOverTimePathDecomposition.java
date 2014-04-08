@@ -4,7 +4,7 @@
  */
 package de.tu_berlin.math.coga.algorithm.flowovertime;
 
-import de.tu_berlin.math.coga.common.algorithm.Algorithm;
+import de.tu_berlin.coga.common.algorithm.Algorithm;
 import de.tu_berlin.math.coga.datastructure.mapping.IdentifiableIntegerIntegerMapping;
 import de.tu_berlin.math.coga.datastructure.mapping.IdentifiableIntegerObjectMapping;
 import de.tu_berlin.math.coga.datastructure.priorityQueue.MinHeap;

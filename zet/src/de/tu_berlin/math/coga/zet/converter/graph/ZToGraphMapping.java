@@ -20,7 +20,7 @@
 package de.tu_berlin.math.coga.zet.converter.graph;
 
 import de.tu_berlin.math.coga.zet.ZETLocalization;
-import de.tu_berlin.math.coga.common.util.Level;
+import de.tu_berlin.coga.common.util.Level;
 import de.tu_berlin.math.coga.math.vectormath.Vector3;
 import de.tu_berlin.math.coga.zet.viewer.NodePositionMapping;
 import ds.graph.Edge;

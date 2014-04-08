@@ -20,10 +20,10 @@
  */
 package zet.gui.main;
 
-import de.tu_berlin.math.coga.common.debug.Debug;
+import de.tu_berlin.coga.common.debug.Debug;
 import de.tu_berlin.math.coga.zet.ZETLocalization;
-import de.tu_berlin.math.coga.common.localization.AbstractLocalization;
-import de.tu_berlin.math.coga.common.localization.Localized;
+import de.tu_berlin.coga.common.localization.AbstractLocalization;
+import de.tu_berlin.coga.common.localization.Localized;
 import ds.PropertyContainer;
 import ds.z.ZControl;
 import event.EventServer;

@@ -1,6 +1,6 @@
 package de.tu_berlin.math.coga.algorithm.simulation;
 
-import de.tu_berlin.math.coga.common.algorithm.Algorithm;
+import de.tu_berlin.coga.common.algorithm.Algorithm;
 
 /**
  *

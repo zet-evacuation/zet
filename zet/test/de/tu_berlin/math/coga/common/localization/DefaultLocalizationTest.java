@@ -1,5 +1,6 @@
 package de.tu_berlin.math.coga.common.localization;
 
+import de.tu_berlin.coga.common.localization.DefaultLocalization;
 import org.junit.Test;
 import static org.junit.Assert.assertEquals;
 

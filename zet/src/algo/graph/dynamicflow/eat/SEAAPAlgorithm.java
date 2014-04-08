@@ -21,8 +21,8 @@
 package algo.graph.dynamicflow.eat;
 
 import algo.graph.shortestpath.Dijkstra;
-import de.tu_berlin.math.coga.common.algorithm.Algorithm;
-import de.tu_berlin.math.coga.common.algorithm.AlgorithmStatusEvent;
+import de.tu_berlin.coga.common.algorithm.Algorithm;
+import de.tu_berlin.coga.common.algorithm.AlgorithmStatusEvent;
 import ds.graph.ImplicitTimeExpandedResidualNetwork;
 import ds.graph.Node;
 import ds.graph.flow.EarliestArrivalAugmentingPath;

@@ -21,8 +21,8 @@
 
 package io.movie;
 
-import de.tu_berlin.math.coga.common.util.Formatter;
-import de.tu_berlin.math.coga.common.util.IOTools;
+import de.tu_berlin.coga.common.util.Formatter;
+import de.tu_berlin.coga.common.util.IOTools;
 import info.clearthought.layout.TableLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;

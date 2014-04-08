@@ -4,7 +4,7 @@
  */
 package de.tu_berlin.math.coga.zet.converter.graph;
 
-import de.tu_berlin.math.coga.common.util.Level;
+import de.tu_berlin.coga.common.util.Level;
 import de.tu_berlin.math.coga.math.vectormath.Vector2;
 import ds.PropertyContainer;
 import ds.collection.ListSequence;

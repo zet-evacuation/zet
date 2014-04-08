@@ -21,7 +21,7 @@
 package algo.graph.dynamicflow.eat;
 
 import algo.graph.shortestpath.Dijkstra;
-import de.tu_berlin.math.coga.common.algorithm.Algorithm;
+import de.tu_berlin.coga.common.algorithm.Algorithm;
 import ds.graph.Node;
 
 /**

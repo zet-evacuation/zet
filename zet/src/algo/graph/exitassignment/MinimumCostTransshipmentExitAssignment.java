@@ -23,7 +23,7 @@ import algo.graph.shortestpath.Dijkstra;
 import algo.graph.util.PathDecomposition;
 import de.tu_berlin.math.coga.algorithm.networkflow.maximumflow.PushRelabelHighestLabelGlobalGapRelabelling;
 import de.tu_berlin.math.coga.algorithm.networkflow.mincostflow.SuccessiveShortestPath;
-import de.tu_berlin.math.coga.common.algorithm.Algorithm;
+import de.tu_berlin.coga.common.algorithm.Algorithm;
 import de.tu_berlin.math.coga.zet.converter.graph.NetworkFlowModel;
 import ds.graph.Edge;
 import ds.graph.IdentifiableCollection;

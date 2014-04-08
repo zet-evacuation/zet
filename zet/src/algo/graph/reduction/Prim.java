@@ -6,7 +6,7 @@ package algo.graph.reduction;
 
 import ds.graph.MinSpanningTree;
 import ds.graph.problem.MinSpanningTreeProblem;
-import de.tu_berlin.math.coga.common.algorithm.Algorithm; 
+import de.tu_berlin.coga.common.algorithm.Algorithm; 
 import ds.graph.Node;
 import java.util.Random;
 import ds.graph.Edge;

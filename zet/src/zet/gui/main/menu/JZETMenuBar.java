@@ -4,7 +4,7 @@
  */
 package zet.gui.main.menu;
 
-import de.tu_berlin.math.coga.common.localization.Localized;
+import de.tu_berlin.coga.common.localization.Localized;
 import de.tu_berlin.math.coga.components.framework.Menu;
 import ds.PropertyContainer;
 import gui.GUIControl;

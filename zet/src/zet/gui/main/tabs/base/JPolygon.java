@@ -15,7 +15,7 @@
  */
 package zet.gui.main.tabs.base;
 
-import de.tu_berlin.math.coga.common.util.Selectable;
+import de.tu_berlin.coga.common.util.Selectable;
 import ds.PropertyContainer;
 import ds.z.Area;
 import ds.z.Barrier;

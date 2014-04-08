@@ -4,8 +4,8 @@
  */
 package de.tu_berlin.math.coga.zet.converter.graph;
 
-import de.tu_berlin.math.coga.common.algorithm.Algorithm;
-import de.tu_berlin.math.coga.common.debug.Debug;
+import de.tu_berlin.coga.common.algorithm.Algorithm;
+import de.tu_berlin.coga.common.debug.Debug;
 import ds.graph.flow.PathBasedFlowOverTime;
 import ds.z.BuildingPlan;
 import ds.z.ConcreteAssignment;

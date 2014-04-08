@@ -27,7 +27,7 @@ import javax.media.opengl.GL;
 import opengl.drawingutils.GLColor;
 import opengl.drawingutils.GLVector;
 import opengl.framework.abs.AbstractDrawable;
-import de.tu_berlin.math.coga.common.util.Direction8;
+import de.tu_berlin.coga.common.util.Direction8;
 
 public class GLCell extends AbstractDrawable<GLCell, GLCellControl> {
 	private static GLVector ul = null;	// upper Left

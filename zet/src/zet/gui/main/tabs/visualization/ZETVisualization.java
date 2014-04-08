@@ -4,8 +4,8 @@
  */
 package zet.gui.main.tabs.visualization;
 
-import de.tu_berlin.math.coga.common.util.Formatter;
-import de.tu_berlin.math.coga.common.util.units.TimeUnits;
+import de.tu_berlin.coga.common.util.Formatter;
+import de.tu_berlin.coga.common.util.units.TimeUnits;
 import ds.PropertyContainer;
 import ds.z.ZControl;
 import gui.GUIControl;

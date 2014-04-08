@@ -6,7 +6,7 @@ package zet.gui.main.toolbar;
 
 import batch.BatchResult;
 import batch.BatchResultEntry;
-import de.tu_berlin.math.coga.common.localization.Localized;
+import de.tu_berlin.coga.common.localization.Localized;
 import gui.GUIControl;
 import gui.ZETMain;
 import de.tu_berlin.math.coga.datastructure.NamedIndex;

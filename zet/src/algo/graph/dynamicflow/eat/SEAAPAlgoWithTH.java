@@ -11,8 +11,8 @@ import ds.graph.Node;
 import ds.graph.flow.FlowOverTimeImplicit;
 import java.util.Arrays;
 import java.util.LinkedList;
-import de.tu_berlin.math.coga.common.algorithm.Algorithm;
-import de.tu_berlin.math.coga.common.algorithm.AlgorithmStatusEvent;
+import de.tu_berlin.coga.common.algorithm.Algorithm;
+import de.tu_berlin.coga.common.algorithm.AlgorithmStatusEvent;
 /**
  *
  * @author schwengf

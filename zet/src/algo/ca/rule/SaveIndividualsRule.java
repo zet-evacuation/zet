@@ -15,7 +15,7 @@
  */
 package algo.ca.rule;
 
-import de.tu_berlin.math.coga.common.util.IOTools;
+import de.tu_berlin.coga.common.util.IOTools;
 
 public class SaveIndividualsRule extends AbstractSaveRule {
 	static String nord = IOTools.getNextFreeNumberedFilename( "./", "results_nord", 3 );

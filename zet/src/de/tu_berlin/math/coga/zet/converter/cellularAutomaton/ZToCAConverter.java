@@ -23,11 +23,11 @@ package de.tu_berlin.math.coga.zet.converter.cellularAutomaton;
 
 import algo.ca.PotentialController;
 import algo.ca.SPPotentialController;
-import de.tu_berlin.math.coga.common.algorithm.Algorithm;
+import de.tu_berlin.coga.common.algorithm.Algorithm;
 import de.tu_berlin.math.coga.zet.ZETLocalization;
-import de.tu_berlin.math.coga.common.util.Direction8;
-import static de.tu_berlin.math.coga.common.util.Direction8.*;
-import de.tu_berlin.math.coga.common.util.Level;
+import de.tu_berlin.coga.common.util.Direction8;
+import static de.tu_berlin.coga.common.util.Direction8.*;
+import de.tu_berlin.coga.common.util.Level;
 import de.tu_berlin.math.coga.zet.converter.RasterContainerCreator;
 import de.tu_berlin.math.coga.zet.converter.RoomRasterSquare;
 import ds.ca.evac.EvacCell;

@@ -5,7 +5,7 @@
 package batch.plugins.impl;
 
 import batch.plugins.AlgorithmicPlugin;
-import de.tu_berlin.math.coga.common.algorithm.Algorithm;
+import de.tu_berlin.coga.common.algorithm.Algorithm;
 import de.tu_berlin.math.coga.zet.converter.graph.NetworkFlowModel;
 import de.tu_berlin.math.coga.zet.converter.graph.ThinNetworkConverter;
 import ds.z.BuildingPlan;

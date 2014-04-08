@@ -4,9 +4,9 @@
  */
 package ds.z;
 
-import de.tu_berlin.math.coga.common.localization.AbstractLocalization;
-import de.tu_berlin.math.coga.common.util.Formatter;
-import de.tu_berlin.math.coga.common.util.Helper;
+import de.tu_berlin.coga.common.localization.AbstractLocalization;
+import de.tu_berlin.coga.common.util.Formatter;
+import de.tu_berlin.coga.common.util.Helper;
 import de.tu_berlin.math.coga.rndutils.distribution.Distribution;
 import de.tu_berlin.math.coga.rndutils.distribution.continuous.NormalDistribution;
 import de.tu_berlin.math.coga.rndutils.distribution.continuous.UniformDistribution;

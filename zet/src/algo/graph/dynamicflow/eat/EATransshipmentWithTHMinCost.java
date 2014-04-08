@@ -16,7 +16,7 @@
 package algo.graph.dynamicflow.eat;
 
 import algo.graph.dynamicflow.DynamicTransshipmentProblem;
-import de.tu_berlin.math.coga.common.algorithm.Algorithm;
+import de.tu_berlin.coga.common.algorithm.Algorithm;
 import algo.graph.dynamicflow.TransshipmentWithTimeHorizon;
 import de.tu_berlin.math.coga.algorithm.networkflow.mincostflow.MinimumMeanCycleCancelling;
 import ds.graph.Edge;

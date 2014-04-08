@@ -24,7 +24,7 @@ import ds.graph.ImplicitTimeExpandedResidualNetwork;
 import ds.graph.Node;
 import ds.graph.flow.FlowOverTimeImplicit;
 import java.util.LinkedList;
-import de.tu_berlin.math.coga.common.algorithm.Algorithm;
+import de.tu_berlin.coga.common.algorithm.Algorithm;
 
 /**
  *

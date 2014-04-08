@@ -4,7 +4,7 @@
  */
 package gui;
 
-import de.tu_berlin.math.coga.common.algorithm.AlgorithmListener;
+import de.tu_berlin.coga.common.algorithm.AlgorithmListener;
 import de.tu_berlin.math.coga.zet.converter.cellularAutomaton.ZToCAMapping;
 import de.tu_berlin.math.coga.zet.converter.cellularAutomaton.ZToCARasterContainer;
 import de.tu_berlin.math.coga.zet.converter.graph.NetworkFlowModel;

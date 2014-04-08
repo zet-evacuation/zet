@@ -21,7 +21,7 @@
 package algo.graph.exitassignment;
 
 import algo.graph.shortestpath.Dijkstra;
-import de.tu_berlin.math.coga.common.algorithm.Algorithm;
+import de.tu_berlin.coga.common.algorithm.Algorithm;
 import de.tu_berlin.math.coga.datastructure.priorityQueue.MinHeap;
 import de.tu_berlin.math.coga.zet.converter.graph.NetworkFlowModel;
 import ds.graph.IdentifiableCollection;

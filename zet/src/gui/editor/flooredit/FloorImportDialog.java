@@ -35,7 +35,7 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JList;
 import javax.swing.JOptionPane;
-import de.tu_berlin.math.coga.common.localization.AbstractLocalization;
+import de.tu_berlin.coga.common.localization.AbstractLocalization;
 import ds.ProjectLoader;
 import gui.GUIControl;
 import gui.ZETLoader;

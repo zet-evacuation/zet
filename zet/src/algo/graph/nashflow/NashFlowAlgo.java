@@ -20,7 +20,7 @@ package algo.graph.nashflow;
 import algo.graph.thinflow.ThinFlowAlgo;
 import ds.graph.problem.ThinFlowProblem;
 import ds.graph.flow.ThinFlow;
-import de.tu_berlin.math.coga.common.algorithm.Algorithm;
+import de.tu_berlin.coga.common.algorithm.Algorithm;
 import ds.graph.network.DynamicNetwork;
 import ds.graph.DoubleMap;
 import ds.graph.problem.NashFlowProblem;

@@ -40,7 +40,7 @@ import de.tu_berlin.math.coga.batch.operations.AtomicOperation;
 import de.tu_berlin.math.coga.batch.operations.BasicOptimization;
 import de.tu_berlin.math.coga.batch.operations.Operation;
 import de.tu_berlin.math.coga.batch.operations.OperationList;
-import de.tu_berlin.math.coga.common.algorithm.Algorithm;
+import de.tu_berlin.coga.common.algorithm.Algorithm;
 import ds.ProjectLoader;
 import ds.z.Project;
 import gui.GUIControl;

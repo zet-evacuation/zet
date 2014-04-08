@@ -20,7 +20,7 @@
 package algo.graph.dynamicflow.eat;
 
 //import cern.colt.Arrays;
-import de.tu_berlin.math.coga.common.algorithm.Algorithm;
+import de.tu_berlin.coga.common.algorithm.Algorithm;
 import ds.graph.Edge;
 import ds.graph.ImplicitTimeExpandedResidualNetwork;
 import ds.graph.Node;

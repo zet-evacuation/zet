@@ -5,7 +5,7 @@
 package de.tu_berlin.math.coga.algorithm.networkflow.maximumflow;
 
 import algo.graph.traverse.BFS;
-import de.tu_berlin.math.coga.common.algorithm.Algorithm;
+import de.tu_berlin.coga.common.algorithm.Algorithm;
 import ds.graph.Edge;
 import ds.graph.Node;
 import ds.graph.StaticPath;

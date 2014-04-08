@@ -27,7 +27,7 @@ import de.tu_berlin.math.coga.zet.converter.cellularAutomaton.ZToCAMapping;
 import de.tu_berlin.math.coga.zet.converter.cellularAutomaton.ZToCARasterContainer;
 import de.tu_berlin.math.coga.zet.converter.cellularAutomaton.ZToCARasterSquare;
 import de.tu_berlin.math.coga.zet.converter.cellularAutomaton.ZToCARoomRaster;
-import de.tu_berlin.math.coga.common.util.Direction8;
+import de.tu_berlin.coga.common.util.Direction8;
 import ds.PropertyContainer;
 import ds.z.Floor;
 import ds.z.Room;
