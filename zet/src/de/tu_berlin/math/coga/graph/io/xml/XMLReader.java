@@ -10,7 +10,7 @@ import algo.graph.dynamicflow.eat.EarliestArrivalFlowProblem;
 import com.thoughtworks.xstream.XStream;
 import com.thoughtworks.xstream.io.xml.DomDriver;
 import ds.graph.Edge;
-import ds.mapping.IdentifiableIntegerMapping;
+import de.tu_berlin.coga.container.mapping.IdentifiableIntegerMapping;
 import ds.graph.network.AbstractNetwork;
 import ds.graph.Node;
 import io.FileTypeException;

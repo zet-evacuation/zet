@@ -20,7 +20,7 @@
 
 package ds.graph;
 
-import ds.mapping.Identifiable;
+import de.tu_berlin.coga.container.mapping.Identifiable;
 import com.thoughtworks.xstream.annotations.XStreamAlias;
 import com.thoughtworks.xstream.annotations.XStreamAsAttribute;
 

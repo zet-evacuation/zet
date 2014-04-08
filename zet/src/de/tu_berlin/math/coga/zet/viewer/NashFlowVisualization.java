@@ -7,7 +7,7 @@ package de.tu_berlin.math.coga.zet.viewer;
 import de.tu_berlin.math.coga.math.Conversion;
 import de.tu_berlin.math.coga.math.vectormath.Vector3;
 import ds.graph.Edge;
-import ds.mapping.IdentifiableObjectMapping;
+import de.tu_berlin.coga.container.mapping.IdentifiableObjectMapping;
 import ds.graph.network.AbstractNetwork;
 import ds.graph.Node;
 import ds.graph.network.Network;

@@ -6,7 +6,7 @@ import ds.graph.Node;
 import ds.graph.network.Network;
 import ds.graph.problem.MinimumCostFlowProblem;
 import ds.graph.problem.RawMinimumCostFlowProblem;
-import ds.mapping.IdentifiableIntegerMapping;
+import de.tu_berlin.coga.container.mapping.IdentifiableIntegerMapping;
 
 /**
  * Converter that transforms memory-efficient raw minimum cost flow problems

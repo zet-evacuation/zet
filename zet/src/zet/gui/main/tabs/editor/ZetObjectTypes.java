@@ -4,15 +4,15 @@
  */
 package zet.gui.main.tabs.editor;
 
-import de.tu_berlin.coga.zet.model.AssignmentArea;
-import de.tu_berlin.coga.zet.model.Barrier;
-import de.tu_berlin.coga.zet.model.DelayArea;
-import de.tu_berlin.coga.zet.model.EvacuationArea;
-import de.tu_berlin.coga.zet.model.InaccessibleArea;
-import de.tu_berlin.coga.zet.model.Room;
-import de.tu_berlin.coga.zet.model.SaveArea;
-import de.tu_berlin.coga.zet.model.StairArea;
-import de.tu_berlin.coga.zet.model.TeleportArea;
+import ds.z.AssignmentArea;
+import ds.z.Barrier;
+import ds.z.DelayArea;
+import ds.z.EvacuationArea;
+import ds.z.InaccessibleArea;
+import ds.z.Room;
+import ds.z.SaveArea;
+import ds.z.StairArea;
+import ds.z.TeleportArea;
 import gui.GUIOptionManager;
 import java.awt.Color;
 import java.util.Objects;

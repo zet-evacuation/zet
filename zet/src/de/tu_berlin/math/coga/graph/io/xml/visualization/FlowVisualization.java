@@ -10,7 +10,7 @@ import ds.graph.Edge;
 import ds.graph.Node;
 import ds.graph.flow.EdgeBasedFlowOverTime;
 import ds.graph.network.AbstractNetwork;
-import ds.mapping.IdentifiableIntegerMapping;
+import de.tu_berlin.coga.container.mapping.IdentifiableIntegerMapping;
 import java.util.List;
 
 /**

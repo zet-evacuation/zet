@@ -5,7 +5,7 @@
 package de.tu_berlin.math.coga.zet;
 
 import de.tu_berlin.coga.common.localization.AbstractLocalization;
-import de.tu_berlin.coga.zet.model.ZLocalization;
+import ds.z.ZLocalization;
 
 /**
  *

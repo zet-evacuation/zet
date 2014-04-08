@@ -23,7 +23,7 @@ package batch.tasks;
 
 import batch.BatchResultEntry;
 import de.tu_berlin.math.coga.zet.converter.cellularAutomaton.ZToCAConverter;
-import de.tu_berlin.coga.zet.model.Project;
+import ds.z.Project;
 import ds.ca.evac.EvacuationCellularAutomaton;
 
 /**

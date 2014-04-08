@@ -6,12 +6,12 @@ package de.tu_berlin.math.coga.algorithm.networkflow.maximumflow;
 
 import de.tu_berlin.math.coga.datastructure.BucketSet;
 import de.tu_berlin.math.coga.datastructure.Tuple;
-import de.tu_berlin.math.coga.datastructure.priorityQueue.BucketPriorityQueue;
+import de.tu_berlin.math.coga.datastructure.BucketPriorityQueue;
 import ds.graph.Edge;
 import ds.graph.Node;
 import ds.graph.flow.MaximumFlow;
 import ds.graph.problem.MaximumFlowProblem;
-import ds.mapping.IdentifiableIntegerMapping;
+import de.tu_berlin.coga.container.mapping.IdentifiableIntegerMapping;
 
 /**
  *

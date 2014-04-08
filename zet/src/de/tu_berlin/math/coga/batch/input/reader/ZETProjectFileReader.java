@@ -5,7 +5,7 @@
 package de.tu_berlin.math.coga.batch.input.reader;
 
 import ds.ProjectLoader;
-import de.tu_berlin.coga.zet.model.Project;
+import ds.z.Project;
 import java.io.File;
 import java.io.IOException;
 import java.util.logging.Level;

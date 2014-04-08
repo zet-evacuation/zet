@@ -9,7 +9,7 @@ import ds.graph.Node;
 import ds.graph.network.AbstractNetwork;
 import ds.graph.network.Network;
 import ds.graph.problem.MaximumFlowProblem;
-import ds.mapping.IdentifiableIntegerMapping;
+import de.tu_berlin.coga.container.mapping.IdentifiableIntegerMapping;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Set;

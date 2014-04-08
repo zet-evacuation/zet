@@ -21,8 +21,8 @@ package algo.graph.shortestpath;
 
 import ds.graph.GraphLocalization;
 import ds.graph.Edge;
-import ds.mapping.IdentifiableIntegerMapping;
-import ds.mapping.IdentifiableObjectMapping;
+import de.tu_berlin.coga.container.mapping.IdentifiableIntegerMapping;
+import de.tu_berlin.coga.container.mapping.IdentifiableObjectMapping;
 import ds.graph.network.AbstractNetwork;
 import ds.graph.Node;
 import ds.graph.Path;

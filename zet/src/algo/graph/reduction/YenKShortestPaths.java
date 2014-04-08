@@ -4,7 +4,7 @@
  */
 package algo.graph.reduction;
 
-import de.tu_berlin.math.coga.datastructure.priorityQueue.MinHeap;
+import de.tu_berlin.coga.container.priority.MinHeap;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;

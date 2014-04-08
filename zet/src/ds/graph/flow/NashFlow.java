@@ -23,20 +23,20 @@ package ds.graph.flow;
 
 import ds.graph.problem.NashFlowProblem;
 import java.util.Vector;
-import ds.graph.DoubleMap;
 import ds.graph.Node;
+import de.tu_berlin.coga.container.mapping.IdentifiableDoubleMapping;
 
 /**
  *
- * @author Sebastian Schenker   
+ * @author Sebastian Schenker
  */
 
 public class NashFlow {
-    
+
     private NashFlowProblem problem;
-    private Vector<DoubleMap<Node>> nodelabelvector;
-    
-    public NashFlow(NashFlowProblem problem, Vector<DoubleMap<Node>> nodelabels) {
+    private Vector<IdentifiableDoubleMapping<Node>> nodelabelvector;
+
+    public NashFlow(NashFlowProblem problem, Vector<IdentifiableDoubleMapping<Node>> nodelabels) {
         this.problem = problem;
         nodelabelvector = nodelabels;
     }
@@ -44,9 +44,9 @@ public class NashFlow {
     public NashFlowProblem getProblem() {
         return problem;
     }
-    
-    public Vector<DoubleMap<Node>> getNodeLabels() {
+
+    public Vector<IdentifiableDoubleMapping<Node>> getNodeLabels() {
         return nodelabelvector;
     }
-        
+
 }

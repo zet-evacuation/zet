@@ -11,7 +11,7 @@ import de.tu_berlin.math.coga.zet.converter.graph.NetworkFlowModel;
 import ds.CompareVisualizationResults;
 import ds.GraphVisualizationResults;
 import ds.ca.evac.EvacuationCellularAutomaton;
-import de.tu_berlin.coga.zet.model.Project;
+import ds.z.Project;
 import io.visualization.BuildingResults;
 import io.visualization.CAVisualizationResults;
 import java.beans.PropertyChangeEvent;

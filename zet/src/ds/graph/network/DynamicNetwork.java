@@ -13,17 +13,14 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
-/*
- * DynamicGraph.java
- *
- */
+
 package ds.graph.network;
 
-import ds.collection.ListSequence;
+import de.tu_berlin.coga.container.collection.ListSequence;
 import ds.graph.DirectedGraph;
 import ds.graph.Edge;
 import ds.graph.GraphLocalization;
-import ds.graph.IdentifiableCollection;
+import de.tu_berlin.coga.container.collection.IdentifiableCollection;
 import ds.graph.Node;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -33,7 +30,8 @@ import java.util.List;
 import java.util.Map;
 
 /**
- *
+ * The term {@code DynamicNetwork} refers to the fact, that the network
+ * structure can change over time.
  */
 public class DynamicNetwork implements DirectedGraph {
 
@@ -86,8 +84,8 @@ public class DynamicNetwork implements DirectedGraph {
 
 	public void addNode( Node node ) {
 		nodes.add( node );
-		incomingEdges.put( node, new ListSequence<Edge>() );
-		outgoingEdges.put( node, new ListSequence<Edge>() );
+		incomingEdges.put( node, new ListSequence<>() );
+		outgoingEdges.put( node, new ListSequence<>() );
 	}
 
 	public void addNodes( Iterable<Node> nodes ) {
@@ -107,7 +105,7 @@ public class DynamicNetwork implements DirectedGraph {
 
 	public List<Edge> extractEdges() {
 		List<Edge> edgesCopy = this.edges;
-		setEdges( new ArrayList<Edge>() );
+		setEdges( new ArrayList<>() );
 		return edgesCopy;
 	}
 
@@ -154,6 +152,7 @@ public class DynamicNetwork implements DirectedGraph {
 		return nodes;
 	}
 
+	@Override
 	public int degree( Node node ) {
 		return inDegree( node ) + outDegree( node );
 	}
@@ -315,7 +314,7 @@ public class DynamicNetwork implements DirectedGraph {
 	public IdentifiableCollection<Node> adjacentNodes( Node node ) {
 		return new OppositeNodeCollection( node, incidentEdges( node ) );
 	}
-   
+
 	@Override
 	public IdentifiableCollection<Node> predecessorNodes( Node node ) {
 		return new OppositeNodeCollection( node, incomingEdges.get( node ) );
@@ -350,41 +349,41 @@ public class DynamicNetwork implements DirectedGraph {
 		network.setEdges( edges );
 		return network;
 	}
-        
+
         public void add_edge_temp(Edge e)
         {
             temp_removed_edges.remove(e);
         }
-        
+
         public void add_node_temp(Node n)
         {
             temp_removed_nodes.remove(n);
         }
-        
+
         public void remove_edge_temp(Edge e)
         {
             temp_removed_edges.add(e);
         }
-        
+
         public void remove_node_temp(Node n)
         {
             temp_removed_nodes.add(n);
         }
-        
+
         public void recover_temp_removed_edges()
         {
             temp_removed_edges.clear();
         }
-        
+
         public void recover_temp_removed_nodes()
         {
             temp_removed_nodes.clear();
         }
-        
+
         public IdentifiableCollection<Node> temp_adjacentNodes( Node node ) {
-            
+
             IdentifiableCollection<Node> adjacent_nodes = new ListSequence<>();
-            
+
                 if (!temp_removed_nodes.contains(node))
                 {
                      IdentifiableCollection<Edge> adj = outgoingEdges(node);
@@ -397,10 +396,10 @@ public class DynamicNetwork implements DirectedGraph {
                          adjacent_nodes.add(e.opposite(node));
                      }
                 }
-           
+
 		return adjacent_nodes;
 	}
-        
+
 	public IdentifiableCollection<Node> temp_predNodes( Node node ) {
 		IdentifiableCollection<Node> adjacent_nodes = new ListSequence<>();
 

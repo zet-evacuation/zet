@@ -20,8 +20,8 @@
 
 package algo.graph.exitassignment;
 
-import ds.mapping.IdentifiableIntegerMapping;
-import ds.mapping.IdentifiableObjectMapping;
+import de.tu_berlin.coga.container.mapping.IdentifiableIntegerMapping;
+import de.tu_berlin.coga.container.mapping.IdentifiableObjectMapping;
 import ds.graph.Node;
 import java.util.LinkedList;
 import java.util.List;

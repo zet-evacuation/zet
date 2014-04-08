@@ -20,7 +20,7 @@ import de.tu_berlin.coga.common.algorithm.Algorithm;
 import algo.graph.dynamicflow.TransshipmentWithTimeHorizon;
 import de.tu_berlin.math.coga.algorithm.networkflow.mincostflow.MinimumMeanCycleCancelling;
 import ds.graph.Edge;
-import ds.mapping.IdentifiableIntegerMapping;
+import de.tu_berlin.coga.container.mapping.IdentifiableIntegerMapping;
 import ds.graph.TimeExpandedNetwork;
 import ds.graph.problem.MinimumCostFlowProblem;
 

@@ -5,9 +5,9 @@
 package zet.gui.main.tabs.editor;
 
 import de.tu_berlin.math.coga.components.framework.Button;
-import de.tu_berlin.coga.zet.model.AssignmentArea;
-import de.tu_berlin.coga.zet.model.AssignmentType;
-import de.tu_berlin.coga.zet.model.EvacuationArea;
+import ds.z.AssignmentArea;
+import ds.z.AssignmentType;
+import ds.z.EvacuationArea;
 import info.clearthought.layout.TableLayout;
 import java.awt.Component;
 import java.awt.event.ActionEvent;

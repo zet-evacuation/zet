@@ -4,7 +4,7 @@
  */
 package de.tu_berlin.math.coga.algorithm.scheduling;
 
-import ds.mapping.Identifiable;
+import de.tu_berlin.coga.container.mapping.Identifiable;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;

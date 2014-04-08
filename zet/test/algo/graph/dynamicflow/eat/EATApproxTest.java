@@ -11,7 +11,7 @@ import ds.graph.Edge;
 import ds.graph.Node;
 import ds.graph.network.AbstractNetwork;
 import ds.graph.network.Network;
-import ds.mapping.IdentifiableIntegerMapping;
+import de.tu_berlin.coga.container.mapping.IdentifiableIntegerMapping;
 import java.util.ArrayList;
 import org.junit.Assert;
 import org.junit.Before;

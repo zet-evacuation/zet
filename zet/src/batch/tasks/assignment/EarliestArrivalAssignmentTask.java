@@ -23,9 +23,9 @@ package batch.tasks.assignment;
 import algo.graph.exitassignment.EarliestArrivalTransshipmentExitAssignment;
 import batch.BatchResultEntry;
 import batch.tasks.AssignmentTask;
-import de.tu_berlin.coga.zet.model.Assignment;
-import de.tu_berlin.coga.zet.model.ConcreteAssignment;
-import de.tu_berlin.coga.zet.model.Project;
+import ds.z.Assignment;
+import ds.z.ConcreteAssignment;
+import ds.z.Project;
 
 /**
  * A task that calculates an exit assignment using earliest arrival dynamic flows.

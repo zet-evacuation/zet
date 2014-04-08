@@ -35,10 +35,10 @@ import ds.ca.evac.EvacuationCellularAutomaton;
 import ds.ca.evac.ExitCell;
 import ds.ca.evac.SaveCell;
 import ds.ca.evac.StaticPotential;
-import de.tu_berlin.coga.zet.model.BuildingPlan;
-import de.tu_berlin.coga.zet.model.Floor;
-import de.tu_berlin.coga.zet.model.Project;
-import de.tu_berlin.coga.zet.model.TeleportArea;
+import ds.z.BuildingPlan;
+import ds.z.Floor;
+import ds.z.Project;
+import ds.z.TeleportArea;
 import evacuationplan.BidirectionalNodeCellMapping;
 import java.util.ArrayDeque;
 import java.util.ArrayList;
@@ -367,7 +367,7 @@ public class ZToCAConverter extends Algorithm<BuildingPlan,ConvertedCellularAuto
 
 				ds.ca.evac.DoorCell partnerDoor = (ds.ca.evac.DoorCell) lastMapping.get( partner );
 				if( partnerDoor == null ) {
-					ZToCARoomRaster partnerRoom = getContainer().getRasteredRoom( (de.tu_berlin.coga.zet.model.Room) ( partner.getPolygon()) );
+					ZToCARoomRaster partnerRoom = getContainer().getRasteredRoom( (ds.z.Room) ( partner.getPolygon()) );
 					int newX = de.tu_berlin.math.coga.zet.converter.RasterTools.polyCoordToRasterCoord( partner.getX(), partnerRoom.getXOffset(), partnerRoom );
 					int newY = de.tu_berlin.math.coga.zet.converter.RasterTools.polyCoordToRasterCoord( partner.getY(), partnerRoom.getYOffset(), partnerRoom );
 
@@ -423,7 +423,7 @@ public class ZToCAConverter extends Algorithm<BuildingPlan,ConvertedCellularAuto
 
 			//System.out.println( square.getPolygon() );
 			// Find the appropriate TeleportArea
-			de.tu_berlin.coga.zet.model.Room r = (de.tu_berlin.coga.zet.model.Room) square.getPolygon();
+			ds.z.Room r = (ds.z.Room) square.getPolygon();
 			for( TeleportArea t : r.getTeleportAreas() ) {
 				if( t.contains( square.getSquare() ) ) {
 					System.out.println( "Teleport-Area gefunden: " + t.getName() );
@@ -436,7 +436,7 @@ public class ZToCAConverter extends Algorithm<BuildingPlan,ConvertedCellularAuto
 						} else {
 							System.out.println( "Suche die Zielzelle:" );
 
-							de.tu_berlin.coga.zet.model.Room targetRoom = t.getAssociatedRoom();
+							ds.z.Room targetRoom = t.getAssociatedRoom();
 							ZToCARoomRaster targetRoomRaster = lastContainer.getRasteredRoom( targetRoom);
 							//ZToCARoomRaster roomRaster = lastMapping.get( lastContainer.getRasteredRoom( targetRoom) );
 							for( ZToCARasterSquare sq : targetRoomRaster.getAccessibleSquares() ) {

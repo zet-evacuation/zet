@@ -5,7 +5,7 @@
 
 package algo.graph.shortestpath;
 
-import de.tu_berlin.math.coga.datastructure.priorityQueue.MinHeap;
+import de.tu_berlin.coga.container.priority.MinHeap;
 import ds.graph.Edge;
 import ds.graph.Node;
 import ds.graph.network.DynamicNetwork;

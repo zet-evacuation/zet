@@ -4,15 +4,15 @@
  */
 package de.tu_berlin.math.coga.datastructure.searchtree;
 
-import ds.collection.ListSequence;
-import ds.graph.ArraySet;
+import de.tu_berlin.coga.container.collection.ListSequence;
+import de.tu_berlin.coga.container.collection.ArraySet;
 import ds.graph.DirectedGraph;
 import ds.graph.Edge;
 import ds.graph.GraphLocalization;
-import ds.graph.IdentifiableCollection;
+import de.tu_berlin.coga.container.collection.IdentifiableCollection;
 import ds.graph.Node;
-import ds.mapping.IdentifiableIntegerMapping;
-import ds.mapping.IdentifiableObjectMapping;
+import de.tu_berlin.coga.container.mapping.IdentifiableIntegerMapping;
+import de.tu_berlin.coga.container.mapping.IdentifiableObjectMapping;
 import java.util.Iterator;
 
 

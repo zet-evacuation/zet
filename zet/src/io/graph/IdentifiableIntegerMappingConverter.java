@@ -25,9 +25,9 @@ import com.thoughtworks.xstream.converters.MarshallingContext;
 import com.thoughtworks.xstream.converters.UnmarshallingContext;
 import com.thoughtworks.xstream.io.HierarchicalStreamReader;
 import com.thoughtworks.xstream.io.HierarchicalStreamWriter;
-import ds.mapping.Identifiable;
-import ds.graph.IdentifiableCollection;
-import ds.mapping.IdentifiableIntegerMapping;
+import de.tu_berlin.coga.container.mapping.Identifiable;
+import de.tu_berlin.coga.container.collection.IdentifiableCollection;
+import de.tu_berlin.coga.container.mapping.IdentifiableIntegerMapping;
 
 /**
  *

@@ -23,7 +23,7 @@ import com.thoughtworks.xstream.io.HierarchicalStreamReader;
 import com.thoughtworks.xstream.io.HierarchicalStreamWriter;
 import com.thoughtworks.xstream.mapper.Mapper;
 
-import de.tu_berlin.coga.zet.model.Floor;
+import ds.z.Floor;
 
 
 /** A converter that behaves just like a normal converter would do, he only adds

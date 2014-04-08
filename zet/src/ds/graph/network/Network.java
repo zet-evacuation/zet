@@ -6,18 +6,18 @@ package ds.graph.network;
 
 import algo.graph.shortestpath.Dijkstra;
 import com.thoughtworks.xstream.annotations.XStreamAlias;
-import ds.collection.DependingListSequence;
-import ds.collection.HidingSet;
-import ds.collection.ListSequence;
+import de.tu_berlin.coga.container.collection.DependingListSequence;
+import de.tu_berlin.coga.container.collection.HidingSet;
+import de.tu_berlin.coga.container.collection.ListSequence;
 import ds.graph.Edge;
 import ds.graph.Forest;
 import ds.graph.GraphLocalization;
-import ds.graph.IdentifiableCollection;
+import de.tu_berlin.coga.container.collection.IdentifiableCollection;
+import ds.graph.Graph;
 import ds.graph.Node;
 import ds.graph.Path;
-import ds.mapping.IdentifiableConstantMapping;
-import ds.mapping.IdentifiableIntegerMapping;
-import ds.mapping.IdentifiableObjectMapping;
+import de.tu_berlin.coga.container.mapping.IdentifiableIntegerMapping;
+import de.tu_berlin.coga.container.mapping.IdentifiableObjectMapping;
 import java.util.Iterator;
 
 /**
@@ -86,7 +86,7 @@ public class Network extends AbstractNetwork {
 		indegree = new IdentifiableIntegerMapping<>( initialNodeCapacity );
 		outdegree = new IdentifiableIntegerMapping<>( initialNodeCapacity );
 	}
-	
+
 	Network( Network network ) {
 		this.edges = network.edges;
 		this.nodes = network.nodes;
@@ -116,7 +116,7 @@ public class Network extends AbstractNetwork {
 	public IdentifiableCollection<Edge> edges() {
 		return edges;
 	}
-	
+
 	public IdentifiableCollection<Edge> allEdges() {
 		return edges.getAll();
 	}
@@ -188,11 +188,11 @@ public class Network extends AbstractNetwork {
 	public IdentifiableCollection<Edge> outgoingEdges( Node node ) {
 		return outgoingEdges.get( node );
 	}
-	
+
 	public Iterator<Edge> allOutgoingEdges( Node node ) {
 		return outgoingEdges.get( node ).iteratorAll();
 	}
-					
+
 
 	/**
 	 * Returns an {@link IdentifiableCollection} containing all the nodes adjacent to
@@ -315,7 +315,7 @@ public class Network extends AbstractNetwork {
 				return edge;
 		return null;
 	}
-	
+
 	public Edge allGetEdge( Node start, Node end ) {
 
 		Iterator<Edge> iter = outgoingEdges.get( start ).iteratorAll();
@@ -326,9 +326,9 @@ public class Network extends AbstractNetwork {
 		}
 		return null;
 	}
-	
-	
-					
+
+
+
 
 	/**
 	 * Returns an {@link ListSequence} containing all edges starting at
@@ -484,7 +484,7 @@ public class Network extends AbstractNetwork {
 			nodes.setHidden( node, value );
 		}
 	}
-        
+
 	@Override
 	public void setHiddenOnlyNode( Node node, boolean value ) {
 		nodes.setHidden( node, value );
@@ -699,7 +699,7 @@ public class Network extends AbstractNetwork {
 	 */
 	@Override
 	public boolean existsPath( Node start, Node end ) {
-            Dijkstra dijkstra = new Dijkstra(this, IdentifiableConstantMapping.UNIT_EDGE_MAPPING, start);
+            Dijkstra dijkstra = new Dijkstra(this, Graph.UNIT_EDGE_MAPPING, start);
             dijkstra.run();
             Forest spt = dijkstra.getShortestPathTree();
             Path path = spt.getPathToRoot(end);
@@ -712,7 +712,7 @@ public class Network extends AbstractNetwork {
 
 	@Override
 	public Path getPath( Node start, Node end ) {
-            Dijkstra dijkstra = new Dijkstra(this, IdentifiableConstantMapping.UNIT_EDGE_MAPPING, start);
+            Dijkstra dijkstra = new Dijkstra(this, Graph.UNIT_EDGE_MAPPING, start);
             dijkstra.run();
             Forest spt = dijkstra.getShortestPathTree();
             Path path = spt.getPathToRoot(end);
@@ -721,8 +721,8 @@ public class Network extends AbstractNetwork {
             } else {
                 return null;
             }
-	}        
-        
+	}
+
 	/**
 	 * Checks whether at least one edge between the specified start and end nodes
 	 * exists.
@@ -762,11 +762,11 @@ public class Network extends AbstractNetwork {
 	public Iterator<Node> iterator() {
 		return nodes.iterator();
 	}
-	
+
 	public Iterator<Edge> allEdgesIterator() {
 		return edges.iteratorAll();
 	}
-	
+
 	/**
 	 * Returns the number of edges in this graph. Runtime O(1).
 	 * @return the number of edges in this graph.

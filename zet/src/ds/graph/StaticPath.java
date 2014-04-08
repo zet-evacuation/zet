@@ -20,7 +20,8 @@
 
 package ds.graph;
 
-import ds.collection.ListSequence;
+import de.tu_berlin.coga.container.collection.IdentifiableCollection;
+import de.tu_berlin.coga.container.collection.ListSequence;
 import java.util.Iterator;
 
 /**

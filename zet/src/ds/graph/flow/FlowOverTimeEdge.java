@@ -21,7 +21,7 @@
 package ds.graph.flow;
 
 import ds.graph.Edge;
-import ds.mapping.IdentifiableIntegerMapping;
+import de.tu_berlin.coga.container.mapping.IdentifiableIntegerMapping;
 
 /**
  * This class represents an edge in a flow over time setting. 

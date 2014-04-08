@@ -23,9 +23,9 @@ import batch.tasks.*;
 import algo.graph.exitassignment.ReducedEarliestArrivalTransshipmentExitAssignment;
 import batch.BatchResultEntry;
 import de.tu_berlin.math.coga.zet.converter.graph.RectangleConverter;
-import de.tu_berlin.coga.zet.model.Project;
-import de.tu_berlin.coga.zet.model.Assignment;
-import de.tu_berlin.coga.zet.model.ConcreteAssignment;
+import ds.z.Project;
+import ds.z.Assignment;
+import ds.z.ConcreteAssignment;
 
 /**
  *

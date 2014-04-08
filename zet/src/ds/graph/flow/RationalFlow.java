@@ -21,16 +21,16 @@
 package ds.graph.flow;
 
 import ds.graph.Edge;
-import ds.graph.DoubleMap;
+import de.tu_berlin.coga.container.mapping.IdentifiableDoubleMapping;
 
 /**
  *
  * @author Sebastian Schenker
  */
 
-public class RationalFlow extends DoubleMap<Edge> {
+public class RationalFlow extends IdentifiableDoubleMapping<Edge> {
 
-    public RationalFlow(DoubleMap<Edge> flow) {
+    public RationalFlow(IdentifiableDoubleMapping<Edge> flow) {
         super(flow);
     }
 

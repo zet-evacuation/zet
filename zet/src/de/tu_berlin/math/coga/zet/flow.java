@@ -38,7 +38,7 @@ import ds.graph.Node;
 import ds.graph.flow.FlowOverTimePath;
 import ds.graph.flow.PathBasedFlowOverTime;
 import ds.graph.problem.MaximumFlowProblem;
-import ds.mapping.IdentifiableIntegerMapping;
+import de.tu_berlin.coga.container.mapping.IdentifiableIntegerMapping;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;

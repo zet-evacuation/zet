@@ -20,8 +20,8 @@
 
 package de.tu_berlin.math.coga.graph.generator;
 
-import ds.mapping.Identifiable;
-import ds.mapping.IdentifiableIntegerMapping;
+import de.tu_berlin.coga.container.mapping.Identifiable;
+import de.tu_berlin.coga.container.mapping.IdentifiableIntegerMapping;
 import ds.graph.network.AbstractNetwork;
 import ds.graph.Node;
 import ds.graph.network.Network;

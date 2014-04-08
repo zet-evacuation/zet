@@ -89,7 +89,7 @@ public class ZETMain {
 		if( plugin.canTake( atomic.accepts() ) ) {
 			System.out.println( "The plugin can take the input from the atomic operation" );
 			if( plugin.canGenerate( atomic.generates() ) ) {
-				Algorithm algo = plugin.getAlgorithm();
+				//Algorithm algo = plugin.getAlgorithm();
 				System.out.println( "Algorithm created;" );
 			} else {
 				System.out.println( "The plugin cannot generate the output!" );

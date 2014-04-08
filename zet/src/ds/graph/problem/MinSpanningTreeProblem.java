@@ -5,7 +5,7 @@
 package ds.graph.problem;
 
 
-import ds.mapping.IdentifiableIntegerMapping;
+import de.tu_berlin.coga.container.mapping.IdentifiableIntegerMapping;
 import ds.graph.Edge;
 import de.tu_berlin.math.coga.zet.converter.graph.NetworkFlowModel;
 /**

@@ -4,8 +4,6 @@
  */
 package ds.z;
 
-import de.tu_berlin.coga.zet.model.Edge;
-import de.tu_berlin.coga.zet.model.PlanPoint;
 import junit.framework.TestCase;
 import org.junit.Test;
 

@@ -4,7 +4,7 @@
  */
 package zet.gui.treeview;
 
-import de.tu_berlin.coga.zet.model.Floor;
+import ds.z.Floor;
 
 
 /**

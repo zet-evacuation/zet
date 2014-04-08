@@ -20,7 +20,7 @@ import algo.graph.dynamicflow.DynamicTransshipmentProblem;
 import algo.graph.dynamicflow.TransshipmentFramework;
 import ds.graph.Edge;
 import ds.graph.flow.FlowOverTime;
-import ds.mapping.IdentifiableIntegerMapping;
+import de.tu_berlin.coga.container.mapping.IdentifiableIntegerMapping;
 import ds.graph.network.AbstractNetwork;
 import ds.graph.Node;
 

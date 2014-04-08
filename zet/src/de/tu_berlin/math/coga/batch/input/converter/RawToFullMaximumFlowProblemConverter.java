@@ -9,7 +9,7 @@ import ds.graph.Edge;
 import ds.graph.network.Network;
 import ds.graph.problem.MaximumFlowProblem;
 import ds.graph.problem.RawMaximumFlowProblem;
-import ds.mapping.IdentifiableIntegerMapping;
+import de.tu_berlin.coga.container.mapping.IdentifiableIntegerMapping;
 
 /**
  * Converter that transforms memory-efficient raw maximum flow problems into

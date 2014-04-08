@@ -17,11 +17,11 @@ package algo.graph.util;
 
 import algo.graph.Flags;
 import algo.graph.traverse.DFS;
-import ds.collection.ListSequence;
+import de.tu_berlin.coga.container.collection.ListSequence;
 import ds.graph.Node;
 import ds.graph.network.AbstractNetwork;
-import ds.mapping.IdentifiableIntegerMapping;
-import ds.mapping.IdentifiableObjectMapping;
+import de.tu_berlin.coga.container.mapping.IdentifiableIntegerMapping;
+import de.tu_berlin.coga.container.mapping.IdentifiableObjectMapping;
 import java.util.LinkedList;
 
 /**

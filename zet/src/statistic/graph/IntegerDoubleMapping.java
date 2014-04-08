@@ -19,7 +19,8 @@
  */
 package statistic.graph;
 
-import ds.mapping.IntegerIntegerMapping;
+import de.tu_berlin.coga.container.mapping.TimeIntegerMapping;
+import de.tu_berlin.coga.container.mapping.TimeIntegerPair;
 import java.util.Iterator;
 import java.util.NavigableSet;
 import java.util.SortedSet;
@@ -81,9 +82,9 @@ public class IntegerDoubleMapping implements Cloneable, Iterable<TimeValuePair> 
         set(Integer.MAX_VALUE, 0);
     }
 
-    public IntegerDoubleMapping(IntegerIntegerMapping iim) {
+    public IntegerDoubleMapping(TimeIntegerMapping iim) {
         mapping = new TreeSet<TimeValuePair>();
-        for (IntegerIntegerMapping.TimeIntegerPair tip : iim) {
+        for (TimeIntegerPair tip : iim) {
             mapping.add(new TimeValuePair(tip.time(), tip.value()));
         }
     }

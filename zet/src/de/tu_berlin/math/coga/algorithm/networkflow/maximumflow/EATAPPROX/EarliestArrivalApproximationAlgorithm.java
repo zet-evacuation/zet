@@ -11,7 +11,7 @@ import de.tu_berlin.coga.common.util.units.TimeUnits;
 import ds.graph.Edge;
 import ds.graph.Node;
 import ds.graph.network.NetworkInterface;
-import ds.mapping.IdentifiableIntegerMapping;
+import de.tu_berlin.coga.container.mapping.IdentifiableIntegerMapping;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;

@@ -22,12 +22,12 @@ package algo.graph.exitassignment;
 
 import algo.graph.shortestpath.Dijkstra;
 import de.tu_berlin.coga.common.algorithm.Algorithm;
-import de.tu_berlin.math.coga.datastructure.priorityQueue.MinHeap;
+import de.tu_berlin.coga.container.priority.MinHeap;
 import de.tu_berlin.math.coga.zet.converter.graph.NetworkFlowModel;
-import ds.graph.IdentifiableCollection;
+import de.tu_berlin.coga.container.collection.IdentifiableCollection;
 import ds.graph.Node;
 import ds.graph.network.AbstractNetwork;
-import ds.mapping.IdentifiableObjectMapping;
+import de.tu_berlin.coga.container.mapping.IdentifiableObjectMapping;
 
 /**
  *

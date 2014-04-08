@@ -20,8 +20,8 @@
 package de.tu_berlin.math.coga.zet.converter;
 
 import de.tu_berlin.math.coga.zet.ZETLocalization;
-import de.tu_berlin.coga.zet.model.Floor;
-import de.tu_berlin.coga.zet.model.Room;
+import ds.z.Floor;
+import ds.z.Room;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;

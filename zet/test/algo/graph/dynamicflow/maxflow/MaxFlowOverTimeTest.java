@@ -9,7 +9,7 @@ import ds.graph.Edge;
 import ds.graph.Node;
 import ds.graph.network.AbstractNetwork;
 import ds.graph.network.Network;
-import ds.mapping.IdentifiableIntegerMapping;
+import de.tu_berlin.coga.container.mapping.IdentifiableIntegerMapping;
 import java.util.LinkedList;
 import java.util.List;
 import org.junit.Test;

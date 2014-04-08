@@ -26,7 +26,7 @@ import ds.graph.flow.FlowOverTimePath;
 import ds.graph.flow.PathBasedFlowOverTime;
 import ds.graph.flow.PathBasedFlow;
 import ds.graph.flow.StaticPathFlow;
-import ds.mapping.IdentifiableIntegerMapping;
+import de.tu_berlin.coga.container.mapping.IdentifiableIntegerMapping;
 
 /** 
  * The class {@code TransshipmentWithTimeHorizon} provides a method to calculate 

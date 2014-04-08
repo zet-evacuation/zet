@@ -26,7 +26,7 @@ import de.tu_berlin.math.coga.algorithm.networkflow.mincostflow.SuccessiveShorte
 import de.tu_berlin.coga.common.algorithm.Algorithm;
 import de.tu_berlin.math.coga.zet.converter.graph.NetworkFlowModel;
 import ds.graph.Edge;
-import ds.graph.IdentifiableCollection;
+import de.tu_berlin.coga.container.collection.IdentifiableCollection;
 import ds.graph.Node;
 import ds.graph.flow.MaximumFlow;
 import ds.graph.flow.PathBasedFlow;
@@ -34,7 +34,7 @@ import ds.graph.flow.StaticPathFlow;
 import ds.graph.network.AbstractNetwork;
 import ds.graph.network.Network;
 import ds.graph.problem.MaximumFlowProblem;
-import ds.mapping.IdentifiableIntegerMapping;
+import de.tu_berlin.coga.container.mapping.IdentifiableIntegerMapping;
 import java.util.LinkedList;
 import java.util.List;
 

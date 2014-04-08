@@ -20,61 +20,61 @@ import de.tu_berlin.coga.common.algorithm.Algorithm;
 import ds.graph.problem.ThinFlowProblem;
 import ds.graph.flow.ThinFlow;
 
-import ds.graph.DoubleMap;
 import ds.graph.Edge;
 import ds.graph.Node;
 import ds.graph.network.DynamicNetwork;
-import ds.collection.ListSequence;
+import de.tu_berlin.coga.container.collection.ListSequence;
+import de.tu_berlin.coga.container.mapping.IdentifiableDoubleMapping;
 import java.util.HashSet;
 import java.util.HashMap;
 
 public class ThinFlowAlgo extends Algorithm<ThinFlowProblem,ThinFlow> {
 
-    
+
      private static final double EPSILON = 0.001;
      private static final double ZEROLIMIT = 0.000001;
-           
-    
+
+
      private HashMap<Edge,Edge> newedgeToOrigedgeMap;
-     
+
      private HashSet<Edge> usedEdges;
-     
+
      private void initializeDatastructures() {
          newedgeToOrigedgeMap = new HashMap<Edge,Edge>();
          usedEdges = new HashSet<Edge>();
-     } 
-     
-     
+     }
+
+
      public HashSet<Edge> getUsedEdges() {
          return usedEdges;
-     } 
-     
+     }
+
      private void addEdgeToUsedEdges(Edge e) {
          usedEdges.add(e);
-     } 
-     
+     }
+
      private int getNewedgeToOrigedgeMapSize() {
          return newedgeToOrigedgeMap.size();
      }
-     
-       
+
+
      private Edge getOrigEdge(Edge edge) {
          Edge oldedge;
-         if((oldedge=newedgeToOrigedgeMap.get(edge)) != null) 
+         if((oldedge=newedgeToOrigedgeMap.get(edge)) != null)
              return oldedge;
-         else 
+         else
              return edge;
-         
+
      }
-     
+
      @Override
      public ThinFlow runAlgorithm(ThinFlowProblem thinflowprob) {
          initializeDatastructures();
          runThinFlow();
          return new ThinFlow(thinflowprob,getProblem().getEdgeFlowValues(),getProblem().getNodeLabels());
      }
-     
-     
+
+
      /*function returns a set containing the exiting edges of given nodeset*/
      private HashSet<Edge> exitingEdges(DynamicNetwork wgraph, HashSet<Node> nodeset) {
          HashSet<Edge> outedges = new HashSet<Edge>();
@@ -83,7 +83,7 @@ public class ThinFlowAlgo extends Algorithm<ThinFlowProblem,ThinFlow> {
              for(Edge oe : wgraph.outgoingEdges(n)) {
                  outedges.add(oe);
             }
-             
+
              for(Edge ie : wgraph.incomingEdges(n)) {
                  inedges.add(ie);
             }
@@ -91,11 +91,11 @@ public class ThinFlowAlgo extends Algorithm<ThinFlowProblem,ThinFlow> {
          for(Edge e : inedges) {
              outedges.remove(e);
          }
-         
+
          return outedges;
      }
-     
-     /*function returns set containing edges that are behind sparsest cut and for which algorithm does not 
+
+     /*function returns set containing edges that are behind sparsest cut and for which algorithm does not
      explicitely set flow values*/
      private HashSet<Edge> behindEdges(DynamicNetwork wgraph, HashSet<Node> nodeset) {
          HashSet<Edge> behindEdgeSet = new HashSet();
@@ -105,39 +105,39 @@ public class ThinFlowAlgo extends Algorithm<ThinFlowProblem,ThinFlow> {
          }
          return behindEdgeSet;
      }
-   
-     
+
+
      public void runThinFlow() {
-            
+
         DynamicNetwork workingGraph = getProblem().getGraph();
-        DoubleMap<Node> workingDemands = new DoubleMap(getProblem().getNodeDemands());
-        DoubleMap<Node> nodelabels = new DoubleMap(getProblem().getGraph().numberOfNodes());
-        DoubleMap<Edge> flowvalues = new DoubleMap(getProblem().getGraph().numberOfEdges()+getNewedgeToOrigedgeMapSize());
+        IdentifiableDoubleMapping<Node> workingDemands = new IdentifiableDoubleMapping(getProblem().getNodeDemands());
+        IdentifiableDoubleMapping<Node> nodelabels = new IdentifiableDoubleMapping(getProblem().getGraph().numberOfNodes());
+        IdentifiableDoubleMapping<Edge> flowvalues = new IdentifiableDoubleMapping(getProblem().getGraph().numberOfEdges()+getNewedgeToOrigedgeMapSize());
         Double q; //congestion
         HashSet<Node> spcutSet;
         HashSet<Edge> exitEdges;
         HashSet<Edge> edgesBehindSparsestCut;
         HashSet<Edge> internalEdges = new HashSet<Edge>(workingGraph.edges());
-        
+
         SparsestCut sparsestcut;
         Node source = getProblem().getSource();
-       
+
         boolean sourceDemandIsZero = false;
-             
+
         while(true) {
-            
+
            sparsestcut = new SparsestCut(workingGraph,getProblem().getCapacities(),workingDemands,source);
-           
-           q = sparsestcut.getCongestion(); 
-           
+
+           q = sparsestcut.getCongestion();
+
            spcutSet = sparsestcut.getMinCut();
-                      
+
            exitEdges = exitingEdges(workingGraph,spcutSet);
            edgesBehindSparsestCut = behindEdges(workingGraph,spcutSet);
-                      
+
            HashSet<Edge> edgesBehind = new HashSet<Edge>();
            HashSet<Edge> edgesExit = new HashSet<Edge>();
-           
+
            /*set flowvalues of edges behind sparsest cut*/
            Edge origEdge;
            double value;
@@ -145,15 +145,15 @@ public class ThinFlowAlgo extends Algorithm<ThinFlowProblem,ThinFlow> {
               value = q*sparsestcut.getMinCutEdgeFlowValue(be);
               flowvalues.set(be,value);
               if((origEdge=getOrigEdge(be)) != be)
-                  flowvalues.set(origEdge,value); 
+                  flowvalues.set(origEdge,value);
               if(value > ZEROLIMIT) {
                   addEdgeToUsedEdges(be);
                   edgesBehind.add(getOrigEdge(be));
               }
               internalEdges.remove(be);
-              
+
               }
-     
+
            /*set flowvalues of exiting edges of sparsest cut*/
            for(Edge e: exitEdges) {
                value = q * getProblem().getCapacities().get(e);  //getEdgeCapacity(e);
@@ -166,15 +166,15 @@ public class ThinFlowAlgo extends Algorithm<ThinFlowProblem,ThinFlow> {
                }
                internalEdges.remove(e);
            }
-           
-           
+
+
            /*set nodelabels of nodes in workingGraph /setminus sparsestCutSet to congestion*/
            for(Node n: workingGraph.nodes()) {
                if(!spcutSet.contains(n)) {
                    nodelabels.set(n,q);
                }
            }
-           
+
            if(spcutSet.size() == 1) {
                for(Node n: spcutSet) {
                   nodelabels.set(n, 0.0);
@@ -184,48 +184,48 @@ public class ThinFlowAlgo extends Algorithm<ThinFlowProblem,ThinFlow> {
                }
               break;
            }
-           
+
            /*set new demands of set in sparsest cut*/
            for(Node v: spcutSet) {
-           
+
                 ListSequence<Edge> outedges = workingGraph.outgoingEdges(v);
                 HashSet<Edge> outEdges = new HashSet();
                 for(Edge e: outedges) {
                    outEdges.add(e);
                 }
-          
+
                 outEdges.retainAll(exitEdges);
-            
+
                 double newdemands = workingDemands.get(v);
-           
-                
-                    
+
+
+
                 for(Edge edge: outEdges)
                     newdemands -= flowvalues.get(edge);
-           
+
                 workingDemands.set(v,newdemands);
-            
+
             //check if demand is fulfilled
             if(v==source && newdemands <= EPSILON) {
                 sourceDemandIsZero = true; //the demand of the source is fulfilled
                 for(Node n: spcutSet) {
                     nodelabels.set(n, 0.0);
                 }
-                
+
                 for(Edge e: internalEdges) {
                    flowvalues.set(e,0.0);
                 }
-                
+
                 break; //jump out of for-loop
             }
            }
-           
+
            //if the demand of the source is fulfilled, then jump out of while-loop
            if(sourceDemandIsZero) {
-               break; 
+               break;
            }
-              
-            
+
+
             //update workingGraph
             DynamicNetwork newworkingGraph = new DynamicNetwork(workingGraph);
             for(Node n: workingGraph.nodes()) {
@@ -234,20 +234,20 @@ public class ThinFlowAlgo extends Algorithm<ThinFlowProblem,ThinFlow> {
                 }
             }
             workingGraph = newworkingGraph;
-                
-            
+
+
            } //end while
-        
+
         System.out.println("nodelabels = " + nodelabels.toString());
         System.out.println("flowvalues = " + flowvalues.toString());
-        
+
         //set NodeLabels
         getProblem().setNodeLabels(nodelabels);
         //set EdgeFlowValues
         getProblem().setEdgeFlowValues(flowvalues);
-      
+
        }
-         
+
      }
-     
-    
+
+

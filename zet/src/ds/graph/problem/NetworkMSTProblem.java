@@ -6,7 +6,7 @@ package ds.graph.problem;
 
 import ds.graph.network.DynamicNetwork;
 import ds.graph.Edge;
-import ds.mapping.IdentifiableIntegerMapping;
+import de.tu_berlin.coga.container.mapping.IdentifiableIntegerMapping;
 
 /**
  *

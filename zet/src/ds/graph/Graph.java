@@ -19,11 +19,16 @@
  */
 package ds.graph;
 
+import de.tu_berlin.coga.container.collection.IdentifiableCollection;
+import de.tu_berlin.coga.container.mapping.IdentifiableConstantMapping;
+
 /**
- * The {@code Graph} interface provides a common interface for 
+ * The {@code Graph} interface provides a common interface for
  * implementations of graphs.
  */
 public interface Graph extends Iterable<Node>{
+	public static IdentifiableConstantMapping<Edge> UNIT_EDGE_MAPPING = new IdentifiableConstantMapping<>( 1 );
+	public static IdentifiableConstantMapping<Node> UNIT_NODE_MAPPING = new IdentifiableConstantMapping<>( 1 );
 	/**
 	 * Checks whether the graph is directed.
 	 * @return {@code true} if the graph is directed, {@code false}

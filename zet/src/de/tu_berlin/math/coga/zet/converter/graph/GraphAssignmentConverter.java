@@ -6,10 +6,10 @@ package de.tu_berlin.math.coga.zet.converter.graph;
 
 import de.tu_berlin.coga.common.algorithm.Algorithm;
 import ds.graph.Node;
-import de.tu_berlin.coga.zet.model.ConcreteAssignment;
-import de.tu_berlin.coga.zet.model.Person;
-import de.tu_berlin.coga.zet.model.PlanPoint;
-import de.tu_berlin.coga.zet.model.Room;
+import ds.z.ConcreteAssignment;
+import ds.z.Person;
+import ds.z.PlanPoint;
+import ds.z.Room;
 import java.util.List;
 
 /**

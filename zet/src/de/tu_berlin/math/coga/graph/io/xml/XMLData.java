@@ -9,8 +9,8 @@ import de.tu_berlin.math.coga.zet.viewer.NodePositionMapping;
 import ds.graph.Edge;
 import ds.graph.Node;
 import ds.graph.network.AbstractNetwork;
-import ds.mapping.IdentifiableDoubleMapping;
-import ds.mapping.IdentifiableIntegerMapping;
+import de.tu_berlin.coga.container.mapping.IdentifiableDoubleMapping;
+import de.tu_berlin.coga.container.mapping.IdentifiableIntegerMapping;
 import java.util.LinkedHashMap;
 import java.util.List;
 

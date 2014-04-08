@@ -8,8 +8,8 @@ import de.tu_berlin.coga.common.algorithm.Algorithm;
 import ds.graph.Edge;
 import ds.graph.Graph;
 import ds.graph.Node;
-import ds.mapping.IdentifiableIntegerMapping;
-import ds.mapping.IdentifiableObjectMapping;
+import de.tu_berlin.coga.container.mapping.IdentifiableIntegerMapping;
+import de.tu_berlin.coga.container.mapping.IdentifiableObjectMapping;
 
 /**
  *

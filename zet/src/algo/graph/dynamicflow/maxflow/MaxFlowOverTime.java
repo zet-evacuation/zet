@@ -28,7 +28,7 @@ import ds.graph.DynamicPath;
 import ds.graph.flow.FlowOverTimePath;
 import ds.graph.Edge;
 import ds.graph.GraphLocalization;
-import ds.mapping.IdentifiableIntegerMapping;
+import de.tu_berlin.coga.container.mapping.IdentifiableIntegerMapping;
 import ds.graph.Node;
 import ds.graph.flow.PathBasedFlow;
 import ds.graph.StaticPath;

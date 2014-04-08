@@ -20,7 +20,7 @@
  */
 package zet.gui.assignmentEditor;
 
-import de.tu_berlin.coga.zet.model.Project;
+import ds.z.Project;
 import java.awt.BorderLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;

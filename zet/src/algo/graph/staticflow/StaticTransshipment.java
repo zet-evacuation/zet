@@ -22,7 +22,7 @@ package algo.graph.staticflow;
 
 import ds.graph.problem.MaximumFlowProblem;
 import ds.graph.Edge;
-import ds.mapping.IdentifiableIntegerMapping;
+import de.tu_berlin.coga.container.mapping.IdentifiableIntegerMapping;
 import ds.graph.network.AbstractNetwork;
 import ds.graph.Node;
 import ds.graph.network.ResidualNetwork;

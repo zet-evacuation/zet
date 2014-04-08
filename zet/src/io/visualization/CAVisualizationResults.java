@@ -89,7 +89,7 @@ public class CAVisualizationResults implements VisualizationResult {
 
 	private void convertMapping( ZToCAMapping caMapping ) {
 		for( Integer floorID : caMapping.getCAFloors() ) {
-			de.tu_berlin.coga.zet.model.Floor zFloor = caMapping.get( floorID );
+			ds.z.Floor zFloor = caMapping.get( floorID );
 			double xOffset = zFloor.getxOffset();
 			double yOffset = zFloor.getyOffset();
 
@@ -97,7 +97,7 @@ public class CAVisualizationResults implements VisualizationResult {
 		}
 
 		for( ds.ca.evac.Room room : caMapping.getCARooms() ) {
-			de.tu_berlin.coga.zet.model.Room zRoom = caMapping.get( room ).getRoom();
+			ds.z.Room zRoom = caMapping.get( room ).getRoom();
 			double xOffset = zRoom.getxOffset();
 			double yOffset = zRoom.getyOffset();
 

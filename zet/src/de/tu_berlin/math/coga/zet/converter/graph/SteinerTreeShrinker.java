@@ -7,15 +7,15 @@ package de.tu_berlin.math.coga.zet.converter.graph;
 import algo.graph.reduction.MSTSteiner;
 import algo.graph.reduction.Prim;
 import de.tu_berlin.coga.common.algorithm.Algorithm;
-import ds.collection.ListSequence;
+import de.tu_berlin.coga.container.collection.ListSequence;
 import ds.graph.Edge;
-import ds.graph.IdentifiableCollection;
+import de.tu_berlin.coga.container.collection.IdentifiableCollection;
 import ds.graph.MinSpanningTree;
 import ds.graph.MinSteinerTree;
 import ds.graph.Node;
 import ds.graph.NodeRectangle;
 import ds.graph.problem.MinSpanningTreeProblem;
-import ds.mapping.IdentifiableIntegerMapping;
+import de.tu_berlin.coga.container.mapping.IdentifiableIntegerMapping;
 
 /**
  *

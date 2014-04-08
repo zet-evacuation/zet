@@ -4,7 +4,7 @@
  */
 package de.tu_berlin.math.coga.batch.input.reader;
 
-import de.tu_berlin.coga.zet.model.Project;
+import ds.z.Project;
 import java.io.File;
 
 /**

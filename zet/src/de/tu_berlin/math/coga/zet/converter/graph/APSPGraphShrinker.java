@@ -5,9 +5,9 @@
 package de.tu_berlin.math.coga.zet.converter.graph;
 
 import algo.graph.shortestpath.APSPAlgo;
-import ds.collection.ListSequence;
+import de.tu_berlin.coga.container.collection.ListSequence;
 import ds.graph.Edge;
-import ds.graph.IdentifiableCollection;
+import de.tu_berlin.coga.container.collection.IdentifiableCollection;
 /**
  *
  * @author Marlen Schwengfelder

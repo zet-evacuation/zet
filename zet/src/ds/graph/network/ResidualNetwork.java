@@ -20,9 +20,9 @@
 package ds.graph.network;
 
 import ds.graph.Edge;
-import ds.graph.IdentifiableCollection;
-import ds.mapping.Mappings;
-import ds.mapping.IdentifiableIntegerMapping;
+import de.tu_berlin.coga.container.collection.IdentifiableCollection;
+import de.tu_berlin.coga.container.mapping.Mappings;
+import de.tu_berlin.coga.container.mapping.IdentifiableIntegerMapping;
 
 /**
  * The {@code ResidualNetwork} class provides flow algorithms with the

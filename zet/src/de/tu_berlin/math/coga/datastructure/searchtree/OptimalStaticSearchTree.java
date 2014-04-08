@@ -8,7 +8,7 @@ import de.tu_berlin.math.coga.algorithm.shortestpath.searchtree.OptimalStaticSea
 import ds.graph.BinaryTreeToString;
 import ds.graph.Edge;
 import ds.graph.Node;
-import ds.mapping.IdentifiableDoubleMapping;
+import de.tu_berlin.coga.container.mapping.IdentifiableDoubleMapping;
 
 
 /**

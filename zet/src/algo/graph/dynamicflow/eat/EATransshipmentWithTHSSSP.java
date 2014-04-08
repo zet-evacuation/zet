@@ -19,7 +19,7 @@ import algo.graph.dynamicflow.DynamicTransshipmentProblem;
 import algo.graph.dynamicflow.TransshipmentWithTimeHorizon;
 import de.tu_berlin.math.coga.algorithm.networkflow.mincostflow.SuccessiveShortestPath;
 import ds.graph.Edge;
-import ds.mapping.IdentifiableIntegerMapping;
+import de.tu_berlin.coga.container.mapping.IdentifiableIntegerMapping;
 import ds.graph.TimeExpandedNetwork;
 
 public class EATransshipmentWithTHSSSP extends TransshipmentWithTimeHorizon<DynamicTransshipmentProblem> {

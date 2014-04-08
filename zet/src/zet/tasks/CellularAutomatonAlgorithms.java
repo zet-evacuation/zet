@@ -29,7 +29,7 @@ import de.tu_berlin.math.coga.zet.ZETLocalization;
 import de.tu_berlin.math.coga.zet.converter.cellularAutomaton.ZToCAMapping;
 import de.tu_berlin.math.coga.zet.converter.cellularAutomaton.ZToCARasterContainer;
 import ds.ca.evac.EvacuationCellularAutomaton;
-import de.tu_berlin.coga.zet.model.ConcreteAssignment;
+import ds.z.ConcreteAssignment;
 import io.visualization.CAVisualizationResults;
 
 /**

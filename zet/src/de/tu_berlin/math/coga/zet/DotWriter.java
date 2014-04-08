@@ -6,8 +6,8 @@ package de.tu_berlin.math.coga.zet;
 
 import algo.graph.dynamicflow.eat.EarliestArrivalFlowProblem;
 import ds.graph.Edge;
-import ds.graph.IdentifiableCollection;
-import ds.mapping.IdentifiableIntegerMapping;
+import de.tu_berlin.coga.container.collection.IdentifiableCollection;
+import de.tu_berlin.coga.container.mapping.IdentifiableIntegerMapping;
 import ds.graph.network.AbstractNetwork;
 import ds.graph.Node;
 import java.io.BufferedWriter;

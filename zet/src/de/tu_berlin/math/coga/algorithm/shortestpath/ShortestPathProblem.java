@@ -7,7 +7,7 @@ package de.tu_berlin.math.coga.algorithm.shortestpath;
 import ds.graph.Edge;
 import ds.graph.Graph;
 import ds.graph.Node;
-import ds.mapping.IdentifiableIntegerMapping;
+import de.tu_berlin.coga.container.mapping.IdentifiableIntegerMapping;
 
 /**
  *

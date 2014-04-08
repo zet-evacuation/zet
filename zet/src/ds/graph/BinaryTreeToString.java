@@ -6,7 +6,7 @@ package ds.graph;
 
 import de.tu_berlin.math.coga.datastructure.searchtree.BinaryTree;
 import ds.graph.Node;
-import ds.mapping.Mapping;
+import de.tu_berlin.coga.container.mapping.IdentifiableMapping;
 import java.util.LinkedList;
 import java.util.Queue;
 
@@ -16,16 +16,16 @@ import java.util.Queue;
  * @author Jan-Philipp Kappmeier
  */
 public class BinaryTreeToString {
-	
+
 	private BinaryTree bt;
-	private Mapping d;
-	
+	private IdentifiableMapping d;
+
 	public static String format( BinaryTree bt ) {
 		BinaryTreeToString btts = new BinaryTreeToString( bt );
 		return btts.formatTree();
 	}
 
-	public static String format( BinaryTree bt, Mapping d ) {
+	public static String format( BinaryTree bt, IdentifiableMapping d ) {
 		BinaryTreeToString btts = new BinaryTreeToString( bt, d );
 		return btts.formatTree();
 	}
@@ -34,11 +34,11 @@ public class BinaryTreeToString {
 		this.bt = bt;
 	}
 
-	private BinaryTreeToString( BinaryTree bt, Mapping d ) {
+	private BinaryTreeToString( BinaryTree bt, IdentifiableMapping d ) {
 		this.bt = bt;
 		this.d = d;
 	}
-	
+
 	private String formatTree() {
 		if (bt.isEmpty())
 			return "EMPTY";
@@ -229,9 +229,9 @@ public class BinaryTreeToString {
 			//String[] str = node.getData().toString().split("" + (char)10);
 			String[] str = node.toString().split("" + (char)10 );
 			if( d != null ) {
-				str = d.getObject( node ).toString().split("" + (char)10 );
+				str = d.get( node ).toString().split("" + (char)10 );
 			}
-			
+
 
 			StringBuilder builder = new StringBuilder();
 			builder.append(str[0]);

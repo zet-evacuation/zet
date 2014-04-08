@@ -19,7 +19,8 @@
  */
 package ds.graph;
 
-import ds.mapping.IdentifiableObjectMapping;
+import de.tu_berlin.coga.container.collection.IdentifiableCollection;
+import de.tu_berlin.coga.container.mapping.IdentifiableObjectMapping;
 import com.thoughtworks.xstream.annotations.XStreamAlias;
 import ds.graph.network.Network;
 

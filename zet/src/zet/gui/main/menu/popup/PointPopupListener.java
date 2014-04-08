@@ -20,10 +20,10 @@
  */
 package zet.gui.main.menu.popup;
 
-import de.tu_berlin.coga.zet.model.Edge;
-import de.tu_berlin.coga.zet.model.PlanPoint;
-import de.tu_berlin.coga.zet.model.PlanPolygon;
-import de.tu_berlin.coga.zet.model.ZControl;
+import ds.z.Edge;
+import ds.z.PlanPoint;
+import ds.z.PlanPolygon;
+import ds.z.ZControl;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
