@@ -4,9 +4,8 @@
  */
 package opengl.drawingutils;
 
-import de.tu_berlin.math.coga.datastructure.ArrayList;
+import java.util.ArrayList;
 import javax.media.opengl.GL;
-
 
 /**
  * A class that supports color gradients that use more than one color. The
@@ -14,19 +13,20 @@ import javax.media.opengl.GL;
  * @author Jan-Philipp Kappmeier
  */
 public class RainbowGradient {
-	/** The 'real' Newton colors of a rainbow. */
-	final static public GLColor[] rainbow = { GLColor.red, GLColor.orange, GLColor.yellow, GLColor.green, GLColor.blue, GLColor.indigo, GLColor.violet };
+	/** The 'real' Newton colors of a RAINBOW. */
+	final static public GLColor[] RAINBOW = { GLColor.red, GLColor.orange, GLColor.yellow, GLColor.green, GLColor.blue, GLColor.indigo, GLColor.violet };
 	/** The list of colors used for the gradient. */
-	private ArrayList<GLColor> colors = new ArrayList<GLColor>( rainbow );
+	private ArrayList<GLColor> colors;
 	/** The maximal time up to which the color gradient should use. */
 	double maxTime = 25;
 	/** The time interval that is used for each color. */
-	double timeInterval = maxTime / 6;
+	double timeInterval;
 
 	/**
-	 * Initializes with a default rainbow gradient.
+	 * Initializes with a default RAINBOW gradient.
 	 */
 	public RainbowGradient() {
+		this( RAINBOW );
 	}
 
 	/**
@@ -34,7 +34,9 @@ public class RainbowGradient {
 	 * @param colors the colors of the gradient
 	 */
 	public RainbowGradient( GLColor[] colors ) {
-		this.colors = new ArrayList<GLColor>( colors );
+		this.colors = new ArrayList<>( colors.length );
+		for( int i = 0; i < colors.length; ++i )
+			this.colors.add( colors[i] );
 		timeInterval = maxTime / (colors.length-1);
 	}
 

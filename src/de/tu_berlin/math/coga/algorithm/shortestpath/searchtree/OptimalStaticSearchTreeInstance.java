@@ -4,14 +4,14 @@
  */
 package de.tu_berlin.math.coga.algorithm.shortestpath.searchtree;
 
-import de.tu_berlin.math.coga.datastructure.ArrayList;
 import de.tu_berlin.math.coga.datastructure.KeyValuePair;
+import java.util.ArrayList;
 import java.util.Collections;
 
 
 /**
  *
- * @param <T> 
+ * @param <T>
  * @author Jan-Philipp Kappmeier
  */
 public class OptimalStaticSearchTreeInstance<T extends Comparable<T>> {
@@ -21,7 +21,7 @@ public class OptimalStaticSearchTreeInstance<T extends Comparable<T>> {
 	public OptimalStaticSearchTreeInstance() {
 		keys = new ArrayList<>();
 	}
-	
+
 	public void addKeyValuePair( T key, double probability ) {
 		//this.key.add( key );
 		keys.add( new KeyValuePair<>( key, probability ) );
@@ -29,15 +29,15 @@ public class OptimalStaticSearchTreeInstance<T extends Comparable<T>> {
 		if( total > 1 )
 			throw new IllegalStateException( "Total probability > 1" );
 	}
-	
+
 	public int size() {
 		return keys.size();
 	}
-	
+
 	public double getProbability( int i ) {
 		return keys.get( i ).getValue();
 	}
-	
+
 	public void sort() {
 		Collections.sort( keys );
 	}
