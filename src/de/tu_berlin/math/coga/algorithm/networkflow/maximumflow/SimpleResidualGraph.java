@@ -7,16 +7,16 @@ package de.tu_berlin.math.coga.algorithm.networkflow.maximumflow;
 
 import de.tu_berlin.math.coga.datastructure.graph.OutgoingStarGraph;
 import de.tu_berlin.math.coga.datastructure.graph.network.ResidualNetwork;
-import ds.collection.ListSequence;
-import ds.graph.ArraySet;
+import de.tu_berlin.coga.container.collection.ListSequence;
+import de.tu_berlin.coga.container.collection.ArraySet;
 import ds.graph.DirectedGraph;
 import ds.graph.Edge;
-import ds.graph.IdentifiableCollection;
+import de.tu_berlin.coga.container.collection.IdentifiableCollection;
 import ds.graph.Node;
 import ds.graph.network.NetworkInterface;
-import ds.mapping.IdentifiableBooleanMapping;
-import ds.mapping.IdentifiableIntegerMapping;
-import ds.mapping.IdentifiableObjectMapping;
+import de.tu_berlin.coga.container.mapping.IdentifiableBooleanMapping;
+import de.tu_berlin.coga.container.mapping.IdentifiableIntegerMapping;
+import de.tu_berlin.coga.container.mapping.IdentifiableObjectMapping;
 import java.util.Iterator;
 
 /**

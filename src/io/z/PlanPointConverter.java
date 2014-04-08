@@ -20,7 +20,7 @@ import com.thoughtworks.xstream.converters.reflection.ReflectionConverter;
 import com.thoughtworks.xstream.converters.reflection.ReflectionProvider;
 import com.thoughtworks.xstream.io.HierarchicalStreamReader;
 import com.thoughtworks.xstream.mapper.Mapper;
-import de.tu_berlin.coga.zet.model.PlanPoint;
+import ds.z.PlanPoint;
 
 /** A converter that behaves just like a normal converter would do, he only adds
  * the functionality of recreating the changeListeners.

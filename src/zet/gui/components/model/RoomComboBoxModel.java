@@ -19,9 +19,9 @@
  */
 package zet.gui.components.model;
 
-import de.tu_berlin.coga.zet.model.Floor;
-import de.tu_berlin.coga.zet.model.Room;
-import de.tu_berlin.coga.zet.model.ZControl;
+import ds.z.Floor;
+import ds.z.Room;
+import ds.z.ZControl;
 import java.util.LinkedList;
 import java.util.List;
 import javax.swing.DefaultComboBoxModel;

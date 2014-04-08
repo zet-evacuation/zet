@@ -5,12 +5,12 @@
 package zet.gui.main.tabs.editor;
 
 import de.tu_berlin.math.coga.zet.ZETLocalization;
-import de.tu_berlin.coga.zet.model.Area;
-import de.tu_berlin.coga.zet.model.Barrier;
-import de.tu_berlin.coga.zet.model.PlanPoint;
-import de.tu_berlin.coga.zet.model.PlanPolygon;
-import de.tu_berlin.coga.zet.model.Room;
-import de.tu_berlin.coga.zet.model.ZControl;
+import ds.z.Area;
+import ds.z.Barrier;
+import ds.z.PlanPoint;
+import ds.z.PlanPolygon;
+import ds.z.Room;
+import ds.z.ZControl;
 import gui.ZETLoader;
 import gui.editor.CoordinateTools;
 import java.awt.Component;

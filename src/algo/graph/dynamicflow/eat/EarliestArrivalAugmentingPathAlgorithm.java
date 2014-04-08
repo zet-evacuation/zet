@@ -25,9 +25,9 @@ import ds.graph.Edge;
 import ds.graph.ImplicitTimeExpandedResidualNetwork;
 import ds.graph.Node;
 import ds.graph.flow.EarliestArrivalAugmentingPath;
-import ds.mapping.IdentifiableIntegerMapping;
-import ds.mapping.IdentifiableObjectMapping;
-import ds.mapping.IntegerIntegerMapping;
+import de.tu_berlin.coga.container.mapping.IdentifiableIntegerMapping;
+import de.tu_berlin.coga.container.mapping.IdentifiableObjectMapping;
+import de.tu_berlin.coga.container.mapping.TimeIntegerMapping;
 import java.util.LinkedList;
 import java.util.Queue;
 
@@ -46,7 +46,7 @@ public class EarliestArrivalAugmentingPathAlgorithm extends Algorithm<EarliestAr
      * Stores the time at which we left the predecessor of a node to reach it at
      * a point in time.
      */
-    private transient IdentifiableObjectMapping<Node, IntegerIntegerMapping> departureTimes;
+    private transient IdentifiableObjectMapping<Node, TimeIntegerMapping> departureTimes;
     /**
      * Stores the earliest arrival times for nodes.
      */
@@ -82,13 +82,13 @@ public class EarliestArrivalAugmentingPathAlgorithm extends Algorithm<EarliestAr
         network = problem.getNetwork();
         int timeHorizon = problem.getTimeHorizon();
         // Initialize predecessor and departure time data structures for nodes     
-        departureTimes = new IdentifiableObjectMapping<>(network.nodes(), IntegerIntegerMapping.class);
+        departureTimes = new IdentifiableObjectMapping<>(network.nodes(), TimeIntegerMapping.class);
         predecessorNodes = new IdentifiableObjectMapping<>(network.nodes(), Node[].class);
         predecessorEdges = new IdentifiableObjectMapping<>(network.nodes(), Edge[].class);
         for (Node node : network.nodes()) {
             predecessorNodes.set(node, new Node[timeHorizon]);
             predecessorEdges.set(node, new Edge[timeHorizon]);
-            departureTimes.set(node, new IntegerIntegerMapping());
+            departureTimes.set(node, new TimeIntegerMapping());
             predecessorNodes.get(node)[0] = null;
             departureTimes.get(node).set(0, Integer.MAX_VALUE);
         }

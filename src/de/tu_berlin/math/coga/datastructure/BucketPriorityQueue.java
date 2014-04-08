@@ -1,15 +1,13 @@
 /**
- * BucketPriorityQueue.java
- * Created: Oct 21, 2010, 11:50:07 AM
+ * BucketPriorityQueue.java Created: Oct 21, 2010, 11:50:07 AM
  */
-package de.tu_berlin.math.coga.datastructure.priorityQueue;
+package de.tu_berlin.math.coga.datastructure;
 
-import ds.mapping.Identifiable;
-import ds.mapping.IdentifiableIntegerMapping;
-import ds.mapping.IdentifiableObjectMapping;
+import de.tu_berlin.coga.container.mapping.Identifiable;
+import de.tu_berlin.coga.container.mapping.IdentifiableIntegerMapping;
+import de.tu_berlin.coga.container.mapping.IdentifiableObjectMapping;
 import java.lang.reflect.Array;
 import java.util.HashSet;
-
 
 /**
  *
@@ -19,7 +17,7 @@ import java.util.HashSet;
 public class BucketPriorityQueue<E extends Identifiable> {
 
 	IdentifiableObjectMapping<E, E> next;
-  protected Class<E> rangeType;
+	protected Class<E> rangeType;
 	E[] buckets;
 	public boolean[] active;
 	public HashSet<E> activeHash;
@@ -27,19 +25,18 @@ public class BucketPriorityQueue<E extends Identifiable> {
 	int minIndex;
 	int dMax;
 	int domainSize;
-	protected IdentifiableIntegerMapping <E>distanceLabels;
-
+	protected IdentifiableIntegerMapping<E> distanceLabels;
 
 	//@SuppressWarnings( "unchecked" )
 	public BucketPriorityQueue( int domainSize, Class<E> rangeType ) {
 		next = new IdentifiableObjectMapping<>( domainSize, rangeType );
 		this.rangeType = rangeType;
-		this.buckets = (E[]) Array.newInstance( rangeType, domainSize );
+		this.buckets = (E[])Array.newInstance( rangeType, domainSize );
 		active = new boolean[domainSize];
 		this.domainSize = domainSize;
 		maxIndex = 0;
-		minIndex = domainSize-1;
-		activeHash = new HashSet<>( (int)(domainSize * 0.1 ) );
+		minIndex = domainSize - 1;
+		activeHash = new HashSet<>( (int)(domainSize * 0.1) );
 	}
 
 	public void setDistanceLabels( IdentifiableIntegerMapping<E> distanceLabels ) {
@@ -52,16 +49,16 @@ public class BucketPriorityQueue<E extends Identifiable> {
 			active[i] = false;
 		}
 
-		for( int i = dMax+1; i < domainSize; ++i )
+		for( int i = dMax + 1; i < domainSize; ++i ) {
 			active[i] = false;
+		}
 		dMax = maxIndex = 0;
-		minIndex = domainSize-1;
+		minIndex = domainSize - 1;
 	}
 
 	public E get( int n ) {
 		return buckets[n];
 	}
-
 
 	public final int addActive( int distance, E node ) {
 //		if( node.id() == 3457 && distance == 10899 ) {
@@ -77,10 +74,9 @@ public class BucketPriorityQueue<E extends Identifiable> {
 
 		activeHash.add( node );
 
-
-		if( active[node.id()] == true )
+		if( active[node.id()] == true ) {
 			return maxIndex;	// was already active
-
+		}
 		active[node.id()] = true;
 
 		next.set( node, buckets[distance] );
@@ -88,12 +84,15 @@ public class BucketPriorityQueue<E extends Identifiable> {
 		buckets[distance] = node;
 
 		final int dist = distanceLabels.get( node );
-		if( dist < minIndex )
+		if( dist < minIndex ) {
 			minIndex = dist;
-		if( dist > maxIndex )
+		}
+		if( dist > maxIndex ) {
 			maxIndex = dist;
-		if( dMax < maxIndex )
+		}
+		if( dMax < maxIndex ) {
 			dMax = maxIndex;
+		}
 		return maxIndex;
 	}
 
@@ -109,7 +108,7 @@ public class BucketPriorityQueue<E extends Identifiable> {
 		//	System.out.println( "Deactivate 3457 with distance " + distance );
 		//}
 		if( node.id() == 57262 ) {
-		//	System.out.println( "Dectivate 57262 with distance " + distance );
+			//	System.out.println( "Dectivate 57262 with distance " + distance );
 		}
 
 		activeHash.remove( node );
@@ -152,8 +151,9 @@ public class BucketPriorityQueue<E extends Identifiable> {
 	}
 
 	public E max() {
-		while( maxIndex >= 0 && buckets[maxIndex] == null )
+		while( maxIndex >= 0 && buckets[maxIndex] == null ) {
 			maxIndex--;
+		}
 		return maxIndex >= 0 ? buckets[maxIndex] : null;
 	}
 

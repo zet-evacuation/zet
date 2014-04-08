@@ -6,10 +6,10 @@ package de.tu_berlin.math.coga.zet.converter.graph;
 
 import algo.graph.reduction.GreedyAlgo;
 import ds.graph.Edge;
-import ds.graph.IdentifiableCollection;
+import de.tu_berlin.coga.container.collection.IdentifiableCollection;
 import ds.graph.MinSpanningTree;
 import ds.graph.problem.MinSpanningTreeProblem;
-import ds.mapping.IdentifiableIntegerMapping;
+import de.tu_berlin.coga.container.mapping.IdentifiableIntegerMapping;
 
 /**
  *

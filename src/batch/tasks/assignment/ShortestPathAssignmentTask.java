@@ -23,9 +23,9 @@ package batch.tasks.assignment;
 import batch.tasks.*;
 import algo.graph.exitassignment.ShortestPathExitAssignment;
 import batch.BatchResultEntry;
-import de.tu_berlin.coga.zet.model.Project;
-import de.tu_berlin.coga.zet.model.Assignment;
-import de.tu_berlin.coga.zet.model.ConcreteAssignment;
+import ds.z.Project;
+import ds.z.Assignment;
+import ds.z.ConcreteAssignment;
 
 /**
  * A task that calculates an exit assignment using shortest paths.

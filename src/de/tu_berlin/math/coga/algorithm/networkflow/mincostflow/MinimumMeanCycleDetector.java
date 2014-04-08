@@ -24,11 +24,11 @@
 package de.tu_berlin.math.coga.algorithm.networkflow.mincostflow;
 
 import ds.graph.network.Network;
-import ds.mapping.IdentifiableObjectMapping;
+import de.tu_berlin.coga.container.mapping.IdentifiableObjectMapping;
 import ds.graph.network.AbstractNetwork;
-import ds.mapping.IdentifiableIntegerMapping;
+import de.tu_berlin.coga.container.mapping.IdentifiableIntegerMapping;
 import ds.graph.Edge;
-import ds.mapping.Mappings;
+import de.tu_berlin.coga.container.mapping.Mappings;
 import ds.graph.Node;
 import ds.graph.Path;
 import ds.graph.StaticPath;

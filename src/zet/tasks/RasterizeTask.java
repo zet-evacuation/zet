@@ -20,7 +20,7 @@
 
 package zet.tasks;
 
-import de.tu_berlin.coga.zet.model.Project;
+import ds.z.Project;
 
 /**
  * Performs the rasterization of a {@link ds.z.BuildingPlan}.

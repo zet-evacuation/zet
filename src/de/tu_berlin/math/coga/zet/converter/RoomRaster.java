@@ -26,11 +26,11 @@ import java.util.List;
 import de.tu_berlin.coga.common.util.Direction8;
 import de.tu_berlin.coga.common.util.Level;
 import de.tu_berlin.math.coga.zet.converter.RoomRasterProperty;
-import de.tu_berlin.coga.zet.model.Barrier;
-import de.tu_berlin.coga.zet.model.Edge;
-import de.tu_berlin.coga.zet.model.Floor;
-import de.tu_berlin.coga.zet.model.Room;
-import de.tu_berlin.coga.zet.model.StairArea;
+import ds.z.Barrier;
+import ds.z.Edge;
+import ds.z.Floor;
+import ds.z.Room;
+import ds.z.StairArea;
 import java.util.Iterator;
 
 /**

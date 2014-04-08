@@ -16,13 +16,13 @@
 package zet.gui.main.tabs.editor;
 
 import de.tu_berlin.math.coga.zet.ZETLocalization;
-import de.tu_berlin.coga.zet.model.Area;
-import de.tu_berlin.coga.zet.model.Barrier;
-import de.tu_berlin.coga.zet.model.Floor;
-import de.tu_berlin.coga.zet.model.PlanPolygon;
-import de.tu_berlin.coga.zet.model.Room;
-import de.tu_berlin.coga.zet.model.ZModelAreaEvent;
-import de.tu_berlin.coga.zet.model.ZModelRoomEvent;
+import ds.z.Area;
+import ds.z.Barrier;
+import ds.z.Floor;
+import ds.z.PlanPolygon;
+import ds.z.Room;
+import ds.z.ZModelAreaEvent;
+import ds.z.ZModelRoomEvent;
 import event.EventListener;
 import gui.GUIControl;
 import gui.GUIOptionManager;

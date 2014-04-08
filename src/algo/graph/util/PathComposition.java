@@ -23,7 +23,7 @@ import ds.graph.flow.PathBasedFlowOverTime;
 import ds.graph.flow.FlowOverTimePath;
 import ds.graph.Edge;
 import ds.graph.flow.EdgeBasedFlowOverTime;
-import ds.mapping.IdentifiableIntegerMapping;
+import de.tu_berlin.coga.container.mapping.IdentifiableIntegerMapping;
 import ds.graph.network.AbstractNetwork;
 import ds.graph.flow.FlowOverTimeEdge;
 

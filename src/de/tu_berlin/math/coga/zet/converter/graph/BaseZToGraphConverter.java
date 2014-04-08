@@ -11,7 +11,7 @@ import ds.PropertyContainer;
 import ds.graph.Edge;
 import ds.graph.Graph;
 import ds.graph.Node;
-import de.tu_berlin.coga.zet.model.BuildingPlan;
+import ds.z.BuildingPlan;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;

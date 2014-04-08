@@ -16,9 +16,9 @@ import de.tu_berlin.math.coga.zet.converter.cellularAutomaton.ZToCARasterContain
 import ds.PropertyContainer;
 import ds.ca.evac.EvacuationCellularAutomaton;
 import ds.ca.results.VisualResultsRecorder;
-import de.tu_berlin.coga.zet.model.AssignmentType;
-import de.tu_berlin.coga.zet.model.ConcreteAssignment;
-import de.tu_berlin.coga.zet.model.Project;
+import ds.z.AssignmentType;
+import ds.z.ConcreteAssignment;
+import ds.z.Project;
 import io.visualization.CAVisualizationResults;
 
 

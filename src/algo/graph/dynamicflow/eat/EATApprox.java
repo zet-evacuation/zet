@@ -8,7 +8,7 @@ import de.tu_berlin.math.coga.algorithm.flowovertime.maxflow.MaximumFlowOverTime
 import de.tu_berlin.math.coga.algorithm.networkflow.maximumflow.PushRelabel;
 import de.tu_berlin.math.coga.algorithm.networkflow.maximumflow.PushRelabelHighestLabel;
 import ds.graph.Edge;
-import ds.mapping.IdentifiableIntegerMapping;
+import de.tu_berlin.coga.container.mapping.IdentifiableIntegerMapping;
 import ds.graph.network.AbstractNetwork;
 import ds.graph.Node;
 import ds.graph.flow.MaximumFlow;

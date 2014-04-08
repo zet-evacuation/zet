@@ -17,7 +17,7 @@ package algo.graph.dynamicflow;
 
 import algo.graph.staticflow.StaticTransshipment;
 import ds.graph.Edge;
-import ds.mapping.IdentifiableIntegerMapping;
+import de.tu_berlin.coga.container.mapping.IdentifiableIntegerMapping;
 import ds.graph.TimeExpandedNetwork;
 
 /**

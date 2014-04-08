@@ -10,7 +10,7 @@
 package zet;
 
 import algo.graph.dynamicflow.eat.EarliestArrivalFlowProblem;
-import ds.mapping.IdentifiableIntegerMapping;
+import de.tu_berlin.coga.container.mapping.IdentifiableIntegerMapping;
 import ds.graph.Node;
 import java.io.FileNotFoundException;
 import java.io.IOException;

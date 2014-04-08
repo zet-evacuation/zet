@@ -19,8 +19,8 @@ package algo.graph.nashflow;
 
 import java.util.ArrayList;
 import ds.graph.Node;
+import de.tu_berlin.coga.container.mapping.IdentifiableDoubleMapping;
 import java.util.HashMap;
-import ds.graph.DoubleMap;
 import java.util.List;
 import java.util.Collections;
 
@@ -30,59 +30,59 @@ import java.util.Collections;
  */
 
 public class NodePartition {
-    
+
     private List<Node>[] partitionArray;
     private HashMap<Node,Integer> nodeToArrayPosition;
-    
-     
-    
-    public NodePartition(List<Node> nodeList, DoubleMap<Node> thinflowNodelabels ) {
-        HashMap< Double, List<Node> > helperMap = new HashMap(nodeList.size()); 
+
+
+
+    public NodePartition(List<Node> nodeList, IdentifiableDoubleMapping<Node> thinflowNodelabels ) {
+        HashMap< Double, List<Node> > helperMap = new HashMap(nodeList.size());
         ArrayList<Double> helperList;
-        
+
         //einfuegen in hashmap mit numerischen problemen?
-               
+
         for(Node n: nodeList) {
             helperMap.put(thinflowNodelabels.get(n),new ArrayList());
-                 
+
         }
-         
-                
+
+
         helperList = new ArrayList(helperMap.keySet());
-        
+
         Collections.sort(helperList);
-        
+
         for(Node n: nodeList) {
             (helperMap.get(thinflowNodelabels.get(n))).add(n);
         }
-    
+
         partitionArray = new List[helperList.size()];
         nodeToArrayPosition = new HashMap(nodeList.size());
         int i=0;
         for(Double d: helperList) {
             partitionArray[i] = helperMap.get(d);
-            
+
             for(Node n: partitionArray[i])
                 nodeToArrayPosition.put(n, i);
-            
+
             i++;
-        
+
         }
-       
+
     }
-    
+
     public List<Node>[] getPartitionArray() {
         return partitionArray;
     }
-    
+
     public HashMap<Node,Integer> getNodeToArrayPosition() {
         return nodeToArrayPosition;
     }
-    
+
     public int getNodePosition(Node n) {
         return nodeToArrayPosition.get(n);
     }
- 
+
     public void printArray(){
         for(int i=0;i<partitionArray.length;i++) {
             for(Node n : partitionArray[i])

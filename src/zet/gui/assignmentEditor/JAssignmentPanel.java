@@ -27,10 +27,10 @@ import de.tu_berlin.math.coga.rndutils.distribution.continuous.ExponentialDistri
 import de.tu_berlin.math.coga.rndutils.distribution.continuous.HyperExponentialDistribution;
 import de.tu_berlin.math.coga.rndutils.distribution.continuous.NormalDistribution;
 import de.tu_berlin.math.coga.rndutils.distribution.continuous.UniformDistribution;
-import de.tu_berlin.coga.zet.model.Project;
-import de.tu_berlin.coga.zet.model.Assignment;
-import de.tu_berlin.coga.zet.model.AssignmentType;
-import de.tu_berlin.coga.zet.model.ZControl;
+import ds.z.Project;
+import ds.z.Assignment;
+import ds.z.AssignmentType;
+import ds.z.ZControl;
 import de.tu_berlin.math.coga.components.framework.Button;
 import info.clearthought.layout.TableLayout;
 import java.awt.BorderLayout;

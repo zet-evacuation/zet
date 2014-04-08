@@ -21,7 +21,7 @@ package de.tu_berlin.math.coga.zet.converter.graph;
 
 import de.tu_berlin.math.coga.zet.converter.RoomRaster;
 import ds.graph.Node;
-import de.tu_berlin.coga.zet.model.Room;
+import ds.z.Room;
 
 /**
  * The class {@code ZToGraphRoomRaster} represents a rastered room.

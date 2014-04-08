@@ -7,7 +7,7 @@ package de.tu_berlin.math.coga.graph.generator;
 import de.tu_berlin.math.coga.rndutils.RandomUtils;
 import de.tu_berlin.math.coga.rndutils.distribution.DiscreteDistribution;
 import ds.graph.Edge;
-import ds.mapping.IdentifiableIntegerMapping;
+import de.tu_berlin.coga.container.mapping.IdentifiableIntegerMapping;
 import ds.graph.network.AbstractNetwork;
 import ds.graph.Node;
 import ds.graph.network.Network;

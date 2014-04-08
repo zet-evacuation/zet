@@ -24,22 +24,22 @@ package ds.graph.flow;
 import ds.graph.problem.ThinFlowProblem;
 import ds.graph.Edge;
 import ds.graph.Node;
-import ds.graph.DoubleMap;
+import de.tu_berlin.coga.container.mapping.IdentifiableDoubleMapping;
 
 /**
  *
- * @author Sebastian Schenker   
+ * @author Sebastian Schenker
  */
 
 public class ThinFlow {
-    
+
     private ThinFlowProblem problem;
-    
-    private DoubleMap<Node> nodelabels;
-    
-    private DoubleMap<Edge> edgeflowvalues;
-    
-    public ThinFlow(ThinFlowProblem problem, DoubleMap<Edge> flows, DoubleMap<Node> labels) {
+
+    private IdentifiableDoubleMapping<Node> nodelabels;
+
+    private IdentifiableDoubleMapping<Edge> edgeflowvalues;
+
+    public ThinFlow(ThinFlowProblem problem, IdentifiableDoubleMapping<Edge> flows, IdentifiableDoubleMapping<Node> labels) {
         this.problem = problem;
         nodelabels = labels;
         edgeflowvalues = flows;
@@ -48,13 +48,13 @@ public class ThinFlow {
     public ThinFlowProblem getProblem() {
         return problem;
     }
-    
-    public DoubleMap<Node> getNodeLabels() {
+
+    public IdentifiableDoubleMapping<Node> getNodeLabels() {
         return nodelabels;
     }
-        
-    public DoubleMap<Edge> getEdgeFlowValues() {
+
+    public IdentifiableDoubleMapping<Edge> getEdgeFlowValues() {
         return edgeflowvalues;
     }
-    
+
 }

@@ -13,72 +13,60 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
-
-/*
- * RationalMaxFlowProblem.java
- *
- */
-
 package ds.graph.problem;
 
 import ds.graph.Edge;
-import ds.graph.DoubleMap;
 import ds.graph.network.DynamicNetwork;
 import ds.graph.Node;
-
+import de.tu_berlin.coga.container.mapping.IdentifiableDoubleMapping;
 
 /**
  *
  * @author Sebastian Schenker
  */
-
 public class RationalMaxFlowProblem {
-    
-    private DynamicNetwork network;
-    private DoubleMap<Edge> capacities;
-    private Node source;
-    private Node sink;
 
-    public RationalMaxFlowProblem(DynamicNetwork network, DoubleMap<Edge> capacities, Node source, Node sink) {
-        this.network = network;
-        this.capacities = capacities;
-        this.source = source;
-        this.sink = sink;
-    }
+	private DynamicNetwork network;
+	private IdentifiableDoubleMapping<Edge> capacities;
+	private Node source;
+	private Node sink;
 
-    
-    public DoubleMap<Edge> getCapacities() {
-        return capacities;
-    }
+	public RationalMaxFlowProblem( DynamicNetwork network, IdentifiableDoubleMapping<Edge> capacities, Node source, Node sink ) {
+		this.network = network;
+		this.capacities = capacities;
+		this.source = source;
+		this.sink = sink;
+	}
 
-    public void setCapacities(DoubleMap<Edge> capacities) {
-        this.capacities = capacities;
-    }
+	public IdentifiableDoubleMapping<Edge> getCapacities() {
+		return capacities;
+	}
 
-    public DynamicNetwork getNetwork() {
-        return network;
-    }
+	public void setCapacities( IdentifiableDoubleMapping<Edge> capacities ) {
+		this.capacities = capacities;
+	}
 
-    public void setNetwork(DynamicNetwork network) {
-        this.network = network;
-    }
-    
-    public Node getSink() {
-        return sink;        
-    }
-    
-    public void setSink(Node sink) {
-        this.sink = sink;
-    }
+	public DynamicNetwork getNetwork() {
+		return network;
+	}
 
-     
-    public Node getSource() {
-        return source;
-    }
-    
-    public void setSource(Node source) {
-        this.source = source;
-    }    
-    
-        
+	public void setNetwork( DynamicNetwork network ) {
+		this.network = network;
+	}
+
+	public Node getSink() {
+		return sink;
+	}
+
+	public void setSink( Node sink ) {
+		this.sink = sink;
+	}
+
+	public Node getSource() {
+		return source;
+	}
+
+	public void setSource( Node source ) {
+		this.source = source;
+	}
 }

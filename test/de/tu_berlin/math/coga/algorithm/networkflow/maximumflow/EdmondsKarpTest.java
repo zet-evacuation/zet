@@ -8,7 +8,7 @@ import ds.graph.Edge;
 import ds.graph.Node;
 import ds.graph.network.Network;
 import ds.graph.problem.MaximumFlowProblem;
-import ds.mapping.IdentifiableIntegerMapping;
+import de.tu_berlin.coga.container.mapping.IdentifiableIntegerMapping;
 import junit.framework.TestCase;
 import org.junit.Test;
 

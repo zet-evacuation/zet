@@ -20,7 +20,7 @@
 package ds.graph;
 
 import com.thoughtworks.xstream.annotations.XStreamAsAttribute;
-import ds.mapping.Identifiable;
+import de.tu_berlin.coga.container.mapping.Identifiable;
 
 /**
  * The {@code Edge} class represents a edge in a graph.

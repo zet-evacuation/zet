@@ -4,8 +4,10 @@
  */
 package de.tu_berlin.math.coga.datastructure;
 
-import ds.mapping.Identifiable;
-import ds.mapping.IdentifiableObjectMapping;
+import de.tu_berlin.coga.container.mapping.Identifiable;
+import de.tu_berlin.coga.container.mapping.Identifiable;
+import de.tu_berlin.coga.container.mapping.IdentifiableObjectMapping;
+import de.tu_berlin.coga.container.mapping.IdentifiableObjectMapping;
 import java.lang.reflect.Array;
 import java.util.Objects;
 

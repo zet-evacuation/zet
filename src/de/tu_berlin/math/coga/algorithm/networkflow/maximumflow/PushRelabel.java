@@ -6,7 +6,7 @@ package de.tu_berlin.math.coga.algorithm.networkflow.maximumflow;
 
 import de.tu_berlin.coga.common.algorithm.Algorithm;
 import ds.graph.Edge;
-import ds.mapping.IdentifiableIntegerMapping;
+import de.tu_berlin.coga.container.mapping.IdentifiableIntegerMapping;
 import ds.graph.Node;
 import ds.graph.network.ResidualNetwork;
 import ds.graph.flow.MaximumFlow;

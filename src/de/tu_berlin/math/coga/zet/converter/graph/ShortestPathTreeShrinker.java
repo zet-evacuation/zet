@@ -5,9 +5,9 @@
 package de.tu_berlin.math.coga.zet.converter.graph;
 
 import algo.graph.shortestpath.DijkstraWithRationalDistances;
-import ds.collection.ListSequence;
+import de.tu_berlin.coga.container.collection.ListSequence;
 import ds.graph.Edge;
-import ds.graph.IdentifiableCollection;
+import de.tu_berlin.coga.container.collection.IdentifiableCollection;
 import ds.graph.network.DynamicNetwork;
 import java.util.HashMap;
 import java.util.Map;

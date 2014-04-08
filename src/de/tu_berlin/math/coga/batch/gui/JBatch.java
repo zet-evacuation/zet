@@ -42,7 +42,7 @@ import de.tu_berlin.math.coga.batch.operations.Operation;
 import de.tu_berlin.math.coga.batch.operations.OperationList;
 import de.tu_berlin.coga.common.algorithm.Algorithm;
 import ds.ProjectLoader;
-import de.tu_berlin.coga.zet.model.Project;
+import ds.z.Project;
 import gui.GUIControl;
 import java.awt.BorderLayout;
 import java.awt.event.KeyEvent;

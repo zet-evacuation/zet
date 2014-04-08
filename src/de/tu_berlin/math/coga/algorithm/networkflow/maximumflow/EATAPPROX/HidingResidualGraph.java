@@ -8,12 +8,12 @@ package de.tu_berlin.math.coga.algorithm.networkflow.maximumflow.EATAPPROX;
 
 import de.tu_berlin.math.coga.algorithm.networkflow.maximumflow.SimpleResidualGraph;
 import de.tu_berlin.math.coga.datastructure.Tuple;
-import ds.collection.ListSequence;
+import de.tu_berlin.coga.container.collection.ListSequence;
 import ds.graph.Edge;
-import ds.graph.IdentifiableCollection;
+import de.tu_berlin.coga.container.collection.IdentifiableCollection;
 import ds.graph.Node;
 import ds.graph.network.NetworkInterface;
-import ds.mapping.IdentifiableIntegerMapping;
+import de.tu_berlin.coga.container.mapping.IdentifiableIntegerMapping;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedList;

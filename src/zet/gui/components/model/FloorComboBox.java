@@ -4,7 +4,7 @@
  */
 package zet.gui.components.model;
 
-import de.tu_berlin.coga.zet.model.AbstractFloor;
+import ds.z.AbstractFloor;
 import java.awt.Component;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.JComboBox;

@@ -25,7 +25,7 @@ import de.tu_berlin.math.coga.zet.ZETLocalization;
 import de.tu_berlin.coga.common.localization.AbstractLocalization;
 import de.tu_berlin.coga.common.localization.Localized;
 import ds.PropertyContainer;
-import de.tu_berlin.coga.zet.model.ZControl;
+import ds.z.ZControl;
 import event.EventServer;
 import event.MessageEvent;
 import event.MessageEvent.MessageType;

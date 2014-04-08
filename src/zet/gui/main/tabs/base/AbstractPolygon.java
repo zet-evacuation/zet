@@ -21,9 +21,9 @@
 
 package zet.gui.main.tabs.base;
 
-import de.tu_berlin.coga.zet.model.Edge;
-import de.tu_berlin.coga.zet.model.PlanPoint;
-import de.tu_berlin.coga.zet.model.PlanPolygon;
+import ds.z.Edge;
+import ds.z.PlanPoint;
+import ds.z.PlanPolygon;
 import java.awt.Color;
 import java.awt.FontMetrics;
 import java.awt.Graphics2D;

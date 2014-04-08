@@ -4,9 +4,9 @@
  */
 package zet.gui.main.tabs.editor;
 
-import de.tu_berlin.coga.zet.model.StairArea;
-import de.tu_berlin.coga.zet.model.StairPreset;
-import de.tu_berlin.coga.zet.model.ZLocalization;
+import ds.z.StairArea;
+import ds.z.StairPreset;
+import ds.z.ZLocalization;
 import info.clearthought.layout.TableLayout;
 import java.awt.Component;
 import java.awt.event.ActionEvent;

@@ -18,9 +18,9 @@
  */
 package de.tu_berlin.math.coga.zet.converter;
 
-import de.tu_berlin.coga.zet.model.Edge;
-import de.tu_berlin.coga.zet.model.PlanPoint;
-import de.tu_berlin.coga.zet.model.PlanPolygon;
+import ds.z.Edge;
+import ds.z.PlanPoint;
+import ds.z.PlanPolygon;
 import java.util.ArrayList;
 
 /**

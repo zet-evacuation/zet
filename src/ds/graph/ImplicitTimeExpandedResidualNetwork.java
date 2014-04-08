@@ -23,9 +23,9 @@ import algo.graph.dynamicflow.eat.EarliestArrivalFlowProblem;
 import ds.graph.flow.EarliestArrivalAugmentingPath;
 import ds.graph.flow.EarliestArrivalAugmentingPath.NodeTimePair;
 import ds.graph.network.Network;
-import ds.mapping.IdentifiableIntegerMapping;
-import ds.mapping.IdentifiableObjectMapping;
-import ds.mapping.IntegerIntegerMapping;
+import de.tu_berlin.coga.container.mapping.IdentifiableIntegerMapping;
+import de.tu_berlin.coga.container.mapping.IdentifiableObjectMapping;
+import de.tu_berlin.coga.container.mapping.TimeIntegerMapping;
 
 /**
  * A class representing an implicit time-expanded residual network, i.e. a 
@@ -52,7 +52,7 @@ public class ImplicitTimeExpandedResidualNetwork extends Network {
     /**
      * Stores the flow over time corresponding to this network.
      */
-    private IdentifiableObjectMapping<Edge, IntegerIntegerMapping> flow;
+    private IdentifiableObjectMapping<Edge, TimeIntegerMapping> flow;
     /**
      * References the underlying earliest arrival flow problem.
      */
@@ -72,7 +72,7 @@ public class ImplicitTimeExpandedResidualNetwork extends Network {
     /**
      * Keeps track of waiting of flow in nodes.
      */
-    private IdentifiableObjectMapping<Node, IntegerIntegerMapping> waiting;
+    private IdentifiableObjectMapping<Node, TimeIntegerMapping> waiting;
 
     /**
      * Creates an implicit time-expanded residual network for the specified 
@@ -110,13 +110,13 @@ public class ImplicitTimeExpandedResidualNetwork extends Network {
                 reverseEdges.set(reverse, edge);
             }
         }
-        flow = new IdentifiableObjectMapping<>(problem.getNetwork().edges(), IntegerIntegerMapping.class);
+        flow = new IdentifiableObjectMapping<>(problem.getNetwork().edges(), TimeIntegerMapping.class);
         for (Edge edge : problem.getNetwork().edges()) {
-            flow.set(edge, new IntegerIntegerMapping());
+            flow.set(edge, new TimeIntegerMapping());
         }
-        waiting = new IdentifiableObjectMapping<>(problem.getNetwork().nodes(), IntegerIntegerMapping.class);
+        waiting = new IdentifiableObjectMapping<>(problem.getNetwork().nodes(), TimeIntegerMapping.class);
         for (Node node : problem.getNetwork().nodes()) {
-            waiting.set(node, new IntegerIntegerMapping());
+            waiting.set(node, new TimeIntegerMapping());
         }
     }
 
@@ -339,7 +339,7 @@ public class ImplicitTimeExpandedResidualNetwork extends Network {
      * Returns the flow over time this residual network is corresponding to.
      * @return the flow over time this residual network is corresponding to.
      */
-    public IdentifiableObjectMapping<Edge, IntegerIntegerMapping> flow() {
+    public IdentifiableObjectMapping<Edge, TimeIntegerMapping> flow() {
         return flow;
     }
 
@@ -355,7 +355,7 @@ public class ImplicitTimeExpandedResidualNetwork extends Network {
      * Returns the (static) flow out of the super source.
      * @return the flow out of the super source.
      */
-    public IdentifiableObjectMapping<Node, IntegerIntegerMapping> waitingFlow() {
+    public IdentifiableObjectMapping<Node, TimeIntegerMapping> waitingFlow() {
         return waiting;
     }
     

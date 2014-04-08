@@ -29,7 +29,7 @@ import de.tu_berlin.coga.common.algorithm.Algorithm;
 import de.tu_berlin.math.coga.zet.converter.graph.NetworkFlowModel;
 import ds.graph.Edge;
 import ds.graph.Forest;
-import ds.graph.IdentifiableCollection;
+import de.tu_berlin.coga.container.collection.IdentifiableCollection;
 import ds.graph.Node;
 import ds.graph.Path;
 import ds.graph.flow.FlowOverTimeImplicit;
@@ -38,8 +38,8 @@ import ds.graph.flow.MaximumFlow;
 import ds.graph.flow.PathBasedFlowOverTime;
 import ds.graph.network.AbstractNetwork;
 import ds.graph.problem.MaximumFlowProblem;
-import ds.mapping.IdentifiableIntegerMapping;
-import ds.mapping.IdentifiableObjectMapping;
+import de.tu_berlin.coga.container.mapping.IdentifiableIntegerMapping;
+import de.tu_berlin.coga.container.mapping.IdentifiableObjectMapping;
 
 /**
  *

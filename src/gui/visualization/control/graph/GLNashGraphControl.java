@@ -9,7 +9,7 @@ import de.tu_berlin.math.coga.zet.viewer.NashFlowVisualization;
 import de.tu_berlin.math.coga.zet.viewer.NodePositionMapping;
 import ds.graph.Edge;
 import ds.graph.Graph;
-import ds.mapping.IdentifiableObjectMapping;
+import de.tu_berlin.coga.container.mapping.IdentifiableObjectMapping;
 import ds.graph.Node;
 import gui.visualization.draw.graph.GLNashGraph;
 

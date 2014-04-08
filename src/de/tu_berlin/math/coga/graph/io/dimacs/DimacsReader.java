@@ -15,7 +15,7 @@ import de.tu_berlin.coga.common.util.units.BinaryUnits;
 import de.tu_berlin.coga.common.util.units.TimeUnits;
 import de.tu_berlin.math.coga.graph.generator.RMFGEN;
 import de.tu_berlin.math.coga.rndutils.distribution.discrete.UniformDistribution;
-import ds.graph.Edge;import ds.mapping.IdentifiableIntegerMapping;
+import ds.graph.Edge;import de.tu_berlin.coga.container.mapping.IdentifiableIntegerMapping;
 import ds.graph.network.AbstractNetwork;
 import ds.graph.Node;
 import ds.graph.flow.MaximumFlow;

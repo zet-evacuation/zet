@@ -19,7 +19,7 @@ import de.tu_berlin.math.coga.rndutils.RandomUtils;
 import de.tu_berlin.math.coga.rndutils.generators.GeneralRandom;
 import ds.graph.flow.PathBasedFlowOverTime;
 import ds.graph.flow.FlowOverTimePath;
-import ds.mapping.IdentifiableObjectMapping;
+import de.tu_berlin.coga.container.mapping.IdentifiableObjectMapping;
 import ds.graph.Node;
 import ds.ca.evac.EvacCell;
 import ds.ca.evac.EvacuationCellularAutomaton;

@@ -21,12 +21,12 @@ import com.thoughtworks.xstream.converters.reflection.ReflectionProvider;
 import com.thoughtworks.xstream.io.HierarchicalStreamReader;
 import com.thoughtworks.xstream.mapper.Mapper;
 
-import de.tu_berlin.coga.zet.model.Project;
+import ds.z.Project;
 import ds.VisualProperties;
-import de.tu_berlin.coga.zet.model.Assignment;
-import de.tu_berlin.coga.zet.model.Floor;
-import de.tu_berlin.coga.zet.model.Room;
-import de.tu_berlin.coga.zet.model.TeleportArea;
+import ds.z.Assignment;
+import ds.z.Floor;
+import ds.z.Room;
+import ds.z.TeleportArea;
 import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;

@@ -4,6 +4,7 @@
  */
 package ds.graph;
 
+import de.tu_berlin.coga.container.collection.IdentifiableCollection;
 import ds.graph.problem.NetworkMSTProblem;
 
 /**

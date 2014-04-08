@@ -8,7 +8,7 @@ import batch.plugins.AlgorithmicPlugin;
 import de.tu_berlin.coga.common.algorithm.Algorithm;
 import de.tu_berlin.math.coga.zet.converter.graph.NetworkFlowModel;
 import de.tu_berlin.math.coga.zet.converter.graph.RectangleConverter;
-import de.tu_berlin.coga.zet.model.BuildingPlan;
+import ds.z.BuildingPlan;
 import net.xeoh.plugins.base.annotations.PluginImplementation;
 
 

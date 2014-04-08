@@ -23,7 +23,7 @@ import algo.graph.shortestpath.MooreBellmanFord;
 import algo.graph.traverse.BFS;
 import ds.graph.Path;
 import ds.graph.Edge;
-import ds.mapping.IdentifiableIntegerMapping;
+import de.tu_berlin.coga.container.mapping.IdentifiableIntegerMapping;
 import ds.graph.network.AbstractNetwork;
 import ds.graph.Node;
 import ds.graph.network.ResidualNetwork;

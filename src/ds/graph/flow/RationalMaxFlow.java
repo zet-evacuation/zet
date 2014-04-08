@@ -17,38 +17,37 @@
  * RationalMaxFlow.java
  *
  */
-
 package ds.graph.flow;
 
 import ds.graph.problem.RationalMaxFlowProblem;
 import ds.graph.Edge;
-import ds.graph.DoubleMap;
+import de.tu_berlin.coga.container.mapping.IdentifiableDoubleMapping;
 
 /**
  *
- * @author Sebastian Schenker   
+ * @author Sebastian Schenker
  */
 public class RationalMaxFlow extends RationalFlow {
-    
-    private RationalMaxFlowProblem problem;
-    
-    public RationalMaxFlow(RationalMaxFlowProblem problem, DoubleMap<Edge> flow) {
-        super(flow);
-        this.problem = problem;
-    }
 
-    public RationalMaxFlowProblem getProblem() {
-        return problem;
-    }
-    
-    public double getFlowValue() {
-        double result = 0.0;
-        for (Edge edge : problem.getNetwork().outgoingEdges(problem.getSource())) {
-                result += get(edge);
-            }
-        for (Edge edge : problem.getNetwork().incomingEdges(problem.getSource())) {
-                result -= get(edge);
-            }
-        return result;        
-    }
+	private RationalMaxFlowProblem problem;
+
+	public RationalMaxFlow( RationalMaxFlowProblem problem, IdentifiableDoubleMapping<Edge> flow ) {
+		super( flow );
+		this.problem = problem;
+	}
+
+	public RationalMaxFlowProblem getProblem() {
+		return problem;
+	}
+
+	public double getFlowValue() {
+		double result = 0.0;
+		for( Edge edge : problem.getNetwork().outgoingEdges( problem.getSource() ) ) {
+			result += get( edge );
+		}
+		for( Edge edge : problem.getNetwork().incomingEdges( problem.getSource() ) ) {
+			result -= get( edge );
+		}
+		return result;
+	}
 }

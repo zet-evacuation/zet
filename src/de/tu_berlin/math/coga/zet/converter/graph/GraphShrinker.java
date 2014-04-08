@@ -5,7 +5,7 @@ package de.tu_berlin.math.coga.zet.converter.graph;
 
 import de.tu_berlin.coga.common.algorithm.Algorithm;
 import ds.graph.Edge;
-import ds.graph.IdentifiableCollection;
+import de.tu_berlin.coga.container.collection.IdentifiableCollection;
 import ds.graph.Node;
 import ds.graph.NodeRectangle;
 import java.util.LinkedList;

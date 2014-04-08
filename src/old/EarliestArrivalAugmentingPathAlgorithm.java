@@ -23,11 +23,9 @@ import algo.graph.dynamicflow.eat.EarliestArrivalAugmentingPathProblem;
 import ds.graph.flow.EarliestArrivalAugmentingPath;
 import ds.graph.ImplicitTimeExpandedResidualNetwork;
 import ds.graph.Edge;
-import ds.graph.IdentifiableCollection;
-import ds.mapping.IdentifiableIntegerMapping;
-import ds.mapping.IdentifiableObjectMapping;
-import ds.mapping.IntegerIntegerArrayMapping;
-import ds.mapping.IntegerIntegerMapping;
+import de.tu_berlin.coga.container.mapping.IdentifiableIntegerMapping;
+import de.tu_berlin.coga.container.mapping.IdentifiableObjectMapping;
+import de.tu_berlin.coga.container.mapping.TimeIntegerMapping;
 import ds.graph.Node;
 import java.util.LinkedList;
 import java.util.Queue;
@@ -41,12 +39,12 @@ import de.tu_berlin.coga.common.algorithm.Algorithm;
 public class EarliestArrivalAugmentingPathAlgorithm extends Algorithm<EarliestArrivalAugmentingPathProblem, EarliestArrivalAugmentingPath> {
 
     private static final Logger LOGGER = Logger.getLogger(EarliestArrivalAugmentingPathAlgorithm.class.getCanonicalName());
-    
+
     private static final boolean DEBUG = false;
-    
+
     private static final Node SOURCE = new Node(-1);
     private transient Queue<Node> candidates;
-    private transient IdentifiableObjectMapping<Node, IntegerIntegerMapping> departureTimes;
+    private transient IdentifiableObjectMapping<Node, TimeIntegerMapping> departureTimes;
     private transient IdentifiableIntegerMapping<Node> labels;
     private transient ImplicitTimeExpandedResidualNetwork network;
     private transient IdentifiableObjectMapping<Node, Node[]> predecessorNodes;
@@ -60,13 +58,13 @@ public class EarliestArrivalAugmentingPathAlgorithm extends Algorithm<EarliestAr
         int timeHorizon = problem.getTimeHorizon();
         candidates = new LinkedList<Node>();
         labels = new IdentifiableIntegerMapping(network.nodes());
-        departureTimes = new IdentifiableObjectMapping<Node, IntegerIntegerMapping>(network.nodes(), IntegerIntegerMapping.class);
+        departureTimes = new IdentifiableObjectMapping<Node, TimeIntegerMapping>(network.nodes(), TimeIntegerMapping.class);
         predecessorNodes = new IdentifiableObjectMapping<Node, Node[]>(network.nodes(), Node[].class);
         predecessorEdges = new IdentifiableObjectMapping<Node, Edge[]>(network.nodes(), Edge[].class);
         for (Node node : network.nodes()) {
             predecessorNodes.set(node, new Node[timeHorizon]);
             predecessorEdges.set(node, new Edge[timeHorizon]);
-            departureTimes.set(node, new IntegerIntegerMapping());
+            departureTimes.set(node, new TimeIntegerMapping());
         }
         candidates.add(source);
         for (Node node : network.nodes()) {
@@ -80,7 +78,7 @@ public class EarliestArrivalAugmentingPathAlgorithm extends Algorithm<EarliestAr
         setPredecessorNode(source, 0, SOURCE);
         for (int time = 0; time < timeHorizon; time++) {
             setDepartureTime(source, time, time);
-        }        
+        }
         while (!candidates.isEmpty()) {
             Node node = candidates.poll();
             if (DEBUG) System.out.println("Processing node: " + node);
@@ -167,11 +165,11 @@ public class EarliestArrivalAugmentingPathAlgorithm extends Algorithm<EarliestAr
                         //if (predecessorDepartureTime < time) {
                             edge = edges.first();
                         } else {
-                            edge = edges.last();                                
+                            edge = edges.last();
                         }
                     }*/
                     Edge edge = predEdge;
-                            
+
                     cap = capacity(edge, predecessorDepartureTime);
                     if (cap == 0) {
                         //System.out.println("Case 1: " + edges + " " + capacity(edges.first(), predecessorDepartureTime) + " " + capacity(edges.last(), predecessorDepartureTime));
@@ -181,8 +179,8 @@ public class EarliestArrivalAugmentingPathAlgorithm extends Algorithm<EarliestAr
                 } else if (time > predecessorDepartureTime) {
                     cap = waitCapacity(pred, predecessorDepartureTime);
                 } else {
-                    cap = waitCancellingCapacity(pred, predecessorDepartureTime);               
-                    //System.out.println("Get: " + pred + " " + predecessorDepartureTime + " " + cap);                    
+                    cap = waitCancellingCapacity(pred, predecessorDepartureTime);
+                    //System.out.println("Get: " + pred + " " + predecessorDepartureTime + " " + cap);
                 }
                 if (cap < capacity) {
                     capacity = cap;
@@ -194,7 +192,7 @@ public class EarliestArrivalAugmentingPathAlgorithm extends Algorithm<EarliestAr
                 predEdge = predecessorEdges.get(node)[predecessorDepartureTime];
                 time = predecessorDepartureTime;
                 if (DEBUG) System.out.println("Current time/node: " + time + "/" + node);
-                if (oldPred != pred) {   
+                if (oldPred != pred) {
                     if (DEBUG) System.out.println(predecessorDepartureTime + " vs " + nextTime);
                     int newDepTime = getDepartureTime(node, time);
                     if (DEBUG) System.out.println("newDepTime " + newDepTime);
@@ -229,7 +227,7 @@ public class EarliestArrivalAugmentingPathAlgorithm extends Algorithm<EarliestAr
                             }*//*
                         } else {
                             throw new AssertionError("This should not happen.");
-                        }*/                    
+                        }*/
                     } else {
                         if (DEBUG) System.out.println("Case 3");
                         tt = 0;

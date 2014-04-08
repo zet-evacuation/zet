@@ -27,7 +27,7 @@ import com.thoughtworks.xstream.converters.ConversionException;
 import ds.graph.flow.PathBasedFlowOverTime;
 import ds.graph.flow.FlowOverTimePath;
 import ds.graph.Edge;
-import ds.mapping.IdentifiableIntegerMapping;
+import de.tu_berlin.coga.container.mapping.IdentifiableIntegerMapping;
 import ds.graph.network.AbstractNetwork;
 import de.tu_berlin.math.coga.zet.converter.graph.NetworkFlowModel;
 import ds.graph.Node;

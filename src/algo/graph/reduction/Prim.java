@@ -13,11 +13,11 @@ import ds.graph.Edge;
 import de.tu_berlin.math.coga.zet.converter.graph.NetworkFlowModel;
 import ds.graph.network.DynamicNetwork;
 import ds.graph.Graph;
-import ds.graph.IdentifiableCollection;
-import ds.mapping.IdentifiableIntegerMapping;
-import ds.mapping.IdentifiableObjectMapping;
-import ds.collection.ListSequence;
-import de.tu_berlin.math.coga.datastructure.priorityQueue.MinHeap;
+import de.tu_berlin.coga.container.collection.IdentifiableCollection;
+import de.tu_berlin.coga.container.mapping.IdentifiableIntegerMapping;
+import de.tu_berlin.coga.container.mapping.IdentifiableObjectMapping;
+import de.tu_berlin.coga.container.collection.ListSequence;
+import de.tu_berlin.coga.container.priority.MinHeap;
 
 
 /**

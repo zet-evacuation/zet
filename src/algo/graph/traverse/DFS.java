@@ -23,7 +23,7 @@ package algo.graph.traverse;
 import ds.graph.GraphLocalization;
 import ds.graph.Edge;
 import ds.graph.Graph;
-import ds.graph.IdentifiableCollection;
+import de.tu_berlin.coga.container.collection.IdentifiableCollection;
 import ds.graph.Node;
 import java.util.ArrayList;
 import java.util.HashMap;

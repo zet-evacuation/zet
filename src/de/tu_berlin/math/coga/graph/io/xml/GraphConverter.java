@@ -10,7 +10,7 @@ import com.thoughtworks.xstream.converters.UnmarshallingContext;
 import com.thoughtworks.xstream.io.HierarchicalStreamReader;
 import com.thoughtworks.xstream.io.HierarchicalStreamWriter;
 import ds.graph.Edge;
-import ds.mapping.IdentifiableDoubleMapping;
+import de.tu_berlin.coga.container.mapping.IdentifiableDoubleMapping;
 import ds.graph.network.AbstractNetwork;
 import ds.graph.Node;
 import ds.graph.network.Network;

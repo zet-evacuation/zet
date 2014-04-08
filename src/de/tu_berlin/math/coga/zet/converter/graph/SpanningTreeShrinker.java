@@ -6,7 +6,7 @@ package de.tu_berlin.math.coga.zet.converter.graph;
 
 import algo.graph.reduction.Prim;
 import ds.graph.Edge;
-import ds.graph.IdentifiableCollection;
+import de.tu_berlin.coga.container.collection.IdentifiableCollection;
 import ds.graph.MinSpanningTree;
 import ds.graph.problem.MinSpanningTreeProblem;
 import java.util.logging.Level;

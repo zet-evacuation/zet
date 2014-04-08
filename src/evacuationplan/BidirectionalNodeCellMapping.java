@@ -27,8 +27,8 @@ import de.tu_berlin.math.coga.zet.converter.cellularAutomaton.ZToCARasterContain
 import de.tu_berlin.math.coga.zet.converter.graph.ZToGraphRoomRaster;
 
 import ds.graph.Node;
-import de.tu_berlin.coga.zet.model.Floor;
-import de.tu_berlin.coga.zet.model.Room;
+import ds.z.Floor;
+import ds.z.Room;
 import ds.ca.evac.EvacCell;
 
 import util.DebugFlags;

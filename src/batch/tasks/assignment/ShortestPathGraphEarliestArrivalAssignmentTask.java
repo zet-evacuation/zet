@@ -23,9 +23,9 @@ import batch.tasks.*;
 import algo.graph.exitassignment.ShortestPathGraphEarliestArrivalTransshipmentExitAssignment;
 import batch.BatchResultEntry;
 //import old.ZToGraphConverter;
-import de.tu_berlin.coga.zet.model.Project;
-import de.tu_berlin.coga.zet.model.Assignment;
-import de.tu_berlin.coga.zet.model.ConcreteAssignment;
+import ds.z.Project;
+import ds.z.Assignment;
+import ds.z.ConcreteAssignment;
 
 /**
  *

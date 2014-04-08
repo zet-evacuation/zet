@@ -23,12 +23,12 @@ import de.tu_berlin.math.coga.algorithm.networkflow.maximumflow.PushRelabelHighe
 import de.tu_berlin.coga.common.algorithm.Algorithm;
 import de.tu_berlin.math.coga.zet.converter.graph.NetworkFlowModel;
 import ds.graph.Edge;
-import ds.graph.IdentifiableCollection;
+import de.tu_berlin.coga.container.collection.IdentifiableCollection;
 import ds.graph.Node;
 import ds.graph.flow.MaximumFlow;
 import ds.graph.network.AbstractNetwork;
 import ds.graph.problem.MaximumFlowProblem;
-import ds.mapping.IdentifiableIntegerMapping;
+import de.tu_berlin.coga.container.mapping.IdentifiableIntegerMapping;
 
 /**
  *

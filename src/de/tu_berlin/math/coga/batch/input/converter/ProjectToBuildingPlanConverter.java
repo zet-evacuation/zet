@@ -5,8 +5,8 @@
 package de.tu_berlin.math.coga.batch.input.converter;
 
 import de.tu_berlin.coga.common.algorithm.Algorithm;
-import de.tu_berlin.coga.zet.model.BuildingPlan;
-import de.tu_berlin.coga.zet.model.Project;
+import ds.z.BuildingPlan;
+import ds.z.Project;
 
 /**
  * A convenience converter that extracts the building plan from a project.

@@ -8,11 +8,11 @@ import algo.graph.shortestpath.Dijkstra;
 import de.tu_berlin.coga.common.algorithm.Algorithm;
 import de.tu_berlin.math.coga.zet.converter.graph.NetworkFlowModel;
 import de.tu_berlin.math.coga.zet.converter.graph.ZToGraphMapping;
-import ds.collection.ListSequence;
+import de.tu_berlin.coga.container.collection.ListSequence;
 import ds.graph.Edge;
 import ds.graph.Forest;
 import ds.graph.Graph;
-import ds.graph.IdentifiableCollection;
+import de.tu_berlin.coga.container.collection.IdentifiableCollection;
 import ds.graph.MinSteinerTree;
 import ds.graph.NetworkMST;
 import ds.graph.Node;
@@ -21,7 +21,7 @@ import ds.graph.network.AbstractNetwork;
 import ds.graph.network.DynamicNetwork;
 import ds.graph.problem.MinSpanningTreeProblem;
 import ds.graph.problem.NetworkMSTProblem;
-import ds.mapping.IdentifiableIntegerMapping;
+import de.tu_berlin.coga.container.mapping.IdentifiableIntegerMapping;
 
 
 /**

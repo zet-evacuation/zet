@@ -5,7 +5,7 @@
 package de.tu_berlin.math.coga.datastructure.graph;
 
 import ds.graph.Edge;
-import ds.graph.IdentifiableCollection;
+import de.tu_berlin.coga.container.collection.IdentifiableCollection;
 import ds.graph.Node;
 
 /**

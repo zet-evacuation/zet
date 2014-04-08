@@ -22,11 +22,11 @@ import org.junit.Test;
 import ds.graph.problem.NashFlowProblem;
 import ds.graph.flow.NashFlow;
 
-import ds.graph.DoubleMap;
+import ds.more.DoubleMap;
 import ds.graph.Edge;
 import ds.graph.Node;
 import ds.graph.network.DynamicNetwork;
-import ds.mapping.IdentifiableDoubleMapping;
+import de.tu_berlin.coga.container.mapping.IdentifiableDoubleMapping;
 
 
 

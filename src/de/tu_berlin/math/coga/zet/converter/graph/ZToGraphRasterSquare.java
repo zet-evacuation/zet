@@ -21,8 +21,8 @@ package de.tu_berlin.math.coga.zet.converter.graph;
 
 import de.tu_berlin.math.coga.zet.converter.RoomRasterSquare;
 import ds.graph.Node;
-import de.tu_berlin.coga.zet.model.AssignmentArea;
-import de.tu_berlin.coga.zet.model.Room;
+import ds.z.AssignmentArea;
+import ds.z.Room;
 
 /**
  * The class {@code ZToGraphRasterSquare} represents a raster square used to

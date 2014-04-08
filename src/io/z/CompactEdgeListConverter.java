@@ -23,8 +23,8 @@ import com.thoughtworks.xstream.io.HierarchicalStreamReader;
 import com.thoughtworks.xstream.io.HierarchicalStreamWriter;
 import com.thoughtworks.xstream.mapper.Mapper;
 
-import de.tu_berlin.coga.zet.model.Edge;
-import de.tu_berlin.coga.zet.model.PlanPoint;
+import ds.z.Edge;
+import ds.z.PlanPoint;
 
 import java.util.ArrayList;
 
