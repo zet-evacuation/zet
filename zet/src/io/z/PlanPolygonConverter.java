@@ -20,8 +20,21 @@ import com.thoughtworks.xstream.converters.reflection.ReflectionConverter;
 import com.thoughtworks.xstream.converters.reflection.ReflectionProvider;
 import com.thoughtworks.xstream.io.HierarchicalStreamReader;
 import com.thoughtworks.xstream.mapper.Mapper;
+import ds.z.AssignmentArea;
+import ds.z.Barrier;
+import ds.z.DelayArea;
 import ds.z.Edge;
+import ds.z.EvacuationArea;
+import ds.z.Floor;
+import ds.z.InaccessibleArea;
+import ds.z.PlanPoint;
 import ds.z.PlanPolygon;
+import ds.z.Room;
+import ds.z.RoomEdge;
+import ds.z.SaveArea;
+import ds.z.StairArea;
+import ds.z.TeleportArea;
+import java.util.ArrayList;
 
 /**
  * A converter that reads a polygon from the file. That means the edges and
@@ -42,6 +55,107 @@ public class PlanPolygonConverter extends ReflectionConverter {
 	public Object unmarshal( final HierarchicalStreamReader reader, final UnmarshallingContext context ) {
 		Object created = instantiateNewInstance( reader, context );
 
+//		PlanPolygon<Edge> t = (PlanPolygon<Edge>)created;
+//		
+////        // Traverse Tree
+//					
+//					        //Node supersink = (Node) context.convertAnother(null, Node.class);
+//
+//            reader.moveDown();
+//						System.out.println( "Skip: " + reader.getNodeName() );
+//						reflectionProvider.writeField( created, "edgeClassType", RoomEdge.class, PlanPolygon.class );
+//            reader.moveUp();
+////            if ("polygon".equals(reader.getNodeName()))
+////            {
+////                Polygon polygon = (Polygon)context.convertAnother(myClass, Polygon.class);
+////                myClass.addPolygon(polygon);
+////            } 
+//            reader.moveDown();
+//						System.out.println( "Marshal: " + reader.getNodeName() );
+//						PlanPoint start = (PlanPoint) context.convertAnother(created, PlanPoint.class, new CompactEdgeListConverter( mapper, reflectionProvider ) );
+//            reflectionProvider.writeField( created, "start", start, PlanPolygon.class );
+//            reader.moveUp();
+//            reader.moveDown();
+//						System.out.println( "Marshal: " + reader.getNodeName() );
+//						PlanPoint end = (PlanPoint) context.convertAnother(created, PlanPoint.class, new CompactEdgeListConverter( mapper, reflectionProvider ) );
+//            reflectionProvider.writeField( created, "end", end, PlanPolygon.class );
+//						reader.moveUp();
+//
+//            reader.moveDown();
+//						System.out.println( "Marshal: " + reader.getNodeName() );
+//						reflectionProvider.writeField( created, "size", Integer.parseInt( reader.getValue() ), PlanPolygon.class );
+//            reader.moveUp();
+//
+//            reader.moveDown();
+//						System.out.println( "Marshal: " + reader.getNodeName() );
+//						//PlanPoint intersectionPoint = (PlanPoint) context.convertAnother(created, PlanPoint.class, new CompactEdgeListConverter( mapper, reflectionProvider ) );
+//            //reflectionProvider.writeField( created, "intersectionPoint", intersectionPoint, PlanPolygon.class );
+//						reader.moveUp();
+//					
+//            reader.moveDown();
+//						System.out.println( "Marshal: " + reader.getNodeName() );
+//						Floor associatedFloor = (Floor) context.convertAnother(created, Floor.class );
+//            reflectionProvider.writeField( created, "associatedFloor", associatedFloor, Room.class );
+//						reader.moveUp();
+//						
+//            reader.moveDown();
+//						System.out.println( "Marshal: " + reader.getNodeName() );
+//						ArrayList<AssignmentArea> assignmentAreas = (ArrayList<AssignmentArea>) context.convertAnother(created, ArrayList.class );
+//            reflectionProvider.writeField( created, "assignmentAreas", assignmentAreas, Room.class );
+//						reader.moveUp();
+//
+//						reader.moveDown();
+//						System.out.println( "Marshal: " + reader.getNodeName() );
+//						ArrayList<Barrier> barriers = (ArrayList<Barrier>) context.convertAnother(created, ArrayList.class );
+//            reflectionProvider.writeField( created, "barriers", barriers, Room.class );
+//						reader.moveUp();
+//
+//						reader.moveDown();
+//						System.out.println( "Marshal: " + reader.getNodeName() );
+//						ArrayList<DelayArea> delayAreas = (ArrayList<DelayArea>) context.convertAnother(created, ArrayList.class );
+//            reflectionProvider.writeField( created, "delayAreas", delayAreas, Room.class );
+//						reader.moveUp();
+//
+//						reader.moveDown();
+//						System.out.println( "Marshal: " + reader.getNodeName() );
+//						ArrayList<EvacuationArea> evacuationAreas = (ArrayList<EvacuationArea>) context.convertAnother(created, ArrayList.class );
+//            reflectionProvider.writeField( created, "evacuationAreas", evacuationAreas, Room.class );
+//						reader.moveUp();
+//
+//						reader.moveDown();
+//						System.out.println( "Marshal: " + reader.getNodeName() );
+//						ArrayList<InaccessibleArea> inaccessibleAreas = (ArrayList<InaccessibleArea>) context.convertAnother(created, ArrayList.class );
+//            reflectionProvider.writeField( created, "inaccessibleAreas", inaccessibleAreas, Room.class );
+//						reader.moveUp();
+//
+//						reader.moveDown();
+//						System.out.println( "Marshal: " + reader.getNodeName() );
+//						ArrayList<SaveArea> saveAreas = (ArrayList<SaveArea>) context.convertAnother(created, ArrayList.class );
+//            reflectionProvider.writeField( created, "saveAreas", saveAreas, Room.class );
+//						reader.moveUp();
+//
+//						reader.moveDown();
+//						System.out.println( "Marshal: " + reader.getNodeName() );
+//						ArrayList<StairArea> stairAreas = (ArrayList<StairArea>) context.convertAnother(created, ArrayList.class );
+//            reflectionProvider.writeField( created, "stairAreas", stairAreas, Room.class );
+//						reader.moveUp();
+//
+//						reader.moveDown();
+//						System.out.println( "Marshal: " + reader.getNodeName() );
+//						ArrayList<TeleportArea> teleportAreas = (ArrayList<TeleportArea>) context.convertAnother(created, ArrayList.class );
+//            reflectionProvider.writeField( created, "teleportAreas", teleportAreas, Room.class );
+//						reader.moveUp();
+//
+//						
+//						
+//						
+//						while (reader.hasMoreChildren())  {
+//            reader.moveDown();
+//						System.out.println( "Skip in polygon: " + reader.getNodeName() );
+//            reader.moveUp();
+//		       }
+//		
+		
 		try {
 			created = doUnmarshal( created, reader, context );
 		} catch( com.thoughtworks.xstream.converters.ConversionException ex ) {

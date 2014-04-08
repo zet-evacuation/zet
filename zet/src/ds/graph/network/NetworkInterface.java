@@ -11,5 +11,10 @@ import ds.graph.DirectedGraph;
  * @author Jan-Philipp Kappmeier
  */
 public interface  NetworkInterface extends DirectedGraph {
+
+	@Override
+	public default boolean isDirected() {
+		return true;
+	}
 	
 }

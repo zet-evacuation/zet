@@ -48,9 +48,6 @@ public class EdgeConverter extends ReflectionConverter {
 			final UnmarshallingContext context) {
 		Object created = instantiateNewInstance(reader, context);
 
-		// Early recreation of changeListener List neccessary
-///		reflectionProvider.writeField (created, "changeListeners", new ArrayList<ChangeListener> (), myClass);
-
         created = doUnmarshal(created, reader, context);
 		Edge result = (Edge)serializationMethodInvoker.callReadResolve(created);
 
