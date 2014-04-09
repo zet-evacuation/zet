@@ -21,7 +21,7 @@
 package de.tu_berlin.math.coga.zet.converter;
 
 import de.tu_berlin.math.coga.zet.ZETLocalization;
-import ds.z.PlanPolygon;
+import de.tu_berlin.coga.zet.model.PlanPolygon;
 import java.lang.reflect.Array;
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;

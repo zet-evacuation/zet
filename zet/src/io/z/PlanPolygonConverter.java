@@ -20,20 +20,20 @@ import com.thoughtworks.xstream.converters.reflection.ReflectionConverter;
 import com.thoughtworks.xstream.converters.reflection.ReflectionProvider;
 import com.thoughtworks.xstream.io.HierarchicalStreamReader;
 import com.thoughtworks.xstream.mapper.Mapper;
-import ds.z.AssignmentArea;
-import ds.z.Barrier;
-import ds.z.DelayArea;
-import ds.z.Edge;
-import ds.z.EvacuationArea;
-import ds.z.Floor;
-import ds.z.InaccessibleArea;
-import ds.z.PlanPoint;
-import ds.z.PlanPolygon;
-import ds.z.Room;
-import ds.z.RoomEdge;
-import ds.z.SaveArea;
-import ds.z.StairArea;
-import ds.z.TeleportArea;
+import de.tu_berlin.coga.zet.model.AssignmentArea;
+import de.tu_berlin.coga.zet.model.Barrier;
+import de.tu_berlin.coga.zet.model.DelayArea;
+import de.tu_berlin.coga.zet.model.Edge;
+import de.tu_berlin.coga.zet.model.EvacuationArea;
+import de.tu_berlin.coga.zet.model.Floor;
+import de.tu_berlin.coga.zet.model.InaccessibleArea;
+import de.tu_berlin.coga.zet.model.PlanPoint;
+import de.tu_berlin.coga.zet.model.PlanPolygon;
+import de.tu_berlin.coga.zet.model.Room;
+import de.tu_berlin.coga.zet.model.RoomEdgeA;
+import de.tu_berlin.coga.zet.model.SaveArea;
+import de.tu_berlin.coga.zet.model.StairArea;
+import de.tu_berlin.coga.zet.model.TeleportArea;
 import java.util.ArrayList;
 
 /**
@@ -63,7 +63,7 @@ public class PlanPolygonConverter extends ReflectionConverter {
 //
 //            reader.moveDown();
 //						System.out.println( "Skip: " + reader.getNodeName() );
-//						reflectionProvider.writeField( created, "edgeClassType", RoomEdge.class, PlanPolygon.class );
+//						reflectionProvider.writeField( created, "edgeClassType", RoomEdgeA.class, PlanPolygon.class );
 //            reader.moveUp();
 ////            if ("polygon".equals(reader.getNodeName()))
 ////            {

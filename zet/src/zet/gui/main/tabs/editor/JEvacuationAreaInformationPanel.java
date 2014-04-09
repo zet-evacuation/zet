@@ -4,7 +4,7 @@
  */
 package zet.gui.main.tabs.editor;
 
-import ds.z.EvacuationArea;
+import de.tu_berlin.coga.zet.model.EvacuationArea;
 import info.clearthought.layout.TableLayout;
 import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;

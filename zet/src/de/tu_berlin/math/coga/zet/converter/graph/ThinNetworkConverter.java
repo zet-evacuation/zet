@@ -13,17 +13,17 @@ import ds.graph.Node;
 import ds.graph.NodeRectangle;
 import ds.graph.PositionNode;
 import de.tu_berlin.coga.container.mapping.IdentifiableObjectMapping;
-import ds.z.Area;
-import ds.z.AssignmentArea;
-import ds.z.DelayArea;
-import ds.z.EvacuationArea;
-import ds.z.Floor;
-import ds.z.InaccessibleArea;
-import ds.z.PlanPoint;
-import ds.z.PlanPolygon;
-import ds.z.Room;
-import ds.z.RoomEdge;
-import ds.z.StairArea;
+import de.tu_berlin.coga.zet.model.Area;
+import de.tu_berlin.coga.zet.model.AssignmentArea;
+import de.tu_berlin.coga.zet.model.DelayArea;
+import de.tu_berlin.coga.zet.model.EvacuationArea;
+import de.tu_berlin.coga.zet.model.Floor;
+import de.tu_berlin.coga.zet.model.InaccessibleArea;
+import de.tu_berlin.coga.zet.model.PlanPoint;
+import de.tu_berlin.coga.zet.model.PlanPolygon;
+import de.tu_berlin.coga.zet.model.Room;
+import de.tu_berlin.coga.zet.model.RoomEdgeA;
+import de.tu_berlin.coga.zet.model.StairArea;
 import java.awt.Point;
 import java.util.Collection;
 import java.util.HashMap;
@@ -423,12 +423,12 @@ public class ThinNetworkConverter extends BaseZToGraphConverter{
                     {
                         //node between 2 evacuation areas
                         if( debug ) {System.out.println("Create node between 2 evacuation areas for room: " + ZRoom.getName());}
-                        Collection<ds.z.Edge> doors1 = MoreDoorRoom.getDoorEdges();
-                        Collection<ds.z.Edge> doors2 = ZRoom.getDoorEdges();
+                        Collection<de.tu_berlin.coga.zet.model.Edge> doors1 = MoreDoorRoom.getDoorEdges();
+                        Collection<de.tu_berlin.coga.zet.model.Edge> doors2 = ZRoom.getDoorEdges();
                         Point p = new Point();
-                        for (ds.z.Edge edge: doors1)
+                        for (de.tu_berlin.coga.zet.model.Edge edge: doors1)
                         {
-                            for (ds.z.Edge edge1: doors2)
+                            for (de.tu_berlin.coga.zet.model.Edge edge1: doors2)
                             {
                             boolean first = edge.getSource().x == edge1.getSource().x;
                             boolean second = edge.getSource().y == edge1.getSource().y;
@@ -1523,9 +1523,9 @@ public class ThinNetworkConverter extends BaseZToGraphConverter{
     public HashMap<Point,Integer> getFloorDoors(Room room)
         {
             HashMap<Point,Integer> doors = new HashMap<>();
-            LinkedList<RoomEdge> edges = new LinkedList<>();
+            LinkedList<RoomEdgeA> edges = new LinkedList<>();
 
-            for (RoomEdge edge: room.getEdges() ){
+            for (RoomEdgeA edge: room.getEdges() ){
                 //System.out.println("link target: " + edge.getLinkTarget());
                 if (!(edge.getLinkTarget()==null)){
                     if (!(edge.getLinkTarget().getRoom().getAssociatedFloor().equals(room.getAssociatedFloor())))
@@ -1539,14 +1539,14 @@ public class ThinNetworkConverter extends BaseZToGraphConverter{
             //create one door for neighbouring edges
             if (edges.size() >1)
             {
-                RoomEdge start = edges.peekFirst();
+                RoomEdgeA start = edges.peekFirst();
                 int longwidth = start.length();
-                RoomEdge end = start;
-                RoomEdge next;
+                RoomEdgeA end = start;
+                RoomEdgeA next;
                 
                 while (edges.size() > 1)
                 {
-                    RoomEdge first = edges.poll();
+                    RoomEdgeA first = edges.poll();
                     next = edges.getFirst();
                     
                     if (next.isNeighbour(first))
@@ -1633,7 +1633,7 @@ public class ThinNetworkConverter extends BaseZToGraphConverter{
             }
             else if (edges.size()==1)
             {
-                RoomEdge x = edges.element();
+                RoomEdgeA x = edges.element();
                 int width = x.length();
                 int xpos = (x.getSource().getXInt() + x.getTarget().getXInt())/2;
                 int ypos = (x.getSource().getYInt() + x.getTarget().getYInt())/2;
@@ -1669,8 +1669,8 @@ public class ThinNetworkConverter extends BaseZToGraphConverter{
         for( ZToGraphRoomRaster room : rasteredRooms ) 
         {
             neighbours = new HashSet<>();
-            List<RoomEdge> rEdges = room.getRoom().getEdges();
-            for (RoomEdge e: rEdges)
+            List<RoomEdgeA> rEdges = room.getRoom().getEdges();
+            for (RoomEdgeA e: rEdges)
             {
                 if (e.getLinkTarget() != null)
                 {
@@ -1681,18 +1681,18 @@ public class ThinNetworkConverter extends BaseZToGraphConverter{
                 }
             }
             //gives all dooredges for the first considered room  
-            Collection<ds.z.Edge> dooredgesroom1 = room.getRoom().getDoorEdges();
+            Collection<de.tu_berlin.coga.zet.model.Edge> dooredgesroom1 = room.getRoom().getDoorEdges();
             //look for all other rooms on the same floor
             for (ZToGraphRoomRaster room2:rasteredRooms )
             {
                 //gives all dooredges for the other considered room
-                Collection<ds.z.Edge> dooredgesroom2 = room2.getRoom().getDoorEdges();
+                Collection<de.tu_berlin.coga.zet.model.Edge> dooredgesroom2 = room2.getRoom().getDoorEdges();
                 
                 if (room2 != room && (room2.getRoom().getAssociatedFloor().equals(room.getRoom().getAssociatedFloor())))
                 {                             
-                    for (ds.z.Edge edge: dooredgesroom1)
+                    for (de.tu_berlin.coga.zet.model.Edge edge: dooredgesroom1)
                     {
-                        for (ds.z.Edge edge2: dooredgesroom2)
+                        for (de.tu_berlin.coga.zet.model.Edge edge2: dooredgesroom2)
                         {
      
                            //edges do not have the same associated polygon, so only look for same start/end
@@ -2146,7 +2146,7 @@ public class ThinNetworkConverter extends BaseZToGraphConverter{
             {
                  
                  List<PlanPoint> getPoints = coveredArea.get(node2);                   
-                 PlanPolygon poly = new PlanPolygon(ds.z.Edge.class);
+                 PlanPolygon poly = new PlanPolygon(de.tu_berlin.coga.zet.model.Edge.class);
                  poly.defineByPoints(getPoints);
                  //System.out.println("center: " + center);
                 

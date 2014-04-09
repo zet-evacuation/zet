@@ -20,8 +20,8 @@
 package gui.editor.flooredit;
 
 import de.tu_berlin.math.coga.zet.ZETLocalization;
-import ds.z.Project;
-import ds.z.Floor;
+import de.tu_berlin.coga.zet.model.Project;
+import de.tu_berlin.coga.zet.model.Floor;
 import de.tu_berlin.math.coga.components.framework.Button;
 import gui.GUIOptionManager;
 import info.clearthought.layout.TableLayout;

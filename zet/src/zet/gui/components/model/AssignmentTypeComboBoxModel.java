@@ -20,9 +20,9 @@
  */
 package zet.gui.components.model;
 
-import ds.z.Assignment;
-import ds.z.AssignmentType;
-import ds.z.ZControl;
+import de.tu_berlin.coga.zet.model.Assignment;
+import de.tu_berlin.coga.zet.model.AssignmentType;
+import de.tu_berlin.coga.zet.model.ZControl;
 import java.io.IOException;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.JComboBox;

@@ -21,7 +21,7 @@ import com.thoughtworks.xstream.converters.reflection.ReflectionProvider;
 import com.thoughtworks.xstream.io.HierarchicalStreamReader;
 import com.thoughtworks.xstream.mapper.Mapper;
 
-import ds.z.Assignment;
+import de.tu_berlin.coga.zet.model.Assignment;
 
 /**
  * A converter that behaves just like a normal converter would do.

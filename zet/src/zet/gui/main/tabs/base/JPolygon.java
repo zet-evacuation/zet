@@ -17,16 +17,16 @@ package zet.gui.main.tabs.base;
 
 import de.tu_berlin.coga.common.util.Selectable;
 import ds.PropertyContainer;
-import ds.z.Area;
-import ds.z.Barrier;
-import ds.z.Edge;
-import ds.z.EvacuationArea;
-import ds.z.PlanPoint;
-import ds.z.PlanPolygon;
-import ds.z.Room;
-import ds.z.RoomEdge;
-import ds.z.StairArea;
-import ds.z.TeleportEdge;
+import de.tu_berlin.coga.zet.model.Area;
+import de.tu_berlin.coga.zet.model.Barrier;
+import de.tu_berlin.coga.zet.model.Edge;
+import de.tu_berlin.coga.zet.model.EvacuationArea;
+import de.tu_berlin.coga.zet.model.PlanPoint;
+import de.tu_berlin.coga.zet.model.PlanPolygon;
+import de.tu_berlin.coga.zet.model.Room;
+import de.tu_berlin.coga.zet.model.RoomEdgeA;
+import de.tu_berlin.coga.zet.model.StairArea;
+import de.tu_berlin.coga.zet.model.TeleportEdge;
 import gui.GUIControl;
 import gui.GUIOptionManager;
 import gui.editor.Areas;
@@ -175,7 +175,7 @@ public class JPolygon extends AbstractPolygon<JFloor> implements Selectable {
 	 * (only works for edges / {@link JPolygon}).
 	 * @param p
 	 * @return The topmost plan component that was clicked on, e.g. a PlanPoint,
-	 * a Edge/RoomEdge or a PlanPolygon. If no such component can be found null is returned.
+ a Edge/RoomEdgeA or a PlanPolygon. If no such component can be found null is returned.
 	 */
 	public Object findClickTargetAt( Point p ) {
 		// Check sub-objects
@@ -436,7 +436,7 @@ public class JPolygon extends AbstractPolygon<JFloor> implements Selectable {
 			else
 				g2.setPaint( new Color( edgeColor.getRed(), edgeColor.getGreen(), edgeColor.getBlue(), (int)(0.3 * edgeColor.getAlpha()) ) );
 			//g2.setPaint( (myEdge instanceof TeleportEdge) ? GUIOptionManager.getTeleportEdgeColor() : getForeground() );
-			if( myEdge instanceof RoomEdge && ((RoomEdge)myEdge).isPassable() )
+			if( myEdge instanceof RoomEdgeA && ((RoomEdgeA)myEdge).isPassable() )
 				// Paint dashed line to indicate passability
 				if( (selected || myEdge.equals( selectedEdge )) && !draggedCopy )
 					g2.setStroke( stroke_dashed_thick );

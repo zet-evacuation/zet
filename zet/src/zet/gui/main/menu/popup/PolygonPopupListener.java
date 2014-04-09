@@ -20,11 +20,11 @@
  */
 package zet.gui.main.menu.popup;
 
-import ds.z.AssignmentArea;
-import ds.z.AssignmentType;
-import ds.z.PlanPoint;
-import ds.z.PlanPolygon;
-import ds.z.Room;
+import de.tu_berlin.coga.zet.model.AssignmentArea;
+import de.tu_berlin.coga.zet.model.AssignmentType;
+import de.tu_berlin.coga.zet.model.PlanPoint;
+import de.tu_berlin.coga.zet.model.PlanPolygon;
+import de.tu_berlin.coga.zet.model.Room;
 import gui.GUIControl;
 import gui.editor.Areas;
 import zet.gui.main.JZetWindow;

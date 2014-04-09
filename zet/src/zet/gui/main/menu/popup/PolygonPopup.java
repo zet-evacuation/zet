@@ -5,9 +5,9 @@
 package zet.gui.main.menu.popup;
 
 import de.tu_berlin.math.coga.components.framework.Menu;
-import ds.z.Assignment;
-import ds.z.AssignmentType;
-import ds.z.PlanPolygon;
+import de.tu_berlin.coga.zet.model.Assignment;
+import de.tu_berlin.coga.zet.model.AssignmentType;
+import de.tu_berlin.coga.zet.model.PlanPolygon;
 import gui.GUIControl;
 import java.io.IOException;
 import java.util.LinkedList;

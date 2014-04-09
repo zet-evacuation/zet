@@ -24,7 +24,7 @@ import ds.ca.results.ExitAction;
 import ds.ca.results.MoveAction;
 import ds.ca.results.SwapAction;
 import ds.ca.results.VisualResultsRecorder;
-import ds.z.Floor;
+import de.tu_berlin.coga.zet.model.Floor;
 import exitdistributions.IndividualToExitMapping;
 import java.util.ArrayList;
 import java.util.Collection;

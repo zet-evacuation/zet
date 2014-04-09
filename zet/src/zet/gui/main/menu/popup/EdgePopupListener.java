@@ -20,12 +20,12 @@
  */
 package zet.gui.main.menu.popup;
 
-import ds.z.Edge;
-import ds.z.PlanPoint;
-import ds.z.Room;
-import ds.z.RoomEdge;
-import ds.z.TeleportEdge;
-import ds.z.ZControl;
+import de.tu_berlin.coga.zet.model.Edge;
+import de.tu_berlin.coga.zet.model.PlanPoint;
+import de.tu_berlin.coga.zet.model.Room;
+import de.tu_berlin.coga.zet.model.RoomEdgeA;
+import de.tu_berlin.coga.zet.model.TeleportEdge;
+import de.tu_berlin.coga.zet.model.ZControl;
 import de.tu_berlin.coga.zet.template.Door;
 import de.tu_berlin.coga.zet.template.ExitDoor;
 import event.EventServer;
@@ -76,19 +76,19 @@ public class EdgePopupListener implements ActionListener {
 	public void actionPerformed( ActionEvent e ) {
 		try {
 			if( e.getActionCommand().equals( "makePassable" ) )
-				if( myEdge instanceof RoomEdge ) {
-					Room myRoom = ((RoomEdge)myEdge).getRoom();
-					RoomEdge partner = null;
+				if( myEdge instanceof RoomEdgeA ) {
+					Room myRoom = ((RoomEdgeA)myEdge).getRoom();
+					RoomEdgeA partner = null;
 
 					for( Room r : myRoom.getAssociatedFloor().getRooms() )
 						if( r != myRoom )
 							try {
-								partner = r.getEdge( (RoomEdge)myEdge );
+								partner = r.getEdge( (RoomEdgeA)myEdge );
 								break; // Break when successful
 							} catch( IllegalArgumentException ex ) { }
 					if( partner != null ) {
-						((RoomEdge)myEdge).setLinkTarget( partner );
-						partner.setLinkTarget( (RoomEdge)myEdge );
+						((RoomEdgeA)myEdge).setLinkTarget( partner );
+						partner.setLinkTarget( (RoomEdgeA)myEdge );
 					} else
 						EventServer.getInstance().dispatchEvent( new MessageEvent( this, MessageEvent.MessageType.Error, "Erzeugen Sie zuerst 2 übereinanderliegende Raumbegrenzungen!" ) );
 				} else
@@ -106,7 +106,7 @@ public class EdgePopupListener implements ActionListener {
 
 				projectControl.insertPoint( myEdge, newPoint );
 			} else if( e.getActionCommand().equals( "makeTeleport" ) )
-				if( myEdge instanceof RoomEdge )
+				if( myEdge instanceof RoomEdgeA )
 //					if( GUIOptionManager.getEditMode() != EditModeOld.TeleportEdgeCreation ) {
 					if( null != EditModeOld.TeleportEdgeCreation ) {
 						// Start teleport connection creation
@@ -115,14 +115,14 @@ public class EdgePopupListener implements ActionListener {
 
 						EventServer.getInstance().dispatchEvent( new MessageEvent( this, MessageEvent.MessageType.Status, "Wählen Sie jetzt die Gegenseite aus (Rechtsklick+Menu)!" ) );
 					} else {
-						Room.connectToWithTeleportEdge( (RoomEdge)EditModeOld.TeleportEdgeCreation.getPayload().getFirst(), (RoomEdge)myEdge );
+						Room.connectToWithTeleportEdge( (RoomEdgeA)EditModeOld.TeleportEdgeCreation.getPayload().getFirst(), (RoomEdgeA)myEdge );
 						GUIOptionManager.setEditMode( GUIOptionManager.getPreviousEditMode() );
 					}
 				else
 					EventServer.getInstance().dispatchEvent( new MessageEvent( this, MessageEvent.MessageType.Error, "Nur Raumbegrenzungen können zu Stockwerksdurchgängen gemacht werden!" ) );
 			else if( e.getActionCommand().equals( "makeEvacEdge" ) )
-				if( myEdge instanceof RoomEdge )
-					guiControl.getZControl().getProject().getBuildingPlan().getDefaultFloor().addEvacuationRoom( (RoomEdge)myEdge );
+				if( myEdge instanceof RoomEdgeA )
+					guiControl.getZControl().getProject().getBuildingPlan().getDefaultFloor().addEvacuationRoom( (RoomEdgeA)myEdge );
 				else
 					EventServer.getInstance().dispatchEvent( new MessageEvent( this, MessageEvent.MessageType.Error, "Nur Raumbegrenzungen können zu Evakuierungsausgängen gemacht werden!" ) );
 			else if( e.getActionCommand().equals( "createPassageRoom" ) ) {
@@ -137,7 +137,7 @@ public class EdgePopupListener implements ActionListener {
 //					GUIOptionManager.getEditMode().getPayload().add( myEdge );
 					EventServer.getInstance().dispatchEvent( new MessageEvent( this, MessageEvent.MessageType.Status, "Wählen Sie jetzt die Gegenseite aus (Rechtsklick+Menu)!" ) );
 				} else {
-					projectControl.connectRooms( (RoomEdge)EditModeOld.PassableRoomCreation.getPayload().getFirst(), (RoomEdge)myEdge );
+					projectControl.connectRooms( (RoomEdgeA)EditModeOld.PassableRoomCreation.getPayload().getFirst(), (RoomEdgeA)myEdge );
 					GUIOptionManager.setEditMode( GUIOptionManager.getPreviousEditMode() );
 				}
 			} else if( e.getActionCommand().equals( "showPassageTarget" ) ) {
@@ -147,9 +147,9 @@ public class EdgePopupListener implements ActionListener {
 				// Show the right room
 				guiControl.showPolygon( partnerRoom );
 			} else if( e.getActionCommand().equals( "revertPassage" ) )
-				projectControl.disconnectAtEdge( (RoomEdge)myEdge);
+				projectControl.disconnectAtEdge( (RoomEdgeA)myEdge);
 			else if( e.getActionCommand().startsWith( "createDoor" ) ) {
-				if( !(myEdge instanceof RoomEdge ) )
+				if( !(myEdge instanceof RoomEdgeA ) )
 					throw new IllegalStateException( "Doors can only be created in rooms!" );
 				System.out.println( "Try to create a door" );
 
@@ -158,7 +158,7 @@ public class EdgePopupListener implements ActionListener {
 
 				Door d = guiControl.getDoorTemplates().getDoor( index );
 
-				Room myRoom = ((RoomEdge)myEdge).getRoom();
+				Room myRoom = ((RoomEdgeA)myEdge).getRoom();
 
 				PlanPoint newPoint = new PlanPoint( CoordinateTools.translateToModel( mousePosition ) );
 				newPoint = myEdge.getPointOnEdge( newPoint );
@@ -168,16 +168,16 @@ public class EdgePopupListener implements ActionListener {
 					newPoint.y = (int)Math.round( (double)newPoint.y / rasterSnap ) * (int)rasterSnap;
 				}
 				//PlanPoint newPoint = new PlanPoint( CoordinateTools.translateToModel( mousePosition ) );
-				projectControl.createDoor( (RoomEdge)myEdge, newPoint, d.getSize() );
+				projectControl.createDoor( (RoomEdgeA)myEdge, newPoint, d.getSize() );
 			} else if( e.getActionCommand().startsWith( "createExitDoor" ) ) {
-				if( !(myEdge instanceof RoomEdge ) )
+				if( !(myEdge instanceof RoomEdgeA ) )
 					throw new IllegalStateException( "Doors can only be created in rooms!" );
 				System.out.println( "Try to create a door" );
 				int index = Integer.parseInt( e.getActionCommand().substring( 14 ) );
 				System.out.println( "Load index " + index );
 
 				ExitDoor d = guiControl.getExitDoorTemplates().getDoor( index );
-				Room myRoom = ((RoomEdge)myEdge).getRoom();
+				Room myRoom = ((RoomEdgeA)myEdge).getRoom();
 
 				PlanPoint newPoint = new PlanPoint( CoordinateTools.translateToModel( mousePosition ) );
 				newPoint = myEdge.getPointOnEdge( newPoint );
@@ -186,7 +186,7 @@ public class EdgePopupListener implements ActionListener {
 					newPoint.x = (int)Math.round( (double)newPoint.x / rasterSnap ) * (int)rasterSnap;
 					newPoint.y = (int)Math.round( (double)newPoint.y / rasterSnap ) * (int)rasterSnap;
 				}
-				projectControl.createExitDoor( (RoomEdge)myEdge, newPoint, d.getSize() );
+				projectControl.createExitDoor( (RoomEdgeA)myEdge, newPoint, d.getSize() );
 			}
 		} catch( RuntimeException ex ) {
 			EventServer.getInstance().dispatchEvent( new MessageEvent( this, MessageEvent.MessageType.Error, ex.getLocalizedMessage() ) );

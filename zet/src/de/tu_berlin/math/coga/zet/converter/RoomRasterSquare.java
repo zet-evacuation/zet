@@ -19,11 +19,11 @@
  */
 package de.tu_berlin.math.coga.zet.converter;
 
-import ds.z.DelayArea;
-import ds.z.EvacuationArea;
-import ds.z.InaccessibleArea;
-import ds.z.Room;
-import ds.z.SaveArea;
+import de.tu_berlin.coga.zet.model.DelayArea;
+import de.tu_berlin.coga.zet.model.EvacuationArea;
+import de.tu_berlin.coga.zet.model.InaccessibleArea;
+import de.tu_berlin.coga.zet.model.Room;
+import de.tu_berlin.coga.zet.model.SaveArea;
 import java.util.Collections;
 import java.util.EnumMap;
 import java.util.EnumSet;
@@ -31,7 +31,7 @@ import java.util.Locale;
 import java.util.Set;
 import de.tu_berlin.coga.common.util.Direction8;
 import de.tu_berlin.coga.common.util.Level;
-import ds.z.TeleportArea;
+import de.tu_berlin.coga.zet.model.TeleportArea;
 
 /**
  * The {@code RoomRasterSquare} is a special type of {@link RasterSquare} containing

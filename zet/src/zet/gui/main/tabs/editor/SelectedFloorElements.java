@@ -5,7 +5,7 @@
 package zet.gui.main.tabs.editor;
 
 import de.tu_berlin.coga.common.util.SelectedElements;
-import ds.z.Edge;
+import de.tu_berlin.coga.zet.model.Edge;
 import zet.gui.main.tabs.base.JPolygon;
 
 

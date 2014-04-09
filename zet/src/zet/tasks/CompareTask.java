@@ -13,9 +13,9 @@ import de.tu_berlin.math.coga.zet.converter.graph.BaseZToGraphConverter;
 import de.tu_berlin.math.coga.zet.converter.graph.GraphAssignmentConverter;
 import ds.CompareVisualizationResults;
 import ds.graph.network.AbstractNetwork;
-import ds.z.BuildingPlan;
-import ds.z.ConcreteAssignment;
-import ds.z.Project;
+import de.tu_berlin.coga.zet.model.BuildingPlan;
+import de.tu_berlin.coga.zet.model.ConcreteAssignment;
+import de.tu_berlin.coga.zet.model.Project;
 
 /**
  *

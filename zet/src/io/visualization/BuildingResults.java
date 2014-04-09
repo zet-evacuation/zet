@@ -15,7 +15,7 @@
  */
 package io.visualization;
 
-import ds.z.AbstractFloor;
+import de.tu_berlin.coga.zet.model.AbstractFloor;
 import opengl.framework.abs.VisualizationResult;
 import java.awt.geom.Point2D;
 import java.util.Collection;
@@ -24,8 +24,8 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
-import ds.z.PlanPoint;
-import ds.z.RelativePosition;
+import de.tu_berlin.coga.zet.model.PlanPoint;
+import de.tu_berlin.coga.zet.model.RelativePosition;
 import java.util.Vector;
 
 /**
@@ -137,24 +137,24 @@ public class BuildingResults implements VisualizationResult {
 	private LinkedList<Wall> walls;
 	private HashMap<Integer, Floor> floors;
 
-	public BuildingResults( ds.z.BuildingPlan buildingPlan ) {
+	public BuildingResults( de.tu_berlin.coga.zet.model.BuildingPlan buildingPlan ) {
 		walls = new LinkedList<>();
 		floors = new HashMap<>();
 
-		for( ds.z.Floor zFloor : buildingPlan.getFloors() ) {
+		for( de.tu_berlin.coga.zet.model.Floor zFloor : buildingPlan.getFloors() ) {
 			Floor buildingFloor = new Floor( buildingPlan.getFloorID( zFloor ), zFloor.getName() );
 
 			if( zFloor.getRooms().size() >= 0 ) { // TODO: remove as not necessary
 				if( floors.put( buildingFloor.id(), buildingFloor ) != null )
 					throw new RuntimeException( "Error while building the visualisation data out of the building plan: " + "There were two z-floors with the same id. " );
 
-				for( ds.z.Room room : zFloor.getRooms() ) {
+				for( de.tu_berlin.coga.zet.model.Room room : zFloor.getRooms() ) {
 					addHeterogeneousEdgeList( room.edgeIterator( false ), room, buildingFloor );
-					for( ds.z.Barrier barrier : room.getBarriers() ) {
+					for( de.tu_berlin.coga.zet.model.Barrier barrier : room.getBarriers() ) {
 						Wall w = addHomogeneousEdgeList( barrier.edgeIterator( false ), barrier, buildingFloor, Wall.ElementType.INACCESSIBLE );
 						w.setBarrier( true );
 					}
-					for( ds.z.InaccessibleArea area : room.getInaccessibleAreas() )
+					for( de.tu_berlin.coga.zet.model.InaccessibleArea area : room.getInaccessibleAreas() )
 						addHomogeneousEdgeList( area.edgeIterator( false ), area, buildingFloor, Wall.ElementType.INACCESSIBLE );
 				}
 			}
@@ -173,11 +173,11 @@ public class BuildingResults implements VisualizationResult {
 		return Collections.unmodifiableCollection( floors.values() );
 	}
 
-	protected void addHeterogeneousEdgeList( Iterator<? extends ds.z.RoomEdge> edgeIt, ds.z.PlanPolygon<?> room, Floor floor ) {
+	protected void addHeterogeneousEdgeList( Iterator<? extends de.tu_berlin.coga.zet.model.RoomEdgeA> edgeIt, de.tu_berlin.coga.zet.model.PlanPolygon<?> room, Floor floor ) {
 		Wall curWall = new Wall( floor );
 
 		if( edgeIt.hasNext() ) {
-			ds.z.RoomEdge firstEdge = edgeIt.next();
+			de.tu_berlin.coga.zet.model.RoomEdgeA firstEdge = edgeIt.next();
 			checkOrientation( firstEdge, room, curWall );
 			if( firstEdge.isPassable() ) {
 				curWall.addPoint( firstEdge.getSource(), Wall.ElementType.PASSABLE );
@@ -189,7 +189,7 @@ public class BuildingResults implements VisualizationResult {
 		}
 
 		while( edgeIt.hasNext() ) {
-			ds.z.RoomEdge curEdge = edgeIt.next();
+			de.tu_berlin.coga.zet.model.RoomEdgeA curEdge = edgeIt.next();
 			checkOrientation( curEdge, room, curWall );
 			if( curEdge.isPassable() )
 				curWall.addPoint( curEdge.getTarget(), Wall.ElementType.PASSABLE );
@@ -199,18 +199,18 @@ public class BuildingResults implements VisualizationResult {
 		addWall( curWall );
 	}
 
-	protected Wall addHomogeneousEdgeList( Iterator<? extends ds.z.Edge> edgeIt, ds.z.PlanPolygon<?> room, Floor floor, Wall.ElementType type ) {
+	protected Wall addHomogeneousEdgeList( Iterator<? extends de.tu_berlin.coga.zet.model.Edge> edgeIt, de.tu_berlin.coga.zet.model.PlanPolygon<?> room, Floor floor, Wall.ElementType type ) {
 		Wall curWall = new Wall( floor );
 
 		if( edgeIt.hasNext() ) {
-			ds.z.Edge firstEdge = edgeIt.next();
+			de.tu_berlin.coga.zet.model.Edge firstEdge = edgeIt.next();
 			checkOrientation( firstEdge, room, curWall );
 			curWall.addPoint( firstEdge.getSource(), type );
 			curWall.addPoint( firstEdge.getTarget(), type );
 		}
 
 		while( edgeIt.hasNext() ) {
-			ds.z.Edge curEdge = edgeIt.next();
+			de.tu_berlin.coga.zet.model.Edge curEdge = edgeIt.next();
 			checkOrientation( curEdge, room, curWall );
 			curWall.addPoint( curEdge.getTarget(), type );
 		}
@@ -225,7 +225,7 @@ public class BuildingResults implements VisualizationResult {
 	 * @param room the room
 	 * @param curWall the wall
 	 */
-	private void checkOrientation( ds.z.Edge edge, ds.z.PlanPolygon<?> room, Wall curWall ) {
+	private void checkOrientation( de.tu_berlin.coga.zet.model.Edge edge, de.tu_berlin.coga.zet.model.PlanPolygon<?> room, Wall curWall ) {
 		boolean isLeft = room.relativePolygonPosition( edge, RelativePosition.Left );
 		boolean isRight = room.relativePolygonPosition( edge, RelativePosition.Right );
 		if( isLeft != isRight ) {

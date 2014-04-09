@@ -6,7 +6,7 @@ package zet.gui.main.tabs.editor;
 
 import de.tu_berlin.math.coga.zet.ZETLocalization;
 import de.tu_berlin.coga.common.localization.Localized;
-import ds.z.ZControl;
+import de.tu_berlin.coga.zet.model.ZControl;
 import gui.GUIControl;
 import info.clearthought.layout.TableLayout;
 import java.awt.ComponentOrientation;

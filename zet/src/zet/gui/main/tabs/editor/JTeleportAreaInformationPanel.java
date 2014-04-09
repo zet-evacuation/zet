@@ -5,10 +5,10 @@
 package zet.gui.main.tabs.editor;
 
 
-import ds.z.EvacuationArea;
-import ds.z.Floor;
-import ds.z.Room;
-import ds.z.TeleportArea;
+import de.tu_berlin.coga.zet.model.EvacuationArea;
+import de.tu_berlin.coga.zet.model.Floor;
+import de.tu_berlin.coga.zet.model.Room;
+import de.tu_berlin.coga.zet.model.TeleportArea;
 import info.clearthought.layout.TableLayout;
 import java.awt.Component;
 import java.awt.event.FocusEvent;

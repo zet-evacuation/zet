@@ -4,9 +4,9 @@
  */
 package zet.gui.main.tabs.editor;
 
-import ds.z.Edge;
-import ds.z.Floor;
-import ds.z.ZControl;
+import de.tu_berlin.coga.zet.model.Edge;
+import de.tu_berlin.coga.zet.model.Floor;
+import de.tu_berlin.coga.zet.model.ZControl;
 import gui.editor.CoordinateTools;
 import java.awt.Point;
 import java.util.List;

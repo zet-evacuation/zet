@@ -29,15 +29,15 @@ import zet.tasks.CellularAutomatonAlgorithms;
 import zet.tasks.GraphAlgorithmEnumeration;
 import de.tu_berlin.math.coga.zet.converter.cellularAutomaton.ZToCAConverter.ConversionNotSupportedException;
 import de.tu_berlin.coga.common.algorithm.Algorithm;
-import ds.z.Project;
+import de.tu_berlin.coga.zet.model.Project;
 import ds.PropertyContainer;
 import ds.ca.evac.EvacuationCellularAutomaton;
 import ds.ca.results.VisualResultsRecorder;
 import de.tu_berlin.math.coga.zet.converter.graph.NetworkFlowModel;
 import ds.graph.flow.PathBasedFlowOverTime;
-import ds.z.Assignment;
-import ds.z.AssignmentType;
-import ds.z.ConcreteAssignment;
+import de.tu_berlin.coga.zet.model.Assignment;
+import de.tu_berlin.coga.zet.model.AssignmentType;
+import de.tu_berlin.coga.zet.model.ConcreteAssignment;
 import evacuationplan.FlowBasedCAFactory;
 
 /**

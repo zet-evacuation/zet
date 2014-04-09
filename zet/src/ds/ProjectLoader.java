@@ -1,6 +1,5 @@
 /**
- * ProjectLoader.java
- * Created: 24.01.2011, 13:04:00
+ * ProjectLoader.java Created: 24.01.2011, 13:04:00
  */
 package ds;
 
@@ -10,10 +9,11 @@ import com.thoughtworks.xstream.converters.Converter;
 import com.thoughtworks.xstream.converters.reflection.ReflectionProvider;
 import com.thoughtworks.xstream.mapper.Mapper;
 import com.thoughtworks.xstream.mapper.MapperWrapper;
+import de.tu_berlin.coga.zet.model.Edge;
 import de.tu_berlin.math.coga.rndutils.distribution.continuous.NormalDistribution;
 import de.tu_berlin.math.coga.rndutils.distribution.continuous.UniformDistribution;
-import ds.z.Project;
-import ds.z.ZLocalization;
+import de.tu_berlin.coga.zet.model.Project;
+import de.tu_berlin.coga.zet.model.ZLocalization;
 import io.z.NormalDistributionConverter;
 import io.z.UniformDistributionConverter;
 import io.z.XMLConverter;
@@ -36,34 +36,28 @@ import java.util.zip.GZIPInputStream;
 import java.util.zip.GZIPOutputStream;
 import java.util.zip.ZipEntry;
 
-
 /**
  * Loads and saves zet projects. A singleton class.
  * @author Jan-Philipp Kappmeier
  */
 public class ProjectLoader {
-	//private static ProjectLoader instance = new ProjectLoader();
+	private static XStream xmlConvert;
 
-	private static XStream xml_convert;
-
-	public static XStream getXStream() {
-		return xml_convert;
-	}
-
-
-static {
-	final Set<String> ignore = new HashSet<String>() {{
-			add( "xOffsetAll" );
-			add( "yOffsetAll" );
-			add( "heightAll" );
-			add( "widthAll" );
-			//add( "maxY_DefiningEdge" ); // cannot be ignored due to backwards compatibility
-			//add( "minX_DefiningEdge" );
-			//add( "maxX_DefiningEdge" );
-			//add( "minY_DefiningEdge" );
-		}};
-		xml_convert = new XStream() {
-		@Override
+	static {
+		final Set<String> ignore = new HashSet<String>() {
+			{
+				add( "xOffsetAll" );
+				add( "yOffsetAll" );
+				add( "heightAll" );
+				add( "widthAll" );
+				//add( "maxY_DefiningEdge" ); // cannot be ignored due to backwards compatibility
+				//add( "minX_DefiningEdge" );
+				//add( "maxX_DefiningEdge" );
+				//add( "minY_DefiningEdge" );
+			}
+		};
+		xmlConvert = new XStream() {
+			@Override
 			protected MapperWrapper wrapMapper( MapperWrapper next ) {
 				return new MapperWrapper( next ) {
 					@Override
@@ -79,22 +73,25 @@ static {
 				};
 			}
 		};
-		xml_convert.setMode( XStream.ID_REFERENCES );
+		xmlConvert.setMode( XStream.ID_REFERENCES );
+
+		xmlConvert.alias( "ds.z.Edge", Edge.class );
+		xmlConvert.alias( "another", Edge.class );
+		xmlConvert.alias( "lineSegment", Edge.class );
 
 		//Configure aliases for external classes (Java API)
-		xml_convert.useAttributeFor( java.awt.Point.class, "x" );
-		xml_convert.useAttributeFor( java.awt.Point.class, "y" );
+		xmlConvert.useAttributeFor( java.awt.Point.class, "x" );
+		xmlConvert.useAttributeFor( java.awt.Point.class, "y" );
 
-		xml_convert.alias( "uniformDistribution", UniformDistribution.class );
-		xml_convert.registerConverter( new UniformDistributionConverter() );
+		xmlConvert.alias( "uniformDistribution", UniformDistribution.class );
+		xmlConvert.registerConverter( new UniformDistributionConverter() );
 
-		xml_convert.alias( "normalDistribution", NormalDistribution.class );
-		xml_convert.registerConverter( new NormalDistributionConverter() );
+		xmlConvert.alias( "normalDistribution", NormalDistribution.class );
+		xmlConvert.registerConverter( new NormalDistributionConverter() );
 
 		//Configure aliases for all ds.* classes
 		//For this purpose the current location of the bytecode is searched for
 		//all class names. These are loaded and their annotaions are examined.
-
 		// Load "ds" because the JARClassLoader won't load "" (the FileClassLoader does)
 		URL pack = Project.class.getClassLoader().getResource( "ds" );
 		String url = pack.toExternalForm();
@@ -102,7 +99,7 @@ static {
 		url = url.substring( 0, url.lastIndexOf( '/' ) + 1 );
 
 		// Scan JARs iteratively
-		if( url.startsWith( "jar:" ) )
+		if( url.startsWith( "jar:" ) ) {
 			try {
 				String jar_filename = url.substring( url.indexOf( ':' ) + 1, url.lastIndexOf( '!' ) );
 				JarFile jar = new JarFile( new File( new URI( jar_filename ) ) );
@@ -110,21 +107,22 @@ static {
 				Enumeration enu = jar.entries();
 				while( enu.hasMoreElements() ) {
 					String entry = ((ZipEntry)enu.nextElement()).getName();
-					if( entry.endsWith( ".class" ) )
+					if( entry.endsWith( ".class" ) ) {
 						try {
 							String classname = entry.replace( '/', '.' ).substring(
 											0, entry.lastIndexOf( '.' ) );
 							Class fromFile = Project.class.getClassLoader().loadClass( classname );
 							processClassObject( fromFile );
 						} catch( Exception ex ) {
-							System.out.println( " Problem while scanning classes: Class file" + entry +
-											"\n" + ex.getLocalizedMessage() );
+							System.out.println( " Problem while scanning classes: Class file" + entry
+											+ "\n" + ex.getLocalizedMessage() );
 						}
+					}
 				}
 			} catch( URISyntaxException | IOException ex ) {
 				throw new RuntimeException( ZLocalization.getSingleton().getString( "ds.InitProjectException" + ex.getLocalizedMessage() ) );
 			}
-		else if( url.startsWith( "file:" ) )
+		} else if( url.startsWith( "file:" ) ) {
 			try {
 				File dir = new File( new URI( url ) );
 				assert (dir.isDirectory());
@@ -132,25 +130,28 @@ static {
 			} catch( URISyntaxException ex ) {
 				throw new RuntimeException( ZLocalization.getSingleton().getString( "ds.InitProjectException" ) );
 			}
-		else
+		} else {
 			throw new IllegalStateException( ZLocalization.getSingleton().getString( "ds.DeterminingJarException" ) );
+		}
 	}
 
 	/** Crawls the given directory for class files and processes them. */
 	private static void scanPackage( File dir, String pack ) {
-		for( File f : dir.listFiles() )
-			if( f.isDirectory() )
+		for( File f : dir.listFiles() ) {
+			if( f.isDirectory() ) {
 				scanPackage( f, pack + f.getName() + "." );
-			else if( f.getName().endsWith( ".class" ) )
+			} else if( f.getName().endsWith( ".class" ) ) {
 				try {
 					String classname = f.getName().substring( 0, f.getName().lastIndexOf( '.' ) );
-					Class<?> fromFile = Project.class.getClassLoader().loadClass( pack + classname );					
+					Class<?> fromFile = Project.class.getClassLoader().loadClass( pack + classname );
 					processClassObject( fromFile );
 				} catch( NoClassDefFoundError ex ) {
 					System.err.println( "Class belonging to file '" + f.getAbsolutePath() + "' does not exist. Please check your dist directory." );
 				} catch( Exception ex ) {
 					System.out.println( "Problem while scanning classes: Class file" + f.getName() + "\n" + ex.getLocalizedMessage() );
 				}
+			}
+		}
 	}
 
 	/** Used to initialize the XStream related stuff concerning the given type. */
@@ -158,23 +159,19 @@ static {
 		// Inhibit alias processing on the converter classes themselves
 		// as this will lead to unwanted behaviour in XStream
 		if( !com.thoughtworks.xstream.converters.Converter.class.isAssignableFrom( type ) ) {
-			Annotations.configureAliases( xml_convert, type );
+			Annotations.configureAliases( xmlConvert, type );
 
-			if( type.isAnnotationPresent( XMLConverter.class ) )
-				xml_convert.registerConverter( (Converter)((XMLConverter)type.getAnnotation(
+			if( type.isAnnotationPresent( XMLConverter.class ) ) {
+				xmlConvert.registerConverter( (Converter)((XMLConverter)type.getAnnotation(
 								XMLConverter.class )).value().getConstructor(
-								Mapper.class, ReflectionProvider.class ).newInstance(
-								xml_convert.getMapper(), xml_convert.getReflectionProvider() ) );
+												Mapper.class, ReflectionProvider.class ).newInstance(
+												xmlConvert.getMapper(), xmlConvert.getReflectionProvider() ) );
+			}
 		}
 	}
 
-	private ProjectLoader() {
-
-	}
-
-//	public static ProjectLoader getInstance() {
-//		return instance;
-//	}
+	/** Private constructor for utility class. */
+	private ProjectLoader() { }
 
 	/**
 	 * Saves a project to its project file.
@@ -186,20 +183,21 @@ static {
 	}
 
 	/**
-	 * @param p 
+	 * @param p
 	 * @param file The location where the Project shall be stored.
 	 * @exception IOException - Is thrown when the I/O-Operation fails.
 	 */
 	public static void save( Project p, File file ) throws IOException {
 		OutputStream output = new BufferedOutputStream( new FileOutputStream( file ) );
 
-		if( file.getAbsolutePath().endsWith( ".gzet" ) )
+		if( file.getAbsolutePath().endsWith( ".gzet" ) ) {
 			output = new GZIPOutputStream( output );
+		}
 		// Set project file before saving, to get it into the saved file
 		p.setProjectFile( file );
 
 		try {
-			xml_convert.toXML( p, output );
+			xmlConvert.toXML( p, output );
 		} catch( Exception e ) {
 			e.printStackTrace( System.err );
 		}
@@ -215,14 +213,14 @@ static {
 	public static Project load( File projectFile ) throws IOException {
 		//FileReader
 		InputStream input;
-		if( projectFile.getAbsolutePath().endsWith( ".gzet" ) )
+		if( projectFile.getAbsolutePath().endsWith( ".gzet" ) ) {
 			input = new GZIPInputStream( new BufferedInputStream( new FileInputStream( projectFile ) ) );
-		else
+		} else {
 			input = new BufferedInputStream( new FileInputStream( projectFile ) );
-		Project p = (Project) xml_convert.fromXML( input );
+		}
+		Project p = (Project)xmlConvert.fromXML( input );
 		input.close();
 		return p;
 	}
-
 
 }
