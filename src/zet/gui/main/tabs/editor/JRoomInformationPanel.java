@@ -4,7 +4,7 @@
  */
 package zet.gui.main.tabs.editor;
 
-import ds.z.Room;
+import de.tu_berlin.coga.zet.model.Room;
 import gui.ZETProperties;
 import info.clearthought.layout.TableLayout;
 import java.awt.event.ActionEvent;

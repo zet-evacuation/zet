@@ -28,10 +28,10 @@ import de.tu_berlin.math.coga.zet.converter.cellularAutomaton.ZToCAConverter.Con
 import ds.PropertyContainer;
 import ds.ca.evac.EvacuationCellularAutomaton;
 import ds.ca.results.VisualResultsRecorder;
-import ds.z.Assignment;
-import ds.z.AssignmentType;
-import ds.z.ConcreteAssignment;
-import ds.z.Project;
+import de.tu_berlin.coga.zet.model.Assignment;
+import de.tu_berlin.coga.zet.model.AssignmentType;
+import de.tu_berlin.coga.zet.model.ConcreteAssignment;
+import de.tu_berlin.coga.zet.model.Project;
 import exitdistributions.ExitDistributionBasedCAFactory;
 import io.visualization.CAVisualizationResults;
 import java.util.TreeMap;

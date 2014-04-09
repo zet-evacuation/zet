@@ -28,7 +28,7 @@ import ds.graph.Node;
 import ds.graph.NodeRectangle;
 import de.tu_berlin.coga.container.mapping.IdentifiableIntegerMapping;
 import de.tu_berlin.coga.container.mapping.IdentifiableObjectMapping;
-import ds.z.Room;
+import de.tu_berlin.coga.zet.model.Room;
 import gui.visualization.VisualizationOptionManager;
 import java.awt.Shape;
 import java.util.HashMap;

@@ -13,6 +13,7 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
+
 package io.z;
 
 import com.thoughtworks.xstream.converters.MarshallingContext;
@@ -22,51 +23,40 @@ import com.thoughtworks.xstream.converters.reflection.ReflectionProvider;
 import com.thoughtworks.xstream.io.HierarchicalStreamReader;
 import com.thoughtworks.xstream.io.HierarchicalStreamWriter;
 import com.thoughtworks.xstream.mapper.Mapper;
+import de.tu_berlin.coga.zet.model.Floor;
 
-import ds.z.Floor;
 
-
-/** A converter that behaves just like a normal converter would do, he only adds
- * the functionality of recreating the changeListeners.
- *
+/**
+ * Converts a flow back from XML format to the {@link Floor} instance. Restores
+ * the omitted information that can be recomputed.
+ * @author Jan-Philipp Kappmeier
  * @author Timon Kelter
  */
 public class FloorConverter extends ReflectionConverter {
-	private Class myClass = Floor.class;
+	private final static Class<?> myClass = Floor.class;
 
 	public FloorConverter( Mapper mapper, ReflectionProvider reflectionProvider ) {
 		super( mapper, reflectionProvider );
 	}
 
 	@Override
+	@SuppressWarnings( "unchecked" )
 	public boolean canConvert( Class type ) {
 		return myClass.isAssignableFrom( type );
 	}
 
 	@Override
 	public void marshal( Object original, HierarchicalStreamWriter writer, MarshallingContext context ) {
-		//System.out.println( "Floor: " + ((Floor)original).getName() );
 		super.marshal( original, writer, context );
-
 	}
 
 	@Override
 	public Object unmarshal( final HierarchicalStreamReader reader, final UnmarshallingContext context ) {
 		Object created = instantiateNewInstance( reader, context );
-
 		created = doUnmarshal( created, reader, context );
-		//System.out.println( "Floor: " + ((Floor)created).getName() );
-
 		Floor result = (Floor)serializationMethodInvoker.callReadResolve( created );
-
-
-		// Recreate transient flag
-//		reflectionProvider.writeField( result, "enableEventGeneration", new Boolean( true ), myClass );
-
-		// Legacy support for old example files
-		if( !result.boundStructureAvailable() )
-			result.recomputeBounds( false );
-
+		// Recompute the min/max defining coordinates, which are not stored in the file
+		result.recomputeBounds( true );
 		return result;
 	}
 }

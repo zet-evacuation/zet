@@ -7,7 +7,7 @@ package de.tu_berlin.math.coga.zet.converter.graph;
 import Jama.EigenvalueDecomposition;
 import Jama.Matrix;
 import de.tu_berlin.math.coga.math.vectormath.Vector2;
-import ds.z.PlanPoint;
+import de.tu_berlin.coga.zet.model.PlanPoint;
 import java.util.LinkedList;
 import java.util.List;
 

@@ -21,9 +21,9 @@
 
 package zet.gui.main.tabs;
 
-import ds.z.Floor;
+import de.tu_berlin.coga.zet.model.Floor;
 import ds.PropertyContainer;
-import ds.z.ZControl;
+import de.tu_berlin.coga.zet.model.ZControl;
 import gui.GUIControl;
 import gui.visualization.control.ZETGLControl;
 import java.awt.event.ActionEvent;

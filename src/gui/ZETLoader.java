@@ -4,7 +4,6 @@
  */
 package gui;
 
-
 import batch.load.BatchProject;
 import batch.load.BatchProjectEntry;
 import com.martiansoftware.jsap.FlaggedOption;
@@ -36,7 +35,6 @@ import javax.swing.UIManager;
 import javax.xml.parsers.ParserConfigurationException;
 import org.xml.sax.SAXException;
 import zet.gui.GUILocalization;
-import zet.gui.main.JZetWindow;
 
 /**
  *
@@ -70,7 +68,8 @@ public class ZETLoader {
 	/**
 	 * Creates a new instance of {@code ZETMain}
 	 */
-	private ZETLoader() {	}
+	private ZETLoader() {
+	}
 
 	static void load( String[] args ) {
 		loc.addSupportedLocale( Locale.GERMAN );
@@ -78,171 +77,177 @@ public class ZETLoader {
 		Menu.setLoc( loc );
 		try {
 
-		JSAP jsap = new JSAP();
-		loc.setPrefix( "help." );
+			JSAP jsap = new JSAP();
+			loc.setPrefix( "help." );
 
-		UnflaggedOption optProjectFile = new UnflaggedOption( "project" )
-						.setStringParser( JSAP.STRING_PARSER )
-						.setRequired( false );
-		optProjectFile.setHelp( loc.getString("projectFile") );
-		jsap.registerParameter( optProjectFile );
+			UnflaggedOption optProjectFile = new UnflaggedOption( "project" )
+							.setStringParser( JSAP.STRING_PARSER )
+							.setRequired( false );
+			optProjectFile.setHelp( loc.getString( "projectFile" ) );
+			jsap.registerParameter( optProjectFile );
 
-		FlaggedOption optProperty = new FlaggedOption( "property" ).setStringParser( JSAP.STRING_PARSER )
-						.setRequired( false )
-						.setShortFlag( 'p' )
-						.setLongFlag( "property" );
-		optProperty.setHelp( loc.getString( "propertyFile" ) );
-		jsap.registerParameter( optProperty );
+			FlaggedOption optProperty = new FlaggedOption( "property" ).setStringParser( JSAP.STRING_PARSER )
+							.setRequired( false )
+							.setShortFlag( 'p' )
+							.setLongFlag( "property" );
+			optProperty.setHelp( loc.getString( "propertyFile" ) );
+			jsap.registerParameter( optProperty );
 
-		FlaggedOption optBatchFile = new FlaggedOption( "batch" ).setStringParser( JSAP.STRING_PARSER )
-						.setRequired( false )
-						.setShortFlag( 'b' )
-						.setLongFlag( "batch" );
-		optBatchFile.setHelp( loc.getString( "batchFile" ) );
-		jsap.registerParameter( optBatchFile );
+			FlaggedOption optBatchFile = new FlaggedOption( "batch" ).setStringParser( JSAP.STRING_PARSER )
+							.setRequired( false )
+							.setShortFlag( 'b' )
+							.setLongFlag( "batch" );
+			optBatchFile.setHelp( loc.getString( "batchFile" ) );
+			jsap.registerParameter( optBatchFile );
 
-		Switch optLoadLast = new Switch( "loadlast" ).setLongFlag( "loadlast" );
-		optLoadLast.setHelp( loc.getString( "loadLast" ) );// TODO add text for load last
-		jsap.registerParameter( optLoadLast );
+			Switch optLoadLast = new Switch( "loadlast" ).setLongFlag( "loadlast" );
+			optLoadLast.setHelp( loc.getString( "loadLast" ) );// TODO add text for load last
+			jsap.registerParameter( optLoadLast );
 
-		FlaggedOption optLogFile = new FlaggedOption( "log" ).setStringParser( JSAP.STRING_PARSER )
-						.setRequired( false )
-						.setShortFlag( 'l' )
-						.setLongFlag( "log" );
-		optLogFile.setHelp( loc.getString( "logFile" ) );
-		jsap.registerParameter( optLogFile );
+			FlaggedOption optLogFile = new FlaggedOption( "log" ).setStringParser( JSAP.STRING_PARSER )
+							.setRequired( false )
+							.setShortFlag( 'l' )
+							.setLongFlag( "log" );
+			optLogFile.setHelp( loc.getString( "logFile" ) );
+			jsap.registerParameter( optLogFile );
 
-		FlaggedOption optErrFile = new FlaggedOption( "err" ).setStringParser( JSAP.STRING_PARSER )
-						.setRequired( false )
-						.setShortFlag( 'e' )
-						.setLongFlag( "error" );
-		optErrFile.setHelp( loc.getString( "errFile" ) );
-		jsap.registerParameter( optErrFile );
+			FlaggedOption optErrFile = new FlaggedOption( "err" ).setStringParser( JSAP.STRING_PARSER )
+							.setRequired( false )
+							.setShortFlag( 'e' )
+							.setLongFlag( "error" );
+			optErrFile.setHelp( loc.getString( "errFile" ) );
+			jsap.registerParameter( optErrFile );
 
-		Switch optAutoLog = new Switch( "autolog" ).setLongFlag( "autolog" );
-		optAutoLog.setHelp( loc.getString( "autoLog" ) );
-		jsap.registerParameter( optAutoLog );
+			Switch optAutoLog = new Switch( "autolog" ).setLongFlag( "autolog" );
+			optAutoLog.setHelp( loc.getString( "autoLog" ) );
+			jsap.registerParameter( optAutoLog );
 
-		Switch optVerbose = new Switch( "verbose" ).setLongFlag( "verbose" ).setShortFlag( 'v' );
-		optVerbose.setHelp( loc.getString( "verbose" ) );
-		jsap.registerParameter( optVerbose );
+			Switch optVerbose = new Switch( "verbose" ).setLongFlag( "verbose" ).setShortFlag( 'v' );
+			optVerbose.setHelp( loc.getString( "verbose" ) );
+			jsap.registerParameter( optVerbose );
 
-		Switch optDebug = new Switch( "debug" ).setLongFlag( "debug" ).setShortFlag( 'd' );
-		optDebug.setHelp( loc.getString( "debug" ) );
-		jsap.registerParameter( optDebug );
+			Switch optDebug = new Switch( "debug" ).setLongFlag( "debug" ).setShortFlag( 'd' );
+			optDebug.setHelp( loc.getString( "debug" ) );
+			jsap.registerParameter( optDebug );
 
-		Switch optNoVisualization = new Switch( "noVis" ).setLongFlag( "noVisualization" );
-		optNoVisualization.setHelp( loc.getString( "noVisualization" ) );
-		jsap.registerParameter( optNoVisualization );
+			Switch optNoVisualization = new Switch( "noVis" ).setLongFlag( "noVisualization" );
+			optNoVisualization.setHelp( loc.getString( "noVisualization" ) );
+			jsap.registerParameter( optNoVisualization );
 
-		Switch optNoStatistic = new Switch( "noStat" ).setLongFlag( "noStatistic" );
-		optNoStatistic.setHelp( loc.getString( "noStatistic" ) );
-		jsap.registerParameter( optNoStatistic );
+			Switch optNoStatistic = new Switch( "noStat" ).setLongFlag( "noStatistic" );
+			optNoStatistic.setHelp( loc.getString( "noStatistic" ) );
+			jsap.registerParameter( optNoStatistic );
 
-		Switch optHelp = new Switch( "help" ).setShortFlag( 'h' ).setLongFlag( "help" );
-		optHelp.setHelp( loc.getString( "help" ) );
-		jsap.registerParameter( optHelp );
+			Switch optHelp = new Switch( "help" ).setShortFlag( 'h' ).setLongFlag( "help" );
+			optHelp.setHelp( loc.getString( "help" ) );
+			jsap.registerParameter( optHelp );
 
-		JSAPResult config = jsap.parse( args );
-		if( !config.success() ) {
-			System.err.println();
-			for( java.util.Iterator errs = config.getErrorMessageIterator(); errs.hasNext();)
-				System.err.println( loc.getString( "error" ) + errs.next() );
+			JSAPResult config = jsap.parse( args );
+			if( !config.success() ) {
+				System.err.println();
+				for( java.util.Iterator errs = config.getErrorMessageIterator(); errs.hasNext(); ) {
+					System.err.println( loc.getString( "error" ) + errs.next() );
+				}
 
-			System.err.println();
-			System.err.println( loc.getString( "usage" ) + " java zet" + jsap.getUsage() );
-			System.err.println();
-			System.err.println( jsap.getHelp() );
-			System.err.println();
-			System.exit( 1 );
-		}
-
-		if( config.getBoolean( "help" ) ) {
-			System.out.println();
-			System.out.println( loc.getString( "usage" ) + " java zet" + jsap.getUsage() );
-			System.out.println();
-			System.out.println( jsap.getHelp() );
-			if( !config.contains( "project" ) ) {
-				System.exit( 0 );
-			}
-		}
-		loc.setPrefix( "" );
-
-		if( config.contains( "log" ) )
-			ZETMain.logFile = config.getString( "log" );
-		if( config.contains( "err" ) )
-			ZETMain.errFile = config.getString( "err" );
-		ZETMain.setUpLog( config.contains( "log" ), config.contains(  "err" ), config.getBoolean( "autolog" ), config.getBoolean( "verbose" ) );
-
-		if( config.getBoolean( "noVis" ) ) {
-			System.err.println( loc.getString( "log.disableVisualization" ) );
-			useVisualization = false;
-		}
-
-		if( config.getBoolean( "noStat" ) ) {
-			log.severe( loc.getString( "log.disableStatistic" ) );
-			useStatistic = false;
-		}
-
-		if( config.contains( "batch" ) )
-			loadBatchProject( config.getString( "batch" ) );
-
-		if( config.contains( "project" ) )
-			loadedProject = config.getString( "project" );
-
-		loadLast = config.contains( "loadlast" );
-
-		if( config.contains( "property" ) ) {
-			try {
-				ZETProperties.setCurrentProperty( Paths.get( config.getString( "property" ) ) );
-			} catch( PropertyLoadException ex ) {
-				log.log( Level.SEVERE, "Property file ''{0}'' cound not be loaded. Continuing with default.", config.getString( "property" ));
-			}
-		}
-
-		debug = config.getBoolean( "debug" );
-		if( debug ) {
-			//Debug.setDefaultLogLevel( Level.ALL );
-			Debug.setDefaultLogLevel( Level.FINER );
-			//log.log( Level.INFO, "{0}{1}", new Object[]{String.format( "%-25s", "Java-Version:" ), System.getProperty( "java.version" )});
-
-			log.log(  Level.INFO, "{0}{1}", new Object[]{String.format( "%-25s", "Runtime:" ), System.getProperty( "java.runtime.name" )});
-			log.log(  Level.INFO, "{0}{1}", new Object[]{String.format( "%-25s", "Java-Laufzeit-Version:" ), System.getProperty( "java.runtime.version" )});
-
-
-			log.log(  Level.INFO, "{0}{1}", new Object[]{String.format( "%-25s", "VM:" ), System.getProperty( "java.vm.name" )});
-			log.log(  Level.INFO, "{0}{1}", new Object[]{String.format( "%-25s", "VM-Version:" ), System.getProperty( "java.vm.version" )});
-			log.log(  Level.INFO, "{0}{1}", new Object[]{String.format( "%-25s", "Hersteller:" ), System.getProperty( "java.vm.vendor" )});
-
-			log.log(  Level.INFO, "{0}{1}", new Object[]{String.format( "%-25s", "Betriebssystem:" ), System.getProperty( "os.name" )});
-			log.log(  Level.INFO, "{0}{1}", new Object[]{String.format( "%-25s", "Architektur:" ), System.getProperty( "os.arch" )});
-
-			log.log( Level.INFO, "{0}{1}", new Object[]{String.format( "%-25s", "Encoding:" ), System.getProperty( "sun.jnu.encoding" )});
-
-			boolean first = true;
-			String[] paths = System.getProperty( "java.library.path" ).split( ":" );
-			for( String s : paths ) {
-				if( first ) {
-					log.log(  Level.INFO, "{0}{1}", new Object[]{String.format( "%-25s", "Library Path:" ), s});
-					first = false;
-				} else
-					log.log( Level.INFO, "                         {0}", s);
+				System.err.println();
+				System.err.println( loc.getString( "usage" ) + " java zet" + jsap.getUsage() );
+				System.err.println();
+				System.err.println( jsap.getHelp() );
+				System.err.println();
+				System.exit( 1 );
 			}
 
-			paths = System.getProperty( "java.class.path" ).split( ":" );
-			first = true;
-			for( String s : paths ) {
-				if( first ) {
-					log.log(  Level.INFO, "{0}{1}", new Object[]{String.format( "%-25s", "Class Path:" ), s});
-					first = false;
-				} else
-					log.log( Level.INFO, "                         {0}", s);
+			if( config.getBoolean( "help" ) ) {
+				System.out.println();
+				System.out.println( loc.getString( "usage" ) + " java zet" + jsap.getUsage() );
+				System.out.println();
+				System.out.println( jsap.getHelp() );
+				if( !config.contains( "project" ) ) {
+					System.exit( 0 );
+				}
 			}
-			log.log( Level.INFO, "{0}{1}", new Object[]{String.format( "%-25s", "Befehlszeile:" ), System.getProperty( "sun.java.command" )});
-		}
+			loc.setPrefix( "" );
 
-		createEditor();
-		} catch (JSAPException ex ) {
+			if( config.contains( "log" ) ) {
+				ZETMain.logFile = config.getString( "log" );
+			}
+			if( config.contains( "err" ) ) {
+				ZETMain.errFile = config.getString( "err" );
+			}
+			ZETMain.setUpLog( config.contains( "log" ), config.contains( "err" ), config.getBoolean( "autolog" ), config.getBoolean( "verbose" ) );
+
+			if( config.getBoolean( "noVis" ) ) {
+				System.err.println( loc.getString( "log.disableVisualization" ) );
+				useVisualization = false;
+			}
+
+			if( config.getBoolean( "noStat" ) ) {
+				log.severe( loc.getString( "log.disableStatistic" ) );
+				useStatistic = false;
+			}
+
+			if( config.contains( "batch" ) ) {
+				loadBatchProject( config.getString( "batch" ) );
+			}
+
+			if( config.contains( "project" ) ) {
+				loadedProject = config.getString( "project" );
+			}
+
+			loadLast = config.contains( "loadlast" );
+
+			if( config.contains( "property" ) ) {
+				try {
+					ZETProperties.setCurrentProperty( Paths.get( config.getString( "property" ) ) );
+				} catch( PropertyLoadException ex ) {
+					log.log( Level.SEVERE, "Property file ''{0}'' cound not be loaded. Continuing with default.", config.getString( "property" ) );
+				}
+			}
+
+			debug = config.getBoolean( "debug" );
+			if( debug ) {
+				//Debug.setDefaultLogLevel( Level.ALL );
+				Debug.setDefaultLogLevel( Level.FINER );
+				//log.log( Level.INFO, "{0}{1}", new Object[]{String.format( "%-25s", "Java-Version:" ), System.getProperty( "java.version" )});
+
+				log.log( Level.INFO, "{0}{1}", new Object[]{String.format( "%-25s", "Runtime:" ), System.getProperty( "java.runtime.name" )} );
+				log.log( Level.INFO, "{0}{1}", new Object[]{String.format( "%-25s", "Java-Laufzeit-Version:" ), System.getProperty( "java.runtime.version" )} );
+
+				log.log( Level.INFO, "{0}{1}", new Object[]{String.format( "%-25s", "VM:" ), System.getProperty( "java.vm.name" )} );
+				log.log( Level.INFO, "{0}{1}", new Object[]{String.format( "%-25s", "VM-Version:" ), System.getProperty( "java.vm.version" )} );
+				log.log( Level.INFO, "{0}{1}", new Object[]{String.format( "%-25s", "Hersteller:" ), System.getProperty( "java.vm.vendor" )} );
+
+				log.log( Level.INFO, "{0}{1}", new Object[]{String.format( "%-25s", "Betriebssystem:" ), System.getProperty( "os.name" )} );
+				log.log( Level.INFO, "{0}{1}", new Object[]{String.format( "%-25s", "Architektur:" ), System.getProperty( "os.arch" )} );
+
+				log.log( Level.INFO, "{0}{1}", new Object[]{String.format( "%-25s", "Encoding:" ), System.getProperty( "sun.jnu.encoding" )} );
+
+				boolean first = true;
+				String[] paths = System.getProperty( "java.library.path" ).split( ":" );
+				for( String s : paths ) {
+					if( first ) {
+						log.log( Level.INFO, "{0}{1}", new Object[]{String.format( "%-25s", "Library Path:" ), s} );
+						first = false;
+					} else {
+						log.log( Level.INFO, "                         {0}", s );
+					}
+				}
+
+				paths = System.getProperty( "java.class.path" ).split( ":" );
+				first = true;
+				for( String s : paths ) {
+					if( first ) {
+						log.log( Level.INFO, "{0}{1}", new Object[]{String.format( "%-25s", "Class Path:" ), s} );
+						first = false;
+					} else {
+						log.log( Level.INFO, "                         {0}", s );
+					}
+				}
+				log.log( Level.INFO, "{0}{1}", new Object[]{String.format( "%-25s", "Befehlszeile:" ), System.getProperty( "sun.java.command" )} );
+			}
+
+			createEditor();
+		} catch( JSAPException ex ) {
 
 		}
 	}
@@ -266,8 +271,9 @@ public class ZETLoader {
 				checkFile( optionFile, "Option file" );
 				// Load properties
 				try {
-					if( ZETProperties.getCurrentPropertyTreeModel() == null )
+					if( ZETProperties.getCurrentPropertyTreeModel() == null ) {
 						ZETProperties.setCurrentProperty( Paths.get( "./properties/properties.xml" ) );
+					}
 				} catch( PropertyLoadException ex ) {
 					exit( "Property file could not be loaded" );
 				}
@@ -288,10 +294,12 @@ public class ZETLoader {
 				informationFile = new File( informationFilename );
 				try {
 					PropertyContainer.getInstance().applyParameters( optionFile );
-				} catch( PropertyLoadException ex ) { }
+				} catch( PropertyLoadException ex ) {
+				}
 				try {
 					PropertyContainer.getInstance().applyParameters( informationFile );
-				} catch( PropertyLoadException ex ) { }
+				} catch( PropertyLoadException ex ) {
+				}
 				// Update the values in the ptms
 				ZETLoader.ptmInformation.getRoot().reloadFromPropertyContainer();
 				ZETLoader.ptmOptions.getRoot().reloadFromPropertyContainer();
@@ -324,18 +332,20 @@ public class ZETLoader {
 
 				if( !loadedProject.equals( "" ) ) {
 					File f = new File( loadedProject );
-					if( !loadLast )
+					if( !loadLast ) {
 						checkFile( f, "Project file" );
-					else {
-						if( !f.exists() )
+					} else {
+						if( !f.exists() ) {
 							f = null;
+						}
 					}
-					if( f != null) {
+					if( f != null ) {
 						guiControl.loadProject( f );
-						log.log( Level.INFO, "Projekt {0} geladen.", f.getAbsolutePath());
+						log.log( Level.INFO, "Projekt {0} geladen.", f.getAbsolutePath() );
 						GUIOptionManager.setLastFile( 1, f.getAbsolutePath() );
-					} else
+					} else {
 						guiControl.newProject( true ); // Project supposed to load does not exist. Create empty
+					}
 				} else {
 					//guiControl.newProject();
 					//zcontrol = new ZControl();
@@ -376,27 +386,26 @@ public class ZETLoader {
 	}
 
 	/**
-	 * Checks if a file exists and quits with an error message and return code
-	 * 1 if not.
+	 * Checks if a file exists and quits with an error message and return code 1
+	 * if not.
 	 * @param file the file that is to be checked
-	 * @param fileType the file type that is checked. The error output will start with fileType
+	 * @param fileType the file type that is checked. The error output will start
+	 * with fileType
 	 */
-	public static void checkFile( File file, String fileType ) {
-		if( fileType.equals( "" ) )
-			fileType = "File '";
-		else
-			fileType += " '";
+	public static void checkFile( final File file, final String fileType ) {
+		final String f = fileType.isEmpty() ? "File '" : fileType + " '";
 		try {
-			if( !file.exists() )
-				exit( fileType + file.getCanonicalPath() + "' does not exist." );
+			if( !file.exists() ) {
+				exit( f + file.getCanonicalPath() + "' does not exist." );
+			}
 		} catch( IOException e ) {
 			exit( "Error loading file." );
 		}
 	}
 
 	/**
-	 * Checks if a file exists and quits with an error message and return code
-	 * 1 if not.
+	 * Checks if a file exists and quits with an error message and return code 1
+	 * if not.
 	 * @param file the file that is to be checked
 	 */
 	public static void checkFile( File file ) {
@@ -409,7 +418,7 @@ public class ZETLoader {
 	 */
 	public static void sendError( String msg ) {
 		System.err.println( msg );
-		EventServer.getInstance().dispatchEvent( new MessageEvent<JZetWindow>( null, MessageType.Error, msg ) );
+		EventServer.getInstance().dispatchEvent( new MessageEvent<>( null, MessageType.Error, msg ) );
 	}
 
 	/**
@@ -418,7 +427,7 @@ public class ZETLoader {
 	 */
 	public static void sendMessage( String msg ) {
 		System.out.println( msg );
-		EventServer.getInstance().dispatchEvent( new MessageEvent<JZetWindow>( null, MessageType.Status, msg ) );
+		EventServer.getInstance().dispatchEvent( new MessageEvent<>( null, MessageType.Status, msg ) );
 	}
 
 	/**

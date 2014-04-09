@@ -13,6 +13,7 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
+
 package io.z;
 
 import com.thoughtworks.xstream.converters.UnmarshallingContext;
@@ -21,12 +22,13 @@ import com.thoughtworks.xstream.converters.reflection.ReflectionProvider;
 import com.thoughtworks.xstream.io.HierarchicalStreamReader;
 import com.thoughtworks.xstream.mapper.Mapper;
 
-import ds.z.Edge;
-import ds.z.RoomEdge;
-import ds.z.TeleportEdge;
+import de.tu_berlin.coga.zet.model.Edge;
+import de.tu_berlin.coga.zet.model.RoomEdgeA;
+import de.tu_berlin.coga.zet.model.TeleportEdge;
 
 
-/** A converter that behaves just like a normal converter would do, he only adds
+/**
+ * A converter that behaves just like a normal converter would do, it only adds
  * the functionality of recreating the changeListeners.
  *
  * @author Timon Kelter
@@ -51,10 +53,10 @@ public class EdgeConverter extends ReflectionConverter {
         created = doUnmarshal(created, reader, context);
 		Edge result = (Edge)serializationMethodInvoker.callReadResolve(created);
 
-		if (result instanceof RoomEdge) {
+		if (result instanceof RoomEdgeA) {
 			// Recreate transient fields
 			reflectionProvider.writeField (created, "ensureMatchWithLinkTarget",
-				Boolean.valueOf(!(result instanceof TeleportEdge)), RoomEdge.class);
+				Boolean.valueOf(!(result instanceof TeleportEdge)), RoomEdgeA.class);
 		}
 		if (result instanceof TeleportEdge) {
 			// Recreate transient fields

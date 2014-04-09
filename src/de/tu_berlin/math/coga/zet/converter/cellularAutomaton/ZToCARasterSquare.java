@@ -20,7 +20,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Vector;
 
-import ds.z.Room;
+import de.tu_berlin.coga.zet.model.Room;
 
 public class ZToCARasterSquare extends RoomRasterSquare{
 

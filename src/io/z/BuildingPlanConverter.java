@@ -20,8 +20,8 @@ import com.thoughtworks.xstream.converters.reflection.ReflectionConverter;
 import com.thoughtworks.xstream.converters.reflection.ReflectionProvider;
 import com.thoughtworks.xstream.io.HierarchicalStreamReader;
 import com.thoughtworks.xstream.mapper.Mapper;
-import ds.z.BuildingPlan;
-import ds.z.Floor;
+import de.tu_berlin.coga.zet.model.BuildingPlan;
+import de.tu_berlin.coga.zet.model.Floor;
 import java.util.ArrayList;
 
 /**
