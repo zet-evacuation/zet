@@ -18,7 +18,7 @@
  */
 package de.tu_berlin.math.coga.zet.converter;
 
-import de.tu_berlin.coga.zet.model.Edge;
+import de.tu_berlin.coga.zet.model.PlanEdge;
 import de.tu_berlin.coga.zet.model.PlanPoint;
 import de.tu_berlin.coga.zet.model.PlanPolygon;
 import java.util.ArrayList;
@@ -89,7 +89,7 @@ public class RasterSquare {
 		squareList.add( new PlanPoint( x + raster, y + raster ) );
 		squareList.add( new PlanPoint( x, y + raster ) );
 
-		square = new PlanPolygon<>( Edge.class );
+		square = new PlanPolygon<>( PlanEdge.class );
 		square.defineByPoints( squareList );
 
 		stairPotential = -1;

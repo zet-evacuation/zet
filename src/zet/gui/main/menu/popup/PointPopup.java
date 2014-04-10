@@ -5,7 +5,7 @@
 package zet.gui.main.menu.popup;
 
 import de.tu_berlin.math.coga.components.framework.Menu;
-import de.tu_berlin.coga.zet.model.Edge;
+import de.tu_berlin.coga.zet.model.PlanEdge;
 import de.tu_berlin.coga.zet.model.PlanPoint;
 import gui.GUIControl;
 import java.util.LinkedList;
@@ -49,7 +49,7 @@ public class PointPopup extends JPopupMenu {
 	 * @param currentPoint The PlanPoint on which the PointPopupMenu shall be
 	 * shown.
 	 */
-	public void setPopupPoint( Edge currentEdge, PlanPoint currentPoint ) {
+	public void setPopupPoint( PlanEdge currentEdge, PlanPoint currentPoint ) {
 		for( PointPopupListener p : pointPopupListeners )
 			p.setPoint( currentEdge, currentPoint );
 	}

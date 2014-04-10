@@ -5,16 +5,20 @@ package ds;
 
 import com.thoughtworks.xstream.XStream;
 import com.thoughtworks.xstream.annotations.Annotations;
+import com.thoughtworks.xstream.annotations.XStreamAlias;
+import com.thoughtworks.xstream.annotations.XStreamOmitField;
 import com.thoughtworks.xstream.converters.Converter;
 import com.thoughtworks.xstream.converters.reflection.ReflectionProvider;
 import com.thoughtworks.xstream.mapper.Mapper;
 import com.thoughtworks.xstream.mapper.MapperWrapper;
-import de.tu_berlin.coga.zet.model.Edge;
+import de.tu_berlin.coga.zet.model.PlanEdge;
+import de.tu_berlin.coga.zet.model.PlanPolygon;
 import de.tu_berlin.math.coga.rndutils.distribution.continuous.NormalDistribution;
 import de.tu_berlin.math.coga.rndutils.distribution.continuous.UniformDistribution;
 import de.tu_berlin.coga.zet.model.Project;
 import de.tu_berlin.coga.zet.model.ZLocalization;
 import io.z.NormalDistributionConverter;
+import io.z.PlanPolygonConverter;
 import io.z.UniformDistributionConverter;
 import io.z.XMLConverter;
 import java.io.BufferedInputStream;
@@ -41,7 +45,7 @@ import java.util.zip.ZipEntry;
  * @author Jan-Philipp Kappmeier
  */
 public class ProjectLoader {
-	private static XStream xmlConvert;
+	private final static XStream xmlConvert;
 
 	static {
 		final Set<String> ignore = new HashSet<String>() {
@@ -75,9 +79,9 @@ public class ProjectLoader {
 		};
 		xmlConvert.setMode( XStream.ID_REFERENCES );
 
-		xmlConvert.alias( "ds.z.Edge", Edge.class );
-		xmlConvert.alias( "another", Edge.class );
-		xmlConvert.alias( "lineSegment", Edge.class );
+		xmlConvert.alias( "ds.z.Edge", PlanEdge.class );
+		xmlConvert.alias( "another", PlanEdge.class );
+		xmlConvert.alias( "lineSegment", PlanEdge.class );
 
 		//Configure aliases for external classes (Java API)
 		xmlConvert.useAttributeFor( java.awt.Point.class, "x" );
@@ -88,7 +92,23 @@ public class ProjectLoader {
 
 		xmlConvert.alias( "normalDistribution", NormalDistribution.class );
 		xmlConvert.registerConverter( new NormalDistributionConverter() );
+		
+		//@XStreamOmitField
+		//private T maxY_DefiningEdge;
 
+		xmlConvert.omitField( PlanPolygon.class, "maxY_DefiningEdge" );
+
+		
+		//@XStreamAlias("planPolygon")
+		//@XMLConverter(PlanPolygonConverter.class)
+		xmlConvert.alias( "planPolygon", PlanPolygon.class );
+		//xmlConvert.registerConverter( new PlanPolygonConverter(null, null ) );
+		//@XStreamOmitField
+		//private final Class<T> edgeClassType;
+		xmlConvert.omitField( PlanPolygon.class, "edgeClassType" );
+		
+		xmlConvert.useAttributeFor( PlanPolygon.class, "closed" );
+		
 		//Configure aliases for all ds.* classes
 		//For this purpose the current location of the bytecode is searched for
 		//all class names. These are loaded and their annotaions are examined.

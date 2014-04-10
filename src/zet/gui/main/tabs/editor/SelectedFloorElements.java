@@ -5,7 +5,7 @@
 package zet.gui.main.tabs.editor;
 
 import de.tu_berlin.coga.common.util.SelectedElements;
-import de.tu_berlin.coga.zet.model.Edge;
+import de.tu_berlin.coga.zet.model.PlanEdge;
 import zet.gui.main.tabs.base.JPolygon;
 
 
@@ -14,10 +14,10 @@ import zet.gui.main.tabs.base.JPolygon;
  * @author Jan-Philipp Kappmeier
  */
 public class SelectedFloorElements extends SelectedElements<JPolygon> {
-	Edge selectedEdge;
+	PlanEdge selectedEdge;
 	JPolygon selectedElementPolygon;
 
-	void selectEdge( JPolygon toSelect, Edge edge ) {
+	void selectEdge( JPolygon toSelect, PlanEdge edge ) {
 		clear();
 		selectedEdge = edge;
 		selectedElementPolygon = toSelect;
@@ -26,7 +26,7 @@ public class SelectedFloorElements extends SelectedElements<JPolygon> {
 		super.notifyObservers( toSelect );
 	}
 
-	public Edge getSelectedEdge() {
+	public PlanEdge getSelectedEdge() {
 		return selectedEdge;
 	}
 

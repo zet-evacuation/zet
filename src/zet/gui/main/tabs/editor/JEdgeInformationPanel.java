@@ -5,10 +5,10 @@
 package zet.gui.main.tabs.editor;
 
 import de.tu_berlin.coga.zet.model.DefaultEvacuationFloor;
-import de.tu_berlin.coga.zet.model.Edge;
+import de.tu_berlin.coga.zet.model.PlanEdge;
 import de.tu_berlin.coga.zet.model.EvacuationArea;
 import de.tu_berlin.coga.zet.model.Room;
-import de.tu_berlin.coga.zet.model.RoomEdgeA;
+import de.tu_berlin.coga.zet.model.RoomEdge;
 import de.tu_berlin.coga.zet.model.TeleportEdge;
 import info.clearthought.layout.TableLayout;
 import java.awt.event.FocusEvent;
@@ -24,7 +24,7 @@ import zet.gui.main.JZetWindow;
  *
  * @author Jan-Philipp Kappmeier
  */
-public class JEdgeInformationPanel extends JInformationPanel<Edge> {
+public class JEdgeInformationPanel extends JInformationPanel<PlanEdge> {
 	private JLabel lblEdgeType;
 	private JLabel lblEdgeLength;
 	private JLabel lblEdgeExitName;
@@ -91,7 +91,7 @@ public class JEdgeInformationPanel extends JInformationPanel<Edge> {
 	public void update() {
 		txtEdgeExitName.setEnabled( false );
 		lblEdgeExitName.setText( "" );
-		if( current instanceof RoomEdgeA ) {
+		if( current instanceof RoomEdge ) {
 			if( current instanceof TeleportEdge ) {
 				TeleportEdge te = (TeleportEdge)current;
 				if( ((Room)te.getLinkTarget().getAssociatedPolygon()).getAssociatedFloor() instanceof DefaultEvacuationFloor ) {
@@ -106,7 +106,7 @@ public class JEdgeInformationPanel extends JInformationPanel<Edge> {
 				else
 					lblEdgeType.setText( "Stockwerkübergang" );
 			} else {
-				if( ((RoomEdgeA)current).isPassable() ) {
+				if( ((RoomEdge)current).isPassable() ) {
 					lblEdgeType.setText( "Durchgang" );
 				} else {
 					lblEdgeType.setText( "Wand" );

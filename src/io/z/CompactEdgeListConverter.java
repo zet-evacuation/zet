@@ -13,6 +13,7 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
+
 package io.z;
 
 import com.thoughtworks.xstream.converters.MarshallingContext;
@@ -23,7 +24,7 @@ import com.thoughtworks.xstream.io.HierarchicalStreamReader;
 import com.thoughtworks.xstream.io.HierarchicalStreamWriter;
 import com.thoughtworks.xstream.mapper.Mapper;
 
-import de.tu_berlin.coga.zet.model.Edge;
+import de.tu_berlin.coga.zet.model.PlanEdge;
 import de.tu_berlin.coga.zet.model.PlanPoint;
 
 import java.util.ArrayList;
@@ -90,7 +91,8 @@ public class CompactEdgeListConverter extends ReflectionConverter {
 		reader.moveDown ();
 
 		// Get the edges one by one
-		Edge currentEdge = null, lastEdge = null;
+		PlanEdge currentEdge = null;
+		PlanEdge lastEdge = null;
 		PlanPoint currentPoint = null;
 		boolean unclosedPolygon = false;
 		boolean firstPoint = true;
@@ -108,7 +110,7 @@ public class CompactEdgeListConverter extends ReflectionConverter {
 			if (reader.hasMoreChildren ()) {
 				reader.moveDown ();
 				Class edgeType = mapper.realClass (reader.getNodeName ());
-				currentEdge = (Edge) context.convertAnother (null, edgeType);
+				currentEdge = (PlanEdge) context.convertAnother (null, edgeType);
 				reader.moveUp ();
 
 				// Reinstall the connection between the objects
@@ -116,12 +118,12 @@ public class CompactEdgeListConverter extends ReflectionConverter {
 					reflectionProvider.writeField (currentPoint, "previousEdge",
 							lastEdge, PlanPoint.class);
 					reflectionProvider.writeField (lastEdge, "target",
-							currentPoint, Edge.class);
+							currentPoint, PlanEdge.class);
 				}
 				reflectionProvider.writeField (currentPoint, "nextEdge",
 						currentEdge, PlanPoint.class);
 				reflectionProvider.writeField (currentEdge, "source",
-						currentPoint, Edge.class);
+						currentPoint, PlanEdge.class);
 
 				lastEdge = currentEdge;
 			} else {
@@ -134,18 +136,18 @@ public class CompactEdgeListConverter extends ReflectionConverter {
 		// Finish the polygon
 		if (unclosedPolygon) {
 			reflectionProvider.writeField (currentEdge, "target",
-					currentPoint, Edge.class);
+					currentPoint, PlanEdge.class);
 			reflectionProvider.writeField (currentPoint, "previousEdge",
 					currentEdge, PlanPoint.class);
 		} else {
 			reflectionProvider.writeField (created, "previousEdge",
 					currentEdge, PlanPoint.class);
 			reflectionProvider.writeField (currentEdge, "target",
-					created, Edge.class);
+					created, PlanEdge.class);
 		}
 
 		// Iterate over edges - Recreate changeListener lists
-		Edge start = created.getNextEdge ();
+		PlanEdge start = created.getNextEdge ();
 		currentEdge = start;
 		do {
 //			currentEdge.getSource ().addChangeListener (currentEdge);

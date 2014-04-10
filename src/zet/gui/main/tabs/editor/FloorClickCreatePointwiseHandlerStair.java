@@ -4,7 +4,7 @@
  */
 package zet.gui.main.tabs.editor;
 
-import de.tu_berlin.coga.zet.model.Edge;
+import de.tu_berlin.coga.zet.model.PlanEdge;
 import de.tu_berlin.coga.zet.model.StairArea;
 import de.tu_berlin.coga.zet.model.ZControl;
 import de.tu_berlin.coga.zet.model.exception.StairAreaBoundaryException;
@@ -54,8 +54,8 @@ public class FloorClickCreatePointwiseHandlerStair extends FloorClickCreatePoint
 				throw new AssertionError( "No stair, but instead it is of type " + stair.getPlanPolygon().getClass() );
 
 			Object obj = stair.findClickTargetAt( SwingUtilities.convertPoint( getEditStatus().getControlled(), p, stair ) );
-			if( obj instanceof Edge ) {
-				Edge e = (Edge)obj;
+			if( obj instanceof PlanEdge ) {
+				PlanEdge e = (PlanEdge)obj;
 				//System.out.println( "FINALLY AN EDGE WAS HIT" );
 				StairArea sa = (StairArea)stair.getPlanPolygon();
 				if( stairState == StairStates.Lower ) {

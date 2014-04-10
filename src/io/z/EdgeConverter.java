@@ -22,8 +22,8 @@ import com.thoughtworks.xstream.converters.reflection.ReflectionProvider;
 import com.thoughtworks.xstream.io.HierarchicalStreamReader;
 import com.thoughtworks.xstream.mapper.Mapper;
 
-import de.tu_berlin.coga.zet.model.Edge;
-import de.tu_berlin.coga.zet.model.RoomEdgeA;
+import de.tu_berlin.coga.zet.model.PlanEdge;
+import de.tu_berlin.coga.zet.model.RoomEdge;
 import de.tu_berlin.coga.zet.model.TeleportEdge;
 
 
@@ -34,7 +34,7 @@ import de.tu_berlin.coga.zet.model.TeleportEdge;
  * @author Timon Kelter
  */
 public class EdgeConverter extends ReflectionConverter {
-	private Class myClass = Edge.class;
+	private Class myClass = PlanEdge.class;
 
 	public EdgeConverter (Mapper mapper, ReflectionProvider reflectionProvider) {
 		super (mapper, reflectionProvider);
@@ -51,12 +51,12 @@ public class EdgeConverter extends ReflectionConverter {
 		Object created = instantiateNewInstance(reader, context);
 
         created = doUnmarshal(created, reader, context);
-		Edge result = (Edge)serializationMethodInvoker.callReadResolve(created);
+		PlanEdge result = (PlanEdge)serializationMethodInvoker.callReadResolve(created);
 
-		if (result instanceof RoomEdgeA) {
+		if (result instanceof RoomEdge) {
 			// Recreate transient fields
 			reflectionProvider.writeField (created, "ensureMatchWithLinkTarget",
-				Boolean.valueOf(!(result instanceof TeleportEdge)), RoomEdgeA.class);
+				Boolean.valueOf(!(result instanceof TeleportEdge)), RoomEdge.class);
 		}
 		if (result instanceof TeleportEdge) {
 			// Recreate transient fields
