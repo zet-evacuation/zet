@@ -173,11 +173,11 @@ public class BuildingResults implements VisualizationResult {
 		return Collections.unmodifiableCollection( floors.values() );
 	}
 
-	protected void addHeterogeneousEdgeList( Iterator<? extends de.tu_berlin.coga.zet.model.RoomEdgeA> edgeIt, de.tu_berlin.coga.zet.model.PlanPolygon<?> room, Floor floor ) {
+	protected void addHeterogeneousEdgeList( Iterator<? extends de.tu_berlin.coga.zet.model.RoomEdge> edgeIt, de.tu_berlin.coga.zet.model.PlanPolygon<?> room, Floor floor ) {
 		Wall curWall = new Wall( floor );
 
 		if( edgeIt.hasNext() ) {
-			de.tu_berlin.coga.zet.model.RoomEdgeA firstEdge = edgeIt.next();
+			de.tu_berlin.coga.zet.model.RoomEdge firstEdge = edgeIt.next();
 			checkOrientation( firstEdge, room, curWall );
 			if( firstEdge.isPassable() ) {
 				curWall.addPoint( firstEdge.getSource(), Wall.ElementType.PASSABLE );
@@ -189,7 +189,7 @@ public class BuildingResults implements VisualizationResult {
 		}
 
 		while( edgeIt.hasNext() ) {
-			de.tu_berlin.coga.zet.model.RoomEdgeA curEdge = edgeIt.next();
+			de.tu_berlin.coga.zet.model.RoomEdge curEdge = edgeIt.next();
 			checkOrientation( curEdge, room, curWall );
 			if( curEdge.isPassable() )
 				curWall.addPoint( curEdge.getTarget(), Wall.ElementType.PASSABLE );
@@ -199,18 +199,18 @@ public class BuildingResults implements VisualizationResult {
 		addWall( curWall );
 	}
 
-	protected Wall addHomogeneousEdgeList( Iterator<? extends de.tu_berlin.coga.zet.model.Edge> edgeIt, de.tu_berlin.coga.zet.model.PlanPolygon<?> room, Floor floor, Wall.ElementType type ) {
+	protected Wall addHomogeneousEdgeList( Iterator<? extends de.tu_berlin.coga.zet.model.PlanEdge> edgeIt, de.tu_berlin.coga.zet.model.PlanPolygon<?> room, Floor floor, Wall.ElementType type ) {
 		Wall curWall = new Wall( floor );
 
 		if( edgeIt.hasNext() ) {
-			de.tu_berlin.coga.zet.model.Edge firstEdge = edgeIt.next();
+			de.tu_berlin.coga.zet.model.PlanEdge firstEdge = edgeIt.next();
 			checkOrientation( firstEdge, room, curWall );
 			curWall.addPoint( firstEdge.getSource(), type );
 			curWall.addPoint( firstEdge.getTarget(), type );
 		}
 
 		while( edgeIt.hasNext() ) {
-			de.tu_berlin.coga.zet.model.Edge curEdge = edgeIt.next();
+			de.tu_berlin.coga.zet.model.PlanEdge curEdge = edgeIt.next();
 			checkOrientation( curEdge, room, curWall );
 			curWall.addPoint( curEdge.getTarget(), type );
 		}
@@ -225,7 +225,7 @@ public class BuildingResults implements VisualizationResult {
 	 * @param room the room
 	 * @param curWall the wall
 	 */
-	private void checkOrientation( de.tu_berlin.coga.zet.model.Edge edge, de.tu_berlin.coga.zet.model.PlanPolygon<?> room, Wall curWall ) {
+	private void checkOrientation( de.tu_berlin.coga.zet.model.PlanEdge edge, de.tu_berlin.coga.zet.model.PlanPolygon<?> room, Wall curWall ) {
 		boolean isLeft = room.relativePolygonPosition( edge, RelativePosition.Left );
 		boolean isRight = room.relativePolygonPosition( edge, RelativePosition.Right );
 		if( isLeft != isRight ) {

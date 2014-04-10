@@ -4,7 +4,7 @@
  */
 package zet.gui.main.tabs.editor;
 
-import de.tu_berlin.coga.zet.model.Edge;
+import de.tu_berlin.coga.zet.model.PlanEdge;
 import de.tu_berlin.coga.zet.model.Floor;
 import de.tu_berlin.coga.zet.model.ZControl;
 import gui.editor.CoordinateTools;
@@ -189,7 +189,7 @@ public class EditStatus {
 	 * @param toSelect
 	 * @param edge
 	 */
-	void selectEdge( JPolygon toSelect, Edge edge ) {
+	void selectEdge( JPolygon toSelect, PlanEdge edge ) {
 		selection.selectEdge( toSelect, edge );
 	}
 }

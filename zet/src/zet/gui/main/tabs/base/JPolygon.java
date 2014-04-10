@@ -15,16 +15,17 @@
  */
 package zet.gui.main.tabs.base;
 
+import static de.tu_berlin.coga.common.util.Helper.in;
 import de.tu_berlin.coga.common.util.Selectable;
 import ds.PropertyContainer;
 import de.tu_berlin.coga.zet.model.Area;
 import de.tu_berlin.coga.zet.model.Barrier;
-import de.tu_berlin.coga.zet.model.Edge;
+import de.tu_berlin.coga.zet.model.PlanEdge;
 import de.tu_berlin.coga.zet.model.EvacuationArea;
 import de.tu_berlin.coga.zet.model.PlanPoint;
 import de.tu_berlin.coga.zet.model.PlanPolygon;
 import de.tu_berlin.coga.zet.model.Room;
-import de.tu_berlin.coga.zet.model.RoomEdgeA;
+import de.tu_berlin.coga.zet.model.RoomEdge;
 import de.tu_berlin.coga.zet.model.StairArea;
 import de.tu_berlin.coga.zet.model.TeleportEdge;
 import gui.GUIControl;
@@ -99,11 +100,11 @@ public class JPolygon extends AbstractPolygon<JFloor> implements Selectable {
 	public final static BasicStroke stroke_thick = new BasicStroke( EDGE_PAINT_WIDTH );
 	private final GUIControl guiControl;
 
-	private Edge selectedEdge;
+	private PlanEdge selectedEdge;
 	private Point selectedPoint;
 	private Point dragOffset;
 
-	public void setSelectedEdge( Edge edge ) {
+	public void setSelectedEdge( PlanEdge edge ) {
 		this.selectedEdge = edge;
 	}
 	public void setSelectedPoint( PlanPoint point ) {
@@ -123,7 +124,7 @@ public class JPolygon extends AbstractPolygon<JFloor> implements Selectable {
 	//############## EDGE RELATED FIELDS ###################
 	private class EdgeData {
 		/** The ds.z.Edges that eauch graphical edge representation is connected to. */
-		public Edge myEdge;
+		public PlanEdge myEdge;
 		/** The location of PlanPoint1 of any edge in the <u>coordinate space of the JPolygon.</u> */
 		public Point node1;
 		/** The location of PlanPoint2 of any edge in the <u>coordinate space of the JPolygon.</u> */
@@ -308,7 +309,7 @@ public class JPolygon extends AbstractPolygon<JFloor> implements Selectable {
 
 			// Display own edges - This must come after the areas have been created,
 			// otherwise the room edges will dominate the area edges.
-			for( Edge e : myPolygon.getEdges() ) {
+			for( PlanEdge e : myPolygon.getEdges() ) {
 				EdgeData ed = new EdgeData();
 				ed.myEdge = e;
 
@@ -425,7 +426,7 @@ public class JPolygon extends AbstractPolygon<JFloor> implements Selectable {
 
 		// ### Paint the Edges ###
 		Iterator<EdgeData> itEdgeData = edgeData.iterator();
-		for( Edge myEdge : myPolygon ) {
+		for( PlanEdge myEdge : in(myPolygon.edgeIterator()) ) {
 			assert ( itEdgeData.hasNext() );
 			EdgeData ed = itEdgeData.next();
 
@@ -436,7 +437,7 @@ public class JPolygon extends AbstractPolygon<JFloor> implements Selectable {
 			else
 				g2.setPaint( new Color( edgeColor.getRed(), edgeColor.getGreen(), edgeColor.getBlue(), (int)(0.3 * edgeColor.getAlpha()) ) );
 			//g2.setPaint( (myEdge instanceof TeleportEdge) ? GUIOptionManager.getTeleportEdgeColor() : getForeground() );
-			if( myEdge instanceof RoomEdgeA && ((RoomEdgeA)myEdge).isPassable() )
+			if( myEdge instanceof RoomEdge && ((RoomEdge)myEdge).isPassable() )
 				// Paint dashed line to indicate passability
 				if( (selected || myEdge.equals( selectedEdge )) && !draggedCopy )
 					g2.setStroke( stroke_dashed_thick );

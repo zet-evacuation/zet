@@ -21,7 +21,7 @@
 
 package zet.gui.main.tabs.base;
 
-import de.tu_berlin.coga.zet.model.Edge;
+import de.tu_berlin.coga.zet.model.PlanEdge;
 import de.tu_berlin.coga.zet.model.PlanPoint;
 import de.tu_berlin.coga.zet.model.PlanPolygon;
 import java.awt.Color;
@@ -40,7 +40,7 @@ import javax.swing.JComponent;
 abstract public class AbstractPolygon<E extends AbstractFloor> extends JComponent {
 	protected Polygon drawingPolygon;
 	/** Most global super type of PlanPolygon. */
-	protected PlanPolygon<Edge> myPolygon;
+	protected PlanPolygon<PlanEdge> myPolygon;
 	//private JFloor myFloor;
 	protected E myFloor;
 

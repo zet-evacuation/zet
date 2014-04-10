@@ -20,7 +20,7 @@
  */
 package zet.gui.main.menu.popup;
 
-import de.tu_berlin.coga.zet.model.Edge;
+import de.tu_berlin.coga.zet.model.PlanEdge;
 import de.tu_berlin.coga.zet.model.PlanPoint;
 import de.tu_berlin.coga.zet.model.PlanPolygon;
 import de.tu_berlin.coga.zet.model.ZControl;
@@ -35,7 +35,7 @@ public class PointPopupListener implements ActionListener {
 	/** The control class for changing the z data structure. */
 	ZControl projectControl;
 	/** The edge on which the point lies. */
-	private Edge currentEdge;
+	private PlanEdge currentEdge;
 	/** The point for which the pop-up is used. */
 	private PlanPoint currentPoint;
 
@@ -48,7 +48,7 @@ public class PointPopupListener implements ActionListener {
 	 * @param currentEdge one edge to that the point is adjacent
 	 * @param currentPoint the PlanPoint on which the pop-up is shown.
 	 */
-	public void setPoint( Edge currentEdge, PlanPoint currentPoint ) {
+	public void setPoint( PlanEdge currentEdge, PlanPoint currentPoint ) {
 		this.currentEdge = currentEdge;
 		this.currentPoint = currentPoint;
 	}

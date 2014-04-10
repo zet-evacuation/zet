@@ -21,11 +21,11 @@ import java.io.IOException;
 
 import de.tu_berlin.coga.zet.model.Barrier;
 import de.tu_berlin.coga.zet.model.BuildingPlan;
-import de.tu_berlin.coga.zet.model.Edge;
+import de.tu_berlin.coga.zet.model.PlanEdge;
 import de.tu_berlin.coga.zet.model.Floor;
 import de.tu_berlin.coga.zet.model.InaccessibleArea;
 import de.tu_berlin.coga.zet.model.Room;
-import de.tu_berlin.coga.zet.model.RoomEdgeA;
+import de.tu_berlin.coga.zet.model.RoomEdge;
 import util.DebugFlags;
 
 /**
@@ -41,7 +41,7 @@ public class DXFWriter {
 	 * @param edge the edge to be converted.
 	 * @return the edge converted into a dxf line.
 	 */
-	private static String edgeToLine(Edge edge, int floorNr, int color){
+	private static String edgeToLine(PlanEdge edge, int floorNr, int color){
 		String output = "";
 		output += "0\nLINE\n";
 		output += "8\n"+floorNr+"\n";
@@ -75,7 +75,7 @@ public class DXFWriter {
 		int floorNr = 0;
 		for (Floor floor : buildingPlan.getFloors()){
 			for (Room room : floor.getRooms()){
-				for (RoomEdgeA edge : room.getEdges()){
+				for (RoomEdge edge : room.getEdges()){
 					if (edge.isPassable()){
 						output += edgeToLine(edge, floorNr,5);
 					} else {
@@ -85,13 +85,13 @@ public class DXFWriter {
 				}
 				
 				for (InaccessibleArea iArea : room.getInaccessibleAreas()){
-					for (Edge edge : iArea.getEdges()){
+					for (PlanEdge edge : iArea.getEdges()){
 						output += edgeToLine(edge, floorNr,0);
 					}					
 				}
 				
 				for (Barrier barrier : room.getBarriers()){
-					for (Edge edge : barrier.getEdges()){
+					for (PlanEdge edge : barrier.getEdges()){
 						output += edgeToLine(edge, floorNr,0);
 					}
 				}

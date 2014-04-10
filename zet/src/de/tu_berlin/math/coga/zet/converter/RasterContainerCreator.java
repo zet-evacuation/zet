@@ -36,7 +36,7 @@ import de.tu_berlin.coga.zet.model.Floor;
 import de.tu_berlin.coga.zet.model.InaccessibleArea;
 import de.tu_berlin.coga.zet.model.PlanPoint;
 import de.tu_berlin.coga.zet.model.Room;
-import de.tu_berlin.coga.zet.model.RoomEdgeA;
+import de.tu_berlin.coga.zet.model.RoomEdge;
 import de.tu_berlin.coga.zet.model.SaveArea;
 import de.tu_berlin.coga.zet.model.DelayArea.DelayType;
 import de.tu_berlin.coga.zet.model.exception.RoomEdgeInvalidTargetException;
@@ -113,8 +113,8 @@ public class RasterContainerCreator {
 		i = 0;
 		for( Floor floor : buildingPlan.getFloors() )
 			for( Room room : floor.getRooms() ) {
-				for( de.tu_berlin.coga.zet.model.Edge edge : room.getEdges() ) {
-					RoomEdgeA rEdge = (RoomEdgeA) edge;
+				for( de.tu_berlin.coga.zet.model.PlanEdge edge : room.getEdges() ) {
+					RoomEdge rEdge = (RoomEdge) edge;
 					ZToCARoomRaster raster = container.getRasteredRoom( room );
 					if( (rEdge).isPassable() ) {
 						List<ZToCARasterSquare> squares = de.tu_berlin.math.coga.zet.converter.RasterTools.getSquaresAlongEdge( rEdge, raster );
@@ -151,11 +151,11 @@ public class RasterContainerCreator {
 
 	private void saveListOfDoors( ZToGraphRoomRaster roomRaster, ZToGraphRasterContainer container ) {
 		de.tu_berlin.coga.zet.model.Room room = roomRaster.getRoom();
-		for( de.tu_berlin.coga.zet.model.Edge edge : room.getEdges() ) {
-			RoomEdgeA rEdge = (RoomEdgeA) edge;
+		for( de.tu_berlin.coga.zet.model.PlanEdge edge : room.getEdges() ) {
+			RoomEdge rEdge = (RoomEdge) edge;
 			if( (rEdge).isPassable() ) {
 				List<ZToGraphRasterSquare> squares = de.tu_berlin.math.coga.zet.converter.RasterTools.getSquaresAlongEdge( rEdge, roomRaster );
-				RoomEdgeA partnerEdge = rEdge.getLinkTarget();
+				RoomEdge partnerEdge = rEdge.getLinkTarget();
 				Room partnerRoom = rEdge.getLinkTarget().getRoom();
 
 				if( partnerEdge == null )

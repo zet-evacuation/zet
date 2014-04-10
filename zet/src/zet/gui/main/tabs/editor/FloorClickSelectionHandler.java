@@ -5,7 +5,7 @@
 package zet.gui.main.tabs.editor;
 
 import de.tu_berlin.coga.zet.model.Area;
-import de.tu_berlin.coga.zet.model.Edge;
+import de.tu_berlin.coga.zet.model.PlanEdge;
 import de.tu_berlin.coga.zet.model.PlanPoint;
 import de.tu_berlin.coga.zet.model.PlanPolygon;
 import de.tu_berlin.coga.zet.model.Room;
@@ -83,8 +83,8 @@ public class FloorClickSelectionHandler extends FloorClickHandler {
 				if( clickedOn != null )
 					if( clickedOn instanceof PlanPoint ) {
 						PlanPoint dp = (PlanPoint) clickedOn;
-					} else if( clickedOn instanceof Edge ) {
-						Edge edge = (Edge) clickedOn;
+					} else if( clickedOn instanceof PlanEdge ) {
+						PlanEdge edge = (PlanEdge) clickedOn;
 						getEditStatus().clearSelection();
 						getEditStatus().selectEdge( toSelect, edge );
 					} else if( clickedOn instanceof PlanPolygon ) {

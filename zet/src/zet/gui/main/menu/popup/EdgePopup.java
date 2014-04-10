@@ -6,8 +6,8 @@ package zet.gui.main.menu.popup;
 
 import de.tu_berlin.math.coga.components.framework.Menu;
 import ds.PropertyContainer;
-import de.tu_berlin.coga.zet.model.Edge;
-import de.tu_berlin.coga.zet.model.RoomEdgeA;
+import de.tu_berlin.coga.zet.model.PlanEdge;
+import de.tu_berlin.coga.zet.model.RoomEdge;
 import de.tu_berlin.coga.zet.model.TeleportEdge;
 import de.tu_berlin.coga.zet.template.Door;
 import de.tu_berlin.coga.zet.template.ExitDoor;
@@ -75,8 +75,8 @@ public class EdgePopup extends JPopupMenu {
 	 * @param mousePosition the position at which the popup menu is shown with
 	 * coordinates that must be relative to the whole Floor
 	 */
-	public void setPopupEdge( Edge currentEdge, Point mousePosition ) {
-		boolean passable = (currentEdge instanceof RoomEdgeA) && ((RoomEdgeA)currentEdge).isPassable();
+	public void setPopupEdge( PlanEdge currentEdge, Point mousePosition ) {
+		boolean passable = (currentEdge instanceof RoomEdge) && ((RoomEdge)currentEdge).isPassable();
 		// passage-Creation
 		((JMenuItem)this.getComponent( 1 )).setVisible( !passable );
 		// passage-room creation

@@ -27,7 +27,7 @@ import de.tu_berlin.coga.common.util.Direction8;
 import de.tu_berlin.coga.common.util.Level;
 import de.tu_berlin.math.coga.zet.converter.RoomRasterProperty;
 import de.tu_berlin.coga.zet.model.Barrier;
-import de.tu_berlin.coga.zet.model.Edge;
+import de.tu_berlin.coga.zet.model.PlanEdge;
 import de.tu_berlin.coga.zet.model.Floor;
 import de.tu_berlin.coga.zet.model.Room;
 import de.tu_berlin.coga.zet.model.StairArea;
@@ -145,7 +145,7 @@ public class RoomRaster<T extends RoomRasterSquare> extends Raster<T, Room> {
 		// Barrieren durchgehen und entsprechende übergänge zwischen den Rasterquadraten sperren.
 		for (Barrier barrier : getRoom ().getBarriers ()) {
 			// Jede Kante der aktuellen Barriere durchgehen und an der Kante liegende übergänge sperren.
-			for (Edge barrierEdge : barrier.getEdges ()) {
+			for (PlanEdge barrierEdge : barrier.getEdges ()) {
 
 				// Für über der Kante liegende Rastersquares den Übergang nach unten sperren.
 				List<T> squares = de.tu_berlin.math.coga.zet.converter.RasterTools.getSquaresAboveEdge (barrierEdge, this);
@@ -202,10 +202,10 @@ public class RoomRaster<T extends RoomRasterSquare> extends Raster<T, Room> {
 	 */
 	private List<RoomRasterSquare> generateLowBlock (StairArea stair) {
 		LinkedList<RoomRasterSquare> result = new LinkedList<RoomRasterSquare> ();
-		Iterator<Edge> itEd = stair.edgeIterator(stair.getLowerLevelStart(), stair.getLowerLevelEnd(), false);
+		Iterator<PlanEdge> itEd = stair.edgeIterator(stair.getLowerLevelStart(), stair.getLowerLevelEnd(), false);
 		
 		while (itEd.hasNext()){
-			Edge e = itEd.next();
+			PlanEdge e = itEd.next();
 			
 			List<T> squaresAlongE = de.tu_berlin.math.coga.zet.converter.RasterTools.getSquaresAlongEdge(e, this);
 			for (T square : squaresAlongE){				
