@@ -14,15 +14,12 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 
-/*
- * MenuFramework.java
- * Created on 17. Dezember 2007, 02:06:21
- */
-
 package de.tu_berlin.math.coga.components.framework;
 
-import de.tu_berlin.coga.common.localization.DefaultLocalization;
 import de.tu_berlin.coga.common.localization.AbstractLocalization;
+import de.tu_berlin.coga.common.localization.Localization;
+import de.tu_berlin.coga.common.localization.LocalizationManager;
+import de.tu_berlin.math.coga.components.JVideoOptionsDialog;
 import de.tu_berlin.math.coga.components.Localizer;
 import java.awt.event.ActionListener;
 import java.awt.event.InputEvent;
@@ -43,10 +40,12 @@ import javax.swing.KeyStroke;
  */
 public class Menu {
 	/** The localization object used to generate localized menu titles. */
-	private static AbstractLocalization loc = DefaultLocalization.getSingleton();
+		private static Localization loc = LocalizationManager.getSingleton().getLocalization( JVideoOptionsDialog.COMPONENT_LOCALIZATION );
+
+
 	private Menu() { }
 
-	public static AbstractLocalization getLocalization() {
+	public static Localization getLocalization() {
 		return loc;
 	}
 	
@@ -55,7 +54,7 @@ public class Menu {
 	 * menu entries.
 	 * @param localization the {@code AbstractLocalization} opbject.
 	 */
-	public static void setLoc( AbstractLocalization loc ) {
+	public static void setLoc( Localization loc ) {
 		Menu.loc = loc;
 	}
 	

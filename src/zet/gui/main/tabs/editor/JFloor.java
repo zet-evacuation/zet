@@ -13,9 +13,10 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
+
 package zet.gui.main.tabs.editor;
 
-import de.tu_berlin.math.coga.zet.ZETLocalization;
+import de.tu_berlin.math.coga.zet.ZETLocalization2;
 import de.tu_berlin.coga.zet.model.Area;
 import de.tu_berlin.coga.zet.model.Barrier;
 import de.tu_berlin.coga.zet.model.Floor;
@@ -120,7 +121,7 @@ public class JFloor extends AbstractFloor implements EventListener<ZModelRoomEve
 		planImage.setOffsetX( -floorMin_x );
 		planImage.setOffsetY( -floorMin_y );
 
-		ZETLoader.sendMessage( ZETLocalization.getSingleton().getString( "gui.message.FloorSuccessfullyLoaded" ) );
+		ZETLoader.sendMessage( ZETLocalization2.loc.getString( "gui.message.FloorSuccessfullyLoaded" ) );
 
 		revalidate();
 		repaint();

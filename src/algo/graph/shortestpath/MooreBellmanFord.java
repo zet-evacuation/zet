@@ -13,10 +13,7 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
-/*
- * MooreBellmanFord.java
- *
- */
+
 package algo.graph.shortestpath;
 
 import ds.graph.GraphLocalization;
@@ -52,48 +49,42 @@ public class MooreBellmanFord {
 
     public IdentifiableIntegerMapping<Node> getDistances() {
         if (distances == null) {
-            throw new IllegalStateException(GraphLocalization.getSingleton (
-			).getString ("algo.graph.shortestpath.NotCalledYetException"));
+            throw new IllegalStateException(GraphLocalization.loc.getString ("algo.graph.shortestpath.NotCalledYetException"));
         }
         return distances;
     }
 
     public double getDistance(Node node) {
         if (distances == null) {
-            throw new IllegalStateException(GraphLocalization.getSingleton (
-			).getString ("algo.graph.shortestpath.NotCalledYetException"));
+            throw new IllegalStateException(GraphLocalization.loc.getString ("algo.graph.shortestpath.NotCalledYetException"));
         }
         return distances.get(node);
     }
 
     public IdentifiableObjectMapping<Node, Edge> getLastEdges() {
         if (edges == null) {
-            throw new IllegalStateException(GraphLocalization.getSingleton (
-			).getString ("algo.graph.shortestpath.NotCalledYetException"));
+            throw new IllegalStateException(GraphLocalization.loc.getString ("algo.graph.shortestpath.NotCalledYetException"));
         }
         return edges;
     }
 
     public Edge getLastEdge(Node node) {
         if (edges == null) {
-            throw new IllegalStateException(GraphLocalization.getSingleton (
-			).getString ("algo.graph.shortestpath.NotCalledYetException"));
+            throw new IllegalStateException(GraphLocalization.loc.getString ("algo.graph.shortestpath.NotCalledYetException"));
         }
         return edges.get(node);
     }
 
     public IdentifiableObjectMapping<Node, Node> getPredecessors() {
         if (nodes == null) {
-            throw new IllegalStateException(GraphLocalization.getSingleton (
-			).getString ("algo.graph.shortestpath.NotCalledYetException"));
+            throw new IllegalStateException(GraphLocalization.loc.getString ("algo.graph.shortestpath.NotCalledYetException"));
         }
         return nodes;
     }
 
     public Node getPredecessor(Node node) {
         if (nodes == null) {
-            throw new IllegalStateException(GraphLocalization.getSingleton (
-			).getString ("algo.graph.shortestpath.NotCalledYetException"));
+            throw new IllegalStateException(GraphLocalization.loc.getString ("algo.graph.shortestpath.NotCalledYetException"));
         }
         return nodes.get(node);
     }
@@ -115,19 +106,17 @@ public class MooreBellmanFord {
 
     public void run() {
         if (graph == null) {
-            throw new IllegalStateException(GraphLocalization.getSingleton (
-    		).getString ("algo.graph.shortestpath.GraphIsNullException"));
+            throw new IllegalStateException(GraphLocalization.loc.getString ("algo.graph.shortestpath.GraphIsNullException"));
         }
         if (source == null) {
-            throw new IllegalStateException(GraphLocalization.getSingleton (
-    		).getString ("algo.graph.shortestpath.SourceIsNullException"));
+            throw new IllegalStateException(GraphLocalization.loc.getString ("algo.graph.shortestpath.SourceIsNullException"));
         }
         if (distances != null) {
             return;
         }
-        distances = new IdentifiableIntegerMapping<Node>(graph.numberOfNodes());
-        edges = new IdentifiableObjectMapping<Node, Edge>(graph.numberOfNodes(), Edge.class);
-        nodes = new IdentifiableObjectMapping<Node, Node>(graph.numberOfNodes(), Node.class);
+        distances = new IdentifiableIntegerMapping<>(graph.numberOfNodes());
+        edges = new IdentifiableObjectMapping<>(graph.numberOfNodes(), Edge.class);
+        nodes = new IdentifiableObjectMapping<>(graph.numberOfNodes(), Node.class);
         for (Node node : graph.nodes()) {
             distances.set(node, Integer.MAX_VALUE);
         }

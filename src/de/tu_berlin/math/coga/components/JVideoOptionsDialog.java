@@ -14,13 +14,10 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 
-/*
- * VideoOptions.java
- * Created on 8. November 2008, 20:45
- */
 package de.tu_berlin.math.coga.components;
 
-import de.tu_berlin.coga.common.localization.AbstractLocalization;
+import de.tu_berlin.coga.common.localization.Localization;
+import de.tu_berlin.coga.common.localization.LocalizationManager;
 import de.tu_berlin.coga.common.util.units.BinaryUnits;
 import de.tu_berlin.coga.common.util.Formatter;
 import de.tu_berlin.math.coga.components.framework.Button;
@@ -64,6 +61,7 @@ import opengl.helper.TextureFontStrings;
  * @author  Jan-Philipp Kappmeier
  */
 public class JVideoOptionsDialog extends javax.swing.JDialog {
+	public final static String COMPONENT_LOCALIZATION = "de.tu_berlin.math.coga.components.ComponentLocalization";
 	private static final int COL_TEXT = 0;
 	private static final int COL_Y = COL_TEXT + 1;
 	private static final int COL_BOLD = COL_Y + 1;
@@ -75,7 +73,7 @@ public class JVideoOptionsDialog extends javax.swing.JDialog {
 	/** The return value, cancel by default. */
 	private int retVal = JOptionPane.CANCEL_OPTION;
 	/** The localization class. */
-	static final AbstractLocalization loc = ComponentLocalization.getSingleton();
+	static final Localization loc = LocalizationManager.getSingleton().getLocalization( COMPONENT_LOCALIZATION );
 	/** The default cancel button. */
 	private JButton btnCancel;
 	/** The default ok button. */
@@ -668,11 +666,11 @@ public class JVideoOptionsDialog extends javax.swing.JDialog {
 		public String getColumnName( int column ) {
 			switch( column ) {
 				case COL_TEXT:
-					return ComponentLocalization.getSingleton().getStringWithoutPrefix( "JVideoOptionsDialog.textTable.text" );
+					return loc.getStringWithoutPrefix( "JVideoOptionsDialog.textTable.text" );
 				case COL_Y:
-					return ComponentLocalization.getSingleton().getStringWithoutPrefix( "JVideoOptionsDialog.textTable.y" );
+					return loc.getStringWithoutPrefix( "JVideoOptionsDialog.textTable.y" );
 				case COL_BOLD:
-					return ComponentLocalization.getSingleton().getStringWithoutPrefix( "JVideoOptionsDialog.textTable.bold" );
+					return loc.getStringWithoutPrefix( "JVideoOptionsDialog.textTable.bold" );
 				default:
 					return null;
 			}

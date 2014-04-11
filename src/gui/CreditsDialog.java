@@ -14,11 +14,6 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 
-/**
- * CreditsDialog.java
- * Created 18.05.2008, 20:03:38
- */
-
 package gui;
 
 import java.awt.Frame;
@@ -38,7 +33,7 @@ public class CreditsDialog extends JDialog {
 	 * @param parent the parent window
 	 */
 	public CreditsDialog( Frame parent ) {
-		super(parent, GUILocalization.getSingleton().getString( "AppTitle" ) + " v" + ZETMain.version + " " + ZETMain.revision, true);
+		super(parent, GUILocalization.loc.getString( "AppTitle" ) + " v" + ZETMain.version + " " + ZETMain.revision, true);
 		setSize( 640, 480 );
 		setLocation ( parent.getX () + ((parent.getWidth() - getWidth()) / 2), parent.getY () + ((parent.getHeight() - getHeight()) / 2));
 		CreditsPanel credits = new CreditsPanel();

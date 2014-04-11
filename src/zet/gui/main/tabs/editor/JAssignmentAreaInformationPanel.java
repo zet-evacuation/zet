@@ -24,7 +24,6 @@ import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import javax.swing.JList;
 import javax.swing.JTextField;
-import zet.gui.GUILocalization;
 import zet.gui.components.model.AssignmentTypeComboBoxModel;
 import zet.gui.components.model.ComboBoxRenderer;
 import zet.gui.main.JZetWindow;

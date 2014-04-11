@@ -14,15 +14,11 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 
-/**
- * Class PropertyTreeNode
- * Created 22.02.2008, 01:36:06
- */
 package gui.propertysheet;
 
 import com.thoughtworks.xstream.annotations.XStreamAlias;
 import com.thoughtworks.xstream.annotations.XStreamConverter;
-import de.tu_berlin.math.coga.zet.ZETLocalization;
+import de.tu_berlin.math.coga.zet.ZETLocalization2;
 import de.tu_berlin.coga.common.localization.AbstractLocalization;
 import gui.propertysheet.abs.PropertyElement;
 import gui.propertysheet.abs.DefaultPropertyTreeNodeConverter;
@@ -98,7 +94,7 @@ public class PropertyTreeNode  implements PropertyElement {
 	 */
 	@Override
 	public String getDisplayName() {
-		return isUsedAsLocString() ? ZETLocalization.getSingleton().getString( name ) : name;
+		return isUsedAsLocString() ? ZETLocalization2.loc.getString( name ) : name;
 	}
 
 	@Override

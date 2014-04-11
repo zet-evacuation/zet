@@ -14,9 +14,6 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 
-/**
- * Class CellularAutomatonAlgorithms Created 07.07.2008, 01:29:17
- */
 package zet.tasks;
 
 import algo.ca.algorithm.evac.EvacuationCellularAutomatonBackToFront;
@@ -25,7 +22,7 @@ import algo.ca.algorithm.evac.EvacuationCellularAutomatonInOrder;
 import algo.ca.algorithm.evac.EvacuationCellularAutomatonRandom;
 import algo.ca.algorithm.evac.SwapCellularAutomaton;
 import algo.ca.framework.EvacuationCellularAutomatonAlgorithm;
-import de.tu_berlin.math.coga.zet.ZETLocalization;
+import de.tu_berlin.math.coga.zet.ZETLocalization2;
 import de.tu_berlin.math.coga.zet.converter.cellularAutomaton.ZToCAMapping;
 import de.tu_berlin.math.coga.zet.converter.cellularAutomaton.ZToCARasterContainer;
 import ds.ca.evac.EvacuationCellularAutomaton;
@@ -42,7 +39,7 @@ public enum CellularAutomatonAlgorithms {
 	 * A simulation algorithm where all individuals move in the order of
 	 * decreasing distances.
 	 */
-	BackToFront( ZETLocalization.getSingleton().getString( "batch.caOrder.backToFront" ) ) {
+	BackToFront( ZETLocalization2.loc.getString( "batch.caOrder.backToFront" ) ) {
 		@Override
 		public EvacuationCellularAutomatonAlgorithm getAlgorithm() {
 			return new EvacuationCellularAutomatonBackToFront();
@@ -52,7 +49,7 @@ public enum CellularAutomatonAlgorithms {
 	 * A simulation algorithm where all individuals move in the order of
 	 * increasing distances.
 	 */
-	FrontToBack( ZETLocalization.getSingleton().getString( "batch.caOrder.frontToBack" ) ) {
+	FrontToBack( ZETLocalization2.loc.getString( "batch.caOrder.frontToBack" ) ) {
 		@Override
 		public EvacuationCellularAutomatonAlgorithm getAlgorithm() {
 			return new EvacuationCellularAutomatonFrontToBack();
@@ -62,7 +59,7 @@ public enum CellularAutomatonAlgorithms {
 	 * A simulation algorithm where all individuals are simulated in a random order
 	 * in each step.
 	 */
-	RandomOrder( ZETLocalization.getSingleton().getString( "batch.caOrder.random" ) ) {
+	RandomOrder( ZETLocalization2.loc.getString( "batch.caOrder.random" ) ) {
 		@Override
 		public EvacuationCellularAutomatonAlgorithm getAlgorithm() {
 			return new EvacuationCellularAutomatonRandom();
@@ -72,7 +69,7 @@ public enum CellularAutomatonAlgorithms {
 	 * A simulation algorithm where all individuals are simulated in a random order
 	 * and where two individuals can swap position.
 	 */
-	Swap( ZETLocalization.getSingleton().getString( "batch.caOrder.swap" ) ) {
+	Swap( ZETLocalization2.loc.getString( "batch.caOrder.swap" ) ) {
 		@Override
 		public EvacuationCellularAutomatonAlgorithm getAlgorithm() {
 			return new SwapCellularAutomaton();
@@ -82,7 +79,7 @@ public enum CellularAutomatonAlgorithms {
 	 * A simulation algorithm where all individuals are simulated in the same order
 	 * in each step.
 	 */
-	InOrder( ZETLocalization.getSingleton().getString( "batch.caOrder.unifom" ) ) {
+	InOrder( ZETLocalization2.loc.getString( "batch.caOrder.unifom" ) ) {
 		@Override
 		public EvacuationCellularAutomatonAlgorithm getAlgorithm() {
 			return new EvacuationCellularAutomatonInOrder();

@@ -11,8 +11,9 @@ import de.tu_berlin.coga.common.algorithm.AlgorithmEvent;
 import de.tu_berlin.coga.common.algorithm.AlgorithmProgressEvent;
 import de.tu_berlin.coga.common.algorithm.AlgorithmStartedEvent;
 import de.tu_berlin.coga.common.algorithm.AlgorithmTerminatedEvent;
-import de.tu_berlin.math.coga.zet.ZETLocalization;
-import de.tu_berlin.coga.common.localization.AbstractLocalization;
+import de.tu_berlin.math.coga.zet.ZETLocalization2;
+import de.tu_berlin.coga.common.localization.Localization;
+import de.tu_berlin.coga.common.localization.LocalizationManager;
 import de.tu_berlin.coga.common.util.Formatter;
 import de.tu_berlin.coga.common.util.units.TimeUnits;
 import de.tu_berlin.math.coga.components.framework.Menu;
@@ -89,7 +90,7 @@ public class FlowVisualizationTool extends JFrame implements PropertyChangeListe
 			add( visNash );
 		}
 	};
-	AbstractLocalization loc = ZETLocalization.getSingleton();
+	Localization loc = ZETLocalization2.loc;
 	private int sliderAccuracy = 100;
 	Visualization<? extends DrawableControlable> vis = visFlow;
 	JEventStatusBar sb = new JEventStatusBar();
@@ -105,7 +106,7 @@ public class FlowVisualizationTool extends JFrame implements PropertyChangeListe
 	public FlowVisualizationTool() {
 		super();
 		theInstance = this;
-		loc.setLocale( Locale.getDefault() );
+		LocalizationManager.getSingleton().setLocale( Locale.getDefault() );
 
 		setDefaultCloseOperation( JFrame.EXIT_ON_CLOSE );
 		setSize( 800, 600 );
@@ -145,7 +146,7 @@ public class FlowVisualizationTool extends JFrame implements PropertyChangeListe
 	 * tool bar and status bar.
 	 */
 	private void initializeComponents() {
-		loc.setLocale( Locale.GERMAN );
+		LocalizationManager.getSingleton().setLocale( Locale.GERMAN );
 		sb = new JEventStatusBar();
 		add( sb, BorderLayout.SOUTH );
 

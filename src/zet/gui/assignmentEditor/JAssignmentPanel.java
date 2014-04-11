@@ -14,13 +14,10 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 
-/*
- * DistributionTab.java
- * Created on 16. Dezember 2007, 22:48
- */
-
 package zet.gui.assignmentEditor;
 
+import de.tu_berlin.coga.common.localization.Localization;
+import de.tu_berlin.coga.common.localization.LocalizationManager;
 import de.tu_berlin.math.coga.rndutils.distribution.Distribution;
 import de.tu_berlin.math.coga.rndutils.distribution.continuous.ErlangDistribution;
 import de.tu_berlin.math.coga.rndutils.distribution.continuous.ExponentialDistribution;
@@ -106,7 +103,7 @@ public class JAssignmentPanel extends JPanel {
 	private static final int DIST_ERLANG = 3;
 	private static final int DIST_HYPEREXPONENTIAL = 4;
 	Project myProject;
-	private static final GUILocalization loc = GUILocalization.getSingleton();	// the ZET GUI localization object
+	private static final Localization loc = GUILocalization.loc;	// the ZET GUI localization object
 	private Assignment currentAssignment;
 	private AssignmentType currentAssignmentType;
 	private JTextField addAssignmentText;
@@ -840,13 +837,13 @@ public class JAssignmentPanel extends JPanel {
 				case COL_DISTRIBUTION:
 					return params.get( row ).getDistributionName();
 				case COL_PARAM1:
-					return loc.getFloatConverter().format( params.get( row ).getParam( 1 ) );
+					return LocalizationManager.getSingleton().getFloatConverter().format( params.get( row ).getParam( 1 ) );
 				case COL_PARAM2:
-					return loc.getFloatConverter().format( params.get( row ).getParam( 2 ) );
+					return LocalizationManager.getSingleton().getFloatConverter().format( params.get( row ).getParam( 2 ) );
 				case COL_PARAM3:
-					return loc.getFloatConverter().format( params.get( row ).getParam( 3 ) );
+					return LocalizationManager.getSingleton().getFloatConverter().format( params.get( row ).getParam( 3 ) );
 				case COL_PARAM4:
-					return loc.getFloatConverter().format( params.get( row ).getParam( 4 ) );
+					return LocalizationManager.getSingleton().getFloatConverter().format( params.get( row ).getParam( 4 ) );
 				default:
 					return null;
 			}
@@ -911,19 +908,19 @@ public class JAssignmentPanel extends JPanel {
 						drawCharts();
 						break;
 					case COL_PARAM1:
-						params.get( row ).setParam( 1, loc.getFloatConverter().parse( (String) value ).doubleValue() );
+						params.get( row ).setParam( 1, LocalizationManager.getSingleton().getFloatConverter().parse( (String) value ).doubleValue() );
 						drawCharts();
 						break;
 					case COL_PARAM2:
-						params.get( row ).setParam( 2, loc.getFloatConverter().parse( (String) value ).doubleValue() );
+						params.get( row ).setParam( 2, LocalizationManager.getSingleton().getFloatConverter().parse( (String) value ).doubleValue() );
 						drawCharts();
 						break;
 					case COL_PARAM3:
-						params.get( row ).setParam( 3, loc.getFloatConverter().parse( (String) value ).doubleValue() );
+						params.get( row ).setParam( 3, LocalizationManager.getSingleton().getFloatConverter().parse( (String) value ).doubleValue() );
 						drawCharts();
 						break;
 					case COL_PARAM4:
-						params.get( row ).setParam( 4, loc.getFloatConverter().parse( (String) value ).doubleValue() );
+						params.get( row ).setParam( 4, LocalizationManager.getSingleton().getFloatConverter().parse( (String) value ).doubleValue() );
 						drawCharts();
 						break;
 					default:

@@ -13,13 +13,10 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
-/*
- * FloorImportDialog.java
- * Created 06.05.2009, 21:05:25
- */
+
 package gui.editor.flooredit;
 
-import de.tu_berlin.math.coga.zet.ZETLocalization;
+import de.tu_berlin.math.coga.zet.ZETLocalization2;
 import de.tu_berlin.coga.zet.model.Project;
 import de.tu_berlin.coga.zet.model.Floor;
 import de.tu_berlin.math.coga.components.framework.Button;
@@ -35,11 +32,10 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JList;
 import javax.swing.JOptionPane;
-import de.tu_berlin.coga.common.localization.AbstractLocalization;
+import de.tu_berlin.coga.common.localization.Localization;
 import ds.ProjectLoader;
 import gui.GUIControl;
 import gui.ZETLoader;
-import gui.ZETMain;
 
 /**
  * The class {@code FloorImportDialog} allows importing floors from other
@@ -48,9 +44,9 @@ import gui.ZETMain;
  */
 public class FloorImportDialog extends JDialog {
 	/** The localization class. */
-	private static final AbstractLocalization loc = ZETLocalization.getSingleton();
+	private static final Localization loc = ZETLocalization2.loc;
 	/** The elements of the floor list. */
-	private Vector<Floor> floors = new Vector<Floor>();
+	private Vector<Floor> floors = new Vector<>();
 	/** The list of floors available in the newly loaded project. */
 	private JList list;
 	/** The project loaded in the editor. */

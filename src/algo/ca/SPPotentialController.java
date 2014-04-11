@@ -13,10 +13,11 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
+
 package algo.ca;
 
 import algo.ca.util.PotentialUtils;
-import de.tu_berlin.math.coga.zet.ZETLocalization;
+import de.tu_berlin.math.coga.zet.ZETLocalization2;
 import de.tu_berlin.math.coga.rndutils.RandomUtils;
 import de.tu_berlin.math.coga.rndutils.generators.GeneralRandom;
 import ds.ca.evac.EvacCell;
@@ -189,8 +190,7 @@ public class SPPotentialController implements PotentialController {
 	public void decreaseDynamicPotential (EvacCell cell) throws IllegalArgumentException{
 		DynamicPotential dynPot = pm.getDynamicPotential();
 		if(!(dynPot.contains(cell))){
-			throw new IllegalArgumentException (ZETLocalization.getSingleton (
-			).getString ("algo.ca.InsertCellPreviouslyException"));
+			throw new IllegalArgumentException (ZETLocalization2.loc.getString ("algo.ca.InsertCellPreviouslyException"));
 		}
 		
 		//if(cell.getIndividual() != null){

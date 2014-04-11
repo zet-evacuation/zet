@@ -14,10 +14,6 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 
-/*
- * MaxFlowOverTime.java
- * Created on 22. Januar 2008, 03:39
- */
 package algo.graph.dynamicflow.maxflow;
 
 import de.tu_berlin.math.coga.algorithm.flowovertime.maxflow.MaximumFlowOverTimeProblem;
@@ -132,7 +128,7 @@ public class MaxFlowOverTime extends Algorithm<MaximumFlowOverTimeProblem, TimeR
 		timeHorizon = problem.getTimeHorizon();
 
 		if( (sources == null) || (sinks == null) )
-			throw new IllegalArgumentException( GraphLocalization.getSingleton().getString( "algo.graph.MaxFlowOverTime.SpecifySourceSinkFirst" ) );
+			throw new IllegalArgumentException( GraphLocalization.loc.getString( "algo.graph.MaxFlowOverTime.SpecifySourceSinkFirst" ) );
 
 		if( (sources.isEmpty()) || (sinks.isEmpty()) )
 			return new TimeReapeatedFlow( timeHorizon );

@@ -13,10 +13,7 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
-/*
- * OppositeNodeIterator.java
- *
- */
+
 package ds.graph.network;
 
 import ds.graph.Edge;
@@ -54,7 +51,7 @@ public class OppositeNodeIterator implements Iterator<Node> {
 	protected OppositeNodeIterator( Node node, Iterator<Edge> edgeIterator ) {
 		this.node = node;
 		this.edgeIterator = edgeIterator;
-		this.visited = new HashMap<Node, Boolean>();
+		this.visited = new HashMap<>();
 	}
 
 	/**
@@ -101,6 +98,6 @@ public class OppositeNodeIterator implements Iterator<Node> {
 	 */
 	@Override
 	public void remove() {
-		throw new UnsupportedOperationException( GraphLocalization.getSingleton().getString( "ds.graph.NotSupportedException" ) );
+		throw new UnsupportedOperationException( GraphLocalization.loc.getString( "ds.graph.NotSupportedException" ) );
 	}
 }

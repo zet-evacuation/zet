@@ -23,7 +23,7 @@ package de.tu_berlin.math.coga.zet.converter.graph;
 import algo.graph.dynamicflow.eat.EarliestArrivalFlowProblem;
 import algo.graph.util.GraphInstanceChecker;
 import com.thoughtworks.xstream.annotations.XStreamAlias;
-import de.tu_berlin.math.coga.zet.ZETLocalization;
+import de.tu_berlin.math.coga.zet.ZETLocalization2;
 import de.tu_berlin.math.coga.math.vectormath.Vector3;
 import de.tu_berlin.math.coga.zet.viewer.NodePositionMapping;
 import ds.graph.Edge;
@@ -86,7 +86,7 @@ public class NetworkFlowModel implements Iterable<Node> {
 		if( edgeCapacities.isDefinedFor( edge ) )
 			return edgeCapacities.get( edge );
 		else
-			throw new IllegalArgumentException( ZETLocalization.getSingleton().getString( "ds.Graph.NoEdgeCapacityException" + edge + "." ) );
+			throw new IllegalArgumentException( ZETLocalization2.loc.getString( "ds.Graph.NoEdgeCapacityException" + edge + "." ) );
 	}
 
 	/**
@@ -120,7 +120,7 @@ public class NetworkFlowModel implements Iterable<Node> {
 		if( nodeCapacities.isDefinedFor( node ) )
 			return nodeCapacities.get( node );
 		else
-			throw new IllegalArgumentException( ZETLocalization.getSingleton().getString( "ds.Graph.NoNodeCapacityException" + node + "." ) );
+			throw new IllegalArgumentException( ZETLocalization2.loc.getString( "ds.Graph.NoNodeCapacityException" + node + "." ) );
 	}
 
 	public IdentifiableIntegerMapping<Node> nodeCapacities() {
@@ -131,7 +131,7 @@ public class NetworkFlowModel implements Iterable<Node> {
 		if( transitTimes.isDefinedFor( edge ) )
 			return transitTimes.get( edge );
 		else
-			throw new IllegalArgumentException( ZETLocalization.getSingleton().getString( "ds.Graph.NoTransitTimeException" + edge + "." ) );
+			throw new IllegalArgumentException( ZETLocalization2.loc.getString( "ds.Graph.NoTransitTimeException" + edge + "." ) );
 	}
 
 	public double getExactTransitTime( Edge edge ) {
@@ -203,7 +203,7 @@ public class NetworkFlowModel implements Iterable<Node> {
 				mapping.setDeletedSourceNode( oldSource, true );
 			}
 		} else
-			throw new AssertionError( ZETLocalization.getSingleton().getString( "converter.NoCheckException" ) );
+			throw new AssertionError( ZETLocalization2.loc.getString( "converter.NoCheckException" ) );
 	}
 
 	Node newNode() {

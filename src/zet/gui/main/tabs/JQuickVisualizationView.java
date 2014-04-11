@@ -14,13 +14,9 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 
-/**
- * Class JQuickVisualizationView
- * Created 30.04.2008, 09:51:45
- */
-
 package zet.gui.main.tabs;
 
+import de.tu_berlin.coga.common.localization.Localization;
 import de.tu_berlin.coga.zet.model.Floor;
 import ds.PropertyContainer;
 import de.tu_berlin.coga.zet.model.ZControl;
@@ -44,7 +40,7 @@ import zet.tasks.DisplayFloorTask;
  * @author Jan-Philipp Kappmeier
  */
 public class JQuickVisualizationView extends AbstractSplitPropertyWindow<JFloorScrollPane<JRasterFloor>> {
-	GUILocalization loc;
+	Localization loc;
 	private FloorComboBox<Floor> quickfloorSelector;
 	private int selectedFloor = 0;
 	private final GUIControl guiControl;
@@ -60,7 +56,7 @@ public class JQuickVisualizationView extends AbstractSplitPropertyWindow<JFloorS
 	public JQuickVisualizationView( GUIControl guiControl ) {
 		super( new JFloorScrollPane<>( new JRasterFloor() ) );
 		this.guiControl = guiControl;
-		loc = GUILocalization.getSingleton();
+		loc = GUILocalization.loc;
 	}
 
 	public void updateQuickFloorlist() {
@@ -117,7 +113,7 @@ public class JQuickVisualizationView extends AbstractSplitPropertyWindow<JFloorS
 		} );
 
 		int row = 1;
-		loc = GUILocalization.getSingleton();
+		loc = GUILocalization.loc;
 		lblFloorSelector = new JLabel( loc.getString( "Floors" ) + ":" );
 		panel.add( lblFloorSelector, "1, " + row++ );
 		panel.add( quickfloorSelector, "1, " + row++ );

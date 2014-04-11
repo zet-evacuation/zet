@@ -13,16 +13,12 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
-/**
- * Class DefaultRuleSet
- * Erstellt 14.04.2008, 12:37:53
- */
 
 package algo.ca;
 
 import algo.ca.rule.AbstractMovementRule;
 import algo.ca.rule.Rule;
-import de.tu_berlin.math.coga.zet.ZETLocalization;
+import de.tu_berlin.math.coga.zet.ZETLocalization2;
 import ds.PropertyContainer;
 import java.util.ArrayList;
 
@@ -55,7 +51,7 @@ public class DefaultRuleSet extends RuleSet {
 			if( movementRule == null )
 				movementRule = (AbstractMovementRule)rule;
 			else
-				throw new IllegalArgumentException( ZETLocalization.getSingleton().getString( "algo.ca.RuleSet.MovementRuleException" ) );
+				throw new IllegalArgumentException( ZETLocalization2.loc.getString( "algo.ca.RuleSet.MovementRuleException" ) );
 		}
 		super.add( rule );
 	}
@@ -73,7 +69,7 @@ public class DefaultRuleSet extends RuleSet {
 			if( movementRule == null )
 				movementRule = (AbstractMovementRule)rule;
 			else
-				throw new IllegalArgumentException( ZETLocalization.getSingleton().getString( "algo.ca.RuleSet.MovementRuleException" ) );
+				throw new IllegalArgumentException( ZETLocalization2.loc.getString( "algo.ca.RuleSet.MovementRuleException" ) );
 		}
 		super.add( rule, useInPrimarySet, useInLoopSet );
 	}

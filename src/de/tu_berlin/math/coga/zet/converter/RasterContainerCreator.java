@@ -13,13 +13,10 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
-/*
- * RasterContainerCreator.java
- *
- */
+
 package de.tu_berlin.math.coga.zet.converter;
 
-import de.tu_berlin.math.coga.zet.ZETLocalization;
+import de.tu_berlin.math.coga.zet.ZETLocalization2;
 import de.tu_berlin.math.coga.zet.converter.graph.ZToGraphRoomRaster;
 import de.tu_berlin.math.coga.zet.converter.graph.ZToGraphRasteredDoor;
 import de.tu_berlin.math.coga.zet.converter.graph.ZToGraphRasterSquare;
@@ -159,7 +156,7 @@ public class RasterContainerCreator {
 				Room partnerRoom = rEdge.getLinkTarget().getRoom();
 
 				if( partnerEdge == null )
-					throw new RuntimeException( ZETLocalization.getSingleton().getString( "converter.InconsistencyException" ) );
+					throw new RuntimeException( ZETLocalization2.loc.getString( "converter.InconsistencyException" ) );
 
 				ZToGraphRoomRaster partnerRaster = container.getRasteredRoom( partnerRoom );
 				List<ZToGraphRasterSquare> partnerSquares = de.tu_berlin.math.coga.zet.converter.RasterTools.getSquaresAlongEdge( partnerEdge, partnerRaster );
@@ -181,7 +178,7 @@ public class RasterContainerCreator {
 	public static Project makeComplexExample() {
 		Project project = new Project();
 		BuildingPlan bp = project.getBuildingPlan();
-		Floor mainFloor = new Floor( ZETLocalization.getSingleton().getString( "converter.groundFloor" ) );
+		Floor mainFloor = new Floor( ZETLocalization2.loc.getString( "converter.groundFloor" ) );
 		bp.addFloor( mainFloor );
 
 		ArrayList<PlanPoint> points;

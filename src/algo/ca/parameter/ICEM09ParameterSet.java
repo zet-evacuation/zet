@@ -13,9 +13,10 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
+
 package algo.ca.parameter;
 
-import de.tu_berlin.math.coga.zet.ZETLocalization;
+import de.tu_berlin.math.coga.zet.ZETLocalization2;
 import ds.PropertyContainer;
 import ds.ca.evac.EvacCell;
 import ds.ca.evac.Individual;
@@ -121,7 +122,7 @@ public class ICEM09ParameterSet extends AbstractDefaultParameterSet {
 	@Override
 	public double effectivePotential( EvacCell referenceCell, EvacCell targetCell ) {
 		if( referenceCell.getIndividual() == null )
-			throw new IllegalArgumentException( ZETLocalization.getSingleton().getString( "algo.ca.parameter.NoIndividualOnReferenceCellException" ) );
+			throw new IllegalArgumentException( ZETLocalization2.loc.getString( "algo.ca.parameter.NoIndividualOnReferenceCellException" ) );
 		StaticPotential staticPotential = referenceCell.getIndividual().getStaticPotential();
 		final double statPotlDiff = staticPotential.getPotential( referenceCell ) - staticPotential.getPotential( targetCell );
 		return statPotlDiff;

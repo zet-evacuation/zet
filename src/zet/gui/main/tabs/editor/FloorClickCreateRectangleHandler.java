@@ -3,7 +3,7 @@
  */
 package zet.gui.main.tabs.editor;
 
-import de.tu_berlin.math.coga.zet.ZETLocalization;
+import de.tu_berlin.math.coga.zet.ZETLocalization2;
 import de.tu_berlin.coga.zet.model.PlanPoint;
 import de.tu_berlin.coga.zet.model.PlanPolygon;
 import de.tu_berlin.coga.zet.model.Room;
@@ -54,7 +54,7 @@ public class FloorClickCreateRectangleHandler extends FloorClickHandler {
 		PlanPoint p1 = new PlanPoint( CoordinateTools.translateToModel( getEditStatus().isRasterizedPaintMode() ? getEditStatus().getNextRasterPoint( getEditStatus().getLastClick() ) : getEditStatus().getLastClick() ) );
 		PlanPoint p2 = new PlanPoint( CoordinateTools.translateToModel( getEditStatus().isRasterizedPaintMode() ? getEditStatus().getNextRasterPoint( p ) : p ) );
 		if( p1.getX() == p2.getX() || p1.getY() == p2.getY() ) {
-			ZETLoader.sendError( ZETLocalization.getSingleton().getString( "gui.error.RectangleCreationZeroArea" ) );
+			ZETLoader.sendError( ZETLocalization2.loc.getString( "gui.error.RectangleCreationZeroArea" ) );
 			return;
 		}
 		LinkedList<PlanPoint> points = new LinkedList<>();

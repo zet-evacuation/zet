@@ -1,11 +1,7 @@
-/**
- * Vector2.java
- * Created: 04.03.2010, 16:23:50
- */
 package de.tu_berlin.math.coga.math.vectormath;
 
 
-import de.tu_berlin.math.coga.zet.ZETLocalization;
+import de.tu_berlin.coga.common.localization.LocalizationManager;
 import de.tu_berlin.math.coga.math.Conversion;
 import java.text.NumberFormat;
 import java.text.ParseException;
@@ -271,7 +267,7 @@ public class Vector2 implements Cloneable {
 	 */
 	@Override
 	public String toString(){
-		return toString( ZETLocalization.getSingleton().getFloatConverter() );
+		return toString( LocalizationManager.getSingleton().getFloatConverter() );
 	}
 
 	/**
@@ -295,7 +291,7 @@ public class Vector2 implements Cloneable {
 	 * @throws ParseException if an error occurs during parsing
 	 */
 	public void parse( String value ) throws ParseException {
-		parse( value, ZETLocalization.getSingleton().getFloatConverter() );
+		parse( value, LocalizationManager.getSingleton().getFloatConverter() );
 	}
 
 	/**

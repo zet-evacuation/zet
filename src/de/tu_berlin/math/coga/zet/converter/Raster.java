@@ -14,13 +14,9 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 
-/*
- * Raster.java
- */
-
 package de.tu_berlin.math.coga.zet.converter;
 
-import de.tu_berlin.math.coga.zet.ZETLocalization;
+import de.tu_berlin.math.coga.zet.ZETLocalization2;
 import de.tu_berlin.coga.zet.model.PlanPolygon;
 import java.lang.reflect.Array;
 import java.lang.reflect.InvocationTargetException;
@@ -86,8 +82,7 @@ public class Raster<T extends RasterSquare, P extends PlanPolygon> {
 	 */
 	public Raster( Class<T> squareClassType, Class<P> polygonClassType, PlanPolygon p, int raster ) throws java.lang.IllegalArgumentException {
 		if( raster < 1 ) {
-			throw new java.lang.IllegalArgumentException (ZETLocalization.getSingleton (
-			).getString ("converter.NegativeRasterException"));
+			throw new java.lang.IllegalArgumentException (ZETLocalization2.loc.getString ("converter.NegativeRasterException"));
 		}
 		this.squareClassType = squareClassType;
 		this.polygonClassType = polygonClassType;
@@ -114,8 +109,7 @@ public class Raster<T extends RasterSquare, P extends PlanPolygon> {
 	 */
 	public Raster( Class<T> squareClassType, Class<P> polygonClassType, PlanPolygon p, double raster ) throws java.lang.IllegalArgumentException {
 		if( zet.util.ConversionTools.floatToInt( raster ) < 1 ) {
-			throw new java.lang.IllegalArgumentException (ZETLocalization.getSingleton (
-			).getString ("converter.NegativeRasterException"));
+			throw new java.lang.IllegalArgumentException (ZETLocalization2.loc.getString ("converter.NegativeRasterException"));
 		}
 		this.squareClassType = squareClassType;
 		this.polygonClassType = polygonClassType;

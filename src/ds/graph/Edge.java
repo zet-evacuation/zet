@@ -13,10 +13,7 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
-/*
- * Edge.java
- *
- */
+
 package ds.graph;
 
 import com.thoughtworks.xstream.annotations.XStreamAsAttribute;
@@ -59,7 +56,7 @@ public class Edge implements Identifiable {
      */
     public Edge(int id, Node start, Node end) {
         if (start == null || end == null) {
-            throw new NullPointerException(GraphLocalization.getSingleton().getString("ds.graph.StartEndNodeIsNullException"));
+            throw new NullPointerException(GraphLocalization.loc.getString("ds.graph.StartEndNodeIsNullException"));
         }
         this.edgeID = id;
         this.start = start;

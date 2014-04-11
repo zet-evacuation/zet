@@ -14,15 +14,12 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 
-/*
- * JZetWindow.java
- * Created 04.12.2007, 17:08
- */
 package zet.gui.main;
 
 import de.tu_berlin.coga.common.debug.Debug;
-import de.tu_berlin.math.coga.zet.ZETLocalization;
-import de.tu_berlin.coga.common.localization.AbstractLocalization;
+import de.tu_berlin.coga.common.localization.Localization;
+import de.tu_berlin.math.coga.zet.ZETLocalization2;
+import de.tu_berlin.coga.common.localization.LocalizationManager;
 import de.tu_berlin.coga.common.localization.Localized;
 import ds.PropertyContainer;
 import de.tu_berlin.coga.zet.model.ZControl;
@@ -73,11 +70,11 @@ import zet.util.ConversionTools;
 public class JZetWindow extends JFrame implements Localized {
 
 	/** The localization class. */
-	static final AbstractLocalization loc = GUILocalization.getSingleton();
+	static final Localization loc = GUILocalization.loc;
 	/** Stores the last mouse position if a mouse position event is sent. */
 	private static Point lastMouse = new Point( 0, 0 );
 	/** The delimiter used if numbers are stored in a tuple. */
-	final static String delimiter = ZETLocalization.getSingleton().getStringWithoutPrefix( "numberSeparator" );
+	final static String delimiter = ZETLocalization2.loc.getStringWithoutPrefix( "numberSeparator" );
 	private static boolean editing = false;
 	// Options
 	/** The number format used to display the zoom factor in the text field. */
@@ -118,7 +115,7 @@ public class JZetWindow extends JFrame implements Localized {
 		super();
 
 		// Set up locale information
-		loc.setLocale( Locale.getDefault() );
+		LocalizationManager.getSingleton().setLocale( Locale.getDefault() );
 		nfZoom.setMaximumFractionDigits( 2 );
 
 		// Set window position
@@ -261,8 +258,8 @@ public class JZetWindow extends JFrame implements Localized {
 	public static void sendMouse( Point position ) {
 		lastMouse = position;
 		String realCoordsMillimeter = "(" + Integer.toString( position.x ) + delimiter + Integer.toString( position.y ) + ")";
-		String realCoordsMeter = "(" + ZETLocalization.getSingleton().getFloatConverter().format( ConversionTools.toMeter( position.x ) ) + delimiter + ZETLocalization.getSingleton().getFloatConverter().format( ConversionTools.toMeter( position.y ) ) + ")";
-		String text = String.format( GUILocalization.getSingleton().getString( "gui.EditPanel.Mouse.PositionMillimeterMeter" ), realCoordsMillimeter, realCoordsMeter );
+		String realCoordsMeter = "(" + LocalizationManager.getSingleton().getFloatConverter().format( ConversionTools.toMeter( position.x ) ) + delimiter + LocalizationManager.getSingleton().getFloatConverter().format( ConversionTools.toMeter( position.y ) ) + ")";
+		String text = String.format( loc.getString( "gui.EditPanel.Mouse.PositionMillimeterMeter" ), realCoordsMillimeter, realCoordsMeter );
 		EventServer.getInstance().dispatchEvent( new MessageEvent<JZetWindow>( null, MessageType.MousePosition, text ) );
 	}
 

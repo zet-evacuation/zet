@@ -1,11 +1,8 @@
-/**
- * BasicProperty.java
- * Created: Nov 25, 2011, 3:04:51 PM
- */
+
 package gui.propertysheet;
 
 import com.l2fprod.common.propertysheet.DefaultProperty;
-import de.tu_berlin.math.coga.zet.ZETLocalization;
+import de.tu_berlin.math.coga.zet.ZETLocalization2;
 import ds.PropertyContainer;
 import gui.propertysheet.abs.PropertyElement;
 import gui.propertysheet.abs.PropertyValue;
@@ -51,7 +48,7 @@ public class BasicProperty<T> extends DefaultProperty implements PropertyValue<T
 	 */
 	@Override
 	public String getDisplayName() {
-		return isUsedAsLocString() ? ZETLocalization.getSingleton().getString( super.getDisplayName() ) : super.getDisplayName();
+		return isUsedAsLocString() ? ZETLocalization2.loc.getString( super.getDisplayName() ) : super.getDisplayName();
 	}
 
 	@Override
@@ -70,7 +67,7 @@ public class BasicProperty<T> extends DefaultProperty implements PropertyValue<T
 
 	@Override
 	public String getShortDescription() {
-		return isUsedAsLocString() ? ZETLocalization.getSingleton().getString( super.getShortDescription() ) : super.getShortDescription();
+		return isUsedAsLocString() ? ZETLocalization2.loc.getString( super.getShortDescription() ) : super.getShortDescription();
 	}
 
 	@Override

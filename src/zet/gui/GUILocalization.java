@@ -4,28 +4,29 @@
  */
 package zet.gui;
 
-import de.tu_berlin.coga.common.localization.AbstractLocalization;
-import java.util.MissingResourceException;
+import de.tu_berlin.coga.common.localization.Localization;
+import de.tu_berlin.coga.common.localization.LocalizationManager;
 
 /**
  *
  * @author Jan-Philipp Kappmeier
  */
-public class GUILocalization extends AbstractLocalization {
-
-	private volatile static GUILocalization singleton;
-
-	private GUILocalization() throws MissingResourceException {
-		super( "zet.gui.GUILocalization" );
-	}
-
-	public static GUILocalization getSingleton() {
-		if( singleton == null )
-			synchronized( GUILocalization.class ) {
-				// thread safe: check again if pointer is null
-				if( singleton == null )
-					singleton = new GUILocalization();
-			}
-		return singleton;
-	}
+public class GUILocalization {
+	public final static Localization loc = LocalizationManager.getSingleton().getLocalization( "zet.gui.GUILocalization" );
+					
+//	private volatile static GUILocalization singleton;
+//
+//	private GUILocalization() throws MissingResourceException {
+//		super( "zet.gui.GUILocalization" );
+//	}
+//
+//	public static GUILocalization getSingleton() {
+//		if( singleton == null )
+//			synchronized( GUILocalization.class ) {
+//				// thread safe: check again if pointer is null
+//				if( singleton == null )
+//					singleton = new GUILocalization();
+//			}
+//		return singleton;
+//	}
 }

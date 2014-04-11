@@ -13,13 +13,11 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
-/*
- * JCellPolygon.java
- * Created on 28.01.2008, 00:41:39
- */
+
 package zet.gui.main.tabs.quickVisualization;
 
-import de.tu_berlin.math.coga.zet.ZETLocalization;
+import de.tu_berlin.coga.common.localization.LocalizationManager;
+import de.tu_berlin.math.coga.zet.ZETLocalization2;
 import de.tu_berlin.coga.common.util.Direction8;
 import ds.PropertyContainer;
 import ds.ca.evac.EvacCell;
@@ -48,7 +46,7 @@ public class JCellPolygon extends AbstractPolygon<AbstractFloor> {
 	EnumSet<Direction8> borders = EnumSet.noneOf( Direction8.class );
 	private EvacCell cell;
 	private final boolean showIndividualNames;
-	private static final NumberFormat nfFloat = ZETLocalization.getSingleton().getFloatConverter();// NumberFormat.getNumberInstance( DefaultLoc.getSingleton().getLocale() );
+	private static final NumberFormat nfFloat = LocalizationManager.getSingleton().getFloatConverter();// NumberFormat.getNumberInstance( DefaultLoc.getSingleton().getLocale() );
 	private EvacuationCellularAutomaton ca;
 
 	/**

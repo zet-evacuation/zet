@@ -140,7 +140,7 @@ public class ProjectLoader {
 					}
 				}
 			} catch( URISyntaxException | IOException ex ) {
-				throw new RuntimeException( ZLocalization.getSingleton().getString( "ds.InitProjectException" + ex.getLocalizedMessage() ) );
+				throw new RuntimeException( ZLocalization.loc.getString( "ds.InitProjectException" + ex.getLocalizedMessage() ) );
 			}
 		} else if( url.startsWith( "file:" ) ) {
 			try {
@@ -148,10 +148,10 @@ public class ProjectLoader {
 				assert (dir.isDirectory());
 				scanPackage( dir, "" );
 			} catch( URISyntaxException ex ) {
-				throw new RuntimeException( ZLocalization.getSingleton().getString( "ds.InitProjectException" ) );
+				throw new RuntimeException( ZLocalization.loc.getString( "ds.InitProjectException" ) );
 			}
 		} else {
-			throw new IllegalStateException( ZLocalization.getSingleton().getString( "ds.DeterminingJarException" ) );
+			throw new IllegalStateException( ZLocalization.loc.getString( "ds.DeterminingJarException" ) );
 		}
 	}
 

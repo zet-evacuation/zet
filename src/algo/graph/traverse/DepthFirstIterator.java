@@ -13,10 +13,6 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
-/*
- * DFS.java
- *
- */
 
 package algo.graph.traverse;
 
@@ -54,12 +50,12 @@ public class DepthFirstIterator {
     
     public DepthFirstIterator(Graph graph) {
         this.graph = graph;
-        backEdges = new ArrayList<Edge>(graph.numberOfEdges());
-        crossEdges = new ArrayList<Edge>(graph.numberOfEdges());
-        forwardEdges = new ArrayList<Edge>(graph.numberOfEdges());
-        treeEdges = new ArrayList<Edge>(graph.numberOfEdges());
-        numbering = new HashMap<Node,Integer>(graph.numberOfNodes());
-        states = new HashMap<Node,State>(graph.numberOfNodes());
+        backEdges = new ArrayList<>(graph.numberOfEdges());
+        crossEdges = new ArrayList<>(graph.numberOfEdges());
+        forwardEdges = new ArrayList<>(graph.numberOfEdges());
+        treeEdges = new ArrayList<>(graph.numberOfEdges());
+        numbering = new HashMap<>(graph.numberOfNodes());
+        states = new HashMap<>(graph.numberOfNodes());
         currentNumber = 0;        
         for (int i=0; i<graph.numberOfNodes(); i++) {
             numbering.put(graph.getNode(i),0);
@@ -68,26 +64,22 @@ public class DepthFirstIterator {
     }
 
     public List<Edge> getBackEdges() {
-        if (backEdges == null) throw new IllegalStateException(GraphLocalization.getSingleton (
-		).getString ("algo.graph.traverse.NotCalledYetException"));
+        if (backEdges == null) throw new IllegalStateException(GraphLocalization.loc.getString ("algo.graph.traverse.NotCalledYetException"));
         return backEdges;
     }    
     
     public List<Edge> getCrossEdges() {
-        if (crossEdges == null) throw new IllegalStateException(GraphLocalization.getSingleton (
-		).getString ("algo.graph.traverse.NotCalledYetException"));
+        if (crossEdges == null) throw new IllegalStateException(GraphLocalization.loc.getString ("algo.graph.traverse.NotCalledYetException"));
         return crossEdges;
     }    
     
     public List<Edge> getForwardEdges() {
-        if (forwardEdges == null) throw new IllegalStateException(GraphLocalization.getSingleton (
-		).getString ("algo.graph.traverse.NotCalledYetException"));
+        if (forwardEdges == null) throw new IllegalStateException(GraphLocalization.loc.getString ("algo.graph.traverse.NotCalledYetException"));
         return forwardEdges;
     }    
     
     public List<Edge> getTreeEdges() {
-        if (treeEdges == null) throw new IllegalStateException(GraphLocalization.getSingleton (
-		).getString ("algo.graph.traverse.NotCalledYetException"));
+        if (treeEdges == null) throw new IllegalStateException(GraphLocalization.loc.getString ("algo.graph.traverse.NotCalledYetException"));
         return treeEdges;
     }
     
@@ -96,8 +88,7 @@ public class DepthFirstIterator {
     }
     
     public void run(boolean reverse) {
-        if (graph == null) throw new IllegalStateException(GraphLocalization.getSingleton (
-		).getString ("algo.graph.traverse.NotCalledYetException"));
+        if (graph == null) throw new IllegalStateException(GraphLocalization.loc.getString ("algo.graph.traverse.NotCalledYetException"));
         if (backEdges != null) return;
         for (int i=0; i<graph.numberOfNodes(); i++) {
             if (numbering.get(graph.getNode(i)) == 0) run(graph.getNode(i),reverse);

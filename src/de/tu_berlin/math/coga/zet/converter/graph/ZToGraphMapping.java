@@ -19,7 +19,7 @@
  */
 package de.tu_berlin.math.coga.zet.converter.graph;
 
-import de.tu_berlin.math.coga.zet.ZETLocalization;
+import de.tu_berlin.math.coga.zet.ZETLocalization2;
 import de.tu_berlin.coga.common.util.Level;
 import de.tu_berlin.math.coga.math.vectormath.Vector3;
 import de.tu_berlin.math.coga.zet.viewer.NodePositionMapping;
@@ -112,7 +112,7 @@ public class ZToGraphMapping {
 		if( edgeLevels.isDefinedFor( edge ) )
 			return edgeLevels.get( edge );
 		else
-			throw new IllegalArgumentException( ZETLocalization.getSingleton().getString( "converter.EdgeLvlNotDefinedException" + " (" + edge + ")" ) );
+			throw new IllegalArgumentException( ZETLocalization2.loc.getString( "converter.EdgeLvlNotDefinedException" + " (" + edge + ")" ) );
 
 	}
 
@@ -154,7 +154,7 @@ public class ZToGraphMapping {
 		if( nodeShapes.isDefinedFor( node ) )
 			return nodeShapes.get( node );
 		else
-			throw new IllegalArgumentException( ZETLocalization.getSingleton().getString( "converter.NodeShapeNotDefinedException" + " (" + node + ")" ) );
+			throw new IllegalArgumentException( ZETLocalization2.loc.getString( "converter.NodeShapeNotDefinedException" + " (" + node + ")" ) );
 	}
 
 	void setNodeShape( Node node, Shape value ) {
@@ -165,28 +165,28 @@ public class ZToGraphMapping {
 		if( nodeSpeedFactors.isDefinedFor( node ) )
 			return nodeSpeedFactors.get( node );
 		else
-			throw new IllegalArgumentException( ZETLocalization.getSingleton().getString( "converter.NodeSpeedNotDefinedException" + " (" + node + ")" ) );
+			throw new IllegalArgumentException( ZETLocalization2.loc.getString( "converter.NodeSpeedNotDefinedException" + " (" + node + ")" ) );
 	}
 
 	public double getUpNodeSpeedFactor( Node node ) {
 		if( nodeUpSpeedFactors.isDefinedFor( node ) )
 			return nodeUpSpeedFactors.get( node );
 		else
-			throw new IllegalArgumentException( ZETLocalization.getSingleton().getString( "converter.NodeSpeedNotDefinedException" + " (" + node + ")" ) );
+			throw new IllegalArgumentException( ZETLocalization2.loc.getString( "converter.NodeSpeedNotDefinedException" + " (" + node + ")" ) );
 	}
 
 	public double getDownNodeSpeedFactor( Node node ) {
 		if( nodeDownSpeedFactors.isDefinedFor( node ) )
 			return nodeDownSpeedFactors.get( node );
 		else
-			throw new IllegalArgumentException( ZETLocalization.getSingleton().getString( "converter.NodeSpeedNotDefinedException" + " (" + node + ")" ) );
+			throw new IllegalArgumentException( ZETLocalization2.loc.getString( "converter.NodeSpeedNotDefinedException" + " (" + node + ")" ) );
 	}
 
 	public boolean getIsDeletedSourceNode( Node node ) {
 		if( isDeletedSourceNode.isDefinedFor( node ) )
 			return isDeletedSourceNode.get( node );
 		else
-			throw new IllegalArgumentException( ZETLocalization.getSingleton().getString( "converter.NodeSourceNotDefinedException" + " (" + node + ")" ) );
+			throw new IllegalArgumentException( ZETLocalization2.loc.getString( "converter.NodeSourceNotDefinedException" + " (" + node + ")" ) );
 	}
 
 	void setNodeSpeedFactor( Node node, double value ) {

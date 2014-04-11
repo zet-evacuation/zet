@@ -1,9 +1,7 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
+
 package zet.gui.main.menu.popup;
 
+import de.tu_berlin.coga.common.localization.Localization;
 import de.tu_berlin.math.coga.components.framework.Menu;
 import de.tu_berlin.coga.zet.model.PlanEdge;
 import de.tu_berlin.coga.zet.model.PlanPoint;
@@ -12,7 +10,6 @@ import java.util.LinkedList;
 import java.util.List;
 import javax.swing.JPopupMenu;
 import zet.gui.GUILocalization;
-import zet.gui.main.menu.popup.PointPopupListener;
 
 /**
  *
@@ -20,7 +17,7 @@ import zet.gui.main.menu.popup.PointPopupListener;
  */
 public class PointPopup extends JPopupMenu {
 	/** The localization class. */
-	private GUILocalization loc = GUILocalization.getSingleton();
+	private Localization loc = GUILocalization.loc;
 	/** All JPolygons share the same pop-up menu listeners, which are stored here. */
 	private List<PointPopupListener> pointPopupListeners = new LinkedList<>();
 	private GUIControl guiControl;

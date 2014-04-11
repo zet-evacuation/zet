@@ -14,17 +14,12 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 
-/**
- * Class JVisualizationView
- * Created 10.06.2008, 11:07:01
- */
-
 package zet.gui.main.tabs;
 
-import de.tu_berlin.math.coga.zet.ZETLocalization;
+import de.tu_berlin.coga.common.localization.Localization;
+import de.tu_berlin.coga.common.localization.LocalizationManager;
 import ds.PropertyContainer;
 import gui.GUIControl;
-import gui.ZETMain;
 import de.tu_berlin.math.coga.components.JArrayPanel;
 import gui.ZETLoader;
 import gui.visualization.AbstractVisualizationView;
@@ -61,7 +56,7 @@ import zet.gui.components.model.FloorComboBox;
  */
 public class JVisualizationView extends AbstractVisualizationView<ZETVisualization> {
 	private final GUIControl guiControl;
-	private GUILocalization loc = GUILocalization.getSingleton();
+	private Localization loc = GUILocalization.loc;
 	/** The visualization panel. */
 	private ZETVisualization visualization;
 	/** A combo box that allows selecting the visible floor (if not all are visible) */
@@ -118,7 +113,7 @@ public class JVisualizationView extends AbstractVisualizationView<ZETVisualizati
 		 */
 		@Override
 		public String toString() {
-			return GUILocalization.getSingleton().getStringWithoutPrefix( locString );
+			return GUILocalization.loc.getStringWithoutPrefix( locString );
 		}
 	}
 	
@@ -156,7 +151,7 @@ public class JVisualizationView extends AbstractVisualizationView<ZETVisualizati
 		@SuppressWarnings( "UseOfObsoleteCollectionType" ) // hashtable has to be used here due to slider
 		Hashtable<Integer, JComponent> table = new Hashtable<>();
 		for( int i = 1; i <= 10; i++ )
-			table.put( new Integer( -i * 10 ), new JLabel( ZETLocalization.getSingleton().getFloatConverter().format( (10 - i) * 0.1 ) ) );
+			table.put( new Integer( -i * 10 ), new JLabel( LocalizationManager.getSingleton().getFloatConverter().format( (10 - i) * 0.1 ) ) );
 		table.put( new Integer( 0 ), new JLabel( "1" ) );
 		for( int i = 1; i < 10; i++ )
 			table.put( new Integer( i * 10 ), new JLabel( "" + (i + 1) ) );
@@ -203,7 +198,7 @@ public class JVisualizationView extends AbstractVisualizationView<ZETVisualizati
 		int row = 1;
 
 		if( loc == null )
-			loc = GUILocalization.getSingleton();
+			loc = GUILocalization.loc;
 
 
 		lblFloorSelector = new JLabel( loc.getString( "gui.EditPanel.Default.Floors" ) + ":" );
