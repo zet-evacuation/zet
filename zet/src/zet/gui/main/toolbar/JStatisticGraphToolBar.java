@@ -1,14 +1,11 @@
-/**
- * JStatisticGraphToolBar.java
- * Created: 22.07.2010 11:41:46
- */
+
 package zet.gui.main.toolbar;
 
 import batch.BatchResult;
 import batch.BatchResultEntry;
+import de.tu_berlin.coga.common.localization.Localization;
 import de.tu_berlin.coga.common.localization.Localized;
 import gui.GUIControl;
-import gui.ZETMain;
 import de.tu_berlin.math.coga.datastructure.NamedIndex;
 import de.tu_berlin.math.coga.components.framework.Button;
 import gui.ZETLoader;
@@ -32,7 +29,7 @@ public class JStatisticGraphToolBar extends JToolBar implements ActionListener, 
 
 	private final GUIControl control;
 	/** The localization class. */
-	static final GUILocalization loc = GUILocalization.getSingleton();
+	static final Localization loc = GUILocalization.loc;
 	private JButton btnExit;
 	private JButton btnOpenResults;
 	private JButton btnSaveResults;

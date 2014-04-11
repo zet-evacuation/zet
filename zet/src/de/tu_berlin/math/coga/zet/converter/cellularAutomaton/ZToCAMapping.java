@@ -16,7 +16,7 @@
 
 package de.tu_berlin.math.coga.zet.converter.cellularAutomaton;
 
-import de.tu_berlin.math.coga.zet.ZETLocalization;
+import de.tu_berlin.math.coga.zet.ZETLocalization2;
 import ds.ca.evac.EvacCell;
 import ds.ca.evac.EvacuationCellularAutomaton;
 import java.util.HashMap;
@@ -90,11 +90,9 @@ public class ZToCAMapping
 	 */
 	public boolean insertTuple(EvacCell cell, ZToCARasterSquare rasterSquare) throws IllegalArgumentException {
 		if (cell == null)
-			throw new IllegalArgumentException(ZETLocalization.getSingleton (
-			).getString ("converter.CellIsNullException"));
+			throw new IllegalArgumentException(ZETLocalization2.loc.getString ("converter.CellIsNullException"));
 		if (rasterSquare == null)
-			throw new IllegalArgumentException(ZETLocalization.getSingleton (
-			).getString ("converter.RasterSquareIsNullException"));
+			throw new IllegalArgumentException(ZETLocalization2.loc.getString ("converter.RasterSquareIsNullException"));
 		boolean overwrite = false;
 		
 		if(this.cellToRasterSquare.containsKey(cell) || this.rasterSquareToCell.containsKey(rasterSquare)){
@@ -130,11 +128,9 @@ public class ZToCAMapping
 	 */
 	public boolean insertTuple(ZToCARoomRaster roomRaster, ds.ca.evac.Room zARoom) throws IllegalArgumentException {
 		if (roomRaster == null)
-			throw new IllegalArgumentException(ZETLocalization.getSingleton (
-			).getString ("converter.zRoomIsNullException"));
+			throw new IllegalArgumentException(ZETLocalization2.loc.getString ("converter.zRoomIsNullException"));
 		if (zARoom == null)
-			throw new IllegalArgumentException(ZETLocalization.getSingleton (
-			).getString ("converter.ZARoomIsNullException"));
+			throw new IllegalArgumentException(ZETLocalization2.loc.getString ("converter.ZARoomIsNullException"));
 		boolean overwrite = false;
 		
 		if (this.zRoomToZARoom.containsKey(roomRaster) || this.zARoomToZRoom.containsKey(zARoom)) {
@@ -154,11 +150,9 @@ public class ZToCAMapping
 	
 	public boolean insertTuple(Integer floorID, de.tu_berlin.coga.zet.model.Floor zFloor){
        if (floorID == null)
-            throw new IllegalArgumentException(ZETLocalization.getSingleton (
-			).getString ("converter.FloorIDIsNullException"));
+            throw new IllegalArgumentException(ZETLocalization2.loc.getString ("converter.FloorIDIsNullException"));
         if (zFloor == null)
-            throw new IllegalArgumentException(ZETLocalization.getSingleton (
-			).getString ("converter.ZFloorIsNullException"));
+            throw new IllegalArgumentException(ZETLocalization2.loc.getString ("converter.ZFloorIsNullException"));
         
         boolean overwrite = false;
         if (this.zaFloorToZFloor.containsKey(floorID) || this.zFloorToZAFloor.containsKey(zFloor)) {
@@ -183,8 +177,7 @@ public class ZToCAMapping
 	 */
 	public ZToCARasterSquare get(EvacCell cell) throws IllegalArgumentException {
 		if (cell == null)
-			throw new IllegalArgumentException(ZETLocalization.getSingleton (
-			).getString ("converter.CellIsNullException"));
+			throw new IllegalArgumentException(ZETLocalization2.loc.getString ("converter.CellIsNullException"));
         
 		return this.cellToRasterSquare.get(cell);
 	}
@@ -198,8 +191,7 @@ public class ZToCAMapping
 	 */
 	public EvacCell get(ZToCARasterSquare rasterSquare) throws IllegalArgumentException {
 		if (rasterSquare == null)
-			throw new IllegalArgumentException(ZETLocalization.getSingleton (
-			).getString ("converter.RasterSquareIsNullException"));
+			throw new IllegalArgumentException(ZETLocalization2.loc.getString ("converter.RasterSquareIsNullException"));
 		return this.rasterSquareToCell.get(rasterSquare);
 	}
 	
@@ -215,8 +207,7 @@ public class ZToCAMapping
 	 */
 	public ZToCARoomRaster get(ds.ca.evac.Room zARoom) throws IllegalArgumentException {
 		if (zARoom == null)
-			throw new IllegalArgumentException(ZETLocalization.getSingleton (
-			).getString ("converter.ZARoomParameterException"));
+			throw new IllegalArgumentException(ZETLocalization2.loc.getString ("converter.ZARoomParameterException"));
 		return this.zARoomToZRoom.get(zARoom);
 	}
 	
@@ -240,8 +231,7 @@ public class ZToCAMapping
 	 */
 	public ds.ca.evac.Room get(ZToCARoomRaster rasteredRoom) throws IllegalArgumentException {
 		if (rasteredRoom == null)
-			throw new IllegalArgumentException(ZETLocalization.getSingleton (
-			).getString ("converter.ZRoomParameterIsNullException"));
+			throw new IllegalArgumentException(ZETLocalization2.loc.getString ("converter.ZRoomParameterIsNullException"));
 		return this.zRoomToZARoom.get(rasteredRoom);
 	}
 	

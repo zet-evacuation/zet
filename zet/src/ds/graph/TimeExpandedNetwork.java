@@ -13,15 +13,10 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
-/*
- * TimeExpandedNetzwork.java
- *
- */
 
 package ds.graph;
 
 import de.tu_berlin.coga.container.collection.ListSequence;
-import ds.graph.network.AbstractNetwork;
 import ds.graph.network.Network;
 import ds.graph.network.NetworkInterface;
 import de.tu_berlin.coga.container.mapping.IdentifiableIntegerMapping;
@@ -298,21 +293,21 @@ public class TimeExpandedNetwork extends Network {
    public TimeExpandedNetwork(NetworkInterface network, IdentifiableIntegerMapping<Edge> capacities, IdentifiableIntegerMapping<Edge> transitTimes, Node source, Node sink, int timeHorizon, boolean allowStorageInNodes) {
 		this(allowStorageInNodes, network, timeHorizon);
 		if (source ==null && sink==null)
-			throw new AssertionError(GraphLocalization.getSingleton ( ).getString ("ds.graph.SinkSourceNullException"));
+			throw new AssertionError(GraphLocalization.loc.getString ("ds.graph.SinkSourceNullException"));
 		if (source ==null)
-			throw new AssertionError(GraphLocalization.getSingleton ( ).getString ("ds.graph.SourceIsNullException"));
+			throw new AssertionError(GraphLocalization.loc.getString ("ds.graph.SourceIsNullException"));
 		if (sink==null)
-			throw new AssertionError(GraphLocalization.getSingleton ( ).getString ("ds.graph.SinkIsNullException"));
+			throw new AssertionError(GraphLocalization.loc.getString ("ds.graph.SinkIsNullException"));
 		sources = new ListSequence<Node>();
 		sources.add(source);
 		originalSources = sources;
-		originalSinks = new ListSequence<Node>();
+		originalSinks = new ListSequence<>();
 		originalSinks.add(sink);
 		createTimeExpansion(network, capacities, transitTimes, timeHorizon,
 				sources, originalSinks, allowStorageInNodes);
 		this.source = grid[source.id()][0];
 		this.sink = grid[sink.id()][timeHorizon-1];
-		sinks = new ListSequence<Node>();
+		sinks = new ListSequence<>();
 		sinks.add(this.sink);
 	}
 
@@ -348,11 +343,9 @@ public class TimeExpandedNetwork extends Network {
     private void createSuperSourceAndSink(int supersouceOutgoingCapacitiy){
 
     	if (originalSources.size() <= 0)
-    		throw new AssertionError(GraphLocalization.getSingleton (
-			).getString ("ds.graph.OriginalSourcesException"));
+    		throw new AssertionError(GraphLocalization.loc.getString ("ds.graph.OriginalSourcesException"));
     	if (originalSinks.size() <= 0)
-    		throw new AssertionError(GraphLocalization.getSingleton (
-			).getString ("ds.graph.OriginalSinksException"));
+    		throw new AssertionError(GraphLocalization.loc.getString ("ds.graph.OriginalSinksException"));
 
     	if (originalSources.size()>1)
     		createSuperSource(supersouceOutgoingCapacitiy);
@@ -397,7 +390,7 @@ public class TimeExpandedNetwork extends Network {
 		int overallSupply=0;
 		for (Node node : network.nodes()) {
 			if (!supplies.isDefinedFor(node))
-				throw new AssertionError(GraphLocalization.getSingleton ( ).getString ("ds.graph.NoSupplyNodeException"));
+				throw new AssertionError(GraphLocalization.loc.getString ("ds.graph.NoSupplyNodeException"));
 			else {
 				overallSupply += supplies.get(node);
 				if (supplies.get(node)>0)
@@ -409,7 +402,7 @@ public class TimeExpandedNetwork extends Network {
 		originalSources = sources;
 
 		if (overallSupply != 0)
-			throw new AssertionError(GraphLocalization.getSingleton ( ).getString ("ds.graph.SumNotZeroException"));
+			throw new AssertionError(GraphLocalization.loc.getString ("ds.graph.SumNotZeroException"));
 
 		createTimeExpansion(network, capacities, transitTimes, timeHorizon, sources, originalSinks, allowStorageInNodes );
 
@@ -528,9 +521,9 @@ public class TimeExpandedNetwork extends Network {
     	}
 
     	if (originalSources.size() <= 0)
-    		throw new AssertionError(GraphLocalization.getSingleton ().getString ("ds.graph.OriginalSourcesException"));
+    		throw new AssertionError(GraphLocalization.loc.getString ("ds.graph.OriginalSourcesException"));
     	if (originalSinks.size() <= 0)
-    		throw new AssertionError(GraphLocalization.getSingleton ().getString ("ds.graph.OriginalSinksException"));
+    		throw new AssertionError(GraphLocalization.loc.getString ("ds.graph.OriginalSinksException"));
 
     	if (originalSources.size()>1)
     		createSuperSource(supplies);
@@ -602,11 +595,11 @@ public class TimeExpandedNetwork extends Network {
     // This method uses that the original network does not include loops!
     private boolean isHoldoverArc(Edge edge){
     	if (edge==null)
-    		throw new AssertionError(GraphLocalization.getSingleton ().getString ("ds.graph.EdgeIsNullException"));
+    		throw new AssertionError(GraphLocalization.loc.getString ("ds.graph.EdgeIsNullException"));
     	if (edge.start() == null)
-    		throw new AssertionError(GraphLocalization.getSingleton ().getString ("ds.graph.StartNodeIsNullException"));
+    		throw new AssertionError(GraphLocalization.loc.getString ("ds.graph.StartNodeIsNullException"));
     	if (edge.end() == null)
-    		throw new AssertionError(GraphLocalization.getSingleton ().getString ("ds.graph.EndNodeIsNullException"));
+    		throw new AssertionError(GraphLocalization.loc.getString ("ds.graph.EndNodeIsNullException"));
     	return (originalID.get(edge.start()) == originalID.get(edge.end()));
     }
 
@@ -684,8 +677,7 @@ public class TimeExpandedNetwork extends Network {
      */
     public Node singleSink(){
     	if (sink == null)
-    		throw new AssertionError(GraphLocalization.getSingleton (
-			).getString ("ds.graph.NoSingleSinkException"));
+    		throw new AssertionError(GraphLocalization.loc.getString ("ds.graph.NoSingleSinkException"));
     	else
     		return sink;
     }
@@ -711,7 +703,7 @@ public class TimeExpandedNetwork extends Network {
      */
     public Node singleSource(){
     	if (source == null)
-    		throw new AssertionError(GraphLocalization.getSingleton().getString ("ds.graph.NoSingleSourceException"));
+    		throw new AssertionError(GraphLocalization.loc.getString ("ds.graph.NoSingleSourceException"));
    		return source;
     }
 

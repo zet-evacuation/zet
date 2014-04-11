@@ -13,10 +13,11 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
+
 package algo.ca.rule;
 
 import algo.ca.algorithm.evac.EvacuationSimulationProblem;
-import de.tu_berlin.math.coga.zet.ZETLocalization;
+import de.tu_berlin.math.coga.zet.ZETLocalization2;
 import ds.ca.evac.EvacCell;
 import ds.ca.evac.Individual;
 
@@ -50,10 +51,10 @@ public abstract class AbstractRule implements Rule {
 	@Override
 	public void setEvacuationSimulationProblem( EvacuationSimulationProblem esp ) {
 		if( this.esp != null )
-			throw new RuntimeException( ZETLocalization.getSingleton().getString( "algo.ca.rule.RuleAlreadyHaveCAControllerException" ) );
+			throw new RuntimeException( ZETLocalization2.loc.getString( "algo.ca.rule.RuleAlreadyHaveCAControllerException" ) );
 
 		if( esp == null )
-			throw new RuntimeException( ZETLocalization.getSingleton().getString( "algo.ca.rule.CAControllerIsNullException" ) );
+			throw new RuntimeException( ZETLocalization2.loc.getString( "algo.ca.rule.CAControllerIsNullException" ) );
 
 		this.esp = esp;
 	}

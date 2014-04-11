@@ -1,7 +1,4 @@
-/**
- * BinaryTree.java
- * Created: 23.07.2012, 10:50:17
- */
+
 package de.tu_berlin.math.coga.datastructure.searchtree;
 
 import de.tu_berlin.coga.container.collection.ListSequence;
@@ -234,7 +231,7 @@ public class BinaryTree implements DirectedGraph {
 			idOfLastCreatedEdge = id % (size-1);
 			return edge;
 		} else
-			throw new IllegalStateException( GraphLocalization.getSingleton().getString( "ds.Graph.NoCapacityException" ) );
+			throw new IllegalStateException( GraphLocalization.loc.getString( "ds.Graph.NoCapacityException" ) );
 	}
 	
 	public Edge setLeft( Node start, Node end ) {
@@ -247,7 +244,7 @@ public class BinaryTree implements DirectedGraph {
 			idOfLastCreatedEdge = id % (size-1);
 			return edge;
 		} else
-			throw new IllegalStateException( GraphLocalization.getSingleton().getString( "ds.Graph.NoCapacityException" ) );
+			throw new IllegalStateException( GraphLocalization.loc.getString( "ds.Graph.NoCapacityException" ) );
 	}
 	
 	public Edge setRight( Node start, Node end ) {
@@ -260,7 +257,7 @@ public class BinaryTree implements DirectedGraph {
 			idOfLastCreatedEdge = id % (size-1);
 			return edge;
 		} else
-			throw new IllegalStateException( GraphLocalization.getSingleton().getString( "ds.Graph.NoCapacityException" ) );
+			throw new IllegalStateException( GraphLocalization.loc.getString( "ds.Graph.NoCapacityException" ) );
 	}
 
 	

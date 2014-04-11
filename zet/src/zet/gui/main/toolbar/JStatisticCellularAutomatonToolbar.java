@@ -4,9 +4,9 @@
  */
 package zet.gui.main.toolbar;
 
+import de.tu_berlin.coga.common.localization.Localization;
 import de.tu_berlin.coga.common.localization.Localized;
 import gui.GUIControl;
-import gui.ZETMain;
 import de.tu_berlin.math.coga.components.framework.Button;
 import gui.ZETLoader;
 import java.awt.event.ActionEvent;
@@ -23,7 +23,7 @@ public class JStatisticCellularAutomatonToolbar extends JToolBar implements Acti
 
 	private final GUIControl control;
 	/** The localization class. */
-	static final GUILocalization loc = GUILocalization.getSingleton();
+	static final Localization loc = GUILocalization.loc;
 	private JButton btnExit;
 	private JButton btnOpenResults;
 	private JButton btnSaveResults;

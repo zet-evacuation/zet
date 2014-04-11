@@ -14,14 +14,9 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 
-/**
- * Class JMFWrapper
- * Erstellt 09.11.2008, 23:26:46
- */
-
 package io.movie;
 
-import de.tu_berlin.math.coga.zet.ZETLocalization;
+import de.tu_berlin.math.coga.zet.ZETLocalization2;
 import java.util.Vector;
 import javax.media.MediaLocator;
 import javax.swing.JLabel;
@@ -58,7 +53,7 @@ public class JMFWrapper extends PicturesOnlyWriter {
 	@Override
 	public JPanel getAdvancedConfigurationPanel() {
 		JPanel panel = new JPanel();
-		panel.add( new JLabel( ZETLocalization.getSingleton().getString( "gui.visualization.createMovieDialog.jmf.noSupport" ) ) );
+		panel.add( new JLabel( ZETLocalization2.loc.getString( "gui.visualization.createMovieDialog.jmf.noSupport" ) ) );
 		return panel;
 	}
 

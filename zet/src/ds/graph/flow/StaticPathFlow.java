@@ -13,10 +13,6 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
-/*
- * PathFlow.java
- *
- */
 
 package ds.graph.flow;
 
@@ -62,8 +58,7 @@ public class StaticPathFlow implements Iterable<Edge> {
      * @exception NullPointerException if {@code path} is null.
      */
     public StaticPathFlow(StaticPath path, int amount){
-        if (path == null) throw new NullPointerException(GraphLocalization.getSingleton (
-		).getString ("ds.graph.PathIsNullException"));
+        if (path == null) throw new NullPointerException(GraphLocalization.loc.getString ("ds.graph.PathIsNullException"));
         setPath(path);
         setAmount(amount);
     }
@@ -135,8 +130,7 @@ public class StaticPathFlow implements Iterable<Edge> {
      * @exception NullPointerException if {@code path} is null.
      */
     public void setPath(StaticPath path) {
-        if (path == null) throw new NullPointerException(GraphLocalization.getSingleton (
-		).getString ("ds.graph.PathIsNullException"));
+        if (path == null) throw new NullPointerException(GraphLocalization.loc.getString ("ds.graph.PathIsNullException"));
         this.path = path;
     }    
     

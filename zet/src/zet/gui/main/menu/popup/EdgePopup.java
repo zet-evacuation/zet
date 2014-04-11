@@ -1,9 +1,7 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
+
 package zet.gui.main.menu.popup;
 
+import de.tu_berlin.coga.common.localization.Localization;
 import de.tu_berlin.math.coga.components.framework.Menu;
 import ds.PropertyContainer;
 import de.tu_berlin.coga.zet.model.PlanEdge;
@@ -27,7 +25,7 @@ import zet.gui.GUILocalization;
  */
 public class EdgePopup extends JPopupMenu {
 		/** The localization class. */
-	private GUILocalization loc = GUILocalization.getSingleton();;
+	private Localization loc = GUILocalization.loc;
 	/** All JPolygons share the same pop-up menu listeners, which are stored here. */
 	private List<EdgePopupListener> edgePopupListeners = new LinkedList<>();
 	private GUIControl guiControl;

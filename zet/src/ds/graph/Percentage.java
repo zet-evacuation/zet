@@ -13,6 +13,7 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
+
 package ds.graph;
 
 /**
@@ -34,12 +35,10 @@ public class Percentage {
 	 */
 	public Percentage(double percentage){
 		if (percentage < 0){
-			throw new AssertionError(GraphLocalization.getSingleton (
-			).getString ("ds.PercentageNegativeException"));
+			throw new AssertionError(GraphLocalization.loc.getString ("ds.PercentageNegativeException"));
 		}
 		if (percentage > 100){
-			throw new AssertionError(GraphLocalization.getSingleton (
-			).getString ("ds.PercentageGreater100Exception"));
+			throw new AssertionError(GraphLocalization.loc.getString ("ds.PercentageGreater100Exception"));
 		}
 		this.percentage = percentage;
 	}

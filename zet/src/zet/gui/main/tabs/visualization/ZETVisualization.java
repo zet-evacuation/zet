@@ -1,9 +1,7 @@
-/**
- * ZETVisualization.java
- * Created: 09.03.2010, 17:28:30
- */
 package zet.gui.main.tabs.visualization;
 
+import de.tu_berlin.coga.common.localization.Localization;
+import de.tu_berlin.coga.common.localization.LocalizationManager;
 import de.tu_berlin.coga.common.util.Formatter;
 import de.tu_berlin.coga.common.util.units.TimeUnits;
 import ds.PropertyContainer;
@@ -29,7 +27,7 @@ import zet.gui.GUILocalization;
 @SuppressWarnings( "serial" )
 public class ZETVisualization extends Visualization<ZETGLControl> {
 	/** The GUI localization class. */
-	GUILocalization loc = GUILocalization.getSingleton();
+	Localization loc = GUILocalization.loc;
 	/** The minimal number of frames that needs to be captured in movie rendering mode for the cellular automaton */
 	private int minimalFrameCountCellularAutomaton;
 	/** The minimal number of frames that needs to be captured in movie rendering mode for the graph */
@@ -111,7 +109,7 @@ public class ZETVisualization extends Visualization<ZETGLControl> {
 				finished = false;
 				minimalFrameCountCellularAutomaton = 2;
 				if( showTimestepCellularAutomaton ) {
-					font.print( 0, this.getHeight() - (row++) * fontSize, loc.getString( "gui.VisualizationPanel.FPS.Simulation.Step" ) + " " + loc.getFloatConverter().format( control.getCaStep() ) );
+					font.print( 0, this.getHeight() - (row++) * fontSize, loc.getString( "gui.VisualizationPanel.FPS.Simulation.Step" ) + " " + LocalizationManager.getSingleton().getFloatConverter().format( control.getCaStep() ) );
 					font.print( 0, this.getHeight() - (row++) * fontSize, loc.getString( "gui.VisualizationPanel.FPS.Simulation.Time" ) + " " + Formatter.formatUnit( control.getCaStep() * control.getCaSecondsPerStep(), TimeUnits.Seconds ) );
 				}
 			}
@@ -128,7 +126,7 @@ public class ZETVisualization extends Visualization<ZETGLControl> {
 				finished = false;
 				minimalFrameCountGraph = 2;
 				if( showTimestepGraph ) {
-					font.print( 0, this.getHeight() - (row++) * fontSize, loc.getString( "gui.VisualizationPanel.FPS.Graph.Step" ) + " " + loc.getFloatConverter().format( control.getGraphStep() ) );
+					font.print( 0, this.getHeight() - (row++) * fontSize, loc.getString( "gui.VisualizationPanel.FPS.Graph.Step" ) + " " + LocalizationManager.getSingleton().getFloatConverter().format( control.getGraphStep() ) );
 					font.print( 0, this.getHeight() - (row++) * fontSize, loc.getString( "gui.VisualizationPanel.FPS.Graph.Time" ) + " " + Formatter.formatUnit( control.getGraphStep() * control.getGraphSecondsPerStep(), TimeUnits.Seconds ) );
 				}
 			}

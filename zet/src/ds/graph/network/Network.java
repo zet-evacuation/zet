@@ -516,7 +516,7 @@ public class Network extends AbstractNetwork {
 			idOfLastCreatedEdge = id % capacity;
 			return edge;
 		} else
-			throw new IllegalStateException( GraphLocalization.getSingleton().getString( "ds.Graph.NoCapacityException" ) );
+			throw new IllegalStateException( GraphLocalization.loc.getString( "ds.Graph.NoCapacityException" ) );
 	}
 
 	/**

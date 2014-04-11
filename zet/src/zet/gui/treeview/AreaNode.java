@@ -1,9 +1,7 @@
-/**
- * AreaNode.java
- * Created: 21.01.2011, 11:21:00
- */
+
 package zet.gui.treeview;
 
+import de.tu_berlin.coga.common.localization.LocalizationManager;
 import de.tu_berlin.coga.zet.model.Area;
 import de.tu_berlin.coga.zet.model.ZLocalization;
 
@@ -23,7 +21,7 @@ public class AreaNode extends ProjectTreeNode<Area> {
 		sb.append( zFormatData.getAreaType().getTypeString() + "\n" );
 		sb.append( zFormatData.getCoordinateString() + "\n" );
 		sb.append( "Koordinaten: " + zFormatData.getCoordinateString() + "\n" );
-		sb.append( "Fläche: " + ZLocalization.getSingleton().getFloatConverter().format( zFormatData.areaMeter() ) + "m²\n" );
+		sb.append( "Fläche: " + LocalizationManager.getSingleton().getFloatConverter().format( zFormatData.areaMeter() ) + "m²\n" );
 		return sb.toString();
 	}
 

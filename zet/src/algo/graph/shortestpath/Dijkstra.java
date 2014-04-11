@@ -13,10 +13,7 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
-/*
- * Dijkstra.java
- *
- */
+
 package algo.graph.shortestpath;
 
 import de.tu_berlin.coga.container.priority.MinHeap;
@@ -58,37 +55,37 @@ public class Dijkstra {
 
 	public IdentifiableIntegerMapping<Node> getDistances() {
 		if( distances == null )
-			throw new IllegalStateException( GraphLocalization.getSingleton().getString( "algo.graph.shortestpath.NotCalledYetException" ) );
+			throw new IllegalStateException( GraphLocalization.loc.getString( "algo.graph.shortestpath.NotCalledYetException" ) );
 		return distances;
 	}
 
 	public int getDistance( Node node ) {
 		if( distances == null )
-			throw new IllegalStateException( GraphLocalization.getSingleton().getString( "algo.graph.shortestpath.NotCalledYetException" ) );
+			throw new IllegalStateException( GraphLocalization.loc.getString( "algo.graph.shortestpath.NotCalledYetException" ) );
 		return distances.get( node );
 	}
 
 	public IdentifiableObjectMapping<Node, Edge> getLastEdges() {
 		if( edges == null )
-			throw new IllegalStateException( GraphLocalization.getSingleton().getString( "algo.graph.shortestpath.NotCalledYetException" ) );
+			throw new IllegalStateException( GraphLocalization.loc.getString( "algo.graph.shortestpath.NotCalledYetException" ) );
 		return edges;
 	}
 
 	public Edge getLastEdge( Node node ) {
 		if( edges == null )
-			throw new IllegalStateException( GraphLocalization.getSingleton().getString( "algo.graph.shortestpath.NotCalledYetException" ) );
+			throw new IllegalStateException( GraphLocalization.loc.getString( "algo.graph.shortestpath.NotCalledYetException" ) );
 		return edges.get( node );
 	}
 
 	public IdentifiableObjectMapping<Node, Node> getPredecessors() {
 		if( nodes == null )
-			throw new IllegalStateException( GraphLocalization.getSingleton().getString( "algo.graph.shortestpath.NotCalledYetException" ) );
+			throw new IllegalStateException( GraphLocalization.loc.getString( "algo.graph.shortestpath.NotCalledYetException" ) );
 		return nodes;
 	}
 
 	public Node getPredecessor( Node node ) {
 		if( nodes == null )
-			throw new IllegalStateException( GraphLocalization.getSingleton().getString( "algo.graph.shortestpath.NotCalledYetException" ) );
+			throw new IllegalStateException( GraphLocalization.loc.getString( "algo.graph.shortestpath.NotCalledYetException" ) );
 		return nodes.get( node );
 	}
 
@@ -102,9 +99,9 @@ public class Dijkstra {
 
 	public void run() {
 		if( graph == null )
-			throw new IllegalStateException( GraphLocalization.getSingleton().getString( "algo.graph.shortestpath.GraphIsNullException" ) );
+			throw new IllegalStateException( GraphLocalization.loc.getString( "algo.graph.shortestpath.GraphIsNullException" ) );
 		if( source == null )
-			throw new IllegalStateException( GraphLocalization.getSingleton().getString( "algo.graph.shortestpath.SourceIsNullException" ) );
+			throw new IllegalStateException( GraphLocalization.loc.getString( "algo.graph.shortestpath.SourceIsNullException" ) );
 		if( distances != null )
 			return;
 		distances = new IdentifiableIntegerMapping<>( graph.numberOfNodes() );

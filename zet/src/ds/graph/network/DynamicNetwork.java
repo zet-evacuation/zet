@@ -179,7 +179,7 @@ public class DynamicNetwork implements DirectedGraph {
 		else if( node == edge.end() )
 			return edge.start();
 		else
-			throw new IllegalArgumentException( GraphLocalization.getSingleton().getString( "ds.graph.NotIncidentException" + node + ", " + edge ) );
+			throw new IllegalArgumentException( GraphLocalization.loc.getString( "ds.graph.NotIncidentException" + node + ", " + edge ) );
 	}
 
 	public Node opposite( Node node, Edge edge ) {
@@ -335,12 +335,12 @@ public class DynamicNetwork implements DirectedGraph {
 
 	@Override
 	public IdentifiableCollection<Edge> getEdges( Node start, Node end ) {
-		throw new UnsupportedOperationException( GraphLocalization.getSingleton().getString( "ds.graph.NotSupportedException" ) );
+		throw new UnsupportedOperationException( GraphLocalization.loc.getString( "ds.graph.NotSupportedException" ) );
 	}
 
 	@Override
 	public boolean existsPath( Node start, Node end ) {
-		throw new UnsupportedOperationException( GraphLocalization.getSingleton().getString( "ds.graph.NotSupportedException" ) );
+		throw new UnsupportedOperationException( GraphLocalization.loc.getString( "ds.graph.NotSupportedException" ) );
 	}
 
 	public AbstractNetwork getAsStaticNetwork() {

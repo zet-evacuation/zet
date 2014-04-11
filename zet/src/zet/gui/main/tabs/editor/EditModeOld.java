@@ -13,6 +13,7 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
+
 package zet.gui.main.tabs.editor;
 
 import de.tu_berlin.coga.zet.model.AssignmentArea;
@@ -131,7 +132,7 @@ public enum EditModeOld {
 	/**
 	 * @return a reasonable description of the edit mode. */
 	public String getName() {
-		return GUILocalization.getSingleton().getString( key );
+		return GUILocalization.loc.getString( key );
 	}
 
 	/**

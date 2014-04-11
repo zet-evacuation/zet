@@ -13,10 +13,11 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
+
 package gui.visualization.control;
 
-import de.tu_berlin.coga.common.localization.AbstractLocalization;
-import de.tu_berlin.math.coga.zet.ZETLocalization;
+import de.tu_berlin.coga.common.localization.Localization;
+import de.tu_berlin.math.coga.zet.ZETLocalization2;
 import ds.CompareVisualizationResults;
 import ds.PropertyContainer;
 import ds.GraphVisualizationResults;
@@ -129,7 +130,7 @@ public class ZETGLControl implements DrawableControlable {
 //		REACTION_TIME
 //	}
 	/** The localization class. */
-	private AbstractLocalization loc = ZETLocalization.getSingleton();
+	private Localization loc = ZETLocalization2.loc;
 	/** Indicates whether the graph is currently visible, or not. */
 	private boolean showGraph;
 	/** Indicates whether the cellular automaton is currently visible, or not. */

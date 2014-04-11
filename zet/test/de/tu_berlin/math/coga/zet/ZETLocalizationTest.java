@@ -37,6 +37,6 @@ public class ZETLocalizationTest {
 	 */
 	@Test
 	public void testGetSingleton() {
-		ZETLocalization result = ZETLocalization.getSingleton();
+		ZETLocalization2 result = ZETLocalization2.getSingleton();
 	}
 }

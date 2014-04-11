@@ -13,10 +13,6 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
-/*
- * StaticPath.java
- *
- */
 
 package ds.graph;
 
@@ -57,8 +53,7 @@ public class StaticPath implements Path, Iterable<Edge> {
             consistent &= addLastEdge(edge);
         }
         if (!consistent)
-            throw new IllegalArgumentException(GraphLocalization.getSingleton (
-			).getString ("ds.Graph.NotConsistentException"));
+            throw new IllegalArgumentException(GraphLocalization.loc.getString ("ds.Graph.NotConsistentException"));
     }
 
     /**
@@ -76,8 +71,7 @@ public class StaticPath implements Path, Iterable<Edge> {
             consistent &= addLastEdge(edge);
         }
         if (!consistent)
-            throw new IllegalArgumentException(GraphLocalization.getSingleton (
-			).getString ("ds.Graph.NotConsistentException"));
+            throw new IllegalArgumentException(GraphLocalization.loc.getString ("ds.Graph.NotConsistentException"));
     }
 
     /**

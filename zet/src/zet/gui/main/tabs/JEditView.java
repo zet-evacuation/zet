@@ -14,12 +14,9 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 
-/**
- * Class JEditView
- * Created 29.04.2008, 21:06:42
- */
 package zet.gui.main.tabs;
 
+import de.tu_berlin.coga.common.localization.Localization;
 import de.tu_berlin.math.coga.components.JRuler;
 import ds.PropertyContainer;
 import de.tu_berlin.coga.zet.model.AssignmentArea;
@@ -168,7 +165,7 @@ public class JEditView extends AbstractSplitPropertyWindow<JFloorScrollPane<JFlo
 	}
 
 	/** The localization class. */
-	private GUILocalization loc;
+	private Localization loc;
 	/** The currently active panel type */
 	private static Panels eastPanelType;
 	/** The control object for the loaded project. */
@@ -199,7 +196,7 @@ public class JEditView extends AbstractSplitPropertyWindow<JFloorScrollPane<JFlo
 		this.selection = selection;
 		//((JRoomInformationPanel)Panels.Room.getPanel()).setSelection( selection );
 		EventServer.getInstance().registerListener( getFloor(), ZModelRoomEvent.class );
-		loc = GUILocalization.getSingleton();
+		loc = GUILocalization.loc;
 		this.guiControl = Objects.requireNonNull( guiControl, "GUI control class cannot be null." );
 		this.editStatus = Objects.requireNonNull( editStatus, "Edit status object cannot be null." );
 		this.getLeftPanel().getHorizontalScrollBar().addAdjustmentListener( adlPlanImage );
@@ -315,7 +312,7 @@ public class JEditView extends AbstractSplitPropertyWindow<JFloorScrollPane<JFlo
 
 		int row = 1;
 
-		loc = GUILocalization.getSingleton();
+		loc = GUILocalization.loc;
 		loc.setPrefix( "gui.EditPanel." );
 		lblFloorSelector = new JLabel( loc.getString( "Default.Floors" ) + ":" );
 		eastPanel.add( lblFloorSelector, "1, " + row++ );

@@ -1,10 +1,7 @@
-/**
- * JPropertyDialog.java
- * Created: Nov 28, 2011, 3:40:40 PM
- */
+
 package gui.editor.properties;
 
-import de.tu_berlin.math.coga.zet.ZETLocalization;
+import de.tu_berlin.math.coga.zet.ZETLocalization2;
 import ds.PropertyContainer;
 import gui.ZETProperties;
 import de.tu_berlin.math.coga.components.framework.Button;
@@ -29,8 +26,8 @@ public class JPropertyDialog extends JOptionsDialog {
 
 		int space = 10;
 		JPanel buttonPanel = new JPanel( );
-		JButton btnOK = Button.newButton( ZETLocalization.getSingleton().getString( "gui.OK" ), getDefaultButtonsListener(), "ok"  );
-		JButton btnCancel = Button.newButton( ZETLocalization.getSingleton().getString( "gui.Cancel" ), getDefaultButtonsListener(), "cancel" );
+		JButton btnOK = Button.newButton( ZETLocalization2.loc.getString( "gui.OK" ), getDefaultButtonsListener(), "ok"  );
+		JButton btnCancel = Button.newButton( ZETLocalization2.loc.getString( "gui.Cancel" ), getDefaultButtonsListener(), "cancel" );
 		double size2[][] = { {TableLayout.FILL, TableLayout.PREFERRED, space, TableLayout.PREFERRED, space, TableLayout.PREFERRED, space }, {space, TableLayout.PREFERRED, space } };
 		buttonPanel.setLayout( new TableLayout( size2 ) );
 

@@ -4,12 +4,12 @@
  */
 package zet.gui.main.tabs.editor;
 
-import de.tu_berlin.math.coga.zet.ZETLocalization;
+import de.tu_berlin.coga.common.localization.Localization;
+import de.tu_berlin.coga.common.localization.LocalizationManager;
 import de.tu_berlin.coga.common.localization.Localized;
 import de.tu_berlin.coga.zet.model.ZControl;
 import gui.GUIControl;
 import info.clearthought.layout.TableLayout;
-import java.awt.ComponentOrientation;
 import java.text.NumberFormat;
 import javax.swing.JPanel;
 import zet.gui.GUILocalization;
@@ -21,9 +21,9 @@ import zet.gui.GUILocalization;
  */
 public abstract class JInformationPanel<U> extends JPanel implements Localized {
 	/** The localization class. */
-	protected GUILocalization loc;
-	protected static NumberFormat nfFloat = ZETLocalization.getSingleton().getFloatConverter();
-	protected static NumberFormat nfInteger = ZETLocalization.getSingleton().getIntegerConverter();
+	protected Localization loc;
+	protected static NumberFormat nfFloat = LocalizationManager.getSingleton().getFloatConverter();
+	protected static NumberFormat nfInteger = LocalizationManager.getSingleton().getIntegerConverter();
 	/** The control object for the loaded project. */
 	protected ZControl projectControl;
 	protected GUIControl guiControl;
@@ -39,7 +39,7 @@ public abstract class JInformationPanel<U> extends JPanel implements Localized {
 
 	protected JInformationPanel( double[] columns, double[] rows ) {
 		super( new TableLayout( columns, rows ) );
-		loc = GUILocalization.getSingleton();
+		loc = GUILocalization.loc;
 	}
 	
 	private static double[] columns() {

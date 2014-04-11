@@ -13,6 +13,7 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
+
 package algo.graph.dynamicflow;
 
 import de.tu_berlin.coga.common.algorithm.Algorithm;
@@ -53,7 +54,7 @@ public abstract class DynamicFlowAlgorithm<U extends DynamicFlowProblem> extends
 		if (resultFlowPathBased != null)
 			return resultFlowPathBased;
 		if (resultFlowEdgeBased != null) {
-			throw new AssertionError(GraphLocalization.getSingleton().getString ("algo.graph.dynmicflow.NoEdgeBasedFlowException"));
+			throw new AssertionError(GraphLocalization.loc.getString ("algo.graph.dynmicflow.NoEdgeBasedFlowException"));
 		}
 		return null;
 	}

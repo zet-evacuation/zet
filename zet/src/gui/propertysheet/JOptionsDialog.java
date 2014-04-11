@@ -1,7 +1,3 @@
-/**
- * JOptionsDialog.java
- * Created: Nov 25, 2011, 12:16:57 PM
- */
 package gui.propertysheet;
 
 import com.l2fprod.common.propertysheet.Property;
@@ -11,7 +7,7 @@ import com.l2fprod.common.propertysheet.PropertySheetTableModel;
 import com.l2fprod.common.swing.JButtonBar;
 import com.l2fprod.common.swing.plaf.ButtonBarUI;
 import com.l2fprod.common.swing.plaf.blue.BlueishButtonBarUI;
-import de.tu_berlin.math.coga.zet.ZETLocalization;
+import de.tu_berlin.math.coga.zet.ZETLocalization2;
 import de.tu_berlin.math.coga.components.framework.Button;
 import zet.gui.main.toolbar.ZETIconSet;
 import info.clearthought.layout.TableLayout;
@@ -78,8 +74,8 @@ public class JOptionsDialog extends JDialog {
 
 		int space = 10;
 		JPanel buttonPanel = new JPanel( );
-		JButton btnOK = Button.newButton( ZETLocalization.getSingleton().getString( "gui.OK" ), aclButton, "ok"  );
-		JButton btnCancel = Button.newButton( ZETLocalization.getSingleton().getString( "gui.Cancel" ), aclButton, "cancel" );
+		JButton btnOK = Button.newButton( ZETLocalization2.loc.getString( "gui.OK" ), aclButton, "ok"  );
+		JButton btnCancel = Button.newButton( ZETLocalization2.loc.getString( "gui.Cancel" ), aclButton, "cancel" );
 		double size2[][] = { {TableLayout.FILL, TableLayout.PREFERRED, space, TableLayout.PREFERRED, space }, {space, TableLayout.PREFERRED, space } };
 		buttonPanel.setLayout( new TableLayout( size2 ) );
 		buttonPanel.add( btnOK, "1,1" );

@@ -1,9 +1,7 @@
-/**
- * JStairAreaInformationPanel.java
- * Created: 22.11.2012, 17:22:46
- */
+
 package zet.gui.main.tabs.editor;
 
+import de.tu_berlin.coga.common.localization.LocalizationManager;
 import de.tu_berlin.coga.zet.model.StairArea;
 import de.tu_berlin.coga.zet.model.StairPreset;
 import de.tu_berlin.coga.zet.model.ZLocalization;
@@ -129,7 +127,7 @@ public class JStairAreaInformationPanel extends JInformationPanel<StairArea> {
 			@Override
 			public Component getListCellRendererComponent( JList<? extends StairPreset> list, StairPreset value, int index, boolean isSelected, boolean cellHasFocus ) {
 				JLabel presetLabel = (JLabel)defaultRenderer.getListCellRendererComponent( list, value, index, isSelected, cellHasFocus );
-				presetLabel.setText( ZLocalization.getSingleton().getString( presetLabel.getText() ) );
+				presetLabel.setText( ZLocalization.loc.getString( presetLabel.getText() ) );
 				return presetLabel;
 			}
 
@@ -143,12 +141,12 @@ public class JStairAreaInformationPanel extends JInformationPanel<StairArea> {
 			@Override
 			public void actionPerformed( ActionEvent arg0 ) {
 				StairPreset sp = (StairPreset)cbxStairPresets.getSelectedItem();
-				NumberFormat nf = loc.getFloatConverter();
+				NumberFormat nf = LocalizationManager.getSingleton().getFloatConverter();
 				txtStairFactorUp.setText( nf.format( sp.getSpeedFactorUp() ) );
 				txtStairFactorDown.setText( nf.format( sp.getSpeedFactorDown() ) );
 			}
 		});
-		lblStairPresetDescription = new JLabel( ZLocalization.getSingleton().getString( ((StairPreset)cbxStairPresets.getSelectedItem()).getText() ) ) ;
+		lblStairPresetDescription = new JLabel( ZLocalization.loc.getString( ((StairPreset)cbxStairPresets.getSelectedItem()).getText() ) ) ;
 		this.add( lblStairPresetDescription, "0, " + row++ );
 		row++;
 
@@ -167,7 +165,7 @@ public class JStairAreaInformationPanel extends JInformationPanel<StairArea> {
 		lblStairFactorUp.setText( loc.getString( "Stair.FactorUp" ) + ":" );
 		lblStairFactorDown.setText( loc.getString( "Stair.FactorDown" ) + ":" );
 		lblStairPreset.setText( loc.getString( "Stair.Preset" ) + ":" );
-		lblStairPresetDescription.setText( ZLocalization.getSingleton().getString( ((StairPreset)cbxStairPresets.getSelectedItem() ).getText() ) );
+		lblStairPresetDescription.setText( ZLocalization.loc.getString( ((StairPreset)cbxStairPresets.getSelectedItem() ).getText() ) );
 		loc.clearPrefix();
 	}
 }

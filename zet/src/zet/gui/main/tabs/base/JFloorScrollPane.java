@@ -14,11 +14,6 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 
-/**
- * Class JFloorScrollPane
- * Created 29.04.2008, 22:36:38
- */
-
 package zet.gui.main.tabs.base;
 
 import de.tu_berlin.coga.common.localization.Localized;
@@ -129,12 +124,12 @@ public class JFloorScrollPane<T extends AbstractFloor> extends JScrollPane imple
 					topRuler.repaint();
 					leftRuler.repaint();
 					unitButton.setText( nextUnit.toString() );
-					unitButton.setToolTipText( GUILocalization.getSingleton().getStringWithoutPrefix( locString ) );
+					unitButton.setToolTipText( GUILocalization.loc.getStringWithoutPrefix( locString ) );
 				}
 			}
 		});
 		buttonCorner.add( unitButton );
-		unitButton.setToolTipText( GUILocalization.getSingleton().getStringWithoutPrefix( locString ) );
+		unitButton.setToolTipText( GUILocalization.loc.getStringWithoutPrefix( locString ) );
 
 		setCorner( JScrollPane.UPPER_LEFT_CORNER, buttonCorner );
 		setCorner( JScrollPane.UPPER_RIGHT_CORNER, new JCorner() );
@@ -161,7 +156,7 @@ public class JFloorScrollPane<T extends AbstractFloor> extends JScrollPane imple
 
 	@Override
 	public void localize() {
-		unitButton.setToolTipText( GUILocalization.getSingleton().getStringWithoutPrefix( locString ) );
+		unitButton.setToolTipText( GUILocalization.loc.getStringWithoutPrefix( locString ) );
 	}
 
 	/**

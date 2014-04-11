@@ -1,9 +1,8 @@
-/**
- * JZETMenuBar.java
- * Created: 21.07.2010 10:03:06
- */
+
 package zet.gui.main.menu;
 
+import de.tu_berlin.coga.common.localization.Localization;
+import de.tu_berlin.coga.common.localization.LocalizationManager;
 import de.tu_berlin.coga.common.localization.Localized;
 import de.tu_berlin.math.coga.components.framework.Menu;
 import ds.PropertyContainer;
@@ -40,7 +39,7 @@ import zet.tasks.CellularAutomatonAlgorithms;
 public class JZETMenuBar extends JMenuBar implements ActionListener, Localized {
 	private final GUIControl control;
 	/** The localization class. */
-	static final GUILocalization loc = GUILocalization.getSingleton();
+	static final Localization loc = GUILocalization.loc;
 	private JMenuItem mnuFileSaveResultAs;
 	private JMenuItem mnuFileLoadResult;
 	private JMenuItem mnuShowAllAreas;
@@ -228,7 +227,7 @@ public class JZETMenuBar extends JMenuBar implements ActionListener, Localized {
 			grpLanguage.add( tmp );
 			if( first == null )
 				first = tmp;
-			if( locale.getLanguage().equals( loc.getLocale().getLanguage() ) ) {
+			if( locale.getLanguage().equals( LocalizationManager.getSingleton().getLocale().getLanguage() ) ) {
 				tmp.setSelected( true );
 				localeFound = true;
 			}

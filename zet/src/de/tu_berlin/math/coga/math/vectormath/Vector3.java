@@ -14,14 +14,10 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 
-/*
- * Vector.java
- * Created on 30.01.2008, 00:54:29
- */
-
 package de.tu_berlin.math.coga.math.vectormath;
 
-import de.tu_berlin.math.coga.zet.ZETLocalization;
+import de.tu_berlin.coga.common.localization.LocalizationManager;
+import de.tu_berlin.math.coga.zet.ZETLocalization2;
 import java.text.NumberFormat;
 import java.text.ParseException;
 
@@ -321,7 +317,7 @@ public class Vector3 implements Cloneable {
 	 */
 	@Override
 	public String toString(){
-		return toString( ZETLocalization.getSingleton().getFloatConverter() );
+		return toString( LocalizationManager.getSingleton().getFloatConverter() );
 	}
 
 	/**
@@ -345,7 +341,7 @@ public class Vector3 implements Cloneable {
 	 * @throws ParseException if an error occurs during parsing
 	 */
 	public void parse( String value ) throws ParseException {
-		parse( value, ZETLocalization.getSingleton().getFloatConverter() );
+		parse( value, LocalizationManager.getSingleton().getFloatConverter() );
 	}
 
 	/**

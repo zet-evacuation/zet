@@ -14,17 +14,12 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 
-/*
- * ZToCAConverter.java
- *
- */
-
 package de.tu_berlin.math.coga.zet.converter.cellularAutomaton;
 
 import algo.ca.PotentialController;
 import algo.ca.SPPotentialController;
 import de.tu_berlin.coga.common.algorithm.Algorithm;
-import de.tu_berlin.math.coga.zet.ZETLocalization;
+import de.tu_berlin.math.coga.zet.ZETLocalization2;
 import de.tu_berlin.coga.common.util.Direction8;
 import static de.tu_berlin.coga.common.util.Direction8.*;
 import de.tu_berlin.coga.common.util.Level;
@@ -86,7 +81,7 @@ public class ZToCAConverter extends Algorithm<BuildingPlan,ConvertedCellularAuto
 		 * 
 		 */
 		public ConversionNotSupportedException() {
-			super( ZETLocalization.getSingleton().getString( "converter.ZConversionException" ) );
+			super( ZETLocalization2.loc.getString( "converter.ZConversionException" ) );
 		}
 
 		/**
@@ -232,7 +227,7 @@ public class ZToCAConverter extends Algorithm<BuildingPlan,ConvertedCellularAuto
 	 */
 	public ZToCAMapping getMapping() {
 		if( lastMapping == null )
-			throw new IllegalStateException(ZETLocalization.getSingleton ().getString ("converter.CallConvertFirstException"));
+			throw new IllegalStateException(ZETLocalization2.loc.getString ("converter.CallConvertFirstException"));
 
 		return lastMapping;
 	}
@@ -254,7 +249,7 @@ public class ZToCAConverter extends Algorithm<BuildingPlan,ConvertedCellularAuto
 	 */
 	public ZToCARasterContainer getContainer() throws IllegalStateException {
 		if( lastContainer == null )
-			throw new IllegalStateException(ZETLocalization.getSingleton ().getString ("converter.CallConvertFirstException"));
+			throw new IllegalStateException(ZETLocalization2.loc.getString ("converter.CallConvertFirstException"));
 
 		return lastContainer;
 	}
@@ -342,7 +337,7 @@ public class ZToCAConverter extends Algorithm<BuildingPlan,ConvertedCellularAuto
 			return null;
 
 		if( square.isInaccessible() && square.isDoor() )
-			throw new ConversionNotSupportedException(ZETLocalization.getSingleton ().getString ("algo.ca.NotInitializedException" + x + ", " + y ));
+			throw new ConversionNotSupportedException(ZETLocalization2.loc.getString ("algo.ca.NotInitializedException" + x + ", " + y ));
 
 //        if(square.isExit() && square.isDoor()){
 //            throw new ConversionNotSupportedException("Doors in exit areas are currently not supported.");

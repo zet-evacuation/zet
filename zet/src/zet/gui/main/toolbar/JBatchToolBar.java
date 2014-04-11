@@ -1,12 +1,9 @@
-/**
- * JBatchToolBar.java
- * Created: 22.07.2010 11:46:08
- */
+
 package zet.gui.main.toolbar;
 
+import de.tu_berlin.coga.common.localization.Localization;
 import de.tu_berlin.coga.common.localization.Localized;
 import gui.GUIControl;
-import gui.ZETMain;
 import de.tu_berlin.math.coga.components.framework.Button;
 import gui.ZETLoader;
 import java.awt.event.ActionEvent;
@@ -22,7 +19,7 @@ import zet.gui.GUILocalization;
 public class JBatchToolBar extends JToolBar implements ActionListener, Localized {
 	private final GUIControl control;
 	/** The localization class. */
-	static final GUILocalization loc = GUILocalization.getSingleton();
+	static final Localization loc = GUILocalization.loc;
 	private JButton btnExit;
 	private JButton btnSaveResults;
 	private JButton btnOpenResults;

@@ -13,10 +13,6 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
-/*
- * OppositeNodeCollection.java
- *
- */
 
 package ds.graph.network;
 
@@ -60,26 +56,25 @@ public class OppositeNodeCollection implements IdentifiableCollection<Node> {
      * @exception UnsupportedOperationException if this method is called.
      */
     public boolean add(Node element) {
-        throw new UnsupportedOperationException(GraphLocalization.getSingleton (
-		).getString ("ds.graph.NotSupportedException"));
+        throw new UnsupportedOperationException(GraphLocalization.loc.getString ("ds.graph.NotSupportedException"));
     }
 
     /**
      * This operation is not supported by this collection.
      * @exception UnsupportedOperationException if this method is called.
      */
+		@Override
     public void remove(Node element) {
-        throw new UnsupportedOperationException(GraphLocalization.getSingleton (
-		).getString ("ds.graph.NotSupportedException"));
+        throw new UnsupportedOperationException(GraphLocalization.loc.getString ("ds.graph.NotSupportedException"));
     }
 
     /**
      * This operation is not supported by this collection.
      * @exception UnsupportedOperationException if this method is called.
      */
+		@Override
     public Node removeLast() {
-        throw new UnsupportedOperationException(GraphLocalization.getSingleton (
-		).getString ("ds.graph.NotSupportedException"));
+        throw new UnsupportedOperationException(GraphLocalization.loc.getString ("ds.graph.NotSupportedException"));
     }
 
     /**
@@ -125,8 +120,7 @@ public class OppositeNodeCollection implements IdentifiableCollection<Node> {
      * @exception UnsupportedOperationException if this method is called.
      */        
     public Node get(int id) {
-        throw new UnsupportedOperationException(GraphLocalization.getSingleton (
-		).getString ("ds.graph.NotSupportedException"));
+        throw new UnsupportedOperationException(GraphLocalization.loc.getString ("ds.graph.NotSupportedException"));
     }
 
     /**

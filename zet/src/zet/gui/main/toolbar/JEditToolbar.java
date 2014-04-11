@@ -4,6 +4,8 @@
  */
 package zet.gui.main.toolbar;
 
+import de.tu_berlin.coga.common.localization.Localization;
+import de.tu_berlin.coga.common.localization.LocalizationManager;
 import de.tu_berlin.coga.common.localization.Localized;
 import de.tu_berlin.math.coga.components.framework.Button;
 import gui.GUIControl;
@@ -43,7 +45,7 @@ import zet.gui.main.tabs.editor.ZetObjectTypes;
 @SuppressWarnings( "serial" )
 public class JEditToolbar extends JToolBar implements ActionListener, PopupMenuListener, KeyListener, Localized {
 	/** The localization class. */
-	static final GUILocalization loc = GUILocalization.getSingleton();
+	static final Localization loc = GUILocalization.loc;
 	private JButton btnExit;
 	private JButton btnOpen;
 	private JButton btnSave;
@@ -281,7 +283,7 @@ public class JEditToolbar extends JToolBar implements ActionListener, PopupMenuL
 	 * insert real and integer values.
 	 */
 	private void updateZoomFactor() {
-		NumberFormat nf = NumberFormat.getNumberInstance( loc.getLocale() );
+		NumberFormat nf = LocalizationManager.getSingleton().getIntegerConverter();
 		String text = txtZoomFactor.getText();
 		char c = text.charAt( text.length() - 1 );
 		boolean percent = false;

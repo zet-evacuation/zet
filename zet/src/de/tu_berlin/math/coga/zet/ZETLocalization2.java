@@ -1,27 +1,23 @@
 /**
- * GraphLocalization.java
- * Created: Nov 12, 2010, 3:13:18 PM
+ * DefaultLoc.java
+ * Created: Nov 12, 2010, 2:49:05 PM
  */
-package ds.graph;
+package de.tu_berlin.math.coga.zet;
 
+import de.tu_berlin.coga.common.localization.AbstractLocalization;
 import de.tu_berlin.coga.common.localization.Localization;
 import de.tu_berlin.coga.common.localization.LocalizationManager;
-
 
 /**
  *
  * @author Jan-Philipp Kappmeier
  */
-public class GraphLocalization {
-	final public static Localization loc = LocalizationManager.getSingleton().getLocalization( "ds.graph.GraphLocalization" );
-//private volatile static GraphLocalization singleton;
+public class ZETLocalization2 {
+	//private volatile static ZETLocalization singleton;
+	public final static Localization loc = LocalizationManager.getSingleton().getLocalization( "de.tu_berlin.math.coga.zet.zevacuate" );
+
 //
-//	private GraphLocalization() throws MissingResourceException {
-//		super( "" );
-//	}
-//
-//	// synchronized keyword has been removed from here
-//	public static GraphLocalization getSingleton() {
+//	public static ZETLocalization getSingleton() {
 //		// needed because once there is singleton available no need to acquire
 //		// monitor again & again as it is costly
 //		if( singleton == null )
@@ -29,7 +25,7 @@ public class GraphLocalization {
 //				// this is needed if two threads are waiting at the monitor at the
 //				// time when singleton was getting instantiated
 //				if( singleton == null )
-//					singleton = new GraphLocalization();
+//					singleton = new ZETLocalization();
 //			}
 //		return singleton;
 //	}

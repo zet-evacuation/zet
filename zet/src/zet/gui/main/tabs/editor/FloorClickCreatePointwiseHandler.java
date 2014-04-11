@@ -4,7 +4,7 @@
  */
 package zet.gui.main.tabs.editor;
 
-import de.tu_berlin.math.coga.zet.ZETLocalization;
+import de.tu_berlin.math.coga.zet.ZETLocalization2;
 import de.tu_berlin.coga.zet.model.Area;
 import de.tu_berlin.coga.zet.model.Barrier;
 import de.tu_berlin.coga.zet.model.PlanPoint;
@@ -75,7 +75,7 @@ public class FloorClickCreatePointwiseHandler extends FloorClickHandler {
 
 			// check if the new point will close the polygon or the area will be zero
 			if( getZControl().latestPolygon().willClose( last, p2 ) && getZControl().latestPolygon().area() == 0 && !(getZControl().latestPolygon() instanceof Barrier) ) {
-				ZETLoader.sendError( ZETLocalization.getSingleton().getString( "gui.error.RectangleCreationZeroArea" ) );
+				ZETLoader.sendError( ZETLocalization2.loc.getString( "gui.error.RectangleCreationZeroArea" ) );
 				return;
 			}
 

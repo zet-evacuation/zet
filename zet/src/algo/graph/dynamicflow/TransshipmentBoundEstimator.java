@@ -92,7 +92,7 @@ public class TransshipmentBoundEstimator {
 		for (Node node : network.nodes()){
 			if (supplies.get(node)<0){
 				if (sink!= null)
-					throw new AssertionError(GraphLocalization.getSingleton().getString ("algo.graph.dynamicflow.OnlyOneSinkException"));
+					throw new AssertionError(GraphLocalization.loc.getString ("algo.graph.dynamicflow.OnlyOneSinkException"));
 				if (sink==null)
 					sink = node;
 			}
@@ -196,15 +196,14 @@ public class TransshipmentBoundEstimator {
 		
 		/* Find sink and sources and the maximal supply. Create a supply mapping that is 1 for all sources, -1 for the sink and 0 else. */
 		Node sink = null;
-		IdentifiableIntegerMapping<Node> oneSupplies = new IdentifiableIntegerMapping<Node>(supplies.getDomainSize());
-		LinkedList<Node> sources = new LinkedList<Node>();
-		LinkedList<Node> sinks = new LinkedList<Node>();
+		IdentifiableIntegerMapping<Node> oneSupplies = new IdentifiableIntegerMapping<>(supplies.getDomainSize());
+		LinkedList<Node> sources = new LinkedList<>();
+		LinkedList<Node> sinks = new LinkedList<>();
 		int maxSupply = 0;
 		for (Node node : network.nodes()){
 			if (supplies.get(node)<0){
 				if (sink!= null)
-					throw new AssertionError(GraphLocalization.getSingleton (
-					).getString ("algo.graph.dynamicflow.OnlyOneSinkException"));
+					throw new AssertionError(GraphLocalization.loc.getString ("algo.graph.dynamicflow.OnlyOneSinkException"));
 				if (sink==null)
 					sink = node;
 			}
@@ -352,8 +351,7 @@ public class TransshipmentBoundEstimator {
 		for (Node node : network.nodes()){
 			if (supplies.get(node)<0){
 				if (sink!= null)
-					throw new AssertionError(GraphLocalization.getSingleton (
-					).getString ("algo.graph.dynamicflow.OnlyOneSinkException"));
+					throw new AssertionError(GraphLocalization.loc.getString ("algo.graph.dynamicflow.OnlyOneSinkException"));
 				if (sink==null)
 					sink = node;
 			}
