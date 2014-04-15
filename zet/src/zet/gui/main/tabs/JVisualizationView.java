@@ -151,7 +151,7 @@ public class JVisualizationView extends AbstractVisualizationView<ZETVisualizati
 		@SuppressWarnings( "UseOfObsoleteCollectionType" ) // hashtable has to be used here due to slider
 		Hashtable<Integer, JComponent> table = new Hashtable<>();
 		for( int i = 1; i <= 10; i++ )
-			table.put( new Integer( -i * 10 ), new JLabel( LocalizationManager.getSingleton().getFloatConverter().format( (10 - i) * 0.1 ) ) );
+			table.put( new Integer( -i * 10 ), new JLabel( LocalizationManager.getManager().getFloatConverter().format( (10 - i) * 0.1 ) ) );
 		table.put( new Integer( 0 ), new JLabel( "1" ) );
 		for( int i = 1; i < 10; i++ )
 			table.put( new Integer( i * 10 ), new JLabel( "" + (i + 1) ) );

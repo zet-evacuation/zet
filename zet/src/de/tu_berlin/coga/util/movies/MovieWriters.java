@@ -13,16 +13,9 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
-/**
- * Class MovieWriters
- * Erstellt 12.11.2008, 12:23:15
- */
 
-package io.visualization;
+package de.tu_berlin.coga.util.movies;
 
-import io.movie.MovieWriter;
-import io.movie.FFmpegWrapper;
-import io.movie.JMFWrapper;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.EnumSet;
@@ -38,10 +31,10 @@ public enum MovieWriters {
 	JMF( "Java Media Files", 1, new JMFWrapper() );
 
 	/** The name of the image format. The result of the {@link toString()} method */
-	private String name;
-	private int formatListsIndex;
+	private final String name;
+	private final int formatListsIndex;
 	/** The movie writer for the selected enumeration item. */
-	private MovieWriter amw;
+	private final MovieWriter amw;
 	
 	private static final MovieFormat[][] movieFormats = {
 		{MovieFormat.H264, MovieFormat.DIVX, MovieFormat.MPEG1, MovieFormat.MPEG2, MovieFormat.MPEG4, MovieFormat.XVID},
@@ -64,13 +57,13 @@ public enum MovieWriters {
 	}
 	
 	public EnumSet<MovieFormat> getSupportedMovieFormats() {
-		ArrayList<MovieFormat> al = new ArrayList<MovieFormat>( movieFormats[formatListsIndex].length);
+		ArrayList<MovieFormat> al = new ArrayList<>( movieFormats[formatListsIndex].length);
 		al.addAll( Arrays.asList( movieFormats[formatListsIndex] ) );
 		return EnumSet.copyOf( al );
 	}
 
 	public EnumSet<ImageFormat> getSupportedImageFormats() {
-		ArrayList<ImageFormat> al = new ArrayList<ImageFormat>( imageFormats[formatListsIndex].length);
+		ArrayList<ImageFormat> al = new ArrayList<>( imageFormats[formatListsIndex].length);
 		al.addAll( Arrays.asList( imageFormats[formatListsIndex] ) );
 		return EnumSet.copyOf( al );
 	}

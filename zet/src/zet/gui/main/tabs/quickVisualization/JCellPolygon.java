@@ -46,7 +46,7 @@ public class JCellPolygon extends AbstractPolygon<AbstractFloor> {
 	EnumSet<Direction8> borders = EnumSet.noneOf( Direction8.class );
 	private EvacCell cell;
 	private final boolean showIndividualNames;
-	private static final NumberFormat nfFloat = LocalizationManager.getSingleton().getFloatConverter();// NumberFormat.getNumberInstance( DefaultLoc.getSingleton().getLocale() );
+	private static final NumberFormat nfFloat = LocalizationManager.getManager().getFloatConverter();// NumberFormat.getNumberInstance( DefaultLoc.getSingleton().getLocale() );
 	private EvacuationCellularAutomaton ca;
 
 	/**

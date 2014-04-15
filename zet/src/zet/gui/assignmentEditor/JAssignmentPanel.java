@@ -837,13 +837,13 @@ public class JAssignmentPanel extends JPanel {
 				case COL_DISTRIBUTION:
 					return params.get( row ).getDistributionName();
 				case COL_PARAM1:
-					return LocalizationManager.getSingleton().getFloatConverter().format( params.get( row ).getParam( 1 ) );
+					return LocalizationManager.getManager().getFloatConverter().format( params.get( row ).getParam( 1 ) );
 				case COL_PARAM2:
-					return LocalizationManager.getSingleton().getFloatConverter().format( params.get( row ).getParam( 2 ) );
+					return LocalizationManager.getManager().getFloatConverter().format( params.get( row ).getParam( 2 ) );
 				case COL_PARAM3:
-					return LocalizationManager.getSingleton().getFloatConverter().format( params.get( row ).getParam( 3 ) );
+					return LocalizationManager.getManager().getFloatConverter().format( params.get( row ).getParam( 3 ) );
 				case COL_PARAM4:
-					return LocalizationManager.getSingleton().getFloatConverter().format( params.get( row ).getParam( 4 ) );
+					return LocalizationManager.getManager().getFloatConverter().format( params.get( row ).getParam( 4 ) );
 				default:
 					return null;
 			}
@@ -908,19 +908,19 @@ public class JAssignmentPanel extends JPanel {
 						drawCharts();
 						break;
 					case COL_PARAM1:
-						params.get( row ).setParam( 1, LocalizationManager.getSingleton().getFloatConverter().parse( (String) value ).doubleValue() );
+						params.get( row ).setParam( 1, LocalizationManager.getManager().getFloatConverter().parse( (String) value ).doubleValue() );
 						drawCharts();
 						break;
 					case COL_PARAM2:
-						params.get( row ).setParam( 2, LocalizationManager.getSingleton().getFloatConverter().parse( (String) value ).doubleValue() );
+						params.get( row ).setParam( 2, LocalizationManager.getManager().getFloatConverter().parse( (String) value ).doubleValue() );
 						drawCharts();
 						break;
 					case COL_PARAM3:
-						params.get( row ).setParam( 3, LocalizationManager.getSingleton().getFloatConverter().parse( (String) value ).doubleValue() );
+						params.get( row ).setParam( 3, LocalizationManager.getManager().getFloatConverter().parse( (String) value ).doubleValue() );
 						drawCharts();
 						break;
 					case COL_PARAM4:
-						params.get( row ).setParam( 4, LocalizationManager.getSingleton().getFloatConverter().parse( (String) value ).doubleValue() );
+						params.get( row ).setParam( 4, LocalizationManager.getManager().getFloatConverter().parse( (String) value ).doubleValue() );
 						drawCharts();
 						break;
 					default:

@@ -21,7 +21,7 @@ public class AreaNode extends ProjectTreeNode<Area> {
 		sb.append( zFormatData.getAreaType().getTypeString() + "\n" );
 		sb.append( zFormatData.getCoordinateString() + "\n" );
 		sb.append( "Koordinaten: " + zFormatData.getCoordinateString() + "\n" );
-		sb.append( "Fläche: " + LocalizationManager.getSingleton().getFloatConverter().format( zFormatData.areaMeter() ) + "m²\n" );
+		sb.append( "Fläche: " + LocalizationManager.getManager().getFloatConverter().format( zFormatData.areaMeter() ) + "m²\n" );
 		return sb.toString();
 	}
 

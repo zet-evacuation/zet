@@ -13,7 +13,7 @@ import de.tu_berlin.coga.common.localization.LocalizationManager;
  * @author Jan-Philipp Kappmeier
  */
 public class GraphLocalization {
-	final public static Localization loc = LocalizationManager.getSingleton().getLocalization( "ds.graph.GraphLocalization" );
+	final public static Localization loc = LocalizationManager.getManager().getLocalization( "ds.graph.GraphLocalization" );
 //private volatile static GraphLocalization singleton;
 //
 //	private GraphLocalization() throws MissingResourceException {

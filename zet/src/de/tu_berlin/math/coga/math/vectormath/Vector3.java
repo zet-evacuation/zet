@@ -317,7 +317,7 @@ public class Vector3 implements Cloneable {
 	 */
 	@Override
 	public String toString(){
-		return toString( LocalizationManager.getSingleton().getFloatConverter() );
+		return toString( LocalizationManager.getManager().getFloatConverter() );
 	}
 
 	/**
@@ -341,7 +341,7 @@ public class Vector3 implements Cloneable {
 	 * @throws ParseException if an error occurs during parsing
 	 */
 	public void parse( String value ) throws ParseException {
-		parse( value, LocalizationManager.getSingleton().getFloatConverter() );
+		parse( value, LocalizationManager.getManager().getFloatConverter() );
 	}
 
 	/**

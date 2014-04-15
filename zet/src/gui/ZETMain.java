@@ -14,11 +14,6 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 
-/*
- * ZETMain.java
- * Created on 4. Dezember 2007, 17:08
- */
-
 package gui;
 
 import algo.graph.dynamicflow.eat.EarliestArrivalFlowProblem;

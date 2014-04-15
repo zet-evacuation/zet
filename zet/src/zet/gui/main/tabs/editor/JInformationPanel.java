@@ -22,8 +22,8 @@ import zet.gui.GUILocalization;
 public abstract class JInformationPanel<U> extends JPanel implements Localized {
 	/** The localization class. */
 	protected Localization loc;
-	protected static NumberFormat nfFloat = LocalizationManager.getSingleton().getFloatConverter();
-	protected static NumberFormat nfInteger = LocalizationManager.getSingleton().getIntegerConverter();
+	protected static NumberFormat nfFloat = LocalizationManager.getManager().getFloatConverter();
+	protected static NumberFormat nfInteger = LocalizationManager.getManager().getIntegerConverter();
 	/** The control object for the loaded project. */
 	protected ZControl projectControl;
 	protected GUIControl guiControl;

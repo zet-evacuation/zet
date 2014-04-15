@@ -115,7 +115,7 @@ public class JZetWindow extends JFrame implements Localized {
 		super();
 
 		// Set up locale information
-		LocalizationManager.getSingleton().setLocale( Locale.getDefault() );
+		LocalizationManager.getManager().setLocale( Locale.getDefault() );
 		nfZoom.setMaximumFractionDigits( 2 );
 
 		// Set window position
@@ -258,7 +258,7 @@ public class JZetWindow extends JFrame implements Localized {
 	public static void sendMouse( Point position ) {
 		lastMouse = position;
 		String realCoordsMillimeter = "(" + Integer.toString( position.x ) + delimiter + Integer.toString( position.y ) + ")";
-		String realCoordsMeter = "(" + LocalizationManager.getSingleton().getFloatConverter().format( ConversionTools.toMeter( position.x ) ) + delimiter + LocalizationManager.getSingleton().getFloatConverter().format( ConversionTools.toMeter( position.y ) ) + ")";
+		String realCoordsMeter = "(" + LocalizationManager.getManager().getFloatConverter().format( ConversionTools.toMeter( position.x ) ) + delimiter + LocalizationManager.getManager().getFloatConverter().format( ConversionTools.toMeter( position.y ) ) + ")";
 		String text = String.format( loc.getString( "gui.EditPanel.Mouse.PositionMillimeterMeter" ), realCoordsMillimeter, realCoordsMeter );
 		EventServer.getInstance().dispatchEvent( new MessageEvent<JZetWindow>( null, MessageType.MousePosition, text ) );
 	}

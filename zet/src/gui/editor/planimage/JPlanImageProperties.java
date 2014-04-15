@@ -53,9 +53,9 @@ public class JPlanImageProperties extends JComponent {
 	int pixelCount = 1;
 	int millimeterCount = 1;
 	double meterCount = 0.001;
-	private static final NumberFormat nfFloat = LocalizationManager.getSingleton().getFloatConverter();// NumberFormat.getNumberInstance(
+	private static final NumberFormat nfFloat = LocalizationManager.getManager().getFloatConverter();// NumberFormat.getNumberInstance(
 					//ZETLocalization2.loc.getLocale() );
-	private static final NumberFormat nfInteger = LocalizationManager.getSingleton().getIntegerConverter();
+	private static final NumberFormat nfInteger = LocalizationManager.getManager().getIntegerConverter();
 	//NumberFormat.getIntegerInstance( ZETLocalization2.loc.getLocale() );
 	private JTextField txtPixel;
 	private JTextField txtMillies;

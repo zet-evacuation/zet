@@ -13,15 +13,12 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
-/**
- * Class PicturesOnlyWriter
- * Erstellt 17.11.2008, 00:58:01
- */
 
-package io.movie;
+package de.tu_berlin.coga.util.movies;
 
+import de.tu_berlin.coga.common.localization.LocalizationManager;
 import de.tu_berlin.coga.common.util.IOTools;
-import java.util.Vector;
+import java.util.List;
 import javax.swing.JPanel;
 
 /**
@@ -37,6 +34,7 @@ public class PicturesOnlyWriter extends MovieWriter {
 	 * @param frameNumber the (ignored) frame number
 	 * @return the next filename
 	 */
+	@Override
 	public String getFilename( int frameNumber ) {
 		return IOTools.getNextFreeNumberedFilepath( path, framename, FRAMEDIGITS  ) + "." + frameFormat.getEnding();
 	}
@@ -46,8 +44,9 @@ public class PicturesOnlyWriter extends MovieWriter {
 	 * @throws java.lang.UnsupportedOperationException because the {@code PicturesOnlyWriter} does not support movie encoding.
 	 */
 	@Override
-	public void create( Vector<String> inputFiles, String filename ) throws java.lang.UnsupportedOperationException {
-		throw new UnsupportedOperationException( "This wrapper does not support movie encoding." );
+	public void create( List<String> inputFiles, String filename ) throws java.lang.UnsupportedOperationException {
+		throw new UnsupportedOperationException( LocalizationManager.getManager()
+						.getLocalization( "de.tu_berlin.coga.util.movies" ).getString( "pictureOnly.jmf.noEncoding" ) );
 	}
 
 	/**
@@ -58,5 +57,4 @@ public class PicturesOnlyWriter extends MovieWriter {
 	public JPanel getAdvancedConfigurationPanel() {
 		return new JPanel();
 	}
-
 }

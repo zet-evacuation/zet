@@ -14,12 +14,10 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 
-package io.movie;
+package de.tu_berlin.coga.util.movies;
 
-import io.visualization.ImageFormat;
-import io.visualization.MovieFormat;
 import java.io.File;
-import java.util.Vector;
+import java.util.ArrayList;
 
 /**
  * A {@code MovieManager} controls {@link MovieWriter} objects,
@@ -46,7 +44,7 @@ public class MovieManager {
 	/** The name of the movie frames. */
 	private String framename = "frame";
 	/** A vector containing the complete filenames of the video frames. */
-	private Vector<String> inputFiles;
+	private ArrayList<String> inputFiles;
 	/** The format of the video. */
 	private MovieFormat movieFormat = MovieFormat.DIVX;
 	/** The format of the images. */
@@ -64,7 +62,7 @@ public class MovieManager {
 	 * format is {@link MovieFormat#DIVX}.
 	 */
 	public MovieManager() {
-		inputFiles = new Vector<String>();
+		inputFiles = new ArrayList<>();
 		if( !(path.endsWith( "/" ) || path.endsWith( "\\" ) ) )
 			path = path + "/";
 		writer = new FFmpegWrapper();

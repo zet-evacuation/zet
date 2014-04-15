@@ -227,7 +227,7 @@ public class JZETMenuBar extends JMenuBar implements ActionListener, Localized {
 			grpLanguage.add( tmp );
 			if( first == null )
 				first = tmp;
-			if( locale.getLanguage().equals( LocalizationManager.getSingleton().getLocale().getLanguage() ) ) {
+			if( locale.getLanguage().equals( LocalizationManager.getManager().getLocale().getLanguage() ) ) {
 				tmp.setSelected( true );
 				localeFound = true;
 			}
