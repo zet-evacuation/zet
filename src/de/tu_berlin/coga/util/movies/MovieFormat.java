@@ -13,12 +13,8 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 
-package io.visualization;
+package de.tu_berlin.coga.util.movies;
 
 /**
  * An enumeration of some movie formats that can be written.
@@ -41,9 +37,9 @@ public enum MovieFormat {
 	MOV( "Quicktime", "mov" );
 
 	/** The ending of the movie format. */
-	private String ending;	
+	private final String ending;	
 	/** The name of the movie format. The result of the {@link toString()} method */
-	private String name;
+	private final String name;
 
 	/**
 	 * Creates a new enumeration instance

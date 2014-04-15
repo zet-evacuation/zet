@@ -141,7 +141,7 @@ public class JStairAreaInformationPanel extends JInformationPanel<StairArea> {
 			@Override
 			public void actionPerformed( ActionEvent arg0 ) {
 				StairPreset sp = (StairPreset)cbxStairPresets.getSelectedItem();
-				NumberFormat nf = LocalizationManager.getSingleton().getFloatConverter();
+				NumberFormat nf = LocalizationManager.getManager().getFloatConverter();
 				txtStairFactorUp.setText( nf.format( sp.getSpeedFactorUp() ) );
 				txtStairFactorDown.setText( nf.format( sp.getSpeedFactorDown() ) );
 			}

@@ -14,16 +14,9 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 
-/**
- * Class MovieWriter
- * Erstellt 09.11.2008, 22:43:29
- */
+package de.tu_berlin.coga.util.movies;
 
-package io.movie;
-
-import io.visualization.ImageFormat;
-import io.visualization.MovieFormat;
-import java.util.Vector;
+import java.util.List;
 import javax.swing.JPanel;
 
 /**
@@ -67,6 +60,7 @@ public abstract class MovieWriter {
 	 * @return the filename including the path
 	 */
 	public abstract String getFilename( int number );
+	
 	/**
 	 * Creates the video with the specified filename with the {@code #path}. The
 	 * filenames should be submitted, but, however, needn't be neccessaryly
@@ -74,7 +68,7 @@ public abstract class MovieWriter {
 	 * @param inputFiles the filenames of the video frames
 	 * @param filename the movie output filename (without path)
 	 */
-	public abstract void create( Vector<String> inputFiles, String filename );
+	public abstract void create( List<String> inputFiles, String filename );
 
 	/**
 	 * Returns a {@link JPanel} that allows setting up some advanced features for

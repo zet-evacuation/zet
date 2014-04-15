@@ -14,9 +14,11 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 
-package io.movie;
+package de.tu_berlin.coga.util.movies;
 
-import de.tu_berlin.math.coga.zet.ZETLocalization2;
+import de.tu_berlin.coga.common.localization.Localization;
+import de.tu_berlin.coga.common.localization.LocalizationManager;
+import java.util.List;
 import java.util.Vector;
 import javax.media.MediaLocator;
 import javax.swing.JLabel;
@@ -27,22 +29,26 @@ import javax.swing.JPanel;
  * @author Jan-Philipp Kappmeier
  */
 public class JMFWrapper extends PicturesOnlyWriter {
+	private final static Localization loc = LocalizationManager.getManager().getLocalization( "io.movie.movies" );
 	/**
 	 * {@inheritDoc}
 	 * <p>Creates a new quicktime movie out of the images in the submitted vector.
 	 * The movie is only a sequence of jpegs played with the selected framerate.</p>
 	 * @param images the vector of images (with full paths)
+	 * @param filename the output file name
 	 */
 	@Override
-	public void create( Vector<String> images, String filename ) {
-		MediaLocator oml;
+	public void create( List<String> images, String filename ) {
 		String outputURL = "file:" + path + filename + "." + movieFormat.getEnding();
-		if ( ( oml = JpegImagesToQuicktime.createMediaLocator( outputURL ) ) == null ) {
+		MediaLocator oml = JpegImagesToQuicktime.createMediaLocator( outputURL );
+		if ( oml == null ) {
 			System.err.println( "Cannot build media locator from: " + outputURL );
 			System.exit( 0 );
 		}
 		JpegImagesToQuicktime imageToMovie = new JpegImagesToQuicktime();
-		imageToMovie.doIt( width, height, framerate, images, oml  );
+		@SuppressWarnings( "UseOfObsoleteCollectionType" ) // legacy code uses vector
+		Vector<String> fileList = new Vector<>( images );
+		imageToMovie.doIt( width, height, framerate, fileList, oml  );
 	}
 	
 	/**
@@ -53,8 +59,7 @@ public class JMFWrapper extends PicturesOnlyWriter {
 	@Override
 	public JPanel getAdvancedConfigurationPanel() {
 		JPanel panel = new JPanel();
-		panel.add( new JLabel( ZETLocalization2.loc.getString( "gui.visualization.createMovieDialog.jmf.noSupport" ) ) );
+		panel.add( new JLabel( loc.getString( "gui.visualization.createMovieDialog.jmf.noSupport" ) ) );
 		return panel;
 	}
-
 }

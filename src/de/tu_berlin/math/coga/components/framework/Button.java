@@ -37,7 +37,7 @@ import javax.swing.JToggleButton;
  */
 public class Button {
 	/** The localization object used to generate localized menu titles. */
-	private static Localization loc = LocalizationManager.getSingleton().getLocalization( JVideoOptionsDialog.COMPONENT_LOCALIZATION );
+	private static Localization loc = LocalizationManager.getManager().getLocalization( JVideoOptionsDialog.COMPONENT_LOCALIZATION );
 
 	/** Private constructor avoids instantiation. */
 	private Button() {}

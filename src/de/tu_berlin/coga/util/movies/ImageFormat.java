@@ -13,7 +13,8 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
-package io.visualization;
+
+package de.tu_berlin.coga.util.movies;
 
 /**
  * An enumeration with some image formats that can be written.
@@ -30,9 +31,9 @@ public enum ImageFormat {
 	PNG( "PNG", "png" );
 
 	/** The ending of the movie format. */
-	private String ending;	
+	private final String ending;	
 	/** The name of the image format. The result of the {@link toString()} method */
-	private String name;
+	private final String name;
 	
 
 	/**

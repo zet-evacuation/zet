@@ -32,10 +32,10 @@ import gui.GUIOptionManager;
 import gui.visualization.Visualization;
 import gui.visualization.control.graph.GLFlowGraphControl;
 import gui.visualization.control.graph.GLNashGraphControl;
-import io.movie.MovieManager;
-import io.visualization.ImageFormat;
-import io.visualization.MovieFormat;
-import io.visualization.MovieWriters;
+import de.tu_berlin.coga.util.movies.MovieManager;
+import de.tu_berlin.coga.util.movies.ImageFormat;
+import de.tu_berlin.coga.util.movies.MovieFormat;
+import de.tu_berlin.coga.util.movies.MovieWriters;
 import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.Toolkit;
@@ -106,7 +106,7 @@ public class FlowVisualizationTool extends JFrame implements PropertyChangeListe
 	public FlowVisualizationTool() {
 		super();
 		theInstance = this;
-		LocalizationManager.getSingleton().setLocale( Locale.getDefault() );
+		LocalizationManager.getManager().setLocale( Locale.getDefault() );
 
 		setDefaultCloseOperation( JFrame.EXIT_ON_CLOSE );
 		setSize( 800, 600 );
@@ -146,7 +146,7 @@ public class FlowVisualizationTool extends JFrame implements PropertyChangeListe
 	 * tool bar and status bar.
 	 */
 	private void initializeComponents() {
-		LocalizationManager.getSingleton().setLocale( Locale.GERMAN );
+		LocalizationManager.getManager().setLocale( Locale.GERMAN );
 		sb = new JEventStatusBar();
 		add( sb, BorderLayout.SOUTH );
 

@@ -14,12 +14,7 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 
-/**
- * Class FFmpegWrapper
- * Created 09.11.2008, 22:40:51
- */
-
-package io.movie;
+package de.tu_berlin.coga.util.movies;
 
 import de.tu_berlin.coga.common.util.Formatter;
 import de.tu_berlin.coga.common.util.IOTools;
@@ -30,7 +25,7 @@ import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
 import java.io.File;
 import java.io.IOException;
-import java.util.Vector;
+import java.util.List;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JFileChooser;
@@ -64,7 +59,8 @@ public class FFmpegWrapper extends MovieWriter {
 	 * <p>Encodes the movie, one or two times, depending if 2-pass encoding
 	 * is enabled or disabled.</p>
 	 */
-	public void create( Vector<String> inputFiles, String filename ) {
+	@Override
+	public void create( List<String> inputFiles, String filename ) {
 		command = ""; // clear all commandlines to store the new ones.
 
 		duration = inputFiles.size() / (double)framerate;
@@ -121,7 +117,7 @@ public class FFmpegWrapper extends MovieWriter {
 		else
 			System.out.println( "Starte Video-Encodierung." );
 
-		int ret = 0;
+		int ret;
 		if( twoPassEncoding ) {
 			ret = record( 1, filename );
 			if( ret != 0 )
@@ -234,7 +230,9 @@ public class FFmpegWrapper extends MovieWriter {
 	 * <p>Creates a new frame image filename. The frame number is the only used
 	 * parameter, as the encoder reads all files beginning with the frame prefix
 	 * and a number. Existing files are overwritten without any request.</p>
+	 * @return the filename for the file number
 	 */
+	@Override
 	public String getFilename( int number ) {
 		return path + framename + Formatter.fillLeadingZeros( number, FRAMEDIGITS ) + "." + frameFormat.getEnding();
 	}
@@ -267,6 +265,7 @@ public class FFmpegWrapper extends MovieWriter {
 		final JCheckBox chk2PassEncoding = new JCheckBox( "2-pass encoding" );
 		chk2PassEncoding.setSelected( true );
 		chk2PassEncoding.addActionListener( new ActionListener() {
+			@Override
 			public void actionPerformed( ActionEvent e ) {
 				twoPassEncoding = chk2PassEncoding.isSelected();
 			}
@@ -277,14 +276,16 @@ public class FFmpegWrapper extends MovieWriter {
 		final JTextField txtMusicFile = new JTextField();
 		panel.add( txtMusicFile, "1,4" );
 		txtMusicFile.addFocusListener( new FocusListener() {
-			public void focusGained( FocusEvent e ) { }
+			@Override public void focusGained( FocusEvent e ) { }
 
+			@Override
 			public void focusLost( FocusEvent e ) {
 				mp3File = txtMusicFile.getText();
 			}
 		});
 		final JButton btnSelectMusicFile = new JButton( "Durchsuchen" );
 		btnSelectMusicFile.addActionListener( new ActionListener() {
+			@Override
 			public void actionPerformed( ActionEvent e ) {
 					JFileChooser musicFileChooser = new JFileChooser();
 					musicFileChooser.setFileFilter( new FileFilter() {
@@ -308,8 +309,10 @@ public class FFmpegWrapper extends MovieWriter {
 		panel.add( new JLabel( "Zusätzliche Optionen (eigene Gefahr):"), "1,6,3,6" );
 		final JTextField txtAdvancedCommands = new JTextField();
 		txtAdvancedCommands.addFocusListener( new FocusListener() {
+			@Override
 			public void focusGained( FocusEvent e ) { }
 
+			@Override
 			public void focusLost( FocusEvent e ) {
 				advancedParameter = txtAdvancedCommands.getText();
 			}

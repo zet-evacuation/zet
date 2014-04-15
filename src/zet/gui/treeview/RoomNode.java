@@ -20,7 +20,7 @@ public class RoomNode extends ProjectTreeNode<Room> {
 		StringBuilder sb = new StringBuilder();
 		sb.append( "Raum: " + zFormatData.getName() + "\n" );
 		sb.append( "Koordinaten: " + zFormatData.getCoordinateString() + "\n" );
-		sb.append( "Fläche: " + LocalizationManager.getSingleton().getFloatConverter().format( zFormatData.areaMeter() ) + "m²\n" );
+		sb.append( "Fläche: " + LocalizationManager.getManager().getFloatConverter().format( zFormatData.areaMeter() ) + "m²\n" );
 		return sb.toString();
 	}
 

@@ -283,7 +283,7 @@ public class JEditToolbar extends JToolBar implements ActionListener, PopupMenuL
 	 * insert real and integer values.
 	 */
 	private void updateZoomFactor() {
-		NumberFormat nf = LocalizationManager.getSingleton().getIntegerConverter();
+		NumberFormat nf = LocalizationManager.getManager().getIntegerConverter();
 		String text = txtZoomFactor.getText();
 		char c = text.charAt( text.length() - 1 );
 		boolean percent = false;

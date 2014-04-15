@@ -58,7 +58,7 @@ import gui.visualization.Visualization.RecordingMode;
 import gui.visualization.control.ZETGLControl;
 import gui.visualization.control.ZETGLControl.CellInformationDisplay;
 import io.DXFWriter;
-import io.movie.MovieManager;
+import de.tu_berlin.coga.util.movies.MovieManager;
 import io.visualization.CAVisualizationResults;
 import java.awt.Rectangle;
 import java.awt.image.BufferedImage;
@@ -673,7 +673,7 @@ public class GUIControl implements AlgorithmListener {
 	}
 
 	public void switchToLanguage( Locale locale ) {
-		LocalizationManager.getSingleton().setLocale( locale );
+		LocalizationManager.getManager().setLocale( locale );
 		Localizer.instance().updateLocalization();
 	}
 

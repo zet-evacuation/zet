@@ -14,11 +14,7 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 
-/**
- * Class InputHandler
- * Erstellt 10.11.2008, 03:07:40
- */
-package io.movie;
+package de.tu_berlin.coga.util.movies;
 
 import java.io.BufferedReader;
 import java.io.InputStream;

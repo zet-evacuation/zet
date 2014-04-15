@@ -12,7 +12,7 @@ import de.tu_berlin.coga.common.localization.LocalizationManager;
  * @author Jan-Philipp Kappmeier
  */
 public class GUILocalization {
-	public final static Localization loc = LocalizationManager.getSingleton().getLocalization( "zet.gui.GUILocalization" );
+	public final static Localization loc = LocalizationManager.getManager().getLocalization( "zet.gui.GUILocalization" );
 					
 //	private volatile static GUILocalization singleton;
 //

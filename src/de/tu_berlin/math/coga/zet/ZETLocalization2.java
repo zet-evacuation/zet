@@ -14,7 +14,7 @@ import de.tu_berlin.coga.common.localization.LocalizationManager;
  */
 public class ZETLocalization2 {
 	//private volatile static ZETLocalization singleton;
-	public final static Localization loc = LocalizationManager.getSingleton().getLocalization( "de.tu_berlin.math.coga.zet.zevacuate" );
+	public final static Localization loc = LocalizationManager.getManager().getLocalization( "de.tu_berlin.math.coga.zet.zevacuate" );
 
 //
 //	public static ZETLocalization getSingleton() {

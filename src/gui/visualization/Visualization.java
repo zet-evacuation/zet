@@ -25,7 +25,7 @@ import de.tu_berlin.math.coga.math.vectormath.Vector3;
 import event.EventServer;
 import event.MessageEvent;
 import event.MessageEvent.MessageType;
-import io.movie.MovieManager;
+import de.tu_berlin.coga.util.movies.MovieManager;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.event.KeyEvent;

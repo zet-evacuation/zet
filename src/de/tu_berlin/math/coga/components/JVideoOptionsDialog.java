@@ -22,10 +22,10 @@ import de.tu_berlin.coga.common.util.units.BinaryUnits;
 import de.tu_berlin.coga.common.util.Formatter;
 import de.tu_berlin.math.coga.components.framework.Button;
 import info.clearthought.layout.TableLayout;
-import io.movie.MovieWriter;
-import io.visualization.ImageFormat;
-import io.visualization.MovieFormat;
-import io.visualization.MovieWriters;
+import de.tu_berlin.coga.util.movies.MovieWriter;
+import de.tu_berlin.coga.util.movies.ImageFormat;
+import de.tu_berlin.coga.util.movies.MovieFormat;
+import de.tu_berlin.coga.util.movies.MovieWriters;
 import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -73,7 +73,7 @@ public class JVideoOptionsDialog extends javax.swing.JDialog {
 	/** The return value, cancel by default. */
 	private int retVal = JOptionPane.CANCEL_OPTION;
 	/** The localization class. */
-	static final Localization loc = LocalizationManager.getSingleton().getLocalization( COMPONENT_LOCALIZATION );
+	static final Localization loc = LocalizationManager.getManager().getLocalization( COMPONENT_LOCALIZATION );
 	/** The default cancel button. */
 	private JButton btnCancel;
 	/** The default ok button. */

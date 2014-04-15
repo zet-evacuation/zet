@@ -1,4 +1,3 @@
-
 /*
  * @(#)JpegImagesToQuicktime.java	1.3 01/03/13
  *
@@ -29,7 +28,7 @@
  * redistribute the Software for such purposes.
  */
 
-package io.movie;
+package de.tu_berlin.coga.util.movies;
 
 import java.awt.Dimension;
 import java.io.File;
