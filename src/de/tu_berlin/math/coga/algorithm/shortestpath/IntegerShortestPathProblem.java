@@ -11,9 +11,9 @@ import de.tu_berlin.coga.container.mapping.IdentifiableIntegerMapping;
 
 /**
  *
- * @author gross
+ * @author Jan-Philipp Kappmeier
  */
-public class ShortestPathProblem {
+public class IntegerShortestPathProblem {
 
     Node getSource() {
         throw new UnsupportedOperationException("Not yet implemented");

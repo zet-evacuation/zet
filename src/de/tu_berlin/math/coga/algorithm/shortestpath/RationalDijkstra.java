@@ -1,9 +1,4 @@
-/*
- * Dijkstra.java
- *
- */
-
-package algo.graph.shortestpath;
+package de.tu_berlin.math.coga.algorithm.shortestpath;
 
 import de.tu_berlin.coga.container.priority.MinHeap;
 import ds.graph.Edge;
@@ -18,7 +13,7 @@ import java.util.Map;
  *
  * @author Martin Groß
  */
-public class DijkstraWithRationalDistances {
+public class RationalDijkstra {
     
     private Map<Edge,Double> costs;
     private DynamicNetwork graph;
@@ -28,10 +23,10 @@ public class DijkstraWithRationalDistances {
     private Map<Node,Edge> edges;
     private Map<Node,Node> nodes;
     
-    public DijkstraWithRationalDistances() {
+    public RationalDijkstra() {
     }
 
-    public DijkstraWithRationalDistances(DynamicNetwork graph, Map<Edge,Double> costs, Node source) { // TODO genral graph class here
+    public RationalDijkstra(DynamicNetwork graph, Map<Edge,Double> costs, Node source) { // TODO genral graph class here
         this.costs = costs;
         this.graph = graph;
         this.source = source;

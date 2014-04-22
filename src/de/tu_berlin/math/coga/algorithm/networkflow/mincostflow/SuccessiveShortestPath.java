@@ -19,7 +19,7 @@
  */
 package de.tu_berlin.math.coga.algorithm.networkflow.mincostflow;
 
-import algo.graph.shortestpath.MooreBellmanFord;
+import de.tu_berlin.math.coga.algorithm.shortestpath.MooreBellmanFord;
 import algo.graph.traverse.BFS;
 import ds.graph.Path;
 import ds.graph.Edge;

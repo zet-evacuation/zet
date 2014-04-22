@@ -4,7 +4,7 @@
  */
 package de.tu_berlin.math.coga.zet.converter.graph;
 
-import algo.graph.shortestpath.DijkstraWithRationalDistances;
+import de.tu_berlin.math.coga.algorithm.shortestpath.RationalDijkstra;
 import de.tu_berlin.coga.container.collection.ListSequence;
 import ds.graph.Edge;
 import de.tu_berlin.coga.container.collection.IdentifiableCollection;
@@ -31,7 +31,7 @@ public class ShortestPathGraphShrinker extends GraphShrinker {
 		for( Edge edge : getProblem().graph().edges() )
 			costs.put( edge, (double)getProblem().getTransitTime( edge ) );
 
-		DijkstraWithRationalDistances dijkstra = new DijkstraWithRationalDistances( (DynamicNetwork)getProblem().graph(), costs, getProblem().getSupersink() );
+		RationalDijkstra dijkstra = new RationalDijkstra( (DynamicNetwork)getProblem().graph(), costs, getProblem().getSupersink() );
 		dijkstra.run();
 		DynamicNetwork shortestPathNetwork = dijkstra.getShortestPathGraph();
 

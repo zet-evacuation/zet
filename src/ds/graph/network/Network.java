@@ -4,7 +4,7 @@
  */
 package ds.graph.network;
 
-import algo.graph.shortestpath.Dijkstra;
+import de.tu_berlin.math.coga.algorithm.shortestpath.Dijkstra;
 import com.thoughtworks.xstream.annotations.XStreamAlias;
 import de.tu_berlin.coga.container.collection.DependingListSequence;
 import de.tu_berlin.coga.container.collection.HidingSet;
