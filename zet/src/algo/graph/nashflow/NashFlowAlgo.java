@@ -23,7 +23,7 @@ import ds.graph.network.DynamicNetwork;
 import ds.graph.problem.NashFlowProblem;
 import ds.graph.Edge;
 import ds.graph.Node;
-import algo.graph.shortestpath.DijkstraWithRationalDistances;
+import de.tu_berlin.math.coga.algorithm.shortestpath.RationalDijkstra;
 import ds.graph.flow.NashFlow;
 import java.util.HashMap;
 import java.util.Map;
@@ -295,7 +295,7 @@ public class NashFlowAlgo extends Algorithm<NashFlowProblem, NashFlow> {
 
 
 		/*shortest path values between source and other nodes*/
-		DijkstraWithRationalDistances dijk = new DijkstraWithRationalDistances( workingGraph, transitMap, source );
+		RationalDijkstra dijk = new RationalDijkstra( workingGraph, transitMap, source );
 		/*compute distances*/
 		dijk.run();
 		/*map for distances*/
@@ -557,7 +557,7 @@ public class NashFlowAlgo extends Algorithm<NashFlowProblem, NashFlow> {
 		}
 
 		/*shortest path values between source and other nodes*/
-		DijkstraWithRationalDistances dijk = new DijkstraWithRationalDistances( workingGraph, transitMap, source );
+		RationalDijkstra dijk = new RationalDijkstra( workingGraph, transitMap, source );
 		/*compute distances*/
 		dijk.run();
 		/*map for distances*/
@@ -820,7 +820,7 @@ public class NashFlowAlgo extends Algorithm<NashFlowProblem, NashFlow> {
 		}
 
 		/*shortest path values between source and other nodes*/
-		DijkstraWithRationalDistances dijk = new DijkstraWithRationalDistances( workingGraph, transitMap, source );
+		RationalDijkstra dijk = new RationalDijkstra( workingGraph, transitMap, source );
 		/*compute distances*/
 		dijk.run();
 		/*map for distances*/

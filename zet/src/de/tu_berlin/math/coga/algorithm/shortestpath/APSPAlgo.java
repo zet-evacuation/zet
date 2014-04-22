@@ -2,7 +2,7 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package algo.graph.shortestpath;
+package de.tu_berlin.math.coga.algorithm.shortestpath;
 
 
 import de.tu_berlin.math.coga.zet.converter.graph.NetworkFlowModel;
@@ -11,9 +11,12 @@ import de.tu_berlin.coga.container.collection.IdentifiableCollection;
 import de.tu_berlin.coga.container.collection.ListSequence;
 
 
- /*
- * @author schwengf
- */
+ /**
+  * Most likely an implementation of the WUSP-algorithm in
+  * "All Pairs Shortest Paths in Undirected Graphs with Integer Weights" by
+  * Shoshan and Zwick.
+  * @author schwengf
+  */
 public class APSPAlgo {
   
   NetworkFlowModel model;

@@ -3,7 +3,7 @@
  * and open the template in the editor.
  */
 package algo.graph.reduction;
-import algo.graph.shortestpath.Dijkstra;
+import de.tu_berlin.math.coga.algorithm.shortestpath.Dijkstra;
 import de.tu_berlin.coga.common.algorithm.Algorithm;
 import de.tu_berlin.math.coga.zet.converter.graph.NetworkFlowModel;
 import de.tu_berlin.coga.container.collection.ListSequence;
